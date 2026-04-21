@@ -143,11 +143,11 @@ Both documents flag ED-138 as unresolved. Jordan has now resolved it: versus rol
 
 **Action:** Add a cross-reference in social_contest_v30 §9 (TTRPG Rules) or a new section noting that NPCs have Pressure Points (renamed from Resonant Styles per Jordan) and how those map to Contest Styles.
 
-## 2.3 "Rendering Stability" vs "Thread Tension"
+## 2.3 "Mending Stability" vs "Thread Tension"
 
-**All active design docs use "Rendering Stability" (RS).** The old term "Thread Tension" appears in:
-- threadwork_v30 §8.1: "Thread Tension (Thread Tension, 0→100) | Replaced By: Rendering Stability (RS, 100→0)" — correctly documenting the rename.
-- mass_battle_v30 §A.14: "must be converted to Rendering Stability with inversion (Thread Tension +N → Rendering Stability −N)" — stale reference noting conversion needed.
+**All active design docs use "Mending Stability" (MS).** The old term "Thread Tension" appears in:
+- threadwork_v30 §8.1: "Thread Tension (Thread Tension, 0→100) | Replaced By: Mending Stability (MS, 100→0)" — correctly documenting the rename.
+- mass_battle_v30 §A.14: "must be converted to Mending Stability with inversion (Thread Tension +N → Mending Stability −N)" — stale reference noting conversion needed.
 - params_threadwork.md: Multiple references to "Thread Tension" in pre-PP-600 sections that are marked as superseded.
 
 **No active conflicts** — the rename is documented. But the stale references in mass_battle_v30 and params_threadwork should be cleaned up.
@@ -197,7 +197,7 @@ Both documents flag ED-138 as unresolved. Jordan has now resolved it: versus rol
 
 | Document | Piety Track Definition |
 |---|---|
-| victory_v30 §2 | Full PT definition: range 0–5, action cap (±1 per faction per territory per season), Calamity Drift (RS-linked erosion), T15 hard-fixed at 0. |
+| victory_v30 §2 | Full PT definition: range 0–5, action cap (±1 per faction per territory per season), Calamity Drift (MS-linked erosion), T15 hard-fixed at 0. |
 | peninsular_strain_v1 §2.2 | Starting PT values per territory. |
 
 **These are complementary, not overlapping.** victory_v30 defines mechanics, peninsular_strain defines starting values. No conflict.
@@ -289,7 +289,7 @@ Both documents flag ED-138 as unresolved. Jordan has now resolved it: versus rol
 | combat_v30 §7 | "Stamina = Endurance + Relevant History + 1" | History struck per PP-611 |
 | combat_v30 §9 | Pre-PP-232 unit stat names (Strength, Combat Power, Cohesion) | Renamed to Size, Power, Discipline |
 | combat_v30 §10 | Cross-ref to "threadwork_redesign_v25.md" | Renamed to threadwork_v30.md |
-| mass_battle_v30 §A.14 | "Thread Tension" references | Should be "Rendering Stability" |
+| mass_battle_v30 §A.14 | "Thread Tension" references | Should be "Mending Stability" |
 | params_board_game.md | TC_CHURCH_SEIZURE_THRESHOLD = 60 | Graduated Seizure has no TC threshold (PP-494) |
 | params_combat.md PP-275 | "Stamina capped at base value (End + H + 1 − armour mod)" | "H" (History) struck from Stamina formula |
 | social_contest_v30 §4 Step 1 | "Attunement alone (no History), TN 7, Ob 1" | Superseded by PP-614: Pool = Attunement + Recall, Ob = Cha÷2 |
@@ -406,7 +406,7 @@ As noted in §4.5 above: Accord (peninsular_strain) affects territory governance
 
 **victory_v30 §6:** WC (0–3) and WR (0–4) tracks. **params_board_game:** WR advancement rules. **fieldwork_v30 §8.1:** Survey action Anomaly result mentions WC.
 
-**Slight confusion:** WC (Warden Cooperation) is a shared track. WR (Warden Recognition) is Varfell-specific. Both affect Thread operations and RS. They're distinct tracks with distinct functions but similar names. In a videogame UI, these need clear visual differentiation.
+**Slight confusion:** WC (Warden Cooperation) is a shared track. WR (Warden Recognition) is Varfell-specific. Both affect Thread operations and MS. They're distinct tracks with distinct functions but similar names. In a videogame UI, these need clear visual differentiation.
 
 ---
 
@@ -438,7 +438,7 @@ As noted in §4.5 above: Accord (peninsular_strain) affects territory governance
 | ID | Location | Stale Reference | Correct Reference |
 |---|---|---|---|
 | X-1 | combat_v30 §10 | threadwork_redesign_v25.md | threadwork_v30.md |
-| X-2 | mass_battle_v30 §A.14 | "Thread Tension" | "Rendering Stability" |
+| X-2 | mass_battle_v30 §A.14 | "Thread Tension" | "Mending Stability" |
 | X-3 | params_board_game | TC_CHURCH_SEIZURE_THRESHOLD = 60 | Graduated Seizure, no threshold (PP-494) |
 | X-4 | params_combat PP-275 | "End + H + 1 − armour mod" | "End + 1 − armour mod" (H struck) |
 | X-5 | clock_registry_v30 | IP start = 5 | IP start = 20 |

@@ -51,7 +51,7 @@ domain_files:
     description: "Clock environmental effects, cascade depth"
     headings:
       - "Clock Environmental Effects (v04 B2)"
-      - "Rendering Stability (RS) Effects"
+      - "Mending Stability (MS) Effects"
       - "Theocracy Clock (TC) Effects"
       - "Invasion Pressure (IP) Effects"
       - "Cascade Depth Cap (v04 B4)"

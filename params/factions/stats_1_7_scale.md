@@ -22,7 +22,7 @@ Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game 
 | Clock | TTRPG | BG (bg_v05 P-32) | Shared Loss |
 |-------|-------|-----------------|-------------|
 | Theocracy Counter | 0 | 28 | — |
-| Rendering Stability | 60 | 72 | Rendering Stability = 0 |
+| Mending Stability | 60 | 72 | Mending Stability = 0 |
 | Institutional Pressure | 20 | 20 | — |
 | Public Instability | — | 5 | — |
 
@@ -103,7 +103,7 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 | Baralta | Theocracy Counter suppression | Church Mandate −1/season while Mandate ≥ 4 |
 | Schoenland | Active spoiler | Various faction disruptions |
 
-Rendering Stability ≤ 10 adds +1 to coup/succession trigger check pools.
+Mending Stability ≤ 10 adds +1 to coup/succession trigger check pools.
 
 ## Unique Actions — All Factions (PP-168)
 
@@ -168,7 +168,7 @@ Cannot target factions in territories where Guild Favour < 5.
 
 ### Restoration Movement — Community Weaving [SUPERSEDED by PP-616]
 
-> **SUPERSEDED:** This spec is superseded by `params/threadwork.md` PP-616 (Community Organizing — Canonical Pool). PP-616 unifies all Thread operations under a single pool formula: `(Spirit × 2) + History + TPS`, supersedes the Influence-pool framing, replaces Thread Tension effect with direct RS effect, and removes the Domain Action framing ("Not a Domain Action — a Thread operation"). Co-Movement card draw per P-01 remains canonical. Retained below for patch-history reference only — do not implement.
+> **SUPERSEDED:** This spec is superseded by `params/threadwork.md` PP-616 (Community Organizing — Canonical Pool). PP-616 unifies all Thread operations under a single pool formula: `(Spirit × 2) + History + TPS`, supersedes the Influence-pool framing, replaces Thread Tension effect with direct MS effect, and removes the Domain Action framing ("Not a Domain Action — a Thread operation"). Co-Movement card draw per P-01 remains canonical. Retained below for patch-history reference only — do not implement.
 
 Roll: Influence vs Ob = Thread Tension ÷ 20 (round up).
 Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated with the Restoration Movement.
@@ -241,20 +241,20 @@ NPC: Appease if Mandate ≥ 4 AND Stability ≤ 3.
 > **SUPERSEDED:** This procedure is superseded by `params/threadwork.md` PP-616 (Community Organizing — Canonical Pool). PP-616 changes: (1) pool formula from `Mandate + History` to `(Spirit × 2) + History + TPS` unifying all Thread operations; (2) removes Domain Action framing — Community Organizing is a Thread operation, not a DA ("One per contact window round. Not a Domain Action."); (3) removes the Failure → Mandate −1 consequence. Mandate ≥ 1 prerequisite retained (Mending Mandate). The [PROVISIONAL] tag is removed — PP-616 is final. Retained below for patch-history reference only — do not implement.
 
 Revolution Domain Action. Pool: Mandate (as dice) + History, TN 7, Ob 3. Prerequisite: Mandate ≥ 1.
-| Degree | RS Effect | Other |
+| Degree | MS Effect | Other |
 |--------|-----------|-------|
-| Overwhelming | RS +2 | Mandate unchanged |
-| Success | RS +1 | Mandate unchanged |
-| Partial | RS +0 | Wasted action |
-| Failure | RS +0 | Mandate −1 |
+| Overwhelming | MS +2 | Mandate unchanged |
+| Success | MS +1 | Mandate unchanged |
+| Partial | MS +0 | Wasted action |
+| Failure | MS +0 | Mandate −1 |
 Frequency: once per season. Consumes 1 Domain Action.
 
 ## Simultaneous Catastrophe Rule (PP-199 — ED-077)
 
-If RS=0 AND IP≥80 both trigger in the same Accounting phase:
-1. RS=0 resolves first (Shared Loss: game-ending Thread collapse condition).
+If MS=0 AND IP≥80 both trigger in the same Accounting phase:
+1. MS=0 resolves first (Shared Loss: game-ending Thread collapse condition).
 2. IP≥80 Altonian invasion pressure resolves second.
-Both are independent effects. Priority: RS=0 > IP threshold. If RS=0 triggers Shared Loss end condition, IP escalation is moot.
+Both are independent effects. Priority: MS=0 > IP threshold. If MS=0 triggers Shared Loss end condition, IP escalation is moot.
 
 ## Reformed Settlement Standing Effect (PP-201 — ED-081)
 
@@ -302,7 +302,7 @@ Public Instability is a Hybrid-mode secondary clock.
 - Hybrid increases: +1 per season Revolution Agitation resolves (any degree); +1 per season IP increases while TC > 40.
 - Hybrid decreases: −1 per season Crown or Guilds completes successful social Domain Action in contested territory.
 - Threshold 8: Revolution gains one free Agitation action at no Domain Action cost.
-- Threshold 10: Shared loss condition check (Institutional collapse — distinct from RS=0 Rupture).
+- Threshold 10: Shared loss condition check (Institutional collapse — distinct from MS=0 Rupture).
 
 ## Lowenritter Reactive Military NPC Guidance (PP-238)
 

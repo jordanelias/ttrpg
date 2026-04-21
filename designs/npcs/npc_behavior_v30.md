@@ -57,7 +57,7 @@ Every named NPC holds three interconnected attributes.
 | Primary Conviction | Order | "Order is not made — it is maintained. Everything depends on not flinching." |
 | Secondary Conviction | Reason | Privately sympathises with Restoration. Recognises Thread reality may be true. Does not act on it. |
 | Ethical Framework | Virtue Ethics (Crown) | Aligned: −1 Ob on public, visible, virtuous action. Contradictory: +1 Ob on covert/expedient action. |
-| Primary Resonant Style | Consequence | Show him the cost of maintaining order: the practitioners persecuted, the knowledge lost, the Rendering Stability declining. His Order conviction claims to preserve Valoria. If preserving order is destroying what it protects, he cannot dismiss the argument. |
+| Primary Resonant Style | Consequence | Show him the cost of maintaining order: the practitioners persecuted, the knowledge lost, the Mending Stability declining. His Order conviction claims to preserve Valoria. If preserving order is destroying what it protects, he cannot dismiss the argument. |
 | Secondary Resonant Style | Solidarity | Activates only via intimate Knot. He is guarded; reaching him personally requires sustained relationship. |
 | Thread Sensitivity | 28 (near Stirring) | Unrecognised. His proximity to Thread awareness makes Evidence attacks partially effective but he lacks the perceptual framework to integrate what he is told. |
 | Certainty | 3 (Questioning) | Already cracking. Further decline possible through play. |
@@ -196,7 +196,7 @@ Every named NPC holds three interconnected attributes.
 
 | Attribute | Value | Notes |
 |---|---|---|
-| Primary Conviction | **Emergence window: Seasons 1–8 (ED-618).** Torben starts with no primary Conviction. The first faction to reach Disposition ≥ +2 with Torben before Season 8 sets his primary Conviction. If two factions reach +2 simultaneously (same Accounting): tiebreak by (1) higher total Disposition, then (2) chronologically earliest first investment action. After Season 8: primary Conviction is locked — it cannot be changed through further investment or Contest victories. Secondary Conviction can be added through Scars (1–2 Scars from decisive RS targeting activate secondary). If no faction reaches Disposition ≥ +2 before Season 8: Torben defaults to Order (Crown institutional baseline). Each primary Conviction produces distinct Crown Priority Tree behavior when Torben leads (see arc profiles below). |
+| Primary Conviction | **Emergence window: Seasons 1–8 (ED-618).** Torben starts with no primary Conviction. The first faction to reach Disposition ≥ +2 with Torben before Season 8 sets his primary Conviction. If two factions reach +2 simultaneously (same Accounting): tiebreak by (1) higher total Disposition, then (2) chronologically earliest first investment action. After Season 8: primary Conviction is locked — it cannot be changed through further investment or Contest victories. Secondary Conviction can be added through Scars (1–2 Scars from decisive MS targeting activate secondary). If no faction reaches Disposition ≥ +2 before Season 8: Torben defaults to Order (Crown institutional baseline). Each primary Conviction produces distinct Crown Priority Tree behavior when Torben leads (see arc profiles below). |
 | Primary Conviction | [EDITORIAL: ED-394 — Torben Conviction not specified. At Loyalty 3 (start), he is uncommitted. Conviction emerges through play. Proposed: starts with no primary Conviction — first faction to invest in him sets his initial Conviction. This makes Torben a contested narrative asset.] |
 | Secondary Conviction | Autonomy (always present — a prince who has been bargained over his entire life defaults to self-determination when cornered) |
 | Ethical Framework | Inherits from whichever faction holds his Loyalty (Crown at start). Framework shifts on Loyalty transfer. |
@@ -331,7 +331,7 @@ Church heresy designation operates differently inside vs outside Church-controll
 
 The Ministry census — conducted every 2 seasons across all Ministry-administered settlements — records population, economic output, infrastructure condition, and a mandatory field labeled "Perceptual Anomaly Reports" (PAR). PAR entries are complaints, observations, and incident reports from residents describing unexplained phenomena: déjà vu clusters, temporal disorientation, objects in wrong locations, memory discrepancies between neighbors. The Ministry has collected PAR data for 150+ seasons. It is filed under "Public Health — Cognitive" and has never been cross-referenced with Thread activity.
 
-**Data structure:** Each settlement's PAR file contains a per-season anomaly density score (0–10 scale, derived from incident count normalized by population). Anomaly density correlates with local Rendering Stability (inverse) and cumulative Thread operation volume, but the Ministry does not know this.
+**Data structure:** Each settlement's PAR file contains a per-season anomaly density score (0–10 scale, derived from incident count normalized by population). Anomaly density correlates with local Mending Stability (inverse) and cumulative Thread operation volume, but the Ministry does not know this.
 
 **Access rules:**
 
@@ -345,14 +345,14 @@ The Ministry census — conducted every 2 seasons across all Ministry-administer
 
 A character with TS ≥ 30 (Stirring or above) who accesses the deep archive cross-reference recognizes PAR data as Thread Sensitivity readings encoded in lay language. This recognition is automatic — no roll required. The character gains:
 
-- **Census Thread Map:** Identifies which settlements have sustained high Thread activity over the campaign timeline. Each settlement with anomaly density ≥ 6 for 3+ consecutive seasons is flagged as a Thread Activity Zone. This information is equivalent to knowing the settlement's Rendering Stability band (Stable/Contested/Fractured) without visiting it.
+- **Census Thread Map:** Identifies which settlements have sustained high Thread activity over the campaign timeline. Each settlement with anomaly density ≥ 6 for 3+ consecutive seasons is flagged as a Thread Activity Zone. This information is equivalent to knowing the settlement's Mending Stability band (Stable/Contested/Fractured) without visiting it.
 - **Practitioner inference:** Settlements with anomaly density spikes correlating with specific seasons can be cross-referenced with known NPC movements to identify likely practitioners. Ob 3 Intellect check per settlement queried. Success: one NPC with TS ≥ 30 in that settlement during the spike season is identified as a probable practitioner. This does not confirm — it narrows the search.
 
 A character with TS 10–29 who accesses the deep archive gets an uneasy sense that the data means something more than cognitive health reports, but cannot decode it. They gain +1D on their next Thread-related Intellect check (one-time bonus, consumed on use).
 
 A character with TS 0–9 sees only public health data. No Thread-relevant information is perceived.
 
-**Engine implementation:** Census data is generated procedurally from settlement Rendering Stability history. No manual authoring. The PAR anomaly density for settlement S in season T = max(0, 10 − RS_band_midpoint) + random(−1, +1), clamped 0–10. RS band midpoints: Stable=90, Contested=65, Fractured=40, Shattered=15.
+**Engine implementation:** Census data is generated procedurally from settlement Mending Stability history. No manual authoring. The PAR anomaly density for settlement S in season T = max(0, 10 − RS_band_midpoint) + random(−1, +1), clamped 0–10. MS band midpoints: Stable=90, Contested=65, Fractured=40, Shattered=15.
 
 **Haelgrund integration:** If Haelgrund reaches Arc C (TS → 20+), he does not yet meet the TS ≥ 30 threshold for automatic recognition. However, his institutional knowledge grants an exception: Haelgrund at TS 20+ can perform the cross-reference with an Intellect Ob 2 check (his bureaucratic expertise compensates for incomplete Thread perception). On success, he provides the Census Thread Map to the player without the player needing to access it themselves. On failure, he senses the pattern but cannot articulate it — retry available next season.
 
@@ -361,7 +361,7 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 
 ### §2.15 Crown Inner Circle (ED-634, approved 2026-04-17)
 
-| Role | Name | Conviction | RS | Certainty | Notes |
+| Role | Name | Conviction | MS | Certainty | Notes |
 |------|------|------------|-----|-----------|-------|
 | Royal Marshal | Wilhelm Voss | Order | Authority | 4 | Distrusts Löwenritter. Disposition vs Southern Einhir: −1. |
 | Lord Treasurer | Annalie Reichard | Precedent | Evidence | 5 | Distant Feldhaus cousin. Disposition toward Baralta: +1. |
@@ -371,14 +371,14 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 
 ### §2.16 Hafenmark Inner Council (ED-635, ED-636, approved 2026-04-17)
 
-| Role | Name | Conviction | RS | Certainty |
+| Role | Name | Conviction | MS | Certainty |
 |------|------|------------|-----|-----------|
 | Legal Advisor | Torvi Heljason | Precedent | Evidence | 5 |
 | Military Commander | Olaf Geirson | Order | Consequence | 4 |
 
 ### §2.17 Varfell Jarl Council (ED-637, ED-638, approved 2026-04-17)
 
-| Role | Name | Conviction | RS | Certainty |
+| Role | Name | Conviction | MS | Certainty |
 |------|------|------------|-----|-----------|
 | Senior Jarl of the Western Highlands | Björn Holdar | Continuity | Consequence | 3 |
 | Skald-Chief | Ingrid Stenskald | Community | Solidarity | 3 |
@@ -480,12 +480,12 @@ NPC practitioners use the following Coherence thresholds. Applies TTRPG (GM guid
 |---|---|---|
 | 10–6 | Stable | Operate freely per tactical/strategic need. |
 | 5 | Dissonant | Self-limit to defensive Thread ops only (Mending, defensive Weaving). No offensive Dissolution/Lock/POP. |
-| 4–3 | Degraded | Cease Thread operations. Non-Thread combatant. Exception: RS ≤ 20 + Warden → Mending only. |
+| 4–3 | Degraded | Cease Thread operations. Non-Thread combatant. Exception: MS ≤ 20 + Warden → Mending only. |
 | 2 | Fractured | Seek withdrawal. Reserve in mass battle. Disengage in personal combat. Arc transition consideration. |
 | 1 | Severed | Crisis mode. Arc transition fires. +2 Ob all Thread ops. Dissociative episodes (EDGE-02). |
 | 0 | Conversion | NPC Transition per params_core PP-261. |
 
-**RS Override (Warden):** RS ≤ 20 → Warden NPCs override Degraded/Fractured for Mending only. Continuity Conviction overrides personal safety. Mechanism for ARC-S34 (Edeyja Burnout).
+**MS Override (Warden):** MS ≤ 20 → Warden NPCs override Degraded/Fractured for Mending only. Continuity Conviction overrides personal safety. Mechanism for ARC-S34 (Edeyja Burnout).
 
 **BG Priority Trees:** Amend Varfell §8.5, Edeyja/Wardens §8.10: Priority 2 Coherence gate per this table.
 
@@ -611,16 +611,16 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 **Arc A: The Holdout (Default)**
 - Branch condition: No PC expedition reaches Southernmost. Wardens continue alone.
 - Conviction: Continuity, unchanged. No arc movement.
-- Behavior: Static. She holds. The Southernmost slowly loses ground. RS decline accelerates.
+- Behavior: Static. She holds. The Southernmost slowly loses ground. MS decline accelerates.
 
 **Arc B: The Collaboration**
-- Behavior: Edeyja shares warden knowledge. Campaign-altering information flows. RS stabilisation becomes possible.
+- Behavior: Edeyja shares warden knowledge. Campaign-altering information flows. MS stabilisation becomes possible.
 - Belief 3 activates: "Help has come. I will not waste it."
 
 **Arc C: The Crisis**
-- Branch condition: Warden count reaches 0 (all other wardens killed or incapacitated) OR RS ≤ 20.
+- Branch condition: Warden count reaches 0 (all other wardens killed or incapacitated) OR MS ≤ 20.
 - Conviction: Continuity → Autonomy (the work has failed; she must survive to try again).
-- Risk: Her presence strains RS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ RS drain). She is a walking Calamity echo.
+- Risk: Her presence strains MS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ MS drain). She is a walking Calamity echo.
 
 **Warden Faction Paths (campaign_architecture_v1 §6):** Five paths to Warden political relevance: (A) Recruited by Varfell (WR 3+, institutional integration); (B) Recruited by RM post-revelation (Embrace arc, philosophical alliance); (C) Recruited by player (WR ≥ 3 + Founded Organization); (D) Recruited by Lenneth (Crown integration via Elske Loyalty Track); (E) Independent faction at MS ≤ 20 (crisis-driven, Mending Sanctuary declaration). See campaign_architecture_v1.md §6.2 for full specification. If activated, Warden governance uses consensus model with collective Spirit-derived governance stat.
 
@@ -798,7 +798,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 2 | PT ≤ 1 in 3+ territories (population losing faith connection → Founding conditions for RM political emergence) | Community Organising in lowest-PT territory adjacent to RM Presence. |
 | 3 | Presence marker expansion to adjacent territory (if Stability ≥ 3) | Community Organising in adjacent territory without Presence marker. |
 | 4 | Founding Agent protection: if Founding Agent in threatened territory, relocate before hostile action resolves. | Standard |
-| 5 | Community Organizing (if RS ≤ 60 and practitioner with TS 30+ available) | RS restoration |
+| 5 | Community Organizing (if MS ≤ 60 and practitioner with TS 30+ available) | MS restoration |
 | 6 | If attacked: no military response (RM has no Military). Diplomatic appeal to allied faction. Senator Outward if Influence ≥ 2. | Reactive — non-violent |
 | 7 | Pass. Presence markers maintained. | Default |
 
@@ -808,8 +808,8 @@ All NPC faction priority trees follow a standardised 7-level structure:
 |---|---|---|
 | 1 | Gap or Shifting Object detected in any territory | Emergency Mend at Gap site. Wardens deploy to location. |
 | 2 | Thread exploitation site disturbance detected (Thread Tension source traced to Southernmost harvesting) | Investigate source. Wardens intercept settlement-layer Thread-exploitation operatives in Southernmost territory (post-Niflhel dissolution; see settlement_layer_v30 §4.9). |
-| 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1 per Warden deployment (max +2/season). |
-| 4 | Work alongside any faction performing Thread restoration (Community Organizing, Mending, RS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
+| 3 | MS ≤ 40 | Peninsula-wide Weaving. MS +1 per Warden deployment (max +2/season). |
+| 4 | Work alongside any faction performing Thread restoration (Community Organizing, Mending, MS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
 | 5 | Assess any new practitioner who enters Southernmost territory | Assessment interview. TS ≤ 20: dismissed. TS 21–39: acknowledged. TS 40+: useful. |
 | 6 | If attacked: Thread operations at a scale that renders conventional force irrelevant. Wardens do not advertise this. | Absolute deterrence |
 | 7 | Continue containment work. Hold the Southernmost. | Default |
@@ -995,7 +995,7 @@ An NPC who has been recruited defects if:
 
 | ED-663 | Thread → Conviction Scar Triggers: §3.4. 7×6 matrix. Certainty scaling. Season cap. Player parallel. | P0 — resolved |
 | ED-664 | Player Conviction × Thread events: Spirit TN 7 Ob 1. In §3.4. | P0 — resolved |
-| ED-665 | NPC Practitioner Coherence AI: §4.3. 6-tier table. Warden RS override. BG priority tree note. | P0 — resolved |
+| ED-665 | NPC Practitioner Coherence AI: §4.3. 6-tier table. Warden MS override. BG priority tree note. | P0 — resolved |
 | ED-666 | Companion departure Thread triggers: propagation to companion_specification_v30. | P1 — pending |
 | ED-667 | Adjudicator Thread response: propagation to social_contest_v30. | P1 — pending |
 
@@ -1015,7 +1015,7 @@ An NPC who has been recruited defects if:
 
 | Constraint | Status |
 |---|---|
-| P-01 (Co-movement) | No Thread operations added. Contest RS effects use existing rules. |
+| P-01 (Co-movement) | No Thread operations added. Contest MS effects use existing rules. |
 | P-02 (Inseparability) | Not directly invoked. System operates at social/political layer. |
 | P-06 (Confrontation development) | TS thresholds in §5 follow Foundations §14. |
 | P-12 (Beliefs and rolls) | NPC Beliefs mirror PC system. Momentum/Belief achievement patterns respected. |

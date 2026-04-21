@@ -50,7 +50,7 @@ Minor complication rule: the acting faction chooses which minor consequence appl
 | Parliamentary Manoeuvre | Standing −1 OR no effect (already: Partial = no effect; Minor added) | Mandate −1 + opponent faction Standing +1 |
 | Investigate (Inward) | Information gained is incomplete (GM notes one datum as unreliable) OR Standing −1 | No information gained; Stability −1 (internal leaks suspected) |
 | Spy (Outward) | Intel gained but acting faction identity exposed OR Standing −1 | No intel gained; target faction may take one free Intel action vs acting faction next season |
-| Thread Operation | Ob +1 to next Thread op in this territory (Thread Debt token) OR Rendering Stability −1 | Thread Debt token placed; Rendering Stability −2 |
+| Thread Operation | Ob +1 to next Thread op in this territory (Thread Debt token) OR Mending Stability −1 | Thread Debt token placed; Mending Stability −2 |
 | Community Organising | +1 Ob to next Community action in this territory OR Standing −1 | No progress; Institutional Pressure +1 |
 | Fortify | Fortification begun at −1 Cohesion for resulting unit OR Standing −1 | No fortification; Wealth −1 |
 | March / Military | See Battle Resolution (separate system) | See Battle Resolution |
@@ -84,7 +84,7 @@ Battle already has a structured outcome table (stalemate, margins). No change. F
 
 ### 4.3 Thread Operations
 
-Thread operations already produce mandatory co-movement consequences (P-01). The FF complication for Thread op Failure adds Rendering Stability cost on top of co-movement — not instead of it.
+Thread operations already produce mandatory co-movement consequences (P-01). The FF complication for Thread op Failure adds Mending Stability cost on top of co-movement — not instead of it.
 
 ---
 

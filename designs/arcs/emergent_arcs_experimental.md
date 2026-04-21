@@ -32,7 +32,7 @@ flowchart TD
     H --> I["Relational Gap forms\n+2 Ob all social Domain Actions between affected factions\nCannot form new formal agreements between parties until Mended"]
     
     I --> J{Player response}
-    J -->|"Mend the Relational Gap"| K["Mending pool: Att + Focus + TPS\nStandard Gap Ob 5 (TTRPG)\nSuccess: RS +1; agreement substrate restored\nEpistemic co-movement: settling, TS 10+ perceive calming"]
+    J -->|"Mend the Relational Gap"| K["Mending pool: Att + Focus + TPS\nStandard Gap Ob 5 (TTRPG)\nSuccess: MS +1; agreement substrate restored\nEpistemic co-movement: settling, TS 10+ perceive calming"]
     J -->|"Run Formal Debate to re-establish treaty"| L["Debate: Consequence genre\n(future stakes — what the treaty should do)\nConsequence win → Domain Echo: +1D on first Domain Action\npursuing that consequence within the season\nActualises the argued future as probability anchor"]
     J -->|"Ignore it — seek new treaty"| M["Relational Gap persists\nRS −4/season the Gap remains\nOld signatories cannot formally agree\nAll prior faction relationships through this agreement: +2 Ob social ops"]
     
@@ -43,7 +43,7 @@ flowchart TD
 
 **Why this arc is emergent:** The practitioner who Weaved the treaty intended to protect it. The brittleness is not failure — it is success. Weaving at Relational scale worked. The problem is that the rigidity it created, which was invisible during Diagnosis, manifests only when external political pressure arrives. The player had no mechanical way to anticipate this during the operation.
 
-**Arc shape:** 1 season to Weave and lock in. 1–3 seasons of political pressure accumulating. 1 season of shattering. 2–3 season resolution arc (Mending or re-Debate). If d6=1 fires on Mending: Niflhel harvesting sub-arc restarts Rendering Stability drain.
+**Arc shape:** 1 season to Weave and lock in. 1–3 seasons of political pressure accumulating. 1 season of shattering. 2–3 season resolution arc (Mending or re-Debate). If d6=1 fires on Mending: Niflhel harvesting sub-arc restarts Mending Stability drain.
 
 ---
 
@@ -111,7 +111,7 @@ flowchart TD
     E -->|"Threadweave this turn"| F["Turn 6: Coherence 5 → 4 (entering Fragmented)\n−1D all social rolls\n−1D Memory-based rolls\n+1 Ob all Thread operations including the Leap\nRoll Fragmented Fallout on entry — d6 narrative effect fires"]
     E -->|"Stabilise general"| G["General stabilised\nBattle outcome depends on remaining units without Thread support\nPractitioner at Coherence 5 — not yet Fragmented\nTrade-off: battle risk accepted to preserve practitioner rendering"]
     
-    F --> H["Turn 7 (final): Coherence 4 → 3 or Failure → 2\nIf operation fails at Fragmented: Partial or Failure\nPartial: RS −1, Coherence −1 additional (from degree table + scale)\nCoherence cap: −1 per operation regardless — but degree-table costs apply at Relational+ on Failure\nFragmented Failure = Coherence −1 additional: possible reach to 2 (Fractured)"]
+    F --> H["Turn 7 (final): Coherence 4 → 3 or Failure → 2\nIf operation fails at Fragmented: Partial or Failure\nPartial: MS −1, Coherence −1 additional (from degree table + scale)\nCoherence cap: −1 per operation regardless — but degree-table costs apply at Relational+ on Failure\nFragmented Failure = Coherence −1 additional: possible reach to 2 (Fractured)"]
     
     H --> I["Battle resolves\nFaction wins or loses — recorded on territory card\nPractitioner at Coherence 2–3 (Fractured)\nRoll Fractured Fallout on entering Fractured band\nGM begins Belief Co-Authorship: presents shifting perceptual framework as internal voice"]
     
@@ -135,9 +135,9 @@ flowchart TD
 
 ## Arc 8: The Temporal Window
 
-**Primary mechanics:** Threadweaving v2.5 Past-Oriented Pulling prerequisite (Rendering Stability ≤ 60) · Rendering Stability degradation sources · Einhir Ritual Framework (§9.15) · Temporal Disjunction · Certainty checks · Multiple faction awareness
+**Primary mechanics:** Threadweaving v2.5 Past-Oriented Pulling prerequisite (Mending Stability ≤ 60) · Mending Stability degradation sources · Einhir Ritual Framework (§9.15) · Temporal Disjunction · Certainty checks · Multiple faction awareness
 
-**Seed:** Rendering Stability deteriorates below 60. Multiple factions learn that Past-Oriented Pulling is now mechanically accessible.
+**Seed:** Mending Stability deteriorates below 60. Multiple factions learn that Past-Oriented Pulling is now mechanically accessible.
 
 **Light narrative:** For the first time since the Catastrophe, someone could reach back. Everyone who knows this is deciding whether to let them.
 
@@ -145,7 +145,7 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["RS degrades below 60\n(from Niflhel harvesting, Lock drift, Gap persistence, winter)\nPast-Oriented Pulling prerequisite: RS ≤ 60 — now met\nTS 70+ required; Diagnosis mandatory; Ob 3–7 by recency"] --> B["Who knows the threshold exists?"]
+    A["MS degrades below 60\n(from Niflhel harvesting, Lock drift, Gap persistence, winter)\nPast-Oriented Pulling prerequisite: MS ≤ 60 — now met\nTS 70+ required; Diagnosis mandatory; Ob 3–7 by recency"] --> B["Who knows the threshold exists?"]
     B --> C["Varfell — TK 3+: 'succession leverage linked to Southernmost access'\nVaynard's TK advances include this structural theory\nIf told explicitly by practitioner: TK +1–2 immediately"]
     B --> D["Revolution — TS 30+ practitioner affiliated\nCommunity tradition may include partial knowledge of Einhir temporal work\n[EDITORIAL: extent of Revolution's pre-Catastrophe knowledge]"]
     B --> E["Church — zero awareness\nConfessor Himlensendt TS 0 (theologically foreclosed)\nChurch +2 Ob to all Thread-revealing Domain Actions\nDelay before Church understands what is possible"]
@@ -159,24 +159,24 @@ flowchart TD
     I --> J["Southernmost expedition arc\n2–3 seasons minimum\nNon-TS-30+ units dissolve on entry (mass battle §A.11)\nExpedition force = practitioners + affiliated personnel only\nNo military escort unless individually TS 30+"]
     J --> K["Expedition triggers Axis 2 (Knowledge)\nVarfell Intel detects movement\nChurch Intel at Southernmost: Church +2 Ob to all Thread-revealing ops\nNiflhel Quiet deployed to observe (Intel vs Intel)\nTT +0.5 from Quiet deployment during expedition"]
     
-    K --> L["Past-Oriented Pulling attempt:\nTS 70+, RS ≤ 60, Diagnosis mandatory\nFoundational event: Ob 7 (base) + 2 (Foundational surcharge) = Ob 9\nRS consequence ×3: Success = RS −9 minimum\nFailure: snap-back Wound + RS −6 minimum\nPractitioner pool ceiling: Spirit + History + TPS÷2"]
+    K --> L["Past-Oriented Pulling attempt:\nTS 70+, MS ≤ 60, Diagnosis mandatory\nFoundational event: Ob 7 (base) + 2 (Foundational surcharge) = Ob 9\nRS consequence ×3: Success = MS −9 minimum\nFailure: snap-back Wound + MS −6 minimum\nPractitioner pool ceiling: Spirit + History + TPS÷2"]
     
     L --> M{Pull outcome}
-    M -->|"Success (RS −9 minimum)"| N["Event displaced\nTemporal Disjunction fires:\nMemories of the displaced event persist in all witnesses\nPhysical facts removed from the world\nAll characters whose mechanical state reverts: Spirit TN7 Ob 1\nFailure: Certainty −1 — they remember something that didn't happen"]
-    M -->|"Failure (RS −6 minimum + snap-back Wound)"| O["Practitioner takes Wound\nRS −6: likely drops RS another threshold band\nTemporally: nothing displaced\nBut the attempt created detectable Thread activity\nAxis 9 fires: Church detects large-scale unauthorised Thread operation"]
-    M -->|"Partial (RS −6, Shifting Object at Foundational scale)"| P["Foundational-scale Shifting Object\nThe Catastrophe event oscillates between presence and absence\nInstitutions built on its history oscillate in authority\nChurch's theological basis destabilised at Structural scale\nReversal requires second Pull or large-scale Mending"]
+    M -->|"Success (MS −9 minimum)"| N["Event displaced\nTemporal Disjunction fires:\nMemories of the displaced event persist in all witnesses\nPhysical facts removed from the world\nAll characters whose mechanical state reverts: Spirit TN7 Ob 1\nFailure: Certainty −1 — they remember something that didn't happen"]
+    M -->|"Failure (MS −6 minimum + snap-back Wound)"| O["Practitioner takes Wound\nRS −6: likely drops MS another threshold band\nTemporally: nothing displaced\nBut the attempt created detectable Thread activity\nAxis 9 fires: Church detects large-scale unauthorised Thread operation"]
+    M -->|"Partial (MS −6, Shifting Object at Foundational scale)"| P["Foundational-scale Shifting Object\nThe Catastrophe event oscillates between presence and absence\nInstitutions built on its history oscillate in authority\nChurch's theological basis destabilised at Structural scale\nReversal requires second Pull or large-scale Mending"]
     
     N --> Q["Temporal Disjunction consequences\nPhysical-fact-triggered states revert (e.g., Knot strain from external events)\nExperience-triggered states persist (strain from character's own response)\nWitnesses who directly contradict their memory: mandatory Certainty check\nTS 30+ observers: mandatory\nCharacters with Knot to displaced fact: mandatory\n'Their rendering of reality has been compromised — they remember something that didn't happen'"]
-    Q --> R["RS now below 50 or below 40 depending on starting position\nRS threshold band shifts: new threshold effects apply at next Accounting\nIf RS crosses from Strained to Fragile:\nSpontaneous Shifting Objects begin forming in high-traffic Thread territories"]
+    Q --> R["MS now below 50 or below 40 depending on starting position\nRS threshold band shifts: new threshold effects apply at next Accounting\nIf MS crosses from Strained to Fragile:\nSpontaneous Shifting Objects begin forming in high-traffic Thread territories"]
     
     O --> S["Church opens Heresy Investigation\nKnowledge that Foundational Pull was attempted\nAxis 9 fully activated\nTC +1 (Church consolidation response to Thread threat)\nGrand Debate: 5 exchanges — can practitioners defend the attempt?"]
     
     P --> T["Institutions built on the partially-displaced event oscillate\nMandates for affected factions: unreliable — Structural Shifting Object means authority intermittent\nDomain Actions by those institutions: −1D\nMandate-conferring capacity suspended until Mended\nThis is functionally a political crisis without any political act by any faction"]
 ```
 
-**Why this arc is emergent:** The Past-Oriented Pulling prerequisite (Rendering Stability ≤ 60) means the world must first degrade before temporal manipulation is possible. Factions that want to use it need the world to be worse. No faction deliberately tanks Rendering Stability to open the window — Rendering Stability degrades from the accumulated effects of prior play. The window opens as a side effect of everything else. When it opens, every faction with knowledge of Thread mechanics has a different agenda for what to do with it.
+**Why this arc is emergent:** The Past-Oriented Pulling prerequisite (Mending Stability ≤ 60) means the world must first degrade before temporal manipulation is possible. Factions that want to use it need the world to be worse. No faction deliberately tanks Mending Stability to open the window — Mending Stability degrades from the accumulated effects of prior play. The window opens as a side effect of everything else. When it opens, every faction with knowledge of Thread mechanics has a different agenda for what to do with it.
 
-**Arc shape:** Background Rendering Stability deterioration for 3–6 seasons (invisible prerequisite accumulating). Window opens as a threshold event. 2–3 season Southernmost expedition to satisfy Einhir Ritual Framework. 1 session Pulling attempt. 2–4 season consequence arc from whichever branch fires.
+**Arc shape:** Background Mending Stability deterioration for 3–6 seasons (invisible prerequisite accumulating). Window opens as a threshold event. 2–3 season Southernmost expedition to satisfy Einhir Ritual Framework. 1 session Pulling attempt. 2–4 season consequence arc from whichever branch fires.
 
 ---
 
@@ -187,8 +187,8 @@ flowchart TD
 | Over-actualised treaty shatters during Tribunal season | 5 + 6 | Relational Gap opens; Debate re-establishment needed; Evidence genre Pull fires in tribunal room while Relational Gap exists in the same zone |
 | Practitioner at Rendering Crisis during Southernmost expedition | 7 + 8 | Cannot Leap, cannot Diagnose; Einhir Ritual Framework acquisition impossible; expedition must wait for Corrective Weaving to restore Coherence to 1+ before proceeding |
 | Mass battle turns general's Coherence Fragmented before Temporal Pull attempt | 7 + 8 | At Fragmented: +1 Ob all Thread operations including Leap; Foundational Pull already at Ob 9 + 2 surcharge; now Ob 12 — exceeds Ob 10 cap; Pull becomes mechanically impossible until Coherence recovers |
-| Evidence genre win in Tribunal fires temporal co-movement while Rendering Stability ≤ 40 | 6 + 8 | At Rendering Stability Fragile: Shifting Objects form spontaneously in Thread-traffic territories; temporal co-movement from Tribunal triggers spontaneous Shifting Object in the courtroom itself; witnesses perceive rendering failure mid-proceeding |
-| Niflhel Quiet deployed during Southernmost expedition adds Thread Tension while Rendering Stability already critical | 8 (late) | Each Quiet deployment: Rendering Stability −0.5 (existing harvesting chain); Rendering Stability at expedition season already stressed; Niflhel accelerates the Rendering Stability drain that makes the Foundational Pull more dangerous to the substrate |
+| Evidence genre win in Tribunal fires temporal co-movement while Mending Stability ≤ 40 | 6 + 8 | At Mending Stability Fragile: Shifting Objects form spontaneously in Thread-traffic territories; temporal co-movement from Tribunal triggers spontaneous Shifting Object in the courtroom itself; witnesses perceive rendering failure mid-proceeding |
+| Niflhel Quiet deployed during Southernmost expedition adds Thread Tension while Mending Stability already critical | 8 (late) | Each Quiet deployment: Mending Stability −0.5 (existing harvesting chain); Mending Stability at expedition season already stressed; Niflhel accelerates the Mending Stability drain that makes the Foundational Pull more dangerous to the substrate |
 | Collective Mending of Relational Gap has Belief conflict | 5 (recovery) | Directly opposing Beliefs require pre-Leap check; practitioners who disagree about whether the treaty should be restored cannot align; Shifting Object persists |
 
 ---
@@ -205,11 +205,11 @@ flowchart TD
 | Coherence drain per mass battle turn | 7 | Winning the war costs practitioner rendering stability; deterministic, not a punishment |
 | Corrective Weaving Ob 5 at Rendering Crisis | 7 | Recovery requires external rendering; self-rescue is ontologically impossible |
 | Belief conflict in Collective operations | 7 | Opposing intentionalities block collective Mending/Corrective Weaving |
-| Rendering Stability ≤ 60 prerequisite for Past-Oriented Pulling | 8 | World deterioration opens temporal mechanics; perverse incentive structure |
+| Mending Stability ≤ 60 prerequisite for Past-Oriented Pulling | 8 | World deterioration opens temporal mechanics; perverse incentive structure |
 | Einhir Ritual Framework (§9.15) | 8 | Three-condition gate for Foundational operations; each condition is a campaign arc in itself |
 | Temporal Disjunction + Certainty checks | 8 | Success of the Pull destabilises rendering for all witnesses; victory has ontological cost |
 | Foundational-scale Shifting Object (Partial) | 8 | Half-successful temporal manipulation oscillates institutional authority at Structural scale; political crisis from Thread event |
 
 ---
 
-*All arcs require Rendering Stability to be tracked accurately across sessions. Arcs 7 and 8 converge if the same practitioner runs both — full-battle Threadweaving followed by Foundational Pull in the same campaign is a near-certain Rendering Crisis path.*
+*All arcs require Mending Stability to be tracked accurately across sessions. Arcs 7 and 8 converge if the same practitioner runs both — full-battle Threadweaving followed by Foundational Pull in the same campaign is a near-certain Rendering Crisis path.*

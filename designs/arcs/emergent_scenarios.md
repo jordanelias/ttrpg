@@ -61,36 +61,36 @@ Operation declared and rolled
 │
 ├─ WEAVING (Spirit + History + TPS, TN 7)
 │   │
-│   ├─ OVERWHELMING → Full effect; RS +1 (Rel+); +1 TS
+│   ├─ OVERWHELMING → Full effect; MS +1 (Rel+); +1 TS
 │   │                  Over-actualisation if Relational+: subsequent Ob +1 for season
 │   ├─ SUCCESS      → Full effect; substrate stable
-│   ├─ PARTIAL      → Partial effect; RS −1; Coherence check harder
-│   └─ FAILURE      → Interaction collapses; RS −2; Coherence −1 harder
-│                      If RS ≤ 40: Shifting Object forms
-│                      If RS ≤ 20: Gap opens → [SCENARIO 6]
+│   ├─ PARTIAL      → Partial effect; MS −1; Coherence check harder
+│   └─ FAILURE      → Interaction collapses; MS −2; Coherence −1 harder
+│                      If MS ≤ 40: Shifting Object forms
+│                      If MS ≤ 20: Gap opens → [SCENARIO 6]
 │
 ├─ PULLING (Spirit + History + TPS, TN 7)
 │   │
-│   ├─ OVERWHELMING → Full effect; extended duration; RS unchanged
+│   ├─ OVERWHELMING → Full effect; extended duration; MS unchanged
 │   ├─ SUCCESS      → Full effect; standard duration
-│   ├─ PARTIAL      → Partial effect; RS −1; Coherence retention harder
-│   └─ FAILURE      → Snap-back; 1 Wound (no armour); RS −2; Coherence harder
+│   ├─ PARTIAL      → Partial effect; MS −1; Coherence retention harder
+│   └─ FAILURE      → Snap-back; 1 Wound (no armour); MS −2; Coherence harder
 │
 ├─ FORCED RESOLUTION — LOCK (Spirit + History, TN 7, min Ob 4)
 │   │
-│   ├─ OVERWHELMING → Target locked; RS −1; +1 TS
-│   ├─ SUCCESS      → Target locked; RS −1
-│   │                  Chronic drift begins: RS −1/season from season 2
-│   ├─ PARTIAL      → Partial lock; RS −2; Coherence −1
-│   └─ FAILURE      → Collapse onto practitioner; 2 Wounds; RS −3; Coherence −1
+│   ├─ OVERWHELMING → Target locked; MS −1; +1 TS
+│   ├─ SUCCESS      → Target locked; MS −1
+│   │                  Chronic drift begins: MS −1/season from season 2
+│   ├─ PARTIAL      → Partial lock; MS −2; Coherence −1
+│   └─ FAILURE      → Collapse onto practitioner; 2 Wounds; MS −3; Coherence −1
 │                      Adjacent configs: +1 Ob for season
 │
 ├─ FORCED RESOLUTION — DISSOLUTION (Spirit + History, TN 7, min Ob 4)
 │   │
-│   ├─ OVERWHELMING → Target dissolves; RS −3; Micro-Gap (closes this scene)
-│   ├─ SUCCESS      → Target dissolves; RS −5; Gap forms (closes 1 scene)
-│   ├─ PARTIAL      → Shifting Object; RS −6; Gap remains
-│   └─ FAILURE      → Full Gap; RS −8; Monstrous Incursion; Practitioner Incapacitated
+│   ├─ OVERWHELMING → Target dissolves; MS −3; Micro-Gap (closes this scene)
+│   ├─ SUCCESS      → Target dissolves; MS −5; Gap forms (closes 1 scene)
+│   ├─ PARTIAL      → Shifting Object; MS −6; Gap remains
+│   └─ FAILURE      → Full Gap; MS −8; Monstrous Incursion; Practitioner Incapacitated
 │                      → [SCENARIO 6] + [SCENARIO 3]
 │
 └─ CO-MOVEMENT FIRES on every operation regardless of outcome
@@ -248,20 +248,20 @@ INSPIRATION CHAIN
 ## SCENARIO 6: GAP FORMATION AND MONSTROUS INCURSION
 
 ```
-GAP OPENS (from: Dissolution failure, Weaving failure at RS ≤ 20,
-            Past-Oriented Pull, operation failure at RS threshold)
+GAP OPENS (from: Dissolution failure, Weaving failure at MS ≤ 20,
+            Past-Oriented Pull, operation failure at MS threshold)
 │
-├─ RS CONSEQUENCES BY CURRENT RS VALUE at Gap formation
-│   ├─ RS < 40  → Shifting Object forms
-│   ├─ RS 40–59 → Weak monstrous configuration
-│   ├─ RS 60–79 → Full monstrous entity
-│   └─ RS 80+   → Full entity + Shifting Object in each adjacent territory
+├─ MS CONSEQUENCES BY CURRENT MS VALUE at Gap formation
+│   ├─ MS < 40  → Shifting Object forms
+│   ├─ MS 40–59 → Weak monstrous configuration
+│   ├─ MS 60–79 → Full monstrous entity
+│   └─ MS 80+   → Full entity + Shifting Object in each adjacent territory
 │
 ├─ SHIFTING OBJECT stage (pre-Gap or from Partial operations)
 │   └─ Mend (Ob 2, TS 50+) can close before it escalates
 │
 ├─ GAP PERSISTS (not Mended this scene)
-│   └─ RS −4 per season (active Gap drain)
+│   └─ MS −4 per season (active Gap drain)
 │       │
 │       └─ After 1+ seasons: Entrenched Gap (Mend Ob 6, TS 70+)
 │          After 3+ seasons: Catastrophic Gap (Mend Ob 7; Einhir ritual or collective)
@@ -269,23 +269,23 @@ GAP OPENS (from: Dissolution failure, Weaving failure at RS ≤ 20,
 ├─ MENDING ATTEMPT (Attunement + Focus + TPS, TN 7)
 │   Ob = Gap severity (Shifting 2 → Catastrophic 7)
 │   │
-│   ├─ OVERWHELMING → Gap closes; RS +2; Coherence −1; Mended zone +1 Ob to Gap formation for 1 season
-│   ├─ SUCCESS      → Gap closes; RS +1; Coherence −1
+│   ├─ OVERWHELMING → Gap closes; MS +2; Coherence −1; Mended zone +1 Ob to Gap formation for 1 season
+│   ├─ SUCCESS      → Gap closes; MS +1; Coherence −1
 │   ├─ PARTIAL      → Gap reduced 1 severity category; second Mending needed
-│   └─ FAILURE      → Gap unchanged; Coherence −1; RS −2
+│   └─ FAILURE      → Gap unchanged; Coherence −1; MS −2
 │
 ├─ MONSTROUS INCURSION
 │   ├─ Treated as narrative/combat encounter in TTRPG
 │   ├─ Increases Church Credibility Evidence (Inquisitor's investigation pool)
-│   ├─ Contributes to TC rise (Thread events read as divine warning if RS < 55)
-│   └─ RS < 40 active: Monstrous Incursion risk in all territories with Gaps
+│   ├─ Contributes to TC rise (Thread events read as divine warning if MS < 55)
+│   └─ MS < 40 active: Monstrous Incursion risk in all territories with Gaps
 │
 └─ MULTI-SEASON UNADDRESSED GAP CHAIN
-    RS active drain: −4/season per Gap
+    MS active drain: −4/season per Gap
     Lock chronic drift: −1–2/season
     Winter passive drift: −1/season
     Combined: −6 to −10+/season without intervention
-    → If this exceeds Mending output → RS terminal decline → [SCENARIO 9]
+    → If this exceeds Mending output → MS terminal decline → [SCENARIO 9]
 ```
 
 ---
@@ -347,14 +347,14 @@ COHERENCE RECOVERY
 ## SCENARIO 8: FACTION CLOCK INTERACTIONS
 
 ```
-Three clocks run simultaneously: RS (100→0), TC (0→100), IP (0→100)
-Starting values: RS 28 (Stirring), TC 22, IP 20
+Three clocks run simultaneously: MS (100→0), TC (0→100), IP (0→100)
+Starting values: MS 28 (Stirring), TC 22, IP 20
 │
-├─ RS FALLS BELOW 55
+├─ MS FALLS BELOW 55
 │   ├─ TC +1/season
 │   └─ IP +1/season
 │
-├─ RS FALLS BELOW 40
+├─ MS FALLS BELOW 40
 │   ├─ TC +2/season (total, replaces the +1)
 │   ├─ IP +2/season (total)
 │   └─ Gaps may open spontaneously: 1d10/season; on 1–2 → Gap in lowest-Prosperity territory
@@ -369,35 +369,35 @@ Starting values: RS 28 (Stirring), TC 22, IP 20
 │       ├─ IP +2/season additional
 │       └─ Almaic Kyriakos begins formal documentation for Altonian Emperor
 │
-├─ TC > 60 AND RS < 40 SIMULTANEOUSLY
+├─ TC > 60 AND MS < 40 SIMULTANEOUSLY
 │   └─ Both clocks accelerate at maximum rate → fast path to dual CAMPAIGN EVENTS
 │
 ├─ ALL THREE CLOCKS ABOVE MIDPOINT SIMULTANEOUSLY
 │   └─ Campaign enters ENDGAME PHASE
 │
-├─ RS THRESHOLD EFFECTS (activate/deactivate at Accounting)
-│   ├─ RS 59–40 (Fragile): Shifting Objects spontaneously form in Thread territories
+├─ MS THRESHOLD EFFECTS (activate/deactivate at Accounting)
+│   ├─ MS 59–40 (Fragile): Shifting Objects spontaneously form in Thread territories
 │   │   one random Shifting Object/season; Thread ops +1 Ob in affected territories
-│   ├─ RS 39–20 (Fractured): Gaps may open spontaneously; Monstrous Incursion risk
+│   ├─ MS 39–20 (Fractured): Gaps may open spontaneously; Monstrous Incursion risk
 │   │   non-practitioners experience rendering failures
-│   └─ RS 19–1 (Critical): +1 Ob all Thread ops worldwide; faction Stability checks Ob 1/season
+│   └─ MS 19–1 (Critical): +1 Ob all Thread ops worldwide; faction Stability checks Ob 1/season
 │       Fail → Mandate −1 (min 0); at Mandate 0 fail → Faction Fracture (sub-faction splinters)
 │
 └─ FACTION INTERACTIONS (Domain Actions, seasonal)
     ├─ Crown vs Church: Sovereignty axis (TC brake via Sovereign Authority Doctrine)
     ├─ Church vs all:   Excommunication, Territory Seizure at TC 60+
     ├─ Guilds:          Economic friction; Thread operations visible → TC +1/event
-    ├─ Revolution:      Community Weaving (RS −2/season if sustained); loses Mending
-    │                   at Mandate 0 → feedback loop severs RS recovery
-    └─ Niflhel:         Residue harvesting (RS +0.5/season); Church-Niflhel exposure → TC −3
+    ├─ Revolution:      Community Weaving (MS −2/season if sustained); loses Mending
+    │                   at Mandate 0 → feedback loop severs MS recovery
+    └─ Niflhel:         Residue harvesting (MS +0.5/season); Church-Niflhel exposure → TC −3
 ```
 
 ---
 
-## SCENARIO 9: TERMINAL Rendering Stability DECLINE — THE EINHIR PATH
+## SCENARIO 9: TERMINAL Mending Stability DECLINE — THE EINHIR PATH
 
 ```
-RS ENTERS CRITICAL BAND (19–1)
+MS ENTERS CRITICAL BAND (19–1)
 │
 ├─ AUTOMATIC PRESSURES per season (cumulative unless resolved)
 │   ├─ Active Gaps: −4/Gap
@@ -410,11 +410,11 @@ RS ENTERS CRITICAL BAND (19–1)
 │   ├─ Fail → Mandate −1
 │   └─ At Mandate 0 fail → Faction Fracture (sub-faction splits)
 │
-├─ MENDING as only RS recovery path
-│   Best single Mending: RS +1 (Success) or +2 (Overwhelming)
-│   At RS 1: most operations risk Rupture on Failure
+├─ MENDING as only MS recovery path
+│   Best single Mending: MS +1 (Success) or +2 (Overwhelming)
+│   At MS 1: most operations risk Rupture on Failure
 │   Success rate at Ob 5–7: ~17–58% even at maximum pool
-│   Net seasonal RS change with active Mending: typically −8 to −15 still
+│   Net seasonal MS change with active Mending: typically −8 to −15 still
 │
 ├─ STRUCTURAL EXIT REQUIREMENTS (all must occur)
 │   ├─ 1. Remove all active Locks (eliminate drift): Pull at Ob = (Lock TS ÷ 10) − 2
@@ -424,11 +424,11 @@ RS ENTERS CRITICAL BAND (19–1)
 │          → Collective Pool: Anchor + helper floor(Cog ÷ 2) per helper
 │             Conflicting Beliefs: non-chaining or requires pre-Leap Spirit check
 │
-├─ COLLECTIVE OPERATION FAILURE at RS 1
-│   └─ Operation Failure → RS −8 (Dissolution) minimum
-│      At RS 1: RS 1 − 8 = RS ≤ 0 → THE RUPTURE
+├─ COLLECTIVE OPERATION FAILURE at MS 1
+│   └─ Operation Failure → MS −8 (Dissolution) minimum
+│      At MS 1: MS 1 − 8 = MS ≤ 0 → THE RUPTURE
 │
-└─ THE RUPTURE (RS = 0)
+└─ THE RUPTURE (MS = 0)
     ├─ Campaign event — not loss in the conventional sense
     ├─ No faction wins
     ├─ Ein Sof erupts through failed substrate: too much being for consciousness to render
@@ -491,7 +491,7 @@ IP RISES (various sources)
 │
 ├─ PUBLIC THREAD USE observed by Altonian agents → IP +2/event
 ├─ SUCCESSION DELAY past 2 campaign arcs → IP +2
-├─ RS < 55 → IP +1/season (cross-clock)
+├─ MS < 55 → IP +1/season (cross-clock)
 ├─ TC > 40 → IP +1/season
 ├─ TC > 60 → IP +2/season
 │
@@ -519,7 +519,7 @@ IP RISES (various sources)
     ├─ Unified Valorian diplomatic front (all factions cooperative): IP drift halts 1 season
     ├─ Schoenland trade alliance: IP −2/year; removes Merchant Consortium political cover
     └─ Grand Diplomatic Scene victory (requires: faction dominance + Church Mandate > 5
-        + RS > 50): IP frozen; peace treaty available
+        + MS > 50): IP frozen; peace treaty available
 ```
 
 ---
@@ -532,7 +532,7 @@ Crown faces succession question (Torben / Elske / Parliament / coup)
 ├─ TUTORING DEMAND (IP 30+)
 │   ├─ Accept: Crown legitimacy preserved; Torben leaves Valoria temporarily
 │   │   └─ Altonian influence over heir grows; future complication seeded
-│   └─ Refuse: IP +2 immediately; RS < 55 means TC also rises this season
+│   └─ Refuse: IP +2 immediately; MS < 55 means TC also rises this season
 │
 ├─ TORBEN PATH
 │   ├─ Torben established as heir: Crown Mandate stable; Church monitoring
@@ -550,8 +550,8 @@ Crown faces succession question (Torben / Elske / Parliament / coup)
 │   └─ Hafenmark supports constitutional resolution → Ob reduced (Categorical Imperative)
 │
 ├─ COUP PATH
-│   ├─ Any faction Stability 0 → Faction Fracture risk (RS ≤ 19)
-│   ├─ NPCs with coup trigger conditions: RS ≤ 10 → +1 to trigger check pool
+│   ├─ Any faction Stability 0 → Faction Fracture risk (MS ≤ 19)
+│   ├─ NPCs with coup trigger conditions: MS ≤ 10 → +1 to trigger check pool
 │   └─ Successful coup: Crown Mandate collapses; IP surge; TC surge if Church-aligned
 │
 └─ ROYAL DECREE (Crown Unique Action, 1/season)
@@ -605,7 +605,7 @@ Multiple practitioners target same configuration
     └─ As above, targeting substrate absence rather than thread
         Mend Ob ceiling: 8 (applies even to stacked collective modifiers)
         Required for: Catastrophic Gap (Ob 7), Locked Zone border (Ob 8+)
-        → Only structural exit from RS terminal decline → [SCENARIO 9]
+        → Only structural exit from MS terminal decline → [SCENARIO 9]
 ```
 
 ---
@@ -625,7 +625,7 @@ Personal combat occurring during a mass battle
 │   │
 │   ├─ OFFENSIVE (Dissolution, offensive Pull targeting enemy units)
 │   │   └─ Fires Phase 2 (before Engagement), simultaneous with Volley
-│   │       Declared Phase 1; RS costs ×3 floor, capped +15/operation
+│   │       Declared Phase 1; MS costs ×3 floor, capped +15/operation
 │   │
 │   └─ SUPPORT (Weave, Mend, Lock, non-offensive Pull)
 │       └─ Fires Phase 5 (Cascade), after Engagement
@@ -636,9 +636,9 @@ Personal combat occurring during a mass battle
 │       (a pre-battle appeal can alter opening combat state)
 │
 ├─ DOMAIN ECHO from mass combat outcome
-│   ├─ Major battle → RS +2 (significant mass battle source)
-│   ├─ Thread op in mass combat → RS ×3 floor cost
-│   └─ Einhir site under siege stress → RS −1 additional/season
+│   ├─ Major battle → MS +2 (significant mass battle source)
+│   ├─ Thread op in mass combat → MS ×3 floor cost
+│   └─ Einhir site under siege stress → MS −1 additional/season
 │
 └─ ZOOM IN / ZOOM OUT vocabulary
     ├─ Zoom In: GM narrows from mass scale to personal duel within battle
@@ -663,11 +663,11 @@ target same configuration with OPPOSING INTENTIONALITIES
 ├─ Board game order roll: made at Cascade Phase
 │
 ├─ Outcome determines which intentionality wins
-│   ├─ Both succeed: higher net successes prevails; loser's RS cost still applies
-│   ├─ One succeeds, one fails: succeeding side prevails; failing side's RS cost applies
-│   └─ Both fail: neither effect; both RS costs apply → net RS loss with no gain
+│   ├─ Both succeed: higher net successes prevails; loser's MS cost still applies
+│   ├─ One succeeds, one fails: succeeding side prevails; failing side's MS cost applies
+│   └─ Both fail: neither effect; both MS costs apply → net MS loss with no gain
 │
-├─ RS CHANGES: both Personal and Strategic Phase applied at Accounting
+├─ MS CHANGES: both Personal and Strategic Phase applied at Accounting
 │   Seasonal cap: ±10 net per season (cap applies to net after all sources)
 │
 ├─ COHERENCE: PC practitioner leading a Strategic Phase Thread order
@@ -676,7 +676,7 @@ target same configuration with OPPOSING INTENTIONALITIES
 │       └─ No PC declares → no Coherence cost (NPC-led; no personal Leap)
 │
 └─ LOCK CHRONIC DRIFT: registered on territory card at Cascade Phase
-    Drift begins next Accounting: RS −1/season per locked territory
+    Drift begins next Accounting: MS −1/season per locked territory
 ```
 
 ---
@@ -688,20 +688,20 @@ target same configuration with OPPOSING INTENTIONALITIES
 ### Loop A — The Einhir Spiral (most common campaign-ending pattern)
 ```
 Practitioner ambition (large-scale operations)
-→ RS loss per operation
-→ RS crosses threshold → +1 Ob worldwide
+→ MS loss per operation
+→ MS crosses threshold → +1 Ob worldwide
 → Operations harder → more Partial/Failure outcomes
-→ More RS loss per failed operation
+→ More MS loss per failed operation
 → Gaps open → Monstrous Incursion → Church Credibility Evidence rises
 → TC rise → IP rise → factional instability
 → Factional instability → Domain Actions misfiring → Mandate drops
 → Revolution loses Community Mending access (Mandate 0)
-→ RS loss unaddressed → RS Critical → [SCENARIO 9]
+→ MS loss unaddressed → MS Critical → [SCENARIO 9]
 ```
 
 ### Loop B — Church Dominance Lock
 ```
-TC rises above 55 (RS < 55 cross-clock)
+TC rises above 55 (MS < 55 cross-clock)
 → TC +2/season; IP +1/season
 → IP > 45: Church offers theological mediation
 → TC +1/season additional
@@ -729,16 +729,16 @@ Practitioner uses Dissolution Residue (Coherence −1 guaranteed)
 
 ### Loop D — Revolutionary Thread Access Window
 ```
-RS rises (world destabilising)
-→ RS 40+: Leap becomes available (Stirring/Wakening)
+MS rises (world destabilising)
+→ MS 40+: Leap becomes available (Stirring/Wakening)
 → Previously dormant TS characters can Leap
 → New practitioners emerge; Thread practice visible
 → Church TC rise (visible Thread use +1/event)
 → TC rise → IP rise → factional instability
 → BUT: if Revolution Community Weaves successfully:
-    RS −2/season; factional Stability pressure relieved
-→ IF Revolution Mandate drops to 0 (RS Critical → faction Stability checks):
-    Community Mending blocked → RS accelerates
+    MS −2/season; factional Stability pressure relieved
+→ IF Revolution Mandate drops to 0 (MS Critical → faction Stability checks):
+    Community Mending blocked → MS accelerates
 → Window closes precisely when it's needed most
 ```
 

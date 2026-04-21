@@ -58,7 +58,7 @@ Each NPC has a primary Resonant Style and a secondary (activates after primary e
 | Primary Conviction | Order | "Order is not made — it is maintained. Everything depends on not flinching." |
 | Secondary Conviction | Reason | Privately sympathises with Restoration. Recognises Thread reality may be true. Does not act on it. |
 | Ethical Framework | Virtue Ethics (Crown) | Aligned: −1 Ob on public, visible, virtuous action. Contradictory: +1 Ob on covert/expedient action. |
-| Primary Resonant Style | Consequence | Show him the cost of maintaining order: the practitioners persecuted, the knowledge lost, the Rendering Stability declining. His Order conviction claims to preserve Valoria. If preserving order is destroying what it protects, he cannot dismiss the argument. |
+| Primary Resonant Style | Consequence | Show him the cost of maintaining order: the practitioners persecuted, the knowledge lost, the Mending Stability declining. His Order conviction claims to preserve Valoria. If preserving order is destroying what it protects, he cannot dismiss the argument. |
 | Secondary Resonant Style | Solidarity | Activates only via intimate Knot. He is guarded; reaching him personally requires sustained relationship. |
 | Thread Sensitivity | 28 (near Stirring) | Unrecognised. His proximity to Thread awareness makes Evidence attacks partially effective but he lacks the perceptual framework to integrate what he is told. |
 | Certainty | 3 (Questioning) | Already cracking. Further decline possible through play. |
@@ -283,7 +283,7 @@ Activates only if Vaynard is eliminated (Loyalty 0 + Mandate 0, per PP-486).
 | Primary Conviction | Autonomy | Survival and profit. No moral framework. Pure instrumentality. |
 | Secondary Conviction | [None — Niflhel does not have a fallback ideology. If Autonomy fails, the arms fracture and each pursues individual survival.] |
 | Ethical Framework | Amoral Consequentialism (Niflhel) | Covert: −1 Ob (always). Public: +2 Ob. |
-| Primary Resonant Style | Consequence | Operationally focused. Show them that their actions are producing blowback that threatens their survival infrastructure. Thread Tension accumulation from Quiet deployments is the canonical example: they do not know they are degrading Rendering Stability. |
+| Primary Resonant Style | Consequence | Operationally focused. Show them that their actions are producing blowback that threatens their survival infrastructure. Thread Tension accumulation from Quiet deployments is the canonical example: they do not know they are degrading Mending Stability. |
 | Secondary Resonant Style | Evidence | If Consequence fails, present evidence of their own exposure — compromised operatives, trail leading to their supply chains, Warden detection of their Southernmost activity. Existential operational threat. |
 | Thread Sensitivity | Arm-dependent. Quiet operatives may include practitioners. |
 | Certainty | Variable. Operatives across all Certainty levels. |
@@ -510,20 +510,20 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 **Arc A: The Holdout (Default)**
 - Branch condition: No PC expedition reaches Southernmost. Wardens continue alone.
 - Conviction: Continuity, unchanged. No arc movement.
-- Behavior: Static. She holds. The Southernmost slowly loses ground. RS decline accelerates.
+- Behavior: Static. She holds. The Southernmost slowly loses ground. MS decline accelerates.
 
 **Arc B: The Collaboration**
 - Branch condition: PCs reach primary site (Season 3+) AND demonstrate Thread competence (successful Weaving in her presence).
 - Conviction: Continuity remains primary. Reason activates as secondary (she begins to consider strategic options beyond pure endurance).
-- Behavior: Edeyja shares warden knowledge. Campaign-altering information flows. RS stabilisation becomes possible.
+- Behavior: Edeyja shares warden knowledge. Campaign-altering information flows. MS stabilisation becomes possible.
 - Resonant Style shift: Solidarity activates (she now has colleagues for the first time in decades). PCs who build Knot with her gain access to the deepest Thread knowledge in the setting.
 - Belief 3 activates: "Help has come. I will not waste it."
 
 **Arc C: The Crisis**
-- Branch condition: Warden count reaches 0 (all other wardens killed or incapacitated) OR RS ≤ 20.
+- Branch condition: Warden count reaches 0 (all other wardens killed or incapacitated) OR MS ≤ 20.
 - Conviction: Continuity → Autonomy (the work has failed; she must survive to try again).
 - Behavior: Edeyja may leave the Southernmost for the first time. This is a campaign-defining event. [NOTE: This arc explicitly overrides edeyja_npc.md §'She never leaves the Southernmost.' The canonical statement describes current behavior under current conditions. Arc C specifies conditions under which that behavior changes. The canonical document's statement — 'She needs help she cannot ask for from people who don't know she exists' — implies she would act differently if the Southernmost's survival required it.] A TS 75–80 practitioner entering the peninsula's political space changes everything.
-- Risk: Her presence strains RS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ RS drain). She is a walking Calamity echo.
+- Risk: Her presence strains MS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ MS drain). She is a walking Calamity echo.
 
 ---
 
@@ -715,7 +715,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 2 | PT ≤ 1 in 3+ territories (population losing faith connection → Founding conditions for RM political emergence) | Community Organising in lowest-PT territory adjacent to RM Presence. |
 | 3 | Presence marker expansion to adjacent territory (if Stability ≥ 3) | Community Organising in adjacent territory without Presence marker. |
 | 4 | Founding Agent protection: if Founding Agent in threatened territory, relocate before hostile action resolves. | Standard |
-| 5 | Community Weaving (if RS ≤ 60 and practitioner with TS 30+ available) | RS restoration |
+| 5 | Community Weaving (if MS ≤ 60 and practitioner with TS 30+ available) | MS restoration |
 | 6 | If attacked: no military response (RM has no Military). Diplomatic appeal to allied faction. Senator Outward if Influence ≥ 2. | Reactive — non-violent |
 | 7 | Pass. Presence markers maintained. | Default |
 
@@ -725,8 +725,8 @@ All NPC faction priority trees follow a standardised 7-level structure:
 |---|---|---|
 | 1 | Gap or Shifting Object detected in any territory | Emergency Mend at Gap site. Wardens deploy to location. |
 | 2 | Niflhel supply chain disturbance detected (Thread Tension source traced to Southernmost harvesting) | Investigate source. Wardens intercept Niflhel operatives in Southernmost territory. |
-| 3 | RS ≤ 40 | Peninsula-wide Weaving. RS +1 per Warden deployment (max +2/season). |
-| 4 | Work alongside any faction performing Thread restoration (Community Weaving, Mending, RS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
+| 3 | MS ≤ 40 | Peninsula-wide Weaving. MS +1 per Warden deployment (max +2/season). |
+| 4 | Work alongside any faction performing Thread restoration (Community Weaving, Mending, MS-positive actions) | Cooperation: +1D to allied Thread operations in Southernmost-adjacent territories (Warden Cooperation Track ≥ 1). |
 | 5 | Assess any new practitioner who enters Southernmost territory | Assessment interview. TS ≤ 20: dismissed. TS 21–39: acknowledged. TS 40+: useful. |
 | 6 | If attacked: Thread operations at a scale that renders conventional force irrelevant. Wardens do not advertise this. | Absolute deterrence |
 | 7 | Continue containment work. Hold the Southernmost. | Default |
@@ -800,7 +800,7 @@ When a Zoom In Contest successfully targets an NPC's Resonant Style:
 
 | Constraint | Status |
 |---|---|
-| P-01 (Co-movement) | No Thread operations added. Contest RS effects use existing rules. |
+| P-01 (Co-movement) | No Thread operations added. Contest MS effects use existing rules. |
 | P-02 (Inseparability) | Not directly invoked. System operates at social/political layer. |
 | P-06 (Confrontation development) | TS thresholds in §5 follow Foundations §14. |
 | P-12 (Beliefs and rolls) | NPC Beliefs mirror PC system. Momentum/Belief achievement patterns respected. |

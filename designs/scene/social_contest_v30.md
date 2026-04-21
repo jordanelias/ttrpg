@@ -218,8 +218,8 @@ Both orators push in the same direction within the same temporal horizon.
 
 | Genre Won | Thread Consequence |
 |---|---|
-| Memory | Temporal co-movement (retention shift). The audience re-experiences cited configurations. Observers with Thread Sensitivity (TS) 30+ perceive thread-shimmer. Rendering Stability (RS) +1. |
-| Projection | Actualization co-movement (protention anchor). The argued future becomes a probability anchor. +1D on the first Domain Action pursuing that outcome within the season. RS +1 if the projection involves Thread-sensitive matters. |
+| Memory | Temporal co-movement (retention shift). The audience re-experiences cited configurations. Observers with Thread Sensitivity (TS) 30+ perceive thread-shimmer. Mending Stability (MS) +1. |
+| Projection | Actualization co-movement (protention anchor). The argued future becomes a probability anchor. +1D on the first Domain Action pursuing that outcome within the season. MS +1 if the projection involves Thread-sensitive matters. |
 
 
 **Domain Echo:**
@@ -229,7 +229,7 @@ Both orators push in the same direction within the same temporal horizon.
 
 **Total Victory** (Conviction Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one instance per session, clears at next session start if unused). Winning orator gains +1 Momentum (if below cap 4). Disposition change with all witnesses; Reputation shift (GM-set magnitude). In Board Game (BG) Parliamentary Vote: losing coalition's dominant faction takes Mandate −1 for one season.
 
-**Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. RS changes subject to RS ceiling (100) and RS=0 lockout.
+**Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. MS changes subject to MS ceiling (100) and MS=0 lockout.
 
 ### §6.1 Obligations (NEW — post-contest binding commitments)
 

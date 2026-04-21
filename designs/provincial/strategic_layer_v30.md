@@ -76,7 +76,7 @@ All rolls use **d10**. Results per die:
 
 **Impact on gameplay:**
 
-> **P-29: Rendering Stability gain:** Revolution Rendering Stability gain from Thread operations: +1 Rendering Stability per successful Weave against Church-held territory (max +2/season from this source). Requires Thread Sensitivity ≥ 20 practitioner.
+> **P-29: Mending Stability gain:** Revolution Mending Stability gain from Thread operations: +1 Mending Stability per successful Weave against Church-held territory (max +2/season from this source). Requires Thread Sensitivity ≥ 20 practitioner.
 
 > **P-23:** **Church Influence Seizure threshold:** Church Church Influence 80+ triggers seizure at next Accounting. Territory roll: Church Military vs Defender Military, Ob 2. Each success: one contested territory flips. Hard cap: maximum 2 territory transfers per seizure event per faction (prevents single-season consolidation).
 
@@ -86,7 +86,7 @@ All rolls use **d10**. Results per die:
 **Specific affected rules:**
 - Hafenmark Diplomat in T6: Influence 4, Diplomat −1 Ob, base Ob 1 = floor 1. Cannot be reduced further. ✓
 - Church in T3 with doctrine-aligned −1 Ob AND territory −1 Ob on a base Ob 2 action = Ob 1 floor. Correct.
-- Restoration Community Organizing: Ob = ceil((100−RS)/20) min 1, −1 per Presence marker in territory (floor 1). At RS 72 (start): Ob 2. Formula per params_board_game.md is canonical; bg_v05 simplified "Ob 2" is stale. [PP-491, ED-330 resolved]
+- Restoration Community Organizing: Ob = ceil((100−MS)/20) min 1, −1 per Presence marker in territory (floor 1). At MS 72 (start): Ob 2. Formula per params_board_game.md is canonical; bg_v05 simplified "Ob 2" is stale. [PP-491, ED-330 resolved]
 
 > **Policy Instrument definition (PP-036):** **Policy Instrument (Crown only):** When Crown's Mandate ≥ 4, Crown may take one additional Standard Action per season designated as the Policy Instrument. This action may be any action Crown could normally take; it is not limited by card-hand constraints. It activates once per season and cannot be interrupted by Parliamentary Manoeuvre (see P-19). Activation condition: Mandate ≥ 4 at the start of the season.
 
@@ -171,15 +171,15 @@ All rolls use **d10**. Results per die:
 
 
 
-> **Battle Consequences (PP-647):** Each Battle resolved on Valorian soil: RS −1 (Campaign/War scale: RS −2). Each season with inter-faction Battle: IP +2, Peninsular Strain +1. Attacker conquest: territory Accord → 1. Defender territory: Accord −1. Covert actions and ungarrisoned Church Seizure: no RS/IP/Strain cost. See peninsular_strain_v1.md §3.
+> **Battle Consequences (PP-647):** Each Battle resolved on Valorian soil: MS −1 (Campaign/War scale: MS −2). Each season with inter-faction Battle: IP +2, Peninsular Strain +1. Attacker conquest: territory Accord → 1. Defender territory: Accord −1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost. See peninsular_strain_v1.md §3.
 
 ---
 
-## I-06 — Restoration Victory Rendering Stability ≥ 50 vs Rendering Stability Starting at 72
+## I-06 — Restoration Victory Mending Stability ≥ 50 vs Mending Stability Starting at 72
 
 **Location:** B5 Restoration Victory.
-**Framing inconsistency:** "5 Presence markers in 5 non-adjacent territories, held 2 consecutive seasons + Rendering Stability ≥ 50." Rendering Stability starts at 72, so this condition is met at game start. The condition only becomes challenging once Rendering Stability degrades below 50, which means in early-game there's no Rendering Stability gate. This is almost certainly intentional design (Restoration must maintain Rendering Stability above 50 to win — it's a preservation condition, not an acquisition condition) but requires explicit framing.
-**Correction (PATCH P-17):** Add: "Rendering Stability ≥ 50 must be met at the moment of victory declaration. Restoration's network victory goal inherently requires preventing world degradation — their win is impossible if the world has decayed past the threshold."
+**Framing inconsistency:** "5 Presence markers in 5 non-adjacent territories, held 2 consecutive seasons + Mending Stability ≥ 50." Mending Stability starts at 72, so this condition is met at game start. The condition only becomes challenging once Mending Stability degrades below 50, which means in early-game there's no Mending Stability gate. This is almost certainly intentional design (Restoration must maintain Mending Stability above 50 to win — it's a preservation condition, not an acquisition condition) but requires explicit framing.
+**Correction (PATCH P-17):** Add: "Mending Stability ≥ 50 must be met at the moment of victory declaration. Restoration's network victory goal inherently requires preventing world degradation — their win is impossible if the world has decayed past the threshold."
 
 ---
 
@@ -381,7 +381,7 @@ But at RDT 6:
 8. **VICTORY CHECK:** Hafenmark declares victory at Accounting Step 12.
 9. **Hollow Victory check:** Hafenmark Appease count: assume 2 (−1 Deed effective). Effective Deeds: 3 − 1 = 2. Path A requires 3. Hafenmark CANNOT declare victory — Hollow Victory modifier reduces effective Deed count below threshold.
 
-> **Clarification (PP-035):** "Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction whose victory condition uses a Deed or similar countable token). Restoration's presence-based victory condition (Rendering Stability ≥ 50) and Löwenritter/Crown's mandate-based conditions are not Deed systems. Hollow Victory does not apply to these factions."
+> **Clarification (PP-035):** "Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction whose victory condition uses a Deed or similar countable token). Restoration's presence-based victory condition (Mending Stability ≥ 50) and Löwenritter/Crown's mandate-based conditions are not Deed systems. Hollow Victory does not apply to these factions."
 
 **Verdict:** The Reformed Settlement chain fires 6-7 effects in one resolution window. The Cascade Depth Cap of 3 immediate effects prevents some of these from applying instantly — specifically: the Church Influence gain, RDT gain, and Deed confirmation must queue to Accounting rather than applying mid-Phase. This is correct behavior per the cap rule. The cap prevents a single card play from immediately triggering a victory declaration within Phase 4.
 
@@ -389,31 +389,31 @@ But at RDT 6:
 
 ---
 
-## Cascade Test 3: Varfell Vaynard-scale Thread Operation + Co-Movement + Rendering Stability Trigger (PP-663 re-framed)
+## Cascade Test 3: Varfell Vaynard-scale Thread Operation + Co-Movement + Mending Stability Trigger (PP-663 re-framed)
 
 > **[HISTORICAL EXAMPLE — PP-664]** The scenario below was constructed when VTM was a live faction track. VTM has been struck from canon (PP-663). The example is preserved to illustrate cascade depth analysis, not as a normative description of current mechanics. For current Thread operations, see `threadwork_v30` — all Thread mastery is character-scale.
 
-**Setup:** Rendering Stability 38 (below 40; Thread operations Ob −1 globally active; but Ob1 floor applies). Varfell Vaynard personal Thread ops available (was VTM 5 — PP-663: faction track struck; test preserved as character-scale scene illustration). Varfell plays Pontifex (Senate Market, Thread operation) in T12. Declares Actualized dimension outcome before drawing (VTM 5 ability): chooses Rendering Stability +1 (stabilize).
+**Setup:** Mending Stability 38 (below 40; Thread operations Ob −1 globally active; but Ob1 floor applies). Varfell Vaynard personal Thread ops available (was VTM 5 — PP-663: faction track struck; test preserved as character-scale scene illustration). Varfell plays Pontifex (Senate Market, Thread operation) in T12. Declares Actualized dimension outcome before drawing (VTM 5 ability): chooses Mending Stability +1 (stabilize).
 
 **Thread Operation Procedure:**
 1. Declare: Pontifex, T12, Weaving (stabilization).
-2. Against temporal flow check: Rendering Stability is below 30? No (Rendering Stability 38). Prior Thread Debt in T12? Assume yes — 1 token present. → Thread Debt incurred. +1 Ob to NEXT operation here (per PATCH P-24 correction).
-3. Ob modifiers: base Ob 2, Thread Witness Node in T12? Assume yes (+1 additional Co-Movement draw later). Rendering Stability environment (49–30): Thread operations −1 Ob. Ob 2 − 1 = Ob 1 (floor). Thread Debt existing: this doesn't increase THIS operation's Ob (per PATCH P-24 — the debt affects the NEXT operation, not this one). Ob 1.
+2. Against temporal flow check: Mending Stability is below 30? No (Mending Stability 38). Prior Thread Debt in T12? Assume yes — 1 token present. → Thread Debt incurred. +1 Ob to NEXT operation here (per PATCH P-24 correction).
+3. Ob modifiers: base Ob 2, Thread Witness Node in T12? Assume yes (+1 additional Co-Movement draw later). Mending Stability environment (49–30): Thread operations −1 Ob. Ob 2 − 1 = Ob 1 (floor). Thread Debt existing: this doesn't increase THIS operation's Ob (per PATCH P-24 — the debt affects the NEXT operation, not this one). Ob 1.
 4. Roll: Thread operation — Vaynard-scale (character, not faction). Thread operations use the practitioner's personal TS/Coherence per threadwork_v30. Scene-layer resolution: Vaynard chooses the Actualized dimension outcome of one Co-Movement card draw." The roll itself uses Influence vs Ob.
    Roll 4d10: 9, 7, 2, 10 → 9(1), 7(1), 10(2) = 4 net. Ob 1, surplus 3 = **Overwhelming.**
 
-5. Apply result: Weaving Overwhelming in T12 — the stabilization works. Additional effect at Overwhelming: Rendering Stability +1 (from the declared Actualized dimension choice).
+5. Apply result: Weaving Overwhelming in T12 — the stabilization works. Additional effect at Overwhelming: Mending Stability +1 (from the declared Actualized dimension choice).
 6. Co-Movement draw: Thread Witness Node → draw 2 cards. Cards drawn: CM-12 (Ground Stability) and CM-19 (Substrate Assertion).
-   - Vaynard practitioner declaration: Actualized dimension already declared as Rendering Stability +1. CM-12 Actualized = Rendering Stability +1. CM-19 Actualized = Rendering Stability −3.
-   - Per VTM 5: "choose the Actualized dimension outcome of one Co-Movement card draw." Only ONE card's Rendering Stability can be chosen. The other applies normally.
-   - Varfell chooses CM-12 as the card for VTM 5 intervention: Rendering Stability +1 applies. CM-19's Rendering Stability −3 applies normally.
-   - Net Rendering Stability from this operation: +1 (Overwhelming) + +1 (CM-12 chosen) − 3 (CM-19) = Rendering Stability −1 net. Rendering Stability 38 → 37.
+   - Vaynard practitioner declaration: Actualized dimension already declared as Mending Stability +1. CM-12 Actualized = Mending Stability +1. CM-19 Actualized = Mending Stability −3.
+   - Per VTM 5: "choose the Actualized dimension outcome of one Co-Movement card draw." Only ONE card's Mending Stability can be chosen. The other applies normally.
+   - Varfell chooses CM-12 as the card for VTM 5 intervention: Mending Stability +1 applies. CM-19's Mending Stability −3 applies normally.
+   - Net Mending Stability from this operation: +1 (Overwhelming) + +1 (CM-12 chosen) − 3 (CM-19) = Mending Stability −1 net. Mending Stability 38 → 37.
 
 8. Attention Pool: CM-12 = no epistemic. CM-19: Varfell reveals operation type → Church Attention Pool +2.
 
-**Total cascade: Rendering Stability −1, Attention +2, Varfell operation type revealed to all, +1 Ob to next T12 Thread operation (Thread Debt).**
+**Total cascade: Mending Stability −1, Attention +2, Varfell operation type revealed to all, +1 Ob to next T12 Thread operation (Thread Debt).**
 
-**Verdict:** VTM 5's power is real but bounded. Two Co-Movement draws with Thread Witness Node creates meaningful variance — Varfell chose to stabilize but one of the two cards undercut them. The Rendering Stability outcome (−1 net after trying to stabilize) is appropriately dramatic. Reveal of operation type adds political heat. This is a well-designed climactic moment. **No crunch failure.** The VTM 5 ability is correctly scoped.
+**Verdict:** VTM 5's power is real but bounded. Two Co-Movement draws with Thread Witness Node creates meaningful variance — Varfell chose to stabilize but one of the two cards undercut them. The Mending Stability outcome (−1 net after trying to stabilize) is appropriately dramatic. Reveal of operation type adds political heat. This is a well-designed climactic moment. **No crunch failure.** The VTM 5 ability is correctly scoped.
 
 ---
 
@@ -448,7 +448,7 @@ Territories Church can seize: any non-Church controlled territory.
 # PART SIX: EMERGENT SCENARIOS (Branching Dice Rolls)
 
 ## SCENARIO A: The Klapp Awakening — Church-Varfell-Wardens Triangle
-*(Season 9, 4-player game. Church Influence 38, Rendering Stability 48, Vaynard in T9 — character-scale practitioner presence; PP-664: VTM state descriptor struck with VTM track)*
+*(Season 9, 4-player game. Church Influence 38, Mending Stability 48, Vaynard in T9 — character-scale practitioner presence; PP-664: VTM state descriptor struck with VTM track)*
 
 
 **Klapp Event draws from Named Character Events deck. Card drawn.**
@@ -568,7 +568,7 @@ Vanguard (defender, Balanced vs Offensive): Discipline 5 +fort? T4 has Fort 2: +
 **Comparison:** Complex action selection with cascading production chains. Valoria's Phase 5 Accounting is the most Feast-like element — many simultaneous calculations. The risk is that accounting feels like bookkeeping rather than drama. **Recommendation:** Any accounting step that changes the board state in a visible, narratively interesting way (a clock crossing a threshold, a faction collapsing) should be **announced dramatically** before the numbers are updated. The drama of "Church Influence crosses 50 — Assert/Suppress now mandatory every season" should be a table moment, not a quiet bookkeeping entry.
 
 ## Here I Stand / Virgin Queen
-- HIS has explicit rules for when the game ends in a shared loss (Ottoman conquest). Valoria's Rendering Stability Rupture = shared loss is correct but the Rendering Stability decline rate (−1/year baseline) is slow. In a 20-season game, Rendering Stability loses ~5 points from baseline alone. Thread operations accelerate this. The shared loss threat needs to feel more immediate in the mid-game.
+- HIS has explicit rules for when the game ends in a shared loss (Ottoman conquest). Valoria's Mending Stability Rupture = shared loss is correct but the Mending Stability decline rate (−1/year baseline) is slow. In a 20-season game, Mending Stability loses ~5 points from baseline alone. Thread operations accelerate this. The shared loss threat needs to feel more immediate in the mid-game.
 
 ## Twilight Imperium 4th Edition
 
@@ -716,8 +716,8 @@ Note: the 2×−1 variant (threshold at 2× Ob minus 1) was tested but produced 
 The Cascade phase resolves all batched consequences in fixed order. Game Master-run; not skippable.
 
 1. Domain Echoes from Personal phase scenes
-2. Thread operation clock changes (RS, TT)
-3. Clock threshold events (CI, IP, RS band transitions)
+2. Thread operation clock changes (MS, TT)
+3. Clock threshold events (CI, IP, MS band transitions)
 4. Board order consequences (Non-Player Character actions, coalition penalties, etc.)
 5. Accounting: attribute changes, seasonal caps applied, victory checks
 
@@ -771,7 +771,7 @@ A Player Character on an extended expedition (Southernmost, Einhir research) is 
 
 ## §9.15 Thread Debt in Hybrid — Design Note
 
-Thread Debt incurred in personal Thread operations applies on the board only when the Game Master determines the operation was "against temporal flow" by TTRPG criteria (Past-Oriented Pulling, contested operations at RS < 30). Standard Weaving, Mending, and Locking do not generate Thread Debt on the board regardless of RS level.
+Thread Debt incurred in personal Thread operations applies on the board only when the Game Master determines the operation was "against temporal flow" by TTRPG criteria (Past-Oriented Pulling, contested operations at MS < 30). Standard Weaving, Mending, and Locking do not generate Thread Debt on the board regardless of MS level.
 
 ---
 

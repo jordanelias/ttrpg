@@ -44,14 +44,14 @@
 
 **T15 rule (PP-407):** T15 Conviction is permanently 0. No action, event, faction ability, or seasonal drift may increase it. The Calamity annihilated orthodox Piety at the Einhir epicentre. This is metaphysically irreversible — the rendering itself is compromised there (P-07).
 
-**T9 soft cap:** Himmelenger starts at PT 5 but is not locked. Sustained pressure (Hafenmark suppression, Varfell cultural actions, RS decline) can reduce it. It does not auto-recover to 5.
+**T9 soft cap:** Himmelenger starts at PT 5 but is not locked. Sustained pressure (Hafenmark suppression, Varfell cultural actions, MS decline) can reduce it. It does not auto-recover to 5.
 
 ### 1.2 Movement Rules (PP-408)
 
 **Seasonal cap:** ±1 PT per territory per season. No combination of actions can move a territory's PT by more than 1 in a single season.
 
 
-**Exception — Calamity Drift (RS decline):** When Rendering Stability (RS) drops below a threshold, territories adjacent to T15 experience PT erosion. See §1.3.
+**Exception — Calamity Drift (MS decline):** When Mending Stability (MS) drops below a threshold, territories adjacent to T15 experience PT erosion. See §1.3.
 
 #### Movement Actions
 
@@ -60,7 +60,7 @@
 | Preach | Church | PT +1 | Church controls or is prominent in territory | Influence vs Ob 2 | Success: PT +1 in target territory |
 | Suppress Heresy | Church | PT +1 | Territory PT ≤ 2 | Influence vs Ob 3 | Success: PT +1. Failure: PT −1 (backlash) |
 | Cultural Reclamation | Varfell | PT −1 | Varfell controls territory OR territory has Einhir cultural presence | Influence vs Ob 2 | Success: PT −1 in target territory |
-| Community Weaving | RM (latent or active) | PT −1 | Territory PT ≤ 3 | See §5.3 | Success: PT −1 (plus RS effects per existing mechanic) |
+| Community Weaving | RM (latent or active) | PT −1 | Territory PT ≤ 3 | See §5.3 | Success: PT −1 (plus MS effects per existing mechanic) |
 | Secular Governance | Hafenmark | PT −1 | Hafenmark controls territory | Mandate vs Ob 2 | Success: PT −1. Cannot reduce below 2 via this action. |
 | Consecrate | Church | PT +1 | Church controls territory AND PT ≥ 3 | Influence vs Ob 3 | Success: PT +1. Additionally: territory becomes Consecrated (see §1.4) |
 | Missionary Work | Church | PT +1 | Territory not controlled by Church, PT ≤ 3 | Influence vs Ob = controlling faction's Mandate | Success: PT +1 in that territory |
@@ -68,14 +68,14 @@
 
 **Church prominence:** Church Mandate > controlling faction's Mandate in that territory. Required for Preach. Not required for Missionary Work (which targets territories where Church lacks prominence — hence the higher Ob).
 
-### 1.3 Calamity Drift — RS-Linked PT Erosion (PP-409)
+### 1.3 Calamity Drift — MS-Linked PT Erosion (PP-409)
 
 
-| RS Threshold | Effect |
+| MS Threshold | Effect |
 |-------------|--------|
-| RS ≤ 50 | Territories adjacent to T15 (T6, T13): PT −1 at Accounting if PT > 0 |
-| RS ≤ 35 | All territories within 2 steps of T15: PT −1 at Accounting if PT > 0. Adjacency per map. |
-| RS ≤ 20 | All territories: PT −1 at Accounting if PT > 0. Orthodoxy collapses under rendering strain. |
+| MS ≤ 50 | Territories adjacent to T15 (T6, T13): PT −1 at Accounting if PT > 0 |
+| MS ≤ 35 | All territories within 2 steps of T15: PT −1 at Accounting if PT > 0. Adjacency per map. |
+| MS ≤ 20 | All territories: PT −1 at Accounting if PT > 0. Orthodoxy collapses under rendering strain. |
 
 Calamity Drift applies after all faction actions resolve but before TC calculation. Calamity Drift ignores the ±1/season cap (it stacks with faction-driven movement). Calamity Drift cannot reduce T15 below 0 (already there) or increase any PT.
 
@@ -308,7 +308,7 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 | Varfell raises PT in own territory (via any means) | WA −1 |
 | Varfell allies with Church (formal alliance declared) | WA −2 (immediate) |
 | Varfell suppresses Community Weaving in own territory | WA −1 |
-| RS drops below 50 while Varfell controls T13 | WA −1 (Einhir sites destabilise; movement blames Varfell inaction) |
+| MS drops below 50 while Varfell controls T13 | WA −1 (Einhir sites destabilise; movement blames Varfell inaction) |
 
 **Seasonal cap:** ±1 WA per season (same discipline as PT).
 
@@ -320,7 +320,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 1. WA ≤ −2 (Varfell has alienated the movement)
 2. At least 3 territories have PT ≤ 1
-3. RS ≤ 50 (rendering instability feeds cultural desperation)
+3. MS ≤ 50 (rendering instability feeds cultural desperation)
 
 
 
@@ -338,13 +338,13 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 **Ethical Framework:** Rawlsian Social Contract (unchanged from stage6 design). −1 Ob for actions benefiting common population; +1 Ob for actions concentrating power.
 
-**NPC AI priority:** Reduce PT in adjacent territories. Protect RS. Oppose Church and any faction with Mandate ≥ 5.
+**NPC AI priority:** Reduce PT in adjacent territories. Protect MS. Oppose Church and any faction with Mandate ≥ 5.
 
 **Actions (once per season, NPC-controlled):**
 
 | Action | Roll | Effect |
 |--------|------|--------|
-| Community Weaving | Influence vs Ob = Thread Tension ÷ 20 (round up, min 1). Requires practitioner TS 30+ affiliated. | Overwhelming: RS +2, PT −1 in target territory. Success: RS +1, PT −1. Partial: no effect. Failure: Stability −1, RS −1. Co-Movement card drawn. |
+| Community Weaving | Influence vs Ob = Thread Tension ÷ 20 (round up, min 1). Requires practitioner TS 30+ affiliated. | Overwhelming: MS +2, PT −1 in target territory. Success: MS +1, PT −1. Partial: no effect. Failure: Stability −1, MS −1. Co-Movement card drawn. |
 | Grassroots Organising | Influence vs Ob 2 | Success: RM Mandate +1 in one territory with PT ≤ 2. Caps at Mandate 5. |
 | Resist Seizure | Influence vs Church Influence | When Church attempts seizure in territory with PT ≤ 2: RM adds +1 Ob to Church seizure roll. Passive — does not consume RM's action. |
 
@@ -383,9 +383,9 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 |------|-----------|------|
 | **Deed 1 — Thread Mastery** | VTM = 5. | — |
 | **Deed 2 — Territorial Command** | Control T4 (Grauwald) + T13 (Oastad) + ≥ 1 other territory simultaneously. | — |
-| **Deed 3 — World Intact** | RS ≥ 50 at the moment of victory declaration. | — |
+| **Deed 3 — World Intact** | MS ≥ 50 at the moment of victory declaration. | — |
 
-**Corrections applied:** T4 = Grauwald (was "Vargstad"). T13 = Oastad (was "Stillhelm"). Deed structure is otherwise sound — VTM 5 is a genuine multi-season investment (minimum ~S14–S16 to achieve), territorial control is non-trivial, and RS ≥ 50 creates tension with Thread operations that degrade RS.
+**Corrections applied:** T4 = Grauwald (was "Vargstad"). T13 = Oastad (was "Stillhelm"). Deed structure is otherwise sound — VTM 5 is a genuine multi-season investment (minimum ~S14–S16 to achieve), territorial control is non-trivial, and MS ≥ 50 creates tension with Thread operations that degrade MS.
 
 **No further changes required for Path C.**
 
@@ -393,7 +393,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 ## 7. Co-Victory Replacement — Varfell + RM (PP-418)
 
-**Old co-victory (DISSOLVED):** Varfell Thread Supremacy + Restoration Network Victory (both RS ≥ 50). Invalid — RM is no longer a primary faction with its own victory path.
+**Old co-victory (DISSOLVED):** Varfell Thread Supremacy + Restoration Network Victory (both MS ≥ 50). Invalid — RM is no longer a primary faction with its own victory path.
 
 **Replacement: Einhir Restoration Co-Victory**
 
@@ -404,7 +404,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 | VTM ≥ 4 | Varfell |
 | WA ≥ +2 | Varfell (cultivation choices) |
 | ≥ 4 territories at PT ≤ 1 | Both (Varfell Cultural Reclamation + latent RM Community Weaving) |
-| RS ≥ 40 | Both (Community Weaving sustains RS; Varfell Thread operations must not collapse it) |
+| MS ≥ 40 | Both (Community Weaving sustains MS; Varfell Thread operations must not collapse it) |
 | Warden Cooperation ≥ 2 | Varfell |
 | Vaynard controls T13 (Oastad) | Varfell |
 
@@ -437,8 +437,8 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 |-----|-------------|
 | [GAP: TC pacing — no simulation] | TC 75 timeline estimate (~S20) is analytical only. Needs simulation with faction AI to validate. Flag as SIM-DEBT. |
 | [GAP: AEA pacing — no simulation] | Altonian Theocracy clock has 5 advancement conditions. Needs simulation to confirm it is achievable but not trivial. |
-| [GAP: RM emergence frequency] | The triple condition (WA ≤ −2, 3 territories PT ≤ 1, RS ≤ 50) may be too restrictive or too permissive. Needs stress test. |
-| [GAP: Community Weaving dual effect] | Community Weaving now affects both RS and PT. Need to verify this does not create a positive feedback loop (low PT → more Weaving → lower PT → more RM power). |
+| [GAP: RM emergence frequency] | The triple condition (WA ≤ −2, 3 territories PT ≤ 1, MS ≤ 50) may be too restrictive or too permissive. Needs stress test. |
+| [GAP: Community Weaving dual effect] | Community Weaving now affects both MS and PT. Need to verify this does not create a positive feedback loop (low PT → more Weaving → lower PT → more RM power). |
 | [GAP: Consecrated status interaction with seizure] | Consecrated territories get −1 Ob on seizure but also require PT ≥ 5 via Consecrate action. This may make high-PT territories too easy to seize. Needs edge case check. |
 | [GAP: Hafenmark Secular Governance floor] | Secular Governance cannot reduce PT below 2. Is this the right floor? If Hafenmark wants to support RM, they may need to push lower. |
 | [GAP: Fort Level data] | Seizure Ob formula uses Fort Level (0–3). Confirm which territories have which Fort Levels — not in handoff. |
@@ -452,7 +452,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 | PP-406 | Track | Conviction (PT) starting values — 15 eligible territories, 0–5 range |
 | PP-407 | Track | T15 hard fix rule — PT permanently 0, no exceptions |
 | PP-408 | Track | PT movement rules — faction actions, frequency, seasonal cap ±1 |
-| PP-409 | Track | Calamity Drift — RS-linked PT erosion at RS ≤ 50/35/20 |
+| PP-409 | Track | Calamity Drift — MS-linked PT erosion at MS ≤ 50/35/20 |
 | PP-410 | Track | Consecrated status — PT 5 via Consecrate action, floor of 4 while Church controls |
 | PP-411 | Seizure | Church Seizure Ob = 2 + Fort Level + max(0, 3 − PT). Prominence required. |
 | PP-412 | TC | TC generation redesign — passive +1, Conviction Yield, Assert, Suppress, Hafenmark structural |

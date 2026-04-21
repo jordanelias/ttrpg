@@ -14,11 +14,11 @@ Valoria has no scripted plot. Arcs emerge from five mechanical engines running i
 
 | Engine | Key Output |
 |---|---|
-| Three clocks (Rendering Stability / Theocracy Counter / Institutional Pressure) | Threshold events; loss conditions |
+| Three clocks (Mending Stability / Theocracy Counter / Institutional Pressure) | Threshold events; loss conditions |
 | Seasonal accounting (Stability checks, Domain Echoes) | Faction collapse; power shifts |
 | Non-Player Character trigger conditions (Ehrenwall counter, Vaynard TK, Baralta Theocracy Counter suppression) | Named-Non-Player Character decision points |
 | Political axes (9 qualitative axes) | Scene conflict framing; casus belli |
-| Thread operations + Co-Movement | Ontological consequences; Rendering Stability drain |
+| Thread operations + Co-Movement | Ontological consequences; Mending Stability drain |
 
 Each arc below names the **mechanical seed**, traces the **causal chain** through these engines, and shows the resulting **campaign shape**. The same seed produces different arcs depending on player choices at each branch.
 
@@ -98,24 +98,24 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A["Niflhel deploys The Quiet each season\nEach deployment: TT +0.5 cumulative\n(Southernmost harvesting supply chain)"] --> B["TT rises → RS falls\nat Accounting: RS threshold events fire"]
-    B --> C["RS threshold events\nGM determines consequences organically\nfrom current political/Thread state"]
+    A["Niflhel deploys The Quiet each season\nEach deployment: TT +0.5 cumulative\n(Southernmost harvesting supply chain)"] --> B["TT rises → MS falls\nat Accounting: MS threshold events fire"]
+    B --> C["MS threshold events\nGM determines consequences organically\nfrom current political/Thread state"]
     C --> D["Church Mandate ≥ 5\nTC +1/season automatic\nChurch gains institutional momentum"]
     A --> E["Niflhel does not know it is causing TT rise\nNo Niflhel Domain Action targets TT\nNo player or NPC is tracking it"]
-    E --> F{"Players investigate RS decline"}
-    F -->|"No investigation"| G["RS continues falling\nThreshold events cascade\nRS < 40: mid-crisis\nRS < 20: endgame imminent"]
+    E --> F{"Players investigate MS decline"}
+    F -->|"No investigation"| G["MS continues falling\nThreshold events cascade\nRS < 40: mid-crisis\nRS < 20: endgame imminent"]
     F -->|"Investigation begins"| H["GM evidence trail:\nThread disturbances at Southernmost\nNiflhel supply chain visible to sensitives"]
     H --> I["Players must control 4 Niflhel arms\nOne Intel vs Ob 3 per arm\nArms act independently if redirected incorrectly"]
     I --> J{Arms controlled}
     J -->|"All 4"| K["Southernmost harvesting stops\nTT stops rising\nRS stabilises — but does not recover without active Mending"]
     J -->|"Partial"| L["Uncontrolled arms continue harvesting\nTT still rising at reduced rate\nControlled arms can be used as intelligence assets"]
-    K --> M["Revolution Community Weaving now viable\nRequires TS 30+ practitioner affiliated\nInfluence vs Ob = TT ÷ 20\nSuccess: TT −1; RS recovers"]
+    K --> M["Revolution Community Weaving now viable\nRequires TS 30+ practitioner affiliated\nInfluence vs Ob = TT ÷ 20\nSuccess: TT −1; MS recovers"]
     M --> N["Co-Movement Card drawn\nEven recovery has Thread consequences\nP-01 applies: unintended ontological shift"]
     N --> O["Church detects Thread activity during recovery\nOntological Axis 9 activates: Thread truth approaching public"]
     O --> P["TC rise from Church consolidation response\nFaction crisis: knowledge axis and ontological axis both active"]
 ```
 
-**Why this arc is emergent:** Niflhel's Thread Tension accumulation is a mechanical side effect of its core operation, not a villain plan. The arc exists because Niflhel is good at its job. The players may not connect Rendering Stability decline to Niflhel operations for several seasons.
+**Why this arc is emergent:** Niflhel's Thread Tension accumulation is a mechanical side effect of its core operation, not a villain plan. The arc exists because Niflhel is good at its job. The players may not connect Mending Stability decline to Niflhel operations for several seasons.
 
 **Campaign shape:** Background decay for 3–5 seasons. Investigation arc of 2–3 seasons. Recovery arc of 2–4 seasons. Theocracy Counter rise in the recovery arc creates a second front.
 
@@ -164,7 +164,7 @@ These arcs do not run in isolation. Common collision points:
 | Collision | Arcs | Mechanic |
 |---|---|---|
 | Martial Law fires while Vaynard Revelation is at Parliamentary Vote | 1 + 2 | Vote blocked by Martial Law Military check |
-| Niflhel Thread Tension drain accelerates Rendering Stability fall during Axis 9 Resolution | 3 + 4 | Rendering Stability threshold events fire during Grand Debate season |
+| Niflhel Thread Tension drain accelerates Mending Stability fall during Axis 9 Resolution | 3 + 4 | Mending Stability threshold events fire during Grand Debate season |
 | Vaynard TK 5 + Löwenritter coup at same Accounting | 2 + 1 | Two crisis events same season; Stability checks stack |
 | Revolution Weaving reduces Thread Tension while Church responds to Axis 9 | 3 + 4 | Thread Tension drops but Theocracy Counter rises from Church consolidation; clocks trade off |
 | Church territorial seizure (Theocracy Counter 60) during Coup Martial Law | 1 (late) | Church seizes Crown-law-locked territories; Löwenritter cannot respond legally |

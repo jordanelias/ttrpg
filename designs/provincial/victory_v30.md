@@ -25,7 +25,7 @@
 ## Core Frame
 
 
-Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Rendering Stability (RS) crisis. Church compensates with Mass Seizure — a one-shot bid available at CI ≥ 60, strongest at CI 100. Crown and Varfell can address RS via Thread path but at cost of political resources.
+Two simultaneous contests: who governs the peninsula AND whether it survives. Church and Hafenmark are structurally blind to the Mending Stability (MS) crisis. Church compensates with Mass Seizure — a one-shot bid available at CI ≥ 60, strongest at CI 100. Crown and Varfell can address MS via Thread path but at cost of political resources.
 
 **Equal win probability** for Crown, Varfell, Hafenmark, Church. Restoration Movement (RM) is hardest mode (Hybrid only). (BALANCE-001, revised PP-494)
 
@@ -88,7 +88,7 @@ Global track (0–10). Advances from inter-faction battles, faction eliminations
 
 ### 0.4 Battle Consequences
 
-Each Battle on Valorian soil: RS −1 (Campaign/War scale: RS −2). Each season with inter-faction battle: IP +2, Strain +1. See peninsular_strain_v1.md §3.
+Each Battle on Valorian soil: MS −1 (Campaign/War scale: MS −2). Each season with inter-faction battle: IP +2, Strain +1. See peninsular_strain_v1.md §3.
 
 ### 0.5 Faction Acquisition Toolkits
 
@@ -168,7 +168,7 @@ Key rules:
 - T15 (Askeheim) PT hard-fixed at 0. Cannot increase. (P-03 + Foundations §8)
 - T9 (Himmelenger) starts at 5, soft cap — can drop under pressure, does not auto-recover.
 - **PT action cap:** Each faction may initiate at most one deliberate PT-moving action per territory per season (±1 max). Calamity Drift, Church Seizure Overwhelming PT bonus, and Domain Echoes from Zoom In are consequences — they are not faction actions and are not cap-governed.
-- Calamity Drift (RS-linked PT erosion) ignores the action cap. RS ≤ 50: T6/T13 PT −1. RS ≤ 35: territories within 2 steps of T15 PT −1. RS ≤ 20: all territories PT −1.
+- Calamity Drift (MS-linked PT erosion) ignores the action cap. MS ≤ 50: T6/T13 PT −1. MS ≤ 35: territories within 2 steps of T15 PT −1. MS ≤ 20: all territories PT −1.
 
 ---
 
@@ -391,7 +391,7 @@ PT ≤ 1 in ≥ 4 of the 15 playable territories (T1–T14, T17) *(PP-543: was �
 #### Phase 2 — Cultural Uprising of T9 Himmelenger
 Available only while Phase 1 condition is met. Declared once per game at any Accounting where Phase 1 holds. RM plays their Pontifex card and rolls: **Weaver Thread pool vs Ob = CI ÷ 10 (round up, min 1, max 5).**
 
-Prerequisites: RS ≥ 25 (substrate must be stable enough for a coherent popular movement — below 25, physical destabilisation overwhelms cultural organisation). If RS < 25, Cultural Uprising is unavailable regardless of Phase 1 status.
+Prerequisites: MS ≥ 25 (substrate must be stable enough for a coherent popular movement — below 25, physical destabilisation overwhelms cultural organisation). If MS < 25, Cultural Uprising is unavailable regardless of Phase 1 status.
 
 Modifiers:
 - T9 PT ≤ 1: Ob −1 (Cathedral already culturally shifted)
@@ -407,7 +407,7 @@ Modifiers:
 | Failure | Uprising crushed. CI +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc. |
 
 #### RM Territory Control — Cultural Displacement
-**Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Organizing places Presence markers; it does not directly reduce PT. PT reduction comes from: successful Uprising OW (T9, −2 PT), Calamity Drift (RS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). (CR-STRIKE-2026-04-19: Cultural Reformation −1 PT removed.) RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
+**Presence markers vs Phase 1 (important distinction):** Presence markers are the *holding mechanic* for post-Uprising T9 (≥ 3 required in T9). They are NOT the Phase 1 mechanic. Phase 1 (PT ≤ 1 in ≥ 4 territories) tracks Piety Track values, not Presence marker counts. Community Organizing places Presence markers; it does not directly reduce PT. PT reduction comes from: successful Uprising OW (T9, −2 PT), Calamity Drift (MS ≤ 50 in low-PT territories), and natural secular drift (−1 PT per 5 seasons without Church cultivation). (CR-STRIKE-2026-04-19: Cultural Reformation −1 PT removed.) RM players should prioritise PT reduction for Phase 1 and Presence markers for post-Uprising T9 holding — these are parallel but distinct goals.
 
 **Overwhelming Uprising bonus:** An Overwhelming Cultural Uprising result automatically places +2 Presence markers in T9 (population mobilisation from the Uprising itself). These markers are placed before the holding condition is checked, ensuring OW Uprising immediately provides the foundation for holding T9.
 
@@ -456,7 +456,7 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 | PV held | ≥ 10 |
 | CI | < 50 |
 | IP | < 60 |
-| RS | > 40 |
+| MS | > 40 |
 | PI | ≥ 4 |
 | Successor confirmed | Elske confirmed OR Torben Loyalty ≥ 6 |
 | Season | ≥ 20 (Year 5) |
@@ -472,11 +472,11 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 | 4–5 | Aligned | IP −1/season |
 | 6–7 | Devoted | IP −2/season; Diplomatic Exchange eligible |
 
-**Advancement:** Senator Outward (Diplomacy Ob 2) Success +1, OW +2. Personal scene Disposition ≥ +2 (Solidarity RS) +1. Fair trade treatment of Schoenland routes: +1/year. Conviction violation: −1. War on Schoenland: −3.
+**Advancement:** Senator Outward (Diplomacy Ob 2) Success +1, OW +2. Personal scene Disposition ≥ +2 (Solidarity MS) +1. Fair trade treatment of Schoenland routes: +1/year. Conviction violation: −1. War on Schoenland: −3.
 
 **Diplomatic Exchange (Loyalty ≥ 6, IP < 60):** Senator Outward, Ob 2. Success: IP −10, threshold +5, AER +1, Elske status changes to willing resident. OW: All above + Schoenland Treaty.
 
-**"Elske confirmed"** = Diplomatic Exchange success. Satisfies Regency Establishment condition above. *Conviction: Order. RS: Solidarity. Certainty: 4.*
+**"Elske confirmed"** = Diplomatic Exchange success. Satisfies Regency Establishment condition above. *Conviction: Order. MS: Solidarity. Certainty: 4.*
 
 #### Alternate — Military Consolidation
 Only available if Regency Establishment not achieved after 8 Löwenritter seasons (track with counter on Löwenritter mat).
@@ -485,7 +485,7 @@ Only available if Regency Establishment not achieved after 8 Löwenritter season
 |-----------|-----------|
 | PV held | ≥ 16 |
 | Löwenritter Military | ≥ 5 |
-| RS | > 35 |
+| MS | > 35 |
 | CI | < 60 |
 
 
@@ -521,9 +521,9 @@ When Coup Counter reaches 4 and Löwenritter activates:
 | Pair | Conditions (all simultaneous at Accounting) |
 |------|---------------------------------------------|
 | **Crown + Hafenmark** | Crown PV ≥ 12 AND Hafenmark PV ≥ 12 AND PI ≥ 7 AND CI < 50 AND Crown Mandate ≥ 4 AND Hafenmark Mandate ≥ 4 AND neither faction has played Legionary targeting the other in preceding 4 seasons | *(PP-561 + PP-572, ED-391: 4-season no-active-conflict reinforces cooperative design)* |
-| **Crown + Varfell** | Crown PV ≥ 12 AND Varfell PV ≥ 8 AND WR ≥ 2 AND RS ≥ 50 | *(PP-663: VTM ≥ 3 replaced by WR ≥ 2)* |
-| **Varfell + RM** | WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND RS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4; PP-663: VTM ≥ 3 term struck)* |
-| **Hafenmark + RM** | Hafenmark PV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND RS ≥ 40 | *(PP-546: territories was ≥ 4)* |
+| **Crown + Varfell** | Crown PV ≥ 12 AND Varfell PV ≥ 8 AND WR ≥ 2 AND MS ≥ 50 | *(PP-663: VTM ≥ 3 replaced by WR ≥ 2)* |
+| **Varfell + RM** | WR ≥ 2 AND ≥ 3 territories PT ≤ 1 AND MS ≥ 40 AND Varfell controls T13 | *(PP-545: VTM was ≥ 4; territories was ≥ 4; PP-663: VTM ≥ 3 term struck)* |
+| **Hafenmark + RM** | Hafenmark PV ≥ 10 AND ≥ 3 territories PT ≤ 2 AND PI ≥ 4 AND MS ≥ 40 | *(PP-546: territories was ≥ 4)* |
 | **Löwenritter + Hafenmark** | Löwenritter PV ≥ 8 AND Hafenmark PV ≥ 8 AND PI ≥ 4 |
 | **Church + Hafenmark (Partition)** | See §3.2. Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict. Requires Phase 1 Declaration (see below). |
 
@@ -539,7 +539,7 @@ Co-victories are distinct from operational coalitions (PP-404/405). A faction ma
 
 **No shared loss. No fade to black.** Every crisis becomes a new chapter. The campaign continues.
 
-### 5.1 RS=0 → Post-Calamity Era
+### 5.1 MS=0 → Post-Calamity Era
 
 The substrate tears. The world changes. Campaign continues.
 
@@ -594,7 +594,7 @@ Recovery from Phase 3: IP reduced below 60 through sustained resistance. This is
 
 [EDITORIAL: ED-685 — RM Underground Network conversion. Source: historical_precedents_analysis.md §2.]
 
-**Critical design note:** During Occupation, the game world continues ticking. RS declines. Thread phenomena intensify. The Southernmost calamity clock does not pause. Faction internal politics continue. The Occupation is a new constraint layered on existing systems, not a replacement.
+**Critical design note:** During Occupation, the game world continues ticking. MS declines. Thread phenomena intensify. The Southernmost calamity clock does not pause. Faction internal politics continue. The Occupation is a new constraint layered on existing systems, not a replacement.
 
 ### 5.3 All Factions Dissolved → Anarchy Era
 
@@ -610,9 +610,9 @@ No faction has standing Mandate. Parliament has no quorum. The Ministry continue
 
 ### The Rupture Scene (ED-630)
 
-When RS reaches 0 at Accounting, the Rupture Scene fires as a narrative transition into the Post-Calamity Era.
+When MS reaches 0 at Accounting, the Rupture Scene fires as a narrative transition into the Post-Calamity Era.
 
-**Step 1 — World state narration:** The engine describes what RS 0 feels like in the territory the player currently occupies. Sensory, immediate, not abstract.
+**Step 1 — World state narration:** The engine describes what MS 0 feels like in the territory the player currently occupies. Sensory, immediate, not abstract.
 
 **Step 2 — The Last Declaration:**
 
@@ -621,20 +621,20 @@ The player states: (1) their primary Belief as currently written; (2) one specif
 **Step 3 — Post-Calamity Era begins.** Faction acquisition suspended. Mending becomes the most consequential action in the game.
 ---
 
-## 6. Askeheim and RS (BALANCE-004)
+## 6. Askeheim and MS (BALANCE-004)
 
-If no faction engages with Askeheim (T15), RS trends toward 0 and a second Calamity occurs.
+If no faction engages with Askeheim (T15), MS trends toward 0 and a second Calamity occurs.
 
-**See also:** references/rs_budget.md (centralized RS drain/recovery budget), references/wc_survival_spine.md (WC as the mechanism of the survival contest).
+**See also:** references/rs_budget.md (centralized MS drain/recovery budget), references/wc_survival_spine.md (WC as the mechanism of the survival contest).
 
-**The Two Contests:** The campaign presents two simultaneous contests: (1) political sovereignty — which faction governs, and (2) world survival — does the world survive. WC is the mechanism of Contest 2. RS 0 = Rupture = all factions lose. See wc_survival_spine.md for the full strategic architecture, including the IP/expedition resource tension that makes the contests compete.
+**The Two Contests:** The campaign presents two simultaneous contests: (1) political sovereignty — which faction governs, and (2) world survival — does the world survive. WC is the mechanism of Contest 2. MS 0 = Rupture = all factions lose. See wc_survival_spine.md for the full strategic architecture, including the IP/expedition resource tension that makes the contests compete.
 
 **Warden Cooperation track (0–3):**
 - WC ≥ 1: +1D to all Thread operations peninsula-wide.
-- WC ≥ 2: All RS drain from Gaps and Locks halved.
-- WC ≥ 3: RS +2/season at Accounting (Edeyja active Mending). **This is the singular endgame survival path** — see rs_budget.md Scenario C.
+- WC ≥ 2: All MS drain from Gaps and Locks halved.
+- WC ≥ 3: MS +2/season at Accounting (Edeyja active Mending). **This is the singular endgame survival path** — see rs_budget.md Scenario C.
 
-Multiple victory conditions require RS thresholds. A faction that ignores RS risks losing to Rupture regardless of territorial control.
+Multiple victory conditions require MS thresholds. A faction that ignores MS risks losing to Rupture regardless of territorial control.
 
 **Warden Recognition (WR) track (0–4) — Varfell Path B:**
 - WR 0: Wardens unaware or indifferent.
@@ -670,12 +670,12 @@ WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is e
 **Prerequisites (all required):**
 - Player PC Disposition ≥ +3 with Yrsa Vossen
 - ≥ 2 territories have PT ≤ 2
-- RS ≥ 40
+- MS ≥ 40
 - Player has completed ≥ 1 Community Organizing (political organizing — building consensus-governance cells, mutual-aid networks, community contacts)
 
 **Founding Scene (mandatory Priority 0 Zoom In when prerequisites met):**
 1. Player proposes: a named territory (first cell location), a Commitment, a Belief declaration.
-2. Vossen evaluates via Solidarity RS. Argue roll: Attunement primary, No Adjudicator, Ob 2. Success → Founding. Partial → 1 additional Community Organizing required next season. Failure → retry after 1 season.
+2. Vossen evaluates via Solidarity MS. Argue roll: Attunement primary, No Adjudicator, Ob 2. Success → Founding. Partial → 1 additional Community Organizing required next season. Failure → retry after 1 season.
 3. On Founding, RM is created with: Mandate 2, Influence 4, Wealth 1, Military 0, Stability 4.
 
 **Post-Founding:** Praetor card activates (Community Projects). Mandate cap 4. PC Embedding: +1D on RM Domain Actions in Founding territory. Phase 1 objective: PT ≤ 1 in ≥ 4 territories.
@@ -752,7 +752,7 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 | PP-412 | Victory | Hafenmark Dynastic Assertion — T1 Valorsplatz (corrected from old T-number) |
 | PP-413 | Victory | Church Altonian Theocracy — T9 Himmelenger (corrected from old T-number) |
 | PP-414 | Victory | Varfell Path B provisional (ED-311 pending) |
-| PP-415 | Victory | RM Cultural Revolution — RS ≥ 40 confirmed canonical |
+| PP-415 | Victory | RM Cultural Revolution — MS ≥ 40 confirmed canonical |
 | PP-416 | PT | PT action cap clarified — consequences not cap-governed |
 | PP-417 | Church | Prominence mechanic defined (Church Mandate > controlling faction Mandate per territory) |
 | PP-418 | Löwenritter | Military Consolidation — 8-season timer requires counter on Löwenritter mat |
@@ -800,7 +800,7 @@ Simulation confirms that spoiler strategies are functional. Key findings:
 
 ### RM Solo Victory (Hybrid mode, post-Founding)
 Phase 1: ≥ 4 territories PT ≤ 1, held 2 consecutive Accounting steps. *(PP-543: was ≥ 5)*
-Phase 2: Cultural Uprising of T9 Himmelenger. RS ≥ 25 required (PP-467).
+Phase 2: Cultural Uprising of T9 Himmelenger. MS ≥ 25 required (PP-467).
 Roll: Weaver Thread pool vs Ob = CI ÷ 10. Win: T9 under RM administration + Phase 1 held × 2 Accounting steps.
 
 ### §4 Co-Victory Override (PP-478)
@@ -809,5 +809,5 @@ Varfell+RM and Hafenmark+RM co-victories: **Hybrid mode only, post-Founding.** B
 ### §8 RM Emergence Override (PP-478)
 The WA-based spontaneous RM Emergence mechanic (§8) is REPLACED by the Founding mechanic.
 WA track remains (it governs Warden's Accord, not RM emergence). The triple-condition RM emergence
-(WA ≤ −2 AND ≥ 3 territories PT ≤ 1 AND RS ≤ 50) is struck. RM emergence is now exclusively
+(WA ≤ −2 AND ≥ 3 territories PT ≤ 1 AND MS ≤ 50) is struck. RM emergence is now exclusively
 via the Founding Mechanic in Hybrid mode.

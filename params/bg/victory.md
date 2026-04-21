@@ -12,9 +12,9 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 | Hafenmark | Parliamentary Sovereignty | PV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | PV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
 | Varfell Path B | Southernmost Dominion | PV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
-| Varfell Path C | Thread Supremacy | PV ≥ 10 + VTM = 5 + Rendering Stability (RS) ≥ 50 |
+| Varfell Path C | Thread Supremacy | PV ≥ 10 + VTM = 5 + Mending Stability (MS) ≥ 50 |
 | Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: PT ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
-| Löwenritter | Regency Establishment | PV ≥ 10 + Thread Consciousness (CI) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
+| Löwenritter | Regency Establishment | PV ≥ 10 + Thread Consciousness (CI) < 50 + IP < 60 + MS > 40 + PI ≥ 4 + successor |
 
 **Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Peninsular Strain ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
 
@@ -49,16 +49,16 @@ Per victory_v30.md §4. All require 2 consecutive Accounting steps except Church
 | Pair | Key Conditions |
 |------|---------------|
 | Crown + Hafenmark | Crown PV ≥ 12, Hafenmark PV ≥ 12, PI ≥ 7, CI < 50, Crown Mandate ≥ 4, Hafenmark Mandate ≥ 4 | *(PP-561)* |
-| Crown + Varfell | Crown PV ≥ 12, Varfell PV ≥ 8, VTM ≥ 3, RS ≥ 50 |
-| Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, RS ≥ 40 |
-| Hafenmark + RM | Hafenmark PV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, RS ≥ 40 |
+| Crown + Varfell | Crown PV ≥ 12, Varfell PV ≥ 8, VTM ≥ 3, MS ≥ 50 |
+| Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, MS ≥ 40 |
+| Hafenmark + RM | Hafenmark PV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, MS ≥ 40 |
 | Löwenritter + Hafenmark | Löwenritter PV ≥ 8, Hafenmark PV ≥ 8, PI ≥ 4 |
 | Church + Hafenmark (Partition) | Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
 
 Incompatible: Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
 ### Shared Loss Conditions
-Per victory_v30.md §5. RS = 0 (Rupture), IP ≥ 100 + Altonian External Relationship (AER) ≤ 1 (Altonian Conquest), or all factions Stability 0 (Total Institutional Collapse).
+Per victory_v30.md §5. MS = 0 (Rupture), IP ≥ 100 + Altonian External Relationship (AER) ≤ 1 (Altonian Conquest), or all factions Stability 0 (Total Institutional Collapse).
 
 ### Hollow Victory — DISSOLVED
 The Hollow Victory modifier system (Deed-count penalties) has been dissolved with the Deed system (PP-427). In Hybrid mode, BG victory without personal arc resolution is a narrative qualifier per P-32 (see victory_v30.md §9.3).
@@ -87,9 +87,9 @@ PI advances per existing IP/PI interaction rules. PI markers placed in territori
 | Hafenmark | Parliamentary Sovereignty | PV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | PV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
 | Varfell Path B | Southernmost Dominion | PV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
-| Varfell Path C | Thread Supremacy | PV ≥ 10 + VTM = 5 + Rendering Stability (RS) ≥ 50 |
+| Varfell Path C | Thread Supremacy | PV ≥ 10 + VTM = 5 + Mending Stability (MS) ≥ 50 |
 | Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: PT ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
-| Löwenritter | Regency Establishment | PV ≥ 10 + Thread Consciousness (CI) < 50 + IP < 60 + RS > 40 + PI ≥ 4 + successor |
+| Löwenritter | Regency Establishment | PV ≥ 10 + Thread Consciousness (CI) < 50 + IP < 60 + MS > 40 + PI ≥ 4 + successor |
 
 **Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Peninsular Strain ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
 
@@ -126,9 +126,9 @@ Per victory_v30.md §4. All require 2 consecutive Accounting steps except Church
 | Pair | Key Conditions |
 |------|---------------|
 | Crown + Hafenmark | Crown PV ≥ 12, Hafenmark PV ≥ 12, PI ≥ 7, CI < 50, Crown Mandate ≥ 4, Hafenmark Mandate ≥ 4 | *(PP-561)* |
-| Crown + Varfell | Crown PV ≥ 12, Varfell PV ≥ 8, VTM ≥ 3, RS ≥ 50 |
-| Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, RS ≥ 40 |
-| Hafenmark + RM | Hafenmark PV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, RS ≥ 40 |
+| Crown + Varfell | Crown PV ≥ 12, Varfell PV ≥ 8, VTM ≥ 3, MS ≥ 50 |
+| Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, MS ≥ 40 |
+| Hafenmark + RM | Hafenmark PV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, MS ≥ 40 |
 | Löwenritter + Hafenmark | Löwenritter PV ≥ 8, Hafenmark PV ≥ 8, PI ≥ 4 |
 | Church + Hafenmark (Partition) | Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
 
@@ -136,7 +136,7 @@ Incompatible: Crown + Church, Crown + Löwenritter, Church + Varfell, Church + R
 
 
 ### Shared Loss Conditions
-Per victory_v30.md §5. RS = 0 (Rupture), IP ≥ 100 + Altonian External Relationship (AER) ≤ 1 (Altonian Conquest), or all factions Stability 0 (Total Institutional Collapse).
+Per victory_v30.md §5. MS = 0 (Rupture), IP ≥ 100 + Altonian External Relationship (AER) ≤ 1 (Altonian Conquest), or all factions Stability 0 (Total Institutional Collapse).
 
 
 ### Hollow Victory — DISSOLVED

@@ -33,7 +33,7 @@
 
 2. Set Safety Tools.
 3. Create Characters: 3 Histories at 2 points each; 31 points; declare 3–5 Knots.
-4. Set clocks: Rendering Stability 72, Theocracy Counter 15, Institutional Pressure 20.
+4. Set clocks: Mending Stability 72, Theocracy Counter 15, Institutional Pressure 20.
 5. Review the Action Economy and Scope Shift procedure.
 
 ### TTRPG Endgame
@@ -41,7 +41,7 @@
 
 **Endgame indicators (Game Master guidance — not triggers):**
 - All PCs have resolved or abandoned their central Beliefs.
-- Rendering Stability has risen above 80 (world recovering) or fallen below 20 (world doomed).
+- Mending Stability has risen above 80 (world recovering) or fallen below 20 (world doomed).
 - The succession crisis has resolved (Torben, Elske, Parliament, or coup).
 - The Church's authority is broken or triumphant (Theocracy Counter below 20 or above 80).
 - Altonia has invaded or been permanently deterred.
@@ -67,7 +67,7 @@
 
 Victory conditions are checked at the end of each season's accounting phase.
 
-**Shared loss condition (all modes):** Rendering Stability reaches 0. The Rupture. No faction wins.
+**Shared loss condition (all modes):** Mending Stability reaches 0. The Rupture. No faction wins.
 
 **Additional endgame triggers:**
 - Season 10 reached: highest point total wins.
@@ -99,7 +99,7 @@ One hybrid session covers one season, structured in four phases:
 
 ### Clock Synchronisation
 
-All three clocks (Rendering Stability, Theocracy Counter, Institutional Pressure) advance at Accounting regardless of mode. In hybrid:
+All three clocks (Mending Stability, Theocracy Counter, Institutional Pressure) advance at Accounting regardless of mode. In hybrid:
 - Board game orders that affect clocks resolve at Accounting.
 - No clock advances between Personal and Strategic phases — everything batches to Accounting.
 
@@ -108,7 +108,7 @@ All three clocks (Rendering Stability, Theocracy Counter, Institutional Pressure
 
 
 
-**Hybrid loss:** Rendering Stability 0, or faction collapse with no personal resolution.
+**Hybrid loss:** Mending Stability 0, or faction collapse with no personal resolution.
 
 ---
 
@@ -154,7 +154,7 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| Thread operations | Personal-scale (Weaving, Pulling, Mending, Leaps) with full narrative | Faction-scale (Weave/Mend/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal Rendering Stability. |
+| Thread operations | Personal-scale (Weaving, Pulling, Mending, Leaps) with full narrative | Faction-scale (Weave/Mend/Investigate/Harvest orders) with Co-Movement Card | Personal Phase: TTRPG Thread ops. Strategic Phase: board game Thread orders. Both count toward seasonal Mending Stability. |
 | Co-movement | Version C (automatic deterministic + actual d6) | Co-Movement Card deck (18 cards) | Personal Phase: Version C. Strategic Phase: Co-Movement Cards. |
 | Discovery Events | Full narrative scene | Attribute change only (no scene) | TTRPG scene triggered by board game Discovery Event |
 
@@ -170,7 +170,7 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| Rendering Stability/Theocracy Counter/Institutional Pressure advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
+| Mending Stability/Theocracy Counter/Institutional Pressure advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
 | Threshold events | Game Master narrates and runs scenes | Event card or table lookup | Board game trigger; Game Master may run TTRPG scene for narratively significant thresholds |
 
 
@@ -188,9 +188,9 @@ Where the three modes diverge mechanically:
 3. Narrates the secondary consequence as part of the scene.
 
 
-### Rendering Stability Threshold Events
+### Mending Stability Threshold Events
 
-When Rendering Stability crosses a threshold (downward), the Game Master determines a narratively appropriate consequence from the current situation. No event deck. The current political, social, and thread-level state of the world should generate the threshold consequence organically. See §5.4.3 for the full Rendering Stability threshold table.
+When Mending Stability crosses a threshold (downward), the Game Master determines a narratively appropriate consequence from the current situation. No event deck. The current political, social, and thread-level state of the world should generate the threshold consequence organically. See §5.4.3 for the full Mending Stability threshold table.
 
 ---
 

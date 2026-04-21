@@ -222,7 +222,7 @@ The Southernmost Zones system is superseded by the Proximity Rating system. Each
 | 4 | T2 Kronmark, T16 Schoenland, T9 Himmelenger, T7 Rendstad, T10 Spartfell |
 | 5 | T3 Lowenskyst, T8 Gransol, T17 Halvarshelm |
 
-RS effects per Proximity Rating: see §Rendering Stability (RS) Effects above (Simplified BG Lookup Table from calamity_radiation_v30.md).
+MS effects per Proximity Rating: see §Mending Stability (MS) Effects above (Simplified BG Lookup Table from calamity_radiation_v30.md).
 
 
 
@@ -230,7 +230,7 @@ RS effects per Proximity Rating: see §Rendering Stability (RS) Effects above (S
 ### Authority: designs/ttrpg/edeyja_npc.md; Philosophical Foundations P-13
 
 **T6 Stillhelm = normal territory.** Standard military march, territorial control,
-Domain Actions all apply. Difficult frontier terrain (+1 Ob non-Thread) and RS drain
+Domain Actions all apply. Difficult frontier terrain (+1 Ob non-Thread) and MS drain
 from substrate proximity, but no special access gate.
 
 **T15 Askeheim = the Southernmost proper.** Not a normal territory. Cannot be
@@ -305,7 +305,7 @@ Champion path in the game. Lenneth's path remains arc-dependent (ED-119 open).
 ### Authority: designs/ttrpg/edeyja_npc.md; Philosophical Foundations P-13
 
 **T6 Stillhelm = normal territory.** Standard military march, territorial control,
-Domain Actions all apply. Difficult frontier terrain (+1 Ob non-Thread) and RS drain
+Domain Actions all apply. Difficult frontier terrain (+1 Ob non-Thread) and MS drain
 from substrate proximity, but no special access gate.
 
 **T15 Askeheim = the Southernmost proper.** Not a normal territory. Cannot be

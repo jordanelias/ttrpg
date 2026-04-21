@@ -293,8 +293,8 @@ BARALTA'S SOLMUND CLAIM — PRECONDITIONS
 │       │   Does he support her publicly? That is Axis 1, Axis 3, and
 │       │   Axis 9 simultaneously.
 │       │
-│       └─ RS consequences (if Thread truth enters public political discourse):
-│           RS does not change from the speech itself — this is rendered-side.
+│       └─ MS consequences (if Thread truth enters public political discourse):
+│           MS does not change from the speech itself — this is rendered-side.
 │           But: if the debate forces practitioners into the open to testify
 │           about Solmund's nature, Thread operations may fire. Each operation:
 │           co-movement as standard. Axis 9 begins resolving publicly.
@@ -359,9 +359,9 @@ NIFLHEL-CHURCH EXPOSURE CHAIN
     ├─ COLLISION: Church-Niflhel exposure + Southernmost expedition
     │   If Niflhel's Southernmost harvesting supply chain becomes public:
     │   Niflhel Stability −2; Church Stability −2 (complicity);
-    │   RS consequence: Niflhel harvesting disturbs Thread environment
-    │   at +0.5 RS/season — until now unknown; exposure makes it stoppable
-    │   → RS −0.5/season once operation ceases (slow but real)
+    │   MS consequence: Niflhel harvesting disturbs Thread environment
+    │   at +0.5 MS/season — until now unknown; exposure makes it stoppable
+    │   → MS −0.5/season once operation ceases (slow but real)
     │
     └─ KLAPP CONVERSION (CE 4, TS 31 approaching Stirring)
         If Klapp's TS grows past 30 during this crisis:
@@ -513,7 +513,7 @@ ELSKE'S STARTING STATE
     │   phenomena during her Altonian years and has TS 10+...]
     │   A Queen with Thread sensitivity, post-Church exposure:
     │   TC +2 immediately (Church demands she renounce or submit to Inquisitor)
-    │   RS: no direct effect, but her potential support of practitioners
+    │   MS: no direct effect, but her potential support of practitioners
     │   is the most powerful political shield practitioners have ever had
     │   → Axis 9 begins resolving; → Axis 1, 2, 3 all activate simultaneously
     │
@@ -529,9 +529,9 @@ ELSKE'S STARTING STATE
 # ARC 7: THE SOUTHERNMOST SPIRAL
 
 ```
-SOUTHERNMOST CRISIS TIMELINE (RS-driven, not fixed season)
+SOUTHERNMOST CRISIS TIMELINE (MS-driven, not fixed season)
 │
-├─ RS REACHES 50 (Stirring/Wakening boundary)
+├─ MS REACHES 50 (Stirring/Wakening boundary)
 │   Outer Einhir winding shows strain.
 │   Practitioners in adjacent territories report pressure.
 │   Boundary configurations degrading — first player warning.
@@ -542,14 +542,14 @@ SOUTHERNMOST CRISIS TIMELINE (RS-driven, not fixed season)
 │   │
 │   └─ NO STABILISING WEAVING for 3 consecutive seasons:
 │       Outer winding begins to crack.
-│       Visible map effect. RS +1/season from Southernmost begins.
+│       Visible map effect. MS +1/season from Southernmost begins.
 │
 ├─ CRACKING CONTINUES 3 more seasons without Ceiral Ritual attempt:
 │   Outer winding fails.
-│   RS +2/season from Southernmost — automatic, unremovable until Ritual.
-│   → RS acceleration feeds [Scenario 9: Terminal Decline]
+│   MS +2/season from Southernmost — automatic, unremovable until Ritual.
+│   → MS acceleration feeds [Scenario 9: Terminal Decline]
 │
-├─ EXPEDITION ATTEMPTED (requires RS ≥ 40; practitioner TS 30+)
+├─ EXPEDITION ATTEMPTED (requires MS ≥ 40; practitioner TS 30+)
 │   │
 │   Season 1 — Approach:
 │   ├─ Military escort Cohesion check Ob 1 (Thread proximity unsettles troops)
@@ -578,18 +578,18 @@ SOUTHERNMOST CRISIS TIMELINE (RS-driven, not fixed season)
     Requirements: Ceiral Text + Awareness 5+ + TS 60+ lead + 2× TS 20+ participants
     │
     ├─ OVERWHELMING → wound stabilises permanently
-    │   RS −10; Southernmost settleable
+    │   MS −10; Southernmost settleable
     │
     ├─ SUCCESS → temporary stabilisation
-    │   RS −6; accessible without prerequisites for 5 seasons; re-attempt possible
+    │   MS −6; accessible without prerequisites for 5 seasons; re-attempt possible
     │
     ├─ PARTIAL → partial stabilisation
-    │   RS −3; Forgetting Ob −1 permanently; lead practitioner cannot re-attempt
+    │   MS −3; Forgetting Ob −1 permanently; lead practitioner cannot re-attempt
     │
     └─ FAILURE → outer winding tears
-        RS +8; Mode 3 monstrous entity at primary site;
+        MS +8; Mode 3 monstrous entity at primary site;
         lead practitioner Incapacitated
-        → RS +8 may cross Critical threshold immediately
+        → MS +8 may cross Critical threshold immediately
         → Monstrous entity of Mode 3: largest single monster in the game;
            requires mass combat or collective Thread operation to address
         → Church: Inquisitor reports + TC +2 (Thread catastrophe = divine warning)
@@ -781,7 +781,7 @@ Almud develops TS 30 (Discovery Event)
   Or: Almud as practitioner-king is the most radical possible narrative resolution.
 → TC CONSEQUENCE: if Almud publicly acknowledges Thread practice:
   TC +3 (Church mobilises against ruling monarch)
-  But: RS improves if he supports Mending operations (new practitioner with high TS capital)
+  But: MS improves if he supports Mending operations (new practitioner with high TS capital)
 → This is the scenario in which Axis 9 resolves publicly and the campaign's
   central dramatic question answers itself.
 ```
@@ -794,16 +794,16 @@ Almud develops TS 30 (Discovery Event)
 
 ```
 Torben at Loyalty 3: Crown Mandate −2; Ehrenwall Coup Counter +1
-→ Same season: Ceiral Ritual fails → RS +8; Mode 3 entity; lead practitioner incapacitated
-→ RS crosses 50 (if near boundary): Southernmost cracking clock resets to 0
+→ Same season: Ceiral Ritual fails → MS +8; Mode 3 entity; lead practitioner incapacitated
+→ MS crosses 50 (if near boundary): Southernmost cracking clock resets to 0
   AND +2/season begins
-→ IP +2 (Altonian agents observe the RS surge)
+→ IP +2 (Altonian agents observe the MS surge)
 → TC +2 (Church: Thread catastrophe = divine warning requiring Church leadership)
-→ Church: RS < 55 cross-clock fires: TC +1/season; IP +1/season
+→ Church: MS < 55 cross-clock fires: TC +1/season; IP +1/season
 → Ehrenwall Coup Counter: TC at 40+? → Counter increment fires
 → Counter may now reach 3 from a single season's cascade:
   Torben condition + TC condition + (if Crown lost territories) = coup
-→ Players face: retrieve Torben OR contain RS OR prevent TC from crossing 40
+→ Players face: retrieve Torben OR contain MS OR prevent TC from crossing 40
   All three simultaneously, with one lead practitioner incapacitated.
 ```
 
@@ -863,10 +863,10 @@ Baralta claims Solmund-ordained authority (not Church-mediated)
   Destabilisation Trigger fires fully: the Church's relics ARE originary Locks
   Church Stability −3 in one season.
   Axis 9 resolves publicly. The world knows what Solmund was.
-→ RS consequence: Axis 9 resolution doesn't change RS directly —
+→ MS consequence: Axis 9 resolution doesn't change MS directly —
   but if originary Locks are now in public discourse, practitioners
   attempt to work them. Each attempt: standard co-movement.
-  At the scale of foundational-locked objects: RS consequences severe.
+  At the scale of foundational-locked objects: MS consequences severe.
 ```
 
 ---
@@ -881,11 +881,11 @@ The campaign's central dramatic question answers itself when at least three of t
 | Axis 9 resolves publicly | Church's foundational claim is contested |
 | Elske is installed independently | Succession stable without Altonian capture |
 | Torben retrieved at Loyalty 6+ | Dynasty intact |
-| Rendering Stability above 40 (Wakening → Stirring) | Practitioners functional; world stabilising |
+| Mending Stability above 40 (Wakening → Stirring) | Practitioners functional; world stabilising |
 | Theocracy Counter below 40 | Church institutional conquest stalled |
 | Institutional Pressure below 45 | Altonian invasion deterred |
 | Ehrenwall's Coup Counter at 1 or less | Löwenritter maintain institutional loyalty |
-| Southernmost stabilised (Ceiral Ritual success) | Rendering Stability −6 to −10; world healing |
+| Southernmost stabilised (Ceiral Ritual success) | Mending Stability −6 to −10; world healing |
 
 **All nine simultaneously: STABLE — the peninsula survives intact, changed.**
 

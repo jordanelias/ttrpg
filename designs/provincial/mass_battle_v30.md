@@ -481,7 +481,7 @@ Phase 6, not immediately. Unit unaffected. Failed First Leap (Dissociation):
 character unavailable for remainder of battle. *[EDGE-03]*
 
 **Thread Gaps from battle:** Gaps created during mass battle are registered
-on the territory card at battle resolution. Standard Gap Rendering Stability drift applies.
+on the territory card at battle resolution. Standard Gap Mending Stability drift applies.
 *[EDGE-05]*
 
 ---
@@ -549,11 +549,11 @@ Professional units (Light Infantry and above) have no such restriction — they 
 
 **Battle outcome → faction consequences:** *[FACTION-P2-02 — proposed, EDITORIAL]*
 **Battle outcome → peninsular consequences (PP-647, peninsular_strain_v1.md §3):**
-- Each Battle resolved on Valorian soil: RS −1 (Campaign/War scale: RS −2). Immediate.
+- Each Battle resolved on Valorian soil: MS −1 (Campaign/War scale: MS −2). Immediate.
 - Each season with inter-faction battle: IP +2 (checked at Accounting step 4e).
 - Each season with inter-faction battle: Peninsular Strain +1 (checked at Accounting step 4d).
-- Popular Uprising (Accord 0 territory): RS −1. Does NOT trigger IP +2 or Strain +1 (not inter-faction).
-- Altonian Vanguard battle: RS −1. Does NOT trigger IP +2 (Altonia's own operation) or Strain +1.
+- Popular Uprising (Accord 0 territory): MS −1. Does NOT trigger IP +2 or Strain +1 (not inter-faction).
+- Altonian Vanguard battle: MS −1. Does NOT trigger IP +2 (Altonia's own operation) or Strain +1.
 - Territory conquered by military victory: Accord set to 1 (peninsular_strain_v1.md §2.4).
 - Unit destroyed: faction Military −1 (subject to ±2/season cap)
 - Battle lost (defending force routed): Cohesion −15 (derived_stats_v1)
@@ -576,7 +576,7 @@ the Woven configuration shatters into a Shifting Object. A Woven unit can be
 simultaneously more and less resilient than an unworked unit. *[EDGE-07]*
 
 
-must be converted to Rendering Stability with inversion (Thread Tension +N → Rendering Stability −N). *[EDGE-06 — P1,
+must be converted to Mending Stability with inversion (Thread Tension +N → Mending Stability −N). *[EDGE-06 — P1,
 requires separate compilation pass on stage5_clocks.md]*
 
 ---
@@ -679,7 +679,7 @@ Formation Break at Health 0.
 **Step 6 — Morale.** Formation Break → Discipline check Ob 2 → Route on fail.
 
 **Thread in BG battles:** handled by Co-Movement cards per existing rules.
-At Rendering Stability < 20: T-03 fires — both sides draw 1 Co-Movement card per battle.
+At Mending Stability < 20: T-03 fires — both sides draw 1 Co-Movement card per battle.
 *[P3-c confirmed]*
 
 ---
@@ -720,7 +720,7 @@ approval — each reflects the faction's military doctrine.]
 ### B.5 HYBRID HANDOFF
 
 **No Player Character in battle:** BG resolution fires. Territory control applies. Faction
-stat consequences (Military, Stability) apply at Accounting. Rendering Stability changes from
+stat consequences (Military, Stability) apply at Accounting. Mending Stability changes from
 any Thread orders apply at Accounting.
 
 **Zoom In — Phase-Lock Protocol (PP-103):**
@@ -833,7 +833,7 @@ Every Battle resolved on Valorian soil carries systemic costs beyond the immedia
 
 | Consequence | Trigger | Value |
 |------------|---------|-------|
-| Substrate Fracture | Any inter-faction Battle | RS −1 (Campaign/War scale: RS −2) |
+| Substrate Fracture | Any inter-faction Battle | MS −1 (Campaign/War scale: MS −2) |
 | Accord erosion — conquered territory | Attacker conquers via Battle | Accord set to 1 (Category A: all settlements reset to Order 1) |
 | Accord erosion — defender's territory | Battle occurs in a territory the defender controls | Order −1 in settlement nearest battle site (Category B per §2.5) |
 
@@ -846,13 +846,13 @@ Every Battle resolved on Valorian soil carries systemic costs beyond the immedia
 
 ### §E.3 Exceptions
 
-- Covert operations (Niflhel sabotage, Church Seizure of ungarrisoned territories): no RS/IP/Strain cost.
-- Altonian Vanguard battles: RS −1 (siege) only; no IP or Strain from these.
-- Popular Uprisings (Accord 0 garrison combat): RS −1 only; no IP or Strain.
+- Covert operations (Niflhel sabotage, Church Seizure of ungarrisoned territories): no MS/IP/Strain cost.
+- Altonian Vanguard battles: MS −1 (siege) only; no IP or Strain from these.
+- Popular Uprisings (Accord 0 garrison combat): MS −1 only; no IP or Strain.
 - Löwenritter Coup activation battles: Strain +1 only for first 2 seasons; no IP (per peninsular_strain §4.3 exemption).
 
 ### §E.4 Cumulative caps per season
 
-Maximum RS change from battles: −3 per season (regardless of battle count within season). Maximum Strain advancement from battles: +2 per season. IP advancement is uncapped — each battle season = +3 IP, stacking with TC-based IP advancement (peninsular_strain §3.2).
+Maximum MS change from battles: −3 per season (regardless of battle count within season). Maximum Strain advancement from battles: +2 per season. IP advancement is uncapped — each battle season = +3 IP, stacking with TC-based IP advancement (peninsular_strain §3.2).
 
 *Sources: peninsular_strain_v1.md §3, military_layer_v30.md §2.2b, victory_v30.md §0.4, board_game PP-647. This section consolidates those references into one canonical location.*

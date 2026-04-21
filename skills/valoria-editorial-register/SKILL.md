@@ -224,7 +224,7 @@ After any session where design work was done:
 | ST-BG-01: Overwhelming threshold (Ob+1 vs 2×Ob) | bg_v05_simulation_and_patches.md | P1 | board_game, dice |
 | ST-BG-05: Theocracy Counter (TC) 80 seizure scope | bg_v05_simulation_and_patches.md | P1 | board_game, church |
 | ST-INT-02: Commander bonus formula (three conflicting formulas) | bg_v05, mass_battle_v3 | P1 | mass_combat, hybrid, commander |
-| ST-INT-07: Ceiral Ritual Rendering Stability gain vs Co-Movement scale | bg_v05, mass_battle_v3 | P2 | threadwork, hybrid, scaling |
+| ST-INT-07: Ceiral Ritual Mending Stability gain vs Co-Movement scale | bg_v05, mass_battle_v3 | P2 | threadwork, hybrid, scaling |
 | ST-INT-08: Muster output in BG context (Str=2 off token scale) | bg_v05, mass_battle_v3 | P2 | board_game, hybrid, muster |
 | ST-INT-12: Altonian invasion unit stats BLOCKER | bg_v05, mass_battle_v3 | P1-BLOCKER | hybrid, mass_combat, altonia |
 | ST-MB-01: Volley TN 6 vs universal TN 7 | mass_battle_v3.md | P1 | mass_combat, volley |

@@ -11,7 +11,7 @@
 
 A GitHub repository (`jordanelias/ttrpg`, branch `main`) containing the complete design documentation for a tabletop game called Valoria. Approximately 35 active design documents, 15 parameter/reference files, 10 canonical/amendment files, and supporting infrastructure. No game code. Pure mechanical specification — formulas, procedures, tables, edge-case rulings, patch history.
 
-The documents describe a hybrid game: personal-scale RPG (one character in combat, social contests, metaphysical operations) interlocked with strategic-scale board game (one faction competing for territorial control). Two scales connected by a consequence propagation system. Three world clocks measuring existential threats — Rendering Stability at zero is shared loss; the other two (Theocracy Counter, Institutional Pressure) create escalating crises that reshape the game but are not automatically terminal.
+The documents describe a hybrid game: personal-scale RPG (one character in combat, social contests, metaphysical operations) interlocked with strategic-scale board game (one faction competing for territorial control). Two scales connected by a consequence propagation system. Three world clocks measuring existential threats — Mending Stability at zero is shared loss; the other two (Theocracy Counter, Institutional Pressure) create escalating crises that reshape the game but are not automatically terminal.
 
 ## 1.2 What You Are Building
 
@@ -240,7 +240,7 @@ All persistent world state. Single source of truth. Read-only query interface fo
 
 **Character Registry** — player character + named NPCs + generated officers/locals. Stat blocks, Histories, Knots, Beliefs, Thread state.
 
-**Setting State** — territory data, adjacency graph, calamity radiation state (derived from RS), woven configuration registry (over-actualisation tracking), thread debt per territory, current season, year tracking.
+**Setting State** — territory data, adjacency graph, calamity radiation state (derived from MS), woven configuration registry (over-actualisation tracking), thread debt per territory, current season, year tracking.
 
 **Narrative State** — NPC trajectory states (conditional, multi-season branching), queued scenes from prior seasons, event log, active Beliefs driving the personal arc.
 
@@ -308,7 +308,7 @@ Two timing categories. Every consequence is classified at creation:
 
 | Timing | When Applied | Examples | Why |
 |--------|-------------|---------|-----|
-| **Immediate** | During resolution, as it occurs | RS (PP-253: live, no buffer), Coherence, Health, Wounds, Stamina, Composure, Momentum | Subsequent rolls in the same conflict read these values for Ob/pool calculation |
+| **Immediate** | During resolution, as it occurs | MS (PP-253: live, no buffer), Coherence, Health, Wounds, Stamina, Composure, Momentum | Subsequent rolls in the same conflict read these values for Ob/pool calculation |
 | **Deferred** | At conflict conclusion, upstreamed | Domain Echoes (faction stat changes), narrative outcomes, NPC triggers, Belief evaluations | Conflict outcome may change their meaning; should be evaluated as a whole |
 
 ```gdscript
@@ -496,7 +496,7 @@ var delta: int            # +2
 var reason: String        # "Wounds (2): +2 Ob"
 ```
 
-The roll context includes modifiers from current world state: RS-dependent Thread Ob modifier (read live from Meta), Coherence-dependent Ob and pool penalties, wound penalties, over-actualisation, thread debt, sequential failure penalties. These are queried from Meta at context assembly time — they reflect the world as it is right now, including any changes from prior operations in the same contact window.
+The roll context includes modifiers from current world state: MS-dependent Thread Ob modifier (read live from Meta), Coherence-dependent Ob and pool penalties, wound penalties, over-actualisation, thread debt, sequential failure penalties. These are queried from Meta at context assembly time — they reflect the world as it is right now, including any changes from prior operations in the same contact window.
 
 **Stage 2 — Resolution Branching.** Five resolution modes:
 
@@ -524,11 +524,11 @@ Degree determination (both variants): Overwhelming requires net ≥ 2×Ob AND ne
 
 A cross-cutting service, not a container. Any container can invoke it. The same mechanical pipeline resolves Thread operations regardless of whether the practitioner is in personal combat, mass combat, investigation, or executing a faction strategic order.
 
-The pipeline: eligibility check → environmental modifier query (RS-dependent Ob, territory thread debt, Coherence state) → Leap resolution → contact window (Focus − 1 operation rounds) → per-operation resolution with co-movement (three auto-effects always, per P-01) → consequence reporting.
+The pipeline: eligibility check → environmental modifier query (MS-dependent Ob, territory thread debt, Coherence state) → Leap resolution → contact window (Focus − 1 operation rounds) → per-operation resolution with co-movement (three auto-effects always, per P-01) → consequence reporting.
 
-**The Feedback Loop.** Within a single contact window, RS and Coherence changes from each operation feed back into the next operation's modifiers. The system recalculates RS Ob modifier and Coherence Ob modifier after each operation by querying Meta's live values. This produces the canonical compounding spiral: low Coherence increases Thread Ob → harder operations produce worse RS outcomes on Failure → worse RS further modifies Thread Ob.
+**The Feedback Loop.** Within a single contact window, MS and Coherence changes from each operation feed back into the next operation's modifiers. The system recalculates MS Ob modifier and Coherence Ob modifier after each operation by querying Meta's live values. This produces the canonical compounding spiral: low Coherence increases Thread Ob → harder operations produce worse MS outcomes on Failure → worse MS further modifies Thread Ob.
 
-RS changes from Thread operations apply immediately (PP-253). They are not batched. When the ThreadworkSystem produces an RS consequence, it is classified as IMMEDIATE and the Conflict Container forwards it to Meta at once. The Cascade display later shows what happened, but the state already changed.
+MS changes from Thread operations apply immediately (PP-253). They are not batched. When the ThreadworkSystem produces an MS consequence, it is classified as IMMEDIATE and the Conflict Container forwards it to Meta at once. The Cascade display later shows what happened, but the state already changed.
 
 **Visual representation** is per-container. Each container optionally implements a ThreadVisualHandler interface (show Leap transition, show operation result, show co-movement, show Coherence change). The ThreadworkSystem produces mechanical results. The container translates them into visuals appropriate to its context (full shader overlay in combat, simplified indicator in mass battle, territory highlight on the board).
 
@@ -536,7 +536,7 @@ RS changes from Thread operations apply immediately (PP-253). They are not batch
 
 ### During Resolution (Immediate)
 
-RS, Coherence, Health, Wounds, Stamina, Composure, Momentum — applied through tracker registry as they occur. Threshold events fire on crossing.
+MS, Coherence, Health, Wounds, Stamina, Composure, Momentum — applied through tracker registry as they occur. Threshold events fire on crossing.
 
 ### At Conflict Conclusion (Deferred)
 
@@ -588,7 +588,7 @@ func _start_season():
         _show_victory(victor)
         return
     if Meta.get_rs() <= 0:
-        _show_shared_loss("Rendering Stability Rupture")
+        _show_shared_loss("Mending Stability Rupture")
         return
     _start_season()
 
@@ -807,9 +807,9 @@ No design documents. Build the engine skeleton from the architecture specificati
 
 **Extract from:** `references/params_core.md` (161 lines)
 
-Static data: TN value table, Ob scale, degree table, attribute list and ranges, derived score formulas, Momentum rules, RS baseline decay rate, Certainty track rules, Reach terminology.
+Static data: TN value table, Ob scale, degree table, attribute list and ranges, derived score formulas, Momentum rules, MS baseline decay rate, Certainty track rules, Reach terminology.
 
-System rules: Momentum auto-success interaction (add to roll, 1 can cancel), RS baseline decay timing.
+System rules: Momentum auto-success interaction (add to roll, 1 can cancel), MS baseline decay timing.
 
 **Cross-reference:** `references/params_core_history.md` for patch history.
 
@@ -865,19 +865,19 @@ Wire: season start → overview (auto-confirm) → conflict container → combat
 
 5a. **The Leap** (1 week) — Eligibility, pool (Spirit + Attunement + History + TPS), TN 7, Ob by TS tier (this Ob formula is unique to the Leap — operations use the scale table Ob instead), degree outcomes, contact duration = Focus.
 
-5b. **Weaving** (1 week) — Pool, scale Ob table, RS consequences (scale-dependent), Coherence auto-cost, over-actualisation at Relational+, overweaving penalty.
+5b. **Weaving** (1 week) — Pool, scale Ob table, MS consequences (scale-dependent), Coherence auto-cost, over-actualisation at Relational+, overweaving penalty.
 
-5c. **Pulling** (1 week) — Ob by actualization level, duration ladder, Past-Oriented Pulling (TS 70+, RS ≤ 60, TN 8, halved pool for Foundational, fortification Ob addition).
+5c. **Pulling** (1 week) — Ob by actualization level, duration ladder, Past-Oriented Pulling (TS 70+, MS ≤ 60, TN 8, halved pool for Foundational, fortification Ob addition).
 
 5d. **Mending** (3 days) — Ob by Gap severity, threadcut interference.
 
 5e. **Co-Movement** (1 week) — Three auto-effects on every operation (P-01). Version C for personal phase (deterministic + d6). Card deck (18 cards) for strategic phase. Both produce all three dimensions.
 
-5f. **Combat integration** (3 days) — Wire Priority 5 in CombatLogic to ThreadworkSystem. Thread overlay activation. Immediate RS/Coherence consequences flow through ConflictContainer to Meta. Subsequent combat rounds see updated Ob.
+5f. **Combat integration** (3 days) — Wire Priority 5 in CombatLogic to ThreadworkSystem. Thread overlay activation. Immediate MS/Coherence consequences flow through ConflictContainer to Meta. Subsequent combat rounds see updated Ob.
 
 5g. **Coherence track** (3 days) — 10→0 with threshold effects (Dissonant/Fragmented/Fractured/Severed/Crisis). TS-gated branching at 0. Certainty interaction (Coherence 0 → Certainty −1).
 
-5h. **Feedback loop verification** (2 days) — Integration test: Weave drops RS below threshold mid-contact → next operation in same window has updated Ob → Coherence cost from first op applies Ob penalty to second op. Verify the compounding spiral works.
+5h. **Feedback loop verification** (2 days) — Integration test: Weave drops MS below threshold mid-contact → next operation in same window has updated Ob → Coherence cost from first op applies Ob penalty to second op. Verify the compounding spiral works.
 
 ## Phase 6 — Debate Container (3–4 weeks)
 

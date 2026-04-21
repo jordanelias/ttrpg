@@ -85,8 +85,8 @@ Fetch in this order. Check `canonical_sources.yaml` to confirm current paths bef
 **Emergence standard:** Each arc must satisfy: *no single player decision caused this; it required multiple independent systems running simultaneously.* If a single player choice is sufficient to explain the arc, it is a plot hook, not an emergent arc.
 
 **Canon constraints (non-negotiable):**
-- Niflhel does not harvest threads. Never attribute Rendering Stability drain to Niflhel operations.
-- All three clock dimensions (Rendering Stability, Theocracy Counter (TC), Institutional Pressure (IP)) are independent. Do not treat them as the same system.
+- Niflhel does not harvest threads. Never attribute Mending Stability drain to Niflhel operations.
+- All three clock dimensions (Mending Stability, Theocracy Counter (TC), Institutional Pressure (IP)) are independent. Do not treat them as the same system.
 - Ethical framework penalties apply to factions, not players directly.
 - Seasonal cap: ±2 per faction stat per season regardless of Domain Action count.
 

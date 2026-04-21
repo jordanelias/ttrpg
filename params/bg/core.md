@@ -77,7 +77,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 ## Starting Values (v04 B2, PP-188 correction)
 | Track | Start | Range | Notes |
 |-------|-------|-------|-------|
-| Rendering Stability (RS) | 72 | 0–100 | Rupture = shared loss |
+| Mending Stability (MS) | 72 | 0–100 | Rupture = shared loss |
 | Church Influence (CI) | **28** | 0–100 (no freeze) | CI 60 = Mass Seizure available (one-shot). CI 100 = cap. P-32 sets starting value at 28. |
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–20 | Cumulative pressure meter. Auto-resolves at PI ≥ 20 (Crown elimination). |
@@ -142,15 +142,15 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | 3–4 | Tension | All factions: Mandate check at Accounting (Mandate pool vs Ob 1). Failure: Mandate −1. |
 | 5–6 | Fracture | All factions: Accord −1 in one territory (lowest-Accord first, controller choice). |
 | 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2. |
-| 9–10 | Collapse | Non-capital territories: Accord cap 2. Mandate check Ob 3. RS −1/season additional. |
+| 9–10 | Collapse | Non-capital territories: Accord cap 2. Mandate check Ob 3. MS −1/season additional. |
 
 **Warden Cooperation (WC) Effects:**
 | WC | Effect |
 |----|--------|
 | 0 | No effect. |
 | ≥ 1 | +1D to all Thread operations peninsula-wide. |
-| ≥ 2 | RS decay rate halved (seasonal baseline −1 becomes −0.5, rounded down). |
-| 3 | RS +2/season at Accounting. |
+| ≥ 2 | MS decay rate halved (seasonal baseline −1 becomes −0.5, rounded down). |
+| 3 | MS +2/season at Accounting. |
 
 
 ## Faction Starting Stats (v04 B5)
@@ -175,7 +175,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 - Fort level is retained on the territory card (physical fortifications don't vanish).
 - Ministry AP-tokens and Guilds CP-tokens in eliminated faction territories are removed immediately.
 - Löwenritter Autonomy: if Crown is eliminated, Löwenritter immediately advances to Split (Stage 4). T14 becomes Löwenritter territory.
-- CI, IP, RS effects tied to eliminated faction's territory holdings: cease immediately (e.g. T9 CI +1/season bonus stops if Church is eliminated and loses T9 control).
+- CI, IP, MS effects tied to eliminated faction's territory holdings: cease immediately (e.g. T9 CI +1/season bonus stops if Church is eliminated and loses T9 control).
 
 
 
@@ -202,10 +202,10 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
 | Spy (Tribune Outward) | floor(target Intel / 2) + 1 | — |
-| Survey (Consul Inward) | (5 − Proximity Rating) + 1, min 1 | Askeheim (PR 0) → Ob 6; Lowenskyst (PR 5) → Ob 1. Pool: Influence. On Success: reveal 1 undiscovered POI (Resource: Prosperity +1; Secret: +1D next mil/intel action; Remnant: Thread op Ob −1 ×2 seasons + Thread Debt token; Anomaly: RS −1 immediately + Warden Cooperation +1 eligible). On Failure targeting Depth ≥ 3: +1 Church Attention Pool. See fieldwork_design_v1.md §8.1. (PP-628) |
+| Survey (Consul Inward) | (5 − Proximity Rating) + 1, min 1 | Askeheim (PR 0) → Ob 6; Lowenskyst (PR 5) → Ob 1. Pool: Influence. On Success: reveal 1 undiscovered POI (Resource: Prosperity +1; Secret: +1D next mil/intel action; Remnant: Thread op Ob −1 ×2 seasons + Thread Debt token; Anomaly: MS −1 immediately + Warden Cooperation +1 eligible). On Failure targeting Depth ≥ 3: +1 Church Attention Pool. See fieldwork_design_v1.md §8.1. (PP-628) |
 | Parliamentary Manoeuvre (Hafenmark) | floor(opponent Influence / 2) + 1 | — |
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
-| Community Weaving (Restoration) | (100−RS)÷20 round up min 1 | −1 per Presence marker in territory |
+| Community Weaving (Restoration) | (100−MS)÷20 round up min 1 | −1 per Presence marker in territory |
 | Dynastic Proclamation (Hafenmark) | floor(target Stability / 2) + 1 | Diplomat card. Hafenmark M ≥ 4, M > target controller M. +1 Ob if PT ≤ 1. −1 Ob if Diplomatic Token on target. See peninsular_strain_v1.md §5.3. |
 | Cultural Reformation (Varfell) | STRUCK CR-STRIKE-2026-04-19 | Action removed. Varfell expansion is military-only. See canon/supersession_register.yaml. |
 | Martial Governance (Löwenritter) | floor(Prosperity / 2) + 2 | Löwenritter only. Military pool. Accord +1 (cap 2). |

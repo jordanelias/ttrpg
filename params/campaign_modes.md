@@ -42,13 +42,13 @@ GM compression options:
 ## Starting Clock Values (TTRPG Session Zero)
 | Clock | Start | Source |
 |-------|-------|--------|
-| Rendering Stability | 72 | params_core.md |
+| Mending Stability | 72 | params_core.md |
 | Theocracy Counter | 15 | params_factions_ttrpg.md |
 | Institutional Pressure | 20 | params_board_game.md |
 
 ## Endgame Indicators (TTRPG — emergent, not triggers)
 - All PCs resolved/abandoned central Beliefs
-- RS > 80 (recovering) or RS < 20 (doomed)
+- MS > 80 (recovering) or MS < 20 (doomed)
 - Succession crisis resolved
 - TC < 20 (Church broken) or TC > 80 (Church triumphant)
 - Altonian threat resolved

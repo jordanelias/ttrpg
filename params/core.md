@@ -65,13 +65,13 @@ Momentum range: 0–4. Resets to 0 at the **start of each session** (not scene).
 **Between-scene carry within a session:** Momentum carries between scenes within the same session. A character who ends Scene 1 with Momentum 2 begins Scene 2 with Momentum 2.
 **Hoarding cost:** Momentum cannot be banked across sessions. Any unspent Momentum at session end is lost.
 
-## RS Baseline Decay (PP-255)
-Rendering Stability (RS) loses **−1 per in-game year** from baseline drift alone (confirmed bg_v05 Part Seven precedent analysis). This applies across all modes:
-- TTRPG: −1 RS per 4-season year, applied at Year-End Accounting.
-- Board Game: −1 RS per Year-End step.
+## MS Baseline Decay (PP-255)
+Mending Stability (MS) loses **−1 per in-game year** from baseline drift alone (confirmed bg_v05 Part Seven precedent analysis). This applies across all modes:
+- TTRPG: −1 MS per 4-season year, applied at Year-End Accounting.
+- Board Game: −1 MS per Year-End step.
 - Hybrid: same as TTRPG.
 Thread operations accelerate this. Restoration sources can offset but not reverse baseline decay.
-RS floor: 0 (Rupture). RS ceiling: 100. Starting value by mode: TTRPG default = 60; Board Game default = 72.
+MS floor: 0 (Rupture). MS ceiling: 100. Starting value by mode: TTRPG default = 60; Board Game default = 72.
 
 
 ## Pool Minimum

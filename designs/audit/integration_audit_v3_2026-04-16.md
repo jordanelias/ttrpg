@@ -276,8 +276,8 @@ fieldwork_v30 §2.2: "Failed fieldwork action on specific target cannot be reatt
 
 Audit v2 §3.4, WR 1 advancement: "Player character survives 1 scene in a territory with Calamity Radiation (Proximity Rating ≤ 2) while having TS ≥ 15."
 
-fieldwork_v30 §1 Depth Axis Ob modifiers: "Calamity radiation: +1 Ob per RS band below 60 at current Proximity Rating."
+fieldwork_v30 §1 Depth Axis Ob modifiers: "Calamity radiation: +1 Ob per MS band below 60 at current Proximity Rating."
 
-Two different systems use "Proximity Rating." The fieldwork version uses RS (Rendering Stability) bands as the actual scaling mechanism. The WR advancement condition uses "Proximity Rating ≤ 2" as a threshold without defining the scale or how it maps to RS bands.
+Two different systems use "Proximity Rating." The fieldwork version uses MS (Mending Stability) bands as the actual scaling mechanism. The WR advancement condition uses "Proximity Rating ≤ 2" as a threshold without defining the scale or how it maps to MS bands.
 
 Geography_design.md (referenced but 

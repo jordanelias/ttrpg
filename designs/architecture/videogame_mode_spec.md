@@ -69,14 +69,14 @@ The videogame is a continuous experience at two simultaneous scales:
 | Rule | Videogame Decision | Source |
 |------|-------------------|--------|
 | Parts 1–4 (Operations, Coherence, Dissolution Residue, Recovery) | **Use in full.** All personal-scale Thread mechanics. | threadwork_v30 §§1–4 |
-| Part 5 (Rendering Stability) | **Use.** RS tracked globally. All drain/restoration per rs_budget.md. | threadwork_v30 §5, references/rs_budget.md |
-| §5.4 (RS in Board Game) | **Use as strategic-scale RS tracking.** RS changes from strategic-phase Thread orders applied at Accounting. | threadwork_v30 §5.4 |
-| §5.5 (RS in Hybrid) | **Use.** Both personal and strategic RS changes unified at Accounting. Seasonal cap ±10 net. | threadwork_v30 §5.5 |
+| Part 5 (Mending Stability) | **Use.** MS tracked globally. All drain/restoration per rs_budget.md. | threadwork_v30 §5, references/rs_budget.md |
+| §5.4 (MS in Board Game) | **Use as strategic-scale MS tracking.** MS changes from strategic-phase Thread orders applied at Accounting. | threadwork_v30 §5.4 |
+| §5.5 (MS in Hybrid) | **Use.** Both personal and strategic MS changes unified at Accounting. Seasonal cap ±10 net. | threadwork_v30 §5.5 |
 | §7.1 (Board Game Thread Orders) | **Use as strategic-scale Thread actions.** Weave, Mend, Investigate, Harvest are faction-level Domain Actions during strategic phase. | threadwork_v30 §7.1 |
 | §7.2 (Hybrid Mode) | **Use.** Coherence declaration rule (PP-198) governs who pays Coherence cost when personal-scale Thread ops affect the strategic layer. | threadwork_v30 §7.2 |
 | §7.3 Mode Branching Table | **Collapse to single column.** See §2 below. | — |
 | Co-Movement Cards (18) | **Use at strategic scale.** When a strategic-phase Thread order fires, draw a Co-Movement Card. When personal-scale Thread-Read fires during a scene, use Version C (auto-effects). | threadwork_v30 §7.1, §3.2 |
-| Lock Chronic Drift | **Engine tracks.** Per-territory RS drift applied automatically at Accounting. | threadwork_v30 §3.3 |
+| Lock Chronic Drift | **Engine tracks.** Per-territory MS drift applied automatically at Accounting. | threadwork_v30 §3.3 |
 | Coherence | **Use.** Per-practitioner track, 10→0. Engine tracks. | threadwork_v30 §3 |
 | "GM tracks" entries | **Engine tracks.** All "Game Master tracks" items become engine-tracked state. | — |
 
@@ -90,7 +90,7 @@ The videogame is a continuous experience at two simultaneous scales:
 | Part B (BG Battle Resolution) | **Use as auto-resolve option.** When a battle occurs and the player chooses not to Zoom In, resolve via Part B's simplified formula (Martial pool vs Battle Ob). | mass_battle_v30 Part B |
 | §B.5 (Hybrid Handoff) | **Use.** This IS the videogame's battle zoom: strategic-phase battle triggers Part A when player zooms in, Part B when they don't. | mass_battle_v30 §B.5 |
 | BG Unit Stats (§B.2) | **Use.** Pre-set on unit tokens. Strategic-scale view shows BG stats; zoomed battle shows full TTRPG stats. | mass_battle_v30 §B.2 |
-| Thread in Mass Battle (§A.10) | **Use.** ×3 RS multiplier. Phase 4 timing. | mass_battle_v30 §A.10 |
+| Thread in Mass Battle (§A.10) | **Use.** ×3 MS multiplier. Phase 4 timing. | mass_battle_v30 §A.10 |
 
 **Implementation:** BattleContainer + BattleLogic. PhaseLockedSimultaneous mode (zoomed). SoloResolution (auto-resolve).
 
@@ -151,8 +151,8 @@ Replaces threadwork_v30 §7.3 three-column table.
 | Gap closure | **Personal:** Mending roll (Spirit×2 + History + TPS). **Strategic:** Mend order (faction action). Both resolve at Accounting. |
 | Co-movement | **Personal:** Version C auto-effects (temporal + epistemic auto, actualized d6). **Strategic:** Draw Co-Movement Card. |
 | Practitioner degradation | **Personal:** Coherence 10→0 tracked per character. **Strategic:** Not tracked for NPC faction practitioners (abstracted into faction Thread order outcomes). |
-| World stability | **RS 100→0.** All changes unified at Accounting. Seasonal cap ±10 net (per threadwork_v30 §5.5). |
-| Lock chronic drift | **Engine tracks.** Per-territory RS drift. Applied automatically at Accounting. No "GM tracks" — the engine IS the GM. |
+| World stability | **MS 100→0.** All changes unified at Accounting. Seasonal cap ±10 net (per threadwork_v30 §5.5). |
+| Lock chronic drift | **Engine tracks.** Per-territory MS drift. Applied automatically at Accounting. No "GM tracks" — the engine IS the GM. |
 
 ---
 

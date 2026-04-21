@@ -8,10 +8,10 @@
 ~1,862 tokens
 
   - Clock Environmental Effects (v04 B2)
-    - Rendering Stability (RS) Effects
+    - Mending Stability (MS) Effects
     - Theocracy Clock (TC) Effects
     - Invasion Pressure (IP) Effects
-    - Rendering Stability (RS) Effects
+    - Mending Stability (MS) Effects
     - Theocracy Clock (TC) Effects
     - Invasion Pressure (IP) Effects
   - Cascade Depth Cap (v04 B4)
