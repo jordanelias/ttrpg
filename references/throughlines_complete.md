@@ -289,8 +289,13 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 | T-23 NPC Arc Emergence | All faction vectors | npc_behavior §5, arc_expansion | Fully implemented |
 | T-24 Convergence as Crisis | §VI Convergence Markers (7+) | arc_register | Fully specified |
 | T-25 Generational Arc | Not covered | settlement_layer §7 (Extended Timeline) | Implemented |
+| T-26 Recursion (TL-3) | ARC-S32, S34; Southernmost arcs | RWCE cascade (pending ED-735), Church priority tree (pending) | Design complete; Godot implementation pending |
+| T-27 Effects Real Explanation Wrong (TL-4) | Distributed across faction-interpretation arcs | Seam Text TS-gating (threadwork §2.3), Filter chain (investigation) | Design complete; Conviction Scar targeting pending |
+| T-28 Confrontation/Leap/Operation (TL-5) | All practitioner arcs | canon/02 Leap Mechanism amendment (foundations); threadwork §2.3, §31 | Foundations canonical; knot-profile character sheet pending Godot |
+| T-29 Baralta Prophylaxis Cracker (TL-8) | ARC-S01, S13; Hafenmark cluster | NPC §6 Baralta theology (canonical); prophylaxis-as-variable mechanic pending | Theological profile canonical; mechanical capture pending |
+| T-30 Information Asymmetry (TL-7) | Distributed across all factional-divergence arcs | investigation Filter chain, TS visibility tables, chronicler divergence | Filter chain + TS gating implemented; Conviction Scene UX pending |
 
-**Count: 25 throughlines identified. 25/25 have mechanical implementation. 0 throughlines are purely aspirational.**
+**Count: 30 throughlines identified (25 original + 5 novel from 2026-04-20 atomization). 30/30 have mechanical specification; pending implementations tracked in Status column.**
 
 ---
 
