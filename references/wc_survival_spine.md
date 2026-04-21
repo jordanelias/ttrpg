@@ -2,7 +2,7 @@
 ## ED-669 | Status: CANONICAL
 ## Date: 2026-04-17
 ## Scope: Documents WC's role as the mechanism of the "second contest" (survival vs. sovereignty)
-## Cross-references: victory_v30.md §6, references/rs_budget.md, clock_registry_v30.md, arc_register.md §II (ARC-S15, S32, S34)
+## Cross-references: victory_v30.md §6, references/ms_budget.md, clock_registry_v30.md, arc_register.md §II (ARC-S15, S32, S34)
 ## Canon compliance: A1 (Thread as constitutive ground — WC measures collective recognition of substrate dependency)
 
 ---
@@ -26,13 +26,13 @@ These contests compete for the same resources: player time, faction actions, mil
 | 0 | No effect | — | The peninsula has not recognized its constitutive dependency on the substrate. Factions treat Thread as irrelevant to governance. |
 | 1 | +1D all Thread operations peninsula-wide | WR ≥ 2 | Partial recognition. Some factions engage with Askeheim. Thread practice becomes slightly more effective. |
 | 2 | All RS drain from Gaps and Locks halved | WR ≥ 2 | Meaningful investment. The factions are investing in substrate maintenance. Gap/Lock drain reduced from ~−9.5 to ~−4.75/season. |
-| 3 | RS +2/season at Accounting (Edeyja active Mending) | WR 3 | Full recognition. Active Edeyja Mending. The peninsula has accepted its constitutive nature. The only viable endgame RS path (see rs_budget.md Scenario C). |
+| 3 | RS +2/season at Accounting (Edeyja active Mending) | WR 3 | Full recognition. Active Edeyja Mending. The peninsula has accepted its constitutive nature. The only viable endgame RS path (see ms_budget.md Scenario C). |
 
 ---
 
 ## Why WC 3 Is Singular
 
-Per rs_budget.md:
+Per ms_budget.md:
 - Peak RS drain at Year 20–25, WC 0: ~−21 to −23/season. Recovery: ~+1/season. Net: ~−20/season. **Rupture in under 2 seasons from RS 45.**
 - Peak RS drain at Year 20–25, WC 3: drain reduced to ~−15/season by halved Gap/Lock drain. Recovery: +5/season (WC bonus + Mending). Net: ~−10/season. **Survivable to Year 30 with concentrated effort.**
 

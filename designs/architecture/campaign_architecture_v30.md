@@ -3,7 +3,7 @@
 ## Status: CANONICAL — approved by Jordan 2026-04-17
 ## Scope: Consolidated design for all systems introduced or corrected in the 2026-04-17 victory revision session. Church settlement infrastructure, CI=100, RM identity, Thread revelation curve, phased IP escalation, Altonia repulsion, MS loss reform, Coherence asymmetry, Mending community, Portrait Retirement, Lineage, Warden faction paths.
 ## Supersedes: All prior "alternate victory condition" framing. All "shared loss" framing. The ×3 mass battle MS multiplier. Flat Coherence cost tables.
-## Cross-references: victory_v30.md, peninsular_strain_v1.md, settlement_layer_v30.md, threadwork_v30.md, params_threadwork.md, rs_budget.md, player_agency_v30.md, npc_behavior_v30.md
+## Cross-references: victory_v30.md, peninsular_strain_v1.md, settlement_layer_v30.md, threadwork_v30.md, params_threadwork.md, ms_budget.md, player_agency_v30.md, npc_behavior_v30.md
 
 ---
 
@@ -245,7 +245,7 @@ This document is the canonical source for all systems above. The following exist
 | victory_v30 §7 | CI/CI | Add CI=100 Mass Seizure from Part 1 §1.3 |
 | threadwork_v30 §5.2 | MS sources | Strike ×3, reference Part 3 §3.1 |
 | params_threadwork §Coherence | Cost table | Replace with Part 3 §3.2 |
-| rs_budget §2.2 | Mass battle drain | Update from ×3 to flat −1 |
+| ms_budget §2.2 | Mass battle drain | Update from ×3 to flat −1 |
 | player_agency_v30 §2 | Convictions | Add resolution-state tracking from Part 7 §7.3 |
 | All RM references | "Community Organizing" | Rename to "Community Organizing" per Part 2 §2.2 |
 | worldbuilding_v30 or threadwork_v30 | Thread visibility | Add revelation curve from Part 4 |

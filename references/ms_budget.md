@@ -1,8 +1,9 @@
 # VALORIA — Mending Stability Budget
 ## ED-668 | Status: CANONICAL
-## Date: 2026-04-17
+## Date: 2026-04-17 (content) / 2026-04-20 (file rename)
 ## Scope: Single source of truth for all MS drain and recovery sources
 ## Cross-references: params_threadwork.md, params_core.md, peninsular_strain_v1.md, victory_v30.md, calamity_radiation_v30.md, threadwork_v30.md §5, mass_battle_v30.md §A.10
+## Rename history: references/rs_budget.md → references/ms_budget.md (2026-04-20, ED-731 terminology propagation)
 ## Canon compliance: A1 (Thread constitutive ground — MS measures substrate integrity)
 
 ---

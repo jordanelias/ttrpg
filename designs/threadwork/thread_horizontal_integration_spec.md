@@ -2,7 +2,7 @@
 ## ED-673 through ED-681 | Status: CANONICAL
 ## Date: 2026-04-17
 ## Scope: All remaining cross-system Thread fire paths, editorial resolutions, and patches
-## Depends: rs_budget.md (ED-668), wc_survival_spine.md (ED-669), npc_behavior_v30 §3.4/§4.3 (ED-670–672)
+## Depends: ms_budget.md (ED-668), wc_survival_spine.md (ED-669), npc_behavior_v30 §3.4/§4.3 (ED-670–672)
 ## Resolves: All open questions from thread_constitutive_integration_analysis_v2.md
 
 ---
@@ -258,7 +258,7 @@ The existing specification (1 season withdrawal + 3 Anchoring Scenes + resolutio
 
 | ED | Target Document | Section | Action |
 |---|---|---|---|
-| ED-668 | references/rs_budget.md | New file | Create |
+| ED-668 | references/ms_budget.md | New file | Create |
 | ED-669 | references/wc_survival_spine.md | New file | Create |
 | ED-673 | designs/hybrid/scale_transitions_v30.md | After §5.5 | Insert §5.6 |
 | ED-674 | designs/systems/player_agency_v30.md | §4.2 | Insert Step 2b |
@@ -270,7 +270,7 @@ The existing specification (1 season withdrawal + 3 Anchoring Scenes + resolutio
 | ED-680 | designs/systems/investigation_systems_proposal_2026-04-15.md | §Case Board | Insert Thread Layer |
 | ED-681 | designs/ttrpg/threadwork_v30.md | §3.7 | Expand beats |
 | — | canon/editorial_ledger.yaml | Append | ED-673 through ED-681 |
-| — | references/canonical_sources.yaml | Add entries | rs_budget, wc_survival_spine |
+| — | references/canonical_sources.yaml | Add entries | ms_budget, wc_survival_spine |
 | — | references/file_index_summary.md | Update | New files, propagation status |
 | — | designs/ui/valoria_ui_ux_v4_1.md | §Thread state display | Cross-reference WC UI requirement |
 

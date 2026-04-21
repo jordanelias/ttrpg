@@ -375,7 +375,7 @@ The military layer bridges BG units to mass battle. Mass battle §A.10 has exten
 
 **Practitioner-general Coherence:** NPC generals who are practitioners operate under npc_behavior_v30 §4.3 Coherence AI thresholds. Coherence ≤ 5 → defensive Thread ops only. Coherence ≤ 3 → cease Thread operations. When assigning generals to units, faction AI must account for practitioner Coherence state.
 
-**Battle RS cost:** Each battle on Valorian soil costs RS −1 (Campaign/War: −2) per peninsular_strain_v1 §3.1 and rs_budget.md. This is not a penalty — mass violence degrades the substrate (Foundations A1).
+**Battle RS cost:** Each battle on Valorian soil costs RS −1 (Campaign/War: −2) per peninsular_strain_v1 §3.1 and ms_budget.md. This is not a penalty — mass violence degrades the substrate (Foundations A1).
 
 **Unit quality and Thread:** Accord (§4.1) is the population-level expression of social thread-coherence. Low Accord means the population's rendered social structures resist the governing faction — not political opposition in the conventional sense, but substrate-level misalignment between the population's thread-configuration and the faction's institutional rendering.
 

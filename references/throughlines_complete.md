@@ -37,7 +37,7 @@ Time-based pressures that advance regardless of player action. These are the gam
 
 ### T-04: RS Decay → Radiation Cascade → Institutional Crisis
 **Chain:** RS baseline decay (−1/year) + Gap persistence (−4/season) + Lock drift (−1 to −2/season) + battle costs (−1 to −2/battle) → RS threshold crossing → calamity radiation effects by proximity → spontaneous Gaps → spontaneous threadcut beings → settlement Order loss → faction Stability checks → Mandate erosion → faction vulnerability → more battles → more RS decay
-**Systems:** rs_budget, calamity_radiation, peninsular_strain, settlement_layer, faction_layer, victory, mass_battle
+**Systems:** ms_budget, calamity_radiation, peninsular_strain, settlement_layer, faction_layer, victory, mass_battle
 **What it means:** The world is dying. The decay is structural — it comes from the Calamity's unhealed damage, not from player action. Player action (battle, Thread operations) accelerates it. Only Mending and WC slow it. This is the positive feedback loop that makes the survival contest urgent.
 **Arc register vectors:** ARC-P02, ARC-S15, ARC-S32, ARC-S34
 **Convergence markers:** COLLISION C (Tutoring + Southernmost), COLLISION J (Church Siege of Southern Gates)
@@ -157,7 +157,7 @@ Chains that operate through space.
 
 ### T-19: Southernmost as Hidden Front
 **Chain:** RS decay → Southernmost Spiral (ARC-S15: RS ≤ 50 → cracking timeline) → Expedition required → military escort required → IP diverts military attention → expedition endangered → WC advancement stalled → RS recovery stalled → more decay
-**Systems:** params_southernmost, wc_survival_spine, rs_budget, victory (WR/WC tracks), mass_battle (Southernmost §A.11)
+**Systems:** params_southernmost, wc_survival_spine, ms_budget, victory (WR/WC tracks), mass_battle (Southernmost §A.11)
 **What it means:** The Southernmost is where the survival contest is fought. Expeditions to Askeheim are the mechanism for WC advancement. But expeditions require practitioners (TS 30+), military escort, and faction support — all of which compete with the sovereignty contest. The Southernmost is the place where the two contests physically converge.
 **Arc register:** ARC-S15 (Spiral), ARC-S34 (Edeyja Burnout), TE-12 (Collector's Chokehold), TE-13 (Warden Threshold)
 
@@ -169,12 +169,12 @@ Chains that produce emergent strategic dynamics.
 
 ### T-20: The Two Contests
 **Chain:** Sovereignty contest (territorial control, faction stats, victory conditions) competes with survival contest (RS maintenance, WC advancement, expedition support) for the same resources (military, actions, practitioner Coherence, player time)
-**Systems:** wc_survival_spine, rs_budget, victory, peninsular_strain (IP/expedition tension), player_agency (Scene Slate — thread-state vs duty-aligned scenes)
+**Systems:** wc_survival_spine, ms_budget, victory, peninsular_strain (IP/expedition tension), player_agency (Scene Slate — thread-state vs duty-aligned scenes)
 **What it means:** This is the game's central strategic architecture. A player who optimizes for sovereignty ignores WC and RS, risking Rupture. A player who optimizes for survival sacrifices political position. The tension is unresolvable — the player must manage both contests simultaneously with insufficient resources for either. WC 3 is the only endgame survival path, and it requires cross-faction cooperation that the sovereignty contest discourages.
 
 ### T-21: Thread Political Warfare
 **Chain:** Shared RS track → any faction's Thread aggression damages all factions → mutual deterrence → Lock-and-cede (deny territory by making it ungovernable) → Thread brinksmanship (bait enemy into RS-costly operations) → Thread exploitation sites (settlement-level RS damage as tragedy-of-the-commons)
-**Systems:** npc_behavior (§8.5 Varfell brinksmanship, §8.10 Warden RS override), rs_budget, wc_survival_spine
+**Systems:** npc_behavior (§8.5 Varfell brinksmanship, §8.10 Warden RS override), ms_budget, wc_survival_spine
 **What it means:** The shared RS track creates a geopolitical doctrine. Aggressive Thread warfare is a credible threat against all factions including the attacker. The strategic behaviors (Lock-and-cede, brinksmanship, Harvest) are not exploits — they are coherent doctrines that the shared RS track generates. For videogame implementation, these must be NPC AI behaviors, not emergent player discoveries alone.
 **Arc register:** ARC-S33 (Lattice of Enemies)
 
@@ -268,7 +268,7 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 | T-01 Everything Is Thread | Implicit in all vectors | Explicit in combat §10, fieldwork §2.4 | Partially framed |
 | T-02 Rendering = Consciousness | Implicit | investigation (Filter 1), fieldwork (Intelligibility) | Fully implemented |
 | T-03 Inseparability | All Thread vectors | threadwork (co-movement tables) | Fully implemented |
-| T-04 RS Decay | ARC-P02, S15, S32, S34 | rs_budget, calamity_radiation | Fully implemented |
+| T-04 RS Decay | ARC-P02, S15, S32, S34 | ms_budget, calamity_radiation | Fully implemented |
 | T-05 TC Accumulation | ARC-P01 | tc_political_redesign, conviction_track | Fully implemented |
 | T-06 IP Accumulation | ARC-P06 | peninsular_strain §3.2 | Implemented; base rate GAP noted |
 | T-07 Peninsular Strain | Not covered | peninsular_strain §4 | Fully implemented |
@@ -283,7 +283,7 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 | T-17 Companion Moral Mirror | Not covered | companion_specification §6.1 (Thread departure) | Implemented (ED-666) |
 | T-18 Radiation Gradient | ARC-S15 | calamity_radiation (full matrix) | Fully implemented |
 | T-19 Southernmost Hidden Front | ARC-S15, S34 | params_southernmost, wc_survival_spine | Implemented |
-| T-20 Two Contests | ARC-S32, S33 | wc_survival_spine (explicit), rs_budget | Implemented (ED-669) |
+| T-20 Two Contests | ARC-S32, S33 | wc_survival_spine (explicit), ms_budget | Implemented (ED-669) |
 | T-21 Thread Political Warfare | ARC-S33 | npc_behavior §8 (priority tree amendments) | Implemented (ED-679) |
 | T-22 Belief Lattice | ARC-S33 | threadwork §2.5 (Collective Operations) | Implemented |
 | T-23 NPC Arc Emergence | All faction vectors | npc_behavior §5, arc_expansion | Fully implemented |

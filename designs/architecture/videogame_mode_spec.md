@@ -69,7 +69,7 @@ The videogame is a continuous experience at two simultaneous scales:
 | Rule | Videogame Decision | Source |
 |------|-------------------|--------|
 | Parts 1–4 (Operations, Coherence, Dissolution Residue, Recovery) | **Use in full.** All personal-scale Thread mechanics. | threadwork_v30 §§1–4 |
-| Part 5 (Mending Stability) | **Use.** MS tracked globally. All drain/restoration per rs_budget.md. | threadwork_v30 §5, references/rs_budget.md |
+| Part 5 (Mending Stability) | **Use.** MS tracked globally. All drain/restoration per ms_budget.md. | threadwork_v30 §5, references/ms_budget.md |
 | §5.4 (MS in Board Game) | **Use as strategic-scale MS tracking.** MS changes from strategic-phase Thread orders applied at Accounting. | threadwork_v30 §5.4 |
 | §5.5 (MS in Hybrid) | **Use.** Both personal and strategic MS changes unified at Accounting. Seasonal cap ±10 net. | threadwork_v30 §5.5 |
 | §7.1 (Board Game Thread Orders) | **Use as strategic-scale Thread actions.** Weave, Mend, Investigate, Harvest are faction-level Domain Actions during strategic phase. | threadwork_v30 §7.1 |

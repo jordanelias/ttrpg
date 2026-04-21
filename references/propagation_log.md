@@ -565,11 +565,11 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 ## RS Budget Document (2026-04-17)
 | Source | Target | Status |
 |--------|--------|--------|
-| threadwork_v30.md §5.2 | references/rs_budget.md §2 | DONE — aggregated |
-| victory_v30.md §0.4 | references/rs_budget.md §2.1 (battle drain) | DONE — aggregated |
-| params_board_game.md §Accounting | references/rs_budget.md §7.1 | DONE — referenced |
-| peninsular_strain_v1.md §3 | references/rs_budget.md §2.1 (siege) | DONE — aggregated |
-| tests/thread_stress/threadwork_audit_register.md §F | references/rs_budget.md §5 | DONE — peak scenarios incorporated |
+| threadwork_v30.md §5.2 | references/ms_budget.md §2 | DONE — aggregated |
+| victory_v30.md §0.4 | references/ms_budget.md §2.1 (battle drain) | DONE — aggregated |
+| params_board_game.md §Accounting | references/ms_budget.md §7.1 | DONE — referenced |
+| peninsular_strain_v1.md §3 | references/ms_budget.md §2.1 (siege) | DONE — aggregated |
+| tests/thread_stress/threadwork_audit_register.md §F | references/ms_budget.md §5 | DONE — peak scenarios incorporated |
 
 
 ## PP-661 — Faction Politics Throughline Resolutions (2026-04-17)
