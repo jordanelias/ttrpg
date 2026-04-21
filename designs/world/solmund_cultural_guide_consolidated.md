@@ -384,7 +384,7 @@ Result: the peninsula's existential threat is invisible to the three factions wi
 
 ### 20.1 What Already Exists
 
-Threadwork_v30 §2.3: "Physical effects (a wound closing, an object moving) are visible to all." Mending co-movement: on Overwhelming, "Non-sensitives notice a distinct easing of tension." Mending Ob 7 (Catastrophic Gap) and Ob 8+ (Locked Zone border) require collective operations + Einhir framework — near-impossible solo.
+Threadwork_v30 §2.3: "Physical effects (a wound closing, an object moving) are visible to all." Mending co-movement: on Overwhelming, "Non-sensitives notice a distinct easing of tension." Mending Ob 7 (Catastrophic Gap) requires TS 70+ plus Einhir framework or collective operation. Ob 8+ (Locked Zone border) requires TS 70+ plus Einhir framework. Solo Ob 7–8 is near-impossible (~40–58% at maximum pool per threadwork_v30 §31).
 
 ### 20.2 Proposed Trigger
 
