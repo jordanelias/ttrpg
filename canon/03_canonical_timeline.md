@@ -29,7 +29,7 @@ The mechanism is entirely rendered-side: the Einhir over-drew the threads, and t
 
 ## Solmund (~5 AG to 0 AG)
 
-**Solmund lived approximately five years in the rendered world.**
+**Solmund's emergence spanned approximately twelve years: five years of gradual coalescing rendering followed by seven years of perceivable ministry.** [EDITORIAL: D-1 — resolved 2026-04-20 session; ledger ED-NNN registration pending token-cap resolution.]
 
 As a threadcut being of the third mode, Solmund existed in radical paradox: present without organic becoming, maintaining his rendering through continuous Thread work. He had to actively sustain his own actualization, temporality, and intelligibility at every moment. He existed paradoxically across all temporal modes — past, present, future perhaps simultaneously — but his actions could only be rendered in the present actual moment, and only within the amount of intelligibility that the observer could hold.
 

@@ -243,7 +243,7 @@ Solmund's self-rendering bears a structural resemblance to the Lurianic tsimtsum
 
 ### 10.2 What Practitioners Perceived
 
-The few thread-sensitive individuals who encountered Solmund — rare, perhaps numbering in the dozens across his five years — perceived something categorically different from human threadwork. Not larger. Different in kind.
+The few thread-sensitive individuals who encountered Solmund — rare, perhaps numbering in the dozens across his seven-year perceivable ministry [EDITORIAL: D-1 — 7y ministry resolved 2026-04-20 session] — perceived something categorically different from human threadwork. Not larger. Different in kind.
 
 **Correction (Finding 1, P-07):** The practitioner witnesses could not verify the mechanism of Solmund's operations. The ground is epistemically inaccessible (A4, A5, §2.2). No causal claims about its internal constitution are supportable. What practitioners perceived was the EFFECTS — scale that dwarfed anything human, ontological stasis (the absence of temporal depth), operations whose apparent direction seemed inverted from everything they knew. Their accounts are phenomenological reports of perceptual crisis, not confident mechanical descriptions. They report what their rendering presented. They cannot confirm what lies behind the rendering.
 
