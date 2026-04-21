@@ -1,27 +1,38 @@
 # Editorial Ledger Summary
+# auto-generated 2026-04-20
 
-<!-- auto-generated — 2026-04-19T17:15:00Z -->
-
-p1_blocker_count: 2
-open_count: 42
-total_active: 42
-next_id: 708
+p1_blocker_count: 0
+open_count: 12
+total_active: 28
+next_id: 738
 
 p1_blockers:
-  - ED-632: Shadow Renown: referenced in faction_politics_expanded (REN-
-  - ED-633: Deniability Debt (Riskbreaker): referenced in faction_politi
+  []
 
 p2_open:
-  - ED-542: Battle consequences propagation gap — mass_battle_v30.md mis
-  - ED-586: Arc behavioral state vs Priority 6 contradiction at Mandate 
-  - ED-587: Stability Crisis Zoom In trigger absent. Proposed: Stability
-  - ED-615: Schoenland Treaty terms undefined. What does Schoenland rece
-  - ED-616: No Parliamentary mechanic blocks Tribune Domain Actions. Int
-  - ED-617: Grand Contest Recall (+2D): once per cited source per contes
-  - ED-618: Torben Conviction emergence window: formally Seasons 1-8.
-  - ED-621: BG Parliamentary Vote: lobby offset can pre-determine outcom
-  - ED-622: Varfell cannot file Parliamentary motions (no Senator card).
-  - ED-623: IP advancement too slow.
+  - ED-660: "Certainty scale: faction_politics_expanded lists Almstedt at Cert"
+  - ED-661: "Ministry Protocol 3 seniority conflict."
+  - ED-662: "Elske residency post-Coup legal implications."
+  - ED-664: "Advisor-principal confidentiality boundary undefined."
+  - ED-665: "Grand Contest as succession trial not in canonical docs."
+  - ED-668: "RS decline rate calibration question."
+  - ED-669: "Irreversible institutional precedent persistence across campaigns"
+  - ED-704: "Seizure does not apply to Uncontrolled territories."
+  - ED-705: "Cohesion -15 = derived of Stability -1, not independent."
+  - ED-710: "Settlement adjacency graph — new mechanical layer. Invasions occu"
+  - ED-711: "Fractional province ownership — province PV fractionalizes by set"
+  - ED-712: "Generalized Faction Succession Contest — extends baralta_crown_cl"
 
 recent_resolutions:
-  - none
+  - ED-722: "D-1 resolved: Solmund 12y emergence (5y coalescing + 7y ministry)"
+  - ED-723: "D-2 resolved: pre-Calamity governance author-determined, surfaced"
+  - ED-724: "D-3 resolved: dissolution site specific but contested, off-map. T"
+  - ED-725: "D-4 resolved: Altonian invasion ~18 AG (~30y post-Catastrophe). T"
+  - ED-726: "D-5 resolved: site-network three-layer model (foundational/respon"
+  - ED-727: "D-6 resolved: Lenneth TS pathway = slow scholarly loosening, SA-g"
+  - ED-728: "D-7 resolved: Valn origin pre-Altonian, ambiguous, possibly pre-E"
+  - ED-729: "PR-1 resolved: Finitude pivot home = canon/00_philosophical_found"
+  - ED-730: "PR-2 resolved: Leap taxonomy home = new canon/02_foundations_amen"
+  - ED-731: "PR-3 resolved: propagate MS (Mending Stability) over RS. Sweep pe"
+  - ED-732: "PR-11 BA-1 resolved: Baralta direct communion supplements (not su"
+  - ED-733: "PR-12 B-1 resolved: Ficinian Cardinal emanation accepted as Churc"

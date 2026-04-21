@@ -1,9 +1,8 @@
-# Valoria Editorial Ledger — Active
-# next_id: 709
-# Rebuilt 2026-04-19. Lost IDs: ED-670-672, ED-698-703.
+# Valoria Editorial Ledger — Active (open items + recent resolutions)
+# next_id: 738
+# Rebuilt 2026-04-20. Split: resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
-
 
   - id: ED-660
     date: 2026-04-17
@@ -64,109 +63,130 @@ entries:
     description: "Settlement adjacency graph — new mechanical layer. Invasions occur at settlement-scale via inter-settlement edges (road/river/mountain/coastal). Spec: designs/territory/settlement_adjacency_v30.md (PP-666)."
     status: open
     severity: P2
-    source: PP-666
+    source: "PP-666"
 
   - id: ED-711
     date: 2026-04-19
     description: "Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers. 75%-share threshold triggers Consolidation Domain Action. Spec: designs/provincial/fractional_province_ownership_v30.md (PP-666)."
     status: open
     severity: P2
-    source: PP-666
+    source: "PP-666"
 
   - id: ED-712
     date: 2026-04-19
     description: "Generalized Faction Succession Contest — extends baralta_crown_claim_v30 framework to all factions. Leader loss triggers contest; narrow winner → faction splits; widely-won → unified transition. RM Settlement Emergence pathway formalized as per-settlement trigger alongside province-scale Cultural Uprising. Spec: designs/provincial/faction_succession_split_v30.md (PP-666)."
     status: open
     severity: P2
-    source: PP-666
+    source: "PP-666"
 
-  - id: ED-713
-    date: 2026-04-19
-    description: "Mine income rate resolved: Mine-type settlement yields floor(Prosperity/2) Wealth/year to controlling faction. Guild management +1, Trade Network token +1. Cap 4 Wealth/Mine/year. See designs/audit/gap_resolution_2026-04-19.md §1.1 (PP-667)."
+  - id: ED-722
+    date: 2026-04-20
+    description: "D-1 resolved: Solmund 12y emergence (5y coalescing + 7y ministry). Propagated timeline L32, solmund_guide L246 (commit e642f195)."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-723
+    date: 2026-04-20
+    description: "D-2 resolved: pre-Calamity governance author-determined, surfaced through fragments. Altonian overlays do not map to pre-Calamity geography."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-724
+    date: 2026-04-20
+    description: "D-3 resolved: dissolution site specific but contested, off-map. Timeline revision = separate workplan."
     status: resolved
     severity: P2
-    source: PP-667
+    source: "session_master_2026_04_20.md + handoff"
 
-  - id: ED-714
-    date: 2026-04-19
-    description: "Hafenmark food vulnerability and Crown Einhir suppression DA — resolved as non-mechanics. Both exist only as worldbuilding texture. Existing mechanics (Trade Network, Heresy Investigation, Church AP, Parliamentary Motion) cover the design space. See designs/audit/gap_resolution_2026-04-19.md §1.2, §1.3 (PP-667)."
+  - id: ED-725
+    date: 2026-04-20
+    description: "D-4 resolved: Altonian invasion ~18 AG (~30y post-Catastrophe). Timeline revision = separate workplan."
     status: resolved
     severity: P2
-    source: PP-667
+    source: "session_master_2026_04_20.md + handoff"
 
-  - id: ED-715
-    date: 2026-04-19
-    description: "OPEN ITEMS sweep across settlement_layer, military_layer, peninsular_strain, faction_layer, victory_v30, threadwork_v30 — 26 items resolved, 5 superseded by PP-663/PP-666, 7 deferred to engine_v4 smoke-test, 10+ threadwork PROVISIONALs deferred as scene-layer scope. Propagation to source-doc OPEN ITEMS tables deferred to follow-up infrastructure commit. See designs/audit/gap_resolution_2026-04-19.md §2 (PP-667)."
+  - id: ED-726
+    date: 2026-04-20
+    description: "D-5 resolved: site-network three-layer model (foundational/responsive/not-scheduled). Integration target canon/02_foundations_amendment_leap_mechanism.md (pending Batch 2)."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-727
+    date: 2026-04-20
+    description: "D-6 resolved: Lenneth TS pathway = slow scholarly loosening, SA-gated, ceiling 10-20. NPC update = separate workplan."
     status: resolved
     severity: P2
-    source: PP-667
+    source: "session_master_2026_04_20.md + handoff"
 
-  - id: ED-716
-    date: 2026-04-19
-    description: "Label audit (PP-670): caste annotations file correctly deprecated (merged into npc_roster_v30 §14 on 2026-04-11). threadwork_v25_historical.md had mismatched label — internal banner added. sim_ttrpg_batch_legacy_* files flagged for follow-up banner pass (low priority). See designs/audit/label_audit_2026-04-19.md."
+  - id: ED-728
+    date: 2026-04-20
+    description: "D-7 resolved: Valn origin pre-Altonian, ambiguous, possibly pre-Einhir. Worldbuilding update = separate workplan."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-729
+    date: 2026-04-20
+    description: "PR-1 resolved: Finitude pivot home = canon/00_philosophical_foundations.md §4.3 (Option A). Integration pending Batch 1."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-730
+    date: 2026-04-20
+    description: "PR-2 resolved: Leap taxonomy home = new canon/02_foundations_amendment_leap_mechanism.md (Option A). Integration pending Batch 2."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-731
+    date: 2026-04-20
+    description: "PR-3 resolved: propagate MS (Mending Stability) over RS. Sweep pending Batch 5 §5.4."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-732
+    date: 2026-04-20
+    description: "PR-11 BA-1 resolved: Baralta direct communion supplements (not supersedes) \"does not question theology\" in NPC §6. Maps TL-4."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-733
+    date: 2026-04-20
+    description: "PR-12 B-1 resolved: Ficinian Cardinal emanation accepted as Church self-understanding. Consolidated guide §3.2 canonical."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-734
+    date: 2026-04-20
+    description: "PR-13 S-1 resolved: Lurianic Catastrophe mapping accepted as RM theology. Consolidated guide §4.4 canonical."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-735
+    date: 2026-04-20
+    description: "PR-14 bundle resolved: Finding 7 + RWCE + Miracle Investigation + SA-gating all accepted. Integration cascade = separate workplan."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-736
+    date: 2026-04-20
+    description: "PR-15 resolved: Seam Text framing = Option A metadata frame. Consolidated guide L290-292 update pending."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-737
+    date: 2026-04-20
+    description: "Ledger split: all resolved entries migrated to canon/editorial_ledger_archive.yaml. Main retains open + new resolutions only."
     status: resolved
     severity: P3
-    source: PP-670
-
-  - id: ED-717
-    date: 2026-04-19
-    description: "Meta-throughline synthesis (PP-671): 3 substrate-posture gaps (Hafenmark/Löwenritter/RM lacking М-4 characterization). Framework resolution: T-15a/b/c in throughlines_meta_infill.md §3.1. Design-doc propagation complete 2026-04-19: Hafenmark §8.4, Löwenritter §8.9, RM §8.8 (factions_personal_v30)."
-    status: resolved
-    severity: P2
-    source: PP-671
-
-
-  - id: ED-718
-    date: 2026-04-19
-    description: "Throughlines hierarchical framework (PP-672) — canonical vetting guide adopted. Five tiers: Ω (intent, 1), Μ (modes, 4), М (meta-throughlines, 6), Τ (throughlines, 25), Q (quality, 3). Supersedes PP-671 meta-throughlines doc as vetting authority. Skeleton: references/throughlines_meta.md (9k). Infill: references/throughlines_meta_infill.md (28k). Adoption scope: new work; existing canon grandfathered."
-    status: resolved
-    severity: P2
-    source: PP-672
-
-  - id: ED-719
-    date: 2026-04-19
-    description: "Terminology cleanup (PP-673) — three-way 'skeleton' collision resolved. Auto-generated *_skeleton.md files (heading/line/token navigation companions) renamed to *_index.md; tools/skeleton_gen.py renamed to tools/doc_index_gen.py; github_ops functions (read_skeleton→read_index, was_skeletonized→was_indexed, _route_to_skeletons→_route_to_indexes) and caches (_skeleton_reads→_index_reads, _skeleton_route_cache→_index_route_cache) renamed; depth='skeleton' depth='index'. The term 'skeleton' is now reserved for ruleset-in-mechanical-spec-style canonical documents (banner: '<!-- SKELETON — mechanical spec only -->'). 75 files renamed, 8 code/skill files updated."
-    status: resolved
-    severity: P2
-    source: PP-673
-
-  - id: ED-720
-    date: 2026-04-19
-    description: "Framework enforcement + tier N (PP-674). valoria_hooks.vetting_gate() enforces vetting: block on Class A/B patch register entries from PP-674 forward. New task type design_proposal requires loading throughlines_meta.md. Tier N added above Ω: subject-grounding check against Renaissance-era political-leadership dynamics. Four new Failure Lexicon terms (fantasy imposition, duplicate coverage, edge case mechanic, abstractable). N authority: Jordan. Pre-PP-674 entries grandfathered via pre-framework: true marker."
-    status: resolved
-    severity: P1
-    source: PP-674
-
-  - id: ED-600
-    date: 2026-04-19
-    description: "Niflhel named operatives (Quartermaster, Quiet One) — dead. Session B Niflhel dissolution. STRUCK in arc_expansion_v30.md (bdf8a6a2)."
-    status: resolved
-    severity: P2
-    source: Session B dissolution (2026-04-18)
-
-  - id: ED-667
-    date: 2026-04-19
-    description: "Coup Counter readiness gap — binary trigger lacked intermediate posture. Resolved by Löwenritter graduated autonomy (4-stage Loyal/Restless/Autonomous/Split). See conflict_architecture_proposal.md, clock_registry_v30.md. Propagated Session B (c0be619, f6b6ae6) + 2026-04-19 session (148d0184..8ff353d3)."
-    status: resolved
-    severity: P2
-    source: Session B graduated autonomy (2026-04-18)
-
-  - id: ED-632
-    date: 2026-04-19
-    description: "Shadow Renown — CANON spec in faction_politics_v30 §2.2b.i."
-    status: resolved
-    severity: P1
-    source: 2026-04-19
-
-  - id: ED-633
-    date: 2026-04-19
-    description: "Deniability Debt — CANON spec in faction_politics_v30 §2.2b.ii."
-    status: resolved
-    severity: P1
-    source: 2026-04-19
-
-  - id: ED-721
-    date: 2026-04-19
-    description: "CI cap vs Piety Yield T9 — Option A CANON (uniform cap). ci_political_v30 §7.1."
-    status: resolved
-    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
