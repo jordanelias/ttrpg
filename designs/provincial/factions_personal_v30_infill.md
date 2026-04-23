@@ -71,7 +71,7 @@ The Revolution's connection to Einhir cultural continuity allows collective Thre
 [EDITORIAL: Should one named Revolution figure be established as the default Non-Player Character contact point? Suggested profile: southern Einhir elder holding fragmentary inner-tradition knowledge, partially obscured by the Forgetting.]
 ## 8.9 Faction 8: The Löwenritter (Military Order)
 The Löwenritter are not an independent political faction — they are an institutional instrument of the Crown. They hold territory (the fortress at the northern border), maintain military capacity, and act as the Crown's deniable covert arm. Their loyalty is to the Crown as an institution, not to any specific monarch.
-**Coup Threshold:** Grandmaster Ehrenwall is keeping count. The Game Master tracks a private Coup Counter (0–3). When it reaches 3, the coup fires at the next seasonal accounting.
+**Coup Threshold:** Grandmaster Ehrenwall is keeping count. The Game Master tracks a private Löwenritter Autonomy (0–3). When it reaches 3, the Split fires at the next seasonal accounting.
 - Theocracy Counter reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)
 **Counter never decrements.** Once Ehrenwall marks a failure, she does not revise the assessment. See NPCs section for full Ehrenwall mechanics and coup execution procedure.
 **Martial Law Capacity:** If the coup trigger fires, the Löwenritter impose Martial Law on all Crown-held territories simultaneously. Effects:

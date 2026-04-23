@@ -1,7 +1,7 @@
 <!-- DERIVED FROM: Checkpoint 14 (compilation/valoria_ruleset_checkpoint_14.md, 2026-03-26) -->
 <!-- SESSION: 2026-03-30 / 2026-03-31 — see session_log_archive.md -->
 <!-- STATUS: Pre-release reference tool. Not valid against any post-CP14 ruleset. -->
-<!-- POST-SESSION-B/C NOTE (2026-04-19): Arc 1 (Coup Counter) and Arc 3 (Niflhel) reference dissolved systems. Coup Counter was replaced by Löwenritter graduated autonomy (4-stage Loyal/Restless/Autonomous/Split) — see designs/architecture/conflict_architecture_proposal.md. Niflhel dissolved — Shadow Network phenomena now render at settlement layer (designs/territory/settlement_layer_v30.md §4.7-4.9); Dalla Virke became independent intelligence broker (designs/npcs/npcs_special.md). The arcs below remain as pre-dissolution illustrations of emergent structure only. -->
+<!-- POST-SESSION-B/C NOTE (2026-04-19): Arc 1 (Löwenritter Autonomy) and Arc 3 (Niflhel) reference dissolved systems. Löwenritter Autonomy was replaced by Löwenritter graduated autonomy (4-stage Loyal/Restless/Autonomous/Split) — see designs/architecture/conflict_architecture_proposal.md. Niflhel dissolved — Shadow Network phenomena now render at settlement layer (designs/territory/settlement_layer_v30.md §4.7-4.9); Dalla Virke became independent intelligence broker (designs/npcs/npcs_special.md). The arcs below remain as pre-dissolution illustrations of emergent structure only. -->
 
 # Valoria — Emergent Campaign Arcs
 *Derived purely from mechanical systems. No editorial content decided. All narrative framing is illustrative, not canonical.*
@@ -37,7 +37,7 @@ flowchart TD
     A["Players suppress Church publicly\nTC stays ≥40 for 1 season"] --> B["Ehrenwall Counter +1\n(Crown takes no TC-reducing Domain Action)"]
     C["Altonia contacts Torben\nPlayers miss or ignore it"] --> D["Torben loyalty drops to 3–2\nEhrenwall Counter +1"]
     E["Church Domain Action seizes territory\nCrown has no military response"] --> F["Crown loses 2+ territories in one season\nEhrenwall Counter +1"]
-    B & D & F --> G["Coup Counter = 3\nTrigger fires at next Seasonal Accounting"]
+    B & D & F --> G["Löwenritter Autonomy = 3\nTrigger fires at next Seasonal Accounting"]
     G --> H["Löwenritter impose Martial Law\nAll Crown territories simultaneously"]
     H --> I["All non-Military Domain Actions blocked\nRequire secondary Military check Ob 2"]
     H --> J["Only Crown + Löwenritter may act openly\nAll other factions need Covert Ob 3"]
@@ -48,7 +48,7 @@ flowchart TD
     L --> O["Martial Law lifts when TC < 40\nEhrenwall stands down — but counter never resets"]
 ```
 
-**Why this arc is emergent, not scripted:** The counter has three independent triggers. Players rarely track all three simultaneously. The coup fires because attention was elsewhere — which is its entire mechanical logic.
+**Why this arc is emergent, not scripted:** The counter has three independent triggers. Players rarely track all three simultaneously. The Split fires because attention was elsewhere — which is its entire mechanical logic.
 
 **Campaign shape:** Mid-campaign crisis. 1–2 seasons of accumulation (invisible), 1 season of martial law (acute), resolution arc of 2–4 seasons.
 
