@@ -116,7 +116,7 @@ entries:
 
   - id: ED-727
     date: 2026-04-20
-    description: "D-6 resolved: Lenneth TS pathway = slow scholarly loosening, SA-gated, ceiling 10-20. NPC update = separate workplan."
+    description: "D-6 resolved: Lenneth TS pathway = slow scholarly loosening, SA-gated, ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md 2026-04-22."
     status: resolved
     severity: P2
     source: "session_master_2026_04_20.md + handoff"

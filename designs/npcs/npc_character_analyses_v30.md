@@ -144,7 +144,7 @@ Edeyja is the only NPC in the roster who is not compromised, and this is itself 
 | Ruler | Position | TS | Method |
 |-------|----------|-----|--------|
 | Almud | Governance pragmatism + ethical doubt | 0 | Manages the question without resolving it |
-| Lenneth | Institutional empowerment through revival | 0 (can gain through research) | Build up, not tear down — Crown as patron |
+| Lenneth | Institutional empowerment through revival | 0; slow scholarly loosening, SA-gated, ceiling 10–20 (D-6 ED-727) | Build up, not tear down — Crown as patron |
 | Baralta | Pure adversary of Restoration | 0 | Sovereign divine right requires theological monopoly |
 | Vaynard | Revolutionary expulsion | Environmental (southern baseline) | Tear down Church and caste entirely |
 
@@ -170,6 +170,8 @@ Edeyja is the only NPC in the roster who is not compromised, and this is itself 
 ## 2. Queen Lenneth Almqvist — The Institutional Revivalist
 
 **Base profile.** Lenneth Almqvist is the Queen Consort. Primary Conviction: Equity. She believes caste suppression is wrong and the Crown should be the instrument of reform. Her programme: Einhir revival through Crown authority. Archivist by training — she has network access to pre-Suppression texts and institutional records. She does not hold a faction stat sheet; her influence routes through Almud (Crown Mandate modulation) and, in extreme cases, through direct ascension.
+
+**TS pathway.** Lenneth starts TS 0 with a developable but bounded pathway: slow scholarly loosening through accretive exposure to the archive's Einhir materials. Progression is gated by Crown SA (consolidated guide §24) — each TS increment requires the broader scholarly-awareness track to reach a threshold before the next loosening is available — with a ceiling of TS 10–20. Lenneth does not reach the TS 30 practitioner threshold through this pathway; Seam Text legibility, direct Thread operation, and witness-account recognition remain closed to her unless an alternate developmental route fires. [EDITORIAL: D-6 — resolved 2026-04-20; propagated this commit; ED-727.]
 
 **Arc A: The Reformist Queen Consort (Default)**
 - Role: policy influence through Almud. Crown reform advances only insofar as Almud's Certainty declines and he permits her programme to enter Crown action.

@@ -167,3 +167,11 @@ systems:
 # All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
 # verification ledger is built at /home/claude/sim_verification_ledger.json
 # citing these paths. See valoria_hooks.sim_gate() for requirements.
+
+# ── D-3 + D-6 + D-7 propagation (2026-04-22) ─────────────────────────────
+# D-3 (ED-724): Solmund dissolution site — specific, contested, off-map.
+#   Propagated canon/03_canonical_timeline.md §Solmund.
+# D-6 (ED-727): Lenneth TS pathway — slow scholarly loosening, SA-gated,
+#   ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md.
+# D-7 (ED-728): Valn origin — pre-Altonian, ambiguous, possibly pre-Einhir.
+#   Propagation target TBD this session.
