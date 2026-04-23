@@ -154,3 +154,54 @@ Character action → settlement consequence → territory consequence → penins
 | Warden mechanics | N1, T14 |
 
 **Result:** Every system connects to ≥ 2 throughlines. No orphan mechanics. The derived stat system connects to 4 throughlines — structurally load-bearing, validating the architectural decision.
+
+
+---
+
+# ONTOLOGICAL AND MECHANICAL THROUGHLINES (T-31..T-41, POST-ATOMIZATION)
+
+## T-31 — Reflexive Suspension
+Two-decision Leap player surface (entry commit, exit timing) grounded in canon/02 Am 1.
+**Key docs:** canon/02 Am 1; threadwork_v30 §2.3; designs/audit/mechanical_implementation_revised_2026_04_21.md §1.
+
+## T-32 — Sincere Structural Closure
+Church position as formation-structural anosognosia; crackable only by confrontation under integration.
+**Key docs:** canon §9; canon/02 Am 5; designs/audit/mechanical_implementation_revised_2026_04_21.md §6.
+
+## T-33 — TS as Developmental Arc
+TS as receptive-capacity measure per canon/01 Am 3; waterline-lowering development through confrontation-retention.
+**Key docs:** canon/01 Am 3; canon §14; designs/audit/mechanical_implementation_revised_2026_04_21.md §4.
+
+## T-34 — Distal Interoception through Knot Tethers
+Somatic signal through knot-channels per canon/02 Am 6.
+**Key docs:** canon/02 Am 6; designs/audit/mechanical_implementation_revised_2026_04_21.md §5.
+
+## T-35 — Unified Uncanny Capacity Synthesis
+Four uncanny traditions at observer-TS-band-determined loci.
+**Key docs:** designs/audit/mechanical_implementation_revised_2026_04_21.md §9.6.
+
+## T-36 — Relational Ontological Identity (TS 50–69 Coherence 0)
+Companion knots load-bearing at canon/01 Am 4 relational-persistence outcome.
+**Key docs:** canon/01 Am 4; designs/audit/mechanical_implementation_revised_2026_04_21.md §5.4.
+
+## T-37 — Stimulus Resistance Triplet
+Three integration-failure modes: predication, grammaticalisation, categorisation.
+**Key docs:** designs/audit/mechanical_implementation_revised_2026_04_21.md §6.
+
+## T-38 — Real as Continuous Amplitude
+Substrate-excess amplitude continuous; monstrosity is extreme end.
+**Key docs:** designs/audit/mechanical_implementation_revised_2026_04_21.md §9.
+
+## T-39 — Textual Mode Typology
+Four in-world textual modes per canon §10.2 distinct.
+**Key docs:** designs/audit/mechanical_implementation_revised_2026_04_21.md §7.
+
+## T-40 — TS as Taxonomic Expansion
+Category admission via receptive-capacity development.
+**Key docs:** designs/audit/mechanical_implementation_revised_2026_04_21.md §8.
+
+## T-41 — Damaged Substrate Is Non-Agential
+No moral agency in substrate damage; demonology is T-27 interpreter output.
+**Key docs:** canon/00 §4.3; designs/audit/mechanical_implementation_revised_2026_04_21.md §9.
+
+*[EDITORIAL: T-31..T-41 registry entries per designs/audit/rigorous_audit_synthesis_s1_s7_v3_1.md + ED-738.]*

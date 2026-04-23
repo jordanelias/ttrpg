@@ -300,3 +300,78 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 ---
 
 *Every throughline has at least partial system documentation and mechanical implementation. The game's constitutive chains are structurally complete. What remains is simulation validation (do the chains produce the intended dynamics at the intended rates?) and constitutive framing (do the system documents describe their mechanics in Thread terms?).*
+
+
+---
+
+## VIII. POST-ATOMIZATION THROUGHLINES (T-31..T-41, FROM S1–S7 RIGOROUS AUDIT SYNTHESIS v3.1)
+
+### T-31: Reflexive Suspension
+**Chain:** canon/02 Am 1 → practitioner perceives target configuration at TS-band receptive capacity → entry commit locks operation sequence up to (Focus − 1) with pre-declared exit conditions → Leap Roll resolves → reflexive facing suspends, outward facing persists, layer 1 Ein Sof spooling continues → sequence executes as committed, no mid-contact modification → voluntary exit or Fatigue-threshold involuntary exit triggers Retention Roll → reflexive self-rendering reasserts, knots register at substrate depth below reflexive-access threshold per canon/02 Am 2
+**Systems:** threadwork_v30 §2.3; canon/02 Am 1; entry-commit UX; contact-phase execution; retention degree outcomes; knot-profile two-layer UX
+**What it means:** Player-facing surface is two decisions (entry commit, exit timing). Contact is resolution, not a decision sequence. Canon/02 Am 1 structural commitment means mid-contact modification is unavailable.
+**Implementation status:** Proposed. Wave 1 workplan P1.
+
+### T-32: Sincere Structural Closure
+**Chain:** canon §9 → observer confronts excess-being → receptive capacity gates what is received → formation auto-generates motor-plausible explanation → no residual dissonance → propositional argument cannot crack → only confrontational experience under integrative conditions produces cracking
+**Systems:** Church NPC dialogue generator; canon §9; faction formation; Baralta partial prophylaxis (T-29)
+**What it means:** Church position on threadwork is formation-structural anosognosia. Argument cannot shift at framework level; only confrontation under integrative conditions produces frame-drift.
+**Implementation status:** Proposed. Wave 1 workplan P3.
+
+### T-33: TS as Developmental Arc
+**Chain:** canon §14 → confrontation held under integration-supportive conditions → cumulative receptive-capacity development → band threshold crossings at TS 30, 50, 70, 90 → practitioner waterline lowers; more of substrate-iceberg receivable per canon/01 Am 3 explicit
+**Systems:** TS track; Certainty track; band-crossing Event Scenes; dialogue registers keyed to TS band; ambient narrative-self content differentiation
+**What it means:** TS is a receptive-capacity axis per canon/01 Am 3. Development comes from confrontation under support; substrate-iceberg is invariant across observers; higher TS receives more of the same given at ordinary perception.
+**Implementation status:** Proposed. Wave 1 workplans P2, P9, P10.
+
+### T-34: Distal Interoception through Knot Tethers
+**Chain:** Practitioner forms knot via operation → knot persists at substrate depth below reflexive-access threshold → knot remains tethered post-surface → continuous seismographic signal via canon/02 Am 6 intelligence-mechanic (no dice roll; somatic interoceptive) → signal reports MS state, vulnerability trigger, affective valence of knotted territories
+**Systems:** Knot-profile diagnostic panel; ambient somatic layer; vulnerability-trigger pre-cognitive cues; signal clarity as trait/training variable
+**What it means:** Practitioner's somatic awareness of knotted-territory states is framework-original distal sense. Within-character channel for what canon/02 Am 2 says reflexive self-rendering cannot access.
+**Implementation status:** Proposed. Wave 2 workplan P15 Layer 2.
+
+### T-35: Unified Uncanny Capacity Synthesis
+**Chain:** Observer encounters category-resistant entity or Fragmented-band practitioner → receptive capacity (observer TS band) gates received content → observer formation + interpretive frame processes received content → frame-consistent uncanny register emerges per observer-TS
+**Systems:** Dialogue generator observer-TS branching; threadcut rendering (threadwork §6.2); Fragmented-band practitioner outward facing; Providence-being temporal rendering
+**What it means:** Framework accommodates Jentsch/Mori/Freud/Heidegger uncanny traditions at specific loci within a single structural account. Same entity, different receptive capacities, different frame-consistent registers.
+**Implementation status:** Proposed. Wave 4 workplan P17.
+
+### T-36: Relational Ontological Identity (TS 50–69 Coherence 0)
+**Chain:** Career operations → cumulative Coherence depletion → Coherence 0 at TS 50–69 → layer 2 self-rendering ceases → canon/01 Am 4 TS-gated outcome: companion knots become load-bearing → identity sustained through named bonds → knot severance produces structural disassembly → isolation is categorically lethal
+**Systems:** canon/01 Am 4; companion system (structurally consequential at this trajectory); knot-profile load-bearing state flag; dialogue generator companion-indexed registers
+**What it means:** At this ending-trajectory, practitioner exists through relational bonds rather than autonomous self-coherence. Knot severance is structural disassembly, not grief event. Trajectory-conditional.
+**Implementation status:** Proposed. Wave 3 workplan P22.
+
+### T-37: Stimulus Resistance Triplet
+**Chain:** Substrate-adjacent stimulus in perception → resistance mode triggers by integration-failure mode → predication resistance (naming fails); grammaticalisation resistance (relational grammatical integration fails); categorisation resistance (taxonomic placement fails)
+**Systems:** NPC dialogue three-register templates; environmental substrate-excess amplitude; Seam Text vs Church doctrinal text-generator; unified category-resistance dialogue register
+**What it means:** Framework distinguishes three modes of integration-failure with stimuli ordinary perception cannot fully process. All within the renderable; Ein Sof is structural terminus beyond resistance.
+**Implementation status:** Proposed. Waves 2+4 workplans P7/P12/P17.
+
+### T-38: Real as Continuous Amplitude (Within the Renderable)
+**Chain:** Substrate is excess at all times → every location has substrate-excess amplitude (ordinary/moderate/mid-high/high/extreme) → TS development expands predicate set; extreme amplitude remains beyond highest TS predicate sets
+**Systems:** Environmental design amplitude per region; shader/audio register amplitude-scaled; NPC dialogue amplitude-keyed; monstrosity UX as scaled extreme; Gap-proximity gradient
+**What it means:** Framework-world has continuously-present substrate excess. No substrate-quiet location. Monstrosity is extreme amplitude of the same spectrum, not separate category.
+**Implementation status:** Proposed. Environmental-quality three-composite consolidation + P13 + P21 surface amplitude at UI.
+
+### T-39: Textual Mode Typology
+**Chain:** In-world expressive output from practitioner or faction → four distinct production modes: below-waterline cartographic (inner-tradition); Church doctrinal; Coherence-degraded; other-faction doctrinal (Varfell/Baralta/RM) → observer receptive capacity (TS + formation) determines legibility
+**Systems:** Text generator four-mode templates; dialogue faction-AI variants per T-27; historical corpus as environmental-storytelling; Church chronicler/Varfell report/Baralta homily/RM lineage-text distinctive generators; TS-correlated text rendering
+**What it means:** Framework commits to four distinct in-world textual modes. Each has own grammatical structure; cross-mode reading requires different receptive capacities.
+**Implementation status:** Proposed. Wave 2 workplan P12 core.
+
+### T-40: TS as Taxonomic Expansion
+**Chain:** Confrontation retention → TS band threshold crossings → new framework-taxonomic categories admitted into receptive capacity. TS 30+ substrate-effect. TS 50+ relational thread-structure, threadcut mode. TS 70+ structural reality, Accord as institution. TS 90+ full substrate topology, environmental-strain awareness
+**Systems:** Band-threshold Event Scenes unlock category availability; map UI TS-keyed overlay layers; dialogue generator high-TS taxonomy access; text rendering shift
+**What it means:** Higher TS admits more categories into receptive capacity for placing received content. Categories are substrate-supported invariantly; TS expansion admits them.
+**Implementation status:** Proposed. Wave 1 workplan P21 + Wave 2 workplan P2.
+
+### T-41: Damaged Substrate Is Non-Agential
+**Chain:** Substrate damage (Gap, dissolution residue, Calamity residue, wounded territory, threadcut de-actualisation) → rendering effects (environmental distortion, Coherence pressure, solastalgia) → without moral agency, corruption, demonism, malice, qelippot analog → art direction: desaturation, coldness, absence, wrongness → NPC response: non-moralising recognition or T-27 interpreter output → player response: contain, flee, survive; never defeat via damage
+**Systems:** Monstrosity art direction; damaged-substrate zones environmental design; Gap manifestation UX; solastalgia vulnerability triggers; Church demonic framing as interpreter output per T-27
+**What it means:** Damaged substrate has no moral agent. Framework refuses demonology-pathway Church doctrine imposes on substrate damage. Ethics flow from substrate-ontology, not moral-adversary framing.
+**Implementation status:** Proposed. Multi-proposal: Wave 1 P7 + Wave 2 P5 + Wave 3 P14 solastalgia + art direction design guidance.
+
+**Count: 41 throughlines (30 pre-atomization + 11 novel from S1–S7 rigorous audit synthesis v3.1, post-ED-738). All 11 novel entries have Wave 1–4 workplan mappings.**
+
+*[EDITORIAL: T-31..T-41 derived from designs/audit/rigorous_audit_synthesis_s1_s7_v3_1.md per ED-738 pivot. М-7..М-11 meta-throughline additions propagated separately.]*
