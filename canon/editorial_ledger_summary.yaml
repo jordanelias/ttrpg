@@ -4,7 +4,7 @@
 p1_blocker_count: 0
 open_count: 12
 total_active: 28
-next_id: 738
+next_id: 739
 
 p1_blockers:
   []
@@ -24,6 +24,7 @@ p2_open:
   - ED-712: "Generalized Faction Succession Contest — extends baralta_crown_cl"
 
 recent_resolutions:
+  - ED-738: "Ein Sof gradient + cartographic contemplative lineage + three over-readings corrected."
   - ED-722: "D-1 resolved: Solmund 12y emergence (5y coalescing + 7y ministry)"
   - ED-723: "D-2 resolved: pre-Calamity governance author-determined, surfaced"
   - ED-724: "D-3 resolved: dissolution site specific but contested, off-map. T"

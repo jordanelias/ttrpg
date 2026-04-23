@@ -1,8 +1,15 @@
 # Valoria Editorial Ledger — Active (open items + recent resolutions)
-# next_id: 738
+# next_id: 739
 # Rebuilt 2026-04-20. Split: resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
+
+  - id: ED-738
+    date: 2026-04-21
+    description: "Ein Sof gradient + cartographic contemplative lineage + three over-readings corrected + receptive-capacity framing + iceberg gameplay conceptualisation authorised. Resolves audit-propagated framings across Sessions 1–7. Prerequisite for v3.1 synthesis commit."
+    status: resolved
+    severity: editorial
+    resolution_doc: "designs/audit/editorial_ein_sof_gradient_2026_04_21.md"
 
   - id: ED-660
     date: 2026-04-17
