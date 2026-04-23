@@ -73,9 +73,9 @@ Four causal mechanisms by which Ω is produced. A proposal primarily serves 1–
 
 ---
 
-## §3 М — META-THROUGHLINES (6)
+## §3 М — META-THROUGHLINES (11)
 
-Structural patterns from the 25 throughlines. Each subordinated to Μ modes.
+Structural patterns across the 41 throughlines. Each subordinated to Μ modes. Expanded from 6 to 11 per S1–S7 rigorous audit synthesis v3.1 (ED-738).
 
 | М | Pattern | Parent Μ |
 |---|---|---|
@@ -85,8 +85,13 @@ Structural patterns from the 25 throughlines. Each subordinated to Μ modes.
 | М-4 | Institutions stake substrate-postures | Μ-γ |
 | М-5 | Scales connect through substrate | Μ-δ |
 | М-6 | Choice is forced | Μ-α |
+| М-7 | Borrowings are operational extensions (composite assembly) | Μ-γ, Μ-β |
+| М-8 | Access is vertical-position gated (within the renderable) | Μ-β, Μ-γ |
+| М-9 | Ontological inversion of clinical phenomenology | Μ-γ, Μ-α |
+| М-10 | Environment as constitutive medium (bounded by the renderable) | Μ-δ, Μ-γ |
+| М-11 | Voluntary and involuntary capacity duality | Μ-α, Μ-γ |
 
-**Dependencies:** М-2→М-1 · М-4→М-3 · М-5→М-3 · М-6→М-1.
+**Dependencies:** М-2→М-1 · М-4→М-3 · М-5→М-3 · М-6→М-1 · М-9→М-7 · М-10→М-3 · М-10→М-2 · М-11→М-6.
 
 **Rating rubric:**
 - **+** extends — new instantiation of the pattern
@@ -94,7 +99,7 @@ Structural patterns from the 25 throughlines. Each subordinated to Μ modes.
 - **−** violates — resolve or redesign
 - **○** does not apply to proposal scope
 
-**T→М tag table** (for Τ-level checks): see infill §3.1. Summary: all 25 T's covered; primary-assignment distribution — М-1: 4 · М-2: 2 · М-3: 3 · М-4: 7 · М-5: 6 · М-6: 5.
+**T→М tag table** (for Τ-level checks): see infill §3.1. Summary: all 25 T's covered; primary-assignment distribution — М-1: 4 · М-2: 2 · М-3: 4 · М-4: 8 · М-5: 7 · М-6: 5 · М-7: (framework design-level, cross-cutting) · М-8: 1 · М-9: 1 · М-10: 1 · М-11: 2. Full tag table in infill §3.1.
 
 ---
 

@@ -100,7 +100,91 @@ Four is the minimum coherent set.
 | T-24 | Convergence as Crisis | М-5 | — | Scale-connecting — multiple throughlines intersecting at various scales produce emergent crisis. |
 | T-25 | Generational Arc | М-5 | — | Scale-connecting — 30-year clock transforms personal standings into institutional reality. |
 
-Coverage: 24 of 25 + T-15a/b/c (T-10 struck; T-15a/b/c added). Primary distribution: М-1: 4 · М-2: 2 · М-3: 3 · М-4: 7 · М-5: 6 · М-6: 5.
+| T-26 | Recursion as Setting Structure (TL-3) | М-5 | М-3 | Primary scale-recursive (same dynamic at multiple scales). Secondary substrate-grounded. |
+| T-27 | Effects Real, Explanation Wrong (TL-4) | М-4 | М-6 | Primary institutional (faction interpretive-frame coherent-but-wrong). Secondary forced-choice (argument fails; frame-crack requires confrontation). |
+| T-28 | Confrontation/Leap/Operation Triad (TL-5) | М-3 | М-6 | Primary substrate-grounded (three-phase engagement with substrate). Secondary forced-choice (each phase has decision architecture). |
+| T-29 | Baralta as Accidental Prophylaxis Cracker (TL-8) | М-4 | М-8 | Primary institutional (Baralta's partial prophylaxis-crack is formation-structural). Secondary access-gated (crack admits substrate content into receptive capacity). |
+| T-30 | Information Asymmetry as Core Mechanic (TL-7) | М-8 | М-5 | Primary access-gated (different receptive capacities at different observer-nodes). Secondary scale-recursive (asymmetry operates at all scales). |
+| T-31 | Reflexive Suspension | М-3 | М-6 | Primary substrate-grounded (Leap geometry = suspension of layer 2 reflexive facing). Secondary forced-choice (entry commit and exit timing). М-7 ✓, М-8 primary, М-9 ✓, М-11 primary. |
+| T-32 | Sincere Structural Closure | М-4 | М-6 | Primary institutional (Church position formation-structural). Secondary forced-choice (frame-shift pathway). М-7 ✓, М-8 ✓, М-9 primary extension. |
+| T-33 | TS as Developmental Arc | М-3 | М-6 | Primary substrate-grounded (receptive-capacity expansion). Secondary forced-choice (confrontation Hold/Turn-Away). М-7 ✓, М-8 ✓, М-10 ✓, М-11 primary extension. |
+| T-34 | Distal Interoception through Knot Tethers | М-5 | М-3 | Primary scale-connecting (knot-channels cross geographic distance). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-9 ✓, М-10 primary extension. |
+| T-35 | Unified Uncanny Capacity Synthesis | М-3 | М-4 | Primary substrate-grounded (uncanny register emerges from TS-band receptive capacity). Secondary institutional (formation + frame). М-7 ✓, М-8 primary extension, М-9 ✓. |
+| T-36 | Relational Ontological Identity (TS 50–69 C0) | М-5 | М-3 | Primary scale-connecting (companion knots load-bearing at ontological scale). Secondary substrate-grounded. М-7 ✓, М-8 ✓. |
+| T-37 | Stimulus Resistance Triplet | М-3 | М-8 | Primary substrate-grounded (three resistance modes at integration-failure loci). Secondary access-gated. М-7 ✓, М-8 ✓, М-9 ✓. |
+| T-38 | Real as Continuous Amplitude | М-3 | М-2 | Primary substrate-grounded (amplitude is continuous substrate-excess). Secondary geography-holds-pressure. М-7 ✓, М-8 ✓, М-10 primary extension. |
+| T-39 | Textual Mode Typology | М-4 | М-3 | Primary institutional (four-mode faction-output typology). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-9 ✓. |
+| T-40 | TS as Taxonomic Expansion | М-5 | М-3 | Primary scale-connecting (taxonomic categories admit scale-spanning content at thresholds). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-10 ✓, М-11 primary extension. |
+| T-41 | Damaged Substrate Is Non-Agential | М-3 | М-4 | Primary substrate-grounded (damage-as-substrate-state without moral agent). Secondary institutional (Church-demonology as interpreter output per T-27). М-7 ✓, М-9 primary extension, М-10 ✓. |
+
+Coverage: 40 of 41 + T-15a/b/c (T-10 struck; T-15a/b/c added; T-26..T-41 from v3.1 synthesis). Primary distribution: М-1: 4 · М-2: 2 · М-3: 14 · М-4: 11 · М-5: 8 · М-6: 5 · М-7..М-11: cross-cutting extensions primarily on T-31..T-41.
+
+М-7..М-11 primary extensions: М-8 primary on T-30, T-35. М-9 primary extension on T-32, T-41. М-10 primary extension on T-34, T-38. М-11 primary extension on T-31, T-33, T-40.
+
+### §3.4 М-7 detailed specification — Borrowings Are Operational Extensions
+
+**Pattern.** Every scholarly-lineage concept the framework adopts contributes a component to a composite operational assembly. Each component is structurally continuous with its source; each is deployed within the framework's operational architecture rather than preserved in source-native register. The composite is framework-original in assembly; components have clean precedent.
+
+**Instances.** Husserl epoché (radicalised into reflexive-only suspension + operational Leap); Metzinger PSM (opacity as TS arc); Block phenomenal-vs-access (reflexive = access); Global Workspace (specialist-level thread work); Kierkegaard leap and repetition (First Leap + iterability); Lacan Real and Symbolic (monstrosity as non-Symbolic-nettable); apophatic theology + Ein Sof (tzimtzum-grounded structural wall at ground; non-apophatic cartographic middle per ED-738); Lurianic Kabbalah (tzimtzum + tikkun without qelippot); clinical-trauma phenomenology family (anosognosia, Capgras, Cotard, DPDR, structural dissociation); Gibsonian ecological psychology; Kaplan ART; Clark-Chalmers extended mind; Tolmanian and Lynchian wayfinding; Prinzhorn and Dubuffet art brut.
+
+**Derivation.** 25+ cells across Sessions 1–7. Canonical acknowledgment pending (canon/00 §1.2 extension per ED-738 §8).
+
+**Parent Μ.** Μ-γ + Μ-β.
+
+### §3.5 М-8 detailed specification — Access Is Vertical-Position Gated (Within the Renderable)
+
+**Pattern.** What any being can receive of the game world is gated by position relative to the waterline of ordinary rendering (canon/01 Am 3 explicit): ordinary perception above the waterline; reflexive + outward facing at the waterline; below-waterline content receivable during Leap contact (canon/02 Am 1) or at TS-cultivated receptive capacity. All renderable content is in principle describable within conditions-dependent receptive-capacity constraints per ED-738. The renderable terminates at the Ein Sof structural wall for all beings.
+
+**Per receptive-capacity correction (ED-738 §5).** TS expansion is expansion of what can be received, not what is given. Different observers encounter the same given; different waterlines per observer-TS admit different content into receptive capacity.
+
+**Instances at T-level.** T-30, T-31, T-32, T-33, T-35, T-27, T-28, T-37, T-40.
+
+**Derivation.** 9+ cells across Sessions 1–7.
+
+**Parent Μ.** Μ-β + Μ-γ. Dependencies: М-8 → М-4 (institutions stake substrate-postures within access-gated receptive-capacity bands).
+
+### §3.6 М-9 detailed specification — Ontological Inversion of Clinical Phenomenology
+
+**Pattern.** Framework adopts clinical trauma-phenomenology vocabulary while inverting causal direction. Clinical vocabulary preserved (anosognosia, Capgras, Cotard, neglect, aphasia, TBI, split-brain, DPDR, structural dissociation, agnosia, Jentschian uncanny, Mori valley, solastalgia); the condition is rendered as real in the world (substrate ontological), not delusional in the patient (perceiver pathology). Clinical phenomenology provides phenomenological precision; ontological inversion provides framework-specific moral and dramatic weight.
+
+**Instances (12+ confirmed across Sessions 1–7).** Clinical anosognosia ↔ Prophylaxis; Clinical Capgras ↔ Fragmented band; Clinical Cotard ↔ Coherence 0 freefall; Clinical hemispatial neglect ↔ non-sensitive formation; Clinical split-brain confabulation ↔ Church doctrinal output; Clinical DPDR ↔ Coherence-degraded inner phenomenology; Clinical art-brut pathologisation ↔ Coherence-degraded expression as state-accurate rendering; Clinical agnosia ↔ stimulus resists predication; Clinical category resistance ↔ framework category resistance; Ordinary place attachment ↔ framework knot-profile; Clinical solastalgia ↔ knotted-territory MS drop; Jentsch animate-or-inanimate binary ↔ ontological third category.
+
+**Derivation.** 12+ instances across Sessions 1–7 Observation 7.
+
+**Parent Μ.** Μ-γ + Μ-α. Dependencies: М-9 → М-7 (sub-pattern of composite assembly specific to clinical-trauma borrowings).
+
+### §3.7 М-10 detailed specification — Environment as Constitutive Medium (Bounded by the Renderable)
+
+**Pattern.** Environment is constitutive of practitioner capacity, not backdrop. Framework integrates 4E cognition (embodied, embedded, extended, enactive) at the substrate-ontological register: Gibsonian direct perception of substrate-specifying invariants; ART restorative environments supporting developmental registers; ontologically-reciprocal place attachment via knot profile; Clark-Chalmers extended cognitive coupling through knot channels; Tolmanian and Lynchian substrate-topological cognitive mapping at non-Euclidean scale. Environment co-constitutes what the practitioner can perceive, do, and know — bounded by М-8's renderable terminus.
+
+**Per ED-738.** М-10 operates within the renderable. Ein Sof is not an environment; it is structural ground. Environment's constitutive role tapers toward the renderable terminus but does not cross.
+
+**Instances at T-level.** T-33, T-38, T-16, T-34, T-40.
+
+**Derivation.** Five-cell convergence (S6-C32..C36) + supplementary evidence across Sessions 1–7.
+
+**Parent Μ.** Μ-δ + Μ-γ. Dependencies: М-10 → М-3; М-10 → М-2.
+
+### §3.8 М-11 detailed specification — Voluntary and Involuntary Capacity Duality
+
+**Pattern.** The same structural phenomenological capacity yields opposite valences depending on agency and context. Capacity is neutral; mode of engagement (chosen and cultivated with support vs undergone without support) determines developmental trajectory. Framework systematically treats the same capacity in different modes as producing trained skillful outcomes or pathological destabilising outcomes.
+
+**Instances.**
+- DPDR phenomenology: involuntary at Coherence degradation (distressing) ↔ voluntary at high-TS opacity practice (cultivated).
+- Peritraumatic dissociation: involuntary trauma protection ↔ cultivated confrontation training.
+- Meta-awareness: involuntary at Coherence degradation ↔ cultivated at TS development.
+- Automatic expression: involuntary adjacent to Coherence-degraded output ↔ cultivated craft in inner-tradition cartographic register.
+- Below-waterline perceptual relocation: involuntary at Leap reflexive suspension ↔ cultivated at high-TS voluntary opacity.
+
+**Implication.** UX design distinguishes voluntary and involuntary registers for phenomenologically similar states. Integration-supportive conditions is the mechanism by which involuntary encounters become cultivated capacities. Pedagogy is the structural mechanism converting pathology-adjacent into developmental.
+
+**Derivation.** Five-instance convergence across Sessions 1, 3, 5, 7.
+
+**Parent Μ.** Μ-α + Μ-γ. Dependencies: М-11 → М-6.
+
+---
+
+*[EDITORIAL: ED-738-adjacent — М-7..М-11 derived from S1–S7 audit synthesis per designs/audit/rigorous_audit_synthesis_s1_s7_v3_1.md.]*
 
 ### §3.2 М-dependencies explained
 
