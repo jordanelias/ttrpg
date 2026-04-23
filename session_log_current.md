@@ -1,87 +1,55 @@
-# SESSION LOG: 2026-04-20 ATOMIZATION RUN
-## Status: ACTIVE — atomization workplan complete; minor follow-ups remain
-
-last_stage: Atomization workplan 2026-04-20 — Batches 0/1/2/3/4/5§5.1+§5.2+§5.4+§5.4tier2/6/7/8 complete. D-1..D-7 + PR-1..PR-15 all resolved and committed. RS→MS sweep complete across all active non-archive non-superseded files (508 RS words + 161 'Rendering Stability' phrases swept). rs_budget.md renamed to ms_budget.md with 8 cross-ref updates. Throughlines completeness check extended to 30 entries (T-01..T-30).
+session_id: 2026-04-21-rigorous-audit-s1-s7-synthesis-v3-1
+session_close: 2026-04-21
+phase: audit-synthesis-complete
+status: closed
+last_stage: >
+  Rigorous audit S1–S7 synthesis v3.1 full commit sequence complete.
+  ED-738 editorial committed (d80e1532). v3.1 synthesis + mechanical implementation
+  revised + mechanical implications revised committed (cf8f2612). T-31..T-41 registry
+  additions committed (d9ebd026). М-7..М-11 meta-throughline additions + T-26..T-41
+  tag-table extension committed (c4db7299). Wave 1 workplans + gameplay assessment
+  committed (b91a8c66). 41 total throughlines. 11 total meta-throughlines.
+  Corrections applied per ED-738: consciousness-absent→non-reflexive register;
+  non-episodic retention→cartographic register at specificity-gated resolution;
+  pure apophatic→Regimes 1–3 cartographic + Regime 4 apophatic; different-givens→
+  same given different receptive capacities; dive-log→below-waterline cartographic;
+  six-phase Leap→two-decision player surface; Thread-Read not a separate operation;
+  Hold vs Flee→Hold vs Turn-Away; water-metaphor extensions stripped; iceberg framing
+  authorised for gameplay conceptualisation per ED-738 §4.
 
 next_action:
   skill: editorial
   description: >
-    Atomization workplan substantially complete. Remaining targeted follow-ups:
-    (1) RWCE / Miracle Investigation / SA-gating full mechanical integration per ED-735 — separate atomization workplan required (touches params/bg/faction_actions, clocks, NPC priority trees, Tension Cards, Conviction Scene UX).
-    (2) D-3 (dissolution site specific but contested, off-map) — timeline/worldbuilding update per ED-724; separate workplan.
-    (3) D-4 (Altonian invasion ~18 AG) — timeline revision per ED-725; separate workplan. Multiple cross-cutting references.
-    (4) D-5 Einhir site-network three-layer operational model — new designs/world/einhir_site_network.md or expansion of calamity_radiation_v30 (ED-726 target corrected this sequence). Separate workplan.
-    (5) D-6 (Lenneth TS pathway scholarly loosening, SA-gated, ceiling 10-20) — NPC analyses update per ED-727; separate workplan.
-    (6) D-7 (Valn origin pre-Altonian) — worldbuilding update per ED-728; separate workplan.
-    (7) PROVISIONAL marker audit — 45 active-path files contain [PROVISIONAL:] markers. Audit scope large; most markers pre-date this session. Enumerate and resolve individually when touched.
-    (8) Auto-generated index files (e.g. references/file_index.md, *_index.md) still contain 'rs_budget' references. These regenerate via tools/doc_index_gen.py on next doc-index run. No manual patch needed.
-    (9) canon/02 "formerly Rendering Stability per ED-731" cross-ref is intentional historical annotation — DO NOT sweep.
-  blockers: []
+    Wave 1 atomization PP entries for P1/P3/P9/P10/P21 per designs/workplans/wave1_workplans.md.
+    Blockers: P6-1 Coherence career floor (3 options); P15-1 Layer 3 prototype test.
+    High-priority decisions: P1-1 surprise/prone Ob; P9-1 Hold vs Turn-Away confirm;
+    P9-2 TS progress-point threshold; P18-1 Accord perception strength; P5-1 observer-variability.
+    Secondary work: Session 8 rigorous audit per v3.1 §6 methodology (cross-matrix tensions;
+    design recommendation synthesis; framework-original contributions inventory).
+    T-26..T-30 registry reconciliation (v3.1 §4 open question 3).
+    Sixteen total open editorial decisions enumerated in mechanical_implementation_revised §11.
+
+blockers:
+  - P6-1: Coherence career floor editorial decision (three options pending)
+  - P15-1: Layer 3 prototype gameplay-contribution test
 
 commits_this_sequence:
-  - 976e1e8a: '[editorial] Batch 6 §6.1 — Ob 7 AND→OR'
-  - e642f195: '[editorial] D-1 cascade — 12y emergence / 7y ministry'
-  - dc6e39ac: '[editorial] Ledger split + register D-1..D-7 + PR-1..PR-15'
-  - 8f8388e9: '[editorial] D-2 + PR-15 — pre-Calamity governance + Seam Text metadata'
-  - 39069744: '[editorial] Batch 1 — Finitude Pivot foundations §4.3'
-  - 46da2d13: '[editorial] Batch 2 — Leap Mechanism amendment + anchors + cross-refs'
-  - 576e9fea: '[editorial] Batch 5 §5.4 core + §5.2 — RS→MS core sweep + timeline L129/L179'
-  - f2b5d143: '[editorial] Batch 3 — MS trajectory v1 + timeline L21/L181'
-  - 239c1d3b: '[editorial] Batch 7 — BA-1 + B-1 + S-1 + Finding 7 worldbuilding §3.7'
-  - a7cffdc0: '[editorial] Batch 8 — throughlines T-02/T-08 extensions + T-26..T-30'
-  - bc7fe400: '[editorial] Session log + ED-726 correction (D-5 target)'
-  - 560267ab: '[editorial] Batch 5 §5.4 tier-2 — RS→MS sweep 40 files (508+161)'
-  - 2660d034: '[editorial] rs_budget.md → ms_budget.md rename + 8 cross-refs'
-  - 162ab112: '[editorial] Throughlines completeness check — T-26..T-30 rows; 25→30'
+  - d80e1532: '[editorial] ED-738 — Ein Sof gradient + cartographic contemplative + ledger'
+  - cf8f2612: '[editorial] S1–S7 rigorous audit synthesis v3.1 + mechanical implementation revised + implications'
+  - d9ebd026: '[editorial] Throughlines T-31..T-41 — registry additions per v3.1 synthesis'
+  - c4db7299: '[editorial] Meta-throughlines М-7..М-11 — skeleton table 6→11 + infill specs + T-26..T-41 tag-table extension'
+  - b91a8c66: '[editorial] Wave 1 workplans P1/P3/P9/P10/P21 + gameplay contribution assessment'
 
-## Atomization state at end of sequence
+throughlines_count: 41
+meta_throughlines_count: 11
 
-### Canonical doctrine
-- canon/00 §4.3 Confrontation as Constitutive Finitude (PR-1 Option A) canonical
-- canon/02_foundations_amendment_leap_mechanism.md (PR-2 Option A) canonical — 6 amendments
-- canon/01 unchanged; canon/02 Amendment 1 refines layer-2 facings without reassigning layer-3
-- threadwork_v30 §2.3 and §31 anchored to canon/02
-- foundations §5.3 cross-ref to canon/02 added
+tier_assignments:
+  N_direct: [P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13]
+  N_extended: [P14, P15-Layer3, P16, P17, P18]
+  N_flavor_pending: [P19, P20, P21-ambitious, P22-conditional]
 
-### Terminology
-- MS (Mending Stability) is canonical across all active non-archive tree
-- RS terminology preserved only in: params/threadwork_superseded.md (intentional), designs/threadwork/threadwork_v25_historical.md (intentional), canon/02 "formerly RS" annotation (intentional), auto-regen indexes (self-heal)
-
-### Timeline corrections
-- L16: Altonian overlay, not indigenous nations (D-2 ED-723)
-- L21: ~12y Catastrophe-to-dissolution (D-1 ED-722)
-- L32: 12y emergence / 7y ministry (D-1 ED-722)
-- L129: TT 28 → MS 72 Strained (PR-3 ED-731)
-- L179: TT→MS inversion note
-- L181: 7y ministry correction cell
-
-### Worldbuilding
-- §7.1 heading Indigenous→Altonian (D-2)
-- §3.7 new Practitioner Witness Tradition (PR-14 Finding 7 ED-735)
-
-### NPC
-- §6 Baralta theology supplement (PR-11 BA-1 ED-732)
-
-### Consolidated Solmund guide
-- §3.2 Ficinian Cardinal canonical (PR-12 B-1 ED-733)
-- §4.4 RM Lurianic canonical (PR-13 S-1 ED-734)
-- §11.2 Finding 7 de-flagged (ED-735)
-- §12 Seam Text metadata frame (PR-15 ED-736)
-- L246 7y ministry (D-1), L387 Ob 7 AND→OR
-
-### Mechanical docs
-- designs/world/ms_trajectory_v1.md (13,409 chars) — 3/5 decision points resolved, 2 provisional
-- references/ms_budget.md (formerly rs_budget.md) with rename history in header
-- 8 files updated to reference ms_budget.md path
-
-### Throughlines
-- T-01..T-25 unchanged
-- T-02 Extension (TL-1 constitutive finitude + TL-6 rendered/thread/ontical triple)
-- T-08 Extension (TL-2 Church conflation as generative engine)
-- T-26..T-30 novel: Recursion, Effects-real-explanation-wrong, Confrontation/Leap/Operation, Baralta cracker, Information asymmetry
-- COMPLETENESS CHECK table updated 25→30 rows
-
-### Editorial ledger
-- Split to main + archive (archive: 13 resolved P2/P3)
-- 16 resolution entries ED-722..ED-737 registered
-- ED-726 description corrected (D-5 target is designs/world/ not canon/02)
+G_tiers:
+  G_core: [P1, P3, P9, P10, P21-overlays]
+  G_support: [P2, P5, P7, P8, P12, P13, P22, P18]
+  G_texture: [P4, P11, P19, P20]
+  G_frame: [P6]
