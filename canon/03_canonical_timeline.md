@@ -37,6 +37,8 @@ His works were ineffable and miraculous in the original sense: he helped living 
 
 **His dissolution (0 AG)** was not a dramatic event but an inevitable one — a being whose rendering was sustained by continuous Thread work eventually ceasing that work. The circumstances are theologically interpreted by the Church but not empirically understood. What the Church calls his death, a practitioner might describe as the cessation of active self-rendering — the threadcut being releasing its hold on actualization and returning to the unintelligible ground from which it emerged.
 
+**The site of dissolution.** The physical location at which Solmund's rendering ceased is specific but contested. Successor traditions disagree on where the dissolution occurred; the Church's canonical identification is disputed by Restoration Movement interpretation and by surviving Einhir-sympathetic lineages. The site lies outside the Valorian peninsula — its actual geography is off-map and inaccessible to players. No in-game pilgrimage action, relic-retrieval mission, or site-network node corresponds to the dissolution site; references to it appear only as interpretive assertions within Church scripture, Restoration Movement doctrine, and Seam Texts. [EDITORIAL: D-3 — resolved 2026-04-20; propagated this commit; ED-724.]
+
 ---
 
 ## Post-Dissolution: Church Formation (0-200 AG)
