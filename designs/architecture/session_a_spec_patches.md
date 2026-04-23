@@ -13,13 +13,13 @@
 **Add:**
 
 ```
-## Three-Scale Resolution Model (PP-TBD)
+## Three-Scale Resolution Model (PP-675)
 
 Each season resolves in three layers, bottom-up:
 
 1. **Settlement layer** (resolves first). Infrastructure actions: Church building construction,
    Guild trade operations, Crown ministerial placement, RM community organizing, governor
-   appointments (including bishop appointments per PP-TBD). Settlement Order and Prosperity
+   appointments (including bishop appointments per PP-675). Settlement Order and Prosperity
    update. Black markets emerge (Order ≤ 1, no governor) or resolve (Order ≥ 3). Governor
    authority checks fire.
 
@@ -45,7 +45,7 @@ Pressure flows downward: peninsula events → province consequences → settleme
 **Add:**
 
 ```
-### Church — Ecclesiastical Appointment (PP-TBD)
+### Church — Ecclesiastical Appointment (PP-675)
 **Type:** Consul Outward (Church only).
 **Prerequisite:** Target settlement has Church building ≥ tier 2 (Church or Cathedral).
 Target settlement has no governor OR existing governor Disposition toward Church ≥ +2.
