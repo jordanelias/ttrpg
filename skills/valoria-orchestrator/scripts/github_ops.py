@@ -115,24 +115,26 @@ def get_fetch_head(path: str, repo: str = None) -> str:
 _CACHE_PATH = '/home/claude/.valoria_cache.json'
 
 def _save_cache() -> None:
-    """Write _session_fetches to disk. Called after reads and commits."""
+    """Write _session_fetches + _fetch_head to disk. Called after reads and commits."""
     try:
         with open(_CACHE_PATH, 'w') as f:
             json.dump({
                 'fetches': {k: v for k, v in _session_fetches.items() if v is not None},
                 'token': _session_token,
+                'fetch_head': _fetch_head,
             }, f)
     except Exception:
         pass  # non-fatal — cache is optimization, not requirement
 
 def _load_cache() -> bool:
-    """Restore _session_fetches from disk. Returns True if cache loaded."""
-    global _session_fetches, _session_token, _health_checked
+    """Restore _session_fetches + _fetch_head from disk. Returns True if cache loaded."""
+    global _session_fetches, _session_token, _health_checked, _fetch_head
     try:
         with open(_CACHE_PATH) as f:
             data = json.load(f)
         _session_fetches = data.get('fetches', {})
         _session_token = data.get('token')
+        _fetch_head = data.get('fetch_head', {})
         _health_checked = True  # health was checked when cache was written
         return bool(_session_fetches)
     except (FileNotFoundError, json.JSONDecodeError):
