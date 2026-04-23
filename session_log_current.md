@@ -1,38 +1,19 @@
-session_id: 2026-04-22-ed717-cleanup
+session_id: 2026-04-22-d3-d6-d7-propagation
 session_close: 2026-04-22
-phase: 0
+phase: editorial
 status: complete
-last_stage: ED-717 closed (T-15a/b/c substrate-postures), ED-667 closed (graduated autonomy), PP-675 backstory strike, residual cleanup
+last_stage: D-3/D-6/D-7 propagation complete 2026-04-22 (commits 9ff5a7de / 1b0c177f / 0d3a82e6). D-3 timeline §Solmund dissolution site paragraph; D-6 Lenneth TS pathway (SA-gated, ceiling 10-20) in NPC analyses + infill; D-7 Valn origin softened to pre-Altonian/possibly pre-Einhir in arcs_10_18.md §Terminology + ED-NEW-7 row. ED-724/727/728 descriptions amended. canonical_sources.yaml block added.
 next_action:
-  skill: confirm with Jordan
+  skill: editorial
   description: >
-    All Session B/C/ED-717 work complete. Remaining:
-    - Index regeneration for modified files
-    - Remaining incidental Niflhel refs in arc/NPC files (non-mechanical, context-appropriate)
-    - CI cap vs Piety Yield at T9 — Jordan design decision pending
-    - Retroactive canon audit — deferred until engine_v4 smoke-test data
-  blockers:
-    - Jordan design decision: CI cap vs Piety Yield at T9
-commits:
-  - 5537bc9: ED-717 (1/3) — T-15a Hafenmark unmediated sovereigntist
-  - cb50098: ED-717 (2/3 + 3/3) — T-15b Löwenritter substrate-agnostic protector + T-15c RM substrate-heritage reclaimer
-  - fb16bd3: ED-717 resolved, ED-667 resolved in editorial ledger
-  - 7b96edd: Residual Niflhel/Coup cleanup in arc files + factions_personal
-  - ef19887: PP-675 backstory strike — assign PP number to STRUCK markers
-session_highlights:
-  - ED-717 CLOSED. Three new М-4 throughlines define substrate-postures for all factions:
-    T-15a Hafenmark (unmediated sovereigntist — Protestant position, shares theology but rejects ecclesial monopoly and governance authority),
-    T-15b Löwenritter (substrate-agnostic protector — Praetorian position, Thread irrelevant to military duty),
-    T-15c RM (substrate-heritage reclaimer — unknowing inheritance via Einhir practice, only unconscious substrate-posture).
-  - М-4 throughline count now 7. Every faction has a defined substrate-posture. All three TS-0 factions face distinct crises at Thread revelation.
-  - ED-667 CLOSED. Graduated autonomy (4-stage) resolves Coup Counter readiness gap.
-  - PP-675 assigned to backstory strike (Session A Patch 7). Father assassination → Royal Crisis Tension Card.
-  - Residual Niflhel/Coup refs cleaned in arcs_31_35, emergent_campaign_arcs, factions_personal_v30_infill.
-  - P1 blocker count reduced 2→1 (ED-667 resolved). Remaining P1: CI cap vs Piety Yield.
-open_items:
-  - CI cap vs Piety Yield at T9 — Jordan design decision pending (last P1)
-  - Index regeneration for ~15 modified files
-  - Retroactive canon audit — deferred until engine_v4 smoke-test data
-  - Sparse throughline-interaction matrix — 7 of 25+3 throughlines have mapped cross-interactions
-  - Remaining incidental Niflhel refs (~30 across arc/NPC files) — non-mechanical context references, not blocking
-P1-BLOCKER count: 1
+    Remaining follow-ups from 2026-04-20 atomization workplan:
+    (1) D-4 Altonian invasion ~18 AG timeline revision (ED-725) — multi-file cross-refs. Dedicated chat.
+    (2) D-5 Einhir site-network three-layer operational model (ED-726) — new designs/world/einhir_site_network.md OR expansion of designs/world/calamity_radiation_v30.md. Dedicated chat.
+    (3) RWCE / Miracle Investigation / SA-gating full mechanical integration (ED-735) — separate atomization workplan touching params/bg/faction_actions, clocks, NPC priority trees, Tension Cards, Conviction Scene UX.
+    (4) PROVISIONAL marker audit — 45 active-path files. Resolve individually when touched.
+  priority: "D-4 or D-5 next depending on Jordan selection"
+blockers: []
+notes:
+  - "canon/editorial_ledger.yaml at 1,836 / 2,000 tokens (WARN). Archival batch recommended before further resolution entries."
+  - "Auto-regen indexes (*_index.md, references/file_index.md) still reference 'rs_budget'. Regenerate via tools/doc_index_gen.py on next doc-index run."
+  - "canon/02 'formerly Rendering Stability per ED-731' cross-ref is intentional historical annotation — do not sweep."
