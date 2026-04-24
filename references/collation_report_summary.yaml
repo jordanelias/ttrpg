@@ -1,0 +1,1257 @@
+# Valoria Collation Report — Summary
+# Rolled-up per-token view. For per-instance line numbers, run tools/valoria_collator.py and inspect /tmp/valoria/collation_report.yaml
+
+version: 1
+total_findings: 9101
+
+summary:
+  VALUE_CONFLICT: 0
+  LEGACY_TERM_USED: 903
+  COLLISION_USED_ALONE: 1092
+  UNKNOWN_ABBREVIATION: 3640
+  UNKNOWN_PROPER_NOUN: 3466
+
+rollups:
+  LEGACY_TERM_USED:
+    - token: "RS"
+      total_count: 531
+      file_count: 76
+      severity: error
+      hint: "Legacy term \"RS\" used — current canonical: \"Mending Stability (MS)\""
+      top_files:
+        - "designs/arcs/arc_expansion_v30.md": 60
+        - "designs/audit/npc_faction_arc_interdependency_2026-04-18.md": 49
+        - "designs/ui/valoria_ui_ux_v4.md": 28
+        - "designs/arcs/gm_ref/arcs_46_55_resolved.md": 25
+        - "params/threadwork.md": 23
+        - "designs/ui/valoria_ui_ux_v4_1.md": 22
+        - "designs/audit/solmund_n_check_res_check.md": 20
+        - "designs/ui/valoria_ui_ux_v4_1_max_audit.md": 20
+        - "designs/arcs/gm_ref/arcs_46_55.md": 18
+        - "designs/audit/session_master_2026_04_20.md": 18
+    - token: "Rendering Stability"
+      total_count: 158
+      file_count: 7
+      severity: error
+      hint: "Legacy term \"Rendering Stability\" used — current canonical: \"Mending Stability (MS)\""
+      top_files:
+        - "designs/threadwork/threadwork_v25_historical.md": 116
+        - "designs/threadwork/threadwork_v30_infill.md": 34
+        - "designs/provincial/strategic_layer_v30_infill.md": 3
+        - "designs/audit/session_master_2026_04_20.md": 2
+        - "designs/architecture/campaign_modes_v30_infill.md": 1
+        - "designs/scene/combat_v30_infill.md": 1
+        - "designs/world/calamity_radiation_v30_infill.md": 1
+    - token: "TD"
+      total_count: 74
+      file_count: 17
+      severity: error
+      hint: "\"TD\" was removed — should not appear"
+      top_files:
+        - "params/bg/tracks.md": 10
+        - "designs/world/solmund_cultural_guide_consolidated.md": 6
+        - "designs/arcs/arcs_31_35.md": 5
+        - "designs/arcs/gm_ref/arcs_05_09.md": 5
+        - "designs/arcs/gm_ref/arcs_10_18.md": 5
+        - "designs/arcs/gm_ref/arcs_36_40.md": 5
+        - "designs/arcs/gm_ref/arcs_41_45.md": 5
+        - "designs/arcs/arcs_16_19.md": 4
+        - "designs/arcs/arcs_20_23.md": 4
+        - "designs/arcs/arcs_24_27.md": 4
+    - token: "Cohesion"
+      total_count: 73
+      file_count: 22
+      severity: error
+      hint: "Legacy term \"Cohesion\" used — current canonical: \"Discipline\""
+      top_files:
+        - "designs/scene/derived_stats_v30.md": 23
+        - "designs/scene/combat_design_v1.md": 10
+        - "designs/arcs/arcs_20_23.md": 4
+        - "designs/provincial/mass_battle_v30.md": 4
+        - "designs/provincial/victory_v30.md": 3
+        - "designs/threadwork/threadwork_v25_historical.md": 3
+        - "designs/threadwork/threadwork_v30.md": 3
+        - "params/history/mass_combat.md": 3
+        - "designs/arcs/arcs_31_35.md": 2
+        - "designs/audit/valoria_complete_system_audit.md": 2
+    - token: "CP"
+      total_count: 63
+      file_count: 22
+      severity: error
+      hint: "Legacy term \"CP\" used — current canonical: \"Power\""
+      top_files:
+        - "designs/arcs/emergent_scenarios.md": 10
+        - "designs/scene/combat_design_v1.md": 5
+        - "designs/threadwork/threadwork_v25_historical.md": 5
+        - "designs/threadwork/threadwork_v30.md": 5
+        - "params/history/mass_combat.md": 5
+        - "designs/provincial/strategic_layer_v30.md": 4
+        - "designs/architecture/campaign_modes_v30.md": 3
+        - "designs/arcs/narrative_scenario_chains.md": 3
+        - "designs/videogame/godot_architecture_specification.md": 3
+        - "params/history/threadwork.md": 3
+    - token: "Thread Depth"
+      total_count: 3
+      file_count: 1
+      severity: error
+      hint: "\"Thread Depth\" was removed — should not appear"
+      top_files:
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md": 3
+    - token: "Combat Power"
+      total_count: 1
+      file_count: 1
+      severity: error
+      hint: "Legacy term \"Combat Power\" used — current canonical: \"Power\""
+      top_files:
+        - "designs/scene/combat_design_v1.md": 1
+  COLLISION_USED_ALONE:
+    - token: "TC"
+      total_count: 943
+      file_count: 97
+      severity: error
+      hint: "\"TC\" is a collision abbreviation — write full term. Canonical: Theocracy Counter"
+      top_files:
+        - "designs/audit/npc_faction_arc_interdependency_2026-04-18.md": 61
+        - "designs/arcs/narrative_scenario_chains.md": 57
+        - "designs/scene/conviction_track_v30.md": 52
+        - "designs/arcs/gm_ref/arcs_46_55_resolved.md": 50
+        - "designs/provincial/faction_politics_v30.md": 48
+        - "designs/arcs/gm_ref/arcs_01_04.md": 43
+        - "designs/arcs/gm_ref/arcs_46_55.md": 38
+        - "designs/provincial/military_layer_v30.md": 37
+        - "designs/arcs/emergent_scenarios.md": 29
+        - "designs/arcs/arc_expansion_v30.md": 28
+    - token: "TD"
+      total_count: 80
+      file_count: 18
+      severity: error
+      hint: "\"TD\" is a collision abbreviation — write full term. Canonical: Thread Depth"
+      top_files:
+        - "params/bg/tracks.md": 12
+        - "designs/world/solmund_cultural_guide_consolidated.md": 6
+        - "designs/arcs/arcs_31_35.md": 5
+        - "designs/arcs/gm_ref/arcs_05_09.md": 5
+        - "designs/arcs/gm_ref/arcs_10_18.md": 5
+        - "designs/arcs/gm_ref/arcs_36_40.md": 5
+        - "designs/arcs/gm_ref/arcs_41_45.md": 5
+        - "designs/arcs/arcs_16_19.md": 4
+        - "designs/arcs/arcs_20_23.md": 4
+        - "designs/arcs/arcs_24_27.md": 4
+    - token: "CP"
+      total_count: 69
+      file_count: 27
+      severity: error
+      hint: "\"CP\" is a collision abbreviation — write full term. Canonical: Character Point"
+      top_files:
+        - "designs/arcs/emergent_scenarios.md": 10
+        - "designs/scene/combat_design_v1.md": 5
+        - "designs/threadwork/threadwork_v25_historical.md": 5
+        - "designs/threadwork/threadwork_v30.md": 5
+        - "params/history/mass_combat.md": 5
+        - "designs/architecture/campaign_modes_v30.md": 3
+        - "designs/arcs/narrative_scenario_chains.md": 3
+        - "designs/provincial/strategic_layer_v30.md": 3
+        - "designs/videogame/godot_architecture_specification.md": 3
+        - "params/history/board_game.md": 3
+  UNKNOWN_ABBREVIATION:
+    - token: "AND"
+      total_count: 111
+      file_count: 111
+      severity: warn
+      hint: "Abbreviation \"AND\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/campaign_modes_v30_infill.md"
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+    - token: "RM"
+      total_count: 88
+      file_count: 88
+      severity: warn
+      hint: "Abbreviation \"RM\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/generational_transition_v30.md"
+    - token: "RS"
+      total_count: 81
+      file_count: 81
+      severity: warn
+      hint: "Abbreviation \"RS\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/companion_app_design_note.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/generational_transition_v30.md"
+    - token: "NOT"
+      total_count: 66
+      file_count: 66
+      severity: warn
+      hint: "Abbreviation \"NOT\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/session_a_spec_patches.md"
+    - token: "IS"
+      total_count: 66
+      file_count: 66
+      severity: warn
+      hint: "Abbreviation \"IS\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+    - token: "OR"
+      total_count: 64
+      file_count: 64
+      severity: warn
+      hint: "Abbreviation \"OR\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/generational_transition_v30.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+    - token: "AI"
+      total_count: 61
+      file_count: 61
+      severity: warn
+      hint: "Abbreviation \"AI\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+    - token: "DESIGN"
+      total_count: 53
+      file_count: 53
+      severity: warn
+      hint: "Abbreviation \"DESIGN\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/companion_app_design_note.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/architecture/scale_transitions_v30_infill.md"
+    - token: "VTM"
+      total_count: 50
+      file_count: 50
+      severity: warn
+      hint: "Abbreviation \"VTM\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/generational_transition_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+    - token: "PT"
+      total_count: 44
+      file_count: 44
+      severity: warn
+      hint: "Abbreviation \"PT\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/generational_transition_v30.md"
+        - "designs/architecture/session_a_spec_patches.md"
+    - token: "ALL"
+      total_count: 44
+      file_count: 44
+      severity: warn
+      hint: "Abbreviation \"ALL\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_modes_v30.md"
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/session_a_spec_patches.md"
+        - "designs/arcs/arcs_20_23.md"
+    - token: "PART"
+      total_count: 43
+      file_count: 43
+      severity: warn
+      hint: "Abbreviation \"PART\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/campaign_modes_v30.md"
+        - "designs/architecture/campaign_modes_v30_infill.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/integration_proposal_v30.md"
+    - token: "SYSTEM"
+      total_count: 41
+      file_count: 41
+      severity: warn
+      hint: "Abbreviation \"SYSTEM\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/player_world_bridge_2026-04-16.md"
+    - token: "CI"
+      total_count: 40
+      file_count: 40
+      severity: warn
+      hint: "Abbreviation \"CI\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/integration_proposal_v30.md"
+    - token: "SIM"
+      total_count: 37
+      file_count: 37
+      severity: warn
+      hint: "Abbreviation \"SIM\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/simulation_review_2026-04-15.md"
+        - "designs/audit/systematic_critique_2026-04-04.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+    - token: "ID"
+      total_count: 37
+      file_count: 37
+      severity: warn
+      hint: "Abbreviation \"ID\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/arcs/arcs_31_35.md"
+        - "designs/arcs/gm_ref/arcs_01_04.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/gm_ref/arcs_46_55.md"
+    - token: "UI"
+      total_count: 34
+      file_count: 34
+      severity: warn
+      hint: "Abbreviation \"UI\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/editorial_ein_sof_gradient_2026_04_21.md"
+        - "designs/audit/gameplay_assessment_2026_04_21.md"
+    - token: "POI"
+      total_count: 33
+      file_count: 33
+      severity: warn
+      hint: "Abbreviation \"POI\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/audit/cross_conversation_review_2026-04-15.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+    - token: "AER"
+      total_count: 31
+      file_count: 31
+      severity: warn
+      hint: "Abbreviation \"AER\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/generational_transition_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/clock_registry_staleness_report.md"
+    - token: "CROSS"
+      total_count: 31
+      file_count: 31
+      severity: warn
+      hint: "Abbreviation \"CROSS\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/arcs/gm_ref/arcs_41_45.md"
+        - "designs/arcs/narrative_scenario_chains.md"
+    - token: "THE"
+      total_count: 31
+      file_count: 31
+      severity: warn
+      hint: "Abbreviation \"THE\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/gm_ref/arcs_41_45.md"
+    - token: "STRUCK"
+      total_count: 30
+      file_count: 30
+      severity: warn
+      hint: "Abbreviation \"STRUCK\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/narrative_scenario_chains.md"
+        - "designs/audit/clock_registry_staleness_report.md"
+    - token: "AP"
+      total_count: 30
+      file_count: 30
+      severity: warn
+      hint: "Abbreviation \"AP\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/gm_ref/arc_narrative_analysis.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/audit/bridge_holistic_review_2026-04-16.md"
+    - token: "INFILL"
+      total_count: 29
+      file_count: 29
+      severity: warn
+      hint: "Abbreviation \"INFILL\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_modes_v30_infill.md"
+        - "designs/architecture/hybrid_gaps_v30_infill.md"
+        - "designs/architecture/scale_transitions_v30_infill.md"
+        - "designs/npcs/npc_behavior_v30_infill.md"
+        - "designs/npcs/npc_character_analyses_v30_infill.md"
+    - token: "WC"
+      total_count: 29
+      file_count: 29
+      severity: warn
+      hint: "Abbreviation \"WC\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/gm_ref/arcs_41_45.md"
+        - "designs/arcs/gm_ref/arcs_46_55.md"
+        - "designs/arcs/gm_ref/arcs_46_55_resolved.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+    - token: "TCV"
+      total_count: 28
+      file_count: 28
+      severity: warn
+      hint: "Abbreviation \"TCV\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/audit/session_master_2026_04_20.md"
+        - "designs/audit/simulation_review_2026-04-15.md"
+    - token: "ITEMS"
+      total_count: 28
+      file_count: 28
+      severity: warn
+      hint: "Abbreviation \"ITEMS\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+        - "designs/audit/settlement_bridge_unification_2026-04-16.md"
+        - "designs/audit/valoria_workplan_final.md"
+        - "designs/npcs/npc_behavior_system_v1.md"
+    - token: "CV"
+      total_count: 26
+      file_count: 26
+      severity: warn
+      hint: "Abbreviation \"CV\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/gm_ref/arc_narrative_analysis.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/gm_ref/arcs_36_40.md"
+        - "designs/arcs/gm_ref/arcs_41_45.md"
+        - "designs/arcs/throughline_resolutions_v30.md"
+    - token: "GAME"
+      total_count: 25
+      file_count: 25
+      severity: warn
+      hint: "Abbreviation \"GAME\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/player_world_bridge_2026-04-16.md"
+        - "designs/audit/systematic_critique_2026-04-04.md"
+        - "designs/audit/valoria_how_to_play.md"
+    - token: "THREAD"
+      total_count: 24
+      file_count: 24
+      severity: warn
+      hint: "Abbreviation \"THREAD\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/emergent_scenarios.md"
+    - token: "WR"
+      total_count: 24
+      file_count: 24
+      severity: warn
+      hint: "Abbreviation \"WR\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+    - token: "TK"
+      total_count: 22
+      file_count: 22
+      severity: warn
+      hint: "Abbreviation \"TK\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_modes_v30_infill.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/arcs_24_27.md"
+    - token: "IN"
+      total_count: 22
+      file_count: 22
+      severity: warn
+      hint: "Abbreviation \"IN\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/arcs/narrative_scenario_chains.md"
+    - token: "OPEN"
+      total_count: 21
+      file_count: 21
+      severity: warn
+      hint: "Abbreviation \"OPEN\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+        - "designs/audit/session_master_2026_04_20.md"
+    - token: "AUD"
+      total_count: 21
+      file_count: 21
+      severity: warn
+      hint: "Abbreviation \"AUD\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/phase3_resolutions.md"
+        - "designs/audit/session_master_2026_04_20.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+    - token: "HYBRID"
+      total_count: 21
+      file_count: 21
+      severity: warn
+      hint: "Abbreviation \"HYBRID\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+        - "designs/audit/valoria_systems_workplan.md"
+        - "designs/npcs/npc_behavior_system_v1.md"
+        - "designs/npcs/npc_behavior_v30.md"
+    - token: "BOARD"
+      total_count: 20
+      file_count: 20
+      severity: warn
+      hint: "Abbreviation \"BOARD\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/npcs/npc_behavior_system_v1.md"
+        - "designs/npcs/npc_behavior_v30.md"
+        - "designs/npcs/npc_behavior_v30_infill.md"
+        - "designs/provincial/fail_forward_pp177.md"
+    - token: "NEW"
+      total_count: 19
+      file_count: 19
+      severity: warn
+      hint: "Abbreviation \"NEW\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/bridge_holistic_review_2026-04-16.md"
+        - "designs/audit/bridge_part1_revisions.md"
+    - token: "UX"
+      total_count: 19
+      file_count: 19
+      severity: warn
+      hint: "Abbreviation \"UX\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/gameplay_assessment_2026_04_21.md"
+        - "designs/audit/mechanical_implementation_revised_2026_04_21.md"
+        - "designs/audit/mechanical_implications_revised_2026_04_21.md"
+    - token: "THREE"
+      total_count: 19
+      file_count: 19
+      severity: warn
+      hint: "Abbreviation \"THREE\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+        - "designs/audit/systematic_critique_2026-04-04.md"
+        - "designs/provincial/strategic_layer_v30.md"
+    - token: "MODE"
+      total_count: 18
+      file_count: 18
+      severity: warn
+      hint: "Abbreviation \"MODE\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+        - "designs/npcs/npc_behavior_system_v1.md"
+        - "designs/npcs/npc_behavior_v30.md"
+        - "designs/npcs/npc_behavior_v30_infill.md"
+    - token: "OW"
+      total_count: 17
+      file_count: 17
+      severity: warn
+      hint: "Abbreviation \"OW\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+    - token: "THIS"
+      total_count: 17
+      file_count: 17
+      severity: warn
+      hint: "Abbreviation \"THIS\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/companion_app_design_note.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/arcs_24_27.md"
+    - token: "AUDIT"
+      total_count: 17
+      file_count: 17
+      severity: warn
+      hint: "Abbreviation \"AUDIT\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+        - "designs/audit/integration_audit_v3_2026-04-16.md"
+        - "designs/audit/player_world_bridge_2026-04-16.md"
+    - token: "COMBAT"
+      total_count: 16
+      file_count: 16
+      severity: warn
+      hint: "Abbreviation \"COMBAT\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/audit/integration_audit_v3_2026-04-16.md"
+        - "designs/audit/valoria_complete_system_audit.md"
+    - token: "MASS"
+      total_count: 16
+      file_count: 16
+      severity: warn
+      hint: "Abbreviation \"MASS\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/audit/valoria_complete_system_audit.md"
+        - "designs/audit/valoria_rse_critique.md"
+    - token: "CANON"
+      total_count: 16
+      file_count: 16
+      severity: warn
+      hint: "Abbreviation \"CANON\" not registered in alias_registry"
+      top_files:
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/audit/session_master_2026_04_20.md"
+        - "designs/audit/valoria_systems_workplan.md"
+        - "designs/npcs/companion_specification_v30.md"
+        - "designs/npcs/npc_behavior_system_v1.md"
+    - token: "FROM"
+      total_count: 16
+      file_count: 16
+      severity: warn
+      hint: "Abbreviation \"FROM\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/arcs_28_30.md"
+        - "designs/arcs/emergent_arcs_experimental.md"
+    - token: "CR"
+      total_count: 16
+      file_count: 16
+      severity: warn
+      hint: "Abbreviation \"CR\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/arcs_31_35.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+    - token: "DA"
+      total_count: 16
+      file_count: 16
+      severity: warn
+      hint: "Abbreviation \"DA\" not registered in alias_registry"
+      top_files:
+        - "designs/arcs/arcs_31_35.md"
+        - "designs/audit/cross_conversation_review_2026-04-15.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+        - "designs/npcs/npc_behavior_system_v1.md"
+        - "designs/npcs/npc_behavior_v30.md"
+  UNKNOWN_PROPER_NOUN:
+    - token: "Ob"
+      total_count: 2335
+      file_count: 110
+      severity: info
+      hint: "Uncategorized capitalized token \"Ob\" appears 9 times in designs/architecture/campaign_architecture_v30.md"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/scale_transitions_v30.md"
+    - token: "Thread"
+      total_count: 2329
+      file_count: 104
+      severity: info
+      hint: "Uncategorized capitalized token \"Thread\" appears 15 times in designs/architecture/campaign_architecture_v30.md"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/campaign_modes_v30.md"
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/companion_app_design_note.md"
+        - "designs/architecture/complete_systems_reference.md"
+    - token: "Disposition"
+      total_count: 663
+      file_count: 40
+      severity: info
+      hint: "Uncategorized capitalized token \"Disposition\" appears 15 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/bridge_holistic_review_2026-04-16.md"
+    - token: "Accord"
+      total_count: 557
+      file_count: 39
+      severity: info
+      hint: "Uncategorized capitalized token \"Accord\" appears 17 times in designs/architecture/canonical_registry.md"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/integration_proposal_v30.md"
+    - token: "Phase"
+      total_count: 599
+      file_count: 38
+      severity: info
+      hint: "Uncategorized capitalized token \"Phase\" appears 7 times in designs/architecture/campaign_architecture_v30.md"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/architecture/scale_transitions_v30_infill.md"
+    - token: "Faction"
+      total_count: 269
+      file_count: 31
+      severity: info
+      hint: "Uncategorized capitalized token \"Faction\" appears 13 times in designs/architecture/player_agency_v30.md"
+      top_files:
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/architecture/tensions_pair_validation.md"
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_31_35.md"
+    - token: "Accounting"
+      total_count: 285
+      file_count: 30
+      severity: info
+      hint: "Uncategorized capitalized token \"Accounting\" appears 8 times in designs/architecture/campaign_modes_v30.md"
+      top_files:
+        - "designs/architecture/campaign_modes_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_24_27.md"
+    - token: "Each"
+      total_count: 228
+      file_count: 30
+      severity: info
+      hint: "Uncategorized capitalized token \"Each\" appears 5 times in designs/architecture/conflict_architecture_proposal.md"
+      top_files:
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/gm_ref/arcs_36_40.md"
+        - "designs/arcs/narrative_scenario_chains.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+    - token: "Success"
+      total_count: 283
+      file_count: 28
+      severity: info
+      hint: "Uncategorized capitalized token \"Success\" appears 6 times in designs/arcs/arcs_20_23.md"
+      top_files:
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/gm_ref/arcs_05_09.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/gm_ref/arcs_41_45.md"
+    - token: "Failure"
+      total_count: 281
+      file_count: 28
+      severity: info
+      hint: "Uncategorized capitalized token \"Failure\" appears 10 times in designs/arcs/arcs_20_23.md"
+      top_files:
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/emergent_arcs_experimental.md"
+        - "designs/arcs/emergent_scenarios.md"
+        - "designs/arcs/gm_ref/arcs_05_09.md"
+    - token: "Conviction"
+      total_count: 472
+      file_count: 26
+      severity: info
+      hint: "Uncategorized capitalized token \"Conviction\" appears 5 times in designs/architecture/complete_systems_reference.md"
+      top_files:
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/bridge_part1_revisions.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+    - token: "Priority"
+      total_count: 366
+      file_count: 26
+      severity: info
+      hint: "Uncategorized capitalized token \"Priority\" appears 7 times in designs/architecture/early_game_ignition_analysis.md"
+      top_files:
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+    - token: "Guilds"
+      total_count: 247
+      file_count: 26
+      severity: info
+      hint: "Uncategorized capitalized token \"Guilds\" appears 11 times in designs/architecture/tensions_pair_validation.md"
+      top_files:
+        - "designs/architecture/tensions_pair_validation.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/gm_ref/arcs_05_09.md"
+    - token: "Player"
+      total_count: 233
+      file_count: 25
+      severity: info
+      hint: "Uncategorized capitalized token \"Player\" appears 6 times in designs/architecture/cogload_moderate_target.md"
+      top_files:
+        - "designs/architecture/cogload_moderate_target.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/arcs/arc_expansion_v30.md"
+    - token: "Certainty"
+      total_count: 303
+      file_count: 23
+      severity: info
+      hint: "Uncategorized capitalized token \"Certainty\" appears 8 times in designs/architecture/complete_systems_reference.md"
+      top_files:
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/emergent_arcs_experimental.md"
+        - "designs/arcs/narrative_scenario_chains.md"
+    - token: "Order"
+      total_count: 352
+      file_count: 22
+      severity: info
+      hint: "Uncategorized capitalized token \"Order\" appears 7 times in designs/architecture/complete_systems_reference.md"
+      top_files:
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/session_a_spec_patches.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_28_30.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+    - token: "Arc"
+      total_count: 681
+      file_count: 22
+      severity: info
+      hint: "Uncategorized capitalized token \"Arc\" appears 133 times in designs/arcs/arc_expansion_v30.md"
+      top_files:
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/arcs_28_30.md"
+    - token: "Contest"
+      total_count: 203
+      file_count: 21
+      severity: info
+      hint: "Uncategorized capitalized token \"Contest\" appears 10 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+    - token: "Personal"
+      total_count: 166
+      file_count: 20
+      severity: info
+      hint: "Uncategorized capitalized token \"Personal\" appears 12 times in designs/architecture/hybrid_gaps_v30.md"
+      top_files:
+        - "designs/architecture/hybrid_gaps_v30.md"
+        - "designs/architecture/hybrid_gaps_v30_infill.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/architecture/scale_transitions_v30_infill.md"
+    - token: "Step"
+      total_count: 233
+      file_count: 20
+      severity: info
+      hint: "Uncategorized capitalized token \"Step\" appears 8 times in designs/architecture/player_agency_v30.md"
+      top_files:
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/gm_ref/arcs_05_09.md"
+        - "designs/audit/bridge_part1_revisions.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+        - "designs/audit/valoria_how_to_play.md"
+    - token: "Exposure"
+      total_count: 220
+      file_count: 19
+      severity: info
+      hint: "Uncategorized capitalized token \"Exposure\" appears 7 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+        - "designs/audit/player_world_bridge_2026-04-16.md"
+    - token: "Depth"
+      total_count: 190
+      file_count: 19
+      severity: info
+      hint: "Uncategorized capitalized token \"Depth\" appears 5 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+    - token: "Prosperity"
+      total_count: 174
+      file_count: 18
+      severity: info
+      hint: "Uncategorized capitalized token \"Prosperity\" appears 5 times in designs/architecture/canonical_registry.md"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+        - "designs/audit/throughline_specifications_2026-04-17.md"
+    - token: "Evidence"
+      total_count: 196
+      file_count: 18
+      severity: info
+      hint: "Uncategorized capitalized token \"Evidence\" appears 7 times in designs/architecture/complete_systems_reference.md"
+      top_files:
+        - "designs/architecture/complete_systems_reference.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/emergent_arcs_experimental.md"
+        - "designs/arcs/narrative_scenario_chains.md"
+    - token: "Non"
+      total_count: 148
+      file_count: 18
+      severity: info
+      hint: "Uncategorized capitalized token \"Non\" appears 8 times in designs/architecture/hybrid_gaps_v30_infill.md"
+      top_files:
+        - "designs/architecture/hybrid_gaps_v30_infill.md"
+        - "designs/arcs/gm_ref/arcs_01_04.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+        - "designs/audit/mechanical_implementation_revised_2026_04_21.md"
+    - token: "Zoom In"
+      total_count: 145
+      file_count: 18
+      severity: info
+      hint: "Uncategorized capitalized token \"Zoom In\" appears 7 times in designs/architecture/player_agency_v30.md"
+      top_files:
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+    - token: "Part"
+      total_count: 274
+      file_count: 16
+      severity: info
+      hint: "Uncategorized capitalized token \"Part\" appears 10 times in designs/architecture/campaign_architecture_v30.md"
+      top_files:
+        - "designs/architecture/campaign_architecture_v30.md"
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+    - token: "Fieldwork"
+      total_count: 163
+      file_count: 16
+      severity: info
+      hint: "Uncategorized capitalized token \"Fieldwork\" appears 6 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+    - token: "Read"
+      total_count: 166
+      file_count: 16
+      severity: info
+      hint: "Uncategorized capitalized token \"Read\" appears 5 times in designs/audit/mechanical_implementation_revised_2026_04_21.md"
+      top_files:
+        - "designs/audit/mechanical_implementation_revised_2026_04_21.md"
+        - "designs/audit/throughline_specifications_2026-04-17.md"
+        - "designs/audit/valoria_workplan_final.md"
+        - "designs/scene/fieldwork_investigation.md"
+        - "designs/scene/fieldwork_rationale.md"
+    - token: "Settlement"
+      total_count: 169
+      file_count: 15
+      severity: info
+      hint: "Uncategorized capitalized token \"Settlement\" appears 8 times in designs/architecture/conflict_architecture_proposal.md"
+      top_files:
+        - "designs/architecture/conflict_architecture_proposal.md"
+        - "designs/audit/settlement_bridge_unification_2026-04-16.md"
+        - "designs/audit/solmund_n_check_res_check.md"
+        - "designs/audit/throughline_specifications_2026-04-17.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+    - token: "Season"
+      total_count: 138
+      file_count: 14
+      severity: info
+      hint: "Uncategorized capitalized token \"Season\" appears 8 times in designs/architecture/early_game_ignition_analysis.md"
+      top_files:
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/arcs/arcs_31_35.md"
+        - "designs/arcs/gm_ref/arcs_01_04.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/gm_ref/arcs_46_55.md"
+    - token: "Parliament"
+      total_count: 134
+      file_count: 14
+      severity: info
+      hint: "Uncategorized capitalized token \"Parliament\" appears 12 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/arcs_28_30.md"
+        - "designs/arcs/arcs_31_35.md"
+        - "designs/arcs/gm_ref/arcs_01_04.md"
+        - "designs/arcs/gm_ref/arcs_46_55.md"
+    - token: "Stage"
+      total_count: 172
+      file_count: 14
+      severity: info
+      hint: "Uncategorized capitalized token \"Stage\" appears 5 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_20_23.md"
+        - "designs/arcs/gm_ref/arcs_01_04.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+    - token: "Resolution"
+      total_count: 144
+      file_count: 14
+      severity: info
+      hint: "Uncategorized capitalized token \"Resolution\" appears 8 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/arcs/gm_ref/arcs_01_04.md"
+        - "designs/arcs/gm_ref/arcs_36_40.md"
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/gap_resolution_2026-04-19.md"
+    - token: "Per"
+      total_count: 102
+      file_count: 14
+      severity: info
+      hint: "Uncategorized capitalized token \"Per\" appears 6 times in designs/architecture/videogame_mode_spec.md"
+      top_files:
+        - "designs/architecture/videogame_mode_spec.md"
+        - "designs/audit/mechanical_implementation_revised_2026_04_21.md"
+        - "designs/audit/mechanical_implications_revised_2026_04_21.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+        - "designs/audit/valoria_complete_system_audit.md"
+    - token: "Co"
+      total_count: 91
+      file_count: 13
+      severity: info
+      hint: "Uncategorized capitalized token \"Co\" appears 5 times in designs/architecture/campaign_modes_v30.md"
+      top_files:
+        - "designs/architecture/campaign_modes_v30.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+        - "designs/audit/valoria_workplan_final.md"
+        - "designs/provincial/peninsular_strain_v30.md"
+        - "designs/provincial/strategic_layer_v30.md"
+    - token: "Beliefs"
+      total_count: 128
+      file_count: 13
+      severity: info
+      hint: "Uncategorized capitalized token \"Beliefs\" appears 5 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_28_30.md"
+        - "designs/audit/bridge_part1_revisions.md"
+    - token: "Trigger"
+      total_count: 112
+      file_count: 13
+      severity: info
+      hint: "Uncategorized capitalized token \"Trigger\" appears 7 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/arcs/gm_ref/arcs_46_55_resolved.md"
+    - token: "Combat"
+      total_count: 115
+      file_count: 13
+      severity: info
+      hint: "Uncategorized capitalized token \"Combat\" appears 5 times in designs/architecture/scale_transitions_v30.md"
+      top_files:
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/audit/player_world_bridge_2026-04-16.md"
+        - "designs/audit/throughlines_transitions_hierarchy.md"
+        - "designs/audit/valoria_complete_system_audit.md"
+        - "designs/audit/valoria_systems_workplan.md"
+    - token: "Domain Action"
+      total_count: 128
+      file_count: 13
+      severity: info
+      hint: "Uncategorized capitalized token \"Domain Action\" appears 16 times in designs/arcs/arcs_16_19.md"
+      top_files:
+        - "designs/arcs/arcs_16_19.md"
+        - "designs/arcs/gm_ref/arcs_46_55.md"
+        - "designs/arcs/gm_ref/arcs_46_55_resolved.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+    - token: "Companion"
+      total_count: 144
+      file_count: 13
+      severity: info
+      hint: "Uncategorized capitalized token \"Companion\" appears 5 times in designs/arcs/throughline_resolutions_v30.md"
+      top_files:
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/bridge_holistic_review_2026-04-16.md"
+        - "designs/audit/bridge_part1_revisions.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+    - token: "Bonds"
+      total_count: 91
+      file_count: 12
+      severity: info
+      hint: "Uncategorized capitalized token \"Bonds\" appears 5 times in designs/architecture/canonical_registry.md"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/audit/cross_conversation_review_2026-04-15.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+        - "designs/audit/valoria_holistic_audit.md"
+    - token: "Every"
+      total_count: 85
+      file_count: 12
+      severity: info
+      hint: "Uncategorized capitalized token \"Every\" appears 8 times in designs/architecture/early_game_ignition_analysis.md"
+      top_files:
+        - "designs/architecture/early_game_ignition_analysis.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/player_world_bridge_2026-04-16.md"
+    - token: "Scene Slate"
+      total_count: 127
+      file_count: 12
+      severity: info
+      hint: "Uncategorized capitalized token \"Scene Slate\" appears 20 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/audit/bridge_holistic_review_2026-04-16.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+    - token: "Duty"
+      total_count: 136
+      file_count: 12
+      severity: info
+      hint: "Uncategorized capitalized token \"Duty\" appears 5 times in designs/architecture/integration_proposal_v30.md"
+      top_files:
+        - "designs/architecture/integration_proposal_v30.md"
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/arcs/throughline_resolutions_v30.md"
+        - "designs/audit/bridge_part1_revisions.md"
+        - "designs/audit/comprehensive_system_audit_2026-04-15.md"
+    - token: "Scene"
+      total_count: 128
+      file_count: 12
+      severity: info
+      hint: "Uncategorized capitalized token \"Scene\" appears 12 times in designs/architecture/player_agency_v30.md"
+      top_files:
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/architecture/scale_transitions_v30.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+    - token: "Guild"
+      total_count: 120
+      file_count: 12
+      severity: info
+      hint: "Uncategorized capitalized token \"Guild\" appears 8 times in designs/architecture/tensions_pair_validation.md"
+      top_files:
+        - "designs/architecture/tensions_pair_validation.md"
+        - "designs/arcs/arc_expansion_v30.md"
+        - "designs/arcs/arcs_24_27.md"
+        - "designs/arcs/gm_ref/arcs_05_09.md"
+        - "designs/arcs/gm_ref/arcs_46_55.md"
+    - token: "Ministry"
+      total_count: 268
+      file_count: 12
+      severity: info
+      hint: "Uncategorized capitalized token \"Ministry\" appears 6 times in designs/arcs/gm_ref/arcs_10_18.md"
+      top_files:
+        - "designs/arcs/gm_ref/arcs_10_18.md"
+        - "designs/audit/integration_audit_v1_2026-04-15.md"
+        - "designs/audit/integration_audit_v2_2026-04-16.md"
+        - "designs/audit/throughline_specifications_2026-04-17.md"
+        - "designs/npcs/npc_behavior_v30.md"
+    - token: "Pool"
+      total_count: 84
+      file_count: 11
+      severity: info
+      hint: "Uncategorized capitalized token \"Pool\" appears 6 times in designs/architecture/canonical_registry.md"
+      top_files:
+        - "designs/architecture/canonical_registry.md"
+        - "designs/audit/phase3_resolutions.md"
+        - "designs/audit/valoria_how_to_play.md"
+        - "designs/provincial/victory_v30.md"
+        - "designs/scene/fieldwork_v30.md"
+    - token: "See"
+      total_count: 73
+      file_count: 11
+      severity: info
+      hint: "Uncategorized capitalized token \"See\" appears 5 times in designs/architecture/player_agency_v30.md"
+      top_files:
+        - "designs/architecture/player_agency_v30.md"
+        - "designs/provincial/faction_layer_v30.md"
+        - "designs/provincial/factions_personal_v30.md"
+        - "designs/provincial/peninsular_strain_v30.md"
+        - "designs/provincial/victory_v30.md"
