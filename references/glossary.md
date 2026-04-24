@@ -1,6 +1,6 @@
 # VALORIA GLOSSARY
 ## Terms, Abbreviations, and Acronyms
-## Last updated: 2026-04-02
+## Last updated: 2026-04-24
 ## Authority: This file is the canonical reference for all term expansions project-wide.
 ## Maintained by: valoria-orchestrator skill (update on any commit that introduces a new term)
 
@@ -149,6 +149,10 @@ All factions tracked on 1–7 scale (0 = collapse / inoperability for most stats
 | Grievance Marker | — | Token placed on a faction after hostile Niflhel action. |
 | Co-Movement Card | — | Board Game mechanism for Thread co-movement; drawn on every Thread operation result. |
 | Einhir | — | Pre-colonial indigenous culture of the Southernmost territories. Cultural/political axis. |
+| Arc | — | Narrative sequence — a bounded structural unit within the emergent campaign framework. Arcs are designed in batches (arcs_01-04, arcs_05-09, etc.) and tracked in designs/arcs/. See designs/arcs/arc_expansion_v30.md. |
+| Zoom In | — | Scale transition from larger (faction/territorial) to smaller (personal/scene) scale. Mechanically implemented as a transition phase during Domain Action resolution. See designs/architecture/scale_transitions_v30.md §4. |
+| Zoom Out | — | Scale transition from smaller (personal/scene) to larger (faction/territorial) scale. Reverse of Zoom In. |
+| Cardinal | — | Title for a senior Church official with Great Influence in the Church of Solmund. Four-Cardinal Structure governs the Church hierarchy. See designs/npcs/npc_roster_v30.md for named Cardinals (Prudence, Justice, Gifts, Temperance). |
 
 ---
 
