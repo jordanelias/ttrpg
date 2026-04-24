@@ -21,7 +21,7 @@
 #   standalone_ok: true|false  (may the abbreviation stand alone in prose?)
 #   category: stat | clock | track | mechanic | operation | mode | infra
 
-version: 1
+version: 2
 
 core_attributes:
   agility:
@@ -91,6 +91,13 @@ derived_stats:
     abbreviations: []
     category: stat
     range: "1-5+"
+  certainty:
+    canonical: "Certainty"
+    abbreviations: ["CERT"]
+    standalone_ok: false
+    category: stat
+    range: "0-5"
+    note: "Cosmological worldview track (PP-551 — redesigned from PP-289). Solmund orthodoxy (5) → Thread acceptance (0). All PCs have it; named NPCs at GM discretion; factions do not hold Certainty."
   momentum:
     canonical: "Momentum"
     abbreviations: []
@@ -525,23 +532,34 @@ collision_table:
 # Abbreviations that appeared in files but lack full-name definition.
 # ─────────────────────────────────────────────────────────────────────────
 
-unresolved:
-  cert:
-    abbreviation: "CERT"
-    suspected: "Certainty (character track referenced in batch_d_designs)"
-    status: "GAP: full name unconfirmed"
+unresolved: {}  # All previously-unresolved abbreviations now identified — see deprecated_abbreviations below
+
+# ─────────────────────────────────────────────────────────────────────────
+# DEPRECATED ABBREVIATIONS
+# Legacy simulator track codes no longer in active use. Present in
+# deprecated/sim_coverage_matrix_legacy.md and related archived test files only.
+# If encountered in active docs: remove or replace with canonical form.
+# ─────────────────────────────────────────────────────────────────────────
+
+deprecated_abbreviations:
   tlk:
     abbreviation: "TLK"
-    suspected: "Talk or a social action abbreviation"
-    status: "GAP: full name unconfirmed"
+    canonical: "Torben Loyalty Clock"
+    context: "Narrative-specific clock for Prince Torben Almqvist's loyalty. Range 10->0. Drain rate historically undefined (F72 gap)."
+    status: "DEPRECATED — confirmed in deprecated/tests/valoria_mechanic_audit_p1.md; retained here for historical grep"
+    active_canonical: null
   dd:
     abbreviation: "DD"
-    suspected: "Domain Dice or date format artefact"
-    status: "GAP: full name unconfirmed"
+    canonical: "Deniability Debt"
+    context: "Niflhel Operative mechanic — starts at 0 and accumulates from covert operations. Present in deprecated/valoria_patch_proposals.md."
+    status: "DEPRECATED — still referenced in some active design docs as 'Deniability Debt' (full term). The abbreviation DD is not in active use."
+    active_canonical: "Deniability Debt"
   fstat:
     abbreviation: "FSTAT"
-    suspected: "Faction Stat"
-    status: "GAP: full name unconfirmed"
+    canonical: "Faction Stats (collective)"
+    context: "Collective shorthand for all faction stat lines (Mandate, Influence, Wealth, Military, Intel, Stability)."
+    status: "DEPRECATED — was a simulator category code, never an in-game term"
+    active_canonical: null
 
 # ─────────────────────────────────────────────────────────────────────────
 # LEGACY RENAMES

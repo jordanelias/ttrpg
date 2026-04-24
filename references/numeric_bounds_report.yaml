@@ -1,0 +1,1617 @@
+# Valoria Numeric Bounds Report
+# Scans all design/params/canon .md for ceiling/cap/floor/threshold/max/min values
+# attached to named mechanical terms. Each entry shows all observed values per name
+# and flags when multiple distinct values appear across multiple files.
+
+# Not every 'conflict' is drift: same-named stat can have multiple legitimate thresholds
+# (e.g., Coherence 10 at start, <=4 Fragmented, <=3 further effects). Manual triage needed.
+
+version: 1
+total_hits: 254
+total_stats_referenced: 97
+
+stats:
+  accord:
+    distinct_values: [2]
+    file_count: 5
+    hit_count: 5
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/architecture/canonical_registry.md"
+        line: 43
+        value: 2
+        pattern: named_bound
+        context: "Thresholds: 0–2 Peace, 3–4 Tension (Mandate check Ob 1), 5–6 Fracture (Accord −1 in one territory), 7–8 Crisis (Accord −"
+      - file: "designs/audit/valoria_how_to_play.md"
+        line: 177
+        value: 2
+        pattern: named_bound
+        context: "**Political Stability:** +1 per season with inter-faction battle. +2 per faction elimination. +1 per territory Revolt. −"
+      - file: "designs/provincial/ci_political_v30.md"
+        line: 246
+        value: 2
+        pattern: named_bound
+        context: "| 9–10 | Non-capital territories: Accord cap 2. Mandate check Ob 3. RS −1/season additional |"
+      - file: "designs/provincial/peninsular_strain_v30.md"
+        line: 294
+        value: 2
+        pattern: named_bound
+        context: "| 9–10 | Collapse | Non-capital territories: Accord cap at 2. Mandate check Ob 3. RS −1/season additional. |"
+      - file: "params/bg/core.md"
+        line: 146
+        value: 2
+        pattern: named_bound
+        context: "| 9–10 | Collapse | Non-capital territories: Accord cap 2. Mandate check Ob 3. MS −1/season additional. |"
+  adjacent_topics_ob:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/scene/fieldwork_v30.md"
+        line: 49
+        value: 1
+        pattern: named_bound
+        context: "- Active Heresy Investigation in territory: +1 Ob to investigation/social actions involving Thread-adjacent topics
+
+Ob f"
+  advancement:
+    distinct_values: [7]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/architecture/canonical_registry.md"
+        line: 133
+        value: 7
+        pattern: named_bound
+        context: "Creation: 31 points, min 1 each, max 5 for one/4 for rest. Advancement max 7. No attribute may reach 0."
+      - file: "params/core.md"
+        line: 100
+        value: 7
+        pattern: named_bound
+        context: "Range: **1–7** (all attributes). Average human: 3. Creation max: 5 (one attribute only; all others ≤ 4). Advancement max"
+  aer_3_holds_vanguard:
+    distinct_values: [80]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 536
+        value: 80
+        pattern: named_bound
+        context: "Institutional Pressure 70: AER 3 holds Vanguard threshold at 80. So Vanguard deploys at Institutional Pressure 80, not 7"
+  aer_level:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/factions/riskbreakers_identity.md"
+        line: 190
+        value: 1
+        pattern: named_bound
+        context: "Senator Outward, Crown only. Influence vs Ob = AER level min 1. Cannot combine with Formal Crown Treaty same season."
+  affects_player_character_at:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+        line: 482
+        value: 2
+        pattern: named_bound
+        context: "**Finding F-54 [P2] — Generational Shift clock absent from v4.1.** For 10–30 year campaigns this is a meaningful clock. "
+  ap_means_full_reconstruction_takes_a:
+    distinct_values: [4]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/arcs_24_27.md"
+        line: 51
+        value: 4
+        pattern: named_bound
+        context: "Individual guild officers are still recruitable. They treat as officers, not faction leaders. But the cost of rebuilding"
+  at_ceilings_and_floors_faction_stats:
+    distinct_values: [0]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/history/board_game.md"
+        line: 74
+        value: 0
+        pattern: named_bound
+        context: "### PP-113 — Stat Ceilings and Floors
+Faction stats floor 0, ceiling 7. Standing 0-10."
+  board_game:
+    distinct_values: [72]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/core.md"
+        line: 74
+        value: 72
+        pattern: named_bound
+        context: "MS floor: 0 (Rupture). MS ceiling: 100. Starting value by mode: TTRPG default = 60; Board Game default = 72."
+  but_his_certainty_might:
+    distinct_values: [4]
+    file_count: 1
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        line: 449
+        value: 4
+        pattern: named_bound
+        context: "**Proposal RW-II (NPC Starting State Variation):** Named NPC starting states have a ±1 range on their Conviction Wound c"
+      - file: "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        line: 449
+        value: 4
+        pattern: starts_at
+        context: "**Proposal RW-II (NPC Starting State Variation):** Named NPC starting states have a ±1 range on their Conviction Wound c"
+  candidate_arrow_at:
+    distinct_values: [4]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+        line: 482
+        value: 4
+        pattern: named_bound
+        context: "**Finding F-54 [P2] — Generational Shift clock absent from v4.1.** For 10–30 year campaigns this is a meaningful clock. "
+      - file: "designs/ui/valoria_ui_ux_v4_2_workplan.md"
+        line: 252
+        value: 4
+        pattern: named_bound
+        context: "| 6.10 | F-54 | §2.1 visibility + §11.3 | Generational Shift visible from Year 8. Character sheet shows age penalty. NPC"
+  capital_accord:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/tracks.md"
+        line: 138
+        value: 2
+        pattern: named_bound
+        context: "| 9–10 | Collapse | Non-capital Accord cap 2. Mandate check Ob 3. RS −1/season additional. |"
+  cascade_depth:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4_2_workplan.md"
+        line: 248
+        value: 3
+        pattern: named_bound
+        context: "| 6.6 | F-31 | §1.2 Phase 3 Cascade | Per-step dismissal shows \"Resolved immediately\" vs \"Queued to next Accounting\"; Ca"
+  cascade_phase_has_specific_depth:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+        line: 362
+        value: 3
+        pattern: named_bound
+        context: "**M49 Cascade Phase 6-step accounting · **v4.1 §1.2 60–120s, per-step dismiss after first. §1.1 points to \"Phase 3 Casca"
+  church_influence:
+    distinct_values: [50, 55, 60]
+    file_count: 1
+    hit_count: 3
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 298
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Gap:** The Institutional Pressure section in B2 shows threshold EFFECTS but not the ongoing Institutional Pressure ADV"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 554
+        value: 55
+        pattern: known_clock_threshold
+        context: "**EMERGENT CONCLUSION:** A seemingly inevitable invasion is repelled by a military that sacrificed political legitimacy "
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 585
+        value: 50
+        pattern: known_clock_threshold
+        context: "- Assert (Church Influence > 50, mandatory): +1/season from Season ~14+"
+  church_territories:
+    distinct_values: [5]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/solmund_n_check_res_check.md"
+        line: 85
+        value: 5
+        pattern: named_bound
+        context: "| **Settlement flavour text** | §27: \"calibrated to territory Certainty\" | **GAP — no settlement-level Certainty defined"
+  ci_mass_seizure:
+    distinct_values: [60]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/core.md"
+        line: 168
+        value: 60
+        pattern: named_bound
+        context: "CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap i"
+  coherence:
+    distinct_values: [0, 1, 2, 3, 4, 5, 7, 10]
+    file_count: 23
+    hit_count: 52
+    potentially_drifted: true
+    # (52 occurrences — too many to list; regenerate bounds_scan.json for full)
+  cohesion:
+    distinct_values: [1]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/arcs_20_23.md"
+        line: 267
+        value: 1
+        pattern: named_bound
+        context: "C -->|\"Failure OR nobody has Medicine History\"| G[\"Stage 2 fires: start of NEXT turn Phase 5\\n−2 Morale ALL units (OUTSI"
+      - file: "params/history/mass_combat.md"
+        line: 18
+        value: 1
+        pattern: named_bound
+        context: "All units at Line formation, Cohesion floor 1, no tactics. Morale floor suspended."
+  combat_pool:
+    distinct_values: [5]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/combat.md"
+        line: 274
+        value: 5
+        pattern: named_bound
+        context: "Combat Pool minimum 5 is a clean floor. No −1D penalty at the floor. If penalties"
+  companion:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+        line: 291
+        value: 2
+        pattern: named_bound
+        context: "**Finding F-20 [P2] — Knot formation procedure (fieldwork §5.6 + npc_behavior §6.3 / ED-391) is not surfaced.** v4.1 §11"
+  confirm:
+    distinct_values: [3]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/core.md"
+        line: 74
+        value: 3
+        pattern: named_bound
+        context: "[FLAGGED FOR REVIEW: ED-142-R — confirm 2×Ob canonical; confirm floor of 3 applies to BG; confirm Ob 10 exception carrie"
+      - file: "params/bg/ed_resolutions.md"
+        line: 160
+        value: 3
+        pattern: named_bound
+        context: "[FLAGGED: confirm 2×Ob canonical; confirm floor of 3 applies to BG before BG compilation.]"
+  convergence_requires:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_36_40.md"
+        line: 386
+        value: 2
+        pattern: named_bound
+        context: "| 1 of 4 | Background noise | Individual arc fires normally. Arc 40 does not activate — convergence requires minimum 2 s"
+  coup_counter:
+    distinct_values: [0, 3]
+    file_count: 1
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_46_55_resolved.md"
+        line: 14
+        value: 3
+        pattern: named_bound
+        context: "| U-01 | Elske Loyalty has no Coup Counter link in stage6. Triggers are: TC ≥ 40 unopposed, Torben loyalty ≤ 2–3, Crown "
+      - file: "designs/arcs/gm_ref/arcs_46_55_resolved.md"
+        line: 93
+        value: 0
+        pattern: starts_at
+        context: "Coup Counter starts at 0. Ceiling: 3. Fires at 3. Counter never decrements."
+  covering_the:
+    distinct_values: [20]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/scene/investigation_systems_v30.md"
+        line: 201
+        value: 20
+        pattern: named_bound
+        context: "**Proposed trigger categories (covering the minimum 20–30):**"
+  creation:
+    distinct_values: [5]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/core.md"
+        line: 100
+        value: 5
+        pattern: named_bound
+        context: "Range: **1–7** (all attributes). Average human: 3. Creation max: 5 (one attribute only; all others ≤ 4). Advancement max"
+  discipline:
+    distinct_values: [0, 3]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 205
+        value: 3
+        pattern: named_bound
+        context: "2. Discipline ceiling
+3. Morale starting value and floor (= 1 while general present)"
+      - file: "params/bg/military.md"
+        line: 82
+        value: 0
+        pattern: named_bound
+        context: "Discipline floor: 0. Any result pushing Discipline to ≤ 0 destroys the unit."
+  e_rather_than_thread_mend_ob:
+    distinct_values: [8]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/emergent_scenarios.md"
+        line: 605
+        value: 8
+        pattern: named_bound
+        context: "└─ As above, targeting substrate absence rather than thread
+        Mend Ob ceiling: 8 (applies even to stacked collecti"
+  elske_confirmation_requires:
+    distinct_values: [4]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/victory_v30.md"
+        line: 464
+        value: 4
+        pattern: named_bound
+        context: "**Season gate (ED-667):** Elske confirmation requires minimum 4 successful Senator Outward actions from Loyalty 2 start "
+  evidence_track:
+    distinct_values: [3, 4, 5]
+    file_count: 6
+    hit_count: 7
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/architecture/player_agency_v30.md"
+        line: 350
+        value: 5
+        pattern: named_bound
+        context: "| Investigation resolved (Complex+) | +1 | Evidence Track threshold 5+ reached per fieldwork §4.1 |"
+      - file: "designs/architecture/player_agency_v30.md"
+        line: 522
+        value: 3
+        pattern: named_bound
+        context: "**How established:** Scene: Embed knowledge into a Knot. Requires WR ≥ 2. The embedded Knot is discoverable by a future "
+      - file: "designs/architecture/scale_transitions_v30.md"
+        line: 249
+        value: 5
+        pattern: named_bound
+        context: "3. A completed Complex or Structural investigation (Evidence Track threshold 5+ reached per fieldwork §4.1) whose subjec"
+      - file: "designs/arcs/arc_expansion_v30.md"
+        line: 305
+        value: 5
+        pattern: named_bound
+        context: "- Player opportunity: discovering Vorn's embezzlement (Fieldwork, Evidence Track threshold 5 on \"Church internal finance"
+      - file: "designs/audit/bridge_part1_revisions.md"
+        line: 30
+        value: 5
+        pattern: named_bound
+        context: "| Investigation resolved (Complex+) | +1 | Evidence Track threshold 5+ reached per fieldwork §4.1 |"
+      - file: "designs/provincial/victory_v30.md"
+        line: 584
+        value: 4
+        pattern: named_bound
+        context: "**Altonian Alignment:** NPC faction AI — when NPC faction reaches Mandate ≤ 2, chance it secretly contacts Altonian Vang"
+      - file: "designs/territory/settlement_layer_v30.md"
+        line: 269
+        value: 3
+        pattern: named_bound
+        context: "| Niflhel | Any (covert) | Niflhel does not govern openly. Niflhel infiltrates a settlement by placing an operative as a"
+  fort:
+    distinct_values: [4]
+    file_count: 1
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/geography.md"
+        line: 12
+        value: 4
+        pattern: named_bound
+        context: "| T3 | Lowenskyst | Crown | 3 | 3 | Border fortress. Fort max 4. Adjacent to T2, T9, T17. |"
+      - file: "params/bg/geography.md"
+        line: 23
+        value: 4
+        pattern: named_bound
+        context: "| T14 | Ehrenfeld | Crown | 3 | 4 | Military hinge. Central fortress. Fort max 4. Löwenritter garrison. Martial Law −1 O"
+  g_each_step_within_the_cascade_depth:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/parliament.md"
+        line: 91
+        value: 3
+        pattern: named_bound
+        context: "This staggers effects across resolution windows, keeping each step within the Cascade Depth Cap of 3."
+  game:
+    distinct_values: [245]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/world/ms_trajectory_v1.md"
+        line: 135
+        value: 245
+        pattern: named_bound
+        context: "`designs/world/calamity_radiation_v30.md` (MS band → territory effect; radiation matrix) · `designs/threadwork/threadwor"
+  gm_advisory:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/throughlines_transitions_hierarchy.md"
+        line: 165
+        value: 3
+        pattern: named_bound
+        context: "| **Obligation** | Decisive contest win in Formal/Grand Contest | Binding commitment on loser lasting 2–4 seasons; viola"
+  guilds_wealth:
+    distinct_values: [4]
+    file_count: 1
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_10_18.md"
+        line: 323
+        value: 4
+        pattern: named_bound
+        context: "A[\"Feldhaus: Trade with Crown (+1 Wealth)<br>Trade with Church (+1 Wealth)<br>Guilds Wealth climbing\"] --> B[\"2 consecut"
+      - file: "designs/arcs/gm_ref/arcs_10_18.md"
+        line: 338
+        value: 4
+        pattern: named_bound
+        context: "- **Mechanical effect:** Double Ledger token. Guilds Wealth floor = 4. Investigate Ob = 3. Solberg Year-End AI check fir"
+  hybrid_session_pacing:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/architecture/hybrid_gaps_v30.md"
+        line: 19
+        value: 1
+        pattern: named_bound
+        context: "### G-091 — Hybrid Session Pacing
+Minimum 1 real-world session per in-game season. No maximum — a season may span multip"
+  if_below:
+    distinct_values: [4]
+    file_count: 3
+    hit_count: 3
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/scene/fieldwork_v30.md"
+        line: 442
+        value: 4
+        pattern: named_bound
+        context: "- **Belief-aligned social success:** +1 Momentum (if below cap 4). Counts as Belief achievement per core engine."
+      - file: "designs/scene/social_contest_system_v2.md"
+        line: 245
+        value: 4
+        pattern: named_bound
+        context: "**Total Victory** (Conviction Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one "
+      - file: "designs/scene/social_contest_v30.md"
+        line: 230
+        value: 4
+        pattern: named_bound
+        context: "**Total Victory** (Conviction Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one "
+  institutional_pressure:
+    distinct_values: [20, 30, 60, 75]
+    file_count: 4
+    hit_count: 8
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/arcs/arcs_20_23.md"
+        line: 43
+        value: 75
+        pattern: known_clock_threshold
+        context: "Institutional Pressure reaches 75 between seasons 8–10 depending on intervention. When it does: Altonian vanguard deploy"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 532
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Elske Loyalty 5 at Institutional Pressure < 60? No — Institutional Pressure is 68. The return condition requires Insti"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 532
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Elske Loyalty 5 at Institutional Pressure < 60? No — Institutional Pressure is 68. The return condition requires Insti"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 140
+        value: 20
+        pattern: starts_at
+        context: "**Elske starts at Loyalty 4, Torben at 3.** Elske needs +2. But she can only return when Loyalty ≥ 6 AND Institutional P"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 119
+        value: 60
+        pattern: known_clock_threshold
+        context: "Institutional Pressure advances: from where? No explicit Institutional Pressure formula seen. Applying PATCH P-28: Insti"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 136
+        value: 30
+        pattern: known_clock_threshold
+        context: "**Assessment: Church Holy State Victory is NOT achievable in a standard 12–20 season campaign without significant oppone"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 140
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Elske starts at Loyalty 4, Torben at 3.** Elske needs +2. But she can only return when Loyalty ≥ 6 AND Institutional P"
+      - file: "params/mass_combat.md"
+        line: 378
+        value: 75
+        pattern: known_clock_threshold
+        context: "Deployment trigger: Institutional Pressure ≥ 75 (CLOCK-EDIT-01)."
+  institutional_pressure_vanguard:
+    distinct_values: [76]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 354
+        value: 76
+        pattern: named_bound
+        context: "- AER +1 if HI confirmed (AER 2 → 3, which triggers: \"Institutional Pressure vanguard threshold: 76→80\")."
+  maintain:
+    distinct_values: [5]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/phase3_resolutions.md"
+        line: 78
+        value: 5
+        pattern: named_bound
+        context: "RECOMMENDATION: Current convergence rate is acceptable. Natural events (external influence, personal crisis) maintain mi"
+  mandate:
+    distinct_values: [0, 4]
+    file_count: 3
+    hit_count: 3
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/arcs/arcs_24_27.md"
+        line: 14
+        value: 0
+        pattern: named_bound
+        context: "**Primary mechanics:** Stability 0 = collapse event · Anti-spiral floor (Stability 2 = Ob 4 regardless of pressure) · Fa"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 158
+        value: 0
+        pattern: named_bound
+        context: "> **P-20:** **Accounting — Mandate cap:** Faction Mandate cannot exceed 7 (hard ceiling). All modifiers that would push "
+      - file: "designs/provincial/victory_v30.md"
+        line: 681
+        value: 4
+        pattern: named_bound
+        context: "**Post-Founding:** Praetor card activates (Community Projects). Mandate cap 4. PC Embedding: +1D on RM Domain Actions in"
+  matches_combat_damage:
+    distinct_values: [0]
+    file_count: 2
+    hit_count: 4
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/scene/social_contest_system_v2.md"
+        line: 158
+        value: 0
+        pattern: named_bound
+        context: "- Strain to loser: margin + Charisma modifier of winner − Focus defence of loser. **Minimum 0.** [Matches combat damage "
+      - file: "designs/scene/social_contest_system_v2.md"
+        line: 363
+        value: 0
+        pattern: named_bound
+        context: "| Strain minimum inconsistency | Strain minimum 0 (matches combat damage minimum 0). |"
+      - file: "designs/scene/social_contest_v30.md"
+        line: 152
+        value: 0
+        pattern: named_bound
+        context: "- Strain to loser: margin + Charisma modifier of winner − Focus defence of loser. **Minimum 0.** [Matches combat damage "
+      - file: "designs/scene/social_contest_v30.md"
+        line: 453
+        value: 0
+        pattern: named_bound
+        context: "| Strain minimum inconsistency | Strain minimum 0 (matches combat damage minimum 0). |"
+  mending_stability:
+    distinct_values: [0, 10, 20, 40, 50, 60, 72]
+    file_count: 7
+    hit_count: 17
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/architecture/campaign_modes_v30.md"
+        line: 70
+        value: 0
+        pattern: known_clock_threshold
+        context: "**Shared loss condition (all modes):** Mending Stability reaches 0. The Rupture. No faction wins."
+      - file: "designs/arcs/arcs_24_27.md"
+        line: 278
+        value: 40
+        pattern: known_clock_threshold
+        context: "**Arc shape:** Single operation, single roll. Immediately divergent. Overwhelming: 1-scene success, Theocracy Counter +1"
+      - file: "designs/arcs/emergent_arcs_experimental.md"
+        line: 138
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Primary mechanics:** Threadweaving v2.5 Past-Oriented Pulling prerequisite (Mending Stability ≤ 60) · Mending Stabilit"
+      - file: "designs/arcs/emergent_arcs_experimental.md"
+        line: 177
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Why this arc is emergent:** The Past-Oriented Pulling prerequisite (Mending Stability ≤ 60) means the world must first"
+      - file: "designs/arcs/emergent_arcs_experimental.md"
+        line: 190
+        value: 40
+        pattern: known_clock_threshold
+        context: "| Evidence genre win in Tribunal fires temporal co-movement while Mending Stability ≤ 40 | 6 + 8 | At Mending Stability "
+      - file: "designs/arcs/emergent_arcs_experimental.md"
+        line: 208
+        value: 60
+        pattern: known_clock_threshold
+        context: "| Mending Stability ≤ 60 prerequisite for Past-Oriented Pulling | 8 | World deterioration opens temporal mechanics; perv"
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 682
+        value: 20
+        pattern: known_clock_threshold
+        context: "At Mending Stability < 20: T-03 fires — both sides draw 1 Co-Movement card per battle."
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 181
+        value: 72
+        pattern: starts_at
+        context: "**Framing inconsistency:** \"5 Presence markers in 5 non-adjacent territories, held 2 consecutive seasons + Mending Stabi"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 178
+        value: 50
+        pattern: known_clock_threshold
+        context: "## I-06 — Restoration Victory Mending Stability ≥ 50 vs Mending Stability Starting at 72"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 181
+        value: 50
+        pattern: known_clock_threshold
+        context: "**Framing inconsistency:** \"5 Presence markers in 5 non-adjacent territories, held 2 consecutive seasons + Mending Stabi"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 182
+        value: 50
+        pattern: known_clock_threshold
+        context: "**Correction (PATCH P-17):** Add: \"Mending Stability ≥ 50 must be met at the moment of victory declaration. Restoration'"
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 384
+        value: 50
+        pattern: known_clock_threshold
+        context: "> **Clarification (PP-035):** \"Hollow Victory applies only to Deed-counting factions (Hafenmark, Guilds, and any faction"
+      - file: "designs/threadwork/threadwork_v30.md"
+        line: 246
+        value: 40
+        pattern: known_clock_threshold
+        context: "| Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms."
+      - file: "designs/threadwork/threadwork_v30.md"
+        line: 246
+        value: 20
+        pattern: known_clock_threshold
+        context: "| Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms."
+      - file: "designs/threadwork/threadwork_v30.md"
+        line: 784
+        value: 10
+        pattern: known_clock_threshold
+        context: "| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (t"
+      - file: "params/factions/stats_1_7_scale.md"
+        line: 25
+        value: 0
+        pattern: known_clock_threshold
+        context: "| Mending Stability | 60 | 72 | Mending Stability = 0 |"
+      - file: "params/factions/stats_1_7_scale.md"
+        line: 106
+        value: 10
+        pattern: known_clock_threshold
+        context: "Mending Stability ≤ 10 adds +1 to coup/succession trigger check pools."
+  mending_ts:
+    distinct_values: [50]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/solmund_n_check_res_check.md"
+        line: 17
+        value: 50
+        pattern: named_bound
+        context: "| Mending TS min: 50+ base, 70+ at Ob 6+ | Implicit | threadwork_v30 Mending table | ✓ |"
+  min_ob:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/factions_personal.md"
+        line: 45
+        value: 1
+        pattern: named_bound
+        context: "Min Ob floor: 1 after all modifiers."
+  minimum_pool_1_die:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/combat.md"
+        line: 205
+        value: 1
+        pattern: named_bound
+        context: "## PP-273 (mass battle) — Minimum pool 1 die
+Minimum 1 die after all penalties. Formation Break at Discipline 0 removes "
+  momentum:
+    distinct_values: [1, 4]
+    file_count: 5
+    hit_count: 5
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/arcs/emergent_scenarios.md"
+        line: 237
+        value: 1
+        pattern: known_clock_threshold
+        context: "│   ├─ Spend: before non-Thread roll; 1 Momentum = 1 auto-success"
+      - file: "designs/audit/integration_audit_v3_2026-04-16.md"
+        line: 259
+        value: 4
+        pattern: named_bound
+        context: "*Gap:* Momentum cap at 4 is too low for the generation rates across a multi-scene season. Either the cap needs to scale "
+      - file: "designs/scene/social_contest_system_v2.md"
+        line: 149
+        value: 1
+        pattern: known_clock_threshold
+        context: "Momentum: before rolling, spend any amount of Momentum to add automatic successes (1 Momentum = 1 success, per core engi"
+      - file: "designs/scene/social_contest_v30.md"
+        line: 143
+        value: 1
+        pattern: known_clock_threshold
+        context: "Momentum: before rolling, spend any amount of Momentum to add automatic successes (1 Momentum = 1 success, per core engi"
+      - file: "params/core.md"
+        line: 60
+        value: 1
+        pattern: known_clock_threshold
+        context: "- Spend: 1 Momentum = 1 automatic success (non-Thread rolls only)"
+  morale:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 163
+        value: 1
+        pattern: named_bound
+        context: "While general is present: Morale floor = 1. At Morale 0: unit routs."
+  most_characters:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/valoria_how_to_play.md"
+        line: 21
+        value: 3
+        pattern: named_bound
+        context: "You choose a starting Certainty (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
+      - file: "designs/audit/valoria_how_to_play.md"
+        line: 21
+        value: 3
+        pattern: starts_at
+        context: "You choose a starting Certainty (0–5): 5 = Orthodox Solmundian, 0 = fully Thread-aware. Most characters start at 3–4. Th"
+  n_dice:
+    distinct_values: [3]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/architecture/complete_systems_reference.md"
+        line: 133
+        value: 3
+        pattern: named_bound
+        context: "| Feint | **Partial commitment** (N dice min 3, rest for Def — PP-294). Margin = dice opponent loses next round. |"
+      - file: "designs/audit/valoria_holistic_audit.md"
+        line: 244
+        value: 3
+        pattern: named_bound
+        context: "- PP-294 (Feint partial commitment): confirmed — N dice min 3, rest for Defence."
+  nconviction_track:
+    distinct_values: [5]
+    file_count: 1
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_05_09.md"
+        line: 82
+        value: 5
+        pattern: starts_at
+        context: "A[\"SEED\\nHafenmark calls Debate: Church arbitration courts jurisdiction\\nConviction Track starts at 5 (neutral)\\nAudienc"
+      - file: "designs/arcs/gm_ref/arcs_05_09.md"
+        line: 191
+        value: 5
+        pattern: starts_at
+        context: "I[\"Church responds to public reveal\\nExcommunication threat: Crown Mandate −1 if Crown uses data\\nDebate opens: Transpar"
+  nfavour:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/arcs_16_19.md"
+        line: 80
+        value: 3
+        pattern: starts_at
+        context: "A[\"Players identify Economic Leverage as needed\\nvs Church Wealth (funding TC expansion)\\nor vs Crown (if extracting con"
+  ob_with:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/systematic_critique_2026-04-04.md"
+        line: 17
+        value: 3
+        pattern: named_bound
+        context: "d10 with TN 7 produces E[net] = 0.3 per die. The probability curves scale predictably. 4D gives ~80% to hit Ob 1; 10D gi"
+  overwhelming:
+    distinct_values: [3]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/videogame/godot_architecture_specification.md"
+        line: 802
+        value: 3
+        pattern: named_bound
+        context: "**Test:** `test_dice_engine.gd` — pool floor, Ob floor, exploding 10s chain, all degree cases (including Ob 20 exception"
+      - file: "params/core.md"
+        line: 6
+        value: 3
+        pattern: named_bound
+        context: "<!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint"
+  overwhelming_requires_a:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/core.md"
+        line: 51
+        value: 3
+        pattern: named_bound
+        context: "Overwhelming requires a minimum of 3 net successes regardless of Ob. (PP-232)"
+  party:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4.md"
+        line: 2042
+        value: 2
+        pattern: named_bound
+        context: "| **Dragon Age / Tyranny** | 2–3 companion sweet spot; companion commentary | Part 14 (party cap of 2), §2.5 (companion "
+  party_management_companion:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4_1.md"
+        line: 1021
+        value: 2
+        pattern: named_bound
+        context: "## §11.5 Party management
+
+Companion cap 2. Connection action during social scene: requires Disp +3, not faction leader,"
+  points:
+    distinct_values: [5]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/mechanical_implementation_revised_2026_04_21.md"
+        line: 258
+        value: 5
+        pattern: named_bound
+        context: "- `[DECISION P3-1]` Frame-crack-points threshold: 5 proposed. Calibration needed against expected Baralta-community resi"
+  proposes_a:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/comprehensive_system_audit_2026-04-15.md"
+        line: 191
+        value: 3
+        pattern: named_bound
+        context: "**Robustness gap IR-1: NPE persistence ceiling and relationship continuity.** The pending decision NPE-02 proposes a cap"
+  public_instability:
+    distinct_values: [3, 4]
+    file_count: 2
+    hit_count: 3
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 554
+        value: 4
+        pattern: known_clock_threshold
+        context: "**EMERGENT CONCLUSION:** A seemingly inevitable invasion is repelled by a military that sacrificed political legitimacy "
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 89
+        value: 3
+        pattern: known_clock_threshold
+        context: "7. Hafenmark holds 4+ Deed Tokens (if Deed 3 = Reformed Settlement, they now hold it). Hafenmark also holds Deed 2 (Publ"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 89
+        value: 3
+        pattern: known_clock_threshold
+        context: "7. Hafenmark holds 4+ Deed Tokens (if Deed 3 = Reformed Settlement, they now hold it). Hafenmark also holds Deed 2 (Publ"
+  removed_from_active_leadership_for_a:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/faction_politics_v30.md"
+        line: 191
+        value: 2
+        pattern: named_bound
+        context: "3. **Duration:** If Assessment passes, the assessed leader is removed from active leadership for a minimum of 2 seasons "
+  rendering_stability:
+    distinct_values: [0, 10, 20, 40, 50, 60]
+    file_count: 3
+    hit_count: 8
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 33
+        value: 50
+        pattern: known_clock_threshold
+        context: "## I-06 — Restoration Victory Rendering Stability ≥ 50 vs Rendering Stability Starting at 72"
+      - file: "designs/threadwork/threadwork_v25_historical.md"
+        line: 238
+        value: 40
+        pattern: known_clock_threshold
+        context: "| Failure | Interaction collapses. Rendering Stability −2. Coherence −1. At Rendering Stability ≤ 40: Shifting Object fo"
+      - file: "designs/threadwork/threadwork_v25_historical.md"
+        line: 238
+        value: 20
+        pattern: known_clock_threshold
+        context: "| Failure | Interaction collapses. Rendering Stability −2. Coherence −1. At Rendering Stability ≤ 40: Shifting Object fo"
+      - file: "designs/threadwork/threadwork_v25_historical.md"
+        line: 310
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal dept"
+      - file: "designs/threadwork/threadwork_v25_historical.md"
+        line: 765
+        value: 10
+        pattern: known_clock_threshold
+        context: "| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (t"
+      - file: "designs/threadwork/threadwork_v25_historical.md"
+        line: 772
+        value: 0
+        pattern: known_clock_threshold
+        context: "Rendering Stability replaces Thread Tension on the board game track. Invert all Thread Tension references: where Thread "
+      - file: "designs/threadwork/threadwork_v30_infill.md"
+        line: 74
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Requirements:** Thread Sensitivity 70+ · Rendering Stability ≤ 60 (substrate must be stressed enough for temporal dept"
+      - file: "designs/threadwork/threadwork_v30_infill.md"
+        line: 157
+        value: 0
+        pattern: known_clock_threshold
+        context: "Rendering Stability replaces Thread Tension on the board game track. Invert all Thread Tension references: where Thread "
+  resolution:
+    distinct_values: [20]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_46_55.md"
+        line: 381
+        value: 20
+        pattern: named_bound
+        context: "The PI track and auto-resolution threshold at 20 are confirmed. Per-action amounts require"
+  resolve:
+    distinct_values: [20]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_46_55_resolved.md"
+        line: 353
+        value: 20
+        pattern: named_bound
+        context: "What the board has been recording is that each faction's normal operations have been nudging PI upward since Season 2. B"
+  resource_expenditure:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 708
+        value: 2
+        pattern: named_bound
+        context: "Resource expenditure threshold: 2× rolled net successes. Below threshold = \"stressed\" — faction takes Wealth −1 at Casca"
+  round_down_to:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 496
+        value: 1
+        pattern: named_bound
+        context: "> **Clarification (PP-MB-06):** \"The requirement 'all individuals must have Thread Sensitivity ≥ 30' applies at the indi"
+  round_up:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/core.md"
+        line: 209
+        value: 1
+        pattern: named_bound
+        context: "| Community Weaving (Restoration) | (100−MS)÷20 round up min 1 | −1 per Presence marker in territory |"
+  s_attack_redirect_to_you:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4.md"
+        line: 1334
+        value: 1
+        pattern: named_bound
+        context: "RESCUE — commit to contest Vaelke's attack redirect to you
+Minimum 1 die, maximum your entire Offence pool."
+  s_can_only_fight_as_line_at_cohesion:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/arcs_20_23.md"
+        line: 230
+        value: 1
+        pattern: named_bound
+        context: "Ehrenwall at Stage 2 is not a tactical setback. It is a campaign event. The Löwenritter's institutional effectiveness is"
+  s_loyalty:
+    distinct_values: [6]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/narrative_scenario_chains.md"
+        line: 400
+        value: 6
+        pattern: named_bound
+        context: "│   └─ Maintained 3 consecutive seasons: Torben's Loyalty floor is 6"
+  session:
+    distinct_values: [1]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 638
+        value: 1
+        pattern: named_bound
+        context: "Session minimum: 1 real-world session per in-game season. No maximum — a season may span multiple sessions if scene volu"
+  sets:
+    distinct_values: [28]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/core.md"
+        line: 81
+        value: 28
+        pattern: named_bound
+        context: "| Church Influence (CI) | **28** | 0–100 (no freeze) | CI 60 = Mass Seizure available (one-shot). CI 100 = cap. P-32 set"
+  shadow_renown_point_that_spills_past:
+    distinct_values: [10]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/faction_politics_v30.md"
+        line: 387
+        value: 10
+        pattern: named_bound
+        context: "| Each Shadow Renown point that spills past cap 10 | +1 |"
+  stability:
+    distinct_values: [0]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/clock_registry_v30.md"
+        line: 38
+        value: 0
+        pattern: named_bound
+        context: "Stats: 1–7 scale, floor 1. Exception: Stability floor 0 in BG (0 = faction eliminated)."
+  stamina:
+    distinct_values: [2]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "params/combat.md"
+        line: 5
+        value: 2
+        pattern: named_bound
+        context: "<!-- PP-232: Health formula revised; Stamina floor 2; armour wield constraint; wound penalty −1D only; -->"
+      - file: "params/core.md"
+        line: 6
+        value: 2
+        pattern: named_bound
+        context: "<!-- PP-232 (Ob cap raised to 20; Overwhelming floor 3; Health formula revised; Stamina floor 2; armour wield constraint"
+  starting_value_ci:
+    distinct_values: [28]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/ci_political_v30.md"
+        line: 99
+        value: 28
+        pattern: starts_at
+        context: "### §2.3 Starting Value
+
+CI starts at 28 per P-32. Unchanged."
+  stat:
+    distinct_values: [7]
+    file_count: 2
+    hit_count: 3
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/throughlines_transitions_hierarchy.md"
+        line: 166
+        value: 7
+        pattern: named_bound
+        context: "| **Framework Drift** | Faction ethical framework produces passive stat changes | Per-framework table: Church → TC +1/se"
+      - file: "params/factions/npc_stance_triangles.md"
+        line: 47
+        value: 7
+        pattern: named_bound
+        context: "| Divine Command | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + TC advanced | Per year (Year-End)"
+      - file: "params/factions/npc_stance_triangles.md"
+        line: 49
+        value: 7
+        pattern: named_bound
+        context: "| Categorical Imperative | Hafenmark | Influence +1 per season all actions framework-aligned | Per season (conditional) "
+  strain:
+    distinct_values: [0]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/scene/social_contest_system_v2.md"
+        line: 363
+        value: 0
+        pattern: named_bound
+        context: "| Strain minimum inconsistency | Strain minimum 0 (matches combat damage minimum 0). |"
+      - file: "designs/scene/social_contest_v30.md"
+        line: 453
+        value: 0
+        pattern: named_bound
+        context: "| Strain minimum inconsistency | Strain minimum 0 (matches combat damage minimum 0). |"
+  system:
+    distinct_values: [20]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/history/combat.md"
+        line: 106
+        value: 20
+        pattern: named_bound
+        context: "- Partial Op Ob stack: resets on success of same type or scene end; system cap 20"
+  territory:
+    distinct_values: [10]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "params/bg/tracks.md"
+        line: 39
+        value: 10
+        pattern: named_bound
+        context: "Per-territory ceiling: 10. **First Inquisitor at AP ≥ 3. Second Inquisitor at AP ≥ 6.** Max 2 Inquisitors/territory. (ED"
+  the:
+    distinct_values: [3, 4]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/audit/integration_audit_v3_2026-04-16.md"
+        line: 255
+        value: 4
+        pattern: named_bound
+        context: "The cap is 4. A moderately active season (2 Belief-pursuit scenes + 1 Rescue success) generates +4, hitting the cap imme"
+      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+        line: 365
+        value: 3
+        pattern: named_bound
+        context: "**Repair:** §1.2 Phase 3 Cascade spec should add: per-step dismissal shows \"Resolved immediately\" vs \"Queued to next Acc"
+  the_cascade_depth:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 386
+        value: 3
+        pattern: named_bound
+        context: "**Verdict:** The Reformed Settlement chain fires 6-7 effects in one resolution window. The Cascade Depth Cap of 3 immedi"
+  the_church_is_rolling_5d10_against_a:
+    distinct_values: [7]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/arcs_20_23.md"
+        line: 93
+        value: 7
+        pattern: named_bound
+        context: "The roll is Church Mandate (pool of 5 dice, currently at 5) versus Baralta's Mandate as direct Ob (currently at 7). Ob 7"
+  theocracy_counter:
+    distinct_values: [30, 40, 42, 50, 60]
+    file_count: 7
+    hit_count: 10
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/arcs/arcs_31_35.md"
+        line: 19
+        value: 42
+        pattern: known_clock_threshold
+        context: "Parliament convenes in the cold season with Theocracy Counter at 42. No one calls it a crisis. The Cardinals have spent "
+      - file: "designs/provincial/factions_personal_v30_infill.md"
+        line: 75
+        value: 40
+        pattern: known_clock_threshold
+        context: "- Theocracy Counter reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 88
+        value: 50
+        pattern: known_clock_threshold
+        context: "**Church chooses Resist (Game Master determines; consistent with Church conviction and Theocracy Counter > 50 assertive "
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 99
+        value: 30
+        pattern: known_clock_threshold
+        context: "**Preconditions:** Varfell VTM 3 (publicly visible). Varfell has a Tribune Inward in T9, adjacent to T3. This season, Re"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 136
+        value: 60
+        pattern: known_clock_threshold
+        context: "**Assessment: Church Holy State Victory is NOT achievable in a standard 12–20 season campaign without significant oppone"
+      - file: "designs/scene/combat_design_v1.md"
+        line: 402
+        value: 40
+        pattern: known_clock_threshold
+        context: "| Church | 4 | 4 | 2 Templar (elite: Cohesion 5, Martial 4) + 2 garrison (Cohesion 3, Martial 2). Templars deploy free a"
+      - file: "designs/scene/combat_v30.md"
+        line: 416
+        value: 40
+        pattern: known_clock_threshold
+        context: "| Church | 4 | 4 | 2 Templar (elite: Discipline 5, Martial 4) + 2 garrison (Discipline 3, Martial 2). Templars deploy fr"
+      - file: "designs/world/worldbuilding_canon_audit_v30_infill.md"
+        line: 38
+        value: 30
+        pattern: known_clock_threshold
+        context: "BG v05 Scenario A (L495): \"Thread operation within 1 territory of T3, Theocracy Counter ≥ 30, no Heresy Investigation op"
+      - file: "params/factions/stats_1_7_scale.md"
+        line: 187
+        value: 40
+        pattern: known_clock_threshold
+        context: "- Theocracy Counter reaches 40 while Crown took no action to reduce it that season"
+      - file: "params/factions/stats_1_7_scale.md"
+        line: 261
+        value: 40
+        pattern: known_clock_threshold
+        context: "When Reformed Settlement is in force (Theocracy Counter ≥ 40 and Church has Resisted):"
+  thread_sensitivity:
+    distinct_values: [0, 20, 30, 50]
+    file_count: 8
+    hit_count: 13
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/arcs/arcs_20_23.md"
+        line: 162
+        value: 30
+        pattern: known_clock_threshold
+        context: "Getting here took years of campaign time. The Ceiral Text had to be found and held. Southernmost Awareness had to reach "
+      - file: "designs/arcs/arcs_31_35.md"
+        line: 181
+        value: 30
+        pattern: known_clock_threshold
+        context: "The expedition uses Approach Training-tagged practitioners (Thread Sensitivity ≥ 30 to cross the Forgetting barrier). In"
+      - file: "designs/npcs/edeyja_npc.md"
+        line: 72
+        value: 20
+        pattern: known_clock_threshold
+        context: "| Entered Southernmost (Season 2) | Brief, wary contact. She assesses the group. Thread Sensitivity ≤ 20: dismissed. Thr"
+      - file: "designs/provincial/faction_politics_v30.md"
+        line: 209
+        value: 30
+        pattern: known_clock_threshold
+        context: "| **Cultural** | Council of the Skald | Warden of the Thread ladder opens (Part 2, §2.7) if the player has Thread Sensit"
+      - file: "designs/provincial/faction_politics_v30.md"
+        line: 237
+        value: 30
+        pattern: known_clock_threshold
+        context: "| **0** | **Catechumen** (Katechumen) | Character creation + presence in a Church-controlled settlement for 1 season + s"
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 491
+        value: 30
+        pattern: known_clock_threshold
+        context: "Non-Thread-sensitive units (Thread Sensitivity < 30) cannot operate in Southernmost. They"
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 496
+        value: 30
+        pattern: known_clock_threshold
+        context: "> **Clarification (PP-MB-06):** \"The requirement 'all individuals must have Thread Sensitivity ≥ 30' applies at the indi"
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 496
+        value: 30
+        pattern: known_clock_threshold
+        context: "> **Clarification (PP-MB-06):** \"The requirement 'all individuals must have Thread Sensitivity ≥ 30' applies at the indi"
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 496
+        value: 30
+        pattern: known_clock_threshold
+        context: "> **Clarification (PP-MB-06):** \"The requirement 'all individuals must have Thread Sensitivity ≥ 30' applies at the indi"
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 499
+        value: 30
+        pattern: known_clock_threshold
+        context: "have Thread Sensitivity ≥ 30. No exceptions."
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 79
+        value: 20
+        pattern: known_clock_threshold
+        context: "> **P-29: Mending Stability gain:** Revolution Mending Stability gain from Thread operations: +1 Mending Stability per s"
+      - file: "designs/provincial/strategic_layer_v30_infill.md"
+        line: 51
+        value: 0
+        pattern: known_clock_threshold
+        context: "**Correction (PATCH P-25):** \"A Heresy Investigation requires a named target: a faction active in that territory this se"
+      - file: "designs/territory/settlement_layer_v30.md"
+        line: 487
+        value: 50
+        pattern: known_clock_threshold
+        context: "- Threshold 2 (Year 10): First generation leaders begin showing age. All original faction leaders: −1 to their highest a"
+  thread_tension:
+    distinct_values: [40, 50]
+    file_count: 4
+    hit_count: 5
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/npcs/npc_behavior_system_v1.md"
+        line: 706
+        value: 40
+        pattern: known_clock_threshold
+        context: "| 5 | Southernmost supply chain maintenance: if Thread Tension ≥ 40 and Niflhel has operated in Southernmost this year, "
+      - file: "designs/world/southernmost_v30.md"
+        line: 77
+        value: 40
+        pattern: known_clock_threshold
+        context: "- **Thread Tension ≥ 40**: The Southernmost is dormant below this threshold. Thread configurations are insufficiently ac"
+      - file: "designs/world/southernmost_v30_infill.md"
+        line: 52
+        value: 50
+        pattern: known_clock_threshold
+        context: "1. **Thread Tension reaches 50**: The outer winding begins showing signs of strain. A visible faction-facing event fires"
+      - file: "designs/world/southernmost_v30_infill.md"
+        line: 58
+        value: 40
+        pattern: known_clock_threshold
+        context: "- **Expedition Action**: Available as an extended Council Phase action (officer unavailable for Season). Prerequisite: T"
+      - file: "params/southernmost.md"
+        line: 53
+        value: 40
+        pattern: known_clock_threshold
+        context: "- Thread Tension ≥ 40"
+  torben_loyalty:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/architecture/early_game_ignition_analysis.md"
+        line: 126
+        value: 3
+        pattern: starts_at
+        context: "| T1 | **Disputed Succession** | 2.3 | Torben Loyalty starts at 3 (not 7). Lenneth publicly declares sympathy for Einhir"
+  torsvald_deniability_debt:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_36_40.md"
+        line: 426
+        value: 3
+        pattern: named_bound
+        context: "**ED-409 — RESOLVED:** Torsvald Deniability Debt threshold = 3. Three aborted operations leaving detectable evidence tri"
+  total_δms_from_catastrophe_to_game:
+    distinct_values: [67]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/session_master_2026_04_20.md"
+        line: 177
+        value: 67
+        pattern: named_bound
+        context: "**Contribution decomposition (total ΔMS from Catastrophe to game start = 67):**"
+      - file: "designs/world/ms_trajectory_v1.md"
+        line: 59
+        value: 67
+        pattern: named_bound
+        context: "**Contribution decomposition, total ΔMS from Catastrophe to game start = 67:**"
+  track_visual:
+    distinct_values: [6]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+        line: 221
+        value: 6
+        pattern: starts_at
+        context: "**Repair:** §6.3 should give a per-variant variation spec table — for each of the 9 proceeding types, which generic-surf"
+  ts_progress_point:
+    distinct_values: [10]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/mechanical_implementation_revised_2026_04_21.md"
+        line: 184
+        value: 10
+        pattern: named_bound
+        context: "- `[DECISION P9-2]` TS progress point threshold: 10 proposed. Requires calibration check against expected campaign-opera"
+  ttrpg:
+    distinct_values: [3, 60]
+    file_count: 6
+    hit_count: 6
+    potentially_drifted: true
+    occurrences:
+      - file: "designs/arcs/gm_ref/arcs_05_09.md"
+        line: 32
+        value: 60
+        pattern: named_bound
+        context: "A[\"SEED\\nRS = 55 (TTRPG start 60, −5 from prior ops)\\nChurch commences Structural Weaving campaign\\nOb 8, Pool ~9–11D (S"
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 212
+        value: 3
+        pattern: named_bound
+        context: "**Command applies in full to each sub-unit (PP-504):** The general's full Command value applies to each commanded sub-un"
+      - file: "params/bg/ed_resolutions.md"
+        line: 165
+        value: 3
+        pattern: named_bound
+        context: "Floor: net ≥ 2 (not 3 — TTRPG floor of 3 is personal-scale drama; BG abstraction warrants lower floor)."
+      - file: "params/core.md"
+        line: 74
+        value: 60
+        pattern: named_bound
+        context: "MS floor: 0 (Rupture). MS ceiling: 100. Starting value by mode: TTRPG default = 60; Board Game default = 72."
+      - file: "params/mass_combat.md"
+        line: 269
+        value: 3
+        pattern: named_bound
+        context: "Full Command applies to each commanded sub-unit's pool independently. Not divided. Sub-unit limit = Command value (TTRPG"
+      - file: "params/threadwork.md"
+        line: 139
+        value: 60
+        pattern: named_bound
+        context: "Starting: TTRPG default 60; BG default 72."
+  ttrpg_hard:
+    distinct_values: [3]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/mass_battle_v30.md"
+        line: 204
+        value: 3
+        pattern: named_bound
+        context: "1. Sub-unit limit (max simultaneous commanded = Command; TTRPG hard cap: 3)"
+      - file: "params/mass_combat.md"
+        line: 136
+        value: 3
+        pattern: named_bound
+        context: "Governs: sub-unit limit (max = Command; TTRPG hard cap 3); Discipline ceiling; Morale floor (= 1 while general present);"
+  unit_discipline:
+    distinct_values: [2]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/world/character_histories_v30.md"
+        line: 360
+        value: 2
+        pattern: named_bound
+        context: "| **3-LO1: Löwenritter Knight** | ★ Elite Discipline (unique: unit Discipline floor 2) · ★ Riposte § | Formation Discipl"
+  varfell_territories:
+    distinct_values: [3]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/audit/solmund_n_check_res_check.md"
+        line: 85
+        value: 3
+        pattern: named_bound
+        context: "| **Settlement flavour text** | §27: \"calibrated to territory Certainty\" | **GAP — no settlement-level Certainty defined"
+  victory:
+    distinct_values: [18]
+    file_count: 1
+    hit_count: 1
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/scene/conviction_track_v30.md"
+        line: 241
+        value: 18
+        pattern: named_bound
+        context: "**Victory threshold: 18.** This requires either:"
+  within_the_cascade_depth:
+    distinct_values: [3]
+    file_count: 2
+    hit_count: 2
+    potentially_drifted: false
+    occurrences:
+      - file: "designs/provincial/strategic_layer_v30.md"
+        line: 344
+        value: 3
+        pattern: named_bound
+        context: "**Total immediate effects from this card play:** 3 (Overwhelming Decree binding + free HI + Standing consequence). Withi"
+      - file: "designs/ui/valoria_ui_ux_v4_1_max_audit.md"
+        line: 364
+        value: 3
+        pattern: named_bound
+        context: "**Finding F-31 [P2] — Cascade Depth Cap (3 immediate effects per card play) is not in v4.1 Cascade spec.** board_game §P"
