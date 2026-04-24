@@ -113,26 +113,27 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 
 **Starting Piety Track (PT) values:**
 
-| T# | Territory | Starting PT |
-|----|-----------|-------------|
-| T1 | Valorsplatz | 3 |
-| T2 | Kronmark | 3 |
-| T3 | Lowenskyst | 3 |
-| T4 | Grauwald | 2 |
-| T5 | Feldmark | 3 |
-| T6 | Stillhelm | 1 |
-| T7 | Rendstad | 3 |
-| T8 | Gransol | 3 |
-| T9 | Himmelenger | 5 |
-| T10 | Spartfell | 3 |
-| T11 | Halvardshelm | 2 |
-| T12 | Sigurdshelm | 2 |
-| T13 | Oastad | 1 |
-| T14 | Ehrenfeld | 3 |
-| T15 | Askeheim | 0 (hard-fixed) |
-| T17 | Halvarshelm | 3 |
+| T# | Territory | Starting PV | Rationale |
+|----|-----------|-------------|-----------|
+| T1 | Valorsplatz | 5 | Crown Capital |
+| T2 | Kronmark | 2 | Crown Heartland |
+| T3 | Lowenskyst | 3 | Border Fortress (Fort 3) |
+| T4 | Grauwald | 2 | Highland Timber |
+| T5 | Feldmark | 2 | Breadbasket |
+| T6 | Stillhelm | 1 | Southern Farmland |
+| T7 | Rendstad | 1 | Timber Valley |
+| T8 | Gransol | 4 | Hafenmark Capital |
+| T9 | Himmelenger | 5 | Church Cathedral City (co-equal with Crown capital) |
+| T10 | Spartfell | 3 | Border Castle (Fort 2) |
+| T11 | Halvardshelm | 1 | Central Fjords |
+| T12 | Sigurdshelm | 4 | Varfell Seat |
+| T13 | Oastad | 1 | Southern Fjords |
+| T14 | Ehrenfeld | 3 | Military Hinge (Fort 3) |
+| T15 | Askeheim | 0 | Southernmost (Uncontrolled, hard-fixed) |
+| T16 | Schoenland | 1 | Island Republic |
+| T17 | Halvarshelm | 2 | Northern Mines |
 
-[PROVISIONAL — starting PT values pending user review. Source: peninsular_strain_v1.md §2.2.]
+PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress · 2 = economic importance · 1 = other · 0 = Southernmost. Total: 40. Jordan-confirmed 2026-04-23.
 
 **Peninsular Strain Threshold Effects:**
 
