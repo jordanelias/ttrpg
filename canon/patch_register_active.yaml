@@ -4,42 +4,6 @@
 
 patches:
 
-- id: PP-019
-  date: 2026-03-27
-  severity: P1
-  description: Niflhel network intelligence output
-  finding_id: F-14 (Batch 3)
-  source: simulation
-  affects: []
-  status: proposed
-  applied_commit: null
-- id: PP-042
-  date: 2026-03-27
-  severity: P2
-  description: M-054 (Einhir Sites) — detectability
-  finding_id: F-B7-42
-  source: simulation
-  affects: []
-  status: proposed
-  applied_commit: null
-- id: PP-044
-  date: 2026-03-27
-  severity: P2
-  description: M-050 (Riskbreakers), M-056 (Destabilisation) — passive faction detection
-  finding_id: F-B7-46
-  source: simulation
-  affects: []
-  status: proposed
-  applied_commit: null
-- id: PP-046
-  date: 2026-03-27
-  severity: P2
-  description: Combat — projectile range closing
-  finding_id: F-B5-M04-C (Batch 5)
-  source: simulation
-  affects: []
-  status: proposed
-  applied_commit: null
 - id: PP-297
   date: 2026-04-02
   severity: P1
@@ -53,33 +17,7 @@ patches:
   applied_commit: 2026-04-02-session
   renumbered_from: PP-093
   renumber_date: 2026-04-04
-- id: PP-298
-  date: 2026-04-02
-  severity: P1
-  description: Coup Counter successor rule — highest CR officer, counter resets [PROVISIONAL]
-  finding_id: F-30/F-33 / SIM-X-07/X-08
-  source: simulation
-  affects:
-  - designs/combat/combat_design_v1.md
-  status: provisional
-  applied_commit: 2026-04-02-session
-  renumbered_from: PP-094
-  renumber_date: 2026-04-04
-- id: PP-320
-  date: 2026-04-02
-  severity: P1
-  description: 'Faction collapse exit: 1 season elapsed + no hostile Domain Actions
-    + Govern Ob 2 Success. Auto-exit Season 2 Stability 1 Mandate 0. PROVISIONAL ED-053.'
-  finding_id: GAP-BG-01 / C-BG-02 / AUDIT-BG-01
-  source: audit
-  affects:
-  - references/params_board_game.md
-  - designs/board_game/valoria_bg_v05_simulation_and_patches.md
-  applied_to_version: v0.14+design-ST
-  status: provisional
-  applied_commit: 2026-04-02-audit-bg-01
-  renumbered_from: PP-117
-  renumber_date: 2026-04-04
+
 - id: PP-349
   date: 2026-04-02
   severity: P2
@@ -125,20 +63,7 @@ patches:
   - over_actualisation
   - shifting_object
   - brittleness
-- id: PP-472
-  date: 2026-04-08
-  severity: P2
-  description: 'Accounting steps 8/8b/9/9b/10/10b collapsed into Step 8 ''Events and
-    Emergence'' with a physical checklist card. These steps all execute in the same
-    window and separating them adds procedural friction. Renumbering: dissolved Step
-    11 removed from numbering; Step 12 becomes Step 9; Step 13 becomes Step 10. Full
-    step sequence now: 1-7, 8 (merged), 9 (victory check), 10 (season advance). Reduces
-    accounting procedural load from 13+ steps to 10.'
-  finding_id: STR-BG-D-09
-  source: BG stress test 2026-04-08
-  affects:
-  - references/params_board_game.md
-  status: scheduled
+
 - id: PP-530-PROV
   type: provisional
   date: 2026-04-10
@@ -482,6 +407,9 @@ patches:
     - skills/valoria-orchestrator/scripts/valoria_hooks.py
     - canon/patch_register_active.yaml
     - canon/editorial_ledger.yaml
+    vetting:
+    class: E
+    note: "PP-674 IS the framework enforcement patch. Self-exempted as infrastructure."
   status: applied
   applied_commit: pending
   vetting:
