@@ -1,41 +1,41 @@
-session_id: 2026-04-23-consolidation-system
-session_close: 2026-04-23
+session_id: 2026-04-24-consolidation-followups
+session_close: 2026-04-24
 phase: infrastructure
 status: complete
 last_stage: >
-  Naming/value/glossary consolidation system built in 4 parts (all committed).
-  Part 1 (proper_noun_registry.yaml) at 4146bac + round-2 finalization at 0f0f38f:
-    62 entries across 10 categories, 42 aliases, 0 open candidates.
-    All 466 round-1 candidates auto-triaged via deterministic rules.
-  Part 2 (alias_registry.yaml) at 3addd2b: 96 entries across 15 categories
-    covering core/derived/thread stats, world clocks, debate, faction stats, combat,
-    dice engine, narrative, thread ops, infra, modes, 4 collisions, 4 unresolved gaps,
-    4 legacy renames.
-  Part 3 (values_master.yaml + tools/extract_values.py) at ad6a8fd: 464 values
-    extracted from 12 of 14 params files; 5 real conflicts surfaced (threadwork/superseded drift).
-  Part 4 (tools/valoria_collator.py + references/collation_report_summary.yaml) at 8516cf6:
-    scans all design/params/canon .md against the 3 registries.
-    First run: 9101 findings after context-aware exemptions.
-      COLLISION_USED_ALONE: 1092 (TC 943×, TD 80×, CP 69×)
-      LEGACY_TERM_USED: 903 (RS 531×, Rendering Stability 158×, Cohesion 73×, CP 63×, TD 74×)
-      UNKNOWN_ABBREVIATION: 3640 (long tail of per-doc terms)
-      UNKNOWN_PROPER_NOUN: 3466 (mostly compound mechanical phrases)
+  Continued follow-ups from 2026-04-23 consolidation-system close.
+  Five commits:
+    2071752 — alias_registry v2 (Certainty added, unresolved gaps closed via deprecated section),
+              + references/numeric_bounds_report.yaml (targeted scan of 207 files for ceiling/cap/
+              floor/threshold/max/min; 254 hits, 97 stats, 14 flagged as potentially drifted).
+    02ba388 — bulk-fix applied: 104 substitutions across 22 files
+              (Rendering Stability→Mending Stability: 74, Cohesion→Discipline: 29, Combat Power→Power: 1).
+              User-authority paths skipped (designs/world, designs/npcs, designs/arcs, designs/territory).
+              Historical/deprecated/superseded files skipped. Lines with rename-context markers skipped.
+    08e0cf1 — tools/valoria_bulk_fix.py + glossary additions (Arc, Zoom In, Zoom Out, Cardinal).
+    Glossary last_updated advanced to 2026-04-24.
+  Collator re-run post-fix: 9101→8969 findings (−132). LEGACY_TERM_USED 903→799 (−104 matches substitutions).
+  COLLISION_USED_ALONE 1092 unchanged — TC/TD/CP require per-context judgment, not auto-fixable.
 next_action:
-  skill: infrastructure
+  skill: editorial
   description: >
-    Concrete follow-ups surfaced by the collator:
-    (1) Bulk-fix tool to consume collation_report_summary and do context-aware
-        substitutions: TC → Theocracy Counter or Conviction Track (requires per-context
-        disambiguation), RS → Mending Stability, Cohesion → Discipline,
-        Combat Power → Power, CP in game-stat contexts → Character Point.
-    (2) Extend values_master to scan designs/*.md too (not just params/), since the
-        CI ceiling 75 vs 100 conflict likely lives in designs/, not params/.
-    (3) Glossary additions for deferred terms from round 1: Arc, Zoom In, Cardinal.
-    (4) Populate alias_registry unresolved gaps: CERT, TLK, DD, FSTAT — confirm full names.
-    (5) Maret disambiguation pass — flagged for per-file context (two Marets: Uln vs Vossen).
-  priority: "(1) bulk-fix tool is highest impact — addresses the 1092 collision + 903 legacy findings"
+    Only manual-judgment items remain from the consolidation system:
+    (1) TC disambiguation sweep — 943 occurrences across design docs. Each TC instance must be
+        manually classified as Theocracy Counter (faction clock) or Conviction Track (debate
+        system). Top files: designs/audit/npc_faction_arc_interdependency_2026-04-18.md (61×),
+        designs/arcs/narrative_scenario_chains.md (57×), designs/scene/conviction_track_v30.md (52×),
+        designs/arcs/gm_ref/arcs_46_55_resolved.md (50×), designs/provincial/faction_politics_v30.md (48×).
+    (2) CP and TD disambiguation — smaller footprint (~149 combined) but also per-context.
+    (3) User-authority-path RS/Rendering Stability residuals — bulk-fix skipped designs/world,
+        designs/npcs, designs/arcs, designs/territory. These need editorial-flagged commits if swept.
+    (4) Numeric bounds report review — 14 stats flagged for potential drift; most are likely
+        legitimate (multiple thresholds per stat) but a handful may be stale references.
+    (5) Maret disambiguation pass — flagged since round-1 proper noun triage (Uln vs Vossen).
+    (6) Five carried-over items from 2026-04-22: D-4, D-5, ED-735 (RWCE/Miracle/SA-gating),
+        PROVISIONAL marker audit, doc_index_gen.py regen.
+  priority: "TC disambiguation is the highest impact on mechanical correctness — ~30 min focused work on top 5 files clears 268 of 943"
 blockers: []
 notes:
-  - "Collation report per-instance detail (985KB) not committed — regenerate via tools/valoria_collator.py"
-  - "Proper noun registry at 62 entries is saturated for this round; additional promotions will come from new design work"
-  - "Five carried-over follow-ups from 2026-04-22 editorial session still pending: D-4, D-5, ED-735 (RWCE/Miracle Investigation/SA-gating), PROVISIONAL marker audit, doc_index_gen.py regeneration"
+  - "Collator per-instance report (962KB) not committed; regenerate via tools/valoria_collator.py"
+  - "Numeric bounds report highlights Mending Stability threshold (20/40/60) inconsistencies in arcs — likely intentional multiple thresholds, not bugs"
+  - "Certainty now registered in alias_registry — any remaining 'CERT' usages in active docs are now properly named (not unresolved)"
