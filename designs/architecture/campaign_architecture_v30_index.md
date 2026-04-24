@@ -17,7 +17,7 @@
 | 2 | 3 | 2 | Status: CANONICAL — approved by Jordan 2026-04-17 |
 | 3 | 4 | 2 | Scope: Consolidated design for all systems introduced or corrected in the 2026-04-17 victory revision session. Church settlement infrastructure, CI=100, RM identity, Thread revelation curve, phased IP escalation, Altonia repulsion, MS loss reform, Coherence asymmetry, Mending community, Portrait Retirement, Lineage, Warden faction paths. |
 | 4 | 5 | 2 | Supersedes: All prior "alternate victory condition" framing. All "shared loss" framing. The ×3 mass battle MS multiplier. Flat Coherence cost tables. |
-| 5 | 6 | 2 | Cross-references: victory_v30.md, peninsular_strain_v1.md, settlement_layer_v30.md, threadwork_v30.md, params_threadwork.md, rs_budget.md, player_agency_v30.md, npc_behavior_v30.md |
+| 5 | 6 | 2 | Cross-references: victory_v30.md, peninsular_strain_v1.md, settlement_layer_v30.md, threadwork_v30.md, params_threadwork.md, ms_budget.md, player_agency_v30.md, npc_behavior_v30.md |
 | 6 | 10 | 1 | PART 1: CHURCH SETTLEMENT INFRASTRUCTURE |
 | 7 | 12 | 2 | §1.1 Four Independent Axes |
 | 8 | 33 | 2 | §1.2 Combined Modifiers |
@@ -58,7 +58,7 @@
 | 2 | 13 | Status: CANONICAL — approved by Jordan 2026-04-17 |
 | 3 | 85 | Scope: Consolidated design for all systems introduced or corrected in the 2026-04-17 victory revision session. Church settlement infrastructure, CI=100, RM identity, Thread revelation curve, phased IP escalation, Altonia repulsion, MS loss reform, Coherence asymmetry, Mending community, Portrait Retirement, Lineage, Warden faction paths. |
 | 4 | 38 | Supersedes: All prior "alternate victory condition" framing. All "shared loss" framing. The ×3 mass battle MS multiplier. Flat Coherence cost tables. |
-| 5 | 47 | Cross-references: victory_v30.md, peninsular_strain_v1.md, settlement_layer_v30.md, threadwork_v30.md, params_threadwork.md, rs_budget.md, player_agency_v30.md, npc_behavior_v30.md |
+| 5 | 47 | Cross-references: victory_v30.md, peninsular_strain_v1.md, settlement_layer_v30.md, threadwork_v30.md, params_threadwork.md, ms_budget.md, player_agency_v30.md, npc_behavior_v30.md |
 | 6 | 535 | PART 1: CHURCH SETTLEMENT INFRASTRUCTURE |
 | 7 | 261 | §1.1 Four Independent Axes |
 | 8 | 71 | §1.2 Combined Modifiers |

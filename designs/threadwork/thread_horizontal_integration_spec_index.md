@@ -16,7 +16,7 @@
 | 1 | 2 | 2 | ED-673 through ED-681 | Status: CANONICAL |
 | 2 | 3 | 2 | Date: 2026-04-17 |
 | 3 | 4 | 2 | Scope: All remaining cross-system Thread fire paths, editorial resolutions, and patches |
-| 4 | 5 | 2 | Depends: rs_budget.md (ED-668), wc_survival_spine.md (ED-669), npc_behavior_v30 §3.4/§4.3 (ED-670–672) |
+| 4 | 5 | 2 | Depends: ms_budget.md (ED-668), wc_survival_spine.md (ED-669), npc_behavior_v30 §3.4/§4.3 (ED-670–672) |
 | 5 | 6 | 2 | Resolves: All open questions from thread_constitutive_integration_analysis_v2.md |
 | 6 | 10 | 2 | EDITORIAL RESOLUTIONS (all 7 open questions) |
 | 7 | 24 | 2 | ED-673: Thread Domain Echo Pathway |
@@ -48,7 +48,7 @@
 | 1 | 11 | ED-673 through ED-681 | Status: CANONICAL |
 | 2 | 4 | Date: 2026-04-17 |
 | 3 | 22 | Scope: All remaining cross-system Thread fire paths, editorial resolutions, and patches |
-| 4 | 26 | Depends: rs_budget.md (ED-668), wc_survival_spine.md (ED-669), npc_behavior_v30 §3.4/§4.3 (ED-670–672) |
+| 4 | 26 | Depends: ms_budget.md (ED-668), wc_survival_spine.md (ED-669), npc_behavior_v30 §3.4/§4.3 (ED-670–672) |
 | 5 | 22 | Resolves: All open questions from thread_constitutive_integration_analysis_v2.md |
 | 6 | 533 | EDITORIAL RESOLUTIONS (all 7 open questions) |
 | 7 | 420 | ED-673: Thread Domain Echo Pathway |

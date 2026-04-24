@@ -319,7 +319,7 @@
 - `references/propagation_log.md`
 - `references/propagation_map.md`
 - `references/restructure_ledger.md`
-- `references/rs_budget.md`
+- `references/ms_budget.md`
 - `references/splits/params_board_game_split.yaml`
 - `references/wc_survival_spine.md`
 
