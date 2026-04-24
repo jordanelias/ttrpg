@@ -293,7 +293,7 @@ Orthodox reading: Solmund miraculously restored the well. Practitioner reading: 
 
 **POI framing note:** When deployed as in-game POI content, this example carries a metadata tag [P-07_FRAME: witness-voice-simile] indicating the "as if the ground remembered" language is a confused witness's reach for vocabulary, not a canonical claim about substrate agency. The POI system must preserve this frame to prevent the witness-voice from being mistaken for a doctrinal claim about the ground possessing memory. [EDITORIAL: PR-15 — resolved 2026-04-20; Option A metadata frame adopted.]
 
-**Mechanical function:** Discoverable POI (Remnant type) in Church territories. Same text, two readings, gated by TS via the existing visibility tables (threadwork_v30 §2.3). Scripture objects discovered early in the game gain new meaning as the player's TS develops. The text does not change. The player's capacity to read it changes.
+**Mechanical function:** Discoverable POI (Remnant type) in Church territories. Same text, two readings. Comprehension gated by TS via the epistemological barrier (P-08, canon/00 §10.1-10.2): non-sensitive readers parse the passage as vivid devotional language; readers with TS ≥ 30 recognise the description as threadwork they have personally witnessed. The scripture object does not change — the player's experiential framework changes. Implementation: at TS ≥ 30, display character-internal recognition annotation alongside the unchanged text.
 
 ---
 
@@ -434,7 +434,7 @@ Canon: "She is the Restoration Movement's pure adversary." The direct communion 
 
 SA increment fires → the only available explanation for large-scale environmental transformation is Solmund. The Church recognises the pattern: its scriptures describe exactly this.
 
-**Proposed Action — Miracle Investigation:** Consul Outward (Church only). Prerequisite: SA ≥ 1 AND RWCE in current or previous arc. Roll: Mandate vs Ob 2.
+**Proposed Action — Miracle Investigation:** Consul Outward (Church only). Prerequisite: SA ≥ 1 AND RWCE in current or previous arc. Roll: Mandate vs Ob = floor(target territory controller SA / 2) + 1. At SA 0 (uncontrolled): Ob 1. At SA 2 (Varfell): Ob 2. At SA 4: Ob 3. Higher controlling-faction SA means more competing local knowledge, making the Church's miracle framing harder to impose.
 
 | Degree | Effect |
 |---|---|
@@ -449,7 +449,7 @@ Investigation encounters practitioners. Church faces the aporia: is threadwork-a
 
 Baralta interprets RWCE through divine right + direct communion. The appropriate secular response is sovereign action, not Church oversight.
 
-**RDT/TD interaction:** RWCE in contested territory provides political ammunition for Reformed Settlement advancement. If Hafenmark controls a territory where RWCE fired AND Church has presence: Baralta can argue the Church's passive theology was proven inadequate. TD escalation penalises Church assertion. At TD 3, any season the Church loses PI gives Hafenmark PI +1.
+**RDT/TD interaction:** RWCE in contested territory provides political ammunition for Reformed Settlement advancement — but does not bypass RDT advancement prerequisites (Hafenmark M ≥ 3, PI ≥ 4, Church presence in controlled territory per params/bg/tracks.md). All conditions must be met. If prerequisites ARE met and Hafenmark controls a territory where RWCE fired AND Church has presence: Baralta can argue the Church's passive theology was proven inadequate. TD escalation penalises Church assertion. At TD 3, any season the Church loses PI gives Hafenmark PI +1.
 
 Baralta invokes Sovereign Authority Doctrine for Southernmost response. This is the jurisdictional claim that triggers Hafenmark's internal constitutional crisis: Almstedt blocks (founding settlement did not include divine right), Strand may support (deed-logic rewards effective action).
 
