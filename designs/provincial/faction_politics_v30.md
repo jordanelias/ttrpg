@@ -144,7 +144,7 @@ The original register leaves four inner-circle NPCs unnamed. This proposal names
 
 | Role | Proposed Name | Conviction | Resonant Style | Certainty | Notes |
 |------|---------------|------------|----------------|-----------|-------|
-| Senior Parliamentary Chair | **Peder Almstedt** (canonical — npc_roster_v30 #8) | Precedent | Evidence | 6 | Already canonical. Deed-monarchy institutional memory; serves as senior chair by seniority. Is the single NPC who remembers the original Almqvist founding terms. |
+| Senior Parliamentary Chair | **Peder Almstedt** (canonical — npc_roster_v30 #8) | Precedent | Evidence | 4 | Already canonical. Deed-monarchy institutional memory; serves as senior chair by seniority. Is the single NPC who remembers the original Almqvist founding terms. |
 | Guild Comptroller | **Annika Feldhaus** (canonical — npc_roster_v30 #7, but secondary role here) | Precedent | Consequence | 5 | Serves as Inner Circle liaison; holds dual rank (Master Merchant in Guilds — Part 2, §2.5). Caste alignment: commercially invested in caste maintenance. |
 | Baralta's Legal Advisor | **Torvi Heljason** (new — ED-635) | Precedent | Authority | 4 | Senior constitutional scholar; sole advisor who may contradict Baralta in private without procedural consequence. Northern Einhir heritage. |
 | Military Commander (Hafenmark) | **Olaf Geirson** (new — ED-636) | Order | Consequence | 4 | Veteran of the Hafenmark defensive tradition; Hafenmark has no offensive army, only border garrisons. He is more a logistician than a general. Caste-neutral; operates in a branch where practical competence dominates. |

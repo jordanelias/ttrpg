@@ -6,8 +6,8 @@ entries:
 
   - id: ED-660
     date: 2026-04-17
-    description: "Certainty scale: faction_politics_expanded lists Almstedt at Certainty 6, exceeding the..."
-    status: open
+    description: "Certainty scale: Almstedt Certainty 6→4 (Jordan-confirmed 2026-04-23)."
+    status: resolved
     severity: P2
 
   - id: ED-661
