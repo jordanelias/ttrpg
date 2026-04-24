@@ -1,0 +1,570 @@
+# Valoria Alias Registry — Mechanic Naming
+#
+# Purpose: canonical name → aliases/abbreviations/legacy names for mechanical
+# terms (distinct from the proper noun registry which handles world entities).
+#
+# This file is the source of truth for how mechanical terms may be written.
+# The collator (tools/valoria_collator.py) checks every design/params file
+# against this registry and flags:
+#   - Uses of an alias without the canonical term on first use in a section
+#   - Uses of a legacy/collision abbreviation that must not appear alone
+#   - Uses of an unknown abbreviation not registered anywhere
+#
+# Seed source: references/glossary.md (2026-04-02)
+#
+# Schema per entry:
+#   canonical: <full term as it must appear>
+#   abbreviations: <list of permitted abbreviations (with restrictions)>
+#   aliases: <list of alternative phrasings treated as equivalent>
+#   legacy: <list of deprecated names that must not be used>
+#   collision_note: <if abbreviation collides with another term>
+#   standalone_ok: true|false  (may the abbreviation stand alone in prose?)
+#   category: stat | clock | track | mechanic | operation | mode | infra
+
+version: 1
+
+core_attributes:
+  agility:
+    canonical: "Agility"
+    abbreviations: []
+    category: stat
+    range: "1-7"
+  attunement:
+    canonical: "Attunement"
+    abbreviations: []
+    category: stat
+    range: "1-7"
+  cognition:
+    canonical: "Cognition"
+    abbreviations: []
+    category: stat
+    range: "1-7"
+  endurance:
+    canonical: "Endurance"
+    abbreviations: []
+    category: stat
+    range: "1-7"
+  presence:
+    canonical: "Presence"
+    abbreviations: []
+    category: stat
+    range: "1-7"
+  spirit:
+    canonical: "Spirit"
+    abbreviations: []
+    category: stat
+    range: "1-7"
+  strength:
+    canonical: "Strength"
+    abbreviations: []
+    category: stat
+    range: "1-7"
+
+derived_stats:
+  health:
+    canonical: "Health"
+    abbreviations: ["HP"]
+    standalone_ok: false
+    category: stat
+  stamina:
+    canonical: "Stamina"
+    abbreviations: []
+    category: stat
+  coherence:
+    canonical: "Coherence"
+    abbreviations: []
+    category: stat
+    range: "10->0"
+  intelligibility:
+    canonical: "Intelligibility"
+    abbreviations: []
+    category: stat
+    range: "10->0"
+  composure:
+    canonical: "Composure"
+    abbreviations: ["COMP"]
+    standalone_ok: false
+    collision_note: "COMP also means Computation/Composition in general English. Write 'Composure' in game documents."
+    category: stat
+  focus:
+    canonical: "Focus"
+    abbreviations: []
+    category: stat
+    range: "1-5+"
+  momentum:
+    canonical: "Momentum"
+    abbreviations: []
+    category: stat
+    range: "0-4"
+
+thread_practitioner_stats:
+  thread_sensitivity:
+    canonical: "Thread Sensitivity"
+    abbreviations: ["TS"]
+    standalone_ok: false
+    category: stat
+    range: "0-100+"
+  thread_pool_score:
+    canonical: "Thread Pool Score"
+    abbreviations: ["TPS"]
+    standalone_ok: false
+    category: stat
+    formula: "Thread Sensitivity / 10 (round down)"
+  thread_depth:
+    canonical: "Thread Depth"
+    abbreviations: ["TD"]
+    status: REMOVED
+    removed_by: "PP-166"
+    legacy: ["Thread Depth"]
+    note: "Phantom stat; not tracked. TD also appears as 'flowchart TD' Mermaid syntax — not a game term."
+    category: stat
+  thread_tension:
+    canonical: "Thread Tension"
+    abbreviations: ["TT"]
+    standalone_ok: false
+    category: track
+    range: "0-100+"
+
+world_clocks:
+  mending_stability:
+    canonical: "Mending Stability"
+    abbreviations: ["MS"]
+    standalone_ok: false
+    category: clock
+    range: "100->0"
+    loss_threshold: "0 = The Rupture (campaign ends)"
+  theocracy_counter:
+    canonical: "Theocracy Counter"
+    abbreviations: ["TC"]
+    standalone_ok: false
+    collision_note: "TC also historically meant Conviction Track (debate). Never use TC alone — write full term."
+    category: clock
+    range: "0-100"
+    loss_threshold: "65 = Church Holy State (BG)"
+    note: "Triggers territorial seizure at 60."
+  institutional_pressure:
+    canonical: "Institutional Pressure"
+    abbreviations: ["IP"]
+    standalone_ok: false
+    category: clock
+    range: "0-100"
+    loss_threshold: "75/80 = Altonian Vanguard (BG)"
+  public_instability:
+    canonical: "Public Instability"
+    abbreviations: ["PI"]
+    standalone_ok: false
+    category: clock
+    range: "0-10"
+    mode: "BG"
+    loss_threshold: "0 = Parliament dissolved + Löwenritter coup"
+
+debate_system:
+  conviction_track:
+    canonical: "Conviction Track"
+    abbreviations: ["CT"]
+    standalone_ok: false
+    collision_note: "CT was preferred over TC to disambiguate from Theocracy Counter, but CT should still not stand alone — write full term."
+    category: track
+    range: "0-10"
+  concentration:
+    canonical: "Concentration"
+    abbreviations: []
+    category: mechanic
+  doubt_marker:
+    canonical: "Doubt Marker"
+    abbreviations: []
+    category: mechanic
+  genre:
+    canonical: "Genre"
+    abbreviations: []
+    category: mechanic
+    values: "Past | Present | Future"
+  orientation:
+    canonical: "Orientation"
+    abbreviations: []
+    category: mechanic
+    values: "Revealing | Obscuring"
+  interaction_type:
+    canonical: "Interaction Type"
+    abbreviations: []
+    category: mechanic
+    values: "CLASH | AMPLIFY | CROSS | DIVERGE"
+
+faction_stats:
+  mandate:
+    canonical: "Mandate"
+    abbreviations: ["M"]
+    standalone_ok: false
+    note: "Single-letter abbreviation permitted only in table headers following a full-term legend."
+    category: stat
+    collapse_threshold: "0 = Collapse state"
+  influence:
+    canonical: "Influence"
+    abbreviations: ["I"]
+    standalone_ok: false
+    note: "Single-letter abbreviation permitted only in table headers. Cannot drop below 1."
+    category: stat
+  wealth:
+    canonical: "Wealth"
+    abbreviations: ["W"]
+    standalone_ok: false
+    note: "0 = cannot Trade or fund Wealth-requiring actions."
+    category: stat
+  military:
+    canonical: "Military"
+    abbreviations: ["Mil"]
+    standalone_ok: false
+    note: "0 = cannot Muster."
+    category: stat
+  intel:
+    canonical: "Intel"
+    abbreviations: ["Int"]
+    standalone_ok: false
+    category: stat
+  stability:
+    canonical: "Stability"
+    abbreviations: ["Sta"]
+    standalone_ok: false
+    note: "0 = Collapse trigger (P-15)."
+    category: stat
+  standing:
+    canonical: "Standing"
+    abbreviations: []
+    category: stat
+    range: "0-10"
+
+combat:
+  combat_endurance:
+    canonical: "Combat Endurance"
+    abbreviations: ["CE"]
+    standalone_ok: false
+    category: stat
+  command:
+    canonical: "Command"
+    abbreviations: []
+    category: stat
+    formula: "ceil((Presence + Cognition) / 2)"
+  damage_resistance:
+    canonical: "Damage Resistance"
+    abbreviations: ["DR"]
+    standalone_ok: false
+    category: stat
+  size:
+    canonical: "Size"
+    abbreviations: []
+    category: stat
+    note: "At 0 = unit destroyed. Replaces Strength in mass combat."
+  power:
+    canonical: "Power"
+    abbreviations: []
+    category: stat
+    legacy: ["Combat Power", "CP"]
+    note: "Damage per success = 1 + Power. Renamed from Combat Power (PP-232). ED-136 locks CP to Character Points only."
+  discipline:
+    canonical: "Discipline"
+    abbreviations: []
+    category: stat
+    legacy: ["Cohesion"]
+    note: "Renamed from Cohesion (PP-232)."
+  health_per_size:
+    canonical: "Health per Size"
+    abbreviations: ["H"]
+    standalone_ok: false
+    category: stat
+    formula: "min(Discipline, Command) + DR"
+  total_health:
+    canonical: "Total Health"
+    abbreviations: []
+    category: stat
+    formula: "Size × H"
+
+dice_engine:
+  target_number:
+    canonical: "Target Number"
+    abbreviations: ["TN"]
+    standalone_ok: true
+    note: "Exception — abbreviation permitted standalone."
+    category: mechanic
+    values: "6 | 7 | 8"
+  obstacle:
+    canonical: "Obstacle"
+    abbreviations: ["Ob"]
+    standalone_ok: true
+    note: "Exception — abbreviation permitted standalone."
+    category: mechanic
+  expected_value:
+    canonical: "Expected Value"
+    abbreviations: ["EV"]
+    standalone_ok: false
+    category: infra
+  degree_of_success:
+    canonical: "Degree of Success"
+    abbreviations: []
+    category: mechanic
+    values: "Overwhelming | Success | Partial | Failure"
+  overwhelming:
+    canonical: "Overwhelming"
+    abbreviations: []
+    category: mechanic
+    formula_ttrpg: "Net successes ≥ 2× Ob AND ≥ 3 minimum (PP-232)"
+    formula_bg: "Net successes ≥ Ob + 1 (provisional)"
+  partial:
+    canonical: "Partial"
+    abbreviations: []
+    category: mechanic
+    formula: "Net successes > 0 but < Ob"
+
+world_narrative:
+  gap:
+    canonical: "Gap"
+    abbreviations: []
+    category: mechanic
+    variants: "Micro-Gap | Standard Gap | Entrenched Gap | Catastrophic Gap"
+  shifting_object:
+    canonical: "Shifting Object"
+    abbreviations: []
+    category: mechanic
+    note: "Pre-Gap substrate instability."
+  locked_zone:
+    canonical: "Locked Zone"
+    abbreviations: []
+    category: mechanic
+  monstrous_incursion:
+    canonical: "Monstrous Incursion"
+    abbreviations: []
+    category: mechanic
+  the_rupture:
+    canonical: "The Rupture"
+    abbreviations: []
+    category: mechanic
+    note: "Campaign-ending event when Mending Stability reaches 0."
+  knot:
+    canonical: "Knot"
+    abbreviations: []
+    category: mechanic
+    variants: "Close | Regular | Distant"
+  belief:
+    canonical: "Belief"
+    abbreviations: []
+    category: mechanic
+  inspiration:
+    canonical: "Inspiration"
+    abbreviations: []
+    category: mechanic
+  history:
+    canonical: "History"
+    abbreviations: []
+    category: mechanic
+    note: "Skill-equivalent. Cap = Memory score."
+  character_point:
+    canonical: "Character Point"
+    abbreviations: ["CP"]
+    standalone_ok: false
+    collision_note: "CP previously ambiguous with Combat Power. ED-136 locks CP to Character Points only; 'Power' is the unit offensive stat."
+    category: mechanic
+  domain_echo:
+    canonical: "Domain Echo"
+    abbreviations: []
+    category: mechanic
+  grievance_marker:
+    canonical: "Grievance Marker"
+    abbreviations: []
+    category: mechanic
+  co_movement_card:
+    canonical: "Co-Movement Card"
+    abbreviations: []
+    category: mechanic
+    mode: "BG"
+
+thread_operations:
+  weaving:
+    canonical: "Weaving"
+    abbreviations: []
+    category: operation
+  pulling:
+    canonical: "Pulling"
+    abbreviations: []
+    category: operation
+    variants: "Present-Oriented | Past-Oriented"
+  past_oriented_pulling:
+    canonical: "Past-Oriented Pulling"
+    abbreviations: ["POP"]
+    standalone_ok: false
+    category: operation
+    requires: "Thread Sensitivity 70+"
+  locking:
+    canonical: "Locking"
+    abbreviations: []
+    category: operation
+    requires: "Thread Sensitivity 50+"
+  dissolution:
+    canonical: "Dissolution"
+    abbreviations: []
+    category: operation
+    requires: "Thread Sensitivity 50+"
+  mending:
+    canonical: "Mending"
+    abbreviations: []
+    category: operation
+    requires: "Thread Sensitivity 50+"
+  diagnosis:
+    canonical: "Diagnosis"
+    abbreviations: []
+    category: operation
+    note: "Mandatory pre-operation read. No roll. Required before Mending/Locking/Dissolution/Past-Oriented Pulling."
+  leap:
+    canonical: "Leap"
+    abbreviations: []
+    category: operation
+    note: "Full-round action (Priority 5). Prerequisite for all Thread operations."
+  forced_resolution:
+    canonical: "Forced Resolution"
+    abbreviations: ["FR"]
+    standalone_ok: false
+    category: operation
+    note: "Collective term for Locking and Dissolution. TN 8. No Thread Pool Score added."
+  dissolution_residue:
+    canonical: "Dissolution Residue"
+    abbreviations: []
+    category: mechanic
+  overweaving:
+    canonical: "Overweaving"
+    abbreviations: []
+    category: mechanic
+    note: "+1 Ob per op after first on same configuration in one contact window."
+
+infrastructure:
+  simulation_identifier:
+    canonical: "Simulation Identifier"
+    abbreviations: ["SIM-NNN"]
+    standalone_ok: true
+    category: infra
+  patch:
+    canonical: "Patch"
+    abbreviations: ["PP-NNN", "PP"]
+    standalone_ok: true
+    category: infra
+  editorial_decision:
+    canonical: "Editorial Decision"
+    abbreviations: ["ED-NNN", "ED"]
+    standalone_ok: true
+    category: infra
+  simulation_debt:
+    canonical: "Simulation Debt"
+    abbreviations: ["SIM-DEBT-NNN"]
+    standalone_ok: true
+    category: infra
+  game_master:
+    canonical: "Game Master"
+    abbreviations: ["GM"]
+    standalone_ok: true
+    category: infra
+  non_player_character:
+    canonical: "Non-Player Character"
+    abbreviations: ["NPC"]
+    standalone_ok: true
+    category: infra
+  player_character:
+    canonical: "Player Character"
+    abbreviations: ["PC"]
+    standalone_ok: true
+    category: infra
+  burning_wheel:
+    canonical: "Burning Wheel"
+    abbreviations: ["BW"]
+    standalone_ok: false
+    category: infra
+
+modes:
+  tabletop_roleplaying_game:
+    canonical: "Tabletop Roleplaying Game"
+    abbreviations: ["TTRPG"]
+    standalone_ok: true
+    category: mode
+  board_game:
+    canonical: "Board Game"
+    abbreviations: ["BG"]
+    standalone_ok: true
+    category: mode
+  hybrid:
+    canonical: "Hybrid"
+    abbreviations: ["HYB"]
+    standalone_ok: false
+    category: mode
+    note: "Write in full; HYB not permitted alone."
+
+# ─────────────────────────────────────────────────────────────────────────
+# COLLISION DISAMBIGUATION TABLE
+# Abbreviations whose meanings conflict. Never use alone.
+# ─────────────────────────────────────────────────────────────────────────
+
+collision_table:
+  tc:
+    abbreviation: "TC"
+    meaning_a: "Theocracy Counter (Church faction clock, 0-100)"
+    meaning_b: "Conviction Track (Debate position tracker, 0-10)"
+    resolution: "Write full term always."
+  cp:
+    abbreviation: "CP"
+    meaning_a: "Character Point (advancement currency) — CURRENT"
+    meaning_b: "Combat Power (renamed to Power — PP-232)"
+    resolution: "CP refers to Character Points only. Use 'Power' for unit offensive stat. [ED-136]"
+  td:
+    abbreviation: "TD"
+    meaning_a: "Thread Depth (phantom stat; REMOVED PP-166)"
+    meaning_b: "Top-Down (Mermaid flowchart directive)"
+    resolution: "Thread Depth does not exist. 'flowchart TD' is valid Mermaid syntax — not a game term."
+  comp:
+    abbreviation: "COMP"
+    meaning_a: "Composure (Debate context)"
+    meaning_b: "Computation / Composition (general English)"
+    resolution: "Write 'Composure' in game documents."
+
+# ─────────────────────────────────────────────────────────────────────────
+# UNRESOLVED / FLAGGED TERMS
+# Abbreviations that appeared in files but lack full-name definition.
+# ─────────────────────────────────────────────────────────────────────────
+
+unresolved:
+  cert:
+    abbreviation: "CERT"
+    suspected: "Certainty (character track referenced in batch_d_designs)"
+    status: "GAP: full name unconfirmed"
+  tlk:
+    abbreviation: "TLK"
+    suspected: "Talk or a social action abbreviation"
+    status: "GAP: full name unconfirmed"
+  dd:
+    abbreviation: "DD"
+    suspected: "Domain Dice or date format artefact"
+    status: "GAP: full name unconfirmed"
+  fstat:
+    abbreviation: "FSTAT"
+    suspected: "Faction Stat"
+    status: "GAP: full name unconfirmed"
+
+# ─────────────────────────────────────────────────────────────────────────
+# LEGACY RENAMES
+# Terms that were renamed. Old names must not appear in current docs.
+# ─────────────────────────────────────────────────────────────────────────
+
+legacy_renames:
+  combat_power_to_power:
+    old: "Combat Power"
+    new: "Power"
+    abbreviation_freed: "CP was ambiguous; now locked to Character Points"
+    patch: "PP-232"
+  cohesion_to_discipline:
+    old: "Cohesion"
+    new: "Discipline"
+    patch: "PP-232"
+  thread_depth_removed:
+    old: "Thread Depth (TD)"
+    new: null
+    status: "REMOVED — phantom stat"
+    patch: "PP-166"
+  rendering_stability_to_mending_stability:
+    old: "Rendering Stability (RS)"
+    new: "Mending Stability (MS)"
+    patch: "ED-731"
+    note: "Historical RS references retained as annotations in canon/02 per intentional design."
