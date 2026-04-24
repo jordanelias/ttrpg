@@ -2,7 +2,7 @@
 # auto-generated 2026-04-23
 
 p1_blocker_count: 0
-open_count: 12
+open_count: 11
 total_active: 12
 next_id: 739
 
@@ -11,10 +11,10 @@ p1_blockers: []
 p2_open:
   - ED-660: "Certainty scale: Almstedt at Cert 6, exceeds scale"
   - ED-661: "Ministry Protocol 3 seniority conflict."
-  - ED-662: "Elske residency post-Coup legal implications."
+  - ED-662: "Elske residency post-Graduated-Autonomy legal implications."
   - ED-664: "Advisor-principal confidentiality boundary undefined."
   - ED-665: "Grand Contest as succession trial not in canonical docs."
-  - ED-668: "MS decline rate calibration question."
+  # ED-668: resolved — MS trajectory v1 + ms_budget.md
   - ED-669: "Irreversible institutional precedent persistence across campaigns."
   - ED-704: "Seizure does not apply to Uncontrolled territories."
   - ED-705: "Cohesion -15 = derived of Stability -1, not independent."

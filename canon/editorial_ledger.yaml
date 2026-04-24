@@ -18,7 +18,7 @@ entries:
 
   - id: ED-662
     date: 2026-04-17
-    description: "Elske residency post-Coup legal implications."
+    description: "Elske residency post-Graduated-Autonomy legal implications (originally post-Coup; Coup Counter replaced by Graduated Autonomy 2026-04-19 c0be619f). Question: what happens to Elske residency rights when Löwenritter transitions through autonomy stages?"
     status: open
     severity: P2
 
@@ -36,9 +36,10 @@ entries:
 
   - id: ED-668
     date: 2026-04-17
-    description: "RS decline rate calibration question."
-    status: open
+    description: "MS decline rate calibration — resolved by MS trajectory v1 (f2b5d143) and references/ms_budget.md. Baseline upward pressure ~0.2 MS/year from Warden contribution; Secession War-scale events ~1 MS/year net downward. Terminology updated RS→MS per ED-731."
+    status: resolved
     severity: P2
+    resolution_commit: "f2b5d143 (MS trajectory v1)"
 
   - id: ED-669
     date: 2026-04-17
