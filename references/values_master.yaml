@@ -1,0 +1,3102 @@
+# Valoria Values Master Registry
+# Auto-extracted from params/*.md by tools/extract_values.py
+# Each entry records a named mechanical value with its source location.
+# Conflicts (same name, different values across files) surfaced below.
+
+version: 1
+total_values: 464
+total_conflicts: 5
+
+# ═══ CONFLICTS (same-named values disagree across files) ═══
+conflicts:
+  history_bonus:
+    distinct_formulas:
+      - "history points + 3 (per Stage 2 §4"
+      - "relevant History points + 3"
+    instances:
+      - file: "params/contest.md"
+        section: "params_contest.md — Social Contest System (v2) > History bonus note (PP-234 era)"
+        line: 175
+        raw_value: "history points + 3 (per Stage 2 §4"
+      - file: "params/fieldwork.md"
+        section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Pool Formula (confirmed ×2 per PP-615)"
+        line: 8
+        raw_value: "relevant History points + 3"
+  lock_chronic_drift:
+    distinct_formulas:
+      - "Object=0; Personal=-1/season; Relational=-1→-2 (season 4+);"
+      - "−1 RS/season per territory with active Lock (seasons 1–3); −2 RS/season (seasons 4+)"
+    instances:
+      - file: "params/threadwork.md"
+        section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Gap Self-Closure by Scale (PP-604 — canonical)"
+        line: 124
+        raw_value: "Object=0; Personal=-1/season; Relational=-1→-2 (season 4+);"
+      - file: "params/threadwork_superseded.md"
+        section: "params_threadwork.md — Thread Operations (v2.5) > RS Change Rule (PP-239)"
+        line: 523
+        raw_value: "−1 RS/season per territory with active Lock (seasons 1–3); −2 RS/season (seasons 4+)"
+  standard_loser:
+    distinct_formulas:
+      - "+1 Ob next op, 2 Composure"
+      - "+1 Ob, 2 Comp"
+    instances:
+      - file: "params/threadwork.md"
+        section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6) > Knot Strain"
+        line: 234
+        raw_value: "+1 Ob, 2 Comp"
+      - file: "params/threadwork_superseded.md"
+        section: "params_threadwork.md — Thread Operations (v2.5) > Opposing Operations — Contested Intentionality (PP-632) > Knot Strain"
+        line: 286
+        raw_value: "+1 Ob next op, 2 Composure"
+  mending_success:
+    distinct_formulas:
+      - "+1"
+      - "+1 to +2 RS per operation"
+    instances:
+      - file: "params/threadwork_superseded.md"
+        section: "params_threadwork.md — Thread Operations (v2.5) > Rendering Stability (RS) Track"
+        line: 245
+        raw_value: "+1"
+      - file: "params/threadwork_superseded.md"
+        section: "params_threadwork.md — Thread Operations (v2.5) > RS Change Rule (PP-239)"
+        line: 525
+        raw_value: "+1 to +2 RS per operation"
+  replaced:
+    distinct_formulas:
+      - "** Mass battle RS cost is flat −1 per battle in which any Thread operation occurs (campaign_architecture_v1 §3"
+      - "** With PP-192 struck (flat −1 per battle replaces ×3), the ×3 exclusion question is moot"
+      - "** With PP-192 struck (flat −1 per battle replaces ×3), this patch is moot"
+    instances:
+      - file: "params/threadwork_superseded.md"
+        section: "params_threadwork.md — Thread Operations (v2.5) > P1 Audit Resolutions — AUD-TW-001 (PP-190–PP-195) > PP-192: Mass Battle RS Multiplier [STRUCK — campaign_architecture_v1 §3.1]"
+        line: 355
+        raw_value: "** Mass battle RS cost is flat −1 per battle in which any Thread operation occurs (campaign_architecture_v1 §3"
+      - file: "params/threadwork_superseded.md"
+        section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-225: RS ×3 Multiplier Applies to Gains [STRUCK — campaign_architecture_v1 §3.1]"
+        line: 442
+        raw_value: "** With PP-192 struck (flat −1 per battle replaces ×3), this patch is moot"
+      - file: "params/threadwork_superseded.md"
+        section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-226: Temporal Auto-Effect RS NOT Subject to ×3 [STRUCK — campaign_architecture_v1 §3.1]"
+        line: 446
+        raw_value: "** With PP-192 struck (flat −1 per battle replaces ×3), the ×3 exclusion question is moot"
+
+# ═══ FULL VALUES INDEX (by source file) ═══
+values:
+  "params/campaign_modes.md":
+    - name: "Season pacing"
+      value_raw: "1 season = 1–2 sessions"
+      kind: formula
+      formula: "1 season = 1–2 sessions"
+      section: "params_campaign_modes.md — Campaign Mode Structure > TTRPG Session Structure"
+      line: 20
+    - name: "Opening (duration)"
+      value_raw: "10 min"
+      kind: formula
+      formula: "10 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > TTRPG Session Structure"
+      table_col: duration
+      line: 16
+    - name: "Scene 1 (duration)"
+      value_raw: "60–90 min"
+      kind: formula
+      formula: "60–90 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > TTRPG Session Structure"
+      table_col: duration
+      line: 17
+    - name: "Scene 2 (optional) (duration)"
+      value_raw: "45–60 min"
+      kind: formula
+      formula: "45–60 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > TTRPG Session Structure"
+      table_col: duration
+      line: 18
+    - name: "Accounting (duration)"
+      value_raw: "15 min"
+      kind: formula
+      formula: "15 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > TTRPG Session Structure"
+      table_col: duration
+      line: 19
+    - name: "Setup (duration)"
+      value_raw: "10–15 min"
+      kind: formula
+      formula: "10–15 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > Board Game Session Structure"
+      table_col: duration
+      line: 26
+    - name: "Season loop ×3–5 (duration)"
+      value_raw: "25–40 min each"
+      kind: formula
+      formula: "25–40 min each"
+      section: "params_campaign_modes.md — Campaign Mode Structure > Board Game Session Structure"
+      table_col: duration
+      line: 27
+    - name: "Endgame check (duration)"
+      value_raw: "5 min"
+      kind: formula
+      formula: "5 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > Board Game Session Structure"
+      table_col: duration
+      line: 28
+    - name: "Personal Phase (duration)"
+      value_raw: "60–90 min"
+      kind: formula
+      formula: "60–90 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > Hybrid Session Structure (4 phases, 1 season/session ≈ 2–2.5 hrs)"
+      table_col: duration
+      line: 33
+    - name: "Strategic Phase (duration)"
+      value_raw: "20–30 min"
+      kind: formula
+      formula: "20–30 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > Hybrid Session Structure (4 phases, 1 season/session ≈ 2–2.5 hrs)"
+      table_col: duration
+      line: 34
+    - name: "Cascade Phase (duration)"
+      value_raw: "10–15 min"
+      kind: formula
+      formula: "10–15 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > Hybrid Session Structure (4 phases, 1 season/session ≈ 2–2.5 hrs)"
+      table_col: duration
+      line: 35
+    - name: "Accounting (duration)"
+      value_raw: "5–10 min"
+      kind: formula
+      formula: "5–10 min"
+      section: "params_campaign_modes.md — Campaign Mode Structure > Hybrid Session Structure (4 phases, 1 season/session ≈ 2–2.5 hrs)"
+      table_col: duration
+      line: 36
+    - name: "Rendering Stability (start)"
+      value_raw: "72"
+      kind: numeric
+      numeric: 72
+      section: "params_campaign_modes.md — Campaign Mode Structure > Starting Clock Values (TTRPG Session Zero)"
+      table_col: start
+      line: 45
+    - name: "Theocracy Counter (start)"
+      value_raw: "15"
+      kind: numeric
+      numeric: 15
+      section: "params_campaign_modes.md — Campaign Mode Structure > Starting Clock Values (TTRPG Session Zero)"
+      table_col: start
+      line: 46
+    - name: "Institutional Pressure (start)"
+      value_raw: "20"
+      kind: numeric
+      numeric: 20
+      section: "params_campaign_modes.md — Campaign Mode Structure > Starting Clock Values (TTRPG Session Zero)"
+      table_col: start
+      line: 47
+  "params/combat.md":
+    - name: "Combat Pool"
+      value_raw: "(Agility × 2) + Relevant History + 3 (minimum 5)"
+      kind: formula
+      formula: "(Agility × 2) + Relevant History + 3 (minimum 5)"
+      section: "params_combat.md — Personal Combat > Pool Formula"
+      line: 14
+    - name: "Stamina"
+      value_raw: "Endurance × 5"
+      kind: formula
+      formula: "Endurance × 5"
+      section: "params_combat.md — Personal Combat > Pool Formula"
+      line: 15
+    - name: "Health"
+      value_raw: "(Endurance + 6) × (max Wounds + 1) — total pool, never resets"
+      kind: formula
+      formula: "(Endurance + 6) × (max Wounds + 1) — total pool, never resets"
+      section: "params_combat.md — Personal Combat > Pool Formula"
+      line: 16
+    - name: "Armour wield constraint (PP-232)"
+      value_raw: "** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below"
+      kind: formula
+      formula: "** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below"
+      section: "params_combat.md — Personal Combat > Pool Formula"
+      line: 17
+    - name: "Pool modifiers"
+      value_raw: "- Wounds: −1D per wound (cumulative)"
+      kind: formula
+      formula: "- Wounds: −1D per wound (cumulative)"
+      section: "params_combat.md — Personal Combat > Pool Formula"
+      line: 19
+    - name: "Fibonacci group bonus"
+      value_raw: "+dice to Offence allocation only (see below)"
+      kind: formula
+      formula: "+dice to Offence allocation only (see below)"
+      section: "params_combat.md — Personal Combat > Pool Formula"
+      line: 22
+    - name: "Final Hit TN"
+      value_raw: "7 + reach modifier + weight modifier + type modifier"
+      kind: formula
+      formula: "7 + reach modifier + weight modifier + type modifier"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      line: 33
+    - name: "STR minimums"
+      value_raw: "** Each \"Heavy\" or \"Long\" axis adds +1 to minimum STR"
+      kind: formula
+      formula: "** Each \"Heavy\" or \"Long\" axis adds +1 to minimum STR"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      line: 35
+    - name: "Blade vs Blunt note"
+      value_raw: "** \"Blade\" encompasses cutting, piercing, and stabbing weapons"
+      kind: formula
+      formula: "** \"Blade\" encompasses cutting, piercing, and stabbing weapons"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      line: 45
+    - name: "Environmental approach (melee closing)"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_combat.md — Personal Combat > Ranged Combat Rules (PP-172)"
+      line: 72
+    - name: "Reload (Heavy Piercing crossbow only)"
+      value_raw: "** Full round after each shot"
+      kind: formula
+      formula: "** Full round after each shot"
+      section: "params_combat.md — Personal Combat > Ranged Combat Rules (PP-172)"
+      line: 81
+    - name: "Ranged STR minimums"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_combat.md — Personal Combat > Ranged Combat Rules (PP-172)"
+      line: 83
+    - name: "Damage"
+      value_raw: "net hits + STR + weapon modifier vs armour tier (see table below)"
+      kind: formula
+      formula: "net hits + STR + weapon modifier vs armour tier (see table below)"
+      section: "params_combat.md — Personal Combat > Damage Formula (PP-232)"
+      line: 93
+    - name: "Weapon modifier vs armour tier"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_combat.md — Personal Combat > Damage Formula (PP-232)"
+      line: 99
+    - name: "Declaration order each round"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_combat.md — Personal Combat > Initiative and Pool Allocation (PP-232)"
+      line: 113
+    - name: "Exchange 1 initiative"
+      value_raw: "higher Attunement acts last (highest information)"
+      kind: formula
+      formula: "higher Attunement acts last (highest information)"
+      section: "params_combat.md — Personal Combat > Initiative and Pool Allocation (PP-232)"
+      line: 117
+    - name: "Note (PP-232)"
+      value_raw: "** Replaces prior \"simultaneous reveal\" procedure"
+      kind: formula
+      formula: "** Replaces prior \"simultaneous reveal\" procedure"
+      section: "params_combat.md — Personal Combat > Initiative and Pool Allocation (PP-232)"
+      line: 119
+    - name: "Vitality"
+      value_raw: "Endurance × 10"
+      kind: formula
+      formula: "Endurance × 10"
+      section: "params_combat.md — Personal Combat > Wounds / Incapacitation (PP-232)"
+      line: 133
+    - name: "Wound Interval"
+      value_raw: "Endurance + 6"
+      kind: formula
+      formula: "Endurance + 6"
+      section: "params_combat.md — Personal Combat > Wounds / Incapacitation (PP-232)"
+      line: 135
+    - name: "Per Wound"
+      value_raw: "**−1D Combat Pool only** (no Ob penalty)"
+      kind: formula
+      formula: "**−1D Combat Pool only** (no Ob penalty)"
+      section: "params_combat.md — Personal Combat > Wounds / Incapacitation (PP-232)"
+      line: 138
+    - name: "Wounds computed on the fly"
+      value_raw: "** wounds_taken = floor(total_damage / Wound_Interval)"
+      kind: formula
+      formula: "** wounds_taken = floor(total_damage / Wound_Interval)"
+      section: "params_combat.md — Personal Combat > Wounds / Incapacitation (PP-232)"
+      line: 140
+    - name: "Stamina"
+      value_raw: "Endurance × 5"
+      kind: formula
+      formula: "Endurance × 5"
+      section: "params_combat.md — Personal Combat > Stamina (ED-694)"
+      line: 181
+    - name: "Equal Attunement in Exchange 1"
+      value_raw: "higher Agility acts last"
+      kind: formula
+      formula: "higher Agility acts last"
+      section: "params_combat.md — Personal Combat > PP-239 — Initiative tiebreaker"
+      line: 193
+    - name: "Wound recovery"
+      value_raw: "stabilised characters return after 1-scene rest; wounds clear at session end"
+      kind: formula
+      formula: "stabilised characters return after 1-scene rest; wounds clear at session end"
+      section: "params_combat.md — Personal Combat > PP-284 — Stage 1/2 clarifications"
+      line: 221
+    - name: "Stage 2 trigger"
+      value_raw: "any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0"
+      kind: formula
+      formula: "any attack with ≥1 net hit on downed Stage 1 character; downed = Defence 0"
+      section: "params_combat.md — Personal Combat > PP-284 — Stage 1/2 clarifications"
+      line: 222
+    - name: "Rescue Momentum on declaration"
+      value_raw: "upgraded from +1 to **+2**"
+      kind: formula
+      formula: "upgraded from +1 to **+2**"
+      section: "params_combat.md — Personal Combat > PP-406: Rescue Momentum — ED-290"
+      line: 278
+    - name: "New rule"
+      value_raw: "if a Rescue attempt **fails** AND the rescuer takes a wound from their own engagement in the same round → **+1 Momentum**"
+      kind: formula
+      formula: "if a Rescue attempt **fails** AND the rescuer takes a wound from their own engagement in the same round → **+1 Momentum**"
+      section: "params_combat.md — Personal Combat > PP-407: Martyr Rule — ED-292"
+      line: 282
+    - name: "Yield"
+      value_raw: "** Declared at Phase 1"
+      kind: formula
+      formula: "** Declared at Phase 1"
+      section: "params_combat.md — Personal Combat > Surrender and Disengage (PP-634)"
+      line: 287
+    - name: "Disengage"
+      value_raw: "** Phase 1 declaration, viable exit required"
+      kind: formula
+      formula: "** Phase 1 declaration, viable exit required"
+      section: "params_combat.md — Personal Combat > Surrender and Disengage (PP-634)"
+      line: 289
+    - name: "Out of Breath (Stamina 0)"
+      value_raw: "−2D on Agility disengage roll"
+      kind: formula
+      formula: "−2D on Agility disengage roll"
+      section: "params_combat.md — Personal Combat > Surrender and Disengage (PP-634)"
+      line: 296
+    - name: "Dissolution in combat"
+      value_raw: "** RS cost per threadwork_v30 §5"
+      kind: formula
+      formula: "** RS cost per threadwork_v30 §5"
+      section: "params_combat.md — Personal Combat > Thread Integration Cross-References (F-07)"
+      line: 306
+    - name: "Thread perception"
+      value_raw: "** TS-sensitive observers perceive combat as thread events"
+      kind: formula
+      formula: "** TS-sensitive observers perceive combat as thread events"
+      section: "params_combat.md — Personal Combat > Thread Integration Cross-References (F-07)"
+      line: 307
+    - name: "Reach (modifier)"
+      value_raw: "−1"
+      kind: formula
+      formula: "−1"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: modifier
+      line: 30
+    - name: "Reach (modifier)"
+      value_raw: "+0"
+      kind: formula
+      formula: "+0"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: modifier
+      line: 30
+    - name: "Weight (modifier)"
+      value_raw: "−1"
+      kind: formula
+      formula: "−1"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: modifier
+      line: 31
+    - name: "Weight (modifier)"
+      value_raw: "+0"
+      kind: formula
+      formula: "+0"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: modifier
+      line: 31
+    - name: "Type (modifier)"
+      value_raw: "+0"
+      kind: formula
+      formula: "+0"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: modifier
+      line: 32
+    - name: "Type (modifier)"
+      value_raw: "+1"
+      kind: formula
+      formula: "+1"
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: modifier
+      line: 32
+    - name: "Short Light Blade (tn)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 51
+    - name: "Short Light Blunt (tn)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 52
+    - name: "Short Heavy Blade (tn)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 53
+    - name: "Long Light Blade (tn)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 54
+    - name: "Short Heavy Blunt (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 55
+    - name: "Long Heavy Blade (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 56
+    - name: "Long Light Blunt (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 57
+    - name: "Long Heavy Blunt (tn)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 58
+    - name: "Unarmed (tn)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_combat.md — Personal Combat > Weapon System (PP-232)"
+      table_col: tn
+      line: 59
+    - name: "Eligibility (value)"
+      value_raw: "Rescued actor outnumbered at Phase 1 declaration (Fibonacci condition); assessed at declaration only"
+      kind: formula
+      formula: "Rescued actor outnumbered at Phase 1 declaration (Fibonacci condition); assessed at declaration only"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 227
+    - name: "Commit (value)"
+      value_raw: "Rescuer allocates N Offence dice (minimum 1) to contest; remainder defend own engagement"
+      kind: formula
+      formula: "Rescuer allocates N Offence dice (minimum 1) to contest; remainder defend own engagement"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 228
+    - name: "Contest (value)"
+      value_raw: "N dice TN 7 vs attacker's Offence roll (contested)"
+      kind: formula
+      formula: "N dice TN 7 vs attacker's Offence roll (contested)"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 229
+    - name: "Win condition (value)"
+      value_raw: "Rescuer net ≥ attacker net"
+      kind: formula
+      formula: "Rescuer net ≥ attacker net"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 230
+    - name: "On win (value)"
+      value_raw: "Attack redirects to rescuer; resolves vs armour DR only (contest dice expended)"
+      kind: formula
+      formula: "Attack redirects to rescuer; resolves vs armour DR only (contest dice expended)"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 231
+    - name: "On loss (value)"
+      value_raw: "Attack hits original target; rescuer N dice wasted; own engagement Defence unaffected"
+      kind: formula
+      formula: "Attack hits original target; rescuer N dice wasted; own engagement Defence unaffected"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 232
+    - name: "Weapon speed (value)"
+      value_raw: "TN 5–6 attackers harder to intercept (higher expected net); TN 7–8 easier"
+      kind: formula
+      formula: "TN 5–6 attackers harder to intercept (higher expected net); TN 7–8 easier"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 233
+    - name: "Rescuer payoff (PP-406) (value)"
+      value_raw: "+2 Momentum on successful intercept if struck (≥1 wound) this Rescue round, any source; capped 2/round"
+      kind: formula
+      formula: "+2 Momentum on successful intercept if struck (≥1 wound) this Rescue round, any source; capped 2/round"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 234
+    - name: "Martyr Rule (PP-407) (value)"
+      value_raw: "Failed intercept + rescuer wounded from own engagement same round → +1 Momentum; no wound = no Momentum"
+      kind: formula
+      formula: "Failed intercept + rescuer wounded from own engagement same round → +1 Momentum; no wound = no Momentum"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 235
+    - name: "Rescued actor payoff (value)"
+      value_raw: "Fibonacci exempt + untargetable this round (successful intercept only)"
+      kind: formula
+      formula: "Fibonacci exempt + untargetable this round (successful intercept only)"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 236
+    - name: "Exemption duration (value)"
+      value_raw: "Current round only"
+      kind: formula
+      formula: "Current round only"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 237
+    - name: "Zone (value)"
+      value_raw: "Adjacent zone"
+      kind: formula
+      formula: "Adjacent zone"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 238
+    - name: "Fails silently (value)"
+      value_raw: "Ineligible / no declared attack — action lost"
+      kind: formula
+      formula: "Ineligible / no declared attack — action lost"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 239
+    - name: "Chain block (value)"
+      value_raw: "Rescuers cannot be rescued the same round"
+      kind: formula
+      formula: "Rescuers cannot be rescued the same round"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 240
+    - name: "Incapacitation at P1 (value)"
+      value_raw: "Rescue fails; attack reverts; no Momentum"
+      kind: formula
+      formula: "Rescue fails; attack reverts; no Momentum"
+      section: "params_combat.md — Personal Combat > Rescue — PP-290, PP-292"
+      table_col: value
+      line: 241
+    - name: "Commit (value)"
+      value_raw: "Player chooses N dice (minimum 3) to Offence for feint; remainder to Defence"
+      kind: formula
+      formula: "Player chooses N dice (minimum 3) to Offence for feint; remainder to Defence"
+      section: "params_combat.md — Personal Combat > Feint — PP-294"
+      table_col: value
+      line: 246
+    - name: "Roll (value)"
+      value_raw: "N dice TN 7 vs opponent's Defence pool TN 7 (sequential per initiative)"
+      kind: formula
+      formula: "N dice TN 7 vs opponent's Defence pool TN 7 (sequential per initiative)"
+      section: "params_combat.md — Personal Combat > Feint — PP-294"
+      table_col: value
+      line: 247
+    - name: "Payoff (value)"
+      value_raw: "B loses [margin] dice from total pool next round; scales with margin"
+      kind: formula
+      formula: "B loses [margin] dice from total pool next round; scales with margin"
+      section: "params_combat.md — Personal Combat > Feint — PP-294"
+      table_col: value
+      line: 248
+    - name: "Pool reduction floor (value)"
+      value_raw: "Minimum 1D (B cannot be reduced below 1D by Feint)"
+      kind: formula
+      formula: "Minimum 1D (B cannot be reduced below 1D by Feint)"
+      section: "params_combat.md — Personal Combat > Feint — PP-294"
+      table_col: value
+      line: 249
+    - name: "Non-stacking (value)"
+      value_raw: "Successive Feints reset reduction to current margin; do not accumulate"
+      kind: formula
+      formula: "Successive Feints reset reduction to current margin; do not accumulate"
+      section: "params_combat.md — Personal Combat > Feint — PP-294"
+      table_col: value
+      line: 250
+    - name: "Expires (value)"
+      value_raw: "Pool reduction cancelled if Feinting actor incapacitated before reduction round"
+      kind: formula
+      formula: "Pool reduction cancelled if Feinting actor incapacitated before reduction round"
+      section: "params_combat.md — Personal Combat > Feint — PP-294"
+      table_col: value
+      line: 251
+    - name: "Initiative note (value)"
+      value_raw: "Higher initiative B sees A's commit and can over-allocate Defence; costs B offensive output"
+      kind: formula
+      formula: "Higher initiative B sees A's commit and can over-allocate Defence; costs B offensive output"
+      section: "params_combat.md — Personal Combat > Feint — PP-294"
+      table_col: value
+      line: 252
+  "params/contest.md":
+    - name: "Interaction type derived"
+      value_raw: "same style = REINFORCE, same genre opposite orientation = CLASH, different genre = CROSS"
+      kind: formula
+      formula: "same style = REINFORCE, same genre opposite orientation = CLASH, different genre = CROSS"
+      section: "params_contest.md — Social Contest System (v2) > Argument Styles (PP-235)"
+      line: 43
+    - name: "Exchange 1"
+      value_raw: "higher Attunement acts last (information advantage)"
+      kind: formula
+      formula: "higher Attunement acts last (information advantage)"
+      section: "params_contest.md — Social Contest System (v2) > Initiative"
+      line: 65
+    - name: "Range"
+      value_raw: "0–10"
+      kind: numeric
+      numeric: 0
+      section: "params_contest.md — Social Contest System (v2) > Conviction Track"
+      line: 97
+    - name: "Starting position"
+      value_raw: "GM-set (typical: 5)"
+      kind: formula
+      formula: "GM-set (typical: 5)"
+      section: "params_contest.md — Social Contest System (v2) > Conviction Track"
+      line: 98
+    - name: "Knot buffer"
+      value_raw: "redirect damage to Knot (+1 strain/use)"
+      kind: formula
+      formula: "redirect damage to Knot (+1 strain/use)"
+      section: "params_contest.md — Social Contest System (v2) > Composure and Rattled"
+      line: 114
+    - name: "At 0"
+      value_raw: "Spent (−2D next exchange; opponent +1D)"
+      kind: formula
+      formula: "Spent (−2D next exchange; opponent +1D)"
+      section: "params_contest.md — Social Contest System (v2) > Concentration and Spent"
+      line: 118
+    - name: "Thread co-movement"
+      value_raw: "Memory win → RS +1 (retention invoked)"
+      kind: formula
+      formula: "Memory win → RS +1 (retention invoked)"
+      section: "params_contest.md — Social Contest System (v2) > Post-Contest"
+      line: 135
+    - name: "Shared pool"
+      value_raw: "sum of all coalition members' (Focus+Recall) at setup"
+      kind: formula
+      formula: "sum of all coalition members' (Focus+Recall) at setup"
+      section: "params_contest.md — Social Contest System (v2) > PP-237 — Coalition Concentration shared pool"
+      line: 172
+    - name: "History bonus"
+      value_raw: "history points + 3 (per Stage 2 §4"
+      kind: formula
+      formula: "history points + 3 (per Stage 2 §4"
+      section: "params_contest.md — Social Contest System (v2) > History bonus note (PP-234 era)"
+      line: 175
+    - name: "RS consequence fires automatically when"
+      value_raw: "(a) Contest subject is a Thread-factual claim, OR (b) Thread op used in a Contest exchange"
+      kind: formula
+      formula: "(a) Contest subject is a Thread-factual claim, OR (b) Thread op used in a Contest exchange"
+      section: "params_contest.md — Social Contest System (v2) > Passive RS from Contest — Gate (PP-259)"
+      line: 220
+    - name: "All other subjects"
+      value_raw: "no RS consequence"
+      kind: formula
+      formula: "no RS consequence"
+      section: "params_contest.md — Social Contest System (v2) > Passive RS from Contest — Gate (PP-259)"
+      line: 222
+    - name: "Concentration maximum"
+      value_raw: "Focus + Recall (= starting value at contest setup)"
+      kind: formula
+      formula: "Focus + Recall (= starting value at contest setup)"
+      section: "params_contest.md — Social Contest System (v2) > PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b)"
+      line: 252
+    - name: "Max positional bonus"
+      value_raw: "+5D (genre +1, audience +1, RS targeting +1, Recall +2)"
+      kind: formula
+      formula: "+5D (genre +1, audience +1, RS targeting +1, Recall +2)"
+      section: "params_contest.md — Social Contest System (v2) > Resonant Style Targeting (from npc_behavior_system_v1.md §6) > Stacking"
+      line: 297
+    - name: "Argue (Expert Judge) (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_contest.md — Social Contest System (v2) > Pools"
+      table_col: tn
+      line: 19
+    - name: "Argue (Crowd) (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_contest.md — Social Contest System (v2) > Pools"
+      table_col: tn
+      line: 20
+    - name: "Argue (No Adjudicator) (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_contest.md — Social Contest System (v2) > Pools"
+      table_col: tn
+      line: 21
+    - name: "Argue (Panel) (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_contest.md — Social Contest System (v2) > Pools"
+      table_col: tn
+      line: 22
+    - name: "Appraise (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_contest.md — Social Contest System (v2) > Pools"
+      table_col: tn
+      line: 23
+    - name: "Recall bonus (tn)"
+      value_raw: "—"
+      kind: formula
+      formula: "—"
+      section: "params_contest.md — Social Contest System (v2) > Pools"
+      table_col: tn
+      line: 24
+    - name: "Pre-contest prep (tn)"
+      value_raw: "7 Ob 1"
+      kind: formula
+      formula: "7 Ob 1"
+      section: "params_contest.md — Social Contest System (v2) > Pools"
+      table_col: tn
+      line: 25
+    - name: "Primary genre (bonus)"
+      value_raw: "+1D"
+      kind: formula
+      formula: "+1D"
+      section: "params_contest.md — Social Contest System (v2) > Genre and Orientation Bonus Dice"
+      table_col: bonus
+      line: 48
+    - name: "Audience boost (bonus)"
+      value_raw: "+1D"
+      kind: formula
+      formula: "+1D"
+      section: "params_contest.md — Social Contest System (v2) > Genre and Orientation Bonus Dice"
+      table_col: bonus
+      line: 49
+    - name: "Maximum combined (bonus)"
+      value_raw: "+2D"
+      kind: formula
+      formula: "+2D"
+      section: "params_contest.md — Social Contest System (v2) > Genre and Orientation Bonus Dice"
+      table_col: bonus
+      line: 50
+    - name: "Composure (value)"
+      value_raw: "Composure"
+      kind: formula
+      formula: "Composure"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: value
+      line: 104
+    - name: "Composure (formula)"
+      value_raw: "Charisma × 3"
+      kind: formula
+      formula: "Charisma × 3"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: formula
+      line: 104
+    - name: "Composure (range)"
+      value_raw: "3–21"
+      kind: numeric
+      numeric: 3
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: range
+      line: 104
+    - name: "Charisma modifier (value)"
+      value_raw: "Charisma modifier"
+      kind: formula
+      formula: "Charisma modifier"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: value
+      line: 105
+    - name: "Charisma modifier (formula)"
+      value_raw: "max(0, floor((Cha − 3) ÷ 2))"
+      kind: formula
+      formula: "max(0, floor((Cha − 3) ÷ 2))"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: formula
+      line: 105
+    - name: "Charisma modifier (range)"
+      value_raw: "0–2"
+      kind: numeric
+      numeric: 0
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: range
+      line: 105
+    - name: "Focus defence (value)"
+      value_raw: "Focus defence"
+      kind: formula
+      formula: "Focus defence"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: value
+      line: 106
+    - name: "Focus defence (formula)"
+      value_raw: "floor(Foc ÷ 2)"
+      kind: formula
+      formula: "floor(Foc ÷ 2)"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: formula
+      line: 106
+    - name: "Focus defence (range)"
+      value_raw: "0–3"
+      kind: numeric
+      numeric: 0
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: range
+      line: 106
+    - name: "Concentration (value)"
+      value_raw: "Concentration"
+      kind: formula
+      formula: "Concentration"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: value
+      line: 107
+    - name: "Concentration (formula)"
+      value_raw: "Focus + Recall"
+      kind: formula
+      formula: "Focus + Recall"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: formula
+      line: 107
+    - name: "Concentration (range)"
+      value_raw: "2–14"
+      kind: numeric
+      numeric: 2
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: range
+      line: 107
+    - name: "Read pool (value)"
+      value_raw: "Read pool"
+      kind: formula
+      formula: "Read pool"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: value
+      line: 108
+    - name: "Read pool (formula)"
+      value_raw: "Attunement only"
+      kind: formula
+      formula: "Attunement only"
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: formula
+      line: 108
+    - name: "Read pool (range)"
+      value_raw: "1–7"
+      kind: numeric
+      numeric: 1
+      section: "params_contest.md — Social Contest System (v2) > Derived Values"
+      table_col: range
+      line: 108
+  "params/core.md":
+    - name: "Thread operations"
+      value_raw: "TN 7 standard; TN 8 for Locking, Dissolution, and Past-Oriented Pulling"
+      kind: formula
+      formula: "TN 7 standard; TN 8 for Locking, Dissolution, and Past-Oriented Pulling"
+      section: "params_core.md — Core Dice Engine > TN Values"
+      line: 28
+    - name: "Ob minimum"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_core.md — Core Dice Engine > Obstacle Scale"
+      line: 40
+    - name: "Range"
+      value_raw: "0–4"
+      kind: numeric
+      numeric: 0
+      section: "params_core.md — Core Dice Engine > Momentum"
+      line: 58
+    - name: "Spend"
+      value_raw: "1 Momentum = 1 automatic success (non-Thread rolls only)"
+      kind: formula
+      formula: "1 Momentum = 1 automatic success (non-Thread rolls only)"
+      section: "params_core.md — Core Dice Engine > Momentum"
+      line: 60
+    - name: "Momentum range"
+      value_raw: "0–4"
+      kind: numeric
+      numeric: 0
+      section: "params_core.md — Core Dice Engine > Momentum Carry Rule (PP-255)"
+      line: 64
+    - name: "Between-scene carry within a session"
+      value_raw: "** Momentum carries between scenes within the same session"
+      kind: formula
+      formula: "** Momentum carries between scenes within the same session"
+      section: "params_core.md — Core Dice Engine > Momentum Carry Rule (PP-255)"
+      line: 65
+    - name: "Hoarding cost"
+      value_raw: "** Momentum cannot be banked across sessions"
+      kind: formula
+      formula: "** Momentum cannot be banked across sessions"
+      section: "params_core.md — Core Dice Engine > Momentum Carry Rule (PP-255)"
+      line: 66
+    - name: "TTRPG"
+      value_raw: "−1 RS per 4-season year, applied at Year-End Accounting"
+      kind: formula
+      formula: "−1 RS per 4-season year, applied at Year-End Accounting"
+      section: "params_core.md — Core Dice Engine > RS Baseline Decay (PP-255)"
+      line: 70
+    - name: "Board Game"
+      value_raw: "−1 RS per Year-End step"
+      kind: formula
+      formula: "−1 RS per Year-End step"
+      section: "params_core.md — Core Dice Engine > RS Baseline Decay (PP-255)"
+      line: 71
+    - name: "Full multi-TN tables"
+      value_raw: "references/tn_full_tables"
+      kind: formula
+      formula: "references/tn_full_tables"
+      section: "params_core.md — Core Dice Engine > Quick Reference — P(≥N net), TN 7"
+      line: 95
+    - name: "Range"
+      value_raw: "**1–7** (all attributes)"
+      kind: formula
+      formula: "**1–7** (all attributes)"
+      section: "params_core.md — Core Dice Engine > Attributes"
+      line: 99
+    - name: "Bonds (Bon)"
+      value_raw: "** Governs relational depth in two simultaneous directions: (1) Disposition ceiling = Bonds"
+      kind: formula
+      formula: "** Governs relational depth in two simultaneous directions: (1) Disposition ceiling = Bonds"
+      section: "params_core.md — Core Dice Engine > Attributes"
+      line: 109
+    - name: "Knot Formation (AUD-NPC-01)"
+      value_raw: "** Disposition +5 + TS ≥ 30 (either party) + Knot capacity available → Spirit pool (Spirit×2) vs TN 7, Ob 2"
+      kind: formula
+      formula: "** Disposition +5 + TS ≥ 30 (either party) + Knot capacity available → Spirit pool (Spirit×2) vs TN 7, Ob 2"
+      section: "params_core.md — Core Dice Engine > Attributes"
+      line: 111
+    - name: "Recall (Rec)"
+      value_raw: "** Knowledge, experience, retention"
+      kind: formula
+      formula: "** Knowledge, experience, retention"
+      section: "params_core.md — Core Dice Engine > Attributes"
+      line: 113
+    - name: "Focus (Foc)"
+      value_raw: "** Concentration, discipline, precision under pressure"
+      kind: formula
+      formula: "** Concentration, discipline, precision under pressure"
+      section: "params_core.md — Core Dice Engine > Attributes"
+      line: 115
+    - name: "Die shows 10"
+      value_raw: "net = 1 (auto) + 2 (roll) = 3 → may reach Overwhelming if ≥ 2×Ob AND ≥ 3 net"
+      kind: formula
+      formula: "net = 1 (auto) + 2 (roll) = 3 → may reach Overwhelming if ≥ 2×Ob AND ≥ 3 net"
+      section: "params_core.md — Core Dice Engine > Momentum Auto-Success Interaction (PP-243)"
+      line: 139
+    - name: "Die shows 1"
+      value_raw: "net = 1 (auto) − 1 (roll) = 0 → Failure at Ob 1"
+      kind: formula
+      formula: "net = 1 (auto) − 1 (roll) = 0 → Failure at Ob 1"
+      section: "params_core.md — Core Dice Engine > Momentum Auto-Success Interaction (PP-243)"
+      line: 141
+    - name: "Definition"
+      value_raw: "** The character's operative cosmological framework"
+      kind: formula
+      formula: "** The character's operative cosmological framework"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 147
+    - name: "Who has it"
+      value_raw: "** All player characters"
+      kind: formula
+      formula: "** All player characters"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 159
+    - name: "Starting value"
+      value_raw: "** Assigned at creation by background"
+      kind: formula
+      formula: "** Assigned at creation by background"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 161
+    - name: "Movement toward 5 (Solmund reinforcement)"
+      value_raw: "** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1)"
+      kind: formula
+      formula: "** Cardinal absolution (once/arc, +1); sustained orthodox community at Year-End if character present (+1); Overwhelming Church Tribunal victory — defendant/witness who accepts verdict (+1)"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 165
+    - name: "Mechanical effects"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 167
+    - name: "Certainty 5"
+      value_raw: "+1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds)"
+      kind: formula
+      formula: "+1D in Church/orthodox contexts; first Coherence loss per session nullified (doctrine scaffolds)"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 169
+    - name: "Certainty 0"
+      value_raw: "−2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification"
+      kind: formula
+      formula: "−2D in Church/orthodox contexts; +1D among Thread-aware communities; Coherence recovery +2 per long rest; TS growth +1 per major Thread encounter (GM-called); arch-heretic classification"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 171
+    - name: "Church interaction by level"
+      value_raw: "** Certainty 5 → Heresy Investigation Ob +2"
+      kind: formula
+      formula: "** Certainty 5 → Heresy Investigation Ob +2"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 172
+    - name: "Relationships"
+      value_raw: "** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth)"
+      kind: formula
+      formula: "** Independent of Coherence (operational resource) and Thread Sensitivity (perceptual depth)"
+      section: "params_core.md — Core Dice Engine > Certainty Track (PP-551 — redesigned from PP-289)"
+      line: 174
+    - name: "Cover (derived)"
+      value_raw: "Cognition + most relevant History for concealment/tradecraft"
+      kind: formula
+      formula: "Cognition + most relevant History for concealment/tradecraft"
+      section: "params_core.md — Core Dice Engine > Attribute Roles — Fieldwork (PP-628, from fieldwork_v30.md §2.1)"
+      line: 214
+    - name: "Controlled (tn)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_core.md — Core Dice Engine > TN Values"
+      table_col: tn
+      line: 25
+    - name: "Standard (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_core.md — Core Dice Engine > TN Values"
+      table_col: tn
+      line: 26
+    - name: "Desperate (tn)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_core.md — Core Dice Engine > TN Values"
+      table_col: tn
+      line: 27
+    - name: "20 (ob)"
+      value_raw: "20"
+      kind: numeric
+      numeric: 20
+      section: "params_core.md — Core Dice Engine > Obstacle Scale"
+      table_col: ob
+      line: 39
+    - name: "Vitality (formula)"
+      value_raw: "Endurance × 10"
+      kind: formula
+      formula: "Endurance × 10"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 121
+    - name: "Vitality (range)"
+      value_raw: "10–70"
+      kind: numeric
+      numeric: 10
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 121
+    - name: "Stamina (formula)"
+      value_raw: "Endurance × 5"
+      kind: formula
+      formula: "Endurance × 5"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 122
+    - name: "Stamina (range)"
+      value_raw: "5–35"
+      kind: numeric
+      numeric: 5
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 122
+    - name: "Composure (formula)"
+      value_raw: "Charisma × 3"
+      kind: formula
+      formula: "Charisma × 3"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 123
+    - name: "Composure (range)"
+      value_raw: "3–21"
+      kind: numeric
+      numeric: 3
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 123
+    - name: "Combat Pool (formula)"
+      value_raw: "(Agility × 2) + weapon History (points + 3)"
+      kind: formula
+      formula: "(Agility × 2) + weapon History (points + 3)"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 124
+    - name: "Combat Pool (range)"
+      value_raw: "min 5"
+      kind: formula
+      formula: "min 5"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 124
+    - name: "Thread Fatigue (formula)"
+      value_raw: "Spirit × 5 (threshold)"
+      kind: formula
+      formula: "Spirit × 5 (threshold)"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 125
+    - name: "Thread Fatigue (range)"
+      value_raw: "5–35"
+      kind: numeric
+      numeric: 5
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 125
+    - name: "Certainty (formula)"
+      value_raw: "5 (starting, varies by background)"
+      kind: formula
+      formula: "5 (starting, varies by background)"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 126
+    - name: "Certainty (range)"
+      value_raw: "0–5"
+      kind: numeric
+      numeric: 0
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 126
+    - name: "Coherence (formula)"
+      value_raw: "10 (starting); countdown to 0"
+      kind: formula
+      formula: "10 (starting); countdown to 0"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 127
+    - name: "Coherence (range)"
+      value_raw: "0–10"
+      kind: numeric
+      numeric: 0
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 127
+    - name: "Resolve (formula)"
+      value_raw: "Spirit"
+      kind: formula
+      formula: "Spirit"
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: formula
+      line: 128
+    - name: "Resolve (range)"
+      value_raw: "1–7"
+      kind: numeric
+      numeric: 1
+      section: "params_core.md — Core Dice Engine > Derived Scores"
+      table_col: range
+      line: 128
+  "params/factions_personal.md":
+    - name: "NPC factions"
+      value_raw: "Pool = faction's relevant stat"
+      kind: formula
+      formula: "Pool = faction's relevant stat"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Domain Action Resolution"
+      line: 34
+    - name: "Anti-death-spiral floor"
+      value_raw: "Stability ≤ 2 → treat as Ob 4 regardless of actual pressure"
+      kind: formula
+      formula: "Stability ≤ 2 → treat as Ob 4 regardless of actual pressure"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Stability Check — Seasonal Accounting"
+      line: 80
+    - name: "Piety Domain Action (1/season)"
+      value_raw: "Mandate pool, Ob 2"
+      kind: formula
+      formula: "Mandate pool, Ob 2"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Theocracy Counter Generation"
+      line: 90
+    - name: "Crown (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 50
+    - name: "Church (ob)"
+      value_raw: "vs target Mandate (or Ob 2 if non-leader)"
+      kind: formula
+      formula: "vs target Mandate (or Ob 2 if non-leader)"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 51
+    - name: "Hafenmark (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 52
+    - name: "Varfell (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 53
+    - name: "Guilds (ob)"
+      value_raw: "vs target Wealth"
+      kind: formula
+      formula: "vs target Wealth"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 54
+    - name: "Niflhel Quiet (Intel) (ob)"
+      value_raw: "vs target Intel"
+      kind: formula
+      formula: "vs target Intel"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 55
+    - name: "Niflhel Quiet (Sabotage) (ob)"
+      value_raw: "vs target Stability"
+      kind: formula
+      formula: "vs target Stability"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 56
+    - name: "Niflhel Quiet (Assassination) (ob)"
+      value_raw: "vs target Intel +2"
+      kind: formula
+      formula: "vs target Intel +2"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 57
+    - name: "Revolution (ob)"
+      value_raw: "TT ÷ 20 (round up)"
+      kind: formula
+      formula: "TT ÷ 20 (round up)"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 58
+    - name: "Löwenritter (ob)"
+      value_raw: "threshold"
+      kind: formula
+      formula: "threshold"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Unique Actions"
+      table_col: ob
+      line: 59
+    - name: "5D (Mandate) (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Probability Reference (verified by SIM-FAC-01/02)"
+      table_col: ob
+      line: 64
+    - name: "6D (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Probability Reference (verified by SIM-FAC-01/02)"
+      table_col: ob
+      line: 65
+    - name: "4D (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Probability Reference (verified by SIM-FAC-01/02)"
+      table_col: ob
+      line: 66
+    - name: "5D (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Probability Reference (verified by SIM-FAC-01/02)"
+      table_col: ob
+      line: 67
+    - name: "5D (ob)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Probability Reference (verified by SIM-FAC-01/02)"
+      table_col: ob
+      line: 68
+    - name: "Quiet season (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Stability Check — Seasonal Accounting"
+      table_col: ob
+      line: 75
+    - name: "One active threat (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Stability Check — Seasonal Accounting"
+      table_col: ob
+      line: 76
+    - name: "Two concurrent threats (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Stability Check — Seasonal Accounting"
+      table_col: ob
+      line: 77
+    - name: "Active attack on Mandate/Wealth (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Stability Check — Seasonal Accounting"
+      table_col: ob
+      line: 78
+    - name: "Campaign-level crisis (ob)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Stability Check — Seasonal Accounting"
+      table_col: ob
+      line: 79
+  "params/fieldwork.md":
+    - name: "Fieldwork Pool"
+      value_raw: "(Primary Attribute × 2) + History bonus"
+      kind: formula
+      formula: "(Primary Attribute × 2) + History bonus"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Pool Formula (confirmed ×2 per PP-615)"
+      line: 7
+    - name: "History bonus"
+      value_raw: "relevant History points + 3"
+      kind: formula
+      formula: "relevant History points + 3"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Pool Formula (confirmed ×2 per PP-615)"
+      line: 8
+    - name: "Pool minimum"
+      value_raw: "5D (Attribute 1, no History: (1×2) + 3 = 5)"
+      kind: formula
+      formula: "5D (Attribute 1, no History: (1×2) + 3 = 5)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Pool Formula (confirmed ×2 per PP-615)"
+      line: 10
+    - name: "Pool maximum"
+      value_raw: "24D (Attribute 7, History 7: (7×2) + (7+3) = 24)"
+      kind: formula
+      formula: "24D (Attribute 7, History 7: (7×2) + (7+3) = 24)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Pool Formula (confirmed ×2 per PP-615)"
+      line: 11
+    - name: "Multi-character"
+      value_raw: "leader + max 2 assistants"
+      kind: formula
+      formula: "leader + max 2 assistants"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Exploration — Discovery Procedure"
+      line: 56
+    - name: "Progress by degree"
+      value_raw: "Failure +0, Partial +1, Success +2, Overwhelming +3"
+      kind: formula
+      formula: "Failure +0, Partial +1, Success +2, Overwhelming +3"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Investigation — Evidence Track"
+      line: 74
+    - name: "Exposure by degree"
+      value_raw: "Failure +2, Partial +1, Success +0, Overwhelming −1"
+      kind: formula
+      formula: "Failure +2, Partial +1, Success +0, Overwhelming −1"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Investigation — Evidence Track"
+      line: 76
+    - name: "Clears"
+      value_raw: "any Success/Overwhelming, or season change"
+      kind: formula
+      formula: "any Success/Overwhelming, or season change"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Desperate Trail (Fail Forward)"
+      line: 84
+    - name: "Thread-verified evidence"
+      value_raw: "half value (round down, min 0) for non-sensitive Evidence Track"
+      kind: formula
+      formula: "half value (round down, min 0) for non-sensitive Evidence Track"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Evidence Quality Tags"
+      line: 96
+    - name: "Evidence"
+      value_raw: "+2 (Success), +3 (Overwhelming)"
+      kind: formula
+      formula: "+2 (Success), +3 (Overwhelming)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Thread-Read (Perceptive Leap)"
+      line: 104
+    - name: "Mending arc"
+      value_raw: "severity reduction yields +1/+2/+2/+3 across four reductions"
+      kind: formula
+      formula: "severity reduction yields +1/+2/+2/+3 across four reductions"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Thread Operation Investigative Yield (contextual — GM determines)"
+      line: 116
+    - name: "Ob rule"
+      value_raw: "effective Ob = max(1, base Ob − Disposition)"
+      kind: formula
+      formula: "effective Ob = max(1, base Ob − Disposition)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      line: 130
+    - name: "Same birthplace/cultural region"
+      value_raw: "+0"
+      kind: formula
+      formula: "+0"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      line: 149
+    - name: "Same occupation/guild/trade"
+      value_raw: "+0"
+      kind: formula
+      formula: "+0"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      line: 150
+    - name: "Same faction (loose)"
+      value_raw: "+0"
+      kind: formula
+      formula: "+0"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      line: 151
+    - name: "Shift by degree"
+      value_raw: "Failure −1, Partial +0, Success +1, Overwhelming +2"
+      kind: formula
+      formula: "Failure −1, Partial +0, Success +1, Overwhelming +2"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      line: 155
+    - name: "Decay"
+      value_raw: "> +2 decays −1/season without contact"
+      kind: formula
+      formula: "> +2 decays −1/season without contact"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      line: 157
+    - name: "Post-Contest"
+      value_raw: "winner Disposition +1 with adjudicator, loser −1"
+      kind: formula
+      formula: "winner Disposition +1 with adjudicator, loser −1"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      line: 159
+    - name: "Tiers"
+      value_raw: "Close (5pts) / Medium (2pts) / Loose (1pt)"
+      kind: formula
+      formula: "Close (5pts) / Medium (2pts) / Loose (1pt)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot System (PP-632 — see params/threadwork.md for full mechanics)"
+      line: 167
+    - name: "Full mechanics"
+      value_raw: "params/threadwork"
+      kind: formula
+      formula: "params/threadwork"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot System (PP-632 — see params/threadwork.md for full mechanics)"
+      line: 173
+    - name: "Trigger"
+      value_raw: "GM-called when Belief contradicts genuine engagement"
+      kind: formula
+      formula: "GM-called when Belief contradicts genuine engagement"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Sincerity Gate"
+      line: 176
+    - name: "Cost"
+      value_raw: "+1 Knot strain per use"
+      kind: formula
+      formula: "+1 Knot strain per use"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot-Mediated Remote Thread-Read (§2.6)"
+      line: 185
+    - name: "Detection"
+      value_raw: "Knotted party Spirit TN 7, Ob = practitioner Cog ÷ 2 (min 1)"
+      kind: formula
+      formula: "Knotted party Spirit TN 7, Ob = practitioner Cog ÷ 2 (min 1)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Knot-Mediated Remote Thread-Read (§2.6)"
+      line: 186
+    - name: "Evidence Track"
+      value_raw: "player-level knowledge"
+      kind: formula
+      formula: "player-level knowledge"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Threadcut Being Social (§2.8)"
+      line: 194
+    - name: "Reduction"
+      value_raw: "concealment (Cog ×2, Ob 2) −2; leave territory reset; season reset; cover identity −1/scene; faction support −2/season"
+      kind: formula
+      formula: "concealment (Cog ×2, Ob 2) −2; leave territory reset; season reset; cover identity −1/scene; faction support −2/season"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Exposure Sources"
+      line: 219
+    - name: "Rattled"
+      value_raw: "+1 Ob per mark to social fieldwork actions"
+      kind: formula
+      formula: "+1 Ob per mark to social fieldwork actions"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Wounds and Fieldwork (§2.2)"
+      line: 229
+    - name: "Wounds and Thread ops"
+      value_raw: "+1 Ob to Leap-based Thread ops (concentration, not pool penalty)"
+      kind: formula
+      formula: "+1 Ob to Leap-based Thread ops (concentration, not pool penalty)"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Wounds and Fieldwork (§2.2)"
+      line: 230
+    - name: "Simple (threshold)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Investigation — Evidence Track"
+      table_col: threshold
+      line: 71
+    - name: "Complex (threshold)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Investigation — Evidence Track"
+      table_col: threshold
+      line: 72
+    - name: "Structural (threshold)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Investigation — Evidence Track"
+      table_col: threshold
+      line: 73
+    - name: "−4 (value)"
+      value_raw: "−4"
+      kind: formula
+      formula: "−4"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 137
+    - name: "−3 (value)"
+      value_raw: "−3"
+      kind: formula
+      formula: "−3"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 138
+    - name: "−2 (value)"
+      value_raw: "−2"
+      kind: formula
+      formula: "−2"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 139
+    - name: "−1 (value)"
+      value_raw: "−1"
+      kind: formula
+      formula: "−1"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 140
+    - name: "+1 (value)"
+      value_raw: "+1"
+      kind: formula
+      formula: "+1"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 142
+    - name: "+2 (value)"
+      value_raw: "+2"
+      kind: formula
+      formula: "+2"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 143
+    - name: "+3 (value)"
+      value_raw: "+3"
+      kind: formula
+      formula: "+3"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 144
+    - name: "+4 (value)"
+      value_raw: "+4"
+      kind: formula
+      formula: "+4"
+      section: "params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing) > Disposition Track (PP-632)"
+      table_col: value
+      line: 145
+  "params/mass_combat.md":
+    - name: "Group 1"
+      value_raw: "** Size 5, Command 5, Discipline 5, Power 3 (Heavy Infantry), DR 2"
+      kind: formula
+      formula: "** Size 5, Command 5, Discipline 5, Power 3 (Heavy Infantry), DR 2"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Worked example"
+      line: 80
+    - name: "Total Health"
+      value_raw: "5×7 = 35"
+      kind: formula
+      formula: "5×7 = 35"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Worked example"
+      line: 83
+    - name: "Damage/success"
+      value_raw: "1+3 = 4"
+      kind: formula
+      formula: "1+3 = 4"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Worked example"
+      line: 84
+    - name: "Group 2"
+      value_raw: "** Size 6, Command 3, Discipline 3, Power 1 (Light Infantry), DR 0"
+      kind: formula
+      formula: "** Size 6, Command 3, Discipline 3, Power 1 (Light Infantry), DR 0"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Worked example"
+      line: 85
+    - name: "Total Health"
+      value_raw: "6×3 = 18  ← full Size used"
+      kind: formula
+      formula: "6×3 = 18  ← full Size used"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Worked example"
+      line: 89
+    - name: "Damage/success"
+      value_raw: "1+1 = 2"
+      kind: formula
+      formula: "1+1 = 2"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Worked example"
+      line: 90
+    - name: "Command"
+      value_raw: "⌈(Charisma + Cognition) ÷ 2⌉"
+      kind: formula
+      formula: "⌈(Charisma + Cognition) ÷ 2⌉"
+      section: "params_mass_combat.md — Mass Battle (v3) > Command [PROPOSAL] (PP-232)"
+      line: 135
+    - name: "Governs"
+      value_raw: "sub-unit limit (max = Command; TTRPG hard cap 3); Discipline ceiling; Morale floor (= 1 while general present); tactic execution (Command dice vs Ob)"
+      kind: formula
+      formula: "sub-unit limit (max = Command; TTRPG hard cap 3); Discipline ceiling; Morale floor (= 1 while general present); tactic execution (Command dice vs Ob)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Command [PROPOSAL] (PP-232)"
+      line: 136
+    - name: "Restoration"
+      value_raw: "Reform Phase only (not engaged), +1 Discipline, Command ≥ current Discipline + 1"
+      kind: formula
+      formula: "Reform Phase only (not engaged), +1 Discipline, Command ≥ current Discipline + 1"
+      section: "params_mass_combat.md — Mass Battle (v3) > Discipline Degradation (Deterministic) [PROPOSAL] (PP-232, PP-251, PP-502)"
+      line: 150
+    - name: "Artillery sight-line rule (PP-106)"
+      value_raw: "** HBl units require clear line of sight to target"
+      kind: formula
+      formula: "** HBl units require clear line of sight to target"
+      section: "params_mass_combat.md — Mass Battle (v3) > DR Table — Mass Combat (PP-104: Projectile split into 4 categories) > Weapon Effectiveness (combined)"
+      line: 214
+    - name: "Volley Phase pool"
+      value_raw: "Power stat (1–7) rolled at TN 6"
+      kind: formula
+      formula: "Power stat (1–7) rolled at TN 6"
+      section: "params_mass_combat.md — Mass Battle (v3) > Volley Phase Pool (PP-503) [PROVISIONAL]"
+      line: 233
+    - name: "Size loss"
+      value_raw: "max(0, net hits + Dmg Mod − DR)"
+      kind: formula
+      formula: "max(0, net hits + Dmg Mod − DR)"
+      section: "params_mass_combat.md — Mass Battle (v3) > RESOLVED PARAMS GAPS (PP-104, 2026-04-02) > Damage Formula — unit Strength loss (PARAMS-GAP-05 resolved)"
+      line: 282
+    - name: "HBl (Artillery/siege)"
+      value_raw: "uses PP-091 Bombard (flat Size damage)"
+      kind: formula
+      formula: "uses PP-091 Bombard (flat Size damage)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Ranged DR Table (Volley Phase) — PP-188"
+      line: 310
+    - name: "Crossbow/HP unit effectiveness at CP4"
+      value_raw: "vs None=1"
+      kind: formula
+      formula: "vs None=1"
+      section: "params_mass_combat.md — Mass Battle (v3) > Ranged DR Table (Volley Phase) — PP-188"
+      line: 314
+    - name: "HBl (lead sling) unit effectiveness at CP4"
+      value_raw: "vs None=1"
+      kind: formula
+      formula: "vs None=1"
+      section: "params_mass_combat.md — Mass Battle (v3) > Ranged DR Table (Volley Phase) — PP-188"
+      line: 315
+    - name: "Formula"
+      value_raw: "floor(faction Military / 2)"
+      kind: formula
+      formula: "floor(faction Military / 2)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Commander Bonus (PP-190)"
+      line: 365
+    - name: "Commander bonus"
+      value_raw: "Military 5 → floor(5/2) = 2 → +2D"
+      kind: formula
+      formula: "Military 5 → floor(5/2) = 2 → +2D"
+      section: "params_mass_combat.md — Mass Battle (v3) > Altonian Invasion Units (PP-193, ED-036 resolved 2026-04-03)"
+      line: 376
+    - name: "Deployment trigger"
+      value_raw: "Institutional Pressure ≥ 75 (CLOCK-EDIT-01)"
+      kind: formula
+      formula: "Institutional Pressure ≥ 75 (CLOCK-EDIT-01)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Altonian Invasion Units (PP-193, ED-036 resolved 2026-04-03)"
+      line: 378
+    - name: "Finding from bg_v05 simulation"
+      value_raw: "Phase 1 planning ~8 min/player with reference cards; ~12-15 min without"
+      kind: formula
+      formula: "Phase 1 planning ~8 min/player with reference cards; ~12-15 min without"
+      section: "params_mass_combat.md — Mass Battle (v3) > Planning Phase Time (PP-202 — ED-083)"
+      line: 384
+    - name: "Crown"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_mass_combat.md — Mass Battle (v3) > Faction Tactic Cards — Confirmed (ED-019 resolved 2026-04-03)"
+      line: 393
+    - name: "Royal Authority"
+      value_raw: "all Crown units +1 Martial this battle"
+      kind: formula
+      formula: "all Crown units +1 Martial this battle"
+      section: "params_mass_combat.md — Mass Battle (v3) > Faction Tactic Cards — Confirmed (ED-019 resolved 2026-04-03)"
+      line: 395
+    - name: "Church"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_mass_combat.md — Mass Battle (v3) > Faction Tactic Cards — Confirmed (ED-019 resolved 2026-04-03)"
+      line: 397
+    - name: "Templar Vanguard"
+      value_raw: "Knights Templar units +2 Discipline this battle"
+      kind: formula
+      formula: "Knights Templar units +2 Discipline this battle"
+      section: "params_mass_combat.md — Mass Battle (v3) > Faction Tactic Cards — Confirmed (ED-019 resolved 2026-04-03)"
+      line: 399
+    - name: "Reform requires"
+      value_raw: "Command ≥ current Discipline + 1 AND Command ≥ 2"
+      kind: formula
+      formula: "Command ≥ current Discipline + 1 AND Command ≥ 2"
+      section: "params_mass_combat.md — Mass Battle (v3) > PP-241 — Reform condition"
+      line: 408
+    - name: "TTRPG Dmg Mod"
+      value_raw: "⌈BG Dmg Mod ÷ 2⌉"
+      kind: formula
+      formula: "⌈BG Dmg Mod ÷ 2⌉"
+      section: "params_mass_combat.md — Mass Battle (v3) > PP-245 — TTRPG Dmg Mod (resolves SIM-DEBT-05)"
+      line: 411
+    - name: "Pursuing-side Discipline check"
+      value_raw: "Ob 1"
+      kind: formula
+      formula: "Ob 1"
+      section: "params_mass_combat.md — Mass Battle (v3) > PP-256 — Feigned Retreat Discipline check Ob"
+      line: 432
+    - name: "ED-094 Crossbow reload"
+      value_raw: "** HP unit fires every other Phase 5 as a unit"
+      kind: formula
+      formula: "** HP unit fires every other Phase 5 as a unit"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-094–098 Resolution (PP-301) — Mass Combat Ranged Consolidated [FLAGGED]"
+      line: 456
+    - name: "ED-095 Archers in melee"
+      value_raw: "** Power −1 in Phase 5 if caught in melee (improvised, no weapon advantage)"
+      kind: formula
+      formula: "** Power −1 in Phase 5 if caught in melee (improvised, no weapon advantage)"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-094–098 Resolution (PP-301) — Mass Combat Ranged Consolidated [FLAGGED]"
+      line: 457
+    - name: "ED-096 Ranged DR scaling"
+      value_raw: "** Personal DR values apply 1:1 at mass scale"
+      kind: formula
+      formula: "** Personal DR values apply 1:1 at mass scale"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-094–098 Resolution (PP-301) — Mass Combat Ranged Consolidated [FLAGGED]"
+      line: 458
+    - name: "ED-097 HP effective Power"
+      value_raw: "** Power = 2 when ready; Power = 0 when reloading"
+      kind: formula
+      formula: "** Power = 2 when ready; Power = 0 when reloading"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-094–098 Resolution (PP-301) — Mass Combat Ranged Consolidated [FLAGGED]"
+      line: 459
+    - name: "ED-098 Cover timing"
+      value_raw: "** Must declare in Phase 1"
+      kind: formula
+      formula: "** Must declare in Phase 1"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-094–098 Resolution (PP-301) — Mass Combat Ranged Consolidated [FLAGGED]"
+      line: 460
+    - name: "ED-121 Paradox window scene"
+      value_raw: "** Battle-turn = scene"
+      kind: formula
+      formula: "** Battle-turn = scene"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-121–125 Resolution (PP-305) — Mass Battle Thread Definitions [FLAGGED]"
+      line: 465
+    - name: "ED-122 Offensive Lock"
+      value_raw: "** PP-222 confirmed — blocks Discipline degradation on locked unit for lock duration"
+      kind: formula
+      formula: "** PP-222 confirmed — blocks Discipline degradation on locked unit for lock duration"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-121–125 Resolution (PP-305) — Mass Battle Thread Definitions [FLAGGED]"
+      line: 466
+    - name: "ED-123 RS thresholds"
+      value_raw: "** Check at Phase 7 Reform (end of each battle-turn)"
+      kind: formula
+      formula: "** Check at Phase 7 Reform (end of each battle-turn)"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-121–125 Resolution (PP-305) — Mass Battle Thread Definitions [FLAGGED]"
+      line: 467
+    - name: "ED-167 CF wound on Zoom Out"
+      value_raw: "** Wound persists"
+      kind: formula
+      formula: "** Wound persists"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-167–168 Resolution (PP-333) — Zoom Out CF Consequences [FLAGGED]"
+      line: 484
+    - name: "ED-168 CF killed between Zoom Ins"
+      value_raw: "** PC-B's Zoom In proceeds without PC-A"
+      kind: formula
+      formula: "** PC-B's Zoom In proceeds without PC-A"
+      section: "params_mass_combat.md — Mass Battle (v3) > ED-167–168 Resolution (PP-333) — Zoom Out CF Consequences [FLAGGED]"
+      line: 485
+    - name: "Both armies uncommanded"
+      value_raw: "PP-273 1D minimum, Line formation, no tactics"
+      kind: formula
+      formula: "PP-273 1D minimum, Line formation, no tactics"
+      section: "params_mass_combat.md — Mass Battle (v3) > Bilateral General Personal Combat (PP-506) [PROVISIONAL]"
+      line: 512
+    - name: "All units"
+      value_raw: "Discipline Ob 1 check"
+      kind: formula
+      formula: "Discipline Ob 1 check"
+      section: "params_mass_combat.md — Mass Battle (v3) > Stalemate Break (PP-297 — canonical)"
+      line: 527
+    - name: "Effective Size contribution to pool (value)"
+      value_raw: "min(Size, Command)"
+      kind: formula
+      formula: "min(Size, Command)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 63
+    - name: "Effective Discipline contribution to Health (value)"
+      value_raw: "min(Discipline, Command)"
+      kind: formula
+      formula: "min(Discipline, Command)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 64
+    - name: "Health per Size (H) (value)"
+      value_raw: "min(Discipline, Command) + DR"
+      kind: formula
+      formula: "min(Discipline, Command) + DR"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 65
+    - name: "Total Health (value)"
+      value_raw: "Size × H"
+      kind: formula
+      formula: "Size × H"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 66
+    - name: "Pool (value)"
+      value_raw: "min(Size, Command) + Command"
+      kind: formula
+      formula: "min(Size, Command) + Command"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 67
+    - name: "Damage per success (value)"
+      value_raw: "1 + Power"
+      kind: formula
+      formula: "1 + Power"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 68
+    - name: "Damage dealt (value)"
+      value_raw: "successes × (1 + Power)"
+      kind: formula
+      formula: "successes × (1 + Power)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 69
+    - name: "Size after round (value)"
+      value_raw: "⌊ remaining Health ÷ H ⌋"
+      kind: formula
+      formula: "⌊ remaining Health ÷ H ⌋"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 70
+    - name: "Destroyed (value)"
+      value_raw: "Size = 0"
+      kind: formula
+      formula: "Size = 0"
+      section: "params_mass_combat.md — Mass Battle (v3) > Core Formula (PP-233) > Definitions"
+      table_col: value
+      line: 71
+    - name: "TTRPG mass combat (formula)"
+      value_raw: "Command = ⌈(Charisma + Cognition) ÷ 2⌉"
+      kind: formula
+      formula: "Command = ⌈(Charisma + Cognition) ÷ 2⌉"
+      section: "params_mass_combat.md — Mass Battle (v3) > Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)"
+      table_col: formula
+      line: 357
+    - name: "BG battle resolution (formula)"
+      value_raw: "Commander bonus = floor(faction Military / 2)"
+      kind: formula
+      formula: "Commander bonus = floor(faction Military / 2)"
+      section: "params_mass_combat.md — Mass Battle (v3) > Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)"
+      table_col: formula
+      line: 358
+    - name: "Hybrid Zoom In (formula)"
+      value_raw: "Use TTRPG CR for TTRPG-layer actions; BG commander bonus for BG-layer accounting"
+      kind: formula
+      formula: "Use TTRPG CR for TTRPG-layer actions; BG commander bonus for BG-layer accounting"
+      section: "params_mass_combat.md — Mass Battle (v3) > Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)"
+      table_col: formula
+      line: 359
+  "params/scale_transitions.md":
+    - name: "Amount"
+      value_raw: "** Faction stat change = +1 per degree above Partial"
+      kind: formula
+      formula: "** Faction stat change = +1 per degree above Partial"
+      section: "params_scale_transitions.md — Scale and Mode Transitions > Domain Echo Rules (PP-108/PP-109)"
+      line: 30
+    - name: "Timing by mode"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_scale_transitions.md — Scale and Mode Transitions > Domain Echo Rules (PP-108/PP-109)"
+      line: 35
+    - name: "Intentional design (PP-109)"
+      value_raw: "** The timing difference is by design"
+      kind: formula
+      formula: "** The timing difference is by design"
+      section: "params_scale_transitions.md — Scale and Mode Transitions > Domain Echo Rules (PP-108/PP-109)"
+      line: 39
+    - name: "Multiple Domain Echoes (same scene)"
+      value_raw: "** Fire in the order they occurred in the scene"
+      kind: formula
+      formula: "** Fire in the order they occurred in the scene"
+      section: "params_scale_transitions.md — Scale and Mode Transitions > Domain Echo Rules (PP-108/PP-109)"
+      line: 41
+    - name: "Second scope action in same round"
+      value_raw: "+1 Inspiration spend"
+      kind: formula
+      formula: "+1 Inspiration spend"
+      section: "params_scale_transitions.md — Scale and Mode Transitions > Scope Shift"
+      line: 52
+    - name: "Non-battle Zoom In"
+      value_raw: "fires at end of current Domain Action being resolved (full procedure pending ED-073)"
+      kind: formula
+      formula: "fires at end of current Domain Action being resolved (full procedure pending ED-073)"
+      section: "params_scale_transitions.md — Scale and Mode Transitions > Mode Tags (for simulation tagging)"
+      line: 62
+  "params/southernmost.md":
+    - name: "TS bonus"
+      value_raw: "TS ÷ 20 (round down) additional dice"
+      kind: formula
+      formula: "TS ÷ 20 (round down) additional dice"
+      section: "params_southernmost.md — Southernmost Mechanics > Forgetting Check"
+      line: 16
+    - name: "Scale"
+      value_raw: "0–7 (or 0–10 for research-intensive factions)"
+      kind: formula
+      formula: "0–7 (or 0–10 for research-intensive factions)"
+      section: "params_southernmost.md — Southernmost Mechanics > Southernmost Awareness (Faction Stat)"
+      line: 48
+    - name: "Gate"
+      value_raw: "[NAME-PENDING: ED-048] Ritual without Awareness 5+ → +2 Ob"
+      kind: formula
+      formula: "[NAME-PENDING: ED-048] Ritual without Awareness 5+ → +2 Ob"
+      section: "params_southernmost.md — Southernmost Mechanics > Southernmost Awareness (Faction Stat)"
+      line: 50
+    - name: "Planning roll"
+      value_raw: "relevant History, Ob 3"
+      kind: formula
+      formula: "relevant History, Ob 3"
+      section: "params_southernmost.md — Southernmost Mechanics > Expedition Prerequisites"
+      line: 55
+    - name: "Resources"
+      value_raw: "Ob 3"
+      kind: formula
+      formula: "Ob 3"
+      section: "params_southernmost.md — Southernmost Mechanics > Expedition Prerequisites"
+      line: 56
+    - name: "Military escort"
+      value_raw: "recommended (1+ unit)"
+      kind: formula
+      formula: "recommended (1+ unit)"
+      section: "params_southernmost.md — Southernmost Mechanics > Expedition Prerequisites"
+      line: 57
+    - name: "Roll"
+      value_raw: "Weaving pool, Ob 5"
+      kind: formula
+      formula: "Weaving pool, Ob 5"
+      section: "params_southernmost.md — Southernmost Mechanics > [NAME-PENDING: ED-048] Ritual"
+      line: 78
+    - name: "Research roll"
+      value_raw: "Recall + Einhir Scholar History, Ob 4"
+      kind: formula
+      formula: "Recall + Einhir Scholar History, Ob 4"
+      section: "params_southernmost.md — Southernmost Mechanics > Extraordinary Repair Weaving"
+      line: 95
+    - name: "Repair roll (each season)"
+      value_raw: "Weaving pool, Ob 3"
+      kind: formula
+      formula: "Weaving pool, Ob 3"
+      section: "params_southernmost.md — Southernmost Mechanics > Extraordinary Repair Weaving"
+      line: 96
+    - name: "Boundary zone < 1 hour (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_southernmost.md — Southernmost Mechanics > Forgetting Check"
+      table_col: ob
+      line: 19
+    - name: "Interior 1–4 hours (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_southernmost.md — Southernmost Mechanics > Forgetting Check"
+      table_col: ob
+      line: 20
+    - name: "Deep interior 4+ hours (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_southernmost.md — Southernmost Mechanics > Forgetting Check"
+      table_col: ob
+      line: 21
+    - name: "Einhir core sites (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_southernmost.md — Southernmost Mechanics > Forgetting Check"
+      table_col: ob
+      line: 22
+    - name: "Border (Snapped) (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_southernmost.md — Southernmost Mechanics > Zone Hazard Table"
+      table_col: ob
+      line: 70
+    - name: "Inner (Oscillating) (ob)"
+      value_raw: "varies"
+      kind: formula
+      formula: "varies"
+      section: "params_southernmost.md — Southernmost Mechanics > Zone Hazard Table"
+      table_col: ob
+      line: 71
+    - name: "Core (Locked) (ob)"
+      value_raw: "2/round"
+      kind: formula
+      formula: "2/round"
+      section: "params_southernmost.md — Southernmost Mechanics > Zone Hazard Table"
+      table_col: ob
+      line: 72
+  "params/threadwork.md":
+    - name: "Key changes"
+      value_raw: "pool unified to (Spirit×2)+History+TPS; TN-based difficulty; three-axis Ob;"
+      kind: formula
+      formula: "pool unified to (Spirit×2)+History+TPS; TN-based difficulty; three-axis Ob;"
+      section: ""
+      line: 2
+    - name: "Single formula for ALL Thread operations"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Thread Pool (PP-616, PP-618, PP-619 — canonical)"
+      line: 19
+    - name: "Ontological basis"
+      value_raw: "** Knots are being-with (Mitsein), not Thread operations"
+      kind: formula
+      formula: "** Knots are being-with (Mitsein), not Thread operations"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Knot Mechanics (PP-632 — canonical)"
+      line: 33
+    - name: "Max Knot count"
+      value_raw: "floor(Bonds/2)+1**"
+      kind: formula
+      formula: "floor(Bonds/2)+1**"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Knot Mechanics (PP-632 — canonical)"
+      line: 42
+    - name: "Breaking"
+      value_raw: "**"
+      kind: formula
+      formula: "**"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Knot Mechanics (PP-632 — canonical)"
+      line: 48
+    - name: "Threadcut being Knot strain"
+      value_raw: "** +1 self-maintenance strain per Knot use"
+      kind: formula
+      formula: "** +1 self-maintenance strain per Knot use"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Knot Mechanics (PP-632 — canonical)"
+      line: 52
+    - name: "Total Ob"
+      value_raw: "Depth Ob + Breadth Ob + Distance Ob**"
+      kind: formula
+      formula: "Depth Ob + Breadth Ob + Distance Ob**"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical)"
+      line: 64
+    - name: "Mending Depth Ob"
+      value_raw: "Depth Ob − 1 (working with substrate's self-repair tendency)"
+      kind: formula
+      formula: "Depth Ob − 1 (working with substrate's self-repair tendency)"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      line: 80
+    - name: "Foundational Mending"
+      value_raw: "Ob 12"
+      kind: formula
+      formula: "Ob 12"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      line: 81
+    - name: "Mending Ob"
+      value_raw: "Depth Ob (from table above) + age modifier (0/+1/+2 fresh/established/entrenched)"
+      kind: formula
+      formula: "Depth Ob (from table above) + age modifier (0/+1/+2 fresh/established/entrenched)"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Gap Self-Closure by Scale (PP-604 — canonical)"
+      line: 122
+    - name: "Lock chronic drift"
+      value_raw: "Object=0; Personal=-1/season; Relational=-1→-2 (season 4+);"
+      kind: formula
+      formula: "Object=0; Personal=-1/season; Relational=-1→-2 (season 4+);"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Gap Self-Closure by Scale (PP-604 — canonical)"
+      line: 124
+    - name: "Field"
+      value_raw: "-2→-3; Structural=-3→-5"
+      kind: formula
+      formula: "-2→-3; Structural=-3→-5"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Gap Self-Closure by Scale (PP-604 — canonical)"
+      line: 125
+    - name: "Scale hierarchy rule"
+      value_raw: "Mending at scale X cannot hold while a disruption at scale X+1+"
+      kind: formula
+      formula: "Mending at scale X cannot hold while a disruption at scale X+1+"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Gap Self-Closure by Scale (PP-604 — canonical)"
+      line: 126
+    - name: "Immediate breach cost"
+      value_raw: "n RS (one-time)"
+      kind: formula
+      formula: "n RS (one-time)"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Dissolution Gap Creation (PP-604 — canonical)"
+      line: 131
+    - name: "Dissonance Factor by source"
+      value_raw: "- Thread operation nearby (brief): 1"
+      kind: formula
+      formula: "- Thread operation nearby (brief): 1"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Dissonance — Spirit Check (PP-607, PP-610 — canonical)"
+      line: 145
+    - name: "Thread operation nearby (significant)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Dissonance — Spirit Check (PP-607, PP-610 — canonical)"
+      line: 148
+    - name: "Entering Field-scale Gap"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Dissonance — Spirit Check (PP-607, PP-610 — canonical)"
+      line: 150
+    - name: "Entering Structural-scale Gap"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Dissonance — Spirit Check (PP-607, PP-610 — canonical)"
+      line: 151
+    - name: "Extended time in Foundational zone"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Dissonance — Spirit Check (PP-607, PP-610 — canonical)"
+      line: 152
+    - name: "Advance"
+      value_raw: "Forgetting Check Success +1; Overwhelming +1 additional"
+      kind: formula
+      formula: "Forgetting Check Success +1; Overwhelming +1 additional"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Warden Recognition (WR) — 0–3 (PP-605 — canonical)"
+      line: 175
+    - name: "Decrease"
+      value_raw: "TE-13 Military in T15 −1 WR AND −1 WC; RM emergence −2; No expedition 3+ seasons −1"
+      kind: formula
+      formula: "TE-13 Military in T15 −1 WR AND −1 WC; RM emergence −2; No expedition 3+ seasons −1"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Warden Recognition (WR) — 0–3 (PP-605 — canonical)"
+      line: 176
+    - name: "Opposing pairs"
+      value_raw: "** Weave/Pull, Lock/Dissolution, Lock/Pull, Weave/Dissolution"
+      kind: formula
+      formula: "** Weave/Pull, Lock/Dissolution, Lock/Pull, Weave/Dissolution"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6)"
+      line: 205
+    - name: "Not opposing"
+      value_raw: "** Weave/Lock, Pull/Dissolution (compound)"
+      kind: formula
+      formula: "** Weave/Lock, Pull/Dissolution (compound)"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6)"
+      line: 206
+    - name: "Overwhelmed"
+      value_raw: "knot strain, not degree-table Failure"
+      kind: formula
+      formula: "knot strain, not degree-table Failure"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6) > Resolution"
+      line: 227
+    - name: "Object -1 (d6"
+      value_raw: "1); Personal -2 (1-2); Relational -3 (1-3); Field -4 (1-4); Structural -5 (1-5)"
+      kind: formula
+      formula: "1); Personal -2 (1-2); Relational -3 (1-3); Field -4 (1-4); Structural -5 (1-5)"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6) > FR vs FR Both-Fail (by Depth)"
+      line: 231
+    - name: "Standard loser"
+      value_raw: "+1 Ob, 2 Comp"
+      kind: formula
+      formula: "+1 Ob, 2 Comp"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Opposing Operations — Contested Intentionality (PP-653; design: threadwork_v30 2.6) > Knot Strain"
+      line: 234
+    - name: "Thread Sensitivity (TS) (range)"
+      value_raw: "0–100"
+      kind: numeric
+      numeric: 0
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Practitioner Stats (PP-616-623 canonical)"
+      table_col: range
+      line: 12
+    - name: "Thread Pool Score (TPS) (range)"
+      value_raw: "TS ÷ 10 (round down)"
+      kind: formula
+      formula: "TS ÷ 10 (round down)"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Practitioner Stats (PP-616-623 canonical)"
+      table_col: range
+      line: 13
+    - name: "Coherence (range)"
+      value_raw: "10→0"
+      kind: formula
+      formula: "10→0"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Practitioner Stats (PP-616-623 canonical)"
+      table_col: range
+      line: 14
+    - name: "Spirit (range)"
+      value_raw: "1–7"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Practitioner Stats (PP-616-623 canonical)"
+      table_col: range
+      line: 15
+    - name: "Focus (range)"
+      value_raw: "1–7"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Practitioner Stats (PP-616-623 canonical)"
+      table_col: range
+      line: 16
+    - name: "All standard operations (Weave, Pull, Mend, Leap, Community Weave) (tn)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > TN Modifiers (PP-619 — canonical)"
+      table_col: tn
+      line: 58
+    - name: "Binding Ops (Lock, Dissolution) (tn)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > TN Modifiers (PP-619 — canonical)"
+      table_col: tn
+      line: 59
+    - name: "Past-Oriented Pulling (POP) (tn)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > TN Modifiers (PP-619 — canonical)"
+      table_col: tn
+      line: 60
+    - name: "POP Binding (Past-Oriented Lock or Dissolution) (tn)"
+      value_raw: "9"
+      kind: numeric
+      numeric: 9
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > TN Modifiers (PP-619 — canonical)"
+      table_col: tn
+      line: 61
+    - name: "Object (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      table_col: ob
+      line: 72
+    - name: "Personal (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      table_col: ob
+      line: 73
+    - name: "Relational (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      table_col: ob
+      line: 74
+    - name: "Field (ob)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      table_col: ob
+      line: 75
+    - name: "Structural (ob)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      table_col: ob
+      line: 76
+    - name: "Foundational (ob)"
+      value_raw: "13"
+      kind: numeric
+      numeric: 13
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Depth Ob — Fibonacci (1, 2, 3, 5, 8, 13)"
+      table_col: ob
+      line: 77
+    - name: "Single (ob)"
+      value_raw: "0"
+      kind: numeric
+      numeric: 0
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Breadth Ob — How much at that depth?"
+      table_col: ob
+      line: 87
+    - name: "Small group (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Breadth Ob — How much at that depth?"
+      table_col: ob
+      line: 88
+    - name: "Formation (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Breadth Ob — How much at that depth?"
+      table_col: ob
+      line: 89
+    - name: "Battlefield (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Breadth Ob — How much at that depth?"
+      table_col: ob
+      line: 90
+    - name: "Regional (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Breadth Ob — How much at that depth?"
+      table_col: ob
+      line: 91
+    - name: "Contact/Close (range)"
+      value_raw: "0–10m"
+      kind: formula
+      formula: "0–10m"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: range
+      line: 96
+    - name: "Contact/Close (ob)"
+      value_raw: "0"
+      kind: numeric
+      numeric: 0
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: ob
+      line: 96
+    - name: "Near (range)"
+      value_raw: "10–100m"
+      kind: formula
+      formula: "10–100m"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: range
+      line: 97
+    - name: "Near (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: ob
+      line: 97
+    - name: "Distant (range)"
+      value_raw: "100m–1km"
+      kind: formula
+      formula: "100m–1km"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: range
+      line: 98
+    - name: "Distant (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: ob
+      line: 98
+    - name: "Far (range)"
+      value_raw: "1km+"
+      kind: formula
+      formula: "1km+"
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: range
+      line: 99
+    - name: "Far (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations — CANONICAL STATE 2026-04-14 > Three-Axis Ob System (PP-622, PP-623 — canonical) > Distance Ob — How far from practitioner's body?"
+      table_col: ob
+      line: 99
+  "params/threadwork_superseded.md":
+    - name: "RS maximum"
+      value_raw: "**100**"
+      kind: formula
+      formula: "**100**"
+      section: "params_threadwork.md — Thread Operations (v2.5) > RS Ceiling"
+      line: 29
+    - name: "Eligibility"
+      value_raw: "Approach Training tag; Thread Sensitivity 30+; not in melee with declared attacker"
+      kind: formula
+      formula: "Approach Training tag; Thread Sensitivity 30+; not in melee with declared attacker"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Leap Roll"
+      line: 50
+    - name: "Skip before FR"
+      value_raw: "+2 Ob + auto Gap on Failure"
+      kind: formula
+      formula: "+2 Ob + auto Gap on Failure"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Diagnosis — STRUCK (ED-134 resolved 2026-04-03)"
+      line: 68
+    - name: "All operations"
+      value_raw: "Pool uses Spirit + relevant History bonus + Thread Pool Score unless stated"
+      kind: formula
+      formula: "Pool uses Spirit + relevant History bonus + Thread Pool Score unless stated"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs"
+      line: 71
+    - name: "TN 8"
+      value_raw: "Locking, Dissolution, and Past-Oriented Pulling"
+      kind: formula
+      formula: "Locking, Dissolution, and Past-Oriented Pulling"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs"
+      line: 72
+    - name: "Overweaving"
+      value_raw: "each op after first in contact window +1 Ob"
+      kind: formula
+      formula: "each op after first in contact window +1 Ob"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Weaving (Things Cohere)"
+      line: 91
+    - name: "Duration by surplus"
+      value_raw: "0 = end of scene"
+      kind: formula
+      formula: "0 = end of scene"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Pulling (Things Open)"
+      line: 102
+    - name: "Active Knot Crisis on target"
+      value_raw: "+1 Ob"
+      kind: formula
+      formula: "+1 Ob"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Past-Oriented Pulling"
+      line: 123
+    - name: "Chronic drift"
+      value_raw: "2–3 seasons: Rendering Stability −1/season + ops +1 Ob"
+      kind: formula
+      formula: "2–3 seasons: Rendering Stability −1/season + ops +1 Ob"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Locking (Forced Resolution)"
+      line: 146
+    - name: "Reversal Ob"
+      value_raw: "original practitioner's Thread Sensitivity ÷ 10 (round up) − 2, min 1"
+      kind: formula
+      formula: "original practitioner's Thread Sensitivity ÷ 10 (round up) − 2, min 1"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Locking (Forced Resolution)"
+      line: 148
+    - name: "In-scene pool penalty"
+      value_raw: "* Each consecutive threadwork operation in the same scene reduces the pool by a Fibonacci amount"
+      kind: formula
+      formula: "* Each consecutive threadwork operation in the same scene reduces the pool by a Fibonacci amount"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      line: 184
+    - name: "Cross-scene Ob fatigue"
+      value_raw: "* Each scene in a season in which threadwork is used adds +2 Ob to all threadwork in subsequent scenes that season"
+      kind: formula
+      formula: "* Each scene in a season in which threadwork is used adds +2 Ob to all threadwork in subsequent scenes that season"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      line: 186
+    - name: "Threadcut being interference"
+      value_raw: "+Ob = being's Thread Sensitivity ÷ 20 (round up), max +4"
+      kind: formula
+      formula: "+Ob = being's Thread Sensitivity ÷ 20 (round up), max +4"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      line: 190
+    - name: "Same source"
+      value_raw: "+1 Ob per prior use"
+      kind: formula
+      formula: "+1 Ob per prior use"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Dissolution Residue"
+      line: 224
+    - name: "Rendering Stability threshold effects"
+      value_raw: "activate/deactivate at Accounting, not mid-scene"
+      kind: formula
+      formula: "activate/deactivate at Accounting, not mid-scene"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Rendering Stability (RS) Track"
+      line: 236
+    - name: "Key Rendering Stability degradation values"
+      value_raw: "- FR Dissolution Failure: −8"
+      kind: formula
+      formula: "- FR Dissolution Failure: −8"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Rendering Stability (RS) Track"
+      line: 240
+    - name: "Mending Success"
+      value_raw: "+1"
+      kind: formula
+      formula: "+1"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Rendering Stability (RS) Track"
+      line: 245
+    - name: "Helper contribution"
+      value_raw: "⌊Cognition ÷ 2⌋ bonus dice each"
+      kind: formula
+      formula: "⌊Cognition ÷ 2⌋ bonus dice each"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Collective Operations"
+      line: 250
+    - name: "Directly opposing Beliefs"
+      value_raw: "pre-Leap Belief check (Spirit TN7 Ob1) or helper drops out"
+      kind: formula
+      formula: "pre-Leap Belief check (Spirit TN7 Ob1) or helper drops out"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Collective Operations"
+      line: 252
+    - name: "Opposing pairs"
+      value_raw: "** Weave/Pull, Lock/Dissolution, Lock/Pull, Weave/Dissolution"
+      kind: formula
+      formula: "** Weave/Pull, Lock/Dissolution, Lock/Pull, Weave/Dissolution"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Opposing Operations — Contested Intentionality (PP-632)"
+      line: 259
+    - name: "Not opposing"
+      value_raw: "** Weave/Lock, Pull/Dissolution (compound)"
+      kind: formula
+      formula: "** Weave/Lock, Pull/Dissolution (compound)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Opposing Operations — Contested Intentionality (PP-632)"
+      line: 260
+    - name: "Standard loser"
+      value_raw: "+1 Ob next op, 2 Composure"
+      kind: formula
+      formula: "+1 Ob next op, 2 Composure"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Opposing Operations — Contested Intentionality (PP-632) > Knot Strain"
+      line: 286
+    - name: "FR loser"
+      value_raw: "+2 Ob, 4 Composure"
+      kind: formula
+      formula: "+2 Ob, 4 Composure"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Opposing Operations — Contested Intentionality (PP-632) > Knot Strain"
+      line: 287
+    - name: "Both succeed"
+      value_raw: "SO + Co-Movement Card"
+      kind: formula
+      formula: "SO + Co-Movement Card"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Opposing Operations — Contested Intentionality (PP-632) > Board Game"
+      line: 308
+    - name: "Resolution roll"
+      value_raw: "Close Knot Bonds + successful Anchoring Scenes, TN7 Ob3"
+      kind: formula
+      formula: "Close Knot Bonds + successful Anchoring Scenes, TN7 Ob3"
+      section: "params_threadwork.md — Thread Operations (v2.5) > P1 Audit Resolutions — AUD-TW-001 (PP-190–PP-195) > PP-194: Rendering Crisis Resolution [PROVISIONAL]"
+      line: 345
+    - name: "REPLACED"
+      value_raw: "** Mass battle RS cost is flat −1 per battle in which any Thread operation occurs (campaign_architecture_v1 §3"
+      kind: formula
+      formula: "** Mass battle RS cost is flat −1 per battle in which any Thread operation occurs (campaign_architecture_v1 §3"
+      section: "params_threadwork.md — Thread Operations (v2.5) > P1 Audit Resolutions — AUD-TW-001 (PP-190–PP-195) > PP-192: Mass Battle RS Multiplier [STRUCK — campaign_architecture_v1 §3.1]"
+      line: 355
+    - name: "GM must disclose before arc"
+      value_raw: "Success/Overwhelming at TS 30-31 reduces TS to 29 or below Leap minimum (30)"
+      kind: formula
+      formula: "Success/Overwhelming at TS 30-31 reduces TS to 29 or below Leap minimum (30)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Sim-Debt Resolutions — SIM-X-17 through SIM-X-20 (PP-201–207) > PP-206 (P3): TS 30-31 Rendering Crisis GM guidance"
+      line: 416
+    - name: "Sustainable"
+      value_raw: "1 Personal Relational op + 1 Strategic declaration/session → Rendering Crisis ~session 10"
+      kind: formula
+      formula: "1 Personal Relational op + 1 Strategic declaration/session → Rendering Crisis ~session 10"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Sim-Debt Resolutions — SIM-X-17 through SIM-X-20 (PP-201–207) > PP-207 (P3): Hybrid Coherence pacing guidance"
+      line: 419
+    - name: "Coherence 2 (Fractured)"
+      value_raw: "+1 Ob all Thread operations"
+      kind: formula
+      formula: "+1 Ob all Thread operations"
+      section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-221: Coherence 2 (Fractured) Thread Ob Penalty [PROVISIONAL]"
+      line: 435
+    - name: "One mass battle turn"
+      value_raw: "1 scene for all RS threshold effects, Coherence-0 leakage, and paradox window ticking"
+      kind: formula
+      formula: "1 scene for all RS threshold effects, Coherence-0 leakage, and paradox window ticking"
+      section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-223: Mass Battle Turn = 1 Scene [PROVISIONAL]"
+      line: 438
+    - name: "REPLACED"
+      value_raw: "** With PP-192 struck (flat −1 per battle replaces ×3), this patch is moot"
+      kind: formula
+      formula: "** With PP-192 struck (flat −1 per battle replaces ×3), this patch is moot"
+      section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-225: RS ×3 Multiplier Applies to Gains [STRUCK — campaign_architecture_v1 §3.1]"
+      line: 442
+    - name: "REPLACED"
+      value_raw: "** With PP-192 struck (flat −1 per battle replaces ×3), the ×3 exclusion question is moot"
+      kind: formula
+      formula: "** With PP-192 struck (flat −1 per battle replaces ×3), the ×3 exclusion question is moot"
+      section: "params_threadwork.md — Thread Operations (v2.5) > SIM-X-22 Provisional Patches (PP-221, PP-223, PP-225, PP-226) > PP-226: Temporal Auto-Effect RS NOT Subject to ×3 [STRUCK — campaign_architecture_v1 §3.1]"
+      line: 446
+    - name: "For simulation"
+      value_raw: "** Use expected value d6=3-4 (minor observational consequence)"
+      kind: formula
+      formula: "** Use expected value d6=3-4 (minor observational consequence)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Actual Auto-Effect Table — Personal-Scale Operations (PP-181)"
+      line: 462
+    - name: "If the investigation proceeds"
+      value_raw: "TC +1 at next Accounting"
+      kind: formula
+      formula: "TC +1 at next Accounting"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Epistemic Auto-Effect — TC Trigger (PP-182)"
+      line: 493
+    - name: "Ritual outcomes"
+      value_raw: "Success RS −6, Overwhelming RS −10, Partial RS −3, Failure RS +8"
+      kind: formula
+      formula: "Success RS −6, Overwhelming RS −10, Partial RS −3, Failure RS +8"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Ceiral Ritual — BG RS Propagation (ED-034 resolved 2026-04-03)"
+      line: 506
+    - name: "Lock chronic drift"
+      value_raw: "−1 RS/season per territory with active Lock (seasons 1–3); −2 RS/season (seasons 4+)"
+      kind: formula
+      formula: "−1 RS/season per territory with active Lock (seasons 1–3); −2 RS/season (seasons 4+)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > RS Change Rule (PP-239)"
+      line: 523
+    - name: "Gap persistence"
+      value_raw: "−4 RS/season per active Gap at Accounting"
+      kind: formula
+      formula: "−4 RS/season per active Gap at Accounting"
+      section: "params_threadwork.md — Thread Operations (v2.5) > RS Change Rule (PP-239)"
+      line: 524
+    - name: "Mending success"
+      value_raw: "+1 to +2 RS per operation"
+      kind: formula
+      formula: "+1 to +2 RS per operation"
+      section: "params_threadwork.md — Thread Operations (v2.5) > RS Change Rule (PP-239)"
+      line: 525
+    - name: "Within a single scene"
+      value_raw: "only the deepest applicable Ob applies (checks do not stack within one scene)"
+      kind: formula
+      formula: "only the deepest applicable Ob applies (checks do not stack within one scene)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Forgetting Check Stacking Rule (PP-240) [PROVISIONAL — ED-153 adjacent]"
+      line: 530
+    - name: "Purpose tracking in Southernmost"
+      value_raw: "**Clarity countdown** mechanic adopted (provisional)"
+      kind: formula
+      formula: "**Clarity countdown** mechanic adopted (provisional)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-029 Resolution (PP-264) [FLAGGED]"
+      line: 558
+    - name: "Start"
+      value_raw: "Clarity = d3+1 (rolled at entry to each Southernmost zone)"
+      kind: formula
+      formula: "Clarity = d3+1 (rolled at entry to each Southernmost zone)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-029 Resolution (PP-264) [FLAGGED]"
+      line: 559
+    - name: "Clarity 0"
+      value_raw: "character must succeed at a Spirit check TN 7 Ob 2 or leave the zone immediately (Purpose dissolves)"
+      kind: formula
+      formula: "character must succeed at a Spirit check TN 7 Ob 2 or leave the zone immediately (Purpose dissolves)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-029 Resolution (PP-264) [FLAGGED]"
+      line: 561
+    - name: "Thread combat vs Mode 3 entities"
+      value_raw: "**Thread pool split (Off/Def) applies** identically to personal combat pool split"
+      kind: formula
+      formula: "**Thread pool split (Off/Def) applies** identically to personal combat pool split"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-030 Resolution (PP-265)"
+      line: 566
+    - name: "Mira relationship"
+      value_raw: "patron-to-practitioner (archive access), not teacher-to-student"
+      kind: formula
+      formula: "patron-to-practitioner (archive access), not teacher-to-student"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-119 Resolution (PP-279) [SUPERSEDED 2026-04-11]"
+      line: 576
+    - name: "Lenneth Almqvist"
+      value_raw: "Thread Sensitivity **8** (starting)"
+      kind: formula
+      formula: "Thread Sensitivity **8** (starting)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-119 Resolution (PP-279) [SUPERSEDED 2026-04-11]"
+      line: 578
+    - name: "Diagnosis as mandatory pre-operation"
+      value_raw: "confirmed as **perception act**, not a separate operation"
+      kind: formula
+      formula: "confirmed as **perception act**, not a separate operation"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-134 Resolution (PP-289)"
+      line: 581
+    - name: "Diagnosis reveals"
+      value_raw: "Thread configuration type, approximate scale, RS signature"
+      kind: formula
+      formula: "Thread configuration type, approximate scale, RS signature"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-134 Resolution (PP-289)"
+      line: 582
+    - name: "Practitioners within 50m"
+      value_raw: "Coherence check TN 7 Ob 1 per scene"
+      kind: formula
+      formula: "Coherence check TN 7 Ob 1 per scene"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Shifting Object Encounter Rule (PP-303) [PROVISIONAL — ED-173]"
+      line: 596
+    - name: "Mending the Shifting Object"
+      value_raw: "treated as Micro-Gap, Ob 2"
+      kind: formula
+      formula: "treated as Micro-Gap, Ob 2"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Shifting Object Encounter Rule (PP-303) [PROVISIONAL — ED-173]"
+      line: 598
+    - name: "Subsequent readings of the same document"
+      value_raw: "no RS effect"
+      kind: formula
+      formula: "no RS effect"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Document RS Resonance (PP-258)"
+      line: 608
+    - name: "Each companion"
+      value_raw: "−2 Coherence/round (cumulative)"
+      kind: formula
+      formula: "−2 Coherence/round (cumulative)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Collective Forgetting — Companion Carrying (PP-279)"
+      line: 612
+    - name: "Additional consequence (untrained only)"
+      value_raw: "**Certainty −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
+      kind: formula
+      formula: "**Certainty −1** (uncontrolled contact with Thread substrate without preparation disturbs epistemic grounding)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Untrained Leap Auto-Fail (PP-281) [PROVISIONAL — ED-178]"
+      line: 624
+    - name: "Lenneth Almqvist"
+      value_raw: "Thread Sensitivity **8** (starting)"
+      kind: formula
+      formula: "Thread Sensitivity **8** (starting)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-119 Resolution (PP-304) — Lenneth Almqvist TS [SUPERSEDED 2026-04-11]"
+      line: 632
+    - name: "In mass battle"
+      value_raw: "collapsed into Leap per PP-224"
+      kind: formula
+      formula: "collapsed into Leap per PP-224"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-134 Resolution (PP-314) — Diagnosis Rationale"
+      line: 639
+    - name: "Recall Anchor mechanic"
+      value_raw: "practitioner who passes Forgetting Check may anchor one other who failed/partially failed"
+      kind: formula
+      formula: "practitioner who passes Forgetting Check may anchor one other who failed/partially failed"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-153 Resolution (PP-330) — Collective Forgetting Anchor [FLAGGED]"
+      line: 650
+    - name: "RS outcome"
+      value_raw: "Success = RS +1; Overwhelming = RS +2"
+      kind: formula
+      formula: "Success = RS +1; Overwhelming = RS +2"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Community Organizing — Canonical Formula (PP-250)"
+      line: 665
+    - name: "Coherence 0"
+      value_raw: "layer 2 (always-already self-rendering) has ceased"
+      kind: formula
+      formula: "layer 2 (always-already self-rendering) has ceased"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-301 Propagation: TS/Coherence Orthogonality — Canonical Framing"
+      line: 686
+    - name: "Mechanical implication"
+      value_raw: "** No amount of study, training, or exposure grants Thread operational capability to a TS 0 character"
+      kind: formula
+      formula: "** No amount of study, training, or exposure grants Thread operational capability to a TS 0 character"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Inert Knowledge (P-08, PP-497)"
+      line: 694
+    - name: "Dissonant Counter"
+      value_raw: "+1 per battle turn with ≥ 3 Thread operations"
+      kind: formula
+      formula: "+1 per battle turn with ≥ 3 Thread operations"
+      section: "params_threadwork.md — Thread Operations (v2.5) > War-Scale Dissonant Thread Effects (PP-502, ED-362 resolved)"
+      line: 709
+    - name: "Thread Sensitivity (TS) (range)"
+      value_raw: "0–100"
+      kind: numeric
+      numeric: 0
+      section: "params_threadwork.md — Thread Operations (v2.5) > Practitioner Stats"
+      table_col: range
+      line: 18
+    - name: "Rendering Stability (RS) (range)"
+      value_raw: "100→0"
+      kind: formula
+      formula: "100→0"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Practitioner Stats"
+      table_col: range
+      line: 19
+    - name: "Coherence (range)"
+      value_raw: "10→0"
+      kind: formula
+      formula: "10→0"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Practitioner Stats"
+      table_col: range
+      line: 20
+    - name: "Focus (range)"
+      value_raw: "1–7"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations (v2.5) > Practitioner Stats"
+      table_col: range
+      line: 21
+    - name: "Thread Pool Score (range)"
+      value_raw: "Thread Sensitivity ÷ 10 (round down)"
+      kind: formula
+      formula: "Thread Sensitivity ÷ 10 (round down)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Practitioner Stats"
+      table_col: range
+      line: 22
+    - name: "30–49 (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations (v2.5) > Leap Roll"
+      table_col: ob
+      line: 41
+    - name: "50+ (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations (v2.5) > Leap Roll"
+      table_col: ob
+      line: 42
+    - name: "Object (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Weaving (Things Cohere)"
+      table_col: ob
+      line: 77
+    - name: "Personal (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Weaving (Things Cohere)"
+      table_col: ob
+      line: 78
+    - name: "Relational (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Weaving (Things Cohere)"
+      table_col: ob
+      line: 79
+    - name: "Territorial (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Weaving (Things Cohere)"
+      table_col: ob
+      line: 80
+    - name: "Structural (ob)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Weaving (Things Cohere)"
+      table_col: ob
+      line: 81
+    - name: "Loosely actualised (ob)"
+      value_raw: "1"
+      kind: numeric
+      numeric: 1
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Pulling (Things Open)"
+      table_col: ob
+      line: 97
+    - name: "Normal (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Pulling (Things Open)"
+      table_col: ob
+      line: 98
+    - name: "Firmly actualised (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Pulling (Things Open)"
+      table_col: ob
+      line: 99
+    - name: "Previously Woven (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Pulling (Things Open)"
+      table_col: ob
+      line: 100
+    - name: "Foundational (ob)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Pulling (Things Open)"
+      table_col: ob
+      line: 101
+    - name: "Same scene/session (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Past-Oriented Pulling"
+      table_col: ob
+      line: 117
+    - name: "1–2 seasons (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Past-Oriented Pulling"
+      table_col: ob
+      line: 118
+    - name: "3–5 seasons (ob)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Past-Oriented Pulling"
+      table_col: ob
+      line: 119
+    - name: "6–10 seasons (ob)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Past-Oriented Pulling"
+      table_col: ob
+      line: 120
+    - name: "10+/generational (ob)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Past-Oriented Pulling"
+      table_col: ob
+      line: 121
+    - name: "Foundational (ob)"
+      value_raw: "Ob 7 + 2 surcharge = 9; Rendering Stability consequence ×3"
+      kind: formula
+      formula: "Ob 7 + 2 surcharge = 9; Rendering Stability consequence ×3"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Past-Oriented Pulling"
+      table_col: ob
+      line: 122
+    - name: "Object (ob)"
+      value_raw: "4"
+      kind: numeric
+      numeric: 4
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Locking (Forced Resolution)"
+      table_col: ob
+      line: 132
+    - name: "Personal (ob)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Locking (Forced Resolution)"
+      table_col: ob
+      line: 133
+    - name: "Relational/Process (ob)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Locking (Forced Resolution)"
+      table_col: ob
+      line: 134
+    - name: "Territorial (ob)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Locking (Forced Resolution)"
+      table_col: ob
+      line: 135
+    - name: "Structural/Foundational (ob)"
+      value_raw: "8+"
+      kind: formula
+      formula: "8+"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Locking (Forced Resolution)"
+      table_col: ob
+      line: 136
+    - name: "Shifting Object (ob)"
+      value_raw: "2"
+      kind: numeric
+      numeric: 2
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      table_col: ob
+      line: 167
+    - name: "Micro-Gap (same scene) (ob)"
+      value_raw: "3"
+      kind: numeric
+      numeric: 3
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      table_col: ob
+      line: 168
+    - name: "Standard Gap (1 session–1 season) (ob)"
+      value_raw: "5"
+      kind: numeric
+      numeric: 5
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      table_col: ob
+      line: 169
+    - name: "Entrenched Gap (1+ seasons) (ob)"
+      value_raw: "6"
+      kind: numeric
+      numeric: 6
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      table_col: ob
+      line: 170
+    - name: "Catastrophic Gap (3+ seasons) (ob)"
+      value_raw: "7"
+      kind: numeric
+      numeric: 7
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      table_col: ob
+      line: 171
+    - name: "Locked Zone border (ob)"
+      value_raw: "8+"
+      kind: formula
+      formula: "8+"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Operations — Pools and TNs > Mending (Substrate Repair)"
+      table_col: ob
+      line: 172
+    - name: "Object/Personal scale op (loss)"
+      value_raw: "0"
+      kind: numeric
+      numeric: 0
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 199
+    - name: "Relational scale op (loss)"
+      value_raw: "−1"
+      kind: formula
+      formula: "−1"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 200
+    - name: "Territorial scale op (loss)"
+      value_raw: "−1"
+      kind: formula
+      formula: "−1"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 201
+    - name: "Structural scale op (loss)"
+      value_raw: "−2"
+      kind: formula
+      formula: "−2"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 202
+    - name: "FR Lock or Dissolution (any scale) (loss)"
+      value_raw: "−1 additional"
+      kind: formula
+      formula: "−1 additional"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 203
+    - name: "Past-Oriented Pulling (loss)"
+      value_raw: "−1 additional. **Cap applies** (unlike Binding Ops per PP-196). Total POP cost = −1 max regardless of scale. (PP-631, TW-05) Cross-ref: fieldwork_v30 §4.5; POP during fieldwork investigation follows same cap. ED-NEW-15 RESOLVED."
+      kind: formula
+      formula: "−1 additional. **Cap applies** (unlike Binding Ops per PP-196). Total POP cost = −1 max regardless of scale. (PP-631, TW-05) Cross-ref: fieldwork_v30 §4.5; POP during fieldwork investigation follows same cap. ED-NEW-15 RESOLVED."
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 204
+    - name: "Mending (loss)"
+      value_raw: "0 (asymmetry — campaign_architecture_v1 §3.2; threadwork fatigue applies instead — see above)"
+      kind: formula
+      formula: "0 (asymmetry — campaign_architecture_v1 §3.2; threadwork fatigue applies instead — see above)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 205
+    - name: "Dissolution residue use (loss)"
+      value_raw: "−1 additional (not subject to cap)"
+      kind: formula
+      formula: "−1 additional (not subject to cap)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 206
+    - name: "History Resonance risk die shows 1 (loss)"
+      value_raw: "−1"
+      kind: formula
+      formula: "−1"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 207
+    - name: "Degree table Failure (Relational+ scale) (loss)"
+      value_raw: "apply as written"
+      kind: formula
+      formula: "apply as written"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Coherence (10→0)"
+      table_col: loss
+      line: 208
+    - name: "Thread Pool Score (value)"
+      value_raw: "8"
+      kind: numeric
+      numeric: 8
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-024 Resolution (PP-263) [FLAGGED FOR DESIGNER REVIEW]"
+      table_col: value
+      line: 549
+    - name: "Coherence (value)"
+      value_raw: "N/A"
+      kind: formula
+      formula: "N/A"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-024 Resolution (PP-263) [FLAGGED FOR DESIGNER REVIEW]"
+      table_col: value
+      line: 550
+    - name: "Wound threshold (value)"
+      value_raw: "12"
+      kind: numeric
+      numeric: 12
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-024 Resolution (PP-263) [FLAGGED FOR DESIGNER REVIEW]"
+      table_col: value
+      line: 551
+    - name: "Initiative (value)"
+      value_raw: "Always last"
+      kind: formula
+      formula: "Always last"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-024 Resolution (PP-263) [FLAGGED FOR DESIGNER REVIEW]"
+      table_col: value
+      line: 552
+    - name: "Thread Operation (value)"
+      value_raw: "Weaving (automatic, no Leap)"
+      kind: formula
+      formula: "Weaving (automatic, no Leap)"
+      section: "params_threadwork.md — Thread Operations (v2.5) > ED-024 Resolution (PP-263) [FLAGGED FOR DESIGNER REVIEW]"
+      table_col: value
+      line: 553
