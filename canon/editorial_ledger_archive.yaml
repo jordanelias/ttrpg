@@ -93,3 +93,117 @@ entries:
     description: "CI cap vs Piety Yield T9 — Option A CANON (uniform cap). ci_political_v30 §7.1."
     status: resolved
     severity: P2
+
+# Archival batch 2026-04-23 — 16 resolved entries from editorial_ledger.yaml
+
+  - id: ED-722
+    date: 2026-04-20
+    description: "D-1 resolved: Solmund 12y emergence (5y coalescing + 7y ministry). Propagated timeline L32, solmund_guide L246 (commit e642f195)."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-723
+    date: 2026-04-20
+    description: "D-2 resolved: pre-Calamity governance author-determined, surfaced through fragments. Altonian overlays do not map to pre-Calamity geography."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-724
+    date: 2026-04-20
+    description: "D-3 resolved: dissolution site specific but contested, off-map. Propagated canon/03_canonical_timeline.md §Solmund 2026-04-22."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-725
+    date: 2026-04-20
+    description: "D-4 resolved: Altonian invasion ~18 AG (~30y post-Catastrophe). Timeline revision = separate workplan."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-726
+    date: 2026-04-20
+    description: "D-5 resolved: Einhir site-network three-layer operational model (foundational pre-Catastrophe scheduled + responsive Warden-era reactive + ambient/not-scheduled). Integration target is designs/world/ (worldbuilding), NOT canon/02_foundations_amendment_leap_mechanism.md (prior mis-mapping corrected). Specific home TBD — candidates: new designs/world/einhir_site_network.md or expansion of designs/world/calamity_radiation_v30.md. Pending separate workplan."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-727
+    date: 2026-04-20
+    description: "D-6 resolved: Lenneth TS pathway = slow scholarly loosening, SA-gated, ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md 2026-04-22."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-728
+    date: 2026-04-20
+    description: "D-7 resolved: Valn origin pre-Altonian, ambiguous, possibly pre-Einhir. Propagated designs/arcs/gm_ref/arcs_10_18.md §Terminology + ED-NEW-7 row 2026-04-22."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-729
+    date: 2026-04-20
+    description: "PR-1 resolved: Finitude pivot home = canon/00_philosophical_foundations.md §4.3 (Option A). Integration pending Batch 1."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-730
+    date: 2026-04-20
+    description: "PR-2 resolved: Leap taxonomy home = new canon/02_foundations_amendment_leap_mechanism.md (Option A). Integration pending Batch 2."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-731
+    date: 2026-04-20
+    description: "PR-3 resolved: propagate MS (Mending Stability) over RS. Sweep pending Batch 5 §5.4."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-732
+    date: 2026-04-20
+    description: "PR-11 BA-1 resolved: Baralta direct communion supplements (not supersedes) \"does not question theology\" in NPC §6. Maps TL-4."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-733
+    date: 2026-04-20
+    description: "PR-12 B-1 resolved: Ficinian Cardinal emanation accepted as Church self-understanding. Consolidated guide §3.2 canonical."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-734
+    date: 2026-04-20
+    description: "PR-13 S-1 resolved: Lurianic Catastrophe mapping accepted as RM theology. Consolidated guide §4.4 canonical."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-735
+    date: 2026-04-20
+    description: "PR-14 bundle resolved: Finding 7 + RWCE + Miracle Investigation + SA-gating all accepted. Integration cascade = separate workplan."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-736
+    date: 2026-04-20
+    description: "PR-15 resolved: Seam Text framing = Option A metadata frame. Consolidated guide L290-292 update pending."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-737
+    date: 2026-04-20
+    description: "Ledger split: all resolved entries migrated to canon/editorial_ledger_archive.yaml. Main retains open + new resolutions only."
+    status: resolved
+    severity: P3
+    source: "session_master_2026_04_20.md + handoff"
