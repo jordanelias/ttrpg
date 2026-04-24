@@ -556,8 +556,8 @@ Professional units (Light Infantry and above) have no such restriction — they 
 - Altonian Vanguard battle: MS −1. Does NOT trigger IP +2 (Altonia's own operation) or Strain +1.
 - Territory conquered by military victory: Accord set to 1 (peninsular_strain_v1.md §2.4).
 - Unit destroyed: faction Military −1 (subject to ±2/season cap)
-- Battle lost (defending force routed): Cohesion −15 (derived_stats_v1)
-- Campaign-scale defeat: Cohesion −30 (derived_stats_v1). Mandate −1 (structural — campaign-scale defeats are major events)
+- Battle lost (defending force routed): Discipline −15 (derived_stats_v1)
+- Campaign-scale defeat: Discipline −30 (derived_stats_v1). Mandate −1 (structural — campaign-scale defeats are major events)
 [EDITORIAL: confirm Military stat change on unit destruction and Stability
 check thresholds]
 
@@ -665,7 +665,7 @@ Net successes = damage dealt to opposing units.
 | Margin | Outcome | Effect |
 |--------|---------|--------|
 | Attacker net ≥ Defender net + 2 | Attacker wins | Territory captured; Defender Military −1 |
-| Margin ≤ 1 either direction | Partial | No territory change; Attacker Cohesion −15 (commitment cost, derived_stats_v1) |
+| Margin ≤ 1 either direction | Partial | No territory change; Attacker Discipline −15 (commitment cost, derived_stats_v1) |
 | Defender net ≥ Attacker net + 2 | Defender wins | No territory change; Attacker Military −1 |
 
 **Accord consequence (PP-645):** Territory gained via BG Battle: Accord set to 1 (Resistant). Defender loses Accord −1 in defended territory (war came to their home). See peninsular_strain_v1.md §2.4.
@@ -768,7 +768,7 @@ All items below approved and confirmed canonical (ED-689).
 #
 ### Army Morale (Derived Composite — derived_stats_v1 §8.2)
 
-Army Morale = floor(average unit Morale) + Command modifier + Cohesion modifier. Gives the player a single legible indicator. Thresholds: 6+ Resolute (rout contagion blocked), 4–5 Steady, 2–3 Shaken (−1D Morale checks, Command check Ob 2 each phase), 1 Wavering (−2D, Command Ob 3 or Withdrawal), 0 Routed (army-level retreat, battle lost). See derived_stats_v1 §8.2 for full specification.
+Army Morale = floor(average unit Morale) + Command modifier + Discipline modifier. Gives the player a single legible indicator. Thresholds: 6+ Resolute (rout contagion blocked), 4–5 Steady, 2–3 Shaken (−1D Morale checks, Command check Ob 2 each phase), 1 Wavering (−2D, Command Ob 3 or Withdrawal), 0 Routed (army-level retreat, battle lost). See derived_stats_v1 §8.2 for full specification.
 
 # PART D: MASS COMBAT WORLD BRIDGE (NEW)
 

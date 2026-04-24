@@ -17,7 +17,7 @@ Mandate ████████░░ 5      Legitimacy: 87/100  [▲ +5/season
 Wealth  ██████░░░░ 4      Treasury:  340/400  [▼ −60/season net]
 Military ████████░░ 5     Levies: 7/10 fielded
 Influence █████████░ 5    Reputation: 62/75   [▲ +5/season]
-Stability ████████░░ 4    Cohesion: 35/40     [▲ +10/season]
+Stability ████████░░ 4    Discipline: 35/40     [▲ +10/season]
 ```
 
 ### Implementation Notes (Godot)

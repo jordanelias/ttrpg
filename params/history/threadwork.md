@@ -9,7 +9,7 @@
 
 ### ST-TW-02 — W-33 (Rally the Broken) Effective CP Threshold
 W-33 only meaningful for units with CP ≥ 3.
-At CP ≤ 2: Cohesion 2 restoration still yields 0 effective dice (Cohesion penalty eliminates pool).
+At CP ≤ 2: Discipline 2 restoration still yields 0 effective dice (Discipline penalty eliminates pool).
 
 ### ST-TW-03 — RS Cost in Mass Battle
 ×3 multiplier for mass battle Thread ops means −1 Coherence per op.

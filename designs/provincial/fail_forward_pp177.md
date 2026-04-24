@@ -44,7 +44,7 @@ Minor complication rule: the acting faction chooses which minor consequence appl
 |---------------|--------------------------------------------------|----------------------------------------------|
 | Govern (Inward) | Standing −1 OR Public Instability +1 | Prosperity −1 in target territory |
 | Trade (Outward) | Standing −1 OR Wealth −1 this season | Wealth −1 (permanent until Accounting) |
-| Muster (Inward) | Unit mustered at Cohesion −1 OR Standing −1 | No unit mustered; Wealth −1 (materials wasted) |
+| Muster (Inward) | Unit mustered at Discipline −1 OR Standing −1 | No unit mustered; Wealth −1 (materials wasted) |
 | Diplomacy (Outward) | Standing −1 OR target faction's Standing +1 | Target faction gains Casus Belli vs acting faction (Ob 3 to dismiss) |
 | Decree (Inward) | Mandate −1 for 1 season OR Public Instability +1 | Mandate −1 (permanent until Accounting) |
 | Parliamentary Manoeuvre | Standing −1 OR no effect (already: Partial = no effect; Minor added) | Mandate −1 + opponent faction Standing +1 |
@@ -52,7 +52,7 @@ Minor complication rule: the acting faction chooses which minor consequence appl
 | Spy (Outward) | Intel gained but acting faction identity exposed OR Standing −1 | No intel gained; target faction may take one free Intel action vs acting faction next season |
 | Thread Operation | Ob +1 to next Thread op in this territory (Thread Debt token) OR Mending Stability −1 | Thread Debt token placed; Mending Stability −2 |
 | Community Organising | +1 Ob to next Community action in this territory OR Standing −1 | No progress; Institutional Pressure +1 |
-| Fortify | Fortification begun at −1 Cohesion for resulting unit OR Standing −1 | No fortification; Wealth −1 |
+| Fortify | Fortification begun at −1 Discipline for resulting unit OR Standing −1 | No fortification; Wealth −1 |
 | March / Military | See Battle Resolution (separate system) | See Battle Resolution |
 | Parliamentary Vote | Losing margin halved (effect reduced) OR Public Instability −1 | Calling faction Mandate −1 + Public Instability −1 |
 

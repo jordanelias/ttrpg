@@ -299,7 +299,7 @@ PENINSULA SCALE
 | Track | Range | Mechanical Role |
 |-------|-------|----------------|
 | Faction Stats (×5) | 1–7 | Dice pools for Domain Actions |
-| Derived Values (×5) | 0–max | Granular resource state (Treasury, Legitimacy, Reputation, Cohesion, Levies) |
+| Derived Values (×5) | 0–max | Granular resource state (Treasury, Legitimacy, Reputation, Discipline, Levies) |
 | Accord | 0–3 | Population alignment with controlling faction; derived from settlement Order |
 | Piety Track (PT) | 0–5 | Church vs Restoration axis; drives Seizure Ob and Calamity Drift |
 | Fort Level | 0–4 | Military defensibility |

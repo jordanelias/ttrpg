@@ -16,7 +16,7 @@
 
 2. **State management** — `GameState` autoload
    - All clocks (RS, TC, IP, PI, Strain) as tracked resources
-   - Faction stats (1-7) + derived values (Treasury, Legitimacy, Reputation, Cohesion)
+   - Faction stats (1-7) + derived values (Treasury, Legitimacy, Reputation, Discipline)
    - Settlement registry (36 entries, P/D/O stats)
    - NPC registry (14+ entries, full stat blocks)
    - PC state (attributes, skills, Standing, Renown, Coherence, etc.)

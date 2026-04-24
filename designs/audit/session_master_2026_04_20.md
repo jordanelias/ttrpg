@@ -120,7 +120,7 @@ The knot-profile determines:
 
 ### §2.7 Cross-references
 
-`designs/threadwork/threadwork_v30.md` §2.3 (The Leap) · §2.4 (Operations During Contact) · §31 (Mending — Repairing the Substrate) · §3 (Coherence) · §5 (Rendering Stability) · `canon/00_philosophical_foundations.md` §5.3 (Threadcut persistence) · `canon/01_foundations_amendment_self_rendering.md` A9 (Threadcut non-spooling), A10 (Developmental TS) · `canon/02_canon_constraints.md` P-07 (Ground does not respond) · `canon/03_canonical_timeline.md` (Catastrophe, Solmund emergence) · Jordan determinations L-1 through L-5, W-1 through W-7, handoff throughlines L-T1 through L-T7 (archives/session_handoff_2026_04_20.md)
+`designs/threadwork/threadwork_v30.md` §2.3 (The Leap) · §2.4 (Operations During Contact) · §31 (Mending — Repairing the Substrate) · §3 (Coherence) · §5 (Mending Stability) · `canon/00_philosophical_foundations.md` §5.3 (Threadcut persistence) · `canon/01_foundations_amendment_self_rendering.md` A9 (Threadcut non-spooling), A10 (Developmental TS) · `canon/02_canon_constraints.md` P-07 (Ground does not respond) · `canon/03_canonical_timeline.md` (Catastrophe, Solmund emergence) · Jordan determinations L-1 through L-5, W-1 through W-7, handoff throughlines L-T1 through L-T7 (archives/session_handoff_2026_04_20.md)
 
 ---
 
@@ -128,7 +128,7 @@ The knot-profile determines:
 
 Status: DRAFT. Arithmetic errors flagged in verification audit F-1 through F-3 applied below. Five decision points remain for Jordan (reduced from six; Solmund magnitude is anchor-forced, not a free choice).
 
-Terminology note: This document uses "MS" (Mending Stability) per handoff determination W-series. Current canon uses "RS" (Rendering Stability) in `designs/world/calamity_radiation_v30.md`, `params/bg/clocks.md`, `designs/threadwork/threadwork_v30.md` §5. Before MS trajectory can commit as canonical, either (a) propagate RS→MS across canon, or (b) revert this document to RS. See §6 canon conflicts.
+Terminology note: This document uses "MS" (Mending Stability) per handoff determination W-series. Current canon uses "RS" (Mending Stability) in `designs/world/calamity_radiation_v30.md`, `params/bg/clocks.md`, `designs/threadwork/threadwork_v30.md` §5. Before MS trajectory can commit as canonical, either (a) propagate RS→MS across canon, or (b) revert this document to RS. See §6 canon conflicts.
 
 ### §3.1 Design Principle
 

@@ -577,7 +577,7 @@ Recovery from Phase 3: IP reduced below 60 through sustained resistance. This is
 **IP Visibility Milestones:**
 - **IP 60:** Intelligence Report — "Altonian forces massing at border." Scene Slate Priority 2. Factions in inter-faction conflict: Mandate check (Ob 2) to divert resources.
 - **IP 80:** "Altonian advance forces in Schoenland corridor." Priority 1 scene: emergency session. Coalition-building via Social Contest available.
-- **IP 90:** "Invasion imminent." All factions aware. Factions still in inter-faction Battle: Cohesion −20.
+- **IP 90:** "Invasion imminent." All factions aware. Factions still in inter-faction Battle: Discipline −20.
 
 [EDITORIAL: ED-684 — IP milestones and Altonian Alignment. Source: historical_precedents_analysis.md §2.]
 
@@ -655,8 +655,8 @@ Starting CI: 28. CI caps at 100. Church may declare Mass Seizure at CI ≥ 60 (o
 **Seasonal CI at Accounting:**
 1. Institutional Momentum: CI +1 (passive).
 2. Piety Yield: per territory where Church is Prominent (Church Mandate > controlling faction Mandate), add by PT. PT 5 = +1, PT 4 = +0.5, others = 0. Total = floor(sum).
-3. Assert (optional Church action): Influence vs Ob 2. Success: CI +1. Failure: Cohesion −15 (derived_stats_v1).
-4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Cohesion −15 (derived_stats_v1).
+3. Assert (optional Church action): Influence vs Ob 2. Success: CI +1. Failure: Discipline −15 (derived_stats_v1).
+4. Suppress (optional opponent action): Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1 passive. Failure: Discipline −15 (derived_stats_v1).
 5. Hafenmark Structural Suppression: while Baralta Mandate ≥ 4, CI −1/season.
 
 **Church Seizure (one-shot, replaces PP-494):** Pool = Influence + floor(CI/15). Ob = 10 − PT − infrastructure (floor 1). CI ≥ 60 required. One attempt only. Prominence required. Church Mandate ≥ 4. Overwhelming seizure: PT +1 (consequence, not cap-governed). See §3.2 for full specification.

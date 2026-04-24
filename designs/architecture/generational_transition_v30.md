@@ -11,7 +11,7 @@ Conviction Legacy fires (T8): one Conviction transforms and transfers to new cha
 ### PRESERVE (world state persists across generations)
 - Evidence Tracks (knowledge persists in notes/records)
 - All faction stats (Mandate, Wealth, Military, Influence, Stability)
-- All derived values (Treasury, Legitimacy, Reputation, Cohesion)
+- All derived values (Treasury, Legitimacy, Reputation, Discipline)
 - All clocks (RS, TC, IP, PI, Strain, VTM, AER, Coup Counter)
 - All settlement states (Prosperity/Defense/Order, governors, facilities)
 - All NPC states (Disposition toward OTHER NPCs, Scars, Beliefs, arc position)

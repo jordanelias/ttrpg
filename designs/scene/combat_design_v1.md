@@ -16,7 +16,7 @@ Translation rules for each scale are noted inline.
 
 | TTRPG | Hybrid | Board Game |
 |-------|--------|------------|
-| Full personal combat (pool split, wound tracking, stamina) | Personal combat for named characters; mass combat abstraction for units | Unit-based abstraction (Martial/Cohesion/Morale); no individual tracking |
+| Full personal combat (pool split, wound tracking, stamina) | Personal combat for named characters; mass combat abstraction for units | Unit-based abstraction (Martial/Discipline/Morale); no individual tracking |
 | Zone-based (no maps or grids) | Zone-based for personal scenes; operational zones for mass combat | Territory-adjacency map; zone-based mass combat within territory |
 | All 10 attributes active | Player Character attributes active; Non-Player Character stats simplified | Faction stats (Military, Wealth, etc.); no personal attributes |
 
@@ -346,8 +346,8 @@ Each combatant is engaged in one primary pairing per round. Extras choose which 
 
 ### Unit Stat Block (1–7 unless noted)
 - **Strength:** Headcount/health pool. At 0: destroyed.
-- **Combat Power (CP):** Dice pool ceiling.
-- **Cohesion:** Organisational integrity.
+- **Power (CP):** Dice pool ceiling.
+- **Discipline:** Organisational integrity.
 - **Morale:** Rout threshold.
 - **Speed:** Slow / Standard / Fast.
 - **Weapon Type:** Inherits personal combat TN table (above).
@@ -393,19 +393,19 @@ See designs/ttrpg/threadwork_redesign_v25.md for full Thread operation rules.
 ## 11. FACTION UNIT ROSTERS (from MT-01, 2026-03-30)
 
 Default unit stats (board game / mass combat):
-- Standard unit: Martial 2, Cohesion 3
-- Elite unit: Martial 3–4, Cohesion 4–5
+- Standard unit: Martial 2, Discipline 3
+- Elite unit: Martial 3–4, Discipline 4–5
 
 | Faction | Military | Starting Units | Notes |
 |---------|---------|---------------|-------|
 | Crown | 4 | 4 | Mixed infantry + cavalry. Standard formation. |
-| Church | 4 | 4 | 2 Templar (elite: Cohesion 5, Martial 4) + 2 garrison (Cohesion 3, Martial 2). Templars deploy free at Theocracy Counter ≥ 40 in Himmelstift. |
-| Hafenmark | 3 | 3 | 1 ducal guard (elite: Cohesion 4, Martial 3) + 2 militia. |
-| Varfell | 4 | 4 | Highland infantry. Cohesion 4. Home territory bonus: +1D in Eisengrund. |
-| Guilds | 2 | 2 | Hired mercenaries. Cohesion 3, Martial 2. High Wealth allows rapid replacement. |
+| Church | 4 | 4 | 2 Templar (elite: Discipline 5, Martial 4) + 2 garrison (Discipline 3, Martial 2). Templars deploy free at Theocracy Counter ≥ 40 in Himmelstift. |
+| Hafenmark | 3 | 3 | 1 ducal guard (elite: Discipline 4, Martial 3) + 2 militia. |
+| Varfell | 4 | 4 | Highland infantry. Discipline 4. Home territory bonus: +1D in Eisengrund. |
+| Guilds | 2 | 2 | Hired mercenaries. Discipline 3, Martial 2. High Wealth allows rapid replacement. |
 | Niflhel | 0 | 0 | No standing units. Cannot hold territory by force. |
 | Revolution | 0 | 0 | No standing units. Community defence possible via Community Weaving. |
-| Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Cohesion 5, Martial 4. +1 unit from Crown transfer post-coup. |
+| Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Discipline 5, Martial 4. +1 unit from Crown transfer post-coup. |
 
 > **[PROVISIONAL] Coup Counter — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
 

@@ -409,7 +409,7 @@ Game Master determines domain type when Lock is applied.
 
 > **Correction (R-56):** Healing operations (W-08 and variants) use accelerated Overweave: each healing operation in the same contact window adds +2 Ob (not +1). Sequence: 1st heal Ob 1, 2nd Ob 3, 3rd Ob 5, 4th Ob 7.
 
-> **W-33 note (P-31):** W-33 is effective only for units with CP ≥ 3. A rallied unit with CP ≤ 2 will have an effective combat pool of 0 despite Cohesion restoration — the Cohesion penalty from Cohesion 2 eliminates the entire pool at low CP values. W-33's primary use case is Professional or Elite infantry (CP 3+) that has broken under morale pressure while retaining Strength.
+> **W-33 note (P-31):** W-33 is effective only for units with CP ≥ 3. A rallied unit with CP ≤ 2 will have an effective combat pool of 0 despite Discipline restoration — the Discipline penalty from Discipline 2 eliminates the entire pool at low CP values. W-33's primary use case is Professional or Elite infantry (CP 3+) that has broken under morale pressure while retaining Strength.
 
 
 

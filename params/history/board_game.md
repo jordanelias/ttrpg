@@ -11,7 +11,7 @@
 Catastrophic Failure is a fifth degree that REPLACES Failure. Not additive.
 
 ### PP-034 — Drawn Battles
-Equal net successes: both sides Cohesion −1, hold position, no territory change.
+Equal net successes: both sides Discipline −1, hold position, no territory change.
 
 ### PP-035 — Hollow Victory Scope
 Hollow Victory applies to Deed-counting factions only (Hafenmark, Guilds).

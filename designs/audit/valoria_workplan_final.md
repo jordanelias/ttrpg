@@ -110,7 +110,7 @@ Estimated effort: 2–3 sessions. Requires design decisions.
 **Propagation:** Every modified doc → `references/propagation_map.md`, `references/canonical_sources.yaml` SHAs.
 
 ## 1.3 — Derived Stats Numerical Calibration [AUD-DS-01]
-**Why:** All multipliers in derived_stats_v1 are explicitly PROVISIONAL (§6). Treasury ×100, Legitimacy ×20, Reputation ×15, Cohesion ×10. Income and drain rates need simulation to confirm: (a) each faction has sustainable economics at starting stats, (b) drain rates create pressure without immediate collapse, (c) stat damage triggers fire once every 5–10 seasons not every season, (d) starting derived values give factions 3–5 seasons of runway before economic pressure forces Trade actions.
+**Why:** All multipliers in derived_stats_v1 are explicitly PROVISIONAL (§6). Treasury ×100, Legitimacy ×20, Reputation ×15, Discipline ×10. Income and drain rates need simulation to confirm: (a) each faction has sustainable economics at starting stats, (b) drain rates create pressure without immediate collapse, (c) stat damage triggers fire once every 5–10 seasons not every season, (d) starting derived values give factions 3–5 seasons of runway before economic pressure forces Trade actions.
 **Design task:** Build a per-faction economic model. For each of Crown, Church, Hafenmark, Varfell: calculate seasonal Treasury income (Σ(settlement Prosperity) × 10 per settlement + Haushalt Competence bonus if Crown + Trade action results), seasonal drains (unit upkeep at −25/professional/season, Campaign Supply at −100/season if in hostile territory, construction at −200/action, Muster costs), and time-to-zero at starting values with no income actions. Adjust multipliers if any faction collapses within 3 seasons or never faces economic pressure within 20 seasons.
 **Dependencies:** 1.2 (Accord propagation affects which settlements contribute Prosperity income — Accord 0 settlements contribute nothing, Accord 1 settlements contribute nothing, only Accord ≥ 2 contributes).
 **Simulation:** `tests/sim_derived_stats_calibration.md` (new). Register in `tests/coverage_matrix.md`.
@@ -622,7 +622,7 @@ Every feature must fire at least once across the 50 campaign runs. This checklis
 - [ ] Treasury income/drain cycle (Prosperity income, Trade, Haushalt, unit upkeep, Campaign Supply, Muster, construction)
 - [ ] Legitimacy income/drain cycle (Accord-based income, Govern, emergency invocation drain)
 - [ ] Reputation income/drain cycle (diplomatic relationship income, Intel/Diplomacy, exposure drain)
-- [ ] Cohesion income/drain cycle (peaceful season income, battle loss drain, crisis drain)
+- [ ] Discipline income/drain cycle (peaceful season income, battle loss drain, crisis drain)
 - [ ] Levies Available ceiling enforcement (Military ×2 cap, disband if over)
 - [ ] Stat damage from derived value depletion (Treasury 0 stays through Accounting → Wealth −1)
 - [ ] Settlement derived values (Local Economy → Treasury income, Garrison Strength display, Public Order → riot events)

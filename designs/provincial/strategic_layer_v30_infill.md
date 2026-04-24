@@ -30,7 +30,7 @@ Every action retains at least one point of resistance. This changes the effectiv
 **Decision (PATCH P-14):** Treaty-based Casus Belli (earned from pledge betrayal) is permanent until used. All other Casus Belli (earned from Brutal disposition, fabricated Heresy Investigation) expire after 3 seasons unused. Varfell's Patience Protocol Casus Belli expires on Riskbreaker exposure. **The distinction is that treaty betrayal creates a permanent grievance; other acquisition routes are tactical windows.**
 ## I-04 — Faction Collapse: "Attributes Freeze" Contradicted by "Mandate Drops to 0"
 ## I-05 — Battle Resolution: Both Sides Roll, No Clear Victory Determination
-## I-06 — Restoration Victory Rendering Stability ≥ 50 vs Rendering Stability Starting at 72
+## I-06 — Restoration Victory Mending Stability ≥ 50 vs Mending Stability Starting at 72
 ## I-07 — Phase 4 Tiebreaking Contradiction (Simultaneous vs Sequential for 3+)
 ## I-08 — Parliamentary Manoeuvre Free Interrupt Scope
 > **P-17:** **Hafenmark Decree scope:** Decrees affect only Varfell Territory factions. Cross-territory Decrees are invalid — they are not issued.
@@ -87,7 +87,7 @@ Every action retains at least one point of resistance. This changes the effectiv
 **Church artificial intelligence Priority at Theocracy Counter 52:** Priority 1: Assert (fires this season). Church Asserts: Theocracy Counter +1 at accounting.
 **Church chooses Resist (Game Master determines; consistent with Church conviction and Theocracy Counter > 50 assertive posture):**
 7. Hafenmark holds 4+ Deed Tokens (if Deed 3 = Reformed Settlement, they now hold it). Hafenmark also holds Deed 2 (Public Instability ≥ 3 — current Public Instability 5). Check all three Path A deeds: RDT ≥ 4 (RDT 6 ✓), Public Instability ≥ 3 (Public Instability 5 ✓), Reformed Settlement (✓). **Hafenmark has all three Path A Deeds simultaneously.**
-## Cascade Test 3: Varfell VTM 5 + Co-Movement + Rendering Stability Trigger
+## Cascade Test 3: Varfell VTM 5 + Co-Movement + Mending Stability Trigger
 7. CM-19 Epistemic: "Acting faction must reveal which Thread operation type was used." Varfell must reveal: Weaving. CM-19 Temporal: "If this operation was Dissolution FR: additional check fires." Not Dissolution — no additional fire.
 ## Cascade Test 4: Church Theocracy Counter 80 Territorial Seizure
 > **P-30:** **Theocracy Counter 80 Territorial Seizure Partial result:** Territory is not seized. Church places 1 Templar Staging Token in the territory (the Templars have moved to the border). The controlling faction may contest this deployment: any Military card play in that territory next season removes the Staging Token a

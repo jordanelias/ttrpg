@@ -39,7 +39,7 @@ Resolution: stats remain 1–7 (correct pool range for d10 probability curves). 
 | High | ×10 | Vitality | Combat has most interactions per scene (5–8+ rounds). Fine granularity for gradual degradation, wound thresholds, equipment differentiation. |
 | Medium | ×5 | Stamina, Thread Fatigue | Action economy resources deplete per-round/per-operation. Variable action costs (3–10 per action) without inflating numbers. |
 | Low | ×3 | Composure, Concentration | Social contests are 1–5 exchanges. Lower multiplier gives equipment modifiers proportionally more impact. |
-| Faction | ×10–100 | Treasury, Legitimacy, Reputation, Cohesion | Seasonal interaction frequency (1–5 events/season). Each calibrated independently. |
+| Faction | ×10–100 | Treasury, Legitimacy, Reputation, Discipline | Seasonal interaction frequency (1–5 events/season). Each calibrated independently. |
 
 ---
 
@@ -217,7 +217,7 @@ Player sees: **"Heavy Infantry — 4,428 / 5,000 (Size 4)"**
 | Wealth | **Treasury** | Wealth × 100, starting = stat × 100 | Accumulated economic resources |
 | Military | **Levies Available** | Military × 2 (ceiling) | Force projection capacity — not spendable, constrains active unit count |
 | Influence | **Reputation** | Influence × 15, starting = stat × 15 | Political capital across factions |
-| Stability | **Cohesion** | Stability × 10, starting = stat × 10 | Internal faction unity |
+| Stability | **Discipline** | Stability × 10, starting = stat × 10 | Internal faction unity |
 
 ### 8.1 Income and Drain
 
@@ -263,7 +263,7 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 
 **When Reputation reaches 0:** Diplomatic and Intel actions +1 Ob. At next Accounting still at 0: Influence −1.
 
-**Cohesion (from Stability):**
+**Discipline (from Stability):**
 - Seasonal income: +10 per peaceful season
 - Successful Govern: +5
 - Battle loss: −15
@@ -272,7 +272,7 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 - Coup (Löwenritter): −50
 - Internal faction schism: −40
 
-**When Cohesion reaches 0:** Stability check at Accounting (Ob 1). Failure: Stability −1. Cohesion drain at Stability ≤ 2 triggers faction collapse checks.
+**When Discipline reaches 0:** Stability check at Accounting (Ob 1). Failure: Stability −1. Discipline drain at Stability ≤ 2 triggers faction collapse checks.
 
 **Levies Available (from Military):** Ceiling, not spendable. Military × 2 = max active units. If Military drops, ceiling drops — disband excess units.
 
@@ -312,13 +312,13 @@ Cross-reference: fieldwork_v30 §5.1, params_core §Bonds (PP-632/PP-684), compa
 
 ### 10.2 Army Morale (Mass Combat Derived Composite)
 
-**Army Morale = floor(average unit Morale) + Command modifier + Cohesion modifier**
+**Army Morale = floor(average unit Morale) + Command modifier + Discipline modifier**
 
 | Component | Source | Range |
 |-----------|--------|-------|
 | Average unit Morale | mean of active units' Morale, floored | 1–7 |
 | Command modifier | +1 if Command ≥ 4; −1 if Command ≤ 2 | −1 to +1 |
-| Cohesion modifier | +1 if faction Cohesion ≥ 75% of max; −1 if ≤ 25% | −1 to +1 |
+| Discipline modifier | +1 if faction Discipline ≥ 75% of max; −1 if ≤ 25% | −1 to +1 |
 
 Thresholds: 6+ Resolute, 4–5 Steady, 2–3 Shaken (−1D Morale checks, Command check Ob 2 each Cascade), 1 Wavering (−2D, Withdrawal unless rally Ob 3), 0 Routed (army-level rout, battle lost).
 
@@ -328,9 +328,9 @@ When player holds governance position (Standing ≥ 3), faction derived value dr
 
 | Event | Derived Value Drain | Renown Consequence |
 |-------|--------------------|-------------------|
-| Accord drops in governed territory | Cohesion −20 | Governor: Renown −1 |
+| Accord drops in governed territory | Discipline −20 | Governor: Renown −1 |
 | Treasury reaches 0 while faction officer | Wealth −1 at Accounting | Counselor+: Renown −1 |
-| Battle loss in governed territory | Cohesion −15 | Governor: Renown −1 |
+| Battle loss in governed territory | Discipline −15 | Governor: Renown −1 |
 | Faction Stability reaches 0 | Faction collapses | Member: Renown −2 |
 
 Renown governance penalties cap at −2 per season. Does not decay below 0.
@@ -357,21 +357,21 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 | Original | Converted To | Files Affected |
 |----------|-------------|----------------|
 | Campaign Supply: Wealth −1/season | Treasury −100/season | mass_battle_v30 |
-| Battle Partial: Stability −1 | Cohesion −15 | mass_battle_v30, military_layer_v30 |
-| Battle loss (routed): Stability check Ob 1 | Cohesion −15 | mass_battle_v30 |
-| Campaign defeat: Stability check Ob 2 | Cohesion −30 | mass_battle_v30 |
+| Battle Partial: Stability −1 | Discipline −15 | mass_battle_v30, military_layer_v30 |
+| Battle loss (routed): Stability check Ob 1 | Discipline −15 | mass_battle_v30 |
+| Campaign defeat: Stability check Ob 2 | Discipline −30 | mass_battle_v30 |
 | Siege supply: Wealth −1/season | Treasury −100/season | military_layer_v30 |
-| Siege failure: Stability −1 | Cohesion −15 | military_layer_v30 |
-| Siege parley rejected: Stability −1 | Cohesion −15 | military_layer_v30 |
-| Assert failure: Stability −1 | Cohesion −15 | tc_political, victory_v30 |
-| Suppress failure: Stability −1 | Cohesion −15 | tc_political, victory_v30 |
-| Govern failure at Prosperity 0: Stability −1 | Cohesion −15 | tc_political |
+| Siege failure: Stability −1 | Discipline −15 | military_layer_v30 |
+| Siege parley rejected: Stability −1 | Discipline −15 | military_layer_v30 |
+| Assert failure: Stability −1 | Discipline −15 | tc_political, victory_v30 |
+| Suppress failure: Stability −1 | Discipline −15 | tc_political, victory_v30 |
+| Govern failure at Prosperity 0: Stability −1 | Discipline −15 | tc_political |
 | Trade Success: Wealth +1 | Treasury +Wealth×25 | tc_political |
 | Strain 3–4: Mandate check → Mandate −1 | Legitimacy −25 | tc_political, peninsular_strain |
-| Seizure failure: Stability −1 | Cohesion −20 | peninsular_strain |
-| Proclamation failure: Stability −1 | Cohesion −20 | peninsular_strain |
-| Cultural Reformation failure: Stability −1 | Cohesion −20 | peninsular_strain |
-| IP 90 inter-faction Battle: Stability −1 | Cohesion −20 | victory_v30 |
+| Seizure failure: Stability −1 | Discipline −20 | peninsular_strain |
+| Proclamation failure: Stability −1 | Discipline −20 | peninsular_strain |
+| Cultural Reformation failure: Stability −1 | Discipline −20 | peninsular_strain |
+| IP 90 inter-faction Battle: Stability −1 | Discipline −20 | victory_v30 |
 | Settlement expansion: Wealth −3 | Treasury −300 | settlement_layer |
 | Mine surplus: Wealth +1 | Treasury +50/season | settlement_layer |
 
@@ -440,7 +440,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 | Faction | Wealth | **Treasury** | ×100 | Drains down |
 | Faction | Military | **Levies Available** | ×2 | Ceiling |
 | Faction | Influence | **Reputation** | ×15 | Drains down |
-| Faction | Stability | **Cohesion** | ×10 | Drains down |
+| Faction | Stability | **Discipline** | ×10 | Drains down |
 | Settlement | Prosperity | **Local Economy** | ×50 | PENDING |
 | Settlement | Defense | **Garrison Strength** | ×20+Fort | PENDING |
 | Settlement | Order | **Public Order** | ×20 | PENDING |

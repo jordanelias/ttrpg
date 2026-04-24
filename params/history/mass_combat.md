@@ -15,7 +15,7 @@ Apply non-general Morale changes first (cap −3), then Stage 2 general death �
 Maximum total Morale loss per Cascade Phase: −5.
 
 ### ST-MB-05 — CR=0 Uncommanded
-All units at Line formation, Cohesion floor 1, no tactics. Morale floor suspended.
+All units at Line formation, Discipline floor 1, no tactics. Morale floor suspended.
 
 ### ST-MB-06 — Reserve Timing
 Commit at Phase 3 Turn N+1 → available for Phase 4 that same turn.
@@ -30,7 +30,7 @@ Roll CR dice (d10s equal to CR score) vs Ob 2 to recognise feint.
 Reduce Strength proportionally to TS-capable fraction. Only Restoration+Varfell VTM≥2 viable.
 
 ### ST-MB-10 — Woven Unit Shifting Object
-Shattered Woven unit fights at Line/Cohesion 1 for battle; Shifting Object status registers post-battle only.
+Shattered Woven unit fights at Line/Discipline 1 for battle; Shifting Object status registers post-battle only.
 
 ### ST-INT-06 — BG Unit TS (Southernmost)
 Church Templar: TS=0. Restoration with Weaver marker: TS=30. Varfell VTM≥2: TS=30.
@@ -44,7 +44,7 @@ TTRPG: immediate. BG: queues to Accounting. Hybrid: TTRPG timing during battle.
 ## Status: PROVISIONAL — requires user approval for final values
 ## [PROVISIONAL: all values below]
 
-| Unit | Strength | CP | Cohesion | Morale | Weapon | Armour | Notes |
+| Unit | Strength | CP | Discipline | Morale | Weapon | Armour | Notes |
 |------|----------|----|----------|--------|--------|--------|-------|
 | Vanguard (standard) | 5 | 4 | 4 | 5 | HeavyCut | Medium | Standard Altonian professional infantry |
 | Elite Guard | 4 | 5 | 5 | 5 | HeavyCut | Heavy | Command unit; general typically attached |

@@ -602,7 +602,7 @@ Die:  d10, success on ≥ TN, chain on 10 (reroll, keep)
 | **Treasury** (from Wealth) | Wealth × 100 | Σ(settlement Prosperity) × 10 + Trade results + Haushalt bonus | Treasury = 0 through Accounting → Wealth −1 |
 | **Legitimacy** (from Mandate) | Mandate × 20 | +5 per territory at Accord ≥ 2 + Govern results | Legitimacy = 0 → Mandate check Ob 2; fail → Mandate −1 |
 | **Reputation** (from Influence) | Influence × 15 | +5 per diplomatic relationship at Disp ≥ +2 + Intel/Diplomacy results | Reputation = 0 → Diplomatic +1 Ob, Intel +1 Ob; next Accounting → Influence −1 |
-| **Cohesion** (from Stability) | Stability × 10 | +10 per peaceful season + Govern +5 | Cohesion = 0 → Stability check Ob 1; fail → Stability −1 |
+| **Discipline** (from Stability) | Stability × 10 | +10 per peaceful season + Govern +5 | Discipline = 0 → Stability check Ob 1; fail → Stability −1 |
 | **Levies Available** (from Military) | Military × 2 | N/A (ceiling, not resource) | Over ceiling → disband |
 | **Local Economy** (settlement) | Prosperity × 50 | Contributes to faction Treasury | Local Economy = 0 through Accounting → Prosperity −1 |
 | **Garrison Strength** (settlement) | Defense × 20 + Fort × 30 | N/A | N/A (derived indicator) |

@@ -335,7 +335,7 @@ See victory_v30.md §3.2 for full Seizure mechanics (PP-494).
 | Overwhelming | floor(PT/2) + 2, max 3 | High institutional authority. PT 5 → Accord 3. PT 3 → Accord 3. PT 1 → Accord 2. |
 | Success | max(floor(PT/2) + 1, 2) | Guaranteed ≥ 2. PT 5 → Accord 3. PT 3 → Accord 2. PT 1 → Accord 2. |
 | Partial | 1 | Politically messy. Contested seizure fails to establish authority. |
-| Failure | N/A | Seizure fails. Cohesion −20 (derived_stats_v1). |
+| Failure | N/A | Seizure fails. Discipline −20 (derived_stats_v1). |
 
 **Defensive interaction:** Controlling faction gains Casus Belli on every seizure attempt (PP-510, existing rule). Institutional Mandate (PP-189) applies — controlling faction may Appease to cancel Seizure before roll.
 
@@ -355,7 +355,7 @@ Baralta's divine-right claim. "Faith is not mediated — it is lived. Anyone who
 | Overwhelming | Territory control transfers. Accord set to 2. Target faction Mandate −1. Hafenmark Mandate +1 (momentum of divine right). No Casus Belli (legitimate succession claim). +1 Standing (PP-515: the claim was publicly made and upheld). |
 | Success | Territory control transfers. Accord set to 2. Target faction Mandate −1. |
 | Partial | Territory does not transfer. Hafenmark gains Casus Belli vs target (rejected claim = justification for force). Target territory Accord −1 (population destabilised by competing claims). |
-| Failure | Hafenmark Cohesion −20 (overreach, derived_stats_v1). No Casus Belli. |
+| Failure | Hafenmark Discipline −20 (overreach, derived_stats_v1). No Casus Belli. |
 
 **Diplomatic Token interaction (PP-517/521):** If Hafenmark has Diplomatic Token on target faction AND uses Proclamation: Token provides −1 Ob (above). On Overwhelming Proclamation: Token is NOT consumed (unlike military conflict, which removes Tokens). On Partial/Failure: Token remains. Token is consumed only if Hafenmark subsequently uses military force against that faction (existing PP-517 rule).
 
