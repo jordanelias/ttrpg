@@ -91,12 +91,11 @@ Piety Domain Action (1/season): Mandate pool, Ob 2. Success: TC +1 (stacks with 
 TC seasonal cap: ±5 combined from all sources.
 Stability ≤ 4: TC generation pauses.
 
-## Coup Counter (Löwenritter)
-Increments (+1) when:
-  - TC reaches 40 and Crown took no TC-reduction action that season
-  - Torben loyalty ≤ 2 (Altonian alignment)
-  - Crown loses 2+ territories in one season without a military DA response
-Counter never decrements. At 3: coup fires at next accounting.
+## ~~Coup Counter (Löwenritter)~~ STRUCK (ED-781 — supersedes per ED-589)
+
+Per `designs/architecture/conflict_architecture_proposal.md §Graduated Löwenritter Autonomy` and `designs/provincial/clock_registry_v30.md L30 Löwenritter Autonomy`, the Coup Counter binary mechanism is replaced by a four-stage progression: **Loyal → Restless → Autonomous → Split** (track-state, not numeric counter). Triggers, Crown effects, and reversibility rules are in `conflict_architecture_proposal.md` L67-L82. Above §59 of this file (Löwenritter Graduated Autonomy entry) is the canonical reference for params lookup. The legacy Coup Counter spec is preserved in `deprecated/` per editorial policy.
+
+Migration note: prior canonical text was "Counter never decrements. At 3: coup fires at next accounting." This is replaced by stage-based progression where stages 1-3 are reversible and only stage 4 (Split) is permanent. References to "Coup Counter" in NPC priority trees (`params/bg/npc_priority_trees.md` L42, L86, L149, L197) refer to the legacy track and should be migrated to "Löwenritter Autonomy stage" in a future cleanup pass.
 
 ## Southernmost Awareness (Faction Stat, 0–7 or 0–10 for research factions)
 | Faction | Starting Awareness |

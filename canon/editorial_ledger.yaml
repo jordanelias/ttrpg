@@ -30,3 +30,9 @@ entries:
     description: "fieldwork §5.6a Knot Formation Procedure — explicit Bonds ≥ 5 prerequisite added. Closes documentation gap surfaced by stress-test 53: Disposition ceiling = Bonds (per §3) + Knot formation requires Disposition +5 (per §5.6a step 1) implies Bonds ≥ 5 minimum, but this derivation was never surfaced as an explicit prerequisite. Player with Bonds 1-4 could attempt Knot formation indefinitely with no possibility of success. Rationale section explains the Knot ecosystem locked behind this prerequisite (Wager, Composure buffer, Thread-Read, Coherence anchoring). Source: 2026-04-25 stress-test 53."
     status: resolved
     severity: P3
+
+  - id: ED-781
+    date: 2026-04-25
+    description: "params/factions_personal §Coup Counter (Löwenritter) STRUCK and replaced with reference to Graduated Autonomy spec. Closes spec inconsistency surfaced by stress-test 57: §59 of same file already declared 'Löwenritter Graduated Autonomy replaces Coup Counter (ED-589)' with 4-stage track (Loyal/Restless/Autonomous/Split per conflict_architecture_proposal §Graduated Löwenritter Autonomy + clock_registry §3), but §94 still contained the legacy Coup Counter increment rules (TC 40 trigger, Torben loyalty, territory loss / Counter at 3 → coup). Two contradictory specs in same file. Now: §94 STRUCK with explicit reference to canonical Graduated Autonomy. Migration note flags 4 stale references in npc_priority_trees.md (L42, L86, L149, L197) for future cleanup. Source: 2026-04-25 stress-test 57."
+    status: resolved
+    severity: P2
