@@ -141,3 +141,9 @@ entries:
     description: "TC disambiguation sweep: glossary note added to top 5 TC-density design docs (npc_faction_arc_interdependency, narrative_scenario_chains, conviction_track_v30, arcs_46_55_resolved, faction_politics_v30) explicitly stating TC = Theocracy Counter (Conviction Track is always written in full). Manual review of 268 TC instances across these 5 files confirmed 0 instances where TC = Conviction Track; corpus uses 'TC' exclusively for Theocracy Counter. The disambiguation problem was real (the abbreviation IS ambiguous in principle) but the residual ambiguity is exclusively documentation-level — readers must infer from context. Glossary note resolves this without per-instance edits. 268 of 943 total TC instances now disambiguated by header note. Source: 2026-04-22 session log carry-over."
     status: resolved
     severity: P3
+
+  - id: ED-757
+    date: 2026-04-24
+    description: "npc_behavior §7.1 framework drift table — fixed malformed Niflhel row (was 3-column entry in 4-column table). Restored row to 4 columns with Frequency = N/A (drift mechanic dissolved with faction). No mechanical change; structural cleanup. Source: 2026-04-24 Niflhel residual sweep."
+    status: resolved
+    severity: P4

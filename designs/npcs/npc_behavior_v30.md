@@ -706,7 +706,7 @@ Maximum bonus dice from Resonant Style targeting: +1D. This stacks with genre bo
 | Consequentialist Pragmatism | Varfell | TK +0.5 per season of active investigation. Caps at TK 3 without PC interaction. | Per season |
 | Rawlsian Social Contract | Restoration | RM Presence markers spread to 1 adjacent territory per season when RM Stability ≥ 3 | Per season (conditional) |
 | Moral Relativism | Guilds | Guild Favour +1 in highest-Favour territory per Year-End | Per year |
-| Amoral Consequentialism | [Niflhel — STRUCK] | Ethical framework dissolved with faction. Intelligence broker NPCs operate without faction-level ethical framework. |
+| Amoral Consequentialism | [Niflhel — STRUCK] | Ethical framework dissolved with faction; settlement-level intelligence brokers operate without faction-level framework | N/A — drift mechanic dissolved with faction (ED-757) |
 | Martial Honour | Löwenritter | If Military < 5: all non-survival actions redirect to Military Consolidation | Continuous |
 
 ### §7.2 Drift and NPC Arc Interaction
