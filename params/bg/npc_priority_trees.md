@@ -39,7 +39,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | P | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward capital. Royal Decree own Stability if available. |
-| 2 | 2+ territories changed OR Coup Counter = 2 OR PI ≥ 8 | Military response. Legionary in threatened territory. |
+| 2 | 2+ territories changed OR Löwenritter Autonomy = Restless OR PI ≥ 8 | Military response. Legionary in threatened territory. |
 | 3 | Royal Decree available + framework-aligned target | Decree: +1 weakest-stat ally or −1 strongest-stat rival. |
 | 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Senator. If T2 Kronmark is ungarrisoned AND any Varfell unit is active in T4: deploy minimum garrison to T2 (1 unit, Legionary Inward). Crown's breadbasket must not be left exposed when Varfell has forward-deployed forces. |
 | 5 | Torben Loyalty ≤ 3 | Senator Outward targeting Torben. |
@@ -83,7 +83,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | P | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Military Consolidation. |
-| 2 | Coup Counter = 2 + trigger imminent | Prepare: pre-position Legionary T14. |
+| 2 | Löwenritter Autonomy = Restless + trigger imminent | Prepare: pre-position Legionary T14. |
 | 3 | Sovereignty defence available (border, Altonian) | Legionary border territory (−1 Ob Martial Honour). |
 | 4 | Bordering faction Military > Löwenritter | Military Consolidation (PP-238). |
 | 5 | Crown M < 3 or Torben Loyalty < 3 | Riskbreaker activation vs faction threatening Crown. |
@@ -146,7 +146,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | P | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward capital. Royal Decree own Stability if available. |
-| 2 | 2+ territories changed OR Coup Counter = 2 OR PI ≥ 8 | Military response. Legionary in threatened territory. |
+| 2 | 2+ territories changed OR Löwenritter Autonomy = Restless OR PI ≥ 8 | Military response. Legionary in threatened territory. |
 | 3 | Royal Decree available + framework-aligned target | Decree: +1 weakest-stat ally or −1 strongest-stat rival. |
 | 4 | Default | Maintain treaties. Defend territory. Govern. Consul/Senator. If T2 Kronmark is ungarrisoned AND any Varfell unit is active in T4: deploy minimum garrison to T2 (1 unit, Legionary Inward). Crown's breadbasket must not be left exposed when Varfell has forward-deployed forces. |
 | 5 | Torben Loyalty ≤ 3 | Senator Outward targeting Torben. |
@@ -194,7 +194,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | P | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Military Consolidation. |
-| 2 | Coup Counter = 2 + trigger imminent | Prepare: pre-position Legionary T14. |
+| 2 | Löwenritter Autonomy = Restless + trigger imminent | Prepare: pre-position Legionary T14. |
 | 3 | Sovereignty defence available (border, Altonian) | Legionary border territory (−1 Ob Martial Honour). |
 | 4 | Bordering faction Military > Löwenritter | Military Consolidation (PP-238). |
 | 5 | Crown M < 3 or Torben Loyalty < 3 | Riskbreaker activation vs faction threatening Crown. |
@@ -236,9 +236,9 @@ Crown Priority Tree P3 (Royal Decree): do NOT attempt if Crown Mandate ≤ 2. At
 Royal Decree failure cost (Mandate −1) applies only at Mandate ≥ 3. At Mandate ≤ 2: failure produces no Mandate loss (institution too weak for additional reputational damage).
 
 
-## PP-NPC-02 — Crown CI Awareness + Coup Counter Refinement (SIM-NPC-01 F-02/F-03)
+## PP-NPC-02 — Crown CI Awareness + Löwenritter Autonomy Refinement (SIM-NPC-01 F-02/F-03; ED-781 migration)
 Crown Priority Tree P2: insert trigger "If CI ≥ 35: Crown takes CI-reducing action (Senator Outward to Hafenmark for coordinated Suppress, OR direct DA targeting Church Mandate). This fires BEFORE the standard P2 triggers (territory loss, coup, PI)."
-Coup Counter increment: CI ≥ 40 trigger requires BOTH conditions: (a) CI ≥ 40, AND (b) Church actively Asserted this season. Passive CI advance alone does not trigger counter. Crown must have failed to prevent active Church expansion, not merely failed to counter institutional drift.
+Löwenritter Autonomy advance to Restless via CI ≥ 40 trigger requires BOTH conditions: (a) CI ≥ 40, AND (b) Church actively Asserted this season. Passive CI advance alone does not advance the Autonomy stage. Crown must have failed to prevent active Church expansion, not merely failed to counter institutional drift. (ED-781: 'Coup Counter increment' migrated to 'Löwenritter Autonomy advance to Restless'.)
 
 
 ## PP-NPC-03 — Church Framework Drift Revision (SIM-NPC-01 F-02)
