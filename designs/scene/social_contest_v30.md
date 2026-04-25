@@ -265,7 +265,7 @@ The Wager Obligation is the structural mechanism by which Continuity-Conviction 
 
 ### §6.2 Conviction Scar Visibility (NEW — player-facing)
 
-When a player's contest argument produces a Conviction Scar on an NPC (per npc_behavior_v30 §3.2 — decisive outcome via Resonant Style targeting with Conviction engagement), the player receives a narrative signal. The GM states: "Something shifted in [NPC]'s expression. Your argument reached something they cannot dismiss." This is not a stat reveal — the player does not learn the Scar count. They learn that their words had structural impact.
+When a player's contest argument produces a Conviction Scar on an NPC (per npc_behavior_v30 §3.3 — decisive outcome via Resonant Style targeting with Conviction engagement), the player receives a narrative signal. The GM states: "Something shifted in [NPC]'s expression. Your argument reached something they cannot dismiss." This is not a stat reveal — the player does not learn the Scar count. They learn that their words had structural impact.
 
 **Videogame implementation:** NPC portrait shows a subtle visual indicator (a crack, a flicker, a moment of instability) when a Scar is produced. The indicator is momentary — it does not persist on the portrait. The player must remember that they wounded this NPC's conviction. If they Appraise in a future contest, the Scar count is revealed per npc_behavior §3.1 (Appraise Overwhelming: one Conviction revealed).
 

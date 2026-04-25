@@ -656,9 +656,33 @@ Central Einhir start all values +1 from the Southern column; Northern Einhir sta
 
 ## §3.6 Caste as Conviction Scar Risk
 
-A player of any caste who publicly adopts a Conviction that is caste-transgressive (a Northern Einhir adopting Conviction: Community — the RM/Warden foundation, is caste-transgressive; a Southern Einhir adopting Conviction: Order — the Crown foundation, is caste-transgressive in a different way) faces an elevated Conviction Scar risk per npc_behavior_v30 §3.2. Scar risk increases the chance that a caste-transgressive Conviction cannot be completed without irreversible personal cost.
+A player of any caste who publicly adopts a Conviction that is caste-transgressive (a Northern Einhir adopting Conviction: Community — the RM/Warden foundation, is caste-transgressive; a Southern Einhir adopting Conviction: Order — the Crown foundation, is caste-transgressive in a different way) faces an elevated Conviction risk per npc_behavior_v30 §3.3 (Scar Accumulation; for PCs, the parallel mechanism is described in npc_behavior §3.4 PC reaction rules — failed Spirit checks "shake" Conviction for 1 season, modeling PC equivalent of NPC Scar accumulation).
 
-This is the mechanism by which Gerik Strand's "ideological ally" potential (npc_roster §14 #9) is expressed: Strand is Northern Einhir by background but adopts a Conviction that aligns with Southern Einhir or RM politics. The transgression is the source of his drama.
+**§3.6.1 Caste-transgressive PC mechanic (NEW — ED-777)**
+
+The "elevated risk" specified above operates through three concrete mechanisms applied when a PC publicly invokes a caste-transgressive Conviction (publicly = in scene with at least one NPC at Standing ≥ 2 in the relevant faction or 3+ NPCs of any rank as audience):
+
+| Mechanism | Trigger | Effect |
+|---|---|---|
+| **Witness Spirit Ob increase** | PC publicly invokes caste-transgressive Conviction in any social Contest | The PC's witness-Spirit check (per npc_behavior §3.4 line 447: PC witnesses Thread event → Spirit pool TN 7 Ob 1) raises to **Ob 2** for any social/Thread event in that scene. The transgressive Conviction makes the PC's own framework less stable, harder to maintain through witnessing. |
+| **Conviction Shake duration** | PC fails the witness-Spirit check during caste-transgressive Conviction display | Standard 1-season shake extends to **2 seasons** (the cultural friction takes longer to resolve). |
+| **Doubt Marker self-application** | PC declares Authority RS while invoking caste-transgressive Conviction (e.g., a Northern Einhir invoking Southern Einhir authority figures) | A Doubt Marker is placed on the **PC** instead of the opposing NPC (per social_contest §6.4-style reverse application). Effect: PC's next winning exchange has its margin reduced by 2 before resistance applies (minimum 0). The PC's own institutional grounding is weakened by the invocation. |
+
+These three mechanisms model the "elevated risk" without requiring PCs to have Scar tracks (which are NPC-only in the canonical implementation). The risk operates through resilience reduction (Ob increase, duration extension) and self-applied Doubt Markers, all of which compound in extended caste-transgressive engagement.
+
+**§3.6.2 Caste-transgressive PC mechanism interaction with Conviction crisis (ED-777)**
+
+If a PC accumulates 3+ caste-transgressive engagements within a single campaign year (defined as 4 consecutive seasons), the player must enter a **Conviction Reformation arc** at the next Accounting:
+
+- Mandatory Zoom-In scene (Priority 0 per scale_transitions §4.3.2): the PC confronts their accumulated transgression personally.
+- Resolution: Spirit pool, TN 7, Ob 3.
+- **Success:** The PC consolidates their caste-transgressive Conviction permanently (the §3.6.1 mechanisms cease applying for that Conviction). PC Renown +1 in factions aligned with the transgressive Conviction; Renown −1 in caste-of-origin factions. The transgression is resolved by formal commitment.
+- **Partial:** Conviction crisis. PC's primary Conviction shifts back to caste-aligned default. Any Standing earned through transgressive Conviction work converts to half value; Conviction Scar permanently logged on PC sheet (this is the only PC Scar in the canonical mechanics — produced specifically by failed reformation).
+- **Failure:** Catastrophic crisis. PC's Conviction Track resets to neutral (5/5/5). All faction Standing in non-caste-aligned factions drops 1 rank (per §1.0a Demotion Magnitude). The PC enters extended NPC-state-equivalent for 2 seasons (per npc_behavior §3.3 "acts unpredictably"; player resumes control after 2 seasons with reset Conviction).
+
+This is the mechanism by which Gerik Strand's "ideological ally" potential (npc_roster §14 #9) is expressed: Strand is Northern Einhir by background but adopts a Conviction that aligns with Southern Einhir or RM politics. The transgression is the source of his drama. As an NPC, Strand uses §3.3 Scar Accumulation rather than the §3.6.1/§3.6.2 PC mechanism — his caste-transgression Scars accumulate per standard NPC rules.
+
+[EDITORIAL: ED-777 — Caste as Conviction Scar Risk specified with numeric mechanics. Closes spec gap surfaced by stress-test 46: §3.6 referenced 'elevated Scar risk per §3.2' but (a) §3.2 is Belief Revision not Scar Accumulation (§3.3 has Scars), (b) PCs do not accumulate Scars in the canonical NPC sense, (c) the qualitative 'elevated risk' had no numeric implementation. Now: §3.6.1 defines three concrete mechanisms (Witness Spirit Ob increase, Conviction Shake duration extension, self-applied Doubt Marker on Authority RS); §3.6.2 defines Conviction Reformation arc (3+ caste-transgressive engagements/year triggers mandatory Priority 0 scene with Spirit Ob 3 resolution). Gerik Strand framing preserved with NPC-vs-PC mechanism distinction. Cross-ref fix: §3.2 → §3.3. Source: 2026-04-25 stress-test 46.]
 
 ---
 
