@@ -742,10 +742,38 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 | Authority | Invoke specific authority figure or text the NPC's framework recognises as binding. Authority must genuinely contradict NPC's position. | +1D to Argue roll. Doubt Marker placed on NPC regardless of exchange outcome. |
 | Solidarity | Requires active Knot (Close or Distant) with NPC. Must invoke the relationship itself. Knot formation during play: see fieldwork_v30 §5.6a. Prerequisites: Disposition +5 + either PC or NPC TS ≥ 30 + Knot capacity available. | +1D to Argue roll. On win: no strain dealt, but NPC's next Belief revision check uses Ob −1. |
 
-### §6.4 Wrong-Style Penalty (Church Martyrdom Extension)
+### §6.4 Wrong-Style Penalty (Church Martyrdom Extension; extended ED-775)
 
-- If result is Failure or Partial: Church Stability +1 (existing PP-259 Martyrdom effect fires).
+**Penalty trigger:**
+- If the Contest's final result is Failure (Conviction Track ≤ 3 from orator's perspective) OR Partial (Conviction Track 4-6 with strain accumulation favoring opponent — see §6.4.1 below for Compromise distinction): Church Stability +1 (existing PP-259 Martyrdom effect fires).
 - The wrong-style penalty makes intelligence (knowing the correct Resonant Style) strategically essential before engaging Church NPCs.
+
+**§6.4.1 RS Declaration Timing (ED-775)**
+
+The orator declares their Resonant Style at Contest setup, before Exchange 1's Read step. The declaration is locked for the duration of the Contest — the orator cannot switch RS mid-Contest. This rule has three implications:
+
+1. The Wrong-Style determination is unambiguous: only the declared RS counts; not "any RS attempted" or "last RS used."
+2. An orator who realizes mid-Contest they declared the wrong RS cannot pivot — they must continue with the wrong style or concede the Contest (per §1 Let It Ride). Conceding produces a Failure result (with associated Wrong-Style Penalty if RS was wrong).
+3. The Genre selection (Memory vs Projection) is similarly locked at setup per §3, mirroring this constraint.
+
+**§6.4.2 Compromise vs Partial Distinction (ED-775)**
+
+Compromise (Conviction Track 4-6) and Partial differ structurally. The Wrong-Style Penalty fires per the following table:
+
+| Conviction Track Outcome | Wrong-Style Penalty Fires? | Rationale |
+|---|---|---|
+| Total Victory ≥ 9 (orator wins decisively) | NO | Orator's RS proved adequate regardless of style choice — Conviction overcame mismatch |
+| Decisive 7-8 | NO | Orator's victory means RS was sufficient |
+| Compromise 5-6 (mid) | YES — half effect (Church Stability +0, but +1 strain instead). The mid-Compromise represents partial-but-not-disastrous engagement. | Mid-Compromise is meaningful exchange; both sides invested. Wrong-style intel cost is partial. |
+| Compromise 4 (barely) | YES — full effect (Church Stability +1) | Barely-Compromise is functionally a near-loss for the orator; full Wrong-Style fires. |
+| Partial 3 (orator near-loss) | YES — full effect | Standard Wrong-Style application. |
+| Failure ≤ 2 | YES — full effect + Church Stability +1 additional (compounded Martyrdom effect for catastrophic engagement) | Decisive loss compounds the institutional benefit to the standing-firm side. |
+
+**§6.4.3 Penalty Stacking Across Contests (ED-775)**
+
+Multiple Wrong-Style penalties from different Contests in the same season DO stack — Church Stability gains compound at Accounting. There is no per-season cap on Wrong-Style-derived Stability gains; the ±2/season Stat Cap (params/factions_personal §Domain Action Resolution) does apply to the net Stability change at Accounting, so a Church faction couldn't gain more than +2 net from any source in a single season regardless. This means: 3 Wrong-Style penalties in the same season produce +3 nominal but cap at +2 net. The "lost" +1 is institutional friction — perception of Church accumulates faster than measurable Stability.
+
+[EDITORIAL: ED-775 — Wrong-Style Penalty extended with: §6.4.1 RS Declaration Timing (locked at Contest setup, no mid-Contest switching), §6.4.2 Compromise vs Partial mapping (graduated penalty by Track outcome), §6.4.3 Cross-Contest stacking (uncapped nominal but ±2/season Domain Action cap applies). Closes spec gaps surfaced by stress-test 27: previously RS declaration timing was unspecified (could be read as per-Contest, per-exchange, or last-attempt); Compromise outcome was not mapped to Failure/Partial wrong-style framing; cross-Contest stacking was undefined. Source: 2026-04-25 stress-test 27.]
 
 ### §6.5 Stacking Limits
 

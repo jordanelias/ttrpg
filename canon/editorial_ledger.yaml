@@ -30,3 +30,9 @@ entries:
     description: "threadwork_v30 §2.1 Approach Training canonical content propagation. §2.1 was empty header; canonical content was scattered across character_histories §Formation 2F (Practitioner Mentorship character-creation route), §270 (Approach Training trait: +1D Leap), §498 (skill ladder Partial-benefit advancement). Consolidated into canonical §2.1 with acquisition pathways (character creation, in-campaign training with mentor TS ≥ 50 + full-season commit + Spirit Ob 2 roll, Catalyst 4E spontaneous), tag effects, without-tag behavior, loss conditions. Closes propagation defect surfaced 2026-04-25 stress-test 30."
     status: resolved
     severity: P2
+
+  - id: ED-775
+    date: 2026-04-25
+    description: "Wrong-Style Penalty extended with three sub-sections per stress-test 27. §6.4.1 RS Declaration Timing: orator declares RS at Contest setup before Exchange 1; locked for Contest duration; cannot switch mid-Contest (parallels Genre lock-in §3). §6.4.2 Compromise vs Partial mapping: Total Victory/Decisive (no penalty), Compromise 5-6 (half effect: +1 strain instead of Stability), Compromise 4 (full effect), Partial 3 (full), Failure ≤2 (compounded +2). §6.4.3 Cross-Contest stacking: nominal stacking uncapped within a season but ±2 Domain Action cap caps net Stability change at Accounting; surplus is institutional-perception friction. Closes spec gaps: RS declaration timing (was unspecified), Compromise/Partial mapping (gap), cross-Contest stacking (gap). Source: 2026-04-25 stress-test 27."
+    status: resolved
+    severity: P3
