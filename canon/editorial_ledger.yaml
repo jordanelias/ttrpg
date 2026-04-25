@@ -96,3 +96,10 @@ entries:
     description: "PROVISIONAL marker cleanup pass: mass_battle_v30 contained 3 markers reading '[PROVISIONAL — ED-XXX resolved]' — the EDs were closed but markers persisted. Markers stripped from L229 (ED-355), L333 (ED-354), L417 (ED-358); replaced with parenthetical resolution note. Substantive content unchanged. Source: 2026-04-24 PROVISIONAL marker audit (carry-over from 2026-04-22)."
     status: resolved
     severity: P4
+
+  - id: ED-768
+    date: 2026-04-24
+    description: "Orphaned PROVISIONAL markers identified across active spec corpus. 13 markers reference low-numbered EDs (ED-063, ED-071, ED-074, ED-098, ED-137, ED-147, ED-148, ED-149, ED-151) that are not present in either active editorial_ledger.yaml or archive. These likely predate the current ledger structure (pre-2026-04-15). Files affected: params/scale_transitions.md (3), params/contest.md (1), params/factions/stats_1_7_scale.md (4), params/mass_combat.md (1), designs/scene/combat_v30_infill.md (1), designs/scene/social_contest_v30.md (1), designs/scene/social_contest_system_v2.md (1), designs/scene/combat_design_v1.md (1). Resolution requires Jordan-side context to determine which markers reference still-open issues vs which reference resolved-but-not-archived items. Marking as documentation-gap not spec-defect; do not strip markers blindly."
+    status: open
+    severity: P3
+    next_action: "Jordan to review 13 orphaned PROVISIONAL markers and either resolve to current ED numbering or strip if obsolete"
