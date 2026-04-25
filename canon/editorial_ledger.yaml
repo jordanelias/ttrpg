@@ -24,3 +24,9 @@ entries:
     status: open
     severity: P3
     next_action: "Jordan to review 13 orphaned PROVISIONAL markers and either resolve to current ED numbering or strip if obsolete"
+
+  - id: ED-769
+    date: 2026-04-24
+    description: "Rendering Stability → Mending Stability rename residual cleanup. strategic_layer_v30_infill.md L22 PP-042 clarification used old name. Updated to canonical Mending Stability. Note: threadwork_v25_historical.md retains 'Rendering Stability' references as historical (intentional preservation per file naming). Numeric bounds report flagging 'rendering_stability' as drifted is partly informative — the value distributions came from threadwork_v25_historical (legitimate historical context) plus this single residual in strategic_layer_v30_infill (now fixed). Source: 2026-04-24 numeric bounds review."
+    status: resolved
+    severity: P3
