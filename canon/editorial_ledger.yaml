@@ -48,3 +48,9 @@ entries:
     description: "Heresy Investigation Lifecycle specified in social_contest §7.3. Closes gap from stress-test 24: scale_transitions §4.3.2 referenced 'active Heresy Investigation' as Mandatory Zoom-In trigger but the Investigation lifecycle (initiation phases, duration 4-6 seasons, 8 closure conditions, multi-Inquisitor handling) was previously not specified. New §7.3.1 lifecycle phases (Initiation 1s + Investigation 2-4s + Verdict 1s); §7.3.2 closure conditions (Inquisitor death/demotion/reassignment, target death/defection/conversion, acquittal, faction protection); §7.3.3 multi-Inquisitor handling (one per Cardinal Justice jurisdiction); §7.3.4 player strategic implications. Source: 2026-04-25 stress-test 24."
     status: resolved
     severity: P2
+
+  - id: ED-773
+    date: 2026-04-25
+    description: "Knot Lifecycle specified in fieldwork §5.6b. Closes spec gap surfaced by stress-test 26: Knot strain accumulation was canonized across multiple use-sites (§2.6 remote investigation +1, social_contest §4 Composure buffer +1, ED-664 §3.5.3 counsel extraction +1, FR Dissolution near Knot partner +1, Conviction Scar firing in Knot partner +1, sustained Disposition < +3 +1) but the break/rupture mechanism was not specified anywhere. Added: strain capacity (Distant Knot 4, Close Knot 7); break consequences (Disposition reset, 4 Composure cost both partners, benefit cessation, possible Scar); rupture triggers (ED-664 public citation, Knot partner death, FR Dissolution targeting partner, opposing Conviction shift, player explicit dissolution); strain decay (-1/season at sustained Disposition ≥+3 + no strain added); threadcut-being Knot Coherence parallel resource. ED-664 §3.5.4 'Knot ruptures' now has explicit mechanism. Source: 2026-04-25 stress-test 26."
+    status: resolved
+    severity: P2

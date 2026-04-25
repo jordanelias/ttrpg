@@ -475,6 +475,52 @@ When prerequisites are met, a Knot Formation scene appears on the Scene Slate at
 
 **Canon compliance:** A12 (Knots bind threads — Thread contact required), P-12 (relational contagion — formation must be structurally significant), P-15 (second-layer engagement — Spirit check models opening one's rendering to mutual influence), A10 (confrontation development — genuine encounter, not transaction).
 
+### §5.6b Knot Lifecycle (NEW — ED-773)
+
+The Knot lifecycle was previously specified for formation (§5.6a) and use (§2.6, social_contest §3) but not for dissolution. This section specifies how Knots end.
+
+**Strain accumulation:** A Knot accrues *strain* through several mechanisms:
+- Knot-mediated remote Thread-Read (§2.6): +1 strain per use.
+- Knot-as-Composure-buffer (social_contest_system_v2 §4 Step 6): +1 strain per use.
+- Knot-mediated counsel extraction (npc_behavior §3.5.3 ED-664): +0 strain on extraction itself; +1 strain per subsequent retrieval attempt (single-extraction-per-campaign rule means typically 0 cumulative).
+- FR Lock or Dissolution near a Knot partner (threadwork_v30 §6 Knot-substrate inseparability): +1 strain.
+- Witnessing Conviction Scar firing in Knot partner (per Conviction Track ≥3 Scar count): +1 strain at next Accounting.
+- Sustained Disposition reduction (Disposition drops below +3 sustained for 2 seasons): +1 strain at Accounting.
+
+**Knot break threshold:** A Knot accumulates strain up to capacity. At capacity exceeded, the Knot breaks at the next Accounting.
+
+| Knot Type | Strain Capacity | Notes |
+|---|---|---|
+| Distant Knot | 4 strain | Can be upgraded to Close (per §5.6a Success outcome). Upgrade resets strain to 0. |
+| Close Knot | 7 strain | Upgrade ceiling. Reaching 7 strain triggers break. |
+
+**Knot break consequences:**
+- Disposition with the Knot partner drops to +2 (or current value −2, whichever is lower; floor at −3 per §3.5 Disposition range).
+- Both partners take 4 Composure (per A12-derived disorientation: the Thread previously connecting renderings releases force).
+- Knot-mediated benefits (Composure shared buffer, +1D social, P-12 contagion, Wager prerequisite, counsel extraction eligibility) cease immediately.
+- Knot count slot frees up — player may form new Knot in a subsequent season per §5.6a procedure.
+- For Close Knots that broke at high strain: Conviction Scar +1 to both partners (the broken Knot leaves perceptual residue per A1/C1 Thread-binding inseparability).
+
+**Rupture (immediate break, bypassing strain accumulation):**
+
+Certain events trigger immediate Knot rupture:
+
+| Trigger | Source | Notes |
+|---|---|---|
+| Public citation of private counsel (ED-664 §3.5.4) | npc_behavior §3.5.4 | Knot ruptures with Disposition reset to −4 (per §3.5.4 specific value). |
+| Knot partner's death | Universal | Disposition becomes irrelevant; Knot partner enters Memory state. Knot-as-buffer can absorb final Composure damage to dying partner per Last Stand rule (player_agency §X — TBD). |
+| FR Dissolution targeting Knot partner | threadwork §3.4 | Tears the Knot directly; partner-of-rupture takes +1 Wound (no armor). |
+| Permanent Conviction shift to opposing Conviction | npc_behavior §5 | Knot tied to specific Conviction-state; opposite Conviction makes the Thread-binding incompatible. |
+| Player explicit dissolution | Player choice | Player may dissolve a Knot at Accounting at any time. Cost: 2 Composure (one-sided release strain). Disposition unchanged (the relationship persists at non-Knotted level). |
+
+**Strain decay:** Knot strain decays at −1 per season at Accounting if no strain was added that season AND Disposition is +3 or higher. Sustained mutual investment in the relationship dissipates accumulated stress.
+
+**Threadcut being Knots:** Knots formed with threadcut beings (per §2.6) follow the same lifecycle but use the threadcut being's Coherence as a parallel resource — strain on the Knot also drains the threadcut being's Coherence at +0.5 per strain (round up). When threadcut Coherence reaches 0, the Knot collapses regardless of strain count. This models the threadcut being's continuous Thread-work to maintain existence — adding a Knot adds maintenance cost that competes with their primary survival.
+
+[EDITORIAL: ED-773 — Knot Lifecycle specified in fieldwork §5.6b. Closes the gap surfaced by audit during stress-test 26: Knot strain accumulation was canonized (multiple use-sites add strain) but Knot break/rupture mechanism was not specified. Added strain capacity (Distant 4, Close 7), break consequences (Disposition drop, Composure cost, possible Scar), rupture triggers (ED-664 public citation, partner death, FR Dissolution, Conviction opposition, player choice), strain decay rules (-1/season at sustained Disposition ≥+3 with no strain added). This is what ED-664 §3.5.4 'Knot ruptures' actually means mechanically. Source: 2026-04-25 stress-test 26.]
+
+---
+
 ### §5.7 Contest Escalation and Negotiate Boundary
 
 
