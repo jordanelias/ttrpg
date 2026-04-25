@@ -454,13 +454,16 @@ Knot-linked characters gain:
 - Relational contagion risk (P-12): Thread-shift propagates through Knots
 
 
-### §5.6a Knot Formation Procedure (AUD-NPC-01 resolution)
+### §5.6a Knot Formation Procedure (AUD-NPC-01 resolution; ED-780 prerequisite clarification)
 
 **Prerequisites (all required):**
 1. Disposition +5 with the target NPC
 2. Either PC or NPC has TS ≥ 30 (Thread contact — per A12, Knots bind threads; substrate must be accessible)
 3. PC's current Knot count < floor(Bonds/2)+1 (per params_core §Bonds max Knot count)
 4. No existing Knot with this NPC
+5. **PC Bonds ≥ 5** (derived prerequisite from §3 Disposition ceiling = Bonds rule and prerequisite 1 above; Bonds 1-4 caps Disposition below +5, making Knot formation structurally impossible. ED-780 surfaces this implicit gate explicitly.)
+
+**Bonds prerequisite rationale (ED-780):** A character with Bonds 1-4 cannot reach Disposition +5 with any NPC because §3 caps Disposition by Bonds attribute. Such a character pursuing Knot formation would reach Disposition equal to their Bonds value (e.g., Bonds 3 → Disposition cap +3 = Cordial), then accumulate no further Disposition regardless of social investment. The Knot formation Spirit Ob 2 roll (resolution below) is never reached. Surfacing this explicitly prevents player frustration from invisible structural gates and clarifies the character creation tradeoff: low Bonds means unable to form Knots, which closes off the Knot-mediated Wager system (social_contest §6.1), Knot-as-Composure-buffer (social_contest §4 Step 6), Knot-mediated Thread-Read (§2.6), and Knot anchoring for Coherence recovery (threadwork §3.5). High Bonds is the canonical relational-system gate.
 
 When prerequisites are met, a Knot Formation scene appears on the Scene Slate at Priority 2. The scene fires once per eligible NPC per season. If declined, it reappears next season while prerequisites hold.
 

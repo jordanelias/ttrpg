@@ -494,3 +494,40 @@ entries:
     description: "Knot Lifecycle specified in fieldwork §5.6b. Closes spec gap surfaced by stress-test 26: Knot strain accumulation was canonized across multiple use-sites (§2.6 remote investigation +1, social_contest §4 Composure buffer +1, ED-664 §3.5.3 counsel extraction +1, FR Dissolution near Knot partner +1, Conviction Scar firing in Knot partner +1, sustained Disposition < +3 +1) but the break/rupture mechanism was not specified anywhere. Added: strain capacity (Distant Knot 4, Close Knot 7); break consequences (Disposition reset, 4 Composure cost both partners, benefit cessation, possible Scar); rupture triggers (ED-664 public citation, Knot partner death, FR Dissolution targeting partner, opposing Conviction shift, player explicit dissolution); strain decay (-1/season at sustained Disposition ≥+3 + no strain added); threadcut-being Knot Coherence parallel resource. ED-664 §3.5.4 'Knot ruptures' now has explicit mechanism. Source: 2026-04-25 stress-test 26."
     status: resolved
     severity: P2
+
+  # Migrated 2026-04-25 (resolved 2026-04-25)
+  - id: ED-774
+    date: 2026-04-25
+    description: "threadwork_v30 §2.1 Approach Training canonical content propagation. §2.1 was empty header; canonical content was scattered across character_histories §Formation 2F (Practitioner Mentorship character-creation route), §270 (Approach Training trait: +1D Leap), §498 (skill ladder Partial-benefit advancement). Consolidated into canonical §2.1 with acquisition pathways (character creation, in-campaign training with mentor TS ≥ 50 + full-season commit + Spirit Ob 2 roll, Catalyst 4E spontaneous), tag effects, without-tag behavior, loss conditions. Closes propagation defect surfaced 2026-04-25 stress-test 30."
+    status: resolved
+    severity: P2
+
+  - id: ED-775
+    date: 2026-04-25
+    description: "Wrong-Style Penalty extended with three sub-sections per stress-test 27. §6.4.1 RS Declaration Timing: orator declares RS at Contest setup before Exchange 1; locked for Contest duration; cannot switch mid-Contest (parallels Genre lock-in §3). §6.4.2 Compromise vs Partial mapping: Total Victory/Decisive (no penalty), Compromise 5-6 (half effect: +1 strain instead of Stability), Compromise 4 (full effect), Partial 3 (full), Failure ≤2 (compounded +2). §6.4.3 Cross-Contest stacking: nominal stacking uncapped within a season but ±2 Domain Action cap caps net Stability change at Accounting; surplus is institutional-perception friction. Closes spec gaps: RS declaration timing (was unspecified), Compromise/Partial mapping (gap), cross-Contest stacking (gap). Source: 2026-04-25 stress-test 27."
+    status: resolved
+    severity: P3
+
+  - id: ED-776
+    date: 2026-04-25
+    description: "faction_politics §1.0a Demotion Magnitude specified. Closes spec gap from stress-test 33: Demotion column on rank ladders gave triggers but not magnitudes. Three magnitude tiers: default = one rank (most failures); severe = 2-3 ranks (public scandal, Heresy non-excommunication, defection); total = Standing −1 Dismissal-with-Dishonor (excommunication, treason, framework abandonment, Cardinal catastrophic events). Cross-rank flow specified (no intermediate-rank pass-through; mentor/livery/hall reset 1 season). Appeal mechanism added (2-season window, faction-internal Conviction Track, no appeal for Dismissal). Source: 2026-04-25 stress-test 33."
+    status: resolved
+    severity: P3
+
+  - id: ED-777
+    date: 2026-04-25
+    description: "Caste-transgressive Conviction PC mechanic specified (faction_politics §3.6.1 + §3.6.2). Closes spec gap surfaced by stress-test 46: §3.6 referenced 'elevated Scar risk per npc_behavior §3.2' but (a) §3.2 is Belief Revision not Scar Accumulation (§3.3 has Scars), (b) PCs do not accumulate Scars in the canonical NPC sense (§3.4 says PC failed witness-Spirit check 'shakes' Conviction for 1 season — no permanent track), (c) the qualitative 'elevated risk' had no numeric implementation. Now: §3.6.1 defines three concrete mechanisms (Witness Spirit Ob 1→2 raise during caste-transgressive Conviction display, Conviction Shake 1→2 seasons on failed check, self-applied Doubt Marker on Authority RS while invoking caste-transgressive Conviction). §3.6.2 defines Conviction Reformation arc (3+ caste-transgressive engagements within 4-season window triggers mandatory Priority 0 Zoom-In; Spirit pool TN 7 Ob 3 resolution; Success consolidates transgressive Conviction permanently; Partial = caste-default Conviction crisis with PC Scar logged; Failure = Conviction Track reset + 2-season NPC-state). Two cross-references corrected: social_contest L268 + faction_politics L659 §3.2 → §3.3. Source: 2026-04-25 stress-test 46."
+    status: resolved
+    severity: P3
+
+  - id: ED-778
+    date: 2026-04-25
+    description: "Wager Obligation edge cases specified in social_contest §6.1.1. Closes spec gap surfaced by stress-test 49: base Wager spec covered Condition Met / Not Met / Partial outcomes but didn't handle counterparty death, counterparty faction institutional collapse, condition becoming structurally impossible, PC death holding outstanding Wager, or PC death owing Wager. Now: counterparty-death = neutral discharge + PC Renown +1; institutional collapse = 4-season suspension before discharge; structural impossibility = fail-forward (arc transition fires, +1 Scar to PC); PC death holding Wager = transfers via generational_transition TRANSFER rule (faction inheritance, Disposition resets to faction-default for successor); PC death owing Wager = transfers to predecessor's faction; if condition no longer achievable, failure-by-incapacitation NPC Mandate +1. Verifiability requirement carried over from base spec. Cross-references generational_transition_v30 (canonical PC successor mechanism). Source: 2026-04-25 stress-test 49."
+    status: resolved
+    severity: P3
+
+  - id: ED-779
+    date: 2026-04-25
+    description: "Inspiration mechanic propagated to canonical derived_stats §5.3. Closes propagation defect surfaced by stress-test 52: canonical Inspiration spec existed only in deprecated/valoria_ttrpg_complete.md §10.4. Active canonical docs (params/core L128, fieldwork §2.2) referenced 'Inspiration' as resource but didn't define how it's acquired, recovered, or lost. Now consolidated as §5.3: Acquisition (mid-campaign 2-scene + Spirit Ob 1 check or 4 CP shortcut, with Complication Tag for partial), Recovery (full-scene engagement +1, focus-present-uncontested +1, max 2/season), Focus loss (immediate 0 + optional Grief Scene Ob 2 conversion). Includes §5.3.4 Inspiration vs Belief vs Conviction distinction table. Belief mechanic flagged for separate future propagation. Source: 2026-04-25 stress-test 52."
+    status: resolved
+    severity: P2
