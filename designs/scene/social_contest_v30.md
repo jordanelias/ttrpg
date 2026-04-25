@@ -340,6 +340,58 @@ Identity: New sub-faction acquires identity per losing claimant's Conviction (e.
 
 ---
 
+### §7.3 Heresy Investigation Lifecycle (ED-772)
+
+The Heresy Investigation is the precursor proceeding to Excommunication Tribunal (§7.1). Per faction_politics §2.3, an Inquisitor at rank ≥ 2 may **initiate** Heresy Proceedings against non-leadership NPCs/PCs; rank ≥ 3 may target Standing 4+ NPCs/PCs. The Investigation runs through several phases before either resolving in dismissal or escalating to Tribunal.
+
+**§7.3.1 Investigation Lifecycle Phases**
+
+| Phase | Duration | Scene Type | Closure Conditions |
+|---|---|---|---|
+| **Initiation** | 1 season | Inquisitor declares filing; target receives summons | Inquisitor may withdraw before next season (Disposition cost: −1 with Cardinal Justice if dismissal seems unjustified) |
+| **Investigation Proper** | 2-4 seasons (Inquisitor declares duration at filing) | One Mandatory Zoom-In Interrogation per season per scale_transitions §4.3.2 (asymmetric Conviction Track, Ob 2 vs target framework) | See §7.3.2 closure conditions below |
+| **Verdict** | 1 season (final Interrogation) | Conclusive Conviction Track exchange (Track length = standard §7 contest, set by Inquisitor) | Verdict: Acquittal (Investigation closed, no further consequence) / Insufficient Evidence (Investigation suspended; may resume if Evidence Track reaches 3 within 4 seasons) / Tribunal Recommended (escalates to §7.1 Excommunication Tribunal) |
+
+**Total nominal duration: 4-6 seasons** from Initiation to Verdict (1 + 2-4 + 1).
+
+**§7.3.2 Investigation Closure Conditions (other than Verdict)**
+
+An active Heresy Investigation closes immediately if any of the following occur:
+
+| Condition | Effect | Rationale |
+|---|---|---|
+| **Inquisitor death** | Investigation suspended. Cardinal Justice may reassign to another Inquisitor of equal rank within 2 seasons (Disposition with target +1 from delay; Investigation resumes mid-phase). After 2 seasons without reassignment: Investigation closes; target may invoke Acquittal-by-default (Disposition with surviving Inquisitorial apparatus −1; future Investigation re-filing requires fresh Evidence Track). | Inquisitor authority is personal; absent reassignment, the proceeding loses procedural footing. |
+| **Inquisitor demoted/excommunicated** | Investigation immediately closed. Target may invoke Acquittal-by-default (full Disposition restoration; Renown +1 in Hafenmark/Crown for surviving institutional capture). The Cardinal Justice loses Mandate −1 (institutional embarrassment). New Investigation against same target requires Cardinal-grade approval AND fresh Evidence Track. | A discredited Inquisitor's filings cannot stand. |
+| **Inquisitor reassigned to another case** | Investigation suspended for up to 2 seasons. If not re-staffed within 2 seasons: closes per Inquisitor death rule. Reassignment requires Cardinal Justice approval — an Inquisitor cannot self-reassign to escape an Investigation. | Prevents Inquisitorial neglect of procedural obligations. |
+| **Target's death** | Investigation closes. Postmortem Tribunal possible (per faction_politics §2.3 + historical Cadaver Synod precedent) but extremely rare and requires Cardinal Justice + Confessor approval (Mandate cost −1 to file). | The proceeding's purpose (correction) becomes moot at target's death; Postmortem Tribunals are political-symbolic, not investigative. |
+| **Target's faction protection** | If target's faction successfully passes a Parliamentary Stay (per §10.1) AND TC < 55: Investigation suspended for 1 season per Stay. Multiple Stays possible (one per Tribunal-equivalent filing per season). Stays do not close the Investigation, only suspend it. | Civil-jurisdiction assertion can delay but not nullify ecclesiastical proceeding. |
+| **Acquittal by Verdict** | Investigation closed. Target receives institutional rehabilitation: Renown +1 in non-Church factions. Re-filing same charge requires fresh Evidence Track (cannot recycle prior testimony). | Procedural double-jeopardy protection. |
+| **Target's faction conversion to Church** | If target faction enters Establishment (TC ≥ 80) under target's leadership: Investigation closes (target now sits on Church side). Politically pyrrhic — historically rare. | The institutional alignment changes; the Inquisitor's premise dissolves. |
+| **Target's defection** | If target formally defects to Church (via Catechumen rank entry per faction_politics §2): Investigation suspended pending theological retraining (1-3 seasons). On retraining completion: closed with Acquittal-by-Submission. Target's prior framework Convictions take Scar 1. | Defection is implicit recantation; Church absorbs rather than judges. |
+
+**§7.3.3 Multiple Inquisitors / Multiple Investigations**
+
+Only one Heresy Investigation per target may be active at any time within a given Cardinal Justice's jurisdiction. A second Inquisitor seeking to file against an already-Investigated target must:
+
+- Wait for current Investigation to close (any condition above).
+- OR petition Cardinal Justice to consolidate Investigations under a single Inquisitor (rare — typically only when the second Inquisitor has Senior Inquisitor rank and the original is Junior).
+
+Cross-jurisdictional Investigations (different Cardinal Justice regions) may run in parallel but do not stack effects — each Investigation is its own track. **Cross-reference:** the per-region Cardinal Justice structure per faction_politics §2 means a target traveling between regions may face new filings on arrival.
+
+**§7.3.4 Player Strategic Implications**
+
+The 4-6 season duration window gives the player time to:
+
+- Acquire counter-Evidence (fieldwork on the original accusation; Investigation procedure permits Evidence introduction during any Interrogation phase).
+- Build coalitional defense: Disposition ≥ +3 with Cardinal Fortitude or Cardinal Prudence opens Witness opportunities at Verdict phase (per §7.1 Tribunal procedures cross-application).
+- Pursue Inquisitor reassignment / death by political maneuver (Niflhel-broker assassination is hypothetically available but radically undermines the player's Conviction; Inquisitor death from non-player causes is a Game Master event).
+- Trigger Parliamentary Stay (§10.1) to delay during evidence-gathering.
+- Defection if Conviction-aligned with Church (rare for active investigations — typically Investigation targets are Reason/Autonomy/Equity-aligned, where defection would compound the Conviction crisis).
+
+[EDITORIAL: ED-772 — Heresy Investigation Lifecycle specified in social_contest §7.3. Closes the gap surfaced by stress-test 24: scale_transitions §4.3.2 referenced 'active Heresy Investigation' as Mandatory Zoom-In trigger but the lifecycle (initiation, closure conditions, multiple-Inquisitor handling) was not specified anywhere in the active corpus. The 4-6 season nominal duration with 8 distinct closure conditions covers Inquisitor death/demotion/reassignment, target death/defection/protection, acquittal/conversion. Source: 2026-04-25 stress-test 24.]
+
+---
+
 ## §8 DERIVED VALUES SUMMARY
 
 | Value | Formula | Range | Parallel |
