@@ -265,3 +265,43 @@ entries:
     status: resolved
     severity: P2
     source: "2026-04-24 audit conversation P1-1"
+
+  # Migrated 2026-04-24 from active ledger (Scene Slate + scale_transitions entries — committed 3e6b0b3 + 19fc650)
+  - id: ED-745
+    date: 2026-04-24
+    description: "Scene Slate mandatory overflow defined as 'Witness Mode' (Read/Appraise free roll + one narrative input + no Domain Echo). Internal priority ordering for 2+ simultaneous mandatories. Source: 2026-04-24 audit completion §3.2/§3.8."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.2/§3.8"
+
+  - id: ED-746
+    date: 2026-04-24
+    description: "Scene Slate Step 4 keyword expansion (6→~25); role-reference resolution table (11 mappings); validator at character creation/Conviction revision. Source: scene_slate §2.1 P2 #2."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.6"
+
+  - id: ED-747
+    date: 2026-04-24
+    description: "Scene Slate cross-step pruning algorithm specified. Deterministic ordering across Steps 1-7 + 2b. internal_index_within_step rules per step. Source: 2026-04-24 audit completion §3.1."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.1"
+
+  - id: ED-748
+    date: 2026-04-24
+    description: "scale_transitions §3.4 + §3.6 stubs filled with forward-references to §5 Domain Echo and mass_battle §A.10. Source: 2026-04-24 audit §3.12."
+    status: resolved
+    severity: P3
+
+  - id: ED-749
+    date: 2026-04-24
+    description: "Stability Crisis Mandatory Zoom-In gains hysteresis: re-arms only after Stab ≥ 3 maintained for 2 consecutive Accountings. Source: 2026-04-24 audit §3.4."
+    status: resolved
+    severity: P2
+
+  - id: ED-750
+    date: 2026-04-24
+    description: "Settlement Revolt Mandatory Zoom-In gains deduplication: settlement-events at same settlement same season collapse into single Mandatory entry. Source: 2026-04-24 audit §3.5."
+    status: resolved
+    severity: P3

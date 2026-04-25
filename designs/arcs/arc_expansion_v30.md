@@ -193,12 +193,12 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 | Attribute | Value |
 |-----------|-------|
-| Name | [Canonical: not named. Propose: Cardinal Gunnar Stark] |
+| Name | [Canonical: not named. Propose: Cardinal Jarnstal] |
 | Primary Conviction | Faith | "The Temple defends what Solmund has sanctified. We are the sword, not the debate." |
-| Secondary Conviction | Order | When Faith fails to justify, the institutional chain of command takes over. Stark follows orders from his superiors even when he disagrees with them — until the orders violate what he understands as the Temple's martial purpose. |
+| Secondary Conviction | Order | When Faith fails to justify, the institutional chain of command takes over. Jarnstal follows orders from his superiors even when he disagrees with them — until the orders violate what he understands as the Temple's martial purpose. |
 | Ethical Framework | Martial Divine Command | Aligned: −1 Ob on any action that physically defends Church territory or personnel. Contradictory: +1 Ob on diplomatic, theological, or administrative actions. |
 | Primary Resonant Style | Consequence | Show him that the Templar deployments are producing worse outcomes than restraint — that the military posture is feeding the resistance it claims to suppress. A general who loses faith in his strategy is reachable. |
-| Secondary Resonant Style | Solidarity | Stark's soldiers are his family. Any appeal invoking specific Templars — their names, their sacrifices, how they've been used and spent — reaches him where strategic argument cannot. |
+| Secondary Resonant Style | Solidarity | Jarnstal's soldiers are his family. Any appeal invoking specific Templars — their names, their sacrifices, how they've been used and spent — reaches him where strategic argument cannot. |
 | Thread Sensitivity | 0 | Non-practitioner. Active theological prophylaxis. |
 | Certainty | 4 | Military piety — faith as discipline, not theology. |
 | Leadership Deviation Ob | 3 during schism / 4 during normal Church operations | He subordinates himself to Himlensendt absolutely during stability. |
@@ -209,23 +209,23 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 3. "I have watched the Confessor send men to die for a theology he debates in comfort. I do not debate."
 
 **Arc A: The Instrument (Default)**
-- Branch condition: Church Stability ≥ 3. Stark executes Himlensendt's orders without question.
-- Behavior: Templar deployments proceed per Church Priority 6 (Templar in PT ≥ 3 Prominent territories). Stark is invisible — he does what he is told.
-- Trigger for arc movement: either Church Stability drops to 2 (Arc B) OR Himlensendt enters Arc B (Crisis of Faith) — when the orders stop making theological sense, Stark's instrument status becomes complicated.
+- Branch condition: Church Stability ≥ 3. Jarnstal executes Himlensendt's orders without question.
+- Behavior: Templar deployments proceed per Church Priority 6 (Templar in PT ≥ 3 Prominent territories). Jarnstal is invisible — he does what he is told.
+- Trigger for arc movement: either Church Stability drops to 2 (Arc B) OR Himlensendt enters Arc B (Crisis of Faith) — when the orders stop making theological sense, Jarnstal's instrument status becomes complicated.
 
 **Arc B: The Questioning Sword**
-- Branch condition: Church Stability ≤ 2 OR Himlensendt has ≥ 2 Scars publicly known OR player defeats Templar forces in T9 (Himmelenger home territory) AND Stark was present.
-- Transformation: Stark's Faith conviction faces the Consequence attack point — is the Temple achieving anything? Certainty: 4 → 3. He begins counting costs that he previously refused to count.
-- Behavior: Stark takes 1 independent action per season not directed by Himlensendt. He uses this to: (a) assess the military situation accurately (Tribune Investigate on enemy Military, not Intel from Himlensendt), (b) personally meet with Templar soldiers and listen to their experience on the ground.
+- Branch condition: Church Stability ≤ 2 OR Himlensendt has ≥ 2 Scars publicly known OR player defeats Templar forces in T9 (Himmelenger home territory) AND Jarnstal was present.
+- Transformation: Jarnstal's Faith conviction faces the Consequence attack point — is the Temple achieving anything? Certainty: 4 → 3. He begins counting costs that he previously refused to count.
+- Behavior: Jarnstal takes 1 independent action per season not directed by Himlensendt. He uses this to: (a) assess the military situation accurately (Tribune Investigate on enemy Military, not Intel from Himlensendt), (b) personally meet with Templar soldiers and listen to their experience on the ground.
 - New Belief: "I was told we were winning. I am starting to wonder what winning means."
-- Decision Fork trigger: If Himlensendt in Arc C (Confrontation) attempts to order Stark to suppress his own congregation (arrest devout citizens for political reasons), Stark faces a Decision Fork. He cannot suppress people he has sworn to defend. He will disobey that specific order (Leadership Deviation check Ob 3 — he usually succeeds in resisting because his Order conviction supports institutional defiance on grounds of clear harm).
+- Decision Fork trigger: If Himlensendt in Arc C (Confrontation) attempts to order Jarnstal to suppress his own congregation (arrest devout citizens for political reasons), Jarnstal faces a Decision Fork. He cannot suppress people he has sworn to defend. He will disobey that specific order (Leadership Deviation check Ob 3 — he usually succeeds in resisting because his Order conviction supports institutional defiance on grounds of clear harm).
 
 **Arc C: The Schismatic General**
-- Branch condition: Church Stability 0 OR Himlensendt's Arc C (Confrontation) becomes public AND Stark independently assesses the situation as institutionally fatal.
-- Transformation: Stark splits from Church hierarchy. He does NOT abandon Faith — he splits from the institutional hierarchy on grounds of institutional self-destruction. "The Temple exists to protect Valoria. The Church has become a threat to Valoria. The Temple cannot serve both."
-- Behavioral consequence: Stark's Templar units become an independent military force — not Crown, not Church, not Löwenritter. They garrison the most contested territory and refuse to move without a credible justification that serves civilian protection.
-- Campaign impact: 2 Templar units (Martial 5, Discipline 6) become a neutral military pole. Any faction can attempt to negotiate Stark's support (Solidarity RS — personal appeal — OR Consequence — show him that supporting your faction protects the most civilians). Stark will not be bribed (he is Order-adjacent — institutional purity matters) but he can be argued.
-- Risk: Löwenritter will attempt to absorb the Templars (Ehrenwall sees a military opportunity). Crown will attempt to ally (Almud sees a Church-counter opportunity). Church will attempt to reassert (Cardinal of Justice may try to Excommunicate Stark — which would make Stark a de facto ally of any anti-Church coalition).
+- Branch condition: Church Stability 0 OR Himlensendt's Arc C (Confrontation) becomes public AND Jarnstal independently assesses the situation as institutionally fatal.
+- Transformation: Jarnstal splits from Church hierarchy. He does NOT abandon Faith — he splits from the institutional hierarchy on grounds of institutional self-destruction. "The Temple exists to protect Valoria. The Church has become a threat to Valoria. The Temple cannot serve both."
+- Behavioral consequence: Jarnstal's Templar units become an independent military force — not Crown, not Church, not Löwenritter. They garrison the most contested territory and refuse to move without a credible justification that serves civilian protection.
+- Campaign impact: 2 Templar units (Martial 5, Discipline 6) become a neutral military pole. Any faction can attempt to negotiate Jarnstal's support (Solidarity RS — personal appeal — OR Consequence — show him that supporting your faction protects the most civilians). Jarnstal will not be bribed (he is Order-adjacent — institutional purity matters) but he can be argued.
+- Risk: Löwenritter will attempt to absorb the Templars (Ehrenwall sees a military opportunity). Crown will attempt to ally (Almud sees a Church-counter opportunity). Church will attempt to reassert (Cardinal of Justice may try to Excommunicate Jarnstal — which would make Jarnstal a de facto ally of any anti-Church coalition).
 
 ---
 
@@ -235,11 +235,11 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 | Attribute | Value |
 |-----------|-------|
-| Name | [Propose: Cardinal Theodric Voss] |
+| Name | [Propose: Cardinal Olafsson] |
 | Primary Conviction | Faith (hardline) | "Solmund's law is exact. Deviation from it is not error — it is transgression. Transgression requires correction." |
-| Secondary Conviction | Order | The Inquisition IS the Church's order-maintenance mechanism. If Faith's purity goal conflicts with Order's stability goal, Voss chooses purity. Every time. |
+| Secondary Conviction | Order | The Inquisition IS the Church's order-maintenance mechanism. If Faith's purity goal conflicts with Order's stability goal, Olafsson chooses purity. Every time. |
 | Ethical Framework | Divine Command (hardline variant) | Aligned: −1 Ob on any investigation, prosecution, or punishment of doctrinal deviation. Contradictory: +1 Ob on mercy, accommodation, or pragmatic exception. |
-| Primary Resonant Style | Authority | Voss is himself an authority — he yields only to higher authority within his framework. The Holy See (distant, unreachable), a direct canonical text he cannot reinterpret, or (in extremis) a miraculous event he personally witnesses could move him. No human argument moves him. |
+| Primary Resonant Style | Authority | Olafsson is himself an authority — he yields only to higher authority within his framework. The Holy See (distant, unreachable), a direct canonical text he cannot reinterpret, or (in extremis) a miraculous event he personally witnesses could move him. No human argument moves him. |
 | Secondary Resonant Style | Evidence | His hardline Faith claims to be empirically grounded in Scripture. Evidence that Scripture does not say what he claims it says — documented, authenticated textual evidence — is the only argumentation vector. |
 | Thread Sensitivity | 0 | Prophylaxis at maximum. He has seen the consequences of Thread exposure and actively maintains theological inoculation. |
 | Certainty | 5 | He is the highest Certainty NPC in the game. First Coherence loss nullified per session. +2D on Faith-aligned actions during schism. |
@@ -251,24 +251,24 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 3. "I have read the documents. There is nothing in the Einhir texts that Scripture does not account for, explain, and warn against."
 
 **Arc A: The Instrument of Purity (Default)**
-- Behavior: Voss prosecutes Heresy Investigations systematically. Any named practitioner who appears in a Church Attention Pool at ≥ 3 becomes a Voss target. His investigations are thorough, documented, and procedurally correct. He is not cruel — he is precise.
-- Game mechanic: Voss-prosecuted Heresy Investigations use Ob 1 (he is the best investigator the Church has). His Argue pool in tribunal: Cognition 5, Church Domain Expertise +1D, Certainty 5 bonus +2D = formidable. Player faces the hardest possible Tribunal opponent when Voss prosecutes.
-- Arc A passive conditioner: Every 4 seasons in Arc A, Voss completes one Structural Investigation on the Thread practitioner network (Evidence Track advancing +2/season automatically from Inquisition resources). At Evidence 8, he has a Structural Finding implicating a named PC-affiliated NPC. This generates an automatic Priority 2 (Heresy Investigation) against that NPC.
+- Behavior: Olafsson prosecutes Heresy Investigations systematically. Any named practitioner who appears in a Church Attention Pool at ≥ 3 becomes a Olafsson target. His investigations are thorough, documented, and procedurally correct. He is not cruel — he is precise.
+- Game mechanic: Voss-prosecuted Heresy Investigations use Ob 1 (he is the best investigator the Church has). His Argue pool in tribunal: Cognition 5, Church Domain Expertise +1D, Certainty 5 bonus +2D = formidable. Player faces the hardest possible Tribunal opponent when Olafsson prosecutes.
+- Arc A passive conditioner: Every 4 seasons in Arc A, Olafsson completes one Structural Investigation on the Thread practitioner network (Evidence Track advancing +2/season automatically from Inquisition resources). At Evidence 8, he has a Structural Finding implicating a named PC-affiliated NPC. This generates an automatic Priority 2 (Heresy Investigation) against that NPC.
 
 **Arc B: The Zealot in Question**
-- Branch condition: Voss personally witnesses a Thread phenomenon he cannot explain within his theology. Specifically: a Gap closure (Mending) producing RS +2 in his presence. He perceives the settling (TS 0, but co-movement epistemic auto-effect is perceptible to all). He knows the world improved. He knows it was the act of a practitioner. He cannot integrate this.
-- Transformation: Voss does not Believe. But he begins to investigate the phenomenon rather than condemning it. His Evidence-secondary RS activates. He will consider textual evidence from non-canonical sources IF they are authenticated within his scholarly framework.
+- Branch condition: Olafsson personally witnesses a Thread phenomenon he cannot explain within his theology. Specifically: a Gap closure (Mending) producing RS +2 in his presence. He perceives the settling (TS 0, but co-movement epistemic auto-effect is perceptible to all). He knows the world improved. He knows it was the act of a practitioner. He cannot integrate this.
+- Transformation: Olafsson does not Believe. But he begins to investigate the phenomenon rather than condemning it. His Evidence-secondary RS activates. He will consider textual evidence from non-canonical sources IF they are authenticated within his scholarly framework.
 - Behavior: One Heresy Investigation per season is quietly suspended — not cancelled, just perpetually deferred. He is conducting parallel research.
 - New Belief: "Solmund's law is exact. I am examining whether I have been reading it exactly."
-- This is extraordinarily dangerous. A Voss who begins to doubt his textual interpretation while retaining his Faith and his Authority RS is a Voss who might find his way to Truth and become its most powerful institutional defender. OR: a Voss who inverts and becomes the most destructive force for the Church — because his perfectionism applied to internal Church corruption would burn the institution down.
+- This is extraordinarily dangerous. A Olafsson who begins to doubt his textual interpretation while retaining his Faith and his Authority RS is a Olafsson who might find his way to Truth and become its most powerful institutional defender. OR: a Olafsson who inverts and becomes the most destructive force for the Church — because his perfectionism applied to internal Church corruption would burn the institution down.
 
 **Arc C: The Inquisitor's Inquisition**
-- Branch condition: Voss's research produces a Finding he cannot suppress: Church documents HAVE been selectively edited. A 400-year-old canonical text has an Einhir passage removed. The removal is documented in the Church archive. Voss authenticated the document himself. His Evidence RS now attacks his own framework.
-- Transformation: Voss turns the Inquisition on the Church. He opens investigations into Himlensendt (who knew?), Prudence (who approved the removal?), Fortitude (who helped cover it?).
+- Branch condition: Olafsson's research produces a Finding he cannot suppress: Church documents HAVE been selectively edited. A 400-year-old canonical text has an Einhir passage removed. The removal is documented in the Church archive. Olafsson authenticated the document himself. His Evidence RS now attacks his own framework.
+- Transformation: Olafsson turns the Inquisition on the Church. He opens investigations into Himlensendt (who knew?), Prudence (who approved the removal?), Fortitude (who helped cover it?).
 - This is the most catastrophic Church event possible — the Inquisitor-General investigating the Confessor. Church Stability −3 immediately. TC −4 (Voss publishes his findings; institutional credibility collapses).
-- Behavioral: Voss becomes an independent judicial actor. He will prosecute anyone, any faction, any NPC, for institutional dishonesty. He is not converted to Thread acceptance — he is converted to the proposition that his Church has been lying to itself. He cannot forgive that.
-- Player opportunity: Voss in Arc C is paradoxically the best possible ally against Church domination. He will pursue truth regardless of political consequence. A player who provides him with Evidence (Fieldwork Finding, authenticated) can direct his Inquisition anywhere they choose.
-- Risk: Voss in Arc C will eventually prosecute the player too if the player has been deceptive in any documented way. He makes no political exceptions.
+- Behavioral: Olafsson becomes an independent judicial actor. He will prosecute anyone, any faction, any NPC, for institutional dishonesty. He is not converted to Thread acceptance — he is converted to the proposition that his Church has been lying to itself. He cannot forgive that.
+- Player opportunity: Olafsson in Arc C is paradoxically the best possible ally against Church domination. He will pursue truth regardless of political consequence. A player who provides him with Evidence (Fieldwork Finding, authenticated) can direct his Inquisition anywhere they choose.
+- Risk: Olafsson in Arc C will eventually prosecute the player too if the player has been deceptive in any documented way. He makes no political exceptions.
 
 ---
 
@@ -278,9 +278,9 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 | Attribute | Value |
 |-----------|-------|
-| Name | [Propose: Cardinal Elsa Vorn] |
+| Name | [Propose: Cardinal Aldric Tormann] |
 | Primary Conviction | Order | The Church endures because its institutions endure. Institutions endure because they are funded. Theology is the justification; wealth is the infrastructure. |
-| Secondary Conviction | Autonomy | Vorn is the only Cardinal who would survive the Church's collapse — she has contingency plans, personal wealth networks, and diplomatic relationships with Guilds and Schoenland that predate her Church service. If Order fails, she defects. |
+| Secondary Conviction | Autonomy | Tormann is the only Cardinal who would survive the Church's collapse — she has contingency plans, personal wealth networks, and diplomatic relationships with Guilds and Schoenland that predate her Church service. If Order fails, she defects. |
 | Ethical Framework | Divine Command (institutional variant) | Aligned: −1 Ob on any action that increases Church wealth or institutional stability. Contradictory: +1 Ob on any action that sacrifices Church resources for theological purity. |
 | Primary Resonant Style | Evidence | Show her the fiscal data. Specific numbers, documented ledgers, projected deficits. Her framework claims to be reality-grounded (the institution must be funded). Evidence that the institution cannot fund its current trajectory moves her. |
 | Secondary Resonant Style | Consequence | Project the consequences of financial ruin. She has already run these numbers. Hearing them stated by someone outside the Church — especially a Guild representative — forces public confrontation with what she privately fears. |
@@ -294,22 +294,22 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 3. "The Guilds are our natural allies, not our enemies. Someone should tell the Confessor."
 
 **Arc A: The Pragmatist (Default)**
-- Behavior: Vorn runs the Church's finances quietly. She is the reason the Church has Wealth 4 instead of Wealth 2 — her Consul actions (Trade/Govern in high-Prosperity territories) consistently outperform other Cardinals' contributions.
-- Arc A passive conditioner: Vorn tracks the cost of every Heresy Investigation (1 Wealth/Investigation, from her internal accounting). When total Investigation cost exceeds Church Wealth 3 in a single season, she files an internal objection (no BG effect, but GM plants the information as a Fieldwork Finding for any player who investigates Church finances).
+- Behavior: Tormann runs the Church's finances quietly. She is the reason the Church has Wealth 4 instead of Wealth 2 — her Consul actions (Trade/Govern in high-Prosperity territories) consistently outperform other Cardinals' contributions.
+- Arc A passive conditioner: Tormann tracks the cost of every Heresy Investigation (1 Wealth/Investigation, from her internal accounting). When total Investigation cost exceeds Church Wealth 3 in a single season, she files an internal objection (no BG effect, but GM plants the information as a Fieldwork Finding for any player who investigates Church finances).
 - Trigger for movement: Church Wealth drops to ≤ 1 from combined Heresy Investigation costs + Embassy maintenance + Blockade effects. At Wealth 1: Arc B activates (Vorn can no longer internally manage).
 
 **Arc B: The Administrator in Conflict**
-- Branch condition: Church Wealth ≤ 1 OR Church Stability ≤ 2 AND Himlensendt overrides Vorn's budget objections twice in one season.
-- Transformation: Vorn's Autonomy secondary activates. She begins making independent financial arrangements — quietly, deniably. Guild Favour +1 in T9 (she is diverting Church tithe funds to Guild accounts as insurance against Church collapse). This is embezzlement on a sovereign scale. It is also the most rational thing she could do.
-- Behavior: Vorn's Priority 7 updates: "DEFAULT → Secret tithe diversion to Guild accounts." This accumulates as Guild Favour +1 every 2 seasons. At Guild Favour 5 in T9: Guilds have enough leverage over Vorn to threaten her with exposure. Guilds gain a Strong Hook on Vorn.
-- Player opportunity: discovering Vorn's embezzlement (Fieldwork, Evidence Track threshold 5 on "Church internal finances") gives the player a Weak Hook. Using it: Vorn can be directed to redirect funds to player-allied causes (RM community support, practitioner shelter) rather than Church purposes. She is incorruptible toward ideology — she is perfectly corruptible toward financial self-preservation.
+- Branch condition: Church Wealth ≤ 1 OR Church Stability ≤ 2 AND Himlensendt overrides Tormann's budget objections twice in one season.
+- Transformation: Tormann's Autonomy secondary activates. She begins making independent financial arrangements — quietly, deniably. Guild Favour +1 in T9 (she is diverting Church tithe funds to Guild accounts as insurance against Church collapse). This is embezzlement on a sovereign scale. It is also the most rational thing she could do.
+- Behavior: Tormann's Priority 7 updates: "DEFAULT → Secret tithe diversion to Guild accounts." This accumulates as Guild Favour +1 every 2 seasons. At Guild Favour 5 in T9: Guilds have enough leverage over Tormann to threaten her with exposure. Guilds gain a Strong Hook on Tormann.
+- Player opportunity: discovering Tormann's embezzlement (Fieldwork, Evidence Track threshold 5 on "Church internal finances") gives the player a Weak Hook. Using it: Tormann can be directed to redirect funds to player-allied causes (RM community support, practitioner shelter) rather than Church purposes. She is incorruptible toward ideology — she is perfectly corruptible toward financial self-preservation.
 
 **Arc C: The Defection**
-- Branch condition: Vorn's embezzlement is discovered by Cardinal of Justice (Voss Arc A passive investigation) OR Church Stability reaches 0.
-- Transformation: Vorn defects. She formalises her Guild relationships, transfers remaining Church assets she controls to Guild accounts, and steps down from Cardinal office.
-- Behavioral: Vorn becomes a Guild sub-NPC — the most financially sophisticated person in the Guild network, with detailed knowledge of Church operations.
-- Campaign impact: Church Wealth −2 immediately (the asset transfer). Church loses its most competent administrator. Subsequent Church Accounting phases are more vulnerable to Wealth depletion. Vorn as a Guild NPC gives Guilds Priority 2 intelligence access to Church operations — the Guilds know exactly what Church can and cannot afford.
-- Risk for players who ally with Vorn: she will not sacrifice herself for anyone. If exposure threatens her, she will redirect whatever Hook the player holds toward someone else. Vorn's Autonomy is real — she survives regardless.
+- Branch condition: Tormann's embezzlement is discovered by Cardinal of Justice (Voss Arc A passive investigation) OR Church Stability reaches 0.
+- Transformation: Tormann defects. She formalises her Guild relationships, transfers remaining Church assets she controls to Guild accounts, and steps down from Cardinal office.
+- Behavioral: Tormann becomes a Guild sub-NPC — the most financially sophisticated person in the Guild network, with detailed knowledge of Church operations.
+- Campaign impact: Church Wealth −2 immediately (the asset transfer). Church loses its most competent administrator. Subsequent Church Accounting phases are more vulnerable to Wealth depletion. Tormann as a Guild NPC gives Guilds Priority 2 intelligence access to Church operations — the Guilds know exactly what Church can and cannot afford.
+- Risk for players who ally with Vorn: she will not sacrifice herself for anyone. If exposure threatens her, she will redirect whatever Hook the player holds toward someone else. Tormann's Autonomy is real — she survives regardless.
 
 ---
 
@@ -319,9 +319,9 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 
 | Attribute | Value |
 |-----------|-------|
-| Name | [Propose: Cardinal Sigrid Kald] |
+| Name | [Propose: Cardinal Klapp] |
 | Primary Conviction | Reason | Truth is discoverable. Solmund's revelation and empirical investigation should converge if both are correctly practised. She has spent her life finding the convergences. She is running out of places to look. |
-| Secondary Conviction | Faith | Kald would not be a Cardinal if she didn't believe. She believes. But she believes in what she has investigated and found credible — not in what she has been told and accepted. The distinction is critical. |
+| Secondary Conviction | Faith | Klapp would not be a Cardinal if she didn't believe. She believes. But she believes in what she has investigated and found credible — not in what she has been told and accepted. The distinction is critical. |
 | Ethical Framework | Divine Command (scholarly variant) | Aligned: −1 Ob on any action that advances knowledge or AER maintenance. Contradictory: +1 Ob on any action that suppresses evidence or prevents scholarly access. |
 | Primary Resonant Style | Evidence | Show her specific, documented, authenticated facts she cannot explain within her theological framework. She is looking for these already. She will receive them as gifts rather than attacks. |
 | Secondary Resonant Style | Authority | Within her framework: a canonical text she has not seen, authenticated by multiple chains of custody, citing Thread phenomena in non-condemnatory terms, would be Authority that forces framework revision. She knows such texts may exist — the Einhir archive at T15 is her greatest unresolved question. |
@@ -335,21 +335,21 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 3. "Thread Sensitivity appears in our congregation with statistical regularity. I have been recording the cases for eleven years. I have not told Himlensendt."
 
 **Arc A: The Investigator (Default)**
-- Behavior: Kald pursues AER maintenance, Temperance declarations, scholarly projects. She is the least militaristic Cardinal — her actions are consistently non-invasive and knowledge-oriented.
-- Arc A passive: Kald has an 11-year dataset on Thread Sensitivity prevalence in Church congregations. This dataset exists as a Structural Finding available to any player who investigates Church archives (Evidence Track 8, Fieldwork at T9, Research action, Depth 3 — the dataset is buried). The dataset proves Thread Sensitivity is heritable, widespread, and not pathological. If this Finding reaches Himlensendt: Arc B for Himlensendt (Authority RS trigger — the Cardinal of Temperance IS an authority he must hear).
+- Behavior: Klapp pursues AER maintenance, Temperance declarations, scholarly projects. She is the least militaristic Cardinal — her actions are consistently non-invasive and knowledge-oriented.
+- Arc A passive: Klapp has an 11-year dataset on Thread Sensitivity prevalence in Church congregations. This dataset exists as a Structural Finding available to any player who investigates Church archives (Evidence Track 8, Fieldwork at T9, Research action, Depth 3 — the dataset is buried). The dataset proves Thread Sensitivity is heritable, widespread, and not pathological. If this Finding reaches Himlensendt: Arc B for Himlensendt (Authority RS trigger — the Cardinal of Temperance IS an authority he must hear).
 
 **Arc B: The Crisis of Evidence**
-- Branch condition: Kald's TS reaches 10 (fieldwork or direct Thread exposure) AND she performs a Thread-Read involuntarily (at TS 10, perceptive encounters begin without deliberate Leap — she perceives Thread configurations during scholarly work). OR: Player provides Kald with authenticated Einhir text evidence.
-- Transformation: Kald's framework breaks — not toward rejection of Faith but toward integration of Thread reality within a revised framework. Her Reason conviction was always leading here. She has arrived.
-- Behavior: Kald drafts a private theological treatise: "Thread Sensitivity as Solmund's Gift: A Reconciliation." She shows it to no one yet. She is building the case from within.
-- Arc B trigger for Himlensendt: If Kald shares the treatise with Himlensendt AND the player has built the groundwork (Evidence RS, prior Scars on Himlensendt) — the combination of an internal Church scholarly authority presenting Thread-integrated theology creates the Authority trigger needed for Himlensendt's arc shift. This is the canonical path to Himlensendt's Arc B that does not require the player to defeat him in direct contest.
+- Branch condition: Klapp's TS reaches 10 (fieldwork or direct Thread exposure) AND she performs a Thread-Read involuntarily (at TS 10, perceptive encounters begin without deliberate Leap — she perceives Thread configurations during scholarly work). OR: Player provides Klapp with authenticated Einhir text evidence.
+- Transformation: Klapp's framework breaks — not toward rejection of Faith but toward integration of Thread reality within a revised framework. Her Reason conviction was always leading here. She has arrived.
+- Behavior: Klapp drafts a private theological treatise: "Thread Sensitivity as Solmund's Gift: A Reconciliation." She shows it to no one yet. She is building the case from within.
+- Arc B trigger for Himlensendt: If Klapp shares the treatise with Himlensendt AND the player has built the groundwork (Evidence RS, prior Scars on Himlensendt) — the combination of an internal Church scholarly authority presenting Thread-integrated theology creates the Authority trigger needed for Himlensendt's arc shift. This is the canonical path to Himlensendt's Arc B that does not require the player to defeat him in direct contest.
 
 **Arc C: The Theologian at the Boundary**
-- Branch condition: Kald presents her treatise publicly (Kald's Conviction crisis: 3 Scars from internal Church pressure to abandon research, OR Voss Arc A passive investigation uncovers the dataset).
-- Transformation: Kald publicly advocates for Thread acceptance within Church doctrine. She does not leave the Church — she contests it from within.
-- Campaign impact: Church Stability −2 (a Cardinal publicly advocating heresy). TC −2. But AER +1 (Altonian academic community, which has Thread-aware scholars, perceives Kald's work positively).
-- Risk: Cardinal of Justice (Voss) opens Heresy Investigation against Kald. If Voss is in Arc A (Instrument): Investigation proceeds and Kald is convicted (Church expels her). If Voss is in Arc B (Questioning): he delays the investigation and reads the treatise himself — with potentially transformative consequences.
-- Player opportunity: Kald in Arc C is the only Church NPC who can publicly validate Thread practice with institutional standing. Her endorsement does not stop Church persecution (Himlensendt or Voss will override), but it creates a Faction Fracture — a formal Church sub-faction (the Temperance Order) that tolerates Thread practice and can provide safe harbour in Church-adjacent territories.
+- Branch condition: Klapp presents her treatise publicly (Kald's Conviction crisis: 3 Scars from internal Church pressure to abandon research, OR Olafsson Arc A passive investigation uncovers the dataset).
+- Transformation: Klapp publicly advocates for Thread acceptance within Church doctrine. She does not leave the Church — she contests it from within.
+- Campaign impact: Church Stability −2 (a Cardinal publicly advocating heresy). TC −2. But AER +1 (Altonian academic community, which has Thread-aware scholars, perceives Klapp's work positively).
+- Risk: Cardinal of Justice (Voss) opens Heresy Investigation against Klapp. If Olafsson is in Arc A (Instrument): Investigation proceeds and Klapp is convicted (Church expels her). If Olafsson is in Arc B (Questioning): he delays the investigation and reads the treatise himself — with potentially transformative consequences.
+- Player opportunity: Klapp in Arc C is the only Church NPC who can publicly validate Thread practice with institutional standing. Her endorsement does not stop Church persecution (Himlensendt or Olafsson will override), but it creates a Faction Fracture — a formal Church sub-faction (the Temperance Order) that tolerates Thread practice and can provide safe harbour in Church-adjacent territories.
 
 ---
 
@@ -595,7 +595,7 @@ When TC crosses a milestone, the following arc effects fire:
 | TC Milestone | NPC arc effects |
 |-------------|----------------|
 | TC 40 (Church Assertive) | Baralta: Certainty check (Categorical Imperative framework claims to prevent this — if it hasn't, something is wrong). Attunement 4D TN7 Ob 2; failure = Certainty −1. Ehrenwall: Coup Counter check trigger — if Crown Stability ≤ 3 at TC 40 crossing: Coup Counter +1 (Church growing AND Crown weak = existential threat to Valoria). |
-| TC 55 (Church Prominent) | Torben: Loyalty check — if Loyalty ≤ 3 to Crown AND TC 55: Torben begins seeking information about Thread independently (his curiosity, previously dormant, activates under environmental stress). TS: 0 → 5 (environmental exposure begins). Kald (Cardinal of Temperance): her private dataset gains 2 new entries. She presents a truncated summary to Himlensendt — not the full dataset, just the trend line. This is an Authority trigger attempt that Himlensendt can accept (Scar) or dismiss (no change). |
+| TC 55 (Church Prominent) | Torben: Loyalty check — if Loyalty ≤ 3 to Crown AND TC 55: Torben begins seeking information about Thread independently (his curiosity, previously dormant, activates under environmental stress). TS: 0 → 5 (environmental exposure begins). Klapp (Cardinal of Temperance): her private dataset gains 2 new entries. She presents a truncated summary to Himlensendt — not the full dataset, just the trend line. This is an Authority trigger attempt that Himlensendt can accept (Scar) or dismiss (no change). |
 | TC 65 (Church Dominant) | Baralta: if in Arc A (Constitutional Triumph path) AND TC 65: the constitutional framework has failed by her own definition. Baralta automatically enters Arc B (The Pragmatist) — no player action required. The system itself produced the proof her framework predicted would never come. Vossen: RM Presence markers in TC-prominent territories: survival check. Presence markers in TC ≥ 65 territories face Church suppression — −1 Presence marker per Church-Prominent territory per Accounting unless player protects. |
 | TC 80 (Church Ascendant) | Almud (any arc): Belief 3 crisis — "Torben must be kept from Altonian influence." TC 80 PT drift means the entire peninsula is more pious. If Almud is in any arc, this produces a forced Decision Fork: accept the new theological reality (Certainty −1) or reassert Order (Coup Counter +1 if Ehrenwall perceives Crown as theologically capitulating). Both consequences fire regardless of what the player has done. The milestone is the trigger. |
 
@@ -606,7 +606,7 @@ When TC crosses a milestone, the following arc effects fire:
 | Strain Level | NPC arc effects |
 |-------------|----------------|
 | Strain 3–4 (Tension) | Hann: Priority 2 trigger updates. "Protect RM cells from Strain effects by pre-positioning." He begins moving cell members without authorisation from Vossen. Strain 3 is the beginning of Vossen/Hann relationship tension even with no player involvement. |
-| Strain 5–6 (Fracture) | Vorn (Cardinal of Prudence): Wealth projection update. Fracture-level Strain threatens Guild trade. Vorn's embezzlement timeline accelerates — if Arc A: begins planning. If Arc B: begins executing. All Niflhel arms: Priority 7 updates to "assess operational sustainability." 3 consecutive Fracture seasons: Niflhel consolidates — all 4 arms pool resources and slow operations, reducing RS threat but making them harder to detect. |
+| Strain 5–6 (Fracture) | Tormann (Cardinal of Prudence): Wealth projection update. Fracture-level Strain threatens Guild trade. Tormann's embezzlement timeline accelerates — if Arc A: begins planning. If Arc B: begins executing. All Niflhel arms: Priority 7 updates to "assess operational sustainability." 3 consecutive Fracture seasons: Niflhel consolidates — all 4 arms pool resources and slow operations, reducing RS threat but making them harder to detect. |
 | Strain 7–8 (Crisis) | Ehrenwall: Coup Counter forced check. At Strain 7 with Crown Stability ≤ 2: Coup Counter automatically reaches 3 (the crisis itself is the final proof that current governance has failed). This is an accelerated coup path — the world crisis produces the coup, not player manipulation. Guildmaster Council: Moral Relativism framework crisis. Guilds can't trade in a world at Strain 7. The Council faces a Decision Fork: engage politically (join a faction coalition) or withdraw (cease all peninsular operations and protect Schoenland trade routes only). |
 | Strain 9–10 (Collapse) | All named NPCs: Autonomy override fires (§5.1 Faction Stability ≤ 1 equivalent — the world is at ≤ 1 Stability). Every NPC's Belief set reduces to its survival core. The most complex NPCs become the most simple. The most idealistic become the most ruthless. Edeyja at Collapse: leaves T15 permanently ("The Southernmost is already lost — I must preserve what I can of the knowledge, not the location"). This is the campaign's final arc event for the warden system. |
 
@@ -622,9 +622,9 @@ These fire when one NPC's arc produces a direct consequence in another NPC's arc
 
 | NPC A arc event | NPC B triggered |
 |----------------|----------------|
-| Himlensendt Scar 1 (publicly known) | Cardinal of Fortitude: Leadership Deviation Ob → 2 (reduced — Stark's independence increases when Himlensendt's authority is publicly questioned). |
-| Himlensendt Scar 2 (publicly known) | Cardinal of Justice: Voss opens an internal investigation of the Confessor himself — not a Heresy Investigation but a canonical competence review. This is within his authority. Himlensendt cannot stop it. |
-| Himlensendt enters Arc B (Crisis of Faith) | Cardinal of Temperance: Kald's Arc B triggers — she receives implicit permission from the Confessor's crisis to share her dataset with him. The shared Belief space opens. |
+| Himlensendt Scar 1 (publicly known) | Cardinal of Fortitude: Leadership Deviation Ob → 2 (reduced — Jarnstal's independence increases when Himlensendt's authority is publicly questioned). |
+| Himlensendt Scar 2 (publicly known) | Cardinal of Justice: Olafsson opens an internal investigation of the Confessor himself — not a Heresy Investigation but a canonical competence review. This is within his authority. Himlensendt cannot stop it. |
+| Himlensendt enters Arc B (Crisis of Faith) | Cardinal of Temperance: Klapp's Arc B triggers — she receives implicit permission from the Confessor's crisis to share her dataset with him. The shared Belief space opens. |
 | Himlensendt enters Arc C (Confrontation — public) | All Cardinals: simultaneous arc acceleration. Justice → Arc C (his Inquisition against Himlensendt — the Church prosecutes its own Confessor). Fortitude → Arc C (Schismatic General — Templars withdraw from Himlensendt's command). Prudence → Arc B (embezzlement accelerates). Temperance → Arc C (treatise published). The four Cardinals fracture in four directions simultaneously. This is the Church schism event. |
 | Himlensendt exits via any arc | Successor determination: the four Cardinals' current arc states determine who leads the Church next. Justice Arc C = trial/judicial chaos. Fortitude Arc C = military Church. Prudence Arc C = commercial Church. Temperance Arc C = scholarly/reformed Church. Player who has invested in specific Cardinals has shaped what the post-Himlensendt Church becomes. |
 
@@ -726,10 +726,10 @@ The following new Zoom In triggers are proposed for scale_transitions §4.3.2 (M
 
 | Trigger | Condition | Scene Content |
 |---------|-----------|---------------|
-| Vorn's Embezzlement Trail | Player reaches Evidence Track 5 on "Church internal finances" | The numbers tell a story. An administrative NPC in the Church archive is nervous. Fieldwork leads to a document that doesn't add up. The scene: the player follows the trail to its origin. Vorn is at the end. This is the discovery scene — she knows the player knows. Negotiation available. |
-| Kald's Dataset Discovery | Player reaches Evidence Track 8 in T9 Church archives, Research action, Depth 3 | The dataset. Eleven years of Thread Sensitivity prevalence data, buried in a tithe subsidiary ledger. The player finds it. Kald may or may not know the player found it. The scene: the player must decide what to do with evidence that could simultaneously liberate Thread practitioners, break Himlensendt, and destroy Kald's career. |
+| Tormann's Embezzlement Trail | Player reaches Evidence Track 5 on "Church internal finances" | The numbers tell a story. An administrative NPC in the Church archive is nervous. Fieldwork leads to a document that doesn't add up. The scene: the player follows the trail to its origin. Tormann is at the end. This is the discovery scene — she knows the player knows. Negotiation available. |
+| Klapp's Dataset Discovery | Player reaches Evidence Track 8 in T9 Church archives, Research action, Depth 3 | The dataset. Eleven years of Thread Sensitivity prevalence data, buried in a tithe subsidiary ledger. The player finds it. Klapp may or may not know the player found it. The scene: the player must decide what to do with evidence that could simultaneously liberate Thread practitioners, break Himlensendt, and destroy Klapp's career. |
 | Orm's Final Maintenance | RS ≤ 35 AND player has WR ≥ 2 | Orm is working on a Gap that is beyond standard maintenance. He is holding something closed that he has been holding for 3 seasons. The player can see it — the effort it requires. Scene: Orm says nothing, but everything is visible to TS ≥ 30. To TS 0 observers: an old man doing hard work alone. The scene is witnessing. The player may assist (Thread operation contributes alongside Orm's — collective operation per threadwork §2.5). |
-| The Confessor's Doubt | Himlensendt has ≥ 1 Scar AND Kald has presented her dataset to him | Himlensendt is in T9 sanctuary. He will not see anyone. But the player, if they have Disposition ≥ +2 with him (from prior interactions — difficult, but possible), receives a note: "I have questions." The scene: a private audience. Not a Contest — a conversation. Himlensendt is asking, not arguing. For the first time in the campaign, the Inquisitor wants to be answered, not to answer. |
+| The Confessor's Doubt | Himlensendt has ≥ 1 Scar AND Klapp has presented her dataset to him | Himlensendt is in T9 sanctuary. He will not see anyone. But the player, if they have Disposition ≥ +2 with him (from prior interactions — difficult, but possible), receives a note: "I have questions." The scene: a private audience. Not a Contest — a conversation. Himlensendt is asking, not arguing. For the first time in the campaign, the Inquisitor wants to be answered, not to answer. |
 
 ---
 
@@ -737,10 +737,10 @@ The following new Zoom In triggers are proposed for scale_transitions §4.3.2 (M
 
 | ED | Description | Priority |
 |----|-------------|---------|
-| ED-591 | Cardinal of Fortitude (Stark) full arc — proposed here. Requires user approval before commit. | P2 |
-| ED-592 | Cardinal of Justice (Voss) full arc — proposed here. Requires user approval. | P2 |
-| ED-593 | Cardinal of Prudence (Vorn) full arc — proposed here. Requires user approval. | P2 |
-| ED-594 | Cardinal of Temperance (Kald) full arc — proposed here. Requires user approval. | P2 |
+| ED-591 | Cardinal of Fortitude (Jarnstal) full arc — surname per faction_politics §3.5 canonical. Resolved 2026-04-24 (ED-758). | P2 — RESOLVED |
+| ED-592 | Cardinal of Justice (Olafsson) full arc — surname per faction_politics §3.5 canonical. Resolved 2026-04-24 (ED-758). | P2 — RESOLVED |
+| ED-593 | Cardinal of Prudence (Aldric Tormann) full arc — name per faction_politics §3.5 + npc_roster §13. Resolved 2026-04-24 (ED-758). | P2 — RESOLVED |
+| ED-594 | Cardinal of Temperance (Klapp) full arc — surname per faction_politics §3.5 canonical. Resolved 2026-04-24 (ED-758). | P2 — RESOLVED |
 | ED-595 | Ehrenwall full arc (A/B/C) — proposed here. Requires user approval. | P2 |
 | ED-596 | Torsvald (Riskbreaker) full arc — proposed here. Requires user approval. | P2 |
 | ED-597 | Vossen full arc expansion — proposed here. Requires user approval. | P2 |
@@ -784,10 +784,10 @@ The following new Zoom In triggers are proposed for scale_transitions §4.3.2 (M
 | Southernmost Wardens (Edeyja) | A/B/C present | Arc B full trigger sequence (4 stages); Warden death conditioners |
 | Southernmost Wardens (Orm) | Not named | Full A/B/C profile |
 | Southernmost Wardens (Third Warden) | Not named | Intentionally unnamed (the death that precedes contact) |
-| Guilds | No arcs | Strain conditioners; Vorn Arc C acquisition |
+| Guilds | No arcs | Strain conditioners; Tormann Arc C acquisition |
 | Niflhel | No NPC arcs | Quartermaster A/B/C; The Quiet One A/B/C |
 | Ministry | No NPCs | Flagged as design debt (ED-pending) |
-| Schoenland/Altonian | Observer | Cross-NPC: Kald's treatise AER +1 (Altonian academic response) |
+| Schoenland/Altonian | Observer | Cross-NPC: Klapp's treatise AER +1 (Altonian academic response) |
 | **Cross-NPC conditioners** | None | Confessor-Cardinals chain; Crown Succession chain; Warden-Vaynard dependency; LR-Niflhel proximity |
 | **Environmental conditioners** | None | RS band transitions; TC milestone effects; Strain level effects |
 | **Obligation conditioners** | None | 6 Obligation-triggered arc effects |

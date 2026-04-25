@@ -67,45 +67,6 @@ entries:
     severity: P2
     source: "PP-666"
 
-  - id: ED-745
-    date: 2026-04-24
-    description: "Scene Slate mandatory overflow defined as 'Witness Mode' (Read/Appraise free roll + one narrative input + no Domain Echo). Internal priority ordering for 2+ simultaneous mandatories. Source: 2026-04-24 audit completion §3.2/§3.8."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit completion §3.2/§3.8"
-
-  - id: ED-746
-    date: 2026-04-24
-    description: "Scene Slate Step 4 keyword expansion (6→~25); role-reference resolution table (11 mappings); validator at character creation/Conviction revision. Source: scene_slate §2.1 P2 #2."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit completion §3.6"
-
-  - id: ED-747
-    date: 2026-04-24
-    description: "Scene Slate cross-step pruning algorithm specified. Deterministic ordering across Steps 1-7 + 2b. internal_index_within_step rules per step. Source: 2026-04-24 audit completion §3.1."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit completion §3.1"
-
-  - id: ED-748
-    date: 2026-04-24
-    description: "scale_transitions §3.4 + §3.6 stubs filled with forward-references to §5 Domain Echo and mass_battle §A.10. Source: 2026-04-24 audit §3.12."
-    status: resolved
-    severity: P3
-
-  - id: ED-749
-    date: 2026-04-24
-    description: "Stability Crisis Mandatory Zoom-In gains hysteresis: re-arms only after Stab ≥ 3 maintained for 2 consecutive Accountings. Source: 2026-04-24 audit §3.4."
-    status: resolved
-    severity: P2
-
-  - id: ED-750
-    date: 2026-04-24
-    description: "Settlement Revolt Mandatory Zoom-In gains deduplication: settlement-events at same settlement same season collapse into single Mandatory entry. Source: 2026-04-24 audit §3.5."
-    status: resolved
-    severity: P3
-
   - id: ED-751
     date: 2026-04-24
     description: "Church Sacred Veto cooldown specified: once per 4 consecutive seasons, per-use reset (not per-game-year cycle). Source: 2026-04-24 audit §3.3."
@@ -147,3 +108,9 @@ entries:
     description: "npc_behavior §7.1 framework drift table — fixed malformed Niflhel row (was 3-column entry in 4-column table). Restored row to 4 columns with Frequency = N/A (drift mechanic dissolved with faction). No mechanical change; structural cleanup. Source: 2026-04-24 Niflhel residual sweep."
     status: resolved
     severity: P4
+
+  - id: ED-758
+    date: 2026-04-24
+    description: "Cardinal Officer naming reconciled. arc_expansion_v30 proposed names (Stark/Voss/Vorn/Kald) replaced with faction_politics §3.5 + npc_roster §13 canonical (Jarnstal/Olafsson/Aldric Tormann/Klapp). Bulk surname replacement applied across arc_expansion. Closes ED-591/592/593/594."
+    status: resolved
+    severity: P2
