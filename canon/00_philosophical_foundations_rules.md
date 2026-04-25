@@ -1,5 +1,5 @@
 # Philosophical Foundations — Enforcement Rules
-# Condensed from: canon/00_philosophical_foundations.md (17,554 tokens)
+# Condensed from: canon/00_philosophical_foundations.md
 # Purpose: Loadable rule set for canon checks, mechanic proposals, and audits.
 # Full prose (rationale, argumentation): see canon/00_philosophical_foundations.md
 # Canon constraints P-01–P-15: see canon/02_canon_constraints.md
@@ -26,23 +26,23 @@ The unintelligible ground is infinite positive being that exceeds all attributes
 ### A6. Rendering
 Rendering is the always-already process by which consciousness presents the thread-substrate as experienceable reality. Performed by minds, not independent of them. Not a voluntary act but a constitutive feature of conscious being.
 
-### A7. Monstrosity
-Monstrosity is surfeit of being, not deficiency. Monstrous beings exceed what the rendering can stably present. The rendering prefers stable actualisation — when a being exceeds the rendering's capacity, the rendering does not fail but produces anomalous presentation (horror, wrongness, perceptual distortion).
+### A7. Monstrosity (Lacanian Real)
+Monstrosity is grounded in the Lacanian Real: that which escapes symbolisation, the unassimilable remainder when rendering has done all it can do. Monstrous beings are surfeit-of-being arriving as being-encounter, structurally outside the moral register. The rendering prefers stable actualisation; when a being exceeds the rendering's capacity, the rendering does not fail but produces anomalous presentation (uncanniness, wrongness, perceptual distortion). Monstrosity is never moral.
 
 ### A8. Providence
 Providence is not divine intervention but the rendering's tendency toward stable configuration. When instabilities arise in the thread-substrate, the rendering works toward resolution — not toward good outcomes, but toward presentable ones.
 
 ### A9. Threadcut Beings
-A threadcut being is not continuously spooled by the Ein Sof. It radically IS without becoming. Requires active maintenance to persist. Deteriorates because it lacks the continuous renewal that grounded beings receive. Orphaned configurations (created by Past-Pulling) are threadcut at the operational level.
+A threadcut being is not continuously spooled by the Ein Sof. It radically IS without becoming. Requires active maintenance to persist. Deteriorates because it lacks the continuous renewal that grounded beings receive. Categorically distinct from a Coherence-0 practitioner: threadcut beings lack layer 1; Coherence-0 practitioners lack layer 2. Orphaned configurations (created by Past-Pulling) are threadcut at the operational level.
 
 ### A10. Confrontation Development
 Thread sensitivity develops through confrontation — felt encounters with what exceeds the rendering's capacity. This is not intellectual understanding but experiential transformation. The practitioner's being is altered, not just their knowledge.
 
-### A11. Epistemic Seduction
-As thread sensitivity increases, the practitioner's normative categories dissolve. The very understanding that would motivate seeking correction is undermined by the transformation itself. This creates a one-way gate: deep practitioners cannot return to naive ontical orientation.
+### A11. Drift From Human-Mode Being
+Coherence is the structural integrity of layer-two self-rendering — the always-already, unconscious threadwork that holds the practitioner's configuration as human-mode being. Layer two has two facings: reflexive (apperceptive self-presentation) and outward (apperceived-by-others); both must be intact for full Coherence. Coherence loss is tridimensional per Inseparability (A2): actuality, intelligibility, and temporality drift together. Coherence is orthogonal to Thread Sensitivity. Coherence 0 is not threadcut: layer 1 (Ein Sof spooling) continues; what has ceased is layer 2. The configuration that follows Coherence 0 depends on the practitioner's perceptual reach for layer-three substitution. A practitioner sustaining a non-human configuration through deliberate threadwork produces substrate strain in their vicinity (the localised Einhir parallel).
 
 ### A12. Knotting and Relational Bonds
-Knots bind threads to each other, creating mutual influence. Wrapping creates looser connections. Both are consequential. Relational bonds propagate consequences through the thread-substrate — an operation on one knotted thread affects all connected threads.
+Knots bind threads to each other, creating mutual influence. Wrapping creates looser connections. Both are consequential. Relational bonds propagate consequences through the thread-substrate — an operation on one knotted thread affects all connected threads. Drift propagates through knots tridimensionally (see A11).
 
 ### A13. Collective Operations
 Multiple practitioners operating on the same thread-region interact. Their intentions may amplify, interfere, or produce emergent consequences none intended. Collective weaving is not additive — it is emergent.
@@ -62,7 +62,7 @@ Ontological knowledge (thread-constitution, rendering process) cannot be transmi
 | Threads | Constitutive ground + condition of possibility for being |
 | Rendering | Consciousness presenting thread-substrate as reality |
 | Ein Sof | Unintelligible ground: infinite positive being, epistemically inaccessible |
-| Threadcut | Not continuously spooled; radically is without becoming |
+| Threadcut | Not continuously spooled; radically is without becoming (lacks layer 1) |
 | Ontical | Pertaining to rendered world (particular beings, facts) |
 | Ontological | Pertaining to Being as such (conditions of possibility) |
 | Knotting | Binding of threads creating mutual influence |
@@ -70,7 +70,11 @@ Ontological knowledge (thread-constitution, rendering process) cannot be transmi
 | Orphaned Configuration | Present state whose causal history was removed |
 | Temporal Disjunction | Gap between retained experience and altered history |
 | Confrontation | Felt encounter with what exceeds rendering capacity |
-| Epistemic Seduction | Dissolution of normative categories through transformation |
+| Coherence | Integrity of layer-two self-rendering as human-mode being; tridimensional, two-facing, orthogonal to TS |
+| Apperception | Husserlian unity of consciousness; the I-think presenting being to itself as unified subject |
+| The Real | Lacanian: that which escapes symbolisation; monstrosity in embodied form |
+| Drift | Progressive Coherence-indexed decoupling from rendering's equilibrium-tendency; manifests tridimensionally |
+| Reality-Strain | Substrate tension produced by being whose continued existence requires sustained layer-three threadwork |
 
 ---
 
@@ -85,8 +89,8 @@ Track cumulative Temporal Disjunction. Low = narrative discomfort. High = mechan
 ### C3. Confrontation Development (ALL formats)
 Character growth through confrontation, not XP accumulation. Each confrontation transforms the character's relationship to the rendering. Cannot be reversed once undergone.
 
-### C4. Epistemic Seduction (ALL formats)
-Power and understanding come at the cost of normative orientation. Deep practitioners gain capability but lose the framework that would tell them when to stop. Mechanics must reflect this: advancement opens capabilities while closing off return paths.
+### C4. Drift Mechanics (ALL formats)
+Coherence is the structural integrity of being-as-human, not a measure of capability or moral standing. Mechanics that engage with Coherence drift must produce structural effects across all three dimensions (actuality, intelligibility, temporality) and across both facings (reflexive and outward apperception). Drift is not moral fall, sin, or character condemnation. Drift propagates tridimensionally through knots; cumulative exposure to a drifting practitioner is itself a form of low-grade confrontation that may initiate drift in connected entities. A Coherence-0 practitioner of high perceptual reach produces substrate strain proportional to their continued existence — the localised Einhir parallel.
 
 ### C5. Relational Knotting (ALL formats)
 Thread bonds propagate consequences. Operations on connected threads affect all knotted partners. Deliberate and organic knots both matter. Social bonds are mechanical bonds.
@@ -98,4 +102,4 @@ Thread bonds propagate consequences. Operations on connected threads affect all 
 - Rules A1–A15 derive from Parts 1–7 of the full document. For philosophical argumentation, fetch the full prose.
 - This file is sufficient for canon compliance checks, mechanic proposals, and audits.
 - P-01 through P-15 in `canon/02_canon_constraints.md` are the binding design constraints; this file provides the metaphysical grounding they rest on.
-- Any mechanic that violates A2 (inseparability), A11 (epistemic seduction), or A14 (calamity nature) is a canon violation regardless of other considerations.
+- Any mechanic that violates A2 (inseparability), A11 (drift from human-mode being), or A14 (calamity nature) is a canon violation regardless of other considerations.

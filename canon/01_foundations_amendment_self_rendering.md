@@ -47,7 +47,7 @@ Coherence degradation is the progressive failure of unconscious self-threadwork.
 
 Coherence is orthogonal to Thread Sensitivity. TS measures how much of the below-waterline Thread-substrate the practitioner can perceive and deliberately operate upon. Coherence measures how effectively their unconscious self-rendering maintains their being as human. These axes do not move together. A practitioner can have high TS and high Coherence (perceptive and stable), high TS and low Coherence (perceptive and destabilizing), low TS and low Coherence (blind and destabilizing), or any other combination.
 
-The epistemic seduction described in §16.1 is one path by which TS and Coherence loss become correlated — but it is a contingent correlation, not a structural necessity. A practitioner who accumulates Coherence loss through retention failures without residue use or transformation follows a different trajectory entirely.
+The drift described in §16.1 is one path by which TS and Coherence loss become correlated — but it is a contingent correlation, not a structural necessity. A practitioner who accumulates Coherence loss through retention failures without residue use or transformation follows a different trajectory entirely.
 
 ### Observable Coherence Degradation
 
@@ -57,7 +57,7 @@ The epistemic seduction described in §16.1 is one path by which TS and Coherenc
 
 **4–3 (Fragmented):** Visibly wrong. Materiality behaves inconsistently — shadows that don't match posture, presence that occupies more space than the body, flickers between being fully in the scene and partially elsewhere. Temporality perceptibly non-linear: references to events that haven't happened, reactions before causes. Intelligibility fractures: the practitioner is apperceived differently by different observers. Two people in the same room describe the practitioner differently — not in opinion, but in what they perceived. The rendering fails to present a consistent human being.
 
-**2–1 (Fractured):** Physical form manifests substrate alteration directly. Weight distribution wrong. Light interacts at a register that produces unease. Temporal existence perceptible to anyone — conversations skip, loop, proceed at inconsistent rates. Knowledge arrives chaotically, not as integrated perception. Relational contagion (§16.3) is now constant and uncontrolled.
+**2–1 (Fractured):** Physical form manifests substrate alteration directly. Weight distribution wrong. Light interacts at a register that produces unease. Temporal existence perceptible to anyone — conversations skip, loop, proceed at inconsistent rates. Knowledge arrives chaotically, not as integrated perception. Relational propagation (§16.3) is now constant and uncontrolled.
 
 **0 (Coherence Failure):** The always-already self-rendering as human has ceased. Ein Sof still spools the being — they are not threadcut, not dissolving. But the layer that maintained their configuration as a human being is gone. They are being spooled into whatever the raw spooling produces without human self-rendering to shape it.
 
