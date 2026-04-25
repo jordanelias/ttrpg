@@ -59,7 +59,7 @@ Interaction type derived: same style = REINFORCE, same genre opposite orientatio
 | Restoration | Rawlsian Social Contract | Revealing | Orientation |
 | Guilds | Moral Relativism | GM picks | Either |
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
-| Niflhel | — | GM picks | Either |
+| ~~Niflhel~~ STRUCK | — | — | — | Per ED-764. |
 
 ## Initiative
 Exchange 1: higher Attunement acts last (information advantage). [ED-138: deterministic vs rolled?]
@@ -147,7 +147,11 @@ Thread co-movement: Memory win → RS +1 (retention invoked). Projection win →
 | Private Negotiation | 1–3 | Symmetric | N/A | No Adjudicator |
 | Personal Appeal | 1 | Appealer proposes | N/A | No Adjudicator |
 
-## Niflhel Social Toolkit [ED-041 provisional]
+## ~~Niflhel Social Toolkit~~ STRUCK (ED-764)
+
+Niflhel struck per CR-STRIKE-2026-04-19. Settlement-level intelligence-broker NPCs (per settlement_layer §4.7-4.9) use individual social interaction patterns per npc_behavior §1. No faction-level Niflhel social toolkit exists.
+
+Original ED-041 provisional content (kept for archival reference but no longer canonical):
 No Formal/Grand Contests. Private negotiation only (Attunement pool). Thread Insight (TS ≥ 30): Attunement read reveals one unstated position.
 
 ## Practitioner Weaving (R-65)

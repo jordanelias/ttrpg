@@ -22,11 +22,13 @@
 | Hafenmark | 4 | 4 | 5 | 3 | — | 4 |
 | Varfell | 4 | 4 | 4 | 4 | — | 4 |
 | Guilds | 3 | 4 | 6 | 2 | — | 5 |
-| Niflhel | — | 5 | 4 | — | — | 4 |
+| ~~Niflhel~~ STRUCK | — | — | — | — | — | — |
 | Revolution | — | 3 | — | — | — | 3 |
 | Löwenritter | — | 3 | — | 5 | 3 | 5 |
 
-Partial sheets: Niflhel (no Mandate, no Military). Revolution (Influence, Stability, Intel only).
+> **Niflhel STRUCK** (per CR-STRIKE-2026-04-19 / conflict_architecture_proposal §Niflhel Dissolution / ED-764). Functions distributed to settlement-level phenomena: black markets (Wealth-bearing); intelligence brokers (Intel-bearing single NPCs); Thread exploitation sites (settlement-Order-bearing). No faction-level Niflhel stat sheet. Settlement-level brokers each have local Intel ≤ 4.
+
+Partial sheets: Revolution (Influence, Stability, Intel only). [Niflhel removed per ED-764.]
 Löwenritter (no Mandate, no Wealth). Guilds NPC-only: no deviation mechanic.
 
 ## Domain Action Resolution
@@ -52,11 +54,9 @@ Min Ob floor: 1 after all modifiers.
 | Hafenmark | Sovereign Authority Doctrine | Mandate | 4 | 1/campaign arc. Heresy Investigation risk. |
 | Varfell | Private Collection | Intel | 2 | 1/season. +1 TS on use. TS 14+: triggers Spirit check. |
 | Guilds | Economic Leverage | Wealth | vs target Wealth | Requires Guild Favour ≥ 5 in territory. |
-| Niflhel Quiet (Intel) | Intel mode | Intel | vs target Intel | Learn 1 hidden attr (Overwhelm: 2). |
-| Niflhel Quiet (Sabotage) | Sabotage mode | Intel | vs target Stability | Success: Stab −1. Fail: Intel −1. |
-| Niflhel Quiet (Assassination) | Assassination mode | Intel | vs target Intel +2 | Fail: full exposure, Stab −2. |
+| ~~Niflhel Quiet~~ STRUCK | — | — | — | Per ED-764. Settlement-level intelligence-broker NPCs use individual Intel; no faction-level Quiet action exists. |
 | Revolution | Community Weaving | Influence | TT ÷ 20 (round up) | Requires practitioner TS 30+. Co-movement fires. |
-| Löwenritter | Coup Counter | — | threshold | Increments at 3 conditions. Never decrements. |
+| Löwenritter | Graduated Autonomy | — | track-state | Replaces Coup Counter (ED-589). Track stages: Loyal → Restless → Autonomous → Split. Per worldbuilding §3 / clock_registry §3. |
 
 ## Probability Reference (verified by SIM-FAC-01/02)
 | Pool | Ob | P(Success+) | P(Overwhelming) |
