@@ -141,6 +141,67 @@ Focus defense (defender): `floor(Foc/2) × 3`. Range 0–9.
 
 ---
 
+### 5.3 Inspiration (motivation resource — propagated 2026-04-25)
+
+Inspiration is a per-character motivation resource representing the depth of a character's emotional or ideological investment in specific people, places, ideals, or objects (called "foci"). Inspirations grant +1D bonuses to actions taken in genuine pursuit of the focus and reduce Ob by 1 when spent strategically (per fieldwork_v30 §2.2).
+
+| Property | Value |
+|----------|-------|
+| Formula | Total Inspiration value ≤ Spirit attribute (Resolve cap, params/core L128) |
+| Range | 0 to Spirit per individual Inspiration; cumulative cap = Spirit across all foci |
+| Direction | Spent (reduces value) and recovered (raises value) per scene engagement |
+| Reset | Inspirations do NOT reset between scenes or seasons. They are persistent character resources, modified through play. |
+| Recovery | Per-scene engagement with focus (see §5.3.2 below); maximum recovery 2 points per Inspiration per season |
+| Loss | Focus permanently destroyed/captured/lost: Inspiration drops to 0 immediately (see §5.3.3) |
+
+**§5.3.1 Inspiration Acquisition (mid-campaign)**
+
+A character without an Inspiration may acquire one through play:
+
+1. Player declares intent and names the focus (a specific named person, place, ideal, or object — not a category).
+2. Two scenes where the character actively engages with the focus (GM/engine confirms engagement is genuine, not incidental).
+3. After each scene: Spirit check TN 7, Ob 1.
+   - **Both succeed:** Inspiration established at 1 point.
+   - **One succeeds, one fails:** Inspiration established at 1 point with a **Complication Tag** — a narrative condition under which the Inspiration applies (e.g., "only while in Valorsplatz" or "contingent on Lenneth's survival"). The Complication Tag is set by the GM/engine and persists until the Inspiration is upgraded or lost.
+   - **Both fail:** Focus not yet crystallized. Player may retry next season with new scenes.
+
+**CP shortcut (G-053):** 4 CP + one scene of genuine engagement + one Spirit check (TN 7, Ob 1). Success: Inspiration at 1 point, no Complication Tag. Failure: 4 CP spent; retry available next season.
+
+**Belief-to-Inspiration conversion:** Completing a Belief converts it to a new Inspiration at 1 point at no CP cost (the conversion is the reward — see §5.3.4 below for Belief mechanics overview). An NPC whose relationship with the character reaches significant depth (Disposition ≥ +4 sustained for 2+ seasons) may become an Inspiration focus through this conversion path.
+
+**§5.3.2 Inspiration Recovery (from reduced value)**
+
+When an Inspiration drops below its established value through use (Inspiration spend per fieldwork §2.2: 1 Inspiration → Ob −1) or narrative loss (focus threatened, partner injured, place damaged):
+
+- **Full scene engaged with the focus:** +1 point. No roll required.
+- **Focus physically present and uncontested:** automatic +1, no check. (Seeing a loved one safe after battle restores the Inspiration without requiring a scene structure.)
+- **Maximum recovery per season:** 2 points per Inspiration per season. Full restoration in one season is not possible — multi-season investment is required to rebuild a deeply spent Inspiration.
+
+**§5.3.3 Focus Destroyed or Permanently Lost**
+
+When an Inspiration's focus is permanently destroyed, captured, or fundamentally changed such that engagement is no longer possible:
+
+1. Inspiration drops to 0 immediately (skipping intermediate recovery).
+2. Player may convert to a new Inspiration through a **Grief Scene**: one scene of genuine reckoning with the loss + Spirit check TN 7 Ob 2.
+   - **Success:** new Inspiration at old value −1 (minimum 1). New focus must thematically connect to the loss.
+   - **Failure:** Inspiration lost entirely. Player may attempt fresh Inspiration acquisition (§5.3.1) next season.
+
+**§5.3.4 Inspiration vs Belief vs Conviction (cross-system distinction)**
+
+These three character-mechanics are distinct and operate at different scales:
+
+| Mechanic | Scale | Function | Persistence |
+|---|---|---|---|
+| **Conviction** (per player_agency §2) | Worldview / framework | Drives all major decisions; determines Resonant Style; tracked on Conviction Track | Lifetime; shifts only through Scar accumulation or major narrative events |
+| **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete §10.2 — TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised |
+| **Inspiration** (this section) | Emotional/ideological investment | Specific focus that grants +1D / Ob −1 when actively engaged | Persistent until focus lost; modifiable via play |
+
+A Belief like "I will protect Lenneth from the Cardinal's reach" can be **converted** to an Inspiration "Lenneth" upon completion (Belief mechanic produces narrative resolution; Inspiration converts it into ongoing mechanical resource). The Conviction underlying both might be Continuity or Care — a deeper framework that motivated the original Belief.
+
+[EDITORIAL: ED-779 — Inspiration mechanic propagated to canonical derived_stats §5.3. Closes propagation defect: canonical Inspiration spec existed only in deprecated/valoria_ttrpg_complete.md §10.4 (acquisition, recovery, focus loss); active canonical docs (params/core L128 'Resolve = Spirit max Inspiration', fieldwork §2.2 'Inspiration spend → Ob −1') referenced but did not define the underlying mechanism. Now consolidated in §5.3 with Acquisition (mid-campaign two-scene + Spirit check or 4 CP shortcut), Recovery (full-scene engagement +1, focus-present-uncontested +1, season cap 2), Focus loss (immediate drop to 0, optional Grief Scene conversion), Inspiration vs Belief vs Conviction distinction table. Belief mechanic itself flagged for future propagation (§5.3.4 TODO note). Source: 2026-04-25 stress-test 52.]
+
+---
+
 ## §6 — Personal Scale: Thread Resources
 
 ### 6.1 Thread Fatigue (action economy resource)
