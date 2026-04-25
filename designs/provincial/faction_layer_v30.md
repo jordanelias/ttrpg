@@ -399,7 +399,7 @@ Each active faction contributes votes equal to its current Mandate. The targeted
 | Majority | Strictly > 50% of participating Mandate |
 | Supermajority | ≥ 60% of participating Mandate |
 
-Church **Sacred Veto:** May cancel any non-military Parliamentary vote once per year (free action; costs Mandate −1 if used against a motion that would have passed). Eligible for Veto: Censure, Embargo, Outlawry, Recognition Challenge, Succession Endorsement, Treaty Ratification. Not eligible: War Authorisation, Blockade, Subsidy.
+Church **Sacred Veto:** Cadence — available once per 4 consecutive seasons (ED-751). Reset triggers on the season when used (e.g., used Season 12 → next available Season 16). Per-Veto-use cooldown, not per-game-year cycle. Free action; costs Mandate −1 if used against a motion that would have passed. Eligible for Veto: Censure, Embargo, Outlawry, Recognition Challenge, Succession Endorsement, Treaty Ratification. Not eligible: War Authorisation, Blockade, Subsidy.
 
 If Church uses Sacred Veto to block a motion that protects Church interests: additional Mandate −1 (self-interested veto is transparent; reputation cost).
 
@@ -457,9 +457,9 @@ This makes sustained Blockade + Embargo an existential threat to Guilds and Hafe
 
 GM controls NPC faction votes (Guilds, Niflhel, and any other NPC-only factions).
 
-**Guilds AI vote rule:** Always votes against Blockade and Combined Embargo+Blockade (threatens Wealth). Votes for Subsidy. Votes against Outlawry (commercial unpredictability). Otherwise votes for whichever outcome reduces the highest Mandate faction's power (competitive commercial instinct).
+**Guilds AI vote rule:** Always votes against Blockade and Combined Embargo+Blockade (threatens Wealth). Votes for Subsidy. Votes against Outlawry (commercial unpredictability). Otherwise votes for whichever outcome reduces the highest Mandate faction's power (competitive commercial instinct). **Settlement-broker influence (ED-752):** Guild Council members operating in broker-influenced settlements (per settlement_layer_v30 §4.7-4.9) may shift Guilds' net vote by −1 per influenced settlement (max 2-vote shift), reflecting broker pressure on commercial leadership.
 
-**Niflhel AI vote rule:** Votes against Outlawry (network exposure). Votes against Recognition Challenge (legitimacy destabilisation creates unpredictable clients). Abstains on War Authorisation. Otherwise votes for the motion that most benefits the weakest active faction (network dependency protection).
+**Niflhel — STRUCK** (per CR-STRIKE-2026-04-19 + PP-DISSOLVE). Settlement-broker NPCs (per settlement_layer §4.7-4.9) do not hold Parliamentary seats and do not vote. The prior Niflhel AI vote rule is dead — no replacement faction-level voting behavior exists for Niflhel. Niflhel's residual influence on Parliamentary outcomes operates through the Guilds settlement-broker mechanism above, not through direct vote. (ED-752)
 
 ---
 
