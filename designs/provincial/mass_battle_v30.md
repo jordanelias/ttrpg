@@ -837,12 +837,20 @@ Every Battle resolved on Valorian soil carries systemic costs beyond the immedia
 | Accord erosion — conquered territory | Attacker conquers via Battle | Accord set to 1 (Category A: all settlements reset to Order 1) |
 | Accord erosion — defender's territory | Battle occurs in a territory the defender controls | Order −1 in settlement nearest battle site (Category B per §2.5) |
 
-### §E.2 Accounting Consequences (per season in which ≥ 1 inter-faction Battle occurred)
+### §E.2 Accounting Consequences (revised per ED-743)
 
-| Consequence | Trigger | Value |
-|------------|---------|-------|
-| Vulnerability Signal | Any inter-faction Battle this season | IP +3 at Accounting (revised from +2, ED-623) |
-| Peninsular Strain | Any inter-faction Battle this season | Strain +1 at Accounting |
+Battle-occurrence is no longer a direct IP or Strain trigger. Battles produce Accord erosion at the *territory* level (§E.1). IP and Strain consequences fire downstream from that Accord erosion — the Accounting *after* a conquest, the conquered territory's Accord ≤ 1 status contributes to peninsula-wide IP and Strain counts.
+
+| Consequence | Trigger | Mechanism |
+|------------|---------|-----------|
+| Substrate Fracture (immediate) | Any inter-faction Battle | MS −1 (Campaign/War scale: MS −2). See §E.1. |
+| Accord erosion (immediate) | Conquest or defender's territory | See §E.1. |
+| Vulnerability Signal (deferred) | Conquered/contested territories at Accord ≤ 1 at next Accounting | IP advance per peninsular_strain §3.2 (territory-count thresholds: 2-3 → +1; 4-5 → +2; 6+ → +3). |
+| Peninsular Strain (deferred) | Conquered/contested territories at Accord ≤ 1 at next Accounting | Strain advance per peninsular_strain §4.1 (+1/territory, cap +3/season). |
+
+A faction that conquers AND rapidly governs the conquered territory to Accord ≥ 2 (typically 1-2 seasons via Govern actions) avoids both IP and Strain advance from that conquest. A faction that conquers and leaves territories at Accord 1 indefinitely pays sustained IP and Strain. **The cost is in the holding, not the conquest.**
+
+[EDITORIAL: ED-743 — Battle-occurrence redirected to deferred Accord-based mechanism. ED-623 (+2 → +3 IP per battle-season) superseded; the IP mechanism itself relocated to peninsular_strain §3.2. Battle-season immediate costs (MS, Accord erosion) retained.]
 
 ### §E.3 Exceptions
 
@@ -853,6 +861,6 @@ Every Battle resolved on Valorian soil carries systemic costs beyond the immedia
 
 ### §E.4 Cumulative caps per season
 
-Maximum MS change from battles: −3 per season (regardless of battle count within season). Maximum Strain advancement from battles: +2 per season. IP advancement is uncapped — each battle season = +3 IP, stacking with TC-based IP advancement (peninsular_strain §3.2).
+Maximum MS change from battles: −3 per season (regardless of battle count within season). IP and Strain advancement caps now live in peninsular_strain §3.2 / §4.1 (territory-count-based, not battle-count-based). IP from territory-instability: cap +3/season (territory-count threshold). IP from CI ≥ 60: +2/season (independent track). Strain from territory-instability: cap +3/season. Strain from faction elim and Revolt: uncapped (discrete events). Battle-occurrence itself does not advance IP or Strain in the current ruleset (ED-743).
 
 *Sources: peninsular_strain_v1.md §3, military_layer_v30.md §2.2b, victory_v30.md §0.4, board_game PP-647. This section consolidates those references into one canonical location.*

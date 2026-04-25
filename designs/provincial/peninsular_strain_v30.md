@@ -254,13 +254,21 @@ Each Battle resolved on Valorian soil: **RS −1.**
 
 ### §3.2 Vulnerability Signal (Pressure 2)
 
-Each season in which a Battle between playable factions is resolved: **IP +3** (revised from +2, ED-623 — validated by ST-42 simulation confirming +2 rate produced a threat that rarely manifested in standard campaigns).
+**Held-instability trigger (ED-743 — supersedes ED-623 battle-occurrence trigger).** Altonia gains intelligence from *visible administrative failure*, not from inter-faction battles per se. The signal is the inability to govern conquered or contested ground. Pax Romana stabilized after conquest; the prior battle-occurrence trigger inverted that logic, taxing the act of conquest rather than the failure to consolidate.
 
-Altonia monitors the peninsula for weakness. Civil war signals vulnerability. This fires once per season regardless of how many battles occur (one season of warfare = one intelligence signal). Battles against NPC factions (Altonian Vanguard, Popular Uprising, Löwenritter coup) do NOT trigger IP advancement — Altonia does not gain intelligence from its own operations, and internal unrest is a different signal from inter-faction civil war.
+| Trigger | IP Change |
+|---------|-----------|
+| At each Accounting, count territories at Accord ≤ 1 controlled by playable factions. 0–1 territories → IP +0; 2–3 → IP +1; 4–5 → IP +2; 6+ → IP +3. | Up to +3/season |
+| CI ≥ 60 sustained (Church dominance signal) | +2/season while sustained |
+| Faction eliminated (Stability 0) | +2 (one-time at moment of collapse) |
 
-**CI-based IP advancement (ED-623):** When CI ≥ 60, Altonia reads Church dominance as peninsula vulnerability. Add **IP +2 per season** while CI ≥ 60 (in addition to civil war IP). This fires automatically at Accounting alongside other IP sources. Revised from +1 (prior rate produced insufficient pressure in moderate-CI campaigns).
+The Accord-based trigger means battle-occurrence does not directly advance IP. What advances IP is the *sustained inability* to bring conquered or contested territory to Compliant governance (Accord ≥ 2). A faction that fights short, decisive wars and rapidly stabilizes generates *less* IP than one that fights inconclusively or holds territory at Resistant Accord for extended periods. Battles still produce Accord-1 conquered territories at the moment of conquest (mass_battle §E.1) — the IP advance fires the season *after*, when those territories remain at Accord ≤ 1 across Accountings.
 
-**IP advancement from civil war is independent of Peninsular Strain (§4).** The two tracks do not feed each other.
+Battles involving NPC factions (Altonian Vanguard, Popular Uprising, Löwenritter coup) do NOT trigger IP advancement directly — Altonia does not gain intelligence from its own operations, and internal unrest is a different signal from inter-faction civil war. However, NPC-faction battles that produce Accord ≤ 1 territories DO contribute to the count above — the inability to stabilize is the same signal regardless of who caused the destabilization.
+
+**IP and Strain may advance from the same world-state** (e.g., a conquered Accord-1 territory contributes to both counts) but through separate aggregation rules — see §4.4.
+
+[EDITORIAL: ED-743 — Vulnerability Signal mechanism revised from battle-occurrence to held-instability. ED-623 superseded. Source: 2026-04-24 audit conversation P1-1 — prior mechanism inverted historical Pax Romana logic (Pax stabilizes after conquest; the prior spec taxed the act of conquest rather than the failure to consolidate). Combination of fix-options (1)+(3) per audit conversation: held-instability advance + Treaty-pair decay.]
 
 ---
 
@@ -270,18 +278,27 @@ Global track, range 0–10. Starts at 0. Public (visible counter on board).
 
 ### §4.1 Advancing Strain
 
+**Held-instability trigger (ED-743).** Strain advances from instability of held ground, not from battle-occurrence. Conquest itself does not advance Strain; *failure to consolidate conquered or contested territory* does.
+
 | Trigger | Strain Change |
 |---------|--------------|
-| Season in which a Battle between playable factions is resolved | +1 |
-| Playable faction eliminated (Stability 0) | +2 |
-| Territory Revolt (Accord 0 → Uncontrolled) | +1 |
+| At each Accounting, per territory at Accord ≤ 1 controlled by any playable faction | +1 per territory, capped at +3/season from this source |
+| Playable faction eliminated (Stability 0) | +2 (one-time at moment of collapse) |
+| Territory Revolt (Accord 0 → Uncontrolled at Accounting) | +1 per Revolt event |
+
+The +3/season cap from territory-instability prevents runaway escalation — a peninsula with 6+ Accord ≤ 1 territories advances Strain at the cap, not unbounded. Faction elimination and Revolt remain uncapped (discrete events, not ongoing conditions).
 
 ### §4.2 Reducing Strain
 
+Strain decay is per-Accounting and decoupled from peninsula-wide peace (the prior coupling produced the multi-faction lock where one faction's war prevented Strain decay for everyone).
+
 | Trigger | Strain Change |
 |---------|--------------|
-| Season with NO inter-faction battles AND no Revolts | −1 (min 0) |
-| Public diplomatic resolution (Crown Treaty formed, Open Pledge honoured, Co-Victory declared) | −1 (max one from this source per season) |
+| At each Accounting, if no Strain advanced from §4.1 territory-instability this season (all controlled territories at Accord ≥ 2) | −1 (min 0) |
+| Per active Treaty pair (Truce, Peace, Alliance, Capitulation, Tributary per faction_layer §3.1) at Accounting | −1 per Treaty pair, capped at −2/season from this source |
+| Public diplomatic resolution (Crown Treaty newly formed, Open Pledge honoured, Co-Victory declared) | −1 (max one from this source per season) |
+
+**Treaty-binding is a Strain-budgeting tool.** Two factions in active Treaty produce Strain decay even while a third faction is at war — the Roman Pax expressed mechanically. Example: peninsula with 3 Treaty pairs (Crown-Hafenmark, Crown-Varfell, Hafenmark-Varfell) and active Crown-Church war. Crown territories at Accord ≤ 1 advance Strain per §4.1, but Treaty pairs deliver −2/season (cap) — net Strain hold or decay despite active warfare. Compare to a peninsula with no Treaty structure, where the same Crown-Church war + Crown territory destabilization produces unmitigated Strain advance.
 
 ### §4.3 Strain Threshold Effects
 
@@ -295,9 +312,16 @@ Global track, range 0–10. Starts at 0. Public (visible counter on board).
 
 **Löwenritter Strain exemption:** Löwenritter emergence (coup) adds Strain +1 (not +2 — the coup is a succession event, not faction elimination). Battles in the first 2 seasons after Löwenritter activation do not advance Strain (the population expects military governance during succession crisis). After 2 seasons: normal Strain rules apply.
 
-### §4.4 Strain and IP — No Cross-Feeding
+### §4.4 Strain and IP — Shared Signal, Independent Aggregation
 
-Strain and IP are independent tracks. Strain effects at Fracture/Crisis/Collapse do NOT add IP. IP advances from its own triggers (Altonian pressure table, CI > 60, civil war battles per §3.2). Both may advance from the same battle event but through separate rules.
+Both tracks now advance from the same world-state signal (Accord ≤ 1 territories at Accounting) but through different aggregation rules:
+- **Strain** (§4.1): +1 per territory, cap +3/season from this source. Faction elim +2, Revolt +1 add separately.
+- **IP** (§3.2): stepwise threshold (0-1 → +0; 2-3 → +1; 4-5 → +2; 6+ → +3) — single contribution per Accounting from this source. CI ≥ 60 adds +2/season independently. Faction elim +2 once.
+- **No direct feed.** Strain effects at Fracture/Crisis/Collapse do NOT add IP. IP does not feed back into Strain.
+
+Both may rise together in a campaign with sustained governance failure. They share the underlying world-state but aggregate it differently (Strain accumulates linearly across territories up to cap; IP uses threshold steps).
+
+[EDITORIAL: ED-743 — §4.4 updated to reflect shared trigger with independent aggregation. Prior framing ("no cross-feeding") preserved as principle but mechanism-level explanation added.]
 
 ---
 
