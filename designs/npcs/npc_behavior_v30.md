@@ -622,6 +622,33 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Conviction: Continuity → Autonomy (the work has failed; she must survive to try again).
 - Risk: Her presence strains MS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ MS drain). She is a walking Calamity echo.
 
+**Arc D: The Confrontation**
+- Branch condition: Player at WC ≥ 2 sustains Continuity-disruptive operations witnessed by Edeyja (Conviction Scar count from §3.4 Thread Operation triggers reaches 3 from player-witnessed events).
+- Conviction shift: Continuity primary unchanged. Resonant Style adds Authority — Edeyja becomes willing to invoke Warden authority publicly against the player (previously withheld).
+- Behavior: Mandatory Zoom-In scene fires (Priority 0 per scale_transitions §4.3.2). Edeyja confronts the player directly. Three resolution paths:
+  - **(a) Player commits to mitigation discipline going forward:** Disposition retained. WC frozen at current level for 4-season probation. Continuity-disruptive operations during probation refire Arc D Confrontation immediately with no further probation option.
+  - **(b) Player refuses or deflects:** Disposition drops to −2. WC reset to 0. Warden Cooperation closed for campaign — no Warden-path advance possible without Founded Organization or Path E (independent crisis-driven) Warden activation.
+  - **(c) Player escalates** (combat, threat, accusation): Edeyja enters Arc C (The Crisis) prematurely. She leaves the player's territory permanently. Warden network goes dark to that player. Arc D probation closed.
+
+**Arc E: The Wager**
+- Branch condition: Player at WC ≥ 2 with sustained Continuity-disruptive operations (Scar count ≥ 2 from §3.4) AND active Knot with Edeyja AND player initiates Grand Contest with Edeyja using Projection genre + Consequence Resonant Style + Solidarity (Knot prerequisite per §1.3) + commitment to specific verifiable future outcome. Arc E is an alternative to Arc D: the player who anticipates Confrontation may pre-emptively wager rather than be confronted.
+- Wager content: player names a specific, time-bound, verifiable future condition (named territory + named MS recovery threshold, OR named Thread Revelation event, OR named timeframe for cross-faction Warden alliance). Vague projections fail Contest at Track ≤ 3 by §6.3 Continuity Wrong-Style Penalty.
+- Resolution by Conviction Track outcome (per social_contest §6.1 Wager Obligation extension):
+
+| Conviction Track | Outcome |
+|---|---|
+| ≥ 9 (Total Victory player) | Edeyja accepts the wager. Cooperation continues at current WC. Substrate-disruptive operations no longer produce Scars from §3.4 *for operations player documents as wager-aligned*. Wager Obligation generated (§6.1 extension), 4-season duration or until verifiable condition met. |
+| 7–8 (Decisive player) | Edeyja accepts conditionally. WC frozen at current level until wager resolves. Scar generation reduced to half rate. Wager Obligation generated. |
+| 4–6 (Compromise) | Edeyja offers limited acceptance: player names 2 specific operation types as exempted; all other operations continue producing Scars. No Wager Obligation; no WC change. |
+| ≤ 3 (Edeyja decisive) | Wager refused. Disposition −1. WC −1. Wrong-Style Penalty active 4 seasons (Continuity NPCs treat repeat Projection appeals as Authority intrusion). |
+
+- Wager resolution (4 seasons later, OR when player-specified condition triggers):
+  - **Condition met:** WC +2 (capped at 3). All accumulated Scars from wager-aligned operations cleared. Edeyja's secondary Conviction may shift toward Reason. New Belief: "There are practitioners worth the cost."
+  - **Condition not met (timeframe expired):** WC drops to 0. Disposition drops to −3. Edeyja enters Arc D Confrontation immediately with no probation option (the wager replaced probation). Relationship cannot be rebuilt this campaign without exceptional circumstances (Mass Battle defending the Southernmost, public sacrifice for Thread cause).
+  - **Condition partially met:** GM judgment. Typical resolution: WC unchanged, Scars resume normally, Disposition −1.
+
+[EDITORIAL: ED-739 — Edeyja Arc D (Confrontation) and Arc E (Wager) added. Source: 2026-04-24 audit conversation. Translates §3.4 Thread Operation Scar matrix into WC-track-specific consequence (Arc D) and provides Consequence-genre-mediated negotiation path (Arc E). Resolves audit conversation P2 finding that WC track lacked decay clause and that ms_budget §Conclusion mis-framed WC 3 as "singular survival path" when it is actually a budget enabler with maintenance requirements.]
+
 **Warden Faction Paths (campaign_architecture_v1 §6):** Five paths to Warden political relevance: (A) Recruited by Varfell (WR 3+, institutional integration); (B) Recruited by RM post-revelation (Embrace arc, philosophical alliance); (C) Recruited by player (WR ≥ 3 + Founded Organization); (D) Recruited by Lenneth (Crown integration via Elske Loyalty Track); (E) Independent faction at MS ≤ 20 (crisis-driven, Mending Sanctuary declaration). See campaign_architecture_v1.md §6.2 for full specification. If activated, Warden governance uses consensus model with collective Spirit-derived governance stat.
 
 ---

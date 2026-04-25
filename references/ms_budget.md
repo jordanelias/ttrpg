@@ -96,11 +96,23 @@
 - **Net: ~−4 to −8/season (capped)**
 - From MS 45: Fractured band by Year 24. Critical by Year 27. Survival to Year 30 viable with active Mending rotation.
 
-### Conclusion: WC 3 is the singular endgame survival path.
+### Conclusion: WC 3 is the budget enabler for substrate-respectful Thread-active play.
 
-At WC 0, peak drain exceeds recovery capacity by ~20 MS/season. No combination of individual Mending operations can offset this — ARC-S32 (Mending Trap) confirms that threadwork fatigue mechanics cap a single practitioner's seasonal output at +6–10 MS, insufficient against peak drain.
+The peak-drain Scenario B figures (~−21 to −23/season at WC 0) describe the *un-disciplined* Thread-aggressive faction profile: 4 Dissolutions/year, 2 active Locks, sustained Thread warfare in mass battle, no Gap closure discipline. This is the budget under which WC 3 is mathematically necessary.
 
-At WC 3, drain is reduced to ~10–12/season (after WC halving of Gap/Lock drain) and offset by +8–12/season community Mending recovery (capped at +10/season by seasonal cap) plus +2/season WC bonus, producing a net decline of ~4–8/season — survivable to Year 30 with concentrated effort.
+Three viable late-game paths exist:
+
+**Path 1 — Disciplined non-Warden play.** Self-mitigation via: restraint on Dissolution and POP; active Gap closure within 1–2 seasons of opening; Lock cleanup; battle minimization; ≤2 Thread ops/turn in mass battle (avoiding Substrate Saturation); voluntary withdrawal of TS 90+ practitioners from active operations. A faction observing these disciplines sustains MS within ±2/season of baseline through a 35-year campaign without Warden integration.
+
+**Path 2 — WC 3 with substrate discipline.** Path 1 disciplines plus WC 3 cooperation. Halved Gap/Lock drain, Edeyja active Mending +2/season, community Mending recovery available. Maximum survivability margin. The "responsible Warden ally" profile.
+
+**Path 3 — WC 3 with successful Wager (Arc E).** Active Knot with Edeyja + Grand Contest victory using Projection-Consequence-Solidarity argument structure + verifiable future commitment. WC 3 cooperation extends to cover Scenario B operational profile. The "staked credit" path — Edeyja accepts present substrate cost on the strength of demonstrated competence and committed future restoration. The wager itself becomes a Wager Obligation (social_contest §6.1) — failure produces immediate Arc D Confrontation with no probation. See npc_behavior §5.2 Edeyja Arc E for full mechanic.
+
+**The trap (Path 4 — non-viable):** WC 3 without discipline AND without Wager. Player misreads ms_budget framing as "WC 3 license to operate without consequence." Edeyja Arc D Confrontation fires within ~10 seasons of WC 3 + sustained substrate-disruptive operations. Player either commits to discipline (collapsing into Path 2) or breaks the alliance (collapsing into a degraded version of Path 1, having spent seasons of investment on a now-lost relationship).
+
+The substrate ontology does not permit "Thread without consequence." WC 3 shifts the discipline target — it does not remove the discipline requirement. Factions seeking maximum operational latitude must arrive at it through the Wager structure, not through cooperation alone.
+
+[EDITORIAL: ED-740 — ms_budget Conclusion reframed from "WC 3 is the singular endgame survival path" to three-path framing. Source: 2026-04-24 audit conversation. Prior framing produced player misread that WC 3 was a survival floor; correct reading is that WC 3 is a budget enabler for one of three viable late-game configurations, with Path 1 (disciplined non-Warden) being equally survivable for substrate-respectful factions.]
 
 ---
 
