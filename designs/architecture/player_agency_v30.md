@@ -258,7 +258,19 @@ For each active Conviction, scan for intersection with:
 - **System keywords (~25):** Thread, Mending, Coherence, Heresy, Knot, Mandate, Order (capitalized = settlement Order or faction stat), Restoration, Warden, Southernmost, Confessor, Parliament, Dynasty, Regency, Occupation, Accord, Treaty, Investigation, Einhir, Calamity, Church, Crown, Hafenmark, Varfell, Standing, Renown.
 - **Role references** (resolve to canonical NPC): "the king" → Almud; "the Confessor" → Himlensendt; "the duchess" → Baralta; "the duke" → Vaynard (or Maret Uln post-succession); "the queen" → Lenneth; "the prince" → Torben; "the princess" → Elske; "the grandmaster" → Ehrenwall; "the spymaster" → Thale; "the lord treasurer" → Reichard; "the royal marshal" → Voss.
 
-**Validator:** at character creation and at each Conviction revision, scan the new Conviction text for matches across all five categories above. If 0 matches found, display non-blocking warning: "This Conviction will not generate scenes via Step 4 unless you reference a specific NPC, faction, territory, system topic, or role. Refine?" Player may dismiss or refine.
+**Validator (extended per ED-766):** at character creation and at each Conviction revision, scan the new Conviction text for matches across all five categories.
+
+**Match severity classification:**
+- **Strong match:** capitalized exact-name (e.g., "Almud", "Crown", "Thread") — high confidence the player intended the system-keyword reading.
+- **Weak match:** lowercase form of a system keyword that is ambiguous with common-English usage (e.g., "order" vs "Order", "crown" vs "Crown"). Could be incidental rather than intentional reference.
+- **No match:** zero candidates in any category.
+
+**Validator behavior by match type:**
+- **0 matches:** display non-blocking warning "This Conviction will not generate scenes via Step 4 unless you reference a specific NPC, faction, territory, system topic, or role. Refine?"
+- **Weak match only:** display non-blocking suggestion "Did you mean [System keyword X]? If so, capitalize it. Otherwise, your Conviction is general-life-themed and won't fire Step 4 scenes about [System keyword X]." Player chooses: (a) capitalize → strong match → fires Step 4, (b) leave lowercase → no Step 4 firing for that match.
+- **Strong match (any):** no warning. Step 4 fires for the matched topic.
+
+This prevents both false-negative (zero-match Conviction missed) and false-positive (incidental keyword match firing wrong scenes) at character creation. The capitalization heuristic transfers semantic disambiguation responsibility to the player at Conviction-write time, where the player has the most context to clarify intent.
 
 For each intersection found, generate one scene entry with the matching NPC/location. Maximum 3 Conviction-generated scenes.
 

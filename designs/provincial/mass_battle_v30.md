@@ -809,7 +809,9 @@ Each mustered unit has one named officer NPC. The officer is generated at Muster
 - Player orders the unit into a situation that costs Size ≥ 2: −1
 - Player is absent from a battle where the unit fights: −1
 
-**Officer death (recalibrated per ED-754):** When a unit takes Size loss, the officer may be killed. Roll: **1d20**. On result ≤ Size lost, the officer is killed. Example: unit loses 2 Size → officer killed on 1 or 2 (10% rate). Unit loses 5 Size → officer killed on 1-5 (25% rate). Prior calibration (1d10) produced 50% officer death at routine 5-Size loss — campaigns lost all named officers in 4-6 battles. The 1d20 recalibration preserves narrative jeopardy (catastrophic losses still kill officers reliably) while permitting named officer NPCs to persist across multiple campaign battles.
+**Officer death (recalibrated per ED-754, scoped per ED-765):** Roll once per battle resolution, not per Size-loss event. Computation: total Size lost in battle by the unit → roll 1d20. On result ≤ total Size lost, the officer is killed. Example: unit loses 2 Size in volley + 3 in engagement = 5 total → officer killed on 1-5 (25% rate). Per-battle resolution is significantly cleaner than per-event: it produces a known-bounded probability, doesn't double-count multi-stage attrition, and surfaces a single named-officer death moment per battle for narrative clarity.
+
+Prior calibration (1d10) produced 50% officer death at routine 5-Size loss — campaigns lost all named officers in 4-6 battles. The 1d20 + per-battle calibration preserves narrative jeopardy (catastrophic losses still kill officers reliably) while permitting named officer NPCs to persist across multiple campaign battles.
 
 **Death consequences:**
 - Player receives notification: "Captain [Name] fell at [location]."

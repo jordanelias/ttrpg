@@ -78,3 +78,15 @@ entries:
     description: "Niflhel STRUCK propagation to params files (params/factions_personal.md, params/contest.md, params/bg/military.md). Faction stat sheet row stricken; Unique Actions Niflhel Quiet entries stricken; Niflhel Social Toolkit (ED-041 provisional) marked STRUCK with redirect to settlement-broker individual NPC behavior; BG card reference updated. Also propagated Löwenritter Coup Counter → Graduated Autonomy in same params file (per ED-589 c0be619f, prior). Source: 2026-04-24 stress-test 12 Niflhel residual scan."
     status: resolved
     severity: P3
+
+  - id: ED-765
+    date: 2026-04-24
+    description: "Officer death roll scoped per-battle, not per-Size-loss-event. Spec was ambiguous (could be read as per-event with multi-stage compounding probability). Resolution: 1d20 vs total Size lost in battle, single roll at battle resolution. Cleaner probability semantics; one named-officer death moment per battle for narrative clarity. Source: 2026-04-24 stress-test 9."
+    status: resolved
+    severity: P3
+
+  - id: ED-766
+    date: 2026-04-24
+    description: "Scene Slate Step 4 keyword validator extended with capitalization heuristic + suggestion mode. Strong matches (capitalized) fire Step 4; weak matches (lowercase ambiguous form like 'order' vs 'Order') trigger suggestion to player to capitalize-or-leave; 0 matches trigger zero-match warning. Prevents false-positive scene generation when player uses common-English form of a system-keyword. Source: 2026-04-24 stress-test 10."
+    status: resolved
+    severity: P3
