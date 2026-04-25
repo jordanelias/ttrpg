@@ -59,11 +59,11 @@ These are campaign-level trackers shared across all factions. All are event-driv
 | Full Term | Abbr | Range | Mode | Start | Loss Threshold | Description |
 |-----------|------|-------|------|-------|----------------|-------------|
 | Mending Stability | MS | 100→0 | ALL | 60 (TTRPG) / 72 (BG) | 0 = The Rupture (campaign ends) | World coherence. Shared track. Degrades from Thread operations and seasonal effects. |
-| Theocracy Counter | TC* | 0–100 | ALL | 0 (TTRPG) / 28 (BG) | 65 = Church Holy State (BG) | Church political dominance accumulation. Church-specific clock. Triggers territorial seizure at 60. |
+| Church Influence | CI | 0–100 | ALL | 0 (TTRPG) / 28 (BG) | 60 = Mass Seizure available; 75 = Phase Transition (Territorial Seizure available); 100 = Theocracy Unification | Church political dominance accumulation. Church-specific clock. Per ci_political_v30 §1.1 (canonical, supersedes prior tc_political_redesign). Renamed from "Theocracy Counter" (TC) per tcv_conflict_register §2 decision 2026-04-19. The "TC" abbreviation now refers exclusively to Conviction Track (debate); CI is unambiguous. |
 | Institutional Pressure | IP | 0–100 | ALL | 20 | 75/80 = Altonian Vanguard (BG) | Pressure from the Altonian Empire. Invasion threat tracker. |
 | Public Instability | PI | 0–10 | BG | 5 | 0 = Parliament dissolved + Löwenritter coup | Parliamentary health tracker. Board Game mode only. |
 
-**\* TC COLLISION NOTE:** `TC` historically abbreviates both **Theocracy Counter** (this table) and **Conviction Track** (Debate system). These are distinct mechanics. Always use the full term. Never use the bare abbreviation `TC`.
+**\* TC RENAME NOTE (resolved 2026-04-19):** `TC` historically abbreviated **Theocracy Counter** (renamed to Church Influence / CI per tcv_conflict_register §2) AND **Conviction Track** (Debate system). The Theocracy Counter → CI rename eliminated half of the collision. Active spec uses **CI** for Church Influence; **CT** for Conviction Track when abbreviation is needed; "TC" should not appear in new content. Residual TC references in existing spec (~675 occurrences across designs/) are queued for cleanup. ED-781 propagation series may address this incrementally.
 
 ---
 
@@ -210,7 +210,7 @@ Terms whose abbreviations conflict with another term. Never use these abbreviati
 
 | Abbreviation | Meaning A | Meaning B | Resolution |
 |-------------|-----------|-----------|------------|
-| TC | Theocracy Counter (Church faction clock, 0–100) | Conviction Track (Debate position tracker, 0–10) | Write full term always. |
+| TC | ~~Theocracy Counter~~ (renamed CI per 2026-04-19; tcv_conflict §2) | Conviction Track (Debate position tracker, 0–10) | Write full term. New content uses CI for Church Influence; TC only acceptable for Conviction Track context. ~675 residual TC=Church-Influence references in active spec queued for cleanup. |
 | CP | Character Points (advancement currency) | Combat Power (now renamed Power — PP-232) | CP now refers to Character Points only. Use "Power" for the unit offensive stat. [EDITORIAL: ED-136] |
 | TD | Thread Depth | Top-Down (Mermaid flowchart directive) | Thread Depth is a phantom stat (REMOVED PP-166). `flowchart TD` is valid Mermaid syntax — not a game term. |
 | COMP | Composure (Debate context) | Computation / Composition (general English) | Write "Composure" in game documents. |

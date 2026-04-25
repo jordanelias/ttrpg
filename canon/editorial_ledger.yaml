@@ -36,3 +36,9 @@ entries:
     description: "params/factions_personal §Coup Counter (Löwenritter) STRUCK and replaced with reference to Graduated Autonomy spec; npc_priority_trees.md migrated (4 references at L42, L86, L149, L197 + section header L239 + spec text L241). Closes spec inconsistency surfaced by stress-test 57: §59 of factions_personal already declared 'Löwenritter Graduated Autonomy replaces Coup Counter (ED-589)' with 4-stage track (Loyal/Restless/Autonomous/Split), but §94 still contained legacy Coup Counter increment rules. npc_priority_trees Crown/Löwenritter trees referenced 'Coup Counter = 2' which now translates to 'Löwenritter Autonomy = Restless' per the canonical Graduated Autonomy stage names. PP-NPC-02 section header + L241 spec text also migrated. All Coup Counter references in active spec now eliminated. Source: 2026-04-25 stress-test 57."
     status: resolved
     severity: P2
+
+  - id: ED-782
+    date: 2026-04-25
+    description: "references/glossary.md updated to reflect canonical TC → CI rename per tcv_conflict_register §2 (decision 2026-04-19). Closes spec inconsistency surfaced by stress-test 60: glossary L62 still listed 'Theocracy Counter | TC*' while ci_political_v30 §1.1 (current canonical) uses 'CI (Church Influence)'. Two parallel naming conventions in active spec. Now: glossary entry renamed to 'Church Influence | CI' with note that TC is renamed; collision note (L66) updated; abbreviation collision table (L213) updated. Milestones updated: 60 = Mass Seizure available, 75 = Phase Transition / Territorial Seizure, 100 = Unification (per ci_political_v30 §2). Residual ~675 TC references in active spec queued as known cleanup item; not propagated in this commit. Source: 2026-04-25 stress-test 60."
+    status: resolved
+    severity: P3
