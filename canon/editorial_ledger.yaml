@@ -36,3 +36,9 @@ entries:
     description: "Wrong-Style Penalty extended with three sub-sections per stress-test 27. §6.4.1 RS Declaration Timing: orator declares RS at Contest setup before Exchange 1; locked for Contest duration; cannot switch mid-Contest (parallels Genre lock-in §3). §6.4.2 Compromise vs Partial mapping: Total Victory/Decisive (no penalty), Compromise 5-6 (half effect: +1 strain instead of Stability), Compromise 4 (full effect), Partial 3 (full), Failure ≤2 (compounded +2). §6.4.3 Cross-Contest stacking: nominal stacking uncapped within a season but ±2 Domain Action cap caps net Stability change at Accounting; surplus is institutional-perception friction. Closes spec gaps: RS declaration timing (was unspecified), Compromise/Partial mapping (gap), cross-Contest stacking (gap). Source: 2026-04-25 stress-test 27."
     status: resolved
     severity: P3
+
+  - id: ED-776
+    date: 2026-04-25
+    description: "faction_politics §1.0a Demotion Magnitude specified. Closes spec gap from stress-test 33: Demotion column on rank ladders gave triggers but not magnitudes. Three magnitude tiers: default = one rank (most failures); severe = 2-3 ranks (public scandal, Heresy non-excommunication, defection); total = Standing −1 Dismissal-with-Dishonor (excommunication, treason, framework abandonment, Cardinal catastrophic events). Cross-rank flow specified (no intermediate-rank pass-through; mentor/livery/hall reset 1 season). Appeal mechanism added (2-season window, faction-internal Conviction Track, no appeal for Dismissal). Source: 2026-04-25 stress-test 33."
+    status: resolved
+    severity: P3

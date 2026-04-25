@@ -58,6 +58,43 @@ The Initiation Duty (Standing 0→1) is the single most important addition. In t
 
 ---
 
+### §1.0a Demotion Magnitude (NEW — ED-776)
+
+The Demotion Trigger column on each rank ladder specifies *what causes* demotion but not *by how much*. This section specifies magnitude rules.
+
+**Default magnitude: one rank.** Most demotion triggers cause the player to drop one rank — Standing N → Standing (N−1). This applies to:
+- Failure of Required Obligations at the current rank.
+- Disposition decline with mentor or institutional supervisor.
+- Procedural failure (e.g., 3 consecutive service failures, missing a Recognition Event timeline).
+- Skill or attribute drift that no longer meets the rank's requirements.
+
+**Severe magnitude: two or more ranks.** Triggers that explicitly involve institutional violation cause multi-rank demotion:
+- Public scandal: drop 2 ranks, minimum Standing 1.
+- Heresy Investigation that ends in Tribunal but not full Excommunication: drop 2 ranks; if rank 5+, drop to Standing 3 (lay status retained).
+- Faction-faction defection that compromises ongoing Obligations: drop 3 ranks or to Standing 1, whichever is higher.
+
+**Total magnitude: full dismissal (Standing 0 or below).** Triggers that constitute fundamental institutional rejection cause Dismissal per §1.0 (Dishonored flag, persistent across campaign):
+- Excommunication (per social_contest §7.1): Standing drops to **−1** (Dismissed-with-Dishonor flag set; cannot re-enter faction in that branch). Note that −1 is below Standing 0; the player is treated as actively opposed by the faction.
+- Treason / oath-breaking against the faction's central authority (Crown regicide, Hafenmark constitutional violation, Varfell jarl-oath breaking, Church doctrinal breaking).
+- Permanent Conviction shift to opposing-framework Conviction (e.g., Crown member shifts to Autonomy primary): rank rolls to Standing 0 (the framework-alignment underpinning advancement is gone).
+- Cardinal-rank-specific triggers (per §1.4 Standing 6 Demotion column): "arm-specific catastrophic event" — the magnitude is engineered such that a Cardinal demoted from Standing 6 falls to Standing 3 (Canon, retains lay status) UNLESS the catastrophic event involves Heresy or Treason, in which case full dismissal applies.
+
+**Demotion vs Loss of Faction Membership:**
+
+| Demotion Result | Faction Membership | Re-entry? |
+|---|---|---|
+| Drop to Standing ≥ 1 (any non-Dismissal demotion) | Retained | Re-advancement possible per Initiation Gates (must complete prerequisites again from current rank) |
+| Drop to Standing 0 (e.g., from Standing 1 demotion) | Retained at lay/initiate level | Re-advancement requires completing Initiation Duty 0→1 again |
+| Drop to Standing −1 (Dismissal) | **Forfeited** | Re-entry impossible in same branch; may petition different Cardinal/Jarl/Minister for separate-branch entry; Dishonored flag applies |
+
+**Cross-rank demotion flow:** When demotion magnitude exceeds 1, the player does NOT pass through intermediate ranks — they fall directly to the destination rank. Mentor relationships from intermediate ranks are voided immediately. Hall Tier and Livery permissions clear and resync to the new rank within 1 season (a Cardinal demoted to Canon must vacate Cardinal-grade housing within 1 season; their Cardinal livery is recalled).
+
+**Demotion appeal:** A demoted player at Standing ≥ 1 may file institutional appeal within 2 seasons of demotion. Resolution: faction-internal Conviction Track (Standard Contest), Adjudicator = supervising Standing-7 NPC or institutional body. Successful appeal reverses the demotion. Failed appeal makes the demotion permanent (no re-appeal in same campaign year). Appeals are unavailable for Standing 0 (Dismissal) demotions — these require Initiation re-attempt, not appeal.
+
+[EDITORIAL: ED-776 — Demotion magnitude specified. Closes spec gap surfaced by stress-test 33: Demotion column gives triggers but not magnitudes. Default = one rank; severe (public scandal, Heresy non-excommunication, defection) = 2-3 ranks; total (excommunication, treason, framework abandonment, Cardinal catastrophic) = Standing −1 dismissal. Also specifies cross-rank flow (no intermediate-rank pass-through; mentor/livery/hall reset within 1 season) and appeal mechanism (2-season window, faction-internal Conviction Track, no appeal for Dismissal). Source: 2026-04-25 stress-test 33.]
+
+---
+
 ## §1.1 CROWN RANK LADDER (Valorsmark Monarchy)
 
 **Faction ethical framework:** Virtue Ethics (factions_ttrpg_v30 §8.2). Visible, public, virtuous actions are −1 Ob; covert or morally ambiguous are +1 Ob. This is a ladder where **being seen doing the right thing** matters more than the doing.
