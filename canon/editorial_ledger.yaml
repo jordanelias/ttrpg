@@ -42,8 +42,8 @@ entries:
 
   - id: ED-705
     date: 2026-04-19
-    description: "Cohesion -15 = derived of Stability -1, not independent."
-    status: open
+    description: "Cohesion -15 = derived of Stability -1, not independent. Resolved 2026-04-24: Cohesion was renamed to Discipline per PP-232; mass_battle §C.4 PP-195 historical note updated to reflect canonical naming. Discipline = Stability × 10 per derived_stats_v30 §8 (a -15 Discipline drain represents derived-resource fluctuation, not direct -1 Stability stat damage)."
+    status: resolved
     severity: P2
 
   - id: ED-710

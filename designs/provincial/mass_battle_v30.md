@@ -673,7 +673,7 @@ Net successes = damage dealt to opposing units.
 **Accord consequence (PP-645):** Territory gained via BG Battle: Accord set to 1 (Resistant). Defender loses Accord −1 in defended territory (war came to their home). See peninsular_strain_v1.md §2.4.
 
 Partial reflects a costly inconclusive engagement — forces committed, ground unchanged.
-*[PP-195 — confirmed: margin ≤1 = Partial; Attacker Cohesion −15 (derived_stats_v1)]*
+*[PP-195 — confirmed: margin ≤1 = Partial; Attacker Discipline −15 (renamed from Cohesion per PP-232; Discipline is the derived stat = Stability × 10 per derived_stats_v30 §8). ED-705.]*
 
 **Step 5 — Apply damage.** Reduce Health per Step 3 net successes × unit damage modifier − DR.
 Formation Break at Health 0.
