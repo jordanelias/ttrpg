@@ -350,7 +350,7 @@ See victory_v30.md §3.2 for full Seizure mechanics (PP-494).
 **Card type:** Special/Unique Power (Priority 6).
 **Pool:** Influence + floor(CI / 15).
 **Ob:** 7 − PT.
-**Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate).
+**Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate). **Uncontrolled exclusion (ED-704):** Seizure cannot target Uncontrolled territories (no controlling faction = no Mandate to exceed). Uncontrolled territories must first be brought under Mandate-bearing control via Pastoral Assumption (settlement_layer §1.7) for Church-routed restoration, or Conquest by another faction, or RM Founding (victory_v30 §8). Only then can subsequent Seizure target the territory.
 
 **Revised Accord on Seizure:**
 

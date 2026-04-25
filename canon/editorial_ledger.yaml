@@ -36,8 +36,8 @@ entries:
 
   - id: ED-704
     date: 2026-04-19
-    description: "Seizure does not apply to Uncontrolled territories."
-    status: open
+    description: "Seizure does not apply to Uncontrolled territories. Resolved 2026-04-24: peninsular_strain §5.2 adds explicit Uncontrolled exclusion — Seizure requires Mandate-bearing controller (no Mandate to exceed). Uncontrolled territories must first come under control via Pastoral Assumption, Conquest, or RM Founding before Seizure can target them."
+    status: resolved
     severity: P2
 
   - id: ED-705
