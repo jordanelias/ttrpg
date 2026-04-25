@@ -1,6 +1,8 @@
 # VALORIA — NARRATIVE SCENARIO CHAINS
 ## Non-Player Character Arcs, Political Crises, and Emergent Consequences
 
+> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+
 *Traces named character arcs, their decision branches, and the mechanical cascade each branch produces. Reads vertically (one arc) or horizontally (cross-arc collisions). All values from compiled ruleset + designs through Session 5. [E-01] = canonical editorial gap: assassination perpetrator TBD. [EDITORIAL] = flagged design intent not yet canonised.*
 
 ---

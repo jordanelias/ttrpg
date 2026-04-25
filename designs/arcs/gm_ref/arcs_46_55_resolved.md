@@ -3,6 +3,8 @@
 *Critique applied: 2026-04-13 | Resolution applied: 2026-04-13*
 *Supersedes: arcs_46_50_batch07.md, arcs_51_55_batch08.md, arcs_46_55_consolidated.md (prior)*
 
+> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+
 ---
 
 ## Resolution Log

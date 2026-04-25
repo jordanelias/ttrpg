@@ -1,6 +1,8 @@
 # VALORIA — NPC · Faction · Arc Interdependency Matrices & Throughlines
 **Date:** 2026-04-18 | **Source authority:** arc_register v8, npc_behavior_v30, arc_expansion_v1, faction_politics_expanded_v1, throughline_analysis_2026-04-17, throughline_resolutions_v1
 
+> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+
 ---
 
 ## HOW TO READ THIS DOCUMENT

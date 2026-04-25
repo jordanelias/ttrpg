@@ -7,6 +7,8 @@
 ## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643)
 ## Scope: Conviction Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
+> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+
 ---
 
 ## 1. Conviction Track — Per-Territory Stat

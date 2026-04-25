@@ -7,6 +7,8 @@
 ## Cross-references: player_agency_v30 (Standing §5, Renown §5.4, Duties §3), factions_ttrpg_v30 (8-faction roster §8.2–§8.9), worldbuilding_v30 (Four-Cardinal Church §3, Löwenritter arms §4, Guild structure §5, Parliament §6), npc_roster_v30 §14 (caste annotations), conviction_track_v30 (CV/WA), tc_political_redesign_v30 (PT/SW/TC milestones), baralta_crown_claim_v30 (Crown Succession Contest, Consecration Crisis), scale_transitions_v30, npc_behavior_v30 §7, settlement_layer_v30 §7.2.
 ## Patch ID: PP-660
 
+> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+
 ---
 
 # PART 0 — AUDIT FINDINGS
