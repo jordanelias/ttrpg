@@ -190,7 +190,28 @@ For each condition TRUE, generate one mandatory scene entry:
 - A mass battle is occurring in the player's territory
 - Player's faction leader is assassinated, overthrown, or incapacitated this season
 
-Mandatory scenes consume 1 scene action each and cannot be deferred. If mandatory scenes exceed the scene action budget, remaining mandatory scenes resolve through NPC AI with the player present but unable to direct outcomes.
+Mandatory scenes consume 1 scene action each and cannot be deferred.
+
+**Internal priority ordering** (when 2+ mandatories fire in same season — player chooses attendance order):
+1. Faction leader removal (succession-eligibility window may close).
+2. Heresy Investigation Target (institutional jeopardy with deadline pressure).
+3. Mass Battle in player's territory (single-event finality; aftermath scene per mass_battle §D.1 mandatory).
+4. Settlement Revolt / Accord 0 territory (governance failure with finite recovery window).
+
+Player may override this ordering by explicit declaration. The ordering is a UX hint for triage, not a hard sequence.
+
+**Mandatory overflow — Witness Mode (when mandatory count > scene action budget):**
+
+1. Player chooses which mandatory scenes to attend personally (one per available scene action).
+2. Remaining mandatory scenes resolve in **Witness Mode**: the player is present but cannot direct outcomes. Per Witness scene the player receives:
+   - One free Read or Appraise action (single roll, normal Ob, no scene-action cost).
+   - One narrative input opportunity at scene resolution (one sentence, GM may incorporate or reject; videogame: pre-scripted dialogue branch tagged to player Conviction).
+   - The scene's mechanical resolution proceeds via NPC AI as if the player had declined to engage.
+3. Witness Mode does NOT generate Domain Echo (player did not act with Sufficient Scope per scale_transitions §7).
+4. Witness Mode does NOT consume Momentum or Coherence.
+5. The player learns scene outcomes the same season; the events do not become retrospective scenes (those fire only when player is fully absent — see §4.4 Where Were You).
+
+[EDITORIAL: ED-745 — Mandatory overflow ('present but overwhelmed') state defined as Witness Mode. Internal priority ordering added. Source: 2026-04-24 audit completion §3.2 and §3.8.]
 
 **Step 2 — Crisis Events (Priority 1 — presented, optional):**
 
@@ -227,12 +248,17 @@ Parse current Duty type. Generate 1–2 scenes matching Duty requirements:
 **Step 4 — Conviction-Aligned (Priority 3):**
 
 For each active Conviction, scan for intersection with:
-- Named NPCs (exact name match in Conviction text)
-- Faction references (faction name match)
-- Territory references (territory name match)
-- System keywords ("Thread," "Church," "investigation," "treaty," "Einhir," "Calamity")
+- **Named NPCs** (exact name match in Conviction text).
+- **Faction references** (faction name match: Crown, Hafenmark, Varfell, Church, Löwenritter, Guilds, Restoration Movement, Wardens).
+- **Territory references** (territory name match across all 17 territories T1-T17, plus colloquial names: Valorsplatz, Gransol, Himmelenger, Sigurdshelm, Lowenskyst, Ehrenfeld, etc.).
+- **System keywords (~25):** Thread, Mending, Coherence, Heresy, Knot, Mandate, Order (capitalized = settlement Order or faction stat), Restoration, Warden, Southernmost, Confessor, Parliament, Dynasty, Regency, Occupation, Accord, Treaty, Investigation, Einhir, Calamity, Church, Crown, Hafenmark, Varfell, Standing, Renown.
+- **Role references** (resolve to canonical NPC): "the king" → Almud; "the Confessor" → Himlensendt; "the duchess" → Baralta; "the duke" → Vaynard (or Maret Uln post-succession); "the queen" → Lenneth; "the prince" → Torben; "the princess" → Elske; "the grandmaster" → Ehrenwall; "the spymaster" → Thale; "the lord treasurer" → Reichard; "the royal marshal" → Voss.
+
+**Validator:** at character creation and at each Conviction revision, scan the new Conviction text for matches across all five categories above. If 0 matches found, display non-blocking warning: "This Conviction will not generate scenes via Step 4 unless you reference a specific NPC, faction, territory, system topic, or role. Refine?" Player may dismiss or refine.
 
 For each intersection found, generate one scene entry with the matching NPC/location. Maximum 3 Conviction-generated scenes.
+
+[EDITORIAL: ED-746 — Step 4 keyword list expanded from 6 to ~25 terms; role-reference resolution table (11 mappings); validator added. Source: 2026-04-24 audit (scene_slate §2.1 P2 #2).]
 
 **Step 5 — NPC Outreach (Priority 3):**
 
@@ -260,6 +286,26 @@ The Slate presents more opportunities than the player can pursue:
 - At game difficulty Narrative: 4–5 opportunities, 5 scene actions.
 
 The surplus is the point. Opportunities not pursued resolve through NPC AI and clock advancement — the revolt you didn't attend to resolves based on garrison strength alone. The NPC whose arc moment you missed makes their decision based on their conviction, without your input. The Thread instability you didn't Mend persists and worsens.
+
+**Cross-step pruning algorithm (deterministic):**
+
+1. Generate all entries from Steps 1–7 + 2b. Tag each with `(step_number, internal_index_within_step)`.
+2. Mandatory entries (Step 1 + Step 2b at RS ≤ 20) cannot be pruned. Add all to slate.
+3. Compute `slate_target_size` from difficulty (4-5 Narrative / 5-7 Normal / 7-9 Hard). Compute `remaining_slots = slate_target_size − count(mandatory)`.
+4. If `remaining_slots ≤ 0`: slate is mandatory-only. Witness Mode applies per §4.2 Step 1.
+5. Otherwise: from non-mandatory entries, sort by `(step_number ascending, internal_index ascending)`. Take first `remaining_slots`.
+6. `internal_index_within_step` is deterministic per step:
+   - Step 2 (Crisis Events): proximity to player (closest first), then trigger order in spec.
+   - Step 2b (Thread-State): condition priority order in §4.2 Step 2b table.
+   - Step 3 (Duty-Aligned): single Duty per player, so internal index = 0; if 2 entries, ordered by target territory proximity.
+   - Step 4 (Conviction-Aligned): Conviction declaration order at character creation/revision (Conviction #1 first, etc.).
+   - Step 5 (NPC Outreach): NPC Disposition descending (highest first), then Renown descending.
+   - Step 6 (Territorial): trigger condition order in §4.2 Step 6.
+   - Step 7 (Ambient): single entry, internal index = 0.
+
+Generation is deterministic — same game state produces same Slate. Pruning is deterministic — same entry-set produces same final Slate.
+
+[EDITORIAL: ED-747 — Cross-step pruning algorithm specified. Source: 2026-04-24 audit completion §3.1.]
 
 ### 4.4 Scene Resolution
 

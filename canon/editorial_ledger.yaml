@@ -4,12 +4,6 @@
 
 entries:
 
-  - id: ED-660
-    date: 2026-04-17
-    description: "Certainty scale: Almstedt Certainty 6→4 (Jordan-confirmed 2026-04-23)."
-    status: resolved
-    severity: P2
-
   - id: ED-661
     date: 2026-04-17
     description: "Ministry Protocol 3 seniority conflict."
@@ -33,13 +27,6 @@ entries:
     description: "Grand Contest as succession trial not in canonical docs."
     status: open
     severity: P2
-
-  - id: ED-668
-    date: 2026-04-17
-    description: "MS decline rate calibration — resolved by MS trajectory v1 (f2b5d143) and references/ms_budget.md. Baseline upward pressure ~0.2 MS/year from Warden contribution; Secession War-scale events ~1 MS/year net downward. Terminology updated RS→MS per ED-731."
-    status: resolved
-    severity: P2
-    resolution_commit: "f2b5d143 (MS trajectory v1)"
 
   - id: ED-669
     date: 2026-04-17
@@ -121,3 +108,24 @@ entries:
     status: resolved
     severity: P2
     source: "2026-04-24 audit conversation P1-1"
+
+  - id: ED-745
+    date: 2026-04-24
+    description: "Scene Slate mandatory overflow defined as 'Witness Mode' (Read/Appraise free roll + one narrative input + no Domain Echo). Internal priority ordering for 2+ simultaneous mandatories. Source: 2026-04-24 audit completion §3.2/§3.8."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.2/§3.8"
+
+  - id: ED-746
+    date: 2026-04-24
+    description: "Scene Slate Step 4 keyword expansion (6→~25); role-reference resolution table (11 mappings); validator at character creation/Conviction revision. Source: scene_slate §2.1 P2 #2."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.6"
+
+  - id: ED-747
+    date: 2026-04-24
+    description: "Scene Slate cross-step pruning algorithm specified. Deterministic ordering across Steps 1-7 + 2b. internal_index_within_step rules per step. Source: 2026-04-24 audit completion §3.1."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.1"

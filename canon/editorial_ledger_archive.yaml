@@ -207,3 +207,18 @@ entries:
     status: resolved
     severity: P3
     source: "session_master_2026_04_20.md + handoff"
+
+  # Migrated 2026-04-24 from active ledger
+  - id: ED-660
+    date: 2026-04-17
+    description: "Certainty scale: Almstedt Certainty 6→4 (Jordan-confirmed 2026-04-23)."
+    status: resolved
+    severity: P2
+
+  - id: ED-668
+    date: 2026-04-17
+    description: "MS decline rate calibration — resolved by MS trajectory v1 (f2b5d143) and references/ms_budget.md. Baseline upward pressure ~0.2 MS/year from Warden contribution; Secession War-scale events ~1 MS/year net downward. Terminology updated RS→MS per ED-731."
+    status: resolved
+    severity: P2
+    resolution_commit: "f2b5d143 (MS trajectory v1)"
+
