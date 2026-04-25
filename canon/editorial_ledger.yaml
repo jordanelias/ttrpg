@@ -90,3 +90,9 @@ entries:
     description: "Scene Slate Step 4 keyword validator extended with capitalization heuristic + suggestion mode. Strong matches (capitalized) fire Step 4; weak matches (lowercase ambiguous form like 'order' vs 'Order') trigger suggestion to player to capitalize-or-leave; 0 matches trigger zero-match warning. Prevents false-positive scene generation when player uses common-English form of a system-keyword. Source: 2026-04-24 stress-test 10."
     status: resolved
     severity: P3
+
+  - id: ED-767
+    date: 2026-04-24
+    description: "PROVISIONAL marker cleanup pass: mass_battle_v30 contained 3 markers reading '[PROVISIONAL — ED-XXX resolved]' — the EDs were closed but markers persisted. Markers stripped from L229 (ED-355), L333 (ED-354), L417 (ED-358); replaced with parenthetical resolution note. Substantive content unchanged. Source: 2026-04-24 PROVISIONAL marker audit (carry-over from 2026-04-22)."
+    status: resolved
+    severity: P4

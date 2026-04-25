@@ -226,7 +226,7 @@ simultaneously in Phase 5, mass battle does not freeze. Both armies fight uncomm
 PP-273 floor (1D minimum per unit), Line formation, no tactics available. Mass battle
 continues turn-by-turn until each general resolves their personal combat and re-establishes
 Command (Ob 2 check Phase 1, following turn). Sequencing within the bilateral personal
-combat: simultaneous initiative per standard personal combat rules. [PROVISIONAL — ED-355 resolved]
+combat: simultaneous initiative per standard personal combat rules. *(ED-355 resolved 2026-04-XX; PROVISIONAL marker stripped per ED-767.)*
 
 **Wounds carry over:** Wounds from personal combat add +1 Ob to Command tactic
 execution rolls. A 2-wound general has tactic success probability halved.
@@ -330,7 +330,7 @@ Phase 5.
 Simultaneous-damage rule governs: damage is recorded in Phase 4 but applied at Phase 6 Step 1.
 The unit's current Size during Phase 5 is its Phase 3-end Size (pre-Thread damage) and it
 participates in Phase 5 Engagement normally. It is removed at Phase 6 Step 1 when all damage
-applies simultaneously. (PP-505) [PROVISIONAL — ED-354 resolved]
+applies simultaneously. (PP-505) *(ED-354 resolved; PROVISIONAL marker stripped per ED-767.)*
 Configuration changes: practitioner may revise target at no cost if the declared configuration
 has changed significantly (unit destroyed, routed, or repositioned). *[THREAD-P2-03]*
 
@@ -414,7 +414,7 @@ Splitting is suboptimal ONLY when:
 2. Sub-unit Size drops so far below Command that each sub-unit pool approaches floor (Size=1 edge)
 
 The primary counter to enemy splitting is NOT matching their split — it is Narrow Pass terrain
-or Feigned Retreat to disengage and re-concentrate. [PROVISIONAL — ED-358 resolved]
+or Feigned Retreat to disengage and re-concentrate. *(ED-358 resolved; PROVISIONAL marker stripped per ED-767.)*
 
 ---
 
