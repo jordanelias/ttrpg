@@ -98,6 +98,41 @@ Replaces: "same as Lock" for Pe
 
 ## 2.1 Approach Training
 
+Approach Training is a binary tag: a practitioner either has it or does not. It is the prerequisite for performing any Thread operation through the Leap (§2.3). Without Approach Training, even a Thread Sensitive character (TS ≥ 30) cannot Leap — they perceive the substrate but cannot suspend rendering enough to act on it.
+
+**Acquisition pathways:**
+
+- **Character creation (Formation 2F: Practitioner Mentorship):** Per character_histories §Formation, characters whose 2F slot is "Practitioner Mentorship" begin with Approach Training as a starting skill. This is the canonical entry route for player characters wanting Thread agency from session 1.
+- **In-campaign training (full-season commitment):** A character without Approach Training may acquire it through a single full-season training arc with a willing practitioner-mentor at TS ≥ 50. Requirements:
+  - Mentor at Disposition ≥ +2 with the trainee.
+  - Mentor's TS ≥ 50 (cannot self-train; cannot be trained by a TS 30-49 practitioner — the mentor must have substrate-control sufficient to demonstrate suspension safely).
+  - One full season committed: trainee cannot pursue other Domain Actions or Faction-track advancement during the training season.
+  - Resolution scene at season end: Spirit pool, TN 7, Ob 2.
+  - Success: Approach Training tag granted. Trainee gains 1 Thread Sensitivity (the formal Leap exposure registers as substrate engagement per §3.2).
+  - Partial: tag granted at next Accounting (one additional season of mentor-led practice required, no further roll).
+  - Failure: tag not granted. The trainee may attempt again next season with a different mentor (cannot retry with the same mentor in the same campaign year — the training relationship is exhausted).
+- **Spontaneous acquisition (rare, narrative-driven):** The Catalyst event "First Leap" (per character_histories §Catalyst 4E) may grant Approach Training implicitly if the character survives an unguided first Leap. This is a Game Master / engine adjudication moment — typical resolution is +Approach Training tag + 1 Conviction Scar + Coherence −1 (the unguided Leap leaves perceptual residue per A1/C1 inseparability).
+
+**Effects of holding the tag:**
+
+- Eligible to attempt §2.3 Leap operations (suspending rendering).
+- +1D on Leap rolls (per character_histories §270 Approach Training trait listing — Scene Battle Thread context: trained specifically for the surrender of rendering).
+- Partial Leap result no longer imposes +1 Ob on the subsequent operation (advanced training benefit per character_histories §498 ladder).
+- Eligible for collective operations (§2.5) at scales requiring Approach Training (Relational and above).
+
+**Effects of NOT holding the tag (TS ≥ 30 without training):**
+
+- Character perceives Thread phenomena per §2.6 visibility rules and may participate in Thread-related social actions (Argue, Read with Thread context).
+- Cannot Leap. Cannot perform any Thread operation (Weaving, Pulling, Locking, Dissolution, Mending). The substrate is legible to them but their rendering does not have the trained capacity to suspend.
+- Eligible to undergo training as described above.
+
+**Loss of tag:**
+
+- Approach Training is generally permanent once acquired. The trained capacity is a structural change to the practitioner's rendering, not a learned skill that decays.
+- One exception: a character who suffers Coherence reduction to 0 with no Reconstitution (per canon/01_foundations §4 Coherence 0 outcomes) loses the tag along with their identity. Reconstituted characters at TS 90+ regain it as part of Full Reconstitution.
+
+[EDITORIAL: ED-774 — Approach Training §2.1 propagated from threadwork_v25_historical + character_histories §Formation 2F + character_histories §270 (Approach Training trait) + character_histories §498 (skill ladder). Closes propagation defect: §2.1 was empty header in canonical threadwork_v30 with infill comment 'No changes from current §5.1' but §5.1 in v25_historical is actually 'What Rendering Stability Measures', not Approach Training. Canonical content was scattered across 3 different files; consolidated here. Source: 2026-04-25 stress-test 30 propagation defect.]
+
 
 ## 2.2 Diagnosis — STRUCK (ED-134/ED-124, 2026-04-03)
 

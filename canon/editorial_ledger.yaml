@@ -25,32 +25,8 @@ entries:
     severity: P3
     next_action: "Jordan to review 13 orphaned PROVISIONAL markers and either resolve to current ED numbering or strip if obsolete"
 
-  - id: ED-769
-    date: 2026-04-24
-    description: "Rendering Stability → Mending Stability rename residual cleanup. strategic_layer_v30_infill.md L22 PP-042 clarification used old name. Updated to canonical Mending Stability. Note: threadwork_v25_historical.md retains 'Rendering Stability' references as historical (intentional preservation per file naming). Numeric bounds report flagging 'rendering_stability' as drifted is partly informative — the value distributions came from threadwork_v25_historical (legitimate historical context) plus this single residual in strategic_layer_v30_infill (now fixed). Source: 2026-04-24 numeric bounds review."
-    status: resolved
-    severity: P3
-
-  - id: ED-770
-    date: 2026-04-24
-    description: "Numeric bounds audit completed for 14 flagged stats from references/numeric_bounds_report.yaml. Outcome: 9 stats confirmed NOT DRIFT (legitimate multiple thresholds — coherence, discipline, evidence_track, institutional_pressure, mandate, momentum, theocracy_counter, thread_sensitivity, thread_tension); 1 stat NOT DRIFT but inspection-worthy (mending_stability — Past-Oriented Pulling 60 vs Restoration 50 thresholds for different game-state purposes); 1 stat NOT DRIFT (public_instability — 3 vs 4 are different event thresholds); 1 stat CLEANUP (rendering_stability — single residual in strategic_layer_v30_infill fixed in ED-769; remaining occurrences in threadwork_v25_historical are intentional historical preservation); 2 SCAN ARTIFACTS (the, ttrpg — false-positive matches from natural-language regex). The numeric_bounds_report.yaml flagging is conservative (any multi-value stat flagged) — manual triage confirmed essentially all variance is legitimate multi-threshold mechanics rather than drift. Closes 'numeric bounds review (14 flagged stats)' item from session log carry-over. Source: 2026-04-24 numeric bounds audit."
-    status: resolved
-    severity: P3
-
-  - id: ED-771
+  - id: ED-774
     date: 2026-04-25
-    description: "Cross-reference audit fixes (4 broken refs across 3 spec files). (1) mass_battle L446/447: §5.2.2/§5.2.3 (nonexistent in mass_battle's flat structure) → threadwork_v30 §3.2 Coherence Reduction (correct referent for per-operation Coherence cap). (2) mass_battle L575: §4.3.4 brittleness rules (nonexistent — threadwork has §4.3 Auto-Effect Tables but no §4.3.4) → threadwork_v30 §2.4 Operations During Contact (where MS ≤ 40 Shifting Object brittleness rule actually lives, L246). (3) npc_behavior L561: 'Foundations §16.3' (no §16 in either Foundations doc — Foundations 01 has Amendments 1-5, Foundations 02 has Amendments 1-6) → canon/02_foundations_amendment_leap_mechanism Amendment 2 + threadwork_v30 §3.2 + §6 (correct canonical principle for Knot-substrate inseparability driving transformation propagation). (4) peninsular_strain L231: §2.4.2 (nonexistent — only §2.4 + §2.4b exist) → §2.4b Accord vs Order Scale Distinction (which is the actual canonical surface for personal-scale Order cap rule). 5th finding (combat_v30 L363 §11.8 referencing compilation/v0.14/stage11_scale_transitions_deprecated.md): explicit deprecated-file reference, acceptable; not fixed. Source: 2026-04-25 cross-reference audit."
-    status: resolved
-    severity: P3
-
-  - id: ED-772
-    date: 2026-04-25
-    description: "Heresy Investigation Lifecycle specified in social_contest §7.3. Closes gap from stress-test 24: scale_transitions §4.3.2 referenced 'active Heresy Investigation' as Mandatory Zoom-In trigger but the Investigation lifecycle (initiation phases, duration 4-6 seasons, 8 closure conditions, multi-Inquisitor handling) was previously not specified. New §7.3.1 lifecycle phases (Initiation 1s + Investigation 2-4s + Verdict 1s); §7.3.2 closure conditions (Inquisitor death/demotion/reassignment, target death/defection/conversion, acquittal, faction protection); §7.3.3 multi-Inquisitor handling (one per Cardinal Justice jurisdiction); §7.3.4 player strategic implications. Source: 2026-04-25 stress-test 24."
-    status: resolved
-    severity: P2
-
-  - id: ED-773
-    date: 2026-04-25
-    description: "Knot Lifecycle specified in fieldwork §5.6b. Closes spec gap surfaced by stress-test 26: Knot strain accumulation was canonized across multiple use-sites (§2.6 remote investigation +1, social_contest §4 Composure buffer +1, ED-664 §3.5.3 counsel extraction +1, FR Dissolution near Knot partner +1, Conviction Scar firing in Knot partner +1, sustained Disposition < +3 +1) but the break/rupture mechanism was not specified anywhere. Added: strain capacity (Distant Knot 4, Close Knot 7); break consequences (Disposition reset, 4 Composure cost both partners, benefit cessation, possible Scar); rupture triggers (ED-664 public citation, Knot partner death, FR Dissolution targeting partner, opposing Conviction shift, player explicit dissolution); strain decay (-1/season at sustained Disposition ≥+3 + no strain added); threadcut-being Knot Coherence parallel resource. ED-664 §3.5.4 'Knot ruptures' now has explicit mechanism. Source: 2026-04-25 stress-test 26."
+    description: "threadwork_v30 §2.1 Approach Training canonical content propagation. §2.1 was empty header; canonical content was scattered across character_histories §Formation 2F (Practitioner Mentorship character-creation route), §270 (Approach Training trait: +1D Leap), §498 (skill ladder Partial-benefit advancement). Consolidated into canonical §2.1 with acquisition pathways (character creation, in-campaign training with mentor TS ≥ 50 + full-season commit + Spirit Ob 2 roll, Catalyst 4E spontaneous), tag effects, without-tag behavior, loss conditions. Closes propagation defect surfaced 2026-04-25 stress-test 30."
     status: resolved
     severity: P2
