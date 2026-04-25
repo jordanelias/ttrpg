@@ -12,8 +12,8 @@ entries:
 
   - id: ED-662
     date: 2026-04-17
-    description: "Elske residency post-Graduated-Autonomy legal implications (originally post-Coup; Coup Counter replaced by Graduated Autonomy 2026-04-19 c0be619f). Question: what happens to Elske residency rights when Löwenritter transitions through autonomy stages?"
-    status: open
+    description: "Elske residency post-Graduated-Autonomy resolved as null-intersection in campaign_architecture §5.3. Elske resides in Altonia by Laskaris-marriage; Löwenritter Autonomy stages (Loyal/Restless/Autonomous/Split) govern Crown-Löwenritter Valorian relationship, not Crown-Altonian. Residency unaffected through all stages except edge case (Crown Stability ≤ 1 + Split simultaneity), which is already addressed by existing IP/Vanguard mechanics rather than new residency rules. Historical anchor: pre-modern dynastic-marriage princess residency derived from husband's house."
+    status: resolved
     severity: P2
 
   - id: ED-664

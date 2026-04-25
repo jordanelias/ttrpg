@@ -174,6 +174,31 @@ After repulsion by any path: IP freezes, cannot rise. Altonian threat permanentl
 
 ---
 
+## §5.3 Elske Residency During Löwenritter Graduated Autonomy (ED-662)
+
+Crown Princess Elske resides in Altonia (married to Doux Alexios Laskaris of T11/T12 Altonian provinces). The Löwenritter Graduated Autonomy track (Loyal → Restless → Autonomous → Split, replacing the binary Coup Counter per worldbuilding §3 + clock_registry §3) governs Crown-Löwenritter relationship within Valoria. **The two are largely orthogonal.**
+
+**Historical anchor:** Royal hostage / dynastic-marriage princess legal frame (per Sargon II's daughter Ahat-abiša at Bit-Purutaš, ~720 BC; Erasmus on geographically-circumscribed dynastic marriage limits; Royal Marriages Act 1772 codifying that succession-affecting marriages require sovereign consent). Standard pre-modern principle: a princess married into a foreign court derives residency from her husband's house, retains royal status of birth-house unless explicitly stripped, and is protected by diplomatic-immunity custom regardless of sending-state's political condition.
+
+**Residency mechanics:**
+
+| Löwenritter Autonomy stage | Crown effect | Elske residency |
+|---|---|---|
+| Loyal | Crown sub-faction; Crown Mandate +1 in T16-T17 region | Unaffected. Elske remains in Altonia by Laskaris-marriage residency. |
+| Restless | Crown Mandate −1 in Löwenritter regions; Coup Watch begins | Unaffected. Crown-Löwenritter tension does not affect Crown-Altonian relations. |
+| Autonomous | Löwenritter operates as independent NPC faction in T16-T17; Crown loses regional Mandate | Unaffected. Elske's Altonian residency is governed by Altonian state, not Crown. |
+| Split | Löwenritter constitutes itself as opposing faction; Ehrenwall Split Card fires | **Conditional effect.** If Crown enters open civil war and is at risk of elimination (Crown Stability ≤ 1), Altonia may *recall* Elske on its own diplomatic calculation (Laskaris's PROTECTIVE behavioral profile per npc_roster §11). This is an Altonian decision, not a residency-rights question — Altonia owns the choice. |
+
+**Loyalty Track interaction:** Elske Loyalty Track effects (campaign_architecture §5.2 Diplomatic Repulsion, §6.2 Path D Crown-Warden integration) operate independently of Löwenritter Autonomy stages. The two tracks address different relational axes (Elske↔Crown vs Crown↔Löwenritter).
+
+**Edge case:** if Löwenritter Split coincides with Crown Stability ≤ 1, the Altonian-Vanguard IP track is the variable that determines whether Altonia recalls Elske as part of broader Valorian intervention calculus. This is governed by IP mechanics, not by Elske residency rules per se.
+
+**Net resolution:** ED-662 surfaced an intersection that is largely null. Elske residency is governed by her Altonian-marriage legal frame (Laskaris's house), not by Crown-Löwenritter relational stages. The minor exception (Crown Stability ≤ 1 + Split simultaneity) is already addressed by IP/Vanguard mechanics rather than requiring new residency-specific rules.
+
+[EDITORIAL: ED-662 — Elske residency post-Graduated-Autonomy clarified as null-intersection. Historical anchor: pre-modern dynastic-marriage princess residency derived from husband's house, not birth-house political condition. Source: 2026-04-24 audit ED-662 closure with historical research.]
+
+---
+
 # PART 6: WARDEN FACTION PATHS
 
 ## §6.1 Starting State
