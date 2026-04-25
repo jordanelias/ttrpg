@@ -24,8 +24,8 @@ entries:
 
   - id: ED-665
     date: 2026-04-17
-    description: "Grand Contest as succession trial not in canonical docs."
-    status: open
+    description: "Grand Contest as succession trial not in canonical docs. Resolved 2026-04-24: social_contest §7.2 added — Succession Contest specified as Grand Contest variant with succession-specific adjudicator, claim eligibility, outcome rules (Decisive / Compromise / Total Victory), and faction-split rule on Compromise. baralta_crown_claim §2 remains canonical Crown instance; new §7.2 provides generalizable framework for all factions."
+    status: resolved
     severity: P2
 
   - id: ED-669

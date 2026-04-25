@@ -299,6 +299,34 @@ When a contest ends in Compromise (Conviction Track 4–6), the tension is defer
 
 **Church Tribunal specifics:** Accused has no corroboration. Exchange count set by Inquisitor (1–5). (PP-272: 'Division' stricken — term was vestigial from an earlier parliamentary design pass; it has no mechanical definition in the current system.) Conviction Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
 
+### §7.2 Succession Contest (NEW — ED-665 closure)
+
+When a faction leader is removed (death, incapacitation, exile, formal resignation), a **Succession Contest** opens at the next Accounting. The Succession Contest uses Grand Contest infrastructure (§3-§5) with the following adaptations:
+
+**Eligible claimants:** Any NPC or PC at Standing ≥ 5 in the affected faction. Cross-faction challengers (e.g., Hafenmark claiming Crown per baralta_crown_claim_v30 §2) require Mandate ≥ 3 in their home faction plus a structural claim mechanism (Deed-Claim, Bloodline, institutional precedent).
+
+**Contest structure:**
+- **Adjudicator:** the faction's institutional body (Crown: inner circle by majority Disposition; Hafenmark: Parliament by Mandate-weighted vote; Varfell: Jarl Assembly by quorum; Church: College of Cardinals by Disposition; Löwenritter: surviving Knight-Commanders by seniority; Guilds: Council by Favour-weighted vote; RM: Mandate ≥ 3 organizers by consensus).
+- **Genre selection:** typically Memory (claimants cite past deeds, lineage, established precedent) or Projection (claimants project their future governance). Claimant selects per §3.
+- **Conviction Track length:** 5 exchanges by default. Adjudicator may set 3-7 depending on contested-ness. A "narrow contest" (close institutional support among claimants) uses longer tracks; a "settled contest" (one obvious successor) uses shorter.
+- **Resolution:**
+
+| Track outcome | Result |
+|---|---|
+| Decisive (≥ 7 or ≤ 3) | Single winner takes faction leadership. Other claimants face Disposition penalty with the new leader (−2 with adjudicator NPCs); winner gains Mandate +1 in the faction's primary territory. |
+| Compromise (4-6) | **Faction split**: factional sub-divisions emerge (e.g., losing claimant retains personal retainers, may be granted a province as semi-autonomous fief). New sub-faction acquires partial inheritance of original faction's stat values per §7.2.1 split-rule below. |
+| Total Victory (≥ 9 or ≤ 1) | Unified transition. No faction split. Winner takes full inheritance + Wager-Obligation power: may extract one verifiable future-condition Obligation from the runner-up at no cost (per §6.1 Wager Obligation). |
+
+**§7.2.1 Faction split rule (Compromise outcome):**
+- Original faction's Mandate, Wealth, Military, Influence, Stability divided by 2 (round down) — half to majority winner, half to losing claimant's new sub-faction.
+- Territories divided per claimants' geographic strongholds (Adjudicator decides ties).
+- Both factions inherit existing Treaties as co-signatories; Embargoes split per territory.
+- New sub-faction acquires identity per losing claimant's Conviction (e.g., Faith → schismatic Church; Order → loyalist Crown remnant; Autonomy → independent Jarldom).
+
+**Cross-references:** baralta_crown_claim_v30 §2 (Crown Succession Contest, the canonical instance for Crown elimination); npc_behavior §5 (faction leader arc transitions trigger Succession Contest); player_agency §5.2 (Standing ≥ 5 PCs eligible to claim).
+
+[EDITORIAL: ED-665 — Succession Contest specified as Grand Contest variant. Closes "Grand Contest as succession trial not in canonical docs" by anchoring the mechanism to existing §3-§5 Grand Contest infrastructure with succession-specific adjudicator and outcome rules. baralta_crown_claim §2 remains the canonical Crown instance; this section provides the generalizable framework for all factions. Source: 2026-04-24 audit ED-665 closure.]
+
 ---
 
 ## §8 DERIVED VALUES SUMMARY
