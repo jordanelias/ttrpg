@@ -67,34 +67,6 @@ entries:
     severity: P2
     source: "PP-666"
 
-  - id: ED-739
-    date: 2026-04-24
-    description: "Edeyja Arc D (Confrontation) and Arc E (Wager) added to npc_behavior §5.2. Translates §3.4 Thread Scar matrix into WC-track-specific consequence (Arc D) and provides Consequence-genre-mediated negotiation path (Arc E). Resolves audit conversation finding that WC track lacked decay clause and that ms_budget §Conclusion mis-framed WC 3 as 'singular survival path' when it is actually a budget enabler with maintenance requirements."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit conversation"
-
-  - id: ED-740
-    date: 2026-04-24
-    description: "ms_budget Conclusion reframed from 'WC 3 is the singular endgame survival path' to three-path framing (disciplined non-Warden / WC 3 cooperative / WC 3 wagered). Prior framing produced player misread that WC 3 was a survival floor; correct reading is budget enabler with three viable late-game configurations."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit conversation"
-
-  - id: ED-741
-    date: 2026-04-24
-    description: "wc_survival_spine 'Why WC 3 Is Singular' reframed to 'Why WC 3 Functions as a Budget Enabler'. Adds explicit WC decay clause (operations Edeyja's Continuity Conviction registers as disruptive cost WC −1; cap −2 WC/season from this path; reaching 0 fires Arc D Confrontation)."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit conversation"
-
-  - id: ED-742
-    date: 2026-04-24
-    description: "social_contest §6.1 Obligations extended to permit Wager Obligation framing — verifiable-future-condition commitment in Grand Contest using Projection genre + Consequence Resonant Style. Generalizable mechanism for any Continuity/Faith/Order-primary NPC with Reason/Precedent secondary. Edeyja Arc E is the canonical instance."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit conversation"
-
   - id: ED-743
     date: 2026-04-24
     description: "Strain trigger inversion fix (P1-1). Strain and IP advance triggers relocated from battle-season to held-instability. peninsular_strain §3.2 (Vulnerability Signal) replaces battle-occurrence with Accord ≤ 1 territory-count thresholds (0-1 → +0; 2-3 → +1; 4-5 → +2; 6+ → +3). peninsular_strain §4.1 replaces battle-season +1 with per-territory +1 capped at +3/season. peninsular_strain §4.2 decouples decay from peninsula-wide peace, adds Treaty-pair decay (−1/pair, cap −2/season). peninsular_strain §4.4 reframes Strain/IP from 'no cross-feeding' to 'shared signal, independent aggregation'. mass_battle §E.2 retains immediate MS and Accord costs but redirects IP/Strain to deferred via peninsular_strain. mass_battle §E.4 caps reframed accordingly. Source: 2026-04-24 audit conversation P1-1 — prior mechanism inverted historical Pax Romana logic (Pax stabilizes after conquest; spec taxed conquest itself). Combination of fix-options (1)+(3) per audit conversation: held-instability advance + Treaty-pair decay."
@@ -129,3 +101,21 @@ entries:
     status: resolved
     severity: P2
     source: "2026-04-24 audit completion §3.1"
+
+  - id: ED-748
+    date: 2026-04-24
+    description: "scale_transitions §3.4 + §3.6 stubs filled with forward-references to §5 Domain Echo and mass_battle §A.10. Source: 2026-04-24 audit §3.12."
+    status: resolved
+    severity: P3
+
+  - id: ED-749
+    date: 2026-04-24
+    description: "Stability Crisis Mandatory Zoom-In gains hysteresis: re-arms only after Stab ≥ 3 maintained for 2 consecutive Accountings. Source: 2026-04-24 audit §3.4."
+    status: resolved
+    severity: P2
+
+  - id: ED-750
+    date: 2026-04-24
+    description: "Settlement Revolt Mandatory Zoom-In gains deduplication: settlement-events at same settlement same season collapse into single Mandatory entry. Source: 2026-04-24 audit §3.5."
+    status: resolved
+    severity: P3

@@ -222,3 +222,31 @@ entries:
     severity: P2
     resolution_commit: "f2b5d143 (MS trajectory v1)"
 
+  # Migrated 2026-04-24 from active ledger (Wager system entries — committed 7d45753)
+  - id: ED-739
+    date: 2026-04-24
+    description: "Edeyja Arc D (Confrontation) and Arc E (Wager) added to npc_behavior §5.2. Translates §3.4 Thread Scar matrix into WC-track-specific consequence (Arc D) and provides Consequence-genre-mediated negotiation path (Arc E). Resolves audit conversation finding that WC track lacked decay clause and that ms_budget §Conclusion mis-framed WC 3 as 'singular survival path' when it is actually a budget enabler with maintenance requirements."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"
+
+  - id: ED-740
+    date: 2026-04-24
+    description: "ms_budget Conclusion reframed from 'WC 3 is the singular endgame survival path' to three-path framing (disciplined non-Warden / WC 3 cooperative / WC 3 wagered). Prior framing produced player misread that WC 3 was a survival floor; correct reading is budget enabler with three viable late-game configurations."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"
+
+  - id: ED-741
+    date: 2026-04-24
+    description: "wc_survival_spine 'Why WC 3 Is Singular' reframed to 'Why WC 3 Functions as a Budget Enabler'. Adds explicit WC decay clause (operations Edeyja's Continuity Conviction registers as disruptive cost WC −1; cap −2 WC/season from this path; reaching 0 fires Arc D Confrontation)."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"
+
+  - id: ED-742
+    date: 2026-04-24
+    description: "social_contest §6.1 Obligations extended to permit Wager Obligation framing — verifiable-future-condition commitment in Grand Contest using Projection genre + Consequence Resonant Style. Generalizable mechanism for any Continuity/Faith/Order-primary NPC with Reason/Precedent secondary. Edeyja Arc E is the canonical instance."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"

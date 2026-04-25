@@ -49,10 +49,18 @@ GM recognises faction scope. Personal Ob resolves first, then Domain Action Ob. 
 
 ### §3.4 Scene → Faction (Domain Echo)
 
+Scene events meeting Sufficient Scope (§7) produce Domain Echo per §5. Multi-condition scenes (multiple Sufficient Scope conditions met simultaneously) follow §3.2 Multi-condition tie-break: highest-priority condition wins. Priority order: Thread operation → Combat victory → Settlement governance → Disposition reach → Investigation completion → Faction-leader-direct → Other. Cap: 1 Domain Echo per faction per scene (PP-329). See §5.5 (Accord Domain Echo) and §5.6 (Thread Domain Echo) for the full Echo specifications.
+
+[EDITORIAL: ED-748 — §3.4 stub filled with forward-reference. Source: 2026-04-24 audit §3.12.]
+
 ### §3.5 Thread → Faction
 Thread operation targeting faction-level configuration resolves as Domain Action. Thread pool used, appropriate Ob applied. No extra roll — the Thread operation IS the faction action.
 
 ### §3.6 Thread → Mass (Mass Battle Integration)
+
+Thread operations during mass battle resolve per mass_battle §A.10. Substrate cost differential by scale: Skirmish/Company (TS ≥ 30, Coherence cost 0/op), Battle/Campaign (TS ≥ 50, Coherence cost −1/op), War (TS ≥ 70, Coherence cost −2/op). Practitioner positioning per mass_battle §A.7 PP-101: rear/Reserve practitioner = safe Phase 4 Leap; front-line practitioner = conditional Phase 5 Leap. Thread operations are recorded in Phase 4 (offensive) or Phase 6 step 4-5 (support — Weaving, Mending, Rally) and applied at Phase 6 Step 1 (simultaneous with Volley + Engagement damage).
+
+[EDITORIAL: ED-748 — §3.6 stub filled with forward-reference. Source: 2026-04-24 audit §3.12.]
 
 ### §3.7 Mass → Personal (General Duel)
 Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange per battle turn. General's Command Rating suspended while in personal combat (PP-232). Maximum 5 exchanges before forced disengage or incapacitation. One mass combat turn = one personal combat exchange. (PP-111)
@@ -117,13 +125,13 @@ The following events generate Priority 0 Scene Slate entries per player_agency_v
 
 | Trigger | Condition | Scene Content |
 |---------|-----------|---------------|
-| Settlement Revolt | Player is in a province containing a settlement at Order 0 | The revolt unfolds at the specific settlement. The player is present at or travels to the settlement in revolt. They choose: support the garrison (combat), negotiate with the populace (social contest), investigate the cause (fieldwork), or flee (movement). |
+| Settlement Revolt | Player is in a province containing a settlement at Order 0. **Deduplication (ED-750):** Settlement-events (settlement_layer §4.3) at same settlement same season collapse into this single Mandatory entry, not two. | The revolt unfolds at the specific settlement. The player is present at or travels to the settlement in revolt. They choose: support the garrison (combat), negotiate with the populace (social contest), investigate the cause (fieldwork), or flee (movement). |
 | Heresy Investigation Target | Player is the target of an active Heresy Investigation | The Inquisitor arrives. Interrogation scene (asymmetric social contest per social_contest §7). The player may resist, comply, or attempt to redirect. |
 | Faction Leader Removal | Player's faction leader is assassinated, overthrown, or incapacitated | The player witnesses or learns of the event directly. Succession mechanics fire (player_agency §5.2). If Standing ≥ 5: leadership offer. If Standing < 5: the player is present for the transition and may intervene. |
 | Mass Battle at Settlement | A mass battle targets a settlement in the player's current province | The player is caught in the battle. They must participate (command or personal combat) or attempt to escape (Endurance check Ob 2; failure = caught in crossfire, take 1 wound). |
 | Companion Arc Trigger | A companion's arc branch trigger fires (npc_behavior §5.2) | The companion's transformation scene plays out with the player present. The player witnesses and may influence the companion's arc resolution. |
 | Knot Partner in Crisis | An NPC Knotted to the player reaches Conviction crisis (Scar count ≥ 3) | The Knot transmits the crisis. The player perceives the NPC's distress through the relational thread (per P-12). Scene: the player may seek out the NPC or experience the crisis at distance through Thread perception. |
-| Stability Crisis | Player's faction Stability drops to ≤ 2 at Accounting OR drops by ≥ 2 in a single Accounting (ED-587) | Emergency faction council: social contest or fieldwork scene revealing the source of the crisis. Player may intervene (Govern action Ob 2 → +1 Stability queued to next Accounting, per Domain Echo §5) or assess (Fieldwork Evidence +2 on "faction stability sources" investigation). Cannot be declined — faction is in crisis. |
+| Stability Crisis | Player's faction Stability drops to ≤ 2 at Accounting OR drops by ≥ 2 in a single Accounting (ED-587). **Hysteresis (ED-749):** Trigger fires once per Stab ≤ 2 entry. Re-arms only after Stab ≥ 3 maintained for 2 consecutive Accountings. | Emergency faction council: social contest or fieldwork scene revealing the source of the crisis. Player may intervene (Govern action Ob 2 → +1 Stability queued to next Accounting, per Domain Echo §5) or assess (Fieldwork Evidence +2 on "faction stability sources" investigation). Cannot be declined — faction is in crisis. |
 | Rank Advancement Recognition Event | Player's Standing crosses a rank threshold (per faction_politics_expanded_v1.md §1, Std 3 and above) AND Formal Recognition Event conditions are met | The recognition ceremony unfolds as a formal faction scene. The player receives the rank, insignia, and attendant obligations. Recognition can be withheld in-scene if inner-circle Disposition or rival-candidate conditions fire — creating a debt scene per §1. |
 
 If mandatory scenes exceed the scene action budget, the player chooses which to attend personally. Remaining mandatory scenes resolve through NPC AI with reduced player influence: the player is present but overwhelmed, able to observe but not direct.
