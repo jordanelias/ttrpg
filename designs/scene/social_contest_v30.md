@@ -314,14 +314,25 @@ When a faction leader is removed (death, incapacitation, exile, formal resignati
 | Track outcome | Result |
 |---|---|
 | Decisive (≥ 7 or ≤ 3) | Single winner takes faction leadership. Other claimants face Disposition penalty with the new leader (−2 with adjudicator NPCs); winner gains Mandate +1 in the faction's primary territory. |
-| Compromise (4-6) | **Faction split**: factional sub-divisions emerge (e.g., losing claimant retains personal retainers, may be granted a province as semi-autonomous fief). New sub-faction acquires partial inheritance of original faction's stat values per §7.2.1 split-rule below. |
+| Compromise (4-6) | **Faction split**: factional sub-divisions emerge (e.g., losing claimant retains personal retainers, may be granted a province as semi-autonomous fief). New sub-faction acquires partial inheritance of original faction's stat values per §7.2.1 split-rule below; track-distance weighting applies (Track 4 = 60/40 majority-favored split; Track 5 = 55/45; Track 6 = 50/50 even split) per stress-test ED-762. |
 | Total Victory (≥ 9 or ≤ 1) | Unified transition. No faction split. Winner takes full inheritance + Wager-Obligation power: may extract one verifiable future-condition Obligation from the runner-up at no cost (per §6.1 Wager Obligation). |
 
-**§7.2.1 Faction split rule (Compromise outcome):**
-- Original faction's Mandate, Wealth, Military, Influence, Stability divided by 2 (round down) — half to majority winner, half to losing claimant's new sub-faction.
-- Territories divided per claimants' geographic strongholds (Adjudicator decides ties).
-- Both factions inherit existing Treaties as co-signatories; Embargoes split per territory.
-- New sub-faction acquires identity per losing claimant's Conviction (e.g., Faith → schismatic Church; Order → loyalist Crown remnant; Autonomy → independent Jarldom).
+**§7.2.1 Faction split rule (Compromise outcome — track-distance weighted per ED-762):**
+
+Track-weighted split ratios:
+- Track 4 (barely-Compromise): majority winner takes 60%, losing claimant 40%.
+- Track 5 (mid-Compromise): 55%/45% split.
+- Track 6 (strong-Compromise): 50%/50% even split.
+
+Stat division: Original faction's Mandate, Wealth, Military, Influence, Stability multiplied by the track ratio (round down for whole-stat values; track-4 majority gets floor(orig × 0.6), losing claimant gets floor(orig × 0.4); etc.).
+
+**Stability floor:** both resulting factions guaranteed minimum Stability 3 — sub-factions emerging from Compromise do not start in immediate Stability Crisis (which would fire mandatory Zoom-In per scale_transitions §4.3.2 + ED-749 hysteresis at Stab ≤ 2). The post-split civil-war drama is institutional, not catastrophic; Stab 3 floor preserves playable space.
+
+Territory division: per claimants' geographic strongholds (Adjudicator decides ties; for Track 4: 60/40 territory split where possible; Track 5: 55/45; Track 6: 50/50).
+
+Treaties: both factions inherit existing Treaties as co-signatories; Embargoes split per territory.
+
+Identity: New sub-faction acquires identity per losing claimant's Conviction (e.g., Faith → schismatic Church; Order → loyalist Crown remnant; Autonomy → independent Jarldom).
 
 **Cross-references:** baralta_crown_claim_v30 §2 (Crown Succession Contest, the canonical instance for Crown elimination); npc_behavior §5 (faction leader arc transitions trigger Succession Contest); player_agency §5.2 (Standing ≥ 5 PCs eligible to claim).
 

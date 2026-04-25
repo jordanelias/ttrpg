@@ -192,11 +192,15 @@ For each condition TRUE, generate one mandatory scene entry:
 
 Mandatory scenes consume 1 scene action each and cannot be deferred.
 
-**Internal priority ordering** (when 2+ mandatories fire in same season — player chooses attendance order):
-1. Faction leader removal (succession-eligibility window may close).
+**Internal priority ordering** (when 2+ mandatories fire in same season — player chooses attendance order; revised per stress-test ED-761 to cover all §4.3.2 mandatory triggers):
+1. Faction Leader Removal (succession-eligibility window may close).
 2. Heresy Investigation Target (institutional jeopardy with deadline pressure).
-3. Mass Battle in player's territory (single-event finality; aftermath scene per mass_battle §D.1 mandatory).
-4. Settlement Revolt / Accord 0 territory (governance failure with finite recovery window).
+3. Stability Crisis (faction-scale collapse; faction enters mandatory Crisis at all settlements).
+4. Mass Battle in player's territory (single-event finality; aftermath scene per mass_battle §D.1 mandatory).
+5. Knot Partner in Crisis (high-relational-stakes; arc-fork moment).
+6. Companion Arc Trigger (narrative pivot; companion transformation).
+7. Settlement Revolt / Accord 0 territory (governance failure with finite recovery window).
+8. Rank Advancement Recognition Event (positive event, but constrained by inner-circle/rival presence per scale_transitions §4.3.2).
 
 Player may override this ordering by explicit declaration. The ordering is a UX hint for triage, not a hard sequence.
 
@@ -204,7 +208,7 @@ Player may override this ordering by explicit declaration. The ordering is a UX 
 
 1. Player chooses which mandatory scenes to attend personally (one per available scene action).
 2. Remaining mandatory scenes resolve in **Witness Mode**: the player is present but cannot direct outcomes. Per Witness scene the player receives:
-   - One free Read or Appraise action (single roll, normal Ob, no scene-action cost).
+   - One free Read or Appraise action — **single roll required, not auto-success** (clarified per stress-test ED-761). Pool per standard Read/Appraise per fieldwork rules; Ob 1 (light, standard); cost: 0 scene actions (the "free" refers to scene-action cost, not roll outcome). Failure means the Witness's perception is unreliable; the player learns the surface event but not its undercurrents.
    - One narrative input opportunity at scene resolution (one sentence, GM may incorporate or reject; videogame: pre-scripted dialogue branch tagged to player Conviction).
    - The scene's mechanical resolution proceeds via NPC AI as if the player had declined to engage.
 3. Witness Mode does NOT generate Domain Echo (player did not act with Sufficient Scope per scale_transitions §7).

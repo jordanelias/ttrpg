@@ -483,9 +483,17 @@ A player with active Knot (per P-12) and Disposition ≥ +3 with an advisor may 
 - **Partial:** advisor reveals general direction of recent counsel without specific content.
 - **Failure:** advisor declines. Disposition unchanged. Player cannot retry this campaign.
 
-**§3.5.4 Public citation rupture**
+**§3.5.4 Public citation rupture (extended scope per stress-test ED-760)**
 
-If the player publicly cites the leaked counsel (uses it in Contest as Evidence; tells a third party who tells anyone; publishes it; uses it as part of Casus Belli framing):
+If the player publicly cites the leaked counsel through any of the following routes, rupture fires:
+- Uses it in Contest as Evidence (Argue, Read, Appraise references citing the counsel content).
+- Uses it in any Asymmetric Proceeding (Tribunal, Royal Audience, Inquisition) — including closed proceedings the advisor doesn't witness directly. The institutional record is itself "publicly cited" once the counsel content enters formal proceedings.
+- Tells a third party who repeats it to anyone, regardless of intermediate confidentiality framing — the chain of custody breaks the Knot's privacy.
+- Tells a third party who keeps it confidential — **partial rupture only:** Disposition with advisor −2 (advisor learns of the secondary transmission via institutional gossip cap; full rupture if subsequent transmission breaches occur).
+- Publishes it directly OR publishes a fictional, dramatic, or reframed account containing the counsel content — creative-content laundering does not insulate. The substantive content match is what matters; advisor's recognition of the leaked counsel in the fictional reframing fires rupture (advisor's Conviction reads the substance, not the genre wrapper).
+- Uses it as part of Casus Belli framing.
+
+When rupture fires:
 
 - Knot ruptures immediately. Disposition resets to −4 with the advisor (no recovery this campaign without exceptional circumstances — Mass Battle defending advisor, public sacrifice, rescue from Heresy proceeding).
 - Advisor's institutional consequences (§3.5.2) fire as if advisor had publicly breached. Advisor blames the player for the breach (Disposition with player additionally affected; advisor enters arc transition triggered by Scar 2+ if not already present).

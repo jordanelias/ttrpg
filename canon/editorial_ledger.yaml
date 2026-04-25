@@ -65,3 +65,28 @@ entries:
     description: "Cardinal Officer naming reconciled. arc_expansion_v30 proposed names (Stark/Voss/Vorn/Kald) replaced with faction_politics §3.5 + npc_roster §13 canonical (Jarnstal/Olafsson/Aldric Tormann/Klapp). Bulk surname replacement applied across arc_expansion. Closes ED-591/592/593/594."
     status: resolved
     severity: P2
+
+  - id: ED-759
+    date: 2026-04-24
+    description: "WC decay rate calibration (stress-test fix). Prior rate (−1 WC per disruptive op, cap −2/season) made Arc E Wager pathway unreachable — Scars ≥ 2 prerequisite simultaneously dropped WC below ≥ 2 prerequisite. Revised: ≥ 2 disruptive ops in same season → WC −1 (cap −1/season). Arc D fires only if WC was ≥ 1 in prior 4 seasons (initial-state WC 0 ≠ Arc D). Source: 2026-04-24 stress-test 2."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 stress-test"
+
+  - id: ED-760
+    date: 2026-04-24
+    description: "Confidentiality boundary §3.5.4 extended scope (stress-test fix). Closed gaps: (1) closed Asymmetric Proceedings (Tribunal/Audience/Inquisition) count as public citation regardless of advisor presence; (2) telling third party who keeps confidential = partial rupture (Disp −2); (3) fictional/dramatic/reframed publication of counsel content fires rupture — advisor's Conviction reads substance, not genre wrapper. Source: 2026-04-24 stress-test 3."
+    status: resolved
+    severity: P2
+
+  - id: ED-761
+    date: 2026-04-24
+    description: "Mandatory internal priority list extended to cover all §4.3.2 triggers (was: 4 entries; now: 8 entries adding Stability Crisis, Knot Partner Crisis, Companion Arc Trigger, Rank Advancement Recognition Event). Witness Mode action specified as roll-required not auto-success (free = scene-action cost, not outcome). Source: 2026-04-24 stress-test 6."
+    status: resolved
+    severity: P2
+
+  - id: ED-762
+    date: 2026-04-24
+    description: "Succession Contest Compromise outcome (§7.2.1) gains track-distance weighting (Track 4 = 60/40 majority split; Track 5 = 55/45; Track 6 = 50/50). Adds Stability floor 3 to prevent immediate Stability Crisis cascade post-split (would fire mandatory Zoom-In per ED-749 hysteresis). Source: 2026-04-24 stress-test 4."
+    status: resolved
+    severity: P2
