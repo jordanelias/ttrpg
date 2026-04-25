@@ -896,6 +896,8 @@ Each Demand entry specifies:
 
 Maximum Outreach entries per season per player: 3 (prevents inbox overload). If more than 3 NPCs qualify, prioritize by: (1) highest Disposition toward player, (2) highest priority-tree action level that fired this season, (3) most recent interaction with the player.
 
+**Cross-faction floor (ED-755):** If 1+ Outreach entries from non-player-faction NPCs qualify (Disposition ≥ +2 + relevance + tree-fired conditions), at least 1 of the 3-Outreach cap is reserved for cross-faction. If no cross-faction entries qualify, the slot fills normally with player-faction Outreach. This prevents player-faction monopoly on the Outreach surface during early-game when player-faction NPCs dominate the Disposition gradient.
+
 Maximum Demand entries per season per player: 2. If more than 2 NPCs qualify, prioritize by: (1) lowest Disposition toward player (most hostile first), (2) highest institutional authority.
 
 #### §8.11.6 Subnational Faction Outreach (NEW — per settlement_bridge_unification C-12)

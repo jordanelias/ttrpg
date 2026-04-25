@@ -67,20 +67,6 @@ entries:
     severity: P2
     source: "PP-666"
 
-  - id: ED-743
-    date: 2026-04-24
-    description: "Strain trigger inversion fix (P1-1). Strain and IP advance triggers relocated from battle-season to held-instability. peninsular_strain §3.2 (Vulnerability Signal) replaces battle-occurrence with Accord ≤ 1 territory-count thresholds (0-1 → +0; 2-3 → +1; 4-5 → +2; 6+ → +3). peninsular_strain §4.1 replaces battle-season +1 with per-territory +1 capped at +3/season. peninsular_strain §4.2 decouples decay from peninsula-wide peace, adds Treaty-pair decay (−1/pair, cap −2/season). peninsular_strain §4.4 reframes Strain/IP from 'no cross-feeding' to 'shared signal, independent aggregation'. mass_battle §E.2 retains immediate MS and Accord costs but redirects IP/Strain to deferred via peninsular_strain. mass_battle §E.4 caps reframed accordingly. Source: 2026-04-24 audit conversation P1-1 — prior mechanism inverted historical Pax Romana logic (Pax stabilizes after conquest; spec taxed conquest itself). Combination of fix-options (1)+(3) per audit conversation: held-instability advance + Treaty-pair decay."
-    status: resolved
-    severity: P1
-    source: "2026-04-24 audit conversation P1-1"
-
-  - id: ED-744
-    date: 2026-04-24
-    description: "ED-623 superseded by ED-743. ED-623's '+2 → +3 IP per battle-season' rate change addressed the symptom (insufficient threat manifestation in ST-42) but reinforced the inverted trigger; ED-743 relocates the trigger entirely. ST-42 was measuring battle-presence-as-signal under the old mechanism; the new mechanism's calibration requires fresh sim-validation. Note: this supersession invalidates ST-42's specific calibration finding while preserving the underlying observation that the prior +2 rate produced rarely-manifested threats — under the new mechanism, threat manifestation is governed by territorial-instability persistence rather than battle frequency."
-    status: resolved
-    severity: P2
-    source: "2026-04-24 audit conversation P1-1"
-
   - id: ED-745
     date: 2026-04-24
     description: "Scene Slate mandatory overflow defined as 'Witness Mode' (Read/Appraise free roll + one narrative input + no Domain Echo). Internal priority ordering for 2+ simultaneous mandatories. Source: 2026-04-24 audit completion §3.2/§3.8."
@@ -141,5 +127,11 @@ entries:
   - id: ED-754
     date: 2026-04-24
     description: "mass_battle §D.2 officer death roll recalibrated 1d10 → 1d20. Prior rate (50% death at routine 5-Size loss) lost all named officers in 4-6 battles; 1d20 preserves jeopardy at catastrophic loss while permitting named officer persistence across campaigns. Source: 2026-04-24 audit §3.10."
+    status: resolved
+    severity: P2
+
+  - id: ED-755
+    date: 2026-04-24
+    description: "npc_behavior §8.11.5 Volume Control: cross-faction Outreach floor — at least 1 of 3-Outreach cap reserved for non-player-faction qualifying NPCs (fills normally if none qualify). Source: 2026-04-24 audit §3.7."
     status: resolved
     severity: P2
