@@ -558,7 +558,7 @@ NPC practitioners use the following Coherence thresholds. Applies TTRPG (GM guid
 
 ### §5.0b Transformation Knot Strain Propagation (AUD-NPC-02 fix, P-12 compliance)
 
-Per Foundations §16.3: a transforming NPC's thread-shift exerts force on everyone knotted to them. When an NPC arc involves TS threshold crossing or epistemic seduction:
+Per the canonical Knot-substrate inseparability principle (canon/02_foundations_amendment_leap_mechanism Amendment 2; threadwork_v30 §3.2 Coherence + §6 ontology): a transforming NPC's thread-shift exerts force on everyone knotted to them. When an NPC arc involves TS threshold crossing or epistemic seduction:
 
 | NPC TS state | Close Knot strain | Distant Knot strain |
 |---|---|---|

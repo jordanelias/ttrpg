@@ -228,7 +228,7 @@ Province Accord = floor(mean(settlement Order)) per settlement_layer_v30 §1.3. 
 
 **Province Accord recalculation:** After any settlement Order change, Province Accord recalculates at next Accounting: floor(mean(all settlement Order values in province)).
 
-**Cap:** ±1 Order per settlement per season from personal-scale actions (per §2.4.2). Province-level Domain Actions (Category A and B Govern/Strain) are not subject to this cap.
+**Cap:** ±1 Order per settlement per season from personal-scale actions (per §2.4b Accord vs Order Scale Distinction). Province-level Domain Actions (Category A and B Govern/Strain) are not subject to this cap.
 
 
 ---

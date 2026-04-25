@@ -443,8 +443,8 @@ or Feigned Retreat to disengage and re-concentrate. *(ED-358 resolved; PROVISION
 | Campaign | Territorial | 50 | 4 | −1/op |
 | War | Structural | 70 | 5 | −2/op |
 
-All Coherence loss is automatic (no check, no Ob) per §5.2.2. The Coherence
-cap (−1 per operation, §5.2.3) applies. No additional surcharge. *[THREAD-P1-02, THREAD-P2-01]*
+All Coherence loss is automatic (no check, no Ob) per threadwork_v30 §3.2. The Coherence
+cap (−1 per operation, threadwork_v30 §3.2 per-operation cap) applies. No additional surcharge. *[THREAD-P1-02, THREAD-P2-01]*
 
 **Coherence depletion warning (PP-501):** A practitioner operating every turn of a 7-turn battle loses 7 Coherence. From full (10): Coherence=3 after 7 turns — Dissonant, not Severed. Severance (Coherence=1) requires ≥9 consecutive operations from full. Battles ≥9 turns with constant operation produce Severance. *[THREAD-P2-02 — corrected PP-501]* [PROVISIONAL]
 
@@ -572,7 +572,7 @@ A Muster action produces 1 unit with Size = 2, Power = floor(faction Military / 
 ### A.14 CROSS-SYSTEM NOTES
 
 **Woven units — brittleness:** Thread-Woven Discipline or Morale boosts are
-subject to §4.3.4 brittleness rules. Taking Size loss > Discipline in a single
+subject to threadwork_v30 §2.4 brittleness rules (MS ≤ 40 → Shifting Object trigger). Taking Size loss > Discipline in a single
 turn qualifies as a non-Thread event of sufficient severity — Game Master may rule
 the Woven configuration shatters into a Shifting Object. A Woven unit can be
 simultaneously more and less resilient than an unworked unit. *[EDGE-07]*
