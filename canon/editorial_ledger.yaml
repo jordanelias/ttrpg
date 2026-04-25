@@ -30,3 +30,9 @@ entries:
     description: "Rendering Stability → Mending Stability rename residual cleanup. strategic_layer_v30_infill.md L22 PP-042 clarification used old name. Updated to canonical Mending Stability. Note: threadwork_v25_historical.md retains 'Rendering Stability' references as historical (intentional preservation per file naming). Numeric bounds report flagging 'rendering_stability' as drifted is partly informative — the value distributions came from threadwork_v25_historical (legitimate historical context) plus this single residual in strategic_layer_v30_infill (now fixed). Source: 2026-04-24 numeric bounds review."
     status: resolved
     severity: P3
+
+  - id: ED-770
+    date: 2026-04-24
+    description: "Numeric bounds audit completed for 14 flagged stats from references/numeric_bounds_report.yaml. Outcome: 9 stats confirmed NOT DRIFT (legitimate multiple thresholds — coherence, discipline, evidence_track, institutional_pressure, mandate, momentum, theocracy_counter, thread_sensitivity, thread_tension); 1 stat NOT DRIFT but inspection-worthy (mending_stability — Past-Oriented Pulling 60 vs Restoration 50 thresholds for different game-state purposes); 1 stat NOT DRIFT (public_instability — 3 vs 4 are different event thresholds); 1 stat CLEANUP (rendering_stability — single residual in strategic_layer_v30_infill fixed in ED-769; remaining occurrences in threadwork_v25_historical are intentional historical preservation); 2 SCAN ARTIFACTS (the, ttrpg — false-positive matches from natural-language regex). The numeric_bounds_report.yaml flagging is conservative (any multi-value stat flagged) — manual triage confirmed essentially all variance is legitimate multi-threshold mechanics rather than drift. Closes 'numeric bounds review (14 flagged stats)' item from session log carry-over. Source: 2026-04-24 numeric bounds audit."
+    status: resolved
+    severity: P3
