@@ -706,7 +706,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 | ≤ 3 (Edeyja decisive) | Wager refused. Disposition −1. WC −1. Wrong-Style Penalty active 4 seasons (Continuity NPCs treat repeat Projection appeals as Authority intrusion). |
 
 - Wager resolution (4 seasons later, OR when player-specified condition triggers):
-  - **Condition met:** WC +2 (capped at 3). All accumulated Scars from wager-aligned operations cleared. Edeyja's secondary Conviction may shift toward Reason. New Belief: "There are practitioners worth the cost."
+  - **Condition met:** WC +2 (capped at 3). All accumulated Scars from wager-aligned operations cleared. Edeyja's secondary Conviction may shift toward Reason. New Belief: "There are practitioners worth the cost." **Post-Wager-pass tolerance:** Arc D Scar threshold raises from 3 to 5 (the Wager has demonstrated sufficient credit that Edeyja extends two additional Scars of tolerance before Confrontation re-fires). Wager-pass Scar threshold increase is permanent for the campaign — the relationship has been transformed, not merely reset (per ED-763 stress-test).
   - **Condition not met (timeframe expired):** WC drops to 0. Disposition drops to −3. Edeyja enters Arc D Confrontation immediately with no probation option (the wager replaced probation). Relationship cannot be rebuilt this campaign without exceptional circumstances (Mass Battle defending the Southernmost, public sacrifice for Thread cause).
   - **Condition partially met:** GM judgment. Typical resolution: WC unchanged, Scars resume normally, Disposition −1.
 
