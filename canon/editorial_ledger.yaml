@@ -131,3 +131,15 @@ entries:
     description: "faction_layer §5.8 NPC vote rules: Niflhel STRUCK propagated (no faction-level replacement); Guilds gains settlement-broker influence note (max 2-vote shift via Guild Council operating in broker-influenced settlements per settlement_layer §4.7-4.9). Source: 2026-04-24 audit §3.9."
     status: resolved
     severity: P3
+
+  - id: ED-753
+    date: 2026-04-24
+    description: "mass_battle §A.7 Phase 2 Volley gains design-rationale paragraph: Power-only formula is intentional asymmetry — Volley is supplementary, Engagement decisive; pure-ranged underperforms equivalent-Military melee at parity. Source: 2026-04-24 audit §3.11."
+    status: resolved
+    severity: P3
+
+  - id: ED-754
+    date: 2026-04-24
+    description: "mass_battle §D.2 officer death roll recalibrated 1d10 → 1d20. Prior rate (50% death at routine 5-Size loss) lost all named officers in 4-6 battles; 1d20 preserves jeopardy at catastrophic loss while permitting named officer persistence across campaigns. Source: 2026-04-24 audit §3.10."
+    status: resolved
+    severity: P2

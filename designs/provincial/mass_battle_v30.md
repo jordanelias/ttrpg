@@ -297,6 +297,8 @@ Projectile units fire. Roll [Power stat] dice vs TN 6. Power stat = unit quality
 Prepared Defence: declare in Phase 1; half Effective Power as passive DR
 against Volley attacks this turn (rounded down, min 0).
 
+**Design rationale (Volley Power-only formula, ED-753):** Volley uses Power dice (1-7) instead of Effective Combat Pool (PP-233) intentionally. Ranged units are supplementary force projection — concentrated effect, narrow window. Volley as a tactic generates initial damage; Engagement (Phase 5) is where decisive force resolves. A pure-ranged force underperforms equivalent-Military melee force at parity Military stat — this is correct: ranged dominance requires combined-arms (e.g., crossbow + Heavy Infantry), not pure-ranged composition. The asymmetry between Volley pool (Power only) and Engagement pool (Power + Command, capped by Size) is the mechanism that ranks generalship as the dominant battle factor while preserving tactical relevance for ranged unit composition.
+
 **Artillery sight-line rule (PP-106):** HBl (Artillery) units require unobstructed
 line of sight. A unit in Line formation positioned between the Artillery and its
 target blocks the shot. Artillery must target units in an unobstructed zone.
@@ -807,7 +809,7 @@ Each mustered unit has one named officer NPC. The officer is generated at Muster
 - Player orders the unit into a situation that costs Size ≥ 2: −1
 - Player is absent from a battle where the unit fights: −1
 
-**Officer death:** When a unit takes Size loss, the officer may be killed. Roll: 1d10. On result ≤ Size lost, the officer is killed. Example: unit loses 2 Size → officer killed on 1 or 2.
+**Officer death (recalibrated per ED-754):** When a unit takes Size loss, the officer may be killed. Roll: **1d20**. On result ≤ Size lost, the officer is killed. Example: unit loses 2 Size → officer killed on 1 or 2 (10% rate). Unit loses 5 Size → officer killed on 1-5 (25% rate). Prior calibration (1d10) produced 50% officer death at routine 5-Size loss — campaigns lost all named officers in 4-6 battles. The 1d20 recalibration preserves narrative jeopardy (catastrophic losses still kill officers reliably) while permitting named officer NPCs to persist across multiple campaign battles.
 
 **Death consequences:**
 - Player receives notification: "Captain [Name] fell at [location]."
