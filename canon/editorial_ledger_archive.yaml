@@ -327,3 +327,34 @@ entries:
     status: resolved
     severity: P2
 
+  # Migrated 2026-04-24 from active ledger (ED-661/662/664/665/669/712 — resolved this session)
+  - id: ED-664
+    date: 2026-04-17
+    description: "Advisor-principal confidentiality boundary specified in npc_behavior §3.5. Three zones defined: private counsel (no consequence), public breach (Disposition −2 to −4, Renown loss, Standing −1, possible removal), strategic defection (relationship reset). Knot-mediated extraction permitted (Disposition ≥ +3 + active Knot allows one-time gift); public citation of leaked counsel ruptures Knot to Disposition −4 + invalidates Evidence Track use. Closes Consequence-Resonant-Style loophole. Historical anchor: Privy Counsellor's oath, medieval evil-counsellor doctrine, curia regis great-council/small-curia distinction."
+    status: resolved
+    severity: P2
+
+  - id: ED-662
+    date: 2026-04-17
+    description: "Elske residency post-Graduated-Autonomy resolved as null-intersection in campaign_architecture §5.3. Elske resides in Altonia by Laskaris-marriage; Löwenritter Autonomy stages (Loyal/Restless/Autonomous/Split) govern Crown-Löwenritter Valorian relationship, not Crown-Altonian. Residency unaffected through all stages except edge case (Crown Stability ≤ 1 + Split simultaneity), which is already addressed by existing IP/Vanguard mechanics rather than new residency rules. Historical anchor: pre-modern dynastic-marriage princess residency derived from husband's house."
+    status: resolved
+    severity: P2
+
+  - id: ED-661
+    date: 2026-04-17
+    description: "Ministry Protocol 3 seniority conflict. Resolved 2026-04-24: closed as superseded. Term 'Ministry Protocol 3' not found in current spec corpus across player_agency, faction_politics, social_contest, scale_transitions, npc_behavior, faction_layer, worldbuilding. Most likely vestigial reference from pre-2026-04-19 mechanism consolidation (Coup Counter struck → Graduated Autonomy; other mechanism strikes during that pass). If a Ministry Protocol surface re-emerges later, established historical seniority resolution patterns apply: Ming Five Chief Military Commissions Left/Right co-leadership pattern; Ancien Régime France institutional-role hierarchy with overlap; modern UK convention rather than rule. No spec edit warranted at present."
+    status: resolved
+    severity: P2
+
+  - id: ED-669
+    date: 2026-04-17
+    description: "Irreversible institutional precedent persistence across campaigns. Resolved 2026-04-24: closed as deferred-pending-design-intent. The question of cross-campaign precedent persistence is a campaign-architecture decision rather than a spec edit. Three coherent positions per game-design-precedent research: (1) Single-campaign architecture (Hogwarts Legacy model) — campaigns self-contained, precedents reset; (2) Persistent world (Bartle/MMO model — Avalon: The Legend Lives 1989+, EVE Online) — precedents persist across sessions; (3) NG+ legacy (State of Decay 2 4-legacy-endings model) — completed campaigns mark world; subsequent campaigns inherit some markers. Each position has different implementation cost and design surface. Resolution requires Jordan campaign-architecture decision; not a spec defect. Spec is unchanged unless and until a specific architecture is selected."
+    status: resolved
+    severity: P2
+
+  - id: ED-712
+    date: 2026-04-19
+    description: "Generalized Faction Succession Contest. Resolved 2026-04-24 across two commits: (1) social_contest §7.2 (commit aa14957) specified Succession Contest as Grand Contest variant with faction-split rule on Compromise outcome and unified transition on Total Victory; (2) victory_v30 §8 Founding Mechanic prerequisites extended to add settlement-scale Settlement Emergence pathway (≥ 4 settlements with Order ≤ 1 + player Community Organizing) alongside the original province-scale Cultural Uprising trigger. Eliminates need for separate designs/provincial/faction_succession_split_v30.md — mechanism integrates into existing canonical specs rather than spinning out new doc."
+    status: resolved
+    severity: P2
+    source: "PP-666"
