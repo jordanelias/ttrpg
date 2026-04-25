@@ -305,3 +305,25 @@ entries:
     description: "Settlement Revolt Mandatory Zoom-In gains deduplication: settlement-events at same settlement same season collapse into single Mandatory entry. Source: 2026-04-24 audit §3.5."
     status: resolved
     severity: P3
+
+  # Migrated 2026-04-24: ED-665 resolved
+  - id: ED-665
+    date: 2026-04-17
+    description: "Grand Contest as succession trial not in canonical docs. Resolved 2026-04-24: social_contest §7.2 added — Succession Contest specified as Grand Contest variant with succession-specific adjudicator, claim eligibility, outcome rules (Decisive / Compromise / Total Victory), and faction-split rule on Compromise. baralta_crown_claim §2 remains canonical Crown instance; new §7.2 provides generalizable framework for all factions."
+    status: resolved
+    severity: P2
+
+  # Migrated 2026-04-24: ED-704 resolved
+  - id: ED-704
+    date: 2026-04-19
+    description: "Seizure does not apply to Uncontrolled territories. Resolved 2026-04-24: peninsular_strain §5.2 adds explicit Uncontrolled exclusion — Seizure requires Mandate-bearing controller (no Mandate to exceed). Uncontrolled territories must first come under control via Pastoral Assumption, Conquest, or RM Founding before Seizure can target them."
+    status: resolved
+    severity: P2
+
+  # Migrated 2026-04-24: ED-705 resolved
+  - id: ED-705
+    date: 2026-04-19
+    description: "Cohesion -15 = derived of Stability -1, not independent. Resolved 2026-04-24: Cohesion was renamed to Discipline per PP-232; mass_battle §C.4 PP-195 historical note updated to reflect canonical naming. Discipline = Stability × 10 per derived_stats_v30 §8 (a -15 Discipline drain represents derived-resource fluctuation, not direct -1 Stability stat damage)."
+    status: resolved
+    severity: P2
+

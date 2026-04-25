@@ -669,9 +669,11 @@ WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is e
 
 **Prerequisites (all required):**
 - Player PC Disposition ≥ +3 with Yrsa Vossen
-- ≥ 2 territories have PT ≤ 2
+- **EITHER** ≥ 2 territories have PT ≤ 2 (province-scale trigger — the original Cultural Uprising pathway) **OR** ≥ 4 settlements with Order ≤ 1 across the peninsula AND ≥ 1 of those settlements has hosted player Community Organizing (settlement-scale Settlement Emergence pathway — ED-712 closure)
 - MS ≥ 40
 - Player has completed ≥ 1 Community Organizing (political organizing — building consensus-governance cells, mutual-aid networks, community contacts)
+
+The settlement-scale pathway (ED-712) lets RM emerge from sub-provincial unrest patterns. Where the province-scale trigger requires a contiguous province-level cultural disposition (PT ≤ 2 in 2+ territories), the settlement pathway triggers from distributed settlement-level governance failure (Order ≤ 1 in 4+ settlements) with player engagement at one of them. The two pathways model different real-world emergence patterns: the former resembles Bolshevik 1917 (concentrated cultural mass in two regions), the latter resembles 1848 European Revolutions (distributed urban governance failure across multiple cities).
 
 **Founding Scene (mandatory Priority 0 Zoom In when prerequisites met):**
 1. Player proposes: a named territory (first cell location), a Commitment, a Belief declaration.

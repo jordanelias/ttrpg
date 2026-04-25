@@ -22,28 +22,10 @@ entries:
     status: open
     severity: P2
 
-  - id: ED-665
-    date: 2026-04-17
-    description: "Grand Contest as succession trial not in canonical docs. Resolved 2026-04-24: social_contest §7.2 added — Succession Contest specified as Grand Contest variant with succession-specific adjudicator, claim eligibility, outcome rules (Decisive / Compromise / Total Victory), and faction-split rule on Compromise. baralta_crown_claim §2 remains canonical Crown instance; new §7.2 provides generalizable framework for all factions."
-    status: resolved
-    severity: P2
-
   - id: ED-669
     date: 2026-04-17
     description: "Irreversible institutional precedent persistence across campaigns."
     status: open
-    severity: P2
-
-  - id: ED-704
-    date: 2026-04-19
-    description: "Seizure does not apply to Uncontrolled territories. Resolved 2026-04-24: peninsular_strain §5.2 adds explicit Uncontrolled exclusion — Seizure requires Mandate-bearing controller (no Mandate to exceed). Uncontrolled territories must first come under control via Pastoral Assumption, Conquest, or RM Founding before Seizure can target them."
-    status: resolved
-    severity: P2
-
-  - id: ED-705
-    date: 2026-04-19
-    description: "Cohesion -15 = derived of Stability -1, not independent. Resolved 2026-04-24: Cohesion was renamed to Discipline per PP-232; mass_battle §C.4 PP-195 historical note updated to reflect canonical naming. Discipline = Stability × 10 per derived_stats_v30 §8 (a -15 Discipline drain represents derived-resource fluctuation, not direct -1 Stability stat damage)."
-    status: resolved
     severity: P2
 
   - id: ED-710
@@ -62,8 +44,8 @@ entries:
 
   - id: ED-712
     date: 2026-04-19
-    description: "Generalized Faction Succession Contest — extends baralta_crown_claim_v30 framework to all factions. Leader loss triggers contest; narrow winner → faction splits; widely-won → unified transition. RM Settlement Emergence pathway formalized as per-settlement trigger alongside province-scale Cultural Uprising. Spec: designs/provincial/faction_succession_split_v30.md (PP-666)."
-    status: open
+    description: "Generalized Faction Succession Contest. Resolved 2026-04-24 across two commits: (1) social_contest §7.2 (commit aa14957) specified Succession Contest as Grand Contest variant with faction-split rule on Compromise outcome and unified transition on Total Victory; (2) victory_v30 §8 Founding Mechanic prerequisites extended to add settlement-scale Settlement Emergence pathway (≥ 4 settlements with Order ≤ 1 + player Community Organizing) alongside the original province-scale Cultural Uprising trigger. Eliminates need for separate designs/provincial/faction_succession_split_v30.md — mechanism integrates into existing canonical specs rather than spinning out new doc."
+    status: resolved
     severity: P2
     source: "PP-666"
 
