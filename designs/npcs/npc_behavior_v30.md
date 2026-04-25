@@ -448,6 +448,61 @@ Player witnesses Thread event → Spirit pool, TN 7, Ob 1. Failure: active Convi
 
 ---
 
+### §3.5 Advisor-Principal Confidentiality Boundary (NEW — ED-664)
+
+Named NPCs holding formal advisor positions to faction principals (Torvi Heljason as Baralta's Legal Advisor; Father Gustav Linder as Crown's Archbishop's Representative; Kolbrun Thale as Crown Spymaster; Cardinal Klapp as Confessor's scholar; Hafenmark IC NPCs to Baralta; Varfell Jarl Council to Vaynard; Almstedt as Senior Parliamentary Chair providing institutional memory) operate under defined confidentiality. **Historical anchor:** the Privy Counsellor's oath ("keep secret all matters committed and revealed unto [them]") and the medieval curia regis distinction between great-council public deliberation and small-curia private counsel. The legitimating function of advisors per Hoccleve and Joel Rosenthal: counsel is institutionally obligatory; advisors must speak frankly without consequence to themselves or counsel becomes useless and rule becomes illegitimate.
+
+**§3.5.1 Private counsel zone (no advisor consequence)**
+
+An advisor speaking in private with their principal (or in formal advisory bodies — Crown Inner Circle, Hafenmark IC, Varfell Jarl Council, College of Cardinals) may contradict, criticize, reframe, or oppose the principal's position. The principal's Disposition with the advisor is unaffected by private disagreement. No Belief Scar accrues to advisor for frank counsel. No Renown loss. No Standing penalty. The advisor's role is precisely to say what others won't.
+
+This zone covers:
+- Private meetings between advisor and principal.
+- Inner-circle / formal advisory body sessions (Crown IC, Hafenmark IC, Varfell Jarl Council, College of Cardinals — each treated as private deliberation per their constitutional charter).
+- Written correspondence within the advisor-principal relationship.
+- Conviction-Track exchanges within Asymmetric Proceedings where the advisor is constituted as principal's counsel (per social_contest §7).
+
+**§3.5.2 Public consequence zone (advisor breach is institutionally costly)**
+
+An advisor who publicly contradicts, undermines, or breaches confidence faces:
+
+| Breach type | Disposition | Renown | Standing | Removal |
+|---|---|---|---|---|
+| Acute breach (single public statement opposing principal) | −2 with principal | −1 institutional | −1 in advisor's faction | Possible (principal-controlled, fires within 1 season) |
+| Calculated breach (sustained public opposition; leak to rivals) | −4 with principal | −2 institutional | −1 to −2 in advisor's faction | Likely (fires within 1 season); rival factions Disposition +1 toward advisor (utility recognition) |
+| Strategic defection (advisor publicly aligns with rival principal) | reset to baseline with original principal; +2 with new principal | 0 net (reputation shifts, doesn't lose) | role-resets per new faction Standing | Original role terminated; new role per new principal |
+
+The asymmetry between acute and calculated breach is the historical pattern: a single intemperate public statement (like a curia regis member criticizing the king at a great council) is institutionally manageable; sustained public opposition is the legitimating frame for the principal's removal of the advisor (or for noble rebellion against a "principal advised by evil counsellors").
+
+**§3.5.3 Knot-mediated extraction (player social mechanism)**
+
+A player with active Knot (per P-12) and Disposition ≥ +3 with an advisor may attempt to extract one private-counsel revelation:
+
+- **Mechanism:** Connect action + Argue roll, Conviction-aligned with advisor's primary Conviction, Ob 2 (advisor framework) +1 Ob (counsel concerns principal directly) = total Ob 3. Genre: typically Memory ("you've shared this kind of confidence with me before") or Solidarity ("we've been through enough that I deserve your honesty"). Single attempt per advisor per campaign.
+- **Success:** advisor reveals one specific piece of private counsel they have given the principal recently. The information is true, recent, and actionable. **No automatic consequence to the advisor.** The Knot's privacy holds — the advisor is sharing as friend-to-friend, not as advisor-to-public.
+- **Partial:** advisor reveals general direction of recent counsel without specific content.
+- **Failure:** advisor declines. Disposition unchanged. Player cannot retry this campaign.
+
+**§3.5.4 Public citation rupture**
+
+If the player publicly cites the leaked counsel (uses it in Contest as Evidence; tells a third party who tells anyone; publishes it; uses it as part of Casus Belli framing):
+
+- Knot ruptures immediately. Disposition resets to −4 with the advisor (no recovery this campaign without exceptional circumstances — Mass Battle defending advisor, public sacrifice, rescue from Heresy proceeding).
+- Advisor's institutional consequences (§3.5.2) fire as if advisor had publicly breached. Advisor blames the player for the breach (Disposition with player additionally affected; advisor enters arc transition triggered by Scar 2+ if not already present).
+- The leaked information itself does not retain Evidence Track value once rupture fires — the citation is procedurally invalidated. Once-spoken information that has been ruptured is treated as institutionally hearsay rather than admissible evidence.
+
+This is the spec mechanism that closes the Consequence-Resonant-Style loophole. Without §3.5.4, players could extract advisor counsel and use it as Consequence-RS Evidence in Contest at no relationship cost. With §3.5.4, the player who wants to use private counsel as Consequence Evidence must accept the relationship cost (full Knot rupture, advisor arc disruption, possible faction-level Disposition cascade if advisor is well-connected). The mechanism preserves the narrative richness of advisor relationships — Knot can deliver private counsel as gift — while preventing strategic exploitation.
+
+**§3.5.5 Cross-references**
+
+- social_contest §7 Asymmetric Proceedings: advisor can be constituted as principal's counsel in formal hearings; advisor's own Conviction Track contributions in such proceedings are still private-zone.
+- npc_behavior §1.3 Resonant Style Consequence: Evidence cited from private counsel triggers §3.5.4 rupture, not Consequence-RS.
+- player_agency §4.5 Opportunities Not Pursued: "advisor private counsel sharing" is a Priority 3 NPC Outreach when advisor Knot ≥ +3 + advisor's principal arc has fired this season; declining is no consequence.
+
+[EDITORIAL: ED-664 — Advisor-Principal Confidentiality Boundary specified. Closes "Advisor-principal confidentiality boundary undefined" P2 from 2026-04-17 ledger. Historical anchor: Privy Counsellor's oath, medieval evil-counsellor doctrine, curia regis great-council/small-curia distinction. RES audit: closes Consequence-Resonant-Style loophole that previously allowed cost-free Evidence extraction via advisor counsel leak. Mechanism: private counsel zone has no advisor consequence; public breach is institutionally costly; Knot-mediated extraction is permitted but public citation ruptures. Source: 2026-04-24 audit ED-664 closure with historical research.]
+
+---
+
 ## §4 DECISION DERIVATION: TTRPG MODE
 
 ### §4.1 Decision Procedure for Named NPCs

@@ -18,8 +18,8 @@ entries:
 
   - id: ED-664
     date: 2026-04-17
-    description: "Advisor-principal confidentiality boundary undefined."
-    status: open
+    description: "Advisor-principal confidentiality boundary specified in npc_behavior §3.5. Three zones defined: private counsel (no consequence), public breach (Disposition −2 to −4, Renown loss, Standing −1, possible removal), strategic defection (relationship reset). Knot-mediated extraction permitted (Disposition ≥ +3 + active Knot allows one-time gift); public citation of leaked counsel ruptures Knot to Disposition −4 + invalidates Evidence Track use. Closes Consequence-Resonant-Style loophole. Historical anchor: Privy Counsellor's oath, medieval evil-counsellor doctrine, curia regis great-council/small-curia distinction."
+    status: resolved
     severity: P2
 
   - id: ED-669
