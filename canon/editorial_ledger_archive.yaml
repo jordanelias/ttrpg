@@ -189,7 +189,7 @@ entries:
 
   - id: ED-735
     date: 2026-04-20
-    description: "PR-14 bundle resolved: Finding 7 + RWCE + Miracle Investigation + SA-gating all accepted. Integration cascade = separate workplan."
+    description: "PR-14 bundle resolved: Finding 7 + Miraculous Event + Miracle Investigation + SA-gating all accepted. Integration cascade = separate workplan."
     status: resolved
     severity: P1
     source: "session_master_2026_04_20.md + handoff"
