@@ -531,3 +531,122 @@ entries:
     description: "Inspiration mechanic propagated to canonical derived_stats §5.3. Closes propagation defect surfaced by stress-test 52: canonical Inspiration spec existed only in deprecated/valoria_ttrpg_complete.md §10.4. Active canonical docs (params/core L128, fieldwork §2.2) referenced 'Inspiration' as resource but didn't define how it's acquired, recovered, or lost. Now consolidated as §5.3: Acquisition (mid-campaign 2-scene + Spirit Ob 1 check or 4 CP shortcut, with Complication Tag for partial), Recovery (full-scene engagement +1, focus-present-uncontested +1, max 2/season), Focus loss (immediate 0 + optional Grief Scene Ob 2 conversion). Includes §5.3.4 Inspiration vs Belief vs Conviction distinction table. Belief mechanic flagged for separate future propagation. Source: 2026-04-25 stress-test 52."
     status: resolved
     severity: P2
+
+# Stage 4 promotions 2026-04-25 (PROVISIONAL — auto-extracted from MENTIONED atoms; require manual review before relying)
+  - id: ED-129
+    date: '2026-04-25'
+    description: '[PROPOSED: Ranged weapon dual taxonomy** — ED-129 open 5]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_document__109__ii-8-architecture-weaknesses-mechanical; evidence atoms: 1; canon mentions:
+      1'
+  - id: ED-131
+    date: '2026-04-25'
+    description: '[PROPOSED: However, **ED-131 (OPEN): values are unplaytested design-intent numbers.** Cannot confirm Robustness until simulation verifies lethality curves]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items; evidence atoms: 3; canon
+      mentions: 1'
+  - id: ED-200
+    date: '2026-04-25'
+    description: '[PROPOSED: S** ✓ ED-200/201 resolved all ambiguities.]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__15__3-5-wound-system; evidence atoms: 1; canon mentions: 2'
+  - id: ED-295
+    date: '2026-04-25'
+    description: '[PROPOSED: N** ✓ **R** ⚠ **ED-295 (OPEN, P1-BLOCKER):** CLASH stalls at median]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items; evidence atoms: 2; canon
+      mentions: 2'
+  - id: ED-297
+    date: '2026-04-25'
+    description: '[PROPOSED: ⚠ **ED-297 (OPEN):** AMPLIFY (coalition) dominates CLASH (solo) at ~5 movement/exchange vs ~0]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items; evidence atoms: 2; canon
+      mentions: 1'
+  - id: ED-539
+    date: '2026-04-25'
+    description: '[PROPOSED: ED-539 (P1) flags the compound effect of TC reform + TCV revaluation + Seizure Accord ≥ 2 as unsimulated]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_consolidation__13__4-5-rendering-strain-substrate-posture-cost; evidence atoms: 2; canon mentions:
+      1'
+  - id: ED-545
+    date: '2026-04-25'
+    description: '[PROPOSED: S17 Scale Transitions (ED-545, P1):** Substantially resolved by §4.3.2/§4.3.3/§4.4]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__19__from-rse-critique-valoria-rse-critique-md; evidence atoms: 1; canon
+      mentions: 2'
+  - id: ED-547
+    date: '2026-04-25'
+    description: '[PROPOSED: S14 Fieldwork (ED-547):** Scene cap (3–5 per season) IS the fieldwork resource]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__19__from-rse-critique-valoria-rse-critique-md; evidence atoms: 1; canon
+      mentions: 1'
+  - id: ED-577
+    date: '2026-04-25'
+    description: '[PROPOSED: Co-Movement card calibration.** ED-577-01 through 04]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__29__phase-iv-simulation-completion; evidence atoms: 1; canon mentions:
+      2'
+  - id: ED-588
+    date: '2026-04-25'
+    description: '[PROPOSED: Knot formation during play (AUD-NPC-01), Accord propagation to settlement Order (AUD-SET-02), Derived stats calibration (AUD-DS-01), Faction politics simulation (AUD-FP-01), Coverage
+      matrix P1 EDs (ED-588, 589, 612)]'
+    status: provisional
+    severity: P3
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__22__from-workplan-valoria-workplan-final-md; evidence atoms: 1; canon mentions:
+      1'
+  - id: ED-618
+    date: '2026-04-25'
+    description: '[PROPOSED: 16.2a Torben Emergence Window (ED-618)  First faction to reach Disposition ≥ +2 before Season 8 sets his primary Conviction]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__83__16-2-named-npc-profiles-12-core; evidence atoms: 1; canon mentions: 3'
+  - id: ED-663
+    date: '2026-04-25'
+    description: '[PROPOSED: 16.4b Thread → Conviction Scar Matrix (ED-663)  7 Thread event types × 7 Convictions]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_document__85__16-4-belief-revision-and-scars; evidence atoms: 1; canon mentions: 4'
+  - id: ED-670
+    date: '2026-04-25'
+    description: '[PROPOSED: 16.8 Heresy Jurisdiction (ED-670)  Jurisdiction varies by territory controller: Full in Church, permitted in Crown (with cooperation), blocked in Hafenmark (Sovereign Authority
+      Doctrine), tolerated at +1 Ob in Varfell, none in Uncontrolled]'
+    status: provisional
+    severity: P3
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__89__16-8-heresy-jurisdiction-ed-670; evidence atoms: 1; canon mentions: 2'
+  - id: ED-694
+    date: '2026-04-25'
+    description: '[PROPOSED: STALE-07: Document the rationale for the formula split.**  ### 2.1b Focus — Role Change  ED-694 replaced "Contact Rounds = Focus" with "Thread Fatigue = Spirit × 5" and "ops/session
+      = Focus − 1"]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_document__09__2-1-attributes-10-range-1-7; evidence atoms: 4; canon mentions: 5'
+  - id: ED-706
+    date: '2026-04-25'
+    description: '[PROPOSED: Sync needed.]`  `[GAP-29: VTM strike propagation incomplete (ED-706, pending PP-664)]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 04_faction_balance_three_modes); primary atom: master_document_2026-04-25__33__6-5-framework-propagation-gaps-deferred-from-prior; evidence atoms:
+      1; canon mentions: 2'
+  - id: ED-738
+    date: '2026-04-25'
+    description: '[PROPOSED: ED-738 (Ein Sof gradient editorial) was referenced across audit cells but had not been committed to canon]'
+    status: provisional
+    severity: P1
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 01_throughlines_meta); primary atom: master_consolidation__01__1-conversation-arc; evidence atoms: 4; canon mentions: 5'
+  - id: ED-783
+    date: '2026-04-25'
+    description: '[PROPOSED: Valoria Canon Rectification — Master Consolidation  **Session date:** 2026-04-25 **Patch proposal:** PP-675 **Editorial ledger:** ED-783 **Commits:** - `b14f0671ae9c7e7bb578865f92745dbcaab64bf0`
+      — primary 4-file rectification - `aae1e72413f9417f46a6d2fd8cb25646bd9ee6aa` — follow-up §16.1 close (op]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 09_canon_rectification_pp675_ed783); primary atom: valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close; evidence atoms:
+      5; canon mentions: 1'
