@@ -14,7 +14,7 @@ All [UNVERIFIED] items resolved against fetched sources. Findings:
 | ID | Resolution | Arc Impact |
 |----|-----------|-----------|
 | U-01 | Elske Loyalty has no Coup Counter link in stage6. Triggers are: CI ≥ 40 unopposed, Torben loyalty ≤ 2–3, Crown loses 2+ territories without military response. Coup Counter ceiling = 3 (stage6), fires at 3. | Arc 47 rebuilt around correct triggers. |
-| U-02 | RS thresholds confirmed: 79–60 Strained, 59–40 Fragile, 39–20 Fractured, 19–1 Critical. No thresholds at 50 or 40. Starting MS 60 = already in Strained. First effect fires at MS 59. | Arc 48 threshold references corrected. |
+| U-02 | MS thresholds confirmed: 79–60 Strained, 59–40 Fragile, 39–20 Fractured, 19–1 Critical. No thresholds at 50 or 40. Starting MS 60 = already in Strained. First effect fires at MS 59. | Arc 48 threshold references corrected. |
 | U-03 | Coherence 7–5 (Dissonant): Close Knots sense wrongness only. Broader non-practitioner perception is via Thread Sensitivity perception table (TS 10–29 = vague unease), not Coherence thresholds. | Arcs 48/54 reframed: Intelligibility is Thread Sensitivity-gated observation, not Coherence-threshold broadcast. |
 | U-04 | WC effects: +1D Thread ops (WC ≥ 1), MS decay halved (WC ≥ 2), MS +2/season (WC 3). No Ob reduction on any Domain Action. | Arc 49 mechanical seed corrected: only ethical framework −1 Ob is real. WC contribution to Suppress removed. |
 | U-05 | Experience at Focus 1 carries zero Coherence cost per §3.2. No operation = no Coherence reduction trigger. | Arc 51 causal chain rebuilt: Focus 1 characters do not Coherence-decay from Experience. New mechanism: Thread Sensitivity growth without Focus creates perceptual burden unaddressed by any recovery mechanic. |
@@ -44,14 +44,14 @@ Meanwhile CI has advanced unchecked in the failed seasons. It is at 47. The Chur
 **Flowchart:**
 
 ```
-TC passive +1/season (PP-402, automatic)
+CI passive +1/season (PP-402, automatic)
     │
     ▼
 Crown Suppress: Ob 2 (Church Mandate 5). Note: Royal Decree has consecutive Ob escalation;
 Suppress does not. Separate mechanics.
     │
-    ├─ Success → TC +0 (passive negated). No escalation next season.
-    └─ Failure → TC +1 + Crown Stability −1 (PP-403)
+    ├─ Success → CI +0 (passive negated). No escalation next season.
+    └─ Failure → CI +1 + Crown Stability −1 (PP-403)
             │
             ▼
         Crown Stability: 4 → 3 → 2 → 1
@@ -60,10 +60,10 @@ Suppress does not. Separate mechanics.
             └─ Crown stops Suppressing
                     │
                     ▼
-                TC unchecked: +1/season
+                CI unchecked: +1/season
                     │
                     ├─ [Intervention] Varfell or Hafenmark Suppress
-                    └─ [None] TC → 60 → Church Territorial Seizure
+                    └─ [None] CI → 60 → Church Territorial Seizure
                             (Mandate vs floor(owner Mandate/2)+1 per territory)
 ```
 
@@ -95,7 +95,7 @@ The Löwenritter's loyalty is to the Crown as institution. This is not betrayal.
 Coup Counter starts at 0. Ceiling: 3. Fires at 3. Counter never decrements.
 Three independent triggers, any order:
 
-Trigger A: TC reaches 40 while Crown took no Suppress/Assert-counteraction that season
+Trigger A: CI reaches 40 while Crown took no Suppress/Assert-counteraction that season
     │ → Coup Counter +1
 
 Trigger B: Torben Loyalty ≤ 2 (Altonian alignment — loyalty track starts 7 per PP-599)
@@ -113,7 +113,7 @@ Coup Counter = 3 → coup fires at next seasonal accounting
     │   (All non-Military Domain Actions require secondary Military check Ob 2 to proceed)
     │
     └─ [Players aware] → must address open triggers before all three close
-            → TC reduction: Suppress or military pressure on Church
+            → CI reduction: Suppress or military pressure on Church
             → Torben Loyalty repair: Influence Domain Actions
             → Territory: Military Domain Action response to any loss
 ```
@@ -134,7 +134,7 @@ Coup Counter = 3 → coup fires at next seasonal accounting
 
 ### Narrative
 
-The campaign starts at RS 60 — already in the Strained band. This is not unusual; the Valorian peninsula's substrate has been strained since the Einhir Catastrophe. The practitioner is careful. They operate at Object and Personal scale most of the time. But necessity and ambition push them toward Relational+ scale operations, and those carry RS costs on Partial and Failure. RS: 60 → 57 → 54 → 51 → 48.
+The campaign starts at MS 60 — already in the Strained band. This is not unusual; the Valorian peninsula's substrate has been strained since the Einhir Catastrophe. The practitioner is careful. They operate at Object and Personal scale most of the time. But necessity and ambition push them toward Relational+ scale operations, and those carry MS costs on Partial and Failure. MS: 60 → 57 → 54 → 51 → 48.
 
 At MS 59, the world crosses into Fragile. Shifting Objects form spontaneously in high-traffic Thread territories. Thread operations take +1 Ob in affected territories. That +1 Ob increases the failure rate of every Thread operation. More failures → more MS costs on the degree table. The degradation accelerates. The practitioner is not doing anything wrong — they are responding to exactly the incentives the system provides — and the world is getting worse at a rate that is now faster than anyone planned for.
 
@@ -171,9 +171,9 @@ MS crosses 59 → Fragile band
                        (Each successful Mending: +1 to +2 MS)
 ```
 
-**Emergent logic:** TS advancement incentivises more operations. More operations produce MS costs. RS degradation increases Ob, which increases failure rate, which produces more RS costs. Three independent rules produce compounding feedback — no single decision caused this.
+**Emergent logic:** TS advancement incentivises more operations. More operations produce MS costs. MS degradation increases Ob, which increases failure rate, which produces more MS costs. Three independent rules produce compounding feedback — no single decision caused this.
 
-**Arc shape:** 6–10 sessions. RS 60 → 59 crossing may happen within 2–3 seasons. Fragile → Fractured requires sustained failure. Players may not notice threshold effects until Shifting Objects appear.
+**Arc shape:** 6–10 sessions. MS 60 → 59 crossing may happen within 2–3 seasons. Fragile → Fractured requires sustained failure. Players may not notice threshold effects until Shifting Objects appear.
 
 ---
 
@@ -199,7 +199,7 @@ Both Crown and Church recognise that Hafenmark is now doing the work. Crown cann
 Crown fails Suppress → Stability 1 → stops Suppressing
     │
     ▼
-Hafenmark begins Suppressing (independently motivated: TC threatens Parliamentary legitimacy)
+Hafenmark begins Suppressing (independently motivated: CI threatens Parliamentary legitimacy)
     │
     ▼
 Ethical framework alignment: Hafenmark Suppress Ob −1 (framework modifier, confirmed)
@@ -221,7 +221,7 @@ Hafenmark Suppress succeeds more reliably than Crown's did
             │
             ├─ Any action reducing Hafenmark Stability → Crown and Church both oppose it
             └─ Hafenmark Stability drops to 2 → Parliamentary Sovereignty closes
-                    → TC unchecked; both Crown and Church face crisis simultaneously
+                    → CI unchecked; both Crown and Church face crisis simultaneously
 ```
 
 **Note on Suppress slot:** Suppress may be declared once per season by one faction. Varfell suppressing their own CI contribution (Arc 50) competes for this slot.
@@ -252,19 +252,19 @@ A Varfell at VTM 4 means CI advances at +2/season instead of +1/season. Every Va
 Varfell invests in VTM (goal: Thread independence from Church)
     │
     ▼
-VTM 3: Thread access without Church licensing + TC contribution +0.5/season (PP-563)
+VTM 3: Thread access without Church licensing + CI contribution +0.5/season (PP-563)
     │
     ▼
-TC: +1 (passive) + 0.5 (VTM 3) = +1.5/season
+CI: +1 (passive) + 0.5 (VTM 3) = +1.5/season
     │
-    ├─ [Unaware] VTM → 4: TC +1 (passive) + 1 (VTM 4) = +2/season
-    │       → TC 28 → 60 in ~16 seasons vs ~32 at baseline
+    ├─ [Unaware] VTM → 4: CI +1 (passive) + 1 (VTM 4) = +2/season
+    │       → CI 28 → 60 in ~16 seasons vs ~32 at baseline
     │
     └─ [Aware] Decision: halt VTM at 3, accept independence plateau
             │
             ├─ VTM halted: Varfell independence goal frozen
-            ├─ VTM continued: TC accelerates; Varfell faces Seizure it helped create
-            └─ Suppress: Varfell uses Domain Actions to counter own TC contribution
+            ├─ VTM continued: CI accelerates; Varfell faces Seizure it helped create
+            └─ Suppress: Varfell uses Domain Actions to counter own CI contribution
                     Ob at Church Mandate 6: floor(6/2)+1=4; ÷2 round up=2; min 1 → Ob 2
                     (Ob 2, not Ob 4)
 
@@ -274,7 +274,7 @@ Stack correction — if Assert fires + VTM 4 active:
     Total: +3/season
     Breakdown: Assert (+2, replacing +1 passive) + VTM (+1) = +3
     Not: passive +1 + VTM +1 + Assert +1 = +3 (wrong decomposition, same result)
-    TC 28 → 60 under this triple condition: ~11 seasons
+    CI 28 → 60 under this triple condition: ~11 seasons
 ```
 
 **Emergent logic:** PP-563 was written as a worldbuilding consequence of Thread activity concentrating institutional pressure — not as a check on Varfell. The interaction with CI passive advance was not designed.

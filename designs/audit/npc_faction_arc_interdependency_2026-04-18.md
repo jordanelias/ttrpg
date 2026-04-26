@@ -30,7 +30,7 @@ Rows = source NPC. Columns = target NPC. Entry = dependency mechanism.
 | **Ehrenwall** | **★** Coup Counter: 3 independent triggers, none decrements; Torben Loyalty ≤ 3 → Counter +1 | No direct arc | No direct arc | No direct arc | — | No direct arc | No direct arc | Cross-NPC: Torben Conviction = Order → Counter resets 0 (her Arc A triumph) |
 | **Edeyja** | No direct arc | ARC-T16 cultural contest in same territories as Church missionaries | No direct arc | **⚠** Vaynard's death → Edeyja: Belief 2 update; WR requirement +1 for next player | No direct arc | — | ARC-S50-ext: RM communities in Proximity 1 are MS early-warning | No direct arc |
 | **Vossen** | No direct arc; Crown PI management indirectly supports RM stability | ARC-T16: competing in same communities | ARC-S43-ext Parliamentary Resentment | Maret Uln succession: Varfell-RM alignment | No direct arc | ARC-S50-ext: community overlap in T6/T13 | — | No direct arc |
-| **Torben** | **⚠** Loyalty track (8→0) at −1/season Covert Contact fail; Loyalty ≤ 3 → Counter +1; Loyalty ≤ 2 → Crown Mandate −2 | No direct arc | No direct arc | Vaynard's Consequence RS: one approach vector to Torben | Cross-NPC: Torben Conviction = Order → Counter reset | No direct arc | Cross-NPC: Torben Conviction = Equity → Vossen Arc B positive branch | — |
+| **Torben** | **⚠** Loyalty track (8→0) at −1/season Covert Contact fail; Loyalty ≤ 3 → Counter +1; Loyalty ≤ 2 → Crown Mandate −2 | No direct arc | No direct arc | Vaynard's Consequence MS: one approach vector to Torben | Cross-NPC: Torben Conviction = Order → Counter reset | No direct arc | Cross-NPC: Torben Conviction = Equity → Vossen Arc B positive branch | — |
 
 ---
 
@@ -47,7 +47,7 @@ Rows = source NPC. Columns = target NPC. Entry = dependency mechanism.
 | **Brandt (Löwenritter)** | Ehrenwall | NPC-ARC-BRA: activates on Ehrenwall removal. Military redirects T3/T10 defense. Counter threshold drops 3→2. |
 | **Orm (Warden)** | Edeyja | Cross-NPC: Orm's death → Edeyja Coherence −1 + WR requirement rebuild. |
 | **Maret Uln (Varfell)** | Vaynard | NPC-ARC-ULN: activates on Vaynard elimination. VTM resets 0. Varfell aligns RM. |
-| **Hann (RM secondary)** | Vossen | Operational complement; Consequence RS (operational failure). Takes leadership on Vossen elimination. |
+| **Hann (RM secondary)** | Vossen | Operational complement; Consequence MS (operational failure). Takes leadership on Vossen elimination. |
 | **Strand (Crown)** | Almud | NPC-ARC-STR: Intel Overwhelming → turn. Full Crown stat line + planned actions leak. Crown admin +1 Ob 2 seasons on removal. |
 | **Laskaris (Altonian)** | Elske/Crown | NPC-ARC-LAK: PROTECTIVE delays Tutoring Demand 1 season; flips if Elske Loyalty ≤ 2 → IP +3 immediately. |
 | **Solberg (Schoenland)** | Crown/Hafenmark | NPC-ARC-SOL: STABILITY-SEEKING bias downplays intelligence. Recall on discovery fires → replacement, no bias, Schoenland more dangerous. |
@@ -73,7 +73,7 @@ Rows = source NPC. Columns = target NPC. Entry = dependency mechanism.
 | **Hafenmark** | ARC-S37 Détente; ARC-T22 Trade Network (Guilds adjacent); TE-04 Highland Parliament | ARC-S06 CI brake (−1/season); ARC-S19 Quaestio | — | ARC-S30 Counter-Narrative (CI contest); TE-32 NW Corridor Control | ARC-S56 Lions' Table Fracture; TE-24 Flanking Route | ARC-S43-ext Parliamentary Resentment | ARC-T22 Hafenmark Trade Network: Guilds +1D defending Hafenmark |  — |
 | **Varfell** | ARC-T21 Path Split; ARC-S27 Revelation Token | ARC-S30 Counter-Narrative; VTM Discretion (PP-438) | TE-29 Timber Contest; ARC-S44 Schoenland Gambit (counter) | — | No direct arc | NPC-ARC-ULN: Maret Uln succession → RM alignment | ARC-S52 Feldhaus Gambit (Varfell offer: trade intel for Collection use) | ARC-S11 Niflhel/Virke supply chain; ARC-S31 Lock Distribution through Quiet arm |
 | **Löwenritter** | Coup Counter (ARC-P03); ARC-S57 Riskbreaker Exposure | ARC-T26 Martial Honour Violation | No direct arc | No direct arc | — | No direct arc | No direct arc | Torsvald × Niflhel proximity (Cross-NPC conditioner) |
-| **RM** | ARC-S22 RM Emergence (WA/CV/RS triple condition); ARC-S49 Rawlsian Bind | ARC-S48 Vossen Saturation vs Church Heresy Investigation | ARC-S43-ext Parliamentary Resentment | NPC-ARC-ULN (Maret Uln alignment) | No direct arc | — | No direct arc | NPC-ARC-VOS: Maret Uln (if active) slows Church AP accumulation vs Vossen |
+| **RM** | ARC-S22 RM Emergence (WA/CV/MS triple condition); ARC-S49 Rawlsian Bind | ARC-S48 Vossen Saturation vs Church Heresy Investigation | ARC-S43-ext Parliamentary Resentment | NPC-ARC-ULN (Maret Uln alignment) | No direct arc | — | No direct arc | NPC-ARC-VOS: Maret Uln (if active) slows Church AP accumulation vs Vossen |
 | **Guilds** | ARC-P09 Royal Debt; ARC-T24 Tax Revolt; ARC-S52 Feldhaus (Crown offer: Charter) | ARC-T24 Church Sanctuary offer | ARC-T22 Trade Network; ARC-S12 Favour Gate | ARC-S52 Feldhaus Gambit (Varfell offer) | No direct arc | No direct arc | — | NPC-ARC-FEL Supply Chain Exposure (Thread-touched goods via Niflhel/Virke) |
 | **Niflhel** | NPC-ARC-STR Strand | ARC-S46-ext Inquisition Overwhelming; ARC-S55 Arms conflict | ARC-S11 Headless Network; ARC-S55 | ARC-S54 Quiet Overreach (TT accumulation) | ARC-S57 Riskbreaker Exposure Spiral | NPC-ARC-VOS (Maret Uln protection) | NPC-ARC-FEL Supply Chain | — |
 
@@ -105,7 +105,7 @@ Each clock arc is not self-contained — it feeds into or gates faction arcs. Th
 | **Clock Arc** | **Directly gates** | **Indirectly enables** | **Terminal if unaddressed** |
 |---|---|---|---|
 | ARC-P01 CI Accumulation | ARC-S19 Quaestio (CI 42); ARC-T03 Excommunication opportunity; TE-02 Territorial Seizure (CI 60); ARC-T10 Phase Transition (CI 75) | Church Priority Tree restructures; Rawlsian Bind fires (CI 50); Détente collapses (CI 42) | CI 75: territorial seizure mode, suppression irrelevant |
-| ARC-P02 MS Decay | ARC-S15 Southernmost Spiral (MS 50); ARC-S05 Temporal Window (MS 60); ARC-S34 Edeyja Burnout | TE-15 Wound Speaks (RS 19); ARC-S33 Lattice of Enemies | RS 0: second Calamity |
+| ARC-P02 MS Decay | ARC-S15 Southernmost Spiral (MS 50); ARC-S05 Temporal Window (MS 60); ARC-S34 Edeyja Burnout | TE-15 Wound Speaks (MS 19); ARC-S33 Lattice of Enemies | MS 0: second Calamity |
 | ARC-P03 Coup Counter | ARC-S56 Lions' Table Fracture (Counter 2); Coup fires (Counter 3) | Counter 2: ARC-T13 Torben transfer; NPC-ARC-BRA Brandt succession | Martial Law; Crown faction under Löwenritter control |
 | ARC-P06 IP Accumulation | ARC-S07 Torben Loyalty Clock (IP 30); ARC-T02 Tutoring Demand (IP 30) | ARC-S23 Elske window closes on Torben loss; COLLISION C risk | IP 100 + AER ≤ 1: Altonian Conquest |
 | ARC-P07 Public Instability | ARC-T24 Tax Revolt (PI 6+); ARC-S24 Baralta Succession gate | PI 10: institutional collapse; PI 8: Stability checks | PI 10: institutional collapse event |
@@ -114,22 +114,22 @@ Each clock arc is not self-contained — it feeds into or gates faction arcs. Th
 
 ### §3.2 Arc Chain Visualization (Primary Chains)
 
-#### Chain A — TC/Church Domination Chain
+#### Chain A — CI/Church Domination Chain
 ```
-ARC-P01 TC passive +1/season
+ARC-P01 CI passive +1/season
     ↓ [no Crown action]
-    → TC 40 → ARC-P03 Counter trigger #1 (Crown inaction)
+    → CI 40 → ARC-P03 Counter trigger #1 (Crown inaction)
     ↓ [Quaestio]
-    → TC 42 → ARC-S19 Quaestio (Grand Debate fires)
+    → CI 42 → ARC-S19 Quaestio (Grand Debate fires)
               → Baralta forced public position
               → ARC-S37 Détente collapses
     ↓ [Baralta Mandate erodes]
-    → ARC-T03 Excommunication → brake ends permanently → TC +4 one-time
+    → ARC-T03 Excommunication → brake ends permanently → CI +4 one-time
     ↓
-    → TC 60 → Territorial Seizure active
+    → CI 60 → Territorial Seizure active
     ↓
-    → TC 75 → ARC-T10 Phase Transition → Church priority restructures
-              → COLLISION J: T9+T2+TC 60+MS 39 → Church siege of southern gates
+    → CI 75 → ARC-T10 Phase Transition → Church priority restructures
+              → COLLISION J: T9+T2+CI 60+MS 39 → Church siege of southern gates
 ```
 
 #### Chain B — MS Collapse Chain
@@ -145,7 +145,7 @@ ARC-P02 MS Decay (−1 to −23/season depending on conditions)
     → MS 40 → Fractured → TE-17/18 Proximity 1 effects active
               → COLLISION J conditions approach
     ↓
-    → MS 19 → ARC-S32 Mending Trap: individual throughput (6–10 RS/season) < decay (12–23/season)
+    → MS 19 → ARC-S32 Mending Trap: individual throughput (6–10 MS/season) < decay (12–23/season)
              → ARC-S33 Lattice of Enemies: Belief compatibility blocks cooperation
              → ARC-S34 Edeyja Burnout: Ob compounds precisely when most needed
              → TE-15 Wound Speaks: Structural Dissolution required; success −3 to −8 MS
@@ -181,9 +181,9 @@ ARC-P04 Axis 9 (background — irreversible accumulation)
     ↓
     → Vaynard TK 2+ → ARC-S40 Forgetting and the Scholar (political Axis 2 accessible)
     → Vaynard TK 4 → ARC-S31 Lock Distribution: 3–5 simultaneous Discovery Events possible
-    → Vaynard TK 5 + RS ≤ 19 → NPC-ARC-VAY Unchecked → TE-13/14 (Warden threshold events)
+    → Vaynard TK 5 + MS ≤ 19 → NPC-ARC-VAY Unchecked → TE-13/14 (Warden threshold events)
     ↓
-    → ARC-S01 Revelation Cascade: TK 3/4/5 = TC +1/+2/+3
+    → ARC-S01 Revelation Cascade: TK 3/4/5 = CI +1/+2/+3
     → ARC-S13 Duke Awakens: Discovery Event → TS 30; Certainty −1; TK +2
     ↓
     → ARC-T08 Vaynard's Confession: Hybrid moment; personal arc enters Parliamentary system
@@ -225,7 +225,7 @@ ARC-P03 Counter accumulation
 | **COLLISION E** — Einhir Elder and Baralta's Claim | Witness testimony (ARC-T23) + Baralta Solmund claim (ARC-S19) + Klapp archive access | Himlensendt's Evidence MS turned against Church by 3 simultaneous sources; Church Stability −3 if Grand Debate fails | Operational — ARC-T23 is resolved canonical; COLLISION E is live |
 | **COLLISION F** — Succession Triangle | Almqvist deed-presumption weakens + Lenneth programme (ARC-S26) + Baralta Deed Claim (ARC-S35) both active | Three-way succession contest; mutually exclusive programmes; Ehrenwall must evaluate all three by deed-logic | Player faction positioning within triangle is permanent commitment — no temporary alliances |
 | **COLLISION G** — Einhir Triangle | Lenneth revival + Baralta suppression + Vaynard revolutionary restoration all active | No stable coalition possible; Lenneth+Vaynard: diagnosis agree/treatment don't; Lenneth+Baralta: orientation agree/Einhir don't; Vaynard+Baralta: nothing | Player alignment within triangle is factional commitment |
-| **COLLISION J** — Church Siege Southern Gates | Church T9+T2 (TE-28) + CI 60+ + MS ≤ 39 | Church winning political contest simultaneously destabilizes the substrate through which it wins; T15 access fires TE-13/14 | Prevent by keeping Church from T9+T2 control simultaneously; or prevent RS from reaching Fractured |
+| **COLLISION J** — Church Siege Southern Gates | Church T9+T2 (TE-28) + CI 60+ + MS ≤ 39 | Church winning political contest simultaneously destabilizes the substrate through which it wins; T15 access fires TE-13/14 | Prevent by keeping Church from T9+T2 control simultaneously; or prevent MS from reaching Fractured |
 
 ---
 
@@ -273,7 +273,7 @@ Scars are the micro-mechanism by which Contests permanently alter NPC arc trajec
 | Vaynard | Knowledge-seeker | Consequence + Evidence both active | Primary may shift to Autonomy; Arc C Consumed risk | Thread operations without safety awareness |
 | Ehrenwall | Institutional loyalist | Solidarity MS opens | Military self-determination | All decisions determined by crisis table |
 | Edeyja | Holdout | Starts accepting evidence from outsiders | Arc B Collaboration | Arc C Final Stand |
-| Vossen | Principled organiser | Consequence RS opens | Principles vs survival explicit choice | Rawlsian Bind fires regardless of CI level |
+| Vossen | Principled organiser | Consequence MS opens | Principles vs survival explicit choice | Rawlsian Bind fires regardless of CI level |
 
 ---
 
@@ -283,7 +283,7 @@ Throughlines are structural threads that run across multiple arcs, multiple NPCs
 
 ---
 
-### THROUGHLINE 1: The TC/RS Pyrrhic Trade
+### THROUGHLINE 1: The CI/MS Pyrrhic Trade
 
 **Structural form:** CI and MS move inversely under Church advancement. Every Church political victory degrades the substrate through which the victory is exercised.
 
@@ -378,10 +378,10 @@ Throughlines are structural threads that run across multiple arcs, multiple NPCs
 
 **Mechanical nodes:**
 - Grand Contest Obligation violated → all NPCs Disposition ≥ +1 with violating faction: −1 Disposition (network contracts)
-- Church Obligation honored → Kald Evidence RS check: 1 fewer Scar to fire (docility rewarded in specific arc terms)
+- Church Obligation honored → Kald Evidence MS check: 1 fewer Scar to fire (docility rewarded in specific arc terms)
 - Crown Obligation honored (T10 garrison) → Ehrenwall: Coup Counter −1
 - Crown Obligation violated (T10 garrison) → Ehrenwall: Coup Counter +1
-- Varfell Obligation honored (RS data to Wardens, 3 seasons) → Edeyja: WR +1
+- Varfell Obligation honored (MS data to Wardens, 3 seasons) → Edeyja: WR +1
 
 **Player experience:** Obligations are not optional narrative commitments — they are mechanical leverage. Honoring them advances NPC arcs in favorable directions; violating them cascades backward through relationship networks. The player who uses social contest system only tactically misses the arc-conditioning function of Obligation fulfillment.
 
@@ -391,7 +391,7 @@ Throughlines are structural threads that run across multiple arcs, multiple NPCs
 
 ### THROUGHLINE 7: The Southern Einhir Cultural Contest
 
-**Structural form:** The same communities — southern Einhir in T6, T13, T5 — are the contested ground for three simultaneous non-military operations: Church pastoral overwrite (ARC-T16), RM Cultural Reclamation (ARC-S47), and Calamity Radiation RS effects (proximity 1 conditions). These do not conflict mechanically — they compete for the same cultural substrate.
+**Structural form:** The same communities — southern Einhir in T6, T13, T5 — are the contested ground for three simultaneous non-military operations: Church pastoral overwrite (ARC-T16), RM Cultural Reclamation (ARC-S47), and Calamity Radiation MS effects (proximity 1 conditions). These do not conflict mechanically — they compete for the same cultural substrate.
 
 **Mechanical nodes:**
 - ARC-T16 Perceptual Prophylaxis: Church missionaries educate AND overwrite — same act
@@ -475,7 +475,7 @@ These are gaps where the interdependency network has identified missing mechanic
 - Torben Conviction lock → Season 8; permanently irreversible
 - Baralta Excommunication success → brake ends permanently
 - NPC Longevity death → succession fires; prior NPC investment does not transfer except where specified
-- RS 0 → Second Calamity; no mechanic prevents it from this state
+- MS 0 → Second Calamity; no mechanic prevents it from this state
 
 **Player-decisional pivots (★):**
 - ★ Torben Disposition investment (Season 1–8): highest single-campaign impact

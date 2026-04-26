@@ -100,7 +100,7 @@ PLAYERS INVESTIGATE THE 218 AG DEATH
 │   │   │   model serves Löwenritter's institutional interests regardless of
 │   │   │   whether the original threat was real) or reassess.
 │   │   │
-│   │   ├─ Church: No TC shift (no Church crime to expose). But: the Church
+│   │   ├─ Church: No CI shift (no Church crime to expose). But: the Church
 │   │   │   has been positioning itself defensively against assassination
 │   │   │   accusations for 27 years. That defensive posture consumed
 │   │   │   institutional resources and shaped Church politics. The revelation
@@ -144,7 +144,7 @@ PLAYERS INVESTIGATE THE 218 AG DEATH
     │   Only exhaustive cross-referencing reveals the absence of a perpetrator.
     ├─ If players act on a partial trail (accuse a faction publicly):
     │   the accused faction suffers the mechanical consequences listed in
-    │   the original perpetrator branches (Mandate loss, TC shift, etc.)
+    │   the original perpetrator branches (Mandate loss, CI shift, etc.)
     │   EVEN THOUGH THEY ARE INNOCENT. The accusation is politically real
     │   regardless of its factual basis. A false accusation of regicide
     │   is nearly as damaging as a true one — because the political system
@@ -166,7 +166,7 @@ Almud privately sympathises with the Einhir Restoration. He governs through the 
 ```
 ALMUD'S CONSTRAINT — EROSION PATHS
 │
-├─ CHURCH DISCREDITED (TC −3 or more in one event)
+├─ CHURCH DISCREDITED (CI −3 or more in one event)
 │   ├─ Church-Niflhel connection exposed → Almud can act on Einhir question
 │   │   without Church opposition carrying legitimate weight
 │   ├─ Cost now: Mandate −2 (northern Einhir nobility) + IP modifier
@@ -179,8 +179,8 @@ ALMUD'S CONSTRAINT — EROSION PATHS
 │   ├─ Revolution Influence reaches 5+ in northern territories:
 │   │   popular pressure reframes the question; northern nobles cannot afford
 │   │   to oppose what the population increasingly supports
-│   ├─ Almud's cost drops: TC +3 alone (without Mandate −2)
-│   │   → He may still not act (TC +3 is severe) but the structural lock is looser
+│   ├─ Almud's cost drops: CI +3 alone (without Mandate −2)
+│   │   → He may still not act (CI +3 is severe) but the structural lock is looser
 │   └─ Baralta can help: if Hafenmark Influence moves in northern territories,
 │       she can absorb the institutional cost, letting Almud act with political cover
 │
@@ -202,9 +202,9 @@ ALMUD'S CONSTRAINT — EROSION PATHS
 │   │   His Belief 1 (Altonian trade at all costs) is re-examined through
 │   │   the lens of what Thread reality means for Valoria's future.
 │   │   → This is the single most politically destabilising individual event available.
-│   │   → TC +1 (ruler shows Thread sensitivity, however slight)
+│   │   → CI +1 (ruler shows Thread sensitivity, however slight)
 │   │   → Ehrenwall: no direct effect; she watches
-│   │   → Confessor: if he learns → TC +2 (heresy investigation trigger)
+│   │   → Confessor: if he learns → CI +2 (heresy investigation trigger)
 │   └─ [EDITORIAL: What does Almud DO with Thread sensitivity if he develops it?
 │       He has no Approach Training path. He is near-Stirring, not Stirring.
 │       A Discovery Event gets him to 30. But 30 is the Leap threshold.
@@ -214,16 +214,16 @@ ALMUD'S CONSTRAINT — EROSION PATHS
 │
 └─ ALMUD ACTS ON EINHIR SYMPATHY (all constraints lifted or accepted)
     ├─ Royal Decree: one faction attribute ±1 immediately (limited but fast)
-    ├─ Public statement of support: Mandate −2 immediately; TC +3
+    ├─ Public statement of support: Mandate −2 immediately; CI +3
     │   → But: Revolution Influence +2; southern Einhir communities visible support
     ├─ Parliamentary endorsement: requires Hafenmark + Crown aligned;
     │   3-exchange vote; Ob = Church Mandate (currently 5)
-    │   Success: TC −1 (Church overreach checked by constitutional process)
-    │   Failure: TC +2 (Church successfully contested the endorsement)
+    │   Success: CI −1 (Church overreach checked by constitutional process)
+    │   Failure: CI +2 (Church successfully contested the endorsement)
     └─ If Almud acts AND has TS 30+:
         His own Thread sensitivity is now a political asset or liability
         depending on who knows. The Church's investigation of practitioners
-        would reach the King. TC escalation accelerates dramatically.
+        would reach the King. CI escalation accelerates dramatically.
         → THRESHOLD: Axis 9 (Ontological) begins resolving publicly.
 ```
 
@@ -280,11 +280,11 @@ BARALTA'S SOLMUND CLAIM — PRECONDITIONS
 │       │   [EDITORIAL: does the debate become a public theological contest
 │       │   about what Solmund/Solmund actually was? If so, Axis 9 fires.]
 │       │
-│       ├─ TC consequences:
-│       │   Success: TC −3 (Baralta's version); Church Mandate −2
+│       ├─ CI consequences:
+│       │   Success: CI −3 (Baralta's version); Church Mandate −2
 │       │   (institutional authority contested at theological root)
-│       │   Failure: TC +2; Baralta excommunicated → TC +4 additional
-│       │   → PRESSURE → THRESHOLD if TC crosses 40 in this cascade
+│       │   Failure: CI +2; Baralta excommunicated → CI +4 additional
+│       │   → PRESSURE → THRESHOLD if CI crosses 40 in this cascade
 │       │
 │       ├─ Vaynard: TK +1 (a political actor is using Thread-adjacent knowledge
 │       │   as a legitimacy claim; this is exactly the instrumentalisation
@@ -336,12 +336,12 @@ NIFLHEL-CHURCH EXPOSURE CHAIN
     │   Baralta pool: Mandate 4 + Reach 5 + evidence bonus (player-supplied)
     │   │
     │   ├─ OVERWHELMING (Parliament victory):
-    │   │   TC −3; Church Stability −2; Olafsson removed from his position;
+    │   │   CI −3; Church Stability −2; Olafsson removed from his position;
     │   │   Inquisitor operations suspended; all seized territories reviewed
     │   │
-    │   ├─ SUCCESS: TC −2; Church Mandate −1; Olafsson suspended
+    │   ├─ SUCCESS: CI −2; Church Mandate −1; Olafsson suspended
     │   │
-    │   ├─ PARTIAL: TC −1; Olafsson investigated but not removed;
+    │   ├─ PARTIAL: CI −1; Olafsson investigated but not removed;
     │   │   Church Intel gains +2D vs all parties involved
     │   │
     │   └─ FAILURE: Church Stability +1 (rally); Baralta's Mandate −1;
@@ -374,8 +374,8 @@ NIFLHEL-CHURCH EXPOSURE CHAIN
         His Trajectory B/C conversion coinciding with Olafsson's exposure
         means the Church is being dismantled from within simultaneously
         from below (Olafsson scandal) and from above (Klapp's private crisis).
-        → Church Stability −1 additional; TC generation pauses
-          (Cardinals competing — Stability ≤ 4 = TC brake activates)
+        → Church Stability −1 additional; CI generation pauses
+          (Cardinals competing — Stability ≤ 4 = CI brake activates)
 ```
 
 ---
@@ -413,7 +413,7 @@ IP REACHES 30 → TUTORING DEMAND FIRES
     │   ├─ LOYALTY 3–2 (Altonia-aligned)
     │   │   ├─ Crown Mandate −1 again (cumulative −2)
     │   │   ├─ Torben writes public letters praising Altonia (visible; IP drops
-    │   │   │   0 — Altonia satisfied; but TC +1 as Church reads it as
+    │   │   │   0 — Altonia satisfied; but CI +1 as Church reads it as
     │   │   │   spiritual failure of the Crown's heir)
     │   │   ├─ EHRENWALL COUP COUNTER +1 (Torben alignment condition met)
     │   │   └─ ELSKE ARC ACTIVATES: her Family conviction fires
@@ -497,7 +497,7 @@ ELSKE'S STARTING STATE
 │       ├─ SUCCESS → marriage dissolved legally; IP +2 (diplomatic insult);
 │       │   cleanest path; Baralta approves
 │       └─ FAILURE → legal challenge fails; Church objects (marriage is sacrament);
-│           TC +1 (Church defends sacramental authority)
+│           CI +1 (Church defends sacramental authority)
 │
 └─ ELSKE'S SUCCESSION STATES
     │
@@ -507,21 +507,21 @@ ELSKE'S STARTING STATE
     │   ├─ Löwenritter response: accepts IF she demonstrates Valorian independence
     │   │   Ehrenwall's test: behavioral, not formal. Does she act for Valoria?
     │   │   One season of visible Valorian governance = Ehrenwall supports her.
-    │   ├─ Church response: accepts if she submits → TC unchanged; refuses → Church opposes
+    │   ├─ Church response: accepts if she submits → CI unchanged; refuses → Church opposes
     │   └─ Hafenmark: supports via parliamentary path; Baralta's preferred outcome
     │
     ├─ INDEPENDENT + HAS DEVELOPED THREAD SENSITIVITY
     │   [EDITORIAL: Elske's TS is not established. If she encountered Thread
     │   phenomena during her Altonian years and has TS 10+...]
     │   A Queen with Thread sensitivity, post-Church exposure:
-    │   TC +2 immediately (Church demands she renounce or submit to Inquisitor)
+    │   CI +2 immediately (Church demands she renounce or submit to Inquisitor)
     │   MS: no direct effect, but her potential support of practitioners
     │   is the most powerful political shield practitioners have ever had
     │   → Axis 9 begins resolving; → Axis 1, 2, 3 all activate simultaneously
     │
     └─ STILL MARRIED TO DUKE (fails all independence paths)
         └─ Crown passes through Elske into Altonian orbit
-            IP decreases (Altonia satisfied) but TC +3 (Church demands
+            IP decreases (Altonia satisfied) but CI +3 (Church demands
             submission from a monarch now effectively Altonian)
             LÖWENRITTER COUP TRIGGER #2 DEFINITIVELY MET → [ARC 8]
 ```
@@ -594,7 +594,7 @@ SOUTHERNMOST CRISIS TIMELINE (MS-driven, not fixed season)
         → MS +8 may cross Critical threshold immediately
         → Monstrous entity of Mode 3: largest single monster in the game;
            requires mass combat or collective Thread operation to address
-        → Church: Inquisitor reports + TC +2 (Thread catastrophe = divine warning)
+        → Church: Inquisitor reports + CI +2 (Thread catastrophe = divine warning)
         → IP +2 (Altonian agents observe; instability confirmed)
         → COLLISION with ARC 3 and ARC 9:
            If Vaynard's expedition failed this, his consequentialist framework
@@ -608,7 +608,7 @@ SOUTHERNMOST CRISIS TIMELINE (MS-driven, not fixed season)
 ```
 COUP COUNTER TRACKING (private; GM-held; 0–3)
 │
-├─ INCREMENT 1: TC reaches 40 while Crown took no action to reduce it that season
+├─ INCREMENT 1: CI reaches 40 while Crown took no action to reduce it that season
 │   (unopposed Church advance)
 │
 ├─ INCREMENT 2: Torben's loyalty reaches 3–2 OR LOWER
@@ -627,12 +627,12 @@ COUP COUNTER TRACKING (private; GM-held; 0–3)
     │   ├─ Crown Mandate −2 (capitulation visible)
     │   ├─ Ehrenwall governs military; Almud governs civil/diplomatic
     │   │   This is de facto dual rule.
-    │   ├─ Church: TC +1 (secular authority fragmenting)
+    │   ├─ Church: CI +1 (secular authority fragmenting)
     │   ├─ Hafenmark: Baralta objects (extralegal; Ob 1 Stability check
     │   │   for Hafenmark; she may issue her own demand)
-    │   └─ [PRESSURE → depends on whether Ehrenwall's governance reduces TC]
-    │       If TC drops below 40 under Ehrenwall: she withdraws.
-    │       If TC stays above 40: permanent dual rule.
+    │   └─ [PRESSURE → depends on whether Ehrenwall's governance reduces CI]
+    │       If CI drops below 40 under Ehrenwall: she withdraws.
+    │       If CI stays above 40: permanent dual rule.
     │
     ├─ ALMUD REFUSES (players do not intervene)
     │   MARTIAL LAW fires across all Crown territories.
@@ -642,8 +642,8 @@ COUP COUNTER TRACKING (private; GM-held; 0–3)
     │   │   All other factions: Covert Domain Action Ob 3 to operate at all
     │   ├─ Duration: until Crown Domain Action removes it
     │   │   (Influence vs Ob = Löwenritter Military ÷ 2, minimum Ob 3)
-    │   │   OR TC drops below 40
-    │   ├─ Church: TC +2 (secular chaos validates Church stability claim)
+    │   │   OR CI drops below 40
+    │   ├─ Church: CI +2 (secular chaos validates Church stability claim)
     │   ├─ Revolution: Mandate +1 (Crown's institutional failure confirmed)
     │   │   But: Revolution cannot operate openly; forced underground
     │   └─ Niflhel: benefits; only covert faction with full operational capacity
@@ -651,10 +651,10 @@ COUP COUNTER TRACKING (private; GM-held; 0–3)
     └─ PLAYERS INTERVENE BEFORE COUP FIRES
         Options (must address at least 2 counter conditions before accounting):
         │
-        ├─ Reduce TC below 40 (remove increment 1's trigger):
-        │   Requires: Church Niflhel exposure (TC −3) OR
-        │   Baralta Sovereign Authority Doctrine (TC −2) OR
-        │   Grand Debate victory (TC −2)
+        ├─ Reduce CI below 40 (remove increment 1's trigger):
+        │   Requires: Church Niflhel exposure (CI −3) OR
+        │   Baralta Sovereign Authority Doctrine (CI −2) OR
+        │   Grand Debate victory (CI −2)
         │   Timeline: must happen BEFORE accounting where counter = 3
         │
         ├─ Retrieve Torben or install Elske (remove increment 2):
@@ -682,18 +682,18 @@ VAYNARD THREAD INVESTIGATION TRACK (TK 0–5)
 │   Sources: practitioner relationship (sustained season) OR
 │            Lenneth's archive channel (if players broker access) OR
 │            Church archives via Niflhel (Intel +1/archive)
-│   Effect: acute awareness; no TC effect; succession leverage
+│   Effect: acute awareness; no CI effect; succession leverage
 │            linked to Southernmost access terms begins forming
 │
 ├─ TK 3: Structural theory (wrong in detail, correct in structure)
-│   Effect: TC +1; Vaynard formally links succession leverage to Southernmost access
+│   Effect: CI +1; Vaynard formally links succession leverage to Southernmost access
 │   His Belief 3: "The succession ratification is my leverage. I will not
 │   surrender it without Southernmost access terms."
 │   Consequence: players must either give him Southernmost access OR
 │   find another way to ratify succession without his vote
 │
 ├─ TK 4: Urgency
-│   Effect: TC +2; Vaynard offers entire Private Collection (including originary
+│   Effect: CI +2; Vaynard offers entire Private Collection (including originary
 │            Locks) in exchange for Thread education + Southernmost partnership
 │   The originary Locks are the same class of objects that:
 │   ├─ Three Cardinals handled → requested reassignment (Himlensendt destabilisation)
@@ -702,12 +702,12 @@ VAYNARD THREAD INVESTIGATION TRACK (TK 0–5)
 │   Vaynard offering them to practitioners is:
 │   → Potential TS growth for multiple characters simultaneously
 │   → Potential Himlensendt destabilisation if Church learns the Locks are in play
-│   → TC +2 additional (Thread artefacts circulating outside Church control)
+│   → CI +2 additional (Thread artefacts circulating outside Church control)
 │
 ├─ TK 5: Dangerous knowledge
 │   Vaynard understands what Solmund was structurally.
 │   He seeks capability, not further knowledge.
-│   Effect: TC +3; he is the most informed secular actor on the peninsula
+│   Effect: CI +3; he is the most informed secular actor on the peninsula
 │            about Thread reality; he is also the most dangerous:
 │            a consequentialist who now wants Thread capability as a tool
 │   Belief revision (forced): "Valoria's future belongs to whoever understands
@@ -750,8 +750,8 @@ Klapp develops Thread sensitivity (Trajectory B/C)
 → Olafsson-Niflhel connection exposed publicly
 → Himlensendt faces: institutional crime (Olafsson) + internal fracture (Klapp)
 → Church Stability −3 (two simultaneous crises)
-→ TC generation PAUSES (Stability ≤ 4, Cardinals competing)
-→ Window opens: TC is not advancing; players can act without TC escalation
+→ CI generation PAUSES (Stability ≤ 4, Cardinals competing)
+→ Window opens: CI is not advancing; players can act without CI escalation
 → Klapp becomes an ally with: archive access, Church procedural knowledge,
   the originary Locks, and a theological crisis he cannot resolve alone
 → If Klapp reaches out to practitioners: Inquisitor protocol fires
@@ -759,7 +759,7 @@ Klapp develops Thread sensitivity (Trajectory B/C)
 → Church hunting its own head of education: Himlensendt must choose
   to use the suppression protocol or refuse
 → If he refuses: Himlensendt Stability check Ob 3 (deviation from doctrine)
-  Success: he deviates; Church Stability −1; TC −1 (institutional authority weakens)
+  Success: he deviates; Church Stability −1; CI −1 (institutional authority weakens)
   Failure: he complies; Klapp suppressed; window closes
 ```
 
@@ -777,12 +777,12 @@ Almud develops TS 30 (Discovery Event)
   Does trade continuity justify complicity in that suppression?
 → His Belief 2 (no path that doesn't choose between justice and monarchy) is obsolete:
   He IS the monarchy. He can choose.
-→ But: Church Heresy Investigation triggers if known (TC +2)
+→ But: Church Heresy Investigation triggers if known (CI +2)
 → Ehrenwall: no coup trigger from TS alone; she cares about sovereignty, not theology
 → Elske, if installed: she is Queen in practice; Almud retires to practitioner path?
   Or: Almud as practitioner-king is the most radical possible narrative resolution.
-→ TC CONSEQUENCE: if Almud publicly acknowledges Thread practice:
-  TC +3 (Church mobilises against ruling monarch)
+→ CI CONSEQUENCE: if Almud publicly acknowledges Thread practice:
+  CI +3 (Church mobilises against ruling monarch)
   But: MS improves if he supports Mending operations (new practitioner with high TS capital)
 → This is the scenario in which Axis 9 resolves publicly and the campaign's
   central dramatic question answers itself.
@@ -800,12 +800,12 @@ Torben at Loyalty 3: Crown Mandate −2; Ehrenwall Coup Counter +1
 → MS crosses 50 (if near boundary): Southernmost cracking clock resets to 0
   AND +2/season begins
 → IP +2 (Altonian agents observe the MS surge)
-→ TC +2 (Church: Thread catastrophe = divine warning requiring Church leadership)
-→ Church: MS < 55 cross-clock fires: TC +1/season; IP +1/season
-→ Ehrenwall Coup Counter: TC at 40+? → Counter increment fires
+→ CI +2 (Church: Thread catastrophe = divine warning requiring Church leadership)
+→ Church: MS < 55 cross-clock fires: CI +1/season; IP +1/season
+→ Ehrenwall Coup Counter: CI at 40+? → Counter increment fires
 → Counter may now reach 3 from a single season's cascade:
-  Torben condition + TC condition + (if Crown lost territories) = coup
-→ Players face: retrieve Torben OR contain MS OR prevent TC from crossing 40
+  Torben condition + CI condition + (if Crown lost territories) = coup
+→ Players face: retrieve Torben OR contain MS OR prevent CI from crossing 40
   All three simultaneously, with one lead practitioner incapacitated.
 ```
 
@@ -826,8 +826,8 @@ Niflhel exposed: Stability −2; but Niflhel responds
 → Niflhel has no political goal — but it has leverage.
   It will sell that leverage to whoever pays.
 → If Varfell pays: Vaynard TK 4+ + Niflhel Intel = the most dangerous
-  information actor on the peninsula; TC +3 cumulative
-→ If Church pays: Olafsson suppressed; assassination buried; TC acceleration resumes
+  information actor on the peninsula; CI +3 cumulative
+→ If Church pays: Olafsson suppressed; assassination buried; CI acceleration resumes
 → If Crown pays: Riskbreaker Deniability Debt +3 in one season;
   Parliamentary inquiry opens; Grand Debate threatens Crown Mandate
 → If players refuse to pay:
