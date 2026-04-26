@@ -1,0 +1,633 @@
+generated: '2026-04-25'
+purpose: Atoms across ≥2 source masters that reference the same canonical ID. These are likely discussing the same decision/proposal/throughline
+  from different angles — strong consolidation candidates.
+cluster_count: 26
+clusters:
+- id: T-36
+  cross_source_count: 3
+  atom_count: 9
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__05__5-proposal-tier-classification
+    source_file: master_consolidation.md
+    header: §5 Proposal tier classification
+    lines: 75
+  - atom_id: master_consolidation__06__6-mechanical-specifications
+    source_file: master_consolidation.md
+    header: §6 Mechanical specifications
+    lines: 131
+  - atom_id: master_consolidation__08__8-open-editorial-decisions
+    source_file: master_consolidation.md
+    header: §8 Open editorial decisions
+    lines: 50
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_document__100__19-4-meta-throughlines-emergent-structural-pattern
+    source_file: valoria_master_document.md
+    header: 19.4 Meta-Throughlines (Emergent Structural Patterns)
+    lines: 44
+  - atom_id: valoria_master_document__101__19-5-connectivity-verification
+    source_file: valoria_master_document.md
+    header: 19.5 Connectivity Verification
+    lines: 33
+  - atom_id: valoria_master_document__110__ii-9-connectivity-mechanical-throughlines-only
+    source_file: valoria_master_document.md
+    header: II.9 Connectivity (Mechanical Throughlines Only)
+    lines: 26
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: M-4
+  cross_source_count: 3
+  atom_count: 9
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_analysis__08__section-8-synthesis-valoria-s-design-identity
+    source_file: valoria_master_analysis.md
+    header: 'Section 8 — Synthesis: Valoria''s design identity'
+    lines: 18
+  - atom_id: valoria_master_analysis__11__section-11-outstanding-design-decisions
+    source_file: valoria_master_analysis.md
+    header: Section 11 — Outstanding design decisions
+    lines: 16
+  - atom_id: valoria_master_analysis__12__section-12-session-handoff
+    source_file: valoria_master_analysis.md
+    header: Section 12 — Session handoff
+    lines: 40
+  - atom_id: valoria_session_master_2026-04-25__01__context-window-1-session-b-core
+    source_file: valoria_session_master_2026-04-25.md
+    header: Context Window 1 — Session B Core
+    lines: 39
+  - atom_id: valoria_session_master_2026-04-25__03__context-window-3-ed-717-cleanup
+    source_file: valoria_session_master_2026-04-25.md
+    header: Context Window 3 — ED-717 + Cleanup
+    lines: 57
+  - atom_id: valoria_session_master_2026-04-25__04__status
+    source_file: valoria_session_master_2026-04-25.md
+    header: Status
+    lines: 19
+- id: T-31
+  cross_source_count: 3
+  atom_count: 8
+  atoms:
+  - atom_id: master_consolidation__01__1-conversation-arc
+    source_file: master_consolidation.md
+    header: §1 Conversation arc
+    lines: 49
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: master_consolidation__07__7-wave-1-workplans
+    source_file: master_consolidation.md
+    header: §7 Wave 1 workplans
+    lines: 21
+  - atom_id: master_consolidation__09__9-commit-ledger
+    source_file: master_consolidation.md
+    header: §9 Commit ledger
+    lines: 39
+  - atom_id: master_consolidation__10__10-next-stage-work
+    source_file: master_consolidation.md
+    header: §10 Next-stage work
+    lines: 23
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: M-3
+  cross_source_count: 3
+  atom_count: 7
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_analysis__08__section-8-synthesis-valoria-s-design-identity
+    source_file: valoria_master_analysis.md
+    header: 'Section 8 — Synthesis: Valoria''s design identity'
+    lines: 18
+  - atom_id: valoria_master_analysis__11__section-11-outstanding-design-decisions
+    source_file: valoria_master_analysis.md
+    header: Section 11 — Outstanding design decisions
+    lines: 16
+  - atom_id: valoria_master_consolidation__20__from-holistic-audit-valoria-holistic-audit-md
+    source_file: valoria_master_consolidation.md
+    header: From holistic audit (`valoria_holistic_audit.md`)
+    lines: 8
+  - atom_id: valoria_master_consolidation__26__phase-i-foundations-compliance-gap-closure
+    source_file: valoria_master_consolidation.md
+    header: Phase I — Foundations Compliance Gap Closure
+    lines: 10
+- id: M-1
+  cross_source_count: 3
+  atom_count: 7
+  atoms:
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_analysis__08__section-8-synthesis-valoria-s-design-identity
+    source_file: valoria_master_analysis.md
+    header: 'Section 8 — Synthesis: Valoria''s design identity'
+    lines: 18
+  - atom_id: valoria_master_analysis__12__section-12-session-handoff
+    source_file: valoria_master_analysis.md
+    header: Section 12 — Session handoff
+    lines: 40
+  - atom_id: valoria_master_consolidation__11__4-3-literal-rendering-per-character-visual-filteri
+    source_file: valoria_master_consolidation.md
+    header: 4.3 Literal Rendering + Per-Character Visual Filtering
+    lines: 27
+  - atom_id: valoria_master_consolidation__18__4-10-conviction-system-architectural-centering
+    source_file: valoria_master_consolidation.md
+    header: 4.10 Conviction System Architectural Centering
+    lines: 51
+  - atom_id: valoria_master_consolidation__26__phase-i-foundations-compliance-gap-closure
+    source_file: valoria_master_consolidation.md
+    header: Phase I — Foundations Compliance Gap Closure
+    lines: 10
+- id: T-34
+  cross_source_count: 3
+  atom_count: 6
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_document__100__19-4-meta-throughlines-emergent-structural-pattern
+    source_file: valoria_master_document.md
+    header: 19.4 Meta-Throughlines (Emergent Structural Patterns)
+    lines: 44
+  - atom_id: valoria_master_document__101__19-5-connectivity-verification
+    source_file: valoria_master_document.md
+    header: 19.5 Connectivity Verification
+    lines: 33
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: PP-675
+  cross_source_count: 3
+  atom_count: 6
+  atoms:
+  - atom_id: valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 9 — Open Items at Session Close
+    lines: 37
+  - atom_id: valoria_session_2026_04_25_master_consolidation__00__preamble
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: (preamble)
+    lines: 11
+  - atom_id: valoria_session_2026_04_25_master_consolidation__09__9-verification-status
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: 9. Verification Status
+    lines: 44
+  - atom_id: valoria_session_2026_04_25_master_consolidation__14__14-references
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: 14. References
+    lines: 23
+  - atom_id: valoria_session_master_2026-04-25__03__context-window-3-ed-717-cleanup
+    source_file: valoria_session_master_2026-04-25.md
+    header: Context Window 3 — ED-717 + Cleanup
+    lines: 57
+  - atom_id: valoria_session_master_2026-04-25__04__status
+    source_file: valoria_session_master_2026-04-25.md
+    header: Status
+    lines: 19
+- id: T-32
+  cross_source_count: 3
+  atom_count: 5
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_document__101__19-5-connectivity-verification
+    source_file: valoria_master_document.md
+    header: 19.5 Connectivity Verification
+    lines: 33
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: T-35
+  cross_source_count: 3
+  atom_count: 5
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: master_consolidation__10__10-next-stage-work
+    source_file: master_consolidation.md
+    header: §10 Next-stage work
+    lines: 23
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: T-33
+  cross_source_count: 3
+  atom_count: 4
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: T-41
+  cross_source_count: 2
+  atom_count: 9
+  atoms:
+  - atom_id: master_consolidation__01__1-conversation-arc
+    source_file: master_consolidation.md
+    header: §1 Conversation arc
+    lines: 49
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: master_consolidation__05__5-proposal-tier-classification
+    source_file: master_consolidation.md
+    header: §5 Proposal tier classification
+    lines: 75
+  - atom_id: master_consolidation__07__7-wave-1-workplans
+    source_file: master_consolidation.md
+    header: §7 Wave 1 workplans
+    lines: 21
+  - atom_id: master_consolidation__09__9-commit-ledger
+    source_file: master_consolidation.md
+    header: §9 Commit ledger
+    lines: 39
+  - atom_id: master_consolidation__10__10-next-stage-work
+    source_file: master_consolidation.md
+    header: §10 Next-stage work
+    lines: 23
+  - atom_id: valoria_master_document__100__19-4-meta-throughlines-emergent-structural-pattern
+    source_file: valoria_master_document.md
+    header: 19.4 Meta-Throughlines (Emergent Structural Patterns)
+    lines: 44
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: ED-738
+  cross_source_count: 2
+  atom_count: 7
+  atoms:
+  - atom_id: master_consolidation__01__1-conversation-arc
+    source_file: master_consolidation.md
+    header: §1 Conversation arc
+    lines: 49
+  - atom_id: master_consolidation__02__2-ed-738-ein-sof-gradient-editorial
+    source_file: master_consolidation.md
+    header: §2 ED-738 — Ein Sof gradient editorial
+    lines: 44
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: master_consolidation__07__7-wave-1-workplans
+    source_file: master_consolidation.md
+    header: §7 Wave 1 workplans
+    lines: 21
+  - atom_id: master_consolidation__09__9-commit-ledger
+    source_file: master_consolidation.md
+    header: §9 Commit ledger
+    lines: 39
+  - atom_id: master_consolidation__11__11-methodological-notes-for-continuation
+    source_file: master_consolidation.md
+    header: §11 Methodological notes for continuation
+    lines: 18
+  - atom_id: threadwork_master__01__i-foundational-stance
+    source_file: threadwork_master.md
+    header: I. Foundational stance
+    lines: 38
+- id: ED-664
+  cross_source_count: 2
+  atom_count: 6
+  atoms:
+  - atom_id: valoria_master_document__116__iv-1-verify-against-source
+    source_file: valoria_master_document.md
+    header: IV.1 Verify Against Source
+    lines: 13
+  - atom_id: valoria_master_document__120__v-2-player-agency-convictions-standing-renown-gap-
+    source_file: valoria_master_document.md
+    header: V.2 Player Agency / Convictions / Standing / Renown (GAP-06)
+    lines: 13
+  - atom_id: valoria_session_2026-04-25_master__01__section-1-commit-manifest-chronological
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 1 — Commit Manifest (chronological)
+    lines: 47
+  - atom_id: valoria_session_2026-04-25_master__03__section-3-major-new-specs-authored
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 3 — Major New Specs Authored
+    lines: 101
+  - atom_id: valoria_session_2026-04-25_master__06__section-6-editorial-decisions-summary
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 6 — Editorial Decisions Summary
+    lines: 58
+  - atom_id: valoria_session_2026-04-25_master__08__section-8-historical-research
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 8 — Historical Research
+    lines: 35
+- id: ED-783
+  cross_source_count: 2
+  atom_count: 6
+  atoms:
+  - atom_id: valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 9 — Open Items at Session Close
+    lines: 37
+  - atom_id: valoria_session_2026_04_25_master_consolidation__00__preamble
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: (preamble)
+    lines: 11
+  - atom_id: valoria_session_2026_04_25_master_consolidation__01__1-scope
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: 1. Scope
+    lines: 21
+  - atom_id: valoria_session_2026_04_25_master_consolidation__09__9-verification-status
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: 9. Verification Status
+    lines: 44
+  - atom_id: valoria_session_2026_04_25_master_consolidation__10__10-outstanding-work
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: 10. Outstanding Work
+    lines: 83
+  - atom_id: valoria_session_2026_04_25_master_consolidation__14__14-references
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    header: 14. References
+    lines: 23
+- id: T-38
+  cross_source_count: 2
+  atom_count: 5
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: master_consolidation__10__10-next-stage-work
+    source_file: master_consolidation.md
+    header: §10 Next-stage work
+    lines: 23
+  - atom_id: valoria_master_document__100__19-4-meta-throughlines-emergent-structural-pattern
+    source_file: valoria_master_document.md
+    header: 19.4 Meta-Throughlines (Emergent Structural Patterns)
+    lines: 44
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: T-40
+  cross_source_count: 2
+  atom_count: 4
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: master_consolidation__06__6-mechanical-specifications
+    source_file: master_consolidation.md
+    header: §6 Mechanical specifications
+    lines: 131
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: M-5
+  cross_source_count: 2
+  atom_count: 4
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_analysis__08__section-8-synthesis-valoria-s-design-identity
+    source_file: valoria_master_analysis.md
+    header: 'Section 8 — Synthesis: Valoria''s design identity'
+    lines: 18
+- id: M-2
+  cross_source_count: 2
+  atom_count: 4
+  atoms:
+  - atom_id: master_consolidation__04__4-meta-throughlines-7-11
+    source_file: master_consolidation.md
+    header: §4 Meta-throughlines М-7..М-11
+    lines: 24
+  - atom_id: valoria_master_analysis__07__section-7-throughlines-and-meta-throughlines
+    source_file: valoria_master_analysis.md
+    header: Section 7 — Throughlines and meta-throughlines
+    lines: 44
+  - atom_id: valoria_master_analysis__08__section-8-synthesis-valoria-s-design-identity
+    source_file: valoria_master_analysis.md
+    header: 'Section 8 — Synthesis: Valoria''s design identity'
+    lines: 18
+  - atom_id: valoria_master_analysis__12__section-12-session-handoff
+    source_file: valoria_master_analysis.md
+    header: Section 12 — Session handoff
+    lines: 40
+- id: ED-665
+  cross_source_count: 2
+  atom_count: 4
+  atoms:
+  - atom_id: valoria_master_document__85__16-4-belief-revision-and-scars
+    source_file: valoria_master_document.md
+    header: 16.4 Belief Revision and Scars
+    lines: 32
+  - atom_id: valoria_session_2026-04-25_master__01__section-1-commit-manifest-chronological
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 1 — Commit Manifest (chronological)
+    lines: 47
+  - atom_id: valoria_session_2026-04-25_master__03__section-3-major-new-specs-authored
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 3 — Major New Specs Authored
+    lines: 101
+  - atom_id: valoria_session_2026-04-25_master__06__section-6-editorial-decisions-summary
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    header: Section 6 — Editorial Decisions Summary
+    lines: 58
+- id: T-37
+  cross_source_count: 2
+  atom_count: 3
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: master_consolidation__10__10-next-stage-work
+    source_file: master_consolidation.md
+    header: §10 Next-stage work
+    lines: 23
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: PP-508
+  cross_source_count: 2
+  atom_count: 3
+  atoms:
+  - atom_id: valoria_master_consolidation__24__from-simulation-review-simulation-review-2026-04-1
+    source_file: valoria_master_consolidation.md
+    header: From simulation review (`simulation_review_2026-04-15.md`)
+    lines: 13
+  - atom_id: valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items
+    source_file: valoria_master_document.md
+    header: II.2 Open Decisions Requiring Jordan (16 items)
+    lines: 21
+  - atom_id: valoria_master_document__45__7-3-key-mechanics
+    source_file: valoria_master_document.md
+    header: 7.3 Key Mechanics
+    lines: 10
+- id: T-39
+  cross_source_count: 2
+  atom_count: 2
+  atoms:
+  - atom_id: master_consolidation__03__3-throughlines-t-31-t-41
+    source_file: master_consolidation.md
+    header: §3 Throughlines T-31..T-41
+    lines: 32
+  - atom_id: valoria_master_document__99__19-3-ontological-throughlines-post-atomization-t-3
+    source_file: valoria_master_document.md
+    header: 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+    lines: 18
+- id: T-09
+  cross_source_count: 2
+  atom_count: 2
+  atoms:
+  - atom_id: master_consolidation__05__5-proposal-tier-classification
+    source_file: master_consolidation.md
+    header: §5 Proposal tier classification
+    lines: 75
+  - atom_id: valoria_session_master_2026-04-25__03__context-window-3-ed-717-cleanup
+    source_file: valoria_session_master_2026-04-25.md
+    header: Context Window 3 — ED-717 + Cleanup
+    lines: 57
+- id: PP-674
+  cross_source_count: 2
+  atom_count: 2
+  atoms:
+  - atom_id: master_consolidation__10__10-next-stage-work
+    source_file: master_consolidation.md
+    header: §10 Next-stage work
+    lines: 23
+  - atom_id: valoria_master_consolidation__04__2-4-recent-canonical-strikes
+    source_file: valoria_master_consolidation.md
+    header: 2.4 Recent canonical strikes
+    lines: 8
+- id: PP-632
+  cross_source_count: 2
+  atom_count: 2
+  atoms:
+  - atom_id: valoria_master_consolidation__20__from-holistic-audit-valoria-holistic-audit-md
+    source_file: valoria_master_consolidation.md
+    header: From holistic audit (`valoria_holistic_audit.md`)
+    lines: 8
+  - atom_id: valoria_master_document__32__5-7-knots-pp-632
+    source_file: valoria_master_document.md
+    header: 5.7 Knots (PP-632)
+    lines: 6
+- id: ED-663
+  cross_source_count: 2
+  atom_count: 2
+  atoms:
+  - atom_id: valoria_master_consolidation__25__phase-0-housekeeping-prerequisite-not-optional
+    source_file: valoria_master_consolidation.md
+    header: Phase 0 — Housekeeping (prerequisite, not optional)
+    lines: 12
+  - atom_id: valoria_master_document__85__16-4-belief-revision-and-scars
+    source_file: valoria_master_document.md
+    header: 16.4 Belief Revision and Scars
+    lines: 32

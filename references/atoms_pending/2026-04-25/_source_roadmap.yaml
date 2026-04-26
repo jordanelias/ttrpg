@@ -1,0 +1,192 @@
+generated: '2026-04-25'
+purpose: 'Per-source classification + atom distribution. Use to plan ingestion order: prefer high-P1 sources with declared canonical target areas.'
+roadmaps:
+- source_file: master_consolidation.md
+  role: consolidation
+  topic: Rigorous Audit S1–S7 synthesis (2026-04-21/22)
+  declared_target_areas:
+  - canon/editorial_ledger.yaml
+  - canon/patch_register*.yaml
+  - references/throughlines*.md
+  atom_count: 13
+  p1_count: 5
+  p2_count: 4
+  p3_count: 4
+  canonical_id_total: 88
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 5
+  inferred_target_distribution:
+    references/throughlines_meta.md: 7
+    canon/editorial_ledger.yaml: 6
+    designs/threadwork/: 5
+- source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+  role: session_log
+  topic: Audit + stress-test session (40 commits, ED-739+)
+  declared_target_areas:
+  - session_logs/ (most already captured)
+  atom_count: 11
+  p1_count: 5
+  p2_count: 4
+  p3_count: 2
+  canonical_id_total: 139
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 2
+  inferred_target_distribution:
+    canon/editorial_ledger.yaml: 10
+    designs/scene/: 7
+    (skip — captured in commit history): 2
+    designs/threadwork/: 2
+- source_file: master_document_2026-04-25.md
+  role: mechanical_design
+  topic: Faction Balance & Player Fulfilment (three-mode architecture)
+  declared_target_areas:
+  - designs/provincial/faction_*
+  - designs/scene/*
+  - canon/editorial_ledger.yaml
+  atom_count: 50
+  p1_count: 2
+  p2_count: 8
+  p3_count: 40
+  canonical_id_total: 16
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 10
+  inferred_target_distribution:
+    designs/provincial/: 18
+    simulations/: 7
+    designs/provincial/faction_*: 5
+    designs/arcs/: 2
+    canon/editorial_ledger.yaml: 2
+    designs/npcs/: 1
+- source_file: valoria_master_document.md
+  role: mechanical_design
+  topic: Master mechanical review and audit record (largest — 125 atoms)
+  declared_target_areas:
+  - designs/
+  - canon/02_canon_constraints.md
+  atom_count: 125
+  p1_count: 1
+  p2_count: 23
+  p3_count: 101
+  canonical_id_total: 80
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 7
+  inferred_target_distribution:
+    designs/threadwork/: 41
+    canon/editorial_ledger.yaml: 15
+    designs/scene/: 7
+    designs/npcs/: 7
+    references/throughlines_meta.md: 6
+    designs/provincial/: 1
+    simulations/: 1
+    designs/arcs/: 1
+- source_file: valoria_master_analysis.md
+  role: audit
+  topic: v2 historicity correction (Three Kingdoms / Sengoku)
+  declared_target_areas:
+  - designs/audit/
+  - canon/editorial_ledger.yaml
+  atom_count: 13
+  p1_count: 1
+  p2_count: 4
+  p3_count: 8
+  canonical_id_total: 21
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 2
+  inferred_target_distribution:
+    references/throughlines_meta.md: 6
+    designs/npcs/: 2
+    designs/threadwork/: 1
+- source_file: valoria_session_master_2026-04-25.md
+  role: session_log
+  topic: Sessions B, C, ED-717 + cleanup (3 context windows)
+  declared_target_areas:
+  - session_logs/ (most already captured)
+  - canon/editorial_ledger.yaml (ED-717)
+  atom_count: 5
+  p1_count: 1
+  p2_count: 2
+  p3_count: 2
+  canonical_id_total: 15
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 2
+  inferred_target_distribution:
+    canon/editorial_ledger.yaml: 3
+    references/throughlines_meta.md: 3
+    designs/threadwork/: 2
+    designs/world/: 1
+- source_file: valoria_master_consolidation.md
+  role: consolidation
+  topic: 'Session consolidation: assessment → critique → foundations → reframing → grounding'
+  declared_target_areas:
+  - canon/editorial_ledger.yaml
+  - designs/
+  atom_count: 40
+  p1_count: 0
+  p2_count: 12
+  p3_count: 28
+  canonical_id_total: 20
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 6
+  inferred_target_distribution:
+    designs/threadwork/: 21
+    simulations/: 11
+    canon/editorial_ledger.yaml: 7
+    designs/scene/: 5
+    designs/npcs/: 5
+    references/throughlines_meta.md: 3
+    designs/provincial/faction_*: 2
+    designs/arcs/: 2
+- source_file: solmund_master_document.md
+  role: editorial_setting
+  topic: Solmund cultural guide (PROVISIONAL — pending Jordan)
+  declared_target_areas:
+  - designs/world/
+  - designs/npcs/
+  - canon/03_canonical_timeline.md
+  atom_count: 32
+  p1_count: 0
+  p2_count: 4
+  p3_count: 28
+  canonical_id_total: 0
+  atoms_with_provisional_marker: 1
+  atoms_with_decision_lang: 3
+  inferred_target_distribution:
+    designs/world/: 21
+    designs/threadwork/: 18
+    designs/provincial/faction_*: 2
+    designs/scene/: 2
+- source_file: valoria_session_2026_04_25_master_consolidation.md
+  role: session_log
+  topic: Canon rectification PP-675 / ED-783
+  declared_target_areas:
+  - canon/patch_register*.yaml (PP-675)
+  - canon/editorial_ledger.yaml (ED-783)
+  atom_count: 15
+  p1_count: 0
+  p2_count: 5
+  p3_count: 10
+  canonical_id_total: 8
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 3
+  inferred_target_distribution:
+    canon/editorial_ledger.yaml: 4
+    designs/threadwork/: 3
+    designs/scene/: 2
+    designs/provincial/faction_*: 1
+    designs/world/: 1
+- source_file: threadwork_master.md
+  role: mechanical_design
+  topic: Threadwork system design synthesis
+  declared_target_areas:
+  - designs/threadwork/threadwork_v30.md
+  atom_count: 12
+  p1_count: 0
+  p2_count: 2
+  p3_count: 10
+  canonical_id_total: 1
+  atoms_with_provisional_marker: 0
+  atoms_with_decision_lang: 1
+  inferred_target_distribution:
+    designs/threadwork/: 11
+    canon/editorial_ledger.yaml: 1
+    designs/world/: 1
