@@ -5,9 +5,9 @@
 # Valoria BG — Conviction Track & Church Victory Redesign
 ## PP-406 through PP-418
 ## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643)
-## Scope: Conviction Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
+## Scope: Conviction Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
-> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Theocracy Counter per ED-782). Conviction Track (CT) is always written in full. (ED-756)
 
 ---
 
@@ -79,7 +79,7 @@
 | MS ≤ 35 | All territories within 2 steps of T15: PT −1 at Accounting if PT > 0. Adjacency per map. |
 | MS ≤ 20 | All territories: PT −1 at Accounting if PT > 0. Orthodoxy collapses under rendering strain. |
 
-Calamity Drift applies after all faction actions resolve but before TC calculation. Calamity Drift ignores the ±1/season cap (it stacks with faction-driven movement). Calamity Drift cannot reduce T15 below 0 (already there) or increase any PT.
+Calamity Drift applies after all faction actions resolve but before CI calculation. Calamity Drift ignores the ±1/season cap (it stacks with faction-driven movement). Calamity Drift cannot reduce T15 below 0 (already there) or increase any PT.
 
 ### 1.3b Thread Operation PT Drift (ED-676)
 
@@ -109,9 +109,9 @@ Effects:
 
 ## 2. Church Seizure Ob — Redesign (PP-411)
 
-**Replaces:** Current "Fort level + 1" and the church_territorial_seizure.md TC 80 procedure.
+**Replaces:** Current "Fort level + 1" and the church_territorial_seizure.md CI 80 procedure.
 
-**Trigger:** TC ≥ 75 (phase transition — see §4). Church may attempt seizure once per season per eligible territory.
+**Trigger:** CI ≥ 75 (phase transition — see §4). Church may attempt seizure once per season per eligible territory.
 
 **Eligibility:** Church prominent in territory (Church Mandate > controlling faction's Mandate). Church Mandate ≥ 4.
 
@@ -157,28 +157,28 @@ Simplified: **Ob = 2 + Fort Level + max(0, 3 − PT)**
 | Overwhelming | Church seizes administrative control. Controlling faction's Mandate −1 in territory. PT +1 (if below 5). PI −1. |
 | Success | Church seizes administrative control. PI −1. |
 | Partial | No seizure. Church Mandate +1, controlling faction Mandate −1 in that territory. |
-| Failure | No seizure. Church Mandate −1 (overreach). TC −2 (visible failure undermines institutional momentum). |
+| Failure | No seizure. Church Mandate −1 (overreach). CI −2 (visible failure undermines institutional momentum). |
 
 
 **Loss of seized territory:** If PT drops below 2 in a Church-controlled territory, a Stability check (Ob 2) is required at Accounting. Failure: Church loses administrative control; territory reverts to prior controller (or becomes Uncontrolled if prior controller has Mandate 0).
 
 ---
 
-## 3. TC Generation — Redesign (PP-412)
+## 3. CI Generation — Redesign (PP-412)
 
 **Replaces:** Flat passive +1/season + Piety Domain Action.
 
-**Starting TC:** 28 (canonical BG). **Phase transition:** TC 75.
+**Starting CI:** 28 (canonical BG). **Phase transition:** CI 75.
 
-### Seasonal TC Calculation
+### Seasonal CI Calculation
 
-At Accounting, TC adjusts as follows (in order):
+At Accounting, CI adjusts as follows (in order):
 
-**Step 1 — Institutional Momentum (passive):** TC +1. (Unchanged from PP-402. Church institutional presence generates baseline pressure regardless of territory holdings.)
+**Step 1 — Institutional Momentum (passive):** CI +1. (Unchanged from PP-402. Church institutional presence generates baseline pressure regardless of territory holdings.)
 
-**Step 2 — Conviction Yield:** For each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add TC bonus based on that territory's PT:
+**Step 2 — Conviction Yield:** For each territory where Church is prominent (Church Mandate > controlling faction's Mandate), add CI bonus based on that territory's PT:
 
-| PT | TC Yield |
+| PT | CI Yield |
 |----|----------|
 | 5 | +1 |
 | 4 | +0.5 (track half-steps; round down total across all territories) |
@@ -191,27 +191,27 @@ At Accounting, TC adjusts as follows (in order):
 
 Maximum theoretical Conviction Yield per season: if Church is prominent in all 15 eligible territories (implausible), and all are PT 5: +15. Realistic early game: prominent in T9 (PT 5) + maybe T1, T2 (PT 4): +1 + 0.5 + 0.5 = floor(2) = +2.
 
-**Step 3 — Assert (optional Church action):** Church may spend a Standard Action to Assert. Roll: Influence vs Ob 2. Success: TC +1 (in addition to Steps 1–2). Failure: no additional TC; Stability −1 (PP-403 applies).
+**Step 3 — Assert (optional Church action):** Church may spend a Standard Action to Assert. Roll: Influence vs Ob 2. Success: CI +1 (in addition to Steps 1–2). Failure: no additional CI; Stability −1 (PP-403 applies).
 
 **Step 4 — Suppress (optional opponent action):** One opposing faction may spend a Standard Action to Suppress. Roll: Mandate vs Ob = Church Mandate. Success: negate Step 1 passive +1 for this season only. Does not affect Conviction Yield or Assert. Failure: no effect; Stability −1 (PP-403 applies).
 
-**Step 5 — Hafenmark Structural Suppression:** While Baralta's Mandate ≥ 4: TC −1/season (existing mechanic, unchanged). Excommunication of Baralta: TC +4 immediately (unchanged).
+**Step 5 — Hafenmark Structural Suppression:** While Baralta's Mandate ≥ 4: CI −1/season (existing mechanic, unchanged). Excommunication of Baralta: CI +4 immediately (unchanged).
 
 ### Piety Domain Action — DISSOLVED
 
-The old Piety Domain Action (Mandate pool, TN 7, Ob 2, TC +1) is replaced by the Conviction Yield system + Assert action. There is no separate "Piety Domain Action" in the redesigned system.
+The old Piety Domain Action (Mandate pool, TN 7, Ob 2, CI +1) is replaced by the Conviction Yield system + Assert action. There is no separate "Piety Domain Action" in the redesigned system.
 
-### TC Pacing Analysis
+### CI Pacing Analysis
 
-Early game (S1–S5): Church prominent in ~1–2 territories (T9 at PT 5). TC gain ≈ +1 (passive) +1 (PT yield from T9) −1 (Hafenmark suppress if Baralta active) = +1/season. TC at S5 ≈ 33.
+Early game (S1–S5): Church prominent in ~1–2 territories (T9 at PT 5). CI gain ≈ +1 (passive) +1 (PT yield from T9) −1 (Hafenmark suppress if Baralta active) = +1/season. CI at S5 ≈ 33.
 
-Mid game (S6–S12): Church expands prominence via Mandate growth, Preaching raises PT. Prominent in 3–5 territories, some at PT 4–5. TC gain ≈ +1 +2 −1 = +2/season. TC at S12 ≈ 47.
+Mid game (S6–S12): Church expands prominence via Mandate growth, Preaching raises PT. Prominent in 3–5 territories, some at PT 4–5. CI gain ≈ +1 +2 −1 = +2/season. CI at S12 ≈ 47.
 
-Late game (S13–S20): Church at peak prominence, 5–8 territories, active Preaching. TC gain ≈ +1 +3 = +4/season (Hafenmark suppression may have ended). TC 75 reached ~S20.
+Late game (S13–S20): Church at peak prominence, 5–8 territories, active Preaching. CI gain ≈ +1 +3 = +4/season (Hafenmark suppression may have ended). CI 75 reached ~S20.
 
-This gives a 20-season timeline to TC 75 under active Church play with moderate opposition — consistent with a full campaign.
+This gives a 20-season timeline to CI 75 under active Church play with moderate opposition — consistent with a full campaign.
 
-[GAP: TC pacing needs simulation with actual faction AI behavior to validate 20-season estimate. Flag for SIM-DEBT.]
+[GAP: CI pacing needs simulation with actual faction AI behavior to validate 20-season estimate. Flag for SIM-DEBT.]
 
 ---
 
@@ -219,11 +219,11 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 
 ### 4.1 Primary Victory — Territorial Consolidation
 
-**Phase 1 — Accumulation (TC 0–74):** Church accumulates TC through institutional momentum, Conviction Yield, and Assert actions. This phase is passive/incremental.
+**Phase 1 — Accumulation (CI 0–74):** Church accumulates CI through institutional momentum, Conviction Yield, and Assert actions. This phase is passive/incremental.
 
-**Phase 2 — Consolidation (TC ≥ 75):** Church shifts to territorial seizure. TC stops advancing (capped at 75). The counter is no longer relevant — the game is now about holding territory.
+**Phase 2 — Consolidation (CI ≥ 75):** Church shifts to territorial seizure. CI stops advancing (capped at 75). The counter is no longer relevant — the game is now about holding territory.
 
-[EDITORIAL: ED-303 — Does TC freeze at 75 or continue advancing? Freezing creates cleaner phase transition. Continuing creates pressure for other factions to suppress even post-75. Recommend freeze.]
+[EDITORIAL: ED-303 — Does CI freeze at 75 or continue advancing? Freezing creates cleaner phase transition. Continuing creates pressure for other factions to suppress even post-75. Recommend freeze.]
 
 
 **Territory Consolidation Values (user-confirmed):**
@@ -259,7 +259,7 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 
 | Condition | AEA +1 |
 |-----------|--------|
-| TC ≥ 50 AND AER ≥ 3 | Church's Valoria-side institutional weight + Altonian diplomatic backing |
+| CI ≥ 50 AND AER ≥ 3 | Church's Valoria-side institutional weight + Altonian diplomatic backing |
 | Church controls ≥ 3 territories | Territorial proof of governance capability |
 | Church Mandate ≥ 6 | Peak institutional authority |
 | Crown Mandate ≤ 2 | Secular authority has collapsed |
@@ -270,15 +270,15 @@ This gives a 20-season timeline to TC 75 under active Church play with moderate 
 - Crown Royal Decree targeting Church: AEA −1.
 - AER drops below 2: AEA resets to 0 (Altonian branch withdraws).
 
-**Victory:** AEA reaches 5 AND TC ≥ 60 AND Church controls Himmelenger (T9). The Church declares Ecclesiastical Primacy — a transnational theocracy with Himmelenger as its capital. Valoria and the Altonian Church territories form a single ecclesiastical jurisdiction.
+**Victory:** AEA reaches 5 AND CI ≥ 60 AND Church controls Himmelenger (T9). The Church declares Ecclesiastical Primacy — a transnational theocracy with Himmelenger as its capital. Valoria and the Altonian Church territories form a single ecclesiastical jurisdiction.
 
-**Interaction with Primary path:** AEA and TC accumulation run in parallel. The Church player can pursue either or both. AEA victory requires less territorial control (only T9 mandatory) but more diplomatic conditions.
+**Interaction with Primary path:** AEA and CI accumulation run in parallel. The Church player can pursue either or both. AEA victory requires less territorial control (only T9 mandatory) but more diplomatic conditions.
 
 ### 4.3 Hollow Victory — Church + Hafenmark (PP-415)
 
 **Trigger conditions (all must be met simultaneously):**
 - Crown Mandate ≤ 1
-- TC ≥ 50
+- CI ≥ 50
 - Church controls ≥ 2 territories
 - Hafenmark controls ≥ 3 territories
 - No active military conflict between Church and Hafenmark
@@ -418,16 +418,16 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 | ED | Resolution | Patch |
 |----|-----------|-------|
-| ED-110 | **Resolved.** Church victory is TC 75 phase transition → territorial consolidation (TCV ≥ 18 for 2 seasons). Alternate: Altonian Theocracy (AEA = 5). Hollow: Church + Hafenmark partition. | PP-413, PP-414, PP-415 |
-| ED-112 | **Closed.** Hafenmark −1/season vs Church +1/season is a pacing concern under old system. Under new TC generation (Conviction Yield + Assert), the interaction is richer: Hafenmark suppression negates passive +1 but cannot touch Conviction Yield. No longer a deadlock risk. | — |
-| ED-111 | **Superseded** by PP-412 (TC generation redesign). Old Piety Domain Action dissolved; replaced by Conviction Yield + Assert. | PP-412 |
+| ED-110 | **Resolved.** Church victory is CI 75 phase transition → territorial consolidation (TCV ≥ 18 for 2 seasons). Alternate: Altonian Theocracy (AEA = 5). Hollow: Church + Hafenmark partition. | PP-413, PP-414, PP-415 |
+| ED-112 | **Closed.** Hafenmark −1/season vs Church +1/season is a pacing concern under old system. Under new CI generation (Conviction Yield + Assert), the interaction is richer: Hafenmark suppression negates passive +1 but cannot touch Conviction Yield. No longer a deadlock risk. | — |
+| ED-111 | **Superseded** by PP-412 (CI generation redesign). Old Piety Domain Action dissolved; replaced by Conviction Yield + Assert. | PP-412 |
 
 **New editorial items raised:**
 
 | ED | Description | Priority |
 |----|-------------|----------|
 | ED-302 | Confirm track name "Conviction" (PT) | P2 |
-| ED-303 | Does TC freeze at 75 or continue advancing? Design recommends freeze. | P1 |
+| ED-303 | Does CI freeze at 75 or continue advancing? Design recommends freeze. | P1 |
 | ED-304 | Hollow Victory scoring — co-win or draw? Design recommends conditional victory for both. | P2 |
 | ED-305 | Varfell-RM Relationship Track (Warden's Accord) starting value — 0 is proposed. Confirm. | P2 |
 
@@ -437,7 +437,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 | Gap | Description |
 |-----|-------------|
-| [GAP: TC pacing — no simulation] | TC 75 timeline estimate (~S20) is analytical only. Needs simulation with faction AI to validate. Flag as SIM-DEBT. |
+| [GAP: CI pacing — no simulation] | CI 75 timeline estimate (~S20) is analytical only. Needs simulation with faction AI to validate. Flag as SIM-DEBT. |
 | [GAP: AEA pacing — no simulation] | Altonian Theocracy clock has 5 advancement conditions. Needs simulation to confirm it is achievable but not trivial. |
 | [GAP: RM emergence frequency] | The triple condition (WA ≤ −2, 3 territories PT ≤ 1, MS ≤ 50) may be too restrictive or too permissive. Needs stress test. |
 | [GAP: Community Weaving dual effect] | Community Weaving now affects both MS and PT. Need to verify this does not create a positive feedback loop (low PT → more Weaving → lower PT → more RM power). |
@@ -457,9 +457,9 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 | PP-409 | Track | Calamity Drift — MS-linked PT erosion at MS ≤ 50/35/20 |
 | PP-410 | Track | Consecrated status — PT 5 via Consecrate action, floor of 4 while Church controls |
 | PP-411 | Seizure | Church Seizure Ob = 2 + Fort Level + max(0, 3 − PT). Prominence required. |
-| PP-412 | TC | TC generation redesign — passive +1, Conviction Yield, Assert, Suppress, Hafenmark structural |
-| PP-413 | Victory | Church Primary Victory — TC 75 phase transition, TCV ≥ 18 for 2 seasons |
-| PP-414 | Victory | Altonian Theocracy Path — AEA clock 0–5, victory at AEA 5 + TC ≥ 60 + hold T9 |
+| PP-412 | CI | CI generation redesign — passive +1, Conviction Yield, Assert, Suppress, Hafenmark structural |
+| PP-413 | Victory | Church Primary Victory — CI 75 phase transition, TCV ≥ 18 for 2 seasons |
+| PP-414 | Victory | Altonian Theocracy Path — AEA clock 0–5, victory at AEA 5 + CI ≥ 60 + hold T9 |
 | PP-415 | Victory | Hollow Victory — Church + Hafenmark partition, Crown Mandate ≤ 1 |
 | PP-416 | RM | RM Emergence — Warden's Accord track, triple-condition trigger, active NPC rules |
 | PP-417 | Varfell | Path B redesign (3 Deeds) + Path C territory correction |
@@ -496,13 +496,13 @@ The Church Attention Pool (AP) is now tracked per settlement (per settlement_bri
 | 3 | Inquisitor's seal appears on a public notice in the town square. NPCs with Disposition ≤ 0 toward the player avoid being seen with them in public. |
 | 4+ | The Inquisitor is present. Church guards patrol. NPCs whisper. Anyone seen talking to the player in private may be questioned afterward. Fieldwork Exposure +1 automatic per scene (the environment itself is hostile to investigation). |
 
-### §11.3 TC Milestone Presentation
+### §11.3 CI Milestone Presentation
 
-When the Theocracy Counter (TC) crosses a milestone threshold, the change is visible across the peninsula — not just in the affected territory.
+When the Church Influence (CI) crosses a milestone threshold, the change is visible across the peninsula — not just in the affected territory.
 
-| TC Threshold | Presentation |
+| CI Threshold | Presentation |
 |-------------|-------------|
-| TC 40 | Church authority is becoming assertive. In Church-controlled territories: new construction (chapels, schools). In non-Church territories: Church envoys arrive with formal diplomatic proposals. |
-| TC 55 | Church is the dominant institutional force. Parliamentary debates increasingly reference Church doctrine. Crown officials are seen attending Church ceremonies. Trade guilds negotiate with Church officials directly. |
-| TC 65 | Church is approaching hegemony. Non-Church factions must actively resist or be absorbed. Suppress Heresy actions fire in border territories. The atmosphere shifts from institutional competition to institutional survival. |
-| TC 75 (phase transition) | Graduated Seizure eligible. The Church is no longer competing — it is consolidating. The question for every other faction is not "how do we win" but "how do we survive." |
+| CI 40 | Church authority is becoming assertive. In Church-controlled territories: new construction (chapels, schools). In non-Church territories: Church envoys arrive with formal diplomatic proposals. |
+| CI 55 | Church is the dominant institutional force. Parliamentary debates increasingly reference Church doctrine. Crown officials are seen attending Church ceremonies. Trade guilds negotiate with Church officials directly. |
+| CI 65 | Church is approaching hegemony. Non-Church factions must actively resist or be absorbed. Suppress Heresy actions fire in border territories. The atmosphere shifts from institutional competition to institutional survival. |
+| CI 75 (phase transition) | Graduated Seizure eligible. The Church is no longer competing — it is consolidating. The question for every other faction is not "how do we win" but "how do we survive." |

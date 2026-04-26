@@ -7,7 +7,7 @@
 ## Cross-references: player_agency_v30 (Standing §5, Renown §5.4, Duties §3), factions_ttrpg_v30 (8-faction roster §8.2–§8.9), worldbuilding_v30 (Four-Cardinal Church §3, Löwenritter arms §4, Guild structure §5, Parliament §6), npc_roster_v30 §14 (caste annotations), conviction_track_v30 (CV/WA), tc_political_redesign_v30 (PT/SW/TC milestones), baralta_crown_claim_v30 (Crown Succession Contest, Consecration Crisis), scale_transitions_v30, npc_behavior_v30 §7, settlement_layer_v30 §7.2.
 ## Patch ID: PP-660
 
-> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Theocracy Counter per ED-782). Conviction Track (CT) is always written in full. (ED-756)
 
 ---
 
@@ -23,7 +23,7 @@ This register v2 addresses eleven structural deficiencies in the original 2026-0
 | A-04 | Caste system (npc_roster_v30 §14) is described as "load-bearing for the entire NPC ecosystem" but absent from the patch register. Rank advancement, Formal Recognition, and inner-circle approval all intersect caste, and the original is silent on all three. | P1 | Part 3 (caste layer) |
 | A-05 | `conviction_track_v30.md` line 16 violates the Solmund naming rule ("Galbadian Orthodoxy" pole). Propagation required across any downstream reference. | P1 | Part 4 (naming propagation) |
 | A-06 | CV (Conviction Track) and PT (Piety Track) are the same per-territory stat under two names across two v30 documents. Plus SW (Spiritual Weight, fixed) was introduced in tc_political_redesign without explicit dissolution of CV. The register silently uses none of the three. | P1 | Part 4 (terminology reconciliation) |
-| A-07 | TC as political legitimacy (floor(TC/20) bonus dice for Church, floor(TC/30) penalty for opposition) has no interaction with the Church rank ladder. A Prelate at TC 28 should not feel identical to a Prelate at TC 90. | P2 | Part 5 (TC × rank ladder) |
+| A-07 | CI as political legitimacy (floor(TC/20) bonus dice for Church, floor(TC/30) penalty for opposition) has no interaction with the Church rank ladder. A Prelate at CI 28 should not feel identical to a Prelate at CI 90. | P2 | Part 5 (CI × rank ladder) |
 | A-08 | The Baralta Crown Claim mechanism (ED-408–411) terminates the Hafenmark faction (Option A merger) or fires PI-gated succession (Option B persistence). Neither outcome is reflected in the rank-ladder design — the register has no path from Hafenmark Chancellor to Crown Chancellor, nor a Hafenmark-under-institutional-successor ladder. | P1 | Part 6 (Baralta × rank interaction) |
 | A-09 | Ministry system (MIN-01–06) is Crown-exclusive. The Church's four-cardinal apparatus, Hafenmark's parliamentary committee structure, and Varfell's Jarl councils have equivalent institutional functions with no mechanical scaffolding. | P2 | Part 7 (Ministry expansion) |
 | A-10 | Generational shift is spec'd at "10 years game-time" (LIN-02 Condition B). At 4 seasons per year that is 40 seasons; typical campaign is ~S14–S20 per victory_v30 pacing. The mechanic is unreachable as written. | P1 | Part 8 (Generational shift fix) |
@@ -267,7 +267,7 @@ The oral law provision referenced in Varfell succession — when a Hochjarl or V
 
 **Core institutional logic:** The Church is organized under a **Four-Cardinal structure** (worldbuilding_v30 §3.1). Each Cardinal heads one Arm (Fortitude/Military, Justice/Judicial, Prudence/Economic, Temperance/Knowledge). This is the Church's equivalent of specialty branches — but because the Cardinals themselves are canonical NPCs (Jarnstal, Olafsson, Prudence [unnamed], Klapp), a Church player's specialty branch is *discipleship to a named Cardinal*. The mentor relationship is more binding in the Church than in any other faction.
 
-**Critical:** the TC political legitimacy bonus (tc_political_redesign_v30 §3.2) interacts strongly with Church rank — see Part 5. Advancement above Standing 3 effectively requires the player to manage their Cardinal's institutional position as well as their own.
+**Critical:** the CI political legitimacy bonus (tc_political_redesign_v30 §3.2) interacts strongly with Church rank — see Part 5. Advancement above Standing 3 effectively requires the player to manage their Cardinal's institutional position as well as their own.
 
 ### Church Ladder Table
 
@@ -278,9 +278,9 @@ The oral law provision referenced in Varfell succession — when a Hochjarl or V
 | **2** | **Deacon** (Diakon) | Complete 2 Lay Confessor Duties with Success+; pass Scriptural Examination (oral Ob 2, adjudicated by a Canon). | May conduct minor Church services (raises PT/CV +1 in the serving territory during service — subject to ±1/season cap); access to Church correspondence network (1 free information relay/season) | Must serve a Cathedral settlement; must report Thread activity to Church superior | Private cell in the cloister of the serving Cathedral | Deacon's black robe with white collar; iron cross | Canon (Standing 3) | Failure to report Thread activity that is later discovered; or 3 consecutive service failures |
 | **3** | **Canon** (Kanoniker) | **Formal Recognition Event:** Investiture by a Cardinal (not by Himlensendt directly — the Cardinal of the player's specialty branch performs the ceremony). Mandatory: 3 Deacon-rank Duties with Success+; at least one Thread reporting that led to Inquisitorial follow-up; doctrinal specialty declared (alignment to one of the Four Cardinals). | Church institutional authority in one territory (can sanction investigations within territory; +1D on Church-aligned fieldwork); access to sealed Church archives in the home Cathedral; Inquisitor sub-ladder opens (Part 2, §2.3) if player aligned to Justice; Templar sub-ladder opens (Part 2, §2.4) if aligned to Fortitude | Must adhere to theological positions of the assigned Cardinal (not just the Confessor — the Cardinal is the direct superior); must conduct regular pastoral work; must file quarterly reports to the assigned Cardinal | Canon's Chamber (private apartment in Cathedral quarters); access to the Canon-level refectory | Canon's black cassock with Cardinal-arm trim (Red for Fortitude/Templars, Blue for Justice/Inquisitors, Gold for Prudence/Economic, Green for Temperance/Knowledge); pectoral cross with Cardinal device | Assigned Cardinal (named NPC) | Theological contradiction (publicly contradicting the Cardinal's doctrine); or failure to conduct pastoral duties; or Thread Sensitivity reaching 30 without institutional sanction |
 | **4** | **Bishop's Delegate** (Bischofslegat) | 3 completed Canon-rank Duties; plus one **Public Doctrinal Defense** — the player successfully defends a theological position in public (a form of Grand Debate, Ob 2, against a named Thread-curious opponent or a theological skeptic). Plus: Cardinal's personal endorsement. | May conduct ecclesiastical trials in own territory (Heresy Proceedings per OFC-03); may grant or withhold Church blessing (affects Mandate ±1 for the blessed/cursed faction); access to Himlensendt's private deliberations (Availability State: In Session + In Private Retreat); manages a Church Sekretum or Dicastery equivalent (see §7.3) | Must manage Church Attention Pool in assigned territories; must advise the Confessor on TC-sensitive matters; must chair a Sekretum | Bishop's Delegate Suite in the Cathedral (apartment with private devotional chapel); rights to consecrate minor structures | Delegate's purple-trim cassock; Episcopal ring (conferring Church administrative authority in ecclesiastical trials); Cardinal's arms embroidered on mantle | Cardinal directly; plus (for high-stakes matters) Himlensendt | Church Attention Pool reaching 5 in assigned territory without response; theological defection; or Cardinal withdraws endorsement (Disposition ≤ −1) |
-| **5** | **Prelate** (Prälat) | Unanimous College of Prelates confirmation (all 5 Prelates at Disposition ≥ 0); plus one **Recognized Deed** — an action the Holy See endorses, or an Altonian Church acknowledgment (if AEA ≥ 3 per conviction_track_v30 §4.2). | Member of the College of Prelates; succession-eligible to Confessor; may cast deciding vote on Church policy questions; Mandate of the Church follows the Prelate's counsel when Confessor delegates; chairs a Cardinal-branch division; may initiate Cardinal Independence Checks (per worldbuilding_v30 §3.2) with institutional consequences | Must maintain theological alignment with majority of College; must actively manage TC in 2+ territories; must advise Confessor on succession-relevant matters; must consult at Holy See if summoned | Prelate's Palace in Himmelenger (T9) — separate residence within the Cathedral precinct; full household; private chapel; sealed-archive access | Prelate's scarlet cassock with full Cardinal arms; Prelate's crozier (authority symbol in public contexts); Cathedral keys (physical symbol of institutional control) | Himlensendt only (or, in Himlensendt's absence, the senior Prelate of the College) | College majority turning against player; theological breach causing schism within the College; or Conviction strain (personal faith crisis) at Certainty ≤ 1 — the Prelate's personal faith must be *functioning* for the rank to function |
+| **5** | **Prelate** (Prälat) | Unanimous College of Prelates confirmation (all 5 Prelates at Disposition ≥ 0); plus one **Recognized Deed** — an action the Holy See endorses, or an Altonian Church acknowledgment (if AEA ≥ 3 per conviction_track_v30 §4.2). | Member of the College of Prelates; succession-eligible to Confessor; may cast deciding vote on Church policy questions; Mandate of the Church follows the Prelate's counsel when Confessor delegates; chairs a Cardinal-branch division; may initiate Cardinal Independence Checks (per worldbuilding_v30 §3.2) with institutional consequences | Must maintain theological alignment with majority of College; must actively manage CI in 2+ territories; must advise Confessor on succession-relevant matters; must consult at Holy See if summoned | Prelate's Palace in Himmelenger (T9) — separate residence within the Cathedral precinct; full household; private chapel; sealed-archive access | Prelate's scarlet cassock with full Cardinal arms; Prelate's crozier (authority symbol in public contexts); Cathedral keys (physical symbol of institutional control) | Himlensendt only (or, in Himlensendt's absence, the senior Prelate of the College) | College majority turning against player; theological breach causing schism within the College; or Conviction strain (personal faith crisis) at Certainty ≤ 1 — the Prelate's personal faith must be *functioning* for the rank to function |
 | **6** | **Cardinal** (Kardinal) | Vacancy in one of the Four Cardinal seats (Fortitude, Justice, Prudence, Temperance) — this only happens when the incumbent Cardinal dies, is deposed, or is raised to Confessor. College of Prelates elects (2/3 supermajority). Requires: at least 4 year-arcs as Prelate; personal endorsement of the outgoing Cardinal (if alive) or of the current Confessor; no outstanding Grand Debates against the player. | Heads one of the Four Arms of the Church (Fortitude/Templars, Justice/Inquisitors, Prudence/Economic, Temperance/Knowledge); controls the arm's Military/Investigation/Wealth/Scholarly resources respectively; named character — triggers Named Character Event Cards specific to the Cardinal's arm (per worldbuilding_v30 §3.3) | Arm-specific — the Cardinal *is* the institutional embodiment of the arm. Jarnstal-analog must deploy Templars without excessive independence (watch Jarnstal Drift mechanic); Olafsson-analog must avoid Niflhel exposure; Prudence-analog must manage charities to avoid Prudence Crisis Event; Klapp-analog must manage Thread-adjacent text handling without institutional reveal. | Cardinal's Palace (Himmelenger or secondary Cathedral); full household; institutional resources of the Arm | Cardinal's red robes with full regalia; full insignia of the Arm (Templar cross for Fortitude, scales for Justice, balance for Prudence, open book for Temperance); Cardinal's ring | Himlensendt only | Arm-specific catastrophic event (Jarnstal Independence card, Olafsson Exposure card, Prudence Crisis card, Klapp Awakening card) if poorly managed; or College of Prelates Cardinal Independence Check failed at Ob 3; or public schism from the Confessor |
-| **7** | **Confessor-Presumptive** (Bekennerpräsident-designiert) | The Confessor position opens (Himlensendt dies, is incapacitated, or has a Crisis of Faith) AND the player is either (a) the Cardinal with College of Prelates majority, or (b) unanimously elected by the College to succeed. This is a *pre-investiture* state. Formal Consecration (see §1.4c) elevates to actual Confessor. | Confessor-equivalent operational authority in Himlensendt's absence; may issue provisional pronouncements pending Consecration; administers the TC bonus-dice pool (floor(TC/20)) as Church's primary political operator | All Prelate and Cardinal obligations combined; pending Consecration must occur within 2 seasons or the position defaults to the next College-majority candidate | Confessor's Residence in Himmelenger (T9) — the single most secure location in the peninsula, the Cathedral's inner citadel | Confessor-Presumptive robes (gold-trimmed white); pending pallium (Consecration token); full Church arms | Holy See-equivalent counsel (off-stage — narrative only) | College rejects Consecration; or rival Cardinal assembles supermajority alternative; or Baralta Crown Claim fires concurrently, creating a Consecration Crisis (baralta_crown_claim_v30 §3) |
+| **7** | **Confessor-Presumptive** (Bekennerpräsident-designiert) | The Confessor position opens (Himlensendt dies, is incapacitated, or has a Crisis of Faith) AND the player is either (a) the Cardinal with College of Prelates majority, or (b) unanimously elected by the College to succeed. This is a *pre-investiture* state. Formal Consecration (see §1.4c) elevates to actual Confessor. | Confessor-equivalent operational authority in Himlensendt's absence; may issue provisional pronouncements pending Consecration; administers the CI bonus-dice pool (floor(TC/20)) as Church's primary political operator | All Prelate and Cardinal obligations combined; pending Consecration must occur within 2 seasons or the position defaults to the next College-majority candidate | Confessor's Residence in Himmelenger (T9) — the single most secure location in the peninsula, the Cathedral's inner citadel | Confessor-Presumptive robes (gold-trimmed white); pending pallium (Consecration token); full Church arms | Holy See-equivalent counsel (off-stage — narrative only) | College rejects Consecration; or rival Cardinal assembles supermajority alternative; or Baralta Crown Claim fires concurrently, creating a Consecration Crisis (baralta_crown_claim_v30 §3) |
 
 ### §1.4b Church Specialty Branches (Cardinal Discipleship)
 
@@ -295,7 +295,7 @@ The oral law provision referenced in Varfell succession — when a Hochjarl or V
 
 Consecration is the formal elevation of Confessor-Presumptive (Standing 7) to Confessor (Leadership). It requires:
 
-1. **Holy See concurrence** (off-stage narrative check — Dispositional with the fictional Valorian Papacy; abstract at Valoria scale, but mechanically: GM-determined +1 Ob on the Consecration ceremony roll for each year-arc the Church's TC has been below 30 in the preceding 3 year-arcs).
+1. **Holy See concurrence** (off-stage narrative check — Dispositional with the fictional Valorian Papacy; abstract at Valoria scale, but mechanically: GM-determined +1 Ob on the Consecration ceremony roll for each year-arc the Church's CI has been below 30 in the preceding 3 year-arcs).
 2. **College of Prelates unanimity** (all 5 Prelates at Disposition ≥ 0 — rival Cardinals must have been co-opted or silenced).
 3. **Consecration ceremony** (scene arc at Himmelenger T9 — mandatory Zoom In).
 
@@ -720,7 +720,7 @@ This is the mechanism by which Gerik Strand's "ideological ally" potential (npc_
 
 2. **Full rename deferred.** A complete rename (CV → PT, file rename `conviction_track_v30.md` → `piety_track_v30.md`, propagation across 489 lines of skeleton + 6,095 char infill + 40,000+ char propagation_map + canonical_sources.yaml + file_index) is a P2 cost-benefit decision that should be done in a dedicated cleanup pass, not bundled with this rank-ladder register.
 
-3. **This register uses PT terminology** in all downstream mechanical discussion (Church rank ladder, TC × rank integration, caste layer). `conviction_track_v30.md` has been annotated with an equivalence note at §1 stating that CV ≡ PT mechanically and that PT is the preferred name in newer design docs.
+3. **This register uses PT terminology** in all downstream mechanical discussion (Church rank ladder, CI × rank integration, caste layer). `conviction_track_v30.md` has been annotated with an equivalence note at §1 stating that CV ≡ PT mechanically and that PT is the preferred name in newer design docs.
 
 4. **Retain SW as separate** (distinct fixed per-territory attribute).
 
@@ -748,49 +748,49 @@ This is the mechanism by which Gerik Strand's "ideological ally" potential (npc_
 
 ---
 
-# PART 5 — TC × RANK LADDER INTEGRATION
+# PART 5 — CI × RANK LADDER INTEGRATION
 
-The TC political legitimacy system (tc_political_redesign_v30 §3) grants Church floor(TC/20) bonus dice in political forums and imposes floor(TC/30) penalty on opposing factions. This interaction was not reflected in the original rank ladder. Per Finding A-07, a Prelate at TC 28 and a Prelate at TC 90 should have structurally different institutional positions.
+The CI political legitimacy system (tc_political_redesign_v30 §3) grants Church floor(TC/20) bonus dice in political forums and imposes floor(TC/30) penalty on opposing factions. This interaction was not reflected in the original rank ladder. Per Finding A-07, a Prelate at CI 28 and a Prelate at CI 90 should have structurally different institutional positions.
 
-## §5.1 Church Rank × TC (Primary integration)
+## §5.1 Church Rank × CI (Primary integration)
 
 The Church's expanded rank ladder (§1.4) acquires TC-dependent effects at Standing 3 and above:
 
-| Church Standing | TC 0–39 effect | TC 40–64 effect (post-Assertive milestone) | TC 65–99 effect (post-Prominent/Dominant) | TC 100 effect (Unification) |
+| Church Standing | CI 0–39 effect | CI 40–64 effect (post-Assertive milestone) | CI 65–99 effect (post-Prominent/Dominant) | CI 100 effect (Unification) |
 |-----------------|----------------|-------------------------------------------|------------------------------------------|-----------------------------|
 | 3 Canon | Standard obligations | +1D Interview in Church territories (institutional weight rising) | +1D Interview in all territories (Church is institutionally dominant) | Canon authority extends to any territory regardless of faction control |
 | 4 Bishop's Delegate | Standard | Ecclesiastical trials may be held in any territory where Church presence exists (not just Church-controlled); +1D Heresy Proceedings | Heresy Proceedings permitted against Standing 5+ rivals (normally restricted to 4-) | Bishop's Delegate may deputize Inquisitors for Unification Seizure support |
 | 5 Prelate | Standard | +1D on all social contests at ceremonial scenes where Church has presence | +2D; Crown Treaty defenses targeting Church pay double-penalty | Prelate may speak with Confessor-equivalent authority for ceremonial purposes |
 | 6 Cardinal | Standard for branch | +1D on Cardinal Independence Checks (resists Confessor countermanding) | +1D; arm-specific modifier (see §5.2) | Cardinal retains full arm authority even if the Confessor is contested |
-| 7 Confessor-Presumptive | Standard | Named Character Event Cards for the Presumptive's arm fire at reduced cost | TC political legitimacy fully transfers to Presumptive during Confessor absence | Unification operations centered on Presumptive |
+| 7 Confessor-Presumptive | Standard | Named Character Event Cards for the Presumptive's arm fire at reduced cost | CI political legitimacy fully transfers to Presumptive during Confessor absence | Unification operations centered on Presumptive |
 
-## §5.2 Arm-Specific TC Modifiers
+## §5.2 Arm-Specific CI Modifiers
 
-At TC 55+ (Prominent milestone) each Cardinal Arm acquires a specialty TC-scaled benefit:
+At CI 55+ (Prominent milestone) each Cardinal Arm acquires a specialty TC-scaled benefit:
 
-| Cardinal | TC 55+ modifier | TC 80+ modifier |
+| Cardinal | CI 55+ modifier | CI 80+ modifier |
 |----------|-----------------|-----------------|
 | Jarnstal (Fortitude) | Templars may defend in non-Church territories without immunity forfeit | Templars may conduct offensive operations against explicitly-named heretical forces (expansion from OFC-04's strict defensive-only rule) |
 | Olafsson (Justice) | Inquisitors may initiate proceedings against Standing 5 targets with Cardinal authorization | Inquisitors may initiate against Standing 6 targets (Parliament-level intervention becomes formally possible) |
 | Prudence | Church charities may be imposed on territories where Prosperity ≤ 3 regardless of faction consent | Church may collect tithes directly from non-Church-controlled territories in ecclesiastical emergency |
 | Klapp (Temperance) | Access to all institutional archives across factions, Church-sanctioned (rival factions +1 Ob to refuse) | Church may dictate doctrinal content of university curricula in all territories |
 
-## §5.3 Non-Church Rank × TC (Secondary integration)
+## §5.3 Non-Church Rank × CI (Secondary integration)
 
-Non-Church factions experience TC as pressure on ranks that interact with the Church:
+Non-Church factions experience CI as pressure on ranks that interact with the Church:
 
-| Rank intersection | TC 40+ effect | TC 65+ effect | TC 100 effect |
+| Rank intersection | CI 40+ effect | CI 65+ effect | CI 100 effect |
 |-------------------|--------------|----------------|----------------|
-| Crown Prince (Std 6) / Crown Regent (Std 7) | Must consult Archbishop's Representative on TC-affecting decisions; inner-circle Disposition penalty for ignoring Linder | Linder's Disposition weight on inner-circle majority counts double | Linder may effectively veto Crown Regent actions with TC implications |
+| Crown Prince (Std 6) / Crown Regent (Std 7) | Must consult Archbishop's Representative on TC-affecting decisions; inner-circle Disposition penalty for ignoring Linder | Linder's Disposition weight on inner-circle majority counts double | Linder may effectively veto Crown Regent actions with CI implications |
 | Hafenmark Chancellor (Std 6) / Speaker-Regent (Std 7) | Baralta's Sovereign Authority Doctrine availability (unchanged, but more frequently needed) | Parliamentary floor(TC/30) penalty reaches −2; coalition maintenance harder | −3 penalty; Hafenmark effectively cannot pass any motion opposing Church without Extraordinary Parliamentary Manoeuvre |
 | Varfell Senior Jarl (Std 6) / Jarl-Regent (Std 7) | No direct effect (Varfell operates outside Church institutional reach) | Skald-Chief's Cultural Reclamation actions +1 Ob (Church suppression visible at regional scale) | Vaynard's Thread operations increasingly constrained by Church scrutiny; Private Collection use generates Church Attention Pool +1 per use |
 
-## §5.4 TC Milestones as Recognition-Event Modifiers
+## §5.4 CI Milestones as Recognition-Event Modifiers
 
-The Formal Recognition Events (§1.x Standing 3 — Banneret/Alderman/Lendmann/Canon) acquire TC dependencies:
+The Formal Recognition Events (§1.x Standing 3 — Banneret/Alderman/Lendmann/Canon) acquire CI dependencies:
 
-- At TC 40+ (Church Assertive milestone), Crown Banneret and Hafenmark Alderman Recognition Events require Archbishop's Representative (Linder) concurrence (one-line approval scene, +1 Ob if opposed by Linder).
-- At TC 65+ (Church Dominant), all non-Church Recognition Events require formal Church consultation (an Audience scene with a Cardinal). This is a structural Skyrim-parallel: as one faction dominates, the others must pay reputation cost to advance their own members — reflecting historical papal-approval dynamics.
+- At CI 40+ (Church Assertive milestone), Crown Banneret and Hafenmark Alderman Recognition Events require Archbishop's Representative (Linder) concurrence (one-line approval scene, +1 Ob if opposed by Linder).
+- At CI 65+ (Church Dominant), all non-Church Recognition Events require formal Church consultation (an Audience scene with a Cardinal). This is a structural Skyrim-parallel: as one faction dominates, the others must pay reputation cost to advance their own members — reflecting historical papal-approval dynamics.
 
 ---
 
@@ -1063,7 +1063,7 @@ Deviations from parity must be explicitly justified in the rank's specification.
 | SIM-POL-R01 | Simulation: 7-rank progression pacing — validate that a player starting at Std 0 can reasonably reach Std 5 by S14 and Std 7 by S20 under normal play | P1 SIM-DEBT |
 | SIM-POL-R02 | Simulation: caste modifier impact — confirm that Southern Einhir rank-advancement gates do not create unwinnable game states | P1 SIM-DEBT |
 | SIM-POL-R03 | Simulation: Baralta Crown Claim × rank interaction — confirm the Hafenmark-to-Crown Recognition Ceremony does not create exploit paths for free Crown Std 5 | P2 SIM-DEBT |
-| SIM-POL-R04 | Simulation: TC × rank interaction — confirm TC 100 Unification does not trivialize or over-constrain Church rank advancement | P2 SIM-DEBT |
+| SIM-POL-R04 | Simulation: CI × rank interaction — confirm CI 100 Unification does not trivialize or over-constrain Church rank advancement | P2 SIM-DEBT |
 | SIM-POL-R05 | Simulation: Generational Shift Disposition outcomes — confirm five-tier outcome table does not produce degenerate paths | P1 SIM-DEBT |
 
 ---
@@ -1080,7 +1080,7 @@ Deviations from parity must be explicitly justified in the rank's specification.
 | npc_roster_v30.md | §14 Caste Annotations: add subsection for rank-advancement caste gating (reflecting Part 3 of this register). Confirm integration of deprecated caste-annotations file. |
 | worldbuilding_v30.md | §3.1 Four-Cardinal: add Cardinal Prudence name confirmation. §6.1 Governance: Committee structure (per §7.2 of this register). |
 | **piety_track_v30.md** (renamed from conviction_track_v30.md) | Complete file rename + Solmund propagation + CV→PT rename |
-| tc_political_redesign_v30.md | §3.2–3.4: add Church-rank × TC interaction (per §5 of this register). |
+| tc_political_redesign_v30.md | §3.2–3.4: add Church-rank × CI interaction (per §5 of this register). |
 | baralta_crown_claim_v30.md | §6 Hafenmark-after-Baralta: explicit reference to the Hafenmark-to-Crown Recognition Ceremony (§6.4 this register). |
 | scale_transitions_v30.md | §4.3.2: add Recognition Event to mandatory Zoom In trigger list (8 total now). |
 | params_npc.md (when created) | Populate inner-circle and Cardinal NPCs with Stance Triangle specifications per §1.1d, §1.2c, §1.3c, §1.4b of this register. |
@@ -1101,7 +1101,7 @@ Deviations from parity must be explicitly justified in the rank's specification.
 | Skyrim-pattern features | Absent | Explicit (Skyrim Eight per rank) |
 | Sub-office ladders | 4 Office Specs, no ranks | 7 full ladders (Löwenritter, Riskbreakers, Inquisitors, Templars, Guilds, Niflhel, Wardens) |
 | Caste integration | Absent | Explicit layer (Part 3) |
-| TC × rank interaction | Absent | Explicit (Part 5) |
+| CI × rank interaction | Absent | Explicit (Part 5) |
 | Baralta Crown Claim × rank | Absent | Explicit (Part 6); new ceremony mechanic |
 | Ministry system | Crown-only | Crown + Hafenmark Committees + Church Dicasteries + Varfell Councils |
 | Generational shift | "10 years" (unreachable) | Four-trigger mechanic (Part 8) |

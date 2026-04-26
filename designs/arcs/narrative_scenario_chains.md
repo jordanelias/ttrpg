@@ -1,7 +1,7 @@
 # VALORIA — NARRATIVE SCENARIO CHAINS
 ## Non-Player Character Arcs, Political Crises, and Emergent Consequences
 
-> **Glossary note:** In this document, **TC** refers exclusively to the **Theocracy Counter** (Church institutional advancement clock, 0–100). Conviction Track is always written in full, never abbreviated as TC. (ED-756)
+> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Theocracy Counter per ED-782). Conviction Track (CT) is always written in full. (ED-756)
 
 *Traces named character arcs, their decision branches, and the mechanical cascade each branch produces. Reads vertically (one arc) or horizontally (cross-arc collisions). All values from compiled ruleset + designs through Session 5. [E-01] = canonical editorial gap: assassination perpetrator TBD. [EDITORIAL] = flagged design intent not yet canonised.*
 
@@ -161,7 +161,7 @@ PLAYERS INVESTIGATE THE 218 AG DEATH
 # ARC 2: ALMUD'S SYMPATHIES — THE SOVEREIGN CONSTRAINT
 
 ## The Structural Problem
-Almud privately sympathises with the Einhir Restoration. He governs through the post-war settlement that suppressed it. His Belief 2 is not cowardice — it is a structural analysis: acting requires simultaneously alienating the Church (Theocracy Counter +3), alienating northern Einhir nobility (Mandate −2), and provoking Altonian diplomatic challenge (Institutional Pressure +1). The constraint erodes only when one or more of these costs is removed by events.
+Almud privately sympathises with the Einhir Restoration. He governs through the post-war settlement that suppressed it. His Belief 2 is not cowardice — it is a structural analysis: acting requires simultaneously alienating the Church (Church Influence +3), alienating northern Einhir nobility (Mandate −2), and provoking Altonian diplomatic challenge (Institutional Pressure +1). The constraint erodes only when one or more of these costs is removed by events.
 
 ```
 ALMUD'S CONSTRAINT — EROSION PATHS
@@ -884,7 +884,7 @@ The campaign's central dramatic question answers itself when at least three of t
 | Elske is installed independently | Succession stable without Altonian capture |
 | Torben retrieved at Loyalty 6+ | Dynasty intact |
 | Mending Stability above 40 (Wakening → Stirring) | Practitioners functional; world stabilising |
-| Theocracy Counter below 40 | Church institutional conquest stalled |
+| Church Influence below 40 | Church institutional conquest stalled |
 | Institutional Pressure below 45 | Altonian invasion deterred |
 | Ehrenwall's Coup Counter at 1 or less | Löwenritter maintain institutional loyalty |
 | Southernmost stabilised (Ceiral Ritual success) | Mending Stability −6 to −10; world healing |
