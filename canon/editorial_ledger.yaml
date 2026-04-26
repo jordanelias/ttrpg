@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 744
+# next_id: 749
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
@@ -45,8 +45,8 @@ entries:
 
   - id: ED-543
     date: 2026-04-25
-    description: "[PROVISIONAL] Clock registry update — full refresh from peninsular_strain_v30 and tc_political_redesign_v30. Promoted from atom valoria_master_consolidation__20 (Stage 4 promotion 2026-04-25). Single-atom evidence; verify whether the registry refresh actually landed under another ED before relying on this entry."
-    status: open
+    description: "[RESOLVED 2026-04-26 by ED-744] Clock registry update — full refresh from peninsular_strain_v30 and tc_political_redesign_v30. Promoted from atom valoria_master_consolidation__20 (Stage 4 promotion 2026-04-25). Single-atom evidence; verify whether the registry refresh actually landed under another ED before relying on this entry."
+    status: resolved
     severity: P1
     source: "atom: valoria_master_consolidation__20__from-holistic-audit-valoria-holistic-audit-md"
 
@@ -73,3 +73,33 @@ entries:
     description: "TC→CI disambiguation sweep complete. ~1,543 TC→CI across 100+ files (designs, params, tests, canon). RS→MS applied to designs/params (263 instances). Alias registry updated: theocracy_counter → church_influence, collision table TC entry marked resolved. Numeric bounds report reviewed: all 14 flagged stats = legitimate or false positives, no drift."
     status: resolved
     severity: P1
+
+  - id: ED-744
+    date: 2026-04-26
+    description: "Clock registry refresh per staleness report. Confirmed changes: CI source updated, IP renamed to Institutional Pressure (start 20), PI replaced by Peninsular Strain (0-10), Stamina formula corrected (History struck PP-611), Disposition range updated (PP-632), Mandate floor 0, Accord track added, Knot count added, stale source references updated. PROVISIONAL items: IP start value (ED-745), Intel Advancement Counter struck status (ED-746), Popular Will struck status (ED-747), Intelligence stat struck status (ED-748). Resolves ED-543."
+    status: resolved
+    severity: P1
+
+  - id: ED-745
+    date: 2026-04-26
+    description: "[PROVISIONAL] IP start value 20 — per staleness report item 3, sourced from peninsular_strain §4. Verify against params_bg_core starting values table."
+    status: open
+    severity: P3
+
+  - id: ED-746
+    date: 2026-04-26
+    description: "[PROVISIONAL] Intel Advancement Counter — staleness report says STRUCK per canonical_definitive_r2. Verify whether fieldwork VTM system fully replaces this."
+    status: open
+    severity: P3
+
+  - id: ED-747
+    date: 2026-04-26
+    description: "[PROVISIONAL] Popular Will (PW) — staleness report says STRUCK per canonical_definitive_r2. Verify against RM founding mechanics in current specs."
+    status: open
+    severity: P3
+
+  - id: ED-748
+    date: 2026-04-26
+    description: "[PROVISIONAL] Intelligence stat — staleness report says STRUCK, replaced by fieldwork Investigation + VTM. Verify if any active specs still reference Intelligence as a faction stat."
+    status: open
+    severity: P3
