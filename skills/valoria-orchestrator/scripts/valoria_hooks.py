@@ -303,8 +303,14 @@ def vetting_gate(additions: list) -> None:
         if pp_num < VETTING_ENFORCED_FROM_PP:
             continue  # grandfathered
         # Does this entry have a vetting block?
-        vetting_match = _re.search(r'\n\s+vetting:\s*\n(.*?)(?=\n\s+\w+:|\Z)',
+        vetting_match = _re.search(r'\n\s+vetting:\s*\n(.*)',
                                    body, _re.DOTALL)
+        # NOTE: capture extends to end-of-body (body is already scoped to one PP
+        # entry by the outer regex). The required-keys substring check below is
+        # unique-key-safe: necessity/omega/mu/m_ratings/q only appear inside
+        # vetting blocks. Avoids the prior bug where lookahead matched FIRST
+        # child of vetting (class:) and truncated captured block to one line.
+        # Fixed 2026-04-25 alongside PP-674 yaml indentation repair.
         if not vetting_match:
             # Missing — is this a Class A/B? We do not know for certain without
             # a class marker. Default: require vetting block for all entries

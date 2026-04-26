@@ -407,9 +407,6 @@ patches:
     - skills/valoria-orchestrator/scripts/valoria_hooks.py
     - canon/patch_register_active.yaml
     - canon/editorial_ledger.yaml
-    vetting:
-    class: E
-    note: "PP-674 IS the framework enforcement patch. Self-exempted as infrastructure."
   status: applied
   applied_commit: pending
   vetting:
