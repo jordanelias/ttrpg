@@ -1,0 +1,40 @@
+generated: '2026-04-25'
+topic: 01_throughlines_meta
+purpose: Pre-drafted register entries for MENTIONED IDs in this topic. Each entry is a starting point — Stage 4 must fill [NEEDS-DECISION] fields
+  and refine [PROPOSED:] descriptions before [editorial] / [patch] commit.
+count: 2
+drafts:
+- id: ED-738
+  date: '2026-04-25'
+  description: '[PROPOSED: ED-738 (Ein Sof gradient editorial) was referenced across audit cells but had not been committed to canon]'
+  status: proposed
+  severity: '[NEEDS-DECISION: P1/P2/P3]'
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - master_consolidation__01__1-conversation-arc
+  - master_consolidation__04__4-meta-throughlines-7-11
+  - master_consolidation__07__7-wave-1-workplans
+  - master_consolidation__09__9-commit-ledger
+  canon_mentions:
+  - references/throughlines_complete.md
+  - designs/workplans/wave1_workplans.md
+  - designs/audit/editorial_ein_sof_gradient_2026_04_21.md
+  - references/throughline_registry.md
+  - references/throughlines_meta.md
+- id: PP-632
+  date: '2026-04-25'
+  severity: '[NEEDS-DECISION: P1/P2/P3]'
+  description: '[PROPOSED: - **PP-632 as design standard.** Every future mechanic meets: one formula, philosophically derivable, simulation-validated,
+    replacing any lookup table]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects: '[NEEDS-DECISION: list affected design docs]'
+  status: proposed
+  evidence_atoms:
+  - valoria_master_consolidation__20__from-holistic-audit-valoria-holistic-audit-md
+  canon_mentions:
+  - designs/scene/derived_stats_v30.md
+  - params/bg/faction_actions.md
+  - params/core.md
+  - designs/audit/valoria_systems_workplan.md
+  - designs/threadwork/threadwork_v30.md

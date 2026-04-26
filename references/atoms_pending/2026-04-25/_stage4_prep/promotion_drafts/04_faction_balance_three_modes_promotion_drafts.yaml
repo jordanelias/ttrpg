@@ -1,0 +1,51 @@
+generated: '2026-04-25'
+topic: 04_faction_balance_three_modes
+purpose: Pre-drafted register entries for MENTIONED IDs in this topic. Each entry is a starting point — Stage 4 must fill [NEEDS-DECISION] fields
+  and refine [PROPOSED:] descriptions before [editorial] / [patch] commit.
+count: 3
+drafts:
+- id: PP-540
+  date: '2026-04-25'
+  severity: '[NEEDS-DECISION: P1/P2/P3]'
+  description: '[PROPOSED: | 1 | 13 | | RM (cond.) | 1 | 3 | n/a | 3 | 2 | 3 | 12 | | Löwenritter (cond.) | 1 | 2 | n/a | 1 | 3 | 2 | 9 |  **Key
+    strategic-layer findings:**  - **Crown''s PV ≥ 14 milestone is pre-met from S1** (PP-540 reduced 16→14 to match starting PV; Crown starts
+    with exactly 14 PV)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects: '[NEEDS-DECISION: list affected design docs]'
+  status: proposed
+  evidence_atoms:
+  - master_document_2026-04-25__13__2-1-initial-faction-balance-audit-findings
+  - master_document_2026-04-25__14__2-2-monte-carlo-simulation-results
+  - master_document_2026-04-25__26__p1-essential-for-modes-to-feel-rich
+  - master_document_2026-04-25__28__p3-designer-hygiene-no-direct-player-impact
+  - master_document_2026-04-25__30__6-2-strategic-layer-mechanical-gaps
+  canon_mentions:
+  - designs/provincial/victory_v30.md
+- id: PP-541
+  date: '2026-04-25'
+  severity: '[NEEDS-DECISION: P1/P2/P3]'
+  description: '[PROPOSED: **Hafenmark PV ≥ 12** (P1) — revert PP-541 7]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects: '[NEEDS-DECISION: list affected design docs]'
+  status: proposed
+  evidence_atoms:
+  - master_document_2026-04-25__14__2-2-monte-carlo-simulation-results
+  - master_document_2026-04-25__26__p1-essential-for-modes-to-feel-rich
+  - master_document_2026-04-25__28__p3-designer-hygiene-no-direct-player-impact
+  - master_document_2026-04-25__30__6-2-strategic-layer-mechanical-gaps
+  - master_document_2026-04-25__33__6-5-framework-propagation-gaps-deferred-from-prior
+  canon_mentions:
+  - designs/provincial/victory_v30.md
+- id: ED-706
+  date: '2026-04-25'
+  description: '[PROPOSED: Sync needed.]`  `[GAP-29: VTM strike propagation incomplete (ED-706, pending PP-664)]'
+  status: proposed
+  severity: '[NEEDS-DECISION: P1/P2/P3]'
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - master_document_2026-04-25__33__6-5-framework-propagation-gaps-deferred-from-prior
+  canon_mentions:
+  - references/canonical_sources.yaml
+  - canon/patch_register_active.yaml
