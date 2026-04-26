@@ -17,6 +17,6 @@ origin: session-master-upload
 
 Governance-level. Must precede further mechanical specification.
 
-1. **Author Five Moments document.** Recommendation #1. `designs/architecture/core_experiential_moments.md`. Enumerate 3–7 moments with state preconditions, player actions, sensory design, consequences, dependent systems.
+1. **Author Five Moments document.** Recommendation #1. `[STRUCK: designs/architecture/core_experiential_moments.md — orphan, no rename candidate, atom reference removed per Stage 4 decision]`. Enumerate 3–7 moments with state preconditions, player actions, sensory design, consequences, dependent systems.
 2. **Name Primary Verb.** Recommendation #2. Include in Five Moments document.
 3. Test every subsequent proposal against moments + foundations + throughlines.

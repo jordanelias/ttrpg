@@ -17,7 +17,7 @@ origin: session-master-upload
 
 **The gap.** Throughlines (T1-T8 tagged, TL-1 through TL-10 numbered, plus implicit) ensure systems feed each other correctly. They are *structural*. Throughlines do not specify which *experiential* moments every campaign should produce — what the player carries with them when they stop playing.
 
-**The proposal.** Author `designs/architecture/core_experiential_moments.md` enumerating 3–7 moments every Valoria campaign must produce. For each: game-state preconditions, player actions required, sensory/emotional design, consequences, dependent systems.
+**The proposal.** Author `[STRUCK: designs/architecture/core_experiential_moments.md — orphan, no rename candidate, atom reference removed per Stage 4 decision]` enumerating 3–7 moments every Valoria campaign must produce. For each: game-state preconditions, player actions required, sensory/emotional design, consequences, dependent systems.
 
 Candidate moments (Jordan's to finalize):
 

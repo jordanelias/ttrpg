@@ -1,0 +1,16 @@
+# Censured Vocabulary
+# Authoritative term-governance store referenced by PP-675 / ED-783 (Canon Rectification, 2026-04-25).
+# Stub placeholder created Stage 4 — populate with specific terms as they are confirmed.
+#
+# Schema:
+#   terms:
+#     - term: <string>
+#       reason: <why censured>
+#       replacement: <preferred alternative or null>
+#       date: <YYYY-MM-DD>
+#       authority: <ED-NNN or PP-NNN>
+
+terms: []
+
+# History
+# - 2026-04-25 — file created as stub via Stage 4 missing-paths resolution.

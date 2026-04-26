@@ -17,7 +17,7 @@ origin: session-master-upload
 
 **Why it matters:** Treasury, Legitimacy, Reputation, Cohesion are videogame-layer values that translate faction stats into player-visible economic and political pressure. The economic throughline (T2, T10) is unverified without these.
 
-**Sources to fetch:** `designs/architecture/derived_stats_v30.md` or equivalent.
+**Sources to fetch:** `designs/scene/derived_stats_v30.md` or equivalent.
 
 **Review questions:**
 - How is Treasury computed from Prosperity?
