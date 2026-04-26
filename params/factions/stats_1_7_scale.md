@@ -182,8 +182,8 @@ Co-Movement Card drawn on every result (P-01 compliance).
 Prerequisite: Mandate ≥ 1 for Mending prerequisite (see stage6 §8.8).
 
 ### Löwenritter — Martial Law / Coup Trigger
-No standard Unique Action roll — Löwenritter action is triggered by Coup Counter reaching 4.
-**Coup Counter increments (+1 each):**
+No standard Unique Action roll — Löwenritter action is triggered by Graduated Autonomy reaching 4.
+**Graduated Autonomy increments (+1 each):**
 - Church Influence reaches 40 while Crown took no action to reduce it that season
 - Torben's loyalty reaches 3–2 or lower
 - Crown loses 2+ territories in one season without a military response Domain Action
@@ -286,15 +286,15 @@ Individual profiles and stat blocks deferred to campaign development.
 <!-- PP-244 applied 2026-04-04: Scene→Mass transition modifier table (PROVISIONAL) -->
 <!-- PP-246 applied 2026-04-04: Lowenritter ethical framework modifiers extracted (Niflhel struck) -->
 
-## Crown Covert Actions (PP-236) [PROVISIONAL — ED-147]
+## Crown Covert Actions (PP-236) [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 Crown has NO Intel stat. Crown covert actions (investigation, sabotage, intelligence gathering) use the **Influence** pool at **+1 Ob**. This is a faction design constraint: Crown is institutionally weakest at covert operations. The +1 Ob penalty applies to all Crown-initiated covert Domain Actions regardless of the action's formal label.
 
-## Crown-Lowenritter Covert Delegation (PP-241) [PROVISIONAL — ED-149]
+## Crown-Lowenritter Covert Delegation (PP-241) [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 When Crown delegates a covert Domain Action to Lowenritter, the roll uses **Lowenritter Intel** pool. The Crown covert +1 Ob penalty does NOT apply — the constraint is institutional, not operational. Lowenritter acts as Crown's deniable agent. Political consequences of Lowenritter action discovery fall on Crown, not Lowenritter.
 
-## Public Instability — Hybrid Mode (PP-237) [PROVISIONAL — ED-148]
+## Public Instability — Hybrid Mode (PP-237) [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 Public Instability is a Hybrid-mode secondary clock.
 - Range: 0–10. Starting value: 5.
@@ -308,7 +308,7 @@ Public Instability is a Hybrid-mode secondary clock.
 
 Lowenritter NPC AI priority: if any bordering faction's Military exceeds Lowenritter Military, Lowenritter NPC AI prioritises Military Consolidation (internal) the following season. This is a guidance rule, not a threshold mechanic — no automatic trigger fires.
 
-## Scene→Mass Transition Modifiers — Hybrid (PP-244) [PROVISIONAL — ED-151]
+## Scene→Mass Transition Modifiers — Hybrid (PP-244) [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 When a personal combat scene precedes or overlaps a Strategic Phase mass action:
 - PC Overwhelming success: mass action at −1 Ob (officer neutralised, morale advantage)

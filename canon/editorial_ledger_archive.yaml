@@ -650,3 +650,82 @@ entries:
     severity: P2
     source: 'Stage 4 promotion 2026-04-25 (originating topic: 09_canon_rectification_pp675_ed783); primary atom: valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close; evidence atoms:
       5; canon mentions: 1'
+
+# Archival batch 2026-04-26
+  - id: ED-780
+    date: 2026-04-25
+    description: "fieldwork §5.6a Knot Formation Procedure — explicit Bonds ≥ 5 prerequisite added. Closes documentation gap surfaced by stress-test 53: Disposition ceiling = Bonds (per §3) + Knot formation requires Disposition +5 (per §5.6a step 1) implies Bonds ≥ 5 minimum, but this derivation was never surfaced as an explicit prerequisite. Player with Bonds 1-4 could attempt Knot formation indefinitely with no possibility of success. Rationale section explains the Knot ecosystem locked behind this prerequisite (Wager, Composure buffer, Thread-Read, Coherence anchoring). Source: 2026-04-25 stress-test 53."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-781
+    date: 2026-04-25
+    description: "params/factions_personal §Coup Counter (Löwenritter) STRUCK and replaced with reference to Graduated Autonomy spec; npc_priority_trees.md migrated (4 references at L42, L86, L149, L197 + section header L239 + spec text L241). Closes spec inconsistency surfaced by stress-test 57: §59 of factions_personal already declared 'Löwenritter Graduated Autonomy replaces Coup Counter (ED-589)' with 4-stage track (Loyal/Restless/Autonomous/Split), but §94 still contained legacy Coup Counter increment rules. npc_priority_trees Crown/Löwenritter trees referenced 'Coup Counter = 2' which now translates to 'Löwenritter Autonomy = Restless' per the canonical Graduated Autonomy stage names. PP-NPC-02 section header + L241 spec text also migrated. All Coup Counter references in active spec now eliminated. Source: 2026-04-25 stress-test 57."
+    status: resolved
+    severity: P2
+
+
+  - id: ED-782
+    date: 2026-04-25
+    description: "references/glossary.md updated to reflect canonical TC → CI rename per tcv_conflict_register §2 (decision 2026-04-19). Closes spec inconsistency surfaced by stress-test 60: glossary L62 still listed 'Theocracy Counter | TC*' while ci_political_v30 §1.1 (current canonical) uses 'CI (Church Influence)'. Two parallel naming conventions in active spec. Now: glossary entry renamed to 'Church Influence | CI' with note that TC is renamed; collision note (L66) updated; abbreviation collision table (L213) updated. Milestones updated: 60 = Mass Seizure available, 75 = Phase Transition / Territorial Seizure, 100 = Unification (per ci_political_v30 §2). Residual ~675 TC references in active spec queued as known cleanup item; not propagated in this commit. Source: 2026-04-25 stress-test 60."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-543
+    date: 2026-04-25
+    description: "[RESOLVED 2026-04-26 by ED-744] Clock registry update — full refresh from peninsular_strain_v30 and tc_political_redesign_v30. Promoted from atom valoria_master_consolidation__20 (Stage 4 promotion 2026-04-25). Single-atom evidence; verify whether the registry refresh actually landed under another ED before relying on this entry."
+    status: resolved
+    severity: P1
+    source: "atom: valoria_master_consolidation__20__from-holistic-audit-valoria-holistic-audit-md"
+
+
+  - id: ED-739
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in npc_roster_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-740
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in worldbuilding_canon_audit_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-741
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in worldbuilding_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-742
+    date: 2026-04-26
+    description: "TC→CI disambiguation sweep complete. ~1,543 TC→CI across 100+ files (designs, params, tests, canon). RS→MS applied to designs/params (263 instances). Alias registry updated: theocracy_counter → church_influence, collision table TC entry marked resolved. Numeric bounds report reviewed: all 14 flagged stats = legitimate or false positives, no drift."
+    status: resolved
+    severity: P1
+
+
+  - id: ED-744
+    date: 2026-04-26
+    description: "Clock registry refresh per staleness report. Confirmed changes: CI source updated, IP renamed to Institutional Pressure (start 20), PI replaced by Peninsular Strain (0-10), Stamina formula corrected (History struck PP-611), Disposition range updated (PP-632), Mandate floor 0, Accord track added, Knot count added, stale source references updated. PROVISIONAL items: IP start value (ED-745), Intel Advancement Counter struck status (ED-746), Popular Will struck status (ED-747), Intelligence stat struck status (ED-748). Resolves ED-543."
+    status: resolved
+    severity: P1
+
+
+  - id: ED-768
+    date: 2026-04-24
+    description: "Orphaned PROVISIONAL markers identified across active spec corpus. 13 markers reference low-numbered EDs (ED-063, ED-071, ED-074, ED-098, ED-137, ED-147, ED-148, ED-149, ED-151) that are not present in either active editorial_ledger.yaml or archive. These likely predate the current ledger structure (pre-2026-04-15). Files affected: params/scale_transitions.md (3), params/contest.md (1), params/factions/stats_1_7_scale.md (4), params/mass_combat.md (1), designs/scene/combat_v30_infill.md (1), designs/scene/social_contest_v30.md (1), designs/scene/social_contest_system_v2.md (1), designs/scene/combat_design_v1.md (1). Resolution requires Jordan-side context to determine which markers reference still-open issues vs which reference resolved-but-not-archived items. Marking as documentation-gap not spec-defect; do not strip markers blindly."
+    status: resolved
+    severity: P3
+    "RESOLVED 2026-04-26 (ED-749): orphaned ED refs stripped, terminology updated"
+
+
+  - id: ED-749
+    date: 2026-04-26
+    description: "PROVISIONAL marker audit (ED-768 resolution). 13 orphaned ED references stripped from 8 files. Stale terminology updated: Coup Counter → Graduated Autonomy (ED-781), Theocracy Counter → Church Influence (ED-782)."
+    status: resolved
+    severity: P3

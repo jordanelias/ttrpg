@@ -110,7 +110,7 @@ The primary attribute for the Argue roll shifts based on the adjudicator type.
 | Expert judge | Cognition | Judge evaluates logical structure |
 | Crowd | Charisma | Crowd responds to delivery and authority |
 | No adjudicator | Attunement | You must read the other party and calibrate |
-| Panel | Cognition | [PROVISIONAL — ED-137] |
+| Panel | Cognition | [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit] |
 
 TN: 7 (Standard). Situational modifiers per core engine (TN 6 Controlled, TN 8 Desperate) apply as normal.
 

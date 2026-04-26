@@ -31,7 +31,7 @@
 **Amount:** Faction stat change = +1 per degree above Partial.
 - Success: +1 to most relevant stat (Mandate for political, Influence for social, Military for combat)
 - Overwhelming: +2
-- Cap: ±2 per scene. [PROVISIONAL — ED-071]
+- Cap: ±2 per scene. [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 **Timing by mode:**
 - Full TTRPG (Register Shift): Domain Echo fires immediately at scene end. No extra roll.
@@ -39,7 +39,7 @@
 
 **Intentional design (PP-109):** The timing difference is by design. Zoom In is a personal intervention in a strategic situation. Faction consequences propagate through seasonal accounting (not instantly) to prevent real-time manipulation of BG stats from personal scenes. This is documented here as an intentional mode asymmetry.
 
-**Multiple Domain Echoes (same scene):** Fire in the order they occurred in the scene. Each applies independently; cap resets per stat per Echo (not per scene total). [PROVISIONAL — resolve ED-071]
+**Multiple Domain Echoes (same scene):** Fire in the order they occurred in the scene. Each applies independently; cap resets per stat per Echo (not per scene total). [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 **Debate outcome → Domain Echo:** Conviction Track ≥7 (winner) queues +1 Mandate for winner's faction. ≤3 queues −1 Mandate for loser's faction. [PP-108]
 
@@ -67,7 +67,7 @@ A personal scene qualifies as faction-scope (triggering Scene→Faction Domain E
 3. An action that would normally require a Domain Action roll (treaty negotiation, formal accusation, territorial claim)
 4. A Thread operation targeting a faction-level configuration (Relational+ scale)
 Personal conflicts (brawls, private debates, social introductions) are personal scope only.
-GM makes final scope determination. [PROVISIONAL — ED-074]
+GM makes final scope determination. [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 ## Domain Echo — Debate Outcome Mapping (PP-108 extension)
 Debate Conviction Track outcomes map to Domain Echo as follows:

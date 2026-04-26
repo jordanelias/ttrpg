@@ -41,7 +41,7 @@ Note: Stage 1/Stage 2 in personal combat are the same framework as general incap
 ### Environmental Factors (Ranged Combat)
 Melee users must close to reach a ranged attacker. Terrain affects the number of rounds of exposure and imposes penalties.
 Cover (a physical obstacle between attacker and defender) adds DR to the defender:
-Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — ED-098]
+Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 ## 6. ARMOUR
 ### Armour (PP-232)
 ### Ranged DR
@@ -73,9 +73,9 @@ Each combatant is engaged in one primary pairing per round. Extras choose which 
 ### PP-089/PP-090 — Hybrid Phase Order and Mode-Switch
 ## 10. THREAD IN COMBAT
 ## 11. FACTION UNIT ROSTERS (from MT-01, 2026-03-30)
-> **[PROVISIONAL] Coup Counter — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
+> **[PROVISIONAL] Graduated Autonomy — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Graduated Autonomy is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Graduated Autonomy resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
 Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth ≥ 4.
-> **[PROVISIONAL] Theocracy Counter seasonal cap:** Theocracy Counter cannot change by more than ±3 per season from Domain Actions alone. All Theocracy Counter sources combined (Domain Actions, Mending Stability-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 Theocracy Counter change per season. Changes exceeding the cap are discarded. This prevents runaway Theocracy Counter spirals from multi-action stacking.
+> **[PROVISIONAL] Church Influence seasonal cap:** Church Influence cannot change by more than ±3 per season from Domain Actions alone. All Church Influence sources combined (Domain Actions, Mending Stability-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 Church Influence change per season. Changes exceeding the cap are discarded. This prevents runaway Church Influence spirals from multi-action stacking.
 > **[PROVISIONAL] Stability recovery:** A faction with Stability ≤ 3 that receives no hostile Domain Actions targeting its Stability in a season gains +1 Stability at Accounting. This represents institutional resilience — factions recover slowly if left alone. Factions at Stability ≥ 4 do not recover this way (they are stable already). Maximum recovery from this rule: +1 per season.
 ## 11.5 FIELDWORK TRANSITIONS
 Fieldwork scenes interact with combat at two defined handoff points (scale_transitions_design_v1.md §3.9):

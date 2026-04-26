@@ -232,19 +232,19 @@ block sight-lines with front-line formations; flank to reach Artillery directly.
 ## Volley Phase Pool (PP-503) [PROVISIONAL]
 Volley Phase pool = Power stat (1–7) rolled at TN 6. NOT the engagement pool formula (PP-233). Ranged output is unit-quality-based, not Command-based.
 
-## Mass Battle Thread RS (PP-601, PP-613 — canonical)
-×3 multiplier STRUCK (PP-601 struck PP-192/PP-225). Individual Thread op RS costs in mass
-battle = full TTRPG value (×1). RS consequences in mass battle come from Substrate
+## Mass Battle Thread MS (PP-601, PP-613 — canonical)
+×3 multiplier STRUCK (PP-601 struck PP-192/PP-225). Individual Thread op MS costs in mass
+battle = full TTRPG value (×1). MS consequences in mass battle come from Substrate
 Saturation Counter only (see params_threadwork.md §Substrate Saturation Counter):
-Counter ≥ 3 at battle end: RS −1 at next Accounting. Hard cap −1/battle.
+Counter ≥ 3 at battle end: MS −1 at next Accounting. Hard cap −1/battle.
 Battle-context Thread Debt expires at battle season end (PP-600).
 
 ## Thread Integration [COMPILED — stage11]
 
-> **Mass battle Dissolution — campaign impact warning (PP-201):** [PROVISIONAL] Dissolution at mass battle scale is a **campaign-altering decision**, not a tactical one. E[RS per Dissolution attempt] = standard TTRPG value (PP-601: ×1, not ×3). Substrate Saturation Counter tracks cumulative Thread load per battle. Counter ≥ 3 at battle end: RS −1. A single Dissolution Failure when RS < 24 triggers the Rupture immediately. **Before a practitioner declares offensive Dissolution in mass battle:** the GM should confirm the table understands this is a world-stakes action. Dissolution in mass battle is the Einhir scale of operation. It may win a battle while ending a campaign. Weaving and Mending are the only RS-neutral or RS-positive mass battle Thread operations on average. Lock and Pull are risky (E −3 to −6 RS per attempt). Dissolution is in a category of its own.
+> **Mass battle Dissolution — campaign impact warning (PP-201):** [PROVISIONAL] Dissolution at mass battle scale is a **campaign-altering decision**, not a tactical one. E[MS per Dissolution attempt] = standard TTRPG value (PP-601: ×1, not ×3). Substrate Saturation Counter tracks cumulative Thread load per battle. Counter ≥ 3 at battle end: MS −1. A single Dissolution Failure when MS < 24 triggers the Rupture immediately. **Before a practitioner declares offensive Dissolution in mass battle:** the GM should confirm the table understands this is a world-stakes action. Dissolution in mass battle is the Einhir scale of operation. It may win a battle while ending a campaign. Weaving and Mending are the only MS-neutral or MS-positive mass battle Thread operations on average. Lock and Pull are risky (E −3 to −6 MS per attempt). Dissolution is in a category of its own.
 
 
-> **RS<24 mass battle Rupture threshold (PP-204):** [PROVISIONAL] If RS is below 24 when a mass battle Thread operation is declared, the GM must inform the declaring practitioner before the roll: a Dissolution Failure at this RS level may trigger the Rupture (PP-601: ×3 multiplier STRUCK; individual RS costs ×1. Substrate Saturation Counter ≥ 3 at battle end = RS −1). This is not a mechanic restriction — the practitioner may still attempt the operation. It is mandatory table information. At RS 0–23: mass battle Thread operations carry increased Rupture risk per Substrate Saturation Counter. PP-601 struck the ×3 multiplier; individual op RS costs are ×1. Print this threshold on the mass battle Thread tracking sheet.
+> **MS<24 mass battle Rupture threshold (PP-204):** [PROVISIONAL] If MS is below 24 when a mass battle Thread operation is declared, the GM must inform the declaring practitioner before the roll: a Dissolution Failure at this MS level may trigger the Rupture (PP-601: ×3 multiplier STRUCK; individual MS costs ×1. Substrate Saturation Counter ≥ 3 at battle end = MS −1). This is not a mechanic restriction — the practitioner may still attempt the operation. It is mandatory table information. At MS 0–23: mass battle Thread operations carry increased Rupture risk per Substrate Saturation Counter. PP-601 struck the ×3 multiplier; individual op MS costs are ×1. Print this threshold on the mass battle Thread tracking sheet.
 
 Combat Thread ops (Dissolution, offensive Pulling): Phase 2. Support ops (Weave, Mend, Lock, non-offensive Pulling): Phase 5. Both declared Phase 1.
 Mass → Personal: Personal Action available at Phase 5 (Priority 8). Limit: 1 exchange/battle turn. General's Phase 5 consumed by personal combat (Command suspended).
@@ -320,7 +320,7 @@ Margin = |attacker net − defender net|.
 - Margin ≥ 2, attacker higher → Win: territory captured, Defender Military −1
 - Margin ≤ 1 (either direction) → Partial: no territory change, Attacker Stability −1
 - Margin ≥ 2, defender higher → Lose: no territory change, Attacker Military −1
-[PROVISIONAL — ED-063: confirm Partial threshold and Stability cost]
+[PROVISIONAL — pre-ledger: confirm Partial threshold and Stability cost]
 
 
 <!-- patches: PP-173 (ranged DR split, HBl personal reference), PP-175 (mass combat DR scaled ÷2 provisional) -->
@@ -464,7 +464,7 @@ Consistent with mass combat abstraction principle. No patch needed.
 ## ED-121–125 Resolution (PP-305) — Mass Battle Thread Definitions [FLAGGED]
 **ED-121 Paradox window scene:** Battle-turn = scene. PP-223 confirmed.
 **ED-122 Offensive Lock:** PP-222 confirmed — blocks Discipline degradation on locked unit for lock duration.
-**ED-123 RS thresholds:** Check at Phase 7 Reform (end of each battle-turn). Coherence-0 leakage fires once per turn.
+**ED-123 MS thresholds:** Check at Phase 7 Reform (end of each battle-turn). Coherence-0 leakage fires once per turn.
 **ED-124 Diagnosis+Leap collapse:** PP-224 confirmed — single Phase 4 action at mass scale.
 **ED-125 Hybrid Strategic Phase paradox windows:** Windows from Personal Phase persist into Strategic Phase. Strategic Phase generates no new windows.
 [FLAGGED: confirm all five rulings before mass-battle Thread compilation.]

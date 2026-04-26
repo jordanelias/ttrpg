@@ -19,7 +19,7 @@
 | Argue (Expert Judge) | (Cognition × 2) + History bonus | 7 | Judge evaluates logical structure |
 | Argue (Crowd) | (Charisma × 2) + History bonus | 7 | Crowd responds to delivery/authority |
 | Argue (No Adjudicator) | (Attunement × 2) + History bonus | 7 | Must read and calibrate to counterpart |
-| Argue (Panel) | (Cognition × 2) + History bonus | 7 | [PROVISIONAL — ED-137] |
+| Argue (Panel) | (Cognition × 2) + History bonus | 7 | [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit] |
 | Appraise | Attunement + Recall | 7 | Ob = opponent Charisma ÷ 2 (round up), min 1. Once per exchange. PP-614: consolidates Read/Judge/Appraise into single canonical entry. |
 | Recall bonus | +2D | — | Citing specific named verifiable claim. Binary. Either genre. |
 | Pre-contest prep | Attunement + History | 7 Ob 1 | Requires 1+ hour. Rushed: TN 8. |

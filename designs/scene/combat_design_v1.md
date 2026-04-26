@@ -226,7 +226,7 @@ Cover (a physical obstacle between attacker and defender) adds DR to the defende
 | Soft (trees, wagon, bale) | +2 DR | +1 DR | +2 DR | +2 DR |
 | Hard (stone wall, fortification) | Blocks shot | Blocks shot | Blocks shot | Blocks shot |
 
-Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — ED-098]
+Cover must be declared in Phase 1 (Movement) to take effect. Cover does not move with the defender. The Game Master determines whether a physical obstacle is present in the zone. A character who does not declare Cover in Phase 1 receives no DR benefit that round, even if physically behind an obstacle. [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 **Board Game:** Weapon types map to BG unit type. No TN variation — units use Martial stat pool vs standard TN 7. Anti-Armour keyword (PP-217): units with HP (crossbow) or HBl (lead sling) weapon type carry the Anti-Armour keyword. When an Anti-Armour unit attacks, reduce target unit's effective armour tier by 1 for that engagement (e.g. Heavy → Medium DR applies). Does not stack from multiple attacking units.
 
@@ -399,7 +399,7 @@ Default unit stats (board game / mass combat):
 | Faction | Military | Starting Units | Notes |
 |---------|---------|---------------|-------|
 | Crown | 4 | 4 | Mixed infantry + cavalry. Standard formation. |
-| Church | 4 | 4 | 2 Templar (elite: Discipline 5, Martial 4) + 2 garrison (Discipline 3, Martial 2). Templars deploy free at Theocracy Counter ≥ 40 in Himmelstift. |
+| Church | 4 | 4 | 2 Templar (elite: Discipline 5, Martial 4) + 2 garrison (Discipline 3, Martial 2). Templars deploy free at Church Influence ≥ 40 in Himmelstift. |
 | Hafenmark | 3 | 3 | 1 ducal guard (elite: Discipline 4, Martial 3) + 2 militia. |
 | Varfell | 4 | 4 | Highland infantry. Discipline 4. Home territory bonus: +1D in Eisengrund. |
 | Guilds | 2 | 2 | Hired mercenaries. Discipline 3, Martial 2. High Wealth allows rapid replacement. |
@@ -407,12 +407,12 @@ Default unit stats (board game / mass combat):
 | Revolution | 0 | 0 | No standing units. Community defence possible via Community Weaving. |
 | Löwenritter | 5 (→6 post-coup) | 5 (→6) | All units elite: Discipline 5, Martial 4. +1 unit from Crown transfer post-coup. |
 
-> **[PROVISIONAL] Coup Counter — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Coup Counter is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Coup Counter resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
+> **[PROVISIONAL] Graduated Autonomy — successor rule:** If the Löwenritter Grandmaster is killed (personal combat, mass battle, or other means) while the Graduated Autonomy is ≥ 1: the Löwenritter council immediately selects the highest-Coherence Rating surviving named officer as acting Grandmaster. The Graduated Autonomy resets to 0. The coup attempt is treated as disrupted — the new acting Grandmaster's first action is to consolidate the Order rather than pursue the coup. If no named officers remain, the Löwenritter enter a leaderless state (all units −1D to all rolls until a new Grandmaster is appointed through narrative play).
 
 **Mustering:** Muster order raises 1 new unit per success (up to Military cap) at standard stats.
 Upgrade to elite: 2 consecutive successful Govern orders in territory + Wealth ≥ 4.
 
-> **[PROVISIONAL] Theocracy Counter seasonal cap:** Theocracy Counter cannot change by more than ±3 per season from Domain Actions alone. All Theocracy Counter sources combined (Domain Actions, Mending Stability-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 Theocracy Counter change per season. Changes exceeding the cap are discarded. This prevents runaway Theocracy Counter spirals from multi-action stacking.
+> **[PROVISIONAL] Church Influence seasonal cap:** Church Influence cannot change by more than ±3 per season from Domain Actions alone. All Church Influence sources combined (Domain Actions, Mending Stability-driven cascade, Thread operations, military outcomes) cannot produce more than ±5 Church Influence change per season. Changes exceeding the cap are discarded. This prevents runaway Church Influence spirals from multi-action stacking.
 
 > **[PROVISIONAL] Stability recovery:** A faction with Stability ≤ 3 that receives no hostile Domain Actions targeting its Stability in a season gains +1 Stability at Accounting. This represents institutional resilience — factions recover slowly if left alone. Factions at Stability ≥ 4 do not recover this way (they are stable already). Maximum recovery from this rule: +1 per season.
 
