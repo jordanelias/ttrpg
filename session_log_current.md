@@ -1,41 +1,46 @@
-session_id: 2026-04-24-consolidation-followups
-session_close: 2026-04-24
-phase: infrastructure
+session_id: 2026-04-26-disambiguation-sweep
+session_close: 2026-04-26
+phase: editorial
 status: complete
 last_stage: >
-  Continued follow-ups from 2026-04-23 consolidation-system close.
-  Five commits:
-    2071752 — alias_registry v2 (Certainty added, unresolved gaps closed via deprecated section),
-              + references/numeric_bounds_report.yaml (targeted scan of 207 files for ceiling/cap/
-              floor/threshold/max/min; 254 hits, 97 stats, 14 flagged as potentially drifted).
-    02ba388 — bulk-fix applied: 104 substitutions across 22 files
-              (Rendering Stability→Mending Stability: 74, Cohesion→Discipline: 29, Combat Power→Power: 1).
-              User-authority paths skipped (designs/world, designs/npcs, designs/arcs, designs/territory).
-              Historical/deprecated/superseded files skipped. Lines with rename-context markers skipped.
-    08e0cf1 — tools/valoria_bulk_fix.py + glossary additions (Arc, Zoom In, Zoom Out, Cardinal).
-    Glossary last_updated advanced to 2026-04-24.
-  Collator re-run post-fix: 9101→8969 findings (−132). LEGACY_TERM_USED 903→799 (−104 matches substitutions).
-  COLLISION_USED_ALONE 1092 unchanged — TC/TD/CP require per-context judgment, not auto-fixable.
+  Full abbreviation disambiguation sweep. 9 commits:
+    db0dcd0 — TC→CI + RS→MS top 5 files (185 TC, 61 RS)
+    1a48d60 — TC→CI residuals in top 5 (83 TC, 21 RS)
+    028a748 — TC→CI + RS→MS 60 design/params files (~422 TC, ~181 RS)
+    44fbb1e — TC→CI + RS→MS 3 user-authority files (ED-783/784/785)
+    dadf8e1 — TC→CI in 46 tests/canon files (853 TC)
+    e024512 — Alias registry TC→CI update + numeric bounds review (ED-786)
+    7989b11 — Maret Vossen → Yrsa Vossen propagation (14 files, PP-665)
+    8563b46 — Maret Vossen → Yrsa Vossen NPC authority file (ED-787)
+  Summary: ~1,543 TC→CI, ~263 RS→MS, ~100 Theocracy Counter→Church Influence (full term),
+  23 Maret Vossen→Yrsa Vossen. Alias registry updated (theocracy_counter→church_influence,
+  collision table TC entry marked resolved). Numeric bounds report reviewed: all 14 flagged
+  stats = legitimate multiple thresholds or false positives, no drift.
+  CP disambiguation confirmed complete (CP=Character Points per ED-136, no active Combat Power refs).
 next_action:
   skill: editorial
   description: >
-    Only manual-judgment items remain from the consolidation system:
-    (1) TC disambiguation sweep — 943 occurrences across design docs. Each TC instance must be
-        manually classified as Theocracy Counter (faction clock) or Conviction Track (debate
-        system). Top files: designs/audit/npc_faction_arc_interdependency_2026-04-18.md (61×),
-        designs/arcs/narrative_scenario_chains.md (57×), designs/scene/conviction_track_v30.md (52×),
-        designs/arcs/gm_ref/arcs_46_55_resolved.md (50×), designs/provincial/faction_politics_v30.md (48×).
-    (2) CP and TD disambiguation — smaller footprint (~149 combined) but also per-context.
-    (3) User-authority-path RS/Rendering Stability residuals — bulk-fix skipped designs/world,
-        designs/npcs, designs/arcs, designs/territory. These need editorial-flagged commits if swept.
-    (4) Numeric bounds report review — 14 stats flagged for potential drift; most are likely
-        legitimate (multiple thresholds per stat) but a handful may be stale references.
-    (5) Maret disambiguation pass — flagged since round-1 proper noun triage (Uln vs Vossen).
-    (6) Five carried-over items from 2026-04-22: D-4, D-5, ED-735 (RWCE/Miracle/SA-gating),
-        PROVISIONAL marker audit, doc_index_gen.py regen.
-  priority: "TC disambiguation is the highest impact on mechanical correctness — ~30 min focused work on top 5 files clears 268 of 943"
+    Remaining items from consolidation queue:
+    (1) RS in tests — ~1,340 instances. Cannot blind-replace: "RS" collides with Rhetorical Style
+        (Evidence RS, Authority RS, Solidarity RS, Consequence RS in NPC debate contexts).
+        Needs per-context classifier distinguishing RS=Mending Stability from RS=Rhetorical Style.
+        Python files blocked by fabrication check; variable names (gs.rs, avg_rs) should not be renamed.
+    (2) TD disambiguation — mostly Mermaid flowchart TD (valid). Small count of Thread Depth (removed
+        PP-166) references may exist. Low priority.
+    (3) ED-768 (P3) — PROVISIONAL marker audit. 13 orphaned markers referencing pre-ledger EDs.
+        Requires Jordan review to determine which are still-open vs resolved-but-unarchived.
+    (4) ED-543 (P1) — Clock registry refresh verification. Single-atom evidence; needs verification
+        whether the registry refresh actually landed under another ED.
+    (5) D-4 (Altonian invasion ~18 AG) — timeline revision per ED-725. Requires Jordan worldbuilding authority.
+    (6) D-5 (Einhir site-network model) — new spec per ED-726. Requires Jordan worldbuilding authority.
+    (7) doc_index_gen.py regen — index files stale after bulk renames. Mechanical but large scope.
+    (8) Python sim file Maret rename (campaign_sim_npc_pcs_2026-04-18.py) — blocked by fabrication check.
+    (9) TC in deprecated/ files — low priority, old docs.
+  priority: "ED-543 (P1) verification is highest severity. RS test disambiguation is highest volume."
 blockers: []
 notes:
-  - "Collator per-instance report (962KB) not committed; regenerate via tools/valoria_collator.py"
-  - "Numeric bounds report highlights Mending Stability threshold (20/40/60) inconsistencies in arcs — likely intentional multiple thresholds, not bugs"
-  - "Certainty now registered in alias_registry — any remaining 'CERT' usages in active docs are now properly named (not unresolved)"
+  - "Glossary notes in affected files updated to reflect CI = Church Influence (was TC = Theocracy Counter)"
+  - "Alias registry collision_table TC entry marked resolved with 2026-04-26 sweep date"
+  - "RS = Rhetorical Style is NOT in the alias_registry — needs entry added if it's a canonical term"
+  - "Numeric bounds report reviewed inline (review header added). Regenerate after next collator run."
+  - "Maret disambiguation was already decision-resolved (PP-665) but propagation was incomplete — now fixed in 15 active files"
