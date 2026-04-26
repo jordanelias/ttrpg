@@ -97,13 +97,13 @@ If broken dependencies are found:
 
 **Consequences:** none new. Closes PP-663 propagation.
 
-## 2026-04-19 — PP-665 Maret Vossen → Yrsa Vossen forename rename
+## 2026-04-19 — PP-665 Yrsa Vossen → Yrsa Vossen forename rename
 
 **Commit:** (this commit)
-**Scope:** resolves forename collision between Maret Uln (Varfell) and Maret Vossen (RM). Vossen renamed to Yrsa Vossen; Uln retains forename.
+**Scope:** resolves forename collision between Maret Uln (Varfell) and Yrsa Vossen (RM). Vossen renamed to Yrsa Vossen; Uln retains forename.
 
 **Renames:**
-- 43 instances of "Maret Vossen" → "Yrsa Vossen" across 25 canonical active files.
+- 43 instances of "Yrsa Vossen" → "Yrsa Vossen" across 25 canonical active files.
 - 2 standalone "Maret" → "Yrsa" in Aldric Hann's belief quote (npc_behavior_v30 and npc_behavior_system_v1) — context is RM leader reference.
 - Registry key `maret_vossen` → `yrsa_vossen` in references/proper_noun_registry.yaml.
 - proper_noun_triage_decisions.yaml `maret` token: action `flag` → `split_resolved`, comment updated to note PP-665 resolution.

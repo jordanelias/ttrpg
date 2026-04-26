@@ -385,7 +385,7 @@ Legend: ✓ covered · ◐ partial · ✗ missing · ⚠ wrong source cited
 |-|-|-|
 | Edeyja (Southernmost Warden-Chief) | Roster #1 | ✗ |
 | Maret Uln (Varfell succession) | #2 | ✗ |
-| Maret Vossen (RM leader) | #3 | ✗ |
+| Yrsa Vossen (RM leader) | #3 | ✗ |
 | Sæmund Haelgrund (Church Justice Cardinal/Inquisitor) | #4 | ✗ |
 | Sigrid Torsvald (Löwenritter Riskbreaker) | #5 | ✗ |
 | Halvar Brandt (Löwenritter officer) | #6 | ✗ |

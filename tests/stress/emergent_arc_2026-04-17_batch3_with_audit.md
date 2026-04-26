@@ -1,6 +1,6 @@
 # VALORIA — EMERGENT ARC SKELETON TEST — BATCH 3
 ## Session: 2026-04-17 | Continuation of Batches 1 & 2
-## NPC focus: Edeyja, Maret Uln, Maret Vossen, Torben, Ehrenwall, Guilds, Niflhel, Cardinal Olafsson, Löwenritter
+## NPC focus: Edeyja, Maret Uln, Yrsa Vossen, Torben, Ehrenwall, Guilds, Niflhel, Cardinal Olafsson, Löwenritter
 ## Threadwork focus: Opposing Operations (§2.6), N-Way lattice collapse, Past-Oriented Pull paradox, Dissolution Residue, Lock chronic drift, Framework Drift, Rendering Crisis Resolution (§3.7), Fallout Tables, Threadcut being × Mending, TS growth mechanics, Knot Strain transformation propagation
 ## Does NOT repeat NEW-S1 through NEW-S37 or Loops A-E from Batches 1-2
 
@@ -701,7 +701,7 @@ PLAYER CONFRONTS OLAFSSON WITH WRONG RESONANT STYLE
 ### NEW-S47: VOSSEN ARC × RM FRAMEWORK DRIFT × COMMUNITY WEAVING RS RECOVERY
 
 ```
-Root: Maret Vossen — TS 0, Certainty 3, non-practitioner RM leader
+Root: Yrsa Vossen — TS 0, Certainty 3, non-practitioner RM leader
       RM Framework Drift: Presence markers spread to 1 adjacent territory per season when RM Stability ≥ 3
       RM Priority Tree Priority 5: Community Weaving (if RS ≤ 60 AND practitioner TS 30+ available)
       Community Weaving success: RS +1 to +2

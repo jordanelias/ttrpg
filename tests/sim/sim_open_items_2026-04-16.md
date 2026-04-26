@@ -229,7 +229,7 @@ From npc_behavior §8.11.3 (Institutional Reach table) — NPCs are accessible i
 | Inge Baralta | Hafenmark | T8 Gransol | Parliamentary City (City) |
 | Magnus Vaynard | Varfell | T12 Sigurdshelm | Ducal Seat (Seat) |
 | Lisbeth Ehrenwall | Löwenritter | T14 Ehrenfeld | Military Seat (Seat) |
-| Maret Vossen | Restoration | T13 Oastad | Outpost (RM-managed) |
+| Yrsa Vossen | Restoration | T13 Oastad | Outpost (RM-managed) |
 | Aldric Hann | Restoration | Mobile / T13 | Logistics network |
 | Torben Almqvist | Crown | T1 Valorsplatz | Royal Seat (with Almud) |
 | Edeyja | Warden | Southernmost (T15) | Warden Outpost |

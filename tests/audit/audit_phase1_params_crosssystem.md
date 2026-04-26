@@ -95,7 +95,7 @@ The trigger formula has no asymmetry condition — it fires on any Size loss exc
 ### AUD-P1-07: Attribute Renames Not Propagated — params_factions + params_threadwork
 **Files:** params_factions.md (2 instances), params_threadwork.md (2 instances)
 **Issue:**
-- params_factions L225-226: Maret Vossen described as "Presence 5+" and Aldric Hann as "Lower Presence." Should be Charisma (PP-234).
+- params_factions L225-226: Yrsa Vossen described as "Presence 5+" and Aldric Hann as "Lower Presence." Should be Charisma (PP-234).
 - params_threadwork Coherence degradation table L199-200: "−1D social/Memory" and "−2D social/Memory" — "Memory" here refers to the attribute (now Recall), not the contest genre. Should be "social/Recall."
 **Action:** Mechanical fix — no editorial required.
 

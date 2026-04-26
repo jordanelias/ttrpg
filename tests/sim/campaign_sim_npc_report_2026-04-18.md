@@ -22,7 +22,7 @@ Seed offset per run for reproducibility.
 | Inge Baralta | Hafenmark | diplomat | 19 (Critical) | 49 | 7/7 | 10 | 182 |
 | Magnus Vaynard | Varfell | investigator | 0 (Critical) | 49 | 7/7 | 1 | 227 |
 | Lisbeth Ehrenwall | Crown | warrior | 23 (Fractured) | 49 | 7/7 | 10 | 180 |
-| Maret Vossen | RM | restorationist | 22 (Fractured) | 49 | 7/7 | 10 | 185 |
+| Yrsa Vossen | RM | restorationist | 22 (Fractured) | 49 | 7/7 | 10 | 185 |
 | Aldric Hann | RM | independent | 18 (Critical) | 49 | 7/7 | 10 | 185 |
 | Prince Torben | Crown | balanced | 23 (Fractured) | 49 | 7/7 | 10 | 184 |
 | Edeyja | Wardens | practitioner | 1 (Critical) | 49 | 7/7 | 1 | 242 |
@@ -50,7 +50,7 @@ RS hits Critical (19) — lowest non-practitioner result. Diplomat policy's high
 ### Lisbeth Ehrenwall (Crown — warrior)
 RS 23 (Fractured). Warrior policy is the most RS-stable non-practitioner option — low Thread engagement. Coherence fully intact. The Löwenritter martial profile produces consistent, unglamorous outcomes: Standing maxes, RS decays slowly, no extreme events. Correct for a character defined by institutional loyalty and martial conservatism.
 
-### Maret Vossen (RM — restorationist)
+### Yrsa Vossen (RM — restorationist)
 RS 22 (Fractured). RM starts dormant — activated at campaign start for this run. Restorationist policy's Thread component (weight 0.3) drives moderate RS pressure. Vossen's Solidarity RS style means high social investment; the sim's socialize actions fire frequently. **Finding:** RM faction with empty starting territories requires a fallback govern target — this was the bug fixed before this run. Worth noting as an engine gap: RM's early-game should primarily access T9 via Community Organizing, not generic governance. Currently treated identically.
 
 ### Aldric Hann (RM — independent)

@@ -223,7 +223,7 @@ A11 (axiom heading), C4 (constraint heading), B-table glossary row, D enforcemen
 canon/01_foundations_amendment_self_rendering.md (§16.1 cross-ref)  → updated
 [+ ~30 design file
   - best match: `canon/patch_register_active.yaml` (overlap 3/8)
-  - canon excerpt: > sa Vossen.     43 instances of 'Maret Vossen' replaced across 25 files. 2 standalone 'Maret'     instances in Aldric Hann's belief quote (RM context) rewritten to 'Yrsa'.     Remaining standalone 'Maret' instances refer to Maret Uln and are unchanged
+  - canon excerpt: > sa Vossen.     43 instances of 'Yrsa Vossen' replaced across 25 files. 2 standalone 'Maret'     instances in Aldric Hann's belief quote (RM context) rewritten to 'Yrsa'.     Remaining standalone 'Maret' instances refer to Maret Uln and are unchanged
 
 - **atom** `valoria_session_2026_04_25_master_consolidation__0`
   - claim: > Anything appearing 5+ times but unregistered is a candidate for review.

@@ -338,7 +338,7 @@ Strain: player Composure = Charisma(4) + 6 = 10. Himlensendt Composure = Charism
 
 Player has spent the off-season preparing evidence (§9.1 Pre-Contest Preparation). Preparation: Attunement 4 + relevant History (Investigation): 7D TN7 Ob 1. 7d10: 9,8,7,3,4,7,2 → 4 net = Overwhelming. +1D Exchange 1 AND Exchange 1 Appraise uses TN 6.
 
-**Evidence Track Finding used:** Player conducted Fieldwork investigation in T6 last season. Finding: "Maret Vossen (RM leader) has documented 3 Gap closings by Stillhelm practitioners in the past 2 seasons." This is a Named, Verifiable, Documented Finding. +1D Exchange 1 (fieldwork §9.1 citation cap 2D max; player has 1 Finding cited = +1D). Combined with preparation: Exchange 1 starts at +2D.
+**Evidence Track Finding used:** Player conducted Fieldwork investigation in T6 last season. Finding: "Yrsa Vossen (RM leader) has documented 3 Gap closings by Stillhelm practitioners in the past 2 seasons." This is a Named, Verifiable, Documented Finding. +1D Exchange 1 (fieldwork §9.1 citation cap 2D max; player has 1 Finding cited = +1D). Combined with preparation: Exchange 1 starts at +2D.
 
 **Exchange 1 of Contest 2 (Track 6, need to push to 7):**
 
@@ -582,7 +582,7 @@ But player escaped (fled) — cannot perform post-combat fieldwork on the active
 
 ## ST-07 — MASS BATTLE WITH ZOOM IN, THREAD OPS, GENERAL DUEL (FULL 7-PHASE RUN)
 
-**Setup:** Season 12, T6 Stillhelm. Crown (4 units: 2 Heavy Infantry, 1 Cavalry, 1 Archer) vs Löwenritter (3 units: 2 Heavy Infantry, 1 Knights Templar). Player commands Crown. Allied Thread practitioner (Maret Vossen, TS 45, Coherence 10) present in Reserve.
+**Setup:** Season 12, T6 Stillhelm. Crown (4 units: 2 Heavy Infantry, 1 Cavalry, 1 Archer) vs Löwenritter (3 units: 2 Heavy Infantry, 1 Knights Templar). Player commands Crown. Allied Thread practitioner (Yrsa Vossen, TS 45, Coherence 10) present in Reserve.
 
 **Crown force:**
 - HI Unit A: Power 4, Size 5, Discipline 5, HeavyCut, Medium. BG Martial 4.
