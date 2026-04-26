@@ -1,0 +1,364 @@
+# atoms_pending/2026-04-25 — Index
+
+Staging area for 10 master / consolidation documents uploaded 2026-04-25.
+Each source split at H2 section boundaries. Atoms carry provenance frontmatter.
+
+**Status:** all atoms `pending-prioritization`. No canon ingestion until prioritization pass.
+
+## Sources
+
+### `VALORIA_SESSION_2026-04-25_MASTER.md`
+- atoms: **11**, source lines: 463, sha: `dedb9b7e51dc8e7b`
+- folder: `valoria_session_2026-04-25_master/`
+- sections:
+  - Section 1 — Commit Manifest (chronological)
+  - Section 2 — P1 Resolution
+  - Section 3 — Major New Specs Authored
+  - Section 4 — Stress Tests Run
+  - Section 5 — Cross-Reference Audit
+  - Section 6 — Editorial Decisions Summary
+  - Section 7 — Files Modified
+  - Section 8 — Historical Research
+  - Section 9 — Open Items at Session Close
+  - Section 10 — Session Statistics
+
+### `master_consolidation.md`
+- atoms: **13**, source lines: 525, sha: `d6e5419e525d5f3b`
+- folder: `master_consolidation/`
+- sections:
+  - §1 Conversation arc
+  - §2 ED-738 — Ein Sof gradient editorial
+  - §3 Throughlines T-31..T-41
+  - §4 Meta-throughlines М-7..М-11
+  - §5 Proposal tier classification
+  - §6 Mechanical specifications
+  - §7 Wave 1 workplans
+  - §8 Open editorial decisions
+  - §9 Commit ledger
+  - §10 Next-stage work
+  - §11 Methodological notes for continuation
+  - §12 What this consolidation is not
+
+### `master_document_2026-04-25.md`
+- atoms: **50**, source lines: 633, sha: `312f97236be6f341`
+- folder: `master_document_2026-04-25/`
+- sections:
+  - Date: 2026-04-25 | Session: 9f2f99bae771869f → c85d4e42c75417c9 → dcd1fe787654eb12
+  - Scope: Consolidates all outcomes, deliverables, simulation findings, and open questions from a multi-stage conversation that began with strategic-layer faction balance and concluded with a three-mode emotional-engagement architecture.
+  - Companion deliverables (reference only — do not re-read except as needed):
+  - - faction_balance_audit_2026-04-25.md (47KB)
+  - - balance_simulation_report_2026-04-25.md (21KB)
+  - - faction_balance_audit_player_experience_2026-04-25.md (51KB)
+  - - leadership_win_proposal_2026-04-25.md (21KB)
+  - - three_modes_of_fulfilment_2026-04-25.md (39KB)
+  - - sim_balance.py (36KB Monte Carlo simulator)
+  - §1.1 Three Modes of Fulfilment (the design recommendation)
+  - §1.2 Crucial design properties of the three-mode architecture
+  - §1.3 Cross-mode interactions
+  - §2.1 Initial faction balance audit findings
+  - §2.2 Monte Carlo simulation results
+  - §2.3 Critical findings beyond audit (sim-revealed)
+  - §2.4 Strategic-layer victory shape recommendations (Victory Scenes)
+  - §3.1 Player-experience faction ranking (inverts strategic ranking)
+  - §3.2 Player-experience proposals (audit §6.9–§6.15)
+  - §3.3 The strong-choice vs weak-choice test
+  - §4.1 The 3-scene Ascension Arc
+  - §4.2 Personal Victory registration
+  - §4.3 Multiple parallel Personal Victory paths
+  - §4.4 Hall of Lineage as persistent campaign meta-state
+  - P0 — Essential for the design to make sense (Three Modes)
+  - P0 — Essential for Mode 3 (Strategy) to function
+  - P1 — Essential for modes to feel rich
+  - P2 — Refinement
+  - P3 — Designer hygiene (no direct player impact)
+  - §6.1 Three-mode architecture gaps
+  - §6.2 Strategic-layer mechanical gaps
+  - §6.3 Player-experience gaps
+  - §6.4 Leadership Win gaps
+  - §6.5 Framework propagation gaps (deferred from prior audit §5)
+  - Phase A — Foundation (P0 set 1)
+  - Phase B — Three-mode declaration (P0 set 2)
+  - Phase C — Mode 3 Victory Scenes (P0 set 3)
+  - Phase D — Mode 1 + Mode 2 enrichment (P1)
+  - Phase E — Strategic balance refinement (P1, sim-validated)
+  - Phase F — Texture and content (P1–P2)
+  - Phase G — Designer hygiene (P3)
+  - §8.1 Faction win-rate equality is not the primary balance question
+  - §8.2 Universal Sovereignty is aspirational, not default
+  - §8.3 Victory is a scene, not a state vector
+  - §8.4 Leadership attainment is itself a Personal Victory
+  - §8.5 The mode is declared, not deduced
+  - §8.6 The world is the same; the win condition varies
+  - §8.7 Defeat is also performed
+  - §8.8 The Cultural Reformation strike requires replacement
+  - §8.9 Faction-balance simulation work remains valid for Mode 3 calibration
+
+### `solmund_master_document.md`
+- atoms: **32**, source lines: 585, sha: `367f2c10b4b68eb8`
+- folder: `solmund_master_document/`
+- sections:
+  - Status: DRAFT — all content PROVISIONAL pending Jordan editorial approval
+  - Scope: Voice registers, artifact taxonomy, philosophical frameworks, Solmund's nature, faction engagement pathways, mechanical audit
+  - Cross-references: canon/00_philosophical_foundations.md, canon/02_canon_constraints.md (P-01–P-15), canon/03_canonical_timeline.md, designs/world/worldbuilding_v30.md, designs/threadwork/threadwork_v30.md, designs/world/southernmost_v30.md, designs/npcs/npc_character_analyses_v30.md, designs/world/character_histories_v30.md, params/bg/faction_actions.md, params/bg/clocks.md, params/bg/tracks.md
+  - 1. The Di Cicco Principle — Faith as Inhabited Architecture
+  - 2. Five Theological Poets — Tonal Registers
+  - 3. Five Renaissance Theologians — Doctrinal Architecture
+  - 4. Six Kabbalistic Sources for Solmund Voice
+  - 5. Derrida — Aporia
+  - 6. Kierkegaard — The Leap of Faith
+  - 7. Augustine — Memory, Confession, Time
+  - 8. Wittgenstein — Whereof One Cannot Speak
+  - 9. Levinas — The Face, Ethics, and Irreconcilable Tension
+  - 10. What Solmund Is — The Authorial Fact
+  - 11. The Two Witness Traditions
+  - 12. The Seam Text
+  - 13. Orthodox Canon
+  - 14. Heterodox and Marginal
+  - 15. Folk and Vernacular
+  - 16. Vocabulary Constraints
+  - 17. Structural Writing Patterns
+  - 18. Tonal Calibration by Certainty
+  - 19. The Problem
+  - 20. The Mechanism: Rendered-World Change Event (RWCE)
+  - 21. Baralta's Theological Position
+  - 22. Faction Response Pathways
+  - 23. The Triple Interpretation
+  - 24. SA-Gated Faction Actions
+  - 25. Conviction Mechanic for RWCE Witnesses
+  - 26. System Connections
+  - 27. Five Throughlines
+  - 28. Implementation Priorities
+
+### `threadwork_master.md`
+- atoms: **12**, source lines: 552, sha: `66219286b90b6f9d`
+- folder: `threadwork_master/`
+- sections:
+  - I. Foundational stance
+  - II. The substrate's language (held in silence)
+  - III. What the player should feel
+  - IV. Three stories the system produces
+  - V. Operations — what threadwork verbs do
+  - VI. Apparatus — what the practitioner carries
+  - VII. Architecture in implementation order
+  - VIII. Substrate ontology constraints
+  - IX. Decisions awaiting Jordan
+  - X. Open dependencies
+  - XI. The game
+
+### `valoria_master_analysis.md`
+- atoms: **13**, source lines: 341, sha: `23f5dbb51819c542`
+- folder: `valoria_master_analysis/`
+- sections:
+  - Section 1 — Task and corrections made
+  - Section 2 — Deliverables produced
+  - Section 3 — v2 factual audit findings (5 tiers)
+  - Section 4 — Individual mechanic N-check (54 proposals)
+  - Section 5 — Branch-level analysis
+  - Section 6 — Holistic system-level
+  - Section 7 — Throughlines and meta-throughlines
+  - Section 8 — Synthesis: Valoria's design identity
+  - Section 9 — Required fixes to v2 cross-lens audit
+  - Section 10 — Implementation priority (throughline-derived)
+  - Section 11 — Outstanding design decisions
+  - Section 12 — Session handoff
+
+### `valoria_master_consolidation.md`
+- atoms: **40**, source lines: 566, sha: `bdc7567069649c60`
+- folder: `valoria_master_consolidation/`
+- sections:
+  - 2.1 The bridge work (2026-04-16) is structurally complete
+  - 2.2 Scale Transitions has 13 Zoom In trigger families
+  - 2.3 Simulation framework exists and is growing
+  - 2.4 Recent canonical strikes
+  - 2.5 Workplan exists
+  - 2.6 NPC and faction interdependency mapped
+  - 2.7 Throughlines and transitions completely mapped
+  - 2.8 Per-system quality is high
+  - 4.1 The Five Moments Framework
+  - 4.2 The Primary Verb: Sustain
+  - 4.3 Literal Rendering + Per-Character Visual Filtering
+  - 4.4 Multi-Perspectival Chroniclers
+  - 4.5 Rendering Strain (Substrate-Posture Cost)
+  - 4.6 Per-Faction Thread Entry Points
+  - 4.7 Confrontation-Only TS, Era-Contingent
+  - 4.8 Cold Open + Progressive System Activation
+  - 4.9 Multi-Generational Lineage + Variant Eras
+  - 4.10 Conviction System Architectural Centering
+  - From RSE critique (`valoria_rse_critique.md`)
+  - From holistic audit (`valoria_holistic_audit.md`)
+  - From systematic critique (`systematic_critique_2026-04-04.md`)
+  - From workplan (`valoria_workplan_final.md`)
+  - From complete system audit (`valoria_complete_system_audit.md`)
+  - From simulation review (`simulation_review_2026-04-15.md`)
+  - Phase 0 — Housekeeping (prerequisite, not optional)
+  - Phase I — Foundations Compliance Gap Closure
+  - Phase II — Experiential Architecture Governance
+  - Phase III — Document Consolidation
+  - Phase IV — Simulation Completion
+  - Phase V — Conviction Architectural Centering
+  - Phase VI — Per-Faction Thread Entry Points
+  - Phase VII — Hand-Authored Content, Tier-Ordered
+  - Phase VIII — Variant Campaign Eras
+  - Phase IX — Onboarding
+  - Phase X — Vertical Slice Playtest Iteration
+  - How recommendations were produced
+  - What the recommendations are not
+  - What the recommendations are
+  - Using this document
+
+### `valoria_master_document.md`
+- atoms: **125**, source lines: 1442, sha: `8f501f471217ba59`
+- folder: `valoria_master_document/`
+- sections:
+  - Conversation Date: 2026-04-24 to 2026-04-25 | Compiled from session work
+  - Subject: Recursive mechanical review of the Valoria videogame design (Godot 4.6 target)
+  - 1.1 Die Face Rule (d10)
+  - 1.2 TN Values
+  - 1.3 Obstacle Scale
+  - 1.4 Degrees of Success
+  - 1.5 Pool Minimum (1D)
+  - 1.6 Momentum (0–4)
+  - 2.1 Attributes (10, range 1–7)
+  - 2.2 Derived Scores
+  - 3.1 Pool Split (Off/Def)
+  - 3.2 Initiative
+  - 3.3 Weapon System (3 Binary Axes)
+  - 3.4 Armour
+  - 3.5 Wound System
+  - 3.6 Actions (14)
+  - 3.7 Fibonacci Group Bonus
+  - 3.8 Mass Mismatch
+  - 3.9 Ranged Combat
+  - 4.1 Adjudicator → Pool Rotation
+  - 4.2 Styles (2×2)
+  - 4.3 Interaction Types
+  - 4.4 Conviction Track (0–10)
+  - 4.5 Composure / Concentration
+  - 4.6 Key Sub-Mechanics
+  - 5.1 Thread Pool
+  - 5.2 Three-Axis Ob
+  - 5.3 Operations
+  - 5.4 Opposing Operations (PP-653)
+  - 5.5 Gap Self-Closure
+  - 5.6 Substrate Saturation Counter (PP-606)
+  - 5.7 Knots (PP-632)
+  - 5.8 WR/WC
+  - 5.9 Dissonance (PP-607/610)
+  - 5.10 Mending Community Tiers
+  - 6.1 Depth Axis (0–5)
+  - 6.2 Fieldwork Pool and Attribute Rotation
+  - 6.3 Evidence Track
+  - 6.4 Socializing / Disposition
+  - 6.5 Exposure System
+  - 6.6 Rendering Strain (Depth 3+)
+  - 6.7 System Transitions (6 bidirectional)
+  - 7.1 Core Formula (PP-233)
+  - 7.2 Phase Structure
+  - 7.3 Key Mechanics
+  - 7.4 PROVISIONAL Count
+  - 8.1 Scene Types
+  - 8.2 Scene Lifecycle
+  - 8.3 Scene Budget and Scene Slate
+  - 9.1 Card-Hand Economy
+  - 9.2 Action Ob Formulas
+  - 9.3 Ethical Framework Modifiers
+  - 9.4 Faction Starting Stats
+  - 9.5 Global Tracks
+  - 9.6 Accord (0–3, per territory)
+  - 9.7 Peninsular Strain (0–10)
+  - 10.1 Eight Handoff Rules
+  - 10.2 Domain Echo (The Upward Pipe)
+  - 10.3 Zoom In / Zoom Out
+  - 11.1 Turn Sequence
+  - 11.2 Hybrid Phase Structure
+  - 12.1 MS (Mending Stability)
+  - 12.2 CI (Church Influence)
+  - 12.3 IP (Invasion Pressure)
+  - 12.4 PI (Parliament Integrity)
+  - 12.5 Personal-Scale Tracks
+  - 13.1 Universal Victory — Peninsular Sovereignty
+  - 13.2 Faction Toolkits (NOT Alternate Endpoints)
+  - 13.3 Co-Victory (6 Pairings)
+  - 13.4 World-State Transitions
+  - 14.1 Architecture
+  - 14.2 Dual-Authority Governance
+  - 14.3 Church 4-Axis Infrastructure
+  - 14.4 Faction Emergence (5 Stages)
+  - 14.5 Faction Collapse
+  - 14.6 Extended Timeline
+  - 15.1 Unit Representation
+  - 15.2 Muster
+  - 15.3 TC Competitive Formula
+  - 15.4 Accord → Military
+  - 15.5 Siege (ED-633)
+  - 16.1 Stance Triangle
+  - 16.2 Named NPC Profiles (12 core)
+  - 16.3 Decision Procedure
+  - 16.4 Belief Revision and Scars
+  - 16.5 BG Priority Trees (All Factions)
+  - 16.6 NPC Outreach / Demand Generation
+  - 16.7 NPC Recruitment (PP-642)
+  - 16.8 Heresy Jurisdiction (ED-670)
+  - 16.9 Roster Tracking (PP-661)
+  - 16.1 Thread Revelation Curve
+  - 16.2 Portrait Retirement and Lineage
+  - 16.3 Mending Community
+  - 20.1 Formula Consistency
+  - 20.2 The Complete Pipeline
+  - 20.3 Personal-to-Global Chain (Verified)
+  - 19.1 Narrative Throughlines (What the Game Is About)
+  - 19.2 System Throughlines (How Mechanics Connect)
+  - 19.3 Ontological Throughlines (Post-Atomization, T-31 to T-41)
+  - 19.4 Meta-Throughlines (Emergent Structural Patterns)
+  - 19.5 Connectivity Verification
+  - II.1 Stale References (10 items)
+  - II.2 Open Decisions Requiring Jordan (16 items)
+  - II.3 Gaps (11 items)
+  - II.4 PROVISIONAL Items (17 total)
+  - II.5 Rating Corrections Applied
+  - II.6 Mechanics Flagged for Removal
+  - II.7 Architecture Strengths (Mechanical)
+  - II.8 Architecture Weaknesses (Mechanical)
+  - II.9 Connectivity (Mechanical Throughlines Only)
+  - II.10 Meta-Throughlines (Genuinely Emergent vs. Imposed)
+  - III.1 Findings Register (14 items)
+  - III.2 Findings Affected by TTRPG-vs-Videogame Framing Errors
+  - III.3 Claims That Survive Recalibration
+  - III.4 Claims That Are Speculative/Hypothesis-Level
+  - IV.1 Verify Against Source
+  - IV.2 Claims I Cannot Currently Verify
+  - IV.3 Recursive Drift Risk
+  - V.1 Companion System (GAP-05)
+  - V.2 Player Agency / Convictions / Standing / Renown (GAP-06)
+  - V.3 Derived Stats (GAP-07)
+  - V.4 Caste / Social Structure
+  - V.5 Royal Assassination Fuse
+  - V.6 Other Likely Unreviewed Items
+
+### `valoria_session_2026_04_25_master_consolidation.md`
+- atoms: **15**, source lines: 577, sha: `4c4672049317ec8e`
+- folder: `valoria_session_2026_04_25_master_consolidation/`
+- sections:
+  - 1. Scope
+  - 2. Censured Vocabulary
+  - 3. Pre-Work Contamination Surface (canon/ tier)
+  - 4. Proposed Architecture for Term Governance (deferred — see §10)
+  - 5. Pipeline / Data-Stream Analysis
+  - 6. Audit of Philosophical Foundations Rewrite
+  - 7. Philosophical Content Established
+  - 8. Canon Changes Committed
+  - 9. Verification Status
+  - 10. Outstanding Work
+  - 11. Key Decisions
+  - 12. Pending Decisions / GAPs
+  - 13. Process / Meta Observations
+  - 14. References
+
+### `valoria_session_master_2026-04-25.md`
+- atoms: **5**, source lines: 162, sha: `8b5f5049f7c1710a`
+- folder: `valoria_session_master_2026-04-25/`
+- sections:
+  - Context Window 1 — Session B Core
+  - Context Window 2 — Session B Secondary + Session C
+  - Context Window 3 — ED-717 + Cleanup
+  - Status
