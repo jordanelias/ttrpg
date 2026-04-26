@@ -96,7 +96,7 @@ A detailed NPC audit was committed to the design repo (designs/npcs/npc_comprehe
 The full NPC ethical stance and resonance behavior system (npc_behavior_v30.md) was designed, audited, simulated, and committed in a dedicated session. My documents captured the content but missed the simulation patches:
 
 - **PP-NPC-01:** Crown Decree gated on Mandate ≥ 3 (prevents death spiral where Almud keeps issuing Decrees at low Mandate, failing, losing more Mandate).
-- **PP-NPC-02:** Deterministic coup requires active Church Assert, not just passive TC advancement (prevents the coup from firing based on a clock no player actively controls).
+- **PP-NPC-02:** Deterministic coup requires active Church Assert, not just passive CI advancement (prevents the coup from firing based on a clock no player actively controls).
 - **PP-NPC-03:** Church Influence drift conditioned on Stability + Church Influence + yearly cycle (prevents runaway drift).
 - **PP-NPC-04:** Varfell Private Collection cooldown enforced (prevents unbounded VTM advancement).
 
@@ -115,7 +115,7 @@ From the concurrent threadwork session (April 14), a full opposing operations sy
 
 From the April 14 arc evaluation session, the trigger distribution across the game was analyzed:
 
-- **Overtriggered:** Church faction (too many arcs fire from TC thresholds alone).
+- **Overtriggered:** Church faction (too many arcs fire from CI thresholds alone).
 - **Undertriggered:** Crown (too few territory-based triggers), Hafenmark (almost no arcs below Season 8), Varfell (VTM path arcs too linear).
 - **Missing:** Territory-based triggers (arcs that fire when specific territories change hands, reach specific Piety/Accord values, or develop specific POI chains). These are essential for the videogame where the player explores territories.
 

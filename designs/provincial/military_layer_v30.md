@@ -1,12 +1,12 @@
 <!-- SKELETON — mechanical spec only -->
 <!-- Infill: military_layer_v30_infill.md -->
 <!-- PP-TBD series — awaiting patch assignment -->
-<!-- Sources: mass_battle_v30.md §A.4, §A.13, §B.2, §B.3, §B.5; params_board_game.md §Unit Muster Ob Table, §Accord, §TC Generation; canonical_sources.yaml -->
+<!-- Sources: mass_battle_v30.md §A.4, §A.13, §B.2, §B.3, §B.5; params_board_game.md §Unit Muster Ob Table, §Accord, §CI Generation; canonical_sources.yaml -->
 <!-- Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) -->
 <!-- Date: 2026-04-14 -->
 
-# VALORIA — Military Layer: Unit Bridge & TC Revision
-## v1.0 — Faction-layer unit representation → mass battle; TC competitive formula
+# VALORIA — Military Layer: Unit Bridge & CI Revision
+## v1.0 — Faction-layer unit representation → mass battle; CI competitive formula
 
 ---
 
@@ -20,7 +20,7 @@ This document resolves two open editorial items:
 | FACTION-P2-03 | Muster → unit stats | Size=2, Power=floor(Military/2)+1 per §A.13 adopted; modifiers added below |
 | Command-EDIT-01 | Same as FACTION-P2-01 | Confirmed |
 | Command-EDIT-03 | Same as FACTION-P2-03 | Confirmed |
-| PP-402 | TC passive +1 per season | Revised to conditional passive; see §2 |
+| PP-402 | CI passive +1 per season | Revised to conditional passive; see §2 |
 
 ---
 
@@ -153,7 +153,7 @@ Knights Templar: Martial 5, Discipline 6, Health 11. TTRPG: Power 5, Size 6, Hea
 
 Unit cap for Templar: max 2 Templar units active simultaneously, regardless of Military stat. They are elite and rare.
 
-Templar units have TC implications — see §2.5.
+Templar units have CI implications — see §2.5.
 
 ---
 
@@ -166,12 +166,12 @@ Extended encirclement targeting a fortified territory. Replaces Battle against g
 
 | Degree | Fort effect | Cost |
 |--------|-------------|------|
-| Overwhelming | Fort −2 | RS −1, Wealth −1 |
-| Success | Fort −1 | RS −1, Wealth −1 |
-| Partial | No change | RS −1, Wealth −1 |
+| Overwhelming | Fort −2 | MS −1, Wealth −1 |
+| Success | Fort −1 | MS −1, Wealth −1 |
+| Partial | No change | MS −1, Wealth −1 |
 | Failure | No change | Stability −1, Wealth −1 |
 
-**Cap:** 5 seasons. Then: Assault (at current Fort) or Withdraw. **RS:** −1/season (threadwork §5.2).  
+**Cap:** 5 seasons. Then: Assault (at current Fort) or Withdraw. **MS:** −1/season (threadwork §5.2).  
 **Garrison supply:** Consul Outward Ob 2 from adjacent territory. Fail: Garrison Discipline −1/season.  
 **Calibration:** Fort 3, Military 4 = Ob 5 ≈ 2%/season. Requires Military 5+ (~25%) or political bypass.
 
@@ -220,35 +220,35 @@ Units from BG with Size tracked: use that Size directly. Do not use the B.2 TTRP
 
 ---
 
-## §3 — TC REVISION: COMPETITIVE FORMULA
+## §3 — CI REVISION: COMPETITIVE FORMULA
 
 ### §3.1 Repeal of PP-402 (Unconditional Passive)
 
-PP-402 (TC +1 passive per season, unconditional) is **repealed** by this document.
+PP-402 (CI +1 passive per season, unconditional) is **repealed** by this document.
 
-**Rationale.** The unconditional passive treated the Theocracy Counter as a countdown clock whose advance required no Church action and could not be zeroed out even by sustained opposition. Historically, the Church's institutional authority required continuous active maintenance — preaching, charitable works, military enforcement of doctrine, and genuine popular piety. These are not passive. When the Church failed to perform them — when secular authorities provided welfare, when heresy spread, when Templar orders were expelled — TC fell. The passive ensured Church always won in long games regardless of play quality.
+**Rationale.** The unconditional passive treated the Church Influence as a countdown clock whose advance required no Church action and could not be zeroed out even by sustained opposition. Historically, the Church's institutional authority required continuous active maintenance — preaching, charitable works, military enforcement of doctrine, and genuine popular piety. These are not passive. When the Church failed to perform them — when secular authorities provided welfare, when heresy spread, when Templar orders were expelled — CI fell. The passive ensured Church always won in long games regardless of play quality.
 
 PP-402 is replaced by a conditional passive (§3.2) and explicit competitive sources (§3.3–§3.6).
 
-**Legacy TC sources note (from params_board_game):** "AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence are subsumed into the Piety Yield system." This document restores Church unit presence as an explicit source (§3.5) and formalises the Wealth/charity dimension (§3.4). Piety Yield is retained and refined (§3.3).
+**Legacy CI sources note (from params_board_game):** "AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence are subsumed into the Piety Yield system." This document restores Church unit presence as an explicit source (§3.5) and formalises the Wealth/charity dimension (§3.4). Piety Yield is retained and refined (§3.3).
 
 ### §3.2 Conditional Passive
 
-TC advances by +1 passively each season **only if** Church is Prominent (Church Mandate > controlling faction Mandate) in **2 or more territories** at Accounting time.
+CI advances by +1 passively each season **only if** Church is Prominent (Church Mandate > controlling faction Mandate) in **2 or more territories** at Accounting time.
 
-| Prominent territory count | TC passive |
+| Prominent territory count | CI passive |
 |---|---|
 | 0–1 | +0 (Church is marginal; no institutional weight) |
 | 2–4 | +1 (Church has meaningful civil presence) |
 | 5+ | +2 (Church dominates civil society across the peninsula) |
 
-Church prominence is the existing ED-326 mechanic (Church Mandate > controlling faction Mandate per territory), updated every Accounting. This conditional passive preserves the historical reality that the Church's calendar, sacraments, and parish infrastructure are always operating — but only generates TC momentum when the Church actually has institutional reach.
+Church prominence is the existing ED-326 mechanic (Church Mandate > controlling faction Mandate per territory), updated every Accounting. This conditional passive preserves the historical reality that the Church's calendar, sacraments, and parish infrastructure are always operating — but only generates CI momentum when the Church actually has institutional reach.
 
 ### §3.3 Piety Yield (Retained, Refined)
 
 For each territory where Church is Prominent:
 
-| Territory PT | TC yield |
+| Territory PT | CI yield |
 |---|---|
 | 5 | +1 |
 | 4 | +0.5 (fractional; floor at Year-End Accounting) |
@@ -257,19 +257,19 @@ For each territory where Church is Prominent:
 
 This is the existing Piety Yield mechanism, extended to include PT 3 as a fractional contributor. PT 3 represents a population that attends church and observes the sacraments but isn't devoted enough to drive institutional authority. Over multiple seasons it accumulates.
 
-**PT 5 in T9 Himmelenger** (starting value) generates +1 TC/season whenever Church is Prominent there. Losing T9 or allowing PT to drop below 5 meaningfully reduces Church's TC income.
+**PT 5 in T9 Himmelenger** (starting value) generates +1 CI/season whenever Church is Prominent there. Losing T9 or allowing PT to drop below 5 meaningfully reduces Church's CI income.
 
 ### §3.4 Charity Advantage
 
-Church has a unique ability to translate Wealth into TC through acts of charity, almsgiving, and institutional welfare provision that rival secular authorities.
+Church has a unique ability to translate Wealth into CI through acts of charity, almsgiving, and institutional welfare provision that rival secular authorities.
 
 At each Accounting: for each territory where Church is Prominent AND Church Wealth ≥ (controlling faction Wealth + 2):
 
-- TC +0.5 per qualifying territory (fractional; floor at Year-End)
+- CI +0.5 per qualifying territory (fractional; floor at Year-End)
 
-**Maximum from this source:** +1 TC per season (requires 2+ qualifying territories).
+**Maximum from this source:** +1 CI per season (requires 2+ qualifying territories).
 
-This represents the Church outspending the secular government on social welfare in that territory — feeding the poor, maintaining hospitals, supporting orphans. When the Church is richer than the duke and visibly more generous, TC rises because the population's loyalty tilts ecclesiastical.
+This represents the Church outspending the secular government on social welfare in that territory — feeding the poor, maintaining hospitals, supporting orphans. When the Church is richer than the duke and visibly more generous, CI rises because the population's loyalty tilts ecclesiastical.
 
 **Church must actively maintain Wealth** to trigger this. If Church Wealth drops (from Parliamentary Embargo, Blockade, or general economic pressure), this source dries up. It rewards economic investment in the Church's institutional role, not just aggressive military or political action.
 
@@ -277,25 +277,25 @@ This represents the Church outspending the secular government on social welfare 
 
 Each territory where Church has a Knights Templar unit stationed AND the territory's PT ≥ 3:
 
-- TC +1 per qualifying territory
-- **Maximum from this source:** +2 TC per season
+- CI +1 per qualifying territory
+- **Maximum from this source:** +2 CI per season
 
 Templars enforce ecclesiastical law physically — suppressing heresy, protecting Church property, projecting authority. Their presence in a pious territory reinforces the Church's institutional claim over that territory in ways that no number of sermons alone can match.
 
-The PT ≥ 3 gate matters: Templars stationed in a secular or resistant territory (PT 1–2) don't generate TC because the population regards them as occupying forces, not defenders of the faith.
+The PT ≥ 3 gate matters: Templars stationed in a secular or resistant territory (PT 1–2) don't generate CI because the population regards them as occupying forces, not defenders of the faith.
 
-**Design note:** This restores the legacy TC source "Church unit presence" (subsumed by PP-205/Piety Yield system) as an explicit named source. It is not redundant with Piety Yield — it fires additionally when Templar units are physically present, representing enforcement, not merely popular piety.
+**Design note:** This restores the legacy CI source "Church unit presence" (subsumed by PP-205/Piety Yield system) as an explicit named source. It is not redundant with Piety Yield — it fires additionally when Templar units are physically present, representing enforcement, not merely popular piety.
 
 ### §3.6 Assert Action
 
 Assert (existing Standard Action, Church only, Pontifex/Senator Priority):
 
-| Assert result | TC effect | Stability effect |
+| Assert result | CI effect | Stability effect |
 |---|---|---|
-| Overwhelming | +2 TC | — |
-| Success | +1 TC | — |
-| Partial | +0 TC | — |
-| Failure | +0 TC | Church Stability −1 |
+| Overwhelming | +2 CI | — |
+| Success | +1 CI | — |
+| Partial | +0 CI | — |
+| Failure | +0 CI | Church Stability −1 |
 
 Assert represents Church actively preaching, issuing papal decrees, performing public ecclesiastical acts of authority. The Overwhelming result represents Assert so decisive that no secular argument can answer it — the Church has won the narrative battle for that season.
 
@@ -305,28 +305,28 @@ Assert is a proactive investment. Church must spend an action slot on it, choosi
 
 Existing rule retained. Any PLAYABLE faction may declare Suppress as a Senator/Mandate action.
 
-| Suppress result | TC effect | Stability effect |
+| Suppress result | CI effect | Stability effect |
 |---|---|---|
 | Overwhelming | Negate this season's conditional passive AND Piety Yield | — |
 | Success | Negate this season's conditional passive only | — |
 | Partial | No effect | — |
-| Failure | No TC effect | Suppressing faction Stability −1 (existing named exception to PP-403 repeal) |
+| Failure | No CI effect | Suppressing faction Stability −1 (existing named exception to PP-403 repeal) |
 
 Suppress requires real political capital — it is a public act of secular authority challenging Church institutional claims. A powerful, stable Crown or Hafenmark can do this successfully. A weakened, occupied faction cannot.
 
 ### §3.8 Hafenmark Structural Suppression (Baralta)
 
-Existing rule retained. While Inge Baralta NPC Mandate ≥ 4: TC −1 per season automatically at Accounting. This is institutional expertise, not a Domain Action.
+Existing rule retained. While Inge Baralta NPC Mandate ≥ 4: CI −1 per season automatically at Accounting. This is institutional expertise, not a Domain Action.
 
-### §3.9 TC Seasonal Cap
+### §3.9 CI Seasonal Cap
 
-Per PP-504 (unchanged): ±5 TC per season from all sources combined. ±3 from player-initiated Domain Actions specifically.
+Per PP-504 (unchanged): ±5 CI per season from all sources combined. ±3 from player-initiated Domain Actions specifically.
 
 ### §3.10 CI Cap and Seizure
 
 CI caps at 100 (no freeze). Church Mass Seizure available at CI ≥ 60 (one-shot). See victory_v30 §3.2/§7.
 
-### §3.11 Full TC Accounting Sequence
+### §3.11 Full CI Accounting Sequence
 
 Execute in order at Phase 5 Step 4:
 
@@ -375,11 +375,11 @@ The military layer bridges BG units to mass battle. Mass battle §A.10 has exten
 
 **Practitioner-general Coherence:** NPC generals who are practitioners operate under npc_behavior_v30 §4.3 Coherence AI thresholds. Coherence ≤ 5 → defensive Thread ops only. Coherence ≤ 3 → cease Thread operations. When assigning generals to units, faction AI must account for practitioner Coherence state.
 
-**Battle RS cost:** Each battle on Valorian soil costs RS −1 (Campaign/War: −2) per peninsular_strain_v1 §3.1 and ms_budget.md. This is not a penalty — mass violence degrades the substrate (Foundations A1).
+**Battle MS cost:** Each battle on Valorian soil costs MS −1 (Campaign/War: −2) per peninsular_strain_v1 §3.1 and ms_budget.md. This is not a penalty — mass violence degrades the substrate (Foundations A1).
 
 **Unit quality and Thread:** Accord (§4.1) is the population-level expression of social thread-coherence. Low Accord means the population's rendered social structures resist the governing faction — not political opposition in the conventional sense, but substrate-level misalignment between the population's thread-configuration and the faction's institutional rendering.
 
-**Devout vs. practitioner army composition:** Church armies are always Devout (cannot use or counter Thread — mass_battle_v30 EDGE-01). Varfell armies include practitioner-generals. Crown and Hafenmark choose based on RS state and enemy Thread capability.
+**Devout vs. practitioner army composition:** Church armies are always Devout (cannot use or counter Thread — mass_battle_v30 EDGE-01). Varfell armies include practitioner-generals. Crown and Hafenmark choose based on MS state and enemy Thread capability.
 
 ## §5 — OPEN EDITORIAL ITEMS
 
@@ -393,8 +393,8 @@ The military layer bridges BG units to mass battle. Mass battle §A.10 has exten
 | ED-NEW-MIL-02 | Accord 1 → Martial −1: offence or defence? | **RESOLVED (PP-667)** — BOTH. |
 | ED-NEW-MIL-03 | Experience stack ceiling. | **RESOLVED (PP-667)** — ceiling is faction Military stat (1–7). |
 | ED-NEW-MIL-04 | Wealth Zero → HI/Cavalry Discipline −1/season. | **RESOLVED (PP-667)** — confirmed; supersedes "Military −1" prior rule. |
-| ED-NEW-TC-01 | Conditional passive thresholds (0-1/2-4/5+). | **DEFERRED (PP-667)** to engine_v4 smoke-test. |
-| ED-NEW-TC-02 | Charity Advantage Wealth differential ≥ 2. | **RESOLVED (PP-667)** — threshold = 2. |
-| ED-NEW-TC-03 | PT 3 Piety Yield. | **RESOLVED (PP-667)** — raised to +0.5 (was +0.25). Integer-stable granularity. |
-| BALANCE-NEW-TC-01 | TC reform pace. | **DEFERRED (PP-667)** to engine_v4 smoke-test. |
-| CLOCK-EDIT-02 | Church military victory → no TC change. | **RESOLVED (PP-667)** — confirmed. TC changes only via Piety Yield / Assert / Suppress / Charity Advantage. |
+| ED-NEW-CI-01 | Conditional passive thresholds (0-1/2-4/5+). | **DEFERRED (PP-667)** to engine_v4 smoke-test. |
+| ED-NEW-CI-02 | Charity Advantage Wealth differential ≥ 2. | **RESOLVED (PP-667)** — threshold = 2. |
+| ED-NEW-CI-03 | PT 3 Piety Yield. | **RESOLVED (PP-667)** — raised to +0.5 (was +0.25). Integer-stable granularity. |
+| BALANCE-NEW-CI-01 | CI reform pace. | **DEFERRED (PP-667)** to engine_v4 smoke-test. |
+| CLOCK-EDIT-02 | Church military victory → no CI change. | **RESOLVED (PP-667)** — confirmed. CI changes only via Piety Yield / Assert / Suppress / Charity Advantage. |

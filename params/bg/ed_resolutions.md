@@ -1,5 +1,5 @@
 ## Balance Findings — Status Update
-**BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_v30.md redesign. Crown victory restructured (TCV ≥ 16 + political conditions, per victory_v30.md). Church primary restructured (TC 75 phase transition + seizure). Varfell Path B redesigned. TC dynamics recalibrated.
+**BAL-04, BAL-05/06, BAL-08, BAL-09 (all P1):** Superseded by victory_v30.md redesign. Crown victory restructured (TCV ≥ 16 + political conditions, per victory_v30.md). Church primary restructured (CI 75 phase transition + seizure). Varfell Path B redesigned. CI dynamics recalibrated.
 **BAL-10 (P2):** Varfell T13 (now T13 Oastad) dominant opening — still relevant for monitoring under new TCV system.
 See victory_v30.md §10 for Monte Carlo win probability assessment.
 [SIM-DEBT: Full faction-AI simulation needed to validate multi-faction interaction under new victory architecture.]
@@ -21,7 +21,7 @@ Faction unique tactic cards (2 per faction, provisional):
 
 
 ## ED-056 Resolution (PP-268)
-Zoom In TC win-delay exploit: if a player triggers Zoom In specifically to suspend Accounting when TC ≥ 75 (Church phase transition), the Accounting still checks victory conditions at suspension point before Zoom In resolves.
+Zoom In CI win-delay exploit: if a player triggers Zoom In specifically to suspend Accounting when CI ≥ 75 (Church phase transition), the Accounting still checks victory conditions at suspension point before Zoom In resolves.
 Rule: **Victory condition check fires at the moment the threshold is crossed, not at Accounting completion.**
 Zoom In cannot retroactively prevent a threshold that was crossed before the interrupt was declared.
 
@@ -48,9 +48,9 @@ VTM 5 ability (choose Actualized dimension of one Co-Movement card): P-14 compli
 
 ## ED-085 Resolution (PP-273)
 Reformed Settlement Church responses confirmed (three options):
-1. **Resist:** Church contests the settlement. Mandate −1 but TC gain continues; Hafenmark gains Deed.
-2. **Accommodate:** Church accepts. TC gain suspended for 1 season. Parliament Integrity +1.
-3. **Ignore:** Church neither contests nor accepts. No mechanical effect; sets up future escalation. TC gain halved for 1 season.
+1. **Resist:** Church contests the settlement. Mandate −1 but CI gain continues; Hafenmark gains Deed.
+2. **Accommodate:** Church accepts. CI gain suspended for 1 season. Parliament Integrity +1.
+3. **Ignore:** Church neither contests nor accepts. No mechanical effect; sets up future escalation. CI gain halved for 1 season.
 [FLAGGED: confirm Mandate −1 for Resist and PI +1 for Accommodate.]
 
 
@@ -62,7 +62,7 @@ BG Co-Movement Resolution Protocol (P-14 compliance):
 4. Draw Co-Movement card.
 5. Apply Actualized dimension first, then Temporal dimension.
 6. Apply any VTM/ability modifications to outcome selection (not card draw).
-7. Record RS change and attention pool change.
+7. Record MS change and attention pool change.
 All BG Thread operations follow this sequence. No shortcuts.
 
 
@@ -73,9 +73,9 @@ Crown territory names (provisional): T2 = **Kronmark** (NW of Arcansheim), T5 = 
 
 ## ED-109 through ED-113 Resolution (PP-278) [FLAGGED FOR DESIGNER REVIEW]
 **ED-109 — Crown victory front-loaded:** Remove 1 pre-met deed from Crown starting conditions. Crown starts with 2 of 5 deeds met (not 3). Rebalances opening tempo.
-**ED-110 — Church primary victory inaccessible:** Add fallback: if TC reaches 70 and Church holds 2+ territories, Church may declare Ecclesiastical Mandate victory (partial win, shared with one ally). Unblocks solo Church win path.
+**ED-110 — Church primary victory inaccessible:** Add fallback: if CI reaches 70 and Church holds 2+ territories, Church may declare Ecclesiastical Mandate victory (partial win, shared with one ally). Unblocks solo Church win path.
 **ED-111 — Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T6 via Path B. +1 VTM threshold gate.
-**ED-112 — TC lock:** Hafenmark suppression capped at −1/season total (cannot be stacked via multiple actions). Church TC gain from T9 remains +1/season. Net: Church can advance TC by investing elsewhere.
+**ED-112 — CI lock:** Hafenmark suppression capped at −1/season total (cannot be stacked via multiple actions). Church CI gain from T9 remains +1/season. Net: Church can advance CI by investing elsewhere.
 **ED-113 — Varfell T6 opening dominance:** Add Fort 1 to T6 at game start (not Fort 0). Increases seizure Ob from 0-fort to Fort 1 resistance (+1D to defender).
 [FLAGGED: all balance adjustments require playtesting confirmation.]
 
@@ -87,7 +87,7 @@ BG Overwhelming floor: net ≥ 3 (PP-249 canonical — matches TTRPG PP-232 floo
 ED-031 correct. PP-179 was documentation error. ED-142 resolved.
 
 
-## ED-056 Resolution (PP-293) — Zoom In TC Win-Delay Exploit
+## ED-056 Resolution (PP-293) — Zoom In CI Win-Delay Exploit
 Victory condition check fires at the moment a threshold is crossed, not at Accounting completion.
 Zoom In cannot retroactively prevent a threshold crossed before the interrupt was declared.
 [FLAGGED: confirm implementation in BG rules before compilation.]
@@ -124,9 +124,9 @@ Card is drawn legitimately; VTM 5 selects the dimension only. P-14 satisfied. ED
 
 ## ED-085 Resolution (PP-298) — Reformed Settlement Church Responses [FLAGGED]
 Three Church responses confirmed:
-1. Resist: Mandate −1; TC gain continues; Hafenmark gains Deed.
-2. Accommodate: TC gain suspended 1 season; PI +1.
-3. Ignore: TC gain halved 1 season; no other effect.
+1. Resist: Mandate −1; CI gain continues; Hafenmark gains Deed.
+2. Accommodate: CI gain suspended 1 season; PI +1.
+3. Ignore: CI gain halved 1 season; no other effect.
 [FLAGGED: confirm Mandate −1 and PI +1 values before compilation.]
 
 
@@ -134,7 +134,7 @@ Three Church responses confirmed:
 ## ED-086 Resolution (PP-299) — BG Co-Movement Resolution Protocol
 Protocol (P-14 compliance): 1) Declare order type. 2) Roll faction pool TN7. 3) Apply degree result.
 4) Draw Co-Movement card. 5) Apply Actualized then Temporal dimension. 6) Apply VTM/ability to outcome selection.
-7) Record RS and Attention changes. All BG Thread operations follow this sequence.
+7) Record MS and Attention changes. All BG Thread operations follow this sequence.
 
 
 
@@ -146,9 +146,9 @@ T2 = **Kronmark** (NW of Ehrenfeld, buffer territory). T5 = **Sudmarken** (SE bo
 
 ## ED-109–113 Resolution (PP-303) — BG Balance Adjustments [FLAGGED]
 **ED-109 Crown front-loaded:** Remove 1 pre-met deed. Crown starts with 2/5 (not 3). Rebalances opening.
-**ED-110 Church primary inaccessible:** Fallback: if TC ≥ 70 + Church holds 2+ territories → Ecclesiastical Mandate (partial shared victory).
+**ED-110 Church primary inaccessible:** Fallback: if CI ≥ 70 + Church holds 2+ territories → Ecclesiastical Mandate (partial shared victory).
 **ED-111 Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T6 via Path B.
-**ED-112 TC lock:** Hafenmark suppression capped at −1/season total (cannot stack). Church TC from T9 remains +1/season.
+**ED-112 CI lock:** Hafenmark suppression capped at −1/season total (cannot stack). Church CI from T9 remains +1/season.
 **ED-113 Varfell T6 dominance:** Add Fort 1 to T6 at game start (+1D to defender, raising seizure difficulty).
 [FLAGGED: all balance adjustments require playtesting confirmation before publication.]
 

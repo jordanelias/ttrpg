@@ -78,7 +78,7 @@ Plus settlement type modifier:
 ### §2.3 Battle Consequences at Settlement Scale
 
 `mass_battle_v30 Part E` consequences continue to apply, but scoped to the settlement:
-- RS −1 to −2: applied peninsula-wide (unchanged).
+- MS −1 to −2: applied peninsula-wide (unchanged).
 - Strain +1: applied peninsula-wide (unchanged).
 - IP +2: applied peninsula-wide (unchanged).
 - **Accord drop:** now applies to the **settlement's Order** (Order −1), not the province's Accord. Province Accord recalculates via floor-average derivation per `settlement_layer §1.3`.

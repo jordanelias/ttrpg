@@ -9,10 +9,10 @@
 
   - Clock Environmental Effects (v04 B2)
     - Mending Stability (MS) Effects
-    - Theocracy Clock (TC) Effects
+    - Theocracy Clock (CI) Effects
     - Invasion Pressure (IP) Effects
     - Mending Stability (MS) Effects
-    - Theocracy Clock (TC) Effects
+    - Theocracy Clock (CI) Effects
     - Invasion Pressure (IP) Effects
   - Cascade Depth Cap (v04 B4)
 
@@ -53,7 +53,7 @@
   - ED-108 Resolution (PP-277) [FLAGGED FOR DESIGNER REVIEW]
   - ED-109 through ED-113 Resolution (PP-278) [FLAGGED FOR DESIGNER REVIEW]
   - BG Overwhelming Threshold — Final (PP-281 / PP-299)
-  - ED-056 Resolution (PP-293) — Zoom In TC Win-Delay Exploit
+  - ED-056 Resolution (PP-293) — Zoom In CI Win-Delay Exploit
   - ED-072 Resolution (PP-294) — Concurrent Zoom In Ordering
   ... +9 more headings
 
@@ -244,9 +244,9 @@
 
 ~2,289 tokens
 
-  - TC Generation — Seasonal (canonical: military_layer_v30 §3, tc_political_redesign_v30 §§1–3)
+  - CI Generation — Seasonal (canonical: military_layer_v30 §3, tc_political_redesign_v30 §§1–3)
   - Faction Political Pool (tc_political_redesign_v30 §3.4)
-  - TC 75 Territorial Seizure (PP-421 — per victory_v30.md §7)
+  - CI 75 Territorial Seizure (PP-421 — per victory_v30.md §7)
     - Seizure Ob
     - Seizure Results
     - Seizure Constraints
@@ -256,9 +256,9 @@
     - Seizure Results
     - Seizure Constraints
     - Church Graduated Seizure (PP-494, PP-506–PP-511)
-  - Theocracy Counter Starting Value — Canonical
-  - TC 75 Seizure — Territorial Seizure (PP-421)
-  - TC 75 Seizure — Territory Values — SUPERSEDED
+  - Church Influence Starting Value — Canonical
+  - CI 75 Seizure — Territorial Seizure (PP-421)
+  - CI 75 Seizure — Territory Values — SUPERSEDED
   ... +2 more headings
 
 ## [params_bg_tracks.md](references/params_bg_tracks.md)

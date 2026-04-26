@@ -11,7 +11,7 @@
   - ED-019 Resolution (PP-288) — Faction Tactic Cards [FLAGGED]
   - ED-024 Resolution (PP-289) — Mode 3 Entity Stats [FLAGGED]
   - ED-029 Resolution (PP-290) — Purpose Tracking / Clarity [FLAGGED]
-  - ED-034 Resolution (PP-291) — Ceiral Ritual RS Asymmetry
+  - ED-034 Resolution (PP-291) — Ceiral Ritual MS Asymmetry
   - ED-036 Resolution (PP-292) — Altonian Invasion Unit Stats [FLAGGED]
   - ED-143–146 Resolution (PP-323) — PC Simulation Constructs [FLAGGED]
   - ED-147 Resolution (PP-324) — Crown Covert Penalty [FLAGGED]
@@ -44,7 +44,7 @@
   - Starting Stats
   - Clock Starting Values
   - Domain Action Rules (TTRPG)
-  - TC Passive Advance (PP-402)
+  - CI Passive Advance (PP-402)
   - Failed Domain Action Stability Cost (PP-403)
   - Ethical Framework Ob Modifiers
   - Leadership Deviation Stability Check Obs
@@ -54,6 +54,6 @@
   - Unique Actions — All Factions (PP-168)
     - Crown — Royal Decree
     - Church — Excommunication
-    - Church — TC 60 Territorial Seizure
+    - Church — CI 60 Territorial Seizure
   ... +33 more headings
 

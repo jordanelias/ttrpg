@@ -382,9 +382,9 @@ An active Heresy Investigation closes immediately if any of the following occur:
 | **Inquisitor demoted/excommunicated** | Investigation immediately closed. Target may invoke Acquittal-by-default (full Disposition restoration; Renown +1 in Hafenmark/Crown for surviving institutional capture). The Cardinal Justice loses Mandate −1 (institutional embarrassment). New Investigation against same target requires Cardinal-grade approval AND fresh Evidence Track. | A discredited Inquisitor's filings cannot stand. |
 | **Inquisitor reassigned to another case** | Investigation suspended for up to 2 seasons. If not re-staffed within 2 seasons: closes per Inquisitor death rule. Reassignment requires Cardinal Justice approval — an Inquisitor cannot self-reassign to escape an Investigation. | Prevents Inquisitorial neglect of procedural obligations. |
 | **Target's death** | Investigation closes. Postmortem Tribunal possible (per faction_politics §2.3 + historical Cadaver Synod precedent) but extremely rare and requires Cardinal Justice + Confessor approval (Mandate cost −1 to file). | The proceeding's purpose (correction) becomes moot at target's death; Postmortem Tribunals are political-symbolic, not investigative. |
-| **Target's faction protection** | If target's faction successfully passes a Parliamentary Stay (per §10.1) AND TC < 55: Investigation suspended for 1 season per Stay. Multiple Stays possible (one per Tribunal-equivalent filing per season). Stays do not close the Investigation, only suspend it. | Civil-jurisdiction assertion can delay but not nullify ecclesiastical proceeding. |
+| **Target's faction protection** | If target's faction successfully passes a Parliamentary Stay (per §10.1) AND CI < 55: Investigation suspended for 1 season per Stay. Multiple Stays possible (one per Tribunal-equivalent filing per season). Stays do not close the Investigation, only suspend it. | Civil-jurisdiction assertion can delay but not nullify ecclesiastical proceeding. |
 | **Acquittal by Verdict** | Investigation closed. Target receives institutional rehabilitation: Renown +1 in non-Church factions. Re-filing same charge requires fresh Evidence Track (cannot recycle prior testimony). | Procedural double-jeopardy protection. |
-| **Target's faction conversion to Church** | If target faction enters Establishment (TC ≥ 80) under target's leadership: Investigation closes (target now sits on Church side). Politically pyrrhic — historically rare. | The institutional alignment changes; the Inquisitor's premise dissolves. |
+| **Target's faction conversion to Church** | If target faction enters Establishment (CI ≥ 80) under target's leadership: Investigation closes (target now sits on Church side). Politically pyrrhic — historically rare. | The institutional alignment changes; the Inquisitor's premise dissolves. |
 | **Target's defection** | If target formally defects to Church (via Catechumen rank entry per faction_politics §2): Investigation suspended pending theological retraining (1-3 seasons). On retraining completion: closed with Acquittal-by-Submission. Target's prior framework Convictions take Scar 1. | Defection is implicit recantation; Church absorbs rather than judges. |
 
 **§7.3.3 Multiple Inquisitors / Multiple Investigations**
@@ -517,7 +517,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 
 ## §7.1 Excommunication Tribunal (ED-625 — approved 2026-04-17)
 
-Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: TC ≥ 40, Church Mandate ≥ 4, Evidence Track ≥ 3 on target from prior HI OR documented Obligation violation OR 2 prior Tribunal convictions.
+Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: CI ≥ 40, Church Mandate ≥ 4, Evidence Track ≥ 3 on target from prior HI OR documented Obligation violation OR 2 prior Tribunal convictions.
 
 **Modifications vs standard §7:**
 - Conviction Track starts at **7** (Church near-decisive before Exchange 1 — institutional fait accompli)
@@ -525,14 +525,14 @@ Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: TC ≥ 4
 - Exchange count: 1–3 (set by Inquisitor)
 - Resistance for accused: halved (same as standard)
 
-*The correct strategic counter is preventing the filing, not defending at Tribunal. See §10.1 Parliamentary Stay. Filing can be prevented while TC < 55.*
+*The correct strategic counter is preventing the filing, not defending at Tribunal. See §10.1 Parliamentary Stay. Filing can be prevented while CI < 55.*
 
 **Consequences on success:**
-- Named NPC: TC +4; target Mandate −2; Certainty forced to min(current, 2); arc transition; all NPCs Disposition ≥ +1 to target check Certainty Ob 1 or lose Disposition −1.
+- Named NPC: CI +4; target Mandate −2; Certainty forced to min(current, 2); arc transition; all NPCs Disposition ≥ +1 to target check Certainty Ob 1 or lose Disposition −1.
 - Player Character: Faction Mandate −3; excluded from Parliamentary motions; Standing −2; Faith-conviction Companions make departure scene check (Scar 1).
-- Faction: Mandate −2; all Church Domain Actions vs faction Ob −1; TC +3.
+- Faction: Mandate −2; all Church Domain Actions vs faction Ob −1; CI +3.
 
-**Revocation — Act of Contrition:** Church declares (Mandate ≥ 5, TC ≥ 50 required). Target fulfils Obligation abjuring the violation. Result: Church Mandate −1, TC −1, Excommunication lifted.
+**Revocation — Act of Contrition:** Church declares (Mandate ≥ 5, CI ≥ 50 required). Target fulfils Obligation abjuring the violation. Result: Church Mandate −1, CI −1, Excommunication lifted.
 
 ---
 
@@ -544,13 +544,13 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 
 **Requirements:** 2+ factions on Side A (the filing-suspension side). Church on Side B. Standard BG Parliamentary Vote resolution (§10).
 
-**Availability:** Only while TC < 55. At TC 55+, the Church's TC political pool bonus (floor(TC/20)) makes the Stay motion effectively unpassable — Church's institutional authority at that level exceeds Parliamentary reach.
+**Availability:** Only while CI < 55. At CI 55+, the Church's CI political pool bonus (floor(CI/20)) makes the Stay motion effectively unpassable — Church's institutional authority at that level exceeds Parliamentary reach.
 
 **Effect on success:** The Church Tribunal is suspended for 1 season. Church may re-file in the following season (no permanent bar). The Stay buys 1 season of disruption window — enough for the target to address one prerequisite condition (Attention Pool reduction, prior conviction, Obligation status).
 
 **Effect on failure:** The Tribunal proceeds immediately. The motion's failure cannot be appealed or re-filed in the same season.
 
-**TC < 55 gate rationale:** As Church grows more prominent (TC 55 = Church Prominent milestone), Parliamentary institutions lose the political standing to override ecclesiastical authority. The Stay window closes as Church grows — creating a genuine strategic timing incentive: suppress TC before it reaches 55, or lose the ability to check Church judicial power through Parliament.
+**CI < 55 gate rationale:** As Church grows more prominent (CI 55 = Church Prominent milestone), Parliamentary institutions lose the political standing to override ecclesiastical authority. The Stay window closes as Church grows — creating a genuine strategic timing incentive: suppress CI before it reaches 55, or lose the ability to check Church judicial power through Parliament.
 
 ---
 

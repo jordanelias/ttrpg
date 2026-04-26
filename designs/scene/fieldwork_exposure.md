@@ -61,9 +61,9 @@ Cover determines Exposure thresholds. Higher Cover shifts thresholds upward, par
 
 In territories where the Church has influence (Piety Track ≥ 3 or Church-controlled), Exposure feeds the Church Attention Pool:
 - At Watched threshold: +1 Attention Pool in this territory at next Accounting.
-- At Compromised threshold: +1 Attention Pool in this territory immediately. (Not +2 — capped at +1 per character per season to prevent runaway TC acceleration.)
+- At Compromised threshold: +1 Attention Pool in this territory immediately. (Not +2 — capped at +1 per character per season to prevent runaway CI acceleration.)
 
-**Cap:** A single character's Exposure contributes at most +1 AP per territory per season. Multiple characters' Exposure in the same territory stacks to a maximum of +2 AP per territory per season from fieldwork sources. This prevents fieldwork-heavy campaigns from generating unbounded TC acceleration through the AP → Heresy Investigation → TC pipeline.
+**Cap:** A single character's Exposure contributes at most +1 AP per territory per season. Multiple characters' Exposure in the same territory stacks to a maximum of +2 AP per territory per season from fieldwork sources. This prevents fieldwork-heavy campaigns from generating unbounded CI acceleration through the AP → Heresy Investigation → CI pipeline.
 
 ---
 

@@ -54,7 +54,7 @@ The inverse-Proximity formula was chosen because:
 
 ### §13.7 Exposure → AP Cap (+1/character/season, +2/territory/season)
 
-The cap prevents fieldwork from becoming a primary driver of TC (Church Attention) escalation. Calibration (SIM-DEBT-FW-04, RESOLVED PP-581): fieldwork contributes approximately 11% of maximum TC acceleration over 4 seasons under the cap. This is bounded to insignificance relative to primary TC drivers (Thread operations, Church territorial conflict, Excommunication chains). The cap ensures fieldwork feels consequential at the personal scale while remaining strategically minor at the faction scale.
+The cap prevents fieldwork from becoming a primary driver of CI (Church Attention) escalation. Calibration (SIM-DEBT-FW-04, RESOLVED PP-581): fieldwork contributes approximately 11% of maximum CI acceleration over 4 seasons under the cap. This is bounded to insignificance relative to primary CI drivers (Thread operations, Church territorial conflict, Excommunication chains). The cap ensures fieldwork feels consequential at the personal scale while remaining strategically minor at the faction scale.
 
 ### §13.8 Thread-Read as Perceptive Leap
 

@@ -83,13 +83,13 @@ P(survive, Stab 2 vs Ob 4) ≈ 59%. ~2 seasons at Stab 2 before probable collaps
 ## Parliamentary Vote
 Pool: relevant faction stat (typically Mandate or Influence).
 Ob: opponent's relevant stat.
-Format: best of 3 exchanges. First to 2 wins. Ties (neither wins 2): motion fails, TT+1, TC+1.
+Format: best of 3 exchanges. First to 2 wins. Ties (neither wins 2): motion fails, TT+1, CI+1.
 
-## Theocracy Counter Generation
-Church Mandate ≥ 5: TC +1/season at accounting.
-Piety Domain Action (1/season): Mandate pool, Ob 2. Success: TC +1 (stacks with above).
-TC seasonal cap: ±5 combined from all sources.
-Stability ≤ 4: TC generation pauses.
+## Church Influence Generation
+Church Mandate ≥ 5: CI +1/season at accounting.
+Piety Domain Action (1/season): Mandate pool, Ob 2. Success: CI +1 (stacks with above).
+CI seasonal cap: ±5 combined from all sources.
+Stability ≤ 4: CI generation pauses.
 
 ## ~~Coup Counter (Löwenritter)~~ STRUCK (ED-781 — supersedes per ED-589)
 

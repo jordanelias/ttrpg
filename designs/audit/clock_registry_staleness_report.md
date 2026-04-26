@@ -13,8 +13,8 @@
 
 | # | Current | Should Be | Source |
 |---|---------|-----------|--------|
-| 1 | TC: "0–75 (freeze ceiling)" | 0–100 (no freeze; Unification at 100) | tc_political_redesign_v30 §0 — **status PROPOSAL** |
-| 2 | TC source: "victory_architecture_v1.md §7" | tc_political_redesign_v30.md / peninsular_strain_v1.md | File renamed + system redesigned |
+| 1 | CI: "0–75 (freeze ceiling)" | 0–100 (no freeze; Unification at 100) | tc_political_redesign_v30 §0 — **status PROPOSAL** |
+| 2 | CI source: "victory_architecture_v1.md §7" | tc_political_redesign_v30.md / peninsular_strain_v1.md | File renamed + system redesigned |
 | 3 | IP start: 5 | 20 | peninsular_strain_v1 §4 (confirmed, committed) |
 | 4 | PI row exists (0–20, start 7) | **STRIKE entire row.** Replace with Political Stability (0–10, start 0, ↑ bad) | peninsular_strain_v1 §4 (PP-403 repealed) |
 
@@ -43,7 +43,7 @@
 
 | # | Track | Current | Correct | Source |
 |---|-------|---------|---------|--------|
-| 14 | RS start | "TTRPG: 60 / BG: 72" | 72 (single value — videogame only) | Jordan directive: videogame only |
+| 14 | MS start | "TTRPG: 60 / BG: 72" | 72 (single value — videogame only) | Jordan directive: videogame only |
 | 15 | Disposition range | "−3 to +5" | −4 to floor(Bonds/2)+1 | PP-632 |
 | 16 | Stamina formula | "Endurance + History + 1 − armour" | End + 1, min 2 (History STRUCK per PP-611) | PP-611, params_combat |
 | 17 | Piety range | "0–5" | 0–4 (per J-7 if confirmed) or remains 0–5 | J-7 PENDING |
@@ -72,7 +72,7 @@
 
 **Requires J-7 decision first:** Items 17, 18 (territory scale).
 
-**Requires tc_political_redesign acceptance:** Items 1, 2, 11, 12 (TC ceiling, source, TV, Spiritual Weight).
+**Requires tc_political_redesign acceptance:** Items 1, 2, 11, 12 (CI ceiling, source, TV, Spiritual Weight).
 
 ---
 
@@ -81,7 +81,7 @@
 ```
 clock_registry_v30.md depends on:
 ├── peninsular_strain_v1.md (Political Stability, Accord, IP start, PP-403 repeal)
-├── tc_political_redesign_v30.md (TC ceiling, Spiritual Weight, CI milestones)  [PROPOSAL]
+├── tc_political_redesign_v30.md (CI ceiling, Spiritual Weight, CI milestones)  [PROPOSAL]
 ├── PP-632 (Disposition, Knots)  [APPLIED]
 ├── PP-611 (Stamina History struck)  [APPLIED]
 ├── victory_v30.md (Territory Value, victory conditions)

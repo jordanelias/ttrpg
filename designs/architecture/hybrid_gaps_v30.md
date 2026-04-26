@@ -93,7 +93,7 @@ Same logic applies to Circles vs. Influence: Circles dice rolled vs. Influence �
 ### G-094 — Cascade Phase Process
 
 2. **Thread consequences** — apply co-movement clock/tracker effects from any Thread operations this session (Thread Tension changes, ThS loss, Coherence changes).
-3. **Clock checks** — check Thread Tension, Theocracy Counter, Institutional Pressure against thresholds. Fire threshold events in order: Thread Tension first, then Theocracy Counter, then Institutional Pressure. Queue any institutional responses for the next Personal phase.
+3. **Clock checks** — check Thread Tension, Church Influence, Institutional Pressure against thresholds. Fire threshold events in order: Thread Tension first, then Church Influence, then Institutional Pressure. Queue any institutional responses for the next Personal phase.
 4. **Seasonal accounting** (end of season only) — faction stat changes from board orders, Knot strain ticks, ThS recovery (+2 if no Thread ops this season), Coherence recovery (Corrective Weaving results), advancement (CP awards, test track advances).
 
 

@@ -159,7 +159,7 @@
 | Mass Combat | ◐ | ◐ | ○ | Cognitive load; consider 3-phase compression |
 | Faction Layer | ● | ◐ | ◐ | Value proliferation; needs UI design |
 | Victory/Strain | ● | ● | ● | None |
-| TC Political | ● | ● | ◐ | Still PROPOSAL; needs acceptance + merge |
+| CI Political | ● | ● | ◐ | Still PROPOSAL; needs acceptance + merge |
 | NPC Behavior | ● | ● | ◐ | GM overhead at table; needs simplified card |
 | Emergent Arcs | ● | ◐ | ● | Trigger distribution; implementation gap |
 | Scale Transitions | ○ | ○ | ◐ | Only 5 Zoom In triggers (ED-545, P1) |

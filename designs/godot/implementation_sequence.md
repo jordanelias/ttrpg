@@ -15,7 +15,7 @@
    - Used by every system. Must be rock-solid before anything else.
 
 2. **State management** — `GameState` autoload
-   - All clocks (RS, TC, IP, PI, Strain) as tracked resources
+   - All clocks (MS, CI, IP, PI, Strain) as tracked resources
    - Faction stats (1-7) + derived values (Treasury, Legitimacy, Reputation, Discipline)
    - Settlement registry (36 entries, P/D/O stats)
    - NPC registry (14+ entries, full stat blocks)
@@ -83,7 +83,7 @@
    - Unit stats (Size/Power/Discipline/Morale/Command)
    - Formations, tactics, General Duel
    - Hybrid handoff (Zoom In at 3 entry points)
-   - Battle consequences (RS, IP, Strain, territory, Accord)
+   - Battle consequences (MS, IP, Strain, territory, Accord)
 
 10. **NPC AI** — `NPCAIManager`
     - Priority tree evaluation (§8.2-8.10)

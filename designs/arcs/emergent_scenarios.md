@@ -197,7 +197,7 @@ Social scene opens
     └─ Examples:
         ├─ Debate victory against Church representative → Church Mandate −1
         ├─ Successful Appeal to Parliament → Crown Influence +1
-        └─ Evidence scene exposing Niflhel → TC −3 (Church-Niflhel complicity)
+        └─ Evidence scene exposing Niflhel → CI −3 (Church-Niflhel complicity)
 ```
 
 ---
@@ -277,7 +277,7 @@ GAP OPENS (from: Dissolution failure, Weaving failure at MS ≤ 20,
 ├─ MONSTROUS INCURSION
 │   ├─ Treated as narrative/combat encounter in TTRPG
 │   ├─ Increases Church Credibility Evidence (Inquisitor's investigation pool)
-│   ├─ Contributes to TC rise (Thread events read as divine warning if MS < 55)
+│   ├─ Contributes to CI rise (Thread events read as divine warning if MS < 55)
 │   └─ MS < 40 active: Monstrous Incursion risk in all territories with Gaps
 │
 └─ MULTI-SEASON UNADDRESSED GAP CHAIN
@@ -347,29 +347,29 @@ COHERENCE RECOVERY
 ## SCENARIO 8: FACTION CLOCK INTERACTIONS
 
 ```
-Three clocks run simultaneously: MS (100→0), TC (0→100), IP (0→100)
-Starting values: MS 28 (Stirring), TC 22, IP 20
+Three clocks run simultaneously: MS (100→0), CI (0→100), IP (0→100)
+Starting values: MS 28 (Stirring), CI 22, IP 20
 │
 ├─ MS FALLS BELOW 55
-│   ├─ TC +1/season
+│   ├─ CI +1/season
 │   └─ IP +1/season
 │
 ├─ MS FALLS BELOW 40
-│   ├─ TC +2/season (total, replaces the +1)
+│   ├─ CI +2/season (total, replaces the +1)
 │   ├─ IP +2/season (total)
 │   └─ Gaps may open spontaneously: 1d10/season; on 1–2 → Gap in lowest-Prosperity territory
 │       → [SCENARIO 6]
 │
-├─ TC RISES ABOVE 40
+├─ CI RISES ABOVE 40
 │   └─ IP +1/season (Church mediation gives Merchant Consortium political cover)
 │
-├─ TC RISES ABOVE 60
+├─ CI RISES ABOVE 60
 │   ├─ IP +2/season (Altonia: Church expansion violates Secession Wars clauses)
 │   └─ If IP > 45 simultaneously:
 │       ├─ IP +2/season additional
 │       └─ Almaic Kyriakos begins formal documentation for Altonian Emperor
 │
-├─ TC > 60 AND MS < 40 SIMULTANEOUSLY
+├─ CI > 60 AND MS < 40 SIMULTANEOUSLY
 │   └─ Both clocks accelerate at maximum rate → fast path to dual CAMPAIGN EVENTS
 │
 ├─ ALL THREE CLOCKS ABOVE MIDPOINT SIMULTANEOUSLY
@@ -384,12 +384,12 @@ Starting values: MS 28 (Stirring), TC 22, IP 20
 │       Fail → Mandate −1 (min 0); at Mandate 0 fail → Faction Fracture (sub-faction splinters)
 │
 └─ FACTION INTERACTIONS (Domain Actions, seasonal)
-    ├─ Crown vs Church: Sovereignty axis (TC brake via Sovereign Authority Doctrine)
-    ├─ Church vs all:   Excommunication, Territory Seizure at TC 60+
-    ├─ Guilds:          Economic friction; Thread operations visible → TC +1/event
+    ├─ Crown vs Church: Sovereignty axis (CI brake via Sovereign Authority Doctrine)
+    ├─ Church vs all:   Excommunication, Territory Seizure at CI 60+
+    ├─ Guilds:          Economic friction; Thread operations visible → CI +1/event
     ├─ Revolution:      Community Weaving (MS −2/season if sustained); loses Mending
     │                   at Mandate 0 → feedback loop severs MS recovery
-    └─ Niflhel:         Residue harvesting (MS +0.5/season); Church-Niflhel exposure → TC −3
+    └─ Niflhel:         Residue harvesting (MS +0.5/season); Church-Niflhel exposure → CI −3
 ```
 
 ---
@@ -492,16 +492,16 @@ IP RISES (various sources)
 ├─ PUBLIC THREAD USE observed by Altonian agents → IP +2/event
 ├─ SUCCESSION DELAY past 2 campaign arcs → IP +2
 ├─ MS < 55 → IP +1/season (cross-clock)
-├─ TC > 40 → IP +1/season
-├─ TC > 60 → IP +2/season
+├─ CI > 40 → IP +1/season
+├─ CI > 60 → IP +2/season
 │
 ├─ IP 30+ → TUTORING DEMAND triggers (Prince Torben)
-│   └─ Crown must respond; delay feeds TC and IP simultaneously
+│   └─ Crown must respond; delay feeds CI and IP simultaneously
 │
 ├─ IP 45–59: HOSTILE
 │   ├─ Border skirmishes
 │   ├─ Vassalage demands through diplomatic channels
-│   └─ Church offers Altonian theological mediation → TC +1/season
+│   └─ Church offers Altonian theological mediation → CI +1/season
 │
 ├─ IP 60–74: WARLIKE
 │   ├─ Invasion preparations begin
@@ -532,27 +532,27 @@ Crown faces succession question (Torben / Elske / Parliament / coup)
 ├─ TUTORING DEMAND (IP 30+)
 │   ├─ Accept: Crown legitimacy preserved; Torben leaves Valoria temporarily
 │   │   └─ Altonian influence over heir grows; future complication seeded
-│   └─ Refuse: IP +2 immediately; MS < 55 means TC also rises this season
+│   └─ Refuse: IP +2 immediately; MS < 55 means CI also rises this season
 │
 ├─ TORBEN PATH
 │   ├─ Torben established as heir: Crown Mandate stable; Church monitoring
-│   ├─ Torben dies or is removed: succession vacuum → IP +2; TC +2 (Church offers stability)
+│   ├─ Torben dies or is removed: succession vacuum → IP +2; CI +2 (Church offers stability)
 │   └─ Torben reveals Thread sensitivity: → [SCENARIO 1] + Church Credibility Evidence surge
 │
 ├─ ELSKE PATH
 │   ├─ Elske as heir: Varfell support; Church opposition (heresy risk)
-│   ├─ Elske pursues Thread practice openly: TC +1–2/event; → [SCENARIO 2]
+│   ├─ Elske pursues Thread practice openly: CI +1–2/event; → [SCENARIO 2]
 │   └─ Elske and Thread operation conflicts: cross-ref Stage 13 NPCs (SIM8-F-02)
 │
 ├─ PARLIAMENTARY PATH
 │   ├─ Parliamentary Vote (Debate structure, 3 exchanges, faction pools)
-│   ├─ Church contests → TC rise via demand unmet
+│   ├─ Church contests → CI rise via demand unmet
 │   └─ Hafenmark supports constitutional resolution → Ob reduced (Categorical Imperative)
 │
 ├─ COUP PATH
 │   ├─ Any faction Stability 0 → Faction Fracture risk (MS ≤ 19)
 │   ├─ NPCs with coup trigger conditions: MS ≤ 10 → +1 to trigger check pool
-│   └─ Successful coup: Crown Mandate collapses; IP surge; TC surge if Church-aligned
+│   └─ Successful coup: Crown Mandate collapses; IP surge; CI surge if Church-aligned
 │
 └─ ROYAL DECREE (Crown Unique Action, 1/season)
     Roll: Mandate vs Ob 2
@@ -693,7 +693,7 @@ Practitioner ambition (large-scale operations)
 → Operations harder → more Partial/Failure outcomes
 → More MS loss per failed operation
 → Gaps open → Monstrous Incursion → Church Credibility Evidence rises
-→ TC rise → IP rise → factional instability
+→ CI rise → IP rise → factional instability
 → Factional instability → Domain Actions misfiring → Mandate drops
 → Revolution loses Community Mending access (Mandate 0)
 → MS loss unaddressed → MS Critical → [SCENARIO 9]
@@ -701,14 +701,14 @@ Practitioner ambition (large-scale operations)
 
 ### Loop B — Church Dominance Lock
 ```
-TC rises above 55 (MS < 55 cross-clock)
-→ TC +2/season; IP +1/season
+CI rises above 55 (MS < 55 cross-clock)
+→ CI +2/season; IP +1/season
 → IP > 45: Church offers theological mediation
-→ TC +1/season additional
+→ CI +1/season additional
 → Church Mandate climbs → Excommunication threats
 → Nobles defect or are silenced → Crown Mandate −1
-→ Crown Mandate loss → fewer anti-TC options
-→ TC > 60: IP +2/season; Almaic Kyriakos documents
+→ Crown Mandate loss → fewer anti-CI options
+→ CI > 60: IP +2/season; Almaic Kyriakos documents
 → IP 75: Merchant Consortium collapses
 → IP 100: INVASION
 ```
@@ -733,8 +733,8 @@ MS rises (world destabilising)
 → MS 40+: Leap becomes available (Stirring/Wakening)
 → Previously dormant TS characters can Leap
 → New practitioners emerge; Thread practice visible
-→ Church TC rise (visible Thread use +1/event)
-→ TC rise → IP rise → factional instability
+→ Church CI rise (visible Thread use +1/event)
+→ CI rise → IP rise → factional instability
 → BUT: if Revolution Community Weaves successfully:
     MS −2/season; factional Stability pressure relieved
 → IF Revolution Mandate drops to 0 (MS Critical → faction Stability checks):

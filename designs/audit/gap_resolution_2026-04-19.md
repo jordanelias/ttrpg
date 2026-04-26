@@ -90,11 +90,11 @@ Current Church/Crown suppression of Einhir-adjacent activity flows through exist
 | ED-NEW-MIL-02 (Accord 1 → Martial −1 applies to offence or defence) | Applies to BOTH offence AND defence — occupation troops from hostile province have consistent morale penalty regardless of posture. | RESOLVED |
 | ED-NEW-MIL-03 (Experience stack ceiling) | Ceiling is faction Military stat (1–7). A Muster-3 unit with 2 Experience stacks → Power = floor(3/2)+1+2 = 4 which still respects Military ≤ 7 ceiling. | RESOLVED |
 | ED-NEW-MIL-04 (Wealth Zero Discipline penalty) | Confirmed: HI/Cavalry Discipline −1/season applies; supersedes any prior "Military −1" rule. | RESOLVED |
-| ED-NEW-TC-01 (Conditional passive thresholds 0-1/2-4/5+) | Deferred to engine_v4 smoke-test. Current thresholds stand PROVISIONAL. | DEFERRED |
-| ED-NEW-TC-02 (Charity Advantage Wealth differential ≥ 2) | Confirmed: threshold = 2. Canonical. | RESOLVED |
-| ED-NEW-TC-03 (PT 3 Piety Yield +0.25) | Raised to +0.5 for integer stability. PT 3 territories now yield +0.5 Piety/season (was +0.25; half-step granularity dropped). | RESOLVED |
-| CLOCK-EDIT-02 (Church military victory — no TC change) | Confirmed: military victory does not modify TC. TC changes via Piety Yield, Assert, Suppress, Charity Advantage (per `military_layer §3`). | RESOLVED |
-| BALANCE-NEW-TC-01 | Deferred to engine_v4. | DEFERRED |
+| ED-NEW-CI-01 (Conditional passive thresholds 0-1/2-4/5+) | Deferred to engine_v4 smoke-test. Current thresholds stand PROVISIONAL. | DEFERRED |
+| ED-NEW-CI-02 (Charity Advantage Wealth differential ≥ 2) | Confirmed: threshold = 2. Canonical. | RESOLVED |
+| ED-NEW-CI-03 (PT 3 Piety Yield +0.25) | Raised to +0.5 for integer stability. PT 3 territories now yield +0.5 Piety/season (was +0.25; half-step granularity dropped). | RESOLVED |
+| CLOCK-EDIT-02 (Church military victory — no CI change) | Confirmed: military victory does not modify CI. CI changes via Piety Yield, Assert, Suppress, Charity Advantage (per `military_layer §3`). | RESOLVED |
+| BALANCE-NEW-CI-01 | Deferred to engine_v4. | DEFERRED |
 
 ### §2.3 peninsular_strain_v30 §8 Open Items
 

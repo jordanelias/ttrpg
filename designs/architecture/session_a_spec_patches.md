@@ -28,7 +28,7 @@ Each season resolves in three layers, bottom-up:
    settlement Prosperity weighted by controller alignment. Military movement along settlement
    adjacency graph. Mass battles resolve at settlement nodes. Territorial transfer.
 
-3. **Peninsula layer** (resolves third). RS/CI/IP/PI/Strain clocks update from province-level
+3. **Peninsula layer** (resolves third). MS/CI/IP/PI/Strain clocks update from province-level
    events. Altonian pressure evaluated. Victory condition check against updated PV totals.
    Warden emergence. Season advances.
 

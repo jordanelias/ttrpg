@@ -29,7 +29,7 @@ At each Year-End Accounting: Ministry produces a Legislative Record for the prio
 **Ministry and Crown Policy:**
 Crown Policy Instruments require Ministry countersignature. If Ministry Mandate < 2 (collapsed or compromised): Crown Policy actions cost +1 Ob (the administrative apparatus is too compromised to implement the decree cleanly). If Ministry Mandate = 0: Crown Policy actions unavailable until Ministry Mandate recovers.
 
-**Ministry and Church Seizure (TC 75):**
+**Ministry and Church Seizure (CI 75):**
 Church Territorial Seizure of T1 (Valorsplatz) requires removing the Ministry AP-token first. If AP-token present: seizure Ob +1 (the administrative apparatus resists institutional capture). If seizure succeeds despite the token: Ministry AP-token in T13 is removed. All Crown Policy actions are now +1 Ob until Ministry reestablishes presence in T13 (requires 1 season of Ministry NPC action in T13).
 
 **Ministry and Hafenmark:**
@@ -101,7 +101,7 @@ At each Year-End Accounting: Ministry produces a Legislative Record for the prio
 **Ministry and Crown Policy:**
 Crown Policy Instruments require Ministry countersignature. If Ministry Mandate < 2 (collapsed or compromised): Crown Policy actions cost +1 Ob (the administrative apparatus is too compromised to implement the decree cleanly). If Ministry Mandate = 0: Crown Policy actions unavailable until Ministry Mandate recovers.
 
-**Ministry and Church Seizure (TC 75):**
+**Ministry and Church Seizure (CI 75):**
 Church Territorial Seizure of T1 (Valorsplatz) requires removing the Ministry AP-token first. If AP-token present: seizure Ob +1 (the administrative apparatus resists institutional capture). If seizure succeeds despite the token: Ministry AP-token in T13 is removed. All Crown Policy actions are now +1 Ob until Ministry reestablishes presence in T13 (requires 1 season of Ministry NPC action in T13).
 
 **Ministry and Hafenmark:**

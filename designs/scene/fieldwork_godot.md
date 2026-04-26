@@ -28,7 +28,7 @@ Territory (Node2D / Node3D)
 
 **Perception gate implementation:** Each POI node has an `is_perceivable(character)` method that checks the character's TS, Cognition, Certainty, and relevant Histories against the POI's depth requirements. POI nodes that fail the perception check are not rendered — they do not exist in the character's world.
 
-**Conditional POI gates:** POIs gated by RS band, season, faction control, or prior discovery are evaluated dynamically. A Remnant that becomes perceivable when RS drops below 60 appears in-world at the moment RS crosses the threshold — the world changes because the substrate's intelligibility has changed.
+**Conditional POI gates:** POIs gated by MS band, season, faction control, or prior discovery are evaluated dynamically. A Remnant that becomes perceivable when MS drops below 60 appears in-world at the moment MS crosses the threshold — the world changes because the substrate's intelligibility has changed.
 
 ### §10.2 Intelligibility Gradient Visualisation
 
@@ -107,9 +107,9 @@ Fieldwork actions consume in-game time:
 - Each season has a budget of 4–6 time units (configurable; represents the available daylight/travel time).
 - At season end: Accounting Phase fires automatically. Clocks advance. Faction actions resolve.
 
-**Clock HUD:** RS, TC, IP displayed persistently. PI and faction-specific tracks available on faction screen. Exposure displayed per-territory on map overlay.
+**Clock HUD:** MS, CI, IP displayed persistently. PI and faction-specific tracks available on faction screen. Exposure displayed per-territory on map overlay.
 
-**Implementation note:** `systems/faction/FactionTurnSystem.gd` handles seasonal accounting. `systems/trackers/TrackerRegistry.gd` can back RS/TC/IP. Clock HUD is a new UI scene — see G10-F06 below.
+**Implementation note:** `systems/faction/FactionTurnSystem.gd` handles seasonal accounting. `systems/trackers/TrackerRegistry.gd` can back MS/CI/IP. Clock HUD is a new UI scene — see G10-F06 below.
 
 ---
 
@@ -124,7 +124,7 @@ Technical validation against jordanelias/valoria-game@main repo structure.
 | G10-F03 | §10.3 | P2 | Journal UI not implemented. `systems/trackers/Tracker.gd` is structurally compatible with Evidence Track backing — no tracker architecture change needed. | New: `scenes/fieldwork/Journal.tscn`, `fieldwork/EvidenceTrack.gd` (thin wrapper over `Tracker.gd`). |
 | G10-F04 | §10.4 | P2 | NPC memory (§10.4) blocked by two existing audit findings: A-02 (`NPCTrajectoryEvaluator` disconnected from season loop) and DA-03 (`NarrativeState.deserialize()` stub — state not persisted). Disposition infrastructure (`NPCSocialModifiers.gd`) is present. | Fix A-02 and DA-03 first. Then: `fieldwork/DispositionTrack.gd` per NPC, dialogue gating via `NPCSocialModifiers`. |
 | G10-F05 | §10.5 | P3 | Dice visualisation not confirmed from directory listing. `assets/ui/` and `assets/audio/` directories exist. Not fieldwork-specific — core engine UI concern. | Verify `scenes/ui/` for existing dice roll UI. Dice visuals are shared across all resolution modes, not fieldwork-only. |
-| G10-F06 | §10.6 | P2 | Clock HUD absent. Two existing bugs affect fieldwork season integration: B-03 (`Constants.RS_CRITICAL_THRESHOLD` missing — POI gates use RS bands) and A-05 (`NarrativeState.log_event()` hardcodes `season = 0`). | Fix B-03 and A-05 first. New: `scenes/ui/ClockHUD.tscn`. Wire to `TrackerRegistry` for RS/TC/IP. |
+| G10-F06 | §10.6 | P2 | Clock HUD absent. Two existing bugs affect fieldwork season integration: B-03 (`Constants.RS_CRITICAL_THRESHOLD` missing — POI gates use MS bands) and A-05 (`NarrativeState.log_event()` hardcodes `season = 0`). | Fix B-03 and A-05 first. New: `scenes/ui/ClockHUD.tscn`. Wire to `TrackerRegistry` for MS/CI/IP. |
 | G10-F07 | §4.5 | P3 | `systems/threadwork/` contains only `.gitkeep`; `ThreadworkSystem.gd` lives in `systems/engine/`. Thread-Read fieldwork integration (§4.5) requires threadwork-fieldwork coupling. Structural inconsistency with declared architecture. | Decision required: move `ThreadworkSystem.gd` to `systems/threadwork/` (preferred — consistent with directory architecture) or document engine placement as permanent. |
 
 **Summary:** No fieldwork implementation exists. Infrastructure is compatible — tracker system, NPC social modifiers, faction turn system, and territory registries all support the §10 architecture without modification. Four existing audit findings (A-02, A-05, B-03, DA-03) directly block §10.4 and §10.6 integration. Recommended sequence: fix audit blockers → POI system → Journal UI → Clock HUD → Shaders.

@@ -144,11 +144,11 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 **Propagation:** If CROSS is rebalanced → `designs/scene/social_contest_v30.md` §4 CROSS section, `params/contest.md`.
 
 ## 2.2 — Co-Movement Card Calibration [ED-577-01/02/03/04] ⚠ HARD DEPENDENCY FOR PHASE 4
-**Why:** 15-card table added this session (ED-577) but effects are entirely unsimulated. Four open flags. The simulation framework uses Co-Movement cards in every Thread operation — uncalibrated cards produce unreliable RS trajectories, which invalidates the entire Phase 4 simulation.
+**Why:** 15-card table added this session (ED-577) but effects are entirely unsimulated. Four open flags. The simulation framework uses Co-Movement cards in every Thread operation — uncalibrated cards produce unreliable MS trajectories, which invalidates the entire Phase 4 simulation.
 **Tasks:**
 (a) **CM-13 "temporary Thread perception" mechanically undefined [ED-577-01].** Propose: non-Sensitive NPC gains TS = 15 (enough to perceive Thread events per visibility table but not enough to perform Thread-Read or Leap). Duration = 1 scene. Scope = passive perception only. The NPC sees something impossible and must process it through their existing Conviction framework — this is a Certainty pressure point, not a Thread capability grant.
 (b) **Deck reshuffle timing unspecified [ED-577-02].** Propose: global deck (not per-territory), reshuffle when all 18 cards have been drawn. This means the deck cycles every 18 Thread operations across the entire peninsula. A territory with high Thread activity draws more cards per cycle. Card counting is possible but requires tracking all Thread operations peninsula-wide — strategically valuable information but not trivially available.
-(c) **RS swing variance [ED-577-03].** Simulate: model 30 seasons × 3 Thread operations/season (average across all factions and practitioners) = 90 card draws per campaign. Calculate mean cumulative RS impact and standard deviation. If std dev > 15 RS points, the deck is too volatile — individual campaigns would have wildly different RS trajectories purely from card draw luck. Fix: adjust individual card RS values to mean-center the deck (sum of all RS effects across 18 cards ≈ 0, with variance from Actualized/Unactualized split).
+(c) **MS swing variance [ED-577-03].** Simulate: model 30 seasons × 3 Thread operations/season (average across all factions and practitioners) = 90 card draws per campaign. Calculate mean cumulative MS impact and standard deviation. If std dev > 15 MS points, the deck is too volatile — individual campaigns would have wildly different MS trajectories purely from card draw luck. Fix: adjust individual card MS values to mean-center the deck (sum of all MS effects across 18 cards ≈ 0, with variance from Actualized/Unactualized split).
 (d) **CM-06 +1D scope [ED-577-04].** CM-06 "Resonance Bloom" grants "+1D to next Thread operation" to "all Practitioners in territory." In a territory with 3+ practitioners, this is extremely powerful — it compounds with existing pool bonuses. Propose: +1D applies to the next operation per practitioner (not all operations), expires unused at season end.
 **Simulation:** `tests/sim_comovement_calibration.md` (new).
 **Propagation:** `designs/threadwork/threadwork_v30.md` §4.3 (card revisions if needed), §4.1 (Core Principle — write foundational text explaining why Co-Movement produces random effects), §4.2 (Why Random — write design rationale).
@@ -162,7 +162,7 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 **Propagation:** `designs/npcs/npc_behavior_v30.md` (NPC profiles §2.5, §2.8, §2.10), `designs/arcs/arc_expansion_v30.md` (arc profiles reference these values), resolve ED-392–398 in editorial ledger.
 
 ## 2.4 — NPC Priority Tree Cross-Faction Simulation [AUD-NPC-03]
-**Why:** 9 faction priority trees (§8.2–§8.10) have never been tested against each other. Each tree has 6–8 priority levels with conditional behaviors. A single incorrect priority ordering (e.g., Church §8.2 prioritizing TC expansion over territorial defense during Stability ≤ 2) produces faction behavior that breaks verisimilitude — the Church would expand aggressively while its institutions are crumbling.
+**Why:** 9 faction priority trees (§8.2–§8.10) have never been tested against each other. Each tree has 6–8 priority levels with conditional behaviors. A single incorrect priority ordering (e.g., Church §8.2 prioritizing CI expansion over territorial defense during Stability ≤ 2) produces faction behavior that breaks verisimilitude — the Church would expand aggressively while its institutions are crumbling.
 **Tasks:** Simulate 10 seasons of 4-faction (Crown/Church/Hafenmark/Varfell) AI priority tree interaction. For each season: each faction evaluates its priority tree, selects a Domain Action, resolves it, and the results modify game state for the next season's evaluation. Check: (a) Does any faction repeatedly choose the same action for 5+ consecutive seasons (action repetition = broken priority evaluation)? (b) Do factions respond to each other's actions — specifically, does reactive Priority 6 fire when a rival faction expands into adjacent territory? (c) Does the Constrained sub-arc (ED-586, Mandate < 3) correctly suspend expansion priorities and switch to institutional rebuilding (Govern, Trade)?
 **Dependencies:** 2.3 (NPC stats needed for priority tree evaluation — TS gates Thread-related priorities for Varfell and Wardens).
 **Simulation:** `tests/sim_priority_trees.md` (new). Update `tests/coverage_matrix.md`.
@@ -174,13 +174,13 @@ Estimated effort: 3–5 sessions. Mix of simulation, design, and propagation.
 **Simulation:** `tests/sim_settlement_economy.md` (new).
 
 ## 2.6 — RM Victory Probability [AUD-VIC-02]
-**Why:** RM is "hardest mode" (explicitly stated) but win probability against 4 AI factions has never been simulated. RM victory has two phases: Phase 1 (Cultural Majority: PT ≤ 1 in ≥ 4 territories) and Phase 2 (Cultural Uprising: Weaver pool vs Ob = TC ÷ 10, round up, min 1, max 5). Both are gated by variables the player has indirect control over (PT through Cultural Reclamation/Community Weaving, TC through counter-pressure). The key question: can RM achieve Phase 1 before TC reaches 60+ (which makes Phase 2 Ob 6 — near-impossible at typical Weaver pools of 7–9D)?
-**Tasks:** Simulate RM-as-player vs 4 AI factions over 120 seasons (30 years). Use the Restorationist player policy. Key metrics: season at which Phase 1 first achieved, TC value at that season, Phase 2 success probability, number of runs (out of 5) that achieve victory. If RM wins <5% of runs, the victory condition may need adjustment (lower Phase 1 threshold, or cap Phase 2 Ob at 4 instead of 5, or give RM a PT erosion bonus from Community Weaving).
-**Dependencies:** 2.4 (AI priority trees must be validated first — Church AI TC advancement rate directly determines RM viability).
+**Why:** RM is "hardest mode" (explicitly stated) but win probability against 4 AI factions has never been simulated. RM victory has two phases: Phase 1 (Cultural Majority: PT ≤ 1 in ≥ 4 territories) and Phase 2 (Cultural Uprising: Weaver pool vs Ob = CI ÷ 10, round up, min 1, max 5). Both are gated by variables the player has indirect control over (PT through Cultural Reclamation/Community Weaving, CI through counter-pressure). The key question: can RM achieve Phase 1 before CI reaches 60+ (which makes Phase 2 Ob 6 — near-impossible at typical Weaver pools of 7–9D)?
+**Tasks:** Simulate RM-as-player vs 4 AI factions over 120 seasons (30 years). Use the Restorationist player policy. Key metrics: season at which Phase 1 first achieved, CI value at that season, Phase 2 success probability, number of runs (out of 5) that achieve victory. If RM wins <5% of runs, the victory condition may need adjustment (lower Phase 1 threshold, or cap Phase 2 Ob at 4 instead of 5, or give RM a PT erosion bonus from Community Weaving).
+**Dependencies:** 2.4 (AI priority trees must be validated first — Church AI CI advancement rate directly determines RM viability).
 **Simulation:** `tests/sim_rm_victory.md` (new).
 
 ## 2.7 — Mass Battle Editorial Items [AUD-MB-02]
-**Why:** Part C of mass_battle_v30 has 7 editorial items pending approval: Command-EDIT-01 (Military stat → unit Power/Discipline ceiling), Command-EDIT-02 (battle outcome → faction stat consequences), Command-EDIT-03 (Muster → unit stats: Size=2, Power = floor(Military/2)+1), BG-EDIT-01 (commander bonus formula: floor(Military/2)), BG-EDIT-02 (faction-specific tactic cards), CLOCK-EDIT-01 (IP 75+ Altonian invasion unit stats), CLOCK-EDIT-02 (Church military victory → TC change).
+**Why:** Part C of mass_battle_v30 has 7 editorial items pending approval: Command-EDIT-01 (Military stat → unit Power/Discipline ceiling), Command-EDIT-02 (battle outcome → faction stat consequences), Command-EDIT-03 (Muster → unit stats: Size=2, Power = floor(Military/2)+1), BG-EDIT-01 (commander bonus formula: floor(Military/2)), BG-EDIT-02 (faction-specific tactic cards), CLOCK-EDIT-01 (IP 75+ Altonian invasion unit stats), CLOCK-EDIT-02 (Church military victory → CI change).
 **Action:** Review each proposed resolution. Accept or modify. These are confirmations of proposals already stated in the doc — acceptance commits them as canonical, rejection requires alternative resolution.
 **Propagation:** `designs/provincial/mass_battle_v30.md` Part C (strike editorial flags, mark as resolved), `params/mass_combat.md` (update extracted values).
 
@@ -243,7 +243,7 @@ Replace PP-089/090 reference to `deprecated/compilation/v0.14/stage11_scale_tran
 §1 (Core Principle: Format Follows Context) is empty — no text. Either write the philosophical foundation (~200 words explaining why contests use exchange structure rather than single rolls: the exchange structure models the iterative nature of persuasion, where each argument responds to the prior) or strike the section header.
 
 ## 3.6 — N-Way Opposing Operations [AUD-TW-03]
-**Current rule:** 3+ practitioners with opposing intentionalities on the same configuration = automatic lattice collapse. All operations fail. Gap forms at target's scale. RS −(2 × number of practitioners).
+**Current rule:** 3+ practitioners with opposing intentionalities on the same configuration = automatic lattice collapse. All operations fail. Gap forms at target's scale. MS −(2 × number of practitioners).
 **Concern:** This is a blunt ceiling that prevents degenerate scenarios but also prevents interesting 3-way Thread conflicts. A 3-way Weaving contest (Crown practitioner + Varfell practitioner + Warden, all targeting the same configuration with different intentions) could produce rich emergent outcomes.
 **Proposal:** Graduated collapse: 3 practitioners = contested resolution at +2 Ob each (hard but not impossible); 4+ = auto-collapse (current rule). Write design proposal.
 
@@ -315,7 +315,7 @@ Estimated effort: 8–12 sessions. This is the single biggest remaining risk AND
 ```
 SEASON LOOP:
   Phase 0: Briefing
-    ├── Read global clocks (RS, TC, IP, PI, Strain)
+    ├── Read global clocks (MS, CI, IP, PI, Strain)
     ├── Read faction states (stats, derived values, units, territories, card hands)
     ├── Read settlement states (P/D/O, governors, facilities, Church infrastructure)
     ├── Read NPC states (Disposition, Scars, Beliefs, arc position, Coherence, TS, alive/dead)
@@ -329,7 +329,7 @@ SEASON LOOP:
   Phase 1b: Scene Slate Generation (player_agency §4.2)
     ├── Step 1: Mandatory Crisis (Priority 0) — check all 7 mandatory Zoom In triggers
     ├── Step 2: Crisis Events (Priority 1) — Accord, Scar count, arc triggers, clock thresholds
-    ├── Step 2b: Thread-State Scenes — RS band, Gaps, Locks, WC
+    ├── Step 2b: Thread-State Scenes — MS band, Gaps, Locks, WC
     ├── Step 3: Duty-Aligned (Priority 2)
     ├── Step 4: Conviction-Aligned (Priority 3) — scan Conviction text against game state
     ├── Step 5: NPC Outreach/Demand (Priority 3) — Disposition/priority tree conditions
@@ -352,13 +352,13 @@ SEASON LOOP:
     │     Obligation, Conviction Scar, Domain Echo, Chain Contest generation
     ├── THREAD SCENE: Leap roll → Contact Duration → operations →
     │     Weaving/Pulling/POP/Locking/Dissolution/Mending degree tables →
-    │     Coherence loss, RS change, Co-Movement card draw, co-movement 3-axis →
+    │     Coherence loss, MS change, Co-Movement card draw, co-movement 3-axis →
     │     Opposing Operations (if contested) → Settlement Echo, Thread Domain Echo
     ├── MASS BATTLE: 7-phase turn structure →
     │     Strategy → Volley → Manoeuvre → Thread → Engagement → Cascade → Reform →
     │     Unit damage, Discipline/Morale checks, General Duel (if triggered) →
     │     Rout/Pursuit, Morale Cascade, battle consequences →
-    │     Territory control change, RS cost, IP/Strain advancement
+    │     Territory control change, MS cost, IP/Strain advancement
     ├── GOVERNANCE SCENE: Develop/Fortify/Pacify/Administer →
     │     Settlement stat change → Order → Accord recalculation
     └── COMPANION SCENE: companion interaction → Disposition/Conviction/departure
@@ -385,12 +385,12 @@ SEASON LOOP:
     ├── Step 1: Derived value income/drain calculation (all factions, all settlements)
     ├── Step 2: Stat damage checks (derived value at 0 → stat −1 triggers)
     ├── Step 3: Domain Echo application (queued from Phase 1c/2)
-    ├── Step 4a: TC calculation (Church infrastructure + PT-based generation)
+    ├── Step 4a: CI calculation (Church infrastructure + PT-based generation)
     ├── Step 4b: PT movement (faction actions + Calamity Drift + Thread Op CV Drift)
     ├── Step 4c: Accord Domain Echoes → settlement Order recalculation → Accord
     ├── Step 4d: Peninsular Strain advancement
     ├── Step 4e: IP advancement (inter-faction battle check)
-    ├── Step 5: RS update (Thread operations + battle costs + Calamity Drift)
+    ├── Step 5: MS update (Thread operations + battle costs + Calamity Drift)
     ├── Step 6: NPC arc evaluation (Scar count, Stability triggers, Certainty shifts)
     ├── Step 6b: NPC death/replacement — if named NPC died this season:
     │     check succession per arc profiles (npc_behavior §5.2),
@@ -425,7 +425,7 @@ SEASON LOOP:
 
 **Task:** Build the game-start state from canonical sources. **Validate every loaded value against its canonical source doc.** If a params file value doesn't match the design doc, flag the discrepancy and use the design doc value (it is authoritative per canonical_sources.yaml).
 
-**Global clocks:** RS 72, TC 28, IP 5, PI 7, Strain 0 (from clock_registry_v30).
+**Global clocks:** MS 72, CI 28, IP 5, PI 7, Strain 0 (from clock_registry_v30).
 
 **Faction stats (4 playable + 4 conditional):**
 
@@ -465,13 +465,13 @@ SEASON LOOP:
 | **Investigator** | Fieldwork first, avoid combat, use Thread-Read when TS ≥ 30 | Fieldwork pacing, Evidence Track completion, Exposure management, Thread-Read vs conventional |
 | **Warrior** | Combat first, accept military Duties, join mass battles, build Combat Rep | Combat frequency, Death Cascade rate, Combat Reputation trajectory, wound/recovery |
 | **Diplomat** | Contest + socializing, build Disposition with faction leaders, seek Standing | Contest outcomes, Obligation generation, Standing progression, NPC arc influence |
-| **Practitioner** | Thread first, 2+ ops/season, pursue Mending, accept Coherence risk | Coherence curve, RS impact, Co-Movement variance, Rendering Crisis timing |
+| **Practitioner** | Thread first, 2+ ops/season, pursue Mending, accept Coherence risk | Coherence curve, MS impact, Co-Movement variance, Rendering Crisis timing |
 | **Governor** | Governance Duties, develop settlements, build institutional Standing | Settlement stats, Prosperity→Treasury, Order→Accord, facility slot pressure |
 | **Balanced** | Equal weight all types, accept Duties and pursue Convictions | The "intended" playstyle — balanced mix without specialization |
 | **Independent** | No faction, Convictions only, build Renown to 7+ | Independent viability, Slate thinness, Renown progression without faction |
 | **Aggressive** | Military expansion, conquer by force, ignore Accord | Conquest death spiral, Campaign Supply drain, Accord 1 penalty |
-| **Theocrat** | Church, maximize TC, rush Graduated Seizure | Church victory timeline, TC acceleration, counter-pressure |
-| **Restorationist** | RM, Cultural Reclamation + Community Weaving, Phase 1/2 victory | RM victory probability, PT erosion vs TC advancement, Founding timing |
+| **Theocrat** | Church, maximize CI, rush Graduated Seizure | Church victory timeline, CI acceleration, counter-pressure |
+| **Restorationist** | RM, Cultural Reclamation + Community Weaving, Phase 1/2 victory | RM victory probability, PT erosion vs CI advancement, Founding timing |
 
 **Run configuration:** 10 policies × 5 random seeds = **50 campaign runs** for baseline analysis.
 
@@ -557,7 +557,7 @@ Every feature must fire at least once across the 50 campaign runs. This checklis
 - [ ] BG battle resolution (single-roll abstraction with tactic cards)
 - [ ] Hybrid handoff (Zoom In at phase-lock points: after Phase 1, after Phase 3, after Phase 6 Step 1)
 - [ ] Thread operations in mass battle (Phase 4 offensive, Phase 6 support)
-- [ ] Battle consequences (RS −1/−2, IP +2, Strain +1, territory control, Accord set to 1)
+- [ ] Battle consequences (MS −1/−2, IP +2, Strain +1, territory control, Accord set to 1)
 
 ### Scale Transitions (8 items)
 - [ ] All 11 upward transitions (DE-1 through DE-11) fired at least once
@@ -651,7 +651,7 @@ Every feature must fire at least once across the 50 campaign runs. This checklis
 
 **Per-run output:**
 - Season-by-season state log (all tracked values, all state changes, all events fired)
-- Clock trajectories (RS, TC, IP, PI, Strain over 120 seasons)
+- Clock trajectories (MS, CI, IP, PI, Strain over 120 seasons)
 - Faction stat trajectories (each stat and derived value over time, per faction)
 - NPC arc timeline (which NPCs transitioned, when, which arc, triggered by what)
 - Victory condition proximity (how close each faction got to each condition, at what season)
@@ -660,8 +660,8 @@ Every feature must fire at least once across the 50 campaign runs. This checklis
 
 **Cross-run analysis (50 runs):**
 - Mean time-to-victory by faction and policy (target: Season 60–100 / Year 15–25)
-- RS trajectory distribution: mean ± std dev. Target: Fractured band (39–20) reached between Season 40–80.
-- TC trajectory distribution. Target: Graduated Seizure (TC 75) available between Season 30–60.
+- MS trajectory distribution: mean ± std dev. Target: Fractured band (39–20) reached between Season 40–80.
+- CI trajectory distribution. Target: Graduated Seizure (CI 75) available between Season 30–60.
 - Treasury depletion frequency: how often does any faction hit Treasury 0? Target: rare event (< 20% of runs), not routine.
 - NPC arc transition frequency. Target: ≥4 of 14 named NPCs undergo arc transitions by Season 60.
 - Feature coverage union: across all 50 runs, which checklist items fired? Target: 100%.
@@ -674,7 +674,7 @@ Every feature must fire at least once across the 50 campaign runs. This checklis
 ## 4.5 — Stress Tests (8 scenarios, run after baseline calibration)
 
 ### 4.5.1 — Church Theocracy Rush
-Church AI maximizes TC every season (Preach + Assert + Church infrastructure investment). Player is Crown. Question: Does Crown AI + player intervention prevent Church from reaching TC 75 before Season 40? If not, what is the counter-strategy, and does the game provide sufficient tools?
+Church AI maximizes CI every season (Preach + Assert + Church infrastructure investment). Player is Crown. Question: Does Crown AI + player intervention prevent Church from reaching CI 75 before Season 40? If not, what is the counter-strategy, and does the game provide sufficient tools?
 
 ### 4.5.2 — Military Conquest Death Spiral
 Player conquers 3 territories by force in 5 seasons (Aggressive policy). All at Accord 1 (no Prosperity income contribution). Campaign Supply active (−100 Treasury/season). Question: Does Treasury reach 0 before Accord recovers to 2 through Govern actions? Is the economic penalty sufficient to deter pure military expansion?
@@ -703,10 +703,10 @@ Run for full 120 seasons (30 years). Question: How many of the 14 starting named
 
 **Output:** `tests/sim_framework/calibration_report.md` — THE GATE DOCUMENT for Godot implementation.
 
-**Contains:** Recommended multiplier adjustments (derived stat ×N values), clock speed tuning (TC/IP advancement rates), priority tree corrections (faction AI behavior fixes), feature coverage gaps (features that never fired), and all discovered design issues with severity triage.
+**Contains:** Recommended multiplier adjustments (derived stat ×N values), clock speed tuning (CI/IP advancement rates), priority tree corrections (faction AI behavior fixes), feature coverage gaps (features that never fired), and all discovered design issues with severity triage.
 
 **Issue triage protocol for sim-discovered issues:**
-- **P1 (balance-critical):** Victory timing outside S60–100, death spirals before S30, stasis windows >10 seasons, feature coverage <100%, RS never reaches crisis. **Must resolve before Phase 5.** These become new Phase 1/2 items. Simulation re-runs after fixes (Phase 4.7).
+- **P1 (balance-critical):** Victory timing outside S60–100, death spirals before S30, stasis windows >10 seasons, feature coverage <100%, MS never reaches crisis. **Must resolve before Phase 5.** These become new Phase 1/2 items. Simulation re-runs after fixes (Phase 4.7).
 - **P2 (system-specific):** Specific system behavior incorrect but doesn't affect overall balance. Resolve during Phase 5 or early Godot implementation.
 - **P3 (cosmetic/theoretical):** Edge cases that rarely fire, minor numerical adjustments. Track but don't block.
 
@@ -772,7 +772,7 @@ Estimated effort: 3–4 sessions. Prerequisite: Phase 4 calibration report accep
 - Contest §2 Step 7: "GM records on hidden ledger" → engine handles all contest bookkeeping
 - NPC Behavior §3.3: "GM judgment" for Scar progression → deterministic threshold: Scar fires on any decisive contest win via correct Resonant Style (binary, no GM discretion)
 - Combat §4 Stunt: "GM sets N, max 5" → environmental modifier table indexed by POI type and terrain (e.g., Fortress interior +2, open field +0, Einhir ruins +3)
-- Threadwork §3.6: "GM determines domain type" for Lock RS drift → domain-type lookup from settlement type (Seat = slow-change, Town = moderate, Outpost = fast-change)
+- Threadwork §3.6: "GM determines domain type" for Lock MS drift → domain-type lookup from settlement type (Seat = slow-change, Town = moderate, Outpost = fast-change)
 - Fieldwork §4.1: "GM sets threshold at investigation opening" → threshold = scope-based (Simple 3, Complex 5, Structural 8) as already defined; the "GM sets" language is a TTRPG artifact
 - Social Contest §2 Step 4: "GM narrates partial outcome proportional to final position" → outcome table indexed by final Conviction Track position (4 = slight compromise toward A, 5 = true middle, 6 = slight compromise toward B)
 - Investigation Systems: NPE "GM grants Belief revelation" → Belief revealed deterministically on Observation (NPC acts on Belief in player's presence) or Appraise Overwhelming
@@ -835,7 +835,7 @@ Follow standard commit protocol (5 steps from HOW TO USE). Update propagation_ma
 New issues enter as ED items in editorial_ledger. Triage to P0/P1/P2/P3 per standard severity definitions. P0/P1 issues gate further implementation work until resolved. P2/P3 tracked but don't block.
 
 ## 6.5 — Quarterly Review
-Re-run full simulation baseline (50 runs with current design doc values). Compare against prior calibration report. Flag any metric drift (victory timing shifted, RS trajectory changed, feature coverage dropped). If drift detected, investigate cause and adjust.
+Re-run full simulation baseline (50 runs with current design doc values). Compare against prior calibration report. Flag any metric drift (victory timing shifted, MS trajectory changed, feature coverage dropped). If drift detected, investigate cause and adjust.
 
 ---
 
@@ -980,7 +980,7 @@ Phase 6 (Ongoing maintenance) ← permanent
 - No stasis (no 10-season window where nothing changes)
 - Victory timing within Season 60–100 (Year 15–25)
 - All ~130 features fire at least once across 50 runs (100% coverage)
-- RS crisis reaches Fractured band (39–20) between Season 40–80
+- MS crisis reaches Fractured band (39–20) between Season 40–80
 - NPC arcs transition: ≥4 of 14 named NPCs by Season 60
 - Player impact measurable: player's faction outperforms AI-only by ≥2 stat points
 

@@ -15,7 +15,7 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 | T6 | Stillhelm | Crown | 0 | 2 | Southern farmland. Southernmost Access point — Expedition into T15 staged from here. Non-Thread orders +1 Ob (frontier terrain). Proximity 1 (Calamity Radiation). Adjacent to T5, T13, T15. |
 | T7 | Rendstad | Hafenmark | 0 | 4 | Timber valley. Adjacent to T4, T8. |
 | T8 | Gransol | Hafenmark ★ | 1 | 5 | Hafenmark capital. Garrison: Muster +1D. Adjacent to T7, T9, T10, T17. |
-| T9 | Himmelenger | Church ★ | 2 | 5 | Cathedral city. Church starts here. TC +1/season Church controls. Church Unique Power −1 Ob. Adjacent to T2, T3, T8, T14, T17. |
+| T9 | Himmelenger | Church ★ | 2 | 5 | Cathedral city. Church starts here. CI +1/season Church controls. Church Unique Power −1 Ob. Adjacent to T2, T3, T8, T14, T17. |
 | T10 | Spartfell | Hafenmark | 2 | 3 | Border castle. NE Altonian pass. Invasion Pressure (IP) events fire here first. Adjacent to T8, T11. |
 | T11 | Halvardshelm | Varfell | 0 | 5 | Central fjords. Breadbasket +1 Pros/season uncontested. Muster Ob −1. Guilds CP-token. Adjacent to T10, T12. |
 | T12 | Sigurdshelm | Varfell ★ | 1 | 3 | Varfell Seat. Niflhel Black Market: Trade +1 Ob, Niflhel Covert −1 Ob. Adjacent to T4, T11, T13. Proximity 2 (Calamity Radiation). |
@@ -29,7 +29,7 @@ All faction starting positions reflect canonical geography. Old v04 map assignme
 
 ### Spiritual Weight (SW) — Territory Attribute (tc_political_redesign_v30 §1)
 
-SW is a fixed attribute per territory representing ecclesiastical importance. Pre-printed on territory cards. SW gates TC generation (Piety Yield weighting), Church political pool, and PT momentum.
+SW is a fixed attribute per territory representing ecclesiastical importance. Pre-printed on territory cards. SW gates CI generation (Piety Yield weighting), Church political pool, and PT momentum.
 
 | T# | Territory | SW | Rationale |
 |----|-----------|-----|-----------|
@@ -52,13 +52,13 @@ SW is a fixed attribute per territory representing ecclesiastical importance. Pr
 | T17 | Halvarshelm | 2 | Northern mines |
 | **Total** | | **32** | |
 
-**SW use cases:** (1) Piety Yield: TC += Σ(PT tier × SW/5) per prominent territory. (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
+**SW use cases:** (1) Piety Yield: CI += Σ(PT tier × SW/5) per prominent territory. (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
 
 
 
 ### Spiritual Weight (SW) — Territory Attribute (tc_political_redesign_v30 §1)
 
-SW is a fixed attribute per territory representing ecclesiastical importance. Pre-printed on territory cards. SW gates TC generation (Piety Yield weighting), Church political pool, and PT momentum.
+SW is a fixed attribute per territory representing ecclesiastical importance. Pre-printed on territory cards. SW gates CI generation (Piety Yield weighting), Church political pool, and PT momentum.
 
 | T# | Territory | SW | Rationale |
 |----|-----------|-----|-----------|
@@ -81,7 +81,7 @@ SW is a fixed attribute per territory representing ecclesiastical importance. Pr
 | T17 | Halvarshelm | 2 | Northern mines |
 | **Total** | | **32** | |
 
-**SW use cases:** (1) Piety Yield: TC += Σ(PT tier × SW/5) per prominent territory. (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
+**SW use cases:** (1) Piety Yield: CI += Σ(PT tier × SW/5) per prominent territory. (2) Church political pool: += Σ(SW of prominent territories)/5. (3) PT momentum: +1D to PT change actions in SW ≥ 3 territories.
 
 
 
@@ -271,7 +271,7 @@ Required sequence to access Askeheim:
 |----------|---------|-------------|-------------------|---------------|
 | Vaynard (VTM 3+) | Varfell | 30 (at VTM 3) | Yes — conditional on VTM development | VTM 3 achieved ~S7–9. Marginal: Forgetting pool = 3D. |
 | Vaynard (VTM 4+) | Varfell | 40 | Yes | VTM 4 ~S10–12. Edeyja will engage substantively. |
-| Almud Almqvist | Crown | 0 | **No** | Discovery Event as rupture (not confirmation): any Thread-significant event with Almud present, Spirit Ob 1. At TS 0, Almud perceives nothing of Thread phenomena — the Discovery Event is first contact with something entirely outside his framework. On success: TS gains initial awareness (GM sets value, likely 10-15 Stirring range), Certainty −1 (permanent). Politically costly: TC +1; Church learning triggers TC +2 + Heresy Investigation. *[ED-364 resolved 2026-04-11: Almud TS revised to 0. Remove secret Einhir sympathy. Einhir policy as governance pragmatism + genuine ethical doubt. Discovery Event as rupture not confirmation.]* |
+| Almud Almqvist | Crown | 0 | **No** | Discovery Event as rupture (not confirmation): any Thread-significant event with Almud present, Spirit Ob 1. At TS 0, Almud perceives nothing of Thread phenomena — the Discovery Event is first contact with something entirely outside his framework. On success: TS gains initial awareness (GM sets value, likely 10-15 Stirring range), Certainty −1 (permanent). Politically costly: CI +1; Church learning triggers CI +2 + Heresy Investigation. *[ED-364 resolved 2026-04-11: Almud TS revised to 0. Remove secret Einhir sympathy. Einhir policy as governance pragmatism + genuine ethical doubt. Discovery Event as rupture not confirmation.]* |
 | Lenneth Almqvist (Queen) | Crown | Unknown (not yet documented) | **Unknown** | Arc-dependent. Holds pre-Altonian sea-republic archive with first-person Thread-perception accounts (~180 AG). Potential TS development through intellectual confrontation with archive content + Thread exposure. [EDITORIAL: ED-119 — Lenneth full design required: starting TS, development path, stat block.] |
 | Restoration Weaver (TS 18) | Restoration | 18 | No | Does not qualify as expedition leader. Provides Ob −1 support when accompanying a qualifying Champion. |
 | Any other faction Champion | Any | < 30 | No | No standard development path. |
@@ -292,7 +292,7 @@ Champion path in the game. Lenneth's path remains arc-dependent (ED-119 open).
 ### What "No Faction Control" Means in BG
 - No control token can be placed in T15.
 - No Govern, Trade, Muster, Fortify, or Decree orders execute in T15.
-- TC 75 Church Territorial Seizure does not target T15.
+- CI 75 Church Territorial Seizure does not target T15.
 - Varfell Path B (T4+T6) refers to control of T6 — a normal territory.
   The deed measures political and strategic presence at the Southernmost threshold,
   not occupation of the epicentre itself.
@@ -348,7 +348,7 @@ Required sequence to access Askeheim:
 |----------|---------|-------------|-------------------|---------------|
 | Vaynard (VTM 3+) | Varfell | 30 (at VTM 3) | Yes — conditional on VTM development | VTM 3 achieved ~S7–9. Marginal: Forgetting pool = 3D. |
 | Vaynard (VTM 4+) | Varfell | 40 | Yes | VTM 4 ~S10–12. Edeyja will engage substantively. |
-| Almud Almqvist | Crown | 0 | **No** | Discovery Event as rupture (not confirmation): any Thread-significant event with Almud present, Spirit Ob 1. At TS 0, Almud perceives nothing of Thread phenomena — the Discovery Event is first contact with something entirely outside his framework. On success: TS gains initial awareness (GM sets value, likely 10-15 Stirring range), Certainty −1 (permanent). Politically costly: TC +1; Church learning triggers TC +2 + Heresy Investigation. *[ED-364 resolved 2026-04-11: Almud TS revised to 0. Remove secret Einhir sympathy. Einhir policy as governance pragmatism + genuine ethical doubt. Discovery Event as rupture not confirmation.]* |
+| Almud Almqvist | Crown | 0 | **No** | Discovery Event as rupture (not confirmation): any Thread-significant event with Almud present, Spirit Ob 1. At TS 0, Almud perceives nothing of Thread phenomena — the Discovery Event is first contact with something entirely outside his framework. On success: TS gains initial awareness (GM sets value, likely 10-15 Stirring range), Certainty −1 (permanent). Politically costly: CI +1; Church learning triggers CI +2 + Heresy Investigation. *[ED-364 resolved 2026-04-11: Almud TS revised to 0. Remove secret Einhir sympathy. Einhir policy as governance pragmatism + genuine ethical doubt. Discovery Event as rupture not confirmation.]* |
 | Lenneth Almqvist (Queen) | Crown | Unknown (not yet documented) | **Unknown** | Arc-dependent. Holds pre-Altonian sea-republic archive with first-person Thread-perception accounts (~180 AG). Potential TS development through intellectual confrontation with archive content + Thread exposure. [EDITORIAL: ED-119 — Lenneth full design required: starting TS, development path, stat block.] |
 | Restoration Weaver (TS 18) | Restoration | 18 | No | Does not qualify as expedition leader. Provides Ob −1 support when accompanying a qualifying Champion. |
 | Any other faction Champion | Any | < 30 | No | No standard development path. |
@@ -370,7 +370,7 @@ Champion path in the game. Lenneth's path remains arc-dependent (ED-119 open).
 ### What "No Faction Control" Means in BG
 - No control token can be placed in T15.
 - No Govern, Trade, Muster, Fortify, or Decree orders execute in T15.
-- TC 75 Church Territorial Seizure does not target T15.
+- CI 75 Church Territorial Seizure does not target T15.
 - Varfell Path B (T4+T6) refers to control of T6 — a normal territory.
   The deed measures political and strategic presence at the Southernmost threshold,
   not occupation of the epicentre itself.

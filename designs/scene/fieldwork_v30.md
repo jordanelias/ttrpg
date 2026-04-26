@@ -45,7 +45,7 @@ All fieldwork operates on a shared **Depth Axis** — a graduated scale from ful
 - Character is foreign to territory (no relevant History): +1 Ob
 - Allied faction provides support: −1 Ob
 - Character is local resident with relevant History: −1 Ob
-- Calamity radiation: +1 Ob per RS band below 60 at current Proximity Rating (see calamity_radiation.md)
+- Calamity radiation: +1 Ob per MS band below 60 at current Proximity Rating (see calamity_radiation.md)
 - Active Heresy Investigation in territory: +1 Ob to investigation/social actions involving Thread-adjacent topics
 
 Ob floor: 1 (per core engine).
@@ -133,7 +133,7 @@ TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Despe
 
 **Scale, distance, and breadth:**
 
-- **Scale** (stage11 §11.1): Higher scale = broader investigative reach, higher Ob, higher Coherence/RS cost. Territorial Thread-Read perceives an entire settlement's substrate (TS 50+, Coherence −1).
+- **Scale** (stage11 §11.1): Higher scale = broader investigative reach, higher Ob, higher Coherence/MS cost. Territorial Thread-Read perceives an entire settlement's substrate (TS 50+, Coherence −1).
 - **Temporal reach (POP only):** Accesses past configurations. Same-session (Ob 3) is the viable investigative range. Generational (Ob 7+) is near-impossible (<0.1% success).
 
 
@@ -191,7 +191,7 @@ A practitioner Knotted to an NPC may Thread-Read that NPC's Thread configuration
 | Resource | 1 | Mines, farmland, trade routes, harbours | Territory bonus: Prosperity +1, Muster Ob −1, Trade Ob −1, or equivalent. |
 | Secret | 2 | Hidden passages, concealed archives, smuggling routes, abandoned settlements | Tactical advantage: ambush positions, escape routes, intelligence caches. |
 | Remnant | 3 | Einhir ruins, Thread scars, Locked Zones, Calamity artifacts | Thread-level content: Thread Debt reduction, TS advancement opportunity, rendering strain (§3.4). |
-| Anomaly | 4 | Active Thread phenomena, oscillating zones, rendering failures, Snapped Zone boundaries | Dangerous content: Coherence check on entry, RS effects, monstrous emergence possible. **Mode 1 (Ordinary Incursion):** configuration has no self-awareness and deteriorates across scenes — investigation is time-sensitive; Evidence Track progress from this source halves after the third scene past initial contact as the configuration degrades. **Mode 2 (Providence):** a temporary organized event, not an entity — Interview and social fieldwork actions are unavailable (there is no being to address); investigation accesses the event's Thread configuration via Examine and Thread-Read only. Evidence tag: Observational (Mode 1), Thread-verified (Mode 2). Per P-05: modes are mechanically distinct and require distinct investigation procedures. (PP-628) |
+| Anomaly | 4 | Active Thread phenomena, oscillating zones, rendering failures, Snapped Zone boundaries | Dangerous content: Coherence check on entry, MS effects, monstrous emergence possible. **Mode 1 (Ordinary Incursion):** configuration has no self-awareness and deteriorates across scenes — investigation is time-sensitive; Evidence Track progress from this source halves after the third scene past initial contact as the configuration degrades. **Mode 2 (Providence):** a temporary organized event, not an entity — Interview and social fieldwork actions are unavailable (there is no being to address); investigation accesses the event's Thread configuration via Examine and Thread-Read only. Evidence tag: Observational (Mode 1), Thread-verified (Mode 2). Per P-05: modes are mechanically distinct and require distinct investigation procedures. (PP-628) |
 | Breach | 5 | The rendering's edge. Unintelligible ground proximate. | Existential content: rendering strain (§3.4). The character confronts what rendering cannot process. **Threadcut emergence sites:** if a Breach is the confirmed entry point of a known threadcut being (Mode 3), Thread-Read of the site reveals the being's entry configuration — the tear's topology is a forensic record of the being's first moment of active self-maintenance. Evidence yield: +3 regardless of roll degree (Thread-verified tag). The being may detect this investigation (§2.8 counter-investigation applies). |
 
 
@@ -207,10 +207,10 @@ Einhir sites (Remnants, Anomalies, Breaches) render on the world map according t
 
 **After Diagnosis:** Once a character with sufficient TS has performed a successful Diagnosis operation (threadwork_v30 §2) on a site, the site becomes permanently visible on the world map at its full detail level for all characters. The practitioner's Diagnosis renders the site intelligible — the information propagates through the party's shared knowledge base.
 
-**Engine implementation:** Site visibility is per-character, calculated from character TS at map render time. Diagnosed sites flag as  and render at max detail for all characters. Sites generate procedurally from territory RS history (low RS = more Remnants/Anomalies; RS ≤ 30 may spawn Breaches).
+**Engine implementation:** Site visibility is per-character, calculated from character TS at map render time. Diagnosed sites flag as  and render at max detail for all characters. Sites generate procedurally from territory MS history (low MS = more Remnants/Anomalies; MS ≤ 30 may spawn Breaches).
 
 
-**Conditional POI availability:** Not all POIs are discoverable at all times. POIs may be gated by: RS band (a Remnant becomes visible only when RS drops below 60), season (a Snapped Zone oscillates into accessibility in Winter only), faction control (a Secret accessible only while the controlling faction holds the territory), or prior discovery (discovering POI A reveals the existence of POI B). The GM records conditional gates at setup. In Godot, conditional gates are authored per-POI.
+**Conditional POI availability:** Not all POIs are discoverable at all times. POIs may be gated by: MS band (a Remnant becomes visible only when MS drops below 60), season (a Snapped Zone oscillates into accessibility in Winter only), faction control (a Secret accessible only while the controlling faction holds the territory), or prior discovery (discovering POI A reveals the existence of POI B). The GM records conditional gates at setup. In Godot, conditional gates are authored per-POI.
 
 ### §3.2 Discovery Procedure
 
@@ -228,7 +228,7 @@ Einhir sites (Remnants, Anomalies, Breaches) render on the world map according t
 
 ### §3.3 Movement and Time
 
-**TTRPG:** Moving between territories takes time. Adjacent territories: 1 scene of travel. Non-adjacent: GM determines route, 1 scene per territory traversed. Travel through Calamity-affected territories (Proximity Rating ≤ 2) at RS ≤ 40: Endurance check Ob 1 per territory or take 1 Exposure.
+**TTRPG:** Moving between territories takes time. Adjacent territories: 1 scene of travel. Non-adjacent: GM determines route, 1 scene per territory traversed. Travel through Calamity-affected territories (Proximity Rating ≤ 2) at MS ≤ 40: Endurance check Ob 1 per territory or take 1 Exposure.
 
 
 
@@ -608,7 +608,7 @@ Cover determines Exposure thresholds. Higher Cover shifts thresholds upward, par
 
 In territories where the Church has influence (Piety Track ≥ 3 or Church-controlled), Exposure feeds the Church Attention Pool:
 - At Watched threshold: +1 Attention Pool in this territory at next Accounting.
-- At Compromised threshold: +1 Attention Pool in this territory immediately. (Not +2 — capped at +1 per character per season to prevent runaway TC acceleration.)
+- At Compromised threshold: +1 Attention Pool in this territory immediately. (Not +2 — capped at +1 per character per season to prevent runaway CI acceleration.)
 
 
 ---
@@ -642,7 +642,7 @@ In territories where the Church has influence (Piety Track ≥ 3 or Church-contr
 | Resource | Prosperity +1 in this territory |
 | Secret | +1D on next military or intelligence action in this territory |
 | Remnant | Thread operation Ob −1 in this territory for 2 seasons; Thread Debt token placed |
-| Anomaly | RS −1 at this territory immediately; Warden Cooperation (WC) +1 eligible when Warden Recognition (WR) ≥ 2 (Wardens recognise the faction as a steward). See params_board_game.md §Warden Cooperation and §Warden Recognition. (PP-630) |
+| Anomaly | MS −1 at this territory immediately; Warden Cooperation (WC) +1 eligible when Warden Recognition (WR) ≥ 2 (Wardens recognise the faction as a steward). See params_board_game.md §Warden Cooperation and §Warden Recognition. (PP-630) |
 
 - **Effect on Failure:** No POI found. +1 Church Attention Pool in this territory if the survey targeted Depth ≥ 3 content.
 
@@ -767,7 +767,7 @@ Fieldwork actions consume in-game time:
 - Each exploration/investigation/social scene = 1 time unit.
 - At season end: Accounting Phase fires automatically. Clocks advance. Faction actions resolve.
 
-**Clock HUD:** RS, TC, IP displayed persistently. PI and faction-specific tracks available on faction screen. Exposure displayed per-territory on map overlay.
+**Clock HUD:** MS, CI, IP displayed persistently. PI and faction-specific tracks available on faction screen. Exposure displayed per-territory on map overlay.
 
 ---
 
@@ -795,7 +795,7 @@ Fieldwork actions consume in-game time:
 | ED-507 (was ED-NEW-01) | POI catalog per territory. Requires cross-reference with geography_design.md and calamity_radiation.md. Each territory needs 2-6 authored POIs across depth levels with conditional availability gates. **FLAGGED — authorial decision.** | P2 |
 | ED-508 (was ED-NEW-02) | Named NPC starting Dispositions. Requires cross-reference with NPC roster. Partially addressed by ARC-T23 Remembrancer (ED ledger entry, 2026-04-13). Full NPC Disposition table pending. **FLAGGED — authorial decision.** | P2 |
 | ED-496 (was ED-NEW-03) | Survey action stat assignment confirmed: Influence. Monitor in simulation — if Survey dominates Govern, consider Ob adjustment. Resolved: Influence confirmed canonical for Survey (fieldwork_design_v1.md §8.1 states explicitly). SIM-DEBT-FW-05 confirms Survey and Govern occupy different niches. **RESOLVED.** | P2 → RESOLVED |
-| ED-497 (was ED-NEW-04) | Exposure ↔ Church Attention Pool interaction. §6.5 caps at +1/character/season and +2/territory/season from fieldwork. **CONFIRMED SAFE** (PP-581 simulation: fieldwork contributes ~11% of max TC acceleration over 4 seasons). **RESOLVED.** | P3 → RESOLVED |
+| ED-497 (was ED-NEW-04) | Exposure ↔ Church Attention Pool interaction. §6.5 caps at +1/character/season and +2/territory/season from fieldwork. **CONFIRMED SAFE** (PP-581 simulation: fieldwork contributes ~11% of max CI acceleration over 4 seasons). **RESOLVED.** | P3 → RESOLVED |
 | ED-498 (was ED-NEW-05) | Negotiate vs Contest boundary defined (§5.7): "The GM does not offer a choice — the situation's structure determines the mechanic." Edge cases foreclosed by design. **RESOLVED.** | P2 → RESOLVED |
 | ED-509 (was ED-NEW-06) | Godot POI node architecture (§10.1). Requires validation against Valoria-game repo Godot project structure. Deferred until Godot implementation phase. **FLAGGED.** | P3 |
 | ED-499 (was ED-NEW-07) | Evidence Track persistence. §4.1 explicitly states "persistent across scenes and sessions." No mechanical overhead beyond GM notes — same as clocks. **RESOLVED.** | P3 → RESOLVED |
@@ -814,7 +814,7 @@ Fieldwork actions consume in-game time:
 |------|------------|
 | KN-01/02 | Knot-mediated remote Thread-Read: §2.6. +1 Knot strain per use. Detection → Disposition −3. |
 | DIS-01/02 | Non-sensitive partner Dissonance: §2.7. Spirit check vs Dissonance Factor. Field team rotation. |
-| TC-01/02/03/04 | Threadcut being social fieldwork: §2.8. Testimonial tag. P-08 bridged by being's translation. Evidence Track = player-level knowledge. Counter-investigation possible. |
+| CI-01/02/03/04 | Threadcut being social fieldwork: §2.8. Testimonial tag. P-08 bridged by being's translation. Evidence Track = player-level knowledge. Counter-investigation possible. |
 | MA-02/03 | Mending arcs as investigation: §2.4. Severity reduction = evidence. Multi-season campaign pacing. |
 | CW-01 | Community Organizing detectable: §2.4 table (Weaving row covers Community Organizing). |
 
@@ -877,7 +877,7 @@ Fieldwork actions consume in-game time:
 | SIM-DEBT-FW-01 | **RESOLVED** (PP-583). Ob calibration across Depth 1-5 at 5 pool sizes ± hostile/foreign modifiers. Calibration sound: 5D handles D1, 9D handles D1-2, 13D handles D1-3, 17D handles D1-4, 24D challenges at D5. |
 | SIM-DEBT-FW-02 | **RESOLVED** (PP-576 partial, PP-583 complete). 5-threshold investigation completes in 3-5 scenes for high-pool (15-19D). Low-pool (9D): 4-6 scenes at D1-2. Pacing confirmed. |
 | SIM-DEBT-FW-03 | **RESOLVED** (PP-583). Neutral→Bonded: ~6-8 actions across 3-4 seasons (with failures and maintenance at +3). Sincerity Gate adds ~37% failure on instrumental Connect. Meaningful investment confirmed. |
-| SIM-DEBT-FW-04 | **RESOLVED** (PP-581). AP feedback: fieldwork contributes ~11% of max TC acceleration. +1/char/season +2/territory/season cap is sufficient. |
+| SIM-DEBT-FW-04 | **RESOLVED** (PP-581). AP feedback: fieldwork contributes ~11% of max CI acceleration. +1/char/season +2/territory/season cap is sufficient. |
 | SIM-DEBT-FW-05 | **RESOLVED** (PP-583). Survey and Govern occupy different niches. Govern dominates mid-proximity (reliable Prosperity). Survey dominates high-proximity (safe northern territories). Neither dominates the other. |
 | SIM-DEBT-FW-06 | **RESOLVED** (PP-583). Cover 3: detected in 3 scenes. Cover 9: full season before detection. Cover 12+: near-immune to casual detection, threatened only by combat+Thread stacking. Appropriate differentiation. |
 | SIM-DEBT-FW-07 | **RESOLVED** (PP-577). Transition simulation. All 6 directions functional. |

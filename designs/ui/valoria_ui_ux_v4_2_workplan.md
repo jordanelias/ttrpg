@@ -139,7 +139,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 |---|---|---|---|---|
 | 3.1 | F-17 | `valoria_ui_ux_v4_1.md` §13.7.3 line 1138 | Change "Coherence ≤ 5" to "Coherence ≤ 7" (covers full Dissonant band) | `threadwork_v30.md` §3.3 |
 | 3.2 | F-26 | `valoria_ui_ux_v4_1.md` §8.4 | Split Bypass rule: non-Fortress `Military > Defense + 2`; Fortress `Military > Defense + 3` | `settlement_layer_v30.md` §5.1 lines 237, 241 |
-| 3.3 | F-56 | `valoria_ui_ux_v4_1.md` §9.7 TS 70+ row | Split into TS 70–89 (−1 RS/session) and TS 90+ (−1 RS/scene) | `threadwork_v30.md` PP-197 |
+| 3.3 | F-56 | `valoria_ui_ux_v4_1.md` §9.7 TS 70+ row | Split into TS 70–89 (−1 MS/session) and TS 90+ (−1 MS/scene) | `threadwork_v30.md` PP-197 |
 | 3.4 | F-59 | `valoria_ui_ux_v4_1.md` Part 14 UI-03 | Update threshold reference from Coherence ≤ 5 to ≤ 7 to align with 3.1 | Derived from 3.1 |
 | 3.5 | F-67 | `valoria_ui_ux_v4_1.md` §9.4 | Rename three-axis first axis from "Scale" to "Breadth" | `threadwork_v30.md` §2.4 (PP-622/PP-623 rename) |
 | 3.6 | Register | `canon/editorial_ledger.yaml` | Entries: ED-642 (F-17), ED-643 (F-26), ED-644 (F-56), ED-645 (F-67) | — |
@@ -286,7 +286,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 | 7.3 | F-14 | §9.3 | Pre-Leap Diagnosis preview panel: target configuration properties + three-axis Ob estimate. Distinct from commit modal | `threadwork_v30` §2.2 + §2.3 |
 | 7.4 | F-18 | §9.4 | Residue inventory row in Thread panel: token icons with potency rating; click adds to pool with volatility warning. Hidden if none held | `threadwork_v30` §3.4 |
 | 7.5 | F-21 | §10.2 | Name the stat Rendering Strain (not "Thread cost accumulating"); cap = Health; De-Actualization cascade at Strain = Health. Observer-dependency rendering per TS table | `threadwork_v30` §6.2, §6.4 |
-| 7.6 | F-22 | §13 + §9.6 RS Critical | Rupture = mandatory cutscene list entry (3-minute tier); RS Critical band (19–1) adds per-season Crisis Accounting banner showing RS trajectory + projected Rupture season | `threadwork_v30` §5.3 design note |
+| 7.6 | F-22 | §13 + §9.6 MS Critical | Rupture = mandatory cutscene list entry (3-minute tier); MS Critical band (19–1) adds per-season Crisis Accounting banner showing MS trajectory + projected Rupture season | `threadwork_v30` §5.3 design note |
 | 7.7 | F-38 | §8.2 | Two errors to fix: (a) Phase 4 runs always, renders observer's-perception view per threadwork §2.3 Observation table; (b) General Duel is generic Personal Action at Phase 5 Priority 8, not practitioner-gated | `mass_battle_v30` §A.7 + `scale_transitions_v30` §3.7 |
 | 7.8 | F-44 | §13 + §1.4 | Retrospective Zoom In mini-cutscene: fires when player arrives/communicates with territory where major event occurred offscreen. Routes via companion → Knot → messenger → ambient rumor per scale_transitions §4.3 Retrospective | `scale_transitions_v30` §4.3 |
 | 7.9 | F-45 | §12.1 | Add 5 missing transition rows: Fieldwork → Contest (Findings as +1D/Finding prep); Fieldwork → Mass Battle (suspension); BG Survey → TTRPG (Fieldwork Offset from degree); Combat → Fieldwork (Exposure codification +1/+2/+3); Contest → Fieldwork (Appraise → Evidence +1 Testimonial) | `scale_transitions_v30` §3.9 |
@@ -322,12 +322,12 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 
 | Item | Finding | Section | Change | Dep source |
 |---|---|---|---|---|
-| 8.1 | F-4 | §4.3 | Restate fully (not defer to v4): per-action cost matrix (scene-action / Exposure Success / Exposure Failure / Coherence / RS / Depth cap at TS 0) on button hover | `fieldwork_v30` §4.2 + §6.3 |
+| 8.1 | F-4 | §4.3 | Restate fully (not defer to v4): per-action cost matrix (scene-action / Exposure Success / Exposure Failure / Coherence / MS / Depth cap at TS 0) on button hover | `fieldwork_v30` §4.2 + §6.3 |
 | 8.2 | F-28 | §11.1 Domain Action flow | Rewrite: target → Sufficient Scope projection → Institutional challenge check (challenges core institutional authority AND target Mandate ≥ 4) → Uphold/Appease modal with NPC-AI rule transparent → roll → Echo animation | `board_game_v30` PP-189 |
 | 8.3 | F-47 | — | Already addressed in 7.10; this item verifies extension is complete across all 4 gateways | — |
-| 8.4 | F-50 | §2.1 three-clock summary | TC threshold markers visible: seasons-to-threshold trajectory (passive +1/season → seasons to 65/75/80) | `victory_v30` TC milestones |
+| 8.4 | F-50 | §2.1 three-clock summary | CI threshold markers visible: seasons-to-threshold trajectory (passive +1/season → seasons to 65/75/80) | `victory_v30` CI milestones |
 | 8.5 | F-51 | §2.1 three-clock summary | IP threshold markers visible: 40 / 60 / 75 / 100 milestones | `clock_registry_v30` + `victory_v30` |
-| 8.6 | F-53 | §4.3 per-action preview | Add Calamity Ob modifier row: +1 Ob per RS band below 60 at current Proximity per fieldwork §1 | `fieldwork_v30` §1 + `calamity_radiation_v30` |
+| 8.6 | F-53 | §4.3 per-action preview | Add Calamity Ob modifier row: +1 Ob per MS band below 60 at current Proximity per fieldwork §1 | `fieldwork_v30` §1 + `calamity_radiation_v30` |
 | 8.7 | Register | `canon/editorial_ledger.yaml` | Entries: ED-679 through ED-683 | — |
 
 **Blocks:** Stage 10 (index rewrite must reflect final state).
@@ -338,7 +338,7 @@ Stages 1–3 are **unblocking** — they remove contamination and inconsistency 
 
 - F-4: §4.3 fieldwork per-action cost matrix (full restatement, no v4 defer)
 - F-28: §11.1 Uphold/Appease precise trigger (institutional challenge AND Mandate ≥ 4)
-- F-50/F-51: TC/IP threshold markers in three-clock summary
+- F-50/F-51: CI/IP threshold markers in three-clock summary
 - F-53: Calamity Ob modifier in fieldwork per-action preview
 - ED-679 through ED-683 recorded
 ```

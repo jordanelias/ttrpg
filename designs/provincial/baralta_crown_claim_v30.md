@@ -36,12 +36,12 @@ When the trigger fires, a Succession Contest opens at the next Accounting. All m
 |-----------|------------|------|-----------|
 | Löwenritter | Military authority + institutional loyalty | Military 5 + Stability | Löwenritter Autonomy ≥ 3 (has been building toward this) |
 | Hafenmark | Deed-claim + parliamentary authority | Mandate + Influence | Baralta alive + Hafenmark Mandate ≥ 4 |
-| Church | Consecration authority (refuse all candidates, claim regency) | Mandate + Influence | TC ≥ 40 (theocratic threshold — Church only claims if already dominant) |
+| Church | Consecration authority (refuse all candidates, claim regency) | Mandate + Influence | CI ≥ 40 (theocratic threshold — Church only claims if already dominant) |
 
 **Resolution:** Each claiming faction rolls their pool vs Ob 3 (TN 7). Highest net successes wins. Ties: Löwenritter wins military ties (they have the army). Hafenmark wins political ties (they have parliamentary legitimacy).
 
 **If Hafenmark wins: Consecration Crisis fires (see §3).**
-**If Church wins: Theocratic regency. TC +10. All factions face Stability check Ob 2.**
+**If Church wins: Theocratic regency. CI +10. All factions face Stability check Ob 2.**
 
 ### Baralta Claim Precondition (Active Positioning)
 
@@ -66,14 +66,14 @@ Hafenmark wins Crown Succession Contest.
 Check Church Stability at the moment Hafenmark wins:
 
 **Church Stability ≥ 4: Himlensendt Refuses Consecration.**
-- TC +3 (Church overreach visible)
+- CI +3 (Church overreach visible)
 - Crown Mandate inherited by Hafenmark at −2 (unconsecrated ruler penalty)
 - Baralta rules without theological blessing
-- If Baralta governs successfully for 3 consecutive seasons without Church consecration (Mandate does not drop below 3): deed-logic is validated without Church blessing. Church legitimation role permanently diminished — TC passive advance reduced to +0.5/season (the population has seen that the Crown functions without Church sanction)
+- If Baralta governs successfully for 3 consecutive seasons without Church consecration (Mandate does not drop below 3): deed-logic is validated without Church blessing. Church legitimation role permanently diminished — CI passive advance reduced to +0.5/season (the population has seen that the Crown functions without Church sanction)
 - If Baralta's Mandate drops below 3 during the 3-season window: unconsecrated rule fails. Succession Contest reopens. Baralta is excluded (deed-claim rebutted by performance failure).
 
 **Church Stability ≤ 3: Himlensendt Consecrates Under Duress.**
-- TC −5 (sovereign supremacy enacted)
+- CI −5 (sovereign supremacy enacted)
 - Church Stability −3 (institutional trauma)
 - At Stability 0: Church anti-death-spiral floor applies — Stability cannot drop below 0, but at 0 the Church is functionally a subordinate institution for remainder of game
 - Baralta takes Crown with full consecration. Crown Mandate inherited at full value.
@@ -95,10 +95,10 @@ Early game. Church is confident. Himlensendt refuses. Baralta rules unconsecrate
 ### Scenario B: Church Stability 3, Hafenmark wins Succession Contest mid-game (Season 8-10)
 
 
-- TC −5. If TC was at 35-40 range, drops to 30-35. Significant reduction.
+- CI −5. If CI was at 35-40 range, drops to 30-35. Significant reduction.
 - Church Stability 3 → 0. Church functionally subordinated.
 - Baralta takes Crown with full Mandate inheritance + Sovereign Authority Doctrine as Crown action.
-- **Assessment: mid-game consecration is Baralta's optimal window.** Church is weakened enough to force consecration but still has enough institutional presence that consecration is meaningful. TC reduction is significant. Church subordination is permanent.
+- **Assessment: mid-game consecration is Baralta's optimal window.** Church is weakened enough to force consecration but still has enough institutional presence that consecration is meaningful. CI reduction is significant. Church subordination is permanent.
 
 ### Scenario C: Church Stability 4, Hafenmark wins Succession Contest late-game (Season 14+)
 
@@ -113,7 +113,7 @@ The Church Stability threshold produces balanced outcomes:
 - **Stability ≥ 4 (refusal):** Baralta faces a severe penalty that makes early claims unviable and late claims dramatic gambles. The system correctly punishes moves without proper preparation.
 - **Stability ≤ 3 (consecration):** Baralta gets full legitimacy but only after the Church has been sufficiently weakened — meaning players invested significant effort to create the conditions. The reward is proportional to the investment.
 
-This tension — needing the Church weak enough to force consecration but not wanting TC to spike in the interim — is good design. It creates a multi-season strategic calculation.
+This tension — needing the Church weak enough to force consecration but not wanting CI to spike in the interim — is good design. It creates a multi-season strategic calculation.
 
 ## 5. Hafenmark Succession After Baralta Takes Crown
 

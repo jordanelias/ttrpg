@@ -14,9 +14,9 @@ Valoria has no scripted plot. Arcs emerge from five mechanical engines running i
 
 | Engine | Key Output |
 |---|---|
-| Three clocks (Mending Stability / Theocracy Counter / Institutional Pressure) | Threshold events; loss conditions |
+| Three clocks (Mending Stability / Church Influence / Institutional Pressure) | Threshold events; loss conditions |
 | Seasonal accounting (Stability checks, Domain Echoes) | Faction collapse; power shifts |
-| Non-Player Character trigger conditions (Ehrenwall counter, Vaynard TK, Baralta Theocracy Counter suppression) | Named-Non-Player Character decision points |
+| Non-Player Character trigger conditions (Ehrenwall counter, Vaynard TK, Baralta Church Influence suppression) | Named-Non-Player Character decision points |
 | Political axes (9 qualitative axes) | Scene conflict framing; casus belli |
 | Thread operations + Co-Movement | Ontological consequences; Mending Stability drain |
 
@@ -26,15 +26,15 @@ Each arc below names the **mechanical seed**, traces the **causal chain** throug
 
 ## Arc 1: The Coup That Wasn't Supposed to Happen
 
-**Seed:** Players focus on Church opposition and Theocracy Counter reduction. Crown is left to manage itself.
+**Seed:** Players focus on Church opposition and Church Influence reduction. Crown is left to manage itself.
 
-**Light narrative:** The players believe they're winning — they've stalled the Church, reduced Theocracy Counter, protected practitioners. Then, quietly, the soldiers arrive. Not the Church's templars. The Crown's own.
+**Light narrative:** The players believe they're winning — they've stalled the Church, reduced Church Influence, protected practitioners. Then, quietly, the soldiers arrive. Not the Church's templars. The Crown's own.
 
 ### Mechanical Causal Chain
 
 ```mermaid
 flowchart TD
-    A["Players suppress Church publicly\nTC stays ≥40 for 1 season"] --> B["Ehrenwall Counter +1\n(Crown takes no TC-reducing Domain Action)"]
+    A["Players suppress Church publicly\nTC stays ≥40 for 1 season"] --> B["Ehrenwall Counter +1\n(Crown takes no CI-reducing Domain Action)"]
     C["Altonia contacts Torben\nPlayers miss or ignore it"] --> D["Torben loyalty drops to 3–2\nEhrenwall Counter +1"]
     E["Church Domain Action seizes territory\nCrown has no military response"] --> F["Crown loses 2+ territories in one season\nEhrenwall Counter +1"]
     B & D & F --> G["Löwenritter Autonomy = 3\nTrigger fires at next Seasonal Accounting"]
@@ -45,7 +45,7 @@ flowchart TD
     K -->|"Influence vs Ob = Löwenritter Mil ÷ 2"| L["Remove Martial Law\nRequires Domain Action success"]
     K -->|"Work within Martial Law"| M["Campaign reorients:\nAll faction operations covert\nTC continues rising unopposed"]
     K -->|"Align with Ehrenwall"| N["Institutional Crown pivot\nNew campaign axis: military vs civil authority"]
-    L --> O["Martial Law lifts when TC < 40\nEhrenwall stands down — but counter never resets"]
+    L --> O["Martial Law lifts when CI < 40\nEhrenwall stands down — but counter never resets"]
 ```
 
 **Why this arc is emergent, not scripted:** The counter has three independent triggers. Players rarely track all three simultaneously. The Split fires because attention was elsewhere — which is its entire mechanical logic.
@@ -70,11 +70,11 @@ flowchart TD
     A --> E["TK 4: Vaynard offers Collection access\nfor Thread knowledge + Southernmost partnership\nTC +2 cumulative"]
     E --> F["Church Intel opens Heresy Investigation\nvs Vaynard (Thread artefact possession)"]
     F --> G["Parliamentary Vote\n(Crown must decide)"]
-    G -->|"Crown defends Vaynard"| H["TC +2\nCrown–Church relations fracture\nBaralta forced to choose sides\nTC suppression at risk"]
+    G -->|"Crown defends Vaynard"| H["CI +2\nCrown–Church relations fracture\nBaralta forced to choose sides\nTC suppression at risk"]
     G -->|"Crown yields to Church justice"| I["Southernmost access collapses\nVaynard succession leverage dissolves\nBaralta's Church cooperation secured"]
-    H --> J["Baralta's TC suppression holding?\nMandate ≥ 4 required"]
-    J -->|"Yes — suppression active"| K["TC growth slowed\nChurch must target Baralta next"]
-    J -->|"No — Mandate has eroded"| L["TC suppression removed\nTC +1/season resumes\nChurch territorial seizure threshold approaching"]
+    H --> J["Baralta's CI suppression holding?\nMandate ≥ 4 required"]
+    J -->|"Yes — suppression active"| K["CI growth slowed\nChurch must target Baralta next"]
+    J -->|"No — Mandate has eroded"| L["CI suppression removed\nTC +1/season resumes\nChurch territorial seizure threshold approaching"]
     E --> M["TK 5: Vaynard understands Solmund's structural nature\nSeeks capability not knowledge\nTC +3 cumulative"]
     M --> N["Vaynard at TS 14+ base\nEach Collection use: Spirit check TN7 Ob1\nDiscovery Event risk fires"]
     N --> O{"Discovery Event"}
@@ -82,7 +82,7 @@ flowchart TD
     O -->|"Failure"| Q["Certainty −1\nNew Belief from ignorance\nVaynard becomes unpredictable"]
 ```
 
-**Why this arc is emergent:** Theocracy Counter accumulates from Vaynard's TK advances as a side effect of helping him. The Player Character who builds the relationship is simultaneously raising a clock they probably need to suppress. No player intends this.
+**Why this arc is emergent:** Church Influence accumulates from Vaynard's TK advances as a side effect of helping him. The Player Character who builds the relationship is simultaneously raising a clock they probably need to suppress. No player intends this.
 
 **Campaign shape:** Slow-burn 4–6 season arc. Each TK level is a scene. The Parliamentary vote is the crisis point. Multiple branching endgames depending on the Crown's choice.
 
@@ -112,12 +112,12 @@ flowchart TD
     K --> M["Revolution Community Weaving now viable\nRequires TS 30+ practitioner affiliated\nInfluence vs Ob = TT ÷ 20\nSuccess: TT −1; MS recovers"]
     M --> N["Co-Movement Card drawn\nEven recovery has Thread consequences\nP-01 applies: unintended ontological shift"]
     N --> O["Church detects Thread activity during recovery\nOntological Axis 9 activates: Thread truth approaching public"]
-    O --> P["TC rise from Church consolidation response\nFaction crisis: knowledge axis and ontological axis both active"]
+    O --> P["CI rise from Church consolidation response\nFaction crisis: knowledge axis and ontological axis both active"]
 ```
 
 **Why this arc is emergent:** Niflhel's Thread Tension accumulation is a mechanical side effect of its core operation, not a villain plan. The arc exists because Niflhel is good at its job. The players may not connect Mending Stability decline to Niflhel operations for several seasons.
 
-**Campaign shape:** Background decay for 3–5 seasons. Investigation arc of 2–3 seasons. Recovery arc of 2–4 seasons. Theocracy Counter rise in the recovery arc creates a second front.
+**Campaign shape:** Background decay for 3–5 seasons. Investigation arc of 2–3 seasons. Recovery arc of 2–4 seasons. Church Influence rise in the recovery arc creates a second front.
 
 ---
 
@@ -143,11 +143,11 @@ flowchart TD
     K --> L["Vaynard at TK 5: understands Solmund structurally\nSeeks capability\nNo longer just observing — becomes actor"]
     L --> M["Crown forced onto Axis 9:\nCosmological legitimacy of Church authority\nvs constitutional order"]
     M --> N{"Crown's Axis 9 position"}
-    N -->|"Crown defends Thread truth access"| O["TC −2 (Sovereign Authority Doctrine)\nHeresy Investigation vs Crown opens\nBaralta invokes constitutional claim\nParliamentary Vote"]
-    N -->|"Crown defers to Church"| P["TC −1 short term\nPractitioners lose Crown protection\nRS unaddressed — Rupture risk grows\nLöwenritter watch Crown's weakness"]
+    N -->|"Crown defends Thread truth access"| O["CI −2 (Sovereign Authority Doctrine)\nHeresy Investigation vs Crown opens\nBaralta invokes constitutional claim\nParliamentary Vote"]
+    N -->|"Crown defers to Church"| P["CI −1 short term\nPractitioners lose Crown protection\nRS unaddressed — Rupture risk grows\nLöwenritter watch Crown's weakness"]
     O --> Q["Grand Debate (5 exchanges)\nChurch Mandate vs Baralta pool\nPC substitution available"]
-    Q -->|"Church wins"| R["Baralta Mandate −2, TC +3\nTC suppression removed\nChurch territorial seizure active"]
-    Q -->|"Players win"| S["TC −3, Church Mandate −1\nAxis 9 partially resolved\nThread knowledge enters public record\nInert Knowledge upgrades for non-sensitives who held it"]
+    Q -->|"Church wins"| R["Baralta Mandate −2, CI +3\nTC suppression removed\nChurch territorial seizure active"]
+    Q -->|"Players win"| S["CI −3, Church Mandate −1\nAxis 9 partially resolved\nThread knowledge enters public record\nInert Knowledge upgrades for non-sensitives who held it"]
     S --> T["TTRPG Endgame indicator:\nAxis 9 resolved\nAt least one PC has transformed\nRS direction determined by Weaving vs drain balance"]
 ```
 
@@ -166,8 +166,8 @@ These arcs do not run in isolation. Common collision points:
 | Martial Law fires while Vaynard Revelation is at Parliamentary Vote | 1 + 2 | Vote blocked by Martial Law Military check |
 | Niflhel Thread Tension drain accelerates Mending Stability fall during Axis 9 Resolution | 3 + 4 | Mending Stability threshold events fire during Grand Debate season |
 | Vaynard TK 5 + Löwenritter coup at same Accounting | 2 + 1 | Two crisis events same season; Stability checks stack |
-| Revolution Weaving reduces Thread Tension while Church responds to Axis 9 | 3 + 4 | Thread Tension drops but Theocracy Counter rises from Church consolidation; clocks trade off |
-| Church territorial seizure (Theocracy Counter 60) during Coup Martial Law | 1 (late) | Church seizes Crown-law-locked territories; Löwenritter cannot respond legally |
+| Revolution Weaving reduces Thread Tension while Church responds to Axis 9 | 3 + 4 | Thread Tension drops but Church Influence rises from Church consolidation; clocks trade off |
+| Church territorial seizure (Church Influence 60) during Coup Martial Law | 1 (late) | Church seizes Crown-law-locked territories; Löwenritter cannot respond legally |
 
 ---
 

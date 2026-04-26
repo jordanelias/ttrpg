@@ -11,7 +11,7 @@ Decay on Altonian Court residence: −1 immediately on departure + −1/Year-End
 - Crown Compromises Institutional Mandate: −1.
 - Crown issues Emergency Powers: −1.
 - Löwenritter Coup fires: reset to 1.
-- TC crosses 60: −1.
+- CI crosses 60: −1.
 - Torben sent to Altonia (comply with tutoring demand): −2 immediately.
 
 [STRUCK — Deed system dissolved PP-424. Torben Loyalty conditions now per victory_v30.md §3.6 Löwenritter.]
@@ -66,10 +66,10 @@ Range: 0–3. Starts at 0.
 | WC Level | Effect |
 |----------|--------|
 | ≥ 1 | +1D to all Thread operations peninsula-wide |
-| ≥ 2 | RS decay rate halved |
-| ≥ 3 | RS +2/season at Accounting |
+| ≥ 2 | MS decay rate halved |
+| ≥ 3 | MS +2/season at Accounting |
 
-WC advances via successful Southernmost Expedition and Warden engagement actions. Multiple victory conditions require RS thresholds; WC is the primary tool to arrest RS decline.
+WC advances via successful Southernmost Expedition and Warden engagement actions. Multiple victory conditions require MS thresholds; WC is the primary tool to arrest MS decline.
 
 
 ## Warden's Accord (WA)
@@ -77,7 +77,7 @@ WC advances via successful Southernmost Expedition and Warden engagement actions
 
 Range: −3 to +3. Starts at 0.
 
-RM Emergence triple condition: WA ≤ −2 AND ≥ 3 territories PT ≤ 1 AND RS ≤ 50. One-shot.
+RM Emergence triple condition: WA ≤ −2 AND ≥ 3 territories PT ≤ 1 AND MS ≤ 50. One-shot.
 RM Suppression: WA ≥ 0 OR all territories PT ≥ 2 OR RM Stability 0.
 Varfell Path B blocked if RM has emerged (WA ≤ −2).
 

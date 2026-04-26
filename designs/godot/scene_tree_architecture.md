@@ -18,7 +18,7 @@ root (Node)
 │   └── AudioManager        — music, SFX
 │
 ├── UILayer (CanvasLayer, z=10 — persistent chrome)
-│   ├── TopBar              — season counter, RS/TC/IP indicators, faction emblem
+│   ├── TopBar              — season counter, MS/CI/IP indicators, faction emblem
 │   ├── NotificationQueue   — event popups, Scene Slate alerts
 │   └── PauseMenu           — settings, save/load, quit
 │

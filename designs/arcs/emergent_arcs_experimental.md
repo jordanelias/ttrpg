@@ -23,7 +23,7 @@ flowchart TD
     A["Practitioner Weaves diplomatic agreement\nRelational scale, Ob 3\nSuccess: agreement binds at Thread level"] --> B["Over-actualisation fires automatically\nSubsequent Thread ops on this configuration: +1 Ob\nClears after one season OR if Pulled"]
     B --> C["Agreement is rigid\nCannot adapt to changing circumstances\n§9.8: configured for brittleness under stress"]
     
-    C --> D["Church territorial seizure attempt\n(TC reached 40–60 threshold)\nChurch claims the treaty territory"]
+    C --> D["Church territorial seizure attempt\n(CI reached 40–60 threshold)\nChurch claims the treaty territory"]
     D --> E{Non-Thread event of sufficient severity\nvs over-actualised configuration}
     E -->|"GM rules: brittleness applies"| F["Relational Shifting Object forms\nAgreement oscillates between binding and void\nParties disagree whether it exists or what it means"]
     E -->|"GM rules: treaty bends"| G["Agreement degrades to Partial\nRemains mechanically binding but politically contested\nStill has Thread scar — future ops +1 Ob"]
@@ -49,7 +49,7 @@ flowchart TD
 
 ## Arc 6: The Tribunal and the Temporal Shimmer
 
-**Primary mechanics:** Debate redesign v1 asymmetric proceedings (Church Tribunal) · Evidence genre Thread consequence (Pulling / temporal co-movement) · Axis 9 (Ontological) · Theocracy Counter threshold
+**Primary mechanics:** Debate redesign v1 asymmetric proceedings (Church Tribunal) · Evidence genre Thread consequence (Pulling / temporal co-movement) · Axis 9 (Ontological) · Church Influence threshold
 
 **Seed:** The Church opens an Inquisitorial proceeding against a practitioner Player Character or Varfell for Thread-related heresy.
 
@@ -79,12 +79,12 @@ flowchart TD
     L --> M["Consequence: Accused gains Mandate +1 (sympathy martyr mechanic)\nChurch Mandate −1 (Excommunication failure analog)\nThread argument entered the public record\nAxis 2 activates: Knowledge — Thread truth now formally contested, not suppressed"]
     
     F --> N["Excommunication eligible\nRoll: Church Mandate vs accused's Mandate\nOverwhelming: Reputation −1 all factions; Domain Mandate −1; barred from public office\nFailure: Church Mandate −1; accused gains Mandate +1 (martyr)"]
-    N --> O["Baralta TC suppression still active if Mandate ≥ 4\nExcommunication of Baralta specifically: TC +4 immediately\nTC suppression removed\nChurch territorial seizure procedure opens"]
+    N --> O["Baralta CI suppression still active if Mandate ≥ 4\nExcommunication of Baralta specifically: CI +4 immediately\nTC suppression removed\nChurch territorial seizure procedure opens"]
 ```
 
 **Why this arc is emergent:** The asymmetric Tribunal structure means the accused cannot Reframe (no Sed Contra). They can only raise objections and make a final distinction. An Evidence genre Overwhelming against the accused fires Pulling co-movement — the Church's own evidentiary argument temporally disturbs the room. The very tool of institutional suppression produces the Thread visibility the Church is trying to prevent.
 
-**Arc shape:** 1 session for the Tribunal scene. Immediate Theocracy Counter/Mandate consequences at Accounting. If Evidence Overwhelming fires: Axis 9 crisis in the same session. Resolution arc depends on which outcome branch fires.
+**Arc shape:** 1 session for the Tribunal scene. Immediate Church Influence/Mandate consequences at Accounting. If Evidence Overwhelming fires: Axis 9 crisis in the same session. Resolution arc depends on which outcome branch fires.
 
 ---
 

@@ -26,7 +26,7 @@ NPCs hold primary + secondary Conviction. Secondary activates under pressure (Be
 TS Gate: Thread-level evidence invalid as Evidence targeting vs TS 0 NPCs (P-08 compliance). Ontical evidence only.
 
 ### Named NPC Stance Triangles
-| NPC | Faction | Primary Conviction | Secondary | Primary Resonant Style | Secondary RS | TS | Certainty |
+| NPC | Faction | Primary Conviction | Secondary | Primary Resonant Style | Secondary MS | TS | Certainty |
 |---|---|---|---|---|---|---|---|
 | Almud | Crown | Order | Reason | Consequence | Solidarity | 28 | 3 |
 | Himlensendt | Church | Faith | Order | Evidence | Authority | 0 | 5 |
@@ -44,7 +44,7 @@ Torben: first faction at Loyalty ≥ 5 sets primary Conviction. Default Autonomy
 ### Framework Drift
 | Framework | Faction | Drift | Frequency | Cap |
 |---|---|---|---|---|
-| Divine Command | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + TC advanced | Per year (Year-End) | Stat ceiling 7 (PP-NPC-03) |
+| Divine Command | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + CI advanced | Per year (Year-End) | Stat ceiling 7 (PP-NPC-03) |
 | Virtue Ethics | Crown | Crown NPCs Certainty ≥ 3: +1 Certainty/year unchallenged | Per year | Certainty 5 |
 | Categorical Imperative | Hafenmark | Influence +1 per season all actions framework-aligned | Per season (conditional) | Stat ceiling 7 |
 | Consequentialist Pragmatism | Varfell | TK +0.5/season active investigation; caps TK 3 without PC | Per season | TK 3 |
@@ -65,4 +65,4 @@ Drift is passive (not a Domain Action). Does not count toward ±2 DA seasonal ca
 ### NPC Belief Revision
 Trigger: decisive Contest outcome (Conviction Track ≥ 7 or ≤ 3) + winning argument used NPC's Resonant Style + argument specifically engaged the Belief. Old Belief → Scar (permanent). New Belief forms.
 
-Scar effects: 1 Scar = secondary Conviction activates. 2 Scars = primary may shift to secondary; secondary RS activates. 3+ Scars = Conviction crisis (d6 table per major decision).
+Scar effects: 1 Scar = secondary Conviction activates. 2 Scars = primary may shift to secondary; secondary MS activates. 3+ Scars = Conviction crisis (d6 table per major decision).

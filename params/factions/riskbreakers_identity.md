@@ -14,7 +14,7 @@ Provisional minimal tactic card set (2 per faction):
 | Church | Sanctuary (protect 1 NPC from targeting 1 season) | Inquisition (force reveal 1 hidden faction stat) |
 | Hafenmark | Trade Leverage (+1D all Wealth rolls 1 season) | Constitutional Check (−2 Ob one Crown action) |
 | Varfell | Intelligence Supremacy (learn full stat block of 1 faction) | Patience Protocol (pass; bank +2D for any future roll) |
-| Restoration | Community Shield (reduce RS cost of 1 Weaving by 2) | Solidarity (+1D all Presence marker actions 1 season) |
+| Restoration | Community Shield (reduce MS cost of 1 Weaving by 2) | Solidarity (+1D all Presence marker actions 1 season) |
 | Löwenritter | Martial Discipline (immune to Feigned Retreat 1 battle) | Riskbreaker Activation (deploy Quiet-equivalent 1/campaign) |
 [FLAGGED: placeholder designs. Full design required before BG compilation.]
 
@@ -37,10 +37,10 @@ Clarity countdown adopted: Clarity = d3+1 at zone entry. −1 per hour of exposu
 Clarity 0: Spirit TN7 Ob2 or forced exit. TS ≥ 40: +1 Clarity at entry.
 [FLAGGED: confirm d3+1 range and Spirit check parameters.]
 
-## ED-034 Resolution (PP-291) — Ceiral Ritual RS Asymmetry
+## ED-034 Resolution (PP-291) — Ceiral Ritual MS Asymmetry
 
-BG Co-Movement cap (RS +1) applies only to BG-layer Thread abstraction.
-Ceiral Ritual is a TTRPG Zoom In — operates at full TTRPG RS values, bypassing BG cap.
+BG Co-Movement cap (MS +1) applies only to BG-layer Thread abstraction.
+Ceiral Ritual is a TTRPG Zoom In — operates at full TTRPG MS values, bypassing BG cap.
 Not a contradiction. ED-034 resolved — no mechanical change needed.
 
 ## ED-036 Resolution (PP-292) — Altonian Invasion Unit Stats [FLAGGED]
@@ -73,7 +73,7 @@ Crown covert actions use Influence pool at +1 Ob (no Intel stat). PP-236 confirm
 ## ED-148 Resolution (PP-325) — Public Instability Hybrid [FLAGGED]
 
 Public Instability: Hybrid secondary clock. Range 0–10, start 5.
-Increases: +1/season Revolution Agitation resolves (any degree); +1/season IP rises while TC > 40.
+Increases: +1/season Revolution Agitation resolves (any degree); +1/season IP rises while CI > 40.
 Decreases: −1/season Crown or Guilds completes successful social DA in contested territory.
 Threshold 8: Revolution free Agitation action. Threshold 10: Institutional collapse check.
 [FLAGGED: confirm thresholds before Hybrid cascade compilation.]
@@ -114,7 +114,7 @@ a Stability death spiral. Applies once per season max.
 
 Community Weaving canonical formula in params_threadwork.md PP-250.
 Prior entries under PP-168 (Influence/TT÷20) and PP-195 (Mandate+History/Ob3) are deprecated.
-Not a Domain Action. No faction stat output. RS restoration only.
+Not a Domain Action. No faction stat output. MS restoration only.
 
 ## Church Martyrdom Effect (PP-259)
 
@@ -183,7 +183,7 @@ Max active Charters = floor(Mandate / 2) + 1. Charter territory: Govern/Trade �
 
 ## Crown — Thread Liaison (PP-436)
 
-Phase 1 declarative. Designate one allied faction. Their Thread operations in Crown territories count toward Crown co-victory RS tracking. Dissolves on military conflict.
+Phase 1 declarative. Designate one allied faction. Their Thread operations in Crown territories count toward Crown co-victory MS tracking. Dissolves on military conflict.
 
 ## Crown — Diplomatic Outreach to Schoenland (PP-437)
 
@@ -246,14 +246,14 @@ When a Cardinal is killed (by PC action or event):
   Success: new Cardinal appointed, full mechanics resume.
   Overwhelming: Appointment + AER +1 (the crisis galvanises Church unity).
   Failure: gap extended 1 additional season. Another attempt at next Accounting.
-- TC effect: Cardinal death triggers TC +1 (institutional disruption).
+- CI effect: Cardinal death triggers CI +1 (institutional disruption).
 [PROVISIONAL]
 
 ## Restoration Movement — Mode and Founding Status (PP-478, PP-495)
 
 **BG-only mode:** Not a playable faction. No player controls RM.
 **Hybrid mode:** Not present at game start. Founded mid-campaign via Founding Mechanic (see params_board_game.md §RM Founding Mechanic). Post-founding stats depend on Founding degree (Success: Mandate 1/Influence 2/Wealth 1/Military 0/Stability 3; Overwhelming: Mandate 2/Influence 3/Wealth 1/Military 0/Stability 4).
-**TTRPG mode (PP-495):** Not present at campaign start. GM introduces RM as an emergent faction when all narrative conditions converge: (1) cultural shift visible — at least 2 communities/NPCs have expressed dissatisfaction with Church authority or sympathy for Einhir practice in play; (2) substrate strain noticeable — Thread operations have produced visible consequences (Thread Wounds, Coherence loss, RS decline); (3) player engagement — at least one PC has interacted with Einhir cultural knowledge, Southernmost artefacts, or practitioner communities. GM declares the Founding Scene. A named NPC or PC becomes the Founding Agent. RM gains the stat block from §8.8. Floor: session 6 of a standard campaign (political landscape must develop before RM complicates it).
+**TTRPG mode (PP-495):** Not present at campaign start. GM introduces RM as an emergent faction when all narrative conditions converge: (1) cultural shift visible — at least 2 communities/NPCs have expressed dissatisfaction with Church authority or sympathy for Einhir practice in play; (2) substrate strain noticeable — Thread operations have produced visible consequences (Thread Wounds, Coherence loss, MS decline); (3) player engagement — at least one PC has interacted with Einhir cultural knowledge, Southernmost artefacts, or practitioner communities. GM declares the Founding Scene. A named NPC or PC becomes the Founding Agent. RM gains the stat block from §8.8. Floor: session 6 of a standard campaign (political landscape must develop before RM complicates it).
 Prior RM stat entries (Mandate -, Influence -, etc.) reflect pre-Founding state (RM does not exist). Post-Founding stats supersede those entries.
 
 ## NPC Recruitment — Faction Consequence (PP-643)

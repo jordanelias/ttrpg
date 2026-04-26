@@ -293,7 +293,7 @@ This table is the single most important deliverable that does not yet exist as a
 | Investigation (Structural threshold) | Any | Faction Influence ±1, Casus Belli if relevant | ±2 Influence; CB generated | ±1 Influence | NPC arc trigger | −1 Influence (investigation compromised) |
 | Social Contest (Grand, named NPC) | Named NPC in institutional role | Conviction Wound → faction stat | NPC arc trigger + faction stat −1 (opponent) | NPC Wound +1 | NPC arc update | Disposition −2; opponent faction stat +1 |
 | Thread Op — Mending | Gap repaired or MS site | MS | +2 MS (existing canonical) | +1 MS | MS stable | No effect |
-| Thread Op — Dissolution | Gap created | MS, IP | −1 MS; IP +1 | −1 MS | RS −1 | −2 MS (gap larger than intended) |
+| Thread Op — Dissolution | Gap created | MS, IP | −1 MS; IP +1 | −1 MS | MS −1 | −2 MS (gap larger than intended) |
 | Personal Combat — named NPC defeated | Faction officer eliminated | Faction Mandate | Mandate −2 + NPC arc trigger | Mandate −1 | NPC wounded: Stability −1 next season | No Echo; combat outcome only |
 | Belief Fulfillment — NPC relationship | Deep Disposition change with named NPC | NPC arc trigger | Arc fires; Domain Echo per NPC arc resolution | Arc updated | Disposition shift only | Belief fails; −1 Momentum cap this season |
 | Belief Fulfillment — systemic | Territory or clock affected | Per action type above | Amplified: ±2 instead of ±1 | Standard Echo | Narrative shift | Standard failure Echo |

@@ -17,7 +17,7 @@ TTRPG ← Hybrid → Board Game sharing a mechanical baseline (d10, TN 7, degree
 d10 with TN 7 produces E[net] = 0.3 per die. The probability curves scale predictably. 4D gives ~80% to hit Ob 1; 10D gives ~73% to hit Ob 3. The degree table (Overwhelming at 2×Ob with floor 3) creates a meaningful distinction between "barely succeeded" and "dominated." No exploding dice, no re-roll mechanics, no fiddly modifiers to the die faces. The engine stays out of the way.
 
 ### 1.4 Faction Systems Have Real Asymmetry
-Each faction has genuinely different mechanical identity: Church's Theocracy Counter trajectory, Crown's decree/loyalty tension, Varfell's intelligence-Thread trade-off, Hafenmark's economic leverage, Restoration's Community Weaving. These aren't cosmetic differences — they produce different strategic concerns and different optimal play patterns in BG mode.
+Each faction has genuinely different mechanical identity: Church's Church Influence trajectory, Crown's decree/loyalty tension, Varfell's intelligence-Thread trade-off, Hafenmark's economic leverage, Restoration's Community Weaving. These aren't cosmetic differences — they produce different strategic concerns and different optimal play patterns in BG mode.
 
 ---
 
@@ -71,7 +71,7 @@ This is expected at this stage of development. But the gap between "design works
 ## 4. DESIGN DEBT
 
 ### 4.1 Stage 5 (Clocks) and Stage 15 (Spell Catalog) Are Empty
-Two compilation stages have zero content. Clocks are mechanically critical (TC, RS, IP drive the entire BG game and half the TTRPG game). The clock mechanics are defined across multiple other files (factions, board game, threadwork) but there is no unified clock document. A player asking "how do clocks work?" has no single place to look.
+Two compilation stages have zero content. Clocks are mechanically critical (CI, MS, IP drive the entire BG game and half the TTRPG game). The clock mechanics are defined across multiple other files (factions, board game, threadwork) but there is no unified clock document. A player asking "how do clocks work?" has no single place to look.
 
 Spell catalog is empty — Thread operations serve as the "magic system," but there's no consolidated reference for what a practitioner can actually DO. The operations are spread across threadwork_v25 (85k chars) with no quick-reference index.
 
@@ -109,7 +109,7 @@ When does a TTRPG session of Valoria look like? How many scenes per session? Whe
 
 **Is the game fun to play slowly?**
 
-Every system in Valoria produces consequences that ripple across multiple tracks and multiple sessions. Thread operations affect RS, which affects faction play, which affects NPC behaviour, which affects the political landscape, which affects which Thread operations are available. This interconnection is the game's thesis — inseparability made mechanical.
+Every system in Valoria produces consequences that ripple across multiple tracks and multiple sessions. Thread operations affect MS, which affects faction play, which affects NPC behaviour, which affects the political landscape, which affects which Thread operations are available. This interconnection is the game's thesis — inseparability made mechanical.
 
 But interconnection means every action requires understanding the full system state. A player who wants to "just do a thing" — attack an enemy, persuade a noble, weave a thread — must first assess the downstream effects across 3-6 tracked variables. The game rewards strategic thinking and punishes impulsive action. This is philosophically consistent with the Foundations (rendering is constitutive work; carelessness has ontological consequences).
 

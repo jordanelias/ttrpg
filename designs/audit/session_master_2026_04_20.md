@@ -128,7 +128,7 @@ The knot-profile determines:
 
 Status: DRAFT. Arithmetic errors flagged in verification audit F-1 through F-3 applied below. Five decision points remain for Jordan (reduced from six; Solmund magnitude is anchor-forced, not a free choice).
 
-Terminology note: This document uses "MS" (Mending Stability) per handoff determination W-series. Current canon uses "RS" (Mending Stability) in `designs/world/calamity_radiation_v30.md`, `params/bg/clocks.md`, `designs/threadwork/threadwork_v30.md` §5. Before MS trajectory can commit as canonical, either (a) propagate RS→MS across canon, or (b) revert this document to RS. See §6 canon conflicts.
+Terminology note: This document uses "MS" (Mending Stability) per handoff determination W-series. Current canon uses "MS" (Mending Stability) in `designs/world/calamity_radiation_v30.md`, `params/bg/clocks.md`, `designs/threadwork/threadwork_v30.md` §5. Before MS trajectory can commit as canonical, either (a) propagate MS→MS across canon, or (b) revert this document to MS. See §6 canon conflicts.
 
 ### §3.1 Design Principle
 
@@ -225,7 +225,7 @@ Restoration Movement geography follows the gradient of lived Calamity memory. Ca
 2. **Ministry duration.** Confirm current canon (5-year ministry, timeline L32) or adopt D-1 (12-year Catastrophe-to-dissolution with 5-year coalescing + 7-year perceivable ministry).
 3. **Colonial revolt specification.** Write revolt history as part of this document, or defer to a separate session and proceed with 3–5 unnamed dips totaling −8 to −12 MS distributed across 145 years.
 4. **Himmelenger R-7 interpretation.** Confirm that the Church's "material stability advantage" is distance-caused (node distance from T15), not Altonian-gifted—the Altonian grant merely let the Church claim the pre-existing advantage.
-5. **Terminology propagation.** Propagate RS→MS across canon before MS trajectory commits, or revert this document to RS throughout. See §6 canon conflicts.
+5. **Terminology propagation.** Propagate MS→MS across canon before MS trajectory commits, or revert this document to MS throughout. See §6 canon conflicts.
 
 ---
 
@@ -305,7 +305,7 @@ Prioritised. Items in each tier block downstream work until resolved.
 - Ministry duration (overlaps with D-1)
 - Colonial revolt specification
 - Himmelenger R-7 interpretation
-- RS/MS terminology propagation priority
+- MS/MS terminology propagation priority
 
 ### §5.2 Tier 2 — Structural integration tasks (unblocked once Tier 1 resolves)
 
@@ -319,14 +319,14 @@ Prioritised. Items in each tier block downstream work until resolved.
 |---|---|---|
 | canon/03_canonical_timeline.md L16 | Replace "three indigenous provinces" per E-2 | D-2 |
 | canon/03_canonical_timeline.md L32 | Ministry duration | D-1 |
-| canon/03_canonical_timeline.md L129 | TT 28 (Stirring) → MS 72 or RS 72 | RS/MS terminology |
+| canon/03_canonical_timeline.md L129 | TT 28 (Stirring) → MS 72 or MS 72 | MS/MS terminology |
 | canon/00_philosophical_foundations.md | Integrate finitude pivot; Solmund acts = miracle not Weaving | Home decision |
 | designs/world/worldbuilding_v30.md §7 | "Three Indigenous Nations" → revised per E-2 | D-2 |
 | designs/world/solmund_cultural_guide_consolidated.md | Three line-edits (§8.1 below) | After Tier 1 |
 
 ### §5.3 Tier 3 — MS trajectory commit (unblocked by §3.7 + terminology)
 
-After Tier 1 + RS/MS decision: commit corrected MS trajectory with PROVISIONAL flag to `designs/world/ms_trajectory_v1.md` or integrate into `designs/world/calamity_radiation_v30.md`.
+After Tier 1 + MS/MS decision: commit corrected MS trajectory with PROVISIONAL flag to `designs/world/ms_trajectory_v1.md` or integrate into `designs/world/calamity_radiation_v30.md`.
 
 ### §5.4 Tier 4 — Uncommitted synthesis documents
 
@@ -355,7 +355,7 @@ After Tier 1 + RS/MS decision: commit corrected MS trajectory with PROVISIONAL f
 
 ### §5.7 Tier 7 — Simulation priorities
 
-- **ED-539 compound effect** (TC reform + TCV revaluation + Seizure Accord ≥ 2) — most urgent
+- **ED-539 compound effect** (CI reform + TCV revaluation + Seizure Accord ≥ 2) — most urgent
 - Rendering Strain integration if adopted
 - NPC AI priority tree cross-faction (AUD-NPC-03)
 - Settlement economy (AUD-SET-03)
@@ -371,9 +371,9 @@ Six distinct conflicts between session Jordan determinations and current canon p
 | # | Canon location | Text | Conflicts with | Resolution required |
 |---|---|---|---|---|
 | C-1 | timeline L16 | "three indigenous provinces: Valorsmark, Baiamont, Lupicco" | E-2 (pre-Calamity organisation unknowable) | D-2 decision + timeline revision + worldbuilding_v30 §7 revision |
-| C-2 | timeline L129 | "TT 28 (Stirring)" | TT struck; "Stirring" band name predates current band taxonomy | Rewrite with current terminology (MS or RS) + current band name (Fractured, since value 28 is in 39–20) |
+| C-2 | timeline L129 | "TT 28 (Stirring)" | TT struck; "Stirring" band name predates current band taxonomy | Rewrite with current terminology (MS or MS) + current band name (Fractured, since value 28 is in 39–20) |
 | C-3 | timeline L32 | "approximately five years" | D-1 proposes 7-year ministry + 5-year coalescing (12 total) | D-1 decision + timeline revision + consolidated guide §10.2 revision |
-| C-4 | calamity_radiation_v30.md, clocks.md, threadwork_v30.md §5 | "RS" throughout | Handoff W-series uses "MS" | RS/MS terminology decision + full propagation |
+| C-4 | calamity_radiation_v30.md, clocks.md, threadwork_v30.md §5 | "MS" throughout | Handoff W-series uses "MS" | MS/MS terminology decision + full propagation |
 | C-5 | canon/00_philosophical_foundations.md | No explicit finitude-pivot statement | P-1 through P-4 Jordan determinations | Integrate §1 of this document as new subsection |
 | C-6 | foundations or threadwork_v30 | No Leap mechanism taxonomy (restorative/manipulative/destructive) | L-1 through L-5 Jordan determinations | Integrate §2 of this document; location decision pending |
 
@@ -477,13 +477,13 @@ Unblocks Tiers 2–7. No other single action unblocks comparably much.
 
 1. **Canonical home for finitude pivot** (§1) — foundations §4.3 / §14.1 / standalone. Determines whether the finitude-pivot canonical draft in Part I of this document integrates into foundations in-place or stands alone.
 2. **Canonical home for Leap taxonomy** (§2) — foundations amendment / threadwork_v30 §2.3 expansion / standalone. Determines where TL-5 (three-layer distinction) gets codified.
-3. **RS/MS terminology decision.** Required before MS trajectory can commit without creating three-way terminology split (current: TT in timeline, RS in radiation+clocks+threadwork, MS in handoff+trajectory doc).
+3. **MS/MS terminology decision.** Required before MS trajectory can commit without creating three-way terminology split (current: TT in timeline, MS in radiation+clocks+threadwork, MS in handoff+trajectory doc).
 
 ### §10.3 Third-tier (post-§10.1 + §10.2)
 
 4. Commit Part I (finitude pivot) to decided canon home with PROVISIONAL flag.
 5. Commit Part II (Leap taxonomy) to decided canon home with PROVISIONAL flag.
-6. Propagate RS→MS (or keep RS) across canon per §10.2 #3.
+6. Propagate MS→MS (or keep MS) across canon per §10.2 #3.
 7. Commit corrected MS trajectory (Part III) once terminology stabilised.
 8. Apply three line-edits to consolidated Solmund guide (§8.1).
 
@@ -505,8 +505,8 @@ All claims in this document are either quoted from canonical source, derived ari
 - `canon/03_canonical_timeline.md` — Pre-History, Catastrophe, Solmund, Post-Dissolution, Altonian Period, Secession Wars
 
 **Designs:**
-- `designs/threadwork/threadwork_v30.md` — §2.3 (The Leap), §2.4 (Operations), §31 (Mending), §3 (Coherence), §5 (RS Thresholds)
-- `designs/world/calamity_radiation_v30.md` — node distance map, radiation matrix by RS band
+- `designs/threadwork/threadwork_v30.md` — §2.3 (The Leap), §2.4 (Operations), §31 (Mending), §3 (Coherence), §5 (MS Thresholds)
+- `designs/world/calamity_radiation_v30.md` — node distance map, radiation matrix by MS band
 - `designs/world/southernmost_v30.md` — Forgetting mechanics, expedition procedure
 - `designs/world/solmund_cultural_guide_consolidated.md` — all parts, byte-verified against upload
 - `designs/npcs/npc_character_analyses_v30_index.md` — structure (contents not fully verified)

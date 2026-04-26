@@ -131,7 +131,7 @@ Approach Training is a binary tag: a practitioner either has it or does not. It 
 - Approach Training is generally permanent once acquired. The trained capacity is a structural change to the practitioner's rendering, not a learned skill that decays.
 - One exception: a character who suffers Coherence reduction to 0 with no Reconstitution (per canon/01_foundations §4 Coherence 0 outcomes) loses the tag along with their identity. Reconstituted characters at TS 90+ regain it as part of Full Reconstitution.
 
-[EDITORIAL: ED-774 — Approach Training §2.1 propagated from threadwork_v25_historical + character_histories §Formation 2F + character_histories §270 (Approach Training trait) + character_histories §498 (skill ladder). Closes propagation defect: §2.1 was empty header in canonical threadwork_v30 with infill comment 'No changes from current §5.1' but §5.1 in v25_historical is actually 'What Rendering Stability Measures', not Approach Training. Canonical content was scattered across 3 different files; consolidated here. Source: 2026-04-25 stress-test 30 propagation defect.]
+[EDITORIAL: ED-774 — Approach Training §2.1 propagated from threadwork_v25_historical + character_histories §Formation 2F + character_histories §270 (Approach Training trait) + character_histories §498 (skill ladder). Closes propagation defect: §2.1 was empty header in canonical threadwork_v30 with infill comment 'No changes from current §5.1' but §5.1 in v25_historical is actually 'What Mending Stability Measures', not Approach Training. Canonical content was scattered across 3 different files; consolidated here. Source: 2026-04-25 stress-test 30 propagation defect.]
 
 
 ## 2.2 Diagnosis — STRUCK (ED-134/ED-124, 2026-04-03)
@@ -936,7 +936,7 @@ Cards 1–15: retained (all Thread Tension references become Mending Stability, 
 Cards 16–18 added:
 
 16. **Substrate Settling** — Mended territory: all Thread operations −1 Ob next season.
-17. **Scar Trace** — Mended territory retains visible Thread scar. Church Theocracy Counter +1. No Mending Stability change.
+17. **Scar Trace** — Mended territory retains visible Thread scar. Church Church Influence +1. No Mending Stability change.
 18. **Residue Condensation** — dissolution residue forms at Mending site. Niflhel may harvest.
 
 ### Lock Chronic Drift

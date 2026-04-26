@@ -20,7 +20,7 @@
 | CI passive | PP-402 unconditional +1 | Conditional passive per military_layer_v30 §3.2 |
 | Card renewal | Not modelled in sim | Cooldown Track implemented |
 | Govern effect | Mandate +1 on success (sim) | Mandate recovery (OW in capital per PP-174) + Accord maintenance |
-| Battle → RS/IP | Not modelled in sim | Battle → RS −1, IP +2 per season with inter-faction battle |
+| Battle → MS/IP | Not modelled in sim | Battle → MS −1, IP +2 per season with inter-faction battle |
 | AI postures | Greedy / single-turn evaluation | Threat-aware, stat-priority ordering |
 
 Conflicts resolved:
@@ -243,9 +243,9 @@ Peninsular Strain (range 0–10) rises from inter-faction battles (+1/season wit
 | 3–4 | All factions: Mandate check at Accounting (Mandate pool vs Ob 1). Failure → Mandate −1 |
 | 5–6 | All factions: Accord −1 in one non-capital territory (controller's choice) |
 | 7–8 | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2 |
-| 9–10 | Non-capital territories: Accord cap 2. Mandate check Ob 3. RS −1/season additional |
+| 9–10 | Non-capital territories: Accord cap 2. Mandate check Ob 3. MS −1/season additional |
 
-**Battles → RS −1 per battle (missing from prior sim builds).** Each season in which at least one inter-faction battle occurred: RS −1 immediately at Accounting. Campaign/War scale: RS −2. This is canonical (params_board_game §Battle Consequences / peninsular_strain_v1.md §3).
+**Battles → MS −1 per battle (missing from prior sim builds).** Each season in which at least one inter-faction battle occurred: MS −1 immediately at Accounting. Campaign/War scale: MS −2. This is canonical (params_board_game §Battle Consequences / peninsular_strain_v1.md §3).
 
 **Battles → IP +2 per season with inter-faction battle** (also missing from prior sim builds). Each season with battle: IP +2 at Accounting.
 
@@ -395,10 +395,10 @@ PP-174 (Govern OW in own capital: Mandate +1) is retained.
 New: Govern Success in any territory = Accord +1. Govern OW in capital = Mandate +1 AND Accord +1.
 No conflict — PP-174 specifies OW in capital; we add the Success-in-any-territory Accord effect.
 
-### §7.5 Battle → RS and IP
+### §7.5 Battle → MS and IP
 
-New: Battle → RS −1 per season with battle; IP +2.
-Check against existing: RS baseline decay is −1/year-end (annual). Battle RS damage is separate and immediate. No conflict — both apply.
+New: Battle → MS −1 per season with battle; IP +2.
+Check against existing: MS baseline decay is −1/year-end (annual). Battle MS damage is separate and immediate. No conflict — both apply.
 Check against IP: existing IP +1 from Torben Loyalty ≤ 3. Battle IP +2 is additional. No conflict.
 
 ### §7.6 Seizure Changes (Mass Seizure replaces gated Seizure)

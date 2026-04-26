@@ -483,7 +483,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 - Social contest: Argue pools, genre/orientation, Conviction Track, interaction types
 - Thread operations: Leap procedure, operation types, co-movement, Ob values
 - Disposition Track, Renown Track, Standing
-- TC, PT, Accord, RS, IP — already distinct tracked values
+- CI, PT, Accord, MS, IP — already distinct tracked values
 
 ---
 

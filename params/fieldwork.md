@@ -36,7 +36,7 @@ Pool maximum: 24D (Attribute 7, History 7: (7×2) + (7+3) = 24)
 | 4 | Liminal | TS ≥ 30 | 5 |
 | 5 | Unintelligible | TS ≥ 50; Coherence check Ob 2 | 8 |
 
-Ob modifiers: hostile territory +1, foreign +1, allied −1, local resident −1, RS <60 at Proximity ≤2 +1, active HI +1. Floor: 1.
+Ob modifiers: hostile territory +1, foreign +1, allied −1, local resident −1, MS <60 at Proximity ≤2 +1, active HI +1. Floor: 1.
 
 ## Degree Table (core engine — PP-232/PP-249)
 | Net | Degree |
@@ -253,7 +253,7 @@ Success: reveal POI. Overwhelming: POI + Influence +1. Failure: +1 AP if Depth �
 | Resource | Prosperity +1 |
 | Secret | +1D next military/intel action |
 | Remnant | Thread op Ob −1 for 2 seasons; Thread Debt token |
-| Anomaly | RS −1 immediate; WC +1 eligible |
+| Anomaly | MS −1 immediate; WC +1 eligible |
 
 ## Domain Echo from Investigation (§2.5)
 Resolved Finding with faction scope → Domain Echo per stage11 §11.5.

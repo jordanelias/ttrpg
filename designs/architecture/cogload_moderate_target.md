@@ -61,10 +61,10 @@ Eliminates the accounting lookup — the card tells you what changes.
 
 ### BG-2: Accounting Checklist on Faction Mat (Tier 1 — zero texture loss)
 Printed order-of-operations on the faction player mat:
-1. ☐ TC: +/− from this season's actions
-2. ☐ RS: +/− from Thread events (if any)
+1. ☐ CI: +/− from this season's actions
+2. ☐ MS: +/− from Thread events (if any)
 3. ☐ IP: +1 if no Crown military action
-4. ☐ Check thresholds (TC 40/60/80, IP 75, RS thresholds)
+4. ☐ Check thresholds (CI 40/60/80, IP 75, MS thresholds)
 5. ☐ Stat changes from Domain Actions
 6. ☐ Draw cards to hand limit
 
@@ -146,7 +146,7 @@ Replace per-operation Coherence cost lookup with:
 
 Flat per scale, not per operation type. The current system has slight variation by operation type at each scale, but the variation is narrow (typically ±1). Flattening to a scale-only cost eliminates the lookup entirely — the scale is already known.
 - Reduction: −0.5
-- Texture cost: Moderate. Loses the per-operation Coherence cost variation. Currently, Dissolution costs more Coherence than Mending at the same scale, reflecting the philosophical weight of destruction vs repair. Flattening this removes a mechanical expression of the Foundations' ontological hierarchy. However, the RS cost differences between operations already carry this thematic weight more prominently (Dissolution = −5 RS, Mending = +1 RS). Coherence was a secondary expression.
+- Texture cost: Moderate. Loses the per-operation Coherence cost variation. Currently, Dissolution costs more Coherence than Mending at the same scale, reflecting the philosophical weight of destruction vs repair. Flattening this removes a mechanical expression of the Foundations' ontological hierarchy. However, the MS cost differences between operations already carry this thematic weight more prominently (Dissolution = −5 MS, Mending = +1 MS). Coherence was a secondary expression.
 - Canon impact: P-15 requires Coherence tracking (layer 2 integrity). Coherence is still tracked — only the per-op lookup is simplified. No violation.
 
 ### TW-6: Static Thread Sensitivity and Thread Pool Score (Tier 1 — zero texture loss)
@@ -228,7 +228,7 @@ Core Tier scores: all ≤6.0 (Light-Moderate). Full Tier scores: as computed abo
 
 ### META-2: GM-Side Tracking Delegation
 Many tracked variables are world-state, not player-state:
-- RS → GM tracks (it's a world track, not a character track)
+- MS → GM tracks (it's a world track, not a character track)
 - Faction stats → GM tracks (or faction player tracks their own only)
 - NPC Morale/Discipline → GM tracks
 - Clock thresholds → GM checks
@@ -248,7 +248,7 @@ Instead of memorising rules, players use a physical reference system:
 | Unit card | Size/Discipline/Morale checkboxes, trigger thresholds, damage per success | Player (mass combat) |
 | Faction mat | Stat tracks, accounting checklist, unique action summary | Player (BG) |
 | Strain card | Margin × Cha mod × Foc def → strain lookup | GM (contest) |
-| ×3 RS card | Pre-multiplied RS costs for mass battle Thread | GM (mass+thread) |
+| ×3 MS card | Pre-multiplied MS costs for mass battle Thread | GM (mass+thread) |
 | Mode transition flowchart | 8 handoff rules as a decision tree | GM |
 
 With this architecture, the game's mechanical depth is preserved entirely — it's just stored in physical components rather than human memory. The cognitive load scores above assume this architecture is in place.
@@ -281,7 +281,7 @@ With this architecture, the game's mechanical depth is preserved entirely — it
 
 ### What was retained
 
-Every meaningful tactical decision. Every canon constraint. All three-dimensional co-movement. Coherence tracking. RS tracking. The weapon matrix. Pool splitting. Conviction Track. Faction stat interactions. Domain Echoes. Scale transitions. Mode boundaries. All NPC mechanics. All clock systems. All victory conditions.
+Every meaningful tactical decision. Every canon constraint. All three-dimensional co-movement. Coherence tracking. MS tracking. The weapon matrix. Pool splitting. Conviction Track. Faction stat interactions. Domain Echoes. Scale transitions. Mode boundaries. All NPC mechanics. All clock systems. All victory conditions.
 
 ### Honest Assessment
 The target of ≤8.0 across all systems is achievable. Thread Operations hits 8.0 only with TW-5 (flat Coherence cost), which has moderate texture cost. Without TW-5, it sits at 8.5 — close but above target. Every other system reaches ≤8.0 with strategies that have zero or minimal texture cost, primarily through better information presentation (reference architecture) rather than mechanical simplification.

@@ -79,7 +79,7 @@ Sincerely devout. Not cynical — wrong.
 
 **AI:** 1. Survival. 2. Coup readiness (Counter ≥ 2): pre-position T14. 3. Border defense (−1 Ob). 4. Monitor Military stats. 5. Crown Mandate < 3 or Torben < 3 → Riskbreaker. 6. Full military response. 7. Pass.
 
-**PP-NPC-02:** Coup requires active Church Assert, not passive TC.
+**PP-NPC-02:** Coup requires active Church Assert, not passive CI.
 
 **Löwenritter Five-Arm Structure:**
 
@@ -220,4 +220,4 @@ Battle consequences: MS −1 (Campaign −2), IP +2/season, Political Stability 
 
 **Simulation baseline:** Church 53%, Crown Treaty 14%, Timeout 32%. Hafenmark collapses 27.8%. tc_political_redesign_v30 addresses via CI milestones, political legitimacy bonus, conditional passive.
 
-**Unvalidated:** Accord+Political Stability+battle compound (ED-538). TC reform+TCV+Seizure Accord compound (ED-539). Accord-aware AI vs Hafenmark collapse. Dynastic Proclamation/Cultural Reformation.
+**Unvalidated:** Accord+Political Stability+battle compound (ED-538). CI reform+TCV+Seizure Accord compound (ED-539). Accord-aware AI vs Hafenmark collapse. Dynastic Proclamation/Cultural Reformation.

@@ -16,14 +16,14 @@ Military 0 makes Muster invalid (PP-039). Legionary cards are unplayable in hand
 ## Piety Yield Dead Zone — Explicit Note (PP-473)
 **Church-controlled territories produce zero Piety Yield.**
 Church Prominence = Church Mandate > controlling faction Mandate. When Church controls a territory, Church IS the controlling faction. Church Mandate > Church Mandate = False = not Prominent = no Piety Yield.
-Implication: Post-TC 75 seizure removes territories from Piety Yield pool. Plan accordingly.
+Implication: Post-CI 75 seizure removes territories from Piety Yield pool. Plan accordingly.
 
 
 ## AER >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)
 AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
 - AER >= 3 bypasses Hafenmark Structural Suppression (passive -1/season from Baralta Mandate >= 4).
 - Parliamentary Challenge is a card action; fires when played regardless of AER.
-- When AER >= 3 is active: structural is already negated; Challenge's "replaces structural" clause has no practical effect on structural. Challenge still fires and produces its degree-table TC result.
+- When AER >= 3 is active: structural is already negated; Challenge's "replaces structural" clause has no practical effect on structural. Challenge still fires and produces its degree-table CI result.
 
 
 ## Submission + Mandate 0 Ruling (PP-475)
@@ -42,7 +42,7 @@ Submitted faction remains as vassal with Mandate 0. Mandate-0 effects apply. Fac
 | Hybrid | Not present at game start. Emerges via Founding event. Once founded: playable by PC's controlling player (or GM if NPC-founded). |
 
 ### Popular Will (PW) Track
-Range 0–5. Public track (placed near RS clock). Starts at 0. Belongs to no faction.
+Range 0–5. Public track (placed near MS clock). Starts at 0. Belongs to no faction.
 
 **Advances +1 when:**
 - ≥ 2 territories simultaneously have PT ≤ 1 AND no Church Heresy Investigation is active in any of them (checked at Accounting).
@@ -50,7 +50,7 @@ Range 0–5. Public track (placed near RS clock). Starts at 0. Belongs to no fac
 
 **Regresses −1 when:**
 - Church executes a successful Heresy Investigation in a PT ≤ 1 territory.
-- TC ≥ 60 at Accounting (while TC ≥ 60: PW regresses −1/season automatically).
+- CI ≥ 60 at Accounting (while CI ≥ 60: PW regresses −1/season automatically).
 
 Floor: 0. Ceiling: 5.
 
@@ -59,11 +59,11 @@ Floor: 0. Ceiling: 5.
 |-----------|-----------|
 | PW track | ≥ 3 |
 | Territories with PT ≤ 1 | ≥ 3 |
-| RS | ≤ 60 |
+| MS | ≤ 60 |
 
 ### Founding Procedure
 Founding Agent declared (PC with communal Conviction, or named NPC at GM discretion).
-Roll: Founding Agent's Influence vs Ob = TC ÷ 10 (round up, min 1, max 5).
+Roll: Founding Agent's Influence vs Ob = CI ÷ 10 (round up, min 1, max 5).
 
 | Degree | Starting Stats | Presence Markers |
 |--------|---------------|-----------------|
@@ -92,7 +92,7 @@ Pool: 1D base + 1D per adjacent territory with RM Presence marker (PP-460). Fail
 
 
 ### Popular Will (PW) Track
-Range 0–5. Public track (placed near RS clock). Starts at 0. Belongs to no faction.
+Range 0–5. Public track (placed near MS clock). Starts at 0. Belongs to no faction.
 
 **Advances +1 when:**
 - ≥ 2 territories simultaneously have PT ≤ 1 AND no Church Heresy Investigation is active in any of them (checked at Accounting).
@@ -100,7 +100,7 @@ Range 0–5. Public track (placed near RS clock). Starts at 0. Belongs to no fac
 
 **Regresses −1 when:**
 - Church executes a successful Heresy Investigation in a PT ≤ 1 territory.
-- TC ≥ 60 at Accounting (while TC ≥ 60: PW regresses −1/season automatically).
+- CI ≥ 60 at Accounting (while CI ≥ 60: PW regresses −1/season automatically).
 
 Floor: 0. Ceiling: 5.
 
@@ -110,12 +110,12 @@ Floor: 0. Ceiling: 5.
 |-----------|-----------|
 | PW track | ≥ 3 |
 | Territories with PT ≤ 1 | ≥ 3 |
-| RS | ≤ 60 |
+| MS | ≤ 60 |
 
 
 ### Founding Procedure
 Founding Agent declared (PC with communal Conviction, or named NPC at GM discretion).
-Roll: Founding Agent's Influence vs Ob = TC ÷ 10 (round up, min 1, max 5).
+Roll: Founding Agent's Influence vs Ob = CI ÷ 10 (round up, min 1, max 5).
 
 | Degree | Starting Stats | Presence Markers |
 |--------|---------------|-----------------|

@@ -187,7 +187,7 @@ state {
   player: PlayerState
   companions: [CompanionState, max 2]
   factions: [FactionState]
-  clocks: { RS, TC, IP, GEN }
+  clocks: { MS, CI, IP, GEN }
   investigations: [Investigation]
   journal: JournalState
   codex: CodexState
@@ -249,8 +249,8 @@ Four global clocks, band-labeled:
 
 ```
 ┌─────────────────────────────────────┐
-│  RS · Fragile     [■■■■■□□□□□]  48  │
-│  TC · Strained    [■■■■■■□□□□]  52  │
+│  MS · Fragile     [■■■■■□□□□□]  48  │
+│  CI · Strained    [■■■■■■□□□□]  52  │
 │  IP · Strained    [■■■■■□□□□□]  41  │
 │  GEN · Year 3     [□□□□□□□□□□]  0.2 │
 └─────────────────────────────────────┘
@@ -258,7 +258,7 @@ Four global clocks, band-labeled:
 
 Hover any bar: full tooltip with exact value, next band threshold, and most recent change source.
 
-**Visual treatment of band transitions (ambient, always-on):** the RS bar is not just a number — as RS crosses from Strained to Fragile, the bar itself acquires a barely-perceptible shimmer. At Fractured, the shimmer intensifies and the bar's geometry has minor inconsistency frame-to-frame. This is one of the §20 feel layers: the HUD itself reflects substrate state. `[RESOLVES UI-06]` — Framework Drift pulse and RS shader intensity spec in §20.
+**Visual treatment of band transitions (ambient, always-on):** the MS bar is not just a number — as MS crosses from Strained to Fragile, the bar itself acquires a barely-perceptible shimmer. At Fractured, the shimmer intensifies and the bar's geometry has minor inconsistency frame-to-frame. This is one of the §20 feel layers: the HUD itself reflects substrate state. `[RESOLVES UI-06]` — Framework Drift pulse and MS shader intensity spec in §20.
 
 ### §2.3.2 Framework Drift strip
 
@@ -266,7 +266,7 @@ Hover any bar: full tooltip with exact value, next band threshold, and most rece
 ┌─────────────────────────────────────┐
 │  FRAMEWORK DRIFT                    │
 │  Crown   · → · Influence +1         │
-│  Church  · ↑ · TC +1 accounting     │
+│  Church  · ↑ · CI +1 accounting     │
 │  Hafen   · · · stable               │
 │  Varfell · ↓ · Intel −1             │
 │  L-R     · · · stable               │
@@ -413,8 +413,8 @@ Rendered as an illustrated 2D overhead. Hand-painted style (Triangle Strategy pr
 | Accord | Fill saturation (3+: full, 1–2: muted, 0: desaturated + agitation shader) |
 | Occupation | Hatched overlay, base color + hatch pattern in occupier color |
 | Framework Drift | Subtle edge pulse (1.2s cycle, 80% alpha peak) in faction color |
-| RS substrate state | Global shader on the whole map (§9.6 details) |
-| Calamity gradient | Static radial darkening from Askeheim T15, intensifies as RS drops per calamity_radiation_v30 |
+| MS substrate state | Global shader on the whole map (§9.6 details) |
+| Calamity gradient | Static radial darkening from Askeheim T15, intensifies as MS drops per calamity_radiation_v30 |
 | Player position | Illustrated character silhouette token |
 | Companion positions | Smaller silhouettes beside player |
 | Active Slate anchor | Amber glow halo around the relevant territory/settlement node |
@@ -1087,7 +1087,7 @@ Base pool:   Charisma 5 × 2  =  10D     ░░░░░░░░░░
 + Audience:  Revealing match  =  14D     ░░░░░░░░░░░░░░
 + Corrob:    Eira (Ob 1)      =  15D     ░░░░░░░░░░░░░░░
 + Finding:   Church records   =  16D     ░░░░░░░░░░░░░░░░
-+ RS target: Consequence      =  17D     ░░░░░░░░░░░░░░░░░
++ MS target: Consequence      =  17D     ░░░░░░░░░░░░░░░░░
 ─────────────────────────────  vs  Ob 2
                               = 17D vs 2
 ```
@@ -1608,13 +1608,13 @@ The Thread panel itself overlays the current scene:
 ║   ▸ Dissolution (TN 8)  Ob 4  forced absence · FR surcharge −1 Coh        ║
 ║   ▸ Past-Oriented Pull  (TN 8) Ob 4 + recency · chronic −1 Coh            ║
 ║                                                                            ║
-║  RS COST PREVIEW                                                           ║
-║   Overwhelming: RS +1 (Weaving only, Relational+)                         ║
-║   Success: RS 0                                                           ║
-║   Partial: RS −2 (Personal scale)                                         ║
-║   Failure: RS −3 (Personal scale)                                         ║
+║  MS COST PREVIEW                                                           ║
+║   Overwhelming: MS +1 (Weaving only, Relational+)                         ║
+║   Success: MS 0                                                           ║
+║   Partial: MS −2 (Personal scale)                                         ║
+║   Failure: MS −3 (Personal scale)                                         ║
 ║                                                                            ║
-║   ⚠ at Structural scale Failure: RS −8 to −12 (catastrophic)              ║
+║   ⚠ at Structural scale Failure: MS −8 to −12 (catastrophic)              ║
 ║                                                                            ║
 ║  COHERENCE COST: −1 (Personal scale auto)                                 ║
 ║                                                                            ║
@@ -1654,11 +1654,11 @@ After every operation, the co-movement panel takes over. It is NOT dismissable f
 ╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
-## §9.6 RS environmental rendering
+## §9.6 MS environmental rendering
 
-Per calamity_radiation_v30, RS band state has territory-specific effects. The UI renders these as environmental shifts visible on the Peninsula map and within settlements:
+Per calamity_radiation_v30, MS band state has territory-specific effects. The UI renders these as environmental shifts visible on the Peninsula map and within settlements:
 
-| RS Band | Peninsula map | Settlement interior | Audio |
+| MS Band | Peninsula map | Settlement interior | Audio |
 |---------|---------------|--------------------|----|
 | 100–80 Stable | Warm painted palette, clear lighting | Soft, grounded, natural ambient | Clean chamber music |
 | 79–60 Strained | Slight muting, edges less crisp | Occasional flicker in torch flames | Underlayer of distant harmonics |
@@ -1667,7 +1667,7 @@ Per calamity_radiation_v30, RS band state has territory-specific effects. The UI
 | 19–1 Critical | Map aberration; territory tint shifts unpredictably | Full rendering failures — the vignette itself wrong | Terror bed: low-frequency rumble, occasional sub-audible pulse |
 | 0 Rupture | (campaign over — cutscene fires) | — | — |
 
-The Peninsula map breathes with RS. A game played at RS 85 feels completely different from one played at RS 25 — not because the rules changed, but because the world literally renders differently.
+The Peninsula map breathes with MS. A game played at MS 85 feels completely different from one played at MS 25 — not because the rules changed, but because the world literally renders differently.
 
 ## §9.7 Coherence and rendering corruption
 
@@ -1697,7 +1697,7 @@ Threadwork in Valoria cannot be "just another skill" because:
 1. **The game's visual/audio register changes** for Thread operations — not as a special effect, but as a structural shift. You literally perceive differently.
 2. **Co-movement is mandatory** — you do not get to "just cast the spell." Every operation costs in three dimensions, visibly, with animations you cannot skip.
 3. **The UI itself degrades at low Coherence** — the interface you trust becomes unreliable. You are no longer the secure operator of a game; you are the character struggling to hold their rendering together.
-4. **Structural-scale operations can END the game** — RS 0 = Rupture = campaign over. Threadwork is the only mechanic that carries this weight, and the UI surfaces that weight pre-roll every time.
+4. **Structural-scale operations can END the game** — MS 0 = Rupture = campaign over. Threadwork is the only mechanic that carries this weight, and the UI surfaces that weight pre-roll every time.
 5. **Non-practitioners cannot access this UI at all.** A character with TS < 30 has no Thread panel, no Thread sight toggle, no Leap option in combat. The ENTIRE Thread layer is invisible to them. This is the mechanical expression of P-08 (epistemological barrier): non-sensitives literally cannot perceive what sensitives perceive.
 
 The player who plays a non-sensitive character sees the Peninsula as a solid, legible place. The player who plays a sensitive character sees the same Peninsula as a configuration. Both are playing the same game; neither is playing the full game.
@@ -1720,7 +1720,7 @@ This layer is what makes threadwork uncapturable by any playable character. It i
 Triggered by:
 - Active Thread contact (§9.4 Thread panel)
 - Coherence ≤ 5 (§9.7 UI corruption)
-- RS ≤ 40 inside Calamity-proximate territories (§9.6)
+- MS ≤ 40 inside Calamity-proximate territories (§9.6)
 
 **During Thread contact, the entire game register shifts:**
 
@@ -1843,17 +1843,17 @@ Fires at Phase 3 Cascade. An illuminated scroll unrolls down the screen, with ea
     Hafenmark · Mandate −1 (same event, target)
 
   Step 2 — Thread operation clock changes
-    RS: no personal-phase Thread operations this season
-    TC: unchanged
+    MS: no personal-phase Thread operations this season
+    CI: unchanged
 
   Step 3 — Clock threshold events
-    TC from 51 → 52 (passive +1, Church Mandate ≥ 3)
+    CI from 51 → 52 (passive +1, Church Mandate ≥ 3)
     IP from 41 → 43 (inter-faction battle in T3)
     No band transitions this season
 
   Step 4 — Board order consequences
     Crown Muster in T1: unit raised (LI, Size 3, Power 3)
-    Church Assert: TC +1 (folded into Step 3 above)
+    Church Assert: CI +1 (folded into Step 3 above)
     Hafenmark Trade: Wealth +1
     Varfell Intel: +1 Intel (T12 revealed)
 
@@ -1918,7 +1918,7 @@ Full-screen Peninsula view accessible from `M` key. Same Peninsula as the main m
 - Show faction control
 - Show Accord
 - Show Framework Drift
-- Show RS gradient
+- Show MS gradient
 - Show IP threat vectors
 - Show player presence history (where you have been this campaign)
 - Show NPC positions (named NPCs you know about)
@@ -2252,7 +2252,7 @@ signal treaty_phase_advanced(treaty_ref, phase)
 signal faction_emergence_stage_changed(faction_id, old_stage, new_stage)
 signal faction_collapsed(faction_id)
 signal victory_condition_met(faction_id, condition)
-signal rupture_imminent()  // RS 0
+signal rupture_imminent()  // MS 0
 signal rupture_occurred()  // campaign ends
 ```
 
@@ -2344,7 +2344,7 @@ Required art assets for v1:
 - 9 faction hand panel card arts (Legionary, Senator, Consul, Tribune, Pontifex, Prefect, Recess, Policy, Parliamentary Manoeuvre) × 8 factions = 72 card arts (many shared)
 - Cutscene backgrounds: 40+ painted scenes (per §19.2 trigger list)
 - UI iconography: ~120 icons (stat, clock, action, condition, Conviction, Belief)
-- Peninsula map shader variants (RS band states × 5)
+- Peninsula map shader variants (MS band states × 5)
 
 Required audio assets:
 
@@ -2401,10 +2401,10 @@ All UI-01 through UI-15 items from v3 resolved in this document. Summary index w
 |----|----------|-----------|----------|
 | UI-01 | Combat grid size | 12×8 standard, 16×10 set-piece, never below 10×6 or above 20×12 | §7.4 |
 | UI-02 | Hand panel card visual | Iconic card art, Triangle Strategy / illuminated manuscript aesthetic; symbolic icon + typography + stat line + readiness state | §11.2 |
-| UI-03 | Involuntary Thread perception | Implemented as ambient glyph flickers during Coherence ≤ 5 and as Thread sight reveal in specific high-RS territories | §9.2, §9.7 |
+| UI-03 | Involuntary Thread perception | Implemented as ambient glyph flickers during Coherence ≤ 5 and as Thread sight reveal in specific high-MS territories | §9.2, §9.7 |
 | UI-04 | Slate volume at Hard difficulty | 9 entries at Hard; manageable because of tiered visibility (priority markers collapse to edge at a glance) and companion commentary that annotates 1–2 per season | §2.6 |
 | UI-05 | Obligation panel placement | Dedicated block in right rail; expandable on click; no separate top-level screen | §2.3.5 |
-| UI-06 | Framework Drift pulse intensity | 80% alpha at 1.2s cycle; perceptible but not distracting. RS band shader intensity scales with band severity | §2.3.2, §20.1 |
+| UI-06 | Framework Drift pulse intensity | 80% alpha at 1.2s cycle; perceptible but not distracting. MS band shader intensity scales with band severity | §2.3.2, §20.1 |
 | UI-07 | Panel adjudicator type | Upstream ED-137 dependency persists; the UI is designed to accept any of Panel / Individual / Crowd adjudicators by changing the venue illustration and voting mechanic | §15 (deferred to ED-137 resolution) |
 | UI-08 | Thread sight toggle default | Manual; player-initiated. One exception: prompt appears when entering scene with active Gap or Depth ≥ 3 Thread phenomena | §9.2 |
 | UI-09 | Settlement capture interrupt handling | Side panel notification, not battle interruption. General Duel still does full Zoom In (it IS personal combat) | §8.3 |

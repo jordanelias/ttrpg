@@ -133,7 +133,7 @@ Rattled + Spent: cumulative. Pool minimum 1D.
 | Compromise (4–6) | No Domain Echo; GM narrates partial outcome |
 | Private tie (no tracker) | Stall; strain persists; Read info permanent; relationship stressed |
 
-Thread co-movement: Memory win → RS +1 (retention invoked). Projection win → RS +1 if Thread-sensitive.
+Thread co-movement: Memory win → MS +1 (retention invoked). Projection win → MS +1 if Thread-sensitive.
 
 ## Proceeding Types
 | Type | Exchanges | Roles | Resistance Mod | Adjudicator |
@@ -207,8 +207,8 @@ Maximum 10 exchanges per Contest session.
 After 10 consecutive exchanges without resolution: forced Unmask fires.
 Loser = orator whose track is closer to their losing threshold (lower Composure on tie).
 
-## Hybrid Debate TC Clamp (PP-256)
-In Hybrid mode Contest: TC restricted to range 4–6 at session start regardless of BG lobbying.
+## Hybrid Debate CI Clamp (PP-256)
+In Hybrid mode Contest: CI restricted to range 4–6 at session start regardless of BG lobbying.
 BG lobbying shifts starting position ±1 within that range only.
 Prevents BG-layer pre-deciding Contest outcome.
 
@@ -220,10 +220,10 @@ Does not apply when Thread op targets a Church institutional interest.
 Replaces PP-123. When temporal axis conflict fires: −1D to BOTH parties' Argue rolls for that exchange.
 Symmetric: both destabilised equally.
 
-## Passive RS from Contest — Gate (PP-259)
-RS consequence fires automatically when:
+## Passive MS from Contest — Gate (PP-259)
+MS consequence fires automatically when:
 (a) Contest subject is a Thread-factual claim, OR (b) Thread op used in a Contest exchange.
-All other subjects: no RS consequence. No GM discretion required.
+All other subjects: no MS consequence. No GM discretion required.
 
 ## BG Doubt Marker Analog
 No analog needed. BG debate fully abstracted. Parliamentary Vote (ED-053) handles faction-level outcomes.
@@ -281,10 +281,10 @@ Source: fieldwork_investigation.md §2.3 / F-TRANS-11. social_contest_system_v2.
 
 ### Targeting Declaration
 Before Argue roll (Step 3): player declares "targeting Resonant Style." GM confirms match.
-Requires: (a) argument uses Contest style mapping to the declared RS, (b) content addresses a known Belief, (c) player has previously discovered the RS.
+Requires: (a) argument uses Contest style mapping to the declared MS, (b) content addresses a known Belief, (c) player has previously discovered the MS.
 
 ### Targeting Effects
-| RS | Required form | On confirmed targeting |
+| MS | Required form | On confirmed targeting |
 |---|---|---|
 | Evidence | Memory + Revealing. Must cite specific named verifiable claim. | +1D Argue. On win: CT +1 additional (bypasses 1 resistance). |
 | Consequence | Projection + Revealing. Must project specific outcome framework fails to prevent. | +1D Argue. On win: NPC +2 strain. |
@@ -295,10 +295,10 @@ Requires: (a) argument uses Contest style mapping to the declared RS, (b) conten
 Thread-level evidence invalid as Evidence targeting vs TS 0 NPCs. Ontical evidence only. Exception: TS 30+ NPCs accept Thread-level evidence.
 
 ### Wrong-Style Penalty (Church Martyrdom extension)
-Wrong RS vs Church institutional NPC (Himlensendt, Olafsson, Klapp, Cardinals) in public venue with Failure/Partial: Church Stability +1 (PP-259 fires).
+Wrong MS vs Church institutional NPC (Himlensendt, Olafsson, Klapp, Cardinals) in public venue with Failure/Partial: Church Stability +1 (PP-259 fires).
 
 ### Stacking
-Max positional bonus: +5D (genre +1, audience +1, RS targeting +1, Recall +2). Each prerequisite independently costly. Practical pools 12–18D; 25D+ extreme.
+Max positional bonus: +5D (genre +1, audience +1, MS targeting +1, Recall +2). Each prerequisite independently costly. Practical pools 12–18D; 25D+ extreme.
 
 ## Temporal Axis Conflict (PP-351 — canonical)
 
@@ -310,7 +310,7 @@ card drawn during the contest scene).
 ## Church Self-Investigation Exception (PP-349 — canonical)
 
 The Church does not file Heresy Investigation against its own ordained members
-who are supporting Church institutional interests (TC advancement, PT increase,
+who are supporting Church institutional interests (CI advancement, PT increase,
 infrastructure expansion). Self-investigation only triggers when an ordained
 member acts against Church interests (supporting RM, lowering PT, aiding
 Varfell Thread programs).

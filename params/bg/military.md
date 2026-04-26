@@ -13,7 +13,7 @@ Unit starting Discipline: Light Infantry 3, Heavy Infantry 4, Cavalry 4, Ranged 
 
 ## BG Co-Movement Resolution Protocol (PP-182, ED-086 resolved 2026-04-03 — P-14 compliant)
 
-**Serialization (PP-503):** When multiple Thread operations fire in the same season, resolve each operation's Co-Movement card fully (draw → apply all three dimensional effects → discard) before the next operation draws. Effects from earlier cards may alter conditions for later draws (e.g., RS threshold crossings).
+**Serialization (PP-503):** When multiple Thread operations fire in the same season, resolve each operation's Co-Movement card fully (draw → apply all three dimensional effects → discard) before the next operation draws. Effects from earlier cards may alter conditions for later draws (e.g., MS threshold crossings).
 [Full protocol in PP-182 section — three-dimensional auto-effects for all Thread operations]
 History Resonance markers (temporal), Attention Pool (epistemic), Primary result (actualized).
 Thread Tension (TT) = sum of all History Resonance markers across board.
@@ -37,8 +37,8 @@ No BG Military modifier for ranged-specialist factions. BG correctly abstracts a
 20-card deck. Draw on: Partial Community Weaving, ~~Niflhel Harvest~~ (struck per ED-764; replaced by Settlement-Broker Harvest event triggered by Intel ≥ 4 broker activity at black-market settlements), VTM preview.
 | Category | Count | Effect |
 |----------|-------|--------|
-| TC effect | 4 | TC +1 immediately |
-| RS stabilisation | 3 | RS +1 at next Accounting |
+| CI effect | 4 | CI +1 immediately |
+| MS stabilisation | 3 | MS +1 at next Accounting |
 | Faction intel leak | 3 | One random faction learns Thread operation occurred here |
 | Thread Debt adjacent | 3 | Thread Debt token in adjacent territory |
 | History Resonance adjacent | 3 | History Resonance marker in adjacent territory |

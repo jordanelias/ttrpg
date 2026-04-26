@@ -19,7 +19,7 @@
 | Crown collapse rate | 3.4% | — |
 | Hafenmark collapse rate | 27.8% | — |
 
-**Critical finding:** Church dominates the pure AI faction layer. The only counter-TC mechanic is Hafenmark's diplomatic token, which is fragile (Hafenmark collapses 27.8% of the time before it can be used effectively). This is the finding that motivated tc_political_redesign_v30.
+**Critical finding:** Church dominates the pure AI faction layer. The only counter-CI mechanic is Hafenmark's diplomatic token, which is fragile (Hafenmark collapses 27.8% of the time before it can be used effectively). This is the finding that motivated tc_political_redesign_v30.
 
 **My audit documents never referenced these numbers.** They directly inform every balance discussion.
 
@@ -30,7 +30,7 @@ Ran NPC behavior system against faction AI. 7 findings, 4 patches applied:
 | Patch | Fix | Why It Matters |
 |---|---|---|
 | PP-NPC-01 | Crown Decree gated on Mandate ≥ 3 | Prevents death spiral where Almud keeps issuing Decrees at low Mandate, failing, losing more Mandate |
-| PP-NPC-02 | Deterministic coup requires active Church Assert, not just passive TC | Prevents coup from firing based on a clock no player actively controls |
+| PP-NPC-02 | Deterministic coup requires active Church Assert, not just passive CI | Prevents coup from firing based on a clock no player actively controls |
 | PP-NPC-03 | Church Influence drift conditioned on Stability + CI + yearly cycle | Prevents runaway Church Influence accumulation |
 | PP-NPC-04 | Varfell Private Collection cooldown enforced | Prevents unbounded VTM advancement |
 
@@ -61,7 +61,7 @@ All 10 items resolved:
 | Ob calibration | 5D pool handles Depth 1. 9D handles D1-2. 13D handles D1-3. 17D handles D1-4. 24D challenges D5. |
 | Evidence pacing | 5-threshold investigation completes in 3-5 scenes (high-pool 15-19D). Low-pool (9D): 4-6 scenes at D1-2. |
 | Disposition economy | Neutral→Bonded = 6-8 actions across 3-4 seasons. Sincerity Gate adds ~37% failure on instrumental Connect. |
-| Attention Pool feedback | Fieldwork contributes ~11% of max TC acceleration over 4 seasons. Cap sufficient. |
+| Attention Pool feedback | Fieldwork contributes ~11% of max CI acceleration over 4 seasons. Cap sufficient. |
 | Survey vs Govern | Different niches. Govern dominates mid-proximity. Survey dominates high-proximity. Neither universally optimal. |
 | Cover calibration | Cover 3 = detected in 3 scenes. Cover 9 = full season before detection. Cover 12+ = near-immune to casual detection. |
 | Transition simulation | All 6 fieldwork ↔ other-system transitions functional (F-TRANS-01 through F-TRANS-12). |
@@ -99,9 +99,9 @@ Validated post-patch mechanics:
 
 | Finding | Result |
 |---|---|
-| Church TC race | TC ≥ 60 unreachable in 12-round standard game with Hafenmark suppression active (+1/season net = needs 32 seasons from start) |
+| Church CI race | CI ≥ 60 unreachable in 12-round standard game with Hafenmark suppression active (+1/season net = needs 32 seasons from start) |
 | Thread Wound formation | Appropriate pace (requires sustained neglect or repeated failure) |
-| Church viable paths | TC-accelerating plays, Excommunicate Baralta, alt victory via Deed 4 (Crown Mandate ≤ 2) |
+| Church viable paths | CI-accelerating plays, Excommunicate Baralta, alt victory via Deed 4 (Crown Mandate ≤ 2) |
 
 ---
 
@@ -121,7 +121,7 @@ Validated post-patch mechanics:
 
 8. **Hafenmark collapse rate (27.8%)** — I mentioned the sim results in the cross-conversation review but didn't note this as a game balance problem requiring design response.
 9. **Church dominance in pure AI** — I noted it but didn't connect it to tc_political_redesign_v30 as the design response.
-10. **SIM-BG-02 (TC race)** — The finding that TC ≥ 60 is unreachable with suppression was from March. The tc_political_redesign changes the TC ceiling to 100 and adds milestones at 40/55/65/80 — directly addressing this. I should have connected the finding to the redesign.
+10. **SIM-BG-02 (CI race)** — The finding that CI ≥ 60 is unreachable with suppression was from March. The tc_political_redesign changes the CI ceiling to 100 and adds milestones at 40/55/65/80 — directly addressing this. I should have connected the finding to the redesign.
 
 ---
 
@@ -130,7 +130,7 @@ Validated post-patch mechanics:
 These were explicitly called out in conversations as needing simulation but not yet run:
 
 1. **Accord + Strain + battle consequences compound effect** — peninsular_strain system hasn't been simulated with the full valoria_sim (ED-538, P1).
-2. **TC reform + TCV revaluation + Seizure Accord ≥ 2 compound effect on Church** — three simultaneous Church buffs/reforms without combined validation (ED-539, P1).
+2. **CI reform + TCV revaluation + Seizure Accord ≥ 2 compound effect on Church** — three simultaneous Church buffs/reforms without combined validation (ED-539, P1).
 3. **NPC AI with Accord-aware governance** — priority trees were updated but sim hasn't re-run to check if Hafenmark collapse rate improves.
 4. **Dynastic Proclamation and Cultural Reformation** — two new acquisition tools never simulated.
 5. **Unit health = Type Health × Size** — Jordan's directive; not yet validated by simulation against existing mass combat balance.

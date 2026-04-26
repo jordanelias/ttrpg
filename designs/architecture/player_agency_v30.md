@@ -228,12 +228,12 @@ For each condition TRUE, generate one scene entry:
 
 **Step 2b — Thread-State Scenes (ED-674, Priority 1–3):**
 
-Check local thread state (RS band × territory proximity per calamity_radiation_v30):
+Check local thread state (MS band × territory proximity per calamity_radiation_v30):
 
 | Condition | Scene | Priority |
 |---|---|---|
-| RS ≤ 20 (Critical) in current territory | Thread Crisis: substrate instability manifests per radiation matrix | 1 (mandatory) |
-| RS dropped below threshold band since last Slate | Threshold-Crossing: world visibly changes per radiation band | 2 |
+| MS ≤ 20 (Critical) in current territory | Thread Crisis: substrate instability manifests per radiation matrix | 1 (mandatory) |
+| MS dropped below threshold band since last Slate | Threshold-Crossing: world visibly changes per radiation band | 2 |
 | Active Gap in current territory | Investigation/Mending Opportunity at Gap site | 2 |
 | Active Lock in current territory | Governance Rigidity: frozen policy/relationship manifests as obstruction | 3 |
 | WC advanced since last Slate | Warden Cooperation: new Thread resources, new Warden NPC relationships | 3 |
@@ -284,7 +284,7 @@ For each named NPC where ALL hold: Disposition ≤ −2 toward player, NPC holds
 
 **Step 6 — Territorial (Priority 4):**
 
-Generate 1–2 scenes from the player's current territory: NPC arrival, trade/economic event, Thread phenomenon (if RS ≤ 60 in this territory's Calamity band), military movement.
+Generate 1–2 scenes from the player's current territory: NPC arrival, trade/economic event, Thread phenomenon (if MS ≤ 60 in this territory's Calamity band), military movement.
 
 **Step 7 — Ambient (Priority 5):**
 
@@ -306,7 +306,7 @@ The surplus is the point. Opportunities not pursued resolve through NPC AI and c
 **Cross-step pruning algorithm (deterministic):**
 
 1. Generate all entries from Steps 1–7 + 2b. Tag each with `(step_number, internal_index_within_step)`.
-2. Mandatory entries (Step 1 + Step 2b at RS ≤ 20) cannot be pruned. Add all to slate.
+2. Mandatory entries (Step 1 + Step 2b at MS ≤ 20) cannot be pruned. Add all to slate.
 3. Compute `slate_target_size` from difficulty (4-5 Narrative / 5-7 Normal / 7-9 Hard). Compute `remaining_slots = slate_target_size − count(mandatory)`.
 4. If `remaining_slots ≤ 0`: slate is mandatory-only. Witness Mode applies per §4.2 Step 1.
 5. Otherwise: from non-mandatory entries, sort by `(step_number ascending, internal_index ascending)`. Take first `remaining_slots`.

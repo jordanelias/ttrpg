@@ -15,7 +15,7 @@ PP-660 committed a comprehensive faction politics rank-ladder expansion (Standin
 |---|-------------|------------------|--------|
 | 1 | Caste starting-state opacity — no onboarding signal for caste × faction viability | player_agency §7.1 + this doc §1 | ED-659 (batch) |
 | 2 | Duty system contradicts Std 0 Initiation Duty — §3.2 auto-generates Duty; §3.4 says 0–5 range | player_agency §3.2, §3.4 | ED-659 (batch) |
-| 3 | TC × Warden asymmetry — Warden ladder not covered by TC interaction; no rank ladder for RM-when-active | this doc §3, §4 (amends faction_politics §2.7 + adds RM stub) | ED-659 (batch) |
+| 3 | CI × Warden asymmetry — Warden ladder not covered by CI interaction; no rank ladder for RM-when-active | this doc §3, §4 (amends faction_politics §2.7 + adds RM stub) | ED-659 (batch) |
 | 4 | Generational × Coup × IP clock convergence — Torben maturation interacts unspecified with 3 other clocks | baralta_crown_claim §7 (new section) | ED-659 (batch) |
 | 5 | NPC roster capacity — ~35 NPCs now load-bearing; companion app limits unverified | npc_behavior §11 (new section) | ED-659 (batch) |
 | 6 | Hall Tier is flavor text — no settlement_layer mechanical hook | settlement_layer §1.4 (new section) | ED-659 (batch) |
@@ -112,19 +112,19 @@ With: *"Standing +1 (faction-specific track, 0–7 per faction_politics_expanded
 
 ---
 
-# §3 — TC × WARDEN ASYMMETRY + RM-WHEN-ACTIVE LADDER (Throughline 3)
+# §3 — CI × WARDEN ASYMMETRY + RM-WHEN-ACTIVE LADDER (Throughline 3)
 
 ## §3.1 The Problem
 
-PP-660 §5.1 specifies TC × Church rank. PP-660 §5.3 specifies TC × non-Church rank (Crown Prince, Hafenmark Chancellor, Varfell Senior Jarl). But the Warden sub-ladder was not included in either table. The Warden is neither Church-allied nor Church-opposed — it is Church-**hidden**. As TC rises, Church scrutiny rises, and Warden operations become more dangerous without a specified mechanical cost.
+PP-660 §5.1 specifies CI × Church rank. PP-660 §5.3 specifies CI × non-Church rank (Crown Prince, Hafenmark Chancellor, Varfell Senior Jarl). But the Warden sub-ladder was not included in either table. The Warden is neither Church-allied nor Church-opposed — it is Church-**hidden**. As CI rises, Church scrutiny rises, and Warden operations become more dangerous without a specified mechanical cost.
 
 Secondly: PP-660 §2 names the Restoration Movement as a potential sub-office target ("RM-when-active"), but the ladder was not built because RM emergence is conditional (conviction_track_v30 §5.2). A player who participates in RM founding (ED-620) lacks a specified progression path within the movement.
 
-## §3.2 Resolution: Warden × TC Pressure Scale
+## §3.2 Resolution: Warden × CI Pressure Scale
 
-**Add to faction_politics_expanded_v1 §5 (TC × Rank Ladder Integration) via this document's propagation:**
+**Add to faction_politics_expanded_v1 §5 (CI × Rank Ladder Integration) via this document's propagation:**
 
-| Warden Standing | TC 0–39 | TC 40–54 | TC 55–79 (Prominent+) | TC 80–99 (Ascendant) | TC 100 (Unification) |
+| Warden Standing | CI 0–39 | CI 40–54 | CI 55–79 (Prominent+) | CI 80–99 (Ascendant) | CI 100 (Unification) |
 |-----------------|---------|----------|----------------------|---------------------|---------------------|
 | 0–2 (Thread-Touched through Warden) | Standard | Standard | +1 Ob on visible Warden-network contact in Church-presence territories | +2 Ob; safe-house exposure risk | Warden Ladder effectively goes underground; no Formal Recognition Events possible |
 | 3+ (Senior Warden through Chief) | Standard | +1 Ob Southernmost Expedition planning (Church monitoring rises) | +2 Ob; Warden-Captain cannot conduct Recognition Events in Cathedral settlements | +3 Ob; Warden-Senior convocations require covert location (no fixed seat) | Warden-Chief position becomes literal hiding — Edeyja's successor cannot be publicly identified |
@@ -139,7 +139,7 @@ ED-629 (2026-04-17) raised 28 P0 blockers on Thread system integration, includin
 
 ## §3.4 Resolution: RM-When-Active Ladder (Stub)
 
-Per conviction_track_v30 §5.2, the Restoration Movement emerges as an active faction when WA ≤ −2 AND ≥ 3 territories at CV ≤ 1 AND RS ≤ 50. Once emerged, the RM is a latent-faction-promoted-to-active mechanic. A player participating in its founding (ED-620) or serving within it post-emergence requires a ladder analogous to the 7 other faction ladders.
+Per conviction_track_v30 §5.2, the Restoration Movement emerges as an active faction when WA ≤ −2 AND ≥ 3 territories at CV ≤ 1 AND MS ≤ 50. Once emerged, the RM is a latent-faction-promoted-to-active mechanic. A player participating in its founding (ED-620) or serving within it post-emergence requires a ladder analogous to the 7 other faction ladders.
 
 The RM ladder is **a stub here** because the movement's institutional architecture is deliberately thin — RM rejects institutional hierarchy as ethical principle (Rawlsian Social Contract, factions_ttrpg_v30 §8.8). A formal rank ladder reproducing Crown-style gradation would violate the movement's design premise.
 
@@ -395,7 +395,7 @@ This document is CANONICAL effective 2026-04-17 via PP-661. It resolves the 10 t
 
 | ED | Description | Priority |
 |----|-------------|----------|
-| ED-659 (batch) | Throughline resolutions batch: TL-1 (caste onboarding), TL-2 (Std 0 Duty carve-out), TL-3 (Warden × TC + RM stub), TL-9 (SIM discoverability), TL-10 (future-split marker). Applied in PP-661. | P1 — APPLIED |
+| ED-659 (batch) | Throughline resolutions batch: TL-1 (caste onboarding), TL-2 (Std 0 Duty carve-out), TL-3 (Warden × CI + RM stub), TL-9 (SIM discoverability), TL-10 (future-split marker). Applied in PP-661. | P1 — APPLIED |
 | ED-659 (batch) | Generational × Coup × IP × Baralta convergence (TL-4). Three-clock interaction table applied to baralta §7. | P1 — APPLIED |
 | ED-659 (batch) | NPC roster tracking capacity (TL-5). npc_behavior §11 applied. | P1 — APPLIED |
 | ED-659 (batch) | Hall Tier settlement integration (TL-6). settlement_layer §1.4 applied. | P1 — APPLIED |
