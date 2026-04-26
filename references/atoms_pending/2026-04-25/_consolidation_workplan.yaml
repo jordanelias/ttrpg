@@ -1,0 +1,266 @@
+generated: '2026-04-25'
+plan_version: v1
+status: pending Jordan approval — DO NOT execute until plan signed off
+inputs:
+  priority_queue: references/atoms_pending/2026-04-25/_priority_queue.yaml
+  id_clusters: references/atoms_pending/2026-04-25/_id_clusters.yaml
+  source_roadmap: references/atoms_pending/2026-04-25/_source_roadmap.yaml
+totals_in_scope:
+  atoms: 316
+  P1: 15
+  P2: 68
+  P3: 233
+  cross_source_id_clusters: 26
+  unique_canonical_ids: 141
+stages:
+- stage: 0
+  name: Pre-flight ID verification
+  goal: For every canonical ID referenced across the 316 atoms, classify as known (in register) or unknown (needs new entry). Output drives the
+    rest of the plan.
+  blocking: all subsequent stages
+  inputs:
+  - _id_inventory.yaml
+  actions:
+  - Fetch canon/editorial_ledger.yaml; cross-check 71 unique ED-NNN; flag unknowns as new-registration candidates.
+  - Fetch canon/patch_register_active.yaml + archives via canon/patch_register_index.md; cross-check 37 unique PP-NNN.
+  - Fetch references/throughlines_meta.md; cross-check 21 T-NN and 11 M-NN; flag unknowns.
+  - 'Produce _id_verification_report.yaml: per-ID known/unknown/needs-update.'
+  expected_commits: 1 (`[infrastructure]` — verification report only)
+  jordan_decision_required: false
+  estimated_duration: short — single fetch + comparison
+- stage: 1
+  name: Solmund editorial review
+  goal: Solmund cultural guide is editorial-path content with [PROVISIONAL:] marker. Single editorial-block hand-off; no mechanical work until
+    Jordan approves.
+  blocking: all designs/world/ + designs/npcs/ work touching Solmund
+  parallel_with: Stage 2
+  inputs:
+  - solmund_master_document__25__22-faction-response-pathways (41 lines, signal=18)
+  - solmund_master_document__31__28-implementation-priorities (63 lines, signal=15)
+  - solmund_master_document__23__20-the-mechanism-rendered-world-change-event-rwce (30 lines, signal=12)
+  - solmund_master_document__29__26-system-connections (21 lines, signal=10)
+  - solmund_master_document__05__2-five-theological-poets-tonal-registers (36 lines, signal=8)
+  - '... 27 more atoms in solmund_master_document/'
+  actions:
+  - Bundle all 32 solmund atoms (1 P2 + 4 P3 + 27 unscored) as a single editorial review document.
+  - Hand off to Jordan for line-level approve/reject/modify per cluster (Di Cicco principle, voice registers, faction pathways, etc.).
+  - 'On approval: route approved content to designs/world/, designs/npcs/ via [editorial] commits with [EDITORIAL: ED-NNN — description] markers.'
+  - 'On rejection: archive rejected atoms; do not commit.'
+  expected_commits: 0–6 depending on approval breadth (`[editorial]` per design doc updated)
+  jordan_decision_required: true
+  decision_points:
+  - Approve / reject / modify each thematic block (Di Cicco principle, voice registers, artifact taxonomy, philosophical frameworks, faction engagement
+    pathways, mechanical audit).
+  - Confirm target paths within designs/world/ vs designs/npcs/.
+  estimated_duration: depends on Jordan availability — review block first, code work follows
+- stage: 2
+  name: Cross-source ID-cluster consolidation
+  goal: For each canonical ID referenced by atoms across ≥2 sources, reconcile drift and update the register. This is the highest-leverage work
+    because each consolidation closes 4-9 atoms at once.
+  blocking: Stage 3 (mechanical ingestion may reference these IDs)
+  sub_stages:
+  - sub_stage: 2a
+    name: Throughlines T-31..T-41 + meta-throughlines M-1..M-5 (cohesive block)
+    cluster_ids:
+    - T-36
+    - M-4
+    - T-31
+    - M-3
+    - M-1
+    - T-34
+    - T-32
+    - T-35
+    - T-33
+    - T-41
+    - T-38
+    - T-40
+    - M-5
+    - M-2
+    - T-37
+    - T-39
+    - T-09
+    cluster_count: 17
+    atom_count_in_clusters: 93
+    rationale: Throughline + meta-throughline structure is interrelated; partial consolidation would create register drift. Read all atoms in
+      cluster, reconcile, update references/throughlines_meta.md as a single coherent commit.
+    expected_commits: 1–2 (`[editorial]` for ED markers + `[compilation]` for throughlines_meta)
+  - sub_stage: 2b
+    name: PP-675 canon rectification cluster
+    cluster_ids:
+    - PP-675
+    rationale: PP-675 is referenced by 6 atoms across 3 sources (canon rectification patch). Verify it exists in patch_register_active.yaml; if
+      so, update propagation_map; if not, register it.
+    expected_commits: 1 (`[patch]` if new) or 0 (if already complete)
+  - sub_stage: 2c
+    name: Other PP clusters
+    cluster_ids:
+    - PP-508
+    - PP-674
+    - PP-632
+    rationale: PP-674, PP-540, PP-541, PP-508, PP-632 — each is a separate patch. Consolidate per-cluster into patch_register.
+    expected_commits: 3 (`[patch]` per cluster, only if new)
+  - sub_stage: 2d
+    name: ED-clusters (editorial decisions)
+    cluster_ids:
+    - ED-738
+    - ED-664
+    - ED-783
+    - ED-665
+    - ED-663
+    cluster_count: 5
+    rationale: ED-738, ED-664, ED-665, ED-783, ED-663 — for each, verify ledger entry; reconcile cross-source drift if any.
+    expected_commits: 1–5 (`[editorial]` per ED needing update)
+  jordan_decision_required: false
+  jordan_review_at_milestones: true
+  estimated_duration: medium — 26 cluster reads + register diffs
+- stage: 3
+  name: Per-source mechanical ingestion
+  goal: Route the 39 P1/P2 atoms NOT covered by cross-source clusters and NOT in solmund/session-logs into their declared target design paths.
+  blocking: Stage 6 archive
+  depends_on:
+  - Stage 2 (shared IDs reconciled first)
+  sub_stages:
+  - sub_stage: 3a
+    name: VALORIA_SESSION_2026-04-25_MASTER.md → ['session_logs/ (most already captured)']
+    source_file: VALORIA_SESSION_2026-04-25_MASTER.md
+    role: session_log
+    p1_p2_atom_count: 4
+    expected_commits: 1–2 (`[compilation]` design-doc updates)
+  - sub_stage: 3b
+    name: master_document_2026-04-25.md → ['designs/provincial/faction_*', 'designs/scene/*', 'canon/editorial_ledger.yaml']
+    source_file: master_document_2026-04-25.md
+    role: mechanical_design
+    p1_p2_atom_count: 10
+    expected_commits: 1–2 (`[compilation]` design-doc updates)
+  - sub_stage: 3c
+    name: threadwork_master.md → ['designs/threadwork/threadwork_v30.md']
+    source_file: threadwork_master.md
+    role: mechanical_design
+    p1_p2_atom_count: 2
+    expected_commits: 1–2 (`[compilation]` design-doc updates)
+  - sub_stage: 3d
+    name: valoria_master_document.md → ['designs/', 'canon/02_canon_constraints.md']
+    source_file: valoria_master_document.md
+    role: mechanical_design
+    p1_p2_atom_count: 15
+    expected_commits: 1–3 (`[compilation]` design-doc updates)
+  - sub_stage: 3e
+    name: valoria_master_consolidation.md → ['canon/editorial_ledger.yaml', 'designs/']
+    source_file: valoria_master_consolidation.md
+    role: consolidation
+    p1_p2_atom_count: 6
+    expected_commits: 1–2 (`[compilation]` design-doc updates)
+  - sub_stage: 3f
+    name: valoria_session_2026_04_25_master_consolidation.md → ['canon/patch_register*.yaml (PP-675)', 'canon/editorial_ledger.yaml (ED-783)']
+    source_file: valoria_session_2026_04_25_master_consolidation.md
+    role: session_log
+    p1_p2_atom_count: 1
+    expected_commits: 1–2 (`[compilation]` design-doc updates)
+  - sub_stage: 3g
+    name: valoria_master_analysis.md → ['designs/audit/', 'canon/editorial_ledger.yaml']
+    source_file: valoria_master_analysis.md
+    role: audit
+    p1_p2_atom_count: 1
+    expected_commits: 1–2 (`[compilation]` design-doc updates)
+  jordan_decision_required: false
+  estimated_duration: long — atom-level review + target-path commits across 3-6 design files
+- stage: 4
+  name: Audit + consolidation source verification
+  goal: For each P1/P2 atom in the audit and consolidation masters, verify the content is captured somewhere in canon. If missing, route to appropriate
+    target.
+  blocking: Stage 6 archive
+  depends_on:
+  - Stage 2 (most ED/PP/T/M references should be reconciled first)
+  sources_in_scope:
+  - master_consolidation.md
+  - valoria_master_consolidation.md
+  - valoria_master_analysis.md
+  actions:
+  - For each P1/P2 atom in ['master_consolidation.md', 'valoria_master_consolidation.md', 'valoria_master_analysis.md'], cross-reference content
+    claims against current canon state.
+  - 'Atoms whose content is fully captured: mark front-matter status=consolidated:verified-existing.'
+  - 'Atoms with new claims: route to appropriate canon target via [editorial] or [compilation] commit.'
+  expected_commits: variable — likely 0–5 depending on coverage gaps
+  jordan_decision_required: false
+  estimated_duration: medium — verification-heavy
+- stage: 5
+  name: Session-log verification skim
+  goal: Session logs contain index-of-decisions atoms (commit manifests, ED summaries). Treat as verification targets, NOT fresh content. For
+    each ID listed, confirm it exists in the appropriate register.
+  blocking: Stage 6 archive
+  depends_on:
+  - Stage 0 (verification report) + Stage 2 (clusters resolved)
+  sources_in_scope:
+  - VALORIA_SESSION_2026-04-25_MASTER.md
+  - valoria_session_2026_04_25_master_consolidation.md
+  - valoria_session_master_2026-04-25.md
+  p1_p2_atom_count: 17
+  actions:
+  - For each of the 17 P1/P2 session-log atoms, run an ID-presence check against the verification report from Stage 0.
+  - Report any IDs listed in session logs but missing from registers — these are the only items requiring action.
+  - 'Other session-log content: archive without ingestion (already in commit history).'
+  expected_commits: 0–3 (`[editorial]` or `[patch]` for any missing IDs)
+  jordan_decision_required: false
+  estimated_duration: short — automated ID diff
+- stage: 6
+  name: Archive atoms_pending
+  goal: Once all atoms are either consolidated or verified-skip, mark the staging folder closed.
+  blocking: null
+  depends_on:
+  - Stages 1–5 complete
+  options:
+  - 'Option A: Move references/atoms_pending/2026-04-25/ → references/atom_archive/2026-04-25/. Preserves provenance trail.'
+  - 'Option B: Delete atoms_pending entirely. Cleaner but loses traceability.'
+  - 'Option C: Update each atom front-matter with status=consolidated:<commit_oid> or status=skipped:<reason>. Preserves provenance with explicit
+    closure.'
+  jordan_decision_required: true
+  decision_points:
+  - Choose archive strategy A/B/C.
+  expected_commits: 1 (`[infrastructure]` archive move)
+  estimated_duration: short
+risks:
+- id: R1
+  risk: 'Editorial-path commits without proper [EDITORIAL: ED-NNN] marker'
+  mitigation: editorial_gate hook blocks commits to designs/npcs/, designs/world/, designs/arcs/gm_ref/, canon/03_ without markers. Plan honors
+    hook by gating Solmund through Stage 1 review.
+- id: R2
+  risk: Stale references_propagation when patch_register changes without propagation_map co-file update
+  mitigation: Hook enforces patch_register writes to include propagation_map.md. Plan flags PP-cluster sub-stages as patch+propagation co-commits.
+- id: R3
+  risk: Throughline drift if T-31..T-41 consolidated piecemeal across multiple commits
+  mitigation: Stage 2a treats throughline+meta-throughline as a single cohesive block. Single commit covering all T-NN/M-NN updates to throughlines_meta.md.
+- id: R4
+  risk: TC/CP/TD disambiguation ambiguity (943 TC occurrences, ~149 CP/TD per current next_action)
+  mitigation: Out of scope for this plan — already a tracked next_action. Stage 3 may surface additional instances; flag them for the disambiguation
+    pass rather than resolving here.
+- id: R5
+  risk: Session-log P1 atoms (commit manifests) misread as fresh content
+  mitigation: Caveat in _prioritization.md flags this. Stage 5 explicitly treats session-log P1 as verification targets, not ingestion targets.
+- id: R6
+  risk: Solmund review block exceeds Jordan reviewable size in single pass
+  mitigation: Stage 1 allows splitting solmund into thematic blocks (Di Cicco principle, voice registers, etc.) for incremental review.
+- id: R7
+  risk: Provenance loss if atoms_pending deleted before consolidation status fully tracked
+  mitigation: Stage 6 Option C (front-matter status updates) preserves traceability. Recommend C unless storage/cleanliness is the priority.
+effort_estimate:
+  commit_count_estimate:
+    minimum: 14
+    expected: 31
+    maximum: 57
+  session_count_estimate: 3–5 separate Claude sessions; bootstrap+context budget per session limits atom batch size
+  token_envelope_per_stage:
+    '0': small (<5k) — small register fetches + diff
+    '1': medium (10–30k) — 32 solmund atoms + design doc reads
+    '2': large (40–80k) — cluster reads across 26 clusters
+    '3': large (40–80k) — per-source mechanical work
+    '4': medium (15–30k) — verification-heavy
+    '5': small (<10k) — automated ID diff
+    '6': small (<5k) — archive move
+definition_of_done_per_stage:
+  '0': Verification report committed; no IDs unaccounted for.
+  '1': All 32 solmund atoms either committed to designs/world/ + designs/npcs/ with [EDITORIAL] markers, or marked rejected.
+  '2': All 26 cross-source ID clusters reconciled into their target registers; cluster atoms marked status=consolidated.
+  '3': All P1/P2 atoms in mechanical sources committed to their declared target areas or marked verified-existing.
+  '4': All P1/P2 atoms in audit/consolidation sources verified against canon; gaps closed.
+  '5': All session-log P1/P2 atoms reduced to ID-presence diff; any missing IDs registered.
+  '6': atoms_pending/2026-04-25 archived per chosen strategy; folder closed.
