@@ -1,32 +1,84 @@
+# Canonical Sources
+# Tracks which docs are authoritative for which systems.
+# Entries here supersede any other documentation they conflict with.
+
 sources:
+  # ── Struck canon (2026-04-19) ──────────────────────────────────────────
+  # The following mechanics are NO LONGER CANONICAL. See canon/supersession_register.yaml.
+  # Any doc referencing these mechanics has [SUPERSEDED 2026-04-19] marker at top of file.
   struck:
-  - id: VTM
-    name: Vaynard Thread Mastery
-    reason: Placeholder mechanic with no canonical advancement rule. Referenced in victory paths + Cultural Reformation pool but never defined. Struck per Jordan 2026-04-19.
-    eds:
-    - ED-706
-    replacement: Pending editorial rewrite of Varfell victory paths.
-    commits:
-    - f7aa0ed
-    - 297f892
-    - 13b8f30
-    - 613ebf9
-    - dc13a75
-    - pending-PP-664
-  - id: PP-650
-    name: Cultural Reformation
-    reason: Varfell Colonist card territorial conversion action. Incompatible with Vaynard's military-conqueror identity (Reinhardt von Lohengramm parallel). Vaynard does not convert populations ideologically.
-      Varfell expansion is purely military. Struck per Jordan 2026-04-19.
-    eds:
-    - ED-707
-    replacement: Varfell expands via military conquest only. Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions available to Varfell first
-      due to southern TS baseline + RM proximity, NOT as BG-layer bonuses.
-    commits:
-    - 297f892
-    - 13b8f30
-    - 613ebf9
-    - dc13a75
-    - pending-PP-664
+    - id: "VTM"
+      name: "Vaynard Thread Mastery"
+      reason: "Placeholder mechanic with no canonical advancement rule. Referenced in victory paths + Cultural Reformation pool but never defined. Struck per Jordan 2026-04-19."
+      eds: [ED-706]
+      replacement: "Pending editorial rewrite of Varfell victory paths."
+      commits: [f7aa0ed, 297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
+    - id: "PP-650"
+      name: "Cultural Reformation"
+      reason: "Varfell Colonist card territorial conversion action. Incompatible with Vaynard's military-conqueror identity (Reinhardt von Lohengramm parallel). Vaynard does not convert populations ideologically. Varfell expansion is purely military. Struck per Jordan 2026-04-19."
+      eds: [ED-707]
+      replacement: "Varfell expands via military conquest only. Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer bonuses."
+      commits: [297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
+
+# placeholder — additional sources pending population
+
+# ── PP-665 Name Resolution (2026-04-19) ──────────────────────────────────
+# Maret Vossen renamed to Yrsa Vossen (RM leader). Maret Uln (Varfell) unchanged.
+# Forename collision resolved. See canon/patch_register_active.yaml PP-665.
+
+# ── PP-666 New Systems (2026-04-19) ──────────────────────────────────────
+# Three new mechanical systems added as PROVISIONAL specs. See ED-710, ED-711, ED-712.
+# - Settlement adjacency: designs/territory/settlement_adjacency_v30.md
+# - Fractional province ownership: designs/provincial/fractional_province_ownership_v30.md
+# - Faction succession split: designs/provincial/faction_succession_split_v30.md
+# Status: PROVISIONAL — pending smoke-test before CANONICAL.
+
+# ── PP-667 Gap Sweep (2026-04-19) ────────────────────────────────────────
+# 3 real audit gaps resolved + 26 OPEN ITEMS across 6 design docs swept.
+# See designs/audit/gap_resolution_2026-04-19.md + ED-713, ED-714, ED-715.
+# Editorial ledger archival batch: ED-542..ED-658 moved to archive_601_800.
+
+# ── PP-668 OPEN ITEMS propagation (2026-04-19) ───────────────────────────
+# Completes PP-667 propagation. Source-doc OPEN ITEMS tables now show final
+# status for all 34 previously-open items.
+
+# ── PP-670 Label Audit (2026-04-19) ──────────────────────────────────────
+# See designs/audit/label_audit_2026-04-19.md + ED-716.
+# One correction: threadwork_v25_historical.md banner added.
+
+# ── PP-671 Meta-throughlines (2026-04-19) ────────────────────────────────
+# 5 meta-throughlines extracted from throughlines_complete.md.
+# Evaluative criteria for design proposals. See references/throughlines_meta.md.
+# ED-717 flags Hafenmark/Löwenritter/RM institutional-attractor throughline gap.
+# Session B: Niflhel dissolved (conflict_architecture_proposal). T-10 struck. NPC §2.12/§8.8/§8.8a struck.
+# Session B: Löwenritter graduated autonomy replaces Coup Counter (conflict_architecture_proposal).
+
+# ── PP-672 Throughlines Framework (2026-04-19) ───────────────────────────
+# references/throughlines_meta.md (skeleton) + references/throughlines_meta_infill.md (infill)
+# are the canonical vetting authority for all Valoria work.
+# Five tiers: Ω (intent) / Μ (modes) / М (meta-throughlines) / Τ (throughlines) / Q (quality).
+# Supersedes PP-671 meta-throughlines doc. See ED-718.
+
+# ── PP-673 Terminology cleanup (2026-04-19) ──────────────────────────────
+# "skeleton" now strictly refers to canonical rulesets in mechanical-spec-only
+# style (banner: SKELETON — mechanical spec only). Auto-generated heading
+# navigation companions renamed to *_index.md; tool renamed to doc_index_gen.py.
+# See ED-719 and PP-673.
+
+# ── PP-674 Framework enforcement + tier N (2026-04-19) ───────────────────
+# valoria_hooks.vetting_gate enforces vetting: blocks on Class A/B patch entries.
+# Tier N (Necessity) added: subject-grounding check against Renaissance-era
+# political-leadership dynamics. 4 new Failure Lexicon terms (fantasy imposition,
+# duplicate coverage, edge case mechanic, abstractable).
+# See ED-720 and references/throughlines_meta.md §0, §8.5, §10-11.
+# Session C: Tensions Deck (params/bg/tensions_deck.md) and Royal Assassination (params/bg/royal_assassination.md) specs extracted from conflict_architecture_proposal.
+
+
+# ── Full-Stack System → Canonical Source Map (2026-04-19) ────────────────
+# Populated for sim_gate(full_stack) readiness. Each system maps to its
+# authoritative design_doc and (where applicable) its params file. The sim
+# verification ledger must cite these paths. See valoria_hooks.SIM_CANONICAL_PRESETS.
+
 systems:
   core_engine:
     design_doc: designs/architecture/complete_systems_reference.md
@@ -67,7 +119,7 @@ systems:
     design_doc: designs/provincial/military_layer_v30.md
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
-    note: Renamed from tc_political_redesign_v30 — same doc, CI is Theocracy Counter's politically-active form.
+    note: "Renamed from tc_political_redesign_v30 — same doc, CI is Theocracy Counter's politically-active form."
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
   settlement_layer:
@@ -76,7 +128,9 @@ systems:
     design_doc: designs/architecture/campaign_architecture_v30.md
   derived_stats:
     design_doc: params/factions/stats_1_7_scale.md
-    note: Derived faction stats (1-7 scale). Primary source for Mandate/Influence/Wealth/Military/Intel/Stability starting values and progression rules.
+    note: "Derived faction stats (1-7 scale). Primary source for Mandate/Influence/Wealth/Military/Intel/Stability starting values and progression rules."
+
+# ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/npcs/npc_behavior_v30.md
     params: params/factions/npc_stance_triangles.md
@@ -90,38 +144,96 @@ systems:
     source: conflict_architecture_proposal.md
   conflict_architecture:
     design_doc: designs/architecture/conflict_architecture_proposal.md
-    note: CANON 2026-04-18. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal assassination fuse.
+    note: "CANON 2026-04-18. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal assassination fuse."
   throughlines_framework:
     design_doc: references/throughlines_meta.md
     infill: references/throughlines_meta_infill.md
-    note: Canonical vetting authority for all proposals (PP-672, PP-674).
+    note: "Canonical vetting authority for all proposals (PP-672, PP-674)."
+
+# ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
     design_doc: designs/world/ms_trajectory_v1.md
-    note: 'Canonical for peninsula-wide Mending Stability values at specific historical dates. D-1 (12y emergence) + PR-3 (MS terminology) resolved 2026-04-20. Two provisional elements: colonial revolts
-      §8 gap 1; Himmelenger R-7 §8 gap 2. ED-722/ED-731.'
+    note: "Canonical for peninsula-wide Mending Stability values at specific historical dates. D-1 (12y emergence) + PR-3 (MS terminology) resolved 2026-04-20. Two provisional elements: colonial revolts §8 gap 1; Himmelenger R-7 §8 gap 2. ED-722/ED-731."
+
+# ── Foundations amendments (canonical philosophy) ──────────────────────
   leap_mechanism:
     design_doc: canon/02_foundations_amendment_leap_mechanism.md
-    note: Canonical for Leap suspension dynamics, knot formation, and operation-type taxonomy (restorative/manipulative/destructive). Supplements canon/01 Amendments 1-4. ED-730.
+    note: "Canonical for Leap suspension dynamics, knot formation, and operation-type taxonomy (restorative/manipulative/destructive). Supplements canon/01 Amendments 1-4. ED-730."
   self_rendering:
     design_doc: canon/01_foundations_amendment_self_rendering.md
-    note: Canonical for three-layer being-persistence, Leap definition, Coherence definition, Coherence 0 TS-gated outcomes.
+    note: "Canonical for three-layer being-persistence, Leap definition, Coherence definition, Coherence 0 TS-gated outcomes."
+
+# ────────────────────────────────────────────────────────────────────────
+# All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
+# verification ledger is built at /home/claude/sim_verification_ledger.json
+# citing these paths. See valoria_hooks.sim_gate() for requirements.
+
+# ── D-3 + D-6 + D-7 propagation (2026-04-22) ─────────────────────────────
+# D-3 (ED-724): Solmund dissolution site — specific, contested, off-map.
+#   Propagated canon/03_canonical_timeline.md §Solmund.
+# D-6 (ED-727): Lenneth TS pathway — slow scholarly loosening, SA-gated,
+#   ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md.
+# D-7 (ED-728): Valn origin — pre-Altonian, ambiguous, possibly pre-Einhir.
+#   Propagated designs/arcs/gm_ref/arcs_10_18.md §Terminology (L17) + ED-NEW-7 row.
+# Last touched: 2026-04-25 (ED-739/740/741/742 — Wager system commit)
+# Last touched: 2026-04-25 (ED-743/744 — Strain trigger inversion fix)
+# Last touched: 2026-04-25 (ED-745/746/747 — Scene Slate spec-fixes)
+# Last touched: 2026-04-25 (ED-748/749/750 — scale_transitions spec-fixes; ED-739..742 archived)
+# Last touched: 2026-04-25 (ED-751/752 — faction_layer Sacred Veto + NPC vote cleanup)
+# Last touched: 2026-04-25 (ED-753/754 — mass_battle Volley docs + officer death calibration)
+# Last touched: 2026-04-25 (ED-755 — npc_behavior cross-faction Outreach floor; ED-743/744 archived)
+# Last touched: 2026-04-25 (ED-756 — TC disambiguation glossary notes)
+# Last touched: 2026-04-25 (ED-757 — Niflhel drift table row cleanup)
+# Last touched: 2026-04-25 (ED-758 — Cardinal naming reconciled; ED-745..750 archived)
+# Last touched: 2026-04-25 (ED-704 resolved — Seizure Uncontrolled exclusion)
+# Last touched: 2026-04-25 (ED-705 resolved — Cohesion → Discipline derivation clarified)
+# Last touched: 2026-04-25 (ED-665 resolved — Succession Contest specified as Grand Contest variant)
+# Last touched: 2026-04-25 (ED-712 resolved — RM Settlement Emergence pathway; ED-665/704/705 archived)
+# Last touched: 2026-04-25 (ED-664 resolved — Advisor-Principal Confidentiality Boundary)
+# Last touched: 2026-04-25 (ED-662 resolved — Elske residency null-intersection clarified)
+# Last touched: 2026-04-25 (ED-661/669 resolved + 6 entries archived)
+# Last touched: 2026-04-25 (ED-759/760/761/762 stress-test fixes)
+# Last touched: 2026-04-25 (ED-763 — Arc E post-Wager Scar threshold tolerance)
+# Last touched: 2026-04-25 (ED-764 — Niflhel STRUCK params propagation)
+# Last touched: 2026-04-25 (ED-765/766 — Officer death scope + Step 4 capitalization heuristic)
+# Last touched: 2026-04-25 (ED-767 — PROVISIONAL marker cleanup mass_battle)
+# Last touched: 2026-04-25 (ED-768 — orphaned PROVISIONAL markers documented)
+# Last touched: 2026-04-25 (ledger maintenance — 13 entries archived)
+# Last touched: 2026-04-25 (ED-769 — RS→MS residual cleanup strategic_layer_v30_infill)
+# Last touched: 2026-04-25 (ED-770 — numeric bounds audit closure)
+# Last touched: 2026-04-25 (ED-771 — cross-reference audit fixes, 4 broken refs)
+# Last touched: 2026-04-25 (ED-772 — Heresy Investigation Lifecycle in social_contest §7.3)
+# Last touched: 2026-04-25 (ED-773 — Knot Lifecycle specified)
+# Last touched: 2026-04-25 (ED-774 — Approach Training canonical + 5 archived)
+# Last touched: 2026-04-25 (ED-775 — Wrong-Style Penalty extended)
+# Last touched: 2026-04-25 (ED-776 — Demotion Magnitude specified)
+# Last touched: 2026-04-25 (ED-777 — caste-transgressive PC Conviction mechanism + cross-ref fixes)
+# Last touched: 2026-04-25 (ED-778 — Wager Obligation edge cases)
+# Last touched: 2026-04-25 (ED-778 cross-ref fix: generational_transition not character_histories §Heir)
+# Last touched: 2026-04-25 (ED-779 — Inspiration mechanic propagated)
+# Last touched: 2026-04-25 (ED-780 — Bonds ≥ 5 explicit prerequisite + 6 archived)
+# Last touched: 2026-04-25 (ED-781 — Coup Counter STRUCK, Graduated Autonomy canonical)
+# Last touched: 2026-04-25 (ED-781 — npc_priority_trees Coup Counter migrations)
+# Last touched: 2026-04-25 (ED-782 — glossary TC→CI rename)
+  # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
+  # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   solmund_voice:
     design_doc: designs/world/solmund_voice_v30.md
     status: provisional
-    added: 2026-04-25 Stage 4
+    added: '2026-04-25 Stage 4'
   solmund_philosophy:
     design_doc: designs/world/solmund_philosophy_v30.md
     status: provisional
-    added: 2026-04-25 Stage 4
+    added: '2026-04-25 Stage 4'
   solmund:
     design_doc: designs/world/solmund_v30.md
     status: provisional
-    added: 2026-04-25 Stage 4
+    added: '2026-04-25 Stage 4'
   solmund_artifacts:
     design_doc: designs/world/solmund_artifacts_v30.md
     status: provisional
-    added: 2026-04-25 Stage 4
+    added: '2026-04-25 Stage 4'
   rwce_mechanism:
     design_doc: designs/scene/rwce_mechanism_v30.md
     status: provisional
-    added: 2026-04-25 Stage 4
+    added: '2026-04-25 Stage 4'
