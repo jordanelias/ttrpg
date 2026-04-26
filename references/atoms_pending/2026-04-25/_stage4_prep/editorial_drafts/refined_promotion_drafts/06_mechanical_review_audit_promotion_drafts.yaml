@@ -1,0 +1,440 @@
+generated: '2026-04-25'
+topic: 06_mechanical_review_audit
+purpose: Pre-drafted register entries for MENTIONED IDs in this topic. Each entry is a starting point — Stage 4 must fill [NEEDS-DECISION] fields
+  and refine [PROPOSED:] descriptions before [editorial] / [patch] commit.
+count: 27
+drafts:
+- id: PP-233
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: 7.1 Core Formula (PP-233)  Pool = min(Size, Command) + Command]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/provincial/mass_battle_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__43__7-1-core-formula-pp-233
+  canon_mentions:
+  - references/propagation_log.md
+  - designs/provincial/mass_battle_v30.md
+  - references/glossary.md
+  - params/mass_combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-238
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: | ✓ |  ⚠ **STALE-03: PP-238 vs PP-294 (Feint).** PP-238 says full pool to Off, Def = 0]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/npcs/npc_behavior_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__16__3-6-actions-14
+  canon_mentions:
+  - params/factions/stats_1_7_scale.md
+  - designs/npcs/npc_behavior_v30.md
+  - params/combat.md
+  - params/bg/npc_priority_trees.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-239
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: Tiebreak: Att → Agi → GM/coin (PP-239)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - params/combat.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__12__3-2-initiative
+  canon_mentions:
+  - params/combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-246
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - params/factions/stats_1_7_scale.md
+  - params/core.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__03__1-1-die-face-rule-d10
+  canon_mentions:
+  - params/factions/stats_1_7_scale.md
+  - params/core.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-251
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: 7.3 Key Mechanics  **Discipline Degradation (PP-251):** Fires when BOTH: Size loss > Discipline AND this unit''s loss
+    > opponent''s by ≥ 1]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/provincial/mass_battle_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__45__7-3-key-mechanics
+  canon_mentions:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-285
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: | ✓ | | Rescue (PP-285/406/407) | N Off dice contest attacker]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/audit/valoria_systems_workplan.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__16__3-6-actions-14
+  canon_mentions:
+  - params/factions_personal.md
+  - designs/audit/valoria_systems_workplan.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-294
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: 3.6 Actions (14)  | Action | Key Rule | N | |--------|----------|---| | Strike | Standard Off vs Def → damage | ✓ |
+    | Feint (PP-294) | Commit N dice (min 3)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/audit/valoria_systems_workplan.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__16__3-6-actions-14
+  canon_mentions:
+  - params/core.md
+  - designs/audit/valoria_systems_workplan.md
+  - params/combat.md
+  - params/board_game.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-402
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: 15.3 TC Competitive Formula  PP-402 (unconditional passive +1/season) repealed]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/scene/conviction_track_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__79__15-3-tc-competitive-formula
+  canon_mentions:
+  - references/propagation_log.md
+  - designs/scene/conviction_track_v30.md
+  - params/factions/stats_1_7_scale.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-508
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: Consider flanking negation?  **Splitting (PP-508):** Dominates concentration +9% to +45%]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/provincial/mass_battle_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items
+  - valoria_master_document__45__7-3-key-mechanics
+  canon_mentions:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-512
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: Crown Treaty (PP-512–523) = most detailed single action]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/provincial/victory_v30.md
+  - designs/provincial/faction_layer_v30.md
+  - designs/provincial/peninsular_strain_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__68__13-2-faction-toolkits-not-alternate-endpoints
+  canon_mentions:
+  - designs/provincial/victory_v30.md
+  - designs/provincial/faction_layer_v30.md
+  - params/bg/core.md
+  - designs/provincial/peninsular_strain_v30.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-606
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: 5.6 Substrate Saturation Counter (PP-606)  ≥3 ops/battle turn → +1 Ob/+1 Coherence (cap +2)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - params/threadwork.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__31__5-6-substrate-saturation-counter-pp-606
+  canon_mentions:
+  - params/threadwork.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-607
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: 5.9 Dissonance (PP-607/610)  Spirit TN 7 vs Factor (1–4)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - params/threadwork.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__34__5-9-dissonance-pp-607-610
+  canon_mentions:
+  - params/threadwork.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-632
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: 5.7 Knots (PP-632)  Pool = (Bonds × 2) + 3]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/scene/derived_stats_v30.md
+  - designs/audit/valoria_systems_workplan.md
+  - designs/threadwork/threadwork_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__32__5-7-knots-pp-632
+  canon_mentions:
+  - designs/scene/derived_stats_v30.md
+  - params/bg/faction_actions.md
+  - params/core.md
+  - designs/audit/valoria_systems_workplan.md
+  - designs/threadwork/threadwork_v30.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-633
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: Simultaneous Rupture cap (PP-633): ≤ 75% Composure]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - params/core.md
+  - params/threadwork.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__32__5-7-knots-pp-632
+  canon_mentions:
+  - params/core.md
+  - params/threadwork.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-634
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: | ✓ | | Escape (PP-634) | Agi TN 7 Ob 1]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - params/combat.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__16__3-6-actions-14
+  canon_mentions:
+  - params/combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-642
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: 16.7 NPC Recruitment (PP-642)  Four-step: Identify (Disp +4/+5 = not recruitable) → Approach (Cha pool, Ob = floor(highest
+    Disp / 2)+1) → Offer (one incentive, modifies Ob) → Resolution (Failure = faction warned; Partial = +1 Disp, retry −1 Ob; Success = joins;
+    OW = joins + intel)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/npcs/npc_behavior_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__88__16-7-npc-recruitment-pp-642
+  canon_mentions:
+  - references/propagation_log.md
+  - designs/npcs/npc_behavior_v30.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-661
+  date: '2026-04-25'
+  severity: P3
+  description: '[PROPOSED: 16.9 Roster Tracking (PP-661)  Three tiers: Active (~35 cap, full state tracking), Passive (~30, compact), Background
+    (unlimited, identity only)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/audit/throughlines_transitions_hierarchy.md
+  - designs/territory/settlement_layer_v30.md
+  - designs/npcs/npc_behavior_v30.md
+  - designs/provincial/baralta_crown_claim_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__90__16-9-roster-tracking-pp-661
+  canon_mentions:
+  - references/propagation_log.md
+  - designs/audit/throughlines_transitions_hierarchy.md
+  - designs/territory/settlement_layer_v30.md
+  - designs/npcs/npc_behavior_v30.md
+  - designs/provincial/baralta_crown_claim_v30.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-684
+  date: '2026-04-25'
+  severity: P2
+  description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/scene/derived_stats_v30.md
+  - designs/scene/fieldwork_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_master_document__39__6-4-socializing-disposition
+  canon_mentions:
+  - references/propagation_log.md
+  - designs/scene/derived_stats_v30.md
+  - params/core.md
+  - designs/scene/fieldwork_v30.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: ED-129
+  date: '2026-04-25'
+  description: '[PROPOSED: S** ⚠ **DECISION-04 (ED-129 OPEN):** Ranged weapons NOT mapped to this matrix]'
+  status: proposed
+  severity: P2
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items
+  - valoria_master_document__13__3-3-weapon-system-3-binary-axes
+  canon_mentions:
+  - params/combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: ED-131
+  date: '2026-04-25'
+  description: '[PROPOSED: However, **ED-131 (OPEN): values are unplaytested design-intent numbers.** Cannot confirm Robustness until simulation
+    verifies lethality curves]'
+  status: proposed
+  severity: P2
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items
+  - valoria_master_document__106__ii-5-rating-corrections-applied
+  - valoria_master_document__13__3-3-weapon-system-3-binary-axes
+  canon_mentions:
+  - params/combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: ED-200
+  date: '2026-04-25'
+  description: '[PROPOSED: S** ✓ ED-200/201 resolved all ambiguities.]'
+  status: proposed
+  severity: P2
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__15__3-5-wound-system
+  canon_mentions:
+  - references/propagation_log.md
+  - params/combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: ED-295
+  date: '2026-04-25'
+  description: '[PROPOSED: N** ✓ **R** ⚠ **ED-295 (OPEN, P1-BLOCKER):** CLASH stalls at median]'
+  status: proposed
+  severity: P2
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items
+  - valoria_master_document__22__4-3-interaction-types
+  canon_mentions:
+  - references/propagation_log.md
+  - params/contest.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: ED-297
+  date: '2026-04-25'
+  description: '[PROPOSED: ⚠ **ED-297 (OPEN):** AMPLIFY (coalition) dominates CLASH (solo) at ~5 movement/exchange vs ~0]'
+  status: proposed
+  severity: P2
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items
+  - valoria_master_document__22__4-3-interaction-types
+  canon_mentions:
+  - params/contest.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: ED-618
+  date: '2026-04-25'
+  description: '[PROPOSED: 16.2a Torben Emergence Window (ED-618)  First faction to reach Disposition ≥ +2 before Season 8 sets his primary Conviction]'
+  status: proposed
+  severity: P2
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__83__16-2-named-npc-profiles-12-core
+  canon_mentions:
+  - designs/npcs/npc_behavior_v30.md
+  - canon/editorial_ledger_index.md
+  - designs/npcs/npc_character_analyses_v30.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: ED-670
+  date: '2026-04-25'
+  description: '[PROPOSED: 16.8 Heresy Jurisdiction (ED-670)  Jurisdiction varies by territory controller: Full in Church, permitted in Crown
+    (with cooperation), blocked in Hafenmark (Sovereign Authority Doctrine), tolerated at +1 Ob in Varfell, none in Uncontrolled]'
+  status: proposed
+  severity: P3
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__89__16-8-heresy-jurisdiction-ed-670
+  canon_mentions:
+  - references/throughlines_complete.md
+  - designs/npcs/npc_behavior_v30.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: ED-694
+  date: '2026-04-25'
+  description: '[PROPOSED: S** ⚠ Stamina interaction depends on ED-694 formula being canonical (End × 5 with armour as per-action drain modifier,
+    not base Stamina reduction)]'
+  status: proposed
+  severity: P3
+  source: atoms_pending/2026-04-25 promotion (Stage 4 prep)
+  evidence_atoms:
+  - valoria_master_document__14__3-4-armour
+  canon_mentions:
+  - designs/scene/derived_stats_v30.md
+  - designs/provincial/mass_battle_v30.md
+  - params/core.md
+  - designs/scene/social_contest_v30.md
+  - params/contest.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+- id: TC-01
+  description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+  evidence_atoms:
+  - valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items
+  canon_mentions:
+  - designs/scene/fieldwork_v30.md
+  register_target_unknown: true
+  kind: TC
+refined_at: '2026-04-25'
+refinement_notes: 'Severity derived from priority-bucket of evidence_atoms. Affects (PP) derived from canon_mentions. Parent_meta (T/M) derived
+  from throughlines_meta_infill table row when present. Description cleaned (markdown markers stripped, trimmed to coherent sentence). Items still
+  requiring Jordan: severity refinement, finding_id (PP), parent_meta (T/M when no table row), specific description wording.'

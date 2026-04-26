@@ -1,0 +1,44 @@
+generated: '2026-04-25'
+topic: 10_session_log_index
+purpose: Pre-drafted register entries for MENTIONED IDs in this topic. Each entry is a starting point — Stage 4 must fill [NEEDS-DECISION] fields
+  and refine [PROPOSED:] descriptions before [editorial] / [patch] commit.
+count: 2
+drafts:
+- id: PP-195
+  date: '2026-04-25'
+  severity: P1
+  description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/provincial/mass_battle_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_session_2026-04-25_master__01__section-1-commit-manifest-chronological
+  canon_mentions:
+  - params/factions/stats_1_7_scale.md
+  - designs/provincial/mass_battle_v30.md
+  - params/bg/core.md
+  - canon/editorial_ledger_archive.yaml
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+- id: PP-197
+  date: '2026-04-25'
+  severity: P1
+  description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+  finding_id: '[NEEDS-DECISION]'
+  source: atoms_pending/2026-04-25 promotion
+  affects:
+  - designs/threadwork/threadwork_v30.md
+  status: proposed
+  evidence_atoms:
+  - valoria_session_2026-04-25_master__04__section-4-stress-tests-run
+  canon_mentions:
+  - designs/threadwork/threadwork_v30.md
+  - params/mass_combat.md
+  severity_reasoning: derived from highest-priority evidence atom bucket
+  affects_reasoning: derived from canon_mentions; verify each is the right propagation target
+refined_at: '2026-04-25'
+refinement_notes: 'Severity derived from priority-bucket of evidence_atoms. Affects (PP) derived from canon_mentions. Parent_meta (T/M) derived
+  from throughlines_meta_infill table row when present. Description cleaned (markdown markers stripped, trimmed to coherent sentence). Items still
+  requiring Jordan: severity refinement, finding_id (PP), parent_meta (T/M when no table row), specific description wording.'
