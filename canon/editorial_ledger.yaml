@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 742
+# next_id: 743
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
@@ -67,3 +67,9 @@ entries:
     description: "TC→CI + RS→MS abbreviation disambiguation in worldbuilding_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
     status: resolved
     severity: P3
+
+  - id: ED-742
+    date: 2026-04-26
+    description: "TC→CI disambiguation sweep complete. ~1,543 TC→CI across 100+ files (designs, params, tests, canon). RS→MS applied to designs/params (263 instances). Alias registry updated: theocracy_counter → church_influence, collision table TC entry marked resolved. Numeric bounds report reviewed: all 14 flagged stats = legitimate or false positives, no drift."
+    status: resolved
+    severity: P1

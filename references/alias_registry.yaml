@@ -140,15 +140,15 @@ world_clocks:
     category: clock
     range: "100->0"
     loss_threshold: "0 = The Rupture (campaign ends)"
-  theocracy_counter:
-    canonical: "Theocracy Counter"
-    abbreviations: ["TC"]
+  church_influence:
+    canonical: "Church Influence"
+    abbreviations: ["CI"]
     standalone_ok: false
-    collision_note: "TC also historically meant Conviction Track (debate). Never use TC alone — write full term."
     category: clock
     range: "0-100"
     loss_threshold: "65 = Church Holy State (BG)"
-    note: "Triggers territorial seizure at 60."
+    note: "Triggers territorial seizure at 60. Renamed from Theocracy Counter (TC) per ED-782. CI is unambiguous."
+    legacy: ["Theocracy Counter", "TC"]
   institutional_pressure:
     canonical: "Institutional Pressure"
     abbreviations: ["IP"]
@@ -508,9 +508,10 @@ modes:
 collision_table:
   tc:
     abbreviation: "TC"
-    meaning_a: "Theocracy Counter (Church faction clock, 0-100)"
-    meaning_b: "Conviction Track (Debate position tracker, 0-10)"
-    resolution: "Write full term always."
+    meaning_a: "Church Influence (CI) — renamed from Theocracy Counter per ED-782"
+    meaning_b: "Conviction Track (CT) — debate position tracker, 0-10"
+    resolution: "RESOLVED: TC no longer used. Church Influence = CI. Conviction Track = CT. Disambiguation sweep completed 2026-04-26."
+    status: resolved
   cp:
     abbreviation: "CP"
     meaning_a: "Character Point (advancement currency) — CURRENT"

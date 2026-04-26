@@ -3,6 +3,24 @@
 # attached to named mechanical terms. Each entry shows all observed values per name
 # and flags when multiple distinct values appear across multiple files.
 
+# Review: 2026-04-26 — All 14 flagged stats assessed.
+# Result: No actual drift. Details:
+#   coherence: legitimate multi-threshold (10=full, ≤4=Fragmented, 0=catastrophic)
+#   discipline: legitimate (0=loss, 3=threshold)
+#   evidence_track: legitimate tier thresholds (3/4/5)
+#   institutional_pressure: legitimate milestones (20/30/60/75)
+#   mandate: legitimate (0=loss of control, 4=threshold)
+#   mending_stability: legitimate multi-threshold (0/10/20/40/50/60 + 72 BG start)
+#   momentum: legitimate (range 0-4, gain=1)
+#   public_instability: legitimate tiers (3/4)
+#   rendering_stability: naming artifact — now mending_stability (ED-731)
+#   the: false positive (scanner noise)
+#   theocracy_counter: naming artifact — now church_influence (ED-782); legitimate milestones
+#   thread_sensitivity: legitimate tier thresholds (0/20/30/50)
+#   thread_tension: legitimate thresholds (40/50)
+#   ttrpg: false positive (scanner noise)
+# Status: REVIEWED — no action required. Regenerate after next collator run.
+
 # Not every 'conflict' is drift: same-named stat can have multiple legitimate thresholds
 # (e.g., Coherence 10 at start, <=4 Fragmented, <=3 further effects). Manual triage needed.
 
