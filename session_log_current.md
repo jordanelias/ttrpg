@@ -44,5 +44,3 @@ notes:
   - "RS = Rhetorical Style is NOT in the alias_registry — needs entry added if it's a canonical term"
   - "Numeric bounds report reviewed inline (review header added). Regenerate after next collator run."
   - "Maret disambiguation was already decision-resolved (PP-665) but propagation was incomplete — now fixed in 15 active files"
-
-# RS sweep test
