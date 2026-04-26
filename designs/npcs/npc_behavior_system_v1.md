@@ -1,4 +1,4 @@
-<!-- [EDITORIAL: PP-665 — Maret Vossen → Yrsa Vossen rename (2026-04-19). No mechanical changes; cosmetic rename to resolve forename collision with Maret Uln.] -->
+<!-- [EDITORIAL: PP-665 — Yrsa Vossen → Yrsa Vossen rename (2026-04-19). No mechanical changes; cosmetic rename to resolve forename collision with Maret Uln.] -->
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: SUPERSEDED — canonical doc is designs/systems/npc_behavior_v30.md (editorial batch acceptance 2026-04-17). Retained as historical reference.
 ## Date: 2026-04-13
@@ -824,3 +824,5 @@ When a Zoom In Contest successfully targets an NPC's Resonant Style:
 | references/propagation_map.md | Cross-references to contest, factions, threadwork, core |
 
 *End of document.*
+
+[EDITORIAL: ED-743 — Maret Vossen → Yrsa Vossen per PP-665.]
