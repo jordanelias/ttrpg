@@ -10,7 +10,7 @@
 Test IDs: AUDIT-D-02 / SIM-D-05
 Mechanics: Full debate system v1.5 + Thread operations in all temporal axes during debate
 Mode: TTRPG + Hybrid + Board Game (all three) | Temporal: PAST, PRESENT, FUTURE, CROSS
-Tracks: TC, Composure, Concentration, RS, Coherence, Debate Fatigue
+Tracks: CI, Composure, Concentration, RS, Coherence, Debate Fatigue
 Factions: Church, Hafenmark, Crown, Varfell, Restoration
 NPCs: Himlensendt, Baralta, Klapp, Maret Uln, Generic practitioners
 Archetypes: Institutional authority, legalist, practitioner-orator, BG coalition delegate
@@ -28,15 +28,15 @@ Archetypes: Institutional authority, legalist, practitioner-orator, BG coalition
 | FA-02 | Concentration floor 0 | ✓ PASS | PP-102 applied. |
 | FA-03/04 | Strain min 1 | ✓ PASS | PP-103 applied. |
 | FA-05 | effective_margin_CLASH = floor(margin × weight × 1.0) | ✓ PASS | |
-| FA-06 | TC movement = effective_margin − resistance, min 0 | ✓ PASS | |
+| FA-06 | CI movement = effective_margin − resistance, min 0 | ✓ PASS | |
 | FA-07 | DIVERGE negative successes → treated as 0 | ✓ PASS | PP-111. |
 | FA-NEW-01 | BG effective_vote = floor(net × genre_weight) | **WARN P2:** Orientation weight not applied in BG formula. TTRPG uses genre × orientation. BG drops orientation. Acceptable abstraction but undocumented. Flag for design note. | PP-119 |
-| FA-NEW-02 | Hybrid TC offset cap ±2 | ✓ PASS | Clean boundary. |
+| FA-NEW-02 | Hybrid CI offset cap ±2 | ✓ PASS | Clean boundary. |
 | FA-NEW-03 | Pre-debate prep: Attunement + History, TN7/8/6, Ob1 | ✓ PASS | No edge case at Attunement=0 (pool min 1D per params_core). |
 | FA-NEW-04 | Coalition Concentration: only Lead depletes | ✓ PASS | Non-leads unchanged per exchange. |
 | FA-NEW-05 | BG vote resistance: base 0 + up to +2 from Stability≥6 Abstains | ✓ PASS | Cap explicit. |
 | FA-NEW-06 | Debate Fatigue: consumed after first social roll | ✓ PASS | PP-117 clarified. |
-| FA-NEW-07 | Total Victory: TC≥9 or ≤1 | **FLAG P3:** "Total Victory" is a named state but §6.8 Untested Items list still refers to old open items not updated for gap-fills. §6.8 and §6.9 are now stale — they list items as "no procedure exists" that have been resolved in §§6.11–6.15. | PP-119 cleanup |
+| FA-NEW-07 | Total Victory: CI≥9 or ≤1 | **FLAG P3:** "Total Victory" is a named state but §6.8 Untested Items list still refers to old open items not updated for gap-fills. §6.8 and §6.9 are now stale — they list items as "no procedure exists" that have been resolved in §§6.11–6.15. | PP-119 cleanup |
 
 ## AUDIT Mode D — Gap Detection (v1.5)
 
@@ -75,7 +75,7 @@ All GAP-DS-01 through GAP-DS-20 checked against v1.5 text:
 | GAP-DS-24 | Thread temporal axis interaction: R-65 bonus uses TS÷30 but §6.15 between-exchange ops have no temporal axis restrictions — Pulling (Past-oriented) during a Future-genre debate has no rule. | P1 — see SIM-D-05 Part 3 |
 | GAP-DS-25 | Coalition §6.12: no rule for what happens when only ONE coalition member remains un-Rattled and that member is also the only one who can lead. Edge case: last-man lead with no corroborator available. | P3 |
 | GAP-DS-26 | BG §6.13 multi-round: no rule on whether sides may change genre declaration between vote rounds. | P2 |
-| GAP-DS-27 | Hybrid §6.14: TC offset cap ±2 interacts with pre-debate lobbying (already ±2 from Diplomacy). Double-capping means lobbying is irrelevant in Hybrid context if BG vote already provides maximum offset. | P2 |
+| GAP-DS-27 | Hybrid §6.14: CI offset cap ±2 interacts with pre-debate lobbying (already ±2 from Diplomacy). Double-capping means lobbying is irrelevant in Hybrid context if BG vote already provides maximum offset. | P2 |
 
 ## AUDIT Mode E — Core Principles (v1.5)
 
@@ -118,7 +118,7 @@ Already comprehensively tested (SIM-D-01 through SIM-D-04). Confirmed findings:
 - Resistance 2 → Compromise ~95% in 3-exchange Formal; ~75% in 5-exchange Grand.
 - Coalition: endurance advantage confirmed.
 - Rattled in exchange 3–5 typical for Composure ≤ 9 losing orators.
-- Total Victory (TC≥9/≤1) achievable in ~5% of Grand Debates at resistance 2.
+- Total Victory (CI≥9/≤1) achievable in ~5% of Grand Debates at resistance 2.
 **Status: ✓ Verified across multiple scenario types.**
 
 ## BG Mode — Parliamentary Vote, Full Season Cycle
@@ -127,32 +127,32 @@ Already comprehensively tested (SIM-D-01 through SIM-D-04). Confirmed findings:
 
 Side A (Church+Crown): pool 10D. Genre: Present ×1.5. E[net]=3.3. effective_vote=floor(3.3×1.5)=floor(4.95)=4. Δ_A=4.
 Side B (Hafenmark+Varfell): pool 7D. Genre: Future ×1.0. E[net]=2.31. effective_vote=floor(2.31)=2. Δ_B=2.
-Net: 2 toward A. TC: 5→7. **Motion passes in one round.**
+Net: 2 toward A. CI: 5→7. **Motion passes in one round.**
 
 **Genre switch between rounds [GAP-DS-26 test]:** If Hafenmark+Varfell switch to Past genre (×0.5 for Crown audience) in round 2: effective_vote=floor(2.31×0.5)=1. Even weaker. **Switching to secondary genre never improves position for the losing coalition under Crown audience.** Genre pivot between BG rounds is unlikely to be tactically useful against a dominant audience ethical mode — the optimal genre is locked by the question and the audience. GAP-DS-26 resolution: allow genre change between rounds but add design note that it is rarely advantageous. **PP-119 design note.**
 
-**BG Orientation absence [GAP-DS-22]:** Under TTRPG, Hafenmark might use Obscuring to place a Doubt Marker — a purely defensive play when losing. BG has no equivalent. Factions cannot "Abstain from moving the TC" in a targeted way. This is correct — BG Parliamentary Vote is a public vote, not a debate. The Obscuring mechanic belongs to personal-scale argumentation, not faction-level voting. **GAP-DS-22 resolved: BG orientation absence is correct and intentional. Add design note to §6.13. PP-119.**
+**BG Orientation absence [GAP-DS-22]:** Under TTRPG, Hafenmark might use Obscuring to place a Doubt Marker — a purely defensive play when losing. BG has no equivalent. Factions cannot "Abstain from moving the CI" in a targeted way. This is correct — BG Parliamentary Vote is a public vote, not a debate. The Obscuring mechanic belongs to personal-scale argumentation, not faction-level voting. **GAP-DS-22 resolved: BG orientation absence is correct and intentional. Add design note to §6.13. PP-119.**
 
 **BG multi-round genre declaration [GAP-DS-26]:** Add to §6.13: sides may change genre declaration between vote rounds. **PP-119.**
 
 ## Hybrid Mode — Full Sequence
 
-**Setup:** Prior season: Hafenmark ran 2 Diplomacy domain actions targeting this vote. Both successful. TC offset: +2 toward Hafenmark (Side B). Starting TTRPG TC: 5−2=3.
+**Setup:** Prior season: Hafenmark ran 2 Diplomacy domain actions targeting this vote. Both successful. CI offset: +2 toward Hafenmark (Side B). Starting TTRPG CI: 5−2=3.
 
-**Hmm — TC=3 is already Side B win threshold.** Does the Hybrid debate start with a win condition already met?
+**Hmm — CI=3 is already Side B win threshold.** Does the Hybrid debate start with a win condition already met?
 
-**[HD-F-01] P1 FINDING:** If prior lobbying (2 Diplomacy actions toward Side B) produces TC start = 3 or lower (≤3 = Side B wins), the TTRPG personal debate is irrelevant — the outcome is already decided before the named characters speak. This makes the Hybrid debate scene dramatically hollow.
+**[HD-F-01] P1 FINDING:** If prior lobbying (2 Diplomacy actions toward Side B) produces CI start = 3 or lower (≤3 = Side B wins), the TTRPG personal debate is irrelevant — the outcome is already decided before the named characters speak. This makes the Hybrid debate scene dramatically hollow.
 
-**Resolution:** Add rule: Hybrid debate starting TC is clamped to 4–6 (compromise zone) regardless of BG offset. The BG offset shifts where in the compromise zone the debate starts (4 = Side B dominant compromise; 6 = Side A dominant compromise; 5 = neutral) but never pre-decides the outcome. **PP-120 provisional.**
+**Resolution:** Add rule: Hybrid debate starting CI is clamped to 4–6 (compromise zone) regardless of BG offset. The BG offset shifts where in the compromise zone the debate starts (4 = Side B dominant compromise; 6 = Side A dominant compromise; 5 = neutral) but never pre-decides the outcome. **PP-120 provisional.**
 
 **[HD-F-01 continued]:** With PP-120, maximum offset ±2 capped to compromise zone 4–6:
-- BG Δ=+2 toward Side A → TTRPG TC starts at 6 (not 7).
-- BG Δ=+2 toward Side B → TTRPG TC starts at 4 (not 3).
-- BG Δ=0 → TTRPG TC starts at 5.
+- BG Δ=+2 toward Side A → TTRPG CI starts at 6 (not 7).
+- BG Δ=+2 toward Side B → TTRPG CI starts at 4 (not 3).
+- BG Δ=0 → TTRPG CI starts at 5.
 
-This preserves personal skill relevance in all Hybrid contexts. From TC=6, Side B needs to push to TC≤3 in 3–5 exchanges — very difficult but not impossible. **Design intent preserved.**
+This preserves personal skill relevance in all Hybrid contexts. From CI=6, Side B needs to push to CI≤3 in 3–5 exchanges — very difficult but not impossible. **Design intent preserved.**
 
-**Revised §6.14 Step 2:** "Hybrid starting TC = 5 + capped offset, then clamped to 4–6. The personal debate always begins in the compromise zone — faction-level lobbying determines the starting position within that zone, not the outcome."
+**Revised §6.14 Step 2:** "Hybrid starting CI = 5 + capped offset, then clamped to 4–6. The personal debate always begins in the compromise zone — faction-level lobbying determines the starting position within that zone, not the outcome."
 
 ---
 
@@ -249,7 +249,7 @@ Maret attempts POP (same-scene/session, Ob 3, TS 50 qualifies for same-scene onl
 **[TT-F-04] P1 FINDING — TEMPORAL AXIS CONFLICT RULE MISSING:**
 No rule governs what happens when a practitioner uses a Past-axis Thread operation during a Future-axis debate exchange. The between-exchange procedure (§6.15) allows any personal Thread operation with "no debate effect." But POP at same-scene level involves temporal auto-effects that affect all observers — including the audience the orator is simultaneously trying to persuade.
 
-Specifically: POP's temporal auto-effect makes "the audience re-experience the cited past. Observers with TS 30+ perceive a thread-shimmer." This audience effect occurs during a Future-genre debate. The temporal auto-effect of Past invocation contradicts the Future framing of the argument. Should this impose a penalty on the orator's Argue pool or TC position?
+Specifically: POP's temporal auto-effect makes "the audience re-experience the cited past. Observers with TS 30+ perceive a thread-shimmer." This audience effect occurs during a Future-genre debate. The temporal auto-effect of Past invocation contradicts the Future framing of the argument. Should this impose a penalty on the orator's Argue pool or CI position?
 
 **Current rule:** §6.15 says personal Thread operations have "no debate effect." This covers the practitioner's own RS/Coherence. But the POP's automatic audience-affecting temporal effect (which fires per P-01 co-movement) is NOT a personal effect — it affects all present observers.
 
@@ -291,7 +291,7 @@ Specifically: POP's temporal auto-effect makes "the audience re-experience the c
 
 | ID | Description | Blocks |
 |----|-------------|--------|
-| ED-087 | §6.14 Hybrid: TC clamped to 4–6 (PP-120 provisional) — confirm this is correct. Alternate: allow BG lobbying to pre-decide outcome (no clamp). | Hybrid scenarios where faction lobbying should be decisive |
+| ED-087 | §6.14 Hybrid: CI clamped to 4–6 (PP-120 provisional) — confirm this is correct. Alternate: allow BG lobbying to pre-decide outcome (no clamp). | Hybrid scenarios where faction lobbying should be decisive |
 | ED-088 | §6.15 Church self-investigation exception (PP-121) — confirm scope. Does exception apply only to ordained Church members, or to anyone acting under Church institutional authority? | Church Tribunal practitioner support scenarios |
 | ED-089 | §6.15 Thread temporal axis conflict rule (PP-123) — confirm TN8 Read penalty is the right calibration. Alternative: −1D to both Argue rolls that exchange instead of Read penalty. | Thread-practitioner-as-orator scenarios |
 | ED-090 | §3.8 passive RS consequences from debate: should ALL Grand Debates with Thread-sensitive subject matter generate RS change, or only those explicitly involving practitioner actions? Currently "if the consequence involves Thread-sensitive matters" — GM discretion is the gate. Confirm or tighten. | RS tracking consistency |
@@ -306,7 +306,7 @@ Specifically: POP's temporal auto-effect makes "the audience re-experience the c
 | Patch | Location | Change |
 |-------|----------|--------|
 | PP-119 | §6.8, §6.9, §6.13 | (1) Update §6.8/6.9 to mark resolved items. (2) Add design note to §6.13: BG orientation absent by design; genre pivot between rounds permitted. |
-| PP-120 | §6.14 Step 2 | Clamp Hybrid TC starting position to 4–6 (compromise zone). BG offset determines where within zone, not whether outcome is pre-decided. [PROVISIONAL] |
+| PP-120 | §6.14 Step 2 | Clamp Hybrid CI starting position to 4–6 (compromise zone). BG offset determines where within zone, not whether outcome is pre-decided. [PROVISIONAL] |
 | PP-121 | §6.15 Heresy Investigation | Add exception: Church does not investigate its own ordained members using Thread in support of Church interests. Opposing factions may still file. [PROVISIONAL] |
 | PP-122 | §6.5 and note in §6.10/§3.8 | Debate-generated RS changes subject to RS ceiling (100) and RS=0 lockout. At RS=0, no RS change from §3.8 fires in either direction. |
 | PP-123 | §6.15 Between Exchanges | Past-axis Thread operation during Future-genre debate (or Future-axis during Past-genre): both orators' next Read roll uses TN 8. Applies only to operations with temporal auto-effects. [PROVISIONAL] |
@@ -348,7 +348,7 @@ Cross-checking debate_ref_card_v1.md against v1.5 operative text:
 # FINDINGS SUMMARY
 
 **P1 findings: 3**
-- HD-F-01: Hybrid TC can start at win threshold (pre-decided) → PP-120 clamps to 4–6
+- HD-F-01: Hybrid CI can start at win threshold (pre-decided) → PP-120 clamps to 4–6
 - TT-F-04: Past-axis Thread during Future-genre debate — no rule → PP-123
 - TT-F-05: RS=0 lockout not covering debate-generated RS → PP-122 extension
 

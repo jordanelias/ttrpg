@@ -15,7 +15,7 @@ The priority tree system produces functional cross-faction interaction with no d
 ## End-State Data (12 seasons, all 5 seeds)
 
 ### Clocks
-| Seed | TC | RS | IP | PI | Coup | Torben |
+| Seed | CI | RS | IP | PI | Coup | Torben |
 |---|---|---|---|---|---|---|
 | 42 | 43 | 64 | 32 | 0 | 3 | 4 |
 | 137 | 47 | 66 | 32 | 0 | 3 | 4 |
@@ -50,26 +50,26 @@ The priority tree system produces functional cross-faction interaction with no d
 ---
 
 ### F-02 (CRITICAL): Löwenritter Coup Is Deterministic
-**Observation:** Coup Counter reaches 3 in 5/5 runs. TC≥40 fires reliably because Church passive +1/season pushes TC from 28 to 40 by S12. Crown's only TC-reduction tool (Royal Decree targeting Church Mandate) fails too often (see F-01). Once TC≥40, the Coup Counter increments every season Crown fails to reduce TC.
+**Observation:** Coup Counter reaches 3 in 5/5 runs. CI≥40 fires reliably because Church passive +1/season pushes CI from 28 to 40 by S12. Crown's only CI-reduction tool (Royal Decree targeting Church Mandate) fails too often (see F-01). Once CI≥40, the Coup Counter increments every season Crown fails to reduce CI.
 
-**Root cause:** The TC≥40 coup trigger fires on Crown inaction, but Crown has no reliable TC-reduction action. Hafenmark Suppress negates the passive +1 but Church Assert (+1) often replaces it. Crown Royal Decree can reduce Church Mandate to slow TC, but the Decree failure cascade (F-01) eliminates this tool.
+**Root cause:** The CI≥40 coup trigger fires on Crown inaction, but Crown has no reliable CI-reduction action. Hafenmark Suppress negates the passive +1 but Church Assert (+1) often replaces it. Crown Royal Decree can reduce Church Mandate to slow CI, but the Decree failure cascade (F-01) eliminates this tool.
 
 **Impact:** The coup is a narrative certainty, not an emergent possibility. Players cannot prevent it without PC intervention. This violates the design intent (coup as emergent threat, not predetermined).
 
 **Proposed patch (PP-NPC-02):** Two changes:
-1. Crown Priority Tree P2: add "If TC ≥ 35: Crown takes TC-reducing action (Senator Outward to Hafenmark to coordinate Suppress, or direct DA targeting Church Mandate)." This gives Crown earlier awareness of the TC threat.
-2. Coup Counter: increment only if TC ≥ 40 AND Crown took no TC-reducing action AND Church actively Asserted this season. Passive TC advance alone should not trigger the counter — it should require active Church aggression going unchallenged.
+1. Crown Priority Tree P2: add "If CI ≥ 35: Crown takes CI-reducing action (Senator Outward to Hafenmark to coordinate Suppress, or direct DA targeting Church Mandate)." This gives Crown earlier awareness of the CI threat.
+2. Coup Counter: increment only if CI ≥ 40 AND Crown took no CI-reducing action AND Church actively Asserted this season. Passive CI advance alone should not trigger the counter — it should require active Church aggression going unchallenged.
 
 ---
 
 ### F-03 (CRITICAL): Church Framework Drift Unconditionally Dominant
 **Observation:** Church Influence hits ceiling (7) in 5/5 runs by S4. Framework Drift fires every 2 seasons with no condition except "no external challenge" — and the simulation never challenges Church Influence directly because no faction's priority tree targets Church Influence.
 
-**Root cause:** The drift condition ("no external challenge for 2 consecutive seasons") is too loose. In practice, a "challenge" should mean a DA specifically targeting Church Influence. But Church Influence is never targeted because other factions prioritise TC/Mandate/Military.
+**Root cause:** The drift condition ("no external challenge for 2 consecutive seasons") is too loose. In practice, a "challenge" should mean a DA specifically targeting Church Influence. But Church Influence is never targeted because other factions prioritise CI/Mandate/Military.
 
 **Impact:** Church becomes the dominant social actor in all games without any player action. This is partially intentional (Church institutional momentum) but reaching Influence 7 by S4 is too fast.
 
-**Proposed patch (PP-NPC-03):** Revise Church Framework Drift: "Church Influence +1 only if: (a) no faction targeted Church with any hostile DA this season, AND (b) Church Stability ≥ 4 (institutional confidence requires internal cohesion), AND (c) TC advanced this season (the institutional momentum that drives Influence IS the TC advance — they are the same process). Frequency: per year (not per 2 seasons)." This ties Influence drift to TC progress and internal stability, slowing it from S4-ceiling to approximately S8-S10 ceiling.
+**Proposed patch (PP-NPC-03):** Revise Church Framework Drift: "Church Influence +1 only if: (a) no faction targeted Church with any hostile DA this season, AND (b) Church Stability ≥ 4 (institutional confidence requires internal cohesion), AND (c) CI advanced this season (the institutional momentum that drives Influence IS the CI advance — they are the same process). Frequency: per year (not per 2 seasons)." This ties Influence drift to CI progress and internal stability, slowing it from S4-ceiling to approximately S8-S10 ceiling.
 
 ---
 
@@ -99,7 +99,7 @@ The priority tree system produces functional cross-faction interaction with no d
 ---
 
 ### F-07 (LOW): Interaction Loop Functional
-**Observation:** Church→Varfell (Heresy Investigation), Crown→Church (Royal Decree), Guilds→weakest Wealth, Hafenmark→TC (Suppress), Löwenritter→Crown (monitor). The interaction loop creates meaningful faction relationships without degenerate cycles.
+**Observation:** Church→Varfell (Heresy Investigation), Crown→Church (Royal Decree), Guilds→weakest Wealth, Hafenmark→CI (Suppress), Löwenritter→Crown (monitor). The interaction loop creates meaningful faction relationships without degenerate cycles.
 
 **Status:** PASS. No patch needed.
 
@@ -110,8 +110,8 @@ The priority tree system produces functional cross-faction interaction with no d
 | ID | Severity | Target | Description |
 |---|---|---|---|
 | PP-NPC-01 | CRITICAL | Crown Priority Tree P3 | Gate Royal Decree on Mandate ≥ 3. Remove failure cost at Mandate ≤ 2. |
-| PP-NPC-02 | CRITICAL | Crown Priority Tree P2 + Coup Counter | Crown TC awareness at TC ≥ 35. Coup trigger requires active Church Assert, not just passive TC. |
-| PP-NPC-03 | CRITICAL | Church Framework Drift | Condition on Stability ≥ 4 + TC advance + per year not per 2 seasons. |
+| PP-NPC-02 | CRITICAL | Crown Priority Tree P2 + Coup Counter | Crown CI awareness at CI ≥ 35. Coup trigger requires active Church Assert, not just passive CI. |
+| PP-NPC-03 | CRITICAL | Church Framework Drift | Condition on Stability ≥ 4 + CI advance + per year not per 2 seasons. |
 | PP-NPC-04 | MODERATE | Varfell Priority Tree P2 | Once-per-season state tracking for Collection use. |
 
 ---

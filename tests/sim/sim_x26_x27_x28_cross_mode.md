@@ -27,20 +27,20 @@ F-26-05: 2 unspent Momentum would have ended fight Round 3. Hoarding cost: ~2 ex
 
 ## SIM-X-27 Hybrid Domain Season
 
-State: RS=50, TC=44, IP=35. Crown M4 Sta3. Church I6. Varfell Mil5.
-Non-optimal: Church delays TC leverage 2 phases. Crown targets Guilds (Ob4, P~6%) not Varfell (Ob3, P~28%). PC Mira uses indirect social move (narrative flag, 1-season lag).
+State: RS=50, CI=44, IP=35. Crown M4 Sta3. Church I6. Varfell Mil5.
+Non-optimal: Church delays CI leverage 2 phases. Crown targets Guilds (Ob4, P~6%) not Varfell (Ob3, P~28%). PC Mira uses indirect social move (narrative flag, 1-season lag).
 
 Phase outcomes:
 | Phase | Church | Crown | Notable |
 |-------|--------|-------|---------|
 | 1 | Wealth partial (no change) | Guilds attack failure | Guilds I +1 (NPC) |
-| 2 | Influence partial | Mandate partial | TC idle |
-| 3 | Parliamentary Motion success Crown M -1 | Stability +1 | TC 44->42 |
+| 2 | Influence partial | Mandate partial | CI idle |
+| 3 | Parliamentary Motion success Crown M -1 | Stability +1 | CI 44->42 |
 
-End: Crown M3 Sta4. Church TC42. Guilds I5. Varfell-Lowenritter uncontested.
+End: Crown M3 Sta4. Church CI42. Guilds I5. Varfell-Lowenritter uncontested.
 
 Findings:
-F-27-01: TC timing window exists. Delay gave Crown recovery window (Crown failed anyway). System healthy; urgency under-incentivised.
+F-27-01: CI timing window exists. Delay gave Crown recovery window (Crown failed anyway). System healthy; urgency under-incentivised.
 F-27-02: Failed Domain Actions carry no blowback. 6% success action = pure opportunity cost. Consider minor Stability/Standing cost on failure.
 F-27-03: Social moves produce 1-season lag vs direct Domain Action. Mechanically sound.
 F-27-04: Conservative play produced identical end-state. No faction capitalised on delay window. Aggression under-incentivised.
@@ -80,7 +80,7 @@ F-28-08: Varfell territory Ob 4 (Phase 1) -> Ob 6 (Phase 2) after Crown buildup.
 |---------|------|------|
 | TN differential > pool size in combat | TTRPG | Mechanical note |
 | Momentum hoarding dominated; no incentive | TTRPG | Design gap |
-| TC/initiative delay under-incentivised | Hybrid/BG | Design consideration |
+| CI/initiative delay under-incentivised | Hybrid/BG | Design consideration |
 | Failed Domain Actions no blowback | Hybrid | Design consideration |
 | Coalition salience low; local optima dominate | BG | Design concern |
 | No soft-cap on safe-stat over-investment | BG | Design gap |

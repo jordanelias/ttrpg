@@ -92,11 +92,11 @@ F-31-04: 3-turn battle resolution may compress decision space. Design note.
 
 ## SIM-X-32 BG Seasonal Accounting at Crisis Thresholds
 
-State: TC=58 (2 from seizure 60), RS=67, IP=45. Crown M5 (Policy Instrument active). Church Standing cap approaching.
+State: CI=58 (2 from seizure 60), RS=67, IP=45. Crown M5 (Policy Instrument active). Church Standing cap approaching.
 
 Season 12-13 + Year-End outcomes:
-- Church delayed TC advance (Wealth push Season 12). TC went 58→57 (Restoration −1)→59→58 (Restoration −1 again).
-- Church never crossed TC 60 across 2 seasons. Standing capped at 5.
+- Church delayed CI advance (Wealth push Season 12). CI went 58→57 (Restoration −1)→59→58 (Restoration −1 again).
+- Church never crossed CI 60 across 2 seasons. Standing capped at 5.
 - Crown Policy Instrument against Church Influence (Ob 5, P~18%): partial, no effect. Timing irrelevant.
 - RS decay: −1 at Year-End (67→66). PP-255 confirmed working.
 - Hafenmark Influence 5 emerged during great-power hesitation.
@@ -104,9 +104,9 @@ Season 12-13 + Year-End outcomes:
 Findings:
 F-32-01: Smaller factions benefit from great-power hesitation. Hafenmark I→5 during Crown/Church delay.
 F-32-02: Policy Instrument at Ob 5 = 18% regardless of timing. Needs lower Ob ceiling or pool scaling.
-F-32-03: Restoration Thread ops offset Church TC advance by −2 net across 2 seasons. Effective counter-pressure. Healthy.
+F-32-03: Restoration Thread ops offset Church CI advance by −2 net across 2 seasons. Effective counter-pressure. Healthy.
 F-32-04: RS baseline decay (PP-255) confirmed: −1 at Year-End. RS 67→66. Reaches Thread penalty threshold ~Year 13.
-F-32-05: Church Standing cap + stalled TC = win condition blocked by conservative play. Correct consequence.
+F-32-05: Church Standing cap + stalled CI = win condition blocked by conservative play. Correct consequence.
 
 ---
 
@@ -123,7 +123,7 @@ F-32-05: Church Standing cap + stalled TC = win condition blocked by conservativ
 | Two sub-optimal choices combine multiplicatively | Hybrid | Healthy emergent |
 | RS baseline decay confirmed working at Year-End | BG | Confirmed |
 | Policy Instrument Ob 5 too high for credible threat | BG | Design note |
-| Restoration counter-pressure on TC effective and healthy | BG | Healthy emergent |
+| Restoration counter-pressure on CI effective and healthy | BG | Healthy emergent |
 
 ---
 

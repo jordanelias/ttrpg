@@ -21,7 +21,7 @@ Relevant History: "Varfell Thread Scholar" 4 pts → pool bonus +7. Thread Pool 
 - Past-Oriented Pulling pool: Spirit 5 + History 7 + TPS÷2(2) = 14D
 - Locking/Dissolution pool: Spirit 5 + History 7 (no TPS) = 12D
 
-**Board state:** Season 3, Year 1. Rendering Stability (RS) 65. Theocracy Counter (TC) 34. Institutional Pressure (IP) 25. Territory T9 (Varfell capital). Church controls T3 (Himmelenger). Diplomatic crisis: Crown-Church relations strained.
+**Board state:** Season 3, Year 1. Mending Stability (RS) 65. Church Influence (CI) 34. Institutional Pressure (IP) 25. Territory T9 (Varfell capital). Church controls T3 (Himmelenger). Diplomatic crisis: Crown-Church relations strained.
 
 **Fixed roll sequence (all rolls same in both runs; only Thread ops differ):**
 
@@ -78,7 +78,7 @@ Hafenmark Wealth: 5→4. No recovery path established.
 
 **No threadworking. Board state after S3 (Run A):**
 - Crown Mandate 3 (−2 from prior). Prosperity T1: 3.
-- Church gaining political ground. Theocracy Counter 34 (unchanged by standard actions).
+- Church gaining political ground. Church Influence 34 (unchanged by standard actions).
 - Hafenmark Wealth 4.
 - RS: 65 (unchanged — no Thread ops).
 - Diplomatic-axis: Church dominant; no counterweight.
@@ -186,7 +186,7 @@ Round 4 = end of Focus window. Rendering reasserts. Mira returns.
 | Crown-Altonia Treaty | Fully active | Loosened for 2 seasons |
 | Church T9 claim | Active | Removed (Orphaned Config) |
 | Institutional Pressure | 25 | 24 (−1 at next Accounting from Treaty Pull) |
-| Theocracy Counter | 34 | 34 (Thread ops don't move TC directly) |
+| Church Influence | 34 | 34 (Thread ops don't move CI directly) |
 | Paradox windows active | 0 | 1 (T9, 2 scenes) |
 | Orphaned Configurations | 0 | 1 (Church T9 records) |
 | GM event seeds | 0 | 3 (actuality co-movements from all 3 ops) |

@@ -8,18 +8,18 @@
 
 | Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status |
 |---------|-----------|------|----------|--------|----------|------|------------|--------|
-| T11 | M-80, M-28, M-27, CE track | TTRPG | PRES | CE, TC, TT | Church | Valdis | Inquisitor | Complete |
+| T11 | M-80, M-28, M-27, CE track | TTRPG | PRES | CE, CI, TT | Church | Valdis | Inquisitor | Complete |
 | T12 | M-81, DD track, M-34 Circles | TTRPG | PRES | DD, TT | Crown | Riskbreaker operative | Riskbreaker |Complete |
 | T13 | M-76, M-30, M-50 | TTRPG | PRES/FUT | TLK | Crown, Löwenritter | Ehrenwall | Löwenritter Knight | Complete |
-| T14 | M-38, M-48, M-46 | TTRPG | PRES | TC, CERT, COMP | Church, Hafenmark | Baralta, Himlensendt | Faction Leader | Complete |
+| T14 | M-38, M-48, M-46 | TTRPG | PRES | CI, CERT, COMP | Church, Hafenmark | Baralta, Himlensendt | Faction Leader | Complete |
 | T15 | M-79, M-27, M-34 | TTRPG | PAST/PRES | TT, TS | Varfell | Vaynard | Non-TS Scholar | Complete |
-| T16 | M-27 scholarly, M-41, M-59 | TTRPG | PRES/FUT | TS, TC | Crown, Revolution | Lenneth | Non-TS Scholar | Complete |
+| T16 | M-27 scholarly, M-41, M-59 | TTRPG | PRES/FUT | TS, CI | Crown, Revolution | Lenneth | Non-TS Scholar | Complete |
 | T17 | M-34 Circles/Resources (isolation) | TTRPG | PRES | CE (network) | Crown, Church | GEN-08 | Political Operative | Complete |
 | T18 | M-51, M-52, M-54, M-55 | TTRPG | PRES | FSTAT (Military) | Crown | Generic military | Faction Leader | Complete |
 | B11 | M-44, M-49, M-61 | BG | PRES | FSTAT | Guilds | NPC-12 | Faction Leader | Complete |
 | B12 | M-81, M-65, M-43 | BG | PRES | DD, FSTAT | Niflhel, Crown | NPC-10 | Riskbreaker | Complete |
 | B13 | M-55, M-57, M-54 | BG | PRES | FSTAT (Military) | Löwenritter | Ehrenwall | Löwenritter Knight | Complete |
-| B14 | M-60, M-59, M-76 | BG | PRES/FUT | TLK, TC, TT | Crown, Church, Löwenritter | Ehrenwall, Almud, Himlensendt | Faction Leader ×3 | Complete |
+| B14 | M-60, M-59, M-76 | BG | PRES/FUT | TLK, CI, TT | Crown, Church, Löwenritter | Ehrenwall, Almud, Himlensendt | Faction Leader ×3 | Complete |
 | H11 | M-58, M-71, M-73 | HYB | PRES | FSTAT | Hafenmark | Baralta | Faction Leader | Complete |
 | H12 | M-36, M-34, M-42 | HYB | PRES | FSTAT (Mandate) | Crown | Serena | Political Operative | Complete |
 | H13 | M-82, M-71, M-45 | HYB | PRES | CE, TT | Church | GEN-03 Templar | Knight Templar | Complete |
@@ -66,7 +66,7 @@ Valdis — Cog4, End4, Pre4, Spi4
   Belief: "The Arrogance is the origin of the Calamity. I will excise it from Valoria."
 
 Tracks
-  TC: 17 | TT: 31 | IP: 20
+  CI: 17 | TT: 31 | IP: 20
 ```
 
 ### Firing Sequence
@@ -120,8 +120,8 @@ CE 4 + 3 = **CE 7.** This exceeds any listed threshold. The table runs to CE 3+ 
 **Valdis trajectory: Doubling Down (confirmed at CE 3):**
 - He interprets the felt wrongness as evidence of the Arrogance's proximity.
 - He becomes more effective as an investigator because he is now a low-sensitivity Thread-detector without knowing it.
-- TC: +1 (per §9.3 Inquisitor trajectory: Doubling Down → TC +1 at accounting).
-- TC: 17→18.
+- CI: +1 (per §9.3 Inquisitor trajectory: Doubling Down → CI +1 at accounting).
+- CI: 17→18.
 
 **Devout Constraint status:** Active (1 Dissonance Mark). He remains functional. But his TS is now 10 (Dormant). He can perform passive perception in TS 10–29 range: "sense wrongness near Dissolution residue automatically." He has been doing this. He does not recognise it as Thread sensitivity — he reads it as spiritual discernment granted by Solmund.
 
@@ -169,7 +169,7 @@ Crown Deniability Debt: 0 (no exposed operations)
   At DD 5: Parliamentary inquiry (Grand Debate)
 
 Tracks
-  TT: 31 | TC: 17 | IP: 20
+  TT: 31 | CI: 17 | IP: 20
 ```
 
 ### Firing Sequence
@@ -257,7 +257,7 @@ Coup triggers are tied to Torben Loyalty and IP thresholds. Current state: Loyal
 **Current trigger status:**
 - Coup Trigger 1: IP ≥ 65 AND no active defense preparation → NOT met (IP 48 < 65).
 - Coup Trigger 2: Loyalty ≤ 4 → NOT met (Loyalty 6).
-- Coup Trigger 3: TC ≥ 80 AND Church holds Crown territories → NOT met (TC 17).
+- Coup Trigger 3: CI ≥ 80 AND Church holds Crown territories → NOT met (CI 17).
 
 **Conclusion:** No coup fires mechanically. But does the Crown-Church treaty constitute a **Belief contradiction event** for Ehrenwall?
 
@@ -280,7 +280,7 @@ Stability check at seasonal accounting. Ehrenwall's Löwenritter: Stability 5. O
 
 **Step 4 — Almud's response:**
 Crown receives Ehrenwall's ultimatum. Almud's options:
-a) Capitulate: rescind the Church jurisdiction clause. TC consequence (Church views this as breach of agreement: TC +1). Crown Mandate +1 (public display of independence from Church pressure — virtue ethics aligned: −0 Ob bonus on next Domain Action).
+a) Capitulate: rescind the Church jurisdiction clause. CI consequence (Church views this as breach of agreement: CI +1). Crown Mandate +1 (public display of independence from Church pressure — virtue ethics aligned: −0 Ob bonus on next Domain Action).
 b) Enforce: send Crown military to Ehrenfeld to enforce Church jurisdiction. Löwenritter: Stability check Ob 3 (direct threat to institutional sovereignty). Probable Stability −1 or worse. Coup trigger 2 window opens faster.
 c) Negotiate: Offer Ehrenwall a compromise (Inquisitor access limited to specific buildings, not military compounds). Ob 2 Influence vs Ehrenwall (Disposition: Cool, Ob 3).
 
@@ -294,7 +294,7 @@ c) Negotiate: Offer Ehrenwall a compromise (Inquisitor access limited to specifi
 
 **Deadlock:** None. All three of Almud's options are viable.
 
-**Optimal play:** Players observing this will understand they must prevent any two coup triggers from approaching simultaneously. The mechanical coupling between Loyalty, IP, and TC creates a multi-front management problem. This is correct design — the Löwenritter threat should feel structurally present even when no single trigger is near.
+**Optimal play:** Players observing this will understand they must prevent any two coup triggers from approaching simultaneously. The mechanical coupling between Loyalty, IP, and CI creates a multi-front management problem. This is correct design — the Löwenritter threat should feel structurally present even when no single trigger is near.
 
 **VERDICT:** CLEAN. Coup triggers correctly gate to numeric thresholds. Belief contradiction + Leader Deviation creates organic political pressure below the threshold. No rulings needed — existing procedures handle this precisely.
 
@@ -302,12 +302,12 @@ c) Negotiate: Offer Ehrenwall a compromise (Inquisitor access limited to specifi
 
 ## T14: BARALTA × HIMLENSENDT — SOVEREIGNTY CONFRONTATION
 
-### Mechanic IDs: M-38 Debate, M-48 Unique faction actions, M-46 TC clock
+### Mechanic IDs: M-38 Debate, M-48 Unique faction actions, M-46 CI clock
 
 ### Scenario
-Himlensendt has invoked the TC 40 threshold action: "The Ultimatum — Confessor formally demands Crown recognition of Church supremacy over spiritual governance." Parliament is in session. Baralta (Hafenmark Duchess, constitutional legalist) invokes Sovereign Authority (Hafenmark unique action, 1/arc) to formally challenge the Ultimatum before Parliament. This produces a Grand Debate (5 exchanges), Baralta vs Himlensendt, in front of the full Parliament.
+Himlensendt has invoked the CI 40 threshold action: "The Ultimatum — Confessor formally demands Crown recognition of Church supremacy over spiritual governance." Parliament is in session. Baralta (Hafenmark Duchess, constitutional legalist) invokes Sovereign Authority (Hafenmark unique action, 1/arc) to formally challenge the Ultimatum before Parliament. This produces a Grand Debate (5 exchanges), Baralta vs Himlensendt, in front of the full Parliament.
 
-State: TC 42 (just past the Ultimatum threshold). TT 33. Parliament Integrity: moderate.
+State: CI 42 (just past the Ultimatum threshold). TT 33. Parliament Integrity: moderate.
 
 ### Character State
 ```
@@ -392,8 +392,8 @@ Himlensendt wins Exchange 5 (9 > 7). Final score: 1–4.
 - Sovereign Authority is spent for the arc (1/arc use).
 - Hafenmark: +1 Ob to social actions with Church for one season (§9.6 partial — the 5–0 rule applies to the losing faction; 4–1 is close enough that the GM applies the same consequence with reduced scope — one season penalty, not permanent).
 
-**TC consequence:**
-Himlensendt's Ultimatum survives the debate challenge. TC: +2 (Ultimatum formally upheld in Parliament). TC: 42→44.
+**CI consequence:**
+Himlensendt's Ultimatum survives the debate challenge. CI: +2 (Ultimatum formally upheld in Parliament). CI: 42→44.
 
 **Domain Echo:** Hafenmark Sovereign Authority invocation, even though it lost, generated a formal constitutional record. Hafenmark Mandate +0 this season but +1D bonus to ANY future Parliament-based Domain Action attempting to contest Church jurisdictional claims (the precedent is on record, even if it lost today). This is a **banked Domain Echo** — not a seasonal cap item, but a narrative tool the GM holds.
 
@@ -408,7 +408,7 @@ Baralta's strain (3) clears after scene rest. No permanent mechanical damage —
 
 **DESIGN FLAG (P2):** Himlensendt's debate pool (15D base + resonant exploitation) approaches the ceiling of practical contest. Against him, PCs need: Cognition 5 + History 8+ (pool 16D+), or need to exploit HIS resonant tag (Consequence) while having evidence-based advantages. Himlensendt's resonant vulnerability to Consequence arguments means he LOSES the +1D when opponents correctly address him in Consequence Style. A PC using Consequence Style (−0 mismatch, no +1D) against him has 16D vs 15D. Competitive but not decisive. The system creates a final-boss debater who is defeatable but demanding — this is likely correct for the Confessor of Solmund.
 
-**VERDICT:** CLEAN. Grand Debate procedure functions correctly. Resonant Style tags create meaningful pool asymmetry. TC escalation from failed parliamentary challenge is correctly modelled. One ruling confirmed.
+**VERDICT:** CLEAN. Grand Debate procedure functions correctly. Resonant Style tags create meaningful pool asymmetry. CI escalation from failed parliamentary challenge is correctly modelled. One ruling confirmed.
 
 ---
 
@@ -469,8 +469,8 @@ Vaynard is neither Riskbreaker nor Inquisitor. He has no institutional CE table 
 - TK: +1 from Overwhelming research result (already at 2). CE event discovery = TK advancement: TK 2→3.
 
 **TK 3 effects (§8.11 Vaynard NPC profile):**
-- "Church Inquisitor file formally active. TC +1."
-- TC: 33→34 (using current session state).
+- "Church Inquisitor file formally active. CI +1."
+- CI: 33→34 (using current session state).
 - Varfell succession leverage demand formally linked to Southernmost access terms → new board game Domain Action trigger queues.
 
 **RULING CHECK:** Vaynard is TS 19, TK 3. He can now make the scholarly inference that the lock is not simply unusual material — it is operating by rules his framework doesn't yet accommodate. His next research season: if he studies the Einhir texts in his collection, he may qualify for an Einhir Text TS bonus (+5 TS, §5.16). TS 19+5 = 24. Still Dormant. Needs one more season + qualifying read to hit Stirring (30).
@@ -479,15 +479,15 @@ Vaynard is neither Riskbreaker nor Inquisitor. He has no institutional CE table 
 
 **RULING CONFIRMED (R-T15-A):** Scholarly TS growers use Cognition TN7, Ob 1 for CE-triggered TS growth checks (same as Riskbreaker, not Inquisitor Ob 2).
 
-**Critical interaction discovered:** Vaynard's TK advancement (to 3) produces TC +1. This means: **every major scholar who witnesses Thread operations adds to Theocracy Clock pressure** via the Inquisitor file trigger. The TC is not just driven by Church action — intellectual discovery itself fuels Church institutional response. This is philosophically important (P-08: the barrier protects BOTH the individual and the institutional stability of the rendered world). CLEAN.
+**Critical interaction discovered:** Vaynard's TK advancement (to 3) produces CI +1. This means: **every major scholar who witnesses Thread operations adds to Theocracy Clock pressure** via the Inquisitor file trigger. The CI is not just driven by Church action — intellectual discovery itself fuels Church institutional response. This is philosophically important (P-08: the barrier protects BOTH the individual and the institutional stability of the rendered world). CLEAN.
 
-**Design flag (P2):** Vaynard's scholarly TS path is slower than practitioner paths but the TK-driven TC pressure creates an asymmetric risk: he can advance TS without TC consequences until TK 3, then triggers a disproportionate institutional response. Is this calibrated correctly? TK 3 = Inquisitor file active (TC +1). TK is not defined beyond TK 3 in the current ruleset.
+**Design flag (P2):** Vaynard's scholarly TS path is slower than practitioner paths but the TK-driven CI pressure creates an asymmetric risk: he can advance TS without CI consequences until TK 3, then triggers a disproportionate institutional response. Is this calibrated correctly? TK 3 = Inquisitor file active (CI +1). TK is not defined beyond TK 3 in the current ruleset.
 
-**RULING NEEDED (R-T15-B):** TK track needs TK 4 and TK 5 definitions. Tentative proposal: TK 4 = "Public articulation of Thread theory. TC +1. Varfell Mandate +0 (internally known only). One other faction initiates contact for scholarly access." TK 5 = "Public knowledge breakthrough. TC +2. Varfell becomes the Thread knowledge hub. Southernmost access formally offered to alliance partners." Requires editorial approval.
+**RULING NEEDED (R-T15-B):** TK track needs TK 4 and TK 5 definitions. Tentative proposal: TK 4 = "Public articulation of Thread theory. CI +1. Varfell Mandate +0 (internally known only). One other faction initiates contact for scholarly access." TK 5 = "Public knowledge breakthrough. CI +2. Varfell becomes the Thread knowledge hub. Southernmost access formally offered to alliance partners." Requires editorial approval.
 
 [EDITORIAL: TK 4–5 definitions — R-T15-B requires user approval on scope and consequences.]
 
-**VERDICT:** CLEAN. Private Collection functions correctly. Scholarly TS path delivers slower but meaningful growth. TC linkage to scholarly discovery is philosophically valid. Two rulings produced (one requiring editorial approval).
+**VERDICT:** CLEAN. Private Collection functions correctly. Scholarly TS path delivers slower but meaningful growth. CI linkage to scholarly discovery is philosophically valid. Two rulings produced (one requiring editorial approval).
 
 ---
 
@@ -564,8 +564,8 @@ Is the endowment a Treaty? A Treaty (§8.9 and §4.8 Circles) requires: both par
 
 *Crown Stability roll:* 4D TN7 Ob2 (Stability 4): 8✓,3,7✓,4 = 2. Success. Crown absorbs the deviation without institutional fracture.
 
-**TC consequence of Restoration endowment:**
-Crown funding of an organisation that Church actively suppresses: TC +1 (indirect — flagged if detected). If Church Intel roll succeeds, detected: TC +2. Per GM judgment: currently undetected (Lenneth's cover is strong). TC stays at current value.
+**CI consequence of Restoration endowment:**
+Crown funding of an organisation that Church actively suppresses: CI +1 (indirect — flagged if detected). If Church Intel roll succeeds, detected: CI +2. Per GM judgment: currently undetected (Lenneth's cover is strong). CI stays at current value.
 
 ### Findings
 
@@ -607,7 +607,7 @@ Crown funding of an organisation that Church actively suppresses: TC +1 (indirec
 
 ### Degradation Cascade Test
 
-**Scenario:** Political operative's Circles in the Church faction sphere suffers: 2 Network Damage (two burned contacts). Territory where their primary contacts live (Himmelstift) falls to extended Church lockdown (TC 80 seizure). Church Mandate goes hostile (Reputation: −4 from being excommunicated).
+**Scenario:** Political operative's Circles in the Church faction sphere suffers: 2 Network Damage (two burned contacts). Territory where their primary contacts live (Himmelstift) falls to extended Church lockdown (CI 80 seizure). Church Mandate goes hostile (Reputation: −4 from being excommunicated).
 
 Starting pool: Pre5 + Church Circles History (3pts+3=6) = 11D.
 After 2 Network Damage: 11D−1D = 10D.
@@ -800,7 +800,7 @@ Roll: 7D TN7 Ob1: 8✓,3,7✓,9✓,4,8✓,1 = 4, −1 = 3. Overwhelming (≥2). 
 **Seasonal accounting:**
 1. Guilds Wealth: 7 (capped). No Stability change.
 2. Crown Wealth: 3 (disrupted).
-3. TT: +0 (no Thread ops). IP: +2 (baseline). TC: +0.
+3. TT: +0 (no Thread ops). IP: +2 (baseline). CI: +0.
 
 **VERDICT:** CLEAN. Guilds faction mechanics function. Ethical framework modifier correctly reduces Ob for pragmatic economic actions. Stat cap and seasonal cap interact correctly (R-B11-A codified).
 
@@ -827,7 +827,7 @@ Roll: 4D TN7 Ob3: 9✓,7✓,3,8✓ = 3. Success. Niflhel learns one hidden Churc
 
 TT: +0.5 (cumulative). Season 5 total Quiet deployments: 2 (1 prior seasons). TT accumulation: +1.0 → round to +1 at seasonal accounting.
 
-**Niflhel does NOT know this is happening.** From their perspective: successful intelligence operation. From campaign perspective: the Forgetting's residue in their supply chain is disturbing Thread configuration. TC is irrelevant to Niflhel — but TT affects everyone.
+**Niflhel does NOT know this is happening.** From their perspective: successful intelligence operation. From campaign perspective: the Forgetting's residue in their supply chain is disturbing Thread configuration. CI is irrelevant to Niflhel — but TT affects everyone.
 
 **Order 2 — Trade (Schwarzmarkt, own territory −1 Ob):**
 Wealth 4D vs Ob1 (home territory Black Market −1 Ob from standard Ob2). Ethical framework: pragmatic (Niflhel has no listed framework — they operate without ideological constraint; no modifier). Roll: 4D TN7 Ob1: 8✓,4,7✓,3 = 2. Overwhelming (≥2). Wealth +1 (capped at +2/season, only +1 this season). Wealth: 4→5.
@@ -917,7 +917,7 @@ Terminal state: Fortification 0, End 0 units, 1 remaining unit barely holding. A
 ### Mechanic IDs: M-60 Casus belli, M-59 Alliance/treaty, M-76 Coup trigger (Löwenritter)
 
 ### Setup
-Season 9. TT 38. TC 52. IP 62 (Hostile, near Warlike threshold 65). Three-faction crisis:
+Season 9. TT 38. CI 52. IP 62 (Hostile, near Warlike threshold 65). Three-faction crisis:
 - Crown: wants war justification to deploy military against Niflhel (they've confirmed Olafsson-Niflhel connection).
 - Church: wants Löwenritter mobilized against Altonian threat, BUT Löwenritter hasn't accepted Church command authority.
 - Löwenritter: Ehrenwall's ultimatum holds — will not accept Church command, but WILL fight Altonia if Crown authorises directly.
@@ -956,7 +956,7 @@ Result: Löwenritter deploys to Border Pass. IP consequence: Löwenritter milita
 
 **Three-faction state after:**
 - Crown: casus belli legitimised (Niflhel/Altonia named). Military coalition with Löwenritter.
-- Church: frustrated (Löwenritter under Crown, not Church authority). TC +1 from institutional friction. TC: 52→53.
+- Church: frustrated (Löwenritter under Crown, not Church authority). CI +1 from institutional friction. CI: 52→53.
 - Löwenritter: mobilized under Crown command. Belief satisfied. No coup trigger approaching.
 
 **Alliance and treaty map after this scene:**
@@ -969,7 +969,7 @@ Result: Löwenritter deploys to Border Pass. IP consequence: Löwenritter milita
 
 **Critical interaction:** The three-way crisis resolves without any party getting what they fully wanted:
 - Crown: got the war legitimacy but didn't get Church cooperation.
-- Church: kept TC driving but lost command authority.
+- Church: kept CI driving but lost command authority.
 - Löwenritter: mobilized but under a command arrangement that creates future friction with Church.
 
 This is correct political simulation behaviour — no clean victories, all actors compromised. CLEAN.
@@ -1009,11 +1009,11 @@ Church places Govern (Himmelstift). Crown (playing it safe) also places Govern (
 Church Mandate 5D Ob1 (Govern, uncontested would be Ob1; contested: Ob = opponent's Mandate÷2 = Crown Mandate 5÷2 = Ob3): 5D Ob3: 9✓,7✓,3,8✓,4 = 3. Success (≥3).
 Crown Mandate 5D Ob3: 8✓,4,9✓,3,7✓ = 3. Tie (3 vs 3). **Tie goes to defender (Church).** Church retains Himmelstift control.
 
-But the legal void created this season: Church can no longer use the treaty as its legal basis. TC +1 (Church forced to use institutional power, not legal agreement, to maintain control — this escalation is captured as TC pressure). TC: 53→54.
+But the legal void created this season: Church can no longer use the treaty as its legal basis. CI +1 (Church forced to use institutional power, not legal agreement, to maintain control — this escalation is captured as CI pressure). CI: 53→54.
 
 **Cascade Phase applies:**
 1. Territory: Himmelstift → Church (Govern tie → defender retains).
-2. TC: +1 (from contested governance action).
+2. CI: +1 (from contested governance action).
 3. Hafenmark Knot (Parliament legal office): strain update (from Personal Phase).
 4. Seasonal cap check: all changes within ±2.
 
@@ -1062,9 +1062,9 @@ Serena presents the Olafsson-Niflhel evidence to the neutral bloc. Appeal: Prese
 
 ### Domain Echo
 
-Investigation passing generates Domain Echo: Church Intel exposed → Olafsson must suspend Inquisitor operations in Crown territory for 1 season (TC event — church institutional operation constraint). TC −1 (Inquisitor suspension reduces TC pressure). TC: 54→53.
+Investigation passing generates Domain Echo: Church Intel exposed → Olafsson must suspend Inquisitor operations in Crown territory for 1 season (CI event — church institutional operation constraint). CI −1 (Inquisitor suspension reduces CI pressure). CI: 54→53.
 
-**Seasonal cap check:** TC −1 = within cap. Crown Mandate +1 (successful parliamentary manoeuvre; virtue ethics aligned): within cap. Crown Mandate: 5 (already at high end — check cap. Crown Mandate was at 5. Hmm, assuming +1 from victory: 5+1=6. Within 1–7 scale). Crown Mandate: 5→6.
+**Seasonal cap check:** CI −1 = within cap. Crown Mandate +1 (successful parliamentary manoeuvre; virtue ethics aligned): within cap. Crown Mandate: 5 (already at high end — check cap. Crown Mandate was at 5. Hmm, assuming +1 from victory: 5+1=6. Within 1–7 scale). Crown Mandate: 5→6.
 
 **Renown interaction check:**
 Renown allowed the meeting with Baralta but didn't modify the Circles roll or the Appeal roll. Did Renown produce any dice bonus? No — per §10.5: "Renown does not grant mechanical bonuses. It does not add dice, reduce Ob, or replace any other system. It grants social access." CONFIRMED. The entire sequence worked without Renown granting any dice. Renown eliminated one Circles Ob4 roll; the rest was standard social resolution.
@@ -1082,7 +1082,7 @@ Renown allowed the meeting with Baralta but didn't modify the Circles roll or th
 ### Mechanic IDs: M-82 Knights Templar organization, M-71 Phase handoffs, M-45 TT clock
 
 ### Scenario
-A Knights Templar unit is assigned to suppress a Monstrous Incursion (Mode 1 entity, Personal scale) that manifested inside a siege encampment (Crown besieging a Church-held position — TC conflict zone). The Templar officer (GEN-03) accumulates CE through direct combat with the monstrous entity and hits CE 3. Unlike Inquisitors, Templars have "no institutional trajectory framework for managing it — Templar CE crises are personal, sudden, and unmanaged."
+A Knights Templar unit is assigned to suppress a Monstrous Incursion (Mode 1 entity, Personal scale) that manifested inside a siege encampment (Crown besieging a Church-held position — CI conflict zone). The Templar officer (GEN-03) accumulates CE through direct combat with the monstrous entity and hits CE 3. Unlike Inquisitors, Templars have "no institutional trajectory framework for managing it — Templar CE crises are personal, sudden, and unmanaged."
 
 ### Initial State
 ```
@@ -1169,7 +1169,7 @@ Belief challenged: +1 CP. Player (if this is a PC-run scenario) must decide: hol
 | R-T12-B | Parliamentary Inquiry (DD 5) pool = highest-Mandate faction + 2D (institutional weight). | T12 | Ruling |
 | R-T14-A | Resonant Style tag grants +1D to the ATTACKER when addressing the NPC using their resonant style, per exchange. | T14 | Confirmed |
 | R-T15-A | Scholarly TS growers use Cognition TN7 Ob1 for CE-triggered growth checks (not Inquisitor Ob2). | T15 | Ruling |
-| R-T15-B | TK 4–5 definitions required. Tentative: TK4 = public articulation (TC+1), TK5 = knowledge breakthrough (TC+2, Southernmost ally access). | T15 | EDITORIAL |
+| R-T15-B | TK 4–5 definitions required. Tentative: TK4 = public articulation (CI+1), TK5 = knowledge breakthrough (CI+2, Southernmost ally access). | T15 | EDITORIAL |
 | R-T16-A | §5.1 Approach Training season-arc path requires witness requirement update; scholarly arc to TS30 via Einhir texts qualifies as practitioner-adjacent. | T16 | Patch (Claude executes) |
 | R-T17-A | Resources at 0D = no material access. Rebuild: 1 season downtime in friendly controlled territory → Resources 1D. Each successful season +1D. | T17 | Ruling |
 | R-T18-A | Muster Ob: 2 (standard domestic). Ob1 with Fieldmark/special property. Ob3 contested territory. Garrison bonus is +1D (pool), not Ob reduction. | T18 | Ruling |

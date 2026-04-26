@@ -16,17 +16,17 @@ ACTION: Remove Guilds and Niflhel player victory conditions from params. Add Res
 ### Cat 2: Starting Values
 | Item | Params | v04 Correct |
 |------|--------|-------------|
-| TC start | 28 (P-32 patch) | 22 |
+| CI start | 28 (P-32 patch) | 22 |
 | Torben Loyalty start | 8 (my PG-09 error) | 3 (active from game start) |
 | Torben Loyalty trigger | IP>30 activates clock | No such trigger — always active |
 | PI start | 5 | 7 |
 | Varfell Mandate | 4 | 3 |
 | Elske | Not in params | Off-board card near T4, Loyalty 0-7 starts 4 |
-| Church victory TC | 40 (PP-171 patch) | 70 (primary) |
+| Church victory CI | 40 (PP-171 patch) | 70 (primary) |
 
 ### Cat 3: Church Victory (Critical patch error)
 PP-171 changed Church Deed 4 from Control T1 to "Crown Mandate ≤ 2".
-v04: Church Deed 4 = Control T1. Primary victory gate = TC ≥ 70.
+v04: Church Deed 4 = Control T1. Primary victory gate = CI ≥ 70.
 PP-171 must be reverted. Church deeds must match v04.
 
 ### Cat 4: Crown Victory (Stale)
@@ -38,7 +38,7 @@ v04 Varfell paths: Intelligence Hegemony (VTM≥3, 3 territories, stats revealed
 My params had Intel stat-based deeds — these don't exist. Intel stat advancement (PP-173/176) was invented without canonical basis.
 
 ### Patches to Revert
-PP-171: Church Deed 4 → REVERT to Control T1; TC≥70 primary victory
+PP-171: Church Deed 4 → REVERT to Control T1; CI≥70 primary victory
 PP-172: Crown Deed 4 (IP escape clause) → REVERT; Crown has 5 deeds per v04
 PP-173: Intel advancement → REVERT (no basis in v04)
 PP-176: Varfell Deed 1 Intel≥5 → REVERT (no such deed in v04)
@@ -58,7 +58,7 @@ PP-186: Crown Deed 2 territories raised → REVERT to v04 spec (4 territories)
 - Named Character Event deck
 - Co-victory conditions
 
-### TC 80 Sweep — Reconciliation Needed
+### CI 80 Sweep — Reconciliation Needed
 v04/v05 P-23: "Hard cap: maximum 2 territory transfers per seizure event per faction"
 My PP-183: cap at 4 territories/season (more generous)
 v04 is authoritative — cap should be 2, not 4.

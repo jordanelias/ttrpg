@@ -123,7 +123,7 @@ Diagnosis on threadcut beings reveals the temporal paradox: no accumulated past,
 
 **Assessment: PASS.**
 
-RS (Rendering Stability) is explicitly a measure of the rendered world's capacity — not of the ground's state or behaviour. The ground does not respond, fight back, or act. Gaps form because "the Einhir over-drew the threads, and the structural limits of the substrate were exceeded." The ground's positive being "erupts through the tear" — eruption, not attack.
+RS (Mending Stability) is explicitly a measure of the rendered world's capacity — not of the ground's state or behaviour. The ground does not respond, fight back, or act. Gaps form because "the Einhir over-drew the threads, and the structural limits of the substrate were exceeded." The ground's positive being "erupts through the tear" — eruption, not attack.
 
 Over-actualisation hazard: the substrate strains because practitioners drove configurations beyond natural coherence. The ground continues to spool but the rigid configuration can't integrate. This is rendered-side mechanism — the practitioners caused the problem by over-working the substrate.
 

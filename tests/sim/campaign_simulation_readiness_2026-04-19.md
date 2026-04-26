@@ -76,7 +76,7 @@ The harness is working. Further refinement falls into three tiers:
 
 **Tier A — Conquest loop (1 session):** Currently no faction can take
 another's territory. Add Mass Combat resolution (mass_battle_v30), Territory
-Seizure DAs (Church CI=60+ TC Seizure, Crown military occupation), territory
+Seizure DAs (Church CI=60+ CI Seizure, Crown military occupation), territory
 control changes, Accord damage on conquest. After this, Peninsular
 Sovereignty becomes achievable in simulation.
 

@@ -69,8 +69,8 @@ Momentum: 2 | Inspiration: *Her predecessor Renne* (value 1 — Arend's dead par
 ---
 
 ## OPENING STATE (Season 8)
-RS: 58 | TC: 47 | IP: 36 | Public Instability: 5
-(Season 7 resolution: TC advanced +2 from Church motion compliance; IP +2 from Institutional Pressure events)
+RS: 58 | CI: 47 | IP: 36 | Public Instability: 5
+(Season 7 resolution: CI advanced +2 from Church motion compliance; IP +2 from Institutional Pressure events)
 
 Faction stats (Season 8 opening):
 | Faction | Mandate | Influence | Wealth | Military | Stability |
@@ -382,7 +382,7 @@ FINDINGS:
 | Faction | Order | Target | Notes |
 |---------|-------|--------|-------|
 | Crown | Investigate (Influence +1 Ob per PP-236) | Niflhel | Torben suspects Niflhel after Halvard's Ledger |
-| Church | TC Pressure | Parliament | TC 47; motion to extend Church auditing rights |
+| Church | CI Pressure | Parliament | CI 47; motion to extend Church auditing rights |
 | Varfell | Intelligence Operation | Crown | Signe's handler orders probe of Crown administrative layer |
 | Niflhel | Quiet — Assassination mode | Varfell Intel | Protect the actor; neutralise Signe's report |
 | Guilds | Trade — Wealth expansion | Hafenmark | Routine |
@@ -398,10 +398,10 @@ Ob = Niflhel Intel(4) + 1 (Crown covert penalty) = 5. Pool: Influence(4) → 4D.
 E[net]: 1.2. P(≥5): < 1%.
 **Outcome: Failure.** Crown finds nothing. Niflhel Intel is too opaque. Domain Echo: none.
 
-**Church TC Pressure → Parliament:**
+**Church CI Pressure → Parliament:**
 Church Influence(6) + Mandate(5) = 11D (per stage6 leadership bonus). Ob: Parliament Integrity(7) — this is the PI stat; Ob = 7.
 E[net]: 3.3. P(≥7): ~5%.
-**Outcome: Partial.** TC +1 → **TC: 48**. Motion acknowledged but not ratified. Church gains one formal auditing right, not full extension.
+**Outcome: Partial.** CI +1 → **CI: 48**. Motion acknowledged but not ratified. Church gains one formal auditing right, not full extension.
 
 **Varfell Intelligence → Crown administrative layer:**
 Varfell Intel(3) vs Crown Stability(3). Ob 3. Pool: 3D. P(≥3): ~15%.
@@ -431,7 +431,7 @@ Pool: Military(6). Ob 2. 6D. P(≥2): ~92%.
 STRATEGIC PHASE — SEASON 8
 ─────────────────────────────────────────────────────────────────────
 Crown Investigate Niflhel: 4D Ob5 → FAILURE (< 1% success)
-Church TC Pressure: 11D Ob7 → PARTIAL → TC 47→48
+Church CI Pressure: 11D Ob7 → PARTIAL → CI 47→48
 Varfell Intel probe: 3D Ob3 → FAILURE
 Niflhel Assassination mode: 5D Ob5 → FAILURE (report survives)
 Guilds Trade: 5D Ob6 → FAILURE
@@ -439,7 +439,7 @@ Hafenmark Diplomatic: 5D Ob3 → PARTIAL (narrative only)
 Lowenritter Consolidation: 6D Ob2 → SUCCESS → Stability 5→6
 
 CLOCK CHANGES:
-  TC: 47 → 48
+  CI: 47 → 48
   RS: 58 (unchanged — no Thread operations this strategic phase)
   IP: 36 (unchanged — no Revolution action)
   Public Instability: 5 (unchanged)
@@ -448,8 +448,8 @@ CLOCK CHANGES:
 FINDING F-C09: Crown investigation of Niflhel is structurally impossible
   without Lowenritter delegation (PP-241). 4D Ob5 is < 1% success. This
   is correctly designed — Crown needs a covert arm it doesn't have.
-FINDING F-C10: Church TC advance from 47 to 48 at Ob 7 required Partial.
-  TC 50 (RS inquiry threshold) is now 2 points away. Clock pressure mounting.
+FINDING F-C10: Church CI advance from 47 to 48 at Ob 7 required Partial.
+  CI 50 (RS inquiry threshold) is now 2 points away. Clock pressure mounting.
 FINDING F-C11: Niflhel assassination mode fails because the target is a
   physical document in an uncompromised cipher location, not a person.
   System correctly treats documents-as-targets differently from NPC targets.
@@ -465,7 +465,7 @@ FINDING F-C11: Niflhel assassination mode fails because the target is a
 ## PHASE 3: CASCADE PHASE
 
 **Threshold checks:**
-- TC 48: below 50; no new threshold. TC 50 threshold (Church formal RS inquiry) now 2 points away.
+- CI 48: below 50; no new threshold. CI 50 threshold (Church formal RS inquiry) now 2 points away.
 - RS 58: Fragile band (40–59). One random Shifting Object per season at Accounting. Spontaneous Thread events +1 Ob in high-traffic territories.
 - IP 36: below 40. No domain action queuing change.
 - Lowenritter Stability 6: not a threshold; within normal range.
@@ -485,7 +485,7 @@ One Shifting Object forms. Location: highest-traffic Thread territory (the terri
 | Clock | Start | End | Change |
 |-------|-------|-----|--------|
 | RS | 58 | 58 | 0 |
-| TC | 47 | 48 | +1 |
+| CI | 47 | 48 | +1 |
 | IP | 36 | 36 | 0 |
 | Public Instability | 5 | 5 | 0 |
 
@@ -521,10 +521,10 @@ Crown cannot reliably investigate Niflhel (4D Ob 5: < 1% success). Even with Low
 **Patch PP-301 (provisional):** Add "Defector Cultivation" as a special Domain Action available to Crown and Varfell only. Pool: Influence. Ob = target faction Intel + 2. Success: gain one data point about target faction per season (not full stat reveal). Overwhelming: gain a permanent +1D on all future intelligence actions against that faction.
 [FLAGGED FOR REVIEW: ED-171]
 
-### Audit-C-03: Church TC Advance Rate vs Resistance
-Church TC advance per season: expected +1 at Ob 7 (Parliament Integrity 7). P(≥7 net from 11D): ~5%. In most seasons, Church TC does not advance from this action. TC has been advancing because of threshold events and PC inaction, not from domain action success.
+### Audit-C-03: Church CI Advance Rate vs Resistance
+Church CI advance per season: expected +1 at Ob 7 (Parliament Integrity 7). P(≥7 net from 11D): ~5%. In most seasons, Church CI does not advance from this action. CI has been advancing because of threshold events and PC inaction, not from domain action success.
 
-**Finding F-C13:** Church primary win path (TC to 80) requires ~32 seasons of TC advancement at current rate, or threshold events that cascade. This is consistent with ED-110's finding that Church primary victory is inaccessible in standard campaign. PP-278 (ED-110 resolution) added a fallback: Ecclesiastical Mandate at TC 70 + 2 territories. This is the realistic win path.
+**Finding F-C13:** Church primary win path (CI to 80) requires ~32 seasons of CI advancement at current rate, or threshold events that cascade. This is consistent with ED-110's finding that Church primary victory is inaccessible in standard campaign. PP-278 (ED-110 resolution) added a fallback: Ecclesiastical Mandate at CI 70 + 2 territories. This is the realistic win path.
 
 **Audit verdict: PP-278 correctly addresses the structural problem. No additional patch needed.**
 
@@ -570,7 +570,7 @@ RS 58 triggered one Shifting Object per Fragile band rule. Location is GM-determ
 | F-C07 | High-EV bad outcome | Design | High-pool roll can produce narratively bad outcomes | None |
 | F-C08 | PP-245 CROSS | Validation | Simultaneous CROSS works cleanly; no sequencing ambiguity | PP-245 confirmed |
 | F-C09 | Crown Intel deficit | Design | Crown 4D Ob5 = structural intelligence blindness | PP-301 (Defector Cultivation) |
-| F-C10 | TC clock rate | Design | Church TC advance at Ob7 requires partial each season | PP-278 sufficient |
+| F-C10 | CI clock rate | Design | Church CI advance at Ob7 requires partial each season | PP-278 sufficient |
 | F-C11 | Document-as-target | Gap | Assassination mode has no document-target rule | PP-302 (GAP-C-01) |
 | F-C12 | Crown intelligence paths | Gap | PC-level Circles (defector) is not in Domain Action system | PP-301 + ED-171 |
 | F-C13 | Church primary victory | Design | PP-278 fallback correct; no additional patch | None |
@@ -597,4 +597,4 @@ RS 58 triggered one Shifting Object per Fragile band rule. Location is GM-determ
 
 ## COVERAGE MATRIX ADDITIONS (SIM-COMP-01)
 
-| SIM-COMP-01 | Contest CROSS asymmetry, Belief CP non-optimal, Domain Echo PP-252, TC advance at Ob7, Shifting Object Fragile band, document-as-target | Full Hybrid | PRES | RS, TC, IP, Composure, Certainty, Conviction Track | Crown, Church, Varfell, Guilds, Niflhel, Lowenritter | Halvard J, Signe M, Elan V, Lotte B, Torben, Niflhel Quiet | Bureaucrat, Intel-Officer, Doubting-Inquisitor, Enforcer | COMPLETE | F-C01 to F-C15; PP-301–303; ED-171–173 |
+| SIM-COMP-01 | Contest CROSS asymmetry, Belief CP non-optimal, Domain Echo PP-252, CI advance at Ob7, Shifting Object Fragile band, document-as-target | Full Hybrid | PRES | RS, CI, IP, Composure, Certainty, Conviction Track | Crown, Church, Varfell, Guilds, Niflhel, Lowenritter | Halvard J, Signe M, Elan V, Lotte B, Torben, Niflhel Quiet | Bureaucrat, Intel-Officer, Doubting-Inquisitor, Enforcer | COMPLETE | F-C01 to F-C15; PP-301–303; ED-171–173 |

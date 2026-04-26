@@ -13,7 +13,7 @@
 Test ID: SIM-D-02
 Mechanics: Argue, Read, DIVERGENCE, CLASH, Conviction Track, Composure, Concentration, initiative
 Mode: TTRPG | Temporal: PRESENT (Parliament session, current political moment)
-Tracks: TC, Composure (both NPCs), Concentration (both NPCs)
+Tracks: CI, Composure (both NPCs), Concentration (both NPCs)
 Factions: Church, Hafenmark; audience: Parliament (Crown-weighted)
 NPCs: Confessor Himlensendt (Church), Duchess Inge Baralta (Hafenmark)
 Archetypes: Institutional authority orator (Himlensendt), Legalist-constitutionalist orator (Baralta)
@@ -43,7 +43,7 @@ Archetypes: Institutional authority orator (Himlensendt), Legalist-constitutiona
 
 **Exchange count:** 3 (Formal Debate, Parliament)
 **Role structure:** Alternating. Himlensendt proposes X1 (Presence 6 > Baralta 5), Baralta X2, Himlensendt X3.
-**Stakes:** A wins → Church ratification authority formally recognised (TC+2, Church Mandate+1, Baralta Mandate−1). B wins → Sovereign Authority Doctrine enshrined (TC−2, Baralta Mandate+1, Church Reach−1). Compromise → motion tabled, committee review, no immediate stat change.
+**Stakes:** A wins → Church ratification authority formally recognised (CI+2, Church Mandate+1, Baralta Mandate−1). B wins → Sovereign Authority Doctrine enshrined (CI−2, Baralta Mandate+1, Church Reach−1). Compromise → motion tabled, committee review, no immediate stat change.
 
 ---
 
@@ -117,7 +117,7 @@ Himlensendt — Pres 6, Cog 5, Att 3 [P], Focus 3 [P]
 Baralta — Pres 5, Att 2 [P], Focus 3 [P]
   Composure: 11/11 | Concentration: 8/8 | Strain: 0 | Conditions: none
   Argue pool: 11D | Read pool: 2D
-Tracks: TC=5 | Resistance=2 [P]
+Tracks: CI=5 | Resistance=2 [P]
 Genre weights: Future×1.0, Present×1.5, Past×0.5
 ```
 [P] = Provisional value
@@ -167,7 +167,7 @@ effective_margin_B = floor((4 / 2) × 1.5) = floor(3.0) = **3**
 3 > 2 (resistance)? **Yes.** Δ_B = 3 − 2 = **1** toward Side B.
 
 Net movement: Δ_B − Δ_H = 1 − 0 = 1. Direction: toward Baralta (Side B).
-**TC: 5 → 4.**
+**CI: 5 → 4.**
 
 No strain (Divergence). Initiative stays with Himlensendt (Diverge rule).
 
@@ -179,7 +179,7 @@ No strain (Divergence). Initiative stays with Himlensendt (Diverge rule).
 ## State: Exchange 1 Complete
 Himlensendt — Composure: 12/12 | Concentration: 8/9 (−1) | Strain: 0
 Baralta — Composure: 11/11 | Concentration: 7/8 (−1) | Strain: 0
-Tracks: TC=4 (moved 1 toward Baralta) | Initiative: Himlensendt (DIVERGE — holds)
+Tracks: CI=4 (moved 1 toward Baralta) | Initiative: Himlensendt (DIVERGE — holds)
 ```
 
 ---
@@ -217,7 +217,7 @@ effective_margin_H = floor((5/2) × 1.0) = floor(2.5) = **2**. 2 > 2? **No.** Δ
 **Baralta (Past ×0.5, with Memory bonus raising net to 4):**
 effective_margin_B = floor((4/2) × 0.5) = floor(1.0) = **1**. 1 > 2? **No.** Δ_B = 0.
 
-Net movement: 0. **TC stays at 4.**
+Net movement: 0. **CI stays at 4.**
 
 No strain. Initiative stays with Himlensendt (second consecutive DIVERGE).
 
@@ -229,7 +229,7 @@ No strain. Initiative stays with Himlensendt (second consecutive DIVERGE).
 ## State: Exchange 2 Complete
 Himlensendt — Composure: 12/12 | Concentration: 7/9 (−2 total) | Strain: 0
 Baralta — Composure: 11/11 | Concentration: 6/8 (−2 total) | Strain: 0
-Tracks: TC=4 (unchanged) | Initiative: Himlensendt (holds, 2nd consecutive DIVERGE)
+Tracks: CI=4 (unchanged) | Initiative: Himlensendt (holds, 2nd consecutive DIVERGE)
 Doubt Markers: none
 ```
 
@@ -272,9 +272,9 @@ Run both:
 **Step 4 — Resolve (DIVERGENCE):**
 Himlensendt: floor((5/2)×1.0) = 2. 2 > 2? No. Δ_H = 0.
 Baralta: floor((4/2)×0.5) = 1. 1 > 2? No. Δ_B = 0.
-TC: **4. Unchanged.**
+CI: **4. Unchanged.**
 
-**No strain. Debate ends. TC=4 → Compromise.**
+**No strain. Debate ends. CI=4 → Compromise.**
 
 ---
 
@@ -287,22 +287,22 @@ Himlensendt declares first: **Future + Revealing.**
 Baralta hears it. Her options:
 
 **Option B1 — Match: Future + Obscuring → CLASH (same genre, opposite orientation):**
-- If Baralta wins: Doubt Marker on Himlensendt. TC doesn't move. She protects TC=4 (in compromise, which is a functional win for her — Church ratification blocked).
+- If Baralta wins: Doubt Marker on Himlensendt. CI doesn't move. She protects CI=4 (in compromise, which is a functional win for her — Church ratification blocked).
 - If Himlensendt wins: Revealing wins → track moves toward Him.
 - P(Baralta wins CLASH) ≈ 34% (11D vs 15D, derived below).
 
 P(Himlensendt wins) ≈ 66%.
 E[margin | Him wins] ≈ 2.3 (normal approx with σ_diff = √(0.41×26) ≈ 3.26, truncated normal).
-effective_margin = floor(2.3 × 1.0) = 2. 2 > 2? No. Δ = 0. TC doesn't move even on average Him win.
+effective_margin = floor(2.3 × 1.0) = 2. 2 > 2? No. Δ = 0. CI doesn't move even on average Him win.
 
-P(Him wins with margin ≥ 3) = P(H−B ≥ 3) ≈ 30%. At margin 3: floor(3×1.0)=3 > 2 → Δ=1. TC: 4→5. Still compromise.
-P(Him wins with margin ≥ 4) ≈ 16%. Δ=2. TC: 4→6. Still compromise.
-P(Him wins TC escape, i.e. margin ≥ 6) ≈ 4%. Δ=4. TC: 4→8. Decisive Him win.
+P(Him wins with margin ≥ 3) = P(H−B ≥ 3) ≈ 30%. At margin 3: floor(3×1.0)=3 > 2 → Δ=1. CI: 4→5. Still compromise.
+P(Him wins with margin ≥ 4) ≈ 16%. Δ=2. CI: 4→6. Still compromise.
+P(Him wins CI escape, i.e. margin ≥ 6) ≈ 4%. Δ=4. CI: 4→8. Decisive Him win.
 
 **Option B2 — Future + Revealing → COMPETITION (same genre, same orientation):**
 Same resolution as CLASH minus Obscuring — but Baralta is at a pool disadvantage. Worse for her than B1.
 
-**Baralta's optimal play in Branch B:** Option B1 (Future + Obscuring). Rationale: if she wins, she places a Doubt Marker — protecting TC=4 against any future movement. If she loses, the expected track movement is still 0 (resistance too high for Himlensendt's likely margin). She has nothing to lose from Obscuring.
+**Baralta's optimal play in Branch B:** Option B1 (Future + Obscuring). Rationale: if she wins, she places a Doubt Marker — protecting CI=4 against any future movement. If she loses, the expected track movement is still 0 (resistance too high for Himlensendt's likely margin). She has nothing to lose from Obscuring.
 
 **Step 4 — Resolve (CLASH, Branch B1):**
 
@@ -310,27 +310,27 @@ Pool P(Baralta wins) ≈ 34%.
 
 **Sub-branch B1a — Himlensendt wins CLASH (P≈66%):**
 E[margin|Him wins] ≈ 2.3.
-effective_margin = floor(2.3 × 1.0) = 2. 2 > 2? No. Δ=0. TC: **4. Unchanged.**
+effective_margin = floor(2.3 × 1.0) = 2. 2 > 2? No. Δ=0. CI: **4. Unchanged.**
 Strain to Baralta: E[margin|loss] ≈ 2.3. Strain = 2.3 + 1 + 1 (His Pres mod) − 1 (Baralta Focus def) ≈ **3.3** → round to **3**.
 Baralta: Composure 11 − 3 strain = Composure track at 8/11.
 Concentration: Baralta loses exchange → −1 (exchange) −1 (loss) = −2. 6−2=4.
 Himlensendt: no strain. Concentration −1=6.
 
-Debate ends. TC=4. **Compromise** (motion tabled). Baralta took 3 strain but debate is over.
+Debate ends. CI=4. **Compromise** (motion tabled). Baralta took 3 strain but debate is over.
 
 **Sub-branch B1b — Baralta wins CLASH with Obscuring (P≈34%):**
-→ **Doubt Marker placed on Himlensendt.** TC: 4 (no movement).
+→ **Doubt Marker placed on Himlensendt.** CI: 4 (no movement).
 Strain to Himlensendt: E[margin|Baralta wins] ≈ 1.5 (Her pool is weaker, wins tend to be narrower). Strain = 1.5 + 1 + 1 (Baralta Pres mod) − 1 (His Focus def) ≈ **2.5** → round to **2**.
 Himlensendt: Composure 12 − 2 = 10/12.
 Concentration: Himlensendt loses → −1 −1 = −2. 7−2=5.
 
-Debate ends. TC=4. **Compromise.** Himlensendt has a Doubt Marker active but it's moot — debate is over.
+Debate ends. CI=4. **Compromise.** Himlensendt has a Doubt Marker active but it's moot — debate is over.
 
 ---
 
 ### Outcome Distribution (All Branches)
 
-| Branch | Probability | TC Final | Outcome |
+| Branch | Probability | CI Final | Outcome |
 |--------|-------------|----------|---------|
 | A — 3rd Diverge (Baralta misread) | ~55% | 4 | Compromise |
 | B1a — CLASH, Him wins, low margin | ~30% | 4 | Compromise |
@@ -344,13 +344,13 @@ Debate ends. TC=4. **Compromise.** Himlensendt has a Doubt Marker active but it'
 
 ---
 
-## Final State (Most Likely — Compromise, TC=4)
+## Final State (Most Likely — Compromise, CI=4)
 
 ```
 ## State: Debate Concluded
 Himlensendt — Composure: 12/12 | Concentration: 6/9 | Strain: 0
 Baralta — Composure: 11/11 | Concentration: 5/8 | Strain: 0
-Tracks: TC=4 | Outcome: COMPROMISE — motion tabled for committee review
+Tracks: CI=4 | Outcome: COMPROMISE — motion tabled for committee review
 Stakes resolved: No immediate faction stat change. Church ratification motion deferred.
 ```
 
@@ -367,7 +367,7 @@ Per-exchange steps:
 | Choose | 2 (genre) + 2 (orientation) | 1 (weight table) | 1 (hold Read result) | Read → Choose |
 | Argue | 2 (Memory bonus check) | 0 | 1 (hold choices) | Choose → Argue |
 | Resolve | 1 (interaction type) | 1 (type table) | 2 (both effective_margins) | Argue → Resolve |
-| Movement | 0 | 0 | 1 (TC position) | Resolve → Movement |
+| Movement | 0 | 0 | 1 (CI position) | Resolve → Movement |
 | Strain | 0 | 1 (Presence mod table) | 1 (both Composure tracks) | Resolve → Strain |
 | Concentration | 0 | 0 | 1 (both Concentration) | Resolve → Concentration |
 | **Totals** | **7** | **5** | **6** | **5** |
@@ -377,7 +377,7 @@ Load score: 7+5+6+5 = **23 raw points → normalise: ~7/10 — PROBLEM**
 **Breakdown by component:**
 - Decisions (7): manageable individually, but chain length (7 sequential) creates fatigue.
 - Lookups (5): genre weight table + result table are the bottlenecks.
-- Parallel tracks (6): TC + Composure×2 + Concentration×2 + Doubt Marker status = 6 simultaneous values to hold.
+- Parallel tracks (6): CI + Composure×2 + Concentration×2 + Doubt Marker status = 6 simultaneous values to hold.
 - Sequential deps (5): Read → Choose → Argue → Resolve → Movement/Strain/Concentration — no shortcuts.
 
 **Time estimate:**

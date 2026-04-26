@@ -15,7 +15,7 @@ victory_architecture_v1.md: ✓ (412 lines) — PP-460 RM redesign
 
 RM's new two-phase win condition (PP-460):
 - Phase 1: CV ≤ 1 in ≥ 8 of 15 playable territories.
-- Phase 2: Cultural Uprising of T9 Himmelenger. Weaver Thread pool vs Ob = TC ÷ 10 (round up, min 1, max 5). Prerequisite: RS ≥ 25.
+- Phase 2: Cultural Uprising of T9 Himmelenger. Weaver Thread pool vs Ob = CI ÷ 10 (round up, min 1, max 5). Prerequisite: RS ≥ 25.
 - Win: T9 under RM administration + Phase 1 held × 2 Accounting steps.
 
 Never tested — first run of the new mechanic.
@@ -24,9 +24,9 @@ Never tested — first run of the new mechanic.
 
 ## Mode A: Cultural Uprising Ob Calibration
 
-**Ob formula: TC ÷ 10 (round up, min 1, max 5).**
+**Ob formula: CI ÷ 10 (round up, min 1, max 5).**
 
-| TC | Ob |
+| CI | Ob |
 |----|-----|
 | 1–10 | 1 |
 | 11–20 | 2 |
@@ -35,7 +35,7 @@ Never tested — first run of the new mechanic.
 | 41–50 | 5 (capped) |
 | 51+ | 5 (capped) |
 
-**Starting TC: 28 → Ob 3.** By S10 (TC ~38 assuming passive +1/season with Hafenmark suppression cancelling some): Ob 4. By S15 (TC ~43, post-AER 3 bypass): Ob 5 (capped).
+**Starting CI: 28 → Ob 3.** By S10 (CI ~38 assuming passive +1/season with Hafenmark suppression cancelling some): Ob 4. By S15 (CI ~43, post-AER 3 bypass): Ob 5 (capped).
 
 **Weaver Thread pool:** RM's Weaver NPC. TS 18 (from params). Leap pool: Spirit + Attunement + History + TPS. TS 18 → TPS ≤ 1 (TS 18 < 30 threshold for standard Leap). Wait — Weaver at TS 18 cannot Leap at all (Leap requires TS ≥ 30).
 
@@ -43,7 +43,7 @@ Never tested — first run of the new mechanic.
 
 **Ruling (gap-fill):** The Cultural Uprising is not a standard Thread Leap. It's a Community action driven by collective cultural force, not an individual practitioner's Thread skill. The pool for the Uprising roll is: **Presence markers in all territories at CV ≤ 1 (count) + 1D base.** This makes the Uprising's strength proportional to RM's accumulated cultural work — the more territories shifted, the stronger the Uprising roll. RS thresholds still apply (Co-Movement auto-effects fire as if it were a Thread-adjacent action).
 
-Revised formula: **Pool = (count of territories at CV ≤ 1) × 1D + 1D base vs Ob = TC ÷ 10.**
+Revised formula: **Pool = (count of territories at CV ≤ 1) × 1D + 1D base vs Ob = CI ÷ 10.**
 
 **[EDITORIAL: ED-345 — Cultural Uprising pool undefined. Weaver TS 18 cannot Leap normally. Uprising pool should be defined as either: (a) collective Presence pool (1D per territory with RM Presence at CV ≤ 1, max 15D), or (b) Weaver pool only (if Weaver TS is raised by Warden interaction to TS 30+ by Phase 1 unlock). Option (a) is more narratively coherent — the Uprising is the people, not one practitioner. P1 — blocks Cultural Uprising adjudication.]**
 
@@ -56,19 +56,19 @@ Revised formula: **Pool = (count of territories at CV ≤ 1) × 1D + 1D base vs 
 CV ≤ 1 territories (8): T3, T4, T6, T7, T10, T12, T13, T17. RM has Presence markers in all 8.
 T9 (Himmelenger) CV: was 5 at start, now 2 (Church partially spread, Varfell Counter-Narrative fired twice against it). Not yet ≤ 1.
 
-**TC at S18:** 28 + 17 passive (assuming Hafenmark suppressed 5 seasons, Church Asserted 8 seasons) ≈ 28 + 17 − 5 + 8 = **TC 48.** Ob = ceil(48÷10) = ceil(4.8) = **5 (capped).**
+**CI at S18:** 28 + 17 passive (assuming Hafenmark suppressed 5 seasons, Church Asserted 8 seasons) ≈ 28 + 17 − 5 + 8 = **CI 48.** Ob = ceil(48÷10) = ceil(4.8) = **5 (capped).**
 
 **RS at S18:** 72 − 17 (Weaving costs ~1/season) − 1 (baseline year-end decay × 4 years) ≈ **RS 51.** Above RS 25 prerequisite ✓.
 
 **Uprising modifiers:**
 - T9 CV = 2 (not ≤ 1): Ob −1 modifier does NOT apply.
 - WC: 0 (Warden Emergence not fired): no +1D.
-- TC 48 ≥ 50? No: 48 < 50 → TC modifier does NOT apply.
+- CI 48 ≥ 50? No: 48 < 50 → CI modifier does NOT apply.
 - Church Mandate 5 ≥ 5: **Ob +1** (Church actively suppresses).
 
 **Final Ob: 5 (capped) + 1 (Church M5) = 6.** But Ob max from formula: cap is 5. Does the Church Mandate modifier push beyond the cap?
 
-**Ruling:** The formula cap (max 5) applies to the TC ÷ 10 calculation. The Church Mandate modifier is a separate additive bonus. Final Ob = 6 is valid (Ob can go above the formula cap via modifiers; Ob cap of 20 from core rules applies universally). **Final Ob: 6.**
+**Ruling:** The formula cap (max 5) applies to the CI ÷ 10 calculation. The Church Mandate modifier is a separate additive bonus. Final Ob = 6 is valid (Ob can go above the formula cap via modifiers; Ob cap of 20 from core rules applies universally). **Final Ob: 6.**
 
 **Pool (using gap-fill: 1D per CV≤1 territory with Presence + 1D base):** 8 territories + 1 base = **9D vs Ob 6.**
 
@@ -91,7 +91,7 @@ P(Failure or Partial combined): ~50%.
 **Changes:**
 - T9 CV 1: Ob −1 modifier applies.
 - RM has 10 territories at CV ≤ 1 (one more territory Weaved during arc gap): pool **11D**.
-- TC at S22: 48 + 4 seasons ≈ **TC 52.** Ob = ceil(52÷10) = ceil(5.2) = **6 (above cap, but cap is 5).** Wait — cap applies to TC component: TC ÷ 10 capped at 5. So TC contribution = 5 regardless of TC ≥ 51. Church Mandate modifier: Church M 5 → +1. T9 CV ≤ 1 modifier: −1. Net Ob: 5 + 1 − 1 = **5.**
+- CI at S22: 48 + 4 seasons ≈ **CI 52.** Ob = ceil(52÷10) = ceil(5.2) = **6 (above cap, but cap is 5).** Wait — cap applies to CI component: CI ÷ 10 capped at 5. So CI contribution = 5 regardless of CI ≥ 51. Church Mandate modifier: Church M 5 → +1. T9 CV ≤ 1 modifier: −1. Net Ob: 5 + 1 − 1 = **5.**
 - WC: still 0.
 
 **Pool: 11D vs Ob 5.** E(net) = 11 × 0.572 = 6.3.
@@ -125,7 +125,7 @@ If RS falls below 25 during Phase 1 hold, Uprising cannot be declared. RM is loc
 **Finding P2 — Aggressive Weaving to hit Phase 1 fast risks dropping RS below Uprising prerequisite.** RM faces a pacing constraint: Weave too fast → RS collapse → Uprising blocked. Weave slowly → other factions win first. Optimal pace: 2–3 Weavings/season (RS drain ~2–3/season), reaching Phase 1 around S15–18.
 
 **Edge 2: Church takes T9 BEFORE RM declares Uprising.**
-If Church reaches TC 75 and seizes T9 via Territorial Seizure, T9 is Church-controlled with high CV (Church keeps CV up in own territory). RM cannot easily Weave T9 down to CV ≤ 1 (Church will Piety Spread to counter), and the Uprising targets T9 regardless of who controls it. Uprising would need to unseat Church from T9 — the Ob formula still applies.
+If Church reaches CI 75 and seizes T9 via Territorial Seizure, T9 is Church-controlled with high CV (Church keeps CV up in own territory). RM cannot easily Weave T9 down to CV ≤ 1 (Church will Piety Spread to counter), and the Uprising targets T9 regardless of who controls it. Uprising would need to unseat Church from T9 — the Ob formula still applies.
 
 **Can RM do Cultural Uprising on a Church-seized T9?** Nothing in the mechanic restricts it to uncontrolled T9. The Uprising is a popular movement against institutional authority — it makes MORE sense if Church controls T9 (the Uprising is against Church occupation). RM can attempt Uprising on Church-held T9 with the same formula.
 

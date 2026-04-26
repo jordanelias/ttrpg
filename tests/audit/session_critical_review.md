@@ -65,7 +65,7 @@ In priority order:
 | ID | Priority | Decision needed |
 |----|----------|-----------------|
 | ED-036 | P1 BLOCKER | Altonian invasion unit stats — approve provisional or design canonical |
-| ED-110/112 | P1 | Church victory path + TC lock — linked; decide together |
+| ED-110/112 | P1 | Church victory path + CI lock — linked; decide together |
 | ED-109 | P1 | Crown victory balance (3/5 deeds pre-met) |
 | ED-111/113 | P2 | Varfell T13 balance (Fort 1 fix applied; confirm sufficient) |
 | ED-108 | P2 | Crown territory names T10/T11 (Nordhelm/Mittelmark) |

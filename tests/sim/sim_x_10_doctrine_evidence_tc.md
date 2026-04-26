@@ -1,14 +1,14 @@
 # SIM-X-10: Baralta — Sovereign Authority Doctrine + Olafsson Evidence Chain
-## Mode: C (Full Scenario) + B (Interaction Chain: Domain Action × Evidence Chain × TC cascade × Zoom In to social scene)
+## Mode: C (Full Scenario) + B (Interaction Chain: Domain Action × Evidence Chain × CI cascade × Zoom In to social scene)
 ## Mechanics: §6 Factions × §9 Social × §11 Domain Echo × §13 NPCs × Clock triggers
-## Context: Season following SIM-X-05 (Debate loss). Baralta invokes the Sovereign Authority Doctrine — her signature Domain Action — despite the +1 Ob penalty from the Grand Debate loss. Simultaneously, players supply Solvind Brak's testimony corroborating Baralta's Olafsson-Niflhel evidence. Two Domain Actions chain in a single seasonal phase. Clock state: RS 28, TC 23 (post-X-08 +1), IP 21 (passive drift +1).
+## Context: Season following SIM-X-05 (Debate loss). Baralta invokes the Sovereign Authority Doctrine — her signature Domain Action — despite the +1 Ob penalty from the Grand Debate loss. Simultaneously, players supply Solvind Brak's testimony corroborating Baralta's Olafsson-Niflhel evidence. Two Domain Actions chain in a single seasonal phase. Clock state: RS 28, CI 23 (post-X-08 +1), IP 21 (passive drift +1).
 
 ---
 
 ## Setup
 
 ### Current Clocks
-RS: 28 (Stirring) | TC: 23 | IP: 21
+RS: 28 (Stirring) | CI: 23 | IP: 21
 
 ### Baralta's State
 - Mandate: 4 (starting value; not depleted yet)
@@ -32,17 +32,17 @@ Expected net successes: 12×0.33 = 4.0. Ob5 requires ≥5 net.
 
 | Degree | Result | P |
 |--------|--------|---|
-| Overwhelming (net ≥7) | TC −3, Church Mandate −1, Investigation blocked | ~12% |
-| Success (net 5–6) | TC −2, Church Mandate −1, Investigation opens Ob4 | ~30% |
-| Partial (net 3–4) | TC −1, Investigation opens immediately, Church Reach +1 | ~33% |
-| Failure (net ≤2) | TC +1, Investigation opens, Baralta Mandate −1 | ~25% |
+| Overwhelming (net ≥7) | CI −3, Church Mandate −1, Investigation blocked | ~12% |
+| Success (net 5–6) | CI −2, Church Mandate −1, Investigation opens Ob4 | ~30% |
+| Partial (net 3–4) | CI −1, Investigation opens immediately, Church Reach +1 | ~33% |
+| Failure (net ≤2) | CI +1, Investigation opens, Baralta Mandate −1 | ~25% |
 
-**Most likely outcome: Partial (33%).** TC −1, Investigation opens immediately, Church Reach +1.
+**Most likely outcome: Partial (33%).** CI −1, Investigation opens immediately, Church Reach +1.
 
 ### Applying Partial result:
-TC: 23−1 = **22**. Church Reach effective +1 (domain modifier this season). Heresy Investigation opens immediately (Stage 1: File Building, Church Reach vs Ob3).
+CI: 23−1 = **22**. Church Reach effective +1 (domain modifier this season). Heresy Investigation opens immediately (Stage 1: File Building, Church Reach vs Ob3).
 
-**Domain Echo check:** Doctrine invocation is a Domain Action that crosses from factional to institutional scope. Domain Echo: Baralta wins TC reduction — feeds into the parliamentary record. No further echo needed (it is already the top-level faction action).
+**Domain Echo check:** Doctrine invocation is a Domain Action that crosses from factional to institutional scope. Domain Echo: Baralta wins CI reduction — feeds into the parliamentary record. No further echo needed (it is already the top-level faction action).
 
 ---
 
@@ -60,22 +60,22 @@ Baralta pool: Mandate 7 + Reach 5 + 2D bonus = 14D TN7. Ob3. P(≥3 net from 14D
 
 | Degree | Result | P |
 |--------|--------|---|
-| Overwhelming (net ≥6) | Church Stability −2, TC −3, Olafsson suspended | ~72% |
-| Success (net 3–5) | Church Stability −2, TC −3, Olafsson suspended | ~26% |
+| Overwhelming (net ≥6) | Church Stability −2, CI −3, Olafsson suspended | ~72% |
+| Success (net 3–5) | Church Stability −2, CI −3, Olafsson suspended | ~26% |
 
-Wait — §13 combines Success and Overwhelming into same result: "Success: Church Stability −2, TC −3, Olafsson's Inquisitor operations suspended." No differentiation given. Overwhelming likely adds a bonus (GM discretion — possible Mandate damage or additional NPC consequence).
+Wait — §13 combines Success and Overwhelming into same result: "Success: Church Stability −2, CI −3, Olafsson's Inquisitor operations suspended." No differentiation given. Overwhelming likely adds a bonus (GM discretion — possible Mandate damage or additional NPC consequence).
 
-**Most likely outcome: Success/Overwhelming (98%).** Church Stability −2, TC −3, Olafsson suspended.
+**Most likely outcome: Success/Overwhelming (98%).** Church Stability −2, CI −3, Olafsson suspended.
 
 ### Applying Evidence Chain:
 Church Stability: 5−2 = **3**.
-TC: 22−3 = **19**. (Two Domain Actions in same season; seasonal cap ±2 per faction attribute per season — but TC is a clock, not a faction attribute. Confirm: §11.5 "Faction attributes may not change by more than ±2 per season." TC is a clock, not a faction attribute. Cap does not apply to TC.)
+CI: 22−3 = **19**. (Two Domain Actions in same season; seasonal cap ±2 per faction attribute per season — but CI is a clock, not a faction attribute. Confirm: §11.5 "Faction attributes may not change by more than ±2 per season." CI is a clock, not a faction attribute. Cap does not apply to CI.)
 
-TC drops from 22 to 19 in a single season. That is −3 in one action.
+CI drops from 22 to 19 in a single season. That is −3 in one action.
 
-**Church Stability brake check:** "When Church Stability falls to 5 or below at seasonal accounting, TC generation ceases that season." Church Stability is now 3 — well below 5. TC generation ceases this season. All TC passive drift sources are suppressed.
+**Church Stability brake check:** "When Church Stability falls to 5 or below at seasonal accounting, CI generation ceases that season." Church Stability is now 3 — well below 5. CI generation ceases this season. All CI passive drift sources are suppressed.
 
-TC passive drift (Church Mandate ≥7 condition check): Church Mandate = 5 currently; not ≥7. Passive drift suppressed anyway.
+CI passive drift (Church Mandate ≥7 condition check): Church Mandate = 5 currently; not ≥7. Passive drift suppressed anyway.
 
 ---
 
@@ -94,21 +94,21 @@ Heresy Investigation Stage 1 (File Building) opens against [target TBD — likel
 ## Zoom Out: Seasonal Accounting
 
 ### Clock Summary After Action A + Action B
-TC: 22 → 21 (Doctrine Partial −1) → 19 (Evidence −3) → **19**. Below 22 threshold.
+CI: 22 → 21 (Doctrine Partial −1) → 19 (Evidence −3) → **19**. Below 22 threshold.
 
-Hmm — TC started this season at 23. After both actions:
-TC: 23 −1 (Doctrine) −3 (Evidence) = **19**.
+Hmm — CI started this season at 23. After both actions:
+CI: 23 −1 (Doctrine) −3 (Evidence) = **19**.
 
-Check TC 20 threshold crossing: TC was 22 entering season; crossing below 20 crosses the lower bound of TC band 20–39 ("Ecclesiastical Consolidation"). TC is now 19 — entering "Institutional Pressure" band (0–19).
+Check CI 20 threshold crossing: CI was 22 entering season; crossing below 20 crosses the lower bound of CI band 20–39 ("Ecclesiastical Consolidation"). CI is now 19 — entering "Institutional Pressure" band (0–19).
 
-**TC threshold event:** TC drops from Ecclesiastical Consolidation (20–39) into Institutional Pressure (0–19). Per §7 threshold logic: "When RS crosses a threshold, the GM determines a narratively appropriate consequence from the current situation."
+**CI threshold event:** CI drops from Ecclesiastical Consolidation (20–39) into Institutional Pressure (0–19). Per §7 threshold logic: "When RS crosses a threshold, the GM determines a narratively appropriate consequence from the current situation."
 
-This is significant — TC crossing back below 20 means Church authority over marriage law, inheritance disputes, and educational standards is no longer mechanically entrenched. The institutional conquest is partially reversed.
+This is significant — CI crossing back below 20 means Church authority over marriage law, inheritance disputes, and educational standards is no longer mechanically entrenched. The institutional conquest is partially reversed.
 
-**Finding F-43 [P1-flag — design concern]:** Two Domain Actions in a single season can move TC by −4 (Doctrine −1 + Evidence −3). Starting TC at 23, this collapses a threshold crossing in one season. The seasonal cap on faction attributes (±2) does not apply to clocks. TC has no seasonal cap. A motivated player coalition with the right evidence can drop TC by 4+ in a single season, potentially crossing multiple thresholds. This may be intended (political pivots should be dramatic) or may need a seasonal TC change cap. [Not proposing a patch — flagging for user decision.]
+**Finding F-43 [P1-flag — design concern]:** Two Domain Actions in a single season can move CI by −4 (Doctrine −1 + Evidence −3). Starting CI at 23, this collapses a threshold crossing in one season. The seasonal cap on faction attributes (±2) does not apply to clocks. CI has no seasonal cap. A motivated player coalition with the right evidence can drop CI by 4+ in a single season, potentially crossing multiple thresholds. This may be intended (political pivots should be dramatic) or may need a seasonal CI change cap. [Not proposing a patch — flagging for user decision.]
 
 ### Church Stability consequences
-Church Stability 5→3. At Stability 3 (well below 5): TC brake activates. But also: internal Church crisis. Cardinals competing publicly. Olafsson's suspension is public — visible humiliation of the Cardinal of Justice.
+Church Stability 5→3. At Stability 3 (well below 5): CI brake activates. But also: internal Church crisis. Cardinals competing publicly. Olafsson's suspension is public — visible humiliation of the Cardinal of Justice.
 
 Church Stability check for Leadership Deviation: Himlensendt acted against doctrine? No — the Doctrine invocation was external. Stability check does not fire for external faction damage. Stability simply sits at 3.
 
@@ -124,11 +124,11 @@ Appeal Ob: Parliament neutral → Ob2. Plus: Church Stability is 3 — Himlensen
 
 12D TN7 vs Ob3. P(≥3 net) from 12D ≈ 87%. Most likely: Success.
 
-**Domain Echo from Himlensendt's Appeal (success):** Parliament persuaded Church jurisdiction should be preserved in some domains. TC +1 (partial recovery from public legitimacy restoration).
+**Domain Echo from Himlensendt's Appeal (success):** Parliament persuaded Church jurisdiction should be preserved in some domains. CI +1 (partial recovery from public legitimacy restoration).
 
-TC: 19→20. Just crosses back over the threshold. Oscillation — Church barely holds institutional footing at TC 20.
+CI: 19→20. Just crosses back over the threshold. Oscillation — Church barely holds institutional footing at CI 20.
 
-**Finding F-44 [P3]:** A single successful Appeal by a high-pool NPC (12D) at Ob3 produces a Domain Echo that partially reverses a multi-action TC reduction. The TC clock can oscillate within a single season through chained Domain Actions from multiple actors. This is mechanically correct (the rules support it) but creates a bookkeeping challenge in fast-moving political seasons.
+**Finding F-44 [P3]:** A single successful Appeal by a high-pool NPC (12D) at Ob3 produces a Domain Echo that partially reverses a multi-action CI reduction. The CI clock can oscillate within a single season through chained Domain Actions from multiple actors. This is mechanically correct (the rules support it) but creates a bookkeeping challenge in fast-moving political seasons.
 
 ---
 
@@ -137,25 +137,25 @@ TC: 19→20. Just crosses back over the threshold. Oscillation — Church barely
 | Clock | Start | X-09 | X-10 Actions | X-10 Himlensendt | End |
 |-------|-------|------|-------------|-----------------|-----|
 | RS | 28 | 28 | 28 | 28 | **28** |
-| TC | 22 | 22 | 19 | 20 | **20** |
+| CI | 22 | 22 | 19 | 20 | **20** |
 | IP | 20 | 20 | 20 | 20 | **20** (+1 passive drift pending) |
 
 **Cross-clock check at accounting:**
-RS 28 < 55: TC +1/season. TC: 20+1 = 21.
-RS 28 < 40: TC +2/season (total, replaces above). TC: 20+2 = **22**.
+RS 28 < 55: CI +1/season. CI: 20+1 = 21.
+RS 28 < 40: CI +2/season (total, replaces above). CI: 20+2 = **22**.
 IP: passive drift +1. IP: 20→21.
-TC at 22 < 40: no TC→IP cross-clock effect.
+CI at 22 < 40: no CI→IP cross-clock effect.
 
-Wait — "RS < 40: TC +2/season (total)." RS is 28 (< 40). Therefore TC gains +2 from passive drift due to RS state.
+Wait — "RS < 40: CI +2/season (total)." RS is 28 (< 40). Therefore CI gains +2 from passive drift due to RS state.
 
-But Church Stability brake: Stability = 3 (< 5). "TC generation ceases that season." Does this brake apply to cross-clock passive drift from RS? The brake says "TC generation ceases that season regardless of Church Mandate." It specifically references Church Mandate as the source being suppressed. Cross-clock RS→TC drift is a structural clock mechanic, not Church-Mandate-driven generation.
+But Church Stability brake: Stability = 3 (< 5). "CI generation ceases that season." Does this brake apply to cross-clock passive drift from RS? The brake says "CI generation ceases that season regardless of Church Mandate." It specifically references Church Mandate as the source being suppressed. Cross-clock RS→CI drift is a structural clock mechanic, not Church-Mandate-driven generation.
 
-**Finding F-45 [P1 — rules ambiguity]:** Church Stability brake ("TC generation ceases") — does it suppress RS-driven cross-clock TC increase? The text says "TC generation ceases that season regardless of Church Mandate" — the "regardless of Church Mandate" clause suggests it suppresses Mandate-based TC drift, but the RS→TC cross-clock entry is a separate mechanic. Ambiguous. Two interpretations: (a) brake suppresses ALL TC increase sources this season; (b) brake suppresses only Mandate-based TC generation. This is a rules gap requiring user decision.
+**Finding F-45 [P1 — rules ambiguity]:** Church Stability brake ("CI generation ceases") — does it suppress RS-driven cross-clock CI increase? The text says "CI generation ceases that season regardless of Church Mandate" — the "regardless of Church Mandate" clause suggests it suppresses Mandate-based CI drift, but the RS→CI cross-clock entry is a separate mechanic. Ambiguous. Two interpretations: (a) brake suppresses ALL CI increase sources this season; (b) brake suppresses only Mandate-based CI generation. This is a rules gap requiring user decision.
 
-**Taking interpretation (a) for now:** Church Stability brake suppresses all TC increase this season.
+**Taking interpretation (a) for now:** Church Stability brake suppresses all CI increase this season.
 
 **Final clocks after full accounting:**
-RS: 28 | TC: 20 (brake suppresses +2) | IP: 21
+RS: 28 | CI: 20 (brake suppresses +2) | IP: 21
 
 ---
 
@@ -164,6 +164,6 @@ RS: 28 | TC: 20 (brake suppresses +2) | IP: 21
 | ID | Category | Severity | Description |
 |----|----------|----------|-------------|
 | F-42 | Interaction | P2 | Doctrine opens Investigation; Evidence Chain suspends Investigator — emergent frozen Investigation state, no explicit rule |
-| F-43 | Design | P1 | Two Domain Actions can move TC by −4 in one season; no seasonal TC cap exists; may be intended but warrants user decision |
-| F-44 | Design | P3 | High-pool NPC Appeal can partially reverse multi-action TC reduction in same season; clock oscillation possible |
-| F-45 | Rules | P1 | Church Stability brake ambiguity: does it suppress RS-driven cross-clock TC increase or only Mandate-based TC generation? |
+| F-43 | Design | P1 | Two Domain Actions can move CI by −4 in one season; no seasonal CI cap exists; may be intended but warrants user decision |
+| F-44 | Design | P3 | High-pool NPC Appeal can partially reverse multi-action CI reduction in same season; clock oscillation possible |
+| F-45 | Rules | P1 | Church Stability brake ambiguity: does it suppress RS-driven cross-clock CI increase or only Mandate-based CI generation? |

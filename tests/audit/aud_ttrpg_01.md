@@ -34,7 +34,7 @@
 | Attributes | 1–5 (inferred) | Max not in params_core — only in CP table | P2 |
 | History points | 0–Memory | Memory range/start undefined | P1 |
 | Thread Depth (TD) | 0–10 | Defined but unused in any formula | P2 (dead stat) |
-| Rendering Stability | 100→0 | No ceiling for restoration above 100 | P2 |
+| Mending Stability | 100→0 | No ceiling for restoration above 100 | P2 |
 | Coherence | 10→0 | Starting value unconfirmed in params | P2 |
 | Focus | 1–5+ | Derivation absent — attribute, derived, or purchased? | P1 |
 | RS start (TTRPG) | Conflict | params_factions: 60 vs stage12: 72 | P1 |
@@ -127,7 +127,7 @@
 | Mechanic | Modes | Transition Defined? | State Preserved? | Flag |
 |----------|-------|---------------------|------------------|------|
 | Faction stats | ALL | Minimal (one sentence) | Yes | P2: no formal handoff sheet |
-| TC/RS/IP clocks | ALL | Implied | Yes | P1: RS start conflict compounds at mode switch |
+| CI/RS/IP clocks | ALL | Implied | Yes | P1: RS start conflict compounds at mode switch |
 | Personal characters | TTRPG/HYB | "Suspended" only | Unknown | P1: reactivation procedure undefined |
 | Thread operations | TTRPG/HYB | Absent in BG | N/A | P2: no BG abstraction for Thread→faction effects |
 | Personal↔Unit combat | HYB | Not defined | N/A | P1: HYB personal/unit transition missing |

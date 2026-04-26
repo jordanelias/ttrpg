@@ -338,7 +338,7 @@ Mending cannot be directly opposed under this procedure. Mending targets substra
 - Thread operations at the same site (co-movement disturbance): +1 Ob.
 - Threadcut being interference (P-17): +TS ÷ 20 (round up), max +4.
 - Territory effects, Fraying Bane: per existing rules.
-- Rendering Stability threshold penalties (Fragile+): per §5.3.
+- Mending Stability threshold penalties (Fragile+): per §5.3.
 
 ## C.6 Scale Mismatch
 

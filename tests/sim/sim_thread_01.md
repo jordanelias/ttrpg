@@ -12,7 +12,7 @@ Test ID: SIM-THREAD-01
 Mechanics: Weaving (Relational), Pulling (Normal), POP (Past-Oriented), Locking (Personal), Debate, Domain Echo, Register Shift, Co-movement (all three axes)
 Mode: TTRPG (Sessions A-C), HYB (Session D)
 Temporal: PAST (Session C), PRES (Sessions A-B), FUT (Session D)
-Tracks: RS, Coherence, Composure, TC, Domain Echo queue, Wound
+Tracks: RS, Coherence, Composure, CI, Domain Echo queue, Wound
 Factions: Crown, Church, Hafenmark, Varfell
 NPCs: Almud (Crown archetype), Baralta (Hafenmark archetype), Klapp (Church archetype), Generic TS-52 Practitioner (Present), Generic TS-72 Practitioner (Past), Generic TS-55 Practitioner (Future)
 Archetypes: Monarch, Legalist-constitutionalist, Institutional practitioner, Archivist-scholar
@@ -23,7 +23,7 @@ Archetypes: Monarch, Legalist-constitutionalist, Institutional practitioner, Arc
 ## SHARED STARTING STATE (all sessions)
 
 ```
-TC: 36 | RS: 65 | IP: 24 | PI: 5
+CI: 36 | RS: 65 | IP: 24 | PI: 5
 Crown: M5 I5 W4 Mil4 Sta4
 Church: M4 I6 W5 Mil3 Sta5
 Hafenmark: M4 I4 W5 Mil3 Sta4
@@ -142,7 +142,7 @@ Track at 4, Envoy behind. Envoy invokes Concede a Point (step 5): forfeit exchan
 
 - Domain Echo: Crown Mandate −1; Hafenmark Influence +1. Queues to next Accounting.
 - Scene: Baralta publicly demands Templar withdrawal. Envoy cannot refuse a Parliament-scope commitment.
-- TC consequence: No direct TC change from Baralta's win (Church was not a party to this debate). But: if Church learns of the Olafsson-Niflhel reveal, TC −2 (from ED-049 Stability brake activation path).
+- CI consequence: No direct CI change from Baralta's win (Church was not a party to this debate). But: if Church learns of the Olafsson-Niflhel reveal, CI −2 (from ED-049 Stability brake activation path).
 
 ### Mode A Findings
 
@@ -156,7 +156,7 @@ Track at 4, Envoy behind. Envoy invokes Concede a Point (step 5): forfeit exchan
 
 ## SESSION B — PRESENT AXIS: WEAVING (RELATIONAL)
 
-**Seed:** TC=36, accelerating. A TS-52 practitioner Weaves the Crown-Hafenmark alliance thread (Relational scale) to prevent it from fraying. The practitioner is at a private audience — no combat, no debate — pure Thread operation.
+**Seed:** CI=36, accelerating. A TS-52 practitioner Weaves the Crown-Hafenmark alliance thread (Relational scale) to prevent it from fraying. The practitioner is at a private audience — no combat, no debate — pure Thread operation.
 
 ### Practitioner State
 
@@ -242,7 +242,7 @@ The Domain-equivalent consequence: no Domain Action was taken. The practitioner 
 
 ## SESSION C — PAST AXIS: PAST-ORIENTED PULLING (HISTORICAL CONFIGURATION)
 
-**Seed:** TC=36. A TS-72 practitioner attempts POP to access the thread of the 218 AG Royal Assassination — to determine what actually happened (key campaign truth, ~27 years/108 seasons ago). High stakes, near-impossible mechanically.
+**Seed:** CI=36. A TS-72 practitioner attempts POP to access the thread of the 218 AG Royal Assassination — to determine what actually happened (key campaign truth, ~27 years/108 seasons ago). High stakes, near-impossible mechanically.
 
 ### Practitioner State
 
@@ -331,7 +331,7 @@ Pool: 11D, TN7, Ob7. E[net] = 3.3. P(net ≥ 7, 11D TN7) ≈ 8%.
 
 ## SESSION D — FUTURE AXIS: LOCKING (HYBRID MODE)
 
-**Seed:** TC=38 (approaching 40 threshold). A TS-55 practitioner Zooms In from a BG session (after Phase 3) to attempt Locking on the political-institutional configuration preventing Church TC-advance — specifically, Locking the Constitutional Settlement of 201 AG at Personal scale (one named clause) to make it harder to override.
+**Seed:** CI=38 (approaching 40 threshold). A TS-55 practitioner Zooms In from a BG session (after Phase 3) to attempt Locking on the political-institutional configuration preventing Church CI-advance — specifically, Locking the Constitutional Settlement of 201 AG at Personal scale (one named clause) to make it harder to override.
 
 **Why Personal scale (not Relational/Territorial):** Territorial Locking (Ob 7, TN8, pool = Spirit+History only, no TPS) is effectively impossible for any realistic practitioner. Personal scale Locking (Ob 5, TN8) gives P(success) ≈ 8% — still hard, but demonstrable.
 
@@ -347,7 +347,7 @@ RS (shared): 65
 
 ### Zoom In (Hybrid — from BG Phase 3)
 
-Phase-Lock: Zoom In fires after Phase 3 (manoeuvre complete). State transfer per reference card: RS→65 (direct), TC→38 (suspended), all BG actions suspended.
+Phase-Lock: Zoom In fires after Phase 3 (manoeuvre complete). State transfer per reference card: RS→65 (direct), CI→38 (suspended), all BG actions suspended.
 
 ### Leap (TS 55 ≥ 50 for Locking ✓)
 
@@ -358,7 +358,7 @@ E[net] = 3.3. P(Overwhelming) ≈ 90%.
 
 ### Diagnosis
 
-Personal scale target: the Constitutional Settlement's "Parliamentary Mandate" clause (the text that limits Church TC-advance without Parliament's formal sanction). Loosely actualised (the clause exists but has been interpreted away by Church practice). Locking Ob: 5 (Personal) −1 (Leap) = **Ob 4.**
+Personal scale target: the Constitutional Settlement's "Parliamentary Mandate" clause (the text that limits Church CI-advance without Parliament's formal sanction). Loosely actualised (the clause exists but has been interpreted away by Church practice). Locking Ob: 5 (Personal) −1 (Leap) = **Ob 4.**
 
 ### Locking Attempt (Personal scale, Ob 4, TN8)
 
@@ -393,7 +393,7 @@ Approximate: very low probability (~5%).
 
 **Temporal auto-effect (Personal scale):** Narrative only. "The practitioner feels the 201 AG settlement's weight — a room in the palace, men arguing about the exact word 'mandate.' No mechanical effect."
 
-**Epistemic auto-effect (by degree, Partial):** Practitioner knows: the clause's partial lock is visible to any TS 30+ observer in the same building. One Church observer (assumed present in the palace: TS 31, Klapp's early sensitivity) will register "something shifted." This triggers: Church investigation check (+1 to TC at next Accounting if investigation proceeds).
+**Epistemic auto-effect (by degree, Partial):** Practitioner knows: the clause's partial lock is visible to any TS 30+ observer in the same building. One Church observer (assumed present in the palace: TS 31, Klapp's early sensitivity) will register "something shifted." This triggers: Church investigation check (+1 to CI at next Accounting if investigation proceeds).
 
 **Actual auto-effect:** Expected d6 consequence — "A document in the palace archive opens to the 201 AG proceedings. A clerk notes it with mild curiosity."
 
@@ -405,7 +405,7 @@ Per state_transfer_spec PP-107:
 - RS consequence: immediate. RS 65→63 (Partial) or 65→62 (Failure).
 - No Strength changes (no combat).
 - Domain Echo queued: Partial Lock → BG effect: Constitutional Settlement clause has +1 Ob on override Domain Actions for 1 season. This queues as a Domain Echo, fires at next Accounting.
-- Epistemic auto-effect (TS 30+ Church observer): TC +1 queued to Accounting (investigation trigger).
+- Epistemic auto-effect (TS 30+ Church observer): CI +1 queued to Accounting (investigation trigger).
 
 BG session resumes from Phase 3.
 
@@ -417,9 +417,9 @@ BG session resumes from Phase 3.
 
 **F-TH-D-02 (P2):** Partial Lock has no stated duration in params_threadwork. Success Lock: "chronic drift begins RS −1/season from season 2." Partial Lock: nothing stated for duration or degradation. **Patch: Partial Lock = degrades after 1 season (same as volatile Weave). Effective Ob reduction (+1 Ob on override) applies this season only.**
 
-**F-TH-D-03 (P1):** Epistemic auto-effect from Locking (Church observer gains TS 31 awareness of Thread operation) triggers TC. This creates a feedback loop: every Thread op in a Church-observed location increases TC. At TC=38 approaching critical threshold, even Partial Lock attempts can accelerate the crisis. **This is mechanically correct per design — Thread operations have political consequences — but the TC trigger rate from epistemic auto-effects is not stated.** Params say epistemic auto-effect produces "social Ob shifts" — what is the TC trigger formula? Not defined.
+**F-TH-D-03 (P1):** Epistemic auto-effect from Locking (Church observer gains TS 31 awareness of Thread operation) triggers CI. This creates a feedback loop: every Thread op in a Church-observed location increases CI. At CI=38 approaching critical threshold, even Partial Lock attempts can accelerate the crisis. **This is mechanically correct per design — Thread operations have political consequences — but the CI trigger rate from epistemic auto-effects is not stated.** Params say epistemic auto-effect produces "social Ob shifts" — what is the CI trigger formula? Not defined.
 
-**Patch: Epistemic auto-effect TC trigger: a TS 30+ Church observer witnessing a Thread op → TC +1 only if the Church initiates an investigation (requires a Church Domain Action to pursue). Observation alone does not trigger TC. This prevents automatic TC escalation from all observed ops.**
+**Patch: Epistemic auto-effect CI trigger: a TS 30+ Church observer witnessing a Thread op → CI +1 only if the Church initiates an investigation (requires a Church Domain Action to pursue). Observation alone does not trigger CI. This prevents automatic CI escalation from all observed ops.**
 
 **F-TH-D-04 (P2 — Hybrid-specific):** Domain Echo from Thread op (Partial Lock creates +1 Ob on override Domain Actions) has no BG-layer mechanic for representing this. A "+1 Ob on Domain Actions" is a TTRPG mechanic — BG uses Martial rolls, not Ob. **Patch: Thread Lock Domain Echo → BG: flagged territory/card gets Thread Debt token (from PP-106 scope). Thread Debt +1 means that BG-layer political Domain Actions targeting this area roll −1D for 1 season.**
 
@@ -433,7 +433,7 @@ BG session resumes from Phase 3.
 |----|---------|-------------|--------|
 | F-TH-B-03 | B | Actual d6 auto-effect table missing for personal-scale ops | PP-181 |
 | F-TH-C-04 | C | Temporal auto-effect RS cost at generational POP not in params | PP-181 |
-| F-TH-D-03 | D | TC trigger formula for epistemic auto-effect not defined | PP-182 |
+| F-TH-D-03 | D | CI trigger formula for epistemic auto-effect not defined | PP-182 |
 
 ### P2
 
@@ -463,8 +463,8 @@ BG session resumes from Phase 3.
 3. Document Territorial Locking as near-impossible by design (P-06 consistent)
 4. Partial Lock duration: 1 season only
 
-### PP-182: TC trigger and Partial Lock clarification (P1)
-1. Epistemic auto-effect TC trigger: observation alone does not trigger TC; Church Domain Action investigation required
+### PP-182: CI trigger and Partial Lock clarification (P1)
+1. Epistemic auto-effect CI trigger: observation alone does not trigger CI; Church Domain Action investigation required
 2. Partial Lock: degrades after 1 season
 
 ### PP-183: Evidence leverage audience shift cap (P2)

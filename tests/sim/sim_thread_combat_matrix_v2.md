@@ -10,7 +10,7 @@
 | Old Term | Current Term | Notes |
 |---|---|---|
 | Intelligibility | **Coherence** | 10→0 countdown, practitioner rendering stability |
-| TT (Thread Tension) | **RS (Rendering Stability)** | 100→0, world track, inverted direction |
+| TT (Thread Tension) | **RS (Mending Stability)** | 100→0, world track, inverted direction |
 | Health = Endurance + 6 | **Health = Endurance** | Flat, no +6 |
 | Wound Ob penalty | **None** | Wounds are dramatic thresholds with zero combat penalty |
 | Wound Ob to Thread ops | **+1 Ob per Wound** | Still applies to Leap, Weaving, Pulling, Mending, FR |
@@ -94,16 +94,16 @@ High-complexity intersections requiring sustained reasoning across multiple foun
 
 | Cell | Test | Profiles | Question | Rules Engaged | Blockers |
 |---|---|---|---|---|---|
-| E-01 | Weaving stat output on a weapon (Object enhancement) | P3 + weapon | P3 Weaves on ally's weapon (Object, Ob 1). On success: what changes? Does Weaving add to damage, improve Hit TN, add DR? No rule specifies Thread operation stat output on equipment. | §2.4 Weaving Object + §8.5 Weapon | **GAP-TC-01** |
-| E-02 | Pulling stat output on armour (Object degradation) | P3 vs P5 armour | P3 Pulls on P5's armour. On success: what degrades? DR reduction? Stamina mod removal? No rule specifies Thread operation stat output on equipment. | §2.4 Pulling Object + §8.6 Armour | **GAP-TC-01** |
-| E-03 | Weaving stat output on a person (Personal enhancement) | P3 → P7 | P3 Weaves on P7 (Personal, Ob 2). Does this heal wounds? Add temporary Health? Boost Combat Pool? No rule specifies Thread operation stat output on persons in combat. | §2.4 Weaving Personal + §8.1 Combat Pool | **GAP-TC-01** |
+| E-01 | Weaving stat output on a weapon (Object enhancement) | P3 + weapon | P3 Weaves on ally's weapon (Object, Ob 1). On success: what changes? Does Weaving add to damage, improve Hit TN, add DR? No rule specifies Thread operation stat output on equipment. | §2.4 Weaving Object + §8.5 Weapon | **GAP-CI-01** |
+| E-02 | Pulling stat output on armour (Object degradation) | P3 vs P5 armour | P3 Pulls on P5's armour. On success: what degrades? DR reduction? Stamina mod removal? No rule specifies Thread operation stat output on equipment. | §2.4 Pulling Object + §8.6 Armour | **GAP-CI-01** |
+| E-03 | Weaving stat output on a person (Personal enhancement) | P3 → P7 | P3 Weaves on P7 (Personal, Ob 2). Does this heal wounds? Add temporary Health? Boost Combat Pool? No rule specifies Thread operation stat output on persons in combat. | §2.4 Weaving Personal + §8.1 Combat Pool | **GAP-CI-01** |
 | E-04 | Involuntary Leap mid-melee (TS 90+) | P8 vs P1 + P1b | P8 (TS 92) is in melee. Nearby Thread operation triggers involuntary Leap risk (Focus check TN 7 Ob 1). P8 fails check. What happens to their pool split? Are they immediately Defence-only? Does the involuntary Leap produce a contact window with no declared intentionality? | §2.3 Involuntary Leap + §8.2 Round Structure |
 | E-05 | Past-Oriented Pulling to reverse a combat Wound | P4 (wounded) | P4 has taken a Wound during this fight. Attempts Past-Oriented Pulling (same scene = Ob 3, + TPS÷2 pool) to reverse the Wound event. Does temporal displacement of the Wound restore Health? Does the Wound's damage "un-happen"? Memories remain (Temporal Disjunction) — allies remember P4 being wounded but the wound is gone. Does this interact with §8.7 wound thresholds? | §2.4 Past-Oriented Pulling + §8.7 Wounds + Temporal Disjunction | Requires §9.10 reversion logic |
 | E-06 | Personal Lock on self in combat (self-preservation Lock) | P4 in extremis | P4 is near incapacitation (2W of 3 max). Locks own personal configuration (Ob 5). On success: P4 cannot change — cannot take further Wounds (configuration frozen). But also cannot heal, cannot be Pulled, cannot act (acting = becoming = impossible while Locked). Is this a valid survival tactic? Does it produce a combat stalemate? **Editorial ruling received: [record ruling here].** | §2.4 Lock Personal + §8.7 Wounds + Lock ontology (P-06) | E-06 editorial |
 | E-07 | Dissolution of an opponent mid-melee (Personal Dissolution) | P4 vs P1 | P4 Dissolves P1's personal configuration (Ob 5). On overwhelming/success: P1 ceases to exist as a rendered being. This is lethal. RS −5 to −8. Gap at P1's location. Is Personal Dissolution a one-hit kill mechanic? What defences exist? Can P1 resist? How does this interact with P-01, P-02 (inseparability, Ein Sof fullness)? | §2.4 Dissolution Personal + P-01, P-02, P-06, P-08 |
 | E-08 | Dissolution creating Gap mid-group-combat | P4 vs P1 in 3v3 | P4 Dissolves an Object mid-fight; Gap forms. Gap persists for the scene. All fighters are in proximity to an active Gap. Effects: TS 30+ perceive it; non-practitioners experience wrongness; Certainty checks? Does the Gap affect combat mechanically (zone disruption, morale)? How does it interact with Fibonacci/zone states? | §2.4 Dissolution + Gap effects + §8.8 Group Combat |
 | E-09 | Mending an active Gap mid-fight while allies defend | P4 + P3 + P2 vs Monstrous Entity | A Gap opened (from prior Dissolution or Monstrous Incursion). P4 attempts Mending while P3 and P2 fight the entity. Mending pool: Att 5 + Focus 5 + TPS 7 = 17D. Standard Gap Ob 5. But P4 is in a combat scene — is there a time pressure modifier? Monstrous entity targets P4 (the practitioner): can P3/P2 intercept? Rescue mechanic applicability? | §2.4 Mending + §8.8 Rescue + Monstrous Incursion rules |
-| E-10 | Weaving a weapon during active use (Object Weaving on held weapon) | P2 with damaged weapon | P2's weapon is degraded (from a Pull or environmental damage). P2 Weaves on their own weapon (Object, Ob 1) while in combat. Can a practitioner Weave on an object they're holding? Does the weapon need to be put down (rendering vulnerability)? Does the Weaving affect the weapon's stats? | §2.4 Weaving Object + §8.5 Weapon | **GAP-TC-01** |
+| E-10 | Weaving a weapon during active use (Object Weaving on held weapon) | P2 with damaged weapon | P2's weapon is degraded (from a Pull or environmental damage). P2 Weaves on their own weapon (Object, Ob 1) while in combat. Can a practitioner Weave on an object they're holding? Does the weapon need to be put down (rendering vulnerability)? Does the Weaving affect the weapon's stats? | §2.4 Weaving Object + §8.5 Weapon | **GAP-CI-01** |
 
 ---
 
@@ -124,13 +124,13 @@ High-complexity intersections requiring sustained reasoning across multiple foun
 
 | Gap ID | Description | Cells Blocked |
 |---|---|---|
-| GAP-TC-01 | Weaving/Pulling stat output on weapons, armour, persons — no rule specifies what Thread operations DO to combat stats | E-01, E-02, E-03, E-10 |
-| GAP-TC-02 | Diagnosis action economy in combat — Priority 4 but no explicit pool-split ruling | A-01 (testable with assumptions) |
-| GAP-TC-03 | Leap defensive posture — "reactive defence" not mapped to pool-split vocabulary | A-02 (testable with assumptions) |
-| GAP-TC-04 | Pulling combat effect on persons — what does "loosened configuration" mean for combat stats? | C-01 |
-| GAP-TC-05 | Personal Lock combat implications — frozen configuration vs ongoing combat | D-05, E-06 |
-| GAP-TC-06 | Threadcut action economy — no Leap means no full-round constraint? | F-01 |
-| GAP-TC-07 | Monstrous Incursion as combatant — no stat block or combat integration rules | D-03, E-08, E-09 |
+| GAP-CI-01 | Weaving/Pulling stat output on weapons, armour, persons — no rule specifies what Thread operations DO to combat stats | E-01, E-02, E-03, E-10 |
+| GAP-CI-02 | Diagnosis action economy in combat — Priority 4 but no explicit pool-split ruling | A-01 (testable with assumptions) |
+| GAP-CI-03 | Leap defensive posture — "reactive defence" not mapped to pool-split vocabulary | A-02 (testable with assumptions) |
+| GAP-CI-04 | Pulling combat effect on persons — what does "loosened configuration" mean for combat stats? | C-01 |
+| GAP-CI-05 | Personal Lock combat implications — frozen configuration vs ongoing combat | D-05, E-06 |
+| GAP-CI-06 | Threadcut action economy — no Leap means no full-round constraint? | F-01 |
+| GAP-CI-07 | Monstrous Incursion as combatant — no stat block or combat integration rules | D-03, E-08, E-09 |
 
 ---
 
@@ -151,7 +151,7 @@ Stage 1 — Mode A: Isolation simulations (cells with no editorial blockers)
   Flag: cells requiring assumptions about unmapped rules
 
 Stage 2 — Gap surfacing
-  After Stage 1: present GAP-TC-01 through GAP-TC-07 with simulation evidence
+  After Stage 1: present GAP-CI-01 through GAP-CI-07 with simulation evidence
   User resolves or provides editorial guidance
 
 Stage 3 — Mode B: Interaction chains (cross-cluster)

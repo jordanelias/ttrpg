@@ -22,21 +22,21 @@ Using params_board_game.md TCV table (canonical geography_design numbering) and 
 
 | Pair | Key Thresholds | Crown start | Hafen start | Varfell start | Gap analysis |
 |------|---------------|-------------|-------------|---------------|--------------|
-| Crown + Hafenmark | Crown TCV ≥ 12, Hafen TCV ≥ 9, PI ≥ 5, TC < 50 | 12 ✓ at start | 8 → gap 1 | — | Crown already meets TCV. Hafen needs 1 TCV. PI ≥ 5 main gate (starts 7 ✓). TC < 50 main gate (starts 28 ✓). **Near-immediate co-victory path if Crown and Hafen ally early.** |
+| Crown + Hafenmark | Crown TCV ≥ 12, Hafen TCV ≥ 9, PI ≥ 5, CI < 50 | 12 ✓ at start | 8 → gap 1 | — | Crown already meets TCV. Hafen needs 1 TCV. PI ≥ 5 main gate (starts 7 ✓). CI < 50 main gate (starts 28 ✓). **Near-immediate co-victory path if Crown and Hafen ally early.** |
 | Crown + Varfell | Crown TCV ≥ 12, Varfell TCV ≥ 8, VTM ≥ 3, RS ≥ 50 | 12 ✓ at start | — | 6 → gap 2 | Crown at start. Varfell needs TCV +2 AND VTM 3 (~S7-9). RS ≥ 50 = passive (starts 72, must not decay below 50 by S7-9). **Reachable S10-14 with no RS crisis.** |
 | Varfell + RM | VTM ≥ 4, WR ≥ 2, ≥ 4 territories CV ≤ 1, RS ≥ 40, Varfell T13 | — | — | — | Hybrid only post-PP-478. VTM 4 ~S10-12. WR ≥ 2 requires 2 successful Expeditions ~S8-12. CV ≤ 1 in 4 territories requires sustained RS decline AND no Church CV pushback. **Available S14-18 in Hybrid.** |
 | Hafenmark + RM | Hafen TCV ≥ 10, ≥ 4 territories CV ≤ 2, PI ≥ 4, RS ≥ 40 | — | 8 → gap 2 | — | Hybrid only post-PP-478. Hafen TCV gap 2. PI 4 (starts 7 ✓). 4 territories CV ≤ 2 requires RS ≤ ~50 (Calamity Drift). **Available S12-16 in Hybrid.** |
 | Löwenritter + Hafenmark | Löw TCV ≥ 8, Hafen TCV ≥ 8, PI ≥ 4 | — | 8 ✓ at start | — | Post-coup only. Löwenritter starts with inherited Crown territory access. TCV ≥ 8 achievable if Löwenritter keeps 4-5 territories from pre-coup Crown position. PI ≥ 4 (starts 7-3=4 post-coup: PI −3 from coup. **PI 4 exactly at coup: passes immediately.** |
-| Church + Hafenmark (Partition) | Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 terr, Hafen ≥ 3 terr, no military conflict | — | 8 ✓ (4 terr) | — | TC ≥ 50: ~S12-14 uncontested. Crown Mandate ≤ 1: requires sustained suppression. Church ≥ 2: starting 1, needs seizure. **Available S14-20 if Crown politically destroyed.** |
+| Church + Hafenmark (Partition) | Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 terr, Hafen ≥ 3 terr, no military conflict | — | 8 ✓ (4 terr) | — | CI ≥ 50: ~S12-14 uncontested. Crown Mandate ≤ 1: requires sustained suppression. Church ≥ 2: starting 1, needs seizure. **Available S14-20 if Crown politically destroyed.** |
 
 ### B: Edge Cases
 
 **D-03-01: Crown + Hafenmark immediate co-victory threat.**
-Crown TCV 12 (start ✓) + Hafenmark TCV 8 (1 short). If Hafenmark takes any TCV-1 territory in Season 1 (March into undefended T17, adjacent to T8): TCV 9. TC < 50 ✓. PI ≥ 5 ✓ (starts 7). All conditions met by Season 1 Accounting.
+Crown TCV 12 (start ✓) + Hafenmark TCV 8 (1 short). If Hafenmark takes any TCV-1 territory in Season 1 (March into undefended T17, adjacent to T8): TCV 9. CI < 50 ✓. PI ≥ 5 ✓ (starts 7). All conditions met by Season 1 Accounting.
 
 **This is a Season-1 co-victory risk.** Crown and Hafenmark are geographically separated (Crown: T1/T2/T3/T5/T6/T14; Hafenmark: T7/T8/T10/T17). They don't need to coordinate militarily — they just need to hold existing territories AND not be politically suppressed below the thresholds.
 
-**P2 finding — Co-Victory-01:** Crown + Hafenmark co-victory is achievable as early as Season 1–2 with zero active play if both players hold existing territories and TC stays below 50. The 2-consecutive-Accounting-step requirement is the only gate — they must hold for 2 seasons. But if no other player attacks them, this is essentially free.
+**P2 finding — Co-Victory-01:** Crown + Hafenmark co-victory is achievable as early as Season 1–2 with zero active play if both players hold existing territories and CI stays below 50. The 2-consecutive-Accounting-step requirement is the only gate — they must hold for 2 seasons. But if no other player attacks them, this is essentially free.
 
 **Recommendation:** Reduce Crown TCV threshold from 12 to 14 (forces Crown to take one additional territory) OR add a condition (Crown Mandate ≥ 4 sustained 2 seasons, requiring active political management). [EDITORIAL: ED-343]
 
@@ -73,7 +73,7 @@ The Partition condition includes "no active military conflict between Church and
 **Piety Spread (PP-428):** Consul Inward, AP ≥ 1 prerequisite, pool = Mandate 5.
 - Ob = target Mandate ÷ 2 + Fort. Crown T1 (Mandate 5, Fort 2): Ob = 2+2 = 4. Church pool 5 at Ob 4: P(Success) ≈ 19%. Very hard.
 - Church's own territory (no fort, CV already high): Ob = 1. P(Success) ≈ 91%. Trivial.
-- Finding: Piety Spread is effectively a self-reinforcement tool (Church holds territory, spreads CV in it). Cross-territory CV pushing into fortified rivals is nearly impossible without TC ≥ 50 modifier (doctrine-aligned −1 Ob).
+- Finding: Piety Spread is effectively a self-reinforcement tool (Church holds territory, spreads CV in it). Cross-territory CV pushing into fortified rivals is nearly impossible without CI ≥ 50 modifier (doctrine-aligned −1 Ob).
 
 **Active Inquisition (PP-429):** Senator Inward, pool = Mandate 5.
 - Ob = territory Stability ÷ 2 round up. Lowest Stability faction (Restoration post-founding S3: Stability 3 → Ob 2). Church pool 5 at Ob 2: P(AP +2) = Success = 69%. AP accumulates quickly.
@@ -91,8 +91,8 @@ The Partition condition includes "no active military conflict between Church and
 ### Hafenmark Actions (Parliamentary Challenge, Parliamentary Session, Diplomat)
 
 **Parliamentary Challenge (PP-431-COR):** REPLACES structural suppression when played.
-- Already analysed in prior stress test: E(TC from Challenge) = −0.65 vs structural −1.0. Challenge is worse on expected TC suppression.
-- Finding confirmed: Structural suppression is mechanically better than Challenge on TC impact alone. Challenge is only worth playing for the Uphold/Appease trigger (9% Overwhelming) and PI ≥ 5 Ob reduction. No Hafenmark player should regularly substitute Challenge for structural.
+- Already analysed in prior stress test: E(CI from Challenge) = −0.65 vs structural −1.0. Challenge is worse on expected CI suppression.
+- Finding confirmed: Structural suppression is mechanically better than Challenge on CI impact alone. Challenge is only worth playing for the Uphold/Appease trigger (9% Overwhelming) and PI ≥ 5 Ob reduction. No Hafenmark player should regularly substitute Challenge for structural.
 
 **Parliamentary Session (PP-432):** Once per arc. All factions vote.
 - With 4 Diplomatic Tokens placed (maximum 1 per faction mat, so max 3 others): 3 factions count as Support regardless of vote. Majority = 3+1 (Ministry if AP in T1) vs 0-1 Oppose. Overwhelming majority.
@@ -124,10 +124,10 @@ The Partition condition includes "no active military conflict between Church and
 
 ### Varfell Actions (VTM Discretion, Revelation Tokens, Counter-Narrative)
 
-**VTM Discretion (PP-438):** Spend 1 PC (at VTM 4+) to suppress VTM TC contribution. Cooldown every 2 seasons.
-- VTM TC contribution not defined in params. VTM presence is public at VTM 3+. What is the exact TC generated by VTM? **[GAP: VTM TC contribution value not specified.]**
-- Finding: VTM Discretion's value is entirely dependent on an unquantified TC contribution. Cannot balance until that value is specified.
-- **[EDITORIAL: ED-345 — VTM TC contribution per level. How much TC does public VTM presence generate per season? This value determines whether VTM Discretion is worth 1 PC.]**
+**VTM Discretion (PP-438):** Spend 1 PC (at VTM 4+) to suppress VTM CI contribution. Cooldown every 2 seasons.
+- VTM CI contribution not defined in params. VTM presence is public at VTM 3+. What is the exact CI generated by VTM? **[GAP: VTM CI contribution value not specified.]**
+- Finding: VTM Discretion's value is entirely dependent on an unquantified CI contribution. Cannot balance until that value is specified.
+- **[EDITORIAL: ED-345 — VTM CI contribution per level. How much CI does public VTM presence generate per season? This value determines whether VTM Discretion is worth 1 PC.]**
 
 **Revelation Tokens (PP-439):** 4 consecutive PC Spy successes OR Overwhelming Tribune Investigate → permanent token.
 - 4 consecutive Spy successes: P(single success at pool 4, Ob = target Intel/2)... Intel stat not defined for most factions. **[GAP: Intel stat not in faction stat table — Influence is used for Intel actions per PP-180 Intel Advancement Counter.]**
@@ -135,7 +135,7 @@ The Partition condition includes "no active military conflict between Church and
 - Per Overwhelming Tribune Investigate: P(OW) ≈ 9% per roll.
 - Finding: Revelation Token accumulation is slow (~10% per attempt). Path A (2 tokens) expected time: ~10-20 sessions of Tribune actions. Patience Protocol exists for a reason.
 
-**Counter-Narrative (PP-441-COR):** TC −0.5 on Overwhelming only (PP-441-COR confirmed). E(TC per use) = −0.04 to −0.135/season (from prior simulation SIM-PP-06). Primary use: AP pressure, not TC suppression.
+**Counter-Narrative (PP-441-COR):** CI −0.5 on Overwhelming only (PP-441-COR confirmed). E(CI per use) = −0.04 to −0.135/season (from prior simulation SIM-PP-06). Primary use: AP pressure, not CI suppression.
 - Combined with Intelligence Hegemony Path A: Varfell uses Counter-Narrative to generate AP (triggering Church response) while Intel actions build Revelation Tokens. The Counter-Narrative Failure exposes Varfell's presence (+2 Ob next season in that territory). In Church-prominent territories (where Counter-Narrative is most valuable), Inquisitors add +2 Ob already. A Failure → 4 Ob total on Counter-Narrative in that territory next season: near-impossible.
 - Finding F-Var-01: Counter-Narrative becomes increasingly risky as Church deploys Inquisitors (+2 Ob baseline) and a prior Failure compounds (+2 Ob more). Varfell should prioritise Counter-Narrative in non-Inquisitor territories and accept the Inquisitor-territory AP as a secondary effect of Active Inquisition.
 
@@ -231,7 +231,7 @@ Without Thread Wounds, RS only becomes critical (< 40) under very high Thread ac
 ### P1
 
 **P1-08 — Crown + Hafenmark co-victory achievable Season 1-2 with zero active play.**
-Crown TCV 12 ✓ at start. Hafenmark needs TCV 9 (has 8, gains 1 from any territorial hold). TC < 50 ✓ at start. PI ≥ 5 ✓ at start. If neither Crown nor Hafenmark is attacked and they hold existing territories for 2 Accounting steps: co-victory declared. No other faction can prevent this purely by holding their own territories.
+Crown TCV 12 ✓ at start. Hafenmark needs TCV 9 (has 8, gains 1 from any territorial hold). CI < 50 ✓ at start. PI ≥ 5 ✓ at start. If neither Crown nor Hafenmark is attacked and they hold existing territories for 2 Accounting steps: co-victory declared. No other faction can prevent this purely by holding their own territories.
 Severity: P1 — effectively removes the co-victory's value as a meaningful arc goal.
 **[EDITORIAL: ED-343 — Strengthen Crown + Hafenmark co-victory requirements. Options: (a) Crown TCV ≥ 14 (forces active expansion), (b) add Crown Mandate ≥ 4 sustained 2 seasons, (c) require PI ≥ 7 (currently starts at 7, degrades easily — forces PI maintenance). Provisional: add Crown Mandate ≥ 4 condition.]**
 
@@ -245,8 +245,8 @@ Fixed by PP-479.
 Church Seizure delay via Ministry Mandate roll at Ob = Church Mandate 5 with pool 3D is near-impossible.
 [EDITORIAL: ED-346 — automatic delay with roll for Ministry damage.]
 
-**P2-09 — VTM TC contribution unspecified.**
-VTM Discretion (PP-438) cannot be balanced without knowing the TC contribution of public VTM presence.
+**P2-09 — VTM CI contribution unspecified.**
+VTM Discretion (PP-438) cannot be balanced without knowing the CI contribution of public VTM presence.
 [EDITORIAL: ED-345]
 
 **P2-10 — Royal Decree Fragmentation modifier fires at worst time.**
@@ -285,7 +285,7 @@ Patience Protocol is explicitly designed for slowness. P3 — correct design, no
 |----|---------|-------------|
 | ED-343 | P1 | Crown + Hafenmark co-victory requires strengthening (achievable Season 1-2 passively) |
 | ED-344 | P2 | Royal Decree Fragmentation modifier: +2 Ob (current) vs +1 Ob (proposed) |
-| ED-345 | P2 | VTM TC contribution per level (required to balance VTM Discretion) |
+| ED-345 | P2 | VTM CI contribution per level (required to balance VTM Discretion) |
 | ED-346 | P2 | Ministry Priority 3 vs Church Seizure: automatic 1-season delay vs near-impossible roll |
 
 ---
@@ -298,7 +298,7 @@ Patience Protocol is explicitly designed for slowness. P3 — correct design, no
 | Church unique actions | ✓ | ✓ | Issues found | F-Church-01 (Cardinal Focus dominant), balance noted |
 | Hafenmark unique actions | ✓ | ✓ | Issues found | P2 (Challenge<structural confirmed), F-Hafen-01 |
 | Crown unique actions | ✓ | ✓ | Issues found | P2-10 (Decree Fragmentation), P3-03 (Thread Liaison single-purpose) |
-| Varfell unique actions | ✓ | ✓ | Issues found | P2-09 (VTM TC undefined), F-Var-01 |
+| Varfell unique actions | ✓ | ✓ | Issues found | P2-09 (VTM CI undefined), F-Var-01 |
 | Ministry NPC AI | ✓ | ✓ | Issues found | P2-08 (Priority 3 dead), P2-11 (Domain conflict) |
 | RS decay (20-season) | ✓ | — | Complete | F-RS-01/02/03 — system healthy, WC critical long-term |
 | Battle resolution | ✓ | ✓ | Complete | PP-476 applied |

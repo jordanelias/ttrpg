@@ -9,7 +9,7 @@
 
 ## SCENARIO CONTEXT
 
-**Season:** Autumn, Year 3. RS: 55 (Fragile band — Shifting Objects spontaneous; Thread ops +1 Ob in affected territories). TC: 42. IP: 35.
+**Season:** Autumn, Year 3. RS: 55 (Fragile band — Shifting Objects spontaneous; Thread ops +1 Ob in affected territories). CI: 42. IP: 35.
 
 **Territory:** Sigurdshelm (T12) — Varfell Seat. Proximity Rating: 2.
 Calamity radiation at RS 55, Proximity 2: +1 Ob non-Thread (per calamity_radiation.md).
@@ -177,11 +177,11 @@ If Edda POPs the Burning of Ehrenfeld:
 - Inquisitor loses Memory genre bonus (+1D) on the exchange that cited the Burning.
 - Edda may invoke the displacement as a Projection-genre argument.
 - All characters in the chamber: Spirit check TN 7 vs Dissonance Factor 3 (POP affecting nearby characters' temporal experience). Failure: Spirit −1D for rest of scene.
-- Church observers with TS ≥ 30: they perceive the POP. Heresy Investigation may follow (TC trigger per epistemic auto-effect — requires Church formal investigation action, not automatic).
+- Church observers with TS ≥ 30: they perceive the POP. Heresy Investigation may follow (CI trigger per epistemic auto-effect — requires Church formal investigation action, not automatic).
 
-**[FINDING TW-06]: POP in a Church Tribunal triggers immediate TC consequences.** The epistemic auto-effect (params_threadwork.md §Epistemic Auto-Effect): "A TS 30+ Church observer witnessing a Thread operation does NOT automatically trigger TC increase." BUT a Church Tribunal already has Church actors present and investigating. The formal investigation condition is met by the Tribunal itself. POP during a Church Tribunal: TC +1 at next Accounting is near-certain (the Church IS investigating — that's what the Tribunal is).
+**[FINDING TW-06]: POP in a Church Tribunal triggers immediate CI consequences.** The epistemic auto-effect (params_threadwork.md §Epistemic Auto-Effect): "A TS 30+ Church observer witnessing a Thread operation does NOT automatically trigger CI increase." BUT a Church Tribunal already has Church actors present and investigating. The formal investigation condition is met by the Tribunal itself. POP during a Church Tribunal: CI +1 at next Accounting is near-certain (the Church IS investigating — that's what the Tribunal is).
 
-**Combined effect:** POP during Church Tribunal = RS −3+, Coherence −1, self-incrimination, TC +1, and the POP itself has <1-18% success chance. This is a desperation move that accelerates every negative clock simultaneously.
+**Combined effect:** POP during Church Tribunal = RS −3+, Coherence −1, self-incrimination, CI +1, and the POP itself has <1-18% success chance. This is a desperation move that accelerates every negative clock simultaneously.
 
 ### State After Transition 2
 
@@ -190,7 +190,7 @@ Edda (if POP attempted and failed — most likely): Coherence 4 (Fragmented).
   RS: 55 → 52 minimum (POP Success RS cost even on near-zero probability).
   If POP failed: RS 55 → 49 (−6 POP Failure). Snap-back: 1 Wound.
   Coherence: 5 → 4 (−1). Wounds: 1 → 2.
-  TC: 42 → 43 at next Accounting.
+  CI: 42 → 43 at next Accounting.
   Evidence: intact at 5/8.
   FINDING: POP during Contest is mechanically and narratively a last resort.
 ```
@@ -404,7 +404,7 @@ The Thread-verified evidence is Inert Knowledge for non-sensitives. Torsten rece
 ```
 POP Success (42%): Coherence 4 (Fragmented), RS 52, Evidence RESOLVED (9/8).
   Aldric has orphaned memory configuration. Edda has recovered testimony.
-  TC: +1 at Accounting if Church investigates the POP (likely — TC 43 → 44).
+  CI: +1 at Accounting if Church investigates the POP (likely — CI 43 → 44).
 POP Failure (58%): Coherence 4, RS 49, Wounds 2, Evidence at 7/8.
   Aldric's memory permanently displaced. Orphaned config is evidence of attempt.
 ```
@@ -507,7 +507,7 @@ Edda: Coherence 3 (Fragmented), RS 53, Wounds 1-2.
 
 | ID | Description |
 |----|-------------|
-| TW-06 | POP in Church Tribunal triggers TC +1 (Tribunal satisfies epistemic auto-effect investigation condition). Correct interaction. |
+| TW-06 | POP in Church Tribunal triggers CI +1 (Tribunal satisfies epistemic auto-effect investigation condition). Correct interaction. |
 | TW-11 | **Pulling is the investigation-optimal Thread operation.** Full pool, TN 7, 0 RS/Coherence at Personal scale. Creates clear investigative hierarchy. |
 | TW-13 | **POP on recent memories is the viable POP use case.** Same-session Ob 3 at 42% is the sweet spot — genuine dramatic tension. |
 | TW-14 | **POP creates dual-layer evidence** (ontical face + ontological face). P-08 operating as designed. |

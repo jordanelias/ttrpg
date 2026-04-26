@@ -199,7 +199,7 @@ TTRPG/Hybrid use Attunement+History prep roll. BG uses prior Diplomacy domain ac
 
 ### FINDING J-04 [P1] — §3.8 Thread Consequences Partially Narrated — Possible P-01 Violation
 **Setup:** Evidence genre win fires Thread co-movement per §3.8.
-**Mechanism:** §3.8 says "The audience re-experiences the cited past. Observers with Thread Sensitivity 30+ perceive a thread-shimmer in the room. Rendering Stability +1." RS+1 is automatic. But the epistemic auto-effect ("audience re-experiences the cited past") and actual auto-effect are described narratively, not as mandatory mechanical triggers with defined outputs.
+**Mechanism:** §3.8 says "The audience re-experiences the cited past. Observers with Thread Sensitivity 30+ perceive a thread-shimmer in the room. Mending Stability +1." RS+1 is automatic. But the epistemic auto-effect ("audience re-experiences the cited past") and actual auto-effect are described narratively, not as mandatory mechanical triggers with defined outputs.
 **Canon constraint P-01:** "Every thread operation MUST produce automatic co-movement effects across all three dimensions... No GM discretion to skip."
 **Conflict:** If §3.8 genre-win Thread consequences are treated as Thread operations (which they appear to be, given RS changes), then P-01 requires all three dimensional auto-effects to fire automatically with no GM discretion.
 **Severity:** P1 — potential P-01 violation.

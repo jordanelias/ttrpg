@@ -135,7 +135,7 @@ Focus 2 and Focus 3 produce the same result after halving: 0 operations. Focus 3
 
 ## 8.1 Can Thread Work Satisfy a Factional Duty? [ROBUST — GAP]
 
-Player_agency_v30 (from prior batches): Duties are faction-assigned objectives. Examples inferred: "Govern this settlement," "Recruit officers in T4," "Suppress TC activity in T9."
+Player_agency_v30 (from prior batches): Duties are faction-assigned objectives. Examples inferred: "Govern this settlement," "Recruit officers in T4," "Suppress CI activity in T9."
 
 A player with Duty "Govern S-015 Gransol Parliament" could either: (a) use the Governance action (mundane, pool = Cognition + relevant History, Ob = floor(Prosperity/2)+1), or (b) use a Relational Weave on the Parliament's institutional bonds (Thread operation, per Batch 1 ruling).
 

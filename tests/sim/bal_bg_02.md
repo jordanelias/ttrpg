@@ -10,13 +10,13 @@
 
 ## P1 Findings (block balance sign-off)
 BAL-04 (ED-109): Crown 3/5 deeds pre-met at game start. Passive victory viable.
-BAL-05/06 (ED-110): Church primary victory inaccessible. TC net 0 vs Hafenmark. Deed 4 near-impossible.
+BAL-05/06 (ED-110): Church primary victory inaccessible. CI net 0 vs Hafenmark. Deed 4 near-impossible.
 BAL-08 (ED-111): Varfell Path B 9-10 season win. T13 adjacent to starting T4, Fort 0, seizable S1.
-BAL-09 (ED-112): TC lock — Hafenmark suppression exactly cancels Church TC generation at start.
+BAL-09 (ED-112): CI lock — Hafenmark suppression exactly cancels Church CI generation at start.
 
 ## P2 Findings
 BAL-01: Crown economic advantage (21 Pros vs Church 5). Partially offset by 5-deed VC.
-BAL-05: Church viable path requires either (A) AER TC acceleration or (B) Deed 4 redesign.
+BAL-05: Church viable path requires either (A) AER CI acceleration or (B) Deed 4 redesign.
 BAL-10 (ED-113): Varfell T13 dominant opening reduces strategic variety.
 
 ## P3 Findings
@@ -24,7 +24,7 @@ BAL-03: Hafenmark Military 3 leaves no military deterrent. Correct by design (Pa
 
 ## Proposed Fixes (awaiting user decision ED-109 through ED-113)
 ED-109: Crown — options A/B/C/D
-ED-110: Church — recommended option A (AER ≥ 3 generates TC +1/season bypassing suppression) + option B (Deed 4 redesign)
+ED-110: Church — recommended option A (AER ≥ 3 generates CI +1/season bypassing suppression) + option B (Deed 4 redesign)
 ED-111: Varfell Path B — recommended option D (2-season hold requirement)
-ED-112: TC lock — recommended option A (same as ED-110A)
+ED-112: CI lock — recommended option A (same as ED-110A)
 ED-113: T13 — recommended option B (early Warden trigger on Varfell march to T13) or C (accept)

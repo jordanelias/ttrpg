@@ -290,7 +290,7 @@ BG Thread orders require TS ≥ 30 affiliation: "Available to any faction with a
 
 **The Church is structurally blind to the RS crisis** (noted in victory_v30 "Core Frame"). This is confirmed by the BG Thread order gate: the Church cannot Mend. Its only RS-adjacent capability is the Co-Movement Card from BG opposing operations (if an enemy Thread op fires and the Church has a practitioner... which it doesn't by canon).
 
-**Design validation:** The Church's inability to address RS is intentional. Their path to victory relies on political dominance (TC, Graduated Seizure) before RS becomes critical — they must win politically before the world becomes unlivable. The Mend BG order unavailability is the mechanical expression of this structural blindness. Worth stating explicitly.
+**Design validation:** The Church's inability to address RS is intentional. Their path to victory relies on political dominance (CI, Graduated Seizure) before RS becomes critical — they must win politically before the world becomes unlivable. The Mend BG order unavailability is the mechanical expression of this structural blindness. Worth stating explicitly.
 
 ---
 
@@ -298,7 +298,7 @@ BG Thread orders require TS ≥ 30 affiliation: "Available to any faction with a
 
 ## 14.1 R-63 Creates an Undefined Ob Variable in Every Lock Calculation [GAP]
 
-R-63: "Replaces uniform −1 Rendering Stability/season for locked institutions: Slow-change domain (seasonal/yearly evolution): −1 Rendering Stability/season. Game Master determines domain type when Lock is applied."
+R-63: "Replaces uniform −1 Mending Stability/season for locked institutions: Slow-change domain (seasonal/yearly evolution): −1 Mending Stability/season. Game Master determines domain type when Lock is applied."
 
 The slow-change domain rate (−1/season) is defined. The fast-change domain rate is not stated. The rule says "Game Master determines domain type" — implying there are multiple domain types with different rates — but only slow-change is specified.
 

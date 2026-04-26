@@ -65,7 +65,7 @@ Altonia conquers the Valorian peninsula during a period when the Church of Solmu
 
 **Altonian cultural imperialism.** Separately from Church containment, Altonia systematically destroys Valnese records, monuments, and temples — targeting Einhir cultural heritage, not the Church. The Forgetting is epistemological (P-08), not political. The destruction matters politically (Restoration Movement grievance, loss of lineage records) but has zero bearing on the epistemological barrier.
 
-**The Church learns from containment.** The Church's institutional memory includes 200 years of being managed through accommodation. Himlensendt's strategy at game start — hospitals, charities, dispute resolution, gradual TC accumulation — is the Church applying Altonia's containment logic in reverse: making itself indispensable so the Crown cannot afford to confront it. The cage became a school.
+**The Church learns from containment.** The Church's institutional memory includes 200 years of being managed through accommodation. Himlensendt's strategy at game start — hospitals, charities, dispute resolution, gradual CI accumulation — is the Church applying Altonia's containment logic in reverse: making itself indispensable so the Crown cannot afford to confront it. The cage became a school.
 
 ---
 
@@ -112,7 +112,7 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 | Year | Event |
 |------|-------|
 | 200 AG | Post-war settlement. First Almqvist (Almud's father) on the throne — the war hero who earned the deed-claim. |
-| ~200-218 AG | **First Almqvist's reign (~18 years).** Military leader transitioning to peacetime sovereign. Competent, focused on border security and Altonian deterrence. Church consolidates co-sovereign position. TC begins accumulating. |
+| ~200-218 AG | **First Almqvist's reign (~18 years).** Military leader transitioning to peacetime sovereign. Competent, focused on border security and Altonian deterrence. Church consolidates co-sovereign position. CI begins accumulating. |
 | ~218 AG | **The hunting accident.** The first Almqvist — the founder, the war hero — killed. Officially accidental; widely suspected assassination. Perpetrator undefined. [EDITORIAL E-01: perpetrator TBD.] |
 | ~218 AG | **Almud Almqvist ascends to the throne.** The founder's son. Young. Has not personally earned the deed-claim — inherits the presumption his father created. Early reign defined by proving the presumption warranted. |
 | 220-235 AG | **Almud opens trade via Schoenland.** Politically toxic. Economy stabilises. The Church objects publicly; its Altonian missionaries quietly benefit. Schoenland profits enormously. |
@@ -129,7 +129,7 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 | Clock | Value | Rationale |
 |-------|-------|-----------|
 | MS | 72 (Strained) | ~250 years of accumulated disruption since the Catastrophe, partially stabilised by residual Einhir site integrity + Warden Mending. [EDITORIAL: PR-3 ED-731 — TT→MS inversion resolved 2026-04-20; 100-TT gives MS on current scale.] |
-| TC | 22 | Church incubated during 200 years of Altonian containment, consolidated post-independence. 45 years of post-independence accumulation. |
+| CI | 22 | Church incubated during 200 years of Altonian containment, consolidated post-independence. 45 years of post-independence accumulation. |
 | IP | 20 (Dormant) | Trade relations active. Elske's marriage provides veneer of stability. |
 
 ### Key Figures at Game Start
@@ -175,7 +175,7 @@ Not a faction — a spoiler actor. Profits from tension, including caste tension
 | Conflict | Resolution |
 |----------|------------|
 | CP13: Year 102 AG | **245 AG.** Timeline chat + 200-year shift. |
-| Earlier: TC 0 or TC 15 | **TC 22.** Church predates secession, consolidated post-war. |
+| Earlier: CI 0 or CI 15 | **CI 22.** Church predates secession, consolidated post-war. |
 | Timeline chat: one child | **Two children** (Elske + Torben). Session 5 editorial. |
 | Timeline chat: "Altonian prince" | **Altonian Duke (Doux).** Session 5 editorial. |
 | Earlier: TT 28 "reflecting 102 years" | **MS 72 (Strained) reflecting ~250 years since Catastrophe (TT→MS inversion 2026-04-20).** |

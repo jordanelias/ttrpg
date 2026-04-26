@@ -12,7 +12,7 @@ Before arcs: the six human-play patterns injected as non-optimal choice nodes. T
 |------|-----------|-----------|
 | IP-A | **The Fixated** | Pursues one Belief obsessively regardless of changed circumstances. Spends all Momentum on that Belief even when doing so collapses other tracks. |
 | IP-B | **The Diplomatic Idealist** | Attempts to negotiate with every faction including active enemies. Rolls social when combat is required. Triggers Ethical Framework penalties by refusing actions that violate personal values even when mechanically optimal. |
-| IP-C | **The Thread Maximiser** | Every scene, attempts a Thread operation regardless of Rendering Stability (RS) level or personal Coherence. Treats Thread as the answer to non-Thread problems. |
+| IP-C | **The Thread Maximiser** | Every scene, attempts a Thread operation regardless of Mending Stability (RS) level or personal Coherence. Treats Thread as the answer to non-Thread problems. |
 | IP-D | **The Hoarder** | Never spends Momentum. Saves Wealth faction contributions. Refuses to commit resources until a "perfect moment" that never arrives. |
 | IP-E | **The Splitter** | When the party faces a two-front problem, splits the group — each Player Character handles one front alone, halving all pools. |
 | IP-F | **The Confronter** | Escalates every social scene to a direct challenge before Reading the Room. Misidentifies Resonant Styles. Always opens with the wrong mode (Character when the Non-Player Character responds to Consequence, etc.). |
@@ -24,13 +24,13 @@ Notation in flowcharts: optimal path = solid line; irrational branch = dashed li
 ## ARC 1: The Succession Weapon
 
 ### Mechanical Seed
-Theocracy Counter (TC) crosses threshold 30 → Church institutional pressure fires → Himlensendt invokes doctrine (Domain Action: Influence attack on Crown Mandate) → King Almud's Sovereign Constraint activates → Torben loyalty clock becomes contested asset.
+Church Influence (CI) crosses threshold 30 → Church institutional pressure fires → Himlensendt invokes doctrine (Domain Action: Influence attack on Crown Mandate) → King Almud's Sovereign Constraint activates → Torben loyalty clock becomes contested asset.
 
 ### Narrative
 
 The players will first notice something is wrong with the Church through small things: a sermon referenced in passing, a minor official refusing to confirm a merchant's contract without a tithe review, a locked archive that was open last season. No one announces that Confessor Arne Himlensendt has decided to move.
 
-By the time the Theocracy Counter crosses 30, the Church has already run two Domain Actions — one to increase its Influence in the southern parishes, one to reduce the Crown's Mandate among the commons by seeding a scandal about treasury mismanagement. Players watching only the explicit scene layer will have seen neither. Players watching faction stats will notice Crown Mandate has dropped one. If they investigate, the trail leads to a retired clerk named Vaynard who, under pressure, reveals he passed documents to a Church representative.
+By the time the Church Influence crosses 30, the Church has already run two Domain Actions — one to increase its Influence in the southern parishes, one to reduce the Crown's Mandate among the commons by seeding a scandal about treasury mismanagement. Players watching only the explicit scene layer will have seen neither. Players watching faction stats will notice Crown Mandate has dropped one. If they investigate, the trail leads to a retired clerk named Vaynard who, under pressure, reveals he passed documents to a Church representative.
 
 The lever the Church pulls is Torben. When Institutional Pressure reaches 30, Altonia's education demand arrives — and Himlensendt uses his Influence network to ensure it arrives with Church endorsement. Torben leaves Valoria. The Torben Loyalty Clock starts counting.
 
@@ -40,7 +40,7 @@ Now the players face a structural problem, not a villain to fight: the king cann
 
 ```mermaid
 flowchart TD
-    A["TC crosses 30\n[Theocracy Counter threshold — stage12 §12.3]"]
+    A["CI crosses 30\n[Church Influence threshold — stage12 §12.3]"]
     A --> B["Church Domain Action: Influence attack\nvs Crown Mandate\n[Domain Ob = Crown Mandate 5; Church Influence 6D TN7]"]
     B --> C{Outcome}
     C -->|"Partial/Fail\n(Church net < 5)"| D["Crown Mandate holds\nChurch plots longer-term\n[next attempt Season +2]"]
@@ -75,7 +75,7 @@ flowchart TD
 
 ### Footer
 
-No player designed this arc. It emerges from TC threshold mechanics, the Torben Loyalty Clock, and Himlensendt's Beliefs running in parallel without player input. Arc shape: 3–4 seasons, compressed in BG mode to 1 session. Endgame indicator: succession resolved or definitively broken.
+No player designed this arc. It emerges from CI threshold mechanics, the Torben Loyalty Clock, and Himlensendt's Beliefs running in parallel without player input. Arc shape: 3–4 seasons, compressed in BG mode to 1 session. Endgame indicator: succession resolved or definitively broken.
 
 **Irrational behaviour findings:**
 - IP-F (Confronter): Misidentifying Himlensendt's Resonant Style (Consequence, not Character) costs +1 Ob on the critical Debate, making loss near-certain. Church Stability bonus from martyrdom effect compounds — the players made Himlensendt stronger.
@@ -84,16 +84,16 @@ No player designed this arc. It emerges from TC threshold mechanics, the Torben 
 
 ---
 
-## ARC 2: The Rendering Stability Drain
+## ARC 2: The Mending Stability Drain
 
 ### Mechanical Seed
-One Thread practitioner Player Character runs operations every scene for 3 seasons without Thread management → Rendering Stability (RS) decays to threshold 50 → world-legibility effects begin → non-practitioner factions notice anomalies → Varfell mobilises its intelligence network → Church interprets manifestations as heresy → Institutional Pressure spike.
+One Thread practitioner Player Character runs operations every scene for 3 seasons without Thread management → Mending Stability (RS) decays to threshold 50 → world-legibility effects begin → non-practitioner factions notice anomalies → Varfell mobilises its intelligence network → Church interprets manifestations as heresy → Institutional Pressure spike.
 
 ### Narrative
 
 The players won't notice the drain from their side. The Thread practitioner is doing what Thread practitioners do — Leaping when there's an advantage, running Diagnosis on Unstable threads, occasionally overreaching. Each operation costs RS fractions and no single scene looks alarming.
 
-What they will notice is the world getting strange at the edges. A trade document from Hafenmark arrives with an ink error that shouldn't exist — a word in a dead form, no longer used. An old man in the market describes a road that isn't there and has never been. A miller's dog won't stop barking at a wall. These are not random events — they are RS manifestations: the substrate producing legibility failures as it degrades. Players who don't understand what Rendering Stability is will try to investigate these incidents as normal mysteries. They are not mysteries. They are symptoms.
+What they will notice is the world getting strange at the edges. A trade document from Hafenmark arrives with an ink error that shouldn't exist — a word in a dead form, no longer used. An old man in the market describes a road that isn't there and has never been. A miller's dog won't stop barking at a wall. These are not random events — they are RS manifestations: the substrate producing legibility failures as it degrades. Players who don't understand what Mending Stability is will try to investigate these incidents as normal mysteries. They are not mysteries. They are symptoms.
 
 By the time RS crosses 50, Varfell's intelligence network has logged enough anomalies to flag a "thread-active zone" to their leadership. They don't announce this. They move an agent to the town. Meanwhile, the Church's perception is different: Himlensendt's theological framework converts the anomalies into evidence of heresy. He doesn't know he's wrong. His institutional perceptual prophylaxis prevents him from making the causal inference a practitioner would make. He knows something is happening. He concludes it is spiritual corruption. He begins an inquiry.
 
@@ -115,7 +115,7 @@ flowchart TD
     F --> G["Varfell Intel action fires automatically\n[Institutional Tendency: map anomalies]\nVariances logged over 2 scenes"]
     F --> H["Church interprets anomalies as heresy\nHimlensendt — Institutional Pressure +2\n[stage6 §8 Church ethical framework]"]
     G --> I["Varfell moves agent into area\nIntel +1 vs players' faction\n[Domain Action: Intel surveillance]"]
-    H --> J["Church begins formal inquiry\nTheocracy Counter +3 if inquiry formalized\n[Domain Action: Institutional Pressure attack]"]
+    H --> J["Church begins formal inquiry\nChurch Influence +3 if inquiry formalized\n[Domain Action: Institutional Pressure attack]"]
 
     I --> K{Players detect Varfell agent?}
     K -->|"Attunement+Intel Ob 3 (opposed by agent Intel 4)"| L["Agent identified\nVarfell contact scene available\n[Axis 7: Information vs Secrecy]"]
@@ -128,14 +128,14 @@ flowchart TD
     Q --> R["Operation pool collapse:\ne.g. Spirit 4+Attunement 3+TPS 3 = 10D\n@ TN8: E[net] = 2.0 vs Ob 2 standard\nstill functional — but Ob rising with RS"]
 
     O -.->|"[IP-F] Confront Himlensendt directly\nabout Thread truth\n[Axis 9: Ontological]"| S["Church ethical framework: +2 Ob\nfor revealing Thread truth\nHimlensendt Composure 12, effective Ob 5\nPlayers need net 5+ against pool ~8D TN7"]
-    S -->|"Fail (likely — ~35% at 8D)"| T["Theocracy Counter +5\nChurch formally declares heresy\nPlayers marked — Institutional Pressure spike"]
+    S -->|"Fail (likely — ~35% at 8D)"| T["Church Influence +5\nChurch formally declares heresy\nPlayers marked — Institutional Pressure spike"]
     S -->|"Success (rare)"| U["Himlensendt shaken — 1 season\nbut institutional momentum continues without him\n[Leader vs Institution rule]"]
 
     N --> V["RS restoration: Varfell Domain Action\nWealth 5D vs Ob 3\n~88% success\nRS +8 (restoration effect)"]
     P --> V
     V --> W["RS stabilises 48–56\nArc moves to monitoring phase\nfaction relationships permanently shifted"]
 
-    T --> X["ARC feeds ARC 1 (TC spike)\nand ARC 4 (Church military action)\n→ multi-arc convergence"]
+    T --> X["ARC feeds ARC 1 (CI spike)\nand ARC 4 (Church military action)\n→ multi-arc convergence"]
 ```
 
 ### Footer
@@ -144,7 +144,7 @@ Emerges from the RS decay mechanic running in the background while players pursu
 
 **Irrational behaviour findings:**
 - IP-C (Thread Maximiser): The key failure is not immediate — the pool numbers remain functional down to RS 50 (TN shift). The failure is *political*: the Thread operations are legible to factions before they become mechanically limiting. By the time the Maximiser notices mechanical degradation, the Church inquiry is already filed and Varfell has the intelligence. The mechanic punishes the archetype through surveillance, not through pool collapse.
-- IP-F on Himlensendt: The +2 Ob for Thread truth revelation is the Church's hardest modifier. Even a well-built Debate pool (~8D) has only ~35% success against effective Ob 5. The confrontation route is nearly a guaranteed Theocracy Counter spike. Most tables will not see this coming.
+- IP-F on Himlensendt: The +2 Ob for Thread truth revelation is the Church's hardest modifier. Even a well-built Debate pool (~8D) has only ~35% success against effective Ob 5. The confrontation route is nearly a guaranteed Church Influence spike. Most tables will not see this coming.
 
 ---
 
@@ -207,7 +207,7 @@ Emerges from Löwenritter's partial stat sheet (no Mandate) colliding with coup 
 ## ARC 4: The Thread Truth Cascade
 
 ### Mechanical Seed
-Axis 9 (Ontological) resolved publicly → Thread truth becomes common knowledge → Church Theocracy Counter collapses (−20 minimum) → Church Stability crisis → Himlensendt's institutional power breaks → vacuum in moral authority → all factions reposition on Axis 1 (Sovereignty) simultaneously → political cascade.
+Axis 9 (Ontological) resolved publicly → Thread truth becomes common knowledge → Church Church Influence collapses (−20 minimum) → Church Stability crisis → Himlensendt's institutional power breaks → vacuum in moral authority → all factions reposition on Axis 1 (Sovereignty) simultaneously → political cascade.
 
 ### Narrative
 
@@ -215,7 +215,7 @@ The players will probably not mean to resolve Axis 9. It will happen because one
 
 The immediate effect is not what players expect. There is no riot, no sudden collapse. There is a silence. People do not process ontological revelations quickly. What they process quickly is that the institution they were told to trust lied to them about the most fundamental question there is. That anger takes two to three scenes to become organised. When it does, it moves faster than any Domain Action.
 
-Himlensendt does not lose faith. That is the thing. His theological framework simply — converts. He finds a new interpretation that maintains Church authority while accepting the physical reality of Thread. He is now more dangerous, not less: a sophisticated institution adapting rather than collapsing. The Church's Theocracy Counter drops, then stabilises. What the players thought they had destroyed has become something different.
+Himlensendt does not lose faith. That is the thing. His theological framework simply — converts. He finds a new interpretation that maintains Church authority while accepting the physical reality of Thread. He is now more dangerous, not less: a sophisticated institution adapting rather than collapsing. The Church's Church Influence drops, then stabilises. What the players thought they had destroyed has become something different.
 
 Meanwhile, every other faction repositions. The Crown can now openly acknowledge what Almud has always privately suspected. The Guilds see commercial opportunity in legitimate Thread services. Varfell — the faction that was already there — finds itself suddenly central rather than marginal. The Revolution, which used Thread truth as a political weapon, must decide what it stands for now that the weapon has fired.
 
@@ -225,11 +225,11 @@ Meanwhile, every other faction repositions. The Crown can now openly acknowledge
 flowchart TD
     A["Axis 9 resolution event:\nPublic Thread demonstration OR\nDocument release OR\nInquisitor testimony\n[stage6 §8.1 Nine Political Axes]"]
     A --> B["Church ethical framework fires:\n+2 Ob on any action to suppress\n(institutional perceptual prophylaxis now fails)\n[stage6 §8.3 Church framework]"]
-    B --> C["TC −20 (minimum) — automatic\n[Threshold: TC below 20 = Church authority broken indicator\nstage12 §12.1 endgame indicators]"]
-    C --> D{"TC position before revelation"}
-    D -->|"TC was 50–70 → now 30–50"| E["Church weakened but functional\nHimlensendt adaptation begins\n2 seasons to new doctrine"]
-    D -->|"TC was 30–50 → now 10–30"| F["Church in crisis\nStability −2 this season\nTemplar independence fractures"]
-    D -->|"TC was 15–30 → now 0–10"| G["Church collapses institutionally\nEndgame indicator: Church broken\nMoral authority vacuum — all factions scramble"]
+    B --> C["CI −20 (minimum) — automatic\n[Threshold: CI below 20 = Church authority broken indicator\nstage12 §12.1 endgame indicators]"]
+    C --> D{"CI position before revelation"}
+    D -->|"CI was 50–70 → now 30–50"| E["Church weakened but functional\nHimlensendt adaptation begins\n2 seasons to new doctrine"]
+    D -->|"CI was 30–50 → now 10–30"| F["Church in crisis\nStability −2 this season\nTemplar independence fractures"]
+    D -->|"CI was 15–30 → now 0–10"| G["Church collapses institutionally\nEndgame indicator: Church broken\nMoral authority vacuum — all factions scramble"]
 
     E --> H{Player response to adapting Church}
     H -->|"Optimal: engage Himlensendt\nwith Evidence on doctrine\n[Resonant Style: Consequence — Ob 3]"| I["Debate succeeds on Evidence\nNew doctrine shaped by Player Character input\nChurch emerges as Thread-acknowledging institution"]
@@ -242,7 +242,7 @@ flowchart TD
 
     N -->|"Direct Crown: support Almud\n[Virtue Ethics: visible public support = −1 Ob]"| O["Crown Mandate Domain Action\nPool: 5D + player pool (if leadership)\nvs Ob 3 (multiple competitors)\nP(success) ≈ 82%\nCrown becomes dominant faction"]
     N -->|"Direct Varfell: operationalise Thread services"| P["Varfell Influence 4D vs Ob 2\nP(success) ≈ 93%\nThread economy begins — RS restoration viable\nas commercial service"]
-    N -.->|"[IP-C] Player Character Thread operations\nat all revealed locations\n— 'demonstrate capability'"| Q["RS −8 over 2 scenes\n(multiple operations, Rendering Stability burn)\nRS may cross 40 if already degraded\nARC 2 re-activates"]
+    N -.->|"[IP-C] Player Character Thread operations\nat all revealed locations\n— 'demonstrate capability'"| Q["RS −8 over 2 scenes\n(multiple operations, Mending Stability burn)\nRS may cross 40 if already degraded\nARC 2 re-activates"]
 
     N -.->|"[IP-B] Negotiate with all factions\nsimultaneously\n— 'everyone should benefit'"| R["Circles Ob 3 × 4 factions\neach contested by competing factions\nPlayers at ~50% per roll without faction backing\n3 of 4 likely fail"]
     R --> S["Players perceived as committed to nobody\nFaction relationship penalty: −1 with all contacted factions\n(wasted their time)"]
@@ -262,7 +262,7 @@ flowchart TD
 
 ### Footer
 
-Axis 9 resolution is an endgame indicator, not a mid-arc event — this arc only fires in a late campaign. No player can deliberately trigger it cleanly; it emerges from accumulated scenes where Thread truth leaked incrementally. Arc shape: 1–2 seasons of cascade, then resolution. In BG mode, compressed to single TC threshold event with faction repositioning table.
+Axis 9 resolution is an endgame indicator, not a mid-arc event — this arc only fires in a late campaign. No player can deliberately trigger it cleanly; it emerges from accumulated scenes where Thread truth leaked incrementally. Arc shape: 1–2 seasons of cascade, then resolution. In BG mode, compressed to single CI threshold event with faction repositioning table.
 
 **Irrational behaviour findings:**
 - IP-C (Thread Maximiser): The revelation scene creates a window where Thread operations are *expected* — the world knows they exist. The Maximiser reads this as permission. The RS burn from multiple demonstration operations during the cascade can push RS below 40, re-triggering ARC 2 at exactly the moment the political situation is most volatile. Two simultaneous crises (RS collapse + political cascade) is the most punishing combined outcome.
@@ -314,7 +314,7 @@ flowchart TD
     Q -->|"Niflhel asks: RS restoration\nif documents used safely"| R["Players control document access\nThread practitioners can use documents\nas RS restoration catalyst\n[RS +5 per controlled study session\nvs RS −2 per normal operation]"]
     Q -->|"Niflhel asks: protect them\nfrom all factions"| S["Niflhg Stability becomes player-sponsored\nDomain Action: Influence support\nvs Church Ob 3 each season\nP(success) ≈ 72% — sustainable but costly"]
 
-    R --> T["Document study programme:\nRS net +3/season (restore − operation cost)\nNiflhel Stability +1 (legitimacy from purpose)\nChurch Theocracy Counter −5 (over 3 seasons)\nas Thread truth leaks incrementally"]
+    R --> T["Document study programme:\nRS net +3/season (restore − operation cost)\nNiflhel Stability +1 (legitimacy from purpose)\nChurch Church Influence −5 (over 3 seasons)\nas Thread truth leaks incrementally"]
     S --> U["Documents preserved — no RS benefit\nChurch search continues but blocked\nArc extends until players choose release or use"]
 
     T --> V["Controlled Axis 9 resolution path:\nThread truth emerges gradually\nChurch has time to adapt (Himlensendt)\nTC drops 15 over 4 seasons vs 20 in one event\n→ softer landing than sudden ARC 4 trigger"]
@@ -338,9 +338,9 @@ Emerges from Niflhel's partial stat sheet — they can survive (Stability 4, Inf
 
 | | ARC 1: Succession | ARC 2: RS Drain | ARC 3: Löwenritter | ARC 4: Axis 9 | ARC 5: Niflhel |
 |---|---|---|---|---|---|
-| **ARC 1: Succession** | — | TC spike from Church inquiry accelerates RS decay | Torben loyalty ≤3 is coup trigger #2 | Public destabilisation widens Axis 9 crack | Niflhel documents contain Torben-relevant lineage data [EDITORIAL: ED-NNN — is this canon?] |
-| **ARC 2: RS Drain** | Thread anomalies accelerate TC (Church inquiry) | — | RS collapse is coup trigger #3 (crisis condition) | RS must be ≥55 for controlled Axis 9 resolution | Documents provide only net-positive RS pathway |
-| **ARC 3: Löwenritter** | Coup removes Crown as stabilising factor | Löwenritter military action adds RS stress (mass battle) | — | Coup accelerates TC collapse (Church loses Crown buffer) | Löwenritter indifferent to documents — but Revolution is not |
+| **ARC 1: Succession** | — | CI spike from Church inquiry accelerates RS decay | Torben loyalty ≤3 is coup trigger #2 | Public destabilisation widens Axis 9 crack | Niflhel documents contain Torben-relevant lineage data [EDITORIAL: ED-NNN — is this canon?] |
+| **ARC 2: RS Drain** | Thread anomalies accelerate CI (Church inquiry) | — | RS collapse is coup trigger #3 (crisis condition) | RS must be ≥55 for controlled Axis 9 resolution | Documents provide only net-positive RS pathway |
+| **ARC 3: Löwenritter** | Coup removes Crown as stabilising factor | Löwenritter military action adds RS stress (mass battle) | — | Coup accelerates CI collapse (Church loses Crown buffer) | Löwenritter indifferent to documents — but Revolution is not |
 | **ARC 4: Axis 9** | Thread truth destabilises succession (Almud's private suspicion now public) | RS cascade if Axis 9 fires at RS < 55 | Political vacuum accelerates if Church collapses simultaneously | — | ARC 5 controlled path is the only soft Axis 9 trigger |
 | **ARC 5: Niflhel** | Documents irrelevant to succession unless lineage angle exists | Document study is only net-positive RS path | Revolution would weaponise documents if they gain power | ARC 5 soft path prevents ARC 4 cascade | — |
 
@@ -372,10 +372,10 @@ Emerges from Niflhel's partial stat sheet — they can survive (Stability 4, Inf
 - [EDITORIAL: ED-NNN — does Niflhel archive contain lineage data relevant to Torben? Requires user ruling before ARC 1/ARC 5 cross-arc interaction is canonical]
 
 **Test ID:** SIM-ARC-01
-**Mechanics:** Domain Actions, Debate system, RS decay/restoration, TC thresholds, Torben Loyalty Clock, Niflhel document mechanic (provisional), Coup trigger conditions
+**Mechanics:** Domain Actions, Debate system, RS decay/restoration, CI thresholds, Torben Loyalty Clock, Niflhel document mechanic (provisional), Coup trigger conditions
 **Mode:** TTRPG primary; BG notes included per arc
 **Temporal:** Multi-season, cross-arc
-**Tracks:** RS, TC, Institutional Pressure, Torben Loyalty, Mandate, Stability, Influence, Military, Coherence
+**Tracks:** RS, CI, Institutional Pressure, Torben Loyalty, Mandate, Stability, Influence, Military, Coherence
 **Factions:** All eight
 **NPCs:** Almud, Himlensendt, Torben, Elske, Edith Varn (referenced), Baralta (referenced)
 **Archetypes:** IP-A through IP-F (all six irrational archetypes)

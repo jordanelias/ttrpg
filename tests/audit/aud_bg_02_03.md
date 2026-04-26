@@ -21,16 +21,16 @@ P2 findings:
 - C-01: Past-Pull in T13 nearly impossible without VTM (intended gating).
 - C-02: VTM advancement from Tribune on Thread Wound sites is reliable path (note).
 
-### SIM-BG-02: Church TC Race
-Church reaches TC 40 (Deed 1) at exactly S12 with Hafenmark suppression active.
+### SIM-BG-02: Church CI Race
+Church reaches CI 40 (Deed 1) at exactly S12 with Hafenmark suppression active.
 Knife-edge timing creates maximum tension. Correct design.
-Without Hafenmark suppression (Baralta Excommunicated): TC 40 by S6. Church wins midgame.
+Without Hafenmark suppression (Baralta Excommunicated): CI 40 by S6. Church wins midgame.
 Tension correctly hinged on Hafenmark maintaining Baralta's Mandate. ✓
 
-### SIM-BG-03: TC 80 All-Territory Sweep
+### SIM-BG-03: CI 80 All-Territory Sweep
 P1 finding (→PP-183): Unlimited sweep seizes ~6.5 territories in one season. Game-ending.
-Capped at 4 territories/season. TC gain from Seizure capped at +4/season.
-Church still overwhelmingly powerful at TC 80; other factions have 2-3 seasons to respond.
+Capped at 4 territories/season. CI gain from Seizure capped at +4/season.
+Church still overwhelmingly powerful at CI 80; other factions have 2-3 seasons to respond.
 
 ### SIM-BG-04: Varfell Thread Supremacy
 VTM 5 + RS ≥ 50 + T12/T13 achievable by S11-12 at median play.

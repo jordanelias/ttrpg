@@ -1,7 +1,7 @@
 # SIM-X-05: Grand Debate — Baralta (Hafenmark) vs Himlensendt (Church)
 ## Mode: C (Full Scenario) + B (Interaction Chain: Debate × Thread × Audience)
 ## Mechanics: §9 Debate × W-41 × W-42 × W-40 × §13 NPCs
-## Context: Parliamentary session. Motion: Sovereign Authority Doctrine (Baralta) vs Church Inquisitorial Jurisdiction (Himlensendt). 5-exchange Grand Debate. Audience: Parliament (mixed, slight Church lean due to TC=35).
+## Context: Parliamentary session. Motion: Sovereign Authority Doctrine (Baralta) vs Church Inquisitorial Jurisdiction (Himlensendt). 5-exchange Grand Debate. Audience: Parliament (mixed, slight Church lean due to CI=35).
 ## Stakes: Winning orator's position generates Domain Echo. Grand Debate 5–0 loss: +1 Ob to social actions for 1 season.
 
 ---
@@ -31,7 +31,7 @@
 
 **Audience: Parliament**
 - Composition: mixed nobility, crown delegates, guild representatives
-- Current disposition: slight Church lean (TC=35 → Church has been active; Mandate Church=5 vs Crown=5)
+- Current disposition: slight Church lean (CI=35 → Church has been active; Mandate Church=5 vs Crown=5)
 - Style bonus: Consequence arguments receive +1D before Church-leaning audience (GM call — future stakes resonate)
 - Thread detection: no TS≥50 observers in Parliament other than Klapp
 
@@ -40,7 +40,7 @@
 ## State: Pre-Debate
 
 ### Tracks
-RS: 100 | Klapp Coherence: 10/10 | TC: 35
+RS: 100 | Klapp Coherence: 10/10 | CI: 35
 
 **Exchange count:** 5 (Grand Debate)
 **Initiative equivalent:** No mechanical initiative in Debate — simultaneous rolls per exchange.
@@ -185,7 +185,7 @@ Final score: Himlensendt 5–0 Baralta (most likely) OR 4–1 Baralta (with Insp
 **Grand Debate 5–0 loss (Baralta):**
 - Baralta: +1 Ob on all social actions vs Church for 1 season
 - Domain Echo: Himlensendt's position (Church inquisitorial jurisdiction) stands. Church Reach effectively +1 on Inquisitor investigations this season.
-- TC: no direct change from Debate outcome, but the Church's political win creates pressure: GM may rule TC +1 at next accounting (public Church victory in Parliament → Piety strengthened).
+- CI: no direct change from Debate outcome, but the Church's political win creates pressure: GM may rule CI +1 at next accounting (public Church victory in Parliament → Piety strengthened).
 
 **W-42 consequences (Klapp's intervention):**
 - Klapp shifted audience disposition: if anyone noticed (TS≥50 observers?), this is an observable Thread event. No TS≥50 observers in Parliament except Klapp himself (TS31 < 50). Undetected.

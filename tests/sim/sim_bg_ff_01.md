@@ -12,11 +12,11 @@ Two parallel 4-season runs of the same board state. Identical rolls (fixed seed)
 
 **Starting board state (Season 1, Year 1):**
 - Crown: Mandate 5, Influence 5, Wealth 4, Military 4, Stability 4, Standing 5. Controls T1, T2, T4.
-- Church: Mandate 5, Influence 6, Wealth 5, Military 4, Stability 5. Controls T3, T7. Theocracy Counter (TC) 28.
+- Church: Mandate 5, Influence 6, Wealth 5, Military 4, Stability 5. Controls T3, T7. Church Influence (CI) 28.
 - Hafenmark: Mandate 4, Influence 4, Wealth 5, Military 3, Stability 4. Controls T6.
 - Varfell: Mandate 4, Influence 4, Wealth 3, Military 3, Stability 4, Intel 4. Controls T9.
 - Guilds: Mandate 3, Influence 4, Wealth 3, Military 3, Stability 4. Controls T8, T11.
-- Rendering Stability (RS): 72. Public Instability (PI): 5. Institutional Pressure (IP): 20.
+- Mending Stability (RS): 72. Public Instability (PI): 5. Institutional Pressure (IP): 20.
 
 **Fixed roll sequence (d10, pre-rolled for all actions):**
 S1: Crown Govern 1,4,8,3 → net 0 (Failure). Church Trade 7,9,2 → net 2 (Success Ob1). Hafenmark Diplomacy 6,1,8 → net 0 (Partial at Ob1? Net = +1-1 = 0 = Failure). Varfell Spy 7,7,3 → net 2 (Success Ob2: exact). Guilds Trade 4,4,6 → net 0 (Failure). Crown Military march 8,7,3,2 → net 2 (Success Ob2).
@@ -48,7 +48,7 @@ Result: Action wasted. No state change. Wealth unchanged.
 **Crown Military March to T5 — Success (net 2, Ob 2):**
 Result: Crown unit enters T5.
 
-**S1 State changes (Run A):** Church Wealth 6, Varfell gains Church intel. Crown unit in T5. Everything else: static. Rendering Stability 72, Public Instability 5, Institutional Pressure 20.
+**S1 State changes (Run A):** Church Wealth 6, Varfell gains Church intel. Crown unit in T5. Everything else: static. Mending Stability 72, Public Instability 5, Institutional Pressure 20.
 
 ---
 
@@ -71,7 +71,7 @@ Result: Action wasted. No intel gained. No state change.
 Result: Reduced success. Prosperity T8 +1.
 
 **Church Thread Op — Success (net 3, Ob 2):**
-Result: Rendering Stability −1 (Co-Movement). RS 71. Thread Debt token placed in T3.
+Result: Mending Stability −1 (Co-Movement). RS 71. Thread Debt token placed in T3.
 
 **S2 State (Run A):** Crown Mandate 4, Church Wealth 6, Mandate 6, Hafenmark Wealth 7 (ceiling hit), RS 71, Varfell no intel from Investigate, Prosperity T1+1, T8+1.
 
@@ -126,7 +126,7 @@ Result: Diplomatic agreement with Guilds. Guilds Standing +1.
 | Faction | Mandate | Wealth | Military | Stability | Notes |
 |---------|---------|--------|----------|-----------|-------|
 | Crown | 4 (−1) | 4 | 4 + unit in T5 | 4 | Deed 1 at risk (Mandate <5) |
-| Church | 6 (+1) | 6 (+1) | 4 + Templar | 5 | Theocracy Counter 28 (no advance) |
+| Church | 6 (+1) | 6 (+1) | 4 + Templar | 5 | Church Influence 28 (no advance) |
 | Hafenmark | 4 | 7 (ceiling, +2) | 3 + new unit Coh3 | 4 | Wealth capped |
 | Varfell | 4 | 3 | 3 | 4 | Intel on Church; Thread Debt T9 |
 | Guilds | 3 | 3 | 3 | 4 | Standing +1 |
@@ -210,7 +210,7 @@ Crown action delayed.
 
 **Guilds Community Organising — Failure (Moderate complication):**
 Complication: +1 Ob to next Community action in any Guilds territory.
-Effect: Guilds are now blocked from Community Organising next season at standard Ob. This represents organised opposition to the Guilds' community efforts — possibly Church-backed given Theocracy Counter trajectory.
+Effect: Guilds are now blocked from Community Organising next season at standard Ob. This represents organised opposition to the Guilds' community efforts — possibly Church-backed given Church Influence trajectory.
 
 **Varfell Thread Op — Success (unchanged):**
 RS 70. Thread Debt T9.
@@ -247,7 +247,7 @@ Guilds Standing +1 → Guilds Standing 3. Church-Guilds alignment forming.
 | Faction | Mandate | Wealth | Military | Stability | Standing | Notes |
 |---------|---------|--------|----------|-----------|----------|-------|
 | Crown | 4 (−1) | 4 | 4 + T5 unit | 4 | 5 | PI 7; Church Casus Belli active; action delayed S3 |
-| Church | 6 (+1) | 6 (+1) | 4 + Templar | 5 | — | Theocracy Counter 28; Casus Belli vs Crown |
+| Church | 6 (+1) | 6 (+1) | 4 + Templar | 5 | — | Church Influence 28; Casus Belli vs Crown |
 | Hafenmark | 4 | 7 (ceiling) | 3 + Coh3 unit | 4 | 3 (−1) | Casus Belli from Guilds active |
 | Varfell | 4 | 3 | 3 | 3 (−1) | — | Thread Debt T9; community +1Ob next |
 | Guilds | 3 | 3 | 3 | 4 | 3 (−1) | Casus Belli vs Hafenmark; recovering from Wealth shock |
@@ -300,7 +300,7 @@ RS: 70 (−2). Public Instability: 7 (+2). Institutional Pressure: 20 (unchanged
 
 The comparison is unambiguous. Five zero-consequence Failures in Run A vs five state-changing complications in Run B. The complication choices (Minor Partial) also create faction-voice moments that BG currently lacks — a faction's decision about which Minor consequence to accept reveals its priorities.
 
-One nuance: **FF increases the speed of board state degradation.** Rendering Stability is identical (both RS 70) but Stability, Standing, and PI all declined in Run B. In a 12-season game this compounds. The question is whether this creates appropriate pressure or accelerates the game unsatisfyingly. Assessment: appropriate — the complications are proportionate and recoverable. A Stability −1 is serious but not catastrophic; a Casus Belli can be managed diplomatically.
+One nuance: **FF increases the speed of board state degradation.** Mending Stability is identical (both RS 70) but Stability, Standing, and PI all declined in Run B. In a 12-season game this compounds. The question is whether this creates appropriate pressure or accelerates the game unsatisfyingly. Assessment: appropriate — the complications are proportionate and recoverable. A Stability −1 is serious but not catastrophic; a Casus Belli can be managed diplomatically.
 
 ---
 

@@ -18,7 +18,7 @@
 ### A1 — Axis Coverage: PASS
 All three axes mechanically expressed:
 - Actuality: Weaving (drives toward), Dissolution (tears from), Locking (freezes)
-- Intelligibility: Thread Sensitivity, Diagnosis, Rendering Stability, Coherence
+- Intelligibility: Thread Sensitivity, Diagnosis, Mending Stability, Coherence
 - Temporality: Past-Oriented Pulling, temporal weight in Diagnosis, co-movement temporal auto-effect
 
 ### A2 — Co-movement: PASS (with note)
@@ -100,9 +100,9 @@ Coherence degradation penalties apply to Argue rolls. Clean.
 RS restoration from Community Weaving listed in degradation table (+1 to +2 RS). No pool, Ob, or failure condition.
 Recommendation: Define as Revolution Domain Action: Mandate + History, Ob 3. Success=RS+1, Overwhelming=RS+2, Failure=Mandate−1.
 
-#### AUD-TW-12 (P3) — TC Investigation failure outcome
-PP-182: Church investigates (Domain Action Ob 2) → TC +1. No ruling on failure.
-Recommendation: Failure = wasted action, TC unchanged. Low priority; GM call acceptable.
+#### AUD-TW-12 (P3) — CI Investigation failure outcome
+PP-182: Church investigates (Domain Action Ob 2) → CI +1. No ruling on failure.
+Recommendation: Failure = wasted action, CI unchanged. Low priority; GM call acceptable.
 
 ### B5 — Thread × Clocks
 
@@ -145,7 +145,7 @@ Recommendation: Coherence = 10 on first activation. Subsequent activations: GM c
 | AUD-TW-09 | P2 (ed) | Mass Combat × Thread | FR surcharge nullified by §3.2 cap at Territorial |
 | AUD-TW-10 | P2 | Social × Thread | POP displacement of debate subject: no ruling |
 | AUD-TW-11 | P1 | Faction × Thread | Community Weaving procedure undefined |
-| AUD-TW-12 | P3 | Faction × Thread | TC Investigation failure outcome |
+| AUD-TW-12 | P3 | Faction × Thread | CI Investigation failure outcome |
 | AUD-TW-13 | P3 | Clocks × Thread | RS→Stability→Mandate not in propagation_map |
 | AUD-TW-14 | P2 | Hybrid × Thread | §9.13 reference: verify exists |
 | AUD-TW-15 | P2 | Hybrid × Thread | "Narratively leads" ambiguous: replace with binary |

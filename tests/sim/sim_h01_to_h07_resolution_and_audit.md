@@ -49,7 +49,7 @@ Revolution Influence 3 vs Mandate Ob 4 produces P(success) ≈ 3% per season. Th
 Public Instability is a **Hybrid-mode secondary clock** (TTRPG mode does not track it as a clock — it is folded into Institutional Pressure in TTRPG). In Hybrid mode:
 - Range: 0–10
 - Starting value: 5 (matches BG starting value)
-- Increases: +1 per season a Revolution Agitation Domain Action resolves (any degree), +1 per season Institutional Pressure increases while TC > 40
+- Increases: +1 per season a Revolution Agitation Domain Action resolves (any degree), +1 per season Institutional Pressure increases while CI > 40
 - Decreases: −1 per season Crown or Guilds completes a successful social Domain Action targeting the Harbour District or equivalent territory
 - Threshold at 8: Faction Fracture risk — Revolution gains a free Agitation action at no Domain Action cost
 - Threshold at 10: Shared loss condition check (not Rupture — Institutional collapse, distinct from RS=0 Rupture)
@@ -63,7 +63,7 @@ Public Instability is a **Hybrid-mode secondary clock** (TTRPG mode does not tra
 
 ## F-H06 — Lowenritter response trigger at Varfell Military 6
 **Status: GAP — no canonical trigger exists.**
-No document defines a Lowenritter response triggered by Varfell Military reaching 6. The Lowenritter coup trigger (stage6 §8.9) fires on TC-40 Crown inaction or Crown losing 2+ territories — not on Varfell Military thresholds.
+No document defines a Lowenritter response triggered by Varfell Military reaching 6. The Lowenritter coup trigger (stage6 §8.9) fires on CI-40 Crown inaction or Crown losing 2+ territories — not on Varfell Military thresholds.
 
 **Resolution (PP-238):**
 Varfell Military 6 does NOT trigger a Lowenritter response. The simulation's assumption was incorrect. Lowenritter response to Varfell Military growth is handled through normal NPC AI: Lowenritter Institutional Tendency is "maintain border deterrence." When Varfell Military exceeds Lowenritter Military (currently equal at 5/6), the NPC AI should prioritise a Military Consolidation order the following season. This is a GM guidance note, not a threshold mechanic.
@@ -405,20 +405,20 @@ Modes: A (isolation), B (interaction), D (edge cases).
 
 ---
 
-## AUDIT-05: Clock Interaction — TC × IP × RS Cascade Risk
+## AUDIT-05: Clock Interaction — CI × IP × RS Cascade Risk
 
-**Three-clock interdependency at current state (TC 45, IP 34, RS 53):**
+**Three-clock interdependency at current state (CI 45, IP 34, RS 53):**
 
 | Clock pair | Interaction | Current risk |
 |-----------|-------------|-------------|
-| TC ↑ + RS ↓ | Church action rate increases as world degrades; more Thread suppression orders raise Ob for practitioners → slower RS recovery | ACTIVE — TC 45, RS Fragile |
+| CI ↑ + RS ↓ | Church action rate increases as world degrades; more Thread suppression orders raise Ob for practitioners → slower RS recovery | ACTIVE — CI 45, RS Fragile |
 | IP ↑ + Mandate | Institutional Pressure rise erodes faction Mandate floors; Revolution agitation at IP 34 has near-zero impact but IP 40 threshold changes domain action queuing | LOW — IP 34 below 40 threshold |
 | RS ↓ + Faction Stability | RS ≤ 19: all factions make Stability checks Ob 1 per season. Currently RS 53: not triggered | LOW |
-| TC 50 threshold | Church may demand formal RS inquiry. Requires Crown cooperation at TC 50. If Crown refuses: IP +2 | APPROACHING — TC 45, 5 points away |
+| CI 50 threshold | Church may demand formal RS inquiry. Requires Crown cooperation at CI 50. If Crown refuses: IP +2 | APPROACHING — CI 45, 5 points away |
 
-**Finding AUD-05-F1:** TC 50 threshold arriving in 1–2 seasons is the most immediate cascade risk. If Crown refuses Church RS inquiry, IP rises +2 (to 36). This is still below IP 40 (domain action queuing change) but narrows the margin.
+**Finding AUD-05-F1:** CI 50 threshold arriving in 1–2 seasons is the most immediate cascade risk. If Crown refuses Church RS inquiry, IP rises +2 (to 36). This is still below IP 40 (domain action queuing change) but narrows the margin.
 
-**Finding AUD-05-F2:** The three clocks are designed to produce converging crises. At TC 55, RS 48, IP 40: Church has parliamentary leverage, Thread operations are harder, and Crown loses domain priority. This triple-threshold convergence is the mid-to-late campaign pressure the system is designed to produce. From current state (Season 6/7), this convergence is 3–4 seasons away. Pacing is correct.
+**Finding AUD-05-F2:** The three clocks are designed to produce converging crises. At CI 55, RS 48, IP 40: Church has parliamentary leverage, Thread operations are harder, and Crown loses domain priority. This triple-threshold convergence is the mid-to-late campaign pressure the system is designed to produce. From current state (Season 6/7), this convergence is 3–4 seasons away. Pacing is correct.
 
 ---
 
@@ -475,7 +475,7 @@ Modes: A (isolation), B (interaction), D (edge cases).
 | AUD-03-F2 | Audit finding | P2 | Lowenritter framework not extracted to params | PP-246 |
 | AUD-04-F1 | Confirmed | — | RS costs internally consistent | None |
 | AUD-04-F2 | Known gap | P2 | PO-Pull scale multiplier table incomplete | AUD-P1-16 |
-| AUD-05-F1 | New finding | P2 | TC 50 threshold imminent (1–2 seasons away) | None |
+| AUD-05-F1 | New finding | P2 | CI 50 threshold imminent (1–2 seasons away) | None |
 | AUD-05-F2 | Confirmed design | — | Three-clock convergence pacing correct | None |
 | AUD-06-F1 | Confirmed | — | CP rates in range | None |
 | AUD-06-F2 | Confirmed design | — | History advancement requires Ob ≥ attribute; working correctly | None |

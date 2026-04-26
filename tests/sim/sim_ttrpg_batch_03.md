@@ -44,8 +44,8 @@ Stage compilation files (stage3_thread_operations.md) use obsolete attribute nam
 | BT3-06 | Renown × Debate interaction | B | PRES | CERT | Crown/Church | Almud/Himlensendt | Faction Leader | Complete |
 | BT3-07 | Vaynard Ambition Track | A | FUT | FSTAT | Varfell | Vaynard | Faction Leader | Complete |
 | BT3-08 | Niflhel Supremacy Mechanic | A+endgame | PRES/FUT | FSTAT | Niflhel | — | Faction Leader | Complete |
-| BT3-09 | TC pause at Stability ≤ 4 | C | PRES/FUT | TC, FSTAT | Church/Crown | Himlensendt/Baralta | Faction Leader | Complete |
-| BT3-10 | Seasonal Events S-16–S-20 | C | CROSS | TT, TC, IP, FSTAT | All | Multiple | Multiple | Complete |
+| BT3-09 | CI pause at Stability ≤ 4 | C | PRES/FUT | CI, FSTAT | Church/Crown | Himlensendt/Baralta | Faction Leader | Complete |
+| BT3-10 | Seasonal Events S-16–S-20 | C | CROSS | TT, CI, IP, FSTAT | All | Multiple | Multiple | Complete |
 
 ---
 
@@ -442,7 +442,7 @@ This means: tables that actively ignore Varfell see no Ambition events. The trac
 Severity: P2. Add to §14.8 GM reference: "Vaynard's Ambition Track will not cross Threshold 20 through passive drift in a 10-season campaign. Active opposition by PCs is required to engage the track's mechanics."
 
 **F-10 · No decrease mechanic exists (P2)**
-Vaynard's Ambition can only increase. There is no mechanic to reduce it (unlike TT, TC, IP which all have decrease sources). Once Ambition crosses 100 (military campaign launches), there is no de-escalation path.
+Vaynard's Ambition can only increase. There is no mechanic to reduce it (unlike TT, CI, IP which all have decrease sources). Once Ambition crosses 100 (military campaign launches), there is no de-escalation path.
 Finding: This makes the track a one-way ratchet. PCs who trigger high Ambition early cannot walk it back through diplomacy or other means.
 Severity: P2. Proposed fix: Add one decrease trigger. Suggested: "Successful Diplomacy Domain Action representing a victory over Varfell that includes a concession from another faction (not merely defeating Vaynard): Ambition −5." This creates a diplomatic cost-benefit calculation.
 
@@ -507,11 +507,11 @@ Proposed fix: Define a 3-step procedure: (1) Manufacture claim — Intel Domain 
 
 ---
 
-## BT3-09 · TC PAUSE AT CHURCH STABILITY ≤ 4
+## BT3-09 · CI PAUSE AT CHURCH STABILITY ≤ 4
 
 **Mode C — Full Scenario Simulation**
-**Mechanic:** "When Church Stability falls to 5 or below at seasonal accounting, TC generation ceases that season regardless of Church Mandate."
-*(Per §14.7 checklist: TC pauses if Church Stability ≤ 4. Per §8.3 text: "Stability ≤ 4: TC generation pauses." Cross-check: checklist uses ≤ 4; §8.3 uses ≤ 4. Consistent. Earlier version said "≤ 5" — CP14 has it at ≤ 4.)*
+**Mechanic:** "When Church Stability falls to 5 or below at seasonal accounting, CI generation ceases that season regardless of Church Mandate."
+*(Per §14.7 checklist: CI pauses if Church Stability ≤ 4. Per §8.3 text: "Stability ≤ 4: CI generation pauses." Cross-check: checklist uses ≤ 4; §8.3 uses ≤ 4. Consistent. Earlier version said "≤ 5" — CP14 has it at ≤ 4.)*
 
 ### Scenario Setup
 
@@ -520,22 +520,22 @@ Proposed fix: Define a 3-step procedure: (1) Manufacture claim — Intel Domain 
 ```
 ## State: Season 5, Pre-Accounting
 ### Clocks
-TT 35 | TC 38 | IP 28
+TT 35 | CI 38 | IP 28
 
 ### Factions
 Church — M5 I6 W5 Mil4 Stability: 5 (above pause threshold)
 Crown — M5 I5 W4 Mil4 Stability: 4
 Hafenmark — M4 I4 W5 Mil3 Stability: 4
 
-### TC Sources This Season
+### CI Sources This Season
 Church Mandate 5 at accounting: +1/season
-TT 35 (below 45): no TT-driven TC addition
+TT 35 (below 45): no TT-driven CI addition
 Church Mandate ≥ 5 → +1/season
-Total projected TC: +1 → TC 39
+Total projected CI: +1 → CI 39
 
 ### Active Conditions
-Baralta's Mandate ≥ 4: TC suppressor active (−1/season)
-Net TC change: +1 − 1 = 0
+Baralta's Mandate ≥ 4: CI suppressor active (−1/season)
+Net CI change: +1 − 1 = 0
 ```
 
 ### Action: PCs Trigger Cardinal Conflict
@@ -564,22 +564,22 @@ Church Stability −1 → Stability 4.
 
 ### State Delta
 Church Stability: 5 → 4
-TC pause threshold: NOW AT BOUNDARY (≤ 4 = paused)
+CI pause threshold: NOW AT BOUNDARY (≤ 4 = paused)
 ```
 
 ```
 ## State: End of Season 5 Accounting
 ### Clocks
-TT 35 | TC 38 (unchanged — TC generation pauses at Church Stability 4)
+TT 35 | CI 38 (unchanged — CI generation pauses at Church Stability 4)
 IP 28
 
 ### Factions
 Church — M5 I6 W5 Mil4 Stability: 4 (at threshold)
-TC generation: PAUSED this season
+CI generation: PAUSED this season
 
 ### Findings
-TC held at 38 rather than advancing to 39.
-Church Mandate still 5 — if Stability recovers above 4 next season, TC generation resumes.
+CI held at 38 rather than advancing to 39.
+Church Mandate still 5 — if Stability recovers above 4 next season, CI generation resumes.
 ```
 
 ### Season 6 — Stability Recovery Path
@@ -593,22 +593,22 @@ Pool: 4D, TN7, Ob 1
 P(Success): ~92% | P(Failure): ~8%
 Expected: Stability recovers to 5.
 
-### Most likely outcome: Church Stability returns to 5. TC generation resumes Season 6.
-TC advance: +1 (Mandate 5) − 1 (Baralta suppressor) = 0. TC stays 38.
+### Most likely outcome: Church Stability returns to 5. CI generation resumes Season 6.
+CI advance: +1 (Mandate 5) − 1 (Baralta suppressor) = 0. CI stays 38.
 ```
 
 ### Findings
 
-**F-12 · TC pause is binary and recovers within one season (P2)**
-The TC pause threshold (Stability ≤ 4) fires for exactly one season when Church Stability drops to 4. On a quiet season check, the Church recovers to 5 with 92% probability. The pause effect is therefore typically: one season of TC generation halted, then normal resumes.
-To maintain TC pause pressure, PCs must keep Church Stability suppressed each season. This requires active Domain Action effort every season — sustainable only with dedicated anti-Church play.
-Severity: P2. The mechanic works as intended but is weaker than it might appear. Inform tables: "One successful anti-Church operation does not permanently suppress TC. Sustained effort is required."
+**F-12 · CI pause is binary and recovers within one season (P2)**
+The CI pause threshold (Stability ≤ 4) fires for exactly one season when Church Stability drops to 4. On a quiet season check, the Church recovers to 5 with 92% probability. The pause effect is therefore typically: one season of CI generation halted, then normal resumes.
+To maintain CI pause pressure, PCs must keep Church Stability suppressed each season. This requires active Domain Action effort every season — sustainable only with dedicated anti-Church play.
+Severity: P2. The mechanic works as intended but is weaker than it might appear. Inform tables: "One successful anti-Church operation does not permanently suppress CI. Sustained effort is required."
 
-**F-13 · TC pause interacts with Baralta suppressor ambiguously (P1)**
-§8.4 states: "While Baralta's Mandate remains 4+, she suppresses TC at −1/season." §8.3 (Church): "Stability ≤ 4: TC generation ceases."
-When both are active simultaneously, TC generation ceases AND Baralta's −1 is also active. Does Baralta's modifier apply to a paused TC (i.e., does TC go to −1 this season)?
-**No rule governs this interaction.** If TC generation ceases = the raw change is 0, and then Baralta's modifier applies: TC −1 in a season when TC would have paused anyway, creating a −1 effect without active Church generation.
-Severity: P1. Proposed fix: Clarify that TC pause means TC change is set to 0 before modifiers. Negative modifiers (Baralta suppressor, Grand Debate victory) may still reduce TC below 0 (i.e., TC goes down even in a pause season). This is actually a beneficial player interaction — PCs who suppress Church Stability AND have Baralta active can actively reduce TC.
+**F-13 · CI pause interacts with Baralta suppressor ambiguously (P1)**
+§8.4 states: "While Baralta's Mandate remains 4+, she suppresses CI at −1/season." §8.3 (Church): "Stability ≤ 4: CI generation ceases."
+When both are active simultaneously, CI generation ceases AND Baralta's −1 is also active. Does Baralta's modifier apply to a paused CI (i.e., does CI go to −1 this season)?
+**No rule governs this interaction.** If CI generation ceases = the raw change is 0, and then Baralta's modifier applies: CI −1 in a season when CI would have paused anyway, creating a −1 effect without active Church generation.
+Severity: P1. Proposed fix: Clarify that CI pause means CI change is set to 0 before modifiers. Negative modifiers (Baralta suppressor, Grand Debate victory) may still reduce CI below 0 (i.e., CI goes down even in a pause season). This is actually a beneficial player interaction — PCs who suppress Church Stability AND have Baralta active can actively reduce CI.
 
 ---
 
@@ -622,7 +622,7 @@ Severity: P1. Proposed fix: Clarify that TC pause means TC change is set to 0 be
 ```
 ## State: Season 4
 ### Clocks
-TT 30 | TC 25 | IP 22
+TT 30 | CI 25 | IP 22
 
 ### Factions
 Niflhel — Hafenbund (public exposure of a smuggling operation)
@@ -653,7 +653,7 @@ Severity: P2. Proposed fix: GM distributes different pieces to different faction
 ```
 ## State: Season 6
 ### Clocks
-TT 42 | TC 32 | IP 24
+TT 42 | CI 32 | IP 24
 
 ### Factions
 Church — Inquisition now active
@@ -672,7 +672,7 @@ Church opens Inquisition in Territory X.
 **Findings:**
 
 **F-16 · "Automatically opens Inquisition" has no associated mechanic (P2)**
-The Church's Inquisition is referenced but the specific mechanics of an active Inquisition (Ob effects, CE implications, how it escalates) are not consolidated in one location. The term appears in TC rise sources and NPC descriptions but no "Inquisition procedure" section exists in the compiled ruleset.
+The Church's Inquisition is referenced but the specific mechanics of an active Inquisition (Ob effects, CE implications, how it escalates) are not consolidated in one location. The term appears in CI rise sources and NPC descriptions but no "Inquisition procedure" section exists in the compiled ruleset.
 Severity: P2. The Inquisition is a central factional tool that players will encounter frequently. A procedural section is needed (or a cross-reference to wherever this is defined).
 
 **F-17 · "Random territory" trigger has no defined procedure (P3)**
@@ -690,17 +690,17 @@ Two adjacent factions (GM or random): Church and Hafenmark
 **Trigger:** Both factions −1 Stability. IP +1 if Crown is involved.
 
 ```
-Church Stability: 5 → 4 (now at TC pause threshold — see BT3-09)
+Church Stability: 5 → 4 (now at CI pause threshold — see BT3-09)
 Hafenmark Stability: 4 → 3
 IP: Crown not involved. No IP change.
 ```
 
-**Compounding interaction:** S-18 drops Church Stability to 4, which (depending on season timing) may trigger the TC pause mechanic (BT3-09). A single event card can trigger a cascade: Church Stability drop → TC pause → Baralta suppressor active → TC potentially reduced by 1 this season.
+**Compounding interaction:** S-18 drops Church Stability to 4, which (depending on season timing) may trigger the CI pause mechanic (BT3-09). A single event card can trigger a cascade: Church Stability drop → CI pause → Baralta suppressor active → CI potentially reduced by 1 this season.
 
 **Findings:**
 
-**F-18 · S-18 + TC pause cascade (P2)**
-S-18 drawn in a season when Church Stability is already 5 → drop to 4 triggers TC pause. Combined with Baralta suppressor (−1), TC goes −1 this season. One random seasonal event card effectively generates TC reduction without any active PC play.
+**F-18 · S-18 + CI pause cascade (P2)**
+S-18 drawn in a season when Church Stability is already 5 → drop to 4 triggers CI pause. Combined with Baralta suppressor (−1), CI goes −1 this season. One random seasonal event card effectively generates CI reduction without any active PC play.
 Severity: P2. This is not necessarily a problem — variance is expected. Note for GM: S-18 is more powerful than it appears when Church Stability is near threshold.
 
 ### S-19 · Debt Called
@@ -728,7 +728,7 @@ Severity: P3. Degenerate case is handled implicitly. No fix needed.
 ```
 ## State: Season 7
 ### Clocks
-TT 48 | TC 44 | IP 30
+TT 48 | CI 44 | IP 30
 
 ### Thread Operations This Season
 Three practitioners plan operations.
@@ -741,12 +741,12 @@ Three practitioners plan operations.
 - Weaving at Territorial (normally Ob 4) → Ob 3. P(Success): 13D vs Ob 3 → ~80%.
 - Past-Oriented Pulling (normally Ob 5 + additional) → Ob 4. P(Success): 15D vs Ob 4 → ~84%.
 
-TT effect: −1 at accounting. TT 48 → 47 (below 45 for TT-driven TC effects).
+TT effect: −1 at accounting. TT 48 → 47 (below 45 for TT-driven CI effects).
 
 **Findings:**
 
 **F-20 · Thread Quiet drops TT below a cross-clock threshold (P2)**
-If TT is at 46 or 47 when S-20 fires, the −1 reduction drops TT below 45. This removes the TT>45 cross-clock effect (TC +1/season; IP +1/season) for the following season, producing a double benefit: practitioners get −1 Ob AND two cross-clock effects pause.
+If TT is at 46 or 47 when S-20 fires, the −1 reduction drops TT below 45. This removes the TT>45 cross-clock effect (CI +1/season; IP +1/season) for the following season, producing a double benefit: practitioners get −1 Ob AND two cross-clock effects pause.
 Severity: P2. This is favourable compounding for PCs. Note for GM: when TT is near the 45 threshold, S-20 has outsized strategic value. No fix needed — this is emergent interaction, not a bug.
 
 **F-21 · "The quiet is wrong" has no mechanical consequence (P3)**
@@ -786,13 +786,13 @@ Severity: P3. This is a missed narrative opportunity. Proposed fix: Add: "Practi
 | F-11 | BT3-07 | P3 | Design | 80→100 jump possible in one season at max opposition | Functioning as intended |
 | F-12 | BT3-08 | P1 | Gap | Niflhel Supremacy: no tiebreak for leading/weakest when equal | Add: all tied = all get +1 Intel; random weakest |
 | F-13 | BT3-08 | P1 | Gap | Partial Faction endgame path mechanically undefined | Define 3-step procedure |
-| F-12 (TC) | BT3-09 | P2 | Design | TC pause lasts 1 season and recovers with 92% probability — weaker than it appears | Document for GMs |
-| F-13 (TC) | BT3-09 | P1 | Gap | TC pause + Baralta suppressor: interaction undefined (TC −1 in pause season?) | Clarify: modifiers still apply to paused baseline |
+| F-12 (CI) | BT3-09 | P2 | Design | CI pause lasts 1 season and recovers with 92% probability — weaker than it appears | Document for GMs |
+| F-13 (CI) | BT3-09 | P1 | Gap | CI pause + Baralta suppressor: interaction undefined (CI −1 in pause season?) | Clarify: modifiers still apply to paused baseline |
 | F-14 | BT3-10 S-16 | P1 | Gap | "One piece of information" undefined | Standardize using Quiet Network format |
 | F-15 | BT3-10 S-16 | P2 | Gap | Multiple factions learning from same source: no distribution rule | GM distributes different pieces |
 | F-16 | BT3-10 S-17 | P2 | Gap | "Inquisition" referenced but no procedure defined in ruleset | Procedure section needed |
 | F-17 | BT3-10 S-17 | P3 | Gap | "Random territory" has no BG randomization method | Add: 1d15 or territory draw |
-| F-18 | BT3-10 S-18 | P2 | Design | S-18 can cascade into TC pause + Baralta suppressor | Note for GM, no fix |
+| F-18 | BT3-10 S-18 | P2 | Design | S-18 can cascade into CI pause + Baralta suppressor | Note for GM, no fix |
 | F-19 | BT3-10 S-19 | P3 | Edge | Wealth 0 faction cannot pay debt — implicit resolution | No fix needed |
 | F-20 | BT3-10 S-20 | P2 | Design | Thread Quiet drops TT below 45: removes two cross-clock effects simultaneously | Note for GM, no fix |
 | F-21 | BT3-10 S-20 | P3 | Gap | "Quiet is wrong" flavour text has no mechanical hook for TS 50+ practitioners | Optional: Spirit check TS growth opportunity |
@@ -809,7 +809,7 @@ Severity: P3. This is a missed narrative opportunity. Proposed fix: Add: "Practi
 6. **Renown F-09** — "Initial advantage" scope undefined → fix: Exchange 1 only
 7. **F-12 (Niflhel)** — Supremacy tiebreak missing → fix: tie = all +1 Intel, random weakest
 8. **F-13 (Niflhel)** — Partial Faction endgame path undefined → define procedure
-9. **F-13 (TC)** — TC pause + Baralta suppressor interaction undefined → clarify modifier order
+9. **F-13 (CI)** — CI pause + Baralta suppressor interaction undefined → clarify modifier order
 10. **F-14 (S-16)** — "One piece of information" undefined → standardize
 
 ---

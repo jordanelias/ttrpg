@@ -75,7 +75,7 @@ PLAYER EXPEDITION REACHES SOUTHERNMOST (at RS ≥ 40 + practitioner TS 30+)
     Edeyja testifying at Parliament (Collision E scenario) regarding Solmund's nature:
     She travels from Askeheim to Valorsplatz: 5+ provinces traversed
     RS cost: −1/season of sustained presence (not per traverse — she's THERE for 1 season)
-    RS −1 from her presence + Parliament itself generates political turmoil (TC movement)
+    RS −1 from her presence + Parliament itself generates political turmoil (CI movement)
     → BUT: her testimony is the highest-value political event available (Confrontation with Church)
     → Player must decide: RS cost of Edeyja's testimony vs political gain
     Warden Cooperation Track ≥ 3: she will come if asked
@@ -432,8 +432,8 @@ LÖWENRITTER COUP FIRES (COUNTER 3) — POST-COUP STATE
 │   Reconstitution condition: PI = 0
 │   PI (Political Instability) currently at: whatever accumulated during the coup's violence
 │   Each season of Martial Law: PI +1 (institutional rendering failure)
-│   RS Critical: institutional Stability checks failing → Mandate declining → TC advancing
-│   TC advancing: IP +2/season (TC > 60 feeds IP, not PI directly — confirm cross-reference)
+│   RS Critical: institutional Stability checks failing → Mandate declining → CI advancing
+│   CI advancing: IP +2/season (CI > 60 feeds IP, not PI directly — confirm cross-reference)
 │   [Note: PI and IP are distinct; PI = Political Instability internal; IP = Invasion Pressure]
 │   PI starts at 0 and rises from violent events (existing rule: Political Stability = PI)
 │   Coup is maximal violent event: PI +3-4 immediately
@@ -654,9 +654,9 @@ PLAYER CONFRONTS OLAFSSON WITH WRONG RESONANT STYLE
 │   The Church frames every failed attack on its servants as persecution
 │   Player's challenge is Olafsson → Church narrative: "The Cardinal of Justice is under assault"
 │   → Church Stability rising from player's attack
-│   → TC passive generation: Church Stability ≥ 4 → no brake on passive TC
-│   → Himlensendt's Priority 3: Mandate ≥ 4 → Assert → TC +1
-│   → Wrong approach to Olafsson creates TC acceleration
+│   → CI passive generation: Church Stability ≥ 4 → no brake on passive CI
+│   → Himlensendt's Priority 3: Mandate ≥ 4 → Assert → CI +1
+│   → Wrong approach to Olafsson creates CI acceleration
 │
 ├─ FRAMEWORK DRIFT EXTENSION:
 │   If Church has had no external challenge for 2 consecutive seasons (player failed repeatedly):
@@ -680,7 +680,7 @@ PLAYER CONFRONTS OLAFSSON WITH WRONG RESONANT STYLE
 │
 └─ SECOND CARDINAL THREAT:
     If Olafsson is removed (Censure, prosecution, arc trigger):
-    Church Priority Tree Priority 2: if Stability ≤ 2 → suspension of TC Assert
+    Church Priority Tree Priority 2: if Stability ≤ 2 → suspension of CI Assert
     → Removing Olafsson weakens the Church's Inquisitor operations
     → But: Cardinal of Fortitude (secondary) has Templar deployment capability (Priority 6)
     → If Olafsson's removal is perceived as persecution: Fortitude deploys Templars
@@ -837,7 +837,7 @@ TORBEN ARRIVES IN ALTONIA WITH LATENT THREAD SENSITIVITY (TS 0 BUT RS EVENTS NEA
 │   At Certainty 2: Thread-referencing Dialogue Lattice utterances available to HIM (not just to player)
 │   Torben can now ASSERT Thread reality claims in political contexts
 │   → Torben as practitioner-heir speaking Thread reality in Parliament: the most politically explosive statement possible
-│   → Church: Heresy Investigation against the Crown heir (TC +2)
+│   → Church: Heresy Investigation against the Crown heir (CI +2)
 │   → Almud (if alive): confronted with his own son's Thread development
 │   → [ARC 2: Almud's Sympathies] × [Torben Discovery] = the single most politically destabilizing individual event available
 │
@@ -980,7 +980,7 @@ THREE-PRACTITIONER CONTEST OVER T9 HIMMELENGER THREAD CONFIGURATION
 │   Himlensendt: Priority 2 fires immediately (Thread event in Church territory)
 │   Inquisitor deployment to Himmelenger: Church Attention Pool maxed
 │   Church Credibility Evidence: maximum input (a GAP at the Cathedral)
-│   TC +2 (Thread catastrophe = divine warning)
+│   CI +2 (Thread catastrophe = divine warning)
 │
 ├─ POLITICAL AFTERMATH:
 │   All three practitioners were visible during the operation (visibility rules apply)
@@ -1114,7 +1114,7 @@ ALMUD ENTERS ARC A (REFORMER) — TS THRESHOLD CROSSING FROM 28 TO 30
 **ASSESSMENT: ◕ (strong, one gap)**
 
 **Strengths:**
-The settlement layer (Batch 1) creates province-level emergent governance without player involvement: NPC governors follow the faction priority tree (priority Order ≥ 2, then Prosperity, then Defense). Framework Drift (Batch 3) generates Guild Favour, Church Influence, RM Presence markers, and Varfell TK passively each season. NPC Priority Trees (Batch 2, §8) operate as a full-game simulation without player input — Church asserts TC, Crown protects Torben, Hafenmark suppresses TC, Guilds pursue trade. The three feedback loops in Batch 1 and two in Batch 2 all operate without player agency: Loop A (governance neglect), Loop B (companion Coherence), Loop C (investigation drift), Loop D (Parliament pressure), Loop E (counter-recruitment). The Conviction 3+ Scar Roll 6 (NEW-S25) creates genuinely unpredictable NPC behavior that the player can influence but not control.
+The settlement layer (Batch 1) creates province-level emergent governance without player involvement: NPC governors follow the faction priority tree (priority Order ≥ 2, then Prosperity, then Defense). Framework Drift (Batch 3) generates Guild Favour, Church Influence, RM Presence markers, and Varfell TK passively each season. NPC Priority Trees (Batch 2, §8) operate as a full-game simulation without player input — Church asserts CI, Crown protects Torben, Hafenmark suppresses CI, Guilds pursue trade. The three feedback loops in Batch 1 and two in Batch 2 all operate without player agency: Loop A (governance neglect), Loop B (companion Coherence), Loop C (investigation drift), Loop D (Parliament pressure), Loop E (counter-recruitment). The Conviction 3+ Scar Roll 6 (NEW-S25) creates genuinely unpredictable NPC behavior that the player can influence but not control.
 
 **Gap:**
 The Scene Slate Priority 5 (Ambient) entries — the lowest-stakes Slate entries — are underspecified as emergence sources. When no Priority 0-3 events fire (a clean season), the Slate falls back to ambient territorial events. These are currently described but not formally specified as NPE outputs. The Ambient entries should be the primary source of non-crisis, slow-building emergent pressure (Framework Drift visually manifesting, NPC social drift appearing in territorial texture). Without this specification, clean seasons feel empty rather than quietly building.
@@ -1178,7 +1178,7 @@ The province-level Accord now derives from floor(average(settlement Order)) per 
 
 The IP baseline has been halved (settlement_layer §7.1: from +1/season to +1/2 seasons baseline) to accommodate 20-30 year games. BUT: the Altonian Invasion Pressure escalation table in emergent_scenarios.md (Scenario 11) still uses the original rate benchmarks (IP 30+ fires Tutoring Demand, IP 100 = Invasion). With the halved baseline: IP 30 is now reached in 60 seasons (15 years) instead of 30 seasons (7.5 years). IP 100 = 200 seasons (50 years) — well beyond any campaign length.
 
-This means: the IP milestones fire only from non-baseline sources (Thread events, succession delays, TC cross-clock effects). The clock now functions as an accumulator of bad political decisions rather than a passive timer. This is likely INTENDED (correct design for the 30-year game) but should be stated explicitly in emergent_scenarios.md as a design note update.
+This means: the IP milestones fire only from non-baseline sources (Thread events, succession delays, CI cross-clock effects). The clock now functions as an accumulator of bad political decisions rather than a passive timer. This is likely INTENDED (correct design for the 30-year game) but should be stated explicitly in emergent_scenarios.md as a design note update.
 
 ## G3: NIFLHEL PRIORITY 1 × RENOWN 9 INTERACTION [P2]
 

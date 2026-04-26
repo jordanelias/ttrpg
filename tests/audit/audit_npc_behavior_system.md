@@ -114,7 +114,7 @@ This is a TENSION, not a violation. The arc explicitly frames this as a departur
 ### AUD-NPC-08 — Framework Drift Bypasses Seasonal Cap
 **Issue:** The existing seasonal cap is ±2 per stat per season from Domain Actions (PP-242). Framework Drift is passive (not a Domain Action). The proposal does not specify whether Framework Drift counts toward the seasonal cap.
 
-**Precedent:** TC passive advance (+1/season, PP-402) is explicitly separate from the DA cap. RS baseline decay (−1/year, PP-255) is separate from DA effects. These suggest passive effects are NOT subject to the DA seasonal cap.
+**Precedent:** CI passive advance (+1/season, PP-402) is explicitly separate from the DA cap. RS baseline decay (−1/year, PP-255) is separate from DA effects. These suggest passive effects are NOT subject to the DA seasonal cap.
 
 **Fix required:** Explicitly state: "Framework Drift is a passive effect, not a Domain Action. It does not count toward the ±2 DA seasonal cap. It IS subject to the stat ceiling (7) and floor (1)."
 
@@ -196,8 +196,8 @@ The design intent is clear (Torben as contested narrative asset), and the Loyalt
 ### AUD-NPC-15 — NOTE: Arc Emergence Default Outcomes Favor Status Quo
 **Observation:** If PCs do not intervene, the default arcs are:
 - Almud → Arc B (Fortress): Certainty drifts up, Order doubles down.
-- Himlensendt → Arc A (Zealot): TC advances unchallenged.
-- Baralta → either Arc A (triumph) or Arc C (excommunication), depending on Church TC progress.
+- Himlensendt → Arc A (Zealot): CI advances unchallenged.
+- Baralta → either Arc A (triumph) or Arc C (excommunication), depending on Church CI progress.
 - Vaynard → stalls at TK 3, never reaches awakening.
 - Edeyja → Arc A (Holdout): wardens slowly lose ground.
 

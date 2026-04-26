@@ -12,17 +12,17 @@
 | SIM-X-02 | Debate + W-41 | C+B | Single scene | Composure, Coherence, RS, Belief | Church | Vessa, Aldric | Asymmetric Debate | Complete |
 | SIM-X-03 | Mass Battle + W-30 + W-33 | C+B | 2 turns | Size, Cohesion, Morale, Coherence, RS | Lowenritter, Rebel | Solmund | Thread-supported Mass Battle | Complete |
 | SIM-X-04 | Mass Battle + Personal Combat (General Duel) | C+D | 3 turns | Size, Cohesion, Morale, Health, Wounds, CR | Lowenritter, Rebellion | Harnak, Davan | General Duel | Complete |
-| SIM-X-05 | Grand Debate + W-41 + W-42 + Audience | C+B | 5 exchanges | Composure, Coherence, RS, TC, Knots | Church, Hafenmark | Baralta, Himlensendt, Klapp | Institutional Grand Debate | Complete |
+| SIM-X-05 | Grand Debate + W-41 + W-42 + Audience | C+B | 5 exchanges | Composure, Coherence, RS, CI, Knots | Church, Hafenmark | Baralta, Himlensendt, Klapp | Institutional Grand Debate | Complete |
 | SIM-X-06 | Personal Combat + Wound −1D + CE arc | C+D | 4 rounds | Health, Wounds, Stamina, CE | Lowenritter, Church | Ehrenwall, Haelmund, Vald, Maret | Named NPC duel + Inquisitor arc | Complete |
 | SIM-X-07 | Mass Battle + W-30 + P-31 + General Duel + Stage 1/2 | C+D | 3 turns | Size, Cohesion, Morale, Coherence, RS, CR, Coup Counter | Lowenritter, Church | Ehrenwall (killed), Jarnstal, Maret | Named-NPC mass battle + Thread + deadlock | Complete |
-| SIM-X-08 | Seasonal Accounting cascade | D+E | 1 season | All faction stats, TC, RS, Knots | All | Baralta, Klapp, Ehrenwall (dead), Vald | Full cascade | Complete |
-| SIM-X-09 | Social (Vaynard/Almud) + Discovery Event + Domain Echo + Zoom | C+B | 1 scene | Composure, TS, TK, TC, IP | Crown, Varfell, Church | Vaynard, Almud, Klapp | Social → Thread → Faction zoom | Complete |
-| SIM-X-10 | Sovereign Authority Doctrine + Olafsson Evidence Chain + TC cascade | C+B | 1 season | TC, Church Stability, Mandate, Baralta penalty | Church, Hafenmark | Baralta, Himlensendt, Olafsson | Domain Action chain + clock cascade | Complete |
-| SIM-X-11 | Maret infiltration → Thread Diagnosis → Domain Echo → Inquisitor advance | C+B | 1 scene | TK, TC, CE, Coherence, RS, Investigation stages | Church, Varfell | Maret, Klapp, Vald | Personal→Thread→Faction zoom sequence | Complete |
+| SIM-X-08 | Seasonal Accounting cascade | D+E | 1 season | All faction stats, CI, RS, Knots | All | Baralta, Klapp, Ehrenwall (dead), Vald | Full cascade | Complete |
+| SIM-X-09 | Social (Vaynard/Almud) + Discovery Event + Domain Echo + Zoom | C+B | 1 scene | Composure, TS, TK, CI, IP | Crown, Varfell, Church | Vaynard, Almud, Klapp | Social → Thread → Faction zoom | Complete |
+| SIM-X-10 | Sovereign Authority Doctrine + Olafsson Evidence Chain + CI cascade | C+B | 1 season | CI, Church Stability, Mandate, Baralta penalty | Church, Hafenmark | Baralta, Himlensendt, Olafsson | Domain Action chain + clock cascade | Complete |
+| SIM-X-11 | Maret infiltration → Thread Diagnosis → Domain Echo → Inquisitor advance | C+B | 1 scene | TK, CI, CE, Coherence, RS, Investigation stages | Church, Varfell | Maret, Klapp, Vald | Personal→Thread→Faction zoom sequence | Complete |
 | SIM-X-12 | 3-season full cascade | D+E | 3 seasons | All clocks, all faction stats, all NPC states | All | All named | Full cascade accounting | Complete |
 
 | SIM-X-13 | FR-D-01 Dissolution + Past-Oriented Pulling (hypothetical TS 70) | C+B | Single scene | RS, Coherence retention, Temporal Disjunction, Certainty | None | Maret Uln, Haelmund (Disjunction witness) | Evidence erasure, PO-Pull prerequisites | Complete |
-| SIM-X-14 | Mode 2 Monstrous Entity + W-06b + Vaynard Discovery + Domain Echo | C+D | Single scene | RS, Coherence, Certainty, TC, Locked Zone proximity | Varfell, Niflhel, Crown | Vaynard, Maret, Niflhel Envoy, Crown Diplomat | Political scene interrupted by entity | Complete |
+| SIM-X-14 | Mode 2 Monstrous Entity + W-06b + Vaynard Discovery + Domain Echo | C+D | Single scene | RS, Coherence, Certainty, CI, Locked Zone proximity | Varfell, Niflhel, Crown | Vaynard, Maret, Niflhel Envoy, Crown Diplomat | Political scene interrupted by entity | Complete |
 | SIM-X-15 | Knot crisis (Klapp/Ansel) + Certainty + Inspiration attack + Call a Knot | C+D | 3 exchanges | Coherence, Certainty, Knot strain, Composure, Inspiration | Church | Klapp, Olafsson, Ansel | Practitioner under interrogation + Knot crisis | Complete |
 | SIM-X-16 | Collective Weave (Maret anchor + Klapp helper) + Rendering Crisis | C+B | Single scene | Coherence retention (both), Certainty (Klapp→0), RS, Knots | Varfell | Maret, Klapp | First collective operation + Rendering Crisis | Complete |
 
@@ -35,8 +35,8 @@
 | F-11 | X-03 | W-33 broken for Size≤2 units: Cohesion=2 insufficient when Size is binding constraint | RESOLVED — ST-TW-02 applied to threadwork_redesign_v25.md |
 | F-27 | X-07 | Mass battle deadlock (HeavyCut vs HeavyArmour): no stalemate resolution rule | PATCHED — Add to mass_battle_v3: at 3+ consecutive turns with 0 damage dealt, units with no tactical option may withdraw one zone (costs movement, does not trigger pursuit). |
 | F-30/F-33 | X-07/08 | Coup Counter: no successor rule on Grandmaster death | PROVISIONAL — On Grandmaster death with Coup Counter ≥ 1: Löwenritter selects highest-CR surviving named officer as acting Grandmaster. Coup Counter resets to 0. Provisional pending user approval. |
-| F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season; no seasonal cap on TC | PROVISIONAL — TC change cap: ±3 per season from Domain Actions (±5 from all sources combined). Provisional pending user approval. |
-| F-45 | X-10 | Church Stability brake scope — suppresses Mandate-based TC only or all TC sources? | EDITORIAL — ED-049 added to ledger |
+| F-43 | X-10 | Two Domain Actions can drop CI by 4+ in one season; no seasonal cap on CI | PROVISIONAL — CI change cap: ±3 per season from Domain Actions (±5 from all sources combined). Provisional pending user approval. |
+| F-45 | X-10 | Church Stability brake scope — suppresses Mandate-based CI only or all CI sources? | EDITORIAL — ED-049 added to ledger |
 | F-52 | X-12 | No Stability recovery mechanic for externally damaged faction Stability | PROVISIONAL — Stability recovery: +1 Stability per season of no hostile Domain Actions targeting that faction + Stability ≤ 3 (slow natural recovery). Provisional pending user approval. |
 
 ## Rules Gaps (No Patch Needed — GM Ruling Acceptable)
@@ -73,25 +73,25 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | ID | Source | Description |
 |----|--------|-------------|
 | F-70 | X-16 | Klapp Rendering Crisis: Belief revision content requires user input |
-| F-45 | X-10 | Church Stability brake scope: suppresses only Mandate-based TC, or all TC sources? |
+| F-45 | X-10 | Church Stability brake scope: suppresses only Mandate-based CI, or all CI sources? |
 | F-52 | X-12 | Faction Stability recovery rate for externally damaged Stability — no rule defined |
 | F-30 | X-07 | Coup Counter successor on Grandmaster death — no rule defined |
 | F-27 | X-07 | Mass battle stalemate resolution — no rule defined |
 | F-11 | X-03 | W-33 broken for CP≤2 units — EDITORIAL PENDING |
-| F-43 | X-10 | Two Domain Actions can drop TC by 4+ in one season — no seasonal TC cap |
+| F-43 | X-10 | Two Domain Actions can drop CI by 4+ in one season — no seasonal CI cap |
 | SIM-D-01 | Debate: Argue/Read/CLASH/COMP/DIVERGE/TIE/Track/Composure/Concentration/Doubt/Regroup | TTRPG | CROSS | Composure, Concentration, Conviction Track | Generic (all factions modelled) | Generic archetypes | High-Pres orator, History-specialist, Low-social, Balanced social | Complete | F-D-01 (P1), F-D-02 (P2), F-D-03 (P2), F-D-04 (P2), F-D-06 (P2); SIM-DEBT-01 recalibrated |
 
-| SIM-D-02 | Debate: Full scenario C+J — Himlensendt vs Baralta, 3-exchange Parliament, Diverge chain | TTRPG | PRESENT | TC, Composure, Concentration | Church, Hafenmark | Himlensendt, Baralta | Institutional authority, Legalist-constitutionalist | Complete | F-C-02 (P2 PP-100), F-C-04 (P1 ED-051), F-C-05 (P2 ED-052), F-C-06 (P1 cognitive load); SIM-DEBT-01 RESOLVED |
+| SIM-D-02 | Debate: Full scenario C+J — Himlensendt vs Baralta, 3-exchange Parliament, Diverge chain | TTRPG | PRESENT | CI, Composure, Concentration | Church, Hafenmark | Himlensendt, Baralta | Institutional authority, Legalist-constitutionalist | Complete | F-C-02 (P2 PP-100), F-C-04 (P1 ED-051), F-C-05 (P2 ED-052), F-C-06 (P1 cognitive load); SIM-DEBT-01 RESOLVED |
 
-| AUDIT-D-01 | Debate system Modes A–G — formula validation, number systems, interaction chains, gaps, principles, burden, cross-mode | TTRPG+BG+HYB | CROSS | Composure, Concentration, TC | All | Generic | All debate archetypes | Complete | FA-01/02/03/04 (P2 patched PP-101/102/103/104), GAP-DS-09–20, C-01/C-02/G-01/G-03 (P1), ED-053–059 logged |
-| SIM-D-03 | Debate subsystem G2 (Tribunal dominant strategy) + K1 (cross-mode delta) + K2 (transition) | TTRPG+BG+HYB | CROSS | Composure, TC | Church, Hafenmark | Generic Inquisitor, Generic Accused | Institutional authority, disadvantaged accused | Complete | G2-F-01 (P1 PP-109), K1-01/K1-02 (P1 ED-056/053), K2-F-02 (P1 PP-105 ext) |
+| AUDIT-D-01 | Debate system Modes A–G — formula validation, number systems, interaction chains, gaps, principles, burden, cross-mode | TTRPG+BG+HYB | CROSS | Composure, Concentration, CI | All | Generic | All debate archetypes | Complete | FA-01/02/03/04 (P2 patched PP-101/102/103/104), GAP-DS-09–20, C-01/C-02/G-01/G-03 (P1), ED-053–059 logged |
+| SIM-D-03 | Debate subsystem G2 (Tribunal dominant strategy) + K1 (cross-mode delta) + K2 (transition) | TTRPG+BG+HYB | CROSS | Composure, CI | Church, Hafenmark | Generic Inquisitor, Generic Accused | Institutional authority, disadvantaged accused | Complete | G2-F-01 (P1 PP-109), K1-01/K1-02 (P1 ED-056/053), K2-F-02 (P1 PP-105 ext) |
 
-| SIM-D-04 | Debate gap-fill stress test — §§6.11-6.15, PP-112-118, BG Vote, Hybrid, Coalition, Beliefs, Total Victory | TTRPG+BG+HYB | CROSS | TC, Composure, Concentration, Debate Fatigue | Church, Hafenmark, Crown, Varfell | Himlensendt, Baralta, Klapp | Coalition, BG delegate, Hybrid | Complete | C-01/02/03 coalition confirmed; A.2-03 PP-117 (BG zero-zero); K2 PP-118 (Hybrid exchange count); SIM-DEBT-02 flagged |
+| SIM-D-04 | Debate gap-fill stress test — §§6.11-6.15, PP-112-118, BG Vote, Hybrid, Coalition, Beliefs, Total Victory | TTRPG+BG+HYB | CROSS | CI, Composure, Concentration, Debate Fatigue | Church, Hafenmark, Crown, Varfell | Himlensendt, Baralta, Klapp | Coalition, BG delegate, Hybrid | Complete | C-01/02/03 coalition confirmed; A.2-03 PP-117 (BG zero-zero); K2 PP-118 (Hybrid exchange count); SIM-DEBT-02 flagged |
 
-| SIM-HYB-01 | G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario | HYB | PRES | TC, RS, IP, Stability, Coherence, Composure, Wounds, Unit Str/Morale/Cohesion | Church, Varfell, Crown, Hafenmark | Vaynard, Cardinal Klapp, Templar Sergeant | Practitioner-Scholar, Institutional Legalist, Church Militant | COMPLETE (Session A + B) | F-HYB-01 (P1→PP-101), GAP-K2-01 (P1→PP-101), F-HYB-02 (params stale→params_debate fixed), F-HYB-03 (P2→ED-054); 7 params gaps logged |
+| SIM-HYB-01 | G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario | HYB | PRES | CI, RS, IP, Stability, Coherence, Composure, Wounds, Unit Str/Morale/Cohesion | Church, Varfell, Crown, Hafenmark | Vaynard, Cardinal Klapp, Templar Sergeant | Practitioner-Scholar, Institutional Legalist, Church Militant | COMPLETE (Session A + B) | F-HYB-01 (P1→PP-101), GAP-K2-01 (P1→PP-101), F-HYB-02 (params stale→params_debate fixed), F-HYB-03 (P2→ED-054); 7 params gaps logged |
 
-| AUDIT-D-02 | Debate system v1.5 re-audit + all modes + Thread temporal axes | TTRPG+BG+HYB | PAST/PRES/FUT/CROSS | TC, Composure, Concentration, RS, Coherence | All | Himlensendt, Baralta, Klapp, Maret, Vaynard | All debate archetypes | Complete | PP-119-123 applied; HD-F-01 P1 (PP-120 Hybrid clamp); TT-F-04 P1 (PP-123 temporal conflict); ED-087-091 logged |
-| SIM-D-05 | Thread in all temporal axes during debate — Past/Present/Future axis tests | TTRPG | PAST+PRES+FUT | RS, Coherence, TC, Conviction Track | Church, Varfell | Maret, Klapp, Vaynard | Practitioner-orator, institutional | Complete | TT-F-01-05; 3 P1 findings patched PP-120/122/123; 2 P2 ED-097/089 |
+| AUDIT-D-02 | Debate system v1.5 re-audit + all modes + Thread temporal axes | TTRPG+BG+HYB | PAST/PRES/FUT/CROSS | CI, Composure, Concentration, RS, Coherence | All | Himlensendt, Baralta, Klapp, Maret, Vaynard | All debate archetypes | Complete | PP-119-123 applied; HD-F-01 P1 (PP-120 Hybrid clamp); TT-F-04 P1 (PP-123 temporal conflict); ED-087-091 logged |
+| SIM-D-05 | Thread in all temporal axes during debate — Past/Present/Future axis tests | TTRPG | PAST+PRES+FUT | RS, Coherence, CI, Conviction Track | Church, Varfell | Maret, Klapp, Vaynard | Practitioner-orator, institutional | Complete | TT-F-01-05; 3 P1 findings patched PP-120/122/123; 2 P2 ED-097/089 |
 | SIM-X-17 | POP + paradox window (PP-193) | TTRPG | PAST | Coherence, RS, TD | None | Generic TS70, TS30+ opponent | Veteran practitioner, adversary | Complete | 1 gap (sequential POP on paradoxed thread) |
 | SIM-X-18 | Rendering Crisis arc (PP-194) | TTRPG | CROSS | Coherence, Thread Sensitivity, Bonds | None | Generic practitioner, Close Knot | Late-campaign veteran | Complete | 2 findings: stability disruption gap; TS30-31 TS loss risk |
 | SIM-X-19 | Mass battle ×3 RS multiplier (PP-192) | TTRPG+Hybrid | PRES | RS, Coherence | Generic | Generic TS70 practitioner | Combat practitioner | Complete | P1: 3 Dissolution attempts = campaign-ending RS drain; RS<24 Rupture threshold |
@@ -118,7 +118,7 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 |---------|-----------------|--------|
 | F-27 | Mass battle stalemate: 3+ turns 0 damage → may withdraw one zone | Provisional — apply to mass_battle_v3 |
 | F-30/F-33 | Coup Counter successor: highest-CR officer, Counter resets | Provisional — apply to designs/combat |
-| F-43 | TC change cap: ±3/season Domain Actions, ±5 all sources | Provisional — apply to stage5_clocks or designs |
+| F-43 | CI change cap: ±3/season Domain Actions, ±5 all sources | Provisional — apply to stage5_clocks or designs |
 | F-52 | Stability recovery: +1/season with no hostile actions when Stability ≤ 3 | Provisional — apply to faction rules |
 
 
@@ -145,7 +145,7 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 
 | Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
 |---------|-----------|------|----------|--------|----------|------|------------|--------|----------|
-| AUDIT-BG-01 | BG Mode: Modes A+B+C+D+E+F+G | BG+Hybrid | Structural audit | TC RS IP PI Faction-stats Cohesion | All BG | N/A | N/A | Complete | GAP-BG-01 (P1) GAP-BG-02 (P1) GAP-BG-14 (P1); 9xP2; PP-112-122 applied |
+| AUDIT-BG-01 | BG Mode: Modes A+B+C+D+E+F+G | BG+Hybrid | Structural audit | CI RS IP PI Faction-stats Cohesion | All BG | N/A | N/A | Complete | GAP-BG-01 (P1) GAP-BG-02 (P1) GAP-BG-14 (P1); 9xP2; PP-112-122 applied |
 
 ### P1 Findings — AUDIT-BG-01
 
@@ -160,10 +160,10 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 | ID | Source | Description | Status |
 |----|--------|-------------|--------|
 | GAP-BG-03 | AUDIT-BG-01 | PI floor/ceiling undefined | PP-115 PROVISIONAL (ED-055) |
-| GAP-BG-04 | AUDIT-BG-01 | TC ceiling post-TC-80 undefined | PP-116 PROVISIONAL (ED-056) |
+| GAP-BG-04 | AUDIT-BG-01 | CI ceiling post-CI-80 undefined | PP-116 PROVISIONAL (ED-056) |
 | GAP-BG-06 | AUDIT-BG-01 | IP above 80 undefined | PP-114 PROVISIONAL |
 | GAP-BG-07 | AUDIT-BG-01 | BG unit Cohesion undefined in params | PP-119 PROVISIONAL |
-| GAP-BG-09 | AUDIT-BG-01 | TC cap vs seizure interaction | PP-116 PROVISIONAL |
+| GAP-BG-09 | AUDIT-BG-01 | CI cap vs seizure interaction | PP-116 PROVISIONAL |
 | GAP-BG-11 | AUDIT-BG-01 | Reformed Settlement +1 Ob — confirm no reversal | PP-121 PROVISIONAL (ED-058 open) |
 | G-BG-03 | AUDIT-BG-01 | BG Thread Ops: no Coherence — confirm intentional | PP-120 PROVISIONAL (ED-057) |
 | G-BG-05 | AUDIT-BG-01 | CP awards in Hybrid: no worked example | PP-122 PROVISIONAL |
@@ -187,13 +187,13 @@ All prior SIM-X-01 through X-08 references to "Strength" as mass battle headcoun
 |----|--------|-------------|--------|
 | SIM-BG-01-01 | SIM-BG-01 | Collapsed faction card access at Mandate 0 — depends ED-001 | Provisional: card access retained for recovery |
 | SIM-BG-01-02 | SIM-BG-01 | Recovery Govern Partial/Failure outcome undefined in PP-117 | Provisional: Partial = no recovery this season |
-| SIM-BG-01-04 | SIM-BG-01 | Church TC 65 at Step 3 vs Restoration Step 5 win: sequence clarification | PP-118-rev1 documents: Restoration Step 5 pre-empts Step 12 |
+| SIM-BG-01-04 | SIM-BG-01 | Church CI 65 at Step 3 vs Restoration Step 5 win: sequence clarification | PP-118-rev1 documents: Restoration Step 5 pre-empts Step 12 |
 
 ## Session B Findings (SIM-HYB-01)
 
 | ID | Severity | Description | Action |
 |----|----------|-------------|--------|
-| F-HYB-04 | P2 | Zoom In as TC win-delay exploit | ED-056 |
+| F-HYB-04 | P2 | Zoom In as CI win-delay exploit | ED-056 |
 | F-HYB-05 | P2 | Unit ghost state during Zoom In window | ED-057 |
 | F-HYB-06 | P2 | Debate stalemate with no forced resolution | ED-058 |
 | F-HYB-07 | P2 | COMPETITION + TIE interaction undefined on equal successes | PP-103 pending |
@@ -222,23 +222,23 @@ PP-104 applied: 4 projectile categories, Str corrections, pool split, damage for
 Open for editorial: ED-061, ED-062, ED-063.
 
 | SIM-PROJ-01 | LP/HP/LBl/HBl projectile categories | TTRPG+BG | PRES | Unit Str, Wounds, DR, Morale | Generic | Generic unit archetypes | Ranged skirmisher, siege crew, armoured infantry | COMPLETE | F-PROJ-01 (P1→PP-106), F-PROJ-03 (P1→ED-064), F-PROJ-04 (P1→PP-105), F-PROJ-08 (P1→PP-106 sight-line), F-PROJ-02/05/06/07 (P2→EDs) |
-| SIM-BG-01 | BG turn sequence, Domain Actions, Seasonal Accounting, Unit Muster, Parliamentary Manoeuvre | BG | PRES | TC, RS, IP, PI, faction stats | Crown, Church, Hafenmark, Varfell, Guilds, Niflhel, Restoration Movement | Generic faction archetypes | Military, Religious, Economic | COMPLETE | F-01 P2->ED-064; F-03 P1->ED-065; F-06 P1 stale compilation; F-07 P2->PP-170; F-08 P2->ED-066; PG-01/02/04/05->PP-169 |
-| AUDIT-HYBRID-01 | All hybrid mechanics: Phase-Lock, State Transfer, Domain Echo, Register Shift, Zoom In/Out | HYB | PRES | TC, RS, IP, Unit Str/Cohesion/Morale, Domain Echo queue | All factions | Generic | All | COMPLETE Modes A–G + K2 extended | GAP-HYB-01–12, AUDIT-C-01–03, ST-K2-01–05, AUDIT-E-01–05; PP-107–112 applied; ED-071–076 flagged |
+| SIM-BG-01 | BG turn sequence, Domain Actions, Seasonal Accounting, Unit Muster, Parliamentary Manoeuvre | BG | PRES | CI, RS, IP, PI, faction stats | Crown, Church, Hafenmark, Varfell, Guilds, Niflhel, Restoration Movement | Generic faction archetypes | Military, Religious, Economic | COMPLETE | F-01 P2->ED-064; F-03 P1->ED-065; F-06 P1 stale compilation; F-07 P2->PP-170; F-08 P2->ED-066; PG-01/02/04/05->PP-169 |
+| AUDIT-HYBRID-01 | All hybrid mechanics: Phase-Lock, State Transfer, Domain Echo, Register Shift, Zoom In/Out | HYB | PRES | CI, RS, IP, Unit Str/Cohesion/Morale, Domain Echo queue | All factions | Generic | All | COMPLETE Modes A–G + K2 extended | GAP-HYB-01–12, AUDIT-C-01–03, ST-K2-01–05, AUDIT-E-01–05; PP-107–112 applied; ED-071–076 flagged |
 | ED-001-RESOLVE | Card-Hand action economy adoption from stage_bg_proposal_v02.md | BG | PRES | n/a | All factions | n/a | n/a | COMPLETE | PP-177 applied; ED-001 resolved; ED-078 resolved; DESIGN-DEBT-BG-01 logged |
-| DOCREVIEW-BG-01 | Full BG doc review + arc review: Wealth sink, Overwhelming, params gaps PG-09/10/12, ED-048 [UNNAMED — ED-416], conviction texts, AER, P-14 gaps | BG+ALL | PRES/CROSS | RS, TC, IP, PI | All factions | All named NPCs | All | COMPLETE | PP-178 Wealth sink; PP-179 Overwhelming 2xOb; PG-09/10/12 resolved; ED-048 resolved; ED-077 resolved; ED-080-086 logged |
+| DOCREVIEW-BG-01 | Full BG doc review + arc review: Wealth sink, Overwhelming, params gaps PG-09/10/12, ED-048 [UNNAMED — ED-416], conviction texts, AER, P-14 gaps | BG+ALL | PRES/CROSS | RS, CI, IP, PI | All factions | All named NPCs | All | COMPLETE | PP-178 Wealth sink; PP-179 Overwhelming 2xOb; PG-09/10/12 resolved; ED-048 resolved; ED-077 resolved; ED-080-086 logged |
 | SIM-001 | PP-172: LP/HP/LBl/HBl ranged subtypes, TN8 defence, environmental factors | TTRPG | PRES | — | All | Generic | Archer, Crossbowman, Slinger, Melee Fighter | COMPLETE | F1: HBl anti-armour profile confirmed. F2: Cover viable balance. F3: TN8 defence viable but weak (P2 note). F4: ED-085 pool-split ruling. F5: ED-086 HBl availability. |
-| AUD-BG-01 | Full BG system audit — formulas, number systems, interaction chains, gaps, principles, playtest burden, cross-mode | BG+HYBRID | CROSS | All BG tracks | All factions | — | All | COMPLETE | PP-180 bundle applied (8 fixes); ED-087 (P1 TC 80 scope); GAP-BG-05 (P1 co-movement protocol) remains open |
+| AUD-BG-01 | Full BG system audit — formulas, number systems, interaction chains, gaps, principles, playtest burden, cross-mode | BG+HYBRID | CROSS | All BG tracks | All factions | — | All | COMPLETE | PP-180 bundle applied (8 fixes); ED-087 (P1 CI 80 scope); GAP-BG-05 (P1 co-movement protocol) remains open |
 | SIM-FF-01 | BG Fail Forward comparative (4-season, 6 factions, fixed rolls) | PP-177 confirmed; ED-085/086/087 flagged | 2026-04-02 | COMPLETE |
 
 | SIM-002 | PP-173: mass combat ranged DR split (LP/HP/LBl/HBl), Volley Phase, Prepared Defence | TTRPG | PRES | — | All | Generic | Archer unit, Crossbow unit, Sling unit, Heavy Infantry | COMPLETE | F1: Old Projectile DR (LightCut) was P1 wrong — HP/HBl massively undervalued vs armour. F2: LBl anti-levy only at mass scale. F3: HBl personal vs Artillery distinction required. |
 | SIM-003 | BG ranged weapons: K1 cross-mode delta; BG abstraction confirmed correct | BG/Hybrid | PRES | — | All | Generic | All unit types | COMPLETE | F1: BG correctly abstracts weapon types — no changes needed. F2: ED-087 raised (faction ranged modifier). |
-| AUD-BG-02-03+SIM-BG-02-04 | BG audit (no Thread + Thread all axes) + stress tests | BG+HYBRID | CROSS | All | All factions | All NPCs | All | COMPLETE | PP-183 TC80 cap; PP-184 Partial Mend warning; PP-185 AP ceiling; PP-186 Crown Deed2; PP-187 Co-Movement cards |
+| AUD-BG-02-03+SIM-BG-02-04 | BG audit (no Thread + Thread all axes) + stress tests | BG+HYBRID | CROSS | All | All factions | All NPCs | All | COMPLETE | PP-183 CI80 cap; PP-184 Partial Mend warning; PP-185 AP ceiling; PP-186 Crown Deed2; PP-187 Co-Movement cards |
 | SIM-005 | PP-175: mass combat ranged DR scaling (÷2); mass battle scenarios A-D | TTRPG | PRES | Strength/Cohesion/Morale | Crown/Church/Varfell/Hafenmark | Generic commanders | Archer, Crossbow, Heavy Infantry, Sling units | COMPLETE | F1(P1): Unscaled DR made LP/LBl anti-levy-only at mass scale — PP-175 provisional. F2: HP now penetrates Medium (0.6 E[dmg] at CP4). ED-094/095/096 raised. |
 
 | SIM-004 | PP-172 personal combat scenarios: gatehouse LP defence, HP+HBl skirmish, Maret HBl vs Templar | TTRPG | PRES | Health/Wounds/Stamina | Crown, Löwenritter | Maret Uln, Generic Knight | LP defender, HP crossbowman, HBl skirmisher, Heavy melee | COMPLETE | 004A-F1: LP ~2.0 dmg/round vs Heavy (formula correction from SIM-001). 004B-F1: HP+HBl destroys heavy veteran in 3 rounds. 004C-F1: High-pool HBl powerful — terrain is balance. |
 | SIM-005 | PP-173 mass combat scenarios: HP vs Heavy armour, LP vs levy, HBl unit test | TTRPG | PRES | Str/Cohesion/Morale | Crown, Varfell | Generic commanders | HP crossbow unit, LP archer unit, HBl unit, Heavy infantry | COMPLETE | 005A-F1: HP units zero damage vs Heavy armour at standard CP (correct — mass combat abstraction). 005B-F1: LP devastates levy. 005C: HBl effective vs Light/Medium. |
 | SIM-006 | Hybrid siege: PP-091 Artillery, PP-172 HBl personal, Zoom-In intersection | Hybrid | PRES | Unit Str/Fortification | Löwenritter, Crown | Maret Uln | HBl skirmisher, Artillery crew | COMPLETE | 006-F1: Personal HBl viable anti-artillery sniper archetype in Hybrid mode. |
-| PP-188 | Comprehensive params correction from authoritative v04 scan | BG | CROSS | All | Crown/Church/Hafenmark/Varfell/Restoration/Löwenritter | All | All | COMPLETE | Faction list corrected; TC=22, PI=7, Torben=3; Phase4 order corrected; Church/Crown/Varfell victory conditions corrected; Guilds/Niflhel removed as players; ED-088 Ministry gap |
+| PP-188 | Comprehensive params correction from authoritative v04 scan | BG | CROSS | All | Crown/Church/Hafenmark/Varfell/Restoration/Löwenritter | All | All | COMPLETE | Faction list corrected; CI=22, PI=7, Torben=3; Phase4 order corrected; Church/Crown/Varfell victory conditions corrected; Guilds/Niflhel removed as players; ED-088 Ministry gap |
 ## SIM-DEBT Updates (2026-04-02)
 | ID | Status | Notes |
 |----|--------|-------|
@@ -246,8 +246,8 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-DEBT-TW-02 | RESOLVED (SIM-X-18) | Rendering Crisis arc validated. 2 findings (SIM-18-01, SIM-18-02). |
 | SIM-DEBT-TW-03 | RESOLVED (SIM-X-19) | ×3 RS multiplier validated. P1 finding: mass Dissolution is campaign-altering (SIM-19-01). |
 | SIM-DEBT-TW-04 | RESOLVED (SIM-X-20) | Hybrid Coherence calibrated — Moderate scenario is correct design intent. 2 minor findings. |
-| PP-189 | v05 final corrections over PP-188: TC=28, Church victory TC≥65, TC80 seizure formula, majority-1s struck, Uphold/Appease | BG | CROSS | TC RS IP PI | All | All | All | COMPLETE | PP-189 applied |
-| PP-190-193 | Torben 10, Varfell 4/4+fortification constraint, TC80 redesign, Ministry NPC design | BG | CROSS | PI TC RS | All + Ministry | All | All | COMPLETE | ED-088 resolved |
+| PP-189 | v05 final corrections over PP-188: CI=28, Church victory CI≥65, CI80 seizure formula, majority-1s struck, Uphold/Appease | BG | CROSS | CI RS IP PI | All | All | All | COMPLETE | PP-189 applied |
+| PP-190-193 | Torben 10, Varfell 4/4+fortification constraint, CI80 redesign, Ministry NPC design | BG | CROSS | PI CI RS | All + Ministry | All | All | COMPLETE | ED-088 resolved |
 | PP-195 | Territory table reconciliation from physical map + canonical source | BG | CROSS | All | All | All | All | COMPLETE | ED-107 resolved; Hafenmark=T2/T4/T8; Varfell=T9-T12; Crown=T1/T3/T5/T6/T7/T13; Guilds/Niflhel network-only |
 | SIM-X-21 | Collective Weaving (§2.5), OA brittleness, Mending cascade | TTRPG | CROSS | Coherence, RS, OA modifier | Crown, Hafenmark | Mira (TS70), Aldric (TS55) | Veteran practitioner-diplomat, junior aide | Complete | Lock vs Weave strategic choice confirmed; OA→Shifting Object carry-through gap || SIM-X-22 | Combat + Mass Battle + Thread + Temporal Axes | TTRPG+Hybrid | PAST/PRES/CROSS | RS, Coherence, Str, Cohesion, Morale, Health, Stamina, Wounds | Lowenritter, Altonian | Mira (TS70), Kaspar, Generic Altonian Commander | Practitioner-general, mass battle+personal overlap, temporal manipulation | Complete | 7 P1, 5 P2, 3 P3. PP-221–231 applied (all PROVISIONAL). ED-120–126 logged. See tests/sim_x_22_combat_massbattle_threadwork_temporal.md |
 | AUD-CMB-01 | combat Modes A–G: formula, number systems, interaction chains, gap detection, core principles, playtest burden, cross-mode | TTRPG/BG/Hybrid | CROSS | All combat variables | All factions | All | All | COMPLETE | 8 P1, 19 P2, 6 P3. See tests/audit_combat_2026-04-02.md |
@@ -272,28 +272,28 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-H-05 | Locking Structural scale, RS chronic drift 5-season | TTRPG | PRES/FUT | RS, Lock duration | None | None | Practitioner | COMPLETE | SIM-H-05-F1/F2/F3 |
 | SIM-H-06 | Momentum auto-success + 1-result cancel, minimum pool edge | TTRPG | PRES | Momentum | None | None | Any | COMPLETE | SIM-H-06-F1/F2; PP-243 |
 | SIM-H-07 | Scene-to-Mass transition, Hybrid zoom, AUD-P1-15 | Hybrid | PRES | Health, Stamina, Military | Crown, Lowenritter | Arend | Soldier-Agent | COMPLETE | SIM-H-07-F1/F2; PP-244; ED-151 |
-| SIM-ARC-01 | Domain Actions, Debate, RS decay/restoration, TC thresholds, Torben Loyalty Clock, Niflhel docs (provisional), Coup triggers | TTRPG + BG notes | Multi-season, cross-arc | RS, TC, IP, Torben Loyalty, Mandate, Stability, Influence, Military, Coherence | All eight | Almud, Himlensendt, Torben, Elske, Baralta | IP-A–IP-F irrational archetypes | Complete | F-ARC-01–F-ARC-11; 3 GAPs; 1 EDITORIAL pending |
-| SIM-H-08 | Debate CLASH conserved resources, solo orator | TTRPG | PRES | Conviction Track, TC | Church | Halvard | Church-Renegade | COMPLETE | SIM-H-08-F1; non-greedy stalemate |
+| SIM-ARC-01 | Domain Actions, Debate, RS decay/restoration, CI thresholds, Torben Loyalty Clock, Niflhel docs (provisional), Coup triggers | TTRPG + BG notes | Multi-season, cross-arc | RS, CI, IP, Torben Loyalty, Mandate, Stability, Influence, Military, Coherence | All eight | Almud, Himlensendt, Torben, Elske, Baralta | IP-A–IP-F irrational archetypes | Complete | F-ARC-01–F-ARC-11; 3 GAPs; 1 EDITORIAL pending |
+| SIM-H-08 | Debate CLASH conserved resources, solo orator | TTRPG | PRES | Conviction Track, CI | Church | Halvard | Church-Renegade | COMPLETE | SIM-H-08-F1; non-greedy stalemate |
 | SIM-H-09 | Circles, Belief conflict, evidence chain | TTRPG | PRES | Momentum, Belief | Crown | Aldric, Torben | Soldier-Agent | COMPLETE | SIM-H-09-F1/F2; Belief rewrite trigger |
 | SIM-H-10 | Past-Oriented Pull, TS cliff at 60, non-aggressive withdrawal | TTRPG | PRES/PAST | RS, TS, Coherence, TPS | None | None | Scholar-Practitioner | COMPLETE | SIM-H-10-F1/F2/F3; ED-161 |
 | SIM-H-11 | Appeal, Domain Echo PP-252, Belief avoidance CP check | TTRPG | PRES | Guilds Intel, Mandate | Guilds, Hafenmark | Vennrich Solt | Guilds-Fixer | COMPLETE | SIM-H-11-F1/F2/F3; GAP-H-06 |
 | SIM-H-12 | PP-248 Discipline degradation validation, Battle Plans PP-235, Domain Echo | Mass/TTRPG | PRES | Size, Discipline, Morale, Military | Crown, Varfell | Arend advisory | Soldier-Agent | COMPLETE | SIM-H-12-F1/F2/F3; PP-248 validated |
 | SIM-H-13 | PP-253 Collective Forgetting Anchor, Territorial Mending, Coherence arc | TTRPG | PRES | RS, Coherence, TS, Forgetting | None | Mira, Dagmara | Scholar-Practitioner, Church-Renegade | COMPLETE | SIM-H-13-F1/F2/F3/F4; ED-162 |
-| SIM-ARC-02 | TC Territory Seizure, Sovereign Authority Doctrine, Thread Sensitivity growth, Discovery Event, Resonant Style shift, Olafsson evidence chain, Royal Decree, Einhir constraint, Excommunication (partial) | TTRPG primary | Multi-season, cross-arc | TC, RS, Torben Loyalty, Mandate, Stability, Influence, TK | All eight | Almud, Baralta, Himlensendt, Olafsson, Klapp, Vaynard, Elske | NG-A–NG-F non-greedy archetypes | Complete | F-ARC2-01–F-ARC2-16; 2 systemic findings |
+| SIM-ARC-02 | CI Territory Seizure, Sovereign Authority Doctrine, Thread Sensitivity growth, Discovery Event, Resonant Style shift, Olafsson evidence chain, Royal Decree, Einhir constraint, Excommunication (partial) | TTRPG primary | Multi-season, cross-arc | CI, RS, Torben Loyalty, Mandate, Stability, Influence, TK | All eight | Almud, Baralta, Himlensendt, Olafsson, Klapp, Vaynard, Elske | NG-A–NG-F non-greedy archetypes | Complete | F-ARC2-01–F-ARC2-16; 2 systemic findings |
 | SIM-X-29 | Debate, Exchange structure, Memory bonus, Genre/Orientation, CROSS/CLASH | TTRPG | PRES | Composure, Conviction Track | Church, Hafenmark | Aldric Barr, Selde Mehn | Citation-fisher vs Genre-misreader | COMPLETE | F-29-01 to F-29-05; GAP-SIM-X29-01 |
 | SIM-X-30 | Thread operations, Leap, Weaving, RS, Coherence, Partial stacking | TTRPG | PRES | RS, Coherence, Composure, TPS | None | Kael Vorn, Deva Shan | Over-extending veteran, eligibility-blind novice | COMPLETE | F-30-01 to F-30-05; GAP-SIM-X30-01 to X30-03 |
 | SIM-X-31 | Mass Battle, Personal Combat, General Duel, Command Pool, wrong-flank PC | Hybrid | PRES | Cohesion, Morale, Health, Wounds, Command Pool | Crown, Varfell | Arend, Vath, Mira Sondhal | Duel-priority general, wrong-flank PC | COMPLETE | F-31-01 to F-31-04 |
-| SIM-X-32 | BG Accounting, TC thresholds, Policy Instrument, RS decay, Restoration counter-pressure | BG | PRES | TC, RS, IP, all faction stats, Standing | Crown, Church, Hafenmark, Restoration | None | Threshold-adjacent caution, Policy Instrument delay | COMPLETE | F-32-01 to F-32-05 |
+| SIM-X-32 | BG Accounting, CI thresholds, Policy Instrument, RS decay, Restoration counter-pressure | BG | PRES | CI, RS, IP, all faction stats, Standing | Crown, Church, Hafenmark, Restoration | None | Threshold-adjacent caution, Policy Instrument delay | COMPLETE | F-32-01 to F-32-05 |
 | SIM-X-26R | Personal Combat (re-sim) | TTRPG | PRES | Health, Wounds, Stamina, Momentum | None | Davan, Solmund, Maret | SATISFY, MOMENTUM-HOARDER, MARTYR, RISK-AVERSE | COMPLETE | F01-F05; GAP-G01-G02; ED-171 |
-| SIM-X-27R | Hybrid Domain Season (re-sim) | Hybrid | PRES | TC, Mandate, Intel | Crown, Church, Hafenmark | PC (generic) | RITUAL, FACTION-LOYAL, FACTION-OPPORTUNIST, BELIEF-FIXED | COMPLETE | F01-F05; GAP-G01-G02; PP-257-258 |
-| SIM-X-28R | BG Multi-Faction (re-sim) | BG | PRES | TC, Mandate, Wealth, Stability, Public Instability | Crown, Church, Hafenmark, Varfell, Restoration Movement | None | FACTION-LOYAL, RITUAL, FACTION-OPPORTUNIST, RISK-AVERSE, MARTYR | COMPLETE | F01-F06; GAP-G01-G02; ED-172 |
+| SIM-X-27R | Hybrid Domain Season (re-sim) | Hybrid | PRES | CI, Mandate, Intel | Crown, Church, Hafenmark | PC (generic) | RITUAL, FACTION-LOYAL, FACTION-OPPORTUNIST, BELIEF-FIXED | COMPLETE | F01-F05; GAP-G01-G02; PP-257-258 |
+| SIM-X-28R | BG Multi-Faction (re-sim) | BG | PRES | CI, Mandate, Wealth, Stability, Public Instability | Crown, Church, Hafenmark, Varfell, Restoration Movement | None | FACTION-LOYAL, RITUAL, FACTION-OPPORTUNIST, RISK-AVERSE, MARTYR | COMPLETE | F01-F06; GAP-G01-G02; ED-172 |
 | SIM-IXC-01 | Canon P-01–P-15, Core Dice, Momentum | ALL | CROSS | Momentum, Coherence | None | None | Practitioner, Combatant | COMPLETE | IXC-01-F2(P2); IXC-01-G1,G2,G3(GAP) |
 | SIM-IXC-02 | Core Dice, Threadwork v25, Leap, TPS, RS, Focus | TTRPG | CROSS | RS, Coherence, Composure, TPS, Momentum | None | Generic Practitioner | Practitioner (low/avg/high) | COMPLETE | IXC-02-F1(P1-amended),F2,F4(P2); IXC-02-G1,G2(GAP) |
 | SIM-IXC-03 | Core Dice, Personal Combat v1, Weapon Matrix, Damage | TTRPG | PRES | Health, Wounds, Stamina | None | Generic combatants | All weapon archetypes | COMPLETE | IXC-03-F3(P1),G1(GAP-P1); F1,F2,F5(P2); G2(GAP) |
-| SIM-COMP-01 | Contest CROSS asymmetry, non-optimal Belief CP, Domain Echo, TC advance, Shifting Object, document-as-target | Full Hybrid | PRES | RS, TC, IP, Composure, Certainty, Conviction Track | Crown, Church, Varfell, Guilds, Niflhel, Lowenritter | Halvard J, Signe M, Elan V, Lotte B | Bureaucrat, Intel-Officer, Doubting-Inquisitor, Enforcer | COMPLETE | F-C01–F-C15; PP-301–303; ED-171–173 |
-| SIM-ARC-03 | Parliamentary Vote, Torben Loyalty Clock, Maret Loyalty, Southernmost Ritual [UNNAMED — ED-416] (POP Foundational), Guilds financing, Lenneth channel, RS×3 consequence, IP threshold | TTRPG primary | Multi-season, 1-scene windows | IP, TC, RS, Torben Loyalty, Maret Loyalty, Mandate, Stability, Influence, Wealth, Thread Sensitivity | All eight | Almud, Lenneth, Torben, Vaynard, Maret, Baralta | NG-G–NG-L new non-greedy archetypes | Complete | F-ARC3-01–F-ARC3-18; 3 systemic findings |
+| SIM-COMP-01 | Contest CROSS asymmetry, non-optimal Belief CP, Domain Echo, CI advance, Shifting Object, document-as-target | Full Hybrid | PRES | RS, CI, IP, Composure, Certainty, Conviction Track | Crown, Church, Varfell, Guilds, Niflhel, Lowenritter | Halvard J, Signe M, Elan V, Lotte B | Bureaucrat, Intel-Officer, Doubting-Inquisitor, Enforcer | COMPLETE | F-C01–F-C15; PP-301–303; ED-171–173 |
+| SIM-ARC-03 | Parliamentary Vote, Torben Loyalty Clock, Maret Loyalty, Southernmost Ritual [UNNAMED — ED-416] (POP Foundational), Guilds financing, Lenneth channel, RS×3 consequence, IP threshold | TTRPG primary | Multi-season, 1-scene windows | IP, CI, RS, Torben Loyalty, Maret Loyalty, Mandate, Stability, Influence, Wealth, Thread Sensitivity | All eight | Almud, Lenneth, Torben, Vaynard, Maret, Baralta | NG-G–NG-L new non-greedy archetypes | Complete | F-ARC3-01–F-ARC3-18; 3 systemic findings |
 | SIM-SOC-01 | Grand Contest + CT + AMPLIFY + initiative + Composure + non-optimal archetypes | TTRPG | Single session (7 exchanges) | CT, Composure, Momentum | Church, Crown, Hafenmark | Church Adv, Crown Adv | Status-Preserving, Impulsive, Fatigued | Complete — P1 resistance formula (PP-278), P1 Fatigued AMPLIFY refusal |
-| SIM-COMP-02 | Multi-Party Contest PP-280, Feigned Retreat PP-256, Mass Mismatch PP-274, Untrained Leap PP-281, Ethical Framework Ob live, BG Victory Race, Dual Win-Conditions | Full Hybrid+BG | PRES | RS, TC, IP, AER, TD, Composure, Certainty, Conviction Track (×2) | Crown, Church, Hafenmark, Varfell, Guilds, Lowenritter | Ravn, Mads, Elan, Halvard | Parliamentary-Advocate, Untrained-Practitioner, Sincere-Confessor, Survival-Mercenary | COMPLETE | F-S01–F-S11; PP-280–281; ED-177–180; GAP-S-01 |
+| SIM-COMP-02 | Multi-Party Contest PP-280, Feigned Retreat PP-256, Mass Mismatch PP-274, Untrained Leap PP-281, Ethical Framework Ob live, BG Victory Race, Dual Win-Conditions | Full Hybrid+BG | PRES | RS, CI, IP, AER, TD, Composure, Certainty, Conviction Track (×2) | Crown, Church, Hafenmark, Varfell, Guilds, Lowenritter | Ravn, Mads, Elan, Halvard | Parliamentary-Advocate, Untrained-Practitioner, Sincere-Confessor, Survival-Mercenary | COMPLETE | F-S01–F-S11; PP-280–281; ED-177–180; GAP-S-01 |
 | SIM-ECON-01 | Domain Actions, Seasonal Accounting, Wealth degradation, anti-death-spiral floor, ethical framework Ob mods, stat caps | TTRPG | 3 seasons | M I W Mil Sta (Crown); Guilds W | Crown (Overextended), Church, Guilds, Varfell | None | Overextended | Complete — P1 DA timing gap (PP-280), P2 Wealth cap asymmetry (PP-281) |
 | SIM-IXC-05 | Attributes, Combat Pool, Opposed Resolution, Damage | TTRPG | PRES | Health, Wounds, Stamina | None | Generic combatants | Min/avg/max builds | COMPLETE | IXC-05-F2(P2) |
 | SIM-IXC-06 | Spirit/Attunement/Focus → Threadwork, Leap | TTRPG | CROSS | RS, Coherence, TPS, Composure | None | Generic Practitioner | Thread builds | COMPLETE | IXC-06-F2(P2); IXC-06-G1(GAP) |
@@ -302,7 +302,7 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-FM-01/02, SIM-RES-05/06/07 | Feint partial commit, Rescue contested roll, payoff calibration | TTRPG | PRES | Health, Wounds, Defence allocation, Momentum | None | Generic actors | GREEDY, RISK-AVERSE | COMPLETE | PP-291 (Feint partial commit); PP-292 (Rescue contest+payoff); ED-291 resolved; FM-02-F02/RES-05-F02/RES-06-F03 design-valid |
 | SIM-PLAY-RES-01/02 | Rescue 3v2 full scenario | TTRPG | PRES | Health, Wounds, Momentum, Fibonacci | None | Aldric, Maret, X/Y/Z | MARTYR, SURVIVAL-FLOOR, GREEDY | COMPLETE | RES-PLAY-F01 P2 (TN5 near-impossible); F02 MARTYR pivot gap; F03 OK; F04 ED-292 open |
 | SIM-FEINT-A/B/C/D | Feint chains, vs-Feint, minimum commit, incapacitation | TTRPG | PRES | Health, Wounds, Defence ceiling | None | Generic actors | GREEDY, RISK-AVERSE | COMPLETE | FEINT-F01 OK; F02 OK; F03 P1→PP-293; F04 OK; F05 P1→PP-293 |
-| SIM-BG-MANDATE | BG Mandate suppression ceiling, coalition viability, endgame lock | BG | PRES | Mandate, Stability, TC | Crown, Church, Hafenmark, Varfell | None | FACTION-LOYAL, RITUAL, FACTION-OPPORTUNIST | COMPLETE | F01-F04 P1; ED-293 open (4 options); Church M7 win-lock confirmed |
+| SIM-BG-MANDATE | BG Mandate suppression ceiling, coalition viability, endgame lock | BG | PRES | Mandate, Stability, CI | Crown, Church, Hafenmark, Varfell | None | FACTION-LOYAL, RITUAL, FACTION-OPPORTUNIST | COMPLETE | F01-F04 P1; ED-293 open (4 options); Church M7 win-lock confirmed |
 | SIM-SC-BASELINE | Social Contest new attribute baselines (SIM-DEBT-03/04) | TTRPG | PRES | Composure, Conviction Track | None | Scholar, Diplomat, Demagogue | GREEDY | PARTIAL | SC-F01 OK; SC-F02 P2 GAP (Conviction Track length); SC-F03 P1 (Demagogue non-viable in CLASH) |
 | SIM-PI-CASCADE | PI revolt cascade | BG | PRES | Public Instability | All | None | — | BLOCKED | GAP PI-CASCADE-01/02 — threshold values missing; SIM-DEBT-08 opened |
 | SIM-DISSONANT | War-scale Dissonant Thread effects | Hybrid | PRES | Coherence, RS | All | Practitioners | — | BLOCKED | GAP DISSONANT-01 — war-scale rates not parameterised; SIM-DEBT-06 carried |
@@ -339,10 +339,10 @@ Open for editorial: ED-061, ED-062, ED-063.
 ## 2026-04-07 Comprehensive Multi-System Stress Test
 | ID | Description | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
 |----|------------|------|----------|--------|----------|------|------------|--------|---------|
-| SIM-BG-01 | TC pacing: Church vs Hafenmark suppression S1–S20 | BG | PRES/FUT | TC | Church, Hafenmark | Himlensendt, Baralta | Expansion vs Suppression | COMPLETE | P2: Hafenmark suppression worth ~6 seasons; Assert mandatory post-TC50 removes decision cost |
-| SIM-BG-02 | Church Seizure Ob range — territory immunity analysis | BG | FUT | TC, CV | Church | Himlensendt | Territorial Expansion | COMPLETE | P1: Fort3+CV0=de facto seizure immunity (Ob 8, <2% success rate); no mechanic to reduce Fort level pre-seizure; ED-candidate-G |
+| SIM-BG-01 | CI pacing: Church vs Hafenmark suppression S1–S20 | BG | PRES/FUT | CI | Church, Hafenmark | Himlensendt, Baralta | Expansion vs Suppression | COMPLETE | P2: Hafenmark suppression worth ~6 seasons; Assert mandatory post-CI50 removes decision cost |
+| SIM-BG-02 | Church Seizure Ob range — territory immunity analysis | BG | FUT | CI, CV | Church | Himlensendt | Territorial Expansion | COMPLETE | P1: Fort3+CV0=de facto seizure immunity (Ob 8, <2% success rate); no mechanic to reduce Fort level pre-seizure; ED-candidate-G |
 | SIM-BG-03 | Crown TCV 18 bottleneck — late-game victory feasibility | BG | FUT | TCV, IP, PI | Crown | Generic Crown | Hegemonic Expansion | COMPLETE | P1: "Suppress all rivals" undefined — Crown victory unresolvable; ED-candidate-A |
-| SIM-BG-04 | PI collapse cascade — Löwenritter coup chain | BG | MID | PI, TC, Coup Counter | Crown, Löwenritter, Church | Ehrenwall, Almud | Institutional Collapse | COMPLETE | P1: PI≤2 TC+2 interacts with frozen TC undefined; coup window narrow at PI 3–4; ED-candidate-B |
+| SIM-BG-04 | PI collapse cascade — Löwenritter coup chain | BG | MID | PI, CI, Coup Counter | Crown, Löwenritter, Church | Ehrenwall, Almud | Institutional Collapse | COMPLETE | P1: PI≤2 CI+2 interacts with frozen CI undefined; coup window narrow at PI 3–4; ED-candidate-B |
 | SIM-BG-05 | RS passive decay — time to Rupture without Warden Cooperation | BG | FUT | RS | All | Generic | Passive/Negligent | COMPLETE | P2: RS 40 band entry ~S40–44; Rupture not near-term threat; +2 Ob to all non-Thread is real consequence |
 | SIM-HY-01 | Domain Echo stacking — same-scene multiple echoes | Hybrid | CROSS | Faction Mandate, Influence | Crown, Church | Almud, Himlensendt | Politician, Churchman | COMPLETE | P1: Per-echo cap reset enables +4 Mandate in one scene; ED-071 must resolve; ED-candidate-C |
 | SIM-HY-02 | Zoom In at illegal phase entry | Hybrid | PRES | Phase state | Any | Generic | Any | COMPLETE | P2: No rule for illegal Zoom In consequence; mid-Phase-6 Domain Echo undefined; ED-candidate-D |
@@ -361,12 +361,12 @@ Open for editorial: ED-061, ED-062, ED-063.
 ## 2026-04-07 Proposed Mechanic Stress Tests
 | ID | Description | Mode | Temporal | Tracks | Factions | Status | Findings |
 |----|------------|------|----------|--------|----------|--------|---------|
-| SIM-PP-01 | PP-428 Piety Spread: CV gain rate vs seizure timeline | BG | FUT | TC, CV | Church | COMPLETE | CLEAN: AP >= 1 gate prevents carpet-bombing; Consul opportunity cost real |
+| SIM-PP-01 | PP-428 Piety Spread: CV gain rate vs seizure timeline | BG | FUT | CI, CV | Church | COMPLETE | CLEAN: AP >= 1 gate prevents carpet-bombing; Consul opportunity cost real |
 | SIM-PP-02 | PP-429 Active Inquisition: AP accumulation rate | BG | PRES/FUT | AP | Church | COMPLETE | P2: First Inquisitor threshold undefined → ED-322 |
-| SIM-PP-03 | PP-431 Parliamentary Challenge: TC suppression stacking | BG | PRES/FUT | TC | Church, Hafenmark | COMPLETE | P1: Stacks with structural suppression → negative TC → correction PP-431-COR |
+| SIM-PP-03 | PP-431 Parliamentary Challenge: CI suppression stacking | BG | PRES/FUT | CI | Church, Hafenmark | COMPLETE | P1: Stacks with structural suppression → negative CI → correction PP-431-COR |
 | SIM-PP-04 | PP-433 Royal Charter: Ob range and charter count | BG | PRES | TCV | Crown | COMPLETE | CLEAN: 3-charter cap appropriate; Seizure +1 Ob defensively meaningful |
-| SIM-PP-05 | PP-438 VTM Discretion: TC suppression vs PC cost | BG | FUT | TC, PC | Varfell | COMPLETE | P2: Weak at VTM 3, strong at VTM 5; cost scaling needed → ED-323 |
-| SIM-PP-06 | PP-441 Counter-Narrative: TC stacking analysis | BG | PRES/FUT | TC | Varfell, Church | COMPLETE | P1: Stacks with Hafenmark suppression → negative TC → correction PP-441-COR |
+| SIM-PP-05 | PP-438 VTM Discretion: CI suppression vs PC cost | BG | FUT | CI, PC | Varfell | COMPLETE | P2: Weak at VTM 3, strong at VTM 5; cost scaling needed → ED-323 |
+| SIM-PP-06 | PP-441 Counter-Narrative: CI stacking analysis | BG | PRES/FUT | CI | Varfell, Church | COMPLETE | P1: Stacks with Hafenmark suppression → negative CI → correction PP-441-COR |
 | SIM-SC-01 | Social Contest: Argue pool, CT movement, Concentration, Doubt Marker, interaction types, genre weights, cross-mode (BG/Hybrid/TTRPG) | A+D+J+L | TTRPG/BG/Hybrid | CT, Concentration, Composure, Strain, Doubt Marker | Crown, Church, Hafenmark, Varfell, Guilds, Restoration | Partial — TTRPG+BG+Hybrid tested | P1: genre dominant strategy, interaction type doc conflict, resistance formula conflict, TIE/DIVERGENCE contradiction, Obscuring OW ambiguity, §3.8 P-01 risk; P2: Focus trap, Regroup cost asymmetry, GM load, corroboration conflict, Memory bonus unverifiable |
 
 ## 2026-04-08 Social Contest Stress Test
@@ -382,15 +382,15 @@ Open for editorial: ED-061, ED-062, ED-063.
 | SIM-VAR-01 | RM BG arc — Community Organising, Weaving, Warden Emergence, RS | BG | 20-season arc | Mandate, Stability, RS, Presence, WC, CV | Restoration | — | RM hardest mode | Complete | F-RM-01 (P1 ED-327→resolved PP-460), F-RM-02/03/04 (P2), F-RM-05 (P3) |
 | SIM-VAR-02 | Threadwork at RS 22 — Leap, Mending, Dissolution edges | TTRPG | Single scene | RS, Coherence, Ob, TPS | None | Maret Uln | TS 50 at Critical RS | Complete | F-RS-01 (P1 recovery timeline), F-RS-02/03/04 (P2/P3 ED-328) |
 | SIM-VAR-03 | Debate forced-CLASH — Klapp vs Baralta, 5 exchanges | TTRPG | 5 exchanges | Composure, CT, Strain, Doubt | Church, Hafenmark | Klapp, Baralta | Matched pools, institutional authority | Complete | F-DB-01 (P1 ED-330), F-DB-02/03 (P2 ED-329), F-DB-04/05 (P3) |
-| SIM-VAR-04 | Löwenritter post-coup arc S8–S16 | BG | 8-season arc | TC, RS, PI, TCV, Coup Counter | Löwenritter, Church, Hafenmark, Varfell | — | Conditional faction first run | Complete | F-LW-01 (P1 ED-331), F-LW-02/03/04/05 (P2 ED-332/333), F-LW-06 (P3) |
+| SIM-VAR-04 | Löwenritter post-coup arc S8–S16 | BG | 8-season arc | CI, RS, PI, TCV, Coup Counter | Löwenritter, Church, Hafenmark, Varfell | — | Conditional faction first run | Complete | F-LW-01 (P1 ED-331), F-LW-02/03/04/05 (P2 ED-332/333), F-LW-06 (P3) |
 | SIM-VAR-05 | Hybrid Crown Zoom In — S6 T9 assault, state transfer | HYB | 2-turn battle + personal | Health, Wounds, Military, TCV, Domain Echo | Crown, Church | Marshal Edren, Inquisitor Vald | General assault + personal combat | Complete | F-HY-01 (P1 mutual annihilation), F-HY-02/03 (P2 ED-334), F-HY-04 (P3) |
 | SIM-VAR-06 | Mass combat wound cascade → capture chain | TTRPG+HYB | 2 turns + personal | Health, Wounds, Size, Cohesion, Mandate | Crown, Church | Maret Elstov, Jarnstal | General capture arc | Complete | F-MC-01/02/03/04 (P2 ED-334/335/336), F-MC-05/06 (P3) |
-| SIM-NEW-01 | Conviction Yield + TC cascade — formula, AER 3 bypass, TC 75 nullification | BG | Seasonal | TC, CV, AER | Church | — | Conviction Yield calibration | Complete | F-CY-01 (P1 late-game), F-CY-02/03/04 (P2) |
-| SIM-NEW-02 | Partition Victory — Church + Hafenmark, S11 race | BG | 11-season arc | TC, TCV, PI, Mandate | Church, Hafenmark, Crown, Varfell | — | Partition mechanics first run | Complete | F-PT-01 (P1 TC binding), F-PT-02/03 (P2 ED-338), F-PT-04 (P3 ED-339) |
-| SIM-NEW-03 | IP crisis + AER threshold — Vanguard chain | BG | 20-season arc | IP, AER, TC | All | — | IP threat calibration | Complete | F-IP-01/02 (P1 ED-340), F-IP-03/04 (P2 ED-341), F-IP-05 (P3) |
-| SIM-NEW-04 | Resistance decay (new) + Crown/Hafenmark co-victory | BG + Debate | S2–S8 | CT, resistance, TCV, PI, TC | Crown, Hafenmark, Church | Klapp, Baralta | Resistance decay first test | Complete | F-RD-01 (P1 decay works), F-RD-02 (P2), F-CV-01 (P1 ED-342), F-CV-02 (P2) |
+| SIM-NEW-01 | Conviction Yield + CI cascade — formula, AER 3 bypass, CI 75 nullification | BG | Seasonal | CI, CV, AER | Church | — | Conviction Yield calibration | Complete | F-CY-01 (P1 late-game), F-CY-02/03/04 (P2) |
+| SIM-NEW-02 | Partition Victory — Church + Hafenmark, S11 race | BG | 11-season arc | CI, TCV, PI, Mandate | Church, Hafenmark, Crown, Varfell | — | Partition mechanics first run | Complete | F-PT-01 (P1 CI binding), F-PT-02/03 (P2 ED-338), F-PT-04 (P3 ED-339) |
+| SIM-NEW-03 | IP crisis + AER threshold — Vanguard chain | BG | 20-season arc | IP, AER, CI | All | — | IP threat calibration | Complete | F-IP-01/02 (P1 ED-340), F-IP-03/04 (P2 ED-341), F-IP-05 (P3) |
+| SIM-NEW-04 | Resistance decay (new) + Crown/Hafenmark co-victory | BG + Debate | S2–S8 | CT, resistance, TCV, PI, CI | Crown, Hafenmark, Church | Klapp, Baralta | Resistance decay first test | Complete | F-RD-01 (P1 decay works), F-RD-02 (P2), F-CV-01 (P1 ED-342), F-CV-02 (P2) |
 | SIM-NEW-05 | Patience Protocol full arc → VTM → Revelation Token | BG | 12-season arc | PC, VTM, Tribune, Revelation | Varfell, Crown, Hafenmark, Church | — | Varfell Intel arc first run | Complete | F-PP-01 (P1 saturation), F-PP-02/03 (P2 ED-343), F-PP-04 (P2 ED-344) |
-| SIM-NEW-06 | Cultural Uprising full run (new RM win condition) | BG | 23-season arc | CV, RS, TC, T9 control | RM, Church, All | — | RM Cultural Uprising first run | Complete | F-CU-01 (P1 ED-345), F-CU-02/03/04/05 (P2/P3) |
+| SIM-NEW-06 | Cultural Uprising full run (new RM win condition) | BG | 23-season arc | CV, RS, CI, T9 control | RM, Church, All | — | RM Cultural Uprising first run | Complete | F-CU-01 (P1 ED-345), F-CU-02/03/04/05 (P2/P3) |
 | F-IP-01 | SIM-NEW-03 | Altonian Vanguard deployment (IP 75) has no defined mechanical effects — endpoint undefined | Open — ED-340 |
 | F-CV-01 | SIM-NEW-04 | Crown/Hafenmark co-victory achievable from S2 — Hafenmark needs 1 territory; Church has no counter-play at that timeline | Open — ED-342 |
 | F-CU-01 | SIM-NEW-06 | Cultural Uprising pool undefined — Weaver TS 18 cannot Leap; Uprising pool formula needed | Open — ED-345 |
@@ -409,7 +409,7 @@ Open for editorial: ED-061, ED-062, ED-063.
 | ID | Description | Mode | Status | Date | Findings |
 |----|------------|------|--------|------|---------| 
 | SIM-DEBT-BG-03 | Co-victory pairings reachability | BG | COMPLETE | 2026-04-08 | P1-08 (Crown+Hafen passive S1-2 — ED-343), P2-07 (Partition tracking — PP-479), P2-12 (Löw+Hafen zero PI margin). |
-| SIM-DEBT-BG-04 | Faction unique action balance | BG | COMPLETE | 2026-04-08 | F-Church-01 (Cardinal Focus dominant), P2-09 (VTM TC — ED-345), P2-10 (Decree Fragmentation — ED-344). |
+| SIM-DEBT-BG-04 | Faction unique action balance | BG | COMPLETE | 2026-04-08 | F-Church-01 (Cardinal Focus dominant), P2-09 (VTM CI — ED-345), P2-10 (Decree Fragmentation — ED-344). |
 | SIM-DEBT-BG-05 | Ministry NPC AI interaction | BG | COMPLETE | 2026-04-08 | P2-08 (Priority 3 dead — ED-346), P2-11 (Domain conflict — PP-480). |
 | SIM-DEBT-BG-06 | RS decay 20-season projection | BG | COMPLETE | 2026-04-08 | CLEAN — system healthy. WC >= 2 critical S8+. Thread-RS-RM feedback loop confirmed intentional. |
 
@@ -424,7 +424,7 @@ Status: COMPLETE
 ### P1 Findings Summary
 | ID | Finding |
 |----|---------|
-| ED-365 | Graduated Seizure pre-TC 75 availability gate ambiguous |
+| ED-365 | Graduated Seizure pre-CI 75 availability gate ambiguous |
 | ED-366 | PP-421 vs PP-494 OW CV cap contradiction |
 | ED-368 | Battle trigger on Graduated Seizure unspecified |
 | J3/ED-355 | Fort Level omitted from PP-494 Ob — conflict with PP-421 |
@@ -571,12 +571,12 @@ Status: COMPLETE
 | SIM-AMPL-01 | AMPLIFY stalemate: low pool + non-primary genre irresolvable deadlock | A+D | PRES | Conviction Track, Composure | Crown, Church, Hafenmark | Himlensendt, Almud, Baralta | Alliance debaters, institutional authority | COMPLETE | F-AMPL-01(P1→PROVISIONAL AMPL-01), F-AMPL-02(P2), F-AMPL-03(P2 design paradox). |
 | SIM-CMD-01 | Command cap: Size > Command glass cannon, no pool boost mechanism | A+D | PRES | Unit Health, Power, Pool | Generic | Generic General | Levy Horde, disciplined unit | COMPLETE | F-CMD-01(REVISED — not zero-benefit), F-CMD-02(P1→PROVISIONAL CMD-01), F-CMD-03(P2). |
 | SIM-CR-01 | Calamity Radiation cross-mode integration: BG Thread tags, Hybrid echo, Surge timing, Forgetting boundary | A+G | CROSS | RS, Domain Action Ob, Thread Ob, CV | All | Generic practitioners | All archetypes | COMPLETE | F-CR-01(P1→PROV CR-01), F-CR-02(P1→PROV CR-02), F-CR-03(P2), F-CR-04(P2), F-CR-05(P3 CLEAN). GAP-CR-01 blocks RS decay precision. |
-| SIM-CLK-01 | Clock Registry interaction chains: RS/TC/IP/PI/WC/WR/AER interdependency | B+G | CROSS | All shared clocks | All | — | — | COMPLETE | F-CLK-01(P2), F-CLK-02(P2 AER/AEA), F-CLK-03(P1→PROV CLK-01), F-CLK-04(P2). |
-| SIM-VIC-01 | Victory Architecture endgame race: 4-player Season 10 projection | C+D | FUT | TCV, TC, PI, RS, Mandate | Crown, Church, Hafenmark, Varfell | — | All faction archetypes | COMPLETE | F-VIC-01(P2→PROV VIC-01), F-VIC-02(P1 EDITORIAL), F-VIC-03(P2), F-VIC-04(P2), F-VIC-05(P1 CLEAN), F-VIC-06(P1 GAP-VIC-02). |
+| SIM-CLK-01 | Clock Registry interaction chains: RS/CI/IP/PI/WC/WR/AER interdependency | B+G | CROSS | All shared clocks | All | — | — | COMPLETE | F-CLK-01(P2), F-CLK-02(P2 AER/AEA), F-CLK-03(P1→PROV CLK-01), F-CLK-04(P2). |
+| SIM-VIC-01 | Victory Architecture endgame race: 4-player Season 10 projection | C+D | FUT | TCV, CI, PI, RS, Mandate | Crown, Church, Hafenmark, Varfell | — | All faction archetypes | COMPLETE | F-VIC-01(P2→PROV VIC-01), F-VIC-02(P1 EDITORIAL), F-VIC-03(P2), F-VIC-04(P2), F-VIC-05(P1 CLEAN), F-VIC-06(P1 GAP-VIC-02). |
 | SIM-VIC-02 | Co-victory pairings stress test post PP-528: exclusivity, timing, feasibility, cognitive load | D+L | CROSS | All | All | — | All | COMPLETE | F-CO-01(P2), F-CO-02(P1 EDITORIAL), F-CO-03(P3). 3 clean scenarios. |
-| SIM-VIC-03 | RM Cultural Uprising: Phase 1 conflict, Phase 2 calibration, RS prerequisite | A+C | CROSS | CV, TC, RS, WC, WR | RM, Church | Pontifex | RM hardest mode | COMPLETE | F-VIC-RM-01(P1→PROV VIC-RM-01), F-VIC-RM-02(P2 GAP-VIC-RM-01), F-VIC-RM-03(P2 CLEAN), F-VIC-RM-04(P3). |
+| SIM-VIC-03 | RM Cultural Uprising: Phase 1 conflict, Phase 2 calibration, RS prerequisite | A+C | CROSS | CV, CI, RS, WC, WR | RM, Church | Pontifex | RM hardest mode | COMPLETE | F-VIC-RM-01(P1→PROV VIC-RM-01), F-VIC-RM-02(P2 GAP-VIC-RM-01), F-VIC-RM-03(P2 CLEAN), F-VIC-RM-04(P3). |
 
-| BAL-VIC-01 | Victory path balance — solo + co-victory timeline normalisation | ALL | CROSS | TCV, PI, VTM, TC, CV | All | — | All | COMPLETE | PP-540–546 applied. Solo 12–16 seasons all factions. Co-victory 10–14 seasons. 7 patches. |
+| BAL-VIC-01 | Victory path balance — solo + co-victory timeline normalisation | ALL | CROSS | TCV, PI, VTM, CI, CV | All | — | All | COMPLETE | PP-540–546 applied. Solo 12–16 seasons all factions. Co-victory 10–14 seasons. 7 patches. |
 
 ## NPC Behavior System — Simulation Debt (2026-04-13)
 
@@ -602,7 +602,7 @@ All v8 additions unsimulated. Required before any v8 arc is referenced in a mech
 | BG-CV-01 to BG-CV-05 | BG Conviction Events | Not simulated |
 | COLLISION J | Church Siege of the Southern Gates | Not simulated |
 
-## SIM-ARC-B01 — Cluster B TC Fracture (2026-04-13)
+## SIM-ARC-B01 — Cluster B CI Fracture (2026-04-13)
 | Arc | Mode | Status | Key Finding |
 |---|---|---|---|
 | ARC-S29 Cardinal Schism | C+D | COMPLETE | Olafsson autonomous AP in non-Church territory; 2 consecutive schism seasons → Inquisitor in Crown military hinge |
@@ -614,7 +614,7 @@ P2 findings: 4 (P2-B01/B02 → PP-577; P2-B03/B04 confirmed design intent, no pa
 ## SIM-ARC-B02 — Season 8 Crown Card Constraint (2026-04-13)
 | Arc interaction | Mode | Status | Key Finding |
 |---|---|---|---|
-| Crown Suppress + Hafenmark Structural TC dependency | B (Interaction) | COMPLETE | Hidden 2-card coordination requirement; PP-579 documents |
+| Crown Suppress + Hafenmark Structural CI dependency | B (Interaction) | COMPLETE | Hidden 2-card coordination requirement; PP-579 documents |
 | Inquisitor AP in non-Church territory | D (Edge) | COMPLETE | Asymmetry intentional; PP-578 clarifies |
 
 ## SIM-ARC-A01 — Cluster A Baralta Programme (2026-04-13)
@@ -636,7 +636,7 @@ P2 findings: 4 (P2-C01/C05 → PP-582; P2-C02 design confirmed; P2-C04 design co
 P3 gaps: 3 (ED-411-413: Maret stats, Edeyja Resonant Style, Mending Ob confirmed)
 
 | SIM-FW-01 | Fieldwork: Survey Ob, Evidence Track, Exposure→AP, Survey vs Consul | A+D | Multi-season | Exposure, AP, Evidence, Cover | Church | None | Exploration calibration | Complete | 2 P1, 1 P2 |
-| SIM-NPC-01 | NPC Behavior: Priority Tree (Crown 5 seasons) | A | 5 seasons | TC, PI, Stability, Mandate, CC, TL | Crown | None | BG AI validation | Complete | 0 |
+| SIM-NPC-01 | NPC Behavior: Priority Tree (Crown 5 seasons) | A | 5 seasons | CI, PI, Stability, Mandate, CC, TL | Crown | None | BG AI validation | Complete | 0 |
 | SIM-NPC-02 | NPC Behavior: Belief Revision Rate | A | 20-contest campaign | Conviction Track, Composure, Scars | All | Named NPCs | Contest calibration | Complete | 0 |
 | SIM-CH-01 | Character Histories: Starting skills + spark rates | A | Character creation + 10 scenes | Skills, Recall, Equip slots | None | None | Lifepath calibration | Complete | 0 |
 
@@ -673,11 +673,11 @@ P2 findings: 4 (P2-F01→PP-593; P2-F02/F04→ED-421; P2-F03 design observation;
 ## SIM-ARC-G01-G05 — Cluster G Capital Territory Events (2026-04-14)
 | Arc | Mode | Status | Key Finding |
 |---|---|---|------|
-| TE-01 T1 Valorsplatz falls | C | COMPLETE | Seizure blocked at equal Mandate (P2-G01/PP-596); TC freeze ceiling clarified (GAP-G01/PP-596) |
+| TE-01 T1 Valorsplatz falls | C | COMPLETE | Seizure blocked at equal Mandate (P2-G01/PP-596); CI freeze ceiling clarified (GAP-G01/PP-596) |
 | TE-04 T8 Gransol falls | C | COMPLETE | Baralta 7D pool recovers T8 same season (P2-G02/PP-597); elimination + loss = ARC-S24 PI gate suspended |
 | TE-05 Mineral Leverage | G | COMPLETE | Not triggered (Varfell not Church); Church path noted |
 | TE-07 Crossroads Consolidates | G | COMPLETE | Suspended when T9 falls; prior VTM gain from TE-07 permanent |
-| TE-08 Cathedral Falls | C | COMPLETE | Church M−3 but Seizure/TC intact (P1-G03/PP-594); ED-404 branch reached |
+| TE-08 Cathedral Falls | C | COMPLETE | Church M−3 but Seizure/CI intact (P1-G03/PP-594); ED-404 branch reached |
 | TE-10 Duchy Falls Silent | C | COMPLETE | All 3 Varfell paths suspended (P1-G04/PP-598); Private Collection contested |
 | TE-26 The Hinge (Coup) | C | COMPLETE | Reconstitution unavailable at PI 3 (P1-G05/PP-595); PI−3 blocks Baralta win (P2-G05/PP-597) |
 P1 findings: 3 (P1-G03→PP-594; P1-G04→PP-598; P1-G05→PP-595)
@@ -709,7 +709,7 @@ All SIM-DEBT-FW items resolved in PP-576 through PP-583.
 | SIM-DEBT-FW-01 | Ob calibration across Depth 1–5 at 5 pool sizes ± hostile/foreign modifiers | PP-583 | Calibration sound: 5D→D1, 9D→D1–2, 13D→D1–3, 17D→D1–4, 24D challenges D5 |
 | SIM-DEBT-FW-02 | Investigation pacing: Evidence Track 5-threshold completion times by pool size | PP-576 partial, PP-583 complete | High-pool (15–19D): 3–5 scenes at D1–3. Low-pool (9D): 4–6 scenes at D1–2. Pacing confirmed. |
 | SIM-DEBT-FW-03 | Disposition economy: Neutral→Bonded timeline across 3–4 seasons | PP-583 | ~6–8 actions across 3–4 seasons. Sincerity Gate adds ~37% failure on instrumental Connect. Meaningful investment confirmed. |
-| SIM-DEBT-FW-04 | Exposure → Church Attention Pool feedback rate under cap | PP-581 | Fieldwork contributes ~11% of max TC acceleration over 4 seasons. Cap (+1/char/season, +2/territory/season) is sufficient. |
+| SIM-DEBT-FW-04 | Exposure → Church Attention Pool feedback rate under cap | PP-581 | Fieldwork contributes ~11% of max CI acceleration over 4 seasons. Cap (+1/char/season, +2/territory/season) is sufficient. |
 | SIM-DEBT-FW-05 | Survey vs Govern action economy (niche differentiation) | PP-583 | Govern dominates mid-proximity (reliable Prosperity). Survey dominates high-proximity (safe northern territories). Neither dominates. |
 | SIM-DEBT-FW-06 | Cover derived value calibration: detection risk by Cover level | PP-583 | Cover 3: detected in 3 scenes. Cover 9: full season before detection. Cover 12+: near-immune to casual detection, threatened by combat+Thread stacking. |
 | SIM-DEBT-FW-07 | Transition simulation: all 6 fieldwork ↔ other-system handoff directions | PP-577 | All 6 directions functional. F-TRANS-01 through F-TRANS-12 resolved. |
@@ -744,7 +744,7 @@ All PASS tests: patched in same commit (PP-630–634).
 
 | Test ID | Mechanics | Mode | Temporal | Tracks | Factions | NPCs | Archetypes | Status | Findings |
 |---------|-----------|------|----------|--------|----------|------|------------|--------|----------|
-| SIM-FW-TRANS | Fieldwork (Examine, Interview, Thread-Read) + Combat + Contest + Mass Battle + Thread transitions | C+D | 1 investigation arc, 4 seasonal scenes | Evidence, Exposure, Disposition, Coherence, RS, Health, Composure, TC, IP | Varfell, Crown, Church | Torsten, Signy | Non-sensitive + practitioner field pair | Complete | 5 transition rules validated; §3.9 confirmed; Desperate Trail rare at normal pool sizes (correct) |
+| SIM-FW-TRANS | Fieldwork (Examine, Interview, Thread-Read) + Combat + Contest + Mass Battle + Thread transitions | C+D | 1 investigation arc, 4 seasonal scenes | Evidence, Exposure, Disposition, Coherence, RS, Health, Composure, CI, IP | Varfell, Crown, Church | Torsten, Signy | Non-sensitive + practitioner field pair | Complete | 5 transition rules validated; §3.9 confirmed; Desperate Trail rare at normal pool sizes (correct) |
 | SIM-FW-NPC | Fieldwork + NPC character interactions; thread-read on NPCs; cover mechanics | C+B | Single session | Evidence, Exposure, TS detection tiers, Certainty, Cover | Varfell, Church | Multiple | Practitioner investigator | Complete | TS detection tiers consistent; Cover 3-12 range confirmed |
 | SIM-FW-TW | Threadwork-fieldwork integration; Thread-Read pool formula (PP-626) | A+B | Single scene | RS, Coherence, TPS contribution, Contact duration | None | Signy | Practitioner investigator | Complete | Thread-Read = (Spi×2)+Hist+TPS confirmed canonical |
 
@@ -754,7 +754,7 @@ All PASS tests: patched in same commit (PP-630–634).
 | FW-01 | Ob calibration: 5D→D1, 9D→D1-2, 13D→D1-3, 17D→D1-4, 24D→D5 | Resolved |
 | FW-02 | Evidence pacing: 3-5 scenes for threshold 5 | Resolved |
 | FW-03 | Neutral→Bonded = 6-8 actions, 3-4 seasons | Resolved |
-| FW-04 | AP feedback = 11% of TC max; cap sufficient | Resolved |
+| FW-04 | AP feedback = 11% of CI max; cap sufficient | Resolved |
 | FW-05 | Survey and Govern occupy different niches; neither dominates | Resolved |
 | FW-06 | Cover 3 (detected in 3 scenes) vs Cover 12+ (near-immune) | Resolved |
 
@@ -781,7 +781,7 @@ All PASS tests: patched in same commit (PP-630–634).
 |---------|-----------|--------|---------|
 | SIM-FAC-01 | Domain Action Ob calibration (1-7 scale) | Complete | Equal-stat NPC: 14% success (correct — PC agency matters). Ethical modifiers: ±15-20% per step. |
 | SIM-FAC-02 | Unique action Ob calibration | Complete | All within range. Assassination (5D vs Ob 6) = 4% (appropriately rare). |
-| SIM-FAC-03 | Edge cases: partial sheets, anti-death-spiral, TC cap | Complete | No P1. P2: 2 seasons at Stab 2 before collapse (adequate). Reference card needed for 48-step accounting. |
+| SIM-FAC-03 | Edge cases: partial sheets, anti-death-spiral, CI cap | Complete | No P1. P2: 2 seasons at Stab 2 before collapse (adequate). Reference card needed for 48-step accounting. |
 
 ## Southernmost Coverage (2026-04-13)
 
@@ -835,7 +835,7 @@ Cardinal restoration, Baralta Arc C, longevity cascade.
 BG lobby cap, Varfell Parliamentary constraint, IP rate, Elske arc, Excommunication procedure, Accord/Order distinction, Guilds victory constraint fix.
 
 ### Confirmed Working
-Guilds Merchant Hegemony (~S15-17), TC bonus equalising Parliament pools, Memory genre advantage, Thread collective op (72D Calamity reversal), Fort defense bonus, Elske pre-coup investment → Regency S17, double Priority 0 Zoom In choice, double longevity death cascade.
+Guilds Merchant Hegemony (~S15-17), CI bonus equalising Parliament pools, Memory genre advantage, Thread collective op (72D Calamity reversal), Fort defense bonus, Elske pre-coup investment → Regency S17, double Priority 0 Zoom In choice, double longevity death cascade.
 
 
 ## Consolidation — sim sessions 2026-04-16
@@ -927,7 +927,7 @@ Partition Phase 1 declaration, battle consequences consolidated.
 
 | ED | Resolution |
 |----|-----------|
-| ED-590 | Church victory revised + validated: TC ≥ 65 + Accord ≥ 3 in ≥ 3 non-capitals |
+| ED-590 | Church victory revised + validated: CI ≥ 65 + Accord ≥ 3 in ≥ 3 non-capitals |
 | ED-572 | Assert → Pontifex-exclusive |
 | ED-545/551/555/557/559/571/583 | See sim_batch_3 |
 | ED-539/585 | See sim_batch_3/4 |
@@ -937,13 +937,13 @@ Partition Phase 1 declaration, battle consequences consolidated.
 Top-down audit across all 8 batches (ST-01 through ST-60).
 
 ### Robustness: ✓ working
-Victory race convergence, TC/RS pyrrhic collision, Obligation cascade, Torben investment race, Calamity reversal gate, co-victory hold, Elske subversive strategy, Niflhel intelligence market
+Victory race convergence, CI/RS pyrrhic collision, Obligation cascade, Torben investment race, Calamity reversal gate, co-victory hold, Elske subversive strategy, Niflhel intelligence market
 
 ### Robustness: ✗ gaps addressed
-IP rate too mild → revised (+3/battle, +2/season TC60+); No Parliamentary block on Excommunication → Parliamentary Stay added; Guilds solo victory resolved (ED-612)
+IP rate too mild → revised (+3/battle, +2/season CI60+); No Parliamentary block on Excommunication → Parliamentary Stay added; Guilds solo victory resolved (ED-612)
 
 ### Elegance: ✓ working
-TC Reform, Church Accord governance condition, Feigned Retreat dual utility, Excommunication fait accompli, Shield Wall/Wedge counter, Depth 5 non-investigative
+CI Reform, Church Accord governance condition, Feigned Retreat dual utility, Excommunication fait accompli, Shield Wall/Wedge counter, Depth 5 non-investigative
 
 ### Elegance: ✗ gaps addressed
 Grand Contest Recall → once-per-source rule; Accord/Order invisible → clarified; IP published wrong → corrected; BG lobby pre-determination → capped at 4-6
@@ -957,7 +957,7 @@ Accord/Order co-fire sequence → Order 0 first, Accord 0 second; Partition sile
 ### Propagated
 social_contest: Grand Contest Recall fix, BG lobby cap, Obligation 3-cap advisory, Parliamentary Stay §10.1
 victory_v30: Rupture Scene + Last Declaration, RM Presence vs Phase 1 distinction, Partition Phase 1 declaration
-peninsular_strain: IP rate +3/battle +2/season-TC60, Accord/Order distinction §2.4b, co-fire sequence
+peninsular_strain: IP rate +3/battle +2/season-CI60, Accord/Order distinction §2.4b, co-fire sequence
 mass_battle: §E Battle Consequences (canonical consolidation from 4 source docs)
 military_layer: §1.9 Siege Action mechanic
 scale_transitions: Stability Crisis Zoom In trigger
@@ -1036,7 +1036,7 @@ Per user instruction 2026-04-17, simulation validation of PP-660 faction politic
 | SIM-POL-R01 | 7-rank progression pacing — validate player from Std 0 can reach Std 5 by S14 and Std 7 by S20 under normal play | P1 | DEFERRED 2026-04-17 |
 | SIM-POL-R02 | Caste modifier impact — confirm Southern Einhir rank-advancement gates do not create unwinnable game states | P1 | DEFERRED 2026-04-17 |
 | SIM-POL-R03 | Baralta Crown Claim × rank interaction — confirm Hafenmark-to-Crown Recognition Ceremony does not create exploit paths for free Crown Std 5 | P2 | DEFERRED 2026-04-17 |
-| SIM-POL-R04 | TC × rank interaction — confirm TC 100 Unification does not trivialize or over-constrain Church rank advancement | P2 | DEFERRED 2026-04-17 |
+| SIM-POL-R04 | CI × rank interaction — confirm CI 100 Unification does not trivialize or over-constrain Church rank advancement | P2 | DEFERRED 2026-04-17 |
 | SIM-POL-R05 | Generational Shift Disposition outcomes — confirm 5-tier outcome table does not produce degenerate paths (always +3 in 2 seasons) | P1 | DEFERRED 2026-04-17 |
 
 Resume trigger: (a) user-initiated simulation review, or (b) patch to faction_politics_expanded_v1 that changes rank-advancement formulas.

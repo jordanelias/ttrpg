@@ -32,13 +32,13 @@
 
 # GAP PATCHES (resolved inline during simulation)
 
-## GP-01: Diagnosis Combat Posture (GAP-TC-02)
+## GP-01: Diagnosis Combat Posture (GAP-CI-02)
 **Patch:** Diagnosis is a Declaration-phase mental action. The practitioner declares "Diagnosis" as their action type (same as declaring Strike or Full Guard). They allocate their full Combat Pool to Defence. Opponent does NOT receive +2D — the practitioner is actively perceiving, not passive. Rationale: Diagnosis is the "last act of rendering" (§2.2) and requires focused attention incompatible with attacking, but the practitioner's physical awareness remains intact.
 
-## GP-02: Leap Defensive Posture (GAP-TC-03)
+## GP-02: Leap Defensive Posture (GAP-CI-03)
 **Patch:** During Leap round, practitioner allocates entire Combat Pool to Defence. Opponent does NOT receive +2D. The Leap's "reactive defence" is pre-conscious physical response — the body maintains guard while rendering suspends. This differs from Full Guard (voiding = intentional passivity) and OOB (exhaustion = inability). The practitioner is neither passive nor exhausted; they are transitioning states. Their body's trained responses continue below consciousness.
 
-## GP-03: Thread Operation Stat Output on Equipment and Persons (GAP-TC-01)
+## GP-03: Thread Operation Stat Output on Equipment and Persons (GAP-CI-01)
 **Patch — derived from scale principle + operation type:**
 
 ### Weaving (coherence, stabilization)
@@ -70,10 +70,10 @@
 
 **Personal Dissolution lethality note:** This is intentionally devastating. Ob 5 minimum, TS 50+ required, Coherence -2 (FR + Dissolution), RS -5 to -8. The cost is immense. No combat defence roll stops it — the attack bypasses physical armour entirely. The only counter: another practitioner performing a Lock or defensive Weaving on the target's configuration before the Dissolution resolves. This is an editorial-adjacent ruling — **[EDITORIAL: confirm Personal Dissolution as instant incapacitation, or add a resistance roll (Spirit check)?]**
 
-## GP-04: Gap Proximity Combat Effects (GAP-TC-08)
+## GP-04: Gap Proximity Combat Effects (GAP-CI-08)
 **Patch:** Active Gap in a combat zone imposes no mechanical combat penalty. Gaps are a strategic/narrative concern, not a tactical modifier. Rationale: Gaps affect the substrate (RS, spontaneous phenomena, wrongness perception) but do not directly interfere with rendered physical combat. A fighter can fight normally next to a Gap — they just feel profoundly wrong while doing so. TS 30+ fighters perceive the Gap and may choose to disengage; non-practitioners feel diffuse dread but suffer no dice penalty.
 
-## GP-05: Monstrous Entity Combat Profile (GAP-TC-07)
+## GP-05: Monstrous Entity Combat Profile (GAP-CI-07)
 **Patch — minimal stat block for simulation purposes:**
 
 | Entity Type | Combat Pool | HP | Weapon Equivalent | Armour | Special |
@@ -84,7 +84,7 @@
 
 **[EDITORIAL: Monstrous Entity stat blocks are placeholder. These are mechanically functional for simulation but lack setting-specific traits, behaviour patterns, and Thread-interaction rules. Full design needed.]**
 
-## GP-06: Threadcut Action Economy (GAP-TC-06)
+## GP-06: Threadcut Action Economy (GAP-CI-06)
 **Patch:** Threadcut beings do NOT get free Thread operations during combat rounds. Their "no Leap required" means they skip the Leap round (saving 1 round of vulnerability) but still declare Thread Operation as their action type and are Defence-only during operation rounds. Rationale: the threadcut being's continuous self-maintenance requires constant intentional direction. Splitting that direction between combat AND external Thread operations is not possible — the being must commit to one or the other each round. Otherwise threadcut beings are categorically superior combatants with no balancing cost.
 
 **Cost balance:** Threadcut beings save the Leap round (1 round less vulnerability) and don't need Approach Training, but every external Thread operation adds +1 Rendering Strain, accelerating De-Actualisation. Their combat advantage is temporal efficiency; their cost is existential.
@@ -406,12 +406,12 @@ P6 (threadcut) directs Pull at its own configuration. Ob: depends on actualizati
 
 | ID | Description | Resolution |
 |---|---|---|
-| GP-01 / GAP-TC-02 | Diagnosis combat posture | Defence-only, no +2D to opponent |
-| GP-02 / GAP-TC-03 | Leap defensive posture | Full Defence, no +2D, pre-conscious reflexes |
-| GP-03 / GAP-TC-01 | Thread op stat output on equipment/persons | Weaving = +1 mod/DR/heal segment; Pulling = -1 mod/DR or -2D person; Lock = freeze; Dissolution = destroy |
-| GP-04 / GAP-TC-08 | Gap proximity combat effects | No mechanical penalty; narrative wrongness only |
-| GP-05 / GAP-TC-07 | Monstrous Entity combat stats | 3-tier stat block (Minor/Standard/Major) |
-| GP-06 / GAP-TC-06 | Threadcut action economy | Defence-only during ops (same as organic), save 1 round (no Leap) |
+| GP-01 / GAP-CI-02 | Diagnosis combat posture | Defence-only, no +2D to opponent |
+| GP-02 / GAP-CI-03 | Leap defensive posture | Full Defence, no +2D, pre-conscious reflexes |
+| GP-03 / GAP-CI-01 | Thread op stat output on equipment/persons | Weaving = +1 mod/DR/heal segment; Pulling = -1 mod/DR or -2D person; Lock = freeze; Dissolution = destroy |
+| GP-04 / GAP-CI-08 | Gap proximity combat effects | No mechanical penalty; narrative wrongness only |
+| GP-05 / GAP-CI-07 | Monstrous Entity combat stats | 3-tier stat block (Minor/Standard/Major) |
+| GP-06 / GAP-CI-06 | Threadcut action economy | Defence-only during ops (same as organic), save 1 round (no Leap) |
 
 ---
 

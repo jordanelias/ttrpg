@@ -16,7 +16,7 @@ This tests whether the system produces meaningful outcomes when PCs do not min-m
 ---
 
 ## OPENING STATE (Season 7)
-RS: 54 | TC: 45 | IP: 34 | Public Instability: 5
+RS: 54 | CI: 45 | IP: 34 | Public Instability: 5
 Mira: TS 59, Momentum 2, Coherence 10, CP 16
 Arend: Momentum 1, CP 13
 Dagmara: Momentum 0, Inspiration (Halvard) depleted, CP 11
@@ -30,14 +30,14 @@ Theron: Momentum 1, CP 9
 
 **Non-greedy constraint:** Dagmara will NOT spend Inspiration (Harbour District congregation, value 3) on this debate. She is saving it for the moment Halvard openly moves against her community. She also will not Fork her Clandestine Courier History into the Debate — it would expose her Revolution contact to Parliament observation.
 
-**Setup:** Dagmara speaks against the Church motion in Parliament. Conviction Track starts at 4 (Church has already moved the narrative — TC 45 gives them institutional authority bonus). Audience: Hafenmark delegates (Categorical Imperative, Past-boosted), one Guilds representative (Moral Relativism, GM picks genre), three Crown seats (Virtue Ethics, Present-boosted).
+**Setup:** Dagmara speaks against the Church motion in Parliament. Conviction Track starts at 4 (Church has already moved the narrative — CI 45 gives them institutional authority bonus). Audience: Hafenmark delegates (Categorical Imperative, Past-boosted), one Guilds representative (Moral Relativism, GM picks genre), three Crown seats (Virtue Ethics, Present-boosted).
 
 Audience ethical mode: mixed. Dominant: Hafenmark majority → Past genre boosted for audience.
 
 **Step 1 — Appraise:** Dagmara Att(5), TN 7, Ob 1 → 5D.
-E[net]: 5×0.30 = 1.5. P(≥1): ~95% → Success: reads Church speaker's primary genre as Past, orientation Obscuring (suppressing the TC timeline from Parliament).
+E[net]: 5×0.30 = 1.5. P(≥1): ~95% → Success: reads Church speaker's primary genre as Past, orientation Obscuring (suppressing the CI timeline from Parliament).
 
-**Dagmara chooses: Past/Revealing.** She will use Church history AGAINST the Church — citing the original Reformed Settlement terms that TC crossing 40 was supposed to trigger consultation, not unilateral motion.
+**Dagmara chooses: Past/Revealing.** She will use Church history AGAINST the Church — citing the original Reformed Settlement terms that CI crossing 40 was supposed to trigger consultation, not unilateral motion.
 
 Church counter-speaker (NPC): Att 4 → reads Dagmara's genre as Past. NPC chooses Past/Obscuring (institutional doctrine, suppress).
 
@@ -637,7 +637,7 @@ FINDING SIM-H-13-F4: Non-greedy withdrawal after one operation preserves
 
 ## COVERAGE MATRIX ADDITIONS
 
-| SIM-H-08 | Debate CLASH no Inspiration (conserved), solo orator | TTRPG | PRES | Conviction Track, TC | Church, Parliament | Halvard, Church NPC | Church-Renegade | COMPLETE | SIM-H-08-F1; stalemate without trivialisation |
+| SIM-H-08 | Debate CLASH no Inspiration (conserved), solo orator | TTRPG | PRES | Conviction Track, CI | Church, Parliament | Halvard, Church NPC | Church-Renegade | COMPLETE | SIM-H-08-F1; stalemate without trivialisation |
 | SIM-H-09 | Circles, Belief conflict, evidence chain | TTRPG | PRES | Momentum, Belief | Crown | Aldric, Torben | Soldier-Agent | COMPLETE | SIM-H-09-F1/F2; Belief rewrite trigger |
 | SIM-H-10 | Past-Oriented Pull, TS cliff, non-aggressive withdrawal | TTRPG | PRES/PAST | RS, TS, Coherence, TPS | Unaffiliated | None | Scholar-Practitioner | COMPLETE | SIM-H-10-F1/F2/F3; ED-161 |
 | SIM-H-11 | Appeal, Domain Echo PP-252, Belief avoidance | TTRPG | PRES | Mandate, Guilds Intel | Guilds, Hafenmark | Vennrich Solt | Guilds-Fixer | COMPLETE | SIM-H-11-F1/F2/F3; GAP-H-06 |

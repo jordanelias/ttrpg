@@ -15,7 +15,7 @@ state_transfer_spec.md: ✓ (230 lines)
 
 ## Scenario
 
-**4-player BG, Season 6.** Crown has TCV 14, pressing toward Regency (needs 16). Hafenmark at TCV 9. Church at TCV 4 (TC 36). Varfell at TCV 6.
+**4-player BG, Season 6.** Crown has TCV 14, pressing toward Regency (needs 16). Hafenmark at TCV 9. Church at TCV 4 (CI 36). Varfell at TCV 6.
 
 Crown's player controls Marshal Edren (PC General): Coordination 4, Endurance 4, Health 10, Spirit 3, Attunement 2, TS 28.
 
@@ -40,7 +40,7 @@ Per state_transfer_spec.md §1:
 | BG phase suspended at Phase 4 Battle | TTRPG scene opens: Assault on Himmelenger | Phase held |
 | Church Inquisitor in T9 (AP 3 from S5) | Inquisitor NPC: Willpower 4, Mandate-equivalent 4 | Present in scene |
 
-**Variables suspended:** All other faction BG turns. RS, TC clocks don't advance during Zoom In scene.
+**Variables suspended:** All other faction BG turns. RS, CI clocks don't advance during Zoom In scene.
 
 ---
 
@@ -121,7 +121,7 @@ Per state_transfer_spec.md Zoom Out:
 
 **[RULING: Personal combat outcomes in Zoom In are NOT Domain Echoes unless they explicitly involve a Thread operation or stated Domain Action. Edren fighting Vald is a tactical personal event — no BG faction-stat consequence queues automatically. GM may apply narrative consequence (Church Mandate +1 "righteous resistance to invasion") but this is not a mechanical Domain Echo.]**
 
-**TC Accounting (S6):** Church played Assert earlier (TC +2). Hafenmark structural (−1). Net TC: 36 + 2 − 1 = **TC 37**.
+**CI Accounting (S6):** Church played Assert earlier (CI +2). Hafenmark structural (−1). Net CI: 36 + 2 − 1 = **CI 37**.
 
 **Critical finding — Crown Military post-Zoom:** Crown's Military 2 means:
 - Future March rolls: 2D vs Ob 2. P(Success): ~22%. Crown can barely sustain military operations.
