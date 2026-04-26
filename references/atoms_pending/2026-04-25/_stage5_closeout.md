@@ -41,7 +41,7 @@ TC-01 was the only canonical ID that did not auto-promote in Stage 4 (kind=TC, r
 - Review the 17 PROVISIONAL ED entries in canon/editorial_ledger_archive.yaml (added 2026-04-25 — see "Stage 4 promotions" section)
 - Review the 33 PROVISIONAL PP entries in archives/patches/patch_register_archive_stage4_promotions_2026_04_25.yaml
 - Verify ED-543 (clock registry refresh) was not already done in another ED
-- Review 5 PROVISIONAL Solmund split files at designs/world/solmund_*_v30.md and designs/scene/rwce_mechanism_v30.md
+- Review 5 PROVISIONAL Solmund split files at designs/world/solmund_*_v30.md and designs/scene/miraculous_event_v30.md
 - Review references/throughlines_meta_infill.md PART 8 append (Solmund throughlines)
 - Run TC disambiguation sweep when ready (TC-01 and ~942 other TC occurrences)
 
@@ -50,3 +50,12 @@ TC-01 was the only canonical ID that did not auto-promote in Stage 4 (kind=TC, r
 - **Per-atom traceability:** look up `atom_id` in `_stage5_closeout.yaml` to see which commit consolidated its content and which (if any) canonical IDs were promoted from its evidence.
 - **Provenance trail preserved:** atom files remain unchanged at their original paths under `references/atoms_pending/2026-04-25/<source>/`. The 10 master uploads can be discarded; the atomization+consolidation+audit+review chain is reproducible from this commit set.
 - **Forward references:** consolidated docs at `_consolidated/`, audit reports at `_audit_reports/`, exhaustive reviews at `_reviews/`, Stage 4 prep at `_stage4_prep/`, this closeout at `_stage5_closeout.{md,yaml}`.
+
+## Post-Stage-4 rename: RWCE → Miraculous Event
+
+After Stage 4 closeout, Jordan renamed the mechanism from "Rendered-World Change Event" / "RWCE" to "Miraculous Event" (per "stop using acronyms" directive). Renames executed across:
+- Live canon: file `designs/scene/rwce_mechanism_v30.md` renamed to `designs/scene/miraculous_event_v30.md`; canonical_sources system key `rwce_mechanism` → `miraculous_event`; in-text refs updated in worldbuilding_v30, solmund_master_document, throughlines_meta_infill, throughlines_complete.
+- Atoms_pending derived analytical artifacts (this folder's _consolidated/, _audit_reports/, _reviews/, _stage4_prep/, _stage5_closeout, _topic_decomposition, _priority_queue, _manifest, _index) updated for forward consistency.
+- **Atom files preserved as provenance** — original master upload wording retained at `references/atoms_pending/2026-04-25/solmund_master_document/`. Atoms still reference RWCE / Rendered-World Change Event because that is what the source documents said on 2026-04-25.
+
+Commits: ed233db8 (live canon + file rename), 4e5ef55b (worldbuilding_v30 follow-up), this commit (analytical artifacts).

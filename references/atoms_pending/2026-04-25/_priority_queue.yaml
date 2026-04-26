@@ -1141,7 +1141,7 @@ queue:
     rationale: signal=13, IDs=2, lines=44, target=['canon/editorial_ledger.yaml']
   - atom_id: solmund_master_document__23__20-the-mechanism-rendered-world-change-event-rwce
     source_file: solmund_master_document.md
-    header: '20. The Mechanism: Rendered-World Change Event (RWCE)'
+    header: '20. The Mechanism: Miraculous Event (Miraculous Event)'
     lines: 30
     signal: 12
     ids: {}
@@ -3738,7 +3738,7 @@ queue:
     rationale: low/negative signal (0) — likely meta or already-captured
   - atom_id: solmund_master_document__28__25-conviction-mechanic-for-rwce-witnesses
     source_file: solmund_master_document.md
-    header: 25. Conviction Mechanic for RWCE Witnesses
+    header: 25. Conviction Mechanic for Miraculous Event Witnesses
     lines: 8
     signal: 0
     ids: {}

@@ -153,7 +153,7 @@ _15 atoms. Sorted by signal descending. These are the highest-density mechanical
 | 13 | `valoria_master_consolidation__14__4-6-per-faction-thread-ent` | 4.6 Per-Faction Thread Entry Points | — | `designs/threadwork/` |
 | 13 | `valoria_master_document__09__2-1-attributes-10-range-1-7` | 2.1 Attributes (10, range 1–7) | ED-694, PP-684 | `designs/threadwork/` |
 | 13 | `valoria_session_2026_04_25_master_consolidation__09__9-verif` | 9. Verification Status | ED-783, PP-675 | `canon/editorial_ledger.yaml` |
-| 12 | `solmund_master_document__23__20-the-mechanism-rendered-world` | 20. The Mechanism: Rendered-World Change Event (RW | — | `designs/threadwork/` |
+| 12 | `solmund_master_document__23__20-the-mechanism-rendered-world` | 20. The Mechanism: Miraculous Event (RW | — | `designs/threadwork/` |
 | 12 | `threadwork_master__07__vii-architecture-in-implementation-or` | VII. Architecture in implementation order | — | `designs/threadwork/` |
 | 12 | `valoria_master_analysis__06__section-6-holistic-system-level` | Section 6 — Holistic system-level | — | `designs/npcs/` |
 | 12 | `valoria_master_analysis__11__section-11-outstanding-design-d` | Section 11 — Outstanding design decisions | M-3,4 | `references/throughlines_meta.m` |

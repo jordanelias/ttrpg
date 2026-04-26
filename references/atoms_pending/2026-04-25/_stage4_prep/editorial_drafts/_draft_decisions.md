@@ -42,10 +42,10 @@ Solmund decomposes into 8 PARTs + 2 appendices. Each has a different ingestion p
 - References canon entities; verify per-claim against canon/03_canonical_timeline.md and designs/world/. P-constraint refs found: (none).
 
 **PART 7 — SOUTHERNMOST ENGAGEMENT DESIGN** → `SPLIT-FROM-SOLMUND-INTO-DESIGN`
-- Mechanical specs (RWCE, SA Increment, etc.) — these belong in designs/scene/ or designs/provincial/, not designs/world/. Recommend extracting to a separate design-track ingestion that goes through Stage 4 mechanical-promotion path, NOT through Solmund editorial path.
+- Mechanical specs (Miraculous Event, SA Increment, etc.) — these belong in designs/scene/ or designs/provincial/, not designs/world/. Recommend extracting to a separate design-track ingestion that goes through Stage 4 mechanical-promotion path, NOT through Solmund editorial path.
 
 **PART 8 — THROUGHLINES AND IMPLEMENTATION** → `SPLIT-FROM-SOLMUND-INTO-DESIGN`
-- Mechanical specs (RWCE, SA Increment, etc.) — these belong in designs/scene/ or designs/provincial/, not designs/world/. Recommend extracting to a separate design-track ingestion that goes through Stage 4 mechanical-promotion path, NOT through Solmund editorial path.
+- Mechanical specs (Miraculous Event, SA Increment, etc.) — these belong in designs/scene/ or designs/provincial/, not designs/world/. Recommend extracting to a separate design-track ingestion that goes through Stage 4 mechanical-promotion path, NOT through Solmund editorial path.
 
 ### Solmund overall recommendation
 
@@ -55,7 +55,7 @@ Solmund is **not a single editorial deliverable** — it is a multi-track consol
 - **Philosophical/Theological track** (PARTs 3) → ingest into `designs/world/solmund_philosophy_v30.md` (new file). Editorial substance, but cross-check Augustine/Wittgenstein/Kierkegaard treatment doesn't contradict canon/00_philosophical_foundations.md.
 - **Solmund Nature + Witness Traditions track** (PART 4) → ingest into `designs/world/solmund_v30.md` (new file). High canon-anchoring; verify against canon/03_canonical_timeline.md and existing designs/world/southernmost_v30.md.
 - **Artifact Taxonomy track** (PART 5) → ingest into `designs/world/solmund_artifacts_v30.md` (new file). Setting work; verify entity names against canon.
-- **Southernmost Engagement / RWCE track** (PART 7) → **DO NOT route through Solmund editorial.** This is mechanical (RWCE mechanism, SA increment, faction action gating). Extract to `designs/scene/rwce_mechanism_v30.md` and route through standard mechanical-promotion path. Subject to PP / ED registration.
+- **Southernmost Engagement / Miraculous Event track** (PART 7) → **DO NOT route through Solmund editorial.** This is mechanical (Miraculous Event mechanism, SA increment, faction action gating). Extract to `designs/scene/miraculous_event_v30.md` and route through standard mechanical-promotion path. Subject to PP / ED registration.
 - **Throughlines track** (PART 8) → integrate into `references/throughlines_meta_infill.md` table with M-parent assignments. Already throughline territory.
 - **Appendices** → resolved findings inform existing canon entries; open items become new ED entries.
 
@@ -181,7 +181,7 @@ Per-topic refined drafts at `editorial_drafts/refined_promotion_drafts/<topic_id
 
 | # | decision | type |
 |---|---|---|
-| 1 | Solmund split into 7 ingestion tracks (voice/style, philosophy, nature, artifacts, RWCE-mech, throughlines, appendices) | structural + per-track per-PART |
+| 1 | Solmund split into 7 ingestion tracks (voice/style, philosophy, nature, artifacts, Miraculous Event-mech, throughlines, appendices) | structural + per-track per-PART |
 | 2 | Topic 06 sub-decomposition refined from 21 → 13 sub-topics | structural |
 | 3 | ED-543: REGISTER (P1, status=open, single-atom evidence) | editorial |
 | 4 | Paths: 1 RENAME / 1 STRIKE / 1 CREATE-PLACEHOLDER | structural |

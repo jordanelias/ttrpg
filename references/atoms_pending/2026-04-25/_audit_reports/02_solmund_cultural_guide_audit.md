@@ -13,7 +13,7 @@
 |---|---|---|
 | **MANUAL-REVIEW** | Internal consistency across Di Cicco principle, voice registers, artifact taxono | Requires substantive content reading; programmatic audit cannot conclude. |
 | **MANUAL-REVIEW** | Cross-references to existing canon (canon/00_philosophical_foundations.md, canon | 5 referenced paths not present in fetched canon corpus (could exist on main but not in fetched files). Sample: ['canon/02_canon_constraints.md', 'designs/world/worldbuilding_v30.md', 'designs/world/so |
-| **MANUAL-REVIEW** | Mechanical audit section claims (Faction Response Pathways, RWCE) consistent wit | Requires substantive content reading; programmatic audit cannot conclude. |
+| **MANUAL-REVIEW** | Mechanical audit section claims (Faction Response Pathways, Miraculous Event) consistent wit | Requires substantive content reading; programmatic audit cannot conclude. |
 | **PASS** | [PROVISIONAL:] / [EDITORIAL:] markers correctly applied per editorial-path rules | 1 [PROVISIONAL:] markers present in atoms. |
 | **MANUAL-REVIEW** | No setting/worldbuilding contradictions with existing canon/03_canonical_timelin | Requires substantive content reading; programmatic audit cannot conclude. |
 

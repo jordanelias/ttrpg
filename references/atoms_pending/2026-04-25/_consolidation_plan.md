@@ -66,7 +66,7 @@ All 316 atoms assigned to exactly one topic via strict sequential assignment (ze
 - **audit checks:**
   - Internal consistency across Di Cicco principle, voice registers, artifact taxonomy, philosophical frameworks, faction engagement pathways, mechanical audit sections.
   - Cross-references to existing canon (canon/00_philosophical_foundations.md, canon/02_canon_constraints.md, designs/world/worldbuilding_v30.md, etc.) are valid.
-  - Mechanical audit section claims (Faction Response Pathways, RWCE) consistent with current designs/.
+  - Mechanical audit section claims (Faction Response Pathways, Miraculous Event) consistent with current designs/.
   - [PROVISIONAL:] / [EDITORIAL:] markers correctly applied per editorial-path rules.
   - No setting/worldbuilding contradictions with existing canon/03_canonical_timeline.md.
 - **post-audit canon target:** `designs/world/, designs/npcs/ — pending Jordan editorial review`

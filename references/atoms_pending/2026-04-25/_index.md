@@ -119,12 +119,12 @@ Each source split at H2 section boundaries. Atoms carry provenance frontmatter.
   - 17. Structural Writing Patterns
   - 18. Tonal Calibration by Certainty
   - 19. The Problem
-  - 20. The Mechanism: Rendered-World Change Event (RWCE)
+  - 20. The Mechanism: Miraculous Event (Miraculous Event)
   - 21. Baralta's Theological Position
   - 22. Faction Response Pathways
   - 23. The Triple Interpretation
   - 24. SA-Gated Faction Actions
-  - 25. Conviction Mechanic for RWCE Witnesses
+  - 25. Conviction Mechanic for Miraculous Event Witnesses
   - 26. System Connections
   - 27. Five Throughlines
   - 28. Implementation Priorities

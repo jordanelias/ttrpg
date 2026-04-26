@@ -194,7 +194,7 @@ Farmers, merchants, labourers, children.
   - canon excerpt: > ness (Faction Stat)  Scale: 0–7 (where applicable) or 0–10 for factions with active research infrastructure.   - Practitioner reports from successful expedition (Diagnosis results converted to Awareness points) - Study of Einhir primary texts (each t
 
 - **atom** `solmund_master_document__23__20-the-mechanism-rend`
-  - claim: > The Mechanism: Rendered-World Change Event (RWCE)
+  - claim: > The Mechanism: Miraculous Event (Miraculous Event)
 
 ### 20.1 What Already Exists
 

@@ -33,7 +33,7 @@ remaining_jordan_actions:
 - Review the 17 PROVISIONAL ED entries in canon/editorial_ledger_archive.yaml (added 2026-04-25 — see "Stage 4 promotions" section)
 - Review the 33 PROVISIONAL PP entries in archives/patches/patch_register_archive_stage4_promotions_2026_04_25.yaml
 - Verify ED-543 (clock registry refresh) was not already done in another ED
-- Review 5 PROVISIONAL Solmund split files at designs/world/solmund_*_v30.md and designs/scene/rwce_mechanism_v30.md
+- Review 5 PROVISIONAL Solmund split files at designs/world/solmund_*_v30.md and designs/scene/miraculous_event_v30.md
 - Review references/throughlines_meta_infill.md PART 8 append (Solmund throughlines)
 - Run TC disambiguation sweep when ready (TC-01 and ~942 other TC occurrences)
 per_atom_closeout:
