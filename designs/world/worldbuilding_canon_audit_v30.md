@@ -46,11 +46,11 @@ v3 flags ED-NEW-04 asking whether the title is "Holy See" or "Confessor."
 **"Reach" is a stale stat name from an earlier version.** Stage13 was not updated when faction stats were renamed to the current six (Mandate/Influence/Wealth/Military/Intel/Stability). All instances of "Reach" in stage13 should be "Influence."
 
 
-### 5. Baralta TC Suppression Threshold — Pre-existing Inconsistency
+### 5. Baralta CI Suppression Threshold — Pre-existing Inconsistency
 
-Stage6 §8.4: "While Baralta's Mandate remains **4+** (on 1–7 scale), she suppresses Theocracy Counter at −1/season."
+Stage6 §8.4: "While Baralta's Mandate remains **4+** (on 1–7 scale), she suppresses Church Influence at −1/season."
 
-Stage13 L154: "While Baralta's Mandate remains **above 5**, she suppresses Theocracy Counter at −1/season."
+Stage13 L154: "While Baralta's Mandate remains **above 5**, she suppresses Church Influence at −1/season."
 
 These are different values. Mandate 4+ means ≥4. "Above 5" means ≥6. This is a significant mechanical discrepancy.
 
@@ -83,7 +83,7 @@ Stage13 L114: "Cardinal Magnus Klapp — **Scholarship**"
 
 ### 9. v3 Klapp Awakening Trigger — Matches BG v05
 
-v3 §3.3 (Klapp Awakening card) states: "Thread operation within 1 territory of Himmelenger, TC ≥ 30, no Heresy Investigation opened this season."
+v3 §3.3 (Klapp Awakening card) states: "Thread operation within 1 territory of Himmelenger, CI ≥ 30, no Heresy Investigation opened this season."
 
 
 The territory reference is T3 in BG v05 but v3 says "Himmelenger." T3 in the BG v05 territory map (stage7) is "Himmelstift" (which maps to T14 Himmelenger in PP-199). But T3 in the PP-199 map is Halvardshelm (Varfell).
@@ -116,7 +116,7 @@ Stage13 has sections for:
 | Baralta = "Inge" (canonical) | Closes ED-NEW-03 | Remove from open editorials |
 | Confessor + Holy See both valid | Closes ED-NEW-04 | Confessor = title, Holy See = office |
 | Stage13 "Reach" = stale "Influence" | Pre-existing | Flag as sync gap |
-| Baralta TC suppression: 4+ (stage6) vs >5 (stage13) | Pre-existing | Stage6 governs. Fix stage13. |
+| Baralta CI suppression: 4+ (stage6) vs >5 (stage13) | Pre-existing | Stage6 governs. Fix stage13. |
 | Klapp = "Temperance" not just "Scholarship" | Minor | Use lore title in v3 |
 | Almaic Kyriakos = new content, not canon | Informational | Mark as new worldbuilding in v3 |
 | "Piety" in stage13 = undefined | Pre-existing | Likely means Church Mandate |
@@ -124,3 +124,5 @@ Stage13 has sections for:
 | ED-007 resolved but no 4th Cardinal exists | Misleading status | ED-NEW-06 is correct vehicle |
 | Jarnstal Counter = new formalisation | No conflict | Consistent with stage13 narrative |
 | No canon violations in v3 | — | — |
+
+[EDITORIAL: ED-740 — TC→CI + RS→MS abbreviation disambiguation per ED-782/ED-731. Mechanical abbreviation rename only; no semantic changes to worldbuilding/NPC content.]

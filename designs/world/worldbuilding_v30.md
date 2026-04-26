@@ -46,9 +46,9 @@
 
 **Cardinal Independence Check:** Cardinal acts against explicit Holy See instruction: relevant pool vs Ob 3. Success: action proceeds, Church Stability −1. Failure: blocked.
 
-**Jarnstal Drift (0–3, Game Master-tracked, private):** Increments each season Jarnstal deploys Templars without Holy See authorisation. At 3: Church Military controlled by Jarnstal, not the Confessor. Church Stability −2, Theocracy Counter (TC) +2.
+**Jarnstal Drift (0–3, Game Master-tracked, private):** Increments each season Jarnstal deploys Templars without Holy See authorisation. At 3: Church Military controlled by Jarnstal, not the Confessor. Church Stability −2, Church Influence (CI) +2.
 
-**Klapp Awakening:** Already in stage13. On Thread Sensitivity (TS) growth success: protects Thread-significant texts. Church Intel detects pattern → internal Heresy Investigation. If investigated before player intervention: Church Stability −1, TC +1. If players extract Klapp: −1D on Church scholarly Influence rolls.
+**Klapp Awakening:** Already in stage13. On Thread Sensitivity (TS) growth success: protects Thread-significant texts. Church Intel detects pattern → internal Heresy Investigation. If investigated before player intervention: Church Stability −1, CI +1. If players extract Klapp: −1D on Church scholarly Influence rolls.
 
 **Olafsson-Broker Exposure (formerly Olafsson-Niflhel):** Already in stage13 (Baralta evidence mechanic). No new mechanics. Trigger reframed post-Session-B: Olafsson's exposure via settlement-layer intelligence broker connection (previously Niflhel connection). Mechanical effect unchanged.
 
@@ -56,15 +56,15 @@
 
 
 **Card: Jarnstal Independence**
-- Effect: Church Military stat now controlled by Jarnstal, not the Church player. Jarnstal acts as a semi-independent NPC: deploys only against perceived threats to the Church (monstrous incursions, territorial attacks on Church territories). Will NOT deploy for political operations. Church Stability −2. TC +2.
+- Effect: Church Military stat now controlled by Jarnstal, not the Church player. Jarnstal acts as a semi-independent NPC: deploys only against perceived threats to the Church (monstrous incursions, territorial attacks on Church territories). Will NOT deploy for political operations. Church Stability −2. CI +2.
 - Counter-play: Church player may spend 1 Influence + 1 Stability to recall Jarnstal and reset the counter. Can only be done once per game.
 
 **Card: Olafsson Exposure**
-- Effect: Olafsson's connection to settlement-layer intelligence brokers revealed (post-Niflhel-dissolution reframing). Church Stability −2, TC −3. Olafsson removed (Inquisitor operations suspended for 2 seasons). Church Heresy Investigation actions +1 Ob until replacement Cardinal appointed.
+- Effect: Olafsson's connection to settlement-layer intelligence brokers revealed (post-Niflhel-dissolution reframing). Church Stability −2, CI −3. Olafsson removed (Inquisitor operations suspended for 2 seasons). Church Heresy Investigation actions +1 Ob until replacement Cardinal appointed.
 - Counter-play: Church may pre-emptively remove Olafsson (spend 1 Stability at Accounting) to prevent the exposure — but loses Inquisitor effectiveness permanently.
 
 **Card: Klapp Awakening**
-- Trigger: Already defined in BG v05 Scenario A — Thread operation within 1 territory of T3 (Himmelstift/Himmelenger), TC ≥ 30, no Heresy Investigation opened this season.
+- Trigger: Already defined in BG v05 Scenario A — Thread operation within 1 territory of T3 (Himmelstift/Himmelenger), CI ≥ 30, no Heresy Investigation opened this season.
 
 **Card: Prudence Crisis**
 - Effect: Church charities collapse in low-Prosperity territories. Church Mandate −1 in each territory where Prosperity ≤ 3. Restoration Movement gains +1 Influence in those territories (they fill the gap).
@@ -84,7 +84,7 @@ Add to existing mechanic:
 
 [FLAG: Needs Institutional Pressure (IP) ladder overcrowding check.]
 
-Single decision point at IP 50: Almaic Kyriakos envoy. Church chooses cooperate (IP −3, TC +2) or refuse (no effect). Consequences branch at higher IP if cooperated.
+Single decision point at IP 50: Almaic Kyriakos envoy. Church chooses cooperate (IP −3, CI +2) or refuse (no effect). Consequences branch at higher IP if cooperated.
 
 [EDITORIAL: ED-NEW-07 — Almaic Kyriakos IP interaction. Needs IP ladder review.]
 
@@ -186,7 +186,7 @@ Proposal only — route to debate system design doc for integration.
 
 **Deposal:** Crown Mandate → 1, Stability −3. Succession: Torben if available and loyal; if not, IP +10; if no heir, interregnum (Crown actions +2 Ob).
 
-**Holy See refusal:** TC +3, Thread Tension (TT) +2.
+**Holy See refusal:** CI +3, Thread Tension (TT) +2.
 
 **Church leverage:** The deposal clause gives the Church structural veto over regime change.
 
@@ -194,7 +194,7 @@ Proposal only — route to debate system design doc for integration.
 
 **Card: Constitutional Crisis**
 - Trigger: Crown Mandate drops to 1 OR Crown loses 3+ territories in a single season.
-- Effect: Motion of No Confidence automatically raised in Parliament. Parliamentary Vote fires at next Accounting. If Crown loses the vote AND Confessor concurs: deposal (§6.2 consequences). If Crown loses but Confessor refuses: TC +3, TT +2.
+- Effect: Motion of No Confidence automatically raised in Parliament. Parliamentary Vote fires at next Accounting. If Crown loses the vote AND Confessor concurs: deposal (§6.2 consequences). If Crown loses but Confessor refuses: CI +3, TT +2.
 
 **Card: Ministry Collapse**
 - Trigger: Crown Stability drops to 2 or below.
@@ -278,7 +278,7 @@ All new cards from this document, plus existing events confirmed for the deck:
 
 | Card | Faction | Trigger | Source |
 |------|---------|---------|--------|
-| Klapp Awakening | Church | Thread op within 1 territory of Himmelenger, TC ≥ 30, no Heresy Investigation this season | BG v05 Scenario A |
+| Klapp Awakening | Church | Thread op within 1 territory of Himmelenger, CI ≥ 30, no Heresy Investigation this season | BG v05 Scenario A |
 | Ehrenwall Split (was Ehrenwall Coup) | Löwenritter | Löwenritter Autonomy track reaches Split (graduated autonomy, replaces Coup Counter 3-trigger) | conflict_architecture_proposal.md, clock_registry_v30.md |
 | Riskbreaker Exposure | Crown | Deniability Debt reaches 3/5 | stage13 §13.6 |
 
@@ -286,8 +286,8 @@ All new cards from this document, plus existing events confirmed for the deck:
 
 | Card | Faction | Trigger | Effect Summary |
 |------|---------|---------|---------------|
-| Jarnstal Independence | Church | Jarnstal Counter reaches 3 | Church Military splits. Church Stability −2, TC +2. |
-| Olafsson Exposure | Church | Overwhelming Intel action vs Church in a settlement with intelligence-broker presence (reframed post-Niflhel-dissolution; settlement_layer_v30 §4.8) | Church Stability −2, TC −3. Inquisitor operations suspended 2 seasons. |
+| Jarnstal Independence | Church | Jarnstal Counter reaches 3 | Church Military splits. Church Stability −2, CI +2. |
+| Olafsson Exposure | Church | Overwhelming Intel action vs Church in a settlement with intelligence-broker presence (reframed post-Niflhel-dissolution; settlement_layer_v30 §4.8) | Church Stability −2, CI −3. Inquisitor operations suspended 2 seasons. |
 | Prudence Crisis | Church | Church Wealth ≤ 2 | Church Mandate −1 in low-Prosperity territories. Restoration +1 Influence there. |
 | Lions' Table Mutiny | Löwenritter | Military ≤ 2 AND Ehrenwall removed | Löwenritter fragments. Military halved. |
 | Guild Schism | Guilds | Stability ≤ 2 | Wealth −1, Influence −1 for 1 season. One territory Guild Favour → 0. |
@@ -338,3 +338,4 @@ All new cards from this document, plus existing events confirmed for the deck:
 
 ---
 
+[EDITORIAL: ED-741 — TC→CI + RS→MS abbreviation disambiguation per ED-782/ED-731. Mechanical abbreviation rename only; no semantic changes to worldbuilding/NPC content.]

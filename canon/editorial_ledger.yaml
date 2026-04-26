@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 739
+# next_id: 742
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
@@ -49,3 +49,21 @@ entries:
     status: open
     severity: P1
     source: "atom: valoria_master_consolidation__20__from-holistic-audit-valoria-holistic-audit-md"
+
+  - id: ED-739
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in npc_roster_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+  - id: ED-740
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in worldbuilding_canon_audit_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+  - id: ED-741
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in worldbuilding_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3

@@ -71,7 +71,7 @@
 
 
 
-**Ethics:** Consequentialist (aligned with Riskbreaker doctrine). The mission justifies the method. But Torsvald's TS means she can perceive the damage that Riskbreaker operations cause at the Thread level — collateral Coherence damage to bystanders, RS effects from covert Thread-adjacent activities. She knows the cost of every operation in a way her colleagues cannot. This knowledge makes her hesitate on operations with high Thread collateral.
+**Ethics:** Consequentialist (aligned with Riskbreaker doctrine). The mission justifies the method. But Torsvald's TS means she can perceive the damage that Riskbreaker operations cause at the Thread level — collateral Coherence damage to bystanders, MS effects from covert Thread-adjacent activities. She knows the cost of every operation in a way her colleagues cannot. This knowledge makes her hesitate on operations with high Thread collateral.
 
 **Behavioral AI — RISK-AVERSE ON THREAD COLLATERAL:** Standard Riskbreaker operations: decisive, efficient, no hesitation. Operations in Thread-active zones or near practitioners: Torsvald over-assesses risk. She will abort or delay operations when Thread collateral exceeds her personal threshold, even if the mission is critical. **Consequence:** Riskbreaker operations in Thread-active territories have a ~30% abort rate when Torsvald leads. Ehrenwall (or her successor) notices the pattern. Deniability Debt +1 when aborted operations leave evidence.
 
@@ -360,7 +360,7 @@ Per worldbuilding_integration_v3 §axis system, each NPC sits on 2–3 of the 9 
 |------|----------|-----------|
 | TTRPG | **Full** | Church internal politics. PCs encounter him in tithe disputes, charitable operations, Parish leader complaints. His OPTIMISER flaw is visible in every scene: he runs the Church's finances brilliantly and creates friction doing it. PCs aligned with the Church must navigate his Parish conflicts; PCs opposing the Church can exploit the friction. |
 | Hybrid | **Modifier** | Church Wealth recovery +1/season (his tithe efficiency). But: in territories where he has increased tithe quotas, Church Mandate −0.5 at Year-End (fractional, tracked). CV erosion accelerates +1 in over-tithed territories at Year-End (resentful communities become RM recruitment targets). Zoom In at a Parish in an over-tithed territory: PCs can witness the friction firsthand and either support the Parish (Church Mandate preserved but Wealth bonus lost in that territory) or support the Cardinal (Wealth maintained but Mandate loss confirmed). |
-| BG | **Event Card (revised Prudence Crisis)** | *Card: Prudence Crisis.* Trigger: Church Wealth ≤ 2 (tithe income insufficient despite the Cardinal's efforts — external pressure has overwhelmed his optimisation). Effect: Church charities collapse in territories with Prosperity ≤ 3. Church Mandate −1 in each. RM gains +1 Influence in those territories. *Card: Parish Revolt.* Trigger: ≥ 3 territories where Prudence Cardinal has increased tithes AND Church Mandate ≤ 3 in any of them. Effect: Parish leaders refuse collection. Church Wealth −2 for 1 season. CV −1 in all affected territories (communities reject Church authority). TC −1 (institutional fracture). Counter-play: Church spends 1 Stability to discipline Parish leaders (tithes restored but Mandate −1 in affected territories permanently). |
+| BG | **Event Card (revised Prudence Crisis)** | *Card: Prudence Crisis.* Trigger: Church Wealth ≤ 2 (tithe income insufficient despite the Cardinal's efforts — external pressure has overwhelmed his optimisation). Effect: Church charities collapse in territories with Prosperity ≤ 3. Church Mandate −1 in each. RM gains +1 Influence in those territories. *Card: Parish Revolt.* Trigger: ≥ 3 territories where Prudence Cardinal has increased tithes AND Church Mandate ≤ 3 in any of them. Effect: Parish leaders refuse collection. Church Wealth −2 for 1 season. CV −1 in all affected territories (communities reject Church authority). CI −1 (institutional fracture). Counter-play: Church spends 1 Stability to discipline Parish leaders (tithes restored but Mandate −1 in affected territories permanently). |
 
 
 ---
@@ -416,3 +416,4 @@ Deferred to next session. Each NPC requires: 10 TTRPG attributes, TS, Coherence,
 
 ### Key structural finding:
 
+[EDITORIAL: ED-739 — TC→CI + RS→MS abbreviation disambiguation per ED-782/ED-731. Mechanical abbreviation rename only; no semantic changes to worldbuilding/NPC content.]
