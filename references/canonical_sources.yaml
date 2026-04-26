@@ -237,3 +237,7 @@ systems:
     design_doc: designs/scene/miraculous_event_v30.md
     status: provisional
     added: '2026-04-25 Stage 4'
+  baralta:
+    design_doc: designs/npcs/baralta_v30.md
+    status: provisional
+    added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'

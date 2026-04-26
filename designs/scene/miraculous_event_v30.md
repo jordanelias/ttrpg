@@ -46,31 +46,7 @@ Territories within Miraculous Event radius gain +1 Accord at next Accounting (on
 
 ## 21. Baralta's Theological Position
 
-### 21.1 Canon Foundation
-
-NPC character analysis §6 (Duchess Inge Baralta): Historical anchor: Isabella I of Castile / Henry VIII. "She does not question the Church's theology. She questions its jurisdiction." Sovereign Authority Doctrine is jurisdictional. Faith is the engine of ambition.
-
-### 21.2 Extension (Jordan, This Session)
-
-Baralta believes in direct communion — anyone can commune with Solmund without Church mediation. Her deeds are evidence of divine favour. She was divinely ordained as a superior person.
-
-### 21.3 Reconciliation
-
-Baralta accepts the Church's *content* (Solmund is real, his acts were divine). She rejects the Church's *monopoly on mediation.* This is simultaneously Henry VIII (sovereign authority supersedes Church jurisdiction), Luther's priesthood of all believers (direct communion), prosperity gospel (success = divine favour), and deed-monarchy theology (worthiness divinely conferred, proven by deeds).
-
-**[EDITORIAL ITEM]:** This extension requires updating NPC analysis §6. The statement "she does not question the Church's theology" should be refined to: she does not question the Church's theological content. She questions the Church's exclusive claim to mediate between humanity and Solmund. This is a theological innovation, not merely a jurisdictional challenge.
-
-### 21.4 Prophylaxis Interaction
-
-Baralta's theology partially cracks the perceptual prophylaxis. Canon §9.1: TS requires holding contingency, feeling rendering as process, releasing the demand for intelligibility. Baralta's deed-theology introduces contingency (standing depends on what you do, not what you are). The contingency is limited — divine right still constrains — but it is more contingent than the Church's absolute essentialism. Populations under Baralta's influence experience a weakened prophylaxis over generational timescales.
-
-**In-game effect:** The generational timescale exceeds the game's ~5 year span. This is narrative/thematic positioning, not a mechanical variable during play. It explains why Baralta's theology is historically progressive, positioning the player to understand the long-term consequence of who holds power.
-
-### 21.5 Baralta as Restoration Adversary
-
-Canon: "She is the Restoration Movement's pure adversary." Baralta's framework has exactly two legitimate sources: the sovereign (divine right) and Solmund (theological content). Pre-Solmund tradition (Einhir) implies Solmund is not the ultimate origin, which implies divine right from Solmund is not ultimate authority. She would need to theologically annihilate the Restoration.
-
-<!-- atom: solmund_master_document__25__22-faction-response-pathways | section_index: 25 | source_section: "22. Faction Response Pathways" -->
+[ROUTED: This section's content has been extracted to `designs/npcs/baralta_v30.md` per Stage 4 follow-up (2026-04-25, conflict-eval finding MEDIUM-01). Baralta's theological position, reconciliation framework, prophylaxis interaction, and adversarial role as Restoration opponent are character-canon, not scene-mechanism. The Miraculous Event mechanism in this file remains; Baralta-as-entity content lives at `designs/npcs/baralta_v30.md`.]
 
 ## 22. Faction Response Pathways
 
