@@ -586,11 +586,11 @@ The enforcement catches *procedural* framework violations (missing vetting block
 **Short-term (requires editorial decisions):**
 - If Baralta direct communion accepted → update NPC analysis §6.
 - If two witness traditions accepted → update worldbuilding_v30 with new §3.7.
-- Write faction response scenarios for RWCE: Church (miracle proclamation → investigation), Crown/Baralta (divine right confirmation → resource allocation), Restoration (vindication → demand for credit), Hafenmark (constitutional procedure → sovereignty dispute).
+- Write faction response scenarios for Miraculous Event: Church (miracle proclamation → investigation), Crown/Baralta (divine right confirmation → resource allocation), Restoration (vindication → demand for credit), Hafenmark (constitutional procedure → sovereignty dispute).
 
 **Medium-term (requires mechanical work):**
 - Implement Seam Text comprehension-gate in Godot (annotation layer at TS ≥ 30, not hidden content).
-- Design RWCE → faction response cascade as arc trigger.
+- Design Miraculous Event → faction response cascade as arc trigger.
 - NPC priority tree branches for Southernmost Contact Decision Events.
 
 ---
@@ -627,12 +627,12 @@ All findings from the original critical review have been resolved inline in this
 | Baralta direct communion | Supplement or supersede "does not question theology"? | NPC analysis §6, Baralta AI, Southernmost engagement |
 | Two witness traditions | Accept as canon extension or extrapolation only? | Seam Text implementation, worldbuilding update |
 | Ficinian Cardinal emanation | Accept as proposed Church self-understanding or remove? | §3.2 |
-| RWCE trigger | Accept proposed mechanic? | Southernmost engagement pathway |
+| Miraculous Event trigger | Accept proposed mechanic? | Southernmost engagement pathway |
 | Miracle Investigation action | Accept proposed action? | Church Southernmost response |
 | SA-gated faction actions | Accept thresholds? | All faction engagement |
-| RWCE → Accord +1 | Accept? | Settlement-scale effects |
-| RWCE → Proximity Rating −1 | Accept? | Territory-scale RS interaction |
-| Conviction mechanic for RWCE | Accept Cognition vs Ob = Certainty? | Personal-scale effects |
+| Miraculous Event → Accord +1 | Accept? | Settlement-scale effects |
+| Miraculous Event → Proximity Rating −1 | Accept? | Territory-scale RS interaction |
+| Conviction mechanic for Miraculous Event | Accept Cognition vs Ob = Certainty? | Personal-scale effects |
 
 ---
 

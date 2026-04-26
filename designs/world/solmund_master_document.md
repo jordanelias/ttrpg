@@ -362,7 +362,7 @@ Orthodox reading: Solmund miraculously restored the well. Practitioner reading: 
 
 Church, Crown, and Hafenmark have no mechanical pathway to engage the Southernmost. SA starting values: 0, 0, 1. No existing faction action targets T15 Askeheim. The expedition procedure (southernmost_v30 §6.3) requires TS 30+ practitioner officers, which none possess at game start.
 
-## 20. The Mechanism: Rendered-World Change Event (RWCE)
+## 20. The Mechanism: Miraculous Event (Miraculous Event)
 
 ### 20.1 What Already Exists
 
@@ -370,15 +370,15 @@ Threadwork_v30 §2.3: "Physical effects (a wound closing, an object moving) are 
 
 ### 20.2 Proposed Trigger
 
-When Mending at Ob ≥ 6 succeeds in any territory at Proximity ≤ 2 from T15 Askeheim: Rendered-World Change Event fires.
+When Mending at Ob ≥ 6 succeeds in any territory at Proximity ≤ 2 from T15 Askeheim: Miraculous Event fires.
 
-| Mending Ob | RWCE Radius | Observable Effects |
+| Mending Ob | Miraculous Event Radius | Observable Effects |
 |---|---|---|
 | 6 | Mended territory only | Local: blight recedes, structures stabilise, water clears |
 | 7 | + Proximity 1 | Regional: adjacent territories perceive easing, trade routes open |
 | 8+ | + Proximity 2 | Peninsular: effects across southern third |
 
-RWCE does not grant thread knowledge. It grants awareness that something changed. The cause is unattributable to non-practitioners. The effects are physical — identical in kind to what Solmund's original witnesses reported.
+Miraculous Event does not grant thread knowledge. It grants awareness that something changed. The cause is unattributable to non-practitioners. The effects are physical — identical in kind to what Solmund's original witnesses reported.
 
 ### 20.3 SA Increment
 
@@ -386,11 +386,11 @@ Each faction with presence in affected territories: SA +1. One-time per Mending 
 
 ### 20.4 Local RS Effects
 
-Territories within RWCE radius receive a −1 modifier to their Proximity Rating for RS-band lookup purposes, effective until next Accounting. This represents the local Mending creating a pocket of stability within the broader RS gradient. One-time per Mending event. Resets if RS band transitions globally.
+Territories within Miraculous Event radius receive a −1 modifier to their Proximity Rating for RS-band lookup purposes, effective until next Accounting. This represents the local Mending creating a pocket of stability within the broader RS gradient. One-time per Mending event. Resets if RS band transitions globally.
 
 ### 20.5 Settlement Accord Effect
 
-Territories within RWCE radius gain +1 Accord at next Accounting (one-time). Represents population response to tangible improvement in living conditions regardless of cause attribution.
+Territories within Miraculous Event radius gain +1 Accord at next Accounting (one-time). Represents population response to tangible improvement in living conditions regardless of cause attribution.
 
 ## 21. Baralta's Theological Position
 
@@ -424,7 +424,7 @@ Canon: "She is the Restoration Movement's pure adversary." Baralta's framework h
 
 SA increment fires → the only available explanation is Solmund. Church recognises the pattern — its scriptures describe exactly this.
 
-**Proposed Action — Miracle Investigation:** Consul Outward (Church only). Prerequisite: SA ≥ 1 AND RWCE in current or previous arc. Roll: Mandate vs Ob = floor(target territory controller's SA / 2) + 1. Scaling rationale: the more the controlling faction already knows about the Southernmost, the harder it is for the Church to impose its miracle framing.
+**Proposed Action — Miracle Investigation:** Consul Outward (Church only). Prerequisite: SA ≥ 1 AND Miraculous Event in current or previous arc. Roll: Mandate vs Ob = floor(target territory controller's SA / 2) + 1. Scaling rationale: the more the controlling faction already knows about the Southernmost, the harder it is for the Church to impose its miracle framing.
 
 | Degree | Effect |
 |---|---|
@@ -443,9 +443,9 @@ Neither is safe.
 
 ### 22.2 Hafenmark/Baralta
 
-Baralta interprets RWCE through divine right + direct communion. Sovereign action, not Church oversight.
+Baralta interprets Miraculous Event through divine right + direct communion. Sovereign action, not Church oversight.
 
-**RDT/TD interaction:** RWCE in contested territory provides political ammunition for Reformed Settlement advancement. RWCE strengthens the political case but does not bypass existing RDT advancement prerequisites (Hafenmark M ≥ 3, PI ≥ 4, Church presence in controlled territory). All conditions must be met.
+**RDT/TD interaction:** Miraculous Event in contested territory provides political ammunition for Reformed Settlement advancement. Miraculous Event strengthens the political case but does not bypass existing RDT advancement prerequisites (Hafenmark M ≥ 3, PI ≥ 4, Church presence in controlled territory). All conditions must be met.
 
 TD escalation penalises Church assertion. At TD 3, any season the Church loses PI gives Hafenmark PI +1.
 
@@ -453,7 +453,7 @@ Baralta invokes Sovereign Authority Doctrine for Southernmost response — the j
 
 ### 22.3 Varfell
 
-Already in the south. RWCE validates existing strategy. Response options: defend Mending site militarily, allow Church/Hafenmark access (knowing the contradictions will tear them apart), or ally with the Restoration to secure the south.
+Already in the south. Miraculous Event validates existing strategy. Response options: defend Mending site militarily, allow Church/Hafenmark access (knowing the contradictions will tear them apart), or ally with the Restoration to secure the south.
 
 ### 22.4 Restoration Movement
 
@@ -479,30 +479,30 @@ Each interpretation is internally consistent. None requires falsehood. Each requ
 | 4 | Can sponsor Mending operations (resources, political cover, military protection) |
 | 5 | Operational knowledge sufficient for faction-directed Repair strategy |
 
-## 25. Conviction Mechanic for RWCE Witnesses
+## 25. Conviction Mechanic for Miraculous Event Witnesses
 
-When a named character witnesses RWCE effects (present in affected territory during the season RWCE fires):
+When a named character witnesses Miraculous Event effects (present in affected territory during the season Miraculous Event fires):
 
 Roll Cognition vs Ob = current Certainty. Success: Certainty unchanged (framework holds). Partial: Certainty −1 (framework strained). Failure: Certainty −2 (framework shaken).
 
-Fires once per character per RWCE. Characters with TS perceive more of the underlying mechanism and face sharper Conviction pressure — the experience is harder to reconcile with their existing framework, whether that framework is theological or secular.
+Fires once per character per Miraculous Event. Characters with TS perceive more of the underlying mechanism and face sharper Conviction pressure — the experience is harder to reconcile with their existing framework, whether that framework is theological or secular.
 
 ## 26. System Connections
 
 | Existing System | Connection Point |
 |---|---|
-| RS track | RWCE fires when Mending improves RS locally. RS band transitions change radiation effects. |
+| RS track | Miraculous Event fires when Mending improves RS locally. RS band transitions change radiation effects. |
 | CI track | Church Assert/Accommodate modifies CI. Miracle narrative reinforces power. |
 | RDT/TD tracks | Baralta's jurisdictional challenge routes through Reformed Doctrine. TD escalation penalises Church. |
 | IP track | Southernmost engagement diverts forces from northern border. Tradeoff is emergent from unit positioning — no automatic IP trigger. |
 | AER track | Miracle Investigation and AER maintenance use different action slots (Consul Outward vs. Phase 1 Cardinal Focus). No mechanical conflict. Tension is narrative: Church attention divided between southern miracle and Altonian relationship. |
-| Mending mechanics | RWCE derives entirely from existing Mending rules. No Mending mechanics changed. |
+| Mending mechanics | Miraculous Event derives entirely from existing Mending rules. No Mending mechanics changed. |
 | NPC priority trees | Baralta, Himlensendt, Vaynard, Almud need Decision Event branches for Southernmost Contact. |
 | POI system | Seam Texts as Remnant POIs. Miracle Investigation may place scripture in new territories. |
-| Conviction Track | RWCE witness mechanic (§25). |
+| Conviction Track | Miraculous Event witness mechanic (§25). |
 | Tensions Deck | New cards: "Miracle or Method," "Sovereign Grace," "Southern Knowledge." |
-| Peninsular Strain | Strain and RS track different phenomena. RWCE does not decrement Strain. |
-| Settlement Accord | +1 Accord for RWCE-affected territories (§20.5). |
+| Peninsular Strain | Strain and RS track different phenomena. Miraculous Event does not decrement Strain. |
+| Settlement Accord | +1 Accord for Miraculous Event-affected territories (§20.5). |
 
 ---
 
@@ -531,11 +531,11 @@ Fires once per character per RWCE. Characters with TS perceive more of the under
 **Short-term (requires editorial decisions):**
 - If Baralta direct communion accepted → update NPC analysis §6.
 - If two witness traditions accepted → update worldbuilding_v30 with new §3.7.
-- Write faction response scenarios for RWCE: Church (miracle proclamation → investigation), Crown/Baralta (divine right confirmation → resource allocation), Restoration (vindication → demand for credit), Hafenmark (constitutional procedure → sovereignty dispute).
+- Write faction response scenarios for Miraculous Event: Church (miracle proclamation → investigation), Crown/Baralta (divine right confirmation → resource allocation), Restoration (vindication → demand for credit), Hafenmark (constitutional procedure → sovereignty dispute).
 
 **Medium-term (requires mechanical work):**
 - Implement Seam Text comprehension-gate in Godot (annotation layer at TS ≥ 30, not hidden content).
-- Design RWCE → faction response cascade as arc trigger.
+- Design Miraculous Event → faction response cascade as arc trigger.
 - NPC priority tree branches for Southernmost Contact Decision Events.
 
 ---
@@ -572,12 +572,12 @@ All findings from the original critical review have been resolved inline in this
 | Baralta direct communion | Supplement or supersede "does not question theology"? | NPC analysis §6, Baralta AI, Southernmost engagement |
 | Two witness traditions | Accept as canon extension or extrapolation only? | Seam Text implementation, worldbuilding update |
 | Ficinian Cardinal emanation | Accept as proposed Church self-understanding or remove? | §3.2 |
-| RWCE trigger | Accept proposed mechanic? | Southernmost engagement pathway |
+| Miraculous Event trigger | Accept proposed mechanic? | Southernmost engagement pathway |
 | Miracle Investigation action | Accept proposed action? | Church Southernmost response |
 | SA-gated faction actions | Accept thresholds? | All faction engagement |
-| RWCE → Accord +1 | Accept? | Settlement-scale effects |
-| RWCE → Proximity Rating −1 | Accept? | Territory-scale RS interaction |
-| Conviction mechanic for RWCE | Accept Cognition vs Ob = Certainty? | Personal-scale effects |
+| Miraculous Event → Accord +1 | Accept? | Settlement-scale effects |
+| Miraculous Event → Proximity Rating −1 | Accept? | Territory-scale RS interaction |
+| Conviction mechanic for Miraculous Event | Accept Cognition vs Ob = Certainty? | Personal-scale effects |
 
 ---
 

@@ -206,10 +206,10 @@ Chains that produce emergent story.
 
 
 ### T-26: Recursion as Setting Structure (TL-3)
-**Chain:** Solmund threadwork → Church misidentification as miracle → Church founded on misidentification → Mending/RWCE in game-present → threadwork misidentified again → new generation of scripture and Heresy Investigation on the same category error
-**Systems:** faction AI (Church priority tree), conviction_track (Certainty revision under contradictory evidence), POI system (Seam Text discovery), RWCE response mechanic (per ED-735 integration workplan), arc register (Miracle Investigation arcs)
+**Chain:** Solmund threadwork → Church misidentification as miracle → Church founded on misidentification → Mending/Miraculous Event in game-present → threadwork misidentified again → new generation of scripture and Heresy Investigation on the same category error
+**Systems:** faction AI (Church priority tree), conviction_track (Certainty revision under contradictory evidence), POI system (Seam Text discovery), Miraculous Event response mechanic (per ED-735 integration workplan), arc register (Miracle Investigation arcs)
 **What it means:** The Church is structurally reliving its founding error without recognising it, because the Perceptual Prophylaxis reproduces the perceptual conditions under which the original misidentification occurred. The recursion is not a narrative accident; it is the expected consequence of the category error in §T-08 Extension under a non-practitioner majority population. The recursion stops only when the prophylaxis cracks — which is a long-run player-influenceable variable, not a scripted beat.
-**Implementation status:** Implicit in RWCE cascade design (PR-14 bundle, pending integration). Needs explicit capture in Church priority tree and Miracle Investigation branching.
+**Implementation status:** Implicit in Miraculous Event cascade design (PR-14 bundle, pending integration). Needs explicit capture in Church priority tree and Miracle Investigation branching.
 **Arc register vectors:** ARC-S32, ARC-S34, arcs touching Southernmost contact events.
 **Source:** session_master_2026_04_20.md Part IV TL-3; ED-735.
 
@@ -289,7 +289,7 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 | T-23 NPC Arc Emergence | All faction vectors | npc_behavior §5, arc_expansion | Fully implemented |
 | T-24 Convergence as Crisis | §VI Convergence Markers (7+) | arc_register | Fully specified |
 | T-25 Generational Arc | Not covered | settlement_layer §7 (Extended Timeline) | Implemented |
-| T-26 Recursion (TL-3) | ARC-S32, S34; Southernmost arcs | RWCE cascade (pending ED-735), Church priority tree (pending) | Design complete; Godot implementation pending |
+| T-26 Recursion (TL-3) | ARC-S32, S34; Southernmost arcs | Miraculous Event cascade (pending ED-735), Church priority tree (pending) | Design complete; Godot implementation pending |
 | T-27 Effects Real Explanation Wrong (TL-4) | Distributed across faction-interpretation arcs | Seam Text TS-gating (threadwork §2.3), Filter chain (investigation) | Design complete; Conviction Scar targeting pending |
 | T-28 Confrontation/Leap/Operation (TL-5) | All practitioner arcs | canon/02 Leap Mechanism amendment (foundations); threadwork §2.3, §31 | Foundations canonical; knot-profile character sheet pending Godot |
 | T-29 Baralta Prophylaxis Cracker (TL-8) | ARC-S01, S13; Hafenmark cluster | NPC §6 Baralta theology (canonical); prophylaxis-as-variable mechanic pending | Theological profile canonical; mechanical capture pending |

@@ -233,7 +233,7 @@ systems:
     design_doc: designs/world/solmund_artifacts_v30.md
     status: provisional
     added: '2026-04-25 Stage 4'
-  rwce_mechanism:
-    design_doc: designs/scene/rwce_mechanism_v30.md
+  miraculous_event:
+    design_doc: designs/scene/miraculous_event_v30.md
     status: provisional
     added: '2026-04-25 Stage 4'
