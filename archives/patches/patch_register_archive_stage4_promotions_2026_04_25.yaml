@@ -1,0 +1,327 @@
+# Patch Register Archive — Stage 4 Promotions Sweep (2026-04-25)
+# Source: atoms_pending/2026-04-25 promotion package
+# Status: PROVISIONAL — auto-extracted from MENTIONED atoms; descriptions and metadata require manual review before relying.
+# Promotion rationale: each PP-NNN was referenced in canon corpus (commit logs, design cross-refs, archives) but not present
+# as a defined entry in canon/patch_register_active.yaml. Stage 4 promotion brings them into a discoverable register location.
+# Pending Jordan review of: finding_id (each entry), description wording, status reconciliation against actual implementation.
+
+patches:
+
+  - id: PP-109
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: Timing:** Immediate (TTRPG) or queued to Accounting (Hybrid — intentional asymmetry PP-109)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - designs/architecture/scale_transitions_v30.md
+    status: provisional
+  - id: PP-195
+    date: '2026-04-25'
+    severity: P1
+    description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 10_session_log_index); evidence atoms: 1; canon mentions: 4'
+    affects:
+    - designs/provincial/mass_battle_v30.md
+    status: provisional
+  - id: PP-197
+    date: '2026-04-25'
+    severity: P1
+    description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 10_session_log_index); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - designs/threadwork/threadwork_v30.md
+    status: provisional
+  - id: PP-233
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: 7.1 Core Formula (PP-233)  Pool = min(Size, Command) + Command]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 4'
+    affects:
+    - designs/provincial/mass_battle_v30.md
+    status: provisional
+  - id: PP-238
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: ED-694 (End × 5) is canonical | | STALE-03 | PP-238 | Feint = full pool, Def = 0 | Strike]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 4'
+    affects:
+    - designs/npcs/npc_behavior_v30.md
+    status: provisional
+  - id: PP-239
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: Tiebreak: Att → Agi → GM/coin (PP-239)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 1'
+    affects:
+    - params/combat.md
+    status: provisional
+  - id: PP-243
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: Auto-successes are additive with roll; 1-faces cancel them (PP-243)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - params/factions/stats_1_7_scale.md
+    - params/core.md
+    status: provisional
+  - id: PP-246
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: [NEEDS-DESCRIPTION] (no clean sentence extracted)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - params/factions/stats_1_7_scale.md
+    - params/core.md
+    status: provisional
+  - id: PP-251
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: 7.3 Key Mechanics  **Discipline Degradation (PP-251):** Fires when BOTH: Size loss > Discipline AND this unit''s loss > opponent''s by ≥ 1]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - designs/provincial/mass_battle_v30.md
+    status: provisional
+  - id: PP-255
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: Stalemate (PP-255):** Max 10 exchanges]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 4'
+    affects:
+    - references/propagation_log.md
+    - params/factions/stats_1_7_scale.md
+    - params/core.md
+    - params/contest.md
+    status: provisional
+  - id: PP-261
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: | | 0 | NPC Transition (PP-261)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 5'
+    affects:
+    - designs/architecture/scale_transitions_v30.md
+    - designs/npcs/npc_behavior_v30.md
+    status: provisional
+  - id: PP-275
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: II.1 Stale References (10 items)  | # | Location | Issue | Fix | |---|----------|-------|-----| | STALE-01 | CSR §3 | Composure = Cha + 6 | Update to Cha × 3 (ED-694) | | STALE-02
+      | PP-275 | Stamina = End+H+1−armour | Strike]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 3; canon mentions: 1'
+    affects:
+    - params/combat.md
+    status: provisional
+  - id: PP-285
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: | ✓ | | Rescue (PP-285/406/407) | N Off dice contest attacker]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - designs/audit/valoria_systems_workplan.md
+    status: provisional
+  - id: PP-294
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: S** ✓ Confirmed in combat (PP-294), contest (Rattled+Spent), fieldwork, threadwork.]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 2; canon mentions: 4'
+    affects:
+    - designs/audit/valoria_systems_workplan.md
+    status: provisional
+  - id: PP-329
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: Cap:** One Echo/scene/faction (PP-329)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - designs/audit/throughlines_transitions_hierarchy.md
+    - designs/architecture/scale_transitions_v30.md
+    status: provisional
+  - id: PP-402
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: 15.3 TC Competitive Formula  PP-402 (unconditional passive +1/season) repealed]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 3'
+    affects:
+    - designs/scene/conviction_track_v30.md
+    status: provisional
+  - id: PP-508
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: Consider flanking negation?  **Splitting (PP-508):** Dominates concentration +9% to +45%]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 2; canon mentions: 2'
+    affects:
+    - designs/provincial/mass_battle_v30.md
+    status: provisional
+  - id: PP-512
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: Crown Treaty (PP-512–523) = most detailed single action]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 4'
+    affects:
+    - designs/provincial/victory_v30.md
+    - designs/provincial/faction_layer_v30.md
+    - designs/provincial/peninsular_strain_v30.md
+    status: provisional
+  - id: PP-528
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: ON-14) | How are Evidence (+2D) and positional (+5D) caps related? | designs/scene/fieldwork_v30.md §2.5; designs/npcs/npc_behavior_v30.md §6.5 | | Crown Treaty re-sign cooldown
+      (DECISION-15) | Does PP-528 explicitly address lapse vs]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 1'
+    affects:
+    - designs/provincial/victory_v30.md
+    status: provisional
+  - id: PP-540
+    date: '2026-04-25'
+    severity: P1
+    description: '[PROPOSED: | 1 | 13 | | RM (cond.) | 1 | 3 | n/a | 3 | 2 | 3 | 12 | | Löwenritter (cond.) | 1 | 2 | n/a | 1 | 3 | 2 | 9 |  **Key strategic-layer findings:**  - **Crown''s PV ≥ 14 milestone
+      is pre-met from S1** (PP-540 reduced 16→14 to match starting PV; Crown starts with exactly 14 PV)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 04_faction_balance_three_modes); evidence atoms: 5; canon mentions: 1'
+    affects:
+    - designs/provincial/victory_v30.md
+    status: provisional
+  - id: PP-541
+    date: '2026-04-25'
+    severity: P1
+    description: '[PROPOSED: Hafenmark PV ≥ 12** (P1) — revert PP-541 7]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 04_faction_balance_three_modes); evidence atoms: 5; canon mentions: 1'
+    affects:
+    - designs/provincial/victory_v30.md
+    status: provisional
+  - id: PP-606
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: 5.6 Substrate Saturation Counter (PP-606)  ≥3 ops/battle turn → +1 Ob/+1 Coherence (cap +2)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 1'
+    affects:
+    - params/threadwork.md
+    status: provisional
+  - id: PP-607
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: 5.9 Dissonance (PP-607/610)  Spirit TN 7 vs Factor (1–4)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 1'
+    affects:
+    - params/threadwork.md
+    status: provisional
+  - id: PP-614
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: 4.6 Key Sub-Mechanics  **Appraise (PP-614):** Att + Rec, TN 7, Ob = opponent Cha ÷ 2]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 1'
+    affects:
+    - params/contest.md
+    status: provisional
+  - id: PP-616
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: Single formula ALL Thread ops (PP-616)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 3'
+    affects:
+    - designs/threadwork/threadwork_v30.md
+    status: provisional
+  - id: PP-632
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: PP-632 as design standard.** Every future mechanic meets: one formula, philosophically derivable, simulation-validated, replacing any lookup table]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 01_throughlines_meta); evidence atoms: 1; canon mentions: 5'
+    affects:
+    - designs/scene/derived_stats_v30.md
+    - designs/audit/valoria_systems_workplan.md
+    - designs/threadwork/threadwork_v30.md
+    status: provisional
+  - id: PP-633
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: Simultaneous Rupture cap (PP-633): ≤ 75% Composure]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - params/core.md
+    - params/threadwork.md
+    status: provisional
+  - id: PP-634
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: | ✓ | | Escape (PP-634) | Agi TN 7 Ob 1]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 1'
+    affects:
+    - params/combat.md
+    status: provisional
+  - id: PP-636
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: Evidence Integration (PP-636):** 1 Finding = +1D E1]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 1'
+    affects:
+    - params/contest.md
+    status: provisional
+  - id: PP-642
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: Review questions:** - How are companions acquired? Disposition gates, recruitment procedure (PP-642), Standing thresholds? - How do companions advance? Independent character sheets
+      or attached to player? - How does companion death/loss interact with Knots (Loss = Coherence −1)? - What is the compa]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 2'
+    affects:
+    - designs/npcs/npc_behavior_v30.md
+    status: provisional
+  - id: PP-661
+    date: '2026-04-25'
+    severity: P3
+    description: '[PROPOSED: 16.9 Roster Tracking (PP-661)  Three tiers: Active (~35 cap, full state tracking), Passive (~30, compact), Background (unlimited, identity only)]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 06_mechanical_review_audit); evidence atoms: 1; canon mentions: 5'
+    affects:
+    - designs/audit/throughlines_transitions_hierarchy.md
+    - designs/territory/settlement_layer_v30.md
+    - designs/npcs/npc_behavior_v30.md
+    - designs/provincial/baralta_crown_claim_v30.md
+    status: provisional
+  - id: PP-675
+    date: '2026-04-25'
+    severity: P1
+    description: '[PROPOSED: Valoria Canon Rectification — Master Consolidation  **Session date:** 2026-04-25 **Patch proposal:** PP-675 **Editorial ledger:** ED-783 **Commits:** - `b14f0671ae9c7e7bb578865f92745dbcaab64bf0`
+      — primary 4-file rectification - `aae1e72413f9417f46a6d2fd8cb25646bd9ee6aa` — follow-up §16.1 close (op]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 09_canon_rectification_pp675_ed783); evidence atoms: 5; canon mentions: 1'
+    affects:
+    - canon/00_philosophical_foundations.md
+    status: provisional
+  - id: PP-684
+    date: '2026-04-25'
+    severity: P2
+    description: '[PROPOSED: DECISION-02: Confirm this is the intended balancing cost for Thread power.**  ### 2.1a Bonds — Dual Formula Divergence  PP-684 revised Disposition ceiling to flat `Bonds`]'
+    finding_id: '[NEEDS-JORDAN: not derivable from atom contexts]'
+    source: 'Stage 4 promotion (originating topic: 03_threadwork_design); evidence atoms: 1; canon mentions: 4'
+    affects:
+    - designs/scene/derived_stats_v30.md
+    - designs/scene/fieldwork_v30.md
+    status: provisional

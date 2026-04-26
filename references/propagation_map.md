@@ -346,3 +346,15 @@ Meaning #1 retains "skeleton" (correct usage). Meanings #2 and #3 migrate to "in
 - Pattern-detection across vetting records becomes possible (are certain М's consistently violated? are N failures flagged but merged anyway?).
 - Framework is no longer advisory — it is procedurally enforced.
 - Substantive framework compliance (correct M ratings, accurate N judgments) still requires Jordan's review; the gate catches only procedural violations.
+
+## Stage 4 Provisional Promotions (2026-04-25)
+
+33 PROVISIONAL patches added to `archives/patches/patch_register_archive_stage4_promotions_2026_04_25.yaml`. Propagation status: **pending review**.
+
+These entries were promoted from MENTIONED-in-canon-corpus state (atom references in `references/atoms_pending/2026-04-25/`) to formal register entries. Each requires manual review of:
+- `finding_id` field (auto-extraction couldn't infer)
+- `affects` list (derived from canon_mentions; may need refinement)
+- `description` wording (auto-extracted from atom contexts, may be approximate)
+- Reconciliation against actual implementation status (some patches may already be applied)
+
+Until reviewed, these PROVISIONAL patches should not drive propagation cascades. They are visible in the register for discoverability only.
