@@ -286,7 +286,7 @@ Meaning #1 retains "skeleton" (correct usage). Meanings #2 and #3 migrate to "in
 
 **File renames:**
 - 75 `*_skeleton.md` → `*_index.md` (auto-generated heading navigation companions)
-- `tools/skeleton_gen.py` → `tools/doc_index_gen.py`
+- `tools/doc_index_gen.py` → `tools/doc_index_gen.py`
 
 **Code migrations (skills/valoria-orchestrator/scripts/):**
 - `github_ops.py`: `_route_to_skeletons` → `_route_to_indexes`, `read_skeleton` → `read_index`, `was_skeletonized` → `was_indexed`, `_skeleton_route_cache` → `_index_route_cache`, `_skeleton_reads` → `_index_reads`, `skeleton_path` → `index_path` (var), `[SKELETON ROUTE]` / `[SKELETON]` print tags → `[INDEX ROUTE]` / `[INDEX]`
