@@ -82,85 +82,126 @@ sources:
 systems:
   core_engine:
     design_doc: designs/architecture/complete_systems_reference.md
+    canonical_sha__designs__architecture__complete_systems_reference_md: "d6ab0a4ead89e25e42e31e152a4047819a7012ca"
     params: params/core.md
+    canonical_sha__params__core_md: "15e2543dcf246001575ab616319846615bb3a028"
     bg_params: params/bg/core.md
+    canonical_sha__params__bg__core_md: "5cc525d51ddee4d2a207ef1149f620eeade13b02"
   combat:
     design_doc: params/combat.md
+    canonical_sha__params__combat_md: "50c50d0032210e4613bfc2388582961aa46c9f07"
     params: params/combat.md
+    canonical_sha__params__combat_md: "50c50d0032210e4613bfc2388582961aa46c9f07"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
+    canonical_sha__designs__threadwork__threadwork_v30_md: "c612066f67e3b5f023ec6461f8713438d6485486"
     params: params/threadwork.md
+    canonical_sha__params__threadwork_md: "4ceefd9f09bef1e7e2edd29cf5f765b07c2e4aad"
   clocks:
     design_doc: params/bg/clocks.md
+    canonical_sha__params__bg__clocks_md: "21ebe8ad652737295c855e4ca5ee67166d4421d0"
     params: params/bg/clocks.md
+    canonical_sha__params__bg__clocks_md: "21ebe8ad652737295c855e4ca5ee67166d4421d0"
   factions:
     design_doc: designs/provincial/factions_personal_v30.md
+    canonical_sha__designs__provincial__factions_personal_v30_md: "b4239c12890096bd6c0c61e175facf761dfd16e4"
     params: params/factions.md
+    canonical_sha__params__factions_md: "3107e624238db2e2e379013f12d3878e39fd1b2d"
     stats: params/factions/stats_1_7_scale.md
+    canonical_sha__params__factions__stats_1_7_scale_md: "cb73bb7536a777e267105019976b5f458328896b"
   victory:
     design_doc: designs/provincial/victory_v30.md
+    canonical_sha__designs__provincial__victory_v30_md: "22e72f930b7926efc4e3ff448c0ac1b2e4776095"
     params: params/bg/victory.md
+    canonical_sha__params__bg__victory_md: "8303b563871444dbdc630ac277d67c6cc7bb6db8"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
+    canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
     adjacency: designs/territory/settlement_adjacency_v30.md
+    canonical_sha__designs__territory__settlement_adjacency_v30_md: "81fca625664b0e3a21d232461fd9ded03d4d9a8d"
     fractional: designs/provincial/fractional_province_ownership_v30.md
+    canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "5399c4b03acd65ad5f967d4d51fcea62faf0b2b6"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
+    canonical_sha__designs__provincial__mass_battle_v30_md: "97a9b49d8ab9af2f6260b343bd67794f601f7899"
     params: params/mass_combat.md
+    canonical_sha__params__mass_combat_md: "dc30f22752dc20099f84d4bb7dfe71efe72d95f3"
   social_debate:
     design_doc: params/contest.md
+    canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
     params: params/contest.md
+    canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
+    canonical_sha__designs__architecture__scale_transitions_v30_md: "4ed8bd67f5570cb6c896d981b21eae3719fd66de"
     params: params/scale_transitions.md
+    canonical_sha__params__scale_transitions_md: "684b08ec7e2df41c846cad1012d669e2cd5a6f9b"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
+    canonical_sha__designs__provincial__faction_layer_v30_md: "99d7312e39f34b198d1256793df0ce1172abc75c"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
+    canonical_sha__designs__provincial__military_layer_v30_md: "0fcb2ea304d193a3f7ce66918c2cdde963cda84e"
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
+    canonical_sha__designs__provincial__ci_political_v30_md: "94a54d69cb00737f66685814e56f132d8c428579"
     note: "Renamed from tc_political_redesign_v30 — same doc, CI is Theocracy Counter's politically-active form."
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "b6ed66db358a71d7ee2967025eb66cab79a99acf"
   settlement_layer:
     design_doc: designs/territory/settlement_layer_v30.md
+    canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
+    canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
   derived_stats:
     design_doc: params/factions/stats_1_7_scale.md
+    canonical_sha__params__factions__stats_1_7_scale_md: "cb73bb7536a777e267105019976b5f458328896b"
     note: "Derived faction stats (1-7 scale). Primary source for Mandate/Influence/Wealth/Military/Intel/Stability starting values and progression rules."
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/npcs/npc_behavior_v30.md
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "8040f503d7890f35b7a587b0a9eadff4e3fb3d61"
     params: params/factions/npc_stance_triangles.md
+    canonical_sha__params__factions__npc_stance_triangles_md: "fc016ff0ef1272e5f3e70ca490e0c00d1421e160"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
+    canonical_sha__designs__provincial__faction_succession_split_v30_md: "cc86bf253643f81b32896f1d45ad677f649c05af"
   royal_assassination_fuse:
     design_doc: params/bg/royal_assassination.md
+    canonical_sha__params__bg__royal_assassination_md: "0388ed54ad203d5a5c3632b00c9e4fc8e0400432"
     source: conflict_architecture_proposal.md
   tensions_deck:
     design_doc: params/bg/tensions_deck.md
+    canonical_sha__params__bg__tensions_deck_md: "c3e77304addce12c41507800bf0c058ea8667d74"
     source: conflict_architecture_proposal.md
   conflict_architecture:
     design_doc: designs/architecture/conflict_architecture_proposal.md
+    canonical_sha__designs__architecture__conflict_architecture_proposal_md: "e65fb4684cc1d25bfc8957ef9ca5b65c0f6c96ba"
     note: "CANON 2026-04-18. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal assassination fuse."
   throughlines_framework:
     design_doc: references/throughlines_meta.md
+    canonical_sha__references__throughlines_meta_md: "816e0980955c7277d25121313b2c220d82fdb5da"
     infill: references/throughlines_meta_infill.md
+    canonical_sha__references__throughlines_meta_infill_md: "6c73e593c02616f03fd9690f2b75900d9629ce69"
     note: "Canonical vetting authority for all proposals (PP-672, PP-674)."
 
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
     design_doc: designs/world/ms_trajectory_v1.md
+    canonical_sha__designs__world__ms_trajectory_v1_md: "ed82c00bc790f22377ae5170ed8831583ca1388b"
     note: "Canonical for peninsula-wide Mending Stability values at specific historical dates. D-1 (12y emergence) + PR-3 (MS terminology) resolved 2026-04-20. Two provisional elements: colonial revolts §8 gap 1; Himmelenger R-7 §8 gap 2. ED-722/ED-731."
 
 # ── Foundations amendments (canonical philosophy) ──────────────────────
   leap_mechanism:
     design_doc: canon/02_foundations_amendment_leap_mechanism.md
+    canonical_sha__canon__02_foundations_amendment_leap_mechanism_md: "c7c416a570de69b5fb32dbafba2625ac7a4d17fe"
     note: "Canonical for Leap suspension dynamics, knot formation, and operation-type taxonomy (restorative/manipulative/destructive). Supplements canon/01 Amendments 1-4. ED-730."
   self_rendering:
     design_doc: canon/01_foundations_amendment_self_rendering.md
+    canonical_sha__canon__01_foundations_amendment_self_rendering_md: "4f0a67e15cae6ce7c8864527ab2000f31fbfc951"
     note: "Canonical for three-layer being-persistence, Leap definition, Coherence definition, Coherence 0 TS-gated outcomes."
 
 # ────────────────────────────────────────────────────────────────────────
@@ -219,25 +260,31 @@ systems:
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   solmund_voice:
     design_doc: designs/world/solmund_voice_v30.md
+    canonical_sha__designs__world__solmund_voice_v30_md: "eb7988c7f9b455e061a6e77f78e889574c9e4221"
     status: provisional
     added: '2026-04-25 Stage 4'
   solmund_philosophy:
     design_doc: designs/world/solmund_philosophy_v30.md
+    canonical_sha__designs__world__solmund_philosophy_v30_md: "cbf000cf8d03363b621ed91fccb04d4e656cf4b9"
     status: provisional
     added: '2026-04-25 Stage 4'
   solmund:
     design_doc: designs/world/solmund_v30.md
+    canonical_sha__designs__world__solmund_v30_md: "27f8e4eeee7b2640cee645a4006c9b46ca017064"
     status: provisional
     added: '2026-04-25 Stage 4'
   solmund_artifacts:
     design_doc: designs/world/solmund_artifacts_v30.md
+    canonical_sha__designs__world__solmund_artifacts_v30_md: "393eb32b1c9e0bdb829420928cdc06476059ba7b"
     status: provisional
     added: '2026-04-25 Stage 4'
   miraculous_event:
     design_doc: designs/scene/miraculous_event_v30.md
+    canonical_sha__designs__scene__miraculous_event_v30_md: "99743a21852a9fe1f9c4b40cf329d434f88882b3"
     status: provisional
     added: '2026-04-25 Stage 4'
   baralta:
     design_doc: designs/npcs/baralta_v30.md
+    canonical_sha__designs__npcs__baralta_v30_md: "ed1118c044a5607aeeaf374a4c646849451473d0"
     status: provisional
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
