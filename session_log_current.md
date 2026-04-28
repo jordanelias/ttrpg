@@ -1,46 +1,38 @@
-session_id: 2026-04-26-disambiguation-sweep
-session_close: 2026-04-26
-phase: editorial
+session_id: 2026-04-27-phase0-foundation
+session_close: 2026-04-27
+phase: infrastructure
 status: complete
 last_stage: >
-  Full abbreviation disambiguation sweep. 9 commits:
-    db0dcd0 — TC→CI + RS→MS top 5 files (185 TC, 61 RS)
-    1a48d60 — TC→CI residuals in top 5 (83 TC, 21 RS)
-    028a748 — TC→CI + RS→MS 60 design/params files (~422 TC, ~181 RS)
-    44fbb1e — TC→CI + RS→MS 3 user-authority files (ED-783/784/785)
-    dadf8e1 — TC→CI in 46 tests/canon files (853 TC)
-    e024512 — Alias registry TC→CI update + numeric bounds review (ED-786)
-    7989b11 — Maret Vossen → Yrsa Vossen propagation (14 files, PP-665)
-    8563b46 — Maret Vossen → Yrsa Vossen NPC authority file (ED-787)
-  Summary: ~1,543 TC→CI, ~263 RS→MS, ~100 Theocracy Counter→Church Influence (full term),
-  23 Maret Vossen→Yrsa Vossen. Alias registry updated (theocracy_counter→church_influence,
-  collision table TC entry marked resolved). Numeric bounds report reviewed: all 14 flagged
-  stats = legitimate multiple thresholds or false positives, no drift.
-  CP disambiguation confirmed complete (CP=Character Points per ED-136, no active Combat Power refs).
+  Phase 0 Foundation — workplan v3 §2. 12 commits across ttrpg + valoria-game.
+  ttrpg commits:
+    3d7e46b — 0.1.1-0.1.3 register truthfulness (11 patch_register SHAs, editorial_summary rebuild)
+    3edf7f0 — 0.2.1-0.2.3 threadwork audit P0 triage (28 P0s classified, 27 unknown IDs verified)
+    6dadbe2 — 0.5.1 compliance_check auto-fetch wiring
+    5e238ea + b07c459 — 0.5.2 freshness_gate regex fix + SHA population (47 fields)
+    b5ca0a7 — 0.7.2 ttrpg README.md
+  valoria-game commits:
+    8be75e5 — 0.4.3/0.4.4 GameMode strip + A-02 disambiguation + Yrsa rename (7 files)
+    f9ed815 — 0.4.3 followup broken ref fixes (3 files)
+    600c5cf — 0.5.3 CI workflow (godot-ci.yml)
+    e4a62db — 0.6.1-0.6.2 conversion_ledger + design_sync status reconciliation
+    c41688c — 0.7.3 README.md rewrite
 next_action:
-  skill: editorial
+  skill: infrastructure
   description: >
-    Remaining items from consolidation queue:
-    (1) RS in tests — ~1,340 instances. Cannot blind-replace: "RS" collides with Rhetorical Style
-        (Evidence RS, Authority RS, Solidarity RS, Consequence RS in NPC debate contexts).
-        Needs per-context classifier distinguishing RS=Mending Stability from RS=Rhetorical Style.
-        Python files blocked by fabrication check; variable names (gs.rs, avg_rs) should not be renamed.
-    (2) TD disambiguation — mostly Mermaid flowchart TD (valid). Small count of Thread Depth (removed
-        PP-166) references may exist. Low priority.
-    (3) ED-768 (P3) — PROVISIONAL marker audit. 13 orphaned markers referencing pre-ledger EDs.
-        Requires Jordan review to determine which are still-open vs resolved-but-unarchived.
-    (4) ED-543 (P1) — Clock registry refresh verification. Single-atom evidence; needs verification
-        whether the registry refresh actually landed under another ED.
-    (5) D-4 (Altonian invasion ~18 AG) — timeline revision per ED-725. Requires Jordan worldbuilding authority.
-    (6) D-5 (Einhir site-network model) — new spec per ED-726. Requires Jordan worldbuilding authority.
-    (7) doc_index_gen.py regen — index files stale after bulk renames. Mechanical but large scope.
-    (8) Python sim file Maret rename (campaign_sim_npc_pcs_2026-04-18.py) — blocked by fabrication check.
-    (9) TC in deprecated/ files — low priority, old docs.
-  priority: "ED-543 (P1) verification is highest severity. RS test disambiguation is highest volume."
-blockers: []
+    Phase 0 remaining items:
+    (1) 0.7.1 LICENSE — Jordan decision needed (proprietary/MIT/Apache/CC BY-NC/custom)
+    (2) 0.7.4 Declare-deferred governance items (CONTRIBUTING, CODE_OF_CONDUCT, etc.)
+    (3) 0.3.1 Params freshness sweep — freshness_gate now working; run full check + resolve stale entries
+    (4) 0.4.6 ACTIONS_PER_FACTION_PER_SEASON PROVISIONAL value in Constants.gd — verify against canonical
+    (5) Broken deps in propagation_map: skeleton_gen.py (renamed to doc_index_gen.py), sim_ttrpg_batch_legacy files — update propagation_map
+    (6) DiceVariant.TTRPG/BG collapsed to STANDARD — verify no test failures
+    (7) Session log next_action items from prior session still relevant: RS test disambiguation (~1,340), D-4/D-5 (Jordan worldbuilding), doc_index_gen regen
+  priority: "LICENSE decision + Phase 0 exit criteria verification, then proceed to Phase 1"
+blockers: ["LICENSE decision (0.7.1) — Jordan"]
 notes:
-  - "Glossary notes in affected files updated to reflect CI = Church Influence (was TC = Theocracy Counter)"
-  - "Alias registry collision_table TC entry marked resolved with 2026-04-26 sweep date"
-  - "RS = Rhetorical Style is NOT in the alias_registry — needs entry added if it's a canonical term"
-  - "Numeric bounds report reviewed inline (review header added). Regenerate after next collator run."
-  - "Maret disambiguation was already decision-resolved (PP-665) but propagation was incomplete — now fixed in 15 active files"
+  - "canonical_sources.yaml at 4,670/5,000 tokens after SHA injection — approaching threshold"
+  - "compliance_check auto-fetch wired but untested (will fire on next bootstrap)"
+  - "Threadwork P0 triage committed: 7 resolved, 15 Jordan-decision, 4 mechanical, 2 reclassify"
+  - "GameMode enum fully stripped from valoria-game (100 .gd files scanned, 0 remaining refs)"
+  - "Values master regen'd: 462 values, 5 false-positive conflicts (all superseded file)"
+  - "Collator ran: 8,873 findings (3,884 unknown abbrevs, 3,594 unknown nouns, 919 legacy terms, 476 collisions)"
