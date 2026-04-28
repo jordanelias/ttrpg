@@ -81,9 +81,9 @@ def put_file(path, content, message, sha):
 
 # ── Parsing helpers ────────────────────────────────────────────────────────────
 
-# Matches canonical path lines:  canonical_*: some/path/file.md
+# Matches any indented key-value where value is a repo path
 _CANON_PATH_RE = re.compile(
-    r'^(\s+)(canonical[^:\s]*?):\s+((?:designs|compilation|canon|references|skills|tests)/[^\s#"\']+)'
+    r'^(\s+)([a-z_]+):\s+((?:designs|params|compilation|canon|references|skills|tests)/[^\s#"\']+)'
 )
 # Matches sha lines:  canonical_sha__...: "40hexchars"
 _SHA_LINE_RE = re.compile(
