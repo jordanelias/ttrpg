@@ -1,27 +1,25 @@
 # Editorial Ledger Summary
-# auto-generated 2026-04-23
+# auto-generated 2026-04-27
 
 p1_blocker_count: 0
-open_count: 10
-total_active: 12
-next_id: 739
+open_count: 6
+total_active: 6
+next_id: 750
 
 p1_blockers: []
 
 p2_open:
-  - ED-660: "Certainty scale: Almstedt at Cert 6, exceeds scale"
-  - ED-661: "Ministry Protocol 3 seniority conflict."
-  - ED-662: "Elske residency post-Graduated-Autonomy legal implications."
-  - ED-664: "Advisor-principal confidentiality boundary undefined."
-  - ED-665: "Grand Contest as succession trial not in canonical docs."
-  # ED-668: resolved — MS trajectory v1 + ms_budget.md
-  - ED-669: "Irreversible institutional precedent persistence across campaigns."
-  - ED-704: "Seizure does not apply to Uncontrolled territories."
-  - ED-705: "Cohesion -15 = derived of Stability -1, not independent."
   - ED-710: "Settlement adjacency graph — new mechanical layer (PP-666)."
   - ED-711: "Fractional province ownership (PP-666)."
-  - ED-712: "Generalized Faction Succession Contest (PP-666)."
 
-recent_resolutions: []
-# 16 resolved entries archived 2026-04-23 (ED-722..ED-738).
-# See canon/editorial_ledger_archive.yaml for resolution details.
+p3_open:
+  - ED-745: "IP start value 20 — verify against params_bg_core."
+  - ED-746: "Intel Advancement Counter — STRUCK per canonical_definitive_r2."
+  - ED-747: "Popular Will (PW) — STRUCK per canonical_definitive_r2."
+  - ED-748: "Intelligence stat — STRUCK, verify active spec references."
+
+recent_resolutions:
+  - "ED-768 orphaned PROVISIONAL markers — resolved 2026-04-26 (ED-749)"
+  - "ED-543 clock registry refresh — resolved 2026-04-26 (ED-744)"
+# Prior archival: 16 resolved entries archived 2026-04-23 (ED-722..ED-738).
+# See canon/editorial_ledger_archive.yaml and archives/editorials/ for resolution details.

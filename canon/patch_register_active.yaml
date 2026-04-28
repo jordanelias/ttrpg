@@ -175,7 +175,7 @@ patches:
     - designs/provincial/varfell_path_b_v30.md
     - designs/provincial/peninsular_strain_v30.md
   status: applied
-  applied_commit: pending
+  applied_commit: dc13a75c
 - id: PP-664
   date: 2026-04-19
   severity: P2
@@ -194,7 +194,7 @@ patches:
     - canon/editorial_ledger.yaml
     - references/canonical_sources.yaml
   status: applied
-  applied_commit: pending
+  applied_commit: 193d5ee8
 - id: PP-665
   date: 2026-04-19
   severity: P2
@@ -237,7 +237,7 @@ patches:
     - params/factions/stats_1_7_scale.md
     - tests/coverage_matrix_archive.md
   status: applied
-  applied_commit: pending
+  applied_commit: d7c5f200
 - id: PP-666
   date: 2026-04-19
   severity: P2
@@ -257,7 +257,7 @@ patches:
     - designs/provincial/fractional_province_ownership_v30.md
     - designs/provincial/faction_succession_split_v30.md
   status: applied
-  applied_commit: pending
+  applied_commit: c3de2eff
 - id: PP-667
   date: 2026-04-19
   severity: P2
@@ -276,7 +276,7 @@ patches:
     - canon/editorial_ledger.yaml
     - archives/editorials/editorial_ledger_archive_601_800.yaml
   status: applied
-  applied_commit: pending
+  applied_commit: 2fd00f09
 - id: PP-668
   date: 2026-04-19
   severity: P2
@@ -296,7 +296,7 @@ patches:
     - designs/provincial/faction_layer_v30.md
     - designs/provincial/victory_v30.md
   status: applied
-  applied_commit: pending
+  applied_commit: b0dfcef6
 - id: PP-670
   date: 2026-04-19
   severity: P3
@@ -313,7 +313,7 @@ patches:
     - designs/threadwork/threadwork_v25_historical.md
     - designs/audit/label_audit_2026-04-19.md
   status: applied
-  applied_commit: pending
+  applied_commit: 80294a3f
 - id: PP-671
   date: 2026-04-19
   severity: P2
@@ -332,7 +332,7 @@ patches:
   affects:
     - references/throughlines_meta.md
   status: applied
-  applied_commit: pending
+  applied_commit: 8498e979
 - id: PP-672
   date: 2026-04-19
   severity: P2
@@ -351,7 +351,7 @@ patches:
     - references/throughlines_meta_infill.md
     - references/canonical_sources.yaml
   status: applied
-  applied_commit: pending
+  applied_commit: 03da0601
   supersedes: PP-671
 - id: PP-673
   date: 2026-04-19
@@ -382,7 +382,7 @@ patches:
     - skills/valoria-simulator/SKILL.md
     - 75 auto-generated *_skeleton.md → *_index.md
   status: applied
-  applied_commit: pending
+  applied_commit: f2f3efe8
 - id: PP-674
   date: 2026-04-19
   severity: P1
@@ -408,7 +408,7 @@ patches:
     - canon/patch_register_active.yaml
     - canon/editorial_ledger.yaml
   status: applied
-  applied_commit: pending
+  applied_commit: 3fab28a6
   vetting:
     class: A
     necessity: pass  # infrastructure: models no Renaissance dynamic, but earns existence as vetting apparatus; N scrutiny applies to game mechanics not meta-framework
