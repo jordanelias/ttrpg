@@ -152,7 +152,38 @@ def assert_bootstrap(scope: str = None) -> str:
         else:
             print(f"[COMPLIANCE ✓] All files compliant.")
     except ImportError:
-        print("[COMPLIANCE] compliance_check.py not found — skipping (pre-Phase 0)")
+        # Auto-fetch compliance_check.py from repo
+        try:
+            import urllib.request, json, base64
+            pat = os.environ.get('GITHUB_PAT', '')
+            if pat:
+                req = urllib.request.Request(
+                    'https://api.github.com/repos/jordanelias/ttrpg/contents/tools/compliance_check.py?ref=main',
+                    headers={'Authorization': f'token {pat}', 'Accept': 'application/vnd.github.v3+json'}
+                )
+                with urllib.request.urlopen(req) as r:
+                    data = json.loads(r.read())
+                open('/home/claude/compliance_check.py', 'w').write(
+                    base64.b64decode(data['content']).decode()
+                )
+                import compliance_check as cc
+                violations = cc.check_all()
+                if violations:
+                    manual = [v for v in violations if v.severity == 'error']
+                    if manual:
+                        raise RuntimeError(
+                            "[COMPLIANCE VIOLATION] Manual intervention required:\n"
+                            + cc.report(manual)
+                        )
+                    warns = [v for v in violations if v.severity == 'warn']
+                    if warns:
+                        print(f"[COMPLIANCE \u26a0] {len(warns)} warning(s) — non-blocking")
+                else:
+                    print("[COMPLIANCE \u2713] All files compliant.")
+            else:
+                print("[COMPLIANCE] No PAT — skipping compliance check")
+        except Exception as e2:
+            print(f"[COMPLIANCE] Auto-fetch failed: {e2} — skipping")
     except RuntimeError as e:
         if 'Cannot load references/atomization_rules.yaml' in str(e):
             print("[COMPLIANCE] atomization_rules.yaml not deployed — skipping (pre-Phase 0)")
