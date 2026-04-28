@@ -157,15 +157,16 @@ def assert_bootstrap(scope: str = None) -> str:
             import urllib.request, json, base64
             pat = os.environ.get('GITHUB_PAT', '')
             if pat:
-                req = urllib.request.Request(
-                    'https://api.github.com/repos/jordanelias/ttrpg/contents/tools/compliance_check.py?ref=main',
-                    headers={'Authorization': f'token {pat}', 'Accept': 'application/vnd.github.v3+json'}
-                )
-                with urllib.request.urlopen(req) as r:
-                    data = json.loads(r.read())
-                open('/home/claude/compliance_check.py', 'w').write(
-                    base64.b64decode(data['content']).decode()
-                )
+                for tool_name in ['atomizer.py', 'compliance_check.py']:
+                    tool_req = urllib.request.Request(
+                        f'https://api.github.com/repos/jordanelias/ttrpg/contents/tools/{tool_name}?ref=main',
+                        headers={'Authorization': f'token {pat}', 'Accept': 'application/vnd.github.v3+json'}
+                    )
+                    with urllib.request.urlopen(tool_req) as tool_r:
+                        tool_data = json.loads(tool_r.read())
+                    open(f'/home/claude/{tool_name}', 'w').write(
+                        base64.b64decode(tool_data['content']).decode()
+                    )
                 import compliance_check as cc
                 violations = cc.check_all()
                 if violations:
@@ -184,6 +185,36 @@ def assert_bootstrap(scope: str = None) -> str:
                 print("[COMPLIANCE] No PAT — skipping compliance check")
         except Exception as e2:
             print(f"[COMPLIANCE] Auto-fetch failed: {e2} — skipping")
+
+    # Freshness gate — blocks sim/audit/patch if canonical sources are stale
+    try:
+        import urllib.request as _ur, json as _j, base64 as _b64
+        pat = os.environ.get('GITHUB_PAT', '')
+        if pat:
+            _fg_req = _ur.Request(
+                'https://api.github.com/repos/jordanelias/ttrpg/contents/tools/freshness_gate.py?ref=main',
+                headers={'Authorization': f'token {pat}', 'Accept': 'application/vnd.github.v3+json'}
+            )
+            with _ur.urlopen(_fg_req) as _fg_r:
+                _fg_data = _j.loads(_fg_r.read())
+            open('/home/claude/freshness_gate.py', 'w').write(
+                _b64.b64decode(_fg_data['content']).decode()
+            )
+            import freshness_gate as fg
+            content, _ = fg.get_file(fg.CANONICAL_SOURCES_PATH)
+            pairs = fg.parse_canonical_pairs(content)
+            stale_count = 0
+            for path, recorded_sha in pairs:
+                if recorded_sha:
+                    live_sha = fg.get_live_sha(path)
+                    if live_sha and live_sha != recorded_sha:
+                        stale_count += 1
+            if stale_count:
+                print(f"[FRESHNESS \u26a0] {stale_count} stale canonical source(s) — run freshness_gate.py --update")
+            else:
+                print(f"[FRESHNESS \u2713] All {len(pairs)} canonical sources fresh.")
+    except Exception as fg_err:
+        print(f"[FRESHNESS] Check skipped: {fg_err}")
     except RuntimeError as e:
         if 'Cannot load references/atomization_rules.yaml' in str(e):
             print("[COMPLIANCE] atomization_rules.yaml not deployed — skipping (pre-Phase 0)")
