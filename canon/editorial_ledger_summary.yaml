@@ -1,8 +1,8 @@
 # Editorial Ledger Summary
-# auto-generated 2026-04-27
+# auto-generated 2026-04-28
 
 p1_blocker_count: 0
-open_count: 6
+open_count: 2
 total_active: 6
 next_id: 750
 
@@ -12,14 +12,8 @@ p2_open:
   - ED-710: "Settlement adjacency graph — new mechanical layer (PP-666)."
   - ED-711: "Fractional province ownership (PP-666)."
 
-p3_open:
-  - ED-745: "IP start value 20 — verify against params_bg_core."
+p3_resolved_this_session:
+  - ED-745: "IP start value 20 — verified canonical."
   - ED-746: "Intel Advancement Counter — STRUCK per canonical_definitive_r2."
-  - ED-747: "Popular Will (PW) — STRUCK per canonical_definitive_r2."
-  - ED-748: "Intelligence stat — STRUCK, verify active spec references."
-
-recent_resolutions:
-  - "ED-768 orphaned PROVISIONAL markers — resolved 2026-04-26 (ED-749)"
-  - "ED-543 clock registry refresh — resolved 2026-04-26 (ED-744)"
-# Prior archival: 16 resolved entries archived 2026-04-23 (ED-722..ED-738).
-# See canon/editorial_ledger_archive.yaml and archives/editorials/ for resolution details.
+  - ED-747: "Popular Will (PW) — STRUCK, hybrid-only."
+  - ED-748: "Intelligence stat — STRUCK per canonical_definitive_r2."

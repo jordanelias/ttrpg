@@ -23,26 +23,30 @@ entries:
   - id: ED-745
     date: 2026-04-26
     description: "[PROVISIONAL] IP start value 20 — per staleness report item 3, sourced from peninsular_strain §4. Verify against params_bg_core starting values table."
-    status: open
+    status: resolved
+    resolution: "IP start = 20 confirmed in params/bg/core.md L82 and Constants.gd IP_START=20. Canonical."
     severity: P3
 
 
   - id: ED-746
     date: 2026-04-26
     description: "[PROVISIONAL] Intel Advancement Counter — staleness report says STRUCK per canonical_definitive_r2. Verify whether fieldwork VTM system fully replaces this."
-    status: open
+    status: resolved
+    resolution: "Intel Advancement Counter STRUCK per canonical_definitive_r2 L123. Clock registry ED-794 notes same."
     severity: P3
 
 
   - id: ED-747
     date: 2026-04-26
     description: "[PROVISIONAL] Popular Will (PW) — staleness report says STRUCK per canonical_definitive_r2. Verify against RM founding mechanics in current specs."
-    status: open
+    status: resolved
+    resolution: "Popular Will STRUCK — hybrid-only clock, not in CDR2, videogame-only mode eliminates it. Clock registry ED-795 notes same."
     severity: P3
 
 
   - id: ED-748
     date: 2026-04-26
     description: "[PROVISIONAL] Intelligence stat — staleness report says STRUCK, replaced by fieldwork Investigation + VTM. Verify if any active specs still reference Intelligence as a faction stat."
-    status: open
+    status: resolved
+    resolution: "Intelligence stat STRUCK per canonical_definitive_r2 L106. Replaced by fieldwork Investigation + VTM."
     severity: P3
