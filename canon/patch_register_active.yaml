@@ -258,6 +258,35 @@ patches:
     - designs/provincial/faction_succession_split_v30.md
   status: applied
   applied_commit: c3de2eff
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: [Mu-alpha, Mu-beta, Mu-gamma]
+    m_ratings:
+      M-1: "+"
+      M-2: "+"
+      M-3: "+"
+      M-4: "\u2713"
+      M-5: "\u2713"
+      M-6: "\u2713"
+    q: pass
+    rationale: >
+      N: Settlement adjacency models geographic-military constraint on invasion routing
+      (Renaissance-era terrain + road networks as strategic factors — load-bearing in
+      Italian Wars, Thirty Years War). Fractional province ownership models contested
+      territorial control (Renaissance duchies frequently split between rival claimants —
+      War of the Roses, Burgundian succession). Succession splits model dynastic/factional
+      schism on leader death (Wars of Succession pattern — universal in period). All three
+      are load-bearing Renaissance dynamics not covered by existing abstractions.
+      Omega-a: Adjacency forces route-planning decisions with cross-scale consequences
+      (march order at personal → battle at settlement → province control shift).
+      Omega-b: Succession contest permanently transforms faction identity through leadership
+      crisis. Omega-c: NPC succession candidates generate autonomous narrative arcs.
+      Omega-d: Split-province creates no dominant strategy (holding Seat vs spreading).
+      Q: Mechanically clean — adjacency uses graph edges, fractionalization uses
+      Prosperity-weighted PV, succession uses existing contest resolution. All integrate
+      with settlement_layer, faction_layer, mass_battle without new subsystems.
 - id: PP-667
   date: 2026-04-19
   severity: P2
