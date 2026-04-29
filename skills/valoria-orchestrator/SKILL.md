@@ -179,12 +179,14 @@ If any required file is missing from this log, or session token is absent, stop 
 
 **Additional reads:** Any task referencing a specific design doc, params file, or register must fetch that file from GitHub before use. Do not read from memory, local copies, or project files.
 
-## Two-Message Session Start (MANDATORY)
+## Session Start Protocol (MANDATORY)
 
-**Message 1 — Bootstrap only:** Run Step 0 via `bash_tool`. Output Session Status Block only. Stop.
-**Message 2 — Task:** Jordan verifies the Session Status Block is present and all fetches succeeded, then sends the task.
+Run Step 0 via `bash_tool`. Output Session Status Block.
 
-If any fetch in Message 1 returns None or the token is missing, do not proceed to Message 2.
+- **If a task follows in the same message:** proceed to it immediately after the Status Block.
+- **If no task follows:** stop and wait for Jordan to verify before sending the task.
+
+If any fetch returns None or the token is missing, do not proceed regardless.
 
 ## Session Start Protocol
 1. From fetched `session_log_current.md`: extract active resumption block.
