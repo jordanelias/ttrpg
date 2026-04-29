@@ -1,38 +1,52 @@
-session_id: 2026-04-27-phase0-foundation
-session_close: 2026-04-27
-phase: infrastructure
-status: complete
+session_id: 2026-04-28-phase0-phase1
+session_close: 2026-04-28
+phase: editorial + infrastructure
+status: in-progress
 last_stage: >
-  Phase 0 Foundation — workplan v3 §2. 12 commits across ttrpg + valoria-game.
-  ttrpg commits:
-    3d7e46b — 0.1.1-0.1.3 register truthfulness (11 patch_register SHAs, editorial_summary rebuild)
-    3edf7f0 — 0.2.1-0.2.3 threadwork audit P0 triage (28 P0s classified, 27 unknown IDs verified)
-    6dadbe2 — 0.5.1 compliance_check auto-fetch wiring
-    5e238ea + b07c459 — 0.5.2 freshness_gate regex fix + SHA population (47 fields)
-    b5ca0a7 — 0.7.2 ttrpg README.md
-  valoria-game commits:
-    8be75e5 — 0.4.3/0.4.4 GameMode strip + A-02 disambiguation + Yrsa rename (7 files)
-    f9ed815 — 0.4.3 followup broken ref fixes (3 files)
-    600c5cf — 0.5.3 CI workflow (godot-ci.yml)
-    e4a62db — 0.6.1-0.6.2 conversion_ledger + design_sync status reconciliation
-    c41688c — 0.7.3 README.md rewrite
+  Phase 0 completion (12/13 exit criteria met, LICENSE pending) + Phase 1 partial.
+  This session commits (ttrpg):
+    4547737 — propagation_map broken dep fix
+    052b82d — bootstrap wiring (compliance_check + freshness_gate)
+    7f640e5 — F2 verification batch ED-745/746/747/748 resolved
+    ba7497d — PP-666 trio vetting block
+  This session commits (valoria-game):
+    f9ed815 — GameMode strip broken ref followup (prior session continuation)
+    600c5cf — CI workflow
+    e4a62db — conversion_ledger + design_sync status reconciliation
+    c41688c — README rewrite
+  Prior session commits carried forward:
+    3d7e46b — register truthfulness
+    3edf7f0 — threadwork P0 triage
+    8be75e5 — GameMode strip (7 files)
+    6dadbe2 — compliance_check auto-fetch
+    b07c459 — freshness_gate regex fix + SHA population
+    b5ca0a7 — ttrpg README
 next_action:
-  skill: infrastructure
+  skill: editorial
   description: >
-    Phase 0 remaining items:
-    (1) 0.7.1 LICENSE — Jordan decision needed (proprietary/MIT/Apache/CC BY-NC/custom)
-    (2) 0.7.4 Declare-deferred governance items (CONTRIBUTING, CODE_OF_CONDUCT, etc.)
-    (3) 0.3.1 Params freshness sweep — freshness_gate now working; run full check + resolve stale entries
-    (4) 0.4.6 ACTIONS_PER_FACTION_PER_SEASON PROVISIONAL value in Constants.gd — verify against canonical
-    (5) Broken deps in propagation_map: skeleton_gen.py (renamed to doc_index_gen.py), sim_ttrpg_batch_legacy files — update propagation_map
-    (6) DiceVariant.TTRPG/BG collapsed to STANDARD — verify no test failures
-    (7) Session log next_action items from prior session still relevant: RS test disambiguation (~1,340), D-4/D-5 (Jordan worldbuilding), doc_index_gen regen
-  priority: "LICENSE decision + Phase 0 exit criteria verification, then proceed to Phase 1"
-blockers: ["LICENSE decision (0.7.1) — Jordan"]
+    DECISION PENDING (Jordan):
+    (1) Restore Intelligence as 6th faction stat? Review at designs/audit/faction_stats_renaissance_review.md
+        - If yes: starting values Crown 3, Church 4, Hafenmark 3, Varfell 5, Loewenritter 2, Guilds 4
+        - Fixes Spy Ob formula (currently broken), Varfell Path A re-gate, Varfell stat identity
+        - If no: need replacement Spy Ob formula + Varfell Path A re-gate + Varfell differentiation
+    (2) LICENSE decision (GOV-08) — proprietary/MIT/Apache/CC BY-NC/custom
+    PHASE 1 REMAINING (after Intelligence decision):
+    (3) 1.1 Knot Formation During Play — design decision
+    (4) 1.2 Accord Propagation to Settlement Order — 15-25 rules need settlement targeting
+    (5) 1.3 Derived Stats Calibration — depends on 1.2
+    (6) 1.4 Faction Politics Sim — depends on 1.3
+    (7) 1.8 Varfell Path A editorial rewrite — depends on Intelligence decision
+    PHASE 0 RESIDUAL:
+    (8) compliance_check atomizer dep — auto-fetch wired but atomizer.py not in fetch list
+    (9) canonical_sources.yaml at 4670/5000 tokens — approaching threshold
+  priority: "Intelligence decision unblocks Path A + Spy Ob + Varfell identity. Then 1.1/1.2 design decisions."
+blockers:
+  - "Intelligence stat decision (Jordan)"
+  - "LICENSE decision (Jordan)"
+  - "1.1 Knot Formation design (Jordan)"
+  - "1.2 Accord Propagation design (Jordan)"
 notes:
-  - "canonical_sources.yaml at 4,670/5,000 tokens after SHA injection — approaching threshold"
-  - "compliance_check auto-fetch wired but untested (will fire on next bootstrap)"
-  - "Threadwork P0 triage committed: 7 resolved, 15 Jordan-decision, 4 mechanical, 2 reclassify"
-  - "GameMode enum fully stripped from valoria-game (100 .gd files scanned, 0 remaining refs)"
-  - "Values master regen'd: 462 values, 5 false-positive conflicts (all superseded file)"
-  - "Collator ran: 8,873 findings (3,884 unknown abbrevs, 3,594 unknown nouns, 919 legacy terms, 476 collisions)"
+  - "Faction stats Renaissance review committed as designs/audit/faction_stats_renaissance_review.md"
+  - "All P3 EDs resolved (745-748). Active ledger now 2 open (ED-710/711, both P2)"
+  - "Phase 0 exit: 12/13 criteria met. Only LICENSE remains."
+  - "Threadwork P0 triage: 7 resolved, 15 Jordan-decision, 4 mechanical, 2 reclassify"
