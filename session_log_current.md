@@ -46,7 +46,7 @@ next_action:
 blockers:
   - "Connections artifact v2 audit pass (next session priority)"
   - "5 terminology workplan decisions (Jordan)"
-  - "Topographic analysis run/defer/kill decision (Jordan, single bit)"
+  - "Topographic analysis findings review (Jordan, 12 TOPO entries to triage)"
   - "8 mass battle design decisions (Jordan)"
   - "8 auto-approvable mass battle patches awaiting approval (Jordan)"
   - "Intelligence stat decision (Jordan)"
@@ -55,7 +55,7 @@ notes:
   - "Stress test committed: designs/audit/mass_battle_stress_test_2026-04-29.md (13c11a9)"
   - "Patch proposals committed: designs/audit/mass_battle_patch_proposals_2026-04-29.md (1d9f864)"
   - "Terminology workplan committed: designs/audit/2026-04-29-terminology-conversion/00_workplan.md (PP-675, ED-759)"
-  - "Topographic analysis workplan committed: designs/audit/2026-04-29-topographic-analysis/00_workplan.md (PP-676, ED-760) — analytic instrument, dedicated session required"
+  - "Topographic analysis Stages 1-4 EXECUTED 2026-04-29 (PP-676, ED-760). Outputs: 02_weakness_register.md + data/. 12 TOPO findings PROVISIONAL pending Jordan review. Three convergent observations: (1) Knot system under-edged in v1, (2) political-dynamics layer numerically confirmed disconnected, (3) several v1 edges genuinely-thin (real propagation gaps). Methodology limits explicit in register §0."
   - "Connections artifact v1 produced (not yet committed to repo — lives at /mnt/user-data/outputs/valoria_connections.jsx)"
   - "v1 has 31 nodes, 53 edges — relationship judgments need full re-audit per next-session directive"
   - "2 math failures still open: MATH-FAIL-01 (siege calibration impossible), MATH-FAIL-02 (H fixed contradiction)"

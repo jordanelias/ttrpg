@@ -384,3 +384,26 @@ PROVISIONAL workplan: vectorized corpus investigation as analytic instrument for
 **Distinct from connections artifact:** the connections artifact draws topology from a designer's hand. Topographic analysis derives topology from the corpus via TF-IDF + cosine similarity. Diagnostic value highest in the gap between the two views.
 
 **Cross-references:** ED-760. Companion to v2 connections audit (separate session).
+
+## PP-676 Topographic Analysis — Stage 1-4 Executed (2026-04-29)
+
+Stages 1-4 of the topographic analysis workplan executed in same chat session per Jordan directive.
+
+**Outputs:**
+- `designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md` — narrative findings (12 TOPO entries)
+- `designs/audit/2026-04-29-topographic-analysis/data/tokens.json` — 126 curated tokens with surface forms, doc counts
+- `designs/audit/2026-04-29-topographic-analysis/data/layout.json` — t-SNE 2D coordinates
+- `designs/audit/2026-04-29-topographic-analysis/data/neighbors.json` — top-8 cosine neighbors per token
+- `designs/audit/2026-04-29-topographic-analysis/data/diagnostics.json` — D1-D6 raw diagnostic outputs
+- `designs/audit/2026-04-29-topographic-analysis/data/cross_doc.json` — doc-level Jaccard graph + v1 edge recheck
+
+**Findings status:** PROVISIONAL pending Jordan review. Each TOPO finding may convert to an ED entry on signoff.
+
+**Three convergent observations:**
+1. Knot system more central than v1 portrayed — high jaccard with Social Contest, Leap, Combat, Domain Echo. **v2 should re-elevate.**
+2. Political-dynamics layer (Armature, Domain Action, Concern, etc.) entirely degree-0 — confirms PROVISIONAL status of 12_development_specification.md numerically.
+3. Several v1 hand-curated edges are genuinely-thin (cosine<0.05 AND jaccard<0.10): Threadwork↔MS Trajectory, Royal Assassination↔NPC Behavior, Fractional Province↔Faction Layer. These are real propagation gaps, not measurement artifacts.
+
+**Methodology limits explicit:** TF-IDF cosine measures co-mention; doc-level Jaccard measures shared territory; hand-curated edges encode causal/functional logic. The diagnostic value is in the disagreement between the three lenses. Future iterations should refine surface-form coverage (Stealth, contest styles undermatched) and consider section-level granularity.
+
+**Cross-references:** ED-760, PP-676.

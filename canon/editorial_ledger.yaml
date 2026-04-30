@@ -79,7 +79,7 @@ entries:
 
   - id: ED-760
     date: 2026-04-29
-    description: "[PROVISIONAL] Topographic analysis workplan. PP-676. Pending Jordan signoff."
+    description: "[PROVISIONAL] Topographic analysis Stages 1-4 executed; 12 TOPO findings in 02_weakness_register.md. PP-676."
     status: open
     severity: P2
     source: "PP-676"

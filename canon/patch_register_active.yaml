@@ -501,6 +501,7 @@ patches:
 - id: PP-676
   date: 2026-04-29
   severity: P2
+  applied_commit: "Stage 1-4 executed 2026-04-29. Results in designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md (12 TOPO-XX findings, PROVISIONAL pending Jordan review)."
   description: "Topographic analysis workplan — vectorized corpus investigation
     as analytic instrument for surfacing project weaknesses unreachable by hand-curation.
     TF-IDF over canonical+provisional corpus, cosine similarity, 2D projection,
@@ -536,4 +537,4 @@ patches:
       M-10: "○"
       M-11: "○"
     q: pass
-    note: "Self-exempting on Ω/Μ — same as PP-674, PP-675. Analytic instrument, not gameplay mechanic."
+    note: "Self-exempting on Ω/Μ — same as PP-674, PP-675. Analytic instrument, not gameplay mechanic. Stages 1-4 executed 2026-04-29 within same chat session per Jordan directive 'let's dig into that workplan'. 12 weakness findings (TOPO-01..TOPO-12) PROVISIONAL pending review. Methodology limits documented in register §0/§8."

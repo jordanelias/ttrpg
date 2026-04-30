@@ -1,0 +1,523 @@
+{
+  "D1_hubs": [
+    {
+      "id": "autonomy",
+      "name": "Autonomy",
+      "degree": 10,
+      "doc_count": 56
+    },
+    {
+      "id": "order_conv",
+      "name": "Order",
+      "degree": 9,
+      "doc_count": 134
+    },
+    {
+      "id": "faith",
+      "name": "Faith",
+      "degree": 7,
+      "doc_count": 52
+    },
+    {
+      "id": "reason",
+      "name": "Reason",
+      "degree": 7,
+      "doc_count": 44
+    },
+    {
+      "id": "equity",
+      "name": "Equity",
+      "degree": 7,
+      "doc_count": 26
+    },
+    {
+      "id": "precedent",
+      "name": "Precedent",
+      "degree": 7,
+      "doc_count": 39
+    },
+    {
+      "id": "continuity",
+      "name": "Continuity",
+      "degree": 7,
+      "doc_count": 40
+    },
+    {
+      "id": "crown",
+      "name": "Crown",
+      "degree": 7,
+      "doc_count": 262
+    },
+    {
+      "id": "varfell",
+      "name": "Varfell",
+      "degree": 7,
+      "doc_count": 188
+    },
+    {
+      "id": "torben",
+      "name": "Torben",
+      "degree": 6,
+      "doc_count": 39
+    },
+    {
+      "id": "church",
+      "name": "Church",
+      "degree": 6,
+      "doc_count": 526
+    },
+    {
+      "id": "hafenmark",
+      "name": "Hafenmark",
+      "degree": 6,
+      "doc_count": 197
+    },
+    {
+      "id": "bg_mode",
+      "name": "Strategic Mode",
+      "degree": 5,
+      "doc_count": 119
+    },
+    {
+      "id": "dissolution",
+      "name": "Dissolution",
+      "degree": 5,
+      "doc_count": 76
+    },
+    {
+      "id": "pressure_point",
+      "name": "Pressure Point",
+      "degree": 5,
+      "doc_count": 7
+    },
+    {
+      "id": "elske",
+      "name": "Elske",
+      "degree": 5,
+      "doc_count": 31
+    },
+    {
+      "id": "lowenritter",
+      "name": "L\u00f6wenritter",
+      "degree": 5,
+      "doc_count": 128
+    },
+    {
+      "id": "zoom_in",
+      "name": "Zoom-In",
+      "degree": 4,
+      "doc_count": 48
+    },
+    {
+      "id": "insinuation_style",
+      "name": "Insinuation Style",
+      "degree": 4,
+      "doc_count": 3
+    },
+    {
+      "id": "lenneth",
+      "name": "Lenneth",
+      "degree": 4,
+      "doc_count": 17
+    }
+  ],
+  "D2_status_disagreement": [
+    {
+      "sim": 0.1576516330242157,
+      "a_id": "passive_npc",
+      "a_name": "Passive NPC",
+      "a_status": "provisional",
+      "b_id": "governor",
+      "b_name": "Governor",
+      "b_status": "canonical"
+    }
+  ],
+  "D3_implied_missing": [
+    {
+      "sim": 0.3067528009414673,
+      "a_id": "altonian_pressure",
+      "a_name": "Altonian Pressure",
+      "a_doc": "canon/03_canonical_timeline.md",
+      "b_id": "ip_clock",
+      "b_name": "IP Clock",
+      "b_doc": "designs/provincial/victory_v30.md"
+    }
+  ],
+  "D4_notional_v1_edges": [
+    {
+      "sim": 0.0,
+      "a_id": "self_rendering",
+      "a_name": "Self-Rendering",
+      "b_id": "npc_behavior",
+      "b_name": "NPC Behavior",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0,
+      "a_id": "conflict_arch",
+      "a_name": "Conflict Architecture",
+      "b_id": "faction_layer",
+      "b_name": "Faction Layer",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0,
+      "a_id": "throughlines",
+      "a_name": "Throughlines",
+      "b_id": "campaign_arch",
+      "b_name": "Campaign Architecture",
+      "v1_strength": 2
+    },
+    {
+      "sim": 0.0,
+      "a_id": "throughlines",
+      "a_name": "Throughlines",
+      "b_id": "conflict_arch",
+      "b_name": "Conflict Architecture",
+      "v1_strength": 2
+    },
+    {
+      "sim": 0.0,
+      "a_id": "throughlines",
+      "a_name": "Throughlines",
+      "b_id": "armature_system",
+      "b_name": "Armature System",
+      "v1_strength": 2
+    },
+    {
+      "sim": 0.0,
+      "a_id": "threadwork",
+      "a_name": "Threadwork",
+      "b_id": "ms_trajectory",
+      "b_name": "MS Trajectory",
+      "v1_strength": 4
+    },
+    {
+      "sim": 0.0,
+      "a_id": "npc_behavior",
+      "a_name": "NPC Behavior",
+      "b_id": "knot",
+      "b_name": "Knot",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0,
+      "a_id": "npc_behavior",
+      "a_name": "NPC Behavior",
+      "b_id": "armature_system",
+      "b_name": "Armature System",
+      "v1_strength": 4
+    },
+    {
+      "sim": 0.0,
+      "a_id": "settlement_layer",
+      "a_name": "Settlement Layer",
+      "b_id": "settlement_signal",
+      "b_name": "Settlement Signal",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0,
+      "a_id": "fractional_province",
+      "a_name": "Fractional Province",
+      "b_id": "faction_layer",
+      "b_name": "Faction Layer",
+      "v1_strength": 2
+    },
+    {
+      "sim": 0.0,
+      "a_id": "peninsular_strain",
+      "a_name": "Peninsular Strain",
+      "b_id": "ms_trajectory",
+      "b_name": "MS Trajectory",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0,
+      "a_id": "royal_assassination",
+      "a_name": "Royal Assassination",
+      "b_id": "npc_behavior",
+      "b_name": "NPC Behavior",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0,
+      "a_id": "armature_system",
+      "a_name": "Armature System",
+      "b_id": "faction_layer",
+      "b_name": "Faction Layer",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0006471119704656303,
+      "a_id": "scale_transitions",
+      "a_name": "Scale Transitions",
+      "b_id": "threadwork",
+      "b_name": "Threadwork",
+      "v1_strength": 2
+    },
+    {
+      "sim": 0.0009818762773647904,
+      "a_id": "mass_combat",
+      "a_name": "Mass Combat",
+      "b_id": "peninsular_strain",
+      "b_name": "Peninsular Strain",
+      "v1_strength": 4
+    },
+    {
+      "sim": 0.001365750445984304,
+      "a_id": "faction_layer",
+      "a_name": "Faction Layer",
+      "b_id": "mass_combat",
+      "b_name": "Mass Combat",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.001413852907717228,
+      "a_id": "fieldwork",
+      "a_name": "Fieldwork",
+      "b_id": "npc_behavior",
+      "b_name": "NPC Behavior",
+      "v1_strength": 2
+    },
+    {
+      "sim": 0.0019023081986233592,
+      "a_id": "threadwork",
+      "a_name": "Threadwork",
+      "b_id": "peninsular_strain",
+      "b_name": "Peninsular Strain",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0024936706759035587,
+      "a_id": "armature_system",
+      "a_name": "Armature System",
+      "b_id": "social_contest",
+      "b_name": "Social Contest",
+      "v1_strength": 3
+    },
+    {
+      "sim": 0.0025353054516017437,
+      "a_id": "scale_transitions",
+      "a_name": "Scale Transitions",
+      "b_id": "combat",
+      "b_name": "Combat",
+      "v1_strength": 2
+    }
+  ],
+  "D5_v1_missing": [],
+  "D6_sparse": [
+    {
+      "id": "stealth",
+      "name": "Stealth",
+      "doc_count": 2,
+      "primary_doc": "designs/architecture/complete_systems_reference.md",
+      "category": "personal"
+    },
+    {
+      "id": "ms_trajectory",
+      "name": "MS Trajectory",
+      "doc_count": 2,
+      "primary_doc": "designs/world/ms_trajectory_v1.md",
+      "category": "peninsula"
+    },
+    {
+      "id": "necessity",
+      "name": "N Necessity",
+      "doc_count": 6,
+      "primary_doc": "references/throughlines_meta.md",
+      "category": "framework"
+    },
+    {
+      "id": "socializing",
+      "name": "Socializing",
+      "doc_count": 6,
+      "primary_doc": "designs/provincial/faction_layer_v30.md",
+      "category": "personal"
+    },
+    {
+      "id": "royal_assassination",
+      "name": "Royal Assassination",
+      "doc_count": 6,
+      "primary_doc": "designs/npcs/npc_behavior_v30.md",
+      "category": "peninsula"
+    },
+    {
+      "id": "pressure_point",
+      "name": "Pressure Point",
+      "doc_count": 7,
+      "primary_doc": "designs/architecture/complete_systems_reference.md",
+      "category": "npc"
+    },
+    {
+      "id": "zoom_out",
+      "name": "Zoom-Out",
+      "doc_count": 8,
+      "primary_doc": "designs/architecture/scale_transitions_v30.md",
+      "category": "architecture"
+    },
+    {
+      "id": "fractional_province",
+      "name": "Fractional Province",
+      "doc_count": 8,
+      "primary_doc": "designs/provincial/fractional_province_ownership_v30.md",
+      "category": "province"
+    },
+    {
+      "id": "tensions_deck",
+      "name": "Tensions Deck",
+      "doc_count": 8,
+      "primary_doc": "designs/architecture/conflict_architecture_proposal.md",
+      "category": "peninsula"
+    },
+    {
+      "id": "sufficient_scope",
+      "name": "Sufficient Scope",
+      "doc_count": 9,
+      "primary_doc": "designs/architecture/scale_transitions_v30.md",
+      "category": "architecture"
+    },
+    {
+      "id": "settlement_adjacency",
+      "name": "Settlement Adjacency",
+      "doc_count": 9,
+      "primary_doc": "designs/territory/settlement_adjacency_v30.md",
+      "category": "settlement"
+    },
+    {
+      "id": "parish",
+      "name": "Parish",
+      "doc_count": 9,
+      "primary_doc": "designs/territory/settlement_layer_v30.md",
+      "category": "settlement"
+    }
+  ],
+  "token_statuses": {
+    "self_rendering": "canonical",
+    "leap": "canonical",
+    "coherence": "canonical",
+    "knot": "canonical",
+    "thread_substrate": "canonical",
+    "mending_stability": "canonical",
+    "thread_sensitivity": "canonical",
+    "scar": "canonical",
+    "scale_transitions": "canonical",
+    "zoom_in": "canonical",
+    "zoom_out": "canonical",
+    "hybrid_mode": "canonical",
+    "bg_mode": "canonical",
+    "ttrpg_mode": "canonical",
+    "domain_echo": "canonical",
+    "sufficient_scope": "canonical",
+    "scene_slate": "canonical",
+    "campaign_arch": "canonical",
+    "conflict_arch": "canonical",
+    "throughlines": "canonical",
+    "omega": "canonical",
+    "mu_modes": "canonical",
+    "necessity": "canonical",
+    "vetting_block": "canonical",
+    "combat": "canonical",
+    "threadwork": "canonical",
+    "weaving": "canonical",
+    "mending": "canonical",
+    "locking": "canonical",
+    "dissolution": "canonical",
+    "pop_op": "canonical",
+    "fieldwork": "canonical",
+    "investigation": "canonical",
+    "socializing": "canonical",
+    "stealth": "canonical",
+    "exposure": "canonical",
+    "npc_behavior": "canonical",
+    "conviction_track": "canonical",
+    "pressure_point": "canonical",
+    "disposition": "canonical",
+    "bonds": "canonical",
+    "mood": "canonical",
+    "belief_revision": "provisional",
+    "faith": "canonical",
+    "order_conv": "canonical",
+    "reason": "canonical",
+    "equity": "canonical",
+    "precedent": "canonical",
+    "autonomy": "canonical",
+    "continuity": "canonical",
+    "social_contest": "canonical",
+    "precedent_style": "canonical",
+    "vision_style": "canonical",
+    "suppression_style": "canonical",
+    "insinuation_style": "canonical",
+    "composure": "canonical",
+    "concentration": "canonical",
+    "wager": "canonical",
+    "heresy_investigation": "canonical",
+    "inspiration": "canonical",
+    "settlement_layer": "canonical",
+    "settlement_adjacency": "provisional",
+    "settlement_signal": "provisional",
+    "passive_npc": "provisional",
+    "bishop_appointment": "canonical",
+    "governor": "canonical",
+    "prosperity": "canonical",
+    "parish": "canonical",
+    "cathedral": "canonical",
+    "faction_layer": "canonical",
+    "faction_succession": "canonical",
+    "fractional_province": "provisional",
+    "stability": "canonical",
+    "occupation": "canonical",
+    "treaty": "canonical",
+    "parliament": "canonical",
+    "mass_combat": "canonical",
+    "military_layer": "canonical",
+    "officer_capture": "canonical",
+    "formation": "canonical",
+    "seizure": "canonical",
+    "victory": "canonical",
+    "peninsular_strain": "canonical",
+    "ms_trajectory": "canonical",
+    "thread_revelation": "canonical",
+    "tensions_deck": "canonical",
+    "royal_assassination": "canonical",
+    "warden_paths": "canonical",
+    "altonian_pressure": "canonical",
+    "ci_clock": "canonical",
+    "ip_clock": "canonical",
+    "pi_clock": "canonical",
+    "coup_counter": "canonical",
+    "cv_tcv": "canonical",
+    "almud": "canonical",
+    "himlensendt": "canonical",
+    "baralta": "canonical",
+    "vaynard": "canonical",
+    "ehrenwall": "canonical",
+    "vossen": "canonical",
+    "torben": "canonical",
+    "elske": "canonical",
+    "lenneth": "canonical",
+    "edeyja": "canonical",
+    "haelgrund": "canonical",
+    "maret_uln": "canonical",
+    "crown": "canonical",
+    "church": "canonical",
+    "hafenmark": "canonical",
+    "varfell": "canonical",
+    "lowenritter": "canonical",
+    "guilds": "canonical",
+    "restoration_movement": "canonical",
+    "niflhel": "canonical",
+    "armature_system": "provisional",
+    "event_impact_matrix": "provisional",
+    "opinion": "provisional",
+    "memory": "provisional",
+    "concern": "provisional",
+    "project_npc": "provisional",
+    "domain_action": "canonical",
+    "knowledge": "canonical",
+    "cascade_attenuation": "canonical",
+    "institutional_stability": "provisional",
+    "standing": "canonical",
+    "inner_circle": "provisional"
+  }
+}
