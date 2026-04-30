@@ -17,7 +17,7 @@
 | 2 | **DONE** | Apply doc 17 patches → produce doc 12 v1.1 | `12_development_specification.md` v1.1 (committed `9dede391`) with 26 patches applied — 1565 lines, 79 PATCH references; ED-756 resolved (`f5acbaa2`) |
 | 3 | **PARTIAL** | Re-vet v1.1 against §13 promotion checklist | Spot-vetting performed during S4-A simulation; no invariant breaks observed in traced scenarios; full §13 checklist walk-through deferred until simulations complete |
 | 4 | **DONE** | Simulation pass — Direction A (Opinion architecture) | `SIM_A_opinion_architecture.md` (commit `fda634db`); 6 scenarios traced; single-writer invariant verified; 6 spec gaps surfaced (ED-758) for v1.2; 4 emergent properties documented |
-| 5 | PENDING | Simulation pass — Direction B (Domain Action selection) | Trace alignment-table + scar-cap + conviction-multiplier interactions |
+| 5 | **DONE** | Simulation pass — Direction B (Domain Action selection) | `SIM_B_domain_action_selection.md` (commit `8a6dbb44`); 8 scenarios; 7 DA-invariants verified; 9 spec gaps (1 P1-critical SIM-B-G8 in ED-759); 1 v1.2-recommended patch (stall-escalator in ED-760); 5 emergent properties |
 | 6 | PENDING | Simulation pass — Direction C (Settlement/Faction signal flow) | Settlement Signal → Concern → Domain Action propagation |
 | 7 | PENDING | Simulation pass — Direction D (Relational dynamics) | Standing recalc, Outreach, Knot integration, Memory accumulation |
 | 8 | PENDING | Simulation pass — Direction E (Composition / cross-system) | Multi-agent trace; emergent behaviors at faction scale |
@@ -262,5 +262,35 @@ Simulation chain. Each direction's pre-flight, scope, and deliverable already sp
 ## SESSIONS 4-B / 4-C / 4-D / 4-E NOTES — TBD
 
 Per main body: Direction B (Domain Action selection / select_proposal + Standing recalc), Direction C (Settlement Signal + edge cases + governor fallback), Direction D (Standing recalc, Outreach, Knot, Memory replacement), Direction E (composition / multi-agent emergence). Each as fresh session per S4-A pattern.
+
+
+---
+
+## SESSION 4-B NOTES — 2026-04-29
+
+**Done (S4 Direction B — Domain Action selection):**
+- `SIM_B_domain_action_selection.md` produced and committed (`8a6dbb44`). 54k chars, 850 lines.
+- Eight scenarios: 1) single-faction inner-circle competition, 2) tie-break cascade, 3) Conviction-aligned displacement (institutional_deference Ob 1), 4) Grieving Mood gate (Spirit Ob 1 pass/fail), 5) Distracted Mood interactions, 6) `generate_new_project()` two-tier, 7) Standing recalc over Campaign Year, 8) **multi-NPC multi-Accounting trace surfacing structural deadlock**.
+- All 7 DA-specific invariants verified (`[DA-INV-1]` through `[DA-INV-7]`).
+- ED-759 (9 gaps) and ED-760 (stall-escalator recommendation) added.
+
+**SIM-B critical gap (SIM-B-G8):** `failed_da_proposals` definition in PATCH 3.11 — does "lost inner-circle competition" count as a failed proposal? If yes, the system has self-reinforcing-inequality dynamics (lower-Standing NPCs lose competitions, lose Standing, lose more competitions). Recommend strict definition for v1.2: "DA roll failed only," NOT "lost competition."
+
+**SIM-B v1.2 patch recommendation:** Stall-escalator in `select_proposal()` score formula. `+0.05 × seasons_stalled` term prevents Scenario-8-style infinite-deadlock for unequal-Standing same-domain collisions.
+
+**SIM-B emergent properties (5):**
+1. Factions select proposals by domain alignment, not proposer Conviction.
+2. Conviction-aligned displacement creates delayed political consequences via Memory-bus.
+3. Long-grief Mood → Project failure cascade → Standing erosion.
+4. Faction crisis state (≥40% Distracted/Grieving) is a player-observable strategic vulnerability.
+5. Cumulative institutional drift through Standing recalc → meta-armature recomputation → proposal selection feedback.
+
+**Cross-direction observations:** DA mechanics interlock with Direction A via Memory-bus; Standing changes generate `standing_change` events → Memories → Direction D dynamics; multi-Year multi-faction is the Direction E target.
+
+---
+
+## SESSIONS 4-C / 4-D / 4-E NOTES — TBD
+
+S4-C (Settlement Signal + edge cases + governor fallback) next-up. Verify PATCH 2.5 null-guards under empty-Passive-NPCs, sparse-Memory, zero-weight; trace governor fallback; observe Settlement Signal → faction Concern propagation cadence per S-44-A scope.
 
 **END OF HANDOFF v1.**

@@ -1,6 +1,7 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 759
-# Archival batch 2026-04-29: 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
+# next_id: 761
+# Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
+# Archival batch 2026-04-29 (a): 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
@@ -61,21 +62,13 @@ entries:
     severity: P1
     source: "doc 17 §6"
 
-  - id: ED-756
-    date: 2026-04-29
-    description: "[PROVISIONAL] Application of doc 17 patches to produce 12_development_specification.md v1.1. Per §7 application checklist (28 numbered steps). Requires Jordan decisions on ED-755 items first OR proceed with default recommendations and flag in v1.1 commentary. Expected delivery: subsequent editorial session."
-    status: resolved
-    severity: P1
-    source: "doc 17 §7"
-    resolution: "Doc 12 v1.1 produced 2026-04-29 with 26 patches applied. Commit 9dede391. ED-755 items marked inline as [JORDAN-DECISION-PENDING-ED-755] in §16; defaults from doc 17 §6 NOT applied. v1.1 has 1565 lines (up from 985 in v1.0); 79 PATCH references. Verification: 28/28 expected-content checks pass." 
-
   - id: ED-757
     date: 2026-04-29
     description: "[PROVISIONAL] Comprehensive mechanical simulations against doc 12 v1.1 (post-revision). Map mechanical interactions across all directions in granular detail to validate revisions and surface emergent behaviors. Expected delivery: simulation sessions following ED-756."
     status: in-progress
     severity: P2
     source: "user request 2026-04-29"
-    progress: "Direction A (Opinion architecture) complete 2026-04-29 — commit fda634db; SIM_A_opinion_architecture.md, 6 scenarios, single-writer invariant verified, 6 spec gaps surfaced (see ED-758). Directions B/C/D/E pending in subsequent sessions."
+    progress: "Direction A complete fda634db (6 scenarios, single-writer verified, 6 gaps ED-758). Direction B complete 8a6dbb44 (8 scenarios, 7 DA-invariants, 9 gaps ED-759 incl P1-critical SIM-B-G8). C/D/E pending."
 
   - id: ED-758
     date: 2026-04-29
@@ -83,4 +76,18 @@ entries:
     status: open
     severity: P2
     source: "SIM-A surfaced gaps; commit fda634db"
+
+  - id: ED-759
+    date: 2026-04-29
+    description: "[PROVISIONAL] Nine specification gaps in doc 12 v1.1 surfaced by SIM-B (Direction B simulation, Domain Action selection). CRITICAL: SIM-B-G8 — failed_da_proposals definition in PATCH 3.11 unclear; affects Standing trajectory materially. Recommend strict 'DA roll failed only' for v1.2. Other gaps: SIM-B-G1 (4th-level tie-break), G2 (failed-deference accounting), G3 (seasons_stalled increment on non-proposal), G4 (generate_goal_from_template), G5 (effect/action helpers), G6 (round semantics), G7 (Year-counter state), G9 (Mood-suppressed accounting). Resolution: doc 12 v1.2."
+    status: open
+    severity: P1
+    source: "SIM-B surfaced gaps; commit 8a6dbb44"
+
+  - id: ED-760
+    date: 2026-04-29
+    description: "[RECOMMENDATION-FOR-V1.2] Add stall-escalator term to select_proposal score: alignment + 0.1*standing + 0.05*seasons_stalled. Prevents infinite-deadlock for unequal-Standing same-domain collisions (SIM-B Scenario 8). Pending Jordan design call."
+    status: open
+    severity: P2
+    source: "SIM-B Scenario 8 deadlock analysis; commit 8a6dbb44"
 
