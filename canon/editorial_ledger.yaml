@@ -97,3 +97,10 @@ entries:
     status: open
     severity: P2
     source: "PP-675"
+
+  - id: ED-760
+    date: 2026-04-29
+    description: "[PROVISIONAL] Topographic analysis workplan. PP-676. Pending Jordan signoff."
+    status: open
+    severity: P2
+    source: "PP-676"

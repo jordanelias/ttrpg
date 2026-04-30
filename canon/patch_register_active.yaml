@@ -497,3 +497,43 @@ patches:
       M-11: "○"
     q: pass  # workplan structure: phased rollout with gates, decisions itemized with recommended answers, risks called out, enforcement spec'd
     note: "Self-exempting on Ω/Μ pattern — same as PP-674. The single Class A gameplay-touching element (retiring Hybrid as a mode in scale_transitions_v30 §6) is structural-vocabulary only: removes a textual abstraction, no behavior change. Engine already runs on a binary Strategic/Scene state machine; three-mode framing was textual not implementation."
+
+- id: PP-676
+  date: 2026-04-29
+  severity: P2
+  description: "Topographic analysis workplan — vectorized corpus investigation
+    as analytic instrument for surfacing project weaknesses unreachable by hand-curation.
+    TF-IDF over canonical+provisional corpus, cosine similarity, 2D projection,
+    8 diagnostic overlays (implied-but-missing edges, notional edges,
+    status-disagreement, cascade-without-return, hub overload, sparse-context,
+    empty regions, Μ servicing). Workplan: designs/audit/2026-04-29-topographic-analysis/00_workplan.md.
+    Recommended after v2 connections audit. Status: PROVISIONAL pending Jordan signoff.
+    ED-760."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/audit/2026-04-29-topographic-analysis/00_workplan.md
+    - canon/patch_register_active.yaml
+    - canon/editorial_ledger.yaml
+    - references/propagation_map.md
+    - session_log_current.md
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Self-exempting on Ω/Μ — same as PP-674, PP-675. Analytic instrument, not gameplay mechanic."

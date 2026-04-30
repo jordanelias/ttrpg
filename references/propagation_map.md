@@ -371,3 +371,16 @@ PROVISIONAL workplan: retire framing terms (TTRPG/BG/Hybrid) and Hybrid-as-third
 **Single load-bearing structural change (workplan §3):** `scale_transitions_v30 §1, §6` rewritten from three-mode (TTRPG/BG/Hybrid) to two-mode (Strategic/Scene) plus Zoom-In as transition verb. Engine already runs on a binary Strategic/Scene state machine; three-mode framing was textual, not implementation. No gameplay behavior change.
 
 **Cross-references:** ED-759.
+
+## PP-676 Topographic Analysis Workplan (2026-04-29)
+
+PROVISIONAL workplan: vectorized corpus investigation as analytic instrument for surfacing weaknesses unreachable by hand-curation.
+
+**Source doc:** `designs/audit/2026-04-29-topographic-analysis/00_workplan.md`
+**Status:** PROVISIONAL — pending Jordan signoff.
+
+**Propagation status:** **NOT STARTED.** No execution begins until PP-676 promotes to APPLIED and §8 pre-execution checklist is satisfied (dedicated session, v2 connections audit landed, canonical_sources pruned, index-routing bypass tested).
+
+**Distinct from connections artifact:** the connections artifact draws topology from a designer's hand. Topographic analysis derives topology from the corpus via TF-IDF + cosine similarity. Diagnostic value highest in the gap between the two views.
+
+**Cross-references:** ED-760. Companion to v2 connections audit (separate session).
