@@ -1948,7 +1948,7 @@ The remaining P2/P3 patches are consolidated here for reference. Each acts as a 
 - PATCH v1.2-37 (§5.2): cross-border event Signal-attribution.
 - PATCH v1.2-39 (§5.4): cross-faction event during simultaneous crises.
 
-**Applied as addendum clarifications (this §15):**
+**Applied as addendum clarifications (this §17):**
 - PATCH v1.2-5, -6, -7, -9, -10, -13, -14, -16, -17 (P2 implementation-determinism).
 - PATCH v1.2-24, -25, -26, -27, -28, -30, -31, -32, -33, -34, -36, -38 (P3 minor cleanups).
 
