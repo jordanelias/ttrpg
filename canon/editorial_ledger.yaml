@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 750
+# next_id: 758
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
@@ -50,3 +50,68 @@ entries:
     status: resolved
     resolution: "Intelligence stat STRUCK per canonical_definitive_r2 L106. Replaced by fieldwork Investigation + VTM."
     severity: P3
+
+
+  - id: ED-750
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 1 (cross-cutting). Single-writer Opinion model: Procedure B writes Memory only, Procedure C writes Memories only, Procedure D handles all Opinion writes via on_memory_added. Resolves E-HORIZ-A, S-HORIZ-A, ST-32-A double-write architecture issue. Patches §1.4-§1.6 of designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md."
+    status: open
+    severity: P1
+    source: "doc 17 §1, issues 13/14/15"
+
+
+  - id: ED-751
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 2 (priority-1, 8 patches). Implementation blockers: PATCH 2.1 select_proposal() + DOMAIN_ARMATURE_ALIGNMENT 42-entry table (E-36-A); PATCH 2.2 max_scars=inner_circle×2 (E-48-A); PATCH 2.3 conviction_alignment_multiplier + OPPOSITIONAL pairs (E-BOT-A); PATCH 2.5 compute_settlement_signal null guards (ST-20-A); PATCH 2.6 conviction_secondary fallback + Armature Confidence (ST-23-A); PATCH 2.7 resonance_lookup category fallback (ST-24-A); PATCH 2.8 additive composition + per-dim normalization (E-BOT-B). Patches §3, §4, §6.5, §10 of doc 12."
+    status: open
+    severity: P1
+    source: "doc 17 §2, issues 13/14/15/16"
+
+
+  - id: ED-752
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 3 (priority-2, 15 patches). Authoring blockers: concern_history cooldown, Knowledge Decay procedure, npc_observes_event visibility gate, Opinion lazy init, Grieving Mood, Knot integration via Outreach (S-LAT-A opacity fix), scars split, Vindicated/Resolved triggers, population_disposition recalc, Outreach Priority 3 default, NPC Standing recalculation §8.1, generate_new_project two-tier, visible_actions ~80 templates, Passive NPC Memory replacement. Patches §1.4, §2.5, §5, §6.3, §8.1, §10 of doc 12."
+    status: open
+    severity: P2
+    source: "doc 17 §3, issues 13/14/15/16"
+
+
+  - id: ED-753
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 4 (priority-3, 16 stub resolutions). Implementation-time issues with stub resolutions sufficient for current planning depth: tie-breaking, threshold definitions, search/gating, cascade/propagation, documentation gaps, friction items. See doc 17 §4 for full inventory."
+    status: open
+    severity: P3
+    source: "doc 17 §4, issues 13/14/15/16"
+
+
+  - id: ED-754
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 5 (featured-behavior documentation, 4 items). Document-as-designed (no spec change): RS-50-A Belief recovery arc, ST-16-A founding Memory, E-DIAG-A diagonal chain legibility, N-DIAG-A Standing 5 milestone scene. Author commentary in §1.1 of doc 12 v1.1."
+    status: open
+    severity: P3
+    source: "doc 17 §5"
+
+
+  - id: ED-755
+    date: 2026-04-29
+    description: "[BLOCKED — JORDAN-DECISION] Political dynamics doc 17 §6 Jordan-decision items (5 + carryover): E-38-A/B symbolic_effects keep+define vs cut 210-entry table; E-TOP-A opacity stance; ST-31-B NPC self-monitoring; R-41-A crisis masking persistence; carryover items (Intelligence stat 6th faction stat, LICENSE/GOV-08, §1.1 Knot Formation During Play, §1.2 Accord Propagation to Settlement Order). Default recommendations provided in doc 17 §6. Application to doc 12 v1.1 blocked on these decisions."
+    status: open
+    severity: P1
+    source: "doc 17 §6"
+
+
+  - id: ED-756
+    date: 2026-04-29
+    description: "[PROVISIONAL] Application of doc 17 patches to produce 12_development_specification.md v1.1. Per §7 application checklist (28 numbered steps). Requires Jordan decisions on ED-755 items first OR proceed with default recommendations and flag in v1.1 commentary. Expected delivery: subsequent editorial session."
+    status: open
+    severity: P1
+    source: "doc 17 §7"
+
+
+  - id: ED-757
+    date: 2026-04-29
+    description: "[PROVISIONAL] Comprehensive mechanical simulations against doc 12 v1.1 (post-revision). Map mechanical interactions across all directions in granular detail to validate revisions and surface emergent behaviors. Expected delivery: simulation sessions following ED-756."
+    status: open
+    severity: P2
+    source: "user request 2026-04-29"
+
