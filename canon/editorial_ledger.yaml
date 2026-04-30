@@ -69,10 +69,3 @@ entries:
     status: open
     severity: P2
     source: "PP-676 v3 execution"
-
-  - id: ED-762
-    date: 2026-04-29
-    description: "[PROVISIONAL] doc 12 v1.2 produced (commit 7c9384ec) — 39 simulation-surfaced spec gaps resolved + ED-760 stall-escalator applied. v1.2 specification revisions doc (21_v1_2_specification_revisions.md, commit b7f2235b) provides patch directives; v1.1 validation report (19_v1_1_validation_report.md, commit b7f2235b) provides simulation evidence base. Ready for §13 Promotion Checklist re-vet pass before canonical promotion. Forward-looking design observations (18 total across SIM-A through SIM-H + narrative pass) documented in doc 19 §5; out-of-scope for v1.2 spec patches but flagged for Jordan post-canonical consideration."
-    status: open
-    severity: P2
-    source: "doc 12 v1.2 commit 7c9384ec; supports Jordan re-vet before canonical promotion"
