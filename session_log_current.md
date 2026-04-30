@@ -1,37 +1,26 @@
----
-session_id: 2026-04-29-topographic-v2v3
+session_id: 2026-04-29-extended-audit
 session_close: 2026-04-29
-phase: "topographic analysis v2 + v3 same-session"
-status: complete
+phase: "2 — ongoing"
+status: extended audit 6 batches complete — 30 fixes applied, 26 decisions pending
 last_stage: >
-  Topographic analysis v2 + v3 executed in same session. v2 (TF-IDF-primary): validation
-  FAILED (Jaccard 0.222). v3 (multi-graph triangulation): validation VALIDATED (2/3
-  structural properties). v3 corrected v2 flagship finding (corpus IS system-anchored,
-  NPC Behavior is integration spine cite-deg 56). 84 tokens × 2940 paragraphs, 5 graphs,
-  8 diagnostics. Combined v2+v3 weakness register at
-  designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md.
+  Groups 18-27 across social_contest, fieldwork, fractional_province, ci_political,
+  accounting sequence, victory math, faction military balance, CI reform.
 next_action:
   skill: editorial
   description: >
-    Jordan review of v3 weakness register. Key v3 findings requiring decision:
-    (1) NPC Behavior is corpus integration spine (cite-deg 56) — schedule audit pass;
-    (2) Throughlines framework lacks formalized system-token coupling — propose
-        adding "load-bearing systems" column to T-NN table;
-    (3) Five Convictions + three Pressure Points are multi-graph isolates with zero
-        recent editorial scrutiny — propose taxonomy doc promotion;
-    (4) Vocabulary debt confirmed: Game Master concentrated in threadwork_v30 (11/16),
-        Cultural Reformation in peninsular_strain_v30 (10/15), Coup Counter dispersed (7 docs);
-    (5) v2 connections audit work item list updated in v3 §V3-10.
-    PRIOR ITEMS still pending Jordan decision:
-    - CI-01 Church Prominent definition (HIGH-PRIORITY, breaks Church CI generation)
-    - PT-01, ACCT-01
-    - Mass battle MB-01..08, INTER-10d/12b/14a/14d/14e/12e/17b/09d
-    - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord Propagation
+    HIGH PRIORITY decisions (Jordan):
+    (1) CI-02 — Mass Seizure Ob: 10−PT−infra (ci_political) vs 7−PT (victory_v30)
+    (2) Mass battle MB-01 through MB-08 (see mass_battle_patch_proposals_2026-04-29.md)
+    (3) INTER-10d, 12b, 14a, 14d+e (interdependency gaps)
+    MEDIUM: SOC-01/02, FW-02, FRAC-02/04, PT-01, ACCT-01 (see batch audit files)
+    UNTESTED AREAS: settlement_layer, npc_behavior, generational_transition, baralta, warden/RM
 blockers:
-  - "Jordan review of v3 weakness register findings"
-  - "Prior session blockers (CI-01, PT-01, ACCT-01, all batches)"
+  - "26 Jordan decisions pending across all batches"
+  - "canonical_sources.yaml at 4771/5000 tokens"
 notes:
-  - "Same-session execution per Jordan directive 'review your review, revise workplan as a replacement, pursue'"
-  - "Workplan v3 (this commit) supersedes v1 (commit ac8f55aa) and v2 (uncommitted)"
-  - "v3 methodology validates corpus IS system-anchored — v2 framing was TF-IDF artifact"
-  - "Combined v2+v3 register retains v2 sections as audit trail"
+  - "35 items confirmed consistent"
+  - "23 bloat items cut"
+  - "30 auto-fixes across 11 files: 778bdcd b7dcc20 63fda93 82cc36d b208922"
+  - "ED-743 propagated to all 4 affected docs"
+  - "RS→MS fixed in peninsular_strain_v30"
+  - "CI-01 Prominent definition fixed; CI 55 milestone renamed to Institutional Reach"
