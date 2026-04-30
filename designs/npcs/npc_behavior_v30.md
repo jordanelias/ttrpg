@@ -1266,18 +1266,18 @@ Every named NPC is classified into one of three tiers:
 |------|-------------------|-------------------|---------|
 | **Active** | Disposition per PC, Availability State, active-Duty reference, Scar count, current-season action flag | All scene types | Companion app primary surface |
 | **Passive** | Disposition per PC (stable), Availability State | Ceremonial scenes, Scene Slate Priority 3+ only | Companion app secondary surface |
-| **Background** | Identity only (name, faction, canonical role) | Reference only; appears in generated text | Game Master memory / roster reference |
+| **Background** | Identity only (name, faction, canonical role) | Reference only; appears in generated text | Engine roster reference |
 
 ### §11.2 Capacity
 
-The peninsula supports approximately **35 named NPCs at Active tier** at any time. This is the soft cap based on companion-app tracking and Game Master narrative load. When a 36th NPC becomes Active (via inner-circle entry, Companion acquisition, or player-initiated arc), one Active NPC is demoted to Passive.
+The peninsula supports approximately **35 named NPCs at Active tier** at any time. This is the soft cap based on companion-app tracking and engine narrative load. When a 36th NPC becomes Active (via inner-circle entry, Companion acquisition, or player-initiated arc), one Active NPC is demoted to Passive.
 
 ### §11.3 Demotion Triggers (priority order)
 
 1. **Off-screen duration:** Active NPC with no scene appearance, Duty assignment, or Disposition shift for ≥ 4 seasons.
 2. **Low Disposition inertia:** Disposition has been −1 to +1, unchanged for ≥ 4 seasons, no active Duty thread.
 3. **Faction removal:** NPC's faction has collapsed, been eliminated, or formally dismissed the NPC.
-4. **Player-declared:** Player signals no interest. Game Master may demote.
+4. **Player-declared:** Player signals no interest. Engine may demote.
 
 Demotion is reversible: a Passive NPC returns to Active when player scene directly engages them, Disposition shifts by ≥ 2, or faction priority tree selects them for a named action.
 

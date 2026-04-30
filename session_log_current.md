@@ -1,38 +1,55 @@
 ---
-session_id: 2026-04-29-throughlines-load-bearing-column
+session_id: 2026-04-29-vocab-sweep
 session_close: 2026-04-29
-phase: "throughlines table augmentation per PP-676 v3 §V3-2"
+phase: "vocabulary debt sweep — Game Master + active Cultural Reformation"
 status: complete
 last_stage: >
-  PP-677 / ED-764 — Load-bearing systems column added to throughlines table.
-  43 active throughlines mapped to canonical system slugs (mean 3.7 systems each).
-  27/32 canonical systems load-bearing for at least one throughline.
-  Pre-table and post-table content byte-identical to prior; only column appended +
-  editorial marker added. Mappings derived from name+description column + implicit
-  mechanism dependencies; self-reviewed and tightened from initial draft.
-  ED-762 collision detected and flagged in propagation_map for Jordan resolution.
+  PP-678 / ED-765 — 17 Game Master references replaced with 'engine'
+  equivalents in threadwork_v30, npc_behavior_v30, mass_battle_v30. 2 active
+  Cultural Reformation references in complete_systems_reference cleaned with
+  STRUCK editorial markers. 14 CR STRUCK markers retained as historical record.
+  Coup Counter sweep DEFERRED — substitution to Graduated Autonomy needs design
+  judgment, not mechanical replacement. Bonus: ED-762 collision resolved
+  (renumbered doc 12 v1.2 entry to ED-763) + 4 ledger entries compressed.
 next_action:
   skill: editorial
   description: >
-    Jordan review of PP-677 throughline→system mappings. Mappings are PROVISIONAL.
-    Each of 43 active throughlines now lists 2-6 canonical system slugs in the
-    new Load-bearing systems column. Revisable by future PP without breaking
-    framework (additive change, no modification of existing columns).
-    PRIOR ITEMS still pending Jordan decision (carried from prior session log):
+    Coup Counter sweep is the next vocabulary debt item. 10 active references
+    across 7 files require Coup Counter (binary 0-4 counter) → Graduated Autonomy
+    (4-state track: Loyal/Restless/Autonomous/Split per ED-781) substitution.
+    NOT 1:1 — Coup Counter ≥ 3 was the trigger threshold; Graduated Autonomy uses
+    state transitions instead. Each site needs review of what mechanical role
+    Coup Counter played there and which Graduated Autonomy state(s) map.
+    Active sites needing replacement:
+      - npc_behavior_v30 L601 ("Coup Counter advances from Crown instability triggers...")
+      - complete_systems_reference L46 ("Coup ≤ 1", "Coup Counter ≥ 3, exile")
+      - victory_v30 L464 ("premature Coup Counter cascade")
+      - victory_v30 L494 ("When Coup Counter reaches 4 and Löwenritter activates")
+      - victory_v30 L501 ("Coup Counter resets to 0")
+      - conflict_architecture_proposal L157 ("integrates with the existing Coup Counter")
+    Sites describing the strike (LEAVE):
+      - canon/03_canonical_timeline L92 (worldbuilding context — historical)
+      - campaign_architecture_v30 L179 ("replacing the binary Coup Counter")
+      - conflict_architecture_proposal L37, L78 (argument FOR Graduated Autonomy)
+    PRIOR ITEMS still pending Jordan decision:
     - PP-676 v3 weakness register §V3-10 priority items (NPC Behavior audit pass,
-      isolate promotion to first-class docs, vocabulary debt sweep three concentrated
-      cleanups, Peninsular Strain + IP change-control review)
-    - CI-01 Church Prominent definition (HIGH-PRIORITY, breaks Church CI generation)
-    - PT-01, ACCT-01
-    - Mass battle MB-01..08, INTER-10d/12b/14a/14d/14e/12e/17b/09d
+      isolate promotion to first-class docs, Peninsular Strain + IP change-control)
+    - PP-677 throughline→system mappings (43 throughlines, 27/32 systems mapped)
+    - PP-678 vocabulary cleanup (this commit)
+    - CI-01 Church Prominent definition (HIGH-PRIORITY)
+    - PT-01, ACCT-01, mass battle MB-01..08, INTER batches
     - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord Propagation
-    INTEGRITY FLAG: ED-762 collision in active ledger needs Jordan resolution.
 blockers:
-  - "Jordan review of PP-677 throughline→system mappings"
-  - "ED-762 collision in canon/editorial_ledger.yaml active section"
-  - "Prior session blockers (PP-676 v3 review items, CI-01, PT-01, ACCT-01, all batches)"
+  - "Coup Counter sweep — design judgment per site for Graduated Autonomy substitution"
+  - "Jordan review of PP-678 (vocabulary cleanup)"
+  - "Jordan review of PP-677 (throughline mappings)"
+  - "Jordan review of PP-676 v3 weakness register findings"
+  - "Prior session blockers"
 notes:
-  - "Same-session continuation per Jordan directive 'proceed'"
-  - "Mappings constructed conservatively — only systems whose absence prevents throughline operation"
-  - "5 unmentioned canonical systems defensibly out of scope (infrastructure, personal-scale combat, meta-tool, flavor docs)"
-  - "ED-762 collision: this commit deliberately skipped ED-763 to avoid renumbering interference; PP-677 uses ED-764"
+  - "Same-session continuation per Jordan directive 'commit continue all best'"
+  - "All 17 GM replacements unique-match verified before apply"
+  - "2 active CR cleanups in csr; 14 CR STRUCK markers retained as audit trail"
+  - "Coup Counter deferred because Graduated Autonomy substitution is not 1:1"
+  - "ED-762 collision (flagged in PP-677/ED-764) resolved by renumbering doc 12 v1.2 entry to ED-763"
+  - "4 ledger entries compressed (ED-751/752/755/762) for size compliance — content references retained"
+  - "canonical_sources.yaml included with no changes per co-file rule for design doc edits"

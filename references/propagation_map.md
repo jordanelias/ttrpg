@@ -461,3 +461,37 @@ commit; PP-677 uses ED-764. Jordan should renumber one of the duplicate ED-762
 entries (suggest renumbering doc 12 v1.2 to ED-763 since it was the second
 addition, but Jordan's choice).
 
+## 2026-04-29 — Vocabulary debt sweep + ED-762 collision resolution (PP-678)
+
+GM-to-engine replacement (17 sites) + 2 active CR cleanups (1 site) + ED-762
+collision resolution (ledger renumbering).
+
+**Files modified:**
+- designs/threadwork/threadwork_v30.md (-67 chars; 12 Game Master → engine)
+- designs/npcs/npc_behavior_v30.md (-24 chars; 3 Game Master → engine)
+- designs/provincial/mass_battle_v30.md (-2 chars; 2 Game Master → engine)
+- designs/architecture/complete_systems_reference.md (+74 chars; 2 active Cultural Reformation cleaned with STRUCK markers)
+- canon/editorial_ledger.yaml (ED-762 collision resolved: doc 12 v1.2 entry renumbered to ED-763; 4 entries compressed for size; ED-765 added; 7,277 → 6,821 chars / ~1819 → ~1705 tokens)
+- canon/patch_register_active.yaml (PP-678 entry)
+- references/canonical_sources.yaml (no content change; included per co-file rule for design doc edits)
+- session_log_current.md (replaced)
+- references/propagation_map.md (this entry)
+
+**Propagation status:** complete in this commit for GM + active CR + collision
+resolution. Coup Counter sweep DEFERRED — substitution to Graduated Autonomy is
+design-judgment work, not mechanical replacement.
+
+**Cross-references:** PP-676 v3 §V3-9, PP-650 (CR strike), ED-781 (CC strike),
+PP-677 (throughlines column), ED-765.
+
+**Collision resolution detail:** Prior commit (f5da82b9, PP-677) flagged a
+collision in active ledger where ED-762 was assigned to two distinct entries
+(topographic v2+v3 / doc 12 v1.2). Resolution: doc 12 v1.2 entry renumbered to
+ED-763 (which had been deliberately skipped in PP-677 commit precisely to allow
+this resolution without renumbering interference). Topographic v2+v3 retains
+ED-762 (was the first-arrived). Flag in PP-677 / ED-764 entries closed.
+
+**Standing flags:**
+- Coup Counter cleanup pending design-judgment review (10 sites across 7 files;
+  suggested mappings in session log notes)
+

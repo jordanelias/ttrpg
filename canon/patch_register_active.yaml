@@ -590,4 +590,60 @@ patches:
       structural-vocabulary only, no behavior change, no rebalance. Mappings
       PROVISIONAL pending Jordan review; revisable by future PP without
       breaking framework."
+- id: PP-678
+  date: 2026-04-29
+  severity: P3
+  description: "Vocabulary debt sweep — Game Master + 2 active Cultural Reformation
+    references. Per project instruction 'There is no GM — the engine handles all
+    resolution', all 17 Game Master references in active design docs replaced with
+    'engine' equivalents preserving mechanical meaning. Per CR-STRIKE-2026-04-19
+    (PP-650), 2 active Cultural Reformation references in
+    designs/architecture/complete_systems_reference.md (Acquisition list L207 +
+    Unvalidated compound L223) cleaned with HTML editorial markers; remaining 14
+    CR references retained as STRUCK markers / strikethroughs / parenthetical
+    historical record (intentional audit trail). Coup Counter sweep DEFERRED to
+    separate PP — substitution to Graduated Autonomy (ED-781) is not 1:1; design
+    judgment required per site. Files modified: threadwork_v30.md (-67 chars,
+    12 GM removed), npc_behavior_v30.md (-24, 3 GM removed), mass_battle_v30.md
+    (-2, 2 GM removed), complete_systems_reference.md (+74, 2 CR removed with
+    STRUCK markers added). All replacements verified unique-match before applying.
+    Bonus this commit: ED-762 collision resolved (doc 12 v1.2 entry renumbered to
+    ED-763), 4 ledger entries compressed for size compliance. ED-765."
+  finding_id: PP-676 v3 §V3-9
+  source: topographic_analysis
+  affects:
+    - designs/threadwork/threadwork_v30.md
+    - designs/npcs/npc_behavior_v30.md
+    - designs/provincial/mass_battle_v30.md
+    - designs/architecture/complete_systems_reference.md
+    - canon/editorial_ledger.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Vocabulary cleanup, no mechanical change. N pass — removes legacy TTRPG
+      terminology contradicting project framing (videogame only, no GM). Ω pass —
+      cleanup only, no scale-transition or feedback-loop impact. Μ self-exempting —
+      editorial. M-ratings ○ across the board: structural-vocabulary only; behavior
+      preserved (engine resolves what GM would have adjudicated, identical mechanical
+      rules). Each replacement preserved sentence's mechanical meaning while
+      substituting agent (engine for GM). 14 STRUCK Cultural Reformation refs
+      retained as audit trail per editorial principle. Coup Counter deferred —
+      design judgment needed for non-1:1 substitution to Graduated Autonomy."
 

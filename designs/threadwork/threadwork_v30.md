@@ -111,7 +111,7 @@ Approach Training is a binary tag: a practitioner either has it or does not. It 
   - Success: Approach Training tag granted. Trainee gains 1 Thread Sensitivity (the formal Leap exposure registers as substrate engagement per §3.2).
   - Partial: tag granted at next Accounting (one additional season of mentor-led practice required, no further roll).
   - Failure: tag not granted. The trainee may attempt again next season with a different mentor (cannot retry with the same mentor in the same campaign year — the training relationship is exhausted).
-- **Spontaneous acquisition (rare, narrative-driven):** The Catalyst event "First Leap" (per character_histories §Catalyst 4E) may grant Approach Training implicitly if the character survives an unguided first Leap. This is a Game Master / engine adjudication moment — typical resolution is +Approach Training tag + 1 Conviction Scar + Coherence −1 (the unguided Leap leaves perceptual residue per A1/C1 inseparability).
+- **Spontaneous acquisition (rare, narrative-driven):** The Catalyst event "First Leap" (per character_histories §Catalyst 4E) may grant Approach Training implicitly if the character survives an unguided first Leap. This is an engine adjudication moment — typical resolution is +Approach Training tag + 1 Conviction Scar + Coherence −1 (the unguided Leap leaves perceptual residue per A1/C1 inseparability).
 
 **Effects of holding the tag:**
 
@@ -277,7 +277,7 @@ No mechanical changes. Provides narrative and investigative information. Supplem
 |---|---|
 | Overwhelming | Full effect. Mending Stability +1 (Relational scale or above only). Practitioner gains 1 Thread Sensitivity. The effect exceeds the stated intention — the wound closes without scarring; the agreement develops genuine trust beyond its terms. |
 | Success | Full effect. Mending Stability unchanged. |
-| Partial | Partial effect (Game Master sets scope). Mending Stability −1. Coherence −1. |
+| Partial | Partial effect (engine sets scope). Mending Stability −1. Coherence −1. |
 | Failure | Interaction collapses. Mending Stability −2. Coherence −1. At Mending Stability ≤ 40: Shifting Object forms. At Mending Stability ≤ 20: Gap opens. |
 
 **Over-Actualisation Hazard (Relational+ scale):**
@@ -388,7 +388,7 @@ Apply to §3.2 Coherence Reduction / Loc
 |---|---|
 | Overwhelming | Target permanently locked. Mending Stability −1. Practitioner gains 1 Thread Sensitivity. |
 | Success | Target locked. Mending Stability −1. |
-| Partial | Partial lock (Game Master sets scope). Mending Stability −2. Coherence −1 (cap). |
+| Partial | Partial lock (engine sets scope). Mending Stability −2. Coherence −1 (cap). |
 | Failure | Collapse onto practitioner. Take 2 Wounds (no armour). Mending Stability −3. Coherence −1 (cap). Adjacent configurations become partially rigid: +1 Ob to all Thread operations targeting configurations adjacent to the failure site, remainder of season. |
 
 **Chronic consequences:**
@@ -402,7 +402,7 @@ Apply to §3.2 Coherence Reduction / Loc
 
 > **Variable Mending Stability drift (R-63):** Replaces uniform −1 Mending Stability/season for locked institutions:
 - Slow-change domain (seasonal/yearly evolution): −1 Mending Stability/season
-Game Master determines domain type when Lock is applied.
+Engine determines domain type when Lock is applied.
 
 **Reversing a Lock:** Pulling at Ob = (original practitioner's Thread Sensitivity ÷ 10, round up) − 2, minimum Ob 1. Successful release: Mending Stability +1 per season the Lock persisted (max +5), as the substrate decompresses.
 
@@ -501,7 +501,7 @@ No investigation Ob modifiers on Success or Overwhelming — Mending resolves ep
 | 2 | Nearby threads settle into slightly different configurations (minor Shifting Object risk in adjacent zone; self-corrects in 1d3 days) |
 | 3 | Temperature/light/sound shift at site (Thread Sensitivity 10+ detectable) |
 | 4 | Mended area retains a trace — Thread Sensitivity 30+ perceive a scar in the substrate for 1 season |
-| 5 | Adjacent thread realigns, producing an unexpected minor benefit (Game Master describes) |
+| 5 | Adjacent thread realigns, producing an unexpected minor benefit (engine surfaces) |
 | 6 | Full closure delayed 1d3 scenes |
 
 ## 2.5 Collective Operations
@@ -621,7 +621,7 @@ Three or more practitioners with at least two genuinely opposing intentionalitie
 | Mending | −1 (substrate engagement is inherently deep regardless of Gap scale) |
 | Dissolution residue use (per use) | −1 additional (on top of operation cost) |
 | History Resonance risk die (shows 1) | −1 |
-| Practitioner Flashback anchoring (Game Master discretion) | −1 |
+| Practitioner Flashback anchoring (engine trigger) | −1 |
 | Extended proximity to Structural-scale Gap | −1 per season |
 
 
@@ -639,8 +639,8 @@ The §3.2 per-operation cap still governs non-FR operations.
 |---|---|---|
 | 10–8 | Stable | No penalty. Rendering solid. The world is legible. |
 | 7–5 | Dissonant | Narrative flickers: wrongness, déjà vu, events slightly out of sequence. Close Knots sense wrongness (+1 strain per 3 sessions). |
-| 4–3 | Fragmented | −1D to all social rolls. −1D to Recall-based rolls. (PP-234) Game Master may present the character's recollection differently from what others remember. All Knots at wrongness pace (+1 strain per 2 sessions). +1 Ob on all Thread operations including the Leap roll (rendering reasserts more aggressively, making suspension harder). Roll Fragmented Fallout on entering this band. |
-| 2 | Fractured | −2D to all social rolls. −2D to Recall-based rolls. (PP-234) All Knots at accelerated wrongness (+1 strain per session). Once per scene with Thread operation: Spirit TN 7 Ob 1 or lose 1 round to a dissociative episode. Certainty maximum reduced by 1 per Coherence level below 3. **Belief Co-Authorship begins:** Game Master presents the practitioner's shifting perceptual framework as the character's internal voice. Player must rewrite each Belief to reflect the framework in which the categories that structure consciousness are loosening. Roll Fractured Fallout on entering this band. |
+| 4–3 | Fragmented | −1D to all social rolls. −1D to Recall-based rolls. (PP-234) Engine may present the character's recollection differently from what others remember. All Knots at wrongness pace (+1 strain per 2 sessions). +1 Ob on all Thread operations including the Leap roll (rendering reasserts more aggressively, making suspension harder). Roll Fragmented Fallout on entering this band. |
+| 2 | Fractured | −2D to all social rolls. −2D to Recall-based rolls. (PP-234) All Knots at accelerated wrongness (+1 strain per session). Once per scene with Thread operation: Spirit TN 7 Ob 1 or lose 1 round to a dissociative episode. Certainty maximum reduced by 1 per Coherence level below 3. **Belief Co-Authorship begins:** Engine presents the practitioner's shifting perceptual framework as the character's internal voice. Player must rewrite each Belief to reflect the framework in which the categories that structure consciousness are loosening. Roll Fractured Fallout on entering this band. |
 | 1 | Severed | −2D social, −2D Recall. (PP-234) Dissociative episodes once per scene regardless of operations (fire at scene start, not mid-operation). Involuntary perceptual events. All Knots +2 strain per session. +2 Ob on all Thread operations including the Leap (rendering barely holds; suspension is constitutively dangerous). The practitioner's rendering is barely functional. The distinction between self and world, between human and monstrous, between actual and potential, is dissolving. Not because something evil is happening to them. Because they have been outside rendering so many times that rendering no longer holds. |
 | 0 | Rendering Crisis | Campaign event. Reality as commonly rendered is no longer accessible. The practitioner's spooling is destabilised — their organic drawing-from-ground is compromised. They must resolve the crisis narratively: sustained engagement with the world's rendered state, relational anchoring, or withdrawal from practice. If unresolved by season end: Non-Player Character. |
 
@@ -663,7 +663,7 @@ Dissolution residue is compressed potential oriented toward the unintelligible g
 
 - **Full season of non-practice (no Thread operations):** +1 Coherence. Spooling reasserts when the practitioner stops suspending it.
 - **A Close Knot voluntarily anchoring through a dedicated Anchoring Scene (Bonds check TN 7, Ob 2):** +1 Coherence. The shared thread of being — the relational spooling — helps stabilise rendering. Costs the Knot +1 strain.
-- **Certain Einhir techniques (Game Master discretion, late-campaign):** +1 Coherence.
+- **Certain Einhir techniques (engine permits late-campaign):** +1 Coherence.
 - **Cannot exceed 10. Cannot be purchased with CP.**
 
 ## 3.6 Fallout Tables
@@ -680,7 +680,7 @@ Dissolution residue is compressed potential oriented toward the unintelligible g
 **Fractured Fallout (d6):**
 2. Your most recent History advancement feels uncertain — borrowed, not learned
 3. A named Knot briefly does not recognise you, or vice versa. Lasts one scene.
-4. You perform an action you do not remember. Game Master describes the gap.
+4. You perform an action you do not remember. Engine describes the gap.
 5. Your Inspiration refresh this scene feels already spent
 6. A Belief reads, briefly, as belonging to someone else
 
@@ -816,7 +816,7 @@ All Thread Tension references from the original deck are converted to Mending St
 | 79–60 | Strained | Occasional wrongness in territories with Thread history. Non-practitioners with Thread Sensitivity 10+ may sense unease near old operation sites. |
 | 59–40 | Fragile | Shifting Objects form spontaneously in high-traffic Thread territories. One random Shifting Object per season at Accounting. Thread operations +1 Ob in affected territories. |
 | 39–20 | Fractured | Gaps may open spontaneously (1d10 per season at Accounting; on 1–2: Gap in territory with lowest Prosperity). Monstrous Incursion risk in all territories with existing Gaps. Non-practitioners experience rendering failures — inconsistent memories, déjà vu, objects in wrong places. |
-| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (the substrate resists manipulation). Seasonal Stability checks for all factions at Ob 1 (institutional rendering begins failing) — failure produces Mandate −1 for that faction (minimum 0). At Mandate 0, failure instead produces Faction Fracture: one sub-faction splinters off as a new minor faction (Game Master determines composition and goals). Mandate cannot go below 0. Discovery Events become common — Thread Sensitivity growth checks for any non-practitioner who witnesses a rendering failure. NPCs with coup or succession trigger conditions (flagged in design files) treat Mending Stability ≤ 10 as +1 to their trigger check pool (institutional rendering failure accelerates political instability). |
+| 19–1 | Critical | As Fractured, plus: spontaneous Gaps on 1–4 (doubled risk). All Thread operations +1 Ob worldwide (the substrate resists manipulation). Seasonal Stability checks for all factions at Ob 1 (institutional rendering begins failing) — failure produces Mandate −1 for that faction (minimum 0). At Mandate 0, failure instead produces Faction Fracture: one sub-faction splinters off as a new minor faction (engine determines composition and goals). Mandate cannot go below 0. Discovery Events become common — Thread Sensitivity growth checks for any non-practitioner who witnesses a rendering failure. NPCs with coup or succession trigger conditions (flagged in design files) treat Mending Stability ≤ 10 as +1 to their trigger check pool (institutional rendering failure accelerates political instability). |
 | 0 | The Rupture | Rendered reality fails. Campaign ends in catastrophe. No faction wins. The Ein Sof's fullness overwhelms the rendered world's capacity. What emerges is not destruction but excess — too much being for consciousness to render. The world does not end. It becomes unintelligible. |
 
 **Design note — Mending Stability Critical as endgame:** Once Mending Stability enters the Critical band (19–1), the campaign is in a 2–4 season endgame without dramatic intervention. At Mending Stability 1, the endgame trap is complete: almost every Thread operation carries Rupture risk on Failure, but not operating also reaches Rupture within 1–3 seasons from Lock drift and winter. The only structural exit requires: remove all active Locks (eliminates drift), Mend all active Gaps (eliminates per-season Mending Stability loss), then operate exclusively at Object/Personal scale until Mending Stability recovers via successful Mending. Each Mending attempt at Mending Stability 1 risks Rupture on Failure (~17–34% success at best). This is the Einhir Catastrophe replicated mechanically — they reached this point, and there was no escape. The game does not provide a clean rescue from Mending Stability 1. It provides a narrow, difficult path that requires practitioner cooperation across faction lines and accepts that Rupture is a legitimate campaign ending. The convergence of Lock drift, Gap persistence, spontaneous Gap formation, and seasonal operation failures produces net Mending Stability losses of 8–15 per season even with active Mending. The seasonal cap (±10) prevents single-Accounting Rupture but cannot arrest multi-season terminal decline. Mending Stability Critical is the point of no return: the table must coordinate across faction lines to stabilise the world, or accept that the campaign ends in the Rupture. This is designed. The Einhir reached the same point.
@@ -966,7 +966,7 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 | Co-movement | Version C (temporal + epistemic auto, actual d6) | Co-Movement Cards (18) | Personal: Version C. Strategic: Cards. |
 | Practitioner degradation | Coherence 10→0 | Not tracked | Coherence during Personal Phase |
 | World stability | Mending Stability 100→0 at seasonal accounting | Mending Stability 100→0 at Accounting | Mending Stability at Cascade Phase Accounting |
-| Lock chronic | Game Master tracks; Mending Stability drift at accounting | Territory card: Mending Stability −1/season | TTRPG → territory card at Cascade |
+| Lock chronic | Engine tracks; Mending Stability drift at accounting | Territory card: Mending Stability −1/season | Personal-scale → territory card at Cascade |
 
 ---
 

@@ -398,7 +398,7 @@ Idle army clock: if no engagements in Phase 5 this turn AND previous turn, both 
 |---|---|---|---|
 | Envelopment | Attempt all-flank; requires Fast | 2 | Refused Flank |
 | Feigned Retreat | Disengage; pursuer Discipline check; re-engage next turn with flank | 3 | Command Ob 2 to recognise |
-| Ambush | First engagement: defender no Defence allocation | 4 | Scouting (Game Master) |
+| Ambush | First engagement: defender no Defence allocation | 4 | Scouting (engine check) |
 | Concentration | All sub-units on one target; max Fibonacci | 1 | Flanks exposed |
 | Refused Flank | Wing anchors on terrain; immune to that flank | 1 | Sacrifices offence |
 | Hammer & Anvil | Shield Wall holds; Fast unit envelops | 3 | Break Anvil first |
@@ -575,8 +575,8 @@ A Muster action produces 1 unit with Size = 2, Power = floor(faction Military / 
 
 **Woven units — brittleness:** Thread-Woven Discipline or Morale boosts are
 subject to threadwork_v30 §2.4 brittleness rules (MS ≤ 40 → Shifting Object trigger). Taking Size loss > Discipline in a single
-turn qualifies as a non-Thread event of sufficient severity — Game Master may rule
-the Woven configuration shatters into a Shifting Object. A Woven unit can be
+turn qualifies as a non-Thread event of sufficient severity — engine resolves
+the Woven configuration shattering into a Shifting Object. A Woven unit can be
 simultaneously more and less resilient than an unworked unit. *[EDGE-07]*
 
 
