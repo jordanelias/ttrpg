@@ -64,9 +64,10 @@ entries:
   - id: ED-756
     date: 2026-04-29
     description: "[PROVISIONAL] Application of doc 17 patches to produce 12_development_specification.md v1.1. Per §7 application checklist (28 numbered steps). Requires Jordan decisions on ED-755 items first OR proceed with default recommendations and flag in v1.1 commentary. Expected delivery: subsequent editorial session."
-    status: open
+    status: resolved
     severity: P1
     source: "doc 17 §7"
+    resolution: "Doc 12 v1.1 produced 2026-04-29 with 26 patches applied. Commit 9dede391. ED-755 items marked inline as [JORDAN-DECISION-PENDING-ED-755] in §16; defaults from doc 17 §6 NOT applied. v1.1 has 1565 lines (up from 985 in v1.0); 79 PATCH references. Verification: 28/28 expected-content checks pass." 
 
   - id: ED-757
     date: 2026-04-29
