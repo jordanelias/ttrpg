@@ -7,7 +7,7 @@
 
 **Source spec validated:** `12_development_specification.md` v1.1 (commit `9dede391`).
 **Source patches validated:** All 26 patches from `17_specification_revisions.md`.
-**Evidence base:** 8 simulation directions + narrative-arc pass = 51 scenarios traced; 33+ invariants verified; 39 specification gaps surfaced; 18 forward-looking design observations.
+**Evidence base:** 8 simulation directions + narrative-arc pass = 51 scenarios traced; 25 invariants explicitly defined and verified at single-direction scale, re-verified across multi-faction/engaged-player/long-horizon/pathology scales without breakdown; 39 specification gaps surfaced; 19 forward-looking design observations (per AUDIT-1 correction). [Counts corrected per `23_chain_audit.md`.]
 **Purpose:** Consolidate findings; produce final validation conclusion; prioritize v1.2 patch resolutions.
 
 ---
@@ -27,7 +27,7 @@
 - Single-mechanic correctness: ✓ (SIM-A through SIM-D)
 - Multi-faction composition: ✓ (SIM-E)
 - Engaged-player narrative production: ✓ (SIM-F)
-- Long-horizon equilibrium (12 Years): ✓ (SIM-G)
+- Long-horizon equilibrium (12 Years, Year-level summary granularity, consistent with granular SIM-A/B/C/D Accounting traces): ✓ (SIM-G)
 - Pathology / extreme stress: ✓ (SIM-H)
 - Project-README design intent: ✓ — feedback loop produces engaging emergent narratives
 
@@ -244,7 +244,7 @@ Properties documented across the simulation chain. Not gaps — observations of 
 
 ---
 
-## §5 FORWARD-LOOKING DESIGN OBSERVATIONS (18 observations for Jordan consideration after v1.2 stabilizes)
+## §5 FORWARD-LOOKING DESIGN OBSERVATIONS (19 observations for Jordan consideration after v1.2 stabilizes; corrected from 18 per AUDIT-1)
 
 Out-of-scope for v1.2 spec patches; design questions for forward planning.
 
@@ -254,6 +254,9 @@ Out-of-scope for v1.2 spec patches; design questions for forward planning.
 - O-N3: Settlement-as-character — named-NPC reactions alongside aggregate Signal.
 - O-N4: "Faction Watershed" event class for cumulative-drift threshold dramatic beats.
 - O-N5: Player Founding Memory (mirror NPCs' permanent Salience-5 anchor).
+
+### From SIM-D:
+- SIM-D-O1: Per-year Δ_standing clamp (currently ±2) may be too generous — consider tightening to ±1/year for slower Renaissance promotion trajectory.
 
 ### From SIM-E:
 - SIM-E-O1: Inner-circle threshold milestone scenes should be P2 mandatory, not P3 available.
@@ -335,7 +338,7 @@ After v1.2 application + re-vet pass: ready for promotion checklist (§13) → c
 
 **v1.1 is a substantial improvement over v1.0:**
 - 26 patches resolved 68 stress-test issues from docs 13/14/15/16.
-- 33+ invariants verified at every scale.
+- 25 invariants verified at single-direction scale (SIM-A: 4, SIM-B: 7, SIM-C: 8, SIM-D: 6); re-verified at composition (SIM-E), engaged-player (SIM-F), long-horizon (SIM-G), and pathology (SIM-H) scales without breakdown.
 - 24 emergent properties documented as natural engine behaviors.
 - Architecture handles single-mechanic, multi-faction, engaged-player, long-horizon, and pathology conditions without breakdown.
 

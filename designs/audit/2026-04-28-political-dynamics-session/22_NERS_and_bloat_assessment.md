@@ -59,7 +59,7 @@ Adds an aggregation layer over individual military Domain Actions. The spec with
 Several P3 patches in §17 are 1-line notes wearing patch ceremony:
 
 - PATCH v1.2-26 (confidence boundary `< 3`): a sed-and-replace operation across §6.2 — should have been applied directly, not added as an addendum entry.
-- PATCH v1.2-29 (banker's rounding): already applied surgically in §8.1; the §17 entry is duplicative.
+- ~~PATCH v1.2-29 (banker's rounding): already applied surgically in §8.1; the §17 entry is duplicative.~~ **Retracted per AUDIT-4 (`23_chain_audit.md`):** the line-1946 reference is a tracking entry in §17.3 Application Audit, not content duplication. Ignore this finding.
 - PATCH v1.2-30 (mood-suppressed accounting): spec already says this in §8.1 strict counter scope clause; §17 entry is redundant.
 - PATCH v1.2-31 (salience-0 lifecycle): one-line note that belongs inline in §2.6.
 
@@ -139,12 +139,12 @@ Otherwise smooth.
 | §5 Meta-Armatures | ~310 | **§5.4.2 Coup (~25 lines) cuttable**; rest OK |
 | §6 Procedures | ~435 | OK; pseudocode-heavy by necessity |
 | §7 Player-Facing Surfaces | ~65 | OK |
-| §8 Integration | ~150 | **§8.2 War + §8.2.1 Peace (~50 lines) cuttable** |
+| §8 Integration | ~150 | **§8.2 War + §8.2.1 Peace (69 lines) cuttable** [AUDIT-5 correction] |
 | §9-§13 Computational/Authoring/Testing/Promotion | ~130 | OK |
 | §14-§16 References + stubs + Jordan-decisions | ~75 | OK |
 | **§17 v1.2 Patch Addendum** | **~85** | **CUTTABLE — apply surgically, delete §17** |
 
-**Total cuttable:** ~160 lines. Cleaned v1.2.1 → ~1800 lines.
+**Total cuttable:** ~178 lines (24 + 69 + 85 = 178; AUDIT-5 corrected from initial ~160). Cleaned v1.2.1 → ~1780 lines.
 
 ### 6.2 Simulation chain artifacts
 
@@ -181,7 +181,7 @@ Single editorial session addressing structural and necessity findings:
 4. **Delete §17** entirely.
 5. **Update §0.1 v1.2 change log** to note the v1.2.1 cleanup.
 
-**Estimated impact:** -160 to -200 lines. v1.2.1 → ~1750-1800 lines. Same semantic content (minus the deferred mechanics) in cleaner structure.
+**Estimated impact:** -178 lines (per AUDIT-5 corrections). v1.2.1 → ~1780 lines. Same semantic content (minus the deferred mechanics) in cleaner structure.
 
 **Estimated effort:** ~30-45 minutes editorial session.
 
