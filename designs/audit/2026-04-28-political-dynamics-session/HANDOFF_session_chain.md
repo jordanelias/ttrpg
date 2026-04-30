@@ -20,8 +20,8 @@
 | 5 | **DONE** | Simulation pass — Direction B (Domain Action selection) | `SIM_B_domain_action_selection.md` (commit `8a6dbb44`); 8 scenarios; 7 DA-invariants verified; 9 spec gaps (1 P1-critical SIM-B-G8 in ED-759); 1 v1.2-recommended patch (stall-escalator in ED-760); 5 emergent properties |
 | 6 | **DONE** | Simulation pass — Direction C (Settlement Signal flow) | `SIM_C_settlement_signal.md` (commit `684b1627`); 9 scenarios; 8 SS-invariants verified (1 partial); 8 gaps (1 P1-critical SIM-C-G6 routing); 5 emergent properties |
 | 7 | **DONE** | Simulation pass — Direction D (Relational dynamics) | `SIM_D_relational_dynamics.md` (commit `84eec07c`); 8 scenarios; 6 REL-invariants verified; 6 gaps surfaced; SIM-B-G8 reaffirmed P1-critical; 5 emergent relational properties |
-| 8 | PENDING | Simulation pass — Direction E (Composition / cross-system) | Multi-agent trace; emergent behaviors at faction scale |
-| 9 | PENDING | Simulation synthesis | Roll-up findings; surface unresolved interactions for v1.2 |
+| 8 | **DONE** | Simulation pass — Direction E (Composition / multi-agent emergence) | `SIM_E_composition.md` (commit `b04523d2`); 6 scenarios, 3-faction × 3-Year trace; SIM-B-G8 P1-criticality confirmed at scale; 2 new gaps + 3 forward-looking design observations |
+| 9 | PENDING (next-up) | Simulation synthesis | Roll-up findings across SIM-A/B/C/D/E + narrative pass; produce final v1.1 validation report; draft v1.2 patch list incorporating P1 resolutions + stall-escalator + succession mechanic |
 
 Session 1 deliverable persists today's gap-resolution; sessions 2-9 execute the chain. User-controlled cadence (continue per session).
 
@@ -349,5 +349,101 @@ After SIM-E: Session 5 (synthesis) — roll up all 5 directions; produce final v
 ## SESSION CONTEXT NOTE — 2026-04-29
 
 This session (S2 + S3-partial + S4-A + S4-B + S4-C + S4-D) executed under continuous "continue" prompts. **7 simulation/editorial commits this session** spanning patch application + 4 of 5 simulation directions. Combined output: 218k chars across SIM_A/B/C/D + doc 12 v1.1 + ledger updates + handoff updates. Significant progress; recommend fresh session for SIM-E to maintain quality over time.
+
+
+---
+
+## SESSION NARRATIVE-ARC PASS NOTES — 2026-04-29
+
+**Purpose:** User-requested light interpretive pass over SIM-A/B/C/D as continuous player experience.
+**Output:** `SIM_narrative_arc_pass.md` (commit `36a8d6e3`).
+
+**Key findings:**
+- Engine produces *chronicles* reliably (court-history texture confirmed). 
+- Engine produces *stories* partially — for players who engage selectively.
+- Strongest narrative substrate: cross-faction events, mandatory P2 escalations (Marshal-confrontation arc), Knot scenes.
+- Weakest: thematic motivation behind NPC Convictions (no backstory mechanic beyond ST-16-A Founding Memory); reactive vs proactive player levers; settlement-as-weather (not character).
+- **Verdict: chronicle strong, novel partial.** Multi-character arcs run in parallel without GM coordination — design intent achieved.
+
+**Five forward-looking design observations** (out-of-scope for v1.2; for Jordan's consideration):
+1. Player-proactive lever expansion (initiate Concerns in NPCs).
+2. Concern-internalization sub-scenes (private monologue/reflection beats).
+3. Settlement-as-character (named-NPC reactions alongside aggregate Signal).
+4. "Faction Watershed" event class for cumulative-drift-threshold dramatic beats.
+5. Player Founding Memory (mirror NPCs' permanent Salience-5 anchor).
+
+---
+
+## SESSION 4-E NOTES — 2026-04-29
+
+**Done (S4-E — Composition / multi-agent emergence):**
+- `SIM_E_composition.md` produced and committed (`b04523d2`). 360 lines.
+- Six scenarios at three-faction × 12-Accounting scale:
+  1. Cross-faction Settlement Signal interference (border-event divergent responses).
+  2. Multi-Year institutional ossification (Y0→Y3 weight trajectories per faction).
+  3. Dramatic intensity test — does an arc reach climax? **Yes — N-DIAG-A milestone scenes are the engine's reliable climax-beat mechanic.** (~12-20 climax beats per Year cycle at 3-faction scale.)
+  4. Player-proactive lever stress test (agency operates indirectly through Memory-bus).
+  5. Three-faction power-equilibrium (no runaway over 3-Year trace; asymmetric drift trajectories).
+  6. Composition pathology test (leader-death cascade; full ossification; succession mechanic gap).
+
+**SIM-E new gaps (2):**
+- SIM-E-G1 (P3): cross-border event Signal-attribution clarification.
+- **SIM-E-G2 (P2): faction succession trigger and mechanism unspecified** — leader death triggers Faction Crisis (existing mechanic) but new-leader designation is unspecified. Recommend "highest-Standing same-faction NPC becomes leader on previous-leader death; Conviction-alignment-with-faction-dominant breaks ties."
+
+**SIM-E forward-looking design observations (3):**
+- SIM-E-O1: Inner-circle threshold (3↔4) milestone scenes should be P2 mandatory, not P3 available.
+- SIM-E-O2: Explicit "Player Move" mechanic seeding named Memories in target NPCs.
+- SIM-E-O3: 5+ Year stress trace recommended for equilibrium/oscillation analysis.
+
+**SIM-E confirmations:**
+- **SIM-B-G8 confirmed P1-critical at scale.** ~8 percentage points of Crown's Order-share between liberal and strict interpretations over 3 years. Most consequential v1.2 decision.
+- **ED-760 stall-escalator validated at scale.** Functions as both anti-deadlock AND anti-ossification mechanic.
+- **SIM-C-G6 routing recommendation holds** under cross-border and three-faction loads.
+- **N-DIAG-A milestone is the engine's primary climax mechanic** — narrative-arc pass underestimated this; Direction E found it reliable.
+
+**Final cumulative gap inventory (across SIM-A/B/C/D/E + narrative pass):**
+- **5 directions, 39 scenarios, 33 invariants verified, 31 spec gaps, 8 forward-looking design observations.**
+- 2 P1-CRITICAL (SIM-B-G8, SIM-C-G6) — confirmed at composition scale.
+- ~13 P2 — implementation determinism issues.
+- ~16 P3 — minor doc/typo/authoring-helper.
+
+---
+
+## SESSION 5 — SYNTHESIS (next-up)
+
+**Recommended scope for fresh-context session:**
+1. Read all 5 SIM docs + narrative pass.
+2. Produce `19_v1.1_validation_report.md`:
+   - All 33 invariants and verification status.
+   - All 31 spec gaps consolidated, prioritized.
+   - Cross-direction integration map.
+   - Emergent properties catalog.
+3. Produce `20_v1.2_patch_list.md`:
+   - P1-critical resolutions: SIM-B-G8 strict definition; SIM-C-G6 routing; SIM-E-G2 succession.
+   - High-impact P2: stall-escalator (ED-760); evasion event (SIM-D-G2); counter infrastructure (SIM-B-G7); etc.
+   - P3 doc cleanup.
+4. Update editorial ledger: close ED-757 (simulations complete); open new entries for v1.2 patch resolutions.
+5. Forward-looking design observations memo: 8 observations for Jordan consideration (not v1.2 scope).
+
+**Estimated output:** ~25-35k chars across 2 docs + ledger updates. Single editorial session.
+
+---
+
+## TOTAL SESSION-CHAIN PROGRESS — 2026-04-29
+
+| # | Status | Commit | Artifact |
+|---|---|---|---|
+| S1 | ✅ DONE | 6de72da1, 831c889a | doc 17 + initial ledger |
+| S2 | ✅ DONE | 9986d8d9, 9dede391, f5acbaa2 | doc 12 v1.1 (26 patches applied) |
+| S3 | 🔶 PARTIAL | (spot-vetted in simulations) | re-vet against §13 |
+| S4-A | ✅ DONE | fda634db | SIM-A Opinion architecture |
+| S4-B | ✅ DONE | 8a6dbb44 | SIM-B Domain Action selection |
+| S4-C | ✅ DONE | 684b1627 | SIM-C Settlement Signal |
+| S4-D | ✅ DONE | 84eec07c | SIM-D Relational dynamics |
+| Narrative pass | ✅ DONE | 36a8d6e3 | SIM_narrative_arc_pass |
+| S4-E | ✅ DONE | b04523d2 | SIM-E Composition |
+| S5 | ⏳ PENDING | — | Synthesis |
+
+**Chain summary:** 13 commits this session-chain. ~280k chars output across simulation/editorial artifacts. Resolution work for 68 stress-test issues complete; v1.1 produced; full simulation chain across 5 directions complete with narrative validation. One synthesis session remains to consolidate findings and draft v1.2 patch list.
 
 **END OF HANDOFF v1.**
