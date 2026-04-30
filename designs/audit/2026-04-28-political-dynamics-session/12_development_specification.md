@@ -1,13 +1,60 @@
-<!-- [PROVISIONAL: 2026-04-28 session — development specification] -->
+<!-- [PROVISIONAL: 2026-04-29 v1.1 — development specification, post-revision] -->
 <!-- STATUS: PROVISIONAL — CURRENT SOURCE OF TRUTH for political dynamics system -->
 <!-- POSITION: designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md -->
-<!-- SUPERSEDES: stage docs 01-11 (preserved for design history) -->
+<!-- SUPERSEDES: stage docs 01-11 (preserved for design history); v1.0 superseded 2026-04-29 by v1.1 -->
+<!-- REVISIONS APPLIED: 17_specification_revisions.md v1 — 26 patches addressing 68 stress-test issues -->
 
-# Political Dynamics System: Development Specification
+# Political Dynamics System: Development Specification (v1.1)
 
 **Status:** PROVISIONAL (development reference — not yet promoted to canonical)
-**Supersedes:** Stage documents 01-08 in 2026-04-28 session (preserved for design history); incorporates streamlining from 09 and stress-test patches from 10.
+**Version:** v1.1 (2026-04-29) — 26 patches applied per `17_specification_revisions.md`. Resolves all P1/P2 issues from stress tests in docs 13/14/15. P3 stubs documented in §0.1 below; §6 Jordan-decision items flagged inline as `[JORDAN-DECISION-PENDING-ED-755]` and not applied.
+**Supersedes:** Stage documents 01-11 in 2026-04-28 session (preserved for design history); incorporates streamlining from 09 and stress-test patches from 10. v1.0 (2026-04-28) superseded by v1.1 (2026-04-29).
 **Audience:** Engine implementation, content authoring, simulation design.
+
+---
+
+## §0.1 v1.1 CHANGE LOG
+
+26 patches applied 2026-04-29 from `17_specification_revisions.md`. Patches grouped by priority.
+
+**Cross-cutting (§1 of doc 17) — single-writer Opinion model:**
+- PATCH 1.4 — Procedure B Resolution rewritten: writes Memory only (Opinion change deferred to D).
+- PATCH 1.5 — Procedure C Project Completion rewritten: writes Memories only.
+- PATCH 1.6 — Procedure D banner: declares single-writer invariant.
+
+**Priority-1 (§2 of doc 17) — implementation blockers:**
+- PATCH 2.1 — `select_proposal()` algorithm + `DOMAIN_ARMATURE_ALIGNMENT` 42-entry table.
+- PATCH 2.2 — `max_scars` definition (`inner_circle_active_npc_count × 2`).
+- PATCH 2.3 — `conviction_alignment_multiplier` values + `OPPOSITIONAL_CONVICTION_PAIRS`.
+- PATCH 2.5 — `compute_settlement_signal` null guards + governor fallback.
+- PATCH 2.6 — `conviction_secondary=None` uniform-fallback + Armature Confidence (§3.6.X).
+- PATCH 2.7 — Resonance lookup category fallback (§4.5).
+- PATCH 2.8 — Armature modifier composition: additive + per-dimension normalization.
+
+**Priority-2 (§3 of doc 17) — authoring blockers:**
+- PATCH 3.1 — `concern_history` regeneration cooldown.
+- PATCH 3.2 — Knowledge Decay sub-step B.0.
+- PATCH 3.3 — Visibility gate in Concern generation.
+- PATCH 3.4 — `get_or_init_opinion()` lazy initialization + `derive_initial_affect()`.
+- PATCH 3.5 — Grieving handling in DA Proposal Phase.
+- PATCH 3.6 — Knot integration via Priority 2 Outreach (opacity preserved).
+- PATCH 3.7 — `scars_total` / `scars_conviction` split.
+- PATCH 3.8 — Vindicated and Resolved Mood triggers.
+- PATCH 3.9 — Population Disposition recalculation.
+- PATCH 3.10 — Outreach Priority 3 default + salience-5/ttl-1 escalation.
+- PATCH 3.11 — NPC Standing recalculation (§8.1).
+- PATCH 3.12 — Settlement Signal scope (covered by PATCH 2.5).
+- PATCH 3.13 — `generate_new_project()` two-tier derivation.
+- PATCH 3.14 — `visible_actions` templates per domain.
+- PATCH 3.15 — Passive NPC Memory replacement rules.
+
+**Priority-3 (§4 of doc 17) — implementation-time stubs:** see doc 17 §4 for inventory; representative resolutions noted inline as `[P3-RESOLVED-PER-DOC17-§4]`.
+
+**Featured-behavior (§5 of doc 17) — author commentary added at §1.1.**
+
+**Pending Jordan decisions (§6 of doc 17 / ED-755):** marked inline as `[JORDAN-DECISION-PENDING-ED-755]`. Defaults from doc 17 §6 are recommended but not applied.
+
+**Open questions for follow-up:** see doc 17 §8 (table calibration, OPPOSITIONAL pair canonicalization, visible_actions count target, Standing magnitudes, Path B threshold, Concern volume, Settlement Signal frequency).
 
 ---
 
@@ -37,6 +84,20 @@ Passive NPCs participate in Settlement Signals (§5.4) and Knowledge propagation
 
 ---
 
+### 1.1 Featured Behaviors (designed-as-such, not bugs)
+
+The following behaviors emerge from intersections of mechanics and are documented as intentional design rather than as defects to remediate. Author commentary added per `17_specification_revisions.md` §5.
+
+- **Post-Contest Belief Recovery Arc (RS-50-A).** When a Belief is revised through a Total Victory Social Contest (Path A), the NPC carries the revision as a Scar without immediate dissonance. Over subsequent seasons, accumulated contradicting Memories re-engage the revised Belief through normal Concern processing, sometimes producing a "rebound" — partial return toward the prior position, expressed as ambivalence. This is the engine's representation of contested political reform: imposed change rarely sticks immediately, and the NPC's worldview re-asserts itself through ordinary cognitive processing. Designers should expect ~30% Belief-recovery rate over 8 seasons post-Contest in playtest; this is a feature.
+
+- **Permanent Salience-5 Founding Memory (ST-16-A).** Each Active NPC carries one Memory of permanent salience 5 representing a personal founding event (origin, vow, defining trauma, formative mentor). This Memory is exempt from decay and the 10-Memory replacement rules — it is always referenced, always weighted maximally. Mechanically: a permanent Memory "anchor" that biases the NPC's interpretive frame across the full campaign. Authoring impact: 1 Founding Memory per Active NPC = ~35 entries.
+
+- **Diagonal Chain Legibility (E-DIAG-A).** Concern-resolution → Memory creation → Procedure D Opinion drift produces a multi-Accounting causal chain (event T+0 → Memory T+0 → Concern T+1 → Memory T+1 → Opinion drift T+2). Players observing this chain see "the NPC took a while to come around" rather than instant reaction. The chain is legible because each step is observable through Read/Surveil/Outreach surfaces. Design intent: NPC inner state changes with *time* rather than *event*, preserving Renaissance-pace political feel.
+
+- **Standing 5 Milestone Visibility (N-DIAG-A).** When a Standing change crosses the inner-circle threshold (3 ↔ 4 transition), engine generates a milestone Scene Slate entry the next Accounting (Priority 3 — available). Player can attend the rising/falling NPC's adjustment scene, or skip it. Mechanically: makes Standing recalculation (PATCH 3.11 / §8.1) visible; thematically: confers narrative weight on institutional advancement/decline.
+
+---
+
 ## §2 PER-NPC DATA STRUCTURES
 
 ### 2.1 Identity (static, set at NPC creation)
@@ -61,7 +122,8 @@ mood: one of {Steady, Anxious, Confident, Grieving, Vindicated, Humiliated, Dist
 mood_set_by: event_id (provenance)
 mood_duration: seasons remaining (typical 1-4)
 beliefs: 2-3 structured beliefs (existing system)
-scars: count of revised Beliefs (existing)
+scars_total: count of all revised Beliefs (existing system, renamed — PATCH 3.7 / N-33-A)
+scars_conviction: count of revised Beliefs that engaged conviction_primary domains (subset of scars_total)
 disposition_with_player: -3 to +5 (existing; can extend to -4 on Knot rupture)
 certainty: 0-5 (existing, optional)
 ts: existing Thread Sensitivity (optional)
@@ -123,6 +185,47 @@ Opinion of <other_npc_id>:
 
 **Hard bound:** affect_axis is clamped to [-3, +3] on every write. No operation can set affect_axis outside this range.
 
+#### 2.5.1 Opinion Initialization (PATCH 3.4 / ST-15-A/B)
+
+All Opinion mutations route through `get_or_init_opinion()`, which returns an existing Opinion or constructs one with derived initial values. Prevents crashes (ST-15-B) and uninitialized affect (ST-15-A) on first contact.
+
+```
+function get_or_init_opinion(npc, subject_id):
+    if subject_id in npc.opinions:
+        return npc.opinions[subject_id]
+    npc.opinions[subject_id] = Opinion(
+        affect_axis=derive_initial_affect(npc, subject_id),
+        confidence=1,                     # newly formed
+        evidence_memory_refs=[],
+        last_updated=current_season,
+    )
+    return npc.opinions[subject_id]
+
+function derive_initial_affect(npc, subject_id):
+    subject = lookup_npc(subject_id)
+    base = 0
+    
+    # Conviction alignment baseline
+    if subject.conviction_primary == npc.conviction_primary:
+        base += 1
+    elif (npc.conviction_primary, subject.conviction_primary) in OPPOSITIONAL_CONVICTION_PAIRS:
+        base -= 1
+    
+    # Faction alignment
+    if subject.faction == npc.faction:
+        base += 1
+    elif npc.faction.is_hostile_to(subject.faction):
+        base -= 1
+    
+    # Standing differential — modest deference encoded elsewhere; no Opinion bias here
+    if subject.faction == npc.faction and subject.standing > npc.standing + 1:
+        base += 0
+    
+    return clamp(base, -3, +3)
+```
+
+NPCs of shared Conviction or shared faction start with mild positive Opinion (+1 each, capped at +3). Opposed Conviction or hostile factions start mild negative. Confidence starts at 1 (low — single piece of evidence will easily move the Opinion).
+
 ### 2.6 Memories (5-10 high-salience records)
 
 ```
@@ -139,6 +242,16 @@ Memory:
 **Memory salience floor:** When a Memory is referenced (in Opinion drift, Concern resolution, or armature seeking-tag matching), its `reference_count` increments. Decayed salience cannot go below `reference_count × 0.5` (max 5). Founding-relationship Memories that are repeatedly used remain salient indefinitely.
 
 **Memory replacement:** When new high-salience Memory would exceed cap (10), the lowest-salience existing Memory is dropped or merged ("another disappointment from the Crown" — collapses similar Memories).
+
+**Passive NPC Memory replacement (PATCH 3.15 / R-42-A):** For Passive NPCs (3-Memory cap), the same replacement rules apply at the lower cap. When a new Memory would exceed cap:
+
+1. If a similar-tag existing Memory exists with same affect-direction, **merge** (collapse "another disappointment from the Crown" — increment `reference_count`; new Memory's salience replaces if higher).
+2. Otherwise, **drop the lowest-salience Memory**.
+3. **Tie-break:** drop the older Memory (timestamp comparison).
+
+Passive Memories also obey the salience-floor mechanic specified above. Merge path is critical because the 3-Memory cap fills quickly — without merging, every Accounting could swap Memories, producing flicker. Merging preserves cumulative pattern recognition.
+
+---
 
 ### 2.7 Knowledge (info-rich NPCs only, variable count)
 
@@ -196,12 +309,21 @@ modify_by_personality(weights, personality):
     # e.g., high intellectual_rigor: +0.1 to mechanism.calculation, mechanism.error
     # e.g., low risk_tolerance: +0.1 to all threat-related options
 
-modify_by_scar_count(weights, scar_count, conviction_primary, conviction_secondary):
+modify_by_scar_count(weights, scar_count, conviction_primary, conviction_secondary):  # PATCH 2.6 — uniform-fallback for None secondary
     # Scar 0: 100% conviction_primary weights
     # Scar 1: 75% primary + 25% secondary
+    #   if conviction_secondary is None: 100% primary, but reduce armature confidence
+    #   (see §3.6.X) — flag the NPC's interpretation as low-confidence
     # Scar 2: 50% primary + 50% secondary
-    # Scar 3+: secondary leads
+    #   if conviction_secondary is None: 75% primary + 25% UNIFORM-FALLBACK
+    # Scar 3+: secondary leads (75% secondary + 25% primary)
+    #   if conviction_secondary is None: 50% primary + 50% UNIFORM-FALLBACK
+    #   (NPC in protracted identity crisis — interpretations diffuse)
+    #
+    # UNIFORM-FALLBACK assigns equal weight (1/n) to every option in each dimension,
+    # representing absence of an interpretive frame.
     # Soft transition; no abrupt personality flips
+    # Note: scar_count uses scars_conviction (PATCH 3.7 / N-33-A), not scars_total
 
 modify_by_active_projects(weights, active_projects):
     # +0.1 to options matching active Project domains
@@ -211,6 +333,49 @@ modify_by_active_concerns(weights, active_concerns):
     # +0.1 to options matching existing Concern seeking tags
     # Continuity bias — interpretive consistency
 ```
+
+**`compute_armature()` — additive composition with per-dimension normalization (PATCH 2.8 / E-BOT-B):**
+
+```
+function compute_armature(npc):
+    # Base — dict[dim][option] -> [0, 1]
+    weights = base_weights_from_conviction(npc.conviction_primary)
+    
+    # Modifiers compose ADDITIVELY. Each returns a delta dict[dim][option] -> delta
+    # (sparse: only non-zero entries). add_modifier mutates in-place.
+    add_modifier(weights, personality_modifier(npc.personality))
+    add_modifier(weights, scar_modifier(npc.scars_conviction, npc.conviction_primary, npc.conviction_secondary))
+    add_modifier(weights, project_modifier(npc.active_projects))
+    add_modifier(weights, concern_modifier(npc.active_concerns))
+    
+    # Floor at 0 — modifier deltas can be negative; never go below zero
+    for dim in ARMATURE_DIMENSIONS:
+        for option in weights[dim]:
+            weights[dim][option] = max(0.0, weights[dim][option])
+    
+    # Normalize per dimension — each dimension becomes a probability distribution
+    for dim in ARMATURE_DIMENSIONS:
+        total = sum(weights[dim].values())
+        if total > 0:
+            for option in weights[dim]:
+                weights[dim][option] /= total
+        else:
+            # all options zeroed (rare) — uniform fallback
+            n = len(weights[dim])
+            for option in weights[dim]:
+                weights[dim][option] = 1.0 / n
+    
+    return weights
+
+function add_modifier(weights, delta):
+    for dim, opt_dict in delta.items():
+        for option, delta_value in opt_dict.items():
+            weights[dim][option] = weights[dim].get(option, 0) + delta_value
+```
+
+**Composition note.** Composition order (personality → scar → project → concern) is irrelevant under additive composition; the order is fixed for reproducibility. Modifiers compose independently; no modifier multiplicatively interacts with another. Per-dimension normalization preserves the probabilistic interpretation: `armature[dim]` sums to 1.0 over its options, suitable for `weighted_select()`. Floor-at-zero handles aggressive negative deltas without producing negative-probability weights.
+
+**Modifier authoring scale.** Each modifier function returns a sparse delta dict. Modifier deltas are typically ±0.05 to ±0.2, with the largest deltas reserved for `scar_modifier` at high Scar counts (which can shift up to ±0.5 per option as armature rotates from primary to secondary).
 
 Final armature: weighted vector across all three dimensions × all options.
 
@@ -275,6 +440,8 @@ function resolve_concern(npc, concern):
 
 Two paths to Belief revision, with explicit gating:
 
+**Scar attribution (PATCH 3.7 / N-33-A):** When a Belief is revised (via Path A or Path B), check whether the Belief's domain engages `npc.conviction_primary`. If yes, increment both `scars_total` and `scars_conviction`. If no, increment only `scars_total`. `scars_conviction` drives `modify_by_scar_count()` (armature shift); `scars_total` drives `institutional_stability` (faction weight). See §2.2 for the field definitions.
+
 **Path A — Social Contest (existing system):** Total Victory Contest with Resonant Style argument engaging the specific Belief → immediate Scar.
 
 **Path B — Concern-driven self-correction (new):** When a Concern resolves with a Memory that contradicts an existing Belief:
@@ -284,6 +451,47 @@ Two paths to Belief revision, with explicit gating:
 **Calcified wrong Belief:** Belief unchallenged for 8+ seasons → calcified. Calcified Beliefs require 3+ contradicting Memories (vs standard 2) for self-correction. Path A Contests against calcified Beliefs are at +1 Ob.
 
 **Belief-revision gating:** If a Belief is revised via Path A this season, all accumulated contradicting Memories for that Belief reset. The Contest result supersedes accumulated evidence.
+
+---
+
+### 3.6 Conviction Alignment for Opinion Drift (PATCH 2.3)
+
+```
+function conviction_alignment_multiplier(npc_a, npc_b):
+    if npc_a.conviction_primary == npc_b.conviction_primary:
+        return 1.5
+    if npc_a.conviction_secondary and npc_b.conviction_secondary and (
+        npc_a.conviction_primary == npc_b.conviction_secondary or
+        npc_a.conviction_secondary == npc_b.conviction_primary
+    ):
+        return 1.2
+    if (npc_a.conviction_primary, npc_b.conviction_primary) in OPPOSITIONAL_CONVICTION_PAIRS:
+        return 0.7
+    return 1.0
+
+OPPOSITIONAL_CONVICTION_PAIRS = {
+    (Faith, Reason), (Reason, Faith),
+    (Order, Autonomy), (Autonomy, Order),
+    (Precedent, Equity), (Equity, Precedent),
+    (Continuity, Reason), (Reason, Continuity),
+}
+```
+
+NPCs sharing primary Conviction interpret each other's actions through a sympathetic frame, amplifying confidence in the Opinion-direction (1.5×). Sharing secondary as a bridge produces partial sympathy (1.2×). Oppositional Convictions (the four canonical antagonisms in the seven-Conviction system) dampen drift — the NPC's interpretive frame treats the other as untrustworthy regardless of evidence (0.7×). All other pairings are neutral (1.0×).
+
+The multiplier compounds with the existing dampening factor `(1 - |affect|/3)`. Combined effect at extremes: a Faith NPC opining Reason-NPC at affect_axis +2 has dampening 0.33 × oppositional 0.7 = 0.23. Slow movement even with positive Memory evidence.
+
+Note: `Continuity↔Reason` is intentionally included — Reason as restless innovation pressures Continuity's preserve-the-existing logic. Tunable per playtest. See `17_specification_revisions.md` §8.2 for canonicalization concern.
+
+#### 3.6.X Armature Confidence (PATCH 2.6)
+
+Armature confidence is a derived scalar [0,1] tracking the coherence of the NPC's interpretive frame.
+
+- **Confidence = 1.0** when armature is dominated by one Conviction (single coherent frame).
+- **Confidence = 0.5** when armature is mixed primary+secondary.
+- **Confidence < 0.5** when uniform-fallback is active (frame absent — NPC in protracted identity crisis).
+
+Low confidence increases per-event interpretation variance: in code, `weighted_select()` at `confidence < 0.7` re-rolls once and averages results, producing more inconsistent armature behavior. This is the mechanical surface of "the NPC's worldview has been shattered without a replacement frame" — produces interesting emergent narrative (NPC becomes hard to predict).
 
 ---
 
@@ -367,6 +575,48 @@ This prevents personal-scale events from disproportionately driving faction-leve
 
 ---
 
+### 4.5 Resonance Lookup Fallback (PATCH 2.7)
+
+Unknown `event_type` lookups in the symbolic resonance table fall back through a category system. Each event_type is authored with a category tag; unknown event_types fall back to category defaults; a final `default` category catches truly unrecognized events (returns neutral on all Convictions).
+
+```
+EVENT_CATEGORIES = {
+    violent: ["assault", "battle", "execution", "raid", "siege", "duel", ...],
+    institutional_change: ["promotion", "demotion", "appointment", "dismissal", "succession", ...],
+    discovery: ["revelation", "investigation_break", "confession", "evidence_surface", ...],
+    ceremonial: ["coronation", "wedding", "funeral", "mass", "audience", ...],
+    economic: ["trade_deal", "tariff", "windfall", "bankruptcy", "embargo", ...],
+    diplomatic: ["treaty", "envoy_received", "alliance", "rupture", "summit", ...],
+    personal: ["birth", "death_natural", "courtship", "knot_formation", "knot_rupture", ...],
+    default: [],  # fallback for unrecognized
+}
+
+CATEGORY_DEFAULT_RESONANCE = {
+    violent:               {Faith: contradicted, Order: neutral, Reason: neutral, Equity: contradicted, Precedent: neutral, Autonomy: neutral, Continuity: neutral},
+    institutional_change:  {Faith: neutral, Order: contradicted, Reason: neutral, Equity: neutral, Precedent: contradicted, Autonomy: aligned, Continuity: contradicted},
+    discovery:             {Faith: neutral, Order: neutral, Reason: aligned, Equity: neutral, Precedent: neutral, Autonomy: aligned, Continuity: neutral},
+    ceremonial:            {Faith: aligned, Order: aligned, Reason: neutral, Equity: neutral, Precedent: aligned, Autonomy: neutral, Continuity: aligned},
+    economic:              {Faith: neutral, Order: neutral, Reason: aligned, Equity: contradicted, Precedent: neutral, Autonomy: aligned, Continuity: neutral},
+    diplomatic:            {Faith: neutral, Order: aligned, Reason: aligned, Equity: aligned, Precedent: neutral, Autonomy: neutral, Continuity: neutral},
+    personal:              {Faith: neutral, Order: neutral, Reason: neutral, Equity: neutral, Precedent: neutral, Autonomy: neutral, Continuity: neutral},
+    default:               {Faith: neutral, Order: neutral, Reason: neutral, Equity: neutral, Precedent: neutral, Autonomy: neutral, Continuity: neutral},
+}
+
+function resonance_lookup(conviction, event_type):
+    if (conviction, event_type) in RESONANCE_TABLE:
+        return RESONANCE_TABLE[(conviction, event_type)]
+    category = categorize_event_type(event_type)  # returns "default" if unknown
+    return CATEGORY_DEFAULT_RESONANCE[category][conviction]
+```
+
+Cross-reference from §4.1 where `symbolic_effects` are described.
+
+**Coupling note.** This patch is independent of the E-38-A/B Jordan decision (`[JORDAN-DECISION-PENDING-ED-755]`). If E-38 cuts the symbolic_effects table, this fallback machinery becomes unused but harmless. If E-38 keeps the table, this fallback fills authoring gaps gracefully.
+
+Categorical defaults derive from Renaissance institutional logic: violence threatens Faith and Equity definitionally; `institutional_change` threatens Order/Precedent/Continuity (which value stasis) and aligns with Autonomy (which values dynamism); discovery aligns with Reason and Autonomy. The `default` row is fully neutral so unrecognized events cause no spurious resonance.
+
+---
+
 ## §5 META-ARMATURES
 
 ### 5.1 Settlement Meta-Armature
@@ -401,43 +651,87 @@ for each present_tier:
     effective_weight = raw_weight / total_present
 ```
 
+**`population_disposition` recalculation (PATCH 3.9 / N-35-A — each Accounting):**
+
+```
+population_disposition[settlement, faction] = clamp(
+    0.4 * normalized_order(settlement) +
+    0.4 * normalized_prosperity(settlement) +
+    0.2 * recent_event_delta(settlement, faction, seasons=4),
+    -3, +5
+)
+
+where:
+  normalized_order maps settlement.order [0, 10] to [-2, +2]
+  normalized_prosperity maps settlement.prosperity [0, 10] to [-2, +2]
+  recent_event_delta = sum of Δ-Disposition events this faction caused this 
+    settlement in last 4 seasons, exponentially decayed (×0.7^seasons_ago).
+```
+
+Order and Prosperity respond to faction governance quality; mapping them to population sentiment is a natural derivation. The event-delta term lets faction-caused disasters or windfalls move sentiment without per-population per-event tracking. Range clamped per existing Disposition spec.
+
+---
+
 ### 5.2 Settlement Signal
 
 The Settlement Meta-Armature interprets events affecting the settlement and produces a Settlement Signal:
 
 ```
-function compute_settlement_signal(settlement, recent_memories):
+function compute_settlement_signal(settlement, recent_memories):  # PATCH 2.5 — null guards + governor fallback (also PATCH 3.12: S-44-A scope)
+    # Guard 1: settlement has no Passive NPCs (ST-20-A)
+    if not settlement.passive_npcs:
+        if settlement.governor:
+            return SettlementSignal.from_governor(settlement.governor, settlement.recent_events)
+        return None  # remote settlement w/ no governor and no Passive NPCs — no Signal
+    
     # Aggregate Passive NPC Memories from last 2 seasons
     weighted_memories = []
     for npc in settlement.passive_npcs:
-        for memory in npc.recent_memories:
-            weight = memory.salience × npc.local_disposition_with_player
+        for memory in npc.recent_memories(seasons=2):
+            # Disposition-with-player only amplifies player-involving Memories (S-44-A / PATCH 3.12)
+            if memory.involves_player:
+                weight = memory.salience * npc.local_disposition_with_player
+            else:
+                weight = memory.salience
             weighted_memories.append((memory, weight))
+    
+    # Guard 2: Passive NPCs exist but no recent Memories
+    if not weighted_memories:
+        return None
     
     # Group by event_type tag
     grouped = group_by_event_type(weighted_memories)
     
-    # Find dominant tag
+    # Guard 3: all weights zero (rare but possible)
+    if not grouped or all(sum_of_weights(g) == 0 for g in grouped):
+        return None
+    
     dominant_tag = max(grouped, key=sum_of_weights)
     
-    # Compute net affect
-    net_affect = sum(memory.affect × weight for memory, weight in weighted_memories) 
-                 / sum(weights)
+    total_weight = sum(w for _, w in weighted_memories)
+    net_affect = sum(memory.affect * w for memory, w in weighted_memories) / total_weight
     
-    # Build Signal
     signal = SettlementSignal(
         affect_axis=net_affect,
         primary_tag=dominant_tag,
-        salience=abs(net_affect) × 2  # min 1, max 5
+        salience=min(5, max(1, abs(net_affect) * 2)),
     )
-    
-    # Apply cascade decay before propagating
-    signal.salience = signal.salience × 0.7
-    
+    signal.salience *= 0.7  # cascade decay
     return signal
+
+function SettlementSignal.from_governor(governor, recent_events):  # PATCH 2.5 — governor-only fallback
+    # For settlements without Passive NPCs.
+    if not recent_events:
+        return None
+    dominant = max(recent_events, key=lambda e: e.salience)
+    return SettlementSignal(
+        affect_axis=interpret_event_affect(dominant, governor.armature),
+        primary_tag=dominant.event_type,
+        salience=dominant.salience * 0.5,  # governor-only Signal at half weight
+    )
 ```
 
-Settlement Signal propagates to controlling faction's relevant Active NPC as a Concern (Procedure B input next Accounting).
+Settlement Signal propagates to controlling faction's relevant Active NPC as a Concern (Procedure B input next Accounting). When `compute_settlement_signal` returns `None`, faction-level Concern generation skips this settlement's Signal that Accounting (sparse-settlement handling).
 
 ### 5.3 Faction Meta-Armature
 
@@ -450,7 +744,7 @@ FactionMetaArmature:
     
     institutional_stability:
         single merged term (replaces prior institutional_inertia + ethical_framework_anchor)
-        weight: 0.4 × (1 - (total_inner_circle_scars / max_scars))
+        weight: 0.4 × max(0, 1 - (sum(npc.scars_total for npc in inner_circle) / (inner_circle_active_npc_count × 2)))  # PATCH 2.2 + PATCH 3.7 — max_scars=2×inner_circle; uses scars_total (institutional weight responds to all Belief revisions)
         value: faction's historical dominant Conviction at game-start
         # Crown: Order/Virtue-Ethics derived
         # Church: Faith/Divine-Command
@@ -466,6 +760,29 @@ FactionMetaArmature:
 The leader's individual armature carries 1.5× weight but does not dominate. A Reformer-arc Almud (Reason-shifted) does not single-handedly shift Crown's institutional interpretation — institutional_stability + Faith-aligned Confessor + Order-aligned Marshal pull the meta-armature toward Crown's traditional framework. This produces the historically realistic dynamic where reformer rulers find their courts resisting their personal transformations.
 
 **Player joining inner circle:** At Standing 5+, the player's armature becomes part of the Faction Meta-Armature. The player's Conviction influences the faction's institutional interpretation.
+
+#### Proposal Selection (PATCH 2.1)
+
+The Faction Meta-Armature ranks competing inner-circle proposals via `select_proposal()`, defined in §6.2. The `DOMAIN_ARMATURE_ALIGNMENT` table is authored content (see §10).
+
+**DOMAIN_ARMATURE_ALIGNMENT table (42 entries, 0.0–1.0):**
+
+| domain | Faith | Order | Reason | Equity | Precedent | Autonomy | Continuity |
+|---|---|---|---|---|---|---|---|
+| military | 0.3 | 1.0 | 0.6 | 0.2 | 0.5 | 0.4 | 0.7 |
+| theological | 1.0 | 0.4 | 0.3 | 0.3 | 0.7 | 0.2 | 0.6 |
+| scholarly | 0.2 | 0.4 | 1.0 | 0.5 | 0.6 | 0.7 | 0.4 |
+| intelligence | 0.3 | 0.7 | 0.8 | 0.2 | 0.5 | 0.6 | 0.5 |
+| economic | 0.2 | 0.5 | 0.7 | 0.6 | 0.4 | 0.8 | 0.4 |
+| diplomatic | 0.5 | 0.6 | 0.5 | 0.7 | 0.6 | 0.4 | 0.6 |
+
+Six domains × seven Convictions. Add rows as new domains are introduced (`personal_legacy`, `personal_courtship`, etc.).
+
+Standing bonus is small (0.1 × standing where standing ∈ [3,7] → max 0.7), so a low-aligned proposal cannot win on Standing alone.
+
+Tie-breaks: Standing → seasons_stalled (higher → wins, prevents perpetual stall).
+
+---
 
 ### 5.4 Faction Crisis Behaviors
 
@@ -531,17 +848,77 @@ function update_mood_real_time(npc, event, event_impact):
 
 **Mood decay:** Each Accounting, Mood decays one step toward Steady unless reinforced this season. Personality modifies decay rate.
 
+- **Vindicated** (PATCH 3.8 / E-37-A): NPC's previously-stated position is publicly confirmed by outcome.
+    - Trigger conditions (any of):
+      (a) NPC won a Total Victory Social Contest as defender within last 2 seasons.
+      (b) A Project completion this season reflects NPC's earlier predicted outcome
+          (e.g., NPC publicly opposed the project; project failed).
+      (c) A Domain Action that NPC publicly advocated succeeded with positive consequence
+          visible this season.
+    - Duration: 2 seasons. -1 Ob to action aligned with vindication's themes.
+
+- **Resolved** (PATCH 3.8 / E-37-A): NPC's Concern resolution produced a clear, satisfying answer that refines or confirms existing Belief (no Scar produced).
+    - Trigger conditions: Concern resolves via `resolve_concern()` with a high-salience matching Memory (≥4) AND resolution does NOT produce a Scar (resolution.causes_belief_revision is False, OR contradiction_strength is "weak").
+    - Duration: 1-2 seasons (1 if salience-4 Memory; 2 if salience-5).
+    - Effect: -1 Ob to action consistent with resolution; +1 Ob to inconsistent.
+
+(Procedure D and B-Resolution check these conditions and call `update_mood_real_time()` when applicable.)
+
+---
+
 ### 6.2 Accounting Sequence
 
 Procedures run in fixed order at Accounting: B → (Domain Action proposals) → C → D → E.
 
 #### Procedure B — Concern Generation and Resolution
 
-**Generation:**
+**B.0 — Knowledge Decay (PATCH 3.2 / N-BOT-D — runs before Generation):**
+```
+For each Active NPC:
+    For each knowledge in npc.knowledge:
+        if not knowledge.valid:
+            continue  # invalidated Knowledge is not decayed; awaiting Concern processing
+        if knowledge.knowledge_type == "ongoing_state":
+            knowledge.salience -= 0.5
+        elif knowledge.knowledge_type == "structural":
+            knowledge.salience -= 0.1
+        elif knowledge.knowledge_type == "historical_event":
+            pass  # no decay; permanent
+        knowledge.salience = max(0, knowledge.salience)
+    
+    # Cull dead Knowledge
+    npc.knowledge = [k for k in npc.knowledge 
+                     if k.salience >= 1 or k.referenced_recently(seasons=4)]
+
+# referenced_recently() is set by any Procedure that uses the Knowledge fact
+# (e.g., Procedure E knowledge sharing increments it).
+```
+
+**Visibility helper (PATCH 3.3 / N-BOT-E):**
+```
+function npc_observes_event(npc, event):
+    if event.visibility.public:
+        return True
+    if npc.id in event.visibility.semi_public_observers:
+        return True
+    if npc.id in event.visibility.private_observers:
+        return True
+    return False
+```
+
+**Generation:** (with visibility gate and concern_history cooldown — PATCH 3.1, 3.3)
 ```
 For each event in last_season.events:
     For each NPC in event.affected_npcs:
+        # Visibility gate (PATCH 3.3 / N-BOT-E) — NPC must be an observer
+        if not npc_observes_event(npc, event):
+            continue
         if NPC is Active:
+            # Concern regeneration cooldown (PATCH 3.1 / N-BOT-C)
+            potential_tag = derive_concern_tag(event, npc.armature)
+            if potential_tag in npc.concern_history and event.salience < 4:
+                continue  # recent same-domain Concern resolved; suppress regen
+            
             concern = generate_concern(npc, event, event_impact_matrix)
             npc.concerns.append(concern)
             if len(npc.concerns) > 3:
@@ -553,20 +930,40 @@ For each Active NPC:
             generate Concern("Is [Belief] accurate given Knowledge X?")
 ```
 
-**Resolution:**
+**Resolution:** (single-writer Opinion model — see PATCH 1.4 / §0.1 change log)
 ```
 For each Active NPC:
     For each concern in npc.concerns:
         concern.salience -= 1  # standard decay
         if concern.salience <= 0 OR ttl exhausted:
             resolution = resolve_concern(npc, concern)
-            apply_resolution(npc, resolution)
-            # May produce Belief update, Opinion drift, or Scar
+            
+            # Belief revision (direct — produces Scar, not Opinion change)
+            if resolution.causes_belief_revision:
+                if resolution.contradiction_strength == "strong":
+                    revise_belief_to_scar(npc, resolution.target_belief)
+                    npc.scars_total += 1
+                    if resolution.target_belief.engages_conviction_primary:
+                        npc.scars_conviction += 1
+                else:
+                    modify_belief(npc, resolution.target_belief, resolution.delta)
             # Scar gating: strong contradiction + multiple high-salience contradicting Memories required
             # Calcified Belief check: if Belief unchallenged 8+ seasons, requires 3+ Memories
             # If Belief revised this season via social Contest (Path A): reset accumulated Memory weight
             
-            # Add to concern_history (max 5 entries)
+            # Resolution Memory (D consumes — drives Opinion change next)
+            if resolution.subject_npc_id:
+                m = Memory(
+                    timestamp=current_season,
+                    event_type="concern_resolved",
+                    participants=[npc.id, resolution.subject_npc_id],
+                    affect=resolution.implied_affect,           # +/- per resolution polarity
+                    salience=resolution.salience,                # carries Concern salience at resolution
+                    detail=resolution.text,
+                )
+                add_memory(npc, m)                               # respects 10-Memory cap with merge/drop
+            
+            # Concern history (cooldown — see PATCH 3.1 / §6.2 Generation)
             npc.concern_history.append(resolution.tag)
             if len(npc.concern_history) > 5:
                 npc.concern_history.pop(0)
@@ -583,9 +980,14 @@ For each Active NPC:
     if npc.active_project.domain_action_required:
         if npc.project_advancement_needs_da_this_season:
             # Personality and Mood gating
-            if npc.mood == Distracted and npc.personality.institutional_deference >= 1:
+            # Grieving (PATCH 3.5 / ST-19-A): auto-fails proposal without Spirit Ob 1
+            if npc.mood == Grieving:
+                if not npc.spirit_check(ob=1):
+                    continue  # Grieving NPC cannot propose this Accounting
+                proposal_modifier = +1  # passes but +1 Ob
+            elif npc.mood == Distracted and npc.personality.institutional_deference >= 1:
                 continue  # high-deference Distracted NPCs suppress proposals
-            if npc.mood == Distracted and npc.personality.institutional_deference < 1:
+            elif npc.mood == Distracted and npc.personality.institutional_deference < 1:
                 proposal_modifier = +1  # Distracted, low-deference: proposes at +1 Ob
             else:
                 proposal_modifier = 0
@@ -604,9 +1006,30 @@ For each faction:
     proposals_in_faction = [p for p in flagged_proposers if p.npc.faction == faction]
     if len(proposals_in_faction) > 1 AND any pair shares domain:
         # Faction Meta-Armature evaluates
-        winner = faction_meta_armature.select_proposal(proposals_in_faction)
+        winner = select_proposal(proposals_in_faction)  # PATCH 2.1 — defined below
         for loser in proposals_in_faction except winner:
             loser.project.seasons_stalled += 1
+
+# select_proposal — Faction Meta-Armature inner-circle competition (PATCH 2.1 / E-36-A)
+function select_proposal(proposals):
+    scores = {}
+    for p in proposals:
+        meta_armature = p.faction.meta_armature
+        domain = p.project.project_domain
+        # Conviction-weighted domain alignment
+        conviction_alignment = sum(
+            meta_armature.conviction_weights[c] × DOMAIN_ARMATURE_ALIGNMENT[domain][c]
+            for c in CONVICTIONS
+        )
+        # Standing bonus (modest, breaks near-ties)
+        standing_bonus = p.npc.standing × 0.1
+        scores[p] = conviction_alignment + standing_bonus
+    
+    winner = max(proposals, key=lambda p: (scores[p], p.npc.standing, p.project.seasons_stalled))
+    return winner
+
+# meta_armature.conviction_weights[c] is a normalized 7-vector summing to 1.0,
+# derived from inner-circle aggregate (§5.3) plus institutional_stability anchor.
 
 # Apply armature-induced Ob modifiers
 For each proposal in selected_proposals:
@@ -651,14 +1074,75 @@ For each Active NPC:
     # Completion check
     if project.progress >= 10:
         execute_completion_effect(project, npc)
-        # Project legacy (added in stress test patches):
-        # +0.5 affect_axis toward NPCs who supported
-        # -0.5 affect_axis toward NPCs who obstructed
-        apply_project_legacy(project, npc)
+        # Project legacy → Memories only (D consolidates Opinion change — PATCH 1.5)
+        for supporter_id in project.supporters:
+            m = Memory(
+                timestamp=current_season,
+                event_type="project_legacy_support",
+                participants=[npc.id, supporter_id],
+                affect=+0.5,                                  # was direct Opinion delta
+                salience=4,                                   # legacy weight
+                detail=f"Stood with me on {project.goal_short}",
+            )
+            add_memory(npc, m)
+        for obstructor_id in project.obstructors:
+            m = Memory(
+                timestamp=current_season,
+                event_type="project_legacy_obstruction",
+                participants=[npc.id, obstructor_id],
+                affect=-0.5,
+                salience=4,
+                detail=f"Worked against me on {project.goal_short}",
+            )
+            add_memory(npc, m)
         generate_new_project(npc)
 ```
 
+# generate_new_project — two-tier derivation (PATCH 3.13 / S-46-A)
+function generate_new_project(npc):
+    # Tier 1 — pre-authored project queue
+    if npc.authored_project_queue and len(npc.authored_project_queue) > 0:
+        return npc.authored_project_queue.pop(0)
+    
+    # Tier 2 — Conviction-aligned procedural generation
+    domain = sample_domain_weighted_by_conviction(npc.conviction_primary)
+    horizon = weighted_choice(["short", "medium", "long"], [0.4, 0.4, 0.2])
+    
+    # Look up template; sample one as Project's representative visible_action (PATCH 3.14 / NS-49-A)
+    visible_actions_pool = VISIBLE_ACTIONS_TEMPLATES[domain]
+    
+    project = Project(
+        goal=generate_goal_from_template(domain, npc),
+        progress=0,
+        progress_status="new",
+        blockers=[],
+        accelerators=[],
+        horizon=horizon,
+        project_domain=domain,
+        visible_actions=[random.choice(visible_actions_pool)],
+        visible_actions_pool=visible_actions_pool,  # for varying observation (PATCH 3.14)
+        completion_effect=standard_effect_for(domain, npc),
+        failure_effect=standard_effect_for_failure(domain, npc),
+        domain_action_required=domain_action_required_for(domain),
+        seasons_stalled=0,
+    )
+    return project
+
+function sample_domain_weighted_by_conviction(conviction):
+    # Reuse DOMAIN_ARMATURE_ALIGNMENT table from §6.2 / PATCH 2.1
+    weights = {d: DOMAIN_ARMATURE_ALIGNMENT[d][conviction] for d in DOMAINS}
+    return weighted_select(list(weights.keys()), list(weights.values()))
+```
+
+Tier 1 honors authored content (specific NPCs may have multi-Project arcs the designer wants preserved); Tier 2 ensures the spec is robust without that content (any NPC can always generate a fresh Project on completion). Conviction-aligned domain selection produces character-consistent follow-ups: a Faith NPC tends to start theological projects, a Reason NPC tends toward scholarly. Horizon weighting (40/40/20 short/medium/long) keeps the project pipeline diverse.
+
+```
 #### Procedure D — Opinion Drift
+
+> **Single-writer invariant.** Procedure D is the only procedure that mutates
+> Opinions. Procedures B-Resolution and C-Completion produce Memories; D consolidates
+> all season-Memory effects into Opinion changes. See §0.1 change log / `17_specification_revisions.md` §1
+> for rationale.
 
 ```
 For each Active NPC:
@@ -669,8 +1153,11 @@ For each Active NPC:
                                        this_season=True)
         
         for memory in new_memories:
+            # Lazy-init Opinion if first contact (PATCH 3.4 / ST-15-B)
+            opinion = get_or_init_opinion(npc, memory.subject_npc_id)
             # Drift formula with dampening
-            drift = base_drift × (1 - abs(opinion.affect_axis) / 3) × conviction_alignment_multiplier
+            multiplier = conviction_alignment_multiplier(npc, opinion.subject_npc)  # PATCH 2.3
+            drift = base_drift × (1 - abs(opinion.affect_axis) / 3) × multiplier
             
             if memory aligns with opinion:
                 opinion.confidence += 0.0 to +1.0
@@ -746,7 +1233,7 @@ For each cross-faction pair (npc_a, npc_b) with prior Memory and mutual Opinion 
         apply_drift_with_decay(...)  # smaller drift values for Distant Contact
 ```
 
-**Knot integration:** Knot partners have guaranteed access to each other's Observable behavior (100% ambient probability when in same settlement). One Concern about each Knot partner is automatically surfaced per season (no Read action required) — appears as dialogue in next interaction.
+**Knot integration (PATCH 3.6 / S-LAT-A — opacity preserved):** Knot partners have guaranteed access to each other's Observable behavior (100% ambient probability when in same settlement). For each Knot partner with an active Concern of salience ≥ 2 about the player, a Priority 2 Outreach scene is generated for the player's next Scene Slate. The Concern is conveyed through partner-driven dialogue in that scene. The player learns of the Concern by attending the scene; NPCs share by choice through scenes (opacity principle preserved). Mechanically equivalent to direct surfacing — player still learns within one Accounting — but routed through Scene Slate so the player must actually attend rather than receive automatic disclosure.
 
 ---
 
@@ -774,6 +1261,8 @@ NPC Project advancement actions surface to the player through:
 4. **Gossip:** NPCs with high Disposition with player gossip about other NPCs' activities. Provides interpretive context: "She's grooming him for command, others say she's steering his political circle."
 5. **Knot:** Guaranteed access to partner's Observable behavior (100% in shared settlement).
 
+**Variable observation (PATCH 3.14 / NS-49-A):** Each Read or Surveil that surfaces a Project's `visible_action` samples a fresh string from `project.visible_actions_pool` (varying observation across encounters; the NPC is not always doing literally the same activity). The player surveilling the Marshal across multiple Accountings sees "drilling troops" then "inspecting fortifications" then "consulting with engineer" — all consistent with a military-domain Project but varied. Pool authored at ~10 entries per domain (~80 total; see §10).
+
 ### 7.3 Witness Mode (existing, capped)
 
 When the player misses scenes due to scene action budget, Witness Mode fires to give passive observation. **Information cap: max 3 Read results per Accounting from Witness Mode.** Remaining witnessed scenes produce narrative summary only ("The Cardinal confronted Himlensendt publicly. You weren't there. Consequences pending.").
@@ -798,9 +1287,17 @@ loyalty_cover_bonus:
     Decays each season not renewed
 ```
 
-### 7.6 NPC Outreach Generation (existing, augmented)
+### 7.6 NPC Outreach Generation (existing, augmented — PATCH 3.10 / R-39-A)
 
-Concern-driven Outreach: NPCs with active Concerns about the player generate Scene Slate entries (Priority 3) asking about the Concern's subject. Scene tone reflects current Mood. Concerns naturally surface without Read action.
+**Concern-driven Outreach:** NPCs with active Concerns about the player generate Scene Slate entries. Default **Priority 3 — AVAILABLE** (the player MAY choose to attend; if skipped, the scene does not consume a slot, and the underlying Concern continues its normal decay).
+
+**Mandatory escalation:** When a Concern reaches `salience 5 AND ttl ≤ 1` (one season from forced resolution), the Outreach scene upgrades to **Priority 2 mandatory** for that Accounting only. After force-resolution, the scene drops from Slate.
+
+**Tone:** Scene tone reflects current Mood (Anxious Concerns → worried tone; Vindicated → assertive tone; Grieving → subdued tone, etc.).
+
+**Knot exception:** The mandatory upgrade rule applies only to Concerns about the player. NPC-NPC Concerns that surface via Knot (PATCH 3.6 / S-LAT-A) follow their own Priority 2 rules and are not subject to this gate.
+
+This pattern preserves NPC autonomy (NPCs still generate Concerns and Outreach proactively) while restoring player agency (the player can decline non-urgent matters). Mandatory escalation ensures urgent Concerns reach the player; non-urgent matters become available content the player can engage with on their own initiative.
 
 ---
 
@@ -818,6 +1315,34 @@ Concern-driven Outreach: NPCs with active Concerns about the player generate Sce
 | Read/Appraise actions | Augmented per §7.1. Memory salience floor on referenced Memories. |
 | Knot system | Augmented. 100% ambient probability for Knot partners; automatic Concern surfacing per season. |
 | Factional Exposure | Augmented with Loyalty Cover bonus. Probabilistic detection (existing). |
+
+---
+
+### 8.1 NPC Standing Recalculation (Campaign Year boundary — PATCH 3.11 / R-40-A)
+
+At end of each Campaign Year (4 Accountings = 1 calendar year), each Active NPC's Standing is recalculated:
+
+```
+Δ_standing = (
+    +0.5 × completed_projects_this_year
+    -0.5 × failed_projects_this_year
+    +0.25 × successful_da_proposals_this_year (max +1.0/year)
+    -0.25 × failed_da_proposals_this_year (max -1.0/year)
+    -0.5 × public_conviction_scars_this_year
+)
+Δ_standing = clamp(Δ_standing, -2, +2)
+npc.standing = round(clamp(npc.standing + Δ_standing, 3, 7))
+```
+
+If `npc.standing` drops below 3 (rounded), NPC exits inner circle (becomes peripheral). If `npc.standing` rises above 7, capped at 7.
+
+A Standing change triggers an event (`event_type: "standing_change"`) which propagates through the standard Event Impact Matrix; inner-circle NPCs receive Memories about the rising/falling colleague.
+
+**Knock-on:** Faction Meta-Armature recomputation reflects shifted Standing weights. Inner-circle composition can change over campaign — a once-S5 NPC may drop to S2 (peripheral); a once-S4 may rise to S5 (inner circle). This is intended.
+
+The Standing ladder row in this section is augmented: **Standing recalculates each Campaign Year based on prior-year activity per §8.1 above.**
+
+Annual cadence (not per-Accounting) prevents Standing from being whippy; the changes accumulate and resolve at narrative milestones.
 
 ---
 
@@ -861,6 +1386,10 @@ Profile at each stage. Each stage produces a working partial system that can be 
 | Personality → armature modifiers | 12 | 4 personality dims × 3 armature dimensions |
 | Event dimension profiles | ~270 | 30 event types × 3 dimensions × 3 options avg |
 | Sentence frame templates | ~15 | Agency × Mechanism × Intent combinations |
+| Domain × Conviction alignment table | 42+ | 6+ Project domains × 7 Convictions (PATCH 2.1) |
+| visible_actions templates per domain | ~80 | ~10 actions × 8 domains (PATCH 3.14 / NS-49-A) |
+| Authored project queue per Active NPC | 35-105 | 1-3 follow-ups per NPC, optional (PATCH 3.13 / S-46-A) |
+| Goal text templates per domain | ~30 | ~5 templates × 6 domains (PATCH 3.13) |
 | Conviction × event symbolic resonance table | 210 | 7 Convictions × 30 event types (single-cell ratings) |
 | Settlement institutional character bias | 6 | Per settlement type |
 | Faction institutional_stability values | 7 | One per faction |
@@ -959,6 +1488,57 @@ To promote from PROVISIONAL to canonical:
   - `designs/territory/settlement_layer_v30.md`
 - [ ] Content authoring scope agreed
 - [ ] Stage-1 simulation pass demonstrating viable basic behavior
+
+---
+
+## §15 PRIORITY-3 STUB RESOLUTIONS (per `17_specification_revisions.md` §4)
+
+These are addressed at implementation time. The proposed answer for each is recorded below; full patch text is deferred to the implementation revision pass.
+
+### 15.1 Tie-breaking and ordering (ST-13-A/B, ST-14-A/B, ST-17-A, ST-18-A, ST-30-A)
+Where two or more entries tie in priority/salience, resolve in stable order: (1) NPC `id` ascending, (2) `created_timestamp` ascending, (3) string `tag` lexicographic. This applies to Concern ordering, Memory tie-breaks for replacement, DA Proposal Phase ties (after Standing and seasons_stalled), and event affected_npcs iteration. `[P3-RESOLVED-PER-DOC17-§4.1]`.
+
+### 15.2 Threshold definitions (ST-22-A, ST-29-A/B, N-LAT-A, N-LAT-B, E-47-A/B, N-34-A)
+Concrete numeric thresholds: Concern force-resolution at `salience ≥ 5 AND ttl ≤ 1`; Standing 5 inner-circle threshold uses `>= 4` (existing); high-salience event bypass at `≥ 4` (PATCH 3.1); calcified Belief at `unchallenged ≥ 8 seasons`; Path B Memory threshold at `2 contradicting Memories at salience ≥ 3` (existing). `[P3-RESOLVED-PER-DOC17-§4.2]`.
+
+### 15.3 Search and gating (ST-27-A, ST-28-A, ST-31-A, N-HORIZ-A)
+Memory.subject_npc_id null-safe access via `.get()` style; cross-faction Distant Contact gated by `prior Memory exists AND mutual Opinion |≥1|` (existing — verify); Procedure E gossip propagation gate at `cumulative_drift > 0.5`; Knowledge contradicts Belief check uses tag-based domain matching. `[P3-RESOLVED-PER-DOC17-§4.3]`.
+
+### 15.4 Cascade and propagation (ST-21-A, ST-21-B, E-VERT-A, S-DIAG-A, S-VERT-A, S-43-A)
+Settlement Signal cascade decay = ×0.7 per scale crossing (existing in PATCH 2.5); Faction Concern-from-Settlement uses Signal salience directly (no further amplification); event vertical propagation (settlement → faction → peninsula) decays ×0.7 per step; faction-to-peninsula propagation only fires for events tagged `peninsula_relevant`. `[P3-RESOLVED-PER-DOC17-§4.4]`.
+
+### 15.5 Documentation gaps (ST-25-C, ST-26-B, S-45-A/B, N-DIAG-B, R-LAT-A, R-DIAG-A)
+Documented in this v1.1 doc inline (gaps noted as `[P3-RESOLVED-PER-DOC17-§4.5]` markers in source where pertinent); broader documentation pass at v1.2.
+
+### 15.6 Friction items (N-TOP-A, N-BOT-A, N-BOT-B, E-LAT-A, R-BOT-A, N-HORIZ-B)
+Non-blocking friction observations from stress tests; addressed by playtest tuning rather than spec change. Recorded in editorial ledger ED-753. `[P3-RESOLVED-PER-DOC17-§4.6]`.
+
+### 15.7 Cross-references
+Several P3 items resolved in P1/P2 patches: ST-32-A (single-writer Opinion, PATCH 1.4-1.6), S-44-A (Settlement Signal scope, PATCH 2.5), and others. See `17_specification_revisions.md` §4.7 for full cross-reference inventory.
+
+---
+
+## §16 PENDING JORDAN-DECISION ITEMS (`[JORDAN-DECISION-PENDING-ED-755]`)
+
+The following items from `17_specification_revisions.md` §6 require Jordan's design call before being applied to v1.2. Default recommendations from doc 17 are stated but **not** applied here. v1.1 operates with the existing v1.0 behavior on these axes; v1.2 will apply whichever resolution Jordan selects.
+
+### 16.1 `[JORDAN-DECISION-PENDING-ED-755]` — E-38-A/B `symbolic_effects` & 210-entry resonance table
+**Question:** Keep+define `symbolic_effects` consumption with the 210-entry Conviction × event resonance table, or cut the table entirely and rely on category fallback (PATCH 2.7) only? **Doc 17 default:** KEEP+define. **v1.1 behavior:** unchanged from v1.0 (table referenced but consumption not specified); PATCH 2.7 fallback active so unknown event_types don't crash.
+
+### 16.2 `[JORDAN-DECISION-PENDING-ED-755]` — E-TOP-A opacity stance
+**Question:** Faction-top behavior opaque-by-design or legible-by-design? **Doc 17 default:** opaque (factions have inscrutable internal logic; players see surfaces, not roots). **v1.1 behavior:** existing default is opaque (status quo).
+
+### 16.3 `[JORDAN-DECISION-PENDING-ED-755]` — ST-31-B NPC self-monitoring
+**Question:** Do NPCs introspect their own Standing/Conviction state for self-aware behavior? **Doc 17 default:** B = no (NPCs do not introspect; behavior is mechanism-driven). **v1.1 behavior:** existing default is no introspection.
+
+### 16.4 `[JORDAN-DECISION-PENDING-ED-755]` — R-41-A crisis masking persistence
+**Question:** Does crisis-masking behavior persist across Accountings under sustained crisis, or reset each Accounting? **Doc 17 default:** B = accept (mask persists). **v1.1 behavior:** existing per-Accounting reset.
+
+### 16.5 `[JORDAN-DECISION-PENDING-ED-755]` — Carryover from prior sessions
+- Intelligence as 6th faction stat (last touched ED-748 — marked struck per `canonical_definitive_r2`; confirm before reintroduction).
+- LICENSE/GOV-08 status (status carryover; needs verification).
+- §1.1 Knot Formation During Play (scope question; existing Knot system handles formation, but campaign-time formation specification incomplete).
+- §1.2 Accord Propagation to Settlement Order (specification incomplete).
 
 ---
 
