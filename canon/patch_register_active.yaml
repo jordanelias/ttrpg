@@ -823,4 +823,40 @@ patches:
       cross-section reference (scale_transitions §3.4) was updated.
       canonical_sources.yaml SHA placeholder PENDING_FIRST_COMMIT will be
       filled in next commit after this lands."
+- id: PP-682
+  date: 2026-04-29
+  severity: P3
+  description: "SHA follow-up for PP-681 conviction_track_v1.md promotion.
+    references/canonical_sources.yaml canonical_sha__designs__personal__conviction_track_v1_md
+    updated from 'PENDING_FIRST_COMMIT' placeholder to actual blob SHA
+    32d8e3412d17157fc0fd27fed91a0e11262743ef. Explanatory note removed
+    (placeholder no longer needed). Standard procedure for new canonical
+    files: SHA cannot be set until file exists in repo. ED-769."
+  finding_id: PP-681 follow-up
+  source: editorial
+  affects:
+    - references/canonical_sources.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "SHA hash assignment for newly-canonical file. Class B because
+      modifies canonical_sources.yaml. N/Ω/Μ trivially pass: no behavior
+      change, no design change, no vetting impact. M-ratings ○."
 

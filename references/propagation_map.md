@@ -619,3 +619,18 @@ ED-768.
   fixed in §3.3 extraction; full corpus sweep not done in this PP)
 - canonical SHA follow-up commit needed for the new file
 
+## 2026-04-29 — Conviction Track SHA follow-up (PP-682)
+
+PP-681 set canonical_sources.yaml SHA placeholder PENDING_FIRST_COMMIT
+(file didn't exist yet). After PP-681 commit (4802e83b) landed, fetched
+new file blob SHA 32d8e3412d17157fc0fd27fed91a0e11262743ef and updated.
+
+**Files modified:**
+- references/canonical_sources.yaml (SHA placeholder filled, note removed)
+- canon/patch_register_active.yaml (PP-682)
+- canon/editorial_ledger.yaml (ED-769)
+- session_log_current.md (replaced)
+- references/propagation_map.md (this entry)
+
+**Cross-references:** PP-681 (Conviction Track promotion), ED-769.
+

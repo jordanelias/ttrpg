@@ -163,10 +163,9 @@ systems:
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/personal/conviction_track_v1.md
-    canonical_sha__designs__personal__conviction_track_v1_md: "PENDING_FIRST_COMMIT"
+    canonical_sha__designs__personal__conviction_track_v1_md: "32d8e3412d17157fc0fd27fed91a0e11262743ef"
     params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "fc016ff0ef1272e5f3e70ca490e0c00d1421e160"
-    note: "Promoted to first-class doc per PP-681. Canonical SHA for new file will be set in follow-up commit once GitHub assigns it."
     related: designs/npcs/npc_behavior_v30.md  # original source; retains redirect stubs
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md

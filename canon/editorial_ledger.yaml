@@ -38,7 +38,7 @@ entries:
 
   - id: ED-752
     date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 3 — 15 priority-2 authoring patches incl. concern_history cooldown, Knowledge Decay, npc_observes_event visibility, Opinion lazy init, Grieving Mood, Knot integration, scars split, etc. Patches §1.4, §2.5, §5, §6.3, §8.1, §10 of doc 12. See doc 17 §3 for full inventory."
+    description: "[PROVISIONAL] Doc 17 batch 3 — 15 priority-2 patches in §1.4/§2.5/§5/§6.3/§8.1/§10. See doc 17 §3."
     status: open
     severity: P2
     source: "doc 17 §3, issues 13/14/15/16"
@@ -59,7 +59,7 @@ entries:
 
   - id: ED-755
     date: 2026-04-29
-    description: "[BLOCKED — JORDAN-DECISION] Political dynamics doc 17 §6 5+carryover items (E-38-A/B symbolic_effects, E-TOP-A opacity, ST-31-B NPC self-monitoring, R-41-A crisis masking; carryover: Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord Propagation). Defaults proposed in doc 17 §6. Application to doc 12 v1.1 blocked on decisions."
+    description: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
     status: open
     severity: P1
     source: "doc 17 §6"
@@ -107,4 +107,10 @@ entries:
     status: applied
     severity: P3
     source: "PP-681"
+  - id: ED-769
+    date: 2026-04-29
+    description: "[APPLIED] SHA follow-up for PP-681 (Conviction Track promotion). canonical_sources.yaml SHA placeholder filled with actual blob SHA 32d8e3412d17157fc0fd27fed91a0e11262743ef. Standard procedure for new canonical files."
+    status: applied
+    severity: P3
+    source: "PP-682 (PP-681 follow-up)"
 
