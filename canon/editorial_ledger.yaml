@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 758
+# next_id: 759
 # Archival batch 2026-04-29: 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
@@ -72,6 +72,15 @@ entries:
   - id: ED-757
     date: 2026-04-29
     description: "[PROVISIONAL] Comprehensive mechanical simulations against doc 12 v1.1 (post-revision). Map mechanical interactions across all directions in granular detail to validate revisions and surface emergent behaviors. Expected delivery: simulation sessions following ED-756."
-    status: open
+    status: in-progress
     severity: P2
     source: "user request 2026-04-29"
+    progress: "Direction A (Opinion architecture) complete 2026-04-29 — commit fda634db; SIM_A_opinion_architecture.md, 6 scenarios, single-writer invariant verified, 6 spec gaps surfaced (see ED-758). Directions B/C/D/E pending in subsequent sessions."
+
+  - id: ED-758
+    date: 2026-04-29
+    description: "[PROVISIONAL] Six specification gaps in doc 12 v1.1 surfaced by SIM-A (Direction A simulation): (1) small_drift/larger_drift coefficients undefined in Procedure D; (2) drift loop iteration order over new_memories not specified; (3) weighted_select() re-roll-and-average semantics under low confidence not fully specified (§3.6.X); (4) knowledge_contradicts_belief() matching algorithm not specified (content-authoring helper); (5) evidence_memory_refs write timing not specified; (6) confidence boundary inconsistency (`<= 2` vs `>= 3` formulations). Resolution target: doc 12 v1.2."
+    status: open
+    severity: P2
+    source: "SIM-A surfaced gaps; commit fda634db"
+
