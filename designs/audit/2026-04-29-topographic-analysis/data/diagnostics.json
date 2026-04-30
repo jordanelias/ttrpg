@@ -1,523 +1,1002 @@
 {
-  "D1_hubs": [
-    {
-      "id": "autonomy",
-      "name": "Autonomy",
-      "degree": 10,
-      "doc_count": 56
-    },
-    {
-      "id": "order_conv",
-      "name": "Order",
-      "degree": 9,
-      "doc_count": 134
-    },
-    {
-      "id": "faith",
-      "name": "Faith",
-      "degree": 7,
-      "doc_count": 52
-    },
-    {
-      "id": "reason",
-      "name": "Reason",
-      "degree": 7,
-      "doc_count": 44
-    },
-    {
-      "id": "equity",
-      "name": "Equity",
-      "degree": 7,
-      "doc_count": 26
-    },
-    {
-      "id": "precedent",
-      "name": "Precedent",
-      "degree": 7,
-      "doc_count": 39
-    },
-    {
-      "id": "continuity",
-      "name": "Continuity",
-      "degree": 7,
-      "doc_count": 40
-    },
-    {
-      "id": "crown",
-      "name": "Crown",
-      "degree": 7,
-      "doc_count": 262
-    },
-    {
-      "id": "varfell",
-      "name": "Varfell",
-      "degree": 7,
-      "doc_count": 188
-    },
-    {
-      "id": "torben",
-      "name": "Torben",
-      "degree": 6,
-      "doc_count": 39
-    },
-    {
-      "id": "church",
-      "name": "Church",
-      "degree": 6,
-      "doc_count": 526
-    },
-    {
-      "id": "hafenmark",
-      "name": "Hafenmark",
-      "degree": 6,
-      "doc_count": 197
-    },
-    {
-      "id": "bg_mode",
-      "name": "Strategic Mode",
-      "degree": 5,
-      "doc_count": 119
-    },
-    {
-      "id": "dissolution",
-      "name": "Dissolution",
-      "degree": 5,
-      "doc_count": 76
-    },
-    {
-      "id": "pressure_point",
-      "name": "Pressure Point",
-      "degree": 5,
-      "doc_count": 7
-    },
-    {
-      "id": "elske",
-      "name": "Elske",
-      "degree": 5,
-      "doc_count": 31
-    },
-    {
-      "id": "lowenritter",
-      "name": "L\u00f6wenritter",
-      "degree": 5,
-      "doc_count": 128
-    },
-    {
-      "id": "zoom_in",
-      "name": "Zoom-In",
-      "degree": 4,
-      "doc_count": 48
-    },
-    {
-      "id": "insinuation_style",
-      "name": "Insinuation Style",
-      "degree": 4,
-      "doc_count": 3
-    },
-    {
-      "id": "lenneth",
-      "name": "Lenneth",
-      "degree": 4,
-      "doc_count": 17
+  "validation": {
+    "mean_jaccard": 0.22231655863938915,
+    "verdict": "FAILED",
+    "groups": {
+      "foundation_cluster": {
+        "jaccard": 0.5,
+        "coverage": 0.8,
+        "expected": [
+          "Coherence",
+          "Ein Sof",
+          "Leap",
+          "Self-Rendering",
+          "Throughlines"
+        ],
+        "observed_extras": [
+          "Solmund",
+          "TS",
+          "Threadwork"
+        ]
+      },
+      "thread_chain": {
+        "jaccard": 0.35714285714285715,
+        "coverage": 0.8333333333333334,
+        "expected": [
+          "Coherence",
+          "Leap",
+          "MS",
+          "TS",
+          "Thread Revelation",
+          "Threadwork"
+        ],
+        "observed_extras": [
+          "Campaign Architecture",
+          "Continuity",
+          "Ein Sof",
+          "IP",
+          "Self-Rendering",
+          "Settlement Layer",
+          "Stability",
+          "Wager"
+        ]
+      },
+      "personal_combat": {
+        "jaccard": 0.18181818181818182,
+        "coverage": 0.6666666666666666,
+        "expected": [
+          "Combat",
+          "Mass Combat",
+          "Military Layer"
+        ],
+        "observed_extras": [
+          "Cultural Reformation",
+          "Domain Echo",
+          "Dynastic Proclamation",
+          "Evidence",
+          "Faction Layer",
+          "Fieldwork",
+          "IP",
+          "Settlement Layer"
+        ]
+      },
+      "social_chain": {
+        "jaccard": 0.0,
+        "coverage": 0.0,
+        "expected": [
+          "Conviction",
+          "Conviction Track",
+          "Domain Echo",
+          "NPC Behavior",
+          "Social Contests"
+        ],
+        "observed_extras": [
+          "Autonomy",
+          "Combat",
+          "Continuity",
+          "Cultural Reformation",
+          "Disposition",
+          "Domain Action",
+          "Edeyja",
+          "Evidence",
+          "IP",
+          "Order",
+          "Precedent",
+          "Scale Transitions",
+          "Settlement Layer",
+          "Torben",
+          "Victory",
+          "Wager",
+          "Zoom In"
+        ]
+      },
+      "faction_hub": {
+        "jaccard": 0.10526315789473684,
+        "coverage": 0.4,
+        "expected": [
+          "CI Political",
+          "Faction Layer",
+          "Mandate",
+          "Mass Seizure",
+          "Stability"
+        ],
+        "observed_extras": [
+          "CI",
+          "Church",
+          "Coherence",
+          "Dynastic Proclamation",
+          "Hafenmark",
+          "Leap",
+          "MS",
+          "Mass Combat",
+          "Military Layer",
+          "Scale Transitions",
+          "Self-Rendering",
+          "Settlement Layer",
+          "Threadwork",
+          "Victory"
+        ]
+      },
+      "peninsula_layer": {
+        "jaccard": 0.17391304347826086,
+        "coverage": 0.5714285714285714,
+        "expected": [
+          "CI",
+          "IP",
+          "MS",
+          "PI",
+          "Peninsular Strain",
+          "Tensions Deck",
+          "Victory"
+        ],
+        "observed_extras": [
+          "Church",
+          "Coherence",
+          "Conflict Architecture",
+          "Crown",
+          "Dynastic Proclamation",
+          "Elske",
+          "Hafenmark",
+          "L\u00f6wenritter",
+          "Mandate",
+          "Mass Seizure",
+          "Miraculous Event",
+          "Social Contests",
+          "Stability",
+          "TCV",
+          "Tensions",
+          "Threadwork"
+        ]
+      },
+      "crown_npcs": {
+        "jaccard": 0.3333333333333333,
+        "coverage": 1.0,
+        "expected": [
+          "Crown",
+          "King Almud",
+          "Lenneth",
+          "Torben"
+        ],
+        "observed_extras": [
+          "Conviction",
+          "Elske",
+          "Equity",
+          "Hafenmark",
+          "Lisbeth Ehrenwall",
+          "L\u00f6wenritter",
+          "Royal Assassination",
+          "Varfell"
+        ]
+      },
+      "church_npcs": {
+        "jaccard": 0.0,
+        "coverage": 0.0,
+        "expected": [
+          "Church",
+          "Confessor Arne",
+          "Faith"
+        ],
+        "observed_extras": [
+          "Autonomy",
+          "CI",
+          "Guilds",
+          "Inge Baralta",
+          "King Almud",
+          "Magnus Vaynard",
+          "Mandate",
+          "Order",
+          "Precedent",
+          "Reason",
+          "Varfell"
+        ]
+      },
+      "rm_cluster": {
+        "jaccard": 0.3076923076923077,
+        "coverage": 1.0,
+        "expected": [
+          "Continuity",
+          "Equity",
+          "Restoration Movement",
+          "Yrsa Vossen"
+        ],
+        "observed_extras": [
+          "Autonomy",
+          "Crown",
+          "Edeyja",
+          "Hafenmark",
+          "Lisbeth Ehrenwall",
+          "Magnus Vaynard",
+          "Precedent",
+          "Reason",
+          "Varfell"
+        ]
+      },
+      "varfell_cluster": {
+        "jaccard": 0.3333333333333333,
+        "coverage": 1.0,
+        "expected": [
+          "Autonomy",
+          "Magnus Vaynard",
+          "Reason",
+          "Varfell"
+        ],
+        "observed_extras": [
+          "Confessor Arne",
+          "Conviction",
+          "Crown",
+          "Equity",
+          "Faith",
+          "Hafenmark",
+          "Order",
+          "Restoration Movement"
+        ]
+      },
+      "lowenritter_cluster": {
+        "jaccard": 0.3,
+        "coverage": 1.0,
+        "expected": [
+          "Lisbeth Ehrenwall",
+          "L\u00f6wenritter",
+          "Order"
+        ],
+        "observed_extras": [
+          "Autonomy",
+          "Coup Counter",
+          "Crown",
+          "Faith",
+          "Guilds",
+          "Precedent",
+          "Reason"
+        ]
+      },
+      "armature_cluster": {
+        "jaccard": 0.21428571428571427,
+        "coverage": 0.75,
+        "expected": [
+          "Armature System",
+          "Domain Action",
+          "Event Impact Matrix",
+          "NPC Behavior"
+        ],
+        "observed_extras": [
+          "CI",
+          "Conviction",
+          "Cultural Reformation",
+          "Loyalty",
+          "Mandate",
+          "Scale Transitions",
+          "Settlement Layer",
+          "Standing",
+          "Threadwork",
+          "Victory"
+        ]
+      },
+      "solmund_cluster": {
+        "jaccard": 0.08333333333333333,
+        "coverage": 0.3333333333333333,
+        "expected": [
+          "Inge Baralta",
+          "Miraculous Event",
+          "Solmund"
+        ],
+        "observed_extras": [
+          "Church",
+          "Confessor Arne",
+          "Conviction Track",
+          "Faith",
+          "Hafenmark",
+          "Magnus Vaynard",
+          "Tensions",
+          "Tensions Deck",
+          "Throughlines"
+        ]
+      }
     }
+  },
+  "implied_missing": [
+    [
+      "Tensions Deck",
+      "Tensions",
+      0.9264475078674071
+    ],
+    [
+      "Fieldwork",
+      "Evidence",
+      0.7585607865662422
+    ],
+    [
+      "MS",
+      "Stability",
+      0.6469617196476339
+    ],
+    [
+      "Dynastic Proclamation",
+      "Cultural Reformation",
+      0.6073967987350875
+    ],
+    [
+      "Combat",
+      "Fieldwork",
+      0.5713154820397677
+    ],
+    [
+      "Wager",
+      "Edeyja",
+      0.5698735232471812
+    ],
+    [
+      "Consequence",
+      "Authority",
+      0.5603429839010906
+    ],
+    [
+      "Hafenmark",
+      "Varfell",
+      0.5459836510261528
+    ],
+    [
+      "Reason",
+      "Equity",
+      0.5256933314005471
+    ],
+    [
+      "Reason",
+      "Autonomy",
+      0.5103875915896965
+    ],
+    [
+      "Order",
+      "Reason",
+      0.4799138267079306
+    ],
+    [
+      "Crown",
+      "L\u00f6wenritter",
+      0.47692845243518645
+    ],
+    [
+      "Combat",
+      "Evidence",
+      0.45503608601986084
+    ],
+    [
+      "Faith",
+      "Order",
+      0.44312025532514415
+    ],
+    [
+      "King Almud",
+      "Lenneth",
+      0.4350040049309518
+    ],
+    [
+      "Equity",
+      "Autonomy",
+      0.4315664938582725
+    ],
+    [
+      "Crown",
+      "Hafenmark",
+      0.4193849385085602
+    ],
+    [
+      "Order",
+      "Autonomy",
+      0.41650202598893404
+    ],
+    [
+      "Royal Assassination",
+      "Lenneth",
+      0.4022288905593723
+    ],
+    [
+      "Continuity",
+      "Edeyja",
+      0.39998610891945857
+    ],
+    [
+      "Equity",
+      "Yrsa Vossen",
+      0.3920234087046164
+    ],
+    [
+      "Self-Rendering",
+      "Coherence",
+      0.3915921127141322
+    ],
+    [
+      "Victory",
+      "TCV",
+      0.39125222378831115
+    ],
+    [
+      "Faith",
+      "Precedent",
+      0.3896970735843654
+    ],
+    [
+      "King Almud",
+      "Torben",
+      0.37157338482622354
+    ],
+    [
+      "Torben",
+      "Elske",
+      0.3714530787957759
+    ],
+    [
+      "Conviction",
+      "Torben",
+      0.3684391463544642
+    ],
+    [
+      "Mass Seizure",
+      "CI",
+      0.3673955059954835
+    ],
+    [
+      "Conviction",
+      "Autonomy",
+      0.35903189686656883
+    ],
+    [
+      "Lisbeth Ehrenwall",
+      "L\u00f6wenritter",
+      0.3569157225561844
+    ],
+    [
+      "Crown",
+      "Varfell",
+      0.3558479308595447
+    ],
+    [
+      "Faith",
+      "Reason",
+      0.349891866693628
+    ],
+    [
+      "Royal Assassination",
+      "Torben",
+      0.3479054195295024
+    ],
+    [
+      "Campaign Architecture",
+      "Thread Revelation",
+      0.3473531896006651
+    ],
+    [
+      "Coherence",
+      "TS",
+      0.34257418228970354
+    ],
+    [
+      "Dynastic Proclamation",
+      "TCV",
+      0.34109810546226016
+    ],
+    [
+      "Magnus Vaynard",
+      "Varfell",
+      0.34070970666566947
+    ],
+    [
+      "Lisbeth Ehrenwall",
+      "Crown",
+      0.3396137704683915
+    ],
+    [
+      "Reason",
+      "Precedent",
+      0.3383342435106323
+    ],
+    [
+      "Order",
+      "Precedent",
+      0.3337561841132508
+    ],
+    [
+      "Equity",
+      "Continuity",
+      0.323265015753912
+    ],
+    [
+      "Autonomy",
+      "L\u00f6wenritter",
+      0.32220846362598543
+    ],
+    [
+      "Consequence",
+      "Loyalty",
+      0.3194971858543774
+    ],
+    [
+      "Reason",
+      "Continuity",
+      0.3193592677400305
+    ],
+    [
+      "Reason",
+      "Consequence",
+      0.3168898097264031
+    ],
+    [
+      "Church",
+      "Mandate",
+      0.3130760822155544
+    ],
+    [
+      "Self-Rendering",
+      "Ein Sof",
+      0.31220810732841275
+    ],
+    [
+      "Authority",
+      "Loyalty",
+      0.31038809251989813
+    ],
+    [
+      "Conviction",
+      "Order",
+      0.3087591309857709
+    ],
+    [
+      "Threadwork",
+      "MS",
+      0.30486781222295434
+    ],
+    [
+      "Varfell",
+      "Restoration Movement",
+      0.28697265045591797
+    ],
+    [
+      "King Almud",
+      "Crown",
+      0.2849081706926198
+    ],
+    [
+      "Royal Assassination",
+      "King Almud",
+      0.28261981221596244
+    ],
+    [
+      "Coherence",
+      "Threadwork",
+      0.28030036315799317
+    ],
+    [
+      "Coherence",
+      "Ein Sof",
+      0.27564998857900924
+    ],
+    [
+      "PI",
+      "Hafenmark",
+      0.27350587714520325
+    ],
+    [
+      "Royal Assassination",
+      "Elske",
+      0.2693969613626827
+    ],
+    [
+      "Precedent",
+      "Continuity",
+      0.2681948685877341
+    ],
+    [
+      "Faith",
+      "Autonomy",
+      0.2660729744022323
+    ],
+    [
+      "Order",
+      "Equity",
+      0.26281856851254204
+    ],
+    [
+      "Armature System",
+      "Event Impact Matrix",
+      0.2603709282210246
+    ],
+    [
+      "Equity",
+      "Precedent",
+      0.25581808151781416
+    ],
+    [
+      "King Almud",
+      "Elske",
+      0.2534549465193585
+    ],
+    [
+      "Hafenmark",
+      "Mandate",
+      0.24843605514500236
+    ],
+    [
+      "Magnus Vaynard",
+      "Restoration Movement",
+      0.24575281641848662
+    ],
+    [
+      "Wager",
+      "Continuity",
+      0.2411326401859659
+    ],
+    [
+      "CI",
+      "Church",
+      0.2397558017863614
+    ],
+    [
+      "Autonomy",
+      "Torben",
+      0.23967406283048437
+    ],
+    [
+      "Church",
+      "Guilds",
+      0.23943065413390813
+    ],
+    [
+      "Faith",
+      "Equity",
+      0.23789007861348785
+    ],
+    [
+      "Hafenmark",
+      "Guilds",
+      0.23751086842078553
+    ],
+    [
+      "Church",
+      "Varfell",
+      0.23385813940497688
+    ],
+    [
+      "TCV",
+      "Cultural Reformation",
+      0.23190992030620333
+    ],
+    [
+      "IP",
+      "Elske",
+      0.23169104427041454
+    ],
+    [
+      "Lenneth",
+      "Crown",
+      0.23112663208747178
+    ],
+    [
+      "Coherence",
+      "MS",
+      0.23027396145455908
+    ],
+    [
+      "Conviction Track",
+      "Wager",
+      0.2265075308843345
+    ],
+    [
+      "Autonomy",
+      "Continuity",
+      0.22508329740277322
+    ],
+    [
+      "Torben",
+      "Crown",
+      0.22366142022888796
+    ],
+    [
+      "Church",
+      "Hafenmark",
+      0.22086427208956863
+    ],
+    [
+      "Victory",
+      "Peninsular Strain",
+      0.2207829213538251
+    ],
+    [
+      "Precedent",
+      "Autonomy",
+      0.2205750344812344
+    ],
+    [
+      "Zoom In",
+      "Domain Echo",
+      0.21796541277968068
+    ],
+    [
+      "Threadwork",
+      "Stability",
+      0.21783974354204627
+    ],
+    [
+      "Knot",
+      "Disposition",
+      0.2168716204941035
+    ],
+    [
+      "L\u00f6wenritter",
+      "Guilds",
+      0.21662392156515614
+    ],
+    [
+      "Evidence",
+      "Authority",
+      0.2162647473927379
+    ],
+    [
+      "Confessor Arne",
+      "Magnus Vaynard",
+      0.21581363197553297
+    ],
+    [
+      "Crown",
+      "Church",
+      0.21282357397452953
+    ],
+    [
+      "Conviction",
+      "Disposition",
+      0.21249815223513138
+    ],
+    [
+      "Leap",
+      "Coherence",
+      0.21156290967373934
+    ],
+    [
+      "Mass Seizure",
+      "Church",
+      0.21076436243960467
+    ],
+    [
+      "Crown",
+      "Guilds",
+      0.2102785015019477
+    ],
+    [
+      "Self-Rendering",
+      "TS",
+      0.20799517490527772
+    ],
+    [
+      "Inge Baralta",
+      "Hafenmark",
+      0.2078625686226603
+    ],
+    [
+      "Zoom In",
+      "Social Contests",
+      0.2065050560590174
+    ],
+    [
+      "Hafenmark",
+      "L\u00f6wenritter",
+      0.20643063217080154
+    ],
+    [
+      "Reason",
+      "Confessor Arne",
+      0.2061839331900921
+    ],
+    [
+      "CI",
+      "Mandate",
+      0.20549168977380386
+    ],
+    [
+      "Victory",
+      "Church",
+      0.20395078718222498
+    ],
+    [
+      "Conviction",
+      "Continuity",
+      0.20350501462350157
+    ],
+    [
+      "Coherence",
+      "Stability",
+      0.20341555161416747
+    ],
+    [
+      "Order",
+      "Lisbeth Ehrenwall",
+      0.20132397280193798
+    ]
   ],
-  "D2_status_disagreement": [
-    {
-      "sim": 0.1576516330242157,
-      "a_id": "passive_npc",
-      "a_name": "Passive NPC",
-      "a_status": "provisional",
-      "b_id": "governor",
-      "b_name": "Governor",
-      "b_status": "canonical"
-    }
+  "notional": [
+    [
+      "MS Trajectory",
+      "Leap",
+      0.0
+    ],
+    [
+      "MS Trajectory",
+      "Self-Rendering",
+      0.0
+    ],
+    [
+      "Campaign Architecture",
+      "CI",
+      0.015772982537225713
+    ],
+    [
+      "Faction Layer",
+      "CI",
+      0.015902218243293863
+    ],
+    [
+      "CI",
+      "Settlement Layer",
+      0.028622245189046387
+    ],
+    [
+      "Campaign Architecture",
+      "NPC Behavior",
+      0.03035799858683831
+    ],
+    [
+      "Campaign Architecture",
+      "Settlement Layer",
+      0.033605807031462744
+    ],
+    [
+      "Peninsular Strain",
+      "CI",
+      0.03872370306713742
+    ],
+    [
+      "Tensions",
+      "Royal Assassination",
+      0.06226716786367234
+    ],
+    [
+      "Tensions Deck",
+      "Royal Assassination",
+      0.06721068094511405
+    ]
   ],
-  "D3_implied_missing": [
-    {
-      "sim": 0.3067528009414673,
-      "a_id": "altonian_pressure",
-      "a_name": "Altonian Pressure",
-      "a_doc": "canon/03_canonical_timeline.md",
-      "b_id": "ip_clock",
-      "b_name": "IP Clock",
-      "b_doc": "designs/provincial/victory_v30.md"
-    }
+  "status_disagreement": [],
+  "hubs": [
+    [
+      "Crown",
+      0.06638431694850365
+    ],
+    [
+      "Autonomy",
+      0.06095092077605712
+    ],
+    [
+      "Reason",
+      0.05949745235572372
+    ],
+    [
+      "Varfell",
+      0.057858374762227015
+    ],
+    [
+      "L\u00f6wenritter",
+      0.05573538198688888
+    ],
+    [
+      "Hafenmark",
+      0.05258145881090973
+    ],
+    [
+      "Equity",
+      0.0519603811328032
+    ],
+    [
+      "Order",
+      0.05151355945522475
+    ],
+    [
+      "Torben",
+      0.05144037954651532
+    ],
+    [
+      "Church",
+      0.05059070233950512
+    ],
+    [
+      "Conviction",
+      0.04748633698495101
+    ],
+    [
+      "TS",
+      0.04606418772329838
+    ],
+    [
+      "King Almud",
+      0.04443369170031302
+    ],
+    [
+      "Lisbeth Ehrenwall",
+      0.041489679933625095
+    ],
+    [
+      "Continuity",
+      0.04116960417557402
+    ],
+    [
+      "Magnus Vaynard",
+      0.0407535795538928
+    ],
+    [
+      "Mandate",
+      0.040472977951301156
+    ]
   ],
-  "D4_notional_v1_edges": [
-    {
-      "sim": 0.0,
-      "a_id": "self_rendering",
-      "a_name": "Self-Rendering",
-      "b_id": "npc_behavior",
-      "b_name": "NPC Behavior",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0,
-      "a_id": "conflict_arch",
-      "a_name": "Conflict Architecture",
-      "b_id": "faction_layer",
-      "b_name": "Faction Layer",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0,
-      "a_id": "throughlines",
-      "a_name": "Throughlines",
-      "b_id": "campaign_arch",
-      "b_name": "Campaign Architecture",
-      "v1_strength": 2
-    },
-    {
-      "sim": 0.0,
-      "a_id": "throughlines",
-      "a_name": "Throughlines",
-      "b_id": "conflict_arch",
-      "b_name": "Conflict Architecture",
-      "v1_strength": 2
-    },
-    {
-      "sim": 0.0,
-      "a_id": "throughlines",
-      "a_name": "Throughlines",
-      "b_id": "armature_system",
-      "b_name": "Armature System",
-      "v1_strength": 2
-    },
-    {
-      "sim": 0.0,
-      "a_id": "threadwork",
-      "a_name": "Threadwork",
-      "b_id": "ms_trajectory",
-      "b_name": "MS Trajectory",
-      "v1_strength": 4
-    },
-    {
-      "sim": 0.0,
-      "a_id": "npc_behavior",
-      "a_name": "NPC Behavior",
-      "b_id": "knot",
-      "b_name": "Knot",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0,
-      "a_id": "npc_behavior",
-      "a_name": "NPC Behavior",
-      "b_id": "armature_system",
-      "b_name": "Armature System",
-      "v1_strength": 4
-    },
-    {
-      "sim": 0.0,
-      "a_id": "settlement_layer",
-      "a_name": "Settlement Layer",
-      "b_id": "settlement_signal",
-      "b_name": "Settlement Signal",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0,
-      "a_id": "fractional_province",
-      "a_name": "Fractional Province",
-      "b_id": "faction_layer",
-      "b_name": "Faction Layer",
-      "v1_strength": 2
-    },
-    {
-      "sim": 0.0,
-      "a_id": "peninsular_strain",
-      "a_name": "Peninsular Strain",
-      "b_id": "ms_trajectory",
-      "b_name": "MS Trajectory",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0,
-      "a_id": "royal_assassination",
-      "a_name": "Royal Assassination",
-      "b_id": "npc_behavior",
-      "b_name": "NPC Behavior",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0,
-      "a_id": "armature_system",
-      "a_name": "Armature System",
-      "b_id": "faction_layer",
-      "b_name": "Faction Layer",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0006471119704656303,
-      "a_id": "scale_transitions",
-      "a_name": "Scale Transitions",
-      "b_id": "threadwork",
-      "b_name": "Threadwork",
-      "v1_strength": 2
-    },
-    {
-      "sim": 0.0009818762773647904,
-      "a_id": "mass_combat",
-      "a_name": "Mass Combat",
-      "b_id": "peninsular_strain",
-      "b_name": "Peninsular Strain",
-      "v1_strength": 4
-    },
-    {
-      "sim": 0.001365750445984304,
-      "a_id": "faction_layer",
-      "a_name": "Faction Layer",
-      "b_id": "mass_combat",
-      "b_name": "Mass Combat",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.001413852907717228,
-      "a_id": "fieldwork",
-      "a_name": "Fieldwork",
-      "b_id": "npc_behavior",
-      "b_name": "NPC Behavior",
-      "v1_strength": 2
-    },
-    {
-      "sim": 0.0019023081986233592,
-      "a_id": "threadwork",
-      "a_name": "Threadwork",
-      "b_id": "peninsular_strain",
-      "b_name": "Peninsular Strain",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0024936706759035587,
-      "a_id": "armature_system",
-      "a_name": "Armature System",
-      "b_id": "social_contest",
-      "b_name": "Social Contest",
-      "v1_strength": 3
-    },
-    {
-      "sim": 0.0025353054516017437,
-      "a_id": "scale_transitions",
-      "a_name": "Scale Transitions",
-      "b_id": "combat",
-      "b_name": "Combat",
-      "v1_strength": 2
-    }
+  "sparse": [
+    [
+      "Fractional Province",
+      2
+    ],
+    [
+      "Faction Succession",
+      2
+    ],
+    [
+      "MS Trajectory",
+      2
+    ],
+    [
+      "Wager",
+      4
+    ],
+    [
+      "CI Political",
+      4
+    ],
+    [
+      "Throughlines",
+      6
+    ],
+    [
+      "Thread Revelation",
+      6
+    ],
+    [
+      "Event Impact Matrix",
+      6
+    ],
+    [
+      "Consequence",
+      6
+    ],
+    [
+      "Authority",
+      6
+    ]
   ],
-  "D5_v1_missing": [],
-  "D6_sparse": [
-    {
-      "id": "stealth",
-      "name": "Stealth",
-      "doc_count": 2,
-      "primary_doc": "designs/architecture/complete_systems_reference.md",
-      "category": "personal"
-    },
-    {
-      "id": "ms_trajectory",
-      "name": "MS Trajectory",
-      "doc_count": 2,
-      "primary_doc": "designs/world/ms_trajectory_v1.md",
-      "category": "peninsula"
-    },
-    {
-      "id": "necessity",
-      "name": "N Necessity",
-      "doc_count": 6,
-      "primary_doc": "references/throughlines_meta.md",
-      "category": "framework"
-    },
-    {
-      "id": "socializing",
-      "name": "Socializing",
-      "doc_count": 6,
-      "primary_doc": "designs/provincial/faction_layer_v30.md",
-      "category": "personal"
-    },
-    {
-      "id": "royal_assassination",
-      "name": "Royal Assassination",
-      "doc_count": 6,
-      "primary_doc": "designs/npcs/npc_behavior_v30.md",
-      "category": "peninsula"
-    },
-    {
-      "id": "pressure_point",
-      "name": "Pressure Point",
-      "doc_count": 7,
-      "primary_doc": "designs/architecture/complete_systems_reference.md",
-      "category": "npc"
-    },
-    {
-      "id": "zoom_out",
-      "name": "Zoom-Out",
-      "doc_count": 8,
-      "primary_doc": "designs/architecture/scale_transitions_v30.md",
-      "category": "architecture"
-    },
-    {
-      "id": "fractional_province",
-      "name": "Fractional Province",
-      "doc_count": 8,
-      "primary_doc": "designs/provincial/fractional_province_ownership_v30.md",
-      "category": "province"
-    },
-    {
-      "id": "tensions_deck",
-      "name": "Tensions Deck",
-      "doc_count": 8,
-      "primary_doc": "designs/architecture/conflict_architecture_proposal.md",
-      "category": "peninsula"
-    },
-    {
-      "id": "sufficient_scope",
-      "name": "Sufficient Scope",
-      "doc_count": 9,
-      "primary_doc": "designs/architecture/scale_transitions_v30.md",
-      "category": "architecture"
-    },
-    {
-      "id": "settlement_adjacency",
-      "name": "Settlement Adjacency",
-      "doc_count": 9,
-      "primary_doc": "designs/territory/settlement_adjacency_v30.md",
-      "category": "settlement"
-    },
-    {
-      "id": "parish",
-      "name": "Parish",
-      "doc_count": 9,
-      "primary_doc": "designs/territory/settlement_layer_v30.md",
-      "category": "settlement"
-    }
+  "cascades": [
+    [
+      "Campaign Architecture",
+      "CI",
+      "Settlement Layer"
+    ],
+    [
+      "Faction Layer",
+      "CI",
+      "Settlement Layer"
+    ],
+    [
+      "Victory",
+      "CI",
+      "Settlement Layer"
+    ],
+    [
+      "Peninsular Strain",
+      "CI",
+      "Settlement Layer"
+    ]
   ],
-  "token_statuses": {
-    "self_rendering": "canonical",
-    "leap": "canonical",
-    "coherence": "canonical",
-    "knot": "canonical",
-    "thread_substrate": "canonical",
-    "mending_stability": "canonical",
-    "thread_sensitivity": "canonical",
-    "scar": "canonical",
-    "scale_transitions": "canonical",
-    "zoom_in": "canonical",
-    "zoom_out": "canonical",
-    "hybrid_mode": "canonical",
-    "bg_mode": "canonical",
-    "ttrpg_mode": "canonical",
-    "domain_echo": "canonical",
-    "sufficient_scope": "canonical",
-    "scene_slate": "canonical",
-    "campaign_arch": "canonical",
-    "conflict_arch": "canonical",
-    "throughlines": "canonical",
-    "omega": "canonical",
-    "mu_modes": "canonical",
-    "necessity": "canonical",
-    "vetting_block": "canonical",
-    "combat": "canonical",
-    "threadwork": "canonical",
-    "weaving": "canonical",
-    "mending": "canonical",
-    "locking": "canonical",
-    "dissolution": "canonical",
-    "pop_op": "canonical",
-    "fieldwork": "canonical",
-    "investigation": "canonical",
-    "socializing": "canonical",
-    "stealth": "canonical",
-    "exposure": "canonical",
-    "npc_behavior": "canonical",
-    "conviction_track": "canonical",
-    "pressure_point": "canonical",
-    "disposition": "canonical",
-    "bonds": "canonical",
-    "mood": "canonical",
-    "belief_revision": "provisional",
-    "faith": "canonical",
-    "order_conv": "canonical",
-    "reason": "canonical",
-    "equity": "canonical",
-    "precedent": "canonical",
-    "autonomy": "canonical",
-    "continuity": "canonical",
-    "social_contest": "canonical",
-    "precedent_style": "canonical",
-    "vision_style": "canonical",
-    "suppression_style": "canonical",
-    "insinuation_style": "canonical",
-    "composure": "canonical",
-    "concentration": "canonical",
-    "wager": "canonical",
-    "heresy_investigation": "canonical",
-    "inspiration": "canonical",
-    "settlement_layer": "canonical",
-    "settlement_adjacency": "provisional",
-    "settlement_signal": "provisional",
-    "passive_npc": "provisional",
-    "bishop_appointment": "canonical",
-    "governor": "canonical",
-    "prosperity": "canonical",
-    "parish": "canonical",
-    "cathedral": "canonical",
-    "faction_layer": "canonical",
-    "faction_succession": "canonical",
-    "fractional_province": "provisional",
-    "stability": "canonical",
-    "occupation": "canonical",
-    "treaty": "canonical",
-    "parliament": "canonical",
-    "mass_combat": "canonical",
-    "military_layer": "canonical",
-    "officer_capture": "canonical",
-    "formation": "canonical",
-    "seizure": "canonical",
-    "victory": "canonical",
-    "peninsular_strain": "canonical",
-    "ms_trajectory": "canonical",
-    "thread_revelation": "canonical",
-    "tensions_deck": "canonical",
-    "royal_assassination": "canonical",
-    "warden_paths": "canonical",
-    "altonian_pressure": "canonical",
-    "ci_clock": "canonical",
-    "ip_clock": "canonical",
-    "pi_clock": "canonical",
-    "coup_counter": "canonical",
-    "cv_tcv": "canonical",
-    "almud": "canonical",
-    "himlensendt": "canonical",
-    "baralta": "canonical",
-    "vaynard": "canonical",
-    "ehrenwall": "canonical",
-    "vossen": "canonical",
-    "torben": "canonical",
-    "elske": "canonical",
-    "lenneth": "canonical",
-    "edeyja": "canonical",
-    "haelgrund": "canonical",
-    "maret_uln": "canonical",
-    "crown": "canonical",
-    "church": "canonical",
-    "hafenmark": "canonical",
-    "varfell": "canonical",
-    "lowenritter": "canonical",
-    "guilds": "canonical",
-    "restoration_movement": "canonical",
-    "niflhel": "canonical",
-    "armature_system": "provisional",
-    "event_impact_matrix": "provisional",
-    "opinion": "provisional",
-    "memory": "provisional",
-    "concern": "provisional",
-    "project_npc": "provisional",
-    "domain_action": "canonical",
-    "knowledge": "canonical",
-    "cascade_attenuation": "canonical",
-    "institutional_stability": "provisional",
-    "standing": "canonical",
-    "inner_circle": "provisional"
-  }
+  "empty_force_count": 0,
+  "empty_tsne_count": 0
 }

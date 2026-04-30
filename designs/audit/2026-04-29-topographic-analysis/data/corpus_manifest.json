@@ -1,0 +1,251 @@
+{
+  "fetched_at": "2026-04-30 02:42:15",
+  "total_paths_attempted": 48,
+  "total_fetched": 47,
+  "design_count": 43,
+  "discourse_count": 4,
+  "excluded_count": 0,
+  "failures": [
+    "conflict_architecture_proposal.md"
+  ],
+  "design_files": [
+    {
+      "path": "canon/00_philosophical_foundations.md",
+      "chars": 63540,
+      "sha256": "a15c10f9f2a265aa"
+    },
+    {
+      "path": "canon/01_foundations_amendment_self_rendering.md",
+      "chars": 14735,
+      "sha256": "22432909b58c9bbc"
+    },
+    {
+      "path": "canon/02_canon_constraints.md",
+      "chars": 8892,
+      "sha256": "4b29c26044f691d8"
+    },
+    {
+      "path": "canon/02_foundations_amendment_leap_mechanism.md",
+      "chars": 14707,
+      "sha256": "25afdd1f0b887bbc"
+    },
+    {
+      "path": "canon/03_canonical_timeline.md",
+      "chars": 19954,
+      "sha256": "945aa9f820d9837e"
+    },
+    {
+      "path": "designs/architecture/campaign_architecture_v30.md",
+      "chars": 18849,
+      "sha256": "a2fdb1099098d8c2"
+    },
+    {
+      "path": "designs/architecture/complete_systems_reference.md",
+      "chars": 14131,
+      "sha256": "0f9d32b05496e677"
+    },
+    {
+      "path": "designs/architecture/conflict_architecture_proposal.md",
+      "chars": 20135,
+      "sha256": "424ce33aa8cb087b"
+    },
+    {
+      "path": "designs/architecture/scale_transitions_v30.md",
+      "chars": 22678,
+      "sha256": "37cd07639e09c1f8"
+    },
+    {
+      "path": "designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md",
+      "chars": 82697,
+      "sha256": "e5f2d143c0e46d76"
+    },
+    {
+      "path": "designs/npcs/baralta_v30.md",
+      "chars": 3941,
+      "sha256": "4e5d577cb35f79fe"
+    },
+    {
+      "path": "designs/npcs/npc_behavior_v30.md",
+      "chars": 107084,
+      "sha256": "6f565776a33184e6"
+    },
+    {
+      "path": "designs/npcs/npc_character_analyses_v30.md",
+      "chars": 21235,
+      "sha256": "ff003cd3e827c14a"
+    },
+    {
+      "path": "designs/provincial/ci_political_v30.md",
+      "chars": 22947,
+      "sha256": "592d7cb6d7441540"
+    },
+    {
+      "path": "designs/provincial/faction_layer_v30.md",
+      "chars": 37652,
+      "sha256": "14dce9464cb15c69"
+    },
+    {
+      "path": "designs/provincial/faction_succession_split_v30.md",
+      "chars": 11138,
+      "sha256": "02918b082a83bb05"
+    },
+    {
+      "path": "designs/provincial/fractional_province_ownership_v30.md",
+      "chars": 9436,
+      "sha256": "bb1e72b3c965f56f"
+    },
+    {
+      "path": "designs/provincial/mass_battle_v30.md",
+      "chars": 53708,
+      "sha256": "948859a027cf9cc0"
+    },
+    {
+      "path": "designs/provincial/military_layer_v30.md",
+      "chars": 24225,
+      "sha256": "4088bcc8b89c2deb"
+    },
+    {
+      "path": "designs/provincial/peninsular_strain_v30.md",
+      "chars": 47226,
+      "sha256": "555eb3cc0eaa1b26"
+    },
+    {
+      "path": "designs/provincial/victory_v30.md",
+      "chars": 56273,
+      "sha256": "33bb0420c77256a1"
+    },
+    {
+      "path": "designs/scene/miraculous_event_v30.md",
+      "chars": 10258,
+      "sha256": "d8c9d9e4dc83b530"
+    },
+    {
+      "path": "designs/territory/settlement_adjacency_v30.md",
+      "chars": 6892,
+      "sha256": "451ff0ef4ea8f715"
+    },
+    {
+      "path": "designs/territory/settlement_layer_v30.md",
+      "chars": 54871,
+      "sha256": "bae85f2bd66165d8"
+    },
+    {
+      "path": "designs/threadwork/threadwork_v30.md",
+      "chars": 80263,
+      "sha256": "3c976a5576578081"
+    },
+    {
+      "path": "designs/world/ms_trajectory_v1.md",
+      "chars": 13409,
+      "sha256": "9ba401f2b83fc897"
+    },
+    {
+      "path": "designs/world/solmund_artifacts_v30.md",
+      "chars": 3621,
+      "sha256": "1c87fc880282a0f2"
+    },
+    {
+      "path": "designs/world/solmund_philosophy_v30.md",
+      "chars": 4791,
+      "sha256": "bb9a911551ff6ac6"
+    },
+    {
+      "path": "designs/world/solmund_v30.md",
+      "chars": 8615,
+      "sha256": "0b9280447b151ee5"
+    },
+    {
+      "path": "designs/world/solmund_voice_v30.md",
+      "chars": 17255,
+      "sha256": "d442a32dd4a6ed92"
+    },
+    {
+      "path": "params/bg/clocks.md",
+      "chars": 7417,
+      "sha256": "3725b5de46cb5fa2"
+    },
+    {
+      "path": "params/bg/royal_assassination.md",
+      "chars": 2642,
+      "sha256": "b589d49f907a2e8c"
+    },
+    {
+      "path": "params/bg/tensions_deck.md",
+      "chars": 2068,
+      "sha256": "5996ab35bad70eca"
+    },
+    {
+      "path": "params/bg/victory.md",
+      "chars": 12344,
+      "sha256": "6bb6826d003a6faf"
+    },
+    {
+      "path": "params/combat.md",
+      "chars": 16426,
+      "sha256": "5a6db137f5c43aaa"
+    },
+    {
+      "path": "params/core.md",
+      "chars": 12954,
+      "sha256": "5ba66dffebe4a835"
+    },
+    {
+      "path": "params/factions.md",
+      "chars": 2455,
+      "sha256": "3dddc261136abaa3"
+    },
+    {
+      "path": "params/factions/npc_stance_triangles.md",
+      "chars": 4255,
+      "sha256": "0c866b217b022722"
+    },
+    {
+      "path": "params/factions/stats_1_7_scale.md",
+      "chars": 20582,
+      "sha256": "ba7ddce98b8325d7"
+    },
+    {
+      "path": "params/mass_combat.md",
+      "chars": 31521,
+      "sha256": "72e5a83e9887a748"
+    },
+    {
+      "path": "params/threadwork.md",
+      "chars": 14481,
+      "sha256": "893f90fe0cafe6b7"
+    },
+    {
+      "path": "references/throughlines_meta.md",
+      "chars": 12789,
+      "sha256": "b4676b510ada41f6"
+    },
+    {
+      "path": "references/throughlines_meta_infill.md",
+      "chars": 51124,
+      "sha256": "940b475a3ada03d2"
+    }
+  ],
+  "discourse_files": [
+    {
+      "path": "designs/provincial/factions_personal_v30.md",
+      "chars": 28593,
+      "sha256": "70a7d329693a6394"
+    },
+    {
+      "path": "params/bg/core.md",
+      "chars": 16240,
+      "sha256": "c05f46d64ab1f1a4"
+    },
+    {
+      "path": "params/contest.md",
+      "chars": 17069,
+      "sha256": "0d1df545e16fa58a"
+    },
+    {
+      "path": "params/scale_transitions.md",
+      "chars": 5813,
+      "sha256": "435a8a63c8294117"
+    }
+  ],
+  "excluded_files": []
+}

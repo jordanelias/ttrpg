@@ -501,15 +501,15 @@ patches:
 - id: PP-676
   date: 2026-04-29
   severity: P2
-  applied_commit: "Stage 1-4 executed 2026-04-29. Results in designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md (12 TOPO-XX findings, PROVISIONAL pending Jordan review)."
-  description: "Topographic analysis workplan — vectorized corpus investigation
-    as analytic instrument for surfacing project weaknesses unreachable by hand-curation.
-    TF-IDF over canonical+provisional corpus, cosine similarity, 2D projection,
-    8 diagnostic overlays (implied-but-missing edges, notional edges,
-    status-disagreement, cascade-without-return, hub overload, sparse-context,
-    empty regions, Μ servicing). Workplan: designs/audit/2026-04-29-topographic-analysis/00_workplan.md.
-    Recommended after v2 connections audit. Status: PROVISIONAL pending Jordan signoff.
-    ED-760."
+  applied_commit: "v1 (commit ac8f55aa) executed 12 TOPO findings; v2 + v3 executed 2026-04-29 same session. v2 methodology validation FAILED; v3 multi-graph triangulation methodology VALIDATED (2/3 structural properties). v3 corrects v2 flagship finding: corpus is system-anchored, not faction/NPC/Conviction-anchored as v2 claimed (TF-IDF cosine artifact). NPC Behavior identified as integration spine (cite-deg 56 in+out). Combined v2+v3 register at designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md. Status: PROVISIONAL pending Jordan review of v3 corrections and recommendations."
+  description: "Topographic analysis — multi-graph triangulation over canonical+provisional
+    corpus as analytic instrument for surfacing project weaknesses unreachable by hand-curation.
+    Five graphs: G_cite (expanded explicit+implicit citations, 421 edges), G_throughline
+    (T-NN table parse), G_mu (Μ mode collapsing), G_pp (PP affects coupling), G_tfidf
+    (supporting only). Eight diagnostics: multi-graph hubs, implied-but-missing,
+    notional edges, cascade-without-return, sparse-context, throughline orphan check,
+    discourse-design divergence, multi-graph isolates. Workplan v3 supersedes v1+v2 same-session.
+    Status: PROVISIONAL pending Jordan signoff. ED-760, ED-762."
   finding_id: USER-DIRECTED
   source: user
   affects:

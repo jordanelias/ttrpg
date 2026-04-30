@@ -1,0 +1,741 @@
+{
+  "g_throughline": {
+    "Hafenmark": {
+      "Inge Baralta": 1,
+      "TS": 1
+    },
+    "Inge Baralta": {
+      "Hafenmark": 1,
+      "TS": 1
+    },
+    "TS": {
+      "Hafenmark": 1,
+      "Inge Baralta": 1
+    }
+  },
+  "g_mu": {
+    "Church": {
+      "Knot": 1,
+      "Leap": 2,
+      "TS": 3,
+      "Crown": 1,
+      "Hafenmark": 2,
+      "Inge Baralta": 2,
+      "L\u00f6wenritter": 2,
+      "Restoration Movement": 2,
+      "Varfell": 1,
+      "Coherence": 1,
+      "Conviction": 1
+    },
+    "Knot": {
+      "Church": 1,
+      "Leap": 1,
+      "TS": 2,
+      "Domain Echo": 1,
+      "Standing": 1
+    },
+    "Leap": {
+      "Church": 2,
+      "Knot": 1,
+      "TS": 2,
+      "Coherence": 1,
+      "Conviction": 1,
+      "Hafenmark": 1,
+      "Inge Baralta": 1,
+      "L\u00f6wenritter": 1,
+      "Restoration Movement": 1
+    },
+    "TS": {
+      "Church": 3,
+      "Knot": 2,
+      "Leap": 2,
+      "Domain Echo": 1,
+      "Standing": 1,
+      "Crown": 1,
+      "Hafenmark": 2,
+      "Inge Baralta": 2,
+      "L\u00f6wenritter": 2,
+      "Restoration Movement": 2,
+      "Varfell": 1,
+      "Coherence": 1,
+      "Conviction": 1
+    },
+    "Domain Echo": {
+      "Knot": 1,
+      "Standing": 1,
+      "TS": 1
+    },
+    "Standing": {
+      "Domain Echo": 1,
+      "Knot": 1,
+      "TS": 1
+    },
+    "Coherence": {
+      "IP": 1,
+      "Peninsular Strain": 1,
+      "Church": 1,
+      "Conviction": 1,
+      "Hafenmark": 1,
+      "Inge Baralta": 1,
+      "Leap": 1,
+      "L\u00f6wenritter": 1,
+      "Restoration Movement": 1,
+      "TS": 1
+    },
+    "IP": {
+      "Coherence": 1,
+      "Peninsular Strain": 1
+    },
+    "Peninsular Strain": {
+      "Coherence": 1,
+      "IP": 1
+    },
+    "Crown": {
+      "Church": 1,
+      "Hafenmark": 1,
+      "Inge Baralta": 1,
+      "L\u00f6wenritter": 1,
+      "Restoration Movement": 1,
+      "TS": 1,
+      "Varfell": 1
+    },
+    "Hafenmark": {
+      "Church": 2,
+      "Crown": 1,
+      "Inge Baralta": 2,
+      "L\u00f6wenritter": 2,
+      "Restoration Movement": 2,
+      "TS": 2,
+      "Varfell": 1,
+      "Coherence": 1,
+      "Conviction": 1,
+      "Leap": 1
+    },
+    "Inge Baralta": {
+      "Church": 2,
+      "Crown": 1,
+      "Hafenmark": 2,
+      "L\u00f6wenritter": 2,
+      "Restoration Movement": 2,
+      "TS": 2,
+      "Varfell": 1,
+      "Coherence": 1,
+      "Conviction": 1,
+      "Leap": 1
+    },
+    "L\u00f6wenritter": {
+      "Church": 2,
+      "Crown": 1,
+      "Hafenmark": 2,
+      "Inge Baralta": 2,
+      "Restoration Movement": 2,
+      "TS": 2,
+      "Varfell": 1,
+      "Coherence": 1,
+      "Conviction": 1,
+      "Leap": 1
+    },
+    "Restoration Movement": {
+      "Church": 2,
+      "Crown": 1,
+      "Hafenmark": 2,
+      "Inge Baralta": 2,
+      "L\u00f6wenritter": 2,
+      "TS": 2,
+      "Varfell": 1,
+      "Coherence": 1,
+      "Conviction": 1,
+      "Leap": 1
+    },
+    "Varfell": {
+      "Church": 1,
+      "Crown": 1,
+      "Hafenmark": 1,
+      "Inge Baralta": 1,
+      "L\u00f6wenritter": 1,
+      "Restoration Movement": 1,
+      "TS": 1
+    },
+    "Conviction": {
+      "Church": 1,
+      "Coherence": 1,
+      "Hafenmark": 1,
+      "Inge Baralta": 1,
+      "Leap": 1,
+      "L\u00f6wenritter": 1,
+      "Restoration Movement": 1,
+      "TS": 1
+    }
+  },
+  "g_pp": {
+    "CI": {
+      "NPC Behavior": 2,
+      "Peninsular Strain": 2,
+      "Campaign Architecture": 1,
+      "Faction Layer": 1,
+      "Military Layer": 1,
+      "Settlement Layer": 1
+    },
+    "NPC Behavior": {
+      "CI": 2,
+      "Peninsular Strain": 1,
+      "Campaign Architecture": 1
+    },
+    "Peninsular Strain": {
+      "CI": 2,
+      "NPC Behavior": 1,
+      "Faction Layer": 1,
+      "Military Layer": 1,
+      "Settlement Layer": 1
+    },
+    "Campaign Architecture": {
+      "CI": 1,
+      "NPC Behavior": 1
+    },
+    "Faction Succession": {
+      "Fractional Province": 1,
+      "IP": 1,
+      "Settlement Adjacency": 1
+    },
+    "Fractional Province": {
+      "Faction Succession": 1,
+      "IP": 1,
+      "Settlement Adjacency": 1
+    },
+    "IP": {
+      "Faction Succession": 1,
+      "Fractional Province": 1,
+      "Settlement Adjacency": 1
+    },
+    "Settlement Adjacency": {
+      "Faction Succession": 1,
+      "Fractional Province": 1,
+      "IP": 1
+    },
+    "Faction Layer": {
+      "CI": 1,
+      "Military Layer": 1,
+      "Peninsular Strain": 1,
+      "Settlement Layer": 1
+    },
+    "Military Layer": {
+      "CI": 1,
+      "Faction Layer": 1,
+      "Peninsular Strain": 1,
+      "Settlement Layer": 1
+    },
+    "Settlement Layer": {
+      "CI": 1,
+      "Faction Layer": 1,
+      "Military Layer": 1,
+      "Peninsular Strain": 1
+    }
+  },
+  "throughlines": {
+    "01": {
+      "name": "Everything Is Thread",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u2014",
+      "description": "Ontological \u2014 all stats are substrate state. Defines substrate-grounds-all pattern.",
+      "tokens": []
+    },
+    "02": {
+      "name": "Rendering Consciousness-Performed",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u2014",
+      "description": "Ontological \u2014 perception is substrate-filtered. Participates in substrate grounding.",
+      "tokens": []
+    },
+    "03": {
+      "name": "Inseparability",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-5",
+      "description": "Primary ontological (every op = substrate op). Secondary scale-connecting (co-movement fires at all scales).",
+      "tokens": []
+    },
+    "04": {
+      "name": "RS Decay",
+      "primary_mu": "\u041c-1",
+      "secondary_mu": "\u2014",
+      "description": "Clock \u2014 continuous pressure from Calamity damage. Canonical pressure pattern.",
+      "tokens": []
+    },
+    "05": {
+      "name": "TC Accumulation",
+      "primary_mu": "\u041c-1",
+      "secondary_mu": "\u2014",
+      "description": "Clock \u2014 continuous pressure from institutional momentum.",
+      "tokens": []
+    },
+    "06": {
+      "name": "IP Accumulation",
+      "primary_mu": "\u041c-1",
+      "secondary_mu": "\u2014",
+      "description": "Clock \u2014 continuous pressure from external intervention.",
+      "tokens": [
+        "IP"
+      ]
+    },
+    "07": {
+      "name": "Peninsular Strain",
+      "primary_mu": "\u041c-1",
+      "secondary_mu": "\u2014",
+      "description": "Clock \u2014 continuous pressure from accumulated war.",
+      "tokens": [
+        "Peninsular Strain"
+      ]
+    },
+    "08": {
+      "name": "Church Rendering Reinforcement",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u2014",
+      "description": "Institutional \u2014 Church's substrate-posture is rendering-reinforcement.",
+      "tokens": [
+        "Church"
+      ]
+    },
+    "09": {
+      "name": "Varfell Thread Progressive",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u2014",
+      "description": "Institutional \u2014 Varfell's posture is thread-progressive.",
+      "tokens": [
+        "Varfell"
+      ]
+    },
+    "11": {
+      "name": "Crown Pragmatic",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u2014",
+      "description": "Institutional \u2014 Crown's posture is instrumentalist.",
+      "tokens": [
+        "Crown"
+      ]
+    },
+    "15a": {
+      "name": "Hafenmark Unmediated Sovereigntist",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary institutional (divine-right governance rejects ecclesial monopoly). Secondary forced-choice (Thread revelation threatens TS-0 Baralta).",
+      "tokens": [
+        "Hafenmark",
+        "Inge Baralta",
+        "TS"
+      ]
+    },
+    "15b": {
+      "name": "L\u00f6wenritter Substrate-Agnostic Protector",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary institutional (military duty, substrate irrelevant). Secondary forced-choice (revelation means military tools fight wrong war).",
+      "tokens": [
+        "L\u00f6wenritter"
+      ]
+    },
+    "15c": {
+      "name": "RM Substrate-Heritage Reclaimer",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary institutional (unknowing substrate inheritance via Einhir practice). Secondary forced-choice (Embrace/Denial/Schism at revelation).",
+      "tokens": [
+        "Restoration Movement"
+      ]
+    },
+    "12": {
+      "name": "Practitioner Arc",
+      "primary_mu": "\u041c-6",
+      "secondary_mu": "\u041c-1",
+      "description": "Primary forced-choice (Coherence cost forces engagement decisions). Secondary pressure (Coherence depletes).",
+      "tokens": [
+        "Coherence"
+      ]
+    },
+    "13": {
+      "name": "Certainty Journey",
+      "primary_mu": "\u041c-6",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded.",
+      "tokens": []
+    },
+    "14": {
+      "name": "Conviction Architecture",
+      "primary_mu": "\u041c-6",
+      "secondary_mu": "\u2014",
+      "description": "Forced-choice \u2014 Scar accumulation forces arc transitions.",
+      "tokens": [
+        "Conviction"
+      ]
+    },
+    "15": {
+      "name": "Player Progression",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u2014",
+      "description": "Scale-connecting \u2014 personal Standing ladder produces settlement\u2192province\u2192faction progression.",
+      "tokens": [
+        "Standing"
+      ]
+    },
+    "16": {
+      "name": "Knot Propagation",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary scale-recursive (Knot Strain propagates through bonded contacts). Secondary substrate-grounded.",
+      "tokens": [
+        "Knot"
+      ]
+    },
+    "17": {
+      "name": "Companion Moral Mirror",
+      "primary_mu": "\u041c-6",
+      "secondary_mu": "\u2014",
+      "description": "Forced-choice \u2014 Thread power vs relational bonds.",
+      "tokens": []
+    },
+    "18": {
+      "name": "Radiation Gradient",
+      "primary_mu": "\u041c-2",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary geography-holds-pressure (RS damage manifests spatially). Secondary substrate-grounded (radiation IS substrate state).",
+      "tokens": []
+    },
+    "19": {
+      "name": "Southernmost Hidden Front",
+      "primary_mu": "\u041c-2",
+      "secondary_mu": "\u041c-1",
+      "description": "Primary geographic (location-specific convergence point). Secondary pressure-feeding (expedition failure advances decay).",
+      "tokens": []
+    },
+    "20": {
+      "name": "Two Contests",
+      "primary_mu": "\u041c-6",
+      "secondary_mu": "\u2014",
+      "description": "Forced-choice \u2014 sovereignty vs survival, insufficient resources for both.",
+      "tokens": []
+    },
+    "21": {
+      "name": "Thread Political Warfare",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary institutional (distinct faction doctrines). Secondary substrate-grounded (shared RS track).",
+      "tokens": []
+    },
+    "22": {
+      "name": "Belief Lattice",
+      "primary_mu": "\u041c-6",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary forced-choice (cooperation requires Belief revision, which is Scar-accumulation). Secondary substrate-participating.",
+      "tokens": []
+    },
+    "23": {
+      "name": "NPC Arc Emergence",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u2014",
+      "description": "Scale-connecting \u2014 personal arc \u2192 faction Domain Echo \u2192 political shift \u2192 new arc triggers.",
+      "tokens": [
+        "Domain Echo"
+      ]
+    },
+    "24": {
+      "name": "Convergence as Crisis",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u2014",
+      "description": "Scale-connecting \u2014 multiple throughlines intersecting at various scales produce emergent crisis.",
+      "tokens": []
+    },
+    "25": {
+      "name": "Generational Arc",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u2014",
+      "description": "Scale-connecting \u2014 30-year clock transforms personal standings into institutional reality.",
+      "tokens": []
+    },
+    "26": {
+      "name": "Recursion as Setting Structure (TL-3)",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary scale-recursive (same dynamic at multiple scales). Secondary substrate-grounded.",
+      "tokens": []
+    },
+    "27": {
+      "name": "Effects Real, Explanation Wrong (TL-4)",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary institutional (faction interpretive-frame coherent-but-wrong). Secondary forced-choice (argument fails; frame-crack requires confrontation).",
+      "tokens": []
+    },
+    "28": {
+      "name": "Confrontation/Leap/Operation Triad (TL-5)",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary substrate-grounded (three-phase engagement with substrate). Secondary forced-choice (each phase has decision architecture).",
+      "tokens": [
+        "Leap"
+      ]
+    },
+    "29": {
+      "name": "Baralta as Accidental Prophylaxis Cracker (TL-8)",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-8",
+      "description": "Primary institutional (Baralta's partial prophylaxis-crack is formation-structural). Secondary access-gated (crack admits substrate content into receptive capacity).",
+      "tokens": [
+        "Inge Baralta"
+      ]
+    },
+    "30": {
+      "name": "Information Asymmetry as Core Mechanic (TL-7)",
+      "primary_mu": "\u041c-8",
+      "secondary_mu": "\u041c-5",
+      "description": "Primary access-gated (different receptive capacities at different observer-nodes). Secondary scale-recursive (asymmetry operates at all scales).",
+      "tokens": []
+    },
+    "31": {
+      "name": "Reflexive Suspension",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary substrate-grounded (Leap geometry = suspension of layer 2 reflexive facing). Secondary forced-choice (entry commit and exit timing). \u041c-7 \u2713, \u041c-8 primary, \u041c-9 \u2713, \u041c-11 primary.",
+      "tokens": [
+        "Leap"
+      ]
+    },
+    "32": {
+      "name": "Sincere Structural Closure",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary institutional (Church position formation-structural). Secondary forced-choice (frame-shift pathway). \u041c-7 \u2713, \u041c-8 \u2713, \u041c-9 primary extension.",
+      "tokens": [
+        "Church"
+      ]
+    },
+    "33": {
+      "name": "TS as Developmental Arc",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-6",
+      "description": "Primary substrate-grounded (receptive-capacity expansion). Secondary forced-choice (confrontation Hold/Turn-Away). \u041c-7 \u2713, \u041c-8 \u2713, \u041c-10 \u2713, \u041c-11 primary extension.",
+      "tokens": [
+        "TS"
+      ]
+    },
+    "34": {
+      "name": "Distal Interoception through Knot Tethers",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary scale-connecting (knot-channels cross geographic distance). Secondary substrate-grounded. \u041c-7 \u2713, \u041c-8 \u2713, \u041c-9 \u2713, \u041c-10 primary extension.",
+      "tokens": [
+        "Knot"
+      ]
+    },
+    "35": {
+      "name": "Unified Uncanny Capacity Synthesis",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-4",
+      "description": "Primary substrate-grounded (uncanny register emerges from TS-band receptive capacity). Secondary institutional (formation + frame). \u041c-7 \u2713, \u041c-8 primary extension, \u041c-9 \u2713.",
+      "tokens": [
+        "TS"
+      ]
+    },
+    "36": {
+      "name": "Relational Ontological Identity (TS 50\u201369 C0)",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary scale-connecting (companion knots load-bearing at ontological scale). Secondary substrate-grounded. \u041c-7 \u2713, \u041c-8 \u2713.",
+      "tokens": [
+        "TS"
+      ]
+    },
+    "37": {
+      "name": "Stimulus Resistance Triplet",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-8",
+      "description": "Primary substrate-grounded (three resistance modes at integration-failure loci). Secondary access-gated. \u041c-7 \u2713, \u041c-8 \u2713, \u041c-9 \u2713.",
+      "tokens": []
+    },
+    "38": {
+      "name": "Real as Continuous Amplitude",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-2",
+      "description": "Primary substrate-grounded (amplitude is continuous substrate-excess). Secondary geography-holds-pressure. \u041c-7 \u2713, \u041c-8 \u2713, \u041c-10 primary extension.",
+      "tokens": []
+    },
+    "39": {
+      "name": "Textual Mode Typology",
+      "primary_mu": "\u041c-4",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary institutional (four-mode faction-output typology). Secondary substrate-grounded. \u041c-7 \u2713, \u041c-8 \u2713, \u041c-9 \u2713.",
+      "tokens": []
+    },
+    "40": {
+      "name": "TS as Taxonomic Expansion",
+      "primary_mu": "\u041c-5",
+      "secondary_mu": "\u041c-3",
+      "description": "Primary scale-connecting (taxonomic categories admit scale-spanning content at thresholds). Secondary substrate-grounded. \u041c-7 \u2713, \u041c-8 \u2713, \u041c-10 \u2713, \u041c-11 primary extension.",
+      "tokens": [
+        "TS"
+      ]
+    },
+    "41": {
+      "name": "Damaged Substrate Is Non-Agential",
+      "primary_mu": "\u041c-3",
+      "secondary_mu": "\u041c-4",
+      "description": "Primary substrate-grounded (damage-as-substrate-state without moral agent). Secondary institutional (Church-demonology as interpreter output per T-27). \u041c-7 \u2713, \u041c-9 primary extension, \u041c-10 \u2713.",
+      "tokens": [
+        "Church"
+      ]
+    }
+  },
+  "mu_modes": {
+    "\u041c-3": [
+      "Church",
+      "Knot",
+      "Leap",
+      "TS"
+    ],
+    "\u041c-5": [
+      "Domain Echo",
+      "Knot",
+      "Standing",
+      "TS"
+    ],
+    "\u041c-1": [
+      "Coherence",
+      "IP",
+      "Peninsular Strain"
+    ],
+    "\u041c-4": [
+      "Church",
+      "Crown",
+      "Hafenmark",
+      "Inge Baralta",
+      "L\u00f6wenritter",
+      "Restoration Movement",
+      "TS",
+      "Varfell"
+    ],
+    "\u041c-6": [
+      "Church",
+      "Coherence",
+      "Conviction",
+      "Hafenmark",
+      "Inge Baralta",
+      "Leap",
+      "L\u00f6wenritter",
+      "Restoration Movement",
+      "TS"
+    ],
+    "\u041c-2": [],
+    "\u041c-8": [
+      "Inge Baralta"
+    ]
+  },
+  "pp_edges": [
+    [
+      "CI",
+      "NPC Behavior",
+      "PP-663"
+    ],
+    [
+      "CI",
+      "Peninsular Strain",
+      "PP-663"
+    ],
+    [
+      "NPC Behavior",
+      "Peninsular Strain",
+      "PP-663"
+    ],
+    [
+      "CI",
+      "Campaign Architecture",
+      "PP-665"
+    ],
+    [
+      "CI",
+      "NPC Behavior",
+      "PP-665"
+    ],
+    [
+      "Campaign Architecture",
+      "NPC Behavior",
+      "PP-665"
+    ],
+    [
+      "Faction Succession",
+      "Fractional Province",
+      "PP-666"
+    ],
+    [
+      "Faction Succession",
+      "IP",
+      "PP-666"
+    ],
+    [
+      "Faction Succession",
+      "Settlement Adjacency",
+      "PP-666"
+    ],
+    [
+      "Fractional Province",
+      "IP",
+      "PP-666"
+    ],
+    [
+      "Fractional Province",
+      "Settlement Adjacency",
+      "PP-666"
+    ],
+    [
+      "IP",
+      "Settlement Adjacency",
+      "PP-666"
+    ],
+    [
+      "CI",
+      "Faction Layer",
+      "PP-668"
+    ],
+    [
+      "CI",
+      "Military Layer",
+      "PP-668"
+    ],
+    [
+      "CI",
+      "Peninsular Strain",
+      "PP-668"
+    ],
+    [
+      "CI",
+      "Settlement Layer",
+      "PP-668"
+    ],
+    [
+      "Faction Layer",
+      "Military Layer",
+      "PP-668"
+    ],
+    [
+      "Faction Layer",
+      "Peninsular Strain",
+      "PP-668"
+    ],
+    [
+      "Faction Layer",
+      "Settlement Layer",
+      "PP-668"
+    ],
+    [
+      "Military Layer",
+      "Peninsular Strain",
+      "PP-668"
+    ],
+    [
+      "Military Layer",
+      "Settlement Layer",
+      "PP-668"
+    ],
+    [
+      "Peninsular Strain",
+      "Settlement Layer",
+      "PP-668"
+    ]
+  ]
+}

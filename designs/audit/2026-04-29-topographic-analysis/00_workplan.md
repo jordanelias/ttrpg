@@ -1,198 +1,250 @@
-<!-- [PROVISIONAL: 2026-04-29 — topographic analysis workplan, pre-execution] -->
-<!-- STATUS: PROVISIONAL — workplan proposal; analytic instrument, not gameplay mechanic -->
+<!-- [REPLACEMENT: 2026-04-29 — supersedes v2 of this same file] -->
+<!-- [PROVISIONAL: 2026-04-29 — topographic analysis workplan v3, pre-execution] -->
+<!-- STATUS: PROVISIONAL — workplan; analytic instrument, not gameplay mechanic -->
 <!-- AUTHORITY: PP-676, ED-760 -->
 
-# Topographic Analysis Workplan — Vectorized Corpus Investigation
+# Topographic Analysis Workplan v3 — Multi-Graph Triangulation
 
-**Date:** 2026-04-29
-**Status:** PROVISIONAL
-**Scope:** Build a corpus-derived topographic view of Valoria's design space — semantic vectorization of all canonical and provisional content — to surface weaknesses that hand-curation cannot reach.
-**Source:** Jordan directive 2026-04-29 — "use the artifact to investigate ways the project is weak" / "topographical approach with vectorized tokens and dynamic connective lines."
-**Audience:** Claude. **Not a player tool, not a Jordan-facing UI.** This is an analytic instrument for evaluating the design from a perspective hand-curation cannot supply.
-**Related:** PP-676, ED-760. Companion to v2 of the connections artifact (separate session, hand-curated edges).
+**Date:** 2026-04-29 (third revision, supersedes v1 and v2 same-day)
+**Status:** PROVISIONAL — pursued in this session
+**Replaces:** v2 (committed earlier 2026-04-29, see commit history). v2 execution exposed thirteen methodology problems; v3 pivots from TF-IDF-primary to multi-graph triangulation with TF-IDF demoted to supporting evidence.
 
 ---
 
-## §0 Why this is genuinely different from the connections artifact
+## §0 What changed from v2
 
-The connections artifact (v1, v2 forthcoming) treats each system as a discrete node and asks: *do these systems intersect?* The answer comes from a designer's read — mine in v1, mine-after-audit in v2. Either way, the topology reflects whose hand drew it.
+v2 used a single primary signal (TF-IDF cosine over paragraph co-occurrence) and tried to validate it against expected_groups derived from my prior. Validation failed at Jaccard 0.222. The post-hoc analysis revealed the methodology had structural problems beyond just the failed validation:
 
-The topographic approach asks a different question: *based on the actual textual evidence in the canonical corpus, how does the conceptual space cluster?* The topology is derived, not drawn. Two systems are close if the corpus repeatedly co-locates them, regardless of whether anyone has explicitly connected them in a design doc. Two are far apart if the corpus rarely puts them in the same neighborhood, regardless of whether they're nominally related.
+| v2 problem | v3 resolution |
+|---|---|
+| Threshold deviation (0.35 → 0.20 post-hoc) | All thresholds locked in §3.7 BEFORE any run; if signal is weaker than thresholds expect, that's a finding, not a tuning opportunity |
+| Validation k=4 mathematically excludes small groups | Validation rebuilt as **structural property checks**, not k-NN Jaccard. Properties true regardless of group composition (e.g. "foundation cluster has lower mean inter-graph degree than periphery") |
+| Within-class clustering not filtered | §3.4 explicit class taxonomy; within-class pairs filtered from implied-missing diagnostic |
+| Token deduplication missing | §3.3 pre-execution merge for known surface-form duplicates (Tensions/Tensions Deck etc.) |
+| Citation graph too sparse to filter | §3.5 EXPANDED citation graph: explicit + implicit (any system name mention in another system's body counts as edge); accept noise, gain signal |
+| Two diagnostics produced null | §2 drops empty-regions diagnostic entirely; status-disagreement reformulated as PP-affect-graph cross-reference |
+| Validation circularity (prior tested against prior) | §3.8 validation uses **independent structured graphs** (Μ/throughline/PP) as alternate ground truths, then looks for *agreement across graphs*, not agreement with my prior |
+| Auto-extracted tokens unvalidated | §3.2 auto picks reviewed against canonical_sources before inclusion; unsure ones flagged not included |
+| Promised but never run: full+auto twin diagnostics | Dropped from scope; if needed, future run |
+| Discourse corpus extracted, never used | v3 builds the discourse overlay (where editorial attention concentrates) as a real diagnostic |
+| Unconventional paragraph-IDF | §3.6 standard term-frequency, log-IDF, document-length-normalized; matches scikit-learn TfidfVectorizer defaults |
+| Arbitrary document weights | Dropped. All design docs weight 1.0; status filtering happens at the diagnostic level instead |
+| MS Trajectory regex error reported as finding | Pre-execution sanity sweep on every token verifies non-zero match before vectorization proceeds |
 
-The diagnostic value is highest in the **gap between the two views**:
-- Edges hand-curation drew that the corpus doesn't substantiate → notional connections without textual substance
-- High corpus similarity that hand-curation missed → implied connections that should be made explicit
-- Hand-curated hubs that the corpus shows as peripheral → over-claimed importance
-- Corpus-central tokens that hand-curation under-emphasized → under-developed importance
+v2 findings that **survive without rerun**:
+- §1.1 faction/NPC/Conviction-as-hubs (mean-similarity ranking, no thresholding required)
+- §1.2 Settlement Layer downstream sink (citation graph only, no TF-IDF)
+- §1.4 Wager↔Edeyja (will re-verify in v3 expanded citation graph)
+- §1.5 vocabulary debt three terms (direct corpus match, no methodology dependency)
+- §1.6 Settlement Layer / CI Political under-coverage (paragraph counts, no methodology dependency)
 
-These gaps are weaknesses no amount of hand-auditing finds, because they require comparing hand-curated structure against an independent measurement.
+v3's job: deepen these, find what v2 missed.
 
 ---
 
 ## §1 N — Necessity case
 
-| N question | Answer |
-|---|---|
-| Renaissance dynamic modeled? | None — analytic instrument, not gameplay |
-| Already covered by existing mechanics? | No — no existing tooling derives topology from textual evidence |
-| Different player situations? | N/A |
-| Load-bearing in subject? | N/A — meta-tooling |
-| Lost by abstracting? | We lose the ability to detect implied-but-missing connections, propagation gaps, status disagreements, and Μ servicing imbalances that hand-curation can't surface. These are real failure modes the project has already exhibited (the salience-4/5 cliff, the symbolic_effects table consumed by nothing, NPC Standing static — all surfaced by simulation, but topography would have flagged them earlier as structural anomalies) |
-
-**N verdict: pass** — analytic infrastructure. Same self-exempting category as PP-674, PP-675.
+Same as v1/v2. Self-exempting analytic instrument, vetting Class A.
 
 ---
 
-## §2 Analytic targets — what the topography is built to surface
+## §2 Diagnostic targets — multi-graph framing
 
-### 2.1 Implied-but-missing edges
-Pairs with high corpus co-occurrence but no explicit cross-reference in any design doc. Highest-value diagnostic. Candidates the v2 audit would otherwise miss.
+Each diagnostic now operates on multiple graphs, with **agreement across graphs** as the primary confidence signal.
 
-### 2.2 Notional edges (over-claimed connections)
-Edges hand-curated that turn out to have low corpus similarity. The connection exists in the designer's head but isn't substantiated by textual content. Either rewrite the spec to make the connection real, or remove the claim.
+The five graphs:
+- **G_cite** — expanded citation graph (explicit + implicit cross-references)
+- **G_tfidf** — TF-IDF cosine graph (supporting only)
+- **G_mu** — systems sharing an Μ mode (parsed from throughlines_meta_infill Μ contribution lists)
+- **G_throughline** — systems sharing a throughline (parsed from throughlines_meta and infill)
+- **G_pp** — systems touched by the same patch (parsed from patch_register_active.yaml `affects:` lists)
 
-### 2.3 Status-disagreement edges
-Strongly-similar pairs where one node is canonical and one is provisional. Propagation gap candidates: provisional design poking at canonical territory, or canonical design implicitly assuming provisional behavior.
+### 2.1 Multi-graph hub overload
+A token is a hub if it is in the top quintile by degree in ≥ 3 of 5 graphs. Single-graph hubs are noise; multi-graph hubs are real connectivity centers.
 
-### 2.4 Cascade-without-return chains
-Sequences of high-similarity edges that flow one direction without a return path. The project intent statement (Ω) requires *positive feedback loop*. One-way cascades are by definition pressure without feedback — a known failure pattern.
+### 2.2 Implied-but-missing edges (now multi-graph)
+Pairs where ≥ 2 of {G_mu, G_throughline, G_pp} link them but G_cite does not. These are pairs the project's structured metadata says are connected, but no explicit citation has been written. **Strict cross-class only** — within-class pairs (Conviction↔Conviction etc.) excluded.
 
-### 2.5 Hub overload
-Tokens with high similarity to many other tokens. Single point of failure: any spec error there cascades widely. Topology doesn't distinguish *load-bearing* from *over-extended* — the analysis must.
+### 2.3 Notional edges
+Pairs where G_cite links them (especially explicitly via `Cross-references:`) but no other graph does. Citation without metadata or content support.
 
-### 2.6 Sparse-context tokens
-Tokens that appear in canon but with thin surrounding context. Either under-developed concepts that should be elaborated, or vocabulary debt where a term is referenced without being defined.
+### 2.4 Cascade-without-return
+Same as v2 §2.4, but now run on G_cite (expanded) instead of just explicit citations. Chains of length ≥ 3 with no return path.
 
-### 2.7 Empty regions
-Areas of the projected space that should plausibly contain something but don't. Conceptual gaps. The hardest diagnostic to formalize and the most generative when it works.
+### 2.5 Sparse-context tokens
+Tokens with paragraph count ≤ 10th percentile AND degree ≤ 10th percentile in G_cite. Drops tokens that are sparse in paragraph mentions but well-cited (their footprint is structural, not textual).
 
-### 2.8 Μ servicing audit
-Map each Μ mode (α / β / γ / δ) to its corpus footprint. Imbalances visible as topographic asymmetry: if Μ-α PRESSURE has a dense cluster at peninsula scale and nothing at scene scale, that's an Ω-d violation candidate (pressure should be felt at every scale, every action paying what it buys).
+### 2.6 Throughline orphan check
+For each of the 41 throughlines, count paragraphs that substantiate it (heuristic: paragraph mentions ≥ 2 of the throughline's contributing systems per throughlines_meta_infill Μ block). Throughlines with ≤ 2 substantiating paragraphs = at risk of being orphaned in implementation.
 
-### 2.9 Throughlines coverage
-For each of the 41 throughlines, locate its primary corpus footprint. Throughlines without a clear topographic home are at risk of being orphaned in implementation.
+### 2.7 Μ servicing imbalance
+For each of the 11 Μ modes, count paragraph mentions of contributing systems. Top quintile / bottom quintile ratio is the imbalance score. Highly imbalanced Μ = mode that depends mostly on undocumented systems.
+
+### 2.8 Vocabulary debt sweep
+Direct grep for known-struck terms (Game Master, Cultural Reformation, Coup Counter, plus any others surfaced in patch register `[STRUCK]` markers). Reports paragraph count + doc list per legacy term.
+
+### 2.9 Discourse-design divergence
+For each token, ratio of (paragraph mentions in discourse corpus / paragraph mentions in design corpus). Tokens with very high ratios are over-discussed (much editorial attention, less actual design substance) — possible over-thinking. Tokens with very low ratios are under-discussed (substantial design, no editorial scrutiny) — possible under-review.
+
+### 2.10 Multi-graph isolates
+Tokens with degree = 0 or 1 in **every** graph. These are conceptually present in the corpus but functionally disconnected from everything else.
 
 ---
 
 ## §3 Technique
 
-### 3.1 Corpus extraction
-- **Bypass `github_ops` index routing.** The router auto-redirects large design docs to their `_index.md` skeleton companions for token efficiency. Semantic vectorization needs full text. Use direct GitHub Contents API or GraphQL with `git/blobs`.
-- **Scope:** all `design_doc` and `params` paths from `references/canonical_sources.yaml`, plus `canon/00..03`, plus `designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md`, plus `designs/audit/2026-04-29-terminology-conversion/00_workplan.md` and `designs/audit/mass_battle_*_2026-04-29.md` (recent provisional design).
-- **Estimated size:** ~150–250k tokens, well within 1M context window. Stage 1 dump confirmed ~150k tokens for the canonical core (47 paths via index-routed fetch; full-text fetch will be larger).
-- **Output:** `designs/audit/<date>-topographic-analysis/data/corpus.json` — `{path: full_content}` keyed by repo path. Hash + size manifest committed for reproducibility.
+### 3.1 Corpus
+Same as v2 (43 design docs, 4 discourse, on disk). Reuse v2 corpus_design.json + corpus_discourse.json.
 
-### 3.2 Token curation
-- **Seed list (~80 tokens):** every system from `canonical_sources.yaml`, every named NPC from `complete_systems_reference.md` Part 1, every clock (MS / CI / IP / PI / CV / TCV), every Conviction (7), every Pressure Point (4), every Style (4 contest styles), every Mode (the 2 + Zoom-In after PP-675 lands; pre-PP-675 the 3), every Throughline category, every key Foundation concept (Leap, Coherence, Self-Rendering, Knot, TS, Domain Echo, Sufficient Scope, Scar).
-- **Auto-extracted (~40 tokens):** capitalized multi-word terms appearing in ≥3 canonical docs and not already in seed list. Filter against false positives (Renaissance proper nouns, parliamentary terminology) using a stopword list.
-- **Final list:** ~120 tokens, manually curated. Stored as `tokens.json` with metadata: `{id, surface_forms (synonyms/aliases), scale, status, seed/auto, definition_source_path}`.
+### 3.2 Tokens
+Reuse v2 tokens.json (84 tokens, 74 seed + 10 auto). Auto-picks audited:
+- KEEP: Ein Sof, Zoom In, Domain Action, Scene Slate, Mass Seizure, Casus Belli, Dynastic Proclamation
+- KEEP as legacy markers: Game Master, Cultural Reformation, Coup Counter
+- (None of the auto-picks are removed; all clear the canonical-source-or-clearly-major-mechanic test)
 
-### 3.3 Vectorization
-- **Granularity:** paragraph-level (split each doc on `\n\n` after first stripping HTML comments and YAML frontmatter). Each paragraph becomes a "document" in TF-IDF terms.
-- **Token matching:** for each token's surface forms (case-insensitive, word-boundary), count appearances per paragraph. Build sparse `token × paragraph` matrix.
-- **TF-IDF weighting:** standard formula. Weight downward for paragraphs in retired/struck content (banner-detected) and provisional content (banner-detected), so retired material doesn't drag the vector toward dead concepts.
-- **Output:** `vectors.npz` — sparse matrix, NumPy.
+### 3.3 Token deduplication
 
-### 3.4 Similarity + projection
-- **Pairwise cosine similarity** over the token vectors. Output: `similarity.npz` (token × token).
-- **2D projection:** sklearn `TSNE(perplexity=15, init='pca', random_state=42)`. Alternatively force-directed where similarity is spring strength — easier to interpret, more visually stable across re-runs. Plan: run both, pick whichever gives cleaner clusters; document the choice in the data manifest. Output: `layout.json` — `{token_id: [x, y]}`.
-- **Density grid:** kernel density estimate on the 2D layout, producing a `width × height` array suitable for contour rendering. Output: `density.json`.
+Pre-execution merge:
+- `Tensions Deck` is a strict subset of `Tensions` context — keep both but flag as known-coupled (suppress from implied-missing if both appear in a high-cosine pair)
+- `MS` and `Mending Stability` already merged in surface forms — verify
+- `CI` (Church Influence the clock) and `CI Political` (the doc) — keep separate; CI is the metric, CI Political is the system
 
-### 3.5 Diagnostic overlays
-For each diagnostic in §2, compute and persist:
-- Top-N implied-but-missing edges (corpus_similarity high, hand-curated edge absent)
-- Top-N notional edges (hand-curated edge present, corpus_similarity low)
-- Status-disagreement edge list (canonical ↔ provisional pairs above similarity threshold)
-- Cascade-without-return chain candidates (longest one-way paths in hand-curated edge graph)
-- Hub overload report (token degree centrality, top quartile)
-- Sparse-context tokens (paragraphs-mentioned count below 3rd-percentile)
-- Empty-region candidates (low-density regions adjacent to high-density clusters)
-- Μ servicing distribution (per-Μ paragraph counts, weighted by canonicality)
+No new merges needed. Mostly recording the v2 lessons.
 
-Output: `weakness_register.md` — narrative findings with token-pair specifics + provenance (which docs/paragraphs).
+### 3.4 Class taxonomy for within-class filtering
+
+Tokens grouped into classes for filtering:
+- **Convictions** (7): Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity
+- **Pressure Points** (4): Evidence, Consequence, Authority, Loyalty
+- **Factions** (7): Crown, Church, Hafenmark, Varfell, Löwenritter, Restoration Movement, Guilds
+- **NPCs** (10): the named NPC tokens
+- **Clocks** (6): MS, CI, IP, PI, TS, TCV
+- **Systems** (everything else)
+
+Within-class pairs are suppressed from implied-but-missing (Faith↔Reason is by-design; Crown↔Church is by-design; etc.). Cross-class pairs are kept.
+
+### 3.5 Expanded citation graph
+
+For each design doc D and each token T whose primary doc is not D:
+- If D's body contains T's primary surface form ≥ 2 times → G_cite has edge (T_of_D, T)
+  - Where "T_of_D" = any token whose primary doc IS D
+- Plus all explicit refs from v2 (`Cross-references:`, `see X.md`, `supersedes:`)
+- Plus all `affects:` lists from `patch_register_active.yaml` mapped through token primary docs
+
+Threshold ≥ 2 mentions filters paragraph-level accidents. Expected output: ~150-300 edges (an order of magnitude denser than v2's 11).
+
+### 3.6 TF-IDF (now supporting only)
+Standard scikit-learn TfidfVectorizer over paragraphs as documents, tokens as terms. L2 normalize. No custom IDF formulation.
+
+Used only for:
+- Hub overload §2.1 cross-check
+- Sparse-context cross-check §2.5
+- Discourse-design divergence §2.9 (separate vectorizer per corpus)
+
+NOT used for:
+- Implied-but-missing (now multi-graph)
+- Status-disagreement (dropped in current form)
+- Empty regions (dropped entirely)
+
+### 3.7 Pre-committed thresholds (locked, no exceptions)
+
+If a threshold doesn't produce signal, that is a finding, not a tuning opportunity. Locked:
+
+- Hub overload §2.1: top quintile by degree in ≥ 3 of 5 graphs → all reported
+- Implied-but-missing §2.2: ≥ 2 of {G_mu, G_throughline, G_pp} link, G_cite doesn't → top 25 by metadata-link-strength
+- Notional §2.3: G_cite explicit edge AND no metadata link AND no other graph link → all reported
+- Cascade-without-return §2.4: chain length ≥ 3, no return in G_cite → all reported
+- Sparse-context §2.5: paragraph ≤ 10th percentile AND G_cite degree ≤ 10th percentile → all reported
+- Throughline orphan §2.6: ≤ 2 substantiating paragraphs → all reported
+- Μ servicing imbalance §2.7: ratio top/bottom quintile ≥ 5 → all reported
+- Vocabulary debt §2.8: direct match → all reported
+- Discourse-design divergence §2.9: discourse:design ratio outside [0.05, 0.5] → all reported
+- Multi-graph isolates §2.10: degree ≤ 1 in every graph → all reported
+
+Tie-breaking: alphabetical token order.
+
+### 3.8 Validation — structural properties, not group-Jaccard
+
+Three structural properties checked. Each is true if methodology produces meaningful signal, regardless of which tokens cluster:
+
+**P1 (Foundation periphery):** Foundation tokens (Self-Rendering, Leap, Coherence, Throughlines, Ein Sof) should have HIGHER mean degree across G_cite + G_throughline than the corpus median (foundation tokens are referenced from many places).
+
+**P2 (Conviction class symmetry):** The 7 Convictions should have approximately equal degree in G_throughline (each Conviction maps to faction-aligned throughlines). Standard deviation of Conviction-degree should be < 30% of mean Conviction-degree.
+
+**P3 (Citation density):** G_cite should have ≥ 100 token-edges. v2's 11 was an artifact of overly-strict explicit-only parsing; expanded parsing should easily clear this. If it doesn't, the corpus is structurally under-cross-referenced and that itself is the finding.
+
+Acceptance: ≥ 2 of 3 properties pass → methodology validated. < 2 pass → report disagreement, do not promote findings to authoritative.
+
+P1 and P2 are non-circular (don't depend on my prior groupings). P3 is a methodology smoke test (citation graph extraction works).
 
 ---
 
-## §4 Stage execution with context-safety
+## §4 Stage execution
 
-**Critical constraint per Jordan:** this analysis must run in a dedicated session. Folding it into other work breaks context.
+### Stage 1 — Build expanded citation graph (this session)
+Parse explicit refs (already done in v2). Add implicit refs by token-name mention threshold. Cross-load PP `affects:` lists. Output `g_cite_v3.json`.
 
-### Stage 1 — Corpus extraction
-Single bash block. Fetches ~250k tokens of full-text corpus via direct GitHub API (bypassing index router). Writes `corpus.json` to `/home/claude/`, then commits it under `designs/audit/<date>-topographic-analysis/data/corpus.json` for reproducibility. **Checkpoint:** at end of stage, dump file count + total chars + hash inline so a vanished turn doesn't lose Stage 1 work.
+### Stage 2 — Build structured-metadata graphs (this session)
+Parse throughlines_meta + infill for Μ contribution lists. Build G_mu, G_throughline. Cross-load PP register for G_pp. Output `g_metadata.json`.
 
-### Stage 2 — Token curation + vectorization
-Single bash block. Builds token list (seed + auto-extracted), tokenizes paragraphs, builds TF-IDF matrix. Writes `tokens.json` and `vectors.npz`. **Checkpoint:** dump token count + vocabulary stats + matrix shape.
+### Stage 3 — Standard TF-IDF (this session)
+Re-vectorize with standard sklearn TfidfVectorizer. Output `g_tfidf_v3.npz`.
 
-### Stage 3 — Similarity + projection
-Single bash block. Cosine similarity + t-SNE + density grid. Writes `similarity.npz`, `layout.json`, `density.json`. **Checkpoint:** dump top-10 strongest similarity pairs + 2D coordinate ranges.
+### Stage 4 — Validation (this session)
+P1, P2, P3 checks. Gate: ≥ 2 of 3 to proceed to authoritative findings. < 2 → findings reported with caveat banner.
 
-### Stage 4 — Diagnostic overlays + weakness register
-1–2 bash blocks. Computes each §2 diagnostic, writes `weakness_register.md` as narrative. **Checkpoint:** dump finding counts per category.
+### Stage 5 — Multi-graph diagnostics (this session)
+Run all §2 diagnostics. Where multiple graphs agree, finding is high-confidence; where they disagree, finding is informative.
 
-### Stage 5 — Optional: viewer artifact
-Only if Jordan requests. The deliverable is the weakness register, not the visualization. Keep this stage off the critical path.
+### Stage 6 — Throughline orphan + Μ imbalance (this session)
+Use parsed metadata from Stage 2 for §2.6, §2.7.
 
-### Stage 6 — Commit + close
-Single `safe_commit` of all data + register + propagation note + session log. Promotes PP-676 from PROVISIONAL → APPLIED.
+### Stage 7 — Discourse-design divergence (this session)
+Vectorize discourse corpus separately. Compute ratio per token. §2.9.
+
+### Stage 8 — Write outputs (this session)
+- Update `02_weakness_register.md` with v3 findings (append, don't replace v2 sections; v3 = §6 onwards)
+- Update `01_methodology.md` with v3 parameters
+- Add `03_validation_report.md` (P1/P2/P3 results)
+
+### Stage 9 — Commit (this session)
+Single safe_commit. Replaces 00_workplan.md (v2 → v3), updates other docs, adds new data files.
 
 ---
 
 ## §5 What this can't find
 
-- **UX failures** — Scene Slate pressure (R-39-A) was the most consequential issue from the political dynamics stress test, and it was about *player experience* (no discretionary actions left), not topology. The corpus can't see this.
-- **Computational cost** — runtime profile concerns, content authoring scope (the 210-entry symbolic resonance table) live outside the graph.
-- **Tedium / pacing** — every edge is treated as a structural fact, not a player-time cost.
-- **Mechanical correctness** — whether a formula is right or balanced is invisible. Topology says "these connect"; it can't say "they connect *correctly*."
-- **Authoring debt** — the 1,190-entry political-dynamics authoring scope doesn't show up.
-- **Intentional asymmetries** — sometimes one-way cascades or sparse regions are correct (e.g. archives directory). The analysis flags candidates; a designer judges which are real weaknesses.
+Same as v1/v2. Plus: **the validity of the multi-graph approach itself depends on the structured metadata being correct.** If throughlines_meta_infill has errors or is incomplete, G_mu and G_throughline inherit those errors. v3 is more robust than v2 but no methodology with this corpus can produce signal independent of the corpus's own structural quality.
 
 ---
 
-## §6 When to run
+## §6 Outputs
 
-Two valid orderings:
-
-**Option A — Before v2 connections audit.** Topographic analysis produces an edge candidate list (top corpus similarities + status-disagreement edges + implied-but-missing edges). The v2 audit then evaluates each candidate manually against the actual specs. The hand-curated v2 inherits corpus-derived suggestions.
-
-**Option B — After v2 connections audit.** Topographic analysis runs against the audited v2 graph. The diagnostic value is the *gap* between the two views: where does corpus-derived topology disagree with hand-audited topology? Disagreements are the highest-value findings.
-
-Recommendation: **B**. The gap analysis is the highest-yield output. v2 first, then this. v2's audited graph becomes input to topographic diagnostics.
-
----
-
-## §7 Outputs
-
-- `designs/audit/<date>-topographic-analysis/00_workplan.md` (this doc, post-execution updated to APPLIED)
-- `designs/audit/<date>-topographic-analysis/01_methodology.md` (executed methodology, parameters, choices)
-- `designs/audit/<date>-topographic-analysis/02_weakness_register.md` (the actual findings — primary deliverable)
-- `designs/audit/<date>-topographic-analysis/data/corpus.json`
-- `designs/audit/<date>-topographic-analysis/data/tokens.json`
-- `designs/audit/<date>-topographic-analysis/data/vectors.npz`
-- `designs/audit/<date>-topographic-analysis/data/similarity.npz`
-- `designs/audit/<date>-topographic-analysis/data/layout.json`
-- `designs/audit/<date>-topographic-analysis/data/density.json`
-- *(optional Stage 5)* `designs/audit/<date>-topographic-analysis/03_viewer.jsx`
+```
+designs/audit/2026-04-29-topographic-analysis/
+├── 00_workplan.md (v3, this doc)
+├── 01_methodology.md (updated for v3)
+├── 02_weakness_register.md (v2 sections + v3 §6 onwards)
+├── 03_validation_report.md (NEW — P1/P2/P3 properties)
+└── data/
+    ├── (v2 outputs preserved)
+    ├── g_cite_v3.json (NEW)
+    ├── g_metadata.json (NEW)
+    ├── g_tfidf_v3.npz (NEW)
+    ├── multigraph_diagnostics.json (NEW)
+    └── discourse_overlay.json (NEW)
+```
 
 ---
 
-## §8 Pre-execution checklist (must satisfy before running)
-
-- [ ] PP-676 promoted from PROVISIONAL → APPLIED on Jordan signoff
-- [ ] Dedicated session — no other work folded in
-- [ ] v2 connections artifact landed (per Option B recommendation)
-- [ ] `canonical_sources.yaml` pruned below threshold (currently 4670/5000)
-- [ ] Index-routing bypass technique tested (Stage 1 needs this; verify with a single full-text fetch before bulk pull)
-
----
-
-## §9 Vetting block
+## §7 Vetting block
 
 ```yaml
 vetting:
   class: A
-  necessity: pass  # analytic infrastructure for surfacing weaknesses unreachable by hand-curation; §1 N case
-  omega: pass  # not a gameplay mechanic; supports Ω vetting indirectly by making weakness candidates visible to the designer
-  mu: []  # meta-tooling, doesn't directly serve any Μ mode
+  necessity: pass
+  omega: pass
+  mu: []
   m_ratings:
     M-1: "○"
     M-2: "○"
@@ -205,17 +257,6 @@ vetting:
     M-9: "○"
     M-10: "○"
     M-11: "○"
-  q: pass  # workplan structure: phased rollout with context-safety checkpoints, output paths specified, technique grounded in a tested Stage 1 partial run, limits explicitly called out
-  note: "Self-exempting on Ω/Μ pattern — same as PP-674, PP-675. Analytic instrument, not gameplay mechanic. Stage 1 partial run completed 2026-04-29 confirmed feasibility (numpy/scipy/sklearn available, corpus fetches at ~150k tokens through index-routed path; full-text fetch will exceed but stays well under 1M context window). Execution deferred to dedicated session per Jordan."
+  q: pass
+  note: "v3 replacement of v2 (which was replacement of v1). Self-exempting on Ω/Μ — meta-tooling. v3 pivots from TF-IDF-primary to multi-graph triangulation in response to v2 execution finding that TF-IDF is too noisy at this corpus's cross-system signal density. Pursued in same session per Jordan directive."
 ```
-
----
-
-## §10 Open items / next session
-
-1. Jordan signs off on this workplan (single decision: run it, defer it, or kill it)
-2. If run: schedule dedicated session, ideally after v2 connections audit lands
-3. If deferred: this workplan stays PROVISIONAL until conditions in §8 are met
-4. If killed: archive workplan with reasoning ledger entry
-
-The single-bit decision is whether the gap-analysis between hand-curated and corpus-derived topology is worth the dedicated session. The recommendation is yes — the diagnostic categories in §2 are not reachable any other way, and the project has already exhibited weaknesses (salience cliff, dead resonance table, static Standing) of exactly the structural-anomaly type that this approach is built to catch earlier.

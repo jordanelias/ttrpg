@@ -407,3 +407,23 @@ Stages 1-4 of the topographic analysis workplan executed in same chat session pe
 **Methodology limits explicit:** TF-IDF cosine measures co-mention; doc-level Jaccard measures shared territory; hand-curated edges encode causal/functional logic. The diagnostic value is in the disagreement between the three lenses. Future iterations should refine surface-form coverage (Stealth, contest styles undermatched) and consider section-level granularity.
 
 **Cross-references:** ED-760, PP-676.
+
+## 2026-04-29 — Topographic analysis v2 + v3 (PP-676)
+
+Same-session execution: v2 TF-IDF methodology (validation FAILED) → v3 multi-graph
+triangulation pivot (validation VALIDATED 2/3 structural properties).
+
+**Files added/modified:**
+- designs/audit/2026-04-29-topographic-analysis/00_workplan.md (REPLACED v1 with v3)
+- designs/audit/2026-04-29-topographic-analysis/01_methodology.md (NEW; v2+v3 sections)
+- designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md (REPLACED v1 with combined v2+v3)
+- designs/audit/2026-04-29-topographic-analysis/03_validation_report.md (NEW; v3 P1/P2/P3)
+- designs/audit/2026-04-29-topographic-analysis/data/* (REPLACED v1 with v2+v3 outputs; .npz binaries dropped, JSON only — see methodology for reproducibility)
+- canon/patch_register_active.yaml (PP-676 description + applied_commit updated)
+- canon/editorial_ledger.yaml (ED-762 added)
+- session_log_current.md (replaced with this session status)
+- references/propagation_map.md (this entry)
+
+**Propagation status:** complete in this commit. All findings are in the weakness
+register pending Jordan review. v2 register sections retained as audit trail per
+v3 §V3-13 v2→v3 diff.

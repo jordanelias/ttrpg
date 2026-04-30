@@ -1,0 +1,136 @@
+{
+  "tokens": [
+    "Combat",
+    "Threadwork",
+    "Mass Combat",
+    "Faction Layer",
+    "Domain Echo",
+    "Conviction Track",
+    "Scale Transitions",
+    "NPC Behavior"
+  ],
+  "occurrence_counts": {
+    "Combat": 30,
+    "Threadwork": 130,
+    "Mass Combat": 70,
+    "Faction Layer": 8,
+    "Domain Echo": 41,
+    "Conviction Track": 16,
+    "Scale Transitions": 4,
+    "NPC Behavior": 3
+  },
+  "top3_neighbors": {
+    "Combat": [
+      [
+        "Domain Echo",
+        0.16231994488450135
+      ],
+      [
+        "Mass Combat",
+        0.14172555511848833
+      ],
+      [
+        "Scale Transitions",
+        0.10461911772082527
+      ]
+    ],
+    "Threadwork": [
+      [
+        "Mass Combat",
+        0.17338322482245097
+      ],
+      [
+        "Combat",
+        0.10284505335631004
+      ],
+      [
+        "Domain Echo",
+        0.04411206797151271
+      ]
+    ],
+    "Mass Combat": [
+      [
+        "Threadwork",
+        0.17338322482245097
+      ],
+      [
+        "Combat",
+        0.14172555511848833
+      ],
+      [
+        "NPC Behavior",
+        0.0975531122723899
+      ]
+    ],
+    "Faction Layer": [
+      [
+        "Scale Transitions",
+        0.21550021979936904
+      ],
+      [
+        "Domain Echo",
+        0.104695210155456
+      ],
+      [
+        "Combat",
+        0.08095910399654774
+      ]
+    ],
+    "Domain Echo": [
+      [
+        "Combat",
+        0.16231994488450135
+      ],
+      [
+        "Faction Layer",
+        0.104695210155456
+      ],
+      [
+        "Conviction Track",
+        0.07996272960475406
+      ]
+    ],
+    "Conviction Track": [
+      [
+        "NPC Behavior",
+        0.12939337745716858
+      ],
+      [
+        "Domain Echo",
+        0.07996272960475406
+      ],
+      [
+        "Combat",
+        0.0
+      ]
+    ],
+    "Scale Transitions": [
+      [
+        "Faction Layer",
+        0.21550021979936904
+      ],
+      [
+        "Combat",
+        0.10461911772082527
+      ],
+      [
+        "Mass Combat",
+        0.06308790184522747
+      ]
+    ],
+    "NPC Behavior": [
+      [
+        "Conviction Track",
+        0.12939337745716858
+      ],
+      [
+        "Mass Combat",
+        0.0975531122723899
+      ],
+      [
+        "Domain Echo",
+        0.06303639510933576
+      ]
+    ]
+  }
+}

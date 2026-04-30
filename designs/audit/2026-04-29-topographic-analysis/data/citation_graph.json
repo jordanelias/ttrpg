@@ -1,0 +1,95 @@
+{
+  "doc_level": {
+    "designs/architecture/campaign_architecture_v30.md": {
+      "designs/provincial/victory_v30.md": 1,
+      "designs/territory/settlement_layer_v30.md": 1,
+      "designs/threadwork/threadwork_v30.md": 1,
+      "designs/npcs/npc_behavior_v30.md": 1
+    },
+    "designs/npcs/npc_character_analyses_v30.md": {
+      "designs/npcs/npc_behavior_v30.md": 1
+    },
+    "designs/provincial/faction_layer_v30.md": {
+      "designs/provincial/victory_v30.md": 2
+    },
+    "designs/provincial/peninsular_strain_v30.md": {
+      "designs/provincial/mass_battle_v30.md": 1,
+      "designs/provincial/victory_v30.md": 4
+    },
+    "designs/provincial/victory_v30.md": {
+      "designs/territory/settlement_layer_v30.md": 2
+    },
+    "designs/world/ms_trajectory_v1.md": {
+      "designs/threadwork/threadwork_v30.md": 1,
+      "canon/03_canonical_timeline.md": 1,
+      "canon/02_foundations_amendment_leap_mechanism.md": 1,
+      "canon/01_foundations_amendment_self_rendering.md": 1
+    },
+    "params/bg/tensions_deck.md": {
+      "params/bg/royal_assassination.md": 1
+    },
+    "params/bg/victory.md": {
+      "designs/provincial/victory_v30.md": 4
+    }
+  },
+  "token_level": {
+    "Campaign Architecture": {
+      "CI": 1,
+      "Settlement Layer": 1,
+      "NPC Behavior": 1
+    },
+    "Faction Layer": {
+      "CI": 2
+    },
+    "Peninsular Strain": {
+      "CI": 4
+    },
+    "CI": {
+      "Settlement Layer": 2
+    },
+    "MS Trajectory": {
+      "Leap": 1,
+      "Self-Rendering": 1
+    },
+    "Tensions Deck": {
+      "Royal Assassination": 1
+    },
+    "Tensions": {
+      "Royal Assassination": 1
+    },
+    "Victory": {
+      "CI": 4
+    }
+  },
+  "token_primary_doc": {
+    "Self-Rendering": "canon/01_foundations_amendment_self_rendering.md",
+    "Leap": "canon/02_foundations_amendment_leap_mechanism.md",
+    "Throughlines": "references/throughlines_meta.md",
+    "Scale Transitions": "designs/architecture/scale_transitions_v30.md",
+    "Conflict Architecture": "designs/architecture/conflict_architecture_proposal.md",
+    "Campaign Architecture": "designs/architecture/campaign_architecture_v30.md",
+    "Combat": "params/combat.md",
+    "Threadwork": "params/threadwork.md",
+    "NPC Behavior": "designs/npcs/npc_behavior_v30.md",
+    "Settlement Layer": "designs/territory/settlement_layer_v30.md",
+    "Settlement Adjacency": "designs/territory/settlement_adjacency_v30.md",
+    "Fractional Province": "designs/provincial/fractional_province_ownership_v30.md",
+    "Faction Layer": "designs/provincial/faction_layer_v30.md",
+    "Faction Succession": "designs/provincial/faction_succession_split_v30.md",
+    "CI Political": "designs/provincial/ci_political_v30.md",
+    "Mass Combat": "params/mass_combat.md",
+    "Military Layer": "designs/provincial/military_layer_v30.md",
+    "Victory": "params/bg/victory.md",
+    "Peninsular Strain": "designs/provincial/peninsular_strain_v30.md",
+    "MS Trajectory": "designs/world/ms_trajectory_v1.md",
+    "Tensions Deck": "params/bg/tensions_deck.md",
+    "Royal Assassination": "params/bg/royal_assassination.md",
+    "Solmund": "designs/world/solmund_v30.md",
+    "Miraculous Event": "designs/scene/miraculous_event_v30.md",
+    "MS": "params/core.md",
+    "CI": "designs/provincial/victory_v30.md",
+    "IP": "designs/provincial/fractional_province_ownership_v30.md",
+    "TS": "canon/02_canon_constraints.md",
+    "Tensions": "params/bg/tensions_deck.md"
+  }
+}
