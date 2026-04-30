@@ -79,7 +79,7 @@ CI runs to 100 (no freeze). Milestone system:
 |---|---|---|
 | 28 | Starting value | — |
 | 40 | Church Assertive | Church gains +1D on all Assert and Seizure rolls |
-| 55 | Church Prominent | All factions: Ob +1 to actions directly opposing Church Domain Actions (Parliament motions targeting Church, Suppress attempts) |
+| 55 | Institutional Reach | All factions: Ob +1 to actions directly opposing Church Domain Actions (Parliament motions targeting Church, Suppress attempts). *(Renamed from "Church Prominent" 2026-04-29 — "Church Prominent" is reserved for the CI generation prerequisite in military_layer_v30 §3.2. This milestone is institutional, not territorial.)* |
 | 65 | Church Dominant | Secular factions must spend an extra action slot (any card type) to pass Parliamentary motions against Church (i.e., two slots not one) |
 | 80 | Church Ascendant | Seizure Ob reduced by 1 globally. All territory PT drifts +1 toward piety pole at Year-End (unless Warden Cooperation ≥ 2) |
 | 100 | Theocracy Unification Attempt | See §2.2 |
@@ -235,7 +235,7 @@ Trade (Consul Outward) pool = Wealth, Ob = floor(Prosperity/2)+1. +1 Ob at IP≥
 
 ### §4.4 Peninsular Strain Effects on Stats
 
-Peninsular Strain (range 0–10) rises from inter-faction battles (+1/season with battle), faction eliminations (+2), revolts (+1). Decays −1 per peaceful season.
+Peninsular Strain (range 0–10) rises from territory-instability (Accord ≤ 1 territory thresholds at Accounting — see peninsular_strain_v30 §4.1), faction eliminations (+2), and revolts (+1). ~~Direct battle-occurrence trigger STRUCK by ED-743~~ (2026-04-29). Decays −1 per peaceful season per §4.2.
 
 | Strain | Effect on faction stats |
 |---|---|
@@ -245,9 +245,9 @@ Peninsular Strain (range 0–10) rises from inter-faction battles (+1/season wit
 | 7–8 | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2 |
 | 9–10 | Non-capital territories: Accord cap 2. Mandate check Ob 3. MS −1/season additional |
 
-**Battles → MS −1 per battle (missing from prior sim builds).** Each season in which at least one inter-faction battle occurred: MS −1 immediately at Accounting. Campaign/War scale: MS −2. This is canonical (params_board_game §Battle Consequences / peninsular_strain_v1.md §3).
+**Battles → MS −1 per battle.** Each season in which at least one inter-faction battle occurred: MS −1 immediately at Accounting. Campaign/War scale: MS −2. This is canonical (mass_battle_v30 §E.1, victory_v30 §0.4).
 
-**Battles → IP +2 per season with inter-faction battle** (also missing from prior sim builds). Each season with battle: IP +2 at Accounting.
+**~~Battles → IP +2 per season: STRUCK by ED-743 (2026-04-29).~~** IP now advances from Accord-based territory-count thresholds at Accounting (peninsular_strain_v30 §3.2), not directly from battle-occurrence.
 
 ---
 
