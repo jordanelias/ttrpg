@@ -1,19 +1,32 @@
-<!-- [PROVISIONAL: 2026-04-29 v1.2.1 — development specification, NERS-cleaned] -->
+<!-- [PROVISIONAL: 2026-04-29 v1.2.2 — INT-3.1 normalization bug fix applied] -->
 <!-- STATUS: PROVISIONAL — CURRENT SOURCE OF TRUTH for political dynamics system -->
 <!-- POSITION: designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md -->
 <!-- SUPERSEDES: stage docs 01-11 (preserved for design history); v1.0→v1.1 superseded 2026-04-29; v1.1→v1.2 superseded 2026-04-29 by simulation-validation revision -->
 <!-- REVISIONS APPLIED: 17_specification_revisions.md (26 patches v1.0→v1.1); 21_v1_2_specification_revisions.md (39 patches v1.1→v1.2 resolving simulation-surfaced gaps); 22_NERS_and_bloat_assessment.md (v1.2→v1.2.1 NERS cleanup); 23_chain_audit.md (audit framing corrections to companion docs) -->
 
-# Political Dynamics System: Development Specification (v1.2.1)
+# Political Dynamics System: Development Specification (v1.2.2)
 
 **Status:** PROVISIONAL (development reference — eligible for canonical promotion review per §13)
-**Version:** v1.2.1 (2026-04-29) — NERS-cleaned. v1.2 had 39 patches applied per `21_v1_2_specification_revisions.md`; v1.2.1 cleanup pass per `22_NERS_and_bloat_assessment.md` (1) cuts §5.4.2 Coup mechanic (deferred to v1.3), (2) cuts §8.2 War State + §8.2.1 Peace Treaty (deferred to v1.3), (3) applies §17 P2/P3 addendum patches surgically in their target sections, (4) deletes §17. Audit corrections per `23_chain_audit.md` reflected in companion docs. P1-CRITICAL resolutions retained (SIM-B-G8 strict, SIM-C-G6 routing, SIM-H-G2 Knot rupture). ED-760 stall-escalator retained. §16 Jordan-decision items remain flagged.
-**Supersedes:** v1.0 (2026-04-28) → v1.1 (2026-04-29, 26 patches) → v1.2 (2026-04-29, 39 simulation-validation patches) → v1.2.1 (2026-04-29, NERS cleanup).
+**Version:** v1.2.2 (2026-04-29) — INT-3.1 normalization bug fix per `27_integration_settlement_layer.md` (population_disposition normalization corrected for settlement stats on 0-5 scale per canonical settlement_layer_v30 §1.3). v1.2.1 was NERS-cleaned. v1.2 had 39 patches applied per `21_v1_2_specification_revisions.md`; v1.2.1 cleanup pass per `22_NERS_and_bloat_assessment.md` (1) cuts §5.4.2 Coup mechanic (deferred to v1.3), (2) cuts §8.2 War State + §8.2.1 Peace Treaty (deferred to v1.3), (3) applies §17 P2/P3 addendum patches surgically in their target sections, (4) deletes §17. Audit corrections per `23_chain_audit.md` reflected in companion docs. P1-CRITICAL resolutions retained (SIM-B-G8 strict, SIM-C-G6 routing, SIM-H-G2 Knot rupture). ED-760 stall-escalator retained. §16 Jordan-decision items remain flagged.
+**Supersedes:** v1.0 (2026-04-28) → v1.1 (2026-04-29, 26 patches) → v1.2 (2026-04-29, 39 simulation-validation patches) → v1.2.1 (2026-04-29, NERS cleanup) → v1.2.2 (2026-04-29, INT-3.1 normalization fix).
 **Audience:** Engine implementation, content authoring, simulation design.
 
 ---
 
-## §0.1 v1.2.1 CHANGE LOG (this version — NERS cleanup)
+## §0.1 v1.2.2 CHANGE LOG (this version — INT-3.1 normalization fix)
+
+Per `27_integration_settlement_layer.md` INT-3.1: population_disposition normalization in §3.9 / PATCH 3.9 was assuming settlement stats on 0-10 scale; canonical settlement_layer_v30 §1.3 specifies 0-5 scale. Corrected:
+
+- `normalized_order(s) = (s.order - 2.5) / 1.25` (maps 0-5 → -2/+2).
+- `normalized_prosperity(s) = (s.prosperity - 2.5) / 1.25` (maps 0-5 → -2/+2).
+
+Previous formula `(s.order - 5) / 2.5` was correct for 0-10 input but produces wrong values for 0-5 input (e.g., settlement.order=5 → +0 nominally, was previously computing +0 — matching luckily; but settlement.order=0 → −2 nominally, was previously computing -2; settlement.order=2 → -0.4 nominally, was previously computing -1.2 — material divergence at low/high end of scale).
+
+**No other v1.2.2 changes.** Single-patch revision; canonical-promotion-blocking bug.
+
+---
+
+## §0.1 v1.2.1 CHANGE LOG (predecessor — NERS cleanup)
 
 Per `22_NERS_and_bloat_assessment.md`:
 
@@ -792,8 +805,14 @@ population_disposition[settlement, faction] = clamp(
 )
 
 where:
-  normalized_order maps settlement.order [0, 10] to [-2, +2]
-  normalized_prosperity maps settlement.prosperity [0, 10] to [-2, +2]
+  normalized_order maps settlement.order [0, 5] to [-2, +2]:
+    normalized_order(s) = (s.order - 2.5) / 1.25
+  normalized_prosperity maps settlement.prosperity [0, 5] to [-2, +2]:
+    normalized_prosperity(s) = (s.prosperity - 2.5) / 1.25
+  
+  (PATCH v1.2.2-INT-3.1 / settlement_layer_v30 §1.3 reconciliation: settlement stats are 
+  on 0-5 scale per canonical settlement_layer_v30 spec; v1.2.1 had assumed 0-10 scale 
+  which would have produced incorrect normalization in implementation. Fixed in v1.2.2.)
   recent_event_delta = sum of Δ-Disposition events this faction caused this 
     settlement in last 4 seasons, exponentially decayed (×0.7^seasons_ago).
 ```
