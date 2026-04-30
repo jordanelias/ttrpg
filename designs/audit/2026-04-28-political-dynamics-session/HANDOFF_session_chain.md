@@ -446,4 +446,58 @@ This session (S2 + S3-partial + S4-A + S4-B + S4-C + S4-D) executed under contin
 
 **Chain summary:** 13 commits this session-chain. ~280k chars output across simulation/editorial artifacts. Resolution work for 68 stress-test issues complete; v1.1 produced; full simulation chain across 5 directions complete with narrative validation. One synthesis session remains to consolidate findings and draft v1.2 patch list.
 
+
+---
+
+## EXTENDED SIMULATION CHAIN — 2026-04-29
+
+After completion of original 5-direction chain, user authorized further simulations leveraging Opus 1M context window. Three additional directions traced.
+
+### SIM-F (player-engaged dramatic arc) — commit `454b5dc4`
+- 16-Accounting trace of deliberate engaged playthrough.
+- Player objective: push Crown toward pluralist Conviction balance.
+- **Engagement hypothesis verified.** Engine produces multi-Act narrative structure for engaged players: setup (Y1), pressure (Y2), crisis (Y3), resolution (Y4). 12+ dramatic-beat density per 4-Year arc. Stated objective achieved without Player Standing gain — institutional change is the reward, not personal advancement.
+- 3 forward-looking observations (SIM-F-O1/O2/O3): Standing-recalc reward for coalition leadership; Faction Crisis precursor warnings; Procedure E pair-interaction probability tuning.
+- All 26 v1.1 patches engaged simultaneously without invariant breaks.
+
+### SIM-G (long-horizon equilibrium) — commit `ca84f96c`
+- 12-Year (48-Accounting) stress trace per SIM-E-O3 recommendation.
+- **No runaway accumulation.** **No oscillations within 12 Years.** Equilibrium reached for diverse-start factions (Crown, Hafenmark); monoculture trajectory for homogeneous-start factions (Varfell).
+- Generational succession (Almud→Marshal at Y6) produces discrete one-time shift then re-stabilization. Multi-decade oscillation emerges naturally from regime sequence.
+- Memory-cap pressure produces realistic long-term character coherence (Founding Memories persist; landmarks survive; patterns merge).
+- 1 new gap (SIM-G-G1: Mood-impact on Faction Meta-Armature aggregate weighting unspecified).
+- 5 forward-looking observations (SIM-G-O1..O5): aging/mortality, Player Scar accumulation, Conviction-diversity bonuses, early-game Memory longevity, generational oscillation framing.
+
+### SIM-H (pathology / crisis cascade) — commit `b54c8162`
+- 6 pathology scenarios: burnt-bridge playthrough, faction internal coup, multi-faction crisis cascade, player-precipitated Faction Crisis, war escalation, Knot rupture cascade.
+- **Engine passes pathology test.** No invariant breaks under extreme stress. Realistic decline cascades. Coherent emergent dynamics.
+- **Third P1-CRITICAL gap surfaced — SIM-H-G2: Knot rupture mechanic.** Spec references Knot rupture as state but doesn't define triggers, mechanics, or consequence cascade. Recommended definition produces coherent cascade per Scenario 6.
+- 6 additional gaps (G1, G3-G7): subversive-intent dialogue, leader-challenge, Faction Crisis resolution path, cross-faction event during simultaneous crises, sustained war-state, peace-treaty mechanics.
+- 2 forward-looking observations: player-precipitated crisis as feature; Knot rupture as featured mechanic.
+
+---
+
+## FINAL CUMULATIVE STATUS — 2026-04-29
+
+**Simulation chain: 8 directions + narrative pass + 51 scenarios + 33 invariants verified + 39 spec gaps + 18 forward-looking observations.**
+
+**Three P1-CRITICAL gaps for v1.2:**
+1. **SIM-B-G8** — `failed_da_proposals` definition (strict vs liberal). Recommend strict.
+2. **SIM-C-G6** — Settlement-Signal-Concern routing. Recommend governor/leader/round-robin.
+3. **SIM-H-G2** — Knot rupture mechanic. Recommend full specification per SIM-H Scenario 6 trace.
+
+**Architecture validated at all scales:** single-mechanic, multi-faction composition, engaged-player narrative, long-horizon equilibrium (12 Years), pathology / extreme stress.
+
+**Engine confirmed to produce:**
+- Stories at scale (chronicle reliably; novel for engaged players).
+- Bounded equilibrium dynamics (no runaway).
+- Multi-decade oscillation through generational succession.
+- Coherent failure / decline under destructive choices.
+- Realistic long-term character coherence via Memory-cap dynamics.
+- Politically authentic Renaissance pace and texture.
+
+**Session 5 (synthesis) deliverable scope expanded:** roll up 8 directions + narrative pass + extended findings; produce final v1.1 validation report consolidating all 39 gaps with prioritization; produce v1.2 patch list incorporating three P1-critical resolutions + ED-760 stall-escalator + high-impact P2 gaps; produce forward-looking design observations memo (18 observations) for Jordan's separate consideration after v1.2 stabilizes.
+
+**Total session output:** 16 commits this session-chain; ~440k chars output across simulation/editorial artifacts.
+
 **END OF HANDOFF v1.**

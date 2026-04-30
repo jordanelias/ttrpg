@@ -68,7 +68,7 @@ entries:
     status: in-progress
     severity: P2
     source: "user request 2026-04-29"
-    progress: "Directions A/B/C/D complete (commits fda634db, 8a6dbb44, 684b1627, 84eec07c). 31 scenarios traced. 27 invariants verified. 29 spec gaps surfaced (2 P1-critical: SIM-B-G8 failed_da_proposals; SIM-C-G6 settlement-Concern routing). Direction E (composition) pending; recommend fresh session."
+    progress: "Full simulation chain complete: A/B/C/D/E/F/G/H + narrative pass (commits fda634db, 8a6dbb44, 684b1627, 84eec07c, 36a8d6e3, b04523d2, 454b5dc4, ca84f96c, b54c8162). 51 scenarios. 39 spec gaps (3 P1-critical: SIM-B-G8 failed_da_proposals, SIM-C-G6 settlement-Concern routing, SIM-H-G2 Knot rupture). 18 forward-looking observations. Architecture validated at all scales. Synthesis session pending."
 
   - id: ED-760
     date: 2026-04-29
@@ -86,8 +86,8 @@ entries:
 
   - id: ED-761
     date: 2026-04-29
-    description: "[PROVISIONAL — TRACKING] 29 specification gaps in doc 12 v1.1 surfaced by SIM-A/B/C/D simulations (commits fda634db, 8a6dbb44, 684b1627, 84eec07c). Two P1-CRITICAL: SIM-B-G8 (failed_da_proposals definition — recommend strict 'DA roll failed only', not 'lost competition'); SIM-C-G6 (Settlement-Signal-derived Concern routing to relevant Active NPC unspecified). Gaps inventoried in respective SIM_*.md docs and HANDOFF_session_chain.md S4 notes. Resolution target: doc 12 v1.2 revision pass."
+    description: "[PROVISIONAL — TRACKING] 39 specification gaps in doc 12 v1.1 surfaced by SIM-A through SIM-H simulations + narrative pass. THREE P1-CRITICAL: SIM-B-G8 (failed_da_proposals definition — recommend strict 'DA roll failed only'); SIM-C-G6 (Settlement-Signal-Concern routing); SIM-H-G2 (Knot rupture trigger conditions/mechanic/consequences — referenced in spec but undefined). Gaps inventoried in respective SIM_*.md docs and HANDOFF_session_chain.md. Resolution target: doc 12 v1.2 revision pass."
     status: open
     severity: P1
-    source: "SIM-A/B/C/D — see HANDOFF and individual SIM docs for full gap inventory"
+    source: "SIM-A/B/C/D/E/F/G/H — see HANDOFF and individual SIM docs for full gap inventory"
 
