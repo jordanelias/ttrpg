@@ -28,7 +28,6 @@ next_action:
     - Review of accumulated PPs: 676 (v3 audit), 677 (throughlines col),
       678 (GM+CR), 679 (vector-audit skill), 680 (CC sweep), 681 (Conviction
       Track promotion), 682 (SHA follow-up)
-    - CI-01 Church Prominent definition (HIGH-PRIORITY)
     - PT-01, ACCT-01, mass battle MB-01..08, INTER batches
     - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord
       Propagation

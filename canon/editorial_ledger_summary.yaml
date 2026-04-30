@@ -1,19 +1,28 @@
 # Editorial Ledger Summary
-# auto-generated 2026-04-28
+# auto-generated 2026-04-30 (manual refresh — prior 2026-04-28 stale; ledger advanced through ED-769)
 
-p1_blocker_count: 0
-open_count: 2
-total_active: 6
-next_id: 750
+p1_blocker_count: 1
+open_count: 5
+total_active: 5
+next_id: 770
 
-p1_blockers: []
+p1_blockers:
+  - ED-755: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
 
 p2_open:
-  - ED-710: "Settlement adjacency graph — new mechanical layer (PP-666)."
-  - ED-711: "Fractional province ownership (PP-666)."
+  - ED-710: "Settlement adjacency graph — new mechanical layer. Invasions occur at settlement-scale via inter-settlement edges (road/river/mountain/coastal). Spec: designs/territory/settlement_adjacency_v30.md…"
+  - ED-711: "Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers. 75%-share threshold triggers Consolidation…"
+  - ED-763: "[PROVISIONAL] doc 12 v1.2 produced (commit 59a1c1e0); 1958 lines; 39 patches resolving all simulation-surfaced gaps; supersedes v1.1. v1.2 is eligible for §13 Promotion Checklist evaluation toward…"
 
-p3_resolved_this_session:
-  - ED-745: "IP start value 20 — verified canonical."
-  - ED-746: "Intel Advancement Counter — STRUCK per canonical_definitive_r2."
-  - ED-747: "Popular Will (PW) — STRUCK, hybrid-only."
-  - ED-748: "Intelligence stat — STRUCK per canonical_definitive_r2."
+p3_open:
+  - ED-764: "[PROVISIONAL] Throughlines table Load-bearing systems column added per PP-677, addressing PP-676 v3 finding §V3-2 that the framework lacked formalized system-token coupling. 43 active throughlines…"
+
+# Recent archival activity (2026-04-30):
+#   ED-750..754  doc 17 batches resolved through v1.2.x
+#   ED-757, ED-760, ED-761  simulation chain + v1.2 production complete
+#   ED-762  archived (doc 12 v1.2.1 progression — collision resolved by renumbering to ED-763)
+#   ED-765  vocabulary debt sweep + ED-762 collision fix (PP-678)
+#   ED-766  valoria-vector-audit skill enshrinement (PP-679)
+#   ED-767  Coup Counter → Graduated Autonomy sweep (PP-680)
+#   ED-768  Conviction Track promoted to first-class doc (PP-681)
+#   ED-769  Conviction Track SHA follow-up (PP-682)
