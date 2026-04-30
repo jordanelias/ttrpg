@@ -349,7 +349,7 @@ See victory_v30.md §3.2 for full Seizure mechanics (PP-494).
 
 **Card type:** Special/Unique Power (Priority 6).
 **Pool:** Influence + floor(CI / 15).
-**Ob:** 7 − PT.
+**Ob:** 10 − PT − infrastructure modifiers (floor 1). Infrastructure modifiers per settlement per ci_political_v30 §2.1. *(Corrected from 7−PT: ci_political_v30 is canonical — Formula A confirmed 2026-04-29 via simulation.)*
 **Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate). **Uncontrolled exclusion (ED-704):** Seizure cannot target Uncontrolled territories (no controlling faction = no Mandate to exceed). Uncontrolled territories must first be brought under Mandate-bearing control via Pastoral Assumption (settlement_layer §1.7) for Church-routed restoration, or Conquest by another faction, or RM Founding (victory_v30 §8). Only then can subsequent Seizure target the territory.
 
 **Revised Accord on Seizure:**
@@ -522,11 +522,11 @@ Occupation (faction_layer_v30.md §2) and Accord (this document §2) address dif
 
 ## §7c CI 0-100 Integration (tc_political_redesign_v30.md)
 
-This document's Church Seizure pool formula (Influence + floor(CI/15)) is compatible with CI running to 100 (no freeze at 75). At CI 100: pool bonus = floor(100/15) = 6 (vs 5 at old CI 75 ceiling). The Seizure Ob formula (7 - PT) is unchanged.
+This document's Church Seizure pool formula (Influence + floor(CI/15)) is compatible with CI running to 100 (no freeze at 75). At CI 100: pool bonus = floor(100/15) = 6 (vs 5 at old CI 75 ceiling). **Seizure Ob formula: 10 − PT − infrastructure (floor 1)** per ci_political_v30 §2.1. *(The "7 − PT" formula referenced here was superseded — Formula A confirmed 2026-04-29.)*
 
 CI milestone effects (tc_political_redesign_v30.md §2.1) interact with Seizure availability:
 - CI >= 40: Church Seizure available (replaces old CI >= 75 gate)
-- CI 80: Seizure Ob -1 globally (stacks with 7 - PT formula)
+- CI 80: Seizure Ob −1 globally (stacks with 10 − PT − infrastructure formula)
 - CI 100: Theocracy Unification Attempt (Seizure on any territory, not just Prominent)
 
 Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizure is always a political act; Accord reflects institutional legitimacy, not CI level.
