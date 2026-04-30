@@ -240,7 +240,7 @@ Ob for military_advance = 2 + (defending territory's Fort level).
 | Wealth | −1/season | 0 (extraction inefficient) |
 | Military | No recruitment from territory | Garrison cost: −1 pool per occupied territory |
 | Stability | See Trigger 1 | — |
-| Accord | Frozen at pre-Occupation value (population loyalty suspended during military contest) | N/A (occupier has no Accord — not yet the controller) |
+| Accord | May decline during Occupation from Stability effects (faction_layer §1.2 Trigger 1) — NOT frozen. Accord resets at control transfer per peninsular_strain §7b table. (Prior "Accord frozen" text struck — superseded by peninsular_strain §7b 2026-04-29.) | N/A (occupier has no Accord until control transfers) |
 
 **Accord on Occupation resolution (peninsular_strain_v1.md §2):**
 - Occupation → automatic control transfer (3 seasons): Accord set to 1 (Resistant). Population endured 3 seasons of military occupation — they do not welcome the new ruler.

@@ -469,7 +469,7 @@ Insert after existing Step 4 (Clock advances):
 3. Passive normalisation: each territory with garrison present AND no hostile action this season for 2 consecutive seasons: Accord +1 (cap Accord 2).
 
 **Step 4d — Peninsular Strain update:**
-1. If no inter-faction battles AND no Revolts this season: Strain −1 (min 0).
+1. Per §4.2: if no Strain advanced from territory-instability this season (all controlled territories at Accord ≥ 2): Strain −1 (min 0). *(Updated to align with §4.2; prior "no battles AND no Revolts" condition was superseded by territory-count mechanism.)*
 2. If diplomatic resolution occurred (Treaty, Pledge honoured): Strain −1 (max one from this source).
 3. Apply Strain threshold effects per §4.3.
 

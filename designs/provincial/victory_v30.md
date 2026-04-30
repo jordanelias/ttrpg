@@ -84,7 +84,7 @@ Per-territory attribute (0–3). Modifies effective Prosperity. See peninsular_s
 
 ### 0.3 Peninsular Strain Counter
 
-Global track (0–10). Advances from inter-faction battles, faction eliminations, revolts. See peninsular_strain_v1.md §4.
+Global track (0–10). Advances from territory-instability (Accord ≤ 1 territory counts at Accounting — §4.1), faction eliminations, and revolts. Direct battle-occurrence no longer advances Strain (ED-743). See peninsular_strain_v30 §4.1/§4.2.
 
 ### 0.4 Battle Consequences
 
