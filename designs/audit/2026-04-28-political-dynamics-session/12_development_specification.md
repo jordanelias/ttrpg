@@ -1,19 +1,41 @@
-<!-- [PROVISIONAL: 2026-04-29 v1.1 — development specification, post-revision] -->
+<!-- [PROVISIONAL: 2026-04-29 v1.2 — development specification, simulation-validated] -->
 <!-- STATUS: PROVISIONAL — CURRENT SOURCE OF TRUTH for political dynamics system -->
 <!-- POSITION: designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md -->
-<!-- SUPERSEDES: stage docs 01-11 (preserved for design history); v1.0 superseded 2026-04-29 by v1.1 -->
-<!-- REVISIONS APPLIED: 17_specification_revisions.md v1 — 26 patches addressing 68 stress-test issues -->
+<!-- SUPERSEDES: stage docs 01-11 (preserved for design history); v1.0→v1.1 superseded 2026-04-29; v1.1→v1.2 superseded 2026-04-29 by simulation-validation revision -->
+<!-- REVISIONS APPLIED: 17_specification_revisions.md (26 patches v1.0→v1.1); 21_v1_2_specification_revisions.md (39 patches v1.1→v1.2 resolving simulation-surfaced gaps) -->
 
-# Political Dynamics System: Development Specification (v1.1)
+# Political Dynamics System: Development Specification (v1.2)
 
-**Status:** PROVISIONAL (development reference — not yet promoted to canonical)
-**Version:** v1.1 (2026-04-29) — 26 patches applied per `17_specification_revisions.md`. Resolves all P1/P2 issues from stress tests in docs 13/14/15. P3 stubs documented in §0.1 below; §6 Jordan-decision items flagged inline as `[JORDAN-DECISION-PENDING-ED-755]` and not applied.
-**Supersedes:** Stage documents 01-11 in 2026-04-28 session (preserved for design history); incorporates streamlining from 09 and stress-test patches from 10. v1.0 (2026-04-28) superseded by v1.1 (2026-04-29).
+**Status:** PROVISIONAL (development reference — eligible for canonical promotion review per §13)
+**Version:** v1.2 (2026-04-29) — 39 patches applied per `21_v1_2_specification_revisions.md` resolving all simulation-surfaced gaps from 8-direction simulation chain (51 scenarios, validation report `19_v1_1_validation_report.md`). Three P1-CRITICAL resolutions: failed_da_proposals strict definition (SIM-B-G8), Settlement-Signal-Concern routing (SIM-C-G6), Knot rupture mechanic (SIM-H-G2). Plus ED-760 stall-escalator + 19 P2 + 16 P3 cleanups. P3 stubs documented in §0.1; §6 Jordan-decision items remain flagged.
+**Supersedes:** v1.0 (2026-04-28) → v1.1 (2026-04-29, 26 patches) → v1.2 (2026-04-29, 39 additional patches from simulation validation).
 **Audience:** Engine implementation, content authoring, simulation design.
 
 ---
 
-## §0.1 v1.1 CHANGE LOG
+## §0.1 v1.2 CHANGE LOG (this version)
+
+39 patches applied 2026-04-29 from `21_v1_2_specification_revisions.md` resolving simulation-surfaced gaps. Patches grouped by priority.
+
+**P1-CRITICAL (§1 of doc 21) — must-resolve-before-canonical:**
+- PATCH v1.2-1 — `failed_da_proposals` strict definition (§8.1 Standing recalc; resolves SIM-B-G8).
+- PATCH v1.2-2 — Settlement-Signal-Concern three-tier routing (§5.2; resolves SIM-C-G6).
+- PATCH v1.2-3 — Knot rupture mechanic full specification (§2.5.2 new + §1.1 featured behavior; resolves SIM-H-G2).
+
+**Recommendation patch (§2 of doc 21):**
+- PATCH v1.2-4 — Stall-escalator term in `select_proposal()` (`+0.05 × seasons_stalled`); validated as anti-deadlock + anti-ossification mechanic at scale (per ED-760).
+
+**Priority-2 (§3 of doc 21) — implementation determinism (19 patches):**
+- PATCH v1.2-5 through v1.2-23. See doc 21 for full list. Highlights: drift coefficients (v1.2-5), iteration order (v1.2-6), 4th-level tie-break (v1.2-8), Standing-recalc counter state (v1.2-11), Mood-impact on aggregate weighting (v1.2-18), faction succession (v1.2-19), faction-internal coup (v1.2-20), war-state mechanic (v1.2-22), peace treaty (v1.2-23).
+
+**Priority-3 (§4 of doc 21) — minor cleanups (16 patches):**
+- PATCH v1.2-24 through v1.2-39. Doc/typo/authoring fixes including N-DIAG-A title rename (v1.2-35), banker's rounding clarification (v1.2-29), confidence boundary standardization (v1.2-26), authored-content scope additions.
+
+Validation evidence base: `19_v1_1_validation_report.md` (consolidates 8-direction simulation chain).
+
+---
+
+## §0.1 v1.1 CHANGE LOG (predecessor)
 
 26 patches applied 2026-04-29 from `17_specification_revisions.md`. Patches grouped by priority.
 
@@ -94,7 +116,9 @@ The following behaviors emerge from intersections of mechanics and are documente
 
 - **Diagonal Chain Legibility (E-DIAG-A).** Concern-resolution → Memory creation → Procedure D Opinion drift produces a multi-Accounting causal chain (event T+0 → Memory T+0 → Concern T+1 → Memory T+1 → Opinion drift T+2). Players observing this chain see "the NPC took a while to come around" rather than instant reaction. The chain is legible because each step is observable through Read/Surveil/Outreach surfaces. Design intent: NPC inner state changes with *time* rather than *event*, preserving Renaissance-pace political feel.
 
-- **Standing 5 Milestone Visibility (N-DIAG-A).** When a Standing change crosses the inner-circle threshold (3 ↔ 4 transition), engine generates a milestone Scene Slate entry the next Accounting (Priority 3 — available). Player can attend the rising/falling NPC's adjustment scene, or skip it. Mechanically: makes Standing recalculation (PATCH 3.11 / §8.1) visible; thematically: confers narrative weight on institutional advancement/decline.
+- **Inner-Circle Threshold Milestone (N-DIAG-A, Standing 3↔4) (PATCH v1.2-35 rename).** When a Standing change crosses the inner-circle threshold (3 ↔ 4 transition), engine generates a milestone Scene Slate entry the next Accounting (Priority 3 — available). Player can attend the rising/falling NPC's adjustment scene, or skip it. Mechanically: makes Standing recalculation (PATCH 3.11 / §8.1) visible; thematically: confers narrative weight on institutional advancement/decline. *Note: prior v1.1 title "Standing 5 Milestone Visibility" was a labeling inconsistency (body specifies 3↔4 transition); renamed in v1.2 per SIM-D-G4.*
+
+- **Knot Rupture (PATCH v1.2-3 / SIM-H-G2).** When sustained negative Disposition or major-betrayal events sever a Knot bond, the engine produces a public salience-5 event with cascading consequences: mutual Disposition crash to -4, Memory propagation to all observers, Concerns about relational reliability in inner-circle peers, future Knot-proposal difficulty increase, possible Belief revision. The rupture Memory is permanent (Founding-equivalent for involved parties). Recovery is multi-Year and partial; the original event is never fully erased. This is the engine's strongest *intimate-political* dramatic mechanic. Full mechanic specification: §2.5.2.
 
 ---
 
@@ -225,6 +249,74 @@ function derive_initial_affect(npc, subject_id):
 ```
 
 NPCs of shared Conviction or shared faction start with mild positive Opinion (+1 each, capped at +3). Opposed Conviction or hostile factions start mild negative. Confidence starts at 1 (low — single piece of evidence will easily move the Opinion).
+
+#### 2.5.2 Knot Rupture (PATCH v1.2-3 / SIM-H-G2)
+
+A Knot is a sustained mutual relational commitment between Active NPCs (or NPC and Player). Knots are formed via existing Knot system mechanics (designs/threadwork/). Knot rupture is the formal severance event — among the engine's most dramatic mechanics, treated here as a featured behavior.
+
+**Trigger conditions.** Knot rupture fires when EITHER:
+1. `disposition_with_partner < -2` sustained for ≥ 2 consecutive seasons, OR
+2. Major-betrayal event: a single contradicting Memory at salience ≥ 5 against a Belief held at confidence 4-5, where the Belief is Knot-related (e.g., "my partner is loyal," "my partner shares my Convictions," "my partner protects me").
+
+**Rupture event mechanic.**
+
+```
+function trigger_knot_rupture(npc_a, npc_b, cause):
+    # Public event of high salience
+    e = Event(
+        event_type="knot_rupture",
+        participants=[npc_a, npc_b],
+        visibility=public,  # Knots are public commitments
+        salience=5,
+        cause=cause,
+    )
+    publish_event(e)
+
+    # Mutual Disposition shift (extends below normal -3 floor)
+    npc_a.disposition_with(npc_b) = -4
+    npc_b.disposition_with(npc_a) = -4
+
+    # Knot bond severed
+    sever_knot(npc_a, npc_b)
+    # → no future P2 mandatory Knot Outreach scenes for this pair
+    #   (PATCH 3.6 supersedence does NOT apply post-rupture)
+
+    # Memory generated for all observers (inner-circle peers + Player if peripheral)
+    for observer in observers_of(e):
+        m = Memory(
+            timestamp=current_season,
+            event_type="knot_rupture_observed",
+            participants=[npc_a, npc_b, observer],
+            affect=-2 if (observer is npc_a or npc_b) else -1,
+            salience=5,
+            detail=cause.description,
+        )
+        add_memory(observer, m)
+
+    # Concerns about both parties' relational reliability propagate
+    for observer in observers_of(e):
+        if observer.is_active() and observer != npc_a and observer != npc_b:
+            generate_concern(observer, e, event_impact_matrix)
+            # Concern tag: "relational_reliability_questioned"
+
+    # Mood impact for involved parties
+    npc_a.mood = Grieving  # duration: 4 seasons
+    npc_b.mood = Grieving
+```
+
+**Long-term consequences.**
+
+- **Damaged-character Memory persists.** The `knot_rupture_observed` Memory is permanent salience 5 (Founding-equivalent for involved parties; high-salience long-decay for observers). Future relational events involving npc_a or npc_b are interpreted against this Memory.
+- **Future Knot proposals face increased skepticism.** When npc_a or npc_b is offered a new Knot (existing Knot system mechanics), the engine increases acceptance difficulty — receiving NPC's `disposition_with_proposer` requires ≥ +1 (vs ≥ 0 standard) before Knot can form. Reflects loss-of-trust.
+- **Belief revision potential.** If npc_a (or Player) accumulates additional contradicting Memories about relational reliability after rupture, Path B Belief revision can fire. Player's Belief "I am trustworthy in personal commitments" can revise to "I am inconstant" — generating a permanent identity Scar.
+- **Faction-level reputation:** inner-circle NPCs use the rupture event in their interpretive frame for years. A ruptured-Knot NPC who later argues for institutional trust faces pre-existing skepticism.
+
+**Recovery path.** Knot rupture is reversible only through extended trust-rebuilding:
+- npc_a's Disposition with former-partner must reach ≥ 0 again (sustained 4+ seasons of consistent positive Memories).
+- A new Knot proposal can be made, subject to the increased-difficulty gate.
+- The original `knot_rupture_observed` Memory persists — full erasure is not possible.
+
+**Featured behavior commentary.** Knot rupture is a *politically-public personal-failure event* — both intimate and institutional. Players choosing playstyles that risk Knot rupture should be aware: this is a near-permanent character-mark, and the engine will weight it heavily in long-term relational interpretation. Designers authoring Knot-relevant content should treat Knot rupture as a *featured dramatic peak*, not a mere state-transition. See also §1.1 Featured Behaviors entry on Knot Rupture.
 
 ### 2.6 Memories (5-10 high-salience records)
 
@@ -731,7 +823,39 @@ function SettlementSignal.from_governor(governor, recent_events):  # PATCH 2.5 �
     )
 ```
 
-Settlement Signal propagates to controlling faction's relevant Active NPC as a Concern (Procedure B input next Accounting). When `compute_settlement_signal` returns `None`, faction-level Concern generation skips this settlement's Signal that Accounting (sparse-settlement handling).
+Settlement Signal propagates to controlling faction's "relevant Active NPC" as a Concern (Procedure B input next Accounting). When `compute_settlement_signal` returns `None`, faction-level Concern generation skips this settlement's Signal that Accounting (sparse-settlement handling).
+
+**Routing logic (PATCH v1.2-2 / SIM-C-G6):**
+
+```
+function route_signal_to_concern(signal, settlement, faction):
+    # Tier 1 — settlement governor if Active NPC
+    if settlement.governor and settlement.governor.is_active_npc():
+        return settlement.governor
+
+    # Tier 2 — faction leader if seat settlement
+    if settlement == faction.seat_settlement:
+        return faction.leader
+
+    # Tier 3 — round-robin among inner-circle by signal.primary_tag domain affinity
+    candidates = []
+    for npc in faction.inner_circle:
+        if npc.is_active():
+            affinity = DOMAIN_ARMATURE_ALIGNMENT[derive_domain(signal.primary_tag)][npc.conviction_primary]
+            candidates.append((npc, affinity))
+    candidates.sort(key=lambda x: (-x[1], -x[0].standing, x[0].id))
+    return candidates[0][0] if candidates else None
+```
+
+Where `derive_domain(tag)` maps Signal tag to its closest matching Project domain (e.g., "raid_threat" → military; "trade_deal" → economic; "ceremonial" → theological/diplomatic). Authored mapping in `params/signal_tag_to_domain.md`.
+
+**Routing failures.** If Tier 3 also returns None (no Active NPCs in inner circle — extreme edge case), the Signal is dropped. This should occur only during severe Faction Crisis (institutional autopilot).
+
+**Cross-border events (PATCH v1.2-37 / SIM-E-G1):** A single peninsula-scale event can produce one Signal per affected settlement (multi-settlement events). Each settlement's Signal propagates as its own Concern via the routing logic above. The event itself is unique; Signals are derived per-settlement; Concerns propagate per-Signal.
+
+**Signal salience handling (PATCH v1.2-12 / SIM-C-G1, G2):** After cascade decay (`signal.salience *= 0.7`), if the resulting salience is below 1, the Signal is dropped (sub-threshold). Otherwise, salience is rounded to nearest integer for Concern propagation.
+
+**Repeated-Signal handling on active Concern (PATCH v1.2-15 / SIM-C-G8):** When a Settlement Signal arrives matching an Active NPC's still-active Concern (same domain-tag), the existing Concern's salience is updated via max-update (`existing.salience = max(existing.salience, signal.salience)`); ttl is also max-updated. No new Concern generated. Prevents runaway Concern accumulation while reflecting ongoing severity.
 
 ### 5.3 Faction Meta-Armature
 
@@ -739,8 +863,20 @@ Settlement Signal propagates to controlling faction's relevant Active NPC as a C
 FactionMetaArmature:
     inner_circle_aggregate:
         weighted_average_of_inner_circle_armatures
-        weights: Standing-based (S7: 1.0, S6: 0.7, S5: 0.5, S4: 0.3)
-        leader: standing_weight × 1.5
+        weights: Standing-based (S7: 1.0, S6: 0.7, S5: 0.5, S4: 0.3) × mood_modifier
+        leader: (standing_weight × 1.5) × mood_modifier
+        
+        # PATCH v1.2-18 / SIM-G-G1 — Mood-impact dampening:
+        mood_modifier = {
+            Steady, Confident, Vindicated, Resolved: 1.0  # full institutional engagement
+            Anxious, Humiliated:                     1.0  # still institutionally engaged
+            Distracted:                              0.7  # cognitive dissonance reduces weight
+            Grieving:                                0.5  # active withdrawal from institutional engagement
+        }
+        # Rationale: leaders/peers in difficult Mood states have reduced institutional weight,
+        # reflecting their reduced engagement. Crown's Almud falling Distracted reduces his
+        # armature contribution from 1.5 to ~1.05 (1.5 × 0.7); the inner circle's aggregate
+        # shifts toward less-distracted peers. Realistic political dynamic.
     
     institutional_stability:
         single merged term (replaces prior institutional_inertia + ethical_framework_anchor)
@@ -792,7 +928,15 @@ Tie-breaks: Standing → seasons_stalled (higher → wins, prevents perpetual st
 - No new NPC Project proposals accepted
 - No inner-circle competition this season
 - Survival actions still fire normally
-- Recovery: when inner-circle Mood states improve below threshold
+
+**Recovery paths (PATCH v1.2-21 / SIM-H-G4):**
+1. Mood states improve below threshold — happens if external pressure subsides AND inner-circle peers process Concerns toward resolution. Standard recovery for transient crises (e.g., plague-induced).
+2. Succession event resolves underlying conflict — leader-death + `designate_new_leader` (§5.4.1 below) OR successful Coup (§5.4.2 below). Leadership clarity restores institutional decision-making capacity even if some peers remain Distracted.
+3. External alliance event — formal merging or vassalage to another faction (out of v1.2 scope; existing diplomatic mechanics).
+
+A Faction Crisis without resolution path through (1)-(3) is structurally degenerate and indicates engine should generate diplomatic/external pressure events to force resolution. Long-running crises (>8 seasons) may trigger neighbor-faction interventions.
+
+**Cross-faction event handling during simultaneous crises (PATCH v1.2-39 / SIM-H-G5):** When multiple factions are simultaneously in Faction Crisis (institutional autopilot), cross-faction events (treaty proposals, diplomatic overtures) are declined by autopilot factions. Bounce-back events (refused-overture) accumulate as Memories in the proposing faction and as latent diplomatic-tension Concerns to surface when crisis-state ends.
 
 **Anomaly detection:** If ≥ 3 inner-circle NPCs simultaneously show {Disposition-with-leader < baseline} AND {at least 2 in negative Mood states (Distracted, Humiliated, Anxious)} AND no major external crisis event this season:
 - Faction Meta-Armature generates Concern: "Internal destabilization detected?" salience 4
@@ -808,6 +952,70 @@ Tie-breaks: Standing → seasons_stalled (higher → wins, prevents perpetual st
 - Available: Influence and Wealth Domain Actions only
 - Unavailable: Military, Mandate, faction-large-scale actions
 - Standard Ob formula applies
+
+#### 5.4.1 Faction Succession (PATCH v1.2-19 / SIM-E-G2)
+
+When the faction leader dies (or otherwise becomes permanently incapable — e.g., reduced to Standing < 4 below inner-circle threshold via long-term failure), the leader-flag must transfer.
+
+**Trigger:** event_type = "leader_death" OR "leader_exit_inner_circle".
+
+**Selection mechanic:**
+
+```
+function designate_new_leader(faction):
+    # Tier 1: highest-Standing same-faction Active NPC
+    candidates = [npc for npc in faction.inner_circle if npc.is_active()]
+    candidates.sort(key=lambda n: -n.standing)
+    
+    if len(candidates) == 0:
+        # Faction has no inner circle — institutional collapse
+        return None  # Faction dissolves or merges per external mechanic
+    
+    if len(candidates) == 1:
+        return candidates[0]
+    
+    # Tier 2 (tie-break): Conviction-alignment with faction's institutional anchor
+    top_standing = candidates[0].standing
+    tied_candidates = [c for c in candidates if c.standing == top_standing]
+    if len(tied_candidates) == 1:
+        return tied_candidates[0]
+    
+    tied_candidates.sort(key=lambda n: -conviction_alignment_score(n, faction.dominant_conviction))
+    
+    # Tier 3 (final tie-break): NPC.id ascending
+    return tied_candidates[0]
+```
+
+**Cascade events on succession:**
+- New leader emits `standing_change` event (now flagged as leader; meta-armature recomputation reflects 1.5× weight).
+- Inner-circle peers receive Memories about succession (affect varies per their Conviction-alignment with new leader).
+- Faction Meta-Armature recomputes immediately (next Accounting reflects new leader's armature).
+- Optionally: succession milestone scene (Priority 3 available — player can witness if interested).
+
+**Faction Crisis state interaction.** If the previous leader died during a Faction Crisis (multiple inner-circle Distracted/Grieving), succession may help resolve crisis (institutional clarity restored); or may extend it (new leader inherits crisis without legitimacy). Engine handles via standard Mood recovery dynamics.
+
+#### 5.4.2 Leader Challenge / Coup Mechanic (PATCH v1.2-20 / SIM-H-G3)
+
+A faction-internal peer challenger can attempt to displace the current leader through a Path A Total Victory Social Contest at faction-leader-Belief level.
+
+**Trigger.** Challenger NPC initiates a Social Contest against the leader's Belief "I am the rightful leader of <faction>." Requires:
+- `Challenger.standing >= leader.standing` (cannot challenge from clearly-lower position).
+- `Challenger.opinion_of(leader).affect_axis < -1` (sustained negative Opinion).
+- Challenger has accumulated ≥ 3 contradicting Memories about leader's competence at salience ≥ 3 in last 4 seasons.
+
+**Contest dynamics.**
+- Contest is Path A (Belief-level), public visibility.
+- Faction Meta-Armature backs leader (institutional_stability anchor + leader's 1.5× weight with current mood_modifier per PATCH v1.2-18).
+- Challenger's coalition: any inner-circle peer with `opinion_of(leader).affect_axis < 0` contributes to challenger's side; any peer with `opinion_of(leader).affect_axis > 0` contributes to leader's side.
+- Player can support either side (if S5+ and aligned with one party).
+
+**Outcomes.**
+- **Total Victory for challenger:** leader-flag transfers; existing leader becomes peer at current Standing (no automatic exile). Trigger `leader_change` event.
+- **Modified Victory for challenger:** leader retains flag but accepts institutional reorganization (similar to engaged-player coalition outcome — reorganization with minority protections).
+- **Modified Defeat for challenger:** leader retains flag; challenger's Standing penalty (Δ_standing -1 to -2 immediate, not waiting for Year boundary).
+- **Total Defeat for challenger:** leader retains flag + challenger's Belief revises to "leader is rightful" (Scar generated) + challenger may be exiled to peripheral status.
+
+**Faction Crisis interaction.** If contest occurs during Faction Crisis (institutional autopilot), the contest is *the* resolution path — succession by combat, in effect. Crisis ends with Contest outcome.
 
 ---
 
@@ -1023,9 +1231,18 @@ function select_proposal(proposals):
         )
         # Standing bonus (modest, breaks near-ties)
         standing_bonus = p.npc.standing × 0.1
-        scores[p] = conviction_alignment + standing_bonus
+        # Stall-escalator (PATCH v1.2-4 / ED-760): long-stalled projects gradually escalate
+        # +0.05 per season of stalling. Validated at scale (SIM-E Sc 2, SIM-G Sc 1-4) as both
+        # anti-deadlock and anti-ossification mechanic. At seasons_stalled=4: +0.20 boost
+        # (matches a 2-Standing differential). At seasons_stalled=8: +0.40 (matches 4-Standing).
+        # Without it, unequal-Standing same-domain collisions can produce permanent winner-takes-all
+        # deadlocks — see SIM-B Scenario 8.
+        stall_escalator = 0.05 × p.project.seasons_stalled
+        scores[p] = conviction_alignment + standing_bonus + stall_escalator
     
-    winner = max(proposals, key=lambda p: (scores[p], p.npc.standing, p.project.seasons_stalled))
+    # Four-level tie-break (PATCH v1.2-8 / SIM-B-G1):
+    # score → Standing → seasons_stalled → NPC.id ascending (lower wins for stable determinism)
+    winner = max(proposals, key=lambda p: (scores[p], p.npc.standing, p.project.seasons_stalled, -p.npc.id))
     return winner
 
 # meta_armature.conviction_weights[c] is a normalized 7-vector summing to 1.0,
@@ -1318,7 +1535,7 @@ This pattern preserves NPC autonomy (NPCs still generate Concerns and Outreach p
 
 ---
 
-### 8.1 NPC Standing Recalculation (Campaign Year boundary — PATCH 3.11 / R-40-A)
+### 8.1 NPC Standing Recalculation (Campaign Year boundary — PATCH 3.11 / R-40-A; refined PATCH v1.2-1, v1.2-11, v1.2-29)
 
 At end of each Campaign Year (4 Accountings = 1 calendar year), each Active NPC's Standing is recalculated:
 
@@ -1327,12 +1544,33 @@ At end of each Campaign Year (4 Accountings = 1 calendar year), each Active NPC'
     +0.5 × completed_projects_this_year
     -0.5 × failed_projects_this_year
     +0.25 × successful_da_proposals_this_year (max +1.0/year)
+        # successful = won inner-circle competition AND DA roll succeeded
     -0.25 × failed_da_proposals_this_year (max -1.0/year)
+        # failed = won inner-circle competition AND DA roll FAILED
+        # (lost competitions do NOT count — they only increment seasons_stalled)
     -0.5 × public_conviction_scars_this_year
 )
 Δ_standing = clamp(Δ_standing, -2, +2)
-npc.standing = round(clamp(npc.standing + Δ_standing, 3, 7))
+npc.standing = round_half_to_even(clamp(npc.standing + Δ_standing, 3, 7))
 ```
+
+**Counter scope (PATCH v1.2-1 / SIM-B-G8 strict definition):** Mood-suppressed proposals (Distracted high-deference `continue`; Grieving Spirit-check fail) do NOT increment any counter. Lost inner-circle competitions do NOT count as `failed_da_proposals` — they increment `seasons_stalled` only (see §6.2 Procedure C). Failed-deference checks during Conviction-aligned displacement do NOT count as `failed_da_proposals` — they produce a separate `displacement_neglect_observed` event (see §6.2 PATCH 3.5 / PATCH v1.2-9). Strict interpretation rewards execution rather than competition outcome; validated at scale by SIM-E Sc 2 and SIM-D Sc 6.
+
+**Counter state (PATCH v1.2-11 / SIM-B-G7):** Each NPC maintains:
+
+```
+npc.year_counters = {
+    completed_projects: 0,
+    failed_projects: 0,
+    successful_da_proposals: 0,
+    failed_da_proposals: 0,
+    public_conviction_scars: 0,
+}
+```
+
+Counters increment during the Year on the appropriate events. They reset to zero at end of Standing recalc (after Δ_standing computed and applied). Counters are tracked per-NPC and are not visible to other NPCs (internal Standing-evaluation only).
+
+**Rounding semantics (PATCH v1.2-29 / SIM-B-G6):** `round_half_to_even` (banker's rounding) used explicitly for determinism. E.g., 4.5 → 4; 5.5 → 6.
 
 If `npc.standing` drops below 3 (rounded), NPC exits inner circle (becomes peripheral). If `npc.standing` rises above 7, capped at 7.
 
@@ -1343,6 +1581,74 @@ A Standing change triggers an event (`event_type: "standing_change"`) which prop
 The Standing ladder row in this section is augmented: **Standing recalculates each Campaign Year based on prior-year activity per §8.1 above.**
 
 Annual cadence (not per-Accounting) prevents Standing from being whippy; the changes accumulate and resolve at narrative milestones.
+
+### 8.2 Inter-Faction War State (PATCH v1.2-22 / SIM-H-G6)
+
+Sustained military conflict between factions is tracked at faction-pair level:
+
+```
+faction_pair_state[faction_a, faction_b] = {
+    war_state: bool,
+    war_started_at: season,
+    accumulated_military_events: list[(season, event_type, casualties)],
+    diplomatic_breakdown_count: int,
+}
+```
+
+**War-state trigger:**
+- 3+ military Domain Actions executed against faction-pair within 4 seasons, AND
+- No active treaty between factions, AND
+- Diplomatic Domain Action attempted by either faction has failed within 2 seasons.
+
+**During war state:**
+- Cross-faction Settlement Signals carry war-context tag (military events at borders amplify by 1.3×).
+- Cross-faction Knots experience Disposition penalty (-0.2 per Accounting; sustained war risks Knot rupture per §2.5.2).
+- DA Proposal Phase favors military proposals in both factions (`war_state` flag adds +0.1 to military-domain alignment scores).
+- Population_disposition in border settlements drifts negative for whichever faction is perceived as aggressor.
+
+**Peace mechanism:** see §8.2.1.
+
+#### 8.2.1 Peace Treaty Mechanic (PATCH v1.2-23 / SIM-H-G7)
+
+Peace treaty is a diplomatic Domain Action at faction-pair level:
+
+```
+function propose_peace_treaty(faction_a, faction_b, terms):
+    # Both factions must approve
+    a_approves = faction_a.meta_armature_evaluates_treaty(terms)
+    b_approves = faction_b.meta_armature_evaluates_treaty(terms)
+    
+    if not (a_approves and b_approves):
+        # Treaty rejected; war_state continues; diplomatic_breakdown_count += 1
+        return TreatyOutcome.REJECTED
+    
+    # Both approve — treaty enters force
+    treaty = Treaty(
+        signatories=[faction_a, faction_b],
+        terms=terms,
+        signed_at=current_season,
+        duration=terms.duration,
+    )
+    
+    # End war state
+    faction_pair_state[faction_a, faction_b].war_state = False
+    faction_pair_state[faction_a, faction_b].war_ended_at = current_season
+    
+    # Generate ceremonial event
+    event = Event(
+        event_type="treaty_signed",
+        participants=[faction_a.leader, faction_b.leader],
+        visibility=public,
+        salience=4,
+    )
+    publish_event(event)
+    
+    return TreatyOutcome.SIGNED
+```
+
+**Treaty terms** (authored content per scenario): may include border adjustments, trade provisions, Knot exchanges (royal marriages), tribute, hostage arrangements. Terms structured as a list of Conviction-aligned-or-contradicted commitments — each faction's meta-armature evaluates whether terms are acceptable.
+
+**Treaty violation:** if a faction takes action contradicting treaty terms, generates high-salience contradiction Memory in opposing faction's leadership; can re-trigger war_state via existing dynamics.
 
 ---
 
@@ -1562,3 +1868,92 @@ For design history and reasoning, see `designs/audit/2026-04-28-political-dynami
 | 11 | top_down_audit.md | Holistic audit | Findings drove this consolidation |
 
 **This document (12_development_specification.md) is the current source of truth** for the political dynamics system. Stage documents 01-11 are preserved for design history; their specific mechanisms may have been superseded.
+
+---
+
+## §17 v1.2 PATCH ADDENDUM (consolidated P2/P3 clarifications)
+
+Patches v1.2-1 through v1.2-4 (P1-CRITICAL + ED-760 stall-escalator) and v1.2-18, v1.2-19, v1.2-20, v1.2-21, v1.2-22, v1.2-23, v1.2-35 are applied surgically in their target sections (§2.5.2 Knot Rupture, §5.2 Settlement Signal routing, §5.3 Mood-impact aggregate weighting, §5.4.1 Faction Succession, §5.4.2 Coup Mechanic, §8.1 Standing Recalc strict definition + counter state, §8.2 War State, §8.2.1 Peace Treaty, §1.1 Featured Behaviors rename + Knot Rupture entry).
+
+The remaining P2/P3 patches are consolidated here for reference. Each acts as a clarifying note; readers should interpret the indicated section accordingly. Authoritative for v1.2.
+
+### 17.1 P2 Implementation-Determinism Clarifications
+
+**PATCH v1.2-5 (SIM-A-G1) — Drift coefficients in §3.6.** Define drift coefficients explicitly:
+- `base_drift = 0.3`
+- `small_drift_coefficient = 0.3` (for confidence-aligned drift)
+- `larger_drift_coefficient = 1.0` (for confidence-contradicting drift at low confidence)
+
+**PATCH v1.2-6 (SIM-A-G2) — Drift loop iteration order in §6.2 Procedure D.** Iterate `new_memories` chronologically by timestamp; ties broken by salience descending.
+
+**PATCH v1.2-7 (SIM-A-G3) — `weighted_select()` re-roll-and-average semantics in §3.6.X Armature Confidence.** At confidence < 0.7, sample twice per dimension. If samples agree, use that result. If they disagree, randomly choose one (over many calls, produces 50/50 split between sampled options). Produces interpretation variance — intended behavior of "frame absent."
+
+**PATCH v1.2-9 (SIM-B-G2) — Failed-deference accounting in §6.2 DA Proposal Phase.** On displacement-deference-check failure: generates `displacement_neglect_observed` event (visibility=semi-public to faction leader); does NOT count as `failed_da_proposal` for Standing recalc. The proposal succeeded; only the deference check failed.
+
+**PATCH v1.2-10 (SIM-B-G3) — `seasons_stalled` increment on non-proposal in §6.2 Procedure C.** If `project.progress` unchanged this season, `project.seasons_stalled += 1` regardless of cause: lost competition, Mood-suppression (Grieving Spirit-fail or Distracted high-deference suppression), no DA proposal made, etc. Stall reflects absence of progress, not specifically competitive failure.
+
+**PATCH v1.2-13 (SIM-C-G3) — `interpret_event_affect()` algorithm in §5.2.** Maps event affect to armature-aligned interpretation: `return event.affect * (1 + 0.3 * armature_alignment_with_event_category(armature, event.event_type))`. Aligned events appear ~1.3× their nominal affect through this armature; contradicted events ~0.7×.
+
+**PATCH v1.2-14 (SIM-C-G7) — `recent_event_delta` event-log infrastructure in §5.1.** Each settlement maintains `settlement.faction_event_history[faction] = [(season, delta, event_type), ...]`, capped at last 8 seasons (older entries dropped). Updated each Accounting by faction-governance-impact events. The `recent_event_delta` formula reads from this list with exponential decay (×0.7^seasons_ago).
+
+**PATCH v1.2-16 (SIM-D-G2) — P2-evasion event handling in §7.6 NPC Outreach Generation.** When the player ignores a Priority 2 mandatory Outreach scene entirely (refuses attendance, sacrifices all other Slate slots), the engine spawns an `evasion_observed` event (visibility=semi-public to outreach_npc, salience=4). Consequences: outreach_npc generates a new Concern at salience+1 vs the original Concern (tag: `player_evading_<original_concern_domain>`); outreach_npc.mood may shift to Anxious or Distracted; Memory generated with affect -2. Mandatory P2 evasion produces accelerating relational damage rather than indefinite deferral.
+
+**PATCH v1.2-17 (SIM-D-G5) — Memory-add edge case in §2.6 / PATCH 3.15.** Drop existing-lowest-salience Memory only if the new Memory's salience is at least as high as the existing minimum. If the new Memory's salience is strictly lower than `min(existing.salience)`, refuse to add the new Memory. Exception: if same-tag existing Memory exists, merge per Rule 1 regardless of salience comparison.
+
+### 17.2 P3 Minor Cleanups
+
+**PATCH v1.2-24 (SIM-A-G4) — `knowledge_contradicts_belief()` content-authoring helper in §2.7.** Define as tag-based domain matching using authored Belief-domain tags (specific implementation deferred to authoring stage; mechanism is straightforward tag-set intersection).
+
+**PATCH v1.2-25 (SIM-A-G5) — `evidence_memory_refs` write timing in §6.2 Procedure D.** Update happens after drift application completes for the Memory. Order: apply drift → append memory_id to `evidence_memory_refs`.
+
+**PATCH v1.2-26 (SIM-A-G6) — Confidence boundary standardization throughout §6.2 Procedure D.** Use `< 3` consistently (i.e., 1 or 2 = weak/low confidence; 3+ = strong). Replace any "<= 2" or ">= 3" inconsistencies in spec text.
+
+**PATCH v1.2-27 (SIM-B-G4) — `generate_goal_from_template()` content scope in §10.** Add row to authoring requirements: "Goal text templates per domain | ~30 entries | params/project_goal_templates.md, 5 templates × 6 domains."
+
+**PATCH v1.2-28 (SIM-B-G5) — Per-domain helpers in §10.** Add row to authoring requirements: `standard_effect_for()` and `domain_action_required_for()` per-domain authored constants in `params/project_domain_effects.md`.
+
+**PATCH v1.2-30 (SIM-B-G9) — Mood-suppressed proposal accounting in §6.2.** Mood-suppressed proposals (Distracted high-deference `continue`, Grieving Spirit-fail) do NOT increment any Year-counter for Standing recalc. Non-events for accounting purposes. (Note: this is also reflected in §8.1 PATCH v1.2-1 Counter scope clause.)
+
+**PATCH v1.2-31 (SIM-C-G4) — Salience-0 Memory lifecycle in §2.6.** Salience-0 Memories are eligible to be dropped on next replacement check; effectively pending-replacement until cap pressure forces them out.
+
+**PATCH v1.2-32 (SIM-C-G5) — `categorize_event_type()` inverse-lookup in §4.5.** Build inverse dict at engine init: `CATEGORY_LOOKUP = {event_type: category for category, types in EVENT_CATEGORIES.items() for event_type in types}`. Used by `resonance_lookup()` fallback per PATCH 2.7.
+
+**PATCH v1.2-33 (SIM-D-G1) — Concern dissipation `implied_affect` default in §6.2 Procedure B Resolution.** When Concern dissipates without engagement (decay-to-0 with no resolution event), generate Memory with `event_type='concern_dissipated_without_engagement'`, `affect=-0.5`, `salience=concern.salience` (at dissipation). Reflects mild negative reading from NPC's perspective ("their question went unanswered").
+
+**PATCH v1.2-34 (SIM-D-G3) — PATCH 3.6 + PATCH 3.10 interaction for Knot Concerns in §7.6.** PATCH 3.6 (Knot Outreach P2 mandatory) supersedes PATCH 3.10 (P3 default) for Knot-partner Concerns about player. Knot Outreach is always P2 mandatory regardless of salience-5 escalation rule. (Note: post-rupture per §2.5.2, Knot Outreach no longer fires; rupture severs the bond.)
+
+**PATCH v1.2-36 (SIM-D-G6) — Merge tie-break in §2.6 / PATCH 3.15.** When multiple existing Memories qualify for merge (same tag, same affect-direction), select most-recent (highest timestamp). Reasoning: newer event tends to be the "current" framing for the pattern.
+
+**PATCH v1.2-38 (SIM-H-G1) — Subversive-intent dialogue interpretation in §10.** Scene templates expose explicit affect-direction tagging for each dialogue branch. Subversive-intent dialogue branches are tagged with negative-affect-direction; supportive branches with positive. Scene authoring distinguishes *what the player chooses to express* from the mechanical Memory affect produced. See `params/scene_templates.md`.
+
+### 17.3 v1.2 Application Audit
+
+**Applied surgically (in target sections):**
+- PATCH v1.2-1 (§8.1): failed_da_proposals strict definition.
+- PATCH v1.2-2 (§5.2): Settlement-Signal-Concern three-tier routing.
+- PATCH v1.2-3 (§2.5.2 + §1.1): Knot rupture mechanic + featured behavior.
+- PATCH v1.2-4 (§6.2): stall-escalator in select_proposal score.
+- PATCH v1.2-8 (§6.2): 4th-level tie-break in select_proposal.
+- PATCH v1.2-11 (§8.1): Standing recalc counter state.
+- PATCH v1.2-12 (§5.2): Signal salience handling.
+- PATCH v1.2-15 (§5.2): repeated-Signal max-update on active Concern.
+- PATCH v1.2-18 (§5.3): Mood-impact on aggregate weighting.
+- PATCH v1.2-19 (§5.4.1): faction succession.
+- PATCH v1.2-20 (§5.4.2): leader challenge / coup mechanic.
+- PATCH v1.2-21 (§5.4): Faction Crisis resolution paths.
+- PATCH v1.2-22 (§8.2): war state mechanic.
+- PATCH v1.2-23 (§8.2.1): peace treaty mechanic.
+- PATCH v1.2-29 (§8.1): banker's rounding clarification.
+- PATCH v1.2-35 (§1.1): N-DIAG-A title rename.
+- PATCH v1.2-37 (§5.2): cross-border event Signal-attribution.
+- PATCH v1.2-39 (§5.4): cross-faction event during simultaneous crises.
+
+**Applied as addendum clarifications (this §15):**
+- PATCH v1.2-5, -6, -7, -9, -10, -13, -14, -16, -17 (P2 implementation-determinism).
+- PATCH v1.2-24, -25, -26, -27, -28, -30, -31, -32, -33, -34, -36, -38 (P3 minor cleanups).
+
+All 39 v1.2 patches are present in this document. See `21_v1_2_specification_revisions.md` for full patch directives and rationale; see `19_v1_1_validation_report.md` for the simulation-evidence base supporting each patch.
+
+---
+
+*(See §14 above for stage-document references and §13 for Promotion Checklist.)*
