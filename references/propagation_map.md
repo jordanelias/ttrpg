@@ -358,3 +358,16 @@ These entries were promoted from MENTIONED-in-canon-corpus state (atom reference
 - Reconciliation against actual implementation status (some patches may already be applied)
 
 Until reviewed, these PROVISIONAL patches should not drive propagation cascades. They are visible in the register for discoverability only.
+
+## PP-675 Terminology Conversion Workplan (2026-04-29)
+
+PROVISIONAL workplan: retire framing terms (TTRPG/BG/Hybrid) and Hybrid-as-third-mode. Preserve mechanical vocabulary (dice pool, TN, Ob, exchange, degree of success, pool formulas).
+
+**Source doc:** `designs/audit/2026-04-29-terminology-conversion/00_workplan.md`
+**Status:** PROVISIONAL — pending Jordan signoff on 5 decisions in workplan §4.
+
+**Propagation status:** **NOT STARTED.** No source-doc edits begin until Jordan resolves §4 decisions and PP-675 promotes from PROVISIONAL → APPLIED. Phase 1 of the workplan creates `references/terminology_canon.md` as authority; Phase 2 builds `references/terminology_sweep_inventory.md` enumerating every legacy-term occurrence by file; Phase 3 propagates by directory cluster (architecture first, archives skipped); Phase 4 adds `terminology_gate` to `safe_commit` to make conversion permanent; Phase 5 updates project-level files (project knowledge instructions block, hook docstrings, SKILL.md files).
+
+**Single load-bearing structural change (workplan §3):** `scale_transitions_v30 §1, §6` rewritten from three-mode (TTRPG/BG/Hybrid) to two-mode (Strategic/Scene) plus Zoom-In as transition verb. Engine already runs on a binary Strategic/Scene state machine; three-mode framing was textual, not implementation. No gameplay behavior change.
+
+**Cross-references:** ED-759.

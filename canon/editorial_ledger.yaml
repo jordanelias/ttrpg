@@ -91,3 +91,9 @@ entries:
     severity: P2
     source: "SIM-B Scenario 8 deadlock analysis; commit 8a6dbb44"
 
+  - id: ED-759
+    date: 2026-04-29
+    description: "[PROVISIONAL] Terminology conversion workplan: retire framing terms (TTRPG/BG/Hybrid) and Hybrid-as-third-mode. Preserve mechanical vocabulary (dice pool, TN, Ob, etc.). Single architectural change: scale_transitions_v30 §6 three-mode → two-mode + Zoom-In. Workplan at designs/audit/2026-04-29-terminology-conversion/00_workplan.md proposes 5 phases with terminology_gate CI hook enforcement at Phase 4. Status: PROVISIONAL pending Jordan signoff on 5 decisions enumerated in workplan §4. PP-675."
+    status: open
+    severity: P2
+    source: "PP-675"

@@ -452,3 +452,48 @@ patches:
       M-6: "○"
     q: pass  # infrastructure quality check: hooks pass syntax; framework text is consistent with §10 ownership rules
     note: "Self-exempting — meta-framework infrastructure, not gameplay mechanic. Subsequent Class A/B gameplay proposals will carry full vetting records."
+
+- id: PP-675
+  date: 2026-04-29
+  severity: P1
+  description: "Terminology conversion workplan — eliminate framing terms (TTRPG/BG/Hybrid)
+    and retire Hybrid as a third mode of play. Preserves all mechanical vocabulary
+    (dice pool, TN, Ob, exchange, degree of success, pool formulas, Wound, Stamina,
+    Fibonacci scaling). Single architectural change: scale_transitions_v30 §1, §6
+    rewritten from three-mode (TTRPG/BG/Hybrid) to two-mode (Strategic/Scene) plus
+    Zoom-In as transition verb. All other changes are vocabulary substitution
+    enforced by a new terminology_gate hook in safe_commit. Workplan at
+    designs/audit/2026-04-29-terminology-conversion/00_workplan.md proposes 5 phases:
+    (0) decisions locked (5 Jordan calls itemized, recommended answers given);
+    (1) terminology_canon.md authority doc; (2) sweep inventory; (3) staged
+    propagation by directory cluster, archives skipped; (4) terminology_gate CI/hook
+    enforcement; (5) project-level cleanup including project knowledge instructions
+    block. Status: PROVISIONAL pending Jordan signoff on §4 decisions. ED-759."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - designs/audit/2026-04-29-terminology-conversion/00_workplan.md
+    - canon/patch_register_active.yaml
+    - canon/editorial_ledger.yaml
+    - session_log_current.md
+    - references/propagation_map.md
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass  # meta-framework cleanup; removes non-Renaissance abstraction (Hybrid as third mode); workplan §1 N case
+    omega: pass  # not a gameplay mechanic; supports Ω-readable framing by aligning vocabulary with the videogame the player actually plays
+    mu: []  # meta-framework, doesn't directly serve any Μ mode
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass  # workplan structure: phased rollout with gates, decisions itemized with recommended answers, risks called out, enforcement spec'd
+    note: "Self-exempting on Ω/Μ pattern — same as PP-674. The single Class A gameplay-touching element (retiring Hybrid as a mode in scale_transitions_v30 §6) is structural-vocabulary only: removes a textual abstraction, no behavior change. Engine already runs on a binary Strategic/Scene state machine; three-mode framing was textual not implementation."
