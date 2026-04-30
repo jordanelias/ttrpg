@@ -492,6 +492,64 @@ def supersession_check(additions: list) -> None:
         print("  Verify commit does not regress the superseded authority. (non-blocking)\n")
 
 
+def assert_unique_ids(additions: list) -> None:
+    """
+    Enforce id uniqueness in ledger and register files.
+
+    Prevents collision bugs like ED-762 (committed 2026-04-29 across two separate
+    sessions, surfaced in audit 2026-04-30). Hooks at commit time so violations
+    fail fast rather than after CI or via downstream propagation defects.
+
+    Files checked:
+      canon/editorial_ledger.yaml          (entries: list with .id)
+      canon/editorial_ledger_archive.yaml  (entries: list with .id)
+      canon/patch_register_active.yaml     (top-level list with .id)
+      canon/patch_register_archive.yaml    (top-level list with .id)
+    """
+    LEDGER_FILES = {
+        'canon/editorial_ledger.yaml':         'entries',
+        'canon/editorial_ledger_archive.yaml': 'entries',
+        'canon/patch_register_active.yaml':    None,
+        'canon/patch_register_archive.yaml':   None,
+    }
+    import yaml
+    errors = []
+    for path, content in additions:
+        if path not in LEDGER_FILES:
+            continue
+        try:
+            data = yaml.safe_load(content)
+        except yaml.YAMLError as e:
+            errors.append(f"UNIQUE_IDS: {path}: YAML parse error — {e}")
+            continue
+        key = LEDGER_FILES[path]
+        if key is None:
+            items = data if isinstance(data, list) else []
+        else:
+            items = (data or {}).get(key, []) or []
+        seen, dupes = {}, []
+        for item in items:
+            if not isinstance(item, dict):
+                continue
+            iid = item.get('id')
+            if iid is None:
+                continue
+            if iid in seen:
+                dupes.append(iid)
+            else:
+                seen[iid] = True
+        if dupes:
+            errors.append(
+                f"UNIQUE_IDS: {path}: duplicate ID(s) {sorted(set(dupes))}. "
+                f"Each entry must have a unique id (caused ED-762 collision 2026-04-29)."
+            )
+    if errors:
+        raise RuntimeError(
+            "[HOOK VIOLATION] assert_unique_ids FAILED:\n"
+            + "\n".join(f"  [{i+1}] {e}" for i, e in enumerate(errors))
+        )
+
+
 def pre_commit_gate(additions: list, deletions: list = None) -> None:
     """
     Hard gate before every commit. Checks:
@@ -591,6 +649,12 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     # Sim fabrication check — catches uncited mechanical constants in sim files
     try:
         sim_fabrication_check(additions)
+    except RuntimeError as e:
+        errors.append(str(e))
+
+    # Unique-ID check on ledger/register files (prevents ED-762-style collisions)
+    try:
+        assert_unique_ids(additions)
     except RuntimeError as e:
         errors.append(str(e))
 
