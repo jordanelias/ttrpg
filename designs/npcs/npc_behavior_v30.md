@@ -23,18 +23,9 @@ Every named NPC holds three interconnected attributes.
 
 ### §1.2 Conviction Taxonomy
 
-| Conviction | Grounding Claim | What it values | What it dismisses |
-|---|---|---|---|
-| Faith | Value is revealed through divine authority | Doctrine, institutional continuity, spiritual obedience | Empirical contradiction, pragmatic objection |
-| Order | Value is maintained through structure | Stability, procedure, predictability | Innovation, disruption (even beneficial) |
-| Reason | Value is discovered through evidence | Knowledge, investigation, falsifiability | Tradition without justification, appeal to emotion |
-| Equity | Value is distributed justly | Access, fairness, dismantling privilege | Institutional prerogative, hierarchical authority |
-| Precedent | Value is inherited from what has been established | Legal continuity, constitutional procedure, institutional memory | Ad hoc decisions, revolutionary action |
-| Autonomy | Value is chosen by the actor | Self-determination, operational freedom, survival | Universal moral claims, institutional demands |
-| Continuity | Value is sustained through practice | The work itself, applied necessity, endurance | Politics, ideology, anything that does not directly serve the ongoing task |
-| Community | Value is constituted through collective being | The group, the living tradition, the practice as shared act | Individual claims of authority or exception; hierarchy that displaces communal determination |
-| Warden | Value is the maintenance of the boundary between rendering and collapse | The work of holding — Thread practice, Mending, substrate care | Political agendas that interfere with the maintenance work; ideology that claims priority over immediate necessity |
-
+*The Conviction taxonomy specification has been promoted to its own canonical doc per PP-681.
+See `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction definitions
+(Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity, Community, Warden).*
 
 ### §1.3 Resonant Style Taxonomy
 
@@ -404,49 +395,15 @@ An NPC revises a Belief when ALL of the following hold:
 
 ### §3.3 Scar Accumulation and Conviction Effects
 
-| Scars | Effect on Conviction | Effect on Resonant Style | Effect on Behavior |
-|---|---|---|---|
-| 0 | Default configuration | Default configuration | Stable institutional behavior |
-| 1 | Secondary Conviction activates alongside primary. Decision Forks increase. | No change | NPC exhibits internal conflict. Both Convictions influence decisions. |
-| 2 | Primary Conviction may shift to secondary (GM judgment based on Scar content). NPC enters arc transition state. | Secondary Resonant Style activates permanently. NPC is now vulnerable on two fronts. | Institutional Tendency may diverge from personal behavior. NPC may take surprising actions. |
-| 3+ | Conviction crisis. NPC acts unpredictably for 1 season (GM rolls on Conviction table below to determine each major decision). | All Resonant Styles active. NPC is socially exposed. | The NPC is in full transformation. Their arc has entered a terminal phase — they will either stabilise into a new configuration or be destroyed. |
-
-**Conviction crisis table** (3+ Scars, GM rolls d6 per major decision):
-| Roll | NPC acts on... |
-|---|---|
-| 1–2 | Original primary Conviction (habitual regression) |
-| 3–4 | Secondary Conviction (conscious pivot) |
-| 5 | Autonomy (survival instinct overrides both) |
-| 6 | Whichever Conviction most aligns with the last PC interaction (relational pull) |
-
----
+*The Scar accumulation table and Conviction crisis mechanics have been promoted to their own
+canonical doc per PP-681. See `designs/personal/conviction_track_v1.md` §2 for the canonical
+specification (Scar count → Conviction state effects, Conviction crisis d6 table for 3+ Scar NPCs).*
 
 ### §3.4 Thread Operation → Conviction Scar Triggers (ED-663, ED-664)
 
-Thread operations witnessed by NPCs produce Conviction Scars. Parallels the Certainty Track movement triggers (params_core PP-551) but targets a different track: Certainty = cosmological framework shift; Conviction Scar = moral wound.
-
-**Thread Event × Conviction Scar Matrix:**
-
-| Thread Event Witnessed | Faith | Order | Reason | Equity | Precedent | Autonomy | Continuity |
-|---|---|---|---|---|---|---|---|
-| Dissolution of living being | **Scar** | **Scar** | **Scar** | **Scar** if powerless victim | **Scar** | **Scar** if unwilling | No |
-| POP (history rewrite) | **Scar** | **Scar** | **Scar** | No | **Scar** | No | **Scar** if disrupts work |
-| Lock on a being | No | No | No | **Scar** | **Scar** if no legal basis | **Scar** | **Scar** if prevents work |
-| Mending a Gap | No | No | No | No | No | No | No |
-| Weaving (non-harmful) | **Scar** | No | No | No | No | No | No |
-| Rendering Crisis (witnessed) | **Scar** | **Scar** if disrupts environment | **Scar** | **Scar** if harms bystanders | No | **Scar** | **Scar** if disrupts work |
-
-**Conditions:**
-- **Witness requirement:** Direct witness (present in scene) or credible testimony (Evidence Track contribution + Disposition ≥ +1).
-- **Certainty scaling:** C5: +1 Scar severity. C0: −1 Scar severity. C2–3: standard.
-- **Season cap:** Max 1 Scar per season from Thread witnessing per NPC.
-- **Mending exception:** Mending never produces Scars.
-- **Faith specificity:** Faith NPCs Scar from ANY Thread operation except Mending.
-
-**Player Conviction Checks (ED-664):**
-Player witnesses Thread event → Spirit pool, TN 7, Ob 1. Failure: active Conviction shaken (mechanical = NPC Scar 1 effect) for 1 season.
-
----
+*The Thread Event × Conviction Scar matrix has been promoted to its own canonical doc per PP-681.
+See `designs/personal/conviction_track_v1.md` §3 for the canonical specification (full matrix,
+witness requirements, Certainty scaling, Faith-specificity rule, Player Conviction Checks).*
 
 ### §3.5 Advisor-Principal Confidentiality Boundary (NEW — ED-664)
 

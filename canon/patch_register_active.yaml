@@ -759,4 +759,68 @@ patches:
       cites ED-781 inline for traceability. 4 leaves intentionally preserved:
       worldbuilding text + descriptive references to the strike itself
       (don't erase audit trail)."
+- id: PP-681
+  date: 2026-04-29
+  severity: P3
+  description: "Conviction Track promoted to first-class doc, addressing PP-676
+    v3 §V3-5 multi-graph isolate finding (Conviction Track central but lived
+    inline in npc_behavior_v30 with no own file). New file
+    designs/personal/conviction_track_v1.md (4,834 chars from extraction +
+    banner + cross-references) consolidates the §1.2 Conviction Taxonomy table
+    (9 Convictions: Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity/
+    Community/Warden), §3.3 Scar Accumulation table + Conviction crisis d6
+    table, §3.4 Thread Event × Conviction Scar matrix + witness conditions +
+    Player Conviction Checks (ED-664). Original sections in npc_behavior_v30
+    replaced with redirect stubs pointing at new doc as canonical source
+    (avoids breaking implicit citations to the npc_behavior file itself).
+    Cross-reference in scale_transitions_v30.md L219 updated:
+    'npc_behavior_v30 §3.4' → 'conviction_track_v1.md §3, formerly
+    npc_behavior_v30 §3.4'. canonical_sources.yaml conviction_track.design_doc
+    repointed at new file with PENDING_FIRST_COMMIT SHA placeholder + retain
+    npc_behavior as 'related' for stub-redirect traceability. Bonus: 3 'GM'
+    references inside §3.3 table cells (missed by PP-678 because they were 'GM'
+    not 'Game Master' full phrase) replaced with 'engine' equivalents in the
+    extracted version. Files modified: 1 added (conviction_track_v1.md),
+    3 modified (npc_behavior_v30 -3835 chars, scale_transitions_v30
+    +50 chars, canonical_sources.yaml ~+200 chars). ED-768."
+  finding_id: PP-676 v3 §V3-5
+  source: topographic_analysis
+  affects:
+    - designs/personal/conviction_track_v1.md
+    - designs/npcs/npc_behavior_v30.md
+    - designs/architecture/scale_transitions_v30.md
+    - references/canonical_sources.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Structural promotion of canonical concept. N pass — restores
+      first-class doc status to a canonical mechanic (Conviction Track) that
+      v3 audit identified as multi-graph isolate despite being central to
+      NPC Behavior. Ω pass — improves citation graph structure (Conviction
+      Track now citable from its own file rather than buried; future runs
+      should show Conviction Track promoted out of isolate set). Μ []
+      because promotion is structural, no behavior change. M-ratings ○:
+      content extraction is byte-preserving (verified pre/post) except 3 GM →
+      engine substitutions which were incremental cleanups. Stub-redirect
+      strategy preserves all existing implicit citations; only one explicit
+      cross-section reference (scale_transitions §3.4) was updated.
+      canonical_sources.yaml SHA placeholder PENDING_FIRST_COMMIT will be
+      filled in next commit after this lands."
 

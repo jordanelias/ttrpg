@@ -216,7 +216,7 @@ Accord Domain Echoes fire at Accounting Step 4c alongside other Accord checks. T
 
 Thread events produce Domain Echo to faction stats when they meet Thread Significance — distinct from Sufficient Scope (§7).
 
-**Fires when:** (a) Thread operation produces RS change ≥ 1, OR (b) Thread operation witnessed by NPC whose Conviction Scar fires (npc_behavior_v30 §3.4), OR (c) Thread operation creates/destroys Gap, Lock, or Knot at Territorial+ scale.
+**Fires when:** (a) Thread operation produces RS change ≥ 1, OR (b) Thread operation witnessed by NPC whose Conviction Scar fires (conviction_track_v1.md §3, formerly npc_behavior_v30 §3.4), OR (c) Thread operation creates/destroys Gap, Lock, or Knot at Territorial+ scale.
 
 | Thread Event | Affected Stat | Direction |
 |---|---|---|

@@ -101,4 +101,10 @@ entries:
     status: applied
     severity: P3
     source: "PP-680 (PP-676 v3 §V3-9, PP-678 deferred)"
+  - id: ED-768
+    date: 2026-04-29
+    description: "[APPLIED] Conviction Track promoted to first-class doc per PP-681 (PP-676 v3 §V3-5). New designs/personal/conviction_track_v1.md consolidates §1.2 Conviction Taxonomy + §3.3 Scar Accumulation + §3.4 Thread Operation triggers extracted from npc_behavior_v30 (4,834 chars). Original sections replaced with redirect stubs. scale_transitions_v30 L219 cross-ref updated. canonical_sources.yaml repointed (SHA pending follow-up). 3 GM → engine substitutions in §3.3 table cells (missed by PP-678 due to 'GM' vs 'Game Master' phrase difference)."
+    status: applied
+    severity: P3
+    source: "PP-681"
 

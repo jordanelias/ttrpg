@@ -567,3 +567,55 @@ ED-781 (Graduated Autonomy spec), ED-767.
 **Standing:** vocabulary debt sweep complete for the 3 terms identified in v3
 audit (Game Master, Cultural Reformation, Coup Counter).
 
+## 2026-04-29 — Conviction Track promotion (PP-681)
+
+Addresses PP-676 v3 §V3-5 multi-graph isolate finding. Conviction Track was
+canonical and central but lived inline in npc_behavior_v30 with no own file.
+Now has first-class doc status.
+
+**Files added:**
+- designs/personal/conviction_track_v1.md (4,834 chars; canonical extraction
+  + banner + cross-references)
+
+**Files modified:**
+- designs/npcs/npc_behavior_v30.md (-3,835 chars; §1.2 + §3.3 + §3.4 replaced
+  with redirect stubs)
+- designs/architecture/scale_transitions_v30.md (+50 chars; L219 cross-ref
+  updated 'npc_behavior_v30 §3.4' → 'conviction_track_v1.md §3, formerly
+  npc_behavior_v30 §3.4')
+- references/canonical_sources.yaml (~+200 chars; conviction_track.design_doc
+  repointed at new file; SHA placeholder PENDING_FIRST_COMMIT to be filled in
+  follow-up commit; original npc_behavior listed as 'related' for traceability)
+- canon/patch_register_active.yaml (PP-681)
+- canon/editorial_ledger.yaml (ED-768)
+- session_log_current.md (replaced)
+- references/propagation_map.md (this entry)
+
+**SHA follow-up required:** canonical_sources.yaml has
+canonical_sha__designs__personal__conviction_track_v1_md = "PENDING_FIRST_COMMIT".
+After this commit lands, fetch the new file's blob SHA and update with a
+follow-up no-op-content PP. This is standard procedure for new canonical
+files — the SHA can't be set until the file exists.
+
+**Stub-redirect strategy:** Original §1.2 / §3.3 / §3.4 sections in
+npc_behavior_v30 retain their headers + a 1-2 sentence redirect to the new
+canonical file. Existing references that cite npc_behavior_v30 file-level
+still resolve correctly. Only one explicit cross-section reference was found
+(scale_transitions §3.4) and was updated; broader cross-reference audit
+recommended in future session.
+
+**Bonus cleanup:** 3 'GM' references inside §3.3 table cells (missed by
+PP-678 because 'GM' bare differs from 'Game Master' full phrase) replaced
+with 'engine' equivalents in the extracted version. PP-678 used "Game Master"
+exact-match; bare "GM" is a separate sweep candidate for future PP.
+
+**Cross-references:** PP-676 v3 §V3-5 (source finding), PP-678 (parent
+vocabulary debt sweep, missed bare 'GM'), PP-680 (CC sweep, also a v3 §V3-9
+follow-up), ED-663/ED-664/ED-672 (source authority for Conviction mechanics),
+ED-768.
+
+**Standing flags:**
+- Bare 'GM' references may exist elsewhere in design corpus (3 found and
+  fixed in §3.3 extraction; full corpus sweep not done in this PP)
+- canonical SHA follow-up commit needed for the new file
+
