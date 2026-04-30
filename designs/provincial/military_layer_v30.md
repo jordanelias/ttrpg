@@ -234,7 +234,7 @@ PP-402 is replaced by a conditional passive (§3.2) and explicit competitive sou
 
 ### §3.2 Conditional Passive
 
-CI advances by +1 passively each season **only if** Church is Prominent (Church Mandate > controlling faction Mandate) in **2 or more territories** at Accounting time.
+CI advances by +1 passively each season **only if** Church is Prominent in **2 or more territories** at Accounting time. **Prominent:** Church controls the territory, OR Church Mandate > the controlling faction's Mandate. (CI-01 fix 2026-04-29: Church is always Prominent in territories it controls.)
 
 | Prominent territory count | CI passive |
 |---|---|
