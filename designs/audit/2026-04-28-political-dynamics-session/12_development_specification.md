@@ -1,19 +1,41 @@
-<!-- [PROVISIONAL: 2026-04-29 v1.2 — development specification, simulation-validated] -->
+<!-- [PROVISIONAL: 2026-04-29 v1.2.1 — development specification, NERS-cleaned] -->
 <!-- STATUS: PROVISIONAL — CURRENT SOURCE OF TRUTH for political dynamics system -->
 <!-- POSITION: designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md -->
 <!-- SUPERSEDES: stage docs 01-11 (preserved for design history); v1.0→v1.1 superseded 2026-04-29; v1.1→v1.2 superseded 2026-04-29 by simulation-validation revision -->
-<!-- REVISIONS APPLIED: 17_specification_revisions.md (26 patches v1.0→v1.1); 21_v1_2_specification_revisions.md (39 patches v1.1→v1.2 resolving simulation-surfaced gaps) -->
+<!-- REVISIONS APPLIED: 17_specification_revisions.md (26 patches v1.0→v1.1); 21_v1_2_specification_revisions.md (39 patches v1.1→v1.2 resolving simulation-surfaced gaps); 22_NERS_and_bloat_assessment.md (v1.2→v1.2.1 NERS cleanup); 23_chain_audit.md (audit framing corrections to companion docs) -->
 
-# Political Dynamics System: Development Specification (v1.2)
+# Political Dynamics System: Development Specification (v1.2.1)
 
 **Status:** PROVISIONAL (development reference — eligible for canonical promotion review per §13)
-**Version:** v1.2 (2026-04-29) — 39 patches applied per `21_v1_2_specification_revisions.md` resolving all simulation-surfaced gaps from 8-direction simulation chain (51 scenarios, validation report `19_v1_1_validation_report.md`). Three P1-CRITICAL resolutions: failed_da_proposals strict definition (SIM-B-G8), Settlement-Signal-Concern routing (SIM-C-G6), Knot rupture mechanic (SIM-H-G2). Plus ED-760 stall-escalator + 19 P2 + 16 P3 cleanups. P3 stubs documented in §0.1; §6 Jordan-decision items remain flagged.
-**Supersedes:** v1.0 (2026-04-28) → v1.1 (2026-04-29, 26 patches) → v1.2 (2026-04-29, 39 additional patches from simulation validation).
+**Version:** v1.2.1 (2026-04-29) — NERS-cleaned. v1.2 had 39 patches applied per `21_v1_2_specification_revisions.md`; v1.2.1 cleanup pass per `22_NERS_and_bloat_assessment.md` (1) cuts §5.4.2 Coup mechanic (deferred to v1.3), (2) cuts §8.2 War State + §8.2.1 Peace Treaty (deferred to v1.3), (3) applies §17 P2/P3 addendum patches surgically in their target sections, (4) deletes §17. Audit corrections per `23_chain_audit.md` reflected in companion docs. P1-CRITICAL resolutions retained (SIM-B-G8 strict, SIM-C-G6 routing, SIM-H-G2 Knot rupture). ED-760 stall-escalator retained. §16 Jordan-decision items remain flagged.
+**Supersedes:** v1.0 (2026-04-28) → v1.1 (2026-04-29, 26 patches) → v1.2 (2026-04-29, 39 simulation-validation patches) → v1.2.1 (2026-04-29, NERS cleanup).
 **Audience:** Engine implementation, content authoring, simulation design.
 
 ---
 
-## §0.1 v1.2 CHANGE LOG (this version)
+## §0.1 v1.2.1 CHANGE LOG (this version — NERS cleanup)
+
+Per `22_NERS_and_bloat_assessment.md`:
+
+1. **Cut §5.4.2 Leader Challenge / Coup Mechanic.** 24 lines deferred to v1.3. Faction succession on leader-death (§5.4.1) handles dominant case; coup-by-living-peer is rare and emergent-Memory-drift dynamics handle precursor pressures without explicit mechanic. PATCH v1.2-20 effectively withdrawn from v1.2.1 spec body (still tracked in doc 21 for v1.3 reactivation).
+
+2. **Cut §8.2 Inter-Faction War State + §8.2.1 Peace Treaty Mechanic.** 69 lines deferred to v1.3. War-state was an aggregation layer over individual military Domain Actions; peace treaty was a diplomatic Domain Action with binding terms — both already supported implicitly by general DA framework. PATCH v1.2-22 and v1.2-23 effectively withdrawn from v1.2.1 spec body (tracked in doc 21 for v1.3 reactivation).
+
+3. **§17 v1.2 Patch Addendum applied surgically and deleted.** ~85 lines. P2/P3 patches that were consolidated as prose summary in §17 are now applied as clarifying notes in their target sections (§3.6, §3.6.X, §5.1, §5.2, §6.2 Procedures B/C/D, §7.6, §10, etc.). Implementors no longer need to consult both target section AND §17 for authoritative behavior.
+
+**Net change:** ~178 lines reduction. v1.2.1 spec body is tighter, more elegant, and passes NERS rigorously.
+
+**Patches retained from v1.2 (no change):**
+- All P1-CRITICAL: PATCH v1.2-1 (failed_da_proposals strict, §8.1), PATCH v1.2-2 (Settlement-Signal-Concern routing, §5.2), PATCH v1.2-3 (Knot rupture, §2.5.2 + §1.1).
+- ED-760 stall-escalator: PATCH v1.2-4 (§6.2).
+- §5.4.1 Faction Succession: PATCH v1.2-19.
+- All other surgical patches in their target sections.
+
+**Validation evidence:** `19_v1_1_validation_report.md` + `23_chain_audit.md` corrections.
+
+---
+
+## §0.1 v1.2 CHANGE LOG (predecessor)
 
 39 patches applied 2026-04-29 from `21_v1_2_specification_revisions.md` resolving simulation-surfaced gaps. Patches grouped by priority.
 
@@ -26,7 +48,7 @@
 - PATCH v1.2-4 — Stall-escalator term in `select_proposal()` (`+0.05 × seasons_stalled`); validated as anti-deadlock + anti-ossification mechanic at scale (per ED-760).
 
 **Priority-2 (§3 of doc 21) — implementation determinism (19 patches):**
-- PATCH v1.2-5 through v1.2-23. See doc 21 for full list. Highlights: drift coefficients (v1.2-5), iteration order (v1.2-6), 4th-level tie-break (v1.2-8), Standing-recalc counter state (v1.2-11), Mood-impact on aggregate weighting (v1.2-18), faction succession (v1.2-19), faction-internal coup (v1.2-20), war-state mechanic (v1.2-22), peace treaty (v1.2-23).
+- PATCH v1.2-5 through v1.2-23. See doc 21 for full list. Highlights: drift coefficients (v1.2-5), iteration order (v1.2-6), 4th-level tie-break (v1.2-8), Standing-recalc counter state (v1.2-11), Mood-impact on aggregate weighting (v1.2-18), faction succession (v1.2-19), faction-internal coup (v1.2-20), war-state mechanic (v1.2-22), peace treaty (v1.2-23). [v1.2.1 note: patches v1.2-20, v1.2-22, v1.2-23 deferred to v1.3 per NERS cleanup; remainder retained surgically.]
 
 **Priority-3 (§4 of doc 21) — minor cleanups (16 patches):**
 - PATCH v1.2-24 through v1.2-39. Doc/typo/authoring fixes including N-DIAG-A title rename (v1.2-35), banker's rounding clarification (v1.2-29), confidence boundary standardization (v1.2-26), authored-content scope additions.
@@ -345,6 +367,12 @@ Passive Memories also obey the salience-floor mechanic specified above. Merge pa
 
 ---
 
+**PATCH v1.2-17 clarification (SIM-D-G5) — Memory-add edge case (PATCH 3.15 refinement).** When adding a new Memory at cap pressure: drop the existing-lowest-salience Memory only if the new Memory's salience is at least as high as the existing minimum. If new Memory's salience is strictly lower than `min(existing.salience)`, refuse to add the new Memory. Exception: if same-tag existing Memory exists, merge regardless of salience comparison.
+
+**PATCH v1.2-31 clarification (SIM-C-G4) — Salience-0 Memory lifecycle.** Salience-0 Memories are eligible to be dropped on next replacement check; effectively pending-replacement until cap pressure forces them out.
+
+**PATCH v1.2-36 clarification (SIM-D-G6) — Merge tie-break (PATCH 3.15 refinement).** When multiple existing Memories qualify for merge (same tag, same affect-direction), select most-recent (highest timestamp). Reasoning: newer event tends to be the "current" framing for the pattern.
+
 ### 2.7 Knowledge (info-rich NPCs only, variable count)
 
 ```
@@ -367,6 +395,8 @@ Knowledge:
 **Knowledge → Belief trigger:** When a high-salience (≥4) Knowledge fact is acquired by an NPC and contradicts an active Belief's domain, Procedure B generates a Concern: "Is [Belief] still accurate given what I now know?"
 
 ---
+
+**PATCH v1.2-24 clarification (SIM-A-G4) — `knowledge_contradicts_belief()` content-authoring helper.** Implementation uses tag-based domain matching: a Knowledge fact contradicts a Belief if `knowledge.domain_tags ∩ belief.domain_tags` is non-empty AND the fact's affect direction opposes the Belief's stance. Specific implementation deferred to authoring stage; mechanism is straightforward tag-set intersection.
 
 ## §3 THE ARMATURE
 
@@ -587,6 +617,8 @@ Low confidence increases per-event interpretation variance: in code, `weighted_s
 
 ---
 
+**PATCH v1.2-7 clarification (SIM-A-G3) — `weighted_select()` re-roll-and-average semantics.** At `armature_confidence < 0.7`, sample twice per dimension. If both samples agree, use that result. If they disagree, randomly choose one (over many calls, produces 50/50 split between sampled options). Produces interpretation variance across calls — intended behavior of "frame absent" ambiguity.
+
 ## §4 EVENT IMPACT MATRIX
 
 ### 4.1 Structure
@@ -709,6 +741,12 @@ Categorical defaults derive from Renaissance institutional logic: violence threa
 
 ---
 
+**PATCH v1.2-32 clarification (SIM-C-G5) — `categorize_event_type()` inverse-lookup.** Build inverse dict at engine init from `EVENT_CATEGORIES`:
+```
+CATEGORY_LOOKUP = {event_type: category for category, types in EVENT_CATEGORIES.items() for event_type in types}
+```
+Used by `resonance_lookup()` fallback per PATCH 2.7.
+
 ## §5 META-ARMATURES
 
 ### 5.1 Settlement Meta-Armature
@@ -763,6 +801,12 @@ where:
 Order and Prosperity respond to faction governance quality; mapping them to population sentiment is a natural derivation. The event-delta term lets faction-caused disasters or windfalls move sentiment without per-population per-event tracking. Range clamped per existing Disposition spec.
 
 ---
+
+**PATCH v1.2-14 clarification (SIM-C-G7) — `recent_event_delta` event-log infrastructure.** Each settlement maintains:
+```
+settlement.faction_event_history[faction] = [(season, delta, event_type), ...]
+```
+Capped at last 8 seasons (older entries dropped). Updated each Accounting by faction-governance-impact events. The `recent_event_delta` formula reads from this list with exponential decay (×0.7^seasons_ago).
 
 ### 5.2 Settlement Signal
 
@@ -857,6 +901,13 @@ Where `derive_domain(tag)` maps Signal tag to its closest matching Project domai
 
 **Repeated-Signal handling on active Concern (PATCH v1.2-15 / SIM-C-G8):** When a Settlement Signal arrives matching an Active NPC's still-active Concern (same domain-tag), the existing Concern's salience is updated via max-update (`existing.salience = max(existing.salience, signal.salience)`); ttl is also max-updated. No new Concern generated. Prevents runaway Concern accumulation while reflecting ongoing severity.
 
+**PATCH v1.2-13 clarification (SIM-C-G3) — `interpret_event_affect()` algorithm.** Maps event affect to armature-aligned interpretation:
+```
+interpret_event_affect(event, armature):
+    return event.affect * (1 + 0.3 * armature_alignment_with_event_category(armature, event.event_type))
+```
+Aligned events appear ~1.3× their nominal affect through this armature; contradicted events appear ~0.7×. Preserves sign; attenuates or amplifies magnitude.
+
 ### 5.3 Faction Meta-Armature
 
 ```
@@ -931,7 +982,7 @@ Tie-breaks: Standing → seasons_stalled (higher → wins, prevents perpetual st
 
 **Recovery paths (PATCH v1.2-21 / SIM-H-G4):**
 1. Mood states improve below threshold — happens if external pressure subsides AND inner-circle peers process Concerns toward resolution. Standard recovery for transient crises (e.g., plague-induced).
-2. Succession event resolves underlying conflict — leader-death + `designate_new_leader` (§5.4.1 below) OR successful Coup (§5.4.2 below). Leadership clarity restores institutional decision-making capacity even if some peers remain Distracted.
+2. Succession event resolves underlying conflict — leader-death + `designate_new_leader` (§5.4.1 below). Leadership clarity restores institutional decision-making capacity even if some peers remain Distracted. (A coup mechanic is deferred to v1.3 per `22_NERS_and_bloat_assessment.md`.)
 3. External alliance event — formal merging or vassalage to another faction (out of v1.2 scope; existing diplomatic mechanics).
 
 A Faction Crisis without resolution path through (1)-(3) is structurally degenerate and indicates engine should generate diplomatic/external pressure events to force resolution. Long-running crises (>8 seasons) may trigger neighbor-faction interventions.
@@ -993,29 +1044,6 @@ function designate_new_leader(faction):
 - Optionally: succession milestone scene (Priority 3 available — player can witness if interested).
 
 **Faction Crisis state interaction.** If the previous leader died during a Faction Crisis (multiple inner-circle Distracted/Grieving), succession may help resolve crisis (institutional clarity restored); or may extend it (new leader inherits crisis without legitimacy). Engine handles via standard Mood recovery dynamics.
-
-#### 5.4.2 Leader Challenge / Coup Mechanic (PATCH v1.2-20 / SIM-H-G3)
-
-A faction-internal peer challenger can attempt to displace the current leader through a Path A Total Victory Social Contest at faction-leader-Belief level.
-
-**Trigger.** Challenger NPC initiates a Social Contest against the leader's Belief "I am the rightful leader of <faction>." Requires:
-- `Challenger.standing >= leader.standing` (cannot challenge from clearly-lower position).
-- `Challenger.opinion_of(leader).affect_axis < -1` (sustained negative Opinion).
-- Challenger has accumulated ≥ 3 contradicting Memories about leader's competence at salience ≥ 3 in last 4 seasons.
-
-**Contest dynamics.**
-- Contest is Path A (Belief-level), public visibility.
-- Faction Meta-Armature backs leader (institutional_stability anchor + leader's 1.5× weight with current mood_modifier per PATCH v1.2-18).
-- Challenger's coalition: any inner-circle peer with `opinion_of(leader).affect_axis < 0` contributes to challenger's side; any peer with `opinion_of(leader).affect_axis > 0` contributes to leader's side.
-- Player can support either side (if S5+ and aligned with one party).
-
-**Outcomes.**
-- **Total Victory for challenger:** leader-flag transfers; existing leader becomes peer at current Standing (no automatic exile). Trigger `leader_change` event.
-- **Modified Victory for challenger:** leader retains flag but accepts institutional reorganization (similar to engaged-player coalition outcome — reorganization with minority protections).
-- **Modified Defeat for challenger:** leader retains flag; challenger's Standing penalty (Δ_standing -1 to -2 immediate, not waiting for Year boundary).
-- **Total Defeat for challenger:** leader retains flag + challenger's Belief revises to "leader is rightful" (Scar generated) + challenger may be exiled to peripheral status.
-
-**Faction Crisis interaction.** If contest occurs during Faction Crisis (institutional autopilot), the contest is *the* resolution path — succession by combat, in effect. Crisis ends with Contest outcome.
 
 ---
 
@@ -1259,6 +1287,8 @@ For each proposal in selected_proposals:
 execute_proposed_domain_actions(selected_proposals)
 ```
 
+**PATCH v1.2-33 clarification (SIM-D-G1) — Concern dissipation `implied_affect` default.** When a Concern dissipates without engagement (decays to salience-0 OR ttl-0 with no resolution event), generate a Memory with `event_type='concern_dissipated_without_engagement'`, `affect=-0.5`, `salience=concern.salience` (at dissipation). Reflects mild negative reading from NPC's perspective ("their question went unanswered"). Standard Procedure D drift consumes this Memory next Accounting.
+
 #### Procedure C — Project Advancement
 
 ```
@@ -1354,6 +1384,12 @@ function sample_domain_weighted_by_conviction(conviction):
 Tier 1 honors authored content (specific NPCs may have multi-Project arcs the designer wants preserved); Tier 2 ensures the spec is robust without that content (any NPC can always generate a fresh Project on completion). Conviction-aligned domain selection produces character-consistent follow-ups: a Faith NPC tends to start theological projects, a Reason NPC tends toward scholarly. Horizon weighting (40/40/20 short/medium/long) keeps the project pipeline diverse.
 
 ```
+**PATCH v1.2-10 clarification (SIM-B-G3) — `seasons_stalled` increment on non-proposal.** If `project.progress` is unchanged this season, increment `project.seasons_stalled` regardless of cause (lost competition, Mood-suppression by Grieving Spirit-fail or Distracted high-deference, no DA proposal made, etc). Stall reflects absence of progress, not specifically competitive failure.
+
+**PATCH v1.2-9 clarification (SIM-B-G2) — Failed-deference accounting in DA Proposal Phase.** On displacement-deference-check failure, generate `displacement_neglect_observed` event (visibility=semi-public to faction leader); does NOT count as `failed_da_proposal` for Standing recalc. The proposal succeeded; only the deference check failed.
+
+**PATCH v1.2-30 clarification (SIM-B-G9) — Mood-suppressed proposal accounting.** Mood-suppressed proposals (Distracted high-deference `continue`; Grieving Spirit-fail) do NOT increment any Year-counter for Standing recalc. They are non-events for accounting purposes (also reflected in §8.1 PATCH v1.2-1 Counter scope clause).
+
 #### Procedure D — Opinion Drift
 
 > **Single-writer invariant.** Procedure D is the only procedure that mutates
@@ -1399,6 +1435,12 @@ For each Active NPC:
             memory.reference_count += 1
             memory.salience_floor = max(memory.salience_floor, memory.reference_count × 0.5)
 ```
+
+**PATCH v1.2-6 clarification (SIM-A-G2) — Drift loop iteration order.** Iterate `new_memories` chronologically by timestamp; break ties by salience descending.
+
+**PATCH v1.2-25 clarification (SIM-A-G5) — `evidence_memory_refs` write timing.** Update happens after drift application completes for the Memory. Order: apply drift → append `memory_id` to `evidence_memory_refs`.
+
+**PATCH v1.2-26 clarification (SIM-A-G6) — Confidence boundary standardization.** Use `< 3` consistently throughout this Procedure (i.e., 1 or 2 = weak/low confidence; 3+ = strong). Any "<= 2" or ">= 3" phrasings in informal commentary should be read as the standardized `< 3` boundary.
 
 #### Procedure E — Off-Screen Interactions
 
@@ -1518,6 +1560,10 @@ This pattern preserves NPC autonomy (NPCs still generate Concerns and Outreach p
 
 ---
 
+**PATCH v1.2-16 clarification (SIM-D-G2) — P2-evasion event handling.** When the player ignores a Priority 2 mandatory Outreach scene entirely (refuses attendance, sacrifices all other Slate slots), the engine spawns an `evasion_observed` event (visibility=semi-public to outreach_npc, salience=4). Consequences: outreach_npc generates a new Concern at salience+1 vs the original Concern (tag: `player_evading_<original_concern_domain>`); outreach_npc.mood may shift to Anxious or Distracted; Memory generated with affect -2. Mandatory P2 evasion produces accelerating relational damage rather than indefinite deferral — the player retains agency to refuse, but at mounting cost.
+
+**PATCH v1.2-34 clarification (SIM-D-G3) — PATCH 3.6 + 3.10 interaction for Knot Concerns.** PATCH 3.6 (Knot Outreach P2 mandatory) supersedes PATCH 3.10 (P3 default) for Knot-partner Concerns about player. Knot Outreach is always P2 mandatory regardless of salience-5 escalation rule. (Post-rupture per §2.5.2, Knot Outreach no longer fires; rupture severs the bond.)
+
 ## §8 INTEGRATION WITH EXISTING SYSTEMS
 
 | Existing system | Integration |
@@ -1582,74 +1628,6 @@ The Standing ladder row in this section is augmented: **Standing recalculates ea
 
 Annual cadence (not per-Accounting) prevents Standing from being whippy; the changes accumulate and resolve at narrative milestones.
 
-### 8.2 Inter-Faction War State (PATCH v1.2-22 / SIM-H-G6)
-
-Sustained military conflict between factions is tracked at faction-pair level:
-
-```
-faction_pair_state[faction_a, faction_b] = {
-    war_state: bool,
-    war_started_at: season,
-    accumulated_military_events: list[(season, event_type, casualties)],
-    diplomatic_breakdown_count: int,
-}
-```
-
-**War-state trigger:**
-- 3+ military Domain Actions executed against faction-pair within 4 seasons, AND
-- No active treaty between factions, AND
-- Diplomatic Domain Action attempted by either faction has failed within 2 seasons.
-
-**During war state:**
-- Cross-faction Settlement Signals carry war-context tag (military events at borders amplify by 1.3×).
-- Cross-faction Knots experience Disposition penalty (-0.2 per Accounting; sustained war risks Knot rupture per §2.5.2).
-- DA Proposal Phase favors military proposals in both factions (`war_state` flag adds +0.1 to military-domain alignment scores).
-- Population_disposition in border settlements drifts negative for whichever faction is perceived as aggressor.
-
-**Peace mechanism:** see §8.2.1.
-
-#### 8.2.1 Peace Treaty Mechanic (PATCH v1.2-23 / SIM-H-G7)
-
-Peace treaty is a diplomatic Domain Action at faction-pair level:
-
-```
-function propose_peace_treaty(faction_a, faction_b, terms):
-    # Both factions must approve
-    a_approves = faction_a.meta_armature_evaluates_treaty(terms)
-    b_approves = faction_b.meta_armature_evaluates_treaty(terms)
-    
-    if not (a_approves and b_approves):
-        # Treaty rejected; war_state continues; diplomatic_breakdown_count += 1
-        return TreatyOutcome.REJECTED
-    
-    # Both approve — treaty enters force
-    treaty = Treaty(
-        signatories=[faction_a, faction_b],
-        terms=terms,
-        signed_at=current_season,
-        duration=terms.duration,
-    )
-    
-    # End war state
-    faction_pair_state[faction_a, faction_b].war_state = False
-    faction_pair_state[faction_a, faction_b].war_ended_at = current_season
-    
-    # Generate ceremonial event
-    event = Event(
-        event_type="treaty_signed",
-        participants=[faction_a.leader, faction_b.leader],
-        visibility=public,
-        salience=4,
-    )
-    publish_event(event)
-    
-    return TreatyOutcome.SIGNED
-```
-
-**Treaty terms** (authored content per scenario): may include border adjustments, trade provisions, Knot exchanges (royal marriages), tribute, hostage arrangements. Terms structured as a list of Conviction-aligned-or-contradicted commitments — each faction's meta-armature evaluates whether terms are acceptable.
-
-**Treaty violation:** if a faction takes action contradicting treaty terms, generates high-salience contradiction Memory in opposing faction's leadership; can re-trigger war_state via existing dynamics.
-
 ---
 
 ## §9 COMPUTATIONAL CHARACTERISTICS
@@ -1710,6 +1688,12 @@ Profile at each stage. Each stage produces a working partial system that can be 
 **Total: ~1,190 entries** (or ~700-800 with reductions on Knowledge, Opinions, Gossip).
 
 ---
+
+**PATCH v1.2-27 clarification (SIM-B-G4) — Project goal templates.** Add to authoring requirements: "Goal text templates per domain — ~30 entries — `params/project_goal_templates.md` — 5 templates × 6 domains."
+
+**PATCH v1.2-28 clarification (SIM-B-G5) — Per-domain helpers.** Add to authoring requirements: "`standard_effect_for()` and `domain_action_required_for()` per-domain authored constants — `params/project_domain_effects.md`."
+
+**PATCH v1.2-38 clarification (SIM-H-G1) — Subversive-intent dialogue tagging.** Scene templates expose explicit affect-direction tagging for each dialogue branch. Subversive-intent branches tagged negative-affect-direction; supportive branches positive. Scene authoring distinguishes *what the player chooses to express* from the mechanical Memory affect produced. See `params/scene_templates.md`.
 
 ## §11 OUTSTANDING DESIGN DECISIONS
 
@@ -1870,90 +1854,3 @@ For design history and reasoning, see `designs/audit/2026-04-28-political-dynami
 **This document (12_development_specification.md) is the current source of truth** for the political dynamics system. Stage documents 01-11 are preserved for design history; their specific mechanisms may have been superseded.
 
 ---
-
-## §17 v1.2 PATCH ADDENDUM (consolidated P2/P3 clarifications)
-
-Patches v1.2-1 through v1.2-4 (P1-CRITICAL + ED-760 stall-escalator) and v1.2-18, v1.2-19, v1.2-20, v1.2-21, v1.2-22, v1.2-23, v1.2-35 are applied surgically in their target sections (§2.5.2 Knot Rupture, §5.2 Settlement Signal routing, §5.3 Mood-impact aggregate weighting, §5.4.1 Faction Succession, §5.4.2 Coup Mechanic, §8.1 Standing Recalc strict definition + counter state, §8.2 War State, §8.2.1 Peace Treaty, §1.1 Featured Behaviors rename + Knot Rupture entry).
-
-The remaining P2/P3 patches are consolidated here for reference. Each acts as a clarifying note; readers should interpret the indicated section accordingly. Authoritative for v1.2.
-
-### 17.1 P2 Implementation-Determinism Clarifications
-
-**PATCH v1.2-5 (SIM-A-G1) — Drift coefficients in §3.6.** Define drift coefficients explicitly:
-- `base_drift = 0.3`
-- `small_drift_coefficient = 0.3` (for confidence-aligned drift)
-- `larger_drift_coefficient = 1.0` (for confidence-contradicting drift at low confidence)
-
-**PATCH v1.2-6 (SIM-A-G2) — Drift loop iteration order in §6.2 Procedure D.** Iterate `new_memories` chronologically by timestamp; ties broken by salience descending.
-
-**PATCH v1.2-7 (SIM-A-G3) — `weighted_select()` re-roll-and-average semantics in §3.6.X Armature Confidence.** At confidence < 0.7, sample twice per dimension. If samples agree, use that result. If they disagree, randomly choose one (over many calls, produces 50/50 split between sampled options). Produces interpretation variance — intended behavior of "frame absent."
-
-**PATCH v1.2-9 (SIM-B-G2) — Failed-deference accounting in §6.2 DA Proposal Phase.** On displacement-deference-check failure: generates `displacement_neglect_observed` event (visibility=semi-public to faction leader); does NOT count as `failed_da_proposal` for Standing recalc. The proposal succeeded; only the deference check failed.
-
-**PATCH v1.2-10 (SIM-B-G3) — `seasons_stalled` increment on non-proposal in §6.2 Procedure C.** If `project.progress` unchanged this season, `project.seasons_stalled += 1` regardless of cause: lost competition, Mood-suppression (Grieving Spirit-fail or Distracted high-deference suppression), no DA proposal made, etc. Stall reflects absence of progress, not specifically competitive failure.
-
-**PATCH v1.2-13 (SIM-C-G3) — `interpret_event_affect()` algorithm in §5.2.** Maps event affect to armature-aligned interpretation: `return event.affect * (1 + 0.3 * armature_alignment_with_event_category(armature, event.event_type))`. Aligned events appear ~1.3× their nominal affect through this armature; contradicted events ~0.7×.
-
-**PATCH v1.2-14 (SIM-C-G7) — `recent_event_delta` event-log infrastructure in §5.1.** Each settlement maintains `settlement.faction_event_history[faction] = [(season, delta, event_type), ...]`, capped at last 8 seasons (older entries dropped). Updated each Accounting by faction-governance-impact events. The `recent_event_delta` formula reads from this list with exponential decay (×0.7^seasons_ago).
-
-**PATCH v1.2-16 (SIM-D-G2) — P2-evasion event handling in §7.6 NPC Outreach Generation.** When the player ignores a Priority 2 mandatory Outreach scene entirely (refuses attendance, sacrifices all other Slate slots), the engine spawns an `evasion_observed` event (visibility=semi-public to outreach_npc, salience=4). Consequences: outreach_npc generates a new Concern at salience+1 vs the original Concern (tag: `player_evading_<original_concern_domain>`); outreach_npc.mood may shift to Anxious or Distracted; Memory generated with affect -2. Mandatory P2 evasion produces accelerating relational damage rather than indefinite deferral.
-
-**PATCH v1.2-17 (SIM-D-G5) — Memory-add edge case in §2.6 / PATCH 3.15.** Drop existing-lowest-salience Memory only if the new Memory's salience is at least as high as the existing minimum. If the new Memory's salience is strictly lower than `min(existing.salience)`, refuse to add the new Memory. Exception: if same-tag existing Memory exists, merge per Rule 1 regardless of salience comparison.
-
-### 17.2 P3 Minor Cleanups
-
-**PATCH v1.2-24 (SIM-A-G4) — `knowledge_contradicts_belief()` content-authoring helper in §2.7.** Define as tag-based domain matching using authored Belief-domain tags (specific implementation deferred to authoring stage; mechanism is straightforward tag-set intersection).
-
-**PATCH v1.2-25 (SIM-A-G5) — `evidence_memory_refs` write timing in §6.2 Procedure D.** Update happens after drift application completes for the Memory. Order: apply drift → append memory_id to `evidence_memory_refs`.
-
-**PATCH v1.2-26 (SIM-A-G6) — Confidence boundary standardization throughout §6.2 Procedure D.** Use `< 3` consistently (i.e., 1 or 2 = weak/low confidence; 3+ = strong). Replace any "<= 2" or ">= 3" inconsistencies in spec text.
-
-**PATCH v1.2-27 (SIM-B-G4) — `generate_goal_from_template()` content scope in §10.** Add row to authoring requirements: "Goal text templates per domain | ~30 entries | params/project_goal_templates.md, 5 templates × 6 domains."
-
-**PATCH v1.2-28 (SIM-B-G5) — Per-domain helpers in §10.** Add row to authoring requirements: `standard_effect_for()` and `domain_action_required_for()` per-domain authored constants in `params/project_domain_effects.md`.
-
-**PATCH v1.2-30 (SIM-B-G9) — Mood-suppressed proposal accounting in §6.2.** Mood-suppressed proposals (Distracted high-deference `continue`, Grieving Spirit-fail) do NOT increment any Year-counter for Standing recalc. Non-events for accounting purposes. (Note: this is also reflected in §8.1 PATCH v1.2-1 Counter scope clause.)
-
-**PATCH v1.2-31 (SIM-C-G4) — Salience-0 Memory lifecycle in §2.6.** Salience-0 Memories are eligible to be dropped on next replacement check; effectively pending-replacement until cap pressure forces them out.
-
-**PATCH v1.2-32 (SIM-C-G5) — `categorize_event_type()` inverse-lookup in §4.5.** Build inverse dict at engine init: `CATEGORY_LOOKUP = {event_type: category for category, types in EVENT_CATEGORIES.items() for event_type in types}`. Used by `resonance_lookup()` fallback per PATCH 2.7.
-
-**PATCH v1.2-33 (SIM-D-G1) — Concern dissipation `implied_affect` default in §6.2 Procedure B Resolution.** When Concern dissipates without engagement (decay-to-0 with no resolution event), generate Memory with `event_type='concern_dissipated_without_engagement'`, `affect=-0.5`, `salience=concern.salience` (at dissipation). Reflects mild negative reading from NPC's perspective ("their question went unanswered").
-
-**PATCH v1.2-34 (SIM-D-G3) — PATCH 3.6 + PATCH 3.10 interaction for Knot Concerns in §7.6.** PATCH 3.6 (Knot Outreach P2 mandatory) supersedes PATCH 3.10 (P3 default) for Knot-partner Concerns about player. Knot Outreach is always P2 mandatory regardless of salience-5 escalation rule. (Note: post-rupture per §2.5.2, Knot Outreach no longer fires; rupture severs the bond.)
-
-**PATCH v1.2-36 (SIM-D-G6) — Merge tie-break in §2.6 / PATCH 3.15.** When multiple existing Memories qualify for merge (same tag, same affect-direction), select most-recent (highest timestamp). Reasoning: newer event tends to be the "current" framing for the pattern.
-
-**PATCH v1.2-38 (SIM-H-G1) — Subversive-intent dialogue interpretation in §10.** Scene templates expose explicit affect-direction tagging for each dialogue branch. Subversive-intent dialogue branches are tagged with negative-affect-direction; supportive branches with positive. Scene authoring distinguishes *what the player chooses to express* from the mechanical Memory affect produced. See `params/scene_templates.md`.
-
-### 17.3 v1.2 Application Audit
-
-**Applied surgically (in target sections):**
-- PATCH v1.2-1 (§8.1): failed_da_proposals strict definition.
-- PATCH v1.2-2 (§5.2): Settlement-Signal-Concern three-tier routing.
-- PATCH v1.2-3 (§2.5.2 + §1.1): Knot rupture mechanic + featured behavior.
-- PATCH v1.2-4 (§6.2): stall-escalator in select_proposal score.
-- PATCH v1.2-8 (§6.2): 4th-level tie-break in select_proposal.
-- PATCH v1.2-11 (§8.1): Standing recalc counter state.
-- PATCH v1.2-12 (§5.2): Signal salience handling.
-- PATCH v1.2-15 (§5.2): repeated-Signal max-update on active Concern.
-- PATCH v1.2-18 (§5.3): Mood-impact on aggregate weighting.
-- PATCH v1.2-19 (§5.4.1): faction succession.
-- PATCH v1.2-20 (§5.4.2): leader challenge / coup mechanic.
-- PATCH v1.2-21 (§5.4): Faction Crisis resolution paths.
-- PATCH v1.2-22 (§8.2): war state mechanic.
-- PATCH v1.2-23 (§8.2.1): peace treaty mechanic.
-- PATCH v1.2-29 (§8.1): banker's rounding clarification.
-- PATCH v1.2-35 (§1.1): N-DIAG-A title rename.
-- PATCH v1.2-37 (§5.2): cross-border event Signal-attribution.
-- PATCH v1.2-39 (§5.4): cross-faction event during simultaneous crises.
-
-**Applied as addendum clarifications (this §17):**
-- PATCH v1.2-5, -6, -7, -9, -10, -13, -14, -16, -17 (P2 implementation-determinism).
-- PATCH v1.2-24, -25, -26, -27, -28, -30, -31, -32, -33, -34, -36, -38 (P3 minor cleanups).
-
-All 39 v1.2 patches are present in this document. See `21_v1_2_specification_revisions.md` for full patch directives and rationale; see `19_v1_1_validation_report.md` for the simulation-evidence base supporting each patch.
-
----
-
-*(See §14 above for stage-document references and §13 for Promotion Checklist.)*
