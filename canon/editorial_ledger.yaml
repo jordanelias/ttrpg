@@ -1,5 +1,6 @@
 # Valoria Editorial Ledger — Active (open items only)
 # next_id: 758
+# Archival batch 2026-04-29: 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
 
 entries:
@@ -11,46 +12,12 @@ entries:
     severity: P2
     source: "PP-666"
 
-
   - id: ED-711
     date: 2026-04-19
     description: "Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers. 75%-share threshold triggers Consolidation Domain Action. Spec: designs/provincial/fractional_province_ownership_v30.md (PP-666)."
     status: open
     severity: P2
     source: "PP-666"
-
-
-  - id: ED-745
-    date: 2026-04-26
-    description: "[PROVISIONAL] IP start value 20 — per staleness report item 3, sourced from peninsular_strain §4. Verify against params_bg_core starting values table."
-    status: resolved
-    resolution: "IP start = 20 confirmed in params/bg/core.md L82 and Constants.gd IP_START=20. Canonical."
-    severity: P3
-
-
-  - id: ED-746
-    date: 2026-04-26
-    description: "[PROVISIONAL] Intel Advancement Counter — staleness report says STRUCK per canonical_definitive_r2. Verify whether fieldwork VTM system fully replaces this."
-    status: resolved
-    resolution: "Intel Advancement Counter STRUCK per canonical_definitive_r2 L123. Clock registry ED-794 notes same."
-    severity: P3
-
-
-  - id: ED-747
-    date: 2026-04-26
-    description: "[PROVISIONAL] Popular Will (PW) — staleness report says STRUCK per canonical_definitive_r2. Verify against RM founding mechanics in current specs."
-    status: resolved
-    resolution: "Popular Will STRUCK — hybrid-only clock, not in CDR2, videogame-only mode eliminates it. Clock registry ED-795 notes same."
-    severity: P3
-
-
-  - id: ED-748
-    date: 2026-04-26
-    description: "[PROVISIONAL] Intelligence stat — staleness report says STRUCK, replaced by fieldwork Investigation + VTM. Verify if any active specs still reference Intelligence as a faction stat."
-    status: resolved
-    resolution: "Intelligence stat STRUCK per canonical_definitive_r2 L106. Replaced by fieldwork Investigation + VTM."
-    severity: P3
-
 
   - id: ED-750
     date: 2026-04-29
@@ -59,14 +26,12 @@ entries:
     severity: P1
     source: "doc 17 §1, issues 13/14/15"
 
-
   - id: ED-751
     date: 2026-04-29
     description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 2 (priority-1, 8 patches). Implementation blockers: PATCH 2.1 select_proposal() + DOMAIN_ARMATURE_ALIGNMENT 42-entry table (E-36-A); PATCH 2.2 max_scars=inner_circle×2 (E-48-A); PATCH 2.3 conviction_alignment_multiplier + OPPOSITIONAL pairs (E-BOT-A); PATCH 2.5 compute_settlement_signal null guards (ST-20-A); PATCH 2.6 conviction_secondary fallback + Armature Confidence (ST-23-A); PATCH 2.7 resonance_lookup category fallback (ST-24-A); PATCH 2.8 additive composition + per-dim normalization (E-BOT-B). Patches §3, §4, §6.5, §10 of doc 12."
     status: open
     severity: P1
     source: "doc 17 §2, issues 13/14/15/16"
-
 
   - id: ED-752
     date: 2026-04-29
@@ -75,14 +40,12 @@ entries:
     severity: P2
     source: "doc 17 §3, issues 13/14/15/16"
 
-
   - id: ED-753
     date: 2026-04-29
     description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 4 (priority-3, 16 stub resolutions). Implementation-time issues with stub resolutions sufficient for current planning depth: tie-breaking, threshold definitions, search/gating, cascade/propagation, documentation gaps, friction items. See doc 17 §4 for full inventory."
     status: open
     severity: P3
     source: "doc 17 §4, issues 13/14/15/16"
-
 
   - id: ED-754
     date: 2026-04-29
@@ -91,14 +54,12 @@ entries:
     severity: P3
     source: "doc 17 §5"
 
-
   - id: ED-755
     date: 2026-04-29
     description: "[BLOCKED — JORDAN-DECISION] Political dynamics doc 17 §6 Jordan-decision items (5 + carryover): E-38-A/B symbolic_effects keep+define vs cut 210-entry table; E-TOP-A opacity stance; ST-31-B NPC self-monitoring; R-41-A crisis masking persistence; carryover items (Intelligence stat 6th faction stat, LICENSE/GOV-08, §1.1 Knot Formation During Play, §1.2 Accord Propagation to Settlement Order). Default recommendations provided in doc 17 §6. Application to doc 12 v1.1 blocked on these decisions."
     status: open
     severity: P1
     source: "doc 17 §6"
-
 
   - id: ED-756
     date: 2026-04-29
@@ -107,11 +68,9 @@ entries:
     severity: P1
     source: "doc 17 §7"
 
-
   - id: ED-757
     date: 2026-04-29
     description: "[PROVISIONAL] Comprehensive mechanical simulations against doc 12 v1.1 (post-revision). Map mechanical interactions across all directions in granular detail to validate revisions and surface emergent behaviors. Expected delivery: simulation sessions following ED-756."
     status: open
     severity: P2
     source: "user request 2026-04-29"
-

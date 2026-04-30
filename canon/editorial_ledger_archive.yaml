@@ -729,3 +729,37 @@ entries:
     description: "PROVISIONAL marker audit (ED-768 resolution). 13 orphaned ED references stripped from 8 files. Stale terminology updated: Coup Counter → Graduated Autonomy (ED-781), Theocracy Counter → Church Influence (ED-782)."
     status: resolved
     severity: P3
+
+# Archival batch 2026-04-29 — political dynamics session intermediate cleanup.
+
+  - id: ED-745
+    date: 2026-04-26
+    description: "[PROVISIONAL] IP start value 20 — per staleness report item 3, sourced from peninsular_strain §4. Verify against params_bg_core starting values table."
+    status: resolved
+    severity: P3
+    resolution: "IP start = 20 confirmed in params/bg/core.md L82 and Constants.gd IP_START=20. Canonical."
+    archive_date: "2026-04-29"
+
+  - id: ED-746
+    date: 2026-04-26
+    description: "[PROVISIONAL] Intel Advancement Counter — staleness report says STRUCK per canonical_definitive_r2. Verify whether fieldwork VTM system fully replaces this."
+    status: resolved
+    severity: P3
+    resolution: "Intel Advancement Counter STRUCK per canonical_definitive_r2 L123. Clock registry ED-794 notes same."
+    archive_date: "2026-04-29"
+
+  - id: ED-747
+    date: 2026-04-26
+    description: "[PROVISIONAL] Popular Will (PW) — staleness report says STRUCK per canonical_definitive_r2. Verify against RM founding mechanics in current specs."
+    status: resolved
+    severity: P3
+    resolution: "Popular Will STRUCK — hybrid-only clock, not in CDR2, videogame-only mode eliminates it. Clock registry ED-795 notes same."
+    archive_date: "2026-04-29"
+
+  - id: ED-748
+    date: 2026-04-26
+    description: "[PROVISIONAL] Intelligence stat — staleness report says STRUCK, replaced by fieldwork Investigation + VTM. Verify if any active specs still reference Intelligence as a faction stat."
+    status: resolved
+    severity: P3
+    resolution: "Intelligence stat STRUCK per canonical_definitive_r2 L106. Replaced by fieldwork Investigation + VTM."
+    archive_date: "2026-04-29"
