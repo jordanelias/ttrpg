@@ -691,4 +691,73 @@ P1-CRITICAL resolutions retained (SIM-B-G8 strict, SIM-C-G6 routing, SIM-H-G2 Kn
 
 **Cumulative session-chain output:** ~520k chars across 24 commits. Eight simulation directions + narrative pass + synthesis + audit + cleanup. Architecture validated at every meaningful scale; spec is implementation-ready.
 
+
+---
+
+## CANONICAL-PROMOTION WORK — 2026-04-29
+
+Following user authorization to "perform all," §13 Promotion Checklist evaluated and most actionable blockers addressed.
+
+### §13 Evaluation (doc 24, commit `a6bfeee3`)
+
+| # | Item | Status |
+|---|---|---|
+| 1 | Re-vetting against current spec | ✓ PASS |
+| 2 | §11 Outstanding Design Decisions | ⚠ BLOCKED ON JORDAN |
+| 3 | Editorial ledger entries for major components | ✓ PASS |
+| 4 | Patch register entries (PP-XXX) | ⚠ FORMAT GAP |
+| 5 | Integration patches against external designs | ✓ DRAFTED |
+| 6 | Content authoring scope | ⚠ BLOCKED ON JORDAN |
+| 7 | Stage-1 simulation pass | ✓ PASS (5× exceeds requirement) |
+
+### Integration patches (docs 25/26/27, commit `58c58c3d`)
+
+20 integration patches across 3 external canonical designs:
+- doc 25 (npc_behavior_v30): 6 patches — Conviction taxonomy, Path B Belief revision, explicit_heir Tier-0, etc.
+- doc 26 (player_agency_v30): 7 patches — Slate priority mapping, Knot rupture mandatory addition, etc.
+- doc 27 (settlement_layer_v30): 7 patches incl P1-CRITICAL INT-3.1 normalization bug.
+
+### v1.2.2 INT-3.1 fix (commit `8d37cede`)
+
+P1-CRITICAL bug: doc 12 PATCH 3.9 assumed settlement stats on 0-10 scale; canonical settlement_layer_v30 §1.3 specifies 0-5 scale. Corrected normalization formula: `(s.order - 2.5) / 1.25`. Single-patch revision.
+
+### Final spec evolution
+
+| Version | Commit | Lines | Status |
+|---|---|---|---|
+| v1.0 | initial | — | superseded |
+| v1.1 | `9dede391` | 1565 | superseded |
+| v1.2 | `59a1c1e0` | 1958 | superseded |
+| v1.2.1 | `52fb1292` | 1856 | superseded |
+| **v1.2.2** | **`8d37cede`** | **1875** | **canonical-promotion candidate** |
+
+### Final session-chain commits
+
+| # | Commit | Artifact |
+|---|---|---|
+| 26 | `a6bfeee3` | doc 24 §13 promotion checklist evaluation |
+| 27 | `58c58c3d` | docs 25/26/27 integration patches |
+| 28 | `8d37cede` | doc 12 v1.2.2 (INT-3.1 fix) |
+
+---
+
+## REMAINING BLOCKERS — JORDAN-FACING
+
+For canonical promotion:
+
+1. **§11 Outstanding Design Decisions** — Wrong-Belief Investigation, authoring scope, carryover (Intelligence stat, LICENSE/GOV-08).
+2. **§16 Jordan-Decision Items (ED-755)** — E-38, E-TOP-A, ST-31-B, R-41-A.
+3. **PP-XXX register format question** — migrate, accept current, or defer.
+4. **Integration-patch adoption** — 20 patches in docs 25/26/27 await Jordan adoption decisions.
+
+These are organizational/decisional, not architectural. v1.2.2 is implementation-ready.
+
+---
+
+## SESSION-CHAIN FINAL STATE
+
+**Commits:** 28. **Artifacts:** ~600k chars. **Validations:** 25 invariants, 51 simulation scenarios, 39 spec gaps surfaced and resolved, 20 integration patches drafted, 1 P1-CRITICAL bug found and fixed (INT-3.1).
+
+doc 12 v1.2.2 is in good standing for canonical promotion pending Jordan engagement on the four remaining blocker categories above.
+
 **END OF HANDOFF v1.**

@@ -1,10 +1,10 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 766
-# Renumbering 2026-04-29 (d): ED-762 collision resolved — doc 12 v1.2 entry renumbered to ED-763 (was the second-arrived). Topographic v2+v3 entry retains ED-762.
-# Archival batch 2026-04-29 (c): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
+# next_id: 770
+# Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
+# Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
-# Archival batch 2026-04-29 (a): 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
-# Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
+# Archival batch 2026-04-29 (a): 4 resolved entries (ED-745..748) migrated.
+# Archival batch 2026-04-23: 16 resolved entries migrated.
 
 entries:
 
@@ -22,41 +22,6 @@ entries:
     severity: P2
     source: "PP-666"
 
-  - id: ED-750
-    date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 1 — single-writer Opinion model resolves E-HORIZ-A/S-HORIZ-A/ST-32-A double-write. Patches §1.4-§1.6 of doc 12."
-    status: open
-    severity: P1
-    source: "doc 17 §1, issues 13/14/15"
-
-  - id: ED-751
-    date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 2 — 8 priority-1 patches resolving E-36-A/E-48-A/E-BOT-A/B/ST-20-A/ST-23-A/ST-24-A. See doc 17 §2."
-    status: open
-    severity: P1
-    source: "doc 17 §2, issues 13/14/15/16"
-
-  - id: ED-752
-    date: 2026-04-29
-    description: "[PROVISIONAL] Doc 17 batch 3 — 15 priority-2 patches in §1.4/§2.5/§5/§6.3/§8.1/§10. See doc 17 §3."
-    status: open
-    severity: P2
-    source: "doc 17 §3, issues 13/14/15/16"
-
-  - id: ED-753
-    date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 3 — 15 priority-2 authoring patches. See doc 17 §3 for full inventory."
-    status: open
-    severity: P3
-    source: "doc 17 §4, issues 13/14/15/16"
-
-  - id: ED-754
-    date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 4 — 16 priority-3 stub resolutions. See doc 17 §4."
-    status: open
-    severity: P3
-    source: "doc 17 §5"
-
   - id: ED-755
     date: 2026-04-29
     description: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
@@ -64,53 +29,16 @@ entries:
     severity: P1
     source: "doc 17 §6"
 
-  - id: ED-762
-    date: 2026-04-29
-    description: "[PROVISIONAL] Spec progression: doc 12 v1.2 (commit 59a1c1e0; 39 patches resolving simulation-surfaced gaps) → v1.2.1 (commit 52fb1292; NERS cleanup per doc 22). v1.2.1: cut §5.4.2 Coup mechanic + §8.2 War State + §8.2.1 Peace Treaty (deferred to v1.3); §17 P2/P3 addendum patches applied surgically in target sections and §17 deleted; AUDIT-1..5 corrections applied to docs 19 and 22 per doc 23 chain audit (commit dbc8d918). v1.2.1 is the canonical-promotion candidate. Recommended next: §13 Promotion Checklist evaluation."
-    status: open
-    severity: P2
-    source: "doc 22 NERS cleanup; doc 23 chain audit; v1.2.1 commit 52fb1292"
-
   - id: ED-763
     date: 2026-04-29
     description: "[PROVISIONAL] doc 12 v1.2 produced (commit 59a1c1e0); 1958 lines; 39 patches resolving all simulation-surfaced gaps; supersedes v1.1. v1.2 is eligible for §13 Promotion Checklist evaluation toward canonical. Recommended next steps: re-vet pass against §13; address any §13 items not satisfied; promote to canonical or schedule additional simulation pass if desired. Forward-looking design observations (18) tracked separately for post-canonical iteration."
     status: open
     severity: P2
     source: "Synthesis chain — docs 19 + 21 + doc 12 v1.2 commit 59a1c1e0"
+
   - id: ED-764
     date: 2026-04-29
     description: "[PROVISIONAL] Throughlines table Load-bearing systems column added per PP-677, addressing PP-676 v3 finding §V3-2 that the framework lacked formalized system-token coupling. 43 active throughlines mapped to canonical system slugs (mean 3.7 systems each, range 2-6). 27/32 canonical systems load-bearing for at least one throughline; 5 defensibly absent (core_engine, combat, throughlines_framework, solmund_voice, solmund_artifacts). Mappings PROVISIONAL pending Jordan review. Note: ED-762 collision detected in active ledger — both topographic v2+v3 entry and doc 12 v1.2 entry assigned same ID across separate sessions. Flagged in propagation_map for Jordan resolution; ED-763 deliberately skipped to avoid renumbering interference."
     status: open
     severity: P3
     source: "PP-677"
-  - id: ED-765
-    date: 2026-04-29
-    description: "[APPLIED] Vocabulary debt sweep per PP-678: 17 Game Master refs replaced with 'engine' equivalents in threadwork_v30 (12), npc_behavior_v30 (3), mass_battle_v30 (2). 2 active Cultural Reformation refs in complete_systems_reference cleaned with HTML STRUCK markers. 14 CR STRUCK markers / strikethroughs / parenthetical historical refs intentionally retained as audit trail. Coup Counter sweep DEFERRED — Coup Counter→Graduated Autonomy is not 1:1 substitution, requires design judgment per site."
-    status: applied
-    severity: P3
-    source: "PP-678 (PP-676 v3 §V3-9)"
-  - id: ED-766
-    date: 2026-04-29
-    description: "[APPLIED] valoria-vector-audit skill enshrined per PP-679. Packages v3 multi-graph triangulation methodology as directory-based skill (SKILL.md + 3 reference docs + vector_audit.py). Reduces future audit setup from one-session derivation to minutes-long invocation. methodology.md locks pre-committed thresholds preserving v2 lessons (no post-hoc tuning). diagnostic_modes.md documents 8 modes. v1_v2_v3_history.md captures 14 v2 problems and v3 corrections (institutional memory)."
-    status: applied
-    severity: P3
-    source: "PP-679"
-  - id: ED-767
-    date: 2026-04-29
-    description: "[APPLIED] Coup Counter → Graduated Autonomy substitution sweep per PP-680, completing PP-678's deferral. 6 active CC references rewritten using ED-781 mapping (CC value → GA stage: 0→Loyal, 2→Restless, 3→Autonomous, 4→Split) in npc_behavior_v30, complete_systems_reference, victory_v30 (3 sites), conflict_architecture_proposal. 4 leaves preserved (worldbuilding + descriptive references to strike). All substitution sites cite ED-781 inline."
-    status: applied
-    severity: P3
-    source: "PP-680 (PP-676 v3 §V3-9, PP-678 deferred)"
-  - id: ED-768
-    date: 2026-04-29
-    description: "[APPLIED] Conviction Track promoted to first-class doc per PP-681 (PP-676 v3 §V3-5). New designs/personal/conviction_track_v1.md consolidates §1.2 Conviction Taxonomy + §3.3 Scar Accumulation + §3.4 Thread Operation triggers extracted from npc_behavior_v30 (4,834 chars). Original sections replaced with redirect stubs. scale_transitions_v30 L219 cross-ref updated. canonical_sources.yaml repointed (SHA pending follow-up). 3 GM → engine substitutions in §3.3 table cells (missed by PP-678 due to 'GM' vs 'Game Master' phrase difference)."
-    status: applied
-    severity: P3
-    source: "PP-681"
-  - id: ED-769
-    date: 2026-04-29
-    description: "[APPLIED] SHA follow-up for PP-681 (Conviction Track promotion). canonical_sources.yaml SHA placeholder filled with actual blob SHA 32d8e3412d17157fc0fd27fed91a0e11262743ef. Standard procedure for new canonical files."
-    status: applied
-    severity: P3
-    source: "PP-682 (PP-681 follow-up)"
-
