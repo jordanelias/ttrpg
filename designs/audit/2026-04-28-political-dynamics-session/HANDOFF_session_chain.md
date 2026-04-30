@@ -18,8 +18,8 @@
 | 3 | **PARTIAL** | Re-vet v1.1 against §13 promotion checklist | Spot-vetting performed during S4-A simulation; no invariant breaks observed in traced scenarios; full §13 checklist walk-through deferred until simulations complete |
 | 4 | **DONE** | Simulation pass — Direction A (Opinion architecture) | `SIM_A_opinion_architecture.md` (commit `fda634db`); 6 scenarios traced; single-writer invariant verified; 6 spec gaps surfaced (ED-758) for v1.2; 4 emergent properties documented |
 | 5 | **DONE** | Simulation pass — Direction B (Domain Action selection) | `SIM_B_domain_action_selection.md` (commit `8a6dbb44`); 8 scenarios; 7 DA-invariants verified; 9 spec gaps (1 P1-critical SIM-B-G8 in ED-759); 1 v1.2-recommended patch (stall-escalator in ED-760); 5 emergent properties |
-| 6 | PENDING | Simulation pass — Direction C (Settlement/Faction signal flow) | Settlement Signal → Concern → Domain Action propagation |
-| 7 | PENDING | Simulation pass — Direction D (Relational dynamics) | Standing recalc, Outreach, Knot integration, Memory accumulation |
+| 6 | **DONE** | Simulation pass — Direction C (Settlement Signal flow) | `SIM_C_settlement_signal.md` (commit `684b1627`); 9 scenarios; 8 SS-invariants verified (1 partial); 8 gaps (1 P1-critical SIM-C-G6 routing); 5 emergent properties |
+| 7 | **DONE** | Simulation pass — Direction D (Relational dynamics) | `SIM_D_relational_dynamics.md` (commit `84eec07c`); 8 scenarios; 6 REL-invariants verified; 6 gaps surfaced; SIM-B-G8 reaffirmed P1-critical; 5 emergent relational properties |
 | 8 | PENDING | Simulation pass — Direction E (Composition / cross-system) | Multi-agent trace; emergent behaviors at faction scale |
 | 9 | PENDING | Simulation synthesis | Roll-up findings; surface unresolved interactions for v1.2 |
 
@@ -292,5 +292,62 @@ Per main body: Direction B (Domain Action selection / select_proposal + Standing
 ## SESSIONS 4-C / 4-D / 4-E NOTES — TBD
 
 S4-C (Settlement Signal + edge cases + governor fallback) next-up. Verify PATCH 2.5 null-guards under empty-Passive-NPCs, sparse-Memory, zero-weight; trace governor fallback; observe Settlement Signal → faction Concern propagation cadence per S-44-A scope.
+
+
+---
+
+## SESSIONS 4-C & 4-D NOTES — 2026-04-29
+
+**Done (S4-C — Settlement Signal flow):**
+- `SIM_C_settlement_signal.md` produced and committed (`684b1627`). 44k chars, 734 lines.
+- Nine scenarios: 1) standard Solmund Signal generation, 2) empty Passive NPCs + governor fallback, 3) no recent Memories (Guard 2), 4) all-zero weights (Guard 3), 5) player-Disposition amplification scope (PATCH 3.12), 6) resonance lookup unknown event_type (PATCH 2.7 fallback), 7) Concern volume target measurement (~0.75/NPC/Accounting — within target), 8) population_disposition recalc (PATCH 3.9), 9) multi-settlement composition over 3 Accountings.
+- 8 SS-invariants verified (`[SS-INV-1..8]`); INV-7 partial (post-cascade-decay salience can fall below clamp range).
+- 8 gaps surfaced. **P1-critical SIM-C-G6:** "Relevant Active NPC" routing for Signal-derived Concerns is unspecified. Recommendation for v1.2: (a) governor if Active, else (b) faction leader if seat, else (c) round-robin among inner-circle by domain affinity.
+
+**Done (S4-D — Relational dynamics):**
+- `SIM_D_relational_dynamics.md` produced and committed (`84eec07c`). 379 lines.
+- Eight scenarios: 1) P3 Outreach skipped no-consequence, 2) P3→P2 escalation at salience-5+ttl-1, 3) Knot integration via P2 Outreach (opacity preserved), 4) Standing change cascade S5→S7 large jump, 5) Standing 3↔4 transition (true N-DIAG-A milestone scene), 6) Standing demotion cascade (interaction with SIM-B-G8), 7) Passive NPC Memory replacement at 3-cap (PATCH 3.15), 8) multi-NPC multi-Accounting relational dynamics over 4 Years.
+- 6 REL-invariants verified (`[REL-INV-1..6]`).
+- 6 gaps surfaced. **SIM-B-G8 reaffirmed P1-critical** in Scenario 6 (interpretation materially affects Confessor's Standing trajectory under deadlock load).
+- N-DIAG-A title-body inconsistency surfaced (G4): title "Standing 5 Milestone" but body describes 3↔4 transition.
+
+**Cross-direction integration verified:**
+- A↔B: Memory drift from Concerns/Project completions feeds Procedure D's Opinion mutations; Standing changes propagate via standard event/Memory chain.
+- A↔C: Settlement Signals → Concerns → Resolutions → Memories → Procedure D drift. Closed loop.
+- A↔D: Outreach attendance generates resolution Memories → Procedure D drift. Closed loop.
+- B↔C: Strong settlement Signals trigger DA proposals (e.g., raid_threat → military DA). Direction-C generates inputs for Direction-B competition.
+- B↔D: Standing recalc → Faction Meta-Armature recomputation → next-cycle proposal selection bias. Multi-Year cumulative institutional drift verified.
+- C↔D: 3-cap Passive Memory replacement (D) shapes what feeds compute_settlement_signal (C). Direction-D mechanics determine Direction-C inputs.
+
+**Cumulative gaps inventory (29 total across SIM-A/B/C/D):**
+- 2 P1-CRITICAL (SIM-B-G8, SIM-C-G6) — material spec impact on Standing trajectory and Concern routing.
+- ~12 P2 — clarifications affecting implementation determinism.
+- ~15 P3 — minor doc/typo/authoring-helper specifications.
+
+All gaps inventoried in respective SIM_*.md docs §summary sections; consolidated ED-761 in editorial_ledger.
+
+---
+
+## SESSION 4-E NOTES — TBD
+
+**Direction E (Composition / multi-agent emergence) is the remaining direction.** Pre-flight for fresh session:
+
+1. Read v1.1 doc 12, then SIM-A/B/C/D summaries (§ final sections of each).
+2. Pre-flight: confirm 29-gap inventory; consolidate to a tight gap-register if useful.
+3. Direction-E scenarios should test multi-agent multi-faction multi-decade dynamics:
+   - 6+ NPCs across 2-3 factions, 12+ Accountings (3 Campaign Years).
+   - Surface emergent: feedback loops, oscillations, deadlocks (validate stall-escalator recommendation ED-760), runaway accumulation, institutional ossification (per SIM-B Scenario 7 / SIM-D Scenario 8 emergent properties).
+   - Cross-faction interference: Settlement Signal cross-border propagation, faction-vs-faction DA proposal effects on shared territories.
+   - Validate SIM-B-G8 critical interpretation under longer time-frame (does strict definition produce stable inner-circle composition vs liberal producing accelerating exclusion?).
+
+Recommend ≥30k chars for SIM-E given composition complexity. Fresh-context session strongly preferred to avoid degradation.
+
+After SIM-E: Session 5 (synthesis) — roll up all 5 directions; produce final v1.1-validation report; surface unresolved interactions for v1.2; draft v1.2 patch list.
+
+---
+
+## SESSION CONTEXT NOTE — 2026-04-29
+
+This session (S2 + S3-partial + S4-A + S4-B + S4-C + S4-D) executed under continuous "continue" prompts. **7 simulation/editorial commits this session** spanning patch application + 4 of 5 simulation directions. Combined output: 218k chars across SIM_A/B/C/D + doc 12 v1.1 + ledger updates + handoff updates. Significant progress; recommend fresh session for SIM-E to maintain quality over time.
 
 **END OF HANDOFF v1.**

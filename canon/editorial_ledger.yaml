@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 761
+# next_id: 762
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
 # Archival batch 2026-04-29 (a): 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
@@ -68,21 +68,7 @@ entries:
     status: in-progress
     severity: P2
     source: "user request 2026-04-29"
-    progress: "Direction A complete fda634db (6 scenarios, single-writer verified, 6 gaps ED-758). Direction B complete 8a6dbb44 (8 scenarios, 7 DA-invariants, 9 gaps ED-759 incl P1-critical SIM-B-G8). C/D/E pending."
-
-  - id: ED-758
-    date: 2026-04-29
-    description: "[PROVISIONAL] Six specification gaps in doc 12 v1.1 surfaced by SIM-A (Direction A simulation): (1) small_drift/larger_drift coefficients undefined in Procedure D; (2) drift loop iteration order over new_memories not specified; (3) weighted_select() re-roll-and-average semantics under low confidence not fully specified (§3.6.X); (4) knowledge_contradicts_belief() matching algorithm not specified (content-authoring helper); (5) evidence_memory_refs write timing not specified; (6) confidence boundary inconsistency (`<= 2` vs `>= 3` formulations). Resolution target: doc 12 v1.2."
-    status: open
-    severity: P2
-    source: "SIM-A surfaced gaps; commit fda634db"
-
-  - id: ED-759
-    date: 2026-04-29
-    description: "[PROVISIONAL] Nine specification gaps in doc 12 v1.1 surfaced by SIM-B (Direction B simulation, Domain Action selection). CRITICAL: SIM-B-G8 — failed_da_proposals definition in PATCH 3.11 unclear; affects Standing trajectory materially. Recommend strict 'DA roll failed only' for v1.2. Other gaps: SIM-B-G1 (4th-level tie-break), G2 (failed-deference accounting), G3 (seasons_stalled increment on non-proposal), G4 (generate_goal_from_template), G5 (effect/action helpers), G6 (round semantics), G7 (Year-counter state), G9 (Mood-suppressed accounting). Resolution: doc 12 v1.2."
-    status: open
-    severity: P1
-    source: "SIM-B surfaced gaps; commit 8a6dbb44"
+    progress: "Directions A/B/C/D complete (commits fda634db, 8a6dbb44, 684b1627, 84eec07c). 31 scenarios traced. 27 invariants verified. 29 spec gaps surfaced (2 P1-critical: SIM-B-G8 failed_da_proposals; SIM-C-G6 settlement-Concern routing). Direction E (composition) pending; recommend fresh session."
 
   - id: ED-760
     date: 2026-04-29
@@ -91,16 +77,17 @@ entries:
     severity: P2
     source: "SIM-B Scenario 8 deadlock analysis; commit 8a6dbb44"
 
-  - id: ED-759
-    date: 2026-04-29
-    description: "[PROVISIONAL] Terminology conversion workplan: retire framing terms (TTRPG/BG/Hybrid) and Hybrid-as-third-mode. Preserve mechanical vocabulary (dice pool, TN, Ob, etc.). Single architectural change: scale_transitions_v30 §6 three-mode → two-mode + Zoom-In. Workplan at designs/audit/2026-04-29-terminology-conversion/00_workplan.md proposes 5 phases with terminology_gate CI hook enforcement at Phase 4. Status: PROVISIONAL pending Jordan signoff on 5 decisions enumerated in workplan §4. PP-675."
-    status: open
-    severity: P2
-    source: "PP-675"
-
   - id: ED-760
     date: 2026-04-29
     description: "[PROVISIONAL] Topographic analysis workplan. PP-676. Pending Jordan signoff."
     status: open
     severity: P2
     source: "PP-676"
+
+  - id: ED-761
+    date: 2026-04-29
+    description: "[PROVISIONAL — TRACKING] 29 specification gaps in doc 12 v1.1 surfaced by SIM-A/B/C/D simulations (commits fda634db, 8a6dbb44, 684b1627, 84eec07c). Two P1-CRITICAL: SIM-B-G8 (failed_da_proposals definition — recommend strict 'DA roll failed only', not 'lost competition'); SIM-C-G6 (Settlement-Signal-derived Concern routing to relevant Active NPC unspecified). Gaps inventoried in respective SIM_*.md docs and HANDOFF_session_chain.md S4 notes. Resolution target: doc 12 v1.2 revision pass."
+    status: open
+    severity: P1
+    source: "SIM-A/B/C/D — see HANDOFF and individual SIM docs for full gap inventory"
+
