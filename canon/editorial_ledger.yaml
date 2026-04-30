@@ -89,4 +89,10 @@ entries:
     status: applied
     severity: P3
     source: "PP-678 (PP-676 v3 §V3-9)"
+  - id: ED-766
+    date: 2026-04-29
+    description: "[APPLIED] valoria-vector-audit skill enshrined per PP-679. Packages v3 multi-graph triangulation methodology as directory-based skill (SKILL.md + 3 reference docs + vector_audit.py). Reduces future audit setup from one-session derivation to minutes-long invocation. methodology.md locks pre-committed thresholds preserving v2 lessons (no post-hoc tuning). diagnostic_modes.md documents 8 modes. v1_v2_v3_history.md captures 14 v2 problems and v3 corrections (institutional memory)."
+    status: applied
+    severity: P3
+    source: "PP-679"
 

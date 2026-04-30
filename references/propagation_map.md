@@ -495,3 +495,35 @@ ED-762 (was the first-arrived). Flag in PP-677 / ED-764 entries closed.
 - Coup Counter cleanup pending design-judgment review (10 sites across 7 files;
   suggested mappings in session log notes)
 
+## 2026-04-29 — valoria-vector-audit skill enshrinement (PP-679)
+
+Packages v3 multi-graph triangulation audit methodology (PP-676) as a reusable
+directory-based skill. Reference run remains designs/audit/2026-04-29-topographic-
+analysis/ as canonical executed implementation.
+
+**Files added:**
+- skills/valoria-vector-audit/SKILL.md (skill entry point with triggers, modes, common failure modes)
+- skills/valoria-vector-audit/references/methodology.md (canonical v3 spec with locked thresholds)
+- skills/valoria-vector-audit/references/diagnostic_modes.md (all 8 modes documented)
+- skills/valoria-vector-audit/references/v1_v2_v3_history.md (institutional memory: 14 v2 problems, v3 corrections)
+- skills/valoria-vector-audit/scripts/vector_audit.py (pipeline scaffold; full implementation references the v3 reference run)
+
+**Files modified:**
+- skills/valoria-orchestrator/references/skill_registry.md (new skill entry + 5 routing-table rows)
+- canon/patch_register_active.yaml (PP-679)
+- canon/editorial_ledger.yaml (ED-766)
+- session_log_current.md (replaced)
+- references/propagation_map.md (this entry)
+
+**Propagation status:** complete. Skill is invocable from this commit forward
+via skill call or trigger phrase from skill_registry.
+
+**Cross-references:** PP-676 v3 (source methodology), PP-677 (Load-bearing systems
+column — restored Mode F), PP-678 (vocabulary debt sweep — demonstrated Mode G
+workflow), ED-766.
+
+**Locked thresholds in methodology.md §3.7:** No post-hoc tuning. Threshold
+deviation invalidates findings — this is the v2 lesson that v3 was designed
+to prevent. Future operators must understand WHY each procedural choice was
+tightened (see v1_v2_v3_history.md) before relaxing.
+

@@ -70,6 +70,16 @@
 - Triggers: dice math, probability, expected value, success rate, TN, Ob, pool size, d10
 - Scripts: `skills/valoria-dice-model/valoria_dice.py`
 
+### valoria-vector-audit
+- Path: `skills/valoria-vector-audit/SKILL.md` (directory-based)
+- Model: Sonnet 4.6 (full pipeline) / Haiku 4.5 (single-mode runs over precomputed graphs)
+- Triggers: topographic audit, vector audit, corpus audit, find weaknesses, find debt, implied connections, what's missing, what's notional, where are the gaps, rerun topographic, validate against corpus, surface non-obvious structural properties
+- Modes: A (multi-graph hubs) B (implied-but-missing) C (notional edges) D (cascade-without-return) E (sparse-context) F (throughline orphans) G (vocabulary debt) H (multi-graph isolates)
+- References: `skills/valoria-vector-audit/references/` (methodology, diagnostic_modes, v1_v2_v3_history)
+- Scripts: `skills/valoria-vector-audit/scripts/vector_audit.py`
+- Note: v3 multi-graph triangulation methodology; supersedes v1+v2 one-off pipelines. Self-exempting on Ω/Μ vetting (Class A analytic instrument). Reference run: designs/audit/2026-04-29-topographic-analysis/. PP-676 / ED-762.
+
+
 ---
 
 
@@ -94,6 +104,11 @@
 | "simulate [scenario]" | valoria-simulator | Mode C + M |
 | "simulate [ttrpg/hybrid/boardgame]" | valoria-simulator | Mode C + G-suite + M — multi-session |
 | "audit [subsystem]" | valoria-mechanic-audit | Modes A-G |
+| "topographic audit" / "vector audit" | valoria-vector-audit | Stages 1-7 + all 8 diagnostic modes |
+| "corpus audit" / "find structural weaknesses" | valoria-vector-audit | Full pipeline |
+| "vocabulary debt" / "find struck terms still in use" | valoria-vector-audit | Mode G only (fast) |
+| "find isolates" / "what's disconnected" | valoria-vector-audit | Modes E + H |
+| "find implied connections" | valoria-vector-audit | Modes B + C |
 | "canon check [mechanic]" | valoria-canon-guard | Full P-01–P-14 pass |
 | "resolve editorials" | valoria-editorial-register | Workflow A |
 | "compile" | valoria-compiler | Full compilation pass (only if requested) |

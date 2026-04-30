@@ -646,4 +646,61 @@ patches:
       substituting agent (engine for GM). 14 STRUCK Cultural Reformation refs
       retained as audit trail per editorial principle. Coup Counter deferred —
       design judgment needed for non-1:1 substitution to Graduated Autonomy."
+- id: PP-679
+  date: 2026-04-29
+  severity: P3
+  description: "valoria-vector-audit skill enshrinement. Packages v3 multi-graph
+    triangulation methodology (PP-676) as a reusable directory-based skill so
+    future audits invoke it via /effort or skill call rather than re-deriving
+    from scratch. v3 took two sessions to converge (v1→v2→v3 with methodology-
+    validation failure mid-stream); enshrinement reduces future audit setup
+    cost from one session to minutes. Skill structure: SKILL.md + references/
+    (methodology, diagnostic_modes, v1_v2_v3_history) + scripts/vector_audit.py.
+    methodology.md contains the canonical v3 spec with all pre-committed
+    thresholds locked. diagnostic_modes.md documents all 8 modes (A multi-graph
+    hubs, B implied-but-missing, C notional, D cascade-without-return, E sparse,
+    F throughline orphans, G vocabulary debt, H multi-graph isolates).
+    v1_v2_v3_history.md captures institutional memory (14 v2 problems and how
+    v3 corrects each) so future operators don't relax tightened constraints.
+    skill_registry.md updated with new entry + 5 routing-table rows. Reference
+    run remains designs/audit/2026-04-29-topographic-analysis/ as canonical
+    executed implementation. ED-766."
+  finding_id: USER-DIRECTED
+  source: user
+  affects:
+    - skills/valoria-vector-audit/SKILL.md
+    - skills/valoria-vector-audit/references/methodology.md
+    - skills/valoria-vector-audit/references/diagnostic_modes.md
+    - skills/valoria-vector-audit/references/v1_v2_v3_history.md
+    - skills/valoria-vector-audit/scripts/vector_audit.py
+    - skills/valoria-orchestrator/references/skill_registry.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Skill enshrinement of analytic methodology. Self-exempting Class A
+      (skill is meta-tooling, not gameplay mechanic). N pass — formalizes
+      methodology that already exists in the corpus (PP-676 v3 execution).
+      Ω pass — improves project capability for surfacing structural weaknesses
+      that hand-curation cannot find. Μ [] because skill produces evidence for
+      vetting; it doesn't itself service Μ modes. M-ratings ○ across the board:
+      no behavior change, methodology unchanged from v3. The skill IS the
+      methodology made accessible. Locked thresholds in methodology.md §3.7
+      preserve v2's hard-learned lessons about post-hoc tuning."
 
