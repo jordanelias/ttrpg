@@ -1,5 +1,6 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 762
+# next_id: 763
+# Archival batch 2026-04-29 (c): ED-757, ED-760, ED-761 (full simulation chain + v1.2 production resolved).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
 # Archival batch 2026-04-29 (a): 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
@@ -62,37 +63,16 @@ entries:
     severity: P1
     source: "doc 17 §6"
 
-  - id: ED-757
-    date: 2026-04-29
-    description: "[PROVISIONAL] Comprehensive mechanical simulations against doc 12 v1.1 (post-revision). Map mechanical interactions across all directions in granular detail to validate revisions and surface emergent behaviors. Expected delivery: simulation sessions following ED-756."
-    status: in-progress
-    severity: P2
-    source: "user request 2026-04-29"
-    progress: "Full simulation chain complete: A/B/C/D/E/F/G/H + narrative pass (commits fda634db, 8a6dbb44, 684b1627, 84eec07c, 36a8d6e3, b04523d2, 454b5dc4, ca84f96c, b54c8162). 51 scenarios. 39 spec gaps (3 P1-critical: SIM-B-G8 failed_da_proposals, SIM-C-G6 settlement-Concern routing, SIM-H-G2 Knot rupture). 18 forward-looking observations. Architecture validated at all scales. Synthesis session pending."
-
-  - id: ED-760
-    date: 2026-04-29
-    description: "[RECOMMENDATION-FOR-V1.2] Add stall-escalator term to select_proposal score: alignment + 0.1*standing + 0.05*seasons_stalled. Prevents infinite-deadlock for unequal-Standing same-domain collisions (SIM-B Scenario 8). Pending Jordan design call."
-    status: open
-    severity: P2
-    source: "SIM-B Scenario 8 deadlock analysis; commit 8a6dbb44"
-
-  - id: ED-760
-    date: 2026-04-29
-    description: "[PROVISIONAL] Topographic analysis Stages 1-4 executed; 12 TOPO findings in 02_weakness_register.md. PP-676."
-    status: open
-    severity: P2
-    source: "PP-676"
-
-  - id: ED-761
-    date: 2026-04-29
-    description: "[PROVISIONAL — TRACKING] 39 specification gaps in doc 12 v1.1 surfaced by SIM-A through SIM-H simulations + narrative pass. THREE P1-CRITICAL: SIM-B-G8 (failed_da_proposals definition — recommend strict 'DA roll failed only'); SIM-C-G6 (Settlement-Signal-Concern routing); SIM-H-G2 (Knot rupture trigger conditions/mechanic/consequences — referenced in spec but undefined). Gaps inventoried in respective SIM_*.md docs and HANDOFF_session_chain.md. Resolution target: doc 12 v1.2 revision pass."
-    status: open
-    severity: P1
-    source: "SIM-A/B/C/D/E/F/G/H — see HANDOFF and individual SIM docs for full gap inventory"
   - id: ED-762
     date: 2026-04-29
     description: "[PROVISIONAL] Topographic analysis v2 + v3 executed in same session. v2 (TF-IDF-primary, 84 tokens × 2940 paragraphs, validation FAILED at Jaccard 0.222). v3 pivot to multi-graph triangulation (G_cite expanded 11→421 edges, G_throughline, G_mu, G_pp, G_tfidf supporting), validation VALIDATED at 2/3 structural properties. v3 corrected v2 flagship finding: corpus IS system-anchored (NPC Behavior is integration spine, cite-deg 56 in+out), not faction/NPC/Conviction-anchored as v2 claimed (TF-IDF cosine artifact). Other v3 findings: throughlines framework lacks system-token coupling formalization (P2 fail is a finding, not methodology defect); 14 multi-graph isolates incl. 5 of 7 Convictions and 3 of 4 Pressure Points (concepts central to NPC Behavior but lacking first-class docs); CI is largest implicit hub with no metadata coupling (top 9 of 15 notional pairs); vocabulary debt confirmed and located precisely. PP-676. Replaces ED-760 v1 stub-entry."
     status: open
     severity: P2
     source: "PP-676 v3 execution"
+
+  - id: ED-762
+    date: 2026-04-29
+    description: "[PROVISIONAL] doc 12 v1.2 produced (commit 7c9384ec) — 39 simulation-surfaced spec gaps resolved + ED-760 stall-escalator applied. v1.2 specification revisions doc (21_v1_2_specification_revisions.md, commit b7f2235b) provides patch directives; v1.1 validation report (19_v1_1_validation_report.md, commit b7f2235b) provides simulation evidence base. Ready for §13 Promotion Checklist re-vet pass before canonical promotion. Forward-looking design observations (18 total across SIM-A through SIM-H + narrative pass) documented in doc 19 §5; out-of-scope for v1.2 spec patches but flagged for Jordan post-canonical consideration."
+    status: open
+    severity: P2
+    source: "doc 12 v1.2 commit 7c9384ec; supports Jordan re-vet before canonical promotion"

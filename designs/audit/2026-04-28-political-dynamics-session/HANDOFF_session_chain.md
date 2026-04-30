@@ -21,7 +21,7 @@
 | 6 | **DONE** | Simulation pass — Direction C (Settlement Signal flow) | `SIM_C_settlement_signal.md` (commit `684b1627`); 9 scenarios; 8 SS-invariants verified (1 partial); 8 gaps (1 P1-critical SIM-C-G6 routing); 5 emergent properties |
 | 7 | **DONE** | Simulation pass — Direction D (Relational dynamics) | `SIM_D_relational_dynamics.md` (commit `84eec07c`); 8 scenarios; 6 REL-invariants verified; 6 gaps surfaced; SIM-B-G8 reaffirmed P1-critical; 5 emergent relational properties |
 | 8 | **DONE** | Simulation pass — Direction E (Composition / multi-agent emergence) | `SIM_E_composition.md` (commit `b04523d2`); 6 scenarios, 3-faction × 3-Year trace; SIM-B-G8 P1-criticality confirmed at scale; 2 new gaps + 3 forward-looking design observations |
-| 9 | PENDING (next-up) | Simulation synthesis | Roll-up findings across SIM-A/B/C/D/E + narrative pass; produce final v1.1 validation report; draft v1.2 patch list incorporating P1 resolutions + stall-escalator + succession mechanic |
+| 9 | **DONE** | Synthesis + v1.2 production | Doc 19 v1.1 validation report (commit `b7f2235b`); Doc 21 v1.2 specification revisions (commit `b7f2235b`); Doc 12 v1.2 produced (commit `7c9384ec`) — 1958 lines, +394 vs v1.1; all 39 patches applied including 3 P1-critical + ED-760 stall-escalator. Ready for §13 Promotion Checklist re-vet. |
 
 Session 1 deliverable persists today's gap-resolution; sessions 2-9 execute the chain. User-controlled cadence (continue per session).
 
@@ -499,5 +499,77 @@ After completion of original 5-direction chain, user authorized further simulati
 **Session 5 (synthesis) deliverable scope expanded:** roll up 8 directions + narrative pass + extended findings; produce final v1.1 validation report consolidating all 39 gaps with prioritization; produce v1.2 patch list incorporating three P1-critical resolutions + ED-760 stall-escalator + high-impact P2 gaps; produce forward-looking design observations memo (18 observations) for Jordan's separate consideration after v1.2 stabilizes.
 
 **Total session output:** 16 commits this session-chain; ~440k chars output across simulation/editorial artifacts.
+
+
+---
+
+## SESSION 5 — SYNTHESIS + v1.2 PRODUCTION — 2026-04-29
+
+User authorization: "you have permission to resolve all best way / synthesize as required / proceed with more work."
+
+**Done (S5 — full synthesis + v1.2 production):**
+
+### Doc 19 — v1.1 Validation Report (commit `b7f2235b`)
+- 359 lines, 25k chars.
+- Consolidates 8-direction simulation chain: 51 scenarios, 33 invariants verified, 39 gaps with prioritization, 24 emergent properties cataloged, 18 forward-looking design observations.
+- Cross-direction integration map (all 6 pairwise integrations verified).
+- Validation conclusion: v1.1 architecture sound; ready for v1.2 patch resolution before canonical promotion.
+
+### Doc 21 — v1.2 Specification Revisions (commit `b7f2235b`)
+- 893 lines, 41k chars.
+- Patch directives for 3 P1-critical + ED-760 + 19 P2 + 16 P3 = 39 total patches.
+- §5 Application checklist; §6 Output expectations.
+
+### Doc 12 v1.2 (commit `7c9384ec`)
+- 1958 lines, 113k chars (+394 lines vs v1.1's 1564).
+- All 39 v1.2 patches applied. New sections:
+  - §2.5.2 Knot Rupture (PATCH v1.2-3, P1-CRITICAL, full mechanic specification + featured-behavior commentary)
+  - §5.4.1 Faction Succession (PATCH v1.2-19)
+  - §5.4.2 Leader Challenge / Coup Mechanic (PATCH v1.2-20)
+  - §8.2 Inter-Faction War State (PATCH v1.2-22)
+  - §8.2.1 Peace Treaty Mechanic (PATCH v1.2-23)
+  - §17 v1.2 Patch Addendum (consolidated P2/P3 clarifications)
+- Updated §0.1 v1.2 change log + retained v1.1 change log as predecessor.
+- Three P1-CRITICAL resolutions:
+  - **PATCH v1.2-1 (§8.1):** failed_da_proposals strict definition — counts only "DA roll failed," not "lost competition." Lost competitions increment seasons_stalled only.
+  - **PATCH v1.2-2 (§5.2):** Settlement-Signal-Concern three-tier routing (governor → faction leader if seat → round-robin by domain affinity).
+  - **PATCH v1.2-3 (§2.5.2 + §1.1):** Full Knot rupture mechanic specification.
+- ED-760 stall-escalator applied as **PATCH v1.2-4** (`+0.05 × seasons_stalled` in select_proposal score).
+- §1.1 N-DIAG-A title renamed: "Inner-Circle Threshold Milestone (Standing 3↔4)" — resolves SIM-D-G4.
+- §5.3 Mood-impact on aggregate weighting added (PATCH v1.2-18 / SIM-G-G1): mood_modifier dampens institutional weight for Distracted (0.7×) and Grieving (0.5×).
+- All 39 patches verified present in spec via grep audit.
+
+### Editorial ledger consolidation
+- ED-757 (simulation chain), ED-760 (stall-escalator recommendation), ED-761 (39-gap tracker) all resolved and archived.
+- ED-762 added (open) — v1.2 produced, ready for §13 Promotion Checklist re-vet.
+
+---
+
+## NEXT STEPS
+
+**Immediate (Jordan-facing):**
+1. Re-vet doc 12 v1.2 against §13 Promotion Checklist before canonical promotion.
+2. Optional spot-check: trace SIM-B Sc 8 deadlock against v1.2 (PATCH v1.2-4 stall-escalator should now break Confessor's deadlock at seasons_stalled ~5-7); trace SIM-H Sc 1 against v1.2 §2.5.2 Knot rupture (full mechanic should produce Sc 6 cascade).
+3. Address §6 Jordan-decision items still flagged (`[JORDAN-DECISION-PENDING-ED-755]`) — these are out-of-scope for v1.2 patches; require Jordan's design call before resolution.
+
+**Forward-looking (post-canonical, per Jordan consideration):**
+- 18 forward-looking design observations documented in doc 19 §5. Out-of-scope for v1.2 spec patches but flagged for separate consideration after v1.2 stabilizes. Highlights: player-proactive lever expansion (O-N1, SIM-E-O2); aging/mortality mechanic (SIM-G-O1); Conviction-diversity bonuses in institutional_stability (SIM-G-O3); Player Founding Memory mirror (O-N5).
+
+---
+
+## TOTAL CHAIN STATISTICS
+
+**18 commits this full session-chain.** Started with stress-test issue resolution (S1, doc 17), produced doc 12 v1.1 (S2), executed 8-direction simulation chain + narrative pass (S4-A through S4-H + narrative), produced synthesis + v1.2 (S5).
+
+**Output volume:** ~580k chars total across:
+- doc 17 (specification revisions) — 33k
+- doc 12 v1.1 (development spec) — 83k
+- SIM-A through SIM-H + narrative pass — 8 docs, ~370k total
+- doc 19 (v1.1 validation report) — 25k
+- doc 21 (v1.2 specification revisions) — 41k
+- doc 12 v1.2 (final spec) — 113k
+- editorial ledger updates + handoff updates throughout
+
+**Architecture validated at every scale tested.** Ready for canonical-promotion review.
 
 **END OF HANDOFF v1.**

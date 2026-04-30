@@ -774,3 +774,42 @@ entries:
     source: "doc 17 §7"
     resolution: "Doc 12 v1.1 produced 2026-04-29 with 26 patches applied. Commit 9dede391. ED-755 items marked inline as [JORDAN-DECISION-PENDING-ED-755] in §16; defaults from doc 17 §6 NOT applied. v1.1 has 1565 lines (up from 985 in v1.0); 79 PATCH references. Verification: 28/28 expected-content checks pass."
     archive_date: "2026-04-29"
+
+# Archival batch 2026-04-29 (c) — ED-757 + ED-760 + ED-761 resolved by simulation chain + v1.2 production.
+
+  - id: ED-757
+    date: 2026-04-29
+    description: "[PROVISIONAL] Comprehensive mechanical simulations against doc 12 v1.1 (post-revision). Map mechanical interactions across all directions in granular detail to validate revisions and surface emergent behaviors. Expected delivery: simulation sessions following ED-756."
+    status: resolved
+    severity: P2
+    source: "user request 2026-04-29"
+    progress: "Full simulation chain complete: A/B/C/D/E/F/G/H + narrative pass (commits fda634db, 8a6dbb44, 684b1627, 84eec07c, 36a8d6e3, b04523d2, 454b5dc4, ca84f96c, b54c8162). 51 scenarios. 39 spec gaps (3 P1-critical: SIM-B-G8 failed_da_proposals, SIM-C-G6 settlement-Concern routing, SIM-H-G2 Knot rupture). 18 forward-looking observations. Architecture validated at all scales. Synthesis session pending."
+    resolution: "Full simulation chain complete (commits fda634db..b54c8162); 51 scenarios, 39 gaps surfaced. v1.1 validation report produced (commit b7f2235b — doc 19). v1.2 spec revisions doc produced + applied: 39 patches resolving all surfaced gaps. doc 12 v1.2 committed 7c9384ec — 1958 lines. Three P1-critical resolved (SIM-B-G8 strict, SIM-C-G6 routing, SIM-H-G2 Knot rupture). v1.2 ready for §13 Promotion Checklist re-vet."
+    archive_date: "2026-04-29"
+
+  - id: ED-760
+    date: 2026-04-29
+    description: "[RECOMMENDATION-FOR-V1.2] Add stall-escalator term to select_proposal score: alignment + 0.1*standing + 0.05*seasons_stalled. Prevents infinite-deadlock for unequal-Standing same-domain collisions (SIM-B Scenario 8). Pending Jordan design call."
+    status: resolved
+    severity: P2
+    source: "SIM-B Scenario 8 deadlock analysis; commit 8a6dbb44"
+    resolution: "Applied as PATCH v1.2-4 in §6.2 select_proposal score formula (commit 7c9384ec). Stall-escalator term +0.05 × seasons_stalled validated as anti-deadlock + anti-ossification mechanic at scale (SIM-E Sc 2, SIM-G Sc 1-4)."
+    archive_date: "2026-04-29"
+
+  - id: ED-760
+    date: 2026-04-29
+    description: "[PROVISIONAL] Topographic analysis Stages 1-4 executed; 12 TOPO findings in 02_weakness_register.md. PP-676."
+    status: resolved
+    severity: P2
+    source: "PP-676"
+    resolution: "Applied as PATCH v1.2-4 in §6.2 select_proposal score formula (commit 7c9384ec). Stall-escalator term +0.05 × seasons_stalled validated as anti-deadlock + anti-ossification mechanic at scale (SIM-E Sc 2, SIM-G Sc 1-4)."
+    archive_date: "2026-04-29"
+
+  - id: ED-761
+    date: 2026-04-29
+    description: "[PROVISIONAL — TRACKING] 39 specification gaps in doc 12 v1.1 surfaced by SIM-A through SIM-H simulations + narrative pass. THREE P1-CRITICAL: SIM-B-G8 (failed_da_proposals definition — recommend strict 'DA roll failed only'); SIM-C-G6 (Settlement-Signal-Concern routing); SIM-H-G2 (Knot rupture trigger conditions/mechanic/consequences — referenced in spec but undefined). Gaps inventoried in respective SIM_*.md docs and HANDOFF_session_chain.md. Resolution target: doc 12 v1.2 revision pass."
+    status: resolved
+    severity: P1
+    source: "SIM-A/B/C/D/E/F/G/H — see HANDOFF and individual SIM docs for full gap inventory"
+    resolution: "All 39 simulation-surfaced specification gaps resolved by v1.2 patch list (doc 21, commit b7f2235b) and applied to doc 12 v1.2 (commit 7c9384ec). Patches v1.2-1 through v1.2-39 cover all 3 P1-critical + 19 P2 + 16 P3 + 1 typo + 1 recommendation (ED-760). See doc 12 v1.2 §0.1 v1.2 change log and §17 v1.2 patch addendum for full inventory."
+    archive_date: "2026-04-29"
