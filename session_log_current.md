@@ -1,52 +1,39 @@
-session_id: 2026-04-28-phase0-phase1
-session_close: 2026-04-28
-phase: editorial + infrastructure
-status: in-progress
+session_id: 2026-04-28-stress-test-political-dynamics
+session_close: 2026-04-29
+phase: simulation
+status: closed
 last_stage: >
-  Phase 0 completion (12/13 exit criteria met, LICENSE pending) + Phase 1 partial.
-  This session commits (ttrpg):
-    4547737 — propagation_map broken dep fix
-    052b82d — bootstrap wiring (compliance_check + freshness_gate)
-    7f640e5 — F2 verification batch ED-745/746/747/748 resolved
-    ba7497d — PP-666 trio vetting block
-  This session commits (valoria-game):
-    f9ed815 — GameMode strip broken ref followup (prior session continuation)
-    600c5cf — CI workflow
-    e4a62db — conversion_ledger + design_sync status reconciliation
-    c41688c — README rewrite
-  Prior session commits carried forward:
-    3d7e46b — register truthfulness
-    3edf7f0 — threadwork P0 triage
-    8be75e5 — GameMode strip (7 files)
-    6dadbe2 — compliance_check auto-fetch
-    b07c459 — freshness_gate regex fix + SHA population
-    b5ca0a7 — ttrpg README
+  Three-batch NERS stress test against 12_development_specification.md (political dynamics).
+  Commits (ttrpg):
+    33100e7b — 13_stress_tests_extended.md (20 issues, 1 critical, 8 high)
+    cac8142 — 14_ners_stress_tests.md (25 issues, 9 design-fail, 8 gaps)
+    bb79d1a1 — 15_stress_tests_batch3.md (23 issues, 2 critical, 11 design-fail)
+    [this close] — 16_session_close_observations.md (comprehensive context, priority order)
+  Total: 68 issues across 50 unique test cases. All patchable; no architectural redesign required.
 next_action:
   skill: editorial
   description: >
-    DECISION PENDING (Jordan):
-    (1) Restore Intelligence as 6th faction stat? Review at designs/audit/faction_stats_renaissance_review.md
-        - If yes: starting values Crown 3, Church 4, Hafenmark 3, Varfell 5, Loewenritter 2, Guilds 4
-        - Fixes Spy Ob formula (currently broken), Varfell Path A re-gate, Varfell stat identity
-        - If no: need replacement Spy Ob formula + Varfell Path A re-gate + Varfell differentiation
-    (2) LICENSE decision (GOV-08) — proprietary/MIT/Apache/CC BY-NC/custom
-    PHASE 1 REMAINING (after Intelligence decision):
-    (3) 1.1 Knot Formation During Play — design decision
-    (4) 1.2 Accord Propagation to Settlement Order — 15-25 rules need settlement targeting
-    (5) 1.3 Derived Stats Calibration — depends on 1.2
-    (6) 1.4 Faction Politics Sim — depends on 1.3
-    (7) 1.8 Varfell Path A editorial rewrite — depends on Intelligence decision
-    PHASE 0 RESIDUAL:
-    (8) compliance_check atomizer dep — auto-fetch wired but atomizer.py not in fetch list
-    (9) canonical_sources.yaml at 4670/5000 tokens — approaching threshold
-  priority: "Intelligence decision unblocks Path A + Spy Ob + Varfell identity. Then 1.1/1.2 design decisions."
+    IMMEDIATE (before implementation):
+    (1) Define select_proposal() + domain_armature_alignment table [E-36-A — Critical]
+    (2) Define max_scars = inner_circle_active_npc_count x 2 [E-48-A — Critical]
+    (3) Define conviction_alignment_multiplier values in Procedure D [E-BOT-A — Critical]
+    (4) Single-writer Opinion model: B/C produce Memories only; D consolidates [ST-32-A / E-HORIZ-A]
+    (5) Decision: define symbolic_effects consumption OR cut 210-entry table [E-38-A/B]
+    PENDING (Jordan decisions, unchanged from prior session):
+    (6) Intelligence stat as 6th faction stat — unblocks Spy Ob, Varfell Path A
+    (7) LICENSE decision (GOV-08)
+    (8) 1.1 Knot Formation During Play
+    (9) 1.2 Accord Propagation to Settlement Order
+  priority: "Items 1-4 are spec edits with correct answers — no design decision needed. Item 5 is highest-stakes decision (400 authoring entries affected)."
 blockers:
-  - "Intelligence stat decision (Jordan)"
-  - "LICENSE decision (Jordan)"
-  - "1.1 Knot Formation design (Jordan)"
-  - "1.2 Accord Propagation design (Jordan)"
+  - "select_proposal() — requires domain_armature_alignment authored table (Jordan sign-off)"
+  - "symbolic_effects decision (keep + define consumption vs cut table)"
+  - "Intelligence stat decision (Jordan, prior session)"
+  - "LICENSE decision (Jordan, prior session)"
 notes:
-  - "Faction stats Renaissance review committed as designs/audit/faction_stats_renaissance_review.md"
-  - "All P3 EDs resolved (745-748). Active ledger now 2 open (ED-710/711, both P2)"
-  - "Phase 0 exit: 12/13 criteria met. Only LICENSE remains."
-  - "Threadwork P0 triage: 7 resolved, 15 Jordan-decision, 4 mechanical, 2 reclassify"
+  - "Full issue register + priority order in 16_session_close_observations.md"
+  - "canonical_sources.yaml at 4670/5000 tokens — approaching threshold"
+  - "Class A (undefined values): 15 issues — authoring/spec completeness, no design decisions"
+  - "Class B (unused fields): 8 issues — field/procedure misalignment, cut or implement"
+  - "Class C (tie-breaking/edge cases): 6 issues — implementation-facing, low urgency"
+  - "Class D (ordering/double-write): 5 issues — single-writer Opinion fix resolves core cluster"
