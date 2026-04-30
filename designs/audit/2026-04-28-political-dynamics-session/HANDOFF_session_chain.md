@@ -15,8 +15,8 @@
 |---|--------|-------|-------------|
 | 1 | **DONE** | Author doc 17 — 48 patch resolutions for 68 stress-test issues | `designs/audit/2026-04-28-political-dynamics-session/17_specification_revisions.md` (committed `6de72da1`) + ED-750..757 (committed `831c889a`) |
 | 2 | **DONE** | Apply doc 17 patches → produce doc 12 v1.1 | `12_development_specification.md` v1.1 (committed `9dede391`) with 26 patches applied — 1565 lines, 79 PATCH references; ED-756 resolved (`f5acbaa2`) |
-| 3 | IN-PROGRESS / PENDING | Re-vet v1.1 against §13 promotion checklist | Vetting report; flag any patch that breaks invariants |
-| 4 | PENDING | Simulation pass — Direction A (Opinion architecture) | Granular interaction map for B/C/D Procedures + Knowledge→Concern→Action chain |
+| 3 | **PARTIAL** | Re-vet v1.1 against §13 promotion checklist | Spot-vetting performed during S4-A simulation; no invariant breaks observed in traced scenarios; full §13 checklist walk-through deferred until simulations complete |
+| 4 | **DONE** | Simulation pass — Direction A (Opinion architecture) | `SIM_A_opinion_architecture.md` (commit `fda634db`); 6 scenarios traced; single-writer invariant verified; 6 spec gaps surfaced (ED-758) for v1.2; 4 emergent properties documented |
 | 5 | PENDING | Simulation pass — Direction B (Domain Action selection) | Trace alignment-table + scar-cap + conviction-multiplier interactions |
 | 6 | PENDING | Simulation pass — Direction C (Settlement/Faction signal flow) | Settlement Signal → Concern → Domain Action propagation |
 | 7 | PENDING | Simulation pass — Direction D (Relational dynamics) | Standing recalc, Outreach, Knot integration, Memory accumulation |
@@ -223,5 +223,44 @@ S3 = re-vet pass against §13 of v1.1. To be done in fresh context. Resumption p
 ## SESSIONS 4-8 NOTES — TBD
 
 Simulation chain. Each direction's pre-flight, scope, and deliverable already specified above in the main body of this handoff. Recommend starting S4 with v1.1 in fresh context after S3 confirms invariants.
+
+
+---
+
+## SESSION 4-A NOTES — 2026-04-29
+
+**Done (S4 Direction A — Opinion architecture):**
+- `SIM_A_opinion_architecture.md` produced and committed (`fda634db`). 36k chars, 527 lines.
+- Six scenarios traced step-by-step with explicit state transitions:
+  1. Canonical chain: Concern resolution → Memory → drift (single-writer verified).
+  2. Project completion legacy → Memories → drift.
+  3. Concurrent B + C in same season (both writing Memories about same subject; D consumes both).
+  4. First-contact lazy init via `get_or_init_opinion()` + `derive_initial_affect()`.
+  5. High-Scar NPC with `conviction_secondary=None` — uniform-fallback path engagement.
+  6. Knowledge Decay → invalidation; visibility gate suppression; indirect propagation via Procedure E.
+- Single-writer invariants `[INV-1, INV-2, INV-3, INV-4]` all hold under traced load.
+- Editorial ledger ED-757 marked in-progress; ED-758 added for the 6 surfaced gaps. Commit `a85e0f2a`.
+
+**Surfaced gaps for v1.2 (ED-758):**
+1. `small_drift` / `larger_drift` coefficients in Procedure D not numerically specified.
+2. Procedure D drift loop iteration order over `new_memories` not specified (matters when multiple Memories about same subject exist same season).
+3. `weighted_select()` re-roll-and-average semantics under armature_confidence < 0.7 not fully specified (§3.6.X).
+4. `knowledge_contradicts_belief()` content-authoring helper unspecified.
+5. `evidence_memory_refs` write timing during D's drift loop unspecified.
+6. Confidence boundary inconsistency: `if confidence <= 2` vs `if confidence >= 3` — boundary at exactly 2 ambiguous in spec.
+
+**Emergent properties observed (worth flagging to design):**
+1. Aligned-direction legacy magnitudes are 30-50% smaller post-patch vs pre-patch. NPCs slower to "warm up" to allies; reaction sharpness to opposition preserved.
+2. Bridge-sympathy across hostile factions when secondary Convictions match — produces realistic individual rapport across institutional opposition.
+3. Uniform-fallback NPCs (high-Scar without secondary) become genuinely chaotic in Concern framing — design-intentional but worth content-author awareness.
+4. Visibility gate + Procedure E gossip chain produces ~1 Accounting delay between event and non-observer's Concern — politically authentic delay pattern.
+
+**Methodology to replicate for S4-B/C/D/E:** Each direction should follow this 6-scenario pattern with explicit step-by-step state transitions, invariant checks, and gap-surfacing. ~30-40k chars per direction is reasonable depth.
+
+---
+
+## SESSIONS 4-B / 4-C / 4-D / 4-E NOTES — TBD
+
+Per main body: Direction B (Domain Action selection / select_proposal + Standing recalc), Direction C (Settlement Signal + edge cases + governor fallback), Direction D (Standing recalc, Outreach, Knot, Memory replacement), Direction E (composition / multi-agent emergence). Each as fresh session per S4-A pattern.
 
 **END OF HANDOFF v1.**
