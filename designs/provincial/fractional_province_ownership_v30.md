@@ -38,6 +38,8 @@ A faction controlling a settlement holds that settlement's PV share regardless o
 
 **Province PV totals re-aggregate per faction at Accounting.** A province with base PV 4 and three settlements of Prosperity 3/2/1 distributes 2/1.33/0.67 PV to the controllers of those three settlements (rounded to 1 decimal). A faction controlling all three: gets 4.0 (the full province). A split 2-vs-1: gets 3.33 vs 0.67.
 
+**Zero-denominator guard (FRAC-01):** If sum of all settlement Prosperities in a province reaches 0 (all settlements devastated): PV distributes equally across settlements (floor(base PV / settlement count), remainder to Seat settlement). Province is treated as Economically Collapsed — Accord forced to 0 at next Accounting regardless of Order values. This is an extreme edge case (sustained total devastation) but must be handled to prevent division-by-zero.
+
 This replaces the current implicit binary (either full 4 PV or 0) with a graduated PV stake.
 
 ### §2.3 Greater / Lesser Naming
@@ -144,5 +146,5 @@ T8 Gransol (Hafenmark, base PV 4, three settlements: Parliament P=3, Harbor P=2,
 ## §5 Open Items
 
 - **PV share rounding:** currently 2-decimal. Consider integer-only (round fractional to nearest whole) for simplicity. Flag for smoke-test.
-- **Multiple non-Seat controllers:** if three factions each hold one non-Seat settlement, Fragmentation Check multiplies Ob. Current spec: +1 Ob per additional non-Seat controller. Needs balance verification.
+- **Multiple non-Seat controllers:** RESOLVED (FRAC-03 2026-04-29). §2.6 additive formula is canonical: Ob = 2 + (number of non-Seat-held settlements), regardless of how many distinct factions hold those settlements. The "multiplies Ob" note in this §5 was a draft query, not a patch — it is struck.
 - **Settlement-level Casus Belli:** when Hafenmark seizes Varfell's Market settlement, does Varfell gain Casus Belli against Hafenmark for the whole province or just the settlement? Current spec: Casus Belli at settlement scope (per `faction_layer §3.5` extension — one Casus Belli per settlement transferred).
