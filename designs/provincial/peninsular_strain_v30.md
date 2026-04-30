@@ -2,7 +2,7 @@
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Integrated into victory_v30.md.
 ## Date: 2026-04-14
 ## Supersedes: victory_v30.md §1 TCV table (partial — TCV revaluation), victory_v30.md §3 (faction-specific victory conditions replaced by universal condition), victory_v30.md §4 (co-victory restructured), victory_v30.md §5 (shared loss retained with modifications)
-## Dependencies: geography_v30.md (territory numbering), params_board_game.md (card-hand PP-177, faction stats, Prosperity per territory, Diplomatic Token PP-517/521, Standing PP-515, Institutional Mandate PP-189), victory_v30.md §2 (PT track retained), victory_v30.md §6 (Askeheim/RS retained), victory_v30.md §7 (CI generation retained), victory_v30.md §9 (Hybrid integration retained)
+## Dependencies: geography_v30.md (territory numbering), params_board_game.md (card-hand PP-177, faction stats, Prosperity per territory, Diplomatic Token PP-517/521, Standing PP-515, Institutional Mandate PP-189), victory_v30.md §2 (PT track retained), victory_v30.md §6 (Askeheim/MS retained), victory_v30.md §7 (CI generation retained), victory_v30.md §9 (Hybrid integration retained)
 ## Propagation required: victory_v30.md, params_board_game.md, geography_v30.md (TCV only)
 
 ---
@@ -239,14 +239,14 @@ Automatic consequences firing when Battle is resolved on Valorian soil. Not opti
 
 ### §3.1 Substrate Fracture (Pressure 1)
 
-Each Battle resolved on Valorian soil: **RS −1.**
+Each Battle resolved on Valorian soil: **MS −1.**
 
-| Battle type | RS cost | Rationale |
+| Battle type | MS cost | Rationale |
 |------------|---------|-----------|
 | Standard Battle (Legionary contested entry) | −1 | Mass violence degrades the Rendering. |
 | Mass Battle (Campaign/War scale per mass_battle_v30.md §A.3) | −2 | Larger scale violence, greater substrate damage. |
 | Siege (Fort ≥ 2 defended) | −1 | Concentrated but geographically contained. |
-| Church Seizure requiring Battle (garrisoned territory) | −1 | The Battle component triggers RS cost; Seizure itself does not. |
+| Church Seizure requiring Battle (garrisoned territory) | −1 | The Battle component triggers MS cost; Seizure itself does not. |
 | Popular Uprising (Accord 0 → Revolt) | −1 | Violence is violence; the substrate does not distinguish. |
 | Altonian Vanguard Battle | −1 | Foreign invasion also damages the substrate. |
 | Covert action (Tribune Investigate, Spy) | 0 | Not mass-violence events. |
@@ -308,7 +308,7 @@ Strain decay is per-Accounting and decoupled from peninsula-wide peace (the prio
 | 3–4 | Tension | All factions: Legitimacy −25 at Accounting (derived_stats_v1). |
 | 5–6 | Fracture | All factions: Accord −1 in one territory (lowest-Accord first, controller's choice among ties). |
 | 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2 at Accounting. |
-| 9–10 | Collapse | Non-capital territories: Accord cap at 2. Mandate check Ob 3. RS −1/season additional. |
+| 9–10 | Collapse | Non-capital territories: Accord cap at 2. Mandate check Ob 3. MS −1/season additional. |
 
 **Löwenritter Strain exemption:** Löwenritter emergence (coup) adds Strain +1 (not +2 — the coup is a succession event, not faction elimination). Battles in the first 2 seasons after Löwenritter activation do not advance Strain (the population expects military governance during succession crisis). After 2 seasons: normal Strain rules apply.
 
@@ -327,7 +327,7 @@ Both may rise together in a campaign with sustained governance failure. They sha
 
 ## §5 Faction Toolkits — Non-Military Territory Acquisition
 
-Each faction has a non-military domain action for acquiring territory that produces Accord ≥ 2. These are categorically better than military conquest (Accord 1) for legitimacy purposes and do not trigger RS/IP costs (unless Battle is required for garrisoned territories).
+Each faction has a non-military domain action for acquiring territory that produces Accord ≥ 2. These are categorically better than military conquest (Accord 1) for legitimacy purposes and do not trigger MS/IP costs (unless Battle is required for garrisoned territories).
 
 ### §5.1 Crown — Formal Crown Treaty (Existing)
 
@@ -363,7 +363,7 @@ See victory_v30.md §3.2 for full Seizure mechanics (PP-494).
 
 **Defensive interaction:** Controlling faction gains Casus Belli on every seizure attempt (PP-510, existing rule). Institutional Mandate (PP-189) applies — controlling faction may Appease to cancel Seizure before roll.
 
-**Fort interaction:** Unchanged (PP-506). Fort does NOT modify Seizure Ob. If garrisoned: Battle required first (existing rule). The Battle triggers RS −1 per §3.1.
+**Fort interaction:** Unchanged (PP-506). Fort does NOT modify Seizure Ob. If garrisoned: Battle required first (existing rule). The Battle triggers MS −1 per §3.1.
 
 ### §5.3 Hafenmark — Dynastic Proclamation — NEW
 
@@ -449,7 +449,7 @@ Existing co-victory pairings from victory_v30.md §4 are retained as alternate c
 
 | Condition | Trigger | Transition |
 |-----------|---------|------------|
-| Post-Calamity Era | RS = 0 at Accounting | Substrate tears. Faction acquisition suspended 3 seasons. Mending doubled. Recovery: MS to 20 within 10 seasons. |
+| Post-Calamity Era | MS = 0 at Accounting | Substrate tears. Faction acquisition suspended 3 seasons. Mending doubled. Recovery: MS to 20 within 10 seasons. |
 | Occupation Era | IP ≥ 100 AND AER ≤ 1 at Accounting | Altonian Governorate activates. Faction actions +2 Ob in occupied territories. Recovery: IP below 60. |
 | Anarchy Era | All factions Stability 0 | Direct governance via personal action. Founded Organization faction formation available. Recovery: Parliament quorum restored. |
 
@@ -473,9 +473,9 @@ Insert after existing Step 4 (Clock advances):
 2. If diplomatic resolution occurred (Treaty, Pledge honoured): Strain −1 (max one from this source).
 3. Apply Strain threshold effects per §4.3.
 
-**Step 4e — Battle consequence accounting:**
-1. If Battle between playable factions occurred this season: IP +2 (§3.2).
-2. RS adjustments from battles already applied during Phase 4 resolution (immediate, not deferred to Accounting).
+**Step 4e — Battle consequence accounting (ED-743):**
+1. ~~If Battle between playable factions occurred this season: IP +2~~ STRUCK by ED-743 (2026-04-29). Battle-occurrence no longer directly advances IP. IP advances from Accord-based territory-count thresholds at Accounting (§3.2). See mass_battle_v30 §E.2.
+2. MS adjustments from battles already applied during Phase 4 resolution (immediate, not deferred to Accounting).
 
 Modify existing Step 12 (Victory condition check): Check universal Peninsular Sovereignty condition (§6.1) alongside existing faction-specific conditions (§6.2). Either type of victory is valid. Co-Victory (§6.3) checked simultaneously.
 
@@ -577,7 +577,7 @@ Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizur
 | PP-NEW-03 | Victory | Peninsular Partition co-victory added. Existing co-victory pairings retained. |
 | PP-NEW-04 | System | Accord per-territory attribute (0–3). Modifies effective Prosperity. Accord ≥ 2 required for TCV contribution. |
 | PP-NEW-05 | System | Peninsular Strain counter (0–10). Advances from inter-faction battles, faction eliminations, revolts. |
-| PP-NEW-06 | System | Battle consequences: RS −1 per battle on Valorian soil. IP +2 per season with inter-faction battle. |
+| PP-NEW-06 | System | Battle consequences: MS −1 per battle on Valorian soil. IP +2 per season with inter-faction battle. |
 | PP-NEW-07 | Hafenmark | Dynastic Proclamation domain action (Diplomat card). Replaces Parliamentary Sovereignty as primary path. |
 | ~~PP-NEW-08~~ | Varfell | ~~Cultural Reformation domain action~~ STRUCK CR-STRIKE-2026-04-19. |
 | PP-NEW-09 | Church | Seizure Accord formula revised: Success → max(floor(PT/2)+1, 2). Guaranteed ≥ 2. |

@@ -54,6 +54,8 @@ Damage simultaneity preserved: all sources resolve together at Phase 4 end. The 
 Damage simultaneity: Effective Power for Phase 5 calculated from Size as of Phase 3 end. Phase 4 Thread effects do not reduce Size before Phase 5 — all applied together at Phase 6 Step 1.
 > **Lock phase assignment in mass combat (PP-191):** [PROVISIONAL] Offensive Lock (targeting enemy formation) = Phase 4; declared at Phase 1 as "offensive." Support Lock (stabilising own formation) = Phase 6 Step 5; declared at Phase 1 as "support." If undeclared: defaults to Phase 6. A practitioner may not perform both Offensive and Support Lock in the same battle turn.
 
+> **PP-530 correction (2026-04-29):** Overwhelming Size Advantage bonus applies at Phase 5 Engagement, not Phase 4. "Opposing unit's Command score" corrected to "opposing general's Command score" — units have no Command stat. See mass_battle_v30 §A.4.
+
 
 ## Core Formula (PP-233)
 
@@ -276,7 +278,7 @@ Generalship dominates. Command asymmetry is intentional. Command=7 vs Command=1 
 
 ### Pool Split — Phase 5 Engagement (PARAMS-GAP-04 resolved)
 Declared in Phase 1. Any allocation valid, min 1D each side.
-Default: ½ pool to Offence (round down), remainder Defence. [PROVISIONAL]
+Default: ½ pool to Offence (round down), remainder Defence. [PROVISIONAL] **Reserve exception:** a unit committing from Reserve at Phase 3 of its first active turn has no Phase 1 declaration window. Default split applies to its first engagement automatically. Normal Phase 1 declaration resumes the following turn.
 
 ### Damage Formula — unit Strength loss (PARAMS-GAP-05 resolved)
 Size loss = max(0, net hits + Dmg Mod − DR)
@@ -391,13 +393,9 @@ Individual reload applies only in personal combat.
 ## Faction Tactic Cards — Confirmed (ED-019 resolved 2026-04-03)
 2 unique tactic cards per faction. Confirmed:
 
-**Crown:**
-- Royal Authority: all Crown units +1 Martial this battle.
-- Diplomatic Shield: no Stability loss from Partial outcome this season.
+**Crown:** STRUCK — PP-283 (2026-04-17) confirmed mass_battle_v30.md §B.4 as canonical for all faction tactic cards. These §ED-019 entries (Royal Authority, Diplomatic Shield) are superseded by §B.4 (Royal Guard, Ducal Call). Struck 2026-04-29.
 
-**Church:**
-- Templar Vanguard: Knights Templar units +2 Discipline this battle.
-- Excommunication Threat: opposing faction −1D all Domain Actions next season if Church Mandate ≥ 4.
+**Church:** STRUCK — see Crown note above. §ED-019 Church entries superseded by §B.4. Struck 2026-04-29.
 
 **Remaining factions (Varfell, Hafenmark, Löwenritter, Revolution):** TBD — pending editorial design.
 
@@ -453,7 +451,7 @@ Consistent with mass combat abstraction principle. No patch needed.
 
 
 ## ED-094–098 Resolution (PP-301) — Mass Combat Ranged Consolidated [FLAGGED]
-**ED-094 Crossbow reload:** HP unit fires every other Phase 5 as a unit. Binary ready/reloading marker.
+**ED-094 Crossbow reload:** STRUCK — superseded by standalone §ED-094 resolution (2026-04-03): HP crossbow units fire every Volley Phase at mass combat scale; individual reload is abstracted at mass scale. Binary marker removed. *(PP-301 ED-094 sub-entry struck 2026-04-29.)*
 **ED-095 Archers in melee:** Power −1 in Phase 5 if caught in melee (improvised, no weapon advantage). TN 7 unchanged.
 **ED-096 Ranged DR scaling:** Personal DR values apply 1:1 at mass scale.
 **ED-097 HP effective Power:** Power = 2 when ready; Power = 0 when reloading. Reload-cycle abstraction.
@@ -512,6 +510,9 @@ If both generals enter personal combat in Phase 5 simultaneously: mass battle co
 Both armies uncommanded: PP-273 1D minimum, Line formation, no tactics. Each general
 re-establishes Command via Ob 2 check Phase 1 of the following turn.
 P(re-establish): Cmd=2: 20%, Cmd=3: 34%, Cmd=4: 46%, Cmd=5: 55%, Cmd=6: 62%.
+
+## Command Halving Rounding (Stage 1)
+Command halved at Stage 1: floor(Command / 2), minimum 1. A Stage 1 general retains at least 1 Command regardless of original value. Minimum 1 preserves the Stage 1 / Stage 2 (Command=0) distinction.
 Low-Command generals take significantly longer to re-establish — intended asymmetry.
 
 ## Mutual Destruction Stability Check Clarification (PP-507) [PROVISIONAL]

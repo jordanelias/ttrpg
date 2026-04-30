@@ -170,6 +170,8 @@ table unchanged.
 
 **Armour Tier / DR table** — inherits personal combat tables. Melee and ranged DR are distinct. *[PP-173]*
 
+**H is computed once at battle start** from the unit's opening Discipline and Command values, then frozen for the battle's duration. Discipline degradation at Phase 6 Step 2 modifies the Effective Power penalty table only — it does not recalculate H or Total Health. *(Resolves MATH-FAIL-02)*
+
 **Melee DR:**
 | Armour | LightCut | HeavyCut | LightBlunt | HeavyBlunt |
 |---|---|---|---|---|
@@ -212,8 +214,7 @@ Cha+Cog derivation. *[Command-P2-02]*
 **Command applies in full to each sub-unit (PP-504):** The general's full Command value applies to each commanded sub-unit's pool independently. Command is not divided across sub-units. Sub-unit limit (max = Command, TTRPG cap: 3) governs count, not distribution. Note: §A.8 splitting guidance is under revision — see ED-358. [PROVISIONAL]
 
 **General two-stage death:** *[P1-02]*
-- Stage 1 (incapacitated): −1 Morale all units, Command halved, Morale floor
-  suspended. Stabilise in Phase 5 with Medicine Ob 2 (1-turn window).
+- Stage 1 (incapacitated): −1 Morale all units, Command halved (floor, minimum 1), Morale floor suspended. Stabilise in Phase 5 with Medicine Ob 2 (1-turn window). *(Command halving: floor(Command÷2), min 1. A Stage 1 general retains at least 1 Command, preserving the Stage 1 / Stage 2 distinction.)*
 - Stage 2 (killed): Stage 2 fires at start of following turn's Phase 5
   if not stabilised. −2 Morale (outside cap), Command = 0, all units uncommanded.
   *[NEW-P2-02 — Stage 1 → 2 timing confirmed]*
@@ -235,9 +236,7 @@ execution rolls. A 2-wound general has tactic success probability halved.
 **Coherence does not affect Command (PP-249):** Coherence is a Thread perceptual track; Command is tactical effectiveness. Dissonance impairs Thread operations only. No Coherence penalty applies to Command tactic rolls.
 
 
-**Mass battle pauses during personal combat.** If general enters personal
-combat, mass battle holds at current state. Resume at Phase 1 of next mass
-battle turn after personal combat resolves. *[D3-P2-02]*
+**Mass battle pauses during personal combat (unilateral).** If one general enters personal combat, mass battle holds at current state. Resume at Phase 1 of next mass battle turn after personal combat resolves. **Exception (PP-506 bilateral):** if both generals enter personal combat simultaneously, mass battle does NOT freeze — both armies continue uncommanded (PP-273 floor, Line formation, no tactics) until each general re-establishes Command (Ob 2, Phase 1 of the following turn). *[D3-P2-02, PP-506]*
 
 ---
 
@@ -260,6 +259,8 @@ battle turn after personal combat resolves. *[D3-P2-02]*
 > **Feigned Retreat Discipline check Ob (PP-256):** The pursuing-side Discipline check is **Ob 1**. Pursuing a fleeing enemy is a natural impulse; Ob 1 reflects the difficulty of halting momentum. Discipline-4 unit: ~87% success. Discipline-1 unit: ~40% success.
 
 > **Clarification (PP-MB-04, PP-499 text fix):** "Reserve commitment at Phase 3 of Turn N+1 makes the unit immediately available for Phase 5 Engagement in that same turn (Turn N+1). Commitment does not delay the unit to Turn N+2. Summary: declare Reserve in Phase 3 of Turn N → unit commits at Phase 3 of Turn N+1 → unit may engage in Phase 5 (Engagement) of Turn N+1."
+
+> **Reserve first-engagement Off/Def split:** A unit committing from Reserve at Phase 3 of Turn N+1 had no Phase 1 declaration window for that turn. Default split applies to its first engagement: equal split (round down to Offence). The unit may declare normally in Phase 1 of Turn N+2 and all subsequent turns.
 
 > **Clarification (PP-MB-07):** "Three-sided encirclement example: Front, Left flank, Right flank simultaneously. Shield Wall negates one declared flank (say, Left). Front attack is fully defended (+2D Def). Right flank attack applies normally (full flanking bonus to attacker). The defender faces two unmitigated engagements and one defended — this is the intended design ceiling for Shield Wall. Command = 3 maximum means a force cannot be attacked from more than three directions simultaneously."
 
@@ -324,7 +325,7 @@ Resolution:
    with Volley and Engagement damage)
 
 A unit whose Size is reduced to 0 by Phase 4 Thread effects is NOT removed before 
-**Overwhelming Size Advantage (PP-530):** When a unit's Size is ≥ 2× the opposing unit's Command score, the larger unit may add +1D to its Offence pool once per Battle Turn (Phase 4 only). This bonus does not apply when the larger unit is in Defensive formation or executing defensive orders (Hold, Fortify). Rationale: a numerically overwhelming force that is actively attacking can leverage its mass; a defensive posture neutralises the advantage.
+**Overwhelming Size Advantage (PP-530):** When a unit's Size is ≥ 2× the opposing *general's* Command score, the larger unit may add +1D to its Offence pool once per Battle Turn, applied at Phase 5 Engagement (not Phase 4). This bonus does not apply when the larger unit is in Defensive formation or executing defensive orders (Hold, Fortify). *(PP-530 corrected: moved from Phase 4 to Phase 5; "opposing unit's Command" clarified as opposing general's Command — units have no Command stat.)*
 
 Phase 5.
 Simultaneous-damage rule governs: damage is recorded in Phase 4 but applied at Phase 6 Step 1.
@@ -387,8 +388,7 @@ after casualties are known — practitioners respond to what the battle has done
 
 **Phase 7 — Reform**
 Non-engaged units: restore Discipline, recover 1 Morale, merge sub-units.
-Idle army clock: if no engagements in Phase 5 this turn AND previous turn,
-both sides lose 1 Morale in Phase 7. *[P2-02, P2-04]*
+Idle army clock: if no engagements in Phase 5 this turn AND previous turn, both sides lose 1 Morale in Phase 7. *[P2-02, P2-04]* **Terrain exception:** this does not fire for a side that was unable to initiate engagement due to terrain constraint (defender behind Walls with no available advance; either side in Narrow Pass with no approach path). Voluntary inaction only.
 
 ---
 
@@ -437,11 +437,11 @@ or Feigned Retreat to disengage and re-concentrate. *(ED-358 resolved; PROVISION
 
 | Battle scale | Thread scale | Min Thread Sensitivity | Thread Ob | Coherence auto-cost |
 |---|---|---|---|---|
-| Skirmish | Personal | 30 | 2 | 0 |
-| Company | Object | 30 | 1 | 0 |
-| Battle | Territorial | 50 | 4 | −1/op |
-| Campaign | Territorial | 50 | 4 | −1/op |
-| War | Structural | 70 | 5 | −2/op |
+| Skirmish | Personal | 30 | 2 (total three-axis Ob) | 0 |
+| Company | Object | 30 | 1 (total three-axis Ob) | 0 |
+| Battle | Territorial | 50 | 4 (total three-axis Ob) | −1/op |
+| Campaign | Territorial | 50 | 4 (total three-axis Ob) | −1/op |
+| War | Structural | 70 | 5 (total three-axis Ob) | −2/op |
 
 All Coherence loss is automatic (no check, no Ob) per threadwork_v30 §3.2. The Coherence
 cap (−1 per operation, threadwork_v30 §3.2 per-operation cap) applies. No additional surcharge. *[THREAD-P1-02, THREAD-P2-01]*
@@ -509,9 +509,11 @@ Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
 Offence successes (no Defence) each turn. Recall: Command Ob 2.
 Over-pursuing exposes flanks. *[confirmed]*
 
-**Morale Cascade (NEW — historical_precedents_warfare §1.3c):** When a unit routs (Morale reaches 0), all friendly units in the same engagement make an immediate Discipline check (Ob 1). Failure: Morale −1. Multiple simultaneous routs compound — each triggers a separate cascade check. This models the historical reality where battles were lost when one section of the line broke and panic spread (Cannae, Hastings). The check is Ob 1 — Discipline 4 units pass ~87% — so cascades primarily threaten low-Discipline formations (Levy, militia), which is historically correct.
+**Morale Cascade (NEW — historical_precedents_warfare §1.3c):** When a unit routs (Morale reaches 0), at Phase 6 Step 3 (Morale checks), all friendly units in the same engagement make a Discipline check (Ob 1). Failure: Morale −1. Multiple simultaneous routs each trigger a separate cascade check; all fire together at Step 3. Multiple simultaneous routs compound — each triggers a separate cascade check. This models the historical reality where battles were lost when one section of the line broke and panic spread (Cannae, Hastings). The check is Ob 1 — Discipline 4 units pass ~87% — so cascades primarily threaten low-Discipline formations (Levy, militia), which is historically correct.
 
 [EDITORIAL: ED-688 — Morale Cascade. Source: historical_precedents_warfare.md §1.3c.]
+
+**Rout vs Destroyed (definitional boundary):** *Rout* = Morale reaches 0; unit flees and cannot fight back (§A.12 cascade fires). *Destroyed* = Size reaches 0; unit eliminated at Phase 6 Step 1. These are distinct states with distinct trigger chains. §A.12 Morale Cascade fires only on Morale rout, not on Size destruction. Artillery-caused unit elimination (Size→0) triggers the Morale −1 "allied unit routed in same zone" entry in §A.4 and PP-198 as a separate enumerated trigger — this does NOT fire the §A.12 Discipline check cascade.
 
 
 **Stalemate Break (PP-297):** If 3 consecutive Battle Turns produce 0 total damage across all engagements (no Health loss on either side), both armies execute Tactical Withdrawal. Effects: no Conviction Track movement, no pursuit, no Rout. Each side's general rolls Command Ob 1 to maintain formation during withdrawal; failure = −1 Discipline on one unit (disorderly retreat). The battle ends as inconclusive. Neither side claims victory. Accounting consequences: IP +1 (military posturing without resolution).
@@ -824,7 +826,7 @@ Prior calibration (1d10) produced 50% officer death at routine 5-Size loss — c
 
 ### §D.3 Player Morale Effect
 
-Units in the player's current territory gain +1 Discipline while the player is physically present during battle. If the player is wounded (2+ wounds) or incapacitated during the battle, all friendly units in the battle take −1 Discipline immediately (morale shock). This is the Mount & Blade effect — the player's presence on the battlefield matters to the soldiers.
+Units in the player's current territory gain +1 Discipline while the player is physically present during battle. This bonus applies whenever the player is in the territory, including during a personal combat pause (the player is still present; Command suspension and Discipline bonus are independent effects). If the player is wounded (2+ wounds) or incapacitated during the battle, all friendly units in the battle take −1 Discipline immediately (morale shock). This is the Mount & Blade effect — the player's presence on the battlefield matters to the soldiers.
 
 **Board Game adaptation:** If a PC is embedded in a territory during battle (per scale_transitions_v30 §9 PC Faction Embedding), friendly units gain +1D on the first battle roll. This stacks with Commander bonus but is capped at +1D total from PC presence.
 

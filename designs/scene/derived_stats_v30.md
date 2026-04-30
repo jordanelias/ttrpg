@@ -289,7 +289,7 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 - Trade Success: +Wealth × 25 gold (one-time)
 - Trade Overwhelming: +Wealth × 50 gold
 - Haushalt Competence bonus: +Competence × 25 gold/season (Competence 0–3). Cap: Haushalt Competence income cannot exceed Wealth × 50 per season. (ED-663 resolution)
-- Campaign Supply (units in hostile territory): −100 gold/season
+- Campaign Supply (units in hostile territory): −100 gold/season (flat total, regardless of unit count — per mass_battle_v30 §A.14b. Prior per-unit formulation struck 2026-04-29.)
 - Siege (attacker): −100 gold/season per active siege
 - Muster (Levy): −50 gold
 - Muster (Professional): −150 gold
@@ -309,6 +309,7 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 - Emergency authority invocation: −30
 - Unpopular Domain Action (drops Accord): −15
 - Battle in own territory: −10
+- Campaign-scale defeat: Mandate −1 (direct stat damage; large-scale military collapse is a structural event per mass_battle_v30 §A.14)
 - Peninsular Strain Mandate check failure: Legitimacy −25 AND Mandate −1
 
 **When Legitimacy reaches 0:** Mandate check at Accounting (Ob 2). Failure: Mandate −1. Accord −1 in all territories.
@@ -327,7 +328,8 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 **Discipline (from Stability):**
 - Seasonal income: +10 per peaceful season
 - Successful Govern: +5
-- Battle loss: −15
+- Battle loss (defending force routed): −15
+- Campaign-scale defeat (Campaign/War scale loss): −30 (structural; represents collapse of strategic initiative)
 - Accord drops to 0 in any territory: −20
 - Faction leader death/succession: −30
 - Coup (Löwenritter): −50
@@ -372,6 +374,7 @@ Companion formation (Disposition ≥ +3) requires Bonds ≥ 5. Knot candidacy (D
 Cross-reference: fieldwork_v30 §5.1, params_core §Bonds (PP-632/PP-684), companion_specification §2.1.
 
 ### 10.2 Army Morale (Mass Combat Derived Composite)
+<!-- Cross-reference: mass_battle_v30 Part C §Army Morale references this section for modifier values. -->
 
 **Army Morale = floor(average unit Morale) + Command modifier + Discipline modifier**
 

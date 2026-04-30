@@ -88,7 +88,7 @@ Global track (0–10). Advances from inter-faction battles, faction eliminations
 
 ### 0.4 Battle Consequences
 
-Each Battle on Valorian soil: MS −1 (Campaign/War scale: MS −2). Each season with inter-faction battle: IP +2, Strain +1. See peninsular_strain_v1.md §3.
+Each Battle on Valorian soil: MS −1 (Campaign/War scale: MS −2). ~~Each season with inter-faction battle: IP +2, Strain +1~~ STRUCK by ED-743 (2026-04-29): battle-occurrence no longer directly advances IP or Strain. IP and Strain advance from Accord-based territory-count thresholds at Accounting. See mass_battle_v30 §E.2 and peninsular_strain_v30 §3.2/§4.1.
 
 ### 0.5 Faction Acquisition Toolkits
 
