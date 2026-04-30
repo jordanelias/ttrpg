@@ -461,7 +461,7 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 | Successor confirmed | Elske confirmed OR Torben Loyalty ≥ 6 |
 | Season | ≥ 20 (Year 5) |
 
-**Season gate (ED-667):** Elske confirmation requires minimum 4 successful Senator Outward actions from Loyalty 2 start — not achievable before Season 10–12 even optimally. Season 20 is the realistic floor for successor infrastructure to exist. Prevents premature Coup Counter cascade enabling Regency before the succession path is mechanically possible.
+**Season gate (ED-667):** Elske confirmation requires minimum 4 successful Senator Outward actions from Loyalty 2 start — not achievable before Season 10–12 even optimally. Season 20 is the realistic floor for successor infrastructure to exist. Prevents premature Löwenritter Autonomy cascade enabling Regency before the succession path is mechanically possible. <!-- per ED-781 -->
 
 ### Elske Loyalty Track (ED-624 — approved 2026-04-17)
 
@@ -491,14 +491,14 @@ Only available if Regency Establishment not achieved after 8 Löwenritter season
 
 #### §3.6a Post-Coup Succession Rule (ED-674)
 
-When Coup Counter reaches 4 and Löwenritter activates:
+When Löwenritter Autonomy reaches Split and Löwenritter activates: <!-- per ED-781 Graduated Autonomy: Loyal → Restless → Autonomous → Split -->
 
 **Immediate effects (Season of Coup):**
 
 1. **Crown leadership vacated.** Almud is removed (imprisoned, exiled, or killed — determined by Ehrenwall's Conviction state at coup trigger). Crown faction does not dissolve but enters Interregnum: no Leadership actions, no treaty ratification, no Royal Decrees. Crown officers retain their Standing but cannot advance.
 2. **Löwenritter chain of command governs.** Ehrenwall (Grand Master) is acting head of government. Knight-Commanders govern Crown-held territories at Accord −1 (military occupation). Kreutz's prior role (Royal Guard Captain) is vacated — his replacement is the senior Knight-Commander by Standing.
 3. **Crown Ministries freeze.** All Ministry actions are suspended for 1 season (administrative disruption). After the freeze, Ministries resume under Löwenritter authority — Ministry NPCs serve whoever governs (per Haelgrund's Belief 1). Ministry Stability −1 from the disruption.
-4. **Coup Counter resets to 0.** The counter tracks pre-coup instability; post-coup, the counter is irrelevant. It does not re-accumulate unless a second coup scenario emerges (requires Ehrenwall's removal + a successor Grand Master, which is outside standard campaign scope).
+4. **Löwenritter Autonomy resets to Loyal.** The Autonomy stage tracks pre-coup instability; post-coup, the stage is irrelevant. It does not re-accumulate unless a second coup scenario emerges (requires Ehrenwall's removal + a successor Grand Master, which is outside standard campaign scope). <!-- per ED-781 Graduated Autonomy -->
 
 **Succession candidates (tracked from coup season onward):**
 

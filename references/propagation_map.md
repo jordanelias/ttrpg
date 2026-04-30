@@ -527,3 +527,43 @@ deviation invalidates findings — this is the v2 lesson that v3 was designed
 to prevent. Future operators must understand WHY each procedural choice was
 tightened (see v1_v2_v3_history.md) before relaxing.
 
+## 2026-04-29 — Coup Counter → Graduated Autonomy substitution (PP-680)
+
+Completes PP-678 (which deferred CC due to non-1:1 substitution requiring
+design judgment). Per ED-781 spec, applied substitution map across 6 active
+sites in 4 files; preserved 4 leaves as historical/descriptive references.
+
+**Substitution table (per ED-781):**
+
+| CC value | GA stage |
+|---|---|
+| 0 | Loyal |
+| 2 | Restless |
+| 3 | Autonomous |
+| 4 | Split |
+
+**Files modified:**
+- designs/npcs/npc_behavior_v30.md (1 active rewrite)
+- designs/architecture/complete_systems_reference.md (1 active rewrite — Arcs A/C)
+- designs/provincial/victory_v30.md (3 active rewrites — Season gate, §3.6a header, §3.6a item 4)
+- designs/architecture/conflict_architecture_proposal.md (1 active rewrite — §Recommendation L157)
+- canon/patch_register_active.yaml (PP-680 entry)
+- canon/editorial_ledger.yaml (ED-767 entry)
+- references/canonical_sources.yaml (no content change; included per co-file rule)
+- session_log_current.md (replaced)
+- references/propagation_map.md (this entry)
+
+**Leaves (intentionally preserved):**
+- canon/03_canonical_timeline.md L92 (worldbuilding — Coup Counter as enforcement
+  mechanism is conceptual political-historical reference, not the mechanic)
+- designs/architecture/campaign_architecture_v30.md §5.3 L179 (describes strike:
+  "Loyal → Restless → Autonomous → Split, replacing the binary Coup Counter")
+- designs/architecture/conflict_architecture_proposal.md L37, L78 (argument FOR
+  Graduated Autonomy referencing what it replaces)
+
+**Cross-references:** PP-676 v3 §V3-9, PP-678 (GM + active CR sweep, CC deferred),
+ED-781 (Graduated Autonomy spec), ED-767.
+
+**Standing:** vocabulary debt sweep complete for the 3 terms identified in v3
+audit (Game Master, Cultural Reformation, Coup Counter).
+

@@ -43,7 +43,7 @@ Not indecisive — burdened by incommensurate contradictory pressures. No good c
 
 **NPC Simulation Patch PP-NPC-01:** Crown Decree gated on Mandate ≥ 3. Prevents death spiral where Almud issues Decrees at low Mandate, fails, loses more Mandate.
 
-**Arcs:** A (Reformer: Certainty → 0-1, Coup ≤ 1, publicly acknowledges Thread), B (Fortress: Stability ≤ 2, Certainty ≥ 3, Order doubles down), C (Overthrown: Coup Counter ≥ 3, exile).
+**Arcs:** A (Reformer: Certainty → 0-1, Löwenritter Autonomy = Loyal, publicly acknowledges Thread), B (Fortress: Stability ≤ 2, Certainty ≥ 3, Order doubles down), C (Overthrown: Löwenritter Autonomy = Autonomous, exile). <!-- per ED-781 Graduated Autonomy track -->
 
 ## 1.5 Confessor Arne Himlensendt (Church)
 

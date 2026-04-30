@@ -703,4 +703,60 @@ patches:
       no behavior change, methodology unchanged from v3. The skill IS the
       methodology made accessible. Locked thresholds in methodology.md §3.7
       preserve v2's hard-learned lessons about post-hoc tuning."
+- id: PP-680
+  date: 2026-04-29
+  severity: P3
+  description: "Coup Counter → Graduated Autonomy substitution sweep, completing
+    PP-678 (which deferred CC due to non-1:1 substitution requiring design judgment).
+    Per ED-781 the substitution map is: Coup Counter 0 → Loyal, 2 → Restless,
+    3 → Autonomous, 4 → Split. 6 active CC references rewritten in 4 files:
+    npc_behavior_v30 §Arc A timing window L601 (CC advances → Autonomy stage advances);
+    complete_systems_reference §1.4 Almud Arcs L46 (Coup ≤ 1 → Autonomy = Loyal,
+    Coup Counter ≥ 3 → Autonomy = Autonomous); victory_v30 §Season gate L464
+    (premature CC cascade → premature Autonomy cascade); victory_v30 §Post-Coup
+    Succession L494 (When CC reaches 4 → When Autonomy reaches Split); victory_v30
+    §Post-Coup §4 L501 (CC resets to 0 → Autonomy resets to Loyal);
+    conflict_architecture_proposal §Recommendation L157 (graduated autonomy
+    integrates with existing CC and T14 → with T14 conditions, replaces prior CC).
+    4 leaves preserved as historical/descriptive references: canonical_timeline §3
+    L92 (worldbuilding text), campaign_architecture_v30 §5.3 L179 (describes
+    strike), conflict_architecture_proposal L37 + L78 (argument FOR Graduated
+    Autonomy citing CC). Each rewrite preserves mechanical meaning; ED-781
+    citation added inline at substitution sites for traceability. ED-767."
+  finding_id: PP-676 v3 §V3-9, PP-678 deferred
+  source: topographic_analysis
+  affects:
+    - designs/npcs/npc_behavior_v30.md
+    - designs/architecture/complete_systems_reference.md
+    - designs/provincial/victory_v30.md
+    - designs/architecture/conflict_architecture_proposal.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Vocabulary/terminology cleanup completing PP-678. N pass — removes
+      legacy terminology (Coup Counter struck per ED-781) from active spec.
+      Ω pass — cleanup only; mechanical behavior preserved (Graduated Autonomy
+      stage transitions implement what Coup Counter values represented).
+      Μ self-exempting — editorial. M-ratings ○: substitution preserves all
+      mechanical effects; only the agent name changes. Each substitution site
+      cites ED-781 inline for traceability. 4 leaves intentionally preserved:
+      worldbuilding text + descriptive references to the strike itself
+      (don't erase audit trail)."
 

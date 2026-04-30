@@ -24,14 +24,14 @@ entries:
 
   - id: ED-750
     date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 1 (cross-cutting). Single-writer Opinion model: Procedure B writes Memory only, Procedure C writes Memories only, Procedure D handles all Opinion writes via on_memory_added. Resolves E-HORIZ-A, S-HORIZ-A, ST-32-A double-write architecture issue. Patches §1.4-§1.6 of designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md."
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 1 — single-writer Opinion model resolves E-HORIZ-A/S-HORIZ-A/ST-32-A double-write. Patches §1.4-§1.6 of doc 12."
     status: open
     severity: P1
     source: "doc 17 §1, issues 13/14/15"
 
   - id: ED-751
     date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 2 — 8 priority-1 patches resolving E-36-A/E-48-A/E-BOT-A/B/ST-20-A/ST-23-A/ST-24-A. Patches §3, §4, §6.5, §10 of doc 12. See doc 17 §2 for spec."
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 2 — 8 priority-1 patches resolving E-36-A/E-48-A/E-BOT-A/B/ST-20-A/ST-23-A/ST-24-A. See doc 17 §2."
     status: open
     severity: P1
     source: "doc 17 §2, issues 13/14/15/16"
@@ -45,14 +45,14 @@ entries:
 
   - id: ED-753
     date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 4 (priority-3, 16 stub resolutions). Implementation-time issues with stub resolutions sufficient for current planning depth: tie-breaking, threshold definitions, search/gating, cascade/propagation, documentation gaps, friction items. See doc 17 §4 for full inventory."
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 3 — 15 priority-2 authoring patches. See doc 17 §3 for full inventory."
     status: open
     severity: P3
     source: "doc 17 §4, issues 13/14/15/16"
 
   - id: ED-754
     date: 2026-04-29
-    description: "[PROVISIONAL] Political dynamics specification revisions v1 — doc 17 batch 5 (featured-behavior documentation, 4 items). Document-as-designed (no spec change): RS-50-A Belief recovery arc, ST-16-A founding Memory, E-DIAG-A diagonal chain legibility, N-DIAG-A Standing 5 milestone scene. Author commentary in §1.1 of doc 12 v1.1."
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 4 — 16 priority-3 stub resolutions. See doc 17 §4."
     status: open
     severity: P3
     source: "doc 17 §5"
@@ -95,4 +95,10 @@ entries:
     status: applied
     severity: P3
     source: "PP-679"
+  - id: ED-767
+    date: 2026-04-29
+    description: "[APPLIED] Coup Counter → Graduated Autonomy substitution sweep per PP-680, completing PP-678's deferral. 6 active CC references rewritten using ED-781 mapping (CC value → GA stage: 0→Loyal, 2→Restless, 3→Autonomous, 4→Split) in npc_behavior_v30, complete_systems_reference, victory_v30 (3 sites), conflict_architecture_proposal. 4 leaves preserved (worldbuilding + descriptive references to strike). All substitution sites cite ED-781 inline."
+    status: applied
+    severity: P3
+    source: "PP-680 (PP-676 v3 §V3-9, PP-678 deferred)"
 

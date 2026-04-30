@@ -1,39 +1,44 @@
 ---
-session_id: 2026-04-29-vector-audit-skill
+session_id: 2026-04-29-cc-sweep
 session_close: 2026-04-29
-phase: "valoria-vector-audit skill enshrinement"
+phase: "Coup Counter → Graduated Autonomy substitution sweep"
 status: complete
 last_stage: >
-  PP-679 / ED-766 — valoria-vector-audit skill enshrined. Directory-based skill
-  with SKILL.md + 3 reference docs (methodology, diagnostic_modes, v1_v2_v3_history)
-  + scripts/vector_audit.py. Skill registry updated with new entry + 5 routing
-  rules. Future audits invoke via skill call rather than re-deriving methodology
-  from scratch. Reference run at designs/audit/2026-04-29-topographic-analysis/
-  remains canonical executed implementation.
+  PP-680 / ED-767 — Coup Counter sweep complete. 6 active sites rewritten with
+  ED-781 substitution map (CC value → GA stage: 0→Loyal, 2→Restless,
+  3→Autonomous, 4→Split). 4 leaves preserved as historical/descriptive
+  references. Vocabulary debt sweep COMPLETE for all 3 v3-audit-identified
+  terms (Game Master + active CR done in PP-678; CC done in PP-680).
 next_action:
   skill: editorial
   description: >
-    Standing items unchanged:
-    - PP-676 v3 weakness register §V3-10 priority items (NPC Behavior audit pass,
-      isolate promotion to first-class docs, Peninsular Strain + IP change-control)
-    - PP-677 throughline→system mappings (43 throughlines, 27/32 systems mapped)
-    - PP-678 vocabulary cleanup (GM + active CR done; CC deferred — needs design
-      judgment for Graduated Autonomy substitution)
-    - PP-679 vector-audit skill (this commit)
+    Vocabulary debt cleanup is now COMPLETE for all PP-676 v3 §V3-9 findings.
+    Remaining v3 §V3-10 priority items:
+    1. Promote canonical concepts to first-class docs (Conviction Track,
+       Convictions taxonomy, Pressure Points taxonomy, Wager, Thread Revelation)
+       — touches canonical_sources.yaml SHA tracking, needs design judgment
+       on scope decision (full extraction vs lightweight stub-and-redirect)
+    2. NPC Behavior audit pass — corpus integration spine (cite-deg 56,
+       zero recent patch activity); too large for a session continuation,
+       needs dedicated session
+    3. Peninsular Strain + IP change-control review (only multi-graph hubs
+       at ≥3/4 graphs; highest change-impact propagation risk)
+    4. Wager system clarity audit (sparse footprint, canonical status)
+    5. Throughlines table P2 re-validation now that Load-bearing systems
+       column exists (PP-677); should pass post-PP-677
+    PRIOR ITEMS still pending Jordan decision:
+    - Review of accumulated PPs: PP-676 (v3 audit), PP-677 (throughlines column),
+      PP-678 (GM + CR sweep), PP-679 (vector-audit skill), PP-680 (CC sweep)
     - CI-01 Church Prominent definition (HIGH-PRIORITY)
     - PT-01, ACCT-01, mass battle MB-01..08, INTER batches
     - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord Propagation
-    Recommended next pursuits (not yet executed):
-    1. Coup Counter sweep — design judgment per site (10 active references)
-    2. Promote Conviction Track to first-class doc (v3 §V3-5 strongest isolate)
-    3. NPC Behavior audit pass (v3 §V3-3 highest-leverage standing item)
 blockers:
-  - "Coup Counter sweep — design judgment for Graduated Autonomy substitution"
-  - "Jordan review of PP-679 (skill enshrinement)"
-  - "Jordan review of PP-678, PP-677, PP-676 v3 findings"
+  - "Conviction Track promotion — scope decision (full extraction vs lightweight stub-and-redirect; canonical_sources.yaml design_doc path implications)"
+  - "NPC Behavior audit — needs dedicated session (107k chars at full focus)"
+  - "Jordan review of accumulated PPs (676, 677, 678, 679, 680)"
   - "Prior session blockers"
 notes:
-  - "Same-session continuation per Jordan directive 'commit continue all best ... enshrine vectorization process for skill call and audits'"
-  - "Skill methodology = v3 verbatim; no methodology change in this commit"
-  - "Reference run preserved as canonical executed implementation"
-  - "scripts/vector_audit.py is scaffold + interface contract; full pipeline implementation continues to live in reference run for now"
+  - "Same-session continuation per Jordan directive 'perform all'"
+  - "All 6 active CC substitutions unique-match verified before apply"
+  - "Each substitution cites ED-781 inline for traceability"
+  - "Vocabulary debt sweep COMPLETE for v3 §V3-9: 17 GM + 17 CR (2 active + 15 markers) + 10 CC (6 active + 4 leaves) = 44 occurrences cleanly handled across 9 files"
