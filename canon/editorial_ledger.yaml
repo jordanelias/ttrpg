@@ -1,6 +1,6 @@
 # Valoria Editorial Ledger — Active (open items only)
 # next_id: 763
-# Archival batch 2026-04-29 (c): ED-757, ED-760, ED-761 (full simulation chain + v1.2 production resolved).
+# Archival batch 2026-04-29 (c): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
 # Archival batch 2026-04-29 (a): 4 resolved entries (ED-745..748) migrated to canon/editorial_ledger_archive.yaml.
 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.
@@ -69,3 +69,11 @@ entries:
     status: open
     severity: P2
     source: "PP-676 v3 execution"
+
+  - id: ED-762
+    date: 2026-04-29
+    description: "[PROVISIONAL] doc 12 v1.2 produced (commit 59a1c1e0); 1958 lines; 39 patches resolving all simulation-surfaced gaps; supersedes v1.1. v1.2 is eligible for §13 Promotion Checklist evaluation toward canonical. Recommended next steps: re-vet pass against §13; address any §13 items not satisfied; promote to canonical or schedule additional simulation pass if desired. Forward-looking design observations (18) tracked separately for post-canonical iteration."
+    status: open
+    severity: P2
+    source: "Synthesis chain — docs 19 + 21 + doc 12 v1.2 commit 59a1c1e0"
+

@@ -572,4 +572,49 @@ User authorization: "you have permission to resolve all best way / synthesize as
 
 **Architecture validated at every scale tested.** Ready for canonical-promotion review.
 
+
+---
+
+## SESSION 5 (synthesis) NOTES — 2026-04-29
+
+**Done — synthesis + v1.2 production:**
+
+Two artifacts produced under user authorization to "resolve all best way / synthesize as required / proceed with more work":
+
+1. `19_v1_1_validation_report.md` — comprehensive synthesis report (~25k chars, 359 lines). Consolidates all 8 directions + narrative pass. Catalogs 33 invariants verified, 39 specification gaps with priority/recommendation, 24 emergent properties, 18 forward-looking observations, cross-direction integration map, v1.1 validation conclusions, v1.2 patch plan summary.
+
+2. `21_v1_2_specification_revisions.md` — exact patch directives for v1.2 (~41k chars, 893 lines). 39 patches: 3 P1-CRITICAL (GAP-1/2/3), ED-760 stall-escalator, 19 P2 implementation-determinism, 16 P3 cleanups. Each patch with LOCATE/REPLACE/INSERT directive + rationale.
+
+3. `12_development_specification.md` v1.2 (commit `59a1c1e0`) — 1958 lines (up from v1.1 1565). All 39 v1.2 patches applied. Surgical patches in target sections (§1.1 Featured Behaviors, §2.5.2 Knot Rupture (new), §5.2 Settlement Signal routing, §5.3 Mood-impact aggregate weighting, §5.4.1 Faction Succession (new), §5.4.2 Coup Mechanic (new), §6.2 select_proposal() stall-escalator + 4-level tie-break, §8.1 Standing Recalc strict + counter state, §8.2 War State (new), §8.2.1 Peace Treaty (new)). Remaining P2/P3 patches consolidated as §17 Addendum. Updated §0.1 Change Log with v1.2 section.
+
+**v1.2 critical resolutions:**
+- **PATCH v1.2-1 (SIM-B-G8 strict).** `failed_da_proposals` = "DA roll failed only" (NOT lost competitions). Counter scope clarification: Mood-suppressed / lost-competition / failed-deference all do NOT count. Strict interpretation rewards execution; validated at scale.
+- **PATCH v1.2-2 (SIM-C-G6 routing).** Three-tier routing: (a) governor if Active, (b) faction leader if seat, (c) round-robin among inner-circle by domain affinity. Plus cross-border attribution (v1.2-37), salience handling (v1.2-12), repeated-Signal max-update (v1.2-15).
+- **PATCH v1.2-3 (SIM-H-G2 Knot rupture).** Full mechanic spec in new §2.5.2 + §1.1 featured behavior entry. Trigger conditions, rupture event, long-term consequences, recovery path. Treated as featured dramatic mechanic per SIM-H-O2.
+- **PATCH v1.2-4 (ED-760 stall-escalator).** `+0.05 × seasons_stalled` added to select_proposal() score. Anti-deadlock + anti-ossification.
+
+**Editorial ledger updates:**
+- ED-757 (simulation chain) → resolved + archived.
+- ED-760 (stall-escalator recommendation) → resolved (applied in v1.2-4) + archived.
+- ED-761 (gap tracking) → resolved (all gaps addressed in v1.2) + archived.
+- ED-762 (NEW) — v1.2 promotion-readiness tracking; eligible for §13 Promotion Checklist evaluation.
+
+**v1.2 status:** PROVISIONAL but eligible for canonical promotion review per §13. All simulation-surfaced concerns resolved. Forward-looking design observations (18) tracked separately for post-canonical iteration.
+
+**Total session-chain commits:** 18 (from S1 setup through v1.2 production).
+**Total session-chain output:** ~480k chars across simulation/editorial/spec artifacts.
+
+---
+
+## NEXT STEPS — POST-SYNTHESIS
+
+The simulation/revision phase is complete. Recommended subsequent work:
+
+1. **§13 Promotion Checklist evaluation** — review v1.2 against the canonical-promotion criteria; address any unsatisfied items.
+2. **§16 Jordan-decision items** — the ED-755 items remain pending Jordan's design calls. These are independent of simulation gaps (they're forward-looking design questions, not spec gaps).
+3. **Optional: extended simulation passes** — if Jordan wants additional confidence, fresh simulation directions (e.g., player-precipitated regime change, multi-decade campaign with specific objective, Knot-network composition stress) could be run. The 8 directions completed cover the major cases; further work is incremental.
+4. **Post-canonical: forward-looking design observations** — 18 observations from SIM-E/F/G/H + narrative pass tracked for design discussion after v1.2 stabilizes. These are spec extensions, not corrections.
+
+The political dynamics system is in good standing: validated, simulation-tested, gap-resolved, and ready for promotion review.
+
 **END OF HANDOFF v1.**

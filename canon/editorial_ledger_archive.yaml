@@ -813,3 +813,7 @@ entries:
     source: "SIM-A/B/C/D/E/F/G/H — see HANDOFF and individual SIM docs for full gap inventory"
     resolution: "All 39 simulation-surfaced specification gaps resolved by v1.2 patch list (doc 21, commit b7f2235b) and applied to doc 12 v1.2 (commit 7c9384ec). Patches v1.2-1 through v1.2-39 cover all 3 P1-critical + 19 P2 + 16 P3 + 1 typo + 1 recommendation (ED-760). See doc 12 v1.2 §0.1 v1.2 change log and §17 v1.2 patch addendum for full inventory."
     archive_date: "2026-04-29"
+
+# Archival batch 2026-04-29 (c) — ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
+
+
