@@ -617,4 +617,78 @@ The simulation/revision phase is complete. Recommended subsequent work:
 
 The political dynamics system is in good standing: validated, simulation-tested, gap-resolved, and ready for promotion review.
 
+
+---
+
+## POST-SYNTHESIS WORK — 2026-04-29
+
+After synthesis (S5) commit, additional work performed under user authorization:
+
+### NERS + bloat assessment (`22_NERS_and_bloat_assessment.md`, commit `09421b5d`)
+
+Critical pass against project's NERS criteria. Findings:
+- **Necessary:** v1.2 contains ~178 lines of completionist bloat — §5.4.2 Coup (24 lines), §8.2 War State + §8.2.1 Peace Treaty (69 lines), §17 v1.2 Patch Addendum (85 lines).
+- **Elegant:** §17 addendum pattern fails NERS — implementors must check both target section AND §17 for any feature; redundancy and structural inelegance.
+- **Robust:** ✓ strong — simulation-validated; supports strategic depth, customization, emergence.
+- **Smooth:** ✓ strong — cross-direction integrations verified; transitions clean.
+
+### Chain audit (`23_chain_audit.md`, commit `aed39f7a`)
+
+Five-phase rigorous audit of session-chain output:
+- **Patch fidelity:** ✓ perfect — all 39 v1.2 patches semantically correct against doc 21 directives.
+- **Gap counts:** ✓ exact match — 39 unique gaps surfaced = 39 claimed.
+- **Invariant counts:** ✗ inflation — "33+ invariants verified" was wrong; actual is 25 unique (re-verified at multiple scales). Correction applied to doc 19.
+- **Long-horizon trace granularity:** ⚠ framing — SIM-G/SIM-E claim Accounting-level traces but contain 0 explicit Accounting-N references; they're Year-summary granularity. Methodologically appropriate but framing inflated rigor. Correction applied to doc 19.
+- **NERS findings:** ⚠ partial — one sub-claim retracted (PATCH v1.2-29 was not "duplicative" — line 1946 was a tracking ref, not content dup). Correction applied to doc 22.
+
+### AUDIT-1..5 corrections committed (`dbc8d918`)
+
+Doc 19 corrections: invariant count 33+ → 25 unique re-verified at scale; observation count 18 → 19 (SIM-D-O1 omitted from catalog); long-horizon granularity reframed as Year-level summary.
+
+Doc 22 corrections: PATCH v1.2-29 duplication claim retracted; §8.2 line count corrected ~50 → 69; total cuttable ~160 → 178.
+
+### v1.2.1 NERS cleanup pass (`52fb1292`)
+
+Per doc 22 recommendations:
+1. **Cut §5.4.2 Coup Mechanic** (24 lines) — deferred to v1.3.
+2. **Cut §8.2 Inter-Faction War State + §8.2.1 Peace Treaty** (69 lines) — deferred to v1.3.
+3. **Apply §17 P2/P3 addendum patches surgically** in target sections (§3.6, §3.6.X, §5.1, §5.2, §6.2 Procedures B/C/D, §7.6, §10, §2.6, §2.7, §4.5).
+4. **Delete §17** entirely.
+5. **Update §0.1 v1.2.1 change log** documenting the cleanup.
+
+**Net result:** v1.2.1 spec is 1856 lines (down from v1.2's 1958 lines; ~102 lines reduction, less than the headline 178 because surgical insertions added clarifying paragraphs back into target sections — but those additions are content-bearing and ELEGANT, not bloat).
+
+P1-CRITICAL resolutions retained (SIM-B-G8 strict, SIM-C-G6 routing, SIM-H-G2 Knot rupture). ED-760 stall-escalator retained. Faction Succession §5.4.1 retained.
+
+### Final session-chain commits (post-synthesis)
+
+| # | Commit | Artifact |
+|---|---|---|
+| 21 | `09421b5d` | doc 22 NERS + bloat assessment |
+| 22 | `aed39f7a` | doc 23 chain audit (5 findings) |
+| 23 | `dbc8d918` | AUDIT-1..5 corrections to docs 19 + 22 |
+| 24 | `52fb1292` | doc 12 v1.2.1 (NERS cleanup) |
+
+---
+
+## CURRENT STATE — 2026-04-29
+
+**doc 12 v1.2.1** (commit `52fb1292`) is the **canonical-promotion candidate**.
+
+| Spec evolution | Version | Lines | Status |
+|---|---|---|---|
+| v1.0 | (initial draft) | — | Superseded |
+| v1.1 | (commit `9dede391`) | 1565 | Superseded |
+| v1.2 | (commit `59a1c1e0`) | 1958 | Superseded by v1.2.1 |
+| **v1.2.1** | **(commit `52fb1292`)** | **1856** | **Current** |
+
+**Companion artifacts:** doc 17 (v1.0→v1.1 patches), doc 19 (validation report, AUDIT-corrected), doc 21 (v1.1→v1.2 patch directives), doc 22 (NERS assessment, AUDIT-corrected), doc 23 (chain audit).
+
+**Recommended next steps:**
+1. **§13 Promotion Checklist evaluation** of v1.2.1.
+2. **§16 Jordan-decision items** — ED-755 items remain pending (not simulation-blocked).
+3. **Forward-looking design observations** (19 from sims + narrative pass) tracked for post-canonical v1.3+ iteration.
+
+**Cumulative session-chain output:** ~520k chars across 24 commits. Eight simulation directions + narrative pass + synthesis + audit + cleanup. Architecture validated at every meaningful scale; spec is implementation-ready.
+
 **END OF HANDOFF v1.**

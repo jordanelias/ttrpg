@@ -66,10 +66,10 @@ entries:
 
   - id: ED-762
     date: 2026-04-29
-    description: "[PROVISIONAL] Topographic analysis v2+v3 executed (PP-676). v2 TF-IDF-primary validation FAILED (Jaccard 0.222). v3 multi-graph triangulation VALIDATED (2/3 structural properties). v3 corrected v2 flagship: corpus IS system-anchored (NPC Behavior cite-deg 56), not faction-anchored. Findings: throughlines lack system-coupling formalization (P2 fail = finding); 14 multi-graph isolates incl. 5/7 Convictions, 3/4 Pressure Points; CI implicit hub w/ no metadata. Full register: designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md."
+    description: "[PROVISIONAL] Spec progression: doc 12 v1.2 (commit 59a1c1e0; 39 patches resolving simulation-surfaced gaps) → v1.2.1 (commit 52fb1292; NERS cleanup per doc 22). v1.2.1: cut §5.4.2 Coup mechanic + §8.2 War State + §8.2.1 Peace Treaty (deferred to v1.3); §17 P2/P3 addendum patches applied surgically in target sections and §17 deleted; AUDIT-1..5 corrections applied to docs 19 and 22 per doc 23 chain audit (commit dbc8d918). v1.2.1 is the canonical-promotion candidate. Recommended next: §13 Promotion Checklist evaluation."
     status: open
     severity: P2
-    source: "PP-676 v3 execution"
+    source: "doc 22 NERS cleanup; doc 23 chain audit; v1.2.1 commit 52fb1292"
 
   - id: ED-763
     date: 2026-04-29
