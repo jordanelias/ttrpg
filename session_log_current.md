@@ -1,63 +1,39 @@
-session_id: 2026-04-29-mass-battle-ners
+session_id: 2026-04-29-mass-battle-ners-cont
 session_close: 2026-04-29
 phase: "2 — ongoing"
-status: audit complete, patch proposals committed, terminology workplan committed
+status: extended audit session complete
 last_stage: >
-  mass battle NERS stress test (batches 1+2) + historical review + patch proposals,
-  systems overview compiled, connections artifact v1 produced,
-  terminology conversion workplan drafted and committed (PP-675/ED-759 provisional)
+  cross-system interdependency stress testing across mass_battle, core dice, Thread, peninsular_strain,
+  derived_stats, personal combat, strategic layer, victory conditions
 next_action:
   skill: editorial
   description: >
-    NEXT-SESSION PRIORITY (set by Jordan 2026-04-29):
-    Re-do the connections artifact at designs/audit/2026-04-29-connections-artifact/
-    with rigorous relationship audit. v1 (committed this session, /mnt/user-data/outputs/valoria_connections.jsx)
-    was a first sketch — relationships were assigned by quick inspection of canonical_sources.yaml
-    and the architecture skeletons, not by reading every system spec end-to-end.
-    Required v2 work:
-    (1) Read every system doc listed in canonical_sources.yaml at least to skeleton depth;
-        for high-traffic hubs (faction_layer, scale_transitions, conflict_arch) read in full
-    (2) For every node pair, decide: edge or no edge; if edge, then type (foundational/cascade/
-        bidirectional/containment/gating), strength (1-4 rubric in node), state (canonical/
-        provisional/gap), and label
-    (3) Audit the v1 edges against the audit and remove/correct any that don't survive
-    (4) Add edges that v1 missed (likely candidates: military_layer→faction_layer details,
-        ms_trajectory↔threadwork specifics, throughlines→every Class A/B touchpoint,
-        any second-order intersections through Self-Rendering/Leap)
-    (5) Encode relationship quality not just by color but also by proximity/clustering
-        and dash-pattern variation
-    (6) Output: revised valoria_connections.jsx with audit log of edge decisions inline
-        in a hidden EDGE_AUDIT comment block
-
-    JORDAN DECISIONS REQUIRED (still pending from prior session):
-    Mass battle (mass_battle_patch_proposals_2026-04-29.md):
-    (1) DECISION-MB-01 through DECISION-MB-08 — 8 design decisions, recommended answers given
-    Terminology conversion (designs/audit/2026-04-29-terminology-conversion/00_workplan.md §4):
-    (2) 4.1 Strategic Mode vs Map Mode for BG (recommend: Strategic Mode)
-    (3) 4.2 Scene Mode vs Encounter Mode for TTRPG (recommend: Scene Mode)
-    (4) 4.3 Confirm Hybrid mode retired (3-mode → 2-mode + Zoom-In) — load-bearing
-    (5) 4.4 Adjudicator → Resolver, or keep (recommend: keep)
-    (6) 4.5 "session" policy (recommend: retire TTRPG-evening sense; allow hooks/UI senses)
-    Standing decisions (still pending from prior sessions):
-    (7) Intelligence stat restoration — see designs/audit/faction_stats_renaissance_review.md
-    (8) LICENSE decision (GOV-08)
-    (9) 1.1 Knot Formation During Play
-    (10) 1.2 Accord Propagation
+    PROPAGATION REQUIRED (high priority — before any implementation):
+    (1) ED-743 → propagate to victory_v30 §0.4 and peninsular_strain Step 4e (strike direct IP/Strain battle trigger)
+    (2) RS → MS global replace in peninsular_strain_v30.md (RS = MS, terminology inconsistency only)
+    (3) Campaign Supply: strike derived_stats §8.1 per-unit cost; replace with flat −100 per mass_battle §A.14b
+    JORDAN DECISIONS (from this session, see designs/audit/mass_battle_interdependency_2026-04-29.md):
+    (4) INTER-09d: Critical hit vs Overwhelming — same threshold? Confirm.
+    (5) INTER-10c: §A.10 Thread Ob (flat 4) vs three-axis system — is flat Ob the total or Depth-only?
+    (6) INTER-10d: Focus stat in mass battle — dead stat or unstated secondary function?
+    (7) INTER-12b: "Discipline" naming collision — rename faction derived value (suggest Cohesion)
+    (8) INTER-12e: Muster: Ob roll + Treasury cost both apply, or one only?
+    (9) INTER-14a: military_advance Ob vs BG Battle — both fire or BG Battle supersedes?
+    (10) INTER-14c: Accord during Occupation — frozen or erodes from Battle?
+    PREVIOUSLY OUTSTANDING DECISIONS (still pending):
+    (11) Mass battle decisions MB-01 through MB-08 (see mass_battle_patch_proposals_2026-04-29.md)
+    (12) Intelligence stat restoration
+    (13) LICENSE (GOV-08)
+    (14) 1.1 Knot Formation, 1.2 Accord Propagation
 blockers:
-  - "Connections artifact v2 audit pass (next session priority)"
-  - "5 terminology workplan decisions (Jordan)"
-  - "Topographic analysis findings review (Jordan, 12 TOPO entries to triage)"
-  - "8 mass battle design decisions (Jordan)"
-  - "8 auto-approvable mass battle patches awaiting approval (Jordan)"
-  - "Intelligence stat decision (Jordan)"
-  - "LICENSE decision (Jordan)"
+  - "ED-743 propagation (action, not decision)"
+  - "RS→MS replacement in peninsular_strain (action, not decision)"
+  - "Campaign Supply cost canonical conflict (action, not decision)"
+  - "Multiple Jordan decisions from all three audit batches"
 notes:
-  - "Stress test committed: designs/audit/mass_battle_stress_test_2026-04-29.md (13c11a9)"
-  - "Patch proposals committed: designs/audit/mass_battle_patch_proposals_2026-04-29.md (1d9f864)"
-  - "Terminology workplan committed: designs/audit/2026-04-29-terminology-conversion/00_workplan.md (PP-675, ED-759)"
-  - "Topographic analysis Stages 1-4 EXECUTED 2026-04-29 (PP-676, ED-760). Outputs: 02_weakness_register.md + data/. 12 TOPO findings PROVISIONAL pending Jordan review. Three convergent observations: (1) Knot system under-edged in v1, (2) political-dynamics layer numerically confirmed disconnected, (3) several v1 edges genuinely-thin (real propagation gaps). Methodology limits explicit in register §0."
-  - "Connections artifact v1 produced (not yet committed to repo — lives at /mnt/user-data/outputs/valoria_connections.jsx)"
-  - "v1 has 31 nodes, 53 edges — relationship judgments need full re-audit per next-session directive"
-  - "2 math failures still open: MATH-FAIL-01 (siege calibration impossible), MATH-FAIL-02 (H fixed contradiction)"
-  - "27 provisionals still requiring resolution before Godot implementation"
-  - "canonical_sources.yaml at 4670/5000 tokens — approaching threshold; pruning needed before terminology_canon entry added"
+  - "Batch 3 committed: designs/audit/mass_battle_interdependency_2026-04-29.md (a50f098)"
+  - "E-FAIL-01 CLOSED: output scaling and PP-233 are complementary layers, not conflicts"
+  - "E-FAIL-02 CLOSED: Army Morale modifiers found in derived_stats §10.2"
+  - "14 cross-system items confirmed consistent (Thread costs, TroopCount math, Domain Echo, etc.)"
+  - "RS vs MS: same stat, terminology inconsistency only in peninsular_strain_v30"
+  - "canonical_sources.yaml at 4670/5000 tokens — approaching threshold"
