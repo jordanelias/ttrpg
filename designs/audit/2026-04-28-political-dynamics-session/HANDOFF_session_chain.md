@@ -14,8 +14,8 @@
 | # | Status | Scope | Deliverable |
 |---|--------|-------|-------------|
 | 1 | **DONE** | Author doc 17 — 48 patch resolutions for 68 stress-test issues | `designs/audit/2026-04-28-political-dynamics-session/17_specification_revisions.md` (committed `6de72da1`) + ED-750..757 (committed `831c889a`) |
-| 2 | PENDING | Apply doc 17 patches → produce doc 12 v1.1 | `12_development_specification.md` v1.1 with all 48 patches applied |
-| 3 | PENDING | Re-vet v1.1 against §13 promotion checklist | Vetting report; flag any patch that breaks invariants |
+| 2 | **DONE** | Apply doc 17 patches → produce doc 12 v1.1 | `12_development_specification.md` v1.1 (committed `9dede391`) with 26 patches applied — 1565 lines, 79 PATCH references; ED-756 resolved (`f5acbaa2`) |
+| 3 | IN-PROGRESS / PENDING | Re-vet v1.1 against §13 promotion checklist | Vetting report; flag any patch that breaks invariants |
 | 4 | PENDING | Simulation pass — Direction A (Opinion architecture) | Granular interaction map for B/C/D Procedures + Knowledge→Concern→Action chain |
 | 5 | PENDING | Simulation pass — Direction B (Domain Action selection) | Trace alignment-table + scar-cap + conviction-multiplier interactions |
 | 6 | PENDING | Simulation pass — Direction C (Settlement/Faction signal flow) | Settlement Signal → Concern → Domain Action propagation |
@@ -174,5 +174,54 @@ If S2 patch application exceeds budget mid-execution: stop after current patch, 
 **Bootstrap auth bug:** `github_ops.start_session_log()` calls `_authorize_next_commit()` which whitelists only `safe_commit`/`assert_bootstrap`/`safe_session_close`/`append_to_register`/etc. but NOT `start_session_log`/`update_session_log`/`close_session_log`. Add these to the allowlist in `github_ops.py:324` (the `approved` tuple). Until fixed, manual `safe_commit` against `session_logs/<scope>_<token>.md` works as substitute, with the caveat that the auto-generated `session_log_current.md` pointer won't update.
 
 ---
+
+
+---
+
+## SESSION 2 NOTES — 2026-04-29
+
+**Done:**
+- Editorial ledger archival (ED-745..748 → archive). Commit `9986d8d9`.
+- Doc 12 v1.1 produced and committed. Commit `9dede391`.
+  - 26 explicit PATCH directives from doc 17 applied: PATCH 1.4, 1.5, 1.6 (cross-cutting); 2.1, 2.2, 2.3, 2.5, 2.6, 2.7, 2.8 (P1); 3.1-3.11, 3.13-3.15 (P2; 3.12 covered by 2.5; 3.4 also wires Procedure D and E).
+  - §1.1 Featured Behaviors author commentary added (4 entries from doc 17 §5).
+  - §15 Priority-3 stub resolutions appendix added (7 stub categories).
+  - §16 Pending Jordan-decision items appendix added (5 items, ED-755).
+  - Verification: 28/28 expected-content checks pass.
+- ED-756 marked resolved. Commit `f5acbaa2`.
+- This handoff doc updated.
+
+**v1.1 structural changes vs v1.0:**
+- 985 → 1565 lines (+580); 44k → 83k chars (+39k).
+- New top sections: §0.1 (change log), §15 (P3 stubs), §16 (Jordan-decision flags).
+- New subsections: §1.1, §3.6, §3.6.X, §4.5, §8.1, §6.2 B.0, §2.5.1.
+- Procedure rewrites: B Resolution (single-writer), C Project Completion (Memory-only legacy), D banner.
+- Function additions: `select_proposal()`, `compute_armature()`, `npc_observes_event()`, `get_or_init_opinion()`, `derive_initial_affect()`, `conviction_alignment_multiplier()`, `SettlementSignal.from_governor()`, `resonance_lookup()` w/ category fallback, `generate_new_project()`, `sample_domain_weighted_by_conviction()`.
+- Tables added: `DOMAIN_ARMATURE_ALIGNMENT` (42 entries), `OPPOSITIONAL_CONVICTION_PAIRS` (4 pairs), `EVENT_CATEGORIES` + `CATEGORY_DEFAULT_RESONANCE`.
+- Numbering note: §15/§16 appear before §14 (which is now an end-of-doc reference appendix). Cosmetic; v1.2 may renumber §14 → §17 for clean ordering.
+
+**Not done:**
+- Full §13 Promotion Checklist re-vet pass (S3) — pending. Spot checks during patch application surfaced no obvious invariant breaks, but a systematic walk-through of §13 against v1.1 has not been performed.
+- Simulations (S4-S8) — pending.
+
+**Open issues observed during v1.1 production:**
+- §14 numbering: §15/§16 appear before §14. Cosmetic; defer to v1.2.
+- `derive_concern_tag()` and `categorize_event_type()` referenced in patches but not specified in v1.1; both are content-authoring helpers that need authoring per `[P3-RESOLVED-PER-DOC17]` markers.
+- `VISIBLE_ACTIONS_TEMPLATES` referenced but content authoring deferred to `params/visible_actions.md` (PATCH 3.14 / NS-49-A) — not yet created.
+- Procedure E `apply_drift()` does not yet route through `get_or_init_opinion()` (PATCH 3.4 specifies it should). Verified PATCH 3.4 inserts the call into Procedure E before drift application; spot-check post-commit confirms presence.
+
+**Bootstrap auth bug:** Same as Session 1 — `start_session_log()` not whitelisted in `_authorize_next_commit()`. Did not engage session log infrastructure for S2 either; commits done via direct `safe_commit()`.
+
+---
+
+## SESSION 3 NOTES — TBD
+
+S3 = re-vet pass against §13 of v1.1. To be done in fresh context. Resumption pre-flight: read v1.1 fully, then walk §13 promotion checklist item by item, recording verdict (pass/fail/partial) per item.
+
+---
+
+## SESSIONS 4-8 NOTES — TBD
+
+Simulation chain. Each direction's pre-flight, scope, and deliverable already specified above in the main body of this handoff. Recommend starting S4 with v1.1 in fresh context after S3 confirms invariants.
 
 **END OF HANDOFF v1.**
