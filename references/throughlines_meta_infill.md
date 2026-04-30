@@ -2,6 +2,7 @@
 <!-- Companion to: references/throughlines_meta.md (SKELETON) -->
 <!-- Do not use for vetting reference; use skeleton only -->
 <!-- [EDITORIAL: PP-672 — throughlines hierarchical framework infill, 2026-04-19] -->
+<!-- [EDITORIAL: PP-676 — load-bearing systems column added per topographic v3 §V3-2, 2026-04-29] -->
 <!-- [EDITORIAL: PP-674 — tier N (Necessity) added, framework enforcement details, 2026-04-19] -->
 
 # Throughlines Framework — Infill
@@ -69,53 +70,52 @@ Four is the minimum coherent set.
 
 ### §3.1 Full T→М tag table
 
-| T | Title | Primary М | Secondary М | Justification |
-|---|---|---|---|---|
-| T-01 | Everything Is Thread | М-3 | — | Ontological — all stats are substrate state. Defines substrate-grounds-all pattern. |
-| T-02 | Rendering Consciousness-Performed | М-3 | — | Ontological — perception is substrate-filtered. Participates in substrate grounding. |
-| T-03 | Inseparability | М-3 | М-5 | Primary ontological (every op = substrate op). Secondary scale-connecting (co-movement fires at all scales). |
-| T-04 | RS Decay | М-1 | — | Clock — continuous pressure from Calamity damage. Canonical pressure pattern. |
-| T-05 | TC Accumulation | М-1 | — | Clock — continuous pressure from institutional momentum. |
-| T-06 | IP Accumulation | М-1 | — | Clock — continuous pressure from external intervention. |
-| T-07 | Peninsular Strain | М-1 | — | Clock — continuous pressure from accumulated war. |
-| T-08 | Church Rendering Reinforcement | М-4 | — | Institutional — Church's substrate-posture is rendering-reinforcement. |
-| T-09 | Varfell Thread Progressive | М-4 | — | Institutional — Varfell's posture is thread-progressive. |
-| T-10 | **STRUCK** (Niflhel dissolved) | — | — | Niflhel dissolved as faction. Thread exploitation distributed to settlement-level phenomena. |
-| T-11 | Crown Pragmatic | М-4 | — | Institutional — Crown's posture is instrumentalist. |
-| T-15a | Hafenmark Unmediated Sovereigntist | М-4 | М-6 | Primary institutional (divine-right governance rejects ecclesial monopoly). Secondary forced-choice (Thread revelation threatens TS-0 Baralta). |
-| T-15b | Löwenritter Substrate-Agnostic Protector | М-4 | М-6 | Primary institutional (military duty, substrate irrelevant). Secondary forced-choice (revelation means military tools fight wrong war). |
-| T-15c | RM Substrate-Heritage Reclaimer | М-4 | М-6 | Primary institutional (unknowing substrate inheritance via Einhir practice). Secondary forced-choice (Embrace/Denial/Schism at revelation). |
-| T-12 | Practitioner Arc | М-6 | М-1 | Primary forced-choice (Coherence cost forces engagement decisions). Secondary pressure (Coherence depletes). |
-| T-13 | Certainty Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. |
-| T-14 | Conviction Architecture | М-6 | — | Forced-choice — Scar accumulation forces arc transitions. |
-| T-15 | Player Progression | М-5 | — | Scale-connecting — personal Standing ladder produces settlement→province→faction progression. |
-| T-16 | Knot Propagation | М-5 | М-3 | Primary scale-recursive (Knot Strain propagates through bonded contacts). Secondary substrate-grounded. |
-| T-17 | Companion Moral Mirror | М-6 | — | Forced-choice — Thread power vs relational bonds. |
-| T-18 | Radiation Gradient | М-2 | М-3 | Primary geography-holds-pressure (RS damage manifests spatially). Secondary substrate-grounded (radiation IS substrate state). |
-| T-19 | Southernmost Hidden Front | М-2 | М-1 | Primary geographic (location-specific convergence point). Secondary pressure-feeding (expedition failure advances decay). |
-| T-20 | Two Contests | М-6 | — | Forced-choice — sovereignty vs survival, insufficient resources for both. |
-| T-21 | Thread Political Warfare | М-4 | М-3 | Primary institutional (distinct faction doctrines). Secondary substrate-grounded (shared RS track). |
-| T-22 | Belief Lattice | М-6 | М-3 | Primary forced-choice (cooperation requires Belief revision, which is Scar-accumulation). Secondary substrate-participating. |
-| T-23 | NPC Arc Emergence | М-5 | — | Scale-connecting — personal arc → faction Domain Echo → political shift → new arc triggers. |
-| T-24 | Convergence as Crisis | М-5 | — | Scale-connecting — multiple throughlines intersecting at various scales produce emergent crisis. |
-| T-25 | Generational Arc | М-5 | — | Scale-connecting — 30-year clock transforms personal standings into institutional reality. |
-
-| T-26 | Recursion as Setting Structure (TL-3) | М-5 | М-3 | Primary scale-recursive (same dynamic at multiple scales). Secondary substrate-grounded. |
-| T-27 | Effects Real, Explanation Wrong (TL-4) | М-4 | М-6 | Primary institutional (faction interpretive-frame coherent-but-wrong). Secondary forced-choice (argument fails; frame-crack requires confrontation). |
-| T-28 | Confrontation/Leap/Operation Triad (TL-5) | М-3 | М-6 | Primary substrate-grounded (three-phase engagement with substrate). Secondary forced-choice (each phase has decision architecture). |
-| T-29 | Baralta as Accidental Prophylaxis Cracker (TL-8) | М-4 | М-8 | Primary institutional (Baralta's partial prophylaxis-crack is formation-structural). Secondary access-gated (crack admits substrate content into receptive capacity). |
-| T-30 | Information Asymmetry as Core Mechanic (TL-7) | М-8 | М-5 | Primary access-gated (different receptive capacities at different observer-nodes). Secondary scale-recursive (asymmetry operates at all scales). |
-| T-31 | Reflexive Suspension | М-3 | М-6 | Primary substrate-grounded (Leap geometry = suspension of layer 2 reflexive facing). Secondary forced-choice (entry commit and exit timing). М-7 ✓, М-8 primary, М-9 ✓, М-11 primary. |
-| T-32 | Sincere Structural Closure | М-4 | М-6 | Primary institutional (Church position formation-structural). Secondary forced-choice (frame-shift pathway). М-7 ✓, М-8 ✓, М-9 primary extension. |
-| T-33 | TS as Developmental Arc | М-3 | М-6 | Primary substrate-grounded (receptive-capacity expansion). Secondary forced-choice (confrontation Hold/Turn-Away). М-7 ✓, М-8 ✓, М-10 ✓, М-11 primary extension. |
-| T-34 | Distal Interoception through Knot Tethers | М-5 | М-3 | Primary scale-connecting (knot-channels cross geographic distance). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-9 ✓, М-10 primary extension. |
-| T-35 | Unified Uncanny Capacity Synthesis | М-3 | М-4 | Primary substrate-grounded (uncanny register emerges from TS-band receptive capacity). Secondary institutional (formation + frame). М-7 ✓, М-8 primary extension, М-9 ✓. |
-| T-36 | Relational Ontological Identity (TS 50–69 C0) | М-5 | М-3 | Primary scale-connecting (companion knots load-bearing at ontological scale). Secondary substrate-grounded. М-7 ✓, М-8 ✓. |
-| T-37 | Stimulus Resistance Triplet | М-3 | М-8 | Primary substrate-grounded (three resistance modes at integration-failure loci). Secondary access-gated. М-7 ✓, М-8 ✓, М-9 ✓. |
-| T-38 | Real as Continuous Amplitude | М-3 | М-2 | Primary substrate-grounded (amplitude is continuous substrate-excess). Secondary geography-holds-pressure. М-7 ✓, М-8 ✓, М-10 primary extension. |
-| T-39 | Textual Mode Typology | М-4 | М-3 | Primary institutional (four-mode faction-output typology). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-9 ✓. |
-| T-40 | TS as Taxonomic Expansion | М-5 | М-3 | Primary scale-connecting (taxonomic categories admit scale-spanning content at thresholds). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-10 ✓, М-11 primary extension. |
-| T-41 | Damaged Substrate Is Non-Agential | М-3 | М-4 | Primary substrate-grounded (damage-as-substrate-state without moral agent). Secondary institutional (Church-demonology as interpreter output per T-27). М-7 ✓, М-9 primary extension, М-10 ✓. |
+| T | Title | Primary М | Secondary М | Justification | Load-bearing systems |
+|---|---|---|---|---|---|
+| T-01 | Everything Is Thread | М-3 | — | Ontological — all stats are substrate state. Defines substrate-grounds-all pattern. | threadwork, derived_stats, self_rendering |
+| T-02 | Rendering Consciousness-Performed | М-3 | — | Ontological — perception is substrate-filtered. Participates in substrate grounding. | self_rendering, leap_mechanism, threadwork |
+| T-03 | Inseparability | М-3 | М-5 | Primary ontological (every op = substrate op). Secondary scale-connecting (co-movement fires at all scales). | threadwork, scale_transitions, self_rendering |
+| T-04 | RS Decay | М-1 | — | Clock — continuous pressure from Calamity damage. Canonical pressure pattern. | clocks, ms_trajectory, peninsular_strain, threadwork |
+| T-05 | TC Accumulation | М-1 | — | Clock — continuous pressure from institutional momentum. | clocks, tc_political, faction_layer |
+| T-06 | IP Accumulation | М-1 | — | Clock — continuous pressure from external intervention. | clocks, peninsular_strain, victory |
+| T-07 | Peninsular Strain | М-1 | — | Clock — continuous pressure from accumulated war. | peninsular_strain, clocks, victory, tensions_deck, royal_assassination_fuse |
+| T-08 | Church Rendering Reinforcement | М-4 | — | Institutional — Church's substrate-posture is rendering-reinforcement. | factions, faction_layer, threadwork, conviction_track |
+| T-09 | Varfell Thread Progressive | М-4 | — | Institutional — Varfell's posture is thread-progressive. | factions, faction_layer, threadwork, conviction_track |
+| T-10 | **STRUCK** (Niflhel dissolved) | — | — | Niflhel dissolved as faction. Thread exploitation distributed to settlement-level phenomena. | — |
+| T-11 | Crown Pragmatic | М-4 | — | Institutional — Crown's posture is instrumentalist. | factions, faction_layer, conviction_track, threadwork |
+| T-15a | Hafenmark Unmediated Sovereigntist | М-4 | М-6 | Primary institutional (divine-right governance rejects ecclesial monopoly). Secondary forced-choice (Thread revelation threatens TS-0 Baralta). | factions, faction_layer, conviction_track, baralta, threadwork |
+| T-15b | Löwenritter Substrate-Agnostic Protector | М-4 | М-6 | Primary institutional (military duty, substrate irrelevant). Secondary forced-choice (revelation means military tools fight wrong war). | factions, faction_layer, military_layer, mass_combat, conviction_track, threadwork |
+| T-15c | RM Substrate-Heritage Reclaimer | М-4 | М-6 | Primary institutional (unknowing substrate inheritance via Einhir practice). Secondary forced-choice (Embrace/Denial/Schism at revelation). | factions, faction_layer, conviction_track, threadwork |
+| T-12 | Practitioner Arc | М-6 | М-1 | Primary forced-choice (Coherence cost forces engagement decisions). Secondary pressure (Coherence depletes). | threadwork, conviction_track, derived_stats |
+| T-13 | Certainty Journey | М-6 | М-3 | Primary forced-choice (irreversible descent opens capabilities, closes relationships). Secondary substrate-grounded. | threadwork, derived_stats, conviction_track, solmund_philosophy, solmund |
+| T-14 | Conviction Architecture | М-6 | — | Forced-choice — Scar accumulation forces arc transitions. | conviction_track, factions, faction_layer |
+| T-15 | Player Progression | М-5 | — | Scale-connecting — personal Standing ladder produces settlement→province→faction progression. | scale_transitions, settlement_layer, faction_layer, factions |
+| T-16 | Knot Propagation | М-5 | М-3 | Primary scale-recursive (Knot Strain propagates through bonded contacts). Secondary substrate-grounded. | threadwork, scale_transitions, factions |
+| T-17 | Companion Moral Mirror | М-6 | — | Forced-choice — Thread power vs relational bonds. | threadwork, conviction_track, factions |
+| T-18 | Radiation Gradient | М-2 | М-3 | Primary geography-holds-pressure (RS damage manifests spatially). Secondary substrate-grounded (radiation IS substrate state). | territories, ms_trajectory, threadwork, settlement_layer |
+| T-19 | Southernmost Hidden Front | М-2 | М-1 | Primary geographic (location-specific convergence point). Secondary pressure-feeding (expedition failure advances decay). | territories, peninsular_strain, settlement_layer, victory, mass_combat, military_layer |
+| T-20 | Two Contests | М-6 | — | Forced-choice — sovereignty vs survival, insufficient resources for both. | victory, peninsular_strain, faction_layer, conflict_architecture, mass_combat |
+| T-21 | Thread Political Warfare | М-4 | М-3 | Primary institutional (distinct faction doctrines). Secondary substrate-grounded (shared RS track). | factions, faction_layer, threadwork, conflict_architecture, mass_combat |
+| T-22 | Belief Lattice | М-6 | М-3 | Primary forced-choice (cooperation requires Belief revision, which is Scar-accumulation). Secondary substrate-participating. | conviction_track, threadwork, social_debate |
+| T-23 | NPC Arc Emergence | М-5 | — | Scale-connecting — personal arc → faction Domain Echo → political shift → new arc triggers. | scale_transitions, faction_layer, factions, conflict_architecture, faction_succession_split |
+| T-24 | Convergence as Crisis | М-5 | — | Scale-connecting — multiple throughlines intersecting at various scales produce emergent crisis. | conflict_architecture, scale_transitions, victory, tensions_deck |
+| T-25 | Generational Arc | М-5 | — | Scale-connecting — 30-year clock transforms personal standings into institutional reality. | campaign_architecture, scale_transitions, faction_layer, peninsular_strain |
+| T-26 | Recursion as Setting Structure (TL-3) | М-5 | М-3 | Primary scale-recursive (same dynamic at multiple scales). Secondary substrate-grounded. | scale_transitions, threadwork, factions |
+| T-27 | Effects Real, Explanation Wrong (TL-4) | М-4 | М-6 | Primary institutional (faction interpretive-frame coherent-but-wrong). Secondary forced-choice (argument fails; frame-crack requires confrontation). | factions, faction_layer, threadwork |
+| T-28 | Confrontation/Leap/Operation Triad (TL-5) | М-3 | М-6 | Primary substrate-grounded (three-phase engagement with substrate). Secondary forced-choice (each phase has decision architecture). | threadwork, leap_mechanism, conflict_architecture |
+| T-29 | Baralta as Accidental Prophylaxis Cracker (TL-8) | М-4 | М-8 | Primary institutional (Baralta's partial prophylaxis-crack is formation-structural). Secondary access-gated (crack admits substrate content into receptive capacity). | baralta, factions, threadwork, miraculous_event, solmund |
+| T-30 | Information Asymmetry as Core Mechanic (TL-7) | М-8 | М-5 | Primary access-gated (different receptive capacities at different observer-nodes). Secondary scale-recursive (asymmetry operates at all scales). | scale_transitions, threadwork, faction_layer |
+| T-31 | Reflexive Suspension | М-3 | М-6 | Primary substrate-grounded (Leap geometry = suspension of layer 2 reflexive facing). Secondary forced-choice (entry commit and exit timing). М-7 ✓, М-8 primary, М-9 ✓, М-11 primary. | leap_mechanism, threadwork, derived_stats |
+| T-32 | Sincere Structural Closure | М-4 | М-6 | Primary institutional (Church position formation-structural). Secondary forced-choice (frame-shift pathway). М-7 ✓, М-8 ✓, М-9 primary extension. | factions, faction_layer, conviction_track |
+| T-33 | TS as Developmental Arc | М-3 | М-6 | Primary substrate-grounded (receptive-capacity expansion). Secondary forced-choice (confrontation Hold/Turn-Away). М-7 ✓, М-8 ✓, М-10 ✓, М-11 primary extension. | threadwork, derived_stats, conviction_track |
+| T-34 | Distal Interoception through Knot Tethers | М-5 | М-3 | Primary scale-connecting (knot-channels cross geographic distance). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-9 ✓, М-10 primary extension. | threadwork, scale_transitions, factions |
+| T-35 | Unified Uncanny Capacity Synthesis | М-3 | М-4 | Primary substrate-grounded (uncanny register emerges from TS-band receptive capacity). Secondary institutional (formation + frame). М-7 ✓, М-8 primary extension, М-9 ✓. | threadwork, derived_stats, factions |
+| T-36 | Relational Ontological Identity (TS 50–69 C0) | М-5 | М-3 | Primary scale-connecting (companion knots load-bearing at ontological scale). Secondary substrate-grounded. М-7 ✓, М-8 ✓. | threadwork, scale_transitions, factions |
+| T-37 | Stimulus Resistance Triplet | М-3 | М-8 | Primary substrate-grounded (three resistance modes at integration-failure loci). Secondary access-gated. М-7 ✓, М-8 ✓, М-9 ✓. | threadwork, derived_stats |
+| T-38 | Real as Continuous Amplitude | М-3 | М-2 | Primary substrate-grounded (amplitude is continuous substrate-excess). Secondary geography-holds-pressure. М-7 ✓, М-8 ✓, М-10 primary extension. | threadwork, ms_trajectory, territories |
+| T-39 | Textual Mode Typology | М-4 | М-3 | Primary institutional (four-mode faction-output typology). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-9 ✓. | factions, faction_layer, social_debate |
+| T-40 | TS as Taxonomic Expansion | М-5 | М-3 | Primary scale-connecting (taxonomic categories admit scale-spanning content at thresholds). Secondary substrate-grounded. М-7 ✓, М-8 ✓, М-10 ✓, М-11 primary extension. | threadwork, derived_stats, scale_transitions |
+| T-41 | Damaged Substrate Is Non-Agential | М-3 | М-4 | Primary substrate-grounded (damage-as-substrate-state without moral agent). Secondary institutional (Church-demonology as interpreter output per T-27). М-7 ✓, М-9 primary extension, М-10 ✓. | threadwork, factions, ms_trajectory |
 
 Coverage: 40 of 41 + T-15a/b/c (T-10 struck; T-15a/b/c added; T-26..T-41 from v3.1 synthesis). Primary distribution: М-1: 4 · М-2: 2 · М-3: 14 · М-4: 11 · М-5: 8 · М-6: 5 · М-7..М-11: cross-cutting extensions primarily on T-31..T-41.
 

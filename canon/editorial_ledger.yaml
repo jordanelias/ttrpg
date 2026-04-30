@@ -76,4 +76,10 @@ entries:
     status: open
     severity: P2
     source: "Synthesis chain — docs 19 + 21 + doc 12 v1.2 commit 59a1c1e0"
+  - id: ED-764
+    date: 2026-04-29
+    description: "[PROVISIONAL] Throughlines table Load-bearing systems column added per PP-677, addressing PP-676 v3 finding §V3-2 that the framework lacked formalized system-token coupling. 43 active throughlines mapped to canonical system slugs (mean 3.7 systems each, range 2-6). 27/32 canonical systems load-bearing for at least one throughline; 5 defensibly absent (core_engine, combat, throughlines_framework, solmund_voice, solmund_artifacts). Mappings PROVISIONAL pending Jordan review. Note: ED-762 collision detected in active ledger — both topographic v2+v3 entry and doc 12 v1.2 entry assigned same ID across separate sessions. Flagged in propagation_map for Jordan resolution; ED-763 deliberately skipped to avoid renumbering interference."
+    status: open
+    severity: P3
+    source: "PP-677"
 

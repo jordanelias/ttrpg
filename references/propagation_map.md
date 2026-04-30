@@ -427,3 +427,37 @@ triangulation pivot (validation VALIDATED 2/3 structural properties).
 **Propagation status:** complete in this commit. All findings are in the weakness
 register pending Jordan review. v2 register sections retained as audit trail per
 v3 §V3-13 v2→v3 diff.
+
+## 2026-04-29 — Throughlines load-bearing systems column (PP-677)
+
+Augments `references/throughlines_meta_infill.md` with a 6th column "Load-bearing
+systems" mapping each of 43 active throughlines to canonical system slugs (from
+`references/canonical_sources.yaml` `systems:` block). Conservative rule: only
+systems whose absence prevents the throughline from operating are listed.
+
+**Files modified:**
+- references/throughlines_meta_infill.md (added Load-bearing systems column to T-NN table; editorial marker added at file head)
+- canon/patch_register_active.yaml (PP-677 entry)
+- canon/editorial_ledger.yaml (ED-764 entry)
+- session_log_current.md (replaced with this session status)
+- references/propagation_map.md (this entry)
+
+**Propagation status:** complete in this commit. Pre-table and post-table content
+byte-identical to prior version (modulo new editorial marker). Verified row-by-row:
+44 rows preserved (T-01..T-09, T-10 STRUCK, T-11..T-41, T-15a/b/c). All original
+column content (Title, Primary М, Secondary М, Justification) byte-identical.
+
+**Cross-references:** PP-676 v3 §V3-2, ED-764.
+
+**INTEGRITY FLAG — Jordan attention requested:**
+ED-762 collision detected in `canon/editorial_ledger.yaml` active section. Two
+entries share ID ED-762:
+1. Topographic analysis v2+v3 entry (PP-676, this session-track)
+2. doc 12 v1.2 production entry (separate session-track)
+
+This appears to be a cross-session race condition: both sessions read the same
+"next ED" before either committed. ED-763 has been deliberately skipped in this
+commit; PP-677 uses ED-764. Jordan should renumber one of the duplicate ED-762
+entries (suggest renumbering doc 12 v1.2 to ED-763 since it was the second
+addition, but Jordan's choice).
+

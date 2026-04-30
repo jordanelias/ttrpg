@@ -538,3 +538,56 @@ patches:
       M-11: "○"
     q: pass
     note: "Self-exempting on Ω/Μ — same as PP-674, PP-675. Analytic instrument, not gameplay mechanic. Stages 1-4 executed 2026-04-29 within same chat session per Jordan directive 'let's dig into that workplan'. 12 weakness findings (TOPO-01..TOPO-12) PROVISIONAL pending review. Methodology limits documented in register §0/§8."
+- id: PP-677
+  date: 2026-04-29
+  severity: P3
+  description: "Throughlines table augmented with Load-bearing systems column,
+    addressing PP-676 v3 finding §V3-2 (throughlines framework lacked formalized
+    system-token coupling). Each of 43 active throughlines mapped to canonical
+    system slugs from references/canonical_sources.yaml `systems:` block whose
+    absence would prevent the throughline from operating. Coverage: 27 of 32
+    canonical systems load-bearing for at least one throughline. 5 systems
+    defensibly absent (core_engine infrastructure, combat personal-scale,
+    throughlines_framework meta-tool, solmund_voice/solmund_artifacts flavor).
+    Distribution: threadwork 31/43, factions 21/43, faction_layer 17/43,
+    conviction_track 13/43. Mean systems-per-throughline 3.7, range 2-6.
+    T-10 STRUCK retains '—'. Pre-table and post-table content byte-identical
+    to prior version (modulo new editorial marker). Mappings derived from each
+    throughline's name+description column plus implicit mechanism dependencies;
+    self-reviewed (initial draft had 11 unmentioned canonical systems, revised
+    to 5 with all defensibly out-of-scope). ED-764. Restores meaning to
+    PP-676 v3 throughline orphan diagnostic."
+  finding_id: PP-676 v3 §V3-2
+  source: topographic_analysis
+  affects:
+    - references/throughlines_meta_infill.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Augmentation of canonical vetting framework (throughlines_meta_infill.md).
+      Class B because it modifies canonical authority for vetting itself, but
+      additive-only (new column, no modification of existing columns). N pass —
+      formalizes system-token coupling already implied by framework. Ω pass —
+      improves cross-scale traceability (Ω-a) by making per-throughline
+      implementation dependencies explicit. M-ratings ○ across the board:
+      structural-vocabulary only, no behavior change, no rebalance. Mappings
+      PROVISIONAL pending Jordan review; revisable by future PP without
+      breaking framework."
+

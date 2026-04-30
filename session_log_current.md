@@ -1,26 +1,38 @@
-session_id: 2026-04-29-extended-audit
+---
+session_id: 2026-04-29-throughlines-load-bearing-column
 session_close: 2026-04-29
-phase: "2 — ongoing"
-status: extended audit 6 batches complete — 30 fixes applied, 26 decisions pending
+phase: "throughlines table augmentation per PP-676 v3 §V3-2"
+status: complete
 last_stage: >
-  Groups 18-27 across social_contest, fieldwork, fractional_province, ci_political,
-  accounting sequence, victory math, faction military balance, CI reform.
+  PP-677 / ED-764 — Load-bearing systems column added to throughlines table.
+  43 active throughlines mapped to canonical system slugs (mean 3.7 systems each).
+  27/32 canonical systems load-bearing for at least one throughline.
+  Pre-table and post-table content byte-identical to prior; only column appended +
+  editorial marker added. Mappings derived from name+description column + implicit
+  mechanism dependencies; self-reviewed and tightened from initial draft.
+  ED-762 collision detected and flagged in propagation_map for Jordan resolution.
 next_action:
   skill: editorial
   description: >
-    HIGH PRIORITY decisions (Jordan):
-    (1) CI-02 — Mass Seizure Ob: 10−PT−infra (ci_political) vs 7−PT (victory_v30)
-    (2) Mass battle MB-01 through MB-08 (see mass_battle_patch_proposals_2026-04-29.md)
-    (3) INTER-10d, 12b, 14a, 14d+e (interdependency gaps)
-    MEDIUM: SOC-01/02, FW-02, FRAC-02/04, PT-01, ACCT-01 (see batch audit files)
-    UNTESTED AREAS: settlement_layer, npc_behavior, generational_transition, baralta, warden/RM
+    Jordan review of PP-677 throughline→system mappings. Mappings are PROVISIONAL.
+    Each of 43 active throughlines now lists 2-6 canonical system slugs in the
+    new Load-bearing systems column. Revisable by future PP without breaking
+    framework (additive change, no modification of existing columns).
+    PRIOR ITEMS still pending Jordan decision (carried from prior session log):
+    - PP-676 v3 weakness register §V3-10 priority items (NPC Behavior audit pass,
+      isolate promotion to first-class docs, vocabulary debt sweep three concentrated
+      cleanups, Peninsular Strain + IP change-control review)
+    - CI-01 Church Prominent definition (HIGH-PRIORITY, breaks Church CI generation)
+    - PT-01, ACCT-01
+    - Mass battle MB-01..08, INTER-10d/12b/14a/14d/14e/12e/17b/09d
+    - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord Propagation
+    INTEGRITY FLAG: ED-762 collision in active ledger needs Jordan resolution.
 blockers:
-  - "26 Jordan decisions pending across all batches"
-  - "canonical_sources.yaml at 4771/5000 tokens"
+  - "Jordan review of PP-677 throughline→system mappings"
+  - "ED-762 collision in canon/editorial_ledger.yaml active section"
+  - "Prior session blockers (PP-676 v3 review items, CI-01, PT-01, ACCT-01, all batches)"
 notes:
-  - "35 items confirmed consistent"
-  - "23 bloat items cut"
-  - "30 auto-fixes across 11 files: 778bdcd b7dcc20 63fda93 82cc36d b208922"
-  - "ED-743 propagated to all 4 affected docs"
-  - "RS→MS fixed in peninsular_strain_v30"
-  - "CI-01 Prominent definition fixed; CI 55 milestone renamed to Institutional Reach"
+  - "Same-session continuation per Jordan directive 'proceed'"
+  - "Mappings constructed conservatively — only systems whose absence prevents throughline operation"
+  - "5 unmentioned canonical systems defensibly out of scope (infrastructure, personal-scale combat, meta-tool, flavor docs)"
+  - "ED-762 collision: this commit deliberately skipped ED-763 to avoid renumbering interference; PP-677 uses ED-764"
