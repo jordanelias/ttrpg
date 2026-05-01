@@ -1,9 +1,10 @@
 # Valoria Ecosystem Workplan v2 — 2026-04-30
 
-STATUS: WORKPLAN
+STATUS: WORKPLAN — RATIFIED
 VERSION: 2 — supersedes ecosystem_workplan_2026-04-30.md
 DRAFT: 2026-04-30
-AUTHORITY: Pending Jordan ratification.
+RATIFIED: 2026-05-01 (Jordan, "accept all commit")
+AUTHORITY: Active — Phase 1 cleared to begin.
 
 CHANGES FROM v1:
 - Phase 1 split into two-layer design (JSON Schema structural + custom referential); estimate 2 directives.

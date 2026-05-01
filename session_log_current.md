@@ -4,12 +4,12 @@ session_close: 2026-05-01
 phase: "Vector audit + P0 propagation + workplans v1/v2 + Phase 0 cleanup"
 status: complete
 last_stage: >
-  PP-705 / ED-778 — Phase 0 cleanup (T1 npc_behavior_v30 stale-threshold markers;
-  D1 glossary cross-ref grep — closed without code change, no broken refs found;
-  B1 Mode G case-sensitivity corrigendum to audit folder methodology +
-  data/mode_g_2026-04-30_corrigendum.json). Ecosystem workplan v2
-  (designs/audit/ecosystem_workplan_v2_2026-04-30.md, SHA 6b0d0f424) drafted
-  pending Jordan ratification.
+  RATIFICATION — Jordan ratified ecosystem workplan v2 ("accept all commit"
+  2026-05-01). v2 status: WORKPLAN — RATIFIED; v1 status: SUPERSEDED.
+  Phase 1 (schemas + advisory two-layer validator) cleared to begin.
+  Phase 0 closed clean: PP-705 / ED-778 (T1/D1/B1 + archival batch
+  2026_05_01_a). Workplan v2 SHA 6b0d0f424; v1 7cf88ce6a; Phase 0 322984230;
+  ratification this commit.
 
 session_arc:
   - "eae4eb0b6: terminology vector-audit folder (4 deliverables + 11 data artefacts)"
@@ -35,50 +35,42 @@ parallel_work_acknowledgment: >
 next_action:
   skill: editorial
   description: >
-    PRIMARY: Jordan ratifies ecosystem workplan v2 (or pushes back / modifies).
-    Ratification = commit message "[ratify] ecosystem workplan v2".
+    PRIMARY: Phase 1 of ecosystem workplan v2 (RATIFIED 2026-05-01).
+    Schemas + advisory two-layer validator (estimate 2 directives).
 
-    AFTER RATIFICATION:
-    Phase 1 — Schemas + advisory two-layer validator (2 directives).
-    See workplan v2 §4 Phase 1 for scope. Phase 1 decision gate: P-10
-    proportionality check after baseline violation report.
+    Phase 1 deliverables (per workplan v2 §4):
+    - schemas/ directory: 8 JSON Schema files for active registers
+      (patch_register_entry, editorial_ledger_entry, canonical_source_entry,
+      censured_vocabulary_entry, propagation_map_entry, supersession_register_entry,
+      alias_registry_entry, audit_finding).
+    - skills/valoria-validate/scripts/validate.py — two-layer CLI
+      (Layer A: structural via jsonschema; Layer B: custom referential).
+    - Violation baseline: designs/audit/{date}-schema-validation-baseline/02_findings.md.
+    - Explicit advisory notice: validation is advisory until Phase 6a.
 
-    PARALLEL OPTION: archival pass urgent — register-health WARN tripped
-    on 4 of 5 registers this commit:
-      - editorial_ledger.yaml: 90.9% of 2k threshold
-      - patch_register_active.yaml: 95.3% of 15k threshold (post-PP-705)
-      - propagation_map.md: 96.5% of 15k threshold (post-PP-705)
-      - canonical_sources.yaml: 98.0% of 5k threshold
+    Phase 1 decision gate (after baseline report):
+    P-10 proportionality check — does violation count/pattern support
+    full Ph2-Ph7 stack, or suggest a simpler path (fix ID acquisition +
+    schema 2 registers + stop)? Jordan reviews baseline, decides.
 
-    P1 BACKLOG (from workplan v2 §8 + 2026-04-30 audit §11.2):
-      - Promote Wager + Thread Revelation to first-class docs
-      - Convictions framework registration (Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity)
-      - Pressure Points framework registration (Evidence/Consequence/Authority/Loyalty)
-      - Three-doc Cohesion -> Discipline sweep (5 paragraphs)
-      - Bare GM corpus sweep (29 paragraphs, 14 docs; alias_registry.standalone_ok policy update)
+    PARALLEL OPTIONS (any priority):
+    - PP-689 SHA followup (covers PP-690 + PP-691 + PP-705 file edits).
+    - P1 backlog from workplan v2 §8 (Wager / Thread Revelation / Convictions /
+      Pressure Points / Cohesion sweep / bare GM sweep) — these run under
+      current safe_commit until Phase 4+, can interleave with Phase 1.
+    - Gameplay-design directive — workplan §B1 flagged infrastructure-to-gameplay
+      imbalance as the most actionable long-term-health finding. Schedule
+      a gameplay directive between infrastructure phases to rebalance.
 
-    P2 BACKLOG (from workplan v2 §8 + audit §11.3):
-      - VTM full sweep + Varfell victory-path editorial rewrite
-      - Cultural Reformation cleanup in peninsular_strain_v30 (10 paragraphs)
-      - Coup Counter -> Graduated Autonomy per-site substitution (now 7 paragraphs post-faction_layer refresh)
-      - Niflhel residue final sweep (22 remaining post-Jordan PP-698..704 cleanup)
-      - Armature System + Event Impact Matrix status clarification
-      - Vector-audit token list expansion (Settlement Adjacency, Fractional Province Ownership,
-        Faction Succession Split, Tensions Deck, Royal Assassination Fuse, MS Trajectory,
-        Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle,
-        Demotion Magnitude, Miraculous Event, Graduated Autonomy)
-
-    METHODOLOGY FOLLOW-UPS:
-      - P2 conviction-symmetry audit (do Conviction-bearing throughlines list Conviction
-        tokens in Load-bearing systems column? Phase 5 verifies)
-      - Re-run vector-audit after P0+P1 actions land (refresh structural graphs)
-
-    PRIOR PENDING (Jordan-side):
-      - PP-689 SHA followup (still pending; now covers PP-690+PP-691+PP-705 changes)
-      - Review of accumulated PP chain 676..705
-      - PT-01, ACCT-01, INTER batches
-      - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord Propagation
-      - NPC Behavior audit (separate dedicated session)
+    BACKLOG (carried forward):
+    - P2 backlog from workplan v2 §8 + audit §11.3 (VTM / CR / Niflhel /
+      Coup Counter design-judgment cleanups; Armature / Event Impact Matrix
+      status; vector-audit token list expansion).
+    - Methodology follow-ups (P2 conviction-symmetry audit; vector-audit re-run
+      after P0+P1 lands).
+    - Prior pending: review of accumulated PP chain 676..705, PT-01, ACCT-01,
+      INTER batches, Intelligence stat, LICENSE/GOV-08, Knot Formation,
+      Accord Propagation, NPC Behavior audit (separate dedicated session).
 
 blockers:
   - "Workplan v2 ratification gates Phase 1+"

@@ -1,9 +1,9 @@
 # Valoria Ecosystem Workplan — 2026-04-30
 
-STATUS: WORKPLAN
+STATUS: SUPERSEDED — see ecosystem_workplan_v2_2026-04-30.md (ratified 2026-05-01)
 DRAFT: 2026-04-30
 SCOPE: Consolidates conversation 2026-04-30 — vector audit, P0 propagation, repo / ecosystem / atom-taxonomy / vector-integration proposals, content audit, code-developer audit. Forward path through 7 phases.
-AUTHORITY: Pending Jordan ratification before any phase begins.
+AUTHORITY: Superseded by v2; retained as historical record.
 
 ---
 
