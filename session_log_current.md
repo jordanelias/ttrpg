@@ -1,86 +1,92 @@
 ---
-session_id: 2026-04-30-terminology-vector-audit-and-ecosystem-workplan
-session_close: 2026-05-01
-phase: "Vector audit + P0 propagation + workplans v1/v2 + Phase 0 cleanup"
-status: complete
+session_id: 2026-04-30-architecture-session
+session_open: 2026-05-01
+phase: "Architectural design — PP-686 faction architecture, PP-687 universal Key substrate, PP-688 articulation layer (anticipated)"
+status: open
 last_stage: >
-  RATIFICATION — Jordan ratified ecosystem workplan v2 ("accept all commit"
-  2026-05-01). v2 status: WORKPLAN — RATIFIED; v1 status: SUPERSEDED.
-  Phase 1 (schemas + advisory two-layer validator) cleared to begin.
-  Phase 0 closed clean: PP-705 / ED-778 (T1/D1/B1 + archival batch
-  2026_05_01_a). Workplan v2 SHA 6b0d0f424; v1 7cf88ce6a; Phase 0 322984230;
-  ratification this commit.
+  COMMIT — five batched commits to designs/audit/2026-04-30-architecture-session/:
+  16528352 (foundation: week audit + workplan v3 addendum),
+  60e471e1 (PP-686 proposal + audit + sim v1/v2 + evaluations),
+  eec6b01c (PP-687 proposal + audit + sim + evaluation),
+  b2ef42fc (narrative articulation: arcs/story/three-tier/significance/cut-scene),
+  de10d7aa (session-folder index README).
+  All artifacts PROVISIONAL — pending Jordan ratification per each proposal's open-questions section.
 
 session_arc:
-  - "eae4eb0b6: terminology vector-audit folder (4 deliverables + 11 data artefacts)"
-  - "157523f2d: PP-691 / ED-772 P0 propagation pass (10 files; TC->CI sweep, glossary rewrite, registry updates)"
-  - "7cf88ce6a: ecosystem workplan v1 draft (456 lines, 8 phases, single doc)"
-  - "6b0d0f424: ecosystem workplan v2 (497 lines, supersedes v1; 19 code-review corrections + self-audit)"
-  - "this commit: PP-705 / ED-778 Phase 0 cleanup (T1/D1/B1 from v2 §0)"
+  - "16528352518: foundation — week audit NERS (174:5 design:impl ratio; lateral peer-system flagged WEAKEST) + workplan v3 addendum (Phase 5a Godot-early addendum)"
+  - "60e471e15: PP-686 — Mission/Cascade/Public Expectation/L+PS architecture replacing Ethical Framework Modifiers + Mandate. Sim v1 (7 scenarios; 5 calibration deltas C1-C5) + v2 with structured-concentration NPCs + Self-Other axis (10-item set C1-C10)"
+  - "eec6b01cc: PP-687 — universal Key substrate. 19/5/0 NERS pre-sim, 22/2/0 post-sim. 6 scenarios all pass: 2,703 keys × 30 seasons in 144ms; determinism confirmed; cross-scale provenance walks correctly; cycle detection works"
+  - "b2ef42fcf: narrative articulation layer (PP-688 anticipated). Three-tier: Tier 1 mud / Tier 2 trigger cut scenes / Tier 3 year-end omniscient chronicle. Significance fn (prominence × stakes × expectation × awareness, two tracks). Canonical Knot/Belief/Inspiration integration per fieldwork_socializing §5.5-5.6 + params/core.md"
+  - "de10d7aa4: index README"
 
-parallel_work_acknowledgment: >
-  Jordan committed substantial editorial work in parallel during this session:
-  cd09b9830 (PP-683..688 mass-battle), a6da7577c (PP-690 Stratagem),
-  ca921b753 (ED-775 / PP-698..704 Niflhel residue + Vaynard canon +
-  Hafenmark/Crown doctrine + archival batch). My workplans v1 and v2
-  referenced register state that was stale by the time of commit; they did
-  NOT account for PP-698..704 or the archival batch. Workplan §1.3 register
-  snapshots are accurate as of audit-time but not as of workplan-commit-time.
-  This is the exact concurrent-session hazard the workplan addresses;
-  it occurred during workplan drafting, validating the urgency of Phase 4
-  atomic-ID-acquisition primitives. The hooks fix at 24ea3b9b0 (assert_unique_ids)
-  partially mitigates this — it blocks ID collisions at commit time —
-  but does not prevent stale-snapshot reasoning during planning.
+architectural_decisions_pending_ratification:
+  - "PP-684 Conviction taxonomy revision: 12 entries (Faith/Authority/Order/Scholastic/Utility/Equity/Liberty/Precedent/Community/Identity/Warden/Virtue) with Honor provisional 13th; Self-Other orientation as separate axis [-1,+1]; cultural background templates"
+  - "PP-685 Conviction migration roster (Reason/Autonomy/Continuity-tagged characters reassigned)"
+  - "PP-686 faction architecture (4-piece: Mission/Cascade/Public Expectation/Legitimacy+Popular Support); 8 open questions §6"
+  - "PP-687 universal Key substrate (typed event records as engine substrate); 10 open questions §9; 6 spec refinements per sim evaluation §4"
+  - "PP-688 articulation layer (anticipated; not yet drafted as PP)"
+
+calibration_set_C1_C10:
+  - "C1: Cap Ob_modifier at ±2 (was ±3)"
+  - "C2: Drop strictness reward path (saturates cap)"
+  - "C3: drift_coef = 0.55-0.65 (sim showed 0.45 still under-responsive)"
+  - "C4: Crisis-bypass rule: leader.scars >= 3 suspends cascade damping"
+  - "C5: β-fidelity gating during negative outcomes (×0.5)"
+  - "C6: Orphan NPC rule: α=1.0, contribute normally"
+  - "C7: Self-Other orientation provisional formula (calibrate at Stage 10)"
+  - "C8: NPC personal_convictions = primary (1-3 entries, 0.6-0.8) + cultural background (0.2-0.4)"
+  - "C9: Codify aggregate as Standing-weighted normalized sum"
+  - "C10: Cultural background templates as separate canonical authoring layer"
 
 next_action:
   skill: editorial
   description: >
-    PRIMARY: Phase 1 of ecosystem workplan v2 (RATIFIED 2026-05-01).
-    Schemas + advisory two-layer validator (estimate 2 directives).
+    PRIMARY (after Jordan ratification of architecture session):
+    1. Resolve PP-687 §10.1 spec refinements inline (cycle detection, Memory query API, sub-step ordering, determinism enumeration, axis-count caveat, partial-migration bootstrap)
+    2. Revise PP-686 spec to reference PP-687 (resolves audit P1-3, P2-1, P2-3, lateral weakness)
+    3. Apply C1-C10 calibration deltas to PP-686 v3 spec
+    4. Author full PP-687 Key type registry (~25-30 types)
+    5. Author Conviction → axis matrix (12 × 4 = 48 entries) with calibration rationale
+    6. Draft PP-688 articulation layer formally (Tier 1 UI lens / Tier 2 trigger ruleset / Tier 3 chronicle generator + significance function + canonical Knot/Belief/Inspiration integration)
+    7. Add to canon/patch_register_active.yaml: PP-684, PP-685, PP-686, PP-687, PP-688 with full vetting blocks per PP-674 framework
 
-    Phase 1 deliverables (per workplan v2 §4):
-    - schemas/ directory: 8 JSON Schema files for active registers
-      (patch_register_entry, editorial_ledger_entry, canonical_source_entry,
-      censured_vocabulary_entry, propagation_map_entry, supersession_register_entry,
-      alias_registry_entry, audit_finding).
-    - skills/valoria-validate/scripts/validate.py — two-layer CLI
-      (Layer A: structural via jsonschema; Layer B: custom referential).
-    - Violation baseline: designs/audit/{date}-schema-validation-baseline/02_findings.md.
-    - Explicit advisory notice: validation is advisory until Phase 6a.
-
-    Phase 1 decision gate (after baseline report):
-    P-10 proportionality check — does violation count/pattern support
-    full Ph2-Ph7 stack, or suggest a simpler path (fix ID acquisition +
-    schema 2 registers + stop)? Jordan reviews baseline, decides.
-
-    PARALLEL OPTIONS (any priority):
-    - PP-689 SHA followup (covers PP-690 + PP-691 + PP-705 file edits).
-    - P1 backlog from workplan v2 §8 (Wager / Thread Revelation / Convictions /
-      Pressure Points / Cohesion sweep / bare GM sweep) — these run under
-      current safe_commit until Phase 4+, can interleave with Phase 1.
-    - Gameplay-design directive — workplan §B1 flagged infrastructure-to-gameplay
-      imbalance as the most actionable long-term-health finding. Schedule
-      a gameplay directive between infrastructure phases to rebalance.
-
-    BACKLOG (carried forward):
-    - P2 backlog from workplan v2 §8 + audit §11.3 (VTM / CR / Niflhel /
-      Coup Counter design-judgment cleanups; Armature / Event Impact Matrix
-      status; vector-audit token list expansion).
-    - Methodology follow-ups (P2 conviction-symmetry audit; vector-audit re-run
-      after P0+P1 lands).
-    - Prior pending: review of accumulated PP chain 676..705, PT-01, ACCT-01,
-      INTER batches, Intelligence stat, LICENSE/GOV-08, Knot Formation,
-      Accord Propagation, NPC Behavior audit (separate dedicated session).
+    PRIOR SESSION CARRY-FORWARD (from terminology-vector-audit session):
+    - Phase 1 of ecosystem workplan v2 (schemas + advisory two-layer validator)
+    - PP-689 SHA followup
+    - P1 backlog (Wager / Thread Revelation / Convictions / Pressure Points / Cohesion sweep / bare GM sweep)
+    - Gameplay-design directive (workplan §B1 flagged infrastructure-to-gameplay imbalance)
 
 blockers:
-  - "Workplan v2 ratification gates Phase 1+"
-  - "Register archival pass needed within 1-2 directives (4/5 at WARN)"
-  - "Concurrent-session ID hazard partially mitigated (assert_unique_ids hook) but stale-snapshot reasoning hazard remains until Phase 4"
-  - "T3 finding (project intent / gameplay velocity) needs Jordan attention — infrastructure-to-gameplay ratio out of balance per workplan v2 §B1"
+  - "All 5 commits this session land artifacts as PROVISIONAL — Jordan must review and ratify each PP's open questions before implementation"
+  - "PP-687 ratifies before PP-686 implementation (sequencing dependency; PP-686 spec consumes PP-687)"
+  - "Workplan v2 Phase 1 still gates the broader infrastructure work; this session opened a parallel architectural track"
+
+session_artifacts: designs/audit/2026-04-30-architecture-session/
+  - 00_index.md
+  - 01_week_audit_NERS.md
+  - 02_workplan_v3_addendum.md
+  - 03_PP-686_proposal.md
+  - 04_PP-686_audit_NERS.md
+  - 05_PP-686_simulation_evaluation.md
+  - 06_PP-686_sim_v2_evaluation.md
+  - 07_PP-687_proposal.md
+  - 08_PP-687_audit_NERS.md
+  - 09_PP-687_simulation_evaluation.md
+  - 10_emergent_arcs_engagement_NERS.md
+  - 11_story_vs_happenings_analysis.md
+  - 12_three_tier_articulation_reframe.md
+  - 13_significance_function_omniscient_voice.md
+  - 14_significance_canonical_integration.md
+  - 15_accounting_cut_scene_snippet.md
+  - sims/pp686_sim.py + pp686_sim_output.txt
+  - sims/pp686_sim_v2.py + pp686_sim_v2_output.txt
+  - sims/pp687_sim.py + pp687_sim_output.txt
 
 notes:
-  - "Three commits this session by Claude: eae4eb0b6, 157523f2d, 7cf88ce6a, 6b0d0f424, plus this Phase 0 commit (5 total)."
-  - "Three commits by Jordan in parallel: cd09b9830, a6da7577c, ca921b753 (substantial editorial work)."
-  - "Phase 0 closed clean: T1 markers added (5 threshold lines flagged); D1 grep found no broken external refs (closed without code change); B1 corrigendum added to audit folder methodology + new corrigendum JSON file; mode_g audit-time numbers preserved per frozen-on-creation convention."
-  - "Workplans v1 + v2 are draft, pending Jordan ratification. Phase 0 was authorized to begin pre-ratification per workplan v2 §0/§10."
-  - "Self-audit finding: workplan staleness (failed to re-pull live registers before drafting) is a new defect class not in original audit findings; should be added to next ecosystem audit's §1 hooks-and-conventions inventory."
+  - "All proposals PROVISIONAL pending Jordan ratification; do not add to patch_register_active.yaml until §6 / §9 / §10 open questions resolved."
+  - "Sim verification ledger (/home/claude/sim_verification_ledger.json) carries 28 distinct numeric values used across PP-686 + PP-687 sims; all cited to provisional proposal documents per sim_fabrication_check hook."
+  - "Conviction taxonomy revision (PP-684): 12 entries confirmed during conversation; Honor flagged provisional 13th; Greed explicitly NOT a Conviction (Self-Other orientation axis instead)."
+  - "PP-686 sim showed: honest defeat (ΔL +0.76, ΔPS -1.79 v2), successful tyrant (L-PS divergence 2.79), succession dynamics (Cesare cascade fid 0.904 → 0.631), all reproduce dramatic patterns Jordan named."
+  - "PP-687 sim showed: 18,724 keys/sec; replay determinism confirmed; CAUSAL_GRAPH walks sub-millisecond; Memory grows to ~1000 entries/NPC at 30 seasons (indexing strategy needed for queries)."
+  - "Articulation reframe: real-time arc detection rejected; year-end Accounting as omniscient retrospective is canonical framing. Cut scenes are punctuation form (Tier 2 + Tier 3)."
+  - "Significance function reads canonical Knot (fieldwork_socializing §5.6), Belief (§5.5), Inspiration (params/core.md L128) mechanics directly; does not invent parallels."
