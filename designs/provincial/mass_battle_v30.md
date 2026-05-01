@@ -126,7 +126,7 @@ Command, Military ceiling above).
 Discipline degrades by 1 when BOTH conditions are met (checked at Phase 6 Step 2):
 (1) Total Size lost this turn > current Discipline rating
 (2) This unit's Size loss exceeds the opposing unit's Size loss by ≥ 1
-Symmetric losses do NOT trigger degradation. All checks fire at Phase 6 Step 2. *[P2-06, PP-251, PP-502]* [PROVISIONAL]
+Symmetric losses do NOT trigger degradation. All checks fire at Phase 6 Step 2. *[P2-06, PP-251, PP-502]* *(PROVISIONAL marker stripped per editorial approval 2026-04-30.)*
 
 | Discipline | Effective Power penalty |
 |---|---|
@@ -157,6 +157,8 @@ Morale degradation triggers:
 separately, not subject to the cap. *[P1-03]*
 
 > **Clarification:** "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply Stage 2 general death −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general kill)."
+
+> **Encirclement exception (PP-683, MB-08):** A unit with no valid retreat path — flanked from 3 simultaneous directions, OR all retreat zones occupied by enemy units — has the −3 Morale cap removed for that Cascade Phase only. Cap restored next turn if retreat path opens. Models historical catastrophic collapse (Cannae, Lake Trasimene) where encircled armies routed beyond what normal cohesion could absorb. Stage 2 general kill remains additive on top.
 
 > **Artillery cascade ruling (PP-198):** Multiple simultaneous HBl unit destructions in one Cascade Phase each trigger Morale −1 (allied unit routed). Total non-general Morale loss still capped at −3. No runaway cascade possible from Artillery alone.
 
@@ -211,7 +213,7 @@ Command governs:
 **Non-Player Character generals:** Command assigned directly (1–7) as a narrative stat without
 Cha+Cog derivation. *[Command-P2-02]*
 
-**Command applies in full to each sub-unit (PP-504):** The general's full Command value applies to each commanded sub-unit's pool independently. Command is not divided across sub-units. Sub-unit limit (max = Command, TTRPG cap: 3) governs count, not distribution. Note: §A.8 splitting guidance is under revision — see ED-358. [PROVISIONAL]
+**Command applies in full to each sub-unit (PP-504):** The general's full Command value applies to each commanded sub-unit's pool independently. Command is not divided across sub-units. Sub-unit limit (max = Command, TTRPG cap: 3) governs count, not distribution. Note: §A.8 splitting guidance is under revision — see ED-358. *(PROVISIONAL marker stripped per editorial approval 2026-04-30.)*
 
 **General two-stage death:** *[P1-02]*
 - Stage 1 (incapacitated): −1 Morale all units, Command halved (floor, minimum 1), Morale floor suspended. Stabilise in Phase 5 with Medicine Ob 2 (1-turn window). *(Command halving: floor(Command÷2), min 1. A Stage 1 general retains at least 1 Command, preserving the Stage 1 / Stage 2 distinction.)*
@@ -267,7 +269,7 @@ execution rolls. A 2-wound general has tactic success probability halved.
 **Formation counter logic:** Wedge beats Line. Shield Wall negates Wedge but
 cannot advance. No formation is universally dominant. *[P2-01]*
 
-**Shield Wall +2D Def — simultaneous engagements (PP-500):** The +2D Def bonus applies to all defensive pools in all simultaneous engagements, including unmitigated flanks. Blanket formation modifier. [PROVISIONAL]
+**Shield Wall +2D Def — simultaneous engagements (PP-500):** The +2D Def bonus applies to all defensive pools in all simultaneous engagements, including unmitigated flanks. Blanket formation modifier. *(PROVISIONAL marker stripped per editorial approval 2026-04-30.)*
 
 **Units beyond Command limit** fight at Line formation, Discipline = 1 floor,
 no tactics available. *[P3-03]*
@@ -294,7 +296,7 @@ support) and target. Diagnosis occurs here (public declaration = rendering
 the configuration). *[P1-01]*
 
 **Phase 2 — Volley**
-Projectile units fire. Roll [Power stat] dice vs TN 6. Power stat = unit quality tier (1–7). Distinct from engagement pool formula (PP-233) — ranged output is governed by unit quality, not generalship. Net successes − DR (Projectile column) = Size loss to record. (PP-503) [PROVISIONAL]
+Projectile units fire. Roll [Power stat] dice vs TN 6. Power stat = unit quality tier (1–7). Distinct from engagement pool formula (PP-233) — ranged output is governed by unit quality, not generalship. Net successes − DR (Projectile column) = Size loss to record. (PP-503) *(PROVISIONAL marker stripped per editorial approval 2026-04-30.)*
 Prepared Defence: declare in Phase 1; half Effective Power as passive DR
 against Volley attacks this turn (rounded down, min 0).
 
@@ -446,7 +448,7 @@ or Feigned Retreat to disengage and re-concentrate. *(ED-358 resolved; PROVISION
 All Coherence loss is automatic (no check, no Ob) per threadwork_v30 §3.2. The Coherence
 cap (−1 per operation, threadwork_v30 §3.2 per-operation cap) applies. No additional surcharge. *[THREAD-P1-02, THREAD-P2-01]*
 
-**Coherence depletion warning (PP-501):** A practitioner operating every turn of a 7-turn battle loses 7 Coherence. From full (10): Coherence=3 after 7 turns — Dissonant, not Severed. Severance (Coherence=1) requires ≥9 consecutive operations from full. Battles ≥9 turns with constant operation produce Severance. *[THREAD-P2-02 — corrected PP-501]* [PROVISIONAL]
+**Coherence depletion warning (PP-501):** A practitioner operating every turn of a 7-turn battle loses 7 Coherence. From full (10): Coherence=3 after 7 turns — Dissonant, not Severed. Severance (Coherence=1) requires ≥9 consecutive operations from full. Battles ≥9 turns with constant operation produce Severance. *[THREAD-P2-02 — corrected PP-501]* *(PROVISIONAL marker stripped per editorial approval 2026-04-30.)*
 
 **Diagnosis timing:** Phase 1 (public declaration = rendering the target
 configuration). Leap phase: Phase 4 (rear practitioner) or Phase 5 (front-line
@@ -528,6 +530,10 @@ Maximum: cannot exceed original Size at army creation.
 Destroyed units (Size 0) cannot be restored — must raise new unit at full
 Resource cost. Thread effects on units (over-actualisation, Locks) persist
 across battle boundaries unless cleared. *[EDGE-08]*
+
+**Morale reset between battles (PP-684, MB-03):** Morale resets to its starting formula (general's Command + unit quality modifier, cap 7) at the start of each new battle. Morale degradation does not persist across battle boundaries. Rationale: persistent Morale snowballs toward deterministic rout in long campaigns regardless of player decisions; campaign fatigue is a separate (future) mechanic at faction layer, not unit-level Morale.
+
+**Discipline persists between battles (PP-685, MB-04):** Discipline does NOT auto-recover at battle end. Degradation accumulated in battle persists. Recovery requires a Muster action on the existing unit (military_layer_v30 §1.7), representing retraining and equipment replacement. Strategic consequence: burning Discipline through Reform-Phase tactics has multi-battle cost — Discipline is a depletable resource until garrison/Muster restores it. Wealth-Zero degradation per §1.7 stacks with battle degradation.
 
 ### A.14b CAMPAIGN SUPPLY (NEW — historical_precedents_warfare §1.3a)
 
@@ -711,13 +717,15 @@ approval — each reflects the faction's military doctrine.]
 | Crown | Royal Guard (Elite unit +3D) | Ducal Call (summon 1 unit from adjacent territory) |
 | Church | Crusade Fervour (Brutal + Discipline check exempt this turn) | Inquisitor's Mark (target unit −2D, any opponent) |
 | Hafenmark | Mercenary Surge (pay 1 Wealth: +2 units this engagement) | Sovereign Authority (immune to Disposition table Ob penalties this engagement) |
-| Varfell | Shadow Intel (see opponent's tactic card before revealing yours) | Calculated Retreat (withdraw without Overextended penalty) |
+| Varfell | Shadow Intel (see opponent's tactic card before revealing yours — see Resolution below) | Calculated Retreat (withdraw without Overextended penalty) |
 | Guilds | Paid Off (opponent unit −1D; costs 1 Wealth) | Logistics Mastery (Strained units fight at full this engagement) |
 | Niflhel | Assassination (target opponent commander; −1D all opp. units) | Disappear (withdraw all units; opponent cannot pursue this season) |
 | Löwenritter | Iron Discipline (immune to Route this engagement) | Martial Law (after winning: territory gains Martial Law next season) |
 | Revolution | People's Courage (Discipline +1 all units this engagement) | Ambush (first engagement in Oastad or Stillhelm: opponent no Defence roll) |
 
 **Tactic cards confirmed canonical (PP-283):** All faction-specific cards above are confirmed as canonical defaults. Content may be revised narratively without patch; mechanical effects require patch.
+
+**Shadow Intel resolution (PP-686, MB-06):** Both sides commit their tactic card simultaneously (face-down). The Varfell player then reveals only the opponent's committed card to themselves (peek), and may swap their own card for a different one from their hand before final reveal. Both cards then reveal simultaneously and resolve normally. Historical grounding: scouts and spies report enemy deployment after both sides are already committed to a battle plan — Shadow Intel models this informational asymmetry. UI implementation: opponent's card flips face-up to Varfell only; Varfell's hand prompts swap-or-keep; both reveal on confirm. No turn-order asymmetry — keeps simultaneous structure intact.
 
 ---
 

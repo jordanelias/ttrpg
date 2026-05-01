@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 770
+# next_id: 771
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
@@ -42,3 +42,10 @@ entries:
     status: open
     severity: P3
     source: "PP-677"
+
+  - id: ED-770
+    date: 2026-04-30
+    description: "[RESOLVED — APPLIED] Mass Battle editorial-decision batch (MB-01..08) approved by Jordan and applied to canonical files. MB-01 Option A: PP-297 Stalemate Break — design doc Tactical Withdrawal wins; params version rewritten. MB-02 Option C: §1.2 Unit Types column relabeled TARGET Size (not muster output); §1.4 governs base. MB-03 Option A: Morale resets between battles (PP-684). MB-04 Option B: Discipline persists; recovery via Muster only (PP-685). MB-05 Option A: Rout contagion brake (already applied prior session). MB-06 Option A: Shadow Intel = Peek mechanism (PP-686). MB-07 Option A: Siege pool = Mil+3 (PP-688, resolves MATH-FAIL-01). MB-08: Encirclement no-cap exception (PP-683). Plus PROVISIONAL marker strip on PP-500/PP-501/PP-502/PP-503/PP-504 per editorial confirmation. New patches PP-683..688. Affected files: designs/provincial/mass_battle_v30.md, designs/provincial/military_layer_v30.md, params/mass_combat.md. Propagation note: stage8_combat compilation and any cross-references to siege/muster need follow-up review (tracked in file_index_summary)."
+    status: closed
+    severity: P2
+    source: "designs/audit/mass_battle_patch_proposals_2026-04-29.md + Jordan editorial 2026-04-30"

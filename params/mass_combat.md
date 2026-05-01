@@ -524,11 +524,14 @@ Each faction takes exactly one Ob 1 check at Accounting.
 ## Stalemate Break (PP-297 — canonical)
 
 If 3 consecutive Battle Turns produce 0 total damage across all engagements
-(no Size loss on either side), both armies suffer:
-- All units: Discipline Ob 1 check
-- Failure: Morale −1
-- If any unit Morale reaches 0: standard Rout rules apply
-Rationale: prolonged indecisive combat erodes unit cohesion.
+(no Size loss on either side), both armies execute **Tactical Withdrawal**:
+- No Conviction Track movement, no pursuit, no Rout possible.
+- Each side's general rolls Command Ob 1 to maintain formation during withdrawal.
+  Failure: −1 Discipline on one unit (disorderly retreat).
+- Battle ends inconclusive. Neither side claims victory.
+- Accounting consequence: IP +1 (military posturing without resolution).
+
+Rationale: prolonged indecisive combat historically resolved via mutual disengagement (logistics, supply, fatigue), not unit collapse. The earlier Discipline-Ob-1 → Morale −1 → Rout chain (struck 2026-04-30 per MB-01 editorial decision) is superseded — design doc §A.12 wins.
 
 ## Splitting Doctrine (PP-508) [PROVISIONAL]
 Splitting is structurally advantageous in most configurations. Simulation matrix (Att Cmd 2-5 vs Def Cmd 2-5):

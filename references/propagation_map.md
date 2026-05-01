@@ -634,3 +634,73 @@ new file blob SHA 32d8e3412d17157fc0fd27fed91a0e11262743ef and updated.
 
 **Cross-references:** PP-681 (Conviction Track promotion), ED-769.
 
+## 2026-04-30 — Mass Battle MB-01..08 editorial-decision batch (PP-683..688, ED-770)
+
+Jordan editorial approval applied 2026-04-30 to the 8 Jordan-decision items
+from designs/audit/mass_battle_patch_proposals_2026-04-29.md, plus PROVISIONAL
+marker strip on PP-500/501/502/503/504. The 8 auto-approvable patches
+(PP-PROP-MB-01..08) had already been applied in prior sessions and were
+verified in-place via inspection.
+
+**Decisions applied:**
+- MB-01 (Stalemate Break): Option A — design doc Tactical Withdrawal wins;
+  params/mass_combat.md §PP-297 rewritten to match. No Rout possible from
+  stalemate; battle ends inconclusive; IP +1 at Accounting.
+- MB-02 (Muster initial Size): Option C — §1.2 column relabeled TARGET Size;
+  §1.4 governs base muster output (PP-687).
+- MB-03 (Morale reset): Option A — Morale resets to starting formula at each
+  new battle (PP-684).
+- MB-04 (Discipline recovery): Option B — Discipline persists across battles;
+  recovery via Muster only (PP-685). §1.7 cross-reference added.
+- MB-05 (Rout contagion brake): already applied prior session — verified at
+  mass_battle_v30 §A.4.
+- MB-06 (Shadow Intel resolution): Option A — Peek mechanism specified
+  (PP-686). UI: Varfell sees opponent's committed card, may swap from hand,
+  both reveal simultaneously.
+- MB-07 (Siege pool formula): Option A — Pool = Mil + 3 (PP-688). Resolves
+  MATH-FAIL-01: Fort 3 + Mil 4 now Ob 5 from pool 7 ≈ 2% match (prior
+  formula was 0%).
+- MB-08 (Encirclement no-cap): Applied (PP-683). Morale −3 cap removed when
+  unit has no valid retreat path (3-direction flank OR all retreat zones
+  occupied). Stage 2 general kill remains additive.
+
+**PROVISIONAL strip:** PP-500 (Shield Wall +2D simul), PP-501 (Coherence
+depletion), PP-502 (Discipline check deterministic), PP-503 (Volley Power-only),
+PP-504 (Command per sub-unit) — all confirmed by editorial approval; PROVISIONAL
+markers replaced with stripping note.
+
+**Files modified:**
+- designs/provincial/mass_battle_v30.md (~+2400 chars; §A.4 cap exception, §A.13
+  reset/persists, §B.4 Shadow Intel resolution, 5 PROVISIONAL strips)
+- designs/provincial/military_layer_v30.md (~+1250 chars; §1.2 TARGET relabel,
+  §1.7 between-battle cross-ref, §1.9 Siege pool fix)
+- params/mass_combat.md (~+460 chars; §PP-297 Stalemate rewritten)
+- canon/patch_register_active.yaml (PP-683..688 entries + vetting blocks)
+- canon/editorial_ledger.yaml (ED-770)
+- canon/editorial_ledger_summary.yaml (next_id 770→771; ED-770 noted)
+- references/canonical_sources.yaml (mass_battle, mass_combat, military_layer
+  SHAs set to PENDING_PP_689 — follow-up SHA commit required)
+- references/propagation_map.md (this entry)
+
+**SHA follow-up required (PP-689):** canonical_sources.yaml has 3 SHAs set to
+PENDING_PP_689. After this commit lands, fetch new blob SHAs for the 3 modified
+canonical files and update via PP-689 follow-up commit. Standard procedure.
+
+**Downstream propagation candidates (audit-flagged, not blocking):**
+- compilation/v0.14/stage8_combat.md — already marked OUTDATED in file_index;
+  any future re-compile must pull from updated canonical files.
+- designs/audit/mass_battle_stress_test_2026-04-29.md, mass_battle_patch_proposals_2026-04-29.md —
+  source documents of this batch; remain as historical record.
+- designs/architecture/scale_transitions_v30.md — no direct mass-battle
+  cross-reference identified, but Discipline/Morale persistence semantics
+  may impact zoom-in/zoom-out edge cases. Future audit candidate.
+
+**Cross-references:** PP-PROP-MB-01..08 (auto-approvable, prior session,
+verified in-place), MB-01..08 editorial decisions, ED-770, MATH-FAIL-01,
+S-FAIL-05/06/13/19, designs/audit/mass_battle_patch_proposals_2026-04-29.md.
+
+**Standing flags:**
+- PP-689 SHA follow-up commit needed (next session priority).
+- Geography × hex/square map × distance/orientation stress test follows this
+  commit (next-action item).
+
