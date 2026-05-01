@@ -169,7 +169,7 @@
     - Varfell Priority Tree
     - Guilds Priority Tree
     - Löwenritter Priority Tree
-    - Niflhel Priority Tree
+    <!-- - Niflhel Priority Tree (deleted 2026-04-30 — Niflhel struck) -->
     - Restoration Movement Priority Tree (Post-Founding)
     - Edeyja/Wardens Priority Tree (Post-Emergence)
     - Priority Tree Template (7 levels)

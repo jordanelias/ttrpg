@@ -49,13 +49,14 @@ characters:
     files_count: 2
   dalla_virke:
     canonical: "Dalla Virke"
-    role: "Syndicate Broker"
-    location: "Niflhel"
+    role: "Settlement-Broker (intelligence)"
+    location: "T1 Valorsplatz / settlement-level network"
     aliases: ["Virke"]
     source: "designs/npcs/npc_roster_v30.md"
     additional_sources:
       - "designs/npcs/npc_character_analyses_v30.md"
     occurrences_count: 8
+    note: "Originally Niflhel-affiliated; reassigned to settlement-broker mechanic post-Niflhel dissolution (CR-STRIKE-2026-04-19)."
     files_count: 4
   doux_alexios_laskaris:
     canonical: "Doux Alexios Laskaris"
@@ -367,13 +368,6 @@ subfactions:
     source: "triage"
     added_via_triage: true
     entry_note: "military of Crown"
-  niflhel:
-    canonical: "Niflhel"
-    also_types: ["organization", "concept"]
-    aliases: []
-    source: "triage"
-    added_via_triage: true
-    entry_note: "Niflhel is umbrella word used for illegal/underground/criminal organizations"
   wardens:
     canonical: "Wardens"
     aliases: ["Warden"]

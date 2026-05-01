@@ -123,9 +123,9 @@ systems:
     canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "5399c4b03acd65ad5f967d4d51fcea62faf0b2b6"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_689"  # ED-770/PP-683..688 batch — SHA update follow-up required
+    canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_705"  # ED-770/PP-683..688 batch — SHA update follow-up required
     params: params/mass_combat.md
-    canonical_sha__params__mass_combat_md: "PENDING_PP_689"  # ED-770 — SHA update follow-up required
+    canonical_sha__params__mass_combat_md: "PENDING_PP_705"  # ED-770 — SHA update follow-up required
   social_debate:
     design_doc: params/contest.md
     canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
@@ -138,10 +138,10 @@ systems:
     canonical_sha__params__scale_transitions_md: "684b08ec7e2df41c846cad1012d669e2cd5a6f9b"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "99d7312e39f34b198d1256793df0ce1172abc75c"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "PENDING_PP_705"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
-    canonical_sha__designs__provincial__military_layer_v30_md: "PENDING_PP_689"  # ED-770/PP-685, PP-687, PP-688 — SHA update follow-up required
+    canonical_sha__designs__provincial__military_layer_v30_md: "PENDING_PP_705"  # ED-770/PP-685, PP-687, PP-688 — SHA update follow-up required
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
     canonical_sha__designs__provincial__ci_political_v30_md: "94a54d69cb00737f66685814e56f132d8c428579"
@@ -247,10 +247,10 @@ systems:
 # Last touched: 2026-04-25 (ledger maintenance — 13 entries archived)
 # Last touched: 2026-04-25 (ED-769 — RS→MS residual cleanup strategic_layer_v30_infill)
 # Last touched: 2026-04-25 (ED-770 — numeric bounds audit closure)
-# Last touched: 2026-04-25 (ED-772 — cross-reference audit fixes, 4 broken refs)
-# Last touched: 2026-04-25 (ED-772 — Heresy Investigation Lifecycle in social_contest §7.3)
-# Last touched: 2026-04-25 (ED-773 — Knot Lifecycle specified)
-# Last touched: 2026-04-25 (ED-774 — Approach Training canonical + 5 archived)
+# Last touched: 2026-04-25 (ED-775 — cross-reference audit fixes, 4 broken refs)
+# Last touched: 2026-04-25 (ED-775 — Heresy Investigation Lifecycle in social_contest §7.3)
+# Last touched: 2026-04-25 (ED-776 — Knot Lifecycle specified)
+# Last touched: 2026-04-25 (ED-777 — Approach Training canonical + 5 archived)
 # Last touched: 2026-04-25 (ED-775 — Wrong-Style Penalty extended)
 # Last touched: 2026-04-25 (ED-776 — Demotion Magnitude specified)
 # Last touched: 2026-04-25 (ED-777 — caste-transgressive PC Conviction mechanism + cross-ref fixes)
@@ -261,7 +261,7 @@ systems:
 # Last touched: 2026-04-25 (ED-781 — Coup Counter STRUCK, Graduated Autonomy canonical)
 # Last touched: 2026-04-25 (ED-781 — npc_priority_trees Coup Counter migrations)
 # Last touched: 2026-04-25 (ED-782 — glossary TC→CI rename)
-# Last touched: 2026-04-30 (ED-772 / PP-691 — terminology P0 propagation: TC→CI sweep npc_behavior_v30 + RS→MS/TC→CI sweep throughlines_meta_infill + glossary rewrite + alias_registry church_influence milestones + censured_vocabulary stub populated)
+# Last touched: 2026-04-30 (ED-775 / PP-698 — terminology P0 propagation: TC→CI sweep npc_behavior_v30 + RS→MS/TC→CI sweep throughlines_meta_infill + glossary rewrite + alias_registry church_influence milestones + censured_vocabulary stub populated)
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   solmund_voice:

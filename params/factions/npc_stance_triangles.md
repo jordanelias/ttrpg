@@ -50,7 +50,7 @@ Torben: first faction at Loyalty ≥ 5 sets primary Conviction. Default Autonomy
 | Consequentialist Pragmatism | Varfell | TK +0.5/season active investigation; caps TK 3 without PC | Per season | TK 3 |
 | Rawlsian Social Contract | RM | Presence +1 adjacent territory/season when Stability ≥ 3 | Per season (conditional) | — |
 | Moral Relativism | Guilds | Guild Favour +1 in highest-Favour territory/Year-End | Per year | Favour 7 |
-| Amoral Consequentialism | Niflhel | After 3 consecutive same-territory Quiet: Intel Ob +1 | Self-limiting | — |
+<!-- Amoral Consequentialism / Niflhel row deleted 2026-04-30 — Niflhel struck. No faction holds this disposition post-strike. -->
 | Martial Honour | Löwenritter | If Military < 5: redirect all non-survival to consolidation | Continuous | Military 5 |
 
 Drift is passive (not a Domain Action). Does not count toward ±2 DA seasonal cap. Subject to stat ceiling (7) and floor (1).

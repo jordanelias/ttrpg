@@ -763,13 +763,13 @@ docs — discovery sweep pending for low-Military/sneaky/raider language).
 
 ---
 
-## 2026-04-30 — PP-691 / ED-772 — Terminology P0 propagation pass
+## 2026-04-30 — PP-698 / ED-775 — Terminology P0 propagation pass
 
 **Trigger:** 2026-04-30 vector-audit (designs/audit/2026-04-30-terminology-vector-audit/) §11.1 P0 actions. Audit committed at SHA eae4eb0b61a718a9.
 
 **Five actions executed:**
 
-1. **TC → CI sweep in designs/npcs/npc_behavior_v30.md.** All 26 mechanical TC mentions (across 17 paragraphs) renamed to CI. Context-verified Church-Influence (not Conviction Track). Resolves the alias_registry collision_table.tc.status='resolved' contradiction surfaced by Mode G — pre-PP-691: 21 actionable TC residuals in design corpus, 16 of them in this single doc.
+1. **TC → CI sweep in designs/npcs/npc_behavior_v30.md.** All 26 mechanical TC mentions (across 17 paragraphs) renamed to CI. Context-verified Church-Influence (not Conviction Track). Resolves the alias_registry collision_table.tc.status='resolved' contradiction surfaced by Mode G — pre-PP-698: 21 actionable TC residuals in design corpus, 16 of them in this single doc.
 
 2. **RS → MS + TC → CI sweep in references/throughlines_meta_infill.md.** T-04 row "RS Decay" → "MS Decay"; T-05 row "TC Accumulation" → "CI Accumulation"; plus 5 body residuals (M-3 historical reference, T-18 description, T-21 description, Τ check section, Failure Lexicon Reskinned-attractor + Cost-hidden examples).
 
@@ -786,8 +786,8 @@ docs — discovery sweep pending for low-Military/sneaky/raider language).
 - references/throughlines_meta_infill.md
 - designs/npcs/npc_behavior_v30.md
 - references/canonical_sources.yaml (Last touched comment)
-- canon/patch_register_active.yaml (PP-691 entry + vetting)
-- canon/editorial_ledger.yaml (ED-772; next_id 772 → 773)
+- canon/patch_register_active.yaml (PP-698 entry + vetting)
+- canon/editorial_ledger.yaml (ED-775; next_id 772 → 773)
 - references/propagation_map.md (this entry)
 - session_log_current.md
 
@@ -800,3 +800,119 @@ docs — discovery sweep pending for low-Military/sneaky/raider language).
 - P2 actions deferred: VTM full sweep + Varfell victory-path editorial rewrite; Cultural Reformation cleanup in peninsular_strain_v30; Niflhel faction-context audit; Coup Counter → Graduated Autonomy per-site substitution; Armature System + Event Impact Matrix status clarification.
 - Methodology follow-up: P2 conviction-symmetry audit (investigate whether Conviction-bearing throughlines list Conviction tokens in Load-bearing systems column); re-run vector-audit after P0+P1 land.
 - PP-689 SHA followup still pending (covers two content commits' worth of changes; queued from PP-690 propagation note).
+
+## 2026-04-30 — Comprehensive faction-doctrine batch (PP-698..697, ED-775, +ED-776/774 standing)
+
+Major editorial pass completing several long-running threads:
+
+**1. Niflhel residue strike (PP-698).** Most of Niflhel was already struck per
+CR-STRIKE-2026-04-19 / PP-DISSOLVE / conflict_architecture_proposal §Niflhel
+Dissolution / ED-752 / ED-764. This patch removes residual references that
+survived prior strikes — registry entries, STRUCK-marker debris in params,
+Niflhel-pair byproducts in compound clauses, faction_layer treaty/trigger/NPC-list
+rows. Niflhel as a faction-level entity is now fully retired from active canon.
+Functions distributed to settlement-broker mechanic (settlement_layer §4.7-4.9).
+
+**Files modified by Niflhel strike:**
+- references/alias_registry.yaml (DD entry decoupled from Niflhel)
+- references/proper_noun_registry.yaml (niflhel: block deleted; Dalla Virke
+  reassigned to settlement-broker)
+- references/proper_noun_triage_decisions.yaml (niflhel: block deleted)
+- params/contest.md (table row + §Niflhel Social Toolkit deleted)
+- params/factions_personal.md (table row + STRUCK explanatory block deleted)
+- params/bg/npc_priority_trees.md (§Niflhel Priority Tree deleted x2)
+- params/factions/stats_1_7_scale.md (§Niflhel — The Quiet Network deleted)
+- params/bg/institutions.md ("Niflhel or Varfell" → "Varfell" x2)
+- params/bg/ministry.md (§Niflhel Network Starting Depth deleted)
+- params/factions/npc_stance_triangles.md (Amoral Consequentialism row deleted)
+- params/fieldwork.md (Niflhel social action modifier row deleted)
+- params/board_game.md (TOC entry deleted)
+- params/bg/military.md (Niflhel Harvest strikethrough → Settlement-Broker Harvest)
+- params/bg/core.md (STRUCK comments cleaned x2)
+- designs/provincial/faction_layer_v30.md (Trigger 4 row, §4.1 Niflhel row,
+  §6 BG NPC list — all Niflhel refs removed)
+
+**Deferred (ED-777 standing):** arc_register_factions.md has 5 Niflhel-coded
+arcs (ARC-S11 Headless Network, ARC-S54 Quiet Overreach, ARC-S55 Arms Out of Sync,
+NPC-ARC-VIR Virke Recall, ARC-T25 Virke Family Ultimatum) that require plot-level
+reframe to settlement-broker mechanic. Dedicated arc-reframe session needed —
+each arc's four-arm structure or Virke trust-network plot needs design-level
+reconception, not just term swap.
+
+**2. Vaynard first name canonicalized (PP-699, resolves ED-NEW-02).** Magnus
+Vaynard, "The White Wolf." Lore-form "Dienton Vaynard" superseded.
+
+**3. Hafenmark equipment-quality doctrine note (PP-700).** Doctrine canon fixed:
+Hafenmark Military 4 expressed as superior equipment quality from mining
+(T17 Halvarshelm) and smithing (T8 Gransol). Mechanical expression TBD via
+simulation testing — flagged as ED-776 standing item. Note inserted at
+faction_layer §1.5 + military_layer §1.3.
+
+**4. Crown standing army doctrine note (PP-701).** Crown's pre-coup standing
+military force is the Löwenritter Order. Crown Military 5 expressed through
+Löwenritter Power 5 / Discipline 6 elite units. Löwenritter row in mass_battle
+§B.4 represents post-coup independent-faction scenario. Note inserted at
+faction_layer §1.5 + military_layer §1.3.
+
+**5. Crown structural-fragility doctrine note (PP-702).** Almud's "least bad
+option" framing canonized. Crown holds highest perceived strength + is most
+structurally fragile (assailed from Altonia/Schoenland/Restoration/Church/
+Hafenmark/Varfell/Löwenritter simultaneously). Fragility is structural, not
+stat-based. Note inserted at faction_layer §1.5.
+
+**6. mass_battle §A.11 PP-MB-06 correction (PP-703).** Previous draft incorrectly
+gated Varfell Southernmost units on "VTM ≥ 2" (VTM struck per params/bg/core L6)
+and implied a faction-property exemption from the Forgetting (the Forgetting is
+universal — every individual entering Askeheim must have personal TS ≥ 30 or
+dissolves). Corrected: no faction can field a conventional military force in the
+Southernmost; only Restoration communities and ad-hoc TS ≥ 30 expeditions can.
+Faction-property exemptions impossible by mechanism.
+
+**7. Edeyja L61 conflict-as-disturbance redirect (PP-704).** Replaced
+Niflhel-supply-chain plot driver with canonical principle: mass battles,
+destructive Thread operations, and faction conflicts ALL generate trace Thread
+disturbance Edeyja senses (mass_battle §E.1 MS −1/battle; calamity_radiation
+§[THREAD]-tagged Domain Actions, PP-531). No replacement plot driver invented —
+redirected to existing mechanic.
+
+**Files modified (consolidated, all 7 patches):**
+- references/alias_registry.yaml
+- references/proper_noun_registry.yaml
+- references/proper_noun_triage_decisions.yaml
+- references/glossary.md (no edit — already correct from prior pass)
+- params/contest.md
+- params/factions_personal.md
+- params/bg/npc_priority_trees.md
+- params/factions/stats_1_7_scale.md
+- params/bg/institutions.md
+- params/bg/ministry.md
+- params/factions/npc_stance_triangles.md
+- params/fieldwork.md
+- params/board_game.md
+- params/bg/military.md
+- params/bg/core.md
+- designs/provincial/faction_layer_v30.md (Niflhel strikes + §1.5 doctrine notes)
+- designs/provincial/mass_battle_v30.md (§A.11 PP-MB-06 correction)
+- designs/provincial/military_layer_v30.md (§1.3 doctrine notes)
+- designs/npcs/edeyja_npc.md
+- designs/world/worldbuilding_v30.md
+- canon/patch_register_active.yaml (PP-698..697 + vetting)
+- canon/editorial_ledger.yaml (ED-775, 773, 774)
+- canon/editorial_ledger_summary.yaml
+- references/canonical_sources.yaml (SHA placeholders → PENDING_PP_705)
+- references/propagation_map.md (this entry)
+
+**Standing follow-ups:**
+- ED-776 (P3 standing): Hafenmark mechanism TBD via simulation
+- ED-777 (P2 standing): arc_register_factions Niflhel reframe — 5 arcs need
+  plot-level reframe in dedicated session
+- PP-698 SHA followup pending — canonical_sources.yaml has placeholders for
+  4 modified files (mass_battle_v30, military_layer_v30, faction_layer_v30,
+  params/mass_combat). Fetch new blob SHAs after this commit lands and update.
+
+**Cross-references:** CR-STRIKE-2026-04-19, PP-DISSOLVE, conflict_architecture_proposal
+§Niflhel Dissolution, ED-752, ED-764, ED-770, ED-771, PP-686/PP-690 (Stratagem
+rename context), PP-MB-06, ED-NEW-02, params/bg/core L4-L9 (Vaynard military-conqueror
+canon).
+
+

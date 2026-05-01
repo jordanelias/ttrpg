@@ -151,5 +151,4 @@ T14 (Ehrenfeld), T2 (Kronmark), T5 (Feldmark), T1 (Valorsplatz — primary Parli
 T11 (Halvardshelm), T8 (Gransol), T3 (Lowenskyst), T1 (Valorsplatz), T9 (Himmelenger). [PP-199 numbering confirmed — all correct.]
 
 
-## Niflhel Network Starting Depth (PP-203)
-T12 (Sigurdshelm) depth 2. T1 (Valorsplatz) depth 1. T9 (Himmelenger) depth 1. [Confirmed correct numbering.]
+<!-- §Niflhel Network Starting Depth (PP-203) deleted 2026-04-30 — Niflhel struck per CR-STRIKE-2026-04-19 / conflict_architecture_proposal §Niflhel Dissolution. Function redistributed to settlement-level intelligence brokers (settlement_layer §4.7-4.9). -->

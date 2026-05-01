@@ -36,11 +36,6 @@ decisions:
     token: "Elske"
     action: alias
     alias_of: "princess_elske_almqvist"
-  niflhel:
-    token: "Niflhel"
-    action: promote
-    types: ["subfaction", "organization", "concept"]
-    entry_note: "Niflhel is umbrella word used for illegal/underground/criminal organizations"
   southernmost:
     token: "Southernmost"
     action: promote

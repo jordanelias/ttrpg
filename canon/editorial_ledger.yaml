@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 773
+# next_id: 778
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
@@ -43,13 +43,6 @@ entries:
     severity: P3
     source: "PP-677"
 
-  - id: ED-770
-    date: 2026-04-30
-    description: "[RESOLVED — APPLIED] Mass Battle editorial-decision batch (MB-01..08) approved by Jordan and applied to canonical files. MB-01 Option A: PP-297 Stalemate Break — design doc Tactical Withdrawal wins; params version rewritten. MB-02 Option C: §1.2 Unit Types column relabeled TARGET Size (not muster output); §1.4 governs base. MB-03 Option A: Morale resets between battles (PP-684). MB-04 Option B: Discipline persists; recovery via Muster only (PP-685). MB-05 Option A: Rout contagion brake (already applied prior session). MB-06 Option A: Shadow Intel = Peek mechanism (PP-686). MB-07 Option A: Siege pool = Mil+3 (PP-688, resolves MATH-FAIL-01). MB-08: Encirclement no-cap exception (PP-683). Plus PROVISIONAL marker strip on PP-500/PP-501/PP-502/PP-503/PP-504 per editorial confirmation. New patches PP-683..688. Affected files: designs/provincial/mass_battle_v30.md, designs/provincial/military_layer_v30.md, params/mass_combat.md. Propagation note: stage8_combat compilation and any cross-references to siege/muster need follow-up review (tracked in file_index_summary)."
-    status: closed
-    severity: P2
-    source: "designs/audit/mass_battle_patch_proposals_2026-04-29.md + Jordan editorial 2026-04-30"
-
   - id: ED-771
     date: 2026-04-30
     description: "[RESOLVED — APPLIED] Tactic card Shadow Intel renamed to Stratagem (PP-690 supersedes PP-686 naming). Mechanic preserved (read opponent's tactic, may revise own, simultaneous reveal). Reframed from faction-secrecy framing to classical prestige-doctrine framing per Vaynard faction profile (cunning + proud, never cowardly). Also corrects information-model framing: tactical-layer mechanics (mass battle, personal combat) use initiative-determined reveal with simultaneous resolution, NOT simultaneous-secret commit. Strategic-layer (faction-season) retains hide-until-reveal because no initiative exists at that scale — fairness consequence, not commit-asymmetry-as-feature. Affected file: designs/provincial/mass_battle_v30.md §B.4."
@@ -63,3 +56,24 @@ entries:
     status: closed
     severity: P2
     source: "PP-691 / 2026-04-30 vector-audit Mode G + Mode H + Mode A + Mode D"
+
+  - id: ED-775
+    date: 2026-04-30
+    description: "[RESOLVED — APPLIED] Comprehensive faction-doctrine batch. (1) Niflhel residue strike (PP-698) — completes the strike begun by CR-STRIKE-2026-04-19 / PP-DISSOLVE / conflict_architecture_proposal §Niflhel Dissolution / ED-752 / ED-764. Removes residual references in registries, params, and faction_layer. DEFERRED: arc_register_factions.md has 5 Niflhel-coded arcs requiring plot-level reframe (ED-777). (2) Vaynard first name canonicalized as Magnus (PP-699; resolves ED-NEW-02). (3) Hafenmark equipment-quality doctrine note (PP-700; mechanic TBD via simulation, ED-776). (4) Crown standing army = Löwenritter doctrine note (PP-701). (5) Crown structural-fragility doctrine note (PP-702). (6) mass_battle §A.11 PP-MB-06 correction (PP-703) — VTM gate removed, Forgetting universality affirmed, no faction-property exemption from Forgetting. (7) Edeyja L61 conflict-as-disturbance redirect (PP-704). New patches PP-698..704. Affected files: ~20 files including 3 design docs, 11 params, 4 references."
+    status: closed
+    severity: P2
+    source: "Jordan editorial 2026-04-30 (comprehensive faction-doctrine batch)"
+
+  - id: ED-776
+    date: 2026-04-30
+    description: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation. Doctrine canon fixed (Hafenmark Military 4 expressed as superior equipment quality from mining/smithing); mechanical expression options (weapon damage +1, effective Armour tier +1, both, or other) require simulation testing. Cross-references: PP-700, faction_layer §1.5, military_layer §1.3."
+    status: open
+    severity: P3
+    source: "Jordan deferred decision 2026-04-30 (Hafenmark mechanic)"
+
+  - id: ED-777
+    date: 2026-04-30
+    description: "[STANDING] arc_register_factions.md — 5 Niflhel-coded arcs require plot-level reframe to settlement-broker mechanic in dedicated session. Affected: ARC-S11, ARC-S54, ARC-S55, NPC-ARC-VIR, ARC-T25. Cross-references: PP-698, conflict_architecture_proposal §Niflhel Dissolution."
+    status: open
+    severity: P2
+    source: "Niflhel strike scope 2026-04-30 (deferred from PP-698)"

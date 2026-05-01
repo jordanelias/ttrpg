@@ -91,8 +91,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 | 7 | Default | Pass. Maintain garrison. |
 Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI = 0).
 
-### Niflhel Priority Tree
-**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Functions distributed to settlement-level phenomena.
+<!-- §Niflhel Priority Tree deleted 2026-04-30 — was STRUCK per conflict_architecture_proposal §Niflhel Dissolution. Functions distributed to settlement-level phenomena (settlement_layer §4.7-4.9). -->
 
 ### Restoration Movement Priority Tree (Post-Founding)
 | P | Condition | Action |
@@ -203,9 +202,7 @@ Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
 Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI = 0).
 
 
-### Niflhel Priority Tree
-**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Functions distributed to settlement-level phenomena.
-
+<!-- §Niflhel Priority Tree deleted 2026-04-30 — was STRUCK per conflict_architecture_proposal §Niflhel Dissolution. Functions distributed to settlement-level phenomena (settlement_layer §4.7-4.9). -->
 
 ### Restoration Movement Priority Tree (Post-Founding)
 | P | Condition | Action |

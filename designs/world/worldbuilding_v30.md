@@ -22,7 +22,7 @@
 
 | Character | Lore | Design | Editorial |
 |-----------|------|--------|-----------|
-| Duke of Varfell | Dienton Vaynard ("The White Wolf") | Magnus Vaynard | ED-NEW-02: which name? Lore gives epithet + military prowess + progressive policies. |
+| Duke of Varfell | Magnus Vaynard ("The White Wolf") | Magnus Vaynard | RESOLVED 2026-04-30 (ED-775 / PP-699): Magnus is canonical first name; "The White Wolf" epithet retained. Lore-form "Dienton Vaynard" superseded. |
 | Duchess of Hafenmark | Inga | Inge | ED-NEW-03: confirm spelling. |
 | Church leader title | "The Holy See" | "Confessor" | ED-NEW-04: recommend both canonical — "Holy See" = formal title, "Confessor" = address. |
 | T4 territory | Oastad | Grauwald (PP-199) | ED-NEW-05: confirm name. |
@@ -305,7 +305,7 @@ All new cards from this document, plus existing events confirmed for the deck:
 | ID | Description | Priority |
 |----|-------------|----------|
 | ED-NEW-01 | Confirm Solmund as canonical First Founder name | P1 |
-| ED-NEW-02 | Vaynard first name: Dienton (lore) vs Magnus (design) | P2 |
+<!-- ED-NEW-02 RESOLVED 2026-04-30 (PP-699): Magnus Vaynard canonical, "The White Wolf" epithet retained. -->
 | ED-NEW-03 | Baralta spelling: Inga vs Inge | P3 |
 | ED-NEW-04 | Church leader title: Holy See + Confessor both canonical? | P3 |
 | ED-NEW-05 | T4 name: Oastad vs Grauwald | P3 |

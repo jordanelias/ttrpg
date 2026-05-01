@@ -34,7 +34,7 @@ No BG Military modifier for ranged-specialist factions. BG correctly abstracts a
 
 
 ## Co-Movement Card Effects — BG Reference (PP-187)
-20-card deck. Draw on: Partial Community Weaving, ~~Niflhel Harvest~~ (struck per ED-764; replaced by Settlement-Broker Harvest event triggered by Intel ≥ 4 broker activity at black-market settlements), VTM preview.
+20-card deck. Draw on: Partial Community Weaving, Settlement-Broker Harvest (triggered by Intel ≥ 4 broker activity at black-market settlements), VTM preview.
 | Category | Count | Effect |
 |----------|-------|--------|
 | CI effect | 4 | CI +1 immediately |

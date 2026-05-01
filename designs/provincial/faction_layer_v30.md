@@ -66,6 +66,30 @@ Capital territories: T1 Valorsplatz (Crown), T8 Gransol (Hafenmark), T9 Himmelen
 
 ---
 
+## §1.5 Faction Doctrine Notes (canon 2026-04-30, ED-775)
+
+### Crown — most impressive at game start, structurally most fragile
+
+Crown holds the highest perceived strength at game start: highest Mandate, highest Wealth, capital + heartland territory (T1 Valorsplatz, T2 Kronmark, T5 Feldmark, T6 Stillhelm, T14 Ehrenfeld) plus the Löwenritter standing army (see below). It is also the campaign's central locus of structural tension. Almud (Crown leader) is canonically constrained to *choosing the least-bad option* in every season because his position is assailed from every axis simultaneously: Altonia (external invasion threat), Schoenland (naval mediation pressure), Restoration Movement (cultural infiltration in Crown territories T2/T5), Church (Sovereignty axis — Crown vs Theocracy), Hafenmark (commercial competition), Varfell (Vaynard's military and political ambitions), and the Löwenritter Order itself (graduated autonomy → coup pressure). Crown's perceived strength is exactly what makes its fracture the campaign's central dramatic possibility — every faction has reason to press, and Almud cannot resist all simultaneously. The fragility is structural, not stat-based.
+
+### Crown standing military force — Löwenritter
+
+Crown's standing army is the Löwenritter Order. All Crown military operations field Löwenritter units pre-coup. Crown faction Military stat 5 is expressed through Löwenritter Power 5 / Discipline 6 elite units (per stats_1_7_scale; military_layer §1.3 Power ceiling). The Löwenritter row in mass_battle §B.4 faction tactic table exists to represent the post-coup scenario where the Order acts as an independent faction (graduated autonomy → Coup Counter trigger → Löwenritter playable). Pre-coup, Crown's tactic options include Löwenritter unit fielding by default; post-coup, Löwenritter cards become available to a new player. This is the unique-faction-promotion mechanic; no other faction in canon has this structure.
+
+### Hafenmark — equipment quality from mining and smithing
+
+Hafenmark Military stat 4 is mid-tier numerically but expressed mechanically as *equipment quality*. Hafenmark's mining (T17 Halvarshelm Northern Mines) and smithing infrastructure (T8 Gransol metalworking) produce superior arms and armour. Hafenmark-mustered units field above-quality-tier weapons and armour relative to peers at the same Military stat. The exact mechanical expression — weapon damage modifier, effective Armour tier shift, or both — is **TBD via simulation testing** (ED-776 standing flag). Doctrine canon is fixed; mechanic calibration is open.
+
+### Varfell — cunning + proud, classical stratagem doctrine
+
+Varfell Military stat 4 is mid-tier (matches Hafenmark, one below Crown). Their advantage is *cunning in service of pride* — Vaynard ("Magnus Vaynard, the White Wolf") presses every available advantage but refuses anything publicly seen as cowardly. Acceptable register: classical battlefield stratagem (Hannibal at Trasimene, Belisarius reading Persians, Mongol envelopment reads, oblique order, recognized terrain exploitation, calculated retreat). Unacceptable register: assassination, civilian targeting, breaking parley, sneak-thievery. Varfell's Intel-stat advantage expresses as Talleyrand-style diplomatic intelligence, not espionage. Their tactic card Stratagem (mass_battle §B.4, PP-690) and Calculated Retreat both encode this prestige-doctrine framing. Varfell expansion is purely military per Jordan decision 2026-04-19 (params/bg/core L4-L9). VTM (Vaynard Thread Mastery) is struck — no faction-property Thread bonus exists.
+
+---
+
+
+
+---
+
 #### Trigger 2 — Unfavourable Treaty Terms
 
 Crown Treaty (PP-512–514/523) has its own degree effects per victory_v30.md §3.1 and is not governed by this table.
@@ -111,7 +135,7 @@ Parliamentary vote effects on target faction. See §5 for full Parliament mechan
 | Sabotage success (Intel vs Stability, Success degree) | −1 |
 | Assassination of named officer NPC, Success | −2; Mandate −1 |
 | Assassination Overwhelming (clean, no evidence) | −2; no Mandate cost |
-| Niflhel operative exposed and captured | −1 to Niflhel (not target) |
+<!-- Niflhel operative row deleted 2026-04-30 — Niflhel struck. Replacement: settlement-broker exposure handled per settlement_layer §4.7-4.9 broker compromise rules. -->
 
 ---
 
@@ -365,8 +389,8 @@ CB is consumed upon first use or after 1 season of non-use (expires). A faction 
 | Crown | Royal Guarantee | Instead of third-party Guarantor | Treaty proceeds without Guarantor; Crown Mandate −1; breach cost doubled |
 | Church | Sacred Compact | Both parties consent at signing | Breach triggers Excommunication threat immediately (Mandate −1 to breacher before other costs) |
 | Hafenmark | Deed-claim | Prior Intel op documented legal claim | Positioning roll +1D; Ratification Ob −1 |
-| Varfell | Concealed bottom line | Default | May bluff Phase 2 minimum concession; Niflhel or Varfell Intel op may expose (Truth roll) |
-| Niflhel | Intermediary standing | Always | Not listed as signatory; broker role; takes Stability −1 if brokered treaty collapses |
+| Varfell | Diplomatic stratagem | Default | May withhold maximum concession until Phase 2 (Talleyrand-style political reading); Varfell Intel op may expose with Truth roll. Vaynard frames withholding as recognized diplomatic art, not bluff. |
+<!-- Niflhel treaty row deleted 2026-04-30 — Niflhel struck per CR-STRIKE-2026-04-19. Settlement-broker intermediary role redirected to settlement_layer §4.7-4.9 — does not appear at faction-treaty layer. -->
 | Löwenritter | Deed-presumption fact | Military advantage demonstrated | Before Positioning roll: opponent must offer ≥1 concession first if Löwenritter's stated military fact is accurate |
 | Guilds | Commercial leverage | Wealth ≥ 4 | Indemnity concessions count as ×1.5 Wealth value for treaty scoring |
 
@@ -553,7 +577,7 @@ PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
 ### §8.1 BG Mode
 
 - Playable factions: Crown, Church, Hafenmark, Varfell (2–4 players); RM optional (5 players)
-- NPC factions: Guilds, Niflhel, Löwenritter (pre-coup), Schoenland, Altonia
+- NPC factions: Guilds, Löwenritter (pre-coup), Schoenland, Altonia
 - Löwenritter enters as playable faction only after coup (Coup Counter = 4)
 - No personal scenes: all mechanics resolve as Domain Actions or Accounting consequences
 - Treaty Phase 2 (Concession declaration) = player negotiation at table; no roll

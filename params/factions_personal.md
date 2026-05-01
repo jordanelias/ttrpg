@@ -22,11 +22,11 @@
 | Hafenmark | 4 | 4 | 5 | 3 | — | 4 |
 | Varfell | 4 | 4 | 4 | 4 | — | 4 |
 | Guilds | 3 | 4 | 6 | 2 | — | 5 |
-| ~~Niflhel~~ STRUCK | — | — | — | — | — | — |
+<!-- Niflhel row deleted 2026-04-30 — STRUCK per CR-STRIKE-2026-04-19 / ED-764. -->
 | Revolution | — | 3 | — | — | — | 3 |
 | Löwenritter | — | 3 | — | 5 | 3 | 5 |
 
-> **Niflhel STRUCK** (per CR-STRIKE-2026-04-19 / conflict_architecture_proposal §Niflhel Dissolution / ED-764). Functions distributed to settlement-level phenomena: black markets (Wealth-bearing); intelligence brokers (Intel-bearing single NPCs); Thread exploitation sites (settlement-Order-bearing). No faction-level Niflhel stat sheet. Settlement-level brokers each have local Intel ≤ 4.
+<!-- Niflhel STRUCK explanatory block deleted 2026-04-30 — see canon/editorial_ledger.yaml ED-770/ED-772 for context. -->
 
 Partial sheets: Revolution (Influence, Stability, Intel only). [Niflhel removed per ED-764.]
 Löwenritter (no Mandate, no Wealth). Guilds NPC-only: no deviation mechanic.

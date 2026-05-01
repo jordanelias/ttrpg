@@ -73,6 +73,10 @@ Per mass_battle_v30 §A.4 (confirmed, resolves FACTION-P2-01):
 
 A faction's Military stat sets both the highest Power unit it can field and the Discipline a fresh unit starts with. Hafenmark (Military 3) cannot field Power=4 Heavy Infantry regardless of Wealth or Prosperity — their training culture tops out at Professional.
 
+**Crown standing army — Löwenritter (PP-701, doctrine note 2026-04-30):** Crown's pre-coup standing military force is the Löwenritter Order. Crown Military stat 5 is expressed through Löwenritter elite units (Power 5, Discipline 6). All Crown muster operations field Löwenritter units by default. Post-coup (Coup Counter trigger), Löwenritter splits as an independent faction with its own tactic cards (mass_battle §B.4) and its own row in stat tables. See faction_layer §1.5 for full doctrine note.
+
+**Hafenmark equipment-quality doctrine (PP-700, mechanism TBD via simulation 2026-04-30):** Hafenmark Military stat 4 is mid-tier numerically but expressed mechanically as superior equipment quality from mining (T17 Halvarshelm) and smithing (T8 Gransol) infrastructure. Hafenmark-mustered units field above-quality-tier weapons and armour relative to peers. Exact mechanical expression — weapon damage modifier, effective Armour tier shift, or both — pending simulation testing. Doctrine canon fixed; calibration open. See faction_layer §1.5 and ED-776 standing flag.
+
 Knights Templar (Power 5, Disc 6) are Church-only and not governed by the Military ceiling. They are raised through a separate ecclesiastical process, not standard Muster.
 
 ### §1.4 Muster Output

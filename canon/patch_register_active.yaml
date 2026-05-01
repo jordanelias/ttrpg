@@ -1,133 +1,10 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 691
+# Next PP number: 705
+# Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → archives/patches/patch_register_archive_2026_04_30_a.yaml
 
 patches:
 
-- id: PP-297
-  date: 2026-04-02
-  severity: P1
-  description: Mass battle stalemate resolution — Tactical Withdrawal after 3 turns
-    0 damage [PROVISIONAL]
-  finding_id: F-27 / SIM-X-07
-  source: simulation
-  affects:
-  - designs/mass_combat/mass_battle_v3.md
-  status: applied
-  applied_commit: 2026-04-02-session
-  renumbered_from: PP-093
-  renumber_date: 2026-04-04
-
-- id: PP-349
-  date: 2026-04-02
-  severity: P2
-  description: '§6.15: Church self-investigation exception — Church does not file
-    Heresy Investigation against own ordained members supporting Church interests.
-    Opposing factions may still file. [PROVISIONAL]'
-  finding_id: TT-F-02 / SIM-D-05
-  source: simulation
-  affects:
-  - designs/debate/debate_system_redesign_v1.md §6.15
-  applied_to_version: v1.6
-  status: applied
-  applied_commit: 2026-04-02-session-close
-  renumbered_from: PP-121
-  renumber_date: 2026-04-04
-- id: PP-351
-  date: 2026-04-02
-  severity: P1
-  description: '§6.15: Temporal axis conflict rule — Past-axis Thread op during Future-primary
-    debate (or reverse) imposes TN 8 on both orators'' next Read roll. Same-axis ops
-    and non-temporal ops unaffected. [PROVISIONAL]'
-  finding_id: TT-F-04 / SIM-D-05
-  source: simulation
-  affects:
-  - designs/debate/debate_system_redesign_v1.md §6.15
-  applied_to_version: v1.6
-  status: applied
-  applied_commit: 2026-04-02-session-close
-  renumbered_from: PP-123
-  renumber_date: 2026-04-04
-- id: PP-208
-  date: 2026-04-02
-  source: SIM-21-01 (P3)
-  description: 'OA modifier does not carry through brittleness collapse to Shifting
-    Object. Shifting Object is new configuration. Exception: OA applies if Mending
-    targets still-Woven thread.'
-  status: applied
-  files:
-  - designs/ttrpg/threadwork_redesign_v25.md
-  - references/params_threadwork.md
-  tags:
-  - threadwork
-  - over_actualisation
-  - shifting_object
-  - brittleness
-
-- id: PP-530-PROV
-  type: provisional
-  date: 2026-04-10
-  severity: P1
-  description: 'PROVISIONAL CMD-01: Overwhelming Size Advantage bonus. Add to mass_battle_v3.md
-    §Unit Combat: "When Size ≥ 2×Command, unit may add +1D to pool once per Battle
-    Turn (Phase 4 only). Does not apply in Defensive formation or on defensive orders."
-    [PROVISIONAL — pending user approval]
-
-    '
-  finding_id: F-CMD-02 (SIM-CMD-01)
-  source: sim_comprehensive_batch_2026_04_10.md
-  affects:
-  - designs/mass_combat/mass_battle_v3.md
-  - references/params_mass_combat.md
-  status: applied
-- id: PP-531-PROV
-  type: provisional
-  date: 2026-04-10
-  severity: P1
-  description: 'PROVISIONAL CR-01: Define "Thread orders" in BG Calamity Radiation
-    Table. Add to calamity_radiation.md §BG Implementation: "''Thread orders'' = Domain
-    Actions bearing [THREAD] tag in params_board_game.md. Expedition and Mending-coordination
-    actions are always [THREAD]-tagged. Govern, Assert, Reinforce, Suppress, Seize
-    etc. are NOT [THREAD]-tagged." [PROVISIONAL]
-
-    '
-  finding_id: F-CR-01 (SIM-CR-01)
-  source: sim_comprehensive_batch_2026_04_10.md
-  affects:
-  - designs/setting/calamity_radiation.md
-  status: applied
-- id: PP-532-PROV
-  type: provisional
-  date: 2026-04-10
-  severity: P1
-  description: 'PROVISIONAL CR-02: Radiation-caused Thread failures in Hybrid Personal
-    Phase. Add to calamity_radiation.md §Hybrid Mode Note: "Radiation-caused Thread
-    failures do NOT generate Domain Echoes. Domain Echoes require deliberate PC Thread
-    operations with faction-intent. Environmental radiation failure is not intentional
-    and queues no echo." [PROVISIONAL]
-
-    '
-  finding_id: F-CR-02 (SIM-CR-01)
-  source: sim_comprehensive_batch_2026_04_10.md
-  affects:
-  - designs/setting/calamity_radiation.md
-  status: applied
-- id: PP-534-PROV
-  type: provisional
-  date: 2026-04-10
-  severity: P2
-  description: 'PROVISIONAL VIC-01: Church Prominence auto-applies in self-controlled
-    territories. Add to victory_architecture_v1.md §3.2: "Church is automatically
-    Prominent in all territories it controls, regardless of Mandate comparison. Mandate
-    comparison (Church Mandate > controlling faction Mandate) applies only to territories
-    controlled by rival factions." [PROVISIONAL]
-
-    '
-  finding_id: F-VIC-01 (SIM-VIC-01)
-  source: sim_comprehensive_batch_2026_04_10.md
-  affects:
-  - designs/board_game/victory_architecture_v1.md
-  status: applied
 - id: PP-652
   date: 2026-04-14
   severity: P2
@@ -1197,3 +1074,200 @@ patches:
       no mechanical change. Μ none. М: no pattern violations (no new mechanic;
       pure term governance). Q pass: audit-evidenced via PP-679 skill execution
       2026-04-30; data preserved at designs/audit/2026-04-30-terminology-vector-audit/data/."
+- id: PP-698
+  date: 2026-04-30
+  severity: P2
+  description: "Niflhel residue strike — comprehensive corpus cleanup of Niflhel
+    references across registries, params, and design files. Most of Niflhel was
+    already struck per CR-STRIKE-2026-04-19 (PP-DISSOLVE) + conflict_architecture_proposal
+    §Niflhel Dissolution + ED-752 + ED-764. This patch removes residual references
+    that survived prior strikes: registry entries (alias_registry DD context,
+    proper_noun_registry niflhel block, proper_noun_triage_decisions niflhel block,
+    Dalla Virke location reassigned to settlement-broker); STRUCK marker debris
+    in params (contest, factions_personal, bg/npc_priority_trees, factions/stats_1_7_scale,
+    factions/npc_stance_triangles, fieldwork, board_game, bg/military, bg/core);
+    Niflhel-pair byproducts trimmed in bg/institutions ('Niflhel or Varfell' →
+    'Varfell'); §Niflhel Network Starting Depth section deleted from bg/ministry;
+    BG NPC factions list in faction_layer §6 trimmed; faction_layer §4.1 treaty
+    row deleted; Trigger 4 cost row deleted. Glossary Grievance Marker entry left
+    (already correctly genericized in prior pass). DEFERRED: arc_register_factions.md
+    has 5 Niflhel-faction-coded arcs (ARC-S11 Headless Network, ARC-S54 Quiet Overreach,
+    ARC-S55 Arms Out of Sync, NPC-ARC-VIR Virke Recall, ARC-T25 Virke Family Ultimatum)
+    that require plot-level reframe to settlement-broker mechanic; flagged in
+    propagation_map for dedicated arc-reframe session."
+  finding_id: editorial 2026-04-30 (Niflhel residue strike)
+  source: editorial
+  affects:
+    - references/alias_registry.yaml
+    - references/proper_noun_registry.yaml
+    - references/proper_noun_triage_decisions.yaml
+    - params/contest.md
+    - params/factions_personal.md
+    - params/bg/npc_priority_trees.md
+    - params/factions/stats_1_7_scale.md
+    - params/bg/institutions.md
+    - params/bg/ministry.md
+    - params/factions/npc_stance_triangles.md
+    - params/fieldwork.md
+    - params/board_game.md
+    - params/bg/military.md
+    - params/bg/core.md
+    - designs/provincial/faction_layer_v30.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Niflhel residue strike (cleanup of struck-faction debris). Class B. N/Ω/Μ trivially pass: no behavior change beyond completing prior strike. Q pass: Jordan editorial 2026-04-30."
+
+- id: PP-699
+  date: 2026-04-30
+  severity: P3
+  description: "Vaynard first name canonicalized: Magnus Vaynard, 'The White Wolf'.
+    Resolves ED-NEW-02 (worldbuilding_v30 L25, L308). Lore-form 'Dienton Vaynard' superseded; epithet 'The White Wolf' retained."
+  finding_id: ED-NEW-02 (Vaynard first name)
+  source: editorial
+  affects:
+    - designs/world/worldbuilding_v30.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: D
+    note: "Class D (content addition / naming canonicalization)."
+
+- id: PP-700
+  date: 2026-04-30
+  severity: P3
+  description: "Hafenmark equipment-quality doctrine note added. Hafenmark Military
+    stat 4 (mid-tier) is expressed mechanically as superior equipment quality from
+    mining (T17 Halvarshelm) and smithing (T8 Gransol) infrastructure. Hafenmark-mustered
+    units field above-quality-tier weapons and armour. Exact mechanical expression
+    (weapon damage modifier, effective Armour tier shift, or both) is TBD via
+    simulation testing — flagged in ED-776 standing items. Doctrine canon fixed;
+    mechanic calibration open. Note inserted at faction_layer §1.5 + military_layer §1.3."
+  finding_id: Jordan doctrine note 2026-04-30 (Hafenmark)
+  source: editorial
+  affects:
+    - designs/provincial/faction_layer_v30.md §1.5
+    - designs/provincial/military_layer_v30.md §1.3
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: D
+    note: "Class D. Doctrine note; mechanic deferred to simulation testing."
+
+- id: PP-701
+  date: 2026-04-30
+  severity: P3
+  description: "Crown standing army = Löwenritter Order doctrine note. Crown's
+    pre-coup standing military force is the Löwenritter Order. All Crown muster
+    operations field Löwenritter units by default; Crown Military stat 5 expressed
+    through Löwenritter Power 5 / Discipline 6 elite units. Löwenritter row in
+    mass_battle §B.4 represents post-coup independent-faction scenario. Note inserted
+    at faction_layer §1.5 + military_layer §1.3."
+  finding_id: Jordan doctrine note 2026-04-30 (Crown-Löwenritter)
+  source: editorial
+  affects:
+    - designs/provincial/faction_layer_v30.md §1.5
+    - designs/provincial/military_layer_v30.md §1.3
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: D
+    note: "Class D. Doctrine note clarifying existing canon faction-promotion mechanic."
+
+- id: PP-702
+  date: 2026-04-30
+  severity: P3
+  description: "Crown structural-fragility doctrine note. Crown holds the highest
+    perceived strength at game start AND is most structurally fragile — Almud is
+    canonically constrained to 'choosing the least-bad option' every season because
+    his position is assailed from every axis simultaneously: Altonia, Schoenland,
+    Restoration Movement, Church (Sovereignty axis), Hafenmark, Varfell, Löwenritter
+    (graduated autonomy → coup). Fragility is structural, not stat-based. Note
+    inserted at faction_layer §1.5."
+  finding_id: Jordan doctrine note 2026-04-30 (Crown fragility)
+  source: editorial
+  affects:
+    - designs/provincial/faction_layer_v30.md §1.5
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: D
+    note: "Class D. Doctrine note formalizing existing canonical Crown narrative."
+
+- id: PP-703
+  date: 2026-04-30
+  severity: P2
+  description: "mass_battle §A.11 PP-MB-06 practical-constraint correction. Previous
+    draft incorrectly stated 'Only Restoration communities and Varfell forces with
+    VTM ≥ 2 can field meaningful units in the Southernmost.' Two errors: (1) VTM
+    is struck per params/bg/core L6; (2) framing implied a faction-property exemption
+    from the Forgetting, but Forgetting is universal — every individual entering
+    Askeheim must have personal TS ≥ 30 or dissolves on entry. Corrected: no faction
+    can field a conventional military force in the Southernmost. Only Restoration
+    communities and ad-hoc TS ≥ 30 expeditions can. Faction-property exemptions
+    impossible by mechanism. Niflhel removed from cannot-field list (already redundant
+    since Niflhel struck)."
+  finding_id: Jordan correction 2026-04-30 (Forgetting universality)
+  source: editorial
+  affects:
+    - designs/provincial/mass_battle_v30.md §A.11
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Class B. Corrects mechanical-rules clarification. N pass: Forgetting universality is canonical (calamity_radiation §Forgetting B-03). Ω pass: corrects two errors without changing underlying mechanic. Q pass."
+
+- id: PP-704
+  date: 2026-04-30
+  severity: P3
+  description: "Edeyja NPC entry conflict-as-disturbance redirect. designs/npcs/edeyja_npc.md
+    L61 previously framed Edeyja's awareness arc around 'Niflhel supply chain'.
+    With Niflhel struck, redirected to canonical principle: mass battles, destructive
+    Thread operations, and large-scale faction conflicts ALL generate trace Thread
+    disturbance Edeyja senses (mass_battle §E.1 MS −1/battle; calamity_radiation
+    §[THREAD]-tagged Domain Actions, PP-531). Slow-burn arc preserved without inventing
+    replacement plot driver — redirected to existing mechanic."
+  finding_id: Jordan correction 2026-04-30 (Edeyja conflict-as-disturbance)
+  source: editorial
+  affects:
+    - designs/npcs/edeyja_npc.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: D
+    note: "Class D. NPC narrative entry update; plot driver redirected to existing canonical mechanic."
+
+

@@ -214,7 +214,7 @@ Cover = Cognition + most relevant History for concealment.
 | Failed social at Disposition ≤ 0 | +1 |
 | Hostile territory per scene | +1 |
 | Conspicuous action | +1 |
-| Niflhel social action | +2 |
+<!-- Niflhel social action modifier deleted 2026-04-30 — Niflhel struck. Replacement: settlement-broker social actions per settlement_layer §4.7-4.9. -->
 | Combat during fieldwork arc | +1 quiet / +2 conspicuous / +3 public |
 
 Reduction: concealment (Cog ×2, Ob 2) −2; leave territory reset; season reset; cover identity −1/scene; faction support −2/season.

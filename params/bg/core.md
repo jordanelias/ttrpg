@@ -22,7 +22,7 @@
 
 ### NPC-Only Factions (never playable)
 Löwenritter (pre-Split), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
-Niflhel: STRUCK (conflict_architecture_proposal). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites).
+<!-- Niflhel deleted 2026-04-30 (was: STRUCK per conflict_architecture_proposal §Niflhel Dissolution). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites). -->
 Ministry: NPC faction (source document not yet identified — [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])
 
 Note: Guilds do NOT have player victory conditions. All Guilds victory condition text from prior params versions was struck (PP-191).
@@ -41,7 +41,7 @@ Note: Guilds do NOT have player victory conditions. All Guilds victory condition
 
 ### NPC-Only Factions (never playable)
 Löwenritter (pre-Split), Riskbreakers, Inquisitors, Guilds, Schoenland, Altonia, Edeyja/Wardens.
-Niflhel: STRUCK (conflict_architecture_proposal). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites).
+<!-- Niflhel deleted 2026-04-30 (was: STRUCK per conflict_architecture_proposal §Niflhel Dissolution). Functions distributed to settlement-level phenomena (black markets, intelligence brokers, Thread exploitation sites). -->
 Ministry: NPC faction (source document not yet identified — [GAP: Ministry NPC design doc not found in any read document. User confirmed it exists. Design blocked until source located.])
 
 Note: Guilds do NOT have player victory conditions. All Guilds victory condition text from prior params versions was struck (PP-191).

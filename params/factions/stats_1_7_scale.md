@@ -162,8 +162,7 @@ Roll: Wealth vs target faction's Wealth.
 | Failure | Guild Favour −1 in that territory |
 Cannot target factions in territories where Guild Favour < 5.
 
-### Niflhel — The Quiet Network
-**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Intelligence/sabotage/assassination functions distributed to settlement-level intelligence brokers.
+<!-- §Niflhel — The Quiet Network deleted 2026-04-30 — was STRUCK per conflict_architecture_proposal §Niflhel Dissolution. Functions distributed to settlement-level intelligence brokers (settlement_layer §4.7-4.9). -->
 
 
 ### Restoration Movement — Community Weaving [SUPERSEDED by PP-616]
@@ -284,7 +283,7 @@ Individual profiles and stat blocks deferred to campaign development.
 <!-- PP-238 applied 2026-04-04: Lowenritter reactive Military NPC guidance -->
 <!-- PP-241 applied 2026-04-04: Crown-Lowenritter covert delegation rule (PROVISIONAL) -->
 <!-- PP-244 applied 2026-04-04: Scene→Mass transition modifier table (PROVISIONAL) -->
-<!-- PP-246 applied 2026-04-04: Lowenritter ethical framework modifiers extracted (Niflhel struck) -->
+<!-- PP-246 applied 2026-04-04: Lowenritter ethical framework modifiers extracted; Niflhel struck per CR-STRIKE-2026-04-19. -->
 
 ## Crown Covert Actions (PP-236) [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 

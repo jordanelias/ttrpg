@@ -1,0 +1,130 @@
+# Patch Register Archive — Batch 2026-04-30 (a)
+# Moved from canon/patch_register_active.yaml to maintain size limits.
+# Originally applied; status preserved.
+
+- id: PP-297
+  date: 2026-04-02
+  severity: P1
+  description: Mass battle stalemate resolution — Tactical Withdrawal after 3 turns
+    0 damage [PROVISIONAL]
+  finding_id: F-27 / SIM-X-07
+  source: simulation
+  affects:
+  - designs/mass_combat/mass_battle_v3.md
+  status: applied
+  applied_commit: 2026-04-02-session
+  renumbered_from: PP-093
+  renumber_date: 2026-04-04
+
+- id: PP-349
+  date: 2026-04-02
+  severity: P2
+  description: '§6.15: Church self-investigation exception — Church does not file
+    Heresy Investigation against own ordained members supporting Church interests.
+    Opposing factions may still file. [PROVISIONAL]'
+  finding_id: TT-F-02 / SIM-D-05
+  source: simulation
+  affects:
+  - designs/debate/debate_system_redesign_v1.md §6.15
+  applied_to_version: v1.6
+  status: applied
+  applied_commit: 2026-04-02-session-close
+  renumbered_from: PP-121
+  renumber_date: 2026-04-04
+
+- id: PP-351
+  date: 2026-04-02
+  severity: P1
+  description: '§6.15: Temporal axis conflict rule — Past-axis Thread op during Future-primary
+    debate (or reverse) imposes TN 8 on both orators'' next Read roll. Same-axis ops
+    and non-temporal ops unaffected. [PROVISIONAL]'
+  finding_id: TT-F-04 / SIM-D-05
+  source: simulation
+  affects:
+  - designs/debate/debate_system_redesign_v1.md §6.15
+  applied_to_version: v1.6
+  status: applied
+  applied_commit: 2026-04-02-session-close
+  renumbered_from: PP-123
+  renumber_date: 2026-04-04
+
+- id: PP-208
+  date: 2026-04-02
+  source: SIM-21-01 (P3)
+  description: 'OA modifier does not carry through brittleness collapse to Shifting
+    Object. Shifting Object is new configuration. Exception: OA applies if Mending
+    targets still-Woven thread.'
+  status: applied
+  files:
+  - designs/ttrpg/threadwork_redesign_v25.md
+  - references/params_threadwork.md
+  tags:
+  - threadwork
+  - over_actualisation
+  - shifting_object
+  - brittleness
+
+- id: PP-530-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: 'PROVISIONAL CMD-01: Overwhelming Size Advantage bonus. Add to mass_battle_v3.md
+    §Unit Combat: "When Size ≥ 2×Command, unit may add +1D to pool once per Battle
+    Turn (Phase 4 only). Does not apply in Defensive formation or on defensive orders."
+    [PROVISIONAL — pending user approval]
+
+    '
+  finding_id: F-CMD-02 (SIM-CMD-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects:
+  - designs/mass_combat/mass_battle_v3.md
+  - references/params_mass_combat.md
+  status: applied
+- id: PP-531-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: 'PROVISIONAL CR-01: Define "Thread orders" in BG Calamity Radiation
+    Table. Add to calamity_radiation.md §BG Implementation: "''Thread orders'' = Domain
+    Actions bearing [THREAD] tag in params_board_game.md. Expedition and Mending-coordination
+    actions are always [THREAD]-tagged. Govern, Assert, Reinforce, Suppress, Seize
+    etc. are NOT [THREAD]-tagged." [PROVISIONAL]
+
+    '
+  finding_id: F-CR-01 (SIM-CR-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects:
+  - designs/setting/calamity_radiation.md
+  status: applied
+- id: PP-532-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P1
+  description: 'PROVISIONAL CR-02: Radiation-caused Thread failures in Hybrid Personal
+    Phase. Add to calamity_radiation.md §Hybrid Mode Note: "Radiation-caused Thread
+    failures do NOT generate Domain Echoes. Domain Echoes require deliberate PC Thread
+    operations with faction-intent. Environmental radiation failure is not intentional
+    and queues no echo." [PROVISIONAL]
+
+    '
+  finding_id: F-CR-02 (SIM-CR-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects:
+  - designs/setting/calamity_radiation.md
+  status: applied
+- id: PP-534-PROV
+  type: provisional
+  date: 2026-04-10
+  severity: P2
+  description: 'PROVISIONAL VIC-01: Church Prominence auto-applies in self-controlled
+    territories. Add to victory_architecture_v1.md §3.2: "Church is automatically
+    Prominent in all territories it controls, regardless of Mandate comparison. Mandate
+    comparison (Church Mandate > controlling faction Mandate) applies only to territories
+    controlled by rival factions." [PROVISIONAL]
+
+    '
+  finding_id: F-VIC-01 (SIM-VIC-01)
+  source: sim_comprehensive_batch_2026_04_10.md
+  affects:
+  - designs/board_game/victory_architecture_v1.md
+  status: applied

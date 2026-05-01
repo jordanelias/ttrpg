@@ -568,7 +568,7 @@ deprecated_abbreviations:
   dd:
     abbreviation: "DD"
     canonical: "Deniability Debt"
-    context: "Niflhel Operative mechanic — starts at 0 and accumulates from covert operations. Present in deprecated/valoria_patch_proposals.md."
+    context: "Deniability Debt mechanic — DEPRECATED. Originally tied to Niflhel Operative mechanic (Niflhel struck per CR-STRIKE-2026-04-19 / conflict_architecture_proposal §Niflhel Dissolution). Mechanic functions redistributed to settlement-broker (settlement_layer §4.7-4.9)."
     status: "DEPRECATED — still referenced in some active design docs as 'Deniability Debt' (full term). The abbreviation DD is not in active use."
     active_canonical: "Deniability Debt"
   fstat:
