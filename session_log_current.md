@@ -61,32 +61,27 @@ blockers:
   - "PP-687 ratifies before PP-686 implementation (sequencing dependency; PP-686 spec consumes PP-687)"
   - "Workplan v2 Phase 1 still gates the broader infrastructure work; this session opened a parallel architectural track"
 
-session_artifacts: designs/audit/2026-04-30-architecture-session/
-  - 00_index.md
-  - 01_week_audit_NERS.md
-  - 02_workplan_v3_addendum.md
-  - 03_PP-686_proposal.md
-  - 04_PP-686_audit_NERS.md
-  - 05_PP-686_simulation_evaluation.md
-  - 06_PP-686_sim_v2_evaluation.md
-  - 07_PP-687_proposal.md
-  - 08_PP-687_audit_NERS.md
-  - 09_PP-687_simulation_evaluation.md
-  - 10_emergent_arcs_engagement_NERS.md
-  - 11_story_vs_happenings_analysis.md
-  - 12_three_tier_articulation_reframe.md
-  - 13_significance_function_omniscient_voice.md
-  - 14_significance_canonical_integration.md
-  - 15_accounting_cut_scene_snippet.md
-  - sims/pp686_sim.py + pp686_sim_output.txt
-  - sims/pp686_sim_v2.py + pp686_sim_v2_output.txt
-  - sims/pp687_sim.py + pp687_sim_output.txt
+session_artifacts: designs/audit/2026-04-30-architecture-session/ (16 docs + 3 sims) — see commit 9230603 integration plan + commits below
 
-notes:
-  - "All proposals PROVISIONAL pending Jordan ratification; do not add to patch_register_active.yaml until §6 / §9 / §10 open questions resolved."
-  - "Sim verification ledger (/home/claude/sim_verification_ledger.json) carries 28 distinct numeric values used across PP-686 + PP-687 sims; all cited to provisional proposal documents per sim_fabrication_check hook."
-  - "Conviction taxonomy revision (PP-684): 12 entries confirmed during conversation; Honor flagged provisional 13th; Greed explicitly NOT a Conviction (Self-Other orientation axis instead)."
-  - "PP-686 sim showed: honest defeat (ΔL +0.76, ΔPS -1.79 v2), successful tyrant (L-PS divergence 2.79), succession dynamics (Cesare cascade fid 0.904 → 0.631), all reproduce dramatic patterns Jordan named."
-  - "PP-687 sim showed: 18,724 keys/sec; replay determinism confirmed; CAUSAL_GRAPH walks sub-millisecond; Memory grows to ~1000 entries/NPC at 30 seasons (indexing strategy needed for queries)."
-  - "Articulation reframe: real-time arc detection rejected; year-end Accounting as omniscient retrospective is canonical framing. Cut scenes are punctuation form (Tier 2 + Tier 3)."
-  - "Significance function reads canonical Knot (fieldwork_socializing §5.6), Belief (§5.5), Inspiration (params/core.md L128) mechanics directly; does not invent parallels."
+# ─────────────────────────────────────────────────────────────────────────
+# 2026-05-01 — PP-684/685/686/687/688 RATIFICATION COMPLETE
+# ─────────────────────────────────────────────────────────────────────────
+ratification_session: 2026-05-01
+status: COMPLETE — 6 commits landed; all PROVISIONAL pending Stage 10
+delegated: "Jordan delegated 12 decisions + signoff to Claude"
+
+commits_landed:
+  - {n: 1, oid: "d2a75fc", scope: "PP-687 substrate", message: "[infrastructure] PP-687 universal Key substrate spec finalization"}
+  - {n: 2, oid: "8d31419", scope: "PP-684+685", message: "[editorial] PP-684 13-Conviction taxonomy + PP-685 migration roster"}
+  - {n: 3, oid: "dede72f", scope: "PP-686 v2", message: "[infrastructure] PP-686 v2 faction architecture spec consuming PP-687"}
+  - {n: 4, oid: "b633778", scope: "PP-688", message: "[infrastructure] PP-688 articulation layer spec"}
+  - {n: 5, oid: "98f492a", scope: "axis matrix", message: "[editorial] Conviction-axis matrix v30 with calibration rationale"}
+  - {n: 6, oid: "0f29cf8", scope: "register entries", message: "[patch] PP-684/685/686/687/688 register entries with vetting blocks"}
+
+decisions_resolved: D1=Honor 13th YES · D2=4-axis (5th Class B if needed) · D3=multi-root cascade · D4=4 Mission triggers · D5=PP-687 schema approved · D6=7×30 type registry · D7=visibility default-from-scene · D8=phased rollout · D9=Key retained · D10=8 initial triggers · D11=pacing deferred · D12=drift_coef=0.6
+
+phase_b_carryforward: Stage 10 lateral cross-system sim · Stage 10 articulation sim (A1-A6) · Phase 5a Godot 7.5-8.5 sessions (was 5; +diagnostic UI +cut scene rendering) · per-system Key migration · params/bg/core.md Ethical Framework Modifiers strike · params/factions[_personal].md L+PS fields · author Mission/cascade/temperament for 6 factions + ~30-50 territories · Mandate-consumer audit
+
+out_of_scope_carryforward: PP-666 trio (P1) · workplan v3↔commit linkage (R5) · PROVISIONAL→canonical sweep ED-750..764, PP-297/351/653 (R6) · mass-battle decision queue (16 items) · pacing PP
+
+ners_close: 17 STRONG / 5 STRONG-conditional / 4 MODERATE / 0 WEAK · 4 lateral+diagonal WEAK→STRONG · story-fraction substrate-alone ~15% → PP-688-complete ~75-85%
