@@ -717,7 +717,7 @@ approval — each reflects the faction's military doctrine.]
 | Crown | Royal Guard (Elite unit +3D) | Ducal Call (summon 1 unit from adjacent territory) |
 | Church | Crusade Fervour (Brutal + Discipline check exempt this turn) | Inquisitor's Mark (target unit −2D, any opponent) |
 | Hafenmark | Mercenary Surge (pay 1 Wealth: +2 units this engagement) | Sovereign Authority (immune to Disposition table Ob penalties this engagement) |
-| Varfell | Shadow Intel (see opponent's tactic card before revealing yours — see Resolution below) | Calculated Retreat (withdraw without Overextended penalty) |
+| Varfell | Stratagem (read opponent's tactic card before locking yours — see Resolution below) | Calculated Retreat (withdraw without Overextended penalty) |
 | Guilds | Paid Off (opponent unit −1D; costs 1 Wealth) | Logistics Mastery (Strained units fight at full this engagement) |
 | Niflhel | Assassination (target opponent commander; −1D all opp. units) | Disappear (withdraw all units; opponent cannot pursue this season) |
 | Löwenritter | Iron Discipline (immune to Route this engagement) | Martial Law (after winning: territory gains Martial Law next season) |
@@ -725,7 +725,7 @@ approval — each reflects the faction's military doctrine.]
 
 **Tactic cards confirmed canonical (PP-283):** All faction-specific cards above are confirmed as canonical defaults. Content may be revised narratively without patch; mechanical effects require patch.
 
-**Shadow Intel resolution (PP-686, MB-06):** Both sides commit their tactic card simultaneously (face-down). The Varfell player then reveals only the opponent's committed card to themselves (peek), and may swap their own card for a different one from their hand before final reveal. Both cards then reveal simultaneously and resolve normally. Historical grounding: scouts and spies report enemy deployment after both sides are already committed to a battle plan — Shadow Intel models this informational asymmetry. UI implementation: opponent's card flips face-up to Varfell only; Varfell's hand prompts swap-or-keep; both reveal on confirm. No turn-order asymmetry — keeps simultaneous structure intact.
+**Stratagem resolution (PP-690, supersedes Shadow Intel naming from PP-686):** At Phase 1 tactic-card resolution, the Varfell general's read of the battlefield triggers first: opposing tactic card is revealed face-up to Varfell. Varfell may then revise their own tactic card from hand once before both reveal simultaneously and resolve normally. Mechanically this is an initiative inversion at the tactic-card layer — Varfell becomes higher-initiative regardless of Speed/Command for that one card resolution. Doctrine grounding: classical battlefield reading — Hannibal at Trasimene, Belisarius reading Persian commitments, Vaynard's celebrated practice of identifying enemy standards and march-discipline before committing his own line. The opposing commander is *out-thought*, not deceived. UI: opposing tactic card flips face-up to Varfell only; Varfell's hand prompts revise-or-keep; both reveal on confirm. *(Renamed from Shadow Intel 2026-04-30 — see PP-690. Faction-secrecy framing replaced with prestige-doctrine framing per Vaynard's commonly-recognized-stratagem disposition.)*
 
 ---
 

@@ -1,6 +1,6 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 689
+# Next PP number: 691
 
 patches:
 
@@ -1076,5 +1076,48 @@ patches:
       M-11: "○"
     q: pass
     note: "Siege pool formula fix. Class B (parameter correction with mechanical justification — adds +3 siege bonus). N pass: siege engineering crews historically distinct from line troops. Ω pass: produces calibration match (~2% at Fort 3 + Mil 4) where prior formula produced 0%. Resolves MATH-FAIL-01. Q pass: MB-07 Option A."
+- id: PP-690
+  date: 2026-04-30
+  severity: P3
+  description: "Tactic card rename — Shadow Intel → Stratagem (Varfell faction-specific
+    card 1 in mass_battle_v30 §B.4). Mechanic preserved: Varfell reads opponent's
+    tactic card before locking own; may revise once; both reveal simultaneously
+    thereafter. Reframed from faction-secrecy framing to prestige-doctrine framing.
+    Doctrine grounding: Hannibal at Trasimene, Belisarius reading Persian
+    commitments — classical battlefield-reading stratagem, publicly recognized as
+    high generalship, never coded cowardly. Aligns with Varfell faction profile
+    (cunning + proud — Vaynard refuses anything seen as cowardly). Also corrects
+    'simultaneous-secret' framing in PP-686 resolution paragraph: Stratagem is
+    an initiative inversion at the tactic-card layer (Varfell becomes higher-init
+    for that card resolution), not a hidden-commit mechanic. Tactical-layer
+    information model: initiative determines reveal order, resolution simultaneous,
+    no hidden commits. (Strategic-layer hide-until-reveal is separate and remains
+    correct for that scale due to absence of initiative there.)"
+  finding_id: editorial 2026-04-30 (Stratagem rename + framing correction)
+  source: editorial
+  affects:
+    - designs/provincial/mass_battle_v30.md §B.4
+  status: applied
+  applied_commit: pending
+  supersedes: PP-686 (Shadow Intel naming + simultaneous-secret framing)
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Tactic card rename + framing correction. Class B (renames a faction-specific tactic, corrects information-model framing). N pass: Stratagem doctrine is historically attested across multiple cultures (Mongol envelopment reads, Belisarius's Persian campaign, Hannibal's Italian campaigns). Ω pass: mechanic unchanged — just renamed and reframed correctly. Q pass: Jordan editorial 2026-04-30."
 
 

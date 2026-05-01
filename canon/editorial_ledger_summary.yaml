@@ -1,10 +1,10 @@
 # Editorial Ledger Summary
-# auto-generated 2026-04-30 (manual refresh — ED-770 mass battle MB-01..08 batch applied)
+# auto-generated 2026-04-30 (manual refresh — ED-771 Stratagem rename + information-model correction)
 
 p1_blocker_count: 1
 open_count: 5
 total_active: 5
-next_id: 771
+next_id: 772
 
 p1_blockers:
   - ED-755: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
@@ -27,3 +27,4 @@ p3_open:
 #   ED-768  Conviction Track promoted to first-class doc (PP-681)
 #   ED-769  Conviction Track SHA follow-up (PP-682)
 #   ED-770  Mass Battle MB-01..08 editorial-decision batch applied (PP-683..688)
+#   ED-771  Stratagem rename + information-model framing correction (PP-690)

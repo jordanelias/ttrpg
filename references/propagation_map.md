@@ -704,3 +704,58 @@ S-FAIL-05/06/13/19, designs/audit/mass_battle_patch_proposals_2026-04-29.md.
 - Geography × hex/square map × distance/orientation stress test follows this
   commit (next-action item).
 
+## 2026-04-30 — Stratagem rename + information-model correction (PP-690, ED-771)
+
+Tactic card "Shadow Intel" (Varfell faction-specific card 1, mass_battle_v30 §B.4)
+renamed to **Stratagem**. Mechanic preserved — Varfell reads opponent's tactic
+card before locking own; may revise once; both reveal simultaneously thereafter.
+PP-690 supersedes PP-686 naming.
+
+**Reframe rationale:** Varfell faction profile per Vaynard is *cunning + immensely
+proud*. Vaynard refuses anything publicly seen as cowardly; he embraces what is
+commonly recognized as classical battle stratagem. "Shadow Intel" coded the card
+sneaky/secretive — wrong register. "Stratagem" is the prestige-doctrine framing:
+Hannibal at Trasimene, Belisarius reading Persian commitments, Mongol envelopment
+reads. Same mechanic, correct framing.
+
+**Information-model correction also applied:** PP-686 resolution paragraph used
+"simultaneous-secret commit" framing for tactical-layer mechanics. This was
+incorrect. Tactical-layer (mass battle, personal combat) uses initiative-determined
+reveal with simultaneous resolution — initiative-holder sees lower-init's
+declaration before locking own (UI v4 §7.4.2). NO hidden commits at tactical scale.
+Stratagem is mechanically an initiative inversion at the tactic-card resolution
+layer (Varfell becomes higher-init for that one card, regardless of Speed/Command),
+not a hidden-commit override.
+
+**Strategic-layer (faction-season) is the only scale that retains hide-until-reveal**
+because no initiative exists at faction-scale to determine declaration order —
+simultaneous-reveal is the fairness-consequence of that absence, not commit-asymmetry-
+as-feature. Strategic encounters that resolve into mass battle transition from
+no-initiative (strategic) to initiative-exists (tactical) at the engagement
+handoff. Strategic-layer fog-of-war on enemy positions persists across reveal —
+order reveal lifts fog on enemy *orders*, not enemy *positions*.
+
+**Files modified:**
+- designs/provincial/mass_battle_v30.md §B.4 (table row + resolution paragraph)
+- canon/patch_register_active.yaml (PP-690 entry + vetting)
+- canon/editorial_ledger.yaml (ED-771)
+- canon/editorial_ledger_summary.yaml (next_id 771→772; ED-771 noted)
+- references/canonical_sources.yaml (mass_battle SHA still PENDING — extends
+  the placeholder window from PP-689 to cover both ED-770 and ED-771 changes;
+  single SHA followup commit will resolve both)
+- references/propagation_map.md (this entry)
+
+**Cross-references:** PP-686 (Shadow Intel original, superseded by PP-690),
+ED-770 (MB-06 batch), ED-771 (this rename), Vaynard faction profile (npc/faction
+docs — discovery sweep pending for low-Military/sneaky/raider language).
+
+**Standing flags:**
+- Niflhel strike scope discovery pass queued (next operation).
+- Varfell descriptor reframe discovery pass queued (after Niflhel).
+- Hafenmark equipment-quality / Crown-Löwenritter / Crown-fragility design
+  notes queued for the comprehensive faction-doctrine commit that follows the
+  two discovery passes.
+- PP-689 SHA followup still pending (now covers two content commits' worth
+  of changes to mass_battle_v30 etc).
+
+

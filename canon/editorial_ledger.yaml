@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 771
+# next_id: 772
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
@@ -49,3 +49,10 @@ entries:
     status: closed
     severity: P2
     source: "designs/audit/mass_battle_patch_proposals_2026-04-29.md + Jordan editorial 2026-04-30"
+
+  - id: ED-771
+    date: 2026-04-30
+    description: "[RESOLVED — APPLIED] Tactic card Shadow Intel renamed to Stratagem (PP-690 supersedes PP-686 naming). Mechanic preserved (read opponent's tactic, may revise own, simultaneous reveal). Reframed from faction-secrecy framing to classical prestige-doctrine framing per Vaynard faction profile (cunning + proud, never cowardly). Also corrects information-model framing: tactical-layer mechanics (mass battle, personal combat) use initiative-determined reveal with simultaneous resolution, NOT simultaneous-secret commit. Strategic-layer (faction-season) retains hide-until-reveal because no initiative exists at that scale — fairness consequence, not commit-asymmetry-as-feature. Affected file: designs/provincial/mass_battle_v30.md §B.4."
+    status: closed
+    severity: P3
+    source: "Jordan editorial 2026-04-30 (Stratagem rename + information-model correction)"
