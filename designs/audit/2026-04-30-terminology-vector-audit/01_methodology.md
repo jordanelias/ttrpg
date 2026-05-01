@@ -100,3 +100,35 @@ This is a presentation-layer extension, not a methodology change. The structural
 ## §7 Methodology version stamp
 
 **v3 (2026-04-29)**, enshrined in `skills/valoria-vector-audit/`. PP-679 introduced this skill as the canonical home; PP-676 was the methodology-validation execution. No v4 exists; if methodology revisions emerge from this run's findings (e.g. P2 fix recipe, isolate-promotion automation), they will be documented as follow-up patches and may produce a v4 spec, but this run executes v3 unchanged.
+
+---
+
+## §8 POST-PUBLICATION CORRIGENDUM (2026-05-01, PP-705)
+
+**Defect identified:** Mode G context-filter regular expressions (in `data/mode_g_2026-04-30.json` generation code) were case-sensitive. Pattern `(?:Theocracy|Church|Influence|Mass Seizure|seizure|threshold|Holy)` would not match "Seizure" (capital S) or "Threshold" (capital T) when those words anchored otherwise-Church-Influence paragraphs. Same defect on Niflhel filter (`faction|Mandate|Influence|grievance|Operative|Syndicate`) — capitalized variants missed.
+
+**Defect class:** B1 in self-audit of this audit (see content audit T/B/V/D/L/H findings, conversation 2026-04-30).
+
+**Numerical impact (re-run with `re.IGNORECASE` post-PP-691 corpus state, 2026-05-01):**
+
+| Term | Audit-time published | Post-PP-691 + B1 fix | Δ |
+|---|---:|---:|---|
+| TC (as Church Influence) | 21 | 2 | -19 (dominated by PP-691 sweep, not case fix) |
+| Niflhel (as faction) | 23 | 22 | -1 (Jordan's parallel ED-775 / PP-698..704 cleanup) |
+| Cohesion | 5 | 5 | unchanged |
+| Cultural Reformation | 13 | 13 | unchanged |
+| Coup Counter | 6 | 7 | +1 (faction_layer_v30 refresh post-Jordan-edit) |
+| VTM | 18 | 19 | +1 |
+| GM (bare) | 29 | 29 | unchanged |
+| Game Master (full phrase) | 0 | 0 | unchanged |
+| Combat Power | 0 | 0 | unchanged |
+| Thread Depth | 0 | 0 | unchanged |
+| Theocracy Counter (full phrase) | 0 | 0 | unchanged |
+| Rendering Stability | 1 | 1 | unchanged |
+| Vaynard Thread Mastery | 2 | 3 | +1 |
+
+**Conclusion:** The case-sensitivity defect's actual numerical impact was small. Most of the Δ in TC is attributable to PP-691's npc_behavior_v30 + throughlines_meta_infill cleanup (which the audit recommended); not to the case fix. The methodology defect is real and should be fixed in code (Phase 5 of ecosystem workplan v2), but the published audit-time numbers were not materially misleading.
+
+**Audit-time data preserved:** `data/mode_g_2026-04-30.json` is unchanged (frozen-on-creation per audit-folder convention). Post-correction state captured in `data/mode_g_2026-04-30_corrigendum.json`.
+
+**Audit-time §1.1 numbers in `02_weakness_register.md` are not retroactively edited.** They reflect pre-PP-691, pre-B1-fix state and remain the historical record.

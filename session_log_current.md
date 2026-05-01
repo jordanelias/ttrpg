@@ -1,62 +1,94 @@
 ---
-session_id: 2026-04-30-terminology-vector-audit-and-propagation
-session_close: 2026-04-30
-phase: "Terminology vector-audit + P0 propagation pass"
+session_id: 2026-04-30-terminology-vector-audit-and-ecosystem-workplan
+session_close: 2026-05-01
+phase: "Vector audit + P0 propagation + workplans v1/v2 + Phase 0 cleanup"
 status: complete
 last_stage: >
-  PP-691 / ED-772 — P0 propagation pass following 2026-04-30 vector-audit.
-  TC -> CI sweep in npc_behavior_v30 (16 paragraphs); RS -> MS + TC -> CI sweep
-  in throughlines_meta_infill (T-04 + T-05 + 5 body residuals); glossary rewrite
-  (Disposition + Domain Action + Part Eleven top-level systems + reconciled CI
-  thresholds + replaced stale Part 12 + VG-target preamble); alias_registry
-  church_influence + collision_table.tc + Disposition/Domain Action additions;
-  censured_vocabulary.yaml stub populated (11 entries). Audit basis:
-  designs/audit/2026-04-30-terminology-vector-audit/.
+  PP-705 / ED-778 — Phase 0 cleanup (T1 npc_behavior_v30 stale-threshold markers;
+  D1 glossary cross-ref grep — closed without code change, no broken refs found;
+  B1 Mode G case-sensitivity corrigendum to audit folder methodology +
+  data/mode_g_2026-04-30_corrigendum.json). Ecosystem workplan v2
+  (designs/audit/ecosystem_workplan_v2_2026-04-30.md, SHA 6b0d0f424) drafted
+  pending Jordan ratification.
+
+session_arc:
+  - "eae4eb0b6: terminology vector-audit folder (4 deliverables + 11 data artefacts)"
+  - "157523f2d: PP-691 / ED-772 P0 propagation pass (10 files; TC->CI sweep, glossary rewrite, registry updates)"
+  - "7cf88ce6a: ecosystem workplan v1 draft (456 lines, 8 phases, single doc)"
+  - "6b0d0f424: ecosystem workplan v2 (497 lines, supersedes v1; 19 code-review corrections + self-audit)"
+  - "this commit: PP-705 / ED-778 Phase 0 cleanup (T1/D1/B1 from v2 §0)"
+
+parallel_work_acknowledgment: >
+  Jordan committed substantial editorial work in parallel during this session:
+  cd09b9830 (PP-683..688 mass-battle), a6da7577c (PP-690 Stratagem),
+  ca921b753 (ED-775 / PP-698..704 Niflhel residue + Vaynard canon +
+  Hafenmark/Crown doctrine + archival batch). My workplans v1 and v2
+  referenced register state that was stale by the time of commit; they did
+  NOT account for PP-698..704 or the archival batch. Workplan §1.3 register
+  snapshots are accurate as of audit-time but not as of workplan-commit-time.
+  This is the exact concurrent-session hazard the workplan addresses;
+  it occurred during workplan drafting, validating the urgency of Phase 4
+  atomic-ID-acquisition primitives. The hooks fix at 24ea3b9b0 (assert_unique_ids)
+  partially mitigates this — it blocks ID collisions at commit time —
+  but does not prevent stale-snapshot reasoning during planning.
+
 next_action:
   skill: editorial
   description: >
-    P1 actions from 2026-04-30 audit §11.2 — Jordan-authority decisions:
-    - Promote Wager + Thread Revelation to first-class docs (each ~PP-681-scope)
-    - Convictions framework registration (Faith/Order/Reason/Equity/Precedent/
-      Autonomy/Continuity — add to alias_registry under new convictions: block;
-      add glossary section "PART X — CONVICTIONS FRAMEWORK")
-    - Pressure Points framework registration (Evidence/Consequence/Authority/
-      Loyalty — same pattern)
-    - Three-doc Cohesion -> Discipline sweep (mass_battle_v30, mass_combat,
-      peninsular_strain — 5 paragraphs total)
-    - Bare GM corpus sweep (29 paragraphs, 14 docs; alias_registry standalone_ok
-      true -> false)
-    P2 actions from §11.3:
-    - VTM full sweep + Varfell victory-path editorial rewrite (design judgment)
-    - Cultural Reformation cleanup in peninsular_strain_v30 (10 concentrated)
-    - Niflhel faction-context audit (sample paragraphs needed)
-    - Coup Counter -> Graduated Autonomy per-site substitution
-    - Armature System + Event Impact Matrix status clarification
-    - Add to v3 token list for next vector-audit run: Settlement Adjacency,
-      Fractional Province Ownership, Faction Succession Split, Tensions Deck,
-      Royal Assassination Fuse, MS Trajectory, Approach Training,
-      Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle,
-      Demotion Magnitude, Miraculous Event, Graduated Autonomy
-    Methodology follow-ups (§11.4):
-    - P2 conviction-symmetry audit (investigate whether Conviction-bearing
-      throughlines list Conviction tokens in Load-bearing systems column)
-    - Re-run vector-audit after P0+P1 actions land (refresh structural graphs)
-    PRIOR ITEMS still pending Jordan decision:
-    - Review of accumulated PPs from prior session: 676..682 (v3 audit chain),
-      683..688 (mass-battle batch), 689 (this directive)
-    - PT-01, ACCT-01, INTER batches
-    - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord
-      Propagation
+    PRIMARY: Jordan ratifies ecosystem workplan v2 (or pushes back / modifies).
+    Ratification = commit message "[ratify] ecosystem workplan v2".
+
+    AFTER RATIFICATION:
+    Phase 1 — Schemas + advisory two-layer validator (2 directives).
+    See workplan v2 §4 Phase 1 for scope. Phase 1 decision gate: P-10
+    proportionality check after baseline violation report.
+
+    PARALLEL OPTION: archival pass urgent — register-health WARN tripped
+    on 4 of 5 registers this commit:
+      - editorial_ledger.yaml: 90.9% of 2k threshold
+      - patch_register_active.yaml: 95.3% of 15k threshold (post-PP-705)
+      - propagation_map.md: 96.5% of 15k threshold (post-PP-705)
+      - canonical_sources.yaml: 98.0% of 5k threshold
+
+    P1 BACKLOG (from workplan v2 §8 + 2026-04-30 audit §11.2):
+      - Promote Wager + Thread Revelation to first-class docs
+      - Convictions framework registration (Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity)
+      - Pressure Points framework registration (Evidence/Consequence/Authority/Loyalty)
+      - Three-doc Cohesion -> Discipline sweep (5 paragraphs)
+      - Bare GM corpus sweep (29 paragraphs, 14 docs; alias_registry.standalone_ok policy update)
+
+    P2 BACKLOG (from workplan v2 §8 + audit §11.3):
+      - VTM full sweep + Varfell victory-path editorial rewrite
+      - Cultural Reformation cleanup in peninsular_strain_v30 (10 paragraphs)
+      - Coup Counter -> Graduated Autonomy per-site substitution (now 7 paragraphs post-faction_layer refresh)
+      - Niflhel residue final sweep (22 remaining post-Jordan PP-698..704 cleanup)
+      - Armature System + Event Impact Matrix status clarification
+      - Vector-audit token list expansion (Settlement Adjacency, Fractional Province Ownership,
+        Faction Succession Split, Tensions Deck, Royal Assassination Fuse, MS Trajectory,
+        Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle,
+        Demotion Magnitude, Miraculous Event, Graduated Autonomy)
+
+    METHODOLOGY FOLLOW-UPS:
+      - P2 conviction-symmetry audit (do Conviction-bearing throughlines list Conviction
+        tokens in Load-bearing systems column? Phase 5 verifies)
+      - Re-run vector-audit after P0+P1 actions land (refresh structural graphs)
+
+    PRIOR PENDING (Jordan-side):
+      - PP-689 SHA followup (still pending; now covers PP-690+PP-691+PP-705 changes)
+      - Review of accumulated PP chain 676..705
+      - PT-01, ACCT-01, INTER batches
+      - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord Propagation
+      - NPC Behavior audit (separate dedicated session)
+
 blockers:
-  - "Wager / Thread Revelation isolate promotions need dedicated sessions"
-  - "Convictions + Pressure Points framework registration is design-scope work"
-  - "Cohesion sweep + bare GM sweep are mechanical but were not in P0 directive"
-  - "VTM / CR / Niflhel / Coup Counter cleanups all require per-site design judgment"
-  - "Jordan review of accumulated PP chain"
+  - "Workplan v2 ratification gates Phase 1+"
+  - "Register archival pass needed within 1-2 directives (4/5 at WARN)"
+  - "Concurrent-session ID hazard partially mitigated (assert_unique_ids hook) but stale-snapshot reasoning hazard remains until Phase 4"
+  - "T3 finding (project intent / gameplay velocity) needs Jordan attention — infrastructure-to-gameplay ratio out of balance per workplan v2 §B1"
+
 notes:
-  - "Full directive 'option 3' completed — vector-audit run + cleaned glossary committed + P0 corpus actions executed in same directive."
-  - "2 commits this directive: eae4eb0b (vector-audit folder) + this commit (P0 propagation)."
-  - "Audit folder preserved at designs/audit/2026-04-30-terminology-vector-audit/ with full data/ artefacts. Re-run from inherited graphs is documented in 01_methodology.md."
-  - "Mode G post-sweep state: TC=Church-Influence reduced from 21 -> 2 actionable (16 npc_behavior + 3 throughlines_meta_infill cleared). All other Mode G targets (Niflhel, VTM, CR, Coup Counter, Cohesion, GM-bare, RS) untouched this commit — queued in censured_vocabulary.yaml."
-  - "alias_registry collision_table.tc.status corrected from 'resolved' to 'resolved_term_partial_corpus' to reflect actual state (TC term canonically retired but 2 paragraphs still present in corpus)."
-  - "Cross-reference: registries-only conflict report from same conversation log surfaced complementary findings (glossary §12 staleness fixed; CI threshold disagreement fixed; HP/Standing/Cohesion/RS legacy entries added to glossary; mode reframing per project instructions). Both audits commit-ready as single propagation pass."
+  - "Three commits this session by Claude: eae4eb0b6, 157523f2d, 7cf88ce6a, 6b0d0f424, plus this Phase 0 commit (5 total)."
+  - "Three commits by Jordan in parallel: cd09b9830, a6da7577c, ca921b753 (substantial editorial work)."
+  - "Phase 0 closed clean: T1 markers added (5 threshold lines flagged); D1 grep found no broken external refs (closed without code change); B1 corrigendum added to audit folder methodology + new corrigendum JSON file; mode_g audit-time numbers preserved per frozen-on-creation convention."
+  - "Workplans v1 + v2 are draft, pending Jordan ratification. Phase 0 was authorized to begin pre-ratification per workplan v2 §0/§10."
+  - "Self-audit finding: workplan staleness (failed to re-pull live registers before drafting) is a new defect class not in original audit findings; should be added to next ecosystem audit's §1 hooks-and-conventions inventory."

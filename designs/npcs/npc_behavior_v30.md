@@ -788,7 +788,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward in highest-PT territory. If Stability = 1: also suspend CI Assert this season. |
 | 2 | Open Thread operation in Church territory OR practitioner identified publicly OR Piety loss ≥ 2 this season | Heresy Investigation (Cardinal of Justice). If target is faction leader: Excommunication. |
-| 3 | CI < 75 AND Mandate ≥ 4 | Assert (CI +1). Piety Domain Action if Assert already used. |
+| 3 | CI < 75 AND Mandate ≥ 4 [STALE-THRESHOLD: 75 removed per ED-782 / ci_political_v30 §2.1; canonical milestones: 40/55/60/65/80/100] | Assert (CI +1). Piety Domain Action if Assert already used. |
 | 4 | Expand Piety AND maintain Accord. Consul Inward in lowest-Accord Church territory if Accord ≤ 1; otherwise lowest-PT territory where Church has presence. If Church building ≥ tier 2 in ungoverned settlement: Ecclesiastical Appointment. | Standard |
 | 5 | AER maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
 | 6 | If attacked (Mandate targeted, territory seized): Templar deployment to contested territory (if Cardinal of Fortitude active and Stability ≥ 2). | Reactive |
@@ -1112,15 +1112,15 @@ An NPC who has been recruited defects if:
 2. **IF** Autonomy = Autonomous/Split → Royal Guard (counter-Split preparation)
 3. **IF** PI ≥ 10 → Parliamentary Manoeuvre (reduce PI)
 4. **IF** Torben Loyalty ≤ 2 → Senator (Inward, dynasty management)
-5. **IF** CI ≥ 50 AND Church Mandate ≥ 4 → Suppress (target Church CI)
+5. **IF** CI ≥ 50 [NON-CANONICAL-THRESHOLD: 50 not in ci_political_v30 §2.1 milestone set; nearest canonical: 55 = Institutional Reach] AND Church Mandate ≥ 4 → Suppress (target Church CI)
 6. **IF** hostile faction Mandate ≥ Crown Mandate → Royal Decree (target highest-Mandate rival)
 7. **IF** TCV < 16 AND adjacent Uncontrolled territory → March (expand)
 8. **DEFAULT** → Senator (Outward, Diplomacy — build alliances)
 
 ### §7.2 Church Priority Tree
 1. **IF** Stability ≤ 2 → Consul (Inward, restore Stability)
-2. **IF** CI ≥ 75 AND eligible seizure target (Prominence + PT conditions met) → Graduated Seizure
-3. **IF** CI < 75 AND Mandate ≥ 3 → Assert (advance CI)
+2. **IF** CI ≥ 75 [STALE-THRESHOLD: 75 territorial-seizure threshold removed per ED-782 / ci_political_v30 §2.1; Mass Seizure now probabilistic from CI ≥ 60 with P = ((CI-60)/40)^3.3] AND eligible seizure target (Prominence + PT conditions met) → Graduated Seizure
+3. **IF** CI < 75 [STALE-THRESHOLD: see L1122 marker] AND Mandate ≥ 3 → Assert (advance CI)
 4. **IF** AER ≤ 1 → Cardinal Focus Temperance (restore AER)
 5. **IF** AP ≥ 3 in any territory → Deploy Inquisitor
 6. **IF** Mandate < 3 → Consul (Outward, Influence — rebuild institutional standing)

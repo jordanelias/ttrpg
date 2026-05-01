@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 778
+# next_id: 779
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
@@ -43,20 +43,6 @@ entries:
     severity: P3
     source: "PP-677"
 
-  - id: ED-771
-    date: 2026-04-30
-    description: "[RESOLVED — APPLIED] Tactic card Shadow Intel renamed to Stratagem (PP-690 supersedes PP-686 naming). Mechanic preserved (read opponent's tactic, may revise own, simultaneous reveal). Reframed from faction-secrecy framing to classical prestige-doctrine framing per Vaynard faction profile (cunning + proud, never cowardly). Also corrects information-model framing: tactical-layer mechanics (mass battle, personal combat) use initiative-determined reveal with simultaneous resolution, NOT simultaneous-secret commit. Strategic-layer (faction-season) retains hide-until-reveal because no initiative exists at that scale — fairness consequence, not commit-asymmetry-as-feature. Affected file: designs/provincial/mass_battle_v30.md §B.4."
-    status: closed
-    severity: P3
-    source: "Jordan editorial 2026-04-30 (Stratagem rename + information-model correction)"
-
-  - id: ED-772
-    date: 2026-04-30
-    description: "[APPLIED — PP-691] Terminology propagation pass following 2026-04-30 vector-audit. Five actions: (1) TC->CI sweep designs/npcs/npc_behavior_v30.md (16 paragraphs, Church-Influence context); (2) RS->MS + TC->CI sweep references/throughlines_meta_infill.md (T-04 RS Decay -> MS Decay; T-05 TC Accumulation -> CI Accumulation; 5 body residuals); (3) glossary rewrite (added Disposition + Domain Action — Mode D cascade sinks; added Part Eleven top-level systems — Peninsular Strain + Conflict Architecture + Campaign Architecture + Victory + CI Political; reconciled CI thresholds to ci_political_v30 §2.1; replaced stale Part 12 with deprecated/resolved annex; added VG-target preamble + Game Master engine-resolution note); (4) alias_registry church_influence updated with structured milestones; collision_table.tc resolution corrected; Disposition + Domain Action added under world_narrative; (5) censured_vocabulary.yaml stub populated (11 entries). Audit basis: designs/audit/2026-04-30-terminology-vector-audit/02_weakness_register.md §11.1 P0 actions."
-    status: closed
-    severity: P2
-    source: "PP-691 / 2026-04-30 vector-audit Mode G + Mode H + Mode A + Mode D"
-
   - id: ED-775
     date: 2026-04-30
     description: "[RESOLVED — APPLIED] Comprehensive faction-doctrine batch. (1) Niflhel residue strike (PP-698) — completes the strike begun by CR-STRIKE-2026-04-19 / PP-DISSOLVE / conflict_architecture_proposal §Niflhel Dissolution / ED-752 / ED-764. Removes residual references in registries, params, and faction_layer. DEFERRED: arc_register_factions.md has 5 Niflhel-coded arcs requiring plot-level reframe (ED-777). (2) Vaynard first name canonicalized as Magnus (PP-699; resolves ED-NEW-02). (3) Hafenmark equipment-quality doctrine note (PP-700; mechanic TBD via simulation, ED-776). (4) Crown standing army = Löwenritter doctrine note (PP-701). (5) Crown structural-fragility doctrine note (PP-702). (6) mass_battle §A.11 PP-MB-06 correction (PP-703) — VTM gate removed, Forgetting universality affirmed, no faction-property exemption from Forgetting. (7) Edeyja L61 conflict-as-disturbance redirect (PP-704). New patches PP-698..704. Affected files: ~20 files including 3 design docs, 11 params, 4 references."
@@ -77,3 +63,10 @@ entries:
     status: open
     severity: P2
     source: "Niflhel strike scope 2026-04-30 (deferred from PP-698)"
+
+  - id: ED-778
+    date: 2026-05-01
+    description: "[APPLIED — PP-705] Phase 0 cleanup from ecosystem workplan v2. Three actions: (1) T1 npc_behavior_v30.md priority-tree CI threshold lines flagged with [STALE-THRESHOLD] markers (5 lines; design-judgment canonical-threshold update deferred); (2) D1 glossary cross-ref grep — closed without code change (no broken external refs); (3) B1 Mode G case-sensitivity corrigendum to audit folder (post-publication §8 + new mode_g_2026-04-30_corrigendum.json; audit-time data preserved per frozen-on-creation). Numerical Δ small post-PP-691 corpus state. Methodology fix in code scheduled Phase 5 workplan v2."
+    status: closed
+    severity: P3
+    source: "PP-705 / workplan_v2 §0 / 2026-04-30 audit T1/D1/B1"

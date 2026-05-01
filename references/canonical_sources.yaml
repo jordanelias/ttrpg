@@ -294,3 +294,5 @@ systems:
     canonical_sha__designs__npcs__baralta_v30_md: "ed1118c044a5607aeeaf374a4c646849451473d0"
     status: provisional
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
+
+# Last touched: 2026-05-01 (ED-778 / PP-705 — Phase 0 cleanup: T1 stale-threshold markers + D1 grep closure + B1 audit corrigendum)

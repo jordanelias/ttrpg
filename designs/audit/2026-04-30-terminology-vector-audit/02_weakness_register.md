@@ -19,6 +19,8 @@ SCOPE: Terminology — drift, conceptual overlap, registry coverage, vocabulary 
 
 **[CONFIDENCE: high]** — direct grep, methodology-independent.
 
+**[2026-05-01 CORRIGENDUM NOTE — PP-705]:** §1.1 numbers below were generated with case-sensitive context filters (B1 self-audit finding). Re-run with `re.IGNORECASE` and post-PP-691 corpus state shows minor numerical shifts; full disclosure in `01_methodology.md` §8 and `data/mode_g_2026-04-30_corrigendum.json`. **The numbers in this register's §1.1 reflect audit-time state and are not retroactively edited.** The audit-time recommendations (§11.1 P0 actions) were not invalidated by the defect; PP-691 executed them and the ecosystem workplan v2 schedules the methodology fix in Phase 5.
+
 ### §1.1 Today's actionable counts (excluding [STRUCK] markers)
 
 | Term | Total para | Actionable | Δ vs v3 (2026-04-29) | Notes |

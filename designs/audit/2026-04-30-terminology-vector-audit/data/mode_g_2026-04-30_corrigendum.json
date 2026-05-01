@@ -1,0 +1,289 @@
+{
+  "VTM": {
+    "total_paragraphs": 19,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 19,
+    "docs": {
+      "designs/architecture/campaign_architecture_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/architecture/complete_systems_reference.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/architecture/scale_transitions_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/npcs/npc_behavior_v30.md": {
+        "actionable": 3,
+        "in_marker": 0
+      },
+      "designs/provincial/ci_political_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/faction_layer_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/mass_battle_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/victory_v30.md": {
+        "actionable": 5,
+        "in_marker": 0
+      },
+      "designs/threadwork/threadwork_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "params/bg/victory.md": {
+        "actionable": 4,
+        "in_marker": 0
+      }
+    }
+  },
+  "Vaynard Thread Mastery": {
+    "total_paragraphs": 3,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 3,
+    "docs": {
+      "designs/provincial/faction_layer_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "params/bg/victory.md": {
+        "actionable": 2,
+        "in_marker": 0
+      }
+    }
+  },
+  "Cultural Reformation": {
+    "total_paragraphs": 13,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 13,
+    "docs": {
+      "designs/npcs/npc_behavior_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/peninsular_strain_v30.md": {
+        "actionable": 10,
+        "in_marker": 0
+      },
+      "designs/provincial/victory_v30.md": {
+        "actionable": 2,
+        "in_marker": 0
+      }
+    }
+  },
+  "Combat Power": {
+    "total_paragraphs": 0,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 0,
+    "docs": {}
+  },
+  "Cohesion": {
+    "total_paragraphs": 5,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 5,
+    "docs": {
+      "designs/provincial/mass_battle_v30.md": {
+        "actionable": 2,
+        "in_marker": 0
+      },
+      "designs/provincial/peninsular_strain_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "params/mass_combat.md": {
+        "actionable": 2,
+        "in_marker": 0
+      }
+    }
+  },
+  "Thread Depth": {
+    "total_paragraphs": 0,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 0,
+    "docs": {}
+  },
+  "Rendering Stability": {
+    "total_paragraphs": 1,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 1,
+    "docs": {
+      "canon/02_foundations_amendment_leap_mechanism.md": {
+        "actionable": 1,
+        "in_marker": 0
+      }
+    }
+  },
+  "Theocracy Counter": {
+    "total_paragraphs": 0,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 0,
+    "docs": {}
+  },
+  "TC (as Church Influence)": {
+    "total_paragraphs": 2,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 2,
+    "docs": {
+      "designs/npcs/npc_character_analyses_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/mass_battle_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      }
+    }
+  },
+  "Coup Counter": {
+    "total_paragraphs": 7,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 7,
+    "docs": {
+      "canon/03_canonical_timeline.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/architecture/campaign_architecture_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/architecture/conflict_architecture_proposal.md": {
+        "actionable": 3,
+        "in_marker": 0
+      },
+      "designs/provincial/faction_layer_v30.md": {
+        "actionable": 2,
+        "in_marker": 0
+      }
+    }
+  },
+  "Game Master": {
+    "total_paragraphs": 0,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 0,
+    "docs": {}
+  },
+  "GM (bare)": {
+    "total_paragraphs": 29,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 29,
+    "docs": {
+      "canon/02_canon_constraints.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "canon/03_canonical_timeline.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/architecture/scale_transitions_v30.md": {
+        "actionable": 2,
+        "in_marker": 0
+      },
+      "designs/npcs/npc_behavior_v30.md": {
+        "actionable": 5,
+        "in_marker": 0
+      },
+      "designs/npcs/npc_character_analyses_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/faction_layer_v30.md": {
+        "actionable": 3,
+        "in_marker": 0
+      },
+      "designs/provincial/mass_battle_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/peninsular_strain_v30.md": {
+        "actionable": 2,
+        "in_marker": 0
+      },
+      "designs/provincial/victory_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/threadwork/threadwork_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "params/combat.md": {
+        "actionable": 2,
+        "in_marker": 0
+      },
+      "params/core.md": {
+        "actionable": 4,
+        "in_marker": 0
+      },
+      "params/factions/stats_1_7_scale.md": {
+        "actionable": 2,
+        "in_marker": 0
+      },
+      "params/mass_combat.md": {
+        "actionable": 3,
+        "in_marker": 0
+      }
+    }
+  },
+  "Niflhel (as faction)": {
+    "total_paragraphs": 22,
+    "paragraphs_in_struck_marker": 0,
+    "paragraphs_actionable": 22,
+    "docs": {
+      "canon/03_canonical_timeline.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/architecture/complete_systems_reference.md": {
+        "actionable": 2,
+        "in_marker": 0
+      },
+      "designs/architecture/conflict_architecture_proposal.md": {
+        "actionable": 5,
+        "in_marker": 0
+      },
+      "designs/npcs/npc_behavior_v30.md": {
+        "actionable": 4,
+        "in_marker": 0
+      },
+      "designs/provincial/faction_layer_v30.md": {
+        "actionable": 2,
+        "in_marker": 0
+      },
+      "designs/provincial/mass_battle_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/provincial/victory_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "designs/territory/settlement_layer_v30.md": {
+        "actionable": 3,
+        "in_marker": 0
+      },
+      "designs/threadwork/threadwork_v30.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "params/factions/npc_stance_triangles.md": {
+        "actionable": 1,
+        "in_marker": 0
+      },
+      "references/throughlines_meta_infill.md": {
+        "actionable": 1,
+        "in_marker": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+# Editorial Ledger Archive — Batch 2026-05-01 (a)
+# Moved from canon/editorial_ledger.yaml to maintain size limits.
+# Originally closed; status preserved.
+
+entries:
+
+  - id: ED-771
+    date: 2026-04-30
+    description: "[RESOLVED — APPLIED] Tactic card Shadow Intel renamed to Stratagem (PP-690 supersedes PP-686 naming). Mechanic preserved (read opponent's tactic, may revise own, simultaneous reveal). Reframed from faction-secrecy framing to classical prestige-doctrine framing per Vaynard faction profile (cunning + proud, never cowardly). Also corrects information-model framing: tactical-layer mechanics (mass battle, personal combat) use initiative-determined reveal with simultaneous resolution, NOT simultaneous-secret commit. Strategic-layer (faction-season) retains hide-until-reveal because no initiative exists at that scale — fairness consequence, not commit-asymmetry-as-feature. Affected file: designs/provincial/mass_battle_v30.md §B.4."
+    status: closed
+    severity: P3
+    source: "Jordan editorial 2026-04-30 (Stratagem rename + information-model correction)"
+
+  - id: ED-772
+    date: 2026-04-30
+    description: "[APPLIED — PP-691] Terminology propagation pass following 2026-04-30 vector-audit. Five actions: (1) TC->CI sweep designs/npcs/npc_behavior_v30.md (16 paragraphs, Church-Influence context); (2) RS->MS + TC->CI sweep references/throughlines_meta_infill.md (T-04 RS Decay -> MS Decay; T-05 TC Accumulation -> CI Accumulation; 5 body residuals); (3) glossary rewrite (added Disposition + Domain Action — Mode D cascade sinks; added Part Eleven top-level systems — Peninsular Strain + Conflict Architecture + Campaign Architecture + Victory + CI Political; reconciled CI thresholds to ci_political_v30 §2.1; replaced stale Part 12 with deprecated/resolved annex; added VG-target preamble + Game Master engine-resolution note); (4) alias_registry church_influence updated with structured milestones; collision_table.tc resolution corrected; Disposition + Domain Action added under world_narrative; (5) censured_vocabulary.yaml stub populated (11 entries). Audit basis: designs/audit/2026-04-30-terminology-vector-audit/02_weakness_register.md §11.1 P0 actions."
+    status: closed
+    severity: P2
+    source: "PP-691 / 2026-04-30 vector-audit Mode G + Mode H + Mode A + Mode D"
