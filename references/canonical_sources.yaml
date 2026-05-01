@@ -274,7 +274,13 @@ systems:
     canonical_sha__designs__provincial__faction_behavior_v30_md: "366b56ec14b2baa2498919bf442b87eac1966849"
     status: provisional
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
+  articulation_layer:
+    design_doc: designs/articulation/articulation_layer_v30.md
+    canonical_sha__designs__articulation__articulation_layer_v30_md: "b97e0469d31d9452c35cd0ed3d6f9e0892743b11"
+    status: provisional
+    added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687'
 
 # Last touched: 2026-05-01 (PP-687 ratification — key_substrate_v30 + key_type_registry_v30 added; PP-665..674 trace comments archived)
 # Last touched: 2026-05-01 (PP-684/685 ratification — conviction_taxonomy_v30 + conviction_migration_roster_v30 added)
 # Last touched: 2026-05-01 (PP-686 v2 ratification — faction_behavior_v30 added)
+# Last touched: 2026-05-01 (PP-688 ratification — articulation_layer_v30 added)
