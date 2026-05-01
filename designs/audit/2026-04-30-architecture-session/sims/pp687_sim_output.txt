@@ -1,0 +1,75 @@
+========================================================================
+SCENARIO PERF — 30-season Key density profile (P1-1)
+========================================================================
+
+=== Performance ===
+Total keys emitted: 2703
+Total observers processed: 36261
+Subscription callbacks: 2703
+Cycles blocked (validator): 0
+Elapsed: 0.144 sec
+Keys/sec: 18,724
+Avg observers per key: 13.4
+
+NPC memory size: min=1013, median=1035, max=1070
+
+Causal graph: 372 parents, 400 edges
+
+Forward walk from key b00ac56822e9 (da.diplomatic_alliance): 1 keys, 0.07ms
+Backward walk from key b00ac56822e9: 1 keys, 0.04ms
+
+========================================================================
+SCENARIO DETERMINISM — replay produces identical Key log (P1-2)
+========================================================================
+Run 1 (seed 42): 35e3a499e35e28b9
+Run 2 (seed 42): 35e3a499e35e28b9  MATCH ✓
+Run 3 (seed 43): c294caab5167ce2a  expected DIFF ✓
+
+========================================================================
+SCENARIO CROSS-SCALE PROVENANCE — diagonal trace verification
+========================================================================
+
+Forward from K0001 (scene insult):
+  └→ K0001 (scene.insult)
+    └→ K0002 (da.covert_betrayal)
+      └→ K0003 (state.succession)
+        └→ K0004 (env.peninsular_strain_shock)
+
+Backward from K0004 (peninsular shock):
+  └← K0004 (env.peninsular_strain_shock)
+    └← K0003 (state.succession)
+      └← K0002 (da.covert_betrayal)
+        └← K0001 (scene.insult)
+
+✓ Cross-scale chain walks correctly. Diagonal trace works.
+
+========================================================================
+SCENARIO OBSERVER RESOLUTION
+========================================================================
+Public peninsula event:  10 observers (expected: all 10)
+Private gift:            2 observers (expected: 2 = source + target)
+Semi-public threat:      5 observers (expected: 5 = source + target + 3 witnesses)
+
+✓ Observer resolution correct for all visibility types.
+
+========================================================================
+SCENARIO PP-686 INTEGRATION — Keys drive faction state
+========================================================================
+Initial: L=5.0, PS=5.0
+  After da.public_governance (success, exposed=False): L=5.00, PS=5.50
+  After da.public_governance (success, exposed=False): L=5.00, PS=6.00
+  After da.covert_betrayal (success, exposed=True): L=4.40, PS=6.50
+  After da.diplomatic_alliance (success, exposed=False): L=4.40, PS=7.00
+
+Final: L=4.40, PS=7.00, violations=1
+
+✓ PP-686 architecture composes cleanly with Key substrate.
+
+========================================================================
+SCENARIO CYCLE DETECTION (P2-3)
+========================================================================
+✓ Self-cycle correctly rejected: Key SELF introduces cycle in causes graph
+
+========================================================================
+ALL SCENARIOS COMPLETE
+========================================================================
