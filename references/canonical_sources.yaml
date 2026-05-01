@@ -279,8 +279,14 @@ systems:
     canonical_sha__designs__articulation__articulation_layer_v30_md: "b97e0469d31d9452c35cd0ed3d6f9e0892743b11"
     status: provisional
     added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687'
+  conviction_axis_matrix:
+    design_doc: designs/personal/conviction_axis_matrix_v30.md
+    canonical_sha__designs__personal__conviction_axis_matrix_v30_md: "bf23140b8e730f592cc1582d5dbebc5b0d5749c8"
+    status: provisional
+    added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
 
 # Last touched: 2026-05-01 (PP-687 ratification — key_substrate_v30 + key_type_registry_v30 added; PP-665..674 trace comments archived)
 # Last touched: 2026-05-01 (PP-684/685 ratification — conviction_taxonomy_v30 + conviction_migration_roster_v30 added)
 # Last touched: 2026-05-01 (PP-686 v2 ratification — faction_behavior_v30 added)
 # Last touched: 2026-05-01 (PP-688 ratification — articulation_layer_v30 added)
+# Last touched: 2026-05-01 (Conviction → axis matrix v30 with calibration rationale added)
