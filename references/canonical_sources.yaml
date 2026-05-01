@@ -269,6 +269,12 @@ systems:
     canonical_sha__designs__personal__conviction_migration_roster_v30_md: "7a92ce020f134482d9202dae53dee16f28651927"
     status: provisional
     added: '2026-05-01 PP-685 ratification — Conviction migration roster'
+  faction_behavior:
+    design_doc: designs/provincial/faction_behavior_v30.md
+    canonical_sha__designs__provincial__faction_behavior_v30_md: "366b56ec14b2baa2498919bf442b87eac1966849"
+    status: provisional
+    added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
 
 # Last touched: 2026-05-01 (PP-687 ratification — key_substrate_v30 + key_type_registry_v30 added; PP-665..674 trace comments archived)
 # Last touched: 2026-05-01 (PP-684/685 ratification — conviction_taxonomy_v30 + conviction_migration_roster_v30 added)
+# Last touched: 2026-05-01 (PP-686 v2 ratification — faction_behavior_v30 added)
