@@ -22,56 +22,11 @@ sources:
 
 # placeholder — additional sources pending population
 
-# ── PP-665 Name Resolution (2026-04-19) ──────────────────────────────────
-# Maret Vossen renamed to Yrsa Vossen (RM leader). Maret Uln (Varfell) unchanged.
-# Forename collision resolved. See canon/patch_register_active.yaml PP-665.
-
-# ── PP-666 New Systems (2026-04-19) ──────────────────────────────────────
-# Three new mechanical systems added as PROVISIONAL specs. See ED-710, ED-711, ED-712.
-# - Settlement adjacency: designs/territory/settlement_adjacency_v30.md
-# - Fractional province ownership: designs/provincial/fractional_province_ownership_v30.md
-# - Faction succession split: designs/provincial/faction_succession_split_v30.md
-# Status: PROVISIONAL — pending smoke-test before CANONICAL.
-
-# ── PP-667 Gap Sweep (2026-04-19) ────────────────────────────────────────
-# 3 real audit gaps resolved + 26 OPEN ITEMS across 6 design docs swept.
-# See designs/audit/gap_resolution_2026-04-19.md + ED-713, ED-714, ED-715.
-# Editorial ledger archival batch: ED-542..ED-658 moved to archive_601_800.
-
-# ── PP-668 OPEN ITEMS propagation (2026-04-19) ───────────────────────────
-# Completes PP-667 propagation. Source-doc OPEN ITEMS tables now show final
-# status for all 34 previously-open items.
-
-# ── PP-670 Label Audit (2026-04-19) ──────────────────────────────────────
-# See designs/audit/label_audit_2026-04-19.md + ED-716.
-# One correction: threadwork_v25_historical.md banner added.
-
-# ── PP-671 Meta-throughlines (2026-04-19) ────────────────────────────────
-# 5 meta-throughlines extracted from throughlines_complete.md.
-# Evaluative criteria for design proposals. See references/throughlines_meta.md.
-# ED-717 flags Hafenmark/Löwenritter/RM institutional-attractor throughline gap.
-# Session B: Niflhel dissolved (conflict_architecture_proposal). T-10 struck. NPC §2.12/§8.8/§8.8a struck.
-# Session B: Löwenritter graduated autonomy replaces Coup Counter (conflict_architecture_proposal).
-
-# ── PP-672 Throughlines Framework (2026-04-19) ───────────────────────────
-# references/throughlines_meta.md (skeleton) + references/throughlines_meta_infill.md (infill)
-# are the canonical vetting authority for all Valoria work.
-# Five tiers: Ω (intent) / Μ (modes) / М (meta-throughlines) / Τ (throughlines) / Q (quality).
-# Supersedes PP-671 meta-throughlines doc. See ED-718.
-
-# ── PP-673 Terminology cleanup (2026-04-19) ──────────────────────────────
-# "skeleton" now strictly refers to canonical rulesets in mechanical-spec-only
-# style (banner: SKELETON — mechanical spec only). Auto-generated heading
-# navigation companions renamed to *_index.md; tool renamed to doc_index_gen.py.
-# See ED-719 and PP-673.
-
-# ── PP-674 Framework enforcement + tier N (2026-04-19) ───────────────────
-# valoria_hooks.vetting_gate enforces vetting: blocks on Class A/B patch entries.
-# Tier N (Necessity) added: subject-grounding check against Renaissance-era
-# political-leadership dynamics. 4 new Failure Lexicon terms (fantasy imposition,
-# duplicate coverage, edge case mechanic, abstractable).
-# See ED-720 and references/throughlines_meta.md §0, §8.5, §10-11.
-# Session C: Tensions Deck (params/bg/tensions_deck.md) and Royal Assassination (params/bg/royal_assassination.md) specs extracted from conflict_architecture_proposal.
+# ── PP-665..PP-674 trace archived 2026-05-01 ────────────────────────────
+# Historical trace comments for PP-665 (Yrsa rename), PP-666 (settlement adjacency / fractional ownership / succession split, PROVISIONAL),
+# PP-667 (gap sweep), PP-668 (open-items propagation), PP-670 (label audit), PP-671 (meta-throughlines),
+# PP-672 (throughlines framework), PP-673 (terminology cleanup), PP-674 (vetting framework + tier N).
+# Detail in canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
 
 
 # ── Full-Stack System → Canonical Source Map (2026-04-19) ────────────────
@@ -294,5 +249,15 @@ systems:
     canonical_sha__designs__npcs__baralta_v30_md: "ed1118c044a5607aeeaf374a4c646849451473d0"
     status: provisional
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
+  key_substrate:
+    design_doc: designs/architecture/key_substrate_v30.md
+    canonical_sha__designs__architecture__key_substrate_v30_md: "62fe16016a0172545cb4f39d8d596a329783eaba"
+    status: provisional
+    added: '2026-05-01 PP-687 ratification — universal Key substrate'
+  key_type_registry:
+    design_doc: designs/architecture/key_type_registry_v30.md
+    canonical_sha__designs__architecture__key_type_registry_v30_md: "6f989dae45b826fb75967332ebce23b5c3fc5d3b"
+    status: provisional
+    added: '2026-05-01 PP-687 ratification — Key type registry'
 
-# Last touched: 2026-05-01 (ED-778 / PP-705 — Phase 0 cleanup: T1 stale-threshold markers + D1 grep closure + B1 audit corrigendum)
+# Last touched: 2026-05-01 (PP-687 ratification — key_substrate_v30 + key_type_registry_v30 added; PP-665..674 trace comments archived)
