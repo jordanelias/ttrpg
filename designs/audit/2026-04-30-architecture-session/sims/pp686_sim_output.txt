@@ -1,0 +1,121 @@
+========================================================================
+SCENARIO 1 — Static Parity Check
+========================================================================
+
+Crown leader Almud personal: Virtue:0.60, Authority:0.40
+Crown aggregate effective:   Virtue:0.36, Authority:0.29, Order:0.15, Utility:0.13
+Crown expected (sovereign):  Virtue:0.60, Authority:0.40
+Cascade fidelity:            0.910
+Legitimacy=5.0, PopularSupport=5.0
+Strictness=0.54
+Mandate (derived):           5
+
+DA                                  category               Ob mod  
+  public ceremony                   public_governance      -3
+  covert assassination              covert_betrayal        +1
+  treaty signing                    diplomatic_alliance    -2
+  rebellion against Crown laws      antinomian_action      +1
+
+Legacy comparison (Ethical Framework Modifier table):
+  Public ceremony  →  current: -1   |  PP-686: see above
+  Covert betrayal  →  current: +1   |  PP-686: see above
+
+========================================================================
+SCENARIO 2 — Succession Dynamics (cascade re-resolution under leader change)
+========================================================================
+
+--- Successor: Cesare (Authority+Utility ruler, low Virtue) ---
+  S1: aggregate Authority:0.32, Utility:0.26, Virtue:0.20 | fidelity 0.707
+  S2: aggregate Authority:0.32, Utility:0.28, Virtue:0.18 | fidelity 0.668
+  S3: aggregate Authority:0.33, Utility:0.29, Virtue:0.16 | fidelity 0.636
+  S4: aggregate Authority:0.33, Utility:0.30, Order:0.15 | fidelity 0.609
+  S5: aggregate Authority:0.33, Utility:0.31, Order:0.15 | fidelity 0.588
+  S6: aggregate Authority:0.33, Utility:0.32, Order:0.15 | fidelity 0.571
+  Before: Virtue:0.36, Authority:0.29, Order:0.15, Utility:0.13 (fid 0.910)
+  After 6: Authority:0.33, Utility:0.32, Order:0.15 (fid 0.571)
+
+--- Successor: Lorenzo (Virtue+Scholastic, principled scholar) ---
+  S1: aggregate Virtue:0.33, Authority:0.21, Scholastic:0.16 | fidelity 0.842
+  S2: aggregate Virtue:0.33, Authority:0.20, Scholastic:0.17 | fidelity 0.826
+  S3: aggregate Virtue:0.32, Authority:0.19, Scholastic:0.18 | fidelity 0.813
+  S4: aggregate Virtue:0.32, Scholastic:0.19, Authority:0.19 | fidelity 0.802
+  S5: aggregate Virtue:0.32, Scholastic:0.20, Authority:0.18 | fidelity 0.792
+  S6: aggregate Virtue:0.32, Scholastic:0.21, Authority:0.18 | fidelity 0.785
+  Before: Virtue:0.36, Authority:0.29, Order:0.15, Utility:0.13 (fid 0.910)
+  After 6: Virtue:0.32, Scholastic:0.21, Authority:0.18 (fid 0.785)
+
+========================================================================
+SCENARIO 3 — Leader Conviction Crisis (cascade root unstable)
+========================================================================
+Initial fidelity: 0.91
+Simulating 8 seasons with leader oscillating personal_convictions:
+  S1: leader=Virtue:0.60, Authority:0.40 | agg=Virtue:0.36, Authority:0.29, Order:0.15 | fid=0.910
+  S2: leader=Virtue:0.60, Authority:0.40 | agg=Virtue:0.36, Authority:0.29, Order:0.15 | fid=0.910
+  S3: leader=Liberty:0.80, Utility:0.20 | agg=Liberty:0.22, Virtue:0.20, Authority:0.19 | fid=0.631
+  S4: leader=Authority:0.70, Virtue:0.30 | agg=Authority:0.36, Virtue:0.26, Order:0.15 | fid=0.842
+  S5: leader=Authority:0.70, Virtue:0.30 | agg=Authority:0.37, Virtue:0.25, Order:0.15 | fid=0.836
+  S6: leader=Authority:0.70, Virtue:0.30 | agg=Authority:0.38, Virtue:0.24, Order:0.15 | fid=0.831
+  S7: leader=Virtue:0.60, Authority:0.40 | agg=Virtue:0.32, Authority:0.31, Order:0.15 | fid=0.891
+  S8: leader=Virtue:0.60, Authority:0.40 | agg=Virtue:0.33, Authority:0.31, Order:0.15 | fid=0.895
+
+Fidelity variance: 0.0074  (high variance = thrashing)
+Drift coef: 0.3 damps per season; lower drift = more stability
+
+========================================================================
+SCENARIO 4 — Strictness Feedback Loop (oscillation test)
+========================================================================
+Season  DA                    Ob   Out   L     PS    Str   
+S1      covert_betrayal       +1   succeed5.10  5.26  0.54  
+S2      public_governance     -3   succeed5.19  5.95  0.52  
+S3      covert_betrayal       +1   fail  4.69  5.77  0.49  
+S4      public_governance     -3   succeed4.78  6.46  0.46  
+S5      covert_betrayal       +1   succeed4.88  6.72  0.46  
+S6      antinomian_action     +1   fail  4.67  6.55  0.45  
+S7      public_governance     -3   succeed4.77  7.00  0.44  
+S8      public_governance     -3   succeed4.86  7.00  0.45  
+
+Final: L=4.86, PS=7.00, Strictness=0.45, Mandate=6
+
+========================================================================
+SCENARIO 5 — Honest Defeat (Mission failure with Cascade fidelity)
+========================================================================
+Initial: L=5.0, PS=5.0, Fidelity=0.910
+8 seasons of Mission failure but high Cascade fidelity (war goes badly, Crown acts honorably):
+  S1: L=5.10, PS=4.92, Mandate=5
+  S2: L=5.19, PS=4.84, Mandate=5
+  S3: L=5.29, PS=4.76, Mandate=5
+  S4: L=5.38, PS=4.69, Mandate=5
+  S5: L=5.48, PS=4.61, Mandate=5
+  S6: L=5.57, PS=4.53, Mandate=5
+  S7: L=5.67, PS=4.45, Mandate=5
+  S8: L=5.76, PS=4.37, Mandate=5
+
+Net ΔL: +0.76, ΔPS: -0.63
+Verdict pattern: Legitimacy preserved? Popular Support eroded?
+
+========================================================================
+SCENARIO 6 — Successful Tyrant (Mission win via anti-role conduct)
+========================================================================
+Initial (Cesare just took over): L=5.0, PS=5.0, Fidelity=0.516
+8 seasons of successful Mission via covert/anti-role action:
+  S1: L=4.90, PS=5.83, Mandate=5, Fid=0.516
+  S2: L=4.79, PS=6.65, Mandate=6, Fid=0.516
+  S3: L=4.69, PS=7.00, Mandate=6, Fid=0.516
+  S4: L=4.58, PS=7.00, Mandate=6, Fid=0.516
+  S5: L=4.48, PS=7.00, Mandate=6, Fid=0.516
+  S6: L=4.37, PS=7.00, Mandate=6, Fid=0.516
+  S7: L=4.27, PS=7.00, Mandate=6, Fid=0.516
+  S8: L=4.17, PS=7.00, Mandate=6, Fid=0.516
+
+Final L-PS divergence: 2.83
+Pattern: PS up, L down? — strong-but-fragile signature
+
+========================================================================
+SCENARIO 7 — Edge Cases (audit P2-4)
+========================================================================
+  Zero-vector leader: agg=Order:0.26, Utility:0.23, Authority:0.21, fid=0.572  (cosine returns 0 cleanly)
+  Orphan NPC effective: zero (skipped)
+  PROBLEM: orphan's contribution to aggregate was SKIPPED — bug
+  Orthogonal aggregate: fid=0.000  (expected near 0)
+  High-L low-PS strictness: 0.86  (expected high — brittle)
+  Low-L high-PS strictness: 0.17  (expected low — populist tolerated)
