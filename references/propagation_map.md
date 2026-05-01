@@ -759,3 +759,44 @@ docs — discovery sweep pending for low-Military/sneaky/raider language).
   of changes to mass_battle_v30 etc).
 
 
+
+
+---
+
+## 2026-04-30 — PP-691 / ED-772 — Terminology P0 propagation pass
+
+**Trigger:** 2026-04-30 vector-audit (designs/audit/2026-04-30-terminology-vector-audit/) §11.1 P0 actions. Audit committed at SHA eae4eb0b61a718a9.
+
+**Five actions executed:**
+
+1. **TC → CI sweep in designs/npcs/npc_behavior_v30.md.** All 26 mechanical TC mentions (across 17 paragraphs) renamed to CI. Context-verified Church-Influence (not Conviction Track). Resolves the alias_registry collision_table.tc.status='resolved' contradiction surfaced by Mode G — pre-PP-691: 21 actionable TC residuals in design corpus, 16 of them in this single doc.
+
+2. **RS → MS + TC → CI sweep in references/throughlines_meta_infill.md.** T-04 row "RS Decay" → "MS Decay"; T-05 row "TC Accumulation" → "CI Accumulation"; plus 5 body residuals (M-3 historical reference, T-18 description, T-21 description, Τ check section, Failure Lexicon Reskinned-attractor + Cost-hidden examples).
+
+3. **references/glossary.md rewrite.** Added Disposition + Domain Action under Part Seven (Mode D cascade sinks 391 + 346 chains; both lacked first-class docs and glossary entries). Added new Part Eleven for top-level systems missing from glossary (Peninsular Strain, Conflict Architecture, Campaign Architecture, Victory, CI Political — Mode A multi-graph hubs). Reconciled Part Two CI threshold row to ci_political_v30 §2.1 canonical (40 / 55 / 60 probabilistic Mass Seizure / 65 / 80 / 100 — old 75 = territorial seizure threshold REMOVED per supersession_register entry 250715f; glossary now reflects). Replaced stale Part 12 (TERMS FLAGGED AS UNRESOLVED) with new Part 13 (DEPRECATED / RESOLVED ABBREVIATIONS) reflecting alias_registry deprecated_abbreviations block. Old Part 11 collision table renumbered to Part 12; added RS legacy entry. Added VG-target preamble per project instructions. Added Game Master engine-resolution note per "There is no GM" directive. Disambiguations added: Coherence/Intelligibility, TT/MS opposite-direction, CE/Stamina, Belief/Inspiration/History.
+
+4. **references/alias_registry.yaml updates.** church_influence: structured milestones map (40/55/60/65/80/100) + accurate threshold note. collision_table.tc.resolution corrected from "Disambiguation sweep completed 2026-04-26" (false per Mode G) to "resolved at term level; corpus residuals 16 in npc_behavior_v30 swept this commit; ~2 paragraphs queued". status: resolved_term_partial_corpus. Disposition + Domain Action added under world_narrative.
+
+5. **references/censured_vocabulary.yaml stub populated.** 11 entries from supersession_register + alias_registry legacy_renames + collision_table + audit Mode G corpus counts: VTM, Vaynard Thread Mastery, Cultural Reformation, Combat Power, Cohesion, Thread Depth, Rendering Stability, Theocracy Counter, TC (as Church Influence), Coup Counter, Niflhel-as-faction, GM (bare). Each entry includes residual_count and residual_concentration from 2026-04-30 audit Mode G.
+
+**Files modified:**
+- references/glossary.md
+- references/alias_registry.yaml
+- references/censured_vocabulary.yaml
+- references/throughlines_meta_infill.md
+- designs/npcs/npc_behavior_v30.md
+- references/canonical_sources.yaml (Last touched comment)
+- canon/patch_register_active.yaml (PP-691 entry + vetting)
+- canon/editorial_ledger.yaml (ED-772; next_id 772 → 773)
+- references/propagation_map.md (this entry)
+- session_log_current.md
+
+**Cross-references:** PP-679 skill (vector-audit), PP-678 (prior Game Master sweep — full-phrase only, complementary scope), ED-731 (RS→MS rename original), ED-782 (TC→CI rename original), ED-781 (Coup Counter → Graduated Autonomy), ED-764 (Niflhel-as-faction strike), ED-706/ED-707 (VTM/CR strikes), supersession_register entry 250715f (CI 75-threshold removal).
+
+**Mode G post-sweep state:** TC=Church-Influence reduced from 21 → 2 actionable (16 npc_behavior_v30 cleared + 3 throughlines_meta_infill cleared this commit; remaining residuals: npc_character_analyses_v30.md (1) + mass_battle_v30.md (1)).
+
+**Standing flags:**
+- P1 actions deferred to next directive: Wager + Thread Revelation isolate promotion; Convictions framework registration (Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity); Pressure Points framework registration (Evidence/Consequence/Authority/Loyalty); three-doc Cohesion → Discipline sweep; bare GM corpus sweep (29 paragraphs, 14 docs).
+- P2 actions deferred: VTM full sweep + Varfell victory-path editorial rewrite; Cultural Reformation cleanup in peninsular_strain_v30; Niflhel faction-context audit; Coup Counter → Graduated Autonomy per-site substitution; Armature System + Event Impact Matrix status clarification.
+- Methodology follow-up: P2 conviction-symmetry audit (investigate whether Conviction-bearing throughlines list Conviction tokens in Load-bearing systems column); re-run vector-audit after P0+P1 land.
+- PP-689 SHA followup still pending (covers two content commits' worth of changes; queued from PP-690 propagation note).

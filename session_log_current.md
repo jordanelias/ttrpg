@@ -1,43 +1,62 @@
 ---
-session_id: 2026-04-29-conviction-track-sha-followup
-session_close: 2026-04-29
-phase: "Conviction Track promotion SHA follow-up"
+session_id: 2026-04-30-terminology-vector-audit-and-propagation
+session_close: 2026-04-30
+phase: "Terminology vector-audit + P0 propagation pass"
 status: complete
 last_stage: >
-  PP-682 / ED-769 — canonical_sources.yaml SHA placeholder
-  PENDING_FIRST_COMMIT replaced with actual blob SHA
-  32d8e3412d17157fc0fd27fed91a0e11262743ef for
-  designs/personal/conviction_track_v1.md (created in PP-681 commit 4802e83b).
-  Standard procedure complete.
+  PP-691 / ED-772 — P0 propagation pass following 2026-04-30 vector-audit.
+  TC -> CI sweep in npc_behavior_v30 (16 paragraphs); RS -> MS + TC -> CI sweep
+  in throughlines_meta_infill (T-04 + T-05 + 5 body residuals); glossary rewrite
+  (Disposition + Domain Action + Part Eleven top-level systems + reconciled CI
+  thresholds + replaced stale Part 12 + VG-target preamble); alias_registry
+  church_influence + collision_table.tc + Disposition/Domain Action additions;
+  censured_vocabulary.yaml stub populated (11 entries). Audit basis:
+  designs/audit/2026-04-30-terminology-vector-audit/.
 next_action:
   skill: editorial
   description: >
-    PP-676 v3 §V3-10 priority items remaining (this directive complete):
-    - NPC Behavior audit pass — corpus integration spine, needs dedicated
-      session (107k chars even after Conviction Track extraction)
-    - Promote remaining isolates to first-class docs: Pressure Points
-      Taxonomy, Wager, Thread Revelation (each = ~PP-681-scope work)
-    - Peninsular Strain + IP change-control review
-    - Wager system clarity audit
-    - Throughlines table P2 re-validation post-PP-677 Load-bearing
-      systems column
-    - Bare 'GM' corpus sweep (PP-678 used 'Game Master' phrase only;
-      bare 'GM' in tables needs separate pass; 3 fixed in PP-681 §3.3
-      extraction, full corpus sweep TBD)
+    P1 actions from 2026-04-30 audit §11.2 — Jordan-authority decisions:
+    - Promote Wager + Thread Revelation to first-class docs (each ~PP-681-scope)
+    - Convictions framework registration (Faith/Order/Reason/Equity/Precedent/
+      Autonomy/Continuity — add to alias_registry under new convictions: block;
+      add glossary section "PART X — CONVICTIONS FRAMEWORK")
+    - Pressure Points framework registration (Evidence/Consequence/Authority/
+      Loyalty — same pattern)
+    - Three-doc Cohesion -> Discipline sweep (mass_battle_v30, mass_combat,
+      peninsular_strain — 5 paragraphs total)
+    - Bare GM corpus sweep (29 paragraphs, 14 docs; alias_registry standalone_ok
+      true -> false)
+    P2 actions from §11.3:
+    - VTM full sweep + Varfell victory-path editorial rewrite (design judgment)
+    - Cultural Reformation cleanup in peninsular_strain_v30 (10 concentrated)
+    - Niflhel faction-context audit (sample paragraphs needed)
+    - Coup Counter -> Graduated Autonomy per-site substitution
+    - Armature System + Event Impact Matrix status clarification
+    - Add to v3 token list for next vector-audit run: Settlement Adjacency,
+      Fractional Province Ownership, Faction Succession Split, Tensions Deck,
+      Royal Assassination Fuse, MS Trajectory, Approach Training,
+      Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle,
+      Demotion Magnitude, Miraculous Event, Graduated Autonomy
+    Methodology follow-ups (§11.4):
+    - P2 conviction-symmetry audit (investigate whether Conviction-bearing
+      throughlines list Conviction tokens in Load-bearing systems column)
+    - Re-run vector-audit after P0+P1 actions land (refresh structural graphs)
     PRIOR ITEMS still pending Jordan decision:
-    - Review of accumulated PPs: 676 (v3 audit), 677 (throughlines col),
-      678 (GM+CR), 679 (vector-audit skill), 680 (CC sweep), 681 (Conviction
-      Track promotion), 682 (SHA follow-up)
-    - PT-01, ACCT-01, mass battle MB-01..08, INTER batches
+    - Review of accumulated PPs from prior session: 676..682 (v3 audit chain),
+      683..688 (mass-battle batch), 689 (this directive)
+    - PT-01, ACCT-01, INTER batches
     - Intelligence stat, LICENSE/GOV-08, §1.1 Knot Formation, §1.2 Accord
       Propagation
 blockers:
-  - "NPC Behavior audit needs dedicated session"
-  - "Other isolate promotions (Pressure Points, Wager, Thread Revelation)"
-  - "Bare 'GM' corpus sweep TBD"
-  - "Jordan review of 7-PP chain (676 → 682)"
-  - "Prior session blockers"
+  - "Wager / Thread Revelation isolate promotions need dedicated sessions"
+  - "Convictions + Pressure Points framework registration is design-scope work"
+  - "Cohesion sweep + bare GM sweep are mechanical but were not in P0 directive"
+  - "VTM / CR / Niflhel / Coup Counter cleanups all require per-site design judgment"
+  - "Jordan review of accumulated PP chain"
 notes:
-  - "This commit completes the same-session 'perform all' directive cleanly"
-  - "6 commits total this directive: f5da82b9, 94861f5c, 4c0239c7 (prior chain) + 646e4049, 4802e83b, this commit"
-  - "All within budget; honest deferrals: NPC Behavior audit (too large for same-session), other isolate promotions (each = own commit cycle)"
+  - "Full directive 'option 3' completed — vector-audit run + cleaned glossary committed + P0 corpus actions executed in same directive."
+  - "2 commits this directive: eae4eb0b (vector-audit folder) + this commit (P0 propagation)."
+  - "Audit folder preserved at designs/audit/2026-04-30-terminology-vector-audit/ with full data/ artefacts. Re-run from inherited graphs is documented in 01_methodology.md."
+  - "Mode G post-sweep state: TC=Church-Influence reduced from 21 -> 2 actionable (16 npc_behavior + 3 throughlines_meta_infill cleared). All other Mode G targets (Niflhel, VTM, CR, Coup Counter, Cohesion, GM-bare, RS) untouched this commit — queued in censured_vocabulary.yaml."
+  - "alias_registry collision_table.tc.status corrected from 'resolved' to 'resolved_term_partial_corpus' to reflect actual state (TC term canonically retired but 2 paragraphs still present in corpus)."
+  - "Cross-reference: registries-only conflict report from same conversation log surfaced complementary findings (glossary §12 staleness fixed; CI threshold disagreement fixed; HP/Standing/Cohesion/RS legacy entries added to glossary; mode reframing per project instructions). Both audits commit-ready as single propagation pass."

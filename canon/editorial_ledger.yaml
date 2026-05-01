@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 772
+# next_id: 773
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
@@ -56,3 +56,10 @@ entries:
     status: closed
     severity: P3
     source: "Jordan editorial 2026-04-30 (Stratagem rename + information-model correction)"
+
+  - id: ED-772
+    date: 2026-04-30
+    description: "[APPLIED — PP-691] Terminology propagation pass following 2026-04-30 vector-audit. Five actions: (1) TC->CI sweep designs/npcs/npc_behavior_v30.md (16 paragraphs, Church-Influence context); (2) RS->MS + TC->CI sweep references/throughlines_meta_infill.md (T-04 RS Decay -> MS Decay; T-05 TC Accumulation -> CI Accumulation; 5 body residuals); (3) glossary rewrite (added Disposition + Domain Action — Mode D cascade sinks; added Part Eleven top-level systems — Peninsular Strain + Conflict Architecture + Campaign Architecture + Victory + CI Political; reconciled CI thresholds to ci_political_v30 §2.1; replaced stale Part 12 with deprecated/resolved annex; added VG-target preamble + Game Master engine-resolution note); (4) alias_registry church_influence updated with structured milestones; collision_table.tc resolution corrected; Disposition + Domain Action added under world_narrative; (5) censured_vocabulary.yaml stub populated (11 entries). Audit basis: designs/audit/2026-04-30-terminology-vector-audit/02_weakness_register.md §11.1 P0 actions."
+    status: closed
+    severity: P2
+    source: "PP-691 / 2026-04-30 vector-audit Mode G + Mode H + Mode A + Mode D"

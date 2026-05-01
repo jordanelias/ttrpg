@@ -1121,3 +1121,79 @@ patches:
     note: "Tactic card rename + framing correction. Class B (renames a faction-specific tactic, corrects information-model framing). N pass: Stratagem doctrine is historically attested across multiple cultures (Mongol envelopment reads, Belisarius's Persian campaign, Hannibal's Italian campaigns). Ω pass: mechanic unchanged — just renamed and reframed correctly. Q pass: Jordan editorial 2026-04-30."
 
 
+
+
+- id: PP-691
+  date: 2026-04-30
+  severity: P2
+  description: "P0 propagation pass following 2026-04-30 terminology vector-audit
+    (designs/audit/2026-04-30-terminology-vector-audit/). Five terminology actions
+    executed: (1) TC -> CI sweep in designs/npcs/npc_behavior_v30.md (16 paragraphs,
+    Church-Influence context confirmed; resolves alias_registry collision_table.tc
+    'RESOLVED' status contradiction surfaced by Mode G); (2) RS -> MS and TC -> CI
+    sweep in references/throughlines_meta_infill.md (T-04 'RS Decay' -> 'MS Decay',
+    T-05 'TC Accumulation' -> 'CI Accumulation', plus 5 body residuals); (3) glossary
+    rewrite — added Disposition + Domain Action (Mode D cascade sinks 391 + 346
+    chains), added new Part Eleven for top-level systems (Peninsular Strain,
+    Conflict Architecture, Campaign Architecture, Victory, CI Political — Mode A
+    multi-graph hubs missing from glossary), reconciled CI thresholds to
+    ci_political_v30 §2.1 canonical (40 / 55 / 60 probabilistic / 65 / 80 / 100;
+    old 75 = territorial seizure threshold REMOVED), replaced stale Part Twelve
+    UNRESOLVED with new Part Thirteen DEPRECATED/RESOLVED reflecting
+    alias_registry deprecated_abbreviations, added VG-target preamble +
+    Game Master engine-resolution note per project instructions, added RS
+    legacy entry to collision table, added Coherence/Intelligibility +
+    TT/MS-direction + CE/Stamina + Belief/Inspiration/History disambiguations;
+    (4) alias_registry church_influence updated with structured milestones map +
+    accurate CI threshold note; collision_table.tc resolution corrected from
+    'sweep completed 2026-04-26' to 'resolved at term level; corpus residuals
+    swept 2026-04-30 (npc_behavior_v30 + throughlines_meta_infill); ~2
+    paragraphs queued'; Disposition + Domain Action added under
+    world_narrative; (5) censured_vocabulary.yaml stub populated with 11
+    entries (VTM, Vaynard Thread Mastery, Cultural Reformation, Combat Power,
+    Cohesion, Thread Depth, Rendering Stability, Theocracy Counter, TC,
+    Coup Counter, Niflhel-as-faction, GM-bare) drawn from supersession_register
+    + alias_registry legacy_renames + collision_table + audit Mode G corpus
+    counts. Audit-evidence basis: designs/audit/2026-04-30-terminology-vector-audit/
+    02_weakness_register.md §11.1 P0 actions. ED-772."
+  finding_id: terminology vector-audit Mode G + Mode H + Mode A + Mode D
+  source: editorial
+  affects:
+    - references/glossary.md
+    - references/alias_registry.yaml
+    - references/censured_vocabulary.yaml
+    - references/throughlines_meta_infill.md
+    - designs/npcs/npc_behavior_v30.md
+    - references/canonical_sources.yaml
+    - references/propagation_map.md
+    - canon/editorial_ledger.yaml
+    - canon/patch_register_active.yaml
+    - session_log_current.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Terminology propagation pass. Class B (parameter-correction + extension —
+      reconciles glossary/alias-registry against canonical doc thresholds; adds
+      missing canonical entries; corrects status claims). N pass: terminology
+      conflict has direct propagation cost — registry contradictions enable
+      stale-term proliferation. Ω pass: pre/post Mode G corpus state quantified;
+      no mechanical change. Μ none. М: no pattern violations (no new mechanic;
+      pure term governance). Q pass: audit-evidenced via PP-679 skill execution
+      2026-04-30; data preserved at designs/audit/2026-04-30-terminology-vector-audit/data/."

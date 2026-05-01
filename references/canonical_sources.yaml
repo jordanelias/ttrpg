@@ -247,7 +247,7 @@ systems:
 # Last touched: 2026-04-25 (ledger maintenance — 13 entries archived)
 # Last touched: 2026-04-25 (ED-769 — RS→MS residual cleanup strategic_layer_v30_infill)
 # Last touched: 2026-04-25 (ED-770 — numeric bounds audit closure)
-# Last touched: 2026-04-25 (ED-771 — cross-reference audit fixes, 4 broken refs)
+# Last touched: 2026-04-25 (ED-772 — cross-reference audit fixes, 4 broken refs)
 # Last touched: 2026-04-25 (ED-772 — Heresy Investigation Lifecycle in social_contest §7.3)
 # Last touched: 2026-04-25 (ED-773 — Knot Lifecycle specified)
 # Last touched: 2026-04-25 (ED-774 — Approach Training canonical + 5 archived)
@@ -261,6 +261,7 @@ systems:
 # Last touched: 2026-04-25 (ED-781 — Coup Counter STRUCK, Graduated Autonomy canonical)
 # Last touched: 2026-04-25 (ED-781 — npc_priority_trees Coup Counter migrations)
 # Last touched: 2026-04-25 (ED-782 — glossary TC→CI rename)
+# Last touched: 2026-04-30 (ED-772 / PP-691 — terminology P0 propagation: TC→CI sweep npc_behavior_v30 + RS→MS/TC→CI sweep throughlines_meta_infill + glossary rewrite + alias_registry church_influence milestones + censured_vocabulary stub populated)
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   solmund_voice:

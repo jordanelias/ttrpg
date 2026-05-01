@@ -273,7 +273,7 @@ Cardinals are institutional officers, not independent actors. They activate as i
 |---|---|---|---|
 | Fortitude (Templar) | Faith + Order | Consequence (military failure) | Deploys Templars aggressively; prioritises territorial defence over theological expansion |
 | Justice (Inquisitor) | Faith (hardline) | Authority (Holy See directives) | Accelerates Heresy Investigations; may target other Cardinals |
-| Prudence (Tithes) | Order + Autonomy | Evidence (fiscal data) | Protects Church wealth; may resist TC expansion if economically costly |
+| Prudence (Tithes) | Order + Autonomy | Evidence (fiscal data) | Protects Church wealth; may resist CI expansion if economically costly |
 | Temperance (Scholar) | Reason + Faith | Evidence (scholarly findings) | Pursues AER maintenance; most likely Cardinal to experience Conviction crisis if exposed to Thread evidence |
 
 
@@ -289,7 +289,7 @@ Church heresy designation operates differently inside vs outside Church-controll
 | Church (T9 + Church-controlled) | Full — Inquisitors may investigate, try, and sentence | Standard heresy proceedings (OFC-03). No jurisdictional obstacle. |
 | Crown (T1 + Crown-controlled) | Permitted with Crown cooperation | Requires Archbishop's Representative (Father Gustav Linder) to formally request Crown permission. Crown grants automatically unless Almud is in Arc A (Reformer) — then Crown blocks (Almud Ob 2 Conviction check; failure = permits, success = blocks). |
 | Hafenmark (T8 + Hafenmark-controlled) | Blocked by Sovereign Authority Doctrine | Hafenmark's Categorical Imperative framework treats Church heresy proceedings as extra-constitutional. Baralta will not permit Church trials on Hafenmark soil. Church may: (a) request extradition (Diplomacy Ob 3; Hafenmark grants only if the accused has Standing 0 in Hafenmark — no citizen is surrendered), or (b) declare the accused heretic in absentia (no mechanical effect in Hafenmark; the accused suffers −2 Standing in any Church territory they enter). |
-| Varfell (T12 + Varfell-controlled) | Tolerated but resented | Vaynard permits Church investigations to avoid TC pressure, but Inquisitors operate at +1 Ob in Varfell (local resistance, cultural friction). Jarl Council may overrule Church sentences if the accused has Varfell Standing ≥ 3. |
+| Varfell (T12 + Varfell-controlled) | Tolerated but resented | Vaynard permits Church investigations to avoid CI pressure, but Inquisitors operate at +1 Ob in Varfell (local resistance, cultural friction). Jarl Council may overrule Church sentences if the accused has Varfell Standing ≥ 3. |
 | Uncontrolled / Contested | No authority | Church has no jurisdictional basis. Inquisitors may operate covertly (Intel action, not heresy proceeding). |
 
 **Engine note:** Heresy designation is tracked per-NPC as a boolean flag. The flag gates Church Standing (heretic cannot hold Standing ≥ 1) and triggers Church Attention Pool +1 in any territory the heretic enters.
@@ -553,7 +553,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 **Arc A: The Reformer**
 - Branch condition: Almud's Certainty reaches 1 or 0 AND Löwenritter Autonomy = Loyal.
-- Risk: TC acceleration (Church responds to Crown heresy). Löwenritter Autonomy may advance toward Restless if reforms perceived as weakness.
+- Risk: CI acceleration (Church responds to Crown heresy). Löwenritter Autonomy may advance toward Restless if reforms perceived as weakness.
 
 > **Timing window clarification (ED-672):** Arc A requires Certainty ≤ 1 AND Löwenritter Autonomy = Loyal simultaneously. In standard play, Almud's Certainty declines through player-initiated Evidence/Consequence Resonant Style engagements (typically 1 Certainty per 2–3 seasons of sustained effort). Löwenritter Autonomy stage advances from Crown instability triggers (officer loss, Crown Stability ≤ 2, Ehrenwall's assessment) per Graduated Autonomy track (ED-781). The window is intentionally narrow — Arc A (reform) is the hardest arc to achieve because it requires the player to destabilize Almud's worldview while simultaneously keeping the Crown stable enough that the Löwenritter do not intervene. If the window closes (Counter reaches 2 while Certainty is still ≥ 2), Arc A becomes permanently inaccessible and Almud defaults to Arc B or C. This is working as designed — reform from within is supposed to be the most demanding path.
 
@@ -590,14 +590,14 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 #### Arne Himlensendt — Arc Map
 
 **Arc A: The Zealot (Default — No Intervention)**
-- Conviction: Faith remains unchallenged. TC advances to 75+ and territorial seizure begins.
+- Conviction: Faith remains unchallenged. CI advances to 75+ and territorial seizure begins.
 
 **Arc B: Crisis of Faith**
 - Branch condition: Total Victory Contest defeat via Evidence Resonant Style. OR: Cardinal of Temperance presents Thread-adjacent scholarly findings that Himlensendt cannot dismiss (AER ≥ 3 AND Temperance Cardinal has Conviction Reason).
-- Behavior: TC pressure decreases (Himlensendt is less aggressive). But Church Stability may also decrease (the Confessor appears to waver publicly → Church Stability −1 at next accounting if Scar is publicly known).
+- Behavior: CI pressure decreases (Himlensendt is less aggressive). But Church Stability may also decrease (the Confessor appears to waver publicly → Church Stability −1 at next accounting if Scar is publicly known).
 
 **Arc C: Confrontation**
-- Risk: If this becomes public, Church Stability −3 (the Confessor is a heretic). TC may actually decrease rapidly as the institutional engine loses its driver. But the vacuum may be worse — Cardinal of Justice or Fortitude may seize control and be more dangerous than Himlensendt ever was.
+- Risk: If this becomes public, Church Stability −3 (the Confessor is a heretic). CI may actually decrease rapidly as the institutional engine loses its driver. But the vacuum may be worse — Cardinal of Justice or Fortitude may seize control and be more dangerous than Himlensendt ever was.
 
 ---
 
@@ -607,11 +607,11 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Conviction: Precedent reinforced. No arc transformation — this IS the arc resolution.
 
 **Arc B: The Pragmatist**
-- Branch condition: Church seizes Hafenmark territory via TC AND Baralta's Sovereign Authority Doctrine fails (Failure result).
+- Branch condition: Church seizes Hafenmark territory via CI AND Baralta's Sovereign Authority Doctrine fails (Failure result).
 - Behavior: Baralta becomes willing to take extralegal action. Alliance with Crown, Restoration, or even settlement-layer brokers becomes possible. Leadership Deviation Ob still 1 (she IS the institution — the institution follows her, not the other way around).
 
 **Arc C: Excommunication**
-- Branch condition: Church Excommunication succeeds against Baralta. TC +4 immediate. Hafenmark Mandate crisis.
+- Branch condition: Church Excommunication succeeds against Baralta. CI +4 immediate. Hafenmark Mandate crisis.
 
 ---
 
@@ -747,7 +747,7 @@ Maximum bonus dice from Resonant Style targeting: +1D. This stacks with genre bo
 
 | Framework | Faction | Drift mechanic | Frequency |
 |---|---|---|---|
-| Divine Command | Church | TC +1 passive (already in rules) | Per season |
+| Divine Command | Church | CI +1 passive (already in rules) | Per season |
 | Divine Command | Church | If no external challenge for 2 consecutive seasons: Influence +1 (institutional confidence) | Per 2 seasons |
 | Virtue Ethics | Crown | Crown NPCs at Certainty ≥ 3: +1 Certainty per year of unchallenged governance | Per year |
 | Categorical Imperative | Hafenmark | Influence +1 per season in which ALL Hafenmark actions were framework-aligned | Per season (conditional) |
@@ -786,15 +786,15 @@ All NPC faction priority trees follow a standardised 7-level structure:
 
 | Priority | Condition | Action |
 |---|---|---|
-| 1 | Stability ≤ 2 | Consul Inward in highest-PT territory. If Stability = 1: also suspend TC Assert this season. |
+| 1 | Stability ≤ 2 | Consul Inward in highest-PT territory. If Stability = 1: also suspend CI Assert this season. |
 | 2 | Open Thread operation in Church territory OR practitioner identified publicly OR Piety loss ≥ 2 this season | Heresy Investigation (Cardinal of Justice). If target is faction leader: Excommunication. |
-| 3 | TC < 75 AND Mandate ≥ 4 | Assert (TC +1). Piety Domain Action if Assert already used. |
+| 3 | CI < 75 AND Mandate ≥ 4 | Assert (CI +1). Piety Domain Action if Assert already used. |
 | 4 | Expand Piety AND maintain Accord. Consul Inward in lowest-Accord Church territory if Accord ≤ 1; otherwise lowest-PT territory where Church has presence. If Church building ≥ tier 2 in ungoverned settlement: Ecclesiastical Appointment. | Standard |
 | 5 | AER maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
 | 6 | If attacked (Mandate targeted, territory seized): Templar deployment to contested territory (if Cardinal of Fortitude active and Stability ≥ 2). | Reactive |
 | 7 | Pass. | Default |
 
-**Post-TC 75:** Priority 3 replaced by Territorial Seizure (roll per territory, starting with highest-value targets).
+**Post-CI 75:** Priority 3 replaced by Territorial Seizure (roll per territory, starting with highest-value targets).
 
 ### §8.3 Crown NPC Priority Tree
 
@@ -813,8 +813,8 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | Priority | Condition | Action |
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward in Hafenmark capital. |
-| 2 | Church seizes any territory via TC OR constitutional procedure bypassed (Martial Law, unilateral Royal Decree targeting Hafenmark) | Sovereign Authority Doctrine (if available). Else: Parliamentary objection (Influence vs Ob 3). |
-| 3 | Suppress action available (Church Mandate ≥ 4) AND Baralta Mandate ≥ 4 | Suppress TC (negate passive +1 this season). |
+| 2 | Church seizes any territory via CI OR constitutional procedure bypassed (Martial Law, unilateral Royal Decree targeting Hafenmark) | Sovereign Authority Doctrine (if available). Else: Parliamentary objection (Influence vs Ob 3). |
+| 3 | Suppress action available (Church Mandate ≥ 4) AND Baralta Mandate ≥ 4 | Suppress CI (negate passive +1 this season). |
 | 3b | Hafenmark Mandate > adjacent non-Hafenmark territory controller Mandate AND Hafenmark Mandate ≥ 4 | Dynastic Proclamation (Diplomat card) targeting adjacent territory with weakest controller Mandate. Prerequisite for NPC use: target controller Mandate < Hafenmark Mandate AND target territory PT ≥ 2. (peninsular_strain_v1.md §5.3) |
 | 4 | Maintain constitutional order. Consul Inward in Hafenmark territories (prioritise lowest-Accord territory). Diplomatic Senator Outward to Crown or Guilds. | Standard |
 | 5 | Trade Compact conditions met (Crown TCV ≥ 14 AND Hafenmark TCV ≥ 10): pursue Compact activation. | Secondary |
@@ -1112,34 +1112,34 @@ An NPC who has been recruited defects if:
 2. **IF** Autonomy = Autonomous/Split → Royal Guard (counter-Split preparation)
 3. **IF** PI ≥ 10 → Parliamentary Manoeuvre (reduce PI)
 4. **IF** Torben Loyalty ≤ 2 → Senator (Inward, dynasty management)
-5. **IF** TC ≥ 50 AND Church Mandate ≥ 4 → Suppress (target Church TC)
+5. **IF** CI ≥ 50 AND Church Mandate ≥ 4 → Suppress (target Church CI)
 6. **IF** hostile faction Mandate ≥ Crown Mandate → Royal Decree (target highest-Mandate rival)
 7. **IF** TCV < 16 AND adjacent Uncontrolled territory → March (expand)
 8. **DEFAULT** → Senator (Outward, Diplomacy — build alliances)
 
 ### §7.2 Church Priority Tree
 1. **IF** Stability ≤ 2 → Consul (Inward, restore Stability)
-2. **IF** TC ≥ 75 AND eligible seizure target (Prominence + PT conditions met) → Graduated Seizure
-3. **IF** TC < 75 AND Mandate ≥ 3 → Assert (advance TC)
+2. **IF** CI ≥ 75 AND eligible seizure target (Prominence + PT conditions met) → Graduated Seizure
+3. **IF** CI < 75 AND Mandate ≥ 3 → Assert (advance CI)
 4. **IF** AER ≤ 1 → Cardinal Focus Temperance (restore AER)
 5. **IF** AP ≥ 3 in any territory → Deploy Inquisitor
 6. **IF** Mandate < 3 → Consul (Outward, Influence — rebuild institutional standing)
 7. **IF** TCV < 8 AND adjacent target with PT ≥ 3 → Consul (Inward, Piety Spread)
-8. **DEFAULT** → Assert (advance TC)
+8. **DEFAULT** → Assert (advance CI)
 
 ### §7.3 Hafenmark Priority Tree
 1. **IF** Stability ≤ 2 → Senator (Inward, restore Stability)
 2. **IF** PI ≤ 3 → Parliamentary Manoeuvre (restore PI)
 3. **IF** RDT < 6 AND Reformed Settlement available → Senator (Reformed Settlement)
 4. **IF** Crown Mandate ≤ 2 AND Church Stability ≤ 3 AND Hafenmark has Claim Token → [EDITORIAL: Baralta Crown Claim]
-5. **IF** TC ≥ 40 → Senator (Outward, Suppress Church — block TC advance)
+5. **IF** CI ≥ 40 → Senator (Outward, Suppress Church — block CI advance)
 6. **IF** adjacent territory TCV ≥ 2 AND controller Mandate ≤ 2 → Diplomat (build alliance or trade)
 7. **IF** Mandate < 4 → Senator (Outward, Influence — rebuild mandate)
 8. **DEFAULT** → Senator (Outward, Diplomacy — maintain treaties)
 
 ### §7.4 Varfell Priority Tree
 1. **IF** Stability ≤ 2 → Tribune (Inward, restore Stability)
-2. **IF** Varfell practitioner present AND TC contribution this season ≥ 1 → Opposing Thread Operation (suppress TC, character-scale per threadwork_v30 §2.6; PP-663: VTM Discretion struck)
+2. **IF** Varfell practitioner present AND CI contribution this season ≥ 1 → Opposing Thread Operation (suppress CI, character-scale per threadwork_v30 §2.6; PP-663: VTM Discretion struck)
 3. **IF** Military ≥ 4 AND adjacent target with controller Mandate ≤ 2 → March (expand)
 4. **IF** WR < target (Path B: 3) OR Intelligence < target (Path A: 4) → Expedition OR Tribune Inward (advance WR / Intelligence) (PP-663: VTM advancement struck; Path C dissolved)
 5. **IF** TCV < threshold (Path A: 14, Path B: 12, Path C: 10) → March or Claim
@@ -1172,7 +1172,7 @@ An NPC who has been recruited defects if:
 4. **DEFAULT** → Hold position (garrison T10)
 
 ### §7.9 Priority Tree Override Conditions
-- **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (TC/Church, PI/Hafenmark, WR/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum. (PP-663: Varfell unique clock changed from VTM to WR.)
+- **Institutional Mandate trigger:** When any DA targets a faction's Mandate stat or unique clock (CI/Church, PI/Hafenmark, WR/Varfell), the targeted faction MUST respond next season with a defensive DA targeting the attacker (skipping normal priority tree). One override per season maximum. (PP-663: Varfell unique clock changed from VTM to WR.)
 
 
 ### §7.10 NPC Stat Values (Thread Sensitivity and Certainty)

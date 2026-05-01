@@ -146,8 +146,14 @@ world_clocks:
     standalone_ok: false
     category: clock
     range: "0-100"
-    loss_threshold: "65 = Church Holy State (BG)"
-    note: "Triggers territorial seizure at 60. Renamed from Theocracy Counter (TC) per ED-782. CI is unambiguous."
+    milestones:
+      "40": "Church Assertive (+1D on Assert and Seizure rolls)"
+      "55": "Institutional Reach (Ob +1 to actions opposing Church Domain Actions)"
+      "60": "Mass Seizure available — probabilistic declaration P = ((CI-60)/40)^3.3 per season (supersession_register entry 250715f)"
+      "65": "Church Dominant (secular factions need extra slot to oppose Church motions)"
+      "80": "Church Ascendant (Seizure Ob -1 globally; PT drift)"
+      "100": "Theocracy Unification Attempt (see ci_political_v30 §2.2)"
+    note: "Renamed from Theocracy Counter (TC) per ED-782. Canonical thresholds per designs/provincial/ci_political_v30.md §2.1. Old 75-threshold seizure removed; Mass Seizure now probabilistic from CI >= 60."
     legacy: ["Theocracy Counter", "TC"]
   institutional_pressure:
     canonical: "Institutional Pressure"
@@ -382,6 +388,16 @@ world_narrative:
     abbreviations: []
     category: mechanic
     mode: "BG"
+  disposition:
+    canonical: "Disposition"
+    abbreviations: []
+    category: mechanic
+    note: "NPC-attached attitude state toward another entity. Drives behaviour-tree branching. Canonical in designs/npcs/npc_behavior_v30.md; no separate first-class doc. Mode D cascade-terminal — 391 chains. Added to glossary 2026-04-30 (PP-691)."
+  domain_action:
+    canonical: "Domain Action"
+    abbreviations: []
+    category: mechanic
+    note: "Faction-level strategic action resolved at scale-transition phase. Unit of strategic-layer decision. Canonical in designs/architecture/scale_transitions_v30.md + designs/provincial/faction_layer_v30.md; no separate first-class doc. Mode D cascade-terminal — 346 chains. Added to glossary 2026-04-30 (PP-691)."
 
 thread_operations:
   weaving:
@@ -510,8 +526,8 @@ collision_table:
     abbreviation: "TC"
     meaning_a: "Church Influence (CI) — renamed from Theocracy Counter per ED-782"
     meaning_b: "Conviction Track (CT) — debate position tracker, 0-10"
-    resolution: "RESOLVED: TC no longer used. Church Influence = CI. Conviction Track = CT. Disambiguation sweep completed 2026-04-26."
-    status: resolved
+    resolution: "RESOLVED at term level: TC no longer used. Church Influence = CI; Conviction Track = CT. Corpus residuals: npc_behavior_v30.md swept 2026-04-30 (PP-691, 16 paragraphs CI-context). Other corpus residuals (5 paragraphs across throughlines_meta_infill + npc_character_analyses + mass_battle) noted in censured_vocabulary.yaml; queued for future sweep cycles."
+    status: resolved_term_partial_corpus
   cp:
     abbreviation: "CP"
     meaning_a: "Character Point (advancement currency) — CURRENT"

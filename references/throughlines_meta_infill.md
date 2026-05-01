@@ -75,8 +75,8 @@ Four is the minimum coherent set.
 | T-01 | Everything Is Thread | М-3 | — | Ontological — all stats are substrate state. Defines substrate-grounds-all pattern. | threadwork, derived_stats, self_rendering |
 | T-02 | Rendering Consciousness-Performed | М-3 | — | Ontological — perception is substrate-filtered. Participates in substrate grounding. | self_rendering, leap_mechanism, threadwork |
 | T-03 | Inseparability | М-3 | М-5 | Primary ontological (every op = substrate op). Secondary scale-connecting (co-movement fires at all scales). | threadwork, scale_transitions, self_rendering |
-| T-04 | RS Decay | М-1 | — | Clock — continuous pressure from Calamity damage. Canonical pressure pattern. | clocks, ms_trajectory, peninsular_strain, threadwork |
-| T-05 | TC Accumulation | М-1 | — | Clock — continuous pressure from institutional momentum. | clocks, tc_political, faction_layer |
+| T-04 | MS Decay | М-1 | — | Clock — continuous pressure from Calamity damage. Canonical pressure pattern. | clocks, ms_trajectory, peninsular_strain, threadwork |
+| T-05 | CI Accumulation | М-1 | — | Clock — continuous pressure from institutional momentum. | clocks, tc_political, faction_layer |
 | T-06 | IP Accumulation | М-1 | — | Clock — continuous pressure from external intervention. | clocks, peninsular_strain, victory |
 | T-07 | Peninsular Strain | М-1 | — | Clock — continuous pressure from accumulated war. | peninsular_strain, clocks, victory, tensions_deck, royal_assassination_fuse |
 | T-08 | Church Rendering Reinforcement | М-4 | — | Institutional — Church's substrate-posture is rendering-reinforcement. | factions, faction_layer, threadwork, conviction_track |
@@ -92,10 +92,10 @@ Four is the minimum coherent set.
 | T-15 | Player Progression | М-5 | — | Scale-connecting — personal Standing ladder produces settlement→province→faction progression. | scale_transitions, settlement_layer, faction_layer, factions |
 | T-16 | Knot Propagation | М-5 | М-3 | Primary scale-recursive (Knot Strain propagates through bonded contacts). Secondary substrate-grounded. | threadwork, scale_transitions, factions |
 | T-17 | Companion Moral Mirror | М-6 | — | Forced-choice — Thread power vs relational bonds. | threadwork, conviction_track, factions |
-| T-18 | Radiation Gradient | М-2 | М-3 | Primary geography-holds-pressure (RS damage manifests spatially). Secondary substrate-grounded (radiation IS substrate state). | territories, ms_trajectory, threadwork, settlement_layer |
+| T-18 | Radiation Gradient | М-2 | М-3 | Primary geography-holds-pressure (MS damage manifests spatially). Secondary substrate-grounded (radiation IS substrate state). | territories, ms_trajectory, threadwork, settlement_layer |
 | T-19 | Southernmost Hidden Front | М-2 | М-1 | Primary geographic (location-specific convergence point). Secondary pressure-feeding (expedition failure advances decay). | territories, peninsular_strain, settlement_layer, victory, mass_combat, military_layer |
 | T-20 | Two Contests | М-6 | — | Forced-choice — sovereignty vs survival, insufficient resources for both. | victory, peninsular_strain, faction_layer, conflict_architecture, mass_combat |
-| T-21 | Thread Political Warfare | М-4 | М-3 | Primary institutional (distinct faction doctrines). Secondary substrate-grounded (shared RS track). | factions, faction_layer, threadwork, conflict_architecture, mass_combat |
+| T-21 | Thread Political Warfare | М-4 | М-3 | Primary institutional (distinct faction doctrines). Secondary substrate-grounded (shared MS track). | factions, faction_layer, threadwork, conflict_architecture, mass_combat |
 | T-22 | Belief Lattice | М-6 | М-3 | Primary forced-choice (cooperation requires Belief revision, which is Scar-accumulation). Secondary substrate-participating. | conviction_track, threadwork, social_debate |
 | T-23 | NPC Arc Emergence | М-5 | — | Scale-connecting — personal arc → faction Domain Echo → political shift → new arc triggers. | scale_transitions, faction_layer, factions, conflict_architecture, faction_succession_split |
 | T-24 | Convergence as Crisis | М-5 | — | Scale-connecting — multiple throughlines intersecting at various scales produce emergent crisis. | conflict_architecture, scale_transitions, victory, tensions_deck |
@@ -188,7 +188,7 @@ Coverage: 40 of 41 + T-15a/b/c (T-10 struck; T-15a/b/c added; T-26..T-41 from v3
 
 ### §3.2 М-dependencies explained
 
-**М-2 presupposes М-1.** Geography is how continuous pressure distributes spatially. Without pressure (М-1), there is no uneven distribution to be geographic. Radiation Gradient (T-18) only makes sense if RS is decaying (a specific instance of М-1's pressure-is-continuous).
+**М-2 presupposes М-1.** Geography is how continuous pressure distributes spatially. Without pressure (М-1), there is no uneven distribution to be geographic. Radiation Gradient (T-18) only makes sense if MS is decaying (a specific instance of М-1's pressure-is-continuous).
 
 **М-4 presupposes М-3.** Faction substrate-postures are postures *on* the substrate. Without substrate grounding (М-3), there is nothing for factions to take postures toward. The Church's rendering-reinforcement, Varfell's thread-progression, Crown's instrumentalism — each is a stance on how to relate to Thread. No Thread, no stance.
 
@@ -206,7 +206,7 @@ The previous meta-throughlines document (PP-671) had misclassifications caught b
 
 - Old М-2 "Substrate as universal medium" included T-08 (Church), T-13 (Certainty), T-18, T-21, T-22. Most were secondary participations. The primary substrate-grounding T's are T-01, T-02, T-03 — the ontological throughlines. Revised М-3 primary list to these three.
 
-- Old М-3 "Institutional identity" included T-05 (TC accumulation). But T-05 is clock-based, not identity-based. The Church HAS an identity (T-08) distinct from the fact that TC accumulates over time (T-05). Removed T-05 from М-3 (now М-4); left it in М-1 where it belongs.
+- Old М-3 "Institutional identity" included T-05 (CI accumulation). But T-05 is clock-based, not identity-based. The Church HAS an identity (T-08) distinct from the fact that CI accumulates over time (T-05). Removed T-05 from М-3 (now М-4); left it in М-1 where it belongs.
 
 - Old М-4 "Scale-preserving" included T-01 and T-18 and T-19. T-01 is ontological not structural-repetition; T-18/T-19 are geographic. Cleaned up to true scale-connecting T's: T-03 (secondary), T-15, T-16, T-23, T-24, T-25.
 
@@ -258,7 +258,7 @@ Primary Μ served: Μ-δ (strong cross-scale). No Μ undermined.
 
 Three extensions, zero violations. **Passes belonging.**
 
-**Τ check:** touches T-04 (RS from battles), T-07 (Strain), T-18 (geographic through edge types). All chains intact.
+**Τ check:** touches T-04 (MS from battles), T-07 (Strain), T-18 (geographic through edge types). All chains intact.
 
 **Q check (robust):** three approaches verified. World-state change: province control transfer visible. Player-independent scenario: two NPC factions can battle each other over a settlement without player input; stakes are visible (provincial control at stake).
 
@@ -375,17 +375,17 @@ These are requirements for the implementation to honor the framework, not sugges
 
 **Dominant strategy.** A choice that pays more than alternatives in all situations. Example: a Thread operation that gives a strategic benefit with no Coherence cost. Violates Ω-d and М-6. Note: a choice that dominates in *some* situations is not a dominant strategy; dominance requires context-independence.
 
-**Flavor-only.** A mechanic using Thread/rendering language without operating on substrate state. Example: a dialogue option called "Thread persuasion" that applies a +2 bonus to social check with no RS cost, no TS requirement, no Coherence effect, no Certainty shift. The name is Thread; the mechanic is not. Violates Μ-γ.
+**Flavor-only.** A mechanic using Thread/rendering language without operating on substrate state. Example: a dialogue option called "Thread persuasion" that applies a +2 bonus to social check with no MS cost, no TS requirement, no Coherence effect, no Certainty shift. The name is Thread; the mechanic is not. Violates Μ-γ.
 
 **Scale break.** A mechanic that operates in one scale with no traceable consequence at other scales. Example: a scene-level "Thread sensing" skill that reveals information but whose use doesn't register in province-scale Church AP, doesn't accumulate Exposure, doesn't produce Knot strain in witnessing NPCs. Violates Μ-δ.
 
-**Reskinned attractor.** A new faction given an existing faction's substrate-posture with different name/flavor. Example: adding a "Southern Church" faction that mechanically duplicates Church's TC accumulation, rendering-reinforcement AP mechanics, etc. Violates М-4 — new faction must have distinct substrate-posture, not palette-swap.
+**Reskinned attractor.** A new faction given an existing faction's substrate-posture with different name/flavor. Example: adding a "Southern Church" faction that mechanically duplicates Church's CI accumulation, rendering-reinforcement AP mechanics, etc. Violates М-4 — new faction must have distinct substrate-posture, not palette-swap.
 
 **Event without stakes.** Mechanic fires in scenarios without player action, but the stakes of those scenarios cannot be read from game state. Example: a random "a merchant was robbed" event that triggers but has no attached NPC with stake, no connected arc, no consequence if not pursued. Violates Q-robust's dramatic-legibility test.
 
 **Special-cased.** Rule with conditional exceptions that don't derive from general principles. Example: "Siege Order decay is -1/season, except at Gransol where it's -0.5/season, except when it's winter where it's -2/season, except when Hafenmark controls adjacent territory where it's..." — each except-clause is a special case. Violates Q-smooth (doesn't compose) and Q-elegant (can't be stated concisely).
 
-**Cost-hidden.** Capability UI that shows gains but omits costs. Example: a Thread Weaving ability tooltip showing "Target NPC Disposition +2" without showing "TC +1, RS -1, Conviction Scar on Faith-convicted observer." Violates М-6.
+**Cost-hidden.** Capability UI that shows gains but omits costs. Example: a Thread Weaving ability tooltip showing "Target NPC Disposition +2" without showing "CI +1, MS -1, Conviction Scar on Faith-convicted observer." Violates М-6.
 
 **Strategic-only.** Mechanic operates at peninsula scale with no personal-layer touchpoint. Example: a new peninsula-wide "Economic Crisis" clock that affects only faction-level Wealth without producing scene-level opportunities, NPC arc triggers, or character-level consequences. Violates Ω-b.
 
