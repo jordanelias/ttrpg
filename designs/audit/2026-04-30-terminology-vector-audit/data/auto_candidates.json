@@ -1,0 +1,112 @@
+[
+  {
+    "term": "Domain Action",
+    "doc_freq": 12,
+    "para_freq": 44
+  },
+  {
+    "term": "Domain Actions",
+    "doc_freq": 15,
+    "para_freq": 42
+  },
+  {
+    "term": "Ein Sof",
+    "doc_freq": 10,
+    "para_freq": 32
+  },
+  {
+    "term": "Zoom In",
+    "doc_freq": 9,
+    "para_freq": 30
+  },
+  {
+    "term": "Mass Seizure",
+    "doc_freq": 5,
+    "para_freq": 21
+  },
+  {
+    "term": "Community Organizing",
+    "doc_freq": 8,
+    "para_freq": 20
+  },
+  {
+    "term": "Resonant Style",
+    "doc_freq": 4,
+    "para_freq": 20
+  },
+  {
+    "term": "Scene Slate",
+    "doc_freq": 8,
+    "para_freq": 17
+  },
+  {
+    "term": "Shifting Object",
+    "doc_freq": 4,
+    "para_freq": 17
+  },
+  {
+    "term": "Casus Belli",
+    "doc_freq": 8,
+    "para_freq": 16
+  },
+  {
+    "term": "Game Master",
+    "doc_freq": 3,
+    "para_freq": 16
+  },
+  {
+    "term": "Heavy Infantry",
+    "doc_freq": 4,
+    "para_freq": 15
+  },
+  {
+    "term": "The Einhir",
+    "doc_freq": 9,
+    "para_freq": 14
+  },
+  {
+    "term": "Cultural Reformation",
+    "doc_freq": 4,
+    "para_freq": 14
+  },
+  {
+    "term": "Light Infantry",
+    "doc_freq": 3,
+    "para_freq": 13
+  },
+  {
+    "term": "Seizure Ob",
+    "doc_freq": 4,
+    "para_freq": 11
+  },
+  {
+    "term": "Dynastic Proclamation",
+    "doc_freq": 5,
+    "para_freq": 11
+  },
+  {
+    "term": "Province Accord",
+    "doc_freq": 5,
+    "para_freq": 11
+  },
+  {
+    "term": "Cultural Uprising",
+    "doc_freq": 5,
+    "para_freq": 11
+  },
+  {
+    "term": "Coup Counter",
+    "doc_freq": 7,
+    "para_freq": 10
+  },
+  {
+    "term": "Thread-Read",
+    "doc_freq": 6,
+    "para_freq": 10
+  },
+  {
+    "term": "Senator Outward",
+    "doc_freq": 4,
+    "para_freq": 10
+  }
+]

@@ -1,0 +1,2550 @@
+{
+  "multi_hubs": [
+    [
+      "Peninsular Strain",
+      3,
+      [
+        [
+          "cite",
+          31
+        ],
+        [
+          "mu",
+          2
+        ],
+        [
+          "pp",
+          5
+        ]
+      ]
+    ],
+    [
+      "IP",
+      3,
+      [
+        [
+          "cite",
+          9
+        ],
+        [
+          "mu",
+          2
+        ],
+        [
+          "pp",
+          3
+        ]
+      ]
+    ]
+  ],
+  "implied_missing": [
+    [
+      "Inge Baralta",
+      "TS",
+      2,
+      3
+    ],
+    [
+      "Hafenmark",
+      "TS",
+      2,
+      3
+    ],
+    [
+      "Hafenmark",
+      "Inge Baralta",
+      2,
+      3
+    ]
+  ],
+  "notional": [
+    [
+      "Faction Layer",
+      "Stability",
+      68
+    ],
+    [
+      "CI",
+      "Mandate",
+      58
+    ],
+    [
+      "NPC Behavior",
+      "TS",
+      55
+    ],
+    [
+      "Faction Layer",
+      "Mandate",
+      54
+    ],
+    [
+      "CI",
+      "Restoration Movement",
+      51
+    ],
+    [
+      "NPC Behavior",
+      "Stability",
+      48
+    ],
+    [
+      "CI Political",
+      "Mandate",
+      44
+    ],
+    [
+      "CI",
+      "Crown",
+      44
+    ],
+    [
+      "CI",
+      "Church",
+      44
+    ],
+    [
+      "Peninsular Strain",
+      "Victory",
+      41
+    ],
+    [
+      "CI",
+      "Hafenmark",
+      39
+    ],
+    [
+      "CI",
+      "MS",
+      38
+    ],
+    [
+      "NPC Behavior",
+      "Varfell",
+      37
+    ],
+    [
+      "CI",
+      "IP",
+      34
+    ],
+    [
+      "CI",
+      "Varfell",
+      33
+    ],
+    [
+      "Scale Transitions",
+      "Threadwork",
+      30
+    ],
+    [
+      "CI",
+      "Victory",
+      29
+    ],
+    [
+      "Conflict Architecture",
+      "Crown",
+      26
+    ],
+    [
+      "NPC Behavior",
+      "Torben",
+      26
+    ],
+    [
+      "Campaign Architecture",
+      "Restoration Movement",
+      24
+    ],
+    [
+      "NPC Behavior",
+      "Order",
+      22
+    ],
+    [
+      "Faction Succession",
+      "Restoration Movement",
+      22
+    ],
+    [
+      "CI",
+      "L\u00f6wenritter",
+      22
+    ],
+    [
+      "Peninsular Strain",
+      "TCV",
+      21
+    ],
+    [
+      "Peninsular Strain",
+      "Varfell",
+      21
+    ],
+    [
+      "Campaign Architecture",
+      "IP",
+      20
+    ],
+    [
+      "Mass Combat",
+      "Threadwork",
+      20
+    ],
+    [
+      "Self-Rendering",
+      "TS",
+      19
+    ],
+    [
+      "NPC Behavior",
+      "Restoration Movement",
+      19
+    ],
+    [
+      "CI",
+      "Stability",
+      19
+    ],
+    [
+      "NPC Behavior",
+      "Threadwork",
+      18
+    ],
+    [
+      "CI Political",
+      "Church",
+      18
+    ],
+    [
+      "Faction Succession",
+      "Varfell",
+      18
+    ],
+    [
+      "Fractional Province",
+      "Hafenmark",
+      18
+    ],
+    [
+      "Campaign Architecture",
+      "MS",
+      17
+    ],
+    [
+      "Conflict Architecture",
+      "L\u00f6wenritter",
+      16
+    ],
+    [
+      "CI",
+      "Mass Seizure",
+      15
+    ],
+    [
+      "Campaign Architecture",
+      "Elske",
+      14
+    ],
+    [
+      "NPC Behavior",
+      "Standing",
+      13
+    ],
+    [
+      "Fractional Province",
+      "Varfell",
+      13
+    ],
+    [
+      "IP",
+      "Varfell",
+      13
+    ],
+    [
+      "Campaign Architecture",
+      "L\u00f6wenritter",
+      12
+    ],
+    [
+      "Scale Transitions",
+      "Zoom In",
+      12
+    ],
+    [
+      "NPC Behavior",
+      "Wager",
+      12
+    ],
+    [
+      "NPC Behavior",
+      "Reason",
+      12
+    ],
+    [
+      "NPC Behavior",
+      "Precedent",
+      12
+    ],
+    [
+      "NPC Behavior",
+      "Yrsa Vossen",
+      12
+    ],
+    [
+      "Faction Layer",
+      "Hafenmark",
+      12
+    ],
+    [
+      "Campaign Architecture",
+      "Crown",
+      11
+    ],
+    [
+      "Conflict Architecture",
+      "Restoration Movement",
+      11
+    ],
+    [
+      "Faction Succession",
+      "Mandate",
+      11
+    ],
+    [
+      "Peninsular Strain",
+      "Restoration Movement",
+      11
+    ],
+    [
+      "CI",
+      "Domain Action",
+      11
+    ],
+    [
+      "MS Trajectory",
+      "Solmund",
+      11
+    ],
+    [
+      "Faction Layer",
+      "Guilds",
+      10
+    ],
+    [
+      "Peninsular Strain",
+      "Stability",
+      10
+    ],
+    [
+      "CI",
+      "Zoom In",
+      10
+    ],
+    [
+      "Settlement Layer",
+      "Varfell",
+      10
+    ],
+    [
+      "Settlement Layer",
+      "Standing",
+      10
+    ],
+    [
+      "Leap",
+      "MS",
+      9
+    ],
+    [
+      "Campaign Architecture",
+      "Coherence",
+      9
+    ],
+    [
+      "NPC Behavior",
+      "PI",
+      9
+    ],
+    [
+      "CI Political",
+      "MS",
+      9
+    ],
+    [
+      "CI Political",
+      "IP",
+      9
+    ],
+    [
+      "CI Political",
+      "Crown",
+      9
+    ],
+    [
+      "Faction Layer",
+      "Social Contests",
+      9
+    ],
+    [
+      "Campaign Architecture",
+      "Varfell",
+      8
+    ],
+    [
+      "Conflict Architecture",
+      "Varfell",
+      8
+    ],
+    [
+      "CI Political",
+      "Victory",
+      8
+    ],
+    [
+      "CI Political",
+      "Stability",
+      8
+    ],
+    [
+      "CI",
+      "Elske",
+      8
+    ],
+    [
+      "Settlement Layer",
+      "Stability",
+      8
+    ],
+    [
+      "MS",
+      "Solmund",
+      8
+    ],
+    [
+      "Mass Combat",
+      "Zoom In",
+      8
+    ],
+    [
+      "Campaign Architecture",
+      "Settlement Layer",
+      7
+    ],
+    [
+      "Campaign Architecture",
+      "Victory",
+      7
+    ],
+    [
+      "Campaign Architecture",
+      "Stability",
+      7
+    ],
+    [
+      "Campaign Architecture",
+      "Mandate",
+      7
+    ],
+    [
+      "Conflict Architecture",
+      "Tensions Deck",
+      7
+    ],
+    [
+      "Conflict Architecture",
+      "Tensions",
+      7
+    ],
+    [
+      "Scale Transitions",
+      "Stability",
+      7
+    ],
+    [
+      "NPC Behavior",
+      "Victory",
+      7
+    ],
+    [
+      "NPC Behavior",
+      "Royal Assassination",
+      7
+    ],
+    [
+      "CI Political",
+      "Faction Layer",
+      7
+    ],
+    [
+      "CI Political",
+      "Hafenmark",
+      7
+    ],
+    [
+      "CI Political",
+      "Varfell",
+      7
+    ],
+    [
+      "Faction Layer",
+      "Zoom In",
+      7
+    ],
+    [
+      "Faction Layer",
+      "L\u00f6wenritter",
+      7
+    ],
+    [
+      "Faction Succession",
+      "Standing",
+      7
+    ],
+    [
+      "Settlement Adjacency",
+      "Settlement Layer",
+      7
+    ],
+    [
+      "MS Trajectory",
+      "Self-Rendering",
+      7
+    ],
+    [
+      "MS",
+      "TS",
+      7
+    ],
+    [
+      "Campaign Architecture",
+      "Threadwork",
+      6
+    ],
+    [
+      "Campaign Architecture",
+      "Mass Combat",
+      6
+    ],
+    [
+      "Conflict Architecture",
+      "Lisbeth Ehrenwall",
+      6
+    ],
+    [
+      "Conflict Architecture",
+      "Guilds",
+      6
+    ],
+    [
+      "Scale Transitions",
+      "TS",
+      6
+    ],
+    [
+      "NPC Behavior",
+      "Solmund",
+      6
+    ],
+    [
+      "NPC Behavior",
+      "TCV",
+      6
+    ],
+    [
+      "CI Political",
+      "Mass Seizure",
+      6
+    ],
+    [
+      "CI Political",
+      "Peninsular Strain",
+      6
+    ],
+    [
+      "CI Political",
+      "PI",
+      6
+    ],
+    [
+      "Faction Layer",
+      "Victory",
+      6
+    ],
+    [
+      "Faction Layer",
+      "TCV",
+      6
+    ],
+    [
+      "Faction Succession",
+      "Settlement Layer",
+      6
+    ],
+    [
+      "Military Layer",
+      "Stability",
+      6
+    ],
+    [
+      "Peninsular Strain",
+      "Scale Transitions",
+      6
+    ],
+    [
+      "CI",
+      "Domain Echo",
+      6
+    ],
+    [
+      "CI",
+      "PI",
+      6
+    ],
+    [
+      "Settlement Layer",
+      "Threadwork",
+      6
+    ],
+    [
+      "Solmund",
+      "TS",
+      6
+    ],
+    [
+      "MS",
+      "Threadwork",
+      6
+    ],
+    [
+      "Mass Combat",
+      "Stability",
+      6
+    ],
+    [
+      "Conflict Architecture",
+      "IP",
+      5
+    ],
+    [
+      "Conflict Architecture",
+      "Hafenmark",
+      5
+    ],
+    [
+      "Conflict Architecture",
+      "Disposition",
+      5
+    ],
+    [
+      "Conflict Architecture",
+      "Stability",
+      5
+    ],
+    [
+      "Scale Transitions",
+      "Scene Slate",
+      5
+    ],
+    [
+      "Faction Layer",
+      "Standing",
+      5
+    ],
+    [
+      "Faction Succession",
+      "Inge Baralta",
+      5
+    ],
+    [
+      "Fractional Province",
+      "Victory",
+      5
+    ],
+    [
+      "IP",
+      "Victory",
+      5
+    ],
+    [
+      "CI",
+      "Torben",
+      5
+    ],
+    [
+      "CI",
+      "Standing",
+      5
+    ],
+    [
+      "Miraculous Event",
+      "Solmund",
+      5
+    ],
+    [
+      "TS",
+      "Threadwork",
+      4
+    ],
+    [
+      "Leap",
+      "Self-Rendering",
+      4
+    ],
+    [
+      "Campaign Architecture",
+      "Knot",
+      4
+    ],
+    [
+      "Campaign Architecture",
+      "Conviction",
+      4
+    ],
+    [
+      "Campaign Architecture",
+      "Yrsa Vossen",
+      4
+    ],
+    [
+      "Campaign Architecture",
+      "Edeyja",
+      4
+    ],
+    [
+      "Conflict Architecture",
+      "King Almud",
+      4
+    ],
+    [
+      "Conflict Architecture",
+      "Lenneth",
+      4
+    ],
+    [
+      "CI Political",
+      "Domain Action",
+      4
+    ],
+    [
+      "Faction Layer",
+      "PI",
+      4
+    ],
+    [
+      "Faction Layer",
+      "Inge Baralta",
+      4
+    ],
+    [
+      "Faction Layer",
+      "Varfell",
+      4
+    ],
+    [
+      "Faction Succession",
+      "Magnus Vaynard",
+      4
+    ],
+    [
+      "Faction Succession",
+      "Yrsa Vossen",
+      4
+    ],
+    [
+      "Faction Succession",
+      "Stability",
+      4
+    ],
+    [
+      "Fractional Province",
+      "Settlement Layer",
+      4
+    ],
+    [
+      "IP",
+      "Settlement Layer",
+      4
+    ],
+    [
+      "Peninsular Strain",
+      "Standing",
+      4
+    ],
+    [
+      "CI",
+      "Lisbeth Ehrenwall",
+      4
+    ],
+    [
+      "Miraculous Event",
+      "TS",
+      4
+    ],
+    [
+      "Settlement Layer",
+      "Victory",
+      4
+    ],
+    [
+      "Leap",
+      "Stability",
+      3
+    ],
+    [
+      "Campaign Architecture",
+      "Domain Action",
+      3
+    ],
+    [
+      "Campaign Architecture",
+      "Church",
+      3
+    ],
+    [
+      "Conflict Architecture",
+      "Mass Seizure",
+      3
+    ],
+    [
+      "Conflict Architecture",
+      "PI",
+      3
+    ],
+    [
+      "Conflict Architecture",
+      "Elske",
+      3
+    ],
+    [
+      "Conflict Architecture",
+      "Coup Counter",
+      3
+    ],
+    [
+      "Scale Transitions",
+      "Standing",
+      3
+    ],
+    [
+      "NPC Behavior",
+      "Scene Slate",
+      3
+    ],
+    [
+      "CI Political",
+      "Mass Combat",
+      3
+    ],
+    [
+      "CI Political",
+      "Military Layer",
+      3
+    ],
+    [
+      "CI Political",
+      "Inge Baralta",
+      3
+    ],
+    [
+      "Faction Succession",
+      "Victory",
+      3
+    ],
+    [
+      "Military Layer",
+      "Threadwork",
+      3
+    ],
+    [
+      "CI",
+      "Threadwork",
+      3
+    ],
+    [
+      "CI",
+      "Conviction",
+      3
+    ],
+    [
+      "CI",
+      "Social Contests",
+      3
+    ],
+    [
+      "CI",
+      "Inge Baralta",
+      3
+    ],
+    [
+      "CI",
+      "Magnus Vaynard",
+      3
+    ],
+    [
+      "CI",
+      "Yrsa Vossen",
+      3
+    ],
+    [
+      "CI",
+      "Disposition",
+      3
+    ],
+    [
+      "CI",
+      "Coup Counter",
+      3
+    ],
+    [
+      "Miraculous Event",
+      "PI",
+      3
+    ],
+    [
+      "Royal Assassination",
+      "Varfell",
+      3
+    ],
+    [
+      "Leap",
+      "Threadwork",
+      2
+    ],
+    [
+      "Leap",
+      "Solmund",
+      2
+    ],
+    [
+      "Campaign Architecture",
+      "Mass Seizure",
+      2
+    ],
+    [
+      "Campaign Architecture",
+      "Thread Revelation",
+      2
+    ],
+    [
+      "Campaign Architecture",
+      "Loyalty",
+      2
+    ],
+    [
+      "Campaign Architecture",
+      "Disposition",
+      2
+    ],
+    [
+      "Conflict Architecture",
+      "Domain Action",
+      2
+    ],
+    [
+      "Conflict Architecture",
+      "Magnus Vaynard",
+      2
+    ],
+    [
+      "Conflict Architecture",
+      "Torben",
+      2
+    ],
+    [
+      "Scale Transitions",
+      "Varfell",
+      2
+    ],
+    [
+      "NPC Behavior",
+      "Zoom In",
+      2
+    ],
+    [
+      "CI Political",
+      "Threadwork",
+      2
+    ],
+    [
+      "CI Political",
+      "TCV",
+      2
+    ],
+    [
+      "Faction Layer",
+      "Scale Transitions",
+      2
+    ],
+    [
+      "Fractional Province",
+      "Restoration Movement",
+      2
+    ],
+    [
+      "IP",
+      "Restoration Movement",
+      2
+    ],
+    [
+      "Peninsular Strain",
+      "Zoom In",
+      2
+    ],
+    [
+      "Peninsular Strain",
+      "Threadwork",
+      2
+    ],
+    [
+      "CI",
+      "Scene Slate",
+      2
+    ],
+    [
+      "CI",
+      "Mass Combat",
+      2
+    ],
+    [
+      "CI",
+      "Casus Belli",
+      2
+    ],
+    [
+      "CI",
+      "Dynastic Proclamation",
+      2
+    ],
+    [
+      "CI",
+      "King Almud",
+      2
+    ],
+    [
+      "CI",
+      "Edeyja",
+      2
+    ],
+    [
+      "CI",
+      "Cultural Reformation",
+      2
+    ],
+    [
+      "Miraculous Event",
+      "Varfell",
+      2
+    ],
+    [
+      "Settlement Layer",
+      "TS",
+      2
+    ],
+    [
+      "Settlement Layer",
+      "TCV",
+      2
+    ],
+    [
+      "Settlement Layer",
+      "Torben",
+      2
+    ],
+    [
+      "MS Trajectory",
+      "TS",
+      2
+    ],
+    [
+      "MS Trajectory",
+      "Stability",
+      2
+    ],
+    [
+      "Royal Assassination",
+      "Torben",
+      2
+    ],
+    [
+      "Combat",
+      "Threadwork",
+      2
+    ]
+  ],
+  "cascades_terminal_count": {
+    "Threadwork": 487,
+    "Church": 478,
+    "Coherence": 445,
+    "Stability": 428,
+    "Disposition": 391,
+    "Varfell": 377,
+    "Knot": 375,
+    "MS": 365,
+    "Hafenmark": 354,
+    "Domain Action": 346,
+    "TS": 332,
+    "Mandate": 318,
+    "Restoration Movement": 317,
+    "Crown": 297,
+    "L\u00f6wenritter": 284,
+    "Mass Combat": 243,
+    "Magnus Vaynard": 241,
+    "Edeyja": 235,
+    "Zoom In": 232,
+    "Inge Baralta": 225,
+    "Domain Echo": 222,
+    "Standing": 222,
+    "Leap": 213,
+    "Solmund": 204,
+    "Casus Belli": 193,
+    "PI": 193,
+    "Combat": 192,
+    "Guilds": 181,
+    "Victory": 177,
+    "IP": 171,
+    "Conviction": 161,
+    "TCV": 156,
+    "Scene Slate": 148,
+    "Torben": 146,
+    "King Almud": 146,
+    "Fieldwork": 141,
+    "Ein Sof": 130,
+    "Self-Rendering": 130,
+    "Elske": 118,
+    "CI": 107,
+    "Autonomy": 104,
+    "NPC Behavior": 103,
+    "Lisbeth Ehrenwall": 99,
+    "Yrsa Vossen": 97,
+    "Cultural Reformation": 94,
+    "Dynastic Proclamation": 94,
+    "Mass Seizure": 85,
+    "Military Layer": 82,
+    "Social Contests": 80,
+    "Confessor Arne": 75,
+    "Order": 75,
+    "Scale Transitions": 72,
+    "Tensions": 72,
+    "Peninsular Strain": 68,
+    "Faction Layer": 67,
+    "Coup Counter": 65,
+    "Conflict Architecture": 62,
+    "Evidence": 57,
+    "Lenneth": 55,
+    "Settlement Adjacency": 48,
+    "Campaign Architecture": 46,
+    "Settlement Layer": 39,
+    "Game Master": 34,
+    "Wager": 34,
+    "Equity": 34,
+    "Faith": 34,
+    "Conviction Track": 34,
+    "Continuity": 34,
+    "Precedent": 34,
+    "Royal Assassination": 34,
+    "Reason": 34,
+    "Consequence": 34,
+    "CI Political": 25,
+    "Tensions Deck": 15,
+    "Thread Revelation": 13,
+    "Loyalty": 13
+  },
+  "cascades_total": 12166,
+  "sparse": [
+    [
+      "Wager",
+      4,
+      0
+    ],
+    [
+      "Thread Revelation",
+      6,
+      0
+    ],
+    [
+      "Event Impact Matrix",
+      6,
+      0
+    ],
+    [
+      "Consequence",
+      6,
+      0
+    ],
+    [
+      "Authority",
+      6,
+      0
+    ]
+  ],
+  "orphans": [
+    [
+      "01",
+      "Everything Is Thread",
+      0,
+      0
+    ],
+    [
+      "02",
+      "Rendering Consciousness-Performed",
+      0,
+      0
+    ],
+    [
+      "03",
+      "Inseparability",
+      0,
+      0
+    ],
+    [
+      "04",
+      "RS Decay",
+      0,
+      0
+    ],
+    [
+      "05",
+      "TC Accumulation",
+      0,
+      0
+    ],
+    [
+      "06",
+      "IP Accumulation",
+      1,
+      0
+    ],
+    [
+      "07",
+      "Peninsular Strain",
+      1,
+      0
+    ],
+    [
+      "08",
+      "Church Rendering Reinforcement",
+      1,
+      0
+    ],
+    [
+      "09",
+      "Varfell Thread Progressive",
+      1,
+      0
+    ],
+    [
+      "11",
+      "Crown Pragmatic",
+      1,
+      0
+    ],
+    [
+      "15b",
+      "L\u00f6wenritter Substrate-Agnostic Protector",
+      1,
+      0
+    ],
+    [
+      "15c",
+      "RM Substrate-Heritage Reclaimer",
+      1,
+      0
+    ],
+    [
+      "12",
+      "Practitioner Arc",
+      1,
+      0
+    ],
+    [
+      "13",
+      "Certainty Journey",
+      0,
+      0
+    ],
+    [
+      "14",
+      "Conviction Architecture",
+      1,
+      0
+    ],
+    [
+      "15",
+      "Player Progression",
+      1,
+      0
+    ],
+    [
+      "16",
+      "Knot Propagation",
+      1,
+      0
+    ],
+    [
+      "17",
+      "Companion Moral Mirror",
+      0,
+      0
+    ],
+    [
+      "18",
+      "Radiation Gradient",
+      0,
+      0
+    ],
+    [
+      "19",
+      "Southernmost Hidden Front",
+      0,
+      0
+    ],
+    [
+      "20",
+      "Two Contests",
+      0,
+      0
+    ],
+    [
+      "21",
+      "Thread Political Warfare",
+      0,
+      0
+    ],
+    [
+      "22",
+      "Belief Lattice",
+      0,
+      0
+    ],
+    [
+      "23",
+      "NPC Arc Emergence",
+      1,
+      0
+    ],
+    [
+      "24",
+      "Convergence as Crisis",
+      0,
+      0
+    ],
+    [
+      "25",
+      "Generational Arc",
+      0,
+      0
+    ],
+    [
+      "26",
+      "Recursion as Setting Structure (TL-3)",
+      0,
+      0
+    ],
+    [
+      "27",
+      "Effects Real, Explanation Wrong (TL-4)",
+      0,
+      0
+    ],
+    [
+      "28",
+      "Confrontation/Leap/Operation Triad (TL-5)",
+      1,
+      0
+    ],
+    [
+      "29",
+      "Baralta as Accidental Prophylaxis Cracker (TL-8)",
+      1,
+      0
+    ],
+    [
+      "30",
+      "Information Asymmetry as Core Mechanic (TL-7)",
+      0,
+      0
+    ],
+    [
+      "31",
+      "Reflexive Suspension",
+      1,
+      0
+    ],
+    [
+      "32",
+      "Sincere Structural Closure",
+      1,
+      0
+    ],
+    [
+      "33",
+      "TS as Developmental Arc",
+      1,
+      0
+    ],
+    [
+      "34",
+      "Distal Interoception through Knot Tethers",
+      1,
+      0
+    ],
+    [
+      "35",
+      "Unified Uncanny Capacity Synthesis",
+      1,
+      0
+    ],
+    [
+      "36",
+      "Relational Ontological Identity (TS 50\u201369 C0)",
+      1,
+      0
+    ],
+    [
+      "37",
+      "Stimulus Resistance Triplet",
+      0,
+      0
+    ],
+    [
+      "38",
+      "Real as Continuous Amplitude",
+      0,
+      0
+    ],
+    [
+      "39",
+      "Textual Mode Typology",
+      0,
+      0
+    ],
+    [
+      "40",
+      "TS as Taxonomic Expansion",
+      1,
+      0
+    ],
+    [
+      "41",
+      "Damaged Substrate Is Non-Agential",
+      1,
+      0
+    ]
+  ],
+  "vocabulary_debt": {
+    "Game Master": {
+      "total_paragraphs": 16,
+      "docs": [
+        [
+          "designs/npcs/npc_behavior_v30.md",
+          3
+        ],
+        [
+          "designs/provincial/mass_battle_v30.md",
+          2
+        ],
+        [
+          "designs/threadwork/threadwork_v30.md",
+          11
+        ]
+      ]
+    },
+    "Cultural Reformation": {
+      "total_paragraphs": 15,
+      "docs": [
+        [
+          "designs/architecture/complete_systems_reference.md",
+          2
+        ],
+        [
+          "designs/npcs/npc_behavior_v30.md",
+          1
+        ],
+        [
+          "designs/provincial/peninsular_strain_v30.md",
+          10
+        ],
+        [
+          "designs/provincial/victory_v30.md",
+          2
+        ]
+      ]
+    },
+    "Coup Counter": {
+      "total_paragraphs": 11,
+      "docs": [
+        [
+          "canon/03_canonical_timeline.md",
+          1
+        ],
+        [
+          "designs/architecture/campaign_architecture_v30.md",
+          1
+        ],
+        [
+          "designs/architecture/complete_systems_reference.md",
+          1
+        ],
+        [
+          "designs/architecture/conflict_architecture_proposal.md",
+          3
+        ],
+        [
+          "designs/npcs/npc_behavior_v30.md",
+          1
+        ],
+        [
+          "designs/provincial/faction_layer_v30.md",
+          1
+        ],
+        [
+          "designs/provincial/victory_v30.md",
+          3
+        ]
+      ]
+    }
+  },
+  "isolates": [
+    [
+      "Ein Sof",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Zoom In",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Fieldwork",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Conviction Track",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Social Contests",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Domain Action",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Wager",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Scene Slate",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Mass Seizure",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Casus Belli",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Dynastic Proclamation",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Thread Revelation",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Armature System",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Event Impact Matrix",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "PI",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "TCV",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Faith",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Order",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Reason",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Equity",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Precedent",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Autonomy",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Continuity",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Evidence",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Consequence",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Authority",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Loyalty",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "King Almud",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Confessor Arne",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Magnus Vaynard",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Lisbeth Ehrenwall",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Yrsa Vossen",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Torben",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Elske",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Edeyja",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Lenneth",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Guilds",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Disposition",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Stability",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Mandate",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Game Master",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Cultural Reformation",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Coup Counter",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Combat",
+      1,
+      0,
+      0,
+      0
+    ]
+  ],
+  "multi_hubs_corrected": [
+    [
+      "Peninsular Strain",
+      3,
+      [
+        [
+          "cite",
+          31
+        ],
+        [
+          "mu",
+          2
+        ],
+        [
+          "pp",
+          5
+        ]
+      ]
+    ],
+    [
+      "IP",
+      3,
+      [
+        [
+          "cite",
+          17
+        ],
+        [
+          "mu",
+          2
+        ],
+        [
+          "pp",
+          3
+        ]
+      ]
+    ]
+  ],
+  "cite_hubs": [
+    [
+      "NPC Behavior",
+      56
+    ],
+    [
+      "CI",
+      46
+    ],
+    [
+      "Settlement Layer",
+      41
+    ],
+    [
+      "Peninsular Strain",
+      31
+    ],
+    [
+      "Scale Transitions",
+      27
+    ],
+    [
+      "Campaign Architecture",
+      27
+    ],
+    [
+      "Faction Layer",
+      26
+    ],
+    [
+      "Conflict Architecture",
+      25
+    ],
+    [
+      "Victory",
+      25
+    ],
+    [
+      "MS",
+      21
+    ],
+    [
+      "CI Political",
+      20
+    ],
+    [
+      "Threadwork",
+      17
+    ],
+    [
+      "Mass Combat",
+      17
+    ],
+    [
+      "IP",
+      17
+    ],
+    [
+      "Church",
+      16
+    ],
+    [
+      "Varfell",
+      15
+    ],
+    [
+      "Stability",
+      15
+    ]
+  ],
+  "isolates_corrected": [
+    [
+      "Armature System",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Event Impact Matrix",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Authority",
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      "Conviction Track",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Wager",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Thread Revelation",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Faith",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Reason",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Equity",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Precedent",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Continuity",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Consequence",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Loyalty",
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      "Game Master",
+      1,
+      0,
+      0,
+      0
+    ]
+  ],
+  "sparse_corrected": [
+    [
+      "Wager",
+      4,
+      1
+    ],
+    [
+      "Thread Revelation",
+      6,
+      1
+    ],
+    [
+      "Event Impact Matrix",
+      6,
+      0
+    ],
+    [
+      "Consequence",
+      6,
+      1
+    ],
+    [
+      "Authority",
+      6,
+      0
+    ]
+  ],
+  "discourse_design_ratio": [
+    [
+      "Conflict Architecture",
+      8,
+      5,
+      0.625
+    ],
+    [
+      "Throughlines",
+      6,
+      3,
+      0.5
+    ],
+    [
+      "Conviction Track",
+      16,
+      7,
+      0.4375
+    ],
+    [
+      "Guilds",
+      46,
+      13,
+      0.2826086956521739
+    ],
+    [
+      "Coup Counter",
+      11,
+      3,
+      0.2727272727272727
+    ],
+    [
+      "Lisbeth Ehrenwall",
+      22,
+      5,
+      0.22727272727272727
+    ],
+    [
+      "Domain Echo",
+      36,
+      8,
+      0.2222222222222222
+    ],
+    [
+      "L\u00f6wenritter",
+      101,
+      21,
+      0.2079207920792079
+    ],
+    [
+      "Social Contests",
+      20,
+      4,
+      0.2
+    ],
+    [
+      "Confessor Arne",
+      26,
+      5,
+      0.19230769230769232
+    ],
+    [
+      "Game Master",
+      16,
+      3,
+      0.1875
+    ],
+    [
+      "Magnus Vaynard",
+      35,
+      6,
+      0.17142857142857143
+    ],
+    [
+      "Faith",
+      12,
+      2,
+      0.16666666666666666
+    ],
+    [
+      "Mandate",
+      192,
+      30,
+      0.15625
+    ],
+    [
+      "Crown",
+      112,
+      17,
+      0.15178571428571427
+    ],
+    [
+      "NPC Behavior",
+      34,
+      5,
+      0.14705882352941177
+    ],
+    [
+      "Domain Action",
+      107,
+      15,
+      0.14018691588785046
+    ],
+    [
+      "Varfell",
+      143,
+      19,
+      0.13286713286713286
+    ],
+    [
+      "Church",
+      126,
+      16,
+      0.12698412698412698
+    ],
+    [
+      "Stability",
+      235,
+      28,
+      0.11914893617021277
+    ],
+    [
+      "Autonomy",
+      30,
+      3,
+      0.1
+    ],
+    [
+      "Hafenmark",
+      158,
+      15,
+      0.0949367088607595
+    ],
+    [
+      "Dynastic Proclamation",
+      11,
+      1,
+      0.09090909090909091
+    ],
+    [
+      "Settlement Layer",
+      34,
+      3,
+      0.08823529411764706
+    ],
+    [
+      "Inge Baralta",
+      59,
+      5,
+      0.0847457627118644
+    ],
+    [
+      "Mass Seizure",
+      24,
+      2,
+      0.08333333333333333
+    ],
+    [
+      "Royal Assassination",
+      12,
+      1,
+      0.08333333333333333
+    ],
+    [
+      "PI",
+      38,
+      3,
+      0.07894736842105263
+    ],
+    [
+      "Threadwork",
+      102,
+      8,
+      0.0784313725490196
+    ],
+    [
+      "Zoom In",
+      39,
+      3,
+      0.07692307692307693
+    ],
+    [
+      "Restoration Movement",
+      136,
+      10,
+      0.07352941176470588
+    ],
+    [
+      "Scale Transitions",
+      15,
+      1,
+      0.06666666666666667
+    ],
+    [
+      "Evidence",
+      15,
+      1,
+      0.06666666666666667
+    ],
+    [
+      "Cultural Reformation",
+      15,
+      1,
+      0.06666666666666667
+    ],
+    [
+      "TS",
+      164,
+      10,
+      0.06097560975609756
+    ],
+    [
+      "Solmund",
+      105,
+      6,
+      0.05714285714285714
+    ],
+    [
+      "MS",
+      195,
+      11,
+      0.05641025641025641
+    ],
+    [
+      "Yrsa Vossen",
+      18,
+      1,
+      0.05555555555555555
+    ],
+    [
+      "Peninsular Strain",
+      55,
+      3,
+      0.05454545454545454
+    ],
+    [
+      "Edeyja",
+      37,
+      2,
+      0.05405405405405406
+    ],
+    [
+      "Victory",
+      97,
+      5,
+      0.05154639175257732
+    ],
+    [
+      "Torben",
+      40,
+      2,
+      0.05
+    ],
+    [
+      "Reason",
+      21,
+      1,
+      0.047619047619047616
+    ],
+    [
+      "IP",
+      98,
+      4,
+      0.04081632653061224
+    ],
+    [
+      "Knot",
+      74,
+      3,
+      0.04054054054054054
+    ],
+    [
+      "Combat",
+      26,
+      1,
+      0.038461538461538464
+    ],
+    [
+      "TCV",
+      27,
+      1,
+      0.037037037037037035
+    ],
+    [
+      "CI",
+      165,
+      6,
+      0.03636363636363636
+    ],
+    [
+      "Order",
+      29,
+      1,
+      0.034482758620689655
+    ],
+    [
+      "King Almud",
+      58,
+      2,
+      0.034482758620689655
+    ],
+    [
+      "Elske",
+      34,
+      1,
+      0.029411764705882353
+    ],
+    [
+      "Disposition",
+      102,
+      3,
+      0.029411764705882353
+    ],
+    [
+      "Conviction",
+      111,
+      3,
+      0.02702702702702703
+    ],
+    [
+      "Leap",
+      78,
+      2,
+      0.02564102564102564
+    ],
+    [
+      "Mass Combat",
+      51,
+      1,
+      0.0196078431372549
+    ],
+    [
+      "Standing",
+      56,
+      1,
+      0.017857142857142856
+    ],
+    [
+      "Coherence",
+      148,
+      2,
+      0.013513513513513514
+    ],
+    [
+      "Self-Rendering",
+      34,
+      0,
+      0.0
+    ],
+    [
+      "Ein Sof",
+      36,
+      0,
+      0.0
+    ],
+    [
+      "Campaign Architecture",
+      10,
+      0,
+      0.0
+    ],
+    [
+      "Fieldwork",
+      8,
+      0,
+      0.0
+    ],
+    [
+      "Wager",
+      4,
+      0,
+      0.0
+    ],
+    [
+      "Scene Slate",
+      22,
+      0,
+      0.0
+    ],
+    [
+      "Settlement Adjacency",
+      8,
+      0,
+      0.0
+    ],
+    [
+      "Faction Layer",
+      28,
+      0,
+      0.0
+    ],
+    [
+      "CI Political",
+      4,
+      0,
+      0.0
+    ],
+    [
+      "Military Layer",
+      9,
+      0,
+      0.0
+    ],
+    [
+      "Casus Belli",
+      17,
+      0,
+      0.0
+    ],
+    [
+      "Thread Revelation",
+      6,
+      0,
+      0.0
+    ],
+    [
+      "Tensions Deck",
+      8,
+      0,
+      0.0
+    ],
+    [
+      "Miraculous Event",
+      17,
+      0,
+      0.0
+    ],
+    [
+      "Armature System",
+      13,
+      0,
+      0.0
+    ],
+    [
+      "Event Impact Matrix",
+      6,
+      0,
+      0.0
+    ],
+    [
+      "Equity",
+      10,
+      0,
+      0.0
+    ],
+    [
+      "Precedent",
+      15,
+      0,
+      0.0
+    ],
+    [
+      "Continuity",
+      15,
+      0,
+      0.0
+    ],
+    [
+      "Consequence",
+      6,
+      0,
+      0.0
+    ],
+    [
+      "Authority",
+      6,
+      0,
+      0.0
+    ],
+    [
+      "Loyalty",
+      7,
+      0,
+      0.0
+    ],
+    [
+      "Lenneth",
+      22,
+      0,
+      0.0
+    ],
+    [
+      "Tensions",
+      10,
+      0,
+      0.0
+    ]
+  ],
+  "p1_corrected": {
+    "pass": true,
+    "fnd_cite": 7.4,
+    "fnd_tl": 0.0,
+    "med_cite": 6.0,
+    "med_tl": 0.0
+  }
+}
