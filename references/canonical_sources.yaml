@@ -259,5 +259,16 @@ systems:
     canonical_sha__designs__architecture__key_type_registry_v30_md: "6f989dae45b826fb75967332ebce23b5c3fc5d3b"
     status: provisional
     added: '2026-05-01 PP-687 ratification — Key type registry'
+  conviction_taxonomy:
+    design_doc: designs/personal/conviction_taxonomy_v30.md
+    canonical_sha__designs__personal__conviction_taxonomy_v30_md: "78235b4aa626a681241fee36d8fc3cf5bbd7ea67"
+    status: provisional
+    added: '2026-05-01 PP-684 ratification — 13-Conviction taxonomy + Self-Other axis'
+  conviction_migration_roster:
+    design_doc: designs/personal/conviction_migration_roster_v30.md
+    canonical_sha__designs__personal__conviction_migration_roster_v30_md: "7a92ce020f134482d9202dae53dee16f28651927"
+    status: provisional
+    added: '2026-05-01 PP-685 ratification — Conviction migration roster'
 
 # Last touched: 2026-05-01 (PP-687 ratification — key_substrate_v30 + key_type_registry_v30 added; PP-665..674 trace comments archived)
+# Last touched: 2026-05-01 (PP-684/685 ratification — conviction_taxonomy_v30 + conviction_migration_roster_v30 added)
