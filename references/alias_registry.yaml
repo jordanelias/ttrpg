@@ -578,6 +578,47 @@ deprecated_abbreviations:
     status: "DEPRECATED — was a simulator category code, never an in-game term"
     active_canonical: null
 
+
+# ─────────────────────────────────────────────────────────────────────────
+# PP-684/PP-687 ALIASES
+# Substrate vocabulary mappings.
+# ─────────────────────────────────────────────────────────────────────────
+
+substrate_aliases:
+  key:
+    canonical: "Key"
+    abbreviations: []
+    aliases: ["EventImpact"]
+    legacy: ["EventImpact Matrix", "event record", "Memory record"]
+    patch: "PP-687"
+    note: "Doc 08 EventImpact is the Key prototype; specific subtypes are da_outcome.* and state_transition.* per key_type_registry_v30.md."
+  memory_entry:
+    canonical: "Memory entry (Key reference + per-NPC salience)"
+    aliases: ["Memory record", "Memory schema"]
+    patch: "PP-687"
+    note: "NPC.memory is list of Key references with salience; not bespoke per-NPC event copies. See key_substrate_v30.md §4.3."
+  philosophical_tradition_legacy:
+    canonical: "Conviction (PP-684 13-Conviction taxonomy)"
+    aliases: []
+    legacy:
+      - "Categorical Imperative"
+      - "Virtue Ethics"
+      - "Divine Command"
+      - "Epistemic Reason"
+      - "Rawlsian"
+      - "Military Honor"
+      - "Reason (legacy tag)"
+      - "Continuity (legacy tag)"
+    patch: "PP-684"
+    note: "Legacy philosophical-tradition labels superseded by 13-Conviction taxonomy (Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor). Per-character migration in PP-685 / conviction_migration_roster_v30."
+  ethical_framework_modifier:
+    canonical: "Ob_modifier (per faction_behavior_v30 §3.7 triadic decomposition)"
+    aliases: []
+    legacy: ["Ethical Framework Modifier"]
+    patch: "PP-686"
+    note: "Replaced by mission + cascade + expectation triadic decomposition clamped at ±2. See SUPERSESSION-PP686-001."
+
+
 # ─────────────────────────────────────────────────────────────────────────
 # LEGACY RENAMES
 # Terms that were renamed. Old names must not appear in current docs.

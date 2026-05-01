@@ -64,4 +64,57 @@ entries:
       - designs/npcs/npc_behavior_v30.md
       - designs/provincial/victory_v30.md
     commits: [297f892, 13b8f30]
+  - superseded_id: "PP-687-001"
+    date: 2026-05-01
+    scope: "Doc 08 §1 EventImpact (categorical aligned/neutral/contradicted projection)"
+    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §2"
+    replacement: >
+      EventImpact superseded by Key.impact_vector — continuous signed projection
+      onto 4-axis (hierarchical/sacred/instrumental/traditional). Doc 08 prototype
+      becomes Key family da_outcome.* (§3 of key_type_registry_v30).
+    files_to_recheck:
+      - canon/02_canon_constraints.md
+      - designs/audit/2026-04-30-architecture-session/00_index.md
+    commits: ["d2a75fc"]
+
+  - superseded_id: "PP-687-002"
+    date: 2026-05-01
+    scope: "Doc 12 Political Dynamics — bespoke event records in procedures A-E"
+    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §8.3"
+    replacement: >
+      Procedures A-E rewrite to consume Keys (Phase B Stage 1).
+      Procedure A reads Memory Keys filtered by axis-relevance.
+      Procedures B-D read scene_event and da_outcome Keys.
+      Procedure E emits scene.dialogue Keys with knowledge payload.
+    files_to_recheck:
+      - designs/provincial/political_dynamics_v30.md
+    commits: ["d2a75fc"]
+
+  - superseded_id: "PP-687-003"
+    date: 2026-05-01
+    scope: "NPC Memory record bespoke schema (per npc_behavior_v30)"
+    superseded_by: "PP-687 / designs/architecture/key_substrate_v30.md §4.3-4.4"
+    replacement: >
+      NPC.memory becomes list of Key references with per-NPC salience field
+      (no longer per-NPC bespoke event copies). Memory Query API §4.4 indexes
+      by axis-relevance / time-window / target-mention for 1000-3300-entry scale.
+    files_to_recheck:
+      - designs/npcs/npc_behavior_v30.md
+    commits: ["d2a75fc"]
+
+  - superseded_id: "PP-686-001"
+    date: 2026-05-01
+    scope: "params/bg/core.md §Ethical Framework Modifiers (philosophical-tradition vocabulary, ±3 Ob cap)"
+    superseded_by: "PP-686 v2 / designs/provincial/faction_behavior_v30.md §3.7"
+    replacement: >
+      Ethical Framework Modifiers superseded by triadic decomposition: 
+      mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier
+      clamped at ±2 (was ±3 — sim v2 confirmed ±3 produced dominant-strategy at high alignment).
+      Strictness functions only as deviation-cost modulator (C2; reward path dropped).
+    files_to_recheck:
+      - params/bg/core.md
+      - params/factions.md
+      - params/factions_personal.md
+      - params/bg/tracks.md
+    commits: ["dede72f"]
 

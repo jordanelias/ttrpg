@@ -831,3 +831,49 @@ canon).
 - PP-689 SHA followup still pending (now covers PP-690 + PP-691 + PP-705 file edits — single SHA-update commit pending).
 - Workplan v2 ratification gates Phase 1+.
 - Concurrent-session ID hazard partially mitigated (assert_unique_ids hook 24ea3b9b0); stale-snapshot reasoning hazard remains until Phase 4.
+
+
+---
+
+## PP-684/685/686/687/688 — 2026-05-01 — Architecture session ratification (5 PPs)
+
+**Trigger:** 2026-04-30 architecture session ratification per integration plan `designs/audit/2026-04-30-architecture-session/16_open_items_NERS_integration_plan.md` (commit 9230603, 800 lines).
+
+**Six commits executed (per integration plan §3.2):**
+
+1. **PP-687 substrate (commit d2a75fc):** designs/architecture/key_substrate_v30.md + designs/architecture/key_type_registry_v30.md created. canonical_sources.yaml updated; PP-665..674 trace comments archived to free space.
+2. **PP-684 + PP-685 taxonomy + roster (commit 8d31419):** designs/personal/conviction_taxonomy_v30.md + designs/personal/conviction_migration_roster_v30.md created. 13-Conviction taxonomy with Honor as 13th per integration plan D1; 9 named character migrations + 4 placeholders + 4 edge cases.
+3. **PP-686 v2 faction architecture (commit dede72f):** designs/provincial/faction_behavior_v30.md created. C1-C10 calibration set applied; D3 multi-root cascade; D4 4-trigger Mission shift; D12 drift_coef=0.6.
+4. **PP-688 articulation layer (commit b633778):** designs/articulation/articulation_layer_v30.md created. 8-trigger ruleset per D10; pacing deferred per D11; 3 Class B Key types added (meta.knot_formed retained, meta.knot_ruptured + state.belief_revised new).
+5. **Conviction → axis matrix (commit 98f492a):** designs/personal/conviction_axis_matrix_v30.md created. 13 × 4 = 52-cell matrix with per-row Renaissance-grounded calibration rationale.
+6. **Register entries (this commit):** PP-684/685/686/687/688 added to patch_register_active.yaml with full vetting blocks; SUPERSESSION-PP687-001/002/003 + SUPERSESSION-PP686-001 to supersession_register.yaml; substrate_aliases section added to alias_registry.yaml.
+
+**12 Jordan-decisions resolved** (per integration plan §3.4, signed off by delegation):
+D1=Honor 13th YES · D2=4-axis accepted, 5th Class B if needed · D3=multi-root cascade · D4=4 Mission-shift triggers · D5=PP-687 schema approved · D6=7×30 type registry · D7=visibility default-from-scene · D8=phased rollout · D9="Key" retained · D10=8 initial triggers · D11=pacing deferred · D12=drift_coef=0.6.
+
+**Files modified:**
+- designs/architecture/key_substrate_v30.md (NEW)
+- designs/architecture/key_type_registry_v30.md (NEW)
+- designs/personal/conviction_taxonomy_v30.md (NEW)
+- designs/personal/conviction_migration_roster_v30.md (NEW)
+- designs/personal/conviction_axis_matrix_v30.md (NEW)
+- designs/provincial/faction_behavior_v30.md (NEW)
+- designs/articulation/articulation_layer_v30.md (NEW)
+- canon/patch_register_active.yaml (5 PP entries)
+- canon/supersession_register.yaml (4 supersession entries)
+- references/alias_registry.yaml (substrate_aliases section)
+- references/canonical_sources.yaml (7 source entries; PP-665..674 trace archived)
+- references/propagation_map.md (this entry)
+
+**Status:** All 7 docs PROVISIONAL. Stage 10 verification battery (per integration plan §3.5) required before promotion to canonical: lateral cross-system simulation (faction × mass_battle × social_contest at scene scale + Strain interaction), articulation-layer simulation (significance scoring, 8-trigger firing rate, chronicle prose generation, K/B/I integration, determinism), production-engine determinism verification during Phase 5a Godot.
+
+**Phase 5a Godot scope updated:** original 5 sessions → 7.5-8.5 sessions per integration plan §3.5 — adds diagnostic UI (2 sessions: faction dashboard, Memory viewer, CAUSAL_GRAPH walker, arc-resolution notifications) + cut scene rendering (1-2 sessions: Tier 2 5-15s + Tier 3 30-90s annual chronicle paragraphs).
+
+**NERS verdict at session close:** 17 STRONG / 5 STRONG-conditional / 4 MODERATE / 0 WEAK. 4 lateral+diagonal directions transitioned WEAK→STRONG. Story-vs-happenings probability raised from substrate-alone ~15% to PP-688-complete ~75-85%.
+
+**Out of scope (carried forward):**
+- PP-666 trio (settlement adjacency ED-710, fractional province ED-711, succession split) — Phase 1 P2 carryover.
+- Workplan v3 ↔ commit ID linkage (week-audit R5).
+- PROVISIONAL→canonical sweep for ED-750/751/752/753/754/762/764, PP-297/351/653 (week-audit R6).
+- Mass-battle decision queue (16 items, MB-01..08 + INTER-10d/12b/14a/14d/14e/12e/17b/09d).
+- Pacing system (future PP per artifact 10 §10.5).

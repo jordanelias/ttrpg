@@ -1,6 +1,7 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
 # Next PP number: 705
+# 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
 # Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → archives/patches/patch_register_archive_2026_04_30_a.yaml
 
 patches:
@@ -1021,3 +1022,170 @@ patches:
       undermine future Mode G runs. Ω pass: T1 markers preserve human-readable
       audit trail; B1 corrigendum preserves audit-time numbers while disclosing
       defect. Q pass: workplan v2 §0 specified all three actions exactly."
+
+
+- id: PP-684
+  date: 2026-05-01
+  severity: P1
+  description: "Conviction taxonomy v30 — 13-Conviction set with structured concentration, Self-Other orientation axis, and 8 cultural background templates. Replaces legacy Reason/Continuity tags and philosophical-tradition labels (Categorical Imperative, Virtue Ethics, Divine Command, Epistemic Reason, Rawlsian, Military Honor) with period-correct vocabulary (Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor). Honor confirmed as 13th Conviction per integration plan D1. Self-Other orientation [-1,+1] decouples greed/altruism from Convictions. 4-axis vectorization (hierarchical/sacred/instrumental/traditional) with 5th-axis allowance as Class B if Stage 10 calibration finds Community/Identity collapse load-bearing. Companion: conviction_axis_matrix_v30 (52-cell matrix with Renaissance-grounded calibration rationale). Architecture session §3 + §16 integration plan §3.4 D1, D2, D8 resolved."
+  finding_id: arch_session_2026-04-30 §3 PP-684 ratification
+  source: editorial
+  affects:
+    - designs/personal/conviction_taxonomy_v30.md
+    - designs/personal/conviction_axis_matrix_v30.md
+    - references/canonical_sources.yaml
+    - references/alias_registry.yaml
+    - canon/supersession_register.yaml
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α", "Μ-γ"]
+    m_ratings:
+      M-1: "+"
+      M-2: "○"
+      M-3: "+"
+      M-4: "✓"
+      M-5: "+"
+      M-6: "✓"
+      M-7: "✓"
+      M-8: "✓"
+      M-9: "+"
+      M-10: "✓"
+      M-11: "✓"
+    q: pass
+    note: "Class A — substrate-defining. N: replaces philosophically-anachronistic vocabulary with period-correct interpretive substrate; load-bearing for PP-686 cascade math and PP-687 axis-projection. Ω: 13-Conviction taxonomy is human-readable; Self-Other axis is intuitive; cultural background templates are authoring-economy. Q: per arch session sims §1 + §1.8 (sim v2 confirmed structured-concentration produces smoother aggregates than flat distributions)."
+
+- id: PP-685
+  date: 2026-05-01
+  severity: P1
+  description: "Conviction migration roster — per-character mapping from legacy Conviction labels to PP-684 13-Conviction taxonomy with structured concentration. Covers 9 named characters (Almud, Cesare, Lorenzo, Yrsa Vossen, Maret Uln, Solmund, Cardinal Reichard, Baralta, Lenneth) plus 4 placeholder mappings (Hafenmark Speaker, Lowenritter Master, Restoration Spokesperson, Niflhel envoy). Edge cases flagged: Vaynard (post-VTM/CR strike), Vossler, Reinholt — defaults provided per §3, designer review at Phase B. Each entry: prior labels, primary 1-3 Convictions with weights summing 0.6-0.8, cultural background template, initial Self-Other orientation, migration rationale."
+  finding_id: arch_session_2026-04-30 §3 PP-685 ratification
+  source: editorial
+  affects:
+    - designs/personal/conviction_migration_roster_v30.md
+    - references/canonical_sources.yaml
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α"]
+    m_ratings:
+      M-1: "+"
+      M-2: "○"
+      M-3: "+"
+      M-4: "✓"
+      M-5: "✓"
+      M-6: "✓"
+      M-7: "✓"
+      M-8: "✓"
+      M-9: "○"
+      M-10: "✓"
+      M-11: "✓"
+    q: pass
+    note: "Class A — character canon mechanical. N: PP-684 ratification renders all existing Conviction tags non-canonical; migration roster is the bookkeeping that prevents lost character state. Ω: human-readable per-character entries with rationale notes."
+
+- id: PP-686
+  date: 2026-05-01
+  severity: P1
+  description: "Faction behavior architecture v2 — Mission/Cascade/Public Expectation/Legitimacy+Popular Support 4-component architecture replacing the Ethical Framework Modifiers system in params/bg/core.md. Mission: authored telos with aligned/contradicted DA categories from PP-687 da_outcome subtypes; 4 enumerated shift triggers (D4). Cascade: hierarchical α-blending of leader Convictions through supervisor graph; multi-root cascade allowance (D3); orphan/zero-vector edge cases handled (§3.9); crisis-bypass at scars≥3 (C4); Standing-weighted aggregate (C9). Public Expectation: 6 role templates with Honor-bearing variants (sovereign, ecclesiastical, mercantile-procedural, intelligence-diplomatic, reformist, military-order); Cascade Fidelity = cosine_similarity(aggregate, expected). L+PS: separate scalars [0,7] with α/β temperament typology (5 variants per §3.4.1), β-fidelity gating (C5), Self-Other modulation (C7), Strain interaction via env.peninsular_strain_shock (P2-3). DA Ob: triadic decomposition (mission + cascade + expectation) clamped at ±2 (C1, was ±3). Mandate retained as derived value for backward compatibility (§4). Dual-armature NPCs with role_acting flag (P2-1). All audit P1 + P2 items resolved. drift_coef = 0.6 per D12. Sim v1 + v2 validated; ratification PROVISIONAL pending Stage 10 cross-system + Strain interaction + replay determinism."
+  finding_id: arch_session_2026-04-30 §3 PP-686 v2 ratification
+  source: editorial
+  affects:
+    - designs/provincial/faction_behavior_v30.md
+    - params/bg/core.md
+    - params/factions.md
+    - params/factions_personal.md
+    - params/bg/tracks.md
+    - references/canonical_sources.yaml
+    - references/alias_registry.yaml
+    - canon/supersession_register.yaml
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α", "Μ-β", "Μ-δ"]
+    m_ratings:
+      M-1: "+"
+      M-2: "○"
+      M-3: "+"
+      M-4: "+"
+      M-5: "+"
+      M-6: "+"
+      M-7: "✓"
+      M-8: "✓"
+      M-9: "+"
+      M-10: "✓"
+      M-11: "+"
+    q: pass
+    note: "Class A — strategic-layer faction architecture. N: original Ethical Framework Modifiers were anachronistic philosophical labels; replacement is period-correct triadic Mission/Cascade/Expectation decomposition that emerges faction behavior dynamically from authored Mission + leader Convictions + public temperament. Ω: faction state schema is fully introspectable via L, PS, cascade_fidelity, strictness; DA Ob calculation is fully traceable. Q: sim v1 + sim v2 confirmed C1-C10 calibration; sim §1.8 confirmed Self-Other formula produces sensible attribution."
+
+- id: PP-687
+  date: 2026-05-01
+  severity: P1
+  description: "Universal Key substrate — engine-wide event substrate where every consequential happening is a typed, validated, append-only Key. Single update rule (key_substrate_v30 §4.1) consumes Keys and propagates effects to observers, subsystems, and causal-graph. Save state = initial conditions + Key log; replay = deterministic re-execution. 4-axis Conviction projection (hierarchical/sacred/instrumental/traditional) drives armature-mediated interpretation. Type registry: 7 families × 30 subtypes total (scene_event:5, da_outcome:5, mechanical_event:4, state_transition:4, environmental:4, scene_outcome:3, system_meta:5 incl. PP-688 Class B additions meta.knot_ruptured + state.belief_revised + meta.legacy_event wrapper). Memory Query API with 3 indexes (axis-relevance, time-window, target-mention) for 1000-3300-entry NPC Memory at 30-100 season campaigns. Determinism guarantees: per-emission RNG seed, stable sort sub-step ordering, x86_64 IEEE-754. Phased rollout per §7.1 with legacy_event wrapper for partial-migration state. Sim §1 confirmed: 2,703 keys × 30 seasons in 144ms; 18,724 keys/sec; sub-millisecond 10-hop walks; replay determinism with seed 42 → hash 35e3a499e35e28b9. All audit and OQ items D5/D6/D7/D8/D9 resolved."
+  finding_id: arch_session_2026-04-30 §3 PP-687 ratification
+  source: editorial
+  affects:
+    - designs/architecture/key_substrate_v30.md
+    - designs/architecture/key_type_registry_v30.md
+    - references/canonical_sources.yaml
+    - references/alias_registry.yaml
+    - canon/supersession_register.yaml
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α", "Μ-β", "Μ-γ", "Μ-δ"]
+    m_ratings:
+      M-1: "+"
+      M-2: "○"
+      M-3: "+"
+      M-4: "+"
+      M-5: "+"
+      M-6: "+"
+      M-7: "+"
+      M-8: "+"
+      M-9: "+"
+      M-10: "✓"
+      M-11: "+"
+    q: pass
+    note: "Class A — foundational engine substrate. Most architecturally consequential PP in the project to date. N: prior architecture had bespoke event records per system (doc 08 EventImpact, doc 12 procedures, NPC Memory schema, conviction_track Scar trigger schema) with no unified semantics; substrate unifies these. Ω: one schema, one update rule, one save format = full engine introspectability. Q: sim §1 + §1.6 + §1.2 confirmed cycle-freeness, salience monotonicity, visibility correctness, replay determinism, cross-system propagation, performance characteristics."
+
+- id: PP-688
+  date: 2026-05-01
+  severity: P1
+  description: "Articulation layer — three-tier system bridging the Key log (happenings) and the player's experience of story. Tier 1: protagonist UI lens with Concern queue, Memory salience indicator, Bonds register, Knot/Belief/Inspiration integration, chronicle search. Tier 2: trigger ruleset (8 initial triggers per D10: state.scar_acquired, state.coup_attempted, state.succession contested/emergency/imposed, mechanical.mission_shift, da.covert_betrayal exposed=true, meta.knot_formed, meta.knot_ruptured, env.peninsular_strain_shock severe/crisis); cross-faction clustering deferred as Phase B 9th candidate; significance function with stakes_weight + protagonist_alignment + cascade_event_weight + accumulated_narrative_weight (range 0-13); 5-15s cut scenes scaling with significance. Tier 3: annual chronicle generator with omniscient voice; universal track + protagonist track; ~5-12 paragraphs per year; reads PP-687 Key log + cascade fidelity + accumulated weight. Adds 3 Class B Key types (meta.knot_formed already in registry; meta.knot_ruptured new; state.belief_revised new). Adds 3 scene-event payload extensions (belief_engagement_for, inspirations_engaged_for, knot_partners_present). Pacing deferred per D11. Story-vs-happenings probability raises full-engine estimate from substrate-alone ~15% to PP-688-complete ~75-85%. Phase 5a Godot scope updated +2.5-3.5 sessions for cut scene rendering + chronicle generator + diagnostic UI."
+  finding_id: arch_session_2026-04-30 §3 PP-688 ratification
+  source: editorial
+  affects:
+    - designs/articulation/articulation_layer_v30.md
+    - designs/architecture/key_type_registry_v30.md
+    - designs/scene/fieldwork_socializing.md
+    - params/core.md
+    - references/canonical_sources.yaml
+    - references/alias_registry.yaml
+  status: provisional
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α", "Μ-γ", "Μ-δ"]
+    m_ratings:
+      M-1: "+"
+      M-2: "○"
+      M-3: "+"
+      M-4: "✓"
+      M-5: "+"
+      M-6: "+"
+      M-7: "✓"
+      M-8: "+"
+      M-9: "+"
+      M-10: "✓"
+      M-11: "+"
+    q: pass
+    note: "Class A — articulation system. N: substrate alone produces ~15% story-fraction; with articulation layer and K/B/I integration, full engine reaches ~75-85% projected story-fraction. PP-688 closes the artifact-11 happenings-vs-story gap. Ω: 3 tiers are independently testable; significance function fully traceable; cut scenes engine-rendered (no authored content). Q: sim §1 confirmed; Stage 10 articulation simulation per §8 (A1-A6) verifies before promotion to canonical."
