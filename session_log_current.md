@@ -2,63 +2,71 @@
 session_id: 2026-05-01-stage-10-validation
 session_open: 2026-05-01
 session_close: pending
-phase: "Stage 10 PASSED both sims; Mandate audit complete; promotion ready pending Jordan signoff"
+phase: "Stage 10 sims PASS + architecture promotion CANONICAL + Mandate audit drafted"
 status: open
 
 last_stage: >
-  Both Stage 10 sims PASS:
-  - lateral cross-system sim (commit bb5e293) — 9/9; lateral+diagonal NERS WEAK→STRONG confirmed at substrate
-  - articulation sim A1-A6 (commit 3cb5207) — 6/6; PP-688 Tier 2+3 validated; A6 supports 9th-trigger ADD
-  Mandate-consumer audit complete (commit 6f6051b) — 17 canonical params files surveyed; per-site L+PS classifications drafted; 5 open questions for Jordan.
+  PROMOTED 2026-05-01 (commit 0134b6d): PP-684/685/686/687/688 architecture entries PROVISIONAL→canonical after Stage 10 sims PASS (12/14 battery).
+  - 7 design docs flipped PROVISIONAL → CANONICAL marker
+  - 5 patch_register entries flipped status: provisional → applied
+  - 7 canonical_sources entries flipped status: provisional → canonical
+  - propagation_map.md updated with promotion record
+  Stage 10 sims:
+  - lateral cross-system sim (commit bb5e293) — 9/9 PASS; lateral+diagonal NERS WEAK→STRONG
+  - articulation sim A1-A6 (commit 3cb5207) — 6/6 PASS; PP-688 Tier 2+3 validated
+  Mandate-consumer audit (commit 6f6051b) — 17 canonical params files surveyed; awaits Jordan decision on 5 OQs.
 
 next_action:
   skill: design
   description: >
-    PRIMARY (gates on Jordan signoff):
-    1. Promote PP-684/685/686/687/688 PROVISIONAL → canonical (Stage 10 12/14 PASS; V7/V8 require Phase 5a engine measurement, not blocking).
-    2. Resolve Mandate-audit open questions §5 (5 items in designs/audit/2026-05-01-stage-10-validation/03_mandate_consumer_audit.md):
-       - submission ruling (PP-475) threshold: L=0 vs PS=0 vs (L+PS)/2=0
+    All mechanical work that does not require creative input is done. Remaining work needs Jordan input:
+
+    JORDAN-DECISION queue:
+    1. Mandate-audit OQs §5 (5 items in designs/audit/2026-05-01-stage-10-validation/03_mandate_consumer_audit.md):
+       - submission ruling (PP-475) threshold migration: L=0 vs PS=0 vs (L+PS)/2=0
        - PP-189 Institutional Mandate Uphold/Appease: per-faction L+PS pair vs L only
-       - failure-clause Mandate gains for Church: L only or both
-       - personal_mandate_view formula: (L+PS)/2 vs max vs weighted
+       - failure-clause Mandate gains for Church: L only vs both L and PS
+       - personal_mandate_view formula: (L+PS)/2 vs max vs min vs weighted
        - Mandate ≥ 4 gates: per-mechanic L vs PS vs strictness
-    3. Decide Phase B 9th trigger: cross-faction clustering (sim A6 supports ADD with corr ≥0.40) and/or state.belief_revised (P2 finding §4.1 of articulation eval).
+    2. Phase B 9th trigger decision:
+       - ADD cross-faction clustering (A6 supports with corr ≥0.40 threshold)
+       - ADD state.belief_revised (resolves P2 finding §4.1 of articulation eval)
+       - Defer both; remain at 8 triggers
+    3. params/bg/core.md Ethical Framework Modifiers section: ALREADY superseded by architecture session; strikethrough table preserved for traceability — confirm Jordan wants it removed entirely (cleaner) or kept (audit trail).
 
-    POST-SIGNOFF MIGRATIONS:
-    4. params/bg/core.md — strike Ethical Framework Modifiers section.
-    5. params/factions/stats_1_7_scale.md — split Mandate column into Legitimacy + Popular Support.
-    6. params/factions_personal.md — add personal_mandate_view derived field.
-    7. Per-site Mandate→L+PS migrations across 9 consumer files per audit §2.
-    8. Reference-file nominal text replacements per audit §3.
-    9. Add ED-782 (P1, audit-driven migration), ED-783 (P2, reference replacements), ED-784 (P2, personal_view), ED-785 (P3, audit OQ resolution) to editorial ledger.
-       [RENUMBERED 2026-05-01 per commit 1229d12d / PP-710: original numbers ED-779/780/781/782 collided with geography Phase 2/3/4 IDs already claimed by PP-706/707/708/709/710. next_id at renumber time = 782; verify next_id at start of work and shift further if it has advanced.]
+    POST-DECISION MECHANICAL WORK (resumable without creative input once OQs answered):
+    4. params/factions/stats_1_7_scale.md — split Mandate column → Legitimacy + Popular Support; per-faction values from §2.1 of audit.
+    5. params/factions_personal.md — add personal_mandate_view derived field per §2.9.
+    6. Per-site Mandate→L+PS migrations across 9 consumer files (audit §2.1–2.10).
+    7. Reference-file nominal text replacements (audit §3, 8 files).
+    8. Add ED-782+ entries to editorial ledger per OQ outcomes (verify next_id has not advanced).
 
-    DEFERRED (multi-session scope):
-    10. Author Mission/cascade/temperament for 6 factions + 30-50 territories (creative authoring).
-    11. Per-system Key migration (PP-687 phased rollout): mass-battle, social-contest, faction-action, scale-transitions, etc.
-    12. PROVISIONAL→canonical sweep for ED-750..764, PP-297/351/653 (Stage 10 lifts gates).
+    CREATIVE-AUTHORING (multi-session scope):
+    9. Author Mission/cascade/temperament for 6 factions + 30-50 territories (per PP-686 v2 §3.1, §3.2, §3.4.1).
+    10. Per-system Key migration: mass-battle, social-contest, faction-action, scale-transitions, etc. (PP-687 §7.1 phased rollout).
 
-    OLDER P1 BACKLOG (deferred, unchanged):
+    OLDER P1 BACKLOG (independent of Stage 10):
     - PP-666 trio (P1)
-    - ED-755 Jordan-decision items
+    - ED-755 Jordan-decision items (Doc 17 §6: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord)
     - mass-battle decision queue (16 items)
     - pacing PP
     - workplan v2 Phase 1
     - gameplay-design directive (workplan §B1)
 
 blockers:
-  - "PP-684/685/686/687/688 PROVISIONAL→canonical promotion gates on Jordan signoff (Stage 10 12/14 PASS; substrate visibility-aware-subscription P2 finding and belief_revised P2 finding both non-blocking carry-forward)"
-  - "Mandate-audit migration commits gate on Jordan signoff for the 5 open questions"
-  - "Phase 5a Godot work gates on canonical specs"
+  - "Mandate-audit migration work blocked on Jordan decisions (5 OQs)"
+  - "Phase 5a Godot work gates on production engine measurement of PP-687 §9 V7/V8 (perf items)"
 
 stage10_status:
   battery_total: 14
   passed: 12
   unverified: 2
   unverified_items: ["PP-687 §9 V7 (memory query perf)", "PP-687 §9 V8 (walk perf)"]
-  unverified_blockers: false   # Phase 5a engine measurement, not Stage 10
-  findings_p2:
-    - "PP-687: substrate dispatch fires by type only, not visibility-aware (lateral sim §4.1)"
+  unverified_blockers: false   # Phase 5a, not Stage 10
+  promotion_complete: true
+  promotion_commit: "0134b6d"
+  findings_p2_carry_forward:
+    - "PP-687: substrate dispatch by type only, not visibility-aware (lateral sim §4.1)"
     - "PP-688: state.belief_revised not in 8-trigger ruleset (articulation sim §4.1)"
   findings_supports_decision:
     - "PP-688 §3.1 9th trigger: A6 corr +0.937 → ADD cross-faction clustering with corr ≥0.40 threshold"
@@ -68,5 +76,7 @@ session_commits:
   - "bb5e293 — Stage 10 lateral cross-system sim 9/9 PASS"
   - "3cb5207 — Stage 10 articulation sim A1-A6 6/6 PASS"
   - "6f6051b — Mandate-consumer audit (canon params survey)"
+  - "78a7b37 — session log update post-sim"
+  - "0134b6d — Stage 10 promotion PROVISIONAL→canonical (PP-684/685/686/687/688)"
 
 predecessor_session: 2026-04-30-architecture-session
