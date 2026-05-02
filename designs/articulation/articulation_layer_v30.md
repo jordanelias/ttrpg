@@ -73,7 +73,7 @@ Player query "what happened in [territory] last year" → engine returns:
 
 A cut scene is a short (5–15 second) engine-rendered moment showing a non-protagonist event in evocative detail. Triggered by thresholds on Key emissions; not authored.
 
-### §3.1 Trigger ruleset (8 initial triggers per D10)
+### §3.1 Trigger ruleset (10 triggers — 8 initial per D10, +#9 cascade clustering added 2026-05-01, +#10 belief_revised added 2026-05-02 per Stage 10 §4.1 finding)
 
 A Key fires a Tier 2 cut scene if it matches **any** of:
 
@@ -88,6 +88,7 @@ A Key fires a Tier 2 cut scene if it matches **any** of:
 | 7 | `meta.knot_ruptured` (Class B per §6) | Composure-load-bearing rupture event |
 | 8 | `env.peninsular_strain_shock` with `severity in [severe, crisis]` | Peninsula-scale narrative beat |
 | 9 | `meta.cascade_cluster_event` (cluster forms or dissolves; sustained ≥ 4 seasons) | Cross-faction ideological alignment / opposition |
+| 10 | `state.belief_revised` for any tracked NPC (Bonded, named in roster) | Singular protagonist-internal belief inflection (Stage 10 articulation sim §4.1: sig=7 mid-tier, otherwise routed only via K/B/I bumps) |
 
 **Trigger 9 specification (added 2026-05-01 per Stage 8b sim verification):**
 
@@ -96,7 +97,7 @@ Condition:
     For each pair (faction_a, faction_b):
         sim = cosine_similarity(faction_a.cascade_fidelity_history[-4:],
                                 faction_b.cascade_fidelity_history[-4:])
-        if abs(sim) > 0.7 (initial threshold; tunable):
+        if abs(sim) > 0.40 (Stage 10 A6 calibration; replaces 2026-05-01 starting 0.7 — see footnote):
             if sustained ≥ 4 seasons (regime entry):
                 emit meta.cascade_cluster_event Key with payload:
                     cluster_pair: [faction_a, faction_b]
@@ -107,7 +108,18 @@ Condition:
                 fire once per regime; refire on regime transition
 ```
 
-The cluster threshold ±0.7 is a starting calibration per integration plan §3.4 D10 deferral resolution. Stage 8b sim (`designs/audit/2026-05-01-stage-8-sim/01_findings_8b_trigger9.md`) verified the architecture; Stage 8c calibration sweep (Phase 5a) refines threshold and dedup logic. Per integration plan §3.4 D10, trigger 9 was deferred from initial release pending sim-validation of clustering detection — Stage 8b provides that validation.
+The cluster threshold ±0.40 reflects Stage 10 articulation sim A6 evidence (corr +0.937 at the canonical Crown/Hafenmark cascade pair, 30-season window; signal classified DETECTABLE per |corr| ≥ 0.30 floor). The original 2026-05-01 starting threshold was ±0.7; Stage 10 §3.6 recommended tightening to ±0.40 to capture cross-faction clustering above the MARGINAL band (0.15–0.30) without false positives from coincidental short-window synchronization. Stage 8b sim (`designs/audit/2026-05-01-stage-8-sim/01_findings_8b_trigger9.md`) verified the architecture; Stage 8c calibration sweep (Phase 5a) refines threshold further and dedup logic. Per integration plan §3.4 D10, trigger 9 was deferred from initial release pending sim-validation of clustering detection — Stage 8b + Stage 10 A6 jointly provide that validation.
+
+**Trigger 10 specification (added 2026-05-02 per Stage 10 articulation sim §4.1 finding):**
+
+```
+Condition:
+    On any state.belief_revised Key for an NPC in the tracked roster
+    (Bonded ≥ 5 OR named-roster member per fieldwork_socializing.md):
+        emit Tier 2 cut scene (sig accumulator + cut scene rendering per §3.4)
+```
+
+State.belief_revised was previously routed only through §3.5 K/B/I integration as a payload **bump** to scene_event significance. Stage 10 §4.1 finding observed: a belief-revision Key on its own — without a co-firing trigger — has sig=7 (mid-tier) but does not produce a cut scene. Adding trigger #10 closes this gap. Cross-reference: integration plan §3.4 D10 originally placeholdered the 9th-trigger slot; with cross-faction clustering already promoted to #9 (2026-05-01) and Stage 10 A6/§4.1 dual-finding, both belief revision and cluster events now have canonical trigger entries.
 
 ### §3.2 Significance function
 

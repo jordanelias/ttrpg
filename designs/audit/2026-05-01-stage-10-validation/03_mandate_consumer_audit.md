@@ -179,23 +179,43 @@ These files mention Mandate in tables, examples, victory conditions, NPC priorit
 
 ---
 
-## §6 Editorial entries (proposed, not yet logged)
+## §5b RESOLVED 2026-05-02 (Jordan signoff)
 
-These would be added to canon/editorial_ledger.yaml after Jordan ratifies the audit:
+All five open questions resolved per recommendations. Captured here for downstream migration consumers.
 
-- **ED-779** P1: "Mandate→L+PS migration per Mandate-consumer audit; per-site classifications in designs/audit/2026-05-01-stage-10-validation/03_mandate_consumer_audit.md §2"
-- **ED-780** P2: "Update reference files (params/factions/riskbreakers_identity.md, ed_resolutions.md, victory.md, core.md, npc_priority_trees.md, npcs_special.md, scale_transitions.md) with nominal Mandate→L/PS replacements per audit §3"
-- **ED-781** P2: "Author personal_mandate_view derived field in params/factions_personal.md per audit §2.9"
-- **ED-782** P3: "Resolve open questions §5 (5 items) in next session"
+| # | Question | Resolution |
+|---|---|---|
+| Q1 | Submission ruling (PP-475) threshold | **PS = 0** — submission is populace capitulation; institutional collapse is a separate event. |
+| Q2 | PP-189 Institutional Mandate Uphold/Appease | **L only** — "Institutional" semantic disambiguates against PS. |
+| Q3 | Failure-clause "Church Mandate +1" gain on non-Church action failure | **Church L only** — institutional vacuum benefits procedural authority; populace does not shift on the other faction's failure. |
+| Q4 | `personal_mandate_view` formula | **`round((L + PS) / 2)`** — personal-scale view at the wrong scale to discriminate L from PS. Note: already authored in `params/factions_personal.md` per PP-686 v2; this resolution confirms existing formula. |
+| Q5 | `Mandate ≥ 4` threshold gates across BG mechanics | **Per-mechanic** — Crown Policy = `L ≥ 4`; populist DAs = `PS ≥ 4`; deviation-cost gates = strictness clamp. Blanket rule loses the split's purpose. |
 
-ED-755 (existing P1) gates on this audit's completion.
+**Phase B trigger ruleset (also resolved 2026-05-02):**
+
+- **Trigger #9 (cross-faction clustering):** already promoted 2026-05-01. Threshold tightened from ±0.7 → ±0.40 per Stage 10 §3.6 / A6 sim evidence (corr +0.937 at canonical Crown/Hafenmark pair, 30-season window). See `articulation_layer_v30 §3.1`.
+- **Trigger #10 (`state.belief_revised`):** ADDED 2026-05-02 per Stage 10 articulation sim §4.1 finding. Belief-revision Keys with sig=7 mid-tier no longer require co-firing trigger; Tier 2 cut scene fires on the Key alone. See `articulation_layer_v30 §3.1`.
+
+**Cross-references:** ED-784 (this resolution + L+PS migration sweep), ED-785 (Phase B trigger ruleset additions), `designs/articulation/articulation_layer_v30.md §3.1` (canonical trigger ruleset, now 10 triggers).
 
 ---
 
-## §7 Status
+## §6 Editorial entries (committed 2026-05-02)
+
+After 2026-05-01 there were ID collisions in the editorial range — ED-779/780/781 were taken by geography canon work and ED-782 by the PP register collision repair. Renumbered to ED-784/785 (single combined commit). Final form:
+
+- **ED-784** P1: "Mandate audit resolution + §5 questions answered (PS / L only / L only / avg / per-mechanic). Migration sweep across 9 consumer files (see audit §2) queued as separate mechanical commit."
+- **ED-785** P2: "Phase B trigger ruleset finalized — #9 cluster threshold ±0.7 → ±0.40 per Stage 10 A6; #10 state.belief_revised added per Stage 10 §4.1. articulation_layer_v30.md §3.1 canonical."
+
+Note: original §6 proposal listed ED-781 for `personal_mandate_view` derived field. That field was already authored in `params/factions_personal.md` per PP-686 v2 — no separate ED needed. Reference file nominal replacements (audit §3) folded into ED-784 sweep.
+
+Correction: original §6 also claimed ED-755 (existing P1) gates on this audit. ED-755 actual scope is doc 17 §6 Jordan-decision items (E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord) — separate decision queue, unrelated to Mandate. ED-755 stays open.
+
+## §7 Status (updated 2026-05-02)
 
 - **Survey:** complete; 17 canonical-params files audited; 9 consumer + 8 reference.
 - **Per-site classifications:** drafted in §2.
-- **Open questions:** 5 in §5 awaiting Jordan.
-- **No canonical changes committed.** All migrations gate on Jordan signoff.
-- **Carry-forward:** Phase 2 migrations enter the next session's queue.
+- **Open questions:** ALL FIVE RESOLVED 2026-05-02 (see §5b).
+- **Phase B trigger ruleset:** finalized 2026-05-02 — 10 triggers total, threshold ±0.40, belief_revised promoted.
+- **Editorial closures:** ED-784 (resolution log + Mandate→L+PS consumer-file migration sweep), ED-785 (Phase B trigger ruleset additions). See `canon/editorial_ledger.yaml`.
+- **Carry-forward:** Phase 2 mechanical migrations across the 9 consumer files (per §4 sequencing) — separate commit; queued next.

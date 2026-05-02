@@ -498,3 +498,36 @@ Active register reduced 14,947 → ~8,500 tokens (cap 15,000). Retained: 3 provi
 **Cross-references:** ED-782 (collision repair, immediate predecessor), ED-770 (PENDING_PP_705 SHA follow-up), session log 2026-05-01..02.
 
 **Pattern note:** ED-782 + ED-783 combined are downstream consequences of insufficient pre-emptive archival discipline. Archival should precede cap pressure, not respond to it. Future workplan should include a recurring archival cadence (e.g., when any register passes 80% of cap).
+
+---
+
+## 2026-05-02 — Mandate audit resolution + Phase B trigger ruleset finalized (ED-784, ED-785)
+
+**ED-784 (P1, closed) — Mandate audit Q1-Q5 resolved.** Jordan signoff 2026-05-02.
+
+| Q | Resolution |
+|---|---|
+| Q1 Submission threshold | PS = 0 |
+| Q2 PP-189 Institutional Mandate | L only |
+| Q3 Failure-clause Church gain | L only |
+| Q4 personal_mandate_view | `round((L+PS)/2)` (already in factions_personal.md per PP-686 v2) |
+| Q5 Mandate≥4 gates | per-mechanic (Crown Policy L≥4, populist DAs PS≥4, deviation-cost gates strictness) |
+
+Resolution log: `designs/audit/2026-05-01-stage-10-validation/03_mandate_consumer_audit.md` §5b.
+
+**Phase 2 mechanical sweep queued (separate commit):** 9 consumer files + 8 reference files. Includes Ethical Framework Modifiers strike in `params/factions/stats_1_7_scale.md` (bg/core.md strike already applied).
+
+**ED-785 (P2, closed) — Phase B trigger ruleset finalized.**
+
+- Trigger #9 (cross-faction clustering): threshold |sim| > 0.7 → > 0.40 per Stage 10 §3.6 / A6 evidence.
+- Trigger #10 (state.belief_revised) ADDED: tracked NPC fires Tier 2 cut scene directly. Closes Stage 10 §4.1 finding.
+
+Total triggers in articulation §3.1: 10. Stage 8c calibration sweep (Phase 5a) refines further.
+
+**Files touched this commit:**
+- `designs/audit/2026-05-01-stage-10-validation/03_mandate_consumer_audit.md` (§5b RESOLVED, §6/§7 updated)
+- `designs/articulation/articulation_layer_v30.md` (§3.1 — header, table, threshold, trigger 10 spec)
+- `canon/editorial_ledger.yaml` (ED-784, ED-785 added; next_id 784 → 786)
+- `references/propagation_map.md` (this section)
+
+**Cross-references:** PP-688 (articulation layer canonical), Stage 10 articulation sim, Stage 8b/c sims, Mandate-consumer audit 2026-05-01.
