@@ -1,6 +1,7 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 707
+# Next PP number: 708
+# Archival batch 2026-05-01 (b): 4 applied PPs (PP-677..680) → archives/patches/patch_register_archive_2026_05_01_b.yaml
 # 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
 # Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → archives/patches/patch_register_archive_2026_04_30_a.yaml
 
@@ -103,227 +104,6 @@ patches:
       M-11: "○"
     q: pass
     note: "Self-exempting on Ω/Μ — same as PP-674, PP-675. Analytic instrument, not gameplay mechanic. Stages 1-4 executed 2026-04-29 within same chat session per Jordan directive 'let's dig into that workplan'. 12 weakness findings (TOPO-01..TOPO-12) PROVISIONAL pending review. Methodology limits documented in register §0/§8."
-- id: PP-677
-  date: 2026-04-29
-  severity: P3
-  description: "Throughlines table augmented with Load-bearing systems column,
-    addressing PP-676 v3 finding §V3-2 (throughlines framework lacked formalized
-    system-token coupling). Each of 43 active throughlines mapped to canonical
-    system slugs from references/canonical_sources.yaml `systems:` block whose
-    absence would prevent the throughline from operating. Coverage: 27 of 32
-    canonical systems load-bearing for at least one throughline. 5 systems
-    defensibly absent (core_engine infrastructure, combat personal-scale,
-    throughlines_framework meta-tool, solmund_voice/solmund_artifacts flavor).
-    Distribution: threadwork 31/43, factions 21/43, faction_layer 17/43,
-    conviction_track 13/43. Mean systems-per-throughline 3.7, range 2-6.
-    T-10 STRUCK retains '—'. Pre-table and post-table content byte-identical
-    to prior version (modulo new editorial marker). Mappings derived from each
-    throughline's name+description column plus implicit mechanism dependencies;
-    self-reviewed (initial draft had 11 unmentioned canonical systems, revised
-    to 5 with all defensibly out-of-scope). ED-764. Restores meaning to
-    PP-676 v3 throughline orphan diagnostic."
-  finding_id: PP-676 v3 §V3-2
-  source: topographic_analysis
-  affects:
-    - references/throughlines_meta_infill.md
-  status: applied
-  applied_commit: pending
-  vetting:
-    class: B
-    necessity: pass
-    omega: pass
-    mu: []
-    m_ratings:
-      M-1: "○"
-      M-2: "○"
-      M-3: "○"
-      M-4: "○"
-      M-5: "○"
-      M-6: "○"
-      M-7: "○"
-      M-8: "○"
-      M-9: "○"
-      M-10: "○"
-      M-11: "○"
-    q: pass
-    note: "Augmentation of canonical vetting framework (throughlines_meta_infill.md).
-      Class B because it modifies canonical authority for vetting itself, but
-      additive-only (new column, no modification of existing columns). N pass —
-      formalizes system-token coupling already implied by framework. Ω pass —
-      improves cross-scale traceability (Ω-a) by making per-throughline
-      implementation dependencies explicit. M-ratings ○ across the board:
-      structural-vocabulary only, no behavior change, no rebalance. Mappings
-      PROVISIONAL pending Jordan review; revisable by future PP without
-      breaking framework."
-- id: PP-678
-  date: 2026-04-29
-  severity: P3
-  description: "Vocabulary debt sweep — Game Master + 2 active Cultural Reformation
-    references. Per project instruction 'There is no GM — the engine handles all
-    resolution', all 17 Game Master references in active design docs replaced with
-    'engine' equivalents preserving mechanical meaning. Per CR-STRIKE-2026-04-19
-    (PP-650), 2 active Cultural Reformation references in
-    designs/architecture/complete_systems_reference.md (Acquisition list L207 +
-    Unvalidated compound L223) cleaned with HTML editorial markers; remaining 14
-    CR references retained as STRUCK markers / strikethroughs / parenthetical
-    historical record (intentional audit trail). Coup Counter sweep DEFERRED to
-    separate PP — substitution to Graduated Autonomy (ED-781) is not 1:1; design
-    judgment required per site. Files modified: threadwork_v30.md (-67 chars,
-    12 GM removed), npc_behavior_v30.md (-24, 3 GM removed), mass_battle_v30.md
-    (-2, 2 GM removed), complete_systems_reference.md (+74, 2 CR removed with
-    STRUCK markers added). All replacements verified unique-match before applying.
-    Bonus this commit: ED-762 collision resolved (doc 12 v1.2 entry renumbered to
-    ED-763), 4 ledger entries compressed for size compliance. ED-765."
-  finding_id: PP-676 v3 §V3-9
-  source: topographic_analysis
-  affects:
-    - designs/threadwork/threadwork_v30.md
-    - designs/npcs/npc_behavior_v30.md
-    - designs/provincial/mass_battle_v30.md
-    - designs/architecture/complete_systems_reference.md
-    - canon/editorial_ledger.yaml
-  status: applied
-  applied_commit: pending
-  vetting:
-    class: B
-    necessity: pass
-    omega: pass
-    mu: []
-    m_ratings:
-      M-1: "○"
-      M-2: "○"
-      M-3: "○"
-      M-4: "○"
-      M-5: "○"
-      M-6: "○"
-      M-7: "○"
-      M-8: "○"
-      M-9: "○"
-      M-10: "○"
-      M-11: "○"
-    q: pass
-    note: "Vocabulary cleanup, no mechanical change. N pass — removes legacy TTRPG
-      terminology contradicting project framing (videogame only, no GM). Ω pass —
-      cleanup only, no scale-transition or feedback-loop impact. Μ self-exempting —
-      editorial. M-ratings ○ across the board: structural-vocabulary only; behavior
-      preserved (engine resolves what GM would have adjudicated, identical mechanical
-      rules). Each replacement preserved sentence's mechanical meaning while
-      substituting agent (engine for GM). 14 STRUCK Cultural Reformation refs
-      retained as audit trail per editorial principle. Coup Counter deferred —
-      design judgment needed for non-1:1 substitution to Graduated Autonomy."
-- id: PP-679
-  date: 2026-04-29
-  severity: P3
-  description: "valoria-vector-audit skill enshrinement. Packages v3 multi-graph
-    triangulation methodology (PP-676) as a reusable directory-based skill so
-    future audits invoke it via /effort or skill call rather than re-deriving
-    from scratch. v3 took two sessions to converge (v1→v2→v3 with methodology-
-    validation failure mid-stream); enshrinement reduces future audit setup
-    cost from one session to minutes. Skill structure: SKILL.md + references/
-    (methodology, diagnostic_modes, v1_v2_v3_history) + scripts/vector_audit.py.
-    methodology.md contains the canonical v3 spec with all pre-committed
-    thresholds locked. diagnostic_modes.md documents all 8 modes (A multi-graph
-    hubs, B implied-but-missing, C notional, D cascade-without-return, E sparse,
-    F throughline orphans, G vocabulary debt, H multi-graph isolates).
-    v1_v2_v3_history.md captures institutional memory (14 v2 problems and how
-    v3 corrects each) so future operators don't relax tightened constraints.
-    skill_registry.md updated with new entry + 5 routing-table rows. Reference
-    run remains designs/audit/2026-04-29-topographic-analysis/ as canonical
-    executed implementation. ED-766."
-  finding_id: USER-DIRECTED
-  source: user
-  affects:
-    - skills/valoria-vector-audit/SKILL.md
-    - skills/valoria-vector-audit/references/methodology.md
-    - skills/valoria-vector-audit/references/diagnostic_modes.md
-    - skills/valoria-vector-audit/references/v1_v2_v3_history.md
-    - skills/valoria-vector-audit/scripts/vector_audit.py
-    - skills/valoria-orchestrator/references/skill_registry.md
-  status: applied
-  applied_commit: pending
-  vetting:
-    class: A
-    necessity: pass
-    omega: pass
-    mu: []
-    m_ratings:
-      M-1: "○"
-      M-2: "○"
-      M-3: "○"
-      M-4: "○"
-      M-5: "○"
-      M-6: "○"
-      M-7: "○"
-      M-8: "○"
-      M-9: "○"
-      M-10: "○"
-      M-11: "○"
-    q: pass
-    note: "Skill enshrinement of analytic methodology. Self-exempting Class A
-      (skill is meta-tooling, not gameplay mechanic). N pass — formalizes
-      methodology that already exists in the corpus (PP-676 v3 execution).
-      Ω pass — improves project capability for surfacing structural weaknesses
-      that hand-curation cannot find. Μ [] because skill produces evidence for
-      vetting; it doesn't itself service Μ modes. M-ratings ○ across the board:
-      no behavior change, methodology unchanged from v3. The skill IS the
-      methodology made accessible. Locked thresholds in methodology.md §3.7
-      preserve v2's hard-learned lessons about post-hoc tuning."
-- id: PP-680
-  date: 2026-04-29
-  severity: P3
-  description: "Coup Counter → Graduated Autonomy substitution sweep, completing
-    PP-678 (which deferred CC due to non-1:1 substitution requiring design judgment).
-    Per ED-781 the substitution map is: Coup Counter 0 → Loyal, 2 → Restless,
-    3 → Autonomous, 4 → Split. 6 active CC references rewritten in 4 files:
-    npc_behavior_v30 §Arc A timing window L601 (CC advances → Autonomy stage advances);
-    complete_systems_reference §1.4 Almud Arcs L46 (Coup ≤ 1 → Autonomy = Loyal,
-    Coup Counter ≥ 3 → Autonomy = Autonomous); victory_v30 §Season gate L464
-    (premature CC cascade → premature Autonomy cascade); victory_v30 §Post-Coup
-    Succession L494 (When CC reaches 4 → When Autonomy reaches Split); victory_v30
-    §Post-Coup §4 L501 (CC resets to 0 → Autonomy resets to Loyal);
-    conflict_architecture_proposal §Recommendation L157 (graduated autonomy
-    integrates with existing CC and T14 → with T14 conditions, replaces prior CC).
-    4 leaves preserved as historical/descriptive references: canonical_timeline §3
-    L92 (worldbuilding text), campaign_architecture_v30 §5.3 L179 (describes
-    strike), conflict_architecture_proposal L37 + L78 (argument FOR Graduated
-    Autonomy citing CC). Each rewrite preserves mechanical meaning; ED-781
-    citation added inline at substitution sites for traceability. ED-767."
-  finding_id: PP-676 v3 §V3-9, PP-678 deferred
-  source: topographic_analysis
-  affects:
-    - designs/npcs/npc_behavior_v30.md
-    - designs/architecture/complete_systems_reference.md
-    - designs/provincial/victory_v30.md
-    - designs/architecture/conflict_architecture_proposal.md
-  status: applied
-  applied_commit: pending
-  vetting:
-    class: B
-    necessity: pass
-    omega: pass
-    mu: []
-    m_ratings:
-      M-1: "○"
-      M-2: "○"
-      M-3: "○"
-      M-4: "○"
-      M-5: "○"
-      M-6: "○"
-      M-7: "○"
-      M-8: "○"
-      M-9: "○"
-      M-10: "○"
-      M-11: "○"
-    q: pass
-    note: "Vocabulary/terminology cleanup completing PP-678. N pass — removes
-      legacy terminology (Coup Counter struck per ED-781) from active spec.
-      Ω pass — cleanup only; mechanical behavior preserved (Graduated Autonomy
-      stage transitions implement what Coup Counter values represented).
-      Μ self-exempting — editorial. M-ratings ○: substitution preserves all
-      mechanical effects; only the agent name changes. Each substitution site
-      cites ED-781 inline for traceability. 4 leaves intentionally preserved:
-      worldbuilding text + descriptive references to the strike itself
-      (don't erase audit trail)."
 - id: PP-681
   date: 2026-04-29
   severity: P3
@@ -1219,4 +999,34 @@ patches:
       M-11: "○"
     q: pass
     note: "Class A (audit instrument; doesn't change mechanics, identifies pre-spec-rewrite needs). N pass: audit precedes spec rewrite, surfaces gaps and bugs. Ω pass: SVG deprecation is preservation-not-deletion; no mechanical change. Q pass: Jordan editorial 2026-05-01."
+- id: PP-707
+  date: 2026-05-01
+  severity: P3
+  description: "Geography canon Phase 1.5 prep work — workplan + schema + sample populated entries + coordinate transform script. Locks decisions for Phase 2 authoring (ED-779) so the next session is execution rather than relitigation. Decisions locked: (1.1) canonical coordinate system 1920×2880 (Godot screen-friendly, peninsula proportions); (1.2) jsx → canonical migration formula (scale + per-territory geographic correction); (1.3) Lake Eidursjø central-south interior, T4 Grauwald NE shore, T12 Sigurdshelm west shore — resolves audit C3 conflict; (1.4) terrain type taxonomy 8 types (plains, coast, forest, marsh, highland, fjord, mountain, pass) plus annotations (river, bridge, road, forgetting_zone, radiation_band); (1.5) terrain cost matrix seed values (simulation-tunable in Phase 4); (1.6) vision-range tables seed values (simulation-tunable in Phase 4); (1.7) flat queryable schema for valoria_geography_v30.yaml. Five sample populated entries demonstrate end-to-end schema (S-001 Valorsplatz Palace, S-006 Lowenskyst Fortress, S-015 Gransol Parliament, S-026 Sigurdshelm Keep, S-033 Askeheim Ruins; T1 Valorsplatz province; northern_range + lake_eidursjo terrain; r_valoris river feature). Coordinate transform script tools/geography/jsx_to_canonical.py reads adjacency_map.jsx and emits Phase 2 stub with scaled anchors + per-territory correction notes — verified deterministic and produces valid YAML against current jsx (17 territories, 26 edges extracted). Phase 2 authoring session estimated ~160k tokens; comfortable in 1M context as fresh focused session. Outputs: designs/audit/2026-04-30-geography-audit/01_phase2_workplan.md (this), tools/geography/jsx_to_canonical.py."
+  finding_id: editorial 2026-05-01 (Phase 1.5 prep work)
+  source: editorial
+  affects:
+    - designs/audit/2026-04-30-geography-audit/01_phase2_workplan.md
+    - tools/geography/jsx_to_canonical.py
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Class A (workplan + tool; doesn't change mechanics, locks decisions for Phase 2 authoring). N pass: workplan reduces decision-thrash and parallel-session collision risk in next phase. Ω pass: pure prep artifact; no canonical mechanics change. Q pass: decisions consistent with audit findings + existing canon (geography_v30.md, settlement_layer §2.1). Transform script tested deterministic against current jsx."
 
