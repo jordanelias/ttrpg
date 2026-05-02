@@ -20,13 +20,7 @@ sources:
       replacement: "Varfell expands via military conquest only. Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer bonuses."
       commits: [297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
 
-# placeholder — additional sources pending population
-
-# ── PP-665..PP-674 trace archived 2026-05-01 ────────────────────────────
-# Historical trace comments for PP-665 (Yrsa rename), PP-666 (settlement adjacency / fractional ownership / succession split, PROVISIONAL),
-# PP-667 (gap sweep), PP-668 (open-items propagation), PP-670 (label audit), PP-671 (meta-throughlines),
-# PP-672 (throughlines framework), PP-673 (terminology cleanup), PP-674 (vetting framework + tier N).
-# Detail in canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
+# Patch history (PP-665..PP-674 and beyond) → canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
 
 
 # ── Full-Stack System → Canonical Source Map (2026-04-19) ────────────────
@@ -77,11 +71,11 @@ systems:
     fractional: designs/provincial/fractional_province_ownership_v30.md
     canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "5399c4b03acd65ad5f967d4d51fcea62faf0b2b6"
     geographic_data: designs/territory/valoria_geography_v30.yaml
-    canonical_sha__designs__territory__valoria_geography_v30_yaml: "PENDING_PP_710"
+    canonical_sha__designs__territory__valoria_geography_v30_yaml: "59bc02f54b3dcd062222093f3f1987bfe06e4991"
     geographic_map: designs/territory/valoria_map_v30.svg
-    canonical_sha__designs__territory__valoria_map_v30_svg: "PENDING_PP_710"
+    canonical_sha__designs__territory__valoria_map_v30_svg: "de02b31202e54cdf74054d0008c1c51c76f3a651"
     march_layer_skeleton: designs/territory/march_layer_v30.md
-    canonical_sha__designs__territory__march_layer_v30_md: "PENDING_PP_710"
+    canonical_sha__designs__territory__march_layer_v30_md: "97fc3561daaecc52a99382154c8af8b7ff00ed18"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
     canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_705"  # ED-770/PP-683..688 batch — SHA update follow-up required
