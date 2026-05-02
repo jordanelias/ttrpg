@@ -1,18 +1,25 @@
 # 2026-05-01 Stage 10 Validation Session
 
 **Predecessor:** `designs/audit/2026-04-30-architecture-session/`
-**Status:** Stage 10 validation — lateral cross-system sim PASS (this commit). Articulation sim A1–A6 pending.
+**Status:** Stage 10 sims complete — both PASS; PROVISIONAL artifacts ready for promotion.
 
-## Phase 1 — Lateral Cross-System Sim (this commit)
+## Phase 1 — Lateral Cross-System Sim (commit bb5e293)
 
-- `01_lateral_evaluation.md` — full NERS scoring + decision; 9/9 PASS; substrate refinement §4.1 carry-forward.
+- `01_lateral_evaluation.md` — 9/9 PASS; lateral+diagonal NERS WEAK→STRONG confirmed at substrate; finding §4.1 (visibility-aware subscription P2).
 - `sims/stage10_lateral_sim.py` — reference harness (seed=42; deterministic).
 - `sims/stage10_lateral_sim_output.txt` — execution trace.
 
-## Phase 2 — Articulation Sim (pending — same session)
+## Phase 2 — Articulation Sim A1–A6 (this commit)
 
-- A1–A6 per PP-688 §8.
+- `02_articulation_evaluation.md` — 6/6 PASS; PP-688 Tier 2 + Tier 3 validated; finding §4.1 (belief_revised trigger P2); A6 supports ADD cross-faction clustering as 9th trigger.
+- `sims/stage10_articulation_sim.py` — reference harness (seed=42; 30-season span).
+- `sims/stage10_articulation_sim_output.txt` — execution trace.
 
-## Phase 3 — Promotion Decision (pending)
+## Phase 3 — Promotion (next session)
 
-After both sims PASS: lift PP-684/685/686/687/688 from PROVISIONAL toward canonical.
+12/14 Stage 10 battery items PASS (V1–V6 substrate, A1–A6 articulation). V7/V8 production-engine items remain UNVERIFIED until Phase 5a.
+
+PP-684/685/686/687/688 lift PROVISIONAL → canonical pending:
+- Jordan signoff on this audit folder
+- params propagation: strike Ethical Framework Modifiers; add L+PS fields; author Mission/cascade/temperament
+- ED-750..764 + PP-297/351/653 PROVISIONAL→canonical sweep

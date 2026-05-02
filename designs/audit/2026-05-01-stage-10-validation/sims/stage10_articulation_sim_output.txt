@@ -1,0 +1,138 @@
+========================================================================
+STAGE 10 ARTICULATION SIMULATION (PP-688 A1-A6)
+SEED=42  N_SEASONS=30  SEASONS_PER_YEAR=4
+========================================================================
+
+  Reference Key log: 886 keys across 30 seasons
+  Author-marked beats: 28
+
+========================================================================
+A1  significance scoring vs authored ground truth
+========================================================================
+  Author-marked beats: 28
+  Top-10 by significance among trigger-matched Keys:
+    sig_t2=10  mechanical.mission_shift          s10 * AUTHOR BEAT
+    sig_t2= 9  state.succession                  s20 * AUTHOR BEAT
+    sig_t2= 9  state.coup_attempted              s28 * AUTHOR BEAT
+    sig_t2= 9  meta.knot_formed                  s3 * AUTHOR BEAT
+    sig_t2= 9  meta.knot_formed                  s10 * AUTHOR BEAT
+    sig_t2= 9  meta.knot_formed                  s17 * AUTHOR BEAT
+    sig_t2= 9  meta.knot_formed                  s24 * AUTHOR BEAT
+    sig_t2= 7  da.covert_betrayal                s7 * AUTHOR BEAT
+    sig_t2= 7  meta.knot_ruptured                s14 * AUTHOR BEAT
+    sig_t2= 7  da.covert_betrayal                s1
+  Top-10 ∩ author beats: 9/10 = 90% (precision)
+  A1  top-10 precision ≥80%:  PASS
+
+========================================================================
+A2  8-trigger ruleset firing rate
+========================================================================
+  Total cut scenes: 48  over 30 seasons
+  Mean rate: 1.60 per season
+  Per-season range: min=1 max=3
+  Distribution: {1: 10, 2: 13, 3: 4}
+  A2  rate ∈ [1.5, 4.0]:  PASS  (rate=1.60)
+
+========================================================================
+A3  chronicle prose generation
+========================================================================
+  Year 1:  6 paragraphs
+    · Peninsula. The year turned with env.peninsular_strain_shock (mild); its weight set the year's tempo.
+    · Crown. 28 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Hafenmark. 32 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Notable. Among individuals, haf_leader accumulated narrative weight 153 this year.
+    · Knots and beliefs. 2 bond/belief inflections this year, including meta.knot_formed.
+    · The protagonist. 12 events directly involved the protagonist.
+  Year 2:  6 paragraphs
+    · Peninsula. The year turned with env.peninsular_strain_shock (mild); its weight set the year's tempo.
+    · Crown. 25 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Hafenmark. 34 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Notable. Among individuals, haf_leader accumulated narrative weight 176 this year.
+    · Knots and beliefs. 1 bond/belief inflections this year, including meta.knot_formed.
+    · The protagonist. 12 events directly involved the protagonist.
+  Year 3:  6 paragraphs
+    · Peninsula. The year turned with mechanical.mission_shift (consolidation); its weight set the year's tempo.
+    · Crown. 29 events shaped its course; the most defining was mechanical.mission_shift (sig=10).
+    · Hafenmark. 31 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Notable. Among individuals, haf_leader accumulated narrative weight 156 this year.
+    · Knots and beliefs. 3 bond/belief inflections this year, including meta.knot_formed.
+    · The protagonist. 10 events directly involved the protagonist.
+  Year 4:  6 paragraphs
+    · Peninsula. The year turned with env.peninsular_strain_shock (mild); its weight set the year's tempo.
+    · Crown. 27 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Hafenmark. 33 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Notable. Among individuals, haf_leader accumulated narrative weight 168 this year.
+    · Knots and beliefs. 2 bond/belief inflections this year, including meta.knot_ruptured.
+    · The protagonist. 7 events directly involved the protagonist.
+  Year 5:  6 paragraphs
+    · Peninsula. The year turned with env.peninsular_strain_shock (mild); its weight set the year's tempo.
+    · Crown. 31 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Hafenmark. 29 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Notable. Among individuals, crown_leader accumulated narrative weight 144 this year.
+    · Knots and beliefs. 2 bond/belief inflections this year, including meta.knot_formed.
+    · The protagonist. 12 events directly involved the protagonist.
+  Year 6:  6 paragraphs
+    · Peninsula. The year turned with env.peninsular_strain_shock (moderate); its weight set the year's tempo.
+    · Crown. 41 events shaped its course; the most defining was state.succession (sig=9).
+    · Hafenmark. 21 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Notable. Among individuals, crown_leader accumulated narrative weight 184 this year.
+    · Knots and beliefs. 1 bond/belief inflections this year, including meta.knot_ruptured.
+    · The protagonist. 11 events directly involved the protagonist.
+  Year 7:  6 paragraphs
+    · Peninsula. The year turned with env.peninsular_strain_shock (mild); its weight set the year's tempo.
+    · Crown. 32 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Hafenmark. 26 events shaped its course; the most defining was env.peninsular_strain_shock (sig=8).
+    · Notable. Among individuals, crown_leader accumulated narrative weight 163 this year.
+    · Knots and beliefs. 4 bond/belief inflections this year, including state.belief_revised.
+    · The protagonist. 10 events directly involved the protagonist.
+  A3.A  ≥5 paragraphs per year:  PASS  min=6
+  A3.B  no missing years (7 expected, 7 produced):  PASS
+
+========================================================================
+A4  K/B/I integration
+========================================================================
+  state.belief_revised cut scenes:   0
+  meta.knot_ruptured cut scenes:     2
+  meta.knot_formed cut scenes:       14
+  Keys with Inspirations engagement: 6
+  A4-NOTE: state.belief_revised is not in the 8-trigger ruleset (PP-688 §3.1).
+           PP-688 §3.5 routes Belief engagement via payload bumps, not direct triggers.
+           Highest-sig belief Key sig=7
+           Recommendation: add state.belief_revised to triggers or accept payload-bump routing.
+  A4.A  Knot rupture/formation fires cut scenes:  PASS
+  A4.B  Belief revision fires OR shows in top-sig:  PASS
+  A4.C  Inspirations engagement present:  PASS
+
+========================================================================
+A5  determinism — replay produces identical cut scenes + chronicle
+========================================================================
+  Key log hash 1: 3bc292dd43ca40b0
+  Key log hash 2: 3bc292dd43ca40b0
+  A5.A  Key log hash match:        PASS
+  A5.B  Cut scene set identical:   PASS  (48 vs 48)
+  A5.C  Chronicle text identical:  PASS
+
+========================================================================
+A6  cross-faction clustering candidate (Phase B 9th trigger decision support)
+========================================================================
+  Faction Crown: mean β-fid=0.854  var=0.0118
+  Faction Hafenmark: mean β-fid=0.802  var=0.0122
+  Cross-faction correlation: +0.937  (n=30)
+  Clustering signal: DETECTABLE
+  Recommendation for Phase B 9th trigger:
+    → ADD as 9th trigger; clustering is reliably detectable in 30-season horizon.
+
+========================================================================
+SUMMARY
+========================================================================
+  A1 significance vs author beats     PASS
+  A2 trigger firing rate ∈ [1.5,4.0]  PASS
+  A3 chronicle ≥5 paragraphs/year     PASS
+  A4 K/B/I integration                PASS
+  A5 determinism                      PASS
+  A6 clustering observation           PASS
+
+  total_keys=886  cut_scenes=48  elapsed=0.046s
+  log_hash=3bc292dd43ca40b0
+
+  OVERALL: PASS
