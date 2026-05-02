@@ -57,70 +57,8 @@ If broken dependencies are found:
 | designs/threadwork/threadwork_v30.md 2.6 | params/threadwork.md | design to params propagation |
 
 
-## 2026-04-19 — PP-668 OPEN ITEMS propagation (completes PP-667)
 
-**Commit:** (this commit)
-**Scope:** propagate PP-667 gap-sweep resolutions into the source-doc OPEN ITEMS tables. Closes the deferred propagation work flagged in PP-667.
-
-**Files:**
-- designs/territory/settlement_layer_v30.md §9 — 9 items with final status (4 RESOLVED, 1 CONFIRMED, 1 SUPERSEDED by PP-666, 2 DEFERRED, 1 N/A).
-- designs/provincial/military_layer_v30.md §5 — 9 items (6 RESOLVED, 3 DEFERRED).
-- designs/provincial/peninsular_strain_v30.md §8 — 7 items (4 CONFIRMED, 1 RESOLVED, 1 SUPERSEDED by PP-663, 1 N/A).
-- designs/provincial/faction_layer_v30.md §10 — 9 items (7 RESOLVED, 2 DEFERRED).
-- designs/provincial/victory_v30.md §11 — ED-311 CLOSED.
-
-All new statuses reference PP-667 and the resolution document `designs/audit/gap_resolution_2026-04-19.md`.
-
-**Registers:**
-- canon/patch_register_active.yaml: PP-668 entry.
-- references/canonical_sources.yaml: co-file touch.
-
-**Consequences:** none new. Completes PP-667 propagation. No new editorial ledger entries needed (resolutions already logged under ED-713/714/715 in PP-667).
-
-## 2026-04-19 — PP-670 Label accuracy audit
-
-**Commit:** (this commit)
-**Scope:** audit of all files with deprecation-suffix names (`_deprecated`, `_legacy`, `_historical`, `_superseded`). 71 files reviewed.
-
-**Findings:**
-- `designs/npcs/npc_roster_caste_annotations_deprecated.md`: correctly labeled. Merge into `npc_roster_v30.md §14` verified.
-- `designs/threadwork/threadwork_v25_historical.md`: mislabel — filename said historical but no internal banner. **Fixed** — banner added pointing to canonical `threadwork_v30.md`.
-- `tests/sim/sim_ttrpg_batch_legacy_02/03/04.md`: filename-only labels, no internal banners. Deferred as low-priority test-layer work.
-- All 57 files in `deprecated/` directory correctly placed per `deprecated/README.md` policy.
-- `params/threadwork_superseded.md`: correctly labeled internally, location intentional.
-
-**Registers:**
-- canon/patch_register_active.yaml: PP-670 entry.
-- canon/editorial_ledger.yaml: ED-716 resolution entry.
-- references/canonical_sources.yaml: co-file touch.
-
-**Deferred:** sim_ttrpg_batch_legacy banner pass — not a blocker. Low reader-hazard; names are self-describing.
-
-## 2026-04-19 — PP-671 Meta-throughline synthesis
-
-**Commit:** (this commit)
-**Scope:** synthesize 5 meta-throughlines from the 25 game throughlines; provide evaluative criteria for design proposals.
-
-**New file:** references/throughlines_meta.md (15k chars)
-
-**Meta-throughlines identified:**
-- M-1 Decay-as-default — entropic baseline, instantiated by 8 throughlines
-- M-2 Substrate-as-universal-medium — rendering/thread ontology across all systems, instantiated by 8 throughlines
-- M-3 Institutional identity = mechanical attractor — each faction's distinct substrate-relationship, instantiated by 5 throughlines
-- M-4 Scale-preserving chains — same throughlines fire at multiple scales, instantiated by 9 throughlines
-- M-5 Forced-choice architecture — irreducible tradeoffs at every significant choice point, instantiated by 6 throughlines
-
-**Findings:**
-- Hafenmark, Löwenritter, and RM all lack their own institutional-attractor throughlines (M-3 gap). ED-717 logs this.
-- PP-666's three new systems (settlement adjacency, fractional ownership, succession split) each strongly satisfy multiple meta-throughlines — validates PP-666 as vision-aligned design.
-- Throughline-interaction matrix is sparse (7 throughlines covered of 25); recommended for future expansion.
-
-**Registers:**
-- canon/patch_register_active.yaml: PP-671 entry.
-- canon/editorial_ledger.yaml: ED-717 entry (M-3 faction under-spec).
-- references/canonical_sources.yaml: cross-reference note.
-
-**No mechanical changes.** Pure synthesis / meta-analysis document.
+<!-- Older entries archived to references/propagation_map_archive_2026_05_01.md (~3793 chars) -->
 
 ## 2026-04-19 — PP-672 Throughlines hierarchical framework (canonical vetting guide)
 
@@ -877,3 +815,67 @@ D1=Honor 13th YES · D2=4-axis accepted, 5th Class B if needed · D3=multi-root 
 - PROVISIONAL→canonical sweep for ED-750/751/752/753/754/762/764, PP-297/351/653 (week-audit R6).
 - Mass-battle decision queue (16 items, MB-01..08 + INTER-10d/12b/14a/14d/14e/12e/17b/09d).
 - Pacing system (future PP per artifact 10 §10.5).
+
+## 2026-05-01 — Geography canon audit + Phase 1 (PP-706, ED-779/780/781)
+
+Pre-spec-rewrite audit conducted on geography canon. Findings: canon is more
+substantial than prior session synthesis suggested — narrative regions
+(geography_v30.md), 17-territory adjacency (jsx + table), 36-settlement registry
+(settlement_layer §2.1), and visual map (SVG) are largely authored. The
+disconnect is mechanical: settlement_adjacency_v30 uses abstract edge-typing
+(Road/River/Mountain Pass/Coastal labels on graph-edges) and doesn't reference
+the (x,y) coordinate data or geographic terrain features that already exist.
+
+**Findings summary:**
+- 9 gaps (G1-G9) blocking v2 mechanical spec authoring: settlement-level coords,
+  province polygons, typed terrain layer, terrain-cost matrix, vision-range,
+  weather/season-modulated mechanics, march-bubble layer, geographic
+  battle-terrain derivation, naval mechanics
+- 5 bugs (C1-C5): coordinate-system disconnect (abstract jsx vs visual SVG);
+  SVG pass-label errors (in-SVG); Lake Eidursjø geometry conflict with T4 jsx
+  position; SVG is structurally pre-canon (different territory numbering schema —
+  e.g., SVG T2=Sigurdshelm, canon T2=Kronmark; SVG T8=Lowenskyst, canon T8=Gransol;
+  no surgical fix possible); Schoenland sea route flagged but not modeled.
+
+**Phase 1 strike (this commit):**
+- Audit report committed at designs/audit/2026-04-30-geography-audit/00_audit_report.md
+- valoria_map_v2.svg deprecated via banner-comment (retained as historical
+  reference — visual peninsula shape, mountain geometry, lake position,
+  calamity rings remain correct; territory labels/numbering do not)
+- Standing items minted ED-779 (Phase 2 data authoring), ED-780 (Phase 3 spec
+  rewrite), ED-781 (Phase 4 stress tests — three queued scenarios)
+
+**Sequencing established for v2 geography work:**
+- Phase 1 (this commit): bug fixes + audit + standing items minted
+- Phase 2 (ED-779, P2): data authoring — coordinate system, settlement coords,
+  province polygons, terrain layer, terrain-cost matrix, vision-range tables,
+  weather/season modifier tables. Output: valoria_geography_v30.yaml + redrawn map.
+- Phase 3 (ED-780, P2): spec rewrite — settlement_adjacency v2 (geography-querying),
+  new march_layer_v30, mass_battle terrain-derivation update, naval mechanics
+  (resolves ED-055 standing since 2026-04-05).
+- Phase 4 (ED-781, P3): three stress tests — Mountain Pass battle, Open-field
+  cavalry encounter, Coastal landing.
+
+**Also flagged:** Pre-existing PP-684..688 collision in patch_register_active.
+My applied mass-battle-MB-batch entries (date 2026-04-30, status: applied,
+commit cd09b98) collide with another session's provisional architecture-work
+entries (date 2026-05-01, status: provisional, commits dede72f4 / 0f29cf87).
+Duplicate IDs in active register. Architecture-session author should renumber
+their provisional entries before marking applied. Not corrected in this commit
+because would override a parallel session's pending work.
+
+**Files modified:**
+- designs/audit/2026-04-30-geography-audit/00_audit_report.md (new)
+- designs/provincial/valoria_map_v2.svg (deprecation banner)
+- canon/patch_register_active.yaml (PP-706)
+- canon/editorial_ledger.yaml (ED-779, 780, 781)
+- canon/editorial_ledger_summary.yaml (refreshed)
+- references/propagation_map.md (this entry)
+
+**Cross-references:** PP-706, ED-779/780/781, ED-055 (naval mechanics),
+ED-710 (settlement adjacency graph PP-666), ED-711 (fractional province ownership),
+designs/world/geography_v30.md (canonical 2026-04-05), designs/world/adjacency_map.jsx,
+designs/territory/settlement_adjacency_v30.md (PROVISIONAL PP-666),
+designs/territory/settlement_layer_v30.md §2.1 (36-settlement registry),
+params/board_game_misc.md (territory rename history).
+

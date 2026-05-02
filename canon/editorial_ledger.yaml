@@ -1,5 +1,6 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 779
+# next_id: 782
+# Archival batch 2026-05-01 (b): ED-763, ED-764 (PROVISIONAL items, low-action) → canon/editorial_ledger_archive.yaml
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
 # Archival batch 2026-04-29 (b): ED-756 (doc 12 v1.1 produced).
@@ -29,20 +30,6 @@ entries:
     severity: P1
     source: "doc 17 §6"
 
-  - id: ED-763
-    date: 2026-04-29
-    description: "[PROVISIONAL] doc 12 v1.2 produced (commit 59a1c1e0); 1958 lines; 39 patches resolving all simulation-surfaced gaps; supersedes v1.1. v1.2 is eligible for §13 Promotion Checklist evaluation toward canonical. Recommended next steps: re-vet pass against §13; address any §13 items not satisfied; promote to canonical or schedule additional simulation pass if desired. Forward-looking design observations (18) tracked separately for post-canonical iteration."
-    status: open
-    severity: P2
-    source: "Synthesis chain — docs 19 + 21 + doc 12 v1.2 commit 59a1c1e0"
-
-  - id: ED-764
-    date: 2026-04-29
-    description: "[PROVISIONAL] Throughlines table Load-bearing systems column added per PP-677, addressing PP-676 v3 finding §V3-2 that the framework lacked formalized system-token coupling. 43 active throughlines mapped to canonical system slugs (mean 3.7 systems each, range 2-6). 27/32 canonical systems load-bearing for at least one throughline; 5 defensibly absent (core_engine, combat, throughlines_framework, solmund_voice, solmund_artifacts). Mappings PROVISIONAL pending Jordan review. Note: ED-762 collision detected in active ledger — both topographic v2+v3 entry and doc 12 v1.2 entry assigned same ID across separate sessions. Flagged in propagation_map for Jordan resolution; ED-763 deliberately skipped to avoid renumbering interference."
-    status: open
-    severity: P3
-    source: "PP-677"
-
   - id: ED-775
     date: 2026-04-30
     description: "[RESOLVED — APPLIED] Comprehensive faction-doctrine batch. (1) Niflhel residue strike (PP-698) — completes the strike begun by CR-STRIKE-2026-04-19 / PP-DISSOLVE / conflict_architecture_proposal §Niflhel Dissolution / ED-752 / ED-764. Removes residual references in registries, params, and faction_layer. DEFERRED: arc_register_factions.md has 5 Niflhel-coded arcs requiring plot-level reframe (ED-777). (2) Vaynard first name canonicalized as Magnus (PP-699; resolves ED-NEW-02). (3) Hafenmark equipment-quality doctrine note (PP-700; mechanic TBD via simulation, ED-776). (4) Crown standing army = Löwenritter doctrine note (PP-701). (5) Crown structural-fragility doctrine note (PP-702). (6) mass_battle §A.11 PP-MB-06 correction (PP-703) — VTM gate removed, Forgetting universality affirmed, no faction-property exemption from Forgetting. (7) Edeyja L61 conflict-as-disturbance redirect (PP-704). New patches PP-698..704. Affected files: ~20 files including 3 design docs, 11 params, 4 references."
@@ -70,3 +57,24 @@ entries:
     status: closed
     severity: P3
     source: "PP-705 / workplan_v2 §0 / 2026-04-30 audit T1/D1/B1"
+  - id: ED-779
+    date: 2026-05-01
+    description: "[STANDING] Phase 2 of geography canon work — data authoring. Required: (a) decide canonical coordinate system (recommended: ~1920×2880 sized for Godot screen, peninsula proportions); (b) author 36 settlement (x, y) coordinates within territory anchor regions; (c) author province polygons (or Voronoi rule for derivation from settlement coords); (d) author typed terrain layer (forest/plains/mountain/marsh/coast/river polygons or raster); (e) author terrain-cost matrix; (f) author vision-range base + terrain × weather × season modifier tables. Output: designs/territory/valoria_geography_v30.yaml (or .json); redrawn canonical map. Cross-references: PP-706, audit §2 G1-G6, §3 C1/C3."
+    status: open
+    severity: P2
+    source: "Geography canon audit 2026-05-01 — Phase 2"
+
+  - id: ED-780
+    date: 2026-05-01
+    description: "[STANDING] Phase 3 of geography canon work — spec rewrite (depends on ED-779 completion). Required: (a) rewrite settlement_adjacency_v30 to query geography data rather than abstract edge-types; (b) author march-bubble + encounter-trigger spec (new doc designs/territory/march_layer_v30.md); (c) update mass_battle_v30 §A.9 / §B.5 for geographic battle-terrain derivation at engagement coordinates; (d) author naval mechanics (resolves ED-055). Output: rewritten settlement_adjacency_v30, new march_layer_v30, updated mass_battle_v30, naval mechanics doc. Cross-references: PP-706, audit §2 G7-G9, §3 C5, ED-055 (naval mechanics, open since 2026-04-05)."
+    status: open
+    severity: P2
+    source: "Geography canon audit 2026-05-01 — Phase 3"
+
+  - id: ED-781
+    date: 2026-05-01
+    description: "[STANDING] Phase 4 of geography canon work — stress tests (depends on ED-780 completion). Three scenarios queued in separate sessions: (1) Mountain Pass battle (T2/T11 Halvardshelm pass — geometry-constrained engagement, narrow-pass clamp emergence); (2) Open-field cavalry encounter (T2 Kronmark plains — flanking-as-position vs declaratory); (3) Coastal landing (Schoenland fleet → T13 Oastad — multi-wave amphibious sequencing, exercises naval mechanics from ED-780). Each stress test exercises the new geographic-route model under different geometric stress patterns. Cross-references: PP-706, ED-779, ED-780."
+    status: open
+    severity: P3
+    source: "Geography canon audit 2026-05-01 — Phase 4"
+

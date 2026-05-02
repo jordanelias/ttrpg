@@ -1,4 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="700" height="900" viewBox="0 0 700 900" style="font-family:Georgia,serif">
+<!-- =====================================================================
+[DEPRECATED — STALE PRE-CANON 2026-05-01]
+This map is from a superseded territory-numbering schema that predates the
+current canon (designs/world/geography_v30.md). Territory T# assignments and
+faction-territory mapping in this SVG do NOT match active canon. Pre-rename
+labels (Vargstad, Eidursjo, Arcansheld, Nordhelm, Mittelmark) are present.
+See designs/audit/2026-04-30-geography-audit/00_audit_report.md §3.C4 for
+the full discrepancy table.
+
+DO NOT use this map for mechanical reference. Phase 2 of geography canon
+work (ED-779) will produce a replacement map drawn from current canon.
+
+This file is retained for historical reference (visual peninsula shape,
+mountain spine geometry, lake position, calamity ring placement). The
+underlying geography is correct; the territory labels and numbering are
+not. Schoenland and Askeheim are the only two T# labels that match
+current canon (T15, T16).
+===================================================================== -->
+
+
 
 <!-- Ocean -->
 <rect width="700" height="900" fill="#1a3a5c"/>

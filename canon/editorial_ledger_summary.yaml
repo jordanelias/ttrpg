@@ -1,36 +1,35 @@
 # Editorial Ledger Summary
-# auto-generated 2026-04-30 (manual refresh — ED-775 comprehensive faction-doctrine batch + standing items ED-776, ED-777)
+# auto-generated 2026-05-01 (manual refresh — ED-779/780/781 geography canon Phase 2/3/4 standing items)
 
 p1_blocker_count: 1
-open_count: 7
-total_active: 7
-next_id: 778
+open_count: 9
+total_active: 9
+next_id: 782
 
 p1_blockers:
   - ED-755: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
 
 p2_open:
-  - ED-710: "Settlement adjacency graph — new mechanical layer. Invasions occur at settlement-scale via inter-settlement edges (road/river/mountain/coastal). Spec: designs/territory/settlement_adjacency_v30.md…"
-  - ED-711: "Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers. 75%-share threshold triggers Consolidation…"
-  - ED-763: "[PROVISIONAL] doc 12 v1.2 produced (commit 59a1c1e0); 1958 lines; 39 patches resolving all simulation-surfaced gaps; supersedes v1.1. v1.2 is eligible for §13 Promotion Checklist evaluation toward…"
+  - ED-710: "Settlement adjacency graph — new mechanical layer. Spec: designs/territory/settlement_adjacency_v30.md (PROVISIONAL PP-666). Will be superseded by ED-780 spec rewrite."
+  - ED-711: "Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers."
+  - ED-763: "[PROVISIONAL] doc 12 v1.2 produced; eligible for §13 Promotion Checklist evaluation toward canonical."
   - ED-777: "[STANDING] arc_register_factions.md — 5 Niflhel-coded arcs require plot-level reframe to settlement-broker mechanic in dedicated session (ARC-S11, ARC-S54, ARC-S55, NPC-ARC-VIR, ARC-T25)."
+  - ED-779: "[STANDING] Geography canon Phase 2 — data authoring (coordinate system, settlement coords, province polygons, terrain layer, terrain-cost matrix, vision-range tables, weather/season modifier tables). PP-706."
+  - ED-780: "[STANDING] Geography canon Phase 3 — spec rewrite (settlement_adjacency v2 geography-querying, new march_layer, mass_battle terrain-derivation, naval mechanics resolving ED-055). PP-706. Depends on ED-779."
 
 p3_open:
-  - ED-764: "[PROVISIONAL] Throughlines table Load-bearing systems column added per PP-677, addressing PP-676 v3 finding §V3-2 that the framework lacked formalized system-token coupling. 43 active throughlines…"
+  - ED-764: "[PROVISIONAL] Throughlines table Load-bearing systems column added per PP-677, addressing PP-676 v3 finding §V3-2."
   - ED-776: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation. Doctrine canon fixed; mechanical expression options require simulation testing."
+  - ED-781: "[STANDING] Geography canon Phase 4 — three stress tests (Mountain Pass battle, Open-field cavalry, Coastal landing). PP-706. Depends on ED-780."
 
-# Recent archival activity (2026-04-30):
-#   ED-750..754  doc 17 batches resolved through v1.2.x
-#   ED-757, ED-760, ED-761  simulation chain + v1.2 production complete
-#   ED-762  archived (doc 12 v1.2.1 progression — collision resolved by renumbering to ED-763)
-#   ED-765  vocabulary debt sweep + ED-762 collision fix (PP-678)
-#   ED-766  valoria-vector-audit skill enshrinement (PP-679)
-#   ED-767  Coup Counter → Graduated Autonomy sweep (PP-680)
-#   ED-768  Conviction Track promoted to first-class doc (PP-681)
-#   ED-769  Conviction Track SHA follow-up (PP-682)
-#   ED-770  Mass Battle MB-01..08 editorial-decision batch applied (PP-683..688) — archived 2026-04-30 (a)
-#   ED-771  Stratagem rename + information-model framing correction (PP-690) — archived 2026-04-30 (a)
-#   ED-772  Terminology vector-audit P0 propagation (PP-691) — applied
+# Recent activity (2026-04-30 to 2026-05-01):
+#   ED-770  Mass Battle MB-01..08 batch (PP-683..688) — archived
+#   ED-771  Stratagem rename + information-model framing correction (PP-690) — archived
+#   ED-772  Terminology vector-audit P0 propagation (PP-691)
 #   ED-775  Comprehensive faction-doctrine batch (PP-698..704)
-#   ED-776  Standing flag — Hafenmark mechanism TBD via simulation
-#   ED-777  Standing flag — arc_register_factions Niflhel reframe deferred
+#   ED-776  Standing — Hafenmark mechanism TBD
+#   ED-777  Standing — arc_register_factions Niflhel reframe deferred
+#   ED-778  Phase 0 ecosystem cleanup (PP-705) — workplan v2
+#   ED-779  Standing — Geography Phase 2 data authoring (PP-706)
+#   ED-780  Standing — Geography Phase 3 spec rewrite (PP-706)
+#   ED-781  Standing — Geography Phase 4 stress tests (PP-706)

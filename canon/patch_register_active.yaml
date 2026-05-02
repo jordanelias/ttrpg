@@ -1,6 +1,6 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 705
+# Next PP number: 707
 # 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
 # Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → archives/patches/patch_register_archive_2026_04_30_a.yaml
 
@@ -1189,3 +1189,34 @@ patches:
       M-11: "+"
     q: pass
     note: "Class A — articulation system. N: substrate alone produces ~15% story-fraction; with articulation layer and K/B/I integration, full engine reaches ~75-85% projected story-fraction. PP-688 closes the artifact-11 happenings-vs-story gap. Ω: 3 tiers are independently testable; significance function fully traceable; cut scenes engine-rendered (no authored content). Q: sim §1 confirmed; Stage 10 articulation simulation per §8 (A1-A6) verifies before promotion to canonical."
+- id: PP-706
+  date: 2026-05-01
+  severity: P2
+  description: "Geography canon audit conducted. Confirmed canon is more substantial than prior session synthesis suggested — narrative regions (geography_v30.md), 17-territory adjacency (jsx + table), 36-settlement registry (settlement_layer §2.1), and visual map (SVG) are largely authored. Cross-reference verification: geography_v30 adjacency table and adjacency_map.jsx edges are in perfect agreement (26/26 symmetric). Faction control matches across canonical sources. Identified 9 gaps (G1-G9) blocking v2 mechanical spec authoring (settlement-level coords, province polygons, typed terrain layer, terrain-cost matrix, vision-range, weather/season-modulated mechanics, march-bubble layer, geographic battle-terrain derivation, naval mechanics) and 5 bugs (C1 coordinate-system disconnect; C2 SVG pass-label errors; C3 Lake Eidursjø geometry conflict with T4 jsx position; C4 SVG is structurally pre-canon — different territory numbering schema; C5 Schoenland sea route flagged but not modeled). Phase 1 strike (this PP): SVG deprecated via banner (retained as historical reference; not deleted because no active mechanical spec depends on it — only index/ledger references; Phase 2 produces replacement). Audit report committed at designs/audit/2026-04-30-geography-audit/00_audit_report.md. Standing items minted ED-779 (Phase 2 data authoring), ED-780 (Phase 3 spec rewrite), ED-781 (Phase 4 stress tests). Also flags pre-existing PP-684..688 collision in patch_register_active: my applied mass-battle-MB-batch entries (date 2026-04-30) collide with another session's provisional architecture-work entries (date 2026-05-01) — duplicate IDs in active register; flagged for resolution by architecture-session author."
+  finding_id: editorial 2026-04-30 (geography canon audit)
+  source: editorial
+  affects:
+    - designs/audit/2026-04-30-geography-audit/00_audit_report.md
+    - designs/provincial/valoria_map_v2.svg
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Class A (audit instrument; doesn't change mechanics, identifies pre-spec-rewrite needs). N pass: audit precedes spec rewrite, surfaces gaps and bugs. Ω pass: SVG deprecation is preservation-not-deletion; no mechanical change. Q pass: Jordan editorial 2026-05-01."
+
