@@ -28,10 +28,11 @@ next_action:
     Tier 3 chronicle paragraphs render → walk_back diagnostic + wall-clock telemetry
     substrate (V4 preserved). Deferred items are additive.
 
-    PROPAGATION-PENDING from session 3.5:
-    - designs/architecture/key_type_registry_v30.md — add 3 mechanical types
-      (scene_entered/exited/skipped) + payload schemas. Implementation is canonical;
-      design doc is lagging. Non-blocking.
+    PROPAGATION DONE from session 3.5 (5052b20):
+    - designs/architecture/key_type_registry_v30.md amended with 3 mechanical Class B
+      types (scene_entered/exited/skipped) — full payload schemas + emitting/consuming
+      systems + class B notes. canonical_sha bumped in references/canonical_sources.yaml.
+    - §9 type-count summary updated: mechanical_event 4→7, total 34→37.
 
     JORDAN-DECISION QUEUE (mechanical work blocked):
     1. Mandate-audit OQs §5 (5 items) — gates params/factions* migration.
@@ -116,5 +117,7 @@ session_commits:
   - "cd3051c — [valoria-game] Phase 5a session 4 WalkBackQuery + WhyDiagnostic UI (PP-687 §5.4)"
   - "b8d4045 — [valoria-game] Phase 5a session 5 ChronicleGenerator + paragraph 1 (PP-688 §4.4)"
   - "b8b9a4a — [valoria-game] Phase 5a session 3.5 telemetry substrate — SceneTimer + 3 Key types + TimeAggregator + 8 tests"
+  - "d194c52 — session log: record b8b9a4a + condense Phase 5a detail + add time-review plan"
+  - "5052b20 — key_type_registry_v30 + canonical_sha bump: 3 mechanical Class B types per session 3.5"
 
 predecessor_session: 2026-04-30-architecture-session
