@@ -1,13 +1,13 @@
 # FILE INDEX SUMMARY
 # Generated: 2026-04-18 (post-restructure)
-# Total files: 697
+# Total files: 699
 
   (root)/: 2 files
   .github/: 1 files
   archives/: 23 files
   canon/: 11 files
   deprecated/: 123 files
-  designs/: 189 files
+  designs/: 191 files
   docs/: 1 files
   params/: 41 files
   references/: 25 files
@@ -29,9 +29,9 @@
 | `designs/arcs/` | Arc narratives S1-S101, scenarios, throughlines | 31 |
 | `designs/audit/` | System audits, bridge revisions, workplans | 30 |
 | `designs/npcs/` | NPC roster, behavior, foils, companion spec | 15 |
-| `designs/provincial/` | Strategic layer, victory, faction layer, military, political, clocks, mass battle | 31 |
+| `designs/provincial/` | Strategic layer, victory, faction layer, military, political, clocks, mass battle | 30 |
 | `designs/scene/` | Combat, social contest, conviction track, fieldwork, investigation, derived stats | 32 |
-| `designs/territory/` | Settlement layer | 2 |
+| `designs/territory/` | Settlement layer + adjacency, geography canon (provinces/terrain/march), replacement map | 5 |
 | `designs/threadwork/` | Threadwork system, philosophical reference, horizontal integration | 8 |
 | `designs/ui/` | UI/UX specifications | 8 |
 | `designs/world/` | Geography, worldbuilding, calamity radiation, character histories | 14 |

@@ -76,6 +76,12 @@ systems:
     canonical_sha__designs__territory__settlement_adjacency_v30_md: "81fca625664b0e3a21d232461fd9ded03d4d9a8d"
     fractional: designs/provincial/fractional_province_ownership_v30.md
     canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "5399c4b03acd65ad5f967d4d51fcea62faf0b2b6"
+    geographic_data: designs/territory/valoria_geography_v30.yaml
+    canonical_sha__designs__territory__valoria_geography_v30_yaml: "PENDING_PP_710"
+    geographic_map: designs/territory/valoria_map_v30.svg
+    canonical_sha__designs__territory__valoria_map_v30_svg: "PENDING_PP_710"
+    march_layer_skeleton: designs/territory/march_layer_v30.md
+    canonical_sha__designs__territory__march_layer_v30_md: "PENDING_PP_710"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
     canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_705"  # ED-770/PP-683..688 batch — SHA update follow-up required

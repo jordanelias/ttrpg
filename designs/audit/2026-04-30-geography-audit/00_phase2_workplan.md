@@ -1,3 +1,14 @@
+<!-- [SUPERSEDED: 2026-05-01 — PP-708 superseded by PP-707 per PP-709 §3 reconciliation] -->
+<!-- BANNER (ED-779 Phase 2 commit 2026-05-01): -->
+<!-- This is workplan B (PP-708). The canonical Phase 2 workplan is PP-707 at: -->
+<!--   designs/audit/2026-04-30-geography-audit/01_phase2_workplan.md -->
+<!-- Reconciliation: designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md -->
+<!-- Of the three substantive disagreements, PP-707 won on (1) canvas 1920×2880, -->
+<!-- (3) explicit Lake/T4 coordinates. PP-708's contribution preserved: terrain naming -->
+<!-- 'fjord_coast' (over PP-707's 'fjord') was adopted into the canonical taxonomy. -->
+<!-- See PP-709 §1.1, §1.2, §1.3 for resolution detail. -->
+<!-- This document is preserved as historical reference only. -->
+
 <!-- [PROVISIONAL: 2026-05-01 — Phase 2 workplan, prep for ED-779 execution] -->
 <!-- AUTHORITY: PP-707 -->
 

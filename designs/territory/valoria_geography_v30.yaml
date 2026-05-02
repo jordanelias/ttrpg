@@ -1,0 +1,827 @@
+# VALORIA — Geographic Canon (Phase 2 Data)
+# [PROVISIONAL: ED-779 Phase 2 — hand-authored geographic data canon]
+# AUTHORITY: ED-779 / PP-707 (canonical workplan) / PP-709 (reconciliation)
+# Coordinate system: 1920×2880, origin top-left, +x east, +y south.
+# Status: PROVISIONAL — calibration values tunable in Phase 4 (ED-781).
+
+meta:
+  schema_version: "1.0"
+  canvas: [1920, 2880]
+  origin: top_left
+  axis: { x: east, y: south }
+  units_to_pixels: 16   # 1 unit = 16 px ≈ 1 league
+  authority: "ED-779 / PP-707 / PP-709"
+  status: PROVISIONAL
+
+# ─── PROVINCES (17) ───
+provinces:
+  T1:
+    name: Valorsplatz
+    faction: Crown
+    region: Eastern Lowlands
+    sub: Capital
+    anchor: [1380, 1150]
+    polygon: [[1170, 1000], [1500, 1000], [1500, 1310], [1170, 1310]]
+    fort_level: 2
+    spiritual_weight: 2
+    proximity_calamity: 3
+    starting_pros: 6
+    settlements: [S-001, S-002, S-003]
+    description: Crown capital. River-sea nexus, eastern coast at Valoris river outflow.
+  T2:
+    name: Kronmark
+    faction: Crown
+    region: Eastern Lowlands
+    sub: Heartland
+    anchor: [1280, 880]
+    polygon: [[1130, 720], [1500, 720], [1500, 1000], [1130, 1000]]
+    fort_level: 1
+    spiritual_weight: 1
+    proximity_calamity: 4
+    starting_pros: 4
+    settlements: [S-004, S-005]
+    description: Crown heartland between capital and northern pass. Italian-coded farmland.
+  T3:
+    name: Lowenskyst
+    faction: Crown
+    region: Northern Mountains
+    sub: Border Fortress
+    anchor: [1380, 380]
+    polygon: [[1280, 290], [1500, 290], [1500, 490], [1280, 490]]
+    fort_level: 3
+    spiritual_weight: 0
+    proximity_calamity: 5
+    starting_pros: 2
+    settlements: [S-006, S-007]
+    description: NE Altonian pass. Primary chokepoint. Fort Level 3 (max 4).
+  T4:
+    name: Grauwald
+    faction: Varfell
+    region: Central Highlands
+    sub: Highland Timber
+    anchor: [1090, 1430]
+    polygon: [[970, 1300], [1170, 1300], [1170, 1480], [970, 1480]]
+    fort_level: 0
+    spiritual_weight: 2
+    proximity_calamity: 3
+    starting_pros: 2
+    settlements: [S-028, S-029]
+    description: NE shore of Lake Eidursjø. Highland timber, Einhir heritage.
+  T5:
+    name: Feldmark
+    faction: Crown
+    region: Eastern Lowlands
+    sub: Breadbasket
+    anchor: [1380, 1700]
+    polygon: [[1170, 1480], [1500, 1480], [1500, 1900], [1170, 1900]]
+    fort_level: 0
+    spiritual_weight: 0
+    proximity_calamity: 2
+    starting_pros: 5
+    settlements: [S-008, S-009]
+    description: Crown breadbasket. Hafenmark food dependency anchor.
+  T6:
+    name: Stillhelm
+    faction: Crown
+    region: Southern Approaches
+    sub: S. Farmland
+    anchor: [1180, 2300]
+    polygon: [[1010, 1900], [1430, 1900], [1180, 2440], [1010, 2400]]
+    fort_level: 0
+    spiritual_weight: 1
+    proximity_calamity: 1
+    starting_pros: 2
+    settlements: [S-010, S-011]
+    description: Calamity-adjacent. Southern Crown gate to Askeheim (Gate 2).
+  T7:
+    name: Rendstad
+    faction: Hafenmark
+    region: Hafenmark Highlands
+    sub: Timber Valley
+    anchor: [720, 800]
+    polygon: [[420, 700], [970, 700], [970, 1000], [420, 1000]]
+    fort_level: 0
+    spiritual_weight: 0
+    proximity_calamity: 4
+    starting_pros: 2
+    settlements: [S-018]
+    description: Hafenmark timber valley. Forested. Remote.
+  T8:
+    name: Gransol
+    faction: Hafenmark
+    region: Hafenmark Highlands
+    sub: Hafenmark Capital
+    anchor: [700, 470]
+    polygon: [[420, 440], [820, 440], [820, 700], [420, 700]]
+    fort_level: 1
+    spiritual_weight: 0
+    proximity_calamity: 4
+    starting_pros: 4
+    settlements: [S-015, S-016, S-017]
+    description: Hafenmark constitutional capital. West sea trade. Schoenland route.
+  T9:
+    name: Himmelenger
+    faction: Church
+    region: Mountain Ridge
+    sub: Cathedral City
+    anchor: [1100, 580]
+    polygon: [[820, 290], [1280, 290], [1280, 720], [820, 720]]
+    fort_level: 2
+    spiritual_weight: 4
+    proximity_calamity: 4
+    starting_pros: 3
+    settlements: [S-023, S-024, S-025]
+    description: Church seat. Cathedral on the mountain ridge between passes. Altonian containment-placement.
+  T10:
+    name: Spartfell
+    faction: Hafenmark
+    region: Northern Mountains
+    sub: Border Castle
+    anchor: [540, 380]
+    polygon: [[420, 290], [620, 290], [620, 480], [420, 480]]
+    fort_level: 2
+    spiritual_weight: 0
+    proximity_calamity: 4
+    starting_pros: 2
+    settlements: [S-019, S-020]
+    description: NW Altonian pass. Secondary chokepoint. Fort Level 2.
+  T11:
+    name: Halvardshelm
+    faction: Varfell
+    region: Central Fjords
+    sub: Central Fjords
+    anchor: [440, 1280]
+    polygon: [[340, 1000], [620, 1000], [620, 1480], [340, 1480]]
+    fort_level: 0
+    spiritual_weight: 1
+    proximity_calamity: 3
+    starting_pros: 2
+    settlements: [S-030]
+    description: Varfell central fjords. North-of-lake. Spartfell border contact.
+  T12:
+    name: Sigurdshelm
+    faction: Varfell
+    region: Western Fjords
+    sub: Varfell Seat
+    anchor: [540, 1850]
+    polygon: [[340, 1480], [780, 1480], [780, 2200], [340, 2200]]
+    fort_level: 1
+    spiritual_weight: 1
+    proximity_calamity: 2
+    starting_pros: 3
+    settlements: [S-026, S-027]
+    description: "Varfell seat. West shore of Lake Eidursjø. Vaynard's court."
+  T13:
+    name: Oastad
+    faction: Varfell
+    region: Southern Fjords
+    sub: Southern Fjords
+    anchor: [580, 2380]
+    polygon: [[340, 2200], [870, 2200], [870, 2500], [340, 2500]]
+    fort_level: 0
+    spiritual_weight: 2
+    proximity_calamity: 1
+    starting_pros: 2
+    settlements: [S-031, S-032]
+    description: Varfell southern gate to Askeheim (Gate 1). Calamity-adjacent.
+  T14:
+    name: Ehrenfeld
+    faction: Crown
+    region: Central Plains
+    sub: Military Hinge
+    anchor: [1290, 1320]
+    polygon: [[1170, 1180], [1430, 1180], [1430, 1480], [1170, 1480]]
+    fort_level: 3
+    spiritual_weight: 1
+    proximity_calamity: 3
+    starting_pros: 3
+    settlements: [S-012, S-013, S-014]
+    description: Crown military hinge. Löwenritter base. 5-way connection. Fort Level 3.
+  T15:
+    name: Askeheim
+    faction: Uncontrolled
+    region: Southernmost
+    sub: Southernmost
+    anchor: [980, 2700]
+    polygon: [[700, 2500], [1180, 2500], [1180, 2800], [700, 2800]]
+    fort_level: 0
+    spiritual_weight: 5
+    proximity_calamity: 0
+    starting_pros: 0
+    settlements: [S-033, S-034]
+    description: "Calamity epicenter. Forgetting zone. Two gates: Oastad (T13) and Stillhelm (T6)."
+  T16:
+    name: Schoenland
+    faction: Schoenland
+    region: Eastern Sea
+    sub: Island Republic
+    anchor: [1760, 920]
+    polygon: [[1660, 850], [1860, 850], [1860, 1050], [1660, 1050]]
+    fort_level: 1
+    spiritual_weight: 0
+    proximity_calamity: 4
+    starting_pros: 3
+    settlements: [S-035, S-036]
+    description: Independent island republic. Altonian trade. Naval choke control.
+  T17:
+    name: Halvarshelm
+    faction: Hafenmark
+    region: Northern Mountains
+    sub: Northern Mines
+    anchor: [920, 360]
+    polygon: [[760, 280], [1100, 280], [1100, 490], [760, 490]]
+    fort_level: 0
+    spiritual_weight: 0
+    proximity_calamity: 4
+    starting_pros: 3
+    settlements: [S-021, S-022]
+    description: Northern mines. Iron and copper. Guild operations.
+
+# ─── SETTLEMENTS (36) ───
+# Stats triplet: [Prosperity, Defense, Order]
+settlements:
+  S-001:
+    name: Valorsplatz Palace
+    territory: T1
+    type: Seat
+    controller: Crown
+    coords: [1380, 1150]
+    stats: [4, 3, 4]
+    description: "Royal court. Lion's Table HQ. Torben resides here."
+  S-002:
+    name: Valorsplatz Riverside
+    territory: T1
+    type: Port
+    controller: Crown
+    controller_subordinate: Guilds
+    coords: [1450, 1230]
+    stats: [4, 1, 3]
+    description: River trade hub. Guild quarter. Largest market in Valoria.
+  S-003:
+    name: Valorsplatz Cathedral
+    territory: T1
+    type: Cathedral
+    controller: Church
+    coords: [1330, 1080]
+    stats: [2, 1, 4]
+    description: Old Solmundic church. Politically significant — Church presence in capital.
+  S-004:
+    name: Kronmark
+    territory: T2
+    type: Town
+    controller: Crown
+    coords: [1280, 880]
+    stats: [3, 1, 3]
+    description: "Agricultural heartland center. Crown's breadbasket administration."
+  S-005:
+    name: Kronmark Watchtower
+    territory: T2
+    type: Fortress
+    controller: Crown
+    coords: [1290, 760]
+    stats: [1, 3, 3]
+    description: Guards northern approach to Valorsplatz.
+  S-006:
+    name: Lowenskyst Fortress
+    territory: T3
+    type: Fortress
+    controller: Crown
+    coords: [1380, 360]
+    stats: [1, 4, 4]
+    description: NE pass fortress. Primary Altonian chokepoint. Fort Level 3 (max 4).
+  S-007:
+    name: Lowenskyst Garrison Town
+    territory: T3
+    type: Town
+    controller: Crown
+    coords: [1390, 460]
+    stats: [2, 1, 3]
+    description: "Military support settlement. Soldiers' families, supply depot."
+  S-008:
+    name: Feldmark
+    territory: T5
+    type: Town
+    controller: Crown
+    coords: [1380, 1700]
+    stats: [4, 0, 3]
+    description: Breadbasket territory. Granary complex. Hafenmark food dependency anchor.
+  S-009:
+    name: Feldmark Storehouse
+    territory: T5
+    type: Mine
+    controller: Crown
+    coords: [1450, 1780]
+    stats: [3, 0, 2]
+    description: Strategic food storage and processing. Controls food supply to northern provinces.
+  S-010:
+    name: Stillhelm
+    territory: T6
+    type: Town
+    controller: Crown
+    coords: [1180, 2300]
+    stats: [2, 0, 2]
+    description: Southern farming settlement. Calamity-adjacent. Population uneasy.
+  S-011:
+    name: Stillhelm Watch
+    territory: T6
+    type: Outpost
+    controller: Crown
+    coords: [1090, 2380]
+    stats: [0, 2, 2]
+    description: Observation post facing Askeheim. Calamity monitoring. Warden contact point.
+  S-012:
+    name: Ehrenfeld Citadel
+    territory: T14
+    type: Fortress
+    controller: Crown
+    controller_subordinate: Löwenritter
+    coords: [1290, 1320]
+    stats: [1, 4, 4]
+    description: Military headquarters. Löwenritter base. 5-way connection hub. Fort Level 3.
+  S-013:
+    name: Ehrenfeld Market
+    territory: T14
+    type: City
+    controller: Crown
+    coords: [1230, 1240]
+    stats: [3, 1, 3]
+    description: Trade junction at the crossroads. Merchants from all factions.
+  S-014:
+    name: Ehrenfeld Barracks
+    territory: T14
+    type: Fortress
+    controller: Löwenritter
+    coords: [1340, 1390]
+    stats: [1, 3, 4]
+    description: Riskbreaker operations. Separate from Citadel command.
+  S-015:
+    name: Gransol Parliament
+    territory: T8
+    type: Seat
+    controller: Hafenmark
+    coords: [700, 470]
+    stats: [4, 2, 4]
+    description: "Parliament building. Baralta's court. Constitutional center."
+  S-016:
+    name: Gransol Harbor
+    territory: T8
+    type: Port
+    controller: Hafenmark
+    controller_subordinate: Guilds
+    coords: [580, 540]
+    stats: [4, 1, 3]
+    description: Western sea trade. Schoenland route.
+  S-017:
+    name: Gransol Market Quarter
+    territory: T8
+    type: City
+    controller: Guilds
+    coords: [760, 460]
+    stats: [5, 0, 3]
+    description: Guild headquarters. Largest trade settlement in Hafenmark.
+  S-018:
+    name: Rendstad
+    territory: T7
+    type: Town
+    controller: Hafenmark
+    coords: [720, 800]
+    stats: [2, 0, 2]
+    description: Timber processing. Remote valley settlement.
+  S-019:
+    name: Spartfell Fortress
+    territory: T10
+    type: Fortress
+    controller: Hafenmark
+    coords: [540, 360]
+    stats: [1, 3, 3]
+    description: NW pass fortress. Secondary Altonian chokepoint. Fort Level 2.
+  S-020:
+    name: Spartfell Village
+    territory: T10
+    type: Town
+    controller: Hafenmark
+    coords: [560, 460]
+    stats: [2, 1, 2]
+    description: Border garrison town.
+  S-021:
+    name: Halvarshelm Mines
+    territory: T17
+    type: Mine
+    controller: Hafenmark
+    controller_subordinate: Guilds
+    coords: [920, 320]
+    stats: [3, 0, 2]
+    description: Primary mining operation. Iron and copper.
+  S-022:
+    name: Halvarshelm Town
+    territory: T17
+    type: Town
+    controller: Hafenmark
+    coords: [920, 380]
+    stats: [2, 0, 3]
+    description: Miner settlement. Guild labor presence.
+  S-023:
+    name: Himmelenger Cathedral
+    territory: T9
+    type: Cathedral
+    controller: Church
+    coords: [1100, 580]
+    stats: [3, 2, 5]
+    description: "Solmundic spiritual center. Confessor's seat. Highest Piety."
+  S-024:
+    name: Himmelenger City
+    territory: T9
+    type: City
+    controller: Church
+    coords: [1170, 660]
+    stats: [3, 1, 4]
+    description: Urban population. Scholars. Cardinal of Temperance.
+  S-025:
+    name: Himmelenger Seminary
+    territory: T9
+    type: Cathedral
+    controller: Church
+    coords: [1030, 510]
+    stats: [1, 1, 5]
+    description: Church training. Theological center. Inquisitor recruitment.
+  S-026:
+    name: Sigurdshelm Keep
+    territory: T12
+    type: Seat
+    controller: Varfell
+    coords: [540, 1850]
+    stats: [3, 2, 3]
+    description: "Vaynard's court. Private Collection housed here."
+  S-027:
+    name: Sigurdshelm Cove
+    territory: T12
+    type: Port
+    controller: Varfell
+    coords: [420, 1900]
+    stats: [2, 1, 2]
+    description: "Fjord access. Varfell's limited naval capability."
+  S-028:
+    name: Grauwald
+    territory: T4
+    type: Town
+    controller: Varfell
+    coords: [1090, 1430]
+    stats: [2, 0, 2]
+    description: Highland settlement. Einhir heritage site. RM presence.
+  S-029:
+    name: Grauwald Lodge
+    territory: T4
+    type: Outpost
+    controller: RM
+    coords: [1160, 1390]
+    stats: [1, 0, 2]
+    description: Einhir cultural preservation. RM meeting site. Hidden.
+  S-030:
+    name: Halvardshelm
+    territory: T11
+    type: Town
+    controller: Varfell
+    coords: [440, 1280]
+    stats: [2, 0, 2]
+    description: Central fjord settlement.
+  S-031:
+    name: Oastad
+    territory: T13
+    type: Town
+    controller: Varfell
+    coords: [580, 2380]
+    stats: [2, 0, 2]
+    description: Southern fishing settlement. Calamity-adjacent.
+  S-032:
+    name: Oastad Shrine
+    territory: T13
+    type: Outpost
+    controller: RM
+    coords: [680, 2480]
+    stats: [0, 0, 1]
+    description: Old Einhir ceremonial site. RM stronghold. Lowest CV territory. Community Organizing site.
+  S-033:
+    name: Askeheim Ruins
+    territory: T15
+    type: Outpost
+    controller: Wardens
+    coords: [980, 2700]
+    stats: [0, 1, 1]
+    description: Einhir Catastrophe epicenter. Active Warden operations. Forgetting barrier.
+  S-034:
+    name: Askeheim Gate
+    territory: T15
+    type: Outpost
+    controller: Uncontrolled
+    coords: [890, 2790]
+    stats: [0, 0, 0]
+    description: Southern access point. Observation camp. No permanent population.
+  S-035:
+    name: Schoenland City
+    territory: T16
+    type: City
+    controller: Schoenland
+    coords: [1760, 920]
+    stats: [4, 2, 4]
+    description: Island capital. Altonian trade. Independent governance.
+  S-036:
+    name: Schoenland Harbor
+    territory: T16
+    type: Port
+    controller: Schoenland
+    coords: [1700, 1010]
+    stats: [3, 3, 4]
+    description: Naval base. Passage control. Altonian supply chain.
+
+# ─── ADJACENCY EDGES (26) ───
+# Edge type per settlement_adjacency_v30 §1.1: road | river | mountain_pass | coastal | gate
+# (gate = Askeheim Gate edges, treated as marsh-entry with attacker −1D fatigue)
+adjacency:
+  - {from: T1, to: T2, type: road}
+  - {from: T1, to: T5, type: road}
+  - {from: T1, to: T14, type: road}
+  - {from: T1, to: T16, type: coastal}
+  - {from: T2, to: T3, type: road}
+  - {from: T2, to: T9, type: road}
+  - {from: T2, to: T14, type: road}
+  - {from: T3, to: T9, type: road}
+  - {from: T3, to: T17, type: road}
+  - {from: T4, to: T7, type: road}
+  - {from: T4, to: T12, type: road}
+  - {from: T4, to: T14, type: road}
+  - {from: T5, to: T6, type: road}
+  - {from: T5, to: T14, type: road}
+  - {from: T6, to: T13, type: road}
+  - {from: T6, to: T15, type: gate}
+  - {from: T7, to: T8, type: road}
+  - {from: T8, to: T9, type: road}
+  - {from: T8, to: T10, type: road}
+  - {from: T8, to: T17, type: road}
+  - {from: T9, to: T14, type: road}
+  - {from: T9, to: T17, type: road}
+  - {from: T10, to: T11, type: mountain_pass}
+  - {from: T11, to: T12, type: road}
+  - {from: T12, to: T13, type: road}
+  - {from: T13, to: T15, type: gate}
+
+# ─── TERRAIN LAYER (8 types) ───
+# Types: plains, forest, highland, mountain, mountain_pass, fjord_coast, coast, marsh
+# Annotations are separate (river, bridge, forgetting_zone, radiation_bands).
+# Roads are NOT authored: A*-cached over terrain-cost field per PP-709 §2.4.
+terrain:
+  - id: terrain-mountain-north
+    type: mountain
+    polygon: [[300, 80], [1620, 80], [1620, 290], [1100, 260], [820, 290], [300, 290]]
+    description: Northern Mountains — east-west barrier vs Altonia. Two passes embedded (Lowenskyst NE, Spartfell NW).
+  - id: terrain-pass-lowenskyst
+    type: mountain_pass
+    polygon: [[1300, 80], [1500, 80], [1500, 290], [1300, 290]]
+    description: Lowenskyst NE pass — primary Altonian crossing. T3 gates this pass. S-006 Fortress.
+  - id: terrain-pass-spartfell
+    type: mountain_pass
+    polygon: [[420, 80], [620, 80], [620, 290], [420, 290]]
+    description: Spartfell NW pass — secondary Altonian crossing. T10 gates this pass. S-019 Fortress.
+  - id: terrain-highland-hafenmark
+    type: highland
+    polygon: [[420, 290], [820, 290], [820, 700], [420, 700]]
+    description: Hafenmark Highlands — Swiss-coded. Rocky, mineral deposits, limited arable. Includes T8, T10.
+  - id: terrain-highland-halvarshelm
+    type: highland
+    polygon: [[760, 290], [1100, 290], [1100, 490], [760, 490]]
+    description: Halvarshelm mining highland (T17). Iron and copper deposits.
+  - id: terrain-highland-grauwald
+    type: highland
+    polygon: [[970, 1300], [1170, 1300], [1170, 1480], [970, 1480]]
+    description: Grauwald highland timber (T4). NE shore of Lake Eidursjø. Einhir heritage.
+  - id: terrain-highland-himmelenger
+    type: highland
+    polygon: [[820, 290], [1280, 290], [1280, 720], [820, 720]]
+    description: Mountain ridge — Cathedral seat (T9). Containment placement between passes.
+  - id: terrain-forest-rendstad
+    type: forest
+    polygon: [[420, 700], [970, 700], [970, 1000], [420, 1000]]
+    description: Rendstad Timber Valley (T7). Hafenmark forest. Remote, slow movement.
+  - id: terrain-fjord-halvardshelm
+    type: fjord_coast
+    polygon: [[200, 1000], [420, 1000], [420, 1480], [280, 1480]]
+    description: Western fjord coast — T11 Halvardshelm. Norwegian-coded. Limited ports.
+  - id: terrain-fjord-sigurdshelm
+    type: fjord_coast
+    polygon: [[200, 1480], [420, 1480], [420, 2200], [280, 2200]]
+    description: "Western fjord coast — T12 Sigurdshelm. Vaynard's seat coast. Sigurdshelm Cove (S-027)."
+  - id: terrain-fjord-oastad
+    type: fjord_coast
+    polygon: [[280, 2200], [600, 2200], [600, 2500], [340, 2500]]
+    description: Southern fjord coast — T13 Oastad. Calamity-adjacent. RM stronghold.
+  - id: terrain-coast-east
+    type: coast
+    polygon: [[1500, 720], [1620, 720], [1620, 2200], [1500, 2200]]
+    description: Eastern Lowlands coast. Italian-coded. River-Valoris outflow at Valorsplatz.
+  - id: terrain-coast-schoenland
+    type: coast
+    polygon: [[1660, 850], [1860, 850], [1860, 1050], [1660, 1050]]
+    description: Schoenland island coast (T16). Independent republic.
+  - id: terrain-plains-kronmark
+    type: plains
+    polygon: [[1100, 720], [1500, 720], [1500, 1000], [1100, 1000]]
+    description: Kronmark agricultural heartland (T2). Crown breadbasket administration.
+  - id: terrain-plains-valorsplatz
+    type: plains
+    polygon: [[1170, 1000], [1500, 1000], [1500, 1310], [1170, 1310]]
+    description: Valorsplatz lowlands (T1). River-sea nexus.
+  - id: terrain-plains-feldmark
+    type: plains
+    polygon: [[1170, 1480], [1500, 1480], [1500, 1900], [1170, 1900]]
+    description: Feldmark breadbasket (T5). Largest grain production. Hafenmark food anchor.
+  - id: terrain-plains-ehrenfeld
+    type: plains
+    polygon: [[1170, 1180], [1430, 1180], [1430, 1480], [1170, 1480]]
+    description: Ehrenfeld central plain (T14). Military hinge.
+  - id: terrain-marsh-stillhelm
+    type: marsh
+    polygon: [[1010, 1900], [1430, 1900], [1180, 2440], [1010, 2400]]
+    description: Stillhelm southern marsh (T6). Calamity bleed.
+  - id: terrain-marsh-askeheim
+    type: marsh
+    polygon: [[700, 2500], [1180, 2500], [1180, 2800], [700, 2800]]
+    description: Askeheim marsh (T15). Calamity epicenter. Forgetting overlay applies.
+  - id: terrain-marsh-lake-shore
+    type: marsh
+    polygon: [[760, 1480], [1170, 1480], [1170, 1980], [760, 1980]]
+    description: Lake Eidursjø shoreline marsh band — encompasses lake itself. Major east-west barrier.
+
+# ─── TERRAIN COST MATRIX (movement multipliers) ───
+# Seed values per PP-707 §1.5; Phase 4 stress test will calibrate.
+# Mountain interior is impassable except via embedded mountain_pass polygons.
+terrain_cost_matrix:
+  plains: 1.0
+  coast: 1.0
+  fjord_coast: 2.5      # broken inlet land terrain; naval rules separate
+  forest: 1.5
+  highland: 1.5
+  marsh: 2.0
+  mountain_pass: 2.0    # embedded pass strips; gated by fortress
+  mountain: 999.0       # impassable (effectively infinity)
+  river_crossing_no_bridge: 1.5
+  river_crossing_with_bridge: 1.0
+  road_overlay: 0.7     # multiplier on underlying terrain (cached A*, not authored)
+
+# ─── VISION RANGE (multiplicative factor stack per PP-709 §2.6) ───
+# effective_vision = base × terrain × weather × season
+vision_range:
+  base_pixels: 240        # ≈ one settlement-spacing distance on 1920×2880
+  terrain_factor:
+    plains: 1.0
+    coast: 1.0
+    fjord_coast: 1.0
+    forest: 0.7           # own-vision reduced inside forest
+    highland: 1.5         # vantage from elevation
+    marsh: 0.7            # mist, broken sightlines
+    mountain_pass: 0.7    # narrow corridor
+    mountain: 1.4         # high vantage if reachable
+  weather_factor:
+    clear: 1.0
+    overcast: 0.85
+    fog: 0.4
+    storm: 0.3
+    blizzard: 0.2
+  season_factor:
+    spring: 1.0
+    summer: 1.05
+    autumn: 0.9
+    winter: 0.6
+
+# ─── MARCH BUDGET (PP-709 §2.3) ───
+# Per-army per-season march budget. Cost consumed via terrain_cost × distance.
+march_budget:
+  base_per_military_point: 100   # px/season; Crown Mil 5 → 500 px budget
+  cavalry_modifier: 1.5          # ≥50% Cav-class units in army
+  skirmish_modifier: 1.3         # low-tier only, no siege equipment (chevauchée)
+
+# ─── WATER FEATURES ───
+water:
+  lakes:
+    - id: lake-eidursjo
+      shape: ellipse
+      center: [960, 1700]
+      rx: 180
+      ry: 280
+      description: Lake Eidursjø — central-south interior. East-west barrier between western Varfell and eastern Crown southern corridors. Oriented N-S.
+  rivers:
+    - id: river-valoris
+      type: navigable
+      vertices: [[1380, 290], [1370, 500], [1380, 800], [1380, 1150], [1450, 1230], [1500, 1310], [1620, 1380]]
+      description: Major river — northern mountain headwaters → Valorsplatz → eastern sea outflow. Crown trade artery.
+
+# ─── BRIDGES (river-crossing point features) ───
+bridges:
+  - id: bridge-valorsplatz
+    coords: [1380, 1150]
+    crosses: river-valoris
+    description: Valorsplatz city bridge — capital crossing.
+  - id: bridge-kronmark
+    coords: [1380, 800]
+    crosses: river-valoris
+    description: Kronmark→Lowenskyst route bridge over Valoris headwaters.
+
+# ─── FORGETTING ZONE (polygon overlay, NOT terrain) ───
+# Per PP-709 §2.2: terrain underneath classified normally; entry triggers personnel-layer
+# Forgetting per calamity_radiation_v30 §Forgetting. TS ≥ 30 individual gating.
+# CANONICAL: no faction-property exemption (PP-703 universality).
+forgetting_zone:
+  id: forgetting-zone
+  polygon: [[200, 2500], [1320, 2500], [1500, 2700], [1500, 2880], [100, 2880], [100, 2700]]
+  description: "Maritime + Askeheim Forgetting Zone. Personnel-layer trigger per calamity_radiation_v30 §Forgetting. TS≥30 individual gating; no faction-property exemption (canon: PP-703)."
+
+# ─── RADIATION BANDS (Calamity, per geography_v30 + calamity_radiation_v30) ───
+# Concentric circles centered at Askeheim epicenter; band number = node distance.
+radiation_bands:
+  - band: 0
+    center: [980, 2700]
+    radius: 120
+    territories: [T15]
+    description: Epicenter ring — T15 Askeheim only.
+  - band: 1
+    center: [980, 2700]
+    radius: 400
+    territories: [T6, T13]
+    description: Calamity-adjacent — T6 Stillhelm, T13 Oastad.
+  - band: 2
+    center: [980, 2700]
+    radius: 900
+    territories: [T5, T12]
+    description: Calamity-near — T5 Feldmark, T12 Sigurdshelm.
+  - band: 3
+    center: [980, 2700]
+    radius: 1450
+    territories: [T1, T14, T4, T11]
+    description: Distant influence.
+  - band: 4
+    center: [980, 2700]
+    radius: 2050
+    territories: [T2, T16, T9, T7, T10]
+    description: Minimal influence.
+  - band: 5
+    center: [980, 2700]
+    radius: 2700
+    territories: [T3, T8, T17]
+    description: Northernmost — calamity-quiet.
+
+# ─── ALTONIAN INVASION ROUTES (geography_v30 §Altonian Invasion Routes) ───
+altonian_passes:
+  primary:
+    name: Lowenskyst
+    territory: T3
+    settlement: S-006
+    terrain_id: terrain-pass-lowenskyst
+    description: "Primary Altonian crossing. Crown holds gate. Fort Level 3 (max 4)."
+  secondary:
+    name: Spartfell
+    territory: T10
+    settlement: S-019
+    terrain_id: terrain-pass-spartfell
+    description: "Secondary Altonian crossing. Hafenmark holds gate. Fort Level 2."
+  naval:
+    description: "Via Schoenland permission at Institutional Pressure (IP) 75+. ED-055 Phase 3 mechanics."
+
+# ─── POI CATALOG (per geography_v30 §Points of Interest) ───
+# Per-territory POI count by category. Discovery via Survey action (fieldwork_v30 §8.1).
+poi_catalog:
+  T1: {resource: 1, secret: 1, remnant: 0, anomaly: 0}
+  T2: {resource: 1, secret: 0, remnant: 1, anomaly: 0}
+  T3: {resource: 0, secret: 1, remnant: 0, anomaly: 0}
+  T4: {resource: 1, secret: 0, remnant: 1, anomaly: 0}
+  T5: {resource: 1, secret: 0, remnant: 0, anomaly: 0}
+  T6: {resource: 0, secret: 1, remnant: 1, anomaly: 1}
+  T7: {resource: 1, secret: 0, remnant: 0, anomaly: 0}
+  T8: {resource: 1, secret: 1, remnant: 0, anomaly: 0}
+  T9: {resource: 0, secret: 1, remnant: 1, anomaly: 0}
+  T10: {resource: 0, secret: 1, remnant: 0, anomaly: 0}
+  T11: {resource: 1, secret: 0, remnant: 1, anomaly: 0}
+  T12: {resource: 0, secret: 1, remnant: 1, anomaly: 0}
+  T13: {resource: 0, secret: 0, remnant: 1, anomaly: 1}
+  T14: {resource: 1, secret: 1, remnant: 0, anomaly: 0}
+  T15: {resource: 0, secret: 0, remnant: 2, anomaly: 2}
+  T16: {resource: 0, secret: 1, remnant: 0, anomaly: 0}
+  T17: {resource: 1, secret: 0, remnant: 0, anomaly: 0}
+
+# ─── SCALE TRANSITION ANCHORS (UI v4 / scene_v30 / mass_battle_v30) ───
+# Strategic peninsula → tactical hex grid alignment per UI v4 §7.4.
+# 1920÷32 = 60 hex columns at full zoom; 2880÷48 = 60 hex rows (16×10 ratio per UI v4).
+scale_anchors:
+  hex_grid_size_px: 32
+  strategic_to_tactical_zoom: 4   # 1 strategic px = 4 tactical px when zoomed
+  settlement_scene_radius: 80     # px around settlement for scene_v30 anchoring
+
+# ─── CROSS-REFERENCES ───
+# canonical narrative: designs/world/geography_v30.md (CANONICAL 2026-04-05)
+# infill prose:        designs/world/geography_v30_infill.md
+# settlement registry: designs/territory/settlement_layer_v30.md §2.1
+# adjacency mechanics: designs/territory/settlement_adjacency_v30.md (PP-666 PROVISIONAL → superseded by march_layer_v30)
+# march mechanics:     designs/territory/march_layer_v30.md (skeleton — Phase 3 ED-780)
+# calamity radiation:  designs/setting/calamity_radiation_v30.md
+# audit trail:         designs/audit/2026-04-30-geography-audit/
+# JSX schematic:       designs/world/adjacency_map.jsx (presentation only; canonical: this file)
+# deprecated:          designs/provincial/valoria_map_v2.svg (pre-canon T-numbers)
+
+# === END VALORIA GEOGRAPHY V30 ===

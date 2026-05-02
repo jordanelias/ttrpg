@@ -1,3 +1,12 @@
+<!-- [PROVISIONAL: ED-710 — PP-666 2026-04-19; SUPERSESSION-PENDING per ED-779/ED-780 2026-05-01] -->
+<!-- BANNER (ED-779 Phase 2 commit 2026-05-01): -->
+<!-- This document remains PROVISIONAL but is on a supersession track. -->
+<!-- Successor: designs/territory/march_layer_v30.md (SKELETON; full body Phase 3 ED-780). -->
+<!-- Phase 2 geographic canon at: designs/territory/valoria_geography_v30.yaml. -->
+<!-- Adjacency graph (26 edges) is now sourced from valoria_geography_v30.yaml :: adjacency. -->
+<!-- The mechanical body below remains operative for mass-battle resolution until march_layer_v30 is CANONICAL. -->
+<!-- Reconciliation memo: designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md (PP-709 §5 O5). -->
+
 <!-- [PROVISIONAL: ED-710 — PP-666 2026-04-19 new mechanical system, pending smoke-test before CANONICAL] -->
 # Settlement Adjacency & Mass Battle at Settlement Scale
 

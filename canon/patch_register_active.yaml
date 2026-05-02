@@ -1093,3 +1093,44 @@ patches:
     q: pass
     note: "Class A (reconciliation/coordination instrument; no mechanical change). N pass: parallel-session collision creates execution-ambiguity for next session; reconciliation eliminates ambiguity. Ω pass: SUPERSEDED file preserved (banner only); CANONICAL file unchanged in this commit; new memo adds decisions to canonical set without overwriting committed workplans. Q pass: Jordan editorial 2026-05-01."
 
+
+- id: PP-710
+  date: 2026-05-01
+  severity: P3
+  description: "Phase 2 geography canon executed (ED-779). Authors designs/territory/valoria_geography_v30.yaml as the data canon for Valoria geography at canonical 1920×2880: 17 territory anchors (jsx-derived via 01_coord_transform pattern + per-territory geographic correction), 17 hand-authored Voronoi-style province polygons with settlement-containment validated, 36 settlement coordinates with type-bias placement (Ports→coast, Mines→mountain, Cathedrals→interior, Outposts→periphery, Garrisons→fortress-adjacent), 26 adjacency edges (incl. T15 gates T6+T13, T1↔T16 coastal, T10↔T11 mountain_pass per PP-709 §2.4), 20 terrain polygons covering all 8 canonical types from PP-709 §2.1 (plains, forest, highland, mountain, mountain_pass, fjord_coast, coast, marsh), Lake Eidursjø ellipse, river Valoris polyline + 2 bridges, forgetting_zone as overlay polygon (canon-preservation per PP-703 universality / PP-709 §2.2), 6 calamity radiation bands, march_budget formula (Military×100px; cavalry 1.5×, skirmish 1.3× per PP-709 §2.3), vision_range multiplicative composition (base 240px × terrain × weather × season per PP-709 §2.6). Concurrently authors designs/territory/valoria_map_v30.svg as replacement map (color-coded terrain, faction-tinted province outlines, settlement glyphs by type, edge classification) and designs/territory/march_layer_v30.md skeleton (Phase 3 ED-780 successor for settlement_adjacency_v30). Banners settlement_adjacency_v30.md (SUPERSESSION-PENDING ED-780) and 00_phase2_workplan.md (SUPERSEDED per PP-709 §3). Deletes deprecated designs/provincial/valoria_map_v2.svg. All locked decisions from PP-707 + PP-709 §2 executed; calibration values (terrain cost coefficients, weather/season multipliers) flagged PROVISIONAL pending Phase 4 stress tests (ED-781)."
+  finding_id: ED-779 Phase 2 execution (geography data canon)
+  source: editorial
+  affects:
+    - designs/territory/valoria_geography_v30.yaml
+    - designs/territory/valoria_map_v30.svg
+    - designs/territory/march_layer_v30.md
+    - designs/territory/settlement_adjacency_v30.md
+    - designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md
+    - designs/provincial/valoria_map_v2.svg
+    - references/canonical_sources.yaml
+    - references/file_index_summary.md
+    - canon/editorial_ledger.yaml
+    - canon/editorial_ledger_summary.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Class A (data canon authoring; no mechanical change to existing rules — calibration TBD via ED-781). N pass: Phase 2 was the gating bottleneck for ED-780 spec rewrite and Godot map rendering; coordinate canon eliminates the ambiguity-driven sim drift. Ω pass: superseded files preserved with banners; existing geography_v30.md narrative canon untouched; replacement SVG places deprecated valoria_map_v2.svg into git history. Q pass: workplan PP-707 + reconciliation PP-709 pre-authorize all locked decisions; calibration values explicitly flagged PROVISIONAL pending Phase 4."
+
+

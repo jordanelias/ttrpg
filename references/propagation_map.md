@@ -862,3 +862,38 @@ The valoria-orchestrator hooks catch content-level collisions but don't prevent 
 
 **Cross-references:** PP-706 (Phase 1 audit), PP-707 (workplan A), PP-708 (workplan B), PP-709 (reconciliation), ED-779 (Phase 2 standing), PP-703 (Forgetting universality — load-bearing for §2.2), PP-666 (settlement adjacency v1, becomes superseded by Phase 3), ED-055 (naval mechanics — Phase 3 standing).
 
+## 2026-05-01 — Phase 2 geography canon executed (PP-710 / ED-779 closed)
+
+ED-779 Phase 2 data-authoring executed per PP-707 canonical workplan and PP-709 locked decisions. Single atomic commit produces the geography data canon at canonical 1920×2880 and skeletons the Phase 3 successor.
+
+**Authored (new):**
+- `designs/territory/valoria_geography_v30.yaml` — data canon: 17 territory anchors (jsx-derived via 01_coord_transform pattern + per-territory geographic correction), 17 hand-authored Voronoi-style province polygons (settlement-containment validated), 36 settlement coordinates with type-bias placement, 26 adjacency edges (incl. T15 gates T6+T13, T1↔T16 coastal, T10↔T11 mountain_pass), 20 terrain polygons covering all 8 canonical types from PP-709 §2.1, Lake Eidursjø ellipse, river Valoris polyline + 2 bridges, forgetting_zone overlay polygon, 6 calamity radiation bands, march_budget formula, vision_range table.
+- `designs/territory/valoria_map_v30.svg` — replacement map: terrain colorization, faction-tinted province outlines, settlement glyphs by type, edge classification.
+- `designs/territory/march_layer_v30.md` — SKELETON for Phase 3 ED-780 successor (full body deferred to ED-780). Locks march budget formula and pathfinding contract; defers calibration, naval, weather × season tables.
+
+**Banners added:**
+- `designs/territory/settlement_adjacency_v30.md` — SUPERSESSION-PENDING marker pointing to march_layer_v30.md (PP-666 mechanical body operative until march_layer is CANONICAL).
+- `designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md` — SUPERSEDED per PP-709 §3 (canonical = 01_phase2_workplan.md / PP-707).
+
+**Deleted:**
+- `designs/provincial/valoria_map_v2.svg` — deprecated map at non-canonical dimensions, replaced by valoria_map_v30.svg in territory/.
+
+**Register updates:**
+- `canon/patch_register_active.yaml` — PP-710 entry (Class A vetting; all M-ratings ○).
+- `canon/editorial_ledger.yaml` — ED-779 transitioned `open` → `closed`; description updated to EXECUTED.
+- `canon/editorial_ledger_summary.yaml` — open_count 9 → 8; ED-779 removed from p2_open; recent-activity comment updated.
+- `references/canonical_sources.yaml` — territories block extended with `geographic_data`, `geographic_map`, `march_layer_skeleton` sub-keys (SHAs PENDING_PP_710).
+- `references/file_index_summary.md` — total 697 → 699; territory/ 2 → 5; provincial/ 31 → 30; designs/ 189 → 191.
+- `session_log_current.md` — last_stage updated.
+
+**Decisions executed:** all PP-707 + PP-709 §2 locked decisions (canvas 1920×2880, 8-terrain taxonomy with `fjord_coast` adopted, Lake Eidursjø central-south, T4 Grauwald NE shore, type-bias settlement placement, forgetting-zone-as-overlay per PP-703 universality, march-budget Military×100px, roads-as-A*-cached, naval deferred to Phase 3, vision multiplicative with concrete starting values). See PP-710 patch_register description for full enumeration.
+
+**PROVISIONAL flags retained:**
+- terrain_cost_matrix off-road multipliers, vision per-terrain coefficients, weather/season multipliers — calibration TBD via Phase 4 stress tests (ED-781).
+- march_layer_v30.md is SKELETON only; full mechanical body authored under ED-780.
+
+**Successor handoff (ED-780, Phase 3):** settlement_adjacency_v30.md mechanical body migrates to march_layer_v30.md; mass_battle_v30 §A.4–A.11 terrain-derivation refactor uses geographic_data terrain layer; naval mechanics first authoring (resolves long-standing ED-055).
+
+**Cross-references:** PP-666 (settlement adjacency v1, supersession-pending), PP-703 (Forgetting universality, load-bearing for forgetting-zone-as-overlay), PP-706 (Phase 1 audit), PP-707 (canonical workplan), PP-708 (superseded workplan), PP-709 (reconciliation memo), ED-779 (Phase 2, CLOSED), ED-780 (Phase 3 spec rewrite, depends-on), ED-781 (Phase 4 stress tests, depends-on), ED-055 (naval mechanics, deferred).
+
+

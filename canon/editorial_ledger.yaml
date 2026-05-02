@@ -59,10 +59,11 @@ entries:
     source: "PP-705 / workplan_v2 §0 / 2026-04-30 audit T1/D1/B1"
   - id: ED-779
     date: 2026-05-01
-    description: "[STANDING] Phase 2 of geography canon work — data authoring. Required: (a) decide canonical coordinate system (recommended: ~1920×2880 sized for Godot screen, peninsula proportions); (b) author 36 settlement (x, y) coordinates within territory anchor regions; (c) author province polygons (or Voronoi rule for derivation from settlement coords); (d) author typed terrain layer (forest/plains/mountain/marsh/coast/river polygons or raster); (e) author terrain-cost matrix; (f) author vision-range base + terrain × weather × season modifier tables. Output: designs/territory/valoria_geography_v30.yaml (or .json); redrawn canonical map. Cross-references: PP-706, audit §2 G1-G6, §3 C1/C3."
-    status: open
+    description: "Phase 2 of geography canon work — data authoring. EXECUTED 2026-05-01 (PP-710): designs/territory/valoria_geography_v30.yaml committed at canonical 1920×2880 (17 territory anchors, 17 province polygons, 36 settlements, 26 adjacency edges, 20 terrain polygons covering 8 canonical types, lake/river/bridges/forgetting-zone/radiation-bands, march-budget formula, vision-range table); replacement designs/territory/valoria_map_v30.svg; designs/territory/march_layer_v30.md skeleton (handoff to ED-780). Calibration values PROVISIONAL pending Phase 4 stress tests (ED-781). Cross-references: PP-706, PP-707 (canonical workplan), PP-709 (reconciliation), PP-710 (execution)."
+    status: closed
     severity: P2
     source: "Geography canon audit 2026-05-01 — Phase 2"
+    applied_commit: pending
 
   - id: ED-780
     date: 2026-05-01
