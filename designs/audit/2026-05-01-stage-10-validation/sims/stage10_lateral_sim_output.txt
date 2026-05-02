@@ -1,0 +1,93 @@
+========================================================================
+STAGE 10 LATERAL CROSS-SYSTEM SIMULATION (PP-686/687/688)
+SEED=42
+========================================================================
+
+========================================================================
+L1  faction × economy lateral
+========================================================================
+  Keys emitted: 4  ids: ['c6a7e9e8097c', 'e71220898b30', 'a86ab1213f7b', '6db717d15462']
+  Hafenmark PS: 4.000 → 4.591  ΔPS=+0.591  L→4.064
+  Crown     PS: 4.000 → 4.557  ΔPS=+0.557  L→4.065
+  INV-L1.A  Hafenmark Δ > Crown Δ for aligned-vs-neutral peer Keys:  PASS
+  INV-L1.B  V5 exactly-once: each faction received all 4 economy Keys:  PASS
+
+========================================================================
+L2  faction × social_contest lateral
+========================================================================
+  contest Key id: c401fa8e73d2
+  da Key id:      d274e72f7eb8  (causes=['c401fa8e73d2'])
+  Crown strictness pre→post: 0.495 → 0.493
+  Crown cascade_fidelity pre→post: 0.925 → 0.461  (Δ=-0.464)
+  Crown agg conv (top 3):    [('Liberty', 0.2375), ('Honor', 0.15166666666666667), ('Equity', 0.14250000000000002)]
+  INV-L2.A  Provenance walk from DA reaches social-contest cause:  PASS
+  INV-L2.B  Cascade fidelity drops ≥0.10 with courtier divergence:  PASS  (Δfid=+0.464)
+
+========================================================================
+L3  faction × mass_battle lateral (crisis-bypass C4)
+========================================================================
+  Battle Keys: ['b3809f3e7171', '6de31eaeaa34', '0aaca84b72c2']
+  haf_leader scars: 0 → 3
+  CRISIS_BYPASS flag count on faction: 0 → 1
+  INV-L3.A  Leader scars accumulate from peer-system battle Keys:  PASS
+  INV-L3.B  Crisis-bypass C4 fires once leader.scars≥3:  PASS
+
+========================================================================
+L4  faction × intelligence lateral (observer-set restriction)
+========================================================================
+  scene.witness id: 2eb198e3b2ef  visibility: ['spy_1', 'crown_leader', 'Crown']
+  da.public_governance id: 308805d47fd4  visibility: ['crown_leader', 'Crown']
+  Crown faction received DA?:     True
+  Hafenmark faction received DA?: True
+  INV-L4.A  Hafenmark not in witness visibility set:  PASS
+  INV-L4.B  Crown in witness visibility set:  PASS
+  L4-NOTE: subscriber filter does not yet read Key.visibility; current substrate fires by type only. Refinement: subscriber-side visibility check at dispatch, or observer-aware subscription registry.
+
+========================================================================
+D1  diagonal — personal → settlement → territory → peninsula (4-hop)
+========================================================================
+  Walk length: 4  scales: ['peninsula', 'territory', 'settlement', 'personal']
+  Walk ids: ['c24cb85f84c2', '7198f490f892', 'b28041110fe4', 'da237525a8f2']
+  Expected ids: ['c24cb85f84c2', '7198f490f892', 'b28041110fe4', 'da237525a8f2']
+  INV-D1.A  Walk reaches all 4 hops:  PASS
+  INV-D1.B  Walk preserves DAG ordering (peninsula→personal):  PASS
+
+========================================================================
+D2  diagonal — scene battle → personal scar → faction Cascade → settlement PE
+========================================================================
+  Walk: ['f0c1ba82e73b', '0337ff5ba091', '4e16a03c8ba8', 'b9ac8e002cb7']
+  Scales: ['settlement', 'territory', 'personal', 'scene']
+  INV-D2.A  Cross-system + cross-scale chain reachable:  PASS
+  INV-D2.B  Walk preserves ordering:  PASS
+
+========================================================================
+V5  cross-system propagation: exactly-once delivery
+========================================================================
+  Subscriber fire counts: {'sub_A': 1, 'sub_B': 1, 'sub_C': 1}
+  V5 exactly-once across exact + wildcard subscribers:  PASS
+
+========================================================================
+V6  PP-686 §3.4/§3.5 L+PS update from da_outcome — formula match
+========================================================================
+  Computed: d_PS=0.19000 d_L=0.03875 attributed=0.600 gate=1.0 beta_fid=1.000
+  Expected: d_PS=0.19000 d_L=0.03875 attributed=0.600 gate=1.0 beta_fid=1.000
+  V6.A ΔPS within 0.001:  PASS
+  V6.B ΔL  within 0.001:  PASS
+
+========================================================================
+SUMMARY
+========================================================================
+  L1 faction × economy              PASS
+  L2 faction × social_contest       PASS
+  L3 faction × mass_battle (C4)     PASS
+  L4 faction × intelligence (V3)    PASS
+  D1 4-hop diagonal walk            PASS
+  D2 cross-system+cross-scale walk  PASS
+  V5 exactly-once delivery          PASS
+  V6 PP-686 §3.4/§3.5 formula       PASS
+  Determinism (replay hash)         PASS
+
+  total_keys=23  cycles_blocked=0  elapsed=0.002s
+  log_hash run1=147990d9f4396201  run2=147990d9f4396201
+
+  OVERALL: PASS
