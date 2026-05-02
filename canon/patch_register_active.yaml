@@ -816,7 +816,8 @@ patches:
     - references/canonical_sources.yaml
     - references/alias_registry.yaml
     - canon/supersession_register.yaml
-  status: provisional
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion
   vetting:
     class: A
     necessity: pass
@@ -846,7 +847,8 @@ patches:
   affects:
     - designs/personal/conviction_migration_roster_v30.md
     - references/canonical_sources.yaml
-  status: provisional
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion
   vetting:
     class: A
     necessity: pass
@@ -882,7 +884,8 @@ patches:
     - references/canonical_sources.yaml
     - references/alias_registry.yaml
     - canon/supersession_register.yaml
-  status: provisional
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion (P2 carry-forward)
   vetting:
     class: A
     necessity: pass
@@ -915,7 +918,8 @@ patches:
     - references/canonical_sources.yaml
     - references/alias_registry.yaml
     - canon/supersession_register.yaml
-  status: provisional
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion (V7/V8 deferred to Phase 5a)
   vetting:
     class: A
     necessity: pass
@@ -949,7 +953,8 @@ patches:
     - params/core.md
     - references/canonical_sources.yaml
     - references/alias_registry.yaml
-  status: provisional
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion (P2 carry-forward; A6 supports 9th-trigger ADD)
   vetting:
     class: A
     necessity: pass

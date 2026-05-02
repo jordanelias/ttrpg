@@ -1,4 +1,4 @@
-<!-- [PROVISIONAL: 2026-05-01 — PP-684 v1 spec, Conviction taxonomy, ratified per integration plan §3.2 commit 2] -->
+<!-- [CANONICAL: 2026-05-01 — PP-684 v1 Conviction taxonomy; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation)] -->
 <!-- STATUS: PROVISIONAL — Class A canonical document. -->
 <!-- AUTHORITY: PP-684 (this doc); supersedes legacy "Reason / Continuity" Conviction labels and per-character anachronistic philosophical-tradition labels. -->
 

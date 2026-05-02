@@ -1,4 +1,4 @@
-<!-- [PROVISIONAL: 2026-05-01 — PP-687 v1 spec, universal Key substrate, ratified per integration plan §3.2 commit 1] -->
+<!-- [CANONICAL: 2026-05-01 — PP-687 v1 universal Key substrate; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation); V7/V8 perf items UNVERIFIED pending Phase 5a, not blocking] -->
 <!-- STATUS: PROVISIONAL — Class A canonical document; ratification by Jordan or designated authority required for promotion. -->
 <!-- AUTHORITY: PP-687 (this doc); supersedes doc 08 §1 EventImpact, bespoke event records in doc 12 procedures, NPC Memory bespoke schema, Conviction Scar trigger schema. -->
 <!-- SUPERSESSIONS: SUPERSESSION-PP687-001, SUPERSESSION-PP687-002, SUPERSESSION-PP687-003 -->

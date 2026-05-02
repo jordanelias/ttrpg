@@ -897,3 +897,14 @@ ED-779 Phase 2 data-authoring executed per PP-707 canonical workplan and PP-709 
 **Cross-references:** PP-666 (settlement adjacency v1, supersession-pending), PP-703 (Forgetting universality, load-bearing for forgetting-zone-as-overlay), PP-706 (Phase 1 audit), PP-707 (canonical workplan), PP-708 (superseded workplan), PP-709 (reconciliation memo), ED-779 (Phase 2, CLOSED), ED-780 (Phase 3 spec rewrite, depends-on), ED-781 (Phase 4 stress tests, depends-on), ED-055 (naval mechanics, deferred).
 
 
+## 2026-05-01 Stage 10 promotion — PP-684/685/686/687/688
+
+PROVISIONAL → canonical promotion of architecture-session entries after Stage 10 sims PASS (12/14 battery).
+
+**Source:** designs/audit/2026-05-01-stage-10-validation/01_lateral_evaluation.md (9/9 PASS) + 02_articulation_evaluation.md (6/6 PASS).
+**Promoted:** PP-684 (Conviction taxonomy + axis matrix), PP-685 (migration roster), PP-686 v2 (faction behavior), PP-687 (Key substrate + type registry), PP-688 (articulation layer).
+**Files updated:** 7 design docs (PROVISIONAL → CANONICAL marker); patch_register_active.yaml (5 entries provisional → applied); canonical_sources.yaml (7 entries provisional → canonical).
+**P2 carry-forward (non-blocking):** (a) PP-687 substrate dispatch by type only, not visibility-aware (lateral sim §4.1); (b) PP-688 state.belief_revised omitted from 8-trigger ruleset (articulation sim §4.1).
+**Decision-supported:** A6 cross-faction clustering correlation +0.937 in 30-season fixture supports ADD as 9th trigger with corr ≥0.40 threshold (Phase B).
+**Deferred to Phase 5a:** PP-687 §9 V7/V8 (memory query + walk perf) require production engine measurement.
+**Cross-references:** session 2026-04-30-architecture-session (origin); session 2026-05-01-stage-10-validation (validation + promotion); ED-755 unblocked.

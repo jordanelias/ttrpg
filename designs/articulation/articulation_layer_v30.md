@@ -1,4 +1,4 @@
-<!-- [PROVISIONAL: 2026-05-01 — PP-688 v1 spec, articulation layer, ratified per integration plan §3.2 commit 4] -->
+<!-- [CANONICAL: 2026-05-01 — PP-688 v1 articulation layer; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation); carry-forward P2: belief_revised not in 8-trigger ruleset (articulation sim §4.1); A6 supports clustering 9th trigger ADD] -->
 <!-- STATUS: PROVISIONAL — Class A canonical document; consumes PP-687 substrate, reads PP-684 + PP-686. -->
 <!-- AUTHORITY: PP-688 -->
 

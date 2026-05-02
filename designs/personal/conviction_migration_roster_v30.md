@@ -1,4 +1,4 @@
-<!-- [PROVISIONAL: 2026-05-01 — PP-685 v1, Conviction migration roster, ratified per integration plan §3.2 commit 2] -->
+<!-- [CANONICAL: 2026-05-01 — PP-685 v1 Conviction migration roster; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation)] -->
 <!-- STATUS: PROVISIONAL — Class A canonical mechanical document. Maps existing characters from legacy Conviction labels to PP-684 13-Conviction taxonomy. -->
 <!-- AUTHORITY: PP-685 -->
 

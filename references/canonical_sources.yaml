@@ -211,12 +211,8 @@ systems:
 # Last touched: 2026-04-25 (ED-777 — caste-transgressive PC Conviction mechanism + cross-ref fixes)
 # Last touched: 2026-04-25 (ED-778 — Wager Obligation edge cases)
 # Last touched: 2026-04-25 (ED-778 cross-ref fix: generational_transition not character_histories §Heir)
-# Last touched: 2026-04-25 (ED-779 — Inspiration mechanic propagated)
-# Last touched: 2026-04-25 (ED-780 — Bonds ≥ 5 explicit prerequisite + 6 archived)
-# Last touched: 2026-04-25 (ED-781 — Coup Counter STRUCK, Graduated Autonomy canonical)
-# Last touched: 2026-04-25 (ED-781 — npc_priority_trees Coup Counter migrations)
-# Last touched: 2026-04-25 (ED-782 — glossary TC→CI rename)
-# Last touched: 2026-04-30 (ED-775 / PP-698 — terminology P0 propagation: TC→CI sweep npc_behavior_v30 + RS→MS/TC→CI sweep throughlines_meta_infill + glossary rewrite + alias_registry church_influence milestones + censured_vocabulary stub populated)
+# Last touched: 2026-04-25 (ED-779/780/781/782 — Inspiration; Bonds ≥5; Coup Counter STRUCK; glossary TC→CI rename)
+# Last touched: 2026-04-30 (ED-775 / PP-698 — terminology P0 propagation; alias_registry CI milestones)
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   solmund_voice:
@@ -252,41 +248,37 @@ systems:
   key_substrate:
     design_doc: designs/architecture/key_substrate_v30.md
     canonical_sha__designs__architecture__key_substrate_v30_md: "62fe16016a0172545cb4f39d8d596a329783eaba"
-    status: provisional
+    status: canonical
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: designs/architecture/key_type_registry_v30.md
     canonical_sha__designs__architecture__key_type_registry_v30_md: "6f989dae45b826fb75967332ebce23b5c3fc5d3b"
-    status: provisional
+    status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry'
   conviction_taxonomy:
     design_doc: designs/personal/conviction_taxonomy_v30.md
     canonical_sha__designs__personal__conviction_taxonomy_v30_md: "78235b4aa626a681241fee36d8fc3cf5bbd7ea67"
-    status: provisional
+    status: canonical
     added: '2026-05-01 PP-684 ratification — 13-Conviction taxonomy + Self-Other axis'
   conviction_migration_roster:
     design_doc: designs/personal/conviction_migration_roster_v30.md
     canonical_sha__designs__personal__conviction_migration_roster_v30_md: "7a92ce020f134482d9202dae53dee16f28651927"
-    status: provisional
+    status: canonical
     added: '2026-05-01 PP-685 ratification — Conviction migration roster'
   faction_behavior:
     design_doc: designs/provincial/faction_behavior_v30.md
     canonical_sha__designs__provincial__faction_behavior_v30_md: "366b56ec14b2baa2498919bf442b87eac1966849"
-    status: provisional
+    status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
   articulation_layer:
     design_doc: designs/articulation/articulation_layer_v30.md
     canonical_sha__designs__articulation__articulation_layer_v30_md: "b97e0469d31d9452c35cd0ed3d6f9e0892743b11"
-    status: provisional
+    status: canonical
     added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687'
   conviction_axis_matrix:
     design_doc: designs/personal/conviction_axis_matrix_v30.md
     canonical_sha__designs__personal__conviction_axis_matrix_v30_md: "bf23140b8e730f592cc1582d5dbebc5b0d5749c8"
-    status: provisional
+    status: canonical
     added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
 
-# Last touched: 2026-05-01 (PP-687 ratification — key_substrate_v30 + key_type_registry_v30 added; PP-665..674 trace comments archived)
-# Last touched: 2026-05-01 (PP-684/685 ratification — conviction_taxonomy_v30 + conviction_migration_roster_v30 added)
-# Last touched: 2026-05-01 (PP-686 v2 ratification — faction_behavior_v30 added)
-# Last touched: 2026-05-01 (PP-688 ratification — articulation_layer_v30 added)
-# Last touched: 2026-05-01 (Conviction → axis matrix v30 with calibration rationale added)
+# Last touched: 2026-05-01 (Stage 10 sims PASS — PP-684/685/686/687/688 architecture entries promoted PROVISIONAL→canonical; conviction_taxonomy + migration_roster + axis_matrix + key_substrate + key_type_registry + faction_behavior + articulation_layer)

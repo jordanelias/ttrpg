@@ -1,4 +1,4 @@
-<!-- [PROVISIONAL: 2026-05-01 — Conviction axis matrix v30 with calibration rationale, ratified per integration plan §3.2 commit 5] -->
+<!-- [CANONICAL: 2026-05-01 — Conviction axis matrix v30 with calibration rationale; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation)] -->
 <!-- STATUS: PROVISIONAL — Class A canonical document. Companion to conviction_taxonomy_v30.md. -->
 <!-- AUTHORITY: PP-684 -->
 

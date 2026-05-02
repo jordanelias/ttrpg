@@ -1,4 +1,4 @@
-<!-- [PROVISIONAL: 2026-05-01 — PP-686 v2 spec, faction behavior architecture, ratified per integration plan §3.2 commit 3] -->
+<!-- [CANONICAL: 2026-05-01 — PP-686 v2 faction behavior architecture; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation); carry-forward P2: substrate visibility-aware subscription (lateral sim §4.1)] -->
 <!-- STATUS: PROVISIONAL — Class A canonical document; consumes PP-687 substrate. -->
 <!-- AUTHORITY: PP-686 (this doc); supersedes params/bg/core.md §Ethical Framework Modifiers and partial supersession of Mandate-as-single-scalar. -->
 

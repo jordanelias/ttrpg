@@ -1,4 +1,4 @@
-<!-- [PROVISIONAL: 2026-05-01 — PP-687 Key type registry, ratified per integration plan §3.2 commit 1] -->
+<!-- [CANONICAL: 2026-05-01 — PP-687 Key type registry; promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation)] -->
 <!-- STATUS: PROVISIONAL — Class A canonical document. Companion to key_substrate_v30.md. -->
 <!-- AUTHORITY: PP-687 -->
 
