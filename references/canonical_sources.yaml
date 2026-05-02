@@ -218,9 +218,9 @@ systems:
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: designs/architecture/key_type_registry_v30.md
-    canonical_sha__designs__architecture__key_type_registry_v30_md: "90556314f8ddc6dbd1af01cde8afee539f2c84b5"
+    canonical_sha__designs__architecture__key_type_registry_v30_md: "9407fc31f642f4ad0883a07e1b121b2b0ab17267"
     status: canonical
-    added: '2026-05-01 PP-687 ratification — Key type registry'
+    added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   conviction_taxonomy:
     design_doc: designs/personal/conviction_taxonomy_v30.md
     canonical_sha__designs__personal__conviction_taxonomy_v30_md: "78235b4aa626a681241fee36d8fc3cf5bbd7ea67"
@@ -262,4 +262,4 @@ systems:
     status: provisional
     added: '2026-05-01 PP-687 Phase B Stage 1 — doc 12 procedures consume Keys'
 
-# Last touched: 2026-05-01 (Stage 10 sims PASS — PP-684/685/686/687/688 architecture entries promoted PROVISIONAL→canonical; conviction_taxonomy + migration_roster + axis_matrix + key_substrate + key_type_registry + faction_behavior + articulation_layer)
+# Last touched: 2026-05-02 (Phase 5a session 3.5 telemetry substrate — key_type_registry amended with 3 mechanical Class B types: scene_entered/exited/skipped; valoria-game commit b8b9a4a)

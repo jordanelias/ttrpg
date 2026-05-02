@@ -308,6 +308,84 @@ emitting_systems: [faction_layer]
 consuming_systems: [faction_layer, npc_behavior, articulation]
 ```
 
+### mechanical.scene_entered
+
+```yaml
+description: Scene boundary marker — fired when GameDirector pushes a scene container onto the zoom stack. Payload-only (no state mutation). Wall-clock timestamps are NEVER added to payload — the SceneTimer sidecar records wall-clock to `user://telemetry/<campaign_id>.jsonl` and joins by scene_id at analysis time. This separation preserves PP-687 §6 V4 replay determinism.
+required_payload_fields:
+  - scene_id                  # 12-hex deterministic hash of (season, year, key_count, seed)
+  - system_id                 # combat | social_contest | fieldwork | mass_battle | strategic
+  - scope                     # personal | relational | territorial | peninsular
+  - sa_cost_estimated         # int — predicted Scene-Action cost (per_system_lookup)
+  - slate_priority            # 0=mandatory, 1=crisis, 2=elective_high, 3=elective, 4=ambient, -1=nested
+  - season_n                  # int
+  - parent_scene_id           # scene_id of parent zoom frame, or "" if top-level
+  - stack_depth_after         # int — zoom-stack depth after push (1=top-level, 2=nested)
+optional_payload_fields:
+  - display_name              # human-readable label (audit only)
+default_scale_signature: [personal, territory, peninsula]   # mirrors scope
+default_permanence: persistent
+default_time_horizon: immediate
+emitting_systems: [game_director]
+consuming_systems: [scene_timer, articulation, audit]
+class: B
+declared_by: Phase 5a session 3.5 telemetry substrate (valoria-game commit b8b9a4a)
+notes:
+  - First member of the scene-lifecycle pair (entered/exited).
+  - parent_scene_id encodes the nesting structure for the zoom stack (max depth 2 per ZM-05).
+  - Articulation may consume for Tier 3 chronicle pacing analysis.
+```
+
+### mechanical.scene_exited
+
+```yaml
+description: Scene boundary marker — fired when GameDirector pops a scene container after `scene_completed` (or on engine cancel). Pairs with scene_entered via scene_id. Wall-clock excluded from payload (see scene_entered notes); SceneTimer sidecar computes elapsed_ms by joining records.
+required_payload_fields:
+  - scene_id                  # same as paired scene_entered
+  - sa_cost_actual            # int — actual SA consumed (may differ from estimated)
+  - outcome_class             # overwhelming | success | partial | failure | unknown
+  - ended_by                  # player | engine_timeout | zoom_in | interrupt | auto_resolve
+  - sufficient_scope          # bool — Domain Echo eligibility per scale_transitions §7
+optional_payload_fields:
+  - scopes_invoked            # [scope_ids] — additional scopes touched mid-scene
+  - coherence_cost            # int — Coherence loss (if any)
+default_scale_signature: [personal, territory, peninsula]
+default_permanence: persistent
+default_time_horizon: immediate
+emitting_systems: [game_director]
+consuming_systems: [scene_timer, articulation, audit]
+class: B
+declared_by: Phase 5a session 3.5 telemetry substrate (valoria-game commit b8b9a4a)
+notes:
+  - Always emitted; on engine cancellation, ended_by="interrupt" with sa_cost_actual=0.
+  - SceneTimer treats arrival without prior scene_entered as a warning (`unknown scene_id`).
+```
+
+### mechanical.scene_skipped
+
+```yaml
+description: Scene-opportunity marker — fired when GameDirector resolves an opportunity abstractly (player declined to zoom in, or no container available). No scene_entered/exited pair is emitted; this is the sole record of the dispatch. Carries zero-elapsed sidecar telemetry to support opportunity-density analysis.
+required_payload_fields:
+  - scene_id                  # 12-hex hash; unique to this skip event
+  - system_id                 # which system the opportunity belonged to
+  - scope                     # ditto
+  - slate_priority            # 0=mandatory (rare; mandatory normally cannot skip), 3=elective
+  - season_n
+  - reason                    # abstract_resolve | unbuilt_container | depth_exceeded
+optional_payload_fields:
+  - source_action_type        # the originating DA type
+default_scale_signature: [personal, territory]
+default_permanence: persistent
+default_time_horizon: immediate
+emitting_systems: [game_director]
+consuming_systems: [scene_timer, audit]
+class: B
+declared_by: Phase 5a session 3.5 telemetry substrate (valoria-game commit b8b9a4a)
+notes:
+  - SceneTimer writes a zero-elapsed sidecar record on receipt.
+  - mandatory skips (slate_priority=0) should be rare and indicate a missing container or depth-exceeded path; surface in audit.
+```
+
 ---
 
 ## §5 Family: state_transition
@@ -756,14 +834,14 @@ articulation_significance: stakes_weight 1-2 per affect magnitude
 |---|---|---|
 | scene_event | 7 | Adds Class B scene.interaction, scene.gossip per PP-687 Phase B Stage 1 |
 | da_outcome | 5 |  |
-| mechanical_event | 4 |  |
+| mechanical_event | 7 | Adds Class B mechanical.scene_entered/exited/skipped per Phase 5a session 3.5 telemetry substrate |
 | state_transition | 6 | Adds Class B state.opinion_revised, state.concern_resolved per PP-687 Phase B Stage 1 |
 | environmental | 4 |  |
 | scene_outcome | 3 |  |
 | system_meta | 5 (incl. PP-688 Class B additions: meta.knot_ruptured, state.belief_revised, plus meta.legacy_event) |  |
-| **Total** | **34** |  |
+| **Total** | **37** |  |
 
-Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 expand the registry by 4 types (8 of total are Class B post-Stage-1). Class A type count remains within the 25-30 bound.
+Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 (+4 types) and Phase 5a session 3.5 telemetry substrate (+3 types) expand the registry by 7 types (11 of total are Class B post-Stage-1+telemetry). Class A type count remains within the 25-30 bound.
 
 ---
 
