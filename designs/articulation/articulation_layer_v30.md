@@ -87,8 +87,27 @@ A Key fires a Tier 2 cut scene if it matches **any** of:
 | 6 | `meta.knot_formed` (Class B per §6) | New Bond tier |
 | 7 | `meta.knot_ruptured` (Class B per §6) | Composure-load-bearing rupture event |
 | 8 | `env.peninsular_strain_shock` with `severity in [severe, crisis]` | Peninsula-scale narrative beat |
+| 9 | `meta.cascade_cluster_event` (cluster forms or dissolves; sustained ≥ 4 seasons) | Cross-faction ideological alignment / opposition |
 
-(Cross-faction Cascade Fidelity clustering — multiple factions converging on aligned-or-misaligned Cascade trends — is **deferred to Phase B** as a 9th candidate trigger pending sim-validation of clustering detection. Per integration plan §3.4 D10.)
+**Trigger 9 specification (added 2026-05-01 per Stage 8b sim verification):**
+
+```
+Condition:
+    For each pair (faction_a, faction_b):
+        sim = cosine_similarity(faction_a.cascade_fidelity_history[-4:],
+                                faction_b.cascade_fidelity_history[-4:])
+        if abs(sim) > 0.7 (initial threshold; tunable):
+            if sustained ≥ 4 seasons (regime entry):
+                emit meta.cascade_cluster_event Key with payload:
+                    cluster_pair: [faction_a, faction_b]
+                    similarity: sim
+                    cluster_type: aligned (sim > 0) | anti_aligned (sim < 0)
+                    sustained_seasons: streak
+                scale: peninsular (if abs(sim) > 0.95) | territorial
+                fire once per regime; refire on regime transition
+```
+
+The cluster threshold ±0.7 is a starting calibration per integration plan §3.4 D10 deferral resolution. Stage 8b sim (`designs/audit/2026-05-01-stage-8-sim/01_findings_8b_trigger9.md`) verified the architecture; Stage 8c calibration sweep (Phase 5a) refines threshold and dedup logic. Per integration plan §3.4 D10, trigger 9 was deferred from initial release pending sim-validation of clustering detection — Stage 8b provides that validation.
 
 ### §3.2 Significance function
 
