@@ -847,3 +847,65 @@ Mechanical, deterministic. Reads adjacency_map.jsx, emits Phase 2 stub with scal
 
 **Cross-references:** PP-706 (audit), PP-707 (this), ED-779 (Phase 2 authority), audit doc 00_audit_report.md.
 
+## 2026-05-01 — Geography Canon Phase 1.5 — Phase 2 prep (PP-708)
+
+Phase 2 prep documents committed to designs/audit/2026-04-30-geography-audit/ to
+leverage existing context for next-session execution efficiency. Phase 2 proper
+(ED-779: data authoring, ~3 commits) needs ~150-200k working space and was
+deferred to a fresh session; this Phase 1.5 commit produces the prep artifacts
+that turn execution-session work from "design + author + decide" into
+"author + verify + extend."
+
+**Three documents:**
+
+1. **00_phase2_workplan.md** — locks all decisions gating execution. Canonical
+   coordinate system 2400×2880 (5:6 aspect, matches jsx peninsula proportions,
+   Godot strategic-map sized). Lake Eidursjø repositioned to canonical (1135, 2263)
+   center, rx=200, ry=150 — per geography_v30_infill east-west barrier function
+   (midpoint between T6 Stillhelm canonical and T13 Oastad canonical). 8-terrain-type
+   taxonomy: plains/forest/highland/mountain/mountain_pass/fjord_coast/coast/marsh.
+   Province polygons implicit-from-Voronoi (no hand-authoring). Vision-range model:
+   multiplicative composition radius × terrain × weather × season. Full schema
+   for valoria_geography_v30.yaml. §2.2 validation checklist (16 items) for
+   pre-commit verification. 3-commit execution plan.
+
+2. **01_coord_transform.py** — Python projection script. Reads adjacency_map.jsx
+   (700×600 abstract canvas), applies linear scale to canonical (2400×2880),
+   validates settlements inside canvas + outside Lake Eidursjø, outputs
+   territory_anchors_canonical.json. Tested: all 17 territories project cleanly;
+   no settlement inside lake. Mechanical/deterministic — execution session runs
+   it once and feeds output directly into territories: section.
+
+3. **02_sample_data.yaml** — proof-of-concept for valoria_geography_v30.yaml schema.
+   Demonstrates: T1 Valorsplatz with 3 settlements (S-001 Palace, S-002 Riverside,
+   S-003 Cathedral) at offset coordinates around territory anchor; 4 terrain
+   polygons (mountain spine, two mountain passes, eastern lowlands plains);
+   river-valoris polyline with crossings; one road polyline; lake-eidursjo
+   ellipse; all top-level keys present; TBD values use YAML null (not literal
+   strings) so queries fail-fast on unauthored values. YAML validates.
+
+**Resolves audit findings:** C1 (coordinate-system disconnect — canonical
+system locked) and C3 (Lake Eidursjø geometry conflict — T4 canonical (789, 1512)
+is 28× squared-normalized-distance away from lake center).
+
+**Files committed:**
+- designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md (new, 21678 chars)
+- designs/audit/2026-04-30-geography-audit/01_coord_transform.py (new, 5kB)
+- designs/audit/2026-04-30-geography-audit/02_sample_data.yaml (new, 8439 chars)
+- canon/patch_register_active.yaml (PP-708)
+- references/propagation_map.md (this entry)
+
+**Phase 2 execution session opens with:**
+1. Bootstrap → read 00_phase2_workplan.md (full)
+2. Run `python3 01_coord_transform.py designs/world/adjacency_map.jsx`
+3. Begin populating designs/territory/valoria_geography_v30.yaml using
+   02_sample_data.yaml as pattern; territories filled from transform script
+   output; settlement-level offsets per territory's narrative description in
+   settlement_layer §2.1
+4. Three-commit Phase 2 structure per workplan §5
+
+**Cross-references:** PP-706 (audit + Phase 1, commit e0d6a07), PP-708 (this prep),
+ED-779 (Phase 2 standing), ED-780 (Phase 3 standing, blocked on ED-779),
+ED-781 (Phase 4 stress tests).
+
+

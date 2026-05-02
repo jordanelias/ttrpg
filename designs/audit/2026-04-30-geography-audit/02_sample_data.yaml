@@ -1,0 +1,219 @@
+# VALORIA GEOGRAPHY — SAMPLE DATA (proof-of-concept)
+# Status: SAMPLE — demonstrates schema for execution session pattern-match
+# Authority: PP-707 / ED-779 schema reference
+#
+# This file is NOT canonical geography data. It demonstrates the schema in
+# 00_phase2_workplan.md §2 with one fully-populated territory (T1) and
+# example terrain entries. Execution session uses this file as pattern;
+# canonical data is authored at designs/territory/valoria_geography_v30.yaml.
+
+meta:
+  canonical_canvas: [2400, 2880]
+  origin: top_left
+  axis: { x: east, y: south }
+  unit: pixel
+  status: SAMPLE
+  source_authority: "PP-707 schema; ED-779 data authoring"
+  schema_version: "0.1"
+
+territories:
+  T1:
+    name: Valorsplatz
+    anchor: [1920, 1176]   # centroid of S-001, S-002, S-003 below
+    starting_control: Crown
+    settlements: [S-001, S-002, S-003]
+    description: "Crown capital territory. River-sea nexus, trade hub. 4 territorial connections."
+
+  # T2-T17 in execution session
+
+settlements:
+  S-001:
+    name: Valorsplatz Palace
+    territory: T1
+    type: Seat
+    controller: Crown
+    coords: [1920, 1176]
+    stats: [4, 3, 4]
+    description: "Royal court. Lion's Table HQ. Almud and Torben reside here."
+
+  S-002:
+    name: Valorsplatz Riverside
+    territory: T1
+    type: Port
+    controller: Crown
+    controller_subordinate: Guilds   # Guild-managed per settlement_layer §2.1
+    coords: [1990, 1230]   # ~70px southeast of Palace; toward river-Valoris mouth
+    stats: [4, 1, 3]
+    description: "River trade hub. Guild quarter. Largest market in Valoria."
+
+  S-003:
+    name: Valorsplatz Cathedral
+    territory: T1
+    type: Cathedral
+    controller: Church
+    coords: [1850, 1150]   # ~85px northwest of Palace; older quarter
+    stats: [2, 1, 4]
+    description: "Old Solmundic church. Politically significant — Church presence in capital."
+
+  # S-004 through S-036 in execution session
+
+terrain:
+  - id: terrain-001
+    type: mountain
+    polygon:
+      - [0, 0]
+      - [2400, 0]
+      - [2400, 380]
+      - [1900, 350]
+      - [1300, 280]
+      - [800, 320]
+      - [0, 380]
+    description: "Northern mountain spine — east-west range; Altonia border. Two passes (Lowenskyst NE, Spartfell NW) embedded as separate terrain-002 / terrain-003 polygons."
+
+  - id: terrain-002
+    type: mountain_pass
+    polygon:
+      - [1700, 250]
+      - [1820, 220]
+      - [1850, 380]
+      - [1720, 400]
+    description: "Lowenskyst NE pass — primary Altonian crossing. Embedded inside terrain-001. T3 Lowenskyst (S-006 Fortress, S-007 Garrison Town) gates this pass."
+
+  - id: terrain-003
+    type: mountain_pass
+    polygon:
+      - [480, 580]
+      - [620, 540]
+      - [640, 700]
+      - [500, 720]
+    description: "Spartfell NW pass — secondary Altonian crossing. Embedded inside terrain-001. T10 Spartfell gates this pass."
+
+  - id: terrain-004
+    type: plains
+    polygon:
+      - [1200, 800]
+      - [2200, 750]
+      - [2300, 1500]
+      - [1400, 1900]
+      - [1100, 1500]
+    description: "Eastern Lowlands — Italian-coded farmland. Crown heartland. T1 Valorsplatz, T2 Kronmark, T5 Feldmark, T14 Ehrenfeld region."
+
+  # ~30-60 more polygons in execution session covering: Western Fjord coast (Varfell),
+  # NW Highlands (Hafenmark Swiss), Central Peninsula plains, Forest patches,
+  # Calamity-marsh around Askeheim, etc.
+
+water:
+  lakes:
+    - id: lake-eidursjo
+      shape: ellipse
+      center: [1135, 2263]
+      rx: 200
+      ry: 150
+      description: "Lake Eidursjø — east-west barrier in central-south interior. Prevents direct connection between western Varfell territories (T11/T12/T13) and eastern Crown farmland (T5/T6) — armies must route around."
+
+  rivers:
+    - id: river-valoris
+      vertices:
+        - [1900, 600]    # source in central highlands
+        - [1880, 800]
+        - [1900, 1000]
+        - [1920, 1176]   # passes through Valorsplatz Palace area
+        - [1990, 1230]   # confluence at Riverside Port
+        - [2200, 1300]   # eastern lowlands
+        - [2400, 1400]   # exits east coast into ocean
+      type: navigable
+      crossings:
+        - { coords: [1900, 1000], type: bridge, description: "Highland river crossing" }
+        - { coords: [1920, 1176], type: bridge, description: "Valorsplatz city bridge" }
+      description: "Major river through Valorsplatz to eastern sea. Trade and transport spine of Crown heartland."
+
+    # river-vargard (T4 Grauwald region) and other Varfell rivers in execution session
+
+roads:
+  - id: road-001
+    vertices:
+      - [1920, 1176]    # Valorsplatz Palace (S-001)
+      - [1700, 1080]    # bend through Kronmark
+      - [1629, 984]     # Kronmark settlement
+      - [1700, 600]     # ascent toward pass
+      - [1749, 278]     # Lowenskyst
+    surface: paved
+    connects: [S-001, S-006]   # endpoints; intermediate settlements pass through
+    description: "Crown highway from Valorsplatz to Lowenskyst — primary Altonian-defense supply route."
+
+  # ~10-15 more roads in execution session per geography_v30 adjacency
+
+terrain_costs:
+  # Movement cost multipliers — values to be authored in execution session.
+  # Use float >= 1.0 for "costs more than plains"; values < 1.0 should not exist.
+  # Use very high value (e.g., 99.0) for "effectively impassable" (mountain interior).
+  plains: 1.0
+  forest: null            # TBD execution session — expected ~1.4
+  highland: null          # TBD — expected ~1.6
+  mountain: null          # TBD — expected impassable (99.0) or very high (5.0+)
+  mountain_pass: null     # TBD — expected ~2.0
+  fjord_coast: null       # TBD — expected ~1.3
+  coast: 1.0
+  marsh: null             # TBD — expected ~2.5
+
+vision_range:
+  base_radius: null       # TBD — expected ~250-400px on 2400×2880 canvas
+  modifiers:
+    terrain:
+      plains: 1.0
+      forest: null        # TBD — expected ~0.6
+      highland: null      # TBD — expected ~1.2 (vantage)
+      mountain: null      # TBD — expected ~1.4 (high vantage)
+      mountain_pass: null # TBD — expected ~0.7 (narrow corridor)
+      fjord_coast: 1.0
+      coast: 1.0
+      marsh: null         # TBD — expected ~0.6
+    weather:
+      clear: 1.0
+      overcast: null      # TBD — expected ~0.85
+      fog: null           # TBD — expected ~0.5
+      storm: null         # TBD — expected ~0.4
+      blizzard: null      # TBD — expected ~0.3
+    season:
+      spring: 1.0
+      summer: null        # TBD — expected ~1.1
+      autumn: null        # TBD — expected ~0.9
+      winter: null        # TBD — expected ~0.7
+
+altonian_passes:
+  primary:
+    name: Lowenskyst
+    settlement: S-006
+    terrain_id: terrain-002
+    description: "Primary Altonian crossing. Crown holds gate. Fort Level 3 (max 4)."
+  secondary:
+    name: Spartfell
+    settlement: S-019
+    terrain_id: terrain-003
+    description: "Secondary Altonian crossing. Hafenmark holds gate. Fort Level 2."
+
+calamity:
+  epicenter: [1166, 2822]   # T15 Askeheim canonical (matches projected anchor)
+  rings:
+    # Per geography_v30 calamity proximity table; radius values TBD pending visual fit
+    - { proximity: 0, radius: null, description: "T15 Askeheim epicenter ring" }
+    - { proximity: 1, radius: null, description: "T6 Stillhelm, T13 Oastad — Calamity-adjacent" }
+    - { proximity: 2, radius: null, description: "T5 Feldmark, T12 Sigurdshelm — Calamity-near" }
+    - { proximity: 3, radius: null, description: "T1, T14, T4, T11 — distant influence" }
+    - { proximity: 4, radius: null, description: "T2, T16, T9, T7, T10 — minimal influence" }
+    - { proximity: 5, radius: null, description: "T3, T8, T17 — northernmost, calamity-quiet" }
+
+forgetting_zone:
+  description: "Maritime Forgetting Zone — coastal waters around southern peninsula. East and west coasts are separate maritime theatres. No reliable sea route around southern tip."
+  zone_polygon: null     # TBD execution session — bounded ocean polygon
+  effect: "Naval routes within this polygon fail Thread coherence checks (per ED-055 mechanics in Phase 3 spec). Schoenland cannot reach Varfell western ports by sea."
+
+# === END SAMPLE ===
+# Execution session extends this file to:
+#   - 17 territories (currently 1)
+#   - 36 settlements (currently 3)
+#   - ~30-60 terrain polygons (currently 4)
+#   - ~10-15 roads (currently 1)
+#   - 2-4 rivers (currently 1)
+#   - All TBD-marked values authored
+#   - Validation per workplan §2.2 passes

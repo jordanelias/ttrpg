@@ -1,6 +1,6 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 708
+# Next PP number: 709
 # Archival batch 2026-05-01 (b): 4 applied PPs (PP-677..680) → archives/patches/patch_register_archive_2026_05_01_b.yaml
 # 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
 # Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → archives/patches/patch_register_archive_2026_04_30_a.yaml
@@ -1029,4 +1029,38 @@ patches:
       M-11: "○"
     q: pass
     note: "Class A (workplan + tool; doesn't change mechanics, locks decisions for Phase 2 authoring). N pass: workplan reduces decision-thrash and parallel-session collision risk in next phase. Ω pass: pure prep artifact; no canonical mechanics change. Q pass: decisions consistent with audit findings + existing canon (geography_v30.md, settlement_layer §2.1). Transform script tested deterministic against current jsx."
+- id: PP-708
+  date: 2026-05-01
+  severity: P3
+  description: "Phase 2 prep — geography canon work leverage. Three documents committed
+    to designs/audit/2026-04-30-geography-audit/ as Phase 1.5 (between Phase 1 audit
+    and Phase 2 execution): (1) 00_phase2_workplan.md — locks decisions before
+    authoring begins (canonical coordinate system 2400×2880, Lake Eidursjø position,
+    8-terrain-type taxonomy, Voronoi-implied province polygons, vision-range
+    multiplicative-composition model, naming conventions, schema), defines schema for
+    valoria_geography_v30.yaml, lists §2.2 validation checklist, plans 3-commit
+    Phase 2 execution structure, defers 5 specific items to execution session;
+    (2) 01_coord_transform.py — Python script projecting jsx 700×600 abstract
+    coordinates to canonical 2400×2880 linearly, validates settlements inside canvas
+    and outside Lake Eidursjø, outputs territory_anchors_canonical.json
+    machine-readable for execution session — verified all 17 territories project
+    cleanly; (3) 02_sample_data.yaml — proof-of-concept demonstrating full schema
+    end-to-end with 1 territory (T1, 3 settlements), 4 terrain polygons, lake,
+    river, road examples, all required top-level keys present, TBD values explicitly
+    null (not literal strings). YAML validates. Resolves audit findings C1
+    (coordinate-system disconnect — canonical system locked) and C3 (Lake Eidursjø
+    geometry conflict with T4 — repositioned per geography_v30_infill spec; T4
+    canonical (789, 1512) is 28× away from lake center)."
+  finding_id: editorial 2026-05-01 (Phase 2 prep — workplan + transform + sample)
+  source: editorial
+  affects:
+    - designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md
+    - designs/audit/2026-04-30-geography-audit/01_coord_transform.py
+    - designs/audit/2026-04-30-geography-audit/02_sample_data.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: D
+    note: "Class D (preparation/leverage instrument; no mechanical change). Workplan locks decisions, transform script is mechanical/deterministic, sample data is non-canonical proof-of-concept. Phase 2 execution (ED-779) will use these as inputs."
+
 
