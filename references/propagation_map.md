@@ -415,3 +415,39 @@ PP-687 §8.8 Godot binding implemented in `jordanelias/valoria-game` (commit 737
 **Phase 5a roadmap:** 1 ✓ | 2 faction L+PS state | 3 cut scene | 4 walk diagnostic UI | 5 chronicle paragraph
 
 **Cross-references:** PP-687 (canonical 2026-05-01); session 2026-05-01-stage-10-validation; jordanelias/valoria-game commit 737106a.
+
+
+## 2026-05-01 Phase 5a session 2 — FactionStateV30 with PP-686 v2 §3.4/§3.5 (valoria-game)
+
+PP-686 v2 §3.4/§3.5/§3.6 + PP-684 13-Conviction axis matrix Godot binding implemented in `jordanelias/valoria-game` (commit 36514e8).
+
+**Files added (parallel namespace `systems/faction_v30/`):**
+- `systems/faction_v30/ConvictionAxisMatrixV30.gd` — canonical 13×4 matrix verbatim from `conviction_axis_matrix_v30.md` §2; project + cosine + rescaled-cosine
+- `systems/faction_v30/NPCStateV30.gd` — minimal NPC state (Convictions Dictionary, standing, Self-Other, supervisor, scars)
+- `systems/faction_v30/CascadeFidelityV30.gd` — β-fidelity (mean rescaled cosine) + standing-weighted aggregate (C9)
+- `systems/faction_v30/FactionStateV30.gd` — L+PS state, mission alignment (-1/0/+1), ΔPS/ΔL formulae, strictness, 5-temperament weights, Self-Other modulation, β-fidelity gating, single-Key dampening (0.25)
+- `systems/faction_v30/FactionLayerV30.gd` — coordinator subscribing to KeyStore for `da.*` + `state.scar_acquired`
+- `tests/test_faction_v30.gd` — 21 GdUnit tests
+- `docs/faction_v30.md` — implementation doc
+
+**Invariants verified at engine layer:**
+- V6 §3.4/§3.5 formula match within 1e-3 (aligned + neutral + contradicted alignments)
+- C5 β-fidelity gating (negative attributed → gate halves contribution)
+- C7 Self-Other modulation (positive reduces; zero/negative no effect)
+- C9 standing-weighted aggregate (Authority 0.875, Liberty 0.125 in 7+1 cascade)
+- §3.4.1 5-temperament weights produce distinct ΔPS (0.76 / 0.84 / 0.68 / 0.80 / 0.72)
+- §3.6 strictness corners (L=4 PS=4 → 0.514; L=7 PS=0 → 0.9; L=0 PS=7 → 0.1; L=7 PS=7 → 0.6)
+- 13-Conviction axis matrix size + projection correctness
+- Mission alignment routing (3 cases)
+- L+PS clamp at [0, 7] boundaries
+- KeyStore subscription integration (da.* and state.scar_acquired both route correctly)
+
+**Coexistence with legacy FactionData:** the `systems/faction_v30/` namespace is the canonical-spec impl. The pre-Mandate-migration `FactionData` in `systems/registries/FactionRegistry.gd` is unchanged; bridge between namespaces deferred until Jordan answers Mandate-audit 5 OQs and per-faction Mandate → L+PS classifications are ratified.
+
+**Calibration items flagged:**
+- `FactionLayerV30.SINGLE_KEY_DAMPENING = 0.25` — calibration-eligible at Phase B per `sim_verification_ledger.json`
+- 5th axis allowance — Class B, conditional on Stage 10 calibration finding Community/Identity collapse load-bearing (not yet observed)
+
+**Phase 5a roadmap:** 1 ✓ KeyStore | 2 ✓ FactionStateV30 | 3 cut scene | 4 walk diagnostic UI | 5 chronicle paragraph
+
+**Cross-references:** PP-686 v2 (canonical 2026-05-01); session 2026-05-01-stage-10-validation; jordanelias/valoria-game commit 36514e8.
