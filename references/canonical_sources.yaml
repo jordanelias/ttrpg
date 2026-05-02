@@ -78,7 +78,7 @@ systems:
     canonical_sha__designs__territory__march_layer_v30_md: "97fc3561daaecc52a99382154c8af8b7ff00ed18"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_705"  # ED-770/PP-683..688 batch — SHA update follow-up required
+    canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_705"  # ED-770/PP-683/PP-711..715 batch (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
     params: params/mass_combat.md
     canonical_sha__params__mass_combat_md: "PENDING_PP_705"  # ED-770 — SHA update follow-up required
   social_debate:
@@ -96,7 +96,7 @@ systems:
     canonical_sha__designs__provincial__faction_layer_v30_md: "PENDING_PP_705"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
-    canonical_sha__designs__provincial__military_layer_v30_md: "PENDING_PP_705"  # ED-770/PP-685, PP-687, PP-688 — SHA update follow-up required
+    canonical_sha__designs__provincial__military_layer_v30_md: "PENDING_PP_705"  # ED-770/PP-712, PP-714, PP-715 (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
     canonical_sha__designs__provincial__ci_political_v30_md: "94a54d69cb00737f66685814e56f132d8c428579"

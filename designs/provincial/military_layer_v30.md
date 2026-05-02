@@ -55,7 +55,7 @@ Canonical from mass_battle_v30 §B.2. TTRPG equivalences are PROVISIONAL (marked
 | Artillery | 2 | 2 | 8 | 2 | 3 | HBl (siege) | None |
 | Knights Templar | 5 | 6 | 11 | 5 | 6 | HeavyBlunt | Heavy |
 
-**TARGET Size (PP-687, MB-02 — editorial 2026-04-30):** The Size column above is the **target size** — what a fully reinforced unit looks like at full strength. It is NOT the muster output. A freshly mustered unit produces Size per §1.4 formula (base 2 + Prosperity modifier, max 4). Units build toward their TARGET via Reinforcement seasons (mass_battle_v30 §A.13). Upper bound on Reinforcement: cannot exceed TARGET. Knights Templar TARGET 6 is reachable via repeated reinforcement — Templar formations historically grew over years of recruitment, not single muster events.
+**TARGET Size (PP-714, MB-02 — editorial 2026-04-30):** The Size column above is the **target size** — what a fully reinforced unit looks like at full strength. It is NOT the muster output. A freshly mustered unit produces Size per §1.4 formula (base 2 + Prosperity modifier, max 4). Units build toward their TARGET via Reinforcement seasons (mass_battle_v30 §A.13). Upper bound on Reinforcement: cannot exceed TARGET. Knights Templar TARGET 6 is reachable via repeated reinforcement — Templar formations historically grew over years of recruitment, not single muster events.
 
 ### §1.3 Military Stat → Unit Power Ceiling
 
@@ -147,7 +147,7 @@ When a faction's Wealth reaches 0:
 
 This is more specific than the prior simulation's Military −1 at Wealth 0. Military stat itself does not degrade from Wealth shortage — the faction still has officers and doctrine. It loses the ability to keep its professional formations intact.
 
-Recovery: when Wealth rises above 0, Discipline degradation stops. Discipline does not auto-recover — requires Muster action on existing unit (representing retraining and equipment replacement). **This applies between battles as well (PP-685, MB-04, editorial 2026-04-30):** Discipline degradation accumulated in battle persists across battle boundaries. Garrison time alone does not restore Discipline; only a Muster action on the existing unit does. Wealth-Zero degradation stacks with battle degradation.
+Recovery: when Wealth rises above 0, Discipline degradation stops. Discipline does not auto-recover — requires Muster action on existing unit (representing retraining and equipment replacement). **This applies between battles as well (PP-712, MB-04, editorial 2026-04-30):** Discipline degradation accumulated in battle persists across battle boundaries. Garrison time alone does not restore Discipline; only a Muster action on the existing unit does. Wealth-Zero degradation stacks with battle degradation.
 
 ### §1.8 Knights Templar (Church Only)
 
@@ -166,7 +166,7 @@ Templar units have CI implications — see §2.5.
 Extended encirclement targeting a fortified territory. Replaces Battle against garrisoned Fort ≥ 2.
 
 **Card:** Legionary Inward. Requires 1 Legionary card + ≥ 1 unit adjacent to target.  
-**Pool:** (Attacker Military stat) + 3 (siege engineering bonus — engineers, equipment, sapper crews), TN 7. **Ob:** 2 + Fort Level. *(PP-688, MB-07 — editorial 2026-04-30. Replaces prior "Pool = Military stat" formulation, which produced mathematically impossible calibration: Fort 3 + Mil 4 = Ob 5 from 4 dice = 0%, contradicting stated ~2% rate. New formula: Fort 3 + Mil 4 = Ob 5 from 7 dice = ~2% match.)*
+**Pool:** (Attacker Military stat) + 3 (siege engineering bonus — engineers, equipment, sapper crews), TN 7. **Ob:** 2 + Fort Level. *(PP-715, MB-07 — editorial 2026-04-30. Replaces prior "Pool = Military stat" formulation, which produced mathematically impossible calibration: Fort 3 + Mil 4 = Ob 5 from 4 dice = 0%, contradicting stated ~2% rate. New formula: Fort 3 + Mil 4 = Ob 5 from 7 dice = ~2% match.)*
 
 | Degree | Fort effect | Cost |
 |--------|-------------|------|

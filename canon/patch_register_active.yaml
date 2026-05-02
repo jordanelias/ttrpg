@@ -1,6 +1,10 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 710
+# Next PP number: 716
+# 2026-05-02: Renumbered mass-battle PP-684..688 → PP-711..715 to resolve register collision
+# with 2026-05-01 architecture-session ratification set (which retains canonical PP-684..688 as
+# the primary semantic owner — 50+ downstream files). Mass-battle entries below carry MB-03/04/06/02/07
+# finding_ids and date 2026-04-30 for archival traceability.
 # Archival batch 2026-05-01 (b): 4 applied PPs (PP-677..680) → archives/patches/patch_register_archive_2026_05_01_b.yaml
 # 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
 # Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → archives/patches/patch_register_archive_2026_04_30_a.yaml
@@ -241,7 +245,7 @@ patches:
     note: "Encirclement no-cap. Class B (extension to existing Morale cap mechanic). N pass: historical encirclement collapse is documented (Cannae, Lake Trasimene). Ω pass: trigger is geometric (3-direction flank or all-zones-occupied) — fires only in genuinely catastrophic positional states. Μ none distinct. М: no pattern violations. Q pass: editorial decision MB-08, jordan-approved."
 
 
-- id: PP-684
+- id: PP-711
   date: 2026-04-30
   severity: P2
   description: "Morale reset between battles (MB-03 Option A). Morale resets to
@@ -277,7 +281,7 @@ patches:
     note: "Morale reset between battles. Class B (extension — defines between-battle state for Morale). N pass: campaign-fatigue is real but separable (modeled at faction layer, not unit). Ω pass: prevents campaign-snowball deterministic-rout. Q pass: MB-03 Option A."
 
 
-- id: PP-685
+- id: PP-712
   date: 2026-04-30
   severity: P2
   description: "Discipline persists between battles (MB-04 Option B). Discipline
@@ -314,7 +318,7 @@ patches:
     note: "Discipline persists between battles. Class B (extension — defines between-battle state for Discipline). N pass: training/equipment loss persists historically. Ω pass: creates strategic Discipline-as-resource layer. Q pass: MB-04 Option B; consistent with §1.7 Wealth-Zero treatment."
 
 
-- id: PP-686
+- id: PP-713
   date: 2026-04-30
   severity: P2
   description: "Shadow Intel resolution (MB-06 Option A — Peek). Both sides commit
@@ -350,7 +354,7 @@ patches:
     note: "Shadow Intel peek mechanism. Class B (extension — specifies tactic resolution). N pass: scout/spy intelligence asymmetry is historically grounded. Ω pass: preserves simultaneous-commit structure; UI tractable. Q pass: MB-06 Option A."
 
 
-- id: PP-687
+- id: PP-714
   date: 2026-04-30
   severity: P2
   description: "Unit Type TARGET Size relabel (MB-02 Option C). The §1.2 Unit Types
@@ -386,7 +390,7 @@ patches:
     note: "TARGET Size relabel. Class B (clarification — semantically reframes table column without changing values). N pass: distinction between target-strength and current-strength is necessary for reinforcement model. Ω pass: reconciles §1.2 vs §1.4 contradiction without value changes. Q pass: MB-02 Option C."
 
 
-- id: PP-688
+- id: PP-715
   date: 2026-04-30
   severity: P2
   description: "Siege pool formula fix (MB-07 Option A). §1.9 Siege Action pool

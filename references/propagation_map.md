@@ -451,3 +451,28 @@ PP-686 v2 §3.4/§3.5/§3.6 + PP-684 13-Conviction axis matrix Godot binding imp
 **Phase 5a roadmap:** 1 ✓ KeyStore | 2 ✓ FactionStateV30 | 3 cut scene | 4 walk diagnostic UI | 5 chronicle paragraph
 
 **Cross-references:** PP-686 v2 (canonical 2026-05-01); session 2026-05-01-stage-10-validation; jordanelias/valoria-game commit 36514e8.
+
+---
+
+## 2026-05-02 — PP register collision resolution (ED-782)
+
+**Trigger:** Pre-flight integrity audit before Stage 10 promotion sign-off discovered duplicate PP IDs in `canon/patch_register_active.yaml` (PP-684..688 each had two entries: 2026-04-30 mass-battle batch + 2026-05-01 architecture-session backfill).
+
+**Resolution:** Mass-battle set renumbered PP-684..688 → PP-711..715. Architecture set retains PP-684..688 (primary semantic owner: 50+ downstream files in audits/sims/designs).
+
+**Renumber map:**
+- PP-684 (MB-03 morale reset) → PP-711
+- PP-685 (MB-04 discipline persists) → PP-712
+- PP-686 (MB-06 shadow intel peek) → PP-713
+- PP-687 (MB-02 unit type TARGET relabel) → PP-714
+- PP-688 (MB-07 siege pool fix) → PP-715
+
+**Files updated this commit:**
+- canon/patch_register_active.yaml (5 id renumbers + header note)
+- designs/provincial/mass_battle_v30.md (3 inline citations)
+- designs/provincial/military_layer_v30.md (3 inline citations)
+- references/canonical_sources.yaml (2 PENDING_PP_705 comments)
+
+**Out of scope:** archives/patches/patch_register_archive_stage4_promotions_2026_04_25.yaml carries a third PP-684 entry (Disposition ceiling = Bonds) in an auto-extracted PROVISIONAL archive. Referenced once in propagation_log.md. Pending Jordan review; not modified here.
+
+**Pattern flagged:** Third register-collision incident in 36 hours. The earlier PP-684..688 collision was already noted in this propagation_map under "Pre-existing PP-684..688 collision" — that note can now be considered resolved.

@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 782
+# next_id: 783
 # Archival batch 2026-05-01 (b): ED-763, ED-764 (PROVISIONAL items, low-action) → canon/editorial_ledger_archive.yaml
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
@@ -78,4 +78,9 @@ entries:
     status: open
     severity: P3
     source: "Geography canon audit 2026-05-01 — Phase 4"
-
+  - id: ED-782
+    date: 2026-05-02
+    description: "PP register collision repair — mass-battle set (date 2026-04-30, finding_ids MB-03/MB-04/MB-06/MB-02/MB-07) renumbered PP-684..688 → PP-711..715. Architecture set (date 2026-05-01, Conviction taxonomy/migration/faction behavior v2/Key substrate/articulation) retains canonical PP-684..688 — 50+ downstream files including all Stage 10 validation. Files updated: canon/patch_register_active.yaml (5 id renumbers + header next-PP 710→716), designs/provincial/mass_battle_v30.md (3 cites), designs/provincial/military_layer_v30.md (3 cites), references/canonical_sources.yaml (2 PENDING_PP_705 comments), references/propagation_map.md (renumber resolution note). Out of scope: stage4 archive PP-684 (Disposition ceiling) — separate, pending Jordan review."
+    status: closed
+    severity: P1
+    source: "register integrity audit 2026-05-02"
