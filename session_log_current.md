@@ -106,23 +106,30 @@ session_commits:
 predecessor_session: 2026-04-30-architecture-session
 
 # ─────────────────────────────────────────────────────────────────────────
-# 2026-05-01 — Phase B Stages 2-7 COMPLETE (post-ratification)
+# 2026-05-01 — Phase B COMPLETE (Stages 1, 1b, 2-7 — 6b/8 deferred)
 # ─────────────────────────────────────────────────────────────────────────
-phase_b_stages_2_to_7_status: COMPLETE
-
+phase_b_status: STAGES_1_TO_7_COMPLETE
 phase_b_commits:
-  - {n: 7, oid: "796d4d5", scope: "Phase B Stages 2-4 — strike Ethical Framework Modifiers + L+PS schema", files: 4}
-  - {n: 8, oid: "a9d0efc", scope: "Phase B Stage 7 — Mandate-consumer audit (124 files, 530 refs scanned)", files: 1}
-  - {n: 9, oid: "080729a", scope: "Phase B Stage 5 — per-faction state authoring (Mission + hierarchy ref + institutional_culture)", files: 2}
-  - {n: 10, oid: "606918e", scope: "Phase B Stage 6 — per-territory public temperament (17 provinces)", files: 2}
+  - {n: 7,  oid: "796d4d5", scope: "Stages 2-4 — strike Ethical Framework Modifiers + L+PS schema (params/bg/core, params/factions[_personal], params/bg/tracks)"}
+  - {n: 8,  oid: "a9d0efc", scope: "Stage 7 — Mandate-consumer audit (124/627 files; 530 refs; 76% via §4 derivation; 24% L-leaning for opportunistic refactor)"}
+  - {n: 9,  oid: "080729a", scope: "Stage 5 — per-faction state authoring (Mission + cascade_roots + institutional_culture for Crown/Church/Hafenmark/Varfell/RM/Löwenritter)"}
+  - {n: 10, oid: "606918e", scope: "Stage 6 — per-territory temperament (17 provinces, 5 typology coverage)"}
+  - {n: 11, oid: "05fccff", scope: "session log update — Phase B 2-7 status"}
+  - {n: 12, oid: "6823c69", scope: "Stage 1 — doc 12 procedures Key-migration spec (political_dynamics_keys_migration_v30.md)"}
+  - {n: 13, oid: "1790a28", scope: "Stage 1b — 4 Class B Key types in registry (state.opinion_revised, state.concern_resolved, scene.interaction, scene.gossip)"}
+
+phase_b_class_b_keys_added: [state.opinion_revised, scene.interaction, scene.gossip, state.concern_resolved]
+type_registry_count: "34 total (was 30); scene_event 7 (was 5), state_transition 6 (was 4)"
+stage_1_naming_reconciliation: "PP-687 §8.3 referenced 'Procedures A-E'; canonical doc 12 has B/C/D/E (A eliminated in session 09). Migration spec §1 reconciles."
 
 phase_b_remaining:
-  stage_1: "doc 12 Political Dynamics procedures A-E rewrite to consume Keys (~1 session per spec) — not started"
   stage_6b: "settlement-level temperament (~50 entries) — deferred per Stage 6 §5"
-  stage_8: "Stage 10 sim verification battery (lateral cross-system + articulation A1-A6, 1-2 sessions) — not started"
+  stage_8:  "Stage 10 sim verification battery (1-2 sessions) — pending. Phase 5a Godot scope: 1.5-2 sessions for doc 12 migration impl + verification."
 
-phase_b_audit_findings:
-  mandate_consumer_audit: "76% of Mandate references operate correctly via §4 derivation (DERIVED + UNCLASSIFIED + BOTH = 402 lines); 24% have semantic preference for refactor (L=124, PS=4). NO IMMEDIATE REFACTOR REQUIRED. Opportunistic refactor list: 46 L-dominant + 1 PS-dominant files."
-  authoring_completeness: "Stage 5 covers 6 player factions (Crown, Church, Hafenmark, Varfell, Restoration Movement, Löwenritter); Guilds and Niflhel handled per existing canon (Niflhel removed per ED-764). Stage 6 covers 17 provinces; settlement-level deferred."
-  multi_root_cascade_status: "Single-root default applied across all factions; multi-root candidates flagged for designer review at Stage 10 sim observation point. Crown (secular/military/household), Church (4-Cardinal), Varfell (Jarl Confederacy), Löwenritter (Riskbreaker covert sub-ladder) are structural multi-root candidates."
+mandate_audit_distribution: "L=124 (24%) opportunistic refactor; PS=4; BOTH=11; DERIVED=175 + UNCLASSIFIED=216 (76%) via §4 derivation"
 
+session_2026-05-01_totals: "13 commits — 7 ratification + 1 session log + 4 Phase B (Stages 2-7) + 2 Phase B (Stages 1, 1b)"
+
+register_health_at_session_close:
+  references_canonical_sources_yaml: "WARN — 4966/5000 tokens (99.3%). Archival pass needed before next canonical_sources.yaml-touching commit."
+  session_log_current_md: "WARN — approaching cap"
