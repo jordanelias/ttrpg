@@ -48,19 +48,25 @@ REPOS = {
 }
 
 # ── Token thresholds (ttrpg only) ─────────────────────────────────────────────
+# TOKEN_THRESHOLDS — token caps per file (raised 2026-05-02 per ED-786)
+# Rationale: The 2026-05-02 register-collision incidents (ED-782, ED-783) traced to chronic
+# cap pressure on editorial_ledger and canonical_sources during heavy editorial sessions.
+# Caps below were raised to give realistic headroom for routine work (2-3 commits per session).
+# Combined with the chunking discipline documented in workplan §6.x, registers should now
+# stay under 80% of cap during normal operations.
 TOKEN_THRESHOLDS = {
-    "session_log_current.md":                  2_000,
-    "session_logs/index.md":                   2_000,
-    "canon/editorial_ledger.yaml":             2_000,
-    "canon/editorial_ledger_summary.yaml":     1_000,
-    "references/file_index_summary.md":        1_000,
-    "references/canonical_sources.yaml":       5_000,
+    "session_log_current.md":                  2_000,   # session-bounded; rotates each session
+    "session_logs/index.md":                   2_000,   # tiny index file
+    "canon/editorial_ledger.yaml":             4_000,   # raised 2_000 → 4_000 (2026-05-02): ED entries are 800-1200 chars; 4 entries/session typical
+    "canon/editorial_ledger_summary.yaml":     2_000,   # raised 1_000 → 2_000 (2026-05-02): paired with parent
+    "references/file_index_summary.md":        2_000,   # raised 1_000 → 2_000 (2026-05-02): file count grows with project
+    "references/canonical_sources.yaml":       8_000,   # raised 5_000 → 8_000 (2026-05-02): every new design doc adds entry; linear growth with design surface
     "skills/valoria-orchestrator/SKILL.md":    8_000,
-    "canon/patch_register_active.yaml":       15_000,
-    "tests/coverage_matrix.md":               5_000,
-    "references/arc_register.md":            20_000,
-    "references/propagation_map.md":         15_000,
-    "references/design_registry.yaml":        8_000,
+    "canon/patch_register_active.yaml":       18_000,   # raised 15_000 → 18_000 (2026-05-02): modest cushion to prevent collision incidents under heavy work
+    "tests/coverage_matrix.md":                8_000,   # raised 5_000 → 8_000 (2026-05-02): was at 4983/5000; Stage tests growing
+    "references/arc_register.md":             20_000,
+    "references/propagation_map.md":          15_000,
+    "references/design_registry.yaml":         8_000,
 }
 ARCHIVE_WARN_THRESHOLD = 100_000
 

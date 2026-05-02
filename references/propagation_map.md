@@ -531,3 +531,46 @@ Total triggers in articulation §3.1: 10. Stage 8c calibration sweep (Phase 5a) 
 - `references/propagation_map.md` (this section)
 
 **Cross-references:** PP-688 (articulation layer canonical), Stage 10 articulation sim, Stage 8b/c sims, Mandate-consumer audit 2026-05-01.
+
+---
+
+## 2026-05-02 — Register cap revision + chunking sweep (ED-786)
+
+**Trigger:** Three register files at >97% of cap during 2026-05-02 session forced ED-783 emergency archival mid-work. Caps were under-budgeted relative to actual work pace (2-3 commits/session, 800-1200 char ED entries, linear growth in canonical_sources with each new design doc).
+
+**Cap raises** (`skills/valoria-orchestrator/scripts/github_ops.py` `TOKEN_THRESHOLDS`):
+
+| File | Old | New | % raise |
+|---|---:|---:|---:|
+| `canon/editorial_ledger.yaml` | 2,000 | 4,000 | +100% |
+| `canon/editorial_ledger_summary.yaml` | 1,000 | 2,000 | +100% |
+| `references/file_index_summary.md` | 1,000 | 2,000 | +100% |
+| `references/canonical_sources.yaml` | 5,000 | 8,000 | +60% |
+| `tests/coverage_matrix.md` | 5,000 | 8,000 | +60% |
+| `canon/patch_register_active.yaml` | 15,000 | 18,000 | +20% |
+
+Unchanged: `session_log_current.md` (2k — session-bounded, rotates), `propagation_map.md` (15k — fine), `arc_register.md` (20k — huge headroom), `design_registry.yaml` (8k — 41% used), `valoria-orchestrator/SKILL.md` (8k).
+
+**Chunking actions** (this commit):
+
+- `canon/editorial_ledger.yaml`: 4 closed entries (ED-782, ED-783, ED-784, ED-785) → `archives/editorial/editorial_ledger_archive_2026_05_02_b.yaml`. Active 1,968 → 1,107 tokens (now 28% of new 4k cap).
+- `tests/coverage_matrix.md`: All historical sim batches 2026-04-17 to 2026-04-19 → `tests/coverage_matrix_archive_2026_04_19.md`. Open Findings table pruned to unresolved-only (resolved rows still traceable via ED refs in archive). Active 4,983 → 358 tokens (now 4% of new 8k cap).
+- `references/canonical_sources.yaml`: All 7 remaining `# Last touched: ...` breadcrumb comments stripped (continuing 2026-05-02-a sweep). Editorial history now exclusively traced via ED entries + propagation_log. Active 4,333 → 4,130 tokens (now 52% of new 8k cap).
+
+**Not chunked** (deliberate):
+
+- `canonical_sources.yaml`: structural split by domain (personal/provincial/meta) considered but rejected — every consumer (sim_gate, audit hooks) reads this file; refactor blast radius too large for marginal benefit once cap raised to 8k. Revisit if growth trajectory pushes back into >80% in <8 weeks.
+- `patch_register_active.yaml`: already chunked aggressively in ED-783 (now 8,533/18,000 = 47% of new cap). No further action.
+
+**Discipline note** (going forward): When any register passes 80% of cap, archive proactively in the same commit as the next routine work. Treat 80% as the operational ceiling, not 100%.
+
+**Cross-references:** ED-782 (collision repair), ED-783 (initial archival sweep), ED-786 (this entry).
+
+**Files in this commit:**
+- `skills/valoria-orchestrator/scripts/github_ops.py` (TOKEN_THRESHOLDS revised + comment block)
+- `canon/editorial_ledger.yaml` (ED-786 added; ED-782/783/784/785 archived)
+- `archives/editorial/editorial_ledger_archive_2026_05_02_b.yaml` (NEW)
+- `tests/coverage_matrix.md` (historical sections moved to archive; Open Findings pruned)
+- `tests/coverage_matrix_archive_2026_04_19.md` (NEW)
+- `references/canonical_sources.yaml` (Last-touched breadcrumbs stripped)
+- `references/propagation_map.md` (this section)

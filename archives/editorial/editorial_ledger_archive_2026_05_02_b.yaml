@@ -1,0 +1,32 @@
+# Editorial Ledger Archive — Batch 2026-05-02 (b)
+# Moved from canon/editorial_ledger.yaml to maintain size limits.
+# 4 closed entries from session 2026-05-02 (collision repair + archival sweep + Mandate audit + trigger ruleset).
+# All status: closed. Cross-references preserved.
+
+entries:
+
+  - id: ED-782
+    date: 2026-05-02
+    description: "PP register collision repair — mass-battle set (date 2026-04-30, finding_ids MB-03/MB-04/MB-06/MB-02/MB-07) renumbered PP-684..688 → PP-711..715. Architecture set (date 2026-05-01, Conviction taxonomy/migration/faction behavior v2/Key substrate/articulation) retains canonical PP-684..688 — 50+ downstream files including all Stage 10 validation. Files updated: canon/patch_register_active.yaml (5 id renumbers + header next-PP 710→716), designs/provincial/mass_battle_v30.md (3 cites), designs/provincial/military_layer_v30.md (3 cites), references/canonical_sources.yaml (2 PENDING_PP_705 comments), references/propagation_map.md (renumber resolution note). Out of scope: stage4 archive PP-684 (Disposition ceiling) — separate, pending Jordan review."
+    status: closed
+    severity: P1
+    source: "register integrity audit 2026-05-02"
+  - id: ED-783
+    date: 2026-05-02
+    description: "Register archival sweep — register-cap pressure relieved across three files. (1) canon/patch_register_active.yaml: 17 applied PPs (date <= 2026-04-30) archived to archives/patches/patch_register_archive_2026_05_02_a.yaml; active register reduced 14947 → ~8500 tokens (cap 15000). Includes mass-battle PP-711..715, PP-681..683, PP-690..704. Architecture set PP-684..688 retained in active. (2) canon/editorial_ledger.yaml: 3 closed entries (ED-775, ED-778, ED-779) archived to archives/editorial/editorial_ledger_archive_2026_05_02_a.yaml; active reduced 1959 → ~1300 tokens (cap 2000). (3) references/canonical_sources.yaml: 35 stale 'Last touched: 2026-04-25' breadcrumb comments pruned; reduced 4988 → ~4300 tokens (cap 5000). PENDING_PP_705 SHA-follow-up entries preserved (post-renumber-aware). Pattern: this commit + ED-782 demonstrate need for pre-emptive archival discipline before register-cap pressure forces emergency triage."
+    status: closed
+    severity: P1
+    source: "register integrity sweep 2026-05-02 (post-renumber follow-through)"
+  - id: ED-784
+    date: 2026-05-02
+    description: "Mandate audit Q1-Q5 resolved (Jordan signoff): Q1 Submission threshold = PS=0; Q2 PP-189 Institutional Mandate = L only; Q3 Failure-clause Church gain = L only; Q4 personal_mandate_view = round((L+PS)/2) (already in factions_personal.md per PP-686 v2); Q5 Mandate>=4 gates = per-mechanic (Crown Policy L>=4, populist DAs PS>=4, deviation-cost gates strictness). Resolution log: designs/audit/2026-05-01-stage-10-validation/03_mandate_consumer_audit.md §5b. Phase 2 mechanical sweep across 9 consumer + 8 reference files (audit §2/§3) queued as separate commit; this entry ratifies decisions only. params/factions/stats_1_7_scale.md Ethical Framework Modifiers strike deferred to that sweep (bg/core.md strike already applied)."
+    status: closed
+    severity: P1
+    source: "Mandate-consumer audit 2026-05-01 + Jordan signoff 2026-05-02"
+
+  - id: ED-785
+    date: 2026-05-02
+    description: "Phase B trigger ruleset finalized in articulation_layer_v30.md §3.1. (1) Trigger #9 (meta.cascade_cluster_event) threshold tightened |sim| > 0.7 -> > 0.40 per Stage 10 articulation sim §3.6 / A6 (corr +0.937, Crown/Hafenmark, 30-season window). (2) Trigger #10 ADDED: state.belief_revised on tracked NPC fires Tier 2 cut scene directly, closing Stage 10 §4.1 P2 finding (sig=7 belief Keys previously routed only via K/B/I bumps). Total triggers: 10. Stage 8c calibration sweep (Phase 5a) refines further."
+    status: closed
+    severity: P2
+    source: "Stage 10 articulation sim §3.6 + §4.1 / Jordan signoff 2026-05-02"
