@@ -1,0 +1,49 @@
+Stage 8b Sim — PP-686 v2 + PP-687 + PP-688 + trigger 9 (cluster detection) over 30 seasons
+Seed: 42
+
+======================================================================
+RESULTS SUMMARY
+======================================================================
+Total Keys emitted: 494
+Total factions:     6
+Total NPCs:         12
+Total territories:  17
+
+--- LATERAL TESTS ---
+LAT-1 (leader Conviction shift → Cascade fidelity): PASS
+  Varfell cascade pre  (s1-14):  0.998
+  Varfell cascade post (s15-30): 0.606
+LAT-2 (mass_battle → da_outcome chain): PASS
+  Battle Keys: 6, linked DA outcomes: 6
+LAT-3 (social_contest → state.opinion_revised): PASS
+  Contest Keys: 10, opinion_revised: 10
+LAT-4 (env.peninsular_strain_shock → temperament drift): PASS
+  Strain shocks: 4, drifted territories: 6
+
+--- ARTICULATION TESTS ---
+A1 (top-10 significance vs author beats): PASS
+  Top-10 seasons:    [7, 21, 28]
+  Author beats:      [3, 5, 6, 7, 9, 10, 12, 14, 15, 18, 20, 21, 24, 25, 27, 28, 30]
+  Overlap: 3 seasons / 100%
+A2 (cut scene firing rate): FAIL
+  Avg cut scenes/season: 1.0
+  Target range: 1.5-4.0/season
+A5 (determinism — Key log hash): 9ccf3d538f2bf65021e4b09662c0dc7de5fe4a3a186710404ddae399cad322ab
+  Total emissions: 494
+A6 (cross-faction cascade fidelity clustering):
+  Avg pair similarity: 0.328
+  Pair similarities: {'crown↔church': 1.0, 'crown↔hafenmark': -1.0, 'crown↔varfell': 0.971, 'crown↔restoration': 1.0, 'crown↔lowenritter': 1.0, 'church↔hafenmark': -1.0, 'church↔varfell': 0.971, 'church↔restoration': 1.0, 'church↔lowenritter': 1.0, 'hafenmark↔varfell': -0.971, 'hafenmark↔restoration': -1.0, 'hafenmark↔lowenritter': -1.0, 'varfell↔restoration': 0.971, 'varfell↔lowenritter': 0.971, 'restoration↔lowenritter': 1.0}
+
+--- FINAL FACTION STATE ---
+  crown           L=6.23  PS=6.80  Mandate=7  cascade_fid=0.881  scars=0  crisis=False
+  church          L=6.79  PS=7.00  Mandate=7  cascade_fid=0.996  scars=0  crisis=False
+  hafenmark       L=3.63  PS=7.00  Mandate=5  cascade_fid=-0.219  scars=1  crisis=False
+  varfell         L=5.40  PS=7.00  Mandate=6  cascade_fid=0.606  scars=0  crisis=False
+  restoration     L=0.02  PS=0.80  Mandate=0  cascade_fid=0.023  scars=1  crisis=False
+  lowenritter     L=1.19  PS=2.00  Mandate=2  cascade_fid=0.995  scars=4  crisis=True
+
+======================================================================
+Determinism hash: 9ccf3d538f2bf65021e4b09662c0dc7d...
+======================================================================
+
+Full results saved to /home/claude/work/pp_phase_b_stage_8_sim_output.json
