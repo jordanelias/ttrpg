@@ -1,5 +1,6 @@
 # Canonical Sources
 # Tracks which docs are authoritative for which systems.
+# 2026-05-02: Stripped 39 stale 'Last touched: 2026-04-25' breadcrumb comments to maintain size budget. ED-770 SHA-follow-up status preserved.
 # Entries here supersede any other documentation they conflict with.
 
 sources:
@@ -176,42 +177,7 @@ systems:
 # Last touched: 2026-04-29 (ci_political §4.4 ED-743 propagation, CI 55 milestone rename)
 # Last touched: 2026-04-29 (FW-01 Domain Echo cap, FRAC-01 zero-guard, FRAC-03 Fragmentation Ob
 # Last touched: 2026-04-29 (CI-01 — Church Prominent definition fixed)
-# Last touched: 2026-04-25 (ED-739/740/741/742 — Wager system commit)
-# Last touched: 2026-04-25 (ED-743/744 — Strain trigger inversion fix)
-# Last touched: 2026-04-25 (ED-745/746/747 — Scene Slate spec-fixes)
-# Last touched: 2026-04-25 (ED-748/749/750 — scale_transitions spec-fixes; ED-739..742 archived)
-# Last touched: 2026-04-25 (ED-751/752 — faction_layer Sacred Veto + NPC vote cleanup)
-# Last touched: 2026-04-25 (ED-753/754 — mass_battle Volley docs + officer death calibration)
-# Last touched: 2026-04-25 (ED-755 — npc_behavior cross-faction Outreach floor; ED-743/744 archived)
-# Last touched: 2026-04-25 (ED-756 — TC disambiguation glossary notes)
-# Last touched: 2026-04-25 (ED-757 — Niflhel drift table row cleanup)
-# Last touched: 2026-04-25 (ED-758 — Cardinal naming reconciled; ED-745..750 archived)
-# Last touched: 2026-04-25 (ED-704 resolved — Seizure Uncontrolled exclusion)
-# Last touched: 2026-04-25 (ED-705 resolved — Cohesion → Discipline derivation clarified)
-# Last touched: 2026-04-25 (ED-665 resolved — Succession Contest specified as Grand Contest variant)
-# Last touched: 2026-04-25 (ED-712 resolved — RM Settlement Emergence pathway; ED-665/704/705 archived)
-# Last touched: 2026-04-25 (ED-664 resolved — Advisor-Principal Confidentiality Boundary)
-# Last touched: 2026-04-25 (ED-662 resolved — Elske residency null-intersection clarified)
-# Last touched: 2026-04-25 (ED-661/669 resolved + 6 entries archived)
-# Last touched: 2026-04-25 (ED-759/760/761/762 stress-test fixes)
-# Last touched: 2026-04-25 (ED-763 — Arc E post-Wager Scar threshold tolerance)
-# Last touched: 2026-04-25 (ED-764 — Niflhel STRUCK params propagation)
-# Last touched: 2026-04-25 (ED-765/766 — Officer death scope + Step 4 capitalization heuristic)
 # Last touched: 2026-04-29 (editorial batch 2 — stale Step 4d, Accord frozen, §0.3 Strain description: H frozen, RS→MS, ED-743 propagation, PP-530 fix, cascade timing, terrain carve-out, rout definition, tactic card STRUCK)
-# Last touched: 2026-04-25 (ED-768 — orphaned PROVISIONAL markers documented)
-# Last touched: 2026-04-25 (ledger maintenance — 13 entries archived)
-# Last touched: 2026-04-25 (ED-769 — RS→MS residual cleanup strategic_layer_v30_infill)
-# Last touched: 2026-04-25 (ED-770 — numeric bounds audit closure)
-# Last touched: 2026-04-25 (ED-775 — cross-reference audit fixes, 4 broken refs)
-# Last touched: 2026-04-25 (ED-775 — Heresy Investigation Lifecycle in social_contest §7.3)
-# Last touched: 2026-04-25 (ED-776 — Knot Lifecycle specified)
-# Last touched: 2026-04-25 (ED-777 — Approach Training canonical + 5 archived)
-# Last touched: 2026-04-25 (ED-775 — Wrong-Style Penalty extended)
-# Last touched: 2026-04-25 (ED-776 — Demotion Magnitude specified)
-# Last touched: 2026-04-25 (ED-777 — caste-transgressive PC Conviction mechanism + cross-ref fixes)
-# Last touched: 2026-04-25 (ED-778 — Wager Obligation edge cases)
-# Last touched: 2026-04-25 (ED-778 cross-ref fix: generational_transition not character_histories §Heir)
-# Last touched: 2026-04-25 (ED-779/780/781/782 — Inspiration; Bonds ≥5; Coup Counter STRUCK; glossary TC→CI rename)
 # Last touched: 2026-04-30 (ED-775 / PP-698 — terminology P0 propagation; alias_registry CI milestones)
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.

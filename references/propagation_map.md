@@ -476,3 +476,25 @@ PP-686 v2 §3.4/§3.5/§3.6 + PP-684 13-Conviction axis matrix Godot binding imp
 **Out of scope:** archives/patches/patch_register_archive_stage4_promotions_2026_04_25.yaml carries a third PP-684 entry (Disposition ceiling = Bonds) in an auto-extracted PROVISIONAL archive. Referenced once in propagation_log.md. Pending Jordan review; not modified here.
 
 **Pattern flagged:** Third register-collision incident in 36 hours. The earlier PP-684..688 collision was already noted in this propagation_map under "Pre-existing PP-684..688 collision" — that note can now be considered resolved.
+
+---
+
+## 2026-05-02 — Register archival sweep (ED-783)
+
+**Trigger:** Three register files at >97% of size cap after ED-782 collision-repair commit. Continuing further work would have started bouncing on `pre_commit_gate` size limits.
+
+**Action — patch_register_active.yaml:** 17 applied PPs (date ≤ 2026-04-30) moved to `archives/patches/patch_register_archive_2026_05_02_a.yaml`.
+- PP-681, PP-682 (mass-battle architecture)
+- PP-683, PP-690, PP-691 (mass-battle, stratagem, march layer)
+- PP-698..704 (geography canon work, settlement adjacency, etc.)
+- PP-711..715 (mass-battle ratification set, renumbered from PP-684..688 per ED-782 — archived in same batch as their original-number siblings)
+
+Active register reduced 14,947 → ~8,500 tokens (cap 15,000). Retained: 3 provisional (PP-652, PP-675, PP-676) + 11 applied 2026-05-01 entries (architecture set PP-684..688 + workplan v3 series PP-705..710).
+
+**Action — editorial_ledger.yaml:** 3 closed entries (ED-775, ED-778, ED-779) moved to `archives/editorial/editorial_ledger_archive_2026_05_02_a.yaml`. Active reduced 1,959 → ~1,300 tokens (cap 2,000). Retained: 7 open + ED-782 (most recent closure).
+
+**Action — canonical_sources.yaml:** 35 stale `# Last touched: 2026-04-25 ...` breadcrumb comments stripped. Pruned 4,988 → ~4,300 tokens (cap 5,000). PENDING_PP_705 SHA-follow-up status entries preserved (mass-battle SHA references already updated post-ED-782 renumber).
+
+**Cross-references:** ED-782 (collision repair, immediate predecessor), ED-770 (PENDING_PP_705 SHA follow-up), session log 2026-05-01..02.
+
+**Pattern note:** ED-782 + ED-783 combined are downstream consequences of insufficient pre-emptive archival discipline. Archival should precede cap pressure, not respond to it. Future workplan should include a recurring archival cadence (e.g., when any register passes 80% of cap).

@@ -1,5 +1,6 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 783
+# next_id: 784
+# Archival batch 2026-05-02 (a): ED-775, ED-778, ED-779 (3 closed entries) → archives/editorial/editorial_ledger_archive_2026_05_02_a.yaml
 # Archival batch 2026-05-01 (b): ED-763, ED-764 (PROVISIONAL items, low-action) → canon/editorial_ledger_archive.yaml
 # Archival batch 2026-04-29 (e): ED-750..754 (doc 17 batches resolved through v1.2.x), ED-762 (v1.2.x progression), ED-765..769 (applied items).
 # Archival batch 2026-04-29 (d): ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
@@ -30,13 +31,6 @@ entries:
     severity: P1
     source: "doc 17 §6"
 
-  - id: ED-775
-    date: 2026-04-30
-    description: "[RESOLVED — APPLIED] Comprehensive faction-doctrine batch. (1) Niflhel residue strike (PP-698) — completes the strike begun by CR-STRIKE-2026-04-19 / PP-DISSOLVE / conflict_architecture_proposal §Niflhel Dissolution / ED-752 / ED-764. Removes residual references in registries, params, and faction_layer. DEFERRED: arc_register_factions.md has 5 Niflhel-coded arcs requiring plot-level reframe (ED-777). (2) Vaynard first name canonicalized as Magnus (PP-699; resolves ED-NEW-02). (3) Hafenmark equipment-quality doctrine note (PP-700; mechanic TBD via simulation, ED-776). (4) Crown standing army = Löwenritter doctrine note (PP-701). (5) Crown structural-fragility doctrine note (PP-702). (6) mass_battle §A.11 PP-MB-06 correction (PP-703) — VTM gate removed, Forgetting universality affirmed, no faction-property exemption from Forgetting. (7) Edeyja L61 conflict-as-disturbance redirect (PP-704). New patches PP-698..704. Affected files: ~20 files including 3 design docs, 11 params, 4 references."
-    status: closed
-    severity: P2
-    source: "Jordan editorial 2026-04-30 (comprehensive faction-doctrine batch)"
-
   - id: ED-776
     date: 2026-04-30
     description: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation. Doctrine canon fixed (Hafenmark Military 4 expressed as superior equipment quality from mining/smithing); mechanical expression options (weapon damage +1, effective Armour tier +1, both, or other) require simulation testing. Cross-references: PP-700, faction_layer §1.5, military_layer §1.3."
@@ -50,20 +44,6 @@ entries:
     status: open
     severity: P2
     source: "Niflhel strike scope 2026-04-30 (deferred from PP-698)"
-
-  - id: ED-778
-    date: 2026-05-01
-    description: "[APPLIED — PP-705] Phase 0 cleanup from ecosystem workplan v2. Three actions: (1) T1 npc_behavior_v30.md priority-tree CI threshold lines flagged with [STALE-THRESHOLD] markers (5 lines; design-judgment canonical-threshold update deferred); (2) D1 glossary cross-ref grep — closed without code change (no broken external refs); (3) B1 Mode G case-sensitivity corrigendum to audit folder (post-publication §8 + new mode_g_2026-04-30_corrigendum.json; audit-time data preserved per frozen-on-creation). Numerical Δ small post-PP-691 corpus state. Methodology fix in code scheduled Phase 5 workplan v2."
-    status: closed
-    severity: P3
-    source: "PP-705 / workplan_v2 §0 / 2026-04-30 audit T1/D1/B1"
-  - id: ED-779
-    date: 2026-05-01
-    description: "Phase 2 of geography canon work — data authoring. EXECUTED 2026-05-01 (PP-710): designs/territory/valoria_geography_v30.yaml committed at canonical 1920×2880 (17 territory anchors, 17 province polygons, 36 settlements, 26 adjacency edges, 20 terrain polygons covering 8 canonical types, lake/river/bridges/forgetting-zone/radiation-bands, march-budget formula, vision-range table); replacement designs/territory/valoria_map_v30.svg; designs/territory/march_layer_v30.md skeleton (handoff to ED-780). Calibration values PROVISIONAL pending Phase 4 stress tests (ED-781). Cross-references: PP-706, PP-707 (canonical workplan), PP-709 (reconciliation), PP-710 (execution)."
-    status: closed
-    severity: P2
-    source: "Geography canon audit 2026-05-01 — Phase 2"
-    applied_commit: pending
 
   - id: ED-780
     date: 2026-05-01
@@ -84,3 +64,9 @@ entries:
     status: closed
     severity: P1
     source: "register integrity audit 2026-05-02"
+  - id: ED-783
+    date: 2026-05-02
+    description: "Register archival sweep — register-cap pressure relieved across three files. (1) canon/patch_register_active.yaml: 17 applied PPs (date <= 2026-04-30) archived to archives/patches/patch_register_archive_2026_05_02_a.yaml; active register reduced 14947 → ~8500 tokens (cap 15000). Includes mass-battle PP-711..715, PP-681..683, PP-690..704. Architecture set PP-684..688 retained in active. (2) canon/editorial_ledger.yaml: 3 closed entries (ED-775, ED-778, ED-779) archived to archives/editorial/editorial_ledger_archive_2026_05_02_a.yaml; active reduced 1959 → ~1300 tokens (cap 2000). (3) references/canonical_sources.yaml: 35 stale 'Last touched: 2026-04-25' breadcrumb comments pruned; reduced 4988 → ~4300 tokens (cap 5000). PENDING_PP_705 SHA-follow-up entries preserved (post-renumber-aware). Pattern: this commit + ED-782 demonstrate need for pre-emptive archival discipline before register-cap pressure forces emergency triage."
+    status: closed
+    severity: P1
+    source: "register integrity sweep 2026-05-02 (post-renumber follow-through)"
