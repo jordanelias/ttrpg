@@ -661,20 +661,109 @@ notes:
 
 ---
 
+### state.opinion_revised
+
+```yaml
+description: Emitted by Procedure D (Opinion Drift) when an Opinion's affect_axis changes by ≥ 0.5 or confidence value changes. Drives Articulation Tier 2 trigger evaluation. (PP-687 Phase B Stage 1 / political_dynamics_keys_migration_v30 §7.1)
+required_payload_fields:
+  - opinion_subject       # npc_id
+  - affect_axis_before    # float
+  - affect_axis_after     # float
+  - confidence_before     # int [1, 5]
+  - confidence_after      # int [1, 5]
+optional_payload_fields:
+  - driver_memory_refs    # [key_uuid]
+default_scale_signature: [personal]
+default_permanence: structural
+default_time_horizon: medium
+default_visibility: private_observers=[emitter, opinion_subject]
+emitting_systems: [npc_behavior / Procedure D]
+consuming_systems: [articulation, npc_memory, social_contest]
+class: B
+declared_by: PP-687 Phase B Stage 1
+articulation_significance: stakes_weight 1-3 per affect delta + confidence change
+```
+
+### scene.interaction
+
+```yaml
+description: Emitted by Procedure E (Off-Screen Interactions) for ambient inner-circle interactions and cross-faction Distant Contact. Carries pre-mutation drift values; state.opinion_revised emits separately if drift threshold crossed. (PP-687 Phase B Stage 1 §7.2)
+required_payload_fields:
+  - interaction_type      # enum: ambient_inner_circle | cross_faction_distant_contact | knot_partner
+  - drift_a_to_b          # float
+  - drift_b_to_a          # float
+optional_payload_fields:
+  - faction               # faction_id
+  - shared_conviction_primary   # bool
+  - cumulative_drift      # float
+default_scale_signature: [personal]
+default_permanence: transient
+default_time_horizon: immediate
+default_visibility: private_observers=[participants]
+emitting_systems: [npc_behavior / Procedure E]
+consuming_systems: [npc_memory, articulation (low priority)]
+class: B
+declared_by: PP-687 Phase B Stage 1
+articulation_significance: stakes_weight 0-1 (low; cumulative_drift > 1.0 escalates)
+```
+
+### scene.gossip
+
+```yaml
+description: Emitted by Procedure E §6.3 when cumulative interaction drift > 0.5. Generates a propagatable gossip artifact reachable by inner-circle observers and (via propagation) third-parties. (PP-687 Phase B Stage 1 §7.3)
+required_payload_fields:
+  - principals            # [npc_id]
+  - cumulative_drift      # float
+  - origin_interaction_key   # key_uuid
+optional_payload_fields:
+  - propagation_observers # [npc_id] — populated by propagation logic
+default_scale_signature: [personal]
+default_permanence: structural
+default_time_horizon: medium
+default_visibility: semi_public_observers=propagation_observers (initial: principals only)
+emitting_systems: [npc_behavior / Procedure E]
+consuming_systems: [npc_memory, articulation]
+class: B
+declared_by: PP-687 Phase B Stage 1
+articulation_significance: stakes_weight 1; multi-hop propagation escalates significance
+```
+
+### state.concern_resolved
+
+```yaml
+description: Emitted by Procedure B (Concern Generation and Resolution) when Concern resolves with subject_npc_id set. Carries resolution polarity and Belief-revision flag. (Belief revision itself emits state.belief_revised separately.) (PP-687 Phase B Stage 1 §7.4)
+required_payload_fields:
+  - concern_tag           # string
+  - affect                # float [-3, +3] — resolution polarity (implied_affect)
+optional_payload_fields:
+  - belief_revision       # bool — true if state.belief_revised also emitted
+default_scale_signature: [personal]
+default_permanence: structural
+default_time_horizon: medium
+default_visibility: private_observers=[emitter, subject_npc_id]
+emitting_systems: [npc_behavior / Procedure B]
+consuming_systems: [npc_memory, articulation]
+class: B
+declared_by: PP-687 Phase B Stage 1
+articulation_significance: stakes_weight 1-2 per affect magnitude
+```
+
+---
+
 ## §9 Type Count Summary
 
-| Family | Subtypes |
-|---|---|
-| scene_event | 5 |
-| da_outcome | 5 |
-| mechanical_event | 4 |
-| state_transition | 4 |
-| environmental | 4 |
-| scene_outcome | 3 |
-| system_meta | 5 (incl. PP-688 Class B additions: meta.knot_ruptured, state.belief_revised, plus meta.legacy_event) |
-| **Total** | **30** |
+| Family | Subtypes | Notes |
+|---|---|---|
+| scene_event | 7 | Adds Class B scene.interaction, scene.gossip per PP-687 Phase B Stage 1 |
+| da_outcome | 5 |  |
+| mechanical_event | 4 |  |
+| state_transition | 6 | Adds Class B state.opinion_revised, state.concern_resolved per PP-687 Phase B Stage 1 |
+| environmental | 4 |  |
+| scene_outcome | 3 |  |
+| system_meta | 5 (incl. PP-688 Class B additions: meta.knot_ruptured, state.belief_revised, plus meta.legacy_event) |  |
+| **Total** | **34** |  |
 
-Within the 25–30 target range per integration plan §3.2 commit 1 D6 decision.
+Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 expand the registry by 4 types (8 of total are Class B post-Stage-1). Class A type count remains within the 25-30 bound.
 
 ---
 

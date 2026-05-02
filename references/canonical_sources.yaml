@@ -252,7 +252,7 @@ systems:
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
     design_doc: designs/architecture/key_type_registry_v30.md
-    canonical_sha__designs__architecture__key_type_registry_v30_md: "6f989dae45b826fb75967332ebce23b5c3fc5d3b"
+    canonical_sha__designs__architecture__key_type_registry_v30_md: "90556314f8ddc6dbd1af01cde8afee539f2c84b5"
     status: canonical
     added: '2026-05-01 PP-687 ratification — Key type registry'
   conviction_taxonomy:
