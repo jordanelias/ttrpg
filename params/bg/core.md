@@ -154,6 +154,8 @@ PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress
 | 3 | MS +2/season at Accounting. |
 
 
+<!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support). Starting Mandate values below are preserved as initial conditions: Legitimacy_init = Popular_Support_init = current authored Mandate. After first Accounting, dynamics replace seed values. See L+PS Starting Values section below. -->
+
 ## Faction Starting Stats (v04 B5)
 | Faction | Mandate | Influence | Wealth | Military | Stability |
 |---------|---------|-----------|--------|----------|-----------|
@@ -167,6 +169,15 @@ PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress
 
 CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
 
+
+
+### Legitimacy + Popular Support — Starting Values (PP-686 v2)
+
+At engine init, both scalars seed from the Mandate column above:
+- `Legitimacy_init = Mandate`
+- `Popular_Support_init = Mandate`
+
+Range [0, 7] for both. After first Accounting, dynamics replace seed values per `designs/provincial/faction_behavior_v30.md §3.4–3.5`. Factions with no Mandate (Restoration, Löwenritter) start with Legitimacy = Popular_Support = 0; PS may climb via successful Mission outcomes from zero.
 
 
 ## Faction Elimination — Territory Status (ED-333 resolved)
@@ -215,15 +226,30 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 All Obs: floor 1.
 
 
-## Ethical Framework Modifiers (v04 B4)
-| Faction | Bonus | Penalty |
-|---------|-------|---------| 
-| Crown (Virtue Ethics) | Public, visible actions −1 Ob | Covert/morally ambiguous +1 Ob |
-| Church (Divine Command) | Doctrine-aligned −1 Ob | Thread-supporting +2 Ob |
-| Hafenmark (Categorical Imperative) | Procedurally grounded −1 Ob | Ad hoc/precedent-breaking +1 Ob |
-| Varfell (Epistemic Reason) | Evidence-based Intel −1 Ob | Emotional/reactive +1 Ob |
-| Restoration (Rawlsian) | Community-benefiting −1 Ob | Hierarchical/exclusionary +1 Ob |
-| Löwenritter (Military Honor) | Orders protecting Valorian sovereignty −1 Ob | Advancing personal/factional gain at Valoria's expense +2 Ob |
+## ~~Ethical Framework Modifiers (v04 B4)~~ — SUPERSEDED 2026-05-01 (PP-686 v2)
+
+<!-- [SUPERSEDED 2026-05-01 — SUPERSESSION-PP686-001] Replaced by triadic decomposition in designs/provincial/faction_behavior_v30.md §3.7 (mission_alignment + cascade_alignment + expectation_alignment, clamped ±2). Period-anachronistic philosophical-tradition labels (Virtue Ethics, Divine Command, Categorical Imperative, Epistemic Reason, Rawlsian, Military Honor) replaced by 13-Conviction taxonomy per PP-684. -->
+
+| Faction | ~~Bonus~~ (struck) | ~~Penalty~~ (struck) |
+|---------|--------------------|----------------------|
+| Crown ~~(Virtue Ethics)~~ | ~~−1 Ob public~~ | ~~+1 Ob covert~~ |
+| Church ~~(Divine Command)~~ | ~~−1 Ob doctrine-aligned~~ | ~~+2 Ob thread-supporting~~ |
+| Hafenmark ~~(Categorical Imperative)~~ | ~~−1 Ob procedural~~ | ~~+1 Ob ad-hoc~~ |
+| Varfell ~~(Epistemic Reason)~~ | ~~−1 Ob evidence-based~~ | ~~+1 Ob emotional~~ |
+| Restoration ~~(Rawlsian)~~ | ~~−1 Ob community~~ | ~~+1 Ob hierarchical~~ |
+| Löwenritter ~~(Military Honor)~~ | ~~−1 Ob loyal~~ | ~~+2 Ob disloyal~~ |
+
+**Replacement** per `designs/provincial/faction_behavior_v30.md §3.7`:
+
+```
+Ob_modifier(da, faction) =
+    mission_alignment_modifier(da, faction.mission)                          # -1, 0, +1 — reads PP-687 da_outcome subtypes
+  + cascade_alignment_modifier(da, faction.aggregate_effective_convictions)  # -1, 0, +1 — reads PP-684 13-Conviction projection
+  + expectation_alignment_modifier(da, faction)                              # ± strictness × {1, 2}
+Ob_modifier = clamp(Ob_modifier, -2, +2)                                     # C1 cap (was ±3 in legacy table)
+```
+
+Faction-specific behavior emerges from authored Mission + leader Convictions + public temperament rather than per-faction philosophical tradition. See faction_behavior_v30 §3.3.1 for role templates with Honor as 13th Conviction (D1).
 
 
 ## Faction Conviction Texts (PP-181, ED-080/081 resolved 2026-04-03)

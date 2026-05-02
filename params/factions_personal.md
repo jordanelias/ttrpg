@@ -5,9 +5,13 @@
 # params_factions_ttrpg.md — TTRPG Faction Mechanics
 
 ## Faction Stats — 1-7 Scale
+<!-- [PP-686 v2 NOTE 2026-05-01] Mandate split into Legitimacy + Popular Support per designs/provincial/faction_behavior_v30.md §3.4–3.5. Mandate retained as derived for backward compat. -->
+
 | Stat | Represents |
 |------|-----------|
-| Mandate | Public legitimacy and popular support |
+| Legitimacy | Populace acceptance — slow-integrating per faction_behavior_v30 §3.5 (PP-686 v2) |
+| Popular Support | Active populace backing — faster-moving per faction_behavior_v30 §3.4 (PP-686 v2) |
+| ~~Mandate~~ (derived) | `Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support)` per faction_behavior_v30 §4 — retained for backward compat |
 | Influence | Political reach and diplomatic weight |
 | Wealth | Economic capacity |
 | Military | Armed force and unit capacity |
@@ -31,20 +35,25 @@
 Partial sheets: Revolution (Influence, Stability, Intel only). [Niflhel removed per ED-764.]
 Löwenritter (no Mandate, no Wealth). Guilds NPC-only: no deviation mechanic.
 
+**Legitimacy + Popular Support init (PP-686 v2):** Both scalars start equal to the Mandate value above (Crown L_init = 5, PS_init = 5; Church L_init = 5, PS_init = 5; Hafenmark L_init = 4, PS_init = 4; Varfell L_init = 4, PS_init = 4; Guilds L_init = 3, PS_init = 3). Factions with no Mandate (Revolution, Löwenritter) start L_init = PS_init = 0; PS may climb via Mission outcomes from zero. After first Accounting, dynamics replace seed values per faction_behavior_v30 §3.4–3.5.
+
 ## Domain Action Resolution
 Pool = character's relevant attribute + faction's relevant stat (if PC holds leadership).
 NPC factions: Pool = faction's relevant stat.
 Ob = target faction's relevant stat (1–7 scale, no division).
 Seasonal cap: ±2 per stat per season at accounting. Minimum Ob: 1 (PP-285).
 
-### Ethical Framework Modifiers
-| Alignment | Ob Modifier |
-|-----------|------------|
-| Aligned with faction framework | −1 Ob |
-| Neutral / unrelated | ±0 |
-| Opposed to framework | +1 Ob |
-| Church revealing Thread truth | +2 Ob |
-Min Ob floor: 1 after all modifiers.
+### ~~Ethical Framework Modifiers~~ — SUPERSEDED 2026-05-01 (PP-686 v2)
+<!-- [SUPERSEDED 2026-05-01 — SUPERSESSION-PP686-001] Replaced by triadic Ob decomposition in designs/provincial/faction_behavior_v30.md §3.7. Min Ob floor 1 retained. -->
+
+| ~~Alignment~~ (struck) | ~~Ob Modifier~~ (struck) |
+|------------------------|--------------------------|
+| ~~Aligned with faction framework~~ | ~~−1 Ob~~ |
+| ~~Neutral / unrelated~~ | ~~±0~~ |
+| ~~Opposed to framework~~ | ~~+1 Ob~~ |
+| ~~Church revealing Thread truth~~ | ~~+2 Ob~~ |
+
+**Replacement** per faction_behavior_v30 §3.7: `Ob_modifier = clamp(mission_alignment + cascade_alignment + expectation_alignment, -2, +2)`. Mission alignment reads PP-687 `da_outcome.*` subtypes; cascade alignment reads PP-684 13-Conviction projection; expectation alignment reads role templates §3.3.1. Min Ob floor 1 retained per PP-285.
 
 ## Unique Actions
 | Faction | Action | Pool | Ob | Notes |

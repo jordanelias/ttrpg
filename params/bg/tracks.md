@@ -1,3 +1,6 @@
+<!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: `Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support)`. Existing Mandate consumers in this file (AER advancement, Excommunication Ob Cap, RDT/TD escalation rows, Peninsular Strain Mandate checks) continue to function via this derivation; no behavioral change. Refactor of consumers to read Legitimacy or Popular_Support directly is opportunistic. -->
+
+
 ## Trade Network Investment — Hafenmark Wealth Sink (PP-178)
 Consul Inward, 2 Wealth cost. Ob 2. Places Trade Route tokens for +1D Trade bonuses.
 Success: Trade Route token placed (+1D Trade this territory this season). Token persists until control transfer.
