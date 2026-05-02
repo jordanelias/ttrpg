@@ -104,3 +104,25 @@ session_commits:
   - "06dae57 — combat videogame stress test (exploratory)"
 
 predecessor_session: 2026-04-30-architecture-session
+
+# ─────────────────────────────────────────────────────────────────────────
+# 2026-05-01 — Phase B Stages 2-7 COMPLETE (post-ratification)
+# ─────────────────────────────────────────────────────────────────────────
+phase_b_stages_2_to_7_status: COMPLETE
+
+phase_b_commits:
+  - {n: 7, oid: "796d4d5", scope: "Phase B Stages 2-4 — strike Ethical Framework Modifiers + L+PS schema", files: 4}
+  - {n: 8, oid: "a9d0efc", scope: "Phase B Stage 7 — Mandate-consumer audit (124 files, 530 refs scanned)", files: 1}
+  - {n: 9, oid: "080729a", scope: "Phase B Stage 5 — per-faction state authoring (Mission + hierarchy ref + institutional_culture)", files: 2}
+  - {n: 10, oid: "606918e", scope: "Phase B Stage 6 — per-territory public temperament (17 provinces)", files: 2}
+
+phase_b_remaining:
+  stage_1: "doc 12 Political Dynamics procedures A-E rewrite to consume Keys (~1 session per spec) — not started"
+  stage_6b: "settlement-level temperament (~50 entries) — deferred per Stage 6 §5"
+  stage_8: "Stage 10 sim verification battery (lateral cross-system + articulation A1-A6, 1-2 sessions) — not started"
+
+phase_b_audit_findings:
+  mandate_consumer_audit: "76% of Mandate references operate correctly via §4 derivation (DERIVED + UNCLASSIFIED + BOTH = 402 lines); 24% have semantic preference for refactor (L=124, PS=4). NO IMMEDIATE REFACTOR REQUIRED. Opportunistic refactor list: 46 L-dominant + 1 PS-dominant files."
+  authoring_completeness: "Stage 5 covers 6 player factions (Crown, Church, Hafenmark, Varfell, Restoration Movement, Löwenritter); Guilds and Niflhel handled per existing canon (Niflhel removed per ED-764). Stage 6 covers 17 provinces; settlement-level deferred."
+  multi_root_cascade_status: "Single-root default applied across all factions; multi-root candidates flagged for designer review at Stage 10 sim observation point. Crown (secular/military/household), Church (4-Cardinal), Varfell (Jarl Confederacy), Löwenritter (Riskbreaker covert sub-ladder) are structural multi-root candidates."
+
