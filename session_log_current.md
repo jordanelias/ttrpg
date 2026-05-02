@@ -1,48 +1,89 @@
-# ─────────────────────────────────────────────────────────────────────────
-# 2026-05-01 SESSION SUMMARY (16 commits — full Phase B + Stage 8 verification)
-# ─────────────────────────────────────────────────────────────────────────
-session_artifacts: designs/audit/2026-04-30-architecture-session/ + designs/audit/2026-05-01-{mandate-consumer-audit, stage-8-sim}/
+---
+session_id: 2026-05-01-stage-10-validation
+session_open: 2026-05-01
+session_close: pending
+phase: "Stage 10 sims PASS + architecture canonical + Phase 5a session 1 landed (KeyStore substrate)"
+status: open
 
-ratification_commits:
-  d2a75fc, 8d31419, dede72f, b633778, 98f492a, 0f29cf8, d18b030
+last_stage: >
+  Stage 10 sims PASS (12/14 battery; bb5e293 lateral 9/9 + 3cb5207 articulation 6/6).
+  PP-684/685/686/687/688 PROMOTED PROVISIONAL→canonical (commit 0134b6d).
+  NERS-all-directions audit (commit 2e688ae): 8 cells lifted, 0 regressions, top-down S persistent.
+  Phase 5a session 1 landed in jordanelias/valoria-game (commit 737106a):
+  KeyStore autoload + Key Resource + KeyValidator + KeyTypeRegistry (30 types) + GdUnit tests covering V1 cycle, V3 visibility auto-augment, V4 replay determinism, V5 exact-once dispatch (exact + family wildcard + universal), 4-hop diagonal walk back/forward.
 
-phase_b_commits:
-  796d4d5, a9d0efc, 080729a, 606918e, 05fccff, 6823c69, 1790a28, c7e14ef
+next_action:
+  skill: design
+  description: >
+    PHASE 5A — IN PROGRESS:
+    - SESSION 1 DONE (commit 737106a valoria-game): KeyStore substrate.
+    - Session 2 NEXT: faction L+PS state mutating from da_outcome Keys (PP-686 v2 §3.4/§3.5).
+      Specifies: FactionState Resource with L/PS scalars, da_outcome handler that
+      computes ΔPS + ΔL per §3.4/§3.5, parity test against TTRPG sim V6 (1e-3 epsilon).
+      Risk: Mandate migration (audit OQs) may change Faction state schema; could
+      build session 2 with Mandate-deprecated stub then revise after Jordan answers.
+    - Session 3: One Tier 2 cut scene firing from one trigger (PP-688 §3.4).
+    - Session 4: Backward walk diagnostic UI (PP-687 §5.4).
+    - Session 5: One chronicle paragraph for one year (PP-688 §4.4).
 
-stage_8_commits:
-  56965de, 74fa864, 4a8ba0c
+    JORDAN-DECISION QUEUE (mechanical work blocked):
+    1. Mandate-audit OQs §5 (5 items) — gates params/factions* migration.
+    2. Phase B 9th trigger decision — clustering / belief_revised / both / neither.
+    3. C3.1 Wager arc selection — gates the playable scene path (workplan v3 addendum).
 
-decisions_resolved: D1-D12 per integration plan defaults
-ners_close: 17 STRONG / 5 STRONG-conditional / 4 MODERATE / 0 WEAK
-# 2026-05-01 — Phase B Stage 8/8b COMPLETE + trigger 9 ratified
-# ─────────────────────────────────────────────────────────────────────────
-phase_b_stage_8_status: COMPLETE
-phase_b_stage_8_commits:
-  - {n: 14, oid: "56965de", scope: "Stage 8 — Stage 10 verification battery (4/4 LAT PASS, A1 62%, A5 deterministic)"}
-  - {n: 15, oid: "74fa864", scope: "Stage 8b — trigger 9 enabled (A1 100%, A2 calibration is stimulus-rate-bound)"}
-  - {n: 16, oid: "4a8ba0c", scope: "Trigger 9 added to articulation_layer_v30 §3.1 (D10 deferral resolution)"}
-phase_b_stage_8_lat_results: {LAT_1: PASS, LAT_2: PASS, LAT_3: PASS, LAT_4: PASS}
-phase_b_stage_8_articulation_results: {A1: PASS_with_caveat, A2: stimulus-rate-bound_FAIL, A3: deferred, A4: deferred, A5: PASS_deterministic, A6: clustering_observed}
-phase_b_stage_8_determinism_hashes:
-  - "stage_8a: a2a31e41c574fd00 ... 476 keys / 30 seasons"
-  - "stage_8b: 9ccf3d538f2bf650 ... 494 keys / 30 seasons (with trigger 9)"
+    POST-DECISION MECHANICAL WORK (resumable without creative input):
+    4. params/factions/stats_1_7_scale.md split (gates on OQs).
+    5. params/factions_personal.md personal_mandate_view (gates on OQs).
+    6. Per-site Mandate→L+PS migrations across 9 consumer files (gates on OQs).
+    7. Reference-file nominal text replacements (8 files).
+    8. ED-782+ entries.
 
-architecture_verdict: "PP-686 v2 + PP-687 + PP-688 integrated system VERIFIED. Lateral cross-system Key propagation works. Determinism reproducible. Significance scoring functional. Cluster detection trigger 9 added. A2 calibration finding is stimulus-rate-bound (sim has only 1 LAT-1 stimulus; production game has many)."
+    CREATIVE-AUTHORING (multi-session scope):
+    9. Mission/cascade/temperament for 6 factions + 30-50 territories.
+    10. Per-system Key migration (mass-battle, social-contest, faction-action, scale-transitions).
 
-promotion_readiness:
-  promotable_now: ["key_substrate_v30", "key_type_registry_v30", "conviction_taxonomy_v30", "conviction_migration_roster_v30", "conviction_axis_matrix_v30", "faction_behavior_v30", "faction_state_authoring_v30", "articulation_layer_v30 (with trigger 9)", "territory_temperaments_v30"]
-  promotable_after_phase_5a: ["political_dynamics_keys_migration_v30 (after doc 12 actually rewritten in production code)"]
-  conditions: "Designer review of Hafenmark cascade misalignment, Church scar-rate, Restoration/Löwenritter zero-start dynamics. Stage 8c (multi-stimulus sim) for A2 calibration confirmation in Phase 5a."
+    OLDER P1 BACKLOG (independent of Stage 10):
+    - PP-666 trio
+    - ED-755 Doc 17 §6 Jordan-decision items
+    - mass-battle decision queue (16 items)
+    - pacing PP
 
-phase_b_carryforward:
-  stage_6b: "settlement-level temperament (~50 entries) — deferred"
-  stage_8c: "multi-stimulus sim for A2 calibration — Phase 5a"
-  doc_12_implementation: "Phase 5a Godot — implement procedures B/C/D/E to consume Keys per political_dynamics_keys_migration_v30"
-  k_b_i_sim_integration: "Phase 5a — A4 verification requires Knot/Belief/Inspiration system"
+blockers:
+  - "Phase 5a session 2 not blocked but benefits from Mandate-audit OQs being answered first (avoid double-migration)"
+  - "Phase 5a session 3 not blocked but benefits from C3.1 Wager arc selection"
+  - "Phase 5a sessions 4-5 not blocked — built directly on canonical PP-687/PP-688"
 
-session_2026-05-01_total_commits: 16
+stage10_status:
+  battery_total: 14
+  passed: 12
+  unverified: 2
+  unverified_items: ["PP-687 §9 V7 (memory query perf)", "PP-687 §9 V8 (walk perf)"]
+  unverified_blockers: false
+  promotion_complete: true
+  promotion_commit: "0134b6d"
+  ners_audit_commit: "2e688ae"
+  findings_p2_carry_forward:
+    - "PP-687: substrate dispatch by type only, not visibility-aware (lateral sim §4.1)"
+    - "PP-688: state.belief_revised not in 8-trigger ruleset (articulation sim §4.1)"
 
-register_health_at_session_close:
-  references_canonical_sources_yaml: "4966/5000 tokens (99.3%) — archival pass needed before next canonical_sources-touching commit"
-  session_log_current_md: "approaching cap"
+phase_5a_status:
+  session: 1
+  status: complete
+  repo: jordanelias/valoria-game
+  commit: "737106a"
+  files: ["autoload/KeyStore.gd", "systems/keys/Key.gd", "systems/keys/KeyValidator.gd", "systems/keys/KeyTypeRegistry.gd", "tests/test_keystore.gd", "docs/key_substrate.md", "project.godot"]
+  invariants_tested: ["V1 cycle-freeness", "V3 visibility correctness", "V4 replay determinism", "V5 exact-once dispatch (exact + wildcard + universal)", "walks back+forward 4-hop"]
+  invariants_deferred: ["V2 salience monotonicity (later session)", "V7 memory query perf (later session)", "V8 walk perf at 10 hops (later session)"]
 
+session_commits:
+  - "eb991f4 — close 2026-04-30-architecture-session; open this session"
+  - "bb5e293 — Stage 10 lateral cross-system sim 9/9 PASS"
+  - "3cb5207 — Stage 10 articulation sim A1-A6 6/6 PASS"
+  - "6f6051b — Mandate-consumer audit"
+  - "78a7b37 — session log post-sim"
+  - "0134b6d — Stage 10 promotion PROVISIONAL→canonical (PP-684/685/686/687/688)"
+  - "18575c0 — session log post-promotion"
+  - "2e688ae — post-promotion NERS all directions (8 lifts, 0 regressions)"
+  - "737106a — [valoria-game] Phase 5a session 1 KeyStore substrate"
+
+predecessor_session: 2026-04-30-architecture-session
