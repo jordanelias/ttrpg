@@ -290,5 +290,10 @@ systems:
     canonical_sha__designs__territory__territory_temperaments_v30_md: "ecc90dd7bc33cc2d242ad2fd26935975e2cfda75"
     status: provisional
     added: '2026-05-01 PP-686 v2 Phase B Stage 6 — per-territory temperament (17 provinces)'
+  political_dynamics_keys_migration:
+    design_doc: designs/provincial/political_dynamics_keys_migration_v30.md
+    canonical_sha__designs__provincial__political_dynamics_keys_migration_v30_md: "fe68d1d7aa5dca9d951cba520f1ad5e2ed05ce58"
+    status: provisional
+    added: '2026-05-01 PP-687 Phase B Stage 1 — doc 12 procedures consume Keys'
 
 # Last touched: 2026-05-01 (Stage 10 sims PASS — PP-684/685/686/687/688 architecture entries promoted PROVISIONAL→canonical; conviction_taxonomy + migration_roster + axis_matrix + key_substrate + key_type_registry + faction_behavior + articulation_layer)
