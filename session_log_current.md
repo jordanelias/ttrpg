@@ -30,7 +30,8 @@ next_action:
     6. params/factions_personal.md — add personal_mandate_view derived field.
     7. Per-site Mandate→L+PS migrations across 9 consumer files per audit §2.
     8. Reference-file nominal text replacements per audit §3.
-    9. Add ED-779 (P1, audit-driven migration), ED-780 (P2, reference replacements), ED-781 (P2, personal_view), ED-782 (P3, audit OQ resolution) to editorial ledger.
+    9. Add ED-782 (P1, audit-driven migration), ED-783 (P2, reference replacements), ED-784 (P2, personal_view), ED-785 (P3, audit OQ resolution) to editorial ledger.
+       [RENUMBERED 2026-05-01 per commit 1229d12d / PP-710: original numbers ED-779/780/781/782 collided with geography Phase 2/3/4 IDs already claimed by PP-706/707/708/709/710. next_id at renumber time = 782; verify next_id at start of work and shift further if it has advanced.]
 
     DEFERRED (multi-session scope):
     10. Author Mission/cascade/temperament for 6 factions + 30-50 territories (creative authoring).
