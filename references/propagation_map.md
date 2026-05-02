@@ -63,98 +63,8 @@ If broken dependencies are found:
 
 <!-- Older entries (through 2026-04-19) archived to archives/propagation/propagation_map_archive_2026_05_01_b.md (~5183 chars; 2 entries) -->
 
-## 2026-04-19 — PP-674 Framework enforcement + Necessity tier (N)
 
-**Commit:** (this commit)
-**Scope:** make the vetting framework a mandatory validation tool; add tier N (Necessity) above Ω.
-
-**Framework changes (references/throughlines_meta.md, references/throughlines_meta_infill.md):**
-- New tier N (Necessity Test) above Ω. Tests whether a proposal models a load-bearing Renaissance-era political-leadership dynamic.
-- N-level questions (5) added to skeleton §0.
-- 4 new Failure Lexicon terms: fantasy imposition, duplicate coverage, edge case mechanic, abstractable.
-- Vetting protocol (§8.1) updated: Class A/B begin with N-check.
-- §8.5 added: enforcement specification — required vetting: block schema for Class A/B patches.
-- Authority table: N owned by Jordan (subject-matter authority).
-- Infill §10 added: tier N rationale, worked examples, what counts as subject grounding.
-- Infill §11 added: enforcement mechanism, vetting: block schema, self-validation of PP-674.
-
-**Ecosystem enforcement (skills/valoria-orchestrator/scripts/valoria_hooks.py):**
-- New function: vetting_gate(additions) — validates Class A/B patch register entries from PP-674 forward have vetting: blocks with required keys (class, necessity, omega, mu, m_ratings, q).
-- vetting_gate wired into pre_commit_gate — fires on every commit that touches canon/patch_register_active.yaml.
-- New task type: design_proposal — requires references/throughlines_meta.md in context before proposing mechanics.
-- Grandfathering: entries with pre-framework: true exempt. PP-001..PP-673 implicit-grandfathered (no new entries before PP-674 need retroactive markers; only new entries are checked).
-
-**Registers:**
-- canon/patch_register_active.yaml: PP-674 entry (self-validating — includes own vetting: block, class A, infrastructure note).
-- canon/editorial_ledger.yaml: ED-720.
-- references/canonical_sources.yaml: enforcement note.
-
-**Consequences:**
-- All future Class A/B gameplay proposals will carry permanent vetting records in the patch register.
-- Pattern-detection across vetting records becomes possible (are certain М's consistently violated? are N failures flagged but merged anyway?).
-- Framework is no longer advisory — it is procedurally enforced.
-- Substantive framework compliance (correct M ratings, accurate N judgments) still requires Jordan's review; the gate catches only procedural violations.
-
-## Stage 4 Provisional Promotions (2026-04-25)
-
-33 PROVISIONAL patches added to `archives/patches/patch_register_archive_stage4_promotions_2026_04_25.yaml`. Propagation status: **pending review**.
-
-These entries were promoted from MENTIONED-in-canon-corpus state (atom references in `references/atoms_pending/2026-04-25/`) to formal register entries. Each requires manual review of:
-- `finding_id` field (auto-extraction couldn't infer)
-- `affects` list (derived from canon_mentions; may need refinement)
-- `description` wording (auto-extracted from atom contexts, may be approximate)
-- Reconciliation against actual implementation status (some patches may already be applied)
-
-Until reviewed, these PROVISIONAL patches should not drive propagation cascades. They are visible in the register for discoverability only.
-
-## PP-675 Terminology Conversion Workplan (2026-04-29)
-
-PROVISIONAL workplan: retire framing terms (TTRPG/BG/Hybrid) and Hybrid-as-third-mode. Preserve mechanical vocabulary (dice pool, TN, Ob, exchange, degree of success, pool formulas).
-
-**Source doc:** `designs/audit/2026-04-29-terminology-conversion/00_workplan.md`
-**Status:** PROVISIONAL — pending Jordan signoff on 5 decisions in workplan §4.
-
-**Propagation status:** **NOT STARTED.** No source-doc edits begin until Jordan resolves §4 decisions and PP-675 promotes from PROVISIONAL → APPLIED. Phase 1 of the workplan creates `references/terminology_canon.md` as authority; Phase 2 builds `references/terminology_sweep_inventory.md` enumerating every legacy-term occurrence by file; Phase 3 propagates by directory cluster (architecture first, archives skipped); Phase 4 adds `terminology_gate` to `safe_commit` to make conversion permanent; Phase 5 updates project-level files (project knowledge instructions block, hook docstrings, SKILL.md files).
-
-**Single load-bearing structural change (workplan §3):** `scale_transitions_v30 §1, §6` rewritten from three-mode (TTRPG/BG/Hybrid) to two-mode (Strategic/Scene) plus Zoom-In as transition verb. Engine already runs on a binary Strategic/Scene state machine; three-mode framing was textual, not implementation. No gameplay behavior change.
-
-**Cross-references:** ED-759.
-
-## PP-676 Topographic Analysis Workplan (2026-04-29)
-
-PROVISIONAL workplan: vectorized corpus investigation as analytic instrument for surfacing weaknesses unreachable by hand-curation.
-
-**Source doc:** `designs/audit/2026-04-29-topographic-analysis/00_workplan.md`
-**Status:** PROVISIONAL — pending Jordan signoff.
-
-**Propagation status:** **NOT STARTED.** No execution begins until PP-676 promotes to APPLIED and §8 pre-execution checklist is satisfied (dedicated session, v2 connections audit landed, canonical_sources pruned, index-routing bypass tested).
-
-**Distinct from connections artifact:** the connections artifact draws topology from a designer's hand. Topographic analysis derives topology from the corpus via TF-IDF + cosine similarity. Diagnostic value highest in the gap between the two views.
-
-**Cross-references:** ED-760. Companion to v2 connections audit (separate session).
-
-## PP-676 Topographic Analysis — Stage 1-4 Executed (2026-04-29)
-
-Stages 1-4 of the topographic analysis workplan executed in same chat session per Jordan directive.
-
-**Outputs:**
-- `designs/audit/2026-04-29-topographic-analysis/02_weakness_register.md` — narrative findings (12 TOPO entries)
-- `designs/audit/2026-04-29-topographic-analysis/data/tokens.json` — 126 curated tokens with surface forms, doc counts
-- `designs/audit/2026-04-29-topographic-analysis/data/layout.json` — t-SNE 2D coordinates
-- `designs/audit/2026-04-29-topographic-analysis/data/neighbors.json` — top-8 cosine neighbors per token
-- `designs/audit/2026-04-29-topographic-analysis/data/diagnostics.json` — D1-D6 raw diagnostic outputs
-- `designs/audit/2026-04-29-topographic-analysis/data/cross_doc.json` — doc-level Jaccard graph + v1 edge recheck
-
-**Findings status:** PROVISIONAL pending Jordan review. Each TOPO finding may convert to an ED entry on signoff.
-
-**Three convergent observations:**
-1. Knot system more central than v1 portrayed — high jaccard with Social Contest, Leap, Combat, Domain Echo. **v2 should re-elevate.**
-2. Political-dynamics layer (Armature, Domain Action, Concern, etc.) entirely degree-0 — confirms PROVISIONAL status of 12_development_specification.md numerically.
-3. Several v1 hand-curated edges are genuinely-thin (cosine<0.05 AND jaccard<0.10): Threadwork↔MS Trajectory, Royal Assassination↔NPC Behavior, Fractional Province↔Faction Layer. These are real propagation gaps, not measurement artifacts.
-
-**Methodology limits explicit:** TF-IDF cosine measures co-mention; doc-level Jaccard measures shared territory; hand-curated edges encode causal/functional logic. The diagnostic value is in the disagreement between the three lenses. Future iterations should refine surface-form coverage (Stealth, contest styles undermatched) and consider section-level granularity.
-
-**Cross-references:** ED-760, PP-676.
+<!-- 1 older entries archived 2026-05-01 to references/propagation_map_archive_2026_05_01_b.md -->
 
 ## 2026-04-29 — Topographic analysis v2 + v3 (PP-676)
 
@@ -908,4 +818,47 @@ is 28× squared-normalized-distance away from lake center).
 ED-779 (Phase 2 standing), ED-780 (Phase 3 standing, blocked on ED-779),
 ED-781 (Phase 4 stress tests).
 
+## 2026-05-01 — Phase 2 workplan reconciliation (PP-709 / ED-779 progressed)
+
+Two parallel sessions independently authored Phase 2 workplans within 13 minutes of each other on 2026-05-01:
+
+- **PP-707** (commit `0e75ccd0`, file `01_phase2_workplan.md`)
+- **PP-708** (commit `70c77288`, file `00_phase2_workplan.md`)
+
+Both claim AUTHORITY: PP-707 internally. Reconciliation memo committed at `designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md` resolves the duplication.
+
+**Three substantive disagreements identified and resolved:**
+1. **Canvas dimensions** (1920×2880 vs 2400×2880) → CANONICAL: 1920×2880 (PP-707). Rationale: hex-grid alignment with UI v4 §7.4 tactical hex (32px cells, 60×90 hexes at full canvas) is mechanically load-bearing for Godot impl.
+2. **Terrain taxonomy** (annotations-vs-type split vs flat type list) → CANONICAL: 8 terrain types + 5 annotations (PP-707 architecture + PP-708 `fjord_coast` naming adopted). Rivers/roads/bridges/forgetting_zone/radiation_band are annotations, not terrain types — resolves polygon-overlap ambiguity.
+3. **Lake Eidursjø geometry** (concrete coords vs deferred) → CANONICAL: PP-707's concrete starting values (lake center 960, 1700; T4 Grauwald NE shore 1090, 1430). Execution session can adjust if Voronoi gives wrong boundaries; starting from concrete values is faster than starting from prose.
+
+**Six decisions absent from both committed workplans, added by reconciliation memo:**
+- §2.1 Settlement-coordinate placement rule (per-settlement nudge from territory anchor by type-bias: Ports toward coast, Mines toward mountain, Cathedrals interior, etc.)
+- §2.2 Forgetting zone as overlay-not-terrain (canon-preservation: making Forgetting a terrain type would imply faction-property exemptions are mechanically possible, contradicting PP-703 universality)
+- §2.3 March-budget formula (Military × 100 px baseline; cavalry 1.5×; skirmish 1.3×)
+- §2.4 Roads as A*-cached, not authored (eliminates duplicate authoring; the terrain layer IS the road network)
+- §2.5 Naval mechanics scope (explicit Phase 3 deferral; Phase 2 authors data layer that *can support* naval but does NOT spec fleets/ports/sea zones/naval combat)
+- §2.6 Vision multiplicative factor structure with concrete starting values (base 240 px × terrain × weather × season; weather: clear 1.0, fog 0.4, storm 0.3, blizzard 0.2; season: spring 1.0, summer 1.05, autumn 0.9, winter 0.6)
+
+**Workplan-of-record designation:**
+- `01_phase2_workplan.md` (PP-707) → CANONICAL
+- `00_phase2_workplan.md` (PP-708) → SUPERSEDED with banner pointing to canonical and to reconciliation memo
+
+**Phase 2 execution canonical decision set:** PP-707's workplan + reconciliation memo. Execution session uses both as authoritative decision basis. PP-708 retained as historical reference.
+
+**Parallel-session collision pattern flagged.** This is the third register-collision incident in 36 hours:
+1. PP-684..688 (mass-battle MB batch vs architecture-session work — applied vs provisional)
+2. PP-705/ED-778 (geography audit vs ecosystem-cleanup workplan)
+3. PP-707/PP-708 (Phase 2 workplan duplicates)
+
+The valoria-orchestrator hooks catch content-level collisions but don't prevent scope-level duplication. Suggested follow-up at orchestrator-skill maintenance level: `pending_workstream.yaml` check at task_gate, or session-scope-reservation protocol. Out-of-scope for this memo.
+
+**Files modified:**
+- designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md (new, ~16k chars)
+- designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md (banner added)
+- canon/patch_register_active.yaml (PP-709)
+- canon/editorial_ledger_summary.yaml (refreshed; ED-779 reflects reconciliation)
+- references/propagation_map.md (this entry)
+
+**Cross-references:** PP-706 (Phase 1 audit), PP-707 (workplan A), PP-708 (workplan B), PP-709 (reconciliation), ED-779 (Phase 2 standing), PP-703 (Forgetting universality — load-bearing for §2.2), PP-666 (settlement adjacency v1, becomes superseded by Phase 3), ED-055 (naval mechanics — Phase 3 standing).
 

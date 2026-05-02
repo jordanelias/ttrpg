@@ -1,6 +1,30 @@
 <!-- [PROVISIONAL: 2026-05-01 — Phase 2 workplan, prep for ED-779 execution] -->
 <!-- AUTHORITY: PP-707 -->
 
+<!-- =====================================================================
+[SUPERSEDED — see reconciliation memo 2026-05-01]
+
+This file (00_phase2_workplan.md, PP-708) is one of two parallel-authored
+Phase 2 workplans committed within minutes of each other on 2026-05-01.
+Per reconciliation memo (designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md):
+
+- CANONICAL workplan = 01_phase2_workplan.md (PP-707)
+- This workplan (PP-708) = SUPERSEDED reference
+
+Specific dispositions:
+- §1.1 canvas decision (2400×2880) → SUPERSEDED in favor of 01_phase2_workplan §1.1 (1920×2880, hex-grid alignment with UI v4 §7.4)
+- §1.3 terrain naming `fjord_coast` → ADOPTED into canonical taxonomy
+- §1.4 river deferral → SUPERSEDED in favor of 01_phase2_workplan §1.4 (river as annotation, not terrain)
+- Other sections → DUPLICATIVE with 01_phase2_workplan; canonical content lives there
+
+Phase 2 execution session uses 01_phase2_workplan.md + 04_workplan_reconciliation.md
+as authoritative decision basis. This file is preserved for historical reference
+and to record the parallel-session collision pattern (memo §9).
+
+Authority: PP-709 (reconciliation memo)
+===================================================================== -->
+
+
 # Geography Canon Phase 2 — Workplan
 
 **Date:** 2026-05-01

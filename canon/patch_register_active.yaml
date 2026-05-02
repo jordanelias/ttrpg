@@ -1,6 +1,6 @@
 # Patch Register — Active
 # Applied/approved/consumed patches archived to canon/patch_register_archive_*.yaml
-# Next PP number: 709
+# Next PP number: 710
 # Archival batch 2026-05-01 (b): 4 applied PPs (PP-677..680) → archives/patches/patch_register_archive_2026_05_01_b.yaml
 # 2026-05-01: Backfilled PP-684/685/686/687/688 (architecture session ratification)
 # Archival batch 2026-04-30 (a): 4 applied PPs (range PP-200..400) → archives/patches/patch_register_archive_2026_04_30_a.yaml
@@ -1062,5 +1062,34 @@ patches:
   vetting:
     class: D
     note: "Class D (preparation/leverage instrument; no mechanical change). Workplan locks decisions, transform script is mechanical/deterministic, sample data is non-canonical proof-of-concept. Phase 2 execution (ED-779) will use these as inputs."
-
+- id: PP-709
+  date: 2026-05-01
+  severity: P3
+  description: "Phase 2 workplan reconciliation. Two parallel sessions independently authored Phase 2 workplans within 13 minutes of each other on 2026-05-01: PP-707 (commit 0e75ccd0, file 01_phase2_workplan.md) and PP-708 (commit 70c77288, file 00_phase2_workplan.md). Both internally claim AUTHORITY: PP-707. Reconciliation memo committed at designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md identifies three substantive disagreements (canvas dimensions 1920×2880 vs 2400×2880; terrain taxonomy annotation-vs-type split; Lake Eidursjø concrete coordinates vs deferred), recommends resolutions, and adds six decisions absent from both committed workplans (per-settlement coordinate placement rule, Forgetting-zone-as-overlay canon-preservation, march-budget formula Military×100px, roads-as-A*-cached, naval scope explicit Phase 3 deferral, vision multiplicative factor structure with concrete starting values). Designates PP-707's 01_phase2_workplan.md as canonical workplan-of-record; PP-708's 00_phase2_workplan.md superseded with banner. PP-708's `fjord_coast` terrain naming adopted into canonical taxonomy. Memo §9 flags parallel-session collision pattern as third such incident in 36 hours (PP-684..688 mass-battle vs architecture; PP-705/ED-778 audit vs ecosystem-cleanup; PP-707/PP-708 workplan duplicates) — suggests follow-up at orchestrator-skill maintenance level."
+  finding_id: editorial 2026-05-01 (Phase 2 workplan reconciliation)
+  source: editorial
+  affects:
+    - designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md
+    - designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Class A (reconciliation/coordination instrument; no mechanical change). N pass: parallel-session collision creates execution-ambiguity for next session; reconciliation eliminates ambiguity. Ω pass: SUPERSEDED file preserved (banner only); CANONICAL file unchanged in this commit; new memo adds decisions to canonical set without overwriting committed workplans. Q pass: Jordan editorial 2026-05-01."
 

@@ -1,5 +1,5 @@
 # Editorial Ledger Summary
-# auto-generated 2026-05-01 (manual refresh — ED-779/780/781 geography canon Phase 2/3/4 standing items)
+# auto-generated 2026-05-01 (manual refresh — Phase 2 workplan reconciliation PP-709)
 
 p1_blocker_count: 1
 open_count: 9
@@ -10,26 +10,26 @@ p1_blockers:
   - ED-755: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
 
 p2_open:
-  - ED-710: "Settlement adjacency graph — new mechanical layer. Spec: designs/territory/settlement_adjacency_v30.md (PROVISIONAL PP-666). Will be superseded by ED-780 spec rewrite."
-  - ED-711: "Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers."
-  - ED-763: "[PROVISIONAL] doc 12 v1.2 produced; eligible for §13 Promotion Checklist evaluation toward canonical."
-  - ED-777: "[STANDING] arc_register_factions.md — 5 Niflhel-coded arcs require plot-level reframe to settlement-broker mechanic in dedicated session (ARC-S11, ARC-S54, ARC-S55, NPC-ARC-VIR, ARC-T25)."
-  - ED-779: "[STANDING] Geography canon Phase 2 — data authoring (coordinate system, settlement coords, province polygons, terrain layer, terrain-cost matrix, vision-range tables, weather/season modifier tables). PP-706."
-  - ED-780: "[STANDING] Geography canon Phase 3 — spec rewrite (settlement_adjacency v2 geography-querying, new march_layer, mass_battle terrain-derivation, naval mechanics resolving ED-055). PP-706. Depends on ED-779."
+  - ED-710: "Settlement adjacency graph — new mechanical layer (PP-666). Will be superseded by ED-780 spec rewrite."
+  - ED-711: "Fractional province ownership."
+  - ED-763: "[PROVISIONAL] doc 12 v1.2 — eligible for §13 Promotion Checklist evaluation."
+  - ED-777: "[STANDING] arc_register_factions Niflhel reframe — 5 arcs need plot-level reframe."
+  - ED-779: "[STANDING — PROGRESSED] Geography Phase 2 data authoring. Phase 1.5 workplan committed PP-707; reconciliation memo PP-709 designates 01_phase2_workplan.md canonical, 00_phase2_workplan.md superseded; adds 6 decisions absent from both committed workplans. Phase 2 execution next session: 36 settlement coordinates, terrain polygons, Voronoi provinces, weather/season tables, replacement map. Estimated 25-35k tokens."
+  - ED-780: "[STANDING] Geography Phase 3 spec rewrite (settlement_adjacency v2, march_layer, mass_battle terrain-derivation, naval mechanics resolving ED-055). Depends on ED-779."
 
 p3_open:
-  - ED-764: "[PROVISIONAL] Throughlines table Load-bearing systems column added per PP-677, addressing PP-676 v3 finding §V3-2."
-  - ED-776: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation. Doctrine canon fixed; mechanical expression options require simulation testing."
-  - ED-781: "[STANDING] Geography canon Phase 4 — three stress tests (Mountain Pass battle, Open-field cavalry, Coastal landing). PP-706. Depends on ED-780."
+  - ED-764: "[PROVISIONAL] Throughlines table Load-bearing systems column — PP-677."
+  - ED-776: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation."
+  - ED-781: "[STANDING] Geography Phase 4 stress tests (Mountain Pass, Open-field cavalry, Coastal landing). Depends on ED-780."
 
 # Recent activity (2026-04-30 to 2026-05-01):
 #   ED-770  Mass Battle MB-01..08 batch (PP-683..688) — archived
-#   ED-771  Stratagem rename + information-model framing correction (PP-690) — archived
+#   ED-771  Stratagem rename (PP-690) — archived
 #   ED-772  Terminology vector-audit P0 propagation (PP-691)
 #   ED-775  Comprehensive faction-doctrine batch (PP-698..704)
 #   ED-776  Standing — Hafenmark mechanism TBD
 #   ED-777  Standing — arc_register_factions Niflhel reframe deferred
-#   ED-778  Phase 0 ecosystem cleanup (PP-705) — workplan v2
-#   ED-779  Standing — Geography Phase 2 data authoring (PP-706)
-#   ED-780  Standing — Geography Phase 3 spec rewrite (PP-706)
-#   ED-781  Standing — Geography Phase 4 stress tests (PP-706)
+#   ED-778  Phase 0 ecosystem cleanup (PP-705)
+#   ED-779  Standing — Geography Phase 2 (PP-706 audit + PP-707/708 workplans + PP-709 reconciliation)
+#   ED-780  Standing — Geography Phase 3 spec rewrite
+#   ED-781  Standing — Geography Phase 4 stress tests
