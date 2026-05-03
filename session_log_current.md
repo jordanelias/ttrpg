@@ -2,54 +2,33 @@
 session_id: 2026-05-01-stage-10-validation
 session_open: 2026-05-01
 session_close: pending
-phase: "Pipeline end-to-end + 0 P1 blockers + 169+ GdUnit tests. Session chain productive."
+phase: "Pipeline MVP complete. 0 P1. Mandate→L+PS done. Trigger 9 end-to-end. 169+ tests."
 status: open
 
 last_stage: >
-  This session (2026-05-03):
-  valoria-game (10 commits): Phase 5a sessions 3-5 (2d04de7, cd3051c, b8d4045) + Phase 5b items
-  10-12 (e6772a4, b92c8be, ff2a323) + spec-parity sweep triggers 9+10 (e3e5541) + coverage
-  matrix update (da75d2e) + Intel stat seeding for 5 factions (800e1c2) + CascadeClusterDetector
-  trigger 9 producer (20e97cd).
-  ttrpg (8 commits): session log updates (a11cb33, a39328c, 87b756c, da40a95, 73c618a) +
-  ED-755 resolution sweep 7/9 default (12ff8d2) + ED-787 closed Intelligence restored (574bf69)
-  + ledger archival + Spy/Intel formula sweep fix (2d517ab).
-  Parallel (out-of-session today): ED-784 Phase 2 Mandate→L+PS mechanical migration COMPLETE
-  4 sweeps (f8ac629, 0a32a29, 9a07316, 987090f).
-  Phase 5a session 3.5 telemetry substrate (valoria-game b8b9a4a + ttrpg d194c52, 5052b20):
-  3 mechanical Class B Key types (scene_entered/exited/skipped), SceneTimer wall-clock JSONL
-  sidecar (preserves PP-687 V4: wall-clock excluded from Key payloads), TimeAggregator 5-query
-  analyzer, GameDirector emission wiring, 8 GdUnit tests including replay-determinism guard,
-  canon propagation to key_type_registry_v30 + canonical_sha bump.
-  Stage 5 telemetry substrate sim (ttrpg 07e2ece): mandatory-frequency + saturation
-  simulation. 4 personas × 100 campaigns × 40 seasons = 16k season-runs in 5s. Findings:
-  mandatory overflow 0% (4 SA structurally absorbs §4.3.2 mandatories under modeled
-  probabilities); saturation 96% Normal / 100% Hard / 36% Narrative (matches §6.1 design
-  intent). Per-system minutes use tabletop §12.3 placeholder durations — flagged
-  [ASSUMPTION], not measurement. Determinism verified (same seed → same log_hash).
+  valoria-game (15 commits this session): Phase 5a s3-5, Phase 5b items 10-12, spec-parity
+  sweep triggers 9+10, coverage matrix, Intel stat seeding, CascadeClusterDetector + wiring
+  into FactionLayerV30.process_season_end (trigger 9 end-to-end), completeness fixes
+  (KeyTypeRegistry meta.cascade_cluster_event), Mandate→L+PS code migration (7 files, 53 refs).
+  ttrpg (9 commits): ED-755 sweep 7/9, ED-787 closed (Intelligence restored, Varfell=4),
+  ledger archival, Spy/Intel sweep fix, session logs.
 
 next_action:
   skill: design
   description: >
-    Pipeline end-to-end at MVP. 0 P1 blockers. 169+ GdUnit tests.
+    Pipeline mechanically complete at MVP. No P1 blockers. All resumable mechanical
+    work this session chain was actionable has been executed.
 
-    ONLY JORDAN-DECISION: ED-788 (P2) — LICENSE. Skipped per Jordan this session.
+    JORDAN-DECISION: ED-788 (P2, skipped) — LICENSE.
+    DISCREPANCY: Church VDL L=4/PS=4 vs canonical table L(BG)=5/PS(BG)=5. Needs Jordan.
 
-    WORKABLE (multi-session, no Jordan input needed):
-    - Mandate→L+PS code migration in valoria-game (~49 refs across 5 files:
-      ValoriaFactionAI 23, Meta.gd 10, DomainActionSystem 6, ValoriaDataLibrary 6,
-      Constants 3). Per-reference judgment needed. forward-compat helpers
-      (legitimacy_key, popular_support_key) already added to FactionData.
-    - CascadeClusterDetector wiring into FactionLayerV30 season-end hook
-      (requires NPC data plumbing for β-fidelity computation at season boundary).
-    - ED-780 Geography Phase 3 spec rewrite (multi-session).
-    - Creative authoring: Mission/cascade/temperament for 6 factions + 30-50 territories.
-    - Cut-scene rendering pipeline (needs Jordan art direction).
-    - Varfell victory path revision (Intelligence Hegemony → anti-Altonian/anti-caste).
+    REMAINING WORKABLE (multi-session, no Jordan input needed):
+    - ED-780 Geography Phase 3 spec rewrite (multi-session)
+    - Creative authoring: Mission/cascade/temperament for 6 factions + 30-50 territories
+    - Cut-scene rendering pipeline (needs Jordan art direction)
+    - Varfell victory path revision
 
-    STANDING P2/P3:
-    ED-710/711 (superseded by ED-780), ED-776 (Hafenmark sim), ED-777 (Niflhel arcs),
-    ED-780/781 (geography 3/4), ED-788 (LICENSE).
+    STANDING P2/P3: ED-710/711 (superseded by ED-780), ED-776/777/780/781/788.
 
 active_ed_open:
   p1: []
