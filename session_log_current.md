@@ -16,6 +16,17 @@ last_stage: >
   + ledger archival + Spy/Intel formula sweep fix (2d517ab).
   Parallel (out-of-session today): ED-784 Phase 2 Mandate→L+PS mechanical migration COMPLETE
   4 sweeps (f8ac629, 0a32a29, 9a07316, 987090f).
+  Phase 5a session 3.5 telemetry substrate (valoria-game b8b9a4a + ttrpg d194c52, 5052b20):
+  3 mechanical Class B Key types (scene_entered/exited/skipped), SceneTimer wall-clock JSONL
+  sidecar (preserves PP-687 V4: wall-clock excluded from Key payloads), TimeAggregator 5-query
+  analyzer, GameDirector emission wiring, 8 GdUnit tests including replay-determinism guard,
+  canon propagation to key_type_registry_v30 + canonical_sha bump.
+  Stage 5 telemetry substrate sim (ttrpg 07e2ece): mandatory-frequency + saturation
+  simulation. 4 personas × 100 campaigns × 40 seasons = 16k season-runs in 5s. Findings:
+  mandatory overflow 0% (4 SA structurally absorbs §4.3.2 mandatories under modeled
+  probabilities); saturation 96% Normal / 100% Hard / 36% Narrative (matches §6.1 design
+  intent). Per-system minutes use tabletop §12.3 placeholder durations — flagged
+  [ASSUMPTION], not measurement. Determinism verified (same seed → same log_hash).
 
 next_action:
   skill: design
