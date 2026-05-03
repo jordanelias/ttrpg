@@ -2,42 +2,41 @@
 session_id: 2026-05-01-stage-10-validation
 session_open: 2026-05-01
 session_close: pending
-phase: "Phase 5a complete + Phase 5b items 10-12 landed (universal sub + extended pickers + paragraph types 2-5 + chronicle annual trigger)"
+phase: "Phase 5a + 5b items 10-12 complete + ED-755 P1 backlog sweep CLOSED (7/9 resolved by default; 2 spun out to ED-787/788)"
 status: open
 
 last_stage: >
-  Stage 10 sims PASS (12/14; bb5e293 lateral 9/9 + 3cb5207 articulation 6/6).
-  PP-684/685/686/687/688 PROMOTED PROVISIONAL→canonical (0134b6d).
-  NERS-all-directions audit (2e688ae): 8 cells lifted, 0 regressions.
+  Stage 10 sims PASS (12/14). PP-684/685/686/687/688 PROMOTED PROVISIONAL→canonical (0134b6d).
   Phase 5a (5 sessions, 104 tests): KeyStore (737106a) → FactionStateV30 (36514e8) → ArticulationLayerV30 (2d04de7) → WalkBackQuery+WhyDiagnostic (cd3051c) → ChronicleGeneratorV30 (b8d4045).
-  Phase 5b post-decision mechanical (3 batches, +37 tests):
-    - Item 10 (e6772a4): universal "*" subscription on ArticulationLayer; pickers extended for triggers 2-8 with emphasis_axis from PP-684 13-Conviction taxonomy (T2/T3 Authority, T5 Honor, T4/T6/T7/T8 multi-axis empty).
-    - Item 11 (b92c8be): chronicle paragraph types 2-5 (faction_movements, notable_individuals, knot_inflections, protagonist) + generate_year_chronicle orchestrator composing all 5 in §4.4 canonical order.
-    - Item 12 (ff2a323): ChronicleLayerV30 — mechanical.accounting (annual==true) auto-trigger; reads ArticulationLayer.unarticulated_weights at fire-time; double-emission guard; defensive payload validation.
+  Phase 5b items 10-12 (3 batches, +37 tests): universal sub + extended pickers (e6772a4); paragraph types 2-5 + orchestrator (b92c8be); ChronicleLayerV30 mechanical.accounting trigger (ff2a323).
+  ED-755 RESOLUTION SWEEP (12ff8d2): single-P1-blocker bundle of 9 items closed. 7 resolved by default application (D1.1 keep symbolic_effects; D1.2 define as Concern salience modifier; D1.3 surface diagonal — already built; D1.4 partial NPC self-monitoring; D1.5 persistent crisis-mask flag with decay; D2.3 Knot formation Disposition+5+TS≥30→Spirit/TN7/Ob2; D2.4 Province Accord = floor(mean settlement Order)). 2 spun out as standalone ED entries (D2.1 → ED-787 P1 Intelligence-stat contradiction; D2.2 → ED-788 P2 LICENSE choice).
 
 next_action:
   skill: design
   description: >
-    PHASE 5A + 5B post-decision mechanical work COMPLETE. Pipeline runs
-    end-to-end: Keys emit → faction state mutates → Tier 2 cut scenes fire
-    on triggers 1-8 with rich captions → Tier 3 chronicle paragraphs
-    generate annually on mechanical.accounting → diagnostic walk_back
-    surfaces causal chains.
+    PHASE 5A + 5B (resumable mechanical) COMPLETE. ED-755 P1 backlog CLOSED.
 
-    JORDAN-DECISION QUEUE (mechanical work blocked):
+    JORDAN-DECISION QUEUE (now 4 items, was 3):
     1. Mandate-audit OQs §5 (5 items) — gates params/factions* migration.
     2. Phase B 9th trigger decision — clustering / belief_revised / both / neither.
-       (Note: ArticulationLayer trigger evaluator skips trigger 9; can be added
-       by 1-line case branch on meta.cascade_cluster_event once decision lands.)
     3. C3.1 Wager arc selection — gates the playable scene path.
+    4. ED-787 (P1 NEW) Intelligence stat — Position A restore (Renaissance review)
+       OR Position B keep STRUCK (ED-748 redundancy). Framed in
+       designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.1.
+       Single binary choice; ED-787 closes with chosen position + cross-ref note
+       in either c2effdd or ED-748.
+    5. ED-788 (P2 NEW) LICENSE — CC-BY-SA / GPL-3 / Proprietary / CC0.
+       Framed in 05_ED-755_resolutions.md §3.2. Not blocking active mechanical
+       work; blocks external contribution / repo publication.
 
     POST-DECISION MECHANICAL (gates on Jordan items above):
-    4. params/factions/stats_1_7_scale.md split.
-    5. params/factions_personal.md personal_mandate_view.
-    6. Per-site Mandate→L+PS migrations across 9 consumer files.
-    7. Reference-file nominal text replacements (8 files).
-    8. ED-782+ entries.
-    9. Bridge between FactionStateV30 (canonical-spec) and legacy FactionData.
+    6. params/factions/stats_1_7_scale.md split (gates on OQs §5).
+    7. params/factions_personal.md personal_mandate_view (gates on OQs §5).
+    8. Per-site Mandate→L+PS migrations across 9 consumer files (gates on OQs §5).
+    9. Reference-file nominal text replacements (8 files).
+    10. ED-782+ entries.
+    11. Bridge between FactionStateV30 (canonical-spec) and legacy FactionData.
+    12. Faction stat schema closure (gates on ED-787).
 
     DESIGN-INPUT-NEEDED MECHANICAL (not blocked, but needs aesthetic input):
     13. Cut-scene rendering pipeline (PP-688 §3.4 flash/scene styles) —
@@ -45,22 +44,26 @@ next_action:
 
     CREATIVE-AUTHORING (multi-session scope):
     14. Mission/cascade/temperament for 6 factions + 30-50 territories.
-    15. Per-system Key migration (mass-battle, social-contest, faction-action, scale-transitions).
+    15. Per-system Key migration (mass-battle, social-contest, faction-action,
+        scale-transitions).
 
-    OLDER P1 BACKLOG (independent of Stage 10):
-    - PP-666 trio
-    - ED-755 Doc 17 §6 Jordan-decision items
-    - mass-battle decision queue (16 items)
-    - pacing PP
+    OLDER OPEN STANDING (other ED entries, P2/P3 — not actively blocking):
+    - ED-710/711 PP-666 (will be superseded by ED-780)
+    - ED-763 doc 12 v1.2 promotion eligibility
+    - ED-764 PP-677 Throughlines load-bearing column
+    - ED-776 Hafenmark equipment-quality mechanism (sim TBD)
+    - ED-777 arc_register_factions Niflhel reframe
+    - ED-780/781 Geography Phase 3/4
+    - ED-786 (CLOSED — register cap audit)
 
-    Recommend: Jordan picks one of (1, 2, 3) to unblock the next mechanical
-    batch (4-9) — those are resumable in any order once OQs settle. Item 13
-    (rendering) is a clean session of its own once art direction is set.
+    Recommend: Jordan picks one of (1, 2, 3, 4, 5) — these are the only
+    items blocking forward mechanical work. ED-787 is the cleanest binary
+    choice and unblocks faction stat schema closure.
 
 blockers:
-  - "Phase 5a + 5b post-decision mechanical complete — no execution blockers"
-  - "Items 4-9 blocked on Jordan-decision queue (Mandate OQs / 9th trigger / Wager arc)"
-  - "Item 13 (cut-scene rendering pipeline) blocked on Jordan visual-direction input"
+  - "Phase 5a + 5b mechanical-resumable work complete — no execution blockers"
+  - "Items 6-12 blocked on Jordan-decision queue (Mandate OQs / 9th trigger / Wager arc / ED-787 / OQs §5)"
+  - "Item 13 (cut-scene rendering) blocked on Jordan visual-direction input"
   - "Faction integration with Meta.gd legacy FactionData blocked on Mandate OQs"
 
 stage10_status:
@@ -74,24 +77,19 @@ stage10_status:
 phase_5a_status:
   current_session: complete
   sessions_done: 5
-  sessions_total: 5
-  repo: jordanelias/valoria-game
   test_count: 104
-  commits:
-    - "737106a — s1 KeyStore substrate (Key + Validator + Registry + 14 tests)"
-    - "36514e8 — s2 FactionStateV30 + axis matrix + cascade fidelity + 21 tests"
-    - "2d04de7 — s3 ArticulationLayerV30 + CutSceneV30 + PP-688 §3 + 36 tests"
-    - "cd3051c — s4 WalkBackQuery + WhyDiagnostic.tscn (PP-687 §5.4) + 12 tests"
-    - "b8d4045 — s5 ChronicleGeneratorV30 + paragraph 1 (PP-688 §4.4) + 21 tests"
 
 phase_5b_status:
   items_done: 3
   test_count: 37
   total_pipeline_tests: 141
-  commits:
-    - "e6772a4 — Item 10 universal sub + extended pickers triggers 2-8 (+14 tests)"
-    - "b92c8be — Item 11 chronicle paragraph types 2-5 + year orchestrator (+14 tests)"
-    - "ff2a323 — Item 12 ChronicleLayerV30 mechanical.accounting trigger (+9 tests)"
+
+ed755_sweep_status:
+  status: closed
+  resolution_doc: "designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md"
+  resolved_by_default: ["D1.1", "D1.2", "D1.3", "D1.4", "D1.5", "D2.3", "D2.4"]
+  spun_out: ["D2.1 → ED-787 P1", "D2.2 → ED-788 P2"]
+  jordan_workload_reduction: "9 items → 2 (~78%)"
 
 session_commits:
   - "eb991f4 — close 2026-04-30-architecture-session; open this session"
@@ -109,5 +107,7 @@ session_commits:
   - "e6772a4 — [valoria-game] Phase 5b Item 10 universal sub + extended pickers"
   - "b92c8be — [valoria-game] Phase 5b Item 11 paragraph types 2-5 + orchestrator"
   - "ff2a323 — [valoria-game] Phase 5b Item 12 ChronicleLayerV30"
+  - "87b756c — session log post-5b"
+  - "12ff8d2 — ED-755 resolution sweep — 7/9 default; D2.1→ED-787, D2.2→ED-788"
 
 predecessor_session: 2026-04-30-architecture-session
