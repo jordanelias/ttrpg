@@ -2,69 +2,73 @@
 session_id: 2026-05-01-stage-10-validation
 session_open: 2026-05-01
 session_close: pending
-phase: "Phase 5a + 5b items 10-12 complete + ED-755 P1 backlog sweep CLOSED (7/9 resolved by default; 2 spun out to ED-787/788)"
+phase: "Phase 5a all sessions + 5b items 10-12 + spec-parity sweep + ED-755 P1 closed + ED-784 Phase 2 mechanical migration COMPLETE"
 status: open
 
 last_stage: >
   Stage 10 sims PASS (12/14). PP-684/685/686/687/688 PROMOTED PROVISIONAL→canonical (0134b6d).
-  Phase 5a (5 sessions, 104 tests): KeyStore (737106a) → FactionStateV30 (36514e8) → ArticulationLayerV30 (2d04de7) → WalkBackQuery+WhyDiagnostic (cd3051c) → ChronicleGeneratorV30 (b8d4045).
-  Phase 5b items 10-12 (3 batches, +37 tests): universal sub + extended pickers (e6772a4); paragraph types 2-5 + orchestrator (b92c8be); ChronicleLayerV30 mechanical.accounting trigger (ff2a323).
-  ED-755 RESOLUTION SWEEP (12ff8d2): single-P1-blocker bundle of 9 items closed. 7 resolved by default application (D1.1 keep symbolic_effects; D1.2 define as Concern salience modifier; D1.3 surface diagonal — already built; D1.4 partial NPC self-monitoring; D1.5 persistent crisis-mask flag with decay; D2.3 Knot formation Disposition+5+TS≥30→Spirit/TN7/Ob2; D2.4 Province Accord = floor(mean settlement Order)). 2 spun out as standalone ED entries (D2.1 → ED-787 P1 Intelligence-stat contradiction; D2.2 → ED-788 P2 LICENSE choice).
+  Phase 5a (5 sessions + 3.5 telemetry, 105+ tests):
+    s1 KeyStore (737106a) → s2 FactionStateV30 (36514e8) → s3 ArticulationLayerV30 (2d04de7) →
+    s3.5 telemetry substrate SceneTimer + 3 mechanical Key types + TimeAggregate (b8b9a4a) →
+    s4 WalkBackQuery + WhyDiagnostic (cd3051c) → s5 ChronicleGeneratorV30 (b8d4045).
+  Phase 5b items 10-12 (3 batches, +37 tests):
+    Item 10 universal sub + extended pickers (e6772a4); Item 11 chronicle paragraph types 2-5 +
+    orchestrator (b92c8be); Item 12 ChronicleLayerV30 mechanical.accounting trigger (ff2a323).
+  Spec-parity sweep (e3e5541, +12 tests): ArticulationLayerV30 brought to canonical articulation §3.1
+    parity — triggers 9 (meta.cascade_cluster_event) + 10 (state.belief_revised, roster-filtered) added.
+    Closes the gap between session-3 implementation (8 triggers) and 2026-05-02 canonical (10 triggers).
+  ED-755 RESOLUTION SWEEP (12ff8d2): 9 sub-items → 7 resolved by default, 2 spun out (ED-787 P1
+    Intelligence-stat contradiction; ED-788 P2 LICENSE choice).
+  PARALLEL TTRPG WORK (out-of-session, today 2026-05-03):
+    ED-784 Phase 2 mechanical migration COMPLETE — 4 sweeps A-D landed (f8ac629, 0a32a29, 9a07316,
+    987090f) — Mandate→L+PS migration across 9 consumer files + 7 reference files done.
 
 next_action:
   skill: design
   description: >
-    PHASE 5A + 5B (resumable mechanical) COMPLETE. ED-755 P1 backlog CLOSED.
+    Most prior queue items are now CLOSED. Active state:
 
-    JORDAN-DECISION QUEUE (now 4 items, was 3):
-    1. Mandate-audit OQs §5 (5 items) — gates params/factions* migration.
-    2. Phase B 9th trigger decision — clustering / belief_revised / both / neither.
-    3. C3.1 Wager arc selection — gates the playable scene path.
-    4. ED-787 (P1 NEW) Intelligence stat — Position A restore (Renaissance review)
-       OR Position B keep STRUCK (ED-748 redundancy). Framed in
-       designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.1.
-       Single binary choice; ED-787 closes with chosen position + cross-ref note
-       in either c2effdd or ED-748.
-    5. ED-788 (P2 NEW) LICENSE — CC-BY-SA / GPL-3 / Proprietary / CC0.
-       Framed in 05_ED-755_resolutions.md §3.2. Not blocking active mechanical
-       work; blocks external contribution / repo publication.
+    JORDAN-DECISION QUEUE (only 2 items remaining — both spun out from ED-755):
+    1. ED-787 (P1) — Intelligence stat: Position A (restore per Renaissance review) OR Position B
+       (keep STRUCK per ED-748). Framed in 05_ED-755_resolutions.md §3.1. Single binary choice;
+       blocks faction stat schema closure.
+    2. ED-788 (P2) — LICENSE: CC-BY-SA / GPL-3 / Proprietary / CC0. Framed in §3.2. Not blocking
+       active mechanical work; blocks external contribution / repo publication.
 
-    POST-DECISION MECHANICAL (gates on Jordan items above):
-    6. params/factions/stats_1_7_scale.md split (gates on OQs §5).
-    7. params/factions_personal.md personal_mandate_view (gates on OQs §5).
-    8. Per-site Mandate→L+PS migrations across 9 consumer files (gates on OQs §5).
-    9. Reference-file nominal text replacements (8 files).
-    10. ED-782+ entries.
-    11. Bridge between FactionStateV30 (canonical-spec) and legacy FactionData.
-    12. Faction stat schema closure (gates on ED-787).
+    PIPELINE STATE — END-TO-END WIRED (Phase 5a + 5b):
+    - Keys emit (KeyStore) → FactionLayer mutates state → ArticulationLayer fires Tier 2 cut scenes
+      on triggers 1-10 with rich captions → ChronicleLayer auto-generates Tier 3 paragraphs annually
+      on mechanical.accounting → WhyDiagnostic surfaces causal chains.
+    - Telemetry substrate (b8b9a4a) records SceneTimer + scene_entered/exited/timed Key types for
+      sim-vs-engine parity.
+    - Cross-tier consistency: ChronicleGeneratorV30 reuses ArticulationLayerV30.compute_significance.
+    - 153+ GdUnit tests across substrate + faction + articulation + diagnostic + chronicle.
 
-    DESIGN-INPUT-NEEDED MECHANICAL (not blocked, but needs aesthetic input):
-    13. Cut-scene rendering pipeline (PP-688 §3.4 flash/scene styles) —
-        needs Jordan's call on visual treatment, asset pipeline, etc.
-
-    CREATIVE-AUTHORING (multi-session scope):
-    14. Mission/cascade/temperament for 6 factions + 30-50 territories.
-    15. Per-system Key migration (mass-battle, social-contest, faction-action,
-        scale-transitions).
-
-    OLDER OPEN STANDING (other ED entries, P2/P3 — not actively blocking):
+    STANDING-OPEN MECHANICAL WORK (P2/P3, not blocking — multi-session each):
     - ED-710/711 PP-666 (will be superseded by ED-780)
-    - ED-763 doc 12 v1.2 promotion eligibility
-    - ED-764 PP-677 Throughlines load-bearing column
+    - ED-777 arc_register_factions Niflhel reframe (creative-authoring)
+    - ED-780 Geography Phase 3 spec rewrite (multi-session: settlement_adjacency v2, march_layer,
+      mass_battle terrain derivation, naval mechanics)
+    - ED-781 Geography Phase 4 stress tests (depends on ED-780)
     - ED-776 Hafenmark equipment-quality mechanism (sim TBD)
-    - ED-777 arc_register_factions Niflhel reframe
-    - ED-780/781 Geography Phase 3/4
-    - ED-786 (CLOSED — register cap audit)
 
-    Recommend: Jordan picks one of (1, 2, 3, 4, 5) — these are the only
-    items blocking forward mechanical work. ED-787 is the cleanest binary
-    choice and unblocks faction stat schema closure.
+    DESIGN-INPUT-NEEDED MECHANICAL:
+    - Cut-scene rendering pipeline (PP-688 §3.4 flash/scene visual treatment) — needs Jordan's call
+      on art direction, asset pipeline, animation timing, caption typography.
+
+    CREATIVE-AUTHORING (multi-session scope, needs Jordan):
+    - Mission/cascade/temperament for 6 factions + 30-50 territories.
+    - Per-system Key migration (mass-battle, social-contest, faction-action, scale-transitions).
+
+    Recommend: Jordan picks Position A or B on ED-787 (single-line text decision unblocks faction
+    stat schema). After that, options are (a) Item 13 with art direction, (b) ED-780 multi-session
+    geography rewrite, (c) creative-authoring sessions.
 
 blockers:
-  - "Phase 5a + 5b mechanical-resumable work complete — no execution blockers"
-  - "Items 6-12 blocked on Jordan-decision queue (Mandate OQs / 9th trigger / Wager arc / ED-787 / OQs §5)"
+  - "Phase 5a + 5b mechanical-resumable work complete — no execution blockers at this layer"
+  - "Faction stat schema closure blocked on ED-787 (Intelligence binary)"
   - "Item 13 (cut-scene rendering) blocked on Jordan visual-direction input"
-  - "Faction integration with Meta.gd legacy FactionData blocked on Mandate OQs"
+  - "Creative-authoring work blocked pending Jordan input"
 
 stage10_status:
   battery_total: 14
@@ -75,39 +79,40 @@ stage10_status:
   ners_audit_commit: "2e688ae"
 
 phase_5a_status:
-  current_session: complete
-  sessions_done: 5
-  test_count: 104
+  sessions_done: 5_plus_telemetry
+  test_count: 105_plus
 
 phase_5b_status:
   items_done: 3
   test_count: 37
-  total_pipeline_tests: 141
+  spec_parity_sweep: "e3e5541 — triggers 9+10 added; +12 tests"
+  total_pipeline_tests: 153_plus
 
 ed755_sweep_status:
   status: closed
   resolution_doc: "designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md"
   resolved_by_default: ["D1.1", "D1.2", "D1.3", "D1.4", "D1.5", "D2.3", "D2.4"]
   spun_out: ["D2.1 → ED-787 P1", "D2.2 → ED-788 P2"]
-  jordan_workload_reduction: "9 items → 2 (~78%)"
+
+ed784_sweep_status:
+  status: closed_2026-05-03
+  description: "Mandate→L+PS migration COMPLETE — 4 sweeps (A: stats_1_7_scale; B: faction_actions+ministry+factions_personal; C: 6 BG consumer files; D: 7 reference files)"
+  commits: ["f8ac629", "0a32a29", "9a07316", "987090f"]
+
+active_ed_open:
+  p1: ["ED-787"]
+  p2: ["ED-710", "ED-711", "ED-777", "ED-780", "ED-788"]
+  p3: ["ED-776", "ED-781"]
+  total: 8
 
 session_commits:
   - "eb991f4 — close 2026-04-30-architecture-session; open this session"
-  - "bb5e293 — Stage 10 lateral cross-system sim 9/9 PASS"
-  - "3cb5207 — Stage 10 articulation sim A1-A6 6/6 PASS"
-  - "0134b6d — Stage 10 promotion PROVISIONAL→canonical"
-  - "2e688ae — post-promotion NERS all directions"
-  - "737106a — [valoria-game] Phase 5a s1 KeyStore"
-  - "36514e8 — [valoria-game] Phase 5a s2 FactionStateV30"
-  - "2d04de7 — [valoria-game] Phase 5a s3 ArticulationLayerV30"
-  - "a11cb33 — session log post-s3"
-  - "cd3051c — [valoria-game] Phase 5a s4 WalkBackQuery"
-  - "b8d4045 — [valoria-game] Phase 5a s5 ChronicleGeneratorV30"
-  - "a39328c — session log Phase 5a complete"
-  - "e6772a4 — [valoria-game] Phase 5b Item 10 universal sub + extended pickers"
-  - "b92c8be — [valoria-game] Phase 5b Item 11 paragraph types 2-5 + orchestrator"
-  - "ff2a323 — [valoria-game] Phase 5b Item 12 ChronicleLayerV30"
-  - "87b756c — session log post-5b"
-  - "12ff8d2 — ED-755 resolution sweep — 7/9 default; D2.1→ED-787, D2.2→ED-788"
+  - "Phase 5a sessions 1-5 + 3.5 (valoria-game): 737106a 36514e8 2d04de7 b8b9a4a cd3051c b8d4045"
+  - "Phase 5b items 10-12 (valoria-game): e6772a4 b92c8be ff2a323"
+  - "Spec-parity sweep (valoria-game): e3e5541 — triggers 9+10"
+  - "12ff8d2 — ED-755 resolution sweep (ttrpg)"
+  - "171d85f — ED-784/785 Mandate audit + trigger ruleset (ttrpg, 2026-05-02)"
+  - "f8ac629 0a32a29 9a07316 987090f — ED-784 Phase 2 sweeps A-D (ttrpg, 2026-05-03)"
+  - "53694d4 — ED-786 register cap revision (ttrpg, 2026-05-02)"
 
 predecessor_session: 2026-04-30-architecture-session
