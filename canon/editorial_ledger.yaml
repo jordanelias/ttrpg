@@ -69,10 +69,11 @@ entries:
 
   - id: ED-787
     date: 2026-05-03
-    description: "[BLOCKED — JORDAN-DECISION] Intelligence stat contradiction: c2effdd (Renaissance political-infrastructure review) restored Intelligence as 6th faction stat; ED-748 had STRUCK it as redundant with Government. Spun out from ED-755 D2.1. Two positions framed in designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.1. Jordan picks Position A (restore) or Position B (keep STRUCK); ED-787 closes with chosen position and cross-reference note in either c2effdd or ED-748 (whichever is overridden). Blocks closure of faction stat schema."
-    status: open
+    closed: 2026-05-03
+    description: "[CLOSED 2026-05-03] Intelligence stat restored — Position A applied per Jordan signoff. c2effdd Renaissance review carries; ED-748 STRUCK ruling overridden. Intel column filled in params/factions/stats_1_7_scale.md (Crown 3, Church 4, Hafenmark 3, Varfell 4, Löwenritter 3 retained, Guilds 4). Varfell value revised from RR's 5 to 4 per Jordan: Varfell is opportunist/revolutionary (anti-Altonian + anti-Einhir-caste), not intelligence-themed. Vaynard entry in canon/03_canonical_timeline.md updated. Full rationale + per-faction details + forward gates: designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.1 Addendum. Faction stat schema closed."
+    status: closed
     severity: P1
-    source: "ED-755 D2.1 spin-out 2026-05-03"
+    source: "ED-755 D2.1 spin-out 2026-05-03; Jordan signoff 2026-05-03"
 
   - id: ED-788
     date: 2026-05-03

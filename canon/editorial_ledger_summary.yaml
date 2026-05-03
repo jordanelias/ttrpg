@@ -1,13 +1,13 @@
 # Editorial Ledger Summary
-# manual refresh 2026-05-03 — ED-755 sweep + audit correction (stale ED-763/764 entries removed)
+# manual refresh 2026-05-03 — ED-787 CLOSED (Intelligence stat restored, Position A applied)
 
-p1_blocker_count: 1
-open_count: 8
+p1_blocker_count: 0
+open_count: 7
 total_active: 10
 next_id: 789
 
 p1_blockers:
-  - ED-787: "[BLOCKED — JORDAN-DECISION] Intelligence stat contradiction (Position A restore vs Position B keep STRUCK). Spun out from ED-755 D2.1; positions framed in 05_ED-755_resolutions.md §3.1. Blocks faction stat schema closure."
+  []   # NO P1 BLOCKERS — first time since pre-ED-755
 
 p2_open:
   - ED-710: "Settlement adjacency graph — new mechanical layer (PP-666). Will be superseded by ED-780 spec rewrite."
@@ -23,12 +23,13 @@ p3_open:
 closed_in_active_ledger:
   - ED-755: "Doc 17 §6 sweep (2026-05-03) — 7/9 resolved by default; D2.1→ED-787, D2.2→ED-788. See 05_ED-755_resolutions.md."
   - ED-786: "Register cap configuration revised + chunking sweep (2026-05-02)."
+  - ED-787: "Intelligence stat restored 2026-05-03 — Position A applied per Jordan signoff. See 05_ED-755_resolutions.md §3.1 Addendum."
 
 # Recent activity (2026-05-01 to 2026-05-03):
 #   ED-755  CLOSED 2026-05-03 — Doc 17 §6 nine-item sweep
 #   ED-779  CLOSED — Geography Phase 2 EXECUTED (PP-710); archived
-#   ED-784  CLOSED — Mandate audit resolution + Phase 2 mechanical migration COMPLETE (4 sweeps A-D today); archived
-#   ED-785  CLOSED — Phase B trigger ruleset finalized (10 triggers, threshold ±0.40, belief_revised promoted); archived
+#   ED-784  CLOSED — Mandate audit resolution + Phase 2 mechanical migration COMPLETE; archived
+#   ED-785  CLOSED — Phase B trigger ruleset finalized; archived
 #   ED-786  CLOSED — register cap revision + chunking sweep
-#   ED-787  P1 NEW — Intelligence stat contradiction (spun out from ED-755 D2.1)
-#   ED-788  P2 NEW — LICENSE / GOV-08 (spun out from ED-755 D2.2)
+#   ED-787  CLOSED 2026-05-03 — Intelligence stat restored (Position A); ED-748 overridden; faction stat schema closed
+#   ED-788  P2 OPEN — LICENSE / GOV-08 (only Jordan-decision item remaining)

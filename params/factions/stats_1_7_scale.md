@@ -1,19 +1,46 @@
 ## Stats (1–7 scale)
 
 Legitimacy / Popular_Support / Influence / Wealth / Military / Intel / Stability
+
+The 7-stat schema. Intel restored as canonical 6th stat (between Military and
+Stability) per ED-787 Position A 2026-05-03 — c2effdd Renaissance political-
+infrastructure review carried; ED-748 STRUCK ruling overridden. Spy Ob formula
+`floor(target Intel / 2) + 1` is no longer broken; institutional intelligence
+capacity is now a faction-level mechanical axis (ED-787 closure rationale: see
+designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.1
+Addendum).
+
 Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
 
 ## Starting Stats
 
 | Faction | L (TTRPG) | PS (TTRPG) | L (BG) | PS (BG) | I | W (TTRPG) | W (BG) | Mil | Int | Sta |
 |---------|-----------|------------|--------|---------|---|-----------|--------|-----|-----|-----|
-| Crown | 5 | 5 | 5 | 5 | 5 | 4 | 4 | 4 | — | 4 |
-| Church | 5 | 5 | 5 | 5 | 6 | 5 | 5 | 4 | — | 5 |
-| Hafenmark | 4 | 4 | 4 | 4 | 4 | 5 | 5 | 3 | — | 4 |
-| Varfell | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | — | 4 |
-| Guilds | 3 | 3 | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
-| Restoration Movement | — | — | — | — | — | — | — | — | No faction stats (PP-460). Operates via Presence markers and Community Weaving. Victory via Cultural Uprising of T9 Himmelenger. |
+| Crown | 5 | 5 | 5 | 5 | 5 | 4 | 4 | 4 | 3 | 4 |
+| Church | 5 | 5 | 5 | 5 | 6 | 5 | 5 | 4 | 4 | 5 |
+| Hafenmark | 4 | 4 | 4 | 4 | 4 | 5 | 5 | 3 | 3 | 4 |
+| Varfell | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
+| Guilds | 3 | 3 | 3 | 3 | 4 | 6 | 6 | 2 | 4 | 5 |
+| Restoration Movement | — | — | — | — | — | — | — | — | — | No faction stats (PP-460). Operates via Presence markers and Community Weaving. Victory via Cultural Uprising of T9 Himmelenger. |
 | Löwenritter | — | — | 3 | 3 | 2/3 | — | — | 5/6 | 3 | 5/4 |
+
+**Intel column rationale (ED-787 closure 2026-05-03, Position A applied):**
+
+| Faction | Int | Rationale |
+|---------|-----|-----------|
+| Crown | 3 | Royal court has some intelligence capacity but not a priority. |
+| Church | 4 | Inquisition + nuncio network — institutional intelligence woven into existing diocesan and missionary infrastructure. |
+| Hafenmark | 3 | Merchant intelligence (trade routes are information routes), but not institutionalized as primary capability. |
+| Varfell | 4 | Pragmatic intelligence use (opportunist/revolutionary) but NOT specialist-themed. The Renaissance review proposed 5 framing Varfell as the Venice-analogue intel-superior faction; ED-787 closure (per Jordan 2026-05-03) revises to 4: Varfell is "press whatever advantage possible" — uses information pragmatically — not the institutionalized intel apparatus that 5 would imply. Their identity axes are anti-Altonian and caste-system-breaking, not intelligence-themed. |
+| Löwenritter | 3 | Military order, modest intelligence infrastructure (already authored — pre-ED-787, retained). |
+| Guilds | 4 | Trade networks provide intelligence; commercial information flows institutionalize partial intel capacity. |
+
+**Mechanical roles for Intel (per Renaissance review — now restored):**
+
+- **Defensive intelligence** (counter-espionage): `Spy Ob = floor(target Intel / 2) + 1`. Previously broken (referenced struck stat); now operational.
+- **Offensive intelligence quality**: Investigate/Intel pool = Intel (not flat Influence as fallback).
+- **Counter-espionage detection** at Intel ≥ 4: on enemy Spy attempt in your territory, roll Intel vs Ob 3. Success = you learn the spy action occurred (not its result).
+- **Strategic fog**: without successful Intel action, enemy faction stats are hidden. Intel reveals them.
 
 Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 §3.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said "Mandate 3 / Wealth 3" while the Starting Stats table above shows Varfell BG Mandate 4 / Wealth 4. The table is authoritative; this note now matches. [TODO: confirm with Jordan if intent was 3 (footnote) or 4 (table) — flagged as part of ED-784 Phase 2 sweep, not blocking.]
 

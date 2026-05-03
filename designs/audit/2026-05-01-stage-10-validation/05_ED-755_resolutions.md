@@ -175,6 +175,78 @@ Items in §2 below are applied (default accepted; ledger updated). Items in §3 
 
 **Spun out to new entry:** ED-787 (P1 — direct contradiction blocking faction stat schema closure). Jordan picks a position; ED-787 closes with the chosen position and a cross-reference note in either c2effdd or ED-748 (whichever is overridden).
 
+#### §3.1 Addendum — ED-787 closed 2026-05-03 (Jordan signoff: Position A applied)
+
+Jordan's call: **Position A — restore Intelligence as the 6th faction stat.**
+
+Cross-reference: ED-748 is overridden. The Renaissance review (c2effdd) carries.
+The 7-stat schema (Legitimacy / Popular Support / Influence / Wealth /
+Military / Intel / Stability) is now canonical in `params/factions/stats_1_7_scale.md`.
+
+**Per-faction Intel starting values** (from Renaissance review with one
+faction-character correction by Jordan):
+
+| Faction | Intel | Source |
+|---------|-------|--------|
+| Crown | 3 | Renaissance review carried |
+| Church | 4 | Renaissance review carried |
+| Hafenmark | 3 | Renaissance review carried |
+| Varfell | **4** | **Revised from Renaissance review's 5** per Jordan 2026-05-03 |
+| Löwenritter | 3 | Existing canon retained (pre-ED-787, never struck) |
+| Guilds | 4 | Renaissance review carried |
+
+**Varfell character clarification (Jordan 2026-05-03):** Varfell is **not**
+an intelligence-themed faction. Their character is "press whatever advantage
+possible" (opportunist/revolutionary), with two anchor goals:
+  1. Remove all traces of Altonia from the peninsula (anti-imperial / anti-
+     Altonian-cultural-residue).
+  2. Break the north/south Einhir caste system (anti-caste / pro-southern-
+     Einhir; Vaynard himself is southern Einhir per canonical_timeline).
+
+The Renaissance review's proposed Intel = 5 framed Varfell as the Venice-
+analogue intelligence-superiority faction. That framing does not match
+canonical character. Intel = 4 is the corrected value: Varfell uses
+information pragmatically (consistent with opportunist method) but does
+not institutionalize intelligence as primary mechanical identity.
+
+Mechanical consequences of Varfell Int = 4 (vs RR's 5):
+  - Varfell remains in the 4/4/4/4/4 generalist profile that the existing
+    table footnote characterizes as "intentional (political isolation at
+    game start, not their full institutional depth)." The 4-across profile
+    is consistent with revolutionary-underdog character: their advantage
+    must be EARNED through play, not given at start.
+  - Spy Ob `floor(Varfell.Int / 2) + 1` = `floor(4/2)+1 = 3`. Adequate
+    defensive intelligence; not dominant.
+  - Counter-espionage detection (Intel ≥ 4) is available to Varfell from
+    start — they meet the threshold but do not exceed it.
+  - No faction starts with Intel > 4. Strategic fog (per RR mechanical
+    role) creates symmetric uncertainty in Game Start state — the asymmetry
+    must be developed, not authored.
+
+**Cross-reference notes:**
+  - `canon/03_canonical_timeline.md` Vaynard NPC entry updated 2026-05-03
+    to record the "press whatever advantage possible" method and the
+    explicit caste-system-breaking goal.
+  - `params/factions/stats_1_7_scale.md` Stats (1-7 scale) section header
+    updated 2026-05-03 to record the schema restoration and Intel column
+    rationale per faction.
+  - `canon/editorial_ledger.yaml` ED-787 closed 2026-05-03 with Position A
+    applied; ED-748 marked overridden in the closure description.
+
+**Forward gates (not blocking):**
+  - Spy / Investigate / Counter-espionage mechanical specs may need patch
+    references where they referenced the struck stat. A targeted sweep of
+    docs that cite "floor(target Intel / 2) + 1" or similar Intel formulas
+    can close this; not blocking because the formula is now structurally
+    valid (Intel column populated).
+  - Varfell's "Intelligence Hegemony" victory path (referenced by the
+    Renaissance review as a Varfell mechanical identity) does not survive
+    the Int 4 revision intact. If a Varfell-specific victory path is
+    desired in the canonical victory table, it should reflect Varfell's
+    actual character (anti-Altonian + anti-caste pursuit through
+    opportunism), not "intelligence superiority." Spin-out item if Jordan
+    wants to revise the Varfell victory path.
+
 ---
 
 ### §3.2 D2.2 — LICENSE / GOV-08 — CHOOSE LICENSE

@@ -141,7 +141,7 @@ The post-war settlement establishes: the Valorian Crown (deed-monarchy, Church-c
 | Prince Torben Almqvist | Early teens | At Royal Court. Altonia's tutoring demand triggers at IP 30. |
 | Confessor Arne Himlensendt | — | Structural keystone. Sincerely devout, completely wrong. Pastoral compassion and ethnic suppression are the same act. |
 | Duchess Inge Baralta | — | Hafenmark. Wants the Crown. Unmarried, childless, heirless. Henry VIII parallel — sovereign supremacy. Pure RM adversary. Deed-family claim from Secession. |
-| Duke Magnus Vaynard | — | Varfell. Southern Einhir heritage. Von Lohengramm parallel — wants Church and Altonian residue expelled. TS from environmental exposure. Consequentialist. |
+| Duke Magnus Vaynard | — | Varfell. Southern Einhir heritage. Von Lohengramm parallel — wants Church and Altonian residue expelled, and the north/south Einhir caste system broken. TS from environmental exposure. Consequentialist. Method: press whatever advantage possible (opportunist/revolutionary; not specialist intelligence-themed — see ED-787 closure 2026-05-03). |
 | Grandmaster Sigrid Ehrenwall | Late 50s | Löwenritter. Loyal to Crown as institution, not bloodline. Deed-logic enforcement mechanism. |
 
 ### Faction Starting Values (1-7 scale)
