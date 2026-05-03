@@ -19,23 +19,23 @@
 | Stability | Internal cohesion and crisis resistance |
 
 ## Starting Values (game start, 45 AG)
-| Faction | Mandate | Influence | Wealth | Military | Intel | Stability |
-|---------|---------|----------|--------|----------|-------|-----------|
-| Crown | 5 | 5 | 4 | 4 | — | 4 |
-| Church | 5 | 6 | 5 | 4 | — | 5 |
-| Hafenmark | 4 | 4 | 5 | 3 | — | 4 |
-| Varfell | 4 | 4 | 4 | 4 | — | 4 |
-| Guilds | 3 | 4 | 6 | 2 | — | 5 |
+| Faction | Legitimacy | Popular_Support | Influence | Wealth | Military | Intel | Stability |
+|---------|------------|------------------|----------|--------|----------|-------|-----------|
+| Crown | 5 | 5 | 5 | 4 | 4 | — | 4 |
+| Church | 5 | 5 | 6 | 5 | 4 | — | 5 |
+| Hafenmark | 4 | 4 | 4 | 5 | 3 | — | 4 |
+| Varfell | 4 | 4 | 4 | 4 | 4 | — | 4 |
+| Guilds | 3 | 3 | 4 | 6 | 2 | — | 5 |
 <!-- Niflhel row deleted 2026-04-30 — STRUCK per CR-STRIKE-2026-04-19 / ED-764. -->
-| Revolution | — | 3 | — | — | — | 3 |
-| Löwenritter | — | 3 | — | 5 | 3 | 5 |
+| Revolution | — | — | 3 | — | — | — | 3 |
+| Löwenritter | — | — | 3 | — | 5 | 3 | 5 |
 
 <!-- Niflhel STRUCK explanatory block deleted 2026-04-30 — see canon/editorial_ledger.yaml ED-770/ED-772 for context. -->
 
 Partial sheets: Revolution (Influence, Stability, Intel only). [Niflhel removed per ED-764.]
-Löwenritter (no Mandate, no Wealth). Guilds NPC-only: no deviation mechanic.
+Löwenritter (no L, no PS, no Wealth — see L_init=PS_init=0 note below). Guilds NPC-only: no deviation mechanic.
 
-**Legitimacy + Popular Support init (PP-686 v2):** Both scalars start equal to the Mandate value above (Crown L_init = 5, PS_init = 5; Church L_init = 5, PS_init = 5; Hafenmark L_init = 4, PS_init = 4; Varfell L_init = 4, PS_init = 4; Guilds L_init = 3, PS_init = 3). Factions with no Mandate (Revolution, Löwenritter) start L_init = PS_init = 0; PS may climb via Mission outcomes from zero. After first Accounting, dynamics replace seed values per faction_behavior_v30 §3.4–3.5.
+**Legitimacy + Popular Support init (PP-686 v2 / 2026-05-02 ED-784 finalization):** Per the table above, both scalars seed at the same value at game start (Crown L=PS=5, Church L=PS=5, Hafenmark L=PS=4, Varfell L=PS=4, Guilds L=PS=3). The seed-equal rule reflects PP-686 v2 §3.4-3.5: at t=0 the populist and procedural axes carry equal weight; Mission outcomes, cascade alignment, and expectation-resolution cycles drive subsequent divergence. Factions with no L+PS at start (Revolution, Löwenritter) seed L=PS=0; PS may climb via Mission outcomes from zero. After first Accounting, dynamics replace seed values per faction_behavior_v30 §3.4–3.5.
 
 ## Domain Action Resolution
 Pool = character's relevant attribute + faction's relevant stat (if PC holds leadership).
@@ -58,9 +58,9 @@ Seasonal cap: ±2 per stat per season at accounting. Minimum Ob: 1 (PP-285).
 ## Unique Actions
 | Faction | Action | Pool | Ob | Notes |
 |---------|--------|------|-----|-------|
-| Crown | Royal Decree | Mandate | 2 | 1/season. Consecutive: +1 Ob per season. Cannot target absent stats. |
-| Church | Excommunication | Mandate | vs target Mandate (or Ob 2 if non-leader) | Requires Mandate ≥ 3. |
-| Hafenmark | Sovereign Authority Doctrine | Mandate | 4 | 1/campaign arc. Heresy Investigation risk. |
+| Crown | Royal Decree | L | 2 | 1/season. Consecutive: +1 Ob per season. Cannot target absent stats. |
+| Church | Excommunication | L | vs target L (or Ob 2 if non-leader) | Requires L ≥ 3. |
+| Hafenmark | Sovereign Authority Doctrine | L | 4 | 1/campaign arc. Heresy Investigation risk. |
 | Varfell | Private Collection | Intel | 2 | 1/season. +1 TS on use. TS 14+: triggers Spirit check. |
 | Guilds | Economic Leverage | Wealth | vs target Wealth | Requires Guild Favour ≥ 5 in territory. |
 | ~~Niflhel Quiet~~ STRUCK | — | — | — | Per ED-764. Settlement-level intelligence-broker NPCs use individual Intel; no faction-level Quiet action exists. |
@@ -70,7 +70,7 @@ Seasonal cap: ±2 per stat per season at accounting. Minimum Ob: 1 (PP-285).
 ## Probability Reference (verified by SIM-FAC-01/02)
 | Pool | Ob | P(Success+) | P(Overwhelming) |
 |------|----|------------|----------------|
-| 5D (Mandate) | 2 | 60% | 23% |
+| 5D (L or PS, generic) | 2 | 60% | 23% |
 | 6D | 3 | 48% | 8% |
 | 4D | 4 | 14% | 0% |
 | 5D | 4 | 23% | 0% |
@@ -84,19 +84,19 @@ NPC-only equal-stat contest: ~14% success, ~59% partial, ~27% fail (design inten
 | Quiet season | 1 |
 | One active threat | 2 |
 | Two concurrent threats | 3 |
-| Active attack on Mandate/Wealth | 4 |
+| Active attack on L, PS, or Wealth | 4 |
 | Campaign-level crisis | 5 |
 Anti-death-spiral floor: Stability ≤ 2 → treat as Ob 4 regardless of actual pressure.
 P(survive, Stab 2 vs Ob 4) ≈ 59%. ~2 seasons at Stab 2 before probable collapse.
 
 ## Parliamentary Vote
-Pool: relevant faction stat (typically Mandate or Influence).
+Pool: relevant faction stat (typically L, PS, or Influence depending on action's procedural-vs-populist nature).
 Ob: opponent's relevant stat.
 Format: best of 3 exchanges. First to 2 wins. Ties (neither wins 2): motion fails, TT+1, CI+1.
 
 ## Church Influence Generation
-Church Mandate ≥ 5: CI +1/season at accounting.
-Piety Domain Action (1/season): Mandate pool, Ob 2. Success: CI +1 (stacks with above).
+Church L ≥ 5: CI +1/season at accounting.
+Piety Domain Action (1/season): L pool, Ob 2. Success: CI +1 (stacks with above).
 CI seasonal cap: ±5 combined from all sources.
 Stability ≤ 4: CI generation pauses.
 

@@ -619,3 +619,65 @@ First commit of the L+PS mechanical migration sweep mandated by ED-784. `params/
 **Cross-references:** ED-784 (umbrella), PP-686 v2 (faction behavior v2), audit §2.1 (per-site classifications), `params/factions_personal.md` (L+PS canonical authority for seed-equal rule), `params/bg/core.md` (Ethical Framework strike applied 2026-05-01 SUPERSESSION-PP686-001).
 
 **Remaining Phase 2 work:** 8 consumer files (faction_actions, factions_personal additional refs, ministry, institutions, parliament, ci_seizure, tracks, stress_patches, phases) + 8 reference files. Subsequent commits B, C, D.
+
+---
+
+## 2026-05-02 — ED-784 Phase 2 sweep: Commit B (faction_actions + ministry + factions_personal)
+
+Second commit of the L+PS migration sweep. Three consumer files migrated.
+
+**`params/bg/faction_actions.md` (38 refs):** All Mandate references in territory/parliamentary/charter/conquest mechanics → L (procedural authority across the board). Bulk patterns:
+
+- `Roll: Mandate vs Ob ...` → `Roll: L vs Ob ...` (Assert, Charter, Influence, Tribune Investigate, Conquest)
+- `controlling faction Mandate`, `controlling faction global Mandate`, `target Mandate`, `target controller Mandate` → L equivalents (institutional/procedural opposition)
+- `Baralta's Mandate ≥ 4` (PP-431-COR CI suppression) → `Baralta's L ≥ 4`
+- `Church Mandate +1` (failure-clause gain per audit Q3) → `Church L +1`
+- `Hafenmark Mandate +1` (Manoeuvre/Conquest gain) → `Hafenmark L +1`
+- `Hafenmark Mandate ≥ 4` (Conquest prerequisite) → `Hafenmark L ≥ 4`
+- `Hafenmark Mandate >` (Manoeuvre gate) → `Hafenmark L >`
+- `Church global Mandate >` (Church-prominent gate) → `Church global L >`
+- `floor(Mandate / 2) + 1` (Charter limit, Assert/Seize Ob) → `floor(L / 2) + 1`
+- `Mandate 0 from submission` (Diplomatic Token suspension) → `PS 0 from submission` (per audit Q1)
+- Defensive Institutional Mandate (PP-189) gate `Mandate ≥ 4` → `L ≥ 4` (per audit Q2)
+- Legacy mechanic name "Institutional Mandate" preserved in textual reference (Q2).
+
+**`params/bg/ministry.md` (32 refs):** Ministry is a structurally institutional (administrative apparatus) entity. Per audit Q2, Ministry's "Mandate" → Ministry **L** only. Bulk: `Ministry Mandate` → `Ministry L`; `Crown Mandate ≥ 4` (Crown decree-support gate) → `Crown L ≥ 4`; bare `Mandate 3D vs Ob 1` (Ministry rolls) → `L 3D vs Ob 1`; `Ministry Collapse (Mandate 0)` → `Ministry Collapse (L 0)`; `AP-token in T13, Mandate ≥ 2` → `... Ministry L ≥ 2`. Stat-block row updated to indicate `PS not tracked for Ministry — administrative apparatus has no separate populist axis`.
+
+**`params/factions_personal.md` (18 refs):** Mostly canonical-authoring file (PP-686 v2 source); bulk of "Mandate" mentions are intentional historical/derived references. Migrations applied:
+
+- Starting Values table header expanded: `Mandate | Influence | ...` → `Legitimacy | Popular_Support | Influence | ...`
+- All 7 faction rows seeded with equal L=PS values per PP-686 v2 (Crown 5/5, Church 5/5, Hafenmark 4/4, Varfell 4/4, Guilds 3/3, Revolution —/—, Löwenritter —/—)
+- L36 "Löwenritter (no Mandate, no Wealth)" → "no L, no PS, no Wealth"
+- Crown Royal Decree pool, Church Excommunication pool/gate, Hafenmark Sovereign Authority Doctrine pool → L (procedural authority)
+- "Active attack on Mandate/Wealth" Stability check → "Active attack on L, PS, or Wealth"
+- "Pool: relevant faction stat (typically Mandate or Influence)" → "(typically L, PS, or Influence depending on action's procedural-vs-populist nature)"
+- Church Mandate ≥ 5 / Piety DA pool → Church L ≥ 5 / L pool (institutional)
+- L38 init note phrasing updated to remove the now-stale "Mandate value above" reference (table no longer has a Mandate column); replaced with the canonical seed-equal rule with explicit per-faction values.
+
+**Preserved intentionally** (L, PS, derived Mandate retained for backward compat):
+- L8 PP-686 v2 NOTE comment block
+- L14 derived Mandate row (`~~Mandate~~ (derived) | Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support)`)
+- L38 init note (now updated phrasing, but keeps "Mandate" only in narrative explanation)
+
+**Cumulative ED-784 Phase 2 progress:**
+
+| File | Mandate refs | Status |
+|---|---:|---|
+| stats_1_7_scale.md | 38 | ✓ Commit A (f8ac629) |
+| factions_personal.md | 18 | ✓ Commit B |
+| faction_actions.md | 38 | ✓ Commit B |
+| ministry.md | 32 | ✓ Commit B |
+| institutions.md | ~21 | pending |
+| parliament.md | ~16 | pending |
+| ci_seizure.md | ~12 | pending |
+| tracks.md | ~11 | pending |
+| stress_patches.md | ~9 | pending |
+| phases.md | ~2 | pending |
+| 8 reference files | ~56 | pending |
+
+**Files in Commit B:**
+- `params/bg/faction_actions.md`
+- `params/bg/ministry.md`
+- `params/factions_personal.md`
+- `references/canonical_sources.yaml` (3 SHAs bumped)
+- `references/propagation_map.md` (this section)
