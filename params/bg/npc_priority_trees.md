@@ -28,7 +28,7 @@
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward highest-PT territory. Suspend CI Assert if Stability = 1. |
 | 2 | Open Thread op in Church territory OR practitioner public OR Piety −2 | Heresy Investigation. If target = faction leader: Excommunication. |
-| 3 | CI < 75 AND Mandate ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
+| 3 | CI < 75 AND Church L ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
 | 4 | Default | Expand Piety. Consul Inward lowest-PT territory with Church presence. |
 | 5 | AER maintenance | Temperance declaration if Cardinal active + Church controls T9. |
 | 6 | Attacked | Templar deployment if Fortitude active + Stability ≥ 2. |
@@ -133,7 +133,7 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 |---|---|---|
 | 1 | Stability ≤ 2 | Consul Inward highest-PT territory. Suspend CI Assert if Stability = 1. |
 | 2 | Open Thread op in Church territory OR practitioner public OR Piety −2 | Heresy Investigation. If target = faction leader: Excommunication. |
-| 3 | CI < 75 AND Mandate ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
+| 3 | CI < 75 AND Church L ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
 | 4 | Default | Expand Piety. Consul Inward lowest-PT territory with Church presence. |
 | 5 | AER maintenance | Temperance declaration if Cardinal active + Church controls T9. |
 | 6 | Attacked | Templar deployment if Fortitude active + Stability ≥ 2. |
@@ -229,12 +229,12 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 
 
 ## PP-NPC-01 — Crown Royal Decree Gate (SIM-NPC-01 F-01)
-Crown Priority Tree P3 (Royal Decree): do NOT attempt if Crown Mandate ≤ 2. At Mandate ≤ 2, Crown defaults to P4.
-Royal Decree failure cost (Mandate −1) applies only at Mandate ≥ 3. At Mandate ≤ 2: failure produces no Mandate loss (institution too weak for additional reputational damage).
+Crown Priority Tree P3 (Royal Decree): do NOT attempt if Crown L ≤ 2 (institutional weakness). At L ≤ 2, Crown defaults to P4.
+Royal Decree failure cost (L −1) applies only at L ≥ 3. At L ≤ 2: failure produces no L loss (institution too weak for additional reputational damage).
 
 
 ## PP-NPC-02 — Crown CI Awareness + Löwenritter Autonomy Refinement (SIM-NPC-01 F-02/F-03; ED-781 migration)
-Crown Priority Tree P2: insert trigger "If CI ≥ 35: Crown takes CI-reducing action (Senator Outward to Hafenmark for coordinated Suppress, OR direct DA targeting Church Mandate). This fires BEFORE the standard P2 triggers (territory loss, coup, PI)."
+Crown Priority Tree P2: insert trigger "If CI ≥ 35: Crown takes CI-reducing action (Senator Outward to Hafenmark for coordinated Suppress, OR direct DA targeting Church L — institutional procedural-authority suppression). This fires BEFORE the standard P2 triggers (territory loss, coup, PI)."
 Löwenritter Autonomy advance to Restless via CI ≥ 40 trigger requires BOTH conditions: (a) CI ≥ 40, AND (b) Church actively Asserted this season. Passive CI advance alone does not advance the Autonomy stage. Crown must have failed to prevent active Church expansion, not merely failed to counter institutional drift. (ED-781: 'Coup Counter increment' migrated to 'Löwenritter Autonomy advance to Restless'.)
 
 

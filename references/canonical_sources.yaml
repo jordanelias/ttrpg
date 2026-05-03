@@ -36,7 +36,7 @@ systems:
     params: params/core.md
     canonical_sha__params__core_md: "15e2543dcf246001575ab616319846615bb3a028"
     bg_params: params/bg/core.md
-    canonical_sha__params__bg__core_md: "5cc525d51ddee4d2a207ef1149f620eeade13b02"
+    canonical_sha__params__bg__core_md: "6e17c277612b06d843bf4c7a239a4380e881b14b"
   combat:
     design_doc: params/combat.md
     canonical_sha__params__combat_md: "50c50d0032210e4613bfc2388582961aa46c9f07"
@@ -63,7 +63,7 @@ systems:
     design_doc: designs/provincial/victory_v30.md
     canonical_sha__designs__provincial__victory_v30_md: "22e72f930b7926efc4e3ff448c0ac1b2e4776095"
     params: params/bg/victory.md
-    canonical_sha__params__bg__victory_md: "8303b563871444dbdc630ac277d67c6cc7bb6db8"
+    canonical_sha__params__bg__victory_md: "c1933a090d526de126379edb4f271122e4d8b433"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
@@ -91,7 +91,7 @@ systems:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "4ed8bd67f5570cb6c896d981b21eae3719fd66de"
     params: params/scale_transitions.md
-    canonical_sha__params__scale_transitions_md: "684b08ec7e2df41c846cad1012d669e2cd5a6f9b"
+    canonical_sha__params__scale_transitions_md: "0447183aaae0b37e57efe74c98e1615fc1a49f8b"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
     canonical_sha__designs__provincial__faction_layer_v30_md: "PENDING_PP_705"

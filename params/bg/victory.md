@@ -9,7 +9,7 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 |---------|----------------|----------------|
 | Crown | Peninsula Sovereignty | PV ≥ 16 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
 | Church of Solmund | Solmundan Orthodoxy | PV ≥ 8 + PT ≥ 3 all held territories. Graduated Seizure: Pool = Influence + floor(CI/15), Ob = 10 − PT − infra (floor 1) (PP-494) |
-| Hafenmark | Parliamentary Sovereignty | PV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
+| Hafenmark | Parliamentary Sovereignty | PV ≥ 12 + Hafenmark L ≥ 4 + PI ≥ 5 + Crown L ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | PV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
 | Varfell Path B | Southernmost Dominion | PV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
 | Varfell Path C | Thread Supremacy | PV ≥ 10 + VTM = 5 + Mending Stability (MS) ≥ 50 |
@@ -18,7 +18,7 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 
 **Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Peninsular Strain ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
 
-**Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each PV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both Mandate ≥ 3. See peninsular_strain_v1.md §6.3.
+**Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each PV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both L ≥ 3 AND PS ≥ 3 (institutional + populist viability — partition co-victory requires both axes per audit Q5 per-mechanic strict reading). See peninsular_strain_v1.md §6.3.
 
 ### Territory Consolidation Values (PV)
 Per victory_v30.md §1. Total PV = 33 (T16 Schoenland not in territorial play, T15 Askeheim PV = 0).
@@ -48,12 +48,12 @@ Per victory_v30.md §4. All require 2 consecutive Accounting steps except Church
 
 | Pair | Key Conditions |
 |------|---------------|
-| Crown + Hafenmark | Crown PV ≥ 12, Hafenmark PV ≥ 12, PI ≥ 7, CI < 50, Crown Mandate ≥ 4, Hafenmark Mandate ≥ 4 | *(PP-561)* |
+| Crown + Hafenmark | Crown PV ≥ 12, Hafenmark PV ≥ 12, PI ≥ 7, CI < 50, Crown L ≥ 4, Hafenmark L ≥ 4 | *(PP-561)* |
 | Crown + Varfell | Crown PV ≥ 12, Varfell PV ≥ 8, VTM ≥ 3, MS ≥ 50 |
 | Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, MS ≥ 40 |
 | Hafenmark + RM | Hafenmark PV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, MS ≥ 40 |
 | Löwenritter + Hafenmark | Löwenritter PV ≥ 8, Hafenmark PV ≥ 8, PI ≥ 4 |
-| Church + Hafenmark (Partition) | Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
+| Church + Hafenmark (Partition) | Crown L ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
 
 Incompatible: Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 
@@ -84,7 +84,7 @@ PI advances per existing IP/PI interaction rules. PI markers placed in territori
 |---------|----------------|----------------|
 | Crown | Peninsula Sovereignty | PV ≥ 16 + suppress all rivals + Invasion Pressure (IP) < 60 + Parliament Integrity (PI) ≥ 3 |
 | Church of Solmund | Solmundan Orthodoxy | PV ≥ 8 + PT ≥ 3 all held territories. Graduated Seizure: Pool = Influence + floor(CI/15), Ob = 10 − PT − infra (floor 1) (PP-494) |
-| Hafenmark | Parliamentary Sovereignty | PV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 |
+| Hafenmark | Parliamentary Sovereignty | PV ≥ 12 + Hafenmark L ≥ 4 + PI ≥ 5 + Crown L ≤ 3 |
 | Varfell Path A | Intelligence Hegemony | PV ≥ 10 + Vaynard Thread Mastery (VTM) ≥ 3 + 2 rival stats revealed + expansion |
 | Varfell Path B | Southernmost Dominion | PV ≥ 8 + VTM ≥ 3 + T13 control + T15 presence + Warden's Accord (WA) ≥ +1 |
 | Varfell Path C | Thread Supremacy | PV ≥ 10 + VTM = 5 + Mending Stability (MS) ≥ 50 |
@@ -93,7 +93,7 @@ PI advances per existing IP/PI interaction rules. PI markers placed in territori
 
 **Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Peninsular Strain ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
 
-**Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each PV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both Mandate ≥ 3. See peninsular_strain_v1.md §6.3.
+**Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each PV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both L ≥ 3 AND PS ≥ 3 (institutional + populist viability — partition co-victory requires both axes per audit Q5 per-mechanic strict reading). See peninsular_strain_v1.md §6.3.
 
 
 ### Territory Consolidation Values (PV)
@@ -125,12 +125,12 @@ Per victory_v30.md §4. All require 2 consecutive Accounting steps except Church
 
 | Pair | Key Conditions |
 |------|---------------|
-| Crown + Hafenmark | Crown PV ≥ 12, Hafenmark PV ≥ 12, PI ≥ 7, CI < 50, Crown Mandate ≥ 4, Hafenmark Mandate ≥ 4 | *(PP-561)* |
+| Crown + Hafenmark | Crown PV ≥ 12, Hafenmark PV ≥ 12, PI ≥ 7, CI < 50, Crown L ≥ 4, Hafenmark L ≥ 4 | *(PP-561)* |
 | Crown + Varfell | Crown PV ≥ 12, Varfell PV ≥ 8, VTM ≥ 3, MS ≥ 50 |
 | Varfell + RM | VTM ≥ 4, WA ≥ +2, ≥ 4 territories PT ≤ 1, MS ≥ 40 |
 | Hafenmark + RM | Hafenmark PV ≥ 10, ≥ 4 territories PT ≤ 2, PI ≥ 4, MS ≥ 40 |
 | Löwenritter + Hafenmark | Löwenritter PV ≥ 8, Hafenmark PV ≥ 8, PI ≥ 4 |
-| Church + Hafenmark (Partition) | Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
+| Church + Hafenmark (Partition) | Crown L ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no military conflict |
 
 Incompatible: Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM.
 

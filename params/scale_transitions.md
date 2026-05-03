@@ -29,7 +29,7 @@
 ## Domain Echo Rules (PP-108/PP-109)
 
 **Amount:** Faction stat change = +1 per degree above Partial.
-- Success: +1 to most relevant stat (Mandate for political, Influence for social, Military for combat)
+- Success: +1 to most relevant stat (per audit Q5 per-mechanic: L for procedural-political issues, PS for populist-political issues; Influence for social; Military for combat)
 - Overwhelming: +2
 - Cap: ±2 per scene. [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
@@ -41,7 +41,7 @@
 
 **Multiple Domain Echoes (same scene):** Fire in the order they occurred in the scene. Each applies independently; cap resets per stat per Echo (not per scene total). [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
-**Debate outcome → Domain Echo:** Conviction Track ≥7 (winner) queues +1 Mandate for winner's faction. ≤3 queues −1 Mandate for loser's faction. [PP-108]
+**Debate outcome → Domain Echo:** Conviction Track ≥7 (winner) queues +1 to winner's faction in the contested axis (L for procedural debates, PS for populist debates per audit Q5). ≤3 queues −1 to loser's faction in the same axis. [PP-108]
 
 ## Mass→Personal Register Shift Rules (PP-111)
 
@@ -73,7 +73,7 @@ GM makes final scope determination. [PROVISIONAL — pre-ledger, accepted as can
 Debate Conviction Track outcomes map to Domain Echo as follows:
 | Outcome | Domain Echo |
 |---------|------------|
-| Track ≥ 7 (winner's side) | Winner faction: +1 Mandate (or relevant stat). Loser faction: −1 Mandate if they held institutional authority on the issue. |
+| Track ≥ 7 (winner's side) | Winner faction: +1 in contested axis (L procedural / PS populist) or other relevant stat. Loser faction: −1 L if they held institutional authority on the issue (audit Q3 institutional-failure pattern). |
 | Track 4–6 (compromise) | No Domain Echo. Scene-level consequence only (GM narrative). |
 | Track ≤ 3 (loser's side) | See Track ≥ 7 reversed. |
 [PROVISIONAL — PP-108]

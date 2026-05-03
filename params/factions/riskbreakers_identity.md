@@ -10,7 +10,7 @@ judged necessary. Already documented in params_factions §Riskbreakers. Confirme
 Provisional minimal tactic card set (2 per faction):
 | Faction | Tactic A | Tactic B |
 |---------|----------|----------|
-| Crown | Royal Prerogative (+2D one Mandate roll, 1/season) | Iron Decree (cancel 1 opposing DA, 1/campaign) |
+| Crown | Royal Prerogative (+2D one L roll, 1/season) | Iron Decree (cancel 1 opposing DA, 1/campaign) |
 | Church | Sanctuary (protect 1 NPC from targeting 1 season) | Inquisition (force reveal 1 hidden faction stat) |
 | Hafenmark | Trade Leverage (+1D all Wealth rolls 1 season) | Constitutional Check (−2 Ob one Crown action) |
 | Varfell | Intelligence Supremacy (learn full stat block of 1 faction) | Patience Protocol (pass; bank +2D for any future roll) |
@@ -51,7 +51,7 @@ Provisional stats for simulation unblocking (ED-036 P1-BLOCKER):
 | Vanguard Infantry | 6 | 4 | 5 | 3 | 2 |
 | Vanguard Cavalry | 4 | 5 | 4 | 4 | 1 |
 | Vanguard Siege | 3 | 3 | 3 | 5 | 3 |
-Altonian faction: Mandate 6, Military 7, Stability 5. No Influence/Wealth/Intel in Valoria context.
+Altonian faction: L 6, PS 6, Military 7, Stability 5. No Influence/Wealth/Intel in Valoria context. (NPC seed-equal per PP-686 v2 — no separate populist dynamic for Altonian invasion force at game start.)
 [FLAGGED: confirm unit stats before Altonian engagement is canonically simulated. P1-BLOCKER cleared provisionally.]
 
 ## ED-143–146 Resolution (PP-323) — PC Simulation Constructs [FLAGGED]
@@ -113,7 +113,7 @@ a Stability death spiral. Applies once per season max.
 ## Community Weaving — Cross-Reference (PP-250)
 
 Community Weaving canonical formula in params_threadwork.md PP-250.
-Prior entries under PP-168 (Influence/TT÷20) and PP-195 (Mandate+History/Ob3) are deprecated.
+Prior entries under PP-168 (Influence/TT÷20) and PP-195 (Mandate+History/Ob3, where Mandate was the unsplit pool — see PP-616 + PP-686 v2 supersession) are deprecated.
 Not a Domain Action. No faction stat output. MS restoration only.
 
 ## Church Martyrdom Effect (PP-259)
@@ -152,7 +152,7 @@ Coalition triggers are public knowledge (the threshold conditions are known); on
 ## Hafenmark — Diplomat Card (ED-320 RESOLVED)
 
 See params_board_game.md §Hafenmark — Diplomat Card for full mechanics.
-**Summary:** Senator Outward, Influence vs Ob = floor(target Mandate / 2) + 1, once/season. Diplomatic Tokens enable Parliamentary Session pre-commitment. Restriction: not Church if PI < 3.
+**Summary:** Senator Outward, Influence vs Ob = floor(target L / 2) + 1, once/season. Diplomatic Tokens enable Parliamentary Session pre-commitment. Restriction: not Church if PI < 3.
 
 ## Hafenmark — RDT/TD Tracks (ED-321 RESOLVED)
 
@@ -179,7 +179,7 @@ Token placed on target faction mat (public, permanent). Two tokens on different 
 
 ## Crown — Royal Charter (PP-433)
 
-Max active Charters = floor(Mandate / 2) + 1. Charter territory: Govern/Trade −1 Ob for all factions; Church Seizure +1 Ob; Crown own actions −2 Ob. Dissolves on control transfer.
+Max active Charters = floor(L / 2) + 1. Charter territory: Govern/Trade −1 Ob for all factions; Church Seizure +1 Ob; Crown own actions −2 Ob. Dissolves on control transfer.
 
 ## Crown — Thread Liaison (PP-436)
 
@@ -198,25 +198,25 @@ Senator Outward, Crown only. Influence vs Ob = AER level min 1. Cannot combine w
 ## Baralta BG Conviction [PP-482, ED-080 resolved]
 
 Fires at any Accounting where PI ≥ 6 OR Hafenmark TCV ≥ 12.
-Effect: Hafenmark Mandate +1. One-time per game.
+Effect: Hafenmark L +1. One-time per game.
 
 ## Vaynard BG Conviction [PP-483, ED-081 resolved]
 
 Fires at any Accounting where VTM ≥ 4 AND Varfell controls T9 or T13.
-Effect: Varfell Mandate +1 AND VTM +1. One-time per game.
+Effect: Varfell L +1 AND VTM +1. One-time per game. [TODO: VTM struck 2026-04-19 per CR-STRIKE; revisit Varfell special-action effect in next victory-paths editorial.]
 
 ## Varfell Succession — Maret Uln [PP-486, ED-308 resolved]
 
-If Vaynard eliminated (Loyalty 0 + Mandate 0): Maret Uln becomes faction leader. VTM resets to 0.
+If Vaynard eliminated (Loyalty 0 + L 0 + PS 0 — full institutional + populist collapse): Maret Uln becomes faction leader. VTM resets to 0. [TODO: VTM struck 2026-04-19; revisit.]
 Varfell aligns with RM goals: cannot target RM, cannot seize RM-held territory.
 This is factional realignment, NOT RM Emergence — RM does not gain faction stats or independent actions.
 The triple-condition hostile RM Emergence trigger remains the canonical path for RM as a playable faction.
 
 ## Baralta Succession — PI-Gated [PP-487, ED-309 resolved]
 
-If Baralta eliminated (Loyalty 0 + Mandate 0):
-- PI ≥ 4: institutional succession. Hafenmark Mandate −1, Stability −1. All mechanics intact.
-- PI < 4: fracture. Hafenmark Mandate halved (round down). TCV victory requirement +2. Parliamentary Sovereignty unavailable until PI recovers to ≥ 4.
+If Baralta eliminated (Loyalty 0 + L 0 + PS 0):
+- PI ≥ 4: institutional succession. Hafenmark L −1, Stability −1. All mechanics intact.
+- PI < 4: fracture. Hafenmark L halved AND PS halved (round down each, independent halving — institutional and populist collapse both register the fracture). TCV victory requirement +2. Parliamentary Sovereignty unavailable until PI recovers to ≥ 4.
 No named successor. Hafenmark's identity is institutional.
 
 ## Cardinal Focus Temperance — AER Gain [PP-490, ED-328 resolved]
@@ -242,7 +242,7 @@ as a named NPC ally (+1D on one Domain Action category per season).
 When a Cardinal is killed (by PC action or event):
 - Cardinal-specific BG mechanics (Fortitude Templar, Justice Inquisitor, Prudence Tithes, Temperance AER)
   are suspended for 1 season (the Holy See appointment procedure takes time).
-- At next Accounting: Church player rolls Church Mandate vs Ob 2 (Holy See appointment).
+- At next Accounting: Church player rolls Church L vs Ob 2 (Holy See appointment).
   Success: new Cardinal appointed, full mechanics resume.
   Overwhelming: Appointment + AER +1 (the crisis galvanises Church unity).
   Failure: gap extended 1 additional season. Another attempt at next Accounting.
@@ -254,12 +254,12 @@ When a Cardinal is killed (by PC action or event):
 **BG-only mode:** Not a playable faction. No player controls RM.
 **Hybrid mode:** Not present at game start. Founded mid-campaign via Founding Mechanic (see params_board_game.md §RM Founding Mechanic). Post-founding stats depend on Founding degree (Success: Mandate 1/Influence 2/Wealth 1/Military 0/Stability 3; Overwhelming: Mandate 2/Influence 3/Wealth 1/Military 0/Stability 4).
 **TTRPG mode (PP-495):** Not present at campaign start. GM introduces RM as an emergent faction when all narrative conditions converge: (1) cultural shift visible — at least 2 communities/NPCs have expressed dissatisfaction with Church authority or sympathy for Einhir practice in play; (2) substrate strain noticeable — Thread operations have produced visible consequences (Thread Wounds, Coherence loss, MS decline); (3) player engagement — at least one PC has interacted with Einhir cultural knowledge, Southernmost artefacts, or practitioner communities. GM declares the Founding Scene. A named NPC or PC becomes the Founding Agent. RM gains the stat block from §8.8. Floor: session 6 of a standard campaign (political landscape must develop before RM complicates it).
-Prior RM stat entries (Mandate -, Influence -, etc.) reflect pre-Founding state (RM does not exist). Post-Founding stats supersede those entries.
+Prior RM stat entries (Mandate -, Influence -, etc., where Mandate was unsplit pre-PP-686 v2) reflect pre-Founding state (RM does not exist). Post-Founding stats supersede those entries. (RM is statless per PP-460 — Founding mechanic likely obsolete; flagged for review.)
 
 ## NPC Recruitment — Faction Consequence (PP-643)
 
 On successful NPC recruitment (npc_behavior_v30.md §9.5 Step 4 — Success or Overwhelming):
-- Losing faction: Mandate −1 in the NPC's primary territory (talent drain signal).
-- Applies once per recruitment. Does not stack with other Mandate penalties.
+- Losing faction: PS −1 in the NPC's primary territory (talent drain signal — populist defection rather than institutional discipline failure).
+- Applies once per recruitment. Does not stack with other L or PS penalties.
 - Overwhelming result additionally provides recruiting faction one Evidence token (Verified).
 - NPC's Disposition toward former faction drops to 0 on departure (regardless of prior value).

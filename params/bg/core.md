@@ -140,10 +140,10 @@ PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress
 | Strain | Name | Effect |
 |--------|------|--------|
 | 0–2 | Peace | No effect. |
-| 3–4 | Tension | All factions: Mandate check at Accounting (Mandate pool vs Ob 1). Failure: Mandate −1. |
+| 3–4 | Tension | All factions: L check at Accounting (L pool vs Ob 1). Failure: L −1. |
 | 5–6 | Fracture | All factions: Accord −1 in one territory (lowest-Accord first, controller choice). |
-| 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2. |
-| 9–10 | Collapse | Non-capital territories: Accord cap 2. Mandate check Ob 3. MS −1/season additional. |
+| 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. L check Ob 2. |
+| 9–10 | Collapse | Non-capital territories: Accord cap 2. L check Ob 3. MS −1/season additional. |
 
 **Warden Cooperation (WC) Effects:**
 | WC | Effect |
@@ -157,27 +157,28 @@ PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress
 <!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support). Starting Mandate values below are preserved as initial conditions: Legitimacy_init = Popular_Support_init = current authored Mandate. After first Accounting, dynamics replace seed values. See L+PS Starting Values section below. -->
 
 ## Faction Starting Stats (v04 B5)
-| Faction | Mandate | Influence | Wealth | Military | Stability |
-|---------|---------|-----------|--------|----------|-----------|
-| Crown | 5 | 5 | 4 | 4 | 4 |
-| Church | 5 | 6 | 5 | 4 | 5 |
-| Hafenmark | 4 | 4 | 5 | 3 | 4 |
-| Varfell | **4** | 4 | **4** | 4 | 4 |
-| Restoration Movement | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
-| Löwenritter (Split) | 3 | 2 | 3 | 6 | 5 |
-| Guilds (NPC) | 3 | 4 | 6 | 2 | 5 |
+| Faction | Legitimacy | Popular_Support | Influence | Wealth | Military | Stability |
+|---------|------------|------------------|-----------|--------|----------|-----------|
+| Crown | 5 | 5 | 5 | 4 | 4 | 4 |
+| Church | 5 | 5 | 6 | 5 | 4 | 5 |
+| Hafenmark | 4 | 4 | 4 | 5 | 3 | 4 |
+| Varfell | **4** | **4** | 4 | **4** | 4 | 4 |
+| Restoration Movement | — | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
+| Löwenritter (Split) | 3 | 3 | 2 | 3 | 6 | 5 |
+| Guilds (NPC) | 3 | 3 | 4 | 6 | 2 | 5 |
 
-CORRECTIONS (PP-191/PP-195): Varfell Mandate 4, Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
+CORRECTIONS (PP-191/PP-195): Varfell L 4, PS 4 (seed equal per PP-686 v2 / 2026-05-02 ED-784 — was unsplit Mandate 4), Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
 
 
 
 ### Legitimacy + Popular Support — Starting Values (PP-686 v2)
 
-At engine init, both scalars seed from the Mandate column above:
-- `Legitimacy_init = Mandate`
-- `Popular_Support_init = Mandate`
+At engine init, both scalars seed equal per the L and PS columns above (post-2026-05-02 ED-784 finalization; the prior Mandate column has been split):
+- `Legitimacy_init = L value in column 2`
+- `Popular_Support_init = PS value in column 3`
+- (For factions with seed-equal authoring, L_init = PS_init = the previously-unsplit Mandate value.)
 
-Range [0, 7] for both. After first Accounting, dynamics replace seed values per `designs/provincial/faction_behavior_v30.md §3.4–3.5`. Factions with no Mandate (Restoration, Löwenritter) start with Legitimacy = Popular_Support = 0; PS may climb via successful Mission outcomes from zero.
+Range [0, 7] for both. After first Accounting, dynamics replace seed values per `designs/provincial/faction_behavior_v30.md §3.4–3.5`. Factions with no L+PS at start (Restoration, Löwenritter) start with Legitimacy = Popular_Support = 0; PS may climb via successful Mission outcomes from zero.
 
 
 ## Faction Elimination — Territory Status (ED-333 resolved)
@@ -194,7 +195,8 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 ## Stat Ceilings and Floors
 | Stat | Floor | Ceiling |
 |------|-------|---------|
-| Mandate | 0 | 7 |
+| Legitimacy | 0 | 7 |
+| Popular_Support | 0 | 7 |
 | Influence | 1 | 7 |
 | Wealth | 0 | 7 |
 | Military | 0 | 7 |
@@ -210,7 +212,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Trade (Consul Outward) | floor(Prosperity / 2) + 1 | +1 IP≥30; +1 T2 |
 | Diplomacy vs NPC (Senator Outward) | floor(NPC Stability / 2) + 1 | — |
 | Diplomacy between players | Negotiated | Not a roll |
-| Formal Crown Treaty (Senator Outward) | floor(target Mandate / 2) + 1 | Crown only. PP-512/513/514/523. See victory_v30.md §3.1. |
+| Formal Crown Treaty (Senator Outward) | floor(target L / 2) + 1 | Crown only. PP-512/513/514/523. See victory_v30.md §3.1. |
 | Thread Operation (Pontifex/Weaver) | Ob 2 base | See PP-182 co-movement protocol |
 | Investigate/Intel (Tribune) | 2 | +2 Ob in Church territory with Inquisitor |
 | Spy (Tribune Outward) | floor(target Intel / 2) + 1 | — |

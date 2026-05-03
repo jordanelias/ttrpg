@@ -13,7 +13,7 @@ First battle completes before second begins.
 Faction unique tactic cards (2 per faction, provisional):
 | Faction | Tactic A | Tactic B |
 |---------|----------|----------|
-| Crown | Royal Prerogative: +2D one Mandate roll | Iron Decree: cancel one opposing Domain Action (1/campaign) |
+| Crown | Royal Prerogative: +2D one L roll | Iron Decree: cancel one opposing Domain Action (1/campaign) |
 | Church | Sanctuary: protect one NPC from targeting for 1 season | Inquisition: force one faction to reveal one hidden stat |
 | Hafenmark | Trade Leverage: +1D all Wealth rolls for 1 season | Constitutional Check: reduce one Crown action Ob by 2 |
 | Varfell | Intelligence Supremacy: learn one faction's full stat block | Patience Protocol: pass; bank +2D for any future roll |
@@ -27,7 +27,7 @@ Zoom In cannot retroactively prevent a threshold that was crossed before the int
 
 
 ## ED-072 Resolution (PP-269)
-Confirmed from params_board_game: concurrent Zoom In ordering resolved by PP-112 (faction-turn Accounting sequence). Faction that triggered the Zoom In resolves first; others queue in Mandate order (descending). ED-072 resolved — already in params.
+Confirmed from params_board_game: concurrent Zoom In ordering resolved by PP-112 (faction-turn Accounting sequence). Faction that triggered the Zoom In resolves first; others queue in derived-Mandate order = round((L+PS)/2) descending (per factions_personal.md, audit Q4). ED-072 resolved — already in params.
 
 
 ## ED-080 Resolution (PP-270)
@@ -48,10 +48,10 @@ VTM 5 ability (choose Actualized dimension of one Co-Movement card): P-14 compli
 
 ## ED-085 Resolution (PP-273)
 Reformed Settlement Church responses confirmed (three options):
-1. **Resist:** Church contests the settlement. Mandate −1 but CI gain continues; Hafenmark gains Deed.
+1. **Resist:** Church contests the settlement. L −1 but CI gain continues; Hafenmark gains Deed.
 2. **Accommodate:** Church accepts. CI gain suspended for 1 season. Parliament Integrity +1.
 3. **Ignore:** Church neither contests nor accepts. No mechanical effect; sets up future escalation. CI gain halved for 1 season.
-[FLAGGED: confirm Mandate −1 for Resist and PI +1 for Accommodate.]
+[FLAGGED: confirm L −1 for Resist (institutional procedural defeat per audit Q3 failure-clause) and PI +1 for Accommodate.]
 
 
 ## ED-086 Resolution (PP-274)
@@ -73,7 +73,7 @@ Crown territory names (provisional): T2 = **Kronmark** (NW of Arcansheim), T5 = 
 
 ## ED-109 through ED-113 Resolution (PP-278) [FLAGGED FOR DESIGNER REVIEW]
 **ED-109 — Crown victory front-loaded:** Remove 1 pre-met deed from Crown starting conditions. Crown starts with 2 of 5 deeds met (not 3). Rebalances opening tempo.
-**ED-110 — Church primary victory inaccessible:** Add fallback: if CI reaches 70 and Church holds 2+ territories, Church may declare Ecclesiastical Mandate victory (partial win, shared with one ally). Unblocks solo Church win path.
+**ED-110 — Church primary victory inaccessible:** Add fallback: if CI reaches 70 and Church holds 2+ territories, Church may declare Ecclesiastical Mandate victory (partial win, shared with one ally; a named victory condition gated on CI threshold + territory hold — operates on Church L as the institutional religious-authority axis per audit Q2). Unblocks solo Church win path.
 **ED-111 — Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T6 via Path B. +1 VTM threshold gate.
 **ED-112 — CI lock:** Hafenmark suppression capped at −1/season total (cannot be stacked via multiple actions). Church CI gain from T9 remains +1/season. Net: Church can advance CI by investing elsewhere.
 **ED-113 — Varfell T6 opening dominance:** Add Fort 1 to T6 at game start (not Fort 0). Increases seizure Ob from 0-fort to Fort 1 resistance (+1D to defender).
@@ -96,7 +96,7 @@ Zoom In cannot retroactively prevent a threshold crossed before the interrupt wa
 
 ## ED-072 Resolution (PP-294) — Concurrent Zoom In Ordering
 Concurrent Zoom In order: faction that triggered the Zoom In resolves first; others queue
-in Mandate order (descending). PP-112 confirmed. Already in params_board_game.
+in Mandate (derived = round((L+PS)/2) per factions_personal.md, audit Q4) order (descending). PP-112 confirmed. Already in params_board_game.
 ED-072 resolved — no change needed.
 
 
@@ -124,10 +124,10 @@ Card is drawn legitimately; VTM 5 selects the dimension only. P-14 satisfied. ED
 
 ## ED-085 Resolution (PP-298) — Reformed Settlement Church Responses [FLAGGED]
 Three Church responses confirmed:
-1. Resist: Mandate −1; CI gain continues; Hafenmark gains Deed.
+1. Resist: L −1; CI gain continues; Hafenmark gains Deed.
 2. Accommodate: CI gain suspended 1 season; PI +1.
 3. Ignore: CI gain halved 1 season; no other effect.
-[FLAGGED: confirm Mandate −1 and PI +1 values before compilation.]
+[FLAGGED: confirm L −1 and PI +1 values before compilation.]
 
 
 
@@ -146,7 +146,7 @@ T2 = **Kronmark** (NW of Ehrenfeld, buffer territory). T5 = **Sudmarken** (SE bo
 
 ## ED-109–113 Resolution (PP-303) — BG Balance Adjustments [FLAGGED]
 **ED-109 Crown front-loaded:** Remove 1 pre-met deed. Crown starts with 2/5 (not 3). Rebalances opening.
-**ED-110 Church primary inaccessible:** Fallback: if CI ≥ 70 + Church holds 2+ territories → Ecclesiastical Mandate (partial shared victory).
+**ED-110 Church primary inaccessible:** Fallback: if CI ≥ 70 + Church holds 2+ territories → Ecclesiastical Mandate (partial shared victory; named condition on Church L).
 **ED-111 Varfell Path B under-gated:** Require VTM ≥ 4 (not 3) to seize T6 via Path B.
 **ED-112 CI lock:** Hafenmark suppression capped at −1/season total (cannot stack). Church CI from T9 remains +1/season.
 **ED-113 Varfell T6 dominance:** Add Fort 1 to T6 at game start (+1D to defender, raising seizure difficulty).

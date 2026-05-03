@@ -746,3 +746,26 @@ Third commit of the L+PS migration sweep. Six consumer files migrated, ~99 Manda
 - `params/bg/stress_patches.md`
 - `params/bg/phases.md`
 - `references/propagation_map.md` (this section)
+
+---
+
+## 2026-05-02 — ED-784 Phase 2 sweep: Commit D — closure
+
+Final commit. ED-784 Phase 2 work complete.
+
+**7 reference files migrated** (74 refs total): `params/factions/riskbreakers_identity.md` (17), `params/bg/ed_resolutions.md` (9), `params/bg/victory.md` (12), `params/bg/core.md` (17), `params/bg/npc_priority_trees.md` (9), `params/bg/npcs_special.md` (5), `params/scale_transitions.md` (5). Migration patterns followed audit §2/§3 classifications + commits A/B/C established conventions: procedural rolls → L; populist outcomes (morale, defection, talent drain) → PS; institutional gates → L; Crown Policy/Hafenmark Sovereignty/Crown Treaty/Senator Outward → L; named victory conditions (Ecclesiastical Mandate) preserved as proper nouns with L footnote; Mandate-order resolution (PP-112) → derived-Mandate = round((L+PS)/2) per audit Q4.
+
+**Notable:** core.md Starting Stats table split (Mandate column → Legitimacy + Popular_Support; all 7 faction rows seeded equal); core.md PP-686 v2 init block phrasing updated; victory.md Hafenmark Parliamentary Sovereignty Mandate≥4 → L≥4; Peninsular Partition "Both Mandate ≥ 3" → "Both L ≥ 3 AND PS ≥ 3" (institutional + populist viability per audit Q5 strict reading); npcs_special.md general capture/execution PS−1/−2 (morale-blow populist component); scale_transitions.md debate-outcome Domain Echo expanded to contested-axis (L procedural / PS populist).
+
+**ED-784 Phase 2 — COMPLETE.** 17 files, **299 Mandate refs** migrated.
+
+| Commit | SHA | Files | Refs |
+|---|---|---:|---:|
+| A | f8ac629 | stats_1_7_scale.md | 38 |
+| B | 0a32a29 | factions_personal + faction_actions + ministry | 88 |
+| C | 9a07316 | institutions + parliament + ci_seizure + tracks + stress_patches + phases | 99 |
+| D | (this) | riskbreakers_identity + ed_resolutions + victory + core + npc_priority_trees + npcs_special + scale_transitions | 74 |
+
+**Files in Commit D:** the 7 above + `references/canonical_sources.yaml` (3 SHAs bumped: victory, core, scale_transitions; other 4 not tracked) + `references/propagation_map.md` (this section).
+
+**Watch-out:** propagation_map now ~99% of cap. Next session priority: archive ED-782..786 + Phase 2 commit-A/B/C/D sections from propagation_map (same chunking discipline as ED-786 editorial_ledger archival).

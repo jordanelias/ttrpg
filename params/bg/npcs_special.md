@@ -5,10 +5,10 @@ Decay on Altonian Court residence: −1 immediately on departure + −1/Year-End
 **Gaining:**
 - Senator Outward targeting Torben: Overwhelming +2; Success +1.
 - Crown holds PI ≥ 5 at Year-End: +1.
-- Crown upholds Institutional Mandate 2+ consecutive seasons: +1/Year-End.
+- Crown upholds Institutional Mandate (operates on L per audit Q2) 2+ consecutive seasons: +1/Year-End.
 
 **Losing:**
-- Crown Compromises Institutional Mandate: −1.
+- Crown Compromises Institutional Mandate (L −1 per audit Q2): −1 Torben Loyalty.
 - Crown issues Emergency Powers: −1.
 - Löwenritter Coup fires: reset to 1.
 - CI crosses 60: −1.
@@ -97,13 +97,13 @@ When a named PC General is captured or killed during a Zoom In personal scene (H
 **Immediate BG consequence (fires at Zoom Out / next Accounting):**
 - Captured general's faction: Legionary card unavailable for **1 season** (no Muster or March orders — the command structure is disrupted).
 - Capturing/killing faction: **Influence +1** (political leverage or military prestige).
-- Captured general's faction: **Mandate −1** at next Accounting (morale blow — general lost).
+- Captured general's faction: **PS −1** at next Accounting (morale blow — general lost; populist defection signal).
 
 **Ransom:** Capturing faction may offer ransom. Base: **2 Wealth** per named general. Both factions must agree. Ransom paid → general returns next season, Legionary card restored.
 
-**Rescue:** Tribune Investigate (Ob 4 in secure enemy territory) to locate, then a Zoom In rescue scene. Success returns general; Failure may result in execution (Mandate −2 instead of −1).
+**Rescue:** Tribune Investigate (Ob 4 in secure enemy territory) to locate, then a Zoom In rescue scene. Success returns general; Failure may result in execution (PS −2 — populist morale catastrophe instead of −1).
 
-**NPC-initiated kills only:** When an NPC kills a PC General (not captured), the Influence +1 and Mandate −1 still apply. No ransom is possible. The general is dead; the faction loses their named commander permanently (all Command bonuses from that general cease).
+**NPC-initiated kills only:** When an NPC kills a PC General (not captured), the Influence +1 and PS −1 still apply (PS for the morale-loss component, consistent with capture/execution rules). No ransom is possible. The general is dead; the faction loses their named commander permanently (all Command bonuses from that general cease).
 
 **Does not trigger a Domain Echo** (this is an Accounting consequence, not a Domain Echo — Domain Echoes apply to PC-initiated Domain Actions only).
 
