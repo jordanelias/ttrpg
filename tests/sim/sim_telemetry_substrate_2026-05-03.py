@@ -380,15 +380,27 @@ WORLDSTATE_TRIGGERS = [
 
 
 def fire_mandatory_triggers(ws: WorldState, persona: str) -> List[str]:
-    """Returns list of mandatory triggers firing this season. ASSUMPTION-DRIVEN probabilities."""
+    """Returns list of mandatory triggers firing this season.
+
+    Two-pass model:
+      Pass 1 — independent rolls per §4.3.2 trigger conditions.
+      Pass 2 — arc-driven correlations: a fired trigger boosts probability of
+               causally-linked triggers firing the same season. Models how
+               canonical campaign arcs cluster mandatory events (e.g. stability
+               collapse triggers revolt + succession in the same season).
+
+    [ASSUMPTION] Correlation magnitudes are reasoned estimates from arc canon,
+    not yet measured against real campaign telemetry. Documented inline below.
+    """
     fired = []
     rng = ws.rng
 
+    # ── Pass 1: independent triggers ────────────────────────────────────────
     # Settlement Revolt — Order 0 in player's territory. Scales with strain.
     p_revolt = 0.05 + 0.03 * max(0, ws.strain - 3)
     if rng.random() < p_revolt: fired.append("settlement_revolt")
 
-    # Heresy Investigation — depends on CI and player's faction (Church-aligned less likely target).
+    # Heresy Investigation — depends on CI and player's faction
     p_heresy = 0.03 + 0.01 * (ws.ci // 30)
     if persona == "church_aligned": p_heresy *= 0.3
     if rng.random() < p_heresy: fired.append("heresy_investigation_target")
@@ -397,28 +409,55 @@ def fire_mandatory_triggers(ws: WorldState, persona: str) -> List[str]:
     p_succession = 0.02 + (0.02 if ws.faction_stability <= 2 else 0)
     if rng.random() < p_succession: fired.append("faction_leader_removal")
 
-    # Mass Battle at Settlement — only if active_battles and player's province targeted
+    # Mass Battle at Settlement
     if ws.active_battles > 0 and rng.random() < 0.30:
         fired.append("mass_battle_at_settlement")
 
-    # Companion Arc Trigger — assume 2-3 companions, each ~10%/season
+    # Companion Arc Trigger
     p_companion = 0.04 + 0.02 * (1 if persona == "social" else 0)
     if rng.random() < p_companion: fired.append("companion_arc_trigger")
 
-    # Knot Partner Crisis — depends on knot count
+    # Knot Partner Crisis
     p_knot = 0.03 * ws.player_knots
     if rng.random() < p_knot: fired.append("knot_partner_crisis")
 
-    # Stability Crisis — hysteresis: requires Stab ≤ 2 AND streak == 0 (just entered)
+    # Stability Crisis — hysteresis ED-749
     if ws.faction_stability <= 2 and ws.faction_stability_low_streak == 0:
-        if rng.random() < 0.85:    # near-certain on first entry into low-stab
+        if rng.random() < 0.85:
             fired.append("stability_crisis")
 
-    # Rank Advancement — Standing crossings (rare; about ~7 over a campaign)
+    # Rank Advancement
     p_rank = 0.08 if ws.player_standing < 5 else 0.04
     if ws.player_standing < 7 and rng.random() < p_rank:
         fired.append("rank_advancement_recognition")
         ws.player_standing += 1
+
+    # ── Pass 2: arc-driven correlations ─────────────────────────────────────
+    # Each rule: if X already fired this season, roll an extra Bernoulli to add Y.
+    # No double-add (set membership check).
+    fired_set = set(fired)
+
+    # Stability collapse → revolt (same province dynamics) + succession (institutional weakness)
+    if "stability_crisis" in fired_set:
+        if "settlement_revolt" not in fired_set and rng.random() < 0.30:
+            fired.append("settlement_revolt"); fired_set.add("settlement_revolt")
+        if "faction_leader_removal" not in fired_set and rng.random() < 0.20:
+            fired.append("faction_leader_removal"); fired_set.add("faction_leader_removal")
+
+    # Mass battle at player's settlement → revolt likely (contested province)
+    if "mass_battle_at_settlement" in fired_set:
+        if "settlement_revolt" not in fired_set and rng.random() < 0.40:
+            fired.append("settlement_revolt"); fired_set.add("settlement_revolt")
+
+    # Faction leader removed → companion arc (companion may be leader or tied)
+    if "faction_leader_removal" in fired_set:
+        if "companion_arc_trigger" not in fired_set and rng.random() < 0.30:
+            fired.append("companion_arc_trigger"); fired_set.add("companion_arc_trigger")
+
+    # Heresy investigation → knot crisis (investigations target inner-circle)
+    if "heresy_investigation_target" in fired_set:
+        if "knot_partner_crisis" not in fired_set and rng.random() < 0.25:
+            fired.append("knot_partner_crisis"); fired_set.add("knot_partner_crisis")
 
     return fired
 

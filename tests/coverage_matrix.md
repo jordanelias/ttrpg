@@ -30,7 +30,7 @@ ED-577-01-04, SIM-POL-R01-R05, ED-684, ED-590, ED-572, ED-545+.
 
 | Sim | Scope | Result |
 |-----|-------|--------|
-| sim_telemetry_substrate_2026-05-03 | Phase 5a session 3.5 telemetry substrate (mandatory zoom-in frequency + SA-budget saturation) | 4 personas × 100 campaigns × 40 seasons = 16k season-runs. Mandatory overflow 0% (4 SA structurally absorbs §4.3.2 mandatories). Saturation: 96% Normal / 100% Hard / 36% Narrative. Mandatory zoom-ins: ~1.13/season mean p90 ~1.6. Per-system minutes use tabletop §12.3 placeholder durations — flagged [ASSUMPTION], not measurement. |
+| sim_telemetry_substrate_2026-05-03 (v2) | Phase 5a session 3.5 telemetry substrate (mandatory zoom-in frequency + SA-budget saturation, arc-driven correlation) | 4 personas × 100 campaigns × 40 seasons = 16k season-runs. v1 (independent triggers): 0% mandatory overflow across personas; mandatory p90 ~1.6. v2 (arc correlation: stability_crisis→revolt+succession, mass_battle→revolt, leader_removal→companion_arc, heresy→knot_crisis): mandatory overflow 0% Narrative/Normal, **0.4% Hard** (1 in 250 seasons under correlation); mandatory p90 lifts to 2.0 (+26%). Saturation unchanged: 96% Normal / 100% Hard / 36% Narrative. Per-system minutes use tabletop §12.3 placeholder durations — flagged [ASSUMPTION]. |
 
 
 ---
