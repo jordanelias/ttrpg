@@ -58,7 +58,7 @@ systems:
     params: params/factions.md
     canonical_sha__params__factions_md: "3107e624238db2e2e379013f12d3878e39fd1b2d"
     stats: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "cb73bb7536a777e267105019976b5f458328896b"
+    canonical_sha__params__factions__stats_1_7_scale_md: "56eba8a60ee00a25c4c6d8ebeec37515a4699c65"
   victory:
     design_doc: designs/provincial/victory_v30.md
     canonical_sha__designs__provincial__victory_v30_md: "22e72f930b7926efc4e3ff448c0ac1b2e4776095"
@@ -113,7 +113,7 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
   derived_stats:
     design_doc: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "cb73bb7536a777e267105019976b5f458328896b"
+    canonical_sha__params__factions__stats_1_7_scale_md: "56eba8a60ee00a25c4c6d8ebeec37515a4699c65"
     note: "Derived faction stats (1-7 scale). Primary source for Mandate/Influence/Wealth/Military/Intel/Stability starting values and progression rules."
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
@@ -179,7 +179,7 @@ systems:
     design_doc: designs/world/solmund_voice_v30.md
     canonical_sha__designs__world__solmund_voice_v30_md: "eb7988c7f9b455e061a6e77f78e889574c9e4221"
     status: provisional
-    added: '2026-04-25 Stage 4'
+    added: '2026-04-25 Stage 4; 2026-05-02 ED-784 Phase 2: Mandate→L+PS migration applied (38 refs reclassified per audit §2.1; Ethical Framework Modifiers + Löwenritter PP-246 sections SUPERSEDED per PP-686 v2)'
   solmund_philosophy:
     design_doc: designs/world/solmund_philosophy_v30.md
     canonical_sha__designs__world__solmund_philosophy_v30_md: "cbf000cf8d03363b621ed91fccb04d4e656cf4b9"

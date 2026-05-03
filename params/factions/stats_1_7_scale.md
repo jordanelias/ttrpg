@@ -1,21 +1,21 @@
 ## Stats (1–7 scale)
 
-Mandate / Influence / Wealth / Military / Intel / Stability
+Legitimacy / Popular_Support / Influence / Wealth / Military / Intel / Stability
 Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
 
 ## Starting Stats
 
-| Faction | M (TTRPG) | M (BG) | I | W (TTRPG) | W (BG) | Mil | Int | Sta |
-|---------|-----------|--------|---|-----------|--------|-----|-----|-----|
-| Crown | 5 | 5 | 5 | 4 | 4 | 4 | — | 4 |
-| Church | 5 | 5 | 6 | 5 | 5 | 4 | — | 5 |
-| Hafenmark | 4 | 4 | 4 | 5 | 5 | 3 | — | 4 |
-| Varfell | 4 | 4 | 4 | 4 | 4 | 4 | — | 4 |
-| Guilds | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
+| Faction | L (TTRPG) | PS (TTRPG) | L (BG) | PS (BG) | I | W (TTRPG) | W (BG) | Mil | Int | Sta |
+|---------|-----------|------------|--------|---------|---|-----------|--------|-----|-----|-----|
+| Crown | 5 | 5 | 5 | 5 | 5 | 4 | 4 | 4 | — | 4 |
+| Church | 5 | 5 | 5 | 5 | 6 | 5 | 5 | 4 | — | 5 |
+| Hafenmark | 4 | 4 | 4 | 4 | 4 | 5 | 5 | 3 | — | 4 |
+| Varfell | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | — | 4 |
+| Guilds | 3 | 3 | 3 | 3 | 4 | 6 | 6 | 2 | — | 5 |
 | Restoration Movement | — | — | — | — | — | — | — | — | No faction stats (PP-460). Operates via Presence markers and Community Weaving. Victory via Cultural Uprising of T9 Himmelenger. |
-| Löwenritter | — | 3 | 2/3 | — | — | 5/6 | 3 | 5/4 |
+| Löwenritter | — | — | 3 | 3 | 2/3 | — | — | 5/6 | 3 | 5/4 |
 
-Note: Varfell BG Mandate 3/Wealth 3 is intentional (political isolation at game start, not their full institutional depth).
+Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_personal.md / faction_behavior_v30 §3.4-3.5) / Wealth 4 is intentional (political isolation at game start, not their full institutional depth). Pre-existing inconsistency: an earlier version of this footnote said "Mandate 3 / Wealth 3" while the Starting Stats table above shows Varfell BG Mandate 4 / Wealth 4. The table is authoritative; this note now matches. [TODO: confirm with Jordan if intent was 3 (footnote) or 4 (table) — flagged as part of ED-784 Phase 2 sweep, not blocking.]
 
 ## Clock Starting Values
 
@@ -41,7 +41,7 @@ Applied at Accounting before Assert/Suppress resolution.
 |--------|-----------|
 | Passive baseline | +1 (always) |
 | Assert (Church) | +2 total (replaces passive; not additive) |
-| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. CI does not decrease. Ob = floor(Church Mandate / 2) + 1 ÷ 2 (round up, min 1). |
+| Suppress (Crown or Hafenmark Domain Action) | Negates passive +1 for that season only. CI does not decrease. Ob = floor(Church L / 2) + 1 ÷ 2 (round up, min 1). |
 
 Suppress may be declared once per season by one faction. It cannot reduce CI below its value at season start.
 TTRPG: same rule applies. BG: same rule applies; Suppress is a Standard Action consuming one card.
@@ -60,13 +60,15 @@ Success/Overwhelming: normal effect, no cost.
 
 **Stability 1 edge case:** If Stability is already 1, a Failure reduces it to 0, triggering an immediate Stability Check (existing mechanic). Factions with low Stability are further discouraged from sub-threshold gambles.
 
-## Ethical Framework Ob Modifiers
+## ~~Ethical Framework Ob Modifiers~~ — SUPERSEDED 2026-05-02 (PP-686 v2 / ED-784)
 
-| Condition | Modifier |
-|-----------|---------|
-| Action aligned with framework | −1 Ob |
-| Action contradicts framework | +1 Ob |
-| Church only: reveals Thread truth | +2 Ob |
+<!-- [SUPERSEDED 2026-05-02 — SUPERSESSION-PP686-002] Replaced by triadic decomposition in designs/provincial/faction_behavior_v30.md §3.7: mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier, clamped at ±2 (was ±3 — sim v2 confirmed ±3 produced dominant-strategy at high alignment). Strictness functions only as deviation-cost modulator (Crown Policy gate). See ED-784, params/bg/core.md (struck 2026-05-01 SUPERSESSION-PP686-001), params/factions_personal.md (struck 2026-05-01 same supersession), and audit §2.1. Retained below struck for patch-history reference only — do not implement. -->
+
+~~| Condition | Modifier |~~
+~~|-----------|---------|~~
+~~| Action aligned with framework | −1 Ob |~~
+~~| Action contradicts framework | +1 Ob |~~
+~~| Church only: reveals Thread truth | +2 Ob |~~
 
 ## Leadership Deviation Stability Check Obs
 
@@ -76,10 +78,10 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 
 | Faction | Action | Roll | Effect |
 |---------|--------|------|--------|
-| Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |
-| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction Mandate −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
-| Church | Church Influence 60 Territorial Seizure | Mandate vs floor(owner's Mandate / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Mandate −1. |
-| Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending Mandate prerequisite: Mandate ≥ 1 |
+| Crown | Royal Decree | L vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |
+| Church | Excommunication | L vs target L (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction L −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
+| Church | Church Influence 60 Territorial Seizure | L vs floor(owner's L / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Church L −1. |
+| Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending PS prerequisite: PS ≥ 1 |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Löwenritter unique actions not extracted |
 
 ## Nine Political Axes (qualitative — not tracked numerically)
@@ -100,7 +102,7 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 |-----|---------|--------|
 | Ehrenwall | Coup trigger | Martial Law; Crown Loyalty check |
 | Vaynard | TK threshold | Research acceleration |
-| Baralta | Church Influence suppression | Church Mandate −1/season while Mandate ≥ 4 |
+| Baralta | Church Influence suppression | Church L −1/season while Baralta L ≥ 4 |
 | Schoenland | Active spoiler | Various faction disruptions |
 
 Mending Stability ≤ 10 adds +1 to coup/succession trigger check pools.
@@ -108,7 +110,7 @@ Mending Stability ≤ 10 adds +1 to coup/succession trigger check pools.
 ## Unique Actions — All Factions (PP-168)
 
 ### Crown — Royal Decree
-Roll: Mandate vs Ob 2. Once per season.
+Roll: L vs Ob 2. Once per season.
 | Degree | Result |
 |--------|--------|
 | Overwhelming | One faction stat ±1 immediate; consecutive seasons: +1 Ob/season |
@@ -117,31 +119,31 @@ Roll: Mandate vs Ob 2. Once per season.
 Cannot target Intel. Effect is immediate and unilateral.
 
 ### Church — Excommunication
-Roll: Mandate vs floor(target Mandate / 2) + 1 (faction leader) or Ob 2 (non-leader).
+Roll: L vs floor(target L / 2) + 1 (faction leader) or Ob 2 (non-leader).
 | Degree | Result |
 |--------|--------|
-| Success | Strips target's Circles bonus; target faction Mandate −1 |
+| Success | Strips target's Circles bonus; target faction L −1 |
 | Failure | — |
 Reversal: Grand Debate (5 exchanges) or new Confessor appointed.
 
 ### Church — CI 60 Territorial Seizure
 Trigger: Church Influence (CI) reaches 60. Fires once per territory.
-Roll: Mandate vs floor(owner's Mandate / 2) + 1.
+Roll: L vs floor(owner's L / 2) + 1.
 | Degree | Result |
 |--------|--------|
 | Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Flat Church Influence value fires immediately. |
-| Failure | Mandate −1 |
+| Failure | Church L −1 |
 Riskbreaker exposure removes seized territory and prevents re-seizure for one season.
 
 ### Hafenmark — Sovereign Authority Doctrine
-Roll: Mandate vs Ob 4. Once per campaign arc.
+Roll: L vs Ob 4. Once per campaign arc.
 | Degree | Result |
 |--------|--------|
-| Overwhelming | Church Influence −3; Church Mandate −1; Heresy Investigation blocked this season; +1D social vs Church for the arc |
-| Success | Church Influence −2; Church Mandate −1; Heresy Investigation opens (Ob 4 to pursue) |
+| Overwhelming | Church Influence −3; Church L −1; Heresy Investigation blocked this season; +1D social vs Church for the arc |
+| Success | Church Influence −2; Church L −1; Heresy Investigation opens (Ob 4 to pursue) |
 | Partial | Church Influence −1; Heresy Investigation opens immediately; Church Influence +1 |
-| Failure | Church Influence +1; Heresy Investigation immediate; Baralta's Mandate −1 |
-CI Suppression: while Baralta's Mandate ≥ 4, Church Influence −1/season. Suppression ends if Mandate < 4 or excommunication (CI +4 immediately).
+| Failure | Church Influence +1; Heresy Investigation immediate; Baralta's L −1 |
+CI Suppression: while Baralta's L ≥ 4, Church Influence −1/season. Suppression ends if L < 4 or excommunication (CI +4 immediately).
 
 ### Varfell — The Private Collection
 Roll: Intel vs Ob 2. Once per season.
@@ -178,7 +180,7 @@ Requires: at least one practitioner with Thread Sensitivity (TS) 30+ affiliated 
 | Partial | Thread Tension unchanged; Stability −1 |
 | Failure | Stability −1; Thread Tension +1 |
 Co-Movement Card drawn on every result (P-01 compliance).
-Prerequisite: Mandate ≥ 1 for Mending prerequisite (see stage6 §8.8).
+Prerequisite: PS ≥ 1 for Mending prerequisite (see stage6 §8.8).
 
 ### Löwenritter — Martial Law / Coup Trigger
 No standard Unique Action roll — Löwenritter action is triggered by Graduated Autonomy reaching 4.
@@ -189,12 +191,12 @@ No standard Unique Action roll — Löwenritter action is triggered by Graduated
 Counter never decrements. Fires at next seasonal accounting once at 4. (PP-577: threshold unified to 4, per params_board_game canonical)
 **Martial Law effects:** All non-Military Domain Actions in Crown territories require secondary Military check (Löwenritter Military pool, TN 7, Ob 2); failure blocks the action. Persists until players remove it (Influence vs Ob = Löwenritter Military ÷ 2, round up, min Ob 3) or Church Influence drops below 40.
 
-## Mandate Recovery (ED-066b resolved — provisional)
+## Mandate Recovery (L + PS independently, ED-066b resolved — provisional, post PP-686 v2)
 
-Factions with Mandate < starting value recover +1 Mandate/season when:
+Factions with L < starting value recover +1 L/season AND factions with PS < starting value recover +1 PS/season independently when:
 - No hostile Domain Action targeting that faction this season
 - Stability ≥ 2
-Cap: cannot recover above starting Mandate value via this mechanic. [PROVISIONAL]
+Cap: neither L nor PS can recover above its starting value via this mechanic. [PROVISIONAL]
 
 ## Hafenmark Wealth Sink (ED-064b resolved — provisional)
 
@@ -211,10 +213,10 @@ When a unit is destroyed in TTRPG mass combat: Faction Military −1 (immediate)
 
 Military stat cap: ±2/season from all Domain Actions combined. Hard cap = faction Military rating (cannot exceed starting value +1 via Domain Actions alone). [PROVISIONAL]
 
-## Institutional Mandate Trigger (ED-003 resolved — provisional)
+## Institutional Mandate Trigger (L-only per audit Q2; ED-003 resolved — provisional)
 
-Institutional Mandate fires when:
-- Faction Mandate ≥ 4, AND
+Institutional Mandate (L) fires when:
+- Faction L ≥ 4, AND
 - A Domain Action directly challenges the faction's core institutional authority:
   Crown: sovereignty or legal authority; Church: spiritual authority or excommunication power;
   Guilds: trade monopoly or taxation; Hafenmark: guild autonomy; Varfell: territorial governance;
@@ -226,26 +228,26 @@ Institutional Mandate fires when:
 PCs are always mechanically present in their primary faction between Zoom Ins.
 Effect: the PC's faction gains +1D on one Domain Action per season in territories the PC is physically located in (narrative confirmation required). [PROVISIONAL]
 
-## Institutional Mandate — Uphold / Appease (PP-189)
+## Institutional Mandate — Uphold / Appease (PP-189; L-only per audit Q2)
 
-Trigger: Mandate ≥ 4 AND Domain Action directly challenges faction core institutional authority.
+Trigger: L ≥ 4 AND Domain Action directly challenges faction core institutional authority.
 | Choice | Timing | Effect | Cost |
 |--------|--------|--------|------|
 | Uphold | Before roll | Roll proceeds | None |
-| Appease | Before roll | Action cancelled | Mandate −1 |
-NPC: Appease if Mandate ≥ 4 AND Stability ≤ 3.
+| Appease | Before roll | Action cancelled | L −1 |
+NPC: Appease if L ≥ 4 AND Stability ≤ 3.
 
 ## Community Weaving — Procedure (PP-195) [SUPERSEDED by PP-616]
 
-> **SUPERSEDED:** This procedure is superseded by `params/threadwork.md` PP-616 (Community Organizing — Canonical Pool). PP-616 changes: (1) pool formula from `Mandate + History` to `(Spirit × 2) + History + TPS` unifying all Thread operations; (2) removes Domain Action framing — Community Organizing is a Thread operation, not a DA ("One per contact window round. Not a Domain Action."); (3) removes the Failure → Mandate −1 consequence. Mandate ≥ 1 prerequisite retained (Mending Mandate). The [PROVISIONAL] tag is removed — PP-616 is final. Retained below for patch-history reference only — do not implement.
+> **SUPERSEDED:** This procedure is superseded by `params/threadwork.md` PP-616 (Community Organizing — Canonical Pool). PP-616 changes: (1) pool formula from `Mandate + History` to `(Spirit × 2) + History + TPS` unifying all Thread operations; (2) removes Domain Action framing — Community Organizing is a Thread operation, not a DA ("One per contact window round. Not a Domain Action."); (3) removes the Failure → Mandate −1 consequence. PS ≥ 1 prerequisite retained (Mending PS). The [PROVISIONAL] tag is removed — PP-616 is final. Retained below for patch-history reference only — do not implement.
 
-Revolution Domain Action. Pool: Mandate (as dice) + History, TN 7, Ob 3. Prerequisite: Mandate ≥ 1.
+Revolution Domain Action. Pool: PS (as dice) + History, TN 7, Ob 3. Prerequisite: PS ≥ 1.
 | Degree | MS Effect | Other |
 |--------|-----------|-------|
-| Overwhelming | MS +2 | Mandate unchanged |
-| Success | MS +1 | Mandate unchanged |
+| Overwhelming | MS +2 | PS unchanged |
+| Success | MS +1 | PS unchanged |
 | Partial | MS +0 | Wasted action |
-| Failure | MS +0 | Mandate −1 |
+| Failure | MS +0 | PS −1 |
 Frequency: once per season. Consumes 1 Domain Action.
 
 ## Simultaneous Catastrophe Rule (PP-199 — ED-077)
@@ -316,11 +318,13 @@ When a personal combat scene precedes or overlaps a Strategic Phase mass action:
 - PC Failure: mass action at +2 Ob (PC captured/incapacitated; morale cost)
 Mid-combat zoom: pause combat. Resolve Strategic Phase. Apply mass outcome as context. Resume personal combat next session.
 
-## Ethical Framework Modifiers — Löwenritter (PP-246)
+## ~~Ethical Framework Modifiers — Löwenritter (PP-246)~~ — SUPERSEDED 2026-05-02 (PP-686 v2 / ED-784)
 
-| Faction | Framework | Aligned (−1 Ob) | Contradict (+1 Ob) |
-|---------|-----------|----------------|-------------------|
-| Löwenritter | Martial Honour | Military actions + Crown-loyal actions | Political manipulation; acting against Crown interest |
+<!-- [SUPERSEDED 2026-05-02 — SUPERSESSION-PP686-003] Per-faction Ethical Framework table superseded alongside the general framework (SUPERSESSION-PP686-002 above). Löwenritter's Mission/cascade/expectation tags now authored in faction state per faction_behavior_v30.md §3.7 (Mission "Honour the Crown's institutional authority"; cascade narrow alignment with Crown procedural decisions; populist expectations track populist Crown loyalty). The previous binary "aligned vs contradict" framing is replaced by the triadic decomposition. Retained below struck for patch-history reference only — do not implement. -->
+
+~~| Faction | Framework | Aligned (−1 Ob) | Contradict (+1 Ob) |~~
+~~|---------|-----------|----------------|-------------------|~~
+~~| Löwenritter | Martial Honour | Military actions + Crown-loyal actions | Political manipulation; acting against Crown interest |~~
 
 ## PP-242 — Seasonal cap timing
 
@@ -344,7 +348,7 @@ Territory seizure CI gains = distinct category (not DA). All CI sources subject 
 
 ## PP-255 — Public Instability full design (BG)
 
-Range 0–10. Start 5. Accrual: +1/season any faction Mandate < 3 at accounting. Recovery: −1/season zero hostile Stability-targeting DAs. PI ≥ 8: revolt check (Stability ≤ 3 factions → Stability Ob 2; fail → Mandate −1). PI = 10: GM narrative uprising event.
+Range 0–10. Start 5. Accrual: +1/season any faction PS < 3 at accounting. Recovery: −1/season zero hostile Stability-targeting DAs. PI ≥ 8: revolt check (Stability ≤ 3 factions → Stability Ob 2; fail → PS −1). PI = 10: GM narrative uprising event.
 
 ## ED-174 provisional — PI cascade brake
 

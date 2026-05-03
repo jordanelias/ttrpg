@@ -574,3 +574,48 @@ Unchanged: `session_log_current.md` (2k — session-bounded, rotates), `propagat
 - `tests/coverage_matrix_archive_2026_04_19.md` (NEW)
 - `references/canonical_sources.yaml` (Last-touched breadcrumbs stripped)
 - `references/propagation_map.md` (this section)
+
+---
+
+## 2026-05-02 — ED-784 Phase 2 sweep: stats_1_7_scale.md (commit A)
+
+First commit of the L+PS mechanical migration sweep mandated by ED-784. `params/factions/stats_1_7_scale.md` is the canonical 1-7 stat block file — most foundational of the 9 consumer files.
+
+**Header migration:** Stat block header `Mandate / Influence / Wealth / Military / Intel / Stability` → `Legitimacy / Popular_Support / Influence / Wealth / Military / Intel / Stability`. Starting Stats table header columns expanded `M (TTRPG) | M (BG)` → `L (TTRPG) | PS (TTRPG) | L (BG) | PS (BG)`. All faction rows seeded with equal L=PS values per PP-686 v2 §3.4-3.5 (Crown 5/5/5/5, Church 5/5/5/5, Hafenmark 4/4/4/4, Varfell 4/4/4/4, Guilds 3/3/3/3, Löwenritter —/—/3/3).
+
+**Mechanic migrations (per audit §2.1 classifications):**
+
+| Mechanic | Roll/Effect | Classification |
+|---|---|---|
+| Crown Royal Decree | Mandate vs Ob 2 | **L** (procedural) |
+| Church Excommunication | Mandate vs target Mandate | **L** vs target **L** (procedural authority both sides) |
+| Excommunication outcome | target Mandate −1 | target **L** −1 (institutional) |
+| CI 60 Territorial Seizure | Mandate vs floor(owner's Mandate / 2) + 1 | **L** vs floor(owner's **L** / 2) + 1 |
+| CI Seizure failure | Mandate −1 | Church **L** −1 |
+| RM Community Weaving | Mending Mandate prerequisite ≥ 1 | Mending **PS** ≥ 1 (populist) |
+| Baralta Suppression | Church Mandate −1/season while Mandate ≥ 4 | Church **L** −1/season while Baralta **L** ≥ 4 |
+| Baralta Heresy outcomes | Church Mandate −1, Baralta's Mandate −1 | Church **L** −1, Baralta's **L** −1 |
+| Baralta CI Suppression gate | while Baralta Mandate ≥ 4 | while Baralta **L** ≥ 4 |
+| RM Mending prerequisite | Mandate ≥ 1 | **PS** ≥ 1 |
+| Mandate Recovery (ED-066b) | factions with Mandate < starting recover +1 | **L** AND **PS** independently (cap at each starting value) |
+| Institutional Mandate Trigger (ED-003) | Faction Mandate ≥ 4 | Faction **L** ≥ 4 (per audit Q2 — institutional) |
+| Institutional Mandate Uphold/Appease (PP-189) | Mandate ≥ 4, Mandate −1 | **L** ≥ 4, **L** −1 (per audit Q2) |
+| RM Revolution DA pool | Mandate (as dice) + History | **PS** (as dice) + History (populist) |
+| RM Revolution outcome | Mandate −1 on failure | **PS** −1 on failure |
+| PI track accrual | any faction Mandate < 3 at accounting | any faction **PS** < 3 (populace dissatisfaction trigger) |
+| PI revolt check failure | Mandate −1 | **PS** −1 (outcome-driven populist loss) |
+
+**Ethical Framework Modifiers strikes (PP-686 v2 / SUPERSESSION-PP686-002 + 003):**
+- §General "Ethical Framework Ob Modifiers" table: SUPERSEDED, struck through, replaced by triadic decomposition in `faction_behavior_v30.md §3.7` (mission_alignment_modifier + cascade_alignment_modifier + expectation_alignment_modifier, ±2 cap).
+- §Löwenritter "Ethical Framework Modifiers (PP-246)" table: SUPERSEDED, struck through. Löwenritter's Mission/cascade/expectation tags now authored in faction state per `faction_behavior_v30 §3.7`.
+
+**Open item flagged:** Pre-existing inconsistency between Starting Stats table (Varfell BG Mandate 4) and L18 footnote (Varfell BG Mandate 3). Footnote updated to match table; flagged for Jordan confirmation as part of ED-784 Phase 2 (not blocking).
+
+**Files in this commit:**
+- `params/factions/stats_1_7_scale.md` (38 Mandate refs migrated; 2 Ethical Framework sections struck; Starting Stats table header + 6 rows updated; L18 footnote inconsistency flagged)
+- `references/canonical_sources.yaml` (canonical_sha bumped)
+- `references/propagation_map.md` (this section)
+
+**Cross-references:** ED-784 (umbrella), PP-686 v2 (faction behavior v2), audit §2.1 (per-site classifications), `params/factions_personal.md` (L+PS canonical authority for seed-equal rule), `params/bg/core.md` (Ethical Framework strike applied 2026-05-01 SUPERSESSION-PP686-001).
+
+**Remaining Phase 2 work:** 8 consumer files (faction_actions, factions_personal additional refs, ministry, institutions, parliament, ci_seizure, tracks, stress_patches, phases) + 8 reference files. Subsequent commits B, C, D.
