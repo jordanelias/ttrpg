@@ -26,6 +26,12 @@
 Key: ED-588/589 (RM), ED-612 (Guilds), AUD-SET/VIC/NPC, SIM-DEBT-03/04,
 ED-577-01-04, SIM-POL-R01-R05, ED-684, ED-590, ED-572, ED-545+.
 
+## Recent Sims (2026-05-03)
+
+| Sim | Scope | Result |
+|-----|-------|--------|
+| sim_telemetry_substrate_2026-05-03 | Phase 5a session 3.5 telemetry substrate (mandatory zoom-in frequency + SA-budget saturation) | 4 personas × 100 campaigns × 40 seasons = 16k season-runs. Mandatory overflow 0% (4 SA structurally absorbs §4.3.2 mandatories). Saturation: 96% Normal / 100% Hard / 36% Narrative. Mandatory zoom-ins: ~1.13/season mean p90 ~1.6. Per-system minutes use tabletop §12.3 placeholder durations — flagged [ASSUMPTION], not measurement. |
+
 
 ---
 
