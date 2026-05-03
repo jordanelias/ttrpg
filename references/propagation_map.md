@@ -681,3 +681,68 @@ Second commit of the L+PS migration sweep. Three consumer files migrated.
 - `params/factions_personal.md`
 - `references/canonical_sources.yaml` (3 SHAs bumped)
 - `references/propagation_map.md` (this section)
+
+---
+
+## 2026-05-02 — ED-784 Phase 2 sweep: Commit C (institutions + parliament + ci_seizure + tracks + stress_patches + phases)
+
+Third commit of the L+PS migration sweep. Six consumer files migrated, ~99 Mandate refs total.
+
+**`params/bg/institutions.md` (27 refs):** Bulk migration — Ministry Mandate / Crown Mandate / Church Mandate / Crown's Mandate → L equivalents. Specific edits: Cardinal of Temperance AER advancement roll (Mandate vs Ob = floor(AER/2)+1) → L; bare Crown confirmation roll (Mandate vs Ob 2) → L; Ministry stat-row narrative ("Its Mandate (3) represents institutional legitimacy") → L (3) with audit Q2 footnote. All institutional throughout — Ministry is administrative apparatus per audit Q2 (no separate populist axis).
+
+**`params/bg/parliament.md` (19 refs):** All procedural-authority parliamentary mechanics. Notable migrations:
+- Crown Policy gates (`Mandate ≥ 4`) → `L ≥ 4` per audit Q5 procedural-authority interpretation
+- §Mandate Recovery (PP-174): renamed to track L+PS independently, like ED-066b in stats_1_7_scale
+- §Mandate Suppression (PP-296): renamed §L Suppression. Coalition cap targets institutional L stat (procedural-authority suppression). PS-targeting suppression (e.g., populist undermining via Information ops) noted as not bound by this cap.
+- Institutional Mandate Uphold/Appease (PP-189): legacy name preserved, mechanic operates on L per audit Q2 (header + body footnoted)
+- Trigger scope: Domain Action targeting "Mandate stat" → "L stat" (institutional context)
+- Crown end-of-Phase-4 Mandate −1 → L −1
+
+**`params/bg/ci_seizure.md` (20 refs):** Pure procedural Church religious-authority mechanics. All Mandate refs → L: Conditional Passive prominence gate, Suppress §3.7 opponent action, Hafenmark Structural Suppression (PP-431-COR Baralta L ≥ 4), Church/non-Church Political pool formulas (Mandate ± floor(CI/N)), seizure prerequisites (Church L ≥ 4, Prominence Church L > controlling faction L).
+
+**`params/bg/tracks.md` (16 refs):** Mostly Peninsular Strain track + Hafenmark Awareness track effects. PP-686 v2 NOTE comment block (L1) preserved as historical record. Migrations:
+- Cardinal AER advancement roll → L (matches institutions.md)
+- Strain "Mandate check" at Tension/Crisis/Collapse states → "L check" (institutional pressure on faction procedural authority)
+- Hafenmark Awareness 3+ effects: Church Mandate −1 → Church L −1 (institutional strain); Hafenmark Mandate ≥ 3 → Hafenmark L ≥ 3 (CI suppression ratchet)
+- Excommunication "+2 Mandate" cost annotation → "+2 L" (Church loses procedural authority equivalent to Hafenmark's PE-driven institutional resilience)
+
+**`params/bg/stress_patches.md` (14 refs):** Mostly Restoration Movement Founding outcomes + PP-475 Submission ruling + Church Prominence formula. Migrations:
+- Church Prominence formula → Church L > controlling faction L
+- Baralta Mandate ≥ 4 (CI suppression context) → Baralta L ≥ 4
+- §Submission + Mandate 0 Ruling (PP-475) → §Submission + PS 0 Ruling per audit Q1 explicitly (header + body)
+- "halved Mandate = 0" → "halved PS = 0" (audit Q1 ratification)
+- "Mandate 0" / "Mandate-0 effects" → "PS 0" / "PS-0 effects"
+- RM Founding outcome stats: Mandate 2/Mandate 1 → L 2 + PS 2 / L 1 + PS 1 (seed equal per PP-686 v2). Inline TODO flagged: PP-460 says RM is statless; may be obsolete content — flagged for Jordan review.
+
+**`params/bg/phases.md` (3 refs):** Brief migrations:
+- Church Prominence update (ED-326): "Church global Mandate exceeds territory's controlling faction's global Mandate" → "Church global L exceeds ... controlling faction's global L"
+- Torben Loyalty modifier "Crown upheld Mandate 2+ consecutive seasons" → "Crown upheld L 2+ consecutive seasons" (procedural Crown discipline reward)
+
+**Cumulative ED-784 Phase 2 progress:**
+
+| File | Mandate refs | Status |
+|---|---:|---|
+| stats_1_7_scale.md | 38 | ✓ Commit A (f8ac629) |
+| factions_personal.md | 18 | ✓ Commit B (0a32a29) |
+| faction_actions.md | 38 | ✓ Commit B (0a32a29) |
+| ministry.md | 32 | ✓ Commit B (0a32a29) |
+| institutions.md | 27 | ✓ Commit C |
+| parliament.md | 19 | ✓ Commit C |
+| ci_seizure.md | 20 | ✓ Commit C |
+| tracks.md | 16 | ✓ Commit C |
+| stress_patches.md | 14 | ✓ Commit C |
+| phases.md | 3 | ✓ Commit C |
+| 8 reference files | ~56 | pending Commit D |
+
+**Subtotal so far:** 225 Mandate refs migrated across 10 consumer files. ED-784 Phase 2 (consumer-file sweep) complete pending Commit D (reference files).
+
+**Note on canonical_sources.yaml:** The 6 files in this commit (`params/bg/{institutions,parliament,ci_seizure,tracks,stress_patches,phases}.md`) are not SHA-tracked in `references/canonical_sources.yaml`. Only some `params/bg/*.md` files have SHA records (core, clocks, victory, royal_assassination, tensions_deck, faction_actions, ministry); the rest are downstream reference files without independent canonical authority. No canonical_sources update is required for this commit.
+
+**Files in Commit C:**
+- `params/bg/institutions.md`
+- `params/bg/parliament.md`
+- `params/bg/ci_seizure.md`
+- `params/bg/tracks.md`
+- `params/bg/stress_patches.md`
+- `params/bg/phases.md`
+- `references/propagation_map.md` (this section)

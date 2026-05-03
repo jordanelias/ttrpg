@@ -2,7 +2,7 @@
 0–20 (cumulative pressure meter). Starts at **7**. Effects table: §PI Thresholds above. (PP-553)
 | PI | State |
 |----|-------|
-| 8–10 | Full Parliament. Crown Policy requires Mandate ≥ 4. |
+| 8–10 | Full Parliament. Crown Policy requires L ≥ 4. |
 | 5–7 | Standard. Parliamentary Manoeuvre available. |
 | 3–4 | Degraded. Parliamentary Manoeuvre +1 Ob. Crown Decree Ob reduced to 1. |
 | ≤ 2 | Non-functional. Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. CI +2 (does not apply when CI is frozen at 75 — PP-560). |
@@ -13,19 +13,19 @@ PI recovers: Hafenmark Parliamentary Manoeuvre success (+1), Crown Parliamentary
 
 
 ## Crown Policy Instrument (PP-180, v04 confirmed)
-Once per season, Crown may issue one Policy if Mandate ≥ 4. Same Policy cannot repeat 2 seasons.
+Once per season, Crown may issue one Policy if L ≥ 4. Same Policy cannot repeat 2 seasons.
 Resolution order: Policy → Hafenmark Opposition → Censor.
 [Full Policy table in faction card section]
 
 
-## Mandate Recovery (PP-174 — provisional, no v04 basis but not contradicted)
-Govern Overwhelming in own capital: Mandate +1 (max once/season, max to faction starting Mandate).
+## Mandate Recovery (L + PS independently, PP-174 — provisional, no v04 basis but not contradicted)
+Govern Overwhelming in own capital: L +1 (max once/season, max to faction starting L). [Note: PS recovery not addressed by Govern Overwhelming; per ED-066b applies independently to populist axis.]
 
 
-## Mandate Suppression — General Cap and Coalition Bonus (PP-296)
-All Domain Actions targeting another faction's Mandate stat use Ob = floor(target Mandate / 2) + 1. Consistent with Excommunication precedent (PP-180).
+## L Suppression — General Cap and Coalition Bonus (PP-296)
+All Domain Actions targeting another faction's L stat (procedural-authority suppression — per audit Q2 institutional context) use Ob = floor(target L / 2) + 1. Consistent with Excommunication precedent (PP-180). PS-targeting suppression (e.g., populist undermining via Information ops) is not bound by this cap; see audit §2 Q5 per-mechanic guidance.
 
-**Coalition suppression bonus (PP-296):** When 2+ factions play Domain Actions targeting the same faction's Mandate in the same Phase 4 resolution, each additional faction beyond the first adds +2D to the suppression pool (automatic — no formal pact declaration required).
+**Coalition suppression bonus (PP-296):** When 2+ factions play Domain Actions targeting the same faction's L in the same Phase 4 resolution, each additional faction beyond the first adds +2D to the suppression pool (automatic — no formal pact declaration required).
 
 | Factions suppressing | Pool bonus |
 |---|---|
@@ -36,15 +36,15 @@ All Domain Actions targeting another faction's Mandate stat use Ob = floor(targe
 
 Coalition bonus applies to the primary suppressing faction's pool. Secondary factions must each have a valid suppression action played this phase. Pool floor: 1D.
 
-**Valid suppression action (PP-518):** Any Domain Action whose stated primary effect includes 'Mandate −N' on the target faction (Excommunicate, Baralta Suppress, Counter-Narrative, equivalents). Actions producing Mandate reduction as secondary, conditional, or cascade effect do NOT qualify.
+**Valid suppression action (PP-518):** Any Domain Action whose stated primary effect includes 'L −N' on the target faction (Excommunicate, Baralta Suppress, Counter-Narrative, equivalents). Actions producing Mandate reduction as secondary, conditional, or cascade effect do NOT qualify.
 
 
-## Institutional Mandate Uphold/Appease (PP-189 — v05 names this "Appease" not "Compromise")
-Each faction has a printed Institutional Mandate. When event challenges it:
+## Institutional Mandate Uphold/Appease (L-only per audit Q2; PP-189 — v05 names this "Appease" not "Compromise")
+Each faction has a printed Institutional Mandate (operates on L per audit Q2). When event challenges it:
 - **Uphold** (before roll): Roll proceeds normally. No cost.
-- **Appease** (before roll): Triggering action cancelled entirely — no roll made. Mandate −1.
-**Trigger scope (ED-324 resolved 2026-04-08):** Fires when a Domain Action directly targets the faction's Mandate stat OR their unique clock/track — CI for Church, PI for Hafenmark, VTM for Varfell. Stability, Influence, Wealth, Military do not trigger. Deterministic — no GM discretion.
-NPC rule: NPC factions Appease if Mandate ≥ 4 AND Stability ≤ 3.
+- **Appease** (before roll): Triggering action cancelled entirely — no roll made. L −1.
+**Trigger scope (ED-324 resolved 2026-04-08):** Fires when a Domain Action directly targets the faction's L stat OR their unique clock/track — CI for Church, PI for Hafenmark, VTM for Varfell. Stability, Influence, Wealth, Military do not trigger. Deterministic — no GM discretion.
+NPC rule: NPC factions Appease if L ≥ 4 AND Stability ≤ 3.
 Note: Prior params used "Compromise" — v05 PP-189 establishes "Appease" as the canonical term.
 
 
@@ -52,9 +52,9 @@ Note: Prior params used "Compromise" — v05 PP-189 establishes "Appease" as the
 Corrections applied over PP-188:
 - CI starting value: 28 (PP-188 had set it to 22 — wrong; P-32 in v05 explicitly raises it from 22 to 28)
 - Church primary victory threshold: CI ≥ 65 (P-32 reduced from 70)
-- CI 75 seizure: Church Mandate vs Ob = Fort + 1 (PP-192/PP-421); PP-183 had wrong formula
+- CI 75 seizure: Church L vs Ob = Fort + 1 (PP-192/PP-421); PP-183 had wrong formula
 - Majority-1s override: STRUCK in v05 (DESIGN DECISION 2026-04-02)
-- Institutional Mandate: Uphold/Appease (PP-189); prior params used "Compromise"
+- Institutional Mandate: Uphold/Appease (PP-189; L-only per audit Q2); prior params used "Compromise"
 - canonical source: v05 is authoritative (v04 is the structural base; v05 is most recent)
 
 
@@ -85,7 +85,7 @@ Crown breaks a Formal Crown Treaty by: (a) playing a Legionary card targeting a 
 ## Treaty Betrayal Cascade Timing (PP-523)
 When Crown breaks a Formal Crown Treaty:
 1. Dissolution declared at Phase 1 (before card plays this season).
-2. Crown Stability −2, Crown Mandate −1 applied at end of Phase 4.
+2. Crown Stability −2, Crown L −1 applied at end of Phase 4.
 3. Casus Belli granted to betrayed faction at Accounting Step 1.
 4. CB usable from the following season only.
 This staggers effects across resolution windows, keeping each step within the Cascade Depth Cap of 3.

@@ -11,7 +11,7 @@ Failure: No token, Stability −1.
 
 ## AER (Altonian Ecclesiastical Relationship) (PP-181, v04 confirmed)
 Track 0–5. Starts 2.
-**AER advancement:** Cardinal of Temperance Phase 1 declaration + roll (Mandate vs Ob = floor(AER/2)+1). Success: AER +1. No roll, no gain.
+**AER advancement:** Cardinal of Temperance Phase 1 declaration + roll (L vs Ob = floor(AER/2)+1). Success: AER +1. No roll, no gain.
 **AER decay (PP-565):** At Year-End Accounting, if Cardinal of Temperance focus was NOT maintained that year (no successful Temperance declaration this year): AER −1 (min 0). Represents diplomatic drift without active Church-Altonian engagement.
 [Full table in PP-181 section — confirmed by v04 B2]
 
@@ -30,7 +30,7 @@ Vaynard Thread Mastery track removed as faction-level stat. Thread capability is
 
 
 ## Church Excommunication Ob Cap (PP-180)
-Ob = floor(target Mandate / 2) + 1.
+Ob = floor(target L / 2) + 1.
 
 
 ## Partial Mend — Thread Wound Risk (PP-184)
@@ -54,9 +54,9 @@ Advances: Reformed Settlement event = +1 (max once per arc). Requires: Hafenmark
 | 0 | Reformed Settlement blocked: Church may Appease at no cost |
 | 1 | Parliamentary Manoeuvre targeting CI: −1 Ob |
 | 2 | Formal Reformed Settlement. TD track activates. |
-| 3 | Church Mandate −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
-| 4 | CI suppression extends: −1 CI/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
-| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on CI Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
+| 3 | Church L −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
+| 4 | CI suppression extends: −1 CI/season while Hafenmark L ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
+| 5 | Excommunication against Hafenmark costs +2 L (Church loses procedural authority equivalent to Hafenmark's PE-driven institutional resilience). Baralta: −2 Ob on CI Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
 
 ### Theological Dissatisfaction (TD) — Range 0–5
 Activates at RDT 2. Advances: +1 per arc when RDT ≥ 2 AND Church plays Assert. Church may freeze TD by playing Accommodate Reformed Settlement.
@@ -82,9 +82,9 @@ Advances: Reformed Settlement event = +1 (max once per arc). Requires: Hafenmark
 | 0 | Reformed Settlement blocked: Church may Appease at no cost |
 | 1 | Parliamentary Manoeuvre targeting CI: −1 Ob |
 | 2 | Formal Reformed Settlement. TD track activates. |
-| 3 | Church Mandate −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
-| 4 | CI suppression extends: −1 CI/season while Hafenmark Mandate ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
-| 5 | Excommunication against Hafenmark costs +2 Mandate. Baralta: −2 Ob on CI Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
+| 3 | Church L −1 (institutional strain) + Diplomatic actions vs Church: −1 Ob |
+| 4 | CI suppression extends: −1 CI/season while Hafenmark L ≥ 3 (was ≥ 4). Reformed territory PT actions +1 Ob for Church. |
+| 5 | Excommunication against Hafenmark costs +2 L (Church loses procedural authority equivalent to Hafenmark's PE-driven institutional resilience). Baralta: −2 Ob on CI Suppress actions. All diplomatic actions targeting Hafenmark from any faction: +1 Ob. |
 
 
 ### Theological Dissatisfaction (TD) — Range 0–5
@@ -135,10 +135,10 @@ Tracks cumulative civil war damage to peninsular unity. Starts at 0.
 | Strain | Name | Effect |
 |--------|------|--------|
 | 0–2 | Peace | None. |
-| 3–4 | Tension | All factions: Mandate check at Accounting (pool vs Ob 1). Failure: Mandate −1. |
+| 3–4 | Tension | All factions: L check at Accounting (pool vs Ob 1). Failure: L −1. |
 | 5–6 | Fracture | All factions: Accord −1 in one territory (lowest first). |
-| 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. Mandate check Ob 2. |
-| 9–10 | Collapse | Non-capital Accord cap 2. Mandate check Ob 3. RS −1/season additional. |
+| 7–8 | Crisis | All factions: Accord −1 in ALL non-capital territories. L check Ob 2. |
+| 9–10 | Collapse | Non-capital Accord cap 2. L check Ob 3. RS −1/season additional. |
 
 ---
 

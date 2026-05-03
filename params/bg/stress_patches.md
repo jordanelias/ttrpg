@@ -15,20 +15,20 @@ Military 0 makes Muster invalid (PP-039). Legionary cards are unplayable in hand
 
 ## Piety Yield Dead Zone — Explicit Note (PP-473)
 **Church-controlled territories produce zero Piety Yield.**
-Church Prominence = Church Mandate > controlling faction Mandate. When Church controls a territory, Church IS the controlling faction. Church Mandate > Church Mandate = False = not Prominent = no Piety Yield.
+Church Prominence = Church L > controlling faction L. When Church controls a territory, Church IS the controlling faction. Church L > Church L = False = not Prominent = no Piety Yield.
 Implication: Post-CI 75 seizure removes territories from Piety Yield pool. Plan accordingly.
 
 
 ## AER >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)
 AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
-- AER >= 3 bypasses Hafenmark Structural Suppression (passive -1/season from Baralta Mandate >= 4).
+- AER >= 3 bypasses Hafenmark Structural Suppression (passive -1/season from Baralta L >= 4).
 - Parliamentary Challenge is a card action; fires when played regardless of AER.
 - When AER >= 3 is active: structural is already negated; Challenge's "replaces structural" clause has no practical effect on structural. Challenge still fires and produces its degree-table CI result.
 
 
-## Submission + Mandate 0 Ruling (PP-475)
-If Submitting faction's halved Mandate = 0: **Submission supersedes Faction Collapse.**
-Submitted faction remains as vassal with Mandate 0. Mandate-0 effects apply. Faction does not enter Faction Collapse (which requires Stability 0 at Accounting end per I-04/P-15, not Mandate 0).
+## Submission + PS 0 Ruling (PP-475 / audit Q1 ratification 2026-05-02)
+If Submitting faction's halved PS = 0: **Submission supersedes Faction Collapse.** (Per audit Q1: submission is populist capitulation; institutional collapse is a separate Faction Collapse pathway.)
+Submitted faction remains as vassal with PS 0. PS-0 effects apply (institutional L may persist; Submission is populist; Faction Collapse pathway via L 0 + Stability 0 separately tracked). Faction does not enter Faction Collapse (which requires Stability 0 at Accounting end per I-04/P-15, not L 0 or PS 0).
 
 
 ## Restoration Movement — Founding Mechanic (PP-478)
@@ -65,10 +65,10 @@ Floor: 0. Ceiling: 5.
 Founding Agent declared (PC with communal Conviction, or named NPC at GM discretion).
 Roll: Founding Agent's Influence vs Ob = CI ÷ 10 (round up, min 1, max 5).
 
-| Degree | Starting Stats | Presence Markers |
+| Degree | Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below) | Presence Markers |
 |--------|---------------|-----------------|
-| Overwhelming | Mandate 2, Influence 3, Wealth 1, Military 0, Stability 4 | 3 markers in PT ≤ 1 territories |
-| Success | Mandate 1, Influence 2, Wealth 1, Military 0, Stability 3 | 2 markers |
+| Overwhelming | L 2, PS 2, Influence 3, Wealth 1, Military 0, Stability 4 | 3 markers in PT ≤ 1 territories |
+| Success | L 1, PS 1, Influence 2, Wealth 1, Military 0, Stability 3 | 2 markers |
 | Partial | PW +1. Not founded. Retry next Accounting. | — |
 | Failure | PW −1. Church gets 1 free Heresy Investigation. Cannot retry until PW resets to ≥ 3. | — |
 
@@ -117,10 +117,10 @@ Floor: 0. Ceiling: 5.
 Founding Agent declared (PC with communal Conviction, or named NPC at GM discretion).
 Roll: Founding Agent's Influence vs Ob = CI ÷ 10 (round up, min 1, max 5).
 
-| Degree | Starting Stats | Presence Markers |
+| Degree | Starting Stats (L+PS seeded equal per PP-686 v2; flagged: RM is statless per PP-460, see TODO note below) | Presence Markers |
 |--------|---------------|-----------------|
-| Overwhelming | Mandate 2, Influence 3, Wealth 1, Military 0, Stability 4 | 3 markers in PT ≤ 1 territories |
-| Success | Mandate 1, Influence 2, Wealth 1, Military 0, Stability 3 | 2 markers |
+| Overwhelming | L 2, PS 2, Influence 3, Wealth 1, Military 0, Stability 4 | 3 markers in PT ≤ 1 territories |
+| Success | L 1, PS 1, Influence 2, Wealth 1, Military 0, Stability 3 | 2 markers |
 | Partial | PW +1. Not founded. Retry next Accounting. | — |
 | Failure | PW −1. Church gets 1 free Heresy Investigation. Cannot retry until PW resets to ≥ 3. | — |
 

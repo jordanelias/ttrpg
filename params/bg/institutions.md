@@ -16,7 +16,7 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 - **Fortitude (Templar):** Templar deployment requires Cardinal of Fortitude to be active (Church Stability ≥ 2). At Stability ≤ 1: Templars do not deploy regardless of card play.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Varfell Intel action on Church — political intelligence work, prestige-coded): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
-- **Temperance (Scholars):** AER maintenance. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may declare AER maintenance at Phase 1. Roll: Mandate vs Ob = floor(current AER / 2) + 1. Success: AER +1. Failure: no change. *(PP-565: was passive reduction of AER loss events; now active roll-gated advancement)*
+- **Temperance (Scholars):** AER maintenance. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may declare AER maintenance at Phase 1. Roll: L vs Ob = floor(current AER / 2) + 1. Success: AER +1. Failure: no change. *(PP-565: was passive reduction of AER loss events; now active roll-gated advancement)*
 
 
 ### Cardinal Death — Succession (ED-336 resolved)
@@ -37,7 +37,7 @@ When a Cardinal is killed during a Zoom In scene (Hybrid mode):
 
 ### Church Levies
 Per canonical source: "Church has its own levies stationed in cathedrals across every major city. Two-thirds can be raised by the King at any given moment."
-**BG mechanic:** Crown may, once per Year-End, raise Church levies: Crown gains Military +1 for one season (levies mobilised). Church loses equivalent Military capacity: Church Military −1 for that season. Church cannot refuse if Crown Mandate ≥ 4.
+**BG mechanic:** Crown may, once per Year-End, raise Church levies: Crown gains Military +1 for one season (levies mobilised). Church loses equivalent Military capacity: Church Military −1 for that season. Church cannot refuse if Crown L ≥ 4.
 
 ### Excommunication — Canonical Procedure
 Excommunication recommended by Cardinal of Justice for heresy conviction. Excommunicated factions/leaders:
@@ -61,7 +61,7 @@ Excommunication recommended by Cardinal of Justice for heresy conviction. Excomm
 - **Fortitude (Templar):** Templar deployment requires Cardinal of Fortitude to be active (Church Stability ≥ 2). At Stability ≤ 1: Templars do not deploy regardless of card play.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Varfell Intel action on Church — political intelligence work, prestige-coded): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
-- **Temperance (Scholars):** AER maintenance. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may declare AER maintenance at Phase 1. Roll: Mandate vs Ob = floor(current AER / 2) + 1. Success: AER +1. Failure: no change. *(PP-565: was passive reduction of AER loss events; now active roll-gated advancement)*
+- **Temperance (Scholars):** AER maintenance. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may declare AER maintenance at Phase 1. Roll: L vs Ob = floor(current AER / 2) + 1. Success: AER +1. Failure: no change. *(PP-565: was passive reduction of AER loss events; now active roll-gated advancement)*
 
 
 
@@ -84,7 +84,7 @@ When a Cardinal is killed during a Zoom In scene (Hybrid mode):
 
 ### Church Levies
 Per canonical source: "Church has its own levies stationed in cathedrals across every major city. Two-thirds can be raised by the King at any given moment."
-**BG mechanic:** Crown may, once per Year-End, raise Church levies: Crown gains Military +1 for one season (levies mobilised). Church loses equivalent Military capacity: Church Military −1 for that season. Church cannot refuse if Crown Mandate ≥ 4.
+**BG mechanic:** Crown may, once per Year-End, raise Church levies: Crown gains Military +1 for one season (levies mobilised). Church loses equivalent Military capacity: Church Military −1 for that season. Church cannot refuse if Crown L ≥ 4.
 
 
 ### Excommunication — Canonical Procedure
@@ -101,7 +101,7 @@ Per canonical source: Löwenritter serves the Monarch through military and civic
 ### Structure
 - **Lions' Table:** Military arm. Coordinates military levies. Appoints Royal Guard.
 - **Lions' Helm:** Naval arm. (BG: no direct naval territory but relevant to Schoenland sea route — Löwenritter Helm can deny T10 sea access to Schoenland at IP < 75 if Crown requests.)
-- **Riskbreakers:** Sub-unit of Löwenritter, NOT independent faction. Operates outside the law to infiltrate cults and criminal organizations. [CORRECTION: Prior design documents treated Riskbreakers as independent NPC. Canonical source places them inside Löwenritter. They remain NPC-controlled but their Priority Tree now links to Löwenritter's coup counter and Crown's Mandate.]
+- **Riskbreakers:** Sub-unit of Löwenritter, NOT independent faction. Operates outside the law to infiltrate cults and criminal organizations. [CORRECTION: Prior design documents treated Riskbreakers as independent NPC. Canonical source places them inside Löwenritter. They remain NPC-controlled but their Priority Tree now links to Löwenritter's coup counter and Crown's L.]
 - **Civic Arm:**
   - Knights of the Peace: patrol and enforce law. BG: when Löwenritter is active (any phase), one territory per season has its March Ob −1 (pacified roads).
   - Royal Investigators: counter-espionage and investigation. BG: once per season, Löwenritter may cancel one successful Intel action targeting Crown (Royal Investigators intercept).
@@ -114,14 +114,14 @@ Per canonical source: Löwenritter serves the Monarch through military and civic
 
 ### Löwenritter — Reconstitution (ED-331 resolved)
 **Type:** Senator Inward (Löwenritter only, post-Split). Available only when PI = 0.
-Roll: Mandate vs Ob 3. Once per season.
+Roll: L vs Ob 3. Once per season.
 
 | Degree | Effect |
 |--------|--------|
 | Overwhelming | PI restored to 2. Parliamentary Manoeuvre re-enabled immediately. |
 | Success | PI restored to 1. Parliamentary Manoeuvre re-enabled. |
 | Partial | PI = 0 (no change). Stability −1. |
-| Failure | PI = 0 (no change). Stability −1. Church Mandate +1 (institutional vacuum benefits Church). |
+| Failure | PI = 0 (no change). Stability −1. Church L +1 (institutional vacuum benefits Church). |
 
 **Rationale:** Löwenritter as successor authority has the standing to reconstitute parliamentary function. Without Reconstitution, PI = 0 is a permanent lock on Regency primary victory (PI ≥ 4 required). This action creates a credible recovery path without trivialising the coup's consequences.
 
@@ -129,7 +129,7 @@ Roll: Mandate vs Ob 3. Once per season.
 ### Structure
 - **Lions' Table:** Military arm. Coordinates military levies. Appoints Royal Guard.
 - **Lions' Helm:** Naval arm. (BG: no direct naval territory but relevant to Schoenland sea route — Löwenritter Helm can deny T10 sea access to Schoenland at IP < 75 if Crown requests.)
-- **Riskbreakers:** Sub-unit of Löwenritter, NOT independent faction. Operates outside the law to infiltrate cults and criminal organizations. [CORRECTION: Prior design documents treated Riskbreakers as independent NPC. Canonical source places them inside Löwenritter. They remain NPC-controlled but their Priority Tree now links to Löwenritter's coup counter and Crown's Mandate.]
+- **Riskbreakers:** Sub-unit of Löwenritter, NOT independent faction. Operates outside the law to infiltrate cults and criminal organizations. [CORRECTION: Prior design documents treated Riskbreakers as independent NPC. Canonical source places them inside Löwenritter. They remain NPC-controlled but their Priority Tree now links to Löwenritter's coup counter and Crown's L.]
 - **Civic Arm:**
   - Knights of the Peace: patrol and enforce law. BG: when Löwenritter is active (any phase), one territory per season has its March Ob −1 (pacified roads).
   - Royal Investigators: counter-espionage and investigation. BG: once per season, Löwenritter may cancel one successful Intel action targeting Crown (Royal Investigators intercept).
@@ -143,14 +143,14 @@ Roll: Mandate vs Ob 3. Once per season.
 
 ### Löwenritter — Reconstitution (ED-331 resolved)
 **Type:** Senator Inward (Löwenritter only, post-Split). Available only when PI = 0.
-Roll: Mandate vs Ob 3. Once per season.
+Roll: L vs Ob 3. Once per season.
 
 | Degree | Effect |
 |--------|--------|
 | Overwhelming | PI restored to 2. Parliamentary Manoeuvre re-enabled immediately. |
 | Success | PI restored to 1. Parliamentary Manoeuvre re-enabled. |
 | Partial | PI = 0 (no change). Stability −1. |
-| Failure | PI = 0 (no change). Stability −1. Church Mandate +1 (institutional vacuum benefits Church). |
+| Failure | PI = 0 (no change). Stability −1. Church L +1 (institutional vacuum benefits Church). |
 
 **Rationale:** Löwenritter as successor authority has the standing to reconstitute parliamentary function. Without Reconstitution, PI = 0 is a permanent lock on Regency primary victory (PI ≥ 4 required). This action creates a credible recovery path without trivialising the coup's consequences.
 
@@ -160,49 +160,49 @@ Per canonical source: Valoria uses a system of ministries to provide services. M
 
 Named ministries in source: Ministry of Law, Ministry of Guilds, Ministry of Logothetes, Ministry of Granaries, Ministry of Pure Water.
 
-**BG Ministry faction** = the collective ministerial apparatus. Its Influence (4) represents reach across all ministries. Its Mandate (3) represents institutional legitimacy — it has authority but is subordinate to Parliament's nominations.
+**BG Ministry faction** = the collective ministerial apparatus. Its Influence (4) represents reach across all ministries. Its L (3) represents institutional legitimacy (PS not tracked — administrative apparatus has no separate populist axis, per audit Q2) — it has authority but is subordinate to Parliament's nominations.
 
 ### Ministry of Guilds — Specific BG Role
 The Ministry of Guilds monitors the guild system, arranges contracts between guilds and Imperial Court, sets taxation. In BG: Ministry of Guilds is the direct connection between Ministry (NPC) and Guilds (NPC).
-- If Ministry Mandate ≥ 2 AND Guilds NPC is active: Guilds may not be targeted by Economic Leverage from other factions without a free Ministry counter (Ministry files procedural objection: +1 Ob to the Economic Leverage roll).
-- If Ministry Mandate ≤ 1: Guilds lose their trade contract protections — all Trade Ob in Guilds-controlled territories +1 (no Ministry to enforce non-competition).
+- If Ministry L ≥ 2 AND Guilds NPC is active: Guilds may not be targeted by Economic Leverage from other factions without a free Ministry counter (Ministry files procedural objection: +1 Ob to the Economic Leverage roll).
+- If Ministry L ≤ 1: Guilds lose their trade contract protections — all Trade Ob in Guilds-controlled territories +1 (no Ministry to enforce non-competition).
 
 ### Parliament Nomination Mechanic (PP-194)
 Per canonical source: Parliament nominates Ministers (confirmed by Monarch) and Rectorates.
 **BG mechanic — Ministry Nomination:**
 Once per Year-End: Parliament (= Hafenmark Parliamentary Manoeuvre success this year + Crown not in Emergency Powers) may nominate a Ministerial agenda. Choose one:
-- **Ministry of Law agenda:** Ministry Mandate +1. All Heresy Investigation Obs +1 (legal proceduralism slows Church).
+- **Ministry of Law agenda:** Ministry L +1. All Heresy Investigation Obs +1 (legal proceduralism slows Church).
 - **Ministry of Guilds agenda:** Guilds NPC Wealth +1. Ministry receives 1 Wealth (tithe/tax income).
 - **Ministry of Logothetes agenda:** All faction Intel orders next season: −1 Ob (administrative records are accessible). Ministry Influence +1 for 1 season.
-Crown must confirm: if Crown Mandate ≥ 3, confirmation is automatic. If Crown Mandate < 3: roll Mandate vs Ob 2. Failure: nomination blocked (Crown too weak to confirm).
+Crown must confirm: if Crown L ≥ 3, confirmation is automatic. If Crown L < 3: roll L vs Ob 2. Failure: nomination blocked (Crown too weak to confirm).
 
 ### Parliament Deposition Mechanic (PP-194 — from canonical source)
 Per canonical source: "Court Parliament has constitutional right to depose Monarch if deemed unfit for duties by the Holy See AND Imperial Court."
 **BG mechanic — Royal Deposition:**
-Fires if ALL of: PI ≥ 5 (Parliament functional), Church Mandate ≥ 5 (Holy See has standing), Crown Mandate ≤ 1 (Monarch deemed unfit), AND at least 2 other player factions have active Standing tokens against Crown.
+Fires if ALL of: PI ≥ 5 (Parliament functional), Church L ≥ 5 (Holy See has standing), Crown L ≤ 1 (Monarch deemed unfit), AND at least 2 other player factions have active Standing tokens against Crown.
 Effect: Crown player must pass the Crown to Löwenritter (Split stage triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
 
 
 ### Ministry of Guilds — Specific BG Role
 The Ministry of Guilds monitors the guild system, arranges contracts between guilds and Imperial Court, sets taxation. In BG: Ministry of Guilds is the direct connection between Ministry (NPC) and Guilds (NPC).
-- If Ministry Mandate ≥ 2 AND Guilds NPC is active: Guilds may not be targeted by Economic Leverage from other factions without a free Ministry counter (Ministry files procedural objection: +1 Ob to the Economic Leverage roll).
-- If Ministry Mandate ≤ 1: Guilds lose their trade contract protections — all Trade Ob in Guilds-controlled territories +1 (no Ministry to enforce non-competition).
+- If Ministry L ≥ 2 AND Guilds NPC is active: Guilds may not be targeted by Economic Leverage from other factions without a free Ministry counter (Ministry files procedural objection: +1 Ob to the Economic Leverage roll).
+- If Ministry L ≤ 1: Guilds lose their trade contract protections — all Trade Ob in Guilds-controlled territories +1 (no Ministry to enforce non-competition).
 
 
 ### Parliament Nomination Mechanic (PP-194)
 Per canonical source: Parliament nominates Ministers (confirmed by Monarch) and Rectorates.
 **BG mechanic — Ministry Nomination:**
 Once per Year-End: Parliament (= Hafenmark Parliamentary Manoeuvre success this year + Crown not in Emergency Powers) may nominate a Ministerial agenda. Choose one:
-- **Ministry of Law agenda:** Ministry Mandate +1. All Heresy Investigation Obs +1 (legal proceduralism slows Church).
+- **Ministry of Law agenda:** Ministry L +1. All Heresy Investigation Obs +1 (legal proceduralism slows Church).
 - **Ministry of Guilds agenda:** Guilds NPC Wealth +1. Ministry receives 1 Wealth (tithe/tax income).
 - **Ministry of Logothetes agenda:** All faction Intel orders next season: −1 Ob (administrative records are accessible). Ministry Influence +1 for 1 season.
-Crown must confirm: if Crown Mandate ≥ 3, confirmation is automatic. If Crown Mandate < 3: roll Mandate vs Ob 2. Failure: nomination blocked (Crown too weak to confirm).
+Crown must confirm: if Crown L ≥ 3, confirmation is automatic. If Crown L < 3: roll L vs Ob 2. Failure: nomination blocked (Crown too weak to confirm).
 
 
 ### Parliament Deposition Mechanic (PP-194 — from canonical source)
 Per canonical source: "Court Parliament has constitutional right to depose Monarch if deemed unfit for duties by the Holy See AND Imperial Court."
 **BG mechanic — Royal Deposition:**
-Fires if ALL of: PI ≥ 5 (Parliament functional), Church Mandate ≥ 5 (Holy See has standing), Crown Mandate ≤ 1 (Monarch deemed unfit), AND at least 2 other player factions have active Standing tokens against Crown.
+Fires if ALL of: PI ≥ 5 (Parliament functional), Church L ≥ 5 (Holy See has standing), Crown L ≤ 1 (Monarch deemed unfit), AND at least 2 other player factions have active Standing tokens against Crown.
 Effect: Crown player must pass the Crown to Löwenritter (Split stage triggers) OR call an emergency Parliamentary Session (Senator Inward, Ob 3) to restore legitimacy. If neither: Crown faction is eliminated; Löwenritter Coup Counter immediately set to 4 (coup fires next season).
 
 

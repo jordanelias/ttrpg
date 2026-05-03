@@ -2,13 +2,13 @@
 **Starting CI: 28. CI runs to 100 (no freeze). Milestone system: see victory_v30 §7.**
 
 Seasonal CI at Accounting (execute in order, per military_layer_v30 §3):
-1. **Conditional Passive (§3.2):** CI +1 only if Church Mandate > controlling faction Mandate in ≥ 2 territories.
+1. **Conditional Passive (§3.2):** CI +1 only if Church L > controlling faction L in ≥ 2 territories.
 2. **Piety Yield (§3.3):** CI += Σ(PT tier × SW/5) per prominent territory, floored. SW = Spiritual Weight per territory (tc_political_redesign_v30 §1).
 3. **Charity Advantage (§3.4):** Church Wealth spent on charity → CI +1 per 2 Wealth, cap 2/season.
 4. **Templar Presence (§3.5):** +1 CI per territory with Church military unit AND Church Prominence.
 5. **Assert (§3.6):** Optional Church action. Influence vs Ob 2. Success: CI +1. Failure: Stability −1.
-6. **Suppress (§3.7):** Optional opponent action. Mandate vs Ob = floor(Church Mandate / 2) + 1. Success: negate Step 1. Failure: Stability −1.
-7. **Hafenmark Structural Suppression (§3.8):** While Baralta Mandate ≥ 4, CI −1/season.
+6. **Suppress (§3.7):** Optional opponent action. L vs Ob = floor(Church L / 2) + 1. Success: negate Step 1. Failure: Stability −1.
+7. **Hafenmark Structural Suppression (§3.8):** While Baralta L ≥ 4, CI −1/season.
 
 **CI seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Conditional Passive, Piety Yield, Calamity Drift, event cards).
 
@@ -16,9 +16,9 @@ Legacy CI sources (AER momentum, Attention Pool threshold, Emergency Powers, Fre
 
 
 ## Faction Political Pool (tc_political_redesign_v30 §3.4)
-**Church:** Political pool = Mandate + floor(CI/20).
-**Non-Church (anti-Church motions):** Political pool = Mandate − floor(CI/30).
-**Non-Church (non-Church motions):** Political pool = Mandate (no CI modifier).
+**Church:** Political pool = L + floor(CI/20).
+**Non-Church (anti-Church motions):** Political pool = L − floor(CI/30).
+**Non-Church (non-Church motions):** Political pool = L (no CI modifier).
 CI creates asymmetric legitimacy: Church gains political bonus proportional to CI; opponents pay a legitimacy cost proportional to CI when directly opposing Church.
 
 
@@ -29,8 +29,8 @@ CI creates asymmetric legitimacy: Church gains political bonus proportional to C
 
 ### Seizure Ob
 Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table.
-Prominence required: Church Mandate > controlling faction's Mandate in target territory.
-Church Mandate ≥ 4 required to attempt seizure.
+Prominence required: Church L > controlling faction's L in target territory.
+Church L ≥ 4 required to attempt seizure.
 
 ### Seizure Results
 Per victory_v30.md §7. Overwhelming seizure: PT +1 in target territory. This is a consequence effect — NOT subject to the ±1 PT seasonal cap. State-change consequences from seizure are exempt from action caps. (PP-502)
@@ -52,7 +52,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 | 1 | 9 (before infra) |
 | 0 (Restoration) | 7 |
 
-**Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate). Prominence assessed at seizure declaration. (PP-509)
+**Prerequisites:** Church L ≥ 4. Prominence (Church L > controlling faction L). Prominence assessed at seizure declaration. (PP-509)
 **Overwhelming:** PT +1 in target territory (consequence, not cap-governed). (PP-494, PP-508)
 **Failure:** Stability −1.
 **Political cost:** Casus Belli granted to controlling faction on every seizure attempt. (See §Casus Belli.) (PP-510)
@@ -77,8 +77,8 @@ Attacker rolls: Military pool vs Ob. Degree table per standard BG degree table (
 
 ### Seizure Ob
 Ob = 10 − PT − infrastructure modifiers (floor 1). See victory_v30 §3.2 for infrastructure table.
-Prominence required: Church Mandate > controlling faction's Mandate in target territory.
-Church Mandate ≥ 4 required to attempt seizure.
+Prominence required: Church L > controlling faction's L in target territory.
+Church L ≥ 4 required to attempt seizure.
 
 
 ### Seizure Results
@@ -103,7 +103,7 @@ One seizure attempt per season. Cannot target T15 (Askeheim) or T16 (Schoenland)
 | 1 | 9 (before infra) |
 | 0 (Restoration) | 7 |
 
-**Prerequisites:** Church Mandate ≥ 4. Prominence (Church Mandate > controlling faction Mandate). Prominence assessed at seizure declaration. (PP-509)
+**Prerequisites:** Church L ≥ 4. Prominence (Church L > controlling faction L). Prominence assessed at seizure declaration. (PP-509)
 **Overwhelming:** PT +1 in target territory (consequence, not cap-governed). (PP-494, PP-508)
 **Failure:** Stability −1.
 **Political cost:** Casus Belli granted to controlling faction on every seizure attempt. (See §Casus Belli.) (PP-510)
