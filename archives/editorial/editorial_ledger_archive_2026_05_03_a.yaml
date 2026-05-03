@@ -1,0 +1,28 @@
+# Editorial Ledger Archive — 2026-05-03 batch (a)
+# Archived: ED-755 (Doc 17 §6 sweep, closed 2026-05-03), ED-786 (register cap, closed 2026-05-02), ED-787 (Intelligence stat, closed 2026-05-03)
+# Source: canon/editorial_ledger.yaml
+
+entries:
+
+  - id: ED-755
+    date: 2026-04-29
+    closed: 2026-05-03
+    description: "[CLOSED — RESOLVED 2026-05-03] Doc 17 §6 Jordan-decision items: 7 of 9 sub-items resolved by default application (D1.1 keep symbolic_effects table; D1.2 define symbolic_effects as Concern salience modifier; D1.3 surface diagonal chains — already implemented in WhyDiagnostic.tscn at valoria-game cd3051c; D1.4 partial NPC self-monitoring; D1.5 persistent crisis-mask flag with decay; D2.3 Knot formation procedure Disposition+5+TS≥30→Spirit/TN7/Ob2; D2.4 Province Accord = floor(mean settlement Order)). 2 sub-items spun out: D2.1 Intelligence-stat contradiction → ED-787 (P1); D2.2 LICENSE choice → ED-788 (P2). Resolution doc: designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md."
+    status: closed
+    severity: P1
+    source: "doc 17 §6"
+
+  - id: ED-786
+    date: 2026-05-02
+    description: "Register cap configuration revised + chunking sweep across active ledgers/registers. (1) TOKEN_THRESHOLDS in skills/valoria-orchestrator/scripts/github_ops.py raised: editorial_ledger 2k→4k, editorial_ledger_summary 1k→2k, file_index_summary 1k→2k, canonical_sources 5k→8k, coverage_matrix 5k→8k, patch_register_active 15k→18k. Rationale: chronic cap pressure during 2026-05-02 session traced to under-budgeted limits; collisions (ED-782) and emergency triage (ED-783) were downstream symptoms. New caps give realistic headroom for routine 2-3 commit/session work. (2) Chunking sweep: editorial_ledger ED-782/783/784/785 (closed) → archives/editorial/editorial_ledger_archive_2026_05_02_b.yaml (1968→1107 tokens); coverage_matrix historical batches 2026-04-17 to 2026-04-19 → tests/coverage_matrix_archive_2026_04_19.md (4983→358 tokens); canonical_sources 'Last touched' breadcrumbs all stripped (4333→4130 tokens, comment-discipline fully migrated to ED entries + propagation_log). (3) Open Findings table in coverage_matrix pruned to unresolved-only (resolved rows traced via ED references in archive). Active register state post-sweep: all files <60% of new caps."
+    status: closed
+    severity: P2
+    source: "register cap audit 2026-05-02 (post ED-782/783 follow-through)"
+
+  - id: ED-787
+    date: 2026-05-03
+    closed: 2026-05-03
+    description: "[CLOSED 2026-05-03] Intelligence stat restored — Position A applied per Jordan signoff. c2effdd Renaissance review carries; ED-748 STRUCK ruling overridden. Intel column filled in params/factions/stats_1_7_scale.md (Crown 3, Church 4, Hafenmark 3, Varfell 4, Löwenritter 3 retained, Guilds 4). Varfell value revised from RR's 5 to 4 per Jordan: Varfell is opportunist/revolutionary (anti-Altonian + anti-Einhir-caste), not intelligence-themed. Vaynard entry in canon/03_canonical_timeline.md updated. Full rationale + per-faction details + forward gates: designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.1 Addendum. Faction stat schema closed."
+    status: closed
+    severity: P1
+    source: "ED-755 D2.1 spin-out 2026-05-03; Jordan signoff 2026-05-03"

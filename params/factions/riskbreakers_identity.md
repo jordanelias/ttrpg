@@ -66,7 +66,7 @@ Designer retains right to revise names and backstory before player-facing public
 
 ## ED-147 Resolution (PP-324) — Crown Covert Penalty [FLAGGED]
 
-Crown covert actions use Influence pool at +1 Ob (no Intel stat). PP-236 confirmed.
+Crown covert actions use Influence pool at +1 Ob (Crown Intel 3 exists post ED-787 restoration but Influence 5 is more favorable; +1 Ob is the covert-action penalty per PP-236). PP-236 confirmed.
 +1 Ob is the provisional modifier — represents Crown's institutional weakness at covert operations.
 [FLAGGED: confirm +1 Ob or set alternative modifier before Crown Domain Action compilation.]
 

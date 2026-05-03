@@ -1,35 +1,25 @@
 # Editorial Ledger Summary
-# manual refresh 2026-05-03 — ED-787 CLOSED (Intelligence stat restored, Position A applied)
+# manual refresh 2026-05-03 — ED-787 closed; 3 closed entries archived (ED-755, ED-786, ED-787)
 
 p1_blocker_count: 0
 open_count: 7
-total_active: 10
+total_active: 7
 next_id: 789
 
-p1_blockers:
-  []   # NO P1 BLOCKERS — first time since pre-ED-755
+p1_blockers: []
 
 p2_open:
   - ED-710: "Settlement adjacency graph — new mechanical layer (PP-666). Will be superseded by ED-780 spec rewrite."
   - ED-711: "Fractional province ownership (PP-666). Will be superseded by ED-780 spec rewrite."
   - ED-777: "[STANDING] arc_register_factions Niflhel reframe — 5 arcs need plot-level reframe."
   - ED-780: "[STANDING] Geography Phase 3 spec rewrite (settlement_adjacency v2, march_layer, mass_battle terrain-derivation, naval mechanics resolving ED-055). Depends on ED-779."
-  - ED-788: "[STANDING — JORDAN-DECISION] LICENSE / GOV-08 — choose license; populate top-level LICENSE file. Spun out from ED-755 D2.2; options framed in 05_ED-755_resolutions.md §3.2."
+  - ED-788: "[STANDING — JORDAN-DECISION] LICENSE / GOV-08 — choose license. Not blocking."
 
 p3_open:
   - ED-776: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation."
-  - ED-781: "[STANDING] Geography Phase 4 stress tests (Mountain Pass, Open-field cavalry, Coastal landing). Depends on ED-780."
+  - ED-781: "[STANDING] Geography Phase 4 stress tests. Depends on ED-780."
 
-closed_in_active_ledger:
-  - ED-755: "Doc 17 §6 sweep (2026-05-03) — 7/9 resolved by default; D2.1→ED-787, D2.2→ED-788. See 05_ED-755_resolutions.md."
-  - ED-786: "Register cap configuration revised + chunking sweep (2026-05-02)."
-  - ED-787: "Intelligence stat restored 2026-05-03 — Position A applied per Jordan signoff. See 05_ED-755_resolutions.md §3.1 Addendum."
-
-# Recent activity (2026-05-01 to 2026-05-03):
-#   ED-755  CLOSED 2026-05-03 — Doc 17 §6 nine-item sweep
-#   ED-779  CLOSED — Geography Phase 2 EXECUTED (PP-710); archived
-#   ED-784  CLOSED — Mandate audit resolution + Phase 2 mechanical migration COMPLETE; archived
-#   ED-785  CLOSED — Phase B trigger ruleset finalized; archived
-#   ED-786  CLOSED — register cap revision + chunking sweep
-#   ED-787  CLOSED 2026-05-03 — Intelligence stat restored (Position A); ED-748 overridden; faction stat schema closed
-#   ED-788  P2 OPEN — LICENSE / GOV-08 (only Jordan-decision item remaining)
+# Recent archives:
+#   2026-05-03 (a): ED-755, ED-786, ED-787 → archives/editorial/editorial_ledger_archive_2026_05_03_a.yaml
+#   2026-05-02 (b): ED-782, ED-783, ED-784, ED-785
+#   2026-05-02 (a): ED-775, ED-778, ED-779
