@@ -23,3 +23,7 @@ PP-684/685/686/687/688 lift PROVISIONAL → canonical pending:
 - Jordan signoff on this audit folder
 - params propagation: strike Ethical Framework Modifiers; add L+PS fields; author Mission/cascade/temperament
 - ED-750..764 + PP-297/351/653 PROVISIONAL→canonical sweep
+
+## Phase 4 — P1 backlog sweep (commit pending)
+
+- `05_ED-755_resolutions.md` — Doc 17 §6 nine-item Jordan-decision sweep. 7 of 9 sub-items resolved by default application (D1.1, D1.2, D1.3 already-implemented, D1.4, D1.5, D2.3, D2.4); 2 spun out to fresh ED entries (D2.1 → ED-787 P1 Intelligence-stat contradiction; D2.2 → ED-788 P2 LICENSE choice). ED-755 closed.

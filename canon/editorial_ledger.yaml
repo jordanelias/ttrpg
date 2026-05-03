@@ -1,5 +1,5 @@
 # Valoria Editorial Ledger — Active (open items only)
-# next_id: 787
+# next_id: 789
 # Archival batch 2026-05-02 (b): ED-782, ED-783, ED-784, ED-785 → archives/editorial/editorial_ledger_archive_2026_05_02_b.yaml
 # Archival batch 2026-05-02 (a): ED-775, ED-778, ED-779 (3 closed entries) → archives/editorial/editorial_ledger_archive_2026_05_02_a.yaml
 # Archival batch 2026-05-01 (b): ED-763, ED-764 (PROVISIONAL items, low-action) → canon/editorial_ledger_archive.yaml
@@ -27,8 +27,9 @@ entries:
 
   - id: ED-755
     date: 2026-04-29
-    description: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
-    status: open
+    closed: 2026-05-03
+    description: "[CLOSED — RESOLVED 2026-05-03] Doc 17 §6 Jordan-decision items: 7 of 9 sub-items resolved by default application (D1.1 keep symbolic_effects table; D1.2 define symbolic_effects as Concern salience modifier; D1.3 surface diagonal chains — already implemented in WhyDiagnostic.tscn at valoria-game cd3051c; D1.4 partial NPC self-monitoring; D1.5 persistent crisis-mask flag with decay; D2.3 Knot formation procedure Disposition+5+TS≥30→Spirit/TN7/Ob2; D2.4 Province Accord = floor(mean settlement Order)). 2 sub-items spun out: D2.1 Intelligence-stat contradiction → ED-787 (P1); D2.2 LICENSE choice → ED-788 (P2). Resolution doc: designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md."
+    status: closed
     severity: P1
     source: "doc 17 §6"
 
@@ -65,3 +66,17 @@ entries:
     status: closed
     severity: P2
     source: "register cap audit 2026-05-02 (post ED-782/783 follow-through)"
+
+  - id: ED-787
+    date: 2026-05-03
+    description: "[BLOCKED — JORDAN-DECISION] Intelligence stat contradiction: c2effdd (Renaissance political-infrastructure review) restored Intelligence as 6th faction stat; ED-748 had STRUCK it as redundant with Government. Spun out from ED-755 D2.1. Two positions framed in designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.1. Jordan picks Position A (restore) or Position B (keep STRUCK); ED-787 closes with chosen position and cross-reference note in either c2effdd or ED-748 (whichever is overridden). Blocks closure of faction stat schema."
+    status: open
+    severity: P1
+    source: "ED-755 D2.1 spin-out 2026-05-03"
+
+  - id: ED-788
+    date: 2026-05-03
+    description: "[STANDING — JORDAN-DECISION] LICENSE / GOV-08 — choose license; populate top-level LICENSE file. Spun out from ED-755 D2.2. Common videogame-design options framed in designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.2: CC-BY-SA 4.0 (share-alike copyleft), GPL-3 (strong copyleft), Proprietary / All Rights Reserved (locked private IP), CC0 (public domain). Not blocking active mechanical work; blocks any external contribution or repo publication."
+    status: open
+    severity: P2
+    source: "ED-755 D2.2 spin-out 2026-05-03"

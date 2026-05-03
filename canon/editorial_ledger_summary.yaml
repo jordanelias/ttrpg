@@ -1,13 +1,13 @@
 # Editorial Ledger Summary
-# auto-generated 2026-05-01 (manual refresh — Phase 2 workplan reconciliation PP-709)
+# auto-generated 2026-05-01 (manual refresh 2026-05-03 — ED-755 resolution sweep)
 
 p1_blocker_count: 1
-open_count: 8
+open_count: 9
 total_active: 9
-next_id: 782
+next_id: 789
 
 p1_blockers:
-  - ED-755: "[BLOCKED — JORDAN-DECISION] Doc 17 §6 Jordan-decision items: E-38-A/B, E-TOP-A, ST-31-B, R-41-A; carryover Intelligence/LICENSE/Knot/Accord. Defaults proposed in doc 17 §6."
+  - ED-787: "[BLOCKED — JORDAN-DECISION] Intelligence stat contradiction (Position A restore vs Position B keep STRUCK). Spun out from ED-755 D2.1; positions framed in 05_ED-755_resolutions.md §3.1. Blocks faction stat schema closure."
 
 p2_open:
   - ED-710: "Settlement adjacency graph — new mechanical layer (PP-666). Will be superseded by ED-780 spec rewrite."
@@ -15,13 +15,15 @@ p2_open:
   - ED-763: "[PROVISIONAL] doc 12 v1.2 — eligible for §13 Promotion Checklist evaluation."
   - ED-777: "[STANDING] arc_register_factions Niflhel reframe — 5 arcs need plot-level reframe."
   - ED-780: "[STANDING] Geography Phase 3 spec rewrite (settlement_adjacency v2, march_layer, mass_battle terrain-derivation, naval mechanics resolving ED-055). Depends on ED-779."
+  - ED-788: "[STANDING — JORDAN-DECISION] LICENSE / GOV-08 — choose license; populate top-level LICENSE file. Spun out from ED-755 D2.2; options framed in 05_ED-755_resolutions.md §3.2."
 
 p3_open:
   - ED-764: "[PROVISIONAL] Throughlines table Load-bearing systems column — PP-677."
   - ED-776: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation."
   - ED-781: "[STANDING] Geography Phase 4 stress tests (Mountain Pass, Open-field cavalry, Coastal landing). Depends on ED-780."
 
-# Recent activity (2026-04-30 to 2026-05-01):
+# Recent activity (2026-04-30 to 2026-05-03):
+#   ED-755  CLOSED 2026-05-03 — Doc 17 §6 sweep: 7 of 9 items resolved by default; D2.1 → ED-787, D2.2 → ED-788. See 05_ED-755_resolutions.md.
 #   ED-770  Mass Battle MB-01..08 batch (PP-683..688) — archived
 #   ED-771  Stratagem rename (PP-690) — archived
 #   ED-772  Terminology vector-audit P0 propagation (PP-691)
@@ -29,6 +31,9 @@ p3_open:
 #   ED-776  Standing — Hafenmark mechanism TBD
 #   ED-777  Standing — arc_register_factions Niflhel reframe deferred
 #   ED-778  Phase 0 ecosystem cleanup (PP-705)
-#   ED-779  CLOSED — Geography Phase 2 EXECUTED (PP-710): valoria_geography_v30.yaml + valoria_map_v30.svg + march_layer_v30.md
+#   ED-779  CLOSED — Geography Phase 2 EXECUTED (PP-710)
 #   ED-780  Standing — Geography Phase 3 spec rewrite
 #   ED-781  Standing — Geography Phase 4 stress tests
+#   ED-786  CLOSED — register cap configuration revised + chunking sweep
+#   ED-787  P1 NEW — Intelligence stat contradiction (spun out from ED-755 D2.1)
+#   ED-788  P2 NEW — LICENSE / GOV-08 (spun out from ED-755 D2.2)
