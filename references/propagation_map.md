@@ -688,7 +688,7 @@ Second commit of the L+PS migration sweep. Three consumer files migrated.
 
 Third commit of the L+PS migration sweep. Six consumer files migrated, ~99 Mandate refs total.
 
-**`params/bg/institutions.md` (27 refs):** Bulk migration — Ministry Mandate / Crown Mandate / Church Mandate / Crown's Mandate → L equivalents. Specific edits: Cardinal of Temperance AER advancement roll (Mandate vs Ob = floor(AER/2)+1) → L; bare Crown confirmation roll (Mandate vs Ob 2) → L; Ministry stat-row narrative ("Its Mandate (3) represents institutional legitimacy") → L (3) with audit Q2 footnote. All institutional throughout — Ministry is administrative apparatus per audit Q2 (no separate populist axis).
+**`params/bg/institutions.md` (27 refs):** Bulk migration — Ministry Mandate / Crown Mandate / Church Mandate / Crown's Mandate → L equivalents. Specific edits: Cardinal of Temperance Altonian diplomacy advancement roll (Mandate vs Ob = floor(Altonian diplomacy/2)+1) → L; bare Crown confirmation roll (Mandate vs Ob 2) → L; Ministry stat-row narrative ("Its Mandate (3) represents institutional legitimacy") → L (3) with audit Q2 footnote. All institutional throughout — Ministry is administrative apparatus per audit Q2 (no separate populist axis).
 
 **`params/bg/parliament.md` (19 refs):** All procedural-authority parliamentary mechanics. Notable migrations:
 - Crown Policy gates (`Mandate ≥ 4`) → `L ≥ 4` per audit Q5 procedural-authority interpretation
@@ -701,7 +701,7 @@ Third commit of the L+PS migration sweep. Six consumer files migrated, ~99 Manda
 **`params/bg/ci_seizure.md` (20 refs):** Pure procedural Church religious-authority mechanics. All Mandate refs → L: Conditional Passive prominence gate, Suppress §3.7 opponent action, Hafenmark Structural Suppression (PP-431-COR Baralta L ≥ 4), Church/non-Church Political pool formulas (Mandate ± floor(CI/N)), seizure prerequisites (Church L ≥ 4, Prominence Church L > controlling faction L).
 
 **`params/bg/tracks.md` (16 refs):** Mostly Peninsular Strain track + Hafenmark Awareness track effects. PP-686 v2 NOTE comment block (L1) preserved as historical record. Migrations:
-- Cardinal AER advancement roll → L (matches institutions.md)
+- Cardinal Altonian diplomacy advancement roll → L (matches institutions.md)
 - Strain "Mandate check" at Tension/Crisis/Collapse states → "L check" (institutional pressure on faction procedural authority)
 - Hafenmark Awareness 3+ effects: Church Mandate −1 → Church L −1 (institutional strain); Hafenmark Mandate ≥ 3 → Hafenmark L ≥ 3 (CI suppression ratchet)
 - Excommunication "+2 Mandate" cost annotation → "+2 L" (Church loses procedural authority equivalent to Hafenmark's PE-driven institutional resilience)

@@ -120,7 +120,7 @@ Cooldown: most cards 1 season; Pontifex/Prefect/Colonist 2 seasons; Recess 0.
 
 VTM (Varfell, 0–5), Warden Cooperation (shared, 0–3), Warden Recognition (Varfell, 0–4), Torben Loyalty (Crown→Löwenritter, 0–7, start 3), Elske Loyalty (Crown, 0–7, start 4), Coup Counter (Löwenritter hidden, 0–4).
 
-**Struck:** AER, RDT, Patience Counter, Intel Advancement Counter.
+**Struck:** Altonian diplomacy, RDT, Patience Counter, Intel Advancement Counter.
 
 ---
 

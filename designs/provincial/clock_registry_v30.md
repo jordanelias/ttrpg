@@ -24,7 +24,6 @@ Progress tracks (0-base; 0 = not yet developed):
 
 | Track | Owner | Range | Start | Source |
 |-------|-------|-------|-------|--------|
-| Altonian Ecclesiastical Accord (AER) | Church/Hafenmark | 0–5 | 0 | victory_architecture_v1.md §AEA |
 | Torben Loyalty | Crown → Löwenritter | 0–7 | 3 | params_board_game.md §Torben (PP-498) |
 | Elske Loyalty | Crown | 0–7 | 4 | params_board_game.md §Elske |
 | Löwenritter Autonomy | Crown-Löwenritter (public) | Loyal/Restless/Autonomous/Split | Loyal | conflict_architecture_proposal §Graduated Autonomy |

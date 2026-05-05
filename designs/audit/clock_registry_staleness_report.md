@@ -24,7 +24,7 @@
 
 | # | Track | Status | Source |
 |---|-------|--------|--------|
-| 5 | AER (Altonian Ecclesiastical Accord) | STRUCK | canonical_definitive_r2 §Struck |
+| 5 | Altonian diplomacy (Altonian Ecclesiastical Accord) | STRUCK | canonical_definitive_r2 §Struck |
 | 6 | Intel Advancement Counter | STRUCK | canonical_definitive_r2 §Struck |
 | 7 | Popular Will (PW) | STRUCK | canonical_definitive_r2 §Struck |
 | 8 | Intelligence stat row | STRUCK — Intel replaced by fieldwork Investigation + VTM | canonical_definitive_r2 §3.1 |

@@ -322,7 +322,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Name | [Propose: Cardinal Klapp] |
 | Primary Conviction | Reason | Truth is discoverable. Solmund's revelation and empirical investigation should converge if both are correctly practised. She has spent her life finding the convergences. She is running out of places to look. |
 | Secondary Conviction | Faith | Klapp would not be a Cardinal if she didn't believe. She believes. But she believes in what she has investigated and found credible — not in what she has been told and accepted. The distinction is critical. |
-| Ethical Framework | Divine Command (scholarly variant) | Aligned: −1 Ob on any action that advances knowledge or AER maintenance. Contradictory: +1 Ob on any action that suppresses evidence or prevents scholarly access. |
+| Ethical Framework | Divine Command (scholarly variant) | Aligned: −1 Ob on any action that advances knowledge or Altonian diplomacy maintenance. Contradictory: +1 Ob on any action that suppresses evidence or prevents scholarly access. |
 | Primary Resonant Style | Evidence | Show her specific, documented, authenticated facts she cannot explain within her theological framework. She is looking for these already. She will receive them as gifts rather than attacks. |
 | Secondary Resonant Style | Authority | Within her framework: a canonical text she has not seen, authenticated by multiple chains of custody, citing Thread phenomena in non-condemnatory terms, would be Authority that forces framework revision. She knows such texts may exist — the Einhir archive at T15 is her greatest unresolved question. |
 | Thread Sensitivity | 8 | Undiscovered. Her scholarly engagement with Thread-adjacent texts has produced micro-TS development she has not attributed correctly. She occasionally perceives things she explains as spiritual intuition. |
@@ -335,7 +335,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 3. "Thread Sensitivity appears in our congregation with statistical regularity. I have been recording the cases for eleven years. I have not told Himlensendt."
 
 **Arc A: The Investigator (Default)**
-- Behavior: Klapp pursues AER maintenance, Temperance declarations, scholarly projects. She is the least militaristic Cardinal — her actions are consistently non-invasive and knowledge-oriented.
+- Behavior: Klapp pursues Altonian diplomacy maintenance, Temperance declarations, scholarly projects. She is the least militaristic Cardinal — her actions are consistently non-invasive and knowledge-oriented.
 - Arc A passive: Klapp has an 11-year dataset on Thread Sensitivity prevalence in Church congregations. This dataset exists as a Structural Finding available to any player who investigates Church archives (Evidence Track 8, Fieldwork at T9, Research action, Depth 3 — the dataset is buried). The dataset proves Thread Sensitivity is heritable, widespread, and not pathological. If this Finding reaches Himlensendt: Arc B for Himlensendt (Authority RS trigger — the Cardinal of Temperance IS an authority he must hear).
 
 **Arc B: The Crisis of Evidence**
@@ -347,7 +347,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 **Arc C: The Theologian at the Boundary**
 - Branch condition: Klapp presents her treatise publicly (Kald's Conviction crisis: 3 Scars from internal Church pressure to abandon research, OR Olafsson Arc A passive investigation uncovers the dataset).
 - Transformation: Klapp publicly advocates for Thread acceptance within Church doctrine. She does not leave the Church — she contests it from within.
-- Campaign impact: Church Stability −2 (a Cardinal publicly advocating heresy). TC −2. But AER +1 (Altonian academic community, which has Thread-aware scholars, perceives Klapp's work positively).
+- Campaign impact: Church Stability −2 (a Cardinal publicly advocating heresy). TC −2. But Altonian diplomacy +1 (Altonian academic community, which has Thread-aware scholars, perceives Klapp's work positively).
 - Risk: Cardinal of Justice (Voss) opens Heresy Investigation against Klapp. If Olafsson is in Arc A (Instrument): Investigation proceeds and Klapp is convicted (Church expels her). If Olafsson is in Arc B (Questioning): he delays the investigation and reads the treatise himself — with potentially transformative consequences.
 - Player opportunity: Klapp in Arc C is the only Church NPC who can publicly validate Thread practice with institutional standing. Her endorsement does not stop Church persecution (Himlensendt or Olafsson will override), but it creates a Faction Fracture — a formal Church sub-faction (the Temperance Order) that tolerates Thread practice and can provide safe harbour in Church-adjacent territories.
 
@@ -787,7 +787,7 @@ The following new Zoom In triggers are proposed for scale_transitions §4.3.2 (M
 | Guilds | No arcs | Strain conditioners; Tormann Arc C acquisition |
 | Niflhel | No NPC arcs | Quartermaster A/B/C; The Quiet One A/B/C |
 | Ministry | No NPCs | Flagged as design debt (ED-pending) |
-| Schoenland/Altonian | Observer | Cross-NPC: Klapp's treatise AER +1 (Altonian academic response) |
+| Schoenland/Altonian | Observer | Cross-NPC: Klapp's treatise Altonian diplomacy +1 (Altonian academic response) |
 | **Cross-NPC conditioners** | None | Confessor-Cardinals chain; Crown Succession chain; Warden-Vaynard dependency; LR-Niflhel proximity |
 | **Environmental conditioners** | None | RS band transitions; TC milestone effects; Strain level effects |
 | **Obligation conditioners** | None | 6 Obligation-triggered arc effects |

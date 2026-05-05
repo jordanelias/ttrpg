@@ -99,7 +99,7 @@ organizational_hierarchy:
   cascade_roots:
     - cardinal_himlensendt               # institutional root
     # Multi-root candidates (canonical structure):
-    # - cardinal_temperance               # AER advancement track
+    # - cardinal_temperance               # Altonian diplomacy advancement track
     # - cardinal_justice                  # inquisitorial arm (Sæmund Haelgrund)
     # - cardinal_fortitude                # military arm
     # - cardinal_prudence                 # Aldric Tormann

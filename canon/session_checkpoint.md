@@ -66,7 +66,7 @@ tests/sim/valoria_full_campaign_sim.py landed at commit 129f2f2b. Contains:
   resolve_degree() with PP-179 + PP-249 thresholds and Ob 10 exception.
 - §2 Faction model: 6-stat 1-7 scale, ±2/season cap, Military cap (ED-039),
   starting_factions() with all 7 active factions (Niflhel dissolved).
-- §3 Clocks: RS/CI/IP/PI/AER/Torben/Elske/WR/WC/Strain/Autonomy; CI ±5/season
+- §3 Clocks: RS/CI/IP/PI/Altonian diplomacy/Torben/Elske/WR/WC/Strain/Autonomy; CI ±5/season
   uniform cap (PP-504, ED-721 Option A); PI +2/season accrual cap; Strain 0-10;
   Mass Seizure gate at CI >= 60.
 - §4 Seasonal loop: accounting_phase() with CI auto-advance, battle

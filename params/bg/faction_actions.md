@@ -52,7 +52,7 @@ Designate one Cardinal as Focused:
 | Fortitude | Templar deploys without Legionary card this season |
 | Justice | AP threshold for first Inquisitor −1 this season |
 | Prudence | Wealth +1 (integer) this season |
-| Temperance | AER +1 this season |
+| Temperance | Altonian diplomacy action available this season |
 
 **Schism interaction:** Schisming Cardinal ignores Focus. Focus has no effect if the designated Cardinal is in schism this season.
 
@@ -166,15 +166,15 @@ Crown designates one allied faction. Liaison's Thread operations in Crown-held t
 
 ### Crown — Diplomatic Outreach to Schoenland (PP-437)
 **Type:** Senator Outward (Crown only). Cannot use same season as Formal Crown Treaty.
-Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
+Roll: Influence vs Ob 2. Virtue Ethics: −1 Ob.
 **Fragmentation modifier:** +1 Ob if 3+ factions have Stability ≤ 2. *(PP-562: was +2 — punished Crown most when Decree most needed)*
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | IP −2 + AER +1 |
-| Success | IP −1 + AER +0.5 |
-| Partial | AER +0.5 |
-| Failure | AER −0.5 |
+| Overwhelming | IP −2 |
+| Success | IP −1 |
+| Partial | IP −0.5 |
+| Failure | no effect |
 
 ---
 
@@ -280,7 +280,7 @@ Designate one Cardinal as Focused:
 | Fortitude | Templar deploys without Legionary card this season |
 | Justice | AP threshold for first Inquisitor −1 this season |
 | Prudence | Wealth +1 (integer) this season |
-| Temperance | AER +1 this season |
+| Temperance | Altonian diplomacy action available this season |
 
 **Schism interaction:** Schisming Cardinal ignores Focus. Focus has no effect if the designated Cardinal is in schism this season.
 
@@ -401,15 +401,15 @@ Crown designates one allied faction. Liaison's Thread operations in Crown-held t
 
 ### Crown — Diplomatic Outreach to Schoenland (PP-437)
 **Type:** Senator Outward (Crown only). Cannot use same season as Formal Crown Treaty.
-Roll: Influence vs Ob = current AER level, min 1. Virtue Ethics: −1 Ob.
+Roll: Influence vs Ob 2. Virtue Ethics: −1 Ob.
 **Fragmentation modifier:** +1 Ob if 3+ factions have Stability ≤ 2. *(PP-562: was +2 — punished Crown most when Decree most needed)*
 
 | Degree | Effect |
 |--------|--------|
-| Overwhelming | IP −2 + AER +1 |
-| Success | IP −1 + AER +0.5 |
-| Partial | AER +0.5 |
-| Failure | AER −0.5 |
+| Overwhelming | IP −2 |
+| Success | IP −1 |
+| Partial | IP −0.5 |
+| Failure | no effect |
 
 ---
 

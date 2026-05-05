@@ -119,7 +119,7 @@ class_name ClockData extends Resource
 @export var source_doc: String          # canonical source reference
 ```
 
-**Instances:** ~25 (MS, CI, IP, PI, Strain, VTM, AER, Coup Counter, Elske Loyalty, PT×15, etc.)
+**Instances:** ~25 (MS, CI, IP, PI, Strain, VTM, Altonian diplomacy, Coup Counter, Elske Loyalty, PT×15, etc.)
 
 ---
 

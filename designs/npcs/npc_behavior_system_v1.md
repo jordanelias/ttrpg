@@ -303,7 +303,7 @@ Cardinals are institutional officers, not independent actors. They activate as i
 | Fortitude (Templar) | Faith + Order | Consequence (military failure) | Deploys Templars aggressively; prioritises territorial defence over theological expansion |
 | Justice (Inquisitor) | Faith (hardline) | Authority (Holy See directives) | Accelerates Heresy Investigations; may target other Cardinals |
 | Prudence (Tithes) | Order + Autonomy | Evidence (fiscal data) | Protects Church wealth; may resist TC expansion if economically costly |
-| Temperance (Scholar) | Reason + Faith | Evidence (scholarly findings) | Pursues AER maintenance; most likely Cardinal to experience Conviction crisis if exposed to Thread evidence |
+| Temperance (Scholar) | Reason + Faith | Evidence (scholarly findings) | Pursues Altonian diplomacy maintenance; most likely Cardinal to experience Conviction crisis if exposed to Thread evidence |
 
 Full stat blocks deferred to campaign development. Stance Triangles activate only on schism. (ED-530 resolved: confirmed as provided.)
 
@@ -447,7 +447,7 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 - Resonant Style: Evidence remains primary but increasingly difficult to deploy as Church institutional power insulates Himlensendt from confrontation.
 
 **Arc B: Crisis of Faith**
-- Branch condition: Total Victory Contest defeat via Evidence Resonant Style. OR: Cardinal of Temperance presents Thread-adjacent scholarly findings that Himlensendt cannot dismiss (AER ≥ 3 AND Temperance Cardinal has Conviction Reason).
+- Branch condition: Total Victory Contest defeat via Evidence Resonant Style. OR: Cardinal of Temperance presents Thread-adjacent scholarly findings that Himlensendt cannot dismiss (Altonian diplomacy ≥ 3 AND Temperance Cardinal has Conviction Reason).
 - First Scar: Himlensendt's Belief 1 ("Solmund's word is the only truth") becomes Scar. New Belief: "Solmund's word may be incomplete — I must investigate carefully before acting."
 - Conviction: Faith primary remains but is now qualified. Secondary (Order) becomes active. He retreats to institutional authority as his theological certainty wavers.
 - Behavior: TC pressure decreases (Himlensendt is less aggressive). But Church Stability may also decrease (the Confessor appears to waver publicly → Church Stability −1 at next accounting if Scar is publicly known).
@@ -627,7 +627,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 2 | Open Thread operation in Church territory OR practitioner identified publicly OR Piety loss ≥ 2 this season | Heresy Investigation (Cardinal of Justice). If target is faction leader: Excommunication. |
 | 3 | TC < 75 AND Mandate ≥ 4 | Assert (TC +1). Piety Domain Action if Assert already used. |
 | 4 | Expand Piety. Consul Inward in territory with lowest PT where Church has presence. | Standard |
-| 5 | AER maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
+| 5 | Altonian diplomacy maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
 | 6 | If attacked (Mandate targeted, territory seized): Templar deployment to contested territory (if Cardinal of Fortitude active and Stability ≥ 2). | Reactive |
 | 7 | Pass. | Default |
 

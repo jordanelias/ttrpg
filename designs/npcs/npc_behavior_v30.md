@@ -274,7 +274,7 @@ Cardinals are institutional officers, not independent actors. They activate as i
 | Fortitude (Templar) | Faith + Order | Consequence (military failure) | Deploys Templars aggressively; prioritises territorial defence over theological expansion |
 | Justice (Inquisitor) | Faith (hardline) | Authority (Holy See directives) | Accelerates Heresy Investigations; may target other Cardinals |
 | Prudence (Tithes) | Order + Autonomy | Evidence (fiscal data) | Protects Church wealth; may resist CI expansion if economically costly |
-| Temperance (Scholar) | Reason + Faith | Evidence (scholarly findings) | Pursues AER maintenance; most likely Cardinal to experience Conviction crisis if exposed to Thread evidence |
+| Temperance (Scholar) | Reason + Faith | Evidence (scholarly findings) | Pursues Altonian diplomacy maintenance; most likely Cardinal to experience Conviction crisis if exposed to Thread evidence |
 
 
 ---
@@ -593,7 +593,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 - Conviction: Faith remains unchallenged. CI advances to 75+ and territorial seizure begins.
 
 **Arc B: Crisis of Faith**
-- Branch condition: Total Victory Contest defeat via Evidence Resonant Style. OR: Cardinal of Temperance presents Thread-adjacent scholarly findings that Himlensendt cannot dismiss (AER ≥ 3 AND Temperance Cardinal has Conviction Reason).
+- Branch condition: Total Victory Contest defeat via Evidence Resonant Style. OR: Cardinal of Temperance presents Thread-adjacent scholarly findings that Himlensendt cannot dismiss (Altonian diplomacy ≥ 3 AND Temperance Cardinal has Conviction Reason).
 - Behavior: CI pressure decreases (Himlensendt is less aggressive). But Church Stability may also decrease (the Confessor appears to waver publicly → Church Stability −1 at next accounting if Scar is publicly known).
 
 **Arc C: Confrontation**
@@ -790,7 +790,7 @@ All NPC faction priority trees follow a standardised 7-level structure:
 | 2 | Open Thread operation in Church territory OR practitioner identified publicly OR Piety loss ≥ 2 this season | Heresy Investigation (Cardinal of Justice). If target is faction leader: Excommunication. |
 | 3 | CI < 75 AND Mandate ≥ 4 [STALE-THRESHOLD: 75 removed per ED-782 / ci_political_v30 §2.1; canonical milestones: 40/55/60/65/80/100] | Assert (CI +1). Piety Domain Action if Assert already used. |
 | 4 | Expand Piety AND maintain Accord. Consul Inward in lowest-Accord Church territory if Accord ≤ 1; otherwise lowest-PT territory where Church has presence. If Church building ≥ tier 2 in ungoverned settlement: Ecclesiastical Appointment. | Standard |
-| 5 | AER maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
+| 5 | Altonian diplomacy maintenance (if Cardinal of Temperance active and Church controls T9). Temperance declaration. | Secondary |
 | 6 | If attacked (Mandate targeted, territory seized): Templar deployment to contested territory (if Cardinal of Fortitude active and Stability ≥ 2). | Reactive |
 | 7 | Pass. | Default |
 
@@ -1121,7 +1121,7 @@ An NPC who has been recruited defects if:
 1. **IF** Stability ≤ 2 → Consul (Inward, restore Stability)
 2. **IF** CI ≥ 75 [STALE-THRESHOLD: 75 territorial-seizure threshold removed per ED-782 / ci_political_v30 §2.1; Mass Seizure now probabilistic from CI ≥ 60 with P = ((CI-60)/40)^3.3] AND eligible seizure target (Prominence + PT conditions met) → Graduated Seizure
 3. **IF** CI < 75 [STALE-THRESHOLD: see L1122 marker] AND Mandate ≥ 3 → Assert (advance CI)
-4. **IF** AER ≤ 1 → Cardinal Focus Temperance (restore AER)
+4. **IF** Altonian diplomacy ≤ 1 → Cardinal Focus Temperance (restore Altonian diplomacy)
 5. **IF** AP ≥ 3 in any territory → Deploy Inquisitor
 6. **IF** Mandate < 3 → Consul (Outward, Influence — rebuild institutional standing)
 7. **IF** TCV < 8 AND adjacent target with PT ≥ 3 → Consul (Inward, Piety Spread)
@@ -1161,14 +1161,14 @@ An NPC who has been recruited defects if:
 
 ### §7.7 Schoenland Priority Tree (NPC faction — observer)
 1. **IF** IP ≥ 60 → Altonian Preparation (Vanguard mobilisation begins)
-2. **IF** IP ≥ 40 → Diplomatic Pressure (AER −1 if Temperance not maintained)
+2. **IF** IP ≥ 40 → Diplomatic Pressure (Altonian diplomacy −1 if Temperance not maintained)
 3. **IF** Supply Chain Exposure + Parish Revolt + PI ≥ 8 (2+ conditions) → Recall Solberg
 4. **DEFAULT** → Trade (passive Wealth generation for peninsula economy)
 
 ### §7.8 Altonian Vanguard Priority Tree (NPC faction — activates at IP ≥ 75)
 1. **IF** deployed at T10 → Advance (march toward T8 along shortest path)
 2. **IF** contested → Battle (fight defending faction)
-3. **IF** AER ≤ 1 → Full Invasion (all territories +1 Ob to all DA for all factions)
+3. **IF** Altonian diplomacy ≤ 1 → Full Invasion (all territories +1 Ob to all DA for all factions)
 4. **DEFAULT** → Hold position (garrison T10)
 
 ### §7.9 Priority Tree Override Conditions

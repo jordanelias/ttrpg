@@ -146,7 +146,7 @@ Simplified: **Ob = 2 + Fort Level + max(0, 3 − PT)**
 | Condition | Modifier |
 |-----------|----------|
 | Consecrated territory | −1 Ob |
-| AER ≥ 3 (Altonian ecclesiastical backing) | +1D to Church roll |
+| Altonian diplomacy ≥ 3 (Altonian ecclesiastical backing) | +1D to Church roll |
 | Previous failed seizure on this territory this campaign | +1 Ob per failure |
 | Löwenritter units present | +1 Ob |
 
@@ -259,7 +259,7 @@ This gives a 20-season timeline to CI 75 under active Church play with moderate 
 
 | Condition | AEA +1 |
 |-----------|--------|
-| CI ≥ 50 AND AER ≥ 3 | Church's Valoria-side institutional weight + Altonian diplomatic backing |
+| CI ≥ 50 AND Altonian diplomacy ≥ 3 | Church's Valoria-side institutional weight + Altonian diplomatic backing |
 | Church controls ≥ 3 territories | Territorial proof of governance capability |
 | Church Mandate ≥ 6 | Peak institutional authority |
 | Crown Mandate ≤ 2 | Secular authority has collapsed |
@@ -268,7 +268,7 @@ This gives a 20-season timeline to CI 75 under active Church play with moderate 
 **AEA reduction:**
 - Hafenmark Sovereign Authority Doctrine success: AEA −1.
 - Crown Royal Decree targeting Church: AEA −1.
-- AER drops below 2: AEA resets to 0 (Altonian branch withdraws).
+- Altonian diplomacy drops below 2: AEA resets to 0 (Altonian branch withdraws).
 
 **Victory:** AEA reaches 5 AND CI ≥ 60 AND Church controls Himmelenger (T9). The Church declares Ecclesiastical Primacy — a transnational theocracy with Himmelenger as its capital. Valoria and the Altonian Church territories form a single ecclesiastical jurisdiction.
 

@@ -474,7 +474,7 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 
 **Advancement:** Senator Outward (Diplomacy Ob 2) Success +1, OW +2. Personal scene Disposition ≥ +2 (Solidarity MS) +1. Fair trade treatment of Schoenland routes: +1/year. Conviction violation: −1. War on Schoenland: −3.
 
-**Diplomatic Exchange (Loyalty ≥ 6, IP < 60):** Senator Outward, Ob 2. Success: IP −10, threshold +5, AER +1, Elske status changes to willing resident. OW: All above + Schoenland Treaty.
+**Diplomatic Exchange (Loyalty ≥ 6, IP < 60):** Senator Outward, Ob 2. Success: IP −10, threshold +5, Elske status changes to willing resident. OW: All above + Schoenland Treaty.
 
 **"Elske confirmed"** = Diplomatic Exchange success. Satisfies Regency Establishment condition above. *Conviction: Order. MS: Solidarity. Certainty: 4.*
 

@@ -1,3 +1,4 @@
+<!-- [2026-05-04] AER references in worked examples below are from pre-removal design. AER track has been removed; Church-Altonian diplomacy now uses Altonian hooks system. Worked examples retained for structural reference but AER-specific reasoning is obsolete. -->
 <!-- SKELETON — mechanical spec only — atomized 2026-04-13 -->
 <!-- Infill: board_game_v30_infill.md -->
 

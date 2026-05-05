@@ -391,7 +391,7 @@ This resolves the major audit P2-1 ambiguity: the architecture supports both, wi
 Mandate(faction) = round(0.5 × Legitimacy + 0.5 × Popular_Support)
 ```
 
-Mandate remains queryable for backward compatibility (resolves OQ6 — transitional retention). Existing consumers (Church Excommunication Ob, AER advancement, victory conditions, etc.) continue to function. Refactor of consumers to read Legitimacy or Popular Support directly is opportunistic.
+Mandate remains queryable for backward compatibility (resolves OQ6 — transitional retention). Existing consumers (Church Excommunication Ob, Altonian diplomacy hooks advancement, victory conditions, etc.) continue to function. Refactor of consumers to read Legitimacy or Popular Support directly is opportunistic.
 
 **Initial values at engine init (preserves continuity for existing scenarios):**
 ```

@@ -19,11 +19,6 @@ Church Prominence = Church L > controlling faction L. When Church controls a ter
 Implication: Post-CI 75 seizure removes territories from Piety Yield pool. Plan accordingly.
 
 
-## AER >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)
-AER >= 3 (PP-203) and Parliamentary Challenge (PP-431-COR) are independent:
-- AER >= 3 bypasses Hafenmark Structural Suppression (passive -1/season from Baralta L >= 4).
-- Parliamentary Challenge is a card action; fires when played regardless of AER.
-- When AER >= 3 is active: structural is already negated; Challenge's "replaces structural" clause has no practical effect on structural. Challenge still fires and produces its degree-table CI result.
 
 
 ## Submission + PS 0 Ruling (PP-475 / audit Q1 ratification 2026-05-02)

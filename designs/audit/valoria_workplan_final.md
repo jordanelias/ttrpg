@@ -400,7 +400,7 @@ SEASON LOOP:
     ├── Step 7: Obligation tracking (duration countdown, violation check)
     ├── Step 8: Victory condition check (all factions, universal + faction-specific)
     ├── Step 9: Exposure reset (per territory)
-    ├── Step 10: Seasonal clock ticks (VTM, AER, Torben Loyalty, Coup Counter, etc.)
+    ├── Step 10: Seasonal clock ticks (VTM, Altonian diplomacy, Torben Loyalty, Coup Counter, etc.)
     ├── Step 11: Coherence recovery check (full season of non-practice → +1)
     ├── Step 12: Seasonal event generation — per settlement d6 roll:
     │     1 = negative event (Prosperity −1 or Order −1, 50/50)

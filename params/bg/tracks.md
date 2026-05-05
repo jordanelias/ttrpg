@@ -1,4 +1,4 @@
-<!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: `Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support)`. Existing Mandate consumers in this file (AER advancement, Excommunication Ob Cap, RDT/TD escalation rows, Peninsular Strain Mandate checks) continue to function via this derivation; no behavioral change. Refactor of consumers to read Legitimacy or Popular_Support directly is opportunistic. -->
+<!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: `Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support)`. Existing Mandate consumers in this file (Excommunication Ob Cap, RDT/TD escalation rows, Peninsular Strain Mandate checks) continue to function via this derivation; no behavioral change. Refactor of consumers to read Legitimacy or Popular_Support directly is opportunistic. -->
 
 
 ## Trade Network Investment — Hafenmark Wealth Sink (PP-178)
@@ -9,13 +9,7 @@ Partial: Token placed, no bonus. Persists.
 Failure: No token, Stability −1.
 
 
-## AER (Altonian Ecclesiastical Relationship) (PP-181, v04 confirmed)
-Track 0–5. Starts 2.
-**AER advancement:** Cardinal of Temperance Phase 1 declaration + roll (L vs Ob = floor(AER/2)+1). Success: AER +1. No roll, no gain.
-**AER decay (PP-565):** At Year-End Accounting, if Cardinal of Temperance focus was NOT maintained that year (no successful Temperance declaration this year): AER −1 (min 0). Represents diplomatic drift without active Church-Altonian engagement.
-[Full table in PP-181 section — confirmed by v04 B2]
-
-
+<!-- [REMOVED 2026-05-04] AER (Altonian Ecclesiastical Relationship) track removed. Church-Altonian diplomacy → Altonian hooks. -->
 ## RDT (Reformed Doctrine Track) (PP-181, v04 B5 confirmed)
 Hafenmark private track 0–5. (PP-555)
 [Full mechanics in PP-181 section — confirmed by v04 B5]

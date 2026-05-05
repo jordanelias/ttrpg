@@ -81,7 +81,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | Church Influence (CI) | **28** | 0–100 (no freeze) | CI 60 = Mass Seizure available (one-shot). CI 100 = cap. P-32 sets starting value at 28. |
 | Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
 | Parliament Integrity (PI) | **7** | 0–20 | Cumulative pressure meter. Auto-resolves at PI ≥ 20 (Crown elimination). |
-| AER | 2 | 0–5 | Near IP clock. |
+| | 2 | 0–5 | Near IP clock. |
 | Torben Loyalty | **7** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (PP-599: start 7, range 0–7. PP-498 start 3 superseded.) |
 | Elske Loyalty | 4 | 0–7 | Off-board card near T4. |
 | Löwenritter Autonomy | Loyal | Loyal→Restless→Autonomous→Split | Graduated autonomy (conflict_architecture_proposal). Replaces binary Coup Counter. See below. |

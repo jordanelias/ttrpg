@@ -8,7 +8,7 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 | Cardinal of Fortitude | Commands Knights Templar | Templar deployment; military arm of Church |
 | Cardinal of Justice | Grand Adjudication + Inquisitors | Heresy Investigations; excommunication recommendations |
 | Cardinal of Prudence | Tithes collection + Charities | Wealth generation; Church's economic arm |
-| Cardinal of Temperance | Universities + Monasteries + Observatories | Scholarly institutions; AER maintenance |
+| Cardinal of Temperance | Universities + Monasteries + Observatories | Scholarly institutions; Altonian diplomacy |
 
 **In BG, Cardinals are Church's internal officers.** When Church Stability drops below 3, one Cardinal may challenge the Confessor (per v04 B3 "internal schism" note). The challenging Cardinal acts on their own priority for one season.
 
@@ -16,7 +16,7 @@ Holy See = elected from among the Bishopry. Second only to the Monarch.
 - **Fortitude (Templar):** Templar deployment requires Cardinal of Fortitude to be active (Church Stability ≥ 2). At Stability ≤ 1: Templars do not deploy regardless of card play.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Varfell Intel action on Church — political intelligence work, prestige-coded): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
-- **Temperance (Scholars):** AER maintenance. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may declare AER maintenance at Phase 1. Roll: L vs Ob = floor(current AER / 2) + 1. Success: AER +1. Failure: no change. *(PP-565: was passive reduction of AER loss events; now active roll-gated advancement)*
+- **Temperance (Scholars):** Altonian diplomacy. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may pursue Altonian diplomatic engagement at Phase 1. Specific hooks TBD (replaces removed AER track).
 
 
 ### Cardinal Death — Succession (ED-336 resolved)
@@ -27,7 +27,7 @@ When a Cardinal is killed during a Zoom In scene (Hybrid mode):
 - Fortitude: Templar deployment requires Legionary card (no free deployment).
 - Justice: Heresy Investigations cannot be issued (no authorising Cardinal).
 - Prudence: Tithe income halved (clerks continue but without Cardinal oversight).
-- Temperance: AER maintenance roll unavailable this season. Year-End AER decay fires automatically (no Temperance declaration possible). PP-565.
+- Temperance: Altonian diplomatic action unavailable this season.
 
 **Succession:** At Year-End Accounting, Holy See appoints a replacement Cardinal. The new Cardinal is anonymous (no named NPC stats — treat as standard Cardinal for mechanical purposes). Full mechanics restored immediately on appointment.
 
@@ -53,7 +53,7 @@ Excommunication recommended by Cardinal of Justice for heresy conviction. Excomm
 | Cardinal of Fortitude | Commands Knights Templar | Templar deployment; military arm of Church |
 | Cardinal of Justice | Grand Adjudication + Inquisitors | Heresy Investigations; excommunication recommendations |
 | Cardinal of Prudence | Tithes collection + Charities | Wealth generation; Church's economic arm |
-| Cardinal of Temperance | Universities + Monasteries + Observatories | Scholarly institutions; AER maintenance |
+| Cardinal of Temperance | Universities + Monasteries + Observatories | Scholarly institutions; Altonian diplomacy |
 
 **In BG, Cardinals are Church's internal officers.** When Church Stability drops below 3, one Cardinal may challenge the Confessor (per v04 B3 "internal schism" note). The challenging Cardinal acts on their own priority for one season.
 
@@ -61,7 +61,7 @@ Excommunication recommended by Cardinal of Justice for heresy conviction. Excomm
 - **Fortitude (Templar):** Templar deployment requires Cardinal of Fortitude to be active (Church Stability ≥ 2). At Stability ≤ 1: Templars do not deploy regardless of card play.
 - **Justice (Inquisitors):** Heresy Investigations are issued under Cardinal of Justice. If Cardinal of Justice is compromised (via Varfell Intel action on Church — political intelligence work, prestige-coded): one Heresy Investigation this season is false (all factions notified that one Investigation this season was procedurally invalid).
 - **Prudence (Tithes):** Church Wealth generation: +0.5 Wealth/season from tithed territories (rounds down at Year-End). Territories where Church has Favour ≥ 3 contribute to tithe income.
-- **Temperance (Scholars):** AER maintenance. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may declare AER maintenance at Phase 1. Roll: L vs Ob = floor(current AER / 2) + 1. Success: AER +1. Failure: no change. *(PP-565: was passive reduction of AER loss events; now active roll-gated advancement)*
+- **Temperance (Scholars):** Altonian diplomacy. While Church controls T9 (Himmelenger — university city), Cardinal of Temperance may pursue Altonian diplomatic engagement at Phase 1. Specific hooks TBD (replaces removed AER track).
 
 
 
@@ -73,7 +73,7 @@ When a Cardinal is killed during a Zoom In scene (Hybrid mode):
 - Fortitude: Templar deployment requires Legionary card (no free deployment).
 - Justice: Heresy Investigations cannot be issued (no authorising Cardinal).
 - Prudence: Tithe income halved (clerks continue but without Cardinal oversight).
-- Temperance: AER maintenance roll unavailable this season. Year-End AER decay fires automatically (no Temperance declaration possible). PP-565.
+- Temperance: Altonian diplomatic action unavailable this season.
 
 **Succession:** At Year-End Accounting, Holy See appoints a replacement Cardinal. The new Cardinal is anonymous (no named NPC stats — treat as standard Cardinal for mechanical purposes). Full mechanics restored immediately on appointment.
 

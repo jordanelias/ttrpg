@@ -187,7 +187,7 @@ Phase 1 declarative. Designate one allied faction. Their Thread operations in Cr
 
 ## Crown — Diplomatic Outreach to Schoenland (PP-437)
 
-Senator Outward, Crown only. Influence vs Ob = AER level min 1. Cannot combine with Formal Crown Treaty same season.
+Senator Outward, Crown only. Influence vs Ob = Altonian diplomacy level min 1. Cannot combine with Formal Crown Treaty same season.
 
 ## Counter-Intelligence Postures (PP-442)
 
@@ -219,13 +219,13 @@ If Baralta eliminated (Loyalty 0 + L 0 + PS 0):
 - PI < 4: fracture. Hafenmark L halved AND PS halved (round down each, independent halving — institutional and populist collapse both register the fracture). TCV victory requirement +2. Parliamentary Sovereignty unavailable until PI recovers to ≥ 4.
 No named successor. Hafenmark's identity is institutional.
 
-## Cardinal Focus Temperance — AER Gain [PP-490, ED-328 resolved]
+## Cardinal Focus Temperance — Altonian diplomacy Gain [PP-490, ED-328 resolved]
 
-AER +1 requires 2 consecutive seasons of Cardinal Focus declaration (not each season).
+Altonian diplomacy +1 requires 2 consecutive seasons of Cardinal Focus declaration (not each season).
 Season 1: mark Focus-declared on Church faction mat.
-Season 2 (consecutive): AER +1 fires.
-If the Church misses a season, the consecutive chain resets. No AER gain from a single-season declaration.
-This prevents Season-1 AER 3 and preserves meaningful commitment cost.
+Season 2 (consecutive): Altonian diplomacy +1 fires.
+If the Church misses a season, the consecutive chain resets. No Altonian diplomacy gain from a single-season declaration.
+This prevents Season-1 Altonian diplomacy 3 and preserves meaningful commitment cost.
 
 ## Torben Loyalty After Crown Elimination [PP-494, ED-332 resolved]
 
@@ -240,11 +240,11 @@ as a named NPC ally (+1D on one Domain Action category per season).
 ## Cardinal Death — Holy See Succession [PP-498, ED-336 resolved]
 
 When a Cardinal is killed (by PC action or event):
-- Cardinal-specific BG mechanics (Fortitude Templar, Justice Inquisitor, Prudence Tithes, Temperance AER)
+- Cardinal-specific BG mechanics (Fortitude Templar, Justice Inquisitor, Prudence Tithes, Temperance Altonian diplomacy)
   are suspended for 1 season (the Holy See appointment procedure takes time).
 - At next Accounting: Church player rolls Church L vs Ob 2 (Holy See appointment).
   Success: new Cardinal appointed, full mechanics resume.
-  Overwhelming: Appointment + AER +1 (the crisis galvanises Church unity).
+  Overwhelming: Appointment + Altonian diplomacy +1 (the crisis galvanises Church unity).
   Failure: gap extended 1 additional season. Another attempt at next Accounting.
 - CI effect: Cardinal death triggers CI +1 (institutional disruption).
 [PROVISIONAL]

@@ -29,7 +29,6 @@ Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of 
 | 30–49 | Church orders: −1 Ob in Church-held territory |
 | 50–69 | Church orders: −1 Ob everywhere. Non-Church Diplomacy targeting Church: +1 Ob. Mandatory Assert/Suppress each season |
 | 70–74 | As above. Territorial Seizure protocol pending — Church prioritises seizure actions. |
-| 60+ | Mass Seizure available (one-shot). AER no longer modifies CI gains at CI 75+. |
 
 ### Invasion Pressure (IP) Effects
 | IP Range | Effect |
@@ -37,7 +36,6 @@ Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of 
 | Below 30 | Trade with Schoenland: +1D |
 | 30–59 | Trade with Schoenland: +1 Ob. All factions: +1D to Intel orders |
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
-| 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
 **Battle Consequences (peninsular_strain_v1.md §3):**
 All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
@@ -49,7 +47,6 @@ All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each sea
 - Advance: if no faction contests Vanguard territory for 2 consecutive seasons, Vanguard advances one territory along the invasion route (T10→T3→T2→T1).
 - Contest: any faction in Vanguard's territory triggers automatic Battle (defender Military vs Ob 3). Win: Vanguard held. Loss: Vanguard advances.
 - While Vanguard occupies T1 (Valorsplatz): all factions −1 Stability/season. Shared pressure.
-- Elimination: AER ≥ 4 → Schoenland mediates; IP threshold rises to 80. AER = 5 → IP held at 50 indefinitely; Vanguard halts.
 - [EDITORIAL: authorial review required — Vanguard faction identity, advance route, and elimination conditions]
 
 
@@ -83,7 +80,6 @@ Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of 
 | 30–49 | Church orders: −1 Ob in Church-held territory |
 | 50–69 | Church orders: −1 Ob everywhere. Non-Church Diplomacy targeting Church: +1 Ob. Mandatory Assert/Suppress each season |
 | 70–74 | As above. Territorial Seizure protocol pending — Church prioritises seizure actions. |
-| 60+ | Mass Seizure available (one-shot). AER no longer modifies CI gains at CI 75+. |
 
 
 ### Invasion Pressure (IP) Effects
@@ -92,7 +88,6 @@ Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of 
 | Below 30 | Trade with Schoenland: +1D |
 | 30–59 | Trade with Schoenland: +1 Ob. All factions: +1D to Intel orders |
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
-| 75+ | Altonian Vanguard deployed. AER ≥ 4: threshold rises to 80. AER 5: IP held at 50 |
 
 **Battle Consequences (peninsular_strain_v1.md §3):**
 All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
@@ -104,7 +99,6 @@ All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each sea
 - Advance: if no faction contests Vanguard territory for 2 consecutive seasons, Vanguard advances one territory along the invasion route (T10→T3→T2→T1).
 - Contest: any faction in Vanguard's territory triggers automatic Battle (defender Military vs Ob 3). Win: Vanguard held. Loss: Vanguard advances.
 - While Vanguard occupies T1 (Valorsplatz): all factions −1 Stability/season. Shared pressure.
-- Elimination: AER ≥ 4 → Schoenland mediates; IP threshold rises to 80. AER = 5 → IP held at 50 indefinitely; Vanguard halts.
 - [EDITORIAL: authorial review required — Vanguard faction identity, advance route, and elimination conditions]
 
 

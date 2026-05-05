@@ -30,7 +30,7 @@
 | 2 | Open Thread op in Church territory OR practitioner public OR Piety −2 | Heresy Investigation. If target = faction leader: Excommunication. |
 | 3 | CI < 75 AND Church L ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
 | 4 | Default | Expand Piety. Consul Inward lowest-PT territory with Church presence. |
-| 5 | AER maintenance | Temperance declaration if Cardinal active + Church controls T9. |
+| 5 | Altonian diplomacy | Temperance declaration if Cardinal active + Church controls T9. |
 | 6 | Attacked | Templar deployment if Fortitude active + Stability ≥ 2. |
 | 7 | Default | Pass. |
 Post-CI 75: P3 → Territorial Seizure (highest-value targets first).
@@ -135,7 +135,7 @@ Post-Coup: all priorities → Martial Law → consolidate → Reconstitution (PI
 | 2 | Open Thread op in Church territory OR practitioner public OR Piety −2 | Heresy Investigation. If target = faction leader: Excommunication. |
 | 3 | CI < 75 AND Church L ≥ 4 | Assert (CI +1). Piety DA if Assert used. |
 | 4 | Default | Expand Piety. Consul Inward lowest-PT territory with Church presence. |
-| 5 | AER maintenance | Temperance declaration if Cardinal active + Church controls T9. |
+| 5 | Altonian diplomacy | Temperance declaration if Cardinal active + Church controls T9. |
 | 6 | Attacked | Templar deployment if Fortitude active + Stability ≥ 2. |
 | 7 | Default | Pass. |
 Post-CI 75: P3 → Territorial Seizure (highest-value targets first).

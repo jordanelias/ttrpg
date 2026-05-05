@@ -49,7 +49,7 @@ Time-based pressures that advance regardless of player action. These are the gam
 **Arc register vectors:** ARC-P01, ARC-S03, ARC-S19, ARC-T10, ARC-T14
 
 ### T-06: IP Accumulation → Altonian Intervention → External Pressure
-**Chain:** IP baseline advance + civil war signals (IP +3/season during inter-faction battles) + TC ≥ 60 signal (IP +2/season) → IP thresholds (30 = Tutoring Demand, 75 = Vanguard deployment, 100 + AER ≤ 1 = Conquest) → external military pressure → resource diversion from sovereignty contest → expedition maintenance endangered → WC advancement stalled → RS recovery stalled
+**Chain:** IP baseline advance + civil war signals (IP +3/season during inter-faction battles) + TC ≥ 60 signal (IP +2/season) → IP thresholds (30 = Tutoring Demand, 75 = Vanguard deployment, 100 + Altonian diplomacy ≤ 1 = Conquest) → external military pressure → resource diversion from sovereignty contest → expedition maintenance endangered → WC advancement stalled → RS recovery stalled
 **Systems:** peninsular_strain, victory, mass_battle, wc_survival_spine
 **What it means:** The peninsula's civil wars invite foreign intervention. IP is the mechanism by which Contest 1 (sovereignty) interferes with Contest 2 (survival) — civil war raises IP, which demands military attention, which diverts resources from WC advancement.
 **Arc register vectors:** ARC-P06, ARC-T02

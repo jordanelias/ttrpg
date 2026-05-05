@@ -227,7 +227,7 @@
   - Total TCV Correction (PP-470)
   - Restoration Senate Market Restriction (PP-471)
   - Piety Yield Dead Zone — Explicit Note (PP-473)
-  - AER >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)
+  - >= 3 and Parliamentary Challenge — Independence Clarification (PP-474)
   - Submission + Mandate 0 Ruling (PP-475)
   - Restoration Movement — Founding Mechanic (PP-478)
     - RM Status by Mode
@@ -266,7 +266,7 @@
 ~1,299 tokens
 
   - Trade Network Investment — Hafenmark Wealth Sink (PP-178)
-  - AER (Altonian Ecclesiastical Relationship) (PP-181, v04 confirmed)
+  - (Altonian Ecclesiastical Relationship) (PP-181, v04 confirmed)
   - RDT (Reformed Doctrine Track) (PP-181, v04 B5 confirmed)
   - TD (Theological Dissatisfaction) (PP-181, v04 B5 confirmed)
   - VTM (Vaynard Thread Mastery) (PP-181, v04 B5 confirmed)

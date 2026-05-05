@@ -234,7 +234,7 @@ PP-402 (CI +1 passive per season, unconditional) is **repealed** by this documen
 
 PP-402 is replaced by a conditional passive (§3.2) and explicit competitive sources (§3.3–§3.6).
 
-**Legacy CI sources note (from params_board_game):** "AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence are subsumed into the Piety Yield system." This document restores Church unit presence as an explicit source (§3.5) and formalises the Wealth/charity dimension (§3.4). Piety Yield is retained and refined (§3.3).
+**Legacy CI sources note (from params_board_game):** "Altonian diplomacy momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence are subsumed into the Piety Yield system." This document restores Church unit presence as an explicit source (§3.5) and formalises the Wealth/charity dimension (§3.4). Piety Yield is retained and refined (§3.3).
 
 ### §3.2 Conditional Passive
 

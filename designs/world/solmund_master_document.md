@@ -495,7 +495,7 @@ Fires once per character per Miraculous Event. Characters with TS perceive more 
 | CI track | Church Assert/Accommodate modifies CI. Miracle narrative reinforces power. |
 | RDT/TD tracks | Baralta's jurisdictional challenge routes through Reformed Doctrine. TD escalation penalises Church. |
 | IP track | Southernmost engagement diverts forces from northern border. Tradeoff is emergent from unit positioning — no automatic IP trigger. |
-| AER track | Miracle Investigation and AER maintenance use different action slots (Consul Outward vs. Phase 1 Cardinal Focus). No mechanical conflict. Tension is narrative: Church attention divided between southern miracle and Altonian relationship. |
+| Altonian diplomacy track | Miracle Investigation and Altonian diplomacy maintenance use different action slots (Consul Outward vs. Phase 1 Cardinal Focus). No mechanical conflict. Tension is narrative: Church attention divided between southern miracle and Altonian relationship. |
 | Mending mechanics | Miraculous Event derives entirely from existing Mending rules. No Mending mechanics changed. |
 | NPC priority trees | Baralta, Himlensendt, Vaynard, Almud need Decision Event branches for Southernmost Contact. |
 | POI system | Seam Texts as Remnant POIs. Miracle Investigation may place scripture in new territories. |

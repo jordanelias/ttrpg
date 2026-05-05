@@ -12,7 +12,7 @@ Seasonal CI at Accounting (execute in order, per military_layer_v30 §3):
 
 **CI seasonal cap (PP-504):** ±3 per season from player-initiated Domain Actions. ±5 per season from all sources combined (includes Conditional Passive, Piety Yield, Calamity Drift, event cards).
 
-Legacy CI sources (AER momentum, Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Piety Yield system — Church prominence in high-PT territories captures the same dynamics. AER ≥ 3 still bypasses Hafenmark structural suppression (PP-203).
+Legacy CI sources (Attention Pool threshold, Emergency Powers, Free Trade Decree, Church unit presence) are subsumed into the Piety Yield system — Church prominence in high-PT territories captures the same dynamics.
 
 
 ## Faction Political Pool (tc_political_redesign_v30 §3.4)
@@ -136,4 +136,4 @@ Zoom In cannot delay CI threshold check. Clocks continue during Zoom In personal
 ## Church CI Gain — Redesign Required (ED-110 resolved 2026-04-03)
 Church must have more CI gain routes than Baralta has suppression capacity.
 Baralta is one person, not a nation. Church spans multiple territories and actors.
-Expand CI gain table before next BG simulation. Options under consideration: AER-linked gain, territory-hold bonuses, non-Hafenmark suppression routes.
+Expand CI gain table before next BG simulation. Options under consideration: territory-hold bonuses, non-Hafenmark suppression routes.

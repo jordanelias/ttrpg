@@ -44,7 +44,7 @@ IP 30 → Almud faces Belief 1 (Altonian trade) vs Belief 3 (ethical doubt) dire
 If Crown is eliminated: Torben Loyalty transfers to Löwenritter as dynastic successor. Track meaning shifts (0 = aligns with anti-Löwenritter faction; 7 = full loyalty). The arc converts Torben from a Crown vulnerability into a Löwenritter asset — or a new pressure vector if other factions bid for his allegiance.
 
 **ARC-T17 — Diplomatic Outreach** `Crown | T3, T16 | ALL`
-Crown Senator Outward action targeting Schoenland: Influence vs Ob = AER level (min 1). Virtue Ethics −1 Ob. Success path: sustained engagement → AER 4+ → IP threshold rises to 80; AER 5 → IP held at 50 (Altonia satisfied). If Valoria is fragmented (3+ factions Stability ≤ 2): Ob +2 (Schoenland hedges toward Altonia). Cannot combine with Formal Crown Treaty same season.
+Crown Senator Outward action targeting Schoenland: Influence vs Ob = Altonian diplomacy level (min 1). Virtue Ethics −1 Ob. Success path: sustained engagement → Altonian diplomacy 4+ → IP threshold rises to 80; Altonian diplomacy 5 → IP held at 50 (Altonia satisfied). If Valoria is fragmented (3+ factions Stability ≤ 2): Ob +2 (Schoenland hedges toward Altonia). Cannot combine with Formal Crown Treaty same season.
 
 **ARC-T19 — Governance Pause** `Crown | T1 | TTRPG`
 Almud Discovery Event attempt (success OR failure) → 1-season Crown AI pause. No offensive Domain Actions. All factions have a window to act without Crown opposition: TC advances unopposed (no Suppress), IP advances (no diplomatic action), Coup Counter may increment (Crown inaction counts). The pause fires on the attempt, not the outcome — the act of perceiving changes him regardless.
@@ -97,7 +97,7 @@ Vote called; tie = motion fails by abstention → TC +1 AND RS −1 simultaneous
 Olafsson files (2 seasons building). Church Mandate pool (5d10) TN 7 vs Ob 7 (Baralta personal Mandate). At Mandate 4: P(success) ≈ 32%. At Mandate 3: P ≈ 66%. Retryable. If successful: Baralta TC suppression ends permanently + TC +4 one-time. Hafenmark loses its most critical TC management tool; ARC-P01 accelerates sharply.
 
 **ARC-T10 — TC 75+ Phase Transition** `Church | ALL | ALL` [THRESHOLD]
-TC freezes. Church shifts entirely to Territorial Seizure mode. AER no longer modifies TC gains. The clock has left the zone where suppression is meaningful; only territorial reconquest changes the dynamic. Direction: the campaign has moved from political management to crisis response.
+TC freezes. Church shifts entirely to Territorial Seizure mode. Altonian diplomacy no longer modifies TC gains. The clock has left the zone where suppression is meaningful; only territorial reconquest changes the dynamic. Direction: the campaign has moved from political management to crisis response.
 
 **ARC-T14 — Consecration Crisis** `Church/Hafenmark | T9, T8, T1 | ALL`
 If Baralta's deed-claim becomes actionable, Himmensendt must decide: consecrate or refuse. Refuse: TC +3 (Church overreach visible), Crown Mandate −2 in territories expecting orderly succession. Consecrate under duress: TC −5 (sovereign supremacy enacted), Church Stability −3. Direction: the consecration dilemma is Himmensendt's load-bearing moment — his sincere faith IS the post-war settlement's theological infrastructure.
@@ -172,7 +172,7 @@ Baralta eliminated (Loyalty 0 + Mandate 0). PI ≥ 4 → institutional successio
 [The resentment dynamic is produced by the existing Resentment Token mechanic (PP-405) and Canonical Coalition Pairs (PP-504). Not a standalone arc — note in GM reference that sustained Hafenmark Parliamentary Challenge use produces Resentment Token accumulation toward coalition formation against Hafenmark.]
 
 **ARC-S44 — Schoenland Gambit** `Hafenmark | T10, T16 | ALL`
-Hafenmark AER ≥ 3 + Solberg active. Influence vs Ob 3 (Schoenland's constitutional respect for Hafenmark). Success: arms supply +0.5/season, AER +1, Solberg becomes Hafenmark intelligence asset on Altonian movements. TE-25 active (NW corridor held) → +1D on roll. Direction: Hafenmark's institutional reputation as a stable constitutional actor is the asset; the gambit converts it into a military and intelligence resource.
+Hafenmark Altonian diplomacy ≥ 3 + Solberg active. Influence vs Ob 3 (Schoenland's constitutional respect for Hafenmark). Success: arms supply +0.5/season, Altonian diplomacy +1, Solberg becomes Hafenmark intelligence asset on Altonian movements. TE-25 active (NW corridor held) → +1D on roll. Direction: Hafenmark's institutional reputation as a stable constitutional actor is the asset; the gambit converts it into a military and intelligence resource.
 
 **ARC-T03** (see Church section — Excommunication targets Baralta; primary consequence is Hafenmark's)
 

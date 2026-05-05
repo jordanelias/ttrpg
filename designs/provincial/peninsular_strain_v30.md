@@ -450,7 +450,7 @@ Existing co-victory pairings from victory_v30.md §4 are retained as alternate c
 | Condition | Trigger | Transition |
 |-----------|---------|------------|
 | Post-Calamity Era | MS = 0 at Accounting | Substrate tears. Faction acquisition suspended 3 seasons. Mending doubled. Recovery: MS to 20 within 10 seasons. |
-| Occupation Era | IP ≥ 100 AND AER ≤ 1 at Accounting | Altonian Governorate activates. Faction actions +2 Ob in occupied territories. Recovery: IP below 60. |
+| Occupation Era | IP ≥ 100 AND Altonian diplomacy ≤ 1 at Accounting | Altonian Governorate activates. Faction actions +2 Ob in occupied territories. Recovery: IP below 60. |
 | Anarchy Era | All factions Stability 0 | Direct governance via personal action. Founded Organization faction formation available. Recovery: Parliament quorum restored. |
 
 The only campaign terminal: Second Calamity after 10 seasons sustained at MS ≤ 5.

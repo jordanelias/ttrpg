@@ -12,7 +12,7 @@ Conviction Legacy fires (T8): one Conviction transforms and transfers to new cha
 - Evidence Tracks (knowledge persists in notes/records)
 - All faction stats (Mandate, Wealth, Military, Influence, Stability)
 - All derived values (Treasury, Legitimacy, Reputation, Discipline)
-- All clocks (MS, CI, IP, PI, Strain, VTM, AER, Coup Counter)
+- All clocks (MS, CI, IP, PI, Strain, VTM, Altonian diplomacy, Coup Counter)
 - All settlement states (Prosperity/Defense/Order, governors, facilities)
 - All NPC states (Disposition toward OTHER NPCs, Scars, Beliefs, arc position)
 - Territory control, Accord, PT per territory

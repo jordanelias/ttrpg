@@ -70,13 +70,13 @@ RS 79–60 (Strained), Proximity 1 Folklore condition active in T6: Church Influ
 T3 Lowenskyst Fort = 0 + IP ≥ 60: Crown Military −1D in T3 for duration (unmanned fortification is worse than none — a resource drain without the benefit; historical precedent). Altonian land invasion via T3 becomes the path of least military resistance. Coup Counter: +1 if Crown has taken no military response Domain Action this season (territory loss trigger).
 
 **TE-23 — Anchor Holds** `Crown | T3 | ALL`
-T3 Fort = 4 (upgraded to max) + Crown Military ≥ 5: AER +1, IP −2 immediately, once per campaign arc. Does not fire if T10 Spartfell simultaneously below Fort 2 (Altonian generals observe both passes; NW vulnerability negates the diplomatic gain).
+T3 Fort = 4 (upgraded to max) + Crown Military ≥ 5: Altonian diplomacy +1, IP −2 immediately, once per campaign arc. Does not fire if T10 Spartfell simultaneously below Fort 2 (Altonian generals observe both passes; NW vulnerability negates the diplomatic gain).
 
 **TE-24 — Flanking Route Opens** `Hafenmark | T10 | ALL`
 T10 Spartfell non-Hafenmark OR Fort = 0: Hafenmark Military −1D in all NW corridor actions while condition holds. The NW pass is structurally undefended by its institutional holder; the strategic cost is operational capacity, not a clock threshold modification.
 
 **TE-25 — Schoenland Watch** `Hafenmark | T10, T17 | ALL`
-T10 + T17 both Hafenmark + Military ≥ 3: NW invasion route closed (TE-24 suspended). AER −1 via ARC-S44 if Schoenland reads Hafenmark as NW stabiliser — this is ARC-S44's roll modifier, not a separate AER modification. TE-25 active reduces ARC-S44 Ob by 1.
+T10 + T17 both Hafenmark + Military ≥ 3: NW invasion route closed (TE-24 suspended). Altonian diplomacy −1 via ARC-S44 if Schoenland reads Hafenmark as NW stabiliser — this is ARC-S44's roll modifier, not a separate Altonian diplomacy modification. TE-25 active reduces ARC-S44 Ob by 1.
 
 **TE-26 — The Hinge** `Crown | T14 | ALL`
 T14 Ehrenfeld non-Crown: controller +1D on Military from T14 (5-connection advantage, no per-territory tracking required); Crown Military from other territories targeting T14's adjacent set +1 Ob. If non-Crown controller has Military in T14 and T14's most-connected adjacent territory simultaneously: Crown loses strategic cohesion in the central peninsula.
@@ -104,7 +104,7 @@ T7 + T4 both non-Hafenmark: Hafenmark Wealth −1 (raw material supply chain). C
 T11 + T10 both Varfell: Hafenmark loses primary border fortress (TE-24 fires for Varfell's benefit). Hafenmark-Varfell Military Compact (PP-504) dissolves immediately if active.
 
 **TE-33 — Naval Pivot** `Schoenland | T16, T1 | ALL`
-AER ≤ 2 + Schoenland controls T16: Schoenland actively brokers between Altonia and Valoria. Any faction building AER to 4 via Diplomatic Outreach while this trigger is active: Solberg becomes a declared intelligence asset for that faction (Altonian military movement data, no Domain Action cost).
+Altonian diplomacy ≤ 2 + Schoenland controls T16: Schoenland actively brokers between Altonia and Valoria. Any faction building Altonian diplomacy to 4 via Diplomatic Outreach while this trigger is active: Solberg becomes a declared intelligence asset for that faction (Altonian military movement data, no Domain Action cost).
 
 **TE-34 — Northern Mine Road** `Church | T17, T9, T3 | ALL`
 Church controls T17: Church Wealth +1/season (mineral and road toll revenue); conditional Church Intel +1D vs Schoenland (Church personnel monitor the northern corridor — not a stat gain; applies only to Schoenland-targeted Intel operations).
