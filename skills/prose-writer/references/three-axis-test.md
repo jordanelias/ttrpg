@@ -46,7 +46,7 @@ The chalk-smell from the scrub arrived on the air. It came from where she was go
 
 ## C4. TS 0. Low Spirit.
 
-The river was beside the path. The path went somewhere. Vael was on it, or had been, or was being carried along by a momentum that had begun before she could remember beginning it.
+The river was beside the path. The path was in the valley. Vael was — she was in the valley, had been beside the river. Still. The birch was here, and the birch was itself.
 
 Birch. Grey scrub. Chalk-smell. These arrived. She received them, the way a slope receives rain — not by intent. The hearing of the river was something happening near her body, on the side where the river was, and on the other side were trees, and the side that was Vael was harder to find than the side that was the river.
 
