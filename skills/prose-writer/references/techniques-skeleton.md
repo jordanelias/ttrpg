@@ -212,6 +212,27 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 
 ---
 
+## 11. Structural Enactment — How Each Author Handles the Inarticulate
+
+The Wittgenstein Constraint (*Tractatus* 7) governs: where the prose cannot speak, the prose is silent. Each author's mode of silence is distinct. The prose does not describe its inability. The sentence structurally enacts the limit.
+
+| Author | Mode of Silence | Mechanism |
+|---|---|---|
+| Lispector | The veer | Sentence attempts to name the thing. The name is wrong. Another name is tried. Also wrong. The sentence veers — changes direction mid-construction. The accumulation of wrong names traces the shape. The sentence does not announce that it has not arrived. It simply ends somewhere other than where it was going. (Moser: "veers toward abstraction without ever quite reaching it." Cixous: "does not say the thing — it does the thing.") |
+| Ishiguro | Confident misidentification | The narrator identifies the thing. Commits. The identification is wrong. The narrator deploys certainty formulas ("she was fairly certain," "she believed"). The reader detects the wrongness from context. The narrator does not. Repair sequences reveal more than the original, but the narrator does not notice. (Walkowitz: unreliability is covert. Beedham: the detective who does not realize the real case is himself.) |
+| Borges | Precision on the impossible | The scholarly apparatus — footnotes, exact measurements, catalogue entries — is applied to impossible content. The precision is flawless. The content is impossible. The impossibility emerges from the gap. The apparatus may document its own gaps (institutional silence: "the archives note and do not answer") but does not confess inadequacy. (Sarlo: "through flawless formal consistency, they display how limited the mind is.") |
+| Ocampo | Flat-affect report | The narrator describes what happened in plain, insufficient language. The narrator does not notice the insufficiency. The gap between the content's magnitude and the prose's flatness is the technique. Close on the wrong detail — the pin, the cup, the eggs. (Borges on Ocampo: "her strange taste for a certain kind of innocent and oblique cruelty." Perez: "narrative resistance.") |
+| Tolkien | Building around the absence | The physical world is described with care — the wall, the ruin, the mortar, the darker soil. The thing the physical world implies is never named. The absence has shape because the surrounding structure has shape. (Shippey: "asterisk reality" — the unknown implied by the known points around it. Flieger: splintered light — the whole exists only as fragments.) |
+| Márquez | Ordinary syntax for impossibility | The impossible is stated in the same register as the ordinary. Exact numbers attached. No wonder-markers. The prose treats the impossible as documented fact. (Short/Leech: "deviation from the norm at lexical/semantic level" — the sentence is grammatically normal and semantically impossible.) |
+| Mistry | Accumulation without summary | Each sentence adds one particular. The reader synthesizes. The prose does not step back to interpret its own accumulation. Dignity through refusal to editorialize. |
+| Tartt | The loaded detail | The object carries more weight than its surface content. The prose does not announce the loading. The reader feels the weight. Close on the specific. |
+
+**Interpolation principle:** When multiple authors appear in one passage, each must serve a different function. One author's content sits inside another author's process. Lispector's veer acts upon Tolkien's named landscape. Ocampo's flat-affect carries Márquez's ordinary impossibility. Ishiguro's misidentification wraps around Borges's precision. The transitions are invisible. The reader perceives one voice.
+
+**Interpolation failure:** Two authors serving the same function (e.g., Lispector veer + Ishiguro uncertainty both serving "narrator unsure") produces redundancy, not synthesis. Choose one.
+
+---
+
 ## Author-Specific Mannerism Risk
 
 If used twice in same passage, becomes mannerism:

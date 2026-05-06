@@ -232,6 +232,37 @@ If used twice in same passage, becomes mannerism:
 
 ---
 
+## The Wittgenstein Constraint
+
+> "Whereof one cannot speak, thereof one must be silent." — Wittgenstein, *Tractatus*, 7
+
+No sentence in the Valoria voice may describe its own inadequacy to the content it attempts to render. The inadequacy must live in the sentence's structure — in what it attempts, where it veers, where it stops — not in the sentence's commentary on itself. The prose does not describe its silence. It is silent.
+
+### 48. Meta-Description of Inarticulation
+- **Symptom:** "She could not name / describe / articulate / explain." "There were no words for." "It was indescribable / nameless / unknowable." "Something for which she had no category / no word / no frame." The prose announces the failure of language from a position of full competence. The writer maintains mastery over the unknowable by naming its unknowability.
+- **Fix:** The sentence attempts. It veers (Lispector), commits wrongly (Ishiguro), applies precision to the impossible (Borges), reports flatly without registering (Ocampo), builds around the absence (Tolkien), or states impossibility in ordinary syntax (Márquez). The reader infers the failure from the sentence's behavior. The sentence does not announce it.
+
+### 49. Clean Oxymorons Bounding the Unbounded
+- **Symptom:** "A weight without mass." "A sound without source." "A light without heat." Clean, balanced rhetorical devices that bound the unbounded. These are workshop constructions that master the unknowable through literary craft.
+- **Fix:** Either commit to one term (Ishiguro — "it was a weight," wrong but committed) or apply precise measurement to the impossible (Borges — give the weight a specific mass and let the specificity be the problem). Or close on the physical and stop (Tolkien).
+
+### 50. Similes Below Coherence 4
+- **Symptom:** "Like a person drowning." "As if through glass." Similes at coherence tiers where the rendering cannot produce them. Similes require analogical reasoning: X is like Y, the relation between X and Y maps to A and B. This requires stable identity (X is X), stable comparison (Y is Y), and the relational apparatus to connect them. At Coherence 4 and below, these are failing.
+- **Fix:** At Coherence 4 and below, eliminate similes. Use declarative sentences. Tautologies (Lispector: "the eggs were eggs") or flat predications (Ocampo: "the shadow had more arms") replace analogical constructions.
+
+### 51. Analytical Self-Observation Below Coherence 5
+- **Symptom:** "She stopped reconstructing." "She noticed her own temporal processing was impaired." The character steps outside their own degraded rendering to observe it analytically. At Coherence 5 and below, this meta-cognitive capacity is the capacity that is degrading.
+- **Fix:** At Coherence 5, analytical self-observation is minimal and effortful. At 4 and below, it is unavailable. The character experiences the failure. They do not observe themselves experiencing it. If the prose needs to convey the character's awareness of their own state, convey it through behavior (she did not move; she confirmed the eggs were eggs) rather than through analytical narration.
+
+### 52. Meta-Commentary on the Prose's Own Limitations
+- **Symptom:** "That part was in a register she could not enter with language." "The referents are no longer available." The prose provides a theory of its own failure. The writer steps outside the narrative to explain why the narrative cannot do what it needs to do.
+- **Fix:** The prose attempts what it needs to do. The attempt fails structurally. The prose does not explain why. The Borgesian variant: if the passage is in scholarly apparatus (codex, chronicle), the apparatus may document a gap as an institutional silence — "the archives note and do not answer" — but the narrator does not provide the theory of why the gap exists.
+
+### Closing Rule
+When the prose reaches the limit of what it can render — whether because coherence has failed or because TS-perceived content exceeds articulation — the prose closes on the nearest concrete thing. The pin beside the book. The chalk on the sleeves. The lane running south. The grass, the ground, the wind. This is the last act of rendering before silence. It is not a symbol. It is the last thing the prose can say.
+
+---
+
 ## The Master Rule
 
 If a sentence could appear in any story about any settlement / character / event, it belongs to no story. Cut it.

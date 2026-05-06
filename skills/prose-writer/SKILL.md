@@ -166,6 +166,9 @@ Before delivering prose, verify:
 - [ ] Have I avoided symmetrical paired constructions, universalized paradoxes, hammering repetition?
 - [ ] Do load-bearing NPCs have at least one anchored dimension?
 - [ ] At low coherence, is the world unchanged while the PC's rendering of it fails?
+- [ ] **Wittgenstein constraint:** Does any sentence describe its own inability to render the content? If so, replace: the sentence must attempt and fail structurally, not announce failure.
+- [ ] Are there similes below Coherence 4, or analytical self-observation below Coherence 5?
+- [ ] Does the passage close on the nearest concrete thing, not on meta-commentary?
 
 ## Valoria-Specific Constraints
 
