@@ -110,9 +110,9 @@ Live rules for composition and audit. Each entry: rule name → symptom → fix.
 - **Symptom:** Passage's texture overwhelmingly one author's techniques without content demanding it.
 - **Fix:** Diagnose what content needs. Splice another author's technique into a clause when motivated.
 
-### 25. Mechanical-Term Leakage in Focalized Prose
-- **Symptom:** Conviction Track / Church Influence / Mending Stability / etc. named in in-world POV.
-- **Fix:** Translate to focalized experience. The character names the experience, not the system.
+### 25. Design-Vocabulary Leakage in Focalized Prose
+- **Symptom:** Game-mechanical terms (Conviction Track, Church Influence, Mending Stability, Coherence, Thread Sensitivity) OR metaphysical design terms (Ein Sof, substrate, configuration, rendering, thread-configuration, structural-scale, restorative lattice, stabilization loop, three-axis framework, possibility-actuality, intelligibility-unintelligibility, co-movement, spooling, layer 2, layer 3) appearing in focalized prose. These are the designer's words, not the character's. The metaphysics is the scaffolding. The prose is the building. The scaffolding does not appear in the building.
+- **Fix:** Translate to the character's own experiential vocabulary. A Warden describes what she perceives using her mentor's words, analogies to her own practice, sensory description. "The same patience she used when she closed a wound" not "restorative structural-scale threadwork." "More of Edda than should be there" not "excess of Ein Sof spooling without limitation." If the character has no words for what they perceive, the prose veers, closes on concrete, or is silent — it does not borrow the designer's terms to fill the gap.
 
 ### 26. Flat-Affect Omniscience
 - **Symptom:** "Neutral all-knowing narrator" with no perspective, no stance.
