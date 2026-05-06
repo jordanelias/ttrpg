@@ -1,10 +1,8 @@
 # Calibration — Source Author Prose Anchors
 
-> **⚠ NEEDS REVISION.** This infill references the six-author roster (includes Morrison, excludes Lispector/Borges/Ocampo). The skeleton has been updated to the eight-author coherence-indexed roster. Morrison anchor should be removed and Lispector/Borges/Ocampo anchors added. Until then, use the skeleton as the live reference.
+Anchor passages from each of the eight source authors, with technique analysis. Calibration targets for composition.
 
-Brief excerpts from each of the six source authors, with technique analysis. These are the calibration targets. When generating new Valoria prose, compare against these passages — does the new prose deploy the techniques the calibration passages demonstrate?
-
-Each excerpt is held to under 15 words per source, one excerpt per source, for fair-use analysis purposes. Fuller analysis follows from secondary sources and craft commentary.
+Each excerpt is held to under 15 words per source for fair-use purposes. Fuller analysis follows from secondary sources.
 
 ---
 
@@ -52,18 +50,47 @@ Each excerpt is held to under 15 words per source, one excerpt per source, for f
 
 ---
 
-## Morrison — *Beloved*
+## Lispector — *The Passion According to G.H.* / *The Hour of the Star*
 
-**Anchor:** The opening sentence: "124 was spiteful."
+**Anchor:** From *The Hour of the Star*: Rodrigo S.M.'s authorial voice opening the novella — the fiction knowing it is fiction, simple vocabulary, ontological questioning.
 
 **Techniques demonstrated:**
-- **Three-word punch.** Subject, verb, complement. Total weight delivered in three words.
-- **Anaphoric structure.** Each of the novel's three sections opens "124 was [adjective]" — spiteful, loud, quiet. The structural repetition does meaning-work across the entire text.
-- **Personification through family-perspective focalization.** The house has a temperament because the family experiences it as having one. The narration channels their perception. Not metaphor — the channeling voice carries the family's lived reality.
-- **Implied backstory.** "Spiteful" implies a reason. The next sentence ("Full of a baby's venom") implies a baby. The two sentences together imply a haunting. Three short clauses, a world.
-- **Refusal to translate.** Morrison does not explain the haunting to outsider readers. The text assumes a reader inside the world.
+- **Author-intrusion.** Rodrigo S.M. is a thinly-disguised version of Lispector. The fiction announces its own construction.
+- **Simple vocabulary at metaphysical depth.** Common words (dedicate, truth, body, word) accessing existential territory without elevation.
+- **The unsayable as primary territory.** The opening circles what cannot be said, but does not announce the unsayability — it attempts and veers.
+- **"This instant-now."** Radical present-tense being, especially in *Água Viva*.
+- **Ontological estrangement.** In *Passion*, G.H.'s encounter with the cockroach: a mundane object exceeds the categories the rendering provides.
 
-**Calibration use:** When Valoria opens a passage on a place — a settlement, a building, a chamber — this is the target. Let a short declarative carry the place's mood. Anchor the mood in a specific perspective (whose mood? whose lived experience?). Resist the impulse to explain.
+**Calibration use:** When Valoria prose encounters the limit of what can be rendered — at low coherence, at high TS, at the boundaries of human categories — Lispector's anchor is the target. The prose attempts. It veers. It does not announce failure. (Moser: "veers toward abstraction without ever quite reaching it." Cixous: "does not say the thing — it does the thing.")
+
+---
+
+## Borges — "Tlön, Uqbar, Orbis Tertius" / "The Library of Babel"
+
+**Anchor:** The opening of "Tlön" — the encyclopedia footnote, the discovered article, the apocryphal reference treated as documented fact.
+
+**Techniques demonstrated:**
+- **Fictive-as-real.** Apocryphal references treated with full scholarly apparatus. The footnote is the fiction.
+- **Erudite metaphysical compression.** Philosophical positions compressed to single clauses.
+- **Tolerance for the impossible inside scholarly register.** Academic tone applied to impossible content. The apparatus is flawless; the content is impossible.
+- **Precision on the impossible.** "The Library of Babel": hexagonal galleries, five shelves, thirty-two books, four hundred ten pages. The precision is total. What it describes is infinite.
+
+**Calibration use:** When Valoria produces codex entries, chronicle passages, institutional records — and especially when the content of these records is ontologically impossible — Borges's anchor is the target. Apply scholarly precision. Let the precision carry the impossibility without remarking on it. (Sarlo: "through flawless formal consistency, paradoxes display how limited the mind is when it tries to apprehend the nature of reality.")
+
+---
+
+## Ocampo (Silvina) — *La Furia* / *Las invitadas*
+
+**Anchor:** Stories such as "El vestido de terciopelo" or "Mimoso" from *La Furia* (1959). Cruelty rendered without moral framing. The domestic interior as horror-site.
+
+**Techniques demonstrated:**
+- **Flat-affect narration.** The narrator reports terrible things with the same investment given to domestic trivia. The incuriosity is the technique.
+- **Children doing terrible things, narrated placidly.** Cruelty rendered without moral comment.
+- **Refusal of explanation.** Events occur; the prose does not justify them. Stories close without resolution.
+- **Charged objects.** Dolls, mirrors, photographs — domestic objects as ontologically loaded. Uncanny rather than aesthetic.
+- **Servants seeing what employers cannot.** Class-position as perceptual access.
+
+**Calibration use:** When Valoria renders rendering failure from an observer's perspective, or when the prose must report something terrible or strange without editorializing, Ocampo's anchor is the target. The narrator reports. The narrator does not register the magnitude. The reader feels the gap. Close on the wrong detail. (Borges: "her strange taste for a certain kind of innocent and oblique cruelty.")
 
 ---
 
@@ -103,15 +130,15 @@ What emerges from comparing these six anchors:
 
 1. **All six refuse explanation.** None of these openings explain themselves. None translate cultural reference. None summarize their own meaning. The reader is positioned as a competent inferrer.
 
-2. **All six have specific perspective.** Tolkien's panorama is from a vantage; Stevens speaks; Mistry's narrator carries the village's stance; Morrison's voice channels the family's experience of the house; Tartt's "we" is collective and confessional; Márquez's narrator speaks from a deep-time chronicler position. None are neutral omniscient.
+2. **All eight have specific perspective.** Tolkien's panorama is from a vantage; Stevens speaks; Mistry's narrator carries the village's stance; Lispector's narrator collapses into the perceiving consciousness; Borges's apparatus is itself a perspective; Ocampo's narrator is incurious about the extraordinary; Tartt's "we" is collective and confessional; Márquez's narrator speaks from a deep-time chronicler position. None are neutral omniscient.
 
 3. **All six operate at structural simplicity with semantic depth.** Sentences are not lexically baroque (with the partial exception of Tartt's longer subordinations). The depth is in what's implied, structured, focalized — not in what's ornamented.
 
-4. **All six tolerate aporia.** None resolve into a single legible meaning. Tolkien's exaltation is not explained; Stevens' interiority is not unpacked; Mistry's "anywhere" is universalization without thesis; Morrison's "spiteful" is not justified; Tartt's "gravity" is named but not specified; Márquez's time-fold is not commented on.
+4. **All eight tolerate aporia.** None resolve into a single legible meaning. Tolkien's exaltation is not explained; Stevens' interiority is not unpacked; Mistry's "anywhere" is universalization without thesis; Lispector's veer does not arrive; Borges's precision describes the impossible; Ocampo's cruelty goes unresolved; Tartt's "gravity" is named but not specified; Márquez's time-fold is not commented on.
 
 5. **All six have concrete physical anchors.** Mountains, pantry, tracks-side shacks, the house at 124, snow on mountains, adobe houses by a river. Place is always present, always specific.
 
-The Valoria voice synthesizes these properties into one practice. Not "borrow Tolkien for landscape, Morrison for openings." Rather: the voice always has these properties available, and which surface in a given sentence depends on focalization and content.
+The Valoria voice synthesizes these properties into one practice. Not "borrow Tolkien for landscape, Ocampo for horror." Rather: the voice always has these properties available, and which surface in a given sentence depends on focalization, content, and coherence tier.
 
 ---
 
@@ -125,7 +152,7 @@ Focalization: collective "we" voice of the resistance, looking back from after a
 
 > We had stalled the Church for three full seasons. The Templar columns had withdrawn northeast and our practitioners walked the markets without concealing their work-tools, and the Capital's bell-towers rang the canonical hours without the long brass note that meant a seizure was coming. We had counted what we thought was worth counting. The Crown's soldiers came at the third bell of a morning we had not been watching. Ehrenwall's columns. Not the Templars. Lawful and not arguable. By midday the notices were posted on every guildhall door, and the gates were closed, and the question of who governed which street had answered itself in the hours we had been asleep.
 
-Techniques surfaced: Tolkien parataxis, Morrison-clustered short sentences ("Ehrenwall's columns. Not the Templars. Lawful and not arguable."), focalized stance ("Lawful and not arguable" owned by the bitter resistance voice), withholding (the "long brass note" implies a system without explaining it).
+Techniques surfaced: Tolkien parataxis, Tartt-punch clustered short sentences ("Ehrenwall's columns. Not the Templars. Lawful and not arguable."), focalized stance ("Lawful and not arguable" owned by the bitter resistance voice), withholding (the "long brass note" implies a system without explaining it).
 
 ### Anchor V2: First-person retrospective with regret (Arc 2)
 
@@ -133,7 +160,7 @@ Focalization: the practitioner who explained, looking back across the cascade of
 
 > He had bought the cabinet at auction without knowing what was in it. That was twenty years before I met him. The objects had moved twice — from the country house to the city residence, from the city residence to the southern estate — and he had never opened more than the third drawer. The afternoon I told him what he had, he listened without interrupting. He thanked me. He poured wine. Two seasons later the Church's investigators arrived at his northern gate, and one season after that the Crown lost the southern coast, and the equilibrium that had held the Capital for nine years began to drift in directions no one had predicted. None of which had happened the morning I sat down with him to drink and explain a thing I should perhaps not have explained.
 
-Techniques surfaced: Márquez prolepsis chain, Morrison-clustered shorts ("He thanked me. He poured wine."), Tartt loaded object (the cabinet), Ishiguro hedging at close ("perhaps not have explained"), aporia held (the regret is held but not justified).
+Techniques surfaced: Márquez prolepsis chain, Tartt-punch clustered shorts ("He thanked me. He poured wine."), Tartt loaded object (the cabinet), Ishiguro hedging at close ("perhaps not have explained"), aporia held (the regret is held but not justified).
 
 ### Anchor V3: Community-chronicler hybrid (Arc 3)
 
@@ -149,7 +176,7 @@ Focalization: Church bureaucracy/bishop's institutional voice, watching its doct
 
 > The Church had held the explanation for nine hundred years. The doctrine of the unbroken weave was taught to novices in language identical to the language the previous bishop had used, and his predecessor, and his predecessor's predecessor, all the way back to the Codex's third revision. The doctrine had held because the contradictions had been small and isolated, occurring in places where no one was looking and to people whose accounts the Church was at liberty to revise. In the spring of the present bishop's thirty-second year, the contradictions arrived in the capital. Three witnesses with three independent reports. Then thirty witnesses. Then a printed account that the Church's stationers could not buy back fast enough. The bishop wrote in his private register that the truth had not changed — that the world was the world it had always been. He was correct on this point and unable to act on it.
 
-Techniques surfaced: Tolkien deep-time paratactic chain ("his predecessor, and his predecessor's predecessor..."), Márquez precision ("nine hundred years," "thirty-second year"), Morrison anaphora ("Three witnesses... Then thirty witnesses. Then a printed account..."), institutional free indirect ("at liberty to revise" owned by Church bureaucracy), aporia held at close ("correct on this point and unable to act on it").
+Techniques surfaced: Tolkien deep-time paratactic chain ("his predecessor, and his predecessor's predecessor..."), Márquez precision ("nine hundred years," "thirty-second year"), structural anaphora ("Three witnesses... Then thirty witnesses. Then a printed account..."), institutional free indirect ("at liberty to revise" owned by Church bureaucracy), aporia held at close ("correct on this point and unable to act on it").
 
 ---
 
@@ -160,7 +187,7 @@ Six source-author anchors plus four Valoria-domain anchors. When generating new 
 - Landscape, panorama, founding events → Tolkien anchor + V3 (community-chronicler) or V4 (institutional deep-time)
 - Restrained character interiority → Ishiguro anchor + V2 (first-person regret)
 - Routine, settlement, working life → Mistry anchor + V3
-- Place-as-character, opening on a specific named site → Morrison anchor + V1 (practitioner-collective)
+- Place-as-character, opening on a specific named site → Ocampo domestic-as-horror-site + V1 (practitioner-collective)
 - Retrospective dread, opening with a disaster already named → Tartt anchor + V1, V2
 - Founding chronology, generations, deep history → Márquez anchor + V4
 

@@ -1,6 +1,6 @@
 # Anti-Patterns — AI Prose Failure Catalogue
 
-> **⚠ NEEDS REVISION.** This infill references the six-author roster (includes Morrison, excludes Lispector/Borges/Ocampo) and contains signifyin' references that have been removed from the skeleton. The skeleton has been updated to the eight-author coherence-indexed roster. This infill should be revised to match. Until then, use the skeleton as the live reference.
+Expanded rationale and examples for the rules in `anti-patterns-skeleton.md`. Eight-author roster: Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo. For the Wittgenstein constraint and coherence-mismatch rules, see the skeleton.
 
 Three layers of evidence: the LAMP taxonomy from professional editors (Chakrabarty et al., CHI 2025), academic research on LLM creative writing limitations (multiple studies 2022–2026), and stylometric analysis of LLM idiosyncrasies. All major models exhibit these failures. The patterns are structural, not superficial. Vocabulary tells evolve as specific words get scrubbed; structural habits persist.
 
@@ -257,16 +257,16 @@ Editorial words ("sinister," "noble," "wretched") floating from a non-existent n
 
 ### Single-Author Dominance Without Cause
 
-The Valoria voice is a weighted blend of six authors: Tolkien (~30%), Márquez (~18%), Ishiguro / Mistry / Morrison / Tartt (~13% each). When a passage's texture is overwhelmingly one author's techniques without the content demanding it, the synthesis has collapsed into pastiche.
+The Valoria voice is a coherence-indexed blend of eight authors: Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo. Weighting shifts with coherence tier — see `coherence-tiers.md`. When a passage's texture is overwhelmingly one author's techniques without the content demanding it, the synthesis has collapsed into pastiche.
 
-This is *not* a rule that every passage must contain all six authors. Some passages legitimately lean heavily on one (a restrained interior monologue may be 60% Ishiguro by texture). The failure is when the dominance is unmotivated — when a passage drifts entirely into one mode because the writer fell into rhythm, not because the content called for it.
+This is *not* a rule that every passage must contain all eight authors. Some passages legitimately lean heavily on one (a restrained interior monologue may be 60% Ishiguro by texture). The failure is when the dominance is unmotivated — when a passage drifts entirely into one mode because the writer fell into rhythm, not because the content called for it.
 
 **Symptoms:**
 - A passage's sentences are all subordinated and hedged, in content that doesn't require restraint.
 - A passage is interior aestheticism throughout, in content that needs landscape or chronicle weight.
 - A passage is sensory catalogue without scale-shift or temporal anchor, in content that includes generations or distance.
 - A passage's matter-of-fact impossibility runs without grounding, in content where grounding is needed.
-- A passage strikes Morrison-punch repeatedly when no single moment earns the weight.
+- A passage strikes Tartt-punch repeatedly when no single moment earns the weight.
 - A passage has no Tolkien-derived techniques anywhere despite Tolkien being the highest-weighted author.
 
 **Fix:** Diagnose what the content needs. If the content involves landscape, chronicle, or scale-shift, Tolkien-derived techniques should be visible somewhere. If the content involves time-folding or the impossible, Márquez-derived techniques should surface. If a passage feels mono-author, splice another author's technique into a clause or sentence — without forcing it. The synthesis tolerates a heavily-weighted-toward-one passage; it does not tolerate the absence of the synthesis.
@@ -326,7 +326,10 @@ Each source author has techniques that, individually effective, become mannerism
 - **Tolkien:** Inverted syntax ("Great was the ruin"). Once: weighty. Repeatedly: costume.
 - **Ishiguro:** "perhaps as it should have been," "I cannot now recall." Once: restrained. Repeatedly: tic.
 - **Mistry:** Sensory catalogues. Once: immersive. Repeatedly: tour.
-- **Morrison:** Three-word punch sentences. Once: weight. Repeatedly: drumbeat.
+- **Tartt:** Three-word punch sentences. Once: weight. Repeatedly: drumbeat.
+- **Lispector:** "This instant-now" temporal shift. Once: rendering failure. Repeatedly: affectation.
+- **Borges:** Infinite recursion / mirror metaphor. Once: the paradox holds. Repeatedly: the trick is visible.
+- **Ocampo:** Flat-affect horror. Once: devastating. Repeatedly: monotone.
 - **Tartt:** Atmospheric long sentences. Once: immersion. Repeatedly: fog.
 - **Márquez:** Hyperbolic precision. Once: comic gravity. Repeatedly: schtick.
 

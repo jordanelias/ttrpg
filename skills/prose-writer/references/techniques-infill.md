@@ -1,306 +1,367 @@
-# Techniques — Synthesized Inventory
+# Techniques — Synthesized Inventory (Infill)
 
-> **⚠ NEEDS REVISION.** This infill references the six-author roster (includes Morrison, excludes Lispector/Borges/Ocampo). The skeleton has been updated to the eight-author coherence-indexed roster. This infill should be revised to match. Until then, use the skeleton as the live reference and treat Morrison-specific entries as superseded.
+Expanded rationale, examples, and academic grounding for the technique rules in `techniques-skeleton.md`. Organized by function. The skill produces a single voice; the inventory is divided for navigability. For the coherence-indexed weighting tables, see `coherence-tiers.md`.
 
-Organized by function, drawing from Tolkien, Ishiguro, Mistry, Morrison, Tartt, and Márquez. Sources noted in brackets where it clarifies usage. The skill produces a single voice; the inventory is divided only for navigability.
-
-**The synthesis is weighted, not equal.** Tolkien's techniques surface most often (~30% of deployments), Márquez's second-most (~18%), and Ishiguro / Mistry / Morrison / Tartt roughly equally (~13% each). Throughout this document, source tags indicate which author the technique derives from; the writer applies them at clause-level granularity, with multiple authors' techniques often appearing in the same sentence. The weighting is a tendency across the aggregate, not a per-sentence quota.
+**Eight-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina). The weighting shifts across coherence tiers — see the skeleton and `coherence-tiers.md` for the tables.
 
 ## 0. Focalization — The Master Principle
 
 Every passage carries a perspective, even when no narrator is named. What looks like neutral omniscience is a chronicler-voice with its own assumptions. Before writing, identify the focalization: a specific character, a community, a chronicler, or a retrospective self.
 
-The focalization determines:
-- **Vocabulary.** A character hostile to authority calls officials "the inspectors." A character employed by authority calls them "colleagues." The same people, different words.
-- **Salience.** What the focalizer notices, lingers on, or skips. A merchant notices prices and qualities. A fugitive notices exits.
-- **Hedging.** What the focalizer can or cannot bear to say directly. A grieving narrator hedges around the grief.
-- **Editorial stance.** Adjectives like "sinister," "noble," "wretched" are licensed when they belong to a focalized perspective. They are AI tells when floating from a neutral narrator.
+The focalization determines vocabulary (a character hostile to authority calls officials "the inspectors"; a character employed by authority calls them "colleagues"), salience (a merchant notices prices; a fugitive notices exits), hedging (a grieving narrator hedges around the grief), and editorial stance (adjectives like "sinister" or "noble" are licensed when they belong to a focalized perspective; they are AI tells when floating from a neutral narrator).
 
-[Morrison] does this constantly — the narrative voice carries the family's judgment of its own house. [Tartt] does it through obsessive first-person narrators whose aestheticism colors everything they see. [Ishiguro] does it through narrators whose restraint is itself the focalization. [Mistry] shifts between omniscient and free-indirect into specific characters, picking up their attitudes mid-paragraph. [Tolkien] elevates register when narrating Elvish or Gondorian scenes and plainens it for hobbit perspective. [Márquez] surfaces the village's collective voice ("according to those brave enough to drink it").
-
-Focalization is the technique that gives the synthesized voice stance without requiring editorial commentary from a non-existent neutral narrator.
+Each author deploys focalization distinctly: Tartt through obsessive first-person narrators whose aestheticism colors everything. Ishiguro through narrators whose restraint IS the focalization. Mistry by shifting between omniscient and free-indirect, picking up characters' attitudes mid-paragraph. Tolkien by elevating register for elevated speakers and plainening it for plain. Márquez by surfacing a village's collective voice. Lispector by collapsing narrator and character into a single perceiving-and-questioning consciousness. Borges by deploying scholarly apparatus that is itself a focalization (the encyclopedia-voice has attitudes). Ocampo by focalizing through narrators who do not register the magnitude of what they describe.
 
 ## 1. Sentence Construction
 
-### Default: Paratactic Coordination [Tolkien]
+### Paratactic Coordination [Tolkien]
 
-Join clauses with "and" or juxtapose them. Avoid defaulting to subordination. The effect is chronicle — events recorded alongside each other, reader supplying causation.
+Clauses joined with "and" or juxtaposed. Reader supplies causation. **This is a marked register** (Turner, per Shippey *Road to Middle-earth*) — stylistically marked, indicating something out of the ordinary. The default register is hypotactic (subordinated). Parataxis surfaces at elevated moments: heroic peaks, battle, ruin, chronicle-at-scale.
 
-- "The river ran dark beneath the walls, and the watchtowers stood empty."
+### Hypotactic Cascade [Tolkien]
 
-Subordination is reserved for moments where causation genuinely matters. When used, the subordinate clause should contain a surprise.
+Long subordinated sentences building cohesion across temporal/spatial clauses. The default register. The Hobbit's opening sentence is a single hypotactic construction establishing character, place, and social context in one arc.
 
-### The Punch Sentence [Morrison]
+### Punch Sentence [Tartt primary / Tolkien at heroic peaks]
 
-Short declarative sentences that imply backstory or carry weight disproportionate to their length. Three to seven words. Often paired with a fragment that does the heavy lifting.
+Short declarative sentences (3-7 words) that carry weight disproportionate to their length. Most effective beside long compound sentences — the asymmetry is the rhythm.
 
-- "She did not return. Not that winter, not the next."
-- "The well went dry in the second year. There were arguments about whose fault it was."
+### Accretive Sentence [Mistry]
 
-These sentences are most effective when placed beside long compound ones. The asymmetry is the rhythm.
+Each sentence adds one physical particular. No summary. The paragraph builds reality through accumulation. (Morey, *Rohinton Mistry*, 2004: "accretive particularity.")
 
-### The Accretive Sentence [Mistry]
+### Qualifying Sentence [Ishiguro]
 
-Each sentence in a sequence adds one more physical particular. No sentence summarizes or interprets. The paragraph builds reality through accumulation.
+Grows through parenthetical correction and hedging. Qualifications signal emotional stakes — the more the narrator hedges, the more important the content. Often violates Grice's maxim of quantity: long but containing little information. The length is evasion.
 
-- "The tailor's shop was narrow. A single window let in working light. Cloth bolts stood upright in the corner. Pins caught the sun on the worktable beside a tin cup of cold tea."
+### Atmospheric Sentence [Tartt]
 
-### The Qualifying Sentence [Ishiguro]
+Long sentence immersing reader in sensory texture. Subordinate clauses serve immersion, not argument. The reader should feel the room before understanding its function.
 
-A sentence that grows through parenthetical correction and hedging. The speaker is trying to be precise, not eloquent. Qualifications signal emotional stakes — the more the narrator hedges, the more important the content.
+### Appositive Cascade [Márquez]
 
-- "It was, I think — though I cannot be certain — sometime during the second autumn that the matter was first raised."
-- Modal verbs as structural distancing: "would," "might," "could have been." These are not weakness; they are the sound of a narrator managing what they can bear to say directly.
+Identify subject, append clause after clause of additional identification. Each appositive extends timeline or scope. The sentence becomes compressed history.
 
-### The Atmospheric Sentence [Tartt]
+### Elliptical Stream of Consciousness [Lispector]
 
-A long sentence that immerses the reader in a place's specific sensory texture. Subordinate clauses serve the immersion, not the argument. The reader should feel the room before understanding its function.
+Interior monologue with skipped connective tissue. Not Joycean-comprehensive; deliberately fragmentary. The gaps between the fragments are as important as the fragments themselves. (Cixous, *Reading with Clarice Lispector*, 1990.)
 
-- "The room smelled of beeswax and old paper, and somewhere a clock ticked unevenly, and through the south window a strip of late afternoon light fell across the leather chair where the seneschal had not sat in nearly a year."
+### Strange Syntax [Lispector]
 
-### The Appositive Cascade [Márquez]
+Sentences sounding as if translated from a language that doesn't exist. Deliberate non-naturalness violating conversational grammar. (Moser, *Why This World*, 2009: "weird word choices, strange syntax, lack of interest in conversational grammar.")
 
-Identify a person or thing, then append clause after clause of additional identification. Each appositive extends the timeline or scope. The sentence becomes a compressed history.
+### Erudite Metaphysical Compression [Borges]
 
-- "the seneschal, who had outlived two wars and a plague and the collapse of the eastern granary and the birth of eleven grandchildren, not one of whom remembered his real name"
+Entire philosophical positions compressed into a single clause. References work hard. The reader must do the unpacking. The compression itself demonstrates the technique — what takes a philosopher a chapter, Borges achieves in a subordinate clause. (Sarlo, *A Writer on the Edge*, 1993.)
 
-### Proleptic Flash-Forward [Márquez, Tartt]
+### Flat Declarative Holding Horror [Ocampo]
 
-State the future as settled fact within a present-tense sentence. The future is known; the interest lies in watching it arrive.
-
-- "He did not yet know that the woman in the doorway would become the last governor of the district."
-
-[Tartt] uses this for dread — naming the disaster early, then circling back to show how it arrived. The opening of *The Secret History* announces the murder before any of the characters' lives are introduced.
-
-### Recursive Mid-Sentence Memory [Morrison]
-
-A sentence rupturing into flashback or interior memory mid-clause, returning to the present without grammatical apology. The reader follows the syntax through time-folds.
-
-- "She walked toward the gate — toward where the gate had been, before her brother had taken it down for firewood, the same brother who would not now meet her eyes — and lifted the latch that was no longer there."
+Simple syntactic structure containing content that should shatter the syntax. The syntax holds. The content doesn't care. The narrator reports with the same investment given to domestic trivia. (Borges on Ocampo: "her strange taste for a certain kind of innocent and oblique cruelty." Perez, "Reading Cruelty," 2016.)
 
 ### Rhythm
 
-- Vary sentence length deliberately. But avoid the long-then-short alternation pattern, which is itself predictable. Cluster three short sentences together. Run two long sentences in sequence. Drop a single fragment.
-- End important clauses on stressed syllables [Tolkien]: "shadow," "fortress," "stone." Avoid weak endings at moments of rhetorical weight.
-- Read aloud. If you can predict the next sentence's length from the current one, the rhythm has fallen into a pattern.
+Vary sentence length without the long-then-short alternation pattern. Cluster three short. Run two long. Drop a fragment. End important clauses on stressed syllables (Tolkien). Read aloud — predictable next-sentence length means a pattern has formed.
 
 ## 2. Paragraph Architecture
 
-### Sequence: Physical World First
+### Physical World First [Tolkien/Mistry/Tartt]
 
-Establish the physical environment before placing characters. What is seen, heard, smelled. Then bodies — where they sit, what they carry, what condition they are in. Then context emerges through what the characters do and say. [Tolkien for landscape; Mistry and Morrison for bodies; Tartt for atmosphere]
+Establish environment → bodies → context. Never abstraction first.
 
-### The Particular Before the General
+### Particular Before General [Mistry/Lispector]
 
-Never open with an abstraction. Open with a specific object, gesture, or sensation. The general condition emerges from the accumulation of particulars, never from statement. [Mistry, Morrison]
-
-- Not: "The settlement was in decline."
-- But: "The market had contracted to six stalls. The seventh had been dismantled for firewood during the cold snap, and no one had rebuilt it."
+Open with specific object/gesture/sensation. General emerges from accumulation. Not "the settlement was in decline" but "the market had contracted to six stalls."
 
 ### Routine as Structure [Mistry]
 
-Describe daily routines and working processes. The disruption of routine is how the narrative introduces change. A morning that proceeds as usual for eight sentences, then doesn't, is more powerful than a dramatic opening.
+Daily routines described; their disruption introduces change.
 
 ### Digression as Revelation [Ishiguro]
 
-The narrator wanders from the subject — the digression contains the real point. "But I was speaking of the garden" returns to the surface, having exposed something the narrator didn't intend to show.
+The narrator wanders; the digression contains the real point. "But I was speaking of the garden" returns to the surface, having exposed something unintended.
 
-### The Channeling Voice [Morrison]
+### Ontological Estrangement [Lispector]
 
-The narrator carries the perspective of the community or character being described, taking on their judgments and idioms. The sad-expectant outlook of someone telling a story they have told before. The reader is positioned as a listener inside the community, not as an outsider needing translation.
+The perceiver's categories fail to contain a mundane object. Not the object changing — the rendering faltering. The rust on a gate, the sun on cobblestones exceed the categories the rendering provides. (Moser: the prose "veers toward abstraction without ever quite reaching it.")
 
-### Circular Return [Márquez, Ishiguro]
+### The Domestic Interior as Horror-Site [Ocampo]
 
-End a paragraph near where it began, but with the meaning transformed. The reader has traveled and arrived back, understanding differently.
+Kitchens, bedrooms, gardens become uncanny without external trigger. The wrongness is in the familiar. The narrator does not remark on the wrongness.
+
+### Community-as-Ensemble [Mistry]
+
+Rotate through multiple characters' POVs within a continuous scene without breaking narration. Not scene-break-with-perspective-change — Mistry's rotation occurs within a single continuous scene.
+
+### Circular Return [Márquez/Ishiguro]
+
+Paragraph ends near where it began, meaning transformed.
 
 ## 3. Time
 
 ### Deep-Time Framing [Tolkien]
 
-Place events in a timeline extending far beyond the narrative moment. "This was before the fall of Edros, when the northern keeps still burned their beacon-fires." The frame implies a world with a past measured in ages.
+Events placed in chronology extending far beyond the narrative moment. The frame implies a world with a past measured in ages.
 
 ### Temporal Compression [Márquez]
 
-Collapse years, decades, or generations into a clause. Birth, ambition, failure, death — contained in a single grammatical unit. Then expand a single moment to fill a paragraph. The alternation between compression and expansion is the technique.
+Years/decades collapse into clauses; single moments expand to fill paragraphs.
 
-### Retrospective Positioning [Ishiguro, Tartt]
+### Retrospective Positioning (covert unreliable) [Ishiguro]
 
-The narrator speaks from a later vantage point, looking back. Inherent dramatic irony — the narrator knows more than they're telling. Phrases like "I understand now" or "at that time I had not yet learned" create the gap between experiencing and narrating self.
+Narrator from later vantage. Unreliability required — not just formality. Built through pragmatic-maxim violations. (Walkowitz, *Cosmopolitan Style*, 2006: unreliability is covert — the narrator does not know.)
 
-[Tartt] uses retrospection more obsessively than Ishiguro: her narrators linger on details they could not have noticed at the time, performing memory's aestheticism.
+### Retrospective Positioning (overt unreliable) [Tartt]
+
+Narrator from later vantage who openly admits unreliability.
 
 ### Time as Spiral [Márquez]
 
-Events recur with variation. The second siege resembles the first. A grandson makes the same error as the grandfather. Track these echoes explicitly.
+Events recur with variation. The second siege resembles the first. Track echoes explicitly.
 
-### Dread / Forward-Foreshadowing [Tartt]
+### Forward-Foreshadowing Dread [Tartt]
 
-Name the disaster early — the death, the fire, the betrayal — then circle back to show how it arrived. This is the inverse of mystery: the question is not "what happens" but "how could this have happened." [Morrison] uses this with Sethe's act in *Beloved*; [Tartt] with Bunny's death.
+Disaster named early. Question becomes "how could this have happened."
+
+### "This Instant-Now" [Lispector]
+
+Radical present-tense being. Escape from chronological time into pure now-ness. In *Água Viva*: "I want to grab hold of the *is* of the thing." Different from Tartt's retrospection and Márquez's time-folding. At low coherence, this is not transcendence — it is the failure of temporal structuring, leaving only the raw now.
+
+### Eternal Return / Time as Labyrinth [Borges]
+
+Temporal recursion as ontological structure. Not flashback — the time itself contains itself. "The Garden of Forking Paths": all possible outcomes exist simultaneously.
 
 ## 4. Voice and Stance
 
-### The Channeling Voice [Morrison]
+### Free Indirect Discourse [All except Tartt]
 
-The narrative voice is a medium for whoever is being centered. It carries their attitudes, their idioms, their blind spots. The voice does not stand apart from its subject; it is inside.
+Third-person narration slipping into character's vocabulary/judgments. No quotation marks. Three distinct categories per Cohn/Pascal: FID (narration carrying character's diction), direct thought (character's words as interior monologue), narrative report (narrator summarizing character's thought from outside). Do not conflate.
 
-### Free Indirect Discourse [Mistry, Morrison, Tolkien, Márquez]
+### Restrained Narrator [Ishiguro]
 
-Third-person narration that slips into a character's consciousness, taking their vocabulary and judgments without quotation marks. The narrator does not announce the shift. The reader feels the perspective change through diction.
+Narrator cannot look directly at central material. Requires unreliability presenting as restraint — not just formal-measured prose. (Beedham, *The Novels of Kazuo Ishiguro*, 2009: the detective who does not realize the real case is himself.)
 
-- "The engineers arrived in their topi hats, with their sinister instruments, and charted on reams of paper the road that would replace the path the village had used for nine generations."
+### Aesthetic Narrator [Tartt]
 
-The "sinister" belongs to the village, not to the narrator. The free indirect technique licenses the editorial word.
+Perception colored by aesthetic obsession or class outsidership.
 
-### Editorial Stance Through Selection
+### Vagueness as Language of Truth [Lispector]
 
-Stance can be carried by what gets named, what gets a sentence, what gets compressed. A description that omits the official's title and uses his first name takes a position. A description that lingers on his medals and uniform takes a different position. Selection is stance.
+Opposed to Tolkien's named specificity. Vagueness reaches what specificity cannot. These coexist through lamination — Tolkien names the surface, Lispector reaches past it. Both present. Both true.
 
-### The Restrained Narrator [Ishiguro]
+### Fictive-as-Real [Borges]
 
-A focalization in which the narrator cannot bear to look directly at the central material. The prose circles, hedges, qualifies. The reader senses what is being avoided.
+Apocryphal references, invented authors, imaginary books treated as documented. Footnotes destabilize the text. (Balderston, *Out of Context*, 1993.)
 
-### The Aesthetic Narrator [Tartt]
+### Tolerance for the Impossible Inside Scholarly Register [Borges]
 
-A focalization in which the narrator's perception is colored by aesthetic obsession or class outsidership. They linger on textures, light, surfaces. They notice what others miss because beauty is, for them, a moral problem they cannot resolve.
+Academic tone applied to ontologically impossible content. The apparatus is flawless. The content is impossible. The gap is the technique. (Sarlo: "through flawless formal consistency, paradoxes display how limited the mind is.")
+
+### Narrator Who Does Not Register What They Describe [Ocampo]
+
+Flat affect is the technique. The narrator reports horror without affect. The incuriosity is the horror. (From Encyclopedia.com: Ocampo "writes in a voice that is purposely sporadic and free of literary devices, almost as if the narrators were not accustomed to expressing themselves.")
+
+### Encoded Vernacular Speech [All, context-dependent]
+
+Double-meaning, encoded speech where surface meaning differs from understood meaning. Applied to specific social contexts where coded communication is established. Not appropriated from specific cultural traditions — name what the prose is actually doing.
 
 ## 5. Emotion and Interiority
 
-### Show Through Suppression [Ishiguro, Mistry]
+### Show Through Suppression [Ishiguro/Mistry]
 
-Emotion is communicated through its absence. Characters maintain composure precisely when they should break. The prose respects the composure.
+Emotion through absence. Composure precisely when speaker should break.
 
-- Name emotions only by negation: "It was not that she was unkind."
-- The withheld climax: approach the most important moment, then pull back.
+### Body as Record [Mistry]
 
-### The Body as Record [Mistry, Morrison]
+Physical conditions tell histories. Scars, posture, calluses. The prose names them without interpreting.
 
-Characters' physical conditions tell their histories. Scars, posture, calluses, the way someone favors a knee. [Mistry] reads bodies for occupational and daily wear. [Morrison] reads bodies for inherited and historical inscription — slavery's marks, motherhood's marks, violence's marks. The synthesis treats the body as the site where social conditions become legible.
+### Humor Beside Gravity [Mistry/Márquez]
 
-### Humor Beside Gravity [Mistry, Márquez]
+Absurdity and suffering same sentence. No commentary on juxtaposition.
 
-Place absurdity and suffering in the same sentence without commentary. A character argues about the price of onions during a political crisis. The prose does not remark on the juxtaposition. [Mistry]'s humor is dry and observational; [Márquez]'s is cosmic and matter-of-fact. Both refuse to editorialize.
+### Grotesque-Elegant Juxtaposition [Tartt]
 
-### Dignity [Ishiguro, Mistry]
+Beauty and horror in the same image. Decorum holding the grotesque.
 
-Characters are not ennobled by suffering. They are also not degraded by it. They remain complex — petty, generous, vain, brave — regardless of circumstances. The prose accompanies them without pity.
+### Dignity [Ishiguro/Mistry]
 
-### Stream of Memory [Morrison, Tartt]
+Characters not ennobled or degraded by suffering. They remain complex.
 
-Direct access to a character's interior, with memory and present perception interleaved. Not stream-of-consciousness in Joyce's sense, but a more controlled stream where the past surfaces in response to the present's pressure.
+### Existentialist Questioning Embedded [Lispector]
 
-## 6. The Supernatural and Extraordinary
+Questions of being, time, freedom inside narrative without being framed as philosophy. (Heschel's "the unsayable" as root of creative activity — JWA.)
 
-### Matter-of-Fact Impossibility [Márquez, Morrison]
+### Pre-Rational Consciousness Access [Lispector]
 
-Present impossible events with the same syntactic treatment as ordinary ones. No change in register, no dramatic pause.
+Characters access pre-linguistic states. The animal sees what the human cannot name.
 
-- "She ascended body and soul while hanging the laundry."
-- [Morrison]: A house is haunted. It is also where people live, eat, argue. The haunting is a fact among facts.
+### Failure of Communication as Structural Subject [Lispector]
+
+Characters fail to connect; the failure is the prose's territory, not its obstacle.
+
+### Cruelty Without Resolution [Ocampo]
+
+The cruel thing happened; the prose moves on. No moral framing.
+
+## 6. The Supernatural
+
+### Matter-of-Fact Impossibility [Márquez]
+
+Impossible events with same syntactic treatment as ordinary. No change in register.
 
 ### Hyperbolic Precision [Márquez]
 
-Attach exact numbers to impossible claims. "It rained for four years, eleven months, and two days." Specificity makes the impossible feel documented.
+Exact numbers attached to impossible claims.
 
-### Never Systematize [Márquez, Morrison]
+### Linguistic Deviation Creating Dream-Reality [Márquez]
 
-Do not explain how the supernatural works. No rules, no mechanism. The carpet floats. The dead return. The ghost speaks. The instant you systematize, you produce fantasy game-logic.
+Repetition, lexical, semantic deviations build atmosphere where the trivial becomes miraculous. (Short, *Exploring the Language of Poems, Plays and Prose*, 1996.)
 
-### The Numinous in the Natural [Tolkien, Tartt]
+### Numinous in the Natural [Tolkien/Tartt]
 
-Physical objects and places can carry weight beyond their material reality without being labeled magical. A mountain, a painting, a ruined keep, a particular room. [Tartt]'s ekphrasis — extended description of an art object as if interrogating it for meaning — treats the object as a node of unstable significance. [Tolkien]'s landscape carries history.
+Physical objects carry weight beyond material reality. Not labeled magical.
+
+### Metamorphosis Without Explanation [Ocampo]
+
+Characters change form, age, identity. No mechanism given.
+
+### Infinite Recursion [Borges]
+
+Mirror within mirror, dream within dream. Text aware of containing itself.
+
+### Heresiarchs and Hidden Orders [Borges]
+
+Secret traditions, suppressed doctrines, hermetic transmissions.
 
 ## 7. Specificity
 
 ### Names Carry Weight [Tolkien]
 
-Proper nouns do narrative work. Use them without explanation. Let names accumulate resonance through repetition. A name used three times without glossing implies a world behind it.
+Proper nouns do narrative work. Use without explanation.
 
 ### Material Specificity [Mistry]
 
-Not "fabric" but "cotton" or "burlap." Not "weapon" but "a short blade with a leather-wrapped grip, the leather black with sweat." Generality is the enemy.
+"Cotton" not "fabric." "Salt cod" not "food."
 
 ### Occupational Language [Mistry]
 
-Characters are defined by work. The prose knows the vocabulary of the trade. Use trade-specific terms without explaining them. Context teaches.
+Trade vocabulary used as natives use it. Context teaches.
 
-### Hyperbolic Specificity [Márquez]
+### Loaded Specific (aesthetic) [Tartt]
 
-When exaggerating, be numerically precise. Not "many years" but "forty years." Not "a great army" but "four thousand men, of whom three hundred deserted before reaching the river."
+Detail carrying weight through aesthetic precision. Quiet symbolic loading.
 
-### The Loaded Specific [Morrison]
+### Loaded Specific (ontological) [Lispector]
 
-A specific detail that carries weight beyond its surface. The red ribbon. The chokecherry tree on Sethe's back. Not a symbol arbitrarily assigned, but a particular object whose specificity makes it carry meaning. The synthesis identifies these in advance — what is the red ribbon of this passage?
+The mundane object that exceeds its category. Different from Tartt's aesthetic loading.
+
+### Charged Objects [Ocampo]
+
+Domestic objects as ontologically loaded. Uncanny rather than aesthetic. Dolls, mirrors, photographs.
+
+### Simple Vocabulary at Metaphysical Depth [Lispector]
+
+Simple words accessing metaphysical territory. A stripped-down lexicon at the limits of the unsayable. (Moser: the paradox of simplicity at depth.)
 
 ## 8. Place and Atmosphere
 
 ### Atmospheric Immersion [Tartt]
 
-Make place into mood through accumulated sensory specifics. The reader should feel the setting before being told its significance. Smoke, dust, light, smell, temperature, sound. The atmosphere does emotional work that exposition cannot.
+Place as mood through accumulated sensory specifics.
 
 ### Landscape as Weight-Bearer [Tolkien]
 
-The physical world is the primary character. Mountains, rivers, weather. Establish before placing inhabitants. Wide to narrow: horizon → valley → river → bridge → figure on bridge.
+Physical world primary character. Wide to narrow.
 
 ### Ekphrasis [Tartt]
 
-Extended description of an art object, document, or built thing as if interrogating it for meaning. The object becomes a node where multiple narrative threads anchor. Useful for codex items, relics, paintings, monuments. The object is described both as it physically is and as it carries history.
+Extended description of art object/document as interrogation for meaning.
 
-### Place as Body [Morrison]
+### Library/Labyrinth as Structural Metaphor [Borges]
 
-Houses, rooms, towns described as if they were living things with conditions, moods, illnesses. "124 was spiteful." Not metaphor but channeling — the family's experience of the place becomes the place's quality.
+Place renders as conceptual rather than geographic.
+
+### Defamiliarization of Mundane Objects [Lispector]
+
+The perceiver's rendering of mundane objects falters. The familiar resists the categories that would make it legible.
+
+### The Uncanny Inside Ordinary Social Occasions [Ocampo]
+
+Birthday parties, dinners, family gatherings as horror-sites.
+
+### Servants Seeing What Employers Cannot [Ocampo]
+
+Class-position as perceptual access.
 
 ## 9. Dialogue
 
-### Vernacular Without Translation [Morrison, Mistry]
+### Vernacular Without Translation [Mistry]
 
-Characters speak in their actual idioms. Untranslated dialect words, regional turns of phrase, class markers. The prose does not explain or footnote. Context teaches the reader.
+Untranslated dialect/idiom. Context teaches.
 
 ### Speech Carrying What's Withheld [Ishiguro]
 
-Two characters discussing surface matters while the reader understands they are negotiating something else. The prose presents the surface; the reader reads the depth.
+Surface conversation while reader understands deeper negotiation.
 
-### Class-Marked Speech [Tartt]
+### Class-Marked Speech [Tartt/Ocampo]
 
-Different characters use different vocabularies, sentence lengths, and registers. Class, education, and origin show in word choice. The synthesis does not flatten characters into a single narrator-voice during dialogue.
+Different vocabularies/registers per character.
 
-### Restrained Direct Speech [Ishiguro]
+### Restrained Reported Speech [Ishiguro]
 
-When dialogue is reported, it is often reported imprecisely. "He said something to the effect of..." or "Her exact words I cannot recall, but the substance was..." This focalizes through a narrator's memory rather than presenting verbatim transcription.
-
-### The Speakerly Text [Morrison]
-
-The narrative voice itself takes on oral-tradition cadence — call and response, anaphora, blues phrasing. The page sounds like speech without being transcribed dialect. This is a register the synthesis can deploy when content calls for ritual, communal, or testimonial weight.
+"He said something to the effect of..." Focalized memory rather than verbatim.
 
 ## 10. Structural Devices
 
 ### Catalogues [Tolkien]
 
-Lists of names, places, lineages, items. Catalogues function as incantation — the act of naming asserts reality.
-
-### Anaphora [Morrison]
-
-Repeated openings. Each section of *Beloved* begins "124 was [adjective]." The repetition is structural, building meaning across the text. A passage can use anaphora at sentence level: "She had not always been afraid. She had not always lived alone. She had not always counted her steps from the gate to the door."
+Lists of names/places/lineages. Naming as incantation.
 
 ### Prophecy and Fulfillment [Márquez]
 
-Establish a pattern, curse, or prediction early. Let characters forget, dismiss, or misread it. Fulfill it in an unexpected form that is, in retrospect, exactly what was foretold.
+Pattern established early. Fulfilled in unexpected form.
 
 ### The Unsaid [Ishiguro]
 
-Construct scenes where what characters don't say is more important than what they do.
+What characters don't say matters more than what they do.
 
-### Community as Organism [Mistry, Morrison]
+### Community as Organism [Mistry]
 
-A settlement, neighborhood, or faction functions as a single living thing with moods, rhythms, health. Individual characters are organs within it. The prose tracks the community's condition as vital signs.
+Settlement/faction as living thing with vital signs.
 
-### Founding Acts [Márquez]
+### Loaded Object [Tartt/Ocampo]
 
-Every family, settlement, or institution has an origin event that determines everything after. The founding echoes forward.
+Specific physical thing anchors multiple narrative threads. Tartt: aesthetic. Ocampo: uncanny.
 
-### Interlace [Tolkien]
+### Encyclopedia Entry as Fictional Form [Borges]
 
-Cut between simultaneous narrative threads. Return to each with a temporal marker. The threads illuminate each other through juxtaposition.
+Scholarly apparatus is the fiction.
 
-### The Loaded Object [Morrison, Tartt]
+### Refusal of Explanation Closing [Ocampo]
 
-A specific physical thing — a painting, a ribbon, a letter, a weapon — that anchors multiple narrative threads. The object carries history. Repeated reference to it accrues meaning. This is structural specificity — the thing is the through-line.
+Story ends without resolution. No mechanism, no moral.
+
+### Veering Toward Abstraction Without Reaching It [Lispector]
+
+Prose moves toward the abstract but stops just short of arriving. (Moser.)
+
+## 11. Structural Enactment — Wittgenstein Constraint Rationale
+
+> "Whereof one cannot speak, thereof one must be silent." — Wittgenstein, *Tractatus*, 7
+
+This governs all prose output. When content exceeds the prose's capacity — whether because coherence has failed or because TS-perceived content resists articulation — the prose does not describe its silence. It is silent. It closes on the nearest concrete thing.
+
+**Why each author's mode of silence works differently:**
+
+Lispector's failure is generative because she taught that "the unsayable can only be given to me through the failure of my language" (*The Passion According to G.H.*). The construction fails. The failure is the achievement. The sentence attempts to name the thing and veers. The accumulation of wrong names traces the shape.
+
+Ishiguro's silence is covert because his narrators do not know they are being silent. Stevens does not say "I could not determine my feelings." He determines them wrongly. The reader detects the wrongness. (Walkowitz: covert unreliability.)
+
+Borges's silence is precise because his paradoxes demonstrate limitation "through flawless formal consistency" (Sarlo). The apparatus does not confess inadequacy. It applies precision to the impossible, and the precision makes the impossibility visible.
+
+Ocampo's silence is incurious because her narrators are "not accustomed to expressing themselves." The narrator describes what happened in plain language. The gap between the plain description and the terrible content is the reader's experience. The narrator does not notice the gap.
+
+Tolkien's silence is architectural because the absent thing takes shape from what surrounds it. Shippey's "asterisk reality" — the unknown implied by the known points around it. The prose builds the wall, the ruin, the mortar. The thing the ruin implies is never named.
+
+Márquez's silence is syntactic because the impossible is stated in ordinary syntax. No markers of wonder. The silence is in what the prose does not do — it does not remark on the impossibility.
+
+**See `test-battery-part1.md`, `part2.md`, `part3.md` for 29 tests exercising these principles with audits.**
