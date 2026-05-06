@@ -1,5 +1,7 @@
 # Techniques — Synthesized Inventory
 
+> **⚠ NEEDS REVISION.** This infill references the six-author roster (includes Morrison, excludes Lispector/Borges/Ocampo). The skeleton has been updated to the eight-author coherence-indexed roster. This infill should be revised to match. Until then, use the skeleton as the live reference and treat Morrison-specific entries as superseded.
+
 Organized by function, drawing from Tolkien, Ishiguro, Mistry, Morrison, Tartt, and Márquez. Sources noted in brackets where it clarifies usage. The skill produces a single voice; the inventory is divided only for navigability.
 
 **The synthesis is weighted, not equal.** Tolkien's techniques surface most often (~30% of deployments), Márquez's second-most (~18%), and Ishiguro / Mistry / Morrison / Tartt roughly equally (~13% each). Throughout this document, source tags indicate which author the technique derives from; the writer applies them at clause-level granularity, with multiple authors' techniques often appearing in the same sentence. The weighting is a tendency across the aggregate, not a per-sentence quota.

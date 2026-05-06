@@ -1,5 +1,7 @@
 # Anti-Patterns — AI Prose Failure Catalogue
 
+> **⚠ NEEDS REVISION.** This infill references the six-author roster (includes Morrison, excludes Lispector/Borges/Ocampo) and contains signifyin' references that have been removed from the skeleton. The skeleton has been updated to the eight-author coherence-indexed roster. This infill should be revised to match. Until then, use the skeleton as the live reference.
+
 Three layers of evidence: the LAMP taxonomy from professional editors (Chakrabarty et al., CHI 2025), academic research on LLM creative writing limitations (multiple studies 2022–2026), and stylometric analysis of LLM idiosyncrasies. All major models exhibit these failures. The patterns are structural, not superficial. Vocabulary tells evolve as specific words get scrubbed; structural habits persist.
 
 ---

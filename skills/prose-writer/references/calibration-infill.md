@@ -1,5 +1,7 @@
 # Calibration — Source Author Prose Anchors
 
+> **⚠ NEEDS REVISION.** This infill references the six-author roster (includes Morrison, excludes Lispector/Borges/Ocampo). The skeleton has been updated to the eight-author coherence-indexed roster. Morrison anchor should be removed and Lispector/Borges/Ocampo anchors added. Until then, use the skeleton as the live reference.
+
 Brief excerpts from each of the six source authors, with technique analysis. These are the calibration targets. When generating new Valoria prose, compare against these passages — does the new prose deploy the techniques the calibration passages demonstrate?
 
 Each excerpt is held to under 15 words per source, one excerpt per source, for fair-use analysis purposes. Fuller analysis follows from secondary sources and craft commentary.

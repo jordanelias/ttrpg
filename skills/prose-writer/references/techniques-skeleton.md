@@ -1,8 +1,10 @@
-# techniques — Skeleton (revised)
+# techniques — Skeleton (coherence-indexed revision)
 
 Live technique inventory. Each entry: technique → source → signature pattern. For rationale and academic grounding, see `techniques-infill.md`.
 
-**Synthesis weighting (rough guide, not strict quota):** Tolkien 30% / Márquez 18% / Ishiguro 13% / Mistry 13% / Morrison 13% / Tartt 13%. Aggregate across the corpus.
+**Eight-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina).
+
+**Coherence-indexed weighting:** The synthesis weights shift across five tiers indexed to PC coherence. See `coherence-tiers.md` for the five tier-tables. At high coherence, realist authors (Tolkien, Mistry) dominate. At low coherence, irreal authors (Lispector, Borges, Ocampo) dominate. The weighting describes aggregate tendency, not per-passage quota.
 
 **Intra-sentence splicing:** Authors may shift between clauses or across conjunctions within a single sentence. Grammar must hold OR be deliberately broken under §0.2 below.
 
@@ -16,16 +18,18 @@ Every passage carries a perspective. No neutral narrator. Before writing, name t
 **Chronicle-mode constraint:** Per P-03, only the four canonical chroniclers (Church, Hafenmark, Restoration, Warden) are valid for in-world chronicle prose.
 
 ### 0.2 Grammar Latitude
-Grammatical deviation is licensed when it (a) corresponds to a documented stylistic mode of one of the six authors AND (b) improves impact. Both required. Not license for sloppy grammar; license for *motivated* deviation.
+Grammatical deviation is licensed when it (a) corresponds to a documented stylistic mode of one of the eight authors AND (b) improves impact. Both required. Not license for sloppy grammar; license for *motivated* deviation.
 
 | Author | Licensed deviations |
 |---|---|
-| Tolkien | Subject-verb inversion ("Great was the ruin"). Sentence fragments at heroic register. Archaic constructions for Rohan/elevated. |
+| Tolkien | Subject-verb inversion ("Great was the ruin"). Sentence fragments at heroic register. Archaic constructions for elevated speakers. |
 | Ishiguro | Long sentences containing little information (Grice-quantity violation). Ambiguous pronoun antecedents. Reduplicated double negatives. |
 | Mistry | Sentence fragments in working-life catalogues. Free-indirect editorialization mid-narration. |
-| Morrison | Severe syntactic fragmentation, especially in interior/trauma sections. AAVE constructions violating Standard English. Sentences breaking grammatical norms entirely. |
 | Tartt | Idiosyncratic comma placement isolating adverbs ("quivered, gently,"). Em-dash interruptions. Fragments at moments of revelation. |
 | Márquez | Run-on sentences crossing paragraph boundaries. Lexical/semantic deviations (Mick Short framework). Repetition violating cohesion norms. |
+| Lispector | Strange syntax violating conversational grammar. Elliptical constructions omitting connective tissue. Repetition as ontological intensity (not rhetorical anaphora). Sentences resisting parsing for grammatical-subject completeness. |
+| Borges | Footnote-as-counter-text within sentence. Em-dashed parenthetical metaphysical paradox. Catalogue constructions (lists of impossible things). Erudite Latinate without thesaurus-elevation tells. |
+| Ocampo | Sentences refusing to acknowledge their content's weight. Flat declarative syntax holding horror without affect. Refusal of explanatory subordination. Closing on the wrong moment (the small detail beside the resolution). |
 
 ---
 
@@ -33,11 +37,11 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 
 | Technique | Source | Signature |
 |---|---|---|
-| Paratactic coordination | Tolkien | Clauses joined with "and" or juxtaposed. Reader supplies causation. **One tool among several, not universal default.** |
-| Hypotactic cascade | Tolkien | Long subordinated sentences building cohesion across multiple temporal/spatial clauses (Bilbo's introduction). Used at scene-setting or character-introduction. |
-| Register-shifting by speaker | Tolkien | Style varies by speaker's race/standing. Anglo-Saxon syntactic patterns for Rohan; plain Hobbit register; travel-guide voice for omniscient sections. |
-| Anglo-Saxon lexical rescue | Tolkien | Obscure Old English words ("éored," "dwimmerlaik," "mearas") used at heroic/elevated registers. Untranslated; context teaches. |
-| Punch sentence | Morrison | 3–7 word declaratives. Disproportionate weight. Best beside long compound sentences. |
+| Paratactic coordination | Tolkien | Clauses joined with "and" or juxtaposed. Reader supplies causation. **Stylistically marked — indicating something out of the ordinary (Turner). Not the default register.** |
+| Hypotactic cascade | Tolkien | Long subordinated sentences building cohesion across multiple temporal/spatial clauses. Default register; use at scene-setting or character-introduction. |
+| Register-shifting by speaker | Tolkien | Style varies by speaker's standing/context. Anglo-Saxon syntactic patterns for elevated registers; plain register for common speech; chronicle voice for omniscient sections. |
+| Anglo-Saxon lexical rescue | Tolkien | Obscure Old English words used at heroic/elevated registers. Untranslated; context teaches. |
+| Punch sentence | Tartt (primary) / Tolkien (heroic peaks) | 3–7 word declaratives. Disproportionate weight. Best beside long compound sentences. |
 | Accretive sentence | Mistry | Each sentence adds one physical particular. No summary. |
 | Qualifying sentence (with Gricean violation) | Ishiguro | Grows through hedging and parenthetical correction. **Often violates Grice's maxim of quantity** — long but containing little information. The length itself is evasion. |
 | Reduplicated double negative | Ishiguro | "He would not repeat his most kind offer." Emphasizes through double negation while creating reader suspicion. |
@@ -46,15 +50,18 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Decorous punctuation | Tartt | Commas isolating adverbs ("quivered, gently,"). Em-dashes interrupting clarity. Punctuation as texture. |
 | Appositive cascade | Márquez | Identify subject, append clause after clause of additional identification. |
 | Proleptic flash-forward | Márquez/Tartt | Future stated as settled fact within present-tense sentence. |
-| Recursive mid-sentence memory | Morrison | Sentence ruptures into flashback mid-clause, returns to present. |
-| Deliberate syntactic fragmentation | Morrison | Syntax actively broken to mirror fragmented mind/trauma. More aggressive than recursive memory — grammatical norms abandoned. |
-| Linguistic deviation as norm-violation | Márquez | Lexical, semantic, repetition deviations from standard expectations (Mick Short framework). The deviation itself is the technique. |
+| Linguistic deviation as norm-violation | Márquez | Lexical, semantic, repetition deviations from standard expectations (Mick Short framework). The deviation itself is the technique — words used wrong, meanings shifted, repetitions exceeding cohesion norms. |
+| Elliptical stream of consciousness | Lispector | Interior monologue with skipped connective tissue. Not Joycean-comprehensive; deliberately fragmentary. |
+| Strange syntax | Lispector | Sentences sound as if translated from a language that doesn't exist. Deliberate non-naturalness violating conversational grammar. |
+| Erudite metaphysical compression | Borges | Entire philosophical positions compressed into a single clause. References work hard. |
+| Compressed paradox | Borges | The map becoming the territory; the dreamer dreamed by the dream; the writer writing himself. Paradox compressed to clause-length. |
+| Flat declarative holding horror | Ocampo | Simple syntactic structure containing content that should shatter the syntax. The syntax holds. The content doesn't care. |
 
 **Rhythm rules:**
 - Vary sentence length without falling into long-then-short alternation pattern
 - End important clauses on stressed syllables (Tolkien)
 - Read aloud — predictable next-sentence length means pattern has formed
-- **Stress-and-release operates fractally** (Le Guin / Drout): at sentence, paragraph, scene, chapter levels simultaneously
+- **Stress-and-release operates at scene and chapter levels** (Le Guin / Drout). Sentence-level and paragraph-level stress-release patterning requires explicit deployment — do not claim fractal operation without deploying at all levels.
 
 ---
 
@@ -63,12 +70,14 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Technique | Source | Signature |
 |---|---|---|
 | Physical world first | Tolkien/Mistry/Tartt | Establish environment → bodies → context. Never abstraction first. |
-| Particular before general | Mistry/Morrison | Open with specific object/gesture/sensation. General emerges from accumulation. |
+| Particular before general | Mistry/Lispector | Open with specific object/gesture/sensation. General emerges from accumulation. |
 | Routine as structure | Mistry | Daily routines described; their disruption introduces change. |
-| Digression as revelation | Ishiguro | Narrator wanders; digression contains the real point. Marked by formulaic phrases ("There are some very pertinent reasons why this memory has remained with me, moreover that come to think of it..."). |
-| Channeling voice | Morrison | Narrator carries community/character perspective. Reader positioned as listener inside. |
-| Community-as-ensemble | Mistry | Rotate through multiple characters' POVs within a scene without breaking narration. Each character's interior briefly surfaces. |
+| Digression as revelation | Ishiguro | Narrator wanders; digression contains the real point. Marked by formulaic phrases. |
+| Community-as-ensemble | Mistry | Rotate through multiple characters' POVs within a continuous scene without breaking narration. **Not scene-break-with-perspective-change** — Mistry's rotation occurs within a single continuous scene. |
 | Circular return | Márquez/Ishiguro | Paragraph ends near where it began, meaning transformed. |
+| Ontological estrangement | Lispector | Mundane object cracks open into metaphysical question. The rust on a gate, the sun on cobblestones become catalysts for existential perception. |
+| The domestic interior as horror-site | Ocampo | Kitchens, bedrooms, gardens become uncanny without external trigger. The wrongness is in the familiar. |
+| Fragmentary assembly | Lispector | Paragraph composed from fragments rather than continuous narrative. The fragments do not resolve. |
 
 ---
 
@@ -78,10 +87,12 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 |---|---|---|
 | Deep-time framing | Tolkien | Events placed in chronology extending far beyond narrative moment. |
 | Temporal compression | Márquez | Years/decades collapse into clauses; single moments expand to fill paragraphs. |
-| Retrospective positioning (covert unreliable) | Ishiguro | Narrator from later vantage. Unreliability built through pragmatic-maxim violations, not declarations. |
-| Retrospective positioning (overt unreliable) | Tartt | Narrator from later vantage who openly admits unreliability. Different from Ishiguro's covert. |
+| Retrospective positioning (covert unreliable) | Ishiguro | Narrator from later vantage. **Unreliability is required — not just formality.** Unreliability built through pragmatic-maxim violations, not declarations. If the narrator is reliable, this is not Ishiguro. |
+| Retrospective positioning (overt unreliable) | Tartt | Narrator from later vantage who openly admits unreliability. Different from Ishiguro's covert mode. |
 | Time as spiral | Márquez | Events recur with variation. Track echoes explicitly. |
 | Forward-foreshadowing dread | Tartt | Disaster named early; "murder mystery in reverse" — question becomes "how could this have happened." |
+| "This instant-now" | Lispector | Radical present-tense being. Escape from chronological time into pure now-ness. Different from Tartt's retrospection and Márquez's time-folding. |
+| Eternal return / time as labyrinth | Borges | Temporal recursion not as flashback but as ontological structure. Time contains itself. |
 
 ---
 
@@ -89,14 +100,18 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 
 | Technique | Source | Signature |
 |---|---|---|
-| Channeling voice | Morrison | Narrator is medium for whoever is centered. |
-| Free indirect discourse | All except Tartt | 3rd-person narration slipping into character's vocabulary/judgments. No quotation marks. |
-| Signifyin' | Morrison (per Gates) | Double-meaning, parodic, self-referential, encoded speech. AAVE rhetorical mode. Things never made explicit. |
+| Free indirect discourse (FID) | All except Tartt | 3rd-person narration slipping into character's vocabulary/judgments. No quotation marks. **Distinct from direct thought** (character's words rendered as interior monologue) **and narrative report** (narrator summarizing character's thought). Three categories per Cohn/Pascal — do not conflate. |
 | Stance through selection | All | What gets named, what gets a sentence, what gets compressed. Selection IS stance. |
-| Refusal to translate | Morrison | AAVE / vernacular / cultural reference deployed as authority. Never sanitized for outsider readers. |
-| Restrained narrator | Ishiguro | Narrator cannot bear to look at central material directly. Prose circles, hedges. |
+| Restrained narrator | Ishiguro | Narrator cannot bear to look at central material directly. Prose circles, hedges. **Requires unreliability presenting as restraint** — not just formal-measured prose. |
 | Aesthetic narrator | Tartt | Narrator's perception colored by aesthetic obsession or class outsidership. |
 | Ambiguous pronoun reference | Ishiguro | Pronouns whose antecedents are deliberately unclear. Linguistic uncertainty as narrative technique. |
+| Vagueness as language of truth | Lispector | Explicitly opposed to Tolkien's named-specificity. Vagueness names what specificity cannot reach. |
+| The unsayable as primary territory | Lispector | What cannot be said is what the prose reaches for. Distinct from Ishiguro (what won't be said) and Tolkien (what is said with weight). |
+| Author-intrusion / self-aware fictional construction | Lispector | The fiction knows it is fiction. A thinly-disguised authorial voice surfaces within narration. |
+| Fictive-as-real | Borges | Apocryphal references, invented authors, imaginary books treated as documented. Footnotes destabilize the text they footnote. |
+| Tolerance for the impossible inside scholarly register | Borges | Academic tone applied to ontologically impossible content. Encyclopedia entry mode. |
+| Narrator who does not register what they describe | Ocampo | Flat affect is the technique. The narrator reports horror without affect. |
+| Encoded vernacular speech with shared meaning-rules | All (context-dependent) | Double-meaning, encoded speech where surface meaning differs from understood meaning. Applied to specific social contexts where coded communication is established. |
 
 ---
 
@@ -105,11 +120,16 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Technique | Source | Signature |
 |---|---|---|
 | Show through suppression | Ishiguro/Mistry | Emotion through absence. Composure precisely when speaker should break. |
-| Body as record | Mistry/Morrison | Physical conditions tell histories. Scars, posture, calluses. |
+| Body as record | Mistry | Physical conditions tell histories. Scars, posture, calluses. |
 | Humor beside gravity | Mistry/Márquez | Absurdity and suffering same sentence. No commentary on juxtaposition. |
-| Grotesque-elegant juxtaposition | Tartt | Beauty and horror in the same image (the yolk in Worcestershire-blood). Decorum holding the grotesque. |
+| Grotesque-elegant juxtaposition | Tartt | Beauty and horror in the same image. Decorum holding the grotesque. |
 | Dignity | Ishiguro/Mistry | Characters not ennobled by suffering. Not degraded. Remain complex. |
-| Stream of memory | Morrison/Tartt | Direct interior access. Past surfaces in response to present's pressure. |
+| Stream of memory | Tartt/Ishiguro | Direct interior access. Past surfaces in response to present's pressure. |
+| Existentialist questioning embedded | Lispector | Questions of being, time, freedom appear inside narrative without being framed as philosophy. |
+| Pre-rational / animal consciousness access | Lispector | Characters access pre-linguistic states. The animal sees what the human cannot name. |
+| Failure of communication as structural subject | Lispector | Characters fail to connect; the failure is the prose's territory, not its obstacle. |
+| Cruelty without resolution | Ocampo | The cruel thing happened; the prose moves on. No moral framing. |
+| Children doing terrible things, narrated placidly | Ocampo | Cruelty rendered without moral comment. The placid narration is the horror. |
 
 ---
 
@@ -117,11 +137,14 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 
 | Technique | Source | Signature |
 |---|---|---|
-| Matter-of-fact impossibility | Márquez/Morrison | Impossible events with same syntactic treatment as ordinary ones. |
+| Matter-of-fact impossibility | Márquez | Impossible events with same syntactic treatment as ordinary ones. |
 | Hyperbolic precision | Márquez | Exact numbers attached to impossible claims. |
-| Linguistic deviation creating dream-reality | Márquez | Repetition, lexical, semantic deviations build atmosphere where trivial things become miraculous (Mick Short analysis of "A Very Old Man with Enormous Wings"). |
-| Never systematize | Márquez/Morrison | No rules for how the supernatural works. No mechanism. |
+| Linguistic deviation creating dream-reality | Márquez | Repetition, lexical, semantic deviations build atmosphere where trivial things become miraculous (Mick Short analysis). |
+| Never systematize | Márquez | No rules for how the supernatural works. No mechanism. |
 | Numinous in the natural | Tolkien/Tartt | Physical objects/places carry weight beyond material reality. Not labeled magical. |
+| Metamorphosis without explanation | Ocampo | Characters change form, age, identity. No mechanism given. |
+| Infinite recursion | Borges | Mirror within mirror, dream within dream, book within book. Text aware of containing itself. |
+| Heresiarchs and hidden orders | Borges | Secret traditions, suppressed doctrines, hermetic transmissions. |
 
 ---
 
@@ -133,7 +156,11 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Material specificity | Mistry | "Cotton" not "fabric." "Salt cod" not "food." |
 | Occupational language | Mistry | Trade vocabulary used as natives use it. Context teaches. |
 | Hyperbolic specificity | Márquez | When exaggerating, be numerically precise. |
-| Loaded specific (shimmer not shout) | Morrison | Specific detail carrying weight beyond surface. **Never announced — quiet symbolic loading.** |
+| Loaded specific (aesthetic) | Tartt | Specific detail carrying weight through aesthetic precision. Quiet symbolic loading. |
+| Loaded specific (ontological) | Lispector | The mundane object that cracks open into being. Different from Tartt's aesthetic loading. |
+| Charged objects | Ocampo | Domestic objects as ontologically loaded. Uncanny rather than aesthetic. |
+| Simple vocabulary at metaphysical depth | Lispector | Simple words accessing metaphysical territory. A stripped-down lexicon at the limits of the unsayable. |
+| Names that recur across texts | Borges | Same names in different positions, suggesting recurrence is the world's structure. |
 
 ---
 
@@ -144,7 +171,11 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Atmospheric immersion | Tartt | Place as mood through accumulated sensory specifics. |
 | Landscape as weight-bearer | Tolkien | Physical world primary character. Wide to narrow. |
 | Ekphrasis | Tartt | Extended description of art object/document/built thing as interrogation for meaning. |
-| Place as body | Morrison | Houses, rooms, towns described as living things with conditions/moods. |
+| Library/labyrinth as structural metaphor | Borges | Place renders as conceptual rather than geographic. |
+| Defamiliarization of mundane objects | Lispector | The texture of the world becomes strange under sustained attention. |
+| The uncanny inside ordinary social occasions | Ocampo | Birthday parties, dinners, family gatherings as horror-sites. |
+| Servants seeing what employers cannot | Ocampo | Class-position as perceptual access. |
+| Animals as witnesses | Ocampo | Dogs, cats, birds present at moments humans miss. |
 
 ---
 
@@ -152,12 +183,11 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 
 | Technique | Source | Signature |
 |---|---|---|
-| Vernacular without translation | Morrison/Mistry | Untranslated dialect/idiom. Context teaches. |
+| Vernacular without translation | Mistry | Untranslated dialect/idiom. Context teaches. |
 | Speech carrying what's withheld | Ishiguro | Surface conversation while reader understands deeper negotiation. |
-| Class-marked speech | Tartt | Different vocabularies/sentence-lengths/registers per character. |
+| Class-marked speech | Tartt/Ocampo | Different vocabularies/sentence-lengths/registers per character. |
 | Restrained reported speech | Ishiguro | "He said something to the effect of..." Focalized memory rather than verbatim. |
-| Speakerly text | Morrison | Narrative voice takes oral-tradition cadence. **Triple sources:** biblical + blues + folklore. |
-| Signifyin' in dialogue | Morrison | Double-meaning verbal exchanges. Surface meaning differs from understood meaning. |
+| Class observation embedded in surreal events | Ocampo | Social hierarchy makes itself felt inside impossible occurrences. |
 
 ---
 
@@ -166,11 +196,38 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Technique | Source | Signature |
 |---|---|---|
 | Catalogues | Tolkien | Lists of names/places/lineages/items. Naming as incantation. |
-| Anaphora | Morrison | Repeated openings. Structural repetition across sections. |
 | Prophecy and fulfillment | Márquez | Pattern/curse established early. Fulfilled in unexpected form. |
 | Murder mystery in reverse | Tartt | Disaster announced at outset; structure inverts mystery. |
 | The unsaid | Ishiguro | Scenes where what characters don't say matters more than what they do. |
-| Community as organism | Mistry/Morrison | Settlement/faction as single living thing with vital signs. |
+| Community as organism | Mistry | Settlement/faction as single living thing with vital signs. |
 | Founding acts | Márquez | Origin event determining everything after. Echoes through generations. |
 | Interlace | Tolkien | Cut between simultaneous threads. Temporal markers. |
-| Loaded object | Morrison/Tartt | Specific physical thing anchors multiple narrative threads. |
+| Loaded object | Tartt/Ocampo | Specific physical thing anchors multiple narrative threads. |
+| Encyclopedia entry / catalogue as fictional form | Borges | Scholarly apparatus is the fiction. |
+| The book that contains itself | Borges | Meta-fictional layer always present. |
+| Translation as creation | Borges | Same text produced in different conditions becomes different text. |
+| Refusal of explanation closing | Ocampo | Story ends without resolution. No mechanism, no moral. |
+| Lyrical patterning | Lispector | Rhythm of closeness and distance. Music-like rather than narrative-like. |
+| Veering toward abstraction without reaching it | Lispector | Prose moves toward the abstract but stops just short of arriving (Moser). |
+
+---
+
+## Author-Specific Mannerism Risk
+
+If used twice in same passage, becomes mannerism:
+- **Tolkien:** Inverted syntax ("Great was the ruin")
+- **Ishiguro:** "perhaps as it should have been," "I cannot now recall"
+- **Mistry:** Sensory catalogues
+- **Tartt:** Atmospheric long sentences
+- **Márquez:** Hyperbolic precision
+- **Lispector:** "This instant-now" temporal shift
+- **Borges:** Infinite recursion / mirror metaphor
+- **Ocampo:** Flat-affect horror
+
+**Discipline:** Borrow techniques in rotation. No single source's signature move twice in same passage.
+
+---
+
+## The Master Rule
+
+If a sentence could appear in any story about any settlement / character / event, it belongs to no story. Cut it.
