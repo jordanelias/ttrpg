@@ -26,7 +26,7 @@ The assessor looked at her. He had the face of a man who had been told what to e
 ## Scene 2. The Sub-Prefect.
 *Focalization: Vael. Coherence 7. TS 0.*
 
-Kalder came from the mill with flour on his cuffs and the particular expression of a man who has been interrupted in something he considered more important than whatever he has been interrupted for. He was tall, thin at the wrists, with the posture of someone who had learned to stand in rooms where other people were shorter. His authority was Hafenmark's — constitutional, procedural, and under Duchess Baralta's writ — and he carried it the way the customs-house carried its pennant, which was to say visibly and at a slight angle.
+Kalder came from the mill with flour on his cuffs and the expression of a man who has been interrupted in something he considered more important than whatever he has been interrupted for. He was tall, thin at the wrists, with the posture of someone who had learned to stand in rooms where other people were shorter. His authority was Hafenmark's — constitutional, procedural, and under Duchess Baralta's writ — and he carried it the way the customs-house carried its pennant, which was to say visibly and at a slight angle.
 
 "The assessor has no jurisdiction here," Kalder said. He sat across from Vael in the customs-house and poured two cups from a bottle whose label was in the Gransol dialect. "Himmelenger can send whoever it likes. Rendstad answers to Gransol. Gransol answers to Parliament. Parliament does not answer to the Confessor."
 
@@ -40,7 +40,7 @@ He stopped. He poured again. Vael's cup was still full.
 
 Vael had already known what he was going to say. Not the words — the shape of the argument, the direction. She had heard it before she had heard it, and the hearing-before was the kind of thing she had been noticing lately — a moment arriving before its cause, a sentence assembling itself in her hands before the speaker's mouth had finished. She was quite certain this was simply the quality of having heard similar arguments before. It was pattern-recognition, nothing more.
 
-Outside, the larch. The river. The customs-house pennant leaning east.
+Outside, the larch stood above the river and the customs-house pennant leaned east in the late-afternoon wind.
 
 ---
 
@@ -79,14 +79,10 @@ The leaves. The water. The bark smell. The light through the door. These.
 ## Scene 5. What the River Knows.
 *Focalization: Vael. Coherence 7. TS 35 (Stirring). After leaving Ilse's house.*
 
-The path back to the settlement followed the river, and the river ran south through the larch, and the larch was the larch she had walked through that morning, and the path was the path. These held. She was walking and the walking was in the right order — left foot then right foot then left — and the order held too, and she was grateful for the order though she did not think gratitude was precisely the right — she was walking.
+The path back to the settlement followed the river, and the river ran south through the larch, and the light through the canopy was the grey-gold of late afternoon in autumn. Vael walked. Once, between two bends in the path, her right foot landed before she had quite lifted it — or she perceived the landing before the lifting — and the moment passed and the path continued and she continued on it.
 
-The river beside her was doing something. It was running south, which was what rivers did in valleys that tilted south, and the running was the running of water over stones, and the stones were — she could point at the stones and say those were the stones the river ran over and she would be right. But the river was also — it was warmer than a river should be in late autumn. Not warmer. It had a quality that she identified as warmth because warmth was the closest — it was the closest. The quality was from the direction of the upper valley, from the direction of Ilse's house, or from beneath the riverbed, or from the water itself.
+The river was warm. She noticed this when the path dropped close to the water and she could feel the air above the surface. It was warmer than a highland river should be this late in the season. Mineral content, she thought — the highland valleys had particular mineral compositions, and she had read that certain dissolved minerals could produce a warmth the skin registered even at distance. She was satisfied with this. The warmth continued from the direction of the upper valley, and the mineral content did not explain the direction, but she did not think the direction was especially significant.
 
-She was quite certain the quality was the mineral content of the water, which in highland valleys was often — she had heard this, or she knew it, or it was true. Highland water had minerals. Minerals could produce a sensation that the skin interpreted as warmth. This was the explanation, and it was a satisfactory explanation, and the quality continued from the direction of the upper valley and the minerals did not explain the direction.
-
-The larch. The path. The river. The settlement below with its leaning pennant and its assessor and its sub-prefect and its twenty houses. She walked toward them. The quality stayed behind her. Or it was in the water beside her. Or it was in the part of the walk she had already done and the part she was doing now was the part that did not have it.
-
-The customs-house pennant was leaning east. The smoke from the timber camp was in the valley. These held.
+The settlement appeared below — the twenty houses, the mill, the customs-house with its leaning pennant. The assessor would still be at the inn. Kalder would still be at the customs-house or back at the mill. The smoke from the timber camp hung in the valley above them all. She walked down toward the settlement, and the warmth from the river stayed behind her, or did not. She did not look back to check.
 
 ---
