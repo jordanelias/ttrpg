@@ -31,6 +31,36 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Borges | Footnote-as-counter-text within sentence. Em-dashed parenthetical metaphysical paradox. Catalogue constructions (lists of impossible things). Erudite Latinate without thesaurus-elevation tells. |
 | Ocampo | Sentences refusing to acknowledge their content's weight. Flat declarative syntax holding horror without affect. Refusal of explanatory subordination. Closing on the wrong moment (the small detail beside the resolution). |
 
+### 0.3 Spirit Axis (orthogonal to Coherence and TS)
+
+Spirit is the metaphysical attribute (range 1–7) governing the PC's will and its relationship to the threadwork. Beyond its mechanical role, Spirit determines how the prose renders the PC at low coherence. Where coherence determines whether the rendering holds and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip when the rendering fails**.
+
+The Spirit axis becomes audible at Coherence 4 and below. Above 4, the rendering is intact enough that the will operates within its normal apparatus. At 4 and below, what remains of the PC is increasingly governed by Spirit. The same coherence tier produces categorically different prose at high vs low Spirit.
+
+| Spirit | Texture | Author register | Closing |
+|---|---|---|---|
+| **High (5–7)** | Beckett continuation. The will grips. The decision recurs. Repetition is willful. The self insists on what it still has. | Beckett (the texture, not in the eight-author roster — invoked through declarative repetition of agency). Layered onto the tier's primary irreal authors. | On the act: "she walks." The verb the self still owns. |
+| **Mid (3–4)** | Default. No specific Spirit-axis effect. The PC neither grips nor dissolves; rendering failure proceeds without will-axis emphasis. | Tier's standard weighting applies. | Per coherence tier's standard closing. |
+| **Low (1–2)** | Lispector dissolution. Predication of self breaks. The name recedes. Agency yields. The body's parts replace the agent. | Lispector (categorical failure on the SUBJECT). Layered onto the tier's primary irreal authors. | On the noun: "the feet move." The body without the self. |
+
+**Beckett texture (high Spirit) — invocation rules:**
+- The decision/walking/holding is named and re-named. "She had decided." "The decision held." "She had decided." Three repetitions are common; the repetition is the act of grip.
+- The self insists on possession: "this is hers," "the walking is hers," "she holds it."
+- Identity may dissolve while agency persists: "Whatever she was now, it was walking." The voice doesn't know what it is, but it goes on.
+- Even involuntary perceptual events at low coherence are things the self pushes through: "she walks through it because walking is the thing she does."
+- Beckett texture is invoked, not deployed as a ninth author — it is the willful-repetition mode used inside the tier's standard weighting.
+
+**Lispector dissolution (low Spirit) — invocation rules:**
+- Predication of self breaks: "Vael was — she was on the path." The being-on-the-path is past tense.
+- The name becomes a thing: "Vael is — Vael is a name. The name is on the path." The self has become an object located in space.
+- Agency dissolves across clauses: "where she was going, or where she was being taken, or where the path went and she was on the path."
+- The body's parts replace the agent: "the thing the feet belong to," "the feet move," "the name was for the thing."
+- Low-Spirit dissolution intensifies Lispector's standard weight at the tier — it is the tier's irreal authorship targeted at the SUBJECT (the self) rather than at the world.
+
+**Spirit axis at Coherence 0:**
+- **High Spirit C0 — the competent monstrous:** Recognizable intentionality applied through alien method. The being inherits the shape of who they were (the Warden tends; the protector visits). What "tend" or "protect" means now operates on a principle the observer cannot access. The proper nouns are the same; the meanings have shifted onto foundations no longer human. Closing on the mismatch: "Tending is what you do and the fire is what is there."
+- **Low Spirit C0 — the unrecognizable:** No recognizable intentionality. The being's actions occur without inherited shape. The work "was simply occurring, the way weather occurs." No intent, no direction, no object. The being breathes; it does not decide.
+
 ---
 
 ## 1. Sentence Construction
@@ -239,6 +269,28 @@ The Wittgenstein Constraint (*Tractatus* 7) governs: where the prose cannot spea
 - **Tolkien specificity + Lispector vagueness:** Not a conflict — a lamination. The name holds the surface. The veer reaches past it. Both are present in the same sentence. "The wall [Tolkien] was also the running and the east and the paces and none of these were the thing [Lispector]."
 - **Ishiguro + Ocampo:** Rational explanation followed by flat contradiction. "The shadow seemed larger, which she attributed to the afternoon light. The shadow had more than two arms." Neither narrator nor character acknowledges the contradiction.
 - **Borges + Márquez:** Scholarly precision + ordinary impossibility. The apparatus documents impossible content without remarking on the impossibility. Complementary, not competing.
+- **Borges + Ocampo + Tolkien closing (the Lem combination):** Clinical incommensurability emerges from the layering. Borges supplies the scholarly precision; Ocampo supplies the flat-affect frame that does not register the impossibility; Tolkien closes on the physical thing the description has been circling. The result is the texture associated with Lem's clinical alien — precise description producing blankness, the apparatus complete and the content unparsable. Lem is not a ninth author; the texture is achieved through this combination. Use when the substrate content is intelligible to apparatus (countable, specifiable) but not to comprehension (the description is correct and tells you nothing).
+
+**The within-observation gradient (TS 50+):**
+
+At elevated TS, the prose must layer three depths within a single observation. Skipping the middle layer makes the gradient discrete (clear vs incomprehensible) instead of continuous, and the continuity is what TS perception actually feels like — the same scene yielding to description at one depth and resisting it at another.
+
+| Layer | Authors | What it does |
+|---|---|---|
+| **Near** | Tolkien, Mistry | Articulable in the PC's own vocabulary — the operation type, the approximate target, the practitioner's training-words. "Restorative. Layered. Careful." Sentences complete normally. |
+| **Middle** | Borges, with Ocampo flat-affect framing | The Lem texture. Scholarly precision applied to substrate detail. The description tells you exactly what is there and what it does and does not yield to the description. The PC names the lines, counts them, identifies their direction — and the count is correct and the count tells you nothing about what the lines are. |
+| **Far** | Lispector veer, or Tolkien building-around-absence | The predication breaks. The sentence reaches for what the perception is *of* and produces only the copula or silence. "What the feeling was a feeling OF was. Was." Or: the prose names the surrounding structure and leaves the central thing unnamed; the absence has shape because the surrounding structure has shape. |
+
+The three layers may occupy three sentences or three clauses within one sentence. They must be present together. A passage that uses only near and far feels two-tiered; a passage that uses near, middle, and far feels gradient.
+
+**Subject/object lamination at high coherence + high TS:**
+
+When the PC has high coherence (rendering intact) and high TS (substrate perception), the irreal techniques target the OBJECT, not the SUBJECT. The PC's cognition is fine. The substrate is what resists. This is the inverse of low-coherence Lispector, where the rendering itself is failing.
+
+- **Subject-axis (the PC):** Tolkien (the PC's clear perception of the world), Mistry (the PC's competent registering of detail), Ishiguro (the PC's reading of their own perception, which may be slightly off — the PC reading their TS perception with their training).
+- **Object-axis (the substrate):** Lispector veer (what the substrate is OF resists predication), Borges precision (the apparatus catches countable content but not comprehension), Ocampo flat-affect (the substrate reports without affect).
+
+A test: replace "she could not articulate the lines" with "the lines did not articulate." If the second is closer to true, the rendering has been targeted at the object correctly. If "she could not articulate" is what the prose is doing, the rendering has been wrongly targeted at the subject — which would be appropriate only if the PC's coherence is failing.
 
 **Coherence-gated technique availability:**
 

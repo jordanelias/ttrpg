@@ -16,7 +16,7 @@ The synthesis is a single integrated voice. All eight authors contribute. The wr
    - `references/techniques-skeleton.md` — technique inventory as rule list
    - `references/anti-patterns-skeleton.md` — failure-mode rules as symptom→fix triplets
    - `references/calibration-skeleton.md` — source-author anchors as use-when reference
-3. **Determine the PC's coherence tier.** Consult `references/coherence-tiers.md` for the tier-tables (10-8, 7-5, 4-3, 2, 1). Also determine the PC's Thread Sensitivity — this is orthogonal to coherence and independently affects the prose. If coherence is not established, default to Tier 10-8. If TS is not established, default to 0.
+3. **Determine the PC's coherence tier, Thread Sensitivity, and Spirit.** Consult `references/coherence-tiers.md` for the tier-tables (10-8, 7-5, 4-3, 2, 1). All three axes are orthogonal and independently affect the prose. If coherence is not established, default to Tier 10-8. If TS is not established, default to 0. If Spirit is not established, default to mid-range (3–4) — neutral, neither agency-grip nor agency-dissolution dominant.
 4. **If prose involves Church speakers, religious texts, or characters with established Certainty levels:** consult Solmund Voice canon at `designs/world/solmund_voice_v30.md` per the scoped-override section below.
 5. Identify focalization. For chronicle-mode prose, this MUST be one of the four canonical chroniclers per P-03.
 6. Write. Apply techniques as content, focalization, and coherence tier demand. Multiple authors per sentence is normal.
@@ -31,9 +31,15 @@ Coherence measures the structural integrity of the practitioner's always-already
 
 The synthesis weights shift across tiers aligned to the canonical coherence thresholds (threadwork_v30 §3.3): 10-8 (Stable), 7-5 (Dissonant), 4-3 (Fragmented), 2 (Fractured), 1 (Severed), 0 (Rendering Crisis / NPC). The world does not change. The practitioner does. Realist authors decrease because the PC's ability to render the world in human categories degrades. Irreal authors increase because the prose must render categorical failure — temporal structuring breaking, logical structure loosening, belonging eroding.
 
-Coherence is orthogonal to Thread Sensitivity. TS determines substrate perception; coherence determines rendering integrity. The prose must not conflate them. A low-coherence PC without TS experiences rendering failure as inexplicable breakdown. A low-coherence PC with TS experiences rendering failure AND substrate perception — but one does not cause the other.
+Coherence is orthogonal to Thread Sensitivity AND to Spirit. Three axes operate independently:
 
-See `references/coherence-tiers.md` for the tier-tables with deployment notes, the TS interaction guidance, and per-tier anti-patterns.
+- **Coherence (10–0)** determines rendering integrity — whether the PC's self-rendering holds them as a human configuration.
+- **Thread Sensitivity (0–100)** determines substrate perception — what the PC perceives beyond ordinary human capacity.
+- **Spirit (1–7, the metaphysical attribute)** determines agency persistence — whether the will continues to grip when rendering fails.
+
+The prose must not conflate them. A low-coherence PC without TS experiences rendering failure as inexplicable breakdown. A low-coherence PC with TS experiences rendering failure AND substrate perception — but one does not cause the other. A low-coherence high-Spirit PC grips the decision (Beckett continuation) while rendering fails. A low-coherence low-Spirit PC dissolves into the dissolution (Lispector dissolution) — agency yields. The Spirit axis becomes audible at Coherence 4 and below, where the Beckett texture (high Spirit) versus the Lispector texture (low Spirit) is the sharpest distinction the prose can make about what the PC still has.
+
+See `references/coherence-tiers.md` for the tier-tables with deployment notes, the TS interaction guidance, the Spirit interaction guidance, and per-tier anti-patterns.
 
 ## Author Weighting (Tier 10-8 Default)
 
@@ -145,6 +151,8 @@ When deviation is motivated AND improves impact, the deviation is correct. When 
 - Drop into "AI sheen": stock metaphors, repetitive cadence, low lexical variety.
 - Appropriate cultural-tradition-specific techniques (signifyin', AAVE rhetorical modes, tradition-specific sacred-text rhythms) without fidelity to their practitioners. Name what the prose actually does.
 - Deploy NPC characters as functional placeholders. Load-bearing NPCs need at least one anchored dimension (ethical framework, conviction, goal, inspiration, factional belonging).
+- Render Coherence 0 NPCs as broken or as transcendent. The C0 NPC is the **competent monstrous**: recognizable intentionality applied through alien method (high Spirit) or no recognizable intentionality at all, the action simply occurring (low Spirit). The being inherits the shape of who they were. The application is not human.
+- Conflate the subject and object axes at high TS. When a high-coherence PC perceives the substrate, the irreal techniques must target the OBJECT perceived, not the SUBJECT perceiving. The PC's cognition is fine. The substrate resists.
 
 ## Self-Check
 
@@ -155,6 +163,9 @@ Before delivering prose, verify:
 - [ ] Is the PC's rendering functioning at the level this tier demands — not better, not worse?
 - [ ] Are irreal techniques serving the PC's categorical failure, not making the world surreal?
 - [ ] Has the prose avoided conflating rendering failure with substrate perception (unless the PC has the TS to perceive the substrate)?
+- [ ] **Spirit axis check (Coherence 4 and below):** Does the prose render high Spirit as Beckett continuation (the will grips, the decision recurs, agency persists) and low Spirit as Lispector dissolution (the name recedes, the feet replace the self, agency yields)? The distinction must be audible.
+- [ ] **Subject/object distinction (high TS, intact rendering):** When the PC has high TS and high coherence, are irreal techniques targeting the OBJECT (what the PC perceives in the substrate) and not the SUBJECT (the PC's own cognition)? The PC's rendering is intact; the resistance is in what they perceive.
+- [ ] **Within-observation gradient (TS 50+):** At elevated TS, does the prose render near (articulable), middle (precise description producing something that doesn't quite work — Borges/Lem), and far (veer, silence — Lispector) within the same observation? Skipping the middle layer is a failure.
 - [ ] Does every editorial word belong to the focalized perspective?
 - [ ] Have I avoided system/mechanical terminology when focalized through an in-world perspective?
 - [ ] Does every modifier earn its place?
@@ -167,6 +178,7 @@ Before delivering prose, verify:
 - [ ] Do load-bearing NPCs have at least one anchored dimension?
 - [ ] At low coherence, is the world unchanged while the PC's rendering of it fails?
 - [ ] **Wittgenstein constraint:** Does any sentence describe its own inability to render the content? If so, replace: the sentence must attempt and fail structurally, not announce failure.
+- [ ] **Absence-explanation check:** When rendering an NPC's missing capacity (C0, low Spirit), does the prose explain what is missing in clauses like "the thing that X produces in a person"? If so, cut to declarative. The reader infers what is missing from what doesn't happen.
 - [ ] Are there similes below Coherence 4, or analytical self-observation below Coherence 5?
 - [ ] Does the passage close on the nearest concrete thing, not on meta-commentary?
 

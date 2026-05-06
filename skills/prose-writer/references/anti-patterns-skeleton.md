@@ -263,6 +263,38 @@ When the prose reaches the limit of what it can render — whether because coher
 
 ---
 
+## Three-Axis Anti-Patterns
+
+### 53. Spirit Axis Flatness at Low Coherence
+- **Symptom:** At Coherence 4 and below, the prose renders rendering failure without distinguishing high Spirit from low Spirit. The PC dissolves regardless of what their will is doing, OR the PC grips regardless of whether agency persists.
+- **Fix:** At Coherence 4 and below, Spirit determines whether the will continues to grip. **High Spirit** = Beckett continuation. The decision recurs. The self insists ("she had decided," "the walking is hers," "she holds it"). Repetition is willful, not mechanical. Even involuntary perceptual events are things the self pushes through. **Low Spirit** = Lispector dissolution. The name recedes. Predication of self breaks ("Vael was — she was on the path"). The feet replace the agent. Agency yields. The same C tier with different Spirit produces categorically different prose. Closing distinguishes: high Spirit closes on the act ("she walks"), low Spirit closes on the noun ("the feet move").
+
+### 54. Within-Observation Gradient Skipping the Middle Layer
+- **Symptom:** At TS 50+, the prose renders the near layer (articulable) and the far layer (veer, silence) but skips the middle layer (precise description producing something that doesn't quite work). The reader gets surface clarity and oblique hint, no middle ground.
+- **Fix:** At TS 50+, deploy three layers within a single observation. **Near** (Tolkien/Mistry register): articulable in the PC's own vocabulary — "restorative, layered, careful." **Middle** (Borges/Lem register): scholarly precision applied to substrate detail, the precision flawless, the content not quite tracking — clinical incommensurability. The PC describes clearly and completely something that does not yield to the description. **Far** (Lispector veer / Tolkien building-around-absence): the predication breaks, the sentence reaches for what the perception is *of* and produces only the copula or silence. Skipping the middle layer makes the gradient discrete (clear vs incomprehensible) instead of continuous. The continuity is the point.
+
+### 55. Over-Explained Absence in C0 / Low-Spirit Rendering
+- **Symptom:** When rendering an NPC's missing capacity — at Coherence 0 low Spirit, or in observation of a being whose intentionality has dissolved — the prose explains what is missing through formulations like "the thing that noticing produces in a person, which is a response," or "the thing that agency does, which is to direct the action." The narrator analyzes the absence into an explicit proposition.
+- **Fix:** State the absence in declarative shorthand. "She did not turn." "She noticed and did nothing." "The work was occurring." The reader infers what is missing from what doesn't happen. The Wittgenstein constraint applies: the prose does not describe the gap; the gap is the silence between sentences.
+
+### 56. Subject/Object Axis Conflation at High TS, Intact Rendering
+- **Symptom:** A high-coherence high-TS PC encountering substrate content has the irreal techniques (Lispector veer, Borges paradox, Ocampo flat-affect) deployed onto the SUBJECT — the PC's own cognition presented as failing. The PC is rendered as if their rendering were degrading.
+- **Fix:** At high coherence, the rendering is intact. The PC's cognition is fine. The OBJECT — the substrate the TS perceives — is what resists articulation. Lispector's veer reaches past the named into what the name does not contain. Ishiguro's misidentification belongs to the PC reading their own perception. Borges's precision is applied to substrate content. The PC is the competent observer; the object is the resistant content. A test: replace "she could not articulate" with "the thing did not articulate." If the second is closer to true, the rendering has been targeted at the object.
+
+### 57. Ishiguro Contradiction Without Audible Sharpness
+- **Symptom:** At TS 30–49 with stable coherence, the PC misidentifies a substrate cue (mineral content, heat-shimmer, normal acoustics). The misidentification is committed. But the contradicting evidence (the warmth has a direction; the sound preceded its cause) is buried, not staged. The reader does not perceive the contradiction; the prose protects the narrator's misreading.
+- **Fix:** The misidentification commits. The contradicting evidence is also present in the same passage and audible to the reader — close to the misidentification, in plain prose, without commentary. The directional information that the misidentification cannot account for is stated and not connected. The reader hears the wrongness. The narrator does not. The Ishiguro gap is the gap between narrator and reader, and the gap requires the reader to have the evidence. If the evidence is absent, the technique becomes plausible truth, not unreliable narration.
+
+### 58. Mistry Tautology Aestheticized Into Lyric
+- **Symptom:** At Coherence 3 and below, Mistry's accretive technique combined with Lispector's tautology produces a meditative, almost lyrical rhythm — "the callus meant the callus. The bench. The cuts. The light." The reader experiences the passage as atmospheric or contemplative.
+- **Fix:** Rendering failure should not produce comfortable prose. The tautological loops are pathological, not lyrical. Break the meditation with a sharp disruption — a dissociative gap (the PC is in the middle of a sentence they don't remember starting), a shadow that doesn't match the body, a weight that has shifted. The disruption reminds the reader that the repetition is the rendering cycling because it cannot synthesize, not the prose savoring the world.
+
+### 59. Tartt Loaded-Object Treated as Available at Low Coherence
+- **Symptom:** At Coherence 4 and below, the prose presents an object as carrying weight in the way Tartt's loaded objects carry weight — the still-moving water indexing recent presence, the half-read letter implying its writer's state. The interpretive chain (object → implication → narrative) is rendered fully.
+- **Fix:** Tartt's loaded-object technique is the most coherence-dependent of the eight. It requires the rendering to produce interpretation. At Coherence 4 and below, the object becomes heavy but unread — present but not meaning. The PC perceives the weight; the chain to implication breaks. "There was something about the water. The something was —" The veer (Lispector) takes the place of the interpretation. The object is loaded in the world; the rendering that would unload it into narrative is failing.
+
+---
+
 ## The Master Rule
 
 If a sentence could appear in any story about any settlement / character / event, it belongs to no story. Cut it.

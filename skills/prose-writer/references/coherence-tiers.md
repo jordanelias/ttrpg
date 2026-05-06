@@ -48,6 +48,30 @@ Thread Sensitivity is orthogonal to Coherence. TS determines how far beyond ordi
 
 TS perception is never referenced in prose unless the PC has the TS to perceive it. A PC with TS 0 at Coherence 3 experiences categorical failure with no substrate awareness at all.
 
+## Spirit Axis Interaction
+
+Spirit (range 1–7, the metaphysical attribute) is orthogonal to Coherence and to TS. While coherence determines whether the rendering holds and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip when the rendering fails**.
+
+Above Coherence 4, the rendering is intact enough that Spirit operates within its normal apparatus — high-Spirit and low-Spirit characters both render the world in human categories and the difference is mostly in temperament and resolve, not in prose texture. **The Spirit axis becomes audible at Coherence 4 and below.** What remains of the PC at low coherence is increasingly governed by Spirit, and the same coherence tier produces categorically different prose at high vs low Spirit.
+
+| Spirit (1–7) | Texture | Mechanism | Closing register |
+|---|---|---|---|
+| **High (5–7)** | Beckett continuation | The will grips. The decision recurs. Repetition is willful, not mechanical. The self insists on what it still has ("this is hers," "she holds it"). Even involuntary perceptual events are pushed through. | The act: "she walks." The verb the self still owns. |
+| **Mid (3–4)** | No specific Spirit-axis effect | Tier's standard weighting applies. | Per coherence tier's standard closing. |
+| **Low (1–2)** | Lispector dissolution | The name recedes. Predication of self breaks. The body's parts replace the agent ("the feet move," "the name was for the thing the feet belong to"). Agency yields. | The noun: "the feet move." The body without the self. |
+
+**Spirit axis at Coherence 4–3:** The Beckett-Lispector contrast first becomes audible. High Spirit: the decision is named and re-named; agency persists across rendering failure. Low Spirit: predication of self breaks; the rendering takes the self with it.
+
+**Spirit axis at Coherence 2:** The contrast intensifies. High Spirit: circular Beckett logic ("she continued because the deciding continued because she continued") — the self grounds itself in itself when external grounds fail. Low Spirit: the self has become a name located in space ("Vael is — Vael is a name. The name is on the path."). Belief Co-Authorship plays differently across Spirit: high Spirit characters may grip a single conviction even as the others decouple; low Spirit characters experience the decoupling without resistance.
+
+**Spirit axis at Coherence 1:** The distinction is starkest. High Spirit: "she can't go on. She goes on." The Beckett voice fully realized — the self contracted to a single capacity (deciding) and operating from there. Low Spirit: "the name was. The river is. The feet move." The self is gone; the body continues mechanically; the world persists. Same coherence tier, categorically different prose.
+
+**Spirit axis at Coherence 0 (NPC):**
+- **High Spirit C0 — the competent monstrous:** Recognizable intentionality applied through alien method. The being inherits the shape of who they were (the Warden tends; the protector visits). What "tend" or "protect" means now operates on a principle the observer cannot access. The proper nouns are the same; the meanings have shifted onto foundations no longer human. The encounter prose closes on the mismatch: tending is what they do, and the river does not need it, and the tending continues.
+- **Low Spirit C0 — the unrecognizable:** No recognizable intentionality. The being's actions occur without inherited shape. The work "was simply occurring, the way weather occurs." No intent, no direction, no object. The being breathes; it does not decide. The encounter prose reports the absence flatly and leaves.
+
+The Spirit axis is referenced in prose only at Coherence 4 and below, and at C0 NPC encounters. At higher coherence, Spirit is invisible to the prose texture (though it remains mechanically active).
+
 ---
 
 ## Tier 10-8 (Stable)
