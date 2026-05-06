@@ -75,7 +75,7 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Digression as revelation | Ishiguro | Narrator wanders; digression contains the real point. Marked by formulaic phrases. |
 | Community-as-ensemble | Mistry | Rotate through multiple characters' POVs within a continuous scene without breaking narration. **Not scene-break-with-perspective-change** — Mistry's rotation occurs within a single continuous scene. |
 | Circular return | Márquez/Ishiguro | Paragraph ends near where it began, meaning transformed. |
-| Ontological estrangement | Lispector | Mundane object cracks open into metaphysical question. The rust on a gate, the sun on cobblestones become catalysts for existential perception. |
+| Ontological estrangement | Lispector | The perceiver's categories fail to contain a mundane object — the rust on a gate, the sun on cobblestones exceed the categories the rendering provides. The object hasn't changed; the rendering's grip on it has slipped. |
 | The domestic interior as horror-site | Ocampo | Kitchens, bedrooms, gardens become uncanny without external trigger. The wrongness is in the familiar. |
 | Fragmentary assembly | Lispector | Paragraph composed from fragments rather than continuous narrative. The fragments do not resolve. |
 
@@ -157,7 +157,7 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Occupational language | Mistry | Trade vocabulary used as natives use it. Context teaches. |
 | Hyperbolic specificity | Márquez | When exaggerating, be numerically precise. |
 | Loaded specific (aesthetic) | Tartt | Specific detail carrying weight through aesthetic precision. Quiet symbolic loading. |
-| Loaded specific (ontological) | Lispector | The mundane object that cracks open into being. Different from Tartt's aesthetic loading. |
+| Loaded specific (ontological) | Lispector | The mundane object that exceeds its category — the perceiver's rendering cannot contain it. Different from Tartt's aesthetic loading. |
 | Charged objects | Ocampo | Domestic objects as ontologically loaded. Uncanny rather than aesthetic. |
 | Simple vocabulary at metaphysical depth | Lispector | Simple words accessing metaphysical territory. A stripped-down lexicon at the limits of the unsayable. |
 | Names that recur across texts | Borges | Same names in different positions, suggesting recurrence is the world's structure. |
@@ -172,7 +172,7 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | Landscape as weight-bearer | Tolkien | Physical world primary character. Wide to narrow. |
 | Ekphrasis | Tartt | Extended description of art object/document/built thing as interrogation for meaning. |
 | Library/labyrinth as structural metaphor | Borges | Place renders as conceptual rather than geographic. |
-| Defamiliarization of mundane objects | Lispector | The texture of the world becomes strange under sustained attention. |
+| Defamiliarization of mundane objects | Lispector | The PC's rendering of mundane objects falters under sustained attention — the familiar resists the categories that would make it legible. |
 | The uncanny inside ordinary social occasions | Ocampo | Birthday parties, dinners, family gatherings as horror-sites. |
 | Servants seeing what employers cannot | Ocampo | Class-position as perceptual access. |
 | Animals as witnesses | Ocampo | Dogs, cats, birds present at moments humans miss. |

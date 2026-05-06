@@ -187,7 +187,7 @@ Live rules for composition and audit. Each entry: rule name → symptom → fix.
 - **Fix:** Consult `coherence-tiers.md` before composing. Match weighting to tier.
 
 ### 42. Realist Anchor Over-Deployment at Low Coherence
-- **Symptom:** At Coherence 1-2, the PC's rendering still producing named places and deep-time framing reliably. The PC presented as stably participating in human categories.
+- **Symptom:** At Coherence 1 or 2, the PC's rendering still producing named places and deep-time framing reliably. The PC presented as stably participating in human categories.
 - **Fix:** At low coherence, the PC's rendering fails to produce structured world-presentation reliably. Tolkien anchors appear as fragments of rendering function — momentary islands of structured perception in a sea of categorical failure.
 
 ### 43. Irreal Author Over-Deployment at High Coherence
