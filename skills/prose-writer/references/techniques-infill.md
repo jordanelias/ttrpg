@@ -350,6 +350,12 @@ Prose moves toward the abstract but stops just short of arriving. (Moser.)
 
 This governs all prose output. When content exceeds the prose's capacity — whether because coherence has failed or because TS-perceived content resists articulation — the prose does not describe its silence. It is silent. It closes on the nearest concrete thing.
 
+**Why the silence is structural, not aesthetic.** Human language is calibrated to human finitude. Threads are the conditions of possibility for human experience — they constitute the framework within which experience, thought, and language become possible. Perceiving the conditions of possibility from within the experience they condition is perceiving the framework you are standing inside. Language, which is itself conditioned by those conditions, cannot describe its own conditions of possibility from outside. The silence at the limit of the prose is not poetic gesture. It is the boundary where the tool encounters what constitutes the tool.
+
+At low coherence, the silence has a second source: the limitation that calibrated language to human finitude is what's failing. The language is not just reaching beyond itself — it is losing the calibration that made it human language. The silence at Coherence 1 is the silence of an instrument that is becoming a different instrument.
+
+At high TS with high coherence, the silence has a different character: the language remains fully calibrated, but the content perceived through TS extends beyond what the calibration can reach. The instrument works. The object is beyond the instrument's range.
+
 **Why each author's mode of silence works differently:**
 
 Lispector's failure is generative because she taught that "the unsayable can only be given to me through the failure of my language" (*The Passion According to G.H.*). The construction fails. The failure is the achievement. The sentence attempts to name the thing and veers. The accumulation of wrong names traces the shape.

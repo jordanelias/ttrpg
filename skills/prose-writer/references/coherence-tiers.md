@@ -36,6 +36,8 @@ The weighting describes aggregate tendency, not per-passage quota.
 
 Thread Sensitivity is orthogonal to Coherence. TS determines how far beyond ordinary human capacity the practitioner perceives. The content perceived becomes increasingly resistant to articulation: what can be explained gives way to what can only be discussed, then to what can only be gestured toward, then to what is wholly alien to human rationality.
 
+**The gradient operates within each observation, not only between TS bands.** A TS 70 practitioner perceiving a full configuration can articulate the elements near human conceptual categories (the operation type, the approximate target, the age) but cannot articulate the elements at the further reaches of their perception (the deep structural architecture, the conditions of possibility that the threads constitute). Higher TS extends perception further from the human domain, so the furthest content at TS 70 is more alien than the furthest content at TS 50. Within any single observation, some of what is perceived is near enough to name; some is beyond naming; some is beyond gesture.
+
 **The coherence tiers below describe rendering failure alone — the PC's participation in human reason degrading.** When a PC also has elevated TS, the prose must layer substrate perception on top of the rendering failure. These are two independent effects:
 
 - **Low coherence, low/no TS:** The PC experiences rendering failure without understanding why. Temporal slippages, belonging-failure, categorical loosening — all inexplicable. The prose renders breakdown without access to the substrate. The PC's experience is of things going wrong without cause.
@@ -134,8 +136,9 @@ The limitation is no longer holding the excess into human shape. Both the ontic 
 
 **Anti-patterns at this tier:**
 - The world becoming dreamlike (the world is consistent; the PC is fragmented)
-- The PC's rendering failure presented as mystical insight (it is breakdown, not transcendence — unless TS is specified)
+- The PC's rendering failure presented as mystical insight (it is departure from human finitude, not transcendence — unless TS is specified)
 - Named anchors vanishing entirely (they're present but the PC's access to them is impaired)
+- Treating the tier as ONLY failure — the tautologies, the temporal coexistence, the veering are not just breakdowns of the old system. They are early signs of a mode of being that does not require temporal exclusivity or named specificity to function. What is emerging in the gap where the limitation was is not nothing.
 
 ---
 
@@ -162,7 +165,7 @@ The limitation has substantially failed. The excess is no longer being held into
 - **Possibility-actuality axis:** Actively decomposing. The PC performs actions they do not remember (dissociative episodes). The distinction between "this happened" and "this could have happened" is no longer enforced by the limitation. The prose may include scene-jumps without transition.
 - **Intelligibility axis:** Knowledge arrives chaotically — facts present but unsequenced, uncontextualized. The limitation that organized perception into integrated experience is no longer functioning. "They were facts and they were beside each other."
 - **Belonging (ontic):** Physical form wrong. Weight distribution off. Light interacts at a register that produces unease. The practitioner's body is no longer being limited into human material presentation. Others see it.
-- **Belief Co-Authorship (ontological):** The categories structuring consciousness are loosening. A conviction feels foreign — as if belonging to someone else. This is not doubt. It is the thread-connections maintaining those beliefs fraying — the belief is there but the connection between the PC and the belief has loosened. The being's mode of engagement with ideas is changing.
+- **Belief Co-Authorship (ontological):** The categories structuring consciousness are loosening. A conviction feels foreign — as if belonging to someone else. This is not doubt. It is the thread-connections maintaining those beliefs fraying — the belief is there but the connection between the PC and the belief has loosened. And not only beliefs: the practitioner's relationship to all their ideas, concepts, and feelings is shifting. The thread-connections that held the practitioner to the concept of "justice" or "protection" or "home" are the same connections that are fraying. The concept persists. The practitioner's belonging to the concept does not.
 - **Relational propagation:** Constant and uncontrolled. The practitioner's knots transmit continuously. Their degradation ripples outward through every connection.
 - **Very short paragraphs.** The rendering cannot sustain extended structure. Closing on isolated detail with flat affect.
 
@@ -195,7 +198,7 @@ The limitation has nearly failed. The being is still a being — Ein Sof still s
 
 - **Temporal axis:** Temporal structuring has failed. The limitation that produced past-present-future as distinct categories is no longer operative. Present-tense dominates — not as stylistic choice, but as the only temporality available to a being whose mode of existence no longer includes temporal sequence. The "instant-now" is not transcendence. It is the temporal becoming that was always there underneath, no longer being limited into sequence.
 - **Possibility-actuality axis:** Dissolved. The distinction between what is and what could be has ceased to be enforced. Dissociative episodes are constant. Involuntary perceptual events: the screening that rendering provided (Amendment 02 §1) is gone. Without TS: noise — raw givenness arriving without the limitation that would make it intelligible. With TS: substrate perception arriving clearly while the apparatus to connect it to thought is absent.
-- **Intelligibility axis:** The self/world boundary is dissolving. Not because the world has invaded the PC — because the limitation that maintained "this is me" and "this is the world" as separate was a limitation, and it is failing. The being's interiority and the world's exteriority become indistinguishable — not in content, but in kind. The being can no longer tell where it stops and the world begins because "stopping" and "beginning" were products of the limitation.
+- **Intelligibility axis:** The self/world boundary is dissolving. Not because the world has invaded the PC — because the limitation that maintained "this is me" and "this is the world" as separate was a limitation, and it is failing. The being's interiority and the world's exteriority become indistinguishable — not in content, but in kind. The being can no longer tell where it stops and the world begins because "stopping" and "beginning" were products of the limitation. The thread-connections to ideas, concepts, and feelings have loosened past recognition — not only do beliefs feel foreign, the capacity for belief itself is what's shifting. The relationship between the being and the concept of "relationship" is what's changing.
 - **Belonging (ontic):** Trace. Tolkien fragments — a name, a landscape detail — appear as momentary islands where the limitation briefly produces one more structured perception before failing again. These are the last evidence of human rendering function.
 - **The prose is not broken prose. It is becoming something else.** The sentences at Coherence 1 are organized by a principle that is no longer human narrative grammar. The tautologies, the present-tense, the names without predicates — these are early forms of a mode of articulation that, at Coherence 0 with sufficient TS, might find equilibrium as a stable inhuman mode. From inside human finitude — which is where the player sits — they read as collapse.
 - **Fragment length.** The rendering cannot sustain structure. Closing on isolated noun.
@@ -212,18 +215,35 @@ The limitation has nearly failed. The being is still a being — Ein Sof still s
 
 The limitation has ceased. Ein Sof still spools the being — they are not threadcut, not dissolving. But layer 2, the always-already self-rendering that limited radical excess into a human configuration, is gone. The excess flows without limitation. The being continues to become — but what it becomes is no longer calibrated within human finitude.
 
-The character becomes an NPC. Not because they are broken. Because what they have become cannot be played from inside human rational engagement with a game. The game is about human finitude. The player sits inside human finitude. The character has left it. Equilibrium may be found — especially at high TS — but that equilibrium is a being, not a human being. A consciousness, not a human consciousness. A mode of engagement with the world, not the human mode.
+The character becomes an NPC. Not because they are broken. Because what they have become cannot be played from inside human rational engagement with a game. The game is about human finitude. The player sits inside human finitude. The character has left it.
 
-What follows depends on Thread Sensitivity (Amendment 01, §4):
+**The being is monstrous** — not in the horror sense but in the philosophical sense (*monstrum*: that which is shown forth). Their existence does not map to the rational domain of ordinary human experience. Others' renderings cannot process them through normal categorical frameworks. They may appear physically present — standing in a room, walking a path — but their presence exceeds what the observer's rendering can contain. The monstrosity is in the gap between the being and the framework, not in the being itself.
+
+**Whether and how the being's physical form alters is unique to each being.** Some may appear barely changed — standing where they stood, wearing what they wore — while their presence produces profound unease in those who share space with them. Others may be visibly, physically altered. The physical outcome depends on what the being was, what their thread-configuration carries, what TS architecture they built through confrontation, and what the excess produces when the limitation ceases. The system does not prescribe one outcome.
+
+**The NPC does not vanish from the game world.** They remain as an actor — present, known, potentially still occupying the spaces and relationships they held as a human. The question the engine must answer: do they stay, and if so, how do they act? Their motivations and actions are generated by a radically alien process that inherits the shape of their original intentionality and goals. The proper nouns are the same — the same settlement, the same allies, the same cause. But the meaning of these inheritances has shifted onto foundations that are no longer human. A former Warden who still visits the sites they once Mended — but what they do there is not Mending. A former protector who still comes to the settlement — but what "protect" means to them now operates on a principle the observer cannot access.
+
+**TS-gated outcomes** (Amendment 01, §4) determine what the being becomes:
 - **TS 30-49 (Stirring):** Ontological freefall. Consciousness exists but cannot render itself as human and cannot work the threads into any stable alternative.
 - **TS 50-69 (Attuned):** Relational persistence. Identity is relational rather than personal — the being exists through their connections.
 - **TS 70-89 (Sensitive):** Structural reconstitution. The practitioner threadworks themselves into a stable non-human configuration through continuous deliberate effort.
 - **TS 90-100 (Resonant):** Full reconstitution. The being reorganizes around a beyond-human rendering — but every moment of continued existence strains the substrate.
 
-Focalization shifts to external observers:
-- **Companion:** a party member observes the PC from outside. The companion's own coherence determines the prose texture for their perspective.
-- **Chronicler:** one of the four canonical chroniclers describes what happened to the PC. The chronicler's perspective and vocabulary apply.
-- **Environmental observer:** the prose focalizes through place. Tolkien landscape-as-agent becomes the available ground.
+Equilibrium may be found at high TS — but that equilibrium is a being, not a human being. A consciousness, not a human consciousness. A mode of engagement with the world, not the human mode.
+
+**How others perceive the Coherence 0 being** depends on their TS:
+- **TS 0-9:** Vague wrongness. The being doesn't look right but the observer can't say why.
+- **TS 10-29:** Overwhelming wrongness. The observer knows something is profoundly wrong but cannot locate it.
+- **TS 30-49:** The crisis is visible. The observer perceives that the being's configuration has ceased to cohere as human.
+- **TS 50-69:** The crisis cause is identifiable. The observer perceives what has happened at the thread level.
+- **TS 70+:** The observer perceives the being's differed thread structure — how the threads have reconfigured beyond the human pattern — and a beyond of the being as it is physically presented within the rendered world. The physical presentation and the thread structure may be two different beings occupying the same space. The observer can perceive the continuous self-sustaining work (at TS 70-89) or the full reconstituted architecture (at TS 90+).
+
+**Prose focalization at Coherence 0** is external — the being cannot be focalized through because the prose-writer voice operates within human finitude:
+- **Companion:** A party member observes the being from outside. The companion's own coherence determines the prose texture.
+- **Chronicler:** One of the four canonical chroniclers documents the being. The chronicler's perspective and vocabulary apply.
+- **Environmental observer:** The prose focalizes through place. Tolkien landscape-as-agent.
+
+When other characters encounter a Coherence 0 NPC, the prose renders the encounter through the observer's focalization. The observer perceives the familiar elements (the NPC's face, their posture, the places they go) and the unfamiliar process beneath (actions that look like continuations but follow a different rationality). The prose does not explain the alien process. It renders what the observer sees and stops.
 
 ---
 
