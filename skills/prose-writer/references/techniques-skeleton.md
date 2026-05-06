@@ -231,6 +231,36 @@ The Wittgenstein Constraint (*Tractatus* 7) governs: where the prose cannot spea
 
 **Interpolation failure:** Two authors serving the same function (e.g., Lispector veer + Ishiguro uncertainty both serving "narrator unsure") produces redundancy, not synthesis. Choose one.
 
+**Interpolation is lamination, not alternation.** Each author operates at a different depth or function in the same sentence. Tolkien holds the surface (the name, the place). Lispector holds the depth (what is beneath or beyond the name). Ishiguro holds the narrator's self-deception. Ocampo holds the flat-affect frame. They do not take turns. They layer. A single sentence can contain Tolkien naming the wall, Lispector reaching past the wall to what the name cannot contain, and Ishiguro's narrator insisting the wall is sufficient.
+
+**Specific productive pairings tested:**
+
+- **Lispector veer + Ishiguro commitment:** The narrator commits (Ishiguro), veers (Lispector), recommits (Ishiguro). The veer sits inside the repair sequence. The recommitment is less convincing than the original. The narrator does not know.
+- **Tolkien specificity + Lispector vagueness:** Not a conflict — a lamination. The name holds the surface. The veer reaches past it. Both are present in the same sentence. "The wall [Tolkien] was also the running and the east and the paces and none of these were the thing [Lispector]."
+- **Ishiguro + Ocampo:** Rational explanation followed by flat contradiction. "The shadow seemed larger, which she attributed to the afternoon light. The shadow had more than two arms." Neither narrator nor character acknowledges the contradiction.
+- **Borges + Márquez:** Scholarly precision + ordinary impossibility. The apparatus documents impossible content without remarking on the impossibility. Complementary, not competing.
+
+**Coherence-gated technique availability:**
+
+| Technique | Available at | Unavailable below |
+|---|---|---|
+| Similes / analogies | 10-8, 7-5 | Coherence 4 (analogical reasoning requires stable identity + comparison) |
+| Analytical self-observation | 10-8, 7-5 (minimal at 5) | Coherence 4 (meta-cognitive capacity is what's degrading) |
+| Tartt loaded-object interpretation | 10-8, 7-5 | Coherence 4 (object present but heavy-and-unread; the rendering cannot produce interpretation) |
+| Tolkien deep-time structure | 10-8, 7-5 (effortful at 5) | Fragments below 4 (names persist but chains break) |
+| Passage-length sustained paragraphs | 10-8 | Degrades through tiers: 7-5 paragraphs with interruption; 4-3 short paragraphs; 2 very short; 1 fragments |
+
+**The 5/4 boundary** is the sharpest perceptible tier-shift. Similes disappear. Analytical self-observation disappears. The reader hears this immediately. This boundary divides prose that still resembles normal fiction (with micro-failures) from prose that is categorically different.
+
+**The last-simile rule:** At Coherence 1, one simile may appear if the text immediately enacts the collapse of the capacity that produced it. The simile is the last. The apparatus breaks in the sentence following. This is a high-risk technique — use once per Coherence 1 passage at most.
+
+**Closing vocabulary by tier:**
+- 10-8: Full closing — landscape, atmosphere, the physical world complete
+- 7-5: Closing with ground-check — "these were good," "the distance had been the right distance"
+- 4-3: Closing on isolated detail — the pin, the crack, the direction
+- 2: Closing on isolated detail with flat-affect — "the pin was beside the book"
+- 1: Closing on isolated noun — "the pin"
+
 ---
 
 ## Author-Specific Mannerism Risk
