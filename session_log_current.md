@@ -1,34 +1,29 @@
 ---
-session_id: 2026-05-01-stage-10-validation
-session_open: 2026-05-01
-session_close: pending
-phase: "Pipeline MVP complete. 0 P1. Mandate→L+PS done. Trigger 9 end-to-end. 169+ tests."
-status: open
+session_id: 2026-05-06-prose-writer-restructure
+session_open: 2026-05-06
+session_close: 2026-05-06
+phase: "prose-writer skill restructured: 8-author coherence-indexed synthesis, Wittgenstein constraint, 29 tests, all infills rewritten"
+status: complete
 
 last_stage: >
-  valoria-game (15 commits this session): Phase 5a s3-5, Phase 5b items 10-12, spec-parity
-  sweep triggers 9+10, coverage matrix, Intel stat seeding, CascadeClusterDetector + wiring
-  into FactionLayerV30.process_season_end (trigger 9 end-to-end), completeness fixes
-  (KeyTypeRegistry meta.cascade_cluster_event), Mandate→L+PS code migration (7 files, 53 refs).
-  ttrpg (9 commits): ED-755 sweep 7/9, ED-787 closed (Intelligence restored, Varfell=4),
-  ledger archival, Spy/Intel sweep fix, session logs.
+  skills/prose-writer (8 commits): Morrison removed, Lispector/Borges/Ocampo added.
+  Coherence tiers aligned to canonical banding (10-8/7-5/4-3/2/1/0).
+  Rendering failure replaces world-surrealism. Coherence orthogonal to TS.
+  Wittgenstein constraint (Tractatus 7) added: no meta-description of inarticulation.
+  Structural enactment §11 added to techniques-skeleton. Anti-patterns 41-52 added.
+  29 tests across 3 battery parts. 10 confirmed rules promoted to skeleton.
+  All 3 infill files rewritten (Morrison removed, 8-author throughout).
+  Definitive composition test: 5 tiers + 2 TS variants.
 
 next_action:
-  skill: design
+  skill: prose-writer
   description: >
-    Pipeline mechanically complete at MVP. No P1 blockers. All resumable mechanical
-    work this session chain was actionable has been executed.
+    Core restructure complete. Remaining polish:
+    - Test battery Part 4 (Mistry/Tartt under low-coherence pressure, final distillation)
+    - Edge tests: Coherence 5/4 simile boundary, Mistry aestheticization risk
+    - Skill is usable now for composition tasks
 
-    JORDAN-DECISION: ED-788 (P2, skipped) — LICENSE.
-    DISCREPANCY: Church VDL L=4/PS=4 vs canonical table L(BG)=5/PS(BG)=5. Needs Jordan.
-
-    REMAINING WORKABLE (multi-session, no Jordan input needed):
-    - ED-780 Geography Phase 3 spec rewrite (multi-session)
-    - Creative authoring: Mission/cascade/temperament for 6 factions + 30-50 territories
-    - Cut-scene rendering pipeline (needs Jordan art direction)
-    - Varfell victory path revision
-
-    STANDING P2/P3: ED-710/711 (superseded by ED-780), ED-776/777/780/781/788.
+blockers: []
 
 active_ed_open:
   p1: []
@@ -36,6 +31,4 @@ active_ed_open:
   p3: ["ED-776", "ED-781"]
   total: 7
 
-pipeline_tests: 169+
-
-predecessor_session: 2026-04-30-architecture-session
+predecessor_session: 2026-05-01-stage-10-validation
