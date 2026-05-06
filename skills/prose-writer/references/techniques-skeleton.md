@@ -298,7 +298,7 @@ A test: replace "she could not articulate the lines" with "the lines did not art
 |---|---|---|
 | Similes / analogies | 10-8, 7-5 | Coherence 4 (analogical reasoning requires stable identity + comparison) |
 | Analytical self-observation | 10-8, 7-5 (minimal at 5) | Coherence 4 (meta-cognitive capacity is what's degrading) |
-| Tartt loaded-object interpretation | 10-8, 7-5 | Coherence 4 (object present but heavy-and-unread; the rendering cannot produce interpretation) |
+| Tartt loaded-object interpretation | 10-8, 7-5 (effortful at 5 — the boundary) | Coherence 4 (object present but heavy-and-unread; the rendering cannot produce interpretation). The 5/4 boundary is also the Tartt ceiling, not just the simile boundary. |
 | Tolkien deep-time structure | 10-8, 7-5 (effortful at 5) | Fragments below 4 (names persist but chains break) |
 | Passage-length sustained paragraphs | 10-8 | Degrades through tiers: 7-5 paragraphs with interruption; 4-3 short paragraphs; 2 very short; 1 fragments |
 
