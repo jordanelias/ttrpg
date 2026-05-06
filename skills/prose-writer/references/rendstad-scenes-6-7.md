@@ -19,11 +19,11 @@ Vael stopped. The afternoon was mild and the sun was on the stone where Edda sat
 
 "Edda," Ilse said.
 
-Edda turned her head. The scar above the left eyebrow. The jaw. The grey at the temples. Ilse had described the face and the face was the face Ilse had described and Vael looked at it and the face looked back and Vael looked away. She looked at the scrub. She looked at the path. She looked at the blanket through the open door.
+Edda turned her head. The scar above the left eyebrow, the jaw, the grey at the temples — the face Ilse had described. Vael looked at it and looked away. She could not have said what made her look away. The face was fine. The features were where features should be. She looked at the scrub instead.
 
 "This is Vael," Ilse said.
 
-"Yes," Edda said. The word was the right word and it came from the right direction and it did what the word "yes" does.
+"Yes," Edda said.
 
 Ilse sat beside Edda on the stone. Vael remained on the path. The cold continued. The sun was on the stone.
 
@@ -64,11 +64,11 @@ Ilse brought water in a cup. Edda held it with both hands. The water did not mov
 
 **TS 35 perception:** "Vael was cold. The cold was from the direction of Edda." Direction identified, quality named wrongly ("cold" — it's not thermal cold, but cold is the closest word Vael has). Ishiguro misidentification: "She was quite certain this was the altitude." Commits. Wrong. The sun contradicts in the same paragraph. Vael does not notice. ✓
 
-**The face:** Vael looks at Edda's face and looks away. The prose does not explain why. It does not say "something behind the face" or "the correctness did not contain." It says: Vael looked at the face and the face looked back and Vael looked away. She looked at the scrub. She looked at the path. The looking-away is the content. The reader infers what made Vael look away. The prose is silent about it. Wittgenstein. ✓
+**The face:** Vael looks at Edda's face and looks away. "She could not have said what made her look away. The face was fine. The features were where features should be." Normal human processing — she sees the face, feels uneasy, can't place why, looks away. At C7, this is a normal reaction to something unsettling, not a rendering failure. The prose does not explain what's wrong with the face. Vael herself doesn't know. The reader infers from context (Edda is a Coherence 0 being; her presence exceeds what rendering can comfortably contain). ✓
 
-**Edda's "yes":** "The word was the right word and it came from the right direction and it did what the word 'yes' does." The sentence confirms the word is correct. It does NOT say "and it also did something else." The previous version announced the excess. This version presents a correct word and lets the reader wonder why the prose needed to confirm its correctness. The confirmation is the tell. ✓
+**Edda's "yes":** One word. No confirmation that it was "the right word" or that it "did what yes does." At C7, Vael hears "yes" and it's "yes." The scene moves on. ✓
 
-**Compared to previous version:** The previous Scene 6 had "looking from behind the correctness with something that the correctness did not contain" (meta-descriptive), "it also did something else" (announcing the excess), and "the difference between a quality from a place and a quality from a person" (analytical). All removed. The scene is now mostly behavior — Vael stops, feels cold, looks at the face, looks away, stays on the path. The prose renders what she does, not what she thinks about what she perceives.
+**Compared to previous versions:** The tautological cycling ("the face was the face Ilse had described"), the word-confirmation ("it did what the word yes does"), and the repetitive looking ("she looked at the scrub, she looked at the path, she looked at the blanket") have been removed. These were C4 textures misdeployed at C7. The revised scene reads as normal prose with one uneasy moment (looking away from the face) and one TS 35 perception (the cold from Edda's direction). This is correct for the tier.
 
 ---
 
