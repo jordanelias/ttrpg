@@ -183,26 +183,34 @@ Live rules for composition and audit. Each entry: rule name → symptom → fix.
 ## Coherence-Mismatch Anti-Patterns
 
 ### 41. Synthesis-Weighting Mismatch with PC Coherence
-- **Symptom:** Composing PC-focalized passage at weighting that doesn't match the established coherence tier. E.g., heavy Borges recursion in a Tier 9-10 passage, or stable Tolkien ground in a Tier 1-2 passage.
+- **Symptom:** Composing PC-focalized passage at weighting that doesn't match the established coherence tier. E.g., heavy Borges recursion in a Tier 10-8 passage, or stable Tolkien ground at Coherence 1.
 - **Fix:** Consult `coherence-tiers.md` before composing. Match weighting to tier.
 
 ### 42. Realist Anchor Over-Deployment at Low Coherence
-- **Symptom:** At Tier 1-2, still anchoring with named places and deep-time framing reliably. The world presented as stable.
-- **Fix:** At low coherence, named anchors are present but unreliable. The prose does not trust them. Tolkien landscape fragments appear but detached from their referents.
+- **Symptom:** At Coherence 1-2, the PC's rendering still producing named places and deep-time framing reliably. The PC presented as stably participating in human categories.
+- **Fix:** At low coherence, the PC's rendering fails to produce structured world-presentation reliably. Tolkien anchors appear as fragments of rendering function — momentary islands of structured perception in a sea of categorical failure.
 
 ### 43. Irreal Author Over-Deployment at High Coherence
-- **Symptom:** At Tier 9-10, deploying Borges recursion, Lispector defamiliarization, or Ocampo uncanny without trigger. The world presented as strange when it should cohere.
-- **Fix:** At high coherence, irreal authors surface only at threadwork-events or edges. The baseline is realist. Strangeness requires cause.
+- **Symptom:** At Tier 10-8, deploying irreal techniques as the PC's rendering failing when rendering is intact. The PC presented as experiencing categorical failure when their self-rendering is stable.
+- **Fix:** At high coherence, the PC's rendering works. Irreal authors serve content-appropriate functions (genuinely recursive content, genuinely uncanny situations), not rendering failure.
+
+### 44. World-Surrealism Conflated with Rendering Failure
+- **Symptom:** At low coherence, the prose presents the world itself as surreal, dreamlike, or strange — the parish house becoming weird, objects cracking open into metaphysical questions, reality "disfigured."
+- **Fix:** The world does not change. The practitioner does. Low-coherence prose renders the PC's failure to participate in human reason — temporal structuring failing, belonging loosening, categories not holding — while the world remains the same world. The strangeness is in the PC's rendering, not in reality.
+
+### 45. Rendering Failure Conflated with Substrate Perception
+- **Symptom:** At low coherence, the prose presents the PC as perceiving threads, substrate, or the "ground" without establishing that the PC has the Thread Sensitivity to perceive these things. Rendering failure treated as granting mystical insight.
+- **Fix:** Coherence and Thread Sensitivity are orthogonal. Rendering failure does not grant substrate perception. A low-coherence PC without TS experiences categorical breakdown with no access to the substrate — they are simply coming apart without knowing why. Only specify substrate perception when the PC's TS is established and sufficient.
 
 ---
 
 ## Character and Cultural Anti-Patterns
 
-### 44. NPC Functional Placeholder
+### 46. NPC Functional Placeholder
 - **Symptom:** NPC has narrative weight but no specified ethical framework, conviction, goal, inspiration, or factional belonging. The NPC functions as plot furniture.
 - **Fix:** Anchor each load-bearing NPC with at least one specific gesture or detail establishing one of these dimensions. The canonical Valoria convictions (Equity, Faith, Order, Excellence) provide the framework. Test: if the NPC carries emotional weight in the scene, the reader must know something about who they are beyond their function.
 
-### 45. Cultural-Tradition Appropriation
+### 47. Cultural-Tradition Appropriation
 - **Symptom:** Borrowing a technique from a specific cultural tradition (signifyin', AAVE rhetorical modes, sacred-text rhythms from a specific tradition) and applying it to non-tradition-specific contexts without fidelity to that tradition's practitioners.
 - **Fix:** Name what the prose is actually doing without the tradition-specific label. Encoded coded speech is not signifyin'. Biblical-cadence borrowing requires either being in dialogue with biblical tradition or naming the structure differently (e.g., "paratactic ritual cadence"). If the technique's power depends on its cultural context, do not extract it from that context.
 

@@ -1,6 +1,6 @@
 ---
 name: prose-writer
-description: "Write narrative prose for Valoria using its singular literary voice — a coherence-indexed weighted synthesis of Tolkien, Borges, Lispector, Ocampo (Silvina), Márquez, Ishiguro, Mistry, and Tartt. The synthesis weights shift across five tiers indexed to player-character coherence (1-2 to 9-10), reflecting the central premise of disfiguration of presence due to threadwork. Use this skill whenever the user asks to write prose, narrative passages, lore entries, character vignettes, settlement descriptions, faction histories, dialogue scenes, codex entries, cutscene scripts, flavor text, or any creative/narrative text."
+description: "Write narrative prose for Valoria using its singular literary voice — a coherence-indexed weighted synthesis of Tolkien, Borges, Lispector, Ocampo (Silvina), Márquez, Ishiguro, Mistry, and Tartt. The synthesis weights shift across tiers indexed to player-character coherence (10-8, 7-5, 4-3, 2, 1), reflecting the progressive failure of the practitioner's self-rendering as a human configuration. Use this skill whenever the user asks to write prose, narrative passages, lore entries, character vignettes, settlement descriptions, faction histories, dialogue scenes, codex entries, cutscene scripts, flavor text, or any creative/narrative text."
 ---
 
 # Prose Writer
@@ -16,7 +16,7 @@ The synthesis is a single integrated voice. All eight authors contribute. The wr
    - `references/techniques-skeleton.md` — technique inventory as rule list
    - `references/anti-patterns-skeleton.md` — failure-mode rules as symptom→fix triplets
    - `references/calibration-skeleton.md` — source-author anchors as use-when reference
-3. **Determine the PC's coherence tier.** Consult `references/coherence-tiers.md` for the five tier-tables (9-10, 7-8, 5-6, 3-4, 1-2). If coherence is not established, default to Tier 9-10.
+3. **Determine the PC's coherence tier.** Consult `references/coherence-tiers.md` for the tier-tables (10-8, 7-5, 4-3, 2, 1). Also determine the PC's Thread Sensitivity — this is orthogonal to coherence and independently affects the prose. If coherence is not established, default to Tier 10-8. If TS is not established, default to 0.
 4. **If prose involves Church speakers, religious texts, or characters with established Certainty levels:** consult Solmund Voice canon at `designs/world/solmund_voice_v30.md` per the scoped-override section below.
 5. Identify focalization. For chronicle-mode prose, this MUST be one of the four canonical chroniclers per P-03.
 6. Write. Apply techniques as content, focalization, and coherence tier demand. Multiple authors per sentence is normal.
@@ -27,17 +27,17 @@ The skeletons are the live working memory during composition. The infill files a
 
 ## Coherence-Indexed Weighting Principle
 
-The synthesis weights shift across five tiers indexed to player-character coherence. This reflects the central premise: threadwork disfigures presence and dislocates reality. As coherence drops, the prose becomes suspicious of its own ground.
+Coherence measures the structural integrity of the practitioner's always-already self-rendering — the unconscious process that maintains their being as a human configuration. Rendering has two facings: epistemic (transforming raw givenness into intelligible experience) and ontological (the practitioner perduring and belonging in their environment). As coherence degrades, both facings fail. The practitioner participates less in the bounds of human reason.
 
-At high coherence (Tier 9-10), realist authors dominate — Tolkien's landscape holds, Mistry's occupational detail is fully accessible, and irreal authors surface only at threadwork-events. At low coherence (Tier 1-2), irreal authors dominate — Lispector's "this instant-now," Borges's recursion, and Ocampo's uncanny become baseline modes, while Tolkien anchors appear as fragments detached from their referents.
+The synthesis weights shift across tiers aligned to the canonical coherence thresholds (threadwork_v30 §3.3): 10-8 (Stable), 7-5 (Dissonant), 4-3 (Fragmented), 2 (Fractured), 1 (Severed), 0 (Rendering Crisis / NPC). The world does not change. The practitioner does. Realist authors decrease because the PC's ability to render the world in human categories degrades. Irreal authors increase because the prose must render categorical failure — temporal structuring breaking, logical structure loosening, belonging eroding.
 
-The weighting describes aggregate tendency, not per-passage quota. Within any given passage, the texture may legitimately be 60% one author based on what content and focalization require.
+Coherence is orthogonal to Thread Sensitivity. TS determines substrate perception; coherence determines rendering integrity. The prose must not conflate them. A low-coherence PC without TS experiences rendering failure as inexplicable breakdown. A low-coherence PC with TS experiences rendering failure AND substrate perception — but one does not cause the other.
 
-See `references/coherence-tiers.md` for the five tier-tables with deployment notes, example markers, and per-tier anti-patterns.
+See `references/coherence-tiers.md` for the tier-tables with deployment notes, the TS interaction guidance, and per-tier anti-patterns.
 
-## Author Weighting (Tier 9-10 Default)
+## Author Weighting (Tier 10-8 Default)
 
-When coherence is unspecified, use the Tier 9-10 (Bounded) weighting:
+When coherence is unspecified, use the Tier 10-8 (Stable) weighting:
 
 | Author | Weight | Role |
 |---|---|---|
@@ -71,7 +71,7 @@ Four authors, one sentence, grammar holds. The reader does not perceive the shif
 
 The writer does not consciously deploy "Tolkien now, then Mistry, then Lispector." The writer writes the passage that the content, focalization, and coherence tier demand, and the synthesis surfaces the appropriate techniques at clause-level granularity. The reference files and self-check exist to verify — after the writing — that the deployment is right.
 
-When reviewing, ask: does the coherence tier match? Is the Tolkien base audible at the level this tier demands? Have irreal authors surfaced without trigger at high coherence? Has the realist ground held when it shouldn't at low coherence?
+When reviewing, ask: does the coherence tier match? Is the PC's rendering functioning at the level this tier demands? Have irreal techniques been deployed as world-surrealism rather than as the PC's categorical failure? Has the prose conflated rendering failure with substrate perception?
 
 ## The Master Principle: Focalization
 
@@ -129,7 +129,7 @@ When deviation is motivated AND improves impact, the deviation is correct. When 
 
 ## What the Voice Does NOT Do
 
-- Lose its ground. At high coherence, Tolkien is the ground. At low coherence, the ground is disfigured but still present — Tolkien anchors appear as fragments. The prose never floats entirely free of physical reference.
+- Lose its ground. At high coherence, Tolkien is the ground — the PC's rendering structures the world into named, legible landscape. At low coherence, the ground degrades because the PC's rendering fails — Tolkien anchors appear as fragments of rendering function in a sea of rendering failure. The prose never floats entirely free of physical reference.
 - Use system or mechanical terminology when focalized through an in-world perspective.
 - Summarize its own meaning.
 - Announce themes. Themes emerge from event and image.
@@ -152,8 +152,9 @@ Before delivering prose, verify:
 
 - [ ] Have I named the focalization?
 - [ ] Does the coherence tier match the PC's established coherence?
-- [ ] Is the ground audible at the level this tier demands?
-- [ ] Are modulations layered appropriately for the tier, not replacing the ground?
+- [ ] Is the PC's rendering functioning at the level this tier demands — not better, not worse?
+- [ ] Are irreal techniques serving the PC's categorical failure, not making the world surreal?
+- [ ] Has the prose avoided conflating rendering failure with substrate perception (unless the PC has the TS to perceive the substrate)?
 - [ ] Does every editorial word belong to the focalized perspective?
 - [ ] Have I avoided system/mechanical terminology when focalized through an in-world perspective?
 - [ ] Does every modifier earn its place?
@@ -164,7 +165,7 @@ Before delivering prose, verify:
 - [ ] Does the closing sentence carry weight, or is it summarizing what already happened?
 - [ ] Have I avoided symmetrical paired constructions, universalized paradoxes, hammering repetition?
 - [ ] Do load-bearing NPCs have at least one anchored dimension?
-- [ ] Have irreal authors surfaced only where the coherence tier licenses them?
+- [ ] At low coherence, is the world unchanged while the PC's rendering of it fails?
 
 ## Valoria-Specific Constraints
 
@@ -186,6 +187,6 @@ The prose-writer skill **continues to apply** for:
 
 The boundary: when the content is *the artifact itself* (a sermon being preached, an inscription being read), use Solmund canon. When the content is *narration around or about the artifact*, use the prose-writer synthesis. A scene in which a bishop preaches a sermon would use Solmund canon for the sermon-text and prose-writer synthesis for the surrounding narration.
 
-**Coherence and Solmund canon:** The canon overlay is independent of PC coherence — a sermon is a sermon at any coherence level. However, the PC's *perception* of the sermon shifts with their coherence. A Tier 1-2 PC may perceive the sermon as fragmented or recursive even though the sermon itself is canonically rendered. The surrounding narration (prose-writer synthesis) carries the coherence-indexed disfiguration; the embedded canon text does not.
+**Coherence and Solmund canon:** The canon overlay is independent of PC coherence — a sermon is a sermon at any coherence level. However, the PC's rendering of the sermon degrades with their coherence. A Coherence 1 PC's rendering may fail to structure the sermon into legible experience — the words arrive but the categories that would organize them into meaning are loosening. The surrounding narration (prose-writer synthesis) carries the coherence-indexed rendering failure; the embedded canon text does not.
 
 When generating ecclesiastical content, fetch the Solmund canon explicitly. Do not approximate it from this skill's reference files.

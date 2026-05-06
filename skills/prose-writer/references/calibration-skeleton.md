@@ -25,7 +25,7 @@ All eight anchors share these properties. The synthesized voice has all of them 
 4. **Tolerate aporia.** None resolve into single legible meaning.
 5. **Concrete physical anchors.** Mountains, pantry, train-side shacks, snow on mountains, adobe houses, the rust on a gate, the library's hexagonal galleries, the kitchen where the child holds the scissors. Place always present.
 6. **Licensed grammatical deviation.** All eight break rules in specific motivated ways. The deviations are part of the voice.
-7. **The prose suspicious of its own ground.** The irreal authors (Lispector, Borges, Ocampo) introduce a quality the original six-author synthesis did not have: the prose does not fully trust the reality it renders. At high coherence this suspicion is latent. At low coherence it is the dominant mode.
+7. **Rendering failure as prose territory.** The irreal authors (Lispector, Borges, Ocampo) introduce a quality the original six-author synthesis did not have: the capacity to render the PC's categorical failure — temporal structuring breaking (Lispector), logical structure loosening (Borges), belonging eroding (Ocampo). At high coherence these techniques serve content-appropriate functions. At low coherence they serve the PC's rendering failure. The world does not change; the practitioner does.
 
 ---
 
@@ -33,13 +33,13 @@ All eight anchors share these properties. The synthesized voice has all of them 
 
 When intra-sentence splicing combines authors, certain pairings have natural compatibilities:
 
-- **Tolkien landscape + Lispector defamiliarization** — the named place perceived as strange
-- **Borges recursion + Ishiguro unreliability** — the narrator inside a recursion they don't recognize
-- **Ocampo flat-affect + Mistry occupational specificity** — the household worker witnessing horror placidly
-- **Lispector "this instant-now" + Tartt atmospheric immersion** — present-tense immersion in a charged interior
+- **Tolkien landscape + Lispector defamiliarization** — the named place that the PC's rendering fails to process normally
+- **Borges recursion + Ishiguro unreliability** — the narrator whose rendering loops without recognizing the loop
+- **Ocampo flat-affect + Mistry occupational specificity** — the worker whose belonging in the scene has eroded, performing the trade placidly while wrong
+- **Lispector "this instant-now" + Tartt atmospheric immersion** — temporal structuring failure immersed in a charged interior
 - **Borges encyclopedia + Tolkien deep-time** — the codex of impossibly old history
-- **Ocampo charged object + Tartt loaded object** — the doll that is both aesthetic and uncanny
+- **Ocampo charged object + Tartt loaded object** — the domestic object that is both aesthetic and uncanny
 - **Tolkien deep-time + Márquez compression** — chronicled scale meeting generational fold
 - **Ishiguro hedging + Tartt punch** — restraint released at moments of revelation
-- **Lispector vagueness + Borges erudition** — the unsayable rendered in scholarly apparatus
-- **Ocampo domestic horror + Lispector ontological estrangement** — the kitchen that is also an existential question
+- **Lispector vagueness + Borges erudition** — the inarticulable rendered in scholarly apparatus
+- **Ocampo belonging-failure + Lispector categorical failure** — the domestic scene where the PC neither fits nor can process

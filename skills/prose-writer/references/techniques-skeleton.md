@@ -4,7 +4,7 @@ Live technique inventory. Each entry: technique → source → signature pattern
 
 **Eight-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina).
 
-**Coherence-indexed weighting:** The synthesis weights shift across five tiers indexed to PC coherence. See `coherence-tiers.md` for the five tier-tables. At high coherence, realist authors (Tolkien, Mistry) dominate. At low coherence, irreal authors (Lispector, Borges, Ocampo) dominate. The weighting describes aggregate tendency, not per-passage quota.
+**Coherence-indexed weighting:** The synthesis weights shift across tiers aligned to canonical coherence thresholds (10-8, 7-5, 4-3, 2, 1). See `coherence-tiers.md` for the tier-tables. As coherence drops, the PC's rendering of the world in human categories degrades — realist authors decrease, irreal authors increase to serve categorical failure. Coherence is orthogonal to Thread Sensitivity. The weighting describes aggregate tendency, not per-passage quota.
 
 **Intra-sentence splicing:** Authors may shift between clauses or across conjunctions within a single sentence. Grammar must hold OR be deliberately broken under §0.2 below.
 
