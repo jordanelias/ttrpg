@@ -8,7 +8,7 @@ Each excerpt is held to under 15 words per source for fair-use purposes. Fuller 
 
 ## Tolkien — *The Lord of the Rings*
 
-**Anchor:** From the panorama Frodo sees from Ithilien (analyzed by Allan Turner via Wikipedia). The passage opens with directional placement: "To the right the Mountains of Gondor glowed, remote in the West..."
+**Anchor:** From the panorama Frodo sees from Ithilien (analyzed by Allan Turner, *Translating Tolkien: Philological Elements in The Lord of the Rings*, 2005). The passage opens with directional placement: "To the right the Mountains of Gondor glowed, remote in the West..."
 
 **Techniques demonstrated:**
 - **Static vantage point.** Tolkien fixes a viewpoint and builds the scene from it. Wide-to-narrow visual movement: distant mountains, then valley, then stream, then road.
@@ -75,7 +75,7 @@ Each excerpt is held to under 15 words per source for fair-use purposes. Fuller 
 - **Tolerance for the impossible inside scholarly register.** Academic tone applied to impossible content. The apparatus is flawless; the content is impossible.
 - **Precision on the impossible.** "The Library of Babel": hexagonal galleries, five shelves, thirty-two books, four hundred ten pages. The precision is total. What it describes is infinite.
 
-**Calibration use:** When Valoria produces codex entries, chronicle passages, institutional records — and especially when the content of these records is ontologically impossible — Borges's anchor is the target. Apply scholarly precision. Let the precision carry the impossibility without remarking on it. (Sarlo: "through flawless formal consistency, paradoxes display how limited the mind is when it tries to apprehend the nature of reality.")
+**Calibration use:** When Valoria produces codex entries, chronicle passages, institutional records — and especially when the content of these records is ontologically impossible — Borges's anchor is the target. Apply scholarly precision. Let the precision carry the impossibility without remarking on it. (Sarlo: "through flawless formal consistency, they display how limited the mind is.")
 
 ---
 
@@ -126,17 +126,17 @@ Each excerpt is held to under 15 words per source for fair-use purposes. Fuller 
 
 ## Cross-Author Synthesis Notes
 
-What emerges from comparing these six anchors:
+What emerges from comparing these eight anchors:
 
-1. **All six refuse explanation.** None of these openings explain themselves. None translate cultural reference. None summarize their own meaning. The reader is positioned as a competent inferrer.
+1. **All eight refuse explanation.** None of these openings explain themselves. None translate cultural reference. None summarize their own meaning. The reader is positioned as a competent inferrer.
 
 2. **All eight have specific perspective.** Tolkien's panorama is from a vantage; Stevens speaks; Mistry's narrator carries the village's stance; Lispector's narrator collapses into the perceiving consciousness; Borges's apparatus is itself a perspective; Ocampo's narrator is incurious about the extraordinary; Tartt's "we" is collective and confessional; Márquez's narrator speaks from a deep-time chronicler position. None are neutral omniscient.
 
-3. **All six operate at structural simplicity with semantic depth.** Sentences are not lexically baroque (with the partial exception of Tartt's longer subordinations). The depth is in what's implied, structured, focalized — not in what's ornamented.
+3. **All eight operate at structural simplicity with semantic depth.** Sentences are not lexically baroque (with the partial exception of Tartt's longer subordinations). The depth is in what's implied, structured, focalized — not in what's ornamented.
 
 4. **All eight tolerate aporia.** None resolve into a single legible meaning. Tolkien's exaltation is not explained; Stevens' interiority is not unpacked; Mistry's "anywhere" is universalization without thesis; Lispector's veer does not arrive; Borges's precision describes the impossible; Ocampo's cruelty goes unresolved; Tartt's "gravity" is named but not specified; Márquez's time-fold is not commented on.
 
-5. **All six have concrete physical anchors.** Mountains, pantry, tracks-side shacks, the house at 124, snow on mountains, adobe houses by a river. Place is always present, always specific.
+5. **All eight have concrete physical anchors.** Mountains, pantry, tracks-side shacks, snow on mountains, adobe houses by a river, the cockroach in G.H.'s maid's room, the encyclopedia footnote, the velvet dress. Place and object always present, always specific.
 
 The Valoria voice synthesizes these properties into one practice. Not "borrow Tolkien for landscape, Ocampo for horror." Rather: the voice always has these properties available, and which surface in a given sentence depends on focalization, content, and coherence tier.
 
@@ -182,7 +182,7 @@ Techniques surfaced: Tolkien deep-time paratactic chain ("his predecessor, and h
 
 ## Summary of the Calibration Set
 
-Six source-author anchors plus four Valoria-domain anchors. When generating new prose, compare the new passage to whichever calibration anchor most closely matches the content type:
+Eight source-author anchors plus four Valoria-domain anchors. When generating new prose, compare the new passage to whichever calibration anchor most closely matches the content type:
 
 - Landscape, panorama, founding events → Tolkien anchor + V3 (community-chronicler) or V4 (institutional deep-time)
 - Restrained character interiority → Ishiguro anchor + V2 (first-person regret)

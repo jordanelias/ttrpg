@@ -123,10 +123,10 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 Each of the eight source authors deliberately violates standard grammar at recognizable points:
 
 - **Tolkien:** subject-verb inversion at heroic register, sentence fragments at peaks, archaic constructions for elevated speakers
-- **Ishiguro:** long sentences containing little information (Grice maxim violation), ambiguous pronoun antecedents, reduplicated double negatives
+- **Ishiguro:** long sentences containing little information (Walkowitz: covert unreliability built through systematic quantity-violation), ambiguous pronoun antecedents, reduplicated double negatives
 - **Mistry:** sentence fragments in working-life catalogues, free-indirect editorial slips
 - **Tartt:** idiosyncratic comma placement isolating adverbs, em-dash interruptions, fragments at moments of revelation
-- **Márquez:** run-on sentences crossing paragraph boundaries, lexical and semantic deviations from norm (Mick Short framework), repetition violating cohesion expectations
+- **Márquez:** run-on sentences crossing paragraph boundaries, lexical and semantic deviations from norm (per Short's stylistic analyses of Márquez), repetition violating cohesion expectations
 - **Lispector:** strange syntax violating conversational grammar, elliptical constructions omitting connective tissue, repetition as ontological intensity, sentences resisting parsing for grammatical-subject completeness
 - **Borges:** footnote-as-counter-text, em-dashed parenthetical metaphysical paradox, catalogue constructions, erudite Latinate without thesaurus-elevation tells
 - **Ocampo:** sentences refusing to acknowledge their content's weight, flat declarative syntax holding horror, refusal of explanatory subordination, closing on the wrong moment

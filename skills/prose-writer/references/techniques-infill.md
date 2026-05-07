@@ -32,7 +32,7 @@ Each sentence adds one physical particular. No summary. The paragraph builds rea
 
 ### Qualifying Sentence [Ishiguro]
 
-Grows through parenthetical correction and hedging. Qualifications signal emotional stakes — the more the narrator hedges, the more important the content. Often violates Grice's maxim of quantity: long but containing little information. The length is evasion.
+Grows through parenthetical correction and hedging. Qualifications signal emotional stakes — the more the narrator hedges, the more important the content. Walkowitz reads this as covert unreliability built through systematic quantity-violation: the narrator says far too much, with elaborate hedging that adds no information. The length is evasion.
 
 ### Atmospheric Sentence [Tartt]
 
@@ -48,7 +48,7 @@ Interior monologue with skipped connective tissue. Not Joycean-comprehensive; de
 
 ### Strange Syntax [Lispector]
 
-Sentences sounding as if translated from a language that doesn't exist. Deliberate non-naturalness violating conversational grammar. (Moser, *Why This World*, 2009: "weird word choices, strange syntax, lack of interest in conversational grammar.")
+Sentences sounding as if translated from a language that doesn't exist. Deliberate non-naturalness violating conversational grammar. (Moser, *Why This World*, 2009: Lispector's prose resists conversational grammar through what reads as deliberate alien-language calibration rather than translation artifact.)
 
 ### Erudite Metaphysical Compression [Borges]
 
@@ -56,7 +56,7 @@ Entire philosophical positions compressed into a single clause. References work 
 
 ### Flat Declarative Holding Horror [Ocampo]
 
-Simple syntactic structure containing content that should shatter the syntax. The syntax holds. The content doesn't care. The narrator reports with the same investment given to domestic trivia. (Borges on Ocampo: "her strange taste for a certain kind of innocent and oblique cruelty." Perez, "Reading Cruelty," 2016.)
+Simple syntactic structure containing content that should shatter the syntax. The syntax holds. The content doesn't care. The narrator reports with the same investment given to domestic trivia. (Borges on Ocampo: "her strange taste for a certain kind of innocent and oblique cruelty." Klingenberg, *Fantasies of the Feminine*, 1999, reads this as the narrator's structural absence: the gap between content magnitude and prose flatness is the technique.)
 
 ### Rhythm
 
@@ -108,7 +108,7 @@ Years/decades collapse into clauses; single moments expand to fill paragraphs.
 
 ### Retrospective Positioning (covert unreliable) [Ishiguro]
 
-Narrator from later vantage. Unreliability required — not just formality. Built through pragmatic-maxim violations. (Walkowitz, *Cosmopolitan Style*, 2006: unreliability is covert — the narrator does not know.)
+Narrator from later vantage. Unreliability required — not just formality. Built through systematic quantity-violation. (Walkowitz, *Cosmopolitan Style*, 2006: unreliability is covert — the narrator does not know.)
 
 ### Retrospective Positioning (overt unreliable) [Tartt]
 
@@ -134,7 +134,7 @@ Temporal recursion as ontological structure. Not flashback — the time itself c
 
 ### Free Indirect Discourse [All except Tartt]
 
-Third-person narration slipping into character's vocabulary/judgments. No quotation marks. Three distinct categories per Cohn/Pascal: FID (narration carrying character's diction), direct thought (character's words as interior monologue), narrative report (narrator summarizing character's thought from outside). Do not conflate.
+Third-person narration slipping into character's vocabulary/judgments. No quotation marks. Three distinct modes that the source authors deploy differently: FID (narration carrying character's diction), direct thought (character's words as interior monologue), narrative report (narrator summarizing character's thought from outside). Walkowitz reads Ishiguro as closer to quoted monologue (Stevens narrates as if speaking, hedging in the rhythm of speech). Mistry deploys FID by picking up village idiom inside an omniscient frame. Lispector collapses narrator and character into a single perceiving voice that resists clean assignment to any single mode. Borges's encyclopedia voice is closer to psycho-narration applied to a fictional consciousness. Do not conflate.
 
 ### Restrained Narrator [Ishiguro]
 
@@ -154,11 +154,11 @@ Apocryphal references, invented authors, imaginary books treated as documented. 
 
 ### Tolerance for the Impossible Inside Scholarly Register [Borges]
 
-Academic tone applied to ontologically impossible content. The apparatus is flawless. The content is impossible. The gap is the technique. (Sarlo: "through flawless formal consistency, paradoxes display how limited the mind is.")
+Academic tone applied to ontologically impossible content. The apparatus is flawless. The content is impossible. The gap is the technique. (Sarlo: "through flawless formal consistency, they display how limited the mind is.")
 
 ### Narrator Who Does Not Register What They Describe [Ocampo]
 
-Flat affect is the technique. The narrator reports horror without affect. The incuriosity is the horror. (From Encyclopedia.com: Ocampo "writes in a voice that is purposely sporadic and free of literary devices, almost as if the narrators were not accustomed to expressing themselves.")
+Flat affect is the technique. The narrator reports horror without affect. The incuriosity is the horror. (Klingenberg, *Fantasies of the Feminine*, 1999, and Mancini, *Silvina Ocampo: Escalas de Pasión*, 2003, both read this as the narrator's structural absence — the narrator is not there to register the magnitude of what they describe.)
 
 ### Encoded Vernacular Speech [All, context-dependent]
 
@@ -188,7 +188,7 @@ Characters not ennobled or degraded by suffering. They remain complex.
 
 ### Existentialist Questioning Embedded [Lispector]
 
-Questions of being, time, freedom inside narrative without being framed as philosophy. (Heschel's "the unsayable" as root of creative activity — JWA.)
+Questions of being, time, freedom inside narrative without being framed as philosophy. (Nunes, *O Mundo de Clarice Lispector*, 1966, reads Lispector's prose as engaging Heidegger, Spinoza, and Kierkegaard without footnotes — the engagement structures the prose's relation to its subjects rather than appearing as discursive philosophy.)
 
 ### Pre-Rational Consciousness Access [Lispector]
 
@@ -214,7 +214,7 @@ Exact numbers attached to impossible claims.
 
 ### Linguistic Deviation Creating Dream-Reality [Márquez]
 
-Repetition, lexical, semantic deviations build atmosphere where the trivial becomes miraculous. (Short, *Exploring the Language of Poems, Plays and Prose*, 1996.)
+Repetition, lexical, semantic deviations build atmosphere where the trivial becomes miraculous. (Short's stylistic analyses of Márquez establish the deviation-from-norm framework as the technique's structural mechanism.)
 
 ### Numinous in the Natural [Tolkien/Tartt]
 
@@ -260,7 +260,7 @@ Domestic objects as ontologically loaded. Uncanny rather than aesthetic. Dolls, 
 
 ### Simple Vocabulary at Metaphysical Depth [Lispector]
 
-Simple words accessing metaphysical territory. A stripped-down lexicon at the limits of the unsayable. (Moser: the paradox of simplicity at depth.)
+Simple words accessing metaphysical territory. A stripped-down lexicon at the limits of the unsayable. (Moser reads this paradoxically — Lispector's metaphysical depth is reached through plain vocabulary rather than elevated diction.)
 
 ## 8. Place and Atmosphere
 

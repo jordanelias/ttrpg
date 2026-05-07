@@ -209,9 +209,9 @@ Stylometric studies (Washington Post analysis of 328k ChatGPT messages) identify
 
 ### Hypotaxis-Parataxis Indecision
 
-Real writers commit. Hemingway commits to parataxis (clauses placed side by side, no subordinate logic). Faulkner commits to hypotaxis (long subordinated sentences building cohesion). Tolkien commits to parataxis with biblical resonance. LLMs split the difference, producing sentences that subordinate weakly without committing to either pattern. Result: prose that reads as competent but lacks the structural conviction of real style.
+Real writers commit. Hemingway commits to parataxis (clauses placed side by side, no subordinate logic). Faulkner commits to hypotaxis (long subordinated sentences building cohesion). Tolkien commits to hypotaxis as default register and to parataxis as marked register at moments of biblical resonance — both modes deployed deliberately, not interchangeably (Turner; Shippey). LLMs split the difference, producing sentences that subordinate weakly without committing to either pattern. Result: prose that reads as competent but lacks the structural conviction of real style.
 
-**Fix:** Commit. The Valoria voice's default is paratactic — short clauses, "and" as connector, causation supplied by reader. When it goes hypotactic, it goes deeply hypotactic, with cascading subordination held to a single arc. No middling subordination.
+**Fix:** Commit. The Valoria voice's default is hypotactic — long subordinated sentences building cohesion across temporal/spatial clauses. Parataxis surfaces as marked register at heroic peaks, ruined cities, deep-time framings (Turner: parataxis is stylistically marked, not the default). When the prose goes paratactic, it commits to the marked register; when hypotactic, it goes deeply hypotactic with cascading subordination held to a single arc. No middling subordination.
 
 ---
 

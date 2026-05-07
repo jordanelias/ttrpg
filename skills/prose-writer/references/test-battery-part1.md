@@ -33,7 +33,7 @@ The sound of the ledger on the table arrived, Vael believed, at the moment Maren
 - Covert unreliability: ✓. Commits to "the room's acoustics." Wrong. She doesn't know it's wrong.
 - Certainty formulas: ✓. "She believed," "fairly certain," "satisfied with it." Each signals the opposite.
 - Repair sequence: ✓. "Though of course an echo follows rather than precedes" — corrects her own comparison, the correction reveals the problem (the sound PRECEDED), she dismisses the implication.
-- Gricean violation: ✓. Long sentence, little information. The length is the evasion.
+- Walkowitz quantity-violation: ✓. Long sentence, little information. The length is the evasion.
 - **Risk:** "sounds preceded themselves slightly" — almost too acute. But Stevens notices everything and misinterprets it. The observation is sharp; the explanation is wrong. This is the gap.
 - **Risk:** The passage is one long sentence of self-justification. Ishiguro frequently gives Stevens paragraph-length justifications that loop and re-approach. The structure is right. But it might be TOO Ishiguro — in the synthesis, this would need splicing with other authors to avoid single-author dominance.
 - **Verdict:** Pass. Strong Ishiguro. Would need tempering in synthesis.

@@ -280,7 +280,7 @@ The synthesis recruits this for the Márquez-mode under anti-pattern #48: the im
 
 **Hyperbolic specificity.** "Twenty adobe houses." "Polished stones, white and enormous, like prehistoric eggs." Williamson, Wood, and Fiddian all treat hyperbolic specificity as Márquez's mode of grounding impossible claims. The exact number is the technique's discipline: precision attached to impossible scope makes the impossibility documentable. Faris extends this: the precision is what distinguishes magical realism from fantasy — fantasy invents; magical realism documents.
 
-The synthesis recruits this through the Mick Short framework: lexical and semantic deviation from norm where the deviation is precision attached to the impossible. Anti-pattern #14 (lexical diversity) connects: the precision must be lexically concrete, not abstract.
+The synthesis recruits this through Short's Márquez stylistics: lexical and semantic deviation from norm where the deviation is precision attached to the impossible. Anti-pattern #14 (lexical diversity) connects: the precision must be lexically concrete, not abstract.
 
 **Linguistic deviation creating dream-reality.** Short's analyses of Márquez establish the technique at the lexical-semantic level. Repetitions that exceed cohesion norms; lexical choices that bend semantic expectation; grammatical structures normal in syntax but impossible in reference. The prose builds a register where the trivial becomes miraculous and the miraculous trivial. The synthesis takes Short's framework as its primary stylistic apparatus for Márquez-mode.
 
