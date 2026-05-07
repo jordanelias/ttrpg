@@ -48,7 +48,7 @@ The chalk-smell from the scrub arrived on the air. It came from where she was go
 
 The river was beside the path. The path was in the valley. Vael was — she was in the valley, had been beside the river. Still. The birch was here, and the birch was itself.
 
-Birch. Grey scrub. Chalk-smell. These arrived. She received them, the way a slope receives rain — not by intent. The hearing of the river was something happening near her body, on the side where the river was, and on the other side were trees, and the side that was Vael was harder to find than the side that was the river.
+Birch. Grey scrub. Chalk-smell. These arrived. She received them, the way a slope receives rain — not by intent. The river-sound was on the right. The trees were on both sides. She was in the valley. She was somewhere on the path between the trees, where the path went, where the river went beside it, but the path itself was something her feet were doing rather than something she was on.
 
 A reason. There had been one. Something to do with the upper valley, with Ilse, with the house at the tree line — but the having-a-reason was not the same as having one, and she was walking either way. The smoke from the timber camp was in the valley. The air was still. She moved through it the way smoke moves through air, which is to say without pushing.
 
@@ -70,7 +70,7 @@ She was walking. Whatever else was uncertain, the walking continued — because 
 
 The river was beside her. Trees on both sides. These were facts and they did not connect into a forest, but they were the facts of a forest, and she walked through them. There had been a reason. The reason had a name, and the name was something to do with Order, with records kept, with things in their places — and the conviction sat in her chest like a coat someone kind had given her, warm and well-made and not quite hers. She walked anyway. The conviction could be a coat. The walking was hers.
 
-Her weight was wrong on the left. She was — she was on the left side of her own body, or the left side of her body was where the heaviness was that should have been distributed. She shifted. The wrongness shifted with her. Her decision walked. Whatever she was now, it was walking.
+Her weight was wrong on the left. She shifted, and the wrongness shifted with her, and she walked. Her decision walked. Whatever she was now, it was walking.
 
 ---
 
@@ -80,7 +80,7 @@ Walking. The path. The feet. River sound on the right. Trees on both sides. Vael
 
 A name. There was one. It was for the thing the feet belonged to, which had been the thing she belonged to, which was the thing on the path. Was.
 
-A reason — there had been one. The reason had a name and the name had been warm in her chest for a long time. The warmth was still there. The chest was hers, or the chest was the place the warmth was. The name belonged to someone, and the someone the name belonged to was no longer the one inside the chest, but the warmth had not gone. The feet went on. The river was the river. The trees were on both sides.
+A reason — there had been one. The reason had a name and the name had been warm in her chest for a long time. The warmth was still there. The name belonged to someone, and the someone the name belonged to was no longer the one walking, but the warmth had not gone. The feet went on. The river was the river. The trees were on both sides.
 
 ---
 
@@ -138,13 +138,11 @@ She did not turn when Tamar came down the bank. The air did not shift. There was
 
 **Self-predicate displacement** (verb of being looks for self-predicate, finds geography or fact instead):
 - C4 Low Spirit: "Vael was — she was in the valley, had been beside the river."
-- C2 High Spirit: "She was — she was on the left side of her own body, or the left side of her body was where the heaviness was that should have been distributed." (The self-statement displaces into a question of weight-location.)
 - C2 Low Spirit: "Vael was — Vael was where the feet were going, or where the feet had been, or where the path went and the feet followed."
 - C1 Low Spirit: "The body is — the body is between the two sides of the path, going forward, where the path goes." (At C1 Low Spirit, even "Vael was —" is gone; "the body is —" replaces it.)
 
 **Single-word sentences as juxtaposition** (one ambiguous word, doing double work):
 - C4 Low Spirit: "Still." (motionless / remained / still here / still as ever)
-- C2 High Spirit: cut — none deployed (the passage already has enough Beckett dialectical material)
 - C2 Low Spirit: "Both." (was at the going / was at the having-been / both true) and "Was." (was, indicating past — the name was for the thing — and was, alone, indicating bare existence)
 - C1 High Spirit: "Inside." (locates her in the valley, also describes the inwardness of how she is in it)
 - C1 Low Spirit: "Was." (the warmth WAS — past tense, no longer present, but also: the verb of being itself, suspended)
@@ -154,10 +152,11 @@ She did not turn when Tamar came down the bank. The air did not shift. There was
 - C4 Low Spirit: "The birch was here, and the birch was itself." (same construction — at this tier, the tautology is the rendering checking what should not need checking)
 - These deployments follow Lispector's actual practice: rare, structurally placed, beside ordinary content.
 
-**Geography substituting for self-statement**:
-- C4 Low Spirit: "the side that was Vael was harder to find than the side that was the river." (The interiority is rendered through spatial relation. The "side" substitutes for "self.")
-- C2 Low Spirit: "the chest was hers, or the chest was the place the warmth was." (The chest as locus instead of "she" as locus.)
-- C1 High Spirit: "she is inside the valley, walking. Inside." (The location IS the interiority at this tier.)
+**Geography substituting for self-statement** (broader geography arrives; the active spatial frame — being ON the path — fails):
+- C4 Low Spirit: "She was in the valley. She was somewhere on the path between the trees, where the path went, where the river went beside it, but the path itself was something her feet were doing rather than something she was on." The valley arrives. The path-as-active-frame does not.
+- C1 High Spirit: "she is inside the valley, walking. Inside." The valley arrives; "on the path" is absent.
+
+**What was cut as wrong:** "the side that was Vael was harder to find than the side that was the river" — this turned the body into geography rather than displacing the location into proper geography. The character should stay a character. Geography (the broader spatial frame) substitutes for the active spatial frame (on the path). The body does not become terrain. Same correction applied to C2 High Spirit ("left side of her own body" cut) and C2 Low Spirit ("the chest was the place the warmth was" cut).
 
 ---
 
