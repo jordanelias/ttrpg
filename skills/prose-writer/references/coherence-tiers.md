@@ -4,31 +4,35 @@
 
 Being flows from Ein Sof — a radical excess of being that is always becoming and always being. For a human to exist as THIS person, in THIS time, in THIS world, the excess must be limited. The paradox: how do you limit a radical excess that is always becoming? The answer is layer 2 — the always-already self-rendering that unconsciously threadworks the practitioner's own continually-spooled existence into a human configuration. Layer 2 is the limitation that makes finitude possible against a background of radical excess.
 
-Coherence measures the structural integrity of this limitation (Foundations Amendment 01, §3). It does not measure perception, sanity, or Thread-awareness. Coherence is orthogonal to Thread Sensitivity.
+Coherence measures the structural integrity of this limitation (Foundations Amendment 01, §3). It does not measure perception, sanity, intelligence, or Thread-awareness. Coherence is orthogonal to Thread Sensitivity.
 
 Threads — the name itself a failing approximation for what exceeds naming — are both substrate and conditions of possibility. They are not brute material fact. They connect people with their environs, to each other, with ideas, concepts, and feelings. They knot and become bound. They fray and dissipate. They lock and freeze in state. They operate along three axes: **temporality** (past-present-future, retention-protention), **possibility-actuality** (what could be and what is), and **intelligibility-unintelligibility** (what can be rendered into human understanding and what resists rendering).
 
-Self-rendering (layer 2) maintains all three axes in their human configuration. When rendering fails, it fails along these axes — not as processing error, but as the failure of limitation itself. The excess that was always there underneath, always flowing from Ein Sof, is no longer being held into human shape.
+Self-rendering (layer 2) maintains all three axes in their *human* configuration. As coherence drops, the rendering does not break — it recalibrates. The reference points that organize proprioception, cognition, perception, and self-understanding slide away from human ones. The system continues to function. The system's outputs are no longer calibrated to human experience.
 
-**This failure operates at two levels simultaneously:**
+**This is the critical principle: the practitioner is not becoming impaired. They are not becoming stupid, broken, or disabled. They are changing.** Their faculties continue. Their proprioception continues. Their will continues (high Spirit) or recedes (low Spirit). What shifts is the reference frame the rendering uses. The body still feels like a body — but the calibration that produces "weight evenly distributed," "limbs in place," "breath as in-out," is sliding to reference points that are not human. The thinking still produces thoughts — but the premises those thoughts build from are no longer the premises a human framework would supply.
 
-**Ontic (the being as entity):** The practitioner's materiality strains and changes — shadow wrong, weight wrong, presence occupying more space than the body accounts for. The being as a thing in the world is altered.
+From the perspective of those who knew the practitioner as human — and from the practitioner's own retained human history — this recalibration is grievous. The bonds, the goals, the language, the shared world were all calibrated within the human reference frame. As that frame shifts, those connections strain. But the practitioner is not failing at being human. They are becoming something whose human history is increasingly external to its current operating frame.
 
-**Ontological (the Being of being):** The practitioner's capacity for consciousness and engagement with the world as a human strains. The very mode of being that makes human experience possible is what's compromising. The rendering that structures experience into human rationality shifts toward an inhuman rationality. The being doesn't cease. It ceases to be human.
+**This recalibration operates at two levels simultaneously:**
+
+**Ontic (the being as entity):** The practitioner's materiality registers differently. Shadow may not match posture. Weight may sit oddly. Light may interact at a register that produces unease in human observers. The being-as-entity is altered — but altered in the sense that its physical relations to the surrounding world are calibrated through a frame that does not match the human one, not in the sense that the body is "broken."
+
+**Ontological (the Being of being):** The practitioner's mode of being recalibrates. The very capacity for consciousness and engagement with the world as a human is what's shifting. The rendering that structures experience into human rationality slides toward an inhuman rationality. The being doesn't cease. It ceases to be human.
 
 At low coherence, equilibrium may still be possible — the being may still find a stable configuration. But that equilibrium is no longer calibrated within human finitude. At Coherence 0, the character becomes an NPC not because they are broken, but because what they have become cannot be played from inside human rational engagement with a game. The game is about human finitude. The character has left it.
 
-**The world does not change. The practitioner does.** The parish house is the same parish house. The practitioner is what is wrong — both as an entity in the world (ontic) and as a mode of being (ontological). Others' rendering of the practitioner does change: at Coherence 7, loved ones describe speaking through glass; at Coherence 4, two observers perceive the practitioner differently; at Coherence 2, the practitioner's physical form manifests substrate alteration visibly. These are effects on the outward facing of the practitioner's rendering.
+**The world does not change. The practitioner does.** The parish house is the same parish house. The practitioner is what is recalibrating — both as an entity in the world (ontic) and as a mode of being (ontological). Others' rendering of the practitioner does change: at Coherence 7, loved ones describe speaking through glass. At Coherence 4, two observers perceive the practitioner differently. At Coherence 2, the practitioner's physical form manifests substrate alteration visibly. These are effects produced by the practitioner's outward-facing rendering operating on shifted reference points — visible to others.
 
 ## How Coherence Affects the Prose
 
 The synthesis weights shift across tiers aligned to the canonical coherence thresholds (threadwork_v30 §3.3). As coherence drops:
 
-- Realist authors (Tolkien, Mistry) decrease because the PC's rendering of the world in human categories degrades. Named specificity, occupational detail, landscape framing, deep-time structure — these all depend on the limitation holding. They become less available as the limitation fails.
-- Ishiguro stays elevated throughout because unreliability is inherent to degraded rendering. The PC's narration becomes less reliable as their self-rendering re-engages incompletely.
-- Irreal authors (Lispector, Borges, Ocampo) increase because the prose must render the shift from human to inhuman mode of being. Lispector serves the temporal axis decomposing (temporal structuring no longer enforcing sequence). Borges serves the intelligibility axis decomposing (the conditions of possibility becoming visible as the limitation that screened them fails). Ocampo serves the ontological belonging decomposing (the being ceasing to fit in the human world).
+- Realist authors (Tolkien, Mistry) decrease because the PC's rendering of the world in *human* categories recalibrates. Named specificity, occupational detail, landscape framing, deep-time structure — these all depend on the human reference frame holding. They become less generative as the frame shifts.
+- Ishiguro stays elevated throughout because unreliability is inherent to a rendering whose reference frame is not the same as the reader's. The PC's narration becomes less reliable not because the PC is being deceptive or impaired, but because the frame they narrate from is increasingly not the frame the reader uses to interpret narration.
+- Irreal authors (Lispector, Borges, Ocampo, Beckett) increase because the prose must render the shift from human to inhuman mode of being. Lispector serves the temporal axis recalibrating (sequence is no longer the operative frame). Borges serves the intelligibility axis recalibrating (the conditions of possibility that the human frame screened are becoming visible). Ocampo serves the ontological belonging recalibrating (the being is fitting differently into the shared world). Beckett serves the high-Spirit case where the will continues through the recalibration.
 
-**The prose at low coherence is not broken prose. It is prose becoming something else.** The present-tense at Coherence 1 is not "failure to use past tense." It is the temporality of a being whose mode of existence no longer structures time as past-present-future. The tautologies are not stuck loops — they are the intelligibility of a being whose rendering is recalibrating to a standard where "the eggs are eggs" is the deepest available truth, because the human chain from eggs to meaning to context to self is no longer the operative chain.
+**The prose at low coherence is not broken prose. It is the output of a rendering operating on shifted reference points.** The present-tense at Coherence 1 is not "failure to use past tense." It is the temporality of a being whose mode of existence no longer organizes time as past-present-future — past-present-future requires the human reference frame, and that frame is no longer the one in operation. The tautologies are not stuck loops — they are predications adequate to a frame in which bare identity is sufficient information, where the human frame's demand for relational/contextual predication is no longer the operative demand. The character is not failing to predicate. They are predicating from a frame where less predication is needed.
 
 The weighting describes aggregate tendency, not per-passage quota.
 
@@ -38,19 +42,19 @@ Thread Sensitivity is orthogonal to Coherence. TS determines how far beyond ordi
 
 **The gradient operates within each observation, not only between TS bands.** A TS 70 practitioner perceiving a full configuration can articulate the elements near human conceptual categories (the operation type, the approximate target, the age) but cannot articulate the elements at the further reaches of their perception (the deep structural architecture, the conditions of possibility that the threads constitute). Higher TS extends perception further from the human domain, so the furthest content at TS 70 is more alien than the furthest content at TS 50. Within any single observation, some of what is perceived is near enough to name; some is beyond naming; some is beyond gesture.
 
-**The coherence tiers below describe rendering failure alone — the PC's participation in human reason degrading.** When a PC also has elevated TS, the prose must layer substrate perception on top of the rendering failure. These are two independent effects:
+**The coherence tiers below describe coherence-recalibration alone — the PC's reference frame sliding away from the human one.** When a PC also has elevated TS, the prose must layer substrate perception on top of the recalibration. These are two independent effects:
 
-- **Low coherence, low/no TS:** The PC experiences rendering failure without understanding why. Temporal slippages, belonging-failure, categorical loosening — all inexplicable. The prose renders breakdown without access to the substrate. The PC's experience is of things going wrong without cause.
-- **Low coherence, moderate TS (30-49):** The PC senses something in the scene, a general direction, an unease with identifiable source — but cannot explain it. The rendering failure and the substrate perception overlap, but the PC cannot distinguish one from the other.
-- **Low coherence, high TS (50-69):** The PC identifies what is happening at the relational scale but their categories for processing this perception are themselves failing. They perceive more than they can hold.
-- **Low coherence, very high TS (70+):** The PC perceives the full configuration but their rendering cannot structure the perception into human categories. The content arrives but the categories that would make it intelligible are the same categories that rendering failure has degraded. The perception is real but increasingly alien.
+- **Low coherence, low/no TS:** The PC's rendering is operating on a frame that no longer matches the human frame, with no perception of the substrate beneath. From a human-frame perspective, things appear to go wrong without cause. From the PC's recalibrated frame, things are happening as the frame produces them — but the produced experience does not match the human history the PC retains.
+- **Low coherence, moderate TS (30-49):** The PC senses something in the scene, a general direction, an unease with identifiable source — but cannot articulate it through their current frame, which is no longer the human frame. The recalibration and the substrate perception are both occurring; the PC cannot separate them.
+- **Low coherence, high TS (50-69):** The PC identifies what is happening at the relational scale; their categories for processing the perception are themselves operating on a recalibrated frame. They perceive more than the human frame would allow them to integrate; the integrating frame they have is not the human one.
+- **Low coherence, very high TS (70+):** The PC perceives the full configuration. Their rendering produces an integration of the perception — but the integration is from a frame that the human frame cannot follow. The perception is real and integrated; the integration is increasingly inhuman.
 - **High coherence, high TS:** The PC's rendering holds — they participate in human reason — but they also perceive beyond it. The tension between what they perceive and what they can articulate is the territory. Rendering structures the perception into the best human approximation available, but the content resists.
 
-TS perception is never referenced in prose unless the PC has the TS to perceive it. A PC with TS 0 at Coherence 3 experiences categorical failure with no substrate awareness at all.
+TS perception is never referenced in prose unless the PC has the TS to perceive it. A PC with TS 0 at Coherence 3 experiences categorical recalibration with no substrate awareness at all.
 
 ## Spirit Axis Interaction
 
-Spirit (range 1–7, the metaphysical attribute) is orthogonal to Coherence and to TS. While coherence determines whether the rendering holds and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip when the rendering fails**.
+Spirit (range 1–7, the metaphysical attribute) is orthogonal to Coherence and to TS. While coherence determines whether the rendering holds the human frame and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip as the rendering recalibrates**.
 
 Above Coherence 4, the rendering is intact enough that Spirit operates within its normal apparatus — high-Spirit and low-Spirit characters both render the world in human categories and the difference is mostly in temperament and resolve, not in prose texture. **The Spirit axis becomes audible at Coherence 4 and below.** What remains of the PC at low coherence is increasingly governed by Spirit, and the same coherence tier produces categorically different prose at high vs low Spirit.
 
@@ -60,9 +64,9 @@ Above Coherence 4, the rendering is intact enough that Spirit operates within it
 | **Mid (3–4)** | No specific Spirit-axis effect | Tier's standard weighting applies. | Per coherence tier's standard closing. |
 | **Low (1–2)** | Lispector dissolution | The name recedes. Predication of self breaks. The body's parts replace the agent ("the feet move," "the name was for the thing the feet belong to"). Agency yields. | The noun: "the feet move." The body without the self. |
 
-**Spirit axis at Coherence 4–3:** The Beckett-Lispector contrast first becomes audible. High Spirit: the decision is named and re-named; agency persists across rendering failure. Low Spirit: predication of self breaks; the rendering takes the self with it.
+**Spirit axis at Coherence 4–3:** The Beckett-Lispector contrast first becomes audible. High Spirit: the decision is named and re-named; agency persists across the recalibration. Low Spirit: predication of self breaks; the self recedes as the frame shifts.
 
-**Spirit axis at Coherence 2:** The contrast intensifies. High Spirit: circular Beckett logic ("she continued because the deciding continued because she continued") — the self grounds itself in itself when external grounds fail. Low Spirit: the self has become a name located in space ("Vael is — Vael is a name. The name is on the path."). Belief Co-Authorship plays differently across Spirit: high-Spirit characters experience the thread-connection to a conviction loosening AND respond by gripping the act of deciding-it-is-mine rather than the conviction itself (Beckett substitution — the deciding becomes the substitute thread, the will replaces the inherited connection). Low-Spirit characters experience the decoupling without resistance — both the conviction's connection AND the self that would re-establish it dissolve.
+**Spirit axis at Coherence 2:** The contrast intensifies. High Spirit: circular Beckett logic ("she continued because the deciding continued because she continued") — the self grounds itself in itself when external reference frames are no longer the operative ones. Low Spirit: the self has become a name located in space ("Vael is — Vael is a name. The name is on the path."). Belief Co-Authorship plays differently across Spirit: high-Spirit characters experience the thread-connection to a conviction loosening AND respond by gripping the act of deciding-it-is-mine rather than the conviction itself (Beckett substitution — the deciding becomes the substitute thread, the will replaces the inherited connection). Low-Spirit characters experience the decoupling without resistance — both the conviction's connection AND the self that would re-establish it recede.
 
 **Spirit axis at Coherence 1:** The distinction is starkest. High Spirit: "she can't go on. She goes on." The Beckett voice fully realized — the self contracted to a single capacity (deciding) and operating from there. Low Spirit: "the name was. The river is. The feet move." The self is gone; the body continues mechanically; the world persists. Same coherence tier, categorically different prose.
 
@@ -85,16 +89,16 @@ No perceptible change. Self-rendering re-engages fully after each Leap.
 | Tartt | 12% | Atmospheric retrospection, loaded objects. Memory structures retrospectively without error. |
 | Ishiguro | 12% | Situational restraint — character choosing not to say. Not structural unreliability. The PC's rendering is intact; any evasion is social, not ontological. |
 | Márquez | 11% | Occasional time-folds, deep history. Temporal structuring holds; Márquez techniques serve narrative scope, not perceptual failure. |
-| Lispector | 8% | Touches at edges. Available only for philosophical territory — existential questioning embedded in narration, not categorical failure. |
+| Lispector | 8% | Touches at edges. Available only for philosophical territory — existential questioning embedded in narration, not categorical recalibration. |
 | Ocampo | 8% | Small uncanny moments. Available only at edges where the content itself is genuinely uncanny, not where the PC's rendering is failing. |
 | Borges | 7% | Rare. Available for content that is structurally recursive (codex entries, institutional histories), not for the PC's cognition failing. |
 
 **The PC belongs in every scene.** Their presence is unremarkable. Others perceive them consistently. Their temporal processing sequences correctly. Named places are where they are. Identity holds.
 
 **Anti-patterns at this tier:**
-- The PC's perception failing without established cause
+- The PC's perception going wrong without established cause
 - The world feeling "wrong" when it is the PC who should feel wrong (at lower tiers)
-- Deploying irreal techniques as rendering failure rather than as content-appropriate devices
+- Deploying irreal techniques as recalibration content rather than as content-appropriate devices
 
 ---
 
@@ -113,16 +117,16 @@ Subtle uncanniness. The practitioner's thread-configuration has shifted enough t
 | Ocampo | 10% |
 | Borges | 8% |
 
-**What rendering failure looks like here — the limitation loosening:**
+**What's happening here — the reference frame beginning to slide:**
 
-The limitation still holds. The practitioner is still human. But the limitation re-engages with micro-imprecisions — the excess shows through in flickers.
+The human reference frame still holds for nearly everything. The practitioner is still functioning fully within it. But the rendering's calibration has begun to shift at the margins, and the shift produces effects that the human frame registers as "slightly off."
 
-- **Temporal axis:** Micro-slippages. An action arrives fractionally early or late. The PC hears a sound before its cause, or knows the shape of what someone will say before the sentence finishes. These are BRIEF and PASSING — the temporal structuring reasserts within the same moment. Not sustained temporal confusion. A flicker. One or two per scene.
+- **Temporal axis:** Micro-slippages. An action arrives fractionally early or late. The PC hears a sound before its cause, or knows the shape of what someone will say before the sentence finishes. These are BRIEF and PASSING — the temporal structuring reasserts within the same moment. Not sustained temporal confusion. A flicker. One or two per scene. The flicker is not a failure of temporal sequencing; it is the rendering occasionally producing temporal events from a frame that doesn't enforce sequence as strictly.
 - **Possibility-actuality axis:** Intact. The distinction between what is and what could be holds at this tier.
-- **Intelligibility axis:** Intact in the PC's own experience. But the PC's outward facing has shifted — others' renderings work harder to process the practitioner. Loved ones describe speaking to someone through glass. The PC does not perceive this about themselves.
+- **Intelligibility axis:** Intact in the PC's own experience. But the PC's outward facing operates on a frame that is faintly different from the one observers use to render people. Loved ones describe speaking to someone through glass. The PC does not perceive this about themselves — from inside their own rendering, they are still themselves doing what they always did.
 - **Belonging:** Slightly loosened. The PC occupies scenes but others register them with faint effort.
-- **Language and cognition:** Fully intact. No word-finding failure. No tautological ground-checking. No veering. Full paragraphs. Similes available. Analytical self-observation available. The micro-failures are temporal/perceptual, not linguistic/categorical.
-- **The Ishiguro technique works here:** The PC notices something slightly off (a sound early, knowing what someone will say) and misidentifies it (pattern-recognition, acoustics, familiarity). The misidentification is confident. The reader catches it. The PC doesn't.
+- **Language and cognition:** Fully intact. No word-finding difficulty. No tautological ground-checking. No veering. Full paragraphs. Similes available. Analytical self-observation available. The micro-effects are temporal/perceptual, not linguistic/categorical. The PC is not impaired.
+- **The Ishiguro technique works here:** The PC notices something slightly off (a sound early, knowing what someone will say) and assigns a familiar cause (pattern-recognition, acoustics, familiarity). The assignment is confident. The reader catches that the assignment doesn't fully account for what was perceived. The PC doesn't. The misassignment is not a deception or an error — it is the PC integrating an effect from a slightly shifted frame back into the human frame they still operate in. The fit is imperfect; the PC does not notice.
 
 **Anti-patterns at this tier:**
 - The world itself becoming surreal (the world is fine; the PC is dissonant)
@@ -133,7 +137,7 @@ The limitation still holds. The practitioner is still human. But the limitation 
 
 ## Tier 4-3 (Fragmented)
 
-Visibly wrong. Materiality behaves inconsistently — shadows that don't match posture, presence that occupies more space than the body, flickers between being fully in the scene and partially elsewhere. Temporality perceptibly non-linear: references to events that haven't happened, reactions before causes. Intelligibility fractures: the practitioner is apperceived differently by different observers. The rendering fails to present a consistent human being.
+Visibly diverged. Materiality behaves inconsistently from a human-frame perspective — shadows that don't match posture, presence that occupies more space than the body, flickers between being fully in the scene and partially elsewhere. Temporality perceptibly non-linear: references to events that haven't happened, reactions before causes. Intelligibility fractures: the practitioner is apperceived differently by different observers. The rendering does not present a consistent human being — because the rendering is no longer producing presentation calibrated to the human frame.
 
 | Author | Weight |
 |---|---|
@@ -146,23 +150,23 @@ Visibly wrong. Materiality behaves inconsistently — shadows that don't match p
 | Tartt | 10% |
 | Mistry | 8% |
 
-**What rendering failure looks like here — the limitation failing visibly:**
+**What's happening here — the reference frame visibly diverged:**
 
-The limitation is no longer holding the excess into human shape. Both the ontic and ontological levels are affected: the practitioner as an entity is visibly wrong, AND their mode of being is shifting.
+The rendering's reference points have shifted enough from the human frame that the divergence is visible to others and audible in the PC's own outputs. Both the ontic and ontological levels are affected: the practitioner as an entity is registered differently by observers, AND their mode of being is operating from premises that are no longer the human ones.
 
-- **Temporal axis:** The rendering can no longer enforce temporal exclusivity. Two temporal states coexist — the ledger is on the table AND Maren is carrying it. The PC references events that haven't happened. They react before causes. This is not confusion about time — it is the temporal limitation that made "this happened, then this happened" operative beginning to fail. The excess of temporal becoming is no longer being held into sequence.
-- **Possibility-actuality axis:** Beginning to decompose. What is and what could be blur at moments. The PC's memory presents events that may or may not have happened — not because memory is faulty, but because the limitation that held actuality in place is loosening.
-- **Intelligibility axis:** Fracturing. The PC's outward facing fails to present a consistent human being — two observers perceive the PC differently (not opinion: perception). The PC's self-knowledge becomes unreliable because the limitation that maintained "I am this person" is the limitation that's degrading.
-- **Belonging (ontic):** The PC's materiality is inconsistent. Shadow doesn't match posture. Presence occupies more space than body. The PC flickers between being fully present and partially elsewhere. The being-as-entity is altered.
-- **Language and cognition:** Similes STOP being available (analogical reasoning requires the stable identity that limitation provides — X is X, Y is Y — and the limitation is failing). Analytical self-observation STOPS (the meta-cognitive capacity is itself part of what's degrading). Named specificity still available but effortful — names arrive with a lag. Tautological confirmations appear (the rendering cycles through identity-checks because it can no longer hold them as given).
-- **The Lispector veer begins:** Sentences attempt to predicate and don't arrive. Not because words are missing — because the limitation that would hold the predication in place is the limitation that's failing.
-- **Ocampo serves belonging-failure:** The PC is present in scenes but doesn't fit. The uncanny is the PC's presence in the room, not the room.
+- **Temporal axis:** Sequence is no longer the operative organizing principle. Two temporal states coexist — the ledger is on the table AND Maren is carrying it. The PC references events that haven't happened. They react before causes. This is not confusion. It is the rendering organizing temporal experience from a frame that does not enforce sequential exclusivity.
+- **Possibility-actuality axis:** The boundary between what is and what could be has begun to operate differently. The PC's memory presents events that may or may not have happened — not because memory is unreliable, but because the actuality/possibility distinction is no longer the operative cut for the rendering.
+- **Intelligibility axis:** The PC's outward facing operates on a frame distinct enough that two observers perceive the PC differently — not opinion, perception. The PC's self-knowledge is similarly produced from a frame that does not match the one the PC's history was built in. They are not confused about who they are; they are knowing themselves through a frame that does not match what they used to use.
+- **Belonging (ontic):** The PC's materiality registers differently. Shadow doesn't match posture. Presence occupies more space than body. The PC flickers between being fully present and partially elsewhere — not because the PC is fading, but because the rendering is producing presence from reference points that don't generate "fully present" the way the human frame does.
+- **Language and cognition:** The PC is fully cognitively functional — they are not impaired, slow, or confused. But the cognitive products operate within a frame where: similes (which require X-is-Y mappings calibrated to a stable shared reference frame) are no longer generative; meta-cognitive analytical observation (which requires the human frame for "self-as-observed-thing") is no longer the operative mode; tautological predications appear (the new frame finds bare identity informative where the human frame would demand relational predication). The PC is not losing capacity. The capacity is producing outputs from a different frame.
+- **The Lispector veer:** Sentences attempt to predicate and arrive elsewhere. The veering is not because words are missing — it is the rendering reaching for a predicate from one frame and producing one from another, and the prose follows the predication where it actually goes.
+- **Ocampo serves belonging-on-shifted-frame:** The PC is present in scenes but the frame they're present in is not quite the frame the room is rendered in. The uncanny is the PC's presence in the room — not because the PC is wrong, but because two frames are operating in the same space.
 
 **Anti-patterns at this tier:**
 - The world becoming dreamlike (the world is consistent; the PC is fragmented)
-- The PC's rendering failure presented as mystical insight (it is departure from human finitude, not transcendence — unless TS is specified)
-- Named anchors vanishing entirely (they're present but the PC's access to them is impaired)
-- Treating the tier as ONLY failure — the tautologies, the temporal coexistence, the veering are not just breakdowns of the old system. They are early signs of a mode of being that does not require temporal exclusivity or named specificity to function. What is emerging in the gap where the limitation was is not nothing.
+- The PC's recalibration presented as mystical insight (it is departure from human finitude, not transcendence — unless TS is specified)
+- Named anchors vanishing entirely (they're present but the frame producing the PC's access to them has shifted)
+- Treating the tier as ONLY breakdown — the tautologies, the temporal coexistence, the veering are not just breakdowns of the old system. They are early outputs of a frame that does not require temporal exclusivity or named specificity to function. What the new frame is producing is not nothing.
 
 ---
 
@@ -181,17 +185,17 @@ Physical form manifests substrate alteration directly. Weight distribution wrong
 | Tartt | 8% |
 | Mistry | 7% |
 
-**What rendering failure looks like here — the being itself changing:**
+**What's happening here — the reference frame substantially shifted:**
 
-The limitation has substantially failed. The excess is no longer being held into human shape at the ontic level — the PC's physical form manifests the alteration directly. And at the ontological level, the mode of being is actively shifting: the categories that structure human consciousness are loosening.
+The rendering's reference points have shifted far enough that the divergence is now perceptible at the ontic level: the PC's physical presence in the world manifests the shift directly. At the ontological level, the categories that organize human consciousness are operating differently. The practitioner is fully functional — fully cognitive, fully embodied, fully purposive (high Spirit) or non-purposive (low Spirit) — but the frame producing those functions is not the human frame.
 
-- **Temporal axis:** Catastrophically impaired. Conversations skip, loop, proceed at inconsistent rates. The PC's temporal existence is no longer private — it is perceptible to anyone. The limitation that held experience into human sequence is failing openly. In prose: dialogue has gaps. The PC is in the middle of a sentence they don't remember starting.
-- **Possibility-actuality axis:** Actively decomposing. The PC performs actions they do not remember (dissociative episodes). The distinction between "this happened" and "this could have happened" is no longer enforced by the limitation. The prose may include scene-jumps without transition.
-- **Intelligibility axis:** Knowledge arrives chaotically — facts present but unsequenced, uncontextualized. The limitation that organized perception into integrated experience is no longer functioning. "They were facts and they were beside each other."
-- **Belonging (ontic):** Physical form wrong. Weight distribution off. Light interacts at a register that produces unease. The practitioner's body is no longer being limited into human material presentation. Others see it.
-- **Belief Co-Authorship (ontological):** The categories structuring consciousness are loosening. A conviction feels foreign — as if belonging to someone else. This is not doubt. It is the thread-connections maintaining those beliefs fraying — the belief is there but the connection between the PC and the belief has loosened. And not only beliefs: the practitioner's relationship to all their ideas, concepts, and feelings is shifting. The thread-connections that held the practitioner to the concept of "justice" or "protection" or "home" are the same connections that are fraying. The concept persists. The practitioner's belonging to the concept does not.
-- **Relational propagation:** Constant and uncontrolled. The practitioner's knots transmit continuously. Their degradation ripples outward through every connection.
-- **Very short paragraphs.** The rendering cannot sustain extended structure. Closing on isolated detail with flat affect.
+- **Temporal axis:** The rendering no longer organizes experience into sequence. Conversations skip, loop, proceed at inconsistent rates — not because the PC is impaired, but because the rendering is producing temporal events from a frame that does not enforce sequential exclusivity. In prose: dialogue has gaps. The PC is in the middle of a sentence they don't remember starting — for them, the starting and the middle are not in a sequential relation.
+- **Possibility-actuality axis:** The actuality/possibility distinction is no longer the operative cut. The PC performs actions they do not remember (dissociative episodes from a human-frame perspective; the actions and the not-remembering are both products of a frame that does not require them to be in the same actuality). Scene-jumps may occur without transition because the frame producing the prose does not require transitions.
+- **Intelligibility axis:** Knowledge arrives without the integrative structure the human frame would supply. Facts are present but not organized into integrated experience — they are facts, and they are beside each other, and the integrating frame is no longer the human one.
+- **Belonging (ontic):** Physical form registers differently. Weight is calibrated through a frame that doesn't generate the human distribution. Light interacts at a register that produces unease in human observers. The body still functions; proprioception still operates; but the reference points organizing those operations are not human ones. The PC is not breaking. The PC's body is doing what the rendering tells it to do, and the rendering's reference points are no longer calibrated to human bodily experience.
+- **Belief Co-Authorship (ontological):** The thread-connections to ideas, concepts, and feelings are loosening. A conviction the PC has held for years feels foreign — not because the PC has changed their mind, but because the connection between the PC and the conviction operates through a frame that no longer generates "this is mine." The belief persists; the belonging to the belief is the operation that is being recalibrated. Same for relationships: the people the PC loves are still loved; the framework producing "loved by me" is no longer the same framework that produced it before.
+- **Relational propagation:** Constant. The practitioner's knots transmit through their frame to others operating in the human frame. The mismatch produces the relational strain.
+- **Very short paragraphs.** The rendering produces output adequate to its current frame — and that frame does not generate extended structure as a default. Closing on isolated detail with flat affect.
 
 **Anti-patterns at this tier:**
 - Stable self-knowledge or reliable memory
@@ -216,22 +220,22 @@ Dissociative episodes constant. Involuntary perceptual events. The distinction b
 | Tartt | 7% |
 | Mistry | 5% |
 
-**What rendering failure looks like here — the being leaving human finitude:**
+**What's happening here — the reference frame nearly entirely shifted:**
 
-The limitation has nearly failed. The being is still a being — Ein Sof still spools, becoming continues — but the limitation that held the becoming into a human shape is barely operational. The mode of being is shifting from human to something else. Not breaking — changing.
+The being's reference frame is now almost entirely not human. Ein Sof still spools; becoming continues; the rendering is operating fully — but operating from premises that have very little overlap with the human frame. The being is not breaking. Their faculties are intact and producing outputs. The outputs are organized by something that is no longer human.
 
-- **Temporal axis:** Temporal structuring has failed. The limitation that produced past-present-future as distinct categories is no longer operative. Present-tense dominates — not as stylistic choice, but as the only temporality available to a being whose mode of existence no longer includes temporal sequence. The "instant-now" is not transcendence. It is the temporal becoming that was always there underneath, no longer being limited into sequence.
-- **Possibility-actuality axis:** Dissolved. The distinction between what is and what could be has ceased to be enforced. Dissociative episodes are constant. Involuntary perceptual events: the screening that rendering provided (Amendment 02 §1) is gone. Without TS: noise — raw givenness arriving without the limitation that would make it intelligible. With TS: substrate perception arriving clearly while the apparatus to connect it to thought is absent.
-- **Intelligibility axis:** The self/world boundary is dissolving. Not because the world has invaded the PC — because the limitation that maintained "this is me" and "this is the world" as separate was a limitation, and it is failing. The being's interiority and the world's exteriority become indistinguishable — not in content, but in kind. The being can no longer tell where it stops and the world begins because "stopping" and "beginning" were products of the limitation. The thread-connections to ideas, concepts, and feelings have loosened past recognition — not only do beliefs feel foreign, the capacity for belief itself is what's shifting. The relationship between the being and the concept of "relationship" is what's changing.
-- **Belonging (ontic):** Trace. Tolkien fragments — a name, a landscape detail — appear as momentary islands where the limitation briefly produces one more structured perception before failing again. These are the last evidence of human rendering function.
-- **The prose is not broken prose. It is becoming something else.** The sentences at Coherence 1 are organized by a principle that is no longer human narrative grammar. The tautologies, the present-tense, the names without predicates — these are early forms of a mode of articulation that, at Coherence 0 with sufficient TS, might find equilibrium as a stable inhuman mode. From inside human finitude — which is where the player sits — they read as collapse.
-- **Fragment length.** The rendering cannot sustain structure. Closing on isolated noun.
+- **Temporal axis:** Past-present-future is no longer the operative temporal structure. Present-tense dominates not because the rendering "fails" to use other tenses, but because the frame the rendering operates in does not generate past and future as distinct categories. The being exists in a now that is the only temporality their current frame produces.
+- **Possibility-actuality axis:** The actuality/possibility distinction is no longer enforced. Dissociative episodes (from a human-frame perspective) are continuous. Involuntary perceptual events: the screening that the human reference frame produced (Amendment 02 §1) is operating differently. Without TS, what arrives is noise — raw givenness without the categorical organization the human frame would supply. With TS: substrate perception arrives clearly, and the apparatus that would connect perception to articulation is operating in a frame the human frame cannot follow.
+- **Intelligibility axis:** The self/world distinction is no longer the operative cut. Not because the world is invading the being — the cut between "this is me" and "this is the world" was produced by the human frame, and the human frame is not the operating frame. The being's interiority and the world's exteriority are produced as a single fact by the new frame. The thread-connections to ideas, concepts, and feelings are operating through a frame in which "having a concept" does not function the way it did. The concept of "relationship" is itself being held in a different relation to the being.
+- **Belonging (ontic):** Trace. Tolkien fragments — a name, a landscape detail — appear as moments where the frame briefly produces an output that the human frame can register as an output. These are intermittent, not failures.
+- **The prose is not broken prose.** The sentences at Coherence 1 are organized by a frame that is no longer human narrative grammar. The tautologies, the present-tense, the names without predicates — these are predications adequate to the frame in operation. They look like collapse from inside the human frame the player sits in. From inside the being's frame, the rendering is functioning.
+- **Sentence and paragraph length.** Short. The rendering produces output adequate to the operating frame; that frame does not generate extended narrative structures the way the human frame did. Closing on isolated noun is one mode (low Spirit). High Spirit produces continuation through anaphoric or dialectical structures (Beckett) — the will is pushing the rendering to keep producing, even from a frame that doesn't natively extend.
 
 **Anti-patterns at this tier:**
 - Stable realist ground anywhere
 - The prose presenting the shift as transcendent illumination (the being is leaving human finitude — this is departure, not ascent. Without TS, it is pure departure with no compensating perception. With TS, the perception and the departure coexist but one does not cause the other.)
 - The prose ceasing to be focalized through the PC (that is Coherence 0)
-- Confusing the limitation's failure (coherence) with the trained opening of perception (TS) — these are different events on different axes
+- Confusing coherence-recalibration with the trained opening of perception (TS) — these are different events on different axes
 
 ---
 
@@ -277,9 +281,9 @@ When coherence changes within a scene:
 
 1. The transition is rendered through per-paragraph shifts in which techniques are available. No hard cut between tiers.
 2. The shift should be perceptible to the reader as the PC's grip on human categories loosening — without announcement.
-3. The PC's rendering degrades gradually: temporal processing that was reliable at the scene's opening begins to slip; belonging that was natural becomes strained; named specificity that was effortless requires effort.
+3. The PC's rendering recalibrates gradually: temporal processing that was reliable at the scene's opening begins to slip; belonging that was natural becomes strained; named specificity that was effortless requires effort.
 4. The physical event being rendered remains the same. The PC's rendering of it shifts. The world is unchanged.
-5. The transition itself is not named. The prose does not say "things are getting stranger." The PC's participation in human reason degrades.
+5. The transition itself is not named. The prose does not say "things are getting stranger." The PC's reference frame slides further from the human one.
 
 ---
 
@@ -287,13 +291,13 @@ When coherence changes within a scene:
 
 | Author | 10-8 | 7-5 | 4-3 | 2 | 1 | Direction |
 |---|---|---|---|---|---|---|
-| Tolkien | 28 | 22 | 14 | 9 | 7 | Down 21 — rendering failing means structured world-presentation degrades |
-| Mistry | 14 | 10 | 8 | 7 | 5 | Down 9 — embodied knowledge degrades with rendering |
-| Tartt | 12 | 11 | 10 | 8 | 7 | Down 5 — retrospective memory structure degrades gently |
-| Ishiguro | 12 | 14 | 14 | 13 | 12 | Stable-high — unreliability inherent to rendering failure at all levels |
-| Márquez | 11 | 13 | 14 | 14 | 14 | Up 3 then stable — temporal structuring failure grows then plateaus |
-| Lispector | 8 | 12 | 16 | 17 | 19 | Up 11 — categorical failure is Lispector's territory |
-| Ocampo | 8 | 10 | 13 | 16 | 18 | Up 10 — belonging-failure is Ocampo's territory |
-| Borges | 7 | 8 | 11 | 16 | 18 | Up 11 — logical/structural failure is Borges's territory |
+| Tolkien | 28 | 22 | 14 | 9 | 7 | Down 21 — recalibration away from human frame means structured world-presentation becomes less generative |
+| Mistry | 14 | 10 | 8 | 7 | 5 | Down 9 — embodied knowledge produced through human frame becomes less generative as the frame shifts |
+| Tartt | 12 | 11 | 10 | 8 | 7 | Down 5 — retrospective memory structure operates from human frame |
+| Ishiguro | 12 | 14 | 14 | 13 | 12 | Stable-high — unreliability inherent to a frame that does not match the reader's |
+| Márquez | 11 | 13 | 14 | 14 | 14 | Up 3 then stable — ordinary syntax for content the human frame would mark as impossible |
+| Lispector | 8 | 12 | 16 | 17 | 19 | Up 11 — categorical recalibration is Lispector's territory |
+| Ocampo | 8 | 10 | 13 | 16 | 18 | Up 10 — belonging-on-shifted-frame is Ocampo's territory |
+| Borges | 7 | 8 | 11 | 16 | 18 | Up 11 — logical/structural recalibration is Borges's territory |
 
 All tiers sum to 100%.

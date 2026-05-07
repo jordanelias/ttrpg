@@ -4,7 +4,7 @@ Live technique inventory. Each entry: technique → source → signature pattern
 
 **Eight-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina).
 
-**Coherence-indexed weighting:** The synthesis weights shift across tiers aligned to canonical coherence thresholds (10-8, 7-5, 4-3, 2, 1). See `coherence-tiers.md` for the tier-tables. As coherence drops, the PC's rendering of the world in human categories degrades — realist authors decrease, irreal authors increase to serve categorical failure. Coherence is orthogonal to Thread Sensitivity. The weighting describes aggregate tendency, not per-passage quota.
+**Coherence-indexed weighting:** The synthesis weights shift across tiers aligned to canonical coherence thresholds (10-8, 7-5, 4-3, 2, 1). See `coherence-tiers.md` for the tier-tables. As coherence drops, the PC's rendering recalibrates away from human reference points — realist authors (which depend on the human frame as a generative source) decrease; irreal authors (which serve content produced from a recalibrated frame) increase. Coherence is orthogonal to Thread Sensitivity. The weighting describes aggregate tendency, not per-passage quota.
 
 **Intra-sentence splicing:** Authors may shift between clauses or across conjunctions within a single sentence. Grammar must hold OR be deliberately broken under §0.2 below.
 
@@ -33,15 +33,15 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 
 ### 0.3 Spirit Axis (orthogonal to Coherence and TS)
 
-Spirit is the metaphysical attribute (range 1–7) governing the PC's will and its relationship to the threadwork. Beyond its mechanical role, Spirit determines how the prose renders the PC at low coherence. Where coherence determines whether the rendering holds and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip when the rendering fails**.
+Spirit is the metaphysical attribute (range 1–7) governing the PC's will and its relationship to the threadwork. Beyond its mechanical role, Spirit determines how the prose renders the PC at low coherence. Where coherence determines whether the rendering holds the human frame and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip as the rendering recalibrates**.
 
 The Spirit axis becomes audible at Coherence 4 and below. Above 4, the rendering is intact enough that the will operates within its normal apparatus. At 4 and below, what remains of the PC is increasingly governed by Spirit. The same coherence tier produces categorically different prose at high vs low Spirit.
 
 | Spirit | Texture | Author register | Closing |
 |---|---|---|---|
 | **High (5–7)** | Beckett continuation. The will grips. The decision recurs. Repetition is willful. The self insists on what it still has. | Beckett (the texture, not in the eight-author roster — invoked through declarative repetition of agency). Layered onto the tier's primary irreal authors. | On the act: "she walks." The verb the self still owns. |
-| **Mid (3–4)** | Default. No specific Spirit-axis effect. The PC neither grips nor dissolves; rendering failure proceeds without will-axis emphasis. | Tier's standard weighting applies. | Per coherence tier's standard closing. |
-| **Low (1–2)** | Lispector dissolution. Predication of self breaks. The name recedes. Agency yields. The body's parts replace the agent. | Lispector (categorical failure on the SUBJECT). Layered onto the tier's primary irreal authors. | On the noun: "the feet move." The body without the self. |
+| **Mid (3–4)** | Default. No specific Spirit-axis effect. The PC neither grips nor dissolves; the recalibration proceeds without will-axis emphasis. | Tier's standard weighting applies. | Per coherence tier's standard closing. |
+| **Low (1–2)** | Lispector dissolution. Predication of self breaks. The name recedes. Agency yields. The body's parts replace the agent. | Lispector (categorical recalibration on the SUBJECT). Layered onto the tier's primary irreal authors. | On the noun: "the feet move." The body without the self. |
 
 **Beckett texture (high Spirit) — invocation rules:**
 - The decision/walking/holding is named and re-named. "She had decided." "The decision held." "She had decided." Three repetitions are common; the repetition is the act of grip.

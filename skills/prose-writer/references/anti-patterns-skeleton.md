@@ -188,11 +188,11 @@ Live rules for composition and audit. Each entry: rule name → symptom → fix.
 
 ### 42. Realist Anchor Over-Deployment at Low Coherence
 - **Symptom:** At Coherence 1 or 2, the PC's rendering still producing named places and deep-time framing reliably. The PC presented as stably participating in human categories.
-- **Fix:** At low coherence, the PC's rendering fails to produce structured world-presentation reliably. Tolkien anchors appear as fragments of rendering function — momentary islands of structured perception in a sea of categorical failure.
+- **Fix:** At low coherence, the PC's rendering does not produce structured world-presentation reliably from the human frame. Tolkien anchors appear as fragments — moments where the frame produces an output the human frame can register, in a context where the broader rendering is producing outputs from a recalibrated frame.
 
 ### 43. Irreal Author Over-Deployment at High Coherence
-- **Symptom:** At Tier 10-8, deploying irreal techniques as the PC's rendering failing when rendering is intact. The PC presented as experiencing categorical failure when their self-rendering is stable.
-- **Fix:** At high coherence, the PC's rendering works. Irreal authors serve content-appropriate functions (genuinely recursive content, genuinely uncanny situations), not rendering failure.
+- **Symptom:** At Tier 10-8, deploying irreal techniques as the PC's rendering recalibrating when the rendering is intact and operating in the human frame. The PC presented as experiencing categorical strain when their self-rendering is stable.
+- **Fix:** At high coherence, the PC's rendering operates in the human frame. Irreal authors serve content-appropriate functions (genuinely recursive content, genuinely uncanny situations), not coherence-recalibration content.
 
 ### 44. World-Surrealism Conflated with Rendering Failure
 - **Symptom:** At low coherence, the prose presents the world itself as surreal, dreamlike, or strange — the parish house becoming weird, objects cracking open into metaphysical questions, reality "disfigured."
@@ -266,7 +266,7 @@ When the prose reaches the limit of what it can render — whether because coher
 ## Three-Axis Anti-Patterns
 
 ### 53. Spirit Axis Flatness at Low Coherence
-- **Symptom:** At Coherence 4 and below, the prose renders rendering failure without distinguishing high Spirit from low Spirit. The PC dissolves regardless of what their will is doing, OR the PC grips regardless of whether agency persists.
+- **Symptom:** At Coherence 4 and below, the prose renders the recalibration without distinguishing high Spirit from low Spirit. The PC dissolves regardless of what their will is doing, OR the PC grips regardless of whether agency persists.
 - **Fix:** At Coherence 4 and below, Spirit determines whether the will continues to grip. **High Spirit** = Beckett continuation. The decision recurs. The self insists ("she had decided," "the walking is hers," "she holds it"). Repetition is willful, not mechanical. Even involuntary perceptual events are things the self pushes through. **Low Spirit** = Lispector dissolution. The name recedes. Predication of self breaks ("Vael was — she was on the path"). The feet replace the agent. Agency yields. The same C tier with different Spirit produces categorically different prose. Closing distinguishes: high Spirit closes on the act ("she walks"), low Spirit closes on the noun ("the feet move").
 
 ### 54. Within-Observation Gradient Skipping the Middle Layer
@@ -304,7 +304,15 @@ When the prose reaches the limit of what it can render — whether because coher
   - Lispector paradox: "What she said was not what she said but what was beside what she said." Statement and immediate undermining. NOT "she said. She had said. The saying was."
   - Lispector juxtaposition: surprising adjacencies of unlike terms. NOT same term beside itself.
   - Tautology, when used at all: rare, structural, ONE moment per passage. "The eggs were eggs" is a single line of categorical collapse. Five sentences of "X was X was X" is mannerism, not technique.
-- **Diagnostic:** if a noun appears three or more times in adjacent sentences without each instance ADDING something or being part of a parallel structure with different content, the prose has fallen into iteration. Cut, vary, or restructure. The "stuck" feeling at low coherence comes from the rendering failing to *progress*, not from the prose repeating words. The failure to progress is enacted through veer (Lispector), through enumeration of difference (Beckett), through paradox, through anaphoric litany — not through saying the same thing twice.
+- **Diagnostic:** if a noun appears three or more times in adjacent sentences without each instance ADDING something or being part of a parallel structure with different content, the prose has fallen into iteration. Cut, vary, or restructure. The "stuck" feeling at low coherence comes from the rendering not *progressing as the human frame would expect it to*, not from the prose repeating words. The non-human-typical progression is enacted through veer (Lispector), through enumeration of difference (Beckett), through paradox, through anaphoric litany — not through saying the same thing twice.
+
+---
+
+### 61. Rendering Recalibration Read as Dysfunction
+- **Symptom:** At low coherence, the prose reads as the PC struggling to do what people normally do — fumbling for words, losing track of where they are, failing at simple cognitive tasks, becoming progressively disabled, slow, or stupid. The reader's takeaway is "this person is breaking down."
+- **Why this is wrong:** The PC is not breaking. They are not becoming impaired, slow, or disabled. They are changing. The rendering's reference points are sliding from human ones to inhuman ones. The system continues to function fully — its outputs are no longer calibrated to human experience. The body still feels like a body; the calibration that produces "weight evenly distributed" slides to non-human reference points. Cognition still produces thoughts; the premises shift. From the perspective of those who knew them and from the character's own retained human history, the experience is grievous — but the character is not failing at being human, they are becoming something whose human history is increasingly external to its operating frame.
+- **Fix:** The prose at low coherence renders the PC doing exactly what their (changing) framework outputs, competently, with full will and capacity (high Spirit) or with the will receded (low Spirit). The tautologies are predications adequate to a frame in which bare identity is sufficient information. The temporal coexistence is the rendering operating from a frame that doesn't enforce sequential exclusivity. The veering predication is the frame producing predicates from a place the human frame cannot follow. The PC is not "trying and failing." The PC is producing what their frame produces. The prose should never read as "person struggling to do what people do." It should read as "person doing what they do, in a way that does not match the human frame the reader is reading from."
+- **Test:** if you can imagine the PC at this tier as "more impaired" or "less impaired," the rendering is wrong. The PC is not on a continuum of impairment. They are on a continuum of frame-displacement. The right test is not "how much of their human capacity is left" but "how far has the frame they operate in slid from the human one."
 
 ---
 
