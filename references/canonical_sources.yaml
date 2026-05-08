@@ -266,3 +266,9 @@ systems:
     canonical_sha__designs__provincial__faction_canon_v30_md: "pending"
     status: provisional
     added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
+
+  character_generation_questionnaire:
+    design_doc: designs/personal/character_generation_questionnaire_v30.md
+    canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "pending"
+    status: design-direction
+    added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
