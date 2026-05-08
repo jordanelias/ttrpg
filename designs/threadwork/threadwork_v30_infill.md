@@ -190,7 +190,7 @@ Territories with Locked configurations: Mending Stability −1/season at Account
 # PART EIGHT: INTERDEPENDENCY MAP
 ## 8.1 Systems Replaced
 ## 8.2 Systems Unchanged
-- Clocks (Theocracy Counter, Institutional Pressure) — unchanged. Mending Stability replaces Thread Tension as the third clock.
+- Clocks (Church Influence, Institutional Pressure) — unchanged. Mending Stability replaces Thread Tension as the third clock.
 - Knot mechanics — strain sources consolidated but mechanical structure unchanged
 ## 8.3 Implementation Sequence
 > **Opposing simultaneous ops (P-24 → §2.6, PP-632):** Full Contested Intentionality procedure defined in §2.6. Supersedes this inline note. See §2.6 for resolution table, knot strain, co-movement decomposition, N-way lattice collapse, Mending immunity, and cross-mode rules.

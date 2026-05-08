@@ -43,7 +43,7 @@
 
 - **detail:** Defined in primary register `canon/editorial_ledger.yaml`.
 - **atom context** (`valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close`):
-  > ## Section 9 — Open Items at Session Close  ### Final open EDs (4)  | ED | Description | Status | |---|---|---| | ED-710 | Settlement adjacency graph | Workplan-scale, deferred | | ED-711 | Fractional province ownership | Workplan-scale, deferred | | ED-768 | 13 orphaned PROVISIONAL markers | Jordan-blocked review | | TC→CI bulk propagation | ~675 residual TC references in active spec | Queued cle
+  > ## Section 9 — Open Items at Session Close  ### Final open EDs (4)  | ED | Description | Status | |---|---|---| | ED-710 | Settlement adjacency graph | Workplan-scale, deferred | | ED-711 | Fractional province ownership | Workplan-scale, deferred | | ED-768 | 13 orphaned PROVISIONAL markers | Jordan-blocked review | | CI→CI bulk propagation | ~675 residual CI references in active spec | Queued cle
 - **canon context** (`canon/editorial_ledger.yaml`):
   > # Valoria Editorial Ledger — Active (open items only) # next_id: 739 # Archival batch 2026-04-23: 16 resolved entries migrated to canon/editorial_ledger_archive.yaml.  entries:    - id: ED-710     date: 2026-04-19     description: "Settlement adjacency graph — new mechanical layer. Invasions occur at settlement-scale via inter-settlement edges (road/river/mountain/coastal). Spec: designs/territory
 
@@ -51,7 +51,7 @@
 
 - **detail:** Defined in primary register `canon/editorial_ledger.yaml`.
 - **atom context** (`valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close`):
-  > ## Section 9 — Open Items at Session Close  ### Final open EDs (4)  | ED | Description | Status | |---|---|---| | ED-710 | Settlement adjacency graph | Workplan-scale, deferred | | ED-711 | Fractional province ownership | Workplan-scale, deferred | | ED-768 | 13 orphaned PROVISIONAL markers | Jordan-blocked review | | TC→CI bulk propagation | ~675 residual TC references in active spec | Queued cle
+  > ## Section 9 — Open Items at Session Close  ### Final open EDs (4)  | ED | Description | Status | |---|---|---| | ED-710 | Settlement adjacency graph | Workplan-scale, deferred | | ED-711 | Fractional province ownership | Workplan-scale, deferred | | ED-768 | 13 orphaned PROVISIONAL markers | Jordan-blocked review | | CI→CI bulk propagation | ~675 residual CI references in active spec | Queued cle
 - **canon context** (`canon/editorial_ledger.yaml`):
   > ttlement-scale via inter-settlement edges (road/river/mountain/coastal). Spec: designs/territory/settlement_adjacency_v30.md (PP-666)."     status: open     severity: P2     source: "PP-666"    - id: ED-711     date: 2026-04-19     description: "Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers. 7
 
@@ -67,7 +67,7 @@
 
 - **detail:** Defined in primary register `canon/editorial_ledger.yaml`.
 - **atom context** (`valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close`):
-  > al open EDs (4)  | ED | Description | Status | |---|---|---| | ED-710 | Settlement adjacency graph | Workplan-scale, deferred | | ED-711 | Fractional province ownership | Workplan-scale, deferred | | ED-768 | 13 orphaned PROVISIONAL markers | Jordan-blocked review | | TC→CI bulk propagation | ~675 residual TC references in active spec | Queued cleanup |  ### Tests not run  21, 23, 25, 32, 37, 61, 
+  > al open EDs (4)  | ED | Description | Status | |---|---|---| | ED-710 | Settlement adjacency graph | Workplan-scale, deferred | | ED-711 | Fractional province ownership | Workplan-scale, deferred | | ED-768 | 13 orphaned PROVISIONAL markers | Jordan-blocked review | | CI→CI bulk propagation | ~675 residual CI references in active spec | Queued cleanup |  ### Tests not run  21, 23, 25, 32, 37, 61, 
 - **canon context** (`canon/editorial_ledger.yaml`):
   > ers. 75%-share threshold triggers Consolidation Domain Action. Spec: designs/provincial/fractional_province_ownership_v30.md (PP-666)."     status: open     severity: P2     source: "PP-666"    - id: ED-768     date: 2026-04-24     description: "Orphaned PROVISIONAL markers identified across active spec corpus. 13 markers reference low-numbered EDs (ED-063, ED-071, ED-074, ED-098, ED-137, ED-147, 
 
@@ -186,7 +186,7 @@ _29 substantive claims (max 3 per atom) with best-match canon excerpts._
 - **atom** `valoria_session_2026-04-25_master__09__section-9-o`
   - claim: > - SIM-NPC-01 + sim-validation queue: requires `engine_v4`.
   - best match: `canon/editorial_ledger.yaml` (overlap 2/4)
-  - canon excerpt: > izure available, 75 = Phase Transition / Territorial Seizure, 100 = Unification (per ci_political_v30 §2). Residual ~675 TC references in active spec queued as known cleanup item; not propagated in this commit. Source: 2026-04-25 stress-test 60."    
+  - canon excerpt: > izure available, 75 = Phase Transition / Territorial Seizure, 100 = Unification (per ci_political_v30 §2). Residual ~675 CI references in active spec queued as known cleanup item; not propagated in this commit. Source: 2026-04-25 stress-test 60."    
 
 - **atom** `valoria_session_2026_04_25_master_consolidation__0`
   - claim: > Scope
@@ -330,7 +330,7 @@ For future sessions and for general project hygiene:
 - **atom** `valoria_session_2026_04_25_master_consolidation__1`
   - claim: > Future amendments should explicitly upstream their philosophical work to the foundation document at the time of the amendment.
   - best match: `canon/editorial_ledger_archive.yaml` (overlap 5/8)
-  - canon excerpt: >  TC-density design docs (npc_faction_arc_interdependency, narrative_scenario_chains, conviction_track_v30, arcs_46_55_resolved, faction_politics_v30) explicitly stating TC = Theocracy Counter (Conviction Track is always written in full). Manual revie
+  - canon excerpt: >  CI-density design docs (npc_faction_arc_interdependency, narrative_scenario_chains, conviction_track_v30, arcs_46_55_resolved, faction_politics_v30) explicitly stating CI = Church Influence (Conviction Track is always written in full). Manual revie
 
 - **atom** `valoria_session_master_2026-04-25__03__context-win`
   - claim: > Shares Church theology entirely (Solmund is divine, threadwork is heresy, Solmundian ethics are correct) but rejects two things: that the Holy Confessor has exclusive access to Solmund, and that the Church should govern.

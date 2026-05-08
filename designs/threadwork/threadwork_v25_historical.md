@@ -924,7 +924,7 @@ Cards 1–15: retained (all Thread Tension references become Rendering Stability
 Cards 16–18 added:
 
 16. **Substrate Settling** — Mended territory: all Thread operations −1 Ob next season.
-17. **Scar Trace** — Mended territory retains visible Thread scar. Church Theocracy Counter +1. No Rendering Stability change.
+17. **Scar Trace** — Mended territory retains visible Thread scar. Church Church Influence +1. No Rendering Stability change.
 18. **Residue Condensation** — dissolution residue forms at Mending site. Niflhel may harvest.
 
 ### Lock Chronic Drift
@@ -991,7 +991,7 @@ Replaces Thread Tension track on board. Runs 100→0. Hidden by default (Investi
 - Political axes, mass combat, siege
 - Histories, Beliefs, Inspirations
 - Circles, Resources
-- Clocks (Theocracy Counter, Institutional Pressure) — unchanged. Rendering Stability replaces Thread Tension as the third clock.
+- Clocks (Church Influence, Institutional Pressure) — unchanged. Rendering Stability replaces Thread Tension as the third clock.
 - Knot mechanics — strain sources consolidated but mechanical structure unchanged
 
 ## 8.3 Implementation Sequence

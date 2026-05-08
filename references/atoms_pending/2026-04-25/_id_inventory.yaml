@@ -5,14 +5,14 @@ totals_by_kind:
   M: 11
   PP: 37
   T: 21
-  TC: 1
+  CI: 1
 register_target_by_kind:
   ED: canon/editorial_ledger.yaml
   PP: canon/patch_register_active.yaml + patch_register_*_archive.yaml
   T: references/throughlines_meta.md
   M: references/throughlines_meta.md
   RS: designs/scene/rendering_stability_v30.md (or relevant designs/)
-  TC: designs/provincial/ — disambiguate Theocracy Counter vs Conviction Track per occurrence
+  CI: designs/provincial/ — disambiguate Church Influence vs Conviction Track per occurrence
   CP: TBD — disambiguation pending per session_log
 inventory:
   ED:
@@ -755,8 +755,8 @@ inventory:
     sources:
     - master_consolidation.md
     - valoria_master_document.md
-  TC:
-  - id: TC-01
+  CI:
+  - id: CI-01
     occurrence_count: 1
     source_count: 1
     sources:

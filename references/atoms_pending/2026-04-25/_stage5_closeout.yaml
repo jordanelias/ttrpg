@@ -23,19 +23,19 @@ commits_this_session:
   solmund_split: 68da3649142d52d457e4a660d7ec109591757b36
   canonical_sources_restored: 9597e0e94daa155ba0ccae8d29ca2fb3d34af112
 tc_01_disposition_note:
-  id: TC-01
+  id: CI-01
   origin: topic 06_mechanical_review_audit, atom valoria_master_document__103__ii-2-open-decisions-requiring-jordan
-  kind: TC (Theocracy Counter — disambiguation pending per existing next_action)
+  kind: CI (Church Influence — disambiguation pending per existing next_action)
   decision: SKIPPED-FROM-AUTO-PROMOTION
-  reasoning: Per existing project next_action (TC disambiguation sweep — 943 occurrences pending classification as Theocracy Counter vs Conviction Track), TC-NN promotions should not happen until the disambiguation
-    pass completes. Atom reference preserved in atoms_pending; will be addressed when TC sweep runs.
+  reasoning: Per existing project next_action (CI disambiguation sweep — 943 occurrences pending classification as Church Influence vs Conviction Track), CI-NN promotions should not happen until the disambiguation
+    pass completes. Atom reference preserved in atoms_pending; will be addressed when CI sweep runs.
 remaining_jordan_actions:
 - Review the 17 PROVISIONAL ED entries in canon/editorial_ledger_archive.yaml (added 2026-04-25 — see "Stage 4 promotions" section)
 - Review the 33 PROVISIONAL PP entries in archives/patches/patch_register_archive_stage4_promotions_2026_04_25.yaml
 - Verify ED-543 (clock registry refresh) was not already done in another ED
 - Review 5 PROVISIONAL Solmund split files at designs/world/solmund_*_v30.md and designs/scene/miraculous_event_v30.md
 - Review references/throughlines_meta_infill.md PART 8 append (Solmund throughlines)
-- Run TC disambiguation sweep when ready (TC-01 and ~942 other TC occurrences)
+- Run CI disambiguation sweep when ready (CI-01 and ~942 other CI occurrences)
 per_atom_closeout:
 - atom_id: master_consolidation__00__preamble
   source_file: master_consolidation.md
@@ -1327,7 +1327,7 @@ per_atom_closeout:
   - ED-131
   - ED-295
   - ED-297
-  - TC-01
+  - CI-01
   promotion_commits:
   - 0630cdbbbda97fc8ff1e6ea61f82876e00703147
   - b14c9b26c081448b0abe7f1becbfe5232e6c701a

@@ -38,7 +38,7 @@ Atoms in section_index order from source.
 **Repository:** `jordanelias/ttrpg`
 **Branch:** main
 **Total commits this session:** 40
-**Commit range:** `7d45753` (Wager system) → `be8a478` (glossary TC→CI rename)
+**Commit range:** `7d45753` (Wager system) → `be8a478` (glossary CI→CI rename)
 **Editorial Decisions logged:** ED-739 through ED-782 (44 EDs)
 **Stress tests run:** 60+ (numbered 1–63 plus integration audits)
 
@@ -58,7 +58,7 @@ Atoms in section_index order from source.
 | 5 | `6035255` | faction_layer Sacred Veto cooldown + Niflhel NPC vote cleanup | ED-751/752 |
 | 6 | `5f52e06` | mass_battle: Volley design rationale + officer death 1d10→1d20 | ED-753/754 |
 | 7 | `8951cd9` | npc_behavior §8.11.5 cross-faction Outreach floor | ED-755 |
-| 8 | `c3c7b88` | TC disambiguation glossary (top 5 files) | ED-756 |
+| 8 | `c3c7b88` | CI disambiguation glossary (top 5 files) | ED-756 |
 | 9 | `40e2eb6` | Niflhel drift table row cleanup | ED-757 |
 | 10 | `ebeb100` | Cardinal naming reconciliation (Stark/Voss/Vorn/Kald → Jarnstal/Olafsson/Tormann/Klapp) | ED-758 |
 | 11 | `4db81bf` | peninsular_strain §5.2 Seizure Uncontrolled exclusion | ED-704 |
@@ -90,7 +90,7 @@ Atoms in section_index order from source.
 | 37 | `df0bab8` | fieldwork §5.6a explicit Bonds ≥ 5 Knot prerequisite + archive 6 | ED-780 |
 | 38 | `f89f3a6` | factions_personal Coup Counter STRUCK → Graduated Autonomy canonical | ED-781 |
 | 39 | `e7fa400` | npc_priority_trees Coup Counter → Löwenritter Autonomy migration | ED-781 |
-| 40 | `be8a478` | glossary TC → CI canonical rename per tcv_conflict §2 | ED-782 |
+| 40 | `be8a478` | glossary CI → CI canonical rename per tcv_conflict §2 | ED-782 |
 
 ---
 
@@ -213,13 +213,13 @@ Added `fieldwork §5.6a` step 5: **PC Bonds ≥ 5**. Derived from §3 Dispositio
 
 `params/factions_personal §94` legacy Coup Counter spec STRUCK; canonical mechanism is now Graduated Autonomy 4-stage track (Loyal → Restless → Autonomous → Split per `conflict_architecture_proposal §Graduated Löwenritter Autonomy`). `npc_priority_trees.md` migrated: 4 cell references at L42, L86, L149, L197 + section header L239 + spec text L241 all converted from "Coup Counter = 2" to "Löwenritter Autonomy = Restless".
 
-### 3.15 — Glossary TC → CI canonical rename (ED-782, commit `be8a478`)
+### 3.15 — Glossary CI → CI canonical rename (ED-782, commit `be8a478`)
 
-Per `tcv_conflict_register §2` decision (2026-04-19), Theocracy Counter renamed to Church Influence (CI). `references/glossary.md` updated:
-- Stat table entry renamed "Theocracy Counter | TC*" → "Church Influence | CI" with milestones (60 = Mass Seizure available, 75 = Phase Transition, 100 = Unification).
-- TC collision note updated to reflect rename eliminates half the collision.
+Per `tcv_conflict_register §2` decision (2026-04-19), Church Influence renamed to Church Influence (CI). `references/glossary.md` updated:
+- Stat table entry renamed "Church Influence | CI*" → "Church Influence | CI" with milestones (60 = Mass Seizure available, 75 = Phase Transition, 100 = Unification).
+- CI collision note updated to reflect rename eliminates half the collision.
 - Abbreviation collision table updated.
-- ~675 residual TC references in active spec flagged as queued cleanup.
+- ~675 residual CI references in active spec flagged as queued cleanup.
 
 ---
 
@@ -247,7 +247,7 @@ Per `tcv_conflict_register §2` decision (2026-04-19), Theocracy Counter renamed
 | 8 | Sacred Veto cooldown | PASS — per-veto-USE not per-Mandate-state |
 | 9 | Officer death | FAIL → FIXED ED-765 (per-battle not per-event) |
 | 10 | Step 4 keyword false-positive | FIXED ED-766 (capitalization heuristic + suggestion mode) |
-| 11 | Heresy Investigation TC | PASS — Inquisitor rank gating works |
+| 11 | Heresy Investigation CI | PASS — Inquisitor rank gating works |
 | 12 | Niflhel STRUCK propagation | FIXED ED-764 (params files + Löwenritter Coup→Graduated Autonomy) |
 | 13 | Coherence at War scale | PASS — well-specified 0-10 with depletion warning |
 | 14 | Domain Echo cap | PASS — 1/faction/scene coherent |
@@ -299,7 +299,7 @@ Per `tcv_conflict_register §2` decision (2026-04-19), Theocracy Counter renamed
 | 57 | Coup Counter | FAIL → FIXED ED-781 (legacy STRUCK; Graduated Autonomy canonical; npc_priority_trees migrated) |
 | 58 | Settlement Order recovery | PASS — Pacify, Chapel, Weaving, Community Organizing all provide +1 |
 | 59 | NPC AI Survival Priority | PASS — Survival overrides everything |
-| 60 | TC milestones (20/40/55/75/80/100) | FAIL → FIXED ED-782 (glossary TC→CI rename) |
+| 60 | CI milestones (20/40/55/75/80/100) | FAIL → FIXED ED-782 (glossary CI→CI rename) |
 | 63 | Galbados naming residuals | PASS — 2 active references are meta-documentation about the rename |
 
 **Tests not run:** 21, 23, 25, 32, 37, 61, 62, 64, 65 (deferred for next iteration).
@@ -334,7 +334,7 @@ Per `tcv_conflict_register §2` decision (2026-04-19), Theocracy Counter renamed
 | ED-751-752 | faction_layer spec-fixes | P2 |
 | ED-753-754 | mass_battle spec-fixes | P2 |
 | ED-755 | Cross-faction Outreach floor | P3 |
-| ED-756 | TC disambiguation glossary | P3 |
+| ED-756 | CI disambiguation glossary | P3 |
 | ED-757 | Niflhel drift table cleanup | P3 |
 | ED-758 | Cardinal naming reconciliation | P3 |
 | ED-759-762 | Stress-test fixes batch 1 | P2 |
@@ -356,7 +356,7 @@ Per `tcv_conflict_register §2` decision (2026-04-19), Theocracy Counter renamed
 | ED-779 | Inspiration mechanic propagation | P2 |
 | ED-780 | Bonds ≥ 5 Knot prerequisite | P3 |
 | ED-781 | Coup Counter STRUCK → Graduated Autonomy | P2 |
-| ED-782 | Glossary TC → CI rename | P3 |
+| ED-782 | Glossary CI → CI rename | P3 |
 
 **P1 count entering session: 2. Exit: 0.**
 

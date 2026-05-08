@@ -11,7 +11,7 @@
 
 A GitHub repository (`jordanelias/ttrpg`, branch `main`) containing the complete design documentation for a tabletop game called Valoria. Approximately 35 active design documents, 15 parameter/reference files, 10 canonical/amendment files, and supporting infrastructure. No game code. Pure mechanical specification — formulas, procedures, tables, edge-case rulings, patch history.
 
-The documents describe a hybrid game: personal-scale RPG (one character in combat, social contests, metaphysical operations) interlocked with strategic-scale board game (one faction competing for territorial control). Two scales connected by a consequence propagation system. Three world clocks measuring existential threats — Mending Stability at zero is shared loss; the other two (Theocracy Counter, Institutional Pressure) create escalating crises that reshape the game but are not automatically terminal.
+The documents describe a hybrid game: personal-scale RPG (one character in combat, social contests, metaphysical operations) interlocked with strategic-scale board game (one faction competing for territorial control). Two scales connected by a consequence propagation system. Three world clocks measuring existential threats — Mending Stability at zero is shared loss; the other two (Church Influence, Institutional Pressure) create escalating crises that reshape the game but are not automatically terminal.
 
 ## 1.2 What You Are Building
 
@@ -708,7 +708,7 @@ Every design document contains a mix of:
 | **Trigger conditions** | Compound boolean conditions that drive situation generation | TriggerCondition Resources + registration |
 | **Narrative content** | NPC dialogue, event text, argument text | Dialogue files, string tables (mostly written fresh) |
 
-Trigger conditions are the category most easily missed. They are scattered across design documents as conditional sentences: "If TC ≥ 30 and a Thread operation occurred within 1 territory of T3 and no Heresy Investigation was opened this season, then..." These must be extracted into declarative data, not hardcoded into logic scripts.
+Trigger conditions are the category most easily missed. They are scattered across design documents as conditional sentences: "If CI ≥ 30 and a Thread operation occurred within 1 territory of T3 and no Heresy Investigation was opened this season, then..." These must be extracted into declarative data, not hardcoded into logic scripts.
 
 ## 7.2 Extraction Worksheet Template
 

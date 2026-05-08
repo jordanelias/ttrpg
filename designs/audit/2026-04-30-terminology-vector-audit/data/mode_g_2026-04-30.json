@@ -114,7 +114,7 @@
       }
     }
   },
-  "TC (as Church Influence)": {
+  "CI (as Church Influence)": {
     "total_paragraphs": 21,
     "paragraphs_in_struck_marker": 0,
     "paragraphs_actionable": 21,
@@ -137,7 +137,7 @@
       }
     }
   },
-  "Theocracy Counter": {
+  "Church Influence": {
     "total_paragraphs": 0,
     "paragraphs_in_struck_marker": 0,
     "paragraphs_actionable": 0,

@@ -13,7 +13,7 @@ Throughlines are named cross-system integration questions that cut across multip
 |---|------|---------|------------|--------|
 | TL-1 | Caste Starting-State Onboarding | No signal for which caste × faction combinations are viable at character creation | Viability Matrix displayed at creation (player_agency §7.1) | Resolved (PP-661) |
 | TL-2 | Standing 0 Initiation Duty | Duty system auto-generates duties at Standing 0, contradicting the Initiation Duty gate | Standing 0 carve-out: only Initiation Duty available until Standing 1 | Resolved (PP-661) |
-| TL-3 | TC × Warden Asymmetry | Warden rank ladder not covered by TC pressure; RM-when-active has no rank ladder | Warden × TC Pressure Scale added; RM stub marked for future design | Resolved (PP-661), RM stub open |
+| TL-3 | CI × Warden Asymmetry | Warden rank ladder not covered by CI pressure; RM-when-active has no rank ladder | Warden × CI Pressure Scale added; RM stub marked for future design | Resolved (PP-661), RM stub open |
 | TL-4 | Generational × Coup × IP Convergence | Torben maturation interacts with Coup Counter, IP, and Baralta Crown Claim without defined sequencing | Three-Clock Interaction Table added to baralta_crown_claim §7 | Resolved (PP-661) |
 | TL-5 | NPC Roster Capacity | ~35 load-bearing NPCs; companion app limits unverified | npc_behavior §11: 3-tier roster (Active/Tracked/Background), 30-NPC cap | Resolved (PP-661) |
 | TL-6 | Hall Tier Settlement Integration | Hall Tier was flavor text with no settlement_layer mechanical hook | Institutional Facility Tiers (settlement_layer §1.4): Wing/Suite/Chamber/Billet slots per settlement type | Resolved (PP-661) |
@@ -39,7 +39,7 @@ Throughlines are named cross-system integration questions that cut across multip
 
 | Name | What It Connects | Systems Involved |
 |------|-----------------|-----------------|
-| **Church Creep** | Church infrastructure growth through institutional helpfulness → Theocracy Counter advancement → territorial seizure | settlement_layer §1.5–1.7 (4-axis infrastructure), conviction_track §1–2 (PT movement), victory §3.2 (Graduated Seizure), peninsular_strain §5.2 (Seizure Accord formula) |
+| **Church Creep** | Church infrastructure growth through institutional helpfulness → Church Influence advancement → territorial seizure | settlement_layer §1.5–1.7 (4-axis infrastructure), conviction_track §1–2 (PT movement), victory §3.2 (Graduated Seizure), peninsular_strain §5.2 (Seizure Accord formula) |
 | **Mending Stability Pressure** | MS decline from Thread operations → Calamity Drift → PT erosion → faction strategic recalculation | threadwork §5.1–5.5 (MS track), conviction_track §1.3 (Calamity Drift), mass_battle §A.14 (battle MS cost), peninsular_strain §3.1 (Substrate Fracture) |
 | **Reputation Cascade** | Player combat/social actions → Combat Reputation / Renown → NPC Disposition shifts → Scene Slate generation | combat §13.2, player_agency §5.4, npc_behavior §8.11 (Outreach driven by Disposition), fieldwork §5.1 (Disposition Track) |
 | **Epistemic Progression** | Character Certainty shifts from Thread exposure → NPC interactions change → new dialogue options unlock → new investigation paths open | character_histories (starting Certainty), threadwork §3.4 (Rendering Strain → Certainty forced shifts), investigation_systems (Ontological Ledger gates dialogue), npc_behavior §3.4 (Thread Event × Conviction Scar Matrix) |
@@ -63,7 +63,7 @@ PENINSULA (global)
 
 | Scale | Resolution Unit | Tracking Scope | Mechanical Layer |
 |-------|----------------|----------------|------------------|
-| **Peninsula** | Season / Arc | Global clocks: MS, TC, IP, PI, Turmoil | Victory conditions, faction elimination, Altonian invasion |
+| **Peninsula** | Season / Arc | Global clocks: MS, CI, IP, PI, Turmoil | Victory conditions, faction elimination, Altonian invasion |
 | **Territory** | Season (Accounting) | Faction stats (1–7), derived values, Accord, PT, Fort Level, Prosperity | Domain Actions, military operations, faction priority trees |
 | **Settlement** | Season (sub-Accounting) | Settlement stats (P/D/O, 0–5), settlement derived values, Governor | Governance actions, POI discovery, NPC roster, institutional facilities |
 | **Scene** | Scene action (3–5/season) | Evidence Track, Disposition, Exposure, Conviction Track, Composure, Concentration | Fieldwork, social contests, combat initiation, Thread operations |
@@ -120,7 +120,7 @@ Every named transition between scales, systems, or modes. Organized by direction
 | **ZI-3** | Faction crisis | Mandatory personal scene | Stability ≤2, leader removal, Heresy Investigation target, etc. | scale_transitions §4.3.2: 7 mandatory triggers generate Priority 0 Scene Slate entries |
 | **ZI-4** | World-state shift | Optional personal scene | Clock band transition, NPC crisis, treaty change, territory control change, Warden emergency | scale_transitions §4.3.3: 5 world-state triggers generate Priority 1 Scene Slate entries |
 | **ZI-5** | NPC priority tree | Scene generation | NPC Outreach/Demand conditions met | npc_behavior §8.11 → player_agency §4.2 Step 5: Scene Slate entries |
-| **ZI-6** | Clock threshold | Scene Slate | MS, TC, IP cross band threshold | player_agency §4.2 Step 2b: Thread-State scenes (Priority 1–3) |
+| **ZI-6** | Clock threshold | Scene Slate | MS, CI, IP cross band threshold | player_agency §4.2 Step 2b: Thread-State scenes (Priority 1–3) |
 | **ZI-7** | Missed world event | Retrospective scene | Player absent from major event | scale_transitions §4.4: "Where Were You?" — free narrative moment filtered through social environment |
 | **ZI-8** | Faction duty | Scene generation | Faction priority stack assigns duty | player_agency §3.2 → §4.2 Step 3: Duty-aligned scenes (Priority 2) |
 | **ZI-9** | Conviction | Scene generation | Player Conviction text intersects with NPCs/locations/systems | player_agency §4.2 Step 4: Conviction-aligned scenes (Priority 3) |
@@ -163,7 +163,7 @@ All named echo and propagation mechanisms.
 | **Morale Cascade** | Unit routs in mass battle | Adjacent units Discipline check Ob 1; failure → Morale −1; compounds per simultaneous rout | Cascade Phase | Secondary loss cannot cause further rout until next turn | mass_battle §A.12 |
 | **Knot Strain Propagation** | NPC arc involves TS threshold crossing or epistemic seduction | Knotted partners receive strain per TS band (TS 30–49: +1/season close, TS 70+: +3/season close, +2/season distant) | Per season | Per NPC per Knot | npc_behavior §5.0b |
 | **Obligation** | Decisive contest win in Formal/Grand Contest | Binding commitment on loser lasting 2–4 seasons; violation → Mandate −1/−2, Stability −1 | At contest resolution | GM advisory cap: 3 active simultaneously | social_contest §6.1 |
-| **Framework Drift** | Faction ethical framework produces passive stat changes | Per-framework table: Church → TC +1/season, Crown → Certainty +1/year, Hafenmark → Influence +1/season (conditional) | Per season/year | Stat ceiling 7, floor 1 | npc_behavior §7.1 |
+| **Framework Drift** | Faction ethical framework produces passive stat changes | Per-framework table: Church → CI +1/season, Crown → Certainty +1/year, Hafenmark → Influence +1/season (conditional) | Per season/year | Stat ceiling 7, floor 1 | npc_behavior §7.1 |
 
 ---
 
@@ -247,7 +247,7 @@ PENINSULA SCALE
   ├── If Church Stability ≤2: Church enters crisis → Zoom In trigger (mandatory)
   ├── Church priority tree modified: remaining Cardinals' behavior shifts
   ├── Coup Counter evaluation (if Crown stability perceived as weak)
-  └── TC generation may slow (Cardinal-driven TC actions suspended)
+  └── CI generation may slow (Cardinal-driven CI actions suspended)
 ```
 
 ## Example: Player Mends a Gap in Stillhelm (T6)
@@ -290,7 +290,7 @@ PENINSULA SCALE
 | Track | Range | Mechanical Role |
 |-------|-------|----------------|
 | Mending Stability (MS) | 0–100 | Thread world-health; drives Calamity Drift, Revelation Curve, faction strategy |
-| Theocracy Counter (TC) | 0–100 | Church institutional authority; drives Seizure capability |
+| Church Influence (CI) | 0–100 | Church institutional authority; drives Seizure capability |
 | Invasion Pressure (IP) | 0–100 | External threat; drives Altonian Vanguard emergence |
 | Parliament Integrity (PI) | 0–20 | Hafenmark institutional strength |
 | Turmoil | 0–10 | Aggregate inter-faction damage; victory condition gate |
@@ -313,7 +313,7 @@ PENINSULA SCALE
 | Defense | 0–5 | Garrison Strength derived value → military targeting |
 | Order | 0–5 | Public Order derived value → province Accord derivation |
 | Institutional Facility Slots | by type | Wing/Suite/Chamber/Billet availability → rank advancement gate |
-| Church Infrastructure | 4 axes | Religious Building / Templar / Inquisitor / Governor → TC, PT, Seizure Ob |
+| Church Infrastructure | 4 axes | Religious Building / Templar / Inquisitor / Governor → CI, PT, Seizure Ob |
 | Governor | NPC/player | Governance actions, local NPC relationships |
 
 ### Scene (Personal)

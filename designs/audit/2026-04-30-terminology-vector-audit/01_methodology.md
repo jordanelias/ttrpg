@@ -47,7 +47,7 @@ Per skill output rule "Audit folder is never overwritten across reruns; new run 
 **Term list:** 13 patterns parsed from `canon/supersession_register.yaml`, `references/alias_registry.yaml` `legacy_renames` and `collision_table`, and ED-764 / ED-781 / PP-678 / session-log directives. See `00_workplan.md` §3.
 
 **Disambiguation:**
-- `TC` standalone uses context filter `(?:Theocracy|Church|Influence|Mass Seizure|seizure|threshold|Holy)` to exclude Conviction-Track-context TC mentions (which are legitimate per alias_registry collision_table).
+- `CI` standalone uses context filter `(?:Theocracy|Church|Influence|Mass Seizure|seizure|threshold|Holy)` to exclude Conviction-Track-context CI mentions (which are legitimate per alias_registry collision_table).
 - `Niflhel` uses context filter `(?:faction|Mandate|Influence|grievance|Operative|Syndicate)` to flag faction-context occurrences only; place-references retained.
 - `GM (bare)` mask `Game\s+Master` to avoid double-counting against the `Game Master` bigram pattern.
 
@@ -113,7 +113,7 @@ This is a presentation-layer extension, not a methodology change. The structural
 
 | Term | Audit-time published | Post-PP-691 + B1 fix | Δ |
 |---|---:|---:|---|
-| TC (as Church Influence) | 21 | 2 | -19 (dominated by PP-691 sweep, not case fix) |
+| CI (as Church Influence) | 21 | 2 | -19 (dominated by PP-691 sweep, not case fix) |
 | Niflhel (as faction) | 23 | 22 | -1 (Jordan's parallel ED-775 / PP-698..704 cleanup) |
 | Cohesion | 5 | 5 | unchanged |
 | Cultural Reformation | 13 | 13 | unchanged |
@@ -123,11 +123,11 @@ This is a presentation-layer extension, not a methodology change. The structural
 | Game Master (full phrase) | 0 | 0 | unchanged |
 | Combat Power | 0 | 0 | unchanged |
 | Thread Depth | 0 | 0 | unchanged |
-| Theocracy Counter (full phrase) | 0 | 0 | unchanged |
+| Church Influence (full phrase) | 0 | 0 | unchanged |
 | Rendering Stability | 1 | 1 | unchanged |
 | Vaynard Thread Mastery | 2 | 3 | +1 |
 
-**Conclusion:** The case-sensitivity defect's actual numerical impact was small. Most of the Δ in TC is attributable to PP-691's npc_behavior_v30 + throughlines_meta_infill cleanup (which the audit recommended); not to the case fix. The methodology defect is real and should be fixed in code (Phase 5 of ecosystem workplan v2), but the published audit-time numbers were not materially misleading.
+**Conclusion:** The case-sensitivity defect's actual numerical impact was small. Most of the Δ in CI is attributable to PP-691's npc_behavior_v30 + throughlines_meta_infill cleanup (which the audit recommended); not to the case fix. The methodology defect is real and should be fixed in code (Phase 5 of ecosystem workplan v2), but the published audit-time numbers were not materially misleading.
 
 **Audit-time data preserved:** `data/mode_g_2026-04-30.json` is unchanged (frozen-on-creation per audit-folder convention). Post-correction state captured in `data/mode_g_2026-04-30_corrigendum.json`.
 

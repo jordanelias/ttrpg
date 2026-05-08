@@ -104,12 +104,12 @@ Added `fieldwork §5.6a` step 5: **PC Bonds ≥ 5**. Derived from §3 Dispositio
 
 `params/factions_personal §94` legacy Coup Counter spec STRUCK; canonical mechanism is now Graduated Autonomy 4-stage track (Loyal → Restless → Autonomous → Split per `conflict_architecture_proposal §Graduated Löwenritter Autonomy`). `npc_priority_trees.md` migrated: 4 cell references at L42, L86, L149, L197 + section header L239 + spec text L241 all converted from "Coup Counter = 2" to "Löwenritter Autonomy = Restless".
 
-### 3.15 — Glossary TC → CI canonical rename (ED-782, commit `be8a478`)
+### 3.15 — Glossary CI → CI canonical rename (ED-782, commit `be8a478`)
 
-Per `tcv_conflict_register §2` decision (2026-04-19), Theocracy Counter renamed to Church Influence (CI). `references/glossary.md` updated:
-- Stat table entry renamed "Theocracy Counter | TC*" → "Church Influence | CI" with milestones (60 = Mass Seizure available, 75 = Phase Transition, 100 = Unification).
-- TC collision note updated to reflect rename eliminates half the collision.
+Per `tcv_conflict_register §2` decision (2026-04-19), Church Influence renamed to Church Influence (CI). `references/glossary.md` updated:
+- Stat table entry renamed "Church Influence | CI*" → "Church Influence | CI" with milestones (60 = Mass Seizure available, 75 = Phase Transition, 100 = Unification).
+- CI collision note updated to reflect rename eliminates half the collision.
 - Abbreviation collision table updated.
-- ~675 residual TC references in active spec flagged as queued cleanup.
+- ~675 residual CI references in active spec flagged as queued cleanup.
 
 ---

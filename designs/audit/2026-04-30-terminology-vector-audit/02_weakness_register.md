@@ -27,7 +27,7 @@ SCOPE: Terminology — drift, conceptual overlap, registry coverage, vocabulary 
 |---|---:|---:|---:|---|
 | **GM (bare)** | 29 | 29 | new — not swept by v3 | Distinct from `Game Master` bigram. PP-678 swept the bigram (16 → 0); bare `GM` was not in scope. Session log: "Bare 'GM' corpus sweep TBD." |
 | **Niflhel (as faction)** | 23 | 23 | not in v3 sweep list | ED-764 STRUCK Niflhel-as-faction; place references retained. Faction-context filter on `faction\|Mandate\|Influence\|grievance\|Operative\|Syndicate`. |
-| **TC (as Church Influence)** | 21 | 21 | not in v3 sweep list | alias_registry collision_table claims "RESOLVED 2026-04-26" — **contradicted by corpus**. 16 of 21 concentrated in `designs/npcs/npc_behavior_v30.md`. |
+| **CI (as Church Influence)** | 21 | 21 | not in v3 sweep list | alias_registry collision_table claims "RESOLVED 2026-04-26" — **contradicted by corpus**. 16 of 21 concentrated in `designs/npcs/npc_behavior_v30.md`. |
 | **VTM** | 18 | 18 | not in v3 sweep list | Strike 2026-04-19 per supersession_register. Highest concentration `designs/provincial/victory_v30.md` (5) + `params/bg/victory.md` (4). |
 | **Cultural Reformation** | 13 | 13 | 15 → 13 (−2) | PP-678 partial sweep. 10 of 13 still concentrated in `designs/provincial/peninsular_strain_v30.md`. |
 | **Coup Counter** | 6 | 6 | 11 → 6 (−5) | ED-781 STRUCK; replacement Graduated Autonomy. Spread across 4 docs; needs design-judgment substitution per site (not 1:1). |
@@ -36,7 +36,7 @@ SCOPE: Terminology — drift, conceptual overlap, registry coverage, vocabulary 
 | **Rendering Stability** | 1 | 1 | not in v3 sweep list | `canon/02_foundations_amendment_leap_mechanism.md`. ED-731 note: "Historical RS references retained as annotations in canon/02 per intentional design" — **flag for verification this is the retained reference**, not residual. |
 | **Combat Power** | 0 | 0 | clean | PP-678 + prior sweeps complete. |
 | **Thread Depth** | 0 | 0 | clean | PP-166 + subsequent cleanup complete. |
-| **Theocracy Counter** (full phrase) | 0 | 0 | clean | ED-782 successful for the bigram. The `TC` standalone abbreviation is the residual (separate row). |
+| **Church Influence** (full phrase) | 0 | 0 | clean | ED-782 successful for the bigram. The `CI` standalone abbreviation is the residual (separate row). |
 | **Game Master** (full phrase) | 0 | 0 | 16 → 0 (−16) | **PP-678 fully effective.** Bare `GM` is the open follow-up. |
 
 **Total actionable: 118 paragraphs across 9 distinct legacy terms.**
@@ -47,7 +47,7 @@ Methodology §3.7 / Mode G recommendation: "Single-doc concentration is the clea
 
 | Term | Top doc | Concentration | Action |
 |---|---|---|---|
-| TC (Church Influence) | `designs/npcs/npc_behavior_v30.md` | 16 / 21 (76%) | **Single-doc grep-replace TC → CI** in npc_behavior_v30. Resolves 76% in one commit. |
+| CI (Church Influence) | `designs/npcs/npc_behavior_v30.md` | 16 / 21 (76%) | **Single-doc grep-replace CI → CI** in npc_behavior_v30. Resolves 76% in one commit. |
 | Cultural Reformation | `designs/provincial/peninsular_strain_v30.md` | 10 / 13 (77%) | Single-doc deletion / strikethrough wrap (depending on CR-STRIKE replacement plan). |
 | VTM | `designs/provincial/victory_v30.md` + `params/bg/victory.md` | 9 / 18 (50%) | Two-doc focused cleanup. Victory paths require design rewrite per supersession_register. |
 | GM (bare) | `designs/npcs/npc_behavior_v30.md` | 5 / 29 (17%) | **Diffuse — no single-doc win.** Requires corpus-wide `\bGM\b` → `Game Master` substitution sweep. |
@@ -59,7 +59,7 @@ Methodology §3.7 / Mode G recommendation: "Single-doc concentration is the clea
 
 ### §1.3 Cleanup priority queue (action-ready)
 
-1. **Single-doc grep-replace TC → CI** in `designs/npcs/npc_behavior_v30.md` (16 paragraphs, mechanical) — resolves the alias_registry vs corpus contradiction noted in the registries-only conflict report.
+1. **Single-doc grep-replace CI → CI** in `designs/npcs/npc_behavior_v30.md` (16 paragraphs, mechanical) — resolves the alias_registry vs corpus contradiction noted in the registries-only conflict report.
 2. **Three-doc sweep `Cohesion` → `Discipline`** in `designs/provincial/mass_battle_v30.md`, `params/mass_combat.md`, `designs/provincial/peninsular_strain_v30.md` — straightforward rename per PP-232 legacy_renames.
 3. **Two-doc VTM sweep** in `designs/provincial/victory_v30.md` + `params/bg/victory.md` — requires Varfell victory-path editorial rewrite per supersession_register VTM-STRIKE entry; cannot grep-replace without design substitution.
 4. **Cultural Reformation cleanup** in `designs/provincial/peninsular_strain_v30.md` (10 paragraphs concentrated) — requires design substitution (CR struck per Vaynard military-conqueror identity; replacements TBD).
@@ -237,7 +237,7 @@ Inherited from v3 (≤2 substantiating paragraphs):
 | 02 Rendering Consciousness-Performed | 0 |
 | 03 Inseparability | 0 |
 | 04 RS Decay | 0 |
-| 05 TC Accumulation | 0 |
+| 05 CI Accumulation | 0 |
 | 06 IP Accumulation | 1 |
 | 07 Turmoil | 1 |
 | 08 Church Rendering Reinforcement | 1 |
@@ -253,7 +253,7 @@ Inherited from v3 (≤2 substantiating paragraphs):
 
 **Terminology implication:**
 - Throughline 04 "RS Decay" still uses **Rendering Stability (RS)** — the legacy term renamed to Mending Stability per ED-731. This is a legacy-term residual in the throughlines table itself. **Action:** rename to "MS Decay" in `references/throughlines_meta_infill.md` T-04 row.
-- Throughline 05 "TC Accumulation" still uses **TC** — the legacy term renamed to CI per ED-782. **Action:** rename to "CI Accumulation" in T-05 row.
+- Throughline 05 "CI Accumulation" still uses **CI** — the legacy term renamed to CI per ED-782. **Action:** rename to "CI Accumulation" in T-05 row.
 - These are two terminology drift findings inside the throughlines framework table itself (not just the design corpus).
 
 ---
@@ -291,7 +291,7 @@ Inherited from v3, top 10 by ratio (discourse mentions / design mentions):
 
 ### §11.1 P0 (do now — same session if directive permits)
 
-1. **Resolve TC sweep status contradiction.** alias_registry says RESOLVED; corpus has 21 actionable TC=Church-Influence residuals. Single-doc grep-replace `\bTC\b` → `CI` in `designs/npcs/npc_behavior_v30.md` (16 paragraphs, 76% of total). Update alias_registry collision_table.tc.status from `resolved` to `partial — 16 in npc_behavior_v30 pending`.
+1. **Resolve CI sweep status contradiction.** alias_registry says RESOLVED; corpus has 21 actionable CI=Church-Influence residuals. Single-doc grep-replace `\bTC\b` → `CI` in `designs/npcs/npc_behavior_v30.md` (16 paragraphs, 76% of total). Update alias_registry collision_table.tc.status from `resolved` to `partial — 16 in npc_behavior_v30 pending`.
 2. **Add Disposition + Domain Action to glossary** (Mode D cascade sinks; both heavily downstream-referenced; Disposition is in alias_registry but not glossary; Domain Action is in neither).
 3. **Add hub systems missing from glossary:** Turmoil, Conflict Architecture, Campaign Architecture, Victory, CI Political (Mode A — all top-quintile cite hubs).
 4. **Update glossary §12 (UNRESOLVED).** All entries (CERT, TLK, DD, FSTAT, CE, INT) are resolved in alias_registry. Either delete §12 or rewrite as historical annex.
@@ -302,7 +302,7 @@ Inherited from v3, top 10 by ratio (discourse mentions / design mentions):
 6. **Promote Wager + Thread Revelation to first-class docs** (Mode H A-action; session log already flagged each as ~PP-681-scope).
 7. **Convictions framework registration.** Add Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity to alias_registry under new `convictions:` block. Add a new glossary section "PART X — CONVICTIONS FRAMEWORK." Cross-link to Conviction Track.
 8. **Pressure Points framework registration.** Add Evidence, Consequence, Authority, Loyalty to alias_registry under `pressure_points:` block. Add glossary section. Per session log, "Pressure Points Taxonomy" is also a P1 isolate-promotion candidate.
-9. **Throughlines table legacy-term rename.** T-04 "RS Decay" → "MS Decay"; T-05 "TC Accumulation" → "CI Accumulation" in `references/throughlines_meta_infill.md`.
+9. **Throughlines table legacy-term rename.** T-04 "RS Decay" → "MS Decay"; T-05 "CI Accumulation" → "CI Accumulation" in `references/throughlines_meta_infill.md`.
 10. **Three-doc Cohesion → Discipline sweep** (Mode G #2).
 11. **Bare GM corpus sweep** (29 paragraphs, 14 docs; mechanical replacement). Update alias_registry `infrastructure.game_master.standalone_ok` from `true` to `false` to bring policy in sync with practice; update glossary §9 to mark Game Master as "engine resolution authority in videogame implementation."
 
@@ -314,7 +314,7 @@ Inherited from v3, top 10 by ratio (discourse mentions / design mentions):
 15. **Coup Counter → Graduated Autonomy per-site substitution** (Mode G #6).
 16. **Armature System + Event Impact Matrix status clarification** (Mode H B-action).
 17. **Add to v3 token list for next vector-audit run:** Settlement Adjacency, Fractional Province Ownership, Faction Succession Split, Tensions Deck, Royal Assassination Fuse, MS Trajectory, Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle, Demotion Magnitude, Miraculous Event, Graduated Autonomy. Re-extract auto-candidates with updated threshold tolerance to ensure these recent EDs are surfaced.
-18. **Populate `references/censured_vocabulary.yaml`** with confirmed struck terms: VTM, Cultural Reformation, Coup Counter, Theocracy Counter, Combat Power, Cohesion, Thread Depth, Rendering Stability, Niflhel-as-faction. Currently empty stub.
+18. **Populate `references/censured_vocabulary.yaml`** with confirmed struck terms: VTM, Cultural Reformation, Coup Counter, Church Influence, Combat Power, Cohesion, Thread Depth, Rendering Stability, Niflhel-as-faction. Currently empty stub.
 19. **Update CI loss thresholds** in glossary + alias_registry to match canonical `designs/provincial/ci_political_v30.md` (with reference to supersession_register entry `250715f` probabilistic curve).
 
 ### §11.4 Methodology follow-ups (not terminology)

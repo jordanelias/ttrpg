@@ -99,14 +99,14 @@ The universe of playable moments the UI must support, derived from the integrate
 
 **World-state moments (driver clocks + peninsular_strain + calamity):**
 70. RS shader modulation (§9.6 five bands + Rupture)
-71. TC appearance / threshold crossings (40 / 75)
+71. CI appearance / threshold crossings (40 / 75)
 72. IP appearance / thresholds / Altonian Preparation / Invasion firing
 73. PI (Parliament Integrity) 0–20 (v4.1 does not surface this — see F-11)
 74. Calamity radiation proximity 0–5 (v4.1 partially surfaces)
 75. GEN (year counter)
 76. CD (v4.1 surfaces it — canon absence, see F-9)
 77. Generational Shift clock (settlement_layer §7.2 — v4.1 does not surface; see F-12)
-78. Theocracy Counter effect display (v4.1 surfaces as TC bar)
+78. Church Influence effect display (v4.1 surfaces as CI bar)
 79. Convergence Marker firing (COLLISION A/B/C/D)
 
 **Content integrity moments (driver canon principles):**
@@ -259,7 +259,7 @@ v4.1 §6.1 specifies "Style selection (Memory/Projection × Revealing/Obscuring)
 
 **M26 Operations (Weave, Pull, POP, Lock, Dissolution, Mending, Memory Pull) · **v4.1 §9.4 covers panel + three-axis Ob. §9.8 covers CD display. §10.3 covers Memory Pull detection.
 
-**Finding F-15 [P1 — CANON COMPLIANCE BREACH] — v4.1 §9.8 surfaces a "CD (Calamity Drift)" track that is not in the canonical clock registry.** clock_registry_v30 §Shared Clocks lists exactly: RS, TC, IP, PI. There is no CD. threadwork mentions "Calamity Drift" historically but it was replaced — see threadwork §8.1 "ThS / CD (§5.9, 20→0) ... → Coherence (10→0) ... Campaign tracking eliminated as separate system." **CD as a distinct track does not exist in current canon.** v4.1 §9.8's "CD this session: 3 / — (no threshold yet)" is a confabulation. (The History Resonance mechanic from threadwork §4.4 still exists, but it is not "CD.")
+**Finding F-15 [P1 — CANON COMPLIANCE BREACH] — v4.1 §9.8 surfaces a "CD (Calamity Drift)" track that is not in the canonical clock registry.** clock_registry_v30 §Shared Clocks lists exactly: RS, CI, IP, PI. There is no CD. threadwork mentions "Calamity Drift" historically but it was replaced — see threadwork §8.1 "ThS / CD (§5.9, 20→0) ... → Coherence (10→0) ... Campaign tracking eliminated as separate system." **CD as a distinct track does not exist in current canon.** v4.1 §9.8's "CD this session: 3 / — (no threshold yet)" is a confabulation. (The History Resonance mechanic from threadwork §4.4 still exists, but it is not "CD.")
 
 **Repair:** Delete §9.8 entirely. The Thread-contact HUD should show Coherence (10 → 0) during contact per §9.7, and History Resonance risk die results as they fire. The "CD contribution to next RS tick" is not a mechanic — RS degradation sources are enumerated in threadwork §5.2 (per-op degree, chronic drift from Locks, winter annual drift, Gap persistence, etc.), none of which are a "CD clock."
 
@@ -361,7 +361,7 @@ Settlement anchor is clickable — opens the settlement view directly. Event ico
 
 **M49 Cascade Phase 6-step accounting · **v4.1 §1.2 60–120s, per-step dismiss after first. §1.1 points to "Phase 3 Cascade (G) — animated 5-step accounting." board_game §Cascade Phase has specific depth cap = 3 per resolution window (so some effects queue to Accounting rather than resolving mid-phase). 
 
-**Finding F-31 [P2] — Cascade Depth Cap (3 immediate effects per card play) is not in v4.1 Cascade spec.** board_game §PART TWO p.348 + p.390: "Within the Cascade Depth Cap of 3 immediate effects" — this is why massive card plays like Church Seizure at TC 80 have some effects queue to next Accounting rather than resolving all at once. Player needs visibility on which effects queued vs resolved.
+**Finding F-31 [P2] — Cascade Depth Cap (3 immediate effects per card play) is not in v4.1 Cascade spec.** board_game §PART TWO p.348 + p.390: "Within the Cascade Depth Cap of 3 immediate effects" — this is why massive card plays like Church Seizure at CI 80 have some effects queue to next Accounting rather than resolving all at once. Player needs visibility on which effects queued vs resolved.
 **Repair:** §1.2 Phase 3 Cascade spec should add: per-step dismissal shows "Resolved immediately" vs "Queued to next Accounting" state. The Cap of 3 acts as a natural pacing mechanism — the animated accounting shows 3 effects landing with weight, with the rest appearing in the next-season Briefing.
 
 **M50 Domain Echo firing · **v4.1 §11.1 mentions "Domain Echo projection" and "Domain Echo animation if Sufficient Scope fires." integration_proposal Part 8 proposes the **Domain Echo Reference Table** as a formal canonical specification — this is integration_proposal's B-1 blocker.
@@ -457,9 +457,9 @@ Settlement anchor is clickable — opens the settlement view directly. Event ico
 
 **M70 RS shader · **v4.1 §9.6 five-band shader table. ✓ canonical per threadwork §5.3. **Pass.**
 
-**M71 TC appearance / threshold crossings · **v4.1 §2.1 "TC visible once character has interacted with Church content." OK. clock_registry TC ranges 0–75 (freeze at 75 per board_game P-23). Thresholds at 40 (Altonian Preparation trigger per victory §AEA), 55 (Church Policy escalation), 65 (Seizure eligible), 80+ (seizure triggers per next Accounting).
+**M71 CI appearance / threshold crossings · **v4.1 §2.1 "CI visible once character has interacted with Church content." OK. clock_registry CI ranges 0–75 (freeze at 75 per board_game P-23). Thresholds at 40 (Altonian Preparation trigger per victory §AEA), 55 (Church Policy escalation), 65 (Seizure eligible), 80+ (seizure triggers per next Accounting).
 
-**Finding F-50 [P2] — TC threshold markers not shown in v4.1 §2.1 clock display.** Showing TC as a value ("Strained" band) without the upcoming-threshold context fails Oath II (transparency is not over-explanation). A player with TC 58 should see "TC 58/75 · Seizure eligible at 65." **Repair:** The three-clock summary panel (§2.1) expanded view shows per-clock: current value, next threshold name, seasons-to-threshold if trajectory is predictable (e.g., TC +1/season passive, so seasons-to-65 = 7). TC specific: freeze at 75, then seizure firing at 80 per board_game P-23.
+**Finding F-50 [P2] — CI threshold markers not shown in v4.1 §2.1 clock display.** Showing CI as a value ("Strained" band) without the upcoming-threshold context fails Oath II (transparency is not over-explanation). A player with CI 58 should see "CI 58/75 · Seizure eligible at 65." **Repair:** The three-clock summary panel (§2.1) expanded view shows per-clock: current value, next threshold name, seasons-to-threshold if trajectory is predictable (e.g., CI +1/season passive, so seasons-to-65 = 7). CI specific: freeze at 75, then seizure firing at 80 per board_game P-23.
 
 **M72 IP appearance / thresholds · **v4.1 §2.1 "Visible once IP has reached ≥ 20, OR character is in a border territory, OR Altonian-related investigation is active." IP range 0–100 per clock_registry. settlement_layer §7.1 recalibrated IP to +1 per 2 seasons (halved) for extended-timeline games. Altonian Preparation fires at IP 60, Diplomatic Pressure at IP 40, Invasion Vanguard at IP 75.
 
@@ -481,7 +481,7 @@ Settlement anchor is clickable — opens the settlement view directly. Event ico
 
 **Finding F-54 [P2] — Generational Shift clock absent from v4.1.** For 10–30 year campaigns this is a meaningful clock. Affects player character at Threshold 2. **Repair:** Add to §2.1 visibility table: GEN-Shift visible from Year 8 onwards (2 years before first threshold). Character sheet (§11.3) shows age penalty if applicable. NPC sheets show succession-candidate arrow at Threshold 4+.
 
-**M78 TC bar · **v4.1 §2.1 covered. ✓
+**M78 CI bar · **v4.1 §2.1 covered. ✓
 
 **M79 Convergence Marker firing · **v4.1 §13.3 confirms 4 cutscenes (Church Double Fracture, Practitioner King, Tutoring + Southernmost, Niflhel Weaponises). Arc-critical tier. **Pass.**
 
@@ -549,7 +549,7 @@ The walkthrough is internally consistent *if* the findings above are repaired. W
 - F-4 per-action Exposure projection absent → player acts blind
 - F-23 governance action Ob projection absent → governor acts blind
 - F-47 Sufficient Scope pre-commit absent → Domain Action player acts blind
-- F-50/F-51 TC/IP threshold markers absent → clock-band display is incomplete bands
+- F-50/F-51 CI/IP threshold markers absent → clock-band display is incomplete bands
 - F-32 Domain Echo Reference Table absent → personal-to-faction mapping is a black box
 
 These are all Oath II violations in specific mechanical moments. The *principle* of Oath II is in the document; the *implementation* in these moments is missing.
@@ -618,7 +618,7 @@ The document also has two canon-compliance breaches (F-15 CD, F-16 Taint) that m
 41. **F-43/F-44 Retrospective Zoom In + arc-specific triggers** — add to §13 + §1.4
 42. **F-45 Missing transition-inventory rows** — add 5 rows to §12.1
 43. **F-48 Hybrid Coherence declaration** — scope question for Jordan
-44. **F-50/F-51 TC/IP threshold markers** — add next-threshold displays in §2.1
+44. **F-50/F-51 CI/IP threshold markers** — add next-threshold displays in §2.1
 45. **F-53 Calamity Ob modifier in fieldwork** — surface in §4.3 per-action preview
 46. **F-54 Generational Shift clock** — add to §2.1 visibility + §11.3 character sheet
 47. **F-56 P-15 TS 90+ Resonant split** — correct §9.7 TS 70+ row
