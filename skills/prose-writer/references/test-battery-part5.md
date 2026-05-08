@@ -8,17 +8,17 @@ Added 2026-05-07 with twelve-author roster expansion.
 
 *Vael at Coherence 2, Spirit 6. The rendering has shifted substantially. The will continues.*
 
-She had decided. The deciding was — she had decided. Not the content of the decision, which was no longer available in the form decisions take when they are about something, but the deciding. She continued. The continuation was not a choice because choosing requires the apparatus that produces alternatives, and the apparatus was operating from premises that did not generate alternatives. She continued because the continuing continued. She could not go on. She went on. The path was under the feet and the feet were hers and the going-on was hers and she held it the way you hold a thing when the hand is the last thing you have. She had decided.
+She walked. The path was steep and the stones were loose and her boots found their holds and she walked. The wind came from the north and she walked into it. Her hands were at her sides and her hands were closed and the closing was the thing her hands were doing and she did not open them. At the ridge she stopped and looked back at the valley and the valley was the valley and she turned and walked. Her pack was on her back and the weight was on her shoulders and she carried it. She could not carry it. She carried it. The path went on and she went on and the going-on was in the legs and the legs moved and the moving was hers.
 
 **Audit:**
-- Dialectical succession: ✓. "She could not go on. She went on." — contraries in sequence, neither canceling the other.
-- Will as grammatical subject: ✓. "The deciding," "the continuing," "the going-on" — the self contracted to a single capacity.
-- No meta-inarticulation: ✓. The prose does not say "she could not describe." It enacts the contraction.
-- Anaphoric structure with variation: ✓. "She had decided" opens and closes — but the content differs. First instance: the fact. Last instance: the act of still-deciding.
-- Spirit audible: ✓. The will grips. "The going-on was hers and she held it."
-- **Risk:** "the way you hold a thing when the hand is the last thing you have" — simile. At C2, similes are borderline (anti-pattern II.5 says C4 and below, but the rule targets analogical reasoning. This is closer to Beckett's own usage — simple physical analogy). Borderline pass.
-- **Risk:** "the apparatus that produces alternatives" — design-vocabulary proximity. "Apparatus" is close to system terminology. Passes because Beckett's own register uses clinical-philosophical vocabulary ("the mechanism of," "the faculty of").
-- **Verdict:** Pass. The Beckett voice is realized at C2 high Spirit — the will continues through the dialectic.
+- Exteriority: ✓. The will is visible through action — walking, carrying, closing hands. The interior is opaque. The reader infers the will from what the body does.
+- Dialectical succession: ✓. "She could not carry it. She carried it." — contraries in sequence, neither canceling the other. But embedded in physical action, not abstract declaration.
+- No interior declaration: ✓. No "she had decided." No "the deciding was hers." The deciding is inferred from the walking into the wind, the closed hands, the continued carrying.
+- No meta-inarticulation: ✓. The prose does not explain why she continues. It shows the continuation.
+- Spirit audible: ✓. High Spirit — the body continues against resistance. "The wind came from the north and she walked into it." The will is in the preposition.
+- Similes absent: ✓. At C2, no analogical reasoning. Declarative predication only.
+- Closing on the act: ✓. "The moving was hers." The self still owns the action.
+- **Verdict:** Pass. The Beckett voice at C2 high Spirit renders the will through exteriority — what the body does, not what the interior declares.
 
 ---
 
@@ -26,16 +26,17 @@ She had decided. The deciding was — she had decided. Not the content of the de
 
 *Edda, a practitioner with scholarly training and TS 55, observes a thread configuration during a mending session. Coherence 8 — rendering fully intact.*
 
-The configuration presented as a radial array with six principal axes, each axis carrying oscillatory activity at frequencies Edda could distinguish but not correlate to any known mending parameter. She catalogued: the first axis was thermal — not metaphorically, not as analogy, but as measurable temperature gradient along the thread-line, dropping point-four degrees across the span of a hand. The second axis carried what her training identified as resonance, a term from the Hafenmark protocols that denoted phase-aligned oscillation between paired threads. The third axis she had no term for. It was present, measurable by the same instruments that measured the first two, consistent in its readings, and the readings corresponded to nothing in the Hafenmark taxonomy. She noted the gap. The fourth, fifth, and sixth axes she perceived as clearly as the first three. She recorded their properties. The properties were precise. The taxonomy was insufficient.
+The configuration had six distinct behaviors. Edda circled it, counting. The first was warmth — not the warmth of a living body or a fire but a warmth that ran along the thread-line and diminished as she moved her hand from one end to the other, cooler at the margins, warmer at the centre. The second was a twinned movement between two threads, each responding to the other in a rhythm her Hafenmark training called resonance, though the word had been coined for simpler operations. The third she had no name for. She observed it for a long time. It was present, consistent, and it behaved differently each time she approached from a different angle, as though what she perceived depended on where she stood. She noted this. The fourth, fifth, and sixth she could distinguish from each other and from the first three. She could describe what each did. She could describe what each affected. She could not describe what any of them were. The descriptions were precise. The descriptions circled the thing and did not enter it.
 
 **Audit:**
-- Clinical incommensurability: ✓. The apparatus is precise ("point-four degrees," "phase-aligned oscillation"). The object exceeds the apparatus ("the third axis she had no term for"). The gap is structural, not confessed.
-- Defamiliarization through expertise: ✓. Edda's scholarly training motivates the register. The clinical precision is character-grounded.
-- TS-gating: ✓. TS 55 licenses the substrate perception. The detail is TS-appropriate.
-- No Wittgenstein violation: ✓. "She had no term for" is not "she could not describe" — it is a taxonomic gap, not a narrative confession. The prose notes the gap and continues.
-- Middle-layer gradient (III.1): ✓. The near layer (axes 1–2: articulable in training vocabulary) → middle layer (axis 3: precise but unclassifiable) → far layer is implicit (what the six-axis configuration *is* remains unnamed).
-- **Risk:** "not metaphorically, not as analogy, but as measurable temperature gradient" — the triple negation is explanatory. It clarifies the technique to the reader rather than enacting Edda's perception. Borderline — Lem's own prose does this (Solaris's narrator explaining that the descriptions are literal). Pass, but only because the character is a trained observer who would think in these terms.
-- **Verdict:** Pass. The Lem texture operates at Q2 — precise observation, insufficient taxonomy.
+- Observing around: ✓. The prose describes what each behavior does, what it affects, how it differs — circling the configuration without entering it. "The descriptions circled the thing and did not enter it."
+- Pre-scientific register: ✓. No instruments, no measurements, no frequencies. Warmth assessed by hand. Movement observed by eye. Counting and distinguishing, not measuring.
+- Defamiliarization through trained observation: ✓. Edda's Hafenmark training motivates the systematic approach — cataloguing, distinguishing, noting. The method is scholarly, not technological.
+- TS-gating: ✓. TS 55 licenses the perception. The detail is TS-appropriate.
+- Middle-layer gradient (III.1): ✓. Near (behaviors 1–2: nameable in training vocabulary) → middle (behavior 3: observable but unnameable, observer-position-dependent) → far (what the configuration is remains unrendered).
+- Taxonomic gap: ✓. "She had no name for" — a gap in categories, not a confession of inadequacy. She notes the gap and continues observing.
+- Achronism check: ✓. No modern scientific vocabulary. Renaissance-compatible observation.
+- **Verdict:** Pass. The Lem texture operates at Q2 — precise pre-scientific observation, observing around, insufficient taxonomy.
 
 ---
 
