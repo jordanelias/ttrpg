@@ -101,7 +101,7 @@ All GAP-DS-01 through GAP-DS-20 checked against v1.5 text:
 | Argue pool | (Pres×2)+History | Same | Mandate sum | Consistent — appropriate abstraction |
 | Genre weights | Full table | Same | Same | ✓ |
 | Orientation weights | ×1.0 / Doubt Marker | Same | **ABSENT** | GAP-DS-22 — P2 |
-| Conviction Track | Active | Active (from BG offset) | Active | ✓ |
+| Piety Track | Active | Active (from BG offset) | Active | ✓ |
 | Thread consequences | Fire | Fire (TTRPG layer) | Do NOT fire | ✓ Documented |
 | Beliefs/Momentum | Active | Active | **Not applicable** | ✓ Correct — faction-level has no Beliefs |
 | Preparation | Prep roll §6.11 | Same | Diplomacy domain action | ✓ Consistent abstraction |
@@ -332,7 +332,7 @@ Cross-checking debate_ref_card_v1.md against v1.5 operative text:
 | DIVERGENCE | ✓ — includes negative-successes note |
 | TIE | ✓ |
 | OBSCURING WIN | ✓ |
-| Conviction Track quick-math | ✓ |
+| Piety Track quick-math | ✓ |
 | Proceeding types table | ✓ |
 | §§6.11–6.15 scale variants | ✓ (all five summarised) |
 | Probability table | ✓ |

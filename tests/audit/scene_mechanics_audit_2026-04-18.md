@@ -74,7 +74,7 @@ PP-601 struck PP-192/PP-225. PP-204 note is stale — still references ×3. **PP
 | Argument styles (4: Precedent/Suppression/Vision/Insinuation) | ✓ | |
 | Interaction types (CLASH/REINFORCE/CROSS/TIE) | ✓ | |
 | Faction boosts (single axis per faction) | ✓ | Table complete |
-| Conviction Track 0-10 | ✓ | |
+| Piety Track 0-10 | ✓ | |
 | Resonant Style targeting | ✓ | npc_behavior §6 |
 | Appraise (Att+Rec vs Cha÷2) | ✓ | PP-614 |
 | Corroboration (Bonds gate) | ✓ | PP-235 |

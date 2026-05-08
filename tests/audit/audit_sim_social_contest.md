@@ -35,7 +35,7 @@
 
 | System | Range | Status |
 |---|---|---|
-| Conviction Track | 0–10 | ✓ Unique to Social Contest; no cross-system conflict |
+| Piety Track | 0–10 | ✓ Unique to Social Contest; no cross-system conflict |
 | Composure | 7–13 (Cha+6) | ✓ PP-460 aligned to Health formula. Consistent |
 | Concentration | Focus+Presence (2–14) | ⚠ P2 — Wide range vs Stamina (2–8). High-Focus+Presence characters near-immune to Spent in Grand Debate. Noted B-01. No structural fix warranted — Concentration is a build investment; immunity is a valid character archetype at cost of other stats. |
 | Strain | 0→Composure | ✓ |

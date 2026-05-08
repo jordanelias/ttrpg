@@ -123,7 +123,7 @@ This is a TENSION, not a violation. The arc explicitly frames this as a departur
 ---
 
 ### AUD-NPC-09 — Resonant Style +1D Stacking Creates Large Pools
-**Issue:** §6.5 permits up to +5D positional bonus on Argue rolls (genre +1, audience +1, Resonant Style +1, Recall +2). Combined with a high-attribute pool (e.g., Charisma 7 → 14 base + History bonus ≈ 8 + 5D positional = 27D at TN 7), this produces very high success probability. Against audience resistance of 1–2, a single exchange could move the Conviction Track by 5+ points, producing Total Victory in one exchange.
+**Issue:** §6.5 permits up to +5D positional bonus on Argue rolls (genre +1, audience +1, Resonant Style +1, Recall +2). Combined with a high-attribute pool (e.g., Charisma 7 → 14 base + History bonus ≈ 8 + 5D positional = 27D at TN 7), this produces very high success probability. Against audience resistance of 1–2, a single exchange could move the Piety Track by 5+ points, producing Total Victory in one exchange.
 
 **Existing caps:** No existing rule caps total bonus dice on Argue rolls.
 

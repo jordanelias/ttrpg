@@ -1,11 +1,11 @@
-# Editorial Decisions — TC/CI/TCV/Seizure/Victory — 2026-04-18
+# Editorial Decisions — CI/CI/TCV/Seizure/Victory — 2026-04-18
 # [EDITORIAL: ED-NEW — Jordan decisions resolving conflict register]
 
 ## Decision 1: CI runs to 100, no freeze
-TC renamed CI (Church Influence). Range 0–100. No freeze at any threshold.
+CI renamed CI (Church Influence). Range 0–100. No freeze at any threshold.
 
-## Decision 2: TC → CI rename
-Theocracy Counter is now Church Influence (CI).
+## Decision 2: CI → CI rename
+Church Influence is now Church Influence (CI).
 
 ## Decision 3: Seizure available from CI ≥ 60
 Church may attempt territorial seizure when CI ≥ 60.

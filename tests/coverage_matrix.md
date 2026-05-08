@@ -36,3 +36,6 @@ ED-577-01-04, SIM-POL-R01-R05, ED-684, ED-590, ED-572, ED-545+.
 ---
 
 > **Historical batches archived.** All sim findings from 2026-04-17 to 2026-04-19 (inclusive) moved to `tests/coverage_matrix_archive_2026_04_19.md` per ED-786 archival sweep 2026-05-02. This active file tracks only unresolved findings, active P1 EDs, and the most-recent session summary.
+
+## Vocabulary Sweep (2026-05-08)
+All test/sim files updated: TC→CI, Peninsular Strain→Turmoil, Conviction Track→Piety Track, contest Initiative→First to Speak.

@@ -47,9 +47,9 @@
 
 ## PART 2 — Mechanical Editorial Resolutions
 
-### ED-087: Hybrid TC Clamp (Debate TC compromise zone restriction)
-**Decision:** Hybrid TC clamp confirmed. TC restricted to compromise zone 4–6 in Hybrid Debate (§6.14). BG lobbying can shift starting position within zone but cannot pre-decide outcome. Rationale: a decisive BG-layer pre-decided debate would bypass the Hybrid Debate system entirely, making it mechanically inert.
-**Patch PP-259:** Add to `params_contest.md`: "Hybrid mode Debate: TC clamped to range 4–6 at session start regardless of BG lobbying. Lobbying shift ±1 within that range only."
+### ED-087: Hybrid CI Clamp (Debate CI compromise zone restriction)
+**Decision:** Hybrid CI clamp confirmed. CI restricted to compromise zone 4–6 in Hybrid Debate (§6.14). BG lobbying can shift starting position within zone but cannot pre-decide outcome. Rationale: a decisive BG-layer pre-decided debate would bypass the Hybrid Debate system entirely, making it mechanically inert.
+**Patch PP-259:** Add to `params_contest.md`: "Hybrid mode Debate: CI clamped to range 4–6 at session start regardless of BG lobbying. Lobbying shift ±1 within that range only."
 **Status: Resolved.**
 
 ### ED-097 (audit): Church Self-Investigation Exception Scope (§6.15)
@@ -86,7 +86,7 @@
 
 ### ED-125: Hybrid Strategic Phase Temporal Auto-Effects
 **Decision — PP-264:** Strategic Phase Thread orders produce temporal auto-effects as follows:
-- Temporal auto-effect at strategic scale: TC ±1 (depending on operation type — Lock/Weave = conservative = no TC; Dissolution = destabilising = TC +1; Pulling = TC −1 if removing suppression).
+- Temporal auto-effect at strategic scale: CI ±1 (depending on operation type — Lock/Weave = conservative = no CI; Dissolution = destabilising = CI +1; Pulling = CI −1 if removing suppression).
 - Paradox window at strategic scale: 1 strategic season (not 1 scene). Any Past-Oriented Pulling at strategic scale opens a paradox window for the current season; all contested Domain Actions during that season +1 Ob from temporal instability.
 - Add to `references/params_threadwork.md` under Hybrid Thread.
 **Status: Resolved.**
@@ -164,7 +164,7 @@ No "zones" as named objects. GM narrates distance; weapon Reach determines viabi
 **Status: Provisional confirmed. No new action.**
 
 ### ED-138: Social Initiative Deterministic vs Rolled
-**Decision:** Deterministic confirmed. Higher Attunement wins Exchange 1 initiative. Rationale: social positioning is about reading ability, not luck. Combat initiative is rolled because physical reaction time has variance; social initiative is a function of perceptive capacity which is a character trait, not a moment-to-moment variable. Tie: higher Charisma. Further tie: GM choice or simultaneous.
+**Decision:** Deterministic confirmed. Higher Attunement wins Exchange 1 initiative. Rationale: social positioning is about reading ability, not luck. Combat initiative is rolled because physical reaction time has variance; social first-to-speak is a function of perceptive capacity which is a character trait, not a moment-to-moment variable. Tie: higher Charisma. Further tie: GM choice or simultaneous.
 **Patch PP-274:** `designs/contest/social_contest_system_v2.md`: document tie-break rule.
 **Status: Resolved.**
 
@@ -265,9 +265,9 @@ These items cannot be resolved mechanically. Surfaced with options. No provision
 |----|-------------|---------|
 | ED-108 | Crown territory names T10/T11 (Nordhelm, Mittelmark provisional) | (A) Accept provisional names · (B) Provide canonical names |
 | ED-109 | Crown victory front-loaded: 3 of 5 deeds pre-met at game start | (A) Accept — Crown is the status quo faction · (B) Redesign deed thresholds · (C) Add contested-deeds rule |
-| ED-110 | Church primary victory inaccessible with active Hafenmark (TC permanently frozen) | (A) Accept — Church wins only when Hafenmark is weakened · (B) Add Church secondary path · (C) Reduce Hafenmark TC suppression to −1 every other season |
+| ED-110 | Church primary victory inaccessible with active Hafenmark (CI permanently frozen) | (A) Accept — Church wins only when Hafenmark is weakened · (B) Add Church secondary path · (C) Reduce Hafenmark CI suppression to −1 every other season |
 | ED-111 | Varfell Path B too fast (9–10 season win) | (A) Gate T13 seizure (require VTM ≥ 4 not 3) · (B) Fortify T13 by default · (C) Crown starts with T13 garrison |
-| ED-112 | TC lock (Hafenmark −1 exactly cancels Church +1) | Same options as ED-110 — these are the same problem |
+| ED-112 | CI lock (Hafenmark −1 exactly cancels Church +1) | Same options as ED-110 — these are the same problem |
 | ED-113 | Varfell T13 dominant opening (seizable Season 1 at no cost) | (A) Add T13 garrison · (B) T13 is contested (Crown claim) = Ob 3 not Ob 1 · (C) Accept — Varfell has a strong opening, Crown should contest |
 | ED-119 | Lenneth Almqvist stat block and TS development arc | (A) Define: TS 0 start, develops via archive exposure · (B) Define specific development arc · (C) Leave as campaign-defined |
 | ED-143–146 | PC simulation constructs (Mira Sondhal, Arend Voss, Sister Dagmara Kuhl, Theron Ault) — canonical approval | (A) Approve all as usable simulation constructs · (B) Approve some · (C) Reject — use generic PC templates only |
@@ -282,12 +282,12 @@ These items cannot be resolved mechanically. Surfaced with options. No provision
 |-------|-------|--------|
 | PP-257 | params_factions.md | Church Martyrdom Effect: Stability +1 on failed public accusatory Debate |
 | PP-258 | params_threadwork.md | Document RS resonance: RS +2 per Thread-sensitive first-person account (one-time, scene-cost, TS≥50) |
-| PP-259 | params_contest.md | Hybrid Debate TC clamp: restricted to range 4–6 |
+| PP-259 | params_contest.md | Hybrid Debate CI clamp: restricted to range 4–6 |
 | PP-260 | params_contest.md | Church self-investigation exception: ordained only; not when op targets Church interests |
 | PP-261 | params_contest.md | Temporal axis conflict: −1D both parties' Argue rolls (replaces PP-123 TN8) |
 | PP-262 | params_contest.md | Passive RS from debate: auto-fires on Thread-factual subject or Thread op in exchange |
 | PP-263 | social_contest_system_v2.md §7 | Strike "Division"; replace with "procedural motion" |
-| PP-264 | params_threadwork.md (Hybrid) | Strategic Phase Thread auto-effects: TC ±1 by op type; paradox window = 1 season |
+| PP-264 | params_threadwork.md (Hybrid) | Strategic Phase Thread auto-effects: CI ±1 by op type; paradox window = 1 season |
 | PP-265 | params_mass_combat.md | FR (Binding Op) scope gate note: TS 90+ for viable mass battle use |
 | PP-266 | params_core.md, params_contest.md | Composure redesign: Rattled = full track expended; Broken = two Rattled |
 | PP-267 | params_combat.md | Zone terminology: strike Close/Far zone; replace with Reach (Short/Long/Ranged) |

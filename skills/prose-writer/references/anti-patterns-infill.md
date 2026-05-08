@@ -299,14 +299,14 @@ This is *not* a rule that every passage must contain all eight authors. Some pas
 
 ### Mechanical-Term Leakage in Focalized Prose
 
-When prose is focalized through an in-world character, system or mechanical terminology breaks the focalization. The character does not know they are inside the Conviction Track or the Church Influence clock or the Ehrenwall Counter. They experience the consequences in human terms.
+When prose is focalized through an in-world character, system or mechanical terminology breaks the focalization. The character does not know they are inside the Piety Track or the Church Influence clock or the Ehrenwall Counter. They experience the consequences in human terms.
 
 **Symptoms:**
-- "The Conviction Track drifted in unexpected directions."
+- "The Piety Track drifted in unexpected directions."
 - "Church Influence had reached the threshold."
 - "The Mending Stability registered a drop."
 
-**Fix:** Translate to focalized experience. The Conviction Track becomes "the agreement that had held the Capital steady." Church Influence becomes "the Church's reach." Mending Stability becomes "the world's hold" or "what kept things together." The character names the experience, not the system.
+**Fix:** Translate to focalized experience. The Piety Track becomes "the agreement that had held the Capital steady." Church Influence becomes "the Church's reach." Mending Stability becomes "the world's hold" or "what kept things together." The character names the experience, not the system.
 
 This rule applies only to in-world focalization. A pure design document may use mechanical terminology directly. A codex entry framed as in-world chronicle should not.
 
@@ -326,10 +326,10 @@ Sentences drawing attention to their own cleverness. "It worked, but not in the 
 
 ### Mechanical-Term Leakage in Focalized Prose
 
-When prose is focalized through an in-world character, system or mechanical terminology breaks the focalization. The character does not know they are inside the Conviction Track, the Church Influence clock, the Threadwork Co-Movement matrix, the Ehrenwall counter. Naming these systems in the character's voice or in narration filtered through their consciousness shatters the perspective frame.
+When prose is focalized through an in-world character, system or mechanical terminology breaks the focalization. The character does not know they are inside the Piety Track, the Church Influence clock, the Threadwork Co-Movement matrix, the Ehrenwall counter. Naming these systems in the character's voice or in narration filtered through their consciousness shatters the perspective frame.
 
 **Symptoms:**
-- A practitioner narrator referring to "the Conviction Track" instead of "the agreement holding the Capital steady" or "the equilibrium."
+- A practitioner narrator referring to "the Piety Track" instead of "the agreement holding the Capital steady" or "the equilibrium."
 - A villager character noticing "Church Influence rising" instead of "the bishop's notices appearing on more doors each spring."
 - A retrospective narrator describing the past in mechanical bookkeeping terms ("our CI reduction held for three seasons").
 

@@ -24,8 +24,8 @@
 **Victory race convergence is correctly calibrated (ST-21).**  
 Multiple factions reach their win conditions within 1–2 seasons of each other in standard play. Crown vs Varfell at Season 20 was separated by one OW Tribune Spy success. The conditions are neither trivially easy (single-faction dominance) nor unreachably hard (drag to Rupture). The game produces genuine endgame tension with several viable winners visible simultaneously. *Verdict: design intent achieved.*
 
-**The TC/RS pyrrhic collision is the game's structural spine — and it works.**  
-Batches 2, 5, 7, 8 all converge on this: Church advancing TC (getting stronger politically) while RS declines (the world gets weaker) produces the game's central irony at mechanical rather than narrative level. A Church that wins at TC 65+ has purchased its victory with the world's health. This is not a coincidence — it is the designed cost, and the simulation confirms it registers correctly. At TC 65, IP is elevated, RS is in Fragile or worse, and the Accord ≥ 3 condition (ED-590) now forces Church to also govern well, not just seize. *Verdict: structural spine confirmed working.*
+**The CI/RS pyrrhic collision is the game's structural spine — and it works.**  
+Batches 2, 5, 7, 8 all converge on this: Church advancing CI (getting stronger politically) while RS declines (the world gets weaker) produces the game's central irony at mechanical rather than narrative level. A Church that wins at CI 65+ has purchased its victory with the world's health. This is not a coincidence — it is the designed cost, and the simulation confirms it registers correctly. At CI 65, IP is elevated, RS is in Fragile or worse, and the Accord ≥ 3 condition (ED-590) now forces Church to also govern well, not just seize. *Verdict: structural spine confirmed working.*
 
 **The Obligation system punches above its weight class.**  
 Across batches 5 and 8, Obligations handle: NPC behavioral constraints, diplomatic commitments, cross-system arc conditioners, and consequence cascades from social contest outcomes — all through one mechanic. The 3-Obligation cascade in ST-28 produced 7 correctly targeted consequences with no conflicts. Obligations are doing more systemic work than any other single mechanic in the game. *Verdict: robust beyond its surface specification.*
@@ -50,10 +50,10 @@ The Asset placement system creates a faction-agnostic service layer: any faction
 ### §1.2 What Is Failing or Underperforming
 
 **IP advancement rate was wrong for 8 batches.**  
-The original rate (+2/battle-season, +1/season TC≥60) produces IP ~47 at Season 30 in a moderate campaign. The Altonian threat never fires in standard play. This is a robustness failure: a shared loss condition that never manifests is not a pressure, it is decoration. The revised rate (+3/battle-season, +2/season TC≥60) validated in ST-42 produces a Season 25 threshold crossing in moderate warfare — genuinely existential. **This finding is significant enough to flag as a design-level error in the original specification, not a simulation gap.**
+The original rate (+2/battle-season, +1/season CI≥60) produces IP ~47 at Season 30 in a moderate campaign. The Altonian threat never fires in standard play. This is a robustness failure: a shared loss condition that never manifests is not a pressure, it is decoration. The revised rate (+3/battle-season, +2/season CI≥60) validated in ST-42 produces a Season 25 threshold crossing in moderate warfare — genuinely existential. **This finding is significant enough to flag as a design-level error in the original specification, not a simulation gap.**
 
 **No Parliamentary mechanic blocks Church Tribunal filing (ED-631).**  
-The Excommunication is effectively automatic once filed at TC 70+ (Track starts at 7 — near-decided before Exchange 1). The correct counter is preventing the filing, not defending at Tribunal. But there is no mechanic to prevent filing. The proposed Parliamentary Stay (TC < 55 only) addresses this, but creates a dependency: protect the Stay window by keeping TC below 55. This is the correct design — the window closes as Church grows — but the mechanic needs to exist to enable that strategy. **Gap in robustness: a major threat (Excommunication) has no viable counter once it becomes likely.**
+The Excommunication is effectively automatic once filed at CI 70+ (Track starts at 7 — near-decided before Exchange 1). The correct counter is preventing the filing, not defending at Tribunal. But there is no mechanic to prevent filing. The proposed Parliamentary Stay (CI < 55 only) addresses this, but creates a dependency: protect the Stay window by keeping CI below 55. This is the correct design — the window closes as Church grows — but the mechanic needs to exist to enable that strategy. **Gap in robustness: a major threat (Excommunication) has no viable counter once it becomes likely.**
 
 **Guilds solo victory was missing (ED-612, resolved).**  
 A faction with no solo victory condition is not a faction — it is a spoiler. The Merchant Hegemony design (ST-31) produces a viable ~Season 15 victory but one that was entirely absent from the game. **This is a robustness failure in the faction design, not the mechanical execution.**
@@ -64,8 +64,8 @@ A faction with no solo victory condition is not a faction — it is a spoiler. T
 
 ### §2.1 What Is Working
 
-**The TC reform (Assert→Pontifex, conditional passive) is an elegance success.**  
-One change fixed three problems simultaneously: TC acceleration (no more 2-Senator Assert spam), Church's mid-game dominance (no more 4-season TC 40 arrival), and the dual Domain Expertise model (Pontifex/Senator each have distinct strategic profiles). The ripple confirmed correct in ST-05, and the TC 40 timeline now lands at Season 12 instead of Season 4 — exactly the spacing a mid-game political faction should occupy. *Verdict: elegant fix.*
+**The CI reform (Assert→Pontifex, conditional passive) is an elegance success.**  
+One change fixed three problems simultaneously: CI acceleration (no more 2-Senator Assert spam), Church's mid-game dominance (no more 4-season CI 40 arrival), and the dual Domain Expertise model (Pontifex/Senator each have distinct strategic profiles). The ripple confirmed correct in ST-05, and the CI 40 timeline now lands at Season 12 instead of Season 4 — exactly the spacing a mid-game political faction should occupy. *Verdict: elegant fix.*
 
 **The Accord ≥ 3 governance condition on Church victory is elegant.**  
 TCV 8 was achievable with 3 territories. The Accord condition silently requires 4 territories (3 non-capitals at Accord 3). The distinction between "having territories" and "governing them well" is exactly the right design pressure for a theocratic faction. Church must use Consul cards (Govern) rather than only Senator cards (Seize), creating a genuine action economy trade-off. The condition is elegant because it produces the right strategic pressure without being a separate victory track — it is an additional constraint on an existing track. *Verdict: elegant expansion of existing mechanic.*
@@ -74,7 +74,7 @@ TCV 8 was achievable with 3 territories. The Accord condition silently requires 
 The card has two completely different values depending on opponent Command: deception (vs low Command — ~60% chance the opponent follows the "retreat") vs strategic tax (vs high Command — the Overextended effect after a loss). A single card text produces two meaningfully different strategic situations. This is canonical elegance in game design: simple rule, contextually varying outcome. *Verdict: well-designed.*
 
 **The Excommunication being an institutional fait accompli is elegant.**  
-Track starting at 7 (near-decisive before Exchange 1) is not a balance problem — it is a statement about what the Inquisition is. The Catholic Church did not lose Inquisition trials through clever oratory. The correct counter (prevent filing) places the strategic challenge at the right moment: before Season 55 TC rather than during the Tribunal. The Tribunal is the consequence of failing politically; the Tribunal itself should not be contestable with sufficient rhetoric. *Verdict: historically accurate elegance.*
+Track starting at 7 (near-decisive before Exchange 1) is not a balance problem — it is a statement about what the Inquisition is. The Catholic Church did not lose Inquisition trials through clever oratory. The correct counter (prevent filing) places the strategic challenge at the right moment: before Season 55 CI rather than during the Tribunal. The Tribunal is the consequence of failing politically; the Tribunal itself should not be contestable with sufficient rhetoric. *Verdict: historically accurate elegance.*
 
 **Shield Wall perfectly countering Wedge at equal pools is elegant.**  
 +2D Def exactly offsets +2D Off, producing a tie. No formation is universally dominant. Counter-formation awareness is a skill that materially changes expected outcomes without requiring extra mechanical complexity — the same pool, the same dice, a different outcome from the prior choice of formation card. *Verdict: elegant formation system.*
@@ -90,7 +90,7 @@ Obligations produced in Grand Contests persist for 4 seasons. Their violation ca
 ### §2.2 What Is Failing
 
 **Grand Contest Recall is the single largest elegance failure across all 8 batches.**  
-The Recall bonus (+2D per exchange per cited source) produces 1-exchange decisive wins in almost all pool-asymmetric matchups. In ST-22, Baralta at 20D vs Player at 15D collapses the Grand Contest in Exchange 1. The fundamental problem: at Ob 2 with large pools, expected net successes are ~8–12. The standard Conviction Track (0–10, victory at ≥7 or ≤3) cannot absorb margins of this size across even 2 exchanges. The proposed fix (Recall once per cited source per contest, not per exchange) is correct and sufficient — it reduces the Baralta pool from a constant 20D to 18D (after first Recall), then 16D (second citation exhausted), producing typical margins of 1–3 and requiring 3–4 exchanges for decisive resolution. **This is the highest-priority unfixed elegance problem in the social contest system.**
+The Recall bonus (+2D per exchange per cited source) produces 1-exchange decisive wins in almost all pool-asymmetric matchups. In ST-22, Baralta at 20D vs Player at 15D collapses the Grand Contest in Exchange 1. The fundamental problem: at Ob 2 with large pools, expected net successes are ~8–12. The standard Piety Track (0–10, victory at ≥7 or ≤3) cannot absorb margins of this size across even 2 exchanges. The proposed fix (Recall once per cited source per contest, not per exchange) is correct and sufficient — it reduces the Baralta pool from a constant 20D to 18D (after first Recall), then 16D (second citation exhausted), producing typical margins of 1–3 and requiring 3–4 exchanges for decisive resolution. **This is the highest-priority unfixed elegance problem in the social contest system.**
 
 **The two-scale territory system (Province Accord, Settlement Order) is elegant in design but invisible in play.**  
 These are the right two scales. Province Accord governs TCV, sovereignty, and political legitimacy. Settlement Order governs local stability, garrison requirements, and civil unrest. They are independent, they can co-fire, and their interaction is consistent with historical governance models. But they are specified across 4 different documents and never clearly distinguished in a single canonical place. The simulation discovered the distinction itself rather than finding it in the rules. **An elegant mechanic that requires detective work to understand is not fully elegant.**
@@ -99,7 +99,7 @@ These are the right two scales. Province Accord governs TCV, sovereignty, and po
 +2/battle-season is not wrong on its face, but it produces a threat that never materialises. A shared loss condition that players never encounter does not constrain their decisions. The revised rate needed to be the published rate. **An inelegant diagnostic: the simulation had to discover that the threat pressure was miscalibrated, which means 8 batches were run against a world where Altonian invasion wasn't a real constraint.**
 
 **BG Parliamentary Vote lobby pre-determination (ED-621).**  
-The lobby offset (±2) applied to a Conviction Track with decisive win at 7 means a +2 lobby push starts the vote at 7 — decisive before a single die is rolled. This violates the mechanic's own logic: lobbying provides advantage, not predetermined outcome. **An elegant mechanic undermined by its interaction with the track's victory threshold.**
+The lobby offset (±2) applied to a Piety Track with decisive win at 7 means a +2 lobby push starts the vote at 7 — decisive before a single die is rolled. This violates the mechanic's own logic: lobbying provides advantage, not predetermined outcome. **An elegant mechanic undermined by its interaction with the track's victory threshold.**
 
 ---
 
@@ -148,7 +148,7 @@ Fort 3 is effectively impregnable against Military 4 through standard Battle (Fo
 Starting at Track 7 with maximum lobbying means the vote is decided before dice are rolled, which creates player friction ("why are we rolling?"). The cap at 6 (compromise zone max) resolves this by ensuring that voting remains meaningful regardless of lobbying investment. *Was friction; now resolved.*
 
 **No Parliamentary mechanic interrupts Church Tribunal filing (ED-631).**  
-Once Church files an Excommunication, nothing in the existing Parliamentary toolkit can stop it. The Parliamentary Stay (now proposed) addresses this — but only while TC < 55. After TC 55, the Stay is effectively unpassable (Church's TC bonus makes blocking too expensive). This creates a timing dependency: protect the Stay window before TC 55 by keeping TC suppressed. This is the correct design, but the mechanic must exist to enable the strategy. *Friction: strategic option is implied but not actionable.*
+Once Church files an Excommunication, nothing in the existing Parliamentary toolkit can stop it. The Parliamentary Stay (now proposed) addresses this — but only while CI < 55. After CI 55, the Stay is effectively unpassable (Church's CI bonus makes blocking too expensive). This creates a timing dependency: protect the Stay window before CI 55 by keeping CI suppressed. This is the correct design, but the mechanic must exist to enable the strategy. *Friction: strategic option is implied but not actionable.*
 
 ---
 
@@ -157,7 +157,7 @@ Once Church files an Excommunication, nothing in the existing Parliamentary tool
 The following errors were made during simulation work and should be noted before these findings are treated as canonical.
 
 **§4.1 IP Rate Discrepancy**  
-Batches 1–4 simulated IP advancement at the existing rate (+2/battle, +1/season TC≥60). Batch 5 only flagged this as a calibration problem. Batches 1–4 conclusions about Altonian threat timing are therefore wrong in absolute terms (the threat was modeled too mildly). The relative findings (coalition rebuff mechanics, AER firewall, Elske track) remain valid — the timing error doesn't invalidate the response mechanics.
+Batches 1–4 simulated IP advancement at the existing rate (+2/battle, +1/season CI≥60). Batch 5 only flagged this as a calibration problem. Batches 1–4 conclusions about Altonian threat timing are therefore wrong in absolute terms (the threat was modeled too mildly). The relative findings (coalition rebuff mechanics, AER firewall, Elske track) remain valid — the timing error doesn't invalidate the response mechanics.
 
 **§4.2 Grand Contest CLASH Direction**  
 In ST-22, the simulation initially concluded that Grand Contests should use CLASH always (simultaneous rolls, higher net wins). This is correct per the social contest rules (CLASH = same genre, opponent orientation). However, the batch 5 analysis did not check whether Baralta's contest orientation in that scenario was genuinely CLASH-eligible. The finding (Recall once-per-source) is correct independently of the CLASH question, but the intermediate analysis conflated the CLASH issue with the Recall issue.
@@ -178,7 +178,7 @@ Several simulations (ST-24, ST-28) tested arc conditioner effects at "Accounting
 | Throughline | Category | Verdict | Action |
 |-------------|----------|---------|--------|
 | Victory race convergence (ST-21) | Robustness | ✓ Working | None |
-| TC/RS pyrrhic collision | Robustness | ✓ Structural spine confirmed | None |
+| CI/RS pyrrhic collision | Robustness | ✓ Structural spine confirmed | None |
 | Obligation cross-system cascade | Robustness | ✓ Over-performing, clean | None |
 | Torben Conviction investment race | Robustness | ✓ Correct early-game competition | Propagate §1.8 Torben window |
 | Calamity reversal gate (4 practitioners) | Robustness | ✓ Correctly late-game | None |
@@ -188,7 +188,7 @@ Several simulations (ST-24, ST-28) tested arc conditioner effects at "Accounting
 | IP advancement rate | Robustness | ✗ Threat too mild — was miscalibrated | Propagate revised rate |
 | No Parliamentary block on Excommunication | Robustness | ✗ Gap — counter unavailable | Propagate Parliamentary Stay |
 | Missing Guilds solo victory | Robustness | ✗ Fixed (ED-612) | Confirmed resolved |
-| TC Reform (Assert→Pontifex) | Elegance | ✓ Three-problem fix | Confirmed resolved |
+| CI Reform (Assert→Pontifex) | Elegance | ✓ Three-problem fix | Confirmed resolved |
 | Church Accord ≥ 3 governance condition | Elegance | ✓ Elegant governance pressure | Confirmed resolved |
 | Feigned Retreat dual utility | Elegance | ✓ Single card, contextual value | None |
 | Excommunication fait accompli | Elegance | ✓ Historically correct | Propagate procedure |

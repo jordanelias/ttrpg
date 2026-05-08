@@ -10,7 +10,7 @@
 
 **Alternate:** Himlensendt's Scar 2 has eroded his institutional confidence enough that he does not cast a decisive vote. He abstains instead: "The College must resolve this. I will not determine it." Without his casting vote, the 2-2 tie defaults to the Cardinal who holds the senior procedural position — by Church internal protocol, Cardinal Justice (Olafsson) holds procedural seniority in disciplinary matters. His motion passes.
 
-**Olafsson's motion:** Accelerate Heresy Proceedings in territories where TC advancement has been blocked by Baralta's Sovereign Authority Doctrine. Specifically: initiate proceedings against the Parliamentary Committee members who voted for the Doctrine, on grounds of "ecclesiastical authority obstruction" — a charge with thin theological basis but available within Church procedural law.
+**Olafsson's motion:** Accelerate Heresy Proceedings in territories where CI advancement has been blocked by Baralta's Sovereign Authority Doctrine. Specifically: initiate proceedings against the Parliamentary Committee members who voted for the Doctrine, on grounds of "ecclesiastical authority obstruction" — a charge with thin theological basis but available within Church procedural law.
 
 ### Immediate Consequences (S16)
 
@@ -88,7 +88,7 @@ He does not recant. He cites Klapp's framework document (now authorized retroact
 
 **World-state consequences:**
 
-TC: −5 (the crisis produces Himlensendt's formal acknowledgment that Heresy Investigation policy has been "misapplied in territories where Thread substrate phenomena are present and documented." He suspends Heresy Investigations in territories where AER documentation shows Thread-substrate activity. Priority 5 temporarily disabled. AP accumulation halts. AER no longer generated from HI confirmation. AER: stable at current level for 3 seasons.
+CI: −5 (the crisis produces Himlensendt's formal acknowledgment that Heresy Investigation policy has been "misapplied in territories where Thread substrate phenomena are present and documented." He suspends Heresy Investigations in territories where AER documentation shows Thread-substrate activity. Priority 5 temporarily disabled. AP accumulation halts. AER no longer generated from HI confirmation. AER: stable at current level for 3 seasons.
 
 Church Stability: −3, then recovers to 2 (Jarnstal maintains institutional continuity; Klapp's framework provides theological coherence; the Proceeding's collapse stabilizes). Slow recovery: +1 Stability per 2 seasons without hostile action.
 
@@ -193,7 +193,7 @@ He learns of the sermon through his Schattendienst (Thale flags it within 2 days
 Almud does not remove Linder. Removing him would: (a) confirm to Church that the report was accurate and significant, (b) create a diplomatic incident with Himmensendt, and (c) eliminate Crown's only established information conduit to Church's internal state. The information cost of keeping Linder is an occasional reported comment. The intelligence cost of removing him is Crown losing all direct insight into Church's inner reasoning. He keeps Linder. But he tells Voss privately: "The Marshal does not speak in the presence of the Archbishop's Representative. About anything."
 
 **The sermon's political effect:**
-Church Mandate: Himlensendt's sermon is doctrine-aligned (disclosing existential threats is a pastoral obligation). His institutional authority strengthens: +1 Certainty for 1 season (Faith reinforced by acting in accordance with it). TC: +1 passive this season (institutional confidence increases TC accumulation rate). 
+Church Mandate: Himlensendt's sermon is doctrine-aligned (disclosing existential threats is a pastoral obligation). His institutional authority strengthens: +1 Certainty for 1 season (Faith reinforced by acting in accordance with it). CI: +1 passive this season (institutional confidence increases CI accumulation rate). 
 
 Crown Mandate: −1 (public implication that Crown is concealing existential threats). Parliamentary Instability: +2 (the Hafenmark Parliamentary network debates whether Crown's concealment warrants a censure motion). Almud's Priority 3 fires (PI ≥ 8 → Parliamentary Manoeuvre).
 
@@ -319,7 +319,7 @@ Counter at 1. The Arc A condition requires Counter ≤ 1. But the Reform is itse
 **Himlensendt's response to Arc A reform:**
 The public investigation into RS is, from Church's perspective, Crown competing with Church for moral authority over an existential concern. Himlensendt's Faith Conviction: the RS decline is not a political problem — it is a theological emergency. Crown conducting a public investigation frames RS as an administrative matter rather than a spiritual one. This is doctrinal competition. He deploys the Archbishop's Representative (Linder) with a formal Church position: "The Southernmost situation falls within Church pastoral jurisdiction. Crown's investigation should coordinate with Church theological review." He is attempting to re-subordinate the investigation to Church authority.
 
-Almud's response: "The investigation coordinates with all institutional actors, including Church. No single institution leads. This is a Valorian matter." Crown has claimed institutional primacy over a crisis that Church claimed institutional primacy over. TC: −1 (Church's assertion of primacy is publicly denied by Crown's framing). PI: +2 (the investigation creates parliamentary debate about which institution governs existential crises). Almud's Priority 3 fires (PI ≥ 8) — he must manage the parliamentary instability his reform has generated.
+Almud's response: "The investigation coordinates with all institutional actors, including Church. No single institution leads. This is a Valorian matter." Crown has claimed institutional primacy over a crisis that Church claimed institutional primacy over. CI: −1 (Church's assertion of primacy is publicly denied by Crown's framing). PI: +2 (the investigation creates parliamentary debate about which institution governs existential crises). Almud's Priority 3 fires (PI ≥ 8) — he must manage the parliamentary instability his reform has generated.
 
 **Vaynard's response:**
 He receives the announcement. His Path C requires RS ≥ 50. Crown's investigation is genuinely positive for RS (it will lead to Warden support eventually). But it also means Crown is now a player in the Thread-RS domain — a domain Vaynard has been treating as his. His intelligence advantage (he has been the only faction with comprehensive RS data for 6 seasons) is about to be equalized by Crown's public investigation. He pre-empts: he publishes his own RS data through his diplomatic channels before Crown's investigation produces its first findings. He establishes himself as the intellectual author of RS-crisis awareness even though Crown has claimed institutional leadership.

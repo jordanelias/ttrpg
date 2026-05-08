@@ -10,7 +10,7 @@
 Test ID: AUDIT-D-01
 Mechanics: All debate mechanics (§6.0–6.10)
 Mode: TTRPG primary; cross-mode in Mode G
-Tracks: Composure, Concentration, Conviction Track, Doubt Marker
+Tracks: Composure, Concentration, Piety Track, Doubt Marker
 Factions: All (genre weight system covers all)
 NPCs: Generic
 Archetypes: All debate-capable
@@ -48,7 +48,7 @@ Archetypes: All debate-capable
 | Read pool | 1–7D | Attunement score only | No combat equivalent | Disjoint from Argue pool — different attribute, much smaller. By design. |
 | Composure | 5–17 | Poise + Bonds + 3 | Combat Stamina: explicit track | MISMATCH: Combat Stamina has a stated per-round depletion rate. Composure has no per-exchange baseline depletion — only strain from exchange results. Very different resource dynamics. |
 | Concentration | 2–14 | Focus + Presence | Combat Stamina | MISMATCH: Concentration depletes every exchange AND on loss. Combat Stamina depletes once per round (−1). Concentration depletes 1–2× per exchange. Rates inconsistent. |
-| Conviction Track | 0–10 | Fixed | Combat Health 0–10 | Win zone asymmetry: 4 positions win for A (7,8,9,10), 4 for B (0,1,2,3), 3 compromise (4,5,6). Not fully symmetric around 5. |
+| Piety Track | 0–10 | Fixed | Combat Health 0–10 | Win zone asymmetry: 4 positions win for A (7,8,9,10), 4 for B (0,1,2,3), 3 compromise (4,5,6). Not fully symmetric around 5. |
 | Resistance | 0–~5 | Faction Stability avg −1 | No direct combat parallel | No upper cap defined. Resistance of 5 would make track movement near-impossible (margin ≥ 6 required at primary genre). |
 | Strain per exchange | 0–25+ | Formula (margin-based) | Combat damage per round | MISMATCH: Combat damage capped by weapon type and Armour DR. Debate strain is uncapped. A single exchange can produce more strain than total Composure. |
 | Genre weight | 0.5/1.0/1.5 | Fixed multiplier | No combat parallel | CONSISTENT internally. Ternary values never 0 or above 1.5 — clean. |
@@ -75,9 +75,9 @@ Archetypes: All debate-capable
 | Rattled | Composure ≥ threshold | −2D Argue, Focus_def lost | 2 | Stacks with Spent (−4D total) — no stated cap |
 | Spent | Concentration = 0 | −2D Argue, opp +1D | 2 | Interaction with Regroup provisional (PP-098) |
 | Doubt Marker | Obscuring WIN | −2 effective_margin on next opp win | 2 | Single marker limit — replacement rule confirmed (PP-099) |
-| Regroup | Player declares | Concentration restores, TC +1 opp, Spent consumed | 3 | PP-098 provisional |
+| Regroup | Player declares | Concentration restores, CI +1 opp, Spent consumed | 3 | PP-098 provisional |
 | Corroboration (§3.5) | Bonds, Knot requirement | +1D/+2D to Argue | 2 | **NOT INTEGRATED into §6.4 exchange steps.** §3.5 exists in Part 3 but §6.4 has no corroboration step. Dead reference in operative system. |
-| Thread consequence (§3.8) | Winning genre + orientation | RS/TC/Domain Echo effects | 1 | Downstream only — clean. §6.5 references §3.8 |
+| Thread consequence (§3.8) | Winning genre + orientation | RS/CI/Domain Echo effects | 1 | Downstream only — clean. §6.5 references §3.8 |
 | Audience resistance | Faction Stability avg −1 | effective_margin gate | 1 | Resistance formula not in §6.4 — only in §6.1. Forward reference only. |
 
 **Circular dependencies:** None found.
@@ -121,7 +121,7 @@ New gaps found (GAP-DS-01 through GAP-DS-08 already in §6.9):
 |---|-----------|--------|-------|
 | 1 | Roll only when meaningful | ALTERED | Read roll mandatory every exchange even in Tribunal (where institutional outcome is predetermined). No "when to roll" gate stated (GAP-DS-13). |
 | 2 | Let It Ride | PRESENT (implied) | Each exchange is a new roll — no re-roll of same attempt. Not explicitly stated. |
-| 3 | Fail Forward | PRESENT | Compromise (TC 4–6) provides narrative output even in failure. Total loss (≤3) has consequences. |
+| 3 | Fail Forward | PRESENT | Compromise (CI 4–6) provides narrative output even in failure. Total loss (≤3) has consequences. |
 | 4 | Histories, not Skills | PRESENT | History bonus is lived experience. Theology, Court Law, Military Command — all appropriate history categories. |
 | 5 | Pool = Attribute + History bonus | ALTERED | Pool = (Presence × 2) + History. Multiplier departs from additive formula. Justified (social combat needs wider variance range) but departs from stated principle. |
 | 6 | Wound system | N/A | Debate uses Composure/Strain, not wounds. Correct separation. |
@@ -161,7 +161,7 @@ New gaps found (GAP-DS-01 through GAP-DS-08 already in §6.9):
 
 **Mitigations (design-level):**
 1. GM reference card covering §6.1 setup + §6.4 flowchart + genre weight table. Eliminates 3 of 5 lookups for experienced players.
-2. Optional: pre-print ledger sheet with TC track + Composure/Concentration counters per orator.
+2. Optional: pre-print ledger sheet with CI track + Composure/Concentration counters per orator.
 3. Optional: Simultaneous argue rolls for DIVERGENCE (no information dependency when genres confirmed different).
 
 ---
@@ -174,14 +174,14 @@ New gaps found (GAP-DS-01 through GAP-DS-08 already in §6.9):
 | Parliamentary Vote | BG (implied) | **No** | **No** | **P1: BG Parliamentary Vote procedure undefined (GAP-DS-05)** |
 | Faction resonance / genre weights | TTRPG | N/A for BG | N/A | Faction ethical modes used in TTRPG only |
 | Thread consequences from debate (§3.8) | TTRPG + Hybrid | Partially (§6.10) | Partially | P2: Hybrid debate procedure not documented |
-| Conviction Track | TTRPG only | N/A | N/A | Not equivalent to any BG stat |
+| Piety Track | TTRPG only | N/A | N/A | Not equivalent to any BG stat |
 | Composure / Concentration | TTRPG only | N/A | N/A | No BG equivalent |
-| Domain Echo from debate win | TTRPG → BG | Partially | Faction stat change defined | TC/Mandate changes documented in stakes; cross-mode propagation not in state_transfer_spec |
+| Domain Echo from debate win | TTRPG → BG | Partially | Faction stat change defined | CI/Mandate changes documented in stakes; cross-mode propagation not in state_transfer_spec |
 
 **Mode G findings:**
 - **G-01 (P1):** BG Parliamentary Vote has no procedure. Referenced in §6.8 (GAP-DS-05). Blocks BG political play.
 - **G-02 (P2):** Hybrid debate — no documented variant. A Hybrid session mid-debate has no rules for what the BG-layer parallel is.
-- **G-03 (P1):** Domain Echo from debate win produces faction stat changes (TC, Mandate, Reach). These cross the TTRPG→BG boundary. No entry in state_transfer_spec for debate-originated Domain Echo. Propagation path unverified.
+- **G-03 (P1):** Domain Echo from debate win produces faction stat changes (CI, Mandate, Reach). These cross the TTRPG→BG boundary. No entry in state_transfer_spec for debate-originated Domain Echo. Propagation path unverified.
 - **G-04 (P2):** Thread consequences from debate (§3.8) specify RS changes and Domain Echo. In Hybrid mode, RS changes affect both TTRPG and BG layers. No documented procedure for how debate RS change propagates to BG Thread Order queue.
 
 ---

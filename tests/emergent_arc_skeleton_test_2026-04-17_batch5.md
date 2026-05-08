@@ -239,7 +239,7 @@ PLAYER GENERAL (PC) CHALLENGES NPC GENERAL TO PERSONAL COMBAT DURING MASS BATTLE
 ```
 Root: §A.11 Southernmost: units dissolve without awareness on entry if TS < 30 (remove from map, no Morale trigger)
       Only RM communities and Varfell forces with VTM ≥ 2 can field meaningful military forces there
-      RM Phase 2 Cultural Uprising: Weaver Thread pool vs Ob = TC ÷ 10; WC ≥ 2 adds +1D
+      RM Phase 2 Cultural Uprising: Weaver Thread pool vs Ob = CI ÷ 10; WC ≥ 2 adds +1D
       WC (Warden Cooperation) ≥ 2: RS decay rate halved; ≥ 3: RS +2/season
 
 THE SOUTHERNMOST AS AN INVERTED MILITARY DOMAIN
@@ -401,16 +401,16 @@ PRACTITIONER WITH TS 60 OPERATES AT BATTLE SCALE FOR MAXIMUM EFFECT
 ### NEW-S69: LÖWENRITTER REGENCY × SUCCESSOR CONFIRMATION × RS GATE RACE
 
 ```
-Root: Löwenritter Regency Establishment: TCV ≥ 10, TC < 50, IP < 60, RS > 40, PI ≥ 4, Successor confirmed (Elske OR Torben Loyalty ≥ 6)
-      If Regency not achieved in 8 Löwenritter seasons → Military Consolidation becomes available (TCV ≥ 16, Military ≥ 5, RS > 35, TC < 60)
+Root: Löwenritter Regency Establishment: TCV ≥ 10, CI < 50, IP < 60, RS > 40, PI ≥ 4, Successor confirmed (Elske OR Torben Loyalty ≥ 6)
+      If Regency not achieved in 8 Löwenritter seasons → Military Consolidation becomes available (TCV ≥ 16, Military ≥ 5, RS > 35, CI < 60)
       Both conditions require RS thresholds
 
 LÖWENRITTER WINS COUP (COUNTER = 3), ENTERS REGENCY PURSUIT
 │
 ├─ REGENCY ESTABLISHMENT CONDITION ANALYSIS:
 │   TCV ≥ 10: Crown starts at 12; Löwenritter inherits Crown territories → immediately achievable
-│   TC < 50: starting TC 28, Baralta's structural suppression gone → TC rises ~+2/season
-│   → TC reaches 50 in ~11 seasons (28 + 11×2 = 50) — tight timeline
+│   CI < 50: starting CI 28, Baralta's structural suppression gone → CI rises ~+2/season
+│   → CI reaches 50 in ~11 seasons (28 + 11×2 = 50) — tight timeline
 │   IP < 60: starting IP 5; Löwenritter less diplomatically capable than Crown → IP rises faster
 │   → IP at +2/season baseline: reaches 60 in ~28 seasons — not the binding constraint
 │   RS > 40: starting RS 28 — BELOW the threshold from game start
@@ -442,8 +442,8 @@ LÖWENRITTER WINS COUP (COUNTER = 3), ENTERS REGENCY PURSUIT
 │   → Inter-faction battles: IP +2 per season, Strain +1, RS −1 → strictly prohibited for RS recovery
 │
 ├─ THE 8-SEASON WINDOW:
-│   If Regency not achieved in 8 seasons: Military Consolidation available (TCV ≥ 16, Military ≥ 5, RS > 35, TC < 60)
-│   Military Consolidation is EASIER (RS > 35 vs > 40; TC < 60 vs < 50; no Successor requirement)
+│   If Regency not achieved in 8 seasons: Military Consolidation available (TCV ≥ 16, Military ≥ 5, RS > 35, CI < 60)
+│   Military Consolidation is EASIER (RS > 35 vs > 40; CI < 60 vs < 50; no Successor requirement)
 │   → Löwenritter has an incentive to fail Regency quickly (within 8 seasons) to access Military Consolidation
 │   → A player who is Löwenritter-aligned can deliberately NOT confirm a Successor
 │     (neither Elske nor Torben Loyalty ≥ 6) for 8 seasons → Military Consolidation unlocks
@@ -470,22 +470,22 @@ LÖWENRITTER WINS COUP (COUNTER = 3), ENTERS REGENCY PURSUIT
 ### NEW-S70: CHURCH + HAFENMARK PARTITION PRESSURE MARKER × ONE-SEASON WARNING
 
 ```
-Root: Church + Hafenmark Partition (ED-304, §3.2): triggered when Crown Mandate ≤ 1, TC ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict between them
-      Partition Pressure marker (ED-338, PP-566): placed if all conditions EXCEPT TC ≥ 50 are met → other factions have 1 season to disrupt before TC threshold check fires
+Root: Church + Hafenmark Partition (ED-304, §3.2): triggered when Crown Mandate ≤ 1, CI ≥ 50, Church ≥ 2 territories, Hafenmark ≥ 3, no active military conflict between them
+      Partition Pressure marker (ED-338, PP-566): placed if all conditions EXCEPT CI ≥ 50 are met → other factions have 1 season to disrupt before CI threshold check fires
       Incompatible co-victories: Crown + Church, Crown + Löwenritter, Church + Varfell, Church + RM
 
 THE PARTITION PRESSURE MARKER AS STRATEGIC ALARM
 │
 ├─ MARKER PLACEMENT CONDITIONS:
 │   Crown Mandate ≤ 1: Crown has been systematically weakened (Parliamentary Censure campaign, Territory loss)
-│   Church controls ≥ 2 territories: TC reached 75, Graduated Seizure fired twice
+│   Church controls ≥ 2 territories: CI reached 75, Graduated Seizure fired twice
 │   Hafenmark controls ≥ 3 territories: Dynastic Proclamations succeeded, TCV at 3+ acquired territories
 │   No active Church-Hafenmark military conflict: the two factions have not battled each other
-│   TC is currently at 45-49 (just below 50 threshold) → Partition Pressure marker placed
+│   CI is currently at 45-49 (just below 50 threshold) → Partition Pressure marker placed
 │
 ├─ THE ONE-SEASON WINDOW:
 │   Marker placed at Accounting: all factions see it publicly (it's a public marker per PP-566)
-│   Next season: if TC crosses 50 with all conditions still met → Partition fires
+│   Next season: if CI crosses 50 with all conditions still met → Partition fires
 │   → One season for other factions to disrupt ANY of the five conditions
 │
 ├─ DISRUPTION OPTIONS BY CONDITION:
@@ -494,12 +494,12 @@ THE PARTITION PRESSURE MARKER AS STRATEGIC ALARM
 │   Crown in this state has likely been losing territories → Trigger 1 fires constantly
 │   → Near-impossible to recover Crown Mandate from 1 to 2 in 1 season under military pressure
 │
-│   Disrupt TC crossing 50: Suppress Church TC this season (Mandate vs Ob = floor(5÷2)+1 = Ob 4)
-│   Baralta's Structural Suppression: TC −1/season (if Baralta Mandate ≥ 4)
+│   Disrupt CI crossing 50: Suppress Church CI this season (Mandate vs Ob = floor(5÷2)+1 = Ob 4)
+│   Baralta's Structural Suppression: CI −1/season (if Baralta Mandate ≥ 4)
 │   But wait: Baralta IS part of the Partition condition (Hafenmark controls ≥ 3 territories → Baralta benefits)
-│   → Does Baralta suppress TC to prevent the Partition she's building toward?
-│   → If Baralta wants the Partition: she suppresses only enough to prevent TC from crossing 50 prematurely
-│   → The Partition marker exists because Hafenmark is NOT blocking TC this season (intentional)
+│   → Does Baralta suppress CI to prevent the Partition she's building toward?
+│   → If Baralta wants the Partition: she suppresses only enough to prevent CI from crossing 50 prematurely
+│   → The Partition marker exists because Hafenmark is NOT blocking CI this season (intentional)
 │
 │   Disrupt Hafenmark territory control: Declare war on Hafenmark (Varfell, Crown, or Löwenritter)
 │   → Creates active military conflict WITH Hafenmark → breaks the "no active Church-Hafenmark conflict" condition
@@ -526,9 +526,9 @@ THE PARTITION PRESSURE MARKER AS STRATEGIC ALARM
     Crown faction: effectively eliminated from victory (its Mandate is ≤ 1, no recovery)
     Varfell: not in the Partition → still pursuing own victory condition
     → Post-Partition world: Church (ecclesiastical authority) + Hafenmark (constitutional governance) divide the peninsula
-    → TC freezes at 75 (already frozen since TC ≥ 75 triggered phase transition earlier?)
-    Wait: TC ≥ 50 is the Partition condition; TC freezes at 75 (the phase transition for seizure)
-    → If TC is at 50-74: it hasn't frozen yet; Partition fires before the phase transition
+    → CI freezes at 75 (already frozen since CI ≥ 75 triggered phase transition earlier?)
+    Wait: CI ≥ 50 is the Partition condition; CI freezes at 75 (the phase transition for seizure)
+    → If CI is at 50-74: it hasn't frozen yet; Partition fires before the phase transition
     → This is a "premature victory" scenario: Church wins before reaching its strongest seizure state
     → Church + Hafenmark Partition is actually Church's SECOND-BEST outcome
     → Church's best: Primary Victory with TCV ≥ 8 and PT ≥ 3 in all territories
@@ -690,7 +690,7 @@ Root: Incompatible co-victories: Crown + Church, Crown + Löwenritter, Church + 
 STRATEGIC IMPLICATIONS OF COMPATIBILITY MAP FOR 5-PLAYER GAME
 │
 ├─ INCOMPATIBILITY ANALYSIS:
-│   Crown + Church: structurally opposed (sovereignty vs theocracy; Crown suppresses TC, Church advances it)
+│   Crown + Church: structurally opposed (sovereignty vs theocracy; Crown suppresses CI, Church advances it)
 │   Crown + Löwenritter: the Coup Counter relationship — a co-victory with the faction threatening you
 │   Church + Varfell: Church views Thread practice as heresy; Varfell pursues Thread mastery
 │   Church + RM: theological antipodes (Solmundic Orthodoxy vs Einhir Restoration)
@@ -717,7 +717,7 @@ STRATEGIC IMPLICATIONS OF COMPATIBILITY MAP FOR 5-PLAYER GAME
 │
 ├─ CROWN + VARFELL COALITION ANALYSIS:
 │   Crown + Varfell co-victory: Crown TCV ≥ 12 AND Varfell TCV ≥ 8 AND VTM ≥ 3 AND RS ≥ 50
-│   → Crown and Varfell are both structurally threatened by Church (TC) and Altonia (IP)
+│   → Crown and Varfell are both structurally threatened by Church (CI) and Altonia (IP)
 │   → Both have Thread-adjacent interests (Crown via Almud TS development, Varfell via VTM)
 │   → Combined condition: RS ≥ 50 requires active Mending → both factions share RS interest
 │   → This co-victory creates the "Thread-realist" coalition against Church theocracy and Altonian invasion
@@ -762,7 +762,7 @@ STRATEGIC IMPLICATIONS OF COMPATIBILITY MAP FOR 5-PLAYER GAME
 | NEW-OI-47 | Woven unit Discipline cap: can Thread Weaving increase a unit's Discipline above its starting maximum (e.g., above Discipline 4 for Cavalry)? The brittleness rule references "Size loss > Discipline" which changes if Discipline can be raised above its baseline. If Weaving can exceed the normal cap, the brittleness threshold is harder to reach. | P2 |
 | NEW-OI-48 | Named unit officer Conviction assignment: "Inherited from faction (one of the faction's two Conviction values per npc_behavior_v30 §2)." Which two Conviction values does Crown use? Crown has Primary: Order and Secondary: Reason (from Almud §2.1). Does this mean Crown officers have either Order or Reason Conviction, chosen at Muster? Or always Order (the primary)? | P3 |
 | NEW-OI-49 | Officer death roll clarification: "Roll 1d10. On result ≤ Size lost, officer killed." — does this roll once per engagement or once per turn? A unit losing 1 Size per turn over 5 turns: 5 separate 10% rolls vs a unit losing 5 Size in one turn: 1 roll at 50%. Same expected value but very different tension dynamics. | P2 |
-| NEW-OI-50 | RS ≤ 20 → ALL territories CV −1 (Calamity Drift §1.3): this includes T1 Valorsplatz (CV 4), T9 Himmelenger (CV 5 soft cap), T14 Ehrenfeld (CV 4). At RS 20, Church's highest-CV territories begin losing CV. Does Church's TC Conviction Yield also begin declining at RS 20 from this CV erosion? If T9 drops from CV 5 to CV 4: Conviction Yield changes from +1 to +0.5. RS catastrophe suppresses the theocracy that was supposed to dominate at RS 40. | P2 |
+| NEW-OI-50 | RS ≤ 20 → ALL territories CV −1 (Calamity Drift §1.3): this includes T1 Valorsplatz (CV 4), T9 Himmelenger (CV 5 soft cap), T14 Ehrenfeld (CV 4). At RS 20, Church's highest-CV territories begin losing CV. Does Church's CI Conviction Yield also begin declining at RS 20 from this CV erosion? If T9 drops from CV 5 to CV 4: Conviction Yield changes from +1 to +0.5. RS catastrophe suppresses the theocracy that was supposed to dominate at RS 40. | P2 |
 
 ---
 

@@ -56,11 +56,11 @@ The project now contains the following resolution layers that a player/GM must t
 3. Pool construction: differs per subsystem (Spirit×2+History+TPS for Thread; Agi×2+History+3 for Combat; Att+2 for Disposition; Power at TN6 for Volley) — 6+ distinct pool formulas
 4. Momentum: 3-threshold system with carry rules
 5. Thread contact: TS gating, Coherence tracking, Intelligibility, Dissonance risk, Gap scale model
-6. Social: Disposition (−4 to floor(Bonds/2)+1), Knots (pool=Bonds×2+3, tiers), Debate (Conviction Track, Doubt Markers, Concentration, Appraise/Argue/Reinforce)
+6. Social: Disposition (−4 to floor(Bonds/2)+1), Knots (pool=Bonds×2+3, tiers), Debate (Piety Track, Doubt Markers, Concentration, Appraise/Argue/Reinforce)
 7. Investigation: Evidence Track, Survey Ob, Cover, Cold Trail → Desperate Trail
 8. Combat: Versus resolution with pool-split, 4 categories (Ranged/Melee/Magic/Social), Yield/Disengage mechanics
 9. Mass combat: Sub-unit composition, Discipline, Command, Volley, Shield Wall, simultaneous damage, Thread coherence 7-turn window
-10. Faction play: Mandate, Stability, Influence, Intel, Loyalty, TC, RS, PI, Coup Counter, Guild Favour — 10+ trackers
+10. Faction play: Mandate, Stability, Influence, Intel, Loyalty, CI, RS, PI, Coup Counter, Guild Favour — 10+ trackers
 
 **Board Game Mode:**
 
@@ -68,7 +68,7 @@ The project now contains the following resolution layers that a player/GM must t
 2. Territory control: TCV, Fort Level, Occupation, Seizure, Contention Markers, Casus Belli
 3. Diplomacy: Open Pledge, Crown Treaty, Coalition Pairs, Diplomatic Tokens, Resentment
 4. Victory: 6+ distinct victory paths with per-faction requirements spanning 12–16 seasons
-5. Accounting Phase: all clocks advance, RS/TC/IP/PI interact
+5. Accounting Phase: all clocks advance, RS/CI/IP/PI interact
 6. NPC Behavior: Stance Triangles, Priority Trees, Framework Drift conditions
 
 **Hybrid Mode:**
@@ -94,7 +94,7 @@ Mass battle sub-units have Discipline and Command. Thread-capable units can perf
 Socializing uses Disposition (now −4 to variable cap), which feeds into Knot formation (which requires its own Connect roll at Ob = tier minus Disposition), and Knots affect Debate (through Resonant Style sources), and Debate outcomes affect NPC Disposition. The PP-632 redesign made Disposition more elegant (one formula replaces a lookup table) but the three-way cycle remains.
 
 **Cascade 4 — Board Game Accounting Phase:**
-At Accounting, all of the following interact: TC advances, RS adjusts, IP ticks, PI increments, Coup Counter evaluates, each NPC evaluates their Priority Tree, each faction evaluates victory conditions, Graduated Seizure checks, Guild Favour checks. The NPC Behavior system (PP-NPC-01 through PP-NPC-04) added four new conditional checks to this phase.
+At Accounting, all of the following interact: CI advances, RS adjusts, IP ticks, PI increments, Coup Counter evaluates, each NPC evaluates their Priority Tree, each faction evaluates victory conditions, Graduated Seizure checks, Guild Favour checks. The NPC Behavior system (PP-NPC-01 through PP-NPC-04) added four new conditional checks to this phase.
 
 **Mitigation assessment:**
 
@@ -133,7 +133,7 @@ The stat audit session (PP-611–614) and the comparative audit (PP-630–634) b
 1. "Remembrancer" → "Witness" rename (PP-635–638) was applied across the codebase. Clean.
 2. "Certainty" has had multiple definitions across sessions. PP-607 defined it one way, PP-553 redesigned it. The canonical definition is in params_core but the name "Certainty" appears in older arc files with the prior meaning.
 3. "Dissolution" vs "Severing" — Thread terminology was standardised in the threadwork redesign, but some arc files still reference the older "Dissolution" terminology when describing Thread failure outcomes that should be "Severing."
-4. "Mandate" is used by both Crown and Church factions with different mechanical meanings (Crown Mandate governs legitimacy; Church Mandate governs institutional authority and Ob for TC Suppress). PP-547 standardised the TC Suppress Ob to floor(Mandate/2)+1, which applies to *Church* Mandate — but some arc files reference "Mandate" without specifying whose.
+4. "Mandate" is used by both Crown and Church factions with different mechanical meanings (Crown Mandate governs legitimacy; Church Mandate governs institutional authority and Ob for CI Suppress). PP-547 standardised the CI Suppress Ob to floor(Mandate/2)+1, which applies to *Church* Mandate — but some arc files reference "Mandate" without specifying whose.
 
 ### Mechanical Value Consistency
 
@@ -168,7 +168,7 @@ The scale_transitions_design_v1 (PP-594, now scale_transitions_v30.md) was creat
 
 The arc system produces 120+ arcs across 8 batches. These arcs have emergence conditions (clock thresholds, NPC track values, faction stat breakpoints). In BG mode, arcs manifest as clock events and mechanical effects. In TTRPG mode, the GM interprets them narratively. In Hybrid mode, the question is: *when does a board-state threshold trigger a Zoom In for an NPC arc moment?*
 
-The NPC Behavior system (PP-NPC-01–04) defines AI priority trees that produce board actions. The arc emergence conditions (from arc_register.md v8) define when arcs "fire." But there is no document mapping which specific arc emergence conditions should produce a Zoom In prompt for the GM in Hybrid mode. The Zoom In reference card (PP-556) added arc-specific triggers for a few arcs (Haelgrund Defection, TC seizure) but this covers perhaps 5 of 120+ arcs.
+The NPC Behavior system (PP-NPC-01–04) defines AI priority trees that produce board actions. The arc emergence conditions (from arc_register.md v8) define when arcs "fire." But there is no document mapping which specific arc emergence conditions should produce a Zoom In prompt for the GM in Hybrid mode. The Zoom In reference card (PP-556) added arc-specific triggers for a few arcs (Haelgrund Defection, CI seizure) but this covers perhaps 5 of 120+ arcs.
 
 **Assessment:** This is the single largest structural gap in the mode transition system. Board Game works (arcs are mechanical effects). TTRPG works (GM reads the arc library). Hybrid's "best of both" promise requires the Zoom In triggers for all major arcs to be specified — otherwise the GM doesn't know when to call a personal scene for an NPC arc moment during board play.
 
@@ -209,7 +209,7 @@ The arc system grew from ~35 arcs to 120+ arcs during this sprint:
 | 04 | 19–35 | Branching decision points |
 | 05 | 36–40 | Interdependent intersecting arcs |
 | 06 | 41–45 | Deep mechanical coupling |
-| 07 | 46–50 | TC/VTM/Loyalty/RS interdependencies |
+| 07 | 46–50 | CI/VTM/Loyalty/RS interdependencies |
 | 08 | 51–55 | Contact duration, PI cascade, wound economy |
 
 ### Arc Quality Audit
@@ -235,11 +235,11 @@ The critique session identified and corrected:
 
 The arc register v8 documents the following principal causation chains:
 
-**Chain A — Thread Counter (TC) → Everything:**
-TC is the master clock. TC advancing triggers: Church Assert/Suppress evaluation → Mandate changes → Ob changes for all faction actions → NPC priority tree re-evaluation → domain action selection → territory control changes → victory condition evaluation. Every faction's victory path either requires TC management or is affected by it. TC is the single most consequential variable in the system.
+**Chain A — Thread Counter (CI) → Everything:**
+CI is the master clock. CI advancing triggers: Church Assert/Suppress evaluation → Mandate changes → Ob changes for all faction actions → NPC priority tree re-evaluation → domain action selection → territory control changes → victory condition evaluation. Every faction's victory path either requires CI management or is affected by it. CI is the single most consequential variable in the system.
 
 **Chain B — Coup Counter → Crown Stability:**
-Three independent triggers (TC ≥ 40 unopposed, Torben Loyalty ≤ 2–3, Crown loses 2+ territories without military response) feed a counter ceiling-3. The PP-NPC-02 fix (Coup Counter requires active Church Assert, not passive TC) was critical — without it, the coup was deterministic in 5/5 simulation runs.
+Three independent triggers (CI ≥ 40 unopposed, Torben Loyalty ≤ 2–3, Crown loses 2+ territories without military response) feed a counter ceiling-3. The PP-NPC-02 fix (Coup Counter requires active Church Assert, not passive CI) was critical — without it, the coup was deterministic in 5/5 simulation runs.
 
 **Chain C — RS → Calamity Radiation → Thread Operations:**
 Reality Strength decline affects calamity radiation geography → affects Thread operation difficulty at affected locations → affects practitioner Coherence → affects RS feedback. This is a self-reinforcing loop with no equilibrium point unless players actively intervene. The Gap scale model (PP-602–606) provides the self-healing mechanism (Gaps close naturally at their scale), but the radiation geography gradient means this loop is faster in the south than the north.
@@ -307,7 +307,7 @@ PP-632 redesigned Disposition as a derivative of Bonds. Bonds also determines Kn
 **Strengths:**
 - Designed, audited (15 findings), simulated (7 findings, 4 patches), and propagated in a single session. Full lifecycle.
 - Stance Triangles and Priority Trees provide deterministic NPC decision logic.
-- Framework Drift conditions (PP-NPC-03: Church drift requires Stability ≥ 4 + TC advance + per year) prevent runaway NPC behavior.
+- Framework Drift conditions (PP-NPC-03: Church drift requires Stability ≥ 4 + CI advance + per year) prevent runaway NPC behavior.
 
 **Weaknesses:**
 - The system was designed and tested within a single session (~826 lines of design doc). The simulation (SIM-NPC-01) found 4 critical issues in 5 seeds × 12 seasons. All were patched — but finding 4 criticals in the first simulation run suggests the initial design had significant calibration gaps.
@@ -359,7 +359,7 @@ PP-632 redesigned Disposition as a derivative of Bonds. Bonds also determines Kn
 
 1. **PP-632 Disposition/Knot redesign.** The single most impactful mechanical change. Replaces a lookup table with one formula, ties Disposition to Bonds (creating a natural social investment → social capability pathway), and properly distinguishes Knot rupture from loss. This is design work that survives.
 
-2. **NPC Behavior System.** A complete subsystem from blank page to simulation-validated in one session. The four simulation-derived patches (Crown Mandate gate, TC awareness for coup, Church drift conditioning, Varfell collection cooldown) are all mechanically necessary corrections.
+2. **NPC Behavior System.** A complete subsystem from blank page to simulation-validated in one session. The four simulation-derived patches (Crown Mandate gate, CI awareness for coup, Church drift conditioning, Varfell collection cooldown) are all mechanically necessary corrections.
 
 3. **Threadwork three-axis Ob system (PP-622).** Depth (Fibonacci) + Breadth + Distance. Mathematically elegant, narratively grounded ("how primordial, how much, how far"), and replaces a flat Ob table.
 

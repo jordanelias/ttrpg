@@ -1,6 +1,6 @@
 # VALORIA — EMERGENT ARC SKELETON TEST — BATCH 4
 ## Session: 2026-04-17 | Continuation of Batches 1-3
-## New surfaces: Conviction Track (CV) per territory, Church Seizure Ob formula, TC Conviction Yield, Baralta Crown Claim / Consecration Crisis, Varfell Path B Deeds, RM Emergence triple condition, Desperate Trail (§4.4), Contested Investigation (§4.6), Depth rendering strain (§3.4), Niflhel Social Toolkit (§5.8), Exposure Track, Knot detection (§2.6), NPC-Initiated Demands (§5.9), AEA clock, CV environmental events, Campaign modes cross-mode interaction
+## New surfaces: Piety Track (CV) per territory, Church Seizure Ob formula, CI Conviction Yield, Baralta Crown Claim / Consecration Crisis, Varfell Path B Deeds, RM Emergence triple condition, Desperate Trail (§4.4), Contested Investigation (§4.6), Depth rendering strain (§3.4), Niflhel Social Toolkit (§5.8), Exposure Track, Knot detection (§2.6), NPC-Initiated Demands (§5.9), AEA clock, CV environmental events, Campaign modes cross-mode interaction
 ## Does NOT repeat NEW-S1 through NEW-S51 from Batches 1-3
 
 ---
@@ -28,7 +28,7 @@ T6 STILLHELM CV TRAJECTORY UNDER RS DECLINE
 │   Seizure Ob = 2 + Fort Level (0, no fortress) + max(0, 3−0) = 2 + 0 + 3 = Ob 5
 │   Church Influence pool: ~4-5 dice (Church Influence starting value)
 │   Success rate at Ob 5 with 5 dice (TN 7): ~27% (very low)
-│   Church cannot reliably seize T6 even at TC ≥ 75 because CV 0 creates near-impossible Ob
+│   Church cannot reliably seize T6 even at CI ≥ 75 because CV 0 creates near-impossible Ob
 │   → The Calamity Drift PROTECTS low-RS territories from Church seizure
 │   → This is the metaphysical defense mechanism: the Calamity's rendering damage repels Church governance
 │
@@ -74,20 +74,20 @@ T6 STILLHELM CV TRAJECTORY UNDER RS DECLINE
 
 ---
 
-### NEW-S53: TC CONVICTION YIELD MANIPULATION — CV SUPPRESSION AS TC BRAKE
+### NEW-S53: CI CONVICTION YIELD MANIPULATION — CV SUPPRESSION AS CI BRAKE
 
 ```
-Root: TC Conviction Yield (§3 PP-412): for each territory where Church is prominent (Church Mandate > controller's), CV 5 → +1 TC/season; CV 4 → +0.5; CV 3-0 → 0
+Root: CI Conviction Yield (§3 PP-412): for each territory where Church is prominent (Church Mandate > controller's), CV 5 → +1 CI/season; CV 4 → +0.5; CV 3-0 → 0
       Suppress action (existing): negates Step 1 passive +1 one season only
-      Hafenmark Structural Suppression: Baralta Mandate ≥ 4 → TC −1/season permanently
+      Hafenmark Structural Suppression: Baralta Mandate ≥ 4 → CI −1/season permanently
 
 PLAYER RUNS SYSTEMATIC CV REDUCTION IN CHURCH-PROMINENT TERRITORIES
 │
 ├─ CHURCH-PROMINENT TERRITORIES AT GAME START:
-│   T9 Himmelenger: Church controls, CV 5 → +1 TC/season (Conviction Yield)
+│   T9 Himmelenger: Church controls, CV 5 → +1 CI/season (Conviction Yield)
 │   Other territories where Church Mandate > controller's: depends on mid-game state
 │   Assume early game: Church prominent in T9 only
-│   Early TC generation: Passive +1 + Conviction Yield +1 − Hafenmark Suppress −1 = net +1/season
+│   Early CI generation: Passive +1 + Conviction Yield +1 − Hafenmark Suppress −1 = net +1/season
 │
 ├─ PLAYER TARGETS T9 CV REDUCTION:
 │   Hafenmark Secular Governance (−1 CV, cannot go below 2): player must be in Hafenmark faction
@@ -97,45 +97,45 @@ PLAYER RUNS SYSTEMATIC CV REDUCTION IN CHURCH-PROMINENT TERRITORIES
 │   T9 has Einhir cultural presence (prior to Catastrophe, Himmelenger was an Einhir site)
 │   → Varfell can perform Cultural Reclamation in T9 via Einhir cultural presence exception
 │   Ob 2 (Varfell Influence vs Ob 2): success → CV −1
-│   T9 CV: 5 → 4 (−0.5 Conviction Yield) → one season of Varfell action reduces TC yield by 0.5
+│   T9 CV: 5 → 4 (−0.5 Conviction Yield) → one season of Varfell action reduces CI yield by 0.5
 │
 ├─ CONVICTION YIELD THRESHOLD ANALYSIS:
-│   T9 at CV 5: +1 TC/season
-│   T9 at CV 4: +0.5 TC/season (halved)
+│   T9 at CV 5: +1 CI/season
+│   T9 at CV 4: +0.5 CI/season (halved)
 │   T9 at CV 3: +0 (no yield)
 │   → Two successful Varfell Cultural Reclamation actions on T9 eliminates Conviction Yield entirely
-│   → Net TC generation: Passive +1 − Hafenmark Suppress −1 = net 0/season
-│   → TC frozen by combining two mechanics: Baralta's structural suppression + Varfell CV reduction
+│   → Net CI generation: Passive +1 − Hafenmark Suppress −1 = net 0/season
+│   → CI frozen by combining two mechanics: Baralta's structural suppression + Varfell CV reduction
 │
 ├─ THE COMBINED BRAKE:
-│   Baralta (Mandate ≥ 4): TC −1/season permanent
+│   Baralta (Mandate ≥ 4): CI −1/season permanent
 │   Varfell (2 successful Reclamations on T9): Conviction Yield eliminated
-│   Net result: TC +1 (passive) − 1 (Baralta) + 0 (CV 3) = net 0/season
-│   TC stays at starting value indefinitely
-│   TC 75 (phase transition) becomes unreachable unless Church actively asserts
-│   Church Assert: TC +1 (additional) if successful → net +1/season restored
+│   Net result: CI +1 (passive) − 1 (Baralta) + 0 (CV 3) = net 0/season
+│   CI stays at starting value indefinitely
+│   CI 75 (phase transition) becomes unreachable unless Church actively asserts
+│   Church Assert: CI +1 (additional) if successful → net +1/season restored
 │   → But Church Assert costs a Standard Action → other Church priorities must wait
 │
 ├─ CHURCH RESPONSE OPTIONS:
-│   Priority 3 (BG tree): Assert if TC < 75 AND Mandate ≥ 3 → Assert fires first
+│   Priority 3 (BG tree): Assert if CI < 75 AND Mandate ≥ 3 → Assert fires first
 │   Priority 4: Preach to restore T9 CV
-│   But Preach (CV +1) takes 1 action; Assert (TC +1) takes 1 action
+│   But Preach (CV +1) takes 1 action; Assert (CI +1) takes 1 action
 │   Church has 1 Standard Action per season → must choose Preach OR Assert, not both
-│   → If Church chooses Preach: TC net stays 0 (no Assert) but CV begins recovering (toward Yield again)
-│   → If Church chooses Assert: TC +1 net (+2 from Assert, − 1 Hafenmark = +1) but CV stays at 3 (no Yield)
-│   → The player forces Church into a perpetual choice between TC advancement and CV maintenance
+│   → If Church chooses Preach: CI net stays 0 (no Assert) but CV begins recovering (toward Yield again)
+│   → If Church chooses Assert: CI +1 net (+2 from Assert, − 1 Hafenmark = +1) but CV stays at 3 (no Yield)
+│   → The player forces Church into a perpetual choice between CI advancement and CV maintenance
 │
 └─ PLAYER STANDING REQUIREMENT:
     Cultural Reclamation is a Varfell Domain Action (Influence pool)
     Player must be inside Varfell faction at Standing 3+ (Counselor) to suggest Domain Actions
     OR: player at Renown 7+ using independent Domain Action pool
     Both paths require prior investment
-    → The TC brake through CV manipulation is a high-Standing or high-Renown play
-    → It is also the most elegant TC suppression path: it doesn't require the Suppress action's per-season cost
+    → The CI brake through CV manipulation is a high-Standing or high-Renown play
+    → It is also the most elegant CI suppression path: it doesn't require the Suppress action's per-season cost
     and it doesn't require Baralta to be personally present (it stacks with her structural suppression passively)
 ```
 
-**New emergence:** The Conviction Yield formula creates a TC manipulation surface through CV reduction that was not possible with the old flat-rate TC generation. Two Varfell Domain Actions targeting T9 permanently eliminates Church's Conviction Yield, freezing TC when combined with Baralta's structural suppression. This makes Varfell and Hafenmark's TC suppression genuinely complementary rather than redundant.
+**New emergence:** The Conviction Yield formula creates a CI manipulation surface through CV reduction that was not possible with the old flat-rate CI generation. Two Varfell Domain Actions targeting T9 permanently eliminates Church's Conviction Yield, freezing CI when combined with Baralta's structural suppression. This makes Varfell and Hafenmark's CI suppression genuinely complementary rather than redundant.
 
 ---
 
@@ -147,15 +147,15 @@ PLAYER RUNS SYSTEMATIC CV REDUCTION IN CHURCH-PROMINENT TERRITORIES
 
 ```
 Root: Consecration Crisis: if Church Stability ≥ 4 → Himlensendt refuses; Crown Mandate inherited at −2
-      If Church Stability ≤ 3 → Himlensendt consecrates under duress; TC −5; Church Stability −3
-      Optimal window: mid-game (Season 8–10) — Church Stability 3, TC 35–40
+      If Church Stability ≤ 3 → Himlensendt consecrates under duress; CI −5; Church Stability −3
+      Optimal window: mid-game (Season 8–10) — Church Stability 3, CI 35–40
       Override: if Himlensendt experienced originary Lock encounter → Arc governs, not Stability
 
 PLAYER ENGINEERS THE OPTIMAL CONSECRATION WINDOW
 │
 ├─ TARGET STATE:
 │   Church Stability ≤ 3 at moment Baralta wins Succession Contest
-│   TC at 35–45 (low enough that TC −5 doesn't waste the suppression)
+│   CI at 35–45 (low enough that CI −5 doesn't waste the suppression)
 │   Crown Mandate ≤ 2 (trigger condition for Succession Contest) + PI ≥ 5
 │
 ├─ CHURCH STABILITY REDUCTION PATH:
@@ -167,18 +167,18 @@ PLAYER ENGINEERS THE OPTIMAL CONSECRATION WINDOW
 │
 ├─ THE SUCCESSION CONTEST MECHANICS:
 │   Trigger: Crown Mandate 0 + Loyalty 0 → Contest opens at next Accounting
-│   Candidates: Löwenritter (Military 5 + Stability), Hafenmark (Mandate + Influence), Church (TC ≥ 40)
-│   If Church Stability is 3: Church cannot contest (TC ≥ 40 required for Church claim, Stability must support)
+│   Candidates: Löwenritter (Military 5 + Stability), Hafenmark (Mandate + Influence), Church (CI ≥ 40)
+│   If Church Stability is 3: Church cannot contest (CI ≥ 40 required for Church claim, Stability must support)
 │   Hafenmark vs Löwenritter: Hafenmark Mandate 4 + Influence 4 = 8 pool vs Löwenritter Military 5 + Stability
 │   With Baralta Claim Precondition Domain Action pre-fired (+2D): Hafenmark total ≈ 10 pool
 │   Löwenritter Military 5 + Stability 3 ≈ 8 pool → Hafenmark wins more often than not
 │
 ├─ CONSECRATION CRISIS FIRES (Church Stability 3):
 │   Church Stability 3 ≤ 3 → Himlensendt consecrates under duress
-│   TC −5: TC was at ~40 (pre-suppression) → TC 35 (well below phase transition at 75)
+│   CI −5: CI was at ~40 (pre-suppression) → CI 35 (well below phase transition at 75)
 │   Church Stability −3: 3 → 0 (Church functionally subordinated)
 │   Baralta takes Crown at full Crown Mandate inheritance
-│   → The most powerful single-event TC suppression in the game (−5 in one action)
+│   → The most powerful single-event CI suppression in the game (−5 in one action)
 │   → Church is reduced to subordinate institutional status for remainder of campaign
 │
 ├─ HIMLENSENDT ARC OVERRIDE:
@@ -195,9 +195,9 @@ PLAYER ENGINEERS THE OPTIMAL CONSECRATION WINDOW
 │   Option A: Baralta as Crown, Hafenmark dissolved
 │   → Crown inherits: Hafenmark Mandate 4 + Wealth 5 + Parliamentary apparatus
 │   → Crown Mandate: starting Mandate + Hafenmark inheritance = substantial
-│   → TC suppression: does Crown inherit Hafenmark Structural Suppression?
-│   → If yes: TC −1/season continues under Crown-Baralta even after the merger
-│   → If no: the strongest TC brake in the game disappears when Baralta becomes Crown
+│   → CI suppression: does Crown inherit Hafenmark Structural Suppression?
+│   → If yes: CI −1/season continues under Crown-Baralta even after the merger
+│   → If no: the strongest CI brake in the game disappears when Baralta becomes Crown
 │   → [GAP NEW-OI-31]: Does Hafenmark Structural Suppression (Baralta Mandate ≥ 4) persist
 │     after Baralta becomes Crown rather than Hafenmark leader? New entity, same person.
 │
@@ -586,16 +586,16 @@ HIMLENSENDT GENERATES DEMAND SCENE AGAINST PLAYER (DISPOSITION −2, HERESY INVE
 ├─ DEFLECT FAILURE: Demand enforced, Disposition −1 (−2 → −3 = Hostile)
 │   → Tribunal convenes: Grand Debate 5 exchanges, Church Tribunal adjudicator (Cognition-primary, Church +1D)
 │   → Player must contest OR submit
-│   → Failing the Tribunal: Heresy confirmed → Excommunication eligible (TC +4 if player is a faction leader)
+│   → Failing the Tribunal: Heresy confirmed → Excommunication eligible (CI +4 if player is a faction leader)
 │   → For a non-leader player: Heresy confirmed → Player's faction Mandate −1 (institutional taint)
 │   → Church Attention Pool maximum: Inquisitor permanent in player's home territory
 │
 ├─ INSTITUTIONALIZED PURSUIT CHAIN:
 │   After Demand enforced (Disposition −3 = Hostile):
-│   Himlensendt Priority 2: already fired (practitioner identified). Next season: Priority 3 (Assert, TC +1)
+│   Himlensendt Priority 2: already fired (practitioner identified). Next season: Priority 3 (Assert, CI +1)
 │   → He treats the player's deflection failure as confirmation: his institutional authority functions
-│   → TC +1 from Assert + passive +1 = +2 this season (no Hafenmark Suppress available during player crisis)
-│   → TC acceleration coincides with player's tribunal requirement
+│   → CI +1 from Assert + passive +1 = +2 this season (no Hafenmark Suppress available during player crisis)
+│   → CI acceleration coincides with player's tribunal requirement
 │
 └─ PLAYER COUNTER-TACTIC (if Disposition −3 BEFORE Demand):
     At Hostile Disposition (−3): all social actions at Ob +3
@@ -610,7 +610,7 @@ HIMLENSENDT GENERATES DEMAND SCENE AGAINST PLAYER (DISPOSITION −2, HERESY INVE
        may deter Himlensendt from issuing the Demand (his Priority 2 competes with Priority 4 self-defense)
 ```
 
-**New emergence:** The Demand scene's Deflect Ob (floor of NPC's highest stat ÷ 2 + 2) creates a specific difficulty floor based on the NPC's power. Himlensendt's Influence 6 produces Ob 5 — roughly even odds for a well-built character. The consequence chain from failed Deflect (Disposition −3 → Tribunal → TC acceleration) shows how a single social failure cascades across three systems. The pre-emptive counter-tactic (filing Parliamentary evidence before Disposition hits −2) is the elegant prevention path.
+**New emergence:** The Demand scene's Deflect Ob (floor of NPC's highest stat ÷ 2 + 2) creates a specific difficulty floor based on the NPC's power. Himlensendt's Influence 6 produces Ob 5 — roughly even odds for a well-built character. The consequence chain from failed Deflect (Disposition −3 → Tribunal → CI acceleration) shows how a single social failure cascades across three systems. The pre-emptive counter-tactic (filing Parliamentary evidence before Disposition hits −2) is the elegant prevention path.
 
 ---
 
@@ -857,26 +857,26 @@ NIFLHEL OPERATIVE (TS 30) RUNS COUNTER-INTELLIGENCE IN T8 GRANSOL
 
 ```
 Root: AEA (Altonian Ecclesiastical Accord) clock 0–5: fires when Church + Altonia combine
-      Advancement conditions: TC ≥ 50 + AER ≥ 3; Church controls ≥3 territories; Church Mandate ≥ 6; Crown Mandate ≤ 2; IP ≥ 60
+      Advancement conditions: CI ≥ 50 + AER ≥ 3; Church controls ≥3 territories; Church Mandate ≥ 6; Crown Mandate ≤ 2; IP ≥ 60
       Each condition: AEA +1, once per season maximum
       AEA = 5: Theocratic invasion begins (Church + Altonian theocratic conquest simultaneously)
 
 PLAYER ANALYSIS: WHICH AEA CONDITIONS ARE PLAYER-ADDRESSABLE?
 │
-├─ CONDITION 1: TC ≥ 50 AND AER ≥ 3
-│   TC at 50: achievable mid-game (Season 12–15 at +2/season average rate)
+├─ CONDITION 1: CI ≥ 50 AND AER ≥ 3
+│   CI at 50: achievable mid-game (Season 12–15 at +2/season average rate)
 │   AER (Altonian Ecclesiastical Reputation): Altonian ecclesiastical backing; starts low
-│   Player intervention on TC: Hafenmark Structural Suppression + Varfell CV reduction (NEW-S53)
-│   → Keeping TC below 50 prevents this AEA condition from ever firing
-│   → If TC reaches 50 with AER ≥ 3: AEA +1 per season this condition is true
+│   Player intervention on CI: Hafenmark Structural Suppression + Varfell CV reduction (NEW-S53)
+│   → Keeping CI below 50 prevents this AEA condition from ever firing
+│   → If CI reaches 50 with AER ≥ 3: AEA +1 per season this condition is true
 │   → Player cannot easily address AER (it's Altonian-side politics)
 │
 ├─ CONDITION 2: Church controls ≥ 3 territories
 │   Starting: Church controls T9 (1 territory)
-│   Church must seize 2+ more territories via TC ≥ 75 seizure
-│   → Preventing TC 75 prevents Church from ever seizing territory (Condition 2 cannot fire)
-│   → If TC reaches 75: Church seizure begins → Condition 2 becomes achievable within 3-5 seasons
-│   → Player: TC suppression is the single most important AEA prevention mechanism (prevents both Condition 1 and 2)
+│   Church must seize 2+ more territories via CI ≥ 75 seizure
+│   → Preventing CI 75 prevents Church from ever seizing territory (Condition 2 cannot fire)
+│   → If CI reaches 75: Church seizure begins → Condition 2 becomes achievable within 3-5 seasons
+│   → Player: CI suppression is the single most important AEA prevention mechanism (prevents both Condition 1 and 2)
 │
 ├─ CONDITION 3: Church Mandate ≥ 6
 │   Starting: Church Mandate 5
@@ -901,14 +901,14 @@ PLAYER ANALYSIS: WHICH AEA CONDITIONS ARE PLAYER-ADDRESSABLE?
 ├─ PLAYER MINIMUM VIABLE INTERVENTION:
 │   To prevent AEA from reaching 5:
 │   → Block any 2 of the 5 conditions from EVER firing
-│   → Easiest pair: TC suppression (prevents Conditions 1 AND 2 simultaneously) + IP suppression (Condition 5)
-│   → TC suppression + Schoenland alliance = two investments that prevent 3 of 5 AEA conditions
+│   → Easiest pair: CI suppression (prevents Conditions 1 AND 2 simultaneously) + IP suppression (Condition 5)
+│   → CI suppression + Schoenland alliance = two investments that prevent 3 of 5 AEA conditions
 │   → The remaining conditions (Church Mandate, Crown Mandate) cannot fire if AEA is already stalled at 2
 │
 ├─ AEA = 5 STATE — WHAT HAPPENS:
 │   Altonian Theocracy: Church + Altonian forces invade simultaneously
 │   IP path: Vanguard Priority Tree activates at IP ≥ 75 → advances toward T8
-│   Church simultaneously: TC 75+ → Territorial Seizure active in Church-controlled territories
+│   Church simultaneously: CI 75+ → Territorial Seizure active in Church-controlled territories
 │   Two simultaneous threats: military (Vanguard) + institutional (Church seizure)
 │   → Player cannot address both: must prioritize military (Vanguard in one territory) OR institutional (Church seizure in another)
 │   → This is the designed endgame scenario when AEA fires: a two-front war the player cannot win alone
@@ -926,7 +926,7 @@ PLAYER ANALYSIS: WHICH AEA CONDITIONS ARE PLAYER-ADDRESSABLE?
        converges here as the payoff for diverse social investment
 ```
 
-**New emergence:** The AEA clock has a clear player-intervention logic: blocking TC suppression alone prevents 3 of 5 conditions from firing. The minimum viable intervention is TC suppression + Schoenland alliance — two investments that prevent the most dangerous compound threat. AEA = 5 punishes relationship specialization specifically, making broad social investment the only winning strategy for the late-game crisis.
+**New emergence:** The AEA clock has a clear player-intervention logic: blocking CI suppression alone prevents 3 of 5 conditions from firing. The minimum viable intervention is CI suppression + Schoenland alliance — two investments that prevent the most dangerous compound threat. AEA = 5 punishes relationship specialization specifically, making broad social investment the only winning strategy for the late-game crisis.
 
 ---
 
@@ -934,11 +934,11 @@ PLAYER ANALYSIS: WHICH AEA CONDITIONS ARE PLAYER-ADDRESSABLE?
 
 | ID | Finding | Priority |
 |----|---------|----------|
-| NEW-OI-31 | Does Hafenmark Structural Suppression (TC −1/season while "Baralta's Mandate ≥ 4") persist after Baralta becomes Crown rather than Hafenmark leader? The condition specifies Baralta, not Hafenmark faction. If it follows the person: Crown-Baralta suppresses TC. If it follows the faction: suppression ends when she leaves Hafenmark. Design intent is unclear. | P1 |
+| NEW-OI-31 | Does Hafenmark Structural Suppression (CI −1/season while "Baralta's Mandate ≥ 4") persist after Baralta becomes Crown rather than Hafenmark leader? The condition specifies Baralta, not Hafenmark faction. If it follows the person: Crown-Baralta suppresses CI. If it follows the faction: suppression ends when she leaves Hafenmark. Design intent is unclear. | P1 |
 | NEW-OI-32 | Does player-facilitated Community Weaving in Varfell territory count as Warden's Accord (WA) advancement? Current WA rules specify "Varfell uses Thread operations in Varfell territory AND VTM is public (≥3): WA +1 (once only)." Does player's Thread operation in Varfell territory (with Varfell permission) count as "Varfell uses"? | P2 |
 | NEW-OI-33 | Threadcut beings (Edeyja, TS 50+) at Depth 5 Breach sites: do Breach auto-effects (Coherence −1, Certainty forced ≤2, TS +1) apply to a threadcut being whose rendering operates constitutively at the originary layer? Their self-rendering IS the Breach condition, conceptually. | P2 |
 | NEW-OI-34 | Knot detection (§2.6): Disposition −3 on detection from an NPC at Disposition +3 brings them to 0 (departure trigger, below +1 threshold). This severity seems asymmetric with the relational investment required to reach Disposition +3. Consider: cap the detection penalty at "Disposition becomes +1" (departure imminent but one persuasion chance without the extreme Ob) rather than raw −3 which overshoots. | P2 |
-| NEW-OI-35 | TC generation redesign (conviction_track_v30 §3 PP-412): is this the canonical TC generation system replacing the older flat +1/season model? The document status is "AWAITING USER REVIEW" — not confirmed canonical. The Conviction Yield system (NEW-S53) assumes this redesign is active. Confirm status before treating as canonical. | P1 |
+| NEW-OI-35 | CI generation redesign (conviction_track_v30 §3 PP-412): is this the canonical CI generation system replacing the older flat +1/season model? The document status is "AWAITING USER REVIEW" — not confirmed canonical. The Conviction Yield system (NEW-S53) assumes this redesign is active. Confirm status before treating as canonical. | P1 |
 | NEW-OI-36 | Hafenmark Secular Governance CV floor: the action "cannot reduce CV below 2 via this action." If Hafenmark wants to support RM Emergence (which requires 3 territories at CV ≤ 1), they cannot use Secular Governance to push below CV 2. Is this the intended floor? It prevents Hafenmark from being an RM facilitator through governance. Only Varfell Cultural Reclamation and Community Weaving can go below CV 2. | P2 |
 | NEW-OI-37 | AEA clock reset conditions: not specified in conviction_track_v30. If AEA reaches 4 but then IP drops below 60 (from Schoenland alliance) and Crown Mandate recovers: does AEA reduce? Or does it only advance, never retreat? Specify AEA reduction mechanics (if any). | P2 |
 | NEW-OI-38 | Varfell Path B Deed 1 vs WA interaction: "Control T13 AND garrison/Tribune present in T15 simultaneously for 2 consecutive seasons." If Varfell achieves this via March (military action): WA −1 per seizure. Two consecutive seasons of garrisoning T15 via military march → WA −2 (from the initial seizure of T13 militarily). Does the ongoing garrison count as additional WA cost? Or only the initial seizure? | P2 |
@@ -950,5 +950,5 @@ PLAYER ANALYSIS: WHICH AEA CONDITIONS ARE PLAYER-ADDRESSABLE?
 *End of Batch 4 document.*
 *12 new scenarios (NEW-S52 through NEW-S63), 10 additional open items (NEW-OI-31 through NEW-OI-40).*
 *Combined totals across all four batches: 63 emergent scenarios, 5 feedback loops (Batches 1-2), 40 total open items.*
-*Primary new surfaces covered: Conviction Track (CV) per territory and Calamity Drift, TC Conviction Yield manipulation, Baralta Crown Claim and Consecration Crisis, Varfell Path B Deed mechanics, RM Emergence self-limiting loop, Desperate Trail + Contested Investigation + Exposure stack, Breach encounters as TS growth mechanism, Demand scene mechanics and Deflect Ob, Hybrid cross-mode Thread contradiction timing, Knot detection and relationship betrayal cascade, Niflhel Exposure race in Contested Investigation, AEA clock minimum viable intervention.*
+*Primary new surfaces covered: Piety Track (CV) per territory and Calamity Drift, CI Conviction Yield manipulation, Baralta Crown Claim and Consecration Crisis, Varfell Path B Deed mechanics, RM Emergence self-limiting loop, Desperate Trail + Contested Investigation + Exposure stack, Breach encounters as TS growth mechanism, Demand scene mechanics and Deflect Ob, Hybrid cross-mode Thread contradiction timing, Knot detection and relationship betrayal cascade, Niflhel Exposure race in Contested Investigation, AEA clock minimum viable intervention.*
 *Critical P1 open items this batch: conviction_track_v30 status unconfirmed (NEW-OI-35), Community Weaving Ob formula ambiguity (NEW-OI-40), Hafenmark Structural Suppression persistence after leadership change (NEW-OI-31).*

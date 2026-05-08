@@ -45,7 +45,7 @@ Triggered when a named PC enters a BG-resolved battle or territory.
 ### Variables that DO NOT transfer (remain in BG layer)
 
 - Faction Stability, Wealth, Influence, Mandate (strategic stats — TTRPG personal scene cannot directly alter these; changes queue as Domain Echoes)
-- TC, IP clocks (same — queue, fire at Accounting)
+- CI, IP clocks (same — queue, fire at Accounting)
 - Co-Movement deck state
 
 ### Zoom Out: TTRPG → BG state update
@@ -61,7 +61,7 @@ After TTRPG scene resolves:
 | Thread operation RS consequence | RS track updated immediately (not queued) |
 | Faith-affecting personal scene (sermon, debate, Community Weaving) | CV ±1 in that territory, queued to Accounting. Cap: 1 CV Domain Echo per Zoom In. One territory only. |
 | Fortification damaged (siege scene) | Fortification −N applied immediately |
-| Debate outcome (Conviction Track ≥7 or ≤3) | Queue as Domain Echo: faction Mandate ±1 (winner's faction +1, loser −1 if applicable). Fires at next Accounting. [PP-108] |
+| Debate outcome (Piety Track ≥7 or ≤3) | Queue as Domain Echo: faction Mandate ±1 (winner's faction +1, loser −1 if applicable). Fires at next Accounting. [PP-108] |
 | Gap aversion (Thread Weaving stabilised) | No BG stat change. RS unchanged (Object-scale). Narrative note: territory has a known instability for future Investigation actions. |
 
 ### Phase-Lock Protocol (PP-103) — replaces prior interruption protocol
@@ -158,9 +158,9 @@ Triggered within TTRPG mode when a faction-level event demands personal-scale re
 
 ## 4. BG → BG (within board game: intra-turn transitions)
 
-### TC 80 Seizure (Church territorial event)
+### CI 80 Seizure (Church territorial event)
 
-Trigger: Church TC reaches 80.
+Trigger: Church CI reaches 80.
 | State before | Protocol | State after |
 |-------------|----------|------------|
 | All faction turns in progress | Seizure interrupts at Accounting | All territory rolls resolve before remaining orders |
@@ -200,18 +200,18 @@ These are always mode-specific and do not transfer:
 
 | Transition | State Variables | Conversion Rule | Status |
 |-----------|----------------|-----------------|--------|
-| TTRPG debate end → BG faction stats | TC position, winner's genre, Thread consequences | §6.5 stakes resolve; Domain Echo table stub PP-110 | Partially defined |
-| BG Parliamentary Vote → TTRPG Formal Debate (Zoom In) | Vote count → TC start position | **UNDEFINED** [K2-F-02] | GAP — P1 |
+| TTRPG debate end → BG faction stats | CI position, winner's genre, Thread consequences | §6.5 stakes resolve; Domain Echo table stub PP-110 | Partially defined |
+| BG Parliamentary Vote → TTRPG Formal Debate (Zoom In) | Vote count → CI start position | **UNDEFINED** [K2-F-02] | GAP — P1 |
 | BG Parliamentary Vote → TTRPG Formal Debate (Zoom In) | Remaining vote rounds → Exchange count | **UNDEFINED** [K2-F-02] | GAP — P1 |
 
 **K2-F-02 resolution needed before BG↔TTRPG debate Zoom In is playable.**
-## Victory Condition Check — Hybrid (PP-420 — replaces TC Win-Delay Rule)
+## Victory Condition Check — Hybrid (PP-420 — replaces CI Win-Delay Rule)
 Victory condition checks for ALL factions fire at Accounting Step 12 regardless of active Zoom In. A Zoom In cannot delay or prevent a victory declaration.
 
 - The 2-Accounting holding requirement is assessed across consecutive Accounting steps. A Zoom In spanning an Accounting boundary counts that Accounting.
 - If a faction meets victory conditions at two consecutive Accounting Steps 12, victory is declared at the second.
-- Church victory is no longer TC-threshold-based. Church wins via TCV ≥ 10 + CV ≥ 3 in all held territories, post-TC 75 phase transition. See victory_architecture_v1.md §3.2.
-- The prior "TC ≥ 65 = Church win" rule is struck (PP-420). The Church does not win by reaching a TC threshold alone.
+- Church victory is no longer CI-threshold-based. Church wins via TCV ≥ 10 + CV ≥ 3 in all held territories, post-CI 75 phase transition. See victory_architecture_v1.md §3.2.
+- The prior "CI ≥ 65 = Church win" rule is struck (PP-420). The Church does not win by reaching a CI threshold alone.
 
 ## P-01 Co-Movement Propagation — BG Layer (ED-076 resolved — provisional)
 TTRPG scene Thread operations fire all three auto-effects per P-01. On Zoom Out, these propagate to BG as:

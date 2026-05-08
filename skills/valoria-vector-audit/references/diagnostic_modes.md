@@ -90,11 +90,11 @@ Each mode is a self-contained query over the five graphs (G_cite, G_throughline,
 ```
 | Token | Para | Cite Deg | Status | Concern |
 |---|---|---|---|---|
-| Conviction Track | 16 | 1 | canonical | Central mechanic, no own file |
+| Piety Track | 16 | 1 | canonical | Central mechanic, no own file |
 | Wager | 4 | 1 | canonical | Mechanic exists, surface-form coverage low |
 ```
 
-**v3 reference run finding:** 14 multi-graph isolates. Concerning subset: 5 of 7 Convictions, 3 of 4 Pressure Points, Conviction Track itself — all canonical concepts living inline in NPC Behavior.
+**v3 reference run finding:** 14 multi-graph isolates. Concerning subset: 5 of 7 Convictions, 3 of 4 Pressure Points, Piety Track itself — all canonical concepts living inline in NPC Behavior.
 
 **Action recommended:** Promote canonical concepts to first-class docs with their own files. Their absence from the citation graph isn't because they're unimportant — it's because they're buried.
 
@@ -155,7 +155,7 @@ Each mode is a self-contained query over the five graphs (G_cite, G_throughline,
 | Wager | 1 | 0 | 0 | 0 | canonical | No own file; surface-form rare |
 ```
 
-**v3 reference run finding:** 14 multi-graph isolates. Mostly canonical concepts buried in parent docs (Conviction Track, the 7 Convictions, the 4 Pressure Points, Wager, Thread Revelation).
+**v3 reference run finding:** 14 multi-graph isolates. Mostly canonical concepts buried in parent docs (Piety Track, the 7 Convictions, the 4 Pressure Points, Wager, Thread Revelation).
 
 **Action recommended:** Same as Mode E — promote to first-class docs. Multi-graph isolation of canonical concepts means those concepts can't be discovered, vetted, or maintained as standalone units.
 

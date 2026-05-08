@@ -140,7 +140,7 @@ State transfer spec confirmed present and non-stale (PP-107 applied, 2026-04-02)
 | Mass combat damage formula (PP-086) | TTRPG mass / Hybrid | DEFINED (within TTRPG mass layer) | PP-086 mass damage formula is TTRPG mass combat. BG uses different abstraction (unit Martial stat). Transition from TTRPG mass → BG not fully documented for damage. | P2: TTRPG mass → BG Zoom Out damage equivalence not defined. |
 | Thread in combat (Coherence) | TTRPG → Hybrid | DEFINED | "Coherence −1 per Thread operation in mass battle (ST-TW-03)." Confirmed in design doc §10. | — |
 | Thread in combat → BG | BG | DEFINED (abstractly) | "Thread operations abstracted to Co-Movement cards and faction Thread orders." Confirmed. | — |
-| Debate → Conviction Track → BG | TTRPG → BG Zoom Out | PARTIALLY defined | PP-108: "Debate outcome (CT ≥7 or ≤3) → Domain Echo: faction Mandate ±1." Defined. But BG→TTRPG debate Zoom In is P1 gap (K2-F-02) — this is pre-existing, not a combat audit finding. | — |
+| Debate → Piety Track → BG | TTRPG → BG Zoom Out | PARTIALLY defined | PP-108: "Debate outcome (CT ≥7 or ≤3) → Domain Echo: faction Mandate ±1." Defined. But BG→TTRPG debate Zoom In is P1 gap (K2-F-02) — this is pre-existing, not a combat audit finding. | — |
 | Armour DR | TTRPG → BG | UNDOCUMENTED | BG weapon types map to "Anti-Armour keyword and unit type" per §5 design doc. No Anti-Armour keyword definition found in combat doc or params_combat. | **P1: Anti-Armour keyword referenced but undefined.** |
 
 ---

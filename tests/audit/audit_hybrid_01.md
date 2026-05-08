@@ -12,7 +12,7 @@
 2. State Transfer — variable inventory (Zoom In/Out)
 3. BG→TTRPG unit conversion (B.2)
 4. Domain Echo (personal/scene → faction attribute)
-5. TC threshold check during suspension
+5. CI threshold check during suspension
 6. RS routing (immediate vs queued)
 7. Clock behavior during suspension
 8. Concurrent Zoom In (multiple PCs)
@@ -47,7 +47,7 @@
 |--------|-------|-------|-----|--------|--------------|
 | Faction stats (M/I/W/Mil/Sta) | 1–7 | ✓ | ✓ | suspended during Zoom In | None |
 | RS | 0–100 | shared | shared | shared, immediate | None |
-| TC | 0–65+ | shared | shared | suspended | None |
+| CI | 0–65+ | shared | shared | suspended | None |
 | IP | 0–80+ | shared | shared | suspended | None |
 | PI | 0–10 | shared | shared | suspended | None |
 | Unit Cohesion | TTRPG 1–7 / BG 0–6 | 1–7 | 0–6 | 1:1 claimed | **RANGE MISMATCH: BG 0 has no TTRPG equivalent; BG 6 maps to TTRPG 6, not 7 max** |
@@ -72,8 +72,8 @@ BG turn running
        └─ Phase-Lock: hold until legal point (Phase 1/3/6 Step 1)
             └─ State inventory: 8 variables checked
                  ├─ Transfer: RS, Cohesion, Morale*, Str*, CP*
-                 ├─ Suspend: Domain Actions, Accounting, Co-Movement, TC threshold
-                 └─ Discard: Faction stats, TC/IP/PI clocks
+                 ├─ Suspend: Domain Actions, Accounting, Co-Movement, CI threshold
+                 └─ Discard: Faction stats, CI/IP/PI clocks
                       └─ TTRPG scene runs (personal combat, Thread, Debate)
                            └─ Zoom Out
                                 ├─ Immediate: Str updates, RS consequences, fortifications
@@ -155,7 +155,7 @@ What happens if the general's personal combat runs more than 1 round? "General's
 | GAP-HYB-10 | Missing duration | Mass→Personal Register Shift: no maximum personal combat duration stated | params_scale_transitions Eight Handoff Rules | P2 | New |
 | GAP-HYB-11 | Missing ordering | Multiple Domain Echoes from same scene: no stated firing order at Accounting | state_transfer_spec §Zoom Out | P2 | New |
 | GAP-HYB-12 | Missing conversion | CR (TTRPG) → BG commander bonus: no formula stated for Zoom Out | state_transfer_spec §Zoom Out | P2 | New |
-| ED-056 (prior) | Open | TC threshold during suspension | — | P2 | Open |
+| ED-056 (prior) | Open | CI threshold during suspension | — | P2 | Open |
 | ED-059 (prior) | Open | RS=0 at Zoom In | — | P2 | Open |
 
 **Total new gaps: 12 (5 P1, 4 P2, 3 carry-forward)**
@@ -210,7 +210,7 @@ What happens if the general's personal combat runs more than 1 round? "General's
 | Mechanic | Modes | Transition Defined? | State Preserved? | Flag |
 |----------|-------|--------------------|-----------------|----|
 | RS (Rendering Stability) | TTRPG/BG/HYB | Yes — immediate in all modes | Yes | None |
-| TC (Theocracy Counter) | TTRPG/BG/HYB | Yes — suspended during Zoom In, threshold deferred | Yes | ED-056 open |
+| CI (Church Influence) | TTRPG/BG/HYB | Yes — suspended during Zoom In, threshold deferred | Yes | ED-056 open |
 | Domain Echo | TTRPG/HYB | **Partially — timing differs (immediate vs queued)** | Yes (queued in HYB) | **P1: AUDIT-C-01** |
 | Unit Strength | TTRPG/BG/HYB | Yes (PP-103 B.5) | **Stale in state_transfer_spec** | **P1: GAP-HYB-02** |
 | Unit Cohesion | TTRPG/BG/HYB | "1:1" claimed | **Scale mismatch** | **P1: GAP-HYB-03** |
@@ -258,7 +258,7 @@ Testing each Zoom Out row:
 | PC Wounds | No BG effect | ✓ Correct |
 | Thread op RS | Immediate update | ✓ Correct |
 | Fortification damaged | Immediate −N | ✓ Correct |
-| PC debate outcome (Conviction Track ≥7 or ≤3) | **Not in Zoom Out table** | **MISSING: debate outcome has no Zoom Out mapping** |
+| PC debate outcome (Piety Track ≥7 or ≤3) | **Not in Zoom Out table** | **MISSING: debate outcome has no Zoom Out mapping** |
 | Threadwork Gap averted | **Not in Zoom Out table** | **MISSING: Gap aversion has no Zoom Out mapping** |
 
 **[ST-K2-02 — P2]: Debate outcome and Gap aversion are absent from Zoom Out table.** These are common TTRPG scene outcomes that should queue faction consequences.

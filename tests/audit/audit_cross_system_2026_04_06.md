@@ -60,7 +60,7 @@ victory_architecture_v1.md (canonical per canonical_sources.yaml) defines an ent
 |-----------|------------------------|-------------------|
 | Structure | TCV thresholds + political conditions, 2 Accounting hold | Deed-count system (3–5 Deeds per faction) |
 | Crown primary | TCV ≥ 18 + suppress all rivals + IP < 60 + PI ≥ 3 | 5 Deeds + PI ≥ 3 gate |
-| Church primary | TCV ≥ 10 + CV ≥ 3 all held (post-TC 75) | 4 Deeds + AER ≥ 3 + TC ≥ 65 |
+| Church primary | TCV ≥ 10 + CV ≥ 3 all held (post-CI 75) | 4 Deeds + AER ≥ 3 + CI ≥ 65 |
 | Hafenmark primary | TCV ≥ 12 + Mandate ≥ 4 + PI ≥ 5 + Crown Mandate ≤ 3 | 3 paths (Reformed Valoria / Theological Supremacy / Parliamentary) |
 | Löwenritter | Conditions-based (TCV ≥ 10 + political gates) | 5 Deeds |
 | Hollow Victory | Dissolved | Active (modifier table present) |
@@ -72,13 +72,13 @@ params_board_game still contains the full Deed-based system, Hollow Victory modi
 
 ---
 
-### A-04. TC Generation: victory_architecture vs params_board_game (CONFLICT — P2)
+### A-04. CI Generation: victory_architecture vs params_board_game (CONFLICT — P2)
 
-victory_architecture_v1.md §7 defines a 5-step TC generation sequence (Institutional Momentum → Conviction Yield → Assert → Suppress → Hafenmark Structural Suppression) with TC starting at 28 and phase transition at 75.
+victory_architecture_v1.md §7 defines a 5-step CI generation sequence (Institutional Momentum → Conviction Yield → Assert → Suppress → Hafenmark Structural Suppression) with CI starting at 28 and phase transition at 75.
 
-params_board_game references TC starting at 28 (corrected by PP-189) and primary victory at TC ≥ 65 (P-32). The phase transition at TC 75 and the new TC generation formula (including Conviction Yield based on per-territory CV values) are not reflected in params_board_game.
+params_board_game references CI starting at 28 (corrected by PP-189) and primary victory at CI ≥ 65 (P-32). The phase transition at CI 75 and the new CI generation formula (including Conviction Yield based on per-territory CV values) are not reflected in params_board_game.
 
-**Required action:** params_board_game TC generation section must be updated to match victory_architecture §7.
+**Required action:** params_board_game CI generation section must be updated to match victory_architecture §7.
 
 ---
 
@@ -175,7 +175,7 @@ WA is not defined in params_board_game. The track, its movement rules, and its i
 
 ---
 
-### B-06. Victory Architecture: Conviction Track (CV) Starting Values — Not in params_board_game (GAP — P1)
+### B-06. Victory Architecture: Piety Track (CV) Starting Values — Not in params_board_game (GAP — P1)
 
 CV starting values per territory (T15 = 0 hard-fixed, T9 = 5, Hafenmark territories = 3, Varfell = 2, Crown = varies) are defined only in victory_architecture §2. params_board_game contains no CV track definition. CV is a core game state variable that affects Church seizure Ob, Calamity Drift, and victory conditions.
 
@@ -260,7 +260,7 @@ These are pre-geography_design.md numbering. victory_architecture_v1.md uses the
 
 | ID | Description | Files Affected |
 |----|------------|----------------|
-| A-04 | TC generation formula not propagated | params_board_game |
+| A-04 | CI generation formula not propagated | params_board_game |
 | ~~A-06~~ | ~~Victory check at Accounting rewrite not propagated~~ | Already present (false finding) |
 | A-07 | calamity_radiation.md Integration Notes not updated to mark completed cross-refs | calamity_radiation.md |
 | A-09 | Warden Cooperation track not in params_board_game | params_board_game |
@@ -280,6 +280,6 @@ All five systems PASS canon constraints (P-01 through P-15) with two minor flags
 
 ### Systemic Observation
 
-The core conflict pattern is clear: **params_board_game is the primary stale document.** It predates the Calamity Radiation framework, the Victory Architecture redesign, the Conviction Track system, the territory renumbering, and the RS inversion from Thread Tension. Nearly all P1 findings trace to params_board_game containing superseded mechanical values. The session log's Priority 1 work list (params_board_game propagation) is the correct fix.
+The core conflict pattern is clear: **params_board_game is the primary stale document.** It predates the Calamity Radiation framework, the Victory Architecture redesign, the Piety Track system, the territory renumbering, and the RS inversion from Thread Tension. Nearly all P1 findings trace to params_board_game containing superseded mechanical values. The session log's Priority 1 work list (params_board_game propagation) is the correct fix.
 
 calamity_radiation.md, threadwork_v25, and victory_architecture_v1.md are internally consistent with each other and with canon. The only cross-system conflicts between these three documents are minor (RS band label granularity at B-01).
