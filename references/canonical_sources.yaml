@@ -256,3 +256,13 @@ systems:
     status: provisional
     added: '2026-05-01 PP-687 Phase B Stage 1 — doc 12 procedures consume Keys'
 
+  character_canon_consolidation:
+    design_doc: designs/npcs/character_canon_v30.md
+    canonical_sha__designs__npcs__character_canon_v30_md: "pending"
+    status: provisional
+    added: '2026-05-08 Character canon consolidation — PART A Framework (§§1-11). Per-NPC sheets pending Q1 scope. Supersedes piecemeal lookup across npc_roster/npc_behavior/npc_character_analyses/migration_roster/stance_triangles.'
+  faction_canon_consolidation:
+    design_doc: designs/provincial/faction_canon_v30.md
+    canonical_sha__designs__provincial__faction_canon_v30_md: "pending"
+    status: provisional
+    added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
