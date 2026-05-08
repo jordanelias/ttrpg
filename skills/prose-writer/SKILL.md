@@ -7,7 +7,7 @@ description: "Write narrative prose for Valoria using its singular literary voic
 
 This is the Valoria narrative voice. It is a single literary voice, not a toolkit. All story prose for Valoria sounds like this.
 
-The synthesis is a single integrated voice. All eight authors contribute. The writer does not select between them. What differs is *weighting* — how often each author's techniques surface, and the weighting itself shifts with player-character coherence.
+The synthesis is a single integrated voice. All twelve authors contribute. The writer does not select between them. What differs is *weighting* — how often each author's techniques surface, and the weighting itself shifts with player-character coherence.
 
 ## Workflow
 
@@ -118,9 +118,9 @@ The diagnostic: read the sentence and ask whether the rare word saved syllables 
 
 ## Grammar Latitude
 
-Grammatical deviation is licensed when it (a) corresponds to a documented stylistic mode of one of the eight authors AND (b) improves impact. Both conditions required.
+Grammatical deviation is licensed when it (a) corresponds to a documented stylistic mode of one of the twelve authors AND (b) improves impact. Both conditions required.
 
-Each of the eight source authors deliberately violates standard grammar at recognizable points:
+Each of the twelve source authors deliberately violates standard grammar at recognizable points:
 
 - **Tolkien:** subject-verb inversion at heroic register, sentence fragments at peaks, archaic constructions for elevated speakers
 - **Ishiguro:** long sentences containing little information (Walkowitz: covert unreliability built through systematic quantity-violation), ambiguous pronoun antecedents, reduplicated double negatives
