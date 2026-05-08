@@ -71,6 +71,25 @@ No sentence in the Valoria voice may describe its own inadequacy to the content 
 - **Fix:** The sentence attempts. It veers (Lispector), commits wrongly (Ishiguro), applies precision to the impossible (Borges), reports flatly without registering (Ocampo), builds around the absence (Tolkien), or states impossibility in ordinary syntax (Márquez). The reader infers the failure from the sentence's behavior. For oxymorons: either commit to one term (Ishiguro) or apply precise measurement to the impossible (Borges). Or close on the physical and stop (Tolkien).
 - **Closing rule:** When the prose reaches the limit of what it can render, it closes on the nearest concrete thing. The pin beside the book. The chalk on the sleeves. The lane running south. The grass, the ground, the wind. Not a symbol. The last thing the prose can say.
 
+### I.6b The Observing-Around Principle
+
+The structured complement to the Wittgenstein constraint. Where the constraint says *the prose does not describe its own inadequacy*, the observing-around principle says *the prose describes what surrounds the thing it cannot enter, and the thing takes shape from the surround*.
+
+Three applications across the three axes:
+
+**X-axis (Coherence) — self-exteriority at high Spirit, low C.** The interior has moved beyond the domain the narrative can access, but the will still operates and produces action. The prose describes AROUND the interior through what the body does — walks, works, holds, continues. The reader infers the will from the behavior. The self is rendered from outside the way a planet is inferred from its gravitational effects. (See IV.1, V.9 Beckett.)
+
+**Y-axis (Thread Sensitivity) — substrate-aporia at high TS.** The practitioner perceives something that exceeds human categories. The perception is real, consistent, and does not yield to naming. The prose describes AROUND the aporia — what the perceived thing does, what it affects, how it behaves, what surrounds it — and the thing takes shape from the precision of the descriptions that circle it without entering it. This is phenomenological: consciousness is given something it cannot categorize, so the prose gestures toward the given by speaking around it. (See III.1 within-observation gradient, V.10 Lem.)
+
+**Z-axis (Spirit) — the limit case at low Spirit, low C.** The agent-subject is dissolving. There is insufficient intentional armature to produce action the narrative could observe around. The prose cannot use the observing-around technique because the self is not generating enough output at the surface. The veering, failed predication, and tautology of low Spirit are not observing-around — they are the narrative attempting and failing to assemble sentences because the agent is insufficient to the verb. This is where the Wittgenstein constraint operates alone: the prose is silent not by circling the silence but by being unable to complete the sentence. (See IV.1 low Spirit, V.7 Lispector.)
+
+**The principle unifies Lem, Beckett, and the within-observation gradient** as three instances of the same fundamental technique — rendering what the narrative cannot enter by rendering what surrounds it. Low Spirit is the boundary where the technique breaks down because there is nothing at the surface to observe.
+
+- **Symptom of violation:** The prose enters the thing directly — names the substrate, explains the motive, describes the interior state. Or: the prose announces its own failure to enter ("she could not describe," "there were no words for").
+- **Fix:** Circle. Describe what the thing does, what it affects, how it behaves, what is beside it. Let the reader assemble the shape from the surround.
+
+---
+
 ### I.7 Content Leakage
 **Consolidates:** design-vocabulary leakage, second-person drift.
 
@@ -128,8 +147,8 @@ No sentence in the Valoria voice may describe its own inadequacy to the content 
 ### III.1 Within-Observation Gradient
 **Scope:** Q2, Q4 (TS 50+).
 
-- **Symptom:** At TS 50+, the prose renders the near layer (articulable) and the far layer (veer, silence) but skips the middle layer (precise description producing something that doesn't quite work).
-- **Fix:** At TS 50+, deploy three layers within a single observation. **Near** (Tolkien/Mistry register): articulable in the PC's vocabulary. **Middle** (Borges/Lem register): scholarly precision applied to substrate detail, the precision flawless, the content not quite tracking — clinical incommensurability. **Far** (Lispector veer / Tolkien building-around-absence): the predication breaks, the sentence reaches for what the perception is *of* and produces only the copula or silence. Skipping the middle layer makes the gradient discrete instead of continuous. The continuity is the point.
+- **Symptom:** At TS 50+, the prose renders the near layer (articulable) and the far layer (veer, silence) but skips the middle layer — the observing-around layer where precise description circles the aporia without entering it.
+- **Fix:** At TS 50+, deploy three layers within a single observation. **Near** (Tolkien/Mistry register): articulable in the PC's vocabulary. **Middle** (Lem observing-around register): the trained eye cataloguing what the perceived thing does, what it affects, how it behaves — circling the aporia with pre-scientific precision, the descriptions exact, the thing itself not yielded to. This is the phenomenological layer: consciousness is given something it cannot categorize, so the prose gestures toward the given by speaking around it. **Far** (Lispector veer / Tolkien building-around-absence): the predication breaks, the sentence reaches for what the perception is *of* and produces only the copula or silence — the observing-around technique itself fails because the thing exceeds even the surround. Skipping the middle layer makes the gradient discrete instead of continuous. The continuity is the point — near shades into middle shades into far, and the reader experiences the approach toward the aporia as a continuous narrowing of what the prose can do.
 
 ### III.2 Subject/Object Axis Conflation
 **Scope:** Q2 (high coherence, high TS).

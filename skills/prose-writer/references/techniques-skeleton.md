@@ -35,7 +35,18 @@ Grammatical deviation is licensed when it (a) corresponds to a documented stylis
 | McCarthy | Unpunctuated dialogue (no quotation marks). Extended paratactic chains at violence/landscape peaks. Sentence fragments as geological observation. Absence of comma before coordinating conjunction in compound sentences. |
 | Le Carré | Qualified statements that withdraw more than they offer. Passive-voice constructions encoding institutional indirection. Professional courtesy formulas carrying threat. Extended subordinate clauses deferring the main clause (institutional circumlocution). |
 
-### 0.3 Spirit Axis (orthogonal to Coherence and TS)
+### 0.3 The Observing-Around Principle
+
+When the prose confronts something it cannot render directly — the interior of a low-C high-Spirit character, the substrate perceived at high TS, the nature of a threadcut being — it describes AROUND the thing. What it does, what it affects, how it behaves, what surrounds it. The thing takes shape from the precision of the descriptions that circle it.
+
+Three applications:
+- **Self-exteriority (high Spirit, low C):** The will produces action; the prose renders the action and is opaque about motive.
+- **Substrate-aporia (high TS):** Consciousness perceives what it cannot categorize; the prose gestures toward the given by speaking around it.
+- **Limit case (low Spirit, low C):** The agent is insufficient; the observing-around technique breaks down because the self is not producing enough output at the surface. The prose veers and fails predication.
+
+The structured complement to the Wittgenstein constraint. Where the constraint says "do not describe the silence," the principle says "describe what is beside the silence, and the silence takes shape."
+
+### 0.4 Spirit Axis (orthogonal to Coherence and TS)
 
 Spirit is the metaphysical attribute (range 1–7) governing the PC's will and its relationship to the threadwork. Beyond its mechanical role, Spirit determines how the prose renders the PC at low coherence. Where coherence determines whether the rendering holds the human frame and TS determines what is perceived beneath the rendering, **Spirit determines whether the will continues to grip as the rendering recalibrates**.
 
