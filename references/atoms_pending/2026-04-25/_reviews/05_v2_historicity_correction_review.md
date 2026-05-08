@@ -71,7 +71,7 @@ _17 substantive claims (max 3 per atom) with best-match canon excerpts._
   - claim: > Written Political Communication | 10+ mechanics | Pass | Pass | **Qualified fail** | Qualified | Memorial/Publish functional overlap; Yantielun redundant |
 | B2.
   - best match: `designs/audit/valoria_systems_workplan.md` (overlap 2/8)
-  - canon excerpt: > _game/faction_layer_v30.md | | S07 | Victory & Peninsular Strain | Faction | designs/board_game/victory_v30.md + peninsular_strain_v1.md | | S08 | TC Political Redesign | Faction | designs/board_game/tc_political_redesign_v30.md | | S09 | Military La
+  - canon excerpt: > _game/faction_layer_v30.md | | S07 | Victory & Turmoil | Faction | designs/board_game/victory_v30.md + peninsular_strain_v1.md | | S08 | TC Political Redesign | Faction | designs/board_game/tc_political_redesign_v30.md | | S09 | Military La
 
 - **atom** `valoria_master_analysis__05__section-5-branch-leve`
   - claim: > Authority Devolution & Succession | 11+ mechanics | Pass (decisive) | Pass | **Fail** | **Fail** | Four parallel "faction-becomes-sovereign" pathways; Hollowed/Retrospective/Material-Legitimacy each duplicated |
@@ -91,7 +91,7 @@ _17 substantive claims (max 3 per atom) with best-match canon excerpts._
   - canon excerpt: > egible to the player.  Note: non-Euclidean visual language and replay-at-higher-TS are ambitious sub-features; they enhance G-core status but are not individually G-core.  ### G-support — produces consequences and feedback  #### P2 — TS as depth unlo
 
 - **atom** `valoria_master_analysis__06__section-6-holistic-sy`
-  - claim: > **Cascade ordering gap:** Compound cascade interaction (Bank Failure → Mercenary Defection → Plague → Financial → Peninsular Strain → Territorial Amalgamation) lacks explicit ordering and trigger-priority specification.
+  - claim: > **Cascade ordering gap:** Compound cascade interaction (Bank Failure → Mercenary Defection → Plague → Financial → Turmoil → Territorial Amalgamation) lacks explicit ordering and trigger-priority specification.
   - best match: `designs/audit/throughlines_transitions_hierarchy.md` (overlap 4/8)
   - canon excerpt: >  (MS track), conviction_track §1.3 (Calamity Drift), mass_battle §A.14 (battle MS cost), peninsular_strain §3.1 (Substrate Fracture) | | **Reputation Cascade** | Player combat/social actions → Combat Reputation / Renown → NPC Disposition shifts → Sce
 

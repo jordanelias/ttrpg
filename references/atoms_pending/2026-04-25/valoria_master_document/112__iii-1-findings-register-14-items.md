@@ -25,7 +25,7 @@ origin: session-master-upload
 | GX-14 | Victory is confirmed, not experienced | P1 | True at design level — no victory ceremony specified. Implementation-fixable. |
 | GX-15 | Strategic/personal split narrows audience | Low | Positioning observation, not flaw |
 | GX-16 | Mid-campaign engagement valley (Season 5-12) | Medium-P1 | [TTRPG-FRAMING partial] Valley is real but spans ~3-6 hours of videogame play, not ~15. MS band transition at 60 is the designed valley-breaker. |
-| WB-11 | Peninsular Strain anti-war signal diffused across 4 causal links | Medium | Causal chain length verified; emotional consequence claim is extrapolation |
+| WB-11 | Turmoil anti-war signal diffused across 4 causal links | Medium | Causal chain length verified; emotional consequence claim is extrapolation |
 | WB-12 | NPC personality is presentation-dependent | P1 | Stance Triangle AI sophistication verified; player perception of personality requires authored content |
 | WB-13 | Thread engagement geographically concentrated | Medium | Verified — TS gates + Thread location distribution support this |
 | WB-14 | Philosophical depth needs mid-register vocabulary | Medium | Recommendation, not finding — depends on UI vocabulary choices |

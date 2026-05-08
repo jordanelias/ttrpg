@@ -15,7 +15,7 @@ origin: session-master-upload
 
 ## Section 11 — Outstanding design decisions
 
-**1. Compound cascade ordering.** Bank Failure + Mercenary Defection + Plague + Financial Cascade + Peninsular Strain + Territorial Amalgamation all route through Wealth/Stability with cascade potential. Explicit ordering and trigger-priority required before any implementation. **Open design decision.**
+**1. Compound cascade ordering.** Bank Failure + Mercenary Defection + Plague + Financial Cascade + Turmoil + Territorial Amalgamation all route through Wealth/Stability with cascade potential. Explicit ordering and trigger-priority required before any implementation. **Open design decision.**
 
 **2. M-4 continuous-contestation as named commitment.** Valoria's acceptance of unresolved-contest as baseline game-state is deliberate and aligned with project intent but unusual for games preferring clear-victory. **Should be documented as explicit design commitment** rather than emergent-property-of-mechanics.
 

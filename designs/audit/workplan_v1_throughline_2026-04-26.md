@@ -108,7 +108,7 @@ The Sim S2 build IS the validation that promotes ED-710/711/712 from PROVISIONAL
 1. Territory T1-T15 model (verifies ED-710 + locks Μ-2 geography)
 2. Domain Action framework (Μ-δ cross-scale apparatus)
 3. Piety Yield + CI political bonus (T-05, T-08 verification)
-4. Peninsular Strain propagation (T-07)
+4. Turmoil propagation (T-07)
 5. Mass combat + Contest system (Μ-α resolution machinery)
 6. Faction AI stub (Μ-β minimal — promote via priority trees in Sim S3)
 7. 40-season smoke test (full Μ-α/β/γ/δ stack)

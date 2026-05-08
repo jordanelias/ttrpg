@@ -54,7 +54,7 @@ Crown · Autonomy · Reason · Varfell · Löwenritter · Hafenmark · Equity ·
 · Torben · Church · Conviction · TS · King Almud · Lisbeth Ehrenwall · Continuity
 ```
 
-**Zero mechanical systems are in this list.** Combat, Threadwork, Faction Layer, Mass Combat, Domain Echo, Scale Transitions, Settlement Layer, Victory, Peninsular Strain — none rank in the top quintile of corpus connectivity. The systems each have their own file and are referenced from afar; the people and convictions appear *throughout* the corpus.
+**Zero mechanical systems are in this list.** Combat, Threadwork, Faction Layer, Mass Combat, Domain Echo, Scale Transitions, Settlement Layer, Victory, Turmoil — none rank in the top quintile of corpus connectivity. The systems each have their own file and are referenced from afar; the people and convictions appear *throughout* the corpus.
 
 **Why this matters:** the project's stated intent (Ω) is a "positive feedback loop between player decisions and mechanics/system/designs that produces an engaging game world with emergent narratives." If the design corpus's connective tissue is *characters and ideologies* rather than *mechanics*, then the integration risk lives in the implementation phase: when Godot has to instantiate the systems, every system-to-system connection is going to have to be inferred from sparse documentation rather than read off direct co-references.
 
@@ -70,7 +70,7 @@ The citation graph is sparse (15 doc-edges, 11 token-edges) but every cascade-wi
 Campaign Architecture → CI → Settlement Layer
 Faction Layer        → CI → Settlement Layer
 Victory              → CI → Settlement Layer
-Peninsular Strain    → CI → Settlement Layer
+Turmoil    → CI → Settlement Layer
 ```
 
 Four major peninsula/province docs cite Settlement Layer through CI, and Settlement Layer does not cite any of them back. **Settlement Layer is a downstream sink in the citation graph.**
@@ -91,7 +91,7 @@ This is consistent with PP-666 (Settlement Adjacency / Fractional Province Owner
 0.029  CI → Settlement Layer
 0.030  Campaign Architecture → NPC Behavior
 0.034  Campaign Architecture → Settlement Layer
-0.039  Peninsular Strain → CI
+0.039  Turmoil → CI
 0.062  Tensions → Royal Assassination
 0.067  Tensions Deck → Royal Assassination
 ```
@@ -100,7 +100,7 @@ This is consistent with PP-666 (Settlement Adjacency / Fractional Province Owner
 
 **Recommendation:** either MS Trajectory adds inline justification for its values referencing the foundational dynamics, or the cross-reference is downgraded from "cited authority" to "see also" status to set correct expectations.
 
-The `Campaign Architecture → CI` / `Faction Layer → CI` / `Peninsular Strain → CI` cluster (all <0.04 cosine) is more concerning: three major architecture docs cite the CI clock without textual engagement. This means the CI clock is referenced at structural-overview level but its mechanics aren't woven into the surrounding text. Implementation risk: someone implementing Faction Layer without reading CI Political may miss CI's interaction with parliament weight, mass seizure trigger, etc.
+The `Campaign Architecture → CI` / `Faction Layer → CI` / `Turmoil → CI` cluster (all <0.04 cosine) is more concerning: three major architecture docs cite the CI clock without textual engagement. This means the CI clock is referenced at structural-overview level but its mechanics aren't woven into the surrounding text. Implementation risk: someone implementing Faction Layer without reading CI Political may miss CI's interaction with parliament weight, mass seizure trigger, etc.
 
 ### 1.4 Implied-but-missing connections — high cosine, no citation (top 10 informative)
 
@@ -268,7 +268,7 @@ P2 fails because the throughlines_meta table doesn't lexically mention Convictio
 | 1 | NPC Behavior | 56 | system |
 | 2 | CI | 46 | clock |
 | 3 | Settlement Layer | 41 | system |
-| 4 | Peninsular Strain | 31 | system |
+| 4 | Turmoil | 31 | system |
 | 5 | Scale Transitions | 27 | system |
 | 6 | Campaign Architecture | 27 | system |
 | 7 | Faction Layer | 26 | system |
@@ -299,7 +299,7 @@ The throughlines_meta table format is `T-NN | name | М-primary | М-secondary |
 
 **This is a documentation gap.** The throughlines framework anchors throughlines to М modes (mechanical-mode classifications) and to factions (via T-15a/b/c, T-08, T-09, T-11, etc.) but does not formalize which **specific system tokens** each throughline depends on. Implementation work that asks "which systems must Godot get right to deliver T-12 Practitioner Arc?" cannot read the answer off the framework — it has to be inferred from prose context.
 
-**Recommendation:** the throughlines table should add a column or sub-block listing "load-bearing systems" per throughline. T-12 Practitioner Arc → [Coherence, Threadwork, NPC Behavior]; T-04 RS Decay → [MS, Peninsular Strain, Threadwork]; etc. This is hand-curation work but small (≤41 throughlines, mostly 2-3 systems each).
+**Recommendation:** the throughlines table should add a column or sub-block listing "load-bearing systems" per throughline. T-12 Practitioner Arc → [Coherence, Threadwork, NPC Behavior]; T-04 RS Decay → [MS, Turmoil, Threadwork]; etc. This is hand-curation work but small (≤41 throughlines, mostly 2-3 systems each).
 
 This finding alone justifies the v3 effort.
 
@@ -311,10 +311,10 @@ Tokens that are top quintile by degree in **≥ 3 of 4 graphs** (cite, throughli
 
 | Token | Cite | Throughline | Mu | PP | Note |
 |---|---|---|---|---|---|
-| **Peninsular Strain** | 31 | — | 2 | 5 | Single most centrally-coupled token across multiple structured views |
+| **Turmoil** | 31 | — | 2 | 5 | Single most centrally-coupled token across multiple structured views |
 | **IP** (Invasion Pressure) | 17 | — | 2 | 3 | Cross-confirmed centrality |
 
-These two tokens are confirmed-central across multiple independent metadata graphs. Any change to Peninsular Strain or IP propagates broadly — change-control on these should be highest priority.
+These two tokens are confirmed-central across multiple independent metadata graphs. Any change to Turmoil or IP propagates broadly — change-control on these should be highest priority.
 
 The **cite-only hubs** (top 17 above) include many systems with high cite centrality but no PP/mu coverage. Rank 1 (NPC Behavior, cite=56) has 0 in g_pp because no recent patches in `patch_register_active.yaml` modify it. This is itself notable: the most central system in the citation graph has had **zero patch activity** in the active register window. Either it's been correct since first written (unlikely for code that complex) or it hasn't been examined recently.
 
@@ -337,7 +337,7 @@ These are pairs heavily cross-mentioned in actual document bodies but never form
 | 44 | CI Political → Mandate |
 | 44 | CI → Crown |
 | 44 | CI → Church |
-| 41 | Peninsular Strain → Victory |
+| 41 | Turmoil → Victory |
 | 39 | CI → Hafenmark |
 | 38 | CI → MS |
 | 37 | NPC Behavior → Varfell |
@@ -508,7 +508,7 @@ Replacing the v2 §4 list with corrected v3 priorities:
    - Cultural Reformation sweep concentrated in peninsular_strain_v30.md
    - Coup Counter dispersed sweep (7 docs) — batch with PP-781 propagation
 
-7. **Schedule an audit of Peninsular Strain and IP** (the only multi-graph hubs across ≥3 of 4 structured views; highest change-impact propagation risk).
+7. **Schedule an audit of Turmoil and IP** (the only multi-graph hubs across ≥3 of 4 structured views; highest change-impact propagation risk).
 
 8. **Wager system needs a clarity audit** — sparse footprint despite canonical status.
 

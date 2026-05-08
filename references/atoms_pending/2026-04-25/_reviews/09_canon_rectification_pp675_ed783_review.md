@@ -109,7 +109,7 @@
 - **atom context** (`valoria_session_master_2026-04-25__03__context-window-3-ed-717-cleanup`):
   > Löwenritter + T-15c RM |  ### Complete М-4 Map  | T | Faction | Substrate-Posture | Conscious? | TS | Revelation Crisis | |---|---------|-------------------|------------|-----|-------------------| | T-08 | Church | Rendering reinforcement | Yes | Varies | Substrate reality threatens essentialist theology | | T-09 | Varfell | Thread progressive | Yes | High | Vindicated but politically exposed | | 
 - **canon context** (`references/throughlines_meta_infill.md`):
-  > momentum. | | T-06 | IP Accumulation | М-1 | — | Clock — continuous pressure from external intervention. | | T-07 | Peninsular Strain | М-1 | — | Clock — continuous pressure from accumulated war. | | T-08 | Church Rendering Reinforcement | М-4 | — | Institutional — Church's substrate-posture is rendering-reinforcement. | | T-09 | Varfell Thread Progressive | М-4 | — | Institutional — Varfell's pos
+  > momentum. | | T-06 | IP Accumulation | М-1 | — | Clock — continuous pressure from external intervention. | | T-07 | Turmoil | М-1 | — | Clock — continuous pressure from accumulated war. | | T-08 | Church Rendering Reinforcement | М-4 | — | Institutional — Church's substrate-posture is rendering-reinforcement. | | T-09 | Varfell Thread Progressive | М-4 | — | Institutional — Varfell's pos
 
 ### T-09 — **DEFINED-IN-CANON**
 

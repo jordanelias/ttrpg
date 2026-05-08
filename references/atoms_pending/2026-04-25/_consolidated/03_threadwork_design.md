@@ -1428,7 +1428,7 @@ Transition graph is **complete for all valid gameplay flows.** Missing paths (Pe
 3. Cooldown advance
 4. Clock advances (RS, CI formula [5 sub-steps], IP, PI)
 5. Church Attention Pool + Thread Debt drain
-6. Peninsular Strain (Accord, Strain, battle consequences)
+6. Turmoil (Accord, Strain, battle consequences)
 7. Threshold events / Milestones / Warden Emergence
 8. WC check / Torben/Elske Loyalty
 9. Occupation duration / Institutional Consolidation
@@ -1666,7 +1666,7 @@ Mass combat's 14 PROVISIONAL items mean the system is incomplete (S ✗). Needs 
 7. NPC Stance Triangle + Scar system (progressive AI destabilization)
 8. Sincerity Gate (37% failure on instrumental relationships)
 9. Post-Calamity continuation (MS=0 doesn't end the game)
-10. Peninsular Strain as anti-war counter (mechanically — see Part III)
+10. Turmoil as anti-war counter (mechanically — see Part III)
 11. Geneva Trap (Church infrastructure helps + creates dependency)
 12. Thread→Conviction Scar Matrix (moral consequence for NPC witnesses)
 

@@ -2175,7 +2175,7 @@ queue:
     rationale: low signal=6
   - atom_id: valoria_master_document__56__9-7-peninsular-strain-0-10
     source_file: valoria_master_document.md
-    header: 9.7 Peninsular Strain (0–10)
+    header: 9.7 Turmoil (0–10)
     lines: 10
     signal: 6
     ids: {}

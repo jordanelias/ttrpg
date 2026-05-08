@@ -201,11 +201,11 @@ Ten functional branches emerge from aggregating related proposals across Parts A
 | **N (system)** | Fail at current scope; Pass at consolidated (~60-70) scope | Branch analysis shows ~40-50% redundancy; individual N-passes do not aggregate |
 | **R (system)** | Pass, with shallow-choice risk flagged | 18+ new DAs on top of existing action economy; variety achieved, meaningful-choice threatened |
 | **E (system)** | **Fail** | ~120 additions against Valoria baseline violates "logically simple / no unnecessary overhead"; internal duplications (authority-devolution ×4, siege-campaign ×2, RM-polity ×2, etc.) directly fail elegance |
-| **S (system)** | Qualified fail; pass at consolidated scope | Compound cascades (Bank + Mercenary + Plague + Peninsular Strain) unordered; Memorial/Publish/Named-Infrastructure-types disambiguation friction |
+| **S (system)** | Qualified fail; pass at consolidated scope | Compound cascades (Bank + Mercenary + Plague + Turmoil) unordered; Memorial/Publish/Named-Infrastructure-types disambiguation friction |
 
 **Critical holistic finding:** Granular-pass auditing approved too much. The ~120 individually-passing mechanics contain ~40-50% redundancy at branch level. Elegance fails from sheer scope regardless of individual validity.
 
-**Cascade ordering gap:** Compound cascade interaction (Bank Failure → Mercenary Defection → Plague → Financial → Peninsular Strain → Territorial Amalgamation) lacks explicit ordering and trigger-priority specification. Required before any implementation.
+**Cascade ordering gap:** Compound cascade interaction (Bank Failure → Mercenary Defection → Plague → Financial → Turmoil → Territorial Amalgamation) lacks explicit ordering and trigger-priority specification. Required before any implementation.
 
 ---
 

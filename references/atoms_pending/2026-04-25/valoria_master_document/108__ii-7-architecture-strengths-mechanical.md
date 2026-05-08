@@ -24,6 +24,6 @@ origin: session-master-upload
 7. NPC Stance Triangle + Scar system (progressive AI destabilization)
 8. Sincerity Gate (37% failure on instrumental relationships)
 9. Post-Calamity continuation (MS=0 doesn't end the game)
-10. Peninsular Strain as anti-war counter (mechanically — see Part III)
+10. Turmoil as anti-war counter (mechanically — see Part III)
 11. Geneva Trap (Church infrastructure helps + creates dependency)
 12. Thread→Conviction Scar Matrix (moral consequence for NPC witnesses)

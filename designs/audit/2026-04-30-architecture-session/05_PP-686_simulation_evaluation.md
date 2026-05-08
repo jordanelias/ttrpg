@@ -227,7 +227,7 @@ These are calibration deltas, not architectural changes. The architecture surviv
 The simulator did not exercise:
 
 - **PP-686 ↔ PP-666 trio.** Settlement adjacency / fractional ownership / faction succession split would interact with cascade-per-territory.
-- **PP-686 ↔ Peninsular Strain.** Strain → temperament → PS chain.
+- **PP-686 ↔ Turmoil.** Strain → temperament → PS chain.
 - **PP-686 ↔ npc_behavior_v30.** Whether NPC autonomous behavior reads personal vs effective Convictions.
 - **Multi-root cascade.** Crown's secular + military + household hierarchies.
 - **Mid-season leader change.** All sims assumed Accounting-boundary changes.

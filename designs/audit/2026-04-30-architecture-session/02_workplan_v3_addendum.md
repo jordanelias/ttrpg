@@ -87,7 +87,7 @@ The single largest velocity drag. All items can be answered yes/no/defer in batc
 | Doc 17 §6 carryover | 4 | Intelligence stat (6th faction stat) — c2effdd reversal proposal; LICENSE/GOV-08; §1.1 Knot Formation; §1.2 Accord Propagation |
 | Mass-battle decisions | 8 | MB-01..08 from 1d9f864 |
 | Mass-battle interdependency | 8 | INTER-10d, 12b, 14a, 14d, 14e, 12e, 17b, 09d from a50f098 |
-| PP-676 v3 §V3-10 priority | 5 | NPC Behavior audit pass; isolate promotion to first-class docs; vocabulary debt sweep three concentrated cleanups; Peninsular Strain + IP change-control |
+| PP-676 v3 §V3-10 priority | 5 | NPC Behavior audit pass; isolate promotion to first-class docs; vocabulary debt sweep three concentrated cleanups; Turmoil + IP change-control |
 | Outstanding | 3 | PT-01; ACCT-01; PP-677 throughline mappings ratify/revise |
 
 **~32 decisions total.** Each is yes/no/defer. Format as a single batch document Jordan reviews top-to-bottom.
@@ -207,7 +207,7 @@ From 1d9f864 (8 patch decisions) + a50f098 (8 interdependency decisions). **Comp
 | D4.1 | NPC Behavior audit pass — green-light / scope / defer |
 | D4.2 | Isolate promotion to first-class docs — which isolates (5 of 7 Convictions, 3 of 4 Pressure Points)? |
 | D4.3 | Vocabulary debt sweep — three concentrated cleanups (per PP-676 v3 finding) — list and approve |
-| D4.4 | Peninsular Strain change-control review |
+| D4.4 | Turmoil change-control review |
 | D4.5 | IP change-control review |
 
 ### D.5 Outstanding singletons

@@ -82,7 +82,7 @@ This document captures the methodology evolution. Future runs should NOT relax t
 **v3's lasting findings:**
 - §V3-1: NPC Behavior is the integration spine (cite-deg 56). Corpus IS system-anchored.
 - §V3-2: Throughlines framework lacks formalized system-token coupling (P2 fail).
-- §V3-3: Peninsular Strain + IP only multi-graph hubs at ≥3/4 graphs.
+- §V3-3: Turmoil + IP only multi-graph hubs at ≥3/4 graphs.
 - §V3-4: Top 15 notional pairs reveal CI as largest implicit hub with no metadata.
 - §V3-5: 14 multi-graph isolates incl. 5/7 Convictions and 3/4 Pressure Points.
 - §V3-6: Discourse/design ratio surfaces over- and under-attention.

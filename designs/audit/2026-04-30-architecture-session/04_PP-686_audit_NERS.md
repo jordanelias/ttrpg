@@ -213,7 +213,7 @@ The PP-666 trio (settlement adjacency, fractional province ownership, faction su
 ### N
 
 **MODERATE.** PP-686 is faction-scale; peer systems at the same scale include:
-- Peninsular Strain (peninsula-scale, but interacts with faction-scale)
+- Turmoil (peninsula-scale, but interacts with faction-scale)
 - Faction stats (Standing, Mandate, etc.)
 - Domain Action framework (cross-faction)
 - Faction relations (Disposition matrices between factions)
@@ -223,7 +223,7 @@ PP-686's relationship with each is partial. Necessity is moderate because the pr
 ### R
 
 **WEAK.**
-- Peninsular Strain interaction: does Strain affect strictness? Strain affects the populace; the populace sets temperament; high Strain probably shifts temperament toward "outcomes-only" (high α_temperament). **Not specified.**
+- Turmoil interaction: does Strain affect strictness? Strain affects the populace; the populace sets temperament; high Strain probably shifts temperament toward "outcomes-only" (high α_temperament). **Not specified.**
 - Cross-faction Disposition: faction A's Mission may align or oppose faction B's Mission. Does that drive Disposition shifts? **Not specified.**
 - DA framework interaction: PP-686 modifies Ob, but DA framework has its own Ob logic. Do they multiply, add, override? Spec says modifier is added; need to verify against current DA Ob computation chain.
 - Faction succession (PP-666): when a faction succession event fires, the cascade root changes mid-stream. PP-686 references "leader change triggers re-resolution" but PP-666's succession-split mechanic creates *two simultaneous cascade roots*. **Direct interaction unaddressed.**

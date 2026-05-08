@@ -514,7 +514,7 @@ The current procedures' bespoke event records are renamed to Key references. No 
 
 - **Domain Actions**: DA submission emits `scene.draft_da` Key; resolution emits `da_outcome.*` Key; consequences propagate via standard rule.
 - **Faction state**: PP-686 components emit Keys when state changes (Mission shift, Cascade re-resolution, Legitimacy/PS thresholds crossed).
-- **Peninsular Strain**: Strain accumulation emits `env.peninsular_strain_*` Keys.
+- **Turmoil**: Strain accumulation emits `env.peninsular_strain_*` Keys.
 
 ### §6.7 Cross-scale infrastructure
 

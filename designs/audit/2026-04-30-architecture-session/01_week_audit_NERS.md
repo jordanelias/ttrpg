@@ -405,7 +405,7 @@ PP-297 and PP-351 have been P1 since Apr 2 — **28 days unresolved**. PP-653 ha
 
 | Item | Source |
 |---|---|
-| PP-676 v3 §V3-10 priority items: NPC Behavior audit pass; isolate promotion; vocabulary debt sweep; Peninsular Strain + IP change-control | PP-676 |
+| PP-676 v3 §V3-10 priority items: NPC Behavior audit pass; isolate promotion; vocabulary debt sweep; Turmoil + IP change-control | PP-676 |
 | CI-01 Church Prominent definition (HIGH-PRIORITY, breaks Church CI generation) | resolved 2026-04-30 (commit 63fda93) — should be moved to closed |
 | CI-02 Seizure Ob conflict | resolved 2026-04-30 (commit c3deb4b) — should be moved to closed |
 | PT-01, ACCT-01 | unresolved |

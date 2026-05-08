@@ -487,10 +487,10 @@ MS 72 (Rupture at 0). CI 28 (Seizure at 60, Mass Seizure at 100). IP 20 (Vanguar
 
 Aligned 3 / Compliant 2 / Resistant 1 / Revolt 0. Province Accord = floor(average settlement Order). Accord ≥ 2 required for TCV.
 
-<!-- atom: valoria_master_document__56__9-7-peninsular-strain-0-10 | section_index: 56 | source_section: "9.7 Peninsular Strain (0–10)" -->
+<!-- atom: valoria_master_document__56__9-7-peninsular-strain-0-10 | section_index: 56 | source_section: "9.7 Turmoil (0–10)" -->
 
 
-## 9.7 Peninsular Strain (0–10)
+## 9.7 Turmoil (0–10)
 
 Peace 0–2 / Tension 3–4 (Mandate check) / Fracture 5–6 (Accord −1 one territory) / Crisis 7–8 (Accord −1 ALL non-capital, Mandate Ob 2) / Collapse 9–10 (Accord cap 2, Mandate Ob 3, MS −1/season). Decay −1/peaceful season.
 
@@ -826,7 +826,7 @@ MS recovery is cumulative across all active Menders. Spirit tiers (1–2 Journey
 
 ## 20.1 Formula Consistency
 
-All pools: (Attr × 2) + H + 3. TN 6/7/8 everywhere. Ob 1–20 everywhere. Degree table universal. Pool floor 1D universal. Domain Echo same trigger/amount/cap everywhere. Clock paradigm consistent (increase/decrease/threshold) for MS, CI, IP, PI, Peninsular Strain, Accord, Evidence Track, Exposure.
+All pools: (Attr × 2) + H + 3. TN 6/7/8 everywhere. Ob 1–20 everywhere. Degree table universal. Pool floor 1D universal. Domain Echo same trigger/amount/cap everywhere. Clock paradigm consistent (increase/decrease/threshold) for MS, CI, IP, PI, Turmoil, Accord, Evidence Track, Exposure.
 
 **The game has one resolution engine expressed at multiple scales.** This is the system's greatest architectural strength.
 
@@ -903,7 +903,7 @@ Every step mechanically defined. No step requires undefined resolution. **Pipeli
 | GX-14 | Victory is confirmed, not experienced | P1 | True at design level — no victory ceremony specified. Implementation-fixable. |
 | GX-15 | Strategic/personal split narrows audience | Low | Positioning observation, not flaw |
 | GX-16 | Mid-campaign engagement valley (Season 5-12) | Medium-P1 | [TTRPG-FRAMING partial] Valley is real but spans ~3-6 hours of videogame play, not ~15. MS band transition at 60 is the designed valley-breaker. |
-| WB-11 | Peninsular Strain anti-war signal diffused across 4 causal links | Medium | Causal chain length verified; emotional consequence claim is extrapolation |
+| WB-11 | Turmoil anti-war signal diffused across 4 causal links | Medium | Causal chain length verified; emotional consequence claim is extrapolation |
 | WB-12 | NPC personality is presentation-dependent | P1 | Stance Triangle AI sophistication verified; player perception of personality requires authored content |
 | WB-13 | Thread engagement geographically concentrated | Medium | Verified — TS gates + Thread location distribution support this |
 | WB-14 | Philosophical depth needs mid-register vocabulary | Medium | Recommendation, not finding — depends on UI vocabulary choices |
@@ -1090,7 +1090,7 @@ Atom-by-atom inventory in source/section order:
 | `valoria_master_document__53__9-4-faction-starting-stats` | `valoria_master_document.md` | 53 | 9.4 Faction Starting Stats | 6 |
 | `valoria_master_document__54__9-5-global-tracks` | `valoria_master_document.md` | 54 | 9.5 Global Tracks | 4 |
 | `valoria_master_document__55__9-6-accord-0-3-per-territory` | `valoria_master_document.md` | 55 | 9.6 Accord (0–3, per territory) | 4 |
-| `valoria_master_document__56__9-7-peninsular-strain-0-10` | `valoria_master_document.md` | 56 | 9.7 Peninsular Strain (0–10) | 10 |
+| `valoria_master_document__56__9-7-peninsular-strain-0-10` | `valoria_master_document.md` | 56 | 9.7 Turmoil (0–10) | 10 |
 | `valoria_master_document__59__10-3-zoom-in-zoom-out` | `valoria_master_document.md` | 59 | 10.3 Zoom In / Zoom Out | 10 |
 | `valoria_master_document__61__11-2-hybrid-phase-structure` | `valoria_master_document.md` | 61 | 11.2 Hybrid Phase Structure | 8 |
 | `valoria_master_document__63__12-2-ci-church-influence` | `valoria_master_document.md` | 63 | 12.2 CI (Church Influence) | 6 |

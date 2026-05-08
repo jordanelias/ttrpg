@@ -618,7 +618,7 @@ The five meta-throughlines collectively define Valoria's design identity:
 
 ## Section 11 — Outstanding design decisions
 
-**1. Compound cascade ordering.** Bank Failure + Mercenary Defection + Plague + Financial Cascade + Peninsular Strain + Territorial Amalgamation all route through Wealth/Stability with cascade potential. Explicit ordering and trigger-priority required before any implementation. **Open design decision.**
+**1. Compound cascade ordering.** Bank Failure + Mercenary Defection + Plague + Financial Cascade + Turmoil + Territorial Amalgamation all route through Wealth/Stability with cascade potential. Explicit ordering and trigger-priority required before any implementation. **Open design decision.**
 
 **2. M-4 continuous-contestation as named commitment.** Valoria's acceptance of unresolved-contest as baseline game-state is deliberate and aligned with project intent but unusual for games preferring clear-victory. **Should be documented as explicit design commitment** rather than emergent-property-of-mechanics.
 
@@ -838,7 +838,7 @@ Every faction sees differently. Church: Inquisitor surveillance. Varfell: Tribun
 ### M5 — The Dual Clock
 Two simultaneous contests: (1) political sovereignty and (2) world survival. MS/WC mechanisms for Contest 2. **"Win the game" and "save the world" compete for resources.** Military expansion (sovereignty) degrades MS (survival). Neither can be ignored. Both require different investments.
 
-*Intersects: N1, victory §0, campaign_architecture §6, MS budget, Peninsular Strain*
+*Intersects: N1, victory §0, campaign_architecture §6, MS budget, Turmoil*
 
 ### M6 — The Moral Architecture of Thread
 Thread operations are mechanically defined but morally ambiguous. Mending: always beneficial (no Scars, always recovers RS). Dissolution: always destructive (Scars all, creates Gaps). Between: Weaving Scars Faith; Pulling risks co-movement; Locking Scars Equity/Autonomy/Continuity. **The game doesn't say which ops are "good" — it shows what each costs mechanically and morally, and lets the player decide.**

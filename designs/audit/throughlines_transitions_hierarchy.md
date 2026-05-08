@@ -63,7 +63,7 @@ PENINSULA (global)
 
 | Scale | Resolution Unit | Tracking Scope | Mechanical Layer |
 |-------|----------------|----------------|------------------|
-| **Peninsula** | Season / Arc | Global clocks: MS, TC, IP, PI, Peninsular Strain | Victory conditions, faction elimination, Altonian invasion |
+| **Peninsula** | Season / Arc | Global clocks: MS, TC, IP, PI, Turmoil | Victory conditions, faction elimination, Altonian invasion |
 | **Territory** | Season (Accounting) | Faction stats (1–7), derived values, Accord, PT, Fort Level, Prosperity | Domain Actions, military operations, faction priority trees |
 | **Settlement** | Season (sub-Accounting) | Settlement stats (P/D/O, 0–5), settlement derived values, Governor | Governance actions, POI discovery, NPC roster, institutional facilities |
 | **Scene** | Scene action (3–5/season) | Evidence Track, Disposition, Exposure, Conviction Track, Composure, Concentration | Fieldwork, social contests, combat initiation, Thread operations |
@@ -109,7 +109,7 @@ Every named transition between scales, systems, or modes. Organized by direction
 | **DE-8** | Personal combat | Garrison Strength | Player defends settlement | Garrison Strength feedback (combat §13.2b / derived_stats §8.4): victory +10, OW victory +20 + PO +5, defeat −10 | Per-battle |
 | **DE-9** | Combat kill | NPC network | Kill named NPC | Death Cascade (combat §13.3): Knot rupture, Disposition shifts, Scene Slate entries, faction Stability, Exposure | No cap — full cascade fires |
 | **DE-10** | Conviction resolution | Renown | Conviction fulfilled, failed, or transformed | Renown +1 per resolution (player_agency §5.4) | |
-| **DE-11** | Battle | Peninsula | Any inter-faction battle on Valorian soil | MS −1 (Campaign/War: MS −2), IP +2, Peninsular Strain +1 (mass_battle §A.14) | Per season |
+| **DE-11** | Battle | Peninsula | Any inter-faction battle on Valorian soil | MS −1 (Campaign/War: MS −2), IP +2, Turmoil +1 (mass_battle §A.14) | Per season |
 
 ## B. Downward Transitions (faction/world → personal)
 
@@ -293,7 +293,7 @@ PENINSULA SCALE
 | Theocracy Counter (TC) | 0–100 | Church institutional authority; drives Seizure capability |
 | Invasion Pressure (IP) | 0–100 | External threat; drives Altonian Vanguard emergence |
 | Parliament Integrity (PI) | 0–20 | Hafenmark institutional strength |
-| Peninsular Strain | 0–10 | Aggregate inter-faction damage; victory condition gate |
+| Turmoil | 0–10 | Aggregate inter-faction damage; victory condition gate |
 
 ### Territory (15 playable)
 | Track | Range | Mechanical Role |

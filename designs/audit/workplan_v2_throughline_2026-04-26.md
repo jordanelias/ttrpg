@@ -162,7 +162,7 @@ Appendix B item classification:
 1. Territory T1-T15 (locks М-2; **requires PP-652 PT values from F2.8**)
 2. Domain Action framework (Μ-δ apparatus; **source: `stats_1_7_scale.md §DA Table` + `faction_politics_v30.md §2`**)
 3. Piety Yield + CI political bonus (T-05, T-08; **source: `ci_political_v30.md §1`**)
-4. Peninsular Strain propagation (T-07)
+4. Turmoil propagation (T-07)
 5. Mass combat + Contest system (Μ-α)
 6. Faction AI stub (Μ-β minimal)
 7. 40-season smoke test (full Μ-α/β/γ/δ)
