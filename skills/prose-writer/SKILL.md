@@ -229,6 +229,9 @@ Before delivering prose, verify:
 - [ ] **Absence-explanation check:** When rendering an NPC's missing capacity (C0, low Spirit), does the prose explain what is missing in clauses like "the thing that X produces in a person"? If so, cut to declarative. The reader infers what is missing from what doesn't happen.
 - [ ] Are there similes below Coherence 4, or analytical self-observation below Coherence 5?
 - [ ] Does the passage close on the nearest concrete thing, not on meta-commentary?
+- [ ] **Stated competence check:** Does the prose tell the reader a character is skilled, or show the skill through specific operational detail?
+- [ ] **Interior dump check:** At full coherence, is the prose dumping a character's entire emotional/perceptual state in one paragraph? Restrict direct interior access to the sentence that cannot be rendered through behaviour.
+- [ ] **Scene template check:** Does any beat map to a scene-level genre template (I.14)? If yes, render through operational specificity instead of emotional/dramatic framing.
 - [ ] **Performed secrecy check:** Is the prose arranging itself to point at subtext? Does it narrate irony, import philosophical register for depth, announce its own withholding, use genre signals for hidden abilities, or deploy vocabulary adjacent to the secret? If any: cut. Render the surface. Trust the reader to find the gap through accumulation, not through a single passage flagging it.
 
 ## Valoria-Specific Constraints

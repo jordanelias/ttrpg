@@ -124,6 +124,66 @@ Six sub-symptoms, from most to least visible:
 
 **This applies beyond hidden TS.** Political maneuvering (do not explain who is winning -- show what they did and let the reader assess), emotional states (do not signal the emotion -- render the behavior), character motivations (do not telegraph the motive -- render the action and let the motive be inferred or remain opaque).
 
+### I.10 Stated Competence
+
+- **Symptom:** "She was one of the best Riskbreakers." "He had always been perceptive." "Almud was a brilliant strategist." The prose tells the reader the character is exceptional rather than showing the competence through specific operational detail.
+- **Fix:** The character does their job. The reader sees the job being done with a specificity and precision that demonstrates competence. Torsvald identifies aggregate type by colour. Haelgrund tracks mortar specifications across nine parishes. Almud holds a letter at the angle the gallery can see the seal. Competence is visible in the detail of the work, never in a declaration about the worker.
+
+### I.11 Summary Narration as Shortcut
+
+- **Symptom:** "In the weeks that followed, the episodes intensified." "Over the next several months, things got worse." "She had seen it many times before." The prose compresses multiple specific events into a single summary sentence, skipping the scenes that would demonstrate the pattern through incident.
+- **Fix:** Render incidents. Each operation in Torsvald's arc is a specific location with specific observations and a specific abort decision. The pattern emerges from the accumulation of incidents, not from the narrator announcing the pattern. Summary narration is licensed for transitions between scenes ("the fourth day," "the third season") but not as a substitute for scenes the reader needs.
+- **Diagnostic:** If the summary sentence could be expanded into a scene that would be more interesting than the summary, the summary is a shortcut.
+
+### I.12 Interior Dump at Full Coherence
+
+- **Symptom:** At Coherence 10, interior access is available. The prose exploits this to dump the character's full emotional and perceptual state in a single paragraph: "She wanted to tell him the truth -- that she could see things now, terrible and beautiful things, threads of power woven through the fabric of the world." The entire interior is made legible at once.
+- **Why this is wrong even when the interior is accessible:** Real interiority is not a storage unit the prose opens and inventories. Characters at full coherence do not experience their own state as a neatly articulated catalogue. The prose-writer synthesis renders interiority through decision, behaviour, operational choice, and restraint -- even when direct access is available. Interior monologue is available but it is expensive and must earn its place the same way rare vocabulary does: by doing work no other mode can do.
+- **Fix:** Torsvald's interiority is visible in what she aborts, what she detours around, what she files and what she omits from the filing. The reader assembles her interior state from her operational decisions. Direct interior access is reserved for the sentence that cannot be rendered any other way. One sentence of interiority in a scene, not one paragraph.
+
+### I.13 Imported Allusion as Atmosphere
+
+- **Symptom:** "The abyss, as it always does, was gazing back." "She felt like Cassandra, cursed to see what no one would believe." "It was a Pyrrhic victory." Literary, philosophical, or mythological allusions imported to add gravitas or atmosphere without doing structural work. The allusion decorates the scene rather than illuminating it.
+- **Fix:** If the allusion does structural work -- if Nietzsche's abyss is the actual philosophical framework a character operates within, not a borrowed metaphor -- it earns its place. If the allusion is atmosphere, cut it. The prose has its own weight; it does not need to borrow from philosophy or mythology to feel significant.
+- **Distinguish from:** Borges-technique quotation/pseudo-scholarly apparatus, which IS structural (the scholarly frame confronting the impossible). The test is whether removing the allusion changes the scene's meaning or just its tone. If only tone: decoration.
+
+<!-- concept:scene-templates -->
+### I.14 Scene-Level Genre Templates
+
+The LLM's most deeply embedded cliche patterns operate at scene level, not sentence level. These are structural conventions the model defaults to because they recur across thousands of training examples. The scene "feels right" because the model has generated it before. That is exactly the problem.
+
+**Three content categories where templates are most dangerous in Valoria:**
+
+**A. Hidden-ability / secret-identity templates:**
+
+| Template | The LLM default | The Valoria rendering |
+|---|---|---|
+| The Awakening | Physical symptoms (headache, vision blur). Character gasps, stumbles, grabs a wall. The world "shifts." | The character notices something specific and occupational. A mortar stain. An air quality. They file it in their professional framework and move on. |
+| The Concerned Friend | "Are you okay? You've been different lately." Direct emotional confrontation. | Institutional metrics. "Your abort rate is thirty-one percent. Ehrenwall's office flagged it." The concern is operational, not personal. |
+| The What's Happening to Me | Extended interior monologue. Character catalogues their changing perceptions. Fear, wonder, confusion. | The character does not catalogue. They notice things, act on them, and move to the next task. The reader catalogues. |
+| The Mentor Appears | A wise figure explains the ability, its history, its dangers. | No mentor. No explanation. Valoria's design: Thread truth is experiential, not transmissible (P-08). Discovery is solitary and institutional frameworks have no category for it. |
+| The Night Vigil | Character alone at night, staring at documents / out the window, contemplating the weight of what's ahead. | The character reviews the briefing, notes the operational parameters, and goes to sleep. Or does not sleep and the prose renders the not-sleeping through what the body does (lies still, listens to rain, counts hours). |
+| The Dawn Departure | Packing kit with grim resolve. "She knew she might not return." Interior monologue about transformation and destiny. | She packs her kit. She checks her optics. She leaves before dawn. |
+
+**B. Political / institutional templates:**
+
+| Template | The LLM default | The Valoria rendering |
+|---|---|---|
+| The Both-Sides Debate | Two rivals present their cases. The reader sees both have a point. Mutual understanding or respectful disagreement. | Both rivals WIN. Neither accommodates. The space narrows. Ratchet principle (VI.5). |
+| The Backroom Deal | Two rivals meet privately. One makes an offer. Dramatic tension. A deal is struck or refused. | Power operates through procedural language in institutional settings. The offer is never stated -- it is implied through what the institutional courtesy includes and omits (Le Carre). |
+| The Intelligence Reveal | A briefing reveals a twist. Characters react. New plan forms. | Intelligence surfaces through operational detail -- a folio with figures in another hand, a forty-one thousand bushel discrepancy, a worn cord on a key. The reader assembles the intelligence picture. No briefing scene announces it. |
+| The Loyal Subordinate Questions | "Sir, are you sure?" Direct challenge to authority. Dramatic tension about whether leader will listen. | Subordinate acts within institutional parameters. Files a report. Adjusts their own operational posture. The challenge is in the institutional record, not in a confrontation scene. |
+
+**C. Perception / thread-encounter templates:**
+
+| Template | The LLM default | The Valoria rendering |
+|---|---|---|
+| The Mystical Vision | Character perceives the supernatural. Shimmering, glowing, pulsing. Awe, terror, transcendence. | The character perceives something specific. They describe what it does, what it affects, how it behaves. Observing-around (I.6b). Pre-scientific. No shimmer. No glow. |
+| The Loss of Control | Character's power activates involuntarily. Dramatic consequences. Fear of self. | The character's perception widens beyond their operational framework. They see something they were not looking for. They note it. The institutional implications (what to report, what to omit) are the drama, not the perception itself. |
+| The Cosmic Reveal | The true nature of reality is unveiled. The character understands everything. Wonder and dread. | The character does not understand everything. They understand one thing more than they did before, and the one thing creates operational problems. Understanding in Valoria is incremental, partial, and has institutional cost. |
+
+**Diagnostic:** Before writing a scene, identify whether the beat maps to a template above. If it does, the template column shows what the LLM will produce by default. The Valoria column shows what the scene should do instead. The difference is always the same: the template renders through emotional/dramatic framing; Valoria renders through operational specificity, institutional consequence, and accumulated detail.
+
 ---
 
 ## II. X-Axis Deployment (Coherence-Tier Checks)
