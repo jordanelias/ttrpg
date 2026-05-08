@@ -283,7 +283,7 @@ If a sentence could appear in any story about any settlement / character / event
 ## Migration Notes
 
 **Moved to infill:**
-- Former #62 (Critical-Tradition Flattening) — interpretive caution per author, not pattern-matchable. Lives in `anti-patterns-infill.md` and `literary-review-deep.md` per-author "Risks" sections.
+- Former #62 (Critical-Tradition Flattening) — interpretive caution per author, not pattern-matchable. Lives in `anti-patterns-infill.md` and `literary-review-critical.md` per-author "Risks" sections.
 - Former #47 (Cultural-Tradition Appropriation) — deployment-context reference, absorbed into infill.
 
 **Absorbed:**
