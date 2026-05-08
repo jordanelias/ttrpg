@@ -25,7 +25,7 @@ The root. The birch. The wall. She walked on.
 **Audit:**
 
 - **Within-observation gradient (TS 50+) — middle layer present?** Yes. Three layers operate: **Near** (articulable in Vael's training vocabulary): "restorative," "the layering," "third pass," "eighty years old, perhaps a hundred." Sentences complete normally. **Middle** (Borges precision + Ocampo flat-affect frame = Lem texture): "she could count the passes by the way each had bedded into what was below it... The count was correct. The count told her the work was old, layered, and made by a hand that knew its work. The count did not tell her what the work *was*." The apparatus catches countable content (passes, age, hand-habit) flawlessly; the precision tells you nothing about what the work is. ✓ **Far** (Lispector veer): "what the work beneath the third pass was a work *of* — was. Was." The predication breaks. ✓
-- **Subject/object distinction (anti-pattern #56):** Vael's rendering is intact (C10). The veer targets the OBJECT — what the work is *of* — not the subject. The PC's cognition is fine. The substrate resists. ✓
+- **Subject/object distinction (anti-pattern III.2):** Vael's rendering is intact (C10). The veer targets the OBJECT — what the work is *of* — not the subject. The PC's cognition is fine. The substrate resists. ✓
 - **Anti-pattern #54 (gradient skip) — fixed.** Where the previous passage went near→far and skipped middle, this passage holds the middle long enough for the reader to feel the apparatus catching content flawlessly while telling you nothing. The Lem texture is the second paragraph's whole second half.
 - **Anti-pattern #25 (design vocabulary):** "Restorative," "layering," "third pass" — Vael's training vocabulary as a TS 70 practitioner. ✓
 - **#48 (meta-description):** "These were the things she could read" — borderline, same as previous. The contrast is between what she *can* read (root, birch) and what she cannot (the work's *of*). The "read" is functional, not analytical. ✓
@@ -162,7 +162,7 @@ The work is on the table.
 - **#48 (meta-description):** None. ✓
 - **Closing:** "The work is on the table." Isolated. Flat. The object the self no longer owns. ✓
 
-**Verdict:** Pass. The Spirit axis at C2 with values content distinguishes sharply between high (deciding-grip replacing fading conviction) and low (both letting go). Confirms anti-pattern #53.
+**Verdict:** Pass. The Spirit axis at C2 with values content distinguishes sharply between high (deciding-grip replacing fading conviction) and low (both letting go). Confirms anti-pattern IV.1.
 
 ---
 
@@ -191,7 +191,7 @@ Whoever had been at the bench had stood up perhaps a count of ten before Vael ha
 
 ### Test 37. C10. TS 90. — extreme TS, intact rendering, subject/object stress test
 
-*Tamar (now identified, the Warden Chronicler) at the Greinmar wall. Coherence 10 (full rendering). TS 90 (Resonant — the highest band where the practitioner remains human). Stress test for anti-pattern #56 — the rendering is fully intact, the substrate is the most resistant, the irreal techniques must target the OBJECT.*
+*Tamar (now identified, the Warden Chronicler) at the Greinmar wall. Coherence 10 (full rendering). TS 90 (Resonant — the highest band where the practitioner remains human). Stress test for anti-pattern III.2 — the rendering is fully intact, the substrate is the most resistant, the irreal techniques must target the OBJECT.*
 
 Tamar set her right hand on the cap-stone of the Greinmar wall. The cap was warm from the afternoon sun and the joint beneath was tight, the lime-mortar still showing the original tooling, the cap-stone laid the long way as Greinmar dry-stone laid them, and Tamar felt all of this clearly — she was a Warden, the wall was a wall, her hand was steady, the count of stones from the lower headland to the gate was forty-seven, she had counted them as a girl.
 
@@ -220,7 +220,7 @@ The cap-stone was warm. The wren was still there.
 
 ### Test 38. C3. TS 0. — Mistry deep-time at low coherence with disruption
 
-*Vael in Maren's workshop. Coherence 3. Spirit mid. Test 24 in the original battery flagged Mistry tautology aestheticization risk — the prose risks reading as meditative rather than pathological. The new anti-pattern #58 says: break the meditation with sharp disruption. This passage adds the disruption.*
+*Vael in Maren's workshop. Coherence 3. Spirit mid. Test 24 in the original battery flagged Mistry tautology aestheticization risk — the prose risks reading as meditative rather than pathological. The new anti-pattern V.7 says: break the meditation with sharp disruption. This passage adds the disruption.*
 
 The callus on Maren's finger was the callus. Vael could see it. The first joint. Right hand. The awl had made it, or the years had made it, or the thing that makes calluses had — the skin was thicker there and the thickness meant something. It meant the years or the awl or the — it meant the callus.
 
@@ -235,7 +235,7 @@ Maren said her name. Vael answered. The answer was an answer. It was about the b
 - **Anti-pattern #58 (Mistry tautology aestheticized) — fixed.** The passage opens in Mistry-Lispector tautology mode ("the callus was the callus"). The second paragraph introduces the dissociative gap: "Vael had been about to answer and the answering had been about to be — Vael had not answered. The looking had been a long time." Vael is in the middle of an exchange she does not remember timing correctly. The third paragraph introduces the visible substrate alteration on Maren (the shadow longer than the face, on the wrong side — this is C3 where two observers can perceive the PC differently, but here the PC perceives the world wrongly because the rendering is fragmented). The disruptions break the meditative rhythm. ✓
 - **Mistry accretion under pressure:** "The callus. The first joint. The thickness of the skin." The accretion still happens, but its function (portrait-through-particulars) is broken — these are now the LAST things she can read, anchors to retreat to when the rendering of Maren's face fails. The same technique, used as a panic-handle rather than as a portrait. ✓
 - **C3 dissociative gap:** "Vael had been looking at the callus. The looking had been a long time." Time stretched. She does not remember when she started looking. ✓
-- **C3 ontic alteration in the world (the shadow on Maren):** Wait — is this rendered correctly? At C3 (Fragmented), the PC's *outward facing* fails (others perceive THE PC differently). But here Vael is perceiving Maren's shadow as wrong. Is this rendering failure (Vael's perception) or substrate event (Maren is genuinely altered)? The passage's framing: "Vael looked away." She immediately retreats to anchored detail. This frames the wrong-shadow as a perceptual event in Vael's rendering — at C3 her perception of others' materiality is unreliable. The substrate is unchanged; her rendering of it is fragmenting. ✓ But this is borderline — the prose could be read as the world becoming strange (anti-pattern #44, world-surrealism). The retreat to anchored detail (looking away, naming the callus) is what saves it: the wrongness is in the rendering, not in Maren. **Borderline pass — the retreat is the indicator.**
+- **C3 ontic alteration in the world (the shadow on Maren):** Wait — is this rendered correctly? At C3 (Fragmented), the PC's *outward facing* fails (others perceive THE PC differently). But here Vael is perceiving Maren's shadow as wrong. Is this rendering failure (Vael's perception) or substrate event (Maren is genuinely altered)? The passage's framing: "Vael looked away." She immediately retreats to anchored detail. This frames the wrong-shadow as a perceptual event in Vael's rendering — at C3 her perception of others' materiality is unreliable. The substrate is unchanged; her rendering of it is fragmenting. ✓ But this is borderline — the prose could be read as the world becoming strange (anti-pattern II.3, world-surrealism). The retreat to anchored detail (looking away, naming the callus) is what saves it: the wrongness is in the rendering, not in Maren. **Borderline pass — the retreat is the indicator.**
 - **Anti-pattern #44 (world-surrealism) — risk?** Yes. The shadow-on-Maren reads close to the world becoming surreal. The fix would be to make the perceptual nature of the alteration explicit — but explicit-rendering would be meta-description (#48). The current solution (Vael looks away, names what she can read) leaves the wrongness ambiguous between perception and world. At C3, this ambiguity may be appropriate — Vael's rendering cannot reliably distinguish her perceptual error from a real-world event. **Pass narrowly. The ambiguity is the texture.**
 - **#48 (meta-description):** "These were the things she could read" — same borderline as before. Functional, not analytical. ✓
 - **Closing:** "Maren's shadow was on the wall." Per C2-3 closing register: isolated detail with flat affect. The shadow is on the wall now (correctly), an implicit recovery. The close reads: the world is the world; Vael's rendering caught up. ✓
@@ -259,7 +259,7 @@ Maren said her name. Vael answered. The answer was an answer. It was about the b
 
 ### New stress tests passed (2/2):
 - **Test 36 (C5 Tartt loaded-object boundary)** — confirmed: 5/4 boundary is the Tartt loaded-object ceiling, not just the simile boundary.
-- **Test 38 (C3 Mistry with disruption)** — anti-pattern #58 fixable with dissociative gap + perceived ontic alteration. Borderline at the perceived-shadow ambiguity, which is the C3 texture itself.
+- **Test 38 (C3 Mistry with disruption)** — anti-pattern V.7 fixable with dissociative gap + perceived ontic alteration. Borderline at the perceived-shadow ambiguity, which is the C3 texture itself.
 
 ### New rules confirmed (for future skeleton promotion):
 1. **The 5/4 boundary is the Tartt loaded-object ceiling** — at C5 the loading still works with effort; at C4 the interpretive chain breaks. This is a new finding to add to coherence-gated technique availability.
@@ -275,4 +275,4 @@ Maren said her name. Vael answered. The answer was an answer. It was about the b
 ### For skeleton update (next session):
 - Add to techniques-skeleton.md coherence-gated availability table: Tartt loaded-object — Available at 10-8, 7-5; degrading at 4-3; broken at 2 and below.
 - Document the Beckett substitution for Belief Co-Authorship at high Spirit in coherence-tiers.md §Spirit Axis Interaction → C2 entry.
-- The C3 perceived ontic ambiguity rule may warrant its own anti-pattern entry, or a clarification to anti-pattern #44 (world-surrealism conflation).
+- The C3 perceived ontic ambiguity rule may warrant its own anti-pattern entry, or a clarification to anti-pattern II.3 (world-surrealism conflation).
