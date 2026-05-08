@@ -34,7 +34,7 @@ Per tc_political_redesign_v30. Seasonal advancement: conditional passive +1 (req
 
 **Political legitimacy bonus:** Church in political forums: +floor(Church Influence / 20) bonus dice. Secular factions opposing Church: −floor(Church Influence / 30) effective voting Mandate.
 
-**Simulation data (valoria_sim v4):** Without counter-mechanics, Church wins 53% of pure-AI campaigns. tc_political_redesign addresses this by distributing TC suppression and adding political costs.
+**Simulation data (valoria_sim v4):** Without counter-mechanics, Church wins 53% of pure-AI campaigns. tc_political_redesign addresses this by distributing CI suppression and adding political costs.
 
 ### Political Stability
 
@@ -93,7 +93,7 @@ Fixed per territory. Gates Church Influence flow and political legitimacy. Range
 
 Per-territory 0–10. Advances from visible Thread ops (+1), fieldwork Exposure at Watched (+1), public practitioner identification (+2). At ≥ 3: first Inquisitor (+1D Church Investigate). At ≥ 6: second Inquisitor (+2D, Heresy Investigation Ob −1). Resets Year-End.
 
-**Simulation data:** Fieldwork contributes ~11% of max TC acceleration over 4 seasons. Cap (+1/character/season, +2/territory/season) is sufficient (SIM-DEBT-FW-04).
+**Simulation data:** Fieldwork contributes ~11% of max CI acceleration over 4 seasons. Cap (+1/character/season, +2/territory/season) is sufficient (SIM-DEBT-FW-04).
 
 ---
 
@@ -202,7 +202,7 @@ Coherence (10→0, practitioners), Thread Sensitivity (0–100), Certainty (0–
 | Old | New | Reason |
 |---|---|---|
 | Rendering Stability | **Metaphysical Stability** | What it measures |
-| Theocracy Counter | **Church Influence** | What it measures. Goes to 100. |
+| Church Influence | **Church Influence** | What it measures. Goes to 100. |
 | Turmoil | **Political Stability** | What it measures |
 | Territory Consolidation Value | **Territory Value** | Simpler. Range 1–5. |
 | Resonant Style | **Pressure Point** | Immediately communicable |
@@ -283,7 +283,7 @@ PP-403 REPEALED. Only canonical triggers:
 | Item | Priority |
 |---|---|
 | Accord + Political Stability + battle consequences compound | P1 (ED-538) |
-| TC reform + TCV revaluation + Seizure Accord compound on Church | P1 (ED-539) |
+| CI reform + TCV revaluation + Seizure Accord compound on Church | P1 (ED-539) |
 | NPC AI with Accord-aware governance (Hafenmark collapse rate) | P1 |
 | Dynastic Proclamation and Cultural Reformation | P1 |
 | Unit health = Type Health × Size | P1 |

@@ -345,7 +345,7 @@ Faction stats floor 0, ceiling 7. Standing 0-10."
         line: 14
         value: 3
         pattern: named_bound
-        context: "| U-01 | Elske Loyalty has no Coup Counter link in stage6. Triggers are: TC ≥ 40 unopposed, Torben loyalty ≤ 2–3, Crown "
+        context: "| U-01 | Elske Loyalty has no Coup Counter link in stage6. Triggers are: CI ≥ 40 unopposed, Torben loyalty ≤ 2–3, Crown "
       - file: "designs/arcs/gm_ref/arcs_46_55_resolved.md"
         line: 93
         value: 0
@@ -682,7 +682,7 @@ Minimum 1 real-world session per in-game season. No maximum — a season may spa
         line: 278
         value: 40
         pattern: known_clock_threshold
-        context: "**Arc shape:** Single operation, single roll. Immediately divergent. Overwhelming: 1-scene success, Theocracy Counter +1"
+        context: "**Arc shape:** Single operation, single roll. Immediately divergent. Overwhelming: 1-scene success, Church Influence +1"
       - file: "designs/arcs/emergent_arcs_experimental.md"
         line: 138
         value: 60
@@ -892,7 +892,7 @@ Minimum 1 die after all penalties. Formation Break at Discipline 0 removes "
         line: 80
         value: 3
         pattern: starts_at
-        context: "A[\"Players identify Economic Leverage as needed\\nvs Church Wealth (funding TC expansion)\\nor vs Crown (if extracting con"
+        context: "A[\"Players identify Economic Leverage as needed\\nvs Church Wealth (funding CI expansion)\\nor vs Crown (if extracting con"
   ob_with:
     distinct_values: [3]
     file_count: 1
@@ -1227,12 +1227,12 @@ CI starts at 28 per P-32. Unchanged."
         line: 166
         value: 7
         pattern: named_bound
-        context: "| **Framework Drift** | Faction ethical framework produces passive stat changes | Per-framework table: Church → TC +1/se"
+        context: "| **Framework Drift** | Faction ethical framework produces passive stat changes | Per-framework table: Church → CI +1/se"
       - file: "params/factions/npc_stance_triangles.md"
         line: 47
         value: 7
         pattern: named_bound
-        context: "| Divine Command | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + TC advanced | Per year (Year-End)"
+        context: "| Divine Command | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + CI advanced | Per year (Year-End)"
       - file: "params/factions/npc_stance_triangles.md"
         line: 49
         value: 7
@@ -1324,17 +1324,17 @@ CI starts at 28 per P-32. Unchanged."
         line: 19
         value: 42
         pattern: known_clock_threshold
-        context: "Parliament convenes in the cold season with Theocracy Counter at 42. No one calls it a crisis. The Cardinals have spent "
+        context: "Parliament convenes in the cold season with Church Influence at 42. No one calls it a crisis. The Cardinals have spent "
       - file: "designs/provincial/factions_personal_v30_infill.md"
         line: 75
         value: 40
         pattern: known_clock_threshold
-        context: "- Theocracy Counter reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)"
+        context: "- Church Influence reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)"
       - file: "designs/provincial/strategic_layer_v30_infill.md"
         line: 88
         value: 50
         pattern: known_clock_threshold
-        context: "**Church chooses Resist (Game Master determines; consistent with Church conviction and Theocracy Counter > 50 assertive "
+        context: "**Church chooses Resist (Game Master determines; consistent with Church conviction and Church Influence > 50 assertive "
       - file: "designs/provincial/strategic_layer_v30_infill.md"
         line: 99
         value: 30
@@ -1359,17 +1359,17 @@ CI starts at 28 per P-32. Unchanged."
         line: 38
         value: 30
         pattern: known_clock_threshold
-        context: "BG v05 Scenario A (L495): \"Thread operation within 1 territory of T3, Theocracy Counter ≥ 30, no Heresy Investigation op"
+        context: "BG v05 Scenario A (L495): \"Thread operation within 1 territory of T3, Church Influence ≥ 30, no Heresy Investigation op"
       - file: "params/factions/stats_1_7_scale.md"
         line: 187
         value: 40
         pattern: known_clock_threshold
-        context: "- Theocracy Counter reaches 40 while Crown took no action to reduce it that season"
+        context: "- Church Influence reaches 40 while Crown took no action to reduce it that season"
       - file: "params/factions/stats_1_7_scale.md"
         line: 261
         value: 40
         pattern: known_clock_threshold
-        context: "When Reformed Settlement is in force (Theocracy Counter ≥ 40 and Church has Resisted):"
+        context: "When Reformed Settlement is in force (Church Influence ≥ 40 and Church has Resisted):"
   thread_sensitivity:
     distinct_values: [0, 20, 30, 50]
     file_count: 8

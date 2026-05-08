@@ -628,14 +628,14 @@ Roll: L vs floor(target faction's L / 2) + 1.
 
 | Degree | Result |
 |---|---|
-| Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Theocracy Counter (territory-level value) fires immediately. |
+| Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Church Influence (territory-level value) fires immediately. |
 | Failure | Church L −1 |
 
 Riskbreaker exposure removes seized territory and prevents re-seizure for one season.
 
 ### Priority Tree (BG)
 
-Per `npc_behavior_v30 §8.2`. Summary: Himlensendt's tree weights doctrinal expansion (Suppress, Assert, CI advance) high; pastoral protection second; Theocracy Counter advancement structurally embedded.
+Per `npc_behavior_v30 §8.2`. Summary: Himlensendt's tree weights doctrinal expansion (Suppress, Assert, CI advance) high; pastoral protection second; Church Influence advancement structurally embedded.
 
 ### Doctrine Notes
 

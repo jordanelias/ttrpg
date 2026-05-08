@@ -35,7 +35,7 @@
 ### Almud ↔ Lenneth: The Custodian and the Reformist
 
 
-Lenneth has the moral conviction Almud's doubt prevents him from reaching. She believes the caste is wrong. She believes the Crown should be the instrument of reform. She has a strategic vision — Crown patronage of Einhir revival would permanently strengthen the deed-claim. Almud has the governance pragmatism Lenneth's conviction prevents her from fully weighing. He sees the costs: Mandate −2, TC +3, IP +1. These are real. But the deeper truth is that Almud has not decided whether acting is right, and Lenneth's certainty pressures him on a question he has not resolved.
+Lenneth has the moral conviction Almud's doubt prevents him from reaching. She believes the caste is wrong. She believes the Crown should be the instrument of reform. She has a strategic vision — Crown patronage of Einhir revival would permanently strengthen the deed-claim. Almud has the governance pragmatism Lenneth's conviction prevents her from fully weighing. He sees the costs: Mandate −2, CI +3, IP +1. These are real. But the deeper truth is that Almud has not decided whether acting is right, and Lenneth's certainty pressures him on a question he has not resolved.
 
 
 
@@ -46,7 +46,7 @@ Lenneth has the moral conviction Almud's doubt prevents him from reaching. She b
 
 
 
-The deed-monarchy's logic makes this rivalry structurally dangerous. If the Crown's legitimacy depends on continuous performance, and Baralta's governance record (Mandate 7, Ob 1 deviation, decades of institutional command) exceeds Almud's by several metrics, then the deed-logic itself argues for Baralta. She knows this. Almud knows she knows. His management of Baralta — tolerating her parliamentary challenges, respecting her Theocracy Counter suppression, not directly confronting her institutional positioning — is the governance of a man who understands that his rival's case is strong and that confrontation would clarify the comparison in her favour.
+The deed-monarchy's logic makes this rivalry structurally dangerous. If the Crown's legitimacy depends on continuous performance, and Baralta's governance record (Mandate 7, Ob 1 deviation, decades of institutional command) exceeds Almud's by several metrics, then the deed-logic itself argues for Baralta. She knows this. Almud knows she knows. His management of Baralta — tolerating her parliamentary challenges, respecting her Church Influence suppression, not directly confronting her institutional positioning — is the governance of a man who understands that his rival's case is strong and that confrontation would clarify the comparison in her favour.
 
 
 

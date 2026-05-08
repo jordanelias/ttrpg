@@ -17,7 +17,7 @@ Valoria is a videogame (Godot 4.6), not a tabletop product. Mode labels (TTRPG /
 - All terms must be written in full in every document. Abbreviations may appear in parentheses immediately after the full term on first use per section: e.g. `Thread Sensitivity (TS)`.
 - Subsequent uses in the same section: full term only.
 - **Exceptions (abbreviation may stand alone):** `TN` (Target Number), `Ob` (Obstacle), `TTRPG`, `BG`.
-- **`TC` is no longer used** — historically ambiguous between Theocracy Counter (renamed to Church Influence / CI per ED-782) and Conviction Track (CT). Use `CI` for the Church clock; write `Conviction Track` in full elsewhere. Residual TC sweep completed for `npc_behavior_v30.md` 2026-04-30 (PP-691); incidental TC residuals in other docs are queued in `references/censured_vocabulary.yaml`.
+- **`CI` is no longer used** — historically ambiguous between Church Influence (renamed to Church Influence / CI per ED-782) and Conviction Track (CT). Use `CI` for the Church clock; write `Conviction Track` in full elsewhere. Residual CI sweep completed for `npc_behavior_v30.md` 2026-04-30 (PP-691); incidental CI residuals in other docs are queued in `references/censured_vocabulary.yaml`.
 
 ---
 
@@ -66,11 +66,11 @@ These are campaign-level trackers shared across all factions. All are event-driv
 | Full Term | Abbr | Range | Mode | Start | Loss / Milestone Thresholds | Description |
 |-----------|------|-------|------|-------|----------------------------|-------------|
 | Mending Stability | MS | 100→0 | ALL | 60 (TTRPG) / 72 (BG) | 0 = The Rupture (campaign ends) | World coherence. Shared track. Degrades from Thread operations and seasonal effects. **Renamed from Rendering Stability (RS) per ED-731.** |
-| Church Influence | CI | 0–100 | ALL | 0 (TTRPG) / 28 (BG) | 40 = Church Assertive · 55 = Institutional Reach · 60 = Mass Seizure available (probabilistic declaration P = ((CI−60)/40)^3.3 per season — supersession_register entry 250715f) · 65 = Church Dominant · 80 = Church Ascendant · 100 = Theocracy Unification Attempt | Church political dominance accumulation. Church-specific clock. Per `designs/provincial/ci_political_v30.md` §2.1 (canonical). **Renamed from "Theocracy Counter" (TC) per ED-782.** Old 75 = Phase Transition / Territorial Seizure threshold REMOVED — Mass Seizure now probabilistic from CI ≥ 60. |
+| Church Influence | CI | 0–100 | ALL | 0 (TTRPG) / 28 (BG) | 40 = Church Assertive · 55 = Institutional Reach · 60 = Mass Seizure available (probabilistic declaration P = ((CI−60)/40)^3.3 per season — supersession_register entry 250715f) · 65 = Church Dominant · 80 = Church Ascendant · 100 = Theocracy Unification Attempt | Church political dominance accumulation. Church-specific clock. Per `designs/provincial/ci_political_v30.md` §2.1 (canonical). **Renamed from "Church Influence" (CI) per ED-782.** Old 75 = Phase Transition / Territorial Seizure threshold REMOVED — Mass Seizure now probabilistic from CI ≥ 60. |
 | Institutional Pressure | IP | 0–100 | ALL | 20 | 75/80 = Altonian Vanguard (BG) | Pressure from the Altonian Empire. Invasion threat tracker. |
 | Public Instability | PI | 0–10 | BG | 5 | 0 = Parliament dissolved + Löwenritter coup | Parliamentary health tracker. Board Game mode only. |
 
-**Old TC = Church Influence rename:** ED-782 retired the abbreviation. New content uses `CI`. Residual `TC` references in `npc_behavior_v30.md` (16 paragraphs) swept by PP-691. Other corpus residuals queued for cleanup; see `canon/supersession_register.yaml` and `references/censured_vocabulary.yaml`. **Do not introduce `TC` in new content.**
+**Old CI = Church Influence rename:** ED-782 retired the abbreviation. New content uses `CI`. Residual `CI` references in `npc_behavior_v30.md` (16 paragraphs) swept by PP-691. Other corpus residuals queued for cleanup; see `canon/supersession_register.yaml` and `references/censured_vocabulary.yaml`. **Do not introduce `CI` in new content.**
 
 ---
 
@@ -221,7 +221,7 @@ These are canonical-authority systems with their own design docs. Hub-centrality
 | Conflict Architecture | `designs/architecture/conflict_architecture_proposal.md` | Architectural specification for conflict resolution across scales. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal Assassination Fuse all anchored here. |
 | Campaign Architecture | `designs/architecture/campaign_architecture_v30.md` | Architectural specification for campaign-scale structure: phase ordering, season cadence, scale-transition orchestration. |
 | Victory | `designs/provincial/victory_v30.md` + `params/bg/victory.md` | Win-condition specification across factions. Faction-specific victory paths (Crown / Church / Hafenmark / Varfell / Löwenritter / RM / Guilds). |
-| CI Political | `designs/provincial/ci_political_v30.md` | Church Influence political dynamics — milestones, seizure mechanics, Theocracy Unification spec. Renamed from `tc_political_redesign_v30` (same doc, CI = Theocracy Counter's politically-active form per `references/canonical_sources.yaml` note). |
+| CI Political | `designs/provincial/ci_political_v30.md` | Church Influence political dynamics — milestones, seizure mechanics, Theocracy Unification spec. Renamed from `tc_political_redesign_v30` (same doc, CI = Church Influence's politically-active form per `references/canonical_sources.yaml` note). |
 
 Other canonical / provisional systems (registration pending in alias_registry — see `references/canonical_sources.yaml` for authoritative system map): Settlement Adjacency, Fractional Province Ownership, Faction Succession Split, Tensions Deck, Royal Assassination Fuse, MS Trajectory, Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle, Demotion Magnitude, Miraculous Event, Solmund Voice / Philosophy / Artifacts.
 
@@ -233,7 +233,7 @@ Terms whose abbreviations conflict with another term. Never use these abbreviati
 
 | Abbreviation | Meaning A | Meaning B | Resolution |
 |-------------|-----------|-----------|------------|
-| TC | ~~Theocracy Counter~~ (renamed CI per ED-782) | ~~Conviction Track~~ (now CT) | **Do not use TC.** Write `CI` for Church Influence; `Conviction Track` (or `CT` in technical contexts) for the debate tracker. |
+| CI | ~~Church Influence~~ (renamed CI per ED-782) | ~~Conviction Track~~ (now CT) | **Do not use CI.** Write `CI` for Church Influence; `Conviction Track` (or `CT` in technical contexts) for the debate tracker. |
 | CP | Character Points (advancement currency) | ~~Combat Power~~ (renamed Power — PP-232) | CP = Character Points only [ED-136]. Use "Power" for the unit offensive stat. |
 | TD | ~~Thread Depth~~ (REMOVED PP-166) | Top-Down (Mermaid flowchart directive) | Thread Depth is a phantom stat (REMOVED PP-166). `flowchart TD` is valid Mermaid syntax — not a game term. |
 | COMP | Composure (Debate context) | Computation / Composition (general English) | Write "Composure" in game documents. |

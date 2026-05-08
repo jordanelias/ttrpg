@@ -7,7 +7,7 @@
 ## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643)
 ## Scope: Conviction Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
-> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Theocracy Counter per ED-782). Conviction Track (CT) is always written in full. (ED-756)
+> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Church Influence per ED-782). Conviction Track (CT) is always written in full. (ED-756)
 
 ---
 

@@ -41,7 +41,7 @@ Tie-breaking: alphabetical token order. Class taxonomy (§3.4 of methodology) ap
 The 2026-04-29 reference run swept three terms (Game Master, Cultural Reformation, Coup Counter). This run expands the list to all struck/legacy terms parsed from:
 - `canon/supersession_register.yaml` (VTM, CR strikes 2026-04-19)
 - `references/alias_registry.yaml` `legacy_renames` block (Combat Power, Cohesion, Thread Depth, Rendering Stability)
-- `references/alias_registry.yaml` `collision_table.tc` meaning_a (TC = Theocracy Counter, ED-782)
+- `references/alias_registry.yaml` `collision_table.tc` meaning_a (CI = Church Influence, ED-782)
 - Editorial actions ED-781 (Coup Counter), ED-764 (Niflhel as faction)
 - Session log P1 sweep target (bare GM, distinct from "Game Master" bigram)
 
@@ -54,8 +54,8 @@ The 2026-04-29 reference run swept three terms (Game Master, Cultural Reformatio
 | `Cohesion` | `\bCohesion\b` | alias_registry legacy_renames PP-232 → Discipline | |
 | `Thread Depth` | full phrase | alias_registry legacy_renames PP-166 → REMOVED | |
 | `Rendering Stability` | full phrase | alias_registry legacy_renames ED-731 → Mending Stability | |
-| `Theocracy Counter` | full phrase | alias_registry collision_table tc | |
-| `TC (as Church Influence)` | `\bTC\b` + context filter on `Theocracy\|Church\|Influence\|Mass Seizure\|seizure\|threshold\|Holy` | alias_registry collision_table tc / ED-782 | Context filter excludes Conviction-Track-context TC mentions |
+| `Church Influence` | full phrase | alias_registry collision_table tc | |
+| `CI (as Church Influence)` | `\bTC\b` + context filter on `Theocracy\|Church\|Influence\|Mass Seizure\|seizure\|threshold\|Holy` | alias_registry collision_table tc / ED-782 | Context filter excludes Conviction-Track-context CI mentions |
 | `Coup Counter` | full phrase | ED-781 conflict_architecture_proposal | Replacement: Graduated Autonomy |
 | `Game Master` | full phrase | session log: GM sweep PP-678 partial | |
 | `GM (bare)` | `\bGM\b` minus `Game Master` mask | session log: bare 'GM' corpus sweep TBD | Distinct from "Game Master" bigram — separately tracked |

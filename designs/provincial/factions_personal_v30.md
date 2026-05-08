@@ -166,25 +166,25 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 - Sincerely devout. Zero awareness of Solmund's actual nature. Not cynical — wrong.
 
 
-**Theocracy Counter 60 — Territorial Seizure Procedure**
+**Church Influence 60 — Territorial Seizure Procedure**
 
 
 **Roll:** Church Mandate (pool, TN 7) vs territory owner's Mandate ÷ 2 (round up, minimum Ob 1).
 
-**Territory Theocracy Counter value (flat, on seizure — no per-season accrual):**
+**Territory Church Influence value (flat, on seizure — no per-season accrual):**
 
-| Territory Type | Theocracy Counter on Seizure |
+| Territory Type | Church Influence on Seizure |
 |---|---|
 | Minor territory (rural, low-prosperity) | +1 |
 | Major territory (trade hub, fortified, ducal seat) | +3 |
 | Capital or key institutional site (Valorsplatz, cathedral city) | +5 |
 
-**Outcome on success:** Church gains administrative control of the territory. The territory's Domain Actions may no longer target Church authority without +2 Ob. The flat Theocracy Counter value fires immediately on seizure.
+**Outcome on success:** Church gains administrative control of the territory. The territory's Domain Actions may no longer target Church authority without +2 Ob. The flat Church Influence value fires immediately on seizure.
 
 **Outcome on failure:** No seizure. Church Mandate −1 (overreach).
 
 **Counter-play options:**
-- Parliamentary vote to dispute seizure (Influence vs Ob 3): success reverses seizure; Theocracy Counter does not fire.
+- Parliamentary vote to dispute seizure (Influence vs Ob 3): success reverses seizure; Church Influence does not fire.
 
 ---
 
@@ -197,7 +197,7 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 - Ad hoc, situational, or precedent-breaking actions: **+1 Ob**
 
 
-**Substrate-Posture (T-15a — Hafenmark Unmediated Sovereigntist; М-4):** *Hafenmark stakes out an unmediated sovereigntist substrate-posture.* The Crown's authority (and therefore Baralta's cadet-branch Crown Claim) derives from the deed-monarchy's competence presumption, not from divine sanction mediated through the Church. Hafenmark denies the Church's ecclesial monopoly on cosmological legitimacy: the ontological axis (Axis 9) is not the Church's to adjudicate because sovereignty does not descend from Solmund. This is the mechanical source of Hafenmark's Theocracy Counter suppression (while Baralta holds Mandate ≥ 4) — suppression expresses the doctrinal claim that Crown authority operates *in parallel to* ecclesial authority, not *beneath* it. Secondary throughline М-6 (forced-choice) fires when Thread revelation becomes unavoidable: Baralta's Certainty 0 (Categorical Imperative worldview, TS 0) is structurally vulnerable to public Thread truth because the Categorical framework presumes a fully rationally intelligible world. If Axis 9 activates, Hafenmark faces forced choice among (a) schism-with-Church (escalating sovereigntist doctrine to openly anti-ecclesial), (b) quiet absorption (Baralta privately accommodates Thread reality while publicly maintaining Categorical stance), (c) collapse (excommunication succeeds, Mandate crisis, Hafenmark succession fragments). See references/throughlines_meta_infill.md §T-15a for the canonical definition; ED-717 (Hafenmark/Löwenritter/RM substrate-posture gaps) — Hafenmark arm now closed.
+**Substrate-Posture (T-15a — Hafenmark Unmediated Sovereigntist; М-4):** *Hafenmark stakes out an unmediated sovereigntist substrate-posture.* The Crown's authority (and therefore Baralta's cadet-branch Crown Claim) derives from the deed-monarchy's competence presumption, not from divine sanction mediated through the Church. Hafenmark denies the Church's ecclesial monopoly on cosmological legitimacy: the ontological axis (Axis 9) is not the Church's to adjudicate because sovereignty does not descend from Solmund. This is the mechanical source of Hafenmark's Church Influence suppression (while Baralta holds Mandate ≥ 4) — suppression expresses the doctrinal claim that Crown authority operates *in parallel to* ecclesial authority, not *beneath* it. Secondary throughline М-6 (forced-choice) fires when Thread revelation becomes unavoidable: Baralta's Certainty 0 (Categorical Imperative worldview, TS 0) is structurally vulnerable to public Thread truth because the Categorical framework presumes a fully rationally intelligible world. If Axis 9 activates, Hafenmark faces forced choice among (a) schism-with-Church (escalating sovereigntist doctrine to openly anti-ecclesial), (b) quiet absorption (Baralta privately accommodates Thread reality while publicly maintaining Categorical stance), (c) collapse (excommunication succeeds, Mandate crisis, Hafenmark succession fragments). See references/throughlines_meta_infill.md §T-15a for the canonical definition; ED-717 (Hafenmark/Löwenritter/RM substrate-posture gaps) — Hafenmark arm now closed.
 
 
 **Leadership Deviation:** Baralta acts against tendency (extralegal action, breaking with Parliament, backchannel dealings with settlement-layer intelligence brokers): Stability check **Ob 1**. Low cost — Baralta IS the institution. Her personal authority is so thoroughly embedded that deviation costs are minimal. This is her structural advantage.
@@ -207,16 +207,16 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 
 | Degree | Result |
 |---|---|
-| **Overwhelming** | Theocracy Counter −3. Church Mandate −1. Heresy Investigation blocked this season. +1D social vs Church for the arc. |
-| **Success** | Theocracy Counter −2. Church Mandate −1. Heresy Investigation opens against Baralta (Ob 4 to pursue). |
-| **Partial** | Theocracy Counter −1. Heresy Investigation opens immediately. Church Influence +1. |
-| **Failure** | Theocracy Counter +1. Heresy Investigation immediate. Baralta's Mandate −1. |
+| **Overwhelming** | Church Influence −3. Church Mandate −1. Heresy Investigation blocked this season. +1D social vs Church for the arc. |
+| **Success** | Church Influence −2. Church Mandate −1. Heresy Investigation opens against Baralta (Ob 4 to pursue). |
+| **Partial** | Church Influence −1. Heresy Investigation opens immediately. Church Influence +1. |
+| **Failure** | Church Influence +1. Heresy Investigation immediate. Baralta's Mandate −1. |
 
 *Roll: Mandate vs Ob 4. Once per campaign arc.*
 
-*Heresy Investigation consequence:* Grand Debate (5 exchanges). If it succeeds without player intervention: Mandate −2, Theocracy Counter +3, Theocracy Counter suppression removed.
+*Heresy Investigation consequence:* Grand Debate (5 exchanges). If it succeeds without player intervention: Mandate −2, Church Influence +3, Church Influence suppression removed.
 
-**Theocracy Counter Suppression:** While Baralta's Mandate remains 4+ (on 1–7 scale), she suppresses Theocracy Counter at −1/season. If Mandate drops below 4, suppression disappears. If excommunicated: Theocracy Counter +4 immediately.
+**Church Influence Suppression:** While Baralta's Mandate remains 4+ (on 1–7 scale), she suppresses Church Influence at −1/season. If Mandate drops below 4, suppression disappears. If excommunicated: Church Influence +4 immediately.
 
 **Default Leader: Duchess Inge Baralta**
 
@@ -255,10 +255,10 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 
 | TK | Campaign Effect |
 |---|---|
-| 1–2 | Informed questions. Acute awareness, not understanding. No Theocracy Counter effect. |
-| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Theocracy Counter +1. |
-| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Theocracy Counter +2. |
-| 5 | Dangerous knowledge — understands what Solmund was structurally. Seeks capability, not further knowledge. Theocracy Counter +3. |
+| 1–2 | Informed questions. Acute awareness, not understanding. No Church Influence effect. |
+| 3 | Structural theory (wrong in detail, correct in structure). Succession leverage formally linked to Southernmost access terms. Church Influence +1. |
+| 4 | Urgency. Willing to offer collection access (including originary locks) for Thread education and Southernmost partnership. Church Influence +2. |
+| 5 | Dangerous knowledge — understands what Solmund was structurally. Seeks capability, not further knowledge. Church Influence +3. |
 
 TK advances through: practitioner relationship (sustained season, cap ×2); originary lock examination with practitioner context (cap ×1); Church archive access via settlement-layer intelligence brokers (+1/archive; see designs/territory/settlement_layer_v30.md §4.8); players sharing Thread-level knowledge directly (+1–2 by depth); Discovery Event triggering Thread Sensitivity 30 (+2 immediately).
 
@@ -350,7 +350,7 @@ The Guilds apply economic pressure to any faction present in a territory where G
 - All non-Military Domain Actions in Martial Law territories require a secondary Military check (Löwenritter Military pool, TN 7, Ob 2) to proceed. Failure: the action is blocked this season.
 - Stability enforcement: Löwenritter Military pool replaces faction-specific pools for all Stability-related Domain Actions in affected territories.
 - Faction restriction: only Löwenritter and Crown may act openly. All other factions must succeed at a Covert Domain Action (Ob 3) to operate at all.
-- Duration: Martial Law persists until a Player Character-driven Domain Action removes it (Influence vs Ob = Löwenritter Military ÷ 2, round up, minimum Ob 3) OR Theocracy Counter drops below 40 (Church threat recedes; Ehrenwall withdraws).
+- Duration: Martial Law persists until a Player Character-driven Domain Action removes it (Influence vs Ob = Löwenritter Military ÷ 2, round up, minimum Ob 3) OR Church Influence drops below 40 (Church threat recedes; Ehrenwall withdraws).
 - Scope: Crown territories only. Hafenmark, Varfell, and Church territories are unaffected.
 
 **Riskbreakers:** The extralegal arm of the Löwenritter. Operations are not recorded in official documents. See §9.3.
@@ -397,7 +397,7 @@ The Ministry is infrastructure, not a faction. It administers roads, courts, tax
 1. Both sides roll relevant faction pools (typically Mandate for legitimacy claims, Influence for procedural contests)
 2. Ob = opponent's relevant stat directly (1–7)
 3. Best of **3 exchanges.** First side to win 2 exchanges wins.
-4. If neither side wins 2 of 3 (draws possible when both meet Ob): motion fails by abstention — Thread Tension +1 and Theocracy Counter +1 (institutional paralysis)
+4. If neither side wins 2 of 3 (draws possible when both meet Ob): motion fails by abstention — Thread Tension +1 and Church Influence +1 (institutional paralysis)
 
 ---
 
@@ -423,7 +423,7 @@ At the end of each campaign season (~4 sessions):
 3. Apply Thread Tension drift and all Thread Tension-lowering events
 4. Check floors (Stability 0 = collapse event) and ceilings (Mandate or Stability 7 = dominance event)
 5. Award CP for Domain Actions and personal goals
-6. Apply Theocracy Counter changes from threshold conditions
+6. Apply Church Influence changes from threshold conditions
 
 ---
 

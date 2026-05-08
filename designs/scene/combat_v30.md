@@ -413,7 +413,7 @@ Default unit stats (board game / mass combat):
 | Faction | Military | Starting Units | Notes |
 |---------|---------|---------------|-------|
 | Crown | 4 | 4 | Mixed infantry + cavalry. Standard formation. |
-| Church | 4 | 4 | 2 Templar (elite: Discipline 5, Martial 4) + 2 garrison (Discipline 3, Martial 2). Templars deploy free at Theocracy Counter ≥ 40 in Himmelstift. |
+| Church | 4 | 4 | 2 Templar (elite: Discipline 5, Martial 4) + 2 garrison (Discipline 3, Martial 2). Templars deploy free at Church Influence ≥ 40 in Himmelstift. |
 | Hafenmark | 3 | 3 | 1 ducal guard (elite: Discipline 4, Martial 3) + 2 militia. |
 | Varfell | 4 | 4 | Highland infantry. Discipline 4. Home territory bonus: +1D in Eisengrund. |
 | Guilds | 2 | 2 | Hired mercenaries. Discipline 3, Martial 2. High Wealth allows rapid replacement. |

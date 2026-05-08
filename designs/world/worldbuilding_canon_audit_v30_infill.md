@@ -24,7 +24,7 @@
 ### 4. Stage13 Uses Stale Stat Name "Reach" — Pre-existing Issue
 Stage13 references "Church Reach 7" (L108), "Reach 5" (L156), "Church Reach +1" (L162), "Crown Reach" (L251). Stage6, BG v05, and params_factions all use "Influence" — "Reach" does not appear in any of these.
 **Action:** Flag as pre-existing inconsistency. Not caused by v3. Add to file_index.md KNOWN STALE SYNC GAPS or raise as a cleanup item.
-### 5. Baralta TC Suppression Threshold — Pre-existing Inconsistency
+### 5. Baralta CI Suppression Threshold — Pre-existing Inconsistency
 ### 6. Cardinal of Temperance Title — Discrepancy Between Lore and Stage13
 v3 §3.1 maps Klapp to "Temperance (Knowledge)" but stage13 titles him "Scholarship." The lore cardinal title is "Temperance"; stage13 uses a functional label "Scholarship."
 **Action:** v3 should use the lore title "Temperance" with stage13's functional description. "Cardinal of Temperance (Scholarship)" or just "Cardinal of Temperance" with scholarship noted as portfolio. Minor — not a mechanical issue.
@@ -35,7 +35,7 @@ v3 §3.6 proposes an IP 50 interaction with the Almaic Kyriakos. This is entirel
 ### 8. "Piety" Referenced in Stage13 — Undefined Mechanic
 Stage13 L315: "Church military arm, commanded by Cardinal Jarnstal. Deployable without royal authorisation **when Piety is high.**"
 ### 9. v3 Klapp Awakening Trigger — Matches BG v05
-BG v05 Scenario A (L495): "Thread operation within 1 territory of T3, Theocracy Counter ≥ 30, no Heresy Investigation opened this season."
+BG v05 Scenario A (L495): "Thread operation within 1 territory of T3, Church Influence ≥ 30, no Heresy Investigation opened this season."
 **Action:** This is part of ED-NEW-09 (territory name reconciliation). v3 should reference the territory by name ("Himmelenger / cathedral city territory") not by number, since numbers are in flux.
 ### 10. Stage13 Names Only 3 Cardinals — Fourth is Genuinely Missing
 There is no Cardinal of Prudence in stage13. The lore establishes four cardinals. ED-007 (already in the ledger, status: resolved) addressed this: "Fourth cardinal identity is a narrative decision deferred to campaign development."
@@ -46,3 +46,5 @@ Stage13 L125-128 says Jarnstal's Belief is "The Knights Templar should be indepe
 v3 §3.2 formalises this as a 0–3 counter (Jarnstal Independence Counter). Stage13 implies the drift but doesn't track it. This is a genuine new mechanic. It's a reasonable formalisation of existing narrative direction.
 **No supersession issue.** v3 is adding structure to what stage13 describes qualitatively. This is design work, not contradiction.
 ## SUMMARY
+
+[EDITORIAL: ED-782 — Theocracy Counter (TC) → Church Influence (CI) rename per vocabulary audit]

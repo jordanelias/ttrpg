@@ -173,7 +173,7 @@ values:
       section: "params_campaign_modes.md — Campaign Mode Structure > Starting Clock Values (TTRPG Session Zero)"
       table_col: start
       line: 45
-    - name: "Theocracy Counter (start)"
+    - name: "Church Influence (start)"
       value_raw: "15"
       kind: numeric
       numeric: 15
@@ -1213,7 +1213,7 @@ values:
       value_raw: "Mandate pool, Ob 2"
       kind: formula
       formula: "Mandate pool, Ob 2"
-      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Theocracy Counter Generation"
+      section: "params_factions_ttrpg.md — TTRPG Faction Mechanics > Church Influence Generation"
       line: 90
     - name: "Crown (ob)"
       value_raw: "2"
@@ -2602,10 +2602,10 @@ values:
       section: "params_threadwork.md — Thread Operations (v2.5) > Actual Auto-Effect Table — Personal-Scale Operations (PP-181)"
       line: 462
     - name: "If the investigation proceeds"
-      value_raw: "TC +1 at next Accounting"
+      value_raw: "CI +1 at next Accounting"
       kind: formula
-      formula: "TC +1 at next Accounting"
-      section: "params_threadwork.md — Thread Operations (v2.5) > Epistemic Auto-Effect — TC Trigger (PP-182)"
+      formula: "CI +1 at next Accounting"
+      section: "params_threadwork.md — Thread Operations (v2.5) > Epistemic Auto-Effect — CI Trigger (PP-182)"
       line: 493
     - name: "Ritual outcomes"
       value_raw: "Success RS −6, Overwhelming RS −10, Partial RS −3, Failure RS +8"

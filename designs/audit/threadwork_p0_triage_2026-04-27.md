@@ -95,8 +95,8 @@ Most P1 items from the audit register are **exploits with rulings already provid
 
 PP-233 confirmed (38 hits, in glossary, mass_battle). Remaining PPs (PP-238/239/246/251/285/294/402/508/512) are pre-PP-530 numbering — all archived in `archives/patches/patch_register_archive_201_400.yaml` or `_001_200.yaml`.
 
-### TC-01 — Stale
+### CI-01 — Stale
 
-Pre-rename Theocracy Counter reference. Now Church Influence. Classified as **stale** — no action needed beyond existing TC→CI sweep.
+Pre-rename Church Influence reference. Now Church Influence. Classified as **stale** — no action needed beyond existing CI→CI sweep.
 
 **Conclusion:** All 27 IDs are legitimate pre-ledger references. None fabricated. None anticipatory. No action required beyond noting their pre-ledger provenance.

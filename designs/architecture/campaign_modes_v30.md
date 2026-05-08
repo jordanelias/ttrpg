@@ -33,7 +33,7 @@
 
 2. Set Safety Tools.
 3. Create Characters: 3 Histories at 2 points each; 31 points; declare 3–5 Knots.
-4. Set clocks: Mending Stability 72, Theocracy Counter 15, Institutional Pressure 20.
+4. Set clocks: Mending Stability 72, Church Influence 15, Institutional Pressure 20.
 5. Review the Action Economy and Scope Shift procedure.
 
 ### TTRPG Endgame
@@ -43,7 +43,7 @@
 - All PCs have resolved or abandoned their central Beliefs.
 - Mending Stability has risen above 80 (world recovering) or fallen below 20 (world doomed).
 - The succession crisis has resolved (Torben, Elske, Parliament, or coup).
-- The Church's authority is broken or triumphant (Theocracy Counter below 20 or above 80).
+- The Church's authority is broken or triumphant (Church Influence below 20 or above 80).
 - Altonia has invaded or been permanently deterred.
 - At least one Player Character has died, retired, or fundamentally transformed.
 
@@ -99,7 +99,7 @@ One hybrid session covers one season, structured in four phases:
 
 ### Clock Synchronisation
 
-All three clocks (Mending Stability, Theocracy Counter, Institutional Pressure) advance at Accounting regardless of mode. In hybrid:
+All three clocks (Mending Stability, Church Influence, Institutional Pressure) advance at Accounting regardless of mode. In hybrid:
 - Board game orders that affect clocks resolve at Accounting.
 - No clock advances between Personal and Strategic phases — everything batches to Accounting.
 
@@ -170,7 +170,7 @@ Where the three modes diverge mechanically:
 
 | Rule | TTRPG | Board Game | Hybrid |
 |---|---|---|---|
-| Mending Stability/Theocracy Counter/Institutional Pressure advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
+| Mending Stability/Church Influence/Institutional Pressure advance | At seasonal accounting | At Accounting | At Accounting (Cascade Phase) — identical |
 | Threshold events | Game Master narrates and runs scenes | Event card or table lookup | Board game trigger; Game Master may run TTRPG scene for narratively significant thresholds |
 
 
@@ -215,8 +215,8 @@ An active practitioner working at Relational+ scale through a full campaign will
 
 The three-way relationship between Baralta (Church-devout, anti-overreach), Vaynard (anti-Church, knowledge-seeking), and Confessor Himlensendt (theocratic consolidation) generates political action without requiring predetermined outcomes. Track seasonal accounting. Apply triggers consistently. Outcomes emerge from the configuration.
 
-**The excommunication scenario.** If Olafsson opens a Heresy Investigation against Baralta: Grand Debate, 5 exchanges. Church represented by Olafsson (Composure 7, pool: Church Reach 7 + Ecclesiastical Law). If it succeeds: Mandate −2, Theocracy Counter +3, Theocracy Counter suppression removed. If players defend her or supply documentary evidence: the investigation can be derailed or reversed.
+**The excommunication scenario.** If Olafsson opens a Heresy Investigation against Baralta: Grand Debate, 5 exchanges. Church represented by Olafsson (Composure 7, pool: Church Reach 7 + Ecclesiastical Law). If it succeeds: Mandate −2, Church Influence +3, Church Influence suppression removed. If players defend her or supply documentary evidence: the investigation can be derailed or reversed.
 
 
 **The Crown's choice when Vaynard is exposed.** Resolved as a Parliamentary Vote (§7.4):
-- Defend Vaynard: Theocracy Counter +2; Crown-Church relations fracture; Baralta must choose sides.
+- Defend Vaynard: Church Influence +2; Crown-Church relations fracture; Baralta must choose sides.

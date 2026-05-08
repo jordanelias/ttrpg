@@ -51,4 +51,4 @@ This is not optional. The inseparability principle is the framework's foundation
 ## 12.7 The Coherence Track as Campaign Arc
 ## 12.8 Running the Noble-Church Triangle
 **The Vaynard revelation.** When a practitioner tells Vaynard what his Thread Sensitivity 14 means: structured social scene. Vaynard makes a Reading Exchange (pool: Cognition 4D, TN 7). If the practitioner wins or presents corroborating evidence: Vaynard accepts and enters his TK-level response. If Vaynard wins: he files the claim as unverified but highly interesting and begins watching the practitioner.
-- Yield to Church justice: Theocracy Counter −1; Crown loses intelligence asset; Southernmost access collapses; Vaynard's succession leverage dissolves unpredictably; Baralta's Church-boundary cooperation secured for the following arc.
+- Yield to Church justice: Church Influence −1; Crown loses intelligence asset; Southernmost access collapses; Vaynard's succession leverage dissolves unpredictably; Baralta's Church-boundary cooperation secured for the following arc.

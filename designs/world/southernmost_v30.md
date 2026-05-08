@@ -191,7 +191,7 @@ In Board Game mode, Southernmost mechanics are abstracted to the faction-level:
 
 ---
 
-*End of Stage 4 compilation. Stage 5 (Clocks: Thread Tension/Theocracy Counter/Institutional Pressure, threshold events, interaction rules) follows.*
+*End of Stage 4 compilation. Stage 5 (Clocks: Thread Tension/Church Influence/Institutional Pressure, threshold events, interaction rules) follows.*
 
 
 [PROVISIONAL: compilation path references updated to _deprecated suffix — no content change]

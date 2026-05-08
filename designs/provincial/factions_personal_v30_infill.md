@@ -31,8 +31,8 @@ Once per season, the Crown issues a unilateral political act that bypasses norma
 ## 8.3 Faction 2: The Church of Solmund
 Correctness is determined by institutional authority, not outcome or character. Actions are evaluated by whether they conform to Solmund's revealed will as interpreted by the hierarchy.
 **Institutional Tendency:** Expand Piety. Suppress heresy. Accumulate civil authority. Deploy Templars against perceived threats. Pursues theological conquest, not territorial.
-**Theocracy Counter Relationship:** Church Mandate 5+ at accounting: Theocracy Counter +1/season. **Secondary TC source (PP-263):** Church may perform a Piety Domain Action (Mandate pool, TN 7, Ob 2) once per season. Success: TC +1, independent of Mandate level and Hafenmark suppression. This represents active missionary and institutional expansion beyond passive Mandate accrual. Failure: no TC gain. This action counts toward the seasonal ±5 TC combined cap. Stability ≤ 4: Theocracy Counter generation pauses (Cardinals competing). *(On 1–7 scale, Mandate 5 = strong institutional position; Stability 4 = mid-range.)*
-At Theocracy Counter 60, the Church may attempt to seize territories through institutional claim rather than military force. This is triggered once per season at seasonal accounting; the Church player (or Game Master) may attempt seizure on any number of territories, resolving each separately.
+**Church Influence Relationship:** Church Mandate 5+ at accounting: Church Influence +1/season. **Secondary CI source (PP-263):** Church may perform a Piety Domain Action (Mandate pool, TN 7, Ob 2) once per season. Success: CI +1, independent of Mandate level and Hafenmark suppression. This represents active missionary and institutional expansion beyond passive Mandate accrual. Failure: no CI gain. This action counts toward the seasonal ±5 CI combined cap. Stability ≤ 4: Church Influence generation pauses (Cardinals competing). *(On 1–7 scale, Mandate 5 = strong institutional position; Stability 4 = mid-range.)*
+At Church Influence 60, the Church may attempt to seize territories through institutional claim rather than military force. This is triggered once per season at seasonal accounting; the Church player (or Game Master) may attempt seizure on any number of territories, resolving each separately.
 - Riskbreaker operation exposing Church-Niflhel connection: each successful exposure removes one seized territory and prevents re-seizure of that territory for one season.
 - Grand Debate challenging Church civil authority: Overwhelming removes all seizures in one duchy; Success removes one.
 ## 8.4 Faction 3: Hafenmark (Duchy)
@@ -72,7 +72,7 @@ The Revolution's connection to Einhir cultural continuity allows collective Thre
 ## 8.9 Faction 8: The Löwenritter (Military Order)
 The Löwenritter are not an independent political faction — they are an institutional instrument of the Crown. They hold territory (the fortress at the northern border), maintain military capacity, and act as the Crown's deniable covert arm. Their loyalty is to the Crown as an institution, not to any specific monarch.
 **Coup Threshold:** Grandmaster Ehrenwall is keeping count. The Game Master tracks a private Löwenritter Autonomy (0–3). When it reaches 3, the Split fires at the next seasonal accounting.
-- Theocracy Counter reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)
+- Church Influence reaches 40 while the Crown has taken no action to reduce it that season (unopposed Church advance)
 **Counter never decrements.** Once Ehrenwall marks a failure, she does not revise the assessment. See NPCs section for full Ehrenwall mechanics and coup execution procedure.
 **Martial Law Capacity:** If the coup trigger fires, the Löwenritter impose Martial Law on all Crown-held territories simultaneously. Effects:
 ## 8.10 Schoenland (Spoiler Actor)
