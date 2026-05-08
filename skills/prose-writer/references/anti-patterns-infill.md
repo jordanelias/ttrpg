@@ -1,8 +1,34 @@
 # Anti-Patterns — AI Prose Failure Catalogue
 
-Expanded rationale and examples for the rules in `anti-patterns-skeleton.md`. Eight-author roster: Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo. For the Wittgenstein constraint and coherence-mismatch rules, see the skeleton.
+Expanded rationale and examples for the rules in `anti-patterns-skeleton.md`. Twelve-author roster: Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo, Beckett, Lem, McCarthy, Le Carré. For the Wittgenstein constraint, coherence-mismatch rules, axis-deployment rules, and new author entries (V.9–V.12), see the skeleton.
 
 Three layers of evidence: the LAMP taxonomy from professional editors (Chakrabarty et al., CHI 2025), academic research on LLM creative writing limitations (multiple studies 2022–2026), and stylometric analysis of LLM idiosyncrasies. All major models exhibit these failures. The patterns are structural, not superficial. Vocabulary tells evolve as specific words get scrubbed; structural habits persist.
+
+---
+
+## Cross-Reference: Infill → Skeleton (6-Category Structure)
+
+The skeleton (`anti-patterns-skeleton.md`) was restructured to a 6-category layout with quadrant mapping (2026-05-07). This infill retains its organization by evidence source. Use this table to locate infill detail for each skeleton section.
+
+| Skeleton Section | Infill Entry (this file) |
+|---|---|
+| **I.1 Language & Register** | Cliché (#1), Awkward Word Choice (#6), Tense Inconsistency (#7), Cultural Ghosting, Lexical Diversity, Negative Parallelism |
+| **I.2 Sentence Architecture** | Sentence Homogeneity (#4), Excessive Symmetry, Hypotaxis-Parataxis Indecision |
+| **I.3 Specificity** | Lack of Specificity (#5) |
+| **I.4 Over-Explanation & Premature Resolution** | Redundant Exposition (#2), Purple Prose (#3), Aporia Failure, Subtext Failure, Dramatic Tension, Plot Template Convergence, Sentiment Modulation, Reaction Shot, Thematic Announcement, Summarizing Final Sentence, Workshop Closings, Closing Sentence Drift |
+| **I.5 Repetition & Iteration** | Hammering Repetition, Lexical Iteration (#60 — in skeleton only) |
+| **I.6 Wittgenstein Constraint** | *(skeleton only — no infill expansion)* |
+| **I.7 Content Leakage** | Second-Person Drift, Mechanical-Term Leakage |
+| **I.8 Long-Range Coherence** | Long-Range Coherence Failure |
+| **II–IV (Axis Deployment)** | *(skeleton only — coordinate-dependent rules)* |
+| **V.1–V.8 Author Deployment** | Part IV Author-Specific Mannerism Risk |
+| **V.9–V.12 (Beckett, Lem, McCarthy, Le Carré)** | *(skeleton only — new authors, infill TBD)* |
+| **V.13 Single-Author Dominance** | Single-Author Dominance Without Cause |
+| **VI.1 Editorial Stance** | Editorial Stance Without Focalization |
+| **VI.2 Flat-Affect Omniscience** | Flat-Affect Omniscience |
+| **VI.3–VI.4 (FID, NPC)** | *(skeleton only)* |
+| **Diagnostic Protocol (D.1–D.6)** | Part II academic research subsections on narrativity, aidiolect, mono-voice |
+| **Master Rule** | Master Rule |
 
 ---
 
