@@ -107,6 +107,16 @@ Four authors, one sentence, grammar holds. The reader does not perceive the shif
 
 ## Writing the Synthesis
 
+**Six governing throughlines** (see anti-patterns skeleton for full detail):
+1. The prose does not perform its own knowledge.
+2. Specificity over generality.
+3. Trust the accumulation.
+4. The surface is the rendering.
+5. Every element earns its place.
+6. Institutional over emotional.
+
+When in doubt, test the passage against these six. If it violates any, rewrite -- regardless of which specific rule applies.
+
 The writer does not consciously deploy "Tolkien now, then Mistry, then Lispector." The writer writes the passage that the content, focalization, and coherence tier demand, and the synthesis surfaces the appropriate techniques at clause-level granularity. The reference files and self-check exist to verify — after the writing — that the deployment is right.
 
 When reviewing, ask: does the coherence tier match? Is the PC's rendering functioning at the level this tier demands? Have irreal techniques been deployed as world-surrealism rather than as the PC's categorical failure? Has the prose conflated rendering failure with substrate perception?

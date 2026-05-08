@@ -13,6 +13,28 @@ This is the audit-time layer. SKILL.md's "What the Voice Does NOT Do" and Self-C
 
 ---
 
+## Governing Throughlines
+
+Six principles that connect the anti-patterns into a coherent system. A writer who internalises these can derive the specific rules. A situation not covered by an existing rule can be addressed by applying the relevant throughline.
+
+<!-- concept:throughlines -->
+
+**1. The prose does not perform its own knowledge.** The prose renders what is there. It does not comment on what is there, explain what is there, point at what is there, or borrow weight to amplify what is there. The reader encounters the thing, not the prose's relationship to the thing. *(Connects: I.4, I.6, I.9, I.10, I.12, I.13)*
+
+**2. Specificity over generality.** Every detail is irreducibly specific to THIS story, THIS character, THIS moment. Generic detail is invisible -- it passes through the reader without producing perception. Specific detail is the prose. *(Connects: I.1, I.3, I.10, I.11, I.14, D.7f)*
+
+**3. Trust the accumulation.** Meaning builds across scenes through accumulated specific detail, not within scenes through announced significance. The reader assembles the meaning. The prose provides the material. A single passage does not carry the full weight -- the weight distributes across the work. *(Connects: I.4, I.9, I.11, VI.5)*
+
+**4. The surface is the rendering.** What is visible -- what the character does, what the objects look like, what the institutional record says -- IS the rendering. The prose does not reach beneath the surface to explain. The depth is in the surface's precision. This applies at every coherence tier: at high C, the surface is rich and legible; at low C high Spirit, the surface is action without motive; at low C low Spirit, the surface is insufficient to the verb. *(Connects: I.6b, I.9, I.10, I.12, I.14, exteriority, observing-around)*
+
+**5. Every element earns its place.** Nothing decorative. Each word, each construction, each technique, each allusion does work the passage cannot do without it. The test: remove the element. If only tone changes, it was decoration. If meaning changes, it earned its place. *(Connects: I.1, I.2, I.5, I.13, V)*
+
+**6. Institutional over emotional.** Valoria's drama lives in institutional consequence -- the abort rate, the Mandate score, the audit, the motion, the worn cord, the circle in the daybook. Emotional confrontation is the LLM's default because training data is saturated with it. Valoria renders through operational specificity and procedural weight. The feeling arrives through the institution, not instead of it. *(Connects: I.12, I.14, VI.5, V.12)*
+
+When in doubt about whether a passage is working, test against these six. If the prose is performing its own knowledge, replacing specificity with generality, announcing rather than accumulating, reaching beneath the surface, decorating, or substituting emotion for institution -- the passage needs rewriting regardless of which numbered rule applies.
+
+---
+
 ## I. Prose Quality (all quadrants, always-on)
 
 ### I.1 Language & Register
