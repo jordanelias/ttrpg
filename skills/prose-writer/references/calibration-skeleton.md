@@ -31,7 +31,7 @@ All eight anchors share these properties. The synthesized voice has all of them 
 
 ## Author Pairing Notes
 
-When intra-sentence splicing combines authors, certain pairings have natural compatibilities. Each is marked **[anchored]** (validated by the critical literature on the source authors — see `literary-review-critical.md` §9.1) or **[synthesis]** (a Valoria-internal innovation without precedent in the eight-author scholarship — §9.2). Both kinds work, but anchored pairings carry the weight of a critical tradition the synthesis is faithful to; synthesis pairings require the audit to bear the work the tradition would otherwise do.
+When intra-sentence splicing combines authors, certain pairings have natural compatibilities. Each is marked **[anchored]** (validated by the critical literature on the source authors — see `literary-review-critical.md` §9.1) or **[synthesis]** (a Valoria-internal innovation without precedent in the twelve-author scholarship — §9.2). Both kinds work, but anchored pairings carry the weight of a critical tradition the synthesis is faithful to; synthesis pairings require the audit to bear the work the tradition would otherwise do.
 
 - **Tolkien landscape + Lispector defamiliarization** [synthesis] — the named place that the PC's rendering fails to process normally
 - **Borges recursion + Ishiguro unreliability** [synthesis] — the narrator whose rendering loops without recognizing the loop

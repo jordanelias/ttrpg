@@ -28,7 +28,7 @@ The reflexive facing serves the epistemic dimension (the PC processing the world
 
 **Canon:** "No penalty. Rendering solid. The world is legible." (threadwork_v30 §3.3). "No perceptible change. Self-rendering re-engages fully after each Leap." (Amendment 01 §3).
 
-**What this means for prose:** Normal prose. Full literary capacity. All eight authors available as content demands. Vael participates fully in human reason — temporal sequencing intact, spatial coherence intact, identity stable, belonging natural.
+**What this means for prose:** Normal prose. Full literary capacity. All twelve authors available as content demands. Vael participates fully in human reason — temporal sequencing intact, spatial coherence intact, identity stable, belonging natural.
 
 **What does NOT happen:** No ground-checking. No tautological confirmation. No word-finding difficulty. No temporal micro-slips. No need to confirm that the wall is a wall or that the number held. The rendering works. The prose should read as high-quality realist fiction.
 

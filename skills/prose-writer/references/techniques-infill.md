@@ -2,7 +2,7 @@
 
 Expanded rationale, examples, and academic grounding for the technique rules in `techniques-skeleton.md`. Organized by function. The skill produces a single voice; the inventory is divided for navigability. For the coherence-indexed weighting tables, see `coherence-tiers.md`.
 
-**Eight-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina). The weighting shifts across coherence tiers — see the skeleton and `coherence-tiers.md` for the tables.
+**Twelve-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina), Beckett, Lem, McCarthy, Le Carré. The weighting shifts across coherence tiers — see the skeleton and `coherence-tiers.md` for the tables.
 
 ## 0. Focalization — The Master Principle
 
