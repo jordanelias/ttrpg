@@ -101,7 +101,7 @@ class GameState:
     season: int = 0
     # Global clocks
     rs: int = 72    # Rendering Stability
-    tc: int = 28    # Theocracy Counter
+    tc: int = 28    # Church Influence
     ip: int = 5     # Institutional Pressure
     pi: int = 7     # Peninsular Integration
     strain: int = 0
