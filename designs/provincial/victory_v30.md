@@ -110,22 +110,22 @@ Full specifications: peninsular_strain_v1.md §5.
 | T# | Territory | Starting PT | Rationale |
 |----|-----------|-------------|-----------|
 | T1 | Valorsplatz | 3 | Capital — moderate Church presence, Crown-dominated |
-| T2 | Falkenberg | 3 | Standard |
-| T3 | Steinfeld | 3 | Standard |
-| T4 | Mittelmark | 2 | Varfell-adjacent; lower Church integration |
-| T5 | Weissburg | 3 | Standard |
-| T6 | Sonnental | 1 | Remote southern; minimal Church infrastructure |
-| T7 | Grauheim | 3 | Standard |
+| T2 | Kronmark | 3 | Standard |
+| T3 | Lowenskyst | 3 | Standard |
+| T4 | Grauwald | 2 | Varfell-adjacent; lower Church integration |
+| T5 | Feldmark | 3 | Standard |
+| T6 | Stillhelm | 1 | Remote southern; minimal Church infrastructure |
+| T7 | Rendstad | 3 | Standard |
 | T8 | Gransol | 3 | Hafenmark capital; Church present but constitutionally constrained |
 | T9 | Himmelenger | 5 | Church capital; maximum theological saturation |
-| T10 | Nordmark | 3 | Standard |
-| T11 | Eisengrund | 2 | Varfell-adjacent; traditional religion blends with doctrine |
+| T10 | Spartfell | 3 | Standard |
+| T11 | Halvardshelm | 2 | Varfell-adjacent; traditional religion blends with doctrine |
 | T12 | Sigurdshelm | 2 | Varfell capital; oral tradition dominant, Church institutional presence weaker |
-| T13 | Southernmost | 1 | Warden territory; Thread-adjacent; Church has minimal reach |
-| T14 | Hafenfeld | 3 | Standard |
-| T15 | Kronheim | 3 | Standard |
-| T16 | Bergstadt | 3 | Standard |
-| T17 | Drakensholm | 3 | Standard |
+| T13 | Oastad | 1 | Warden territory; Thread-adjacent; Church has minimal reach |
+| T14 | Ehrenfeld | 3 | Standard |
+| T15 | Southernmost | 3 | Standard |
+| T16 | Schoenland | 3 | Standard |
+| T17 | Halvarshelm | 3 | Standard |
 
 **Design note:** PT 5 at T9 means the Church starts with its theological heartland at full doctrinal saturation — CI generation from T9 is guaranteed from Season 1. PT 1 at T6/T13 represents frontier territories where the Church must invest to gain traction. PT 2 at Varfell territories reflects cultural resistance to institutional theology. These values are calibrated against the CI generation formula (params_board_game) where PT ≥ 3 contributes positively to CI.
 
@@ -765,7 +765,7 @@ P-32 ("Hybrid victory = BG victory PLUS personal arc resolution") is retained. A
 | PP-423 | Crown | Formal Crown Treaty mechanic |
 | PP-424 | System | Deed system dissolved — all factions |
 | PP-425 | WR | Warden Recognition track defined (0–4) |
-| PP-493 | Territory | All T-numbers remapped to geography_design.md canonical. Old names (Arcansheld, Vargstad, Eidursjo, Nordhelm, Mittelmark) replaced. PV total = 30. Starting PV: Crown 12, Hafenmark 8, Varfell 6, Church 3. |
+| PP-493 | Territory | All T-numbers remapped to geography_design.md canonical. Old names (Arcansheld, Vargstad, Eidursjo, Nordhelm, Grauwald) replaced. PV total = 30. Starting PV: Crown 12, Hafenmark 8, Varfell 6, Church 3. |
 | PP-494 | Church | Mass Seizure (one-shot): Pool = Influence + floor(CI/15), Ob = 10 − PT − infrastructure (floor 1). CI ≥ 60 required. Replaces Graduated Seizure. Church PV threshold reduced to ≥ 8. BALANCE-001 revised to include Church in equal win probability. |
 
 
