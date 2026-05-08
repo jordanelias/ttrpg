@@ -104,6 +104,26 @@ Three applications across the three axes:
 - **Symptom:** Earlier-established traits disappear. Setup elements never pay off. Names/places/facts shift between mentions. Promised consequences don't arrive.
 - **Fix:** Track named entities, established traits, previously-stated facts. Do not contradict established characterization without acknowledging the contradiction.
 
+<!-- concept:performed-secrecy -->
+### I.9 Performed Secrecy (Telegraphed Subtext)
+
+The prose arranges itself to point at what it claims to be hiding. The writer knows the subtext and cannot resist shaping the surface to signal it. **This is the LLM's signature failure on subtext.** The model has seen thousands of examples of hidden-depth prose and reproduces the *pattern of suggesting* rather than the *thing the suggestion gestures at*. The suggestion IS the cliche.
+
+Six sub-symptoms, from most to least visible:
+
+- **Narrated irony.** The prose explains the dramatic irony to the reader. "The thing the Church had built him to find and to destroy, and he would not know this." The reader is told the irony rather than allowed to discover it. **Test:** remove the sentence. If the irony still works from context, the sentence was performing the secret.
+- **Genre signals.** Trope-language that tells the reader "this character has a hidden ability / hidden knowledge / hidden motive." Pressure behind the eyes. A sensitivity to qualities in rooms. A feeling she could not name. These are genre conventions for hidden powers. They telegraph the secret in the act of appearing to conceal it.
+- **Philosophical register imported for depth.** "Presence and absence." "The visible part of a thing whose larger portion is submerged." The character would not think in these terms. The writer is importing a register to signal that more is happening than the surface shows. If the character is a parish investigator, they think in mortar and ledgers, not phenomenology.
+- **Announced withholding.** "He did not write what the consistency meant." "She did not say what she had seen." The prose announces that it is keeping a secret, which makes the secret visible. **Fix:** simply do not write what the character does not write. The absence is silent, not narrated.
+- **Pointing at gaps.** "He had never questioned why the mark and the findings co-occurred." Drawing the reader's attention to exactly the thing the prose should be leaving untouched. The reader's attention follows the prose's attention -- if the prose looks at the gap, the reader sees the gap because the prose showed it to them, not because they found it.
+- **Suggestive vocabulary.** Using words adjacent to the hidden truth near the thing the reader should connect themselves. "Sensitivity" near a character with Thread Sensitivity. "Perception" near a character who perceives the substrate. "Will" near a character whose Spirit is high. The vocabulary creates a lexical field that points at the secret.
+
+**The structural fix:** Render the surface. The character does their job. They do it well. They do it slightly better than the job should allow. The prose does not notice the discrepancy. The prose does not arrange itself to point at the discrepancy. The reader discovers the discrepancy because it accumulates -- across scenes, across sessions -- not because a single passage flags it.
+
+**Diagnostic:** After writing, re-read and ask: would a reader who does not know the secret feel the prose is pointing at something? If yes, the prose is performing the secret. Cut everything that points. Leave the surface. Trust the accumulation.
+
+**This applies beyond hidden TS.** Political maneuvering (do not explain who is winning -- show what they did and let the reader assess), emotional states (do not signal the emotion -- render the behavior), character motivations (do not telegraph the motive -- render the action and let the motive be inferred or remain opaque).
+
 ---
 
 ## II. X-Axis Deployment (Coherence-Tier Checks)

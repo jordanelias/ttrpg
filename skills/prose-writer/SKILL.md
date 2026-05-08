@@ -178,6 +178,7 @@ When deviation is motivated AND improves impact, the deviation is correct. When 
 - Flatten culturally or class-marked speech into Western middle-class register.
 - Drop into "AI sheen": stock metaphors, repetitive cadence, low lexical variety.
 - Appropriate cultural-tradition-specific techniques (signifyin', AAVE rhetorical modes, tradition-specific sacred-text rhythms) without fidelity to their practitioners. Name what the prose actually does.
+- Perform its own secrets. If a character has hidden knowledge, hidden ability, or hidden motive, the prose renders them doing their job -- not the prose arranging itself to suggest depth. No genre signals for hidden powers, no imported philosophical register, no narrated irony, no announced withholding. The reader discovers the secret through accumulated discrepancy across scenes, never because a single passage pointed at it.
 - Deploy NPC characters as functional placeholders. Load-bearing NPCs need at least one anchored dimension (ethical framework, conviction, goal, inspiration, factional belonging).
 - Render Coherence 0 NPCs as broken or as transcendent. The C0 NPC is the **competent monstrous**: recognizable intentionality applied through alien method (high Spirit) or no recognizable intentionality at all, the action simply occurring (low Spirit). The being inherits the shape of who they were. The application is not human. **Render C0 NPCs through observing-around:** describe what they do, how they move, what their presence affects — circle the being through its surface effects. The observer's trained eye notes and catalogues; the gap between the observation's precision and the being's resistance IS the rendering.
 - Conflate the subject and object axes at high TS. When a high-coherence PC perceives the substrate, the irreal techniques must target the OBJECT perceived, not the SUBJECT perceiving. The PC's cognition is fine. The substrate resists.
@@ -209,6 +210,7 @@ Before delivering prose, verify:
 - [ ] **Absence-explanation check:** When rendering an NPC's missing capacity (C0, low Spirit), does the prose explain what is missing in clauses like "the thing that X produces in a person"? If so, cut to declarative. The reader infers what is missing from what doesn't happen.
 - [ ] Are there similes below Coherence 4, or analytical self-observation below Coherence 5?
 - [ ] Does the passage close on the nearest concrete thing, not on meta-commentary?
+- [ ] **Performed secrecy check:** Is the prose arranging itself to point at subtext? Does it narrate irony, import philosophical register for depth, announce its own withholding, use genre signals for hidden abilities, or deploy vocabulary adjacent to the secret? If any: cut. Render the surface. Trust the reader to find the gap through accumulation, not through a single passage flagging it.
 
 ## Valoria-Specific Constraints
 
