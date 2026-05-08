@@ -25,7 +25,7 @@ pending:
 - 'Session 2: Territory model (T1-T15 with Proximity/PV/SW/Accord)'
 - 'Session 2: Domain Action framework + canonical DAs (6+ starter actions)'
 - 'Session 2: Piety Yield + CI political pool bonus'
-- 'Session 2: Peninsular Strain propagation'
+- 'Session 2: Turmoil propagation'
 - 'Session 2: Mass combat (simplified) + Contest system'
 - 'Session 2: Faction AI stub (priority-based DA selection)'
 - 'Session 2: 40-season smoke test with real DAs'
@@ -100,7 +100,7 @@ Session 2 "Middle Layer" scope:
    SW factor = SW/5; T9 counts uniformly per ED-721 Option A).
 5. Church political pool bonus — floor(CI/20) bonus dice; opposing Mandate
    -floor(CI/30) per ci_political §7.2.
-6. Peninsular Strain propagation — battle +1, faction elimination +2, revolt
+6. Turmoil propagation — battle +1, faction elimination +2, revolt
    +1, peaceful -1.
 7. Mass combat (simplified) — mass_battle_v30. Needed for battle resolution.
 8. Contest system (simplified) — params/contest.md Grand Debate 5-exchange
@@ -142,7 +142,7 @@ new canonical value read.
 1. Session 2: Territory model (T1-T15 with Proximity/PV/SW/Accord)
 2. Session 2: Domain Action framework + canonical DAs (6+ starter actions)
 3. Session 2: Piety Yield + CI political pool bonus
-4. Session 2: Peninsular Strain propagation
+4. Session 2: Turmoil propagation
 5. Session 2: Mass combat (simplified) + Contest system
 6. Session 2: Faction AI stub (priority-based DA selection)
 7. Session 2: 40-season smoke test with real DAs

@@ -23,7 +23,7 @@ origin: session-master-upload
 3. Cooldown advance
 4. Clock advances (RS, CI formula [5 sub-steps], IP, PI)
 5. Church Attention Pool + Thread Debt drain
-6. Peninsular Strain (Accord, Strain, battle consequences)
+6. Turmoil (Accord, Strain, battle consequences)
 7. Threshold events / Milestones / Warden Emergence
 8. WC check / Torben/Elske Loyalty
 9. Occupation duration / Institutional Consolidation

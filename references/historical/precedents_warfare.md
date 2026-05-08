@@ -166,7 +166,7 @@ The faction acquisition toolkits (peninsular_strain §5) already model four patt
 
 **Implication:** Add a **Show of Force** Domain Action: the faction moves units to a territory border but does not declare Battle. If the faction's total military Size in adjacent territories exceeds the defender's garrison Size by ≥ 3: the defender must make a Mandate check (Ob = attacker Military − defender Military, min 1). Failure: defender cedes territory voluntarily (Accord set to 2 — negotiated transfer, not conquest). Success: defender holds, but attacker may then declare Battle normally. This is the gun-boat diplomacy pattern: showing up with overwhelming force and letting the defender calculate the odds.
 
-**Show of Force does NOT trigger IP +2 or Peninsular Strain +1** because no battle occurs. It does trigger RS −0 (no substrate damage). This makes military coercion strategically distinct from actual battle — cheaper in world-state terms, but requires overwhelming local superiority.
+**Show of Force does NOT trigger IP +2 or Turmoil +1** because no battle occurs. It does trigger RS −0 (no substrate damage). This makes military coercion strategically distinct from actual battle — cheaper in world-state terms, but requires overwhelming local superiority.
 
 ---
 
@@ -184,7 +184,7 @@ Max Weber identified three bases of legitimate authority:
 
 ### 5.2 What Valoria Already Has
 
-The Accord system (0–5 in the comprehensive analysis, 0–3 in peninsular_strain) already models governance acceptance. Accord rises through good governance and falls through military conquest. The Peninsular Strain system models the cost of military acquisition (Battle → Strain +1, Accord set to 1 for conquered territory).
+The Accord system (0–5 in the comprehensive analysis, 0–3 in peninsular_strain) already models governance acceptance. Accord rises through good governance and falls through military conquest. The Turmoil system models the cost of military acquisition (Battle → Strain +1, Accord set to 1 for conquered territory).
 
 ### 5.3 What's Missing
 
@@ -320,7 +320,7 @@ All additions audited against the core design criterion: does this mechanic cont
 | Trade Mandate | Premature — needs Guild system that doesn't exist yet |
 
 ### Deprioritized (systems already functional, precedent grounding is polish):
-- Peninsular Strain cascade precedent
+- Turmoil cascade precedent
 - Social Contest precedent
 - Caste system precedent
 - Faction collapse/emergence precedent

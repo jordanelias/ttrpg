@@ -388,7 +388,7 @@ SEASON LOOP:
     ├── Step 4a: CI calculation (Church infrastructure + PT-based generation)
     ├── Step 4b: PT movement (faction actions + Calamity Drift + Thread Op CV Drift)
     ├── Step 4c: Accord Domain Echoes → settlement Order recalculation → Accord
-    ├── Step 4d: Peninsular Strain advancement
+    ├── Step 4d: Turmoil advancement
     ├── Step 4e: IP advancement (inter-faction battle check)
     ├── Step 5: MS update (Thread operations + battle costs + Calamity Drift)
     ├── Step 6: NPC arc evaluation (Scar count, Stability triggers, Certainty shifts)

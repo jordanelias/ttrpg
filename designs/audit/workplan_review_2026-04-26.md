@@ -91,7 +91,7 @@ design_sync.md §New Documents: "`tests/thread_stress/threadwork_audit_register.
 conversion_ledger.md Phase 0 Action Items: "Run existing tests — test_dice_engine.gd and test_tracker_registry.gd have never been run." The roadmap includes this (Phase A item 1). The throughline workplan does not. These tests verify the entire F1-layer foundation.
 
 **MISSING-08: PP-652 PROVISIONAL (starting PT values per territory).**
-patch_register_active.yaml PP-652: "Starting PT values per territory proposed. T9 Himmelenger 5, T6 Stillhelm 1, T13 Oastad 1, T4/T11/T12 at 2, remainder at 3." Status: provisional. This is a Class C parameter change affecting T-07 (Peninsular Strain, М-1) directly. It's in the patch register but absent from the workplan's V1 scope. Sim S2 needs starting PT values — if it uses PP-652's proposed values without verifying, it bakes in a provisional.
+patch_register_active.yaml PP-652: "Starting PT values per territory proposed. T9 Himmelenger 5, T6 Stillhelm 1, T13 Oastad 1, T4/T11/T12 at 2, remainder at 3." Status: provisional. This is a Class C parameter change affecting T-07 (Turmoil, М-1) directly. It's in the patch register but absent from the workplan's V1 scope. Sim S2 needs starting PT values — if it uses PP-652's proposed values without verifying, it bakes in a provisional.
 
 **MISSING-09: hybrid_gaps_v30 propagation debt.**
 design_registry.yaml `hybrid_gaps` entry notes: "PROPAGATION-PENDING — 17 hybrid gaps not yet in bg_v05 / stage11." These are post-PP-672 design-doc propagation items that affect Μ-δ (cross-scale) integrity. Not in the workplan.

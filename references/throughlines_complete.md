@@ -54,7 +54,7 @@ Time-based pressures that advance regardless of player action. These are the gam
 **What it means:** The peninsula's civil wars invite foreign intervention. IP is the mechanism by which Contest 1 (sovereignty) interferes with Contest 2 (survival) — civil war raises IP, which demands military attention, which diverts resources from WC advancement.
 **Arc register vectors:** ARC-P06, ARC-T02
 
-### T-07: Peninsular Strain → Accord Erosion → Governance Collapse
+### T-07: Turmoil → Accord Erosion → Governance Collapse
 **Chain:** Battles advance Strain → Strain thresholds (3 = Mandate checks, 5 = Accord −1, 7 = Accord −1 all non-capitals, 9 = Accord cap at 2 + RS −1/season) → Accord erosion → governance difficulty → more instability → more battles → more Strain
 **Systems:** peninsular_strain, faction_layer, settlement_layer, victory (Peninsular Sovereignty requires Accord ≥ 2)
 **What it means:** War destroys the capacity to govern. Sustained military conflict produces a positive feedback loop where the population's willingness to be governed (Accord) erodes, making further conflict more likely. The universal victory condition (Peninsular Sovereignty) requires Accord ≥ 2 in all provinces — Strain 9+ caps Accord at 2 in non-capitals, making victory possible only by ending the war.
@@ -271,7 +271,7 @@ Where throughlines intersect, the game's deepest strategic dynamics emerge.
 | T-04 RS Decay | ARC-P02, S15, S32, S34 | ms_budget, calamity_radiation | Fully implemented |
 | T-05 TC Accumulation | ARC-P01 | tc_political_redesign, conviction_track | Fully implemented |
 | T-06 IP Accumulation | ARC-P06 | peninsular_strain §3.2 | Implemented; base rate GAP noted |
-| T-07 Peninsular Strain | Not covered | peninsular_strain §4 | Fully implemented |
+| T-07 Turmoil | Not covered | peninsular_strain §4 | Fully implemented |
 | T-08 Church Rendering | ARC-S03, S06, S08, S09, etc. | npc_behavior (Church tree), conviction_track | Fully implemented |
 | T-09 Varfell Progressive | ARC-S01, S13, S27 | victory §6 (WR/WC), faction_politics (Warden ladder) | Fully implemented |
 | T-11 Crown Instrumentalist | ARC-S14, S17, S28, S45 | params_board_game (Thread Liaison) | Implemented |

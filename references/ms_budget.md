@@ -27,7 +27,7 @@
 | Baseline annual decay | −1/year (−0.25/season) | Always active | params_core §MS Baseline Decay PP-255 |
 | Gap persistence | −4/season per Gap | While Gap exists | params_threadwork §MS Track |
 | Lock chronic drift | −1 to −2/season per Lock | While Lock exists | params_threadwork §MS Track |
-| Strain 9–10 additional drain | −1/season | While Peninsular Strain ≥ 9 | peninsular_strain_v1 §4.3 |
+| Strain 9–10 additional drain | −1/season | While Turmoil ≥ 9 | peninsular_strain_v1 §4.3 |
 
 ### Operation-Driven
 

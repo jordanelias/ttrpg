@@ -498,7 +498,7 @@ Require reads of: params_board_game.md §Coup Counter, threadwork_redesign_v25.m
 DESIGN GAP 1: PI per-action contribution amounts — not specified in any source. Needs table in params_board_game.md.
 DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source documented. Needs design decision.
 
-## PP-643–657 Peninsular Strain System (2026-04-14)
+## PP-643–657 Turmoil System (2026-04-14)
 | PP | Source | Target | Status |
 |---|---|---|---|
 | PP-643 | peninsular_strain_v1.md §1 | victory_v30.md §1 TCV table | DONE |
@@ -531,7 +531,7 @@ DESIGN GAP 2: Guild Favour restoration mechanic — no upward movement source do
 | tc_political_redesign_v30.md §3 | params_board_game.md political pool | DONE — params_board_game Political Pool section added 2026-04-17 |
 | peninsular_strain_v1.md §7b | faction_layer_v30.md §2 Occupation | Harmonization added |
 | peninsular_strain_v1.md §7c | tc_political_redesign_v30.md §2 TC 0-100 | Harmonization added |
-## PP-658 Faction Layer ↔ Peninsular Strain Integration (2026-04-14)
+## PP-658 Faction Layer ↔ Turmoil Integration (2026-04-14)
 | PP | Source | Target | Status |
 |---|---|---|---|
 | PP-658 | peninsular_strain_v1.md §2 | faction_layer_v30.md §2.3 (Occupation Accord) | DONE |

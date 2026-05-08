@@ -217,7 +217,7 @@ These are canonical-authority systems with their own design docs. Hub-centrality
 
 | Full Term | Canonical doc | Description |
 |-----------|---------------|-------------|
-| Peninsular Strain | `designs/provincial/peninsular_strain_v30.md` | Cross-cutting world-scale pressure system (T-07 throughline). Multi-graph hub (Mode A — top quintile in cite + mu + pp). |
+| Turmoil | `designs/provincial/peninsular_strain_v30.md` | Cross-cutting world-scale pressure system (T-07 throughline). Multi-graph hub (Mode A — top quintile in cite + mu + pp). |
 | Conflict Architecture | `designs/architecture/conflict_architecture_proposal.md` | Architectural specification for conflict resolution across scales. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal Assassination Fuse all anchored here. |
 | Campaign Architecture | `designs/architecture/campaign_architecture_v30.md` | Architectural specification for campaign-scale structure: phase ordering, season cadence, scale-transition orchestration. |
 | Victory | `designs/provincial/victory_v30.md` + `params/bg/victory.md` | Win-condition specification across factions. Faction-specific victory paths (Crown / Church / Hafenmark / Varfell / Löwenritter / RM / Guilds). |
@@ -265,7 +265,7 @@ DR contribution to Health per Size means heavily armoured units accumulate Healt
 
 ## CHANGELOG
 
-- **2026-04-30 (PP-691):** P0 propagation pass following terminology vector-audit. CI thresholds reconciled to ci_political_v30 §2.1 canonical (40 / 55 / 60 probabilistic / 65 / 80 / 100). Added Disposition + Domain Action (Mode D cascade sinks). Added new Part Eleven for top-level systems (Peninsular Strain, Conflict Architecture, Campaign Architecture, Victory, CI Political — Mode A hubs). Old Part Twelve (UNRESOLVED) replaced by new Part Thirteen (DEPRECATED / RESOLVED) reflecting alias_registry deprecated_abbreviations. Old Part Eleven (collision table) renumbered to Part Twelve. Added VG-target preamble and Game Master engine-resolution note. RS legacy entry added to collision table. Coherence vs Intelligibility disambiguation. TT/MS opposite-direction note. CE relationship to Stamina clarified. Inspiration/Belief/History distinction added.
+- **2026-04-30 (PP-691):** P0 propagation pass following terminology vector-audit. CI thresholds reconciled to ci_political_v30 §2.1 canonical (40 / 55 / 60 probabilistic / 65 / 80 / 100). Added Disposition + Domain Action (Mode D cascade sinks). Added new Part Eleven for top-level systems (Turmoil, Conflict Architecture, Campaign Architecture, Victory, CI Political — Mode A hubs). Old Part Twelve (UNRESOLVED) replaced by new Part Thirteen (DEPRECATED / RESOLVED) reflecting alias_registry deprecated_abbreviations. Old Part Eleven (collision table) renumbered to Part Twelve. Added VG-target preamble and Game Master engine-resolution note. RS legacy entry added to collision table. Coherence vs Intelligibility disambiguation. TT/MS opposite-direction note. CE relationship to Stamina clarified. Inspiration/Belief/History distinction added.
 - 2026-04-24 (PP-678): Game Master full-phrase corpus sweep. Cardinal naming reconciled. Earlier glossary touchpoints.
 
 *Glossary maintained by valoria-orchestrator. Update in the same commit as any file that introduces or retires a term.*

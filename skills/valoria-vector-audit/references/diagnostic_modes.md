@@ -13,10 +13,10 @@ Each mode is a self-contained query over the five graphs (G_cite, G_throughline,
 **Output format:**
 ```
 | Token | Cite | Throughline | Mu | PP | Note |
-| Peninsular Strain | 31 | 4 | 2 | 5 | Highest cross-validated centrality |
+| Turmoil | 31 | 4 | 2 | 5 | Highest cross-validated centrality |
 ```
 
-**v3 reference run finding:** Peninsular Strain + IP were the only multi-graph hubs at ≥3/4 graphs. Single-graph cite hubs (top 17): NPC Behavior (56), CI (46), Settlement Layer (41), etc. — these are reported separately as supplementary because v3 P2 fail meant G_throughline was sparse.
+**v3 reference run finding:** Turmoil + IP were the only multi-graph hubs at ≥3/4 graphs. Single-graph cite hubs (top 17): NPC Behavior (56), CI (46), Settlement Layer (41), etc. — these are reported separately as supplementary because v3 P2 fail meant G_throughline was sparse.
 
 **Action recommended:** Multi-graph hubs are the highest change-impact propagation risk. Schedule explicit change-control review.
 
@@ -32,7 +32,7 @@ Each mode is a self-contained query over the five graphs (G_cite, G_throughline,
 ```
 | Links | Strength | Token A | Token B |
 |---|---|---|---|
-| 3 | 12 | Peninsular Strain | Faction Layer |
+| 3 | 12 | Turmoil | Faction Layer |
 ```
 
 **v3 reference run finding:** 3 pairs at ≥2 metadata graphs. (Many more at 1 metadata graph — those are reported separately at lower confidence.)

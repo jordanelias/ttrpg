@@ -17,7 +17,7 @@
 | S04 | Clocks & Tracks | Peninsula | designs/systems/clock_registry_v30.md |
 | S05 | Calamity Radiation | Peninsula | designs/setting/calamity_radiation_v30.md |
 | S06 | Faction Layer | Faction | designs/board_game/faction_layer_v30.md |
-| S07 | Victory & Peninsular Strain | Faction | designs/board_game/victory_v30.md + peninsular_strain_v1.md |
+| S07 | Victory & Turmoil | Faction | designs/board_game/victory_v30.md + peninsular_strain_v1.md |
 | S08 | TC Political Redesign | Faction | designs/board_game/tc_political_redesign_v30.md |
 | S09 | Military Layer | Faction | designs/board_game/military_layer_v30.md |
 | S10 | NPC Behavior | Individual/Faction | designs/systems/npc_behavior_v30.md |

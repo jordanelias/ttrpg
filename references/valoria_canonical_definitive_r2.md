@@ -203,7 +203,7 @@ Coherence (10→0, practitioners), Thread Sensitivity (0–100), Certainty (0–
 |---|---|---|
 | Rendering Stability | **Metaphysical Stability** | What it measures |
 | Theocracy Counter | **Church Influence** | What it measures. Goes to 100. |
-| Peninsular Strain | **Political Stability** | What it measures |
+| Turmoil | **Political Stability** | What it measures |
 | Territory Consolidation Value | **Territory Value** | Simpler. Range 1–5. |
 | Resonant Style | **Pressure Point** | Immediately communicable |
 | Genre "Memory" | **Precedent** | Avoids collision with Recall |

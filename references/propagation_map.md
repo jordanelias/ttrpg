@@ -700,7 +700,7 @@ Third commit of the L+PS migration sweep. Six consumer files migrated, ~99 Manda
 
 **`params/bg/ci_seizure.md` (20 refs):** Pure procedural Church religious-authority mechanics. All Mandate refs → L: Conditional Passive prominence gate, Suppress §3.7 opponent action, Hafenmark Structural Suppression (PP-431-COR Baralta L ≥ 4), Church/non-Church Political pool formulas (Mandate ± floor(CI/N)), seizure prerequisites (Church L ≥ 4, Prominence Church L > controlling faction L).
 
-**`params/bg/tracks.md` (16 refs):** Mostly Peninsular Strain track + Hafenmark Awareness track effects. PP-686 v2 NOTE comment block (L1) preserved as historical record. Migrations:
+**`params/bg/tracks.md` (16 refs):** Mostly Turmoil track + Hafenmark Awareness track effects. PP-686 v2 NOTE comment block (L1) preserved as historical record. Migrations:
 - Cardinal Altonian diplomacy advancement roll → L (matches institutions.md)
 - Strain "Mandate check" at Tension/Crisis/Collapse states → "L check" (institutional pressure on faction procedural authority)
 - Hafenmark Awareness 3+ effects: Church Mandate −1 → Church L −1 (institutional strain); Hafenmark Mandate ≥ 3 → Hafenmark L ≥ 3 (CI suppression ratchet)

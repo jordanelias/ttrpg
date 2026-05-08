@@ -197,11 +197,11 @@ The fundamental problem: **Zoom In is optional.** The player (or GM) decides whe
 
 ---
 
-## 1.10 Peninsular Strain & Accord (peninsular_strain_v1) — World → Player: VERY WEAK | Player → World: WEAK
+## 1.10 Turmoil & Accord (peninsular_strain_v1) — World → Player: VERY WEAK | Player → World: WEAK
 
 **Where the bridge fails:**
 
-Peninsular Strain is the game's universal victory condition — it is the most important strategic system. And it is entirely invisible to the player at the personal scale. Strain (0–10) is a number. Accord (0–3 per territory) is a number. The player cannot see Strain. They cannot feel Accord. They cannot touch Peninsular Tension.
+Turmoil is the game's universal victory condition — it is the most important strategic system. And it is entirely invisible to the player at the personal scale. Strain (0–10) is a number. Accord (0–3 per territory) is a number. The player cannot see Strain. They cannot feel Accord. They cannot touch Peninsular Tension.
 
 Accord is specified as a per-territory attribute with four levels (Aligned, Compliant, Resistant, Revolt). These levels have mechanical consequences (Effective Prosperity modification, garrison requirements, Revolt). But the player's ability to affect Accord is limited to one Domain Echo pathway: "PC publicly governs/administers a territory — Overwhelming/Success → Accord +1" (scale_transitions_v30 §5.5). This is a single action type producing a single outcome. The player has no other way to improve Accord.
 

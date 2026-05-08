@@ -15,6 +15,6 @@ origin: session-master-upload
 
 ## 20.1 Formula Consistency
 
-All pools: (Attr × 2) + H + 3. TN 6/7/8 everywhere. Ob 1–20 everywhere. Degree table universal. Pool floor 1D universal. Domain Echo same trigger/amount/cap everywhere. Clock paradigm consistent (increase/decrease/threshold) for MS, CI, IP, PI, Peninsular Strain, Accord, Evidence Track, Exposure.
+All pools: (Attr × 2) + H + 3. TN 6/7/8 everywhere. Ob 1–20 everywhere. Degree table universal. Pool floor 1D universal. Domain Echo same trigger/amount/cap everywhere. Clock paradigm consistent (increase/decrease/threshold) for MS, CI, IP, PI, Turmoil, Accord, Evidence Track, Exposure.
 
 **The game has one resolution engine expressed at multiple scales.** This is the system's greatest architectural strength.

@@ -28,7 +28,7 @@
 | 13 | 142 | 2 | 1.7 Player Agency System (player_agency_v30) — World → Player: STRONG (PROPOSED) | Player → World: MODERATE (PROPOSED) |
 | 14 | 161 | 2 | 1.8 NPC Behavior (npc_behavior_v30) — World → Player: MODERATE | Player → World: STRONG |
 | 15 | 182 | 2 | 1.9 Scale Transitions (scale_transitions_v30) — World → Player: WEAK | Player → World: MODERATE |
-| 16 | 200 | 2 | 1.10 Peninsular Strain & Accord (peninsular_strain_v1) — World → Player: VERY WEAK | Player → World: WEAK |
+| 16 | 200 | 2 | 1.10 Turmoil & Accord (peninsular_strain_v1) — World → Player: VERY WEAK | Player → World: WEAK |
 | 17 | 217 | 2 | 1.11 Mass Combat (mass_battle_v30) — World → Player: WEAK | Player → World: MODERATE |
 | 18 | 232 | 1 | PART 2: CROSS-CUTTING PROBLEMS |
 | 19 | 234 | 2 | 2.1 The Legibility Problem |
@@ -60,7 +60,7 @@
 | 13 | 846 | 1.7 Player Agency System (player_agency_v30) — World → Player: STRONG (PROPOSED) | Player → World: MODERATE (PROPOSED) |
 | 14 | 869 | 1.8 NPC Behavior (npc_behavior_v30) — World → Player: MODERATE | Player → World: STRONG |
 | 15 | 684 | 1.9 Scale Transitions (scale_transitions_v30) — World → Player: WEAK | Player → World: MODERATE |
-| 16 | 635 | 1.10 Peninsular Strain & Accord (peninsular_strain_v1) — World → Player: VERY WEAK | Player → World: WEAK |
+| 16 | 635 | 1.10 Turmoil & Accord (peninsular_strain_v1) — World → Player: VERY WEAK | Player → World: WEAK |
 | 17 | 529 | 1.11 Mass Combat (mass_battle_v30) — World → Player: WEAK | Player → World: MODERATE |
 | 18 | 1,065 | PART 2: CROSS-CUTTING PROBLEMS |
 | 19 | 268 | 2.1 The Legibility Problem |

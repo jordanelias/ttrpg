@@ -41,7 +41,7 @@
     "Faction Layer": {
       "CI": 2
     },
-    "Peninsular Strain": {
+    "Turmoil": {
       "CI": 4
     },
     "CI": {
@@ -80,7 +80,7 @@
     "Mass Combat": "params/mass_combat.md",
     "Military Layer": "designs/provincial/military_layer_v30.md",
     "Victory": "params/bg/victory.md",
-    "Peninsular Strain": "designs/provincial/peninsular_strain_v30.md",
+    "Turmoil": "designs/provincial/peninsular_strain_v30.md",
     "MS Trajectory": "designs/world/ms_trajectory_v1.md",
     "Tensions Deck": "params/bg/tensions_deck.md",
     "Royal Assassination": "params/bg/royal_assassination.md",

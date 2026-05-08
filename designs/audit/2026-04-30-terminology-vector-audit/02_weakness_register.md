@@ -99,13 +99,13 @@ Tokens with `max(degree) ≤ 1` across G_cite, G_throughline, G_mu, G_pp. Cross-
 - 2 of 14 are fully registered but structurally isolated → stale-graph artefact or struck-target.
 - 1 of 14 (Conviction Track) is a recent promotion with stale-graph artefact.
 
-**Cross-reference to registries-only conflict report §4:** The 14 multi-graph isolates here OVERLAP with my §4 list of "15 canonical/provisional systems missing from glossary" but are not identical. Vector-audit isolates Wager, Thread Revelation, Armature System, Event Impact Matrix, and the Convictions/PP framework members. Registries-only §4 added Settlement Adjacency, Fractional Province Ownership, Faction Succession Split, Tensions Deck, Royal Assassination Fuse, Peninsular Strain, MS Trajectory, Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle, Demotion Magnitude, Miraculous Event — most of which are NOT in the v3 token list (auto-extract threshold ≥3 docs AND ≥10 paragraphs failed for these recent additions). **Vector-audit and registries-only audit are complementary; neither subsumes the other.** Joint action queue:
+**Cross-reference to registries-only conflict report §4:** The 14 multi-graph isolates here OVERLAP with my §4 list of "15 canonical/provisional systems missing from glossary" but are not identical. Vector-audit isolates Wager, Thread Revelation, Armature System, Event Impact Matrix, and the Convictions/PP framework members. Registries-only §4 added Settlement Adjacency, Fractional Province Ownership, Faction Succession Split, Tensions Deck, Royal Assassination Fuse, Turmoil, MS Trajectory, Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle, Demotion Magnitude, Miraculous Event — most of which are NOT in the v3 token list (auto-extract threshold ≥3 docs AND ≥10 paragraphs failed for these recent additions). **Vector-audit and registries-only audit are complementary; neither subsumes the other.** Joint action queue:
 
 | Source-of-finding | Tokens |
 |---|---|
 | Both audits | Wager, Thread Revelation, the 7 Convictions, the 4 Pressure Points |
 | Vector-audit only | Armature System, Event Impact Matrix |
-| Registries-only (below v3 token threshold) | Settlement Adjacency, Fractional Province Ownership, Faction Succession Split, Tensions Deck, Royal Assassination Fuse, Peninsular Strain (already in graph as hub — only registry-missing), MS Trajectory, Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle, Demotion Magnitude, Miraculous Event, Graduated Autonomy |
+| Registries-only (below v3 token threshold) | Settlement Adjacency, Fractional Province Ownership, Faction Succession Split, Tensions Deck, Royal Assassination Fuse, Turmoil (already in graph as hub — only registry-missing), MS Trajectory, Approach Training, Wrong-Style Penalty, Heresy Investigation Lifecycle, Knot Lifecycle, Demotion Magnitude, Miraculous Event, Graduated Autonomy |
 
 ---
 
@@ -117,14 +117,14 @@ Inherited from v3 (no graph regeneration this run):
 
 | Token | cite | tl | mu | pp | Note |
 |---|---:|---:|---:|---:|---|
-| Peninsular Strain | 31 | (top) | 2 | 5 | Highest cross-validated centrality. |
+| Turmoil | 31 | (top) | 2 | 5 | Highest cross-validated centrality. |
 | IP | 17 | (top) | 2 | 3 | Pressure clock; load-bearing. |
 
-**Single-graph cite hubs (supplementary, top 17):** NPC Behavior (56), CI (46), Settlement Layer (41), Peninsular Strain (31), Scale Transitions (27), Campaign Architecture (27), Faction Layer (26), Conflict Architecture (25), Victory (25), MS (21), CI Political (20), Threadwork (17), Mass Combat (17), IP (17), Church (16), Varfell (15), Stability (15).
+**Single-graph cite hubs (supplementary, top 17):** NPC Behavior (56), CI (46), Settlement Layer (41), Turmoil (31), Scale Transitions (27), Campaign Architecture (27), Faction Layer (26), Conflict Architecture (25), Victory (25), MS (21), CI Political (20), Threadwork (17), Mass Combat (17), IP (17), Church (16), Varfell (15), Stability (15).
 
 **Terminology implication:**
-- All multi-graph hubs and 15 of 17 cite hubs are **registered in glossary** (with the exception of Peninsular Strain, Conflict Architecture, Campaign Architecture, Victory, CI Political — all canonical systems per `canonical_sources.yaml` but not glossary entries). These are top-level systems; their absence from the glossary represents the gap "the registry treats systems as files, the glossary treats systems as terms" — they are systems with file-level canonical authority but no term-level canonical entry.
-- **Action:** Add glossary entries for Peninsular Strain, Conflict Architecture, Campaign Architecture, Victory, CI Political. Each is a hub; their absence is a high-impact terminology gap.
+- All multi-graph hubs and 15 of 17 cite hubs are **registered in glossary** (with the exception of Turmoil, Conflict Architecture, Campaign Architecture, Victory, CI Political — all canonical systems per `canonical_sources.yaml` but not glossary entries). These are top-level systems; their absence from the glossary represents the gap "the registry treats systems as files, the glossary treats systems as terms" — they are systems with file-level canonical authority but no term-level canonical entry.
+- **Action:** Add glossary entries for Turmoil, Conflict Architecture, Campaign Architecture, Victory, CI Political. Each is a hub; their absence is a high-impact terminology gap.
 
 ---
 
@@ -165,7 +165,7 @@ Inherited from v3. Cite-weight ≥ 30 with no metadata coupling:
 | 44 | CI Political → Mandate | |
 | 44 | CI → Crown | |
 | 44 | CI → Church | |
-| 41 | Peninsular Strain → Victory | |
+| 41 | Turmoil → Victory | |
 | 39 | CI → Hafenmark | |
 | 38 | CI → MS | |
 | 37 | NPC Behavior → Varfell | |
@@ -239,7 +239,7 @@ Inherited from v3 (≤2 substantiating paragraphs):
 | 04 RS Decay | 0 |
 | 05 TC Accumulation | 0 |
 | 06 IP Accumulation | 1 |
-| 07 Peninsular Strain | 1 |
+| 07 Turmoil | 1 |
 | 08 Church Rendering Reinforcement | 1 |
 | 09 Varfell Thread Progressive | 1 |
 | 11 Crown Pragmatic | 1 |
@@ -293,7 +293,7 @@ Inherited from v3, top 10 by ratio (discourse mentions / design mentions):
 
 1. **Resolve TC sweep status contradiction.** alias_registry says RESOLVED; corpus has 21 actionable TC=Church-Influence residuals. Single-doc grep-replace `\bTC\b` → `CI` in `designs/npcs/npc_behavior_v30.md` (16 paragraphs, 76% of total). Update alias_registry collision_table.tc.status from `resolved` to `partial — 16 in npc_behavior_v30 pending`.
 2. **Add Disposition + Domain Action to glossary** (Mode D cascade sinks; both heavily downstream-referenced; Disposition is in alias_registry but not glossary; Domain Action is in neither).
-3. **Add hub systems missing from glossary:** Peninsular Strain, Conflict Architecture, Campaign Architecture, Victory, CI Political (Mode A — all top-quintile cite hubs).
+3. **Add hub systems missing from glossary:** Turmoil, Conflict Architecture, Campaign Architecture, Victory, CI Political (Mode A — all top-quintile cite hubs).
 4. **Update glossary §12 (UNRESOLVED).** All entries (CERT, TLK, DD, FSTAT, CE, INT) are resolved in alias_registry. Either delete §12 or rewrite as historical annex.
 5. **Resolve CI threshold disagreement.** glossary line 62 vs alias_registry line 149. Cross-check against `references/canonical_sources.yaml` `tc_political` entry (`designs/provincial/ci_political_v30.md` is canonical authority). Choose one threshold spec; propagate.
 

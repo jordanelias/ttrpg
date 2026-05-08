@@ -150,7 +150,7 @@ Character action → settlement consequence → territory consequence → penins
 | Card system | T2 |
 | Caste system | N3 |
 | NPC behavior | N6, T4, T7, T14 |
-| Accord/Peninsular Strain | N2, T5, T12, T13, T15a |
+| Accord/Turmoil | N2, T5, T12, T13, T15a |
 | Warden mechanics | N1, T14 |
 
 **Result:** Every system connects to ≥ 2 throughlines. No orphan mechanics. The derived stat system connects to 4 throughlines — structurally load-bearing, validating the architectural decision.

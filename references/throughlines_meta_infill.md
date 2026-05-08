@@ -78,7 +78,7 @@ Four is the minimum coherent set.
 | T-04 | MS Decay | М-1 | — | Clock — continuous pressure from Calamity damage. Canonical pressure pattern. | clocks, ms_trajectory, peninsular_strain, threadwork |
 | T-05 | CI Accumulation | М-1 | — | Clock — continuous pressure from institutional momentum. | clocks, tc_political, faction_layer |
 | T-06 | IP Accumulation | М-1 | — | Clock — continuous pressure from external intervention. | clocks, peninsular_strain, victory |
-| T-07 | Peninsular Strain | М-1 | — | Clock — continuous pressure from accumulated war. | peninsular_strain, clocks, victory, tensions_deck, royal_assassination_fuse |
+| T-07 | Turmoil | М-1 | — | Clock — continuous pressure from accumulated war. | peninsular_strain, clocks, victory, tensions_deck, royal_assassination_fuse |
 | T-08 | Church Rendering Reinforcement | М-4 | — | Institutional — Church's substrate-posture is rendering-reinforcement. | factions, faction_layer, threadwork, conviction_track |
 | T-09 | Varfell Thread Progressive | М-4 | — | Institutional — Varfell's posture is thread-progressive. | factions, faction_layer, threadwork, conviction_track |
 | T-10 | **STRUCK** (Niflhel dissolved) | — | — | Niflhel dissolved as faction. Thread exploitation distributed to settlement-level phenomena. | — |

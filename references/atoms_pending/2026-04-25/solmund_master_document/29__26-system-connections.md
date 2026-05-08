@@ -27,7 +27,7 @@ origin: session-master-upload
 | POI system | Seam Texts as Remnant POIs. Miracle Investigation may place scripture in new territories. |
 | Conviction Track | RWCE witness mechanic (§25). |
 | Tensions Deck | New cards: "Miracle or Method," "Sovereign Grace," "Southern Knowledge." |
-| Peninsular Strain | Strain and RS track different phenomena. RWCE does not decrement Strain. |
+| Turmoil | Strain and RS track different phenomena. RWCE does not decrement Strain. |
 | Settlement Accord | +1 Accord for RWCE-affected territories (§20.5). |
 
 ---

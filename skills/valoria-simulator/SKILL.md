@@ -175,7 +175,7 @@ Canonical modules for a full-stack Valoria sim (as one example):
 | 3. Faction layer | dice, territory | `designs/provincial/faction_layer_v30.md`, `params/factions/stats_1_7_scale.md` | 1 session |
 | 4. Clock system | faction | `designs/provincial/clock_registry_v30.md`, `params/bg/clocks.md`, `params/bg/tracks.md` | 1 session |
 | 5. TC system | clocks, faction | `designs/provincial/tc_political_v30.md`, `params/bg/tc_seizure.md` | 1 session |
-| 6. Peninsular Strain + Accord | faction, territory | `designs/provincial/peninsular_strain_v30.md` | 1 session |
+| 6. Turmoil + Accord | faction, territory | `designs/provincial/peninsular_strain_v30.md` | 1 session |
 | 7. Faction acquisition toolkits | all above | `peninsular_strain_v30 §5`, faction-specific designs | 1–2 sessions |
 | 8. Universal victory condition | all above | `peninsular_strain_v30 §6` | 1 session |
 | 9. NPC AI priority trees | faction, clocks | `params/bg/npc_priority_trees.md`, `designs/npcs/npc_behavior_v30.md` | 1–2 sessions |

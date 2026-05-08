@@ -265,7 +265,7 @@ Each source split at H2 section boundaries. Atoms carry provenance frontmatter.
   - 9.4 Faction Starting Stats
   - 9.5 Global Tracks
   - 9.6 Accord (0–3, per territory)
-  - 9.7 Peninsular Strain (0–10)
+  - 9.7 Turmoil (0–10)
   - 10.1 Eight Handoff Rules
   - 10.2 Domain Echo (The Upward Pipe)
   - 10.3 Zoom In / Zoom Out

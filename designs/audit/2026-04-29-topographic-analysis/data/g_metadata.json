@@ -72,7 +72,7 @@
     },
     "Coherence": {
       "IP": 1,
-      "Peninsular Strain": 1,
+      "Turmoil": 1,
       "Church": 1,
       "Conviction": 1,
       "Hafenmark": 1,
@@ -84,9 +84,9 @@
     },
     "IP": {
       "Coherence": 1,
-      "Peninsular Strain": 1
+      "Turmoil": 1
     },
-    "Peninsular Strain": {
+    "Turmoil": {
       "Coherence": 1,
       "IP": 1
     },
@@ -170,7 +170,7 @@
   "g_pp": {
     "CI": {
       "NPC Behavior": 2,
-      "Peninsular Strain": 2,
+      "Turmoil": 2,
       "Campaign Architecture": 1,
       "Faction Layer": 1,
       "Military Layer": 1,
@@ -178,10 +178,10 @@
     },
     "NPC Behavior": {
       "CI": 2,
-      "Peninsular Strain": 1,
+      "Turmoil": 1,
       "Campaign Architecture": 1
     },
-    "Peninsular Strain": {
+    "Turmoil": {
       "CI": 2,
       "NPC Behavior": 1,
       "Faction Layer": 1,
@@ -215,20 +215,20 @@
     "Faction Layer": {
       "CI": 1,
       "Military Layer": 1,
-      "Peninsular Strain": 1,
+      "Turmoil": 1,
       "Settlement Layer": 1
     },
     "Military Layer": {
       "CI": 1,
       "Faction Layer": 1,
-      "Peninsular Strain": 1,
+      "Turmoil": 1,
       "Settlement Layer": 1
     },
     "Settlement Layer": {
       "CI": 1,
       "Faction Layer": 1,
       "Military Layer": 1,
-      "Peninsular Strain": 1
+      "Turmoil": 1
     }
   },
   "throughlines": {
@@ -277,12 +277,12 @@
       ]
     },
     "07": {
-      "name": "Peninsular Strain",
+      "name": "Turmoil",
       "primary_mu": "\u041c-1",
       "secondary_mu": "\u2014",
       "description": "Clock \u2014 continuous pressure from accumulated war.",
       "tokens": [
-        "Peninsular Strain"
+        "Turmoil"
       ]
     },
     "08": {
@@ -598,7 +598,7 @@
     "\u041c-1": [
       "Coherence",
       "IP",
-      "Peninsular Strain"
+      "Turmoil"
     ],
     "\u041c-4": [
       "Church",
@@ -634,12 +634,12 @@
     ],
     [
       "CI",
-      "Peninsular Strain",
+      "Turmoil",
       "PP-663"
     ],
     [
       "NPC Behavior",
-      "Peninsular Strain",
+      "Turmoil",
       "PP-663"
     ],
     [
@@ -699,7 +699,7 @@
     ],
     [
       "CI",
-      "Peninsular Strain",
+      "Turmoil",
       "PP-668"
     ],
     [
@@ -714,7 +714,7 @@
     ],
     [
       "Faction Layer",
-      "Peninsular Strain",
+      "Turmoil",
       "PP-668"
     ],
     [
@@ -724,7 +724,7 @@
     ],
     [
       "Military Layer",
-      "Peninsular Strain",
+      "Turmoil",
       "PP-668"
     ],
     [
@@ -733,7 +733,7 @@
       "PP-668"
     ],
     [
-      "Peninsular Strain",
+      "Turmoil",
       "Settlement Layer",
       "PP-668"
     ]
