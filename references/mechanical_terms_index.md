@@ -42,18 +42,19 @@ Algorithmic extraction surfaced 2,166 candidate terms with 131 cross-silo overla
 | §2 | Faction attributes |
 | §3 | Territory attributes |
 | §4 | World / cosmological state |
-| §5 | Personal resolution: Combat |
+| §5 | **Combat (all scales — personal + mass)** |
 | §6 | Personal resolution: Social Contest (Debate) |
 | §7 | Personal resolution: Threadwork |
 | §8 | Personal resolution: Fieldwork (Exploration / Investigation / Socializing / Exposure) |
-| §9 | Personal/strategic resolution: Conviction Track |
-| §10 | Strategic resolution: Mass Combat |
+| §9 | **Piety & Church Influence** |
+| ~~§10~~ | ~~Mass Combat~~ → **merged into §5** |
 | §11 | Strategic resolution: Faction Layer / Domain Actions |
-| §12 | Strategic resolution: Clocks |
+| §12 | Strategic resolution: Clocks (dedicated clock mechanics only) |
 | §13 | Strategic resolution: Tensions Deck / Royal Assassination / Special |
 | §14 | Strategic resolution: Victory Paths |
 | §15 | Scale-bridging |
-| §16 | Dice engine + Authoring/Infrastructure |
+| §16A | Dice engine (system-agnostic resolution primitives) |
+| §16B | Authoring / Infrastructure (meta — not in-game) |
 
 Diagnostic registers:
 | §  | Register |
@@ -117,13 +118,13 @@ Diagnostic registers:
 | Character Point | CP | Advancement currency from Beliefs and session milestones. **CP = Character Points only [ED-136].** | glossary §7 |
 | Knot | — | Significant relationship bond. Variants: Close · Regular · Distant. Lifecycle per ED-773. | glossary §7 |
 | Bond / Bonded NPC | — | Tracked relationship in articulation layer; lower threshold than Knot. | articulation §2.3 |
-| Memory (score) | — | Cap on History entries. | glossary §7 |
+| Recall | — | Cap on History entries. *Renamed from "Memory (score)" to disambiguate from debate genre "Memory" and per-NPC "Memory entry."* | glossary §7 |
 | Memory entry | — | Per-NPC: Key reference + salience. (Renamed from "Memory record" per PP-687.) | key_substrate §4.3 |
 | Conviction Scar | — | Belief-revision marker from social contest outcomes. | contest §6.2 |
 | Self-Other orientation | — | Scalar [-1, +1]. **Separate axis from Convictions.** Captures whom an actor primarily benefits. | conviction_taxonomy §3 |
 | Personal Convictions | — | NPC's vector across the 13-Conviction set. | conviction_taxonomy §1 |
 | Effective Convictions | — | Personal + faction Cascade math (PP-686 §3.2). | faction_behavior §3.2 |
-| Cover (derived) | — | Concealment level vs detection. | fieldwork §6.1 |
+| ~~Cover (derived)~~ | — | ~~Concealment level vs detection.~~ *Moved to §8 Fieldwork — Cover is a fieldwork mechanic output, not a character attribute.* | fieldwork §6.1 |
 | Disposition | — | NPC-attached attitude state toward another entity. Drives behaviour-tree branching. **Belongs in attribute silo when describing the NPC's state, but the Disposition Track also operates as a fieldwork mechanic — see §1.H.** | npc_behavior, fieldwork §5.1 |
 
 ### 1.5 The 13 Convictions (granular enumeration — PP-684 taxonomy)
@@ -188,7 +189,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 ### 2.2 Derived faction values
 | Term | Definition | Source |
 |------|------------|--------|
-| Faction Pool / Political Pool | Pool used in parliamentary + negotiation contexts. | ci_political §3.4 |
+| Political Pool | Pool used in parliamentary + negotiation contexts. *"Faction Pool" and "Mandate Pool" are deprecated aliases.* | ci_political §3.4 |
 | CI Bonus Dice | Bonus to Church faction in political forums per CI threshold. | ci_political §3.2 |
 | CI Obstacle Modifier | +1 Ob to actions opposing Church Domain Actions at CI ≥ 55. | ci_political §3.3 |
 | Spiritual Weight (territory-attached, faction-relevant) | Repurposed from old PV; affects CI generation. | ci_political §1 |
@@ -409,8 +410,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 ### 4.6 Peninsular-scale world state
 | Term | Abbr | Definition | Source |
 |------|------|------------|--------|
-| Peninsular Strain | PS | Cross-cutting world-scale pressure system; T-07 throughline; Mode A hub. | peninsular_strain_v30 |
-| Peninsular Strain Counter | — | Strategic-layer counter for PS. | victory §0.3 |
+| Turmoil | — | Cross-cutting world-scale pressure system; T-07 throughline; Mode A hub. | peninsular_strain_v30 |
+| Turmoil Counter | — | Strategic-layer counter for PS. | victory §0.3 |
 | Peninsular Sovereignty | — | Universal victory condition. *See §N-Victory.* | victory §0 |
 | MS Trajectory | — | Peninsula-wide MS values at specific historical dates (D-1, etc.). | ms_trajectory_v1 |
 | Post-Calamity Era | — | World-state transition triggered at RS=0 (legacy term; now MS=0). | victory §5.1 |
@@ -868,7 +869,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Season and Clock Integration (fieldwork) | Time-passing during fieldwork. | fieldwork §10.6 |
 
 ---
-## SILO 9 — PERSONAL/STRATEGIC RESOLUTION: CONVICTION TRACK
+## SILO 9 — PIETY & CHURCH INFLUENCE
 
 > **Word-class rule:** Piety Track (PT, per-territory, 0–5) is a *strategic-layer* track that takes its name from the *personal-layer* Conviction concept (§1.5). **This is intentional — population conviction = aggregated personal conviction at population scale.** The 13 individual Convictions (Faith, Authority, etc.) live in §1; the strategic track that scores Solmund-vs-Restoration orthodoxy lives here. *Note: "Conviction Track" and "CV" are legacy aliases per ED-644; canonical abbreviation is PT.*
 >
@@ -877,7 +878,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 ### 9.1 Per-territory PT stat
 | Term | Definition | Source |
 |------|------------|--------|
-| Conviction Track (per-territory) | PT | Solmund-orthodoxy axis at population scale per territory. **0–5.** *Canonical abbreviation is PT, not CV, per ED-644. Also called Piety Track.* | conviction_track_v30 §1 |
+| Piety Track (per-territory) | PT | Solmund-orthodoxy axis at population scale per territory. **0–5.** *Was "Conviction Track" — renamed per silo isolation directive. ED-644 confirms PT canonical.* | conviction_track_v30 §1 |
 | Starting Values (PP-406) | Per-territory initial PT by faction-ownership and adjacency. | conviction_track_v30 §1.1 |
 | Movement Rules (PP-408) | Procedure for PT change. | conviction_track_v30 §1.2 |
 | Movement Actions | Specific CV-changing actions per faction. | conviction_track_v30 §1.2 |
@@ -903,7 +904,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Piety Domain Action (DISSOLVED) | Removed Domain Action; subsumed elsewhere. | conviction_track_v30 §3 |
 | CI Pacing Analysis | Pacing characteristics of CI accumulation. | conviction_track_v30 §3 |
 
-### 9.4 Church Victory paths (drive from Conviction Track)
+### 9.4 Church Victory paths (drive from Piety Track)
 | Term | Definition | Source |
 |------|------------|--------|
 | Church Victory Conditions (PP-413) | ED-110 resolution. | conviction_track_v30 §4 |
@@ -930,7 +931,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 ### 9.7 Presentation layer (PT → player)
 | Term | Definition | Source |
 |------|------------|--------|
-| Conviction Track Presentation Layer | World→player surfacing of PT state. | conviction_track_v30 §11 |
+| Piety Track Presentation Layer | World→player surfacing of PT state. | conviction_track_v30 §11 |
 | PT Change Environmental Events | Visible world-events from PT shifts. | conviction_track_v30 §11.1 |
 | Church Attention Pool (player-facing) | Player-facing CI/Attention indicator. | conviction_track_v30 §11.2 |
 | CI Milestone Presentation | Milestone-display schema. | conviction_track_v30 §11.3 |
@@ -1090,7 +1091,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Parliamentary Action | A Domain-Action subtype usable in Parliament. | faction_layer §5.4 |
 | Target Rebuttal | Voted-against faction's response procedure. | faction_layer §5.5 |
 | CI Parliament Interaction | Church-Influence's effect on Parliament. | faction_layer §5.6 |
-| Peninsular Strain Parliament Interaction | PS-counter's effect on Parliament. | faction_layer §5.6b |
+| Turmoil Parliament Interaction | PS-counter's effect on Parliament. | faction_layer §5.6b |
 | Wealth Zero Consequence | Parliamentary effect of W=0. | faction_layer §5.7 |
 | NPC Vote Behavior | Algorithmic NPC-faction vote logic. | faction_layer §5.8 |
 
@@ -1134,14 +1135,14 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 ---
 ## SILO 12 — STRATEGIC RESOLUTION: CLOCKS
 
-> **Word-class rule:** clocks are world-or-faction-state numerical tracks. They are referenced *by* multiple play systems but their *definitions* live in this silo. **Conviction Track (CV) is a per-territory clock but logically lives in §I — see cross-silo overlap §X.**
+> **Word-class rule:** clocks are world-or-faction-state numerical tracks. They are referenced *by* multiple play systems but their *definitions* live in this silo. **Piety Track (PT) is a per-territory clock but logically lives in §9 — see cross-silo overlap §2-overlap.**
 
 ### 12.1 World-state clocks (also cross-listed in §4)
 | Term | Abbr | Range | Direction | Loss-state | Source |
 |------|------|-------|-----------|------------|--------|
 | Mending Stability | MS | 100→0 | down | 0 = The Rupture | threadwork §5 |
 | Thread Tension | TT | 0–100+ | up | (no canonical cap) | threadwork |
-| Peninsular Strain Counter | — | counter | up | escalating PS shocks | victory §0.3, peninsular_strain_v30 |
+| Turmoil Counter | — | counter | up | escalating PS shocks | victory §0.3, peninsular_strain_v30 |
 
 ### 12.2 Faction / political clocks
 | Term | Abbr | Range | Direction | Mode | Definition | Source |
@@ -1226,7 +1227,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Universal Victory Condition — Peninsular Sovereignty | All-factions baseline win-state. | victory §0 |
 | Peninsular Partition (Co-Victory — Alliance-Stalemate) | Multi-faction shared-win procedure (ED-304). | victory §0.1 |
 | Accord System | Population-faction commitment dynamic. | victory §0.2, military_layer §4.1 |
-| Peninsular Strain Counter | World-pressure track gating victory triggers. | victory §0.3 |
+| Turmoil Counter | World-pressure track gating victory triggers. | victory §0.3 |
 | Battle Consequences | Cross-victory battle-outcome impact. | victory §0.4 |
 | Faction Acquisition Toolkits | Per-faction kits for territorial gain/loss. | victory §0.5 |
 | Provincial Value (PV) | Per-territory worth toward Peninsular Sovereignty. | victory §1 |
@@ -1430,7 +1431,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | **Coherence** | §1 character stat · §4 cosmological state · §7 threadwork track | INTENTIONAL — Coherence is one concept (rendering integrity) examined at three scales (personal stat, cosmological substrate, in-operation track). **Keep.** |
 | **Mending Stability (MS)** | §4 world-cosmological · §7 threadwork · §12 clocks · §14 victory | INTENTIONAL — MS is the canonical world-clock; every system that touches it cross-references the same value. **Keep.** |
 | **Certainty** | §1 character stat · §4 solmund-world | INTENTIONAL — Certainty is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character sheet. **Keep.** |
-| **Conviction Track / CV** | §9 (per-territory) · §12 clocks · §14 victory · §6 debate (referenced) | INTENTIONAL — population-scale Conviction at territory level. Naming choice deliberately makes it derivative of personal Conviction (§1.5). **Keep.** |
+| **~~Conviction Track / CV~~** | §9 (per-territory) · §12 clocks · §14 victory · §6 debate | **NO LONGER KEPT.** Renamed: territory = Piety Track (PT); contest = Persuasion Track. "Conviction" is a §1 attribute word — silo contamination. |
 | **The 13 Conviction names** (Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor) | §1 character attributes · §2 faction attributes (via faction Cascade) | INTENTIONAL — same Conviction set at personal and faction scale (per conviction_taxonomy §1). **Keep but FLAG for §3 collision audit:** a Conviction name appearing as a *mechanic verb* would be a violation. None currently do. |
 | **Domain Echo** | §6 debate (bridge out) · §10 mass combat (bridge out) · §11 faction layer · §15 scale-bridging | INTENTIONAL — Domain Echo is the canonical *bridge mechanism*; every personal-scale system that can trigger it cross-references the same primitive. **Keep.** |
 | **Knot** | §1 character (relationships) · §4 cosmological (Knot Formation during Leap) · §7 threadwork (Knot Strain) · §15 scale-bridging | INTENTIONAL — Knot is *one concept* (relational lock) treated at three depths: personal-relationship Knots, cosmological-Leap Knots, threadwork Knot-Strain. Glossary acknowledges. **Keep.** |
@@ -1486,7 +1487,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 |---------------------|---------------------|---------|
 | **Provincial Value (PV)** | Used as input to Spiritual Weight (which is repurposed PV). | OK — naming consistent. |
 | **Piety Track (PT)** | The track and the attribute share name. | OK — same pattern as Stability. |
-| **Conviction Track (CV)** | Already a special case — see §2.1 INTENTIONAL POLYSEMY. | OK |
+| **~~Conviction Track (CV)~~** | Renamed to Piety Track (PT). No longer polysemous. | **RESOLVED** |
 | **Spiritual Weight** | Repurposed PV; used as CI generation input. | OK |
 | **Temperament** | Per-territory attribute; used as input to populace-response computation. | OK |
 | **Accord** | Per-territory attribute; "Accord Domain Echo" mechanic uses the noun. | OK — same pattern. |
@@ -1551,7 +1552,7 @@ Anything else is a violation requiring rename.
 | Combat Pool, Argue Pool, Fieldwork Pool, Thread Pool | Pattern 1 (stat-as-input) | Pool names use the *system* not the attribute. Drivers are attributes; pool names are not attributes. |
 | Combat Endurance (CE) | Pattern 1 | Endurance is the stat; CE is the mechanic. Naming makes the role clear. |
 | Health per Size (H), Total Health | Pattern 1 | Health/Size are mass-combat-renamed terms; the formulas use them as inputs. |
-| Conviction Track (CV) | Pattern 3 (aggregation-cross-scale) | Per-territory aggregation of personal Conviction. Documented intentional. |
+| ~~Conviction Track (CV)~~ → Piety Track (PT) | ~~Pattern 3~~ | **Renamed.** "Conviction" removed from track name — §1 attribute word. PT is scale-neutral name. |
 | The 13 Convictions appearing at faction scale | Pattern 3 | Per faction_behavior §3.2 Cascade math. Documented intentional. |
 | Coherence (personal stat + threadwork track + cosmological substrate) | Pattern 3 | Documented intentional in foundations canon. |
 
