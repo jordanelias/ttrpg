@@ -196,7 +196,7 @@ A new faction would need to do something none of these entities can do. The only
 
 But all of these are variants of existing entities, not genuinely new ones. The Free Company pattern is better modeled as a consequence of the Tensions Deck (the Löwenritter Exercises card, T8) and the Löwenritter Martial Honor Pressure mechanic than as a standalone faction with its own sheet, priority tree, and tracking.
 
-**The complexity budget matters.** The game already tracks: 4 playable factions × 5 stats each, plus CI, MS, IP, PI, AER, PT per territory, Accord per territory, Coup Counter, Torben Loyalty, Elske Loyalty, Peninsular Strain, Popular Will, Warden Recognition, Warden Cooperation, Warden's Accord, plus NPC faction priority trees for Löwenritter, Guilds, Niflhel, Schoenland, Ministry, Riskbreakers, and (post-emergence) RM, Wardens, and Altonian Vanguard. Adding a new entity with its own stat sheet, priority tree, and interaction rules is a net negative unless it does something categorically impossible with existing entities. Nothing in the ignition problem requires that.
+**The complexity budget matters.** The game already tracks: 4 playable factions × 5 stats each, plus CI, MS, IP, PI, AER, PT per territory, Accord per territory, Coup Counter, Torben Loyalty, Elske Loyalty, Turmoil, Popular Will, Warden Recognition, Warden Cooperation, Warden's Accord, plus NPC faction priority trees for Löwenritter, Guilds, Niflhel, Schoenland, Ministry, Riskbreakers, and (post-emergence) RM, Wardens, and Altonian Vanguard. Adding a new entity with its own stat sheet, priority tree, and interaction rules is a net negative unless it does something categorically impossible with existing entities. Nothing in the ignition problem requires that.
 
 ---
 

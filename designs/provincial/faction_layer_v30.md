@@ -462,7 +462,7 @@ The targeted faction may Rebuttal any Censure or Outlawry vote:
 
 Parliamentary actions do NOT directly affect CI.
 
-### §5.6b Peninsular Strain Parliament Interaction
+### §5.6b Turmoil Parliament Interaction
 
 Parliamentary Censure, Embargo, Blockade, and Outlawry reduce target Stability. If Stability drops to ≤ 2, Accord −1 in all territories controlled by that faction (peninsular_strain_v1.md §2.4). Combined Embargo+Blockade (−1 Stability/season ongoing) will erode Accord progressively. Parliament is a legitimacy weapon: sustained institutional pressure degrades governance without triggering battle consequences (no RS cost, no IP cost, no Strain).
 
@@ -556,7 +556,7 @@ PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
            Church Prominence update
   Step 5:  Church Attention Pool resolution
            Thread Debt drain; Thread Resonance markers cleared
-  Step 6:  Peninsular Strain accounting:
+  Step 6:  Turmoil accounting:
            → Accord checks (garrison, Revolt, passive normalisation)
            → Strain update (battle/Revolt decay, diplomatic resolution)
            → Battle consequence accounting (IP, RS)

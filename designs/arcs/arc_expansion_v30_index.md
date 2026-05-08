@@ -54,7 +54,7 @@
 | 39 | 572 | 3 | Environmental Arc Conditioners |
 | 40 | 578 | 4 | RS Band Transitions (New Systematic Conditioner) |
 | 41 | 591 | 4 | TC Milestone Arc Conditioners |
-| 42 | 604 | 4 | Peninsular Strain Conditioners |
+| 42 | 604 | 4 | Turmoil Conditioners |
 | 43 | 615 | 3 | Cross-NPC Arc Conditioners (New Category) |
 | 44 | 621 | 4 | The Confessor and His Cardinals |
 | 45 | 633 | 4 | Crown Succession Chain |
@@ -115,7 +115,7 @@
 | 39 | 1,496 | Environmental Arc Conditioners |
 | 40 | 452 | RS Band Transitions (New Systematic Conditioner) |
 | 41 | 519 | TC Milestone Arc Conditioners |
-| 42 | 480 | Peninsular Strain Conditioners |
+| 42 | 480 | Turmoil Conditioners |
 | 43 | 1,320 | Cross-NPC Arc Conditioners (New Category) |
 | 44 | 408 | The Confessor and His Cardinals |
 | 45 | 478 | Crown Succession Chain |

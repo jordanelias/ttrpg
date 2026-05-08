@@ -38,7 +38,7 @@ Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of 
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
 
 **Battle Consequences (peninsular_strain_v1.md §3):**
-All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
+All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Turmoil +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
 
 
 **[PROVISIONAL ED-340] Altonian Vanguard Mechanics (PP-568 — flag for authorial review):**
@@ -90,7 +90,7 @@ Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of 
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
 
 **Battle Consequences (peninsular_strain_v1.md §3):**
-All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Peninsular Strain +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
+All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Turmoil +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
 
 
 **[PROVISIONAL ED-340] Altonian Vanguard Mechanics (PP-568 — flag for authorial review):**

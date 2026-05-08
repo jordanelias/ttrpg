@@ -16,7 +16,7 @@
 | Mending Stability (MS) | 0–100 | 72 | ↓ (decay) | params_threadwork.md §MS. Videogame-only start value. |
 | Church Influence (CI) | 0–100 | 28 | ↑ | conviction_track_v30.md §3 (generation), ci_political_v30.md (political effects) |
 | Institutional Pressure (IP) | 0–100 | 20 | ↑ | peninsular_strain_v30.md §4.4, params_board_game.md §IP [PROVISIONAL: ED-793 — start value 20 per staleness report item 3; verify against params_bg_core] |
-| Peninsular Strain | 0–10 | 0 | ↑ (bad) | peninsular_strain_v30.md §4. Replaces Parliament Integrity (PP-403 repealed). |
+| Turmoil | 0–10 | 0 | ↑ (bad) | peninsular_strain_v30.md §4. Replaces Parliament Integrity (PP-403 repealed). |
 
 ## Faction-Specific Tracks (BG/Hybrid)
 

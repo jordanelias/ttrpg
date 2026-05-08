@@ -180,7 +180,7 @@ Stats change through Domain Actions and Trigger events. The seasonal cap (±2 pe
 | Parliamentary Outlawry | −2 | faction_layer_v30 §5 |
 | Faction collapse (Stability 0) | Not directly — collapse removes faction | — |
 | Battle loss (margin −2+) | Defender Military −1 (not Mandate) | mass_battle_v30 §B.3 |
-| Peninsular Strain Mandate check | Failure → −1 | Strain table |
+| Turmoil Mandate check | Failure → −1 | Strain table |
 | Seizure Failure | −1 to Church | victory_v30 §3.2 |
 | Diplomatic success vs NPC | +1 (per sim convention) | params_board_game |
 
@@ -220,7 +220,7 @@ Govern (Consul Inward) pool = Mandate, Ob = floor(Prosperity/2)+1, −1 in own c
 | Success | Accord +1 in target territory (max 3); OR Mandate recovery +1 if in capital (max starting Mandate, once/season, PP-174) |
 | Overwhelming | Both: Accord +1 AND Mandate +1 in own capital (PP-174) |
 
-**Govern is the primary stat-maintenance action.** Without Govern, Accord drifts downward under Peninsular Strain pressure, eventually triggering revolts that cost Stability. Factions that neglect Govern for military expansion find their home territories destabilising behind them — exactly the dynamic that destabilised over-extended Italian condottiere states.
+**Govern is the primary stat-maintenance action.** Without Govern, Accord drifts downward under Turmoil pressure, eventually triggering revolts that cost Stability. Factions that neglect Govern for military expansion find their home territories destabilising behind them — exactly the dynamic that destabilised over-extended Italian condottiere states.
 
 ### §4.3 Trade Action — Full Effect
 
@@ -233,9 +233,9 @@ Trade (Consul Outward) pool = Wealth, Ob = floor(Prosperity/2)+1. +1 Ob at IP≥
 | Success | Wealth +1 |
 | Overwhelming | Wealth +2 (capped by seasonal cap of +2) |
 
-### §4.4 Peninsular Strain Effects on Stats
+### §4.4 Turmoil Effects on Stats
 
-Peninsular Strain (range 0–10) rises from territory-instability (Accord ≤ 1 territory thresholds at Accounting — see peninsular_strain_v30 §4.1), faction eliminations (+2), and revolts (+1). ~~Direct battle-occurrence trigger STRUCK by ED-743~~ (2026-04-29). Decays −1 per peaceful season per §4.2.
+Turmoil (range 0–10) rises from territory-instability (Accord ≤ 1 territory thresholds at Accounting — see peninsular_strain_v30 §4.1), faction eliminations (+2), and revolts (+1). ~~Direct battle-occurrence trigger STRUCK by ED-743~~ (2026-04-29). Decays −1 per peaceful season per §4.2.
 
 | Strain | Effect on faction stats |
 |---|---|
@@ -410,9 +410,9 @@ Old: Graduated Seizure from CI ≥ 40 (struck by PP-494 replacement).
 
 ### §7.7 Accord Degradation in Sim
 
-Accord was not modelled in prior sim. Now required for Peninsular Strain → stat impacts.
+Accord was not modelled in prior sim. Now required for Turmoil → stat impacts.
 Starting Accord: capitals = 3, all other home territories = 2. Per params_board_game.
-Accord degradation triggers: Accord 1 without garrison → 0 at Accounting; Peninsular Strain effects.
+Accord degradation triggers: Accord 1 without garrison → 0 at Accounting; Turmoil effects.
 Accord recovery: Govern action (Success → +1, max 3).
 
 ### §7.8 BG Mode vs TTRPG Mode Applicability

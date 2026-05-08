@@ -98,7 +98,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 **Reversal:** Stages 1–3 reversible. Crown can return to Loyal by: raising Stability above 3, conducting military action validating Löwenritter identity, or improving Ehrenwall Disposition through diplomatic engagement. Stage 4 (Split) is irreversible without reconquest.
 | Warden Cooperation (WC) | 0 | 0–3 | Peninsula-wide. WR ≥ 2 required to advance. (PP-605) |
 | Warden Recognition (WR) | 0 | 0–3 | Varfell-only private track. Gates WC. (PP-605) |
-| Peninsular Strain | 0 | 0–10 | Public. Advances from inter-faction battles (+1/season), faction eliminations (+2), revolts (+1). Decays −1/peaceful season. See peninsular_strain_v1.md §4. |
+| Turmoil | 0 | 0–10 | Public. Advances from inter-faction battles (+1/season), faction eliminations (+2), revolts (+1). Decays −1/peaceful season. See peninsular_strain_v1.md §4. |
 
 **Accord (per-territory attribute, range 0–3):** Tracks population acceptance of controller. Modifies effective Prosperity. Accord ≥ 2 required for TCV contribution toward victory. See peninsular_strain_v1.md §2 for full rules.
 
@@ -135,7 +135,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 
 PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress · 2 = economic importance · 1 = other · 0 = Southernmost. Total: 40. Jordan-confirmed 2026-04-23.
 
-**Peninsular Strain Threshold Effects:**
+**Turmoil Threshold Effects:**
 
 | Strain | Name | Effect |
 |--------|------|--------|

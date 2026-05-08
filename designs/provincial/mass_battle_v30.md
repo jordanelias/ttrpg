@@ -561,7 +561,7 @@ Professional units (Light Infantry and above) have no such restriction — they 
 **Battle outcome → peninsular consequences (PP-647, peninsular_strain_v1.md §3):**
 - Each Battle resolved on Valorian soil: MS −1 (Campaign/War scale: MS −2). Immediate.
 - Each season with inter-faction battle: IP +2 (checked at Accounting step 4e).
-- Each season with inter-faction battle: Peninsular Strain +1 (checked at Accounting step 4d).
+- Each season with inter-faction battle: Turmoil +1 (checked at Accounting step 4d).
 - Popular Uprising (Accord 0 territory): MS −1. Does NOT trigger IP +2 or Strain +1 (not inter-faction).
 - Altonian Vanguard battle: MS −1. Does NOT trigger IP +2 (Altonia's own operation) or Strain +1.
 - Territory conquered by military victory: Accord set to 1 (peninsular_strain_v1.md §2.4).
@@ -860,7 +860,7 @@ Battle-occurrence is no longer a direct IP or Strain trigger. Battles produce Ac
 | Substrate Fracture (immediate) | Any inter-faction Battle | MS −1 (Campaign/War scale: MS −2). See §E.1. |
 | Accord erosion (immediate) | Conquest or defender's territory | See §E.1. |
 | Vulnerability Signal (deferred) | Conquered/contested territories at Accord ≤ 1 at next Accounting | IP advance per peninsular_strain §3.2 (territory-count thresholds: 2-3 → +1; 4-5 → +2; 6+ → +3). |
-| Peninsular Strain (deferred) | Conquered/contested territories at Accord ≤ 1 at next Accounting | Strain advance per peninsular_strain §4.1 (+1/territory, cap +3/season). |
+| Turmoil (deferred) | Conquered/contested territories at Accord ≤ 1 at next Accounting | Strain advance per peninsular_strain §4.1 (+1/territory, cap +3/season). |
 
 A faction that conquers AND rapidly governs the conquered territory to Accord ≥ 2 (typically 1-2 seasons via Govern actions) avoids both IP and Strain advance from that conquest. A faction that conquers and leaves territories at Accord 1 indefinitely pays sustained IP and Strain. **The cost is in the holding, not the conquest.**
 

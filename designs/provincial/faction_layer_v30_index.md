@@ -50,7 +50,7 @@
 | 35 | 406 | 3 | §5.4 Parliamentary Actions |
 | 36 | 423 | 3 | §5.5 Target Rebuttal |
 | 37 | 437 | 3 | §5.6 CI Parliament Interaction |
-| 38 | 441 | 3 | §5.6b Peninsular Strain Parliament Interaction |
+| 38 | 441 | 3 | §5.6b Turmoil Parliament Interaction |
 | 39 | 447 | 3 | §5.7 Wealth Zero Consequence |
 | 40 | 456 | 3 | §5.8 NPC Vote Behavior |
 | 41 | 466 | 2 | §6 — OFFICER CAPTURE AND SIGNIFICANT LOSS |
@@ -108,7 +108,7 @@
 | 35 | 432 | §5.4 Parliamentary Actions |
 | 36 | 135 | §5.5 Target Rebuttal |
 | 37 | 21 | §5.6 CI Parliament Interaction |
-| 38 | 226 | §5.6b Peninsular Strain Parliament Interaction |
+| 38 | 226 | §5.6b Turmoil Parliament Interaction |
 | 39 | 112 | §5.7 Wealth Zero Consequence |
 | 40 | 179 | §5.8 NPC Vote Behavior |
 | 41 | 519 | §6 — OFFICER CAPTURE AND SIGNIFICANT LOSS |

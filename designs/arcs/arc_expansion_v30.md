@@ -601,7 +601,7 @@ When TC crosses a milestone, the following arc effects fire:
 
 ---
 
-#### Peninsular Strain Conditioners
+#### Turmoil Conditioners
 
 | Strain Level | NPC arc effects |
 |-------------|----------------|

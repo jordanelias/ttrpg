@@ -514,7 +514,7 @@ Doc 12's procedures rewrite to consume Keys (Phase B Stage 1):
 
 - Domain Actions: submission emits scene.draft_da; resolution emits da_outcome.*; consequences propagate via standard rule.
 - Faction state: PP-686 components emit Keys when state changes (Mission shift, Cascade re-resolution, L/PS thresholds crossed).
-- Peninsular Strain: accumulation emits env.peninsular_strain_shock with delta payload.
+- Turmoil: accumulation emits env.peninsular_strain_shock with delta payload.
 
 ### §8.7 PP-688 Articulation Layer
 

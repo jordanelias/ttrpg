@@ -30,7 +30,7 @@
 | 15 | 170 | 3 | §4.1 How Stats Change |
 | 16 | 212 | 3 | §4.2 Govern Action — Full Effect |
 | 17 | 225 | 3 | §4.3 Trade Action — Full Effect |
-| 18 | 236 | 3 | §4.4 Peninsular Strain Effects on Stats |
+| 18 | 236 | 3 | §4.4 Turmoil Effects on Stats |
 | 19 | 254 | 2 | §5 — CARD SYSTEM AND RENEWAL |
 | 20 | 256 | 3 | §5.1 Card Hands (PP-177) |
 | 21 | 273 | 3 | §5.2 Card → Action Mapping |
@@ -70,7 +70,7 @@
 | 15 | 482 | §4.1 How Stats Change |
 | 16 | 224 | §4.2 Govern Action — Full Effect |
 | 17 | 78 | §4.3 Trade Action — Full Effect |
-| 18 | 265 | §4.4 Peninsular Strain Effects on Stats |
+| 18 | 265 | §4.4 Turmoil Effects on Stats |
 | 19 | 690 | §5 — CARD SYSTEM AND RENEWAL |
 | 20 | 156 | §5.1 Card Hands (PP-177) |
 | 21 | 178 | §5.2 Card → Action Mapping |

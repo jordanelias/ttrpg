@@ -501,7 +501,7 @@ Fires once per character per Miraculous Event. Characters with TS perceive more 
 | POI system | Seam Texts as Remnant POIs. Miracle Investigation may place scripture in new territories. |
 | Conviction Track | Miraculous Event witness mechanic (§25). |
 | Tensions Deck | New cards: "Miracle or Method," "Sovereign Grace," "Southern Knowledge." |
-| Peninsular Strain | Strain and RS track different phenomena. Miraculous Event does not decrement Strain. |
+| Turmoil | Strain and RS track different phenomena. Miraculous Event does not decrement Strain. |
 | Settlement Accord | +1 Accord for Miraculous Event-affected territories (§20.5). |
 
 ---

@@ -19,12 +19,12 @@
 | 4 | 18 | 2 | Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems |
 | 5 | 19 | 2 | Dependencies: ED-302 (PT confirmed), ED-303 (CI cap at 100), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose) |
 | 6 | 20 | 2 | Territory numbering: geography_design.md canonical (all T-numbers match geography_design.md) |
-| 7 | 21 | 2 | See also: designs/board_game/peninsular_strain_v1.md (Accord, Peninsular Strain, universal victory condition, faction acquisition toolkits) |
+| 7 | 21 | 2 | See also: designs/board_game/peninsular_strain_v1.md (Accord, Turmoil, universal victory condition, faction acquisition toolkits) |
 | 8 | 25 | 2 | Core Frame |
 | 9 | 34 | 2 | 0. Universal Victory Condition — Peninsular Sovereignty |
 | 10 | 50 | 3 | 0.1 Peninsular Partition (Co-Victory — Alliance-Stalemate Negotiation) |
 | 11 | 75 | 3 | 0.2 Accord System |
-| 12 | 85 | 3 | 0.3 Peninsular Strain Counter |
+| 12 | 85 | 3 | 0.3 Turmoil Counter |
 | 13 | 89 | 3 | 0.4 Battle Consequences |
 | 14 | 93 | 3 | 0.5 Faction Acquisition Toolkits |
 | 15 | 108 | 3 | 0.4 Starting Piety Track Values by Territory (ED-677, PP-652) |
@@ -89,12 +89,12 @@
 | 4 | 25 | Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems |
 | 5 | 51 | Dependencies: ED-302 (PT confirmed), ED-303 (CI cap at 100), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose) |
 | 6 | 23 | Territory numbering: geography_design.md canonical (all T-numbers match geography_design.md) |
-| 7 | 37 | See also: designs/board_game/peninsular_strain_v1.md (Accord, Peninsular Strain, universal victory condition, faction acquisition toolkits) |
+| 7 | 37 | See also: designs/board_game/peninsular_strain_v1.md (Accord, Turmoil, universal victory condition, faction acquisition toolkits) |
 | 8 | 129 | Core Frame |
 | 9 | 1,408 | 0. Universal Victory Condition — Peninsular Sovereignty |
 | 10 | 420 | 0.1 Peninsular Partition (Co-Victory — Alliance-Stalemate Negotiation) |
 | 11 | 123 | 0.2 Accord System |
-| 12 | 39 | 0.3 Peninsular Strain Counter |
+| 12 | 39 | 0.3 Turmoil Counter |
 | 13 | 45 | 0.4 Battle Consequences |
 | 14 | 158 | 0.5 Faction Acquisition Toolkits |
 | 15 | 401 | 0.4 Starting Piety Track Values by Territory (ED-677, PP-652) |

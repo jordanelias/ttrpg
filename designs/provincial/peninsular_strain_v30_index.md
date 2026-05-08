@@ -12,7 +12,7 @@
 
 | Idx | Line | Level | Heading |
 |-----|------|-------|---------|
-| 0 | 1 | 1 | VALORIA BG — Peninsular Strain System v1 |
+| 0 | 1 | 1 | VALORIA BG — Turmoil System v1 |
 | 1 | 2 | 2 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Integrated into victory_v30.md. |
 | 2 | 3 | 2 | Date: 2026-04-14 |
 | 3 | 4 | 2 | Supersedes: victory_v30.md §1 TCV table (partial — TCV revaluation), victory_v30.md §3 (faction-specific victory conditions replaced by universal condition), victory_v30.md §4 (co-victory restructured), victory_v30.md §5 (shared loss retained with modifications) |
@@ -35,7 +35,7 @@
 | 20 | 236 | 2 | §3 Battle Consequences — NEW |
 | 21 | 240 | 3 | §3.1 Substrate Fracture (Pressure 1) |
 | 22 | 255 | 3 | §3.2 Vulnerability Signal (Pressure 2) |
-| 23 | 267 | 2 | §4 Peninsular Strain Counter — NEW |
+| 23 | 267 | 2 | §4 Turmoil Counter — NEW |
 | 24 | 271 | 3 | §4.1 Advancing Strain |
 | 25 | 279 | 3 | §4.2 Reducing Strain |
 | 26 | 286 | 3 | §4.3 Strain Threshold Effects |
@@ -61,7 +61,7 @@
 
 | Idx | Tokens | Heading |
 |-----|--------|---------|
-| 0 | 10,765 | VALORIA BG — Peninsular Strain System v1 |
+| 0 | 10,765 | VALORIA BG — Turmoil System v1 |
 | 1 | 26 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Integrated into victory_v30.md. |
 | 2 | 4 | Date: 2026-04-14 |
 | 3 | 66 | Supersedes: victory_v30.md §1 TCV table (partial — TCV revaluation), victory_v30.md §3 (faction-specific victory conditions replaced by universal condition), victory_v30.md §4 (co-victory restructured), victory_v30.md §5 (shared loss retained with modifications) |
@@ -84,7 +84,7 @@
 | 20 | 559 | §3 Battle Consequences — NEW |
 | 21 | 233 | §3.1 Substrate Fracture (Pressure 1) |
 | 22 | 290 | §3.2 Vulnerability Signal (Pressure 2) |
-| 23 | 464 | §4 Peninsular Strain Counter — NEW |
+| 23 | 464 | §4 Turmoil Counter — NEW |
 | 24 | 64 | §4.1 Advancing Strain |
 | 25 | 72 | §4.2 Reducing Strain |
 | 26 | 220 | §4.3 Strain Threshold Effects |

@@ -1,4 +1,4 @@
-# VALORIA BG — Peninsular Strain System v1
+# VALORIA BG — Turmoil System v1
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance). Integrated into victory_v30.md.
 ## Date: 2026-04-14
 ## Supersedes: victory_v30.md §1 TCV table (partial — TCV revaluation), victory_v30.md §3 (faction-specific victory conditions replaced by universal condition), victory_v30.md §4 (co-victory restructured), victory_v30.md §5 (shared loss retained with modifications)
@@ -134,7 +134,7 @@ Accord represents the population's acceptance of the current controller's govern
 | Church Seizure, Partial | Accord set to 1 | Contested seizure, politically messy. |
 | Controller's Stability drops to ≤ 2 | −1 in all territories controlled by that faction | Destabilised faction loses trust. One-time per Stability-drop event. |
 | Faction that conquered by force loses Battle elsewhere | −1 in all force-conquered territories held by that faction | Military weakness emboldens resistance. |
-| Peninsular Strain threshold effects | See §4 | Global war-weariness erosion. |
+| Turmoil threshold effects | See §4 | Global war-weariness erosion. |
 
 ### §2.4b Accord vs Order — Scale Distinction (ED-626)
 
@@ -142,7 +142,7 @@ Accord represents the population's acceptance of the current controller's govern
 
 **Order** (0–5) is a *settlement-level* attribute governing local stability within a specific settlement inside a territory. It is tracked per settlement, not per territory.
 
-They are independent: a province at Accord 2 (Compliant governance) may contain a settlement at Order 1 (simmering unrest). Peninsular Strain threshold effects (§4.3) affect province-level Accord. Settlement Order is governed by: garrison presence (+1/season), Govern success (+1 from Success, +2 from Overwhelming in that settlement), battle at settlement (−2 immediately), sustained hostile occupation (−1/season), Church Heresy Investigation at settlement level (Order −1 for non-Church-aligned population in that settlement only).
+They are independent: a province at Accord 2 (Compliant governance) may contain a settlement at Order 1 (simmering unrest). Turmoil threshold effects (§4.3) affect province-level Accord. Settlement Order is governed by: garrison presence (+1/season), Govern success (+1 from Success, +2 from Overwhelming in that settlement), battle at settlement (−2 immediately), sustained hostile occupation (−1/season), Church Heresy Investigation at settlement level (Order −1 for non-Church-aligned population in that settlement only).
 
 **Both can reach 0 simultaneously.** When Province Accord 0 and Settlement Order 0 both trigger in the same territory at the same Accounting, resolve in this sequence: **(1) Settlement Order 0 first** — garrison fights Popular Uprising (Military vs Ob 2). Win: territory held, Accord → 1. **(2) Province Accord 0 consequence second** — if garrison won the Uprising: territory is contested but held (Accord at 1 from the garrison win). If garrison lost the Uprising: the garrison has retreated; the territory becomes Uncontrolled per the Accord 0 rule. This ordering means a garrison victory in a Popular Uprising can prevent the Accord 0 Uncontrolled consequence in the same Accounting. (ED-632)
 
@@ -272,7 +272,7 @@ Battles involving NPC factions (Altonian Vanguard, Popular Uprising, Löwenritte
 
 ---
 
-## §4 Peninsular Strain Counter — NEW
+## §4 Turmoil Counter — NEW
 
 Global track, range 0–10. Starts at 0. Public (visible counter on board).
 
@@ -409,7 +409,7 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 |-----------|-----------|
 | Territory control | All 15 playable territories (T1–T14, T17) — directly or via effective hegemony |
 | Accord | ≥ 2 in all directly-controlled territories |
-| Peninsular Strain | ≤ 6 (peninsula not in Crisis) |
+| Turmoil | ≤ 6 (peninsula not in Crisis) |
 
 **Effective hegemony** counts rival-held territories toward sovereignty if the rival faction is:
 - Treaty-bound (Crown Treaty or equivalent bilateral agreement), OR
@@ -434,7 +434,7 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 | Individual minimum | Each faction controls territories with TCV ≥ 10 |
 | Accord | ≥ 2 in all territories controlled by each faction |
 | Non-aggression | No Battle between the two factions in preceding 4 seasons |
-| Peninsular Strain | ≤ 6 |
+| Turmoil | ≤ 6 |
 | Institutional standing | Both factions Mandate ≥ 3 |
 
 **Partition declaration:** Both players formally declare Partition at the same Accounting.
@@ -465,10 +465,10 @@ Insert after existing Step 4 (Clock advances):
 
 **Step 4c — Accord checks:**
 1. Each territory at Accord 1: if no garrison present (no military unit from controlling faction), Accord → 0.
-2. Each territory at Accord 0: Revolt fires. Garrison fights Popular Uprising (Military vs Ob 2) or retreats. Territory becomes Uncontrolled. Peninsular Strain +1.
+2. Each territory at Accord 0: Revolt fires. Garrison fights Popular Uprising (Military vs Ob 2) or retreats. Territory becomes Uncontrolled. Turmoil +1.
 3. Passive normalisation: each territory with garrison present AND no hostile action this season for 2 consecutive seasons: Accord +1 (cap Accord 2).
 
-**Step 4d — Peninsular Strain update:**
+**Step 4d — Turmoil update:**
 1. Per §4.2: if no Strain advanced from territory-instability this season (all controlled territories at Accord ≥ 2): Strain −1 (min 0). *(Updated to align with §4.2; prior "no battles AND no Revolts" condition was superseded by territory-count mechanism.)*
 2. If diplomatic resolution occurred (Treaty, Pledge honoured): Strain −1 (max one from this source).
 3. Apply Strain threshold effects per §4.3.
@@ -557,8 +557,8 @@ Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizur
 | victory_v30.md §3 | Add universal victory condition (§6.1) as primary. Retain faction-specific as alternates. Strike Hafenmark Parliamentary Sovereignty. | P1 |
 | victory_v30.md §4 | Add Partition co-victory (§6.3). Retain existing pairings as alternates. | P1 |
 | victory_v30.md §10 | Update win probability assessment for revised TCV and universal condition. | P2 |
-| params_board_game.md §Starting Values | Add: Accord per territory (§2.1), Starting PT (§2.2), Peninsular Strain (start 0, range 0–10). | P1 |
-| params_board_game.md §Clock Environmental Effects | Add: Peninsular Strain threshold table (§4.3). | P1 |
+| params_board_game.md §Starting Values | Add: Accord per territory (§2.1), Starting PT (§2.2), Turmoil (start 0, range 0–10). | P1 |
+| params_board_game.md §Clock Environmental Effects | Add: Turmoil threshold table (§4.3). | P1 |
 | params_board_game.md §Accounting | Add steps 4c/4d/4e per §7. | P1 |
 | params_board_game.md §Faction Actions | Add: Dynastic Proclamation (§5.3). Cultural Reformation (§5.4) STRUCK CR-STRIKE-2026-04-19. | P1 |
 | params_board_game.md §Starting TCV | Update Crown 12, Hafenmark 6, Church 5, Varfell 6. | P1 |
@@ -576,7 +576,7 @@ Accord on Seizure follows this document §5.2 regardless of CI milestone. Seizur
 | PP-NEW-02 | Victory | Universal Peninsular Sovereignty condition added. Faction-specific conditions retained as alternates. |
 | PP-NEW-03 | Victory | Peninsular Partition co-victory added. Existing co-victory pairings retained. |
 | PP-NEW-04 | System | Accord per-territory attribute (0–3). Modifies effective Prosperity. Accord ≥ 2 required for TCV contribution. |
-| PP-NEW-05 | System | Peninsular Strain counter (0–10). Advances from inter-faction battles, faction eliminations, revolts. |
+| PP-NEW-05 | System | Turmoil counter (0–10). Advances from inter-faction battles, faction eliminations, revolts. |
 | PP-NEW-06 | System | Battle consequences: MS −1 per battle on Valorian soil. IP +2 per season with inter-faction battle. |
 | PP-NEW-07 | Hafenmark | Dynastic Proclamation domain action (Diplomat card). Replaces Parliamentary Sovereignty as primary path. |
 | ~~PP-NEW-08~~ | Varfell | ~~Cultural Reformation domain action~~ STRUCK CR-STRIKE-2026-04-19. |

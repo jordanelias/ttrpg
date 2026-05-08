@@ -16,7 +16,7 @@ The Deed-based victory system has been dissolved for ALL factions including Löw
 | Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: PT ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
 | Löwenritter | Regency Establishment | PV ≥ 10 + Thread Consciousness (CI) < 50 + IP < 60 + MS > 40 + PI ≥ 4 + successor |
 
-**Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Peninsular Strain ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
+**Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Turmoil ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
 
 **Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each PV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both L ≥ 3 AND PS ≥ 3 (institutional + populist viability — partition co-victory requires both axes per audit Q5 per-mechanic strict reading). See peninsular_strain_v1.md §6.3.
 
@@ -91,7 +91,7 @@ PI advances per existing IP/PI interaction rules. PI markers placed in territori
 | Restoration Movement (RM) | Cultural Revolution (Hybrid only, post-Founding) | Phase 1: PT ≤ 1 in ≥ 8/15 territories. Phase 2: Cultural Uprising of T9 Himmelenger. Win: T9 held + Phase 1 × 2 Accounting. No faction stats. (PP-460, PP-478) |
 | Löwenritter | Regency Establishment | PV ≥ 10 + Thread Consciousness (CI) < 50 + IP < 60 + MS > 40 + PI ≥ 4 + successor |
 
-**Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Peninsular Strain ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
+**Universal Victory — Peninsular Sovereignty (all factions):** All 15 playable territories (T1–T14, T17) controlled directly or via effective hegemony (Treaty-bound, Submitted, or institutionally dominated rivals). Accord ≥ 2 in all directly-controlled territories. Turmoil ≤ 6. Held 2 consecutive Accountings. Faction-specific victories above are retained as alternate (easier) paths. See peninsular_strain_v1.md §6.
 
 **Peninsular Partition (Co-Victory, multiplayer):** Both factions collectively control all 15 territories. Each PV ≥ 10. Accord ≥ 2 everywhere. No inter-faction battle preceding 4 seasons. Strain ≤ 6. Both L ≥ 3 AND PS ≥ 3 (institutional + populist viability — partition co-victory requires both axes per audit Q5 per-mechanic strict reading). See peninsular_strain_v1.md §6.3.
 

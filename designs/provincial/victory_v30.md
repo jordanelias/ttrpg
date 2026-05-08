@@ -18,7 +18,7 @@
 ## Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems
 ## Dependencies: ED-302 (PT confirmed), ED-303 (CI cap at 100), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose)
 ## Territory numbering: geography_design.md canonical (all T-numbers match geography_design.md)
-## See also: designs/board_game/peninsular_strain_v1.md (Accord, Peninsular Strain, universal victory condition, faction acquisition toolkits)
+## See also: designs/board_game/peninsular_strain_v1.md (Accord, Turmoil, universal victory condition, faction acquisition toolkits)
 
 ---
 
@@ -41,7 +41,7 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 |-----------|-----------|
 | Territory control | All 15 playable territories (T1–T14, T17) — directly or via effective hegemony |
 | Accord | ≥ 2 in all directly-controlled territories |
-| Peninsular Strain | ≤ 6 |
+| Turmoil | ≤ 6 |
 
 **Effective hegemony** counts rival-held territories if the rival is: Treaty-bound (Crown Treaty or equivalent), Submitted (Stability 0, formal submission), or institutionally dominated (rival Mandate ≤ 1 AND hegemon Mandate ≥ 5).
 
@@ -59,7 +59,7 @@ When exactly two factions remain AND those factions have a formal alliance or tr
 | Individual minimum | Each faction PV ≥ 10 |
 | Accord | ≥ 2 in all territories controlled by each faction |
 | Non-aggression | No Battle between the two factions in preceding 4 seasons |
-| Peninsular Strain | ≤ 6 |
+| Turmoil | ≤ 6 |
 | Institutional standing | Both factions Mandate ≥ 3 |
 
 **The prompt:** "[NPC Faction] honors the alliance. The peninsula rests between you. End here, as partners, or pursue everything alone?"
@@ -82,7 +82,7 @@ Per-territory attribute (0–3). Modifies effective Prosperity. See peninsular_s
 - **PV counts only at Accord ≥ 2.**
 - Military conquest → Accord 1. Faction-specific non-military acquisition → Accord 2+.
 
-### 0.3 Peninsular Strain Counter
+### 0.3 Turmoil Counter
 
 Global track (0–10). Advances from territory-instability (Accord ≤ 1 territory counts at Accounting — §4.1), faction eliminations, and revolts. Direct battle-occurrence no longer advances Strain (ED-743). See peninsular_strain_v30 §4.1/§4.2.
 

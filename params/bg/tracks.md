@@ -1,4 +1,4 @@
-<!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: `Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support)`. Existing Mandate consumers in this file (Excommunication Ob Cap, RDT/TD escalation rows, Peninsular Strain Mandate checks) continue to function via this derivation; no behavioral change. Refactor of consumers to read Legitimacy or Popular_Support directly is opportunistic. -->
+<!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: `Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support)`. Existing Mandate consumers in this file (Excommunication Ob Cap, RDT/TD escalation rows, Turmoil Mandate checks) continue to function via this derivation; no behavioral change. Refactor of consumers to read Legitimacy or Popular_Support directly is opportunistic. -->
 
 
 ## Trade Network Investment — Hafenmark Wealth Sink (PP-178)
@@ -119,7 +119,7 @@ Population acceptance of current controller. Modifies effective Prosperity and T
 
 ---
 
-## Peninsular Strain (Global, 0–10) — PP-646, peninsular_strain_v30.md §4
+## Turmoil (Global, 0–10) — PP-646, peninsular_strain_v30.md §4
 
 Tracks cumulative civil war damage to peninsular unity. Starts at 0.
 

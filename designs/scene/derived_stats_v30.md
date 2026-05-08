@@ -310,7 +310,7 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 - Unpopular Domain Action (drops Accord): −15
 - Battle in own territory: −10
 - Campaign-scale defeat: Mandate −1 (direct stat damage; large-scale military collapse is a structural event per mass_battle_v30 §A.14)
-- Peninsular Strain Mandate check failure: Legitimacy −25 AND Mandate −1
+- Turmoil Mandate check failure: Legitimacy −25 AND Mandate −1
 
 **When Legitimacy reaches 0:** Mandate check at Accounting (Ob 2). Failure: Mandate −1. Accord −1 in all territories.
 
@@ -343,7 +343,7 @@ Each derived value has **seasonal income** (automatic at Accounting) and **drain
 
 **No game event directly modifies a 1–7 stat except through derived value depletion or explicit major events.**
 
-Events that SHOULD still directly modify stats (major structural shifts): faction collapse triggers, coup, CI=100 Mass Seizure, Altonian Occupation, Parliamentary Outlawry, Generational Shift, Peninsular Strain ≥7, Trade/Govern Overwhelming, decisive battle loss (margin ≥2), unit destruction.
+Events that SHOULD still directly modify stats (major structural shifts): faction collapse triggers, coup, CI=100 Mass Seizure, Altonian Occupation, Parliamentary Outlawry, Generational Shift, Turmoil ≥7, Trade/Govern Overwhelming, decisive battle loss (margin ≥2), unit destruction.
 
 The dividing line: "bad quarter" (derived drain) vs "fundamentally weakened" (stat damage).
 
@@ -456,7 +456,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 | Govern OW in capital: Mandate +1 | KEEP | Exceptional governance = structural |
 | Faction collapse triggers | KEEP | Terminal events |
 | Coup, Occupation, Generational Shift | KEEP | Campaign-altering events |
-| Peninsular Strain ≥7: Mandate check | KEEP | Existential crisis level |
+| Turmoil ≥7: Mandate check | KEEP | Existential crisis level |
 
 ---
 

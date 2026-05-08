@@ -172,7 +172,7 @@ All rolls use **d10**. Results per die:
 
 
 
-> **Battle Consequences (PP-647):** Each Battle resolved on Valorian soil: MS −1 (Campaign/War scale: MS −2). Each season with inter-faction Battle: IP +2, Peninsular Strain +1. Attacker conquest: territory Accord → 1. Defender territory: Accord −1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost. See peninsular_strain_v1.md §3.
+> **Battle Consequences (PP-647):** Each Battle resolved on Valorian soil: MS −1 (Campaign/War scale: MS −2). Each season with inter-faction Battle: IP +2, Turmoil +1. Attacker conquest: territory Accord → 1. Defender territory: Accord −1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost. See peninsular_strain_v1.md §3.
 
 ---
 
