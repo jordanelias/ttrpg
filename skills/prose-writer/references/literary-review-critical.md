@@ -574,3 +574,14 @@ Wood, Michael. *Gabriel García Márquez: One Hundred Years of Solitude*. Cambri
 Zamora, Lois Parkinson. *The Usable Past: The Imagination of History in Recent Fiction of the Americas*. Cambridge University Press, 1997.
 Zamora, Lois Parkinson, and Wendy B. Faris, editors. *Magical Realism: Theory, History, Community*. Duke University Press, 1995.
 
+### Critical-Diagnostic Framework (added 2026-05-08)
+
+Bakhtin, Mikhail. "Discourse in the Novel." 1934. English translation in *The Dialogic Imagination: Four Essays*. Ed. Michael Holquist. Trans. Caryl Emerson and Michael Holquist. University of Texas Press, 1981.
+
+Booth, Wayne C. *The Rhetoric of Fiction*. University of Chicago Press, 1961. Second edition with Afterword, 1983.
+
+Shklovsky, Viktor. "Art as Device." 1917. In *Theory of Prose*. Trans. Benjamin Sher. Dalkey Archive Press, 1990. [Also translated as "Art as Technique."]
+
+Sternberg, Meir. *Expositional Modes and Temporal Ordering in Fiction*. Indiana University Press, 1978.
+
+Zunshine, Lisa. *Why We Read Fiction: Theory of Mind and the Novel*. Ohio State University Press, 2006.

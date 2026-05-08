@@ -343,6 +343,32 @@ Auditing for one rule at a time misses dimensional patterns. Co-occurring featur
 
 ---
 
+## D.7 Critical-Diagnostic Framework (Subtext Calibration)
+
+Six diagnostics drawn from narrative theory, each targeting a specific failure mode in subtext management. Apply after composition, during the beat-risk audit (SKILL.md workflow step 8).
+
+<!-- concept:critical-diagnostics -->
+
+**D.7a Booth Gap Test (unreliable narration calibration).**
+Source: Wayne C. Booth, *The Rhetoric of Fiction* (University of Chicago Press, 1961). Booth's "implied author" framework: the gap between what the narrator says and what the implied author shows is the mechanism of unreliable narration and dramatic irony. **Diagnostic:** Is the gap the right size? Too wide (narrated irony, I.9a) = the prose explains the irony. Too narrow (no gap) = the prose is straightforwardly reliable when it should be unreliable. Calibrate: the reader should perceive the gap without the prose pointing at it. The gap is visible in what the narrator omits, misidentifies, or frames wrongly -- not in the prose announcing the omission.
+
+**D.7b Sternberg Information Management.**
+Source: Meir Sternberg, *Expositional Modes and Temporal Ordering in Fiction* (Indiana University Press, 1978). Sternberg's suspense/curiosity/surprise framework classifies how information gaps between reader and character create engagement. **Diagnostic:** For each beat, classify: is the reader ahead of the character (dramatic irony), behind the character (suspense), or aligned (surprise on reveal)? Then check: has the prose collapsed the gap by over-signaling? Telegraphed subtext is a specific failure -- the prose converts curiosity (reader doesn't know) into collapsed dramatic irony (reader knows because the prose pointed) without earning the reveal.
+
+**D.7c Shklovsky Automatization Test.**
+Source: Viktor Shklovsky, "Art as Device" (1917). Defamiliarization: art slows perception by making the familiar strange. Automatization: the reader processes without perceiving. **Diagnostic:** Read the passage and ask: does the reader process any sentence automatically -- recognizing the pattern without actually perceiving the content? Genre signals (I.9b) are automatized perception: "pressure behind the eyes" is instantly recognized as "hidden powers" without the reader slowing on the specific detail. The antidote is thisness (Wood, D.7f): the irreducibly specific detail that resists pattern-recognition.
+
+**D.7d Zunshine ToM Detection.**
+Source: Lisa Zunshine, *Why We Read Fiction: Theory of Mind and the Novel* (Ohio State University Press, 2006). Readers track characters' mental states using Theory of Mind. The ToM apparatus is calibrated to detect concealment. **Diagnostic:** If the prose performs a secret (I.9), the reader's ToM fires immediately -- they detect the concealment rather than discovering the hidden property. The reader experiences being told, not discovering. Check: would a reader's ToM detect that the prose is hiding something? If yes, the concealment is performed. Fix: render the surface so that the reader's ToM tracks the character's stated mental state (e.g., "I am a thorough investigator") and discovers the discrepancy only through accumulated evidence that the stated state is insufficient to explain the observed behavior.
+
+**D.7e Bakhtin Register Violation.**
+Source: Mikhail Bakhtin, "Discourse in the Novel" (1934; English trans. in *The Dialogic Imagination*, University of Texas Press, 1981). Heteroglossia: each character's register should remain distinct from the author's. **Diagnostic:** Does the prose sound like the author thinking about the character, or like the character thinking? If philosophical vocabulary appears in a parish investigator's focalization, the author's analytical voice has colonized the character's voice. This is a heteroglossia violation. Fix: the prose speaks in the character's register -- mortar and ledgers, not phenomenology.
+
+**D.7f Wood Thisness Test.**
+Source: James Wood, *How Fiction Works* (Farrar, Straus and Giroux, 2008). Thisness (haecceity): the irreducibly specific detail that resists generalization. Genre signals are the opposite: general, recognizable, transferable between stories. **Diagnostic:** For each significant detail in the passage, ask: could this detail appear in any story about this kind of character? If yes, it is a genre signal. If it could only appear in THIS story about THIS character -- the specific mortar discolouration between courses 3 and 4 of the north transept, the cope missing from a specific parish inventory -- it is thisness. Prefer thisness. Always prefer thisness.
+
+---
+
 ## The Master Rule
 
 If a sentence could appear in any story about any settlement / character / event, it belongs to no story. Cut it.
