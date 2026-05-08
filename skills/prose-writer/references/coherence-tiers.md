@@ -82,16 +82,22 @@ The Spirit axis is referenced in prose only at Coherence 4 and below, and at C0 
 
 No perceptible change. Self-rendering re-engages fully after each Leap.
 
-| Author | Weight | Role |
-|---|---|---|
-| Tolkien | 28% | Ground heavy. Rendering solid. Landscape, deep-time, named specificity all fully available. The PC's categories structure the world normally. |
-| Mistry | 14% | Occupational specificity, body-as-record. The PC's embodied knowledge fully accessible. |
-| Tartt | 12% | Atmospheric retrospection, loaded objects. Memory structures retrospectively without error. |
-| Ishiguro | 12% | Situational restraint — character choosing not to say. Not structural unreliability. The PC's rendering is intact; any evasion is social, not ontological. |
-| Márquez | 11% | Occasional time-folds, deep history. Temporal structuring holds; Márquez techniques serve narrative scope, not perceptual failure. |
-| Lispector | 8% | Touches at edges. Available only for philosophical territory — existential questioning embedded in narration, not categorical recalibration. |
-| Ocampo | 8% | Small uncanny moments. Available only at edges where the content itself is genuinely uncanny, not where the PC's rendering is failing. |
-| Borges | 7% | Rare. Available for content that is structurally recursive (codex entries, institutional histories), not for the PC's cognition failing. |
+[ASSUMPTION: New author values and TS-shifted values derived from quadrant logic -- review before relying on for composition.]
+
+| Author | TS 0-29 | TS 30-49 | TS 50+ | Role at this tier |
+|---|---|---|---|---|
+| Tolkien | 24 | 20 | 15 | Ground. Landscape, deep-time, named specificity. Decreases as substrate content enters. |
+| Mistry | 12 | 10 | 8 | Occupational specificity, body-as-record. |
+| Tartt | 11 | 9 | 7 | Atmospheric retrospection, loaded objects. |
+| Ishiguro | 11 | 11 | 10 | Situational restraint. Social evasion, not ontological. |
+| Márquez | 11 | 12 | 12 | Time-folds, deep history. Stable across TS. |
+| Lispector | 8 | 10 | 12 | Edges only at low TS. Ontological estrangement increases with TS. |
+| Ocampo | 8 | 7 | 7 | Small uncanny moments. Content-gated. |
+| Borges | 7 | 10 | 12 | Structural recursion. Increases with TS. Q2 middle-layer at high TS. |
+| Lem | 0 | 5 | 10 | Clinical-substrate observation. Enters only with TS-perceived content. |
+| McCarthy | 4 | 3 | 3 | Combat, violence, landscape extremity. Content-gated. |
+| Le Carré | 3 | 2 | 2 | Institutional-political. Faction/Church bureaucracy. Content-gated. |
+| Beckett | 1 | 1 | 2 | Minimal at high C. Will-continuation only at thematic extremity. |
 
 **The PC belongs in every scene.** Their presence is unremarkable. Others perceive them consistently. Their temporal processing sequences correctly. Named places are where they are. Identity holds.
 
@@ -106,16 +112,20 @@ No perceptible change. Self-rendering re-engages fully after each Leap.
 
 Subtle uncanniness. The practitioner's thread-configuration has shifted enough that others' renderings work harder to process them. Temporal micro-slippages: actions fractionally ahead of or behind the moment. Responses that address what you meant rather than what you said. Loved ones describe speaking to someone through glass.
 
-| Author | Weight |
-|---|---|
-| Tolkien | 22% |
-| Ishiguro | 14% |
-| Márquez | 13% |
-| Lispector | 12% |
-| Tartt | 11% |
-| Mistry | 10% |
-| Ocampo | 10% |
-| Borges | 8% |
+| Author | TS 0-29 | TS 30-49 | TS 50+ |
+|---|---|---|---|
+| Tolkien | 19 | 16 | 13 |
+| Ishiguro | 14 | 13 | 11 |
+| Márquez | 13 | 13 | 13 |
+| Lispector | 12 | 13 | 14 |
+| Tartt | 10 | 9 | 7 |
+| Mistry | 9 | 8 | 6 |
+| Ocampo | 10 | 9 | 8 |
+| Borges | 7 | 9 | 11 |
+| Lem | 0 | 4 | 8 |
+| McCarthy | 3 | 3 | 3 |
+| Le Carré | 2 | 2 | 2 |
+| Beckett | 1 | 1 | 4 |
 
 **What's happening here — the reference frame beginning to slide:**
 
@@ -139,16 +149,20 @@ The human reference frame still holds for nearly everything. The practitioner is
 
 Visibly diverged. Materiality behaves inconsistently from a human-frame perspective — shadows that don't match posture, presence that occupies more space than the body, flickers between being fully in the scene and partially elsewhere. Temporality perceptibly non-linear: references to events that haven't happened, reactions before causes. Intelligibility fractures: the practitioner is apperceived differently by different observers. The rendering does not present a consistent human being — because the rendering is no longer producing presentation calibrated to the human frame.
 
-| Author | Weight |
-|---|---|
-| Lispector | 16% |
-| Tolkien | 14% |
-| Ishiguro | 14% |
-| Márquez | 14% |
-| Ocampo | 13% |
-| Borges | 11% |
-| Tartt | 10% |
-| Mistry | 8% |
+| Author | TS 0-29 | TS 30-49 | TS 50+ |
+|---|---|---|---|
+| Lispector | 15 | 14 | 13 |
+| Tolkien | 12 | 10 | 8 |
+| Ishiguro | 13 | 12 | 10 |
+| Márquez | 13 | 13 | 12 |
+| Ocampo | 12 | 11 | 10 |
+| Borges | 9 | 10 | 11 |
+| Tartt | 8 | 7 | 6 |
+| Mistry | 6 | 5 | 4 |
+| Beckett | 5 | 5 | 5 |
+| Lem | 0 | 5 | 9 |
+| McCarthy | 4 | 4 | 4 |
+| Le Carré | 3 | 4 | 8 |
 
 **What's happening here — the reference frame visibly diverged:**
 
@@ -174,16 +188,20 @@ The rendering's reference points have shifted enough from the human frame that t
 
 Physical form manifests substrate alteration directly. Weight distribution wrong. Light interacts at a register that produces unease. Temporal existence perceptible to anyone — conversations skip, loop, proceed at inconsistent rates. Knowledge arrives chaotically, not as integrated perception. Relational propagation constant and uncontrolled. Belief Co-Authorship begins: the categories that structure consciousness are loosening.
 
-| Author | Weight |
-|---|---|
-| Lispector | 17% |
-| Borges | 16% |
-| Ocampo | 16% |
-| Márquez | 14% |
-| Ishiguro | 13% |
-| Tolkien | 9% |
-| Tartt | 8% |
-| Mistry | 7% |
+| Author | TS 0-29 | TS 30-49 | TS 50+ |
+|---|---|---|---|
+| Lispector | 16 | 15 | 13 |
+| Borges | 14 | 15 | 15 |
+| Ocampo | 15 | 14 | 12 |
+| Márquez | 13 | 13 | 12 |
+| Ishiguro | 12 | 11 | 9 |
+| Tolkien | 7 | 6 | 5 |
+| Tartt | 6 | 5 | 4 |
+| Beckett | 7 | 7 | 7 |
+| Mistry | 5 | 4 | 3 |
+| Lem | 0 | 4 | 8 |
+| McCarthy | 3 | 3 | 6 |
+| Le Carré | 2 | 3 | 6 |
 
 **What's happening here — the reference frame substantially shifted:**
 
@@ -209,16 +227,20 @@ The rendering's reference points have shifted far enough that the divergence is 
 
 Dissociative episodes constant. Involuntary perceptual events. The distinction between self and world, between human and monstrous, between actual and potential, is dissolving. Not because something evil is happening. Because they have been outside rendering so many times that rendering no longer holds.
 
-| Author | Weight |
-|---|---|
-| Lispector | 19% |
-| Borges | 18% |
-| Ocampo | 18% |
-| Márquez | 14% |
-| Ishiguro | 12% |
-| Tolkien | 7% |
-| Tartt | 7% |
-| Mistry | 5% |
+| Author | TS 0-29 | TS 30-49 | TS 50+ |
+|---|---|---|---|
+| Lispector | 18 | 16 | 14 |
+| Borges | 16 | 16 | 14 |
+| Ocampo | 17 | 15 | 12 |
+| Márquez | 13 | 13 | 12 |
+| Ishiguro | 11 | 10 | 8 |
+| Beckett | 9 | 9 | 9 |
+| Tolkien | 5 | 4 | 3 |
+| Tartt | 4 | 4 | 3 |
+| Mistry | 3 | 3 | 2 |
+| Lem | 0 | 5 | 10 |
+| McCarthy | 2 | 3 | 5 |
+| Le Carré | 2 | 2 | 8 |
 
 **What's happening here — the reference frame nearly entirely shifted:**
 
@@ -287,17 +309,25 @@ When coherence changes within a scene:
 
 ---
 
-## Curve Summary
+## Curve Summary (TS 0-29 default column)
 
 | Author | 10-8 | 7-5 | 4-3 | 2 | 1 | Direction |
 |---|---|---|---|---|---|---|
-| Tolkien | 28 | 22 | 14 | 9 | 7 | Down 21 — recalibration away from human frame means structured world-presentation becomes less generative |
-| Mistry | 14 | 10 | 8 | 7 | 5 | Down 9 — embodied knowledge produced through human frame becomes less generative as the frame shifts |
-| Tartt | 12 | 11 | 10 | 8 | 7 | Down 5 — retrospective memory structure operates from human frame |
-| Ishiguro | 12 | 14 | 14 | 13 | 12 | Stable-high — unreliability inherent to a frame that does not match the reader's |
-| Márquez | 11 | 13 | 14 | 14 | 14 | Up 3 then stable — ordinary syntax for content the human frame would mark as impossible |
-| Lispector | 8 | 12 | 16 | 17 | 19 | Up 11 — categorical recalibration is Lispector's territory |
-| Ocampo | 8 | 10 | 13 | 16 | 18 | Up 10 — belonging-on-shifted-frame is Ocampo's territory |
-| Borges | 7 | 8 | 11 | 16 | 18 | Up 11 — logical/structural recalibration is Borges's territory |
+| Tolkien | 24 | 19 | 12 | 7 | 5 | Down 19 |
+| Mistry | 12 | 9 | 6 | 5 | 3 | Down 9 |
+| Tartt | 11 | 10 | 8 | 6 | 4 | Down 7 |
+| Ishiguro | 11 | 14 | 13 | 12 | 11 | Stable-high |
+| Márquez | 11 | 13 | 13 | 13 | 13 | Up 2 then stable |
+| Lispector | 8 | 12 | 15 | 16 | 18 | Up 10 |
+| Ocampo | 8 | 10 | 12 | 15 | 17 | Up 9 |
+| Borges | 7 | 7 | 9 | 14 | 16 | Up 9 |
+| Beckett | 1 | 1 | 5 | 7 | 9 | Up 8 (Spirit-gated) |
+| Lem | 0 | 0 | 0 | 0 | 0 | TS-gated only |
+| McCarthy | 4 | 3 | 4 | 3 | 2 | Stable-low (content-gated) |
+| Le Carré | 3 | 2 | 3 | 2 | 2 | Stable-low (content-gated) |
 
-All tiers sum to 100%.
+**TS 50+ shifts:** At every tier, Lem occupies 8-10% drawn primarily from Tolkien, Mistry, and Tartt. Borges increases 3-5%. Lispector increases 2-4%.
+
+**Spirit modifier (C4 and below):** Combined Lispector + Beckett weight redistributes by Spirit. High Spirit (5-7): +40% of combined pool to Beckett. Low Spirit (1-2): +30% to Lispector. See anti-patterns IV.1.
+
+All columns sum to 100%.
