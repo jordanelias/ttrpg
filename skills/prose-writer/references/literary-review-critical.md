@@ -118,7 +118,7 @@ Ishiguro criticism began with reviews of *A Pale View of Hills* (1982) and *An A
 
 The first phase of academic Ishiguro studies, roughly 1990–2000, focused on memory, repression, and the ethics of unreliable narration. Brian Shaffer's *Understanding Kazuo Ishiguro* (1998) is the first monograph in English, treating the early novels as studies in how the past organizes the present. Cynthia F. Wong's *Kazuo Ishiguro* (2000, second edition 2005) and her edited *Kazuo Ishiguro: Contemporary Critical Perspectives* (2009, with Hülya Yıldız) established the apparatus of close reading. Mike Petry's *Narratives of Memory and Identity: The Novels of Kazuo Ishiguro* (1999) treats the recurring memory-structures across the early work. Wai-chee Dimock's essays from the late 1990s onward bring deep-time reading to Ishiguro's late work. These early studies tend to read Stevens (and the equivalent narrators in *An Artist* and *Pale View*) through psychoanalytic frameworks of repression: what is not said is what is being held back.
 
-The decisive second-phase intervention is Rebecca Walkowitz's *Cosmopolitan Style: Modernism Beyond the Nation* (2006) and *Born Translated: The Contemporary Novel in an Age of World Literature* (2015). Walkowitz argued that Ishiguro's unreliability is *covert* — the narrators do not know they are being silent. Stevens does not lie about facts and does not strategically conceal feelings; he fails to register what would otherwise be felt. The technique is built through pragmatic-maxim violations rather than declarations. The Walkowitz reading reframes Ishiguro from the "repressed butler" reading toward a structural account: the prose's hedging, evasion, and digression are not psychology; they are the narrator's mode of being a narrator. The narration cannot do what it claims to do; the reader's awareness of this gap is the technique.
+The decisive second-phase intervention is Rebecca Walkowitz's *Cosmopolitan Style: Modernism Beyond the Nation* (2006) and *Born Translated: The Contemporary Novel in an Age of World Literature* (2015). Walkowitz argued that Ishiguro's unreliability is *covert* — the narrators do not know they are being silent. Stevens does not lie about facts and does not strategically conceal feelings; he fails to register what would otherwise be felt. The technique is built through pragmatic-maxim violations rather than declarations. [ASSUMPTION: "pragmatic-maxim violations" is a synthesis-internal framing of Walkowitz's broader argument about covert unreliability and cosmopolitan style -- verify whether Walkowitz uses this specific Gricean terminology.] The Walkowitz reading reframes Ishiguro from the "repressed butler" reading toward a structural account: the prose's hedging, evasion, and digression are not psychology; they are the narrator's mode of being a narrator. The narration cannot do what it claims to do; the reader's awareness of this gap is the technique.
 
 The synthesis takes Walkowitz's reading directly. Anti-pattern #37 codifies the consequence: Ishiguro requires unreliability presenting as restraint, not just formal-measured prose. A Le Carré tradecraft narrator is restrained but reliable; a Stevens-style narrator is restrained because he cannot bear the alternative.
 
@@ -381,7 +381,7 @@ Anti-pattern #39 (Mistry ensemble misidentified) — Bharucha, Morey.
 Anti-pattern #40 (stress-and-release fractal claimed without full deployment) — Le Guin, Drout.
 Anti-pattern #46 (NPC functional placeholder) — Bharucha-Rushdie dignity-through-complexity reading.
 Anti-pattern #47 (cultural-tradition appropriation) — the tradition-specificity arguments inside each author's secondary literature: Bharucha and Ranasinha on the Parsi-diasporic position behind Mistry's specificity; Aizenberg and Alazraki on the Kabbalistic specificity of Borges's hidden-orders; Klingenberg on the female-domestic specificity of Ocampo; Fimi on the Anglo-Saxon-imperial substrate of Tolkien.
-Anti-pattern #48 (meta-description of inarticulation) — directly enacted from each author's mode of silence as the critical tradition has read it: Cixous-Moser for Lispector veer; Walkowitz-Beedham for Ishiguro misidentification; Sarlo-Aizenberg for Borges precision; Borges-Klingenberg-Mancini for Ocampo flat-affect; Shippey-Flieger for Tolkien asterisk reality; Faris-Williamson for Márquez ordinary syntax; Morey for Mistry accumulation; Menon-Hargreaves for Tartt loaded detail.
+Anti-pattern #48 (meta-description of inarticulation) — directly enacted from each author's mode of silence as the critical tradition has read it: Cixous-Moser for Lispector veer; Walkowitz-Beedham for Ishiguro misidentification; Sarlo-Aizenberg for Borges precision; Borges-Klingenberg-Mancini for Ocampo flat-affect; Shippey-Flieger for Tolkien asterisk reality; Faris-Williamson for Márquez ordinary syntax; Morey for Mistry accumulation; Hargreaves for Tartt loaded detail [Menon citation removed as fabricated].
 Anti-pattern #49 (clean oxymorons bounding the unbounded) — implicit in Sarlo's "flawless formal consistency" critique; the workshop oxymoron is the failure of the precision-on-the-impossible technique.
 Anti-pattern #50 (similes below Coherence 4) — synthesis-internal, no source criticism.
 Anti-pattern #51 (analytical self-observation below Coherence 5) — synthesis-internal but compatible with Cixous's pre-rational-access reading.
@@ -415,7 +415,7 @@ Alazraki, Jaime. *La Prosa Narrativa de Jorge Luis Borges*. Gredos, 1968.
 — *Borges and the Kabbalah*. Cambridge University Press, 1988.
 Avelar, Idelber. *The Untimely Present: Postdictatorial Latin American Fiction and the Task of Mourning*. Duke University Press, 1999.
 Balderston, Daniel. *Out of Context: Historical Reference and the Representation of Reality in Borges*. Duke University Press, 1993.
-Beedham, Sandra. *The Novels of Kazuo Ishiguro*. Palgrave Macmillan, 2009.
+Beedham, Matthew. *The Novels of Kazuo Ishiguro*. Readers' Guides to Essential Criticism. Palgrave Macmillan, 2009.
 Bell-Villada, Gene. *Borges and His Fiction: A Guide to His Mind and Art*. University of Texas Press, 1981; revised 1999.
 Bharucha, Nilufer. *Rohinton Mistry: Ethnic Enclosures and Transcultural Spaces*. Rawat, 2003.
 Borges, Jorge Luis. Prologue to *La Furia y Otros Cuentos* by Silvina Ocampo. Sur, 1959.
@@ -447,7 +447,7 @@ González Echevarría, Roberto. *Myth and Archive: A Theory of Latin American Na
 Gotlib, Nádia Battella. *Clarice: Uma Vida que se Conta*. Editora Ática, 1995.
 Groes, Sebastian, and Barry Lewis, editors. *Kazuo Ishiguro: New Critical Visions*. Palgrave Macmillan, 2011.
 Hammond, Wayne, and Christina Scull. *The Lord of the Rings: A Reader's Companion*. HarperCollins, 2005.
-Hargreaves, Tracy. Essays on Donna Tartt in *Critical Quarterly* and *Textual Practice*.
+Hargreaves, Tracy. *Donna Tartt's The Secret History: A Reader's Guide*. Continuum Contemporaries. Continuum, 2001.
 Hart, Stephen, and Wen-chin Ouyang, editors. *A Companion to Magical Realism*. Tamesis, 2005.
 Helena, Lúcia. *Nem Musa, Nem Medusa: Itinerários da Escrita em Clarice Lispector*. EDUFF, 1997.
 James, David. *Modernist Futures*. Cambridge University Press, 2012.
@@ -462,7 +462,7 @@ Martin, Gerald. *Gabriel García Márquez: A Life*. Bloomsbury, 2008.
 Marwah-Roy, Anuradha. Essays on Mistry's *Such a Long Journey* and *A Fine Balance* in Indian-fiction journals, 1990s.
 Mendelsohn, Daniel. Review of *The Goldfinch*. *The New York Review of Books*, 2014.
 Méndez, Mariela. *Crónicas Travestis: El Periodismo Transgresor de Alfonsina Storni, Clarice Lispector y Silvina Ocampo*. Beatriz Viterbo Editora, 2017.
-Menon, Tara K. "The 'Beauty Is Terror' Equation in Donna Tartt's *The Secret History*." *The Henry James Review* and reprintings.
+[REMOVED: Menon citation fabricated. Tara K. Menon is a real scholar (Harvard, 19th-century novel) but has no publication on Tartt in The Henry James Review.]
 Molloy, Sylvia. *Las Letras de Borges*. Sudamericana, 1979; English translation *Signs of Borges*, Duke University Press, 1994.
 — *Acto de Presencia: La Escritura Autobiográfica en Hispanoamérica*. Fondo de Cultura Económica, 1996; English *At Face Value*, Cambridge University Press, 1991.
 Morey, Peter. *Rohinton Mistry*. Manchester University Press, 2004.
