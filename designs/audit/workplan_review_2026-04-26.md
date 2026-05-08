@@ -145,7 +145,7 @@ The workplan says A4 "blocks V2 if any T-A..T-E touches Sim S3 modules." This is
 
 - **T-A (Perceptual Prophylaxis as Literary Engine)** connects to Certainty track and SA stat. Both are mechanical. Both are in Sim S3 (NPC priority trees reference Certainty). **Blocks V2.**
 - **T-B (Seam Texts as Mechanical Objects)** connects to POI discovery and fieldwork Survey. These are in V2's threadwork module if fieldwork is included, but Sim S3's checkpoint scope doesn't list fieldwork. **Probably doesn't block V2.**
-- **T-C (Double Consciousness Spiral)** connects to faction AI and Conviction Track. Both are in Sim S3. **Blocks V2.**
+- **T-C (Double Consciousness Spiral)** connects to faction AI and Piety Track. Both are in Sim S3. **Blocks V2.**
 - **T-D (Baralta as Accidental Prophylaxis Cracker)** is explicitly "generational, not in-game mechanical." **Does not block V2.**
 - **T-E (Solmund Repetition)** is "emergent arc design" — connects to arc emergence (T-23). **Weakly blocks V2.**
 

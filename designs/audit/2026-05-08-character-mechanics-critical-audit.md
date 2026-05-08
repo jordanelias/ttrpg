@@ -11,7 +11,7 @@
 
 The character system has three primary layers and four supporting ones:
 
-1. **Personality** (interior gate) — Convictions, Beliefs, Self-Other, Resonant Style, cultural template, Conviction Track.
+1. **Personality** (interior gate) — Convictions, Beliefs, Self-Other, Resonant Style, cultural template, Piety Track.
 2. **Competence** (exterior gate) — Lifepath histories, Skills, Sparking, attribute pools, Recall.
 3. **Metaphysical** (substrate layer) — TS, Coherence, Spirit, Certainty, Substrate-Posture.
 4. *Relational* — Knots, Disposition, Foils, Standing, Caste, Renown.
@@ -19,7 +19,7 @@ The character system has three primary layers and four supporting ones:
 6. *Narrative* — Inspirations, Articulation Layer, Forgetting.
 7. *Specialized* — Shadow Renown, Deniability Debt, Companion specification.
 
-**Headline finding:** the system is **architecturally sound but accreted.** The personality layer is genuinely well-designed and integrates elegantly with the metaphysical and relational layers. The competence layer is sound but underused (histories are not yet content-bearing). The accretion is in the relational and behavioral categories — at least four mechanics overlap or duplicate (Standing/Renown, Stance triangles/Resonant Style, Decision Forks/Conviction Track effects, NPC Belief/PC Belief). The biggest single coverage gap is **PC interiority** — voiced inner life of the player character.
+**Headline finding:** the system is **architecturally sound but accreted.** The personality layer is genuinely well-designed and integrates elegantly with the metaphysical and relational layers. The competence layer is sound but underused (histories are not yet content-bearing). The accretion is in the relational and behavioral categories — at least four mechanics overlap or duplicate (Standing/Renown, Stance triangles/Resonant Style, Decision Forks/Piety Track effects, NPC Belief/PC Belief). The biggest single coverage gap is **PC interiority** — voiced inner life of the player character.
 
 **My own proposals from the last four turns: ~30% earn their place; ~50% are scoped-down keepers; ~20% should be cut.** This document does the cuts.
 
@@ -30,7 +30,7 @@ The character system has three primary layers and four supporting ones:
 | Category | Mechanics |
 |---|---|
 | **Foundational (earliest)** | (1) Inspirations · (2) Beliefs · (3) Goals |
-| **Personality** | (4) Convictions [13D + cultural template] · (5) Cultural Background Templates [8] · (6) Self-Other orientation · (7) Resonant Style [4] · (8) Conviction Track [Scars] · (9) Belief revision mechanic |
+| **Personality** | (4) Convictions [13D + cultural template] · (5) Cultural Background Templates [8] · (6) Self-Other orientation · (7) Resonant Style [4] · (8) Piety Track [Scars] · (9) Belief revision mechanic |
 | **Competence** | (10) Lifepath [4 stages] · (11) History-derived Skills · (12) Sparking · (13) Recall · (14) Attribute d-pools [Mind/Body/Spirit] · (15) Sub-pools [Cognition/Focus/Endurance/Charisma/Bonds] |
 | **Metaphysical** | (16) Thread Sensitivity · (17) Coherence · (18) Spirit (metaphysical attribute, distinct from #14 Spirit pool) · (19) Certainty · (20) Substrate-Posture [T-15] |
 | **Relational** | (21) Knots/Bonds · (22) Disposition · (23) Foil pairings/Ruler Diamond · (24) Standing per faction · (25) Renown · (26) Caste |
@@ -95,7 +95,7 @@ NERS = Necessary / Elegant / Robust / Smooth. Verdict column abbreviations: **KE
 |---|---|---|
 | **KEEP+** | N: high · E: high · R: mid · S: mid | The shape of arguments that reach this person. **Snob findings:** (a) styles are not orthogonal — "Authority-via-Solidarity" is a real argument shape (a recognized leader appealing on shared bonds) that compresses poorly into one of the 4. (b) TS Gate restricts Evidence on TS-0 NPCs (perceptual prophylaxis) but no equivalent gate on Authority-from-Church-context for skeptics, etc. — inconsistent application of the same logic. (c) Wrong-Style Penalty is flat +1 Ob; should arguably differ by mismatch type. |
 
-**(8) Conviction Track [Scars].** 0/1/2/3+ Scars structure. Crisis table at 3+. Source file uses stale 9-Conviction taxonomy (per audit D8).
+**(8) Piety Track [Scars].** 0/1/2/3+ Scars structure. Crisis table at 3+. Source file uses stale 9-Conviction taxonomy (per audit D8).
 
 | Verdict | NERS | Note |
 |---|---|---|
@@ -257,7 +257,7 @@ NERS = Necessary / Elegant / Robust / Smooth. Verdict column abbreviations: **KE
 
 | Verdict | NERS | Note |
 |---|---|---|
-| **AUDIT/FOLD** | N: ? · E: low · R: low · S: ? | **Snob finding:** "Decision Forks increase" appears in the Scar accumulation table but isn't a separately tracked thing. Is this a tracked engine quantity or a documentary phrase? If documentary, fold into Conviction Track Scar effects (which already encode the increased internal-conflict behavior). |
+| **AUDIT/FOLD** | N: ? · E: low · R: low · S: ? | **Snob finding:** "Decision Forks increase" appears in the Scar accumulation table but isn't a separately tracked thing. Is this a tracked engine quantity or a documentary phrase? If documentary, fold into Piety Track Scar effects (which already encode the increased internal-conflict behavior). |
 
 ### §2.7 Narrative layer
 
@@ -422,7 +422,7 @@ Naming hygiene is a real audit finding.
 |---|---|---|
 | Standing per faction (#24) ↔ Renown (#25) | Both reputation; Standing per-faction, Renown public-general | Test: is Renown derivable from Standings (max, sum)? If yes, eliminate as authored. |
 | Stance triangles (#30) ↔ Resonant Style (#7) + Conviction (#4) + Goal (#3) | Triangle is composite of three independent fields | If engine queries triangle as composite, document; if not, retire |
-| Decision Forks (#33) ↔ Conviction Track Scar effects (#8) | Forks "increase under Scars" but isn't separately tracked | Fold into Scar effects |
+| Decision Forks (#33) ↔ Piety Track Scar effects (#8) | Forks "increase under Scars" but isn't separately tracked | Fold into Scar effects |
 | Substrate-Posture (#20) — character or faction? | Filtered through leader's POV | Document categorization explicitly |
 | Per-territory reputation (proposed #52) ↔ Standing (#24) | Two reputation systems | Cut #52; extend #24 |
 | Languages grid (proposed #49) ↔ History content-access (proposed #44) | Languages are content-gates | Fold #49 into #44 |
@@ -482,7 +482,7 @@ Darklands tracks character age; characters retire. Valoria has campaign seasons 
 
 ### §4.8 Trauma history (vs current Scars)
 
-Conviction Track Scars are accumulated *during* play. NPCs canonically have backstory trauma (Edeyja's Thread injury, Ehrenwall's lost knights, Vaynard's complicit-in-erasure act) but this isn't represented as authored Scars. Recommend: NPCs can begin play with N authored Scars from backstory, modeled identically to play-acquired Scars.
+Piety Track Scars are accumulated *during* play. NPCs canonically have backstory trauma (Edeyja's Thread injury, Ehrenwall's lost knights, Vaynard's complicit-in-erasure act) but this isn't represented as authored Scars. Recommend: NPCs can begin play with N authored Scars from backstory, modeled identically to play-acquired Scars.
 
 This is small — adds nothing to the mechanic, just allows authoring use of an existing track.
 
@@ -539,13 +539,13 @@ Seven consultations. Strategic-layer ceiling. Tractable.
 
 ### §6.1 Load-bearing — keep, no cuts
 
-(2) Beliefs · (4) Convictions · (5) Cultural Templates · (6) Self-Other · (7) Resonant Style · (8) Conviction Track · (9) Belief revision · (10) Lifepath · (11) Skills · (12) Sparking · (14) Attribute pools · (16) TS · (17) Coherence · (18) Spirit (metaphysical) · (19) Certainty · (21) Knots · (22) Disposition · (23) Foils · (24) Standing · (26) Caste · (27) Tier system · (28) Behavioral AI flaw · (29) Priority Trees · (31) Arc state machine · (32) Per-NPC arc maps · (34) Articulation Layer · (35) Engagement count · (36) Forgetting · (40) Companion spec.
+(2) Beliefs · (4) Convictions · (5) Cultural Templates · (6) Self-Other · (7) Resonant Style · (8) Piety Track · (9) Belief revision · (10) Lifepath · (11) Skills · (12) Sparking · (14) Attribute pools · (16) TS · (17) Coherence · (18) Spirit (metaphysical) · (19) Certainty · (21) Knots · (22) Disposition · (23) Foils · (24) Standing · (26) Caste · (27) Tier system · (28) Behavioral AI flaw · (29) Priority Trees · (31) Arc state machine · (32) Per-NPC arc maps · (34) Articulation Layer · (35) Engagement count · (36) Forgetting · (40) Companion spec.
 
 29 mechanics, all earn their place.
 
 ### §6.2 Keep with propagation/cleanup needed
 
-(1) Inspirations [naming collision] · (8) Conviction Track [taxonomy debt] · (18) Spirit [naming collision] · (20) Substrate-Posture [authored gaps + categorization] · (32) Per-NPC arc maps [empty bodies] · (34) Articulation Layer [§2.4 vs §3.1 conflict].
+(1) Inspirations [naming collision] · (8) Piety Track [taxonomy debt] · (18) Spirit [naming collision] · (20) Substrate-Posture [authored gaps + categorization] · (32) Per-NPC arc maps [empty bodies] · (34) Articulation Layer [§2.4 vs §3.1 conflict].
 
 ### §6.3 Audit-flag — needs Jordan input
 

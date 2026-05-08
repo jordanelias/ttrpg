@@ -232,7 +232,7 @@ Each source split at H2 section boundaries. Atoms carry provenance frontmatter.
   - 4.1 Adjudicator → Pool Rotation
   - 4.2 Styles (2×2)
   - 4.3 Interaction Types
-  - 4.4 Conviction Track (0–10)
+  - 4.4 Piety Track (0–10)
   - 4.5 Composure / Concentration
   - 4.6 Key Sub-Mechanics
   - 5.1 Thread Pool

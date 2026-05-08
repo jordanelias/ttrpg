@@ -12,7 +12,7 @@ register_target_by_kind:
   T: references/throughlines_meta.md
   M: references/throughlines_meta.md
   RS: designs/scene/rendering_stability_v30.md (or relevant designs/)
-  CI: designs/provincial/ — disambiguate Church Influence vs Conviction Track per occurrence
+  CI: designs/provincial/ — disambiguate Church Influence vs Piety Track per occurrence
   CP: TBD — disambiguation pending per session_log
 inventory:
   ED:

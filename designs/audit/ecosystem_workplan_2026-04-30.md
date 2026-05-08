@@ -48,7 +48,7 @@ Beyond commits, the conversation produced four conceptual proposals — reposito
 ### §1.4 Outstanding from prior sessions (carried forward, not in scope of this workplan unless Phase 0 is expanded)
 
 - PP-689 SHA followup (covers PP-690 + PP-691 file edits — single SHA-update commit pending).
-- NPC Behavior audit (107k chars even after Conviction Track extraction — needs dedicated session).
+- NPC Behavior audit (107k chars even after Piety Track extraction — needs dedicated session).
 - Promote remaining isolates: Wager, Thread Revelation (each ~PP-681-scope).
 - Convictions framework registration (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity).
 - Pressure Points framework registration (Evidence, Consequence, Authority, Loyalty).

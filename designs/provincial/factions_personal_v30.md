@@ -57,7 +57,7 @@ Range: 0–10. Starting value: 5 (BG). Not a separate track in TTRPG mode (effec
 **Domain Ob:** Target faction's relevant stat directly (1–7 scale; no division). A faction at stat 4 sets Ob 4. The rolling character may add their own faction's relevant stat as bonus dice if they hold leadership of that faction.
 
 
-**Domain Action → Social Contest escalation (PP-246):** A Domain Action always produces a mechanical outcome on its own. Escalation to a full Social Contest occurs only when all three hold: (a) both parties are personally present, (b) stakes are explicitly contested by both, AND (c) the DA roll produces a Partial. On Partial: GM may call a Contest at Conviction Track 5 (neutral); DA outcome held pending Contest resolution. On Success or Failure: outcome is final, no Contest.
+**Domain Action → Social Contest escalation (PP-246):** A Domain Action always produces a mechanical outcome on its own. Escalation to a full Social Contest occurs only when all three hold: (a) both parties are personally present, (b) stakes are explicitly contested by both, AND (c) the DA roll produces a Partial. On Partial: GM may call a Contest at Piety Track 5 (neutral); DA outcome held pending Contest resolution. On Success or Failure: outcome is final, no Contest.
 
 **Community Weaving canonical spec (PP-270):** The PP-195 version is canonical. Pool: Mandate + relevant History. TN 7, Ob 3. On success: target RS track +1 (shared world track). All other Community Weaving specifications (PP-168 pool and PP-195 partial variants) are superseded.
 

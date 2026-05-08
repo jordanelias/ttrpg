@@ -9,7 +9,7 @@
 |---|---|---|---|
 | `06_1` | `^1\.` | 3 | 1.1 Die Face Rule (d10) / 1.3 Obstacle Scale / 1.4 Degrees of Success |
 | `06_3` | `^3\.` | 9 | 3.1 Pool Split (Off/Def) / 3.2 Initiative / 3.3 Weapon System (3 Binary Axes) / 3.4 Armour |
-| `06_4` | `^4\.` | 5 | 4.1 Adjudicator → Pool Rotation / 4.2 Styles (2×2) / 4.3 Interaction Types / 4.4 Conviction Track (0–10) |
+| `06_4` | `^4\.` | 5 | 4.1 Adjudicator → Pool Rotation / 4.2 Styles (2×2) / 4.3 Interaction Types / 4.4 Piety Track (0–10) |
 | `06_5` | `^5\.` | 7 | 5.2 Three-Axis Ob / 5.3 Operations / 5.4 Opposing Operations (PP-653) / 5.5 Gap Self-Closure |
 | `06_6` | `^6\.` | 5 | 6.2 Fieldwork Pool and Attribute Rotation / 6.3 Evidence Track / 6.4 Socializing / Disposition / 6.5 Exposure System |
 | `06_7` | `^7\.` | 3 | 7.1 Core Formula (PP-233) / 7.3 Key Mechanics / 7.4 PROVISIONAL Count |

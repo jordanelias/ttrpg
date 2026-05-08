@@ -66,7 +66,7 @@ PENINSULA (global)
 | **Peninsula** | Season / Arc | Global clocks: MS, CI, IP, PI, Turmoil | Victory conditions, faction elimination, Altonian invasion |
 | **Territory** | Season (Accounting) | Faction stats (1–7), derived values, Accord, PT, Fort Level, Prosperity | Domain Actions, military operations, faction priority trees |
 | **Settlement** | Season (sub-Accounting) | Settlement stats (P/D/O, 0–5), settlement derived values, Governor | Governance actions, POI discovery, NPC roster, institutional facilities |
-| **Scene** | Scene action (3–5/season) | Evidence Track, Disposition, Exposure, Conviction Track, Composure, Concentration | Fieldwork, social contests, combat initiation, Thread operations |
+| **Scene** | Scene action (3–5/season) | Evidence Track, Disposition, Exposure, Piety Track, Composure, Concentration | Fieldwork, social contests, combat initiation, Thread operations |
 | **Round** | Round (~6–10 seconds) | Combat Pool, Wound progress, Stamina, Coherence, Contact Duration | Personal combat, Thread Leap/operations, mass battle phases |
 
 ## Thread Scale (parallel to geographic scale)
@@ -100,7 +100,7 @@ Every named transition between scales, systems, or modes. Organized by direction
 | ID | From | To | Trigger | Mechanism | Cap |
 |----|------|----|---------|-----------|-----|
 | **DE-1** | Personal combat | Faction stats | Kill/defeat named faction officer | Combat Domain Echo (combat §13.1): defeat → acting faction stat +1, target Stability −1; kill → additionally Mandate −1 | 1 Echo/scene/faction (PP-329) |
-| **DE-2** | Social contest | Faction stats | Decisive win (Conviction Track ≥7 or ≤3) | Debate Domain Echo (scale_transitions §5.4): Winner Mandate +1, Loser Mandate −1 | 1 Echo/scene/faction |
+| **DE-2** | Social contest | Faction stats | Decisive win (Piety Track ≥7 or ≤3) | Debate Domain Echo (scale_transitions §5.4): Winner Mandate +1, Loser Mandate −1 | 1 Echo/scene/faction |
 | **DE-3** | Fieldwork investigation | Faction stats | Evidence Track reaches threshold (Complex+ scope) | Investigation Domain Echo (fieldwork §2.5): Finding with faction-level scope → ±1 to relevant stat | 1 Echo/scene/faction |
 | **DE-4** | Thread operation | Faction stats | MS change ≥1, or Conviction Scar fires, or Gap/Lock/Knot at Territorial+ | Thread Domain Echo (scale_transitions §5.6): Dissolution → Stability −1, Mending → Mandate +1, etc. | 1 Thread Echo/scene/faction |
 | **DE-5** | Personal scene (any) | Territory Accord | Public governance, destabilization, negotiated transfer, or violence at territorial scale | Accord Domain Echo (scale_transitions §5.5): ±1 Accord in one territory per Zoom In | ±1 Accord/territory/Zoom In |
@@ -322,7 +322,7 @@ PENINSULA SCALE
 | Evidence Track | 0–threshold | Investigation progress per active question |
 | Disposition | −3 to +5 | Per-NPC relationship state → information gates, companion eligibility |
 | Exposure | 0–10+ | Detection risk per territory per season |
-| Conviction Track | 0–10 | Contest progress → Decisive/Compromise |
+| Piety Track | 0–10 | Contest progress → Decisive/Compromise |
 | Composure | 7–13 | Social damage buffer → Rattled threshold |
 | Concentration | 2–14 | Contest endurance → Spent state |
 | Momentum | 0–4 | Bonus successes / Stunt invocation |

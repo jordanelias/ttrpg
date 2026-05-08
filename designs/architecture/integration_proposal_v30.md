@@ -121,7 +121,7 @@ The Lattice sits between Interview (too simple for rich NPC interaction) and Con
 **The integration with social_contest_v30**: When a Dialogue Lattice session reaches an Escalation Trigger outcome (the player has pressed a position the NPC actively resists), the handoff to Contest should carry:
 
 1. **Conviction state**: the NPC's current Wound count, established through the filter chain.
-2. **Disposition state**: the current Disposition, which maps to Conviction Track starting position (±1 per 2 Disposition points, capped at ±2 per existing fieldwork rule §2.3).
+2. **Disposition state**: the current Disposition, which maps to Piety Track starting position (±1 per 2 Disposition points, capped at ±2 per existing fieldwork rule §2.3).
 3. **Evidence pre-load**: any Case Board nodes the player has established in this scene, which can be declared as Contest Corroboration at contest setup.
 4. **Momentum**: if the player gained Momentum from Belief-aligned Lattice utterances during the exploratory phase, those carry into the Contest.
 

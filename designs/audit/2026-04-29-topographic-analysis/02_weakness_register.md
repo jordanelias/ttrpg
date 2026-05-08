@@ -358,7 +358,7 @@ Tokens that appear in the corpus but are connected to almost nothing in any stru
 Armature System          [provisional]   — provisional design, isolation expected
 Event Impact Matrix      [provisional]   — provisional design, isolation expected
 Authority                [canonical]     — Pressure Point, disambiguation excludes most paragraphs
-Conviction Track         [canonical]     — central mechanic, no own file
+Piety Track         [canonical]     — central mechanic, no own file
 Wager                    [canonical]     — mechanic, no own file
 Thread Revelation        [canonical]     — sub-system in Campaign Architecture
 Faith                    [canonical]     — Conviction
@@ -372,15 +372,15 @@ Game Master              [legacy/gap]    — legacy term, expected to disappear
 ```
 
 **Real concerns (not artifacts):**
-1. **Conviction Track** is canonical and central but has no dedicated file. Its definition lives inside `npc_behavior_v30.md`. This makes it an isolate even though it is heavily *used*. Recommendation: Conviction Track gets its own file at `designs/personal/conviction_track_v1.md` or equivalent. v3 §V3-1 confirms NPC Behavior is the integration spine; pulling Conviction Track out would let NPC Behavior reference it cleanly.
+1. **Piety Track** is canonical and central but has no dedicated file. Its definition lives inside `npc_behavior_v30.md`. This makes it an isolate even though it is heavily *used*. Recommendation: Piety Track gets its own file at `designs/personal/conviction_track_v1.md` or equivalent. v3 §V3-1 confirms NPC Behavior is the integration spine; pulling Piety Track out would let NPC Behavior reference it cleanly.
 
 2. **Wager** is canonical but has only 4 paragraph mentions and 1 cite-edge. Either Wager is genuinely under-developed and needs more design substance, or it's documented under a different surface form not captured. Manual check warranted.
 
 3. **Thread Revelation** is canonical (referenced from Campaign Architecture) but has no dedicated file — it lives as a section in the architecture doc. Should it be split out? Question for Jordan.
 
-4. **5 of 7 Convictions** are isolates (Faith, Reason, Equity, Precedent, Continuity have cite=1 each; Order, Autonomy do better). The Conviction definitions live inline in NPC Behavior. They never get cited from elsewhere. This is the same pattern as Conviction Track — central concepts buried in their parent doc.
+4. **5 of 7 Convictions** are isolates (Faith, Reason, Equity, Precedent, Continuity have cite=1 each; Order, Autonomy do better). The Conviction definitions live inline in NPC Behavior. They never get cited from elsewhere. This is the same pattern as Piety Track — central concepts buried in their parent doc.
 
-**Pattern:** the project has **canonical concepts that lack first-class documentation status**. They're real, used, mechanically active, but they're paragraphs inside other docs rather than entities that get cited. The candidates for promotion to dedicated files: Conviction Track, Wager, Thread Revelation, the 7 Convictions taxonomy, the 4 Pressure Points taxonomy. **Promotion to first-class docs would surface them in the citation graph** and make change-impact analysis cleaner.
+**Pattern:** the project has **canonical concepts that lack first-class documentation status**. They're real, used, mechanically active, but they're paragraphs inside other docs rather than entities that get cited. The candidates for promotion to dedicated files: Piety Track, Wager, Thread Revelation, the 7 Convictions taxonomy, the 4 Pressure Points taxonomy. **Promotion to first-class docs would surface them in the citation graph** and make change-impact analysis cleaner.
 
 ---
 
@@ -394,7 +394,7 @@ Two list directions:
 |---|---|---|---|
 | 0.62 | 8 | 5 | Conflict Architecture |
 | 0.50 | 6 | 3 | Throughlines |
-| 0.44 | 16 | 7 | Conviction Track |
+| 0.44 | 16 | 7 | Piety Track |
 | 0.28 | 46 | 13 | Guilds |
 | 0.27 | 11 | 3 | Coup Counter |
 | 0.23 | 22 | 5 | Lisbeth Ehrenwall |
@@ -402,7 +402,7 @@ Two list directions:
 | 0.21 | 101 | 21 | Löwenritter |
 | 0.20 | 20 | 4 | Social Contests |
 
-These tokens get more recent editorial attention than would be predicted by their design footprint. **Conviction Track at 0.44** with only 16 paragraphs of design substance and 7 of audit attention suggests it's either being actively refined (good — natural revision pattern) or being **discussed without sufficient design substance to anchor the discussion** (worrying).
+These tokens get more recent editorial attention than would be predicted by their design footprint. **Piety Track at 0.44** with only 16 paragraphs of design substance and 7 of audit attention suggests it's either being actively refined (good — natural revision pattern) or being **discussed without sufficient design substance to anchor the discussion** (worrying).
 
 **LOW discourse ratio** (substantial design substance, no recent editorial attention, ratio = 0.00):
 
@@ -558,4 +558,4 @@ Replacing the v2 §4 list with corrected v3 priorities:
 | §2 "Project documents people, not systems" | **CORRECTED** — v3 §V3-1 reverses this; the corpus IS system-anchored when measured by citation degree, not paragraph breadth |
 | §4 v2 connections audit items | **REPLACED** by v3 §V3-10 |
 
-The single most consequential correction: **v2's "the project documents people, not systems" structural claim was wrong.** The project documents both, but the citation backbone is system-anchored, with NPC Behavior as the integration spine. v3's recommendation pivots accordingly: vet NPC Behavior, promote currently-inline canonical concepts (Conviction Track, Convictions/Pressure Points taxonomies) to first-class docs, and add load-bearing-systems columns to the throughlines table.
+The single most consequential correction: **v2's "the project documents people, not systems" structural claim was wrong.** The project documents both, but the citation backbone is system-anchored, with NPC Behavior as the integration spine. v3's recommendation pivots accordingly: vet NPC Behavior, promote currently-inline canonical concepts (Piety Track, Convictions/Pressure Points taxonomies) to first-class docs, and add load-bearing-systems columns to the throughlines table.

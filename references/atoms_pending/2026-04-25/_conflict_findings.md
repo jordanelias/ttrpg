@@ -45,7 +45,7 @@
 
 
 
-**Recommendation:** Specify how RWCE-witness conviction integrates with the canonical Conviction Track (extension, parallel system, or override?).
+**Recommendation:** Specify how RWCE-witness conviction integrates with the canonical Piety Track (extension, parallel system, or override?).
 
 ### MEDIUM-03 — `Throughlines-Append-No-Table-Rows`
 

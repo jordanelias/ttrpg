@@ -3,7 +3,7 @@
 *Critique applied: 2026-04-13 | Resolution applied: 2026-04-13*
 *Supersedes: arcs_46_50_batch07.md, arcs_51_55_batch08.md, arcs_46_55_consolidated.md (prior)*
 
-> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Church Influence per ED-782). Conviction Track (CT) is always written in full. (ED-756)
+> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Church Influence per ED-782). Piety Track (CT) is always written in full. (ED-756)
 
 ---
 

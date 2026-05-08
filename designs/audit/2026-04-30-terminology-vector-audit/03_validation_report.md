@@ -51,13 +51,13 @@ This run's findings inherit the same confidence ceiling. P2's failure constrains
 |---|---|---|---|---|---|
 | v3 reference run | [0, 0, 0, 0, 0, 0, 0] | 0.0 | 999.0 | ≤ 50% | **FAIL** |
 
-**Interpretation:** All 7 Convictions have G_throughline degree 0. The throughline framework's tabular format does not lexically anchor Conviction names — "Conviction Track" and individual Conviction names appear in throughline descriptions but do not survive the Load-bearing-systems column extraction.
+**Interpretation:** All 7 Convictions have G_throughline degree 0. The throughline framework's tabular format does not lexically anchor Conviction names — "Piety Track" and individual Conviction names appear in throughline descriptions but do not survive the Load-bearing-systems column extraction.
 
 **This is a finding in itself, not a methodology defect.** The throughlines framework was authored before PP-677 added the Load-bearing systems column; pre-PP-677, the description text didn't reliably name systems. PP-677 was supposed to address this; today's run confirms Convictions remain absent from the systematic system-token coupling.
 
 **Action implication (separate from terminology focus):**
 1. Audit `references/throughlines_meta_infill.md` for whether Conviction-bearing throughlines (e.g. T-04 Hafenmark Confidentiality, T-08 RM Restoration) actually list the relevant Conviction tokens in their Load-bearing systems column.
-2. If yes — extraction script needs improvement. If no — Convictions are not formalized as load-bearing for any throughline despite participating in NPC behavior, social contests, and Conviction Track itself. Either case is a P2 → P1 finding.
+2. If yes — extraction script needs improvement. If no — Convictions are not formalized as load-bearing for any throughline despite participating in NPC behavior, social contests, and Piety Track itself. Either case is a P2 → P1 finding.
 
 **Confidence implication for this run:** Medium for Mode F (throughline orphan) findings — degraded by P2 fail. High for Modes A, B, C, D, E, G, H — independent of P2.
 

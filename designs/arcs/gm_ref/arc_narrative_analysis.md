@@ -90,7 +90,7 @@ Average: 22/25. Consistently strong emergence quality. The non-greedy framework 
 |-----------|-------|------------|
 | Emergence | 5 | A successful Parliamentary action creates a Crown weakness as a side effect. The interaction between Debate outcome → Mandate shift → Crown Virtue Ethics framework vulnerability is multi-system and unpredictable. |
 | Table experience | 5 | "Hafenmark won the debate and created a Crown weakness they now have to decide whether to exploit or repair." This is a perfect dilemma: the winning faction must choose whether to capitalise on their victory's collateral damage. No false choices. |
-| Mechanical grounding | 4 | Social contest mechanics are canonical (social_contest_system_v2). Crown Virtue Ethics Ob modifiers are in params_factions. The Conviction Track interaction is documented but the precise numbers for the aftermath cascade could be tighter. |
+| Mechanical grounding | 4 | Social contest mechanics are canonical (social_contest_system_v2). Crown Virtue Ethics Ob modifiers are in params_factions. The Piety Track interaction is documented but the precise numbers for the aftermath cascade could be tighter. |
 | NPC fidelity | 3 | Baralta drives the debate, but the arc is primarily about institutional mechanics rather than personal character. Any competent Hafenmark leader could trigger this. |
 | Thematic coherence | 4 | Strong institutional theme. Less connected to Thread/Forgetting/metaphysics. This is a governance arc — excellent for the BG/Hybrid layer, less essential for the TTRPG metaphysical layer. |
 | **Total** | **21/25** | Excellent political emergence. Would benefit from deeper NPC entanglement. |
@@ -375,3 +375,5 @@ Tracks known convergence points between arc batches — points where independent
 | Church double fracture | 01–04 + 01–04 | Klapp CE + Jarnstal Stability + Himlensendt destabilisation fire in same Accounting period | Year-End Step 4 |
 | Parish Revolt + Supply Chain Exposure | 36–40 + 36–40 | Arc 36 + Arc 37 terminal events firing same season — Solberg recall condition met (PP-555) | Year-End Accounting |
 | Vaynard Discovery Event + Laskaris Flip | 36–40 + 36–40 | Arc 39 Spirit check fires same season as Arc 38 IP surge — Vaynard forced to choose Collection use during crisis | Phase 4 (Domain Actions) |
+
+[EDITORIAL: ED-782 — Conviction Track → Piety Track (territory) / Persuasion Track (contest) rename per vocabulary audit]

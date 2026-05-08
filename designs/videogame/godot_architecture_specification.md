@@ -366,7 +366,7 @@ Five scene container types plus a Conflict Container that wraps them and a Board
 |-----------|-------|---------|
 | **Conflict** | Wrapper | Hosts scene containers. Tracks data across scene transitions within a single conflict. Routes immediate consequences to Meta. Accumulates deferred consequences for upstream at conclusion. Evaluates Belief engagement for CP. |
 | **Combat** | Personal | Pool-split offence/defence, priority resolution, reach system, wound/stamina tracking |
-| **Debate** | Personal | Argument styles, Conviction Track, Composure/strain, exchange resolution |
+| **Debate** | Personal | Argument styles, Piety Track, Composure/strain, exchange resolution |
 | **Narrative** | Personal | Dialogue, investigation, evidence gathering, event choices, skill checks |
 | **Battle** | Relational | Mass combat 6-phase resolution, unit engagement, commander mechanics |
 | **Board** | Territorial | Territory map, faction orders, card-hand economy, fog of war, AI resolution |
@@ -883,7 +883,7 @@ Wire: season start → overview (auto-confirm) → conflict container → combat
 
 **Extract from:** `designs/contest/social_contest_system_v2.md` (404 lines), `references/params_contest.md`
 
-Argument styles, interaction types, Conviction Track, Composure/strain, exchange resolution (OpposedSimultaneous mode), contest end conditions, Bond-based corroboration, Domain Echo scope recognition for debate outcomes, Register Shift (scene escalation to combat).
+Argument styles, interaction types, Piety Track, Composure/strain, exchange resolution (OpposedSimultaneous mode), contest end conditions, Bond-based corroboration, Domain Echo scope recognition for debate outcomes, Register Shift (scene escalation to combat).
 
 ## Phase 7 — Board Game (8–12 weeks)
 
@@ -987,7 +987,7 @@ There are approximately 15–20 worked examples across the canonical documents. 
 | 3: World data | 1 week | Territories, factions, clocks registered |
 | 4: Game loop | 2 weeks | **First Playable** — one combat/season, clocks advance |
 | 5: Threadwork | 5–7 weeks | Leap, Weave, Pull, Mend, co-movement, feedback loop |
-| 6: Debate | 3–4 weeks | Social contest system, Conviction Track |
+| 6: Debate | 3–4 weeks | Social contest system, Piety Track |
 | 7: Board game | 8–12 weeks | Strategic map, AI factions, orders, victory |
 | 8: Situation gen | 4–5 weeks | **MVP** — full season loop, all systems, NPC arcs |
 | 9+: Post-MVP | Open | Mass combat, narrative, content, polish |

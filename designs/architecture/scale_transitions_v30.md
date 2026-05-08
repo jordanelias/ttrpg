@@ -189,7 +189,7 @@ Cap: ±2 per stat per Echo. (ED-071 resolved by PP-329: one Echo/scene/faction p
 This timing difference is intentional (PP-109): Zoom In is a personal intervention in a strategic situation. Faction consequences propagate through seasonal accounting to prevent real-time manipulation of BG stats from personal scenes.
 
 ### §5.4 Debate → Domain Echo (PP-108)
-| Conviction Track outcome | Domain Echo |
+| Piety Track outcome | Domain Echo |
 |--------------------------|-------------|
 | Track ≥ 7 (winner's side) | Winner faction: +1 Mandate. Loser faction: −1 Mandate if they held institutional authority. |
 | Track 4–6 (compromise) | No Domain Echo. Scene-level consequence only. |
