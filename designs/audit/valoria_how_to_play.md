@@ -77,7 +77,7 @@ Damage = net hits + Strength + weapon modifier − armor DR. Damage accumulates 
 - **Vision** (Projection + Revealing): propose a transparent future.
 - **Insinuation** (Projection + Obscuring): imply unstated consequences.
 
-Each exchange: Appraise (read opponent) → Declare style → optionally Corroborate (spend gathered evidence for +1D) → Argue (roll your contest pool) → Resolve (compare results). The Conviction Track moves toward your position or your opponent's. When one side hits 0 or 10, the contest ends. Composure (Charisma + 6) is your social health — take enough social damage and you're Rattled (+1 Ob) or Spent (−2D, must regroup).
+Each exchange: Appraise (read opponent) → Declare style → optionally Corroborate (spend gathered evidence for +1D) → Argue (roll your contest pool) → Resolve (compare results). The Piety Track moves toward your position or your opponent's. When one side hits 0 or 10, the contest ends. Composure (Charisma + 6) is your social health — take enough social damage and you're Rattled (+1 Ob) or Spent (−2D, must regroup).
 
 **Perform Thread Operations** (requires TS 30+). Enter Thread contact (takes Focus score in rounds to establish). Choose an operation:
 - *Weaving* — cohere a thread (strengthen/repair reality). TN 7.

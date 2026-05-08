@@ -82,7 +82,7 @@ Obra Dinn (Evidence Track), Persona 5 (Disposition/Confidant), Disco Elysium (sk
 
 ## Quality: 9/10
 
-Four interaction types (CLASH, REINFORCE, CROSS, TIE) create genuine tactical decisions. Conviction Track (0–10) with audience resistance parallels armor DR. Genre system (Memory/Projection × Revealing/Obscuring) with faction-specific audience boosts. Obligation system creates multi-season consequences. Chain Contests generate follow-up scenes.
+Four interaction types (CLASH, REINFORCE, CROSS, TIE) create genuine tactical decisions. Piety Track (0–10) with audience resistance parallels armor DR. Genre system (Memory/Projection × Revealing/Obscuring) with faction-specific audience boosts. Obligation system creates multi-season consequences. Chain Contests generate follow-up scenes.
 
 Deficiencies: §1 Core Principle section empty. CROSS interaction floor(÷2) may be non-viable against Resistance 2+.
 
@@ -291,7 +291,7 @@ Single source of truth for all clocks/tracks/counters. 123 lines. Pure reference
 | Tier | Systems |
 |------|---------|
 | 9/10 | Fieldwork, Social Contest, Player Agency, NPC Behavior, Mass Battle, Scale Transitions, Victory, Derived Stats, Investigation, Companion, Clock Registry, UI/UX |
-| 8/10 | Combat, Threadwork, Settlement, Faction Politics, Conviction Track, Character Histories |
+| 8/10 | Combat, Threadwork, Settlement, Faction Politics, Piety Track, Character Histories |
 
 ---
 ---
@@ -348,7 +348,7 @@ Single source of truth for all clocks/tracks/counters. 123 lines. Pure reference
 PENINSULA (global clocks: RS, TC, IP, PI, Strain)
   └── TERRITORY (15 provinces: faction stats, derived values, Accord, PT)
         └── SETTLEMENT (36: Prosperity/Defense/Order, facilities, governor)
-              └── SCENE (Evidence Track, Disposition, Exposure, Conviction Track)
+              └── SCENE (Evidence Track, Disposition, Exposure, Piety Track)
                     └── ROUND (Combat Pool, Wounds, Stamina, Coherence, Contact)
 ```
 
@@ -509,7 +509,7 @@ How each system reads from and writes to every other system. **R** = reads from 
 **Isolated systems (low coupling):**
 - Companion Specification — reads from many, writes to few (Combat only)
 - Clock Registry — read-only reference; writes nothing back
-- Conviction Track — reads Thread/Battle/Settlement; writes only to Victory (via PT)
+- Piety Track — reads Thread/Battle/Settlement; writes only to Victory (via PT)
 
 ### Dependency Risk
 
@@ -711,7 +711,7 @@ All rolls: Nd10, success on ≥ TN. Chain on 10 (reroll, additional success on �
 | AUD-TW-03 | Threadwork | N-Way auto-collapse — consider graduated |
 | AUD-PA-02 | Player Agency | Independent path fewer opportunities |
 | AUD-NPC-04 | NPC Behavior | Conviction crisis d6 — consider weighted |
-| AUD-CT-01 | Conviction Track | CV→PT rename deferred |
+| AUD-CT-01 | Piety Track | CV→PT rename deferred |
 | AUD-CH-01 | Character Histories | Coherence → Recall → skill access |
 | AUD-CK-01 | Clock Registry | Settlement derived tracks not listed |
 

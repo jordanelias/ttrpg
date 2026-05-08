@@ -597,7 +597,7 @@ Authoritative sources: social_contest_v30.md (full).
 
 ## §6.1 The generic contest interface
 
-Contest opening: NPC Stance Triangle revealed, Conviction Track displayed, exchange count set, player's opening bonuses (preparation, Findings).
+Contest opening: NPC Stance Triangle revealed, Piety Track displayed, exchange count set, player's opening bonuses (preparation, Findings).
 
 Each exchange:
 1. Appraise (both orators roll Attunement)

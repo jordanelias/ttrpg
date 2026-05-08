@@ -103,7 +103,7 @@ Rationale: the decision to NOT corroborate when eligible is near-dominated. You'
 - Texture cost: Minimal. Removes a decision with a dominant strategy. Bonds still matter — they determine eligibility.
 
 ### SC-5: Resistance Announced Once (Tier 1 — zero texture loss)
-Audience resistance is a fixed number per contest (average Stability of relevant factions, round up, −1). Announce it at contest start. Print it on a token placed next to the Conviction Track. "Track movement = your margin minus this number."
+Audience resistance is a fixed number per contest (average Stability of relevant factions, round up, −1). Announce it at contest start. Print it on a token placed next to the Piety Track. "Track movement = your margin minus this number."
 
 Players no longer need to compute resistance — they subtract one fixed, visible number.
 - Reduction: −0.25
@@ -281,7 +281,7 @@ With this architecture, the game's mechanical depth is preserved entirely — it
 
 ### What was retained
 
-Every meaningful tactical decision. Every canon constraint. All three-dimensional co-movement. Coherence tracking. MS tracking. The weapon matrix. Pool splitting. Conviction Track. Faction stat interactions. Domain Echoes. Scale transitions. Mode boundaries. All NPC mechanics. All clock systems. All victory conditions.
+Every meaningful tactical decision. Every canon constraint. All three-dimensional co-movement. Coherence tracking. MS tracking. The weapon matrix. Pool splitting. Piety Track. Faction stat interactions. Domain Echoes. Scale transitions. Mode boundaries. All NPC mechanics. All clock systems. All victory conditions.
 
 ### Honest Assessment
 The target of ≤8.0 across all systems is achievable. Thread Operations hits 8.0 only with TW-5 (flat Coherence cost), which has moderate texture cost. Without TW-5, it sits at 8.5 — close but above target. Every other system reaches ≤8.0 with strategies that have zero or minimal texture cost, primarily through better information presentation (reference architecture) rather than mechanical simplification.

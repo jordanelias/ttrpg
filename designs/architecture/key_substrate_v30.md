@@ -499,7 +499,7 @@ Doc 12's procedures rewrite to consume Keys (Phase B Stage 1):
 
 ### §8.4 Personal-scale systems
 
-- Conviction Track: Scar triggers consume scene.witness Keys; emit state.scar_acquired.
+- Piety Track: Scar triggers consume scene.witness Keys; emit state.scar_acquired.
 - Threadwork: thread operations emit scene.thread_operation Keys.
 - Fieldwork / Knot system: knot formation emits meta.knot_formed; rupture emits meta.knot_ruptured (PP-688 Class B).
 - Bonds-≥-5 prerequisite checked via Memory query against accumulated Keys.

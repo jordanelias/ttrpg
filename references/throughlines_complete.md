@@ -120,7 +120,7 @@ Individual-scale chains that shape the player and NPC experience.
 
 ### T-14: Conviction as Moral Architecture
 **Chain:** Conviction type (Faith/Order/Reason/Equity/Precedent/Autonomy/Continuity) → NPC Conviction Scar accumulation from social + Thread events (§3.3, §3.4) → threshold effects (1 Scar = internal conflict, 2 = arc transition, 3+ = crisis) → arc emergence → NPC behavioral transformation → faction-level consequences (Framework Drift, Stability triggers)
-**Systems:** npc_behavior (§3, §5), player_agency (§2 Convictions), companion_specification (§6.1 departure triggers), social_contest (Conviction Track, Composure)
+**Systems:** npc_behavior (§3, §5), player_agency (§2 Convictions), companion_specification (§6.1 departure triggers), social_contest (Piety Track, Composure)
 **What it means:** Conviction is the NPC's deepest commitment — what they will not abandon without being scarred. The Scar system produces emergent narrative: an NPC who accumulates 3 Scars enters crisis, acts unpredictably, and may transform. Thread operations now feed this system (§3.4), meaning the game's most powerful actions produce the most dramatic NPC responses.
 
 ### T-15: Player Progression (Cell → Faction)
@@ -191,7 +191,7 @@ Chains that produce emergent story.
 
 ### T-23: NPC Arc Emergence
 **Chain:** NPC Stance Triangle → Conviction → Scar accumulation (social + Thread) → threshold crossing → arc state transition (A→B→C) → behavioral change → faction-level consequences → Domain Echo → political landscape shift → new NPC arc triggers
-**Systems:** npc_behavior (§5 Arc Emergence), arc_expansion (full arc profiles for 20+ NPCs), arc_register (faction vectors), social_contest (Composure/Conviction Track), companion_specification
+**Systems:** npc_behavior (§5 Arc Emergence), arc_expansion (full arc profiles for 20+ NPCs), arc_register (faction vectors), social_contest (Composure/Piety Track), companion_specification
 **What it means:** NPCs are not static. Their arcs emerge from accumulated game state — Scar count, Certainty, TS threshold crossings, faction Stability. The arc system is a state machine driven by mechanical inputs. In a videogame, this produces emergent narrative without scripted events: the NPC's arc unfolds because the world pushed them there, not because a writer decided it.
 
 ### T-24: Convergence as Emergent Crisis

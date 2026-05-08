@@ -19,7 +19,7 @@
 ## GAPS FOUND
 
 ### [SOC-01] Hybrid §11 — BG vote winner initiative carry-over not specified
-§11 Hybrid: BG Parliamentary Vote runs first, sets Conviction Track offset.
+§11 Hybrid: BG Parliamentary Vote runs first, sets Piety Track offset.
 Whether the BG vote winner gains initiative advantage in the following TTRPG contest is not stated.
 §5 rolls initiative fresh at exchange 1. But should a faction that "won" the BG layer get any
 positional advantage beyond the track offset?

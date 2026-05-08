@@ -92,7 +92,7 @@ The v2 workplan covers NPCs (T-23, T-25, 7 named NPCs) extensively. Player chara
 |---|---|---|
 | Player character creation (attributes, Histories, Beliefs, Inspirations) | params/core.md L100-128 — extracted to Constants.gd | Mechanically present, no UX path |
 | Player progression (Standing 0–7, Rank ladders, Caste) | designs/systems/faction_politics_expanded_v1.md (944 lines) | Not in workplan; design_sync flagged "Phase 5+ implementation needed" |
-| Player Conviction Track (personal-scale) | designs/scene/conviction_track_v30.md | Not in workplan |
+| Player Piety Track (personal-scale) | designs/scene/conviction_track_v30.md | Not in workplan |
 | Player threadwork (TS, Coherence, Knot formation) | params/threadwork.md, threadwork_v30 §5 | V2 covers mechanically; player-UI absent |
 | Player faction alignment | Meta._player_faction_id exists | No selection UX |
 | Tutorial / first-time experience | — | Absent |

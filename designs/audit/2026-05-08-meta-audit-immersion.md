@@ -39,7 +39,7 @@ A system that is Necessary, Elegant, Robust, and Smooth can still destroy immers
 
 DE's systems are mechanically simpler than Valoria's. But DE produces deeper immersion because the player never thinks "I'm in a Thought Cabinet." They think "I'm thinking about this." The skills speak as inner voices, not as stat labels. **The system is invisible to the player because the presentation layer translates mechanics into experience.**
 
-Valoria's system, as designed, is visible as a system. The vocabulary is mechanical: "Conviction Track Scars," "Cascade Fidelity," "Resonant Style primary + secondary," "Self-Other orientation scalar." These are designer terms that the player should never encounter. The player should experience: "my Faith is shaken," "this argument reached me because she showed me proof," "I'm becoming someone I wouldn't have recognized a year ago."
+Valoria's system, as designed, is visible as a system. The vocabulary is mechanical: "Piety Track Scars," "Cascade Fidelity," "Resonant Style primary + secondary," "Self-Other orientation scalar." These are designer terms that the player should never encounter. The player should experience: "my Faith is shaken," "this argument reached me because she showed me proof," "I'm becoming someone I wouldn't have recognized a year ago."
 
 **The audit optimized for system-level criteria. The immersion audit reveals that mechanical soundness is necessary but not sufficient.** The presentation layer — which was not audited until now — determines whether the system creates immersion or destroys it.
 

@@ -372,7 +372,7 @@ The audit_range_consistency.md identifies the complete scale taxonomy:
 - 0–7/1–7: attributes, faction stats, unit stats
 - 0–5: territory tracks (CV/Piety, Prosperity, VTM, etc.)
 - 0–4: territory tracks (Accord, Piety, Fort Level — per J-7 pending)
-- 0–10: Coherence, Exposure, Conviction Track
+- 0–10: Coherence, Exposure, Piety Track
 - 0–100: MS, CI, IP, TS
 
 **The J-7 decision (confirm 0–4 uniform territory scale) is blocking.** Some docs use 0–5, some use 0–4. Until J-7 resolves, every territory-scale formula is potentially stale.

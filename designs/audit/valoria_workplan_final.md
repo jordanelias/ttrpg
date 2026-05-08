@@ -518,8 +518,8 @@ Every feature must fire at least once across the 50 campaign runs. This checklis
 - [ ] Composure threshold crossed → Rattled (+1 Ob cumulative)
 - [ ] Concentration depletion → Spent (−2D next exchange)
 - [ ] Forfeit actions: Regroup (restore Concentration) and Concede a Point (+1D next exchange)
-- [ ] Conviction Track → Decisive win (≥7 or ≤3) → Obligation generated
-- [ ] Conviction Track → Compromise (4–6) → Chain Contest generated for next season
+- [ ] Piety Track → Decisive win (≥7 or ≤3) → Obligation generated
+- [ ] Piety Track → Compromise (4–6) → Chain Contest generated for next season
 - [ ] Deadlock stall-break (ED-582): 2 zero-movement exchanges → Resistance drop → 3rd → forced Compromise
 - [ ] Conviction Scar via correct Resonant Style targeting (at least 1 per run)
 - [ ] Debate Domain Echo (Decisive → Winner/Loser Mandate ±1)
@@ -774,7 +774,7 @@ Estimated effort: 3–4 sessions. Prerequisite: Phase 4 calibration report accep
 - Combat §4 Stunt: "GM sets N, max 5" → environmental modifier table indexed by POI type and terrain (e.g., Fortress interior +2, open field +0, Einhir ruins +3)
 - Threadwork §3.6: "GM determines domain type" for Lock MS drift → domain-type lookup from settlement type (Seat = slow-change, Town = moderate, Outpost = fast-change)
 - Fieldwork §4.1: "GM sets threshold at investigation opening" → threshold = scope-based (Simple 3, Complex 5, Structural 8) as already defined; the "GM sets" language is a TTRPG artifact
-- Social Contest §2 Step 4: "GM narrates partial outcome proportional to final position" → outcome table indexed by final Conviction Track position (4 = slight compromise toward A, 5 = true middle, 6 = slight compromise toward B)
+- Social Contest §2 Step 4: "GM narrates partial outcome proportional to final position" → outcome table indexed by final Piety Track position (4 = slight compromise toward A, 5 = true middle, 6 = slight compromise toward B)
 - Investigation Systems: NPE "GM grants Belief revelation" → Belief revealed deterministically on Observation (NPC acts on Belief in player's presence) or Appraise Overwhelming
 **Action:** For each instance, define the deterministic rule. Compile into a "Videogame Mode Appendix" or inline into each doc with `[VIDEOGAME: ...]` tags.
 

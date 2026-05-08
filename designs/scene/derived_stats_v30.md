@@ -192,7 +192,7 @@ These three character-mechanics are distinct and operate at different scales:
 
 | Mechanic | Scale | Function | Persistence |
 |---|---|---|---|
-| **Conviction** (per player_agency §2) | Worldview / framework | Drives all major decisions; determines Resonant Style; tracked on Conviction Track | Lifetime; shifts only through Scar accumulation or major narrative events |
+| **Conviction** (per player_agency §2) | Worldview / framework | Drives all major decisions; determines Resonant Style; tracked on Piety Track | Lifetime; shifts only through Scar accumulation or major narrative events |
 | **Belief** (per character_histories Stage 4 + valoria_ttrpg_complete §10.2 — TODO: full propagation pending) | Active personal stance | Specific stance taken in the moment; may be revised; produces CP awards on revision | Active until completed or revised |
 | **Inspiration** (this section) | Emotional/ideological investment | Specific focus that grants +1D / Ob −1 when actively engaged | Persistent until focus lost; modifiable via play |
 
@@ -483,7 +483,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 - All faction stat → dice pool relationships
 - All mass combat formulas (Pool, H, damage per success)
 - Coherence (10→0 countdown), Certainty (0–5), Momentum (0–4)
-- Social contest: Argue pools, genre/orientation, Conviction Track, interaction types
+- Social contest: Argue pools, genre/orientation, Piety Track, interaction types
 - Thread operations: Leap procedure, operation types, co-movement, Ob values
 - Disposition Track, Renown Track, Standing
 - CI, PT, Accord, MS, IP — already distinct tracked values

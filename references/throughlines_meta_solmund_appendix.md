@@ -32,7 +32,7 @@ Until those editorial decisions are made, the content lives here as a discoverab
 
 **T-B: Seam Texts as Mechanical Objects.** Same text, comprehension-gated by TS via P-08. Maps to POI Remnant category. Connects to: POI discovery, fieldwork Survey, SA increments, character formation.
 
-**T-C: Double Consciousness Spiral.** Mending effects simultaneously read as Einhir practice, Solmund miracle, and divine-right confirmation. Three factions, three frames, the incompatibility IS the gameplay. Connects to: faction AI, Conviction Track, Tension Cards.
+**T-C: Double Consciousness Spiral.** Mending effects simultaneously read as Einhir practice, Solmund miracle, and divine-right confirmation. Three factions, three frames, the incompatibility IS the gameplay. Connects to: faction AI, Piety Track, Tension Cards.
 
 **T-D: Baralta as Accidental Prophylaxis Cracker.** Her direct-communion theology weakens the perceptual stance the Church's essentialism forecloses. She is closer to metaphysical truth than the Church, for wrong reasons. Effect is generational, not in-game mechanical. Connects to: narrative positioning, long-term consequence framing.
 

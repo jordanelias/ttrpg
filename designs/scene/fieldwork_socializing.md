@@ -179,7 +179,7 @@ The distinction matters: rupture leaves a wound in the relationship. Loss leaves
 
 **Negotiate** applies only when: (a) parties share a goal but disagree on method, or (b) the outcome is not consequential enough for full Contest. If the situation meets Contest initiation conditions (social_contest_system_v2.md §1), the interaction is a Contest. The GM does not offer a choice — the situation's structure determines the mechanic.
 
-Escalation preserves Disposition, applied as Conviction Track offset: ±1 per 2 Disposition points, capped at ±2.
+Escalation preserves Disposition, applied as Piety Track offset: ±1 per 2 Disposition points, capped at ±2.
 
 ---
 

@@ -150,7 +150,7 @@ Group combat Fibonacci: 2v1 +1D, 3v1 +2D, 4-5v1 +3D, 6-7v1 +4D, 8+ +5D cap.
 
 # PART 3: SOCIAL CONTESTS
 
-Setup: Adjudicator → Primary Attr (Expert: Cog, Crowd: Cha, None: Att). Genres: **Precedent** / **Prospect**. Conviction Track 0–10, start 5. Styles: Citation, Suppression, Vision, Insinuation.
+Setup: Adjudicator → Primary Attr (Expert: Cog, Crowd: Cha, None: Att). Genres: **Precedent** / **Prospect**. Piety Track 0–10, start 5. Styles: Citation, Suppression, Vision, Insinuation.
 
 **Exchange:** Appraise (Att+Rec, Ob = floor(Cha/2)+1) → Declare → Corroborate (optional, +1D) → Argue (Primary×2+H+3, +genre/orientation dice) → Resolve (Clash/Reinforce/Cross/Tie) → Forfeit options (Regroup, Concede).
 

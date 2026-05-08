@@ -326,7 +326,7 @@ Beliefs are revealed to players through:
 ### §3.2 Belief Revision
 
 An NPC revises a Belief when ALL of the following hold:
-1. A Contest produces decisive outcome (Conviction Track ≥ 7 or ≤ 3) against the NPC
+1. A Contest produces decisive outcome (Piety Track ≥ 7 or ≤ 3) against the NPC
 2. The winning argument used the NPC's primary or secondary Resonant Style
 3. The winning argument specifically engaged the Belief in question (GM judgment: the argument's content must textually address the commitment)
 
@@ -554,7 +554,7 @@ Before the Argue roll (Step 3), a player may declare "targeting Resonant Style."
 
 | Resonant Style | Required form | On confirmed targeting |
 |---|---|---|
-| Evidence | Memory + Revealing (Precedent). Must cite specific, named, verifiable claim. | +1D to Argue roll. On win: Conviction Track +1 additional (bypasses 1 point of resistance). |
+| Evidence | Memory + Revealing (Precedent). Must cite specific, named, verifiable claim. | +1D to Argue roll. On win: Piety Track +1 additional (bypasses 1 point of resistance). |
 | Consequence | Projection + Revealing (Vision). Must project specific outcome NPC's framework fails to prevent. | +1D to Argue roll. On win: NPC takes +2 strain (hits thinnest defense). |
 | Authority | Invoke specific authority figure or text the NPC's framework recognises as binding. Authority must genuinely contradict NPC's position. | +1D to Argue roll. Doubt Marker placed on NPC regardless of exchange outcome. |
 | Solidarity | Requires active Knot (Close or Distant) with NPC. Must invoke the relationship itself. (ED-522 resolved: NPC Knot formation requires (a) sustained interaction across 2+ scenes in which PC and NPC cooperate toward a shared goal, AND (b) Bonds check — Bonds score, TN 7, Ob 1. Success: Distant Knot formed. Advancement to Close Knot: 1 full season of active relationship + Bonds Ob 2. Advancement to Intimate Knot: 1 full arc of sustained relationship + Bonds Ob 3 + mutual Belief alignment.) | +1D to Argue roll. On win: no strain dealt, but NPC's next Belief revision check uses Ob −1. |
@@ -789,7 +789,7 @@ When a Zoom In Contest successfully targets an NPC's Resonant Style:
 | ID | Description |
 |---|---|
 | SIM-NPC-01 | Full BG simulation with all NPC priority trees active. Validate multi-faction interaction under priority tree model. |
-| SIM-NPC-02 | Contest simulation: Resonant Style +1D stacking with genre/audience/Recall bonuses. Validate pool sizes and Conviction Track movement rates. |
+| SIM-NPC-02 | Contest simulation: Resonant Style +1D stacking with genre/audience/Recall bonuses. Validate pool sizes and Piety Track movement rates. |
 | SIM-NPC-03 | Arc emergence simulation: run 3-season TTRPG campaign with Almud and Himlensendt arc triggers. Validate that arc branch points fire at appropriate game-state conditions. |
 | SIM-NPC-04 | Framework Drift simulation: run 6-season BG game with all drift mechanics active. Validate drift rates do not produce runaway faction dominance. |
 | SIM-NPC-05 | Belief Scar cascade: validate that 3+ Scars on a single NPC (Conviction crisis table) produces playable behavior, not chaos. |

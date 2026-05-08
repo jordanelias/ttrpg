@@ -41,7 +41,7 @@ The videogame is a continuous experience at two simultaneous scales:
 
 | Rule | Videogame Decision | Source |
 |------|-------------------|--------|
-| §§1–9 (TTRPG rules) | **Use in full.** Argue pool, exchange structure, Conviction Track, Composure, styles, preparation, Beliefs integration. | social_contest_v30 §1–§9 |
+| §§1–9 (TTRPG rules) | **Use in full.** Argue pool, exchange structure, Piety Track, Composure, styles, preparation, Beliefs integration. | social_contest_v30 §1–§9 |
 | §10 (BG Parliamentary Vote) | **Use as strategic-scale resolution.** When Parliament votes occur during seasonal phase, resolve via §10 rules. Player may Zoom In to argue personally (triggers §§1–9 via Hybrid §11). | social_contest_v30 §10 |
 | §11 (Hybrid Contest) | **Use.** This IS the videogame's zoom-in contest: BG Parliamentary vote triggers personal-scale debate scene when player participates. | social_contest_v30 §11 |
 | Adjudicator types | **Use.** Engine selects adjudicator type based on scene context (Forum, Court, Private, Expert, Panel). | social_contest_v30 §2 |

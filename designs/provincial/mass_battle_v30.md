@@ -518,7 +518,7 @@ Over-pursuing exposes flanks. *[confirmed]*
 **Rout vs Destroyed (definitional boundary):** *Rout* = Morale reaches 0; unit flees and cannot fight back (§A.12 cascade fires). *Destroyed* = Size reaches 0; unit eliminated at Phase 6 Step 1. These are distinct states with distinct trigger chains. §A.12 Morale Cascade fires only on Morale rout, not on Size destruction. Artillery-caused unit elimination (Size→0) triggers the Morale −1 "allied unit routed in same zone" entry in §A.4 and PP-198 as a separate enumerated trigger — this does NOT fire the §A.12 Discipline check cascade.
 
 
-**Stalemate Break (PP-297):** If 3 consecutive Battle Turns produce 0 total damage across all engagements (no Health loss on either side), both armies execute Tactical Withdrawal. Effects: no Conviction Track movement, no pursuit, no Rout. Each side's general rolls Command Ob 1 to maintain formation during withdrawal; failure = −1 Discipline on one unit (disorderly retreat). The battle ends as inconclusive. Neither side claims victory. Accounting consequences: IP +1 (military posturing without resolution).
+**Stalemate Break (PP-297):** If 3 consecutive Battle Turns produce 0 total damage across all engagements (no Health loss on either side), both armies execute Tactical Withdrawal. Effects: no Piety Track movement, no pursuit, no Rout. Each side's general rolls Command Ob 1 to maintain formation during withdrawal; failure = −1 Discipline on one unit (disorderly retreat). The battle ends as inconclusive. Neither side claims victory. Accounting consequences: IP +1 (military posturing without resolution).
 
 ---
 

@@ -227,7 +227,7 @@ Both documents flag ED-138 as unresolved. Jordan has now resolved it: versus rol
 
 | Document | Fieldwork to Contest Handoff |
 |---|---|
-| fieldwork_v30 §2.3 | "Current Disposition maps to Conviction Track offset (±1 per 2 Disposition, cap ±2). Evidence from fieldwork may be cited in the Contest for +2D Recall bonus." |
+| fieldwork_v30 §2.3 | "Current Disposition maps to Piety Track offset (±1 per 2 Disposition, cap ±2). Evidence from fieldwork may be cited in the Contest for +2D Recall bonus." |
 | social_contest_v30 §9.1 | "Pre-contest Preparation: +1D on Exchange 1." Evidence Track Findings: "+1D per Finding cited, max +2D." |
 
 **Slight conflict:** fieldwork_v30 says Evidence gives "+2D Recall bonus." social_contest_v30 says "+1D per Finding, max +2D." These produce the same ceiling (+2D) but different framing (flat +2D for any evidence vs. +1D per Finding). The per-Finding model from social_contest_v30 is more granular and should be canonical.

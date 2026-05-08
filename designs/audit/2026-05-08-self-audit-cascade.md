@@ -19,7 +19,7 @@ Counting what I proposed across the last three turns:
 - Per-NPC speech registers
 - Tier-3 texture floor
 
-On top of: 13 Convictions, 8 cultural templates, 4 Resonant Styles, 4 metaphysical axes (TS/Coherence/Spirit/Certainty), 4-axis Conviction substrate, 1–3 Beliefs per NPC, Self-Other, attribute pools (Mind/Body/Spirit + Cognition/Focus/Endurance/Charisma/Bonds), Lifepath history, history-derived skills (level 0–3), Knots, Standing per faction, Belief Scars, Conviction Track Scars, Coherence track, Certainty track.
+On top of: 13 Convictions, 8 cultural templates, 4 Resonant Styles, 4 metaphysical axes (TS/Coherence/Spirit/Certainty), 4-axis Conviction substrate, 1–3 Beliefs per NPC, Self-Other, attribute pools (Mind/Body/Spirit + Cognition/Focus/Endurance/Charisma/Bonds), Lifepath history, history-derived skills (level 0–3), Knots, Standing per faction, Belief Scars, Piety Track Scars, Coherence track, Certainty track.
 
 This is the failure mode I should have caught: **specificity is locally elegant, cumulatively crushing.** Each addition was defensible against the previous baseline. None was audited against the cumulative weight.
 

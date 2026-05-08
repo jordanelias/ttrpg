@@ -43,11 +43,11 @@ The faction layer generates events (stability trigger fires, treaty proposed, pa
 
 ---
 
-## 1.2 Conviction Track & Church Mechanics (conviction_track_v30) — World → Player: VERY WEAK | Player → World: MODERATE
+## 1.2 Piety Track & Church Mechanics (conviction_track_v30) — World → Player: VERY WEAK | Player → World: MODERATE
 
 **Where the bridge fails:**
 
-The Conviction Track (0–5 per territory, Piety axis) is one of Valoria's most important systems — it determines Church seizure eligibility, cultural identity, and eventually territory control. But it operates entirely at the faction-strategic layer. A territory's CV changing from 3 to 4 means something profound — the Church's institutional authority is deepening, local Einhir heritage is being suppressed, people's lived relationship to their spiritual tradition is shifting. None of this reaches the player as experience.
+The Piety Track (0–5 per territory, Piety axis) is one of Valoria's most important systems — it determines Church seizure eligibility, cultural identity, and eventually territory control. But it operates entirely at the faction-strategic layer. A territory's CV changing from 3 to 4 means something profound — the Church's institutional authority is deepening, local Einhir heritage is being suppressed, people's lived relationship to their spiritual tradition is shifting. None of this reaches the player as experience.
 
 The Church Attention Pool is the closest thing to player-facing Church pressure, and it works: the player's Exposure feeds the AP, the AP can trigger Heresy Investigation. But the AP is reactive — it responds to what the player does, not what the Church does. When the Church preaches in a territory and CV rises, when Suppress Heresy fires and backlashes, when TC hits milestones — these are world events that reshape the player's environment without the player ever witnessing them.
 
@@ -83,20 +83,20 @@ More critically: **the world does not fieldwork back.** NPC behavior during fiel
 
 ## 1.4 Social Contests (social_contest_v30) — World → Player: MODERATE | Player → World: STRONG
 
-**What the system does well:** The exchange structure, Conviction Track, Composure/Concentration mechanics, and Resonant Style system are excellent. The integration with NPC stance triangles means that social confrontation is mechanically meaningful — the player must know the NPC's conviction and vulnerability to be effective. This rewards investigation (fieldwork) before confrontation (contest), creating a natural progression.
+**What the system does well:** The exchange structure, Piety Track, Composure/Concentration mechanics, and Resonant Style system are excellent. The integration with NPC stance triangles means that social confrontation is mechanically meaningful — the player must know the NPC's conviction and vulnerability to be effective. This rewards investigation (fieldwork) before confrontation (contest), creating a natural progression.
 
 **Where the bridge fails:**
 
-Social contests are isolated events. They begin, they resolve, they end. The Conviction Track resets. The only persistent consequences are: Domain Echo (if sufficient scope), Disposition changes (winner +1, loser −1 with adjudicator), and Rattled marks (which clear at scene end). A devastating argument that shatters an NPC's conviction produces a Belief Scar — but the Scar system is entirely internal to the NPC behavior system. The player does not experience the scar. They do not see the NPC struggling with what they said. They see a stat change on the NPC's sheet, if they Appraise again later.
+Social contests are isolated events. They begin, they resolve, they end. The Piety Track resets. The only persistent consequences are: Domain Echo (if sufficient scope), Disposition changes (winner +1, loser −1 with adjudicator), and Rattled marks (which clear at scene end). A devastating argument that shatters an NPC's conviction produces a Belief Scar — but the Scar system is entirely internal to the NPC behavior system. The player does not experience the scar. They do not see the NPC struggling with what they said. They see a stat change on the NPC's sheet, if they Appraise again later.
 
-More fundamentally: **contests do not chain.** A real political drama is a sequence of escalating confrontations where the outcome of each shapes the next. CK3's scheme system does this — each step in a murder plot changes the social landscape. Burning Wheel's Duel of Wits produces lasting compromises that reshape subsequent scenes. Valoria's contests are one-shots. The player wins a parliamentary debate, receives Domain Echo (+1 Mandate), and the next contest starts fresh with a reset Conviction Track.
+More fundamentally: **contests do not chain.** A real political drama is a sequence of escalating confrontations where the outcome of each shapes the next. CK3's scheme system does this — each step in a murder plot changes the social landscape. Burning Wheel's Duel of Wits produces lasting compromises that reshape subsequent scenes. Valoria's contests are one-shots. The player wins a parliamentary debate, receives Domain Echo (+1 Mandate), and the next contest starts fresh with a reset Piety Track.
 
 **Precedent critique:** Burning Wheel's Duel of Wits produces a binding result — the loser must honor the compromise for a specified duration, and breaking the compromise has mechanical consequences. The contest's outcome persists in the game world as an obligation, not just a stat change. Valoria's contests produce outcomes that propagate through Domain Echo but do not create binding obligations or relationship consequences beyond Disposition ±1.
 
 **Proposal:**
 - Contest outcomes should create Obligations — mechanical commitments that persist across seasons. A won parliamentary debate about Church expansion should produce an Obligation: "Church must not Preach in [territory] for 2 seasons" or "Crown commits to Suppress Heresy in [territory]." Obligations are tracked like clocks. Violating an Obligation triggers a stability event.
 - Belief Scars should be player-visible. When the player's argument produces a Scar on an NPC, the player should receive notification: "Something changed in Himlensendt's expression. His certainty has cracked." This is not a stat reveal — it is a narrative signal that the world registered what the player said.
-- Chain contests: if a contest produces a compromise (Conviction Track 4–6), the unresolved tension should generate a Scene Slate entry for the following season. The argument is not over; it is deferred. The NPC will come back. The compromise will be tested.
+- Chain contests: if a contest produces a compromise (Piety Track 4–6), the unresolved tension should generate a Scene Slate entry for the following season. The argument is not over; it is deferred. The NPC will come back. The compromise will be tested.
 
 ---
 
@@ -295,7 +295,7 @@ If a system fails one direction, add the missing bridge. If a system fails both 
 | 6 | Social Contests | Add Obligations. Scar visibility. Chain contests. | Medium — adds persistence |
 | 7 | Accord | Add player pathways. Environmental legibility. | Medium — connects player to victory condition |
 | 8 | Combat | Domain Echo on named NPC combat. Reputation cascade. Death cascade. | Medium — bridges an isolated system |
-| 9 | Conviction Track | Player-facing indicators. Heresy Investigation as scene. | Low — presentation layer |
+| 9 | Piety Track | Player-facing indicators. Heresy Investigation as scene. | Low — presentation layer |
 | 10 | Mass Combat | Post-battle scenes. Named unit officers. | Low — system already functional |
 
 ---

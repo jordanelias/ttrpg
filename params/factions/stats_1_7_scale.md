@@ -367,7 +367,7 @@ Excommunicated PC faction leader: faction reverts to NPC institutional tendency 
 
 ## PP-246 — DA→Contest escalation
 
-DA always produces outcome. Contest escalation only when: (a) both parties present, (b) stakes contested, (c) DA roll = Partial. On Partial: Contest at Conviction Track 5. On Success/Failure: no Contest.
+DA always produces outcome. Contest escalation only when: (a) both parties present, (b) stakes contested, (c) DA roll = Partial. On Partial: Contest at Piety Track 5. On Success/Failure: no Contest.
 
 ## PP-254 — CI seizure classification
 

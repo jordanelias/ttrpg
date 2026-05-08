@@ -499,7 +499,7 @@ Fires once per character per Miraculous Event. Characters with TS perceive more 
 | Mending mechanics | Miraculous Event derives entirely from existing Mending rules. No Mending mechanics changed. |
 | NPC priority trees | Baralta, Himlensendt, Vaynard, Almud need Decision Event branches for Southernmost Contact. |
 | POI system | Seam Texts as Remnant POIs. Miracle Investigation may place scripture in new territories. |
-| Conviction Track | Miraculous Event witness mechanic (§25). |
+| Piety Track | Miraculous Event witness mechanic (§25). |
 | Tensions Deck | New cards: "Miracle or Method," "Sovereign Grace," "Southern Knowledge." |
 | Turmoil | Strain and RS track different phenomena. Miraculous Event does not decrement Strain. |
 | Settlement Accord | +1 Accord for Miraculous Event-affected territories (§20.5). |
@@ -514,7 +514,7 @@ Fires once per character per Miraculous Event. Characters with TS perceive more 
 
 **T-B: Seam Texts as Mechanical Objects.** Same text, comprehension-gated by TS via P-08. Maps to POI Remnant category. Connects to: POI discovery, fieldwork Survey, SA increments, character formation.
 
-**T-C: Double Consciousness Spiral.** Mending effects simultaneously read as Einhir practice, Solmund miracle, and divine-right confirmation. Three factions, three frames, the incompatibility IS the gameplay. Connects to: faction AI, Conviction Track, Tension Cards.
+**T-C: Double Consciousness Spiral.** Mending effects simultaneously read as Einhir practice, Solmund miracle, and divine-right confirmation. Three factions, three frames, the incompatibility IS the gameplay. Connects to: faction AI, Piety Track, Tension Cards.
 
 **T-D: Baralta as Accidental Prophylaxis Cracker.** Her direct-communion theology weakens the perceptual stance the Church's essentialism forecloses. She is closer to metaphysical truth than the Church, for wrong reasons. Effect is generational, not in-game mechanical. Connects to: narrative positioning, long-term consequence framing.
 
