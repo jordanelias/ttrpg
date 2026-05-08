@@ -2,7 +2,7 @@
 
 Composition-time reference. Extractable techniques and coherence-tier transformations per author.
 
-For critical backing, provenance, and bibliography: see `literary-review-critical.md`.
+Twelve-author roster. For critical backing, provenance, and bibliography: see `literary-review-critical.md`.
 
 
 ## I. Tolkien
@@ -337,3 +337,88 @@ At Coherence 2 Tartt is at 8%. Atmospheric immersion is no longer sustainable �
 
 At Coherence 1 Tartt is at 7%, the lowest weighting at this tier alongside Tolkien. What remains is the punch sentence and the closing-on-the-loaded-detail discipline. The atmospheric immersion is gone; the loaded-object technique is gone; the aesthetic narrator is no longer focalizing because the rendering has failed enough that the narrator's aesthetic obsession is not producible.
 
+## IX. Beckett
+
+Samuel Beckett (1906–1989). Primary quadrants: Q3, Q4 high Spirit. The will-continuation author.
+
+### 9.2 Techniques extracted
+
+**Permutational enumeration.** Beckett's enumerations differ from repetition by advancing through a combinatorial space. Each item in a series differs from the last — "Left foot. Right foot. Left." is not iteration; it is enumeration of discrete steps in which the sameness is the structure and the difference is the position. Watt's exhaustive permutations of Mr. Knott's arrangements are the extreme case: every possible combination tested, none adequate, the testing itself the content. The synthesis recruits permutational enumeration for low-coherence prose where the rendering cycles through possible predications of a recalibrating experience.
+
+**Anaphoric litany with progressive variation.** "This body homeless. This mind ignoring. These emptied hands." Four different objects under one structural anaphora. Each term carries different content; the repetition is structural, not semantic. Distinct from hammering repetition (anti-pattern I.5) because each instance adds. The synthesis recruits this for Spirit-axis high moments at low coherence — the will naming what it still has.
+
+**Dialectical succession.** "I can't go on. I'll go on." The two statements are not iterations of each other; they are contraries held in sequence. The dialectic does not resolve — neither statement cancels the other. The prose advances by contradiction rather than development. At low coherence high Spirit, the PC's will operates through this structure: the impossibility and the continuation coexist.
+
+**Austere negation.** Beckett's late prose strips to minimal predication. "Imagination Dead Imagine." "All of old. Nothing else ever. Ever tried. Ever failed." The sentences carry maximal weight at minimal length. Economy is the technique — every word displaced from expected position does work. The synthesis recruits this for C1–C2 high Spirit, where the rendering produces output adequate to its frame and that frame does not generate extended structure.
+
+**The will as grammatical subject.** In Beckett the self contracts to a single capacity: deciding. "She had decided" is not backstory but present-tense operation — the deciding is what the self is doing, continuously, at the moment of the prose. The synthesis encodes this in the Spirit modifier: at high Spirit, the verb the self still owns closes the passage.
+
+### 9.3 Coherence-tier transformations
+
+At Tier 10–8, Beckett is at 1% — near-absent. Will-continuation is not audible when the rendering is intact. Available only at thematic extremity (a character's resolve tested at the boundary of endurance).
+
+At Tier 7–5, Beckett remains at 1%. The frame has not shifted enough for the will to become the structuring principle.
+
+At Tier 4–3, Beckett enters at 5%. The Spirit axis becomes audible. High-Spirit PCs begin to exhibit the dialectical succession — the rendering fails at something, the will reasserts, the failure and the assertion coexist.
+
+At Coherence 2, Beckett is at 7%. The anaphoric litany and permutational enumeration enter. The will grips by naming what it still has, testing each predication.
+
+At Coherence 1, Beckett is at 9%. The Beckett voice is fully realized at high Spirit: the self contracted to deciding, austere negation, dialectical succession. "She can't go on. She goes on."
+
+## X. Lem
+
+Stanisław Lem (1921–2006). Primary quadrant: Q2. The clinical-substrate author.
+
+### 10.2 Techniques extracted
+
+**Clinical incommensurability.** Lem's characteristic technique: the scholarly apparatus confronting something that doesn't yield to the apparatus. The description is precise, the methodology correct, the terminology exact — and the object exceeds the frame. The reader perceives the gap between the precision of the description and the resistance of the described. Solaris's ocean is described with oceanographic, mathematical, and biological precision that never captures what it is. Fiasco deploys engineering precision against an alien civilization that does not operate on engineering principles. The synthesis recruits this for the middle layer of the within-observation gradient (anti-pattern III.1) at high TS: the practitioner's scholarly or trained register producing precise descriptions of substrate phenomena that don't quite track.
+
+**The failed taxonomy.** Lem constructs elaborate classification systems for phenomena that resist classification. The Star Diaries and Imaginary Magnitude present scholarly taxonomies with footnotes, cross-references, and categorical precision — all for objects that don't belong in the categories assigned. The technique is the precision of the taxonomy, not its failure. The synthesis recruits this for codex entries, scholarly NPC observations, and institutional attempts to categorize thread phenomena.
+
+**Defamiliarization through expertise.** Where other authors defamiliarize through metaphor or distortion, Lem defamiliarizes through the application of professional expertise to non-professional objects. A psychologist's clinical assessment of an alien encounter. An engineer's technical evaluation of an incomprehensible artifact. The expertise is real; the object exceeds it. The synthesis recruits this for PCs whose training or disposition gives them a professional register — the register is motivated by character, not applied generically.
+
+### 10.3 Coherence-tier transformations
+
+At Tier 10–8, Lem is 0% at TS 0–29. Enters at 5% (TS 30–49) and 10% (TS 50+). The clinical register is gated entirely by TS — without substrate perception, there is nothing for the apparatus to fail against.
+
+At all lower tiers, Lem remains TS-gated. At TS 50+, Lem occupies 8–10% regardless of coherence tier. The technique is about the object's resistance to the apparatus, not the observer's coherence. A high-coherence high-TS practitioner and a low-coherence high-TS practitioner both perceive the substrate; the difference is that the low-coherence observer's integrating frame is itself recalibrating while they attempt to describe what they perceive.
+
+## XI. McCarthy
+
+Cormac McCarthy (1933–2023). Primary quadrant: Q1 (combat, violence, landscape extremity).
+
+### 11.2 Techniques extracted
+
+**Violence rendered without editorial.** McCarthy's signature: the prose depicts violence with clinical precision and moral withholding. No commentary on the violence, no evaluation, no implied judgment. The reader registers the event through the prose's refusal to interpret it. Blood Meridian's scalping scenes, The Road's cannibal encounters — the prose reports and stops. The synthesis recruits this for combat encounters in Valoria where the physical world's indifference to human categories is the content.
+
+**Landscape as geological agent.** McCarthy's landscapes are not settings; they are agents operating at geological timescales. The desert in Blood Meridian is a character with deep-time persistence. The prose renders landscape through accumulated geological detail — mineral, formation, erosion — without personification. The world is not hostile or welcoming; it is indifferent because it operates on a timescale that makes human presence trivial. The synthesis recruits this for harsh terrain, wilderness encounters, and moments where the physical world's scale dwarfs human activity. Overlaps with Tolkien's landscape-as-agent but without Tolkien's implied agency — McCarthy's landscapes do not watch or remember; they endure.
+
+**Unpunctuated dialogue.** McCarthy eliminates quotation marks, sometimes eliminates attribution. Dialogue emerges from the prose without formal markers. The technique integrates speech into the same prose surface as action and landscape — no privileged register for human utterance. The synthesis recruits this sparingly, for moments where the distinction between speech and action is the content (combat dialogue, terse exchange in extremity).
+
+**Biblical parataxis at extremity.** McCarthy's paratactic register at moments of violence carries biblical weight — "and" chaining events into a sequence that implies cosmic scope. This is marked register (per Turner's analysis of Tolkien), not default. The synthesis deploys this at combat peaks and landscape extremity, never as sustained base register.
+
+### 11.3 Coherence-tier transformations
+
+McCarthy is content-gated, not coherence-gated. Weight is 3–4% across all tiers (TS 0–29). Combat, violence, and harsh landscape can occur at any coherence level. At low coherence, the world's indifference is amplified — the landscape endures regardless of the PC's recalibration. McCarthy at low coherence is not licensed for the PC's rendering; the PC observes the world through a failing frame, but what they observe (McCarthy's landscape) is unchanged.
+
+At TS 50+, McCarthy increases slightly at C2 and C1 (to 5–6%) — the substrate's physical manifestation at these tiers produces effects that McCarthy's clinical precision renders well.
+
+## XII. Le Carré
+
+John le Carré (David Cornwell, 1931–2020). Primary quadrant: Q1 (institutional-political, tradecraft, bureaucratic maneuvering).
+
+### 12.2 Techniques extracted
+
+**Institutional indirection.** Le Carré's characteristic technique: power operates through what is not said in the committee meeting, the memo that doesn't name its subject, the professional courtesy that conceals threat. The reader infers the institutional power from the procedural language — the euphemism, the passive voice, the qualified statement that withdraws more than it offers. Tinker Tailor Soldier Spy's Circus scenes demonstrate: every conversation is a negotiation in which the stated content is secondary to the implied positioning. The synthesis recruits this for faction politics, Church bureaucracy, Hafenmark intelligence operations — any institutional encounter where power operates through procedural language.
+
+**Controlled information release.** Le Carré structures narrative through the progressive release of information that the institutions control. The reader learns what the protagonist learns, at the pace the institution permits. Smiley's progress through the mole hunt is gated by institutional access — each conversation unlocks one fact while locking three others. The synthesis recruits this for faction-encounter pacing: the player learns about the institution at the rate the institution's representatives choose to disclose.
+
+**Professional courtesy as threat.** Le Carré's dialogue renders politeness as a weapon. "Do sit down." "How kind of you to come." The courtesy is impeccable; the threat is in the courtesy's existence — professional politeness in a context where informality would be natural signals that the interaction is institutional, not personal. The synthesis recruits this for NPC dialogue in institutional settings — Church officials, faction leaders, Hafenmark operatives.
+
+**The exhausted professional.** Le Carré's protagonists are professionals worn down by the institution they serve. Smiley is competent, thorough, and tired. The tiredness is not dramatic — it is occupational. The synthesis recruits this for NPCs and PCs who have served institutional functions long enough for the institution's weight to be audible in their register — not burnout, not drama, but the accumulated sedimentation of procedural life.
+
+### 12.3 Coherence-tier transformations
+
+Le Carré is content-gated, not coherence-gated. Weight is 2–3% at most tiers (TS 0–29). Institutional encounters can occur at any coherence level. At low coherence, institutional indirection interacts with the PC's recalibrating frame: the PC may be fragmenting, but the Church committee still operates through procedural language around them.
+
+At TS 50+, Le Carré increases at C2 and C1 (to 6–8%). High TS at low coherence means the PC perceives substrate activity beneath the institutional surface — the institutional indirection becomes layered, with the procedural language operating at the human level while the PC perceives thread activity beneath it that the institution either doesn't know about or chooses not to name.

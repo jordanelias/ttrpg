@@ -2,7 +2,7 @@
 
 Audit-time reference. Critical reception, risks, cross-author synthesis, and bibliography.
 
-For extractable techniques: see `literary-review-technique.md`.
+Twelve-author roster. For extractable techniques: see `literary-review-technique.md`.
 
 [ASSUMPTION: ~20–40% of bibliography entries may have citation errors — basis: session 2026-05-06 audit. Citation cleanup pending.]
 
@@ -297,7 +297,77 @@ The synthesis's reliance on Tartt is therefore partially a synthesis-internal ar
 
 
 
-## IX. Cross-Author Synthesis: What the Critical Tradition Permits
+## IX. Beckett
+
+Samuel Beckett. Added to roster 2026-05-07. Primary quadrants: Q3, Q4 high Spirit.
+
+### 9.1 Critical reception trajectory
+
+Beckett criticism is among the most extensive in twentieth-century literature. The synthesis draws primarily on three strands. First, the minimalism-and-repetition scholarship: Ruby Cohn's foundational work on Beckett's language, Enoch Brater's studies of the late prose, and S.E. Gontarski's editorial work on the manuscripts showing Beckett's progressive stripping of prose to essentials. Second, the philosophical readings: Alain Badiou's treatment of Beckett through subtraction and the void, and Simon Critchley's readings of Beckett and ethics. Third, the stylistic analysis: Marjorie Perloff on Beckett's "lessness" technique, and Derek Attridge on Beckett's prose rhythms.
+
+[ASSUMPTION: critical citations for Beckett are sourced from general knowledge of the field — specific publication details should be web-verified before being treated as authoritative. The techniques extracted are well-attested in Beckett scholarship generally.]
+
+### 9.4 Risks
+
+**Pastiche minimalism.** The biggest risk. Beckett's minimalism is precise — every word does work. Minimalism without precision is just short sentences. The audit must verify that each stripped construction carries weight the fuller version would not.
+
+**Negation-dialectic as default.** "I can't go on. I'll go on" is the most quoted sentence in Beckett. Using its structure repeatedly makes it a tic. The dialectical succession is a specific technique for specific moments, not a default register.
+
+**Conflation with Lispector dissolution.** Both operate at low coherence. The distinction is Spirit: Beckett's self grips; Lispector's self yields. If the prose could be either, it has not committed to the Spirit axis.
+
+## X. Lem
+
+Stanisław Lem. Added to roster 2026-05-07. Primary quadrant: Q2.
+
+### 10.1 Critical reception trajectory
+
+Lem criticism has operated in two largely separate traditions: the Polish/European and the Anglophone. The European tradition — Jerzy Jarzębski, Stanisław Bereś, and the Kraków school — treats Lem as a philosopher-novelist in the continental tradition. The Anglophone tradition — Peter Swirski's studies of Lem's literary games, Istvan Csicsery-Ronay's placement of Lem within science fiction criticism — tends to read him through genre-SF frameworks. The synthesis draws primarily on Swirski's work on Lem's epistemological strategies and on the general consensus that Lem's distinctive contribution is the deployment of scholarly-scientific registers against objects that exceed those registers.
+
+[ASSUMPTION: critical citations for Lem are sourced from general knowledge of the field — specific publication details should be web-verified before being treated as authoritative.]
+
+### 10.4 Risks
+
+**Clinical register as costume.** Lem's technique requires the clinical register to be motivated by the character's training or disposition. Applied generically, it reads as the author showing off vocabulary. The audit must verify that the character's background licenses the register.
+
+**TS-gating failure.** Lem techniques enter only with TS-perceived content. If the PC has no TS, there is nothing for the clinical apparatus to fail against, and the technique becomes unmotivated precision.
+
+## XI. McCarthy
+
+Cormac McCarthy. Added to roster 2026-05-07. Primary quadrant: Q1.
+
+### 11.1 Critical reception trajectory
+
+McCarthy criticism has moved through phases comparable to Tolkien's: initial resistance from the literary establishment (dismissed as genre-adjacent violence), followed by critical rehabilitation. The key interventions: Harold Bloom's championing of Blood Meridian as the great American novel of the late twentieth century; Vereen Bell's The Achievement of Cormac McCarthy (1988) as the first full-length study; Leo Daugherty's philosophical readings connecting Blood Meridian to Gnostic and Manichaean traditions; Steven Frye's Understanding Cormac McCarthy (2009); and the Cambridge Companion to Cormac McCarthy (2013), edited by Steven Frye, which consolidated the field. The synthesis draws primarily on the stylistic analyses: McCarthy's paratactic register, his landscape technique, and his treatment of violence without editorial.
+
+[ASSUMPTION: critical citations for McCarthy are sourced from general knowledge of the field — specific publication details should be web-verified before being treated as authoritative.]
+
+### 11.4 Risks
+
+**Violence as atmosphere.** McCarthy's violence is specific and clinical. Deploying violence-adjacent McCarthy register for atmosphere rather than for specific depicted events turns the technique into mood.
+
+**Biblical parataxis as default.** Same risk as Tolkien (anti-pattern V.1): parataxis is marked register. If every combat scene deploys biblical parataxis, the marking is lost. McCarthy at base register is hypotactic — the parataxis surfaces at peaks.
+
+**Landscape overwrite.** McCarthy's geological landscape technique is powerful but heavy. In extended passages without action, it becomes the failure Prose identified in Tartt — atmospheric immersion without function.
+
+## XII. Le Carré
+
+John le Carré. Added to roster 2026-05-07. Primary quadrant: Q1.
+
+### 12.1 Critical reception trajectory
+
+Le Carré criticism has focused on the institutional novel and the ethics of espionage. The key studies: Tony Barley's Taking Sides: The Fiction of John le Carré (1986); David Monaghan's The Novels of John le Carré (1985) and Smiley's Circus (1986); LynnDianne Beene's John le Carré (1992); and the more recent Myron Aronoff's The Spy Novels of John le Carré (1999). The synthesis draws primarily on the institutional-language analyses: how le Carré's prose renders power through procedural indirection, and how the espionage novel's structure (progressive disclosure gated by institutional access) serves narrative pacing.
+
+[ASSUMPTION: critical citations for Le Carré are sourced from general knowledge of the field — specific publication details should be web-verified before being treated as authoritative.]
+
+### 12.4 Risks
+
+**Institutional register as default.** Not every conversation is a debriefing. Le Carré's technique operates in institutional contexts where power is at stake. In personal or domestic scenes, the institutional register is wrong.
+
+**Conflation with Ishiguro restraint.** Both use controlled, measured prose. The distinction: Le Carré's withholding is institutional and strategic (the speaker knows what they're not saying and chooses not to say it for positional advantage); Ishiguro's is personal and self-deceptive (the narrator doesn't know they're evading). Anti-pattern V.2 (Ishiguro) and V.12 (Le Carré) are distinct failure modes.
+
+**Professional courtesy overdeployed.** The politeness-as-threat technique is devastating once per scene. Deployed in every NPC interaction, it turns the entire institutional world into a spy novel.
+
+## Cross-Author Synthesis: What the Critical Tradition Permits
 
 The eight authors do not share a critical tradition. Tolkien is read by Anglo-medievalists and philologists; Lispector and Borges by Latin Americanists, structuralist-Argentine theorists, and (separately) French feminists; Mistry by postcolonialists and South Asian diaspora critics; Ishiguro by late-modernist comparatists; Márquez by Boom-and-magical-realism scholars; Ocampo by Argentine-fantastic critics and (recently) Latin American horror traditions; Tartt by mostly review apparatus. The synthesis composes techniques across these traditions, which means it composes techniques that have never been read together by a single critical literature.
 
@@ -393,7 +463,7 @@ The synthesis's anti-pattern catalogue is therefore predominantly grounded in th
 
 
 
-## IX.6 What this review does not establish
+## What this review does not establish
 
 The review has been about technique-extraction and critical anchoring within the literatures on the eight authors. It has not addressed the synthesis's narrative effectiveness — whether prose generated from the synthesis is read as the eight-author voice the synthesis claims. That requires reader-response work the synthesis has not undertaken.
 
