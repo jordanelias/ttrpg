@@ -37,9 +37,12 @@ Coherence is orthogonal to Thread Sensitivity AND to Spirit. Three axes operate 
 - **Thread Sensitivity (0–100)** determines substrate perception — what the PC perceives beyond ordinary human capacity.
 - **Spirit (1–7, the metaphysical attribute)** determines agency persistence — whether the will continues to grip when rendering fails.
 
-The prose must not conflate them. A low-coherence PC without TS experiences rendering failure as inexplicable breakdown. A low-coherence PC with TS experiences rendering failure AND substrate perception — but one does not cause the other. The Spirit axis becomes audible at Coherence 4 and below, producing two **categorically different prose problems**:
+The prose must not conflate them. A low-coherence PC without TS experiences rendering failure as inexplicable breakdown. A low-coherence PC with TS experiences rendering failure AND substrate perception — but one does not cause the other. <!-- concept:spirit-axis -->
+The Spirit axis becomes audible at Coherence 4 and below, producing two **categorically different prose problems**:
 
+<!-- concept:exteriority -->
 - **High Spirit (Beckett):** The will operates beyond human rationality but it *operates* — it produces action. The prose renders what the character does (walks, works, holds, continues) and is **opaque about why**. The interior is inaccessible but functional. The reader infers the will from the behavior. The narrative describes AROUND the interior through its exteriority.
+<!-- concept:agent-insufficiency -->
 - **Low Spirit (Lispector):** The intentional armature is dissolving. The character lacks the strength of will/purpose/belief to simply act. The prose **cannot name an action** because naming "she walked" requires an agent who intended to walk, and the agent is insufficient to the verb. The prose veers, fails to complete predication, falls into tautology. "She was — she was on the path."
 
 These are not two flavors of the same thing. High Spirit: can render action, cannot render motive. Low Spirit: cannot render action because there is no agent sufficient to the verb.
@@ -50,6 +53,7 @@ See `references/coherence-tiers.md` for the tier-tables with deployment notes, t
 
 When coherence is unspecified, use the Tier 10-8 (Stable) weighting. Weights are 2D — indexed by both coherence and Thread Sensitivity:
 
+<!-- author:all-weights -->
 | Author | TS 0-29 | TS 30-49 | TS 50+ | Role |
 |---|---|---|---|---|
 | Tolkien | 24 | 20 | 15 | Ground. Landscape, deep-time, named specificity. |
@@ -88,6 +92,7 @@ The writer does not consciously deploy "Tolkien now, then Mistry, then Lispector
 
 When reviewing, ask: does the coherence tier match? Is the PC's rendering functioning at the level this tier demands? Have irreal techniques been deployed as world-surrealism rather than as the PC's categorical failure? Has the prose conflated rendering failure with substrate perception?
 
+<!-- concept:observing-around -->
 ## The Observing-Around Principle
 
 When the prose confronts something it cannot render directly, it describes AROUND the thing — what it does, what it affects, how it behaves, what surrounds it. The thing takes shape from the surround.

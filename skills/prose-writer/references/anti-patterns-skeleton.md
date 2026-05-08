@@ -59,6 +59,7 @@ This is the audit-time layer. SKILL.md's "What the Voice Does NOT Do" and Self-C
 - **Diagnostic:** If a noun appears three or more times in adjacent sentences without each instance ADDING something or being part of a parallel structure with different content, the prose has fallen into iteration. The "stuck" feeling at low coherence comes from the rendering not *progressing as the human frame would expect*, enacted through veer, enumeration of difference, paradox, anaphoric litany — not through saying the same thing twice.
 - **Distinguish from:** Lispector's repetition-as-ontological-intensity and Ishiguro's repetition-with-variation, which return to the same scene with new detail. These carry difference; hammering does not. At low Spirit, Lispector's veering and failed predication are not repetition — they are the prose attempting to complete a sentence and failing because the agent-subject is insufficient. The failed attempt is different from the previous attempt. At high Spirit, Beckett's prose does not repeat — it renders new actions. The character does the next thing.
 
+<!-- concept:wittgenstein -->
 ### I.6 The Wittgenstein Constraint
 
 > "Whereof one cannot speak, thereof one must be silent." — Wittgenstein, *Tractatus*, 7
@@ -71,6 +72,7 @@ No sentence in the Valoria voice may describe its own inadequacy to the content 
 - **Fix:** The sentence attempts. It veers (Lispector), commits wrongly (Ishiguro), applies precision to the impossible (Borges), reports flatly without registering (Ocampo), builds around the absence (Tolkien), or states impossibility in ordinary syntax (Márquez). The reader infers the failure from the sentence's behavior. For oxymorons: either commit to one term (Ishiguro) or apply precise measurement to the impossible (Borges). Or close on the physical and stop (Tolkien).
 - **Closing rule:** When the prose reaches the limit of what it can render, it closes on the nearest concrete thing. The pin beside the book. The chalk on the sleeves. The lane running south. The grass, the ground, the wind. Not a symbol. The last thing the prose can say.
 
+<!-- concept:observing-around -->
 ### I.6b The Observing-Around Principle
 
 The structured complement to the Wittgenstein constraint. Where the constraint says *the prose does not describe its own inadequacy*, the observing-around principle says *the prose describes what surrounds the thing it cannot enter, and the thing takes shape from the surround*.
@@ -144,6 +146,7 @@ Three applications across the three axes:
 
 ## III. Y-Axis Deployment (Thread Sensitivity Checks)
 
+<!-- concept:within-observation-gradient -->
 ### III.1 Within-Observation Gradient
 **Scope:** Q2, Q4 (TS 50+).
 
@@ -168,13 +171,16 @@ Three applications across the three axes:
 
 **Scope:** Q3, Q4 (Z is audible at Coherence 4 and below).
 
+<!-- concept:spirit-axis -->
 ### IV.1 Spirit Axis Flatness at Low Coherence
 - **Symptom:** At C4 and below, the prose renders the recalibration without distinguishing high Spirit from low Spirit. The PC dissolves regardless of what their will is doing, OR the PC grips regardless of whether agency persists.
 - **Fix:** At C4 and below, Spirit determines whether the will continues to grip. These are **two categorically different prose problems**, not two flavors of the same thing.
 
-  **High Spirit** = Beckett continuation through action. The will operates beyond human rationality but it *operates* — it produces action. The character acts: walks, works, holds, continues. The prose renders the action with precision and is opaque about why. The reader infers the will from the behavior. The narrative describes AROUND the interior through its exteriority. The interior is inaccessible but functional — it is producing output the narrative can render (action), it just can't render the motive. **The prose problem:** can render action, cannot render motive. Closing: the act ("she walks").
+  <!-- concept:exteriority -->
+**High Spirit** = Beckett continuation through action. The will operates beyond human rationality but it *operates* — it produces action. The character acts: walks, works, holds, continues. The prose renders the action with precision and is opaque about why. The reader infers the will from the behavior. The narrative describes AROUND the interior through its exteriority. The interior is inaccessible but functional — it is producing output the narrative can render (action), it just can't render the motive. **The prose problem:** can render action, cannot render motive. Closing: the act ("she walks").
 
-  **Low Spirit** = Lispector dissolution through insufficient intentional armature. The character lacks the strength of intentionality/will/purpose/belief/motivation to simply act. There is no agent sufficient to the verb. The narrative struggles to even name an action — "she walked" requires a "she" who intended to walk, and the interiority that produces intention is dissolving. The prose veers, fails to complete predication, falls into tautology. "She was — she was on the path." The path is there. The feet are there. But the prose cannot assemble the sentence because the agent is insufficient to the construction. **The prose problem:** cannot render action because the agent-subject is dissolving. Closing: the noun ("the feet"), never the act.
+  <!-- concept:agent-insufficiency -->
+**Low Spirit** = Lispector dissolution through insufficient intentional armature. The character lacks the strength of intentionality/will/purpose/belief/motivation to simply act. There is no agent sufficient to the verb. The narrative struggles to even name an action — "she walked" requires a "she" who intended to walk, and the interiority that produces intention is dissolving. The prose veers, fails to complete predication, falls into tautology. "She was — she was on the path." The path is there. The feet are there. But the prose cannot assemble the sentence because the agent is insufficient to the construction. **The prose problem:** cannot render action because the agent-subject is dissolving. Closing: the noun ("the feet"), never the act.
 
 ### IV.2 Over-Explained Absence
 - **Symptom:** When rendering missing capacity — at C0 low Spirit, or observing a being whose intentionality has dissolved — the prose explains what is missing: "the thing that noticing produces in a person, which is a response," or "the thing that agency does, which is to direct the action." The narrator analyzes the absence into an explicit proposition.
@@ -186,64 +192,76 @@ Three applications across the three axes:
 
 Each entry: the author's primary quadrants, the mannerism risk, and deployment constraints. If a technique appears twice in the same passage, it has become mannerism.
 
+<!-- author:tolkien -->
 ### V.1 Tolkien
 **Primary:** Q1, Q2. Fragments at Q3/Q4 as rendering-function remnants.
 - **Mannerism risk:** Inverted syntax ("Great was the ruin"). Once: weighty. Repeatedly: costume.
 - **Deployment constraint:** Parataxis is marked register, not default (Turner). Surface paratactic chains only at heroic peaks, elevated register, moments of weight. If parataxis runs as the base register for paragraphs at a time, the marking is lost. Default is hypotactic.
 
+<!-- author:ishiguro -->
 ### V.2 Ishiguro
 **Primary:** Q1, Q3.
 - **Mannerism risk:** "Perhaps as it should have been," "I cannot now recall." Once: restrained. Repeatedly: tic.
 - **Deployment constraint (restraint mislabeled):** Ishiguro requires *unreliability presenting as restraint*. The narrator's composure conceals self-deception, not just social caution. If the narrator is reliable, the technique is not Ishiguro. Le Carré tradecraft prose, measured diplomatic register, or simple courtesy are not "Ishiguro restraint."
 - **Deployment constraint (contradiction audibility, Q2 at TS 30–49):** When the PC misidentifies a substrate cue, the contradicting evidence must be present and audible to the reader — close to the misidentification, in plain prose, without commentary. The reader hears the wrongness; the narrator does not. If the evidence is absent, the technique becomes plausible truth, not unreliable narration.
 
+<!-- author:mistry -->
 ### V.3 Mistry
 **Primary:** Q1. Accretive technique at Q3/Q4 interacts with Lispector (see V.7).
 - **Mannerism risk:** Sensory catalogues. Once: immersive. Repeatedly: tour.
 - **Deployment constraint (ensemble misidentified):** Mistry's continuous-scene rotation rotates through multiple characters' interiors within a single continuous scene. No break in continuity. If there's a scene break, it's just multiple perspectives — valid but not Mistry's technique.
 
+<!-- author:tartt -->
 ### V.4 Tartt
 **Primary:** Q1.
 - **Mannerism risk:** Atmospheric long sentences. Once: immersion. Repeatedly: fog. Three-word punch sentences. Once: weight. Repeatedly: drumbeat.
 - **Deployment constraint (loaded-object at low C, Q3/Q4):** Tartt's loaded-object technique requires the rendering to produce interpretation. At C4 and below, the object becomes heavy but unread — present but not meaning. The chain to implication breaks. "There was something about the water. The something was —" The veer (Lispector) replaces the interpretation. The object is loaded in the world; the rendering that would unload it into narrative is failing. Most coherence-dependent technique in the roster.
 - **Deployment constraint (atmospheric excess):** In long passages, check that atmospheric immersion is doing work (focalization, reality-effect, temporal anchoring) — not just producing tone. Sustained atmospheric immersion without function becomes the failure Mendelsohn identified.
 
+<!-- author:marquez -->
 ### V.5 Márquez
 **Primary:** Q1, Q2. Time-folds and matter-of-fact impossibility.
 - **Mannerism risk:** Hyperbolic precision. Once: comic gravity. Repeatedly: schtick.
 - **Deployment constraint (genre vs. technique):** Extract Márquez narrowly — matter-of-fact impossibility, hyperbolic specificity, time-fold. Do not produce prose that performs magical-realism as a genre. The genre flattened distinct practices into a marketing category (Faris).
 
+<!-- author:borges -->
 ### V.6 Borges
 **Primary:** Q1, Q2 only. **Not Q3/Q4.** Narrowed per session 2026-05-06.
 - **Mannerism risk:** Infinite recursion / mirror metaphor. Once: the paradox holds. Repeatedly: the trick is visible. Too-clever constructions drawing attention to their own cleverness — the "simply" is condescending and the construction symmetrical. Real prose is rougher.
 - **Deployment constraint:** Borges's content-level recursion is Q1–Q2 territory. At low X, prose-recursion is Lispector paradox-recursion (Q3/Q4 low Z) or Beckett dialectical succession (Q3/Q4 high Z), not Borges. Borges deployed in thin contexts (without developed practitioner-position) becomes decoration rather than position.
 
+<!-- author:lispector -->
 ### V.7 Lispector
 **Primary:** Q3, Q4. Present at Q1 (8%) for ontological estrangement.
 - **Mannerism risk:** "This instant-now" temporal shift. Once: rendering failure. Repeatedly: affectation.
 - **Deployment constraint (tautology aestheticized, Q3/Q4 low Z):** Mistry's accretive technique combined with Lispector's tautology can produce meditative, almost lyrical rhythm — "the callus meant the callus. The bench. The cuts. The light." Rendering failure should not produce comfortable prose. The tautological loops are pathological, not lyrical. Break the meditation with sharp disruption — a dissociative gap, a shadow that doesn't match the body, a weight that has shifted. Reminds the reader the repetition is the rendering cycling because it cannot synthesize.
 
+<!-- author:ocampo -->
 ### V.8 Ocampo
 **Primary:** Q3, Q4. Present at Q1 (8%) for small uncanny moments.
 - **Mannerism risk:** Flat-affect horror. Once: devastating. Repeatedly: monotone.
 
+<!-- author:beckett -->
 ### V.9 Beckett
 **Primary:** Q3, Q4 high Z. The will-continuation author.
 - **Mannerism risk:** Austere negation-dialectic. Once: the contradiction holds ("I can't go on. I'll go on."). Repeatedly: every sentence becomes affirmation-negation toggle. Also: repetitive interior declarations of will ("she held it. She held it. She held it.") — this is iteration (I.5), not Beckett.
 - **Deployment constraint (exteriority):** At low coherence high Spirit, the Beckett voice renders the will through **what the character does**, not through interior declaration. The prose describes action — walking, working, holding, continuing — with precision. The interior is opaque because it has moved beyond the domain the narrative can access. The reader infers the will from the behavior. "She walked into the wind and the wind did not stop her" — not "she had decided to walk." The narrative describes AROUND the interior through its exteriority. This is the "observing around" principle applied to the self: you cannot enter the interior, so you render what the interior produces at the surface.
 - **Deployment constraint (technique):** Beckett's permutational enumeration, anaphoric litany, and dialectical succession all carry *difference*. Each item in a Beckett series differs from the last. If the prose cycles the same word or clause without variation, it has fallen into iteration (see I.5), not Beckett. Beckett's minimalism is economical, not empty — every word displaced from its expected position does work.
 
+<!-- author:lem -->
 ### V.10 Lem
 **Primary:** Q2. The observing-around author.
 - **Mannerism risk:** Modern scientific register. Once: the precision illuminates the alien. Repeatedly: the prose reads as a lab report. **Critical achronism risk:** Valoria is Renaissance-era. No thermometers, no frequencies, no measurement instruments. The analytical method is pre-scientific: careful observation, cataloguing, distinguishing, noting — the methodology of the trained eye without the technology.
 - **Deployment constraint (observing around):** Lem's core technique is describing AROUND the thing that cannot be described directly. The observation is precise — what the thing does, what it affects, how it behaves, what surrounds it — but the observation circles the object without entering it. The gap between the precision of the description and the resistance of the described is the technique. This "observing around" principle is Lem's primary contribution to the synthesis and extends beyond TS-gated content to become available wherever the prose confronts something it cannot render directly: the interior of a low-coherence high-Spirit character, the nature of a threadcut being, the substrate itself.
 - **Deployment constraint (register):** The analytical register must be motivated by the PC's training or disposition — a practitioner's Hafenmark education, a scholar's methodical habits, a warden's systematic observation. Pre-scientific precision: "she counted six axes, each distinct, each behaving differently from the others" — not "oscillation at 4.2-second intervals." The observer catalogues, distinguishes, and notes. The taxonomy fails not because the instruments are insufficient but because the categories are.
 
+<!-- author:mccarthy -->
 ### V.11 McCarthy
 **Primary:** Q1 (combat, violence, landscape extremity).
 - **Mannerism risk:** Biblical parataxis in violence. Unpunctuated dialogue. Once: the weight of the prose matches the weight of the event. Repeatedly: everything reads as apocalyptic judgment regardless of content.
 - **Deployment constraint:** McCarthy's technique renders violence and landscape with clinical precision and moral withholding — the prose does not editorialize on the violence it depicts. Deploy for combat encounters, harsh landscape, moments where the physical world's indifference to human categories is the content. Do not deploy as general-purpose "serious" register. McCarthy at low coherence is not licensed — his prose requires a functioning human observer rendering the world's brutality through intact categories.
 
+<!-- author:lecarre -->
 ### V.12 Le Carré
 **Primary:** Q1 (institutional-political, tradecraft, bureaucratic maneuvering).
 - **Mannerism risk:** Institutional circumlocution. Controlled information release. Once: the reader feels the institutional weight. Repeatedly: every conversation becomes a debriefing.

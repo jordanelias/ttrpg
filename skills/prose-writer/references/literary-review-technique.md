@@ -5,6 +5,7 @@ Composition-time reference. Extractable techniques and coherence-tier transforma
 Twelve-author roster. For critical backing, provenance, and bibliography: see `literary-review-critical.md`.
 
 
+<!-- author:tolkien -->
 ## I. Tolkien
 
 **Position in synthesis:** heaviest weight at every coherence tier; 28% at 10–8, decaying to 7% at Coherence 1. The ground beneath the prose. Even at the lowest coherence Tolkien supplies fragments — names, landscape details, ground-checks — that mark the brief moments where rendering produces structured perception.
@@ -41,6 +42,7 @@ At Coherence 2 and 1, Tolkien is reduced to fragments — a name, a landscape de
 
 
 
+<!-- author:mistry -->
 ## II. Lispector
 
 **Position in synthesis:** rises sharply with coherence drop. 8% at Tier 10–8, 12% at 7–5, 16% at 4–3, 17% at Coherence 2, 19% at Coherence 1 — the highest weight at Coherence 1 of any author. Lispector is the synthesis's primary tool for rendering categorical failure on the subject axis.
@@ -79,6 +81,7 @@ At Coherence 1 Lispector reaches its highest weight, 19%. *Água Viva*'s instant
 
 
 
+<!-- author:tartt -->
 ## III. Borges
 
 **Position in synthesis:** rises sharply with coherence drop. 7% at Tier 10–8, 8% at 7–5, 11% at 4–3, 16% at Coherence 2, 18% at Coherence 1. Tied with Ocampo as the second-highest weight at Coherence 1 after Lispector. Borges is the synthesis's primary tool for the intelligibility axis decomposing — the conditions of possibility becoming visible as the limitation that screened them fails.
@@ -117,6 +120,7 @@ At Coherence 1 Borges is at 18%, second-highest after Lispector. The structural 
 
 
 
+<!-- author:ishiguro -->
 ## IV. Ishiguro
 
 **Position in synthesis:** the most stable weighting across coherence tiers. 12% at Tier 10–8, 14% at 7–5, 14% at 4–3, 13% at Coherence 2, 12% at Coherence 1. Ishiguro is the only author whose weight is roughly flat — because unreliability is inherent to rendering failure at every level, and Ishiguro is the synthesis's primary tool for unreliability. Wherever the rendering fails, the narrator's reading of the failure is itself unreliable; Ishiguro supplies that reading.
@@ -155,6 +159,7 @@ At Coherence 1 Ishiguro is at 12%. The narrator's reading of their own perceptio
 
 
 
+<!-- author:marquez -->
 ## V. Márquez
 
 **Position in synthesis:** rises moderately with coherence drop, then plateaus. 11% at Tier 10–8, 13% at 7–5, 14% at 4–3, 14% at Coherence 2, 14% at Coherence 1. Márquez carries the temporal axis decomposing — temporal compression, time-folding, the matter-of-fact rendering of impossibility — and his weight stabilizes once temporal structuring has fully failed because the technique's contribution is structural rather than scaling with intensity.
@@ -199,6 +204,7 @@ At Coherence 1 Márquez stays at 14%. Time-as-labyrinth (Borges) and the instant
 
 
 
+<!-- author:borges -->
 ## VI. Mistry
 
 **Position in synthesis:** declines steadily with coherence drop. 14% at Tier 10–8, 10% at 7–5, 8% at 4–3, 7% at Coherence 2, 5% at Coherence 1. Mistry's decline is the second-steepest after Tolkien's because Mistry's technique depends on accreted particulars and embodied occupational specificity — both of which require the rendering apparatus that fails at low coherence. What remains of Mistry at low coherence is the body-as-record principle (calluses, scars, posture) reduced to fragments.
@@ -243,6 +249,7 @@ At Coherence 1 Mistry is at 5%, the lowest of any author at this tier. What surv
 
 
 
+<!-- author:lispector -->
 ## VII. Ocampo (Silvina)
 
 **Position in synthesis:** rises sharply with coherence drop. 8% at Tier 10–8, 10% at 7–5, 13% at 4–3, 16% at Coherence 2, 18% at Coherence 1 — tied with Borges as the third-highest weight at the lowest tier. Ocampo is the synthesis's primary tool for the ontological-belonging axis decomposing — the practitioner ceasing to fit in the human world — and her techniques (flat-affect rendering, the domestic interior as horror-site, charged objects, refusal of explanation) are the modes through which belonging-failure becomes audible.
@@ -291,6 +298,7 @@ At Coherence 1 Ocampo is at 18%, tied with Borges. The flat-affect rendering of 
 
 
 
+<!-- author:ocampo -->
 ## VIII. Tartt
 
 **Position in synthesis:** declines steadily with coherence drop. 12% at Tier 10–8, 11% at 7–5, 10% at 4–3, 8% at Coherence 2, 7% at Coherence 1. Tartt's decline is gentle across the upper tiers and steeper at the bottom; she is the most coherence-dependent author of the eight (test battery part 4 confirmed the 5/4 boundary as the Tartt loaded-object ceiling). What survives at low coherence is the atmospheric anchor and the punch sentence; the loaded-object technique that is Tartt's distinctive contribution requires the rendering to produce interpretation, and that rendering is precisely what fails.
@@ -337,6 +345,7 @@ At Coherence 2 Tartt is at 8%. Atmospheric immersion is no longer sustainable �
 
 At Coherence 1 Tartt is at 7%, the lowest weighting at this tier alongside Tolkien. What remains is the punch sentence and the closing-on-the-loaded-detail discipline. The atmospheric immersion is gone; the loaded-object technique is gone; the aesthetic narrator is no longer focalizing because the rendering has failed enough that the narrator's aesthetic obsession is not producible.
 
+<!-- author:beckett -->
 ## IX. Beckett
 
 Samuel Beckett (1906–1989). Primary quadrants: Q3, Q4 high Spirit. The will-continuation author.
@@ -353,6 +362,7 @@ Samuel Beckett (1906–1989). Primary quadrants: Q3, Q4 high Spirit. The will-co
 
 **The will as grammatical subject.** In Beckett the self contracts to a single capacity: deciding. But the deciding is visible in the body, not in the prose declaring it. The character walks, works, holds, continues — and the prose renders these actions with precision while remaining opaque about why. "She had decided" appears once as anchor; thereafter the will is inferred from the behavior. The synthesis encodes this in the Spirit modifier: at high Spirit, the act the self still performs closes the passage.
 
+<!-- concept:exteriority -->
 **Exteriority at low coherence (high Spirit).** At C4 and below with high Spirit, the interior has moved beyond the domain the narrative can adequately access — but the will still *operates* and produces action. The Beckett technique renders the will through its surface effects — what the character does, how they move, what their body enacts — while the narrative describes AROUND the interior. The reader sees the action and infers the will. This is categorically different from low Spirit, where the intentional armature is dissolving and the narrative cannot even name an action because the agent is insufficient to the verb. High Spirit: the prose renders action, is opaque about motive. Low Spirit: the prose cannot render action because there is no agent sufficient to produce it.
 
 ### 9.3 Coherence-tier transformations
@@ -367,12 +377,14 @@ At Coherence 2, Beckett is at 7%. The anaphoric litany and permutational enumera
 
 At Coherence 1, Beckett is at 9%. The Beckett voice is fully realized at high Spirit: the self contracted to deciding, austere negation, dialectical succession. "She can't go on. She goes on."
 
+<!-- author:lem -->
 ## X. Lem
 
 Stanisław Lem (1921–2006). Primary quadrant: Q2. The clinical-substrate author.
 
 ### 10.2 Techniques extracted
 
+<!-- concept:observing-around -->
 **Observing around (clinical incommensurability).** Lem's characteristic technique: describing AROUND the thing that cannot be described directly. The observation circles the object — what it does, what it affects, what surrounds it, how it behaves — without entering it. In Solaris, the ocean is described through what it produces (the Phi-creatures, the mimoids, the symmetriads), what it does to the station's instruments, how it responds to stimuli — never what it is. In Fiasco, the alien civilization is described through its artifacts, its emissions, its effects on the environment — never its intentions. The precision is the point, and so is the gap. The synthesis recruits this as the **primary technique for rendering what cannot be rendered directly**, extending beyond TS-gated content. At high TS: the practitioner's trained observation cataloguing substrate phenomena that don't yield to the categories. At low coherence high Spirit: the narrative describing AROUND the character's interior through their exteriority. At C0 encounters: the observer describing AROUND the threadcut being through its surface effects. **The Valoria adaptation is pre-scientific.** No instruments, no measurements, no frequencies. The analytical method is Renaissance-era: the trained eye cataloguing, distinguishing, noting with methodical care. "She counted six distinct behaviors, each unlike the others" — not "oscillation at 4.2-second intervals." The categories fail because the content exceeds them, not because the instruments are insufficient.
 
 **The failed taxonomy.** Lem constructs elaborate classification systems for phenomena that resist classification. The synthesis recruits this for codex entries, scholarly NPC observations, and institutional attempts to categorize thread phenomena. In the Valoria context: Hafenmark field reports with systematic notation, Church records with careful categorization, practitioner journals with methodical observation — all producing precise, internally consistent records of things that do not belong in the categories assigned.
@@ -385,6 +397,7 @@ At Tier 10–8, Lem is 0% at TS 0–29. Enters at 5% (TS 30–49) and 10% (TS 50
 
 At all lower tiers, Lem remains TS-gated. At TS 50+, Lem occupies 8–10% regardless of coherence tier. The technique is about the object's resistance to the apparatus, not the observer's coherence. A high-coherence high-TS practitioner and a low-coherence high-TS practitioner both perceive the substrate; the difference is that the low-coherence observer's integrating frame is itself recalibrating while they attempt to describe what they perceive.
 
+<!-- author:mccarthy -->
 ## XI. McCarthy
 
 Cormac McCarthy (1933–2023). Primary quadrant: Q1 (combat, violence, landscape extremity).
@@ -405,6 +418,7 @@ McCarthy is content-gated, not coherence-gated. Weight is 3–4% across all tier
 
 At TS 50+, McCarthy increases slightly at C2 and C1 (to 5–6%) — the substrate's physical manifestation at these tiers produces effects that McCarthy's clinical precision renders well.
 
+<!-- author:lecarre -->
 ## XII. Le Carré
 
 John le Carré (David Cornwell, 1931–2020). Primary quadrant: Q1 (institutional-political, tradecraft, bureaucratic maneuvering).
