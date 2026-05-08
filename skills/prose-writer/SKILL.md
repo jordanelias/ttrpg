@@ -19,9 +19,28 @@ The synthesis is a single integrated voice. All twelve authors contribute. The w
 3. **Determine the PC's coherence tier, Thread Sensitivity, and Spirit.** Consult `references/coherence-tiers.md` for the tier-tables (10-8, 7-5, 4-3, 2, 1). All three axes are orthogonal and independently affect the prose. If coherence is not established, default to Tier 10-8. If TS is not established, default to 0. If Spirit is not established, default to mid-range (3–4) — neutral, neither agency-grip nor agency-dissolution dominant.
 4. **If prose involves Church speakers, religious texts, or characters with established Certainty levels:** consult Solmund Voice canon at `designs/world/solmund_voice_v30.md` per the scoped-override section below.
 5. Identify focalization. For chronicle-mode prose, this MUST be one of the four canonical chroniclers per P-03.
-6. Write. Apply techniques as content, focalization, and coherence tier demand. Multiple authors per sentence is normal.
-7. Audit using the skeletons as live rule-set, not memory check.
-8. **Infill-on-demand:** If a skeleton rule needs deeper context (rationale, expanded examples, academic citation, full technique discussion), load the matching section from the corresponding `-infill.md` file. Do not load full infill files routinely.
+6. **Plan beats with cliche risk flags (for non-trivial passages).** Before writing, outline the passage's beats. For each beat, identify the specific cliche or anti-pattern most likely to fire. One line per beat. This is a risk register, not a template.
+
+   Example (Haelgrund investigation scene):
+   - Beat 1: arrives at parish, observes staff. **Risk:** genre signals for hidden powers (I.9b — "a sensitivity to qualities in rooms")
+   - Beat 2: examines accounts, finds nothing wrong. **Risk:** announced withholding (I.9d — "he did not write what the consistency meant")
+   - Beat 3: formal interviews, asks his own questions. **Risk:** pointing at gap (I.9e — drawing attention to what he doesn't question)
+   - Beat 4: finds physical evidence. **Risk:** philosophical register (I.9c — "presence and absence" to describe a discolouration in mortar)
+   - Through-line: TS 12 operating beneath awareness. **Risk:** narrated irony (I.9a — explaining the dramatic irony to the reader). **Structural fix:** render surface only. He is good at his job. Slightly better than good explains. Never flag the gap.
+
+   Example (Baralta/Vaynard/Almud Diet scene):
+   - Beat 1: chamber setup. **Risk:** telling the reader who will win (I.4 premature resolution)
+   - Beat 2: tariff debate, Vaynard's data. **Risk:** making Vaynard the clever one (imbalanced characterization)
+   - Beat 3: Baralta's counter-motion. **Risk:** diminishing her — she always wins (ratchet principle VI.5)
+   - Beat 4: Almud's intervention. **Risk:** making him the mastermind above the other two (same — all three are Goliaths)
+   - Through-line: escalation. **Risk:** equilibrium framing — "the balance held." **Structural fix:** each party advances, none retreats, space narrows.
+
+   Skip this step for single-paragraph prose, dialogue lines, or codex entries. Use it for any scene with subtext, hidden character properties, political dynamics, or multi-character encounters.
+
+7. Write. Apply techniques as content, focalization, and coherence tier demand. Multiple authors per sentence is normal.
+8. **Audit against the beat-risk flags.** For each flagged risk in step 6, check whether the written passage triggered it. This is the targeted review — not a general audit but a check against the specific traps identified before writing. Then run the general self-check (below).
+9. **General audit** using the skeletons as live rule-set, not memory check.
+10. **Infill-on-demand:** If a skeleton rule needs deeper context (rationale, expanded examples, academic citation, full technique discussion), load the matching section from the corresponding `-infill.md` file. Do not load full infill files routinely.
 
 The skeletons are the live working memory during composition. The infill files are reference material for cases where a rule needs justification or expansion.
 
