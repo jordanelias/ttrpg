@@ -774,7 +774,7 @@ All items below approved and confirmed canonical (ED-689).
 | BG-EDIT-01 | Commander bonus formula (§B.3) | CONFIRMED: floor(Military/2) per PP-555 | ✓ |
 | BG-EDIT-02 | Faction-specific tactic cards (§B.4) | CONFIRMED: 8 faction cards as specified | ✓ |
 | CLOCK-EDIT-01 | IP 75+ Altonian invasion unit stats | DEFERRED: requires Phase 4 simulation for calibration | ⏳ |
-| CLOCK-EDIT-02 | Church military victory → TC change | CONFIRMED: No TC change from military victory alone. TC changes from institutional actions only. | ✓ |
+| CLOCK-EDIT-02 | Church military victory → CI change | CONFIRMED: No CI change from military victory alone. CI changes from institutional actions only. | ✓ |
 ---
 
 #

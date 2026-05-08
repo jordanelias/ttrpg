@@ -286,7 +286,7 @@ Requires: (a) argument uses Contest style mapping to the declared MS, (b) conten
 |---|---|---|
 | Evidence | Memory + Revealing. Must cite specific named verifiable claim. | +1D Argue. On win: CT +1 additional (bypasses 1 resistance). |
 | Consequence | Projection + Revealing. Must project specific outcome framework fails to prevent. | +1D Argue. On win: NPC +2 strain. |
-| Authority | Invoke specific binding authority contradicting NPC's position. | +1D Argue. Doubt Marker placed regardless of outcome. |
+| Sanction | Invoke specific binding authority contradicting NPC's position. | +1D Argue. Doubt Marker placed regardless of outcome. |
 | Solidarity | Requires active Knot with NPC. Must invoke the relationship. | +1D Argue. On win: no strain, NPC Belief revision Ob −1. |
 
 ### TS Gate (P-08 compliance)

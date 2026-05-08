@@ -97,6 +97,8 @@ Diagnostic registers:
 | Certainty | (CERT) | 0–5 | Cosmological worldview track. Solmund orthodoxy (5) → Thread acceptance (0). PCs only; named NPCs at GM discretion. | conviction_track, glossary §1 |
 | Momentum | — | 0–4 | Tactical resource. Earned on Overwhelming success or Belief achieved; spent for automatic successes (non-Thread only). | combat_v30 §1 |
 | Thread Fatigue | — | resource | Replaces Contact Rounds (ED-694). | threadwork §2.3 |
+| Bonds | — | 1–7 | Structural relationship capacity. Caps Disposition Track (PP-684). Companion formation requires Bonds ≥ 5. | derived_stats §10.1, params/core |
+| Renown | — | 0+ | Player-governance-linked reputation track. Governance failures apply Renown penalties (cap −2/season). | derived_stats §10.3 |
 
 ### 1.3 Thread Practitioner Stats
 | Term | Abbr | Range | Definition | Source |
@@ -257,8 +259,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Term | Abbr | Range | Definition | Source |
 |------|------|-------|------------|--------|
 | Provincial Value | PV | per-territory | Strategic worth toward Peninsular Sovereignty. | victory §1 |
-| Piety Track (per-territory) | PT | bounded | Per-territory Solmund-orthodoxy track. **Distinct from CI (Church-faction-level clock).** | victory §2, conviction_track_v30 |
-| Conviction Track (per-territory) | CV | 0–10 | Population's Solmund-vs-Thread orthodoxy axis. Per-territory variant of Certainty axis at population scale. | conviction_track_v30 §1 |
+| Piety Track (per-territory) | PT | 0–5 | Per-territory Solmund-orthodoxy track. 0 = Restoration pole, 5 = Piety pole. **PT ≡ Conviction Track per-territory per ED-644. Range is 0–5, NOT 0–10. See conviction_track_v30 §1.** | victory §2, conviction_track_v30 §1 |
+| ~~Conviction Track (per-territory)~~ | ~~CV~~ | ~~0–10~~ | **MERGED — same track as Piety Track (PT) per ED-644 in conviction_track_v30. Abbreviation is PT, range is 0–5. "CV" and "0–10" were diagnostic errors in this index. Canonical name is Piety Track (PT).** | conviction_track_v30 §1 |
 | Spiritual Weight (territory-attached) | — | per-territory | Repurposed PV for CI generation. | ci_political §1 |
 | Temperament (per-territory) | — | 5-typology | One of: pragmatic · traditional · balanced · principled · outcomes-only. | territory_temperaments §2 |
 | Accord (per-territory) | — | population commitment | Population alignment with controlling faction's project. | military_layer §4.1, peninsular_strain |
@@ -388,7 +390,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | The Rupture | Campaign-ending event when MS = 0. | threadwork |
 | The Rupture Scene | Hybrid/TTRPG cinematic moment at MS=0 (ED-630). | victory §5.1 |
 | Calamity (the) | World-scale rendering-side mechanism. | foundations canon |
-| Calamity Drift | RS-linked CV erosion (PP-409). | conviction_track_v30 §1.3 |
+| Calamity Drift | MS-linked PT erosion (PP-409). | conviction_track_v30 §1.3 |
 | Calamity Radiation | Cross-territory effect of Calamity proximity (designs/world). | calamity_radiation (legacy doc) |
 
 ### 4.5 Solmund world-cosmology terms
@@ -612,8 +614,8 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 |------|------------|----------------------|
 | **Evidence** | Facts contradicting belief. | Citation (Precedent + Revealing) |
 | **Consequence** | Outcomes the framework fails to explain. | Vision (Prospect + Revealing) |
-| **Authority** | Recognized binding source. | Suppression (Precedent + Obscuring) |
-| **Loyalty** | Relational obligation. | Any + Revealing (requires active Knot) |
+| **Sanction** | Recognized binding authority. *Renamed from "Authority" to disambiguate from Conviction #2 per §3.2 rename action.* | Suppression (Precedent + Obscuring) |
+| **Solidarity** | Relational obligation. *Renamed from "Loyalty" per params/contest.md canonical source.* | Any + Revealing (requires active Knot) |
 
 ### 6.5 Post-contest mechanics
 | Term | Definition | Source |
@@ -868,19 +870,19 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 ---
 ## SILO 9 — PERSONAL/STRATEGIC RESOLUTION: CONVICTION TRACK
 
-> **Word-class rule:** Conviction Track (CT, per-territory CV 0–10) is a *strategic-layer* track that takes its name from the *personal-layer* Conviction concept (§1.5). **This is intentional — population conviction = aggregated personal conviction at population scale.** The 13 individual Convictions (Faith, Authority, etc.) live in §1; the strategic track that scores Solmund-vs-Thread orthodoxy lives here.
+> **Word-class rule:** Piety Track (PT, per-territory, 0–5) is a *strategic-layer* track that takes its name from the *personal-layer* Conviction concept (§1.5). **This is intentional — population conviction = aggregated personal conviction at population scale.** The 13 individual Convictions (Faith, Authority, etc.) live in §1; the strategic track that scores Solmund-vs-Restoration orthodoxy lives here. *Note: "Conviction Track" and "CV" are legacy aliases per ED-644; canonical abbreviation is PT.*
 >
-> Note: this silo overlaps with §K-Clocks (CV is technically a per-territory clock) and with §N-Victory (CV drives Church victory paths).
+> Note: this silo overlaps with §12-Clocks (PT is technically a per-territory clock) and with §14-Victory (PT drives Church victory paths).
 
-### 9.1 Per-territory CV stat
+### 9.1 Per-territory PT stat
 | Term | Definition | Source |
 |------|------------|--------|
-| Conviction Track (per-territory) | CV — Solmund-orthodoxy axis at population scale per territory. **0–10.** | conviction_track_v30 §1 |
-| Starting Values (PP-406) | Per-territory initial CV by faction-ownership and adjacency. | conviction_track_v30 §1.1 |
-| Movement Rules (PP-408) | Procedure for CV change. | conviction_track_v30 §1.2 |
+| Conviction Track (per-territory) | PT | Solmund-orthodoxy axis at population scale per territory. **0–5.** *Canonical abbreviation is PT, not CV, per ED-644. Also called Piety Track.* | conviction_track_v30 §1 |
+| Starting Values (PP-406) | Per-territory initial PT by faction-ownership and adjacency. | conviction_track_v30 §1.1 |
+| Movement Rules (PP-408) | Procedure for PT change. | conviction_track_v30 §1.2 |
 | Movement Actions | Specific CV-changing actions per faction. | conviction_track_v30 §1.2 |
-| Calamity Drift (PP-409) | RS-linked (now MS-linked) CV erosion. | conviction_track_v30 §1.3 |
-| Thread Operation CV Drift (ED-676) | Per-Thread-op CV erosion in territory. | conviction_track_v30 §1.3b |
+| Calamity Drift (PP-409) | RS-linked (now MS-linked) PT erosion. | conviction_track_v30 §1.3 |
+| Thread Operation PT Drift (ED-676) | Per-Thread-op PT erosion in territory. | conviction_track_v30 §1.3b |
 | Consecrated Status (PP-410) | Church-blessed binary territory state. | conviction_track_v30 §1.4 |
 
 ### 9.2 Church Seizure mechanics
@@ -891,15 +893,15 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Seizure Results | Outcome bands of a Seizure attempt. | conviction_track_v30 §2 |
 | Mass Seizure | CI ≥ 60 probabilistic Seizure declaration. **Replaces gated 75-threshold Seizure.** | ci_political §2.2, conviction_track_v30 |
 
-### 9.3 TC (Theocracy Counter / now Church Influence) generation
-> **CRITICAL — terminology rename:** Theocracy Counter (TC) **renamed to Church Influence (CI)** per ED-782. TC remains in some legacy doc text; CI is canonical. **Per alias_registry: TC no longer used at term level.**
+### 9.3 CI (Church Influence) generation — formerly TC (Theocracy Counter)
+> **Terminology rename:** Theocracy Counter (TC) **renamed to Church Influence (CI)** per ED-782. TC remains in some legacy doc text; CI is canonical. **Per alias_registry: TC no longer used at term level.**
 
 | Term | Definition | Source |
 |------|------------|--------|
-| TC Generation (PP-412) | Renamed: CI Generation procedure. | conviction_track_v30 §3 |
-| Seasonal TC Calculation | Per-season CI accrual procedure. | conviction_track_v30 §3 |
+| CI Generation (PP-412) | CI accrual procedure. *(Heading in conviction_track_v30 §3 still says "TC Generation" — queued for fix.)* | conviction_track_v30 §3 |
+| Seasonal CI Calculation | Per-season CI accrual procedure. | conviction_track_v30 §3 |
 | Piety Domain Action (DISSOLVED) | Removed Domain Action; subsumed elsewhere. | conviction_track_v30 §3 |
-| TC Pacing Analysis | Pacing characteristics of CI accumulation. | conviction_track_v30 §3 |
+| CI Pacing Analysis | Pacing characteristics of CI accumulation. | conviction_track_v30 §3 |
 
 ### 9.4 Church Victory paths (drive from Conviction Track)
 | Term | Definition | Source |
@@ -925,13 +927,13 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Path C — Thread Supremacy | **STRUCK PP-663, 2026-04-19.** | conviction_track_v30 §6.2 |
 | Co-Victory Replacement — Varfell + RM (PP-418) | Replacement co-victory pairing. | conviction_track_v30 §7 |
 
-### 9.7 Presentation layer (CT → player)
+### 9.7 Presentation layer (PT → player)
 | Term | Definition | Source |
 |------|------------|--------|
-| Conviction Track Presentation Layer | World→player surfacing of CV state. | conviction_track_v30 §11 |
-| CV Change Environmental Events | Visible world-events from CV shifts. | conviction_track_v30 §11.1 |
+| Conviction Track Presentation Layer | World→player surfacing of PT state. | conviction_track_v30 §11 |
+| PT Change Environmental Events | Visible world-events from PT shifts. | conviction_track_v30 §11.1 |
 | Church Attention Pool (player-facing) | Player-facing CI/Attention indicator. | conviction_track_v30 §11.2 |
-| TC Milestone Presentation | Milestone-display schema. | conviction_track_v30 §11.3 |
+| CI Milestone Presentation | Milestone-display schema. | conviction_track_v30 §11.3 |
 
 ---
 ## SILO 10 — STRATEGIC RESOLUTION: MASS COMBAT (Mass Battle)
@@ -1154,7 +1156,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Institutional Pressure | IP | 0–100 | up | ALL | Altonian-pressure / institutional-pressure track. **75/80 = Altonian Vanguard (BG).** | values_master |
 | Public Instability | PI | 0–10 | down | BG | Public-confidence track. **0 = Parliament dissolved + Löwenritter coup.** | values_master |
 | Cooldown Track | — | per-action | down | — | Per-action cooldown counter. | ci_political §5.3 |
-| Conviction Track / CV (per-territory) | CT/CV | 0–10 | both | ALL | Per-territory orthodoxy track. **Cross-listed §I.** | conviction_track_v30 |
+| Piety Track (per-territory) | PT | 0–5 | both | ALL | Per-territory Solmund-orthodoxy track. **Same as "Conviction Track" per ED-644. Cross-listed §3.1, §9.** | conviction_track_v30 |
 
 ### 12.3 Faction-internal pseudo-clocks
 | Term | Definition | Source |
@@ -1171,7 +1173,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 |------|------------|--------|
 | Card Renewal | Card-replenishment mechanic (PP-177). | ci_political §5 |
 | Seasonal Cap | Per-season ceiling for CI generation. | ci_political §2.4 |
-| Seasonal TC Calculation (legacy term — now seasonal CI calc) | Per-season CI-accrual procedure. | conviction_track_v30 §3 |
+| Seasonal CI Calculation (legacy term — was "seasonal TC calc") | Per-season CI-accrual procedure. | conviction_track_v30 §3 |
 | Accounting (phase) | Per-season faction-accounting tick. | faction_layer §1.4 |
 
 ### 12.5 Narrative-specific / deprecated clocks
@@ -1440,7 +1442,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Word | Silos / locations | Problem | Recommendation |
 |------|-------------------|---------|----------------|
 | **Cardinal** | §2 faction attributes (Church Cardinal NPC role) · NPC-roster terminology · BG strategic context (the Four-Cardinal Structure) | Two separate uses: (a) Church Cardinal as named NPC role, (b) Cardinal as cardinal-virtues structural-frame. Resolved if "Cardinal" is exclusively the NPC role and the structural frame is renamed (e.g., "Four-Virtue Structure"). **Recommend rename of structural frame.** |
-| **Authority** | §1 (Conviction #2) · §6 (debate Pressure Point Type) · §2 (faction-attribute parlance, adjacent to Mandate) | Three uses, one deliberate (Conviction). Authority-as-Pressure-Point-type uses the Conviction's English root, but mechanically "Authority" the Pressure Point is *not* the Conviction. **Recommend rename Pressure Point type:** e.g., "Authority Citation" or "Sanction" to disambiguate. |
+| **Authority** | §1 (Conviction #2) · §6 (debate Pressure Point Type — **RENAMED to Sanction**) · §2 (faction-attribute parlance, adjacent to Mandate) | ~~Three uses, one deliberate (Conviction). Authority-as-Pressure-Point-type uses the Conviction's English root, but mechanically "Authority" the Pressure Point is *not* the Conviction.~~ **RESOLVED: Pressure Point renamed to "Sanction" in params/contest.md. Remaining uses (Conviction #2, faction-attribute parlance) are non-colliding.** |
 | **Equity / Order / Precedent / Continuity / Honor** | §1 (Convictions #6/3/8/legacy/13) · debate argument-style classifiers (Citation = Precedent + Revealing; etc.) | The four Contest Style names (Citation/Vision/Suppression/Knot-required) **already use rename-from-Conviction** so this is mostly clean. But internally in contest §4 and faction_behavior §3.7, these Conviction labels are repeated for argumentation context with no clear Style mapping. **Audit recommendation:** every place a Conviction word appears in a mechanic context, add inline cross-reference to the §1 Conviction definition. |
 | **Continuity** | §1 (LEGACY Conviction tag) · §2 (faction-attribute legacy framework) | LEGACY-only collision; both deprecated PP-684. **Continue using new 13-Conviction names; flag any active-doc "Continuity" references for sweep.** |
 | **Categorical Imperative / Divine Command** | §1 (LEGACY) · §2 (faction-ethical-framework legacy) | Both replaced by 13-Conviction taxonomy. **Sweep all active docs.** |
@@ -1529,7 +1531,7 @@ Anything else is a violation requiring rename.
 | Violation | Severity | Why it's a violation | Rename target |
 |-----------|----------|----------------------|---------------|
 | **"Mandate Pool"** as a strategic-layer pool name (when "Faction Pool" or "Political Pool" is also in use) | LOW | The faction stat *Mandate* drives a pool that shares its name. Pattern 2 (State-change-naming) doesn't apply because the pool is not *changing* Mandate, it's *spending dice driven by* Mandate. Risks reading "Mandate Pool" as "Mandate ATTRIBUTE = Mandate POOL." | Use **"Political Pool"** (already canonical in `ci_political_v30 §3.4, §7.2`). Verify all other docs collapse to single name. |
-| **"Authority"** as both Conviction (§1) AND Pressure Point Type (§6) | MEDIUM | The Conviction word is used as a debate-Pressure-Point-Type label. Pattern 1 (input) doesn't apply — the Pressure Point isn't checking the Conviction; it's a *style of argument.* | Rename Pressure Point Type to **"Sanction"** or **"Authority Citation"**. Distinguish from the Conviction. |
+| **"~~Authority~~Sanction"** as Pressure Point Type (§6). *Renamed in params/contest.md this session.* | MEDIUM → **DONE** | The Conviction word was used as a debate-Pressure-Point-Type label. Pattern 1 (input) doesn't apply — the Pressure Point isn't checking the Conviction; it's a *style of argument.* | ~~Rename Pressure Point Type to **"Sanction"** or **"Authority Citation"**.~~ **DONE: renamed to Sanction in params/contest.md.** |
 | **"Cardinal"** as NPC role AND structural frame ("Four-Cardinal Structure" of Church Convictions) | LOW | The named NPCs *are* called Cardinals (proper noun). The structural frame uses "Cardinal" generically (cardinal virtues). Risk: reader can't distinguish "the Cardinals voted" (NPCs) from "the Cardinal Structure determined" (frame). | Rename structural frame to **"Four-Virtue Structure"** or **"Quadrennial Frame"**. Reserve "Cardinal" for the NPC role. |
 
 ### §3.3 Borderline cases (audit to confirm, no rename yet)
@@ -1555,11 +1557,11 @@ Anything else is a violation requiring rename.
 
 ### §3.5 Summary of recommended rename actions
 
-1. **Rename Mandate Pool → Political Pool** wherever it persists; verify consolidation. **Priority: low (cleanliness).**
-2. **Rename Pressure Point "Authority" → Sanction** (or "Authority Citation"). **Priority: medium (real polysemy with Conviction).**
-3. **Rename "Four-Cardinal Structure" → Four-Virtue Structure** (or similar). **Priority: low.**
-4. **Audit sweep: any active-doc occurrence of "Categorical Imperative", "Divine Command", "Virtue Ethics", "Epistemic Reason", "Rawlsian", "Continuity (legacy)", "Reason (legacy)"** → replace with appropriate 13-Conviction names. **Priority: medium (legacy cleanup).**
-5. **Add inline cross-reference** anywhere a Conviction word appears in mechanic context to §1.5 definition. **Priority: low (documentation hygiene).**
+1. **Rename Mandate Pool → Political Pool** wherever it persists; verify consolidation. **Priority: low (cleanliness). STATUS: DONE — ci_political_v30 already canonical at "Political Pool" (§3.4). Only remaining occurrence is the comparison header §7.2, which is appropriate.**
+2. **Rename Pressure Point "Authority" → Sanction** (or "Authority Citation"). **Priority: medium (real polysemy with Conviction). STATUS: DONE — renamed to "Sanction" in params/contest.md this session.**
+3. **Rename "Four-Cardinal Structure" → Four-Virtue Structure** (or similar). **Priority: low. STATUS: OPEN — 12+ active files; requires dedicated sweep.**
+4. **Audit sweep: any active-doc occurrence of "Categorical Imperative", "Divine Command", "Virtue Ethics", "Epistemic Reason", "Rawlsian", "Continuity (legacy)", "Reason (legacy)"** → replace with appropriate 13-Conviction names. **Priority: medium (legacy cleanup). STATUS: OPEN — 30+ active files affected; see corpus_fix_manifest.md.**
+5. **Add inline cross-reference** anywhere a Conviction word appears in mechanic context to §1.5 definition. **Priority: low (documentation hygiene). STATUS: OPEN — requires full text sweep.**
 
 ---
 ## §4 — SYNONYM REGISTER (different words, same concept — unification candidates)
@@ -1585,11 +1587,11 @@ Anything else is a violation requiring rename.
 | TTRPG mode | **Tabletop Roleplaying Game (TTRPG)** | (none) | alias_registry. |
 | Hybrid mode (full term) | **Hybrid (HYB)** | (none — HYB never standalone) | alias_registry. |
 | BG mode | **Board Game (BG)** | (none) | alias_registry. |
-| World-track for Solmund-orthodoxy at population scale | **Conviction Track / CV (per-territory)** | Piety Track (PT) — *PT and CV are NOT the same*; PT is per-territory orthodoxy; CV is the population-side track. **Verify if these are merged or distinct.** | conviction_track_v30 vs victory §2 |
-| Per-territory Solmund-orthodoxy track | **Piety Track (PT)** vs **Conviction Track (CV)** — POTENTIAL DUPLICATION | If PT and CV are the same axis at the same scale, one is redundant. | Open audit item. |
+| World-track for Solmund-orthodoxy at territory scale | **Piety Track (PT)** | Conviction Track (CT/CV — legacy abbreviation in some docs) | ED-644 explicitly confirms: "Conviction (PT) here is the same per-territory stat as Piety (PT)." Range is 0–5, NOT 0–10. PT is canonical. **RESOLVED — same track.** |
+| ~~Per-territory Solmund-orthodoxy track~~ | ~~**Piety Track (PT)** vs **Conviction Track (CV)**~~ — ~~POTENTIAL DUPLICATION~~ | ~~If PT and CV are the same axis at the same scale, one is redundant.~~ | **RESOLVED per ED-644: they ARE the same track. PT is canonical. CV/CT are legacy abbreviations.** |
 | Mass Seizure | **Mass Seizure** (probabilistic, CI ≥ 60) | Old "75-threshold Seizure" (gated, replaced) | ci_political §2.2 — replacement noted in supersession. |
 
-> **One open audit item:** `Piety Track (PT)` vs `Conviction Track (CV)` may be the same per-territory axis at the same scale, or they may be subtly different (PT = Solmund-orthodoxy specifically, CV = broader cosmology axis). **Recommend: check victory §2 vs conviction_track_v30 §1 for canonical disambiguation; if duplicates, unify.**
+> ~~**One open audit item:** `Piety Track (PT)` vs `Conviction Track (CV)` may be the same per-territory axis at the same scale, or they may be subtly different.~~ **RESOLVED:** ED-644 in conviction_track_v30 confirms PT ≡ CV. Same track, range 0–5, abbreviation PT. "CV" was a legacy abbreviation that drifted. See conviction_track_v30 §1 line 23.
 
 ---
 
@@ -1609,10 +1611,10 @@ Anything else is a violation requiring rename.
 | Co-files (cross-doc updates) | conviction_taxonomy header | §16 authoring | HIGH |
 | Approach (Threadwork sub-skill) | threadwork §2.1 (Approach Training) | §7 threadwork (already covered) | DONE |
 | Bonded NPC | articulation §2.3 | §1 character (added) | DONE |
-| Bonds (attribute, "Bonds attribute cap") | derived_stats §10.1 | §1 character — **add Bonds as explicit attribute** | MEDIUM (verify) |
+| Bonds (attribute, "Bonds attribute cap") | derived_stats §10.1 | §1 character — **added to §1.2 this session** | DONE |
 | Heroic Resource Slot | (legacy term in settlement_layer §6.1) | §1 or §2 | LOW (may be deprecated) |
 | Stature (Ladder) | settlement_layer §6.1 | §3 territory or §16 (player-progression) | MEDIUM |
-| Renown | derived_stats §10.3 (Renown ↔ Derived Value Bridge) | §1 character — **add Renown as derived value** | MEDIUM (verify) |
+| Renown | derived_stats §10.3 (Renown ↔ Derived Value Bridge) | §1 character — **added to §1.2 this session** | DONE |
 | Bond (vs Knot) | articulation §2.3 | §1 character — already added (Bond / Bonded NPC) | DONE |
 | TroopCount | derived_stats §7 | §10 mass combat — derived value | MEDIUM (extend silo) |
 | Settlement Combat Defense Feedback | derived_stats §10.4 | §3 territory or §10 combat | MEDIUM |
@@ -1622,7 +1624,7 @@ Anything else is a violation requiring rename.
 | Pastoral Assumption | settlement_layer §1.7 | §3 territory (already added) | DONE |
 | Niflhel Operative (legacy) | conflict_architecture (Niflhel struck) | §X-deprecated | DONE (in §6) |
 
-> **Routing-decision summary:** ~12 orphans need a silo; ~10 are already covered. **Add Bonds attribute and Renown derived value to §1.2** if they are first-class (verify via derived_stats_v30 read).
+> **Routing-decision summary:** ~12 orphans need a silo; ~10 are already covered. ~~**Add Bonds attribute and Renown derived value to §1.2**~~ **DONE: Bonds and Renown added to §1.2 this session (verified via derived_stats_v30 §10.1 and §10.3).**
 
 ---
 
@@ -1711,26 +1713,29 @@ Anything else is a violation requiring rename.
 
 ## §V.2 Open audit items surfaced by this exercise
 
-1. **Mandate Pool vs Political Pool consolidation** — verify all docs collapse to *Political Pool*. (§3.2 violation, low severity.)
-2. **Pressure Point "Authority"** — rename recommended to disambiguate from Conviction. (§3.2 violation, medium severity.)
-3. **"Cardinal" as both NPC role and structural frame** — rename structural frame. (§3.2 violation, low severity.)
-4. **Piety Track (PT) vs Conviction Track (CV)** — verify these are distinct or unify. (§4 synonym register, open audit.)
-5. **Bonds attribute and Renown derived value** — verify if first-class character properties; add to §1.2 if so. (§5 orphan.)
-6. **Conviction-name appearances in mechanic context** — full sweep recommended; add inline cross-references to §1.5 anywhere a Conviction word is used in a mechanic. (§3.3, §3.5 #5.)
-7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue Ethics, Divine Command, Epistemic Reason, Rawlsian, Military Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. (§6.4.)
-8. **Corpus residual sweep for TC** — npc_behavior swept; remaining 5 paragraphs across throughlines_meta_infill, npc_character_analyses, mass_battle queued. (§6.1.)
+1. **Mandate Pool vs Political Pool consolidation** — ~~verify all docs collapse to *Political Pool*.~~ **RESOLVED: ci_political_v30 §3.4 already canonical at "Political Pool." No active canonical docs use "Mandate Pool" except ci_political §7.2 comparison header (appropriate).** (§3.2 violation, low severity.)
+2. **Pressure Point "Authority"** — ~~rename recommended to disambiguate from Conviction.~~ **DONE: renamed to "Sanction" in params/contest.md this session. Also corrected "Loyalty" → "Solidarity" per canonical source.** (§3.2 violation, medium severity.)
+3. **"Cardinal" as both NPC role and structural frame** — rename structural frame. **OPEN: 12+ active files use "Four-Cardinal Structure." Requires dedicated sweep cycle. See corpus_fix_manifest.md.** (§3.2 violation, low severity.)
+4. **Piety Track (PT) vs Conviction Track (CV)** — ~~verify these are distinct or unify.~~ **RESOLVED: ED-644 in conviction_track_v30 explicitly confirms PT ≡ CV — same track, same abbreviation (PT), range 0–5. "CV" and "0–10" were index errors. §3.1, §4, §9 entries updated.** (§4 synonym register, closed.)
+5. **Bonds attribute and Renown derived value** — ~~verify if first-class character properties; add to §1.2 if so.~~ **RESOLVED: both confirmed first-class. Bonds = structural relationship capacity (PP-684, derived_stats §10.1). Renown = governance-linked reputation track (derived_stats §10.3). Added to §1.2.** (§5 orphan, closed.)
+6. **Conviction-name appearances in mechanic context** — full sweep recommended; add inline cross-references to §1.5 anywhere a Conviction word is used in a mechanic. **OPEN: requires text sweep of all contest, faction_behavior, and argument-style contexts.** (§3.3, §3.5 #5.)
+7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue Ethics, Divine Command, Epistemic Reason, Rawlsian, Military Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. **OPEN: 30+ active files affected across params/, designs/npcs/, designs/provincial/, designs/scene/, designs/arcs/. See corpus_fix_manifest.md for full file list.** (§6.4.)
+8. **Corpus residual sweep for TC** — ~~npc_behavior swept; remaining 5 paragraphs across throughlines_meta_infill, npc_character_analyses, mass_battle queued.~~ **PARTIALLY RESOLVED: mass_battle_v30 (1 TC→CI), npc_character_analyses_v30_infill (2 TC→CI) fixed this session. throughlines_meta_infill clean (0 hits). Remaining TC residuals exist in 40+ other files (mostly in references/, designs/audit/, and non-canonical docs). See corpus_fix_manifest.md.** (§6.1.)
 
 ## §V.3 Recommended commit path
 
-This file is a **proposal**, not yet committed. Suggested path:
-1. Review and accept the silo taxonomy.
-2. Ratify the §3 collision register's rename actions (Mandate Pool → Political Pool; Pressure Point Authority → Sanction; Four-Cardinal Structure → Four-Virtue Structure).
-3. Adopt §4 synonym register as the canonical disambiguation table.
-4. Schedule sweep cycles for §V.2 #6, #7, #8.
-5. Commit this file at `references/mechanical_terms_index.md` as canonical diagnostic-glossary.
+This file is a **proposal**, ~~not yet committed~~. **Partially resolved this session (2026-05-07).** Suggested path:
+1. ~~Review and accept the silo taxonomy.~~ **Pending Jordan review.**
+2. ~~Ratify the §3 collision register's rename actions (Mandate Pool → Political Pool; Pressure Point Authority → Sanction; Four-Cardinal Structure → Four-Virtue Structure).~~ **Mandate Pool: already consolidated. Authority → Sanction: DONE (params/contest.md). Four-Cardinal: OPEN (sweep needed).**
+3. ~~Adopt §4 synonym register as the canonical disambiguation table.~~ **PT vs CV GAP resolved. Register updated.**
+4. ~~Schedule sweep cycles for §V.2 #6, #7, #8.~~ **#8 partially swept (3 TC→CI fixes). #6 and #7 require dedicated sessions. See corpus_fix_manifest.md.**
+5. Commit this file at `references/mechanical_terms_index.md` as canonical diagnostic-glossary. **Committing this session with fixes applied.**
 
-[GAP: Bonds attribute, Renown — flagged in §5 orphans, need verification from derived_stats_v30 full read]
-[GAP: PT vs CV duplication question — flagged in §4 synonym register, needs disambiguation]
+[GAP: ~~Bonds attribute, Renown~~ — RESOLVED: both added to §1.2 per derived_stats_v30 §10.1/§10.3]
+[GAP: ~~PT vs CV duplication question~~ — RESOLVED per ED-644: same track, PT canonical, range 0–5]
+[GAP: Four-Cardinal → Four-Virtue rename — 12+ active files, requires dedicated sweep cycle]
+[GAP: Legacy ethical-framework labels — 30+ active files, requires dedicated sweep cycle per conviction_migration_roster_v30]
+[GAP: TC residuals — ~40 non-canonical files remain; canonical files (mass_battle_v30, npc_character_analyses_v30_infill) fixed this session]
 [ASSUMPTION: silos as defined cover all play-systems — basis: corpus walk of canonical_sources.yaml + designs/scene/ + canon/]
-[CONFIDENCE: medium-high — diagnostic glossary is comprehensive but a few coverage holes flagged in §V.2]
+[CONFIDENCE: medium-high — diagnostic glossary is comprehensive; 5/8 audit items resolved or partially resolved; 3 remaining require dedicated sweep cycles]
 [SELF-AUTHORED — bias risk: I produced this; an independent reviewer might add: (a) test the silo boundaries against actual play scenarios; (b) verify the Conviction-cross-scale claim in §2.1 with player-facing playtesting; (c) check whether the granular Conviction-axis vectors in §1.6 are stable enough to silo or if they're calibration-volatile.]
