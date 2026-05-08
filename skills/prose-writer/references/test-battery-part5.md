@@ -86,14 +86,15 @@ The Prefect offered her a chair and she sat. He arranged three documents on the 
 She had decided to remain. The remaining was the decision and the decision was the remaining. She held it. The chapel wall was grey and the grey was fact and she held the fact the way she held the deciding. She could not hold it. She held it.
 
 **Low Spirit (Lispector, Spirit 2):**
-The wall was — the wall was grey. Vael was — the name was for the thing the wall was beside. The grey. The name. The wall and the name were beside each other. The name was receding. The wall was not.
+The wall was — the wall was grey. Vael was — on the path. The path was — she was. The name for the thing that would walk on the path was — the feet were on the stones. The stones were cold. The feet were on the cold stones and the walking was — the walking. There was walking. There were stones. The name that would say who was walking was beside the walking the way a shadow is beside a body when the body has — the stones were cold.
 
 **Audit:**
-- Spirit distinction audible: ✓. High Spirit: "She held it. She could not hold it. She held it." The will grips. Low Spirit: "The name was receding. The wall was not." The self yields.
-- Same coherence tier: ✓. Both are C2. Both have failed temporal sequencing, tautological predication, very short paragraphs.
-- Beckett dialectic vs Lispector dissolution: ✓. The techniques produce categorically different prose from the same coherence input.
-- Closing register: ✓. High Spirit closes on the act ("She held it"). Low Spirit closes on the noun ("The wall was not").
-- **Verdict:** Pass. The Spirit modifier differentiates meaningfully at the same coherence tier.
+- Spirit distinction audible: ✓. **Two categorically different prose problems.** High Spirit: the character acts — walks into wind, carries pack. The prose renders action and is opaque about motive. Low Spirit: the character cannot act because the agent is insufficient to the verb. "The name for the thing that would walk on the path was —" The prose attempts to assemble "she walked" and cannot because the "she" is dissolving.
+- Same coherence tier: ✓. Both are C2. Both have failed temporal sequencing. But the failure manifests differently: high Spirit produces declarative action sentences; low Spirit produces incomplete predications.
+- High Spirit = exteriority: ✓. The will inferred from the body's behavior (walking, carrying, closing hands). No interior access.
+- Low Spirit = agent-insufficiency: ✓. The prose cannot name the agent. "There was walking. There were stones." The verbs become intransitive or impersonal. The agent-subject dissolves into the predicate.
+- Closing: ✓. High Spirit closes on the act the self still owns ("the moving was hers"). Low Spirit closes on the nearest concrete noun because the agent cannot close on an act ("the stones were cold").
+- **Verdict:** Pass. The Spirit modifier produces categorically different prose problems at the same coherence tier.
 
 ---
 
