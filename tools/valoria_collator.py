@@ -259,7 +259,7 @@ def scan_file_for_drift(path, content, ctx):
         if abbr in ('API', 'JSON', 'YAML', 'CSV', 'HTML', 'URL', 'PDF', 'ID',
                     'UI', 'UX', 'MD', 'UTF', 'CLI', 'CI', 'CD', 'AI', 'ML',
                     'OS', 'PC', 'NPC', 'GM', 'BG', 'TN', 'CT', 'TS', 'TPS',
-                    'TT', 'MS', 'TC', 'TD', 'COMP', 'POP', 'FR', 'CE', 'CP',
+                    'TT', 'MS', 'CI', 'TD', 'COMP', 'POP', 'FR', 'CE', 'CP',
                     'DR', 'EV', 'FIX', 'TBD', 'TODO', 'WIP', 'WARN', 'TEST',
                     'NONE', 'NULL', 'GAP', 'OK', 'PIC', 'RAM', 'CPU'):
             # CI here is accepted as 'Continuous Integration' — but we want
@@ -281,13 +281,13 @@ def scan_file_for_drift(path, content, ctx):
         for m in re.finditer(rf'\b{re.escape(abbr)}\b', content):
             pos = m.start()
             # Check if immediately preceded by the canonical name in parens-expansion form
-            # e.g. "Theocracy Counter (TC)" is OK; standalone "TC" alone is not
+            # e.g. "Church Influence (CI)" is OK; standalone "CI" alone is not
             before = content[max(0, pos-60):pos]
             # If the canonical full term appears within 50 chars before, it's OK (definition)
             canonical = ctx['alias']['abbrev_to_canonical'].get(abbr)
             if canonical and canonical.lower() in before.lower():
                 continue
-            # Check if preceded by "-" (like PP-TC = patch ID form)
+            # Check if preceded by "-" (like PP-CI = patch ID form)
             if content[max(0,pos-1):pos] == '-':
                 continue
             line = content[:pos].count('\n') + 1

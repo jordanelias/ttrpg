@@ -11,11 +11,11 @@ Handles:
   - Combat Power → Power                     (rename per PP-232, as a mechanic term only)
 
 Does NOT handle (per-context judgment required):
-  - TC alone → Theocracy Counter OR Conviction Track
+  - CI alone → Church Influence OR Piety Track
   - CP alone → Character Point OR Combat Power (→Power)
   - TD alone → Thread Depth (removed, flag) OR flowchart TD (Mermaid, keep)
   - RS alone → Rendering Stability (now Mending Stability) OR Resonant Style
-  - Bare abbreviations anywhere (TC, CP, TD, RS, CE, COMP) — flagged by collator, needs manual review
+  - Bare abbreviations anywhere (CI, CP, TD, RS, CE, COMP) — flagged by collator, needs manual review
 
 Safety rails:
   - Skips files in canon/, archives/, deprecated/, historical/
@@ -45,7 +45,7 @@ import github_ops as g
 
 # Each entry: (pattern, replacement, description)
 # Patterns are case-sensitive word-boundary regex. Only full-form terms are
-# swept here — bare abbreviations (RS, CP, TC, etc.) are intentionally
+# swept here — bare abbreviations (RS, CP, CI, etc.) are intentionally
 # EXCLUDED because they require per-context judgment.
 SUBSTITUTIONS = [
     (r'\bRendering Stability\b', 'Mending Stability',
@@ -241,7 +241,7 @@ Skipped lines containing: formerly, renamed, previously, was called, now called,
 Skipped files in: canon/, archives/, deprecated/, historical/, versions/, _skeleton.md, _index.md
 
 Remaining drift (per-context judgment required, NOT auto-fixed):
-- TC alone → Theocracy Counter OR Conviction Track (943× in collator report)
+- CI alone → Church Influence OR Piety Track (943× in collator report)
 - CP alone → Character Point OR Power (69× — previously ambiguous, now locked to Character Point per ED-136)
 - TD alone → flag (phantom stat) OR keep (Mermaid flowchart syntax)
 - Bare RS — most already caught by Rendering Stability→Mending Stability sweep; any residual RS alone should be checked
