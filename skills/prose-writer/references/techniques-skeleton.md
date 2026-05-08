@@ -2,7 +2,7 @@
 
 Live technique inventory. Each entry: technique → source → signature pattern. For rationale and academic grounding, see `techniques-infill.md`.
 
-**Eight-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina).
+**Twelve-author roster:** Tolkien, Márquez, Ishiguro, Mistry, Tartt, Lispector, Borges, Ocampo (Silvina), Beckett, Lem, McCarthy, Le Carré.
 
 **Coherence-indexed weighting:** The synthesis weights shift across tiers aligned to canonical coherence thresholds (10-8, 7-5, 4-3, 2, 1). See `coherence-tiers.md` for the tier-tables. As coherence drops, the PC's rendering recalibrates away from human reference points — realist authors (which depend on the human frame as a generative source) decrease; irreal authors (which serve content produced from a recalibrated frame) increase. Coherence is orthogonal to Thread Sensitivity. The weighting describes aggregate tendency, not per-passage quota.
 
