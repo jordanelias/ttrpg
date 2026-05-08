@@ -53,8 +53,8 @@ Both conflicts are resolvable without altering the Priority table's existence �
 
 ```
 Phase 1 — O/D Split Declaration (sequential, not blind):
-  1a. Lower initiative holder declares Offence/Defence split.
-  1b. Higher initiative holder sees that split, then declares their own.
+  1a. Lower first-to-speak holder declares Offence/Defence split.
+  1b. Higher first-to-speak holder sees that split, then declares their own.
   [This is unchanged from current rules. Initiative advantage is informational.]
 
 Phase 2 — Action Declaration (simultaneous, blind):

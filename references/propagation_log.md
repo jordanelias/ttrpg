@@ -452,7 +452,7 @@ Propagation targets:
 | `designs/contest/social_contest_v30.md` | `designs/fieldwork/fieldwork_investigation.md` | §9.1 Combined Findings citation cross-reference added |
 | `designs/ttrpg/threadwork_v30.md` | `designs/fieldwork/fieldwork_investigation.md` | §2.3 Thread-Read-as-fieldwork cross-reference added |
 | `references/params_core.md` | `designs/combat/combat_v30.md`, `designs/contest/social_contest_v30.md`, `designs/fieldwork/fieldwork_v30.md` | Pool floor 1D named rule — all pool-using systems now have canonical anchor |
-| `canon/editorial_ledger.yaml` | `designs/systems/npc_behavior_v30.md` | ED-510 (NPC Recruitment PROVISIONAL), ED-511 (Hooks), ED-512 (surrender), ED-513 (fail-forward), ED-514 (social initiative) |
+| `canon/editorial_ledger.yaml` | `designs/systems/npc_behavior_v30.md` | ED-510 (NPC Recruitment PROVISIONAL), ED-511 (Hooks), ED-512 (surrender), ED-513 (fail-forward), ED-514 (social first-to-speak) |
 
 ## PP-641–642 Propagation (2026-04-13)
 

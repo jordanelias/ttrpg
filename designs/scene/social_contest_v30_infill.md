@@ -36,7 +36,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 ## §6 POST-CONTEST RESOLUTION
 **Disposition and Reputation shifts** fire from Total Victory regardless of genre. An overwhelming win in any genre shifts how the audience renders the participants — this is a rendering consequence of social intensity, not a genre effect.
 ## §7 ASYMMETRIC PROCEEDINGS
-**Standard proceedings (Parliament, inter-faction):** Full symmetric system. Proposer role alternates each exchange. Initiative transfers per §5 independently.
+**Standard proceedings (Parliament, inter-faction):** Full symmetric system. Proposer role alternates each exchange. First to speak transfers per §5 independently.
 ## §8 DERIVED VALUES SUMMARY
 ## §9 ADDITIONAL TTRPG RULES
 ### §9.1 Pre-Contest Preparation

@@ -189,7 +189,7 @@ Thread exception: (Spirit × 2) + History + TPS (replaces +3). TN 7 standard, TN
 | Social Contest | Contest Pool vs Contest Pool (unless institutional format predetermines) |
 | Mass Combat | Command vs Command |
 
-Higher net = initiative holder = declares last (information advantage). Tie: random. Transfers to exchange winner. Draws: holder retains.
+Higher net = first-to-speak holder = declares last (information advantage). Tie: random. Transfers to exchange winner. Draws: holder retains.
 
 ## 4.8 Personal Tracks
 

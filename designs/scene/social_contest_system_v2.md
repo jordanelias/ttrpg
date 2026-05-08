@@ -141,7 +141,7 @@ Each exchange's Appraise senses the CURRENT state of the audience (which may hav
 **Step 2b — Corroborate (optional):** A corroborator present at the contest may declare support before the Argue roll. On success: primary orator gains +1D for this exchange. Corroborator must be a declared coalition member (Knot not required). Knot-sharing corroborators roll at Ob 1; non-Knot coalition members roll at Ob 2. In asymmetric proceedings: all corroborators for the disadvantaged party use Ob 2 regardless of Knot. (PP-257) On failure: corroborator takes 1 strain.
 
 **Step 3 — Argue:**
-Initiative holder declares argument and rolls first. Respondent hears, then declares and rolls.
+First-to-speak holder declares argument and rolls first. Respondent hears, then declares and rolls.
 
 Pool: (Primary Attribute × 2) + History bonus (per §3), TN 7.
 Add genre/orientation bonus dice per §2 Step 3 (primary genre +1D; audience boost match +1D; max +2D total).
@@ -172,12 +172,12 @@ One orator invokes what has been (Memory); the other projects what could become 
 - Net track movement = difference between the two movements; direction toward the side with larger movement.
 - Obscuring in CROSS: if the side with larger movement used Obscuring, place a Doubt Marker on the opponent instead of track movement.
 - No strain dealt. Neither argument attacked the other.
-- Initiative stays with holder.
+- First to speak stays with holder.
 
 **TIE** (equal successes, any interaction type):
 - Both orators take 1 strain. **Exception (PP-236): if the interaction type is CROSS, no strain is dealt — CROSS no-strain rule takes precedence. Neither argument attacked the other; a tie does not change that structural fact.**
-- Persuasion Track moves +1 toward initiative holder's position.
-- Initiative stays with holder.
+- Persuasion Track moves +1 toward first-to-speak holder's position.
+- First to speak stays with holder.
 
 **OBSCURING WIN** (winning any exchange with Obscuring orientation in CLASH or REINFORCE; see CROSS clause for CROSS-specific Doubt Marker rule):
 - Persuasion Track does not move toward winner.
@@ -218,7 +218,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 - On tie: stays with current holder.
 - Institutional override: in asymmetric proceedings, the institution determines who proposes regardless of Attunement.
 
-**Design ruling (ED-138 resolved 2026-04-13):** Social initiative is intentionally deterministic. Combat initiative is rolled because combat rewards preparation, luck, and physical readiness — all sources of variance. Social initiative is deterministic because social combat rewards perceptual depth: the more attuned orator genuinely has more information about the audience before the exchange opens, and that information advantage is structural, not probabilistic. Rolling would introduce variance that the design doesn't need here — it would make the Appraise step (Step 1) partially redundant. Deterministic initiative preserved.
+**Design ruling (ED-138 resolved 2026-04-13):** Social first-to-speak is intentionally deterministic. Combat initiative is rolled because combat rewards preparation, luck, and physical readiness — all sources of variance. Social first-to-speak is deterministic because social combat rewards perceptual depth: the more attuned orator genuinely has more information about the audience before the exchange opens, and that information advantage is structural, not probabilistic. Rolling would introduce variance that the design doesn't need here — it would make the Appraise step (Step 1) partially redundant. Deterministic initiative preserved.
 
 ---
 
@@ -250,7 +250,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 
 ## §7 ASYMMETRIC PROCEEDINGS
 
-**Standard proceedings (Parliament, inter-faction):** Full symmetric system. Proposer role alternates each exchange. Initiative transfers per §5 independently.
+**Standard proceedings (Parliament, inter-faction):** Full symmetric system. Proposer role alternates each exchange. First to speak transfers per §5 independently.
 
 **Asymmetric proceedings (Church Tribunal, Royal Audience, Inquisition):**
 - Institution assigns Proposer/Respondent roles. Roles do NOT alternate.
@@ -293,7 +293,7 @@ Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
 **Evidence Track Findings as preparation (F-TRANS-11):** Findings from a completed fieldwork investigation may be cited in the Contest opening. Each Finding cited grants +1D on Exchange 1 (maximum +2D from Findings, regardless of count). Findings are not consumed by citation — they remain on the Evidence Track for future use. Finding citation must be declared at contest setup (GM sets scope: the Finding must be relevant to the contest's subject matter). This bonus stacks with standard preparation (+1D), for a maximum Exchange 1 bonus of +3D when both are available. Requires prior multi-scene investigation to produce Findings. Reference: fieldwork_investigation.md §2.3, §4.1.
 
 ### §9.2 Multi-Party Contest — Coalition Structure
-Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (Focus + Recall) at contest setup. Each exchange depletes the shared pool by 1 (plus 1 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. Initiative transfers to winning side; that side nominates holder.
+Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (Focus + Recall) at contest setup. Each exchange depletes the shared pool by 1 (plus 1 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. First to speak transfers to winning side; that side nominates holder.
 
 ### §9.3 Practitioner Weaving in Contests (R-65)
 A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS ÷ 30) (+1D at 30, +2D at 60, +3D at 90). Must declare before rolling. Visible to all observers. Church may file Heresy Investigation on observation. After exchange: Coherence check Ob 1.
@@ -371,7 +371,7 @@ Total Victory: Persuasion Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 |---|---|---|
 | ED-136 | System rename: "Debate" → "Contest" (or alternative). Pending user decision. | P1 |
 | ED-137 | Panel adjudicator type not yet designed. Using Expert Judge as provisional. | P2 |
-| ED-138 | Social initiative deterministic vs rolled. Current: deterministic (higher Attunement). Combat: rolled. Consistency question. | P2 |
+| ED-138 | Social first-to-speak deterministic vs rolled. Current: deterministic (higher Attunement). Combat: rolled. Consistency question. | P2 |
 
 ### Carried forward
 | ID | Description | Priority |

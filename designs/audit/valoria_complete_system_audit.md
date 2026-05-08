@@ -652,7 +652,7 @@ All rolls: Nd10, success on ≥ TN. Chain on 10 (reroll, additional success on �
 | **Strength** | — | Combat damage addition, weapon minimums |
 | **Cognition** | Fieldwork (investigation), Contest (Expert Judge), Governance | Cover (with History), Command (with Charisma) |
 | **Charisma** | Fieldwork (socializing), Contest (Crowd) | Composure, Contest strain modifier, Command (with Cognition) |
-| **Attunement** | Fieldwork (Read, Negotiate), Contest (No Adjudicator), Appraise | Social initiative |
+| **Attunement** | Fieldwork (Read, Negotiate), Contest (No Adjudicator), Appraise | Social first-to-speak |
 | **Recall** | Fieldwork (Research, Reconstruct) | Concentration (with Focus), skill gatekeeper, Recall bonus in Contest |
 | **Bonds** | Fieldwork (Connect) | Disposition ceiling, Knot capacity |
 | **Focus** | — | Contact Duration (Thread), Concentration (with Recall), Focus defence (Contest strain) |
