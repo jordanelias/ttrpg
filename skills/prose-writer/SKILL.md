@@ -1,6 +1,6 @@
 ---
 name: prose-writer
-description: "Write narrative prose for Valoria using its singular literary voice — a coherence-indexed weighted synthesis of Tolkien, Borges, Lispector, Ocampo (Silvina), Márquez, Ishiguro, Mistry, and Tartt. The synthesis weights shift across tiers indexed to player-character coherence (10-8, 7-5, 4-3, 2, 1), reflecting the progressive failure of the practitioner's self-rendering as a human configuration. Use this skill whenever the user asks to write prose, narrative passages, lore entries, character vignettes, settlement descriptions, faction histories, dialogue scenes, codex entries, cutscene scripts, flavor text, or any creative/narrative text."
+description: "Write narrative prose for Valoria using its singular literary voice — a coherence-indexed weighted synthesis of Tolkien, Borges, Lispector, Ocampo (Silvina), Márquez, Ishiguro, Mistry, Tartt, Beckett, Lem, McCarthy, and Le Carré. The synthesis weights shift across tiers indexed to player-character coherence (10-8, 7-5, 4-3, 2, 1), reflecting the progressive failure of the practitioner's self-rendering as a human configuration. Use this skill whenever the user asks to write prose, narrative passages, lore entries, character vignettes, settlement descriptions, faction histories, dialogue scenes, codex entries, cutscene scripts, flavor text, or any creative/narrative text."
 ---
 
 # Prose Writer
@@ -37,26 +37,35 @@ Coherence is orthogonal to Thread Sensitivity AND to Spirit. Three axes operate 
 - **Thread Sensitivity (0–100)** determines substrate perception — what the PC perceives beyond ordinary human capacity.
 - **Spirit (1–7, the metaphysical attribute)** determines agency persistence — whether the will continues to grip when rendering fails.
 
-The prose must not conflate them. A low-coherence PC without TS experiences rendering failure as inexplicable breakdown. A low-coherence PC with TS experiences rendering failure AND substrate perception — but one does not cause the other. A low-coherence high-Spirit PC grips the decision (Beckett continuation) while rendering fails. A low-coherence low-Spirit PC dissolves into the dissolution (Lispector dissolution) — agency yields. The Spirit axis becomes audible at Coherence 4 and below, where the Beckett texture (high Spirit) versus the Lispector texture (low Spirit) is the sharpest distinction the prose can make about what the PC still has.
+The prose must not conflate them. A low-coherence PC without TS experiences rendering failure as inexplicable breakdown. A low-coherence PC with TS experiences rendering failure AND substrate perception — but one does not cause the other. The Spirit axis becomes audible at Coherence 4 and below, producing two **categorically different prose problems**:
+
+- **High Spirit (Beckett):** The will operates beyond human rationality but it *operates* — it produces action. The prose renders what the character does (walks, works, holds, continues) and is **opaque about why**. The interior is inaccessible but functional. The reader infers the will from the behavior. The narrative describes AROUND the interior through its exteriority.
+- **Low Spirit (Lispector):** The intentional armature is dissolving. The character lacks the strength of will/purpose/belief to simply act. The prose **cannot name an action** because naming "she walked" requires an agent who intended to walk, and the agent is insufficient to the verb. The prose veers, fails to complete predication, falls into tautology. "She was — she was on the path."
+
+These are not two flavors of the same thing. High Spirit: can render action, cannot render motive. Low Spirit: cannot render action because there is no agent sufficient to the verb.
 
 See `references/coherence-tiers.md` for the tier-tables with deployment notes, the TS interaction guidance, the Spirit interaction guidance, and per-tier anti-patterns.
 
 ## Author Weighting (Tier 10-8 Default)
 
-When coherence is unspecified, use the Tier 10-8 (Stable) weighting:
+When coherence is unspecified, use the Tier 10-8 (Stable) weighting. Weights are 2D — indexed by both coherence and Thread Sensitivity:
 
-| Author | Weight | Role |
-|---|---|---|
-| Tolkien | 28% | Ground heavy. Landscape, deep-time, named specificity. |
-| Mistry | 14% | Occupational specificity, body-as-record. |
-| Tartt | 12% | Atmospheric retrospection, loaded objects. |
-| Ishiguro | 12% | Situational restraint, unreliable narration. |
-| Márquez | 11% | Time-folds, matter-of-fact impossibility. |
-| Lispector | 8% | Ontological estrangement, the unsayable. |
-| Ocampo | 8% | Small uncanny moments, flat-affect rendering. |
-| Borges | 7% | Recursion, fictive-as-real, heresiarchs. |
+| Author | TS 0-29 | TS 30-49 | TS 50+ | Role |
+|---|---|---|---|---|
+| Tolkien | 24 | 20 | 15 | Ground. Landscape, deep-time, named specificity. |
+| Mistry | 12 | 10 | 8 | Occupational specificity, body-as-record. |
+| Tartt | 11 | 9 | 7 | Atmospheric retrospection, loaded objects. |
+| Ishiguro | 11 | 11 | 10 | Situational restraint, unreliable narration. |
+| Márquez | 11 | 12 | 12 | Time-folds, matter-of-fact impossibility. |
+| Lispector | 8 | 10 | 12 | Ontological estrangement. |
+| Ocampo | 8 | 7 | 7 | Small uncanny moments, flat-affect rendering. |
+| Borges | 7 | 10 | 12 | Recursion, fictive-as-real, heresiarchs. |
+| Lem | 0 | 5 | 10 | Observing-around. Pre-scientific analytical observation. TS-gated. |
+| McCarthy | 4 | 3 | 3 | Violence, landscape indifference. Content-gated. |
+| Le Carré | 3 | 2 | 2 | Institutional indirection. Content-gated. |
+| Beckett | 1 | 1 | 2 | Will-continuation. Spirit-gated at C4 and below. |
 
-For other tiers, consult `references/coherence-tiers.md`.
+For other tiers and the Spirit modifier, consult `references/coherence-tiers.md`.
 
 ## Intra-Sentence Splicing
 
@@ -78,6 +87,20 @@ Four authors, one sentence, grammar holds. The reader does not perceive the shif
 The writer does not consciously deploy "Tolkien now, then Mistry, then Lispector." The writer writes the passage that the content, focalization, and coherence tier demand, and the synthesis surfaces the appropriate techniques at clause-level granularity. The reference files and self-check exist to verify — after the writing — that the deployment is right.
 
 When reviewing, ask: does the coherence tier match? Is the PC's rendering functioning at the level this tier demands? Have irreal techniques been deployed as world-surrealism rather than as the PC's categorical failure? Has the prose conflated rendering failure with substrate perception?
+
+## The Observing-Around Principle
+
+When the prose confronts something it cannot render directly, it describes AROUND the thing — what it does, what it affects, how it behaves, what surrounds it. The thing takes shape from the surround.
+
+Three applications across the three axes:
+
+- **Self-exteriority (high Spirit, low C):** The will produces action. Describe the action. Be opaque about motive.
+- **Substrate-aporia (high TS):** Consciousness perceives what it cannot categorize. Describe around the aporia — what the perceived thing does, how it behaves. The Lem "observing around" register: pre-scientific, Renaissance-era analytical observation. The trained eye cataloguing and distinguishing, not measuring. The categories fail because the content exceeds them.
+- **Limit case (low Spirit, low C):** The agent is insufficient. The observing-around technique breaks down — the self isn't producing enough output at the surface to observe. The prose veers and fails predication.
+
+This is the structured complement to the Wittgenstein constraint. The constraint says: do not describe the silence. This principle says: describe what is beside the silence, and the silence takes shape.
+
+The Lem register must be pre-scientific. Valoria is Renaissance-era. No thermometers, no frequencies, no instruments. The analytical method is careful observation: counting, distinguishing, noting, cataloguing. "She counted six distinct behaviors" — not "oscillation at 4.2-second intervals."
 
 ## The Master Principle: Focalization
 
@@ -151,7 +174,7 @@ When deviation is motivated AND improves impact, the deviation is correct. When 
 - Drop into "AI sheen": stock metaphors, repetitive cadence, low lexical variety.
 - Appropriate cultural-tradition-specific techniques (signifyin', AAVE rhetorical modes, tradition-specific sacred-text rhythms) without fidelity to their practitioners. Name what the prose actually does.
 - Deploy NPC characters as functional placeholders. Load-bearing NPCs need at least one anchored dimension (ethical framework, conviction, goal, inspiration, factional belonging).
-- Render Coherence 0 NPCs as broken or as transcendent. The C0 NPC is the **competent monstrous**: recognizable intentionality applied through alien method (high Spirit) or no recognizable intentionality at all, the action simply occurring (low Spirit). The being inherits the shape of who they were. The application is not human.
+- Render Coherence 0 NPCs as broken or as transcendent. The C0 NPC is the **competent monstrous**: recognizable intentionality applied through alien method (high Spirit) or no recognizable intentionality at all, the action simply occurring (low Spirit). The being inherits the shape of who they were. The application is not human. **Render C0 NPCs through observing-around:** describe what they do, how they move, what their presence affects — circle the being through its surface effects. The observer's trained eye notes and catalogues; the gap between the observation's precision and the being's resistance IS the rendering.
 - Conflate the subject and object axes at high TS. When a high-coherence PC perceives the substrate, the irreal techniques must target the OBJECT perceived, not the SUBJECT perceiving. The PC's cognition is fine. The substrate resists.
 
 ## Self-Check
@@ -163,9 +186,9 @@ Before delivering prose, verify:
 - [ ] Is the PC's rendering functioning at the level this tier demands — not better, not worse?
 - [ ] Are irreal techniques serving the PC's categorical failure, not making the world surreal?
 - [ ] Has the prose avoided conflating rendering failure with substrate perception (unless the PC has the TS to perceive the substrate)?
-- [ ] **Spirit axis check (Coherence 4 and below):** Does the prose render high Spirit as Beckett continuation (the will grips, the decision recurs, agency persists) and low Spirit as Lispector dissolution (the name recedes, the feet replace the self, agency yields)? The distinction must be audible.
+- [ ] **Spirit axis check (Coherence 4 and below):** High Spirit = exteriority. The prose renders what the character DOES (action, movement) and is opaque about WHY. The will is inferred from the behavior. No interior declarations. Low Spirit = agent-insufficiency. The prose cannot name an action because the agent is insufficient to the verb. Veering, failed predication, tautology. The two produce categorically different prose.
 - [ ] **Subject/object distinction (high TS, intact rendering):** When the PC has high TS and high coherence, are irreal techniques targeting the OBJECT (what the PC perceives in the substrate) and not the SUBJECT (the PC's own cognition)? The PC's rendering is intact; the resistance is in what they perceive.
-- [ ] **Within-observation gradient (TS 50+):** At elevated TS, does the prose render near (articulable), middle (precise description producing something that doesn't quite work — Borges/Lem), and far (veer, silence — Lispector) within the same observation? Skipping the middle layer is a failure.
+- [ ] **Within-observation gradient (TS 50+):** At elevated TS, does the prose render near (articulable), middle (Lem observing-around — the trained eye circling the aporia with pre-scientific precision), and far (veer, silence — the observing-around itself fails) within the same observation? Skipping the middle layer is a failure. The middle layer is the substrate-aporia: consciousness given something it cannot categorize, the prose gesturing toward it by describing around it.
 - [ ] Does every editorial word belong to the focalized perspective?
 - [ ] Have I avoided system/mechanical terminology when focalized through an in-world perspective?
 - [ ] Does every modifier earn its place?
@@ -192,7 +215,7 @@ Before delivering prose, verify:
 
 ### Solmund Voice Canon (Scoped Override)
 
-For **in-world ecclesiastical artifacts** — Solmund manuscripts, cathedral inscriptions, liturgical text, doctrinal treatises, creeds — and for **Solmund clergy speaking ecclesiastically** (sermons, formal pronouncements, theological discourse), the prose-writer skill's eight-author synthesis does **not** apply. Use the Solmund voice canon at `designs/world/solmund_voice_v30.md`.
+For **in-world ecclesiastical artifacts** — Solmund manuscripts, cathedral inscriptions, liturgical text, doctrinal treatises, creeds — and for **Solmund clergy speaking ecclesiastically** (sermons, formal pronouncements, theological discourse), the prose-writer skill's twelve-author synthesis does **not** apply. Use the Solmund voice canon at `designs/world/solmund_voice_v30.md`.
 
 The prose-writer skill **continues to apply** for:
 - All narration *about* Solmund clergy, manuscripts, or ceremonies
