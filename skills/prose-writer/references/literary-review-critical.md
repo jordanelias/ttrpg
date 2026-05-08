@@ -268,11 +268,11 @@ Recent academic work includes Carolina Sanín's essays; Jorgelina Corbatta's art
 
 Tartt has the smallest academic critical apparatus of the eight authors. This is partly a function of recency — *The Secret History* (1992), *The Little Friend* (2002), *The Goldfinch* (2013), with substantial gaps between novels — and partly a function of Tartt's own deliberate distance from academic and journalistic infrastructure. The major secondary literature is review-driven rather than monograph-driven. The synthesis must be honest about this: where the previous seven authors have substantial critical literatures the extractions can anchor in, Tartt's extractions anchor in a thinner apparatus that draws on reviews, interviews, and a small number of academic essays.
 
-The major reviews of *The Secret History* — Kakutani in *The New York Times* (1992), Salman Rushdie's review (collected in *Step Across This Line*), James Wood's later treatment in *How Fiction Works* (2008), and Daniel Mendelsohn's review of *The Goldfinch* in *The New York Review of Books* (2014) — supply the most influential close-reading work. Mendelsohn's review in particular is critical: he questioned the *Goldfinch*'s novelistic discipline at length, and the questioning has shaped subsequent academic reception. The dispute Mendelsohn opened (*Vanity Fair* hosted a follow-up symposium) is the closest thing Tartt criticism has to a foundational debate.
+The major reviews of *The Secret History* — Kakutani in *The New York Times* (1992), Salman Rushdie's review (collected in *Step Across This Line*), James Wood's later treatment in *How Fiction Works* (2008), and Francine Prose's review of *The Goldfinch* in *The New York Review of Books* (2014) — supply the most influential close-reading work. Prose's review in particular is critical: she questioned the *Goldfinch*'s novelistic discipline at length, and the questioning has shaped subsequent academic reception. The dispute Prose opened (*Vanity Fair* hosted a follow-up symposium) is the closest thing Tartt criticism has to a foundational debate.
 
 The most-cited academic essay on Tartt is Tara K. Menon's "The 'Beauty Is Terror' Equation in Donna Tartt's *The Secret History*" (in *The Henry James Review* and various subsequent reprintings). Menon's argument is that the novel's central aesthetic claim — that beauty is terror — is not the characters' aesthetics but the novel's self-justification for its own atmospheric excesses. The novel uses the equation to license its own decoration; the equation is performative as well as thematic. This is the most rigorous extant treatment of Tartt's atmospheric technique and is the source the synthesis draws on most heavily for understanding the Tartt grotesque-elegant juxtaposition.
 
-Tracy Hargreaves's essays on Tartt and on the *Donna Tartt* phenomenon (in *Critical Quarterly* and *Textual Practice*) supply the most extensive treatment of Tartt's relation to the Bret Easton Ellis cohort and to the post-Brat Pack literary moment. J.D. Connor's "Donna Tartt's *The Goldfinch*" (in *The New Republic*, 2013) reads the third novel as attempting Dickensian scope and partially succeeding. Frances Wilson's reviews in *The Literary Review* and *The Times Literary Supplement* are the most extended UK critical writing.
+Tracy Hargreaves's *Donna Tartt's The Secret History: A Reader's Guide* (Continuum, 2001) supply the most extensive treatment of Tartt's relation to the Bret Easton Ellis cohort and to the post-Brat Pack literary moment. Hillary Kelly's review (in *The New Republic*, 2013) reads the third novel as attempting Dickensian scope and partially succeeding. Frances Wilson's reviews in *The Literary Review* and *The Times Literary Supplement* are the most extended UK critical writing.
 
 Academic monographs do not yet exist on Tartt. The closest analogues are essay collections and chapters within broader studies — for example, the chapter on Tartt in Caroline Levander and Robert Levine's edited volumes on contemporary American fiction, and the entries in *The Cambridge Companion to American Fiction since 1945*. Recent doctoral work has begun to address Tartt directly (theses on the classical inheritance in *The Secret History*, on the New York art world in *The Goldfinch*, on the Mississippi setting of *The Little Friend*) but has not yet consolidated into a critical tradition.
 
@@ -281,9 +281,9 @@ The synthesis's reliance on Tartt is therefore partially a synthesis-internal ar
 
 ### 8.4 Risks
 
-**Critical-apparatus thinness.** The synthesis is recruiting Tartt with much less critical anchoring than the previous seven authors. The defense: Menon, Hargreaves, Connor, Mendelsohn supply enough critical work to specify which Tartt is being extracted; the calibration anchors do the rest. But the synthesis cannot claim the depth of critical reading available for Tolkien, Borges, Lispector, etc. The Tartt extractions are necessarily more interpretive — they depend more on the close reading of the calibration anchors than on consolidated critical positions.
+**Critical-apparatus thinness.** The synthesis is recruiting Tartt with much less critical anchoring than the previous seven authors. The defense: [Menon removed], Hargreaves, Kelly, Prose supply enough critical work to specify which Tartt is being extracted; the calibration anchors do the rest. But the synthesis cannot claim the depth of critical reading available for Tolkien, Borges, Lispector, etc. The Tartt extractions are necessarily more interpretive — they depend more on the close reading of the calibration anchors than on consolidated critical positions.
 
-**The Mendelsohn critique.** Mendelsohn's argument that *The Goldfinch* loosens its discipline is relevant to the synthesis. The atmospheric immersion technique is fragile under length; sustained, it becomes the failure Mendelsohn identified. The synthesis must respect the fragility — anti-pattern #3 (Purple Prose) and the audit's specificity-test guard against the failure mode, but the structural pull toward atmospheric excess remains, especially in long passages.
+**The Prose critique.** Prose's argument that *The Goldfinch* loosens its discipline is relevant to the synthesis. The atmospheric immersion technique is fragile under length; sustained, it becomes the failure Prose identified. The synthesis must respect the fragility — anti-pattern #3 (Purple Prose) and the audit's specificity-test guard against the failure mode, but the structural pull toward atmospheric excess remains, especially in long passages.
 
 **Menon's performative reading.** Menon's argument that "beauty is terror" is the novel's self-license for atmospheric excess constrains how the synthesis can recruit grotesque-elegant juxtaposition. The technique is recruitable, but the synthesis cannot use it to license its own atmospheric excesses. The audit must check: is the grotesque-elegant pairing doing work for the focalization, or is it (in Menon's sense) the prose using the pairing to license decoration?
 
@@ -291,7 +291,7 @@ The synthesis's reliance on Tartt is therefore partially a synthesis-internal ar
 
 **Anti-pattern #37 analogue.** Tartt's overt unreliability is sometimes mistaken for Ishiguro's covert unreliability. The two are technically distinct: Ishiguro's narrator does not know they are unreliable; Tartt's narrator declares they are unreliable and continues anyway. The audit must distinguish — claiming Ishiguro technique for Tartt-style overt confession misidentifies the technique.
 
-**The class-outsider focalization.** Hargreaves's and Connor's reading positions Tartt's narrators as class-outsiders. The synthesis recruits this for focalizations across the Valoria social hierarchy, but the technique requires the focalization's class-position to be established. Deployed without that anchoring, the aesthetic obsession reads as the narrator's personal taste rather than as class-marked perceptual access. The audit must check that the focalization's class-position licenses the aesthetic mode.
+**The class-outsider focalization.** Hargreaves's and Kelly's reading positions Tartt's narrators as class-outsiders. The synthesis recruits this for focalizations across the Valoria social hierarchy, but the technique requires the focalization's class-position to be established. Deployed without that anchoring, the aesthetic obsession reads as the narrator's personal taste rather than as class-marked perceptual access. The audit must check that the focalization's class-position licenses the aesthetic mode.
 
 ---
 
@@ -424,7 +424,7 @@ Chance, Jane. *Tolkien's Art: A Mythology for England*. Macmillan, 1979; revised
 — editor, *Tolkien the Medievalist*. Routledge, 2003.
 Cixous, Hélène. *Reading with Clarice Lispector*. Trans. Verena Andermatt Conley. University of Minnesota Press, 1990.
 — *Coming to Writing and Other Essays*. Harvard University Press, 1991.
-Connor, J.D. "Donna Tartt's *The Goldfinch*." *The New Republic*, 2013.
+Kelly, Hillary. "Hard Times ... for Readers." Review of *The Goldfinch*. *The New Republic*, October 2013. [CORRECTED: previously attributed to J.D. Connor.]
 Curry, Patrick. *Defending Middle-earth*. HarperCollins, 1997; revised Houghton Mifflin, 2004.
 Drout, Michael, editor. *J.R.R. Tolkien Encyclopedia: Scholarship and Critical Assessment*. Routledge, 2007.
 — editor, *Beowulf and the Critics by J.R.R. Tolkien*. ACMRS, 2002.
@@ -460,7 +460,7 @@ Malak, Amin. "The Shahrazadic Tradition: Rohinton Mistry's *Such a Long Journey*
 Mancini, Adriana. *Silvina Ocampo: Escalas de Pasión*. Norma, 2003.
 Martin, Gerald. *Gabriel García Márquez: A Life*. Bloomsbury, 2008.
 Marwah-Roy, Anuradha. Essays on Mistry's *Such a Long Journey* and *A Fine Balance* in Indian-fiction journals, 1990s.
-Mendelsohn, Daniel. Review of *The Goldfinch*. *The New York Review of Books*, 2014.
+Prose, Francine. "After Great Expectations." Review of *The Goldfinch*. *The New York Review of Books*, January 9, 2014. [CORRECTED: previously attributed to Daniel Mendelsohn.]
 Méndez, Mariela. *Crónicas Travestis: El Periodismo Transgresor de Alfonsina Storni, Clarice Lispector y Silvina Ocampo*. Beatriz Viterbo Editora, 2017.
 [REMOVED: Menon citation fabricated. Tara K. Menon is a real scholar (Harvard, 19th-century novel) but has no publication on Tartt in The Henry James Review.]
 Molloy, Sylvia. *Las Letras de Borges*. Sudamericana, 1979; English translation *Signs of Borges*, Duke University Press, 1994.
