@@ -20,8 +20,8 @@ from collections import Counter, defaultdict
 # ── CONSTANTS ─────────────────────────────────────────────────────────────────
 DICE_SIDES=10; TN=7; OB_MIN=1; POOL_MIN=1
 OW_FLOOR=3; SEASONAL_CAP=2; STAT_MAX=7; STAT_MIN=0
-PT_MAX=5; PT_MIN=0; # TC_PASSIVE constant removed — PP-402 repealed; conditional passive in _tc_acct
-RS_BG=72; TC_BG=28; IP_START=20; PI_BG=7; SEASONS_PER_YEAR=4
+PT_MAX=5; PT_MIN=0; # CI_PASSIVE constant removed — PP-402 repealed; conditional passive in _tc_acct
+RS_BG=72; CI_BG=28; IP_START=20; PI_BG=7; SEASONS_PER_YEAR=4
 VICTORY_SUSTAIN=2; UNIT_DISC_DEFAULT=4
 
 PLAYABLE   = {"crown","hafenmark","varfell","church"}  # valid diplomatic/military targets
@@ -39,7 +39,7 @@ CAPITAL_GARRISONS = {"T1":3,"T9":2,"T8":2,"T12":2}
 CROWN_TCV=14; DOMINION_TCV=22; CHURCH_TCV=8; HF_TCV=13
 
 # Tracker keys
-KEY_RS="rs"; KEY_TC="tc"; KEY_IP="ip"; KEY_PI="pi"; KEY_PARL="parl"
+KEY_RS="rs"; KEY_CI="ci"; KEY_IP="ip"; KEY_PI="pi"; KEY_PARL="parl"
 KEY_WC="wc"; KEY_VTM="vtm"; KEY_WR="wr"
 KEY_TORBEN="torben"; KEY_ELSKE="elske"; KEY_COUP="coup"
 
@@ -365,9 +365,9 @@ class World:
         self._vc={}; self._go=None; self._log=[]
         self._tfs=set(); self._suppress=False; self._lr_ok=False
         self._wow:list=[]; self._battles_this_season=0
-        self._assert_bonus=0   # TC bonus from Assert action this season
+        self._assert_bonus=0   # CI bonus from Assert action this season
         self.reg.on("rs_rupture",lambda k,e,p: self._set_go("SHARED_LOSS_RS"))
-        self.reg.on("tc_hit",   lambda k,e,p: (self._set_go("TC_THEOCRACY"),self._log_e("TC 75")))
+        self.reg.on("tc_hit",   lambda k,e,p: (self._set_go("TC_THEOCRACY"),self._log_e("CI 75")))
         self.reg.on("elske_low",lambda k,e,p: self.reg.apply(KEY_IP,3))
         self.reg.on("collapse",  lambda k,e,p: self._collapse_fid(p.get("fid","")))
 
@@ -375,14 +375,14 @@ class World:
 
     def start(self):
         rs=self.reg.reg(KEY_RS,RS_BG,0,100); rs.add(TT(0,True,"rs_rupture"))
-        tc=self.reg.reg(KEY_TC,TC_BG,0,100); tc.add(TT(100,False,"tc_hit"))
+        tc=self.reg.reg(KEY_CI,CI_BG,0,100); tc.add(TT(100,False,"tc_hit"))
         self.reg.reg(KEY_IP,IP_START,0,100); self.reg.reg(KEY_PI,PI_BG,0,100)
         self.reg.reg(KEY_PARL,PI_BG,0,20);  self.reg.reg(KEY_WC,0,0,3)
         self.reg.reg(KEY_VTM,0,0,5);        self.reg.reg(KEY_WR,0,0,3)
         self.reg.reg(KEY_TORBEN,7,0,7)
         el=self.reg.reg(KEY_ELSKE,4,0,7);   el.add(TT(2,True,"elske_low"))
         self.reg.reg(KEY_COUP,0,0,4)
-        self.reg.reg("ps",0,0,10)   # Peninsular Strain
+        self.reg.reg("ps",0,0,10)   # Turmoil
         for t in build_territories():
             self.setting.reg(t)
             self.reg.reg(t.pk(),t.pt_start,PT_MIN,PT_MAX)
@@ -418,7 +418,7 @@ class World:
 
     def fs(self,fid,s): return self.reg.val(f"f:{fid}:{s}")
     def rs(self): return self.reg.val(KEY_RS)
-    def tc(self): return self.reg.val(KEY_TC)
+    def tc(self): return self.reg.val(KEY_CI)
     def ip(self): return self.reg.val(KEY_IP)
 
     def _stab(self,fid,d,reason,tn):
@@ -543,7 +543,7 @@ class World:
         P1 EXISTENTIAL: Stability<=1 or only 1 territory
         P2 DEFEND: enemy unit threatens ungarrisoned own territory
         P3 CONSOLIDATE: Stability<=2 OR Wealth<=1 OR Mandate<=2
-        P4 COUNTER_THREAT: TC>=55 for HF/Crown; treaty opportunity for Crown
+        P4 COUNTER_THREAT: CI>=55 for HF/Crown; treaty opportunity for Crown
         P5 EXPAND: all clear, border units ready
         P6 OPPORTUNISTIC: default
         """
@@ -711,14 +711,14 @@ class World:
         if not self.reg.has(pk): pk=f"f:{fid}:influence"
         pool=max(self.reg.val(pk,1),1)
         if fid in DOMAIN_EXP_LEG and ps=="mandate": pool+=1
-        # Church TC political legitimacy bonus (§3.2 tc_political_redesign_v30)
+        # Church CI political legitimacy bonus (§3.2 tc_political_redesign_v30)
         if fid=="church" and at in("govern","crown_treaty","suppress_tc","church_assert","church_seizure","intel_op"):
             pool+=self.tc()//20
         d,_=roll(pool,ob,rng)
 
         if at=="church_assert":
             if d==OVERWHELMING:
-                self._assert_bonus=2   # for TC accounting
+                self._assert_bonus=2   # for CI accounting
             elif d==SUCCESS:
                 self._assert_bonus=1
             elif d==FAILURE: self._stab("church",-1,"Assert fail",1)
@@ -788,10 +788,10 @@ class World:
         elif d==FAILURE:
             self.mut("f:church:mandate",-1)
 
-    # ── TC accounting ─────────────────────────────────────────────────────────
+    # ── CI accounting ─────────────────────────────────────────────────────────
     def _tc_acct(self,supp):
         """
-        TC accounting per military_layer_v30 §3 (revised formula, PP-402 repealed).
+        CI accounting per military_layer_v30 §3 (revised formula, PP-402 repealed).
         Step 1: Conditional passive (0/+1/+2 by prominent count).
         Step 2: Piety Yield per prominent territory PT.
         Step 3: Charity Advantage (Church Wealth outperforms controller).
@@ -808,14 +808,14 @@ class World:
         if np>=5:   passive=2
         elif np>=2: passive=1
         else:       passive=0
-        if passive>0: self.mut(KEY_TC,passive)
+        if passive>0: self.mut(KEY_CI,passive)
 
         # Step 2: Piety Yield
         frac=sum(1.0  if self.reg.val(t.pk())==5 else
                  0.5  if self.reg.val(t.pk())==4 else
                  0.25 if self.reg.val(t.pk())==3 else 0.0 for t in prom)
         pt_yield=math.floor(frac)
-        if pt_yield>0: self.mut(KEY_TC,pt_yield)
+        if pt_yield>0: self.mut(KEY_CI,pt_yield)
 
         # Step 3: Charity Advantage (Church Wealth >= controller Wealth + 2)
         church_wealth=self.fs("church","wealth")
@@ -824,7 +824,7 @@ class World:
             ctrl_wealth=self.fs(t.ctrl,"wealth")
             if church_wealth>=ctrl_wealth+2: charity_frac+=0.5
         charity=min(1,math.floor(charity_frac))
-        if charity>0: self.mut(KEY_TC,charity)
+        if charity>0: self.mut(KEY_CI,charity)
 
         # Step 4: Templar Presence (Templar unit in PT>=3 prominent territory)
         templar_tc=0
@@ -833,24 +833,24 @@ class World:
                 if any(u.is_templar for u in self.setting.units_in(t.tid)):
                     templar_tc+=1
         templar_tc=min(2,templar_tc)
-        if templar_tc>0: self.mut(KEY_TC,templar_tc)
+        if templar_tc>0: self.mut(KEY_CI,templar_tc)
 
         # Step 6: Suppress negates conditional passive and Piety Yield
         if supp:
-            self.mut(KEY_TC,-passive)
-            self.mut(KEY_TC,-pt_yield)
+            self.mut(KEY_CI,-passive)
+            self.mut(KEY_CI,-pt_yield)
 
         # Step 5: Assert result
         if self._assert_bonus>0:
-            self.mut(KEY_TC,self._assert_bonus)
+            self.mut(KEY_CI,self._assert_bonus)
         self._assert_bonus=0
 
         # Step 7: Baralta
         hf=self.fr.get("hafenmark")
         if hf and hf.is_active and self.fs("hafenmark","mandate")>=4:
-            self.mut(KEY_TC,-1)
+            self.mut(KEY_CI,-1)
 
-        # TC milestone 80: Year-End PT drift toward piety
+        # CI milestone 80: Year-End PT drift toward piety
         tc_now=self.tc()
         if tc_now>=80 and self.cs==SEASONS_PER_YEAR:
             for t in self.setting.all():
@@ -875,7 +875,7 @@ class World:
 
     # ── Full accounting ───────────────────────────────────────────────────────
     def _peninsular_strain(self):
-        """Apply Peninsular Strain effects to faction Mandate."""
+        """Apply Turmoil effects to faction Mandate."""
         ps=self.reg.val("ps")
         if ps<=2: return
         import random as _r; rng=_r.Random()  # local rng for checks
@@ -891,7 +891,7 @@ class World:
                 if d==FAILURE: self.mut(f"f:{f.fid}:mandate",-1)
 
     def _accord_update(self):
-        """Accord degradation and revolt per Peninsular Strain."""
+        """Accord degradation and revolt per Turmoil."""
         ps=self.reg.val("ps")
         for t in self.setting.all():
             if not t.playable or not t.ctrl or t.ctrl not in PLAYABLE: continue
@@ -900,7 +900,7 @@ class World:
                 t.accord=0
             # Revolt
             if t.accord==0:
-                self.reg.apply("ps",1)   # revolt +1 Peninsular Strain
+                self.reg.apply("ps",1)   # revolt +1 Turmoil
                 # Garrison fights Popular Uprising
                 if self.setting.garrison(t.tid):
                     import random as _r; rng2=_r.Random()
@@ -911,7 +911,7 @@ class World:
                         self._stab(t.ctrl,-1,"Revolt: garrison lost territory",1)
                 else:
                     self.setting.set_ctrl(t.tid,"")
-            # Peninsular Strain 5-6: Accord -1 in one non-capital per faction (simplified: affect contested border)
+            # Turmoil 5-6: Accord -1 in one non-capital per faction (simplified: affect contested border)
             if ps>=5 and not t.is_cap and t.accord>0:
                 if ps>=7:   # 7-8: all non-capital
                     t.accord=max(0,t.accord-1)
@@ -934,7 +934,7 @@ class World:
                 d,_=roll(max(self.fs(f.fid,"stability"),1),loss,rng)
                 if d==FAILURE: self.mut(f.stabk(),-1)
                 elif d==OVERWHELMING: self.mut(f.stabk(),1)
-        # TC
+        # CI
         self._tc_acct(self._suppress); self._suppress=False
         # RS annual decay
         if self.cs==SEASONS_PER_YEAR: self.mut(KEY_RS,-1)
@@ -942,7 +942,7 @@ class World:
         if self._battles_this_season>0:
             self.mut(KEY_RS,-1)
             self.mut(KEY_IP,2)
-            # Peninsular Strain +1 per season with battle
+            # Turmoil +1 per season with battle
             self.reg.apply("ps",1)
         self._battles_this_season=0
         # Altonian pressure
@@ -1047,7 +1047,7 @@ def hybrid_scene(world,rng):
     elif r<0.95: deg=PARTIAL
     else: deg=FAILURE
     if deg==OVERWHELMING:
-        world.mut(KEY_RS,1); world.mut(KEY_TC,-1)
+        world.mut(KEY_RS,1); world.mut(KEY_CI,-1)
     elif deg==SUCCESS and rng.random()<0.3:
         world.mut(KEY_RS,1)
 
@@ -1075,7 +1075,7 @@ def run_campaign(seed=None,max_years=25,mode="bg",verbose=False):
         if v: result=v; break
     return{"seed":seed,"mode":mode,"years":world.cy,"season":world.cs,
            "outcome":result or{"fid":"","vt":"TIMEOUT"},
-           "rs":world.rs(),"tc":world.tc(),"ip":world.ip(),"snap":world.snap(),
+           "rs":world.rs(),"ci":world.tc(),"ip":world.ip(),"snap":world.snap(),
            "log":world._log[-12:]}
 
 def run_many(n=200,max_years=25,mode="bg"):
@@ -1084,7 +1084,7 @@ def run_many(n=200,max_years=25,mode="bg"):
         r=run_campaign(seed=i,max_years=max_years,mode=mode)
         vt=r["outcome"]["vt"]; fid=r["outcome"].get("fid","")
         outs[vt]+=1; vics[fid or vt]+=1; durs.append(r["years"])
-        rs_f.append(r["rs"]); tc_f.append(r["tc"])
+        rs_f.append(r["rs"]); tc_f.append(r["ci"])
         for fid2,fs in r["snap"].items():
             if not fs["active"]: coll[fid2]+=1
     nf=max(n,1)
@@ -1165,7 +1165,7 @@ def stress_tests():
 
     # T6: Church Seizure targets PLAYABLE only
     w6=World(); w6.start()
-    w6.reg.get(KEY_TC).v=50
+    w6.reg.get(KEY_CI).v=50
     ch=next(f for f in w6.fr.active() if f.fid=="church")
     orders=w6.ai_orders(ch,rng)
     seizure_targets=[o["tgt"] for o in orders if o["at"]=="church_seizure"]
@@ -1194,16 +1194,16 @@ def stress_tests():
     chk("Muster blocked at (Military*2)+3 cap", not result,
         f"units={w8.setting.unit_count('crown')} cap={cap8}")
 
-    # T9: TC Baralta suppression at HF Mandate >= 4
+    # T9: CI Baralta suppression at HF Mandate >= 4
     w9=World(); w9.start(); tc_before=w9.tc()
-    # New TC: passive+2 (8 prominent), piety+1 (four PT=3 at 0.25ea), baralta-1 = net +2
+    # New CI: passive+2 (8 prominent), piety+1 (four PT=3 at 0.25ea), baralta-1 = net +2
     w9._tc_acct(False)
-    chk("TC advances by +2 (passive+2 + piety+1 - baralta-1)", w9.tc()==tc_before+2, f"tc {tc_before}→{w9.tc()}")
+    chk("CI advances by +2 (passive+2 + piety+1 - baralta-1)", w9.tc()==tc_before+2, f"tc {tc_before}→{w9.tc()}")
     # Without Baralta: net +3
     tc_before2=w9.tc()
     w9.reg.get("f:hafenmark:mandate").v=3
     w9._tc_acct(False)
-    chk("TC advances faster without Baralta", w9.tc()>=tc_before2+3, f"tc {tc_before2}→{w9.tc()}")
+    chk("CI advances faster without Baralta", w9.tc()>=tc_before2+3, f"tc {tc_before2}→{w9.tc()}")
 
     # T10: Full campaigns
     for mode in("bg","hybrid"):
@@ -1227,7 +1227,7 @@ def print_stats(st,label):
     n=st["n"]
     print(f"\n{'='*60}\n  {label}\n{'='*60}")
     print(f"Duration: avg {st['avg_y']}y  min {st['min_y']}y  max {st['max_y']}y")
-    print(f"Avg RS={st['avg_rs']}  TC={st['avg_tc']}")
+    print(f"Avg RS={st['avg_rs']}  CI={st['avg_tc']}")
     print("\nOutcomes:")
     for vt,c in st["outcomes"].items():
         pct=c/n*100; bar="█"*max(1,int(pct/2))
@@ -1244,7 +1244,7 @@ if __name__=="__main__":
 
     print("\n"+"="*60+"\nBG — seed=42 trace\n"+"="*60)
     r=run_campaign(seed=42,max_years=25,mode="bg",verbose=True)
-    print(f"\nOutcome: {r['outcome']}  Y{r['years']}S{r['season']}  RS={r['rs']} TC={r['tc']}")
+    print(f"\nOutcome: {r['outcome']}  Y{r['years']}S{r['season']}  RS={r['rs']} CI={r['ci']}")
     for fid,fs in r["snap"].items():
         if not fs["stats"]: continue
         st="ACTIVE" if fs["active"] else "DEAD"

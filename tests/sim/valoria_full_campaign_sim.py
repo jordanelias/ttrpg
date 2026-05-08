@@ -11,12 +11,12 @@ Tier A (this extension):
 - §20 Mass Combat resolution (simplified BG mode from mass_battle_v30 §B.3):
   single-roll per side, margin-based outcome, Accord damage per PP-645.
 - §21 Invade DA: attacker triggers mass combat on an adjacent enemy territory.
-- §22 Church TC Seizure DA: CI>=60 one-per-territory seizure against Church-
+- §22 Church CI Seizure DA: CI>=60 one-per-territory seizure against Church-
   prominent territories not held by Church.
 - §23 Mass Seizure: CI>=60 one-shot, fires against all non-Church Church-
   prominent territories simultaneously (victory_v30 §3.2).
 - §24 Faction AI v2: prioritize conquest when Military available + adjacent
-  target; Church prioritizes TC Seizure / Mass Seizure when CI>=60.
+  target; Church prioritizes CI Seizure / Mass Seizure when CI>=60.
 - §25 Tier A corpus: 16 seeds, win-rate distribution analysis.
 
 Every new mechanical constant is cited via inline canonical comments and
@@ -270,7 +270,7 @@ class Clocks:
         if self.church_influence >= 60 and not self.mass_seizure_used:   # [canonical: params/bg/clocks.md CI 60]
             self.mass_seizure_available = True
         # TC60 Seizure unlocked [canonical: stats_1_7_scale.md TC60 Seizure]
-        if self.church_influence >= 60:               # [canonical: stats_1_7_scale.md "TC 60"]
+        if self.church_influence >= 60:               # [canonical: stats_1_7_scale.md "CI 60"]
             self.tc60_seizure_unlocked = True
         return actual
 
@@ -473,20 +473,20 @@ def da_sovereign_authority(camp: "Campaign", actor: Faction) -> DAResult:
     church = camp.factions.get("Church")
     # [canonical: stats_1_7_scale.md SAD degree effects]
     if degree == Degree.OVERWHELMING:
-        camp.clocks.change_ci(-3)                     # [canonical: stats_1_7_scale.md SAD OW "TC -3"]
+        camp.clocks.change_ci(-3)                     # [canonical: stats_1_7_scale.md SAD OW "CI -3"]
         effects.append("CI -3")
         if church and church.change_stat("mandate", -1):  # [canonical: stats_1_7_scale.md SAD "Church Mandate -1"]
             effects.append("Church.mandate -1")
     elif degree == Degree.SUCCESS:
-        camp.clocks.change_ci(-2)                     # [canonical: stats_1_7_scale.md SAD S "TC -2"]
+        camp.clocks.change_ci(-2)                     # [canonical: stats_1_7_scale.md SAD S "CI -2"]
         effects.append("CI -2")
         if church and church.change_stat("mandate", -1):  # [canonical: stats_1_7_scale.md SAD S Church -1]
             effects.append("Church.mandate -1")
     elif degree == Degree.PARTIAL:
-        camp.clocks.change_ci(-1)                     # [canonical: stats_1_7_scale.md SAD P "TC -1"]
+        camp.clocks.change_ci(-1)                     # [canonical: stats_1_7_scale.md SAD P "CI -1"]
         effects.append("CI -1")
     else:  # FAILURE
-        camp.clocks.change_ci(1)                      # [canonical: stats_1_7_scale.md SAD F "TC +1"]
+        camp.clocks.change_ci(1)                      # [canonical: stats_1_7_scale.md SAD F "CI +1"]
         effects.append("CI +1")
         if actor.change_stat("mandate", -1):          # [canonical: stats_1_7_scale.md SAD F "Baralta Mandate -1"]
             effects.append(f"{actor.name}.mandate -1")
@@ -736,10 +736,10 @@ def initial_campaign(seed: int = 0) -> Campaign:
 
 def accounting_phase(camp: Campaign, log: SimLog) -> None:
     """Run end-of-season Accounting.
-    [canonical: stats_1_7_scale.md §PP-242 + §Theocracy Counter advance]"""
+    [canonical: stats_1_7_scale.md §PP-242 + §Church Influence advance]"""
 
-    # 1. TC advance +1/season (institutional momentum)
-    # [canonical: stats_1_7_scale.md "TC advances by +1 per season"]
+    # 1. CI advance +1/season (institutional momentum)
+    # [canonical: stats_1_7_scale.md "CI advances by +1 per season"]
     applied = camp.clocks.change_ci(1)                # [canonical: stats_1_7_scale.md +1/season]
     if applied:
         log.add(f"CI +{applied} (institutional momentum)")
@@ -1464,7 +1464,7 @@ def fire_einhir_incident(camp: "Campaign", fuse: TensionFuse, log: "SimLog") -> 
     """[canonical: tensions_deck.md Card 5 Einhir Incident]"""
     log.add("EINHIR INCIDENT FIRES")
     # Public confrontation forces position declaration — Strain +1, RM presence up
-    # Simplified: Peninsular Strain +1
+    # Simplified: Turmoil +1
     # [canonical: tensions_deck.md Card 5 "forces all factions to declare position"]
     camp.clocks.change_strain(1)                      # [canonical: tensions_deck.md Card 5]
     log.add(f"  Strain +1, now {camp.clocks.peninsular_strain}")
@@ -1575,7 +1575,7 @@ def run_season_s3(camp: Campaign) -> SimLog:
     tick_tension_fuses(camp, log)
     # 1. Domain Actions
     domain_actions_phase(camp, log)
-    # 2. Accounting (TC advance, battle, strain, PI, mandate recovery, autonomy, endgame)
+    # 2. Accounting (CI advance, battle, strain, PI, mandate recovery, autonomy, endgame)
     accounting_phase(camp, log)
     # 3. Threadwork accounting (TT -> RS coupling)
     threadwork_accounting(camp, log)
@@ -1820,20 +1820,20 @@ def da_invade(camp: "Campaign", actor: Faction, territory_id: str) -> DAResult:
 
 
 # ============================================================================
-# §22. Church TC Seizure DA (CI >= 60, per-territory)
-#      [canonical: stats_1_7_scale.md §Unique Actions TC 60 Territorial Seizure]
+# §22. Church CI Seizure DA (CI >= 60, per-territory)
+#      [canonical: stats_1_7_scale.md §Unique Actions CI 60 Territorial Seizure]
 # ============================================================================
 
 
 def da_tc_seizure(camp: "Campaign", actor: Faction, territory_id: str) -> DAResult:
     """Church Territorial Seizure at CI>=60.
-    [canonical: stats_1_7_scale.md §Unique Actions TC 60 Territorial Seizure]
+    [canonical: stats_1_7_scale.md §Unique Actions CI 60 Territorial Seizure]
     Roll: Mandate vs floor(owner Mandate/2)+1. Once per territory."""
     target = camp.territories.get(territory_id)
     if target is None:
         return DAResult(actor.name, "tc_seizure", territory_id, Degree.FAILURE, 0, [],
                         ["Invalid territory"])
-    # Gate: CI >= 60 [canonical: stats_1_7_scale.md "Trigger: TC reaches 60"]
+    # Gate: CI >= 60 [canonical: stats_1_7_scale.md "Trigger: CI reaches 60"]
     if not camp.clocks.tc60_seizure_unlocked:         # [canonical: stats_1_7_scale.md TC60 gate]
         return DAResult(actor.name, "tc_seizure", territory_id, Degree.FAILURE, 0, [],
                         ["CI < 60"])
@@ -1855,7 +1855,7 @@ def da_tc_seizure(camp: "Campaign", actor: Faction, territory_id: str) -> DAResu
         target.controller = actor.name                # [canonical: stats_1_7_scale.md TC60 "Administrative control"]
         target.accord = 1                             # peacefully administered seizure still resistant
         effects.append(f"{target.tid} seized by Church")
-        # Flat TC +? not applied here (immediate CI already at 60+)
+        # Flat CI +? not applied here (immediate CI already at 60+)
     else:
         # Failure: Mandate -1 [canonical: stats_1_7_scale.md TC60 Failure]
         if actor.change_stat("mandate", -1):          # [canonical: stats_1_7_scale.md TC60 F "Mandate -1"]
@@ -1939,7 +1939,7 @@ def _find_invasion_target(camp: "Campaign", actor: Faction) -> Optional[str]:
 
 
 def select_da_for_faction_v2(camp: "Campaign", f: Faction) -> Optional[Callable]:
-    """AI v2: adds conquest (Invade / TC Seizure / Mass Seizure) + defensive Govern."""
+    """AI v2: adds conquest (Invade / CI Seizure / Mass Seizure) + defensive Govern."""
     if not f.alive() or not f.playable:
         return None
 
@@ -1948,7 +1948,7 @@ def select_da_for_faction_v2(camp: "Campaign", f: Faction) -> Optional[Callable]
         if f.mandate is not None and f.mandate >= 4:
             return lambda: da_mass_seizure(camp, f)
 
-    # Church priority: if CI>=60, TC Seizure a Church-prominent non-Church territory
+    # Church priority: if CI>=60, CI Seizure a Church-prominent non-Church territory
     if f.name == "Church" and camp.clocks.tc60_seizure_unlocked and "tc_seizure" not in f._da_used_this_season:
         candidates = [t for t in camp.territories.values()
                       if t.church_prominent and t.controller != f.name and t.controller is not None]
@@ -1982,7 +1982,7 @@ def select_da_for_faction_v2(camp: "Campaign", f: Faction) -> Optional[Callable]
             and "invade" not in f._da_used_this_season
             and own_count < 15                                                  # [canonical: victory_v30.md §0]
             and camp.season % 2 == 0                                            # every other season (rate-limit invasion spam)
-            and f.name != "Church"):                                            # Church uses TC Seizure, not military invasion
+            and f.name != "Church"):                                            # Church uses CI Seizure, not military invasion
         invasion_target = _find_invasion_target(camp, f)
         if invasion_target:
             return lambda: da_invade(camp, f, invasion_target)

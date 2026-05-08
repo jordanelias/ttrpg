@@ -73,7 +73,7 @@ class Faction:
 @dataclass
 class GameState:
     season: int = 1
-    tc: int = 28  # Theocracy Counter
+    tc: int = 28  # Church Influence
     rs: int = 72  # Rendering Stability
     ip: int = 20  # Institutional Pressure
     pi: int = 5   # Public Instability
@@ -87,7 +87,7 @@ class GameState:
         self.log.append(f"S{self.season}: {msg}")
 
     def clock_summary(self):
-        return (f"  TC={self.tc} RS={self.rs} IP={self.ip} PI={self.pi} "
+        return (f"  CI={self.tc} RS={self.rs} IP={self.ip} PI={self.pi} "
                 f"TorbenLoy={self.torben_loyalty} CoupCtr={self.coup_counter}")
 
 def create_factions():
@@ -130,9 +130,9 @@ def church_priority(f, factions, gs):
                 gs.log_event(f"  Heresy Investigation failed")
         return
 
-    # P3: Assert TC
+    # P3: Assert CI
     if gs.tc < 75 and f.mandate >= 4:
-        gs.log_event("Church P3: Assert (TC +1)")
+        gs.log_event("Church P3: Assert (CI +1)")
         gs.tc = min(75, gs.tc + 1)
         return
 
@@ -195,15 +195,15 @@ def hafenmark_priority(f, factions, gs):
         return
 
     church = factions.get('church')
-    # P2: TC response
+    # P2: CI response
     if gs.tc >= 40 and church and not church.eliminated:
-        gs.log_event("Hafenmark P2: Suppress TC")
+        gs.log_event("Hafenmark P2: Suppress CI")
         net = roll_d10_pool(f.mandate, 7)
         ob = max(1, church.mandate // 2 + 1)
         d = degree(net, ob)
         if d in ('success', 'overwhelming'):
             gs.tc = max(0, gs.tc - 1)  # Negate passive
-            gs.log_event(f"  Suppress success: TC passive negated")
+            gs.log_event(f"  Suppress success: CI passive negated")
         else:
             f.mod_stat('stability', -1)
             gs.log_event(f"  Suppress failed: Stability -1")
@@ -211,8 +211,8 @@ def hafenmark_priority(f, factions, gs):
 
     # P3: Suppress if available
     if church and not church.eliminated and f.mandate >= 4 and church.mandate >= 4:
-        gs.log_event("Hafenmark P3: Suppress TC (routine)")
-        # Simplified: automatic negate of passive TC
+        gs.log_event("Hafenmark P3: Suppress CI (routine)")
+        # Simplified: automatic negate of passive CI
         gs.tc = max(0, gs.tc)  # Just prevents the +1 for this season
         return
 
@@ -328,7 +328,7 @@ def ministry_priority(f, factions, gs):
 
 def seasonal_accounting(factions, gs):
     """Run seasonal accounting."""
-    # 1. TC passive advance
+    # 1. CI passive advance
     gs.tc = min(75, gs.tc + 1)
 
     # 2. RS baseline decay (simplified: -1 per 4 seasons = per year)
@@ -367,11 +367,11 @@ def seasonal_accounting(factions, gs):
     crown = factions.get('crown')
     lowenritter = factions.get('lowenritter')
     if crown and not crown.eliminated:
-        # TC ≥ 40 and Crown took no action to reduce
+        # CI ≥ 40 and Crown took no action to reduce
         if gs.tc >= 40:
             if 'Suppress' not in str(crown.actions_taken):
                 gs.coup_counter = min(3, gs.coup_counter + 1)
-                gs.log_event(f"  Coup Counter +1 (TC≥40 unchallenged) → {gs.coup_counter}")
+                gs.log_event(f"  Coup Counter +1 (CI≥40 unchallenged) → {gs.coup_counter}")
 
         if gs.torben_loyalty <= 2:
             gs.coup_counter = min(3, gs.coup_counter + 1)
@@ -408,9 +408,9 @@ def seasonal_accounting(factions, gs):
     if gs.rs <= 0:
         gs.log_event("  *** RS=0 — RUPTURE — SHARED LOSS ***")
 
-    # 11. TC ≥ 75 check
+    # 11. CI ≥ 75 check
     if gs.tc >= 75:
-        gs.log_event("  TC frozen at 75. Church shifts to territorial seizure.")
+        gs.log_event("  CI frozen at 75. Church shifts to territorial seizure.")
 
     # Clear season actions
     for fa in factions.values():
@@ -453,7 +453,7 @@ def run_simulation(num_seasons=12, seed=42):
         # Snapshot
         snap = {
             'season': season,
-            'tc': gs.tc, 'rs': gs.rs, 'ip': gs.ip, 'pi': gs.pi,
+            'ci': gs.tc, 'rs': gs.rs, 'ip': gs.ip, 'pi': gs.pi,
             'torben': gs.torben_loyalty, 'coup': gs.coup_counter,
             'factions': {n: {'M': f.mandate, 'I': f.influence, 'W': f.wealth,
                             'Mil': f.military, 'S': f.stability, 'elim': f.eliminated}
@@ -484,7 +484,7 @@ for seed in [42, 137, 256, 999, 1701]:
     final = results[-1]
     all_results[seed] = {
         'seasons': len(results),
-        'tc': final['tc'],
+        'ci': final['ci'],
         'rs': final['rs'],
         'ip': final['ip'],
         'pi': final['pi'],
@@ -497,7 +497,7 @@ for seed in [42, 137, 256, 999, 1701]:
 
     print(f"\n--- Seed {seed} ---")
     print(f"  Seasons: {len(results)}")
-    print(f"  Clocks: TC={final['tc']} RS={final['rs']} IP={final['ip']} PI={final['pi']}")
+    print(f"  Clocks: CI={final['ci']} RS={final['rs']} IP={final['ip']} PI={final['pi']}")
     print(f"  Coup Counter: {final['coup']} | Torben: {final['torben']}")
     print(f"  Eliminated: {all_results[seed]['eliminated'] or 'None'}")
     for n, d in final['factions'].items():
@@ -509,14 +509,14 @@ print("\n" + "=" * 70)
 print("ANALYSIS")
 print("=" * 70)
 
-# Finding 1: TC progression
-tc_values = [r['tc'] for r in all_results.values()]
-print(f"\n1. TC after 12 seasons: {tc_values}")
+# Finding 1: CI progression
+tc_values = [r['ci'] for r in all_results.values()]
+print(f"\n1. CI after 12 seasons: {tc_values}")
 if all(tc >= 40 for tc in tc_values):
-    print("   FINDING: TC reaches 40+ in all runs. Hafenmark Suppress is insufficient")
+    print("   FINDING: CI reaches 40+ in all runs. Hafenmark Suppress is insufficient")
     print("   to counter Church passive +1/season. Expected: Hafenmark needs P2 to fire")
     print("   more aggressively or Crown needs to assist.")
-    findings.append("F-01: TC reaches 40+ in all runs by S12. Church institutional momentum dominates.")
+    findings.append("F-01: CI reaches 40+ in all runs by S12. Church institutional momentum dominates.")
 
 # Finding 2: Church Influence drift
 church_inf = [r['church_influence'] for r in all_results.values()]
@@ -530,8 +530,8 @@ if all(i >= 7 for i in church_inf):
 coups = [r['coup'] for r in all_results.values()]
 print(f"\n3. Coup Counter after 12 seasons: {coups}")
 if any(c >= 3 for c in coups):
-    print("   FINDING: Coup fires in some runs. TC≥40 trigger is primary driver.")
-    findings.append("F-03: Coup fires when TC≥40 unchallenged. Crown P2 not aggressive enough on TC.")
+    print("   FINDING: Coup fires in some runs. CI≥40 trigger is primary driver.")
+    findings.append("F-03: Coup fires when CI≥40 unchallenged. Crown P2 not aggressive enough on CI.")
 
 # Finding 4: Eliminations
 all_elim = set()
@@ -558,8 +558,8 @@ findings.append("F-06: Varfell P2 fires every season (Collection always availabl
 # Finding 7: Priority tree interaction
 print(f"\n7. Cross-faction interaction: Church targets Varfell (P2 Heresy). Crown targets")
 print("   Church (Decree). Guilds target weakest Wealth. Löwenritter monitors Crown.")
-print("   Hafenmark suppresses TC. Basic interaction loop is functional.")
-findings.append("F-07: Basic interaction loop functional. Church→Varfell, Crown→Church, Guilds→weakest, Hafenmark→TC, Löwenritter→Crown. No degenerate cycles.")
+print("   Hafenmark suppresses CI. Basic interaction loop is functional.")
+findings.append("F-07: Basic interaction loop functional. Church→Varfell, Crown→Church, Guilds→weakest, Hafenmark→CI, Löwenritter→Crown. No degenerate cycles.")
 
 print("\n" + "=" * 70)
 print(f"TOTAL FINDINGS: {len(findings)}")
