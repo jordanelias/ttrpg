@@ -61,7 +61,7 @@ Interaction type derived: same style = REINFORCE, same genre opposite orientatio
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
 <!-- Niflhel row deleted 2026-04-30 — STRUCK per CR-STRIKE-2026-04-19 / ED-764. Was: ~~Niflhel~~ STRUCK | — | — | — | Per ED-764. -->
 
-## Initiative
+## First to Speak
 Exchange 1: higher Attunement acts last (information advantage). [ED-138: deterministic vs rolled?]
 Subsequent: transfers to exchange winner. Tie: stays with holder.
 Institutional override: institution determines proposer in asymmetric proceedings.
@@ -89,14 +89,14 @@ Step 7 — GM records.
 | CLASH | Same genre, opposite orientation | Compare; margin vs resistance → track movement | Margin + Cha modifier − Foc defence (min 0) |
 | REINFORCE | Same genre, same orientation | Same as CLASH | max(0, (Margin − 1) + Cha modifier − Foc defence) | (PP-401, ED-296 fix: floor at 0) |
 | CROSS | Different genres | Each side: floor(successes ÷ 2) vs resistance; net movement = difference | None |
-| TIE | Equal successes, any type | Both take 1 strain (except CROSS: no strain — PP-236); track +1 toward initiative holder | 1 each (except CROSS: 0 — PP-236) |
+| TIE | Equal successes, any type | Both take 1 strain (except CROSS: no strain — PP-236); track +1 toward first-to-speak holder | 1 each (except CROSS: 0 — PP-236) |
 
 Obscuring win: no track movement; place Doubt Marker on opponent (−2 to opponent's next winning margin; one active at a time; consumed on use).
 
-## Conviction Track
+## Persuasion Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
 Starting position: GM-set (typical: 5).
-Audience resistance: average Stability of factions (round up) − 1, minimum 0. Announced once at contest start; place resistance token on Conviction Track. (PP-235)
+Audience resistance: average Stability of factions (round up) − 1, minimum 0. Announced once at contest start; place resistance token on Persuasion Track. (PP-235)
 
 ## Derived Values
 | Value | Formula | Range |
@@ -168,7 +168,7 @@ Resolved questions cannot be re-contested without significantly changed circumst
 <!-- canonical_sources: references/canonical_sources.yaml -->
 
 ## PP-236 — CROSS Tie no-strain
-CROSS interaction + equal successes: no strain to either orator. CROSS no-strain rule overrides Tie +1-strain. Conviction Track +1 toward initiative holder as normal.
+CROSS interaction + equal successes: no strain to either orator. CROSS no-strain rule overrides Tie +1-strain. Persuasion Track +1 toward first-to-speak holder as normal.
 
 ## PP-237 — Coalition Concentration shared pool
 Shared pool = sum of all coalition members' (Focus+Recall) at setup. Depletes 1/exchange (+1 on loss) regardless of Lead rotation. Spent at 0; resets to setup total.
@@ -232,7 +232,7 @@ No analog needed. BG debate fully abstracted. Parliamentary Vote (ED-053) handle
 ### ED-295: CLASH movement stalls at median
 floor(margin × genre_weight × orientation_weight − resistance) produces 0 movement
 when margin barely exceeds resistance. At median dice results, CLASH advances
-the Conviction Track by 0 — contest stalls. Four fix options proposed (A-D).
+the Persuasion Track by 0 — contest stalls. Four fix options proposed (A-D).
 **User decision required.**
 
 ### ED-296: REINFORCE produces negative movement
@@ -247,7 +247,7 @@ mechanically superior to solo advocacy. May be intended design (rewarding allian
 
 ## PP-NEW-A — TIE/CROSS no-strain exception (SIM-DB-STRESS-01 D-04)
 TIE row in Interaction Types table updated to include CROSS exception.
-In CROSS + TIE: no strain to either orator (PP-236 takes precedence). CT +1 toward initiative holder as normal.
+In CROSS + TIE: no strain to either orator (PP-236 takes precedence). Persuasion Track +1 toward first-to-speak holder as normal.
 Source: SIM-DB-STRESS-01 D-04 finding. 2026-04-09.
 
 ## PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b)
@@ -284,7 +284,7 @@ Requires: (a) argument uses Contest style mapping to the declared MS, (b) conten
 ### Targeting Effects
 | MS | Required form | On confirmed targeting |
 |---|---|---|
-| Evidence | Memory + Revealing. Must cite specific named verifiable claim. | +1D Argue. On win: CT +1 additional (bypasses 1 resistance). |
+| Evidence | Memory + Revealing. Must cite specific named verifiable claim. | +1D Argue. On win: Persuasion Track +1 additional (bypasses 1 resistance). |
 | Consequence | Projection + Revealing. Must project specific outcome framework fails to prevent. | +1D Argue. On win: NPC +2 strain. |
 | Sanction | Invoke specific binding authority contradicting NPC's position. | +1D Argue. Doubt Marker placed regardless of outcome. |
 | Solidarity | Requires active Knot with NPC. Must invoke the relationship. | +1D Argue. On win: no strain, NPC Belief revision Ob −1. |
@@ -302,7 +302,7 @@ Max positional bonus: +5D (genre +1, audience +1, MS targeting +1, Recall +2). E
 
 If a practitioner initiates a Thread operation on a temporal axis that opposes
 the contest's primary temporal orientation, the Thread operation's co-movement
-effects apply to the contest's Conviction Track (±1 shift per co-movement
+effects apply to the contest's Persuasion Track (±1 shift per co-movement
 card drawn during the contest scene).
 
 ## Church Self-Investigation Exception (PP-349 — canonical)

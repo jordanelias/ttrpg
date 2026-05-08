@@ -577,16 +577,16 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 ---
 ## SILO 6 — PERSONAL RESOLUTION: SOCIAL CONTEST (DEBATE)
 
-> **Word-class rule:** rhetoric / argumentation mechanics. Note collisions: **Composure** is a character-attribute (§1) AND the debate damage track. **Authority / Equity / Precedent / Continuity / Order** are Conviction labels (§1.5) AND debate stylistic/argument-class labels — flagged as INTENTIONAL polysemy in §X-overlap.
+> **Word-class rule:** rhetoric / argumentation mechanics. Note collisions: **Composure** is a character-attribute (§1) AND the debate damage track. **Equity / Precedent / Order** are Conviction labels (§1.5) AND debate stylistic/argument-class labels — flagged as INTENTIONAL polysemy in §X-overlap.
 
 ### 6.1 Setup / pool / structure
 | Term | Definition | Source |
 |------|------------|--------|
-| Contest (the system) | Canonical name. Candidates considered: Contest · Contention · Proceeding (ED-136). | contest §1 |
+| Contest (the system) | Canonical name. Candidates considered: Contest · Contention · Proceeding (ED-136). Debate score tracked on **Persuasion Track** (0–10, renamed from "Conviction Track"). | contest §1 |
 | Argue Pool | Dice pool for contest exchanges. | contest §3 |
 | Argue Pool Construction | Procedure for assembling the pool. | contest §3 |
 | Exchange Structure | Per-round structure of an exchange. | contest §4 |
-| Initiative (contest) | Speaker-order rule per round. | contest §5 |
+| First to Speak | Speaker-order rule per round. *Renamed from "Initiative (contest)" to disambiguate from combat Initiative.* | contest §5 |
 | Pre-Contest Preparation | Off-table rhetorical preparation. | contest §9.1 |
 | Format Follows Context | Core principle (§1). | contest §1 |
 | GM Setup (Before Contest Begins) | Setup procedure (also Engine Setup in implementation). | contest §2 |

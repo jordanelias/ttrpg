@@ -143,6 +143,53 @@ terms:
     residual_at_audit: "2026-04-30"
     residual_concentration: "designs/npcs/npc_behavior_v30.md (5) + params/core.md (4) + designs/provincial/faction_layer_v30.md (3); diffuse — 14 docs total"
 
+
+  # ─────────────── Silo cross-contamination fixes (2026-05-08) ───────────────
+
+  - term: "Conviction Track (contest-context)"
+    canonical_full: "Persuasion Track"
+    reason: "'Conviction' is a §1 character-attribute vocabulary word (the 13 Convictions). Using it for the contest debate-score track (0–10) contaminates the attribute silo with mechanic vocabulary."
+    replacement: "Persuasion Track (0–10, debate score)"
+    date: "2026-05-08"
+    authority: "vocabulary audit — silo isolation directive"
+    residual_count: 89
+    residual_at_audit: "2026-05-08"
+    residual_concentration: "params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + 87 remaining files"
+
+  - term: "Conviction Track (territory-context)"
+    canonical_full: "Piety Track (PT)"
+    reason: "'Conviction' is a §1 character-attribute vocabulary word. Per-territory Solmund-orthodoxy track is about piety, not personal Convictions. ED-644 already acknowledged equivalence with Piety Track."
+    replacement: "Piety Track (PT) (0–5, per-territory Solmund orthodoxy)"
+    date: "2026-05-08"
+    authority: "ED-644 + vocabulary audit — silo isolation directive"
+    residual_count: 89
+    residual_at_audit: "2026-05-08"
+    residual_concentration: "Shared count with contest-context; both appear as 'Conviction Track'"
+
+  - term: "CT (abbreviation for Conviction Track)"
+    canonical_full: "PT (Piety Track) or Persuasion Track (no abbreviation)"
+    reason: "CT is deprecated. PT is the territory track abbreviation. Persuasion Track is spelled out (no abbreviation assigned)."
+    replacement: "PT (territory) or Persuasion Track (contest)"
+    date: "2026-05-08"
+    authority: "vocabulary audit"
+
+  - term: "CV (abbreviation for Conviction Track)"
+    canonical_full: "PT (Piety Track)"
+    reason: "CV was a legacy abbreviation for the per-territory track. PT is canonical per ED-644."
+    replacement: "PT"
+    date: "2026-05-08"
+    authority: "ED-644 + vocabulary audit"
+
+  - term: "Initiative (contest-context)"
+    canonical_full: "First to Speak"
+    reason: "'Initiative' in contest context collides with combat Initiative (§5). Different systems should not share mechanic names."
+    replacement: "First to Speak"
+    date: "2026-05-08"
+    authority: "vocabulary audit — silo isolation directive"
+    residual_count: 5
+    residual_at_audit: "2026-05-08"
+    residual_concentration: "params/contest.md (FIXED) + designs/scene/social_contest_v30.md (FIXED) + infill/v2 files pending"
+
 # ─────────────────────────────────────────────────────────────────────
 # Reference cross-links
 # ─────────────────────────────────────────────────────────────────────

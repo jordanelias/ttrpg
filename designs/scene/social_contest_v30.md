@@ -69,11 +69,11 @@ An orator's total bonus dice from genre + audience: maximum +2D (primary genre +
 
 These dice are added to the Argue pool at Step 3 of each exchange. They are fixed at setup — no mid-contest changes.
 
-**Step 4 — Set Conviction Track:**
+**Step 4 — Set Persuasion Track:**
 - Scale: 0–10. Side A wins at ≥ 7. Side B wins at ≤ 3. Compromise zone: 4–6.
 - Starting position: GM-set (typical neutral: 5).
 - Audience resistance: average Stability of represented factions, round up, then −1 (minimum 0). Typical range: 0–2.
-- With no adjudicator (private negotiation, personal appeal): Conviction Track is optional. If not used, winner determined by exchange majority. If exchange majority is tied, the contest stalls: strain persists, all Read results from the contest become permanent knowledge (the parties learned things about each other that cannot be unlearned), and the relationship is stressed. The narrative moves forward — the failure to agree IS a consequential outcome.
+- With no adjudicator (private negotiation, personal appeal): Persuasion Track is optional. If not used, winner determined by exchange majority. If exchange majority is tied, the contest stalls: strain persists, all Read results from the contest become permanent knowledge (the parties learned things about each other that cannot be unlearned), and the relationship is stressed. The narrative moves forward — the failure to agree IS a consequential outcome.
 
 **Step 5 — Set exchange count and role structure:**
 
@@ -133,7 +133,7 @@ Each exchange's Appraise senses the CURRENT state of the audience (which may hav
 **Step 2b — Corroborate (optional):** A corroborator present at the contest may declare support before the Argue roll. On success: primary orator gains +1D for this exchange. Corroborator must be a declared coalition member (Knot not required). Knot-sharing corroborators roll at Ob 1; non-Knot coalition members roll at Ob 2. In asymmetric proceedings: all corroborators for the disadvantaged party use Ob 2 regardless of Knot. (PP-257) On failure: corroborator takes 1 strain.
 
 **Step 3 — Argue:**
-Initiative holder declares argument and rolls first. Respondent hears, then declares and rolls.
+First-to-speak holder declares argument and rolls first. Respondent hears, then declares and rolls.
 
 Pool: (Primary Attribute × 2) + History bonus (per §3), TN 7.
 Add genre/orientation bonus dice per §2 Step 3 (primary genre +1D; audience boost match +1D; max +2D total).
@@ -147,7 +147,7 @@ Momentum: before rolling, spend any amount of Momentum to add automatic successe
 **CLASH** (same genre, opposite orientation):
 Direct contest within the same temporal horizon.
 - Compare successes. Higher wins. Margin = difference.
-- If margin > resistance → Conviction Track moves (margin − resistance) toward winner's position.
+- If margin > resistance → Persuasion Track moves (margin − resistance) toward winner's position.
 - If margin ≤ resistance → 0 movement.
 - Strain to loser: margin + Charisma modifier of winner − Focus defence of loser. **Minimum 0.** [Matches combat damage minimum 0. Focus defence can fully absorb strain just as armour can fully absorb damage.]
 - Charisma modifier: max(0, floor((Charisma − 3) ÷ 2)) → Cha 1–3: +0; Cha 4–5: +1; Cha 6–7: +2.
@@ -165,22 +165,22 @@ Both orators push in the same direction within the same temporal horizon.
 - Net track movement = difference between the two movements; direction toward the side with larger movement.
 - Obscuring in CROSS: if the side with larger movement used Obscuring, place a Doubt Marker on the opponent instead of track movement.
 - No strain dealt. Neither argument attacked the other.
-- Initiative stays with holder.
+- First to speak stays with holder.
 
 **TIE** (equal successes, any interaction type):
 - Both orators take 1 strain. **Exception (PP-236): if the interaction type is CROSS, no strain is dealt — CROSS no-strain rule takes precedence. Neither argument attacked the other; a tie does not change that structural fact.**
-- Conviction Track moves +1 toward initiative holder's position.
-- Initiative stays with holder.
+- Persuasion Track moves +1 toward first-to-speak holder's position.
+- First to speak stays with holder.
 
-- Conviction Track does not move toward winner.
+- Persuasion Track does not move toward winner.
 - Place a Doubt Marker on the opponent.
 - Doubt Marker effect: opponent's next winning exchange has its margin reduced by 2 before resistance is applied (minimum 0).
 - Only one Doubt Marker active at a time. New replaces old.
 - Consumed on use.
 
 **Step 5 — Forfeit actions:**
-- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side. Concentration restores to max (Focus × 3).
-- **Concede a Point:** Forfeit exchange. Take 1 strain. Conviction Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
+- **Regroup:** Forfeit exchange. No argument, no strain. Persuasion Track moves +1 toward non-forfeiting side. Concentration restores to max (Focus × 3).
+- **Concede a Point:** Forfeit exchange. Take 1 strain. Persuasion Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
 
 **Step 6 — Strain and Concentration:**
 
@@ -200,9 +200,9 @@ Both orators push in the same direction within the same temporal horizon.
 
 ---
 
-## §5 INITIATIVE
+## §5 FIRST TO SPEAK
 
-- Exchange 1: **Rolled** — both orators roll Attunement, TN 7, Ob 1. Higher net successes acts last (declares second; information advantage). On tie: higher Attunement stat wins. On stat tie: neutral party (adjudicator) assigns. (ED-581 resolution: rolled initiative aligns with combat initiative for cross-system consistency. The roll adds variance to opening exchanges — a less attuned orator can occasionally seize the read.)
+- Exchange 1: **Rolled** — both orators roll Attunement, TN 7, Ob 1. Higher net successes acts last (declares second; information advantage). On tie: higher Attunement stat wins. On stat tie: neutral party (adjudicator) assigns. (ED-581 resolution: rolled first-to-speak aligns with combat initiative for cross-system consistency. The roll adds variance to opening exchanges — a less attuned orator can occasionally seize the read.)
 - Subsequent exchanges: transfers to exchange winner.
 - On tie: stays with current holder.
 
@@ -211,8 +211,8 @@ Both orators push in the same direction within the same temporal horizon.
 ## §6 POST-CONTEST RESOLUTION
 
 - GM reveals ledger.
-- Conviction Track ≥ 7 = Side A wins; ≤ 3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
-- No Conviction Track (private): exchange majority determines winner. Tie = stall with consequences (see §2 Step 4).
+- Persuasion Track ≥ 7 = Side A wins; ≤ 3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
+- No Persuasion Track (private): exchange majority determines winner. Tie = stall with consequences (see §2 Step 4).
 
 **Thread co-movement by winning genre:**
 
@@ -227,7 +227,7 @@ Both orators push in the same direction within the same temporal horizon.
 - Decisive win + Projection genre: +1D on first Domain Action pursuing the argued outcome within the season.
 - Compromise: no Domain Echo.
 
-**Total Victory** (Conviction Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one instance per session, clears at next session start if unused). Winning orator gains +1 Momentum (if below cap 4). Disposition change with all witnesses; Reputation shift (GM-set magnitude). In Board Game (BG) Parliamentary Vote: losing coalition's dominant faction takes Mandate −1 for one season.
+**Total Victory** (Persuasion Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one instance per session, clears at next session start if unused). Winning orator gains +1 Momentum (if below cap 4). Disposition change with all witnesses; Reputation shift (GM-set magnitude). In Board Game (BG) Parliamentary Vote: losing coalition's dominant faction takes Mandate −1 for one season.
 
 **Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. MS changes subject to MS ceiling (100) and MS=0 lockout.
 
@@ -235,7 +235,7 @@ Both orators push in the same direction within the same temporal horizon.
 
 **GM advisory — Obligation tracking (ED-619):** GMs are advised to cap active Obligations at 3 simultaneously across all parties for tracking tractability. Beyond 3 active Obligations in the same campaign season, use a dedicated ledger rather than session notes. The system allows any number of concurrent Obligations; the cap is a GM guidance note, not a mechanical limit.
 
-A Decisive win (Conviction Track ≥ 7 or ≤ 3) in a Formal or Grand Contest produces a binding **Obligation** — a mechanical commitment that persists across seasons. The Obligation is the contest's lasting consequence in the game world, not just a stat change.
+A Decisive win (Persuasion Track ≥ 7 or ≤ 3) in a Formal or Grand Contest produces a binding **Obligation** — a mechanical commitment that persists across seasons. The Obligation is the contest's lasting consequence in the game world, not just a stat change.
 
 **Obligation structure:** The winning side names one specific commitment that the losing side must honor. The commitment must be achievable and verifiable (not "be good" but "withdraw Templars from Gransol within 2 seasons").
 
@@ -289,10 +289,10 @@ When a player's contest argument produces a Conviction Scar on an NPC (per npc_b
 
 ### §6.3 Chain Contests (NEW — unresolved tension generates follow-up)
 
-When a contest ends in Compromise (Conviction Track 4–6), the tension is deferred, not resolved. The unresolved contest generates a Scene Slate entry for the following season per player_agency_v30 §4.2 (Priority 1 — the unresolved political tension is a crisis event).
+When a contest ends in Compromise (Persuasion Track 4–6), the tension is deferred, not resolved. The unresolved contest generates a Scene Slate entry for the following season per player_agency_v30 §4.2 (Priority 1 — the unresolved political tension is a crisis event).
 
 **Chain contest rules:**
-- The follow-up contest starts at the Conviction Track's final position from the previous contest (not reset to 5). If the first contest ended at Track 4, the chain contest starts at Track 4.
+- The follow-up contest starts at the Persuasion Track's final position from the previous contest (not reset to 5). If the first contest ended at Track 4, the chain contest starts at Track 4.
 - All strain and Concentration reset normally between sessions.
 - Disposition changes from the first contest carry into the second.
 - The NPC's Scar count from the first contest persists — accumulated wounds do not heal between chain contests.
@@ -311,11 +311,11 @@ When a contest ends in Compromise (Conviction Track 4–6), the tension is defer
 
 **Asymmetric proceedings (Church Tribunal, Royal Audience, Inquisition):**
 - Institution assigns Proposer/Respondent roles. Roles do NOT alternate.
-- Disadvantaged party (accused, petitioner) faces halved resistance (round up) when moving the Conviction Track.
+- Disadvantaged party (accused, petitioner) faces halved resistance (round up) when moving the Persuasion Track.
 - Advantaged orator accumulates 0 strain from CROSS exchanges.
 - CLASH strain applies normally when advantaged side loses.
 
-**Church Tribunal specifics:** Accused has no corroboration. Exchange count set by Inquisitor (1–5). (PP-272: 'Division' stricken — term was vestigial from an earlier parliamentary design pass; it has no mechanical definition in the current system.) Conviction Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
+**Church Tribunal specifics:** Accused has no corroboration. Exchange count set by Inquisitor (1–5). (PP-272: 'Division' stricken — term was vestigial from an earlier parliamentary design pass; it has no mechanical definition in the current system.) Persuasion Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
 
 ### §7.2 Succession Contest (NEW — ED-665 closure)
 
@@ -326,7 +326,7 @@ When a faction leader is removed (death, incapacitation, exile, formal resignati
 **Contest structure:**
 - **Adjudicator:** the faction's institutional body (Crown: inner circle by majority Disposition; Hafenmark: Parliament by Mandate-weighted vote; Varfell: Jarl Assembly by quorum; Church: College of Cardinals by Disposition; Löwenritter: surviving Knight-Commanders by seniority; Guilds: Council by Favour-weighted vote; RM: Mandate ≥ 3 organizers by consensus).
 - **Genre selection:** typically Memory (claimants cite past deeds, lineage, established precedent) or Projection (claimants project their future governance). Claimant selects per §3.
-- **Conviction Track length:** 5 exchanges by default. Adjudicator may set 3-7 depending on contested-ness. A "narrow contest" (close institutional support among claimants) uses longer tracks; a "settled contest" (one obvious successor) uses shorter.
+- **Persuasion Track length:** 5 exchanges by default. Adjudicator may set 3-7 depending on contested-ness. A "narrow contest" (close institutional support among claimants) uses longer tracks; a "settled contest" (one obvious successor) uses shorter.
 - **Resolution:**
 
 | Track outcome | Result |
@@ -367,8 +367,8 @@ The Heresy Investigation is the precursor proceeding to Excommunication Tribunal
 | Phase | Duration | Scene Type | Closure Conditions |
 |---|---|---|---|
 | **Initiation** | 1 season | Inquisitor declares filing; target receives summons | Inquisitor may withdraw before next season (Disposition cost: −1 with Cardinal Justice if dismissal seems unjustified) |
-| **Investigation Proper** | 2-4 seasons (Inquisitor declares duration at filing) | One Mandatory Zoom-In Interrogation per season per scale_transitions §4.3.2 (asymmetric Conviction Track, Ob 2 vs target framework) | See §7.3.2 closure conditions below |
-| **Verdict** | 1 season (final Interrogation) | Conclusive Conviction Track exchange (Track length = standard §7 contest, set by Inquisitor) | Verdict: Acquittal (Investigation closed, no further consequence) / Insufficient Evidence (Investigation suspended; may resume if Evidence Track reaches 3 within 4 seasons) / Tribunal Recommended (escalates to §7.1 Excommunication Tribunal) |
+| **Investigation Proper** | 2-4 seasons (Inquisitor declares duration at filing) | One Mandatory Zoom-In Interrogation per season per scale_transitions §4.3.2 (asymmetric Persuasion Track, Ob 2 vs target framework) | See §7.3.2 closure conditions below |
+| **Verdict** | 1 season (final Interrogation) | Conclusive Persuasion Track exchange (Track length = standard §7 contest, set by Inquisitor) | Verdict: Acquittal (Investigation closed, no further consequence) / Insufficient Evidence (Investigation suspended; may resume if Evidence Track reaches 3 within 4 seasons) / Tribunal Recommended (escalates to §7.1 Excommunication Tribunal) |
 
 **Total nominal duration: 4-6 seasons** from Initiation to Verdict (1 + 2-4 + 1).
 
@@ -441,7 +441,7 @@ Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
 **Evidence Track Findings as preparation (F-TRANS-11):** Findings from a completed fieldwork investigation may be cited in the Contest opening. Each Finding cited grants +1D on Exchange 1 (maximum +2D from Findings, regardless of count). Findings are not consumed by citation — they remain on the Evidence Track for future use. Finding citation must be declared at contest setup (GM sets scope: the Finding must be relevant to the contest's subject matter). This bonus stacks with standard preparation (+1D), for a maximum Exchange 1 bonus of +3D when both are available. Requires prior multi-scene investigation to produce Findings. Reference: fieldwork_investigation.md §2.3, §4.1.
 
 ### §9.2 Multi-Party Contest — Coalition Structure
-Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (Focus + Recall) at contest setup. Each exchange depletes the shared pool by 1 (plus 1 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. Initiative transfers to winning side; that side nominates holder.
+Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (Focus + Recall) at contest setup. Each exchange depletes the shared pool by 1 (plus 1 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. First to speak transfers to winning side; that side nominates holder.
 
 ### §9.3 Practitioner Weaving in Contests (R-65)
 A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS ÷ 30) (+1D at 30, +2D at 60, +3D at 90). Must declare before rolling. Visible to all observers. Church may file Heresy Investigation on observation. After exchange: Coherence check Ob 1.
@@ -489,9 +489,9 @@ Faction-level contest resolution for BG scale. To zoom into personal scale, use 
 1. Each faction declares Side A or Side B. Non-declaring factions Abstain.
 2. Each side declares one genre (Memory or Projection).
 3. Resistance: base 0. If a faction with Stability ≥ 6 Abstains: +1 resistance (max +2).
-4. Starting Conviction Track: 5 ± lobbying offset. Each successful Diplomacy action targeting this vote in preceding season: +1 toward lobbying side (max ±2).
+4. Starting Persuasion Track: 5 ± lobbying offset. Each successful Diplomacy action targeting this vote in preceding season: +1 toward lobbying side (max ±2).
 
-**Lobby cap — BG mode (ED-621):** The lobbying offset is restricted to the compromise zone at BG Vote start. Maximum starting Conviction Track: 6. Minimum starting track: 4. Lobbying cannot predetermine a vote — it provides advantage, not a guaranteed outcome. This matches the Hybrid mode restriction (§11 / PP-256). Example: if lobbying would push the track to 7, it is capped at 6.
+**Lobby cap — BG mode (ED-621):** The lobbying offset is restricted to the compromise zone at BG Vote start. Maximum starting Persuasion Track: 6. Minimum starting track: 4. Lobbying cannot predetermine a vote — it provides advantage, not a guaranteed outcome. This matches the Hybrid mode restriction (§11 / PP-256). Example: if lobbying would push the track to 7, it is capped at 6.
 
 ### BG Vote Resolution
 Pool: sum of Mandate of all factions on each side. Roll combined pool TN 7.
@@ -500,18 +500,18 @@ Audience boost: +1D if the side's genre matches the Parliament's dominant factio
 
 Each side: if net successes > resistance → movement = successes − resistance.
 Net track movement = difference; direction toward the larger side.
-Conviction Track ≥ 7 = motion passes; ≤ 3 = motion fails; 4–6 = referred to committee.
+Persuasion Track ≥ 7 = motion passes; ≤ 3 = motion fails; 4–6 = referred to committee.
 Zero-zero: if both sides fail to exceed resistance, motion referred to committee.
 Thread consequences do not fire from BG Parliamentary Vote (personal-scale argument required).
-Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant faction takes Mandate −1 for one season.
+Total Victory: Persuasion Track ≥ 9 or ≤ 1 → losing coalition's dominant faction takes Mandate −1 for one season.
 
 ---
 
 ## §11 HYBRID CONTEST
 
-1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Conviction Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
-2. **Set TTRPG starting Conviction Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
-4. **Resolution:** final TTRPG Conviction Track position determines outcome. Thread consequences may fire.
+1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Persuasion Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
+2. **Set TTRPG starting Persuasion Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
+4. **Resolution:** final TTRPG Persuasion Track position determines outcome. Thread consequences may fire.
 
 ---
 
@@ -520,7 +520,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: CI ≥ 40, Church Mandate ≥ 4, Evidence Track ≥ 3 on target from prior HI OR documented Obligation violation OR 2 prior Tribunal convictions.
 
 **Modifications vs standard §7:**
-- Conviction Track starts at **7** (Church near-decisive before Exchange 1 — institutional fait accompli)
+- Persuasion Track starts at **7** (Church near-decisive before Exchange 1 — institutional fait accompli)
 - No accused corroboration permitted
 - Exchange count: 1–3 (set by Inquisitor)
 - Resistance for accused: halved (same as standard)
@@ -579,7 +579,7 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 |---|---|---|
 | ED-136 | System rename: "Debate" → "Contest" (or alternative). Pending user decision. | P1 |
 | ED-137 | Panel adjudicator type not yet designed. Using Expert Judge as provisional. | P2 |
-| ED-138 | Social initiative deterministic vs rolled. **Resolved (ED-581):** Changed to rolled (Attunement vs Attunement, TN 7, Ob 1). See §5. | Resolved |
+| ED-138 | Social first-to-speak deterministic vs rolled. **Resolved (ED-581):** Changed to rolled (Attunement vs Attunement, TN 7, Ob 1). See §5. | Resolved |
 
 ### Carried forward
 | ID | Description | Priority |
@@ -593,7 +593,7 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 | Topic | Status |
 |---|---|
 | Escalation between social modes (negotiation → debate → appeal) | Conceptually identified, not designed |
-| Negotiation compromise resolution (ZOPA-style) | Identified as structurally different from Conviction Track, not designed |
+| Negotiation compromise resolution (ZOPA-style) | Identified as structurally different from Persuasion Track, not designed |
 | Mass battle rally action (Attunement-based) | Gap identified, belongs in mass_battle_v3 |
 | Appraise step expansion (reveal Beliefs, Knot vulnerabilities) | Conceptually identified, not specified |
 
