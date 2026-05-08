@@ -1,0 +1,448 @@
+# VALORIA — Name Collision Database
+# Canonical term registry. Every game term has exactly one silo.
+# Every abbreviation has exactly one owner. No duplicates.
+#
+# ENFORCEMENT: Hook-checkable. New content committing a term from
+# the wrong silo, or reusing a deprecated term, should fail pre-commit.
+#
+# EXEMPT terms (cosmological/substrate layer) may appear across silos.
+# All other terms: one silo only.
+#
+# Last updated: 2026-05-08
+# Authority: vocabulary audit + silo cohesion analysis
+
+# ═══════════════════════════════════════════════════════════════
+# ABBREVIATION REGISTRY — one abbreviation, one owner, no exceptions
+# ═══════════════════════════════════════════════════════════════
+
+abbreviations:
+  # Character (§1)
+  CP: {term: "Character Points", silo: 1}
+  TS: {term: "Thread Sensitivity", silo: 1}
+  TPS: {term: "Thread Pool Score", silo: 1}
+
+  # Faction (§2)
+  PS: {term: "Public Support", silo: 2}
+  M: {term: "Mandate (faction stat)", silo: 2, scope: "table-only"}
+  I: {term: "Influence (faction stat)", silo: 2, scope: "table-only"}
+  W: {term: "Wealth (faction stat)", silo: 2, scope: "table-only"}
+  Mil: {term: "Military (faction stat)", silo: 2, scope: "table-only"}
+  Int: {term: "Intelligence (faction stat)", silo: 2, scope: "table-only"}
+  Sta: {term: "Stability (faction stat)", silo: 2, scope: "table-only"}
+  L: {term: "Legitimacy", silo: 2, scope: "table-only"}
+
+  # Territory (§3)
+  PV: {term: "Provincial Value", silo: 3}
+
+  # World/Cosmological (§4 — exempt layer)
+  MS: {term: "Mending Stability", silo: 4, exempt: true}
+  TT: {term: "Thread Tension", silo: 4, exempt: true}
+
+  # Combat (§5 — all scales)
+  DR: {term: "Damage Resistance", silo: 5}
+  CE: {term: "Combat Endurance", silo: 5}
+  H: {term: "Health per Size (unit)", silo: 5, scope: "table-only"}
+
+  # Contest/Debate (§6)
+  # No single-letter or two-letter abbreviations for contest terms
+
+  # Piety & Church Influence (§9)
+  PT: {term: "Piety Track", silo: 9}
+  CI: {term: "Church Influence", silo: 9}
+
+  # Clocks (§12)
+  IP: {term: "Institutional Pressure", silo: 12}
+  PI: {term: "Public Instability", silo: 12}
+
+  # Dice Engine (§16A)
+  TN: {term: "Target Number", silo: "16A"}
+  Ob: {term: "Obstacle", silo: "16A"}
+  EV: {term: "Expected Value", silo: "16A"}
+
+  # Authoring (§16B)
+  PP: {term: "Patch (design parameter)", silo: "16B"}
+  ED: {term: "Editorial Decision", silo: "16B"}
+  SIM: {term: "Simulation", silo: "16B"}
+
+# ═══════════════════════════════════════════════════════════════
+# SILO TERM REGISTRY — every term, one silo
+# ═══════════════════════════════════════════════════════════════
+
+terms:
+  # ─────────────── §1 CHARACTER ATTRIBUTES ───────────────
+  silo_1:
+    name: "Character Attributes"
+    description: "What a person carries on their sheet"
+    terms:
+      - Strength
+      - Agility
+      - Endurance
+      - Presence
+      - Cognition
+      - Thread Sensitivity  # abbr: TS
+      - Thread Pool Score   # abbr: TPS
+      - Composure           # attacked by debate but DEFINED here
+      - Certainty           # personal axis
+      - Health              # = Endurance (personal)
+      - Stamina             # = Endurance
+      - Recall              # renamed from "Memory (score)" — caps History entries
+      - Disposition          # NPC state
+      - Attitude Scale
+      - Character Points    # abbr: CP
+      - Momentum            # combat-derived but character-carried
+      - Vitality            # combat HP replacement (ED-548)
+      - Focus               # threadwork resource
+      - Concentration       # contest resource
+      - Background
+      - Calling
+      - Specialty
+      - Faith               # Conviction #1
+      - Authority            # Conviction #2
+      - Order               # Conviction #3
+      - Scholastic          # Conviction #4
+      - Utility             # Conviction #5
+      - Equity              # Conviction #6
+      - Liberty             # Conviction #7
+      - Precedent           # Conviction #8
+      - Community           # Conviction #9
+      - Identity            # Conviction #10
+      - Warden              # Conviction #11
+      - Virtue              # Conviction #12
+      - Honor               # Conviction #13
+      - Conviction Scar
+      - Key                 # generated from Conviction Scars
+      - Memory entry        # per-NPC Key reference (NOT the stat)
+
+  # ─────────────── §2 FACTION ATTRIBUTES ───────────────
+  silo_2:
+    name: "Faction Attributes"
+    description: "What a faction carries on its ledger"
+    terms:
+      - Mandate             # faction stat
+      - Influence           # faction stat
+      - Wealth              # faction stat
+      - Military            # faction stat
+      - Intelligence        # faction stat
+      - Stability           # faction stat
+      - Legitimacy          # faction stat
+      - Public Support      # abbr: PS (freed from collision with Peninsular Strain)
+      - Standing            # faction attribute (also Key type — exempt)
+      - Political Pool      # canonical; "Mandate Pool" and "Faction Pool" deprecated
+      - Effective Conviction # faction-level Conviction vector
+      - Faction Strategy
+      - Cascade
+
+  # ─────────────── §3 TERRITORY ATTRIBUTES ───────────────
+  silo_3:
+    name: "Territory Attributes"
+    description: "What a territory carries on its card"
+    terms:
+      - Provincial Value    # abbr: PV
+      - Accord
+      - Territory Control
+      - Settlement
+      - Garrison
+      - Fortification Level
+      - Supply Level
+      - Trade Route
+
+  # ─────────────── §4 WORLD / COSMOLOGICAL (EXEMPT) ───────────────
+  silo_4:
+    name: "World / Cosmological State"
+    description: "What the world is doing — EXEMPT from silo isolation"
+    exempt: true
+    terms:
+      - Mending Stability   # abbr: MS — cross-silo by design
+      - Thread Tension      # abbr: TT — cross-silo by design
+      - Coherence           # personal + cosmological + threadwork — EXEMPT
+      - Knot                # relationship + cosmological + threadwork — EXEMPT
+      - Domain Echo         # debate + mass combat + faction + scale-bridging — EXEMPT
+      - Certainty Axis      # cosmological scale (distinct from personal Certainty)
+      - Substrate
+      - Thread
+      - Leap
+      - Render
+      - Fray
+      - Solmund Orthodoxy
+
+  # ─────────────── §5 COMBAT (ALL SCALES) ───────────────
+  silo_5:
+    name: "Combat (personal + mass)"
+    description: "How violence resolves at any scale"
+    terms:
+      # Personal scale
+      - Initiative          # combat ONLY — contest uses "First to Speak"
+      - Attack
+      - Defend
+      - Combat Pool
+      - Damage Resistance   # abbr: DR — both scales
+      - Combat Endurance    # abbr: CE
+      - Armour
+      - Wound
+      - Rescue
+      - Degree Table (combat)
+      - Zone
+      - Engagement
+      # Mass/unit scale
+      - Health per Size     # unit-scale HP — abbr: H (table-only)
+      - Unit Stat Block
+      - Formation Type
+      - Battle Turn Structure
+      - Cascade Phase (battle)
+      - Morale
+      - Supply Line
+      - Garrison Action
+      - Siege
+      - Maneuver
+      - Fortification Modifier
+
+  # ─────────────── §6 CONTEST / DEBATE ───────────────
+  silo_6:
+    name: "Social Contest (Debate)"
+    description: "How rhetoric resolves"
+    terms:
+      - First to Speak      # renamed from "Initiative (contest)"
+      - Persuasion Track    # renamed from "Conviction Track (contest)" — 0–10
+      - Argue Pool
+      - Exchange
+      - Genre               # Memory / Projection
+      - Memory (genre)      # debate genre choice — arguing from the past
+      - Projection          # debate genre choice — arguing from the future
+      - Orientation          # Revealing / Obscuring
+      - Revealing
+      - Obscuring
+      - Contest Style
+      - Pressure Point
+      - Sanction            # renamed from "Authority" pressure point
+      - Solidarity          # renamed from "Loyalty" pressure point
+      - Evidence            # pressure point type
+      - Consequence         # pressure point type
+      - Doubt Marker
+      - Audience Resistance
+      - Grand Debate
+      - Composure (track)   # the debate damage track — references §1 Composure attribute
+      - Strain (debate)     # NPC strain from debate
+      - Belief Revision
+      - Co-Movement Card
+
+  # ─────────────── §7 THREADWORK (EXEMPT) ───────────────
+  silo_7:
+    name: "Threadwork"
+    description: "How the substrate is manipulated — EXEMPT from silo isolation"
+    exempt: true
+    terms:
+      - Thread Operation
+      - Thread Pool
+      - Contact
+      - Thread Fatigue      # replaces Contact Rounds (ED-694)
+      - Operative Coherence
+      - Fray Event
+      - Thread Complexity
+
+  # ─────────────── §8 FIELDWORK ───────────────
+  silo_8:
+    name: "Fieldwork"
+    description: "How non-combat, non-debate, non-Thread interaction resolves"
+    terms:
+      - Fieldwork Mode
+      - Exploration
+      - Investigation
+      - Socializing
+      - Exposure
+      - Cover              # moved from §1 — fieldwork mechanic output
+      - Sincerity Gate
+      - Social Standing Check
+      - Evidence Track (fieldwork)
+      - Observation
+      - Hypothesis
+      - Conclusion
+
+  # ─────────────── §9 PIETY & CHURCH INFLUENCE ───────────────
+  silo_9:
+    name: "Piety & Church Influence"
+    description: "How Church orthodoxy spreads and the Church wins"
+    terms:
+      - Piety Track         # abbr: PT — per-territory 0–5. RENAMED from "Conviction Track"
+      - Church Influence    # abbr: CI — renamed from "Theocracy Counter (TC)"
+      - CI Generation
+      - Seasonal CI Calculation
+      - CI Milestone
+      - Church Attention Pool
+      - Piety Domain Action  # dissolved but historically referenced
+      - Restoration         # PT=0 pole
+      - Orthodoxy           # PT=5 pole
+
+  # ─────────────── §11 FACTION LAYER / DOMAIN ACTIONS ───────────────
+  silo_11:
+    name: "Faction Layer / Domain Actions"
+    description: "What factions DO strategically"
+    terms:
+      - Domain Action
+      - Parliamentary Action
+      - Negotiation Action
+      - Faction Turn
+      - Autonomous Actor
+      - NPC Agenda
+      - Faction Behavior Tree
+
+  # ─────────────── §12 CLOCKS ───────────────
+  silo_12:
+    name: "Clocks"
+    description: "Dedicated clock mechanics the world maintains"
+    note: "Only dedicated clock mechanics. Faction stats (Stability, Standing, etc.) live in §2."
+    terms:
+      - Turmoil             # renamed from "Peninsular Strain" — resolves PS collision
+      - Institutional Pressure  # abbr: IP
+      - Public Instability  # abbr: PI
+      - Cooldown Track
+
+  # ─────────────── §13 SPECIAL ───────────────
+  silo_13:
+    name: "Tensions Deck / Assassination / Special"
+    description: "Auxiliary strategic events"
+    terms:
+      - Tensions Card
+      - Royal Assassination
+      - Löwenritter Graduated Autonomy
+
+  # ─────────────── §14 VICTORY ───────────────
+  silo_14:
+    name: "Victory Paths"
+    description: "How factions win"
+    terms:
+      - Victory Path
+      - Victory Scene
+      - Faction Victory Condition
+      - Personal Victory Registration
+      - Endgame Trigger
+
+  # ─────────────── §15 SCALE-BRIDGING (EXEMPT) ───────────────
+  silo_15:
+    name: "Scale-bridging"
+    description: "How systems hand off to each other — EXEMPT"
+    exempt: true
+    terms:
+      - Domain Echo         # cross-listed §4
+      - Scale Transition
+      - Zoom
+      - Bridge Scene
+
+  # ─────────────── §16A DICE ENGINE ───────────────
+  silo_16A:
+    name: "Dice Engine"
+    description: "System-agnostic resolution primitives"
+    terms:
+      - Target Number       # abbr: TN
+      - Obstacle            # abbr: Ob
+      - Pool
+      - Degree of Success
+      - Degree Table
+      - Open-ended Roll
+      - Expected Value      # abbr: EV
+      - Wild Die
+      - Bonus Die
+      - Penalty Die
+
+  # ─────────────── §16B AUTHORING ───────────────
+  silo_16B:
+    name: "Authoring / Infrastructure"
+    description: "Design process vocabulary — not in-game"
+    terms:
+      - Patch               # abbr: PP
+      - Editorial Decision  # abbr: ED
+      - Simulation          # abbr: SIM
+      - Class A (doc tier)
+      - Class B (doc tier)
+      - Throughline
+      - Propagation
+
+# ═══════════════════════════════════════════════════════════════
+# DEPRECATED TERMS — must not appear in new content
+# ═══════════════════════════════════════════════════════════════
+
+deprecated:
+  - term: "Conviction Track"
+    replacement: "Piety Track (territory, 0–5) or Persuasion Track (contest, 0–10)"
+    date: "2026-05-08"
+    reason: "'Conviction' is §1 character-attribute vocabulary"
+
+  - term: "CT"
+    replacement: "PT (Piety Track) or spell out Persuasion Track"
+    date: "2026-05-08"
+
+  - term: "CV"
+    replacement: "PT"
+    date: "2026-05-08"
+
+  - term: "Theocracy Counter"
+    replacement: "Church Influence (CI)"
+    date: "2026-05-08"
+    reason: "ED-782"
+
+  - term: "TC"
+    replacement: "CI"
+    date: "2026-05-08"
+
+  - term: "Peninsular Strain"
+    replacement: "Turmoil"
+    date: "2026-05-08"
+    reason: "PS abbreviation collision with Public Support"
+
+  - term: "Initiative (contest context)"
+    replacement: "First to Speak"
+    date: "2026-05-08"
+    reason: "Collision with combat Initiative"
+
+  - term: "Authority (pressure point)"
+    replacement: "Sanction"
+    date: "2026-05-08"
+    reason: "Collision with Conviction #2 Authority"
+
+  - term: "Loyalty (pressure point)"
+    replacement: "Solidarity"
+    date: "2026-05-08"
+
+  - term: "Mandate Pool"
+    replacement: "Political Pool"
+    date: "2026-05-08"
+
+  - term: "Faction Pool"
+    replacement: "Political Pool"
+    date: "2026-05-08"
+
+  - term: "Memory (score)"
+    replacement: "Recall"
+    date: "2026-05-08"
+    reason: "Collision with debate genre Memory and per-NPC Memory entry"
+
+  - term: "Galbados"
+    replacement: "Solmund"
+    date: "pre-2026"
+    reason: "Canonical name enforcement"
+
+# ═══════════════════════════════════════════════════════════════
+# VALIDATION RULES
+# ═══════════════════════════════════════════════════════════════
+#
+# 1. ABBREVIATION UNIQUENESS: No two entries in `abbreviations:` may
+#    share the same key. This is structurally enforced by YAML (last
+#    wins), so the registry must be checked for duplicates on any edit.
+#
+# 2. TERM UNIQUENESS: No term may appear in two non-exempt silos.
+#    Exempt silos (§4, §7, §15) can share terms with each other and
+#    with non-exempt silos. All other silos: one term, one silo.
+#
+# 3. DEPRECATED ENFORCEMENT: Any term in `deprecated:` must not
+#    appear in new content (excluding historical/diagnostic references
+#    and the censured_vocabulary.yaml registry itself).
+#
+# 4. NEW TERM PROTOCOL: Before adding a new game term to any doc:
+#    a. Search this registry for the term
+#    b. If found → use the existing term from its assigned silo
+#    c. If not found → assign to exactly one silo, add to registry
+#    d. If the term collides with an existing term → rename one
+#
+# 5. ABBREVIATION PROTOCOL: Before assigning an abbreviation:
+#    a. Check abbreviations: for collision
+#    b. If taken → choose a different abbreviation or spell out
+#    c. Two-letter minimum for prose; single-letter only in tables
