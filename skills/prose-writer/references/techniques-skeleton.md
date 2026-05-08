@@ -240,6 +240,10 @@ The Spirit axis becomes audible at Coherence 4 and below. Above 4, the rendering
 
 ## 10. Structural Devices
 
+<!-- concept:ratchet-principle -->
+**The Ratchet (political/faction scenes).** Political encounters between principals are not balanced — they are cumulative. Each scene tightens constraints that subsequent scenes inherit. Structure political sequences as ratchets: each encounter locks the principals further into their positions, narrows the space between them, and moves marginal actors into detonation positions. The principals do not cause the explosion. The explosion comes from the margins — the people the principals moved, the alliances they forced, the information they surfaced. The structural pattern: Goliaths collide → space narrows → margin detonates.
+
+
 | Technique | Source | Signature |
 |---|---|---|
 | Catalogues | Tolkien | Lists of names/places/lineages/items. Naming as incantation. |

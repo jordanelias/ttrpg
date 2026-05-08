@@ -217,6 +217,7 @@ Before delivering prose, verify:
 - Scale-awareness. Personal scenes tolerate interiority. Territory-scale events need sweep. Codex entries take chronicler voice — but specify which chronicler.
 - Names. Use canonical Valoria names exactly. Flag `[NAME?]` rather than inventing.
 - Always Solmund, never Galbados.
+- **The Ratchet Principle (political/faction content).** Political dynamics always escalate. Principals advance into positions they cannot retreat from. Each encounter tightens constraints that cannot be loosened. Resolution does not come from the principals de-escalating — it comes from an external force or a marginal actor that none of the principals were watching. The detonation is in the margins: the delegate who was flipped, the subordinate who recalculated, the intelligence operative who carried the folio. Scenes between political principals should end with all parties having advanced and the space between them narrower than it was. Never write political resolution as mutual accommodation. The accommodation is the next ratchet click.
 
 ### Solmund Voice Canon (Scoped Override)
 
