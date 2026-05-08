@@ -20,7 +20,7 @@
 | 5 | 9 | 1 | PART 0: THE DIAGNOSIS |
 | 6 | 25 | 1 | PART 1: SYSTEM-BY-SYSTEM BRIDGE AUDIT |
 | 7 | 27 | 2 | 1.1 Faction Layer (faction_layer_v30) — World → Player: WEAK | Player → World: MODERATE |
-| 8 | 46 | 2 | 1.2 Conviction Track & Church Mechanics (conviction_track_v30) — World → Player: VERY WEAK | Player → World: MODERATE |
+| 8 | 46 | 2 | 1.2 Piety Track & Church Mechanics (conviction_track_v30) — World → Player: VERY WEAK | Player → World: MODERATE |
 | 9 | 63 | 2 | 1.3 Fieldwork (fieldwork_v30) — World → Player: STRONG | Player → World: MODERATE |
 | 10 | 84 | 2 | 1.4 Social Contests (social_contest_v30) — World → Player: MODERATE | Player → World: STRONG |
 | 11 | 103 | 2 | 1.5 Combat (combat_v30) — World → Player: WEAK | Player → World: WEAK |
@@ -52,7 +52,7 @@
 | 5 | 697 | PART 0: THE DIAGNOSIS |
 | 6 | 8,207 | PART 1: SYSTEM-BY-SYSTEM BRIDGE AUDIT |
 | 7 | 723 | 1.1 Faction Layer (faction_layer_v30) — World → Player: WEAK | Player → World: MODERATE |
-| 8 | 640 | 1.2 Conviction Track & Church Mechanics (conviction_track_v30) — World → Player: VERY WEAK | Player → World: MODERATE |
+| 8 | 640 | 1.2 Piety Track & Church Mechanics (conviction_track_v30) — World → Player: VERY WEAK | Player → World: MODERATE |
 | 9 | 952 | 1.3 Fieldwork (fieldwork_v30) — World → Player: STRONG | Player → World: MODERATE |
 | 10 | 772 | 1.4 Social Contests (social_contest_v30) — World → Player: MODERATE | Player → World: STRONG |
 | 11 | 661 | 1.5 Combat (combat_v30) — World → Player: WEAK | Player → World: WEAK |

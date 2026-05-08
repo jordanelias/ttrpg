@@ -12,11 +12,11 @@
 
 | Idx | Line | Level | Heading |
 |-----|------|-------|---------|
-| 0 | 5 | 1 | Valoria BG — Conviction Track & Church Victory Redesign |
+| 0 | 5 | 1 | Valoria BG — Piety Track & Church Victory Redesign |
 | 1 | 6 | 2 | PP-406 through PP-418 |
 | 2 | 7 | 2 | Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643) |
-| 3 | 8 | 2 | Scope: Conviction Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory |
-| 4 | 12 | 2 | 1. Conviction Track — Per-Territory Stat |
+| 3 | 8 | 2 | Scope: Piety Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory |
+| 4 | 12 | 2 | 1. Piety Track — Per-Territory Stat |
 | 5 | 23 | 3 | 1.1 Starting Values (PP-406) |
 | 6 | 49 | 3 | 1.2 Movement Rules (PP-408) |
 | 7 | 56 | 4 | Movement Actions |
@@ -46,7 +46,7 @@
 | 31 | 415 | 2 | 8. Resolved Editorial Items |
 | 32 | 434 | 2 | 9. Gaps Identified |
 | 33 | 448 | 2 | 10. Patch Summary |
-| 34 | 468 | 2 | 11. Conviction Track Presentation Layer (NEW — World→Player Bridge) |
+| 34 | 468 | 2 | 11. Piety Track Presentation Layer (NEW — World→Player Bridge) |
 | 35 | 470 | 3 | §11.1 CV Change Environmental Events |
 | 36 | 485 | 3 | §11.2 Church Attention Pool — Player-Facing Indicators |
 | 37 | 497 | 3 | §11.3 TC Milestone Presentation |
@@ -55,11 +55,11 @@
 
 | Idx | Tokens | Heading |
 |-----|--------|---------|
-| 0 | 7,260 | Valoria BG — Conviction Track & Church Victory Redesign |
+| 0 | 7,260 | Valoria BG — Piety Track & Church Victory Redesign |
 | 1 | 6 | PP-406 through PP-418 |
 | 2 | 34 | Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643) |
-| 3 | 31 | Scope: Conviction Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory |
-| 4 | 1,492 | 1. Conviction Track — Per-Territory Stat |
+| 3 | 31 | Scope: Piety Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory |
+| 4 | 1,492 | 1. Piety Track — Per-Territory Stat |
 | 5 | 397 | 1.1 Starting Values (PP-406) |
 | 6 | 437 | 1.2 Movement Rules (PP-408) |
 | 7 | 354 | Movement Actions |
@@ -89,7 +89,7 @@
 | 31 | 302 | 8. Resolved Editorial Items |
 | 32 | 322 | 9. Gaps Identified |
 | 33 | 318 | 10. Patch Summary |
-| 34 | 1,134 | 11. Conviction Track Presentation Layer (NEW — World→Player Bridge) |
+| 34 | 1,134 | 11. Piety Track Presentation Layer (NEW — World→Player Bridge) |
 | 35 | 540 | §11.1 CV Change Environmental Events |
 | 36 | 298 | §11.2 Church Attention Pool — Player-Facing Indicators |
 | 37 | 277 | §11.3 TC Milestone Presentation |

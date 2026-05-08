@@ -2,16 +2,16 @@
 <!-- Infill: conviction_track_v30_infill.md -->
 
 <!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
-# Valoria BG — Conviction Track & Church Victory Redesign
+# Valoria BG — Piety Track & Church Victory Redesign
 ## PP-406 through PP-418
 ## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643)
-## Scope: Conviction Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
+## Scope: Piety Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
-> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Church Influence per ED-782). Conviction Track (CT) is always written in full. (ED-756)
+> **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Church Influence per ED-782). Piety Track (CT) is always written in full. (ED-756)
 
 ---
 
-## 1. Conviction Track — Per-Territory Stat
+## 1. Piety Track — Per-Territory Stat
 
 **Name:** Conviction (PT)
 **Range:** 0–5 per territory.
@@ -467,7 +467,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 ---
 
-## 11. Conviction Track Presentation Layer (NEW — World→Player Bridge)
+## 11. Piety Track Presentation Layer (NEW — World→Player Bridge)
 
 ### §11.1 PT Change Environmental Events
 

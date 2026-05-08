@@ -74,11 +74,11 @@ An orator's total bonus dice from genre + audience: maximum +2D (primary genre +
 
 These dice are added to the Argue pool at Step 3 of each exchange. They are fixed at setup — no mid-contest changes.
 
-**Step 4 — Set Conviction Track:**
+**Step 4 — Set Persuasion Track:**
 - Scale: 0–10. Side A wins at ≥ 7. Side B wins at ≤ 3. Compromise zone: 4–6.
 - Starting position: GM-set (typical neutral: 5).
 - Audience resistance: average Stability of represented factions, round up, then −1 (minimum 0). Typical range: 0–2.
-- With no adjudicator (private negotiation, personal appeal): Conviction Track is optional. If not used, winner determined by exchange majority. If exchange majority is tied, the contest stalls: strain persists, all Read results from the contest become permanent knowledge (the parties learned things about each other that cannot be unlearned), and the relationship is stressed. The narrative moves forward — the failure to agree IS a consequential outcome.
+- With no adjudicator (private negotiation, personal appeal): Persuasion Track is optional. If not used, winner determined by exchange majority. If exchange majority is tied, the contest stalls: strain persists, all Read results from the contest become permanent knowledge (the parties learned things about each other that cannot be unlearned), and the relationship is stressed. The narrative moves forward — the failure to agree IS a consequential outcome.
 
 **Step 5 — Set exchange count and role structure:**
 
@@ -153,7 +153,7 @@ Momentum: before rolling, spend any amount of Momentum to add automatic successe
 **CLASH** (same genre, opposite orientation):
 Direct contest within the same temporal horizon.
 - Compare successes. Higher wins. Margin = difference.
-- If margin > resistance → Conviction Track moves (margin − resistance) toward winner's position.
+- If margin > resistance → Persuasion Track moves (margin − resistance) toward winner's position.
 - If margin ≤ resistance → 0 movement.
 - Strain to loser: margin + Charisma modifier of winner − Focus defence of loser. **Minimum 0.** [Matches combat damage minimum 0. Focus defence can fully absorb strain just as armour can fully absorb damage.]
 - Charisma modifier: max(0, floor((Charisma − 3) ÷ 2)) → Cha 1–3: +0; Cha 4–5: +1; Cha 6–7: +2.
@@ -176,19 +176,19 @@ One orator invokes what has been (Memory); the other projects what could become 
 
 **TIE** (equal successes, any interaction type):
 - Both orators take 1 strain. **Exception (PP-236): if the interaction type is CROSS, no strain is dealt — CROSS no-strain rule takes precedence. Neither argument attacked the other; a tie does not change that structural fact.**
-- Conviction Track moves +1 toward initiative holder's position.
+- Persuasion Track moves +1 toward initiative holder's position.
 - Initiative stays with holder.
 
 **OBSCURING WIN** (winning any exchange with Obscuring orientation in CLASH or REINFORCE; see CROSS clause for CROSS-specific Doubt Marker rule):
-- Conviction Track does not move toward winner.
+- Persuasion Track does not move toward winner.
 - Place a Doubt Marker on the opponent.
 - Doubt Marker effect: opponent's next winning exchange has its margin reduced by 2 before resistance is applied (minimum 0).
 - Only one Doubt Marker active at a time. New replaces old.
 - Consumed on use.
 
 **Step 5 — Forfeit actions:**
-- **Regroup:** Forfeit exchange. No argument, no strain. Conviction Track moves +1 toward non-forfeiting side. Concentration restores by Focus score.
-- **Concede a Point:** Forfeit exchange. Take 1 strain. Conviction Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
+- **Regroup:** Forfeit exchange. No argument, no strain. Persuasion Track moves +1 toward non-forfeiting side. Concentration restores by Focus score.
+- **Concede a Point:** Forfeit exchange. Take 1 strain. Persuasion Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
 
 **Step 6 — Strain and Concentration:**
 
@@ -225,8 +225,8 @@ One orator invokes what has been (Memory); the other projects what could become 
 ## §6 POST-CONTEST RESOLUTION
 
 - GM reveals ledger.
-- Conviction Track ≥ 7 = Side A wins; ≤ 3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
-- No Conviction Track (private): exchange majority determines winner. Tie = stall with consequences (see §2 Step 4).
+- Persuasion Track ≥ 7 = Side A wins; ≤ 3 = Side B wins; 4–6 = compromise (GM narrates partial outcome proportional to final position).
+- No Persuasion Track (private): exchange majority determines winner. Tie = stall with consequences (see §2 Step 4).
 
 **Thread co-movement by winning genre:**
 
@@ -242,7 +242,7 @@ One orator invokes what has been (Memory); the other projects what could become 
 - Decisive win + Projection genre: +1D on first Domain Action pursuing the argued outcome within the season.
 - Compromise: no Domain Echo.
 
-**Total Victory** (Conviction Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one instance per session, clears at next session start if unused). Winning orator gains +1 Momentum (if below cap 4). Disposition change with all witnesses; Reputation shift (GM-set magnitude). In Board Game (BG) Parliamentary Vote: losing coalition's dominant faction takes Mandate −1 for one season.
+**Total Victory** (Persuasion Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one instance per session, clears at next session start if unused). Winning orator gains +1 Momentum (if below cap 4). Disposition change with all witnesses; Reputation shift (GM-set magnitude). In Board Game (BG) Parliamentary Vote: losing coalition's dominant faction takes Mandate −1 for one season.
 
 **Post-contest recovery:** all strain and Concentration depletion clear at scene end. Spent clears at scene end. MS changes subject to MS ceiling (100) and MS=0 lockout.
 
@@ -254,11 +254,11 @@ One orator invokes what has been (Memory); the other projects what could become 
 
 **Asymmetric proceedings (Church Tribunal, Royal Audience, Inquisition):**
 - Institution assigns Proposer/Respondent roles. Roles do NOT alternate.
-- Disadvantaged party (accused, petitioner) faces halved resistance (round up) when moving the Conviction Track.
+- Disadvantaged party (accused, petitioner) faces halved resistance (round up) when moving the Persuasion Track.
 - Advantaged orator accumulates 0 strain from CROSS exchanges.
 - CLASH strain applies normally when advantaged side loses.
 
-**Church Tribunal specifics:** Accused has no corroboration. Exchange count set by Inquisitor (1–5). (PP-272: 'Division' stricken — term was vestigial from an earlier parliamentary design pass; it has no mechanical definition in the current system.) Conviction Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
+**Church Tribunal specifics:** Accused has no corroboration. Exchange count set by Inquisitor (1–5). (PP-272: 'Division' stricken — term was vestigial from an earlier parliamentary design pass; it has no mechanical definition in the current system.) Persuasion Track starts biased at 6. Church boosts Obscuring — the Inquisitor's arguments that foreclose the accused's epistemic standing carry institutional weight.
 
 ---
 
@@ -323,7 +323,7 @@ Faction-level contest resolution for BG scale. To zoom into personal scale, use 
 1. Each faction declares Side A or Side B. Non-declaring factions Abstain.
 2. Each side declares one genre (Memory or Projection).
 3. Resistance: base 0. If a faction with Stability ≥ 6 Abstains: +1 resistance (max +2).
-4. Starting Conviction Track: 5 ± lobbying offset. Each successful Diplomacy action targeting this vote in preceding season: +1 toward lobbying side (max ±2).
+4. Starting Persuasion Track: 5 ± lobbying offset. Each successful Diplomacy action targeting this vote in preceding season: +1 toward lobbying side (max ±2).
 
 ### BG Vote Resolution
 Pool: sum of Mandate of all factions on each side. Roll combined pool TN 7.
@@ -332,19 +332,19 @@ Audience boost: +1D if the side's genre matches the Parliament's dominant factio
 
 Each side: if net successes > resistance → movement = successes − resistance.
 Net track movement = difference; direction toward the larger side.
-Conviction Track ≥ 7 = motion passes; ≤ 3 = motion fails; 4–6 = referred to committee.
+Persuasion Track ≥ 7 = motion passes; ≤ 3 = motion fails; 4–6 = referred to committee.
 Zero-zero: if both sides fail to exceed resistance, motion referred to committee.
 Thread consequences do not fire from BG Parliamentary Vote (personal-scale argument required).
-Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant faction takes Mandate −1 for one season.
+Total Victory: Persuasion Track ≥ 9 or ≤ 1 → losing coalition's dominant faction takes Mandate −1 for one season.
 
 ---
 
 ## §11 HYBRID CONTEST
 
-1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Conviction Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
-2. **Set TTRPG starting Conviction Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
+1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Persuasion Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
+2. **Set TTRPG starting Persuasion Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
 3. **TTRPG personal contest:** run standard Formal (3 exchanges) or Grand (5 exchanges) per §§4–7 from adjusted starting position.
-4. **Resolution:** final TTRPG Conviction Track position determines outcome. Thread consequences may fire.
+4. **Resolution:** final TTRPG Persuasion Track position determines outcome. Thread consequences may fire.
 
 ---
 
@@ -385,7 +385,7 @@ Total Victory: Conviction Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 | Topic | Status |
 |---|---|
 | Escalation between social modes (negotiation → debate → appeal) | Conceptually identified, not designed |
-| Negotiation compromise resolution (ZOPA-style) | Identified as structurally different from Conviction Track, not designed |
+| Negotiation compromise resolution (ZOPA-style) | Identified as structurally different from Persuasion Track, not designed |
 | Mass battle rally action (Attunement-based) | Gap identified, belongs in mass_battle_v3 |
 | Appraise step expansion (reveal Beliefs, Knot vulnerabilities) | Conceptually identified, not specified |
 

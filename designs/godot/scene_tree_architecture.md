@@ -24,7 +24,7 @@ root (Node)
 │
 ├── ModalLayer (CanvasLayer, z=20 — popups over everything)
 │   ├── DialoguePanel       — NPC conversation, Belief reveal
-│   ├── ContestPanel        — exchange UI, Conviction Track display
+│   ├── ContestPanel        — exchange UI, Piety Track display
 │   └── ResultsPanel        — combat aftermath, contest outcome
 │
 └── MainScene (Node2D — swapped per game state)

@@ -1,12 +1,12 @@
-<!-- [PROVISIONAL: 2026-04-29 — Conviction Track promoted to first-class doc per PP-681, addressing PP-676 v3 §V3-5 multi-graph isolate finding] -->
+<!-- [PROVISIONAL: 2026-04-29 — Piety Track promoted to first-class doc per PP-681, addressing PP-676 v3 §V3-5 multi-graph isolate finding] -->
 <!-- STATUS: CANONICAL — extracted from designs/npcs/npc_behavior_v30.md §1.2 + §3.3 + §3.4 -->
 <!-- AUTHORITY: PP-681, ED-768. Source authority: ED-663, ED-664 (Thread Operation triggers); ED-672 (Arc A timing) -->
 
-# Valoria — Conviction Track
+# Valoria — Piety Track
 
-The Conviction Track is the personal-scale moral-belief mechanic. Every NPC and PC has a primary Conviction (and may have a secondary), accumulates Conviction Scars from witnessing morally-loading events (Thread operations, ethical violations, etc.), and at sufficient Scar count enters a Conviction crisis where their behavior becomes unpredictable.
+The Piety Track is the personal-scale moral-belief mechanic. Every NPC and PC has a primary Conviction (and may have a secondary), accumulates Conviction Scars from witnessing morally-loading events (Thread operations, ethical violations, etc.), and at sufficient Scar count enters a Conviction crisis where their behavior becomes unpredictable.
 
-This document is the canonical reference for the Conviction Track mechanic. NPC priority trees, Resonant Style activation, and arc transitions consume Conviction values from this spec.
+This document is the canonical reference for the Piety Track mechanic. NPC priority trees, Resonant Style activation, and arc transitions consume Conviction values from this spec.
 
 ---
 

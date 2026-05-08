@@ -1,6 +1,6 @@
 <!-- [PROVISIONAL: 2026-05-07 — Character canon consolidation; supersedes piecemeal lookup across npc_roster_v30 / npc_behavior_v30 / npc_character_analyses_v30 / npc_foils_v30 / character_histories_v30 / individual NPC docs / migration_roster_v30 / stance_triangles for per-NPC texture. Substrate (PP-684 13-Conviction taxonomy + axis_matrix) remains in source files; this consolidation references, does not duplicate.] -->
 <!-- STATUS: PROVISIONAL — pending Jordan ratification. PART A (Framework) complete; PART B (NPC sheets) pending Q1 scope decision. -->
-<!-- AUTHORITY: consolidates PP-684 (13-Conviction) + PP-685 (migration roster) + PP-681 (Conviction Track promotion) + PP-688 (Articulation Layer) + npc_behavior_v30 §§1-12 + npc_roster_v30 + npc_character_analyses_v30 + character_histories_v30 + individual NPC docs (edeyja_npc, baralta_v30, companion_specification). -->
+<!-- AUTHORITY: consolidates PP-684 (13-Conviction) + PP-685 (migration roster) + PP-681 (Piety Track promotion) + PP-688 (Articulation Layer) + npc_behavior_v30 §§1-12 + npc_roster_v30 + npc_character_analyses_v30 + character_histories_v30 + individual NPC docs (edeyja_npc, baralta_v30, companion_specification). -->
 
 # Valoria — Character Canon (Consolidated)
 ## Status: PROVISIONAL — pending ratification.
@@ -193,7 +193,7 @@ Per-NPC sheets in Part B carry 1–3 Beliefs as first-person quoted strings. The
 
 An NPC revises a Belief when ALL hold:
 
-1. A Contest produces decisive outcome (Conviction Track ≥ 7 or ≤ 3) against the NPC.
+1. A Contest produces decisive outcome (Piety Track ≥ 7 or ≤ 3) against the NPC.
 2. The winning argument used the NPC's primary or secondary Resonant Style.
 3. The argument specifically engaged the Belief.
 
@@ -430,7 +430,7 @@ Decisions made in producing this consolidation. Surfaced rather than silently re
 | **D5** | Spirit values absent from canonical NPC sheets; prose-writer treats Spirit as third independent axis at Coherence ≤ 4 | Default Spirit 4 (mid-range neutral) per prose-writer guidance. Flag with `[ASSUMPTION]` per NPC where applied. Where design pressure clearly diverges (Edeyja high; Vaynard at Arc C low), note the pressure but do not author specific value. |
 | **D6** | Baralta (Hafenmark sovereign claimant) misfiled in `migration_roster §2.3` under "Ecclesiastical Faction" with cultural template `ecclesiastical` | **Surface, do not fix.** Per-NPC sheet shows `[CONFLICT: migration_roster §2.3 places under Ecclesiastical with template "ecclesiastical"; npc_behavior §2.3 places her in Hafenmark with Categorical Imperative framework. Recommend correction to hafenmark_procedural template — defer to Jordan.]` |
 | **D7** | Cesare and Lorenzo (Crown succession alternates per migration_roster §2.1) are not in `npc_behavior §2` named-NPC roster but have full conviction profiles in migration roster | Include as Tier 1 / 2 succession-alternate entries. Mark status `succession_alternate (per sim §1.2)` rather than authored-active. Profiles drawn entirely from migration roster + sim continuity. |
-| **D8** | Conviction Track (`conviction_track_v1.md`) Scar mechanic remains canonical; the 9-Conviction taxonomy it indexes is stale | Reference Scar mechanic at §6 above. Crisis-table d6 entry "5: Autonomy" remapped to "Liberty" per PP-684 §6 alias_registry. Source file's stale taxonomy preserved as historical reference until source-file propagation cycle runs. |
+| **D8** | Piety Track (`conviction_track_v1.md`) Scar mechanic remains canonical; the 9-Conviction taxonomy it indexes is stale | Reference Scar mechanic at §6 above. Crisis-table d6 entry "5: Autonomy" remapped to "Liberty" per PP-684 §6 alias_registry. Source file's stale taxonomy preserved as historical reference until source-file propagation cycle runs. |
 
 ---
 

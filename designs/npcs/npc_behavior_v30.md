@@ -389,7 +389,7 @@ Beliefs are revealed to players through:
 ### §3.2 Belief Revision
 
 An NPC revises a Belief when ALL of the following hold:
-1. A Contest produces decisive outcome (Conviction Track ≥ 7 or ≤ 3) against the NPC
+1. A Contest produces decisive outcome (Piety Track ≥ 7 or ≤ 3) against the NPC
 2. The winning argument used the NPC's primary or secondary Resonant Style
 
 
@@ -460,7 +460,7 @@ This is the spec mechanism that closes the Consequence-Resonant-Style loophole. 
 
 **§3.5.5 Cross-references**
 
-- social_contest §7 Asymmetric Proceedings: advisor can be constituted as principal's counsel in formal hearings; advisor's own Conviction Track contributions in such proceedings are still private-zone.
+- social_contest §7 Asymmetric Proceedings: advisor can be constituted as principal's counsel in formal hearings; advisor's own Piety Track contributions in such proceedings are still private-zone.
 - npc_behavior §1.3 Resonant Style Consequence: Evidence cited from private counsel triggers §3.5.4 rupture, not Consequence-RS.
 - player_agency §4.5 Opportunities Not Pursued: "advisor private counsel sharing" is a Priority 3 NPC Outreach when advisor Knot ≥ +3 + advisor's principal arc has fired this season; declining is no consequence.
 
@@ -653,9 +653,9 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 **Arc E: The Wager**
 - Branch condition: Player at WC ≥ 2 with sustained Continuity-disruptive operations (Scar count ≥ 2 from §3.4) AND active Knot with Edeyja AND player initiates Grand Contest with Edeyja using Projection genre + Consequence Resonant Style + Solidarity (Knot prerequisite per §1.3) + commitment to specific verifiable future outcome. Arc E is an alternative to Arc D: the player who anticipates Confrontation may pre-emptively wager rather than be confronted.
 - Wager content: player names a specific, time-bound, verifiable future condition (named territory + named MS recovery threshold, OR named Thread Revelation event, OR named timeframe for cross-faction Warden alliance). Vague projections fail Contest at Track ≤ 3 by §6.3 Continuity Wrong-Style Penalty.
-- Resolution by Conviction Track outcome (per social_contest §6.1 Wager Obligation extension):
+- Resolution by Piety Track outcome (per social_contest §6.1 Wager Obligation extension):
 
-| Conviction Track | Outcome |
+| Piety Track | Outcome |
 |---|---|
 | ≥ 9 (Total Victory player) | Edeyja accepts the wager. Cooperation continues at current WC. Substrate-disruptive operations no longer produce Scars from §3.4 *for operations player documents as wager-aligned*. Wager Obligation generated (§6.1 extension), 4-season duration or until verifiable condition met. |
 | 7–8 (Decisive player) | Edeyja accepts conditionally. WC frozen at current level until wager resolves. Scar generation reduced to half rate. Wager Obligation generated. |
@@ -694,7 +694,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 | Resonant Style | Required form | On confirmed targeting |
 |---|---|---|
-| Evidence | Memory + Revealing (Precedent). Must cite specific, named, verifiable claim. | +1D to Argue roll. On win: Conviction Track +1 additional (bypasses 1 point of resistance). |
+| Evidence | Memory + Revealing (Precedent). Must cite specific, named, verifiable claim. | +1D to Argue roll. On win: Piety Track +1 additional (bypasses 1 point of resistance). |
 | Consequence | Projection + Revealing (Vision). Must project specific outcome NPC's framework fails to prevent. | +1D to Argue roll. On win: NPC takes +2 strain (hits thinnest defense). |
 | Authority | Invoke specific authority figure or text the NPC's framework recognises as binding. Authority must genuinely contradict NPC's position. | +1D to Argue roll. Doubt Marker placed on NPC regardless of exchange outcome. |
 | Solidarity | Requires active Knot (Close or Distant) with NPC. Must invoke the relationship itself. Knot formation during play: see fieldwork_v30 §5.6a. Prerequisites: Disposition +5 + either PC or NPC TS ≥ 30 + Knot capacity available. | +1D to Argue roll. On win: no strain dealt, but NPC's next Belief revision check uses Ob −1. |
@@ -702,7 +702,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 ### §6.4 Wrong-Style Penalty (Church Martyrdom Extension; extended ED-775)
 
 **Penalty trigger:**
-- If the Contest's final result is Failure (Conviction Track ≤ 3 from orator's perspective) OR Partial (Conviction Track 4-6 with strain accumulation favoring opponent — see §6.4.1 below for Compromise distinction): Church Stability +1 (existing PP-259 Martyrdom effect fires).
+- If the Contest's final result is Failure (Piety Track ≤ 3 from orator's perspective) OR Partial (Piety Track 4-6 with strain accumulation favoring opponent — see §6.4.1 below for Compromise distinction): Church Stability +1 (existing PP-259 Martyrdom effect fires).
 - The wrong-style penalty makes intelligence (knowing the correct Resonant Style) strategically essential before engaging Church NPCs.
 
 **§6.4.1 RS Declaration Timing (ED-775)**
@@ -715,9 +715,9 @@ The orator declares their Resonant Style at Contest setup, before Exchange 1's R
 
 **§6.4.2 Compromise vs Partial Distinction (ED-775)**
 
-Compromise (Conviction Track 4-6) and Partial differ structurally. The Wrong-Style Penalty fires per the following table:
+Compromise (Piety Track 4-6) and Partial differ structurally. The Wrong-Style Penalty fires per the following table:
 
-| Conviction Track Outcome | Wrong-Style Penalty Fires? | Rationale |
+| Piety Track Outcome | Wrong-Style Penalty Fires? | Rationale |
 |---|---|---|
 | Total Victory ≥ 9 (orator wins decisively) | NO | Orator's RS proved adequate regardless of style choice — Conviction overcame mismatch |
 | Decisive 7-8 | NO | Orator's victory means RS was sufficient |
@@ -1081,7 +1081,7 @@ An NPC who has been recruited defects if:
 | ID | Description |
 |---|---|
 | SIM-NPC-01 | Full BG simulation with all NPC priority trees active. Validate multi-faction interaction under priority tree model. |
-| SIM-NPC-02 | Contest simulation: Resonant Style +1D stacking with genre/audience/Recall bonuses. Validate pool sizes and Conviction Track movement rates. |
+| SIM-NPC-02 | Contest simulation: Resonant Style +1D stacking with genre/audience/Recall bonuses. Validate pool sizes and Piety Track movement rates. |
 | SIM-NPC-03 | Arc emergence simulation: run 3-season TTRPG campaign with Almud and Himlensendt arc triggers. Validate that arc branch points fire at appropriate game-state conditions. |
 | SIM-NPC-04 | Framework Drift simulation: run 6-season BG game with all drift mechanics active. Validate drift rates do not produce runaway faction dominance. |
 | SIM-NPC-05 | Belief Scar cascade: validate that 3+ Scars on a single NPC (Conviction crisis table) produces playable behavior, not chaos. |

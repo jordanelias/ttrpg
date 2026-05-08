@@ -41,7 +41,7 @@
 
 **Multiple Domain Echoes (same scene):** Fire in the order they occurred in the scene. Each applies independently; cap resets per stat per Echo (not per scene total). [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
-**Debate outcome → Domain Echo:** Conviction Track ≥7 (winner) queues +1 to winner's faction in the contested axis (L for procedural debates, PS for populist debates per audit Q5). ≤3 queues −1 to loser's faction in the same axis. [PP-108]
+**Debate outcome → Domain Echo:** Piety Track ≥7 (winner) queues +1 to winner's faction in the contested axis (L for procedural debates, PS for populist debates per audit Q5). ≤3 queues −1 to loser's faction in the same axis. [PP-108]
 
 ## Mass→Personal Register Shift Rules (PP-111)
 
@@ -70,7 +70,7 @@ Personal conflicts (brawls, private debates, social introductions) are personal 
 GM makes final scope determination. [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit]
 
 ## Domain Echo — Debate Outcome Mapping (PP-108 extension)
-Debate Conviction Track outcomes map to Domain Echo as follows:
+Debate Piety Track outcomes map to Domain Echo as follows:
 | Outcome | Domain Echo |
 |---------|------------|
 | Track ≥ 7 (winner's side) | Winner faction: +1 in contested axis (L procedural / PS populist) or other relevant stat. Loser faction: −1 L if they held institutional authority on the issue (audit Q3 institutional-failure pattern). |

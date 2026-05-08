@@ -1,11 +1,11 @@
 <!-- INFILL — prose/rationale extracted from conviction_track_v30.md -->
 <!-- Skeleton: conviction_track_v30.md -->
 
-# Valoria BG — Conviction Track & Church Victory Redesign
+# Valoria BG — Piety Track & Church Victory Redesign
 ## PP-406 through PP-418
 ## Date: 2026-04-05 | Status: Design Proposal — Awaiting User Review
-## Scope: Conviction Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
-## 1. Conviction Track — Per-Territory Stat
+## Scope: Piety Track, Church Seizure, TC Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
+## 1. Piety Track — Per-Territory Stat
 **Rationale for name:** Conviction captures popular belief — what the people hold to be true. This is not institutional Church power (that is Mandate) nor theological correctness (the Church is sincerely wrong per canon). It is the strength of orthodox faith in the population. The Restoration pole is the absence of that conviction — not a competing faith, but recovered cultural memory that displaces orthodox certainty.
 ### 1.1 Starting Values (PP-406)
 ### 1.2 Movement Rules (PP-408)

@@ -13,7 +13,7 @@ RECOMMENDATION: DEFER. Phase 4 simulation will reveal whether Stamina produces m
 
 ## 3.5 — Social Contest §1 Core Principle (AUD-SC-01)
 TEXT WRITTEN (for insertion into social_contest_v30 §1):
-"Social contests use an exchange structure rather than single rolls because persuasion is iterative. Each argument responds to the prior — a debater adjusts their approach based on the opponent's reaction, the audience's mood, and the accumulating weight of evidence. A single roll would model a speech; an exchange structure models a conversation. The Conviction Track represents the shifting balance of persuasion across multiple exchanges, where the outcome is not predetermined by initial pool sizes but emerges from the sequence of tactical choices (CLASH, REINFORCE, CROSS, TIE) and the interaction between genre, audience, and Resistance. This exchange structure is the contest system's core principle: format follows context."
+"Social contests use an exchange structure rather than single rolls because persuasion is iterative. Each argument responds to the prior — a debater adjusts their approach based on the opponent's reaction, the audience's mood, and the accumulating weight of evidence. A single roll would model a speech; an exchange structure models a conversation. The Piety Track represents the shifting balance of persuasion across multiple exchanges, where the outcome is not predetermined by initial pool sizes but emerges from the sequence of tactical choices (CLASH, REINFORCE, CROSS, TIE) and the interaction between genre, audience, and Resistance. This exchange structure is the contest system's core principle: format follows context."
 
 ## 3.6 — N-Way Graduated Collapse (AUD-TW-03)
 PROPOSAL DOCUMENTED:

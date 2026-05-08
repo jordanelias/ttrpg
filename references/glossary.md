@@ -17,7 +17,7 @@ Valoria is a videogame (Godot 4.6), not a tabletop product. Mode labels (TTRPG /
 - All terms must be written in full in every document. Abbreviations may appear in parentheses immediately after the full term on first use per section: e.g. `Thread Sensitivity (TS)`.
 - Subsequent uses in the same section: full term only.
 - **Exceptions (abbreviation may stand alone):** `TN` (Target Number), `Ob` (Obstacle), `TTRPG`, `BG`.
-- **`CI` is no longer used** — historically ambiguous between Church Influence (renamed to Church Influence / CI per ED-782) and Conviction Track (CT). Use `CI` for the Church clock; write `Conviction Track` in full elsewhere. Residual CI sweep completed for `npc_behavior_v30.md` 2026-04-30 (PP-691); incidental CI residuals in other docs are queued in `references/censured_vocabulary.yaml`.
+- **`CI` is no longer used** — historically ambiguous between Church Influence (renamed to Church Influence / CI per ED-782) and Piety Track (CT). Use `CI` for the Church clock; write `Piety Track` in full elsewhere. Residual CI sweep completed for `npc_behavior_v30.md` 2026-04-30 (PP-691); incidental CI residuals in other docs are queued in `references/censured_vocabulary.yaml`.
 
 ---
 
@@ -78,7 +78,7 @@ These are campaign-level trackers shared across all factions. All are event-driv
 
 | Full Term | Abbr | Range / Type | Description |
 |-----------|------|--------------|-------------|
-| Conviction Track | CT* | 0–10 | Debate position tracker. Side A wins at ≥ 7; Side B wins at ≤ 3. Compromise zone: 4–6. Canonical doc: `designs/personal/conviction_track_v1.md` (promoted PP-681). |
+| Piety Track | CT* | 0–10 | Debate position tracker. Side A wins at ≥ 7; Side B wins at ≤ 3. Compromise zone: 4–6. Canonical doc: `designs/personal/conviction_track_v1.md` (promoted PP-681). |
 | Concentration | — | varies | Debate resource spent to sustain rhetorical positions. |
 | Doubt Marker | — | token | Applied on Obscuring loss in Diverge state. |
 | Composure | — | varies | Social endurance (see Part One). Also the damage track in Debate exchanges. |
@@ -86,7 +86,7 @@ These are campaign-level trackers shared across all factions. All are event-driv
 | Orientation | — | Revealing / Obscuring | Debate stance selection each exchange. |
 | Interaction Type | — | CLASH / AMPLIFY / CROSS / DIVERGE | Determined by Genre + Orientation match between orators. |
 
-**\* CT NOTE:** `CT` is the preferred abbreviation for Conviction Track. Even `CT` should not stand alone — write "Conviction Track" in full.
+**\* CT NOTE:** `CT` is the preferred abbreviation for Piety Track. Even `CT` should not stand alone — write "Piety Track" in full.
 
 ---
 
@@ -233,7 +233,7 @@ Terms whose abbreviations conflict with another term. Never use these abbreviati
 
 | Abbreviation | Meaning A | Meaning B | Resolution |
 |-------------|-----------|-----------|------------|
-| CI | ~~Church Influence~~ (renamed CI per ED-782) | ~~Conviction Track~~ (now CT) | **Do not use CI.** Write `CI` for Church Influence; `Conviction Track` (or `CT` in technical contexts) for the debate tracker. |
+| CI | ~~Church Influence~~ (renamed CI per ED-782) | ~~Piety Track~~ (now CT) | **Do not use CI.** Write `CI` for Church Influence; `Piety Track` (or `CT` in technical contexts) for the debate tracker. |
 | CP | Character Points (advancement currency) | ~~Combat Power~~ (renamed Power — PP-232) | CP = Character Points only [ED-136]. Use "Power" for the unit offensive stat. |
 | TD | ~~Thread Depth~~ (REMOVED PP-166) | Top-Down (Mermaid flowchart directive) | Thread Depth is a phantom stat (REMOVED PP-166). `flowchart TD` is valid Mermaid syntax — not a game term. |
 | COMP | Composure (Debate context) | Computation / Composition (general English) | Write "Composure" in game documents. |

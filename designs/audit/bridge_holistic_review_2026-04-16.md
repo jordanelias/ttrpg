@@ -10,7 +10,7 @@
 | # | System | W→P Before | W→P After | P→W Before | P→W After | Change Summary |
 |---|--------|-----------|----------|-----------|----------|---------------|
 | 1.1 | Faction Layer | Weak | Moderate | Moderate | Strong | Scene Slate surfaces faction events as personal scenes. NPC Outreach makes faction actors proactive. Sufficient Scope lowered for investigations and relationships. |
-| 1.2 | Conviction Track | Very Weak | Moderate | Moderate | Moderate | §11 CV presentation layer. AP player-facing indicators. TC milestone narration. The Church is now visible, not just numerical. |
+| 1.2 | Piety Track | Very Weak | Moderate | Moderate | Moderate | §11 CV presentation layer. AP player-facing indicators. TC milestone narration. The Church is now visible, not just numerical. |
 | 1.3 | Fieldwork | Strong | Strong | Moderate | Strong | Investigation Synthesis (Reconstruct completion). NPC-initiated social (§5.9). Existing strength preserved; Player→World improved via explicit Domain Echo routes for investigation. |
 | 1.4 | Social Contests | Moderate | Strong | Strong | Strong | Obligations create lasting world consequences. Chain contests generate follow-up scenes. Scar visibility makes the player's impact legible. |
 | 1.5 | Combat | Weak | Moderate | Weak | Strong | §13 Combat World Bridge. Domain Echo on named NPC combat. Reputation cascade modifies NPC behavior. Death cascade produces 5-step world consequence chain. |
@@ -73,7 +73,7 @@ The bridge revisions add new interactions to the matrix. Key new connections:
 | Companion candidate list | P2 | ED-COMP-01: which NPCs are designed as companion-eligible? Requires NPC roster annotation. |
 | Companion combat AI | P2 | ED-COMP-02: autonomous vs player-directed in videogame. |
 | Obligation simulation | P2 | Obligation system needs simulation to verify NPC priority tree interaction doesn't produce degenerate loops. |
-| Chain contest Conviction Track carry | P3 | Needs simulation: does carrying Track position from Compromise produce convergence to decisive outcomes, or stalemate loops? |
+| Chain contest Piety Track carry | P3 | Needs simulation: does carrying Track position from Compromise produce convergence to decisive outcomes, or stalemate loops? |
 
 ---
 

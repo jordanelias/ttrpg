@@ -656,13 +656,13 @@ values:
       value_raw: "0–10"
       kind: numeric
       numeric: 0
-      section: "params_contest.md — Social Contest System (v2) > Conviction Track"
+      section: "params_contest.md — Social Contest System (v2) > Piety Track"
       line: 97
     - name: "Starting position"
       value_raw: "GM-set (typical: 5)"
       kind: formula
       formula: "GM-set (typical: 5)"
-      section: "params_contest.md — Social Contest System (v2) > Conviction Track"
+      section: "params_contest.md — Social Contest System (v2) > Piety Track"
       line: 98
     - name: "Knot buffer"
       value_raw: "redirect damage to Knot (+1 strain/use)"

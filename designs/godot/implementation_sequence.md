@@ -55,7 +55,7 @@
    - Combat Reputation tracking
 
 7. **Social contest** — `ContestManager`
-   - Exchange-based Conviction Track (1-9)
+   - Exchange-based Piety Track (1-9)
    - 4 interaction types (CLASH/REINFORCE/CROSS/TIE)
    - 3 adjudicator types → different pool attributes
    - Composure, Concentration, Forfeit actions

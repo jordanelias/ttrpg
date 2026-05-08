@@ -63,6 +63,6 @@ Drift is passive (not a Domain Action). Does not count toward ±2 DA seasonal ca
 | Intimate | 1 full arc of sustained relationship + Bonds check Ob 3 + mutual Belief alignment |
 
 ### NPC Belief Revision
-Trigger: decisive Contest outcome (Conviction Track ≥ 7 or ≤ 3) + winning argument used NPC's Resonant Style + argument specifically engaged the Belief. Old Belief → Scar (permanent). New Belief forms.
+Trigger: decisive Contest outcome (Piety Track ≥ 7 or ≤ 3) + winning argument used NPC's Resonant Style + argument specifically engaged the Belief. Old Belief → Scar (permanent). New Belief forms.
 
 Scar effects: 1 Scar = secondary Conviction activates. 2 Scars = primary may shift to secondary; secondary MS activates. 3+ Scars = Conviction crisis (d6 table per major decision).

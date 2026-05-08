@@ -52,14 +52,14 @@ This is the moment the game either feels brilliantly integrated or collapses und
 The reference architecture (META-3) is not optional — it's load-bearing. Without physical cards, mats, and pre-printed tables, Thread in Mass Combat is not playable by most groups.
 
 ### 3.2 Social Contest Strain System May Feel Like Bookkeeping
-The strain → Composure → Rattled chain, combined with Concentration depletion and Conviction Track movement, produces 3 separate resource tracks to monitor during a single scene type. Even with the strain reference card (SC-1), the player is tracking:
+The strain → Composure → Rattled chain, combined with Concentration depletion and Piety Track movement, produces 3 separate resource tracks to monitor during a single scene type. Even with the strain reference card (SC-1), the player is tracking:
 - Composure (am I Rattled?)
 - Concentration (am I Spent?)
-- Conviction Track (am I winning?)
+- Piety Track (am I winning?)
 
 These interact (Rattled + Spent stack penalties) but are tracked independently. The risk is that a social scene — which should feel like verbal combat — instead feels like accounting. The PP-235 argument styles (SC-3) help by giving the choices rhetorical identity, but the tracking burden remains.
 
-The question: does the strain system produce meaningfully different outcomes from a simpler "margin-based track only" system? If the answer is "strain rarely causes Rattled before the Conviction Track resolves," then the Composure/Concentration subsystem is mechanical weight without proportional payoff. This needs simulation to confirm (but is separate from SIM-DEBT-03/04).
+The question: does the strain system produce meaningfully different outcomes from a simpler "margin-based track only" system? If the answer is "strain rarely causes Rattled before the Piety Track resolves," then the Composure/Concentration subsystem is mechanical weight without proportional payoff. This needs simulation to confirm (but is separate from SIM-DEBT-03/04).
 
 ### 3.3 The Game Is Unpublishable in Current Form
 Not because the design is bad — because the document architecture is a development workspace, not a product. 14 compilation stages, 40+ design docs, 8 params files, 200+ patches, 140+ editorial items. No player can navigate this. The game as experienced by a player must be a single document (or a small set of documents) that presents the rules in play order, not in patch order.

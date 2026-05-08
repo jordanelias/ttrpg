@@ -5,7 +5,7 @@
     "Mass Combat",
     "Faction Layer",
     "Domain Echo",
-    "Conviction Track",
+    "Piety Track",
     "Scale Transitions",
     "NPC Behavior"
   ],
@@ -15,7 +15,7 @@
     "Mass Combat": 70,
     "Faction Layer": 8,
     "Domain Echo": 41,
-    "Conviction Track": 16,
+    "Piety Track": 16,
     "Scale Transitions": 4,
     "NPC Behavior": 3
   },
@@ -86,11 +86,11 @@
         0.104695210155456
       ],
       [
-        "Conviction Track",
+        "Piety Track",
         0.07996272960475406
       ]
     ],
-    "Conviction Track": [
+    "Piety Track": [
       [
         "NPC Behavior",
         0.12939337745716858
@@ -120,7 +120,7 @@
     ],
     "NPC Behavior": [
       [
-        "Conviction Track",
+        "Piety Track",
         0.12939337745716858
       ],
       [

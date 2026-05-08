@@ -97,7 +97,7 @@ TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Despe
 
 **Fieldwork → Combat:** When hostile contact interrupts fieldwork, the current fieldwork action resolves (degree applied, Evidence/Exposure updated). Combat then begins per combat_design_v1.md §3 (initiative by Attunement). If the character was at Exposure ≥ Noticed when interrupted, the interrupting hostile party gains +1D on their first exchange Offence (positional awareness from the character's conspicuousness). Evidence gathered before the interruption is retained regardless of combat outcome.
 
-**Fieldwork → Contest (Escalation):** Per §5.7. Current Disposition maps to Conviction Track offset (±1 per 2 Disposition, cap ±2). Evidence from fieldwork may be cited in the Contest for +2D Recall bonus (per social_contest_system_v2.md §4 Step 3). Evidence cited in a Contest is not consumed — the Evidence Track and its contents persist. The investigation continues after the Contest.
+**Fieldwork → Contest (Escalation):** Per §5.7. Current Disposition maps to Piety Track offset (±1 per 2 Disposition, cap ±2). Evidence from fieldwork may be cited in the Contest for +2D Recall bonus (per social_contest_system_v2.md §4 Step 3). Evidence cited in a Contest is not consumed — the Evidence Track and its contents persist. The investigation continues after the Contest.
 
 **Fieldwork → Mass Battle (Suspension):** Mass battle suspends all active fieldwork. Evidence Tracks freeze at their current value. Battle actions (including Thread operations in Phase 4) do not consume fieldwork time units. Thread-Read during mass battle: resolves in Phase 4 window, classified as intelligence (not offensive). Co-movement fires. May advance an Evidence Track if the Thread-Read targets an investigation question. Fieldwork resumes after the battle at its frozen state.
 
@@ -487,7 +487,7 @@ The Knot lifecycle was previously specified for formation (§5.6a) and use (§2.
 - Knot-as-Composure-buffer (social_contest_system_v2 §4 Step 6): +1 strain per use.
 - Knot-mediated counsel extraction (npc_behavior §3.5.3 ED-664): +0 strain on extraction itself; +1 strain per subsequent retrieval attempt (single-extraction-per-campaign rule means typically 0 cumulative).
 - FR Lock or Dissolution near a Knot partner (threadwork_v30 §6 Knot-substrate inseparability): +1 strain.
-- Witnessing Conviction Scar firing in Knot partner (per Conviction Track ≥3 Scar count): +1 strain at next Accounting.
+- Witnessing Conviction Scar firing in Knot partner (per Piety Track ≥3 Scar count): +1 strain at next Accounting.
 - Sustained Disposition reduction (Disposition drops below +3 sustained for 2 seasons): +1 strain at Accounting.
 
 **Knot break threshold:** A Knot accumulates strain up to capacity. At capacity exceeded, the Knot breaks at the next Accounting.
@@ -528,7 +528,7 @@ Certain events trigger immediate Knot rupture:
 
 
 
-Escalation preserves: current Disposition (applied as starting Conviction Track offset, ±1 per 2 Disposition points, capped at ±2). The relationship does not reset — it intensifies.
+Escalation preserves: current Disposition (applied as starting Piety Track offset, ±1 per 2 Disposition points, capped at ±2). The relationship does not reset — it intensifies.
 
 ### §5.8 Niflhel Social Toolkit Extension
 

@@ -546,12 +546,12 @@ Minimum 1 real-world session per in-game season. No maximum — a season may spa
         line: 245
         value: 4
         pattern: named_bound
-        context: "**Total Victory** (Conviction Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one "
+        context: "**Total Victory** (Piety Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one "
       - file: "designs/scene/social_contest_v30.md"
         line: 230
         value: 4
         pattern: named_bound
-        context: "**Total Victory** (Conviction Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one "
+        context: "**Total Victory** (Piety Track ≥ 9 or ≤ 1): losing primary orator gains Contest Fatigue (−1D next social roll, one "
   institutional_pressure:
     distinct_values: [20, 30, 60, 75]
     file_count: 4
@@ -876,7 +876,7 @@ Minimum 1 die after all penalties. Formation Break at Discipline 0 removes "
         line: 82
         value: 5
         pattern: starts_at
-        context: "A[\"SEED\\nHafenmark calls Debate: Church arbitration courts jurisdiction\\nConviction Track starts at 5 (neutral)\\nAudienc"
+        context: "A[\"SEED\\nHafenmark calls Debate: Church arbitration courts jurisdiction\\nPiety Track starts at 5 (neutral)\\nAudienc"
       - file: "designs/arcs/gm_ref/arcs_05_09.md"
         line: 191
         value: 5
