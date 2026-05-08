@@ -2,7 +2,7 @@
 ## Date: 2026-04-04 | Closes: SIM-DEBT-03 (partial), SIM-DEBT-04 (partial)
 ## 7-Dimension Tag:
 ## Mechanics: CLASH, REINFORCE, CROSS, AMPLIFY, adjudicator pools | Mode: TTRPG | Temporal: PRES
-## Tracks: Composure, Concentration, Conviction Track | Factions: Crown, Hafenmark
+## Tracks: Composure, Concentration, Piety Track | Factions: Crown, Hafenmark
 ## NPCs: Scholar, Diplomat, Demagogue | Archetypes: GREEDY, SATISFY
 
 ## Actors

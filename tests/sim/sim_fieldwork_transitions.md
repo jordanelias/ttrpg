@@ -9,7 +9,7 @@
 
 ## SCENARIO CONTEXT
 
-**Season:** Summer, Year 2. RS: 65. TC: 34. IP: 28.
+**Season:** Summer, Year 2. RS: 65. CI: 34. IP: 28.
 
 **Territory:** Ehrenfeld (T14) — Crown's military hinge. 5 connections. Fort 3.
 Proximity Rating: 3. Piety Track: 2. Church Attention Pool: 0.
@@ -169,7 +169,7 @@ of his territory). This meets Contest initiation conditions (social_contest_syst
 ### Handoff Procedure
 
 Per fieldwork_design_v1.md §5.7 (Contest Escalation):
-1. Current Disposition (−1 Wary) maps to Conviction Track offset: ±1 per 2 Disposition
+1. Current Disposition (−1 Wary) maps to Piety Track offset: ±1 per 2 Disposition
    points, cap ±2. Disposition −1 → offset −0.5 → rounds to 0. Starting Conviction: 5.
 2. Format: Royal Audience (social_contest_system_v2.md §2 Step 5). 3 exchanges.
    Lord Ehren objects throughout (asymmetric). Halved resistance for petitioner (Torsten).
@@ -205,7 +205,7 @@ Not primary genre: +0D. Total: 14D.
 Exchange 1 — CROSS (different genres):
 Torsten effective margin: floor(20D × 0.33 / 2) = floor(3.3) = 3.
 Ehren effective margin: floor(14D × 0.33 / 2) = floor(2.3) = 2.
-Net movement: 1 toward Torsten. Conviction Track: 5 → 4. Halved resistance for
+Net movement: 1 toward Torsten. Piety Track: 5 → 4. Halved resistance for
 petitioner (Royal Audience): resistance effectively 0 for Torsten.
 
 After 3 exchanges (Torsten's evidence advantage gives him ~60% per exchange):
@@ -219,7 +219,7 @@ private agreement, not a public political act).
 
 ```
 Torsten: Evidence Track 4/5 (investigation not yet complete — Contest used evidence
-  but did not resolve the investigation itself). Conviction Track: 3 (Torsten wins).
+  but did not resolve the investigation itself). Piety Track: 3 (Torsten wins).
   Composure: some strain accumulated (1-3 from exchanges). Exposure: unchanged
   (Contest was a formal audience, not fieldwork).
   FINDING: Investigation continues after Contest. Evidence is consumed as argument
@@ -235,7 +235,7 @@ not erase it. The investigator still has the evidence. The investigation
 continues. But this should be stated explicitly.
 
 **F-TRANS-05 (P3):** Disposition with Lord Ehren after Contest. The Contest
-Conviction Track result implies Ehren was persuaded. Should Disposition update?
+Piety Track result implies Ehren was persuaded. Should Disposition update?
 **Proposed rule:** After a Contest won by the petitioner, the adjudicator's
 Disposition shifts +1 toward the winner (grudging respect or acceptance).
 After a Contest lost: Disposition −1 (resentment or dismissal).

@@ -200,7 +200,7 @@ Pool: 4D | TN 7 | Ob 4
 
 **Setup:** Dagmara (Ordained Deacon History 4pts, Cha 5, Cog 4, Att 5) and Theron (Merchant-factor 4pts, Cha 5, Cog 4, Att 4) both choose **Future/Revealing** in Parliament against a Church-backed counter-speaker.
 
-**AMPLIFY rule:** Combined pools vs Conviction Track resistance. Audience: mixed Parliament (Hafenmark, Guilds, Crown delegates). Resistance = avg Stability = avg(4, 4, 3) = 3.7 → **4** (round up).
+**AMPLIFY rule:** Combined pools vs Piety Track resistance. Audience: mixed Parliament (Hafenmark, Guilds, Crown delegates). Resistance = avg Stability = avg(4, 4, 3) = 3.7 → **4** (round up).
 
 **Combined pool:** Dagmara argue pool: (Cog 4 × 2) + History bonus(7) = **15D**. Theron argue pool: (Cog 4 × 2) + History bonus(7) = **15D**. Combined: **30D**.
 
@@ -210,7 +210,7 @@ E[net] at 30D TN7: 30 × 0.30 = **9.0**
 P(≥4): >99%
 Expected movement: net 9 − resistance 4 = **5 track points toward Dagmara/Theron** (capped by track boundaries).
 
-Conviction Track starts at 5 (neutral). Movement of 5 → **Track position 10** (Side A wins). Dagmara and Theron's combined Future/Revealing AMPLIFY wins the Parliament motion in a single exchange.
+Piety Track starts at 5 (neutral). Movement of 5 → **Track position 10** (Side A wins). Dagmara and Theron's combined Future/Revealing AMPLIFY wins the Parliament motion in a single exchange.
 
 **Finding SIM-H-04-F1:** AMPLIFY with two high-pool orators is **decisively powerful**. 30D combined vs resistance 4 produces near-certain maximum track movement. This is not a bug — two expert orators with aligned strategy should dominate. But it creates a strategic incentive to always coordinate orientation before a Debate.
 

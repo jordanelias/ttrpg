@@ -44,7 +44,7 @@
 | F-AMPL-03 | P2 | Stalemate paradox: high-Composure targets (most important chars) most prone to irresolvable debate | Design review note |
 
 **[PROVISIONAL: AMPL-01]** Add to §4 AMPLIFY + §3 general stalemate rule:
-> "If net successes = 0 for 3 consecutive exchanges in the same CLASH or AMPLIFY sequence, both sides exhaust their arguments. The exchange ends without Conviction Track movement. Each participant loses 1 Composure (narrative attrition). The Doubt Marker advances 1 toward the non-initiating side."
+> "If net successes = 0 for 3 consecutive exchanges in the same CLASH or AMPLIFY sequence, both sides exhaust their arguments. The exchange ends without Piety Track movement. Each participant loses 1 Composure (narrative attrition). The Doubt Marker advances 1 toward the non-initiating side."
 
 ---
 
@@ -97,8 +97,8 @@
 **System:** All shared clocks | **Source:** clock_registry.md + params_board_game.md + victory_architecture_v1.md
 
 **Interaction chains confirmed:**
-- RS ↓ → CV erosion (Calamity Drift) → Conviction Yield lower → TC slower (intended)
-- TC ↑ → Church Seizure stronger → Rival TCV lost → Mandate drop → less Suppress → TC accelerates (self-reinforcing, known)
+- RS ↓ → CV erosion (Calamity Drift) → Conviction Yield lower → CI slower (intended)
+- CI ↑ → Church Seizure stronger → Rival TCV lost → Mandate drop → less Suppress → CI accelerates (self-reinforcing, known)
 - WC ↑ → RS decay halved → Radiation pressure delayed (clear cooperation incentive)
 
 | Finding | Severity | Description | Action |
@@ -125,7 +125,7 @@
 | Faction | Season 10 State | Victory Horizon | Notes |
 |---------|----------------|-----------------|-------|
 | Crown | TCV ~14, rivals Mandate 4–5 | Season 18–22 | Suppression bottleneck |
-| Church | TCV ~5, TC ~55 | Season 14–17 | CV management bottleneck |
+| Church | TCV ~5, CI ~55 | Season 14–17 | CV management bottleneck |
 | Hafenmark | TCV ~12, PI ~3 | Season 10–14 | Fastest solo path |
 | Varfell A | TCV ~7, VTM ~1 | Season 14–16 | Intel reveal bottleneck |
 | Crown+Hafenmark co | — | Season 7–10 | Passive co-victory risk (ED-343 still open) |
@@ -136,7 +136,7 @@
 | F-VIC-02 | P1 | Crown victory "Suppress all rivals" produces 20+ season timeline — intended? (ED-candidate-A) | EDITORIAL: confirm intended |
 | F-VIC-03 | P2 | Crown+Hafenmark passive co-victory reachable Season 7–10 (ED-343, still open) | Cross-reference prior finding |
 | F-VIC-04 | P2 | WR Expedition failure consequence unspecified | GAP-VIC-01 logged |
-| F-VIC-05 | P1 | Church TC-75 CV management creates 2–3 season vulnerability window (CLEAN — intended design pressure) | No action |
+| F-VIC-05 | P1 | Church CI-75 CV management creates 2–3 season vulnerability window (CLEAN — intended design pressure) | No action |
 | F-VIC-06 | P1 | Hafenmark has shortest passive solo victory path — prior PP-203 balance fix needs verification | GAP-VIC-02: confirm PP-203 scope |
 
 **[PROVISIONAL: VIC-01]** Church is automatically Prominent in all self-controlled territories. Mandate comparison applies only to territories controlled by rival factions.
@@ -148,7 +148,7 @@
 ### SIM-VIC-02 — Co-Victory Pairings Stress Test (Modes D + L)
 
 **Clean results:**
-- Partition vs Crown+Hafenmark: mutually exclusive (TC < 50 vs TC ≥ 50) — CLEAN
+- Partition vs Crown+Hafenmark: mutually exclusive (CI < 50 vs CI ≥ 50) — CLEAN
 - Crown+Varfell RS ≥ 50: creates cooperation incentive for Expedition — CLEAN
 - Treaty lapse/Partition interaction: Treaty lapse ≠ military conflict — CLEAN
 
@@ -166,10 +166,10 @@
 
 | Conditions | Ob | P(Success) |
 |-----------|----|------------|
-| Base (TC 28) | 3 | ~37% |
+| Base (CI 28) | 3 | ~37% |
 | T9 CV ≤ 1 | 2 | ~54% |
 | T9 CV ≤ 1 + WC ≥ 2 | 2, +1D | ~66% |
-| TC ≥ 50 + T9 CV ≤ 1 | 3 | ~37% |
+| CI ≥ 50 + T9 CV ≤ 1 | 3 | ~37% |
 
 | Finding | Severity | Description | Action |
 |---------|----------|-------------|--------|
@@ -231,8 +231,8 @@
 
 - SIM-WOUND-01: Wound pool reduction calibration is correct for in-session ranges
 - SIM-CR-01: Calamity Drift / Radiation Matrix consistency
-- SIM-CLK-01: RS/TC/WC cooperation loop coherent and intended
-- SIM-VIC-01: Church TC-75 CV vulnerability window is intended design pressure
+- SIM-CLK-01: RS/CI/WC cooperation loop coherent and intended
+- SIM-VIC-01: Church CI-75 CV vulnerability window is intended design pressure
 - SIM-VIC-02: Partition vs Crown+Hafenmark structural exclusivity
 - SIM-VIC-02: Crown+Varfell co-victory RS incentive
 - SIM-VIC-02: Treaty lapse / Partition independence

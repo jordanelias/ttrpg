@@ -138,7 +138,7 @@ As written, a GM could apply both (OBSCURING WIN replaces track movement, AND pl
 
 ### L-05 [P1]: §11 Hybrid + PP-256 not cross-referenced
 
-§11 base text describes a BG Parliamentary Vote running first, then TTRPG contest. If the BG layer reaches CT ≥ 7 or ≤ 3, Let It Ride (§1) would prevent the TTRPG layer from proceeding. PP-256 prevents this by clamping BG offset to ±2 (TC restricted to 4–6 at Hybrid session start), but §11 does not reference PP-256. A GM reading §11 does not know this clamp exists.
+§11 base text describes a BG Parliamentary Vote running first, then TTRPG contest. If the BG layer reaches CT ≥ 7 or ≤ 3, Let It Ride (§1) would prevent the TTRPG layer from proceeding. PP-256 prevents this by clamping BG offset to ±2 (CI restricted to 4–6 at Hybrid session start), but §11 does not reference PP-256. A GM reading §11 does not know this clamp exists.
 
 **Fix:** Add to §11 Step 1: "Note: BG lobbying offset is capped per PP-256; BG layer cannot produce a final resolution."
 

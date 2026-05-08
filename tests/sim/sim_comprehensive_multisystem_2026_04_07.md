@@ -7,7 +7,7 @@
 
 | ID | System | Test | Finding Class |
 |----|--------|------|--------------|
-| SIM-BG-01 | Board Game | TC pacing: Church vs Hafenmark suppression, S1–S20 | P2 |
+| SIM-BG-01 | Board Game | CI pacing: Church vs Hafenmark suppression, S1–S20 | P2 |
 | SIM-BG-02 | Board Game | Church Seizure Ob range — territory immunity analysis | P1 |
 | SIM-BG-03 | Board Game | Crown TCV 18 bottleneck — late-game victory feasibility | P1 |
 | SIM-BG-04 | Board Game | PI collapse cascade — Löwenritter coup chain | P2 |
@@ -31,28 +31,28 @@
 
 ---
 
-### SIM-BG-01 — TC Pacing: Church vs Hafenmark Suppression (S1–S20)
+### SIM-BG-01 — CI Pacing: Church vs Hafenmark Suppression (S1–S20)
 
 ```
 Test ID: SIM-BG-01
-Mechanics: TC generation formula, Conviction Yield, Hafenmark Structural Suppression
+Mechanics: CI generation formula, Conviction Yield, Hafenmark Structural Suppression
 Mode: BG | Temporal: PRES/FUT
-Tracks: TC | Factions: Church, Hafenmark
+Tracks: CI | Factions: Church, Hafenmark
 NPCs: Himlensendt, Baralta | Archetypes: Expansion vs Suppression
 ```
 
-**Setup:** Church Mandate 5, Influence 6. Himmelenger (T14) = CV 5. No other Church-prominent territory initially. Baralta Mandate ≥ 4 (Hafenmark structural suppression active: TC −1/season). Church attempts Assert each season (Influence 6D, TN7, Ob2).
+**Setup:** Church Mandate 5, Influence 6. Himmelenger (T14) = CV 5. No other Church-prominent territory initially. Baralta Mandate ≥ 4 (Hafenmark structural suppression active: CI −1/season). Church attempts Assert each season (Influence 6D, TN7, Ob2).
 
-**TC Generation formula (per season):**
+**CI Generation formula (per season):**
 - Institutional Momentum: +1 (passive, Mandate 5+)
 - Conviction Yield: CV 5 in T14 = +1; CV 4 in T14 = +0.5. Start: T14 CV = 5 (from memory: Himmelenger starts at 5). No other prominent territories initially.
 - Assert: 6D TN7 Ob2. E[net] = 6×0.33 = 2.0. P(≥2) ≈ 70%. Expected contribution: 0.70×1 = +0.70/season
 - Hafenmark suppression: −1/season (Baralta Mandate ≥ 4 active from start)
 
-**Net TC per season (baseline, no second territory):**
+**Net CI per season (baseline, no second territory):**
 = 1 (momentum) + 1 (T14 CV5) + 0.70 (Assert) − 1 (Hafenmark) = **+1.70/season**
 
-**Seasons to TC 75 from start (TC=28, need +47):**
+**Seasons to CI 75 from start (CI=28, need +47):**
 = 47 ÷ 1.70 = **~27.6 seasons**
 
 **With Assert failing (pessimistic):** 1 + 1 − 1 = 1.0/season → 47 seasons (unacceptably slow)
@@ -60,20 +60,20 @@ NPCs: Himlensendt, Baralta | Archetypes: Expansion vs Suppression
 **With second prominent territory at CV 5 (e.g. T14 seized in S10):**
 = 1 + 2 + 0.70 − 1 = **2.70/season** → 47÷2.70 = **~17.4 seasons from game start**
 
-**TC threshold crossings:**
-| TC | Season (median play) |
+**CI threshold crossings:**
+| CI | Season (median play) |
 |----|---------------------|
 | 30 | ~S1 (already near; S1–2) |
 | 50 | ~S12–S13 |
 | 75 | ~S25–S28 |
 
-**TC 50 effect trigger:** Church orders −1 Ob everywhere + mandatory Assert/Suppress each season. This locks in 2 forced actions per season and removes the optional Assert opportunity cost — no downside to Assert once mandatory.
+**CI 50 effect trigger:** Church orders −1 Ob everywhere + mandatory Assert/Suppress each season. This locks in 2 forced actions per season and removes the optional Assert opportunity cost — no downside to Assert once mandatory.
 
-**Post-TC 50 Assert pacing:**
-Mandatory Assert removes the decision cost. TC gains increase: net now includes forced Assert at higher success rate (Mandate growing). If Mandate reaches 6 by TC 50: 7D TN7 Ob2, P(≥2) ≈ 80%. Assert contribution: +0.80.
-Net at Mandate 6, 2 territories: 1 + 2 + 0.80 − 1 = **2.80/season** → TC 75 by ~S24.
+**Post-CI 50 Assert pacing:**
+Mandatory Assert removes the decision cost. CI gains increase: net now includes forced Assert at higher success rate (Mandate growing). If Mandate reaches 6 by CI 50: 7D TN7 Ob2, P(≥2) ≈ 80%. Assert contribution: +0.80.
+Net at Mandate 6, 2 territories: 1 + 2 + 0.80 − 1 = **2.80/season** → CI 75 by ~S24.
 
-**FINDING P2 — TC pace is slow but viable; Hafenmark suppression is mechanically significant:** Without suppression, TC reaches 75 ~6 seasons faster (S18 vs S24). Hafenmark suppression at Mandate ≥ 4 delays the Church by 6 seasons on average — a substantial, meaningful pressure. However: Hafenmark loses suppression if Baralta drops below Mandate 4. If Hafenmark is pressured militarily (Mandate −1 from combat losses), Church escapes suppression and accelerates to S18. **No P1. Mechanical interaction is working as designed. Flag for simulation: what Hafenmark Mandate level does Crown/Church pressure typically produce by S12?**
+**FINDING P2 — CI pace is slow but viable; Hafenmark suppression is mechanically significant:** Without suppression, CI reaches 75 ~6 seasons faster (S18 vs S24). Hafenmark suppression at Mandate ≥ 4 delays the Church by 6 seasons on average — a substantial, meaningful pressure. However: Hafenmark loses suppression if Baralta drops below Mandate 4. If Hafenmark is pressured militarily (Mandate −1 from combat losses), Church escapes suppression and accelerates to S18. **No P1. Mechanical interaction is working as designed. Flag for simulation: what Hafenmark Mandate level does Crown/Church pressure typically produce by S12?**
 
 ---
 
@@ -82,14 +82,14 @@ Net at Mandate 6, 2 territories: 1 + 2 + 0.80 − 1 = **2.80/season** → TC 75 
 ```
 Test ID: SIM-BG-02
 Mechanics: Church Seizure Ob formula, Prominence prerequisite, CV values
-Mode: BG | Temporal: FUT (post-TC 75)
-Tracks: TC, CV | Factions: Church | NPCs: Himlensendt
+Mode: BG | Temporal: FUT (post-CI 75)
+Tracks: CI, CV | Factions: Church | NPCs: Himlensendt
 Archetypes: Territorial Expansion
 ```
 
 **Seizure Ob formula:** Ob = 2 + Fort Level + max(0, 3 − CV)
 
-**Church action pool for seizure:** Influence 6D TN7 (base). Church Mandate 5 required (check: "Church Mandate ≥ 4 required"). At TC 50–74: −1 Ob Church orders everywhere = effective Ob reduction. After TC 75 Ob reduction no longer applies (TC frozen, seizure protocol active — [GAP: does the −1 Ob Church-everywhere modifier from TC 50–69 carry through to TC 75+ seizure? Not explicitly stated in params.])
+**Church action pool for seizure:** Influence 6D TN7 (base). Church Mandate 5 required (check: "Church Mandate ≥ 4 required"). At CI 50–74: −1 Ob Church orders everywhere = effective Ob reduction. After CI 75 Ob reduction no longer applies (CI frozen, seizure protocol active — [GAP: does the −1 Ob Church-everywhere modifier from CI 50–69 carry through to CI 75+ seizure? Not explicitly stated in params.])
 
 **Full Ob range (no ethical modifier, 6D pool):**
 
@@ -114,7 +114,7 @@ Archetypes: Territorial Expansion
 - Fort 2, CV = 0 (Ob 7): de facto immune
 - Fort 3, CV = 0 (Ob 8): **absolute immunity** — cannot seize
 
-**Practical immunity map:** Any well-fortified territory (Fort 2+) with low CV (≤ 1) is effectively immune to Church seizure. The implication: opponents who actively suppress CV and invest in fortification can create permanent seizure barriers even at TC 75+. This is intentional design — but:
+**Practical immunity map:** Any well-fortified territory (Fort 2+) with low CV (≤ 1) is effectively immune to Church seizure. The implication: opponents who actively suppress CV and invest in fortification can create permanent seizure barriers even at CI 75+. This is intentional design — but:
 
 **FINDING P1 — Seizure Ob formula creates a hard immunity wall at Fort 3 + CV 0:** Ob 8 means a 6D Church pool produces Overwhelming on ~2% of rolls, Success on another ~3%. In expectation, the Church would need ~14 attempts (14 seasons) to succeed once. Since the Church gets one seizure attempt per season and victory requires ≥10 TCV, a single Fort 3 CV-0 territory effectively walls off that region permanently. This means any faction that fortifies a buffer territory and maintains low CV can halt Church victory indefinitely. **No mechanic exists to break this wall except Prominence loss (if Church Mandate drops below target faction Mandate).**
 
@@ -166,7 +166,7 @@ IP starts 20. Crown victory requires IP < 60. IP threshold for Altonian Vanguard
 Test ID: SIM-BG-04
 Mechanics: PI degradation triggers, Löwenritter Coup Counter, Crown Emergency Powers
 Mode: BG | Temporal: MID (S8–S15)
-Tracks: PI, Löwenritter Coup Counter, TC | Factions: Crown, Löwenritter, Church
+Tracks: PI, Löwenritter Coup Counter, CI | Factions: Crown, Löwenritter, Church
 NPCs: Ehrenwall, Almud | Archetypes: Institutional collapse
 ```
 
@@ -174,21 +174,21 @@ NPCs: Ehrenwall, Almud | Archetypes: Institutional collapse
 
 **PI degradation sources:**
 - Crown Emergency Powers: −1
-- Church territorial seizure (post-TC 75): −1 per seizure
+- Church territorial seizure (post-CI 75): −1 per seizure
 - Löwenritter coup: −3 (instant)
 
 **Coup Counter threshold:** 4 = coup eligible. Counter triggers from: [GAP: Coup Counter increment triggers not in params read — need to read the Löwenritter faction mechanics.]
 
 **Tractable cascade analysis (known triggers):**
 
-**Scenario: TC reaches 75 by S20, Church seizes 3 territories in S21–S23:**
+**Scenario: CI reaches 75 by S20, Church seizes 3 territories in S21–S23:**
 - Each seizure: PI −1. Three seizures: PI 7 → 4.
 - PI 4 = "Degraded" (Parliamentary Manoeuvre +1 Ob, Crown Decree Ob reduced to 1).
 - Crown responds with Emergency Powers (2× uses): PI 4 → 2.
-- PI ≤ 2 = "Non-functional." Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. **TC +2** (new TC source from PI collapse).
-- TC +2 adds to already-frozen TC? [GAP: PI ≤ 2 gives TC +2, but TC is frozen at 75 once Church reaches that threshold. Does TC +2 fire anyway? If TC is frozen, this TC+2 has no effect — or does it mean PI collapse bypasses the freeze?]
+- PI ≤ 2 = "Non-functional." Hafenmark loses Parliamentary Manoeuvre. Crown governs by decree. **CI +2** (new CI source from PI collapse).
+- CI +2 adds to already-frozen CI? [GAP: PI ≤ 2 gives CI +2, but CI is frozen at 75 once Church reaches that threshold. Does CI +2 fire anyway? If CI is frozen, this CI+2 has no effect — or does it mean PI collapse bypasses the freeze?]
 
-**If TC +2 bypasses the freeze:** Church at TC 77+ has an unsimulated state. The TC effects table caps at "75+" — no entry for TC > 75. **[FINDING P1 — TC 75 freeze + PI collapse TC +2 interaction undefined. Does PI ≤ 2 TC bonus apply when TC is already frozen? If it stacks: creates a TC value above 75 with no defined effect. If it doesn't apply: PI collapse has no TC consequence (which may understate institutional collapse severity).]**
+**If CI +2 bypasses the freeze:** Church at CI 77+ has an unsimulated state. The CI effects table caps at "75+" — no entry for CI > 75. **[FINDING P1 — CI 75 freeze + PI collapse CI +2 interaction undefined. Does PI ≤ 2 CI bonus apply when CI is already frozen? If it stacks: creates a CI value above 75 with no defined effect. If it doesn't apply: PI collapse has no CI consequence (which may understate institutional collapse severity).]**
 
 **Löwenritter entry window:** PI 3–4 is the destabilized-but-functional zone where Löwenritter could plausibly win support (Mandate growing, Crown weakened). If PI drops to 2 before Löwenritter acts, PI recovery is nearly impossible (Hafenmark lost Parliamentary Manoeuvre, Crown Decree governs). **Coup window: PI 3–4 before Non-functional state.**
 
@@ -492,7 +492,7 @@ Archetypes: Command disruption
 Test ID: SIM-DB-01
 Mechanics: CLASH resolution, genre weights, orientation weights, movement formula
 Mode: TTRPG/Hybrid | Temporal: PRES
-Tracks: Conviction Track | Factions: Crown vs Hafenmark | NPCs: Almud, Baralta
+Tracks: Piety Track | Factions: Crown vs Hafenmark | NPCs: Almud, Baralta
 Archetypes: Politician (both sides)
 ```
 
@@ -523,11 +523,11 @@ In a CLASH, one side is Revealing, one is Obscuring (opposite orientations). The
   - Resistance (Crown Hafenmark audience, Stability 4): ceil(4/4) = 1. Movement = ⌊3.0−1⌋ = **2 toward Almud**
 - If Baralta wins by margin 2: movement = ⌊(2 × 1.5 × 0.75) − 1⌋ = ⌊2.25−1⌋ = ⌊1.25⌋ = **1 toward Baralta**
 
-**Revealing generates 2× the Conviction Track movement of Obscuring at the same margin and primary genre.**
+**Revealing generates 2× the Piety Track movement of Obscuring at the same margin and primary genre.**
 
 **Is Revealing always dominant?**
 
-**FINDING P2 — Revealing orientation strictly dominates Obscuring in CLASH:** At equivalent margin, Revealing always generates more Conviction Track movement. The only rationale for Obscuring is:
+**FINDING P2 — Revealing orientation strictly dominates Obscuring in CLASH:** At equivalent margin, Revealing always generates more Piety Track movement. The only rationale for Obscuring is:
 1. Misdirection: if the opponent reads your genre correctly (Step 1 Appraise) and you want to deny the primary genre weight
 2. Forced: if the mechanic requires opposite orientations for CLASH and you're assigned Obscuring
 
@@ -545,16 +545,16 @@ But in Choose step, players select their own orientation. If Revealing always wi
 
 ```
 Test ID: SIM-DB-02
-Mechanics: AMPLIFY, resistance, Conviction Track movement
+Mechanics: AMPLIFY, resistance, Piety Track movement
 Mode: TTRPG | Temporal: PRES
-Tracks: Conviction Track, Composure | Factions: Church + Crown vs Hafenmark
+Tracks: Piety Track, Composure | Factions: Church + Crown vs Hafenmark
 NPCs: Himlensendt + Almud vs Baralta | Archetypes: Alliance debate
 ```
 
-**AMPLIFY: same genre, same orientation. Combined pools vs Conviction Track resistance.**
-Combined pool = Pool A + Pool B. Roll combined vs Ob 2 (base — [GAP: AMPLIFY Ob not confirmed. CLASH uses "Compare successes." AMPLIFY uses "Combined pools vs Conviction Track resistance." — the resistance IS the Ob?]).
+**AMPLIFY: same genre, same orientation. Combined pools vs Piety Track resistance.**
+Combined pool = Pool A + Pool B. Roll combined vs Ob 2 (base — [GAP: AMPLIFY Ob not confirmed. CLASH uses "Compare successes." AMPLIFY uses "Combined pools vs Piety Track resistance." — the resistance IS the Ob?]).
 
-**Reading the rule:** AMPLIFY → "Combined pools vs Conviction Track resistance." Resistance = ceil(Stability/4).
+**Reading the rule:** AMPLIFY → "Combined pools vs Piety Track resistance." Resistance = ceil(Stability/4).
 
 **Himlensendt (Church, Cognition 4, History 2):** Argue pool = (4×2)+2 = 10D
 **Almud (Crown, Cognition 5, History 3):** Argue pool = (5×2)+3 = 13D
@@ -569,7 +569,7 @@ Combined pool = Pool A + Pool B. Roll combined vs Ob 2 (base — [GAP: AMPLIFY O
 Allied orators choose Past Revealing (Past = boosted for Hafenmark audience = ×1.5):
 Movement = ⌊(7.6 × 1.5 × 1.0) − 1⌋ = ⌊11.4 − 1⌋ = ⌊10.4⌋ = **10 toward allied position**
 
-Conviction Track is 0–10. If starting at neutral (5), one AMPLIFY from 23D pool combination moves it from 5 → **15 — far beyond the 10 ceiling.**
+Piety Track is 0–10. If starting at neutral (5), one AMPLIFY from 23D pool combination moves it from 5 → **15 — far beyond the 10 ceiling.**
 
 **Track ceiling = 10. Winner at ≥7. Starting neutral (5): AMPLIFY needs to move 2+ to win.**
 
@@ -590,7 +590,7 @@ Movement > 0 requires: net × genre_weight × orientation_weight > resistance.
 With resistance = 2, genre 0.5, Revealing 1.0: net must be > 4. E[net] ≈ 4 requires ~12D.
 **Pool below 12D targeting a non-primary genre vs resistance 2 produces 0 movement.**
 
-**FINDING P1 — AMPLIFY stalemate at low pool + non-primary genre:** A debate where both sides have pools below ~12D and target non-primary genres vs a resistance-2 audience produces **zero Conviction Track movement every exchange.** The debate cannot resolve. It terminates only via Composure depletion — but if both sides are using AMPLIFY (same genre, same orientation), no Composure damage rule is defined for AMPLIFY. **[GAP: Does AMPLIFY deal Composure damage? The rule only defines Conviction Track movement for AMPLIFY, not Composure damage. If AMPLIFY deals no Composure damage and produces no Track movement at low pools, the debate is a genuine stalemate with no resolution path.]**
+**FINDING P1 — AMPLIFY stalemate at low pool + non-primary genre:** A debate where both sides have pools below ~12D and target non-primary genres vs a resistance-2 audience produces **zero Piety Track movement every exchange.** The debate cannot resolve. It terminates only via Composure depletion — but if both sides are using AMPLIFY (same genre, same orientation), no Composure damage rule is defined for AMPLIFY. **[GAP: Does AMPLIFY deal Composure damage? The rule only defines Piety Track movement for AMPLIFY, not Composure damage. If AMPLIFY deals no Composure damage and produces no Track movement at low pools, the debate is a genuine stalemate with no resolution path.]**
 
 This is a P1 structural gap. AMPLIFY needs either: (a) a minimum movement rule (at least 1 if any successes), or (b) Composure damage on AMPLIFY to provide a secondary resolution path.
 
@@ -600,9 +600,9 @@ This is a P1 structural gap. AMPLIFY needs either: (a) a minimum movement rule (
 
 ```
 Test ID: SIM-DB-03
-Mechanics: Composure, Conviction Track, CLASH margin → Composure
+Mechanics: Composure, Piety Track, CLASH margin → Composure
 Mode: TTRPG | Temporal: PRES
-Tracks: Composure, Conviction Track | Factions: Crown vs Varfell
+Tracks: Composure, Piety Track | Factions: Crown vs Varfell
 NPCs: Almud vs Vaynard | Archetypes: Politician vs Epistemic Reasoner
 ```
 
@@ -638,9 +638,9 @@ Approximately P(13D − 10D ≥ 2) = P(3D pool advantage generates 2+ net): ~40%
 - But movement is 0 on 60% of exchanges. On successful exchanges, E[movement] ≈ 2.
 - E[exchanges] to reach track = 7: 2÷2 = **1 successful exchange** of movement ≈ **2.5 total exchanges**
 
-**Debate duration at 13D vs 10D: 2–4 exchanges before Almud wins via Conviction Track.**
+**Debate duration at 13D vs 10D: 2–4 exchanges before Almud wins via Piety Track.**
 
-**FINDING CLEAN:** At the 13D vs 10D matchup, the debate resolves in 2–4 exchanges via Conviction Track movement. Not too fast (>3 rounds minimum at median), not too slow. Resistance = 1 acts as a meaningful friction mechanic that prevents single-margin victories from dominating. The debate system is calibrated correctly at this pool range. No finding.
+**FINDING CLEAN:** At the 13D vs 10D matchup, the debate resolves in 2–4 exchanges via Piety Track movement. Not too fast (>3 rounds minimum at median), not too slow. Resistance = 1 acts as a meaningful friction mechanic that prevents single-margin victories from dominating. The debate system is calibrated correctly at this pool range. No finding.
 
 ---
 
@@ -803,10 +803,10 @@ Archetypes: Sustained fighter
 
 | ID | Severity | System | Issue |
 |----|----------|--------|-------|
-| SIM-BG-01 | P2 | BG | TC pace viable; Hafenmark suppression worth 6 seasons |
+| SIM-BG-01 | P2 | BG | CI pace viable; Hafenmark suppression worth 6 seasons |
 | SIM-BG-02 | **P1** | BG | Fort 3 + CV 0 = de facto seizure immunity; no mechanic to break |
 | SIM-BG-03 | **P1** | BG | "Suppress all rivals" undefined; Crown victory unresolvable |
-| SIM-BG-04 | **P1** | BG | PI ≤ 2 TC +2 interaction with frozen TC undefined |
+| SIM-BG-04 | **P1** | BG | PI ≤ 2 CI +2 interaction with frozen CI undefined |
 | SIM-BG-05 | P2 | BG | RS 40 band entry ~S40–44; RS Rupture not a near-term threat |
 | SIM-HY-01 | **P1** | Hybrid | Domain Echo cap resets per-echo creates +4 stat stacking exploit |
 | SIM-HY-02 | P2 | Hybrid | Illegal Zoom In — no rule for rejection/queuing; Domain Echo mid-Phase-6 undefined |
@@ -816,7 +816,7 @@ Archetypes: Sustained fighter
 | SIM-MC-03 | P2 | Mass Combat | General death cascades over 2–3 rounds; secondary commander inheritance undefined |
 | SIM-DB-01 | P2 | Debate | Revealing dominates Obscuring in CLASH; Obscuring rationale unclear |
 | SIM-DB-02 | **P1** | Debate | AMPLIFY at low pool + non-primary genre = zero movement and zero Composure damage = irresolvable stalemate |
-| SIM-DB-03 | CLEAN | Debate | Conviction Track movement at 13D vs 10D correctly calibrated |
+| SIM-DB-03 | CLEAN | Debate | Piety Track movement at 13D vs 10D correctly calibrated |
 | SIM-PC-01 | P2 | Combat | TN5 dominates unarmoured targets via Critical frequency; TN8 dominates armoured — correct design |
 | SIM-PC-02 | CLEAN | Combat | Initiative is tactical modifier not decisive advantage |
 | SIM-PC-03 | P2 | Combat | Pool floor 5 creates zombie fighter at 8+ wounds; Ob penalty at high wound counts may be needed |
@@ -831,7 +831,7 @@ Archetypes: Sustained fighter
 |----|-----|---------|
 | GAP-BG-01 | "Suppress all rivals" definition absent | Crown victory |
 | GAP-BG-02 | TCV per-territory values not in params | Crown TCV 18 analysis |
-| GAP-BG-03 | TC +2 from PI ≤ 2 interaction with frozen TC | PI collapse chain |
+| GAP-BG-03 | CI +2 from PI ≤ 2 interaction with frozen CI | PI collapse chain |
 | GAP-BG-04 | Schoenland and Askeheim TCV values | Victory analysis |
 | GAP-HY-01 | Domain Echo cap: per-echo vs per-scene-total | ED-071 |
 | GAP-HY-02 | Illegal Zoom In consequence rule absent | Phase-Lock Protocol |
@@ -851,7 +851,7 @@ Archetypes: Sustained fighter
 | Flag | Issue | Priority |
 |------|-------|----------|
 | ED-candidate-A | "Suppress all rivals" requires definition for Crown victory | P1-BLOCKER candidate |
-| ED-candidate-B | PI ≤ 2 TC +2 interaction with frozen TC — rule needed | P1 |
+| ED-candidate-B | PI ≤ 2 CI +2 interaction with frozen CI — rule needed | P1 |
 | ED-candidate-C | Domain Echo cap: per-echo vs per-scene-total (resolve ED-071) | P1 |
 | ED-candidate-D | Illegal Zoom In consequence — one-line ruling needed | P2 |
 | ED-candidate-E | Weight-of-numbers: large low-Command units offensive contribution | P2 |

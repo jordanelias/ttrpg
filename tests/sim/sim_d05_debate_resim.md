@@ -38,7 +38,7 @@ params_debate.md header is authoritative. Part 6 body requires update. Filed PP-
 | Orator     | 3 | 2 |  8 | 3 | 9 | 7 |
 
 ## MODE A: GENRE WEIGHT IMPACT (Scholar v Diplomat, res=1)
-Genre weight affects Conviction Track movement rate only — not win probability (Finding A-1).
+Genre weight affects Piety Track movement rate only — not win probability (Finding A-1).
 
 | Weight | A Win% | B Win% | Avg Δ/xch |
 |--------|--------|--------|-----------|

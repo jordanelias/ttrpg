@@ -69,12 +69,12 @@ Beliefs: (1) I have survived 12 years because I do not take risks. I will over-d
 ---
 
 ## OPENING STATE (Season 9)
-RS: 58 | TC: 49 | IP: 38 | AER: 2 | TD: 1 | Public Instability: 5
-(Season 8: TC advanced +1 from Church Partial; IP slow climb; AER unchanged; TD at 1 — Church beginning theological consolidation)
+RS: 58 | CI: 49 | IP: 38 | AER: 2 | TD: 1 | Public Instability: 5
+(Season 8: CI advanced +1 from Church Partial; IP slow climb; AER unchanged; TD at 1 — Church beginning theological consolidation)
 
 BG Victory tracking (Season 9):
-- Crown: 2/5 Deeds met (Mandate 5 ✓; PI 7 ≥ 5 ✓; remaining: territory control, TC<50, Torben Loyalty)
-- Church: 1/4 Deeds (TC≥40 ✓ — TC 49; remaining: Mandate 5, T14 control, Crown acknowledgment; AER 2 of 3 gate)
+- Crown: 2/5 Deeds met (Mandate 5 ✓; PI 7 ≥ 5 ✓; remaining: territory control, CI<50, Torben Loyalty)
+- Church: 1/4 Deeds (CI≥40 ✓ — CI 49; remaining: Mandate 5, T14 control, Crown acknowledgment; AER 2 of 3 gate)
 - Hafenmark Path C: PI 7 ≥ 4 ✓, Mandate 4 ✓ — missing: T5 control, no active Heresy Investigation ≥ 2 seasons
 - Varfell Path B: VTM 2 (short of 3); T13 not held
 
@@ -97,8 +97,8 @@ BG Victory tracking (Season 9):
 - Each party Appraises once at exchange open. Appraise results are shared (all parties see all reads).
 - Choose: each party picks genre/orientation independently.
 - Argue: lowest Attunement declares first; others hear, then declare in Att ascending order; highest Att declares last.
-- Resolve: for each pair of same-genre parties, apply CLASH or AMPLIFY. For different-genre pairs, apply CROSS. All movements calculated simultaneously. Apply net to Conviction Track.
-- Conviction Track: three-way track. Two tracks in play: Track A-B (Church vs Ravn), Track A-C (Church vs Mads). A win on either track advances that orator's position.
+- Resolve: for each pair of same-genre parties, apply CLASH or AMPLIFY. For different-genre pairs, apply CROSS. All movements calculated simultaneously. Apply net to Piety Track.
+- Piety Track: three-way track. Two tracks in play: Track A-B (Church vs Ravn), Track A-C (Church vs Mads). A win on either track advances that orator's position.
 
 **Step 1 — Appraise (shared results):**
 - Ravn: Att(3) → 3D TN7 Ob1. P(≥1)≈74%. **Pass.** Reads Church speaker: Past/Obscuring.
@@ -161,7 +161,7 @@ Net Track A-C: +3 − 2 = **+1 toward Mads.** Track A-C: 5→6. (Mads leads narr
 ```
 SCENE 1: MULTI-PARTY CONTEST — THREE-WAY PARLIAMENT
 ─────────────────────────────────────────────────────────────────────
-ENTRY: TC 49 | Track A-B start: 5 | Track A-C start: 5
+ENTRY: CI 49 | Track A-B start: 5 | Track A-C start: 5
 PP-280 (new): Multi-Party Contest procedure applied (FIRST TEST)
 
 APPRAISE (shared):
@@ -449,7 +449,7 @@ FINDING F-S11: Domain Echo (PP-252) fires correctly: personal scene Success
 | Faction | Order | Target | Framework modifier | Pool | Ob | Notes |
 |---------|-------|--------|--------------------|------|----|-------|
 | Crown | Royal Decree | Hafenmark Influence | Crown/Virtue Ethics: Decree is aligned (open honourable act) −1 Ob | Mandate(4)=4D | Ob 1 (Ob2 −1 framework) | Boost Hafenmark to unlock Path C |
-| Church | Assert (TC ≥ 40 mandatory) | TC +1 | Church/Divine Command: Assert is aligned −1 Ob | Influence(6)=6D | Ob 1 | TC advance |
+| Church | Assert (CI ≥ 40 mandatory) | CI +1 | Church/Divine Command: Assert is aligned −1 Ob | Influence(6)=6D | Ob 1 | CI advance |
 | Hafenmark | Diplomatic → Crown T5 | Church contradicts framework: no. Hafenmark Categorical Imperative: rules-based diplomatic action aligned −1 Ob | Influence(5)=5D | Ob 2 (Ob3 −1) | Path C deed (T5 control) |
 | Varfell | Intelligence → Niflhel | Consequentialist: information-driven aligned −1 Ob | Intel(3)=3D | Ob 4 (Ob5 −1) | Find the Quiet practitioner |
 | Guilds | Trade → Hafenmark | Moral Relativism: GM picks boost genre (trade = any) −1 Ob | Wealth(5)=5D | Ob 4 (Ob5 −1) | |
@@ -461,10 +461,10 @@ FINDING F-S11: Domain Echo (PP-252) fires correctly: personal scene Success
 4D TN7 Ob1. E[net]=1.2. P(≥1)≈80%. **Success.** Hafenmark Influence: 5→**6**. (±2 cap: +1 ✓)
 BG: Hafenmark Path C advances — Mandate 4 ✓, PI 7 ≥ 4 ✓, Influence 6 (now has diplomatic weight for T5 claim). Missing: T5 control, no Heresy Investigation.
 
-**Church Assert (mandatory at TC≥40):**
-6D TN7 Ob1. E[net]=1.8. P(≥1)≈92%. **Overwhelming** (P≈60%). TC +2 → **TC: 51.** TC 50 threshold crossed: Church may now demand formal RS inquiry. [THRESHOLD EVENT]
+**Church Assert (mandatory at CI≥40):**
+6D TN7 Ob1. E[net]=1.8. P(≥1)≈92%. **Overwhelming** (P≈60%). CI +2 → **CI: 51.** CI 50 threshold crossed: Church may now demand formal RS inquiry. [THRESHOLD EVENT]
 
-**TC 50 Threshold Event:** Church formally requests RS inquiry. Crown must respond next season. If Crown refuses: IP +2. If Crown complies: Torben's loyalties tested (Torben Loyalty −1).
+**CI 50 Threshold Event:** Church formally requests RS inquiry. Crown must respond next season. If Crown refuses: IP +2. If Crown complies: Torben's loyalties tested (Torben Loyalty −1).
 
 **Hafenmark Diplomatic → T5 claim:**
 5D TN7 Ob2. E[net]=1.5. P(≥2)≈71%. **Success.** Hafenmark begins establishing administrative presence in T5. Not control yet — one more season of action needed for full deed.
@@ -478,22 +478,22 @@ BG: Hafenmark Path C advances — Mandate 4 ✓, PI 7 ≥ 4 ✓, Influence 6 (no
 **Lowenritter Consolidation:**
 6D TN7 Ob1. P(≥1)≈95%. **Success.** Military 6 maintained.
 
-### TC 51 Ethical Framework Cascade (new threshold)
+### CI 51 Ethical Framework Cascade (new threshold)
 
-At TC 50–69: "Church orders: −1 Ob everywhere. Non-Church Diplomacy targeting Church: +1 Ob. Mandatory Assert/Suppress each season." (params_board_game)
+At CI 50–69: "Church orders: −1 Ob everywhere. Non-Church Diplomacy targeting Church: +1 Ob. Mandatory Assert/Suppress each season." (params_board_game)
 
 This activates mid-session. Effect from next season. Flags:
 - Crown Diplomacy targeting Church: now costs +1 Ob baseline
-- Church's Assert action is now mandatory (already was per TC≥40 rule)
+- Church's Assert action is now mandatory (already was per CI≥40 rule)
 - Church's Ob on own actions: −1 (stacks with Ethical Framework −1 = −2 total on aligned actions — **cap check needed**)
 
-**GAP-S-02:** Ob floor is 1 per params_core. TC 50+ Church actions: −1 Ethical Framework −1 TC bonus = Ob−2. Minimum Ob is 1. Both modifiers apply before floor. This is consistent — no new patch needed.
+**GAP-S-02:** Ob floor is 1 per params_core. CI 50+ Church actions: −1 Ethical Framework −1 CI bonus = Ob−2. Minimum Ob is 1. Both modifiers apply before floor. This is consistent — no new patch needed.
 
 ---
 
 ## PHASE 3: CASCADE PHASE
 
-**TC 51 threshold fires:** Church formal RS inquiry demand registered.
+**CI 51 threshold fires:** Church formal RS inquiry demand registered.
 
 **RS 58:** Fragile band. Shifting Object from Season 8 persists (PP-303: +1 Ob to Thread operations in that territory this season — adds next season's RS update cost).
 
@@ -503,7 +503,7 @@ This activates mid-session. Effect from next season. Flags:
 
 **Hafenmark Path C progress:** One deed conditionally met this season (Influence 6 + Diplomatic → T5 in progress). Full deed confirmation requires T5 administrative control next season.
 
-**AER check:** AER 2. Church TC 51 < 65 (primary victory threshold) and Church has 1/4 deeds. AER advancement requires specific conditions — not met this season. AER stays at 2.
+**AER check:** AER 2. Church CI 51 < 65 (primary victory threshold) and Church has 1/4 deeds. AER advancement requires specific conditions — not met this season. AER stays at 2.
 
 **TD (Theological Dissatisfaction):** Mads' public Contest argument + confession to Elan. TD +1 → **TD: 2.** (TD tracks public theological dissatisfaction with the Church's claims. Mads just publicly contradicted Church RS narrative in Parliament.)
 
@@ -515,7 +515,7 @@ This activates mid-session. Effect from next season. Flags:
 | Clock | Start | End | Change | Notes |
 |-------|-------|-----|--------|-------|
 | RS | 58 | 58 | 0 | No Lock drift, no operations |
-| TC | 49 | 51 | +2 | Church Assert Overwhelming |
+| CI | 49 | 51 | +2 | Church Assert Overwhelming |
 | IP | 38 | 38 | 0 | No Revolution action |
 | AER | 2 | 2 | 0 | No AER trigger conditions met |
 | TD | 1 | 2 | +1 | Mads' public confession |
@@ -530,12 +530,12 @@ This activates mid-session. Effect from next season. Flags:
 ### BG Deed Progress (Season 9 end)
 | Faction | Deeds met | Progress |
 |---------|-----------|---------|
-| Crown | 2/5 | TC now 51 — Deed 3 (TC<50 AND IP<75) FAILED this season (TC crossed 50) |
-| Church | 1/4 | TC 51 ≥ 40 ✓; AER 2 of 3 gate — still short |
+| Crown | 2/5 | CI now 51 — Deed 3 (CI<50 AND IP<75) FAILED this season (CI crossed 50) |
+| Church | 1/4 | CI 51 ≥ 40 ✓; AER 2 of 3 gate — still short |
 | Hafenmark Path C | 2/4 partial | PI ✓, Mandate ✓; T5 in progress (not yet controlled); Heresy Investigation: none active (2 seasons clean — meets condition if holds) |
 | Varfell Path B | 0/2 | VTM 2; T13 not held |
 
-**Crown Deed 3 failure:** TC 51 > 50. Crown's Constitutional Stability path requires TC<50. The Church Assert Overwhelming this season made TC 51, blocking Crown Deed 3. Crown must now either suppress Church (Influence action against TC) or pivot to Dominion alternate path (≥8 territories + Submission Condition).
+**Crown Deed 3 failure:** CI 51 > 50. Crown's Constitutional Stability path requires CI<50. The Church Assert Overwhelming this season made CI 51, blocking Crown Deed 3. Crown must now either suppress Church (Influence action against CI) or pivot to Dominion alternate path (≥8 territories + Submission Condition).
 
 This is the BG endgame pressure the three-clock convergence is designed to produce.
 
@@ -567,8 +567,8 @@ Mass Mismatch (Light vs Heavy −1D Defence) confirmed functional. V-1 (Light) e
 Three modifiers applied this session: Crown Decree −1 Ob (aligned/open honourable act), Church Assert −1 Ob (aligned/institutional), Mads Appeal +1 Ob (contradicts doctrine). All three fired correctly. The framework modifiers are a meaningful ±1 adjustment — not decisive, but consistent. **Crown Decree Ob 2→1 was significant:** at Ob 1, Crown's 4D pool has 80% success rate vs 50% at Ob 2. Ethical alignment directly enables Crown's weak Mandate actions. Validated.
 
 ### Audit-S-06: BG Victory Race — Live Pressure
-TC 51 blocked Crown Deed 3 (requires TC<50). This is the designed tension: Church TC advancement directly blocks Crown Constitutional Stability victory path. Crown must now actively suppress TC or pivot strategy. After Season 9:
-- Crown cannot win Constitutional Stability without TC suppression (TC 51, needs <50 next season)
+CI 51 blocked Crown Deed 3 (requires CI<50). This is the designed tension: Church CI advancement directly blocks Crown Constitutional Stability victory path. Crown must now actively suppress CI or pivot strategy. After Season 9:
+- Crown cannot win Constitutional Stability without CI suppression (CI 51, needs <50 next season)
 - Church needs AER 3 gate + 3 more deeds (at minimum 3 seasons of sustained advancement)
 - Hafenmark is closest to Path C (2/4 deeds + T5 in progress)
 The three-faction race is competitive. BG victory condition system confirmed functional.
@@ -596,4 +596,4 @@ After 1 exchange: Mads leads on exchange majority (1-0-0), Track A-C at 6. Conte
 
 ## COVERAGE MATRIX ADDITIONS
 
-| SIM-COMP-02 | Multi-Party Contest PP-280, Feigned Retreat PP-256, Mass Mismatch PP-274, Untrained Leap, Ethical Framework Ob live, BG Victory Race, Dual Win-Conditions | Full Hybrid + BG | PRES | RS, TC, IP, AER, TD, Composure, Certainty, Conviction Track (two) | Crown, Church, Hafenmark, Varfell, Guilds, Lowenritter | Ravn, Mads, Elan, Halvard | Parliamentary-Advocate, Untrained-Practitioner, Sincere-Confessor, Survival-Mercenary | COMPLETE | F-S01–F-S11; PP-280–281; ED-177–180; GAP-S-01/S-02; SIM-DEBT-07 |
+| SIM-COMP-02 | Multi-Party Contest PP-280, Feigned Retreat PP-256, Mass Mismatch PP-274, Untrained Leap, Ethical Framework Ob live, BG Victory Race, Dual Win-Conditions | Full Hybrid + BG | PRES | RS, CI, IP, AER, TD, Composure, Certainty, Piety Track (two) | Crown, Church, Hafenmark, Varfell, Guilds, Lowenritter | Ravn, Mads, Elan, Halvard | Parliamentary-Advocate, Untrained-Practitioner, Sincere-Confessor, Survival-Mercenary | COMPLETE | F-S01–F-S11; PP-280–281; ED-177–180; GAP-S-01/S-02; SIM-DEBT-07 |

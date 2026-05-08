@@ -7,7 +7,7 @@
 Test ID: SIM-BG-01
 Mechanics: BG turn sequence, Domain Actions, Seasonal Accounting, Clocks, Unit Cohesion, Parliamentary Manoeuvre
 Mode: BG | Temporal: PRES
-Tracks: Theocracy Counter (TC), Rendering Stability (RS), Institutional Pressure (IP), Public Instability (PI), faction stats
+Tracks: Church Influence (CI), Rendering Stability (RS), Institutional Pressure (IP), Public Instability (PI), faction stats
 Factions: Crown (P1), Church (P2), Hafenmark (P3), Varfell/Guilds/Niflhel/Restoration Movement (NPC)
 NPCs: Generic Crown, Generic Church, Generic Hafenmark, Generic Varfell, Generic Guilds, Generic Niflhel, Generic Restoration Movement
 Archetypes: Military (Crown), Religious (Church), Economic (Hafenmark)
@@ -37,7 +37,7 @@ Phase 4 Resolution (most likely outcomes at median pools, TN7):
 - Church Thread Op T5 (6D Ob2): E[net]=1.8, P(>=2)=70%. Most likely: Success. RS 72->71. Thread Debt placed.
 - Crown Govern T1 capital (5D Ob1): E[net]=1.5, P(>=1)=91%, P(>=2)=69%. Most likely: Overwhelming. T1 Prosperity 4->5.
 - Crown Muster T1 (4D Ob1): E[net]=1.2, P(>=1)=80%. Most likely: Success. Light Infantry queued (deploys S2). T1 Prosperity 5->4.
-- Church Govern T3 capital (5D Ob1): E[net]=1.5. Most likely: Overwhelming. T3 Prosperity 4->5. TC 28->29.
+- Church Govern T3 capital (5D Ob1): E[net]=1.5. Most likely: Overwhelming. T3 Prosperity 4->5. CI 28->29.
 - Hafenmark Trade T6 (5D Ob2): E[net]=1.5, P(>=2)=69%. Most likely: Overwhelming. Hafenmark W 5->7 (CEILING HIT — F-01).
 - Hafenmark Govern T6 (4D Ob3): E[net]=1.2, P(>=3)=25%. Most likely: Partial. Control gained, T6 Prosperity 5->4.
 - Hafenmark Parliamentary Manoeuvre (4D Ob2): E[net]=1.2, P(>=2)=50%. Most likely: Partial. No effect (PP-170).
@@ -52,11 +52,11 @@ Clocks: TC29 RS71 IP20 PI5
 | ID | Type | Severity | Description | Resolution |
 |----|------|----------|-------------|------------|
 | F-01 | Design gap | P2 | Hafenmark Wealth ceiling hit S1 on Overwhelming Trade T6. No Wealth sink mechanic for excess above 5. Trade dead action S2+ without Wealth expenditure. | ED-064 |
-| F-02 | Balance note | P3 | Crown-Church rivalry load-bearing. NPC Crown leaves TC advancement uncontested. | ED-004 (existing) |
+| F-02 | Balance note | P3 | Crown-Church rivalry load-bearing. NPC Crown leaves CI advancement uncontested. | ED-004 (existing) |
 | F-03 | Cognitive load | P1 | Novice planning ~12 min/player. 3-player = 36 min/season = 432-576 min total campaign. Not viable. | ED-065 |
 | F-04 | Cognitive load | P2 | Phase 5 Accounting (13+ steps, 8/10 load) has no reference card protocol. Table stall risk. | PP-169 partial |
 | F-05 | Design note | P3 | Crown Decree Ob escalation hard wall at consecutive S4 (Ob5 vs 5D). Works as designed; forces seasonal inaction. | Note only |
-| F-06 | Data conflict | P1 | TC starting value conflict: params=28 (P-32 canonical), compilation B1=15 (STALE). Compilation not updated post-P-32. | No params change needed; compilation sync blocked by ED-001 |
+| F-06 | Data conflict | P1 | CI starting value conflict: params=28 (P-32 canonical), compilation B1=15 (STALE). Compilation not updated post-P-32. | No params change needed; compilation sync blocked by ED-001 |
 | F-07 | Spec gap | P2 | Parliamentary Manoeuvre Partial undefined in B5 spec. | PP-170 |
 | F-08 | Spec gap | P2 | Mandate recovery mechanism undefined in BG spec. | ED-066 |
 

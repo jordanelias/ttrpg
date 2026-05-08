@@ -11,7 +11,7 @@
 | Clock | Value | Threshold Notes |
 |-------|-------|----------------|
 | Rendering Stability (RS) | 54 | Below 60: Thread ops at +1 Ob. Below 40: Leap eligibility restricted. |
-| Theocracy Counter (TC) | 42 | Above 40: Church may call for Parliamentary motion without co-sponsor. |
+| Church Influence (CI) | 42 | Above 40: Church may call for Parliamentary motion without co-sponsor. |
 | Institutional Pressure (IP) | 33 | Below 40: Crown retains faction priority in Domain Action queuing. |
 
 ### Faction Stats (Season 6 opening)
@@ -26,7 +26,7 @@
 | Revolution | — | 3 | — | — | — | 3 |
 | Lowenritter | — | 3 | — | 5 | 4 | 5 |
 
-**Campaign context:** The Crown's succession crisis is unresolved. Chancellor Torben holds the regency. Church Theocracy Counter crossed 40 last season — the Church now has parliamentary leverage it has not yet deployed. A Varfell-backed Lowenritter border incursion three seasons ago collapsed; Lowenritter Intel has been recovering quietly. Player characters are embedded in Crown-adjacent faction work.
+**Campaign context:** The Crown's succession crisis is unresolved. Chancellor Torben holds the regency. Church Church Influence crossed 40 last season — the Church now has parliamentary leverage it has not yet deployed. A Varfell-backed Lowenritter border incursion three seasons ago collapsed; Lowenritter Intel has been recovering quietly. Player characters are embedded in Crown-adjacent faction work.
 
 ---
 
@@ -120,7 +120,7 @@
 **Health threshold:** 9 per wound
 
 **Beliefs:**
-1. *The Church is using the Theocracy Counter to manufacture a crisis. I will expose this in Parliament before they deploy it.*
+1. *The Church is using the Church Influence to manufacture a crisis. I will expose this in Parliament before they deploy it.*
 2. *My superiors know I attended a Revolution cell meeting. I will recant before they act — but only if recanting means something.*
 3. *Bonds are not loyalty. Mira is not my ally. But she might become one if I tell her what the Church found in the Southernmost archive.*
 
@@ -327,7 +327,7 @@ FINDINGS:
 ## SCENE 2 — "The Deacon's Dilemma"
 ### *Parliament anteroom. Dagmara + Theron. Church observer present.*
 
-**Dramatic question:** Dagmara wants to warn a Revolution sympathiser in Parliament before the Church deploys Theocracy Counter 42. Theron is leveraging the same meeting to negotiate Guild positioning in the anticipated Parliamentary motion.
+**Dramatic question:** Dagmara wants to warn a Revolution sympathiser in Parliament before the Church deploys Church Influence 42. Theron is leveraging the same meeting to negotiate Guild positioning in the anticipated Parliamentary motion.
 
 **NPC present:** Archon Halvard (Dagmara's superior). Thread Sensitivity 18. Attunement 4, Cognition 5, Charisma 4. He suspects her — this scene is a test.
 
@@ -347,7 +347,7 @@ FINDINGS:
 
 **Most likely outcome: Success.**
 
-> Halvard does not verify his suspicion. He reads her composure as obedience. She learns: the Church motion is timed for the third week of next season — Parliament must have Theocracy Counter ≥ 40 (it is currently 42). *They're not waiting.* 
+> Halvard does not verify his suspicion. He reads her composure as obedience. She learns: the Church motion is timed for the third week of next season — Parliament must have Church Influence ≥ 40 (it is currently 42). *They're not waiting.* 
 
 **State delta:** Dagmara spends Inspiration (Halvard 1 — now 0; Inspiration must be re-established via 2 Spirit checks, see stage2). Intelligence: Church motion is three weeks away. Halvard's suspicion: not resolved, deferred. He will test again.
 
@@ -381,7 +381,7 @@ FINDINGS:
 SCENE 2: "The Deacon's Dilemma"
 ─────────────────────────────────────────────────────────────────────
 ENTRY STATE
-  TC: 42 | Dagmara Momentum: 0 | Theron Momentum: 1
+  CI: 42 | Dagmara Momentum: 0 | Theron Momentum: 1
   Halvard: suspicious (not confirmed)
 ─────────────────────────────────────────────────────────────────────
 
@@ -422,7 +422,7 @@ NPC ACTION: HALVARD SOCIAL READ
   → Cover extended: 1 more season before correct triangulation
 
 EXIT STATE
-  TC: 42 (unchanged) | Dagmara: Intelligence + depleted Inspiration
+  CI: 42 (unchanged) | Dagmara: Intelligence + depleted Inspiration
   Theron: Vrenna Solt contact + Guilds leverage
   Halvard: incorrect note — buys 1 season
   Cross-scene tension: Theron will offer Dagmara a deal she doesn't like
@@ -451,7 +451,7 @@ FINDINGS:
 
 > Mira opens a formal presentation — this is a Debate. She wants to move Torben's conviction from "this is natural decay" (current) to "this is deliberate" (her position). 
 
-**Conviction Track starting position:** Set by Game Master at 7 (Torben already partly convinced RS is declining — but not that it's deliberate). Side A (Mira) wins at ≥ 10? No — standard track: Side A wins ≥ 7. Torben's starting conviction is at 7, meaning Mira *barely needs to move him*.
+**Piety Track starting position:** Set by Game Master at 7 (Torben already partly convinced RS is declining — but not that it's deliberate). Side A (Mira) wins at ≥ 10? No — standard track: Side A wins ≥ 7. Torben's starting conviction is at 7, meaning Mira *barely needs to move him*.
 
 **Revised starting position: 5** (neutral — Torben is sceptical of human causation specifically).
 
@@ -523,7 +523,7 @@ Theron: Merchant-factor History roll, Ob 2 (personal negotiation, known counterp
 SCENE 3: "Two Debts"
 ─────────────────────────────────────────────────────────────────────
 ENTRY STATE
-  Conviction Track: 5 (neutral vs Torben)
+  Piety Track: 5 (neutral vs Torben)
   Torben Conviction: 8 (institutional; hard to move directly)
   Arend: holding Revolution marker
   Dagmara: holding Church motion timing
@@ -568,7 +568,7 @@ ACTION 3c: BACK-CHANNEL DEAL (Dagmara + Theron)
   Belief (Theron 1): activated + partly fulfilled
 
 EXIT STATE
-  Conviction Track: suspended at 5 (scene interrupted)
+  Piety Track: suspended at 5 (scene interrupted)
   Torben: aware of Revolution Southernmost access; reviewing options
   Mira: knows Arend was holding evidence; has not confronted him
   Arend: produced evidence; unclear where it goes from here
@@ -596,7 +596,7 @@ FINDINGS:
 | Faction | Order | Target | Notes |
 |---------|-------|--------|-------|
 | Crown | Investigate (Intel) | Revolution | Torben's order — triggered by Arend's marker |
-| Church | Parliamentary Motion | All | Theocracy Counter 42 ≥ 40: eligible |
+| Church | Parliamentary Motion | All | Church Influence 42 ≥ 40: eligible |
 | Hafenmark | Trade Expansion | Guilds | Wealth target |
 | Varfell | Military Consolidation | Own territory | Stability repair |
 | Guilds | Diplomatic Outreach | Hafenmark | Influence target |
@@ -628,9 +628,9 @@ Margin Church wins: ~1.2 expected.
 
 **Church Ethical Framework modifier:** Church/Divine Command — Past genre boosted. Parliamentary motion is institutional (Past frame) → −1 Ob on Church roll. Effective Ob for opposition to block: **+1 Ob**.
 
-**Outcome: Church Success.** Motion passes with conditions. Theocracy Counter +3 → **TC: 45**.
+**Outcome: Church Success.** Motion passes with conditions. Church Influence +3 → **CI: 45**.
 
-*But Dagmara's deal with Theron means the Guilds abstain rather than oppose — Hafenmark carries the opposition alone. The motion passes, but the margin is noted. Dagmara's Parliament speech (not yet run — this is a Domain Echo from Scene 3 deal; runs next season) will matter at TC 45.*
+*But Dagmara's deal with Theron means the Guilds abstain rather than oppose — Hafenmark carries the opposition alone. The motion passes, but the margin is noted. Dagmara's Parliament speech (not yet run — this is a Domain Echo from Scene 3 deal; runs next season) will matter at CI 45.*
 
 ---
 
@@ -671,7 +671,7 @@ Revolution Influence(3) vs Crown Mandate(4). Ob 4. Pool 3D. E[net]: 0.9. **P(≥
 ```
 STRATEGIC PHASE — SEASON 6 DOMAIN ACTIONS
 ─────────────────────────────────────────────────────────────────────
-CLOCK STATE ENTERING: RS 54 | TC 42 | IP 33
+CLOCK STATE ENTERING: RS 54 | CI 42 | IP 33
 
 CROWN INVESTIGATE → REVOLUTION
   Pool: 4D (proxy Influence) | TN 7 | Ob 3
@@ -685,7 +685,7 @@ CHURCH PARLIAMENTARY MOTION
   Opposition: 7D | TN 7 | E[net]: 2.1
   Ethical modifier: −1 Ob on Church roll (Past/institutional)
   OUTCOME: CHURCH SUCCESS (likely)
-  ┌── Domain Echo: TC +3 → TC: 45 ─────────────────────────────────┐
+  ┌── Domain Echo: CI +3 → CI: 45 ─────────────────────────────────┐
   │   Hafenmark Influence −0 (opposed but lost)                    │
   │   Dagmara deal: Guilds abstained — motion margin narrower      │
   └────────────────────────────────────────────────────────────────┘
@@ -714,7 +714,7 @@ REVOLUTION AGITATE → HARBOUR DISTRICT
   │   [GAP: Public Instability track undefined]                    │
   └────────────────────────────────────────────────────────────────┘
 
-CLOCK STATE EXITING: RS 54 | TC 45 | IP 34
+CLOCK STATE EXITING: RS 54 | CI 45 | IP 34
 ─────────────────────────────────────────────────────────────────────
 ```
 
@@ -723,9 +723,9 @@ CLOCK STATE EXITING: RS 54 | TC 45 | IP 34
 ## PHASE 3: CASCADE PHASE
 ### Domain Echoes + threshold events applied.
 
-**Threshold check — TC 45:**
-- TC 40: Church parliamentary leverage active → *already triggered; motion ran.*
-- TC 50: Church may demand a formal RS inquiry with Crown cooperation — not yet reached.
+**Threshold check — CI 45:**
+- CI 40: Church parliamentary leverage active → *already triggered; motion ran.*
+- CI 50: Church may demand a formal RS inquiry with Crown cooperation — not yet reached.
 
 **Threshold check — RS 54:**
 - RS below 60: Thread ops at +1 Ob → *active.*
@@ -750,7 +750,7 @@ CLOCK STATE EXITING: RS 54 | TC 45 | IP 34
 | Clock | Season Start | Season End | Direction |
 |-------|-------------|------------|-----------|
 | Rendering Stability | 54 | 53 | ↓ |
-| Theocracy Counter | 42 | 45 | ↑ (Church motion passed) |
+| Church Influence | 42 | 45 | ↑ (Church motion passed) |
 | Institutional Pressure | 33 | 34 | ↑ |
 
 ### Faction Stat Changes
@@ -787,7 +787,7 @@ CLOCK STATE EXITING: RS 54 | TC 45 | IP 34
 ## SEASON 6 SIMULATION SUMMARY
 
 ### Narrative State
-The Church motion passed. The Theocracy Counter sits at 45 — five points from the next threshold. Dagmara is committed to a Parliament appearance next season she hasn't told the Church about. Mira has proof of deliberate RS degradation and no credible platform to present it — the Forgetting stripped her conviction, and the Debate with Torben was interrupted before resolution. Arend's evidence gift to Torben has placed him in an ambiguous position relative to both the Crown Marshal and Torben himself. Theron has positioned the Guilds as kingmakers in the anti-Church coalition — at the cost of a debt to Dagmara he intends to collect through her.
+The Church motion passed. The Church Influence sits at 45 — five points from the next threshold. Dagmara is committed to a Parliament appearance next season she hasn't told the Church about. Mira has proof of deliberate RS degradation and no credible platform to present it — the Forgetting stripped her conviction, and the Debate with Torben was interrupted before resolution. Arend's evidence gift to Torben has placed him in an ambiguous position relative to both the Crown Marshal and Torben himself. Theron has positioned the Guilds as kingmakers in the anti-Church coalition — at the cost of a debt to Dagmara he intends to collect through her.
 
 The RS is at 53. Someone is pulling it down on a 14-day cycle. No one has stopped them. The next threshold is 50.
 

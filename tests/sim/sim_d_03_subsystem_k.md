@@ -11,7 +11,7 @@ Test ID: SIM-D-03
 Mechanics: Full debate subsystem — G2 state block format; cross-mode delta K1; transition K2
 Mode: TTRPG primary; cross-mode K covers all three
 Temporal: CROSS
-Tracks: Composure, Concentration, Conviction Track, Doubt Marker
+Tracks: Composure, Concentration, Piety Track, Doubt Marker
 Factions: All (K1 tests faction resonance across modes)
 NPCs: Generic archetypes
 Archetypes: High-Presence, High-History, Low-social, Balanced
@@ -36,9 +36,9 @@ Chosen because: asymmetric proceedings were not run in SIM-D-02. Church Tribunal
 - Church audience: Past +0.5 → Past ×1.5, Present ×1.0, Future ×0.5
 - Resistance (standard for inquisitor side): avg Church Stability round-up −1 = ~2.
 - Accused resistance (halved per §6.7): 2/2 = 1 (round up = 1). **Accused faces resistance 1 when arguing in their favour.**
-- Starting TC: 6 (biased toward Inquisitor per "starts biased" note in §6.0)
+- Starting CI: 6 (biased toward Inquisitor per "starts biased" note in §6.0)
 - Inquisitor holds initiative throughout (asymmetric — proposes all exchanges).
-- Stakes: TC≥7 → formal heresy charge filed; TC≤3 → cleared; Compromise 4–6 → investigation suspended (accused monitored).
+- Stakes: CI≥7 → formal heresy charge filed; CI≤3 → cleared; Compromise 4–6 → investigation suspended (accused monitored).
 
 ---
 
@@ -48,7 +48,7 @@ Chosen because: asymmetric proceedings were not run in SIM-D-02. Church Tribunal
 ## Debate Round 1
 Inquisitor — Composure=10, Conc=8, Strain=0, Pool=13D
 Accused — Composure=8, Conc=6, Strain=0, Pool=7D
-TC=6, Resistance (Inq→Accused): 2 | Resistance (Acc→Inq): 1
+CI=6, Resistance (Inq→Accused): 2 | Resistance (Acc→Inq): 1
 ```
 
 **Step 1 — Read:**
@@ -70,15 +70,15 @@ TC=6, Resistance (Inq→Accused): 2 | Resistance (Acc→Inq): 1
 
 Inquisitor (Past ×1.5, orientation 1.0):
 effective_margin_I = floor((4/2) × 1.5) = floor(3.0) = 3.
-3 > 2 (Inquisitor's resistance)? Yes. Δ_I = 3−2 = 1 toward Inquisitor (Side A). TC: 6→7.
+3 > 2 (Inquisitor's resistance)? Yes. Δ_I = 3−2 = 1 toward Inquisitor (Side A). CI: 6→7.
 
-**TC reaches 7. Side A wins (Inquisitor). Debate ends at Exchange 1.**
+**CI reaches 7. Side A wins (Inquisitor). Debate ends at Exchange 1.**
 
 Accused (Future ×0.5, orientation 1.0):
 effective_margin_A = floor((2/2) × 0.5) = floor(0.5) = 0.
 0 > 1 (Accused's resistance)? No. Δ_A = 0.
 
-Net movement: 1 toward Inquisitor. TC: 6→7 → **Inquisitor wins.**
+Net movement: 1 toward Inquisitor. CI: 6→7 → **Inquisitor wins.**
 
 No strain (Divergence).
 
@@ -86,7 +86,7 @@ No strain (Divergence).
 ## State: Exchange 1 Complete — DEBATE ENDED
 Inquisitor — Composure: 10/10 | Concentration: 7/8 | Strain: 0
 Accused — Composure: 8/8 | Concentration: 5/6 | Strain: 0
-TC=7 → Side A wins (Inquisitor). Heresy charge filed.
+CI=7 → Side A wins (Inquisitor). Heresy charge filed.
 ```
 
 **[G2-F-01] DOMINANT STRATEGY FOUND — P1:**
@@ -95,13 +95,13 @@ The Inquisitor's optimal play is unambiguously: **argue in the boosted genre (Pa
 - Past ×1.5 consistently outperforms Present ×1.0 (primary genre).
 - Against a mis-reading Accused arguing in Future ×0.5, a single DIVERGENCE exchange wins the debate.
 
-The Tribunal starting TC=6 (biased) + boosted genre + higher pool + accused misreading = one-exchange resolution in most cases.
+The Tribunal starting CI=6 (biased) + boosted genre + higher pool + accused misreading = one-exchange resolution in most cases.
 
 **This is not a surprise — Tribunals are designed to be oppressive — but the one-exchange-win probability needs to be stated explicitly so GMs know what they're running.** Current design says "Inquisitor sets exchange count 1–5" without guidance on what count is appropriate for drama vs railroading.
 
 **P(Tribunal resolved in Exchange 1):** Requires Inquisitor to win their Divergence delta. With Past ×1.5 at 13D and resistance 2: P(effective_margin > 2) = P(floor((net/2)×1.5) > 2) = P(net/2 × 1.5 > 2) = P(net > 2.67) = P(net ≥ 3). At 13D: P(net≥3) ≈ 88%.
 
-**P(Tribunal decided in 1 exchange ≈ 88% when TC starts at 6 and Inquisitor uses boosted genre.** This is a dominant strategy / degenerate outcome. Charge filed on exchange 1 in most sessions.
+**P(Tribunal decided in 1 exchange ≈ 88% when CI starts at 6 and Inquisitor uses boosted genre.** This is a dominant strategy / degenerate outcome. Charge filed on exchange 1 in most sessions.
 
 ---
 
@@ -136,18 +136,18 @@ Church Tribunal 1-exchange termination at median pools: **G2-F-01 above — P1 f
 |----------|-------|--------|------------|
 | Pool/formula | (Presence×2)+History, TN7 | Assumed same [UNDEFINED] | No personal debate pool — faction-level vote |
 | Resolution steps | 7 per exchange | [UNDEFINED] | [UNDEFINED — GAP-DS-05] |
-| E[outcome] | Conviction Track movement 0–5/exchange | [UNDEFINED] | Faction vote tally |
+| E[outcome] | Piety Track movement 0–5/exchange | [UNDEFINED] | Faction vote tally |
 | Dominant strategy | Boosted genre + Revealing + Memory bonus | [UNDEFINED] | Whipping (pre-vote faction pressure) |
 | Dead choice? | Obscuring: non-dominant but tactical (Doubt Marker) | [UNDEFINED] | Abstain: present in some vote systems, undefined here |
 | Information available | Full genre weights (at setup); Read gives partial signal | [UNDEFINED] | Faction allegiance (face-up); vote count (real-time) |
-| Win condition | TC ≥7 or ≤3 | [UNDEFINED] | Majority vote count |
-| Consequence propagation | Thread co-movement, TC, Mandate changes | [UNDEFINED] | TC, Mandate, Reach changes (same faction stats) |
+| Win condition | CI ≥7 or ≤3 | [UNDEFINED] | Majority vote count |
+| Consequence propagation | Thread co-movement, CI, Mandate changes | [UNDEFINED] | CI, Mandate, Reach changes (same faction stats) |
 
 **K1 findings:**
 - **K1-01 (P1):** Hybrid debate is entirely undefined. No formula, no resolution steps, no win condition. The TTRPG↔Hybrid boundary for debate has no documented crossing procedure.
 - **K1-02 (P1):** BG Parliamentary Vote has no procedure (confirms GAP-DS-05). The BG political layer has debate-equivalent decisions (faction allegiance, vote) but no resolution mechanics.
 - **K1-03 (P2):** Strategic incentives across TTRPG and BG are reversed for the Obscuring orientation. In TTRPG, Obscuring is a tactical defensive play. In BG (vote context), there is no equivalent to Obscuring — abstaining from a vote is the closest analogue, but abstention and Obscuring have opposite effects (abstention removes your influence; Obscuring places a Doubt Marker that weakens opponent's next win). Cross-mode strategy is incoherent for this mechanic.
-- **K1-04 (P2):** Domain Echo from debate win is the consequence bridge between TTRPG debate and BG faction stats. The bridge is partially documented in §6.5 (winner's genre determines Thread consequence) but the specific stat changes (TC±, Mandate±, Reach±) are only defined in NPC/scenario documents (e.g. Baralta's Sovereign Authority Doctrine), not in the debate system itself. The debate system should document the canonical Domain Echo table for debate wins.
+- **K1-04 (P2):** Domain Echo from debate win is the consequence bridge between TTRPG debate and BG faction stats. The bridge is partially documented in §6.5 (winner's genre determines Thread consequence) but the specific stat changes (CI±, Mandate±, Reach±) are only defined in NPC/scenario documents (e.g. Baralta's Sovereign Authority Doctrine), not in the debate system itself. The debate system should document the canonical Domain Echo table for debate wins.
 
 ---
 
@@ -160,8 +160,8 @@ Trigger: Formal Debate concludes. GM triggers Domain Echo.
 **State inventory at debate conclusion (TTRPG):**
 | Variable | Value | Handling at transition |
 |----------|-------|----------------------|
-| TC final position | e.g. 4 (Compromise) | → Narrated as "motion tabled" — no stat change |
-| TC final position | e.g. 7 (A wins) | → TC±, Mandate±, Reach± changes per stakes |
+| CI final position | e.g. 4 (Compromise) | → Narrated as "motion tabled" — no stat change |
+| CI final position | e.g. 7 (A wins) | → CI±, Mandate±, Reach± changes per stakes |
 | Composure (orators) | e.g. Himlensendt 12/12 | → Discarded at scene end (no BG equivalent) |
 | Concentration | e.g. 6/9 | → Discarded at scene end |
 | Strain accumulated | e.g. 3 | → Discarded (no wound-persistence equivalent) |
@@ -184,13 +184,13 @@ Trigger: BG parliamentary session. GM zooms into TTRPG for a specific faction's 
 State handoff needed:
 | BG State | TTRPG Equivalent | Defined? |
 |---------|-----------------|----------|
-| Vote count so far | TC starting position | **No** — no conversion rule |
+| Vote count so far | CI starting position | **No** — no conversion rule |
 | Faction allegiance | Audience composition | Partially (faction ethical modes are defined) |
 | Faction Stability | Resistance | Yes (formula in §6.1) |
 | Speaker identity | Argue pool calculation | Yes (NPC stats) |
 | Remaining vote rounds | Exchange count | **No** — no conversion rule |
 
-**[K2-F-02] Finding (P1):** Zoom In from BG Parliamentary Vote to TTRPG Formal Debate has no state conversion procedure. Vote count does not map to TC starting position. Remaining vote rounds do not map to exchange count. The Zoom In would require GM improvisation for both critical parameters. Missing from state_transfer_spec (GAP-DS-05 / G-03).
+**[K2-F-02] Finding (P1):** Zoom In from BG Parliamentary Vote to TTRPG Formal Debate has no state conversion procedure. Vote count does not map to CI starting position. Remaining vote rounds do not map to exchange count. The Zoom In would require GM improvisation for both critical parameters. Missing from state_transfer_spec (GAP-DS-05 / G-03).
 
 **Test: Register Shift within TTRPG — personal to faction scale (Domain Echo)**
 
@@ -198,7 +198,7 @@ Trigger: Formal Debate concludes. Domain Echo fires. Faction stat changes apply.
 
 | Personal scale | Faction scale | Transfer |
 |---------------|--------------|---------|
-| TC position (debate winner) | TC change (domain) | Documented in stakes at setup — transferred via GM narrative |
+| CI position (debate winner) | CI change (domain) | Documented in stakes at setup — transferred via GM narrative |
 | Winner's genre | Thread consequence type | §3.8 documented |
 | Winning orator's faction | Faction gaining Mandate bonus | Implicit but unstated in §6.4/6.5 — must be inferred |
 
@@ -210,14 +210,14 @@ Trigger: Formal Debate concludes. Domain Echo fires. Faction stat changes apply.
 
 | ID | Mode | Severity | Description | Disposition |
 |----|------|----------|-------------|-------------|
-| G2-F-01 | G2 | **P1** | Church Tribunal: 88% one-exchange resolution when TC starts at 6 and Inquisitor uses boosted genre. Dominant strategy produces dramatically flat Tribunal play. | PP-109 — add design note + minimum exchange count guidance to §6.7 Tribunal row |
+| G2-F-01 | G2 | **P1** | Church Tribunal: 88% one-exchange resolution when CI starts at 6 and Inquisitor uses boosted genre. Dominant strategy produces dramatically flat Tribunal play. | PP-109 — add design note + minimum exchange count guidance to §6.7 Tribunal row |
 | G2-F-02 | G2 | P2 | Asymmetric proceedings: advantaged orator accumulates 0 strain; disadvantaged Rattled by X3. Intentional but unconfirmed. | ED-058 — confirm design intent |
 | K1-01 | K1 | **P1** | Hybrid debate entirely undefined. No formula, steps, or win condition. | ED-059 — design decision required |
 | K1-02 | K1 | **P1** | BG Parliamentary Vote undefined (confirms GAP-DS-05). | ED-053 (already logged) |
 | K1-03 | K1 | P2 | Obscuring/Doubt Marker has no BG equivalent — cross-mode strategic incoherence. | Design note in §6.6 or Hybrid doc |
 | K1-04 | K1 | P2 | Domain Echo table for debate wins not in debate system — only in scenario docs. | PP-110 — add canonical Domain Echo table to §6.5 |
 | K2-F-01 | K2 | P2 | No persistent character state after debate (no wound equivalent). Rattled leaves no next-scene consequence. | GAP-DS-16 (already logged) — confirm design intent |
-| K2-F-02 | K2 | **P1** | BG→TTRPG Zoom In: vote count and round count have no TC/exchange conversion rule. | PP-105 extension — add to state_transfer_spec |
+| K2-F-02 | K2 | **P1** | BG→TTRPG Zoom In: vote count and round count have no CI/exchange conversion rule. | PP-105 extension — add to state_transfer_spec |
 | K2-F-03 | K2 | P2 | Domain Echo underdetermined in §6.5 — no default consequence table. Stakes set at setup is the only instruction. | PP-110 (same as K1-04) |
 
 ---

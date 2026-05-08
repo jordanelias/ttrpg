@@ -12,7 +12,7 @@ Test ID: SIM-HYB-01
 Mechanics: G1 Mass Combat, G2 Debate, G3 Threadwork, G4 Faction Seasonal, K2 Transition, C Full Scenario
 Mode: HYB
 Temporal: PRES (~Season 2, 245 AG)
-Tracks: TC, RS, IP, PI, Stability, Coherence, Composure, Health/Wounds, Unit Str/Morale/Cohesion
+Tracks: CI, RS, IP, PI, Stability, Coherence, Composure, Health/Wounds, Unit Str/Morale/Cohesion
 Factions: Church, Varfell, Crown, Hafenmark
 NPCs: Vaynard (practitioner proxy), Cardinal Klapp, Generic Church Templar Sergeant
 Archetypes: Practitioner-Scholar, Church Militant, Institutional Legalist
@@ -23,13 +23,13 @@ Archetypes: Practitioner-Scholar, Church Militant, Institutional Legalist
 ## SCENARIO SEED
 
 **Title:** The Templar Crossing  
-**Trigger:** Season 2. TC = 34 after accounting. Church declares Templar deployment into T6 (Varfell Highlands) — a contested border territory. BG Battle Resolution fires. Vaynard is present in T6 conducting covert Thread research → Zoom In triggers. Scene: Vaynard operates during Phase 4 (Offensive Thread), stabilising a growing Gap as the battle rages. Post-engagement, Cardinal Klapp commands him to surrender. Debate fires. If Vaynard loses the debate, the Sergeant enforces capture.
+**Trigger:** Season 2. CI = 34 after accounting. Church declares Templar deployment into T6 (Varfell Highlands) — a contested border territory. BG Battle Resolution fires. Vaynard is present in T6 conducting covert Thread research → Zoom In triggers. Scene: Vaynard operates during Phase 4 (Offensive Thread), stabilising a growing Gap as the battle rages. Post-engagement, Cardinal Klapp commands him to surrender. Debate fires. If Vaynard loses the debate, the Sergeant enforces capture.
 
 ---
 
 ## STARTING STATE
 
-**BG Clocks:** TC=32, RS=68, IP=22, PI=5  
+**BG Clocks:** CI=32, RS=68, IP=22, PI=5  
 **Faction Stats (BG starting):**
 
 | Faction | M | I | W | Mil | Sta |
@@ -45,13 +45,13 @@ Archetypes: Practitioner-Scholar, Church Militant, Institutional Legalist
 
 ### Phase 1: Clock Accounting
 
-- **Church Assert** (mandatory, TC > 28): TC +1 → TC = 33  
-- **T3 territory control** (Church holds T3): TC +1 → TC = 34  
+- **Church Assert** (mandatory, CI > 28): CI +1 → CI = 33  
+- **T3 territory control** (Church holds T3): CI +1 → CI = 34  
 - **IP base advance:** 0/season (event-driven). No events this season yet. IP = 22.  
 - **RS:** No automatic change. RS = 68.  
 - **PI:** No domain actions targeting Parliament this season. PI = 5.
 
-**Post-accounting clocks: TC=34, RS=68, IP=22, PI=5**
+**Post-accounting clocks: CI=34, RS=68, IP=22, PI=5**
 
 ### Phase 2: Domain Actions (relevant to scenario)
 
@@ -117,7 +117,7 @@ BG turn suspended at Battle Phase 5 (Engagement ongoing).
 |-------------|-----------------|----------|-------|
 | Church Military (4→3) | Church Templar unit Strength | ✓ | [PROVISIONAL: BG Military × 1.5 rd down = Str. Church 3 × 1.5 = 4] |
 | Varfell Military (4) | Varfell garrison unit Strength | ✓ | [PROVISIONAL: 4 × 1.5 = 6] |
-| TC = 34 | Reference only (no TTRPG clock mechanic) | ✓ | Suspended |
+| CI = 34 | Reference only (no TTRPG clock mechanic) | ✓ | Suspended |
 | RS = 68 | RS track — direct transfer | ✓ | 1:1 |
 | IP = 22 | Reference only | ✓ | Suspended |
 | Current BG phase | Battle Phase 5 suspended | ✓ | Per spec |
@@ -157,7 +157,7 @@ Vaynard — Agi 2, Pre 3, Cog 4, End 2, Str 2, Spi 4, Att 3
 Health: 2/2 | Wounds: 0 | Stamina: 3 | Combat Pool: 7D | Composure: 8
 TS: 55 | TD: 4 | TPS: 5 (TS÷10) | Coherence: 10 | Focus: 3
 Conditions: None | Armour: None | Weapon: None (unarmed, Ob 8 attack)
-Tracks: RS=68, TC=34
+Tracks: RS=68, CI=34
 
 Church Templar Unit — CP: 4 | Str: 8 | Cohesion: 5 | Morale: 5 | Armour: Medium | Weapon: Heavy Cut
 Varfell Garrison Unit — CP: 4 | Str: 8 | Cohesion: 5 | Morale: 5 | Armour: Light | Weapon: Heavy Cut
@@ -325,7 +325,7 @@ Vaynard at 7D vs Templar Sergeant 9D: E[Sergeant margin] = (9-7)×0.30 = 0.6 exc
 **Setup:**  
 - Vaynard addresses Klapp directly, invoking the Thread evidence he gathered during the operation.  
 - Issue: Was Vaynard's presence here legitimate? Does the Church have authority to detain a private Thread researcher operating in Varfell territory?  
-- Stakes: Conviction Track 0–10. Start: 5 (neutral). Win for Vaynard ≥ 7. Win for Klapp ≤ 3.  
+- Stakes: Piety Track 0–10. Start: 5 (neutral). Win for Vaynard ≥ 7. Win for Klapp ≤ 3.  
 - Audience: Templar soldiers (Church-loyal, Stability 5). Resistance = ⌈5÷2⌉ = 3. [PROVISIONAL: resistance = Stability÷2 round up — formula not confirmed, typical 1-3.]
 
 ### Debate Pools
@@ -334,7 +334,7 @@ Vaynard at 7D vs Templar Sergeant 9D: E[Sergeant margin] = (9-7)×0.30 = 0.6 exc
 (Presence × 2) + History = (3×2) + 1 (Research/Political History) = 7D  
 Memory bonus (+2D when citing specific verifiable claim): eligible when invoking diagnostic findings.  
 Read pool: Attunement (3) only, TN7 Ob1.  
-Primary genre affinity: Future (consequentialist — "what happens if TC reaches 65 and the Church seizes all Thread practitioners?")  
+Primary genre affinity: Future (consequentialist — "what happens if CI reaches 65 and the Church seizes all Thread practitioners?")  
 Genre weight modifier: Varfell audience → Consequentialism → Future boosted +0.5 → Future weight: 1.5
 
 Wait — Audience ethical mode modifier applies to the *audience* genre preference. Varfell faction ethical mode = Consequentialism → Future boosted. But the audience here is Church Templars, not Varfell. Church ethical mode = Divine Command → Past boosted.
@@ -374,9 +374,9 @@ Vaynard considers: if he picks Past+Revealing (same as Klapp), that's AMPLIFY (b
 
 **Vaynard's strategic choice:**  
 CLASH: Vaynard argues same genre (Past), opposite orientation (Obscuring — he wants to reframe the historical precedent). Risk: Klapp has 11D vs his 7D; margin likely favours Klapp.  
-AMPLIFY: Both use Past+Revealing — combined pool vs Conviction Track resistance. Pool = Vaynard 7D + Klapp 11D = 18D vs resistance 3. Track would move heavily — toward whoever has narrative framing.
+AMPLIFY: Both use Past+Revealing — combined pool vs Piety Track resistance. Pool = Vaynard 7D + Klapp 11D = 18D vs resistance 3. Track would move heavily — toward whoever has narrative framing.
 
-Wait — AMPLIFY: "Combined pools vs Conviction Track resistance." If both orators pick AMPLIFY, which direction does the track move? The design seems to be that both are arguing the same case (same genre, same orientation). But Vaynard and Klapp have opposing positions. If both pick Revealing+Past, they're both saying "look at the historical truth" — but they disagree on what that truth implies.
+Wait — AMPLIFY: "Combined pools vs Piety Track resistance." If both orators pick AMPLIFY, which direction does the track move? The design seems to be that both are arguing the same case (same genre, same orientation). But Vaynard and Klapp have opposing positions. If both pick Revealing+Past, they're both saying "look at the historical truth" — but they disagree on what that truth implies.
 
 [PARAMS GAP: AMPLIFY with opposing speakers — direction of track movement unresolved. If both orators pick same genre+orientation but argue opposite conclusions, AMPLIFY combined pool doesn't specify which direction the track moves. Assumes cooperative framing, but adversarial same-genre AMPLIFY is mechanically undefined.]
 
@@ -384,14 +384,14 @@ This is a P2 design gap. In an adversarial debate, AMPLIFY with opposing positio
 
 **[F-HYB-02 — P2]: AMPLIFY in adversarial debate — no track direction rule.**  
 When two orators choose same genre + same orientation but hold opposing positions, AMPLIFY combined pool resolves without specifying which direction the track moves. Rule assumes cooperative framing (both building the same case), but adversarial AMPLIFY is mechanically undefined.  
-**Patch:** In adversarial debate, AMPLIFY = initiative holder's pool +3D (audience boosted by shared genre), respondent pool unchanged. Track moves toward initiative holder if initiative holder's net > resistance. This preserves AMPLIFY's power while assigning direction.  
+**Patch:** In adversarial debate, AMPLIFY = first-to-speak holder's pool +3D (audience boosted by shared genre), respondent pool unchanged. Track moves toward first-to-speak holder if first-to-speak holder's net > resistance. This preserves AMPLIFY's power while assigning direction.  
 → **PP-102 needed.**
 
 **Vaynard opts for CLASH** (Past+Obscuring vs Klapp's Past+Revealing) — the mechanically defined path.
 
 **Step 3 — Argue:**
 
-Initiative holder: Higher Presence acts first (Exchange 1). Klapp Presence 4 > Vaynard Presence 3 → Klapp has initiative.
+First-to-speak holder: Higher Presence acts first (Exchange 1). Klapp Presence 4 > Vaynard Presence 3 → Klapp has initiative.
 
 **Klapp rolls first (CLASH, Past+Revealing):**  
 Pool: 11D TN7.  
@@ -409,7 +409,7 @@ Movement formula:
 margin (1) × genre_weight (Past = 1.5 for Church audience) × orientation_weight (Revealing = 1.0 standard) = 1.5.  
 1.5 > resistance (3)? No — 1.5 < 3. **Track movement: 0.**
 
-Conviction Track stays at 5. Despite Klapp's advantage, the Church Templar audience already believes what Klapp is saying (high resistance blocks track movement when margin × weight < resistance).
+Piety Track stays at 5. Despite Klapp's advantage, the Church Templar audience already believes what Klapp is saying (high resistance blocks track movement when margin × weight < resistance).
 
 **Finding: High resistance absorbs the genre advantage entirely at median pools.**  
 This confirms SIM-D-02's finding: resistance dominates track movement, especially with a sympathetic audience. This is mechanically coherent — changing Church soldiers' convictions is expected to be very hard.
@@ -419,7 +419,7 @@ Vaynard lost by margin 1. Strain formula: margin = composure damage = 1. Vaynard
 
 **State: Post-Exchange 1**  
 ```
-Vaynard — Composure: 7 | Conviction Track: 5 (no movement)
+Vaynard — Composure: 7 | Piety Track: 5 (no movement)
 Klapp — Composure: 10 (no change — won)
 Initiative: transfers to exchange winner (Klapp won → Klapp retains)
 ```
@@ -451,7 +451,7 @@ Pool: 11D, TN7. E[net] = 3.3.
 Genre weight: Past = 1.5. Orientation: Revealing = 1.0.  
 Effective: 3.3 × 1.5 × 1.0 = 4.95. vs resistance 3 → movement = ⌊4.95 − 3⌋ = 1 toward Klapp (toward 3-end of scale).
 
-**Conviction Track: 5 → 4 (toward Klapp victory).**
+**Piety Track: 5 → 4 (toward Klapp victory).**
 
 Composure (CROSS — each evaluated, but who takes strain?):  
 [PARAMS GAP: CROSS composure damage — who takes strain in a CROSS interaction? No explicit rule in params. Assuming: loser of each independent evaluation takes strain proportional to margin.]  
@@ -460,7 +460,7 @@ Composure (CROSS — each evaluated, but who takes strain?):
 
 **State: Post-Exchange 2**
 ```
-Vaynard — Composure: 7 | Conviction Track: 4 (Klapp closer to winning at ≤3)
+Vaynard — Composure: 7 | Piety Track: 4 (Klapp closer to winning at ≤3)
 Klapp — Composure: 10 | Initiative: Klapp (exchange winner, Past moved track)
 ```
 
@@ -498,7 +498,7 @@ Failure: Klapp dismisses it as practitioner manipulation. Track moves toward Kla
 
 **Most likely outcome (Partial):** Klapp is visibly unsettled. He orders the Sergeant to hold. He does not release Vaynard, but he does not press the debate to conclusion this scene. **Stalemate.**
 
-**Conviction Track: 4 (no movement on Partial leverage). Debate ends inconclusively.**
+**Piety Track: 4 (no movement on Partial leverage). Debate ends inconclusively.**
 
 **Debate outcome: Vaynard is detained but not killed. Klapp has insufficient canonical evidence to formally condemn him. The scene ends as Varfell forces approach — forcing both parties to withdraw.**
 
@@ -508,9 +508,9 @@ Failure: Klapp dismisses it as practitioner manipulation. Track moves toward Kla
 
 ```
 Vaynard — Composure: 7 | Coherence: 10 | TS: 57 | Wounds: 0 | Detained (narrative state)
-Klapp — Composure: 10 | Conviction Track: 4 (slight Klapp advantage, inconclusive)
+Klapp — Composure: 10 | Piety Track: 4 (slight Klapp advantage, inconclusive)
 RS: 68 (Gap averted by Weaving; two Relational-scale instabilities remain — flagged for future session)
-TC: 34 (no change from personal scene — domain echoes queue)
+CI: 34 (no change from personal scene — domain echoes queue)
 Templar Sergeant: stands down on Klapp's order. No personal combat occurred.
 ```
 
@@ -538,7 +538,7 @@ Per state_transfer_spec.md §1 "Zoom Out: TTRPG → BG state update":
 ### Post-Zoom-Out BG State
 
 ```
-TC: 34 | RS: 68 | IP: 22 | PI: 5
+CI: 34 | RS: 68 | IP: 22 | PI: 5
 
 Church: M 4→4 (Mandate unchanged — lost battle but this was expected; −1 for diplomatic opposition = 4), 
         I 6, W 5, Mil 3 (battle loss applied), Sta 5
@@ -612,7 +612,7 @@ Hafenmark: M 4, I 4, W 5, Mil 3, Sta 4
 ### Mode D Findings (all 9 categories covered)
 | ID | Category | Description |
 |----|----------|-------------|
-| F-HYB-04 | Boundary | TC win-delay exploit via Zoom In suspension |
+| F-HYB-04 | Boundary | CI win-delay exploit via Zoom In suspension |
 | F-HYB-05 | Boundary | Unit ghost state during Zoom In window |
 | F-HYB-06 | Deadlock | Debate stalemate — no forced resolution |
 | F-HYB-07 | Ambiguity | COMPETITION + TIE: undefined when both score equal successes |
@@ -677,7 +677,7 @@ Confirmed: valoria_emergent_scenarios.md SCENARIO 1 is consistent. ARC 2 (Vaynar
 **Finding:** F-HYB-02  
 **Source:** SIM-HYB-01  
 **Severity:** P2  
-**Description:** In adversarial AMPLIFY, initiative holder's pool +3D; track moves toward initiative holder if net > resistance.  
+**Description:** In adversarial AMPLIFY, first-to-speak holder's pool +3D; track moves toward first-to-speak holder if net > resistance.  
 **Affects:** designs/debate/debate_system_redesign_v1.md §AMPLIFY resolution  
 **Canon risk:** LOW (extends, doesn't contradict)
 

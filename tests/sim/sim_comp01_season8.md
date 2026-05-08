@@ -303,7 +303,7 @@ Elan Past/Obscuring: pool 15D. E[net] 4.5. Genre weight (Past; Church context, P
 
 Halvard E[net]: 5.1. Elan E[net]: 4.5. Both evaluated against resistance 3.
 
-Halvard movement: ⌊(5.1×1.5)−3⌋ = ⌊7.65−3⌋ = ⌊4.65⌋ = **4** (toward Halvard; Conviction Track starts at 5, moves to 9 — Halvard wins).
+Halvard movement: ⌊(5.1×1.5)−3⌋ = ⌊7.65−3⌋ = ⌊4.65⌋ = **4** (toward Halvard; Piety Track starts at 5, moves to 9 — Halvard wins).
 
 Elan counter-movement: ⌊(4.5×0.25)−3⌋ = ⌊1.125−3⌋ = ⌊−1.875⌋ = **0** (Elan's orientation/genre weight too weak against this audience).
 
@@ -597,4 +597,4 @@ RS 58 triggered one Shifting Object per Fragile band rule. Location is GM-determ
 
 ## COVERAGE MATRIX ADDITIONS (SIM-COMP-01)
 
-| SIM-COMP-01 | Contest CROSS asymmetry, Belief CP non-optimal, Domain Echo PP-252, CI advance at Ob7, Shifting Object Fragile band, document-as-target | Full Hybrid | PRES | RS, CI, IP, Composure, Certainty, Conviction Track | Crown, Church, Varfell, Guilds, Niflhel, Lowenritter | Halvard J, Signe M, Elan V, Lotte B, Torben, Niflhel Quiet | Bureaucrat, Intel-Officer, Doubting-Inquisitor, Enforcer | COMPLETE | F-C01 to F-C15; PP-301–303; ED-171–173 |
+| SIM-COMP-01 | Contest CROSS asymmetry, Belief CP non-optimal, Domain Echo PP-252, CI advance at Ob7, Shifting Object Fragile band, document-as-target | Full Hybrid | PRES | RS, CI, IP, Composure, Certainty, Piety Track | Crown, Church, Varfell, Guilds, Niflhel, Lowenritter | Halvard J, Signe M, Elan V, Lotte B, Torben, Niflhel Quiet | Bureaucrat, Intel-Officer, Doubting-Inquisitor, Enforcer | COMPLETE | F-C01 to F-C15; PP-301–303; ED-171–173 |

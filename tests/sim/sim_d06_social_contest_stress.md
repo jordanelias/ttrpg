@@ -109,7 +109,7 @@ Formula: effective_margin = floor(margin × genre_weight); Δ = effective_margin
 | Scholar(11D) vs Scholar(11D)  | ×1.0 | 1 | 39.5% | 32.5% | 28.0% | 5.29 |
 | Scholar(11D) vs Scholar(11D)  | ×1.5 | 1 | 42.6% | 38.0% | 19.4% | 5.24 |
 
-**Finding A-5a:** In even matchups (Diplomat vs Diplomat), initiative holder wins 38–42% vs 30–36% for non-holder, with 20–46% compromise. Initiative advantage is structurally significant in contested debates.
+**Finding A-5a:** In even matchups (Diplomat vs Diplomat), first-to-speak holder wins 38–42% vs 30–36% for non-holder, with 20–46% compromise. Initiative advantage is structurally significant in contested debates.
 
 **Finding A-5b:** High resistance (2) dramatically increases compromise rates in close matchups (31% → 46% in 9D vs 9D). High-Stability audiences actively suppress decisive outcomes.
 
@@ -135,8 +135,8 @@ Formula: effective_margin = floor(margin × genre_weight); Δ = effective_margin
 
 ### EC-03: Initiative advantage quantification (severity: P3)
 **Setup:** Equal pool matchup (9D vs 9D), 3 exchanges.
-**Mechanism:** TIE rate = 13.2%. Each tie moves CT +1 toward initiative holder. Expected free CT gain from ties = 0.4 in 3 exchanges.
-**Outcome:** Initiative holder wins 38.9% vs 30.1% for non-holder in equal matchup. 8.8 percentage point structural advantage.
+**Mechanism:** TIE rate = 13.2%. Each tie moves CT +1 toward first-to-speak holder. Expected free CT gain from ties = 0.4 in 3 exchanges.
+**Outcome:** First-to-speak holder wins 38.9% vs 30.1% for non-holder in equal matchup. 8.8 percentage point structural advantage.
 **Severity:** P3 — meaningful but not dominant. Initiative tie-breaking (PP-318/ED-138) is warranted.
 **Note:** In Grand Debates (5 exchanges), this advantage compounds: ~0.65 free CT from ties.
 

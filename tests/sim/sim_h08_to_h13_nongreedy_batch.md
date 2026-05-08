@@ -26,11 +26,11 @@ Theron: Momentum 1, CP 9
 
 ## SIM-H-08: Dagmara's Parliament Speech — Without Her Best Tool
 **Mode:** TTRPG | **Scene type:** Debate (solo orator, no anchor)
-**Mechanic tested:** Debate with constrained preparation; non-greedy resource use; Conviction Track from below-neutral start
+**Mechanic tested:** Debate with constrained preparation; non-greedy resource use; Piety Track from below-neutral start
 
 **Non-greedy constraint:** Dagmara will NOT spend Inspiration (Harbour District congregation, value 3) on this debate. She is saving it for the moment Halvard openly moves against her community. She also will not Fork her Clandestine Courier History into the Debate — it would expose her Revolution contact to Parliament observation.
 
-**Setup:** Dagmara speaks against the Church motion in Parliament. Conviction Track starts at 4 (Church has already moved the narrative — CI 45 gives them institutional authority bonus). Audience: Hafenmark delegates (Categorical Imperative, Past-boosted), one Guilds representative (Moral Relativism, GM picks genre), three Crown seats (Virtue Ethics, Present-boosted).
+**Setup:** Dagmara speaks against the Church motion in Parliament. Piety Track starts at 4 (Church has already moved the narrative — CI 45 gives them institutional authority bonus). Audience: Hafenmark delegates (Categorical Imperative, Past-boosted), one Guilds representative (Moral Relativism, GM picks genre), three Crown seats (Virtue Ethics, Present-boosted).
 
 Audience ethical mode: mixed. Dominant: Hafenmark majority → Past genre boosted for audience.
 
@@ -67,7 +67,7 @@ Movement: ⌊(1 × 1.5 × 0.5) − 4⌋ = ⌊0.75 − 4⌋ = ⌊−3.25⌋ = 0. 
 
 **Narrative outcome:** The speech lands — Parliament hears it, journalists note it. But the Church motion stands. Dagmara earns +1 CP (Belief 1 pursued). The Guilds delegate approaches her afterward: Theron's deal is now active. Next season she gets the Guilds speaker bonus (+2D collaborative pool toward their agreed action).
 
-**State delta:** Conviction Track: 4 → 4 (no change). Dagmara CP: 11 → 12. Halvard notes her public speech — his suspicion advances one step. Church motion unchallenged this season.
+**State delta:** Piety Track: 4 → 4 (no change). Dagmara CP: 11 → 12. Halvard notes her public speech — his suspicion advances one step. Church motion unchallenged this season.
 
 ---
 
@@ -76,7 +76,7 @@ Movement: ⌊(1 × 1.5 × 0.5) − 4⌋ = ⌊0.75 − 4⌋ = ⌊−3.25⌋ = 0. 
 ```
 SIM-H-08: DAGMARA PARLIAMENT SPEECH
 ─────────────────────────────────────────────────────────────────────
-ENTRY: Conviction Track 4 | Dagmara Inspiration conserved
+ENTRY: Piety Track 4 | Dagmara Inspiration conserved
 NON-GREEDY: No Inspiration spend | No Fork | No Momentum spend
 
 STEP 1 — APPRAISE
@@ -637,7 +637,7 @@ FINDING SIM-H-13-F4: Non-greedy withdrawal after one operation preserves
 
 ## COVERAGE MATRIX ADDITIONS
 
-| SIM-H-08 | Debate CLASH no Inspiration (conserved), solo orator | TTRPG | PRES | Conviction Track, CI | Church, Parliament | Halvard, Church NPC | Church-Renegade | COMPLETE | SIM-H-08-F1; stalemate without trivialisation |
+| SIM-H-08 | Debate CLASH no Inspiration (conserved), solo orator | TTRPG | PRES | Piety Track, CI | Church, Parliament | Halvard, Church NPC | Church-Renegade | COMPLETE | SIM-H-08-F1; stalemate without trivialisation |
 | SIM-H-09 | Circles, Belief conflict, evidence chain | TTRPG | PRES | Momentum, Belief | Crown | Aldric, Torben | Soldier-Agent | COMPLETE | SIM-H-09-F1/F2; Belief rewrite trigger |
 | SIM-H-10 | Past-Oriented Pull, TS cliff, non-aggressive withdrawal | TTRPG | PRES/PAST | RS, TS, Coherence, TPS | Unaffiliated | None | Scholar-Practitioner | COMPLETE | SIM-H-10-F1/F2/F3; ED-161 |
 | SIM-H-11 | Appeal, Domain Echo PP-252, Belief avoidance | TTRPG | PRES | Mandate, Guilds Intel | Guilds, Hafenmark | Vennrich Solt | Guilds-Fixer | COMPLETE | SIM-H-11-F1/F2/F3; GAP-H-06 |

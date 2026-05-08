@@ -11,7 +11,7 @@
 
 ```
 Test ID: SIM-D-02
-Mechanics: Argue, Read, DIVERGENCE, CLASH, Conviction Track, Composure, Concentration, initiative
+Mechanics: Argue, Read, DIVERGENCE, CLASH, Piety Track, Composure, Concentration, initiative
 Mode: TTRPG | Temporal: PRESENT (Parliament session, current political moment)
 Tracks: CI, Composure (both NPCs), Concentration (both NPCs)
 Factions: Church, Hafenmark; audience: Parliament (Crown-weighted)
@@ -36,7 +36,7 @@ Archetypes: Institutional authority orator (Himlensendt), Legalist-constitutiona
 
 **Orientation weights:** Revealing ×1.0 (standard). Obscuring → Doubt Marker (no track movement).
 
-**Conviction Track:** Start 5 (neutral). Side A = Himlensendt (Church ratification). Side B = Baralta (oppose). Win thresholds: A ≥ 7, B ≤ 3. Compromise zone: 4–6.
+**Piety Track:** Start 5 (neutral). Side A = Himlensendt (Church ratification). Side B = Baralta (oppose). Win thresholds: A ≥ 7, B ≤ 3. Compromise zone: 4–6.
 
 **Resistance:** 2 [PROVISIONAL — params_factions.md not read; using midpoint of typical range 1–3]
 [PARAMS GAP: faction Stability values for Church/Hafenmark/Crown not loaded — resistance is provisional]
@@ -188,7 +188,7 @@ Tracks: CI=4 (moved 1 toward Baralta) | Initiative: Himlensendt (DIVERGE — hol
 
 **Roles:** Baralta proposes (alternating). Initiative: **Himlensendt retains** (DIVERGE — stays with holder).
 
-**[F-C-02] Ambiguity flagged:** Proposer (Baralta) and initiative holder (Himlensendt) are different characters. Initiative holder declares genre first (§6.4 Step 3) — Himlensendt declares, Baralta hears, then responds. This gives the initiative holder an information advantage over the proposer despite the proposer nominally framing the debate. Ambiguity: does "role alternation" in §6.7 also reset initiative, or are these two independent mechanics? Current reading: independent. Flagged as PP-100 below.
+**[F-C-02] Ambiguity flagged:** Proposer (Baralta) and first-to-speak holder (Himlensendt) are different characters. First-to-speak holder declares genre first (§6.4 Step 3) — Himlensendt declares, Baralta hears, then responds. This gives the first-to-speak holder an information advantage over the proposer despite the proposer nominally framing the debate. Ambiguity: does "role alternation" in §6.7 also reset initiative, or are these two independent mechanics? Current reading: independent. Flagged as PP-100 below.
 
 ### Step 1 — Read
 
@@ -403,7 +403,7 @@ Load score: 7+5+6+5 = **23 raw points → normalise: ~7/10 — PROBLEM**
 | ID | Mode | Severity | Description | Disposition |
 |----|------|----------|-------------|-------------|
 | F-C-01 | C | P3 | Misleading Read failure can be accidentally superior when it targets a boosted genre. Emergent strategic asymmetry — not a bug. | GM awareness note; no patch. |
-| F-C-02 | C | P2 | Proposer role and initiative holder are decoupled after DIVERGE. X3: Himlensendt holds both. §6.7 "alternating" ambiguous re initiative reset. | PP-100 PROVISIONAL |
+| F-C-02 | C | P2 | Proposer role and first-to-speak holder are decoupled after DIVERGE. X3: Himlensendt holds both. §6.7 "alternating" ambiguous re initiative reset. | PP-100 PROVISIONAL |
 | F-C-03 | C | P2 | Genre weight dominates pool size adjustments: a Memory-boosted Past argument (×0.5) loses to a standard Future argument (×1.0) at these resistance levels. Genre selection > dice quantity. | Design observation — correct and intended. |
 | F-C-04 | C | **P1** | stage13_npcs.md missing debate-relevant attributes (Attunement, Focus, Poise, Bonds) for all named NPCs. All debate simulations using named NPCs require provisional attributes. | ED-051 — request full debate stat block |
 | F-C-05 | C | P2 | Composure shorthand in stage13 ("Presence + 6") mismatches design formula (Poise+Bonds+3). | ED-052 — confirm which applies to NPCs |

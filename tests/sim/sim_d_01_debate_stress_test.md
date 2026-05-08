@@ -11,10 +11,10 @@
 
 ```
 Test ID: SIM-D-01
-Mechanics: Argue roll, Read roll, CLASH, COMPETITION, DIVERGE, TIE, Conviction Track,
+Mechanics: Argue roll, Read roll, CLASH, COMPETITION, DIVERGE, TIE, Piety Track,
            Composure/Rattled, Concentration/Spent, Doubt Marker, Regroup, Concede
 Mode: TTRPG | Temporal: CROSS (applies across scenes)
-Tracks: Composure, Concentration, Conviction Track
+Tracks: Composure, Concentration, Piety Track
 Factions: Generic (all faction resonance variants modelled)
 NPCs: Generic archetypes (Diplomat, Scholar, Warrior-type, Orator)
 Archetypes: High-Presence orator, History-specialist, Low-social combatant, Balanced social
@@ -60,7 +60,7 @@ Symmetric expected winning margin estimated as E[|A−B|] ≈ 0.72√P (derived 
 
 **Key calibration shift:** Under new pool, P(Overwhelming) doubles. Overwhelming (margin ≥ 3) triggers escalated consequences. This is the core SIM-DEBT-01 correction.
 
-### A.3 Conviction Track Movement (CLASH, Revealing)
+### A.3 Piety Track Movement (CLASH, Revealing)
 
 Formula: effective_margin = floor(margin × genre_weight), movement = effective_margin − resistance (min 0)
 
@@ -144,12 +144,12 @@ Concentration = Focus + Presence. Depletes: −1/exchange, −1 additional on ex
 
 **Presence 1, History 0 (2D pool):**
 - E[net] ≈ 0.7. Loses to any opponent with Presence ≥ 2 reliably.
-- Conviction Track movement against typical resistance: near zero (margin too low).
+- Piety Track movement against typical resistance: near zero (margin too low).
 - Composure 5 (minimum: Poise 1, Bonds 1): Rattled by exchange 1-2 when losing to Presence 4+ opponent (strain 4-5 from single exchange).
 - **Finding [F-D-04]:** Presence 1 characters cannot meaningfully participate in formal debate. No floor mechanic exists. A Presence 1 character debating a Presence 4 orator faces ~4-5 strain per exchange, Rattled before exchange 2, then −2D compounds to full incapacitation. Severity: P2. Design note: institutional screening (no Presence 1 character would be sent to a Formal Debate) is the implied solution, but no rule enforces this.
 
-**Conviction Track at 3 or 7 (win-threshold):**
-- Side B at TC=3. Next CLASH with primary genre, res=1, margin=2: movement = floor(2×1.0)−1 = 1 toward Side A. TC→4. No win fires yet. Clean.
+**Piety Track at 3 or 7 (win-threshold):**
+- Side B at CI=3. Next CLASH with primary genre, res=1, margin=2: movement = floor(2×1.0)−1 = 1 toward Side A. CI→4. No win fires yet. Clean.
 - Resistance=0 scenario (bystander audience, Stability avg 1, −1 = 0): margin=1, primary → floor(1)−0 = 1 movement. Every exchange with margin ≥ 1 moves the track. Grand Debate resolves in 2-3 exchanges. Correct for low-institution contexts.
 
 ### D.2 Cascade Cases
@@ -164,9 +164,9 @@ Margin=3, winner Pres 6 (mod +2), loser Composure 7, Focus 2 (def 1):
 
 **DIVERGE + TIE (both score 0 successes, different genres):**
 - Divergence resolution: effective_margin for each = floor(0/2 × genre_weight × orientation_weight) = 0. Net movement = 0.
-- Tie rule (§6.4): "Both orators take 1 strain. Conviction Track moves +1 toward initiative holder." Rule specifies "any interaction type."
+- Tie rule (§6.4): "Both orators take 1 strain. Piety Track moves +1 toward first-to-speak holder." Rule specifies "any interaction type."
 - Conflict: Divergence resolution concludes with 0 movement. Tie rule then also fires (equal successes = 0 and 0). Two contradictory outcomes.
-- **[F-D-01] P1 FINDING:** DIVERGE + TIE ambiguity. Both scoring 0 on a Divergence triggers both the Divergence evaluation (0 movement) and the Tie rule (1 strain each, +1 toward initiative holder). The "any interaction type" language means Tie overrides. Provisional patch PP-097 applied.
+- **[F-D-01] P1 FINDING:** DIVERGE + TIE ambiguity. Both scoring 0 on a Divergence triggers both the Divergence evaluation (0 movement) and the Tie rule (1 strain each, +1 toward first-to-speak holder). The "any interaction type" language means Tie overrides. Provisional patch PP-097 applied.
 
 **Self-reference (Regroup → Spent → Regroup):**
 - Character hits Concentration 0 (Spent). Next action: Regroup. Concentration restores by Focus score. Does this consume the Spent state?
@@ -337,7 +337,7 @@ Old calibration (v1+v2) used Cognition+History pool. Baselines below are correct
 
 | Patch | Description |
 |-------|-------------|
-| PP-097 | DIVERGE+TIE: Tie rule fires on equal successes regardless of interaction type, including Divergence. Both orators take 1 strain; track +1 toward initiative holder. Rationale: "any interaction type" language is explicit. |
+| PP-097 | DIVERGE+TIE: Tie rule fires on equal successes regardless of interaction type, including Divergence. Both orators take 1 strain; track +1 toward first-to-speak holder. Rationale: "any interaction type" language is explicit. |
 | PP-098 | Regroup at Concentration=0: Regroup consumes the Spent state without applying −2D/+1D penalty. Concentration restores by Focus score. Rationale: no argue roll occurs during Regroup — penalty has no application target. |
 | PP-099 | Obscuring in Divergence: use effective_margin formula at orientation_weight=1.0 to determine Divergence winner. If winner used Obscuring, place Doubt Marker on opponent instead of track movement. No track movement. Rationale: Obscuring replaces track movement consistently regardless of interaction type. |
 
