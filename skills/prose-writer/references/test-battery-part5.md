@@ -102,10 +102,10 @@ The wall was — the wall was grey. Vael was — on the path. The path was — s
 
 *A practitioner with scholarly training observes a thread formation that resists classification.*
 
-The formation had been documented in eleven of the fourteen Hafenmark field reports from the Greinmar survey, always with the same notation: *class indeterminate, measurements consistent, no analogue in standard taxonomy*. The measurements were exact: a seven-point radial symmetry with oscillation periods of 4.2, 4.2, 4.1, 4.2, 4.3, 4.2, and 4.2 seconds — six of seven within the margin, the seventh at the boundary. The precision of the repetition was itself a finding. In the ninth report, the observer had added a marginal note, unsigned: *the regularity suggests intention, but the taxonomy contains no entry for intention at this structural scale*. The note had not been incorporated into the summary.
+The formation had been documented in eleven of the fourteen Hafenmark field reports from the Greinmar survey, always with the same notation: *class indeterminate, observations consistent, no analogue in standard taxonomy*. The observations were careful: a seven-armed radial pattern, each arm behaving in the same rhythm as the others save one, which moved at a pace slightly apart, as a bell struck fractionally late in a carillon. The regularity was itself a finding. In the ninth report, the observer had added a marginal note, unsigned: *the regularity suggests intention, but the taxonomy contains no entry for intention at this structural scale*. The note had not been incorporated into the summary.
 
 **Audit:**
-- Lem clinical precision: ✓. Exact measurements, field report format, taxonomic gap.
+- Lem observing-around: ✓. Careful pre-scientific observation, field report format, taxonomic gap. Regularity noted by analogy (carillon bell) rather than by measurement.
 - Borges scholarly apparatus: ✓. Footnote-adjacent marginal note, institutional silence ("not incorporated into the summary"), the archive documenting its own limit.
 - Q2 territory: ✓. High coherence, high TS. The observer is competent; the object resists.
 - Combined texture: ✓. The Lem precision (measurements) and Borges apparatus (institutional documentation) produce the clinical-incommensurability effect from two directions simultaneously.
