@@ -34,7 +34,7 @@
 | BT4-07 | Discovery Events (3× NPC substitution) | A+B | PRES | TS, CERT | Crown/Church/Hafenmark | Almud, Baralta, Lenneth | Multiple | Complete |
 | BT4-08 | Torben Loyalty Clock + Tutoring Demand | C | FUT | TLK, IP, PI | Crown/Altonia | Torben, Elske, Ehrenwall | Faction Leader | Complete |
 | BT4-09 | Ehrenwall Coup Trigger + Martial Law | C | PRES/FUT | FSTAT, PI | Löwenritter/Crown | Ehrenwall, Almud | Faction Leader, Knight | Complete |
-| BT4-10 | Church TC 80 Territorial Seizure | C | PRES | TC, FSTAT | Church/Hafenmark/Crown | Himlensendt, Baralta | Faction Leader | Complete |
+| BT4-10 | Church CI 80 Territorial Seizure | C | PRES | CI, FSTAT | Church/Hafenmark/Crown | Himlensendt, Baralta | Faction Leader | Complete |
 | BT4-11 | Archetype substitution gauntlet | B | PRES/CROSS | Multiple | All | All NPCs | All 9 archetypes | Complete |
 | BT4-12 | Dissolution residue + Niflhel operative | D | PRES | INT, CERT, CE | Niflhel/Church | Olafsson | Inquisitor, Operative | Complete |
 
@@ -85,7 +85,7 @@
 Setup: TT 72 (Fracturing band, +1 Ob to all Thread ops). Practitioner attempts Dissolution at Personal scale. Ob = 5 + 1 (TT) = 6. Pool 13D.
 P(Failure) at 13D Ob 6: ~12%.
 On Failure: TT +8 → TT 80. Gap tears. Monstrous Incursion immediately.
-State after failure: TT 80 (now Rupturing — +2 Ob to all Thread ops permanently until reduced). Incapacitation. Active monstrous entity. TT entering Rupturing band triggers additional cross-clock effects: TC +2/season; IP +2/season.
+State after failure: TT 80 (now Rupturing — +2 Ob to all Thread ops permanently until reduced). Incapacitation. Active monstrous entity. TT entering Rupturing band triggers additional cross-clock effects: CI +2/season; IP +2/season.
 **One failed FR Dissolution at TT 72 can push TT into Rupturing in a single action.**
 Severity: P1. The chain is mechanically valid but produces a runaway cascade: failure generates the monstrous entity the practitioner was trying to destroy, creates a persistent Gap, and sends TT into the highest penalty band. The player had an 88% success chance — but the 12% failure path is campaign-ending for this encounter.
 Proposed fix: No mechanical fix needed — this is correct and appropriately terrifying for Dissolution at high TT. Document explicitly in GM tools: "Dissolution attempts at TT > 60 carry existential risk. Always state the cascading consequence at session start."
@@ -539,7 +539,7 @@ The Devout Constraint says "Discovery Events bypass this for the initial check."
 ```
 ## State: Season 1, Campaign Start
 ### Clocks
-TT 28 | TC 22 | IP 20
+TT 28 | CI 22 | IP 20
 
 ### Tracks
 Torben Loyalty Clock (TLK): 8 (loyal to Valoria)
@@ -632,7 +632,7 @@ Using the proposed counter from BT4-08: Crown has accumulated 5 compromise point
 ```
 ## State: Season 8
 ### Clocks
-TT 45 | TC 52 | IP 38
+TT 45 | CI 52 | IP 38
 
 ### Factions
 Crown — M4 I5 W4 Mil4 Stab4 (weakened by sustained pressure)
@@ -674,34 +674,34 @@ During Martial Law seasons in Crown territories:
 
 ---
 
-## BT4-10 · CHURCH TERRITORIAL SEIZURE AT TC 80
+## BT4-10 · CHURCH TERRITORIAL SEIZURE AT CI 80
 
 **Mode C — Full Scenario**
-**Mechanic:** TC 80 threshold event — Church attempts territorial seizure through institutional claim
+**Mechanic:** CI 80 threshold event — Church attempts territorial seizure through institutional claim
 
 ```
 ## State: Season 9
 ### Clocks
-TT 42 | TC 81 (just crossed 80) | IP 32
+TT 42 | CI 81 (just crossed 80) | IP 32
 
 ### Active Conditions
-Baralta's TC suppressor active (Mandate 4+)
-But TC already crossed 80 — suppressor applies to generation rate, not threshold event
+Baralta's CI suppressor active (Mandate 4+)
+But CI already crossed 80 — suppressor applies to generation rate, not threshold event
 ```
 
-**Finding F-34 (P1): TC 80 seizure procedure is not fully specified**
+**Finding F-34 (P1): CI 80 seizure procedure is not fully specified**
 
-§7.2: "At TC 80, the Church may attempt to seize territories through institutional claim rather than military force. Per-territory roll vs variable Ob. Counter-play options available. (See Faction section for full procedure.)"
+§7.2: "At CI 80, the Church may attempt to seize territories through institutional claim rather than military force. Per-territory roll vs variable Ob. Counter-play options available. (See Faction section for full procedure.)"
 
 **The Faction section does not contain this procedure.** The Stage 6 compilation and CP14 Faction section for the Church (§8.3) do not include a territorial seizure procedure. The reference "See Faction section" points to content that was not written.
 
 Severity: P1. This is a major endgame mechanic with no implementation. The seizure is referenced in two places (§7.2 and §8.3) with identical "full procedure elsewhere" references, but the procedure doesn't exist.
 
 **Proposed procedure (design draft for editorial review):**
-- Church may declare seizure on one territory per season at TC 80+
+- Church may declare seizure on one territory per season at CI 80+
 - Roll: Church Mandate vs Ob = that territory's controlling faction's Mandate ÷ 2 (round up) + Stability ÷ 2 (round up)
 - Counter-play: controlling faction may resist via Domain Action (matching roll) within the same season
-- Outcome on uncontested Church success: territory adds +1 to Church's TC-driven Mandate and loses 1 faction Influence for the controlling faction. Not military occupation — institutional authority transfer.
+- Outcome on uncontested Church success: territory adds +1 to Church's CI-driven Mandate and loses 1 faction Influence for the controlling faction. Not military occupation — institutional authority transfer.
 - Church may not seize: Hafenmark (Baralta's constitutional claim creates Ob +3), territories with active military defence (Military 4+), Schoenland
 
 ---
@@ -777,7 +777,7 @@ If both play to their own resonant styles:
   Himlensendt wins 3–2.
 ```
 
-**Finding F-36 (P2):** In a straight Grand Debate between Baralta and Himlensendt with no style exploitation or character-level modifiers, Himlensendt wins approximately 3–2. Baralta's mechanical advantage (TC suppressor, Sovereign Authority Doctrine) is not a Debate mechanic — it is a separate faction action. Within pure Debate mechanics, the Church leader's higher Presence wins.
+**Finding F-36 (P2):** In a straight Grand Debate between Baralta and Himlensendt with no style exploitation or character-level modifiers, Himlensendt wins approximately 3–2. Baralta's mechanical advantage (CI suppressor, Sovereign Authority Doctrine) is not a Debate mechanic — it is a separate faction action. Within pure Debate mechanics, the Church leader's higher Presence wins.
 
 To beat Himlensendt, Baralta needs:
 - Resonant style exploitation: Baralta targets Himlensendt's Consequence style for 5 exchanges (+1D each) → 12D vs 12D → effectively equal
@@ -867,7 +867,7 @@ Severity: P1. The CE track for NPCs is referenced in the GM reference sheet (§1
 | ID | Test | Severity | Description | Action |
 |---|---|---|---|---|
 | BUG-004 | Preflight | P1 | Dual naming: "Intelligibility" (§4.5) and "Coherence" (§5.10/§2.3) are the same 10→0 track. ThS Glossary uses "Coherence Degradation" for the 20→0 track. Needs standardization. | Fix naming throughout |
-| Edge-11 | BT4-01 | P1 | Dissolution Failure at TT 72 → TT +8 → TT 80 in one action; Rupturing band enters; TC/IP cross-clock cascade. Design correct but must be documented. | GM tools note |
+| Edge-11 | BT4-01 | P1 | Dissolution Failure at TT 72 → TT +8 → TT 80 in one action; Rupturing band enters; CI/IP cross-clock cascade. Design correct but must be documented. | GM tools note |
 | Edge-12a | BT4-01 | P1 | Threadcut Being: Wound-to-sustained-Thread-work conversion undefined | Define: −1 contact round per Wound |
 | Edge-12b | BT4-01 | P1 | Practitioner Coherence bonus dice vs Threadcut target: ambiguous | Clarify: practitioner's own track always applies to their pool |
 | Edge-13 | BT4-01 | P2 | CE lifecycle post-threshold: does it reset, persist, or accumulate? | Define: CE persists and accumulates to 5 |
@@ -886,7 +886,7 @@ Severity: P1. The CE track for NPCs is referenced in the GM reference sheet (§1
 | F-31 | BT4-07 | P1 | Devout bypass rule is mechanically unreachable in current Discovery Event trigger range | Fix: add explicit TS 0–9 Devout exception |
 | F-32 | BT4-08 | P1 | Coup counter: "private GM counter" with no defined value, no decrement triggers, no threshold | Define counter from 5 with explicit decrement triggers |
 | F-33 | BT4-09 | P1 | Martial Law: "Military-based Stability enforcement" undefined | Define full procedure |
-| F-34 | BT4-10 | P1 | Church TC 80 territorial seizure procedure referenced but does not exist in faction section | Write procedure |
+| F-34 | BT4-10 | P1 | Church CI 80 territorial seizure procedure referenced but does not exist in faction section | Write procedure |
 | F-35 | BT4-11 | P2 | Inquisitor archetype: combat pool ~7D — mechanically weak in combat (correct design, needs documentation) | Character guidance note |
 | F-36 | BT4-11 | P2 | Baralta loses straight Debate vs Himlensendt; must exploit style or use Inspiration to win | Document: social mechanics reward preparation and style reading |
 | F-37 | BT4-11 | P2 | Non-sensitives affected by epistemic co-movement even without Thread perception (correct per P-08) | Document as design note |
@@ -913,7 +913,7 @@ Severity: P1. The CE track for NPCs is referenced in the GM reference sheet (§1
 | 11 | F-31: Devout bypass unreachable at TS 0–9 | BT4-07 | Rule clarification |
 | 12 | F-32: Coup counter mechanics undefined | BT4-08 | Rule addition |
 | 13 | F-33: Martial Law procedure undefined | BT4-09 | Rule addition |
-| 14 | F-34: Church TC 80 territorial seizure procedure missing | BT4-10 | Write procedure |
+| 14 | F-34: Church CI 80 territorial seizure procedure missing | BT4-10 | Write procedure |
 | 15 | F-38: GEN-03/06/07 archetypes have no personal-scale mechanics | BT4-11 | Spec addition before CP15 |
 | 16 | F-40: CE track past CE 3 undefined | BT4-12 | Rule addition |
 | 17 | Edge-12b (combined with F-26) | BT4-01/05 | Linked to BUG-004 |

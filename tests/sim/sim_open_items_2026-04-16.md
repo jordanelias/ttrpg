@@ -142,7 +142,7 @@ Using d10 probability table from board_game_v30 §Correction 1:
 |---------|-----------|
 | Ob 2 baseline appropriate | **Confirmed.** Success rates 56–91% across faction profiles are well-differentiated. |
 | Framework alignment creates appropriate asymmetry | **Confirmed.** Well-designed: factions govern best where they fit culturally. |
-| Hafenmark Influence snowball risk | **Low risk.** Stat cap at 7 prevents runaway. Disruption tools (Institutional Mandate, TC Assert in Church-Prominent territories) counterbalance. No design change needed. |
+| Hafenmark Influence snowball risk | **Low risk.** Stat cap at 7 prevents runaway. Disruption tools (Institutional Mandate, CI Assert in Church-Prominent territories) counterbalance. No design change needed. |
 | Govern vs. Military strategic comparison | **Govern is correctly the superior sustained-control tool.** Military is the acquisition tool. The system incentivises governance over conquest — consistent with peninsular_strain design principle. |
 
 **No editorial items generated for ED-SETT-02.** Governance calibration is correct.
@@ -589,13 +589,13 @@ Test: Player complies with Heresy Investigation (submits to Church questioning).
 #### Chain Contest Structure (from social_contest_v30 references)
 
 From npc_behavior §6 (Resonant Style in the Contest System) and the social_contest architecture:
-- Social contests use a Conviction Track (implied 1–10 range per §3.2 reference: "Conviction Track ≥ 7 or ≤ 3" triggers Belief revision)
+- Social contests use a Piety Track (implied 1–10 range per §3.2 reference: "Piety Track ≥ 7 or ≤ 3" triggers Belief revision)
 - Each exchange moves the track by net successes
 - Resolution: Decisive win = Track ≥ 7 (contestant wins) or ≤ 3 (contestant loses)
 
 **Convergence simulation: Player vs. Almud (Certainty 3, Consequence Resonant Style)**
 
-Starting state: Conviction Track 5 (neutral/contested).
+Starting state: Piety Track 5 (neutral/contested).
 
 Player pool: Charisma 4 + History 3 + 3 = 10 dice. Genre bonus (Projection/Revealing for Consequence style): +1D. Total: 11 dice.
 Almud pool: Leadership Deviation Ob 2. Almud defends with Spirit-equivalent (Certainty 3 → 3 defense dice roughly).
@@ -624,7 +624,7 @@ Player Partial: track moves +1. Almud Partial: track stays (Almud's defense cons
 
 Convergence in this worst case: (7 − 5) exchanges = 2 exchanges minimum from neutral, if player only gets +1 per Partial. Maximum exchanges to resolution from 5: 2 upward (5→6→7) or 2 downward (5→4→3). The chain always converges in ≤ 4–5 exchanges from neutral start.
 
-**Longest possible chain:** Starting Track 5, both sides rolling precisely enough to tie each exchange (no movement). But per the resolution table: ties produce "Conviction Track unchanged" — which could theoretically run indefinitely. **Gap: tie-break not defined for extended stalemate.** If Track doesn't move for 3 consecutive exchanges, the contest should have a forced resolution.
+**Longest possible chain:** Starting Track 5, both sides rolling precisely enough to tie each exchange (no movement). But per the resolution table: ties produce "Piety Track unchanged" — which could theoretically run indefinitely. **Gap: tie-break not defined for extended stalemate.** If Track doesn't move for 3 consecutive exchanges, the contest should have a forced resolution.
 
 **Proposed stalemate rule:** After 3 consecutive exchanges with no Track movement: both sides take 1 Composure strain. If Track still hasn't moved after 5 total exchanges: Partial resolution in current Track direction (toward 7 if ≥ 5, toward 3 if < 5). This produces convergence within 5 exchanges maximum.
 
@@ -642,7 +642,7 @@ Convergence in this worst case: (7 − 5) exchanges = 2 exchanges minimum from n
 
 From board_game_v30 §G-11 (reconstructed from embedded patches):
 - IP baseline: starts 0
-- Primary advancement: Theocracy Counter > 60 → +1/season (from embedded P-28 reference)
+- Primary advancement: Church Influence > 60 → +1/season (from embedded P-28 reference)
 - Civil war advancement: +2/season with inter-faction battle (peninsular_strain §3.2)
 - Threshold effects: IP 75 → Vanguard deploys
 
@@ -652,30 +652,30 @@ From peninsular_strain §3.2: "IP +2 per season in which a Battle between playab
 
 | Game format | Seasons | Expected IP advancement (no battles) | Expected with occasional wars |
 |------------|---------|-------------------------------------|------------------------------|
-| Short (4-player, ~20 seasons) | 20 | 0–20 (if TC > 60 for 10+ seasons) | 40–60 (2–3 war seasons) |
+| Short (4-player, ~20 seasons) | 20 | 0–20 (if CI > 60 for 10+ seasons) | 40–60 (2–3 war seasons) |
 | Standard (6-player, ~40 seasons) | 40 | 20–40 | 60–80 → Vanguard threshold |
-| Long (30-year narrative, ~120 seasons) | 120 | 60–120 (guaranteed Vanguard if TC persistent) | 100–200 (multiple invasion cycles) |
+| Long (30-year narrative, ~120 seasons) | 120 | 60–120 (guaranteed Vanguard if CI persistent) | 100–200 (multiple invasion cycles) |
 
 **30-year game IP behavior simulation:**
 
-Season 1–30 (Years 1–7): TC grows from 22 toward 60. At TC 50: Mandatory Assert each season (+1 TC/season). TC 60 reached around Season 38. IP starts at 0, begins climbing at TC 60 threshold.
+Season 1–30 (Years 1–7): CI grows from 22 toward 60. At CI 50: Mandatory Assert each season (+1 CI/season). CI 60 reached around Season 38. IP starts at 0, begins climbing at CI 60 threshold.
 
-Season 38–60: IP +1/season from TC passive (if no AER maintenance). IP: 0 → 22 in 22 seasons. Add occasional wars: +2 per battle season. If 5 war seasons in this period: IP: 22 + 10 = 32. Still below 75.
+Season 38–60: IP +1/season from CI passive (if no AER maintenance). IP: 0 → 22 in 22 seasons. Add occasional wars: +2 per battle season. If 5 war seasons in this period: IP: 22 + 10 = 32. Still below 75.
 
-Season 60–90: AER ≤ 1 condition (Reformed Settlement chain from board_game §Cascade Test 2 — AER drops). IP threshold drops to 75 (default). IP: 32 + 30 (passive at TC 60+) = 62. Add 5 more war seasons: 62 + 10 = 72. Still below 75. AER maintenance (Temperance Cardinal active): if AER = 2 → threshold = 80. IP 72 < 80. Safe. If AER drops to 1: threshold 75. IP 72 → 3 more passive seasons to breach.
+Season 60–90: AER ≤ 1 condition (Reformed Settlement chain from board_game §Cascade Test 2 — AER drops). IP threshold drops to 75 (default). IP: 32 + 30 (passive at CI 60+) = 62. Add 5 more war seasons: 62 + 10 = 72. Still below 75. AER maintenance (Temperance Cardinal active): if AER = 2 → threshold = 80. IP 72 < 80. Safe. If AER drops to 1: threshold 75. IP 72 → 3 more passive seasons to breach.
 
 Season 90–92: Vanguard deploys. First invasion. Players must repel (Löwenritter Battle example from board_game §Scenario C: Vanguard repelled → IP −5). IP: 75 → 70. Below threshold again. 5 more passive seasons: IP 75 again.
 
-**Finding: In a 30-year game, IP creates a recurring Altonian pressure cycle** — not a single endgame event, but a recurring invasion threat every ~10 seasons once TC > 60. This is **correct and sophisticated** design. The 30-year game doesn't end with the Altonian invasion; it creates a multi-cycle narrative of repulsion, respite, and renewed threat.
+**Finding: In a 30-year game, IP creates a recurring Altonian pressure cycle** — not a single endgame event, but a recurring invasion threat every ~10 seasons once CI > 60. This is **correct and sophisticated** design. The 30-year game doesn't end with the Altonian invasion; it creates a multi-cycle narrative of repulsion, respite, and renewed threat.
 
-**IP Recalibration need:** The current IP formula produces threshold breaches approximately every 10–15 seasons after TC > 60. For a 30-year (120-season) game, this means 4–6 Vanguard deployments. This is **too many** — the Vanguard should feel like a climactic event, not a seasonal disruption.
+**IP Recalibration need:** The current IP formula produces threshold breaches approximately every 10–15 seasons after CI > 60. For a 30-year (120-season) game, this means 4–6 Vanguard deployments. This is **too many** — the Vanguard should feel like a climactic event, not a seasonal disruption.
 
 **Proposed recalibration for long games (>60 seasons):**
 
 | Game length | IP advancement modifier |
 |------------|------------------------|
 | ≤ 40 seasons | Standard (current) |
-| 41–80 seasons | Passive IP advancement (from TC > 60): +0.5/season instead of +1 (halved). Civil war: unchanged (+2). |
+| 41–80 seasons | Passive IP advancement (from CI > 60): +0.5/season instead of +1 (halved). Civil war: unchanged (+2). |
 | 81+ seasons | Passive IP: +0.25/season. Civil war: unchanged. Vanguard deployment after repulsion: 3-season cooldown before IP can breach again. |
 
 This makes passive IP slow enough that civil war is the primary IP driver in long games — exactly the correct design pressure (war risks Altonian invasion; governance prevents it).

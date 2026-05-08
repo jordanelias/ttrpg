@@ -31,7 +31,7 @@
 | Seasonal accounting | — | B3, B5 | H6 |
 | Faction stats (Mandate/Reach/Wealth/Stability) | — | B1–B10 | H5–H10 |
 | TT clock | T7 | B2, B5, B8 | H4, H9 |
-| TC clock | T10 | B3, B6 | H5, H10 |
+| CI clock | T10 | B3, B6 | H5, H10 |
 | IP clock | — | B4, B7 | H6 |
 | Unique faction actions | — | B1–B4 | H5 |
 | Ethical framework modifiers | — | B1–B4 | H5 |
@@ -65,7 +65,7 @@
 | Wound + Thread Op (CD at wound threshold) | HIGH | T5 |
 | Intelligibility 4 + social rolls + Knot crisis | HIGH | T9 |
 | FR Dissolution + Certainty blast + public context | HIGH | T7 |
-| TC>60 + TT>60 simultaneous | HIGH | H9 |
+| CI>60 + TT>60 simultaneous | HIGH | H9 |
 | Devout character + Discovery Event + Dissonance | MEDIUM | T4, H8 |
 | Stunt + Fibonacci + group combat | MEDIUM | T3 |
 | All-in resource spend (Stunt+Knot+Momentum) | MEDIUM | T2 |
@@ -286,7 +286,7 @@ Actual d6: 1 → Knot strain ±1. Lenneth Knot (Close, strain1): +1 → strain2.
 
 ---
 
-## T7: FR DISSOLUTION + CERTAINTY BLAST + PUBLIC TC CONSEQUENCE
+## T7: FR DISSOLUTION + CERTAINTY BLAST + PUBLIC CI CONSEQUENCE
 
 **Scenario:** Maret (Certainty 3, Intelligibility 8) performs FR Dissolution on a Mode 1 entity during a public Parliament session. Present: 12 non-practitioners including 2 Church representatives.
 
@@ -313,15 +313,15 @@ Roll results (GM rolling for 12 NPCs in batches):
 
 *Simulated results:* 4 of 12 fail → Certainty −1 each. 8 pass → Certainty holds.
 
-**Church representatives (both fail):** Certainty −1 each. This is politically explosive. Two Church reps experience a Rendering Crisis-adjacent event in Parliament. TC consequence: public Thread use → TC +1 (37 TT, 16 TC; TC now 17).
+**Church representatives (both fail):** Certainty −1 each. This is politically explosive. Two Church reps experience a Rendering Crisis-adjacent event in Parliament. CI consequence: public Thread use → CI +1 (37 TT, 16 CI; CI now 17).
 
 **Maret's Certainty:** Still 3 (he's the practitioner, his Certainty loss comes from the Leap earlier = already applied). No additional Certainty loss from own Dissolution.
 
 **RULING CONFIRMED (R36):** Certainty blast radius fires once per scene, affects all non-practitioners present. Cannot stack from multiple FR Dissolutions in same scene.
 
-**CRITICAL FINDING:** The blast radius has immediate campaign consequences. Church reps with Certainty at (say) 2→1 are now one step from Rendering Crisis. This is exactly P-01: the rendered-side effect of Thread practice propagates. Parliament session records: 4 councillors report "spiritual disturbance." Church TC driver activates.
+**CRITICAL FINDING:** The blast radius has immediate campaign consequences. Church reps with Certainty at (say) 2→1 are now one step from Rendering Crisis. This is exactly P-01: the rendered-side effect of Thread practice propagates. Parliament session records: 4 councillors report "spiritual disturbance." Church CI driver activates.
 
-**VERDICT:** CLEAN. FR Dissolution in public context creates exactly the intended multi-level consequence cascade (TT rise, TC rise, Certainty damage to observers, Intelligibility cost to practitioner). No crunch cascade — all effects run on independent tracks.
+**VERDICT:** CLEAN. FR Dissolution in public context creates exactly the intended multi-level consequence cascade (TT rise, CI rise, Certainty damage to observers, Intelligibility cost to practitioner). No crunch cascade — all effects run on independent tracks.
 
 ---
 
@@ -390,7 +390,7 @@ Scholar Circle: strain 0. In 4 sessions → strain 1 (won't hit threshold 5 for 
 
 ---
 
-## T10: BELIEF REVISION + TS GROWTH + TC ACCELERATION
+## T10: BELIEF REVISION + TS GROWTH + CI ACCELERATION
 
 **Scenario:** Valdis (Devout Inquisitor, TS 5, 1 Dissonance Mark, Certainty 2) has been assigned to investigate Maret. Over the course of three sessions, his TS has crept to 12 (Dormant tier via Discovery Events). His Devout Constraint is still active (1 of 3 Dissonance Marks).
 
@@ -412,12 +412,12 @@ Belief revision of an essentialist Belief → Constraint begins collapsing. Per 
 
 Valdis can now attempt TS growth checks normally.
 
-**TC consequence:** An Inquisitor writing in his private files that "the Church may be built on concealment" is not yet public. But if these files are later exposed: TC −1 (converted Inquisitor testimony = major TC driver from §K per audit document). This banks a potential future TC consequence.
+**CI consequence:** An Inquisitor writing in his private files that "the Church may be built on concealment" is not yet public. But if these files are later exposed: CI −1 (converted Inquisitor testimony = major CI driver from §K per audit document). This banks a potential future CI consequence.
 
 **TS growth check (first available post-collapse):**
 The current confrontation with this evidence qualifies. Spirit TN7 Ob1: 4D: 8✓,7✓,3,4 = 2. Success. +5 TS (12→17). Still Dormant but climbing.
 
-**VERDICT:** CLEAN. The Devout Constraint → Belief revision → Constraint collapse → TS growth unlock path works correctly. The CP awards (+3 CP total: +1 challenged, +2 revised) give the player mechanical reward for philosophically significant character development. TC banking works as intended.
+**VERDICT:** CLEAN. The Devout Constraint → Belief revision → Constraint collapse → TS growth unlock path works correctly. The CP awards (+3 CP total: +1 challenged, +2 revised) give the player mechanical reward for philosophically significant character development. CI banking works as intended.
 
 ---
 
@@ -515,13 +515,13 @@ Crown Intelligence Domain Action (Crown Reach 4D vs Ob3): 4D TN7: 7✓,4,8✓,3 
 
 ## B5: NPC AI BEHAVIOR + SEASONAL EVENT DECK + ACCOUNTING ORDER
 
-**Scenario:** Season 6. Church NPC AI with TC = 22 (crossed 20 threshold). Event card drawn: "Heretic Scholar — a practitioner surfaces publicly. Church TC +2. Revolution Influence +1. Random territory." Territory randomly = Sudwald.
+**Scenario:** Season 6. Church NPC AI with CI = 22 (crossed 20 threshold). Event card drawn: "Heretic Scholar — a practitioner surfaces publicly. Church CI +2. Revolution Influence +1. Random territory." Territory randomly = Sudwald.
 
 **Applying event:**
-TC: 22→24. Revolution Influence: 3→4.
+CI: 22→24. Revolution Influence: 3→4.
 
 **Church NPC AI checks priority:**
-P1: Advance TC. TC = 24. Current path: TC was advancing naturally. NPC evaluates: highest Mandate faction = Crown (Mandate 5). NPC should place Influence or Excommunicate on Crown. At TC<40, AI uses Influence (Excommunicate requires Mandate ≥ 4: Church has Mandate 6, eligible). AI P1 action: Influence on Valorsplatz (Crown heartland).
+P1: Advance CI. CI = 24. Current path: CI was advancing naturally. NPC evaluates: highest Mandate faction = Crown (Mandate 5). NPC should place Influence or Excommunicate on Crown. At CI<40, AI uses Influence (Excommunicate requires Mandate ≥ 4: Church has Mandate 6, eligible). AI P1 action: Influence on Valorsplatz (Crown heartland).
 
 **Church Influence roll** (Reach5D vs Ob=Crown Mandate5=Ob5): 5D TN7: 9✓,7✓,3,8✓,1 = 3, −1 = 2. Partial. Church Mandate +0. Church Mandate −1 from overreach? No — per Influence order failure: "−1 Influence for 1 season (overreach)." Partial uses the Partial result: no change in Mandate, −1 Church Reach for 1 season? 
 
@@ -530,7 +530,7 @@ P1: Advance TC. TC = 24. Current path: TC was advancing naturally. NPC evaluates
 **Accounting phase:**
 1. Attribute changes: Church Reach −0 (Partial, no penalty). Revolution Influence +1 (from event card, already applied mid-season).
 2. Stability checks: no faction took attribute loss. All stable.
-3. Clock: TT +0 (no Thread ops). TC: 24 + passive pressure check. Church Mandate 6 at 9–10 would add TC; at 6, no passive bonus. TC stays 24. IP: 20 + 2 (base) = 22.
+3. Clock: TT +0 (no Thread ops). CI: 24 + passive pressure check. Church Mandate 6 at 9–10 would add CI; at 6, no passive bonus. CI stays 24. IP: 20 + 2 (base) = 22.
 4. Threshold: none crossed.
 5. Co-Movement: no Thread ops this season → no card drawn.
 6. Victory check: no primary conditions met.
@@ -539,9 +539,9 @@ P1: Advance TC. TC = 24. Current path: TC was advancing naturally. NPC evaluates
 
 ---
 
-## B6: CHURCH TERRITORIAL SEIZURE AT TC 80 — PRE-TEST
+## B6: CHURCH TERRITORIAL SEIZURE AT CI 80 — PRE-TEST
 
-**Scenario:** TC has reached 80 (hypothetical Season 12). Church Mandate = 7, Crown Mandate = 3. Eligible territories: territories where Church Mandate > Crown Mandate. With Crown Mandate collapsed to 3, most territories qualify.
+**Scenario:** CI has reached 80 (hypothetical Season 12). Church Mandate = 7, Crown Mandate = 3. Eligible territories: territories where Church Mandate > Crown Mandate. With Crown Mandate collapsed to 3, most territories qualify.
 
 **Territory eligibility check (5 contested territories):**
 1. Valorsplatz (Capital): Church Mandate > Crown Mandate? Church has been building in capital. If Church Mandate 7 > Crown Mandate 3 here: eligible. But Valorsplatz requires Ob5 to seize.
@@ -553,9 +553,9 @@ Church Influence 5D TN7 vs Ob3 (major city, no modifiers): 5D: 9✓,7✓,8✓,3,
 
 **Co-movement from seizure (P-01):** Territorial seizure draws Co-Movement Card: "All factions Stability check Ob1." All 8 factions roll Stability dice TN7 Ob1. 3 factions fail → Stability −1 each.
 
-**Löwenritter coup trigger 3 check:** TC≥80 AND Church holds Crown territories. Himmelstift is Church-controlled (it already was). Has Church seized a Crown-controlled territory? If they seize Valorsplatz → yes. Not yet. Coup trigger 3: not yet met.
+**Löwenritter coup trigger 3 check:** CI≥80 AND Church holds Crown territories. Himmelstift is Church-controlled (it already was). Has Church seized a Crown-controlled territory? If they seize Valorsplatz → yes. Not yet. Coup trigger 3: not yet met.
 
-**TC response per threshold:** At TC80: Church claims territories. Each season after, they continue attempting seizures of newly eligible territories. The TC threshold table says "Church begins controlling territories where Church Mandate > Crown Mandate" — this is ongoing, not one-time.
+**CI response per threshold:** At TC80: Church claims territories. Each season after, they continue attempting seizures of newly eligible territories. The CI threshold table says "Church begins controlling territories where Church Mandate > Crown Mandate" — this is ongoing, not one-time.
 
 **VERDICT:** CLEAN. Seizure procedure works. Co-movement card fires for mass political upheaval. Löwenritter trigger gates correctly on specific conditions.
 
@@ -614,7 +614,7 @@ If Niflhel had used Thread Harvest: +0.5 TT per use. 3 uses over the campaign: T
 
 ## B9: COUP TRIGGER + MULTI-FACTION ALLIANCE vs LÖWENRITTER
 
-**Scenario:** Torben at Loyalty 2. IP = 65 (Warlike). TC = 55. Löwenritter NPC AI detects coup trigger 2 (Loyalty 2 = foreign control imminent). Coup fires next season.
+**Scenario:** Torben at Loyalty 2. IP = 65 (Warlike). CI = 55. Löwenritter NPC AI detects coup trigger 2 (Loyalty 2 = foreign control imminent). Coup fires next season.
 
 **Coup roll:** Military5D TN7 Ob3. Roll: 9✓,7✓,3,8✓,4 = 3. Success. 
 
@@ -624,7 +624,7 @@ If Niflhel had used Thread Harvest: +0.5 TT per use. 3 uses over the campaign: T
 - All factions: Grievance Marker vs Löwenritter.
 
 **Multi-faction response (Season+1):**
-Crown (now weakened) + Church (TC 55, wants order) form informal alliance against Löwenritter. But Church + Löwenritter are both opposed to Altonian invasion — they share IP concern even if in conflict on governance.
+Crown (now weakened) + Church (CI 55, wants order) form informal alliance against Löwenritter. But Church + Löwenritter are both opposed to Altonian invasion — they share IP concern even if in conflict on governance.
 
 **Formal Treaty attempt:** Crown and Church declare Treaty order. Both Reach4D and Reach5D vs Ob2. Crown: 4D: 8✓,4,7✓,3 = 2. Church: 5D: 9✓,3,7✓,4,8✓ = 3. Both ≥ 2: Treaty succeeds. Binding 2 seasons. +1D to all orders in shared territories.
 
@@ -642,7 +642,7 @@ Crown (now weakened) + Church (TC 55, wants order) form informal alliance agains
 
 **Secondary scoring:**
 Crown: 4 territories (4 pts) + Mandate 4 (+1 pt over 3) = 5 pts. Torben Loyalty 5 (+0 pts, needs ≥5 for bonus: yes = +2 pts). Total: 7 pts.
-Church: TC 38 (+1 pt per 10 = 3 pts) + 4 territories where Church Mandate > Crown Mandate (4 pts) + Excommunication not active (0 pts). Total: 7 pts.
+Church: CI 38 (+1 pt per 10 = 3 pts) + 4 territories where Church Mandate > Crown Mandate (4 pts) + Excommunication not active (0 pts). Total: 7 pts.
 Revolution: Influence 4 (+2 pts over 2) + TT 42 (no reduction below starting, −0) + Restoration not fully active (+0). Total: 2 pts.
 Varfell: 2 artifacts (2 pts) + Intel 5 (+2 pts) + research not completed (+0). Total: 4 pts.
 
@@ -682,7 +682,7 @@ Varfell: 2 artifacts (2 pts) + Intel 5 (+2 pts) + research not completed (+0). T
 
 ## H2: HYBRID DEBATE — PERSONAL PHASE SCENE TRIGGERS STRATEGIC PHASE CONSEQUENCE
 
-**Scenario:** Serena (Personal Phase) engages in Grand Debate (5 exchanges) with Confessor Himlensendt. If she achieves 3+ wins in the Debate, this constitutes a Public Overturning of a Church ruling → TC −1 (board game stat), to apply at Cascade.
+**Scenario:** Serena (Personal Phase) engages in Grand Debate (5 exchanges) with Confessor Himlensendt. If she achieves 3+ wins in the Debate, this constitutes a Public Overturning of a Church ruling → CI −1 (board game stat), to apply at Cascade.
 
 **Grand Debate setup:** Serena Focus3 + Court History8 = 11D. Himlensendt Focus4 + Ecclesiastical History7 = 11D. Equal pools. Rhetoric: Serena uses Consequence style. Himlensendt uses Evidence style. Mismatch: Serena targets fear of consequences (he's not risk-averse) → −2D to Serena's pool? Actually: style mismatch means the ATTACKER suffers −2D when using a style that doesn't match the target's vulnerability. Serena using Consequence vs an Evidence-dominant opponent: −2D. Pool: 11−2 = 9D.
 
@@ -694,9 +694,9 @@ Exchange 2: Serena switches to Evidence style (matching his vulnerability). −2
 Exchange 3–5: [Abbreviated] Assume 2-2 going into Exchange 5. Tense final exchange.
 Exchange 5: Serena 11D (Evidence, no penalty, Reading Exchange bonus +1D = 12D): 9✓,8✓,7✓,3,10✓(→4),7✓,4,8✓,1,7✓,9✓,3 = 8, −1 = 7. Himlensendt 11D: 8✓,3,9✓,7✓,4,7✓,1,8✓,3,9✓,4 = 5, −1 = 4. Serena wins Exchange 5 (7>4). Serena wins Debate 3–2.
 
-**Domain Echo queued:** TC −1 (Crown publicly overturns Church ruling via Serena's victory). Applied at Cascade Phase: TC 15→14.
+**Domain Echo queued:** CI −1 (Crown publicly overturns Church ruling via Serena's victory). Applied at Cascade Phase: CI 15→14.
 
-**Cascade Phase application:** TC reduces. This has no threshold consequence (still in Institutional Pressure zone). Board game stat update: Crown Mandate +0, Church Mandate: the GM may note this as a narrative precedent.
+**Cascade Phase application:** CI reduces. This has no threshold consequence (still in Institutional Pressure zone). Board game stat update: Crown Mandate +0, Church Mandate: the GM may note this as a narrative precedent.
 
 **VERDICT:** CLEAN. Grand Debate in Personal Phase creates board game stat consequences at Cascade Phase. The delay between personal victory and strategic effect is correctly managed.
 
@@ -774,7 +774,7 @@ These are different systems and stack independently. Total cost: CD+1, Intelligi
 
 **Seasonal cap check:** ±2 per stat per season. Three Echoes would give Crown Mandate +3. EXCEEDS CAP.
 
-**RULING CONFIRMED (§J5):** Cap is ±2 per stat per season regardless of sources. Crown Mandate +3 is capped to +2. The third Echo (evidence presentation) still occurs narratively but doesn't move the stat this season. It may have other consequences (TC −0, Niflhel Stability check, etc.) that aren't Mandate-related.
+**RULING CONFIRMED (§J5):** Cap is ±2 per stat per season regardless of sources. Crown Mandate +3 is capped to +2. The third Echo (evidence presentation) still occurs narratively but doesn't move the stat this season. It may have other consequences (CI −0, Niflhel Stability check, etc.) that aren't Mandate-related.
 
 **How to adjudicate which two of three Echoes apply?**
 
@@ -843,41 +843,41 @@ Spirit check TN7 Ob1. Vaynard's Spirit: 3 (per profile). 3D TN7: 8✓,4,7✓ = 2
 **Immediate faction consequence (board game stat):**
 Vaynard's TS 30 activates the Thread Investigation Track. TK advances: +2 immediately (direct experience replaces inference). TK was 1 → now 3 (Structural Theorist tier).
 
-At TK3: "Church Inquisitor file formally active. TC +1." TC: 15→16.
+At TK3: "Church Inquisitor file formally active. CI +1." CI: 15→16.
 At TK3: Varfell succession leverage demand formally linked to Southernmost access terms → Domain Action: Varfell Reach vs Crown Mandate (Ob5) to formally state terms. This is a new board game action trigger.
 
 **Cascade Phase applies:**
-- TC +1 (16 total)
+- CI +1 (16 total)
 - Vaynard TK3 domain action queues for next Strategic Phase
 - TS 30 flag on Vaynard card: Private Collection now triggers TS check each use (per §F4 note)
 
 **Player decision:** Vaynard player (faction leader PC) learns about their own TS. The revelation scene (per §6.5 of Ruleset Audit): Vaynard TK 3 response — "Recognition that this changes his theory. He recalculates relationship to Maret and Southernmost communities." This is a Personal Phase scene in the NEXT season.
 
-**VERDICT:** CLEAN. Discovery Event in Cascade Phase generates TC consequence and triggers a new action queue item, both correctly processed. The faction-leader PC's arc (Vaynard learning his TS) naturally becomes the focus of next season's Personal Phase.
+**VERDICT:** CLEAN. Discovery Event in Cascade Phase generates CI consequence and triggers a new action queue item, both correctly processed. The faction-leader PC's arc (Vaynard learning his TS) naturally becomes the focus of next season's Personal Phase.
 
 ---
 
-## H9: THREE-CLOCK CRISIS — TT>60 AND TC>60 SIMULTANEOUSLY
+## H9: THREE-CLOCK CRISIS — TT>60 AND CI>60 SIMULTANEOUSLY
 
-**Scenario:** Season 9. TT = 62. TC = 63. IP = 58 (approaching Warlike). The triple-clock danger condition is active.
+**Scenario:** Season 9. TT = 62. CI = 63. IP = 58 (approaching Warlike). The triple-clock danger condition is active.
 
-**Per §E3:** TT>60 AND TC>60: both clocks accelerate at maximum rate. TT: passive drift +2/year (using R-ST-B10 adjustment). TC: +2/season (from TT>60 driving IP, and Church institutional pressure). IP: +2/season (from TT>60 link) + 1/season (from TC>60 link) = +3/season.
+**Per §E3:** TT>60 AND CI>60: both clocks accelerate at maximum rate. TT: passive drift +2/year (using R-ST-B10 adjustment). CI: +2/season (from TT>60 driving IP, and Church institutional pressure). IP: +2/season (from TT>60 link) + 1/season (from CI>60 link) = +3/season.
 
 **Thread op TT Ob modifier:** TT>60 = Thread ops +1 Ob. At TT62, Maret's Weaving Ob 3 → Ob4. AND 2 Wounds → Ob+2 = Ob6. Weaving at Relational scale under these conditions: Ob6 TN7. Maret Pool 16D (pre-CD penalties): net ~7-8 average. Ob6 = roughly 50% success. High stakes.
 
-**TC acceleration from Thread op:** Every public Thread op → TC+1. In the current crisis, Maret's Weaving in Parliament would add TC+1 on top of the seasonal acceleration: TC 63+2+1 = 66 from a single Weaving.
+**CI acceleration from Thread op:** Every public Thread op → CI+1. In the current crisis, Maret's Weaving in Parliament would add CI+1 on top of the seasonal acceleration: CI 63+2+1 = 66 from a single Weaving.
 
 **Preventing the cascade:** Players must simultaneously:
 1. Reduce TT below 60 (need Overwhelming Weaving or sustained Community Weaving)
-2. Reduce TC below 60 (need Baralta Sovereign Authority, or Church-Niflhel exposure, or Grand Debate victory)
+2. Reduce CI below 60 (need Baralta Sovereign Authority, or Church-Niflhel exposure, or Grand Debate victory)
 3. Keep IP from reaching 75 (Altonian vanguard deployment)
 
 **Resource audit for this season:**
 - Baralta Sovereign Authority: 1/arc. Used in Season 6. Cannot use again until Season 10.
 - Community Weaving: Revolution Stability 1 (from H4). Cannot Weave without risking collapse.
-- Church-Niflhel exposure: requires players to have Brak's evidence. If they do: TC −3 → TC 63→60. Exactly at threshold. Not below.
+- Church-Niflhel exposure: requires players to have Brak's evidence. If they do: CI −3 → CI 63→60. Exactly at threshold. Not below.
 
-**RULING CONFIRMED:** Three-clock interactions per §E3: "Both clocks accelerate at maximum rate" means the seasonal accelerations are +2/season EACH (TT and TC), not a one-time bonus. At Season 10 (one season later), without intervention: TT = 64, TC = 65, IP = 61 (Warlike). Cascade continues.
+**RULING CONFIRMED:** Three-clock interactions per §E3: "Both clocks accelerate at maximum rate" means the seasonal accelerations are +2/season EACH (TT and CI), not a one-time bonus. At Season 10 (one season later), without intervention: TT = 64, CI = 65, IP = 61 (Warlike). Cascade continues.
 
 **Possible intervention:** Serenity uses her sea-republic archive connection (from Lenneth's network) to retrieve the coastal boundary anchor document. This provides −2 TT (ancient Einhir site information allows a specific Weaving target). With Maret Weaving at this target: −2 TT from operation success + −1 Ob (boundary anchor guidance). Net: TT 62→60 if Weaving succeeds. Still above threshold.
 
@@ -885,9 +885,9 @@ At TK3: Varfell succession leverage demand formally linked to Southernmost acces
 
 ---
 
-## H10: HOLLOW VICTORY + TC CAMPAIGN EVENT + COOPERATIVE RESOLUTION
+## H10: HOLLOW VICTORY + CI CAMPAIGN EVENT + COOPERATIVE RESOLUTION
 
-**Scenario:** Season 10. Church has achieved TC 80. Church primary victory condition met: Church controls Himmelstift + Valorsplatz. But Serena (faction leader PC for Crown) has a Belief: "Valoria will not become a Holy State under my watch." This Belief is active and unresolved.
+**Scenario:** Season 10. Church has achieved CI 80. Church primary victory condition met: Church controls Himmelstift + Valorsplatz. But Serena (faction leader PC for Crown) has a Belief: "Valoria will not become a Holy State under my watch." This Belief is active and unresolved.
 
 **Board game result:** Church wins primary victory condition at Season 10 Accounting. Campaign event fires: "The Holy State — Confessor Himlensendt declares Valoria a Holy State."
 
@@ -899,7 +899,7 @@ Option B: Reject hollow victory. Extend play. But the board game victory conditi
 
 **RULING NEEDED (R-ST-H10):** When a board game victory fires in hybrid but a faction leader PC's Belief directly opposes it, the "Campaign Event" replaces the "Victory" — the event fires (the Holy State is declared) but the game continues for a final Personal Phase arc where the PC can respond. This is the "not a loss state — a narrative threshold" language from §5.3 of the Skeleton. The Holy State is a campaign event, not an instant end state.
 
-**Final arc (1 additional Personal Phase season):** Serena has one season to prevent ratification — Grand Debate with Parliament, 5 exchanges, TC consequence if she wins. If she achieves 3+ wins AND Baralta invokes Sovereign Authority (1/arc, Season 10 available): TC −3 → below 80 → Church territorial seizure stops. The Holy State declaration is challenged.
+**Final arc (1 additional Personal Phase season):** Serena has one season to prevent ratification — Grand Debate with Parliament, 5 exchanges, CI consequence if she wins. If she achieves 3+ wins AND Baralta invokes Sovereign Authority (1/arc, Season 10 available): CI −3 → below 80 → Church territorial seizure stops. The Holy State declaration is challenged.
 
 **Probability assessment:** Serena's pool vs Confessor. We tested this in H2 — she can win Grand Debate under favorable conditions. If players have cultivated Baralta relationship, both tools are available simultaneously.
 
@@ -942,7 +942,7 @@ Option B: Reject hollow victory. Extend play. But the board game victory conditi
 - All resolved with single-sentence rulings
 
 ## Mechanics with Clean Passes (no issues)
-Pool split, Fibonacci bonus, Gate wounds, TT rise/fall, TC clock, IP clock, Knot strain thresholds, Intelligibility countdown, Certainty system, FR Dissolution blast radius, Co-movement Version C, Discovery Events, Domain Echo timing, Treaty/betrayal, Seasonal cap, Phase structure, NPC AI priorities, Victory scoring/tiebreak
+Pool split, Fibonacci bonus, Gate wounds, TT rise/fall, CI clock, IP clock, Knot strain thresholds, Intelligibility countdown, Certainty system, FR Dissolution blast radius, Co-movement Version C, Discovery Events, Domain Echo timing, Treaty/betrayal, Seasonal cap, Phase structure, NPC AI priorities, Victory scoring/tiebreak
 
 ## Mechanics Requiring New Rulings
 Wounds in pool-split (net reduction), Beginner's Luck in combat, Collective Thread op helper contribution, Partial Excommunication, Framework modifier timing, Revolution Partial Weaving, Influence order Partial, Revolution victory locking, Board TT drift calibration, Domain Echo timing vs Strategic Phase, Past-Pull Certainty blast, Multiple Domain Echo cap priority, Hollow victory extension

@@ -56,9 +56,9 @@ NPC social behavior is governed by the Stance Triangle: Conviction, Resonant Sty
 
 Rendering failures (objects in wrong places, inconsistent memories, déjà vu) are exactly the kind of Thread evidence that drives Certainty decline. The Certainty track advances toward Thread acceptance when characters witness Thread phenomena. Rendering failures are Thread phenomena — they are the substrate breaking through the rendered surface.
 
-At Fractured RS: the entire non-practitioner population is witnessing persistent, unexplained rendering anomalies. This should systematically drive Certainty Track decline across the population — which feeds TC dynamics (TC advances with Certainty stability; rapid Certainty decline could destabilize the Church's institutional grip).
+At Fractured RS: the entire non-practitioner population is witnessing persistent, unexplained rendering anomalies. This should systematically drive Certainty Track decline across the population — which feeds CI dynamics (CI advances with Certainty stability; rapid Certainty decline could destabilize the Church's institutional grip).
 
-**[EMERGENT+]** At Fractured RS, Certainty Track acceleration should be a mechanical event: "At Accounting when RS is in Fractured band: all NPCs in affected territories make Certainty checks (TN 7 Ob 1). Failure: Certainty −1." This creates a cascade: RS degradation → population Certainty collapse → TC pressure changes → faction political dynamics shift. This is a rich emergent consequence that connects the worldtrack to the social layer.
+**[EMERGENT+]** At Fractured RS, Certainty Track acceleration should be a mechanical event: "At Accounting when RS is in Fractured band: all NPCs in affected territories make Certainty checks (TN 7 Ob 1). Failure: Certainty −1." This creates a cascade: RS degradation → population Certainty collapse → CI pressure changes → faction political dynamics shift. This is a rich emergent consequence that connects the worldtrack to the social layer.
 
 ---
 
@@ -291,7 +291,7 @@ At TS 50+, pool 17D TN8: E[net] = 5.1. P(≥5) ≈ 50%. At TS 70+, pool 24D TN8:
 
 On Success: the judge dissolves. RS −5. Gap forms. The contest... has no adjudicator.
 
-**The social contest system has no rule for adjudicator dissolution mid-contest.** The contest ends by default? The Conviction Track result is voided? The political/legal outcome is null? The murder of a judge mid-Parliament session is both a Thread catastrophe (RS −5, Gap) and a political catastrophe (TC +1 from Church observer investigation, faction Disposition collapse, legal crisis).
+**The social contest system has no rule for adjudicator dissolution mid-contest.** The contest ends by default? The Piety Track result is voided? The political/legal outcome is null? The murder of a judge mid-Parliament session is both a Thread catastrophe (RS −5, Gap) and a political catastrophe (CI +1 from Church observer investigation, faction Disposition collapse, legal crisis).
 
 **[EXPLOIT — but self-punishing]** Dissolving an adjudicator eliminates the contest mechanism but at enormous cost: RS −5, political fallout, Coherence −1, Knot strain with any Close Knot who witnesses it. This is not a clean win — it's the practitioner destroying the political institution they're operating within. The contest system doesn't need a specific counter-rule; the systemic costs are the counter. But it needs an explicit ruling that dissolving the adjudicator voids the contest (treating it as "no adjudicator reached decision"), not a win for the dissolving party.
 

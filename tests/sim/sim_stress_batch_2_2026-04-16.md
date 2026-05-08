@@ -1,7 +1,7 @@
 # VALORIA — Stress Test & Simulation Batch 2
 **Date:** 2026-04-16  
 **Token:** 092ab358769ad4fe  
-**Scope:** Full-length campaign runs, interdependent system tests, cross-scale transitions, Zoom In/Out chains, social contest chains, TC reform validation, military layer stress, hybrid mode handoffs, fieldwork–combat–contest sequences, full NPC arc emergence  
+**Scope:** Full-length campaign runs, interdependent system tests, cross-scale transitions, Zoom In/Out chains, social contest chains, CI reform validation, military layer stress, hybrid mode handoffs, fieldwork–combat–contest sequences, full NPC arc emergence  
 **Method:** max effort — all referenced docs read in full. Dice simulated via explicit d10 rolls with probability tracking.
 
 ---
@@ -10,15 +10,15 @@
 
 | # | Name | Systems Tested | Depth |
 |---|------|---------------|-------|
-| ST-01 | 4-faction BG campaign (Seasons 1–20) | All BG mechanics, TC reform, AI priority trees, military layer, Accord/Strain | Full campaign |
+| ST-01 | 4-faction BG campaign (Seasons 1–20) | All BG mechanics, CI reform, AI priority trees, military layer, Accord/Strain | Full campaign |
 | ST-02 | Cross-scale transition chain | Zoom In from BG battle → personal combat → Thread → Zoom Out | Full sequence |
 | ST-03 | Social contest chain (3-contest arc) | Contest system, Obligation, Chain Contest, Conviction Scar accumulation | Full chain |
 | ST-04 | Hybrid mode — full season | BG → TTRPG Zoom In → fieldwork → combat → Domain Echo → Zoom Out → Cascade | Full season |
-| ST-05 | TC reform stress test | TC sources across 25 seasons; Church victory timeline; Hafenmark suppression efficacy | Full sim |
+| ST-05 | CI reform stress test | CI sources across 25 seasons; Church victory timeline; Hafenmark suppression efficacy | Full sim |
 | ST-06 | Fieldwork → Combat → Contest pipeline | All three system transitions, evidence use in contest | Full pipeline |
 | ST-07 | Mass battle with Zoom In, Thread ops, general duel | Mass battle phases 1–7, Thread scale, personal duel, Zoom Out | Full battle |
 | ST-08 | NPC arc emergence — Almud Arc B / Himlensendt Arc A | BG pressure producing arc conditions, social contest triggering arc shift | Arc sequence |
-| ST-09 | Obligation cascade under Peninsular Strain | Multiple simultaneous Obligations, violation consequences, Strain interaction | Stress test |
+| ST-09 | Obligation cascade under Turmoil | Multiple simultaneous Obligations, violation consequences, Strain interaction | Stress test |
 | ST-10 | Rendering Stability decline curve (RS 72 → crisis) | Thread op failures, Lock chronic drift, battle RS costs, Mending recovery | 30-season curve |
 
 ---
@@ -29,14 +29,14 @@
 
 **Starting stats:**
 
-| Faction | Mandate | Influence | Wealth | Military | Stability | TCV | Accord (cap) | TC |
+| Faction | Mandate | Influence | Wealth | Military | Stability | TCV | Accord (cap) | CI |
 |---------|---------|-----------|--------|----------|-----------|-----|--------------|----|
 | Crown | 5 | 5 | 4 | 4 | 5 | 12 | 3/2/2/2/2/2 | — |
 | Church | 5 | 6 | 4 | 4 | 5 | 5 | 3 (T9) | 28 |
 | Hafenmark | 4 | 5 | 5 | 3 | 5 | 6 | 3/2/2/2 | — |
 | Varfell | 3 | 4 | 3 | 4 | 5 | 6 | 3/2/2/2 | — |
 
-Peninsular Strain: 0. RS: 72. IP: 0.
+Turmoil: 0. RS: 72. IP: 0.
 
 ---
 
@@ -44,20 +44,20 @@ Peninsular Strain: 0. RS: 72. IP: 0.
 
 **Season 1:**
 
-*Church AI (Priority 3 — TC 28 < 40, no milestone):* Assert (Senator, T9). Mandate 5 → Political pool = 5 + floor(28/20)=1 = 6D, TN 7, Ob 1. Expected net = 6×0.4 − 0.6×0.1 = 2.4−0.06 = ~2.3. Roll 6d10: 9,8,7,3,10,5 → 1+1+1+2=5 net. Ob 1, surplus 4 = Overwhelming. TC +2 (Assert OW). TC: 28→30.
+*Church AI (Priority 3 — CI 28 < 40, no milestone):* Assert (Senator, T9). Mandate 5 → Political pool = 5 + floor(28/20)=1 = 6D, TN 7, Ob 1. Expected net = 6×0.4 − 0.6×0.1 = 2.4−0.06 = ~2.3. Roll 6d10: 9,8,7,3,10,5 → 1+1+1+2=5 net. Ob 1, surplus 4 = Overwhelming. CI +2 (Assert OW). CI: 28→30.
 
-*Piety Yield this season:* Church Prominent in T9 (Church Mandate 5 > uncontrolled, effectively Church own territory). PT 5 → yield +1.0. Conditional passive: Church Prominent in 1 territory only → +0 passive (need ≥2). Total TC gain: Assert OW +2 + Piety Yield +1 = +3. Seasonal cap ±5. TC: 30→33. **[FINDING: Piety Yield stacks with Assert result. At Season 1, Church gains TC 28→33 in one season. This is correct — Church is unopposed and T9 is fully pious.]**
+*Piety Yield this season:* Church Prominent in T9 (Church Mandate 5 > uncontrolled, effectively Church own territory). PT 5 → yield +1.0. Conditional passive: Church Prominent in 1 territory only → +0 passive (need ≥2). Total CI gain: Assert OW +2 + Piety Yield +1 = +3. Seasonal cap ±5. CI: 30→33. **[FINDING: Piety Yield stacks with Assert result. At Season 1, Church gains CI 28→33 in one season. This is correct — Church is unopposed and T9 is fully pious.]**
 
 *Crown AI (Priority 6 — no threats):* Govern capital T1. Mandate 5 pool, Ob 1 (capital). 5d10: 9,8,3,7,2 → 3 net. OW: Accord T1 +1 (already 3, cap = no change) AND Mandate +1 (recovery, PP-174). Crown Mandate: 5→6 (but Mandate cap is 7, so fine). **[FINDING: Crown can Mandate-stack via Govern OW capital if starting Mandate is below cap. At Mandate 5 starting, they can reach 6 on Season 1. This is correct — well-governed capitals grow institutional authority.]**
 
-*Hafenmark AI (Priority 3 — TC 33 < 40, no Suppress trigger yet):* Govern T8 (capital). 5D pool (Influence), Ob 1. 5d10: 9,7,4,8,1 → 3−1=2 net. Success. Accord T8 +1 (already 3, capped). Mandate framework drift: all Hafenmark actions framework-aligned this season → Influence +1 drift (Categorical Imperative per npc_behavior §7.1). Hafenmark Influence: 5→6.
+*Hafenmark AI (Priority 3 — CI 33 < 40, no Suppress trigger yet):* Govern T8 (capital). 5D pool (Influence), Ob 1. 5d10: 9,7,4,8,1 → 3−1=2 net. Success. Accord T8 +1 (already 3, capped). Mandate framework drift: all Hafenmark actions framework-aligned this season → Influence +1 drift (Categorical Imperative per npc_behavior §7.1). Hafenmark Influence: 5→6.
 
 *Varfell AI (Priority 3 — no immediate threat):* Tribune Investigate T9 (Intel). Influence 4, Ob 2. 4d10: 9,7,8,2 → 3 net. Success. Varfell learns Church Mandate is "Excellent" (6→wait, Crown Govern OW just pushed Crown to 6; Church still at 5). Correct learning: Church Mandate "Good" (4-5 range per fog of war). +1 Influence (Spy success per stat economy §4.1). Varfell Influence: 4→5.
 
 **Accounting Season 1:**
-- TC: 33 (all sources applied above)
+- CI: 33 (all sources applied above)
 - Accord: all starting values maintained; no hostile actions; no Strain
-- Peninsular Strain: 0 (no battles, no revolts) → −1 passive (no battles this season). Already 0, can't go below.
+- Turmoil: 0 (no battles, no revolts) → −1 passive (no battles this season). Already 0, can't go below.
 - RS: 72 (no Thread ops, no battles)
 - IP: 0 (no battles)
 - Victory checks: no faction meets any condition.
@@ -66,39 +66,39 @@ Peninsular Strain: 0. RS: 72. IP: 0.
 
 **Seasons 2–5 compressed summary:**
 
-Season 2: TC 40 milestone reached (Church Assert S2: +2 more; Piety Yield +1; conditional passive +1 because Church now Prominent in T9 AND T3 — Crown didn't Govern T3 this season, so Church extends influence). TC: 33 + Assert(S2:+2) + PY(+1) + conditional(+1) = 37 → no cap. Hmm — let me recheck: if Church is only Prominent in T9 (not T3), conditional is still +0 (need 2+). Church isn't Prominent in T3 yet at S2 (Crown Mandate ≥ Church Mandate in most territories). So: TC 33 + Assert S2 Ob 1 success = 33+1 = 34. PY T9 +1 = 35. Conditional: Church Prominent in 1 territory = +0. TC: 35. S2 Church Assert (Senator #2): Success: TC 35+1 = 36. **Church has 2 Senator cards.** 2 Asserts in one season: S1 Assert → TC+2 (OW); S2 has 1 more Senator — can Assert again? No: cooldown = 1 season. The S1 Senator goes on cooldown in S2. Church in S2 uses Pontifex (Thread) or the other Senator. Uses 2nd Senator for another Assert.
+Season 2: CI 40 milestone reached (Church Assert S2: +2 more; Piety Yield +1; conditional passive +1 because Church now Prominent in T9 AND T3 — Crown didn't Govern T3 this season, so Church extends influence). CI: 33 + Assert(S2:+2) + PY(+1) + conditional(+1) = 37 → no cap. Hmm — let me recheck: if Church is only Prominent in T9 (not T3), conditional is still +0 (need 2+). Church isn't Prominent in T3 yet at S2 (Crown Mandate ≥ Church Mandate in most territories). So: CI 33 + Assert S2 Ob 1 success = 33+1 = 34. PY T9 +1 = 35. Conditional: Church Prominent in 1 territory = +0. CI: 35. S2 Church Assert (Senator #2): Success: CI 35+1 = 36. **Church has 2 Senator cards.** 2 Asserts in one season: S1 Assert → CI+2 (OW); S2 has 1 more Senator — can Assert again? No: cooldown = 1 season. The S1 Senator goes on cooldown in S2. Church in S2 uses Pontifex (Thread) or the other Senator. Uses 2nd Senator for another Assert.
 
-**[FINDING: Church's 2× Senator advantage means 2 Asserts per season when both Senators are available. But cooldown = 1 season means each Senator refreshes every season. With 2 Senators, Church can play both in S1 (2× Assert) and have both available again in S2 (after S1 cooldown resolves at S2 Accounting). This produces ~4 Assert actions in 2 seasons. This is extremely fast TC gain.]**
+**[FINDING: Church's 2× Senator advantage means 2 Asserts per season when both Senators are available. But cooldown = 1 season means each Senator refreshes every season. With 2 Senators, Church can play both in S1 (2× Assert) and have both available again in S2 (after S1 cooldown resolves at S2 Accounting). This produces ~4 Assert actions in 2 seasons. This is extremely fast CI gain.]**
 
-TC accounting, revised for 2× Senator:
-- S1: Assert(OW, +2) + Assert(Success, +1) + PY(+1) = +4. TC: 28→32.
-- S2: Assert(+1) + Assert(+1) + PY(+1) + conditional(+0) = +3. TC: 32→35.  
-- S3: Assert+Assert+PY = +3. TC: 35→38. Conditional still +0 (only 1 Prominent territory).
-- S4: Assert+Assert+PY = +3. TC: 38→41. **TC 40 milestone crossed.** Church gains +1D on Assert/Seizure rolls.
+CI accounting, revised for 2× Senator:
+- S1: Assert(OW, +2) + Assert(Success, +1) + PY(+1) = +4. CI: 28→32.
+- S2: Assert(+1) + Assert(+1) + PY(+1) + conditional(+0) = +3. CI: 32→35.  
+- S3: Assert+Assert+PY = +3. CI: 35→38. Conditional still +0 (only 1 Prominent territory).
+- S4: Assert+Assert+PY = +3. CI: 38→41. **CI 40 milestone crossed.** Church gains +1D on Assert/Seizure rolls.
 - Conditional at S4: Church now Prominent in T9. Is Church Prominent anywhere else? Only if Church Mandate > that territory's controller Mandate. At S4: Crown Mandate 5 (unchanged; Govern capital S2 would give OW again? Maybe). Let's say Crown stays at 5 (cap is starting Mandate per PP-174, which equals 5 → Crown can't exceed 5 via Govern). So Crown Mandate = 5. Church Mandate = 5. Neither has Church Mandate > Crown Mandate in Crown territories. Church Prominent only in T9. Conditional = +0.
-- S5: Assert+Assert+PY = +3. TC: 41→44. With TC 40 milestone: Assert rolls now +1D. Assert S5 #1: 7D (6D political pool + 1D milestone): high success. TC gain may be OW = +2. Assert S5 #2: OW = +2. TC: 41 + 2+2+1 = 46. Above seasonal cap of 5? 46−41 = 5. Exactly at cap. TC: 46.
+- S5: Assert+Assert+PY = +3. CI: 41→44. With CI 40 milestone: Assert rolls now +1D. Assert S5 #1: 7D (6D political pool + 1D milestone): high success. CI gain may be OW = +2. Assert S5 #2: OW = +2. CI: 41 + 2+2+1 = 46. Above seasonal cap of 5? 46−41 = 5. Exactly at cap. CI: 46.
 
-**[FINDING (ED-NEW-TC-CRITICAL): With 2× Senator and 2 Asserts/season, Church reaches TC 40 milestone in 4 seasons and TC 46 by Season 5. Rate: ~4–5 TC/season. At this rate: TC 55 milestone (Prominent Ob +1) reached by Season 7–8. TC 65 milestone (extra action slot) by Season 10–11. TC 80 milestone by Season 15–16. TC 100 by Season 22–24. This is FASTER than expected — previous session estimated Season 35–45 for Church Holy State victory at TC 70. The 2-Senator 2-Assert engine is more powerful than prior analysis captured.]**
+**[FINDING (ED-NEW-CI-CRITICAL): With 2× Senator and 2 Asserts/season, Church reaches CI 40 milestone in 4 seasons and CI 46 by Season 5. Rate: ~4–5 CI/season. At this rate: CI 55 milestone (Prominent Ob +1) reached by Season 7–8. CI 65 milestone (extra action slot) by Season 10–11. CI 80 milestone by Season 15–16. CI 100 by Season 22–24. This is FASTER than expected — previous session estimated Season 35–45 for Church Holy State victory at CI 70. The 2-Senator 2-Assert engine is more powerful than prior analysis captured.]**
 
-**[FINDING (BALANCE-NEW-TC-01 CONFIRMED): TC reform (conditional passive replacing unconditional) slows passive TC gain but the 2× Senator Assert engine dominates. Net effect: Church TC rate is ~4–5/season early game (same or faster than old system) but becomes more suppressible (Suppress negates conditional passive = only −1 TC/season loss, and Hafenmark Suppress negates conditional+PY for −2 TC/season). Hafenmark Structural Suppression (Baralta −1/season) + active Suppress (−1 conditional passive) = −2 from Church's ~4–5 = net 2–3 TC/season. Church still wins TC race in ~20 seasons. The reform improved the system but didn't fundamentally change Church's dominance.]**
+**[FINDING (BALANCE-NEW-CI-01 CONFIRMED): CI reform (conditional passive replacing unconditional) slows passive CI gain but the 2× Senator Assert engine dominates. Net effect: Church CI rate is ~4–5/season early game (same or faster than old system) but becomes more suppressible (Suppress negates conditional passive = only −1 CI/season loss, and Hafenmark Suppress negates conditional+PY for −2 CI/season). Hafenmark Structural Suppression (Baralta −1/season) + active Suppress (−1 conditional passive) = −2 from Church's ~4–5 = net 2–3 CI/season. Church still wins CI race in ~20 seasons. The reform improved the system but didn't fundamentally change Church's dominance.]**
 
 ---
 
 **Seasons 6–10 (Mid-game pressure):**
 
-Season 6: TC 46. Hafenmark now triggers Priority 4 (TC ≥ 40): Suppress becomes mandatory every season when available. Hafenmark Suppress: Influence 6, Ob 2. 6d10: 9,8,7,3,10,2 → 5 net. Overwhelming. Negates conditional passive AND Piety Yield. Church TC gain this season: Assert(+1) + Assert(+1) = +2 (PY and passive negated). Net: 46→48.
+Season 6: CI 46. Hafenmark now triggers Priority 4 (CI ≥ 40): Suppress becomes mandatory every season when available. Hafenmark Suppress: Influence 6, Ob 2. 6d10: 9,8,7,3,10,2 → 5 net. Overwhelming. Negates conditional passive AND Piety Yield. Church CI gain this season: Assert(+1) + Assert(+1) = +2 (PY and passive negated). Net: 46→48.
 
-**[FINDING: Hafenmark OW Suppress negating both conditional passive and Piety Yield reduces Church's TC gain from ~4–5/season to ~2/season. This is the crucial balance mechanic. If Hafenmark can consistently Suppress OW, Church's timeline extends from 20 to 35+ seasons. Suppress at Influence 6 vs Ob 2: P(Success+) ≈ 80%. Overwhelming: ~57%. Hafenmark gets OW ~57% of the time.]**
+**[FINDING: Hafenmark OW Suppress negating both conditional passive and Piety Yield reduces Church's CI gain from ~4–5/season to ~2/season. This is the crucial balance mechanic. If Hafenmark can consistently Suppress OW, Church's timeline extends from 20 to 35+ seasons. Suppress at Influence 6 vs Ob 2: P(Success+) ≈ 80%. Overwhelming: ~57%. Hafenmark gets OW ~57% of the time.]**
 
-Season 7–10 (simplified): TC advances at ~3/season (1 OW Suppress per 2 seasons negates full gain; 1 Success Suppress per other season negates partial). By Season 10: TC ≈ 46 + 4×3 = 58. TC 55 milestone crossed around Season 9. At TC 55: opposing actions against Church cost +1 Ob.
+Season 7–10 (simplified): CI advances at ~3/season (1 OW Suppress per 2 seasons negates full gain; 1 Success Suppress per other season negates partial). By Season 10: CI ≈ 46 + 4×3 = 58. CI 55 milestone crossed around Season 9. At CI 55: opposing actions against Church cost +1 Ob.
 
-**[FINDING: TC 55 milestone produces immediate political asymmetry. Any faction attempting Censure, Embargo, or Outlawry against Church now faces +1 Ob. At Mandate 5 (Crown, Ob 2 base): Mandate check now Ob 3. P(≥Ob 3, pool 5) ≈ 42% — from reliable to coin-flip. The TC 55 milestone effectively grants Church moderate parliamentary immunity. This is correct design but fires 2 seasons earlier than expected due to the 2-Assert engine.]**
+**[FINDING: CI 55 milestone produces immediate political asymmetry. Any faction attempting Censure, Embargo, or Outlawry against Church now faces +1 Ob. At Mandate 5 (Crown, Ob 2 base): Mandate check now Ob 3. P(≥Ob 3, pool 5) ≈ 42% — from reliable to coin-flip. The CI 55 milestone effectively grants Church moderate parliamentary immunity. This is correct design but fires 2 seasons earlier than expected due to the 2-Assert engine.]**
 
-Season 8 — Church Seizure opportunity: TC ≥ 40 allows Seizure. Church targets T3 (Lowenskyst, Crown territory, PT 3). Seizure Ob = 7 − PT = 7−3 = 4. Church Influence 6 + floor(TC/20) bonus = 6+2 = 8D (TC 52 at S8). 8d10: 9,8,7,4,10,3,7,2 → 6 net. Ob 4, surplus 2 = Success. T3 Accord set to max(floor(3/2)+1, 2) = max(2,2) = 2. Crown loses T3 effective control (TCV 2 lost). Church gains T3 prominence. RS −1 (no Battle required for ungarrisoned territory). **[FINDING: Church's Graduated Seizure is highly effective at TC 40+. With 8D at Ob 4, P(Success+) ≈ 85%. Crown's ungarrisoned territories are highly vulnerable. Crown needs to prioritize garrisoning T3 specifically to block Seizure — requiring a Legionary card before Church gets there.]**
+Season 8 — Church Seizure opportunity: CI ≥ 40 allows Seizure. Church targets T3 (Lowenskyst, Crown territory, PT 3). Seizure Ob = 7 − PT = 7−3 = 4. Church Influence 6 + floor(CI/20) bonus = 6+2 = 8D (CI 52 at S8). 8d10: 9,8,7,4,10,3,7,2 → 6 net. Ob 4, surplus 2 = Success. T3 Accord set to max(floor(3/2)+1, 2) = max(2,2) = 2. Crown loses T3 effective control (TCV 2 lost). Church gains T3 prominence. RS −1 (no Battle required for ungarrisoned territory). **[FINDING: Church's Graduated Seizure is highly effective at CI 40+. With 8D at Ob 4, P(Success+) ≈ 85%. Crown's ungarrisoned territories are highly vulnerable. Crown needs to prioritize garrisoning T3 specifically to block Seizure — requiring a Legionary card before Church gets there.]**
 
 Crown AI response: Priority 2 DEFEND — enemy Church now prominent in T3. Crown Legionary to T3 (Muster). Muster Ob 1 (no prerequisites for Light Infantry). Roll 4d10+commander: 9,7,3,1 → 2−1 = 1 net. Ob 1 = Success. Light Infantry unit raised in T3 (Size 2, Power 3). T3 is now garrisoned. Future Church Seizure requires Battle first (RS −1).
 
-**[FINDING: Crown's correct response to Church Seizure is rapid garrisoning. The 1-season lag (Church Seizes → Crown Musters next season) means the first Seizure often succeeds. Crown must preemptively garrison contested territories before TC 40, or react to the first Seizure by garrisoning everything. This creates a correct tension: Crown must choose between expanding and defending existing holdings.]**
+**[FINDING: Crown's correct response to Church Seizure is rapid garrisoning. The 1-season lag (Church Seizes → Crown Musters next season) means the first Seizure often succeeds. Crown must preemptively garrison contested territories before CI 40, or react to the first Seizure by garrisoning everything. This creates a correct tension: Crown must choose between expanding and defending existing holdings.]**
 
 ---
 
@@ -107,54 +107,54 @@ Crown AI response: Priority 2 DEFEND — enemy Church now prominent in T3. Crown
 | Faction | TCV | Key conditions | Status |
 |---------|-----|---------------|--------|
 | Crown | 10 (lost T3) | Mandate 5, Military 4, Accord maintained in T1/T2/T5/T6/T14 | No win — TCV < 14 |
-| Church | 7 (gained T3) | TC 58, Mandate 5, PT 5 in T9, T3 under Seizure | No win — TCV 7, TC < 65 |
+| Church | 7 (gained T3) | CI 58, Mandate 5, PT 5 in T9, T3 under Seizure | No win — TCV 7, CI < 65 |
 | Hafenmark | 6 | Mandate 4, suppressing Church | No win |
 | Varfell | 6 | VTM 2 (2 Expedition seasons) | No win |
 
-**Peninsular Strain at Season 10:** 1 battle (Crown vs Church over T3? No — Church Seizure of ungarrisoned T3 = no Battle, no Strain). All other actions diplomatic/covert. Strain: 0. RS: 71 (−1 from Seizure, no Battle RS costs since Church took T3 ungarrisoned). IP: 0 (no battles).
+**Turmoil at Season 10:** 1 battle (Crown vs Church over T3? No — Church Seizure of ungarrisoned T3 = no Battle, no Strain). All other actions diplomatic/covert. Strain: 0. RS: 71 (−1 from Seizure, no Battle RS costs since Church took T3 ungarrisoned). IP: 0 (no battles).
 
 ---
 
 **Seasons 11–15 (Power Accumulation):**
 
-Season 11: TC 61. Church at Priority 2 (TC ≥ 55 milestone active, then TC 65 milestone approaches). Crown loses T3 TCV but garrisoned it — Church can only recontest via Battle now. Church shifts to Assert + Seizure targeting T14 (Crown, PT 3, ungarrisoned at time of attempt? Crown may have garrisoned T14 too). Assume Crown garrisons 2 territories with 2× Legionary cards; T14 covered.
+Season 11: CI 61. Church at Priority 2 (CI ≥ 55 milestone active, then CI 65 milestone approaches). Crown loses T3 TCV but garrisoned it — Church can only recontest via Battle now. Church shifts to Assert + Seizure targeting T14 (Crown, PT 3, ungarrisoned at time of attempt? Crown may have garrisoned T14 too). Assume Crown garrisons 2 territories with 2× Legionary cards; T14 covered.
 
-Season 12: TC 65 milestone. **Church Dominant:** secular factions need 2 action slots to pass Parliamentary motions against Church. Crown has 1× Senator card and 1× Prefect. In practice, any Parliamentary motion against Church now costs Crown 2 cards when they only have 1 Senator. **Crown effectively cannot pass anti-Church Parliamentary motions alone.** Hafenmark with 2× Consul + Senator can field 2 cards in Parliament — still functional against Church. **[FINDING: TC 65 milestone grants Church near-immunity to solo Parliamentary action by Crown. The 2-card requirement is a significant constraint since most factions have 1 Senator. Only Hafenmark (2× Consul + Senator = 3 cards) and Church itself (2× Senator) have sufficient card bandwidth. At TC 65, Crown becomes politically toothless without Hafenmark coalition.]**
+Season 12: CI 65 milestone. **Church Dominant:** secular factions need 2 action slots to pass Parliamentary motions against Church. Crown has 1× Senator card and 1× Prefect. In practice, any Parliamentary motion against Church now costs Crown 2 cards when they only have 1 Senator. **Crown effectively cannot pass anti-Church Parliamentary motions alone.** Hafenmark with 2× Consul + Senator can field 2 cards in Parliament — still functional against Church. **[FINDING: CI 65 milestone grants Church near-immunity to solo Parliamentary action by Crown. The 2-card requirement is a significant constraint since most factions have 1 Senator. Only Hafenmark (2× Consul + Senator = 3 cards) and Church itself (2× Senator) have sufficient card bandwidth. At CI 65, Crown becomes politically toothless without Hafenmark coalition.]**
 
 Season 13: Hafenmark Priority 4b fires: Dynastic Proclamation on T7 (Rendstad, adjacent to Gransol T8, controller Mandate 3 [Hafenmark's own territory — this is wrong, Priority 4b targets adjacent territory with controller Mandate < Hafenmark Mandate]). Correctly: Hafenmark targets T6 (Stillhelm, Crown territory, Crown Mandate 5 vs Hafenmark Mandate now 4 — Crown Mandate > Hafenmark Mandate, so Priority 4b doesn't fire; prerequisite is Hafenmark Mandate > target controller Mandate). With Crown at 5 and Hafenmark at 4, Hafenmark cannot Proclaim on any Crown territory. **[FINDING: Dynastic Proclamation is gated by Hafenmark Mandate > target controller Mandate. Since Crown starts at Mandate 5 and Hafenmark at 4, Hafenmark can never Proclaim on Crown territory without first raising Mandate above 5 OR waiting for Crown Mandate to drop. This is correct — Hafenmark's expansion tool targets weakened rivals, not strong ones.]**
 
-Season 14: Varfell Path A VTM advancement. VTM 3 (Expedition to T6 success). Varfell now eligible for VTM Discretion (suppress TC by 1 if their contribution was ≥1 that season). Varfell Tribune: VTM Discretion vs TC. TC: 72. Varfell rolls Influence 5 + VTM 3 (floor(3/2)=1 bonus die) = 6D vs Ob 2. 6d10: 9,8,7,3,10,2 → 5 net. OW: TC −1 additional. TC: 72−1 (Suppress from Hafenmark) −1 (Varfell VTM Discretion) = 70. With Assert (+2) applied this season: TC = 70+2 = 72 (below cap). **[FINDING: When Hafenmark Suppress + Varfell Discretion both fire in the same season, Church's net TC gain is reduced to Assert results only (~2/season). This 2-faction suppression coalition is the correct anti-Church strategy. Critical design: TC 75 is now the old freeze point — in tc_political_redesign_v30, TC runs to 100 with new milestones. Season 14 TC ~72 means TC 80 milestone (Seizure Ob −1 globally; PT drifts +1) is ~4 seasons away.]**
+Season 14: Varfell Path A VTM advancement. VTM 3 (Expedition to T6 success). Varfell now eligible for VTM Discretion (suppress CI by 1 if their contribution was ≥1 that season). Varfell Tribune: VTM Discretion vs CI. CI: 72. Varfell rolls Influence 5 + VTM 3 (floor(3/2)=1 bonus die) = 6D vs Ob 2. 6d10: 9,8,7,3,10,2 → 5 net. OW: CI −1 additional. CI: 72−1 (Suppress from Hafenmark) −1 (Varfell VTM Discretion) = 70. With Assert (+2) applied this season: CI = 70+2 = 72 (below cap). **[FINDING: When Hafenmark Suppress + Varfell Discretion both fire in the same season, Church's net CI gain is reduced to Assert results only (~2/season). This 2-faction suppression coalition is the correct anti-Church strategy. Critical design: CI 75 is now the old freeze point — in tc_political_redesign_v30, CI runs to 100 with new milestones. Season 14 CI ~72 means CI 80 milestone (Seizure Ob −1 globally; PT drifts +1) is ~4 seasons away.]**
 
-Season 15 summary: TC 76. **Old TC 75 freeze was removed in tc_political_redesign_v30.** Under new rules, Church continues to advance TC. TC 80 milestone approaching. Peninsular Strain: 1 (one battle between Varfell and Hafenmark in disputed T4). RS: 70 (−2 from battles since S8). IP: 2 (1 battle season).
+Season 15 summary: CI 76. **Old CI 75 freeze was removed in tc_political_redesign_v30.** Under new rules, Church continues to advance CI. CI 80 milestone approaching. Turmoil: 1 (one battle between Varfell and Hafenmark in disputed T4). RS: 70 (−2 from battles since S8). IP: 2 (1 battle season).
 
 ---
 
 **Seasons 16–20 (Endgame):**
 
-Season 16: TC 80. **Church Ascendant.** Seizure Ob −1 globally. All territory PT drifts +1 at Year-End unless Warden Cooperation ≥ 2. **[CRITICAL FINDING: TC 80 PT drift +1 affects all territories. Starting PT values: T6=1, T13=1, T11=2, T4=2. After TC 80 Year-End drift: T6→2, T13→2, T11→3, T4→3. These are Varfell and fringe Crown territories. Varfell's Cultural Reformation tool requires PT ≤ 3 — all four target territories just rose to 2–3. At PT 3, Reformation Ob = PT+1 = 4. Varfell Cultural Reformation goes from Ob 2 (PT 1) to Ob 4 (PT 3) in one Year-End. This massively narrows Varfell's non-military expansion window.]**
+Season 16: CI 80. **Church Ascendant.** Seizure Ob −1 globally. All territory PT drifts +1 at Year-End unless Warden Cooperation ≥ 2. **[CRITICAL FINDING: CI 80 PT drift +1 affects all territories. Starting PT values: T6=1, T13=1, T11=2, T4=2. After CI 80 Year-End drift: T6→2, T13→2, T11→3, T4→3. These are Varfell and fringe Crown territories. Varfell's Cultural Reformation tool requires PT ≤ 3 — all four target territories just rose to 2–3. At PT 3, Reformation Ob = PT+1 = 4. Varfell Cultural Reformation goes from Ob 2 (PT 1) to Ob 4 (PT 3) in one Year-End. This massively narrows Varfell's non-military expansion window.]**
 
-**[CRITICAL FINDING: TC 80 PT drift effectively neutralises Varfell's primary expansion tool in the endgame. This is intended (Varfell's expansion requires acting before TC 80) but the interaction wasn't previously identified. Varfell must complete Cultural Reformations by Season 15 or face Ob 4+ targets in the endgame. This makes Varfell's Path A (VTM focus) time-sensitive.]**
+**[CRITICAL FINDING: CI 80 PT drift effectively neutralises Varfell's primary expansion tool in the endgame. This is intended (Varfell's expansion requires acting before CI 80) but the interaction wasn't previously identified. Varfell must complete Cultural Reformations by Season 15 or face Ob 4+ targets in the endgame. This makes Varfell's Path A (VTM focus) time-sensitive.]**
 
-Season 17: Church Seizure (TC 80, Seizure Ob −1 globally). Ob = 7−PT−1 (TC80 bonus). T2 (Kronmark, Crown, PT 3): Ob = 7−3−1 = 3. Church pool: Influence 6 + floor(80/20)=4 bonus dice = 10D. 10d10: 9,8,7,6,10,7,3,8,4,2 → 6 net. Ob 3 = OW. T2 Accord set to floor(3/2)+2 = 3 (capped at 3). Crown loses T2 (TCV 1). Church TCV now: T9(5)+T3(2)+T2(1) = 8. Church faction-specific victory: TCV ≥ 8, PT ≥ 3 in all held territories. T3 PT = 3 ✓, T9 PT = 5 ✓, T2 PT = 3 ✓. **Church approaches faction-specific victory condition.** Missing: Mandate check (needs to have maintained Mandate, which it has at 5+).
+Season 17: Church Seizure (CI 80, Seizure Ob −1 globally). Ob = 7−PT−1 (TC80 bonus). T2 (Kronmark, Crown, PT 3): Ob = 7−3−1 = 3. Church pool: Influence 6 + floor(80/20)=4 bonus dice = 10D. 10d10: 9,8,7,6,10,7,3,8,4,2 → 6 net. Ob 3 = OW. T2 Accord set to floor(3/2)+2 = 3 (capped at 3). Crown loses T2 (TCV 1). Church TCV now: T9(5)+T3(2)+T2(1) = 8. Church faction-specific victory: TCV ≥ 8, PT ≥ 3 in all held territories. T3 PT = 3 ✓, T9 PT = 5 ✓, T2 PT = 3 ✓. **Church approaches faction-specific victory condition.** Missing: Mandate check (needs to have maintained Mandate, which it has at 5+).
 
-Season 18: Victory check for Church. TCV = 8 ✓. PT ≥ 3 in T3, T9, T2 ✓. TC ≥ 65 (per §3.2 Church victory requiring TC ≥ 65): TC 82 ✓. But §3.2 of tc_political_redesign references victory_v30 §3.2. Per victory_v30 §3.2: Church victory requires TC ≥ 65 + TCV ≥ 8. **[FINDING: Church approaches faction-specific victory in Season 18 of a 4-faction NPC game. This is within the normal range (victory around Seasons 17–25 per board_game §Part Eight: "Estimated victory: Season 35–45" was for Holy State victory requiring TC 70 under the old rules, but that was with Hafenmark suppression AND pre-TC-reform. Under the new TC reform with 2-Assert engine, Church wins significantly earlier — Season 18.]**
+Season 18: Victory check for Church. TCV = 8 ✓. PT ≥ 3 in T3, T9, T2 ✓. CI ≥ 65 (per §3.2 Church victory requiring CI ≥ 65): CI 82 ✓. But §3.2 of tc_political_redesign references victory_v30 §3.2. Per victory_v30 §3.2: Church victory requires CI ≥ 65 + TCV ≥ 8. **[FINDING: Church approaches faction-specific victory in Season 18 of a 4-faction NPC game. This is within the normal range (victory around Seasons 17–25 per board_game §Part Eight: "Estimated victory: Season 35–45" was for Holy State victory requiring CI 70 under the old rules, but that was with Hafenmark suppression AND pre-CI-reform. Under the new CI reform with 2-Assert engine, Church wins significantly earlier — Season 18.]**
 
-**[MAJOR FINDING — BALANCE-NEW-TC-01 TRIGGERED: The 2-Assert engine under tc_political_redesign produces Church victory in ~18 seasons even with active Hafenmark suppression. This is too fast. The estimated target was Seasons 25–35 for a balanced game. Three potential fixes: (1) Reduce Church to 1 Senator card (losing 2-Assert advantage), (2) Assert-specific cooldown of 2 seasons instead of 1, (3) Restrict Assert to Pontifex card only (not Senator). Each has different strategic implications.]**
+**[MAJOR FINDING — BALANCE-NEW-CI-01 TRIGGERED: The 2-Assert engine under tc_political_redesign produces Church victory in ~18 seasons even with active Hafenmark suppression. This is too fast. The estimated target was Seasons 25–35 for a balanced game. Three potential fixes: (1) Reduce Church to 1 Senator card (losing 2-Assert advantage), (2) Assert-specific cooldown of 2 seasons instead of 1, (3) Restrict Assert to Pontifex card only (not Senator). Each has different strategic implications.]**
 
-**Recommended fix: Assert moves to Pontifex-exclusive.** Church has 1× Pontifex with cooldown 2. This halves Assert frequency: 1 Assert per 2 seasons instead of 2 per season. TC gain from Assert drops from ~2/season to ~0.5/season average. Combined with conditional passive and PY, Church gains ~2.5/season at peak — reaching victory around Season 28–32. Correct target range.
+**Recommended fix: Assert moves to Pontifex-exclusive.** Church has 1× Pontifex with cooldown 2. This halves Assert frequency: 1 Assert per 2 seasons instead of 2 per season. CI gain from Assert drops from ~2/season to ~0.5/season average. Combined with conditional passive and PY, Church gains ~2.5/season at peak — reaching victory around Season 28–32. Correct target range.
 
-**Campaign finding — Peninsular Strain interaction:** During Seasons 11–20, Strain reached 4 (Tension level) from 3 battle-seasons. All factions: Mandate check Ob 1. Church rolled Mandate 5D vs Ob 1: consistently succeeds. Weaker factions (Varfell Mandate 3): ~74% success. Over 5 seasons of Strain-4: Varfell Mandate drops 1 time on average. This is a meaningful but not crippling effect. Correct calibration.
+**Campaign finding — Turmoil interaction:** During Seasons 11–20, Strain reached 4 (Tension level) from 3 battle-seasons. All factions: Mandate check Ob 1. Church rolled Mandate 5D vs Ob 1: consistently succeeds. Weaker factions (Varfell Mandate 3): ~74% success. Over 5 seasons of Strain-4: Varfell Mandate drops 1 time on average. This is a meaningful but not crippling effect. Correct calibration.
 
 **ST-01 AUDIT:**
 
 | Finding | Verdict | Severity |
 |---------|---------|---------|
 | 2-Assert engine too fast (Church victory S18) | Design gap: Assert should be Pontifex-exclusive | P1 |
-| TC 80 PT drift neutralises Varfell tool in endgame | Intended interaction, but not documented | P2 |
-| Church Seizure at TC 80 with 10D pool is near-unstoppable | Correct: TC 80 represents near-theocratic dominance | ✓ Confirmed |
+| CI 80 PT drift neutralises Varfell tool in endgame | Intended interaction, but not documented | P2 |
+| Church Seizure at CI 80 with 10D pool is near-unstoppable | Correct: CI 80 represents near-theocratic dominance | ✓ Confirmed |
 | Hafenmark Dynastic Proclamation cannot target Crown (Mandate gap) | Correct gate — Hafenmark must weaken rivals first | ✓ Confirmed |
-| TC 65 two-card Parliamentary requirement locks out solo Crown | Correct: coalition required at high TC | ✓ Confirmed |
-| Peninsular Strain calibration | Correct — Tension at 3-4 battles/5 seasons | ✓ Confirmed |
+| CI 65 two-card Parliamentary requirement locks out solo Crown | Correct: coalition required at high CI | ✓ Confirmed |
+| Turmoil calibration | Correct — Tension at 3-4 battles/5 seasons | ✓ Confirmed |
 
 ---
 
@@ -181,7 +181,7 @@ Combat Pool = (4×2) + 3 + 3 = 14 dice. Weapon: Long Heavy Blade (TN 7). Armour:
 
 **Exchange 1 (player holds initiative — higher Attunement 4 vs Roderik's est. 3; per combat §3 subsequent rounds transfer to winner, Exchange 1 declared by lower initiative first):**
 
-Per combat §3: lower initiative holder (Roderik) declares split first. Roderik declares: 7 Off / 4 Def (11 dice). Player sees this, declares: 8 Off / 6 Def (14 dice).
+Per combat §3: lower first-to-speak holder (Roderik) declares split first. Roderik declares: 7 Off / 4 Def (11 dice). Player sees this, declares: 8 Off / 6 Def (14 dice).
 
 Player roll (TN 7, Off pool 8): 9,8,7,3,10,7,3,8 → 1+1+1+2+1+1 = 7 net.  
 Roderik roll (TN 6, Off pool 7): 8,6,3,9,7,4,6 → 1+1+1+1 = 4 net (TN 6: 6,7,8,9 = success; 10 = 2 successes; 1 = −1).
@@ -270,7 +270,7 @@ Crown: min(3, 4) + 4 = 7D.
 - Player genre: Projection (+1D from primary). Player not Memory (+0 from audience). Total: +1D.
 - Himlensendt genre: Projection (the Tribunal determines what should happen — Projection). +1D primary. +0 audience (Himlensendt arguing for investigation = Memory of heresy evidence — he switches to Memory). Himlensendt using Memory: +0 primary, +1D audience boost. Total: +1D each.
 
-**Starting Conviction Track:** 5 (neutral). Audience resistance: Baralta Stability 5 → (5−1)/1 (round up) = 2 resistance.
+**Starting Piety Track:** 5 (neutral). Audience resistance: Baralta Stability 5 → (5−1)/1 (round up) = 2 resistance.
 
 **Exchange 1:**
 
@@ -299,7 +299,7 @@ Himlensendt switches to Projection (arguing future Heresy Tribunal outcome). Pri
 
 Resonant Style targeting: player targets Himlensendt Evidence Resonant Style. Argument must use Memory+Revealing. Player is arguing Projection… can't simultaneously target Evidence (which requires Memory+Revealing) with a Projection argument. **[FINDING (GAP): A player cannot simultaneously use Projection genre (primary +1D) and target the Evidence Resonant Style (requires Memory+Revealing). These are incompatible. The player must choose between: (a) genre bonus + no Resonant Style targeting, or (b) switch to Memory genre (lose +1D primary bonus) to target Evidence Resonant Style. This is a genuine strategic tension, correctly designed.]**
 
-Player switches to Memory (loses +1D genre): cites specific evidence of RS decline rates in territories with active Thread persecution. 11D (no genre bonus, not Memory primary in audience). Recall +2D = 13D. Resonant Style targeting (Evidence): +1D = 14D. On win: +1 additional Conviction Track movement.
+Player switches to Memory (loses +1D genre): cites specific evidence of RS decline rates in territories with active Thread persecution. 11D (no genre bonus, not Memory primary in audience). Recall +2D = 13D. Resonant Style targeting (Evidence): +1D = 14D. On win: +1 additional Piety Track movement.
 
 Interaction: CROSS still (player Memory, Himlensendt Projection — different genres).
 
@@ -322,7 +322,7 @@ CLASH resolution: compare successes. Higher wins. Margin determines track moveme
 Player roll 14D TN7: 9,8,10,4,7,3,8,7,9,4,2,8,3,7 → 2+1+1+1+1+1+1+1 = 9 net.  
 Himlensendt roll 14D TN7: 8,7,4,3,10,9,2,7,3,8,7,4,2,9 → 1+1+2+1+1+1+1+1 = 9 net.
 
-Exact tie. Per §4 TIE rule: both take 1 strain. Conviction Track moves +1 toward initiative holder's position. Player holds initiative (from Exchange 1). Track: 5→6.
+Exact tie. Per §4 TIE rule: both take 1 strain. Piety Track moves +1 toward first-to-speak holder's position. Player holds initiative (from Exchange 1). Track: 5→6.
 
 Strain: player Composure = Charisma(4) + 6 = 10. Himlensendt Composure = Charisma(4) + 6 = 10. Both take 1 strain. Not Rattled yet.
 
@@ -402,23 +402,23 @@ Sufficient Scope met? Finding names faction leader acts (Himlensendt's charity p
 
 Domain Echo (§5.2, Personal Phase): fires immediately at scene end (Full TTRPG register shift mode). Effect: Magnitude = OW → ±2 to most relevant faction stat. Most relevant: exposing Church's Charity Advantage weakens it politically (Influence domain). Church Influence −2. **[Wait: Domain Echo fires immediately in full TTRPG mode; in Hybrid mode per §5.3: "Hybrid: Domain Echoes from personal scenes queue to Cascade Phase Accounting." Not immediate in Hybrid.** Domain Echo queued.
 
-*Scene 2 — Social contest vs Varfell NPC officer:* Player resolves a succession dispute in T12 (Sigurdshelm). Adjudicator: No adjudicator (private negotiation). Conviction Track optional. Single exchange. Player wins (Partial — one exchange, Projection-Revealing, Attunement pool): Varfell officer Disposition +1 toward player. No Domain Echo (private negotiation, not sufficient scope).
+*Scene 2 — Social contest vs Varfell NPC officer:* Player resolves a succession dispute in T12 (Sigurdshelm). Adjudicator: No adjudicator (private negotiation). Piety Track optional. Single exchange. Player wins (Partial — one exchange, Projection-Revealing, Attunement pool): Varfell officer Disposition +1 toward player. No Domain Echo (private negotiation, not sufficient scope).
 
 **Cascade Phase (Hybrid, applying all batched consequences):**
 
 Step 1 — Domain Echoes:
-- Fieldwork Scene 1 Domain Echo: Church Influence −2. Queued → fires now at Cascade Step 1. Church Influence: 6→4. **[FINDING: A single Personal Phase OW investigation can drop Church Influence by 2. Church Influence 6→4 is a significant reduction. At Influence 4, Church's Graduated Seizure pool (Influence + floor(TC/20)) = 4+4 = 8D. Vs. prior 6+4 = 10D. Ob 4 success rate: 8D ≈ 79% vs 10D ≈ 88%. Not catastrophic but meaningful. Player investigation of Church finances is a valid counter-strategy.]**
+- Fieldwork Scene 1 Domain Echo: Church Influence −2. Queued → fires now at Cascade Step 1. Church Influence: 6→4. **[FINDING: A single Personal Phase OW investigation can drop Church Influence by 2. Church Influence 6→4 is a significant reduction. At Influence 4, Church's Graduated Seizure pool (Influence + floor(CI/20)) = 4+4 = 8D. Vs. prior 6+4 = 10D. Ob 4 success rate: 8D ≈ 79% vs 10D ≈ 88%. Not catastrophic but meaningful. Player investigation of Church finances is a valid counter-strategy.]**
 
 Step 2 — Thread operation clock changes: No Thread ops in Personal Phase this season.
 
-Step 3 — Clock threshold events: TC check. TC 72 (from ST-01 timeline). No milestone crossed. RS 70. No RS threshold crossed (RS 72−2 = 70; Strained band = 79-60, no change in threshold). IP check: no battle this season → IP unchanged.
+Step 3 — Clock threshold events: CI check. CI 72 (from ST-01 timeline). No milestone crossed. RS 70. No RS threshold crossed (RS 72−2 = 70; Strained band = 79-60, no change in threshold). IP check: no battle this season → IP unchanged.
 
 Step 4 — BG order consequences:
 
 **Strategic Phase (BG) orders this season (run before Personal Phase, per §9.1):**
 
 Varfell AI ran:
-- Tribune Intel T3 (Investigate Crown territory): Influence 5, Ob 2. Roll 5d10: 9,8,7,3,2 → 3 net. Success. Crown stat revealed: "Crown Military at 4 — confirmed by spy network." Varfell Influence +1 (per TC redesign §4.1). Varfell Influence: 5→6.
+- Tribune Intel T3 (Investigate Crown territory): Influence 5, Ob 2. Roll 5d10: 9,8,7,3,2 → 3 net. Success. Crown stat revealed: "Crown Military at 4 — confirmed by spy network." Varfell Influence +1 (per CI redesign §4.1). Varfell Influence: 5→6.
 - Player (Varfell) PC Embedding bonus (§9, scale_transitions): PC present in T12 during Strategic Phase. Varfell Govern T12 gets +1D. Consul Govern T12: Mandate 3+1D (embedding), Ob 1 (capital −1). 4D: 9,8,4,2 → 2 net. OW. Accord T12: already 3 (capped). Mandate +1 (capital OW, PP-174). Varfell Mandate: 3→4.
 
 Step 4 (continued): BG order consequences processed. No NPC coalition penalties this season.
@@ -426,13 +426,13 @@ Step 4 (continued): BG order consequences processed. No NPC coalition penalties 
 Step 5 — Accounting:
 - Attribute changes applied: Church Influence 4 (from Domain Echo), Varfell Mandate 4 (from capital Govern).
 - Accord checks: all territories maintained (no Acc 1 territories without garrisons).
-- TC: 72 + Assert(+1, Church used one Senator) + PY(+1, T9 PT5 Prominent) + Conditional(+0, only 1 Prominent territory) = 74. Seasonal cap ±5: all fine.
+- CI: 72 + Assert(+1, Church used one Senator) + PY(+1, T9 PT5 Prominent) + Conditional(+0, only 1 Prominent territory) = 74. Seasonal cap ±5: all fine.
 - Victory checks: No faction meets conditions.
 - Seasonal caps applied. Pending Domain Echo (Church Influence −2) confirmed.
 
 **[FINDING: The Hybrid Cascade Phase correctly sequences all consequences. The key interaction: PC Embedding in Strategic Phase (+1D to Varfell Govern in T12) stacks with the Personal Phase scene (officer Disposition +1) to produce net Mandate +1 for Varfell. This 2-layer reinforcement (BG + TTRPG personal scenes both improving Varfell's standing in the same territory in the same season) is correct and intended — the hybrid mode rewards presence.]**
 
-**[FINDING (GAP): The Domain Echo from Personal Phase fieldwork (Church Influence −2) is significant enough to change Church's Seizure pool in the following season. But the Domain Echo fires at Cascade Step 1, before Church's TC advance at Step 3. So Church advances TC on top of reduced Influence. The sequence matters: if Influence were reduced before TC advance, Church's political pool would already be reduced when TC benefits are calculated. But TC advance is a clock check (Step 3), not dependent on Influence — so no interaction. However: if Church's reduced Influence triggers a Stability check (Influence 4 vs starting 6 = −2, which is a >2 attribute loss in one season), is a Stability check triggered? Per tc_political_redesign §4.1 Stability note: "Governed exclusively by Triggers 1–5 per faction_layer_v30." No automatic Stability check from Influence loss alone. Correct — no cross-contamination.]**
+**[FINDING (GAP): The Domain Echo from Personal Phase fieldwork (Church Influence −2) is significant enough to change Church's Seizure pool in the following season. But the Domain Echo fires at Cascade Step 1, before Church's CI advance at Step 3. So Church advances CI on top of reduced Influence. The sequence matters: if Influence were reduced before CI advance, Church's political pool would already be reduced when CI benefits are calculated. But CI advance is a clock check (Step 3), not dependent on Influence — so no interaction. However: if Church's reduced Influence triggers a Stability check (Influence 4 vs starting 6 = −2, which is a >2 attribute loss in one season), is a Stability check triggered? Per tc_political_redesign §4.1 Stability note: "Governed exclusively by Triggers 1–5 per faction_layer_v30." No automatic Stability check from Influence loss alone. Correct — no cross-contamination.]**
 
 **ST-04 AUDIT:**
 
@@ -445,22 +445,22 @@ Step 5 — Accounting:
 
 ---
 
-## ST-05 — TC REFORM STRESS TEST (25 SEASONS)
+## ST-05 — CI REFORM STRESS TEST (25 SEASONS)
 
-**Setup:** Church-only TC sim, 25 seasons. Test the repeal of PP-402 (unconditional passive) and the conditional passive system against Hafenmark maximum suppression.
+**Setup:** Church-only CI sim, 25 seasons. Test the repeal of PP-402 (unconditional passive) and the conditional passive system against Hafenmark maximum suppression.
 
 **Variables:**
-- Assert: Pontifex-exclusive (proposed fix from ST-01). Cooldown 2 seasons. 1 Assert per 2 seasons avg = 0.5 TC/season from Assert.
+- Assert: Pontifex-exclusive (proposed fix from ST-01). Cooldown 2 seasons. 1 Assert per 2 seasons avg = 0.5 CI/season from Assert.
 - Conditional passive: Church Prominent in 2+ territories → +1/season. Church Prominent in T9 always (start). T3 gained by Season 6 (per ST-01). So from Season 6: 2 territories Prominent → +1 conditional.
 - Piety Yield: T9 PT5 = +1/season always. T3 PT3 = +0.25/season from Season 6.
 - Charity Advantage: Church Wealth 4, Crown Wealth 4 (same) → no qualifying territory. Requires Church Wealth ≥ Crown Wealth + 2. Church Wealth rises to 6 by Season 10 if Trade succeeds. Then +0.5/season (1 territory qualifying) from Season 10.
-- Templar Presence: 1 Templar in T9 (Sacred Assembly Ob 3: ~42% success S1). Assume Templar deployed by Season 3. T9 PT 5 ≥ 3. TC +1/season from Season 3.
+- Templar Presence: 1 Templar in T9 (Sacred Assembly Ob 3: ~42% success S1). Assume Templar deployed by Season 3. T9 PT 5 ≥ 3. CI +1/season from Season 3.
 - Hafenmark Structural Suppression (Baralta): −1/season always. Baralta Mandate 4 at start. Assume stays ≥ 4 through most of game.
-- Hafenmark Active Suppress: 1 OW per 2 seasons (57% OW rate × every season = 0.57 OW/season). OW negates conditional + PY. In practice: Suppress fires every season, OW half the time. OW effect: −1 conditional (avoided) −1 PY (avoided) = saves Church +2 TC/season for that season. Averaged: Suppress OW 57% of seasons × saves 2 = 1.14 saved (i.e., Church gains 2 TC less in a Suppress-OW season). Simplified: Suppress OW negates 2 TC sources half the time = reduces TC by ~1/season on average.
+- Hafenmark Active Suppress: 1 OW per 2 seasons (57% OW rate × every season = 0.57 OW/season). OW negates conditional + PY. In practice: Suppress fires every season, OW half the time. OW effect: −1 conditional (avoided) −1 PY (avoided) = saves Church +2 CI/season for that season. Averaged: Suppress OW 57% of seasons × saves 2 = 1.14 saved (i.e., Church gains 2 CI less in a Suppress-OW season). Simplified: Suppress OW negates 2 CI sources half the time = reduces CI by ~1/season on average.
 
-**TC accumulation table (proposed Assert-as-Pontifex fix):**
+**CI accumulation table (proposed Assert-as-Pontifex fix):**
 
-| Season | Assert | Conditional | PY | Charity | Templar | Baralta | Suppress avg | Net gain | TC |
+| Season | Assert | Conditional | PY | Charity | Templar | Baralta | Suppress avg | Net gain | CI |
 |--------|--------|------------|-----|---------|---------|---------|-------------|---------|-----|
 | 1 | 0 | 0 | +1 | 0 | 0 | −1 | −0.5 | −0.5 | 27.5 |
 | 2 | +1 | 0 | +1 | 0 | 0 | −1 | −0.5 | +0.5 | 28 |
@@ -474,23 +474,23 @@ Step 5 — Accounting:
 | 10 | +1 | +1 | +1 | +0.5 | +1 | −1 | −1 | +2.5 | 39 |
 | 11 | 0 | +1 | +1 | +0.5 | +1 | −1 | −1 | +1.5 | 40.5 |
 
-TC 40 milestone reached Season 11. With Pontifex-exclusive Assert, vs Season 4 under 2-Assert engine. **Correct:** Assert-as-Pontifex pushes TC 40 milestone back ~7 seasons. This gives secular factions time to build defenses before Church Seizure becomes available.
+CI 40 milestone reached Season 11. With Pontifex-exclusive Assert, vs Season 4 under 2-Assert engine. **Correct:** Assert-as-Pontifex pushes CI 40 milestone back ~7 seasons. This gives secular factions time to build defenses before Church Seizure becomes available.
 
 | 12–15 | ~+2–2.5/season | 40 → 48 |
-| 15 | TC 48 | Church Assertive bonus active |
+| 15 | CI 48 | Church Assertive bonus active |
 | 16–20 | ~+2.5/season with Assertive bonus | 48 → 60.5 |
-| 20 | TC 61 | Near TC 65 milestone |
+| 20 | CI 61 | Near CI 65 milestone |
 | 21–25 | ~+2.5/season | 61 → 73.5 |
 
-TC 55 milestone (Season ~17–18): +1 Ob to actions opposing Church.
-TC 65 milestone (Season ~21–22): 2-card Parliamentary requirement.
-TC 80 milestone (Season ~28–30): PT drift + Seizure Ob −1.
+CI 55 milestone (Season ~17–18): +1 Ob to actions opposing Church.
+CI 65 milestone (Season ~21–22): 2-card Parliamentary requirement.
+CI 80 milestone (Season ~28–30): PT drift + Seizure Ob −1.
 
-**[FINDING: With Assert as Pontifex-exclusive, Church victory timeline (TC ≥ 65 + TCV ≥ 8) is pushed to Season 21–22 minimum for TC alone. TCV 8 requires additional time (Church starts at 5, needs 3 more from Seizure or other means). Total victory around Season 24–28. This is a much better balance point than S18 under the 2-Assert engine. Standard game (~40 seasons) gives secular factions a full 15–20 season window to counter Church before it approaches victory.]**
+**[FINDING: With Assert as Pontifex-exclusive, Church victory timeline (CI ≥ 65 + TCV ≥ 8) is pushed to Season 21–22 minimum for CI alone. TCV 8 requires additional time (Church starts at 5, needs 3 more from Seizure or other means). Total victory around Season 24–28. This is a much better balance point than S18 under the 2-Assert engine. Standard game (~40 seasons) gives secular factions a full 15–20 season window to counter Church before it approaches victory.]**
 
 **Hafenmark maximum suppression scenario:** What if Hafenmark OW Suppress EVERY season (100% OW, impossible but stress test)?
 
-OW every season = conditional + PY negated every season. TC gain = Assert (0.5/season) + Templar (+1/season) + Charity (+0.5/season from S10) − Baralta (−1/season) = 1/season from Season 10. TC reaches 65 milestone: (65−28) ÷ 1 = 37 seasons. TC 65 in Season 39. In a standard 40-season game, Church barely reaches the TC milestone with max suppression. **[FINDING: Maximum Hafenmark suppression (OW every season) makes Church victory via TC extremely unlikely in a 40-season game. This is the correct ceiling — Hafenmark is designed as the structural Church counter. One faction playing perfectly should be able to contain the TC climb. At realistic Suppress rates (57% OW), Church wins around Season 24–28 as calculated above.]**
+OW every season = conditional + PY negated every season. CI gain = Assert (0.5/season) + Templar (+1/season) + Charity (+0.5/season from S10) − Baralta (−1/season) = 1/season from Season 10. CI reaches 65 milestone: (65−28) ÷ 1 = 37 seasons. CI 65 in Season 39. In a standard 40-season game, Church barely reaches the CI milestone with max suppression. **[FINDING: Maximum Hafenmark suppression (OW every season) makes Church victory via CI extremely unlikely in a 40-season game. This is the correct ceiling — Hafenmark is designed as the structural Church counter. One faction playing perfectly should be able to contain the CI climb. At realistic Suppress rates (57% OW), Church wins around Season 24–28 as calculated above.]**
 
 **ST-05 AUDIT:**
 
@@ -715,7 +715,7 @@ Löwenritter general assessment: Stability check from Battle lost (LR lost 1 uni
 
 ## ST-08 — NPC ARC EMERGENCE (ALMUD ARC B / HIMLENSENDT ARC A)
 
-**Setup:** Season 14. Theocracy Counter 62. Crown Stability 2 (near crisis). Almud's Certainty: 3 (Questioning). Löwenritter Coup Counter: 1.
+**Setup:** Season 14. Church Influence 62. Crown Stability 2 (near crisis). Almud's Certainty: 3 (Questioning). Löwenritter Coup Counter: 1.
 
 **Almud Arc B trigger conditions (npc_behavior §5.2):**
 - Crown Stability ≤ 2 AND Almud Certainty ≥ 3: Arc B fires.
@@ -735,21 +735,21 @@ Löwenritter general assessment: Stability check from Battle lost (LR lost 1 uni
 
 **Himlensendt Arc A (Default — No Intervention):**
 
-Season 14: TC 62 (from ST-05 timeline with Assert-as-Pontifex fix). Arc A fires when no Evidence contest has been won against Himlensendt AND no Cardinal of Temperance crisis is active. By Season 14: player has won Contest 2 (ST-03 sim) — wait, this is a different sim branch. In the ST-08 scenario, assume no player intervention with Himlensendt. Arc A: The Zealot.
+Season 14: CI 62 (from ST-05 timeline with Assert-as-Pontifex fix). Arc A fires when no Evidence contest has been won against Himlensendt AND no Cardinal of Temperance crisis is active. By Season 14: player has won Contest 2 (ST-03 sim) — wait, this is a different sim branch. In the ST-08 scenario, assume no player intervention with Himlensendt. Arc A: The Zealot.
 
 Arc A effects:
-- Conviction: Faith unchallenged. TC advances normally.
+- Conviction: Faith unchallenged. CI advances normally.
 - Behavior: Priority 2 ALWAYS fires (Assert/Seizure). Himlensendt's Mandate remains at 5.
-- TC 65 milestone (Season ~21 per ST-05) approaches. Himlensendt in Arc A is more dangerous than the contested Himlensendt in ST-03.
+- CI 65 milestone (Season ~21 per ST-05) approaches. Himlensendt in Arc A is more dangerous than the contested Himlensendt in ST-03.
 
-**[FINDING: Two NPC arcs firing simultaneously (Almud Arc B + Himlensendt Arc A) create a synergistic threat. Almud is rigid and defensively locked; Himlensendt is aggressively advancing TC. Crown cannot resist Church through Parliament (Almud Arc B resists any reform that looks like weakness). Crown cannot fight militarily (Stability 2). The player is trapped between two NPC arcs that reinforce each other's threat. This is exactly the intended political pressure — faction arc interactions creating complex, emergent crises.]**
+**[FINDING: Two NPC arcs firing simultaneously (Almud Arc B + Himlensendt Arc A) create a synergistic threat. Almud is rigid and defensively locked; Himlensendt is aggressively advancing CI. Crown cannot resist Church through Parliament (Almud Arc B resists any reform that looks like weakness). Crown cannot fight militarily (Stability 2). The player is trapped between two NPC arcs that reinforce each other's threat. This is exactly the intended political pressure — faction arc interactions creating complex, emergent crises.]**
 
 **Breakout paths:**
 1. Address Almud via Authority RS: find an NPC Almud respects (Ehrenwall has Authority with Almud per npc_behavior §5.2 Almud Arc B note). Player builds Disposition +3 with Ehrenwall → Ehrenwall delivers the argument Almud can hear. Requires 3+ seasons of relationship-building.
 2. Raise Crown Stability (exit Arc B trigger): Govern capital × 2 seasons. At Ob 1 in capital: ~91% per season. 2 successful Governs → Stability recovery (+1 per clean season, per military_layer §4.1 note: "no hostile Domain Actions + Stability ≤ 3 → +1 Stability"). 2 seasons → Stability back to 4. Arc B exits.
 3. Accept Arc B and coalition with Hafenmark: Hafenmark can contest Church via Parliament (has 3 card types). Player grants Hafenmark trade concessions in exchange for anti-Church Parliamentary motions.
 
-**[FINDING: Breakout path 2 (govern your way out of Arc B) is mechanically clean: 2 seasons of Govern OW in capital exits Arc B by raising Stability above the threshold. But during those 2 seasons, Church advances TC by ~5 points unopposed. The player trades 2 seasons of TC suppression for 2 seasons of stability repair. This is a correct asymmetric choice — stability or counter-threat.]**
+**[FINDING: Breakout path 2 (govern your way out of Arc B) is mechanically clean: 2 seasons of Govern OW in capital exits Arc B by raising Stability above the threshold. But during those 2 seasons, Church advances CI by ~5 points unopposed. The player trades 2 seasons of CI suppression for 2 seasons of stability repair. This is a correct asymmetric choice — stability or counter-threat.]**
 
 **ST-08 AUDIT:**
 
@@ -759,26 +759,26 @@ Arc A effects:
 | Evidence RS targeting becomes inert during Arc B (Reason suppressed) | ✓ Investment in wrong RS can become worthless | Confirmed |
 | Arc B + Arc A (Himlensendt) create synergistic political pressure | ✓ Emergent crisis — intended design | Confirmed |
 | Ehrenwall as Authority intermediary for Almud (Arc B breakout path) | ✓ Clean — requires 3+ seasons, creates urgency | Confirmed |
-| Stability recovery (2 seasons) exits Arc B at cost of 2 seasons TC suppression | ✓ Correct asymmetric tradeoff | Confirmed |
+| Stability recovery (2 seasons) exits Arc B at cost of 2 seasons CI suppression | ✓ Correct asymmetric tradeoff | Confirmed |
 
 ---
 
 ## ST-09 — OBLIGATION CASCADE UNDER PENINSULAR STRAIN
 
-**Setup:** Season 15. Peninsular Strain: 6 (Fracture level). Three active Obligations across factions:
+**Setup:** Season 15. Turmoil: 6 (Fracture level). Three active Obligations across factions:
 1. Church Obligation to Crown: "No Seizure in T2 for 2 seasons" (Grand Contest, 4-season duration, 2 seasons remaining).
 2. Crown Obligation to Hafenmark: "Maintain garrison in T10" (Formal Contest, 2-season duration, 1 season remaining).
 3. Hafenmark Obligation to Varfell: "Share intel on Church movements for 1 season" (Private negotiation, 1-season duration).
 
-**Peninsular Strain 6 (Fracture):** All factions: Accord −1 in one non-capital territory (controller's choice). This season: Crown chooses T6 (lowest-value). Church chooses T3 (recently seized, building stability). Hafenmark chooses T7. Varfell chooses T13. Accord effects: T6: 2→1, T3: 2→1, T7: 2→1, T13: 2→1. All four territories now Resistant.
+**Turmoil 6 (Fracture):** All factions: Accord −1 in one non-capital territory (controller's choice). This season: Crown chooses T6 (lowest-value). Church chooses T3 (recently seized, building stability). Hafenmark chooses T7. Varfell chooses T13. Accord effects: T6: 2→1, T3: 2→1, T7: 2→1, T13: 2→1. All four territories now Resistant.
 
-**[FINDING: Peninsular Strain Fracture (6) simultaneously degrades Accord in the most expendable territory of each faction. Across 4 factions this creates 4 Resistant territories in one Accounting. Each Resistant territory requires: (a) garrison or lose it at next Accounting, (b) Govern +1 Ob to restore, (c) no Prosperity contribution. 4 simultaneous Resistant territories = 4 factions spending card actions on defensive Govern instead of expansion. Strain 6 creates a board-wide governance crisis. This is correct and impactful.]**
+**[FINDING: Turmoil Fracture (6) simultaneously degrades Accord in the most expendable territory of each faction. Across 4 factions this creates 4 Resistant territories in one Accounting. Each Resistant territory requires: (a) garrison or lose it at next Accounting, (b) Govern +1 Ob to restore, (c) no Prosperity contribution. 4 simultaneous Resistant territories = 4 factions spending card actions on defensive Govern instead of expansion. Strain 6 creates a board-wide governance crisis. This is correct and impactful.]**
 
 **Obligation monitoring:**
 
-Church Priority 2 (TC 72, Seizure available): Church NPC tree checks Priority 5 EXPAND: "Seizure when TC ≥ 40 and prominent territories have PT ≥ 3." T2 (Crown) has PT 3 and Church was targeting it. But **Obligation 1 blocks T2 Seizure**. NPC priority tree modification: "any action that would violate the Obligation is blocked for Obligation duration unless faction enters Survival priority (Stability ≤ 2)" (§6.1). Church Stability: 5. Not at survival. **Church cannot Seize T2 this season.** Church redirects to T5 (Feldmark, Crown, PT 3, ungarrisoned) — adjacent target not covered by Obligation.
+Church Priority 2 (CI 72, Seizure available): Church NPC tree checks Priority 5 EXPAND: "Seizure when CI ≥ 40 and prominent territories have PT ≥ 3." T2 (Crown) has PT 3 and Church was targeting it. But **Obligation 1 blocks T2 Seizure**. NPC priority tree modification: "any action that would violate the Obligation is blocked for Obligation duration unless faction enters Survival priority (Stability ≤ 2)" (§6.1). Church Stability: 5. Not at survival. **Church cannot Seize T2 this season.** Church redirects to T5 (Feldmark, Crown, PT 3, ungarrisoned) — adjacent target not covered by Obligation.
 
-T5 Seizure (Church, PT 3, TC 72): Ob = 7−3 = 4. TC80 −1 not yet. Pool: Influence 4 (reduced by player investigation in ST-04) + floor(72/20)=3 = 7D. 7d10: 9,8,7,3,10,7,2 → 5 net. Ob 4, surplus 1 = Success. T5 Accord: max(floor(3/2)+1,2) = 2. Crown loses T5. **Obligation diverted Church from T2 but didn't stop Seizure altogether — it redirected it.**
+T5 Seizure (Church, PT 3, CI 72): Ob = 7−3 = 4. TC80 −1 not yet. Pool: Influence 4 (reduced by player investigation in ST-04) + floor(72/20)=3 = 7D. 7d10: 9,8,7,3,10,7,2 → 5 net. Ob 4, surplus 1 = Success. T5 Accord: max(floor(3/2)+1,2) = 2. Crown loses T5. **Obligation diverted Church from T2 but didn't stop Seizure altogether — it redirected it.**
 
 **[FINDING: Obligations constrain NPC behavior toward the specific committed territory but don't prevent adjacent action. A "no Seizure in T2" Obligation doesn't protect T5. Players must negotiate Obligations carefully — either covering all vulnerable territories or accepting that Church will find alternate targets. This is correct design: Obligation is a political tool, not a blanket protection.]**
 
@@ -849,9 +849,9 @@ Net RS change per season: −2.15 + 0.55 + 0.15 = **−1.45 RS/season** under re
 
 **[FINDING: The Warden expedition is precisely calibrated as a late-game "save the world" arc. Without it, RS reaches Critical by Season 38 and Rupture by Season 47 in a standard game. With it, RS stabilises and the game continues indefinitely. The player's choice to invest in Southernmost expedition vs. political/military expansion is the game's central tradeoff — it creates genuine tension between winning the political game and saving the world. This is the game's most elegant design constraint.]**
 
-**Lock chronic drift amplification:** Each active FR Lock adds −1–2 RS/season. In endgame with TC 80 (Church Locks becoming more common as Church asserts territorial control): 3 active Locks = −3 additional RS/season. Without Mending or Warden, RS decline accelerates to −4+/season in the endgame. This creates an exponential pressure effect: late-game Church dominance (via TC) accelerates RS decline (via Locks), which accelerates Rupture risk. Church "winning" the political game can bring about the world's destruction.
+**Lock chronic drift amplification:** Each active FR Lock adds −1–2 RS/season. In endgame with CI 80 (Church Locks becoming more common as Church asserts territorial control): 3 active Locks = −3 additional RS/season. Without Mending or Warden, RS decline accelerates to −4+/season in the endgame. This creates an exponential pressure effect: late-game Church dominance (via CI) accelerates RS decline (via Locks), which accelerates Rupture risk. Church "winning" the political game can bring about the world's destruction.
 
-**[FINDING (CRITICAL DESIGN VALIDATION): Church's TC victory and RS Rupture are on a collision course. Church TC wins around Season 24–28 (ST-05). RS reaches Critical around Season 38 (ST-10). There's a 10-season gap where the "winning" Church is operating in a world entering Crisis, with Thread ops +1 Ob worldwide, spontaneous Gaps, and Monstrous Incursions. Church wins politically just as the world breaks down. This is the game's tragic endgame: victory is pyrrhic. Church achieves Solmundan Orthodoxy while the Rendering Stability collapses. The player who took the RS-preserving path (Varfell Thread knowledge, Warden expedition, RM community Weaving) has the tools to prevent the Rupture. The Church-victory path produces the apocalypse the Church was supposed to prevent. This is brilliant design.]**
+**[FINDING (CRITICAL DESIGN VALIDATION): Church's CI victory and RS Rupture are on a collision course. Church CI wins around Season 24–28 (ST-05). RS reaches Critical around Season 38 (ST-10). There's a 10-season gap where the "winning" Church is operating in a world entering Crisis, with Thread ops +1 Ob worldwide, spontaneous Gaps, and Monstrous Incursions. Church wins politically just as the world breaks down. This is the game's tragic endgame: victory is pyrrhic. Church achieves Solmundan Orthodoxy while the Rendering Stability collapses. The player who took the RS-preserving path (Varfell Thread knowledge, Warden expedition, RM community Weaving) has the tools to prevent the Rupture. The Church-victory path produces the apocalypse the Church was supposed to prevent. This is brilliant design.]**
 
 **ST-10 AUDIT:**
 
@@ -861,7 +861,7 @@ Net RS change per season: −2.15 + 0.55 + 0.15 = **−1.45 RS/season** under re
 | RS reaches Fragile S15, Fractured S25, Critical S38, Rupture S47 | ✓ Correct endgame curve for 40-season games | Confirmed |
 | Battle-heavy campaigns accelerate Rupture by ~7 seasons | ✓ Correct anti-war incentive | Confirmed |
 | Warden expedition (+2/season) stabilises RS and prevents Rupture | ✓ Correctly designed "save the world" arc | Confirmed |
-| Church TC victory (S24–28) precedes RS Critical by ~10 seasons | ✓ Pyrrhic victory — brilliant design | Confirmed |
+| Church CI victory (S24–28) precedes RS Critical by ~10 seasons | ✓ Pyrrhic victory — brilliant design | Confirmed |
 | Lock chronic drift amplifies RS decline in Church endgame | ✓ Church dominance accelerates world breakdown | Confirmed |
 
 ---
@@ -872,8 +872,8 @@ Net RS change per season: −2.15 + 0.55 + 0.15 = **−1.45 RS/season** under re
 
 | System | Status |
 |--------|--------|
-| TC milestone system (40/55/65/80/100) | ✓ All produce correct political effects |
-| Peninsular Strain Fracture (Accord cascade) | ✓ Board-wide governance crisis at Strain 6 |
+| CI milestone system (40/55/65/80/100) | ✓ All produce correct political effects |
+| Turmoil Fracture (Accord cascade) | ✓ Board-wide governance crisis at Strain 6 |
 | Obligation constraining NPC priority trees | ✓ Elegant behavioral constraint |
 | Zoom In at legal phase-lock points | ✓ Phase 3 entry executes cleanly |
 | BG → TTRPG unit conversion | ✓ Stats translate correctly |
@@ -882,7 +882,7 @@ Net RS change per season: −2.15 + 0.55 + 0.15 = **−1.45 RS/season** under re
 | Social contest — RS targeting breaks Resistance stalls | ✓ RS targeting mechanically essential |
 | Conviction Scar + Obligation from Decisive Win | ✓ NPC behavioral arc trigger |
 | Warden expedition as structural RS stabiliser | ✓ Correctly designed late-game arc |
-| Church TC + RS Rupture collision | ✓ Pyrrhic victory design — validated |
+| Church CI + RS Rupture collision | ✓ Pyrrhic victory design — validated |
 | Discipline check at mass scale (Size lost > Discipline) | ✓ Elite units correctly resist degradation |
 | Wedge formation vs Heavy armour (HeavyCut) | ✓ High damage output, correct counter (Shield Wall) |
 | Domain Echo from OW investigation (−2 Church Influence) | ✓ Powerful but bounded |
@@ -893,8 +893,8 @@ Net RS change per season: −2.15 + 0.55 + 0.15 = **−1.45 RS/season** under re
 
 | Gap ID | Description | Severity |
 |--------|-------------|---------|
-| **SIM2-01** | 2-Assert engine (2× Senator) produces Church TC victory Season 18 — too fast. Fix: Assert → Pontifex-exclusive (1× Pontifex, cooldown 2). Pushes victory to Season 24–28. | **P1** |
-| **SIM2-02** | TC 80 PT drift neutralises Varfell Cultural Reformation (Ob 4 in all target territories) — interaction not documented. Varfell must act before TC 80. | P2 |
+| **SIM2-01** | 2-Assert engine (2× Senator) produces Church CI victory Season 18 — too fast. Fix: Assert → Pontifex-exclusive (1× Pontifex, cooldown 2). Pushes victory to Season 24–28. | **P1** |
+| **SIM2-02** | CI 80 PT drift neutralises Varfell Cultural Reformation (Ob 4 in all target territories) — interaction not documented. Varfell must act before CI 80. | P2 |
 | **SIM2-03** | NPC tactic selection is formation-unaware. LR AI chose Iron Discipline over Shield Wall vs Cavalry Wedge — correct probabilistic choice but Bayesian prior on opponent cavalry = Shield Wall optimal. Add cavalry-present heuristic to NPC tactic selection. | P2 |
 | **SIM2-04** | Reach priority not tracked from Round 1 in general duel simulation. Protocols must apply range rules at combat start. Long weapon holder gets first advantage round. Rules correct; sim protocol gap. | P2 |
 | **SIM2-05** | Post-combat fieldwork (F-TRANS-12): no specification of whether it applies when player fled (not won). Proposed: requires player to control site (enemy fled/incapacitated/dead). | P2 |

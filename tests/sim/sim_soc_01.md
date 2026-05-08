@@ -225,7 +225,7 @@ Test ID: SIM-SOC-01
 Mechanics: Grand Contest (CT, resistance, genre/orient weights, AMPLIFY, initiative, Composure)
 Mode: TTRPG
 Temporal: Single session (7 exchanges)
-Tracks: CT (Conviction Track), Composure (all orators), Momentum
+Tracks: CT (Piety Track), Composure (all orators), Momentum
 Factions: Church, Crown, Hafenmark (audience)
 NPCs: Church Advocate, Crown Advocate
 Archetypes: Status-Preserving (Renn), Impulsive (Holt), Fatigued (Saya)

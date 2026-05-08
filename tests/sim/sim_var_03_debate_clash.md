@@ -149,7 +149,7 @@ Again catastrophic movement. This demonstrates the core P2 finding: any high-poo
 CT at 5 (hypothetical reset). Klapp 10D Revealing, Baralta 11D Obscuring → CLASH.
 
 **Roll:** Klapp 10D net 6. Baralta 11D net 6. **TIE.**
-TIE rule: both take 1 strain; CT +1 toward initiative holder (Baralta). CT: 5 → 4. Both take strain.
+TIE rule: both take 1 strain; CT +1 toward first-to-speak holder (Baralta). CT: 5 → 4. Both take strain.
 Klapp strain: 3/9. Baralta strain: 1/10.
 
 **Neither orator is close to Rattled** (Rattled at strain ≥ Composure — Klapp needs strain 9, Baralta 10). Five exchanges of CLASH + strain have barely dented Composure. **Composure drain is very slow under pure CLASH.**

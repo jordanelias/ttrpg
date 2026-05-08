@@ -147,7 +147,7 @@ In a social contest before an Expert Judge (TS 0): "Judge evaluates logical stru
 **The Expert Judge with TS 0 cannot verify, refute, or evaluate this evidence.** The Inert Knowledge principle (P-08, PP-497): "A TS 0 consciousness cannot render Thread-level structure." The judge cannot even assess whether the practitioner is lying or confused — the evidence is genuinely beyond their rendering capacity.
 
 **Three possible rulings, each with different implications:**
-1. Thread-derived evidence is inadmissible before TS 0 adjudicators (it cannot be evaluated → it cannot change the Conviction Track). Practitioners must translate Thread evidence into physical-world terms.
+1. Thread-derived evidence is inadmissible before TS 0 adjudicators (it cannot be evaluated → it cannot change the Piety Track). Practitioners must translate Thread evidence into physical-world terms.
 2. Thread-derived evidence gets automatic Overwhelming for the practitioner's argument (the judge cannot refute it = it stands). This is exploitable.
 3. Thread-derived evidence is treated as an Authority resonance attack: "My perception, which you cannot verify but which I assert with complete epistemic confidence, says X." The judge's response depends on their Trust in the practitioner.
 

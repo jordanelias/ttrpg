@@ -83,7 +83,7 @@ Categorized by impact severity. Reference: `designs/scene/combat_v30.md`, `desig
 - Faction unit rosters (mass §11)
 - Death Cascade (§13.3) — preserved verbatim
 - Reputation Cascade (§13.2) — preserved verbatim
-- Conviction Track interactions
+- Piety Track interactions
 
 **Net canon footprint:** ~6 major rewrites, ~8 net-new sections, ~5 minor extensions, ~10 unchanged anchors. The canonical resolution math is **fully preserved**. The rework is in presentation, time-shape visualization, spatial substrate, and inter-system bridges — not in the dice or the damage tables.
 
@@ -190,7 +190,7 @@ These are decisions or tensions that the stress test surfaced but **did not reso
 
 ### R5 — Wager system stake range
 
-**Tension:** Conviction / Renown / item / life stakes are canonical adjacencies but no canonical wager spec exists. The range from "honor stake" to "to-the-death" is wide. **Decision needed:** what stake types are canon, what are their numeric ranges, and how do they integrate with Conviction Track / Reputation Cascade?
+**Tension:** Conviction / Renown / item / life stakes are canonical adjacencies but no canonical wager spec exists. The range from "honor stake" to "to-the-death" is wide. **Decision needed:** what stake types are canon, what are their numeric ranges, and how do they integrate with Piety Track / Reputation Cascade?
 
 ### R6 — Fibonacci cap
 

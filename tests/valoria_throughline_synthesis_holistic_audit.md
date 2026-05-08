@@ -16,9 +16,9 @@ Fifteen structural throughlines run across the entire design. Each throughline i
 
 RS starts at 28 — already in the Fragile band (59-40), already below the Calamity Drift threshold (50), temporal window already open (RS ≤ 60 from Session 1), Calamity Radiation already active in T6 and T13. The game does not start with a stable world that degrades. It starts mid-decline.
 
-The factions most capable of addressing RS are the least politically powerful: RM (Mandate = CV ≤ 1 count, starts at 2), Wardens (no faction stats, operates through WC track), Varfell (has capability through VTM but needs expedition access). The factions most politically powerful — Church (TC mechanism), Crown (military, Parliament) — are structurally blind to RS unless their practitioners develop TS.
+The factions most capable of addressing RS are the least politically powerful: RM (Mandate = CV ≤ 1 count, starts at 2), Wardens (no faction stats, operates through WC track), Varfell (has capability through VTM but needs expedition access). The factions most politically powerful — Church (CI mechanism), Crown (military, Parliament) — are structurally blind to RS unless their practitioners develop TS.
 
-This creates the game's central irony: political victory requires the same resources (Domain Actions, Mandate, territorial control) that RS recovery also requires. The Church-pursuing player uses all their Influence on TC advancement; the RS-pursuing player uses all their Influence on Community Weaving. No single faction can do both simultaneously at full capacity.
+This creates the game's central irony: political victory requires the same resources (Domain Actions, Mandate, territorial control) that RS recovery also requires. The Church-pursuing player uses all their Influence on CI advancement; the RS-pursuing player uses all their Influence on Community Weaving. No single faction can do both simultaneously at full capacity.
 
 **Maximum theoretical RS recovery per season** (all sources at peak): Southernmost Mending cap −5/season + Mending +2 + Community Weaving +2 + Warden Cooperation ≥ 3 +2 = net +11 against passive decline. Passive decline at current game state: winter −1 + 2 Locks −2 + 1 active Gap −4 + Calamity Drift T6/T13 (already CV erosion, not RS directly) = −7/season minimum. At RS 28, the window to arrest decline is approximately 4-6 seasons before Critical.
 
@@ -50,22 +50,22 @@ Every institution that systematically suppresses Thread activity inadvertently p
 
 ## TL-03: ALMUD'S INDECISION AS STRUCTURAL STABILIZER
 
-**Systems involved:** npc_behavior_v30 (Almud Arc A/B/C), arc_register (ARC-S14, ARC-S17, ARC-S37, ARC-S45, ARC-S26, Collision F, Collision G), conviction_track_v30 (TC suppression via Détente)
+**Systems involved:** npc_behavior_v30 (Almud Arc A/B/C), arc_register (ARC-S14, ARC-S17, ARC-S37, ARC-S45, ARC-S26, Collision F, Collision G), conviction_track_v30 (CI suppression via Détente)
 
 Almud's uncertainty about the caste question is not a character weakness. It is the campaign's most important structural load-bearing element.
 
-The Almud-Baralta Détente (ARC-S37) produces TC −1/season passive suppression as long as Baralta Mandate ≥ 4 and Crown is not contesting Hafenmark's parliamentary activity. This is active because of Almud's uncertainty: he has not acted on his Einhir sympathy (which would activate Baralta's Deed Claim and collapse the Détente) and has not opposed Baralta (which would drive her to active opposition). His indecision is the condition that makes their cooperation possible.
+The Almud-Baralta Détente (ARC-S37) produces CI −1/season passive suppression as long as Baralta Mandate ≥ 4 and Crown is not contesting Hafenmark's parliamentary activity. This is active because of Almud's uncertainty: he has not acted on his Einhir sympathy (which would activate Baralta's Deed Claim and collapse the Détente) and has not opposed Baralta (which would drive her to active opposition). His indecision is the condition that makes their cooperation possible.
 
 Simultaneously, both Lenneth's institutional revival programme and Baralta's suppression-upon-accession programme are simultaneously active precisely because Almud has not chosen. His non-commitment is the permission structure that allows mutually exclusive political programmes to coexist in the same factional space.
 
 When Almud resolves his uncertainty — through Discovery Event (ARC-S17), through the Einhir Triangle being forced (Collision G), or through player-facilitated erosion (ARC-S14) — five things happen simultaneously:
-1. Baralta's Deed Claim Activates (ARC-S45): she shifts from TC brake to active Crown claimant
-2. Détente collapses: TC suppression brake removed permanently
+1. Baralta's Deed Claim Activates (ARC-S45): she shifts from CI brake to active Crown claimant
+2. Détente collapses: CI suppression brake removed permanently
 3. Collision G fires: three mutually exclusive Einhir positions become actively contested
 4. Succession Triangle activates (ARC-S35): Almud, Torben, Elske, Baralta, Lenneth become simultaneous claimants
-5. TC acceleration: passive +2 to +3/season without the Détente brake
+5. CI acceleration: passive +2 to +3/season without the Détente brake
 
-**The optimal play:** This is the campaign's most sophisticated political timing problem. The answer is not "keep Almud uncertain forever" (the TC and succession clocks have independent momentum) nor "resolve him immediately" (destroys the TC brake at full Church institutional strength). The answer is: resolve Almud only after Church is already destabilized (Collision A active — Klapp converts + Olafsson exposed, Church Stability −3), so the TC acceleration that follows hits a Church that cannot respond effectively. This requires coordinating three independent arc chains (Almud's erosion, Haelgrund investigation, Klapp archive exposure) toward simultaneous resolution in the same 1-2 season window.
+**The optimal play:** This is the campaign's most sophisticated political timing problem. The answer is not "keep Almud uncertain forever" (the CI and succession clocks have independent momentum) nor "resolve him immediately" (destroys the CI brake at full Church institutional strength). The answer is: resolve Almud only after Church is already destabilized (Collision A active — Klapp converts + Olafsson exposed, Church Stability −3), so the CI acceleration that follows hits a Church that cannot respond effectively. This requires coordinating three independent arc chains (Almud's erosion, Haelgrund investigation, Klapp archive exposure) toward simultaneous resolution in the same 1-2 season window.
 
 **Throughline health:** Mechanically elegant. The Almud Arc triggers (Coup Counter, Discovery Event attempt, Torben Loyalty ≤ 3 — any one weakens deed-presumption → ARC-S45) are well-specified. The timing optimization problem is visible only when all three arcs are read together.
 
@@ -114,26 +114,26 @@ The Torben-Almud Knot deterioration (Batch 3) demonstrates the Knot system's cro
 
 ---
 
-## TL-06: TC SUPPRESSION AS COALITION DEPENDENCY
+## TL-06: CI SUPPRESSION AS COALITION DEPENDENCY
 
-**Systems involved:** conviction_track_v30 (TC generation, Hafenmark Structural Suppression), victory_v30 §7 (TC seasonal calculation), npc_behavior_v30 §8.4 (Hafenmark Priority Tree), arc_register (ARC-S06, ARC-S37)
+**Systems involved:** conviction_track_v30 (CI generation, Hafenmark Structural Suppression), victory_v30 §7 (CI seasonal calculation), npc_behavior_v30 §8.4 (Hafenmark Priority Tree), arc_register (ARC-S06, ARC-S37)
 
-The TC suppression architecture has three components: Baralta's structural suppression (TC −1/season while Mandate ≥ 4), Varfell's Conviction Yield elimination (2 Cultural Reclamations on T9 → CV 3, yield = 0), Hafenmark's Parliamentary Suppress (negates passive +1 one season). Each requires specific investment; each has specific collapse conditions.
+The CI suppression architecture has three components: Baralta's structural suppression (CI −1/season while Mandate ≥ 4), Varfell's Conviction Yield elimination (2 Cultural Reclamations on T9 → CV 3, yield = 0), Hafenmark's Parliamentary Suppress (negates passive +1 one season). Each requires specific investment; each has specific collapse conditions.
 
 At baseline, with all three active:
-- Passive TC: +1 (Institutional Momentum) − 1 (Baralta) + 0 (CV 3 yield) − Suppress = net 0/season
-- TC can be frozen indefinitely with no Church Assert
+- Passive CI: +1 (Institutional Momentum) − 1 (Baralta) + 0 (CV 3 yield) − Suppress = net 0/season
+- CI can be frozen indefinitely with no Church Assert
 
 But the architecture is cascading-fragile:
-- Baralta Mandate drops below 4 (from Church Excommunication or player neglect): brake ends permanently, TC +4 one-time, net now +2/season
-- Almud Détente collapses (3 triggers: TC 42 Quaestio, ARC-S45, Governance Pause): Varfell CV reduction loses political cover
-- Church uses Assert (Priority 3: Mandate ≥ 3 → Assert TC +1): adds +1 even against full suppression, net +1/season
+- Baralta Mandate drops below 4 (from Church Excommunication or player neglect): brake ends permanently, CI +4 one-time, net now +2/season
+- Almud Détente collapses (3 triggers: CI 42 Quaestio, ARC-S45, Governance Pause): Varfell CV reduction loses political cover
+- Church uses Assert (Priority 3: Mandate ≥ 3 → Assert CI +1): adds +1 even against full suppression, net +1/season
 
-The TC suppression coalition is the game's most mechanically elegant political arrangement: three factions with very different objectives all benefit from the same passive outcome. Baralta suppresses TC to establish deed-claim legitimacy (TC acceleration threatens her constitutional framework). Varfell suppresses TC to prevent the theocracy that would end practitioner tolerance. The player suppresses TC to preserve the political space for RS recovery work.
+The CI suppression coalition is the game's most mechanically elegant political arrangement: three factions with very different objectives all benefit from the same passive outcome. Baralta suppresses CI to establish deed-claim legitimacy (CI acceleration threatens her constitutional framework). Varfell suppresses CI to prevent the theocracy that would end practitioner tolerance. The player suppresses CI to preserve the political space for RS recovery work.
 
-**The timing problem:** The TC suppression coalition and the RS recovery coalition have overlapping but not identical membership. Varfell is in both. RM is in the RS coalition but not the TC coalition (they prefer CV 0, which erodes the Conviction Yield that the TC coalition depends on maintaining at CV 3). This means RM's cultural victory path (driving CV to 0) conflicts with the TC suppression strategy (which benefits from territories staying at CV 3, not 0). The player who tries to support both RM cultural revolution and TC suppression simultaneously is working against themselves.
+**The timing problem:** The CI suppression coalition and the RS recovery coalition have overlapping but not identical membership. Varfell is in both. RM is in the RS coalition but not the CI coalition (they prefer CV 0, which erodes the Conviction Yield that the CI coalition depends on maintaining at CV 3). This means RM's cultural victory path (driving CV to 0) conflicts with the CI suppression strategy (which benefits from territories staying at CV 3, not 0). The player who tries to support both RM cultural revolution and CI suppression simultaneously is working against themselves.
 
-**Throughline health:** Well-specified. The Hafenmark Structural Suppression ambiguity (NEW-OI-31) — does it follow Baralta personally or the Hafenmark faction? — is the most significant unresolved element. Resolution: it follows the person (the condition specifies "Baralta's Mandate ≥ 4"). Crown-Baralta suppresses TC. This is the logical reading and enables the Consecration Crisis scenario (NEW-S54) as designed.
+**Throughline health:** Well-specified. The Hafenmark Structural Suppression ambiguity (NEW-OI-31) — does it follow Baralta personally or the Hafenmark faction? — is the most significant unresolved element. Resolution: it follows the person (the condition specifies "Baralta's Mandate ≥ 4"). Crown-Baralta suppresses CI. This is the logical reading and enables the Consecration Crisis scenario (NEW-S54) as designed.
 
 ---
 
@@ -217,7 +217,7 @@ Multiple campaign resources are simultaneously available and inaccessible:
 
 At RS Critical (19-1), collective Mending is the only path to prevent Rupture. Collective Mending requires Belief compatibility between participants. Directly opposing Beliefs → Spirit TN 7 Ob 1 pre-Leap (~40% abort risk). The 40% abort rate means a collective Mending with two practitioners holding directly opposing Beliefs fails to assemble 64% of the time.
 
-This makes Belief content a political asset at RS Critical. A faction that wants Thread operations to fail can strain enemy practitioners' Beliefs to create direct oppositions that prevent collective Mending. The Church, which has been straining practitioner Beliefs throughout the campaign (via TC pressure, Heresy Investigation, Inquisitor deployments), is systematically building the condition that makes Mending harder in the endgame.
+This makes Belief content a political asset at RS Critical. A faction that wants Thread operations to fail can strain enemy practitioners' Beliefs to create direct oppositions that prevent collective Mending. The Church, which has been straining practitioner Beliefs throughout the campaign (via CI pressure, Heresy Investigation, Inquisitor deployments), is systematically building the condition that makes Mending harder in the endgame.
 
 **The "become different" requirement:** This throughline encodes the game's deepest thematic statement. A player with a Belief directly opposing another practitioner's CANNOT fulfill that Belief AND save the world. They must choose: pursue the Belief (prevents collective Mending) OR revise the Belief (enables world-saving but costs the Belief's Momentum and Conviction identity). The game mechanically demands at RS Critical that players consider whether their character commitments at campaign start are still the right commitments at campaign end. This is "Conviction revision as campaign arc" made mechanical.
 
@@ -290,9 +290,9 @@ The system's key interaction: The Coherence→Recall cascade. At Coherence 4 (Fr
 ## H1: ROBUST
 **ASSESSMENT: ◑ (moderate — downgraded from ◕)**
 
-**Sustained strengths:** The NPC Priority Trees (§8) generate autonomous faction behavior without player involvement across all 7 batches — no scenario tested required player setup for NPC actions. The behavioral flaw architecture (TL-04) produces consistent emergent situations. The feedback loops (TL-01 RS metabolism, TL-07 TC suppression coalition) create strategic pressure that accumulates across seasons without requiring GM intervention.
+**Sustained strengths:** The NPC Priority Trees (§8) generate autonomous faction behavior without player involvement across all 7 batches — no scenario tested required player setup for NPC actions. The behavioral flaw architecture (TL-04) produces consistent emergent situations. The feedback loops (TL-01 RS metabolism, TL-07 CI suppression coalition) create strategic pressure that accumulates across seasons without requiring GM intervention.
 
-**New gap identified across Batches 4-7:** The "optimal play" for the most critical decisions (Almud timing, Lock Distribution, TC suppression coalition management, Belief content at RS Critical) requires comprehensive multi-system knowledge that no single document makes accessible. A player who has read all the documents can see these throughlines; a player at the table cannot. The game's robustness at the design level does not automatically translate to player-facing robustness at the table.
+**New gap identified across Batches 4-7:** The "optimal play" for the most critical decisions (Almud timing, Lock Distribution, CI suppression coalition management, Belief content at RS Critical) requires comprehensive multi-system knowledge that no single document makes accessible. A player who has read all the documents can see these throughlines; a player at the table cannot. The game's robustness at the design level does not automatically translate to player-facing robustness at the table.
 
 **Specific insufficiency:** The Ambient Scene Slate (Priority 5) underspecification identified in Batch 3 H1 remains unresolved. When no Priority 0-3 events fire (a "clean" season), the Slate falls back to ambient territorial events. These are the primary surface for Framework Drift becoming visible, for NPC behavioral flaws generating low-stakes encounters, and for the world's slow-building texture. Without specification, clean seasons feel structurally empty rather than quietly building toward the next threshold event.
 
@@ -329,9 +329,9 @@ The system's key interaction: The Coherence→Recall cascade. At Coherence 4 (Fr
 ## H3: ELEGANT
 **ASSESSMENT: ◑ (moderate — downgraded from ◕)**
 
-**The aggregate complexity problem:** Each system examined across Batches 1-7 is elegant at the unit level. The Conviction Track (CV per territory, 5 values, one formula) is clean. The NPC behavioral flaws are each one-line behavioral rules. The Forgetting Check (pool + TN + Ob table) is concise. The Calamity Radiation matrix (RS band × Proximity) is the most elegant geography-meets-mechanics table in the design.
+**The aggregate complexity problem:** Each system examined across Batches 1-7 is elegant at the unit level. The Piety Track (CV per territory, 5 values, one formula) is clean. The NPC behavioral flaws are each one-line behavioral rules. The Forgetting Check (pool + TN + Ob table) is concise. The Calamity Radiation matrix (RS band × Proximity) is the most elegant geography-meets-mechanics table in the design.
 
-But their aggregate — encountered at a single table — requires: Province Accord from settlement Order (Batch 1); NPC Priority Trees (Batch 1-2); Knot formation and remote investigation (Batch 2-3); Conviction Track per territory with Calamity Drift (Batch 4); Mass Combat phases (Batch 5); Southernmost Awareness and Expedition zones (Batch 7); Character History lifepath with sparking (Batch 7). The unit elegance does not sum to systemic elegance because the systems were designed independently and now interact.
+But their aggregate — encountered at a single table — requires: Province Accord from settlement Order (Batch 1); NPC Priority Trees (Batch 1-2); Knot formation and remote investigation (Batch 2-3); Piety Track per territory with Calamity Drift (Batch 4); Mass Combat phases (Batch 5); Southernmost Awareness and Expedition zones (Batch 7); Character History lifepath with sparking (Batch 7). The unit elegance does not sum to systemic elegance because the systems were designed independently and now interact.
 
 **Specific elegance failures:**
 
@@ -360,11 +360,11 @@ These are not a problem individually. Collectively they require the player/GM to
 
 | ID | Issue | System | Impact |
 |----|-------|---------|--------|
-| NEW-OI-35 | TC generation redesign canonical status | conviction_track_v30 | All TC simulations invalid if not canonical |
+| NEW-OI-35 | CI generation redesign canonical status | conviction_track_v30 | All CI simulations invalid if not canonical |
 | NEW-OI-40 | Community Weaving Ob: RS direct vs RS-inverse | conviction_track_v30 §5.3 | 2× difference in faction-scale Weaving effectiveness |
 | NEW-OI-11 | Province Accord: Institutional Consolidation +1 vs settlement-derived | settlement_layer, faction_layer | Universal Victory condition directly affected |
 | NEW-OI-51 | Lock handling RS cost | threadwork_v30, arc_register ARC-S31 | Lock Distribution impact calculation incomplete |
-| NEW-OI-31 | Hafenmark Structural Suppression follows person or faction | conviction_track_v30 §3 | TC pacing post-Baralta-becomes-Crown |
+| NEW-OI-31 | Hafenmark Structural Suppression follows person or faction | conviction_track_v30 §3 | CI pacing post-Baralta-becomes-Crown |
 | NEW-OI-43 | Varfell Path A "stats fully revealed" definition | victory_v30 §3.4 | Path A victory condition undefined |
 | NEW-OI-65/66 | Community Weaving scope + personal-scale pool | faction_layer, conviction_track | Table dispute every time it's used |
 | NEW-OI-64 | Thread Debt token unspecified | fieldwork_bg §8.1 | Mechanic referenced but not defined |
@@ -399,7 +399,7 @@ The remaining 55 items (NEW-OI-14 through NEW-OI-70 excluding P1 items) are all 
 ## Immediate (before next simulation run)
 
 **1. Canonize conviction_track_v30 (or flag explicitly as superseded)**
-Every scenario involving TC, CV, RM emergence, or Varfell Path B runs on the assumption that this document's PP-406 through PP-418 are canonical. If the document is still "AWAITING USER REVIEW," the simulation database is built on an unconfirmed foundation. Resolution: accept, reject, or annotate specific sections.
+Every scenario involving CI, CV, RM emergence, or Varfell Path B runs on the assumption that this document's PP-406 through PP-418 are canonical. If the document is still "AWAITING USER REVIEW," the simulation database is built on an unconfirmed foundation. Resolution: accept, reject, or annotate specific sections.
 
 **2. Define Community Weaving pools by scale in one canonical location**
 Personal-scale: [Attribute TBD by NEW-OI-66] + History, TN 7, Ob 3. Faction-scale: Influence + History, TN 7, Ob = ceiling(RS-inverse ÷ 20, min 1). CV change applies only at faction-scale. One table, two rows, scope-labeled. This ends the spec discrepancy.
@@ -426,7 +426,7 @@ Non-operational Thread exposure (handling an originary Lock) should carry a defi
 
 ## Architectural observation (for Jordan's design consideration)
 
-The fifteen throughlines all share one structural feature: they are invisible in isolation and visible only in aggregate. A player who reads threadwork_v30 sees a practitioner system. A player who reads conviction_track_v30 sees a territorial faith system. A player who reads npc_roster_v30 sees thirteen characterized NPCs. None of these documents tells them about TL-02 (suppression creates practitioners), TL-03 (Almud's indecision as structural stabilizer), or TL-06 (TC suppression as coalition dependency). The game's deepest design is distributed across documents that will not be read in sequence at any table.
+The fifteen throughlines all share one structural feature: they are invisible in isolation and visible only in aggregate. A player who reads threadwork_v30 sees a practitioner system. A player who reads conviction_track_v30 sees a territorial faith system. A player who reads npc_roster_v30 sees thirteen characterized NPCs. None of these documents tells them about TL-02 (suppression creates practitioners), TL-03 (Almud's indecision as structural stabilizer), or TL-06 (CI suppression as coalition dependency). The game's deepest design is distributed across documents that will not be read in sequence at any table.
 
 This creates a world-building success and a player-access challenge simultaneously. The design is genuinely emergent — the throughlines were not explicitly designed as throughlines, they emerged from the interaction of consistent mechanical principles applied independently to different domains. But emergence means the player's experience of the campaign depends on how many of these interactions they discover vs. how many remain invisible infrastructure.
 

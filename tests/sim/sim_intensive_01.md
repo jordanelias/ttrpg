@@ -3,7 +3,7 @@
 ## 7-Dimension Tag:
 ## Mechanics: Rescue, Feint, BG Mandate suppression, Social Contest, PI, Dissonant Thread
 ## Mode: TTRPG/BG/Hybrid | Temporal: PRES
-## Tracks: Health, Wounds, Momentum, Fibonacci, Mandate, TC, Composure, PI, RS
+## Tracks: Health, Wounds, Momentum, Fibonacci, Mandate, CI, Composure, PI, RS
 ## Factions: Crown, Church, Hafenmark, Varfell, Restoration Movement
 ## NPCs: Aldric, Maret, Scholar/Diplomat/Demagogue (generic)
 ## Archetypes: MARTYR, SURVIVAL-FLOOR, GREEDY, RISK-AVERSE, FACTION-LOYAL, RITUAL, FACTION-OPPORTUNIST
@@ -51,7 +51,7 @@ P(suppression success) by pool vs Ob:
 F01 [P1]: Direct suppression non-viable vs M5-6 at any starting faction pool. ED-173→ED-293 (4 options).
 F02 [P1]: 2-faction coalition (7D) vs M6: 6%. 3-faction (11D): 25%. Coalition barely viable.
 F03 [P1→ED-293]: Unchecked Church reaches M7 in 2-3 seasons. At M7: near-impossible for any coalition.
-F04 [P1]: M7+TC≥50 simultaneous = win-lock condition. No current BG rule prevents.
+F04 [P1]: M7+CI≥50 simultaneous = win-lock condition. No current BG rule prevents.
 
 ED-293 options: A=cap Ob4, B=coalition +2D, C=Stability path, D=Mandate decay above M5.
 
@@ -63,7 +63,7 @@ Scholar 13D Composure 9. Diplomat 10D Composure 11. Demagogue 6D Composure 12.
 
 Scholar vs Diplomat CLASH: P(Scholar wins)≈62%. Strategic texture correct.
 F01 OK: Pool-driven advantage. Composure asymmetry creates Diplomat attrition strategy.
-F02 P2: Contest too long at median — Conviction Track length not defined. GAP SC-DEBT-02.
+F02 P2: Contest too long at median — Piety Track length not defined. GAP SC-DEBT-02.
 F03 P1: Demagogue non-viable in CLASH vs Scholar (P≈12%). AMPLIFY path not yet tested. GAP SC-DEBT-03.
 
 SIM-DEBT-03/04 PARTIAL — baselines established for CLASH. AMPLIFY and multi-genre not yet re-run.

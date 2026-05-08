@@ -69,7 +69,7 @@
 | **Valkyria Chronicles BLiTZ** (Sega) | Turn-based command layer + real-time third-person aiming during unit's action | Hybrid time-shape | A extension | **Reject** — third-person shooter mechanics are off-genre |
 | **Wakfu / Dofus** (Ankama) | Grid + AP (Action Points) and MP (Movement Points) separated | Discretizes pool further; AP/MP separation = Combat Pool / Stamina | A inspiration | **Inspiration** — Stamina-as-MP is canon-adjacent; explicit AP/MP separation would over-discretize Valoria's continuous pool |
 | **Wildermyth** (Worldwalker) | Tactical combat + persistent narrative consequence (lost limb → permanent) | Wound permanence — canon currently says "Wounds clear at end of session" (§4 PP-284/ED-177) | A inspiration | **Tension flag** — Wildermyth's permanent-consequence model is more dramatic but conflicts with canonical recovery rule. Surface for Jordan's review. |
-| **Triangle Strategy** (Square Enix) | Conviction-axis decisions interrupt tactical battles with branching | Conviction Scar / Conviction Track integration | A extension | **Inspiration** — battle-pause Conviction prompts are a canonical-adjacent UX pattern for §13.3 Death Cascade moments |
+| **Triangle Strategy** (Square Enix) | Conviction-axis decisions interrupt tactical battles with branching | Conviction Scar / Piety Track integration | A extension | **Inspiration** — battle-pause Conviction prompts are a canonical-adjacent UX pattern for §13.3 Death Cascade moments |
 
 ---
 

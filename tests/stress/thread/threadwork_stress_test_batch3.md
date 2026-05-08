@@ -284,15 +284,15 @@ If Church-affiliated practitioners operate at S-003 (Thread ops, Mending, or inv
 
 **[GAP]** No rule addresses whether Provincial Authority extends to authorizing Thread operations within subnational-managed settlements. Proposed ruling: Thread operations in a settlement are governed by whoever manages that settlement, not the Provincial Authority. Church management of S-003 means Church practitioners have Thread operational rights there. The Province faction cannot prevent these operations without revoking management. This has downstream sovereignty implications: the Church has Thread-operational footholds in every province where they manage a Cathedral, regardless of provincial faction alignment.
 
-## 12.2 Church Inquisitor TS + TC Investigation Loop [EXPLOIT — CASCADING]
+## 12.2 Church Inquisitor TS + CI Investigation Loop [EXPLOIT — CASCADING]
 
 S-003 Valorsplatz Cathedral: Church management (Order 4). A Church Inquisitor with TS 30+ stationed here can detect Thread operations anywhere in T1 Valorsplatz within perceptual range (TS 30–49: "senses an operation in the scene; general direction identifiable").
 
-If Almud undergoes First Leap at S-001 (Batch 1 finding): the Inquisitor at S-003 may be within perceptual range (~50m from S-001 if the cathedral is near the palace district). They perceive the operation. They initiate formal Investigation (one Domain Action, Ob 2). Success: TC +1 at next Accounting.
+If Almud undergoes First Leap at S-001 (Batch 1 finding): the Inquisitor at S-003 may be within perceptual range (~50m from S-001 if the cathedral is near the palace district). They perceive the operation. They initiate formal Investigation (one Domain Action, Ob 2). Success: CI +1 at next Accounting.
 
-**This creates a Church-Church feedback loop in the capital:** Church management rights at S-003 give them a Thread-detection asset in the Crown's political center. Any Thread operations by Crown-affiliated practitioners (including Almud's First Leap, any Warden Thread-Read of the capital) are potentially detectable by the S-003 Inquisitor. TC rises automatically from capital Thread activity — without any active Church policy decision. The Inquisitor is there, they have the TS, they detect; the Investigation is nearly automatic for a competent Church agent.
+**This creates a Church-Church feedback loop in the capital:** Church management rights at S-003 give them a Thread-detection asset in the Crown's political center. Any Thread operations by Crown-affiliated practitioners (including Almud's First Leap, any Warden Thread-Read of the capital) are potentially detectable by the S-003 Inquisitor. CI rises automatically from capital Thread activity — without any active Church policy decision. The Inquisitor is there, they have the TS, they detect; the Investigation is nearly automatic for a competent Church agent.
 
-**[EXPLOIT — CASCADING]** TC ratchets upward from Crown Thread activity that the Church detects through its Cathedral management foothold. The player faction cannot prevent TC growth without either: (a) keeping all Thread operations in the capital away from the Cathedral's perceptual range, or (b) revoking Church management of S-003 (political cost: Order −1 at S-003, Disposition −2 with Church). This is a genuine political-Thread tension that should be explicit.
+**[EXPLOIT — CASCADING]** CI ratchets upward from Crown Thread activity that the Church detects through its Cathedral management foothold. The player faction cannot prevent CI growth without either: (a) keeping all Thread operations in the capital away from the Cathedral's perceptual range, or (b) revoking Church management of S-003 (political cost: Order −1 at S-003, Disposition −2 with Church). This is a genuine political-Thread tension that should be explicit.
 
 ---
 
@@ -325,7 +325,7 @@ Faction layer §1: Stability decreases from canonical triggers. In a late-game (
 
 If average faction Stability at Year 20 is 2 (plausible given sustained military activity): audience resistance = ceil(2) − 1 = **1**. At Year 25 with Stability averaging 1.5: resistance = ceil(1.5) − 1 = **1** still. At Stability averaging 1: resistance = ceil(1) − 1 = **0**.
 
-**At audience resistance 0:** The Conviction Track moves by full net successes per exchange, unreduced. A successful argument exchange (net 3 successes) moves the Conviction Track 3 points. At starting position 5: three exchanges at net 3 = Conviction Track 14 → Side A wins. Contests resolve in far fewer exchanges than designed.
+**At audience resistance 0:** The Piety Track moves by full net successes per exchange, unreduced. A successful argument exchange (net 3 successes) moves the Piety Track 3 points. At starting position 5: three exchanges at net 3 = Piety Track 14 → Side A wins. Contests resolve in far fewer exchanges than designed.
 
 **Chain contest convergence at late-game Stability 1 (resistance 0): Grand Contests (5 exchanges) resolve in 1–2 exchanges** for a competent orator. The contest system converges too fast in late-game conditions. This is neither intended nor good — political decisions at the endgame should be hard-fought, not trivially swift.
 
@@ -389,7 +389,7 @@ At Year 30 (Threshold 6, −3 to highest attribute): Spirit 5 → Spirit 2. Thre
 | Forgetting carrying | 4 companions = −8 Coherence/round; Rendering Crisis guaranteed in round 2 | **[EXPLOIT — STRUCTURAL]** | Add design note: companion-carrying is mechanically suicidal beyond 1–2 companions; intended sacrificial mechanic |
 | POP paradox window | First POP creates 1d3-scene immunity to counter-POP on same target | **[EMERGENT+ — tactical]** | State explicitly as first-mover advantage in temporal Thread warfare |
 | Church sovereignty | Cathedral management rights give Church Thread-operational footholds in every province | **[GAP]** | Ruling: Thread ops in settlement governed by settlement manager, not Provincial Authority |
-| Church surveillance | Inquisitor at S-003 detects Almud's First Leap; TC ratchets from capital Thread activity | **[EXPLOIT — CASCADING]** | Surface: Church Cathedral management = automatic Thread detection asset in any province |
+| Church surveillance | Inquisitor at S-003 detects Almud's First Leap; CI ratchets from capital Thread activity | **[EXPLOIT — CASCADING]** | Surface: Church Cathedral management = automatic Thread detection asset in any province |
 | Faction Stability | Structural Dissolution of faction institution not among 5 canonical Stability triggers | **[GAP]** | Add: Structural+ Thread Dissolution of faction core config = Stability −2 |
 | Contest convergence | Fractured RS → Stability decay → audience resistance 0 → Grand Contests resolve in 1–2 exchanges | **[EMERGENT — DESIGN PROBLEM]** | Rule: audience resistance floor = 1 minimum, or explicit note that late-game contest convergence is intentionally faster |
 | POP + settlement NPC | POP on publicly-witnessed event triggers mass Dissonance Factor 3 checks; ~75% failure rate | **[GAP]** | Add rule: formation-scale+ POP triggers Dissonance checks for all witnesses at scene end |

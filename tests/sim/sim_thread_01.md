@@ -49,7 +49,7 @@ Baralta — Pre 4, Cog 5, Composure 12 | Debate pool: (4×2)+3 = 11D
    Audience: Parliamentary observers (mixed, Stability avg 3 → resistance 2)
 ```
 
-Conviction Track: Start 5 (neutral). Baralta argues for withdrawal (track ≥7 = Baralta wins). Crown argues for legitimacy of deployment (track ≤3 = Crown wins).
+Piety Track: Start 5 (neutral). Baralta argues for withdrawal (track ≥7 = Baralta wins). Crown argues for legitimacy of deployment (track ≤3 = Crown wins).
 
 ### Exchange 1 — Read Phase
 
@@ -77,7 +77,7 @@ Baralta changes strategy: Past+Revealing vs Envoy choosing Present+Revealing. Wa
 
 Baralta: Present+Obscuring. Envoy: Present+Revealing → **CLASH**.
 
-CLASH: Baralta 11D vs Envoy 11D. E[margin] = 0 (symmetric). TIE fires (equal expected). Track +1 toward initiative holder (Baralta — higher Presence? Equal at 4. Both 4 → higher Cognition: Baralta 5 vs Envoy 4). Baralta has initiative.
+CLASH: Baralta 11D vs Envoy 11D. E[margin] = 0 (symmetric). TIE fires (equal expected). Track +1 toward first-to-speak holder (Baralta — higher Presence? Equal at 4. Both 4 → higher Cognition: Baralta 5 vs Envoy 4). Baralta has initiative.
 
 Track: 5 → 6 (toward Baralta). Strain to neither (TIE = 1 strain each).
 
@@ -104,7 +104,7 @@ Effective margin = ⌊0.6 × 1.5 (Past, Hafenmark boost — but audience is Parl
 
 No track movement. Strain to Baralta (lost): margin+1+winner's Presence modifier... wait: Envoy Presence 4. Strain = margin(0)+1+winner Presence modifier... from params_debate: "Strain to loser: margin + 1 + winner's Presence modifier. Reduced by loser's Focus defence: floor(Focus/2)."
 
-With margin 0 (expected), strain = 0+1+... hmm, margin 0 means effectively TIE rule fires (both take 1 strain). Let me apply TIE: track +1 toward initiative holder. Initiative: transferred to Envoy (won Exchange 3 by expected net). Track: 6→5.
+With margin 0 (expected), strain = 0+1+... hmm, margin 0 means effectively TIE rule fires (both take 1 strain). Let me apply TIE: track +1 toward first-to-speak holder. Initiative: transferred to Envoy (won Exchange 3 by expected net). Track: 6→5.
 
 Both take 1 strain. Envoy Composure 11→10. Baralta 11→10.
 

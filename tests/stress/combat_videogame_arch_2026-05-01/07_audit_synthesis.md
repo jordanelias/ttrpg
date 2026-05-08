@@ -42,7 +42,7 @@ collapsed sections are not actually scored, they're inferred.
 
 The framework treated diagonal and lateral as distinct lenses but never specified the
 boundary. In Chunks 3–6, several findings appear under both lenses (Threadwork interactions,
-Conviction Track integration). Findings double-counted across overlapping directions inflate
+Piety Track integration). Findings double-counted across overlapping directions inflate
 the apparent coverage.
 
 **Severity:** low-medium. Doesn't invalidate findings but it means "passed all 6 directions"

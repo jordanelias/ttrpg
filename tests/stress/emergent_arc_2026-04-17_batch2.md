@@ -20,7 +20,7 @@ PLAYER WINS GRAND CONTEST AGAINST ALMUD (Parliament or Royal Audience setting)
 │
 ├─ Contest subject: Crown's garrison policy at Lowenskyst Fortress
 │   Player argues: Löwenritter autonomy at S-014 violates Crown authority at S-012
-│   Grand Contest victory (Conviction Track ≥ 7)
+│   Grand Contest victory (Piety Track ≥ 7)
 │   Player names one specific Obligation (must be achievable and verifiable):
 │   "Crown must maintain Defense ≥ 2 in S-006 Lowenskyst Fortress for 4 seasons"
 │
@@ -52,7 +52,7 @@ PLAYER WINS GRAND CONTEST AGAINST ALMUD (Parliament or Royal Audience setting)
 │   Stability −1 (Obligation breach = Trigger 4 equivalent — Major Subterfuge)
 │   Player's next Domain Action targeting Crown: +2 Ob (Crown credibility lost)
 │   → Himlensendt observes: "The King's word means nothing. Parliament should act."
-│   → TC +1 (Church leverages Crown credibility failure)
+│   → CI +1 (Church leverages Crown credibility failure)
 │   → Ehrenwall Coup Counter: if this was the second violation of sovereignty principles → +1
 │
 ├─ SETTLEMENT-TARGETED OBLIGATION AS MILITARY CONSTRAINT:
@@ -97,7 +97,7 @@ PLAYER ACCUMULATES UNRESOLVED CHAIN CONTESTS OVER MULTIPLE SEASONS
 │   Player addresses Season 1 deferred Baralta entry (1 scene action)
 │
 ├─ Season 3: TWO Priority 1 deferred entries (Baralta resolved Season 2 + Vaynard now)
-│   Player also has: Contest with Himlensendt (Priority 1 — TC > 40)
+│   Player also has: Contest with Himlensendt (Priority 1 — CI > 40)
 │   Mandatory: RS threshold scene (Priority 0)
 │   Total Priority 0-1 entries: 4
 │   Scene budget (Normal): 4 actions
@@ -121,7 +121,7 @@ PLAYER ACCUMULATES UNRESOLVED CHAIN CONTESTS OVER MULTIPLE SEASONS
 │   → This debt is paid by consuming scene actions that could have been personal pursuits
 │
 └─ OBLIGATION AS CHAIN TERMINATOR:
-    Grand Contest win (Conviction Track ≥ 7): Obligation generated, tension fully resolved
+    Grand Contest win (Piety Track ≥ 7): Obligation generated, tension fully resolved
     → Chain Contest (§6.3) does NOT generate from Grand Contest outcomes (tension fully resolved)
     → Only Formal Contest Compromise generates Chain entries
     → The player should escalate to Grand Contest (5 exchanges, high cost) specifically to
@@ -170,7 +170,7 @@ HIMLENSENDT REACHES 3+ SCARS (player has been systematically targeting his Faith
 │   → Domain Action: Himlensendt orders investigation into the originary Locks in Church archives
 │   → This is an investigation Himlensendt himself would never order in a stable state
 │   → The investigation surfaces evidence that damages Church institutional claims
-│   → TC −1 (Church institution contradicted by its own investigation)
+│   → CI −1 (Church institution contradicted by its own investigation)
 │   → Church Stability −1 (Himlensendt's public Scar: the Confessor is visibly unstable)
 │
 │   If player's most recent interaction was a Solidarity appeal (personal bond):
@@ -205,7 +205,7 @@ HIMLENSENDT REACHES 3+ SCARS (player has been systematically targeting his Faith
     are simultaneously in crisis states:
     Church major decisions = d6 + d6 per decision
     Two unpredictable primary church actors → Church Domain Actions become probabilistic
-    → TC generation rate: uncertain (could accelerate or brake depending on crisis outcomes)
+    → CI generation rate: uncertain (could accelerate or brake depending on crisis outcomes)
     → The Church's threat becomes non-linear: it might suppress itself before player intervention
     → Or it might take catastrophic offensive action on a bad roll week
     → [Collision A: Church Double Fracture] is now a probabilistic state machine, not a fixed arc
@@ -224,7 +224,7 @@ HIMLENSENDT REACHES 3+ SCARS (player has been systematically targeting his Faith
 ```
 Root: Parliamentary Intent (integration bridge Gap 3): Standing 3+ player flags Evidence for Parliamentary use
       Evidence-as-Corroboration in Parliament: +1D to faction's Ratification roll
-      Parliamentary Conviction Track: +1D lobbying offset per successful Diplomacy action preceding vote
+      Parliamentary Piety Track: +1D lobbying offset per successful Diplomacy action preceding vote
 
 PLAYER RUNS PARALLEL INVESTIGATION AND PARLIAMENTARY PREPARATION
 │
@@ -240,7 +240,7 @@ PLAYER RUNS PARALLEL INVESTIGATION AND PARLIAMENTARY PREPARATION
 │
 ├─ PARLIAMENTARY VOTE MECHANICS (§5.3 + Starting Track modification):
 │   Baralta (Censure proposer): pays no proposer cost for Censure
-│   Starting Conviction Track: 5 ± lobbying offset
+│   Starting Piety Track: 5 ± lobbying offset
 │   Player's prior Diplomacy scene (preceding season) → +1 toward Baralta's side
 │   Player's Structural evidence via Parliamentary Intent → +1D additional for Crown's vote
 │   Guild AI vote: Censure is not Blockade or Outlawry → Guilds vote for whoever weakens highest Mandate faction
@@ -266,7 +266,7 @@ PLAYER RUNS PARALLEL INVESTIGATION AND PARLIAMENTARY PREPARATION
 │   ├─ USE VETO: Mandate −1 (5→4); motion blocked; but self-interested veto → additional Mandate −1 (4→3)
 │   │   → Himlensendt uses Veto: Mandate 3 (two decrements in one move)
 │   │   → Church is now below Crown and Hafenmark in Mandate
-│   │   → TC generation: Passive +1/season (Church Mandate ≥ 3); still fires
+│   │   → CI generation: Passive +1/season (Church Mandate ≥ 3); still fires
 │   │   → But: Church parliamentary power collapsed
 │   │
 │   └─ DO NOT VETO: Censure passes → Church Stability −1; Church Mandate −1 (Censure effect)
@@ -297,30 +297,30 @@ PLAYER RUNS PARALLEL INVESTIGATION AND PARLIAMENTARY PREPARATION
 
 ---
 
-### NEW-S27: CHURCH SACRED VETO × TC MANDATION COLLAPSE × TC ACCELERATION PARADOX
+### NEW-S27: CHURCH SACRED VETO × CI MANDATION COLLAPSE × CI ACCELERATION PARADOX
 
 ```
 Root: Church Sacred Veto (§5.3): cancels any non-military Parliamentary vote; Mandate −1 if against passing motion; additional −1 if self-interested
-      TC generation (existing): Passive +1/season if Church Mandate ≥ 3
-      Church Mandate at 3: still generating TC (barely)
+      CI generation (existing): Passive +1/season if Church Mandate ≥ 3
+      Church Mandate at 3: still generating CI (barely)
 
 HIMLENSENDT USES SACRED VETO THREE TIMES IN FIVE SEASONS
 │
 ├─ Season 1: Censure motion against Church (Niflhel exposure)
 │   Himlensendt Veto: Mandate 5 → 5 − 1 (against passing motion) − 1 (self-interested) = 3
-│   TC: still generating (+1/season)
+│   CI: still generating (+1/season)
 │
 ├─ Season 3: Outlawry motion against Church (Church military overreach)
 │   Outlawry requires Supermajority; Himlensendt uses Veto
 │   Mandate 3 → 3 − 1 − 1 = 1
-│   TC generation: STOPS (Mandate < 3; passive TC generation pauses)
-│   TC is currently at, say, 45
-│   TC stalled: no passive generation
+│   CI generation: STOPS (Mandate < 3; passive CI generation pauses)
+│   CI is currently at, say, 45
+│   CI stalled: no passive generation
 │
 ├─ THE PARADOX:
 │   Church used Sacred Veto to PROTECT ITSELF from political damage
 │   Result: Church Mandate collapsed to 1
-│   TC generation paused (the very mechanism that gives Church power is offline)
+│   CI generation paused (the very mechanism that gives Church power is offline)
 │   Church at Mandate 1: cannot propose Parliamentary motions (needs Mandate 2)
 │   Cannot use Sacred Veto again (needs Mandate 1 to maintain the next Veto; but Veto costs Mandate −1)
 │   → Another Veto = Mandate 0 → Church has no Parliamentary presence at all
@@ -328,16 +328,16 @@ HIMLENSENDT USES SACRED VETO THREE TIMES IN FIVE SEASONS
 ├─ MANDATE 1 CHURCH: STRATEGIC VULNERABILITIES
 │   Parliamentary actions against Church: no Sacred Veto to block
 │   Church cannot issue Censure against player (needs Mandate 2)
-│   Church Domain Actions: Suppress (TC action) now harder — Stability checks harder at low Mandate
+│   Church Domain Actions: Suppress (CI action) now harder — Stability checks harder at low Mandate
 │   Military: Church has no Military stat (non-military faction)
 │   → Church at Mandate 1 is institutionally paralyzed
 │
-├─ TC STALLED WITH CHURCH PARALYZED:
-│   TC at 45 (stalled at Mandate 1 block)
-│   Players can act on Thread reality, RM support, etc. without TC advancing
+├─ CI STALLED WITH CHURCH PARALYZED:
+│   CI at 45 (stalled at Mandate 1 block)
+│   Players can act on Thread reality, RM support, etc. without CI advancing
 │   This is the largest possible "breathing room" state in the game:
-│   No TC advancing + Church institutionally frozen
-│   RS can be stabilized (Mending operations, no TC pressure)
+│   No CI advancing + Church institutionally frozen
+│   RS can be stabilized (Mending operations, no CI pressure)
 │
 ├─ CHURCH RECOVERY PATH:
 │   Church Absolution (unique action): +1 Stability to target; Church Influence +1
@@ -349,7 +349,7 @@ HIMLENSENDT USES SACRED VETO THREE TIMES IN FIVE SEASONS
 │
 │   Likely path: Himlensendt's Challenge resolution (arc branch condition)
 │   Arc B (Crisis of Faith): Mandate may stabilize under new doctrinal framing
-│   Arc A (Zealot): Mandate recovery through aggressive TC suppression action success
+│   Arc A (Zealot): Mandate recovery through aggressive CI suppression action success
 │   But both require standing above Mandate 1 to execute...
 │   → Church at Mandate 1 may be LOCKED OUT of its own recovery mechanisms
 │
@@ -359,11 +359,11 @@ HIMLENSENDT USES SACRED VETO THREE TIMES IN FIVE SEASONS
     Both paths lead to Mandate 1 within 3 Censures
     → Sustained Parliamentary pressure (not combat, not Thread) collapses Church institutional power
     → This is the non-violent Church destruction path
-    → TC is collateral beneficiary: it stalls when Church Mandate falls below 3
+    → CI is collateral beneficiary: it stalls when Church Mandate falls below 3
     → [ARC 4: Niflhel-Church exposure] is the Censure material; systematic Parliament is the delivery mechanism
 ```
 
-**New emergence:** The Sacred Veto is a self-defeating defense mechanism. Systematic Parliamentary pressure forces Himlensendt to exhaust his Veto uses in Mandate-collapse, paradoxically stalling TC generation (the very power the Church was trying to protect). This is an entirely political path to TC management that wasn't visible before the Parliamentary mechanics were specified.
+**New emergence:** The Sacred Veto is a self-defeating defense mechanism. Systematic Parliamentary pressure forces Himlensendt to exhaust his Veto uses in Mandate-collapse, paradoxically stalling CI generation (the very power the Church was trying to protect). This is an entirely political path to CI management that wasn't visible before the Parliamentary mechanics were specified.
 
 ---
 
@@ -567,7 +567,7 @@ PRACTITIONER PLAYER (TS 60) PARTICIPATES IN GRAND CONTEST AT PARLIAMENTARY SESSI
 │   Exchange 1-5 WITHOUT Thread: standard pool → ~50-60% win rate at Ob 3
 │   Thread advantage: shifts each exchange from ~55% to ~75%+ success
 │   → In a 5-exchange Grand Contest: Thread gives ~1-2 additional exchange wins
-│   → At Conviction Track 5 (start), each exchange win moves Track toward win
+│   → At Piety Track 5 (start), each exchange win moves Track toward win
 │   → Thread makes an even contest into a decisive win
 │   COST: Heresy Investigation opened, Coherence −2, visible political identity (confirmed practitioner)
 │
@@ -591,7 +591,7 @@ PRACTITIONER PLAYER (TS 60) PARTICIPATES IN GRAND CONTEST AT PARLIAMENTARY SESSI
     Independent path (no faction): Heresy Investigation exposes the player → they become a known practitioner
     → Renown +1 (investigation resolved at Complex threshold — "investigation of player resolved")
     → NPC Outreach: NPCs seeking practitioner contact now approach the player openly (known quantity)
-    → Church antagonism is maximized: TC +1 from public practitioner confirmed
+    → Church antagonism is maximized: CI +1 from public practitioner confirmed
     → But: RS benefits if player uses the resulting attention to publicly advocate for Mending
     The practitioner who uses Thread in Parliament is CHOOSING public identity
     → This is a strategic decision, not an accident
@@ -1175,7 +1175,7 @@ A faction under sustained Parliamentary attack:
 │
 ├─ Censure motion passes (Mandate ≥ 3 proposer, Majority): Mandate −1, Stability −1
 ├─ Faction uses Rebuttal (Mandate pool vs Ob 2): fails → Censure proceeds
-├─ Faction loses Mandate below 3: Church cannot use Suppress normally (TC anchor weakens)
+├─ Faction loses Mandate below 3: Church cannot use Suppress normally (CI anchor weakens)
 ├─ Without Mandate 3: faction cannot PROPOSE Parliamentary motions (needs Mandate 2 minimum)
 │   → A faction at Mandate 1 cannot propose Rebuttal against further Censure!
 │   → [Rebuttal is a "declare in Phase 4" action that costs an action slot — not a roll-less defense]
@@ -1186,7 +1186,7 @@ A faction under sustained Parliamentary attack:
 └─ Mandate 0: faction has no Parliamentary voice
     But: no Parliamentary voice = no further Mandate costs from Censure (no Mandate to lose)
     → The faction at Mandate 0 is IMMUNE to further Parliament Censure (nothing to take)
-    → TC pauses (if Church at Mandate 0)
+    → CI pauses (if Church at Mandate 0)
     → But: Outlawry (Mandate −2) could force Mandate below 0 (floor at 0? Or negative?)
     → If Mandate floors at 0: Parliament attacks eventually exhaust themselves
     → If Mandate can go negative: the faction is permanently debilitated

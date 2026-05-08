@@ -72,11 +72,11 @@ Full Rest: Clears all Conditions, heals all non-permanent Wounds
 
 ## T-B7-02 — HISTORIES + BELIEFS + INSPIRATIONS + GRAND DEBATE
 **Coverage:** M-003, M-004, M-006, M-037
-**Mode:** TTRPG | **Temporal:** PAST/PRES | **Tracks:** TC,FSTAT,COMP,CERT | **Factions:** Church,Crown,Hafenmark | **NPCs:** Baralta,Himlensendt,Elske | **Archetypes:** Faction Leader,Devout Character
+**Mode:** TTRPG | **Temporal:** PAST/PRES | **Tracks:** CI,FSTAT,COMP,CERT | **Factions:** Church,Crown,Hafenmark | **NPCs:** Baralta,Himlensendt,Elske | **Archetypes:** Faction Leader,Devout Character
 
 ### Mode C — Full Scenario
 
-**Setup:** Grand Debate — Parliament session. Baralta (Hafenmark, constitutional legalist) vs Himlensendt (Church, TC driver). Elske (Crown, player character) must navigate.
+**Setup:** Grand Debate — Parliament session. Baralta (Hafenmark, constitutional legalist) vs Himlensendt (Church, CI driver). Elske (Crown, player character) must navigate.
 
 **Initial State:**
 ```
@@ -93,7 +93,7 @@ Himlensendt — Coord 2, End 5, Health 5, Wounds 0, Composure 7
   Histories: [Devoted since birth — +2D on theological argument] [Institutional authority — +1D when invoking Church precedent]
   Beliefs: "The Confessor's mandate is absolute within Valoria" (active)
 
-Tracks: TC 45 | TT 28 | IP 22 | PI (Parliament Integrity) 6/10
+Tracks: CI 45 | TT 28 | IP 22 | PI (Parliament Integrity) 6/10
 ```
 
 ### Grand Debate Resolution (M-037)
@@ -135,15 +135,15 @@ If Elske spends Inspiration: Pool 10D → P(≥3) ≈ 73% → Success probable
 **Phase 3 — Parliamentary Vote (M-036) trigger**
 Grand Debate outcome determines coalition state entering vote:
 - Himlensendt Success + Elske Partial: Church faction +1 Composure, Crown −1 Composure
-- Coalition calculation: TC 45 (moderate Church influence), PI 6
+- Coalition calculation: CI 45 (moderate Church influence), PI 6
 - Vote requires PI ≥ 5 to proceed — met.
 
 **M-036 + M-037 interaction:**
 Grand Debate outcome shifts faction Composure which feeds into vote pool. No rule specifies: does Composure loss reduce vote dice? **GAP (already F80): coalition mechanics absent. This test confirms the gap is load-bearing — Grand Debate output has nowhere to go mechanically.**
 
-**TC interaction:**
-Himlensendt's successful theological argument: triggers TC +2 (institutional expansion)
-At TC 47: approaching threshold (50 = Synod convenes). This is M-037 → M-031 escalation.
+**CI interaction:**
+Himlensendt's successful theological argument: triggers CI +2 (institutional expansion)
+At CI 47: approaching threshold (50 = Synod convenes). This is M-037 → M-031 escalation.
 
 **M-004 CP awards from this scene:**
 - Elske: Belief tested and partially upheld → 1 CP
@@ -302,7 +302,7 @@ Failure: Action fails, Resources spend wasted, potential exposure.
 
 #### Step 4: Faction Stat update (M-034)
 Wealth 6 → 7 on success.
-**Wealth 7 threshold check:** At Wealth ≥ 7, does any threshold fire? Matrix entry F112 addressed Church Stability/TC interaction. Checking Guild Wealth threshold: no threshold defined for Wealth 7. Thresholds documented for: TC (50, 75, 100), TT (30, 45, 60), IP (20, 40, 60). **GAP: Faction stat thresholds absent.** What happens when Wealth hits 10? When Military hits 0? No consequences defined.
+**Wealth 7 threshold check:** At Wealth ≥ 7, does any threshold fire? Matrix entry F112 addressed Church Stability/CI interaction. Checking Guild Wealth threshold: no threshold defined for Wealth 7. Thresholds documented for: CI (50, 75, 100), TT (30, 45, 60), IP (20, 40, 60). **GAP: Faction stat thresholds absent.** What happens when Wealth hits 10? When Military hits 0? No consequences defined.
 
 **M-034 + M-035 compound action test (BG mode):**
 In BG mode, Domain Actions are resolved at the faction card level without character involvement. Pool = faction stat only. This means BG mode Domain Actions have no situational modifiers — pure stat rolls. Circles and Resources mechanics are TTRPG-only constructs that don't translate to BG. **No BG equivalent for Circles or Resources mechanics confirmed.**
@@ -463,7 +463,7 @@ Effective Ob would drop back to 3 + TD modifier 3 = Ob 6. P(≥6 net, 8D) ≈ 2%
 
 ## T-B7-07 — FACTION STATS + DOMAIN ACTIONS + SEASONAL ACCOUNTING + THEOCRACY CLOCK
 **Coverage:** M-034, M-035, M-038, M-031
-**Mode:** TTRPG/BG | **Temporal:** FUT/CROSS | **Tracks:** FSTAT,TC,TT,IP | **Factions:** Church,Crown,Hafenmark,Revolution | **NPCs:** Himlensendt | **Archetypes:** Faction Leader
+**Mode:** TTRPG/BG | **Temporal:** FUT/CROSS | **Tracks:** FSTAT,CI,TT,IP | **Factions:** Church,Crown,Hafenmark,Revolution | **NPCs:** Himlensendt | **Archetypes:** Faction Leader
 
 ### Mode C — Full Seasonal Cycle
 
@@ -476,15 +476,15 @@ Crown:     M 6, I 7, W 6, Mi 5, In 4, S 6
 Hafenmark: M 4, I 5, W 8, Mi 3, In 4, S 7
 Revolution:M 3, I 4, W 3, Mi 4, In 6, S 4
 
-Tracks: TC 48 | TT 32 | IP 18
+Tracks: CI 48 | TT 32 | IP 18
 ```
 
 #### Phase 1 — Domain Actions (M-035)
 
-**Church — Theological Expansion (TC driver):**
+**Church — Theological Expansion (CI driver):**
 Pool: Mandate 7, TN7, Ob 2 → Expected net: 7 × 0.33 = 2.31 | P(≥2) ≈ 70%
-Success: Influence +1 (7), TC +3 (→ 51). TC 51 crosses threshold 50.
-**TC 50 threshold fires: Synod convened.** Effect: Church gains +2 Mandate for duration of Synod (season). Church Mandate: 7 → 9.
+Success: Influence +1 (7), CI +3 (→ 51). CI 51 crosses threshold 50.
+**CI 50 threshold fires: Synod convened.** Effect: Church gains +2 Mandate for duration of Synod (season). Church Mandate: 7 → 9.
 
 **Crown — Intelligence Gathering on Revolution:**
 Pool: Intelligence 4, TN7, Ob 2 → Expected net: 1.32 | P(≥2) ≈ 50%
@@ -525,8 +525,8 @@ Church: 5 − 5 = 0. **Church Wealth hits 0.**
 **M-038 + M-034 seasonal update:**
 After accounting, faction stat floors need checking. No floor defined for stats (F-B7-12 confirmed). Stats can theoretically reach 0 (and below per Revolution Wealth above).
 
-**TC post-threshold state:**
-TC 51, Synod active. Duration of Synod: not specified. **GAP: Synod duration mechanics absent.** Does it last 1 season? Until TC drops below 50? Until player action resolves it?
+**CI post-threshold state:**
+CI 51, Synod active. Duration of Synod: not specified. **GAP: Synod duration mechanics absent.** Does it last 1 season? Until CI drops below 50? Until player action resolves it?
 
 ### Findings
 
@@ -534,7 +534,7 @@ TC 51, Synod active. Duration of Synod: not specified. **GAP: Synod duration mec
 
 **F-B7-23** (P1) — Domain Action sequencing absent. Simultaneous Domain Actions from opposing factions with interfering effects have no priority or sequencing rule. Crown intel vs Revolution recruitment is a direct conflict with no resolution mechanic. In BG mode this is particularly acute — all factions act simultaneously.
 
-**F-B7-24** (P2) — Synod duration undefined. TC threshold at 50 triggers Synod but no mechanic specifies duration or resolution conditions. Synod is a sustained state with no exit criteria.
+**F-B7-24** (P2) — Synod duration undefined. CI threshold at 50 triggers Synod but no mechanic specifies duration or resolution conditions. Synod is a sustained state with no exit criteria.
 
 **F-B7-25** (P2) — High upkeep creates structural Church poverty. At standard stat values, Church Wealth hits 0 after one seasonal cycle if Wealth starts at 5. Church is designed to have high Mandate/Influence (theological power) but low Wealth — this may be intentional faction design. However, economic paralysis on turn 1 of any campaign is a P2 play experience issue.
 
@@ -752,7 +752,7 @@ ThS at location: ThS 10 → after Thread op: ThS +1 (11). Passive detection Ob f
 
 ## T-B7-11 — THREAD EVENTS IN SOCIAL + CIRCLES + GRAND DEBATE + THEOCRACY CLOCK
 **Coverage:** M-047, M-011, M-037, M-031
-**Mode:** TTRPG | **Temporal:** CROSS | **Tracks:** TT,TS,CERT,TC,FSTAT,IP | **Factions:** Church,Crown,Hafenmark | **NPCs:** Himlensendt,Almud,Baralta | **Archetypes:** Practitioner,Faction Leader,Devout Character
+**Mode:** TTRPG | **Temporal:** CROSS | **Tracks:** TT,TS,CERT,CI,FSTAT,IP | **Factions:** Church,Crown,Hafenmark | **NPCs:** Himlensendt,Almud,Baralta | **Archetypes:** Practitioner,Faction Leader,Devout Character
 
 ### Mode C — Full Scenario
 
@@ -764,7 +764,7 @@ Almud — TS 8, Certainty 6, Coord 3, Composure 5
   Circles: Parliament 5, Crown Court 4
 Himlensendt — TS 0 (Devout: no Thread perception), Composure 7
 Baralta — TS 2 (constitutional legalist, minimal Thread sensitivity)
-TC 48 | TT 30 | IP 17
+CI 48 | TT 30 | IP 17
 ```
 
 #### Step 1: Grand Debate in progress (M-037)
@@ -782,7 +782,7 @@ Spontaneous Thread manifestation — a Shifting Object appears briefly in the ch
 
 **Almud's dilemma (M-047 + M-011):**
 Almud perceives the Thread event as what it is (a spontaneous Shifting Object). She can:
-(a) Say nothing — Himlensendt's narrative stands, TC +3 if his argument succeeds.
+(a) Say nothing — Himlensendt's narrative stands, CI +3 if his argument succeeds.
 (b) Reveal Thread knowledge — exposes her TS awareness publicly. Circles: Parliament 5 → risk of Unmask.
 (c) Reframe without revealing — Circles roll to shift the narrative. Pool: Circles Parliament 5 + Coord 3 = 8D, TN7, Ob 3 → P(success) ≈ 60%.
 
@@ -792,13 +792,13 @@ Almud perceives the Thread event as what it is (a spontaneous Shifting Object). 
 If Almud succeeds at reframe (60%):
 - Himlensendt's Inspiration boost (from "divine confirmation") is neutralised
 - Grand Debate resumes at baseline odds
-- TC gains no benefit this round
+- CI gains no benefit this round
 
 If Almud fails at reframe:
 - Himlensendt's argument succeeds with +1D bonus: P(success) rises to ~80%
-- TC +3 on success (→ 51) → Synod triggers (TC 50 threshold, already noted in T-B7-07)
+- CI +3 on success (→ 51) → Synod triggers (CI 50 threshold, already noted in T-B7-07)
 
-**M-031 + M-037 cascade confirmed:** Grand Debate success by Himlensendt → TC threshold → Synod → Church Mandate +2 → next Grand Debate even harder to contest.
+**M-031 + M-037 cascade confirmed:** Grand Debate success by Himlensendt → CI threshold → Synod → Church Mandate +2 → next Grand Debate even harder to contest.
 
 **IP interaction:**
 Almud's reframe (if she reveals Thread knowledge publicly): IP +3 (political crisis — Crown representative acknowledged Thread activity in Parliament).
@@ -810,13 +810,13 @@ At IP 17 + 3 = 20: IP threshold fires. Effect: Parliament Integrity check requir
 
 **F-B7-35** (P2) — Devout information asymmetry can produce perverse narrative confirmations. Thread accidents are indistinguishable from divine signs for Devout characters. This can create situations where the Devout character is narratively "right" for wrong reasons — and mechanically rewarded for the misinterpretation. May be intentional (epistemic seduction from Foundations P-10) but needs explicit design acknowledgment.
 
-**F-B7-36** (P3) — TC cascade from debate is fast. Two conditions (Himlensendt success + Thread event interrupt) can push TC from 48 to 51 in one scene. At TC 48, the system is one debate away from Synod regardless of player action. Threshold approach speed may need dampening.
+**F-B7-36** (P3) — CI cascade from debate is fast. Two conditions (Himlensendt success + Thread event interrupt) can push CI from 48 to 51 in one scene. At CI 48, the system is one debate away from Synod regardless of player action. Threshold approach speed may need dampening.
 
 ---
 
 ## T-B7-12 — SCALE TRANSITIONS + DOMAIN ACTIONS + SEASONAL ACCOUNTING + CLOCK INTERACTIONS
 **Coverage:** M-048, M-035, M-038, M-033
-**Mode:** HYB | **Temporal:** CROSS | **Tracks:** FSTAT,TT,TC,IP | **Factions:** Crown,Church,Guilds | **NPCs:** Almud | **Archetypes:** Faction Leader,Practitioner
+**Mode:** HYB | **Temporal:** CROSS | **Tracks:** FSTAT,TT,CI,IP | **Factions:** Crown,Church,Guilds | **NPCs:** Almud | **Archetypes:** Faction Leader,Practitioner
 
 ### Mode B+C — Interaction Chain + Scenario
 
@@ -842,12 +842,12 @@ No rule found. **GAP: Thread-derived faction stat gains vs Domain Action economy
 If additive: Crown can gain faction stat benefits from both Thread operations (via practitioners) AND Domain Actions in the same season. This doubles Crown's effective Domain Action output in sessions with active practitioners.
 
 #### Clock Interactions (M-033)
-Almud's Pull modifies historical record → TC −1 (undermining Church's historical claim → reduces TC).
-Scale Transition applied: TC −2 (faction-scale effect).
-TC 48 → 46. Now below threshold 50 (no Synod trigger this season).
+Almud's Pull modifies historical record → CI −1 (undermining Church's historical claim → reduces CI).
+Scale Transition applied: CI −2 (faction-scale effect).
+CI 48 → 46. Now below threshold 50 (no Synod trigger this season).
 
 **M-033 interaction map:**
-One Thread operation chain: IP +2 (if revealed), TC −2 (Almud's effect), TT +1 (Thread op), Crown Influence +1.
+One Thread operation chain: IP +2 (if revealed), CI −2 (Almud's effect), TT +1 (Thread op), Crown Influence +1.
 Clocks affected simultaneously: 3 of 3 major clocks moved in one operation.
 **A single Overwhelming Thread op can move all clocks simultaneously. No ceiling on clock manipulation per operation.**
 
@@ -861,7 +861,7 @@ Influence 8: approaching maximum. Still no threshold defined (F-B7-12 confirmed 
 
 **F-B7-38** (P2) — Thread-derived faction gains vs Domain Action economy. If Thread ops grant faction stat changes additively to Domain Actions, practitioners become a second economy layer for faction stats. High-TS Crown characters could double Crown's faction advancement rate.
 
-**F-B7-39** (P2) — No ceiling on simultaneous clock movement. One Thread operation can move TT, TC, and IP simultaneously. At high practitioner activity, clocks could cascade faster than faction play can respond.
+**F-B7-39** (P2) — No ceiling on simultaneous clock movement. One Thread operation can move TT, CI, and IP simultaneously. At high practitioner activity, clocks could cascade faster than faction play can respond.
 
 ---
 
@@ -992,7 +992,7 @@ On failure: Certainty −2 (6 → 4). Below threshold — next op at −1D.
 
 ## T-B7-15 — NIFLHEL DESTABILISATION + FACTION STATS + RISKBREAKERS + THEOCRACY CLOCK
 **Coverage:** M-056, M-034, M-050, M-031
-**Mode:** BG/HYB | **Temporal:** CROSS/FUT | **Tracks:** FSTAT,TC,TT,DD,CE | **Factions:** Niflhel,Church,Crown | **NPCs:** — | **Archetypes:** Riskbreaker,Faction Leader
+**Mode:** BG/HYB | **Temporal:** CROSS/FUT | **Tracks:** FSTAT,CI,TT,DD,CE | **Factions:** Niflhel,Church,Crown | **NPCs:** — | **Archetypes:** Riskbreaker,Faction Leader
 
 ### Mode C — Faction Operation Scenario
 
@@ -1004,7 +1004,7 @@ Niflhel:  M 3, I 5, W 4, Mi 2, In 7, S 5  [Intel-heavy, covert faction]
 Church:   M 8, I 6, W 4, Mi 5, In 5, S 8  [post-Synod: Mandate elevated]
 Crown:    M 6, I 7, W 5, Mi 5, In 5, S 6
 
-TC 52 (Synod active) | TT 33 | DD(Riskbreaker) 0/10
+CI 52 (Synod active) | TT 33 | DD(Riskbreaker) 0/10
 ```
 
 **F84 confirmed:** Niflhel has no Intel stat in the matrix. This test assigns In 7 as a design inference — Niflhel is defined as covert faction, therefore Intel should be their primary stat. The absence of this in the ruleset is the P1 gap.
@@ -1024,11 +1024,11 @@ DD threshold 10: Riskbreaker is burned — cannot operate, faction takes reputat
 #### Destabilisation action (M-056)
 Niflhel uses leverage to destabilise Church — leaking information about Church financial irregularities.
 Pool: Niflhel Intel 7, TN7, Ob 3 → P(≥3 net) ≈ 60%
-Success: Church Stability −2 (8 → 6). TC −1 (Synod authority undermined). DD +3 (→ 5, hits threshold).
+Success: Church Stability −2 (8 → 6). CI −1 (Synod authority undermined). DD +3 (→ 5, hits threshold).
 
-**TC interaction (M-031):**
-TC 52 − 1 = 51. Still above 50 (Synod still active). Destabilisation slowed the clock but didn't cross it below threshold.
-To end Synod: TC must drop below 50. Needs TC −2 minimum from current position.
+**CI interaction (M-031):**
+CI 52 − 1 = 51. Still above 50 (Synod still active). Destabilisation slowed the clock but didn't cross it below threshold.
+To end Synod: CI must drop below 50. Needs CI −2 minimum from current position.
 
 **M-050 + M-056 interaction — DD acceleration:**
 Each Destabilisation op: DD +3. Each standard Riskbreaker op: DD +2.
@@ -1045,17 +1045,17 @@ Crown Intel 5. Niflhel operating at DD 5 (threshold): Crown passive awareness ch
 No mechanic found for passive faction intelligence checks. **GAP: How do factions discover ongoing covert operations passively?** Only active Domain Actions (Intelligence-type) seem to reveal rival activity.
 
 **Theocracy Clock + Niflhel:**
-TC is primarily driven by Church Domain Actions. Niflhel's destabilisation can suppress TC but cannot drive it down rapidly. TC −1 per successful Destabilisation op vs typical Church TC gains of +2–3 per Domain Action. **Niflhel can slow TC growth but not reverse it meaningfully without more aggressive operations (DD cost too high).**
+CI is primarily driven by Church Domain Actions. Niflhel's destabilisation can suppress CI but cannot drive it down rapidly. CI −1 per successful Destabilisation op vs typical Church CI gains of +2–3 per Domain Action. **Niflhel can slow CI growth but not reverse it meaningfully without more aggressive operations (DD cost too high).**
 
 ### Findings
 
 **F-B7-44** (P1 — confirms F84) — Niflhel Intel stat undefined in ruleset. This test required design inference (In 7) to proceed. Without explicit Intel stat definition for Niflhel, the faction cannot be run mechanically.
 
-**F-B7-45** (P2) — Faction Stability 0 has no defined consequence. Church Stability could theoretically be reduced to 0 through sustained Destabilisation. No mechanic defines what happens (faction collapse? civil war trigger? TC spike?). The most narratively significant outcome has no mechanical expression.
+**F-B7-45** (P2) — Faction Stability 0 has no defined consequence. Church Stability could theoretically be reduced to 0 through sustained Destabilisation. No mechanic defines what happens (faction collapse? civil war trigger? CI spike?). The most narratively significant outcome has no mechanical expression.
 
 **F-B7-46** (P2) — Passive faction intelligence absent. Factions have no mechanic for passively detecting ongoing covert operations. Only active Intel Domain Actions discover rivals. A faction being actively destabilised has no awareness unless they spend a Domain Action specifically to look. Suspense-appropriate but mechanically incomplete.
 
-**F-B7-47** (P3) — Niflhel destabilisation rate cannot outpace Church clock-driving. Church drives TC +2–3 per season via Domain Actions. Niflhel reduces TC −1 per successful op but burns the Riskbreaker after ~3 ops. Church wins the clock race structurally. This may be intentional (TC is supposed to build to a crisis) but means Niflhel's primary mechanical purpose (destabilisation) is cosmetic relative to TC trajectory.
+**F-B7-47** (P3) — Niflhel destabilisation rate cannot outpace Church clock-driving. Church drives CI +2–3 per season via Domain Actions. Niflhel reduces CI −1 per successful op but burns the Riskbreaker after ~3 ops. Church wins the clock race structurally. This may be intentional (CI is supposed to build to a crisis) but means Niflhel's primary mechanical purpose (destabilisation) is cosmetic relative to CI trajectory.
 
 ---
 
@@ -1086,7 +1086,7 @@ TC is primarily driven by Church Domain Actions. Niflhel's destabilisation can s
 | F-B7-21 | T-06 | M-010,M-015 | P3 | Knot/Residue clearing catch-22 — clearing requires accessing; accessing requires clearing |
 | F-B7-22 | T-07 | M-034 | P1 | Negative faction stat undefined — Revolution Wealth −1 reachable in normal play |
 | F-B7-23 | T-07 | M-035 | P1 | Domain Action sequencing absent — simultaneous conflicting actions have no resolution order |
-| F-B7-24 | T-07 | M-031 | P2 | Synod duration undefined — TC 50 trigger fires but no exit condition specified |
+| F-B7-24 | T-07 | M-031 | P2 | Synod duration undefined — CI 50 trigger fires but no exit condition specified |
 | F-B7-25 | T-07 | M-034,M-038 | P2 | Church structural poverty — Wealth hits 0 after 1 seasonal cycle at standard stats |
 | F-B7-26 | T-08 | M-039 | P2 | Initiative tie resolution absent — no mechanic for tied initiative |
 | F-B7-27 | T-08 | M-044 | P3 | Manoeuvres suboptimal vs attacks in almost all cases — likely underused |
@@ -1098,7 +1098,7 @@ TC is primarily driven by Church Domain Actions. Niflhel's destabilisation can s
 | F-B7-33 | T-10 | M-046,M-048 | P2 | TTRPG→BG state handoff undefined — Wounds/Conditions/Thread ops don't carry over |
 | F-B7-34 | T-11 | M-011,M-037 | P2 | Circles as debate substitute undocumented — powerful emergent interaction |
 | F-B7-35 | T-11 | M-047,M-051 | P2 | Devout information asymmetry — Thread accidents confirm Devout beliefs, reward misinterpretation |
-| F-B7-36 | T-11 | M-031,M-037 | P3 | TC cascade from debate is fast — one scene can push TC past threshold |
+| F-B7-36 | T-11 | M-031,M-037 | P3 | CI cascade from debate is fast — one scene can push CI past threshold |
 | F-B7-37 | T-12 | M-048 | P2 | Scale translation ratio undefined — no formula for personal→faction stat conversion |
 | F-B7-38 | T-12 | M-048,M-035 | P2 | Thread-derived faction gains vs Domain Action economy undefined |
 | F-B7-39 | T-12 | M-033 | P2 | No ceiling on simultaneous clock movement from single Thread operation |
@@ -1109,7 +1109,7 @@ TC is primarily driven by Church Domain Actions. Niflhel's destabilisation can s
 | F-B7-44 | T-15 | M-056 | P1 | Niflhel Intel stat undefined (F84 confirmed) |
 | F-B7-45 | T-15 | M-034,M-056 | P2 | Faction Stability 0 has no defined consequence |
 | F-B7-46 | T-15 | M-050,M-056 | P2 | Passive faction intelligence absent — factions can't detect destabilisation without active Intel action |
-| F-B7-47 | T-15 | M-056,M-031 | P3 | Niflhel destabilisation rate cannot outpace TC — covert faction may be cosmetically limited |
+| F-B7-47 | T-15 | M-056,M-031 | P3 | Niflhel destabilisation rate cannot outpace CI — covert faction may be cosmetically limited |
 
 ### P1 Summary — Batch 07
 | Finding | Mechanic | Issue |

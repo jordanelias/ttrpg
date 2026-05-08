@@ -33,7 +33,7 @@ Pool formula (PP-232): (Cognition × 2) + History bonus, TN 7
 Memory bonus (+2D): significant. ~+0.66 expected net. Strong incentive to cite every exchange.
 Momentum spend (1 auto-success): equivalent to ~3D value at TN7. Very high value.
 
-### Conviction Track Movement Table
+### Piety Track Movement Table
 effective_margin = floor(margin × genre_weight × orientation_weight)
 CT move = effective_margin − resistance (if positive)
 
@@ -108,7 +108,7 @@ CT move = effective_margin − resistance (if positive)
 
 ### FINDING D-09 [P1] — TIE Override Conflicts With DIVERGENCE No-Strain Rule
 **Setup:** DIVERGENCE exchange where both orators roll 0 net successes.
-**Mechanism:** TIE override ("any interaction type"): both take 1 strain, CT +1 toward initiative holder. But DIVERGENCE rule: "No strain dealt." These directly conflict. TIE override explicitly states it takes priority.
+**Mechanism:** TIE override ("any interaction type"): both take 1 strain, CT +1 toward first-to-speak holder. But DIVERGENCE rule: "No strain dealt." These directly conflict. TIE override explicitly states it takes priority.
 **Severity:** P1 — confirmed rule conflict; TIE override produces strain in a context DIVERGENCE explicitly prohibits it.
 **Frequency:** Low but possible in any DIVERGENCE exchange with weak pools.
 **Proposed fix:** TIE override should be scoped to CLASH and COMPETITION only. DIVERGENCE both-zero: neither side's effective_margin exceeds resistance, no CT movement, no strain.
@@ -172,7 +172,7 @@ params_debate.md PP-278: resistance = ceil(Stability/4).
 
 ### FINDING D-17 [P2] — GM Bookkeeping Load
 **Setup:** Any Formal or Grand Debate with audience.
-**Mechanism:** GM must track simultaneously: CT position, genre weights (per faction ethical mode), orientation weights, Appraise results, dice pools (variable per character), strain accumulation, Composure thresholds, Concentration per character, Rattled/Spent states, Doubt Markers, initiative holder, exchange count, role structure, Belief alignment check, pre-debate Preparation bonus. ~40 operations per exchange. No reference card exists (acknowledged, deferred to compilation).
+**Mechanism:** GM must track simultaneously: CT position, genre weights (per faction ethical mode), orientation weights, Appraise results, dice pools (variable per character), strain accumulation, Composure thresholds, Concentration per character, Rattled/Spent states, Doubt Markers, first-to-speak holder, exchange count, role structure, Belief alignment check, pre-debate Preparation bonus. ~40 operations per exchange. No reference card exists (acknowledged, deferred to compilation).
 **Severity:** P2 — not a rules break but a play-experience break. High cognitive load concentrated in GM.
 **Frequency:** Every debate.
 **Proposed fix:** Production task: GM ledger card (as acknowledged in ED-141/PP-321). Prioritise before first playtesting session.

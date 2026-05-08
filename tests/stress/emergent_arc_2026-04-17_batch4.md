@@ -1,6 +1,6 @@
 # VALORIA — EMERGENT ARC SKELETON TEST — BATCH 4
 ## Session: 2026-04-17 | Continuation of Batches 1-3
-## New surfaces: Conviction Track (CV) per territory, Church Seizure Ob formula, CI Conviction Yield, Baralta Crown Claim / Consecration Crisis, Varfell Path B Deeds, RM Emergence triple condition, Desperate Trail (§4.4), Contested Investigation (§4.6), Depth rendering strain (§3.4), Niflhel Social Toolkit (§5.8), Exposure Track, Knot detection (§2.6), NPC-Initiated Demands (§5.9), AEA clock, CV environmental events, Campaign modes cross-mode interaction
+## New surfaces: Piety Track (CV) per territory, Church Seizure Ob formula, CI Conviction Yield, Baralta Crown Claim / Consecration Crisis, Varfell Path B Deeds, RM Emergence triple condition, Desperate Trail (§4.4), Contested Investigation (§4.6), Depth rendering strain (§3.4), Niflhel Social Toolkit (§5.8), Exposure Track, Knot detection (§2.6), NPC-Initiated Demands (§5.9), AEA clock, CV environmental events, Campaign modes cross-mode interaction
 ## Does NOT repeat NEW-S1 through NEW-S51 from Batches 1-3
 
 ---
@@ -950,5 +950,5 @@ PLAYER ANALYSIS: WHICH AEA CONDITIONS ARE PLAYER-ADDRESSABLE?
 *End of Batch 4 document.*
 *12 new scenarios (NEW-S52 through NEW-S63), 10 additional open items (NEW-OI-31 through NEW-OI-40).*
 *Combined totals across all four batches: 63 emergent scenarios, 5 feedback loops (Batches 1-2), 40 total open items.*
-*Primary new surfaces covered: Conviction Track (CV) per territory and Calamity Drift, CI Conviction Yield manipulation, Baralta Crown Claim and Consecration Crisis, Varfell Path B Deed mechanics, RM Emergence self-limiting loop, Desperate Trail + Contested Investigation + Exposure stack, Breach encounters as TS growth mechanism, Demand scene mechanics and Deflect Ob, Hybrid cross-mode Thread contradiction timing, Knot detection and relationship betrayal cascade, Niflhel Exposure race in Contested Investigation, AEA clock minimum viable intervention.*
+*Primary new surfaces covered: Piety Track (CV) per territory and Calamity Drift, CI Conviction Yield manipulation, Baralta Crown Claim and Consecration Crisis, Varfell Path B Deed mechanics, RM Emergence self-limiting loop, Desperate Trail + Contested Investigation + Exposure stack, Breach encounters as TS growth mechanism, Demand scene mechanics and Deflect Ob, Hybrid cross-mode Thread contradiction timing, Knot detection and relationship betrayal cascade, Niflhel Exposure race in Contested Investigation, AEA clock minimum viable intervention.*
 *Critical P1 open items this batch: conviction_track_v30 status unconfirmed (NEW-OI-35), Community Weaving Ob formula ambiguity (NEW-OI-40), Hafenmark Structural Suppression persistence after leadership change (NEW-OI-31).*

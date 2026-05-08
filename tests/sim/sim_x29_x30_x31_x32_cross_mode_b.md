@@ -29,7 +29,7 @@ Exchange outcomes:
 | 3 | Past Obscuring | Past Revealing (corrected) | CLASH | Tie (11D vs 10D), no change |
 | 4 | Past Obscuring | Past Revealing | CLASH | Tie again, CT +2 final |
 
-Final: Conviction Track +2 (Church mild advantage). No Composure damage. Inconclusive.
+Final: Piety Track +2 (Church mild advantage). No Composure damage. Inconclusive.
 
 Findings:
 F-29-01: CROSS rewards both without producing winner. Mehn's misread accidentally avoided a disadvantageous CLASH (11D vs 8D). Design note: CROSS should not be fully symmetric.

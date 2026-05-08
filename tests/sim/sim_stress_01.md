@@ -71,7 +71,7 @@
 
 | # | Ruling | Rationale |
 |---|--------|-----------|
-| 1 | CROSS Tie: no strain; track +1 toward initiative holder | CROSS no-strain reflects neither argument attacked the other; tie doesn't change that |
+| 1 | CROSS Tie: no strain; track +1 toward first-to-speak holder | CROSS no-strain reflects neither argument attacked the other; tie doesn't change that |
 | 2 | Mutual total destruction: draw; no territory change; both Stability check Ob 1 | Analogous to combat mutual destruction (Pyrrhic outcome) |
 | 3 | Reform condition: add "AND Command ≥ 2" | Explicit prohibition takes precedence over formula |
 | 4 | Seasonal stat cap: applied at accounting, not per-action | Institutional momentum doesn't reverse between actions within a season |

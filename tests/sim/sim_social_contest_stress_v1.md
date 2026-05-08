@@ -64,7 +64,7 @@ Before findings: **params_debate.md diverges from the operative Part 6 of the ca
 
 **Finding:** With faction Stability range 1–7, practical resistance range is 1–2. The PP-295/ED-164 cap of 5 is redundant — PP-278 formula already caps at 2.
 
-### A-3: Conviction Track Movement
+### A-3: Piety Track Movement
 **Formula:** `CT Δ = floor(margin × gw × ow) − resistance` if positive, else 0
 
 **Minimum winning margin to move CT:**
