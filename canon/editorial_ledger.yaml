@@ -18,6 +18,7 @@ entries:
     status: open
     severity: P2
     source: "PP-666"
+    jordan_decision: "Ratified 2026-05-09 — invasions happen at settlement layer. Execution pending ED-780."
 
   - id: ED-711
     date: 2026-04-19
@@ -25,35 +26,40 @@ entries:
     status: open
     severity: P2
     source: "PP-666"
+    jordan_decision: "Ratified 2026-05-09 — CK county-splintering model confirmed. Bigger provinces or splintered counties. Execution pending ED-780."
 
 
   - id: ED-776
     date: 2026-04-30
-    description: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation. Doctrine canon fixed (Hafenmark Military 4 expressed as superior equipment quality from mining/smithing); mechanical expression options (weapon damage +1, effective Armour tier +1, both, or other) require simulation testing. Cross-references: PP-700, faction_layer §1.5, military_layer §1.3."
+    description: "[STANDING] Hafenmark equipment-quality mechanism — simulation required. Doctrine canon fixed (Hafenmark Military 4 = superior equipment from mining/smithing). Direction 2026-05-09: weapon damage +1 AND damage reduction (armour-equivalent), OR special unit type. Simulation decides which. Cross-references: PP-700, faction_layer §1.5, military_layer §1.3."
     status: open
     severity: P3
     source: "Jordan deferred decision 2026-04-30 (Hafenmark mechanic)"
+    jordan_decision: "2026-05-09 — options: (1) weapon damage +1 + damage reduction, or (2) special unit type. Sim to decide."
 
   - id: ED-777
     date: 2026-04-30
-    description: "[STANDING] arc_register_factions.md — 5 Niflhel-coded arcs require plot-level reframe to settlement-broker mechanic in dedicated session. Affected: ARC-S11, ARC-S54, ARC-S55, NPC-ARC-VIR, ARC-T25. Cross-references: PP-698, conflict_architecture_proposal §Niflhel Dissolution."
+    description: "[STANDING] arc_register_factions.md — 5 arcs require reframe. Niflhel is not a faction. Crime and underground networks exist in Valoria but are not threadwork-related. Affected: ARC-S11, ARC-S54, ARC-S55, NPC-ARC-VIR, ARC-T25. Reframe around crime/underground networks, not Niflhel faction, not threadwork items. Cross-references: PP-698."
     status: open
     severity: P2
     source: "Niflhel strike scope 2026-04-30 (deferred from PP-698)"
+    jordan_decision: "2026-05-09 — Niflhel not a faction. Crime/underground exists but not threadwork-related. Reframe 5 arcs around that."
 
   - id: ED-780
     date: 2026-05-01
-    description: "[STANDING] Phase 3 of geography canon work — spec rewrite (depends on ED-779 completion). Required: (a) rewrite settlement_adjacency_v30 to query geography data rather than abstract edge-types; (b) author march-bubble + encounter-trigger spec (new doc designs/territory/march_layer_v30.md); (c) update mass_battle_v30 §A.9 / §B.5 for geographic battle-terrain derivation at engagement coordinates; (d) author naval mechanics (resolves ED-055). Output: rewritten settlement_adjacency_v30, new march_layer_v30, updated mass_battle_v30, naval mechanics doc. Cross-references: PP-706, audit §2 G7-G9, §3 C5, ED-055 (naval mechanics, open since 2026-04-05)."
+    description: "[STANDING] Phase 3 of geography canon work — spec rewrite (depends on ED-779 completion). Approved scope 2026-05-09: (a) rewrite settlement_adjacency_v30 to query geography data rather than abstract edge-types; (b) author march-bubble + encounter-trigger spec (new doc designs/territory/march_layer_v30.md); (c) update mass_battle_v30 §A.9 / §B.5 for geographic battle-terrain derivation at engagement coordinates. Naval mechanics EXCLUDED — ED-055 deferred indefinitely. Output: rewritten settlement_adjacency_v30, new march_layer_v30, updated mass_battle_v30. Cross-references: PP-706, audit §2 G7-G9, §3 C5."
     status: open
     severity: P2
     source: "Geography canon audit 2026-05-01 — Phase 3"
+    jordan_decision: "2026-05-09 — (a)(b)(c) approved. Naval mechanics out. ED-055 deferred."
 
   - id: ED-781
     date: 2026-05-01
-    description: "[STANDING] Phase 4 of geography canon work — stress tests (depends on ED-780 completion). Three scenarios queued in separate sessions: (1) Mountain Pass battle (T2/T11 Halvardshelm pass — geometry-constrained engagement, narrow-pass clamp emergence); (2) Open-field cavalry encounter (T2 Kronmark plains — flanking-as-position vs declaratory); (3) Coastal landing (Schoenland fleet → T13 Oastad — multi-wave amphibious sequencing, exercises naval mechanics from ED-780). Each stress test exercises the new geographic-route model under different geometric stress patterns. Cross-references: PP-706, ED-779, ED-780."
+    description: "[STANDING] Phase 4 of geography canon work — stress tests (depends on ED-780 completion). Three scenarios queued: (1) Mountain Pass battle (T2/T11 Halvardshelm pass — geometry-constrained engagement, narrow-pass clamp emergence); (2) Open-field cavalry encounter (T2 Kronmark plains — flanking-as-position vs declaratory); (3) Coastal landing (Schoenland → T13 Oastad — amphibious sequencing, no naval mechanics per ED-780 scope). Each stress test exercises the geographic-route model under different geometric stress patterns. Cross-references: PP-706, ED-779, ED-780."
     status: open
     severity: P3
     source: "Geography canon audit 2026-05-01 — Phase 4"
+    jordan_decision: "2026-05-09 — ratified. Always stress test. Coastal landing scenario retained but naval mechanics out of scope."
 
 
   - id: ED-788
