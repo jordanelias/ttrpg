@@ -3,14 +3,14 @@
 # Every named NPC, faction leader, royal family member, or arc character gets an entry.
 #
 # ENFORCEMENT: No character name may appear in design docs without an entry here.
-# Legacy ethical labels (Rawlsian, Utilitarian, etc.) are DEPRECATED — use 13-Conviction names.
+# Conviction vectors use 13-Conviction taxonomy (PP-684). Legacy labels DEPRECATED and removed.
 #
 # Last updated: 2026-05-08
-# Status: DRAFT — legacy labels not yet migrated, unlisted NPCs incomplete
+# Status: ACTIVE — legacy labels migrated per PP-685; stats still deferred per npc_roster_v30
 
 schema:
   required: [id, first_name, last_name, faction, role, status]
-  optional: [age, birthplace, territory, ts, coherence, stats, convictions, goals, arc_trajectory, ethics_legacy, notes]
+  optional: [age, birthplace, territory, ts, coherence, stats, convictions, goals, arc_trajectory, notes]
 
 # ═══════════════════════════════════════════════════════════════
 # ROSTER NPCs (designs/npcs/npc_roster_v30.md)
@@ -20,11 +20,11 @@ characters:
 
   - id: NPC-001
     first_name: Edeyja
-    last_name: null  # [GAP: no surname in canon — "working name, pending final name pass"]
+    last_name: null  # [GAP: no surname in canon — edeyja_npc.md says "working name, pending final name pass"]
     faction: Independent (Southernmost Wardens)
     role: Warden-Chief
     status: canonical
-    age: null  # [GAP]
+    age: null  # [GAP: no age in canon]
     birthplace: Southernmost
     territory: T15 (Southernmost)
     ts: 75–80
@@ -33,14 +33,19 @@ characters:
       cognition: 5
       focus: 5
       endurance: 4
-      social: 3–4  # "moderate"
+      social: 3–4  # "moderate" per edeyja_npc.md
     convictions:
-      primary: null  # [GAP: legacy label "Continuity" — map to Conviction]
-      ethics_legacy: "Continuity"  # DEPRECATED — needs migration
+      primary:
+        - {conviction: Warden, weight: 0.40}
+        - {conviction: Precedent, weight: 0.20}
+      cultural_label: solmund_alpine  # [ASSUMPTION: placeholder per PP-685 §3 — Southernmost template not yet defined]
+      self_other_initial: -0.30
+      migration_notes: "Legacy 'Continuity' → Warden (stewardship duty: 'the work must continue') + Precedent (ancestral practice). Per PP-685 §4 defaults."
     goals: ["Maintain substrate stability", "Protect Southernmost practitioners", "Continue the work regardless of interference"]
     arc_trajectory: "Warden-Chief navigating Church pressure and Thread instability"
+    resonant_style: Evidence  # per edeyja_npc.md
     source: designs/npcs/edeyja_npc.md, npc_roster_v30 §1
-    notes: "Highest TS of any living practitioner. Survived proximity to a major Gap/tear."
+    notes: "Highest TS of any living practitioner. Survived proximity to a major Gap/tear. Name flagged as working name."
 
   - id: NPC-002
     first_name: Maret
@@ -49,18 +54,23 @@ characters:
     role: Practitioner / Succession Fallback
     status: canonical
     age: null  # [GAP]
-    birthplace: Western fjords (near Einhir communities)
+    birthplace: Western fjords (near southern Einhir communities in Varfell territory)
     territory: null
     ts: ~50
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred per npc_roster_v30 §Stat Blocks]
     convictions:
-      primary: null  # [GAP: legacy label "Rawlsian" (from infill) — map to Conviction]
-      ethics_legacy: "Rawlsian"  # DEPRECATED
+      primary:
+        - {conviction: Honor, weight: 0.30}
+        - {conviction: Authority, weight: 0.30}
+        - {conviction: Identity, weight: 0.20}
+      cultural_label: lowenritter_military
+      self_other_initial: +0.10
+      migration_notes: "Per PP-685 §2.2. Prior labels 'Reason' + 'Military Honor'. NPC registry previously had 'Rawlsian' (from infill) — PP-685 roster is authoritative; discrepancy noted."
     goals: ["Serve Varfell intelligence", "Privately sympathize with Restoration Movement"]
-    arc_trajectory: "Dual loyalty — personal sympathy vs professional duty"
+    arc_trajectory: "Dual loyalty — personal sympathy vs professional duty. If Vaynard eliminated, takes Varfell leadership (PP-486)."
     source: npc_roster_v30 §2
-    notes: "Vaynard's intelligence operative. Thread-sensitive. RM-adjacent targets consistently 1 season behind."
+    notes: "Vaynard's intelligence operative. Thread-sensitive. RM-adjacent targets consistently 1 season behind. Southern Einhir solidarity."
 
   - id: NPC-003
     first_name: Yrsa
@@ -73,14 +83,19 @@ characters:
     territory: null
     ts: 25
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP: legacy "Rawlsian social contract" — likely Equity (#6)]
-      ethics_legacy: "Rawlsian social contract"  # DEPRECATED
+      primary:
+        - {conviction: Honor, weight: 0.35}
+        - {conviction: Warden, weight: 0.25}
+        - {conviction: Community, weight: 0.20}
+      cultural_label: solmund_alpine
+      self_other_initial: -0.30
+      migration_notes: "Per PP-685 §2.2. Prior labels in roster 'Continuity' + 'Military Honor'; npc_roster_v30 says 'Rawlsian social contract'. PP-685 mapping used as authoritative. Discrepancy flagged."
     goals: ["Cultural restoration", "Equity and social contract"]
     arc_trajectory: "Visibility as vulnerability — permanent Heresy Investigation target"
     source: npc_roster_v30 §3
-    notes: "TS 25 — above practitioner threshold but below Forgetting resistance gate (29)."
+    notes: "TS 25 — above practitioner threshold but below Forgetting resistance gate (29). PP-665 rename from Maret Vossen."
 
   - id: NPC-004
     first_name: Sæmund
@@ -93,14 +108,18 @@ characters:
     territory: null
     ts: 12
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP: likely Faith (#1) + Authority (#2)]
-      ethics_legacy: null
+      primary:
+        - {conviction: Faith, weight: 0.40}
+        - {conviction: Authority, weight: 0.20}
+      cultural_label: ecclesiastical
+      self_other_initial: 0.00
+      migration_notes: "No prior legacy label. Inferred from role: Church Inquisitor = Faith primary + Authority. Per PP-685 §4 defaults."
     goals: ["Investigate heresy", "Enforce Church orthodoxy"]
-    arc_trajectory: "Latent TS — doesn't know he's Thread Sensitive. PC diagnosis possible."
+    arc_trajectory: "Latent TS — doesn't know he's Thread Sensitive. PC diagnosis possible (Cognition vs Ob 2)."
     source: npc_roster_v30 §4
-    notes: "TS 12 — barely above practitioner threshold. Attributes hunches to investigative instinct."
+    notes: "TS 12 — barely above practitioner threshold. Attributes hunches to investigative instinct. PROCEDURALIST behavioral AI."
 
   - id: NPC-005
     first_name: Sigrid
@@ -113,12 +132,16 @@ characters:
     territory: null
     ts: null  # [GAP — implied high enough for Thread perception]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP: legacy "Consequentialist" — likely Utility (#5)]
-      ethics_legacy: "Consequentialist"  # DEPRECATED
+      primary:
+        - {conviction: Utility, weight: 0.40}
+        - {conviction: Honor, weight: 0.20}
+      cultural_label: lowenritter_military
+      self_other_initial: 0.00
+      migration_notes: "Legacy 'Consequentialist' → Utility. Honor added via lowenritter_military cultural template. Per PP-685 §4 defaults."
     goals: ["Mission success", "Minimize Thread collateral"]
-    arc_trajectory: "Risk-averse on Thread collateral despite Riskbreaker doctrine"
+    arc_trajectory: "Risk-averse on Thread collateral despite Riskbreaker doctrine — TS lets her perceive damage colleagues can't."
     source: npc_roster_v30 §5
 
   - id: NPC-006
@@ -128,18 +151,22 @@ characters:
     role: Officer (Lions' Table)
     status: canonical
     age: null  # [GAP]
-    birthplace: null  # [GAP — near-match: Halvardshelm/Halvarshelm territory names]
+    birthplace: null  # [GAP — see open issue §3 re Halvardshelm]
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred. npc_roster_v30 notes "high personal combat stats (career soldier)"]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
+      primary:
+        - {conviction: Honor, weight: 0.35}
+        - {conviction: Authority, weight: 0.25}
+      cultural_label: lowenritter_military
+      self_other_initial: -0.10
+      migration_notes: "No prior legacy label. Inferred from role: military officer = Honor + Authority. Per PP-685 §4 defaults."
     goals: ["Counter Altonian threat", "Strengthen peninsular defenses"]
-    arc_trajectory: "External threat fixated — evaluates every action against Altonian metric"
+    arc_trajectory: "External threat fixated — evaluates every action against Altonian metric. Brandt succession if Ehrenwall falls."
     source: npc_roster_v30 §6
-    notes: "Name 'Halvar' near-matches territories Halvardshelm/Halvarshelm — verify intentional."
+    notes: "Name 'Halvar' near-matches territories Halvardshelm/Halvarshelm — [OPEN: verify intentional or coincidence]."
 
   - id: NPC-007
     first_name: Annika
@@ -152,31 +179,39 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP: legacy "Utilitarian" — likely Utility (#5)]
-      ethics_legacy: "Utilitarian"  # DEPRECATED
+      primary:
+        - {conviction: Utility, weight: 0.50}
+        - {conviction: Community, weight: 0.10}
+      cultural_label: hafenmark_procedural
+      self_other_initial: +0.10
+      migration_notes: "Legacy 'Utilitarian' → Utility. npc_roster_v30: 'Utilitarian — greatest good for greatest number of guild members'. Self-Other mildly self-interested (PROFIT-MAXIMISING flaw). Per PP-685 §4."
     goals: ["Maximize Guilds Wealth", "Protect artisan livelihoods"]
-    arc_trajectory: "Profit-maximizing — sacrifices Guilds Mandate for Wealth"
+    arc_trajectory: "Profit-maximizing — sacrifices Guilds Mandate for Wealth. Thread-touched supply chain discoverable."
     source: npc_roster_v30 §7
 
   - id: NPC-008
     first_name: Peder
     last_name: Almstedt
     faction: Crown (Ministry)
-    role: Ministry Bureaucrat
+    role: Ministry Bureaucrat (Chief Parliamentary Clerk)
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
-    goals: null  # [GAP]
-    arc_trajectory: null  # [GAP]
+      primary:
+        - {conviction: Order, weight: 0.40}
+        - {conviction: Precedent, weight: 0.20}
+      cultural_label: valorian_court
+      self_other_initial: 0.00
+      migration_notes: "No prior legacy label. Inferred from role: bureaucrat / CONSERVATIVE behavioral AI = Order + Precedent. Per PP-685 §4."
+    goals: ["Maintain procedural correctness", "Block radical action through procedure"]
+    arc_trajectory: "CONSERVATIVE — blocks radical action through procedure, not force. Cognition-heavy social contest target."
     source: npc_roster_v30 §8
 
   - id: NPC-009
@@ -190,38 +225,46 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
-    goals: null  # [GAP]
-    arc_trajectory: null  # [GAP]
+      primary:
+        - {conviction: Authority, weight: 0.30}
+        - {conviction: Utility, weight: 0.30}
+      cultural_label: valorian_court
+      self_other_initial: -0.10
+      migration_notes: "No prior legacy label. Inferred from role: competent administrator, OVERPERFORMER flaw, flattery vulnerability. Authority + Utility. Per PP-685 §4."
+    goals: ["Efficient Crown administration", "Maintain personal indispensability"]
+    arc_trajectory: "OVERPERFORMER — runs every important task. Flattery vulnerability (−1 Ob on social actions acknowledging competence)."
     source: npc_roster_v30 §9
 
   - id: NPC-010
     first_name: Dalla
     last_name: Virke
-    faction: Independent (formerly Niflhel — DISSOLVED)
-    role: Independent Intelligence Broker
+    faction: Niflhel (Virke syndicate)
+    role: Syndicate Broker
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
-    goals: null  # [GAP]
-    arc_trajectory: null  # [GAP]
+      primary:
+        - {conviction: Utility, weight: 0.30}
+        - {conviction: Honor, weight: 0.30}
+      cultural_label: hafenmark_procedural  # [ASSUMPTION: placeholder — niflhel template not yet defined]
+      self_other_initial: +0.10
+      migration_notes: "No prior legacy label. npc_roster_v30: 'Honour among operators — your word is your network.' Utility (effectiveness) + Honor (personal trust, word-as-bond). Per PP-685 §4."
+    goals: ["Maintain Virke trade network", "Protect personal trust relationships"]
+    arc_trajectory: "Personal loyalty to partners vs family directives. Third conflict with family triggers enforcement."
     source: npc_roster_v30 §10
 
   - id: NPC-011
     first_name: Alexios
     last_name: Laskaris
     faction: Altonia
-    role: Altonian Prince (married to Elske)
+    role: Doux (Altonian Prince)
     status: canonical
     title: Doux
     age: null  # [GAP]
@@ -229,12 +272,16 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
-    goals: null  # [GAP]
-    arc_trajectory: null  # [GAP]
+      primary:
+        - {conviction: Authority, weight: 0.30}
+        - {conviction: Warden, weight: 0.30}
+      cultural_label: altonian  # [ASSUMPTION: placeholder — altonian template not yet defined in PP-684 §5]
+      self_other_initial: -0.20
+      migration_notes: "No prior legacy label. Inferred from role: PROTECTIVE behavioral AI, shields Elske = Warden. Imperial authority = Authority. Per PP-685 §4."
+    goals: ["Protect Elske's safety", "Maintain province stability", "Sandbag imperial directives"]
+    arc_trajectory: "PROTECTIVE — priority is Elske's safety. Flips if Elske Loyalty ≤ 2 (IP +3 immediately)."
     source: npc_roster_v30 §11
 
   - id: NPC-012
@@ -248,12 +295,16 @@ characters:
     territory: T16 (Schoenland)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
-    goals: null  # [GAP]
-    arc_trajectory: null  # [GAP]
+      primary:
+        - {conviction: Utility, weight: 0.30}
+        - {conviction: Order, weight: 0.30}
+      cultural_label: hafenmark_procedural  # [ASSUMPTION: placeholder — Schoenland template not defined]
+      self_other_initial: 0.00
+      migration_notes: "No prior legacy label. Inferred from role: STABILITY-SEEKING trade factor. Utility (trade pragmatism) + Order (stability). Per PP-685 §4."
+    goals: ["Maintain stable trade", "Avoid escalation", "Return home eventually"]
+    arc_trajectory: "STABILITY-SEEKING — natural ally for peace, obstacle for escalation. Motivated by homesickness (discoverable via Read Ob 2)."
     source: npc_roster_v30 §12
 
   - id: NPC-013
@@ -267,12 +318,17 @@ characters:
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
-    goals: null  # [GAP]
-    arc_trajectory: "Parish Revolt arc or PC intervention path"
+      primary:
+        - {conviction: Faith, weight: 0.30}
+        - {conviction: Order, weight: 0.25}
+        - {conviction: Utility, weight: 0.20}
+      cultural_label: ecclesiastical
+      self_other_initial: +0.10
+      migration_notes: "No prior legacy label. Inferred from role: OPTIMISER (maximises Church Wealth throughput), aggressive tithe = Faith + Order + Utility. Per PP-685 §4."
+    goals: ["Maximize Church Wealth throughput", "Aggressive tithe collection"]
+    arc_trajectory: "Parish Revolt arc or PC intervention path. Inadvertently funds Church charitable mission while undermining cultural authority."
     source: npc_roster_v30 §13, npc_character_analyses_v30_infill
 
 # ═══════════════════════════════════════════════════════════════
@@ -289,16 +345,20 @@ characters:
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: T1 (Valorsplatz)
-    ts: null  # [GAP]
+    ts: 28  # per character_canon_v30: "Almud (TS 28, no threshold crossing)"
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
+      primary:
+        - {conviction: Virtue, weight: 0.45}
+        - {conviction: Authority, weight: 0.30}
+      cultural_label: valorian_court
+      self_other_initial: -0.10
+      migration_notes: "Per PP-685 §2.1. Prior labels 'Virtue Ethics' + 'Reason'. Public-spirited Captain archetype."
     goals: null  # [GAP]
-    arc_trajectory: null  # [GAP]
+    arc_trajectory: "Canonical Crown Captain per sim continuity §1.2. Royal Assassination Fuse target (Arc F Eliminated → Lenneth Widow Regent)."
     source: faction_canon_v30 §Crown
-    notes: "Canonical Crown Captain per sim continuity §1.2"
+    notes: "TS 28 per character_canon — no threshold crossing. Honor enters via valorian_court cultural template."
 
   - id: NPC-021
     first_name: Arne
@@ -312,184 +372,413 @@ characters:
     territory: T9 (Himmelenger)
     ts: null  # [GAP]
     coherence: null  # [GAP]
-    stats: null  # [GAP]
+    stats: null  # [GAP: deferred]
     convictions:
-      primary: null  # [GAP]
-      ethics_legacy: null
+      primary:
+        - {conviction: Faith, weight: 0.50}
+        - {conviction: Authority, weight: 0.20}
+      cultural_label: ecclesiastical
+      self_other_initial: 0.00
+      migration_notes: "No prior legacy label. Inferred from role: Church leader / Confessor. Per PP-685 §4 defaults."
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
     source: faction_canon_v30 §Church
-    notes: "Canonical per params/bg/core.md L233"
+    notes: "Canonical per params/bg/core.md L233. Agent in Crown Inner Circle via Father Gustav Linder."
 
 # ═══════════════════════════════════════════════════════════════
-# UNLISTED CHARACTERS (found in faction_canon/arcs, NOT in roster)
-# Status: UNVERIFIED — need confirmation these are active named NPCs
+# CROWN INNER CIRCLE (faction_canon_v30, npc_behavior_v30 §2.15)
+# Status: VERIFIED — confirmed active named NPCs per ED-634
 # ═══════════════════════════════════════════════════════════════
 
   - id: NPC-030
     first_name: Elske
     last_name: Almqvist
     faction: Crown (Royal Family)
-    role: Queen/Princess (married to Alexios Laskaris)
-    status: unverified
-    source: faction_canon_v30
-    notes: "[GAP: verify role — queen? princess? What is her relationship to Almud?]"
+    role: Princess (married to Doux Alexios Laskaris)
+    status: canonical  # verified per faction_canon_v30
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null  # off-board (Altonia) unless Elske Return arc
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary: null  # [GAP: no conviction data in canon]
+    goals: null  # [GAP]
+    arc_trajectory: "Off-board diplomatic asset. Elske Loyalty stat drives Laskaris PROTECTIVE behavior. Return arc possible."
+    source: faction_canon_v30 §Crown
+    notes: "Royal Assassination Fuse — not a direct target but her safety drives Alexios's behavior."
 
   - id: NPC-031
     first_name: Torben
     last_name: Almqvist
     faction: Crown (Royal Family)
-    role: Prince
-    status: unverified
+    role: Prince (Heir Apparent)
+    status: canonical  # verified per faction_canon_v30
     title: Prince
-    source: faction_canon_v30
-    notes: "[GAP: verify — Crown Prince? Age? Arc trajectory?]"
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary: null  # [GAP: "Conviction emergence window Seasons 1–8" per ED-618 — convictions develop during play]
+    goals: null  # [GAP]
+    arc_trajectory: "Arc E Bereaved Father (Royal Assassination Fuse target). Conviction emergence window Seasons 1–8 (ED-618)."
+    source: faction_canon_v30 §Crown
+    notes: "Heir apparent. Convictions intentionally undefined at game start — emerge during play."
 
   - id: NPC-032
     first_name: Lenneth
     last_name: Almqvist
     faction: Crown (Royal Family)
-    role: Widow Regent (former Queen?)
-    status: unverified
-    source: faction_canon_v30
-    notes: "[GAP: verify — 'Lenneth Widow' suggests deceased husband. Regent role?]"
+    role: Queen (Widow Regent if Almud eliminated)
+    status: canonical  # verified per faction_canon_v30
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: T1 (Valorsplatz)
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary: null  # [GAP: distinct from ecclesiastical Lenneth in PP-685 — see notes]
+    goals: null  # [GAP]
+    arc_trajectory: "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent."
+    source: faction_canon_v30 §Crown
+    notes: "DISTINCT from the ecclesiastical 'Lenneth' in PP-685 §2.3 (scholarly cleric). This is Queen Lenneth Almqvist. Naming collision flagged."
 
   - id: NPC-033
     first_name: Kolbrun
     last_name: Thale
-    faction: null  # [GAP]
-    role: null  # [GAP]
-    status: unverified
-    source: faction_canon_v30
+    faction: Crown (Inner Circle)
+    role: Spymaster
+    status: canonical  # verified per faction_canon_v30 / ED-634
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Liberty, weight: 0.30}
+        - {conviction: Utility, weight: 0.30}
+      cultural_label: valorian_court
+      self_other_initial: 0.00
+      migration_notes: "faction_canon: 'Autonomy / Consequence MS / Certainty 3'. Autonomy → Liberty; Consequence → Utility. Per PP-685 §4."
+    goals: null  # [GAP]
+    arc_trajectory: "Sole inner-circle contact to settlement-layer intelligence brokers. Certainty 3 (lowest in Inner Circle)."
+    source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-034
     first_name: Gustav
-    last_name: null  # [GAP]
-    faction: Church
-    role: Father (clergy)
-    status: unverified
+    last_name: Linder
+    faction: Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)
+    role: Archbishop's Representative / Father
+    status: canonical  # verified per faction_canon_v30 / ED-634
     title: Father
-    source: faction_canon_v30
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Faith, weight: 0.40}
+        - {conviction: Authority, weight: 0.20}
+      cultural_label: ecclesiastical
+      self_other_initial: 0.00
+      migration_notes: "faction_canon: 'Faith / Authority MS / Certainty 5'. Direct mapping. Per PP-685 §4."
+    goals: null  # [GAP]
+    arc_trajectory: "Dual-loyalty NPC — Himlensendt's agent inside Crown Inner Circle. Certainty 5 (highest)."
+    source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-035
     first_name: Theodor
     last_name: Kreutz
-    faction: null  # [GAP]
-    role: null  # [GAP]
-    status: unverified
-    source: faction_canon_v30
+    faction: Crown (Inner Circle) / Löwenritter Liaison
+    role: Royal Guard Captain
+    status: canonical  # verified per faction_canon_v30 / ED-634
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Order, weight: 0.35}
+        - {conviction: Authority, weight: 0.25}
+      cultural_label: lowenritter_military
+      self_other_initial: -0.10
+      migration_notes: "faction_canon: 'Order / Authority MS / Certainty 4'. Direct mapping. Per PP-685 §4."
+    goals: null  # [GAP]
+    arc_trajectory: "Pre-designated allegiance to Almud personally. His removal triggers Löwenritter Autonomy escalation toward Split."
+    source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-036
     first_name: Wilhelm
     last_name: Voss
-    faction: null  # [GAP]
-    role: null  # [GAP]
-    status: unverified
-    source: faction_canon_v30
+    faction: Crown (Inner Circle)
+    role: Royal Marshal
+    status: canonical  # verified per faction_canon_v30 / ED-634
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Order, weight: 0.35}
+        - {conviction: Authority, weight: 0.25}
+      cultural_label: valorian_court
+      self_other_initial: 0.00
+      migration_notes: "faction_canon: 'Order / Authority MS / Certainty 4'. Direct mapping. Per PP-685 §4."
+    goals: null  # [GAP]
+    arc_trajectory: null  # [GAP]
+    source: faction_canon_v30 §Crown sub-Organizations
 
   - id: NPC-037
     first_name: Annalie
     last_name: Reichard
-    faction: Church
-    role: Cardinal Reichard
-    status: unverified
-    source: faction_canon_v30
-    notes: "One of the Four Cardinals. Verify cardinal virtue assignment."
+    faction: Crown (Inner Circle)  # CORRECTED: was listed as Church/Cardinal — actually Crown Lord Treasurer per faction_canon
+    role: Lord Treasurer
+    status: canonical  # verified per faction_canon_v30 / ED-634
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Precedent, weight: 0.35}
+        - {conviction: Authority, weight: 0.25}
+      cultural_label: valorian_court
+      self_other_initial: 0.00
+      migration_notes: "faction_canon: 'Precedent / Evidence MS / Certainty 5'. Direct mapping on Precedent; Evidence is Resonant Style. Per PP-685 §4."
+    goals: null  # [GAP]
+    arc_trajectory: null  # [GAP]
+    source: faction_canon_v30 §Crown sub-Organizations
+    notes: "CORRECTED: previously listed as 'Church / Cardinal Reichard'. Per faction_canon, Annalie Reichard is Crown Inner Circle Lord Treasurer, NOT a Cardinal. The 'Cardinal Reichard' in PP-685 §2.3 may be a separate entity (artifact 15 sample) or a naming confusion. [OPEN: verify if there is a distinct Cardinal Reichard in Church hierarchy]."
+
+# ═══════════════════════════════════════════════════════════════
+# CHURCH HIERARCHY — Cardinals
+# ═══════════════════════════════════════════════════════════════
+
+  # NPC-004 Sæmund Haelgrund (Cardinal Justice) is above in Roster NPCs section
 
   - id: NPC-038
     first_name: Arnlod
-    last_name: null  # [GAP — surname?]
+    last_name: Olafsson  # FILLED: per faction_canon "Cardinal Arnlod Olafsson"
     faction: Church
-    role: Cardinal Arnlod
-    status: unverified
-    source: faction_canon_v30
+    role: Cardinal (virtue assignment unconfirmed)
+    status: canonical  # verified per faction_canon_v30 §Church
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Faith, weight: 0.40}
+      cultural_label: ecclesiastical
+      self_other_initial: 0.00
+      migration_notes: "No prior legacy label. Only Faith inferred from Cardinal role. Per PP-685 §4 defaults."
+    goals: null  # [GAP]
+    arc_trajectory: null  # [GAP]
+    source: faction_canon_v30 §Church
+    notes: "Cardinal virtue assignment not found in faction_canon (Justice = Haelgrund, Temperance = Klapp candidate, Fortitude = Jarnstal candidate, Prudence = Tormann). [OPEN: which virtue does Arnlod hold, or is he a 5th cardinal without virtue assignment?]"
 
   - id: NPC-039
     first_name: Magnus
-    last_name: null  # [GAP — surname?]
+    last_name: Klapp  # FILLED: per faction_canon "Cardinal Magnus Klapp"
     faction: Church
-    role: Cardinal Magnus
-    status: unverified
-    source: faction_canon_v30
+    role: Cardinal (Temperance candidate)
+    status: canonical  # verified per faction_canon_v30 §Church
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP — "TS exposure via archive work" per faction_canon suggests latent/emerging TS]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Scholastic, weight: 0.35}
+        - {conviction: Faith, weight: 0.25}
+      cultural_label: ecclesiastical
+      self_other_initial: -0.10
+      migration_notes: "No prior legacy label. faction_canon: 'canonical scholar'. Scholastic + Faith inferred. Per PP-685 §4."
+    goals: null  # [GAP]
+    arc_trajectory: "Scholar's Dilemma — TS exposure via archive work."
+    source: faction_canon_v30 §Church
+    notes: "NPC-051 ('Klapp') references in arcs (Klapp Combat, Klapp Thread, etc.) refer to this character's surname, not a separate NPC."
 
   - id: NPC-040
     first_name: Osten
-    last_name: null  # [GAP — surname?]
+    last_name: Jarnstal  # FILLED: per faction_canon "Cardinal Osten Jarnstal"
     faction: Church
-    role: Cardinal Osten
-    status: unverified
-    source: faction_canon_v30
+    role: Cardinal (Fortitude candidate)
+    status: canonical  # verified per faction_canon_v30 §Church
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Honor, weight: 0.35}
+        - {conviction: Faith, weight: 0.25}
+        - {conviction: Authority, weight: 0.15}
+      cultural_label: ecclesiastical
+      self_other_initial: 0.00
+      migration_notes: "No prior legacy label. faction_canon: 'Templar arm' for Fortitude cardinal → Honor (military-religious code) + Faith + Authority. Per PP-685 §4."
+    goals: null  # [GAP]
+    arc_trajectory: null  # [GAP]
+    source: faction_canon_v30 §Church
+
+# ═══════════════════════════════════════════════════════════════
+# OTHER VERIFIED CHARACTERS
+# ═══════════════════════════════════════════════════════════════
 
   - id: NPC-041
     first_name: Aldric
     last_name: Hann
-    faction: null  # [GAP]
-    role: null  # [GAP]
-    status: unverified
-    source: faction_canon_v30
-    notes: "COLLISION CHECK: shares first name with NPC-013 Aldric Tormann. Verify — same person with surname drift, or distinct character?"
+    faction: Restoration Movement
+    role: RM Visible Leadership (alongside Yrsa Vossen)
+    status: canonical  # RESOLVED: distinct from NPC-013 Aldric Tormann per faction_canon §11
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary: null  # [GAP]
+    goals: null  # [GAP]
+    arc_trajectory: null  # [GAP]
+    source: faction_canon_v30 §11 (caste/organization hierarchy)
+    notes: "RESOLVED: distinct character from NPC-013 Aldric Tormann (Church Cardinal Prudence). Aldric Hann is RM visible leadership. Two different factions, different surnames."
 
-  # Arc-only characters (from arcs_31_35.md)
   - id: NPC-050
     first_name: Baralta
     last_name: null  # [GAP]
-    faction: null  # [GAP]
-    role: null  # [GAP]
-    status: unverified
-    source: arcs_31_35.md
-
-  - id: NPC-051
-    first_name: Klapp
-    last_name: null  # [GAP]
-    faction: null  # [GAP]
-    role: null  # [GAP]
-    status: unverified
-    source: arcs_31_35.md
-    notes: "Multiple references: Klapp Combat, Klapp Thread, Klapp Threshold, Klapp Trajectory"
+    faction: Crown (claimant per foil dynamics)
+    role: Claimant (Custodian/Claimant foil with Almud)
+    status: canonical  # verified per faction_canon foil pairings + PP-685 §2.3
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Faith, weight: 0.50}
+        - {conviction: Virtue, weight: 0.20}
+        - {conviction: Warden, weight: 0.10}
+      cultural_label: ecclesiastical
+      self_other_initial: -0.40
+      migration_notes: "Per PP-685 §2.3. Prior labels 'Divine Command' + 'Virtue Ethics'. Selfless devotional archetype."
+    goals: null  # [GAP]
+    arc_trajectory: "Six foil pairings per npc_foils_v30: Almud ↔ Baralta (Custodian/Claimant); Lenneth ↔ Baralta (campaign-defining); Baralta ↔ Vaynard (total opposition)."
+    source: arcs_31_35.md, faction_canon_v30, PP-685 §2.3
 
   - id: NPC-052
     first_name: Vaynard
-    last_name: null  # [GAP — Varfell leader?]
+    last_name: null  # [GAP]
     faction: Varfell
-    role: Varfell leader/jarl?
-    status: unverified
-    source: arcs_31_35.md, npc_roster_v30 (referenced as Maret's superior)
-
-  - id: NPC-053
-    first_name: Olafsson
-    last_name: null  # [GAP — or is Olafsson the surname?]
-    faction: null  # [GAP]
-    role: null  # [GAP]
-    status: unverified
-    source: arcs_31_35.md
-    notes: "'Olafsson Grievance' — may be a surname not a first name"
+    role: Varfell Leader
+    status: canonical  # RESOLVED: confirmed as Varfell faction leader per faction_canon
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: null  # [GAP]
+    coherence: null  # [GAP]
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Authority, weight: 0.40}
+        - {conviction: Honor, weight: 0.20}
+        - {conviction: Identity, weight: 0.20}
+      cultural_label: lowenritter_military  # per faction_state_authoring_v30 §5
+      self_other_initial: +0.20
+      migration_notes: "PP-685 §3 edge case: 'Authority + Honor + Identity, lowenritter_military background; orientation +0.20 (pragmatic militarist)'. PP-650 STRUCK status noted but Conviction profile provided as placeholder."
+    goals: ["Varfell military expansion", "Intelligence-first approach to RM"]
+    arc_trajectory: "Von Lohengramm programme — revolutionary expulsion. If eliminated, Maret Uln succession (PP-486)."
+    source: faction_canon_v30, npc_roster_v30 (referenced as Maret's superior)
+    notes: "PP-650 STRUCK status applies to Cultural Reformation + VTM associations; character remains active. 'Cunning + pride' doctrine (faction_layer §1.5)."
 
 # ═══════════════════════════════════════════════════════════════
-# OPEN ISSUES
+# REMOVED / MERGED ENTRIES
 # ═══════════════════════════════════════════════════════════════
 #
-# 1. LEGACY ETHICAL LABELS: 4 NPCs still have deprecated labels
-#    (Continuity, Rawlsian, Utilitarian, Consequentialist).
-#    Fetch conviction_migration_roster_v30.md to resolve.
+# NPC-051 (Klapp): MERGED into NPC-039 (Cardinal Magnus Klapp).
+#   "Klapp Combat", "Klapp Thread", etc. are arc/mechanic references
+#   to Cardinal Klapp's surname, not a separate character.
 #
-# 2. EDEYJA NAME: flagged as "working name" in edeyja_npc.md.
-#    Needs final name decision.
+# NPC-053 (Olafsson): MERGED into NPC-038 (Cardinal Arnlod Olafsson).
+#   "Olafsson Grievance" is an arc reference to Cardinal Olafsson's
+#   surname, not a separate character.
+
+# ═══════════════════════════════════════════════════════════════
+# OPEN ISSUES — UPDATED
+# ═══════════════════════════════════════════════════════════════
 #
-# 3. HALVAR / HALVARDSHELM: NPC first name near-matches territory.
-#    Verify intentional (named after place) or coincidence.
+# 1. [RESOLVED] LEGACY ETHICAL LABELS migrated to 13-Conviction
+#    taxonomy per PP-685. All deprecated ethics_legacy fields removed.
 #
-# 4. TWO ALDRICS: NPC-013 (Aldric Tormann) and NPC-041 (Aldric Hann).
-#    Same person with surname drift, or two distinct characters?
+# 2. [OPEN] EDEYJA NAME: flagged as "working name" in edeyja_npc.md.
+#    Needs final name decision from Jordan.
 #
-# 5. UNLISTED NPCS: 12 characters found in faction_canon/arcs not in
-#    npc_roster_v30. Need verification: are these active named NPCs
-#    or just referenced-in-passing?
+# 3. [OPEN] HALVAR / HALVARDSHELM: NPC first name near-matches territory.
+#    Needs Jordan decision: intentional (named after place) or coincidence.
 #
-# 6. VAYNARD: Referenced as Maret's superior in npc_roster_v30 but
-#    no roster entry. Varfell faction leader?
+# 4. [RESOLVED] TWO ALDRICS: NPC-013 Aldric Tormann (Church, Cardinal
+#    Prudence) and NPC-041 Aldric Hann (RM visible leadership) are
+#    DISTINCT characters. Different factions, different surnames.
+#    Per faction_canon_v30 §11.
 #
-# 7. STAT GAPS: Most NPCs beyond the top 7 have no stats at all.
-#    Age and birthplace sparse throughout.
+# 5. [PARTIALLY RESOLVED] UNLISTED NPCS: Crown Inner Circle (5 NPCs)
+#    and Church Cardinals confirmed as active named NPCs per
+#    faction_canon_v30 / ED-634. Remaining gaps: character_canon
+#    entries still pending for most.
 #
-# 8. CONVICTION MIGRATION: Once legacy labels are mapped, each NPC
-#    needs a primary Conviction vector (top 3-5 Convictions ranked).
+# 6. [RESOLVED] VAYNARD: Confirmed as Varfell faction leader per
+#    faction_canon_v30. Military-order doctrine. Surname unknown.
+#
+# 7. [OPEN] STAT GAPS: Explicitly deferred per npc_roster_v30
+#    ("Deferred to next session"). Most NPCs beyond Edeyja lack
+#    full stat blocks. Cannot resolve without design authoring session.
+#
+# 8. [RESOLVED] CONVICTION MIGRATION: All NPCs with legacy labels
+#    mapped to 13-Conviction vectors. NPCs without prior labels
+#    assigned inferred Convictions per PP-685 §4 with [ASSUMPTION] flags.
+#
+# NEW ISSUES:
+#
+# 9. [OPEN] CARDINAL REICHARD COLLISION: PP-685 §2.3 references a
+#    "Cardinal Reichard" in the ecclesiastical faction. NPC-037
+#    Annalie Reichard is Crown Inner Circle Lord Treasurer per
+#    faction_canon. Are these the same person (dual role) or
+#    distinct characters? Needs Jordan decision.
+#
+# 10. [OPEN] LENNETH NAMING COLLISION: PP-685 §2.3 references an
+#     ecclesiastical "Lenneth" (scholarly cleric, ED-727). NPC-032
+#     is Queen Lenneth Almqvist (Crown). Are these the same person
+#     or distinct? Queen with scholarly leanings, or separate cleric?
+#
+# 11. [OPEN] CARDINAL ARNLOD — VIRTUE ASSIGNMENT: Four cardinal
+#     virtues (Justice, Temperance, Fortitude, Prudence) mapped to
+#     four cardinals. Arnlod Olafsson has no virtue assignment.
+#     Fifth cardinal, or does he hold one of the four?
+#
+# 12. [OPEN] CONVICTION DISCREPANCIES: PP-685 roster lists different
+#     prior_labels for Yrsa Vossen and Maret Uln than what appears
+#     in npc_roster_v30.md. PP-685 used as authoritative for
+#     migration output, but source labels should be reconciled.
