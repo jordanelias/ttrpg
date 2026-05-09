@@ -1,57 +1,21 @@
-session_id: 2026-05-08-editorial-prose-writer
+session_id: 2026-05-08-infrastructure-hook-enforcement
 session_close: 2026-05-08
-phase: editorial
+phase: infrastructure
 status: complete
-last_stage: prose-writer-skill-overhaul
+last_stage: hook-enforcement-shipped
 next_action:
-  task: prose composition using updated skill pipeline
-  skill: prose-writer
+  task: update PI enforcement_spectrum table; then NERS sim via existing harness + Mode G
+  skill: valoria-simulator
 blockers: none
 commits:
-  - 28cbc33: anti-patterns 6-category restructure
-  - e4d0874: literary review technique/critical split
-  - efb8c78: stale reference fixes
-  - e782ea2: coherence-tiers 2D weighting grid
-  - a61006e: citation fixes batch 1
-  - 403b9a1: citation fixes batch 2
-  - 4f0581f: anti-patterns infill alignment
-  - 29a579f: old rule refs batch 1
-  - cc636bd: new author entries (Beckett, Lem, McCarthy, Le Carré)
-  - ba63fe7: SKILL.md 12-author
-  - 86b3e1f: cross-author synthesis update
-  - 4df0830: old rule refs batch 2
-  - 14b1563: techniques-skeleton new author entries
-  - a765799: techniques-skeleton roster line
-  - 8673753: eight-to-twelve final sweep
-  - 8e5ccd3: test battery part 5 (new author tests)
-  - 4ad57e4: bibliography marked audited
-  - 80ddc0a: test battery part 6 (emergent arc tests)
-  - 7ae359a: exteriority and observing-around reframe
-  - a2269c2: test passage rewrites
-  - c1f5bcb: Spirit axis sharpened (exteriority vs agent-insufficiency)
-  - 4c9c9b7: observing-around as unifying principle across X/Y/Z
-  - 91ea6ba: fix achronistic Lem in Test 44
-  - 0ce6c99: SKILL.md comprehensive update
-  - c6bc4ac: SKILL.md description metadata fix
-  - cb62230: techniques Section 11 Beckett/Lispector update
-  - 08299ae: inline cross-reference tags
-  - 33d0013: fix missing Mistry tag
-  - 532b26c: consistency_check.py v1
-  - e88ce26: consistency_check.py v2 (audit fixes)
-  - 021b52f: ratchet principle encoded
-  - 2b98dfb: I.9 performed secrecy anti-pattern
-  - 133aa76: beat-risk planning workflow
-  - f4704d7: D.7 critical-diagnostic framework (Booth, Sternberg, Shklovsky, Zunshine, Bakhtin, Wood)
+  - bc3a95a: infrastructure task_gate skill-fetch enforcement + sim_gate manifest check
 key_developments:
-  - 12-author roster fully integrated (Beckett, Lem, McCarthy, Le Carré)
-  - observing-around as unifying principle across all three axes
-  - Spirit axis: exteriority (high) vs agent-insufficiency (low)
-  - Lem reframed as pre-scientific Renaissance-era analytical observation
-  - ratchet principle for political content
-  - I.9 performed secrecy anti-pattern (LLM signature failure on subtext)
-  - D.7 critical-diagnostic framework from narrative theory
-  - beat-risk planning workflow (pre-flag cliche traps before writing)
-  - inline cross-reference tags + consistency_check.py
-  - 2D weighting grid (coherence x TS x Spirit modifier)
-  - 6 citation errors found and corrected, bibliography audited
-  - test battery expanded to 52 tests across 6 parts
+  - TASK_REQUIRED_FILES[simulation] requires skills/valoria-simulator/SKILL.md (Level 4)
+  - TASK_REQUIRED_FILES[audit] requires skills/valoria-mechanic-audit/SKILL.md (Level 4)
+  - TASK_REQUIRED_FILES[propose_mechanic] requires skills/valoria-mechanic-audit/SKILL.md
+  - task_gate prints Mode G anti-patterns at decision point for simulation
+  - task_gate prints required-canon reminder for audit
+  - sim_gate raises RuntimeError if no manifest for multi-system scopes
+open_items:
+  - PI enforcement_spectrum table update (sim_gate manifest check now Level 4)
+  - NERS deep simulation pending correct execution via existing harness
