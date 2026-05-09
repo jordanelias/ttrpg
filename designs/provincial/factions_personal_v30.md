@@ -98,7 +98,7 @@ Range: 0–10. Starting value: 5 (BG). Not a separate track in TTRPG mode (effec
 
 ## 8.2 Faction 1: The Crown (Monarchy)
 
-**Ethical Framework: Virtue Ethics**
+**Ethical Framework: Virtue**
 
 
 - Public, visible, virtuous actions (defending the weak, upholding law, honouring treaties): **−1 Ob**
@@ -137,7 +137,7 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 
 ## 8.3 Faction 2: The Church of Solmund
 
-**Ethical Framework: Divine Command**
+**Ethical Framework: Faith**
 
 
 - Doctrine-aligned actions (suppressing heresy, expanding Piety, enforcing moral law): **−1 Ob**
@@ -224,7 +224,7 @@ Invasion wave: 3 Vanguard + 2 Heavy Infantry. NPC general Command 5.
 
 ## 8.5 Faction 4: Varfell (Duchy)
 
-**Ethical Framework: Consequentialist Pragmatism**
+**Ethical Framework: Utility-driven Pragmatism**
 
 
 - Actions with measurable outcomes within one season (concrete, verifiable results): **−1 Ob**
@@ -300,7 +300,7 @@ The Guilds apply economic pressure to any faction present in a territory where G
 
 ## 8.8 Faction 7: The People's Revolution (Restoration Movement)
 
-**Ethical Framework: Rawlsian Social Contract**
+**Ethical Framework: Equity Social Contract**
 
 
 - Actions demonstrably benefiting the common population (reducing taxation, expanding access, challenging noble privilege, protecting Einhir cultural practice): **−1 Ob**

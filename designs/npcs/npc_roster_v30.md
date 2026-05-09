@@ -46,7 +46,7 @@
 
 **Compromise: Visibility as vulnerability.** As the named leader of a movement that the Church considers heretical, Vossen is a permanent Heresy Investigation target. Every season she operates publicly, Church gains +1 Attention Pool (AP) toward her location. She cannot lead from hiding — the movement requires visible leadership to sustain Popular Will — but visibility is what kills her.
 
-**Ethics:** Rawlsian social contract — consistent with RM's ethical framework. Vossen genuinely believes in equity and cultural restoration. But the movement's survival sometimes requires alliances with factions (Varfell, Niflhel) whose ethics she finds repugnant. Every alliance of convenience costs RM Stability −1 (the base fractures when leadership compromises principles).
+**Ethics:** Equity (social contract) — consistent with RM's ethical framework. Vossen genuinely believes in equity and cultural restoration. But the movement's survival sometimes requires alliances with factions (Varfell, Niflhel) whose ethics she finds repugnant. Every alliance of convenience costs RM Stability −1 (the base fractures when leadership compromises principles).
 
 
 **TS:** 25 — just above the practitioner threshold but below the Forgetting resistance gate (29). She can sense Thread-touched artefacts but cannot fully resist the Forgetting when operating near the Southernmost. Her cultural knowledge is partially self-erasing — she must re-learn fragments each time she returns from T13/T15 proximity.
@@ -71,7 +71,7 @@
 
 
 
-**Ethics:** Consequentialist (aligned with Riskbreaker doctrine). The mission justifies the method. But Torsvald's TS means she can perceive the damage that Riskbreaker operations cause at the Thread level — collateral Coherence damage to bystanders, MS effects from covert Thread-adjacent activities. She knows the cost of every operation in a way her colleagues cannot. This knowledge makes her hesitate on operations with high Thread collateral.
+**Ethics:** Utility-driven (aligned with Riskbreaker doctrine). The mission justifies the method. But Torsvald's TS means she can perceive the damage that Riskbreaker operations cause at the Thread level — collateral Coherence damage to bystanders, MS effects from covert Thread-adjacent activities. She knows the cost of every operation in a way her colleagues cannot. This knowledge makes her hesitate on operations with high Thread collateral.
 
 **Behavioral AI — RISK-AVERSE ON THREAD COLLATERAL:** Standard Riskbreaker operations: decisive, efficient, no hesitation. Operations in Thread-active zones or near practitioners: Torsvald over-assesses risk. She will abort or delay operations when Thread collateral exceeds her personal threshold, even if the mission is critical. **Consequence:** Riskbreaker operations in Thread-active territories have a ~30% abort rate when Torsvald leads. Ehrenwall (or her successor) notices the pattern. Deniability Debt +1 when aborted operations leave evidence.
 
@@ -93,7 +93,7 @@
 
 
 
-**Ethics:** Utilitarian — greatest good for the greatest number of guild members. Feldhaus genuinely cares about artisan livelihoods. But her utilitarianism blinds her to the specific harm of Thread-touched goods entering non-sensitive households (potential low-grade Coherence effects on prolonged exposure — a design gap, but a narratively rich one).
+**Ethics:** Utility-oriented — greatest good for the greatest number of guild members. Feldhaus genuinely cares about artisan livelihoods. But her utilitarianism blinds her to the specific harm of Thread-touched goods entering non-sensitive households (potential low-grade Coherence effects on prolonged exposure — a design gap, but a narratively rich one).
 
 **Behavioral AI — PROFIT-MAXIMISING:** Feldhaus optimises for Guilds Wealth above all other stats. She will sacrifice Guilds Mandate (political standing) and Stability (institutional cohesion) to protect revenue streams. **Consequence:** Guilds Wealth remains high, but Guilds Mandate trends toward 2 (political irrelevance). The Guilds become economically powerful but politically marginalised — they can fund anyone but influence no one.
 
@@ -398,7 +398,7 @@ Deferred to next session. Each NPC requires: 10 TTRPG attributes, TS, Coherence,
 
 ### NPCs with direct caste implications:
 
-**Maret Uln (#2):** Southern Einhir solidarity. She grew up near Einhir communities in the western fjords — specifically southern Einhir communities in Varfell territory, the stigmatised population. Her Restoration Movement (RM) sympathy is not abstract; it is solidarity with her own people. If she succeeds Vaynard (PP-486), Varfell shifts from revolutionary expulsion (Vaynard's von Lohengramm programme) to Rawlsian equity — a fundamentally different programme that the RM would experience as both a relief and a betrayal of Vaynard's maximalist promise.
+**Maret Uln (#2):** Southern Einhir solidarity. She grew up near Einhir communities in the western fjords — specifically southern Einhir communities in Varfell territory, the stigmatised population. Her Restoration Movement (RM) sympathy is not abstract; it is solidarity with her own people. If she succeeds Vaynard (PP-486), Varfell shifts from revolutionary expulsion (Vaynard's von Lohengramm programme) to Equity equity — a fundamentally different programme that the RM would experience as both a relief and a betrayal of Vaynard's maximalist promise.
 
 
 

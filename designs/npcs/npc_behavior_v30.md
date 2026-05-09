@@ -47,7 +47,7 @@ See `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction
 |---|---|---|
 | Primary Conviction | Order | "Order is not made — it is maintained. Everything depends on not flinching." |
 | Secondary Conviction | Reason | Privately sympathises with Restoration. Recognises Thread reality may be true. Does not act on it. |
-| Ethical Framework | Virtue Ethics (Crown) | Aligned: −1 Ob on public, visible, virtuous action. Contradictory: +1 Ob on covert/expedient action. |
+| Ethical Framework | Virtue (Crown) | Aligned: −1 Ob on public, visible, virtuous action. Contradictory: +1 Ob on covert/expedient action. |
 | Primary Resonant Style | Consequence | Show him the cost of maintaining order: the practitioners persecuted, the knowledge lost, the Mending Stability declining. His Order conviction claims to preserve Valoria. If preserving order is destroying what it protects, he cannot dismiss the argument. |
 | Secondary Resonant Style | Solidarity | Activates only via intimate Knot. He is guarded; reaching him personally requires sustained relationship. |
 | Thread Sensitivity | 28 (near Stirring) | Unrecognised. His proximity to Thread awareness makes Evidence attacks partially effective but he lacks the perceptual framework to integrate what he is told. |
@@ -67,7 +67,7 @@ See `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction
 |---|---|---|
 | Primary Conviction | Faith | Sincerely devout. Solmund's word is absolute. Not cynical — wrong. |
 | Secondary Conviction | Order | The Church IS order. If Faith wavers, Order sustains. Institutional loyalty is his fallback. |
-| Ethical Framework | Divine Command (Church) | Aligned: −1 Ob on doctrine-aligned action. Contradictory: +1 Ob against doctrine. Thread truth: +2 Ob. |
+| Ethical Framework | Faith (Church) | Aligned: −1 Ob on doctrine-aligned action. Contradictory: +1 Ob against doctrine. Thread truth: +2 Ob. |
 | Primary Resonant Style | Evidence | Show him facts he cannot dismiss within his theology. Specific, documented, verifiable. His Faith claims the world is fully intelligible through Solmund's revelation. Evidence that the world is not what revelation says strains the framework where it is weakest. |
 | Secondary Resonant Style | Authority | The only authority he would recognise above his own is the Holy See or a direct Solmund-connected revelation. Practically unreachable — but a Cardinal defection or inner-tradition document authenticated by Church archival methods could fire this. |
 | Thread Sensitivity | 0 | Theologically foreclosed (Foundations §9.1). Cannot develop without confrontation that shatters the prophylaxis. |
@@ -108,7 +108,7 @@ See `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction
 |---|---|---|
 | Primary Conviction | Reason | Thread reality is the most important discovery. Knowledge is power. |
 | Secondary Conviction | Autonomy | If Reason fails (knowledge proves dangerous or inaccessible), Vaynard falls back on self-preservation and operational independence. The consequentialist framework is Autonomy wearing a laboratory coat. |
-| Ethical Framework | Consequentialist Pragmatism (Varfell) | Aligned: −1 Ob on actions with measurable outcomes within one season. Contradictory: +1 Ob on uncertain/long-term payoff actions. |
+| Ethical Framework | Utility-driven Pragmatism (Varfell) | Aligned: −1 Ob on actions with measurable outcomes within one season. Contradictory: +1 Ob on uncertain/long-term payoff actions. |
 | Primary Resonant Style | Consequence | Show him that his pursuit of Thread knowledge is producing specific bad outcomes — for Valoria, for his duchy, for himself. His consequentialism evaluates actions by results. Demonstrate the results are bad. |
 | Secondary Resonant Style | Evidence | If Consequence fails (he judges the bad outcomes acceptable), Evidence activates: present Thread-level data he cannot explain within his current TK level. He is a collector; present something worth more than what he is sacrificing. |
 | Thread Sensitivity | 14 (Dormant) | Unrecognised. At TS 14+, Private Collection use triggers Spirit check for Discovery Event. |
@@ -150,7 +150,7 @@ See `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction
 |---|---|---|
 | Primary Conviction | Equity | The community is the only legitimate political unit. Power must flow from the people. |
 | Secondary Conviction | Continuity | If Equity fails (the movement is crushed, the community scattered), Vossen falls back on cultural preservation. The Einhir heritage must survive even if political liberation does not. |
-| Ethical Framework | Rawlsian Social Contract (Restoration) | Aligned: −1 Ob on actions benefiting common population. Contradictory: +1 Ob on actions concentrating power. |
+| Ethical Framework | Equity Social Contract (Restoration) | Aligned: −1 Ob on actions benefiting common population. Contradictory: +1 Ob on actions concentrating power. |
 | Primary Resonant Style | Solidarity | She is a grassroots organiser. Her commitments are relational. Appeal to the people she has made promises to, the communities that depend on her, the practitioners she has sheltered. She cannot abandon relationships without abandoning her identity. |
 | Secondary Resonant Style | Consequence | If Solidarity fails (she judges the relationship cost acceptable for the cause), show her that her methods are producing specific harm to the people she claims to serve. The movement's agitation increasing Public Instability that hurts the working population she fights for. |
 | Thread Sensitivity | 0 | Non-practitioner. Charisma 5+, Circles 3+ in working-class networks. |
@@ -169,7 +169,7 @@ See `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction
 |---|---|---|
 | Primary Conviction | Equity | Shares Vossen's framework but more operationally focused. |
 | Secondary Conviction | Autonomy | Less idealistic than Vossen. If Equity fails, Hann defaults to survival — his own and the movement's operational capacity. |
-| Ethical Framework | Rawlsian Social Contract (Restoration) | As Vossen. |
+| Ethical Framework | Equity Social Contract (Restoration) | As Vossen. |
 | Primary Resonant Style | Consequence | Hann is a doer. Show him that his operations are producing bad outcomes. Logistics-focused minds respond to demonstrated operational failure. |
 | Secondary Resonant Style | Evidence | If Consequence fails, present evidence of structural problems in his network — compromised cells, settlement-layer broker infiltration (post-Niflhel dissolution), Church surveillance he has missed. His operational pride is the access point. |
 | Thread Sensitivity | 0 | Non-practitioner. Lower Charisma than Vossen, higher Circles in logistics and street-level networks. |
@@ -232,7 +232,7 @@ Activates only if Vaynard is eliminated (Loyalty 0 + Mandate 0, per PP-486).
 |---|---|---|
 | Primary Conviction | Equity | Aligns Varfell with RM goals on succession. Cannot target RM or seize RM-held territory. |
 | Secondary Conviction | Reason | Retains Varfell's institutional knowledge-seeking tendency but redirects it toward collaborative rather than acquisitive ends. |
-| Ethical Framework | Shifts from Consequentialist Pragmatism to a hybrid: −1 Ob on actions benefiting common population (Rawlsian inheritance), −1 Ob on actions with measurable outcomes (Consequentialist retention). +1 Ob on actions that target Restoration Movement. |
+| Ethical Framework | Shifts from Utility-driven Pragmatism to a hybrid: −1 Ob on actions benefiting common population (Equity inheritance), −1 Ob on actions with measurable outcomes (Utility-driven retention). +1 Ob on actions that target Restoration Movement. |
 | Primary Resonant Style | Evidence | Same vulnerability structure as Vaynard but directed differently: show her evidence that collaboration with RM is producing worse outcomes than Vaynard's independent path would have. |
 | Secondary Resonant Style | Solidarity | She has relationships in both Varfell and RM networks. Relational appeals carry weight. |
 | Thread Sensitivity | 35 (sustained Varfell Thread exposure under Vaynard's intelligence program. Crosses Active threshold — can perform Thread-Read. Affects arc behavior if Vaynard eliminated — ED-397 resolved) |
@@ -630,7 +630,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 **Arc A: The Holdout (Default)**
 - Branch condition: No PC expedition reaches Southernmost. Wardens continue alone.
-- Conviction: Continuity, unchanged. No arc movement.
+- Conviction: Warden, unchanged. No arc movement.
 - Behavior: Static. She holds. The Southernmost slowly loses ground. MS decline accelerates.
 
 **Arc B: The Collaboration**
@@ -639,7 +639,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 **Arc C: The Crisis**
 - Branch condition: Warden count reaches 0 (all other wardens killed or incapacitated) OR MS ≤ 20.
-- Conviction: Continuity → Autonomy (the work has failed; she must survive to try again).
+- Conviction: Warden → Autonomy (the work has failed; she must survive to try again).
 - Risk: Her presence strains MS in the territories she passes through (per threadwork_v25 §Coherence/TS 70+ MS drain). She is a walking Calamity echo.
 
 **Arc D: The Confrontation**
@@ -747,12 +747,12 @@ Maximum bonus dice from Resonant Style targeting: +1D. This stacks with genre bo
 
 | Framework | Faction | Drift mechanic | Frequency |
 |---|---|---|---|
-| Divine Command | Church | CI +1 passive (already in rules) | Per season |
-| Divine Command | Church | If no external challenge for 2 consecutive seasons: Influence +1 (institutional confidence) | Per 2 seasons |
-| Virtue Ethics | Crown | Crown NPCs at Certainty ≥ 3: +1 Certainty per year of unchallenged governance | Per year |
+| Faith | Church | CI +1 passive (already in rules) | Per season |
+| Faith | Church | If no external challenge for 2 consecutive seasons: Influence +1 (institutional confidence) | Per 2 seasons |
+| Virtue | Crown | Crown NPCs at Certainty ≥ 3: +1 Certainty per year of unchallenged governance | Per year |
 | Categorical Imperative | Hafenmark | Influence +1 per season in which ALL Hafenmark actions were framework-aligned | Per season (conditional) |
-| Consequentialist Pragmatism | Varfell | TK +0.5 per season of active investigation. Caps at TK 3 without PC interaction. | Per season |
-| Rawlsian Social Contract | Restoration | RM Presence markers spread to 1 adjacent territory per season when RM Stability ≥ 3 | Per season (conditional) |
+| Utility-driven Pragmatism | Varfell | TK +0.5 per season of active investigation. Caps at TK 3 without PC interaction. | Per season |
+| Equity Social Contract | Restoration | RM Presence markers spread to 1 adjacent territory per season when RM Stability ≥ 3 | Per season (conditional) |
 | Moral Relativism | Guilds | Guild Favour +1 in highest-Favour territory per Year-End | Per year |
 | Amoral Consequentialism | [Niflhel — STRUCK] | Ethical framework dissolved with faction; settlement-level intelligence brokers operate without faction-level framework | N/A — drift mechanic dissolved with faction (ED-757) |
 | Martial Honour | Löwenritter | If Military < 5: all non-survival actions redirect to Military Consolidation | Continuous |

@@ -338,7 +338,7 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 | Military | 0 | Non-violent movement |
 | Stability | 3 | Decentralised resilience |
 
-**Ethical Framework:** Rawlsian Social Contract (unchanged from stage6 design). −1 Ob for actions benefiting common population; +1 Ob for actions concentrating power.
+**Ethical Framework:** Equity Social Contract (unchanged from stage6 design). −1 Ob for actions benefiting common population; +1 Ob for actions concentrating power.
 
 **NPC AI priority:** Reduce PT in adjacent territories. Protect MS. Oppose Church and any faction with Mandate ≥ 5.
 

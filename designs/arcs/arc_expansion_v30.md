@@ -77,7 +77,7 @@ Every arc profile defines:
 
 **Arc A Decision Fork — The Public Edict:** When Certainty reaches 0, Almud faces a Decision Fork: make the Exemption public (Full Reformer, Coup Counter +1 + TC −2 + Church Excommunication eligible) or keep it private (Half Reformer — benefits Thread practitioners but risks institutional exposure). Player can influence this Fork via Solidarity RS (personal appeal through Knot with Almud) — with a Knot at Close, the appeal tips toward public.
 
-**Arc A secondary trigger — Cardinal of Temperance Testimony:** If the Cardinal of Temperance has reached Scar 1 AND approaches Almud privately (triggered when Temperance's Conviction crisis fires — see Cardinal arcs below), this can substitute for the full RS contest requirement. Temperance delivering internal Church evidence of RS degradation is an Authority appeal Almud cannot dismiss (the source is Church-internal, his Virtue Ethics framework values institutional honesty).
+**Arc A secondary trigger — Cardinal of Temperance Testimony:** If the Cardinal of Temperance has reached Scar 1 AND approaches Almud privately (triggered when Temperance's Conviction crisis fires — see Cardinal arcs below), this can substitute for the full RS contest requirement. Temperance delivering internal Church evidence of RS degradation is an Authority appeal Almud cannot dismiss (the source is Church-internal, his Virtue framework values institutional honesty).
 
 ---
 
@@ -90,7 +90,7 @@ Every arc profile defines:
 2. Almud refuses all private audiences with Thread practitioners and their known associates. PC with Thread-adjacent Belief cannot seek audience without triggering Heresy Investigation filing (Almud's Attention Pool +1 from the request alone).
 3. Almud's Beliefs update: Belief 2 replaces with "The Restoration is an existential threat — I cannot distinguish truth from sedition." Any RM Outreach in Crown territory now triggers Priority 2 (Conviction-critical) responses.
 4. Ehrenwall Disposition toward Almud: +1 (Fortress Almud validates Ehrenwall's worldview — order is strength). Coup Counter does NOT advance — Almud is behaving as Ehrenwall wants.
-5. The Fortress is self-reinforcing: every season Almud maintains Fortress, Crown NPCs at Certainty ≥ 3 gain +1 Certainty (Virtue Ethics Drift). The institution hardens while Almud hardens.
+5. The Fortress is self-reinforcing: every season Almud maintains Fortress, Crown NPCs at Certainty ≥ 3 gain +1 Certainty (Virtue Drift). The institution hardens while Almud hardens.
 
 **Arc B exit condition (how to get Almud OUT of Fortress):** The only exit is Ehrenwall. If the player has a Knot at Intimate with Ehrenwall AND Ehrenwall's Solidarity RS is active AND Ehrenwall delivers a Consequence argument ("The Fortress is producing the instability you exist to prevent") — this is the only RS attack Almud can hear in Arc B because it comes through Authority. Ehrenwall is the authority Almud respects.
 
@@ -131,7 +131,7 @@ Every arc profile defines:
 **Branch condition:** Default arc. No PC expedition to Varfell's Private Collection. No VTM advancement challenge. Vaynard is an intellect consuming information without transformation.
 
 **Arc A behavior:**
-1. Vaynard pursues VTM advancement purely instrumentally (Tribune Intel, Private Collection). No Certainty movement. Consequentialist Pragmatism remains stable.
+1. Vaynard pursues VTM advancement purely instrumentally (Tribune Intel, Private Collection). No Certainty movement. Utility-driven Pragmatism remains stable.
 2. His Priority 2 fires reliably: Intel opportunities always taken before any other action.
 3. Vaynard acquires Thread knowledge without Thread perception. He knows facts about Thread without experiencing Thread. This is the most dangerous configuration: competence without wisdom.
 4. Arc A stable state: VTM 2–3 reached by Season 8–10 through reliable Intel. No RS care — Varfell's Thread operations (if any) are purely extractive.
@@ -167,10 +167,10 @@ Three triggering events (any one sufficient):
 
 **Arc C cascade:**
 1. First unguided Leap in a scene alone — Spirit 4D TN7 Ob 2. On failure: Rendering Crisis begins immediately (Coherence 10 → 5 from unguided contact). On success: brief contact, terrifying, productive. Either outcome advances the Consumed trajectory.
-2. Vaynard's Consequentialist Pragmatism: "I will use what I learn." Coherence degradation = he is using what he learns at the cost of his own coherence. He knows this. He continues anyway.
+2. Vaynard's Utility-driven Pragmatism: "I will use what I learn." Coherence degradation = he is using what he learns at the cost of his own coherence. He knows this. He continues anyway.
 3. Certainty 0: his framework has not been disproved — it has been confirmed. The Thread IS real. And now he cannot stop perceiving it. The confirmation destroys him more thoroughly than disproof would have.
 4. Behavioral: Vaynard's Priority Tree collapses entirely. His actions become Thread-compelled rather than politically rational. He takes actions that make no strategic sense because he perceives configurations that require addressing. He becomes an NPC the GM must manage as an agent of the Thread itself, not of Varfell's interests.
-5. Vaynard at Coherence ≤ 3 (Fragmented): −1D all social rolls. Cannot execute Consequentialist Pragmatism (requires rational assessment of outcomes). His Leadership Deviation Ob effectively becomes 1 (the institution cannot predict him).
+5. Vaynard at Coherence ≤ 3 (Fragmented): −1D all social rolls. Cannot execute Utility-driven Pragmatism (requires rational assessment of outcomes). His Leadership Deviation Ob effectively becomes 1 (the institution cannot predict him).
 6. Knot strain propagation (§5.0b): TS 30+ in active crisis → Close Knot +1 strain/season to all Knotted NPCs. If Vaynard has a Knot with the PC (likely at Disposition +3): PC takes +1 Coherence strain per session in Vaynard's presence.
 
 **Arc C recovery gate:** The only exit from Consumed is Edeyja. If Vaynard reaches T15 in Consumed state AND Edeyja is in Arc B (Collaboration) AND Edeyja agrees to treat him: Recovery arc begins. Edeyja's TS 75+ provides the framework Vaynard's Reason cannot build for itself. Recovery takes 3 seasons. Vaynard emerges with Certainty 1, Coherence 6, TS 40 — a genuine practitioner, no longer Scholar, no longer Consumed. A third state that has no name yet.
@@ -196,7 +196,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Name | [Canonical: not named. Propose: Cardinal Jarnstal] |
 | Primary Conviction | Faith | "The Temple defends what Solmund has sanctified. We are the sword, not the debate." |
 | Secondary Conviction | Order | When Faith fails to justify, the institutional chain of command takes over. Jarnstal follows orders from his superiors even when he disagrees with them — until the orders violate what he understands as the Temple's martial purpose. |
-| Ethical Framework | Martial Divine Command | Aligned: −1 Ob on any action that physically defends Church territory or personnel. Contradictory: +1 Ob on diplomatic, theological, or administrative actions. |
+| Ethical Framework | Martial Faith | Aligned: −1 Ob on any action that physically defends Church territory or personnel. Contradictory: +1 Ob on diplomatic, theological, or administrative actions. |
 | Primary Resonant Style | Consequence | Show him that the Templar deployments are producing worse outcomes than restraint — that the military posture is feeding the resistance it claims to suppress. A general who loses faith in his strategy is reachable. |
 | Secondary Resonant Style | Solidarity | Jarnstal's soldiers are his family. Any appeal invoking specific Templars — their names, their sacrifices, how they've been used and spent — reaches him where strategic argument cannot. |
 | Thread Sensitivity | 0 | Non-practitioner. Active theological prophylaxis. |
@@ -238,7 +238,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Name | [Propose: Cardinal Olafsson] |
 | Primary Conviction | Faith (hardline) | "Solmund's law is exact. Deviation from it is not error — it is transgression. Transgression requires correction." |
 | Secondary Conviction | Order | The Inquisition IS the Church's order-maintenance mechanism. If Faith's purity goal conflicts with Order's stability goal, Olafsson chooses purity. Every time. |
-| Ethical Framework | Divine Command (hardline variant) | Aligned: −1 Ob on any investigation, prosecution, or punishment of doctrinal deviation. Contradictory: +1 Ob on mercy, accommodation, or pragmatic exception. |
+| Ethical Framework | Faith (hardline variant) | Aligned: −1 Ob on any investigation, prosecution, or punishment of doctrinal deviation. Contradictory: +1 Ob on mercy, accommodation, or pragmatic exception. |
 | Primary Resonant Style | Authority | Olafsson is himself an authority — he yields only to higher authority within his framework. The Holy See (distant, unreachable), a direct canonical text he cannot reinterpret, or (in extremis) a miraculous event he personally witnesses could move him. No human argument moves him. |
 | Secondary Resonant Style | Evidence | His hardline Faith claims to be empirically grounded in Scripture. Evidence that Scripture does not say what he claims it says — documented, authenticated textual evidence — is the only argumentation vector. |
 | Thread Sensitivity | 0 | Prophylaxis at maximum. He has seen the consequences of Thread exposure and actively maintains theological inoculation. |
@@ -281,7 +281,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Name | [Propose: Cardinal Aldric Tormann] |
 | Primary Conviction | Order | The Church endures because its institutions endure. Institutions endure because they are funded. Theology is the justification; wealth is the infrastructure. |
 | Secondary Conviction | Autonomy | Tormann is the only Cardinal who would survive the Church's collapse — she has contingency plans, personal wealth networks, and diplomatic relationships with Guilds and Schoenland that predate her Church service. If Order fails, she defects. |
-| Ethical Framework | Divine Command (institutional variant) | Aligned: −1 Ob on any action that increases Church wealth or institutional stability. Contradictory: +1 Ob on any action that sacrifices Church resources for theological purity. |
+| Ethical Framework | Faith (institutional variant) | Aligned: −1 Ob on any action that increases Church wealth or institutional stability. Contradictory: +1 Ob on any action that sacrifices Church resources for theological purity. |
 | Primary Resonant Style | Evidence | Show her the fiscal data. Specific numbers, documented ledgers, projected deficits. Her framework claims to be reality-grounded (the institution must be funded). Evidence that the institution cannot fund its current trajectory moves her. |
 | Secondary Resonant Style | Consequence | Project the consequences of financial ruin. She has already run these numbers. Hearing them stated by someone outside the Church — especially a Guild representative — forces public confrontation with what she privately fears. |
 | Thread Sensitivity | 0 | Pragmatic non-interest. She has no theological position on Thread. If Thread practitioners paid tithes reliably, she would probably tolerate them. |
@@ -322,7 +322,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 | Name | [Propose: Cardinal Klapp] |
 | Primary Conviction | Reason | Truth is discoverable. Solmund's revelation and empirical investigation should converge if both are correctly practised. She has spent her life finding the convergences. She is running out of places to look. |
 | Secondary Conviction | Faith | Klapp would not be a Cardinal if she didn't believe. She believes. But she believes in what she has investigated and found credible — not in what she has been told and accepted. The distinction is critical. |
-| Ethical Framework | Divine Command (scholarly variant) | Aligned: −1 Ob on any action that advances knowledge or Altonian diplomacy maintenance. Contradictory: +1 Ob on any action that suppresses evidence or prevents scholarly access. |
+| Ethical Framework | Faith (scholarly variant) | Aligned: −1 Ob on any action that advances knowledge or Altonian diplomacy maintenance. Contradictory: +1 Ob on any action that suppresses evidence or prevents scholarly access. |
 | Primary Resonant Style | Evidence | Show her specific, documented, authenticated facts she cannot explain within her theological framework. She is looking for these already. She will receive them as gifts rather than attacks. |
 | Secondary Resonant Style | Authority | Within her framework: a canonical text she has not seen, authenticated by multiple chains of custody, citing Thread phenomena in non-condemnatory terms, would be Authority that forces framework revision. She knows such texts may exist — the Einhir archive at T15 is her greatest unresolved question. |
 | Thread Sensitivity | 8 | Undiscovered. Her scholarly engagement with Thread-adjacent texts has produced micro-TS development she has not attributed correctly. She occasionally perceives things she explains as spiritual intuition. |
@@ -468,7 +468,7 @@ Cardinals activate as independent NPCs during Church Stability ≤ 2. Existing e
 4. (Hidden) "If Hann goes further than I have asked him to go, I will have to choose between the movement and him. I am not ready for that choice."
 
 **Arc A: The Organiser (Default)**
-- Behavior: Vossen builds RM Presence in low-PT territories through community outreach, practitioner protection, and social fieldwork. Her Rawlsian framework generates Presence markers at +1 adjacent territory per season when Stability ≥ 3.
+- Behavior: Vossen builds RM Presence in low-PT territories through community outreach, practitioner protection, and social fieldwork. Her Equity framework generates Presence markers at +1 adjacent territory per season when Stability ≥ 3.
 - Arc A passive: Vossen's Leadership Deviation Ob = 2 but her institution is decentralised — cells operate semi-independently. Every 3 seasons: GM roll d6. On 6: one cell takes an action Vossen did not authorise (Hann's Autonomy secondary expressing itself at the cell level). This may be beneficial (cell provides intelligence) or disruptive (cell's action triggers Church AP accumulation). Vossen cannot consistently control what the cells do.
 
 **Arc B: The Strained Leader**

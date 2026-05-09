@@ -374,10 +374,10 @@ Each utterance carries an implicit style (matching the Social Contest taxonomy: 
 
 | NPC Framework | Aligned Approach | Resisted Approach | Effect |
 |---|---|---|---|
-| Church (Divine Command) | Precedent + Revealing (doctrine, scripture, precedent) | Prospect + Revealing (Thread truth, empirical evidence) | Thread-true utterances produce hostility even if factually correct (+1 hostile modifier) |
-| Crown (Virtue Ethics) | Revealing + Prospect (principled action, future consequences) | Obscuring (concealment, manipulation) | Obscuring utterances detected more easily; Disposition cost on use |
+| Church (Faith) | Precedent + Revealing (doctrine, scripture, precedent) | Prospect + Revealing (Thread truth, empirical evidence) | Thread-true utterances produce hostility even if factually correct (+1 hostile modifier) |
+| Crown (Virtue) | Revealing + Prospect (principled action, future consequences) | Obscuring (concealment, manipulation) | Obscuring utterances detected more easily; Disposition cost on use |
 | Hafenmark (Categorical Imperative) | Precedent + Revealing (legal, consistent, universal) | Ad hoc/situational reasoning | Situational arguments get reduced Disposition yield even when persuasive |
-| Varfell (Consequentialist) | Prospect + either (outcomes, effects, results) | Deontological appeals | "It's the right thing regardless of outcome" produces skepticism |
+| Varfell (Utility-driven) | Prospect + either (outcomes, effects, results) | Deontological appeals | "It's the right thing regardless of outcome" produces skepticism |
 | Unaligned / RM | Variable by NPC Worldview | Institutional appeals | Faction-authority utterances produce automatic distrust modifier |
 
 ### Full Chain Example
@@ -388,7 +388,7 @@ Player utterance: "I know about the Thread experiments in Gransol" [Evidence-gat
 - Filter 2 (Conviction): Faith conviction, Wound 1. The utterance engages their conviction. Wound 1 response: defensive engagement with involuntary reveal. They do not deny the experiments — they argue for their doctrinal legitimacy. This is the crack: they've implicitly confirmed the experiments exist.
 - Filter 3 (Disposition −1): Defensive response character. They confirm without admitting. Minimal disclosure.
 - Filter 4 (Compromise): No offer in this utterance. Pass.
-- Filter 5 (Ethical Framework — Divine Command): The utterance is Revealing + Prospect (empirical knowledge of heretical activity). This is the resisted approach. Hostility modifier applied to the response tone.
+- Filter 5 (Ethical Framework — Faith): The utterance is Revealing + Prospect (empirical knowledge of heretical activity). This is the resisted approach. Hostility modifier applied to the response tone.
 
 **Result:** The NPC responds defensively, with hostile tone, but with an involuntary confirmation of the facts — their Wound 1 prevents full suppression. The player gains 1 Evidence point (involuntary yield from Conviction Wound 1), the NPC's Disposition moves to −2 (hostile modifier from Filter 5), and the scene is now poised for escalation (the player has confirmed the experiments; the NPC has confirmed they know about them; the relationship has entered a new phase).
 

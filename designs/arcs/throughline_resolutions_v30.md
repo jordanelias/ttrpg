@@ -141,7 +141,7 @@ ED-629 (2026-04-17) raised 28 P0 blockers on Thread system integration, includin
 
 Per conviction_track_v30 §5.2, the Restoration Movement emerges as an active faction when WA ≤ −2 AND ≥ 3 territories at CV ≤ 1 AND MS ≤ 50. Once emerged, the RM is a latent-faction-promoted-to-active mechanic. A player participating in its founding (ED-620) or serving within it post-emergence requires a ladder analogous to the 7 other faction ladders.
 
-The RM ladder is **a stub here** because the movement's institutional architecture is deliberately thin — RM rejects institutional hierarchy as ethical principle (Rawlsian Social Contract, factions_ttrpg_v30 §8.8). A formal rank ladder reproducing Crown-style gradation would violate the movement's design premise.
+The RM ladder is **a stub here** because the movement's institutional architecture is deliberately thin — RM rejects institutional hierarchy as ethical principle (Equity Social Contract, factions_ttrpg_v30 §8.8). A formal rank ladder reproducing Crown-style gradation would violate the movement's design premise.
 
 **Stub spec (for future extension):**
 

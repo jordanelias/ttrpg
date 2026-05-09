@@ -497,7 +497,7 @@ Vaynard (Varfell practitioner) is in T9 (adjacent to T3). Trajectory Choice cond
 > **Clarification (PP-037):** "Co-Movement cards with VTM effects that cannot be applied due to the once-per-season cap or the VTM maximum (7): convert to +1D on the following season's Tribune action in any territory. The converted bonus cannot exceed +2D regardless of how many VTM effects were blocked."
 
 **Roll for Tribune Inward T14 (Investigate the Restoration Weaving):**
-Influence 4 (standard Intel) vs Ob 2. Thread Resonance: +1D. Epistemic Reason (Varfell): evidence-based Intel −1 Ob = Ob 1.
+Influence 4 (standard Intel) vs Ob 2. Thread Resonance: +1D. Scholastic (Varfell): evidence-based Intel −1 Ob = Ob 1.
 Roll 5d10 (Influence 4 + Thread Resonance 1D): 9, 7, 10, 3, 8 → 1+1+2+1 = 5 net. Ob 1, surplus 4 = **Overwhelming.**
 
 Overwhelming Investigate: Restoration's complete stat line revealed + one hidden private track. **Restoration has no private tracks other than their public Presence markers.** The Overwhelming reveals their complete stats (Mandate 2, Influence 4, Wealth 2, Stability 3) plus their active Presence marker locations.

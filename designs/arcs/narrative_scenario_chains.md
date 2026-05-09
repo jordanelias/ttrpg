@@ -663,7 +663,7 @@ COUP COUNTER TRACKING (private; GM-held; 0–3)
         │
         └─ Military response to territory loss (remove increment 3):
             Crown Military Domain Action vs Ob = opposing Military
-            But this requires Almud to act against his Virtue Ethics framework
+            But this requires Almud to act against his Virtue framework
             (covert/expedient) → Stability check Ob 2
             Unless: Löwenritter support the response (paradox — using their threat
             to prevent the coup by giving them the military action they want)
