@@ -40,14 +40,25 @@ CONTEXT_HARD              = 180_000   # 90% — hard close (existing)
 CONTEXT_WARN              = CONTEXT_SOFT  # alias for backward compat
 
 TASK_REQUIRED_FILES = {
-    "simulation":      ["references/canonical_sources.yaml", "canon/02_canon_constraints.md"],
-    "audit":           ["references/canonical_sources.yaml", "canon/02_canon_constraints.md"],
+    # Skill paths added 2026-05-08: each task type now requires fetching its
+    # governing skill before the gate passes. Enforcement rationale: prior to
+    # this change, skill compliance was text-only (Level 1). A session produced
+    # a full sim from scratch, ignoring the existing harness and anti-patterns,
+    # because the simulator skill was never fetched. Adding the skill to the
+    # required-files list promotes enforcement to Level 4 (RuntimeError) —
+    # the skill must be read before any work in that domain begins.
+    "simulation":      ["references/canonical_sources.yaml", "canon/02_canon_constraints.md",
+                        "skills/valoria-simulator/SKILL.md"],
+    "audit":           ["references/canonical_sources.yaml", "canon/02_canon_constraints.md",
+                        "skills/valoria-mechanic-audit/SKILL.md"],
     "canon_check":     ["canon/00_philosophical_foundations_rules.md", "canon/02_canon_constraints.md"],
     "editorial":       ["canon/editorial_ledger.yaml"],
     "patch":           ["canon/patch_register_active.yaml"],
     "compilation":     ["references/canonical_sources.yaml", "canon/patch_register_active.yaml"],
-    "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml"],
-    "design_proposal": ["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml", "references/throughlines_meta.md"],
+    "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml",
+                        "skills/valoria-mechanic-audit/SKILL.md"],
+    "design_proposal": ["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml",
+                        "references/throughlines_meta.md"],
     "design":          ["references/canonical_sources.yaml"],
     "infrastructure":  [],
 }
@@ -250,6 +261,31 @@ def task_gate(task_type: str) -> None:
         )
     _task_gates_passed.add(task_type)
     print(f"[HOOK ✓] task_gate('{task_type}')")
+
+    # Print governing-skill reminder at the decision point. (2026-05-08)
+    # Rationale: skill SKILL.md is now a required fetch (Level 4 above), but
+    # having the file in context != attending to it when planning. Printing the
+    # critical anti-patterns here puts them right before Claude decides its
+    # approach — not buried in bootstrap output 50k+ tokens back.
+    if task_type == "simulation":
+        print(
+            "\n[TASK GATE: simulation] Mode G anti-patterns — verify before writing any code:\n"
+            "  ✗ Build full-stack sim in one session          → module decomposition, one system/session\n"
+            "  ✗ Fetch index; infer mechanics from headings   → force_full=True on all design docs\n"
+            "  ✗ Invent mechanics because they sound right    → every constant needs a ledger entry\n"
+            "  ✗ Batch-run an unvalidated sim                 → no batch runs before all modules verified\n"
+            "  ✗ Use remembered or stale canonical values     → fetch canonical source, never memory\n"
+            "  → Check tests/sim/ for existing harness BEFORE writing new code.\n"
+            "  → Call h.sim_gate() before writing any simulation code.\n"
+        )
+    elif task_type == "audit":
+        print(
+            "\n[TASK GATE: audit] Required before any audit work:\n"
+            "  → Never audit from memory — fetch canonical source for target system.\n"
+            "  → All mechanical values must be cited with source file + section.\n"
+            "  → P1 findings must be appended to canon/editorial_ledger.yaml.\n"
+            "  → Check tests/audit/ for prior audit outputs on this system first.\n"
+        )
 
 
 def task_gate_with_system(task_type: str, system: str, canonical_sources_content: str) -> None:
@@ -1155,6 +1191,34 @@ def sim_gate(scope: str, systems: list = None) -> None:
             + "\n\nA simulation cannot be written on incomplete sources.\n"
             + "Fetch the missing content before proceeding. No exceptions.\n"
         )
+
+    # Manifest check (2026-05-08) — Mode G enforcement.
+    # Any simulation spanning more than one mechanical system requires a module
+    # manifest before code is written. This prevents the sim_v2 anti-pattern:
+    # building a full-stack sim in a single session on index-depth reads.
+    # The manifest must exist at /home/claude/sim_module_manifest.md OR at
+    # tests/sim/<any-subdirectory>/module_manifest.md in the session fetches.
+    # Single-system sims (custom scope, len==1) are exempt.
+    if len(systems) > 1:
+        manifest_local = '/home/claude/sim_module_manifest.md'
+        manifest_in_fetches = any(
+            'module_manifest' in k for k in g._session_fetches
+        )
+        if not os.path.exists(manifest_local) and not manifest_in_fetches:
+            raise RuntimeError(
+                f"[HOOK VIOLATION] sim_gate('{scope}') — module manifest required.\n\n"
+                f"This simulation spans {len(systems)} systems: {systems}\n"
+                f"Mode G (Incremental Build Protocol) is mandatory for multi-system sims.\n\n"
+                f"Before writing any simulation code:\n"
+                f"  1. Produce a module manifest at /home/claude/sim_module_manifest.md\n"
+                f"  2. Commit it to tests/sim/<sim-name>/module_manifest.md\n"
+                f"  3. Re-run sim_gate — it will pass once the manifest is present.\n\n"
+                f"Manifest format: table of modules with name, dependencies,\n"
+                f"canonical_source paths, and status (pending/verified).\n"
+                f"See skills/valoria-simulator/SKILL.md Mode G §Protocol Step 1.\n\n"
+                f"Single-system sims (scope='custom', one system) are exempt.\n"
+                f"No exceptions for multi-system sims.\n"
+            )
 
     # Verification ledger check — the artifact must exist
     ledger_path = '/home/claude/sim_verification_ledger.json'
