@@ -20,7 +20,7 @@ characters:
 
   - id: NPC-001
     first_name: Edeyja
-    last_name: null  # [GAP: no surname in canon — edeyja_npc.md says "working name, pending final name pass"]
+    last_name: null  # mononym; "Edeyja" confirmed final per Jordan 2026-05-08
     faction: Independent (Southernmost Wardens)
     role: Warden-Chief
     status: canonical
@@ -45,7 +45,7 @@ characters:
     arc_trajectory: "Warden-Chief navigating Church pressure and Thread instability"
     resonant_style: Evidence  # per edeyja_npc.md
     source: designs/npcs/edeyja_npc.md, npc_roster_v30 §1
-    notes: "Highest TS of any living practitioner. Survived proximity to a major Gap/tear. Name flagged as working name."
+    notes: "Highest TS of any living practitioner. Survived proximity to a major Gap/tear."
 
   - id: NPC-002
     first_name: Maret
@@ -151,7 +151,7 @@ characters:
     role: Officer (Lions' Table)
     status: canonical
     age: null  # [GAP]
-    birthplace: null  # [GAP — see open issue §3 re Halvardshelm]
+    birthplace: Halvardshelm  # confirmed intentional — named after birthplace
     territory: null
     ts: null  # [GAP]
     coherence: null  # [GAP]
@@ -166,7 +166,7 @@ characters:
     goals: ["Counter Altonian threat", "Strengthen peninsular defenses"]
     arc_trajectory: "External threat fixated — evaluates every action against Altonian metric. Brandt succession if Ehrenwall falls."
     source: npc_roster_v30 §6
-    notes: "Name 'Halvar' near-matches territories Halvardshelm/Halvarshelm — [OPEN: verify intentional or coincidence]."
+    notes: "Named after birthplace Halvardshelm — confirmed intentional."
 
   - id: NPC-007
     first_name: Annika
@@ -442,11 +442,12 @@ characters:
     coherence: null  # [GAP]
     stats: null  # [GAP]
     convictions:
-      primary: null  # [GAP: distinct from ecclesiastical Lenneth in PP-685 — see notes]
+      primary: null  # [GAP: needs Restoration-aligned conviction vector — NOT the ecclesiastical profile in PP-685 §2.3 which is a misattribution]
+      alignment_notes: "Pro-Restoration, allied with Yrsa Vossen. PP-685 §2.3 incorrectly placed Lenneth under Ecclesiastical with Scholastic/Faith/Precedent — that profile is wrong. Conviction vector needs authoring per her actual RM alignment."
     goals: null  # [GAP]
-    arc_trajectory: "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent."
+    arc_trajectory: "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent. Pro-Restoration — allied with Yrsa Vossen."
     source: faction_canon_v30 §Crown
-    notes: "DISTINCT from the ecclesiastical 'Lenneth' in PP-685 §2.3 (scholarly cleric). This is Queen Lenneth Almqvist. Naming collision flagged."
+    notes: "Queen Lenneth Almqvist. Pro-Restoration alignment confirmed per Jordan 2026-05-08. PP-685 §2.3 ecclesiastical profile is a misattribution — needs correction in PP-685."
 
   - id: NPC-033
     first_name: Kolbrun
@@ -733,11 +734,11 @@ characters:
 # 1. [RESOLVED] LEGACY ETHICAL LABELS migrated to 13-Conviction
 #    taxonomy per PP-685. All deprecated ethics_legacy fields removed.
 #
-# 2. [OPEN] EDEYJA NAME: flagged as "working name" in edeyja_npc.md.
-#    Needs final name decision from Jordan.
+# 2. [RESOLVED] EDEYJA NAME: "Edeyja" confirmed final per Jordan 2026-05-08.
+#    Mononym (no surname).
 #
-# 3. [OPEN] HALVAR / HALVARDSHELM: NPC first name near-matches territory.
-#    Needs Jordan decision: intentional (named after place) or coincidence.
+# 3. [RESOLVED] HALVAR / HALVARDSHELM: Confirmed intentional — Halvar is
+#    from Halvardshelm. Birthplace filled. Per Jordan 2026-05-08.
 #
 # 4. [RESOLVED] TWO ALDRICS: NPC-013 Aldric Tormann (Church, Cardinal
 #    Prudence) and NPC-041 Aldric Hann (RM visible leadership) are
@@ -768,17 +769,18 @@ characters:
 #    faction_canon. Are these the same person (dual role) or
 #    distinct characters? Needs Jordan decision.
 #
-# 10. [OPEN] LENNETH NAMING COLLISION: PP-685 §2.3 references an
-#     ecclesiastical "Lenneth" (scholarly cleric, ED-727). NPC-032
-#     is Queen Lenneth Almqvist (Crown). Are these the same person
-#     or distinct? Queen with scholarly leanings, or separate cleric?
+# 10. [RESOLVED] LENNETH: One character — Queen Lenneth Almqvist.
+#     Pro-Restoration, allied with Yrsa Vossen. PP-685 §2.3
+#     ecclesiastical profile (Scholastic/Faith/Precedent) is a
+#     MISATTRIBUTION — needs correction in PP-685. Conviction vector
+#     needs authoring per actual RM alignment. Per Jordan 2026-05-08.
 #
 # 11. [OPEN] CARDINAL ARNLOD — VIRTUE ASSIGNMENT: Four cardinal
 #     virtues (Justice, Temperance, Fortitude, Prudence) mapped to
 #     four cardinals. Arnlod Olafsson has no virtue assignment.
 #     Fifth cardinal, or does he hold one of the four?
 #
-# 12. [OPEN] CONVICTION DISCREPANCIES: PP-685 roster lists different
-#     prior_labels for Yrsa Vossen and Maret Uln than what appears
-#     in npc_roster_v30.md. PP-685 used as authoritative for
-#     migration output, but source labels should be reconciled.
+# 12. [PARTIALLY RESOLVED] CONVICTION DISCREPANCIES: Yrsa Vossen
+#     PP-685 mapping confirmed per Jordan 2026-05-08. Maret Uln
+#     discrepancy still open (registry had 'Rawlsian', PP-685 had
+#     'Reason' + 'Military Honor').
