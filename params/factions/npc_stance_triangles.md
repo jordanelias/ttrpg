@@ -44,11 +44,11 @@ Torben: first faction at Loyalty ≥ 5 sets primary Conviction. Default Autonomy
 ### Framework Drift
 | Framework | Faction | Drift | Frequency | Cap |
 |---|---|---|---|---|
-| Divine Command | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + CI advanced | Per year (Year-End) | Stat ceiling 7 (PP-NPC-03) |
-| Virtue Ethics | Crown | Crown NPCs Certainty ≥ 3: +1 Certainty/year unchallenged | Per year | Certainty 5 |
+| Faith | Church | Influence +1 if: no hostile DA vs Church + Stability ≥ 4 + CI advanced | Per year (Year-End) | Stat ceiling 7 (PP-NPC-03) |
+| Virtue | Crown | Crown NPCs Certainty ≥ 3: +1 Certainty/year unchallenged | Per year | Certainty 5 |
 | Categorical Imperative | Hafenmark | Influence +1 per season all actions framework-aligned | Per season (conditional) | Stat ceiling 7 |
-| Consequentialist Pragmatism | Varfell | TK +0.5/season active investigation; caps TK 3 without PC | Per season | TK 3 |
-| Rawlsian Social Contract | RM | Presence +1 adjacent territory/season when Stability ≥ 3 | Per season (conditional) | — |
+| Utility-driven Pragmatism | Varfell | TK +0.5/season active investigation; caps TK 3 without PC | Per season | TK 3 |
+| Equity Social Contract | RM | Presence +1 adjacent territory/season when Stability ≥ 3 | Per season (conditional) | — |
 | Moral Relativism | Guilds | Guild Favour +1 in highest-Favour territory/Year-End | Per year | Favour 7 |
 <!-- Amoral Consequentialism / Niflhel row deleted 2026-04-30 — Niflhel struck. No faction holds this disposition post-strike. -->
 | Martial Honour | Löwenritter | If Military < 5: redirect all non-survival to consolidation | Continuous | Military 5 |

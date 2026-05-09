@@ -23,7 +23,7 @@ A faction's behavior is determined by four interacting components:
 
 Domain Action Ob is computed from action alignment with all four. Mandate is retained as a derived value during transition.
 
-The architecture eliminates philosophical-tradition vocabulary (Categorical Imperative, Rawlsian, etc.), unifies Conviction vocabulary across personal and faction scales (per PP-684), and produces dynamic faction behavior from a small authored input set + leader Convictions + Public temperament.
+The architecture eliminates philosophical-tradition vocabulary (Categorical Imperative, Equity, etc.), unifies Conviction vocabulary across personal and faction scales (per PP-684), and produces dynamic faction behavior from a small authored input set + leader Convictions + Public temperament.
 
 This is v2 of the original proposal (`designs/audit/2026-04-30-architecture-session/03_PP-686_proposal.md`) with the C1–C10 calibration set and audit P1/P2 resolutions applied.
 

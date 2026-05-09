@@ -42,7 +42,7 @@ This document consolidates per-faction texture canon scattered across:
 **Supersession (informational — recorded in `canon/supersession_register.yaml`):**
 - `params/bg/core.md §Ethical Framework Modifiers` → SUPERSEDED by `faction_behavior_v30 §3.7` (triadic Ob calc) per SUPERSESSION-PP686-001.
 - `params/factions/stats_1_7_scale.md §Ethical Framework Ob Modifiers` → SUPERSEDED 2026-05-02 per SUPERSESSION-PP686-002.
-- Ethical-framework labels (Virtue Ethics / Divine Command / Categorical Imperative / Consequentialist Pragmatism / Rawlsian Social Contract / Moral Relativism / Martial Honour / Administrative Proceduralism) — all formally retired as mechanical anchors. Retained per-faction below as **descriptive disposition tags** for prose-writer continuity, with `[SUPERSEDED — see PP-686 §3.7]` notes inline. Mechanical Ob modifiers come from PP-686 §3.7 triadic calculation, not these labels.
+- Ethical-framework labels (Virtue / Faith / Categorical Imperative / Utility-driven Pragmatism / Equity Social Contract / Moral Relativism / Martial Honour / Administrative Proceduralism) — all formally retired as mechanical anchors. Retained per-faction below as **descriptive disposition tags** for prose-writer continuity, with `[SUPERSEDED — see PP-686 §3.7]` notes inline. Mechanical Ob modifiers come from PP-686 §3.7 triadic calculation, not these labels.
 
 ---
 
@@ -423,7 +423,7 @@ The deed-monarchy: Crown legitimacy is the continuously demonstrated act of gove
 
 ### Ethical Disposition
 
-- **Legacy label:** Virtue Ethics `[SUPERSEDED 2026-05-02 — mechanical role replaced by PP-686 §3.7 triadic Ob calc]`. Retained as descriptive disposition tag for prose-writer continuity.
+- **Legacy label:** Virtue `[SUPERSEDED 2026-05-02 — mechanical role replaced by PP-686 §3.7 triadic Ob calc]`. Retained as descriptive disposition tag for prose-writer continuity.
 - **Public, visible, virtuous actions:** −1 Ob (legacy modifier; intent preserved through PP-686 mission_alignment_modifier on `da.public_governance`).
 - **Covert / expedient action:** +1 Ob (legacy; intent preserved through PP-686 mission_alignment_modifier on `da.covert_betrayal` contradicted).
 - **Leadership Deviation Ob:** 2 (Almud breaks treaty / supports practitioners / ignores Parliament → Stability check Ob 2 at next Accounting).
@@ -585,7 +585,7 @@ The institutional body of Solmundan revelation. The Church reads the world throu
 
 ### Ethical Disposition
 
-- **Legacy label:** Divine Command `[SUPERSEDED 2026-05-02 — mechanical role replaced by PP-686 §3.7 triadic Ob calc]`. Descriptive disposition tag retained.
+- **Legacy label:** Faith `[SUPERSEDED 2026-05-02 — mechanical role replaced by PP-686 §3.7 triadic Ob calc]`. Descriptive disposition tag retained.
 - **Doctrine-aligned (heresy suppression / Piety expansion / moral law enforcement):** −1 Ob.
 - **Doctrine-contradicting:** +1 Ob.
 - **Reveals Thread truth:** +2 Ob (institutional perceptual prophylaxis — Church-only modifier).

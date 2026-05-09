@@ -52,11 +52,11 @@ Interaction type derived: same style = REINFORCE, same genre opposite orientatio
 ## Faction Boosts (single axis per faction)
 | Faction | Ethical Mode | Boost | Axis |
 |---------|-------------|-------|------|
-| Church | Divine Command | Obscuring | Orientation |
-| Crown | Virtue Ethics | Revealing | Orientation |
+| Church | Faith | Obscuring | Orientation |
+| Crown | Virtue | Revealing | Orientation |
 | Varfell | Consequentialism | Projection | Genre |
 | Hafenmark | Categorical Imperative | Memory | Genre |
-| Restoration | Rawlsian Social Contract | Revealing | Orientation |
+| Restoration | Equity Social Contract | Revealing | Orientation |
 | Guilds | Moral Relativism | GM picks | Either |
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
 <!-- Niflhel row deleted 2026-04-30 — STRUCK per CR-STRIKE-2026-04-19 / ED-764. Was: ~~Niflhel~~ STRUCK | — | — | — | Per ED-764. -->

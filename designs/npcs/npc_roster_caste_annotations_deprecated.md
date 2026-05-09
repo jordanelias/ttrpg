@@ -18,7 +18,7 @@ The 2026-04-11 reframing establishes the Einhir caste system as a geographic gra
 
 ### NPCs with direct caste implications:
 
-**Maret Uln (#2):** Southern Einhir solidarity. She grew up near Einhir communities in the western fjords — specifically southern Einhir communities in Varfell territory, the stigmatised population. Her Restoration Movement (RM) sympathy is not abstract; it is solidarity with her own people. If she succeeds Vaynard (PP-486), Varfell shifts from revolutionary expulsion (Vaynard's von Lohengramm programme) to Rawlsian equity — a fundamentally different programme that the RM would experience as both a relief and a betrayal of Vaynard's maximalist promise.
+**Maret Uln (#2):** Southern Einhir solidarity. She grew up near Einhir communities in the western fjords — specifically southern Einhir communities in Varfell territory, the stigmatised population. Her Restoration Movement (RM) sympathy is not abstract; it is solidarity with her own people. If she succeeds Vaynard (PP-486), Varfell shifts from revolutionary expulsion (Vaynard's von Lohengramm programme) to Equity equity — a fundamentally different programme that the RM would experience as both a relief and a betrayal of Vaynard's maximalist promise.
 
 **Maret Vossen (#3):** Needs positioning on Lenneth's institutional revivalism. The RM is internally split between pragmatic acceptance of Crown patronage (any advancement is good) and rejection of Crown authority (the Crown maintained the caste for 45 years; why trust it now?). Vossen herself would probably be cautiously open to Lenneth. The RM base includes people who reject Crown authority entirely. This internal tension is a design gap requiring resolution. [EDITORIAL: ED-NEW-24]
 

@@ -22,14 +22,14 @@ Evidence (facts contradicting belief), Consequence (outcomes framework fails to 
 
 | Faction | Framework | Aligned (−1 Ob) | Contradictory (+1 Ob) |
 |---|---|---|---|
-| Crown | Virtue Ethics | Public, principled action | Covert, expedient action |
-| Church | Divine Command | Doctrine-aligned | Against doctrine (Thread truth: +2 Ob) |
+| Crown | Virtue | Public, principled action | Covert, expedient action |
+| Church | Faith | Doctrine-aligned | Against doctrine (Thread truth: +2 Ob) |
 | Hafenmark | Categorical Imperative | Legal/constitutional | Ad hoc/precedent-breaking |
-| Varfell | Consequentialist | Measurable outcomes within one season | Uncertain/long-term payoff |
+| Varfell | Utility-driven | Measurable outcomes within one season | Uncertain/long-term payoff |
 | Guilds | Moral Relativism | Trade, guild autonomy | Moral consistency |
 | Niflhel | Amoral Consequentialism | Covert (always −1 Ob) | Public (+2 Ob) |
 | Löwenritter | Martial Honour | Protecting Valorian sovereignty | Personal/factional gain at Valoria's expense (+2 Ob) |
-| Restoration | Rawlsian Social Contract | Benefits common population | Concentrates power |
+| Restoration | Equity Social Contract | Benefits common population | Concentrates power |
 
 ## 1.4 King Almud Almqvist (Crown)
 

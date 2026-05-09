@@ -160,11 +160,11 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Old label | Replaced by | Source |
 |-----------|-------------|--------|
 | Categorical Imperative | 13-Conviction taxonomy | PP-684 |
-| Virtue Ethics | 13-Conviction taxonomy | PP-684 |
-| Divine Command | 13-Conviction taxonomy | PP-684 |
-| Epistemic Reason | 13-Conviction taxonomy | PP-684 |
-| Rawlsian | 13-Conviction taxonomy | PP-684 |
-| Military Honor | "Honor" (Conviction #13) | PP-684 |
+| Virtue | 13-Conviction taxonomy | PP-684 |
+| Faith | 13-Conviction taxonomy | PP-684 |
+| Scholastic | 13-Conviction taxonomy | PP-684 |
+| Equity | 13-Conviction taxonomy | PP-684 |
+| Honor | "Honor" (Conviction #13) | PP-684 |
 | Reason (legacy tag) | replaced in PP-684 | PP-684 |
 | Continuity (legacy tag) | replaced in PP-684 | PP-684 |
 
@@ -210,7 +210,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | Crown | Royal political authority; capital at Valorsplatz (T1). Virtue-ethics framework (legacy). | victory §3.1 |
 | Church of Solmund | Theocratic political-religious institution; cathedral at Himmelenger (T9). | victory §3.2 |
 | Hafenmark | Constitutional/legalist faction; Gransol seat (T8). Categorical Imperative framework (legacy). | victory §3.3 |
-| Varfell | Military-conqueror faction; Sigurdshelm seat (T12). Consequentialist framework (legacy); Reinhardt von Lohengramm parallel. | victory §3.4 |
+| Varfell | Military-conqueror faction; Sigurdshelm seat (T12). Utility-driven framework (legacy); Reinhardt von Lohengramm parallel. | victory §3.4 |
 | Restoration Movement (RM) | Cultural-revolution latent faction. Emerges from Varfell-RM relationship track. | victory §3.5 |
 | Löwenritter | Conditional military regency faction; post-coup activation. Lions' Table seat. | victory §3.6 |
 | Guilds | Mercantile / moral-relativist faction. Annika Feldhaus rep. | valoria_complete §1.3 |
@@ -1446,7 +1446,7 @@ Each is an attribute-vector value held by an actor. Period-grounded.
 | **Authority** | §1 (Conviction #2) · §6 (debate Pressure Point Type — **RENAMED to Sanction**) · §2 (faction-attribute parlance, adjacent to Mandate) | ~~Three uses, one deliberate (Conviction). Authority-as-Pressure-Point-type uses the Conviction's English root, but mechanically "Authority" the Pressure Point is *not* the Conviction.~~ **RESOLVED: Pressure Point renamed to "Sanction" in params/contest.md. Remaining uses (Conviction #2, faction-attribute parlance) are non-colliding.** |
 | **Equity / Order / Precedent / Continuity / Honor** | §1 (Convictions #6/3/8/legacy/13) · debate argument-style classifiers (Citation = Precedent + Revealing; etc.) | The four Contest Style names (Citation/Vision/Suppression/Knot-required) **already use rename-from-Conviction** so this is mostly clean. But internally in contest §4 and faction_behavior §3.7, these Conviction labels are repeated for argumentation context with no clear Style mapping. **Audit recommendation:** every place a Conviction word appears in a mechanic context, add inline cross-reference to the §1 Conviction definition. |
 | **Continuity** | §1 (LEGACY Conviction tag) · §2 (faction-attribute legacy framework) | LEGACY-only collision; both deprecated PP-684. **Continue using new 13-Conviction names; flag any active-doc "Continuity" references for sweep.** |
-| **Categorical Imperative / Divine Command** | §1 (LEGACY) · §2 (faction-ethical-framework legacy) | Both replaced by 13-Conviction taxonomy. **Sweep all active docs.** |
+| **Categorical Imperative / Faith** | §1 (LEGACY) · §2 (faction-ethical-framework legacy) | Both replaced by 13-Conviction taxonomy. **Sweep all active docs.** |
 | **TC** (abbreviation) | LEGACY: §12 clock for "Theocracy Counter" · §6 debate "Conviction Track" | RESOLVED at term level (TC no longer used; CI = Church Influence; CT = Conviction Track). **Corpus residuals exist** (npc_behavior swept; mass_battle, throughlines_meta_infill, npc_character_analyses queued). Continue sweep. |
 | **CP** (abbreviation) | §1 (Character Points, current) · §10 (Combat Power, renamed to Power) | RESOLVED: ED-136 locks CP to Character Points; CP = Combat Power deprecated. **Sweep complete per alias_registry.** |
 | **TD** (abbreviation) | §1 (Thread Depth, REMOVED PP-166) · Mermaid `flowchart TD` (top-down syntax) | RESOLVED: Thread Depth phantom; never appeared in docs. **No action needed.** |
@@ -1561,7 +1561,7 @@ Anything else is a violation requiring rename.
 1. **Rename Mandate Pool → Political Pool** wherever it persists; verify consolidation. **Priority: low (cleanliness). STATUS: DONE — ci_political_v30 already canonical at "Political Pool" (§3.4). Only remaining occurrence is the comparison header §7.2, which is appropriate.**
 2. **Rename Pressure Point "Authority" → Sanction** (or "Authority Citation"). **Priority: medium (real polysemy with Conviction). STATUS: DONE — renamed to "Sanction" in params/contest.md this session.**
 3. **Rename "Four-Cardinal Structure" → Four-Virtue Structure** (or similar). **Priority: low. STATUS: OPEN — 12+ active files; requires dedicated sweep.**
-4. **Audit sweep: any active-doc occurrence of "Categorical Imperative", "Divine Command", "Virtue Ethics", "Epistemic Reason", "Rawlsian", "Continuity (legacy)", "Reason (legacy)"** → replace with appropriate 13-Conviction names. **Priority: medium (legacy cleanup). STATUS: OPEN — 30+ active files affected; see corpus_fix_manifest.md.**
+4. **Audit sweep: any active-doc occurrence of "Categorical Imperative", "Faith", "Virtue", "Scholastic", "Equity", "Continuity (legacy)", "Reason (legacy)"** → replace with appropriate 13-Conviction names. **Priority: medium (legacy cleanup). STATUS: OPEN — 30+ active files affected; see corpus_fix_manifest.md.**
 5. **Add inline cross-reference** anywhere a Conviction word appears in mechanic context to §1.5 definition. **Priority: low (documentation hygiene). STATUS: OPEN — requires full text sweep.**
 
 ---
@@ -1583,7 +1583,7 @@ Anything else is a violation requiring rename.
 | Wound-track survival resource (combat) | **Vitality** | Health (legacy in combat context) | ED-548 + ED-694. **Note:** Health is still used as the universal name (the personal stat); Vitality is the *combat-instance* of it. |
 | Action-card faction-strategic system | **Card Hands** + **Card → Action Mapping** + **Cooldown Track** | Various legacy formulations of "card system" | PP-177 unified. |
 | Faction-strategic ethical-framework modifier | **Mission + Cascade + Public Expectation triadic decomposition** | Ethical Framework Modifier (legacy) | PP-686 / SUPERSESSION-PP686-001. |
-| Conviction taxonomy | **The 13 Convictions** (PP-684) | Categorical Imperative · Virtue Ethics · Divine Command · Epistemic Reason · Rawlsian · Military Honor · Reason (legacy) · Continuity (legacy) | PP-684. |
+| Conviction taxonomy | **The 13 Convictions** (PP-684) | Categorical Imperative · Virtue · Faith · Scholastic · Equity · Honor · Reason (legacy) · Continuity (legacy) | PP-684. |
 | Engine-resolution model | **Engine Setup / Resolution** | GM Setup / Resolution (legacy in always-already canon context) | canon/01 (consciousness-performed rendering). |
 | TTRPG mode | **Tabletop Roleplaying Game (TTRPG)** | (none) | alias_registry. |
 | Hybrid mode (full term) | **Hybrid (HYB)** | (none — HYB never standalone) | alias_registry. |
@@ -1672,11 +1672,11 @@ Anything else is a violation requiring rename.
 | Legacy label | Replacement |
 |---|---|
 | Categorical Imperative | One of the 13 Convictions per faction; see conviction_migration_roster |
-| Virtue Ethics | Virtue (Conviction #12) + Self-Other orientation |
-| Divine Command | Faith (Conviction #1) + Authority (Conviction #2) |
-| Epistemic Reason | Scholastic (Conviction #4) |
-| Rawlsian | Equity (Conviction #6) |
-| Military Honor | Honor (Conviction #13) |
+| Virtue | Virtue (Conviction #12) + Self-Other orientation |
+| Faith | Faith (Conviction #1) + Authority (Conviction #2) |
+| Scholastic | Scholastic (Conviction #4) |
+| Equity | Equity (Conviction #6) |
+| Honor | Honor (Conviction #13) |
 | Reason (legacy tag) | (per migration roster — varies by character) |
 | Continuity (legacy tag) | (per migration roster — varies by character) |
 | Ethical Framework Modifier | Mission + Cascade + Public Expectation triadic decomposition (PP-686) |
@@ -1720,7 +1720,7 @@ Anything else is a violation requiring rename.
 4. **Piety Track (PT) vs Conviction Track (CV)** — ~~verify these are distinct or unify.~~ **RESOLVED: ED-644 in conviction_track_v30 explicitly confirms PT ≡ CV — same track, same abbreviation (PT), range 0–5. "CV" and "0–10" were index errors. §3.1, §4, §9 entries updated.** (§4 synonym register, closed.)
 5. **Bonds attribute and Renown derived value** — ~~verify if first-class character properties; add to §1.2 if so.~~ **RESOLVED: both confirmed first-class. Bonds = structural relationship capacity (PP-684, derived_stats §10.1). Renown = governance-linked reputation track (derived_stats §10.3). Added to §1.2.** (§5 orphan, closed.)
 6. **Conviction-name appearances in mechanic context** — full sweep recommended; add inline cross-references to §1.5 anywhere a Conviction word is used in a mechanic. **OPEN: requires text sweep of all contest, faction_behavior, and argument-style contexts.** (§3.3, §3.5 #5.)
-7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue Ethics, Divine Command, Epistemic Reason, Rawlsian, Military Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. **OPEN: 30+ active files affected across params/, designs/npcs/, designs/provincial/, designs/scene/, designs/arcs/. See corpus_fix_manifest.md for full file list.** (§6.4.)
+7. **Legacy ethical-framework labels in active docs** — full sweep for Categorical Imperative, Virtue, Faith, Scholastic, Equity, Honor, "Reason (legacy)", "Continuity (legacy)" → replace per migration roster. **OPEN: 30+ active files affected across params/, designs/npcs/, designs/provincial/, designs/scene/, designs/arcs/. See corpus_fix_manifest.md for full file list.** (§6.4.)
 8. **Corpus residual sweep for TC** — ~~npc_behavior swept; remaining 5 paragraphs across throughlines_meta_infill, npc_character_analyses, mass_battle queued.~~ **PARTIALLY RESOLVED: mass_battle_v30 (1 TC→CI), npc_character_analyses_v30_infill (2 TC→CI) fixed this session. throughlines_meta_infill clean (0 hits). Remaining TC residuals exist in 40+ other files (mostly in references/, designs/audit/, and non-canonical docs). See corpus_fix_manifest.md.** (§6.1.)
 
 ## §V.3 Recommended commit path

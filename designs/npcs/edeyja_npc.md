@@ -27,7 +27,7 @@ She is not defined by this injury. It is a fact of her history, not her identity
 ---
 
 ## Conviction and Resonant Style
-- **Conviction:** Continuity. The work must continue regardless of who or what interferes. The peninsula survives only because the wardens hold.
+- **Conviction:** Warden. The work must continue regardless of who or what interferes. The peninsula survives only because the wardens hold.
 - **Resonant Style:** Evidence. Show her the Thread state data. Show her what you've observed. Abstract appeals to political urgency, moral obligation, or personal stakes do not register. Demonstrated competence in Thread work does.
 
 ---

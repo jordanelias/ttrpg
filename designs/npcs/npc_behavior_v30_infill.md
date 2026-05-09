@@ -102,7 +102,7 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 - Resonant Style: All styles suppressed (he is no longer persuadable in normal terms — his framework has dissolved).
 #### Edeyja — Arc Map
 - Branch condition: PCs reach primary site (Season 3+) AND demonstrate Thread competence (successful Weaving in her presence).
-- Conviction: Continuity remains primary. Reason activates as secondary (she begins to consider strategic options beyond pure endurance).
+- Conviction: Warden remains primary. Reason activates as secondary (she begins to consider strategic options beyond pure endurance).
 - Resonant Style shift: Solidarity activates (she now has colleagues for the first time in decades). PCs who build Knot with her gain access to the deepest Thread knowledge in the setting.
 - Behavior: Edeyja may leave the Southernmost for the first time. This is a campaign-defining event. [NOTE: This arc explicitly overrides edeyja_npc.md §'She never leaves the Southernmost.' The canonical statement describes current behavior under current conditions. Arc C specifies conditions under which that behavior changes. The canonical document's statement — 'She needs help she cannot ask for from people who don't know she exists' — implies she would act differently if the Southernmost's survival required it.] A TS 75–80 practitioner entering the peninsula's political space changes everything.
 ## §6 RESONANT STYLE IN THE CONTEST SYSTEM

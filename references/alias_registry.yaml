@@ -602,11 +602,11 @@ substrate_aliases:
     aliases: []
     legacy:
       - "Categorical Imperative"
-      - "Virtue Ethics"
-      - "Divine Command"
-      - "Epistemic Reason"
-      - "Rawlsian"
-      - "Military Honor"
+      - "Virtue"
+      - "Faith"
+      - "Scholastic"
+      - "Equity"
+      - "Honor"
       - "Reason (legacy tag)"
       - "Continuity (legacy tag)"
     patch: "PP-684"

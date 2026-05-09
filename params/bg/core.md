@@ -230,16 +230,16 @@ All Obs: floor 1.
 
 ## ~~Ethical Framework Modifiers (v04 B4)~~ — SUPERSEDED 2026-05-01 (PP-686 v2)
 
-<!-- [SUPERSEDED 2026-05-01 — SUPERSESSION-PP686-001] Replaced by triadic decomposition in designs/provincial/faction_behavior_v30.md §3.7 (mission_alignment + cascade_alignment + expectation_alignment, clamped ±2). Period-anachronistic philosophical-tradition labels (Virtue Ethics, Divine Command, Categorical Imperative, Epistemic Reason, Rawlsian, Military Honor) replaced by 13-Conviction taxonomy per PP-684. -->
+<!-- [SUPERSEDED 2026-05-01 — SUPERSESSION-PP686-001] Replaced by triadic decomposition in designs/provincial/faction_behavior_v30.md §3.7 (mission_alignment + cascade_alignment + expectation_alignment, clamped ±2). Period-anachronistic philosophical-tradition labels (Virtue, Faith, Categorical Imperative, Scholastic, Equity, Honor) replaced by 13-Conviction taxonomy per PP-684. -->
 
 | Faction | ~~Bonus~~ (struck) | ~~Penalty~~ (struck) |
 |---------|--------------------|----------------------|
-| Crown ~~(Virtue Ethics)~~ | ~~−1 Ob public~~ | ~~+1 Ob covert~~ |
-| Church ~~(Divine Command)~~ | ~~−1 Ob doctrine-aligned~~ | ~~+2 Ob thread-supporting~~ |
+| Crown ~~(Virtue)~~ | ~~−1 Ob public~~ | ~~+1 Ob covert~~ |
+| Church ~~(Faith)~~ | ~~−1 Ob doctrine-aligned~~ | ~~+2 Ob thread-supporting~~ |
 | Hafenmark ~~(Categorical Imperative)~~ | ~~−1 Ob procedural~~ | ~~+1 Ob ad-hoc~~ |
-| Varfell ~~(Epistemic Reason)~~ | ~~−1 Ob evidence-based~~ | ~~+1 Ob emotional~~ |
-| Restoration ~~(Rawlsian)~~ | ~~−1 Ob community~~ | ~~+1 Ob hierarchical~~ |
-| Löwenritter ~~(Military Honor)~~ | ~~−1 Ob loyal~~ | ~~+2 Ob disloyal~~ |
+| Varfell ~~(Scholastic)~~ | ~~−1 Ob evidence-based~~ | ~~+1 Ob emotional~~ |
+| Restoration ~~(Equity)~~ | ~~−1 Ob community~~ | ~~+1 Ob hierarchical~~ |
+| Löwenritter ~~(Honor)~~ | ~~−1 Ob loyal~~ | ~~+2 Ob disloyal~~ |
 
 **Replacement** per `designs/provincial/faction_behavior_v30.md §3.7`:
 
