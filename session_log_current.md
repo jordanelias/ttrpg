@@ -1,21 +1,16 @@
-session_id: 2026-05-08-infrastructure-hook-enforcement
+session_id: 2026-05-08-ners-stress-01-manifest
 session_close: 2026-05-08
-phase: infrastructure
+phase: simulation
 status: complete
-last_stage: hook-enforcement-shipped
+last_stage: ners-manifest-committed
 next_action:
-  task: update PI enforcement_spectrum table; then NERS sim via existing harness + Mode G
+  task: Module 1 — randomization layer. Fetch stats_1_7_scale.md, bg/core.md Starting Values, geography_v30.md T1-T17 table at full depth. Build ledger. Call sim_gate. Implement initial_campaign_randomized. Smoke test vs canonical.
   skill: valoria-simulator
 blockers: none
 commits:
   - bc3a95a: infrastructure task_gate skill-fetch enforcement + sim_gate manifest check
-key_developments:
-  - TASK_REQUIRED_FILES[simulation] requires skills/valoria-simulator/SKILL.md (Level 4)
-  - TASK_REQUIRED_FILES[audit] requires skills/valoria-mechanic-audit/SKILL.md (Level 4)
-  - TASK_REQUIRED_FILES[propose_mechanic] requires skills/valoria-mechanic-audit/SKILL.md
-  - task_gate prints Mode G anti-patterns at decision point for simulation
-  - task_gate prints required-canon reminder for audit
-  - sim_gate raises RuntimeError if no manifest for multi-system scopes
+  - c4bafb3: simulation ners_stress_01 module manifest Mode G step 1
 open_items:
   - PI enforcement_spectrum table update (sim_gate manifest check now Level 4)
-  - NERS deep simulation pending correct execution via existing harness
+  - Module 1 randomization layer (next session)
+  - Module 2 NERS evaluation + batch (after Module 1 verified)
