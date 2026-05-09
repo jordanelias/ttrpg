@@ -45,3 +45,6 @@ All test/sim files updated: TC→CI, Peninsular Strain→Turmoil, Conviction Tra
 | Sim | Scope | Result |
 |-----|-------|--------|
 | ners_stress_01 (manifest) | NERS stress test — randomized starting conditions, all directions, Mode G | Module manifest committed. Module 1 (randomization layer) pending. Module 2 (NERS evaluation + batch) pending. |
+
+### ners_stress_01 Module 1 (2026-05-08)
+Module 1 randomization layer: 5 smoke tests PASS. Status: verified.
