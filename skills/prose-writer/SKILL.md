@@ -75,15 +75,15 @@ When coherence is unspecified, use the Tier 10-8 (Stable) weighting. Weights are
 <!-- author:all-weights -->
 | Author | TS 0-29 | TS 30-49 | TS 50+ | Role |
 |---|---|---|---|---|
-| Tolkien | 24 | 20 | 15 | Ground. Landscape, deep-time, named specificity. |
-| Mistry | 12 | 10 | 8 | Occupational specificity, body-as-record. |
-| Tartt | 11 | 9 | 7 | Atmospheric retrospection, loaded objects. |
-| Ishiguro | 11 | 11 | 10 | Situational restraint, unreliable narration. |
-| Márquez | 11 | 12 | 12 | Time-folds, matter-of-fact impossibility. |
-| Lispector | 8 | 10 | 12 | Ontological estrangement. |
-| Ocampo | 8 | 7 | 7 | Small uncanny moments, flat-affect rendering. |
-| Borges | 7 | 10 | 12 | Recursion, fictive-as-real, heresiarchs. |
-| Lem | 0 | 5 | 10 | Observing-around. Pre-scientific analytical observation. TS-gated. |
+| Tolkien | 26 | 22 | 17 | Ground. Landscape, deep-time, named specificity. |
+| Mistry | 13 | 10 | 8 | Occupational specificity, body-as-record. |
+| Tartt | 12 | 9 | 7 | Atmospheric retrospection, loaded objects. |
+| Ishiguro | 12 | 12 | 11 | Situational restraint, unreliable narration. |
+| Márquez | 12 | 13 | 13 | Time-folds, matter-of-fact impossibility. |
+| Lispector | 0 | 0 | 0 | Coherence-gated. Enters at Tier 7-5 when coherence begins degrading. |
+| Ocampo | 9 | 7 | 7 | Small uncanny moments, flat-affect rendering. |
+| Borges | 8 | 13 | 16 | Recursion, fictive-as-real, heresiarchs. Increases with TS. |
+| Lem | 0 | 8 | 14 | Observing-around. Pre-scientific analytical observation. TS-gated. |
 | McCarthy | 4 | 3 | 3 | Violence, landscape indifference. Content-gated. |
 | Le Carré | 3 | 2 | 2 | Institutional indirection. Content-gated. |
 | Beckett | 1 | 1 | 2 | Will-continuation. Spirit-gated at C4 and below. |

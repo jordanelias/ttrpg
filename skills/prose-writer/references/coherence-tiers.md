@@ -86,15 +86,15 @@ No perceptible change. Self-rendering re-engages fully after each Leap.
 
 | Author | TS 0-29 | TS 30-49 | TS 50+ | Role at this tier |
 |---|---|---|---|---|
-| Tolkien | 24 | 20 | 15 | Ground. Landscape, deep-time, named specificity. Decreases as substrate content enters. |
-| Mistry | 12 | 10 | 8 | Occupational specificity, body-as-record. |
-| Tartt | 11 | 9 | 7 | Atmospheric retrospection, loaded objects. |
-| Ishiguro | 11 | 11 | 10 | Situational restraint. Social evasion, not ontological. |
-| Márquez | 11 | 12 | 12 | Time-folds, deep history. Stable across TS. |
-| Lispector | 8 | 10 | 12 | Edges only at low TS. Ontological estrangement increases with TS. |
-| Ocampo | 8 | 7 | 7 | Small uncanny moments. Content-gated. |
-| Borges | 7 | 10 | 12 | Structural recursion. Increases with TS. Q2 middle-layer at high TS. |
-| Lem | 0 | 5 | 10 | Clinical-substrate observation. Enters only with TS-perceived content. |
+| Tolkien | 26 | 22 | 17 | Ground. Landscape, deep-time, named specificity. Decreases as substrate content enters. |
+| Mistry | 13 | 10 | 8 | Occupational specificity, body-as-record. |
+| Tartt | 12 | 9 | 7 | Atmospheric retrospection, loaded objects. |
+| Ishiguro | 12 | 12 | 11 | Situational restraint. Social evasion, not ontological. |
+| Márquez | 12 | 13 | 13 | Time-folds, deep history. Stable across TS. |
+| Lispector | 0 | 0 | 0 | Coherence-gated. Enters at Tier 7-5. |
+| Ocampo | 9 | 7 | 7 | Small uncanny moments. Content-gated. |
+| Borges | 8 | 13 | 16 | Structural recursion. Increases with TS. Q2 middle-layer at high TS. |
+| Lem | 0 | 8 | 14 | Clinical-substrate observation. Enters only with TS-perceived content. |
 | McCarthy | 4 | 3 | 3 | Combat, violence, landscape extremity. Content-gated. |
 | Le Carré | 3 | 2 | 2 | Institutional-political. Faction/Church bureaucracy. Content-gated. |
 | Beckett | 1 | 1 | 2 | Minimal at high C. Will-continuation only at thematic extremity. |
@@ -313,14 +313,14 @@ When coherence changes within a scene:
 
 | Author | 10-8 | 7-5 | 4-3 | 2 | 1 | Direction |
 |---|---|---|---|---|---|---|
-| Tolkien | 24 | 19 | 12 | 7 | 5 | Down 19 |
-| Mistry | 12 | 9 | 6 | 5 | 3 | Down 9 |
-| Tartt | 11 | 10 | 8 | 6 | 4 | Down 7 |
-| Ishiguro | 11 | 14 | 13 | 12 | 11 | Stable-high |
-| Márquez | 11 | 13 | 13 | 13 | 13 | Up 2 then stable |
-| Lispector | 8 | 12 | 15 | 16 | 18 | Up 10 |
-| Ocampo | 8 | 10 | 12 | 15 | 17 | Up 9 |
-| Borges | 7 | 7 | 9 | 14 | 16 | Up 9 |
+| Tolkien | 26 | 19 | 12 | 7 | 5 | Down 19 |
+| Mistry | 13 | 9 | 6 | 5 | 3 | Down 9 |
+| Tartt | 12 | 10 | 8 | 6 | 4 | Down 7 |
+| Ishiguro | 12 | 14 | 13 | 12 | 11 | Stable-high |
+| Márquez | 12 | 13 | 13 | 13 | 13 | Up 2 then stable |
+| Lispector | 0 | 12 | 15 | 16 | 18 | 0 at stable, up 18 from Tier 7-5 |
+| Ocampo | 9 | 10 | 12 | 15 | 17 | Up 9 |
+| Borges | 8 | 7 | 9 | 14 | 16 | Up 9 |
 | Beckett | 1 | 1 | 5 | 7 | 9 | Up 8 (Spirit-gated) |
 | Lem | 0 | 0 | 0 | 0 | 0 | TS-gated only |
 | McCarthy | 4 | 3 | 4 | 3 | 2 | Stable-low (content-gated) |
