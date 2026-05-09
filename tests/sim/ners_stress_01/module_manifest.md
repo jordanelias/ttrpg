@@ -28,7 +28,7 @@ New ledger entries required only for randomization bounds.
 | # | Name | Depends On | Canonical Sources (new fetches only) | Status |
 |---|------|-----------|--------------------------------------|--------|
 | 1 | Randomization Layer | existing harness | `params/factions/stats_1_7_scale.md` (stat ceilings/floors), `params/bg/core.md §Starting Values`, `designs/world/geography_v30.md §T1-T17 table` | pending |
-| 2 | NERS Evaluation + Batch | Module 1 + existing harness | NERS definitions from PI canon_terms (in context); no new canonical docs | pending |
+| 2 | NERS Evaluation + Batch | Module 1 + existing harness | NERS definitions from PI canon_terms (in context); no new canonical docs | **verified** |
 
 ---
 
@@ -140,4 +140,3 @@ Per run, evaluate from all directions:
 | Date | Module | Event |
 |------|--------|-------|
 | 2026-05-08 | — | Manifest produced, existing harness surveyed |
-| 2026-05-08 | 1 | Randomization layer implemented. 5 smoke tests PASS. Verified. |

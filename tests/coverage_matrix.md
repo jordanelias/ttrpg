@@ -48,3 +48,6 @@ All test/sim files updated: TC→CI, Peninsular Strain→Turmoil, Conviction Tra
 
 ### ners_stress_01 Module 1 (2026-05-08)
 Module 1 randomization layer: 5 smoke tests PASS. Status: verified.
+
+### ners_stress_01 Module 2 (2026-05-08)
+NERS batch: 300 runs. No P1/P2 findings. All NERS signals >= 0.60. All 4 factions win. 52-67% ongoing at s60 — Tier A AI conservative strategy.
