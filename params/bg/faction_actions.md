@@ -129,7 +129,7 @@ Roll: Influence vs Ob = floor(target L / 2) + 1.
 
 ### Crown — Royal Charter (PP-433)
 **Type:** Consul Inward (Crown only).
-Roll: L vs Ob = floor(territory Prosperity / 2) + 1. Virtue Ethics: −1 Ob.
+Roll: L vs Ob = floor(territory Prosperity / 2) + 1. Virtue: −1 Ob.
 **Limit:** Max floor(L / 2) + 1 active Charters simultaneously.
 
 Success: Territory becomes Crown Charter Territory:
@@ -166,7 +166,7 @@ Crown designates one allied faction. Liaison's Thread operations in Crown-held t
 
 ### Crown — Diplomatic Outreach to Schoenland (PP-437)
 **Type:** Senator Outward (Crown only). Cannot use same season as Formal Crown Treaty.
-Roll: Influence vs Ob 2. Virtue Ethics: −1 Ob.
+Roll: Influence vs Ob 2. Virtue: −1 Ob.
 **Fragmentation modifier:** +1 Ob if 3+ factions have Stability ≤ 2. *(PP-562: was +2 — punished Crown most when Decree most needed)*
 
 | Degree | Effect |
@@ -361,7 +361,7 @@ Roll: Influence vs Ob = floor(target L / 2) + 1.
 
 ### Crown — Royal Charter (PP-433)
 **Type:** Consul Inward (Crown only).
-Roll: L vs Ob = floor(territory Prosperity / 2) + 1. Virtue Ethics: −1 Ob.
+Roll: L vs Ob = floor(territory Prosperity / 2) + 1. Virtue: −1 Ob.
 **Limit:** Max floor(L / 2) + 1 active Charters simultaneously.
 
 Success: Territory becomes Crown Charter Territory:
@@ -401,7 +401,7 @@ Crown designates one allied faction. Liaison's Thread operations in Crown-held t
 
 ### Crown — Diplomatic Outreach to Schoenland (PP-437)
 **Type:** Senator Outward (Crown only). Cannot use same season as Formal Crown Treaty.
-Roll: Influence vs Ob 2. Virtue Ethics: −1 Ob.
+Roll: Influence vs Ob 2. Virtue: −1 Ob.
 **Fragmentation modifier:** +1 Ob if 3+ factions have Stability ≤ 2. *(PP-562: was +2 — punished Crown most when Decree most needed)*
 
 | Degree | Effect |
