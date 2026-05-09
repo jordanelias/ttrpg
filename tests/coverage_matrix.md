@@ -39,3 +39,9 @@ ED-577-01-04, SIM-POL-R01-R05, ED-684, ED-590, ED-572, ED-545+.
 
 ## Vocabulary Sweep (2026-05-08)
 All test/sim files updated: TC→CI, Peninsular Strain→Turmoil, Conviction Track→Piety Track, contest Initiative→First to Speak.
+
+## Recent Sims (2026-05-08)
+
+| Sim | Scope | Result |
+|-----|-------|--------|
+| ners_stress_01 (manifest) | NERS stress test — randomized starting conditions, all directions, Mode G | Module manifest committed. Module 1 (randomization layer) pending. Module 2 (NERS evaluation + batch) pending. |
