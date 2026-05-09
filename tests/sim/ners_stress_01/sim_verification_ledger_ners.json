@@ -1,243 +1,114 @@
 {
-  "description": "Verification ledger for ners_stress_01 Module 1 — randomization bounds only. Existing harness constants covered by 153-entry ledger from Sessions 1-3.",
+  "sim_file": "tests/sim/ners_stress_01/module_01_randomization.py",
+  "scope": "custom: clocks + faction_layer + territories",
+  "module": "Module 1 \u2014 Randomization Layer",
+  "manifest": "tests/sim/ners_stress_01/module_manifest.md",
+  "notes": "Existing harness (tests/sim/valoria_full_campaign_sim.py) has 153-entry ledger covering canonical mechanics. This file documents only the NEW mechanical anchors introduced by the randomization wrapper.",
   "entries": [
     {
-      "sim_variable": "PLAYABLE_TERRITORIES",
-      "value": ["T1","T2","T3","T4","T5","T6","T7","T8","T9","T10","T11","T12","T13","T14","T17"],
-      "canonical_source": "tests/sim/valoria_full_campaign_sim.py",
-      "section": "§14 PLAYABLE_TERRITORY_IDS",
-      "quoted_text": "PLAYABLE_TERRITORY_IDS = {\"T1\",\"T2\",\"T3\",\"T4\",\"T5\",\"T6\",\"T7\",\"T8\",\"T9\",\"T10\",\"T11\",\"T12\",\"T13\",\"T14\",\"T17\"}"
-    },
-    {
-      "sim_variable": "STAT_CEILING",
-      "value": 7,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors",
-      "quoted_text": "Legitimacy | 0 | 7"
-    },
-    {
-      "sim_variable": "STAT_FLOOR_LEGITIMACY",
+      "sim_variable": "STAT_FLOOR_DEFAULT",
       "value": 0,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors",
-      "quoted_text": "Legitimacy | 0 | 7"
-    },
-    {
-      "sim_variable": "STAT_FLOOR_POPULAR_SUPPORT",
-      "value": 0,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors",
-      "quoted_text": "Popular_Support | 0 | 7"
+      "canonical_source": "params/bg/core.md",
+      "section": "Stat Ceilings and Floors (L195-203)",
+      "quoted_text": "| Legitimacy | 0 | 7 | ... | Wealth | 0 | 7 | | Military | 0 | 7 | | Stability | 0 | 7 |"
     },
     {
       "sim_variable": "STAT_FLOOR_INFLUENCE",
       "value": 1,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors",
-      "quoted_text": "Influence | 1 | 7"
-    },
-    {
-      "sim_variable": "STAT_FLOOR_WEALTH",
-      "value": 0,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors",
-      "quoted_text": "Wealth | 0 | 7"
-    },
-    {
-      "sim_variable": "STAT_FLOOR_MILITARY",
-      "value": 0,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors",
-      "quoted_text": "Military | 0 | 7"
-    },
-    {
-      "sim_variable": "STAT_FLOOR_STABILITY",
-      "value": 0,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors",
-      "quoted_text": "Stability | 0 | 7"
-    },
-    {
-      "sim_variable": "MS_CANONICAL_START",
-      "value": 72,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Mending Stability (MS) | 72 | 0–100 | Rupture = shared loss"
+      "section": "Stat Ceilings and Floors (L200)",
+      "quoted_text": "| Influence | 1 | 7 |"
     },
     {
-      "sim_variable": "MS_RANGE",
-      "value": [0, 100],
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Mending Stability (MS) | 72 | 0–100 | Rupture = shared loss"
-    },
-    {
-      "sim_variable": "CI_CANONICAL_START",
-      "value": 28,
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Church Influence (CI) | 28 | 0–100 (no freeze)"
-    },
-    {
-      "sim_variable": "CI_RANGE",
-      "value": [0, 100],
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Church Influence (CI) | 28 | 0–100 (no freeze)"
-    },
-    {
-      "sim_variable": "IP_CANONICAL_START",
-      "value": 20,
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard"
-    },
-    {
-      "sim_variable": "IP_RANGE",
-      "value": [0, 100],
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard"
-    },
-    {
-      "sim_variable": "PI_CANONICAL_START",
+      "sim_variable": "STAT_CEILING",
       "value": 7,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Parliament Integrity (PI) | 7 | 0–20 | Cumulative pressure meter. Auto-resolves at PI >= 20 (Crown elimination)."
+      "section": "Stat Ceilings and Floors (L195-203)",
+      "quoted_text": "| Stat | Floor | Ceiling | ... | Legitimacy | 0 | 7 | (all stats: ceiling=7)"
     },
     {
-      "sim_variable": "PI_RANGE",
-      "value": [0, 20],
+      "sim_variable": "CLOCK_RANGE_rendering_stability",
+      "value": 100,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values (v04 B2, PP-188 correction)",
-      "quoted_text": "Parliament Integrity (PI) | 7 | 0–20 | Cumulative pressure meter. Auto-resolves at PI >= 20 (Crown elimination)."
+      "section": "Starting Values (L80)",
+      "quoted_text": "| Mending Stability (MS) | 72 | 0\u2013100 | Rupture = shared loss |"
     },
     {
-      "sim_variable": "MILD_STAT_DELTA",
-      "value": 1,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors — stress test design choice",
-      "quoted_text": "Stat range 1-7 (scale width 6). Mild perturbation = ±1 step, bounded by per-stat floor/ceiling."
-    },
-    {
-      "sim_variable": "MODERATE_STAT_DELTA",
-      "value": 2,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors — stress test design choice",
-      "quoted_text": "Stat range 1-7 (scale width 6). Moderate perturbation = ±2 steps, bounded by per-stat floor/ceiling."
-    },
-    {
-      "sim_variable": "EXTREME_STAT_DELTA",
-      "value": 3,
-      "canonical_source": "params/factions/stats_1_7_scale.md",
-      "section": "Stat Ceilings and Floors — stress test design choice",
-      "quoted_text": "Stat range 1-7 (scale width 6). Extreme perturbation = ±3 steps, bounded by per-stat floor/ceiling."
-    },
-    {
-      "sim_variable": "MILD_MS_DELTA",
-      "value": 8,
+      "sim_variable": "CLOCK_RANGE_church_influence",
+      "value": 100,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "MS range 0-100, canonical start 72. Mild delta ±8 keeps starting range [64, 80] — within safe operating band, below rupture threshold."
+      "section": "Starting Values (L81)",
+      "quoted_text": "| Church Influence (CI) | **28** | 0\u2013100 (no freeze) | CI 60 = Mass Seizure available ..."
     },
     {
-      "sim_variable": "MODERATE_MS_DELTA",
-      "value": 15,
+      "sim_variable": "CLOCK_RANGE_invasion_pressure",
+      "value": 100,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "MS range 0-100, canonical start 72. Moderate delta ±15 keeps starting range [57, 87]."
+      "section": "Starting Values (L82)",
+      "quoted_text": "| Invasion Pressure (IP) | 20 | 0\u2013100 | IP 75 = Altonian Vanguard |"
     },
     {
-      "sim_variable": "EXTREME_MS_DELTA",
-      "value": 25,
+      "sim_variable": "CLOCK_RANGE_parliament_integrity",
+      "value": 20,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "MS range 0-100, canonical start 72. Extreme delta ±25 gives starting range [47, 97] — tests near-rupture openings."
+      "section": "Starting Values (L83)",
+      "quoted_text": "| Parliament Integrity (PI) | **7** | 0\u201320 | Cumulative pressure meter."
     },
     {
-      "sim_variable": "MILD_CI_DELTA",
+      "sim_variable": "CLOCK_RANGE_aer",
       "value": 5,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "CI range 0-100, canonical start 28. Mild delta ±5 gives [23, 33] — below Mass Seizure threshold of 60."
+      "section": "Starting Values (L84)",
+      "quoted_text": "| | 2 | 0\u20135 | Near IP clock. |"
     },
     {
-      "sim_variable": "MODERATE_CI_DELTA",
-      "value": 10,
+      "sim_variable": "CLOCK_RANGE_torben_loyalty",
+      "value": 7,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "CI range 0-100, canonical start 28. Moderate delta ±10 gives [18, 38]."
+      "section": "Starting Values (L85)",
+      "quoted_text": "| Torben Loyalty | **7** | 0\u20137 | Active from game start."
     },
     {
-      "sim_variable": "EXTREME_CI_DELTA",
-      "value": 15,
+      "sim_variable": "CLOCK_RANGE_elske_loyalty",
+      "value": 7,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "CI range 0-100, canonical start 28. Extreme delta ±15 gives [13, 43] — still below Mass Seizure threshold."
+      "section": "Starting Values (L86)",
+      "quoted_text": "| Elske Loyalty | 4 | 0\u20137 | Off-board card near T4. |"
     },
     {
-      "sim_variable": "MILD_IP_DELTA",
-      "value": 5,
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "IP range 0-100, canonical start 20. Mild delta ±5 gives [15, 25] — well below Vanguard threshold of 75."
-    },
-    {
-      "sim_variable": "MODERATE_IP_DELTA",
-      "value": 10,
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "IP range 0-100, canonical start 20. Moderate delta ±10 gives [10, 30]."
-    },
-    {
-      "sim_variable": "EXTREME_IP_DELTA",
-      "value": 15,
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "IP range 0-100, canonical start 20. Extreme delta ±15 gives [5, 35] — still below Vanguard threshold."
-    },
-    {
-      "sim_variable": "MILD_PI_DELTA",
-      "value": 1,
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "PI range 0-20, canonical start 7. Mild delta ±1 gives [6, 8]."
-    },
-    {
-      "sim_variable": "MODERATE_PI_DELTA",
-      "value": 2,
-      "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "PI range 0-20, canonical start 7. Moderate delta ±2 gives [5, 9]."
-    },
-    {
-      "sim_variable": "EXTREME_PI_DELTA",
+      "sim_variable": "CLOCK_RANGE_warden_recognition",
       "value": 3,
       "canonical_source": "params/bg/core.md",
-      "section": "Starting Values — stress test design choice",
-      "quoted_text": "PI range 0-20, canonical start 7. Extreme delta ±3 gives [4, 10]."
+      "section": "Starting Values (L100)",
+      "quoted_text": "| Warden Recognition (WR) | 0 | 0\u20133 | Varfell-only private track."
     },
     {
-      "sim_variable": "MILD_TERRITORY_SWAPS",
-      "value": [0, 1],
-      "canonical_source": "tests/sim/valoria_full_campaign_sim.py",
-      "section": "§14 PLAYABLE_TERRITORY_IDS — stress test design choice",
-      "quoted_text": "15 playable territories (T1-T14, T17). Mild: 0-1 random swaps between factions. Constraint: each faction retains >=1 territory post-swap."
+      "sim_variable": "CLOCK_RANGE_warden_cooperation",
+      "value": 3,
+      "canonical_source": "params/bg/core.md",
+      "section": "Starting Values (L99)",
+      "quoted_text": "| Warden Cooperation (WC) | 0 | 0\u20133 | Peninsula-wide. WR \u2265 2 required to advance."
     },
     {
-      "sim_variable": "MODERATE_TERRITORY_SWAPS",
-      "value": [1, 3],
-      "canonical_source": "tests/sim/valoria_full_campaign_sim.py",
-      "section": "§14 PLAYABLE_TERRITORY_IDS — stress test design choice",
-      "quoted_text": "15 playable territories. Moderate: 1-3 random swaps. Constraint: each faction retains >=1 territory post-swap."
+      "sim_variable": "CLOCK_RANGE_peninsular_strain",
+      "value": 10,
+      "canonical_source": "params/bg/core.md",
+      "section": "Starting Values (L101)",
+      "quoted_text": "| Turmoil | 0 | 0\u201310 | Public. Advances from inter-faction battles ..."
     },
     {
-      "sim_variable": "EXTREME_TERRITORY_SWAPS",
-      "value": [3, 5],
-      "canonical_source": "tests/sim/valoria_full_campaign_sim.py",
-      "section": "§14 PLAYABLE_TERRITORY_IDS — stress test design choice",
-      "quoted_text": "15 playable territories. Extreme: 3-5 random swaps. Constraint: each faction retains >=1 territory post-swap."
+      "sim_variable": "CI_MASS_SEIZURE_THRESHOLD",
+      "value": 60,
+      "canonical_source": "params/bg/core.md",
+      "section": "Starting Values (L81)",
+      "quoted_text": "CI 60 = Mass Seizure available (one-shot). CI 100 = cap."
+    },
+    {
+      "sim_variable": "PLAYABLE_FACTIONS_FOR_SWAP",
+      "value": "Crown,Church,Hafenmark,Varfell",
+      "canonical_source": "designs/world/geography_v30.md",
+      "section": "Territory Map / Starting Control Summary",
+      "quoted_text": "| Crown | Valorsplatz, Kronmark, Lowenskyst, Feldmark, Stillhelm, Ehrenfeld | 6 | | Varfell | Grauwald, Halvardshelm, Sigurdshelm, Oastad | 4 | | Hafenmark | Rendstad, Gransol, Spartfell, Halvarshelm | 4 | | Church | Himmelenger | 1 | (Schoenland fixed: Island Republic, not in play)"
     }
   ]
 }

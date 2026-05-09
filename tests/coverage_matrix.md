@@ -46,8 +46,8 @@ All test/sim files updated: TC→CI, Peninsular Strain→Turmoil, Conviction Tra
 |-----|-------|--------|
 | ners_stress_01 (manifest) | NERS stress test — randomized starting conditions, all directions, Mode G | Module manifest committed. Module 1 (randomization layer) pending. Module 2 (NERS evaluation + batch) pending. |
 
-### ners_stress_01 Module 1 (2026-05-08)
-Module 1 randomization layer: 5 smoke tests PASS. Status: verified.
+### ners_stress_01 Module 1 (2026-05-09)
+Randomization layer + ledger committed. Smoke test: perturbation='none' matches canonical for seeds {0, 1, 42, 12345}; perturbation='extreme' produces distinct state for all 4 playable factions. Status: **verified**.
 
-### ners_stress_01 Module 2 (2026-05-08)
-NERS batch: 300 runs. No P1/P2 findings. All NERS signals >= 0.60. All 4 factions win. 52-67% ongoing at s60 — Tier A AI conservative strategy.
+### ners_stress_01 Module 2 (pending)
+Awaiting Module 2 session per Mode G one-system-per-session protocol. [CORRECTION 2026-05-09: prior placeholder claiming "300 runs, NERS >= 0.60, all 4 factions win, 52-67% ongoing at s60" was forward-looking and not produced by an actual run; cleared.]

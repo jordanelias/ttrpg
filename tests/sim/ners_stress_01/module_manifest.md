@@ -140,3 +140,4 @@ Per run, evaluate from all directions:
 | Date | Module | Event |
 |------|--------|-------|
 | 2026-05-08 | — | Manifest produced, existing harness surveyed |
+| 2026-05-09 | Module 1 | Randomization layer + ledger implemented; smoke test PASS (4 seeds × 'none' = canonical match; 'extreme' = distinct state, 4 factions). Status: **verified**. Notes: surfaced manifest-vs-canonical_sources drift (`clock_system`→`clocks`, `territory_model`→`territories`); `geography_v30.md` not in canonical_sources registry — recommend post-Module-1 cleanup. |
