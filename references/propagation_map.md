@@ -136,3 +136,10 @@
 - Vetting: 6 + · 2 ✓ · 3 ○ · 0 − pass. Genuine extensions on M-1/M-3/M-4/M-5/M-6/M-11; faithful preservation on M-7/M-10; scope-mismatch ○ on M-2 (geography deferred to B1.4), M-8 (access pattern), M-9 (clinical-borrowing pattern).
 - Q-robust: three viable approaches per relational situation (cultivate, exploit, reconcile); world-state visible per-edge; mechanic fires without player action. Q-smooth: methodology mirrors Knot lifecycle. Q-elegant: core rule restatable in one paragraph; second-order Honor-crisis cascade composes cleanly with PP-718.
 - B2 (named-NPC instantiation), B1.2 (defection cascade body), B1.3 (faction-Cascade integration body), B1.4 (settlement-coupling body) all deferred follow-up.
+
+## PP-725 Settlement coupling for relational graph (B1.4 of improvement_avenues_2026-05-10) (2026-05-10)
+**Class B (system extension); applied this commit.** Composes A1 (PP-723) + B1.1 (PP-724) per Jordan's specific guidance ('settlements need zoomed-in geography and ROTK network style is key' — B1.4 is the intersection).
+- `designs/npcs/npc_relational_graph_v30.md` §6 promoted from [Hook for B1.4 — Deferred] to [Implemented PP-725 / B1.4]. Adds: §6.1 NPC residence canon (7-faction HQ mapping + Governor inheritance + explicit override field), §6.2 hop-distance algorithm (BFS with Thread-Witnessed bypass at TS ≥ 30), §6.3 strain-trigger scaling classification (3 buckets: scale / already-geographic / no-scale), §6.4 officer reassignment shock rules, §6.5 worked examples (6 canonical pairs 0..7 hops), §6.6 integration formula.
+- Doc 46k → 55k chars (+9k).
+- Vetting: 3 + · 2 ✓ · 6 ○ · 0 − pass. Genuine extensions: M-2, M-5, M-10.
+- Algorithm validated: BFS on canonical 49-edge graph from PP-723 — all 36 settlements connected; max pair-distance 7 hops (Baralta S-015 ↔ Schoenland Governor S-035). 7-hop max pre-validates ED-055 naval-scope as strategic-compression mechanism (A3 P1 from improvement_avenues).

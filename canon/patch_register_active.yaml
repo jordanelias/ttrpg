@@ -150,3 +150,45 @@ patches:
       breaks: []
     q: pass
     note: "Class A new system. Companion docs read at full depth: fieldwork_v30 §5.6+§5.6a+§5.6b (Knot lifecycle template), character_canon_v30 §1-§11 (per-NPC vector state composition), npc_behavior_v30 §1.1-§1.3+§3+§5 (Stance Triangle, Resonant Style, Belief, Arc state), npc_roster_v30 (13+ named NPCs for B2 instantiation), faction_politics_v30 §1-§2 (rank ladders for liege-vassal grounding), conviction_taxonomy_v30 + axis_matrix_v30 + migration_roster_v30 (Conviction-edge coupling)."
+
+- id: PP-725
+  class: B
+  pre-framework: false
+  date: 2026-05-10
+  severity: P2
+  description: "B1.4 of improvement_avenues_2026-05-10 — settlement coupling for the NPC-NPC relational graph. Operationalizes the PP-724 §6 hook with: (a) NPC residence canon (§6.1 derivation order: explicit override > Governor assignment > faction-headquarters default — canonical HQ mapping for Crown S-001, Hafenmark S-015, Church S-023, Varfell S-026, Löwenritter S-012, RM S-029, Wardens S-033); (b) hop-distance algorithm (§6.2 BFS on valoria_geography_v30.yaml :: settlement_adjacency from PP-723, army-traversable subgraph by default, Thread-Witnessed bypass when both NPCs TS ≥ 30 matching Knot Thread-contact prereq); (c) strain-trigger classification (§6.3 universal triggers and patronage attribution drift scale by distance; kinship absence already geographic; direct hostile + rupture triggers do NOT scale); (d) officer reassignment shock (§6.4 +1 strain on edges whose hop-distance increased ≥1 tier, −1 reverse-shock on decreased; no retroactive recomputation); (e) integration formula (§6.6 strain_add = round_half_up(base × distance_scaling) for scalable triggers); (f) worked examples (§6.5 six canonical NPC pairs 0..7 hops). Composes PP-723 + PP-724 per Jordan guidance ('settlements need zoomed-in geography and ROTK network style is key'). Pre-validates ED-055 naval-scope: 7-hop canonical maximum (Baralta↔Schoenland Governor) motivates naval routes as strategic-compression mechanism."
+  finding_id: improvement_avenues_2026-05-10 B1.4 (settlement coupling composes A1 PP-723 + B1.1 PP-724)
+  source: editorial
+  affects:
+    - designs/npcs/npc_relational_graph_v30.md
+    - canon/patch_register_active.yaml
+    - references/canonical_sources.yaml
+    - references/propagation_map.md
+  status: applied
+  applied_commit: 2026-05-10 PP-725 (this commit)
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: ["Μ-δ", "Μ-α"]
+    mu_secondary_preserved: ["Μ-β", "Μ-γ"]
+    m_ratings:
+      M-1: "○"
+      M-2: "+"
+      M-3: "✓"
+      M-4: "○"
+      M-5: "+"
+      M-6: "○"
+      M-7: "✓"
+      M-8: "○"
+      M-9: "○"
+      M-10: "+"
+      M-11: "○"
+    m_summary: "3 + · 2 ✓ · 6 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the six ○ ratings are appropriate scope-mismatch on patterns where geographic-coupling extension doesn't engage the pattern). Genuine extensions: M-2 (geography distributes relational pressure spatially via the ×1.0..×2.0 scaling), M-5 (cross-scale composition of PP-723 settlement adjacency + PP-724 relational substrate via the BFS hop-distance algorithm), M-10 (environment co-constitutes relational capacity — settlement geography actively constitutes the rate at which ties strain, matching T-34 Distal Interoception substrate-channel-crossing pattern at the NPC-NPC layer)."
+    t_touches:
+      extends: ["T-23", "T-34", "T-18"]
+      preserves: ["T-08", "T-09", "T-11", "T-15", "T-15a", "T-15b", "T-15c", "T-22", "T-25"]
+      breaks: []
+    q: pass
+    note: "Class B system extension. Composes PP-723 (settlement-zoomed geography) + PP-724 (ROTK-network framework) per Jordan's specific guidance — B1.4 is the precise intersection point of those two ambitions. Algorithm validated against PP-723's canonical 49-edge settlement graph (BFS connectivity confirmed: all 36 settlements reachable from S-001 in ≤6 hops; max canonical pair-distance is 7 hops at Baralta↔Schoenland Governor). Self-review bias acknowledged: this composes Claude's prior PP-723 with another session's PP-724; coordination verified by reading the committed PP-724 §6 hook in full before authoring extension; PP-724 §6 hook's scaling table (×1.0..×2.0) preserved verbatim from the parallel-session canonization."
+

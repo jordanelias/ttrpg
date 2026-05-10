@@ -385,23 +385,116 @@ where positive valence promotes cooperation in Decision Forks, negative valence 
 
 ---
 
-## §6 Settlement Coupling [Hook for B1.4 — Deferred]
+## §6 Settlement Coupling [Implemented PP-725 / B1.4]
 
 Edges have **spatial cost**: cross-territory edges accrue background strain at higher rate than intra-territory edges, modeling the Renaissance reality that long-distance ties (couriers, separation, divergent local pressures) are harder to maintain.
 
-**Hook specification (B1.4 deferred):**
-- Strain scaling factor by geographic distance (in `valoria_geography_v30.yaml :: settlement_adjacency:` graph hops):
-  - Same settlement: ×1.0
-  - Adjacent settlements (1 hop): ×1.0
-  - 2-hop: ×1.25
-  - 3-hop: ×1.5
-  - 4+ hop: ×2.0 (considered "remote tie")
-- Thread-Witnessed edges (per `valoria_geography :: settlement_adjacency:` thread_witnessed type) bypass distance-strain (substrate-inseparability operates outside ordinary geographic costs).
-- Officer assignments to distant settlements that strain a sworn-bond: bond-partner LEft behind in original settlement accrues strain per the scaling above.
+**Scaling factor by geographic distance** (in `valoria_geography_v30.yaml :: settlement_adjacency:` graph hops):
+- Same settlement: ×1.0
+- Adjacent settlements (1 hop): ×1.0
+- 2-hop: ×1.25
+- 3-hop: ×1.5
+- 4+ hop: ×2.0 (considered "remote tie")
 
-Full B1.4 spec deferred. The hook is named here so future authoring composes cleanly with PP-723's settlement adjacency.
+Thread-Witnessed edges (per `valoria_geography :: settlement_adjacency:` `thread_witnessed` type) bypass distance-strain: substrate-inseparability per A1/C1 operates outside ordinary geographic costs, but requires both NPCs to have TS ≥ 30 to access the substrate-connection (the Knot Thread-contact prerequisite per `fieldwork §5.6a` generalized to NPC-NPC ties).
+
+### §6.1 NPC residence canon
+
+Distance computation requires knowing each NPC's canonical settlement. PP-725 defines the derivation rule (no per-NPC field required for most NPCs; explicit override available for edge cases).
+
+**Derivation order** (first applicable rule wins):
+1. **Explicit override**: an NPC sheet (per `character_canon §2 How to Read an NPC Sheet`) may include an optional `residence: S-XXX` field. If present, this is canonical.
+2. **Governor assignment**: per `settlement_layer §3.2`, Standing 3+ NPCs assigned as Governor reside at the governed settlement.
+3. **Faction-leader headquarters**: faction leaders without explicit governance reside at the canonical faction-headquarters settlement:
+   - Crown leader → S-001 Valorsplatz Palace (Lion's Table HQ)
+   - Hafenmark Speaker → S-015 Gransol Parliament (Baralta's court)
+   - Church Cardinal of Faith → S-023 Himmelenger Cathedral (Confessor's seat)
+   - Varfell Jarl → S-026 Sigurdshelm Keep (Vaynard's court per canonical prose)
+   - Löwenritter Master → S-012 Ehrenfeld Citadel (military HQ)
+   - RM Spokesperson → S-029 Grauwald Lodge (RM meeting site, hidden)
+   - Wardens lead → S-033 Askeheim Ruins (active Warden operations site)
+4. **Faction-membership default**: Standing 0–2 NPCs reside at their faction-headquarters settlement (rule 3) unless a `character_canon` prose excerpt names a specific scene-location as their habitual setting.
+
+NPC residence may change during play through faction reassignment (§6.4), Governor reassignment per `settlement_layer §3.2`, or canonical narrative events (exile, pilgrimage, taking a new posting).
+
+### §6.2 Hop-distance algorithm
+
+The graph distance between two NPCs is computed by breadth-first search on the canonical `settlement_adjacency:` block:
+
+```
+hop_distance(NPC-A, NPC-B):
+    if A.residence == B.residence: return 0
+    perform BFS on settlement_adjacency graph
+    edges of type {road, river, mountain_pass, coastal, gate} count as 1 hop
+    edges of type thread_witnessed contribute 0 hops IFF both A.TS ≥ 30 AND B.TS ≥ 30
+    if no path exists: return ∞ (treated as ×2.0 remote-tie strain scaling)
+```
+
+The algorithm runs on the `army-traversable subgraph` by default (excluding `thread_witnessed`). Thread-Witnessed bypass applies only when both endpoint NPCs have the Thread-contact capacity (TS ≥ 30, matching the Knot formation prerequisite). For NPCs below the TS threshold, the Thread-Witnessed edges are inert at the relational-strain layer.
+
+Implementation note (`§9.1 Storage`): hop-distance is computed at Accounting cadence per (NPC-pair, edge) tuple, not per turn. Cached values are invalidated when (a) either NPC's residence changes, (b) the settlement_adjacency graph itself is modified by canonical authoring (rare; would be a Class B geography PP), or (c) either NPC crosses the TS 30 threshold (Thread-Witnessed bypass eligibility changes).
+
+### §6.3 Which §3.2 strain triggers scale by distance
+
+Not all strain triggers are geographically meaningful. PP-725 classifies the §3.2 triggers into three buckets:
+
+| Trigger Category | Distance Scaling | Reason |
+|---|---|---|
+| **Universal triggers** (public contradiction, Conviction-crisis polarization, witnessed Thread operation valence mismatch) | **Scales** (multiplied by §6.0 factor) | Background relational pressure from divergent contexts; distance amplifies the divergence (different patrons, different witnessed events, different local Conviction-pressure). |
+| **Kinship absence** (§3.2 kinship: NPCs in different territories with no inter-territory edge for 2+ consecutive seasons) | **Already geographic** — distance scaling does NOT compound | This trigger is itself a distance encoding; multiplying would double-count. Keep as authored. |
+| **Patronage attribution drift** (client publicly attributed success to a source other than the patron) | **Scales** | Distance amplifies — a distant patron is more easily eclipsed in the client's local political ecosystem. |
+| **Direct hostile action triggers** (sworn-bond explicit violation, vassal disobeys explicit order, feud direct violence, debt invocation) | **Does NOT scale** | Events are bound to where they occurred; the strain is bound to the event, not background ambient pressure. |
+| **FR Dissolution, assassination attempts, death-of-partner** (rupture triggers per §3.9) | **Does NOT scale** | Rupture triggers bypass strain accumulation entirely (§3.9). |
+
+The scaling factor is applied at strain-add time: when a scalable trigger fires, the strain delta is multiplied by the §6.0 scaling factor for the (NPC-A, NPC-B) hop-distance, rounded to the nearest integer (with ½ rounding up). Example: a +1 strain trigger between NPCs at 3-hop distance becomes +1 × 1.5 = +2 strain (rounded up from 1.5 by the round-half-up convention).
+
+### §6.4 Officer reassignment
+
+When an NPC's residence changes via faction reassignment or Governor posting:
+
+1. **At reassignment scene resolution** (Class B scene per `faction_canon §3.2` or `settlement_layer §3.2` Governor Assignment): the NPC's `residence` field updates.
+2. **Edge-strain shock** (one-time, at next Accounting):
+   - Edges with NPCs whose hop-distance to the moved NPC *increased* by 1+ hop tier (e.g., crossing from 1-hop to 2-hop, or 3-hop to 4+-hop): **+1 strain shock** on the affected edge. Models the "left behind" emotional cost of separation.
+   - Edges with NPCs whose hop-distance *decreased* by 1+ hop tier: **−1 strain reverse-shock** on the affected edge if strain > 0 (floor at 0). Models proximity-rekindling.
+3. **No retroactive recomputation** of accumulated strain — only the shock applies. The new distance scaling factor takes effect for *future* strain accruals from §6.3 scalable triggers.
+
+This rule formalizes the hook clause from the original §6: "Officer assignments to distant settlements that strain a sworn-bond: bond-partner left behind in original settlement accrues strain per the scaling above."
+
+### §6.5 Worked examples (sanity check)
+
+Using canonical NPC residences per §6.1 derivation and PP-723 settlement adjacency:
+
+| NPC-A | Settlement | NPC-B | Settlement | Hop Distance | Scaling | Strain Trigger Example |
+|---|---|---|---|---:|---:|---|
+| Almud | S-001 (Crown HQ) | Cesare | S-001 (court) | 0 | ×1.0 | Their rivalry strain accrues at baseline rate (same-court succession competitors). |
+| Almud | S-001 | Yrsa Vossen | S-029 (RM Lodge) | 3 | ×1.5 | Any patronage/sworn-bond/debt edge between Crown and RM scales by 1.5 on universal triggers — long-distance political ties erode 50% faster. |
+| Cardinal Reichard | S-023 (Himmelenger Cathedral) | Vaynard | S-026 (Sigurdshelm Keep) | 3 (road); 2 (Thread-Witnessed bypass if both TS≥30) | ×1.5 → ×1.25 | Church-Varfell ties along the Solmund philosophical chain compose with the cathedral-network thread-witnessed edge (S-026↔S-025 per PP-723) if both NPCs have Thread-contact capacity. |
+| Baralta | S-015 (Gransol Parliament) | Schoenland Governor | S-035 (Schoenland City) | 7 | ×2.0 | Hafenmark-Schoenland trade-partnership patronage strain scales by 2.0 — the longest canonical political tie on the peninsula, validating the "remote tie" boundary. |
+| Almud | S-001 | Cardinal Reichard | S-023 | 2 (Crown→Church border via S-004↔S-024) | ×1.25 | Crown-Church ties around Mandate cooperation accrue strain 25% faster than intra-court ties, reflecting the inter-faction friction. |
+| Stillhelm Watch Warden | S-011 | Askeheim Ruins lead | S-033 | 1 hop via the thread_witnessed Warden network edge (PP-723), if both TS≥30 | ×1.0 (Thread-Witnessed bypass) | The Warden network's substrate-inseparability keeps Calamity-monitoring ties at zero-distance penalty — exactly the canonical Warden-network purpose. |
+
+Note on remote ties: the 7-hop Baralta↔Schoenland distance is canonically intended — Schoenland is an offshore island accessible only via the S-002↔S-036 coastal edge from T1 Valorsplatz. Any non-Crown faction maintaining ties to Schoenland figures pays maximum geographic-strain. This compositional consequence pre-validates the ED-055 naval-scope expansion (improvement_avenues A3): once naval routes are mechanized, Hafenmark may gain a direct sea-route to Schoenland reducing this distance, with significant strategic implications for any standing Hafenmark-Schoenland sworn-bonds or patronages.
+
+### §6.6 Integration with §3.2 (revised strain accrual)
+
+The strain-add formula from §3.2 is augmented:
+
+```
+strain_add(edge, trigger):
+    base_delta = trigger.strain_value          # from §3.2 type-specific table
+    if trigger.category in {universal, patronage_attribution_drift}:
+        delta = round_half_up(base_delta × distance_scaling(edge))
+    else:  # direct hostile, kinship-absence (already geographic), rupture-bypass
+        delta = base_delta
+    edge.strain += delta
+    if edge.strain >= edge.capacity:
+        schedule_break_at_next_Accounting(edge)
+```
+
+This composes with §3.7 strain decay (decay is unchanged by distance; sustained healthy interaction reduces strain at the same rate regardless of distance).
 
 ---
+
 
 ## §7 Defection Cascade Hooks [B1.2 — Deferred]
 

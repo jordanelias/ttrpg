@@ -282,6 +282,6 @@ systems:
 
   npc_relational_graph:
     design_doc: designs/npcs/npc_relational_graph_v30.md
-    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "PENDING_PP_724"
+    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "PENDING_PP_725"
     pp: PP-724
     status: PROVISIONAL
