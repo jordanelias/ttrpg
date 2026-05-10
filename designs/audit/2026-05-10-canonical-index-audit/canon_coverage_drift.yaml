@@ -1,0 +1,116 @@
+generated: '2026-05-10T14:04:24.348467+00:00'
+audit_run: canonical-index-coverage-2026-05-10
+method: 'GitHub code search for ''Status: CANONICAL'' across designs/ vs all .md/.yaml/.svg path values reachable in references/canonical_sources.yaml.
+  Coverage check is bidirectional.'
+tooling_status: Diagnostic snapshot only — no canon_coverage_check.py tool committed yet; Jordan to decide on tool build vs.
+  one-shot remediation.
+totals:
+  canonical_header_declarations_in_designs: 59
+  registered_design_files_in_canonical_sources: 44
+  unregistered_with_header: 47
+  registered_no_header: 32
+commit_context:
+  this_commit_registers:
+  - designs/world/geography_v30.md
+  - designs/world/geography_v30_infill.md
+  pre_commit_unregistered_count: 49
+  post_commit_unregistered_count: 47
+unregistered_with_header:
+  description: 'Files declare ''Status: CANONICAL'' in their header but are not registered as a path value in canonical_sources.yaml.
+    Many are _index/_infill companions of registered parents and may be legitimately unregistered if the parent is registered.
+    Needs per-file triage before any sweep.'
+  files:
+  - designs/architecture/campaign_architecture_v30_index.md
+  - designs/architecture/player_agency_v30.md
+  - designs/architecture/player_agency_v30_index.md
+  - designs/architecture/videogame_mode_spec.md
+  - designs/architecture/videogame_mode_spec_index.md
+  - designs/arcs/arc_expansion_v30.md
+  - designs/arcs/arc_expansion_v30_index.md
+  - designs/arcs/throughline_resolutions_v30.md
+  - designs/arcs/throughline_resolutions_v30_index.md
+  - designs/audit/2026-04-28-political-dynamics-session/25_integration_npc_behavior.md
+  - designs/audit/2026-04-28-political-dynamics-session/26_integration_player_agency.md
+  - designs/audit/2026-04-28-political-dynamics-session/27_integration_settlement_layer.md
+  - designs/audit/2026-04-30-terminology-vector-audit/01_methodology.md
+  - designs/audit/bridge_part1_revisions.md
+  - designs/audit/bridge_part1_revisions_index.md
+  - designs/npcs/companion_specification_v30.md
+  - designs/npcs/edeyja_npc.md
+  - designs/npcs/npc_behavior_v30_index.md
+  - designs/npcs/npc_behavior_v30_infill.md
+  - designs/npcs/npc_roster_caste_annotations_deprecated.md
+  - designs/npcs/npc_roster_v30.md
+  - designs/npcs/npc_roster_v30_index.md
+  - designs/npcs/npc_roster_v30_infill.md
+  - designs/provincial/clock_registry_v30.md
+  - designs/provincial/clock_registry_v30_infill.md
+  - designs/provincial/faction_politics_v30.md
+  - designs/provincial/faction_politics_v30_index.md
+  - designs/provincial/mass_battle_v30_index.md
+  - designs/provincial/mass_battle_v30_infill.md
+  - designs/provincial/peninsular_strain_v30_index.md
+  - designs/scene/conviction_track_v30.md
+  - designs/scene/conviction_track_v30_index.md
+  - designs/scene/investigation_systems_v30.md
+  - designs/scene/investigation_systems_v30_index.md
+  - designs/scene/social_contest_v30.md
+  - designs/scene/social_contest_v30_index.md
+  - designs/scene/social_contest_v30_infill.md
+  - designs/territory/settlement_layer_v30_index.md
+  - designs/threadwork/thread_horizontal_integration_spec.md
+  - designs/threadwork/thread_horizontal_integration_spec_index.md
+  - designs/ui/valoria_ui_ux_v4.md
+  - designs/ui/valoria_ui_ux_v4_1.md
+  - designs/world/calamity_radiation_v30.md
+  - designs/world/calamity_radiation_v30_infill.md
+  - designs/world/character_histories_v30.md
+  - designs/world/character_histories_v30_index.md
+  - designs/world/character_histories_v30_infill.md
+registered_no_header:
+  description: 'Files registered in canonical_sources.yaml but missing the ''Status: CANONICAL'' header. Likely a newer convention
+    without the explicit Status line; consider whether the header should be added for consistency or whether the convention
+    has been deprecated.'
+  files:
+  - designs/architecture/complete_systems_reference.md
+  - designs/architecture/conflict_architecture_proposal.md
+  - designs/architecture/key_substrate_v30.md
+  - designs/architecture/key_type_registry_v30.md
+  - designs/architecture/scale_transitions_v30.md
+  - designs/articulation/articulation_layer_v30.md
+  - designs/npcs/baralta_v30.md
+  - designs/npcs/character_canon_v30.md
+  - designs/personal/character_generation_questionnaire_v30.md
+  - designs/personal/conviction_axis_matrix_v30.md
+  - designs/personal/conviction_migration_roster_v30.md
+  - designs/personal/conviction_taxonomy_v30.md
+  - designs/provincial/faction_behavior_v30.md
+  - designs/provincial/faction_canon_v30.md
+  - designs/provincial/faction_state_authoring_v30.md
+  - designs/provincial/faction_succession_split_v30.md
+  - designs/provincial/factions_personal_v30.md
+  - designs/provincial/fractional_province_ownership_v30.md
+  - designs/provincial/political_dynamics_keys_migration_v30.md
+  - designs/provincial/victory_v30.md
+  - designs/scene/derived_stats_v30.md
+  - designs/scene/miraculous_event_v30.md
+  - designs/territory/march_layer_v30.md
+  - designs/territory/settlement_adjacency_v30.md
+  - designs/territory/territory_temperaments_v30.md
+  - designs/territory/valoria_geography_v30.yaml
+  - designs/territory/valoria_map_v30.svg
+  - designs/threadwork/threadwork_v30.md
+  - designs/world/solmund_artifacts_v30.md
+  - designs/world/solmund_philosophy_v30.md
+  - designs/world/solmund_v30.md
+  - designs/world/solmund_voice_v30.md
+remediation_options_for_jordan:
+- (a) Build tools/canon_coverage_check.py — pre-commit + CI mirror enforcement of bidirectional consistency.
+- '(b) One-shot triage: add Status: CANONICAL headers to all registered-no-header files; register all standalone canonical
+  docs from the unregistered-with-header list (excluding legitimate _index/_infill companions).'
+- (c) Defer remediation — accept current bidirectional state; revisit if drift compounds.
+related_session_log_items:
+- designs/world/geography_v30.md was specifically named in 2026-05-10 session log as outstanding canonical_sources.yaml cleanup.
+  This commit closes that item.
+- 'Manifest naming drift (clock_system / territory_model vs clocks / territories): not addressed in this commit. Lives in
+  module_manifest.md, not canonical_sources.yaml.'
