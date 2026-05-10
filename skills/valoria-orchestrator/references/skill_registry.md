@@ -1,6 +1,10 @@
-# Valoria Skill Registry
-# Single source of truth for all skills in the project.
-# Updated on every commit that adds or modifies a skill file.
+# Valoria Skill Registry — markdown companion
+#
+# CANONICAL FORM: `skill_registry.yaml` (this directory).
+# This file is a human-readable companion to that yaml; the hook checks
+# both stay in sync (`pre_commit_gate` co-file rule, Level 4).
+#
+# When adding/renaming/removing a skill, update both files in the same commit.
 # Format: skill name | path | model | triggers | notes
 
 ---

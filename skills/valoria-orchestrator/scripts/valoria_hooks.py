@@ -781,6 +781,34 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
             f"  Sim outputs: {sim_writes}"
         )
 
+    # Co-file: SKILL.md change → skill_registry.yaml (and md companion)
+    # Any change to a skills/<name>/SKILL.md must also update the registry. The
+    # yaml is canonical; the .md is human-readable companion. Adding/removing/
+    # renaming a skill MUST keep both in sync.
+    skill_md_writes = [p for p in paths_in_commit
+                       if re.match(r'^skills/[^/]+/SKILL\.md$', p)]
+    skill_md_deletes = [p for p in (deletions or [])
+                        if re.match(r'^skills/[^/]+/SKILL\.md$', p)]
+    skill_md_changes = skill_md_writes + skill_md_deletes
+    SKILL_REGISTRY_YAML = 'skills/valoria-orchestrator/references/skill_registry.yaml'
+    SKILL_REGISTRY_MD   = 'skills/valoria-orchestrator/references/skill_registry.md'
+    if skill_md_changes:
+        registry_paths_in_commit = (
+            paths_in_commit | set(deletions or [])
+        )
+        if SKILL_REGISTRY_YAML not in registry_paths_in_commit:
+            errors.append(
+                f"CO-FILE: skills/SKILL.md change(s) {skill_md_changes} but\n"
+                f"  {SKILL_REGISTRY_YAML} not in commit.\n"
+                f"  Update the registry entry (or add/remove it) in the same commit."
+            )
+        if SKILL_REGISTRY_MD not in registry_paths_in_commit:
+            errors.append(
+                f"CO-FILE: skills/SKILL.md change(s) {skill_md_changes} but\n"
+                f"  {SKILL_REGISTRY_MD} not in commit.\n"
+                f"  Markdown companion to the yaml registry must also stay in sync."
+            )
+
     # Sim fabrication check — catches uncited mechanical constants in sim files
     try:
         sim_fabrication_check(additions)

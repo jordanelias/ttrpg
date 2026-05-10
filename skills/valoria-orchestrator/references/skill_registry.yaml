@@ -1,0 +1,293 @@
+# Valoria Skill Registry — yaml form
+#
+# Single source of truth for all skills in the project, in a structured form
+# that can be consumed by valoria_hooks.py and tooling. The companion
+# skill_registry.md remains the human-readable documentation; this file is
+# authoritative for any programmatic check (presence, model routing, gating).
+#
+# CO-FILE RULE (enforced by valoria_hooks.pre_commit_gate):
+#   If any commit modifies skills/<name>/SKILL.md (add, rename, or content change),
+#   this file must also be modified in the same commit. Update the corresponding
+#   entry's last_verified date and any changed fields. Adding a new skill: add
+#   a new entry. Removing one: delete the entry and remove the SKILL.md.
+#
+# Fields per entry:
+#   name              — directory name under skills/
+#   path              — primary SKILL.md path
+#   model             — Anthropic model the skill is targeted at when invoked
+#   triggers          — phrases / situations that route the orchestrator here
+#   purpose           — one-line description
+#   references_dir    — optional, references/ subdir if the skill has support files
+#   scripts           — optional, list of scripts the skill ships
+#   gating_hooks      — list of hooks (functions in valoria_hooks.py) that this
+#                       skill is required-fetched by, or that depend on this skill
+#   last_verified     — ISO date this entry was last reconciled with disk reality
+
+version: 1
+generated: 2026-05-10
+total_skills: 13
+
+skills:
+
+  - name: valoria-orchestrator
+    path: skills/valoria-orchestrator/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - session start
+      - resume
+      - route
+      - what's the plan
+      - start work
+      - orchestrate
+    purpose: "Session-level orchestration: bootstrap, status, route to skills, manage commit/close cycle."
+    references_dir: skills/valoria-orchestrator/references/
+    scripts:
+      - skills/valoria-orchestrator/scripts/github_ops.py
+      - skills/valoria-orchestrator/scripts/valoria_hooks.py
+    gating_hooks: []   # orchestrator is the host, not a gate target
+    last_verified: 2026-05-10
+
+  - name: valoria-simulator
+    path: skills/valoria-simulator/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - stress test
+      - simulate
+      - run scenario
+      - test mechanic
+      - probability
+      - crunch cascade
+      - cognitive load
+      - flowchart
+      - precedent comparison
+      - cross-mode
+    purpose: "Mechanical stress testing, scenario sims, edge cases, coverage matrices. Modes A–M."
+    gating_hooks:
+      - task_gate('simulation')        # required-fetch in TASK_REQUIRED_FILES
+      - sim_gate                        # downstream verification
+    last_verified: 2026-05-10
+
+  - name: valoria-mechanic-audit
+    path: skills/valoria-mechanic-audit/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - audit
+      - consistency check
+      - mechanic check
+      - gap detection
+      - redundancy
+      - formula check
+      - what's broken
+      - what's missing
+      - cross-reference audit
+    purpose: "Audit modes A–G: formula, consistency, contradiction, gap, principles, coverage, cross-mode."
+    gating_hooks:
+      - task_gate('audit')             # required-fetch
+      - task_gate('propose_mechanic')  # required-fetch
+    last_verified: 2026-05-10
+
+  - name: valoria-canon-guard
+    path: skills/valoria-canon-guard/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - canon
+      - philosophy
+      - foundations
+      - P-01 through P-14
+      - compliance
+      - philosophical violation
+      - lore check
+    purpose: "Philosophical foundations enforcement; auto-invoked before any compilation pass."
+    last_verified: 2026-05-10
+
+  - name: valoria-editorial-register
+    path: skills/valoria-editorial-register/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - resolve editorials
+      - editorial register
+      - address editorial flags
+      - propagate decisions
+      - what editorials are pending
+      - dedup editorials
+      - consolidate
+      - strike stale
+    purpose: "Editorial ledger workflows A–E: resolve, add, propagate, dedup, harvest."
+    last_verified: 2026-05-10
+
+  - name: valoria-compiler
+    path: skills/valoria-compiler/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - compile
+      - assemble
+      - checkpoint
+      - export
+      - new version
+      - full assembly
+    purpose: "Full compilation pass — LOWEST PRIORITY; only when system is stable and explicitly requested."
+    last_verified: 2026-05-10
+
+  - name: valoria-chunker
+    path: skills/valoria-chunker/SKILL.md
+    model: claude-haiku-4-5
+    triggers:
+      - chunk
+      - section map
+      - large document (>500 lines)
+      - prepare for analysis
+      - extract sections
+    purpose: "Pre-process large docs (>500 lines) into navigable chunks for analysis skills."
+    last_verified: 2026-05-10
+
+  - name: valoria-arc-generator
+    path: skills/valoria-arc-generator/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - generate arc
+      - campaign arc
+      - NPC arc
+      - emergent scenario
+      - arc sequence
+    purpose: "Generate campaign/NPC arcs; emergent scenario sequences."
+    last_verified: 2026-05-10
+
+  - name: valoria-combat-simulator
+    path: skills/valoria-combat-simulator/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - combat simulation
+      - Python combat sim
+      - Monte Carlo combat
+      - statistical combat analysis
+    purpose: "Probabilistic / statistical combat analysis. Mode G1 of valoria-simulator covers scenario combat."
+    references_dir: skills/valoria-combat-simulator/references/
+    scripts:
+      - skills/valoria-combat-simulator/scripts/combat_sim.py
+    last_verified: 2026-05-10
+
+  - name: valoria-dice-model
+    path: skills/valoria-dice-model/SKILL.md
+    model: claude-haiku-4-5
+    triggers:
+      - dice math
+      - probability
+      - expected value
+      - success rate
+      - TN
+      - Ob
+      - pool size
+      - d10
+    purpose: "Dice-engine math primitives (Haiku-tier, fast)."
+    scripts:
+      - skills/valoria-dice-model/valoria_dice.py
+    last_verified: 2026-05-10
+
+  - name: valoria-vector-audit
+    path: skills/valoria-vector-audit/SKILL.md
+    model: claude-sonnet-4-6   # Haiku 4.5 acceptable for single-mode runs over precomputed graphs
+    triggers:
+      - topographic audit
+      - vector audit
+      - corpus audit
+      - find weaknesses
+      - find debt
+      - implied connections
+      - what's missing
+      - what's notional
+      - where are the gaps
+      - validate against corpus
+      - surface non-obvious structural properties
+    purpose: "v3 multi-graph triangulation methodology. Modes A–H. Self-exempting on Ω/Μ vetting (Class A analytic instrument)."
+    references_dir: skills/valoria-vector-audit/references/
+    scripts:
+      - skills/valoria-vector-audit/scripts/vector_audit.py
+    last_verified: 2026-05-10
+
+  - name: valoria-atomizer
+    path: skills/valoria-atomizer/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - atomize
+      - index
+      - infill
+      - split design doc
+      - extract index
+      - extract prose
+      - separate mechanics from prose
+    purpose: "Split a v30 design doc into index (mechanical-only) + infill (prose, rationale, history); update design_registry.yaml."
+    last_verified: 2026-05-10
+
+  - name: prose-writer
+    path: skills/prose-writer/SKILL.md
+    model: claude-sonnet-4-6
+    triggers:
+      - write narrative prose
+      - lore entry
+      - character vignette
+      - settlement description
+      - faction history
+      - dialogue scene
+      - codex entry
+      - cutscene script
+      - flavor text
+    purpose: "Valoria's singular literary voice — coherence-indexed weighted synthesis. Solmund-voice scoped override for Church speakers."
+    references_dir: skills/prose-writer/references/
+    scripts:
+      - skills/prose-writer/scripts/consistency_check.py   # Solmund/Galbados Level 2; Level 4 mirror in valoria_hooks.forbidden_token_gate
+    last_verified: 2026-05-10
+
+
+# ── Routing matrix (consumed by orchestrator) ────────────────────────────────
+# Maps user-intent phrases to (skill, modes/workflows). Authoritative for
+# orchestrator routing decisions; the markdown registry mirrors this for humans.
+
+routing:
+  - intent: "stress test [specific mechanic]"
+    skill: valoria-simulator
+    modes: [A, D, J, L]
+  - intent: "stress test [subsystem]"
+    skill: valoria-simulator
+    modes: [G-submode, D, J, K, L]
+  - intent: "simulate [scenario]"
+    skill: valoria-simulator
+    modes: [C, M]
+  - intent: "audit [subsystem]"
+    skill: valoria-mechanic-audit
+    modes: [A, B, C, D, E, F, G]
+  - intent: "topographic audit / vector audit"
+    skill: valoria-vector-audit
+    modes: ["full pipeline"]
+  - intent: "vocabulary debt"
+    skill: valoria-vector-audit
+    modes: [G]
+  - intent: "find isolates / what's disconnected"
+    skill: valoria-vector-audit
+    modes: [E, H]
+  - intent: "find implied connections"
+    skill: valoria-vector-audit
+    modes: [B, C]
+  - intent: "canon check [mechanic]"
+    skill: valoria-canon-guard
+    modes: ["full P-01–P-14 pass"]
+  - intent: "resolve editorials"
+    skill: valoria-editorial-register
+    modes: [A]
+  - intent: "compile"
+    skill: valoria-compiler
+    modes: ["full pass"]
+  - intent: "atomize / split design doc"
+    skill: valoria-atomizer
+    modes: ["index/infill split + registry update"]
+  - intent: "write [prose/scene/codex/dialogue]"
+    skill: prose-writer
+    modes: ["coherence-tiered narrative composition"]
+
+
+# ── Drift-detection notes ────────────────────────────────────────────────────
+# - Co-file enforcement at Level 4 prevents skills/SKILL.md changes from drifting
+#   from this registry within a commit. CI mirror should run an equivalent check.
+# - The companion markdown (skill_registry.md) is updated alongside this file by
+#   the same commit; consider it human-readable view, this yaml is canonical.
+# - To verify: at any time, `ls skills/*/SKILL.md` should produce exactly the
+#   set of `skills[].path` values here.
