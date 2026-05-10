@@ -1,0 +1,435 @@
+# Valoria Editorial Ledger — Archive 2026-04 (chunk b)
+# Split from canon/editorial_ledger_archive.yaml on 2026-05-10 (compliance: parent file 16,881 tokens > 10,000 limit)
+# Chunk 'b' = second half of archived entries by chronological position in the original archive.
+# ED-ids in this chunk: 129..783 (non-monotonic range, 56 entries)
+
+entries:
+
+  - id: ED-772
+    date: 2026-04-25
+    description: "Heresy Investigation Lifecycle specified in social_contest §7.3. Closes gap from stress-test 24: scale_transitions §4.3.2 referenced 'active Heresy Investigation' as Mandatory Zoom-In trigger but the Investigation lifecycle (initiation phases, duration 4-6 seasons, 8 closure conditions, multi-Inquisitor handling) was previously not specified. New §7.3.1 lifecycle phases (Initiation 1s + Investigation 2-4s + Verdict 1s); §7.3.2 closure conditions (Inquisitor death/demotion/reassignment, target death/defection/conversion, acquittal, faction protection); §7.3.3 multi-Inquisitor handling (one per Cardinal Justice jurisdiction); §7.3.4 player strategic implications. Source: 2026-04-25 stress-test 24."
+    status: resolved
+    severity: P2
+
+  - id: ED-773
+    date: 2026-04-25
+    description: "Knot Lifecycle specified in fieldwork §5.6b. Closes spec gap surfaced by stress-test 26: Knot strain accumulation was canonized across multiple use-sites (§2.6 remote investigation +1, social_contest §4 Composure buffer +1, ED-664 §3.5.3 counsel extraction +1, FR Dissolution near Knot partner +1, Conviction Scar firing in Knot partner +1, sustained Disposition < +3 +1) but the break/rupture mechanism was not specified anywhere. Added: strain capacity (Distant Knot 4, Close Knot 7); break consequences (Disposition reset, 4 Composure cost both partners, benefit cessation, possible Scar); rupture triggers (ED-664 public citation, Knot partner death, FR Dissolution targeting partner, opposing Conviction shift, player explicit dissolution); strain decay (-1/season at sustained Disposition ≥+3 + no strain added); threadcut-being Knot Coherence parallel resource. ED-664 §3.5.4 'Knot ruptures' now has explicit mechanism. Source: 2026-04-25 stress-test 26."
+    status: resolved
+    severity: P2
+
+  # Migrated 2026-04-25 (resolved 2026-04-25)
+  - id: ED-774
+    date: 2026-04-25
+    description: "threadwork_v30 §2.1 Approach Training canonical content propagation. §2.1 was empty header; canonical content was scattered across character_histories §Formation 2F (Practitioner Mentorship character-creation route), §270 (Approach Training trait: +1D Leap), §498 (skill ladder Partial-benefit advancement). Consolidated into canonical §2.1 with acquisition pathways (character creation, in-campaign training with mentor TS ≥ 50 + full-season commit + Spirit Ob 2 roll, Catalyst 4E spontaneous), tag effects, without-tag behavior, loss conditions. Closes propagation defect surfaced 2026-04-25 stress-test 30."
+    status: resolved
+    severity: P2
+
+  - id: ED-775
+    date: 2026-04-25
+    description: "Wrong-Style Penalty extended with three sub-sections per stress-test 27. §6.4.1 RS Declaration Timing: orator declares RS at Contest setup before Exchange 1; locked for Contest duration; cannot switch mid-Contest (parallels Genre lock-in §3). §6.4.2 Compromise vs Partial mapping: Total Victory/Decisive (no penalty), Compromise 5-6 (half effect: +1 strain instead of Stability), Compromise 4 (full effect), Partial 3 (full), Failure ≤2 (compounded +2). §6.4.3 Cross-Contest stacking: nominal stacking uncapped within a season but ±2 Domain Action cap caps net Stability change at Accounting; surplus is institutional-perception friction. Closes spec gaps: RS declaration timing (was unspecified), Compromise/Partial mapping (gap), cross-Contest stacking (gap). Source: 2026-04-25 stress-test 27."
+    status: resolved
+    severity: P3
+
+  - id: ED-776
+    date: 2026-04-25
+    description: "faction_politics §1.0a Demotion Magnitude specified. Closes spec gap from stress-test 33: Demotion column on rank ladders gave triggers but not magnitudes. Three magnitude tiers: default = one rank (most failures); severe = 2-3 ranks (public scandal, Heresy non-excommunication, defection); total = Standing −1 Dismissal-with-Dishonor (excommunication, treason, framework abandonment, Cardinal catastrophic events). Cross-rank flow specified (no intermediate-rank pass-through; mentor/livery/hall reset 1 season). Appeal mechanism added (2-season window, faction-internal Conviction Track, no appeal for Dismissal). Source: 2026-04-25 stress-test 33."
+    status: resolved
+    severity: P3
+
+  - id: ED-777
+    date: 2026-04-25
+    description: "Caste-transgressive Conviction PC mechanic specified (faction_politics §3.6.1 + §3.6.2). Closes spec gap surfaced by stress-test 46: §3.6 referenced 'elevated Scar risk per npc_behavior §3.2' but (a) §3.2 is Belief Revision not Scar Accumulation (§3.3 has Scars), (b) PCs do not accumulate Scars in the canonical NPC sense (§3.4 says PC failed witness-Spirit check 'shakes' Conviction for 1 season — no permanent track), (c) the qualitative 'elevated risk' had no numeric implementation. Now: §3.6.1 defines three concrete mechanisms (Witness Spirit Ob 1→2 raise during caste-transgressive Conviction display, Conviction Shake 1→2 seasons on failed check, self-applied Doubt Marker on Authority RS while invoking caste-transgressive Conviction). §3.6.2 defines Conviction Reformation arc (3+ caste-transgressive engagements within 4-season window triggers mandatory Priority 0 Zoom-In; Spirit pool TN 7 Ob 3 resolution; Success consolidates transgressive Conviction permanently; Partial = caste-default Conviction crisis with PC Scar logged; Failure = Conviction Track reset + 2-season NPC-state). Two cross-references corrected: social_contest L268 + faction_politics L659 §3.2 → §3.3. Source: 2026-04-25 stress-test 46."
+    status: resolved
+    severity: P3
+
+  - id: ED-778
+    date: 2026-04-25
+    description: "Wager Obligation edge cases specified in social_contest §6.1.1. Closes spec gap surfaced by stress-test 49: base Wager spec covered Condition Met / Not Met / Partial outcomes but didn't handle counterparty death, counterparty faction institutional collapse, condition becoming structurally impossible, PC death holding outstanding Wager, or PC death owing Wager. Now: counterparty-death = neutral discharge + PC Renown +1; institutional collapse = 4-season suspension before discharge; structural impossibility = fail-forward (arc transition fires, +1 Scar to PC); PC death holding Wager = transfers via generational_transition TRANSFER rule (faction inheritance, Disposition resets to faction-default for successor); PC death owing Wager = transfers to predecessor's faction; if condition no longer achievable, failure-by-incapacitation NPC Mandate +1. Verifiability requirement carried over from base spec. Cross-references generational_transition_v30 (canonical PC successor mechanism). Source: 2026-04-25 stress-test 49."
+    status: resolved
+    severity: P3
+
+  - id: ED-779
+    date: 2026-04-25
+    description: "Inspiration mechanic propagated to canonical derived_stats §5.3. Closes propagation defect surfaced by stress-test 52: canonical Inspiration spec existed only in deprecated/valoria_ttrpg_complete.md §10.4. Active canonical docs (params/core L128, fieldwork §2.2) referenced 'Inspiration' as resource but didn't define how it's acquired, recovered, or lost. Now consolidated as §5.3: Acquisition (mid-campaign 2-scene + Spirit Ob 1 check or 4 CP shortcut, with Complication Tag for partial), Recovery (full-scene engagement +1, focus-present-uncontested +1, max 2/season), Focus loss (immediate 0 + optional Grief Scene Ob 2 conversion). Includes §5.3.4 Inspiration vs Belief vs Conviction distinction table. Belief mechanic flagged for separate future propagation. Source: 2026-04-25 stress-test 52."
+    status: resolved
+    severity: P2
+
+# Stage 4 promotions 2026-04-25 (PROVISIONAL — auto-extracted from MENTIONED atoms; require manual review before relying)
+  - id: ED-129
+    date: '2026-04-25'
+    description: '[PROPOSED: Ranged weapon dual taxonomy** — ED-129 open 5]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_document__109__ii-8-architecture-weaknesses-mechanical; evidence atoms: 1; canon mentions:
+      1'
+  - id: ED-131
+    date: '2026-04-25'
+    description: '[PROPOSED: However, **ED-131 (OPEN): values are unplaytested design-intent numbers.** Cannot confirm Robustness until simulation verifies lethality curves]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items; evidence atoms: 3; canon
+      mentions: 1'
+  - id: ED-200
+    date: '2026-04-25'
+    description: '[PROPOSED: S** ✓ ED-200/201 resolved all ambiguities.]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__15__3-5-wound-system; evidence atoms: 1; canon mentions: 2'
+  - id: ED-295
+    date: '2026-04-25'
+    description: '[PROPOSED: N** ✓ **R** ⚠ **ED-295 (OPEN, P1-BLOCKER):** CLASH stalls at median]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items; evidence atoms: 2; canon
+      mentions: 2'
+  - id: ED-297
+    date: '2026-04-25'
+    description: '[PROPOSED: ⚠ **ED-297 (OPEN):** AMPLIFY (coalition) dominates CLASH (solo) at ~5 movement/exchange vs ~0]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__103__ii-2-open-decisions-requiring-jordan-16-items; evidence atoms: 2; canon
+      mentions: 1'
+  - id: ED-539
+    date: '2026-04-25'
+    description: '[PROPOSED: ED-539 (P1) flags the compound effect of TC reform + TCV revaluation + Seizure Accord ≥ 2 as unsimulated]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_consolidation__13__4-5-rendering-strain-substrate-posture-cost; evidence atoms: 2; canon mentions:
+      1'
+  - id: ED-545
+    date: '2026-04-25'
+    description: '[PROPOSED: S17 Scale Transitions (ED-545, P1):** Substantially resolved by §4.3.2/§4.3.3/§4.4]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__19__from-rse-critique-valoria-rse-critique-md; evidence atoms: 1; canon
+      mentions: 2'
+  - id: ED-547
+    date: '2026-04-25'
+    description: '[PROPOSED: S14 Fieldwork (ED-547):** Scene cap (3–5 per season) IS the fieldwork resource]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__19__from-rse-critique-valoria-rse-critique-md; evidence atoms: 1; canon
+      mentions: 1'
+  - id: ED-577
+    date: '2026-04-25'
+    description: '[PROPOSED: Co-Movement card calibration.** ED-577-01 through 04]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__29__phase-iv-simulation-completion; evidence atoms: 1; canon mentions:
+      2'
+  - id: ED-588
+    date: '2026-04-25'
+    description: '[PROPOSED: Knot formation during play (AUD-NPC-01), Accord propagation to settlement Order (AUD-SET-02), Derived stats calibration (AUD-DS-01), Faction politics simulation (AUD-FP-01), Coverage
+      matrix P1 EDs (ED-588, 589, 612)]'
+    status: provisional
+    severity: P3
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 08_session_consolidation); primary atom: valoria_master_consolidation__22__from-workplan-valoria-workplan-final-md; evidence atoms: 1; canon mentions:
+      1'
+  - id: ED-618
+    date: '2026-04-25'
+    description: '[PROPOSED: 16.2a Torben Emergence Window (ED-618)  First faction to reach Disposition ≥ +2 before Season 8 sets his primary Conviction]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__83__16-2-named-npc-profiles-12-core; evidence atoms: 1; canon mentions: 3'
+  - id: ED-663
+    date: '2026-04-25'
+    description: '[PROPOSED: 16.4b Thread → Conviction Scar Matrix (ED-663)  7 Thread event types × 7 Convictions]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_document__85__16-4-belief-revision-and-scars; evidence atoms: 1; canon mentions: 4'
+  - id: ED-670
+    date: '2026-04-25'
+    description: '[PROPOSED: 16.8 Heresy Jurisdiction (ED-670)  Jurisdiction varies by territory controller: Full in Church, permitted in Crown (with cooperation), blocked in Hafenmark (Sovereign Authority
+      Doctrine), tolerated at +1 Ob in Varfell, none in Uncontrolled]'
+    status: provisional
+    severity: P3
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 06_mechanical_review_audit); primary atom: valoria_master_document__89__16-8-heresy-jurisdiction-ed-670; evidence atoms: 1; canon mentions: 2'
+  - id: ED-694
+    date: '2026-04-25'
+    description: '[PROPOSED: STALE-07: Document the rationale for the formula split.**  ### 2.1b Focus — Role Change  ED-694 replaced "Contact Rounds = Focus" with "Thread Fatigue = Spirit × 5" and "ops/session
+      = Focus − 1"]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 03_threadwork_design); primary atom: valoria_master_document__09__2-1-attributes-10-range-1-7; evidence atoms: 4; canon mentions: 5'
+  - id: ED-706
+    date: '2026-04-25'
+    description: '[PROPOSED: Sync needed.]`  `[GAP-29: VTM strike propagation incomplete (ED-706, pending PP-664)]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 04_faction_balance_three_modes); primary atom: master_document_2026-04-25__33__6-5-framework-propagation-gaps-deferred-from-prior; evidence atoms:
+      1; canon mentions: 2'
+  - id: ED-738
+    date: '2026-04-25'
+    description: '[PROPOSED: ED-738 (Ein Sof gradient editorial) was referenced across audit cells but had not been committed to canon]'
+    status: provisional
+    severity: P1
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 01_throughlines_meta); primary atom: master_consolidation__01__1-conversation-arc; evidence atoms: 4; canon mentions: 5'
+  - id: ED-783
+    date: '2026-04-25'
+    description: '[PROPOSED: Valoria Canon Rectification — Master Consolidation  **Session date:** 2026-04-25 **Patch proposal:** PP-675 **Editorial ledger:** ED-783 **Commits:** - `b14f0671ae9c7e7bb578865f92745dbcaab64bf0`
+      — primary 4-file rectification - `aae1e72413f9417f46a6d2fd8cb25646bd9ee6aa` — follow-up §16.1 close (op]'
+    status: provisional
+    severity: P2
+    source: 'Stage 4 promotion 2026-04-25 (originating topic: 09_canon_rectification_pp675_ed783); primary atom: valoria_session_2026-04-25_master__09__section-9-open-items-at-session-close; evidence atoms:
+      5; canon mentions: 1'
+
+# Archival batch 2026-04-26
+  - id: ED-780
+    date: 2026-04-25
+    description: "fieldwork §5.6a Knot Formation Procedure — explicit Bonds ≥ 5 prerequisite added. Closes documentation gap surfaced by stress-test 53: Disposition ceiling = Bonds (per §3) + Knot formation requires Disposition +5 (per §5.6a step 1) implies Bonds ≥ 5 minimum, but this derivation was never surfaced as an explicit prerequisite. Player with Bonds 1-4 could attempt Knot formation indefinitely with no possibility of success. Rationale section explains the Knot ecosystem locked behind this prerequisite (Wager, Composure buffer, Thread-Read, Coherence anchoring). Source: 2026-04-25 stress-test 53."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-781
+    date: 2026-04-25
+    description: "params/factions_personal §Coup Counter (Löwenritter) STRUCK and replaced with reference to Graduated Autonomy spec; npc_priority_trees.md migrated (4 references at L42, L86, L149, L197 + section header L239 + spec text L241). Closes spec inconsistency surfaced by stress-test 57: §59 of factions_personal already declared 'Löwenritter Graduated Autonomy replaces Coup Counter (ED-589)' with 4-stage track (Loyal/Restless/Autonomous/Split), but §94 still contained legacy Coup Counter increment rules. npc_priority_trees Crown/Löwenritter trees referenced 'Coup Counter = 2' which now translates to 'Löwenritter Autonomy = Restless' per the canonical Graduated Autonomy stage names. PP-NPC-02 section header + L241 spec text also migrated. All Coup Counter references in active spec now eliminated. Source: 2026-04-25 stress-test 57."
+    status: resolved
+    severity: P2
+
+
+  - id: ED-782
+    date: 2026-04-25
+    description: "references/glossary.md updated to reflect canonical TC → CI rename per tcv_conflict_register §2 (decision 2026-04-19). Closes spec inconsistency surfaced by stress-test 60: glossary L62 still listed 'Theocracy Counter | TC*' while ci_political_v30 §1.1 (current canonical) uses 'CI (Church Influence)'. Two parallel naming conventions in active spec. Now: glossary entry renamed to 'Church Influence | CI' with note that TC is renamed; collision note (L66) updated; abbreviation collision table (L213) updated. Milestones updated: 60 = Mass Seizure available, 75 = Phase Transition / Territorial Seizure, 100 = Unification (per ci_political_v30 §2). Residual ~675 TC references in active spec queued as known cleanup item; not propagated in this commit. Source: 2026-04-25 stress-test 60."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-543
+    date: 2026-04-25
+    description: "[RESOLVED 2026-04-26 by ED-744] Clock registry update — full refresh from peninsular_strain_v30 and tc_political_redesign_v30. Promoted from atom valoria_master_consolidation__20 (Stage 4 promotion 2026-04-25). Single-atom evidence; verify whether the registry refresh actually landed under another ED before relying on this entry."
+    status: resolved
+    severity: P1
+    source: "atom: valoria_master_consolidation__20__from-holistic-audit-valoria-holistic-audit-md"
+
+
+  - id: ED-739
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in npc_roster_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-740
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in worldbuilding_canon_audit_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-741
+    date: 2026-04-26
+    description: "TC→CI + RS→MS abbreviation disambiguation in worldbuilding_v30.md. Mechanical rename only per ED-782 (TC→CI) and ED-731 (RS→MS). No semantic changes."
+    status: resolved
+    severity: P3
+
+
+  - id: ED-742
+    date: 2026-04-26
+    description: "TC→CI disambiguation sweep complete. ~1,543 TC→CI across 100+ files (designs, params, tests, canon). RS→MS applied to designs/params (263 instances). Alias registry updated: theocracy_counter → church_influence, collision table TC entry marked resolved. Numeric bounds report reviewed: all 14 flagged stats = legitimate or false positives, no drift."
+    status: resolved
+    severity: P1
+
+
+  - id: ED-744
+    date: 2026-04-26
+    description: "Clock registry refresh per staleness report. Confirmed changes: CI source updated, IP renamed to Institutional Pressure (start 20), PI replaced by Peninsular Strain (0-10), Stamina formula corrected (History struck PP-611), Disposition range updated (PP-632), Mandate floor 0, Accord track added, Knot count added, stale source references updated. PROVISIONAL items: IP start value (ED-745), Intel Advancement Counter struck status (ED-746), Popular Will struck status (ED-747), Intelligence stat struck status (ED-748). Resolves ED-543."
+    status: resolved
+    severity: P1
+
+
+  - id: ED-768
+    date: 2026-04-24
+    description: "Orphaned PROVISIONAL markers identified across active spec corpus. 13 markers reference low-numbered EDs (ED-063, ED-071, ED-074, ED-098, ED-137, ED-147, ED-148, ED-149, ED-151) that are not present in either active editorial_ledger.yaml or archive. These likely predate the current ledger structure (pre-2026-04-15). Files affected: params/scale_transitions.md (3), params/contest.md (1), params/factions/stats_1_7_scale.md (4), params/mass_combat.md (1), designs/scene/combat_v30_infill.md (1), designs/scene/social_contest_v30.md (1), designs/scene/social_contest_system_v2.md (1), designs/scene/combat_design_v1.md (1). Resolution requires Jordan-side context to determine which markers reference still-open issues vs which reference resolved-but-not-archived items. Marking as documentation-gap not spec-defect; do not strip markers blindly."
+    status: resolved
+    severity: P3
+    "RESOLVED 2026-04-26 (ED-749): orphaned ED refs stripped, terminology updated"
+
+
+  - id: ED-749
+    date: 2026-04-26
+    description: "PROVISIONAL marker audit (ED-768 resolution). 13 orphaned ED references stripped from 8 files. Stale terminology updated: Coup Counter → Graduated Autonomy (ED-781), Theocracy Counter → Church Influence (ED-782)."
+    status: resolved
+    severity: P3
+
+# Archival batch 2026-04-29 — political dynamics session intermediate cleanup.
+
+  - id: ED-745
+    date: 2026-04-26
+    description: "[PROVISIONAL] IP start value 20 — per staleness report item 3, sourced from peninsular_strain §4. Verify against params_bg_core starting values table."
+    status: resolved
+    severity: P3
+    resolution: "IP start = 20 confirmed in params/bg/core.md L82 and Constants.gd IP_START=20. Canonical."
+    archive_date: "2026-04-29"
+
+  - id: ED-746
+    date: 2026-04-26
+    description: "[PROVISIONAL] Intel Advancement Counter — staleness report says STRUCK per canonical_definitive_r2. Verify whether fieldwork VTM system fully replaces this."
+    status: resolved
+    severity: P3
+    resolution: "Intel Advancement Counter STRUCK per canonical_definitive_r2 L123. Clock registry ED-794 notes same."
+    archive_date: "2026-04-29"
+
+  - id: ED-747
+    date: 2026-04-26
+    description: "[PROVISIONAL] Popular Will (PW) — staleness report says STRUCK per canonical_definitive_r2. Verify against RM founding mechanics in current specs."
+    status: resolved
+    severity: P3
+    resolution: "Popular Will STRUCK — hybrid-only clock, not in CDR2, videogame-only mode eliminates it. Clock registry ED-795 notes same."
+    archive_date: "2026-04-29"
+
+  - id: ED-748
+    date: 2026-04-26
+    description: "[PROVISIONAL] Intelligence stat — staleness report says STRUCK, replaced by fieldwork Investigation + VTM. Verify if any active specs still reference Intelligence as a faction stat."
+    status: resolved
+    severity: P3
+    resolution: "Intelligence stat STRUCK per canonical_definitive_r2 L106. Replaced by fieldwork Investigation + VTM."
+    archive_date: "2026-04-29"
+
+# Archival batch 2026-04-29 (b) — ED-756 doc 12 v1.1 production.
+
+  - id: ED-756
+    date: 2026-04-29
+    description: "[PROVISIONAL] Application of doc 17 patches to produce 12_development_specification.md v1.1. Per §7 application checklist (28 numbered steps). Requires Jordan decisions on ED-755 items first OR proceed with default recommendations and flag in v1.1 commentary. Expected delivery: subsequent editorial session."
+    status: resolved
+    severity: P1
+    source: "doc 17 §7"
+    resolution: "Doc 12 v1.1 produced 2026-04-29 with 26 patches applied. Commit 9dede391. ED-755 items marked inline as [JORDAN-DECISION-PENDING-ED-755] in §16; defaults from doc 17 §6 NOT applied. v1.1 has 1565 lines (up from 985 in v1.0); 79 PATCH references. Verification: 28/28 expected-content checks pass."
+    archive_date: "2026-04-29"
+
+# Archival batch 2026-04-29 (c) — ED-757 + ED-760 + ED-761 resolved by simulation chain + v1.2 production.
+
+  - id: ED-757
+    date: 2026-04-29
+    description: "[PROVISIONAL] Comprehensive mechanical simulations against doc 12 v1.1 (post-revision). Map mechanical interactions across all directions in granular detail to validate revisions and surface emergent behaviors. Expected delivery: simulation sessions following ED-756."
+    status: resolved
+    severity: P2
+    source: "user request 2026-04-29"
+    progress: "Full simulation chain complete: A/B/C/D/E/F/G/H + narrative pass (commits fda634db, 8a6dbb44, 684b1627, 84eec07c, 36a8d6e3, b04523d2, 454b5dc4, ca84f96c, b54c8162). 51 scenarios. 39 spec gaps (3 P1-critical: SIM-B-G8 failed_da_proposals, SIM-C-G6 settlement-Concern routing, SIM-H-G2 Knot rupture). 18 forward-looking observations. Architecture validated at all scales. Synthesis session pending."
+    resolution: "Full simulation chain complete (commits fda634db..b54c8162); 51 scenarios, 39 gaps surfaced. v1.1 validation report produced (commit b7f2235b — doc 19). v1.2 spec revisions doc produced + applied: 39 patches resolving all surfaced gaps. doc 12 v1.2 committed 7c9384ec — 1958 lines. Three P1-critical resolved (SIM-B-G8 strict, SIM-C-G6 routing, SIM-H-G2 Knot rupture). v1.2 ready for §13 Promotion Checklist re-vet."
+    archive_date: "2026-04-29"
+
+  - id: ED-760
+    date: 2026-04-29
+    description: "[RECOMMENDATION-FOR-V1.2] Add stall-escalator term to select_proposal score: alignment + 0.1*standing + 0.05*seasons_stalled. Prevents infinite-deadlock for unequal-Standing same-domain collisions (SIM-B Scenario 8). Pending Jordan design call."
+    status: resolved
+    severity: P2
+    source: "SIM-B Scenario 8 deadlock analysis; commit 8a6dbb44"
+    resolution: "Applied as PATCH v1.2-4 in §6.2 select_proposal score formula (commit 7c9384ec). Stall-escalator term +0.05 × seasons_stalled validated as anti-deadlock + anti-ossification mechanic at scale (SIM-E Sc 2, SIM-G Sc 1-4)."
+    archive_date: "2026-04-29"
+
+  - id: ED-760
+    date: 2026-04-29
+    description: "[PROVISIONAL] Topographic analysis Stages 1-4 executed; 12 TOPO findings in 02_weakness_register.md. PP-676."
+    status: resolved
+    severity: P2
+    source: "PP-676"
+    resolution: "Applied as PATCH v1.2-4 in §6.2 select_proposal score formula (commit 7c9384ec). Stall-escalator term +0.05 × seasons_stalled validated as anti-deadlock + anti-ossification mechanic at scale (SIM-E Sc 2, SIM-G Sc 1-4)."
+    archive_date: "2026-04-29"
+
+  - id: ED-761
+    date: 2026-04-29
+    description: "[PROVISIONAL — TRACKING] 39 specification gaps in doc 12 v1.1 surfaced by SIM-A through SIM-H simulations + narrative pass. THREE P1-CRITICAL: SIM-B-G8 (failed_da_proposals definition — recommend strict 'DA roll failed only'); SIM-C-G6 (Settlement-Signal-Concern routing); SIM-H-G2 (Knot rupture trigger conditions/mechanic/consequences — referenced in spec but undefined). Gaps inventoried in respective SIM_*.md docs and HANDOFF_session_chain.md. Resolution target: doc 12 v1.2 revision pass."
+    status: resolved
+    severity: P1
+    source: "SIM-A/B/C/D/E/F/G/H — see HANDOFF and individual SIM docs for full gap inventory"
+    resolution: "All 39 simulation-surfaced specification gaps resolved by v1.2 patch list (doc 21, commit b7f2235b) and applied to doc 12 v1.2 (commit 7c9384ec). Patches v1.2-1 through v1.2-39 cover all 3 P1-critical + 19 P2 + 16 P3 + 1 typo + 1 recommendation (ED-760). See doc 12 v1.2 §0.1 v1.2 change log and §17 v1.2 patch addendum for full inventory."
+    archive_date: "2026-04-29"
+
+# Archival batch 2026-04-29 (c) — ED-757, ED-760, ED-761 (simulation chain + v1.2 production complete).
+
+# Archival batch 2026-04-29 (e) — ED-750..754, ED-762, ED-765..769 (all marked resolved/applied; superseded by ED-763 promotion-readiness tracking).
+
+  - id: ED-750
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 1 — single-writer Opinion model resolves E-HORIZ-A/S-HORIZ-A/ST-32-A double-write. Patches §1.4-§1.6 of doc 12."
+    status: resolved
+    severity: P1
+    source: "doc 17 §1, issues 13/14/15"
+    resolution: "Doc 17 batch resolved through v1.1 → v1.2 → v1.2.1 → v1.2.2 spec progression. Final spec at commit 8d37cede; canonical promotion tracking in ED-763."
+    archive_date: "2026-04-29"
+
+  - id: ED-751
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 2 — 8 priority-1 patches resolving E-36-A/E-48-A/E-BOT-A/B/ST-20-A/ST-23-A/ST-24-A. See doc 17 §2."
+    status: resolved
+    severity: P1
+    source: "doc 17 §2, issues 13/14/15/16"
+    resolution: "Doc 17 batch resolved through v1.1 → v1.2 → v1.2.1 → v1.2.2 spec progression. Final spec at commit 8d37cede; canonical promotion tracking in ED-763."
+    archive_date: "2026-04-29"
+
+  - id: ED-752
+    date: 2026-04-29
+    description: "[PROVISIONAL] Doc 17 batch 3 — 15 priority-2 patches in §1.4/§2.5/§5/§6.3/§8.1/§10. See doc 17 §3."
+    status: resolved
+    severity: P2
+    source: "doc 17 §3, issues 13/14/15/16"
+    resolution: "Doc 17 batch resolved through v1.1 → v1.2 → v1.2.1 → v1.2.2 spec progression. Final spec at commit 8d37cede; canonical promotion tracking in ED-763."
+    archive_date: "2026-04-29"
+
+  - id: ED-753
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 3 — 15 priority-2 authoring patches. See doc 17 §3 for full inventory."
+    status: resolved
+    severity: P3
+    source: "doc 17 §4, issues 13/14/15/16"
+    resolution: "Doc 17 batch resolved through v1.1 → v1.2 → v1.2.1 → v1.2.2 spec progression. Final spec at commit 8d37cede; canonical promotion tracking in ED-763."
+    archive_date: "2026-04-29"
+
+  - id: ED-754
+    date: 2026-04-29
+    description: "[PROVISIONAL] Political dynamics v1 doc 17 batch 4 — 16 priority-3 stub resolutions. See doc 17 §4."
+    status: resolved
+    severity: P3
+    source: "doc 17 §5"
+    resolution: "Doc 17 batch resolved through v1.1 → v1.2 → v1.2.1 → v1.2.2 spec progression. Final spec at commit 8d37cede; canonical promotion tracking in ED-763."
+    archive_date: "2026-04-29"
+
+  - id: ED-762
+    date: 2026-04-29
+    description: "[PROVISIONAL] Spec progression: doc 12 v1.2 (commit 59a1c1e0; 39 patches resolving simulation-surfaced gaps) → v1.2.1 (commit 52fb1292; NERS cleanup per doc 22). v1.2.1: cut §5.4.2 Coup mechanic + §8.2 War State + §8.2.1 Peace Treaty (deferred to v1.3); §17 P2/P3 addendum patches applied surgically in target sections and §17 deleted; AUDIT-1..5 corrections applied to docs 19 and 22 per doc 23 chain audit (commit dbc8d918). v1.2.1 is the canonical-promotion candidate. Recommended next: §13 Promotion Checklist evaluation."
+    status: resolved
+    severity: P2
+    source: "doc 22 NERS cleanup; doc 23 chain audit; v1.2.1 commit 52fb1292"
+    resolution: "Spec progression complete: v1.2.1 (52fb1292) → v1.2.2 (8d37cede). Promotion-readiness tracked in ED-763."
+    archive_date: "2026-04-29"
+
+  - id: ED-765
+    date: 2026-04-29
+    description: "[APPLIED] Vocabulary debt sweep per PP-678: 17 Game Master refs replaced with 'engine' equivalents in threadwork_v30 (12), npc_behavior_v30 (3), mass_battle_v30 (2). 2 active Cultural Reformation refs in complete_systems_reference cleaned with HTML STRUCK markers. 14 CR STRUCK markers / strikethroughs / parenthetical historical refs intentionally retained as audit trail. Coup Counter sweep DEFERRED — Coup Counter→Graduated Autonomy is not 1:1 substitution, requires design judgment per site."
+    status: applied
+    severity: P3
+    source: "PP-678 (PP-676 v3 §V3-9)"
+    archive_date: "2026-04-29"
+
+  - id: ED-766
+    date: 2026-04-29
+    description: "[APPLIED] valoria-vector-audit skill enshrined per PP-679. Packages v3 multi-graph triangulation methodology as directory-based skill (SKILL.md + 3 reference docs + vector_audit.py). Reduces future audit setup from one-session derivation to minutes-long invocation. methodology.md locks pre-committed thresholds preserving v2 lessons (no post-hoc tuning). diagnostic_modes.md documents 8 modes. v1_v2_v3_history.md captures 14 v2 problems and v3 corrections (institutional memory)."
+    status: applied
+    severity: P3
+    source: "PP-679"
+    archive_date: "2026-04-29"
+
+  - id: ED-767
+    date: 2026-04-29
+    description: "[APPLIED] Coup Counter → Graduated Autonomy substitution sweep per PP-680, completing PP-678's deferral. 6 active CC references rewritten using ED-781 mapping (CC value → GA stage: 0→Loyal, 2→Restless, 3→Autonomous, 4→Split) in npc_behavior_v30, complete_systems_reference, victory_v30 (3 sites), conflict_architecture_proposal. 4 leaves preserved (worldbuilding + descriptive references to strike). All substitution sites cite ED-781 inline."
+    status: applied
+    severity: P3
+    source: "PP-680 (PP-676 v3 §V3-9, PP-678 deferred)"
+    archive_date: "2026-04-29"
+
+  - id: ED-768
+    date: 2026-04-29
+    description: "[APPLIED] Conviction Track promoted to first-class doc per PP-681 (PP-676 v3 §V3-5). New designs/personal/conviction_track_v1.md consolidates §1.2 Conviction Taxonomy + §3.3 Scar Accumulation + §3.4 Thread Operation triggers extracted from npc_behavior_v30 (4,834 chars). Original sections replaced with redirect stubs. scale_transitions_v30 L219 cross-ref updated. canonical_sources.yaml repointed (SHA pending follow-up). 3 GM → engine substitutions in §3.3 table cells (missed by PP-678 due to 'GM' vs 'Game Master' phrase difference)."
+    status: applied
+    severity: P3
+    source: "PP-681"
+    archive_date: "2026-04-29"
+
+  - id: ED-769
+    date: 2026-04-29
+    description: "[APPLIED] SHA follow-up for PP-681 (Conviction Track promotion). canonical_sources.yaml SHA placeholder filled with actual blob SHA 32d8e3412d17157fc0fd27fed91a0e11262743ef. Standard procedure for new canonical files."
+    status: applied
+    severity: P3
+    source: "PP-682 (PP-681 follow-up)"
+    archive_date: "2026-04-29"

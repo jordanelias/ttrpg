@@ -79,7 +79,7 @@ policies:
   # ────────────────────────────────────────────────────────────
   - match: "canon/editorial_ledger.yaml"
     max_tokens: 2000
-    auto_archive_status: [resolved, struck, superseded]
+    auto_archive_status: [resolved, closed, struck, superseded]
     archive_target_pattern: "canon/editorial_ledger_archive_{range}.yaml"
     archive_chunk_max: 10000
     archive_chunk_by: ed_range

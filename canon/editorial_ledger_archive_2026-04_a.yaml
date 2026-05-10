@@ -1,0 +1,485 @@
+# Valoria Editorial Ledger — Archive 2026-04 (chunk a)
+# Split from canon/editorial_ledger_archive.yaml on 2026-05-10 (compliance: parent file 16,881 tokens > 10,000 limit)
+# Chunk 'a' = first half of archived entries by chronological position in the original archive.
+# ED-ids in this chunk: 600..771 (non-monotonic range, 71 entries)
+
+entries:
+
+  - id: ED-713
+    date: 2026-04-19
+    description: "Mine income rate resolved: Mine-type settlement yields floor(Prosperity/2) Wealth/year to controlling faction. Guild management +1, Trade Network token +1. Cap 4 Wealth/Mine/year. See designs/audit/gap_resolution_2026-04-19.md §1.1 (PP-667)."
+    status: resolved
+    severity: P2
+    source: "PP-667"
+
+  - id: ED-714
+    date: 2026-04-19
+    description: "Hafenmark food vulnerability and Crown Einhir suppression DA — resolved as non-mechanics. Both exist only as worldbuilding texture. Existing mechanics (Trade Network, Heresy Investigation, Church AP, Parliamentary Motion) cover the design space. See designs/audit/gap_resolution_2026-04-19.md §1.2, §1.3 (PP-667)."
+    status: resolved
+    severity: P2
+    source: "PP-667"
+
+  - id: ED-715
+    date: 2026-04-19
+    description: "OPEN ITEMS sweep across settlement_layer, military_layer, peninsular_strain, faction_layer, victory_v30, threadwork_v30 — 26 items resolved, 5 superseded by PP-663/PP-666, 7 deferred to engine_v4 smoke-test, 10+ threadwork PROVISIONALs deferred as scene-layer scope. Propagation to source-doc OPEN ITEMS tables deferred to follow-up infrastructure commit. See designs/audit/gap_resolution_2026-04-19.md §2 (PP-667)."
+    status: resolved
+    severity: P2
+    source: "PP-667"
+
+  - id: ED-716
+    date: 2026-04-19
+    description: "Label audit (PP-670): caste annotations file correctly deprecated (merged into npc_roster_v30 §14 on 2026-04-11). threadwork_v25_historical.md had mismatched label — internal banner added. sim_ttrpg_batch_legacy_* files flagged for follow-up banner pass (low priority). See designs/audit/label_audit_2026-04-19.md."
+    status: resolved
+    severity: P3
+    source: "PP-670"
+
+  - id: ED-717
+    date: 2026-04-19
+    description: "Meta-throughline synthesis (PP-671): 3 substrate-posture gaps (Hafenmark/Löwenritter/RM lacking М-4 characterization). Framework resolution: T-15a/b/c in throughlines_meta_infill.md §3.1. Design-doc propagation complete 2026-04-19: Hafenmark §8.4, Löwenritter §8.9, RM §8.8 (factions_personal_v30)."
+    status: resolved
+    severity: P2
+    source: "PP-671"
+
+  - id: ED-718
+    date: 2026-04-19
+    description: "Throughlines hierarchical framework (PP-672) — canonical vetting guide adopted. Five tiers: Ω (intent, 1), Μ (modes, 4), М (meta-throughlines, 6), Τ (throughlines, 25), Q (quality, 3). Supersedes PP-671 meta-throughlines doc as vetting authority. Skeleton: references/throughlines_meta.md (9k). Infill: references/throughlines_meta_infill.md (28k). Adoption scope: new work; existing canon grandfathered."
+    status: resolved
+    severity: P2
+    source: "PP-672"
+
+  - id: ED-719
+    date: 2026-04-19
+    description: "Terminology cleanup (PP-673) — three-way 'skeleton' collision resolved. Auto-generated *_skeleton.md files (heading/line/token navigation companions) renamed to *_index.md; tools/skeleton_gen.py renamed to tools/doc_index_gen.py; github_ops functions (read_skeleton→read_index, was_skeletonized→was_indexed, _route_to_skeletons→_route_to_indexes) and caches (_skeleton_reads→_index_reads, _skeleton_route_cache→_index_route_cache) renamed; depth='skeleton' depth='index'. The term 'skeleton' is now reserved for ruleset-in-mechanical-spec-style canonical documents (banner: '<!-- SKELETON — mechanical spec only -->'). 75 files renamed, 8 code/skill files updated."
+    status: resolved
+    severity: P2
+    source: "PP-673"
+
+  - id: ED-720
+    date: 2026-04-19
+    description: "Framework enforcement + tier N (PP-674). valoria_hooks.vetting_gate() enforces vetting: block on Class A/B patch register entries from PP-674 forward. New task type design_proposal requires loading throughlines_meta.md. Tier N added above Ω: subject-grounding check against Renaissance-era political-leadership dynamics. Four new Failure Lexicon terms (fantasy imposition, duplicate coverage, edge case mechanic, abstractable). N authority: Jordan. Pre-PP-674 entries grandfathered via pre-framework: true marker."
+    status: resolved
+    severity: P1
+    source: "PP-674"
+
+  - id: ED-600
+    date: 2026-04-19
+    description: "Niflhel named operatives (Quartermaster, Quiet One) — dead. Session B Niflhel dissolution. STRUCK in arc_expansion_v30.md (bdf8a6a2)."
+    status: resolved
+    severity: P2
+    source: "Session B dissolution (2026-04-18)"
+
+  - id: ED-667
+    date: 2026-04-19
+    description: "Coup Counter readiness gap — binary trigger lacked intermediate posture. Resolved by Löwenritter graduated autonomy (4-stage Loyal/Restless/Autonomous/Split). See conflict_architecture_proposal.md, clock_registry_v30.md. Propagated Session B (c0be619, f6b6ae6) + 2026-04-19 session (148d0184..8ff353d3)."
+    status: resolved
+    severity: P2
+    source: "Session B graduated autonomy (2026-04-18)"
+
+  - id: ED-632
+    date: 2026-04-19
+    description: "Shadow Renown — CANON spec in faction_politics_v30 §2.2b.i."
+    status: resolved
+    severity: P1
+    source: "2026-04-19"
+
+  - id: ED-633
+    date: 2026-04-19
+    description: "Deniability Debt — CANON spec in faction_politics_v30 §2.2b.ii."
+    status: resolved
+    severity: P1
+    source: "2026-04-19"
+
+  - id: ED-721
+    date: 2026-04-19
+    description: "CI cap vs Piety Yield T9 — Option A CANON (uniform cap). ci_political_v30 §7.1."
+    status: resolved
+    severity: P2
+
+# Archival batch 2026-04-23 — 16 resolved entries from editorial_ledger.yaml
+
+  - id: ED-722
+    date: 2026-04-20
+    description: "D-1 resolved: Solmund 12y emergence (5y coalescing + 7y ministry). Propagated timeline L32, solmund_guide L246 (commit e642f195)."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-723
+    date: 2026-04-20
+    description: "D-2 resolved: pre-Calamity governance author-determined, surfaced through fragments. Altonian overlays do not map to pre-Calamity geography."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-724
+    date: 2026-04-20
+    description: "D-3 resolved: dissolution site specific but contested, off-map. Propagated canon/03_canonical_timeline.md §Solmund 2026-04-22."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-725
+    date: 2026-04-20
+    description: "D-4 resolved: Altonian invasion ~18 AG (~30y post-Catastrophe). Timeline revision = separate workplan."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-726
+    date: 2026-04-20
+    description: "D-5 resolved: Einhir site-network three-layer operational model (foundational pre-Catastrophe scheduled + responsive Warden-era reactive + ambient/not-scheduled). Integration target is designs/world/ (worldbuilding), NOT canon/02_foundations_amendment_leap_mechanism.md (prior mis-mapping corrected). Specific home TBD — candidates: new designs/world/einhir_site_network.md or expansion of designs/world/calamity_radiation_v30.md. Pending separate workplan."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-727
+    date: 2026-04-20
+    description: "D-6 resolved: Lenneth TS pathway = slow scholarly loosening, SA-gated, ceiling 10-20. Propagated designs/npcs/npc_character_analyses_v30{,_infill}.md 2026-04-22."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-728
+    date: 2026-04-20
+    description: "D-7 resolved: Valn origin pre-Altonian, ambiguous, possibly pre-Einhir. Propagated designs/arcs/gm_ref/arcs_10_18.md §Terminology + ED-NEW-7 row 2026-04-22."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-729
+    date: 2026-04-20
+    description: "PR-1 resolved: Finitude pivot home = canon/00_philosophical_foundations.md §4.3 (Option A). Integration pending Batch 1."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-730
+    date: 2026-04-20
+    description: "PR-2 resolved: Leap taxonomy home = new canon/02_foundations_amendment_leap_mechanism.md (Option A). Integration pending Batch 2."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-731
+    date: 2026-04-20
+    description: "PR-3 resolved: propagate MS (Mending Stability) over RS. Sweep pending Batch 5 §5.4."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-732
+    date: 2026-04-20
+    description: "PR-11 BA-1 resolved: Baralta direct communion supplements (not supersedes) \"does not question theology\" in NPC §6. Maps TL-4."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-733
+    date: 2026-04-20
+    description: "PR-12 B-1 resolved: Ficinian Cardinal emanation accepted as Church self-understanding. Consolidated guide §3.2 canonical."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-734
+    date: 2026-04-20
+    description: "PR-13 S-1 resolved: Lurianic Catastrophe mapping accepted as RM theology. Consolidated guide §4.4 canonical."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-735
+    date: 2026-04-20
+    description: "PR-14 bundle resolved: Finding 7 + Miraculous Event + Miracle Investigation + SA-gating all accepted. Integration cascade = separate workplan."
+    status: resolved
+    severity: P1
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-736
+    date: 2026-04-20
+    description: "PR-15 resolved: Seam Text framing = Option A metadata frame. Consolidated guide L290-292 update pending."
+    status: resolved
+    severity: P2
+    source: "session_master_2026_04_20.md + handoff"
+
+  - id: ED-737
+    date: 2026-04-20
+    description: "Ledger split: all resolved entries migrated to canon/editorial_ledger_archive.yaml. Main retains open + new resolutions only."
+    status: resolved
+    severity: P3
+    source: "session_master_2026_04_20.md + handoff"
+
+  # Migrated 2026-04-24 from active ledger
+  - id: ED-660
+    date: 2026-04-17
+    description: "Certainty scale: Almstedt Certainty 6→4 (Jordan-confirmed 2026-04-23)."
+    status: resolved
+    severity: P2
+
+  - id: ED-668
+    date: 2026-04-17
+    description: "MS decline rate calibration — resolved by MS trajectory v1 (f2b5d143) and references/ms_budget.md. Baseline upward pressure ~0.2 MS/year from Warden contribution; Secession War-scale events ~1 MS/year net downward. Terminology updated RS→MS per ED-731."
+    status: resolved
+    severity: P2
+    resolution_commit: "f2b5d143 (MS trajectory v1)"
+
+  # Migrated 2026-04-24 from active ledger (Wager system entries — committed 7d45753)
+  - id: ED-739
+    date: 2026-04-24
+    description: "Edeyja Arc D (Confrontation) and Arc E (Wager) added to npc_behavior §5.2. Translates §3.4 Thread Scar matrix into WC-track-specific consequence (Arc D) and provides Consequence-genre-mediated negotiation path (Arc E). Resolves audit conversation finding that WC track lacked decay clause and that ms_budget §Conclusion mis-framed WC 3 as 'singular survival path' when it is actually a budget enabler with maintenance requirements."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"
+
+  - id: ED-740
+    date: 2026-04-24
+    description: "ms_budget Conclusion reframed from 'WC 3 is the singular endgame survival path' to three-path framing (disciplined non-Warden / WC 3 cooperative / WC 3 wagered). Prior framing produced player misread that WC 3 was a survival floor; correct reading is budget enabler with three viable late-game configurations."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"
+
+  - id: ED-741
+    date: 2026-04-24
+    description: "wc_survival_spine 'Why WC 3 Is Singular' reframed to 'Why WC 3 Functions as a Budget Enabler'. Adds explicit WC decay clause (operations Edeyja's Continuity Conviction registers as disruptive cost WC −1; cap −2 WC/season from this path; reaching 0 fires Arc D Confrontation)."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"
+
+  - id: ED-742
+    date: 2026-04-24
+    description: "social_contest §6.1 Obligations extended to permit Wager Obligation framing — verifiable-future-condition commitment in Grand Contest using Projection genre + Consequence Resonant Style. Generalizable mechanism for any Continuity/Faith/Order-primary NPC with Reason/Precedent secondary. Edeyja Arc E is the canonical instance."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation"
+
+  # Migrated 2026-04-24 from active ledger (P1-1 Strain inversion entries — committed 9a16e5d)
+  - id: ED-743
+    date: 2026-04-24
+    description: "Strain trigger inversion fix (P1-1). Strain and IP advance triggers relocated from battle-season to held-instability. peninsular_strain §3.2 (Vulnerability Signal) replaces battle-occurrence with Accord ≤ 1 territory-count thresholds (0-1 → +0; 2-3 → +1; 4-5 → +2; 6+ → +3). peninsular_strain §4.1 replaces battle-season +1 with per-territory +1 capped at +3/season. peninsular_strain §4.2 decouples decay from peninsula-wide peace, adds Treaty-pair decay (−1/pair, cap −2/season). peninsular_strain §4.4 reframes Strain/IP from 'no cross-feeding' to 'shared signal, independent aggregation'. mass_battle §E.2 retains immediate MS and Accord costs but redirects IP/Strain to deferred via peninsular_strain. mass_battle §E.4 caps reframed accordingly. Source: 2026-04-24 audit conversation P1-1 — prior mechanism inverted historical Pax Romana logic (Pax stabilizes after conquest; spec taxed conquest itself). Combination of fix-options (1)+(3) per audit conversation: held-instability advance + Treaty-pair decay."
+    status: resolved
+    severity: P1
+    source: "2026-04-24 audit conversation P1-1"
+
+  - id: ED-744
+    date: 2026-04-24
+    description: "ED-623 superseded by ED-743. ED-623's '+2 → +3 IP per battle-season' rate change addressed the symptom (insufficient threat manifestation in ST-42) but reinforced the inverted trigger; ED-743 relocates the trigger entirely. ST-42 was measuring battle-presence-as-signal under the old mechanism; the new mechanism's calibration requires fresh sim-validation. Note: this supersession invalidates ST-42's specific calibration finding while preserving the underlying observation that the prior +2 rate produced rarely-manifested threats — under the new mechanism, threat manifestation is governed by territorial-instability persistence rather than battle frequency."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit conversation P1-1"
+
+  # Migrated 2026-04-24 from active ledger (Scene Slate + scale_transitions entries — committed 3e6b0b3 + 19fc650)
+  - id: ED-745
+    date: 2026-04-24
+    description: "Scene Slate mandatory overflow defined as 'Witness Mode' (Read/Appraise free roll + one narrative input + no Domain Echo). Internal priority ordering for 2+ simultaneous mandatories. Source: 2026-04-24 audit completion §3.2/§3.8."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.2/§3.8"
+
+  - id: ED-746
+    date: 2026-04-24
+    description: "Scene Slate Step 4 keyword expansion (6→~25); role-reference resolution table (11 mappings); validator at character creation/Conviction revision. Source: scene_slate §2.1 P2 #2."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.6"
+
+  - id: ED-747
+    date: 2026-04-24
+    description: "Scene Slate cross-step pruning algorithm specified. Deterministic ordering across Steps 1-7 + 2b. internal_index_within_step rules per step. Source: 2026-04-24 audit completion §3.1."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 audit completion §3.1"
+
+  - id: ED-748
+    date: 2026-04-24
+    description: "scale_transitions §3.4 + §3.6 stubs filled with forward-references to §5 Domain Echo and mass_battle §A.10. Source: 2026-04-24 audit §3.12."
+    status: resolved
+    severity: P3
+
+  - id: ED-749
+    date: 2026-04-24
+    description: "Stability Crisis Mandatory Zoom-In gains hysteresis: re-arms only after Stab ≥ 3 maintained for 2 consecutive Accountings. Source: 2026-04-24 audit §3.4."
+    status: resolved
+    severity: P2
+
+  - id: ED-750
+    date: 2026-04-24
+    description: "Settlement Revolt Mandatory Zoom-In gains deduplication: settlement-events at same settlement same season collapse into single Mandatory entry. Source: 2026-04-24 audit §3.5."
+    status: resolved
+    severity: P3
+
+  # Migrated 2026-04-24: ED-665 resolved
+  - id: ED-665
+    date: 2026-04-17
+    description: "Grand Contest as succession trial not in canonical docs. Resolved 2026-04-24: social_contest §7.2 added — Succession Contest specified as Grand Contest variant with succession-specific adjudicator, claim eligibility, outcome rules (Decisive / Compromise / Total Victory), and faction-split rule on Compromise. baralta_crown_claim §2 remains canonical Crown instance; new §7.2 provides generalizable framework for all factions."
+    status: resolved
+    severity: P2
+
+  # Migrated 2026-04-24: ED-704 resolved
+  - id: ED-704
+    date: 2026-04-19
+    description: "Seizure does not apply to Uncontrolled territories. Resolved 2026-04-24: peninsular_strain §5.2 adds explicit Uncontrolled exclusion — Seizure requires Mandate-bearing controller (no Mandate to exceed). Uncontrolled territories must first come under control via Pastoral Assumption, Conquest, or RM Founding before Seizure can target them."
+    status: resolved
+    severity: P2
+
+  # Migrated 2026-04-24: ED-705 resolved
+  - id: ED-705
+    date: 2026-04-19
+    description: "Cohesion -15 = derived of Stability -1, not independent. Resolved 2026-04-24: Cohesion was renamed to Discipline per PP-232; mass_battle §C.4 PP-195 historical note updated to reflect canonical naming. Discipline = Stability × 10 per derived_stats_v30 §8 (a -15 Discipline drain represents derived-resource fluctuation, not direct -1 Stability stat damage)."
+    status: resolved
+    severity: P2
+
+  # Migrated 2026-04-24 from active ledger (ED-661/662/664/665/669/712 — resolved this session)
+  - id: ED-664
+    date: 2026-04-17
+    description: "Advisor-principal confidentiality boundary specified in npc_behavior §3.5. Three zones defined: private counsel (no consequence), public breach (Disposition −2 to −4, Renown loss, Standing −1, possible removal), strategic defection (relationship reset). Knot-mediated extraction permitted (Disposition ≥ +3 + active Knot allows one-time gift); public citation of leaked counsel ruptures Knot to Disposition −4 + invalidates Evidence Track use. Closes Consequence-Resonant-Style loophole. Historical anchor: Privy Counsellor's oath, medieval evil-counsellor doctrine, curia regis great-council/small-curia distinction."
+    status: resolved
+    severity: P2
+
+  - id: ED-662
+    date: 2026-04-17
+    description: "Elske residency post-Graduated-Autonomy resolved as null-intersection in campaign_architecture §5.3. Elske resides in Altonia by Laskaris-marriage; Löwenritter Autonomy stages (Loyal/Restless/Autonomous/Split) govern Crown-Löwenritter Valorian relationship, not Crown-Altonian. Residency unaffected through all stages except edge case (Crown Stability ≤ 1 + Split simultaneity), which is already addressed by existing IP/Vanguard mechanics rather than new residency rules. Historical anchor: pre-modern dynastic-marriage princess residency derived from husband's house."
+    status: resolved
+    severity: P2
+
+  - id: ED-661
+    date: 2026-04-17
+    description: "Ministry Protocol 3 seniority conflict. Resolved 2026-04-24: closed as superseded. Term 'Ministry Protocol 3' not found in current spec corpus across player_agency, faction_politics, social_contest, scale_transitions, npc_behavior, faction_layer, worldbuilding. Most likely vestigial reference from pre-2026-04-19 mechanism consolidation (Coup Counter struck → Graduated Autonomy; other mechanism strikes during that pass). If a Ministry Protocol surface re-emerges later, established historical seniority resolution patterns apply: Ming Five Chief Military Commissions Left/Right co-leadership pattern; Ancien Régime France institutional-role hierarchy with overlap; modern UK convention rather than rule. No spec edit warranted at present."
+    status: resolved
+    severity: P2
+
+  - id: ED-669
+    date: 2026-04-17
+    description: "Irreversible institutional precedent persistence across campaigns. Resolved 2026-04-24: closed as deferred-pending-design-intent. The question of cross-campaign precedent persistence is a campaign-architecture decision rather than a spec edit. Three coherent positions per game-design-precedent research: (1) Single-campaign architecture (Hogwarts Legacy model) — campaigns self-contained, precedents reset; (2) Persistent world (Bartle/MMO model — Avalon: The Legend Lives 1989+, EVE Online) — precedents persist across sessions; (3) NG+ legacy (State of Decay 2 4-legacy-endings model) — completed campaigns mark world; subsequent campaigns inherit some markers. Each position has different implementation cost and design surface. Resolution requires Jordan campaign-architecture decision; not a spec defect. Spec is unchanged unless and until a specific architecture is selected."
+    status: resolved
+    severity: P2
+
+  - id: ED-712
+    date: 2026-04-19
+    description: "Generalized Faction Succession Contest. Resolved 2026-04-24 across two commits: (1) social_contest §7.2 (commit aa14957) specified Succession Contest as Grand Contest variant with faction-split rule on Compromise outcome and unified transition on Total Victory; (2) victory_v30 §8 Founding Mechanic prerequisites extended to add settlement-scale Settlement Emergence pathway (≥ 4 settlements with Order ≤ 1 + player Community Organizing) alongside the original province-scale Cultural Uprising trigger. Eliminates need for separate designs/provincial/faction_succession_split_v30.md — mechanism integrates into existing canonical specs rather than spinning out new doc."
+    status: resolved
+    severity: P2
+    source: "PP-666"
+
+  # Migrated 2026-04-24 (resolved this session)
+  - id: ED-755
+    date: 2026-04-24
+    description: "npc_behavior §8.11.5 Volume Control: cross-faction Outreach floor — at least 1 of 3-Outreach cap reserved for non-player-faction qualifying NPCs (fills normally if none qualify). Source: 2026-04-24 audit §3.7."
+    status: resolved
+    severity: P2
+
+  - id: ED-756
+    date: 2026-04-24
+    description: "TC disambiguation sweep: glossary note added to top 5 TC-density design docs (npc_faction_arc_interdependency, narrative_scenario_chains, conviction_track_v30, arcs_46_55_resolved, faction_politics_v30) explicitly stating TC = Theocracy Counter (Conviction Track is always written in full). Manual review of 268 TC instances across these 5 files confirmed 0 instances where TC = Conviction Track; corpus uses 'TC' exclusively for Theocracy Counter. The disambiguation problem was real (the abbreviation IS ambiguous in principle) but the residual ambiguity is exclusively documentation-level — readers must infer from context. Glossary note resolves this without per-instance edits. 268 of 943 total TC instances now disambiguated by header note. Source: 2026-04-22 session log carry-over."
+    status: resolved
+    severity: P3
+
+  - id: ED-757
+    date: 2026-04-24
+    description: "npc_behavior §7.1 framework drift table — fixed malformed Niflhel row (was 3-column entry in 4-column table). Restored row to 4 columns with Frequency = N/A (drift mechanic dissolved with faction). No mechanical change; structural cleanup. Source: 2026-04-24 Niflhel residual sweep."
+    status: resolved
+    severity: P4
+
+  - id: ED-758
+    date: 2026-04-24
+    description: "Cardinal Officer naming reconciled. arc_expansion_v30 proposed names (Stark/Voss/Vorn/Kald) replaced with faction_politics §3.5 + npc_roster §13 canonical (Jarnstal/Olafsson/Aldric Tormann/Klapp). Bulk surname replacement applied across arc_expansion. Closes ED-591/592/593/594."
+    status: resolved
+    severity: P2
+
+  # Migrated 2026-04-24 (resolved 2026-04-24, batch 3)
+  - id: ED-751
+    date: 2026-04-24
+    description: "Church Sacred Veto cooldown specified: once per 4 consecutive seasons, per-use reset (not per-game-year cycle). Source: 2026-04-24 audit §3.3."
+    status: resolved
+    severity: P2
+
+  - id: ED-752
+    date: 2026-04-24
+    description: "faction_layer §5.8 NPC vote rules: Niflhel STRUCK propagated (no faction-level replacement); Guilds gains settlement-broker influence note (max 2-vote shift via Guild Council operating in broker-influenced settlements per settlement_layer §4.7-4.9). Source: 2026-04-24 audit §3.9."
+    status: resolved
+    severity: P3
+
+  - id: ED-753
+    date: 2026-04-24
+    description: "mass_battle §A.7 Phase 2 Volley gains design-rationale paragraph: Power-only formula is intentional asymmetry — Volley is supplementary, Engagement decisive; pure-ranged underperforms equivalent-Military melee at parity. Source: 2026-04-24 audit §3.11."
+    status: resolved
+    severity: P3
+
+  - id: ED-754
+    date: 2026-04-24
+    description: "mass_battle §D.2 officer death roll recalibrated 1d10 → 1d20. Prior rate (50% death at routine 5-Size loss) lost all named officers in 4-6 battles; 1d20 preserves jeopardy at catastrophic loss while permitting named officer persistence across campaigns. Source: 2026-04-24 audit §3.10."
+    status: resolved
+    severity: P2
+
+  - id: ED-759
+    date: 2026-04-24
+    description: "WC decay rate calibration (stress-test fix). Prior rate (−1 WC per disruptive op, cap −2/season) made Arc E Wager pathway unreachable — Scars ≥ 2 prerequisite simultaneously dropped WC below ≥ 2 prerequisite. Revised: ≥ 2 disruptive ops in same season → WC −1 (cap −1/season). Arc D fires only if WC was ≥ 1 in prior 4 seasons (initial-state WC 0 ≠ Arc D). Source: 2026-04-24 stress-test 2."
+    status: resolved
+    severity: P2
+    source: "2026-04-24 stress-test"
+
+  - id: ED-760
+    date: 2026-04-24
+    description: "Confidentiality boundary §3.5.4 extended scope (stress-test fix). Closed gaps: (1) closed Asymmetric Proceedings (Tribunal/Audience/Inquisition) count as public citation regardless of advisor presence; (2) telling third party who keeps confidential = partial rupture (Disp −2); (3) fictional/dramatic/reframed publication of counsel content fires rupture — advisor's Conviction reads substance, not genre wrapper. Source: 2026-04-24 stress-test 3."
+    status: resolved
+    severity: P2
+
+  - id: ED-761
+    date: 2026-04-24
+    description: "Mandatory internal priority list extended to cover all §4.3.2 triggers (was: 4 entries; now: 8 entries adding Stability Crisis, Knot Partner Crisis, Companion Arc Trigger, Rank Advancement Recognition Event). Witness Mode action specified as roll-required not auto-success (free = scene-action cost, not outcome). Source: 2026-04-24 stress-test 6."
+    status: resolved
+    severity: P2
+
+  - id: ED-762
+    date: 2026-04-24
+    description: "Succession Contest Compromise outcome (§7.2.1) gains track-distance weighting (Track 4 = 60/40 majority split; Track 5 = 55/45; Track 6 = 50/50). Adds Stability floor 3 to prevent immediate Stability Crisis cascade post-split (would fire mandatory Zoom-In per ED-749 hysteresis). Source: 2026-04-24 stress-test 4."
+    status: resolved
+    severity: P2
+
+  - id: ED-763
+    date: 2026-04-24
+    description: "Arc E Wager passed — post-Wager Scar threshold tolerance specified. Spec was silent on whether Arc D (Scar 3) re-armed after Wager pass. Resolution: Wager-pass raises Arc D Scar threshold from 3 to 5 permanently for the campaign (relationship transformation, not reset). Source: 2026-04-24 stress-test 7."
+    status: resolved
+    severity: P3
+
+  - id: ED-764
+    date: 2026-04-24
+    description: "Niflhel STRUCK propagation to params files (params/factions_personal.md, params/contest.md, params/bg/military.md). Faction stat sheet row stricken; Unique Actions Niflhel Quiet entries stricken; Niflhel Social Toolkit (ED-041 provisional) marked STRUCK with redirect to settlement-broker individual NPC behavior; BG card reference updated. Also propagated Löwenritter Coup Counter → Graduated Autonomy in same params file (per ED-589 c0be619f, prior). Source: 2026-04-24 stress-test 12 Niflhel residual scan."
+    status: resolved
+    severity: P3
+
+  - id: ED-765
+    date: 2026-04-24
+    description: "Officer death roll scoped per-battle, not per-Size-loss-event. Spec was ambiguous (could be read as per-event with multi-stage compounding probability). Resolution: 1d20 vs total Size lost in battle, single roll at battle resolution. Cleaner probability semantics; one named-officer death moment per battle for narrative clarity. Source: 2026-04-24 stress-test 9."
+    status: resolved
+    severity: P3
+
+  - id: ED-766
+    date: 2026-04-24
+    description: "Scene Slate Step 4 keyword validator extended with capitalization heuristic + suggestion mode. Strong matches (capitalized) fire Step 4; weak matches (lowercase ambiguous form like 'order' vs 'Order') trigger suggestion to player to capitalize-or-leave; 0 matches trigger zero-match warning. Prevents false-positive scene generation when player uses common-English form of a system-keyword. Source: 2026-04-24 stress-test 10."
+    status: resolved
+    severity: P3
+
+  - id: ED-767
+    date: 2026-04-24
+    description: "PROVISIONAL marker cleanup pass: mass_battle_v30 contained 3 markers reading '[PROVISIONAL — ED-XXX resolved]' — the EDs were closed but markers persisted. Markers stripped from L229 (ED-355), L333 (ED-354), L417 (ED-358); replaced with parenthetical resolution note. Substantive content unchanged. Source: 2026-04-24 PROVISIONAL marker audit (carry-over from 2026-04-22)."
+    status: resolved
+    severity: P4
+
+  # Migrated 2026-04-25 (resolved 2026-04-24/25)
+  - id: ED-769
+    date: 2026-04-24
+    description: "Rendering Stability → Mending Stability rename residual cleanup. strategic_layer_v30_infill.md L22 PP-042 clarification used old name. Updated to canonical Mending Stability. Note: threadwork_v25_historical.md retains 'Rendering Stability' references as historical (intentional preservation per file naming). Numeric bounds report flagging 'rendering_stability' as drifted is partly informative — the value distributions came from threadwork_v25_historical (legitimate historical context) plus this single residual in strategic_layer_v30_infill (now fixed). Source: 2026-04-24 numeric bounds review."
+    status: resolved
+    severity: P3
+
+  - id: ED-770
+    date: 2026-04-24
+    description: "Numeric bounds audit completed for 14 flagged stats from references/numeric_bounds_report.yaml. Outcome: 9 stats confirmed NOT DRIFT (legitimate multiple thresholds — coherence, discipline, evidence_track, institutional_pressure, mandate, momentum, theocracy_counter, thread_sensitivity, thread_tension); 1 stat NOT DRIFT but inspection-worthy (mending_stability — Past-Oriented Pulling 60 vs Restoration 50 thresholds for different game-state purposes); 1 stat NOT DRIFT (public_instability — 3 vs 4 are different event thresholds); 1 stat CLEANUP (rendering_stability — single residual in strategic_layer_v30_infill fixed in ED-769; remaining occurrences in threadwork_v25_historical are intentional historical preservation); 2 SCAN ARTIFACTS (the, ttrpg — false-positive matches from natural-language regex). The numeric_bounds_report.yaml flagging is conservative (any multi-value stat flagged) — manual triage confirmed essentially all variance is legitimate multi-threshold mechanics rather than drift. Closes 'numeric bounds review (14 flagged stats)' item from session log carry-over. Source: 2026-04-24 numeric bounds audit."
+    status: resolved
+    severity: P3
+
+  - id: ED-771
+    date: 2026-04-25
+    description: "Cross-reference audit fixes (4 broken refs across 3 spec files). (1) mass_battle L446/447: §5.2.2/§5.2.3 (nonexistent in mass_battle's flat structure) → threadwork_v30 §3.2 Coherence Reduction (correct referent for per-operation Coherence cap). (2) mass_battle L575: §4.3.4 brittleness rules (nonexistent — threadwork has §4.3 Auto-Effect Tables but no §4.3.4) → threadwork_v30 §2.4 Operations During Contact (where MS ≤ 40 Shifting Object brittleness rule actually lives, L246). (3) npc_behavior L561: 'Foundations §16.3' (no §16 in either Foundations doc — Foundations 01 has Amendments 1-5, Foundations 02 has Amendments 1-6) → canon/02_foundations_amendment_leap_mechanism Amendment 2 + threadwork_v30 §3.2 + §6 (correct canonical principle for Knot-substrate inseparability driving transformation propagation). (4) peninsular_strain L231: §2.4.2 (nonexistent — only §2.4 + §2.4b exist) → §2.4b Accord vs Order Scale Distinction (which is the actual canonical surface for personal-scale Order cap rule). 5th finding (combat_v30 L363 §11.8 referencing compilation/v0.14/stage11_scale_transitions_deprecated.md): explicit deprecated-file reference, acceptable; not fixed. Source: 2026-04-25 cross-reference audit."
+    status: resolved
+    severity: P3
