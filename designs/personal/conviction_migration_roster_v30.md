@@ -92,7 +92,7 @@ primary_convictions:
   - {conviction: Honor, weight: 0.35}
   - {conviction: Warden, weight: 0.25}
   - {conviction: Community, weight: 0.20}
-cultural_label: solmund_alpine
+cultural_label: varfell_alpine
 self_other_initial: -0.30
 notes: |
   Strong Continuity legacy → primary on Honor (oath-bound) + Warden (stewardship of dependents) + Community.
@@ -123,7 +123,7 @@ primary_convictions:
   - {conviction: Virtue, weight: 0.30}
   - {conviction: Faith, weight: 0.25}
   - {conviction: Warden, weight: 0.20}
-cultural_label: solmund_alpine
+cultural_label: varfell_alpine
 self_other_initial: -0.50
 notes: |
   Founding figure; archetype of selfless protective Virtue-Faith-Warden composite.
@@ -251,9 +251,9 @@ The following migrations are flagged for designer review during Stage 10 calibra
 
 | Character | Issue | Default mapping |
 |---|---|---|
-| Solmund | Pre-Altonian, possibly pre-Einhir per ED-728; cultural template needs review | solmund_alpine (placeholder) |
+| Solmund | Pre-Altonian, possibly pre-Einhir per ED-728; cultural template needs review | varfell_alpine (placeholder) |
 | Vaynard (per PP-650 STRUCK; see canonical_sources struck) | Was tied to Cultural Reformation (struck) and VTM (struck) — Conviction profile needs clean redraft | Authority + Honor + Identity, lowenritter_military background; orientation +0.20 (pragmatic militarist) |
-| Captain Vossler (sim continuity per artifact 15) | New character introduced in artifact 15 sample chronicle; needs full sheet | Honor + Warden + Identity (military-order); solmund_alpine; -0.20 |
+| Captain Vossler (sim continuity per artifact 15) | New character introduced in artifact 15 sample chronicle; needs full sheet | Honor + Warden + Identity (military-order); varfell_alpine; -0.20 |
 | Captain Reinholt (sim continuity per artifact 15) | New character; needs full sheet | Honor + Authority + Order; valorian_court; 0.00 |
 
 These four are flagged for Phase B per-character review. Default mappings are *placeholders*; the integration plan §3.4 D11 deferred per-character refinement to authoring time.

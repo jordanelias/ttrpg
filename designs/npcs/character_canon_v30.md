@@ -116,7 +116,7 @@ NPC.personal_convictions:
 
 Eight authored templates supply the cultural-background distribution:
 
-`solmund_alpine` · `solmund_lowland_merchant` · `valorian_court` · `ecclesiastical` · `hafenmark_procedural` · `lowenritter_military` · `restoration_reformist` · `einhir_traditional`.
+`varfell_alpine` · `crown_lowland` · `valorian_court` · `ecclesiastical` · `hafenmark_procedural` · `lowenritter_military` · `restoration_reformist` · `einhir_traditional`.
 
 Per-NPC sheets in Part B reference template by name. Distributions live in PP-684 §5.1.
 

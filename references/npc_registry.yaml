@@ -38,7 +38,7 @@ characters:
       primary:
         - {conviction: Warden, weight: 0.40}
         - {conviction: Precedent, weight: 0.20}
-      cultural_label: solmund_alpine  # [ASSUMPTION: placeholder per PP-685 §3 — Southernmost template not yet defined]
+      cultural_label: varfell_alpine  # [ASSUMPTION: placeholder per PP-685 §3 — Southernmost template not yet defined]
       self_other_initial: -0.30
       migration_notes: "Legacy 'Continuity' → Warden (stewardship duty: 'the work must continue') + Precedent (ancestral practice). Per PP-685 §4 defaults."
     goals: ["Maintain substrate stability", "Protect Southernmost practitioners", "Continue the work regardless of interference"]
@@ -88,7 +88,7 @@ characters:
       primary:
         - {conviction: Equity, weight: 0.40}
         - {conviction: Warden, weight: 0.25}
-      cultural_label: solmund_alpine
+      cultural_label: varfell_alpine
       self_other_initial: -0.30
       conviction_notes: "Equity primary per behavior_v30 §RM: 'The community is the only legitimate political unit.' Secondary: Continuity → Warden (cultural preservation fallback). PP-685 mapping (Honor/Warden/Community) superseded by behavior file. Rosa Luxemburg archetype — visibility as vulnerability."
     goals: ["Cultural restoration", "Equity and social contract"]

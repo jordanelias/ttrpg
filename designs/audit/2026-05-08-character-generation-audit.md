@@ -204,7 +204,7 @@ The skill applies to NPCs too (per Self-Check item: "Do load-bearing NPCs have a
 | # | Claim | Source A | Source B | Verified |
 |---|---|---|---|:-:|
 | V1 | Maret Uln has incompatible convictions across files | `npc_behavior_v30 §2.10`: Equity (primary), Reason (secondary) | `migration_roster_v30 §2.2`: Honor 0.30 + Authority 0.30 + Identity 0.20, lowenritter_military template | ✓ |
-| V2 | Yrsa Vossen has incompatible convictions across files | `npc_behavior_v30 §2.6`: Equity (primary), Continuity (secondary) | `migration_roster_v30 §2.2`: Honor 0.35 + Warden 0.25 + Community 0.20, solmund_alpine template | ✓ |
+| V2 | Yrsa Vossen has incompatible convictions across files | `npc_behavior_v30 §2.6`: Equity (primary), Continuity (secondary) | `migration_roster_v30 §2.2`: Honor 0.35 + Warden 0.25 + Community 0.20, varfell_alpine template | ✓ |
 | V3 | Baralta has incompatible convictions AND wrong cultural template | `npc_behavior_v30 §2.3`: Precedent (primary), Faith (secondary), **Hafenmark / Categorical Imperative** | `migration_roster_v30 §2.3 (under "Ecclesiastical Faction")`: Faith 0.50 + Virtue 0.20 + Warden 0.10, **ecclesiastical** template | ✓ — Duchess Inge Baralta (Hafenmark sovereign claimant) misfiled under Ecclesiastical with wrong cultural template |
 | V4 | Three Conviction taxonomy versions canonical at once | `npc_stance_triangles.md` (7) | `conviction_track_v1.md` §1 (9) AND `conviction_taxonomy_v30.md §2` (13) | ✓ |
 | V5 | Vaynard arc map has empty Arc A and Arc B | `npc_behavior_v30 §5.2 Magnus Vaynard — Arc Map`: "**Arc A: The Scholar**" then blank, "**Arc B: The Awakened**" then blank, "**Arc C: Consumed**" then content | — | ✓ |

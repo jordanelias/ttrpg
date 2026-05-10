@@ -156,8 +156,8 @@ A cultural background template is a named distribution over the 13 Convictions, 
 Provisional set; calibrate at Stage 10 against character roster.
 
 ```yaml
-solmund_alpine:
-  description: "Solmund Alpine valley culture — communal, devout, conservative"
+varfell_alpine:
+  description: "Varfell alpine culture — communal, devout, conservative"
   distribution:
     Faith: 0.20
     Community: 0.25
@@ -167,8 +167,8 @@ solmund_alpine:
     Authority: 0.05
     Order: 0.05
 
-solmund_lowland_merchant:
-  description: "Solmund lowland trading culture — pragmatic, civic, mobile"
+crown_lowland:
+  description: "Crown lowland trading culture — pragmatic, civic, mobile"
   distribution:
     Utility: 0.20
     Order: 0.20

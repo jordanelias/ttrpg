@@ -77,7 +77,7 @@ NERS = Necessary / Elegant / Robust / Smooth. Verdict column abbreviations: **KE
 |---|---|---|
 | **KEEP+** | N: critical · E: mid (13 is bloat-adjacent) · R: very high · S: mid (3-taxonomy succession debt persists) | The crown jewel. PP-684 §2 defends each Conviction with load-bearing Renaissance grounding. **Snob findings:** (a) 13 may be more than gameplay can engage with — if the player meaningfully engages with 3–4 of their character's Convictions across a campaign, the other 9–10 are scenery. Test by sim. (b) Convictions are positive-valence only; "anti-Faith" is implicit (low Faith weight) but not equivalent to active opposition. Possible gap. (c) Cultural template auto-fills 0.2–0.4 — if a player wants a non-template character (Crown courtier raised by Restoration, for example), the template system flexes how? Authoring needed. |
 
-**(5) Cultural Background Templates [8].** `solmund_alpine`, `solmund_lowland_merchant`, `valorian_court`, `ecclesiastical`, `hafenmark_procedural`, `lowenritter_military`, `restoration_reformist`, `einhir_traditional`.
+**(5) Cultural Background Templates [8].** `varfell_alpine`, `crown_lowland`, `valorian_court`, `ecclesiastical`, `hafenmark_procedural`, `lowenritter_military`, `restoration_reformist`, `einhir_traditional`.
 
 | Verdict | NERS | Note |
 |---|---|---|
