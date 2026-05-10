@@ -98,6 +98,27 @@
         "C3.2 cosmetic rename (high propagation cost for low value)"
       ],
       "key_finding": "Synthesis premise partially obsolete: v30 canon already merged TTRPG/Hybrid (R3-L01, R3-L07) on 2026-04-17. R3 re-asked against actual structure: no mechanical restructure needed. Documentation addition (I-tier ↔ Part phase-mapping) is the only output needed."
+    },
+    {
+      "module": 4,
+      "name": "R4 Hero participation default",
+      "date": "2026-05-09",
+      "ledger_entries": [
+        "R4-L01",
+        "R4-L02",
+        "R4-L03",
+        "R4-L04",
+        "R4-L05",
+        "R4-L06",
+        "R4-L07",
+        "R4-L08"
+      ],
+      "decision": "C4.2 (default-off, Tier 1 strategic baseline; Tier 2 scene-scale opt-in via §B.5 phase-lock)",
+      "rejected_candidates": [
+        "C4.1 default-on (categorical S-fail: contradicts §B.5 phase-lock framing R4-L01; E-fail: per-battle overhead; starves named-officer Disposition channel R4-L03)"
+      ],
+      "deferred_refinement": "C4.3 context-sensitive — adopt only after Q5 T-trigger criteria (T-Boss / T-Cultural / T-Honor-call) formally specified (P1 ambiguity per EC-D4.A-01)",
+      "key_finding": "Three-tier presence model formalized: Tier 0 absent (BG + Where-Were-You), Tier 1 present-strategic (commander, default), Tier 2 present-scene (Zoom In opt-in). §D.3 player wound morale shock R4-L05 designed for exceptional Tier 2 events."
     }
   ],
   "constants": [
@@ -428,6 +449,70 @@
       "canonical_source": "designs/provincial/mass_battle_v30.md",
       "section": "header",
       "quoted_text": "Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)"
+    },
+    {
+      "id": "R4-L01",
+      "sim_variable": "b5_phase_lock_three_points",
+      "value": "Zoom In may only fire at three legal phase-lock points",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.5",
+      "quoted_text": "Zoom In may only fire at one of three legal phase-lock points:\n- **After Phase 1** (orders placed, nothing resolved — cleanest entry)\n- **After Phase 3** (manoeuvre complete, pre-Engagement)\n- **After Phase 6 Step 1** (all damage applied, no ghost units)"
+    },
+    {
+      "id": "R4-L02",
+      "sim_variable": "player_absent_branch",
+      "value": "Player not present → Where-Were-You retrospective",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§D.1",
+      "quoted_text": "**If the player was not present for the battle:** The aftermath scene is replaced by a \"Where Were You?\" retrospective scene per scale_transitions_v30 §4.4. The player learns about the battle's outcome through their social network. The three aftermath choices are not available — the moment has passed."
+    },
+    {
+      "id": "R4-L03",
+      "sim_variable": "named_officer_disposition_command_quality",
+      "value": "Officer Disposition shifts based on player tactical command quality",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§D.2",
+      "quoted_text": "- Player issues a tactically sound command (Battle turn where player's choice contributes to victory): +1\n- Player orders a retreat or sacrifice that saves the unit: +1\n- Player orders the unit into a situation that costs Size ≥ 2: −1"
+    },
+    {
+      "id": "R4-L04",
+      "sim_variable": "player_morale_effect_presence",
+      "value": "+1 Discipline aura while player present",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§D.3",
+      "quoted_text": "Units in the player's current territory gain +1 Discipline while the player is physically present during battle."
+    },
+    {
+      "id": "R4-L05",
+      "sim_variable": "player_wound_morale_shock",
+      "value": "Player wound ≥2: −1 Discipline morale shock",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§D.3",
+      "quoted_text": "If the player is wounded (2+ wounds) or incapacitated during the battle, all friendly units in the battle take −1 Discipline immediately (morale shock)."
+    },
+    {
+      "id": "R4-L06",
+      "sim_variable": "personal_combat_pause_independent",
+      "value": "Personal combat pause: Command suspension and Discipline bonus independent",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§D.3",
+      "quoted_text": "This bonus applies whenever the player is in the territory, including during a personal combat pause (the player is still present; Command suspension and Discipline bonus are independent effects)."
+    },
+    {
+      "id": "R4-L07",
+      "sim_variable": "bg_no_pc_branch",
+      "value": "Player Character not in battle: BG resolution fires",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.5",
+      "quoted_text": "**No Player Character in battle:** BG resolution fires."
+    },
+    {
+      "id": "R4-L08",
+      "sim_variable": "scale_transitions_handoff_rules",
+      "value": "Eight Handoff Rules canonical",
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§3",
+      "quoted_text": "## §3 Eight Handoff Rules"
     }
   ],
   "meta_findings": [

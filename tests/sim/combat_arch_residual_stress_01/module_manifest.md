@@ -190,3 +190,5 @@ Module 1 R1 (`r1_wound_permanence.md`, committed 45c693e2) was authored against 
 The R1 redo against PP-716 canon may produce a different recommendation. Plan: redo R1 in a subsequent session, save as `r1_wound_permanence_v2.md`, mark v1 superseded.
 
 Modules 2–10 remain pending and will use PP-716 canon from the start.
+
+## R4 verified — C4.2
