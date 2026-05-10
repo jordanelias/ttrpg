@@ -1,0 +1,96 @@
+register: deprecated_superseded
+source: references/mechanical_terms_index.md §6
+extracted: '2026-05-10'
+description: Retired terms. Should not appear in active docs.
+total_entries: 32
+renamed:
+- old: Theocracy Counter (TC)
+  new: Church Influence (CI)
+  patch: ED-782
+- old: Rendering Stability (RS)
+  new: Mending Stability (MS)
+  patch: ED-731
+- old: Combat Power (CP)
+  new: Power
+  patch: PP-232
+- old: Cohesion
+  new: Discipline
+  patch: PP-232
+- old: Strength (mass-combat unit)
+  new: Size
+  patch: PP-232
+- old: Command Rating (CR)
+  new: Command
+  patch: PP-232
+- old: EventImpact / EventImpact Matrix
+  new: Key (substrate)
+  patch: PP-687
+- old: Memory record / Memory schema
+  new: Memory entry
+  patch: PP-687
+- old: Contact Rounds
+  new: Thread Fatigue
+  patch: ED-694
+- old: Health (combat damage track)
+  new: Vitality
+  patch: ED-548, ED-694
+- old: Diagnosis (as separate operation)
+  new: Mandatory pre-op read; no roll
+  patch: ED-134, ED-124
+- old: GM resolution (in canon-context)
+  new: Engine resolution
+  patch: canon/01
+removed:
+- term: Thread Depth (TD)
+  status: REMOVED — phantom stat; never tracked
+  reference: PP-166
+- term: Piety Domain Action
+  status: DISSOLVED
+  reference: conviction_track_v30 §3
+- term: 75-threshold Seizure
+  status: REPLACED by Mass Seizure (CI ≥ 60 probabilistic)
+  reference: ci_political §2 supersession
+- term: Path C — Thread Supremacy (Varfell)
+  status: STRUCK
+  reference: PP-663
+- term: Niflhel as faction
+  status: STRUCK; mechanic functions redistributed to settlement-broker
+  reference: CR-STRIKE-2026-04-19, conflict_architecture
+- term: Vaynard Thread Mastery (VTM)
+  status: STRUCK
+  reference: PP-663
+- term: Cultural Reformation (PP-650)
+  status: STRUCK
+  reference: PP-650 (replaced by PP-685)
+- term: Co-Movement Card (BG-only ten-card deck)
+  status: REPLACED by 18-card deck
+  reference: threadwork §7.1
+deprecated_abbreviations:
+- abbreviation: TLK
+  meaning: Torben Loyalty Clock
+  status: DEPRECATED — drain rate undefined (F72 gap)
+- abbreviation: DD
+  meaning: Deniability Debt
+  status: DEPRECATED (Niflhel-tied; mechanic functions redistributed). Full term still appears in some docs as "Deniability Debt."
+- abbreviation: FSTAT
+  meaning: Faction Stats (collective)
+  status: DEPRECATED — was simulator category code, never an in-game term
+legacy_frameworks:
+- legacy_label: Categorical Imperative
+  replacement: One of the 13 Convictions per faction; see conviction_migration_roster
+- legacy_label: Virtue
+  replacement: 'Virtue (Conviction #12) + Self-Other orientation'
+- legacy_label: Faith
+  replacement: 'Faith (Conviction #1) + Authority (Conviction #2)'
+- legacy_label: Scholastic
+  replacement: 'Scholastic (Conviction #4)'
+- legacy_label: Equity
+  replacement: 'Equity (Conviction #6)'
+- legacy_label: Honor
+  replacement: 'Honor (Conviction #13)'
+- legacy_label: Reason (legacy tag)
+  replacement: (per migration roster — varies by character)
+- legacy_label: Continuity (legacy tag)
+  replacement: (per migration roster — varies by character)
+- legacy_label: Ethical Framework Modifier
+  replacement: Mission + Cascade + Public Expectation triadic decomposition (PP-686)

@@ -1,0 +1,59 @@
+register: attribute_mechanic_collisions
+source: references/mechanical_terms_index.md §3
+extracted: '2026-05-10'
+rule: Character/faction characteristics must not collide with mechanic words.
+active_violations:
+- violation: '**"Mandate Pool"** as a strategic-layer pool name (when "Faction Pool" or "Political Pool" is also in use)'
+  severity: LOW
+  why_it's_a_violation: The faction stat *Mandate* drives a pool that shares its name. Pattern 2 (State-change-naming) doesn't apply because the
+    pool is not *changing* Mandate, it's *spending dice driven by* Mandate. Risks reading "Mandate Pool" as "Mandate ATTRIBUTE = Mandate POOL."
+  rename_target: Use **"Political Pool"** (already canonical in `ci_political_v30 §3.4, §7.2`). Verify all other docs collapse to single name.
+- violation: '**"~~Authority~~Sanction"** as Pressure Point Type (§6). *Renamed in params/contest.md this session.*'
+  severity: MEDIUM → **DONE**
+  why_it's_a_violation: The Conviction word was used as a debate-Pressure-Point-Type label. Pattern 1 (input) doesn't apply — the Pressure Point
+    isn't checking the Conviction; it's a *style of argument.*
+  rename_target: '~~Rename Pressure Point Type to **"Sanction"** or **"Authority Citation"**.~~ **DONE: renamed to Sanction in params/contest.md.**'
+- violation: '**"Cardinal"** as NPC role AND structural frame ("Four-Cardinal Structure" of Church Convictions)'
+  severity: LOW
+  why_it's_a_violation: 'The named NPCs *are* called Cardinals (proper noun). The structural frame uses "Cardinal" generically (cardinal virtues).
+    Risk: reader can''t distinguish "the Cardinals voted" (NPCs) from "the Cardinal Structure determined" (frame).'
+  rename_target: Rename structural frame to **"Four-Virtue Structure"** or **"Quadrennial Frame"**. Reserve "Cardinal" for the NPC role.
+borderline_cases:
+- term: '**"Stability Triggers"**'
+  why_borderline: 'Names the trigger BY the stat it threatens (Pattern 2). Acceptable but the *Stability* noun appears in: Stability stat, Stability
+    Triggers, Stability Recovery, Accounting Stability Check, Faction Collapse Exit Procedure (Stability=0).'
+  audit_question: 'Audit: is Stability ever *not* the subject of these mechanics? If yes, rename that case. Currently all five are about Stability
+    changing. **CLEAN.**'
+- term: '**"Wealth Zero Consequence"**'
+  why_borderline: Pattern 2.
+  audit_question: Same audit. **CLEAN.**
+- term: '**"Military Layer"** as a doc title'
+  why_borderline: The doc is *about* the Military stat's strategic layer. Pattern 2-adjacent.
+  audit_question: 'Audit: is the doc title ever shortened to just "Military"? If yes, that''s a violation. **CLEAN per current usage.**'
+- term: '**"Disposition Track"** (§8 fieldwork) vs Disposition (NPC attribute)'
+  why_borderline: Glossary acknowledges (PP-691). The mechanism is the *Track* (a clock-like construct); the attribute is *Disposition* (a state).
+  audit_question: 'Audit: when prose says "Disposition" alone, does it mean the state or the Track? **Usage is currently consistent — state context
+    vs mechanic context.** Worth a one-sentence glossary note.'
+- term: '**The 13 Conviction names appearing as debate Contest Style names** (Citation/Vision/Suppression/Knot-required)'
+  why_borderline: The Style names ARE renamed from Convictions, so this is already mitigated.
+  audit_question: 'Audit: anywhere a Conviction word appears in debate context outside the Style framework, ensure it''s clearly the Conviction.
+    **Mostly clean per spot-check; full text sweep recommended.**'
+compliant_patterns:
+- term: Combat Pool, Argue Pool, Fieldwork Pool, Thread Pool
+  pattern: Pattern 1 (stat-as-input)
+  why_compliant: Pool names use the *system* not the attribute. Drivers are attributes; pool names are not attributes.
+- term: Combat Endurance (CE)
+  pattern: Pattern 1
+  why_compliant: Endurance is the stat; CE is the mechanic. Naming makes the role clear.
+- term: Health per Size (H), Total Health
+  pattern: Pattern 1
+  why_compliant: Health/Size are mass-combat-renamed terms; the formulas use them as inputs.
+- term: ~~Conviction Track (CV)~~ → Piety Track (PT)
+  pattern: ~~Pattern 3~~
+  why_compliant: '**Renamed.** "Conviction" removed from track name — §1 attribute word. PT is scale-neutral name.'
+- term: The 13 Convictions appearing at faction scale
+  pattern: Pattern 3
+  why_compliant: Per faction_behavior §3.2 Cascade math. Documented intentional.
+- term: Coherence (personal stat + threadwork track + cosmological substrate)
+  pattern: Pattern 3
+  why_compliant: Documented intentional in foundations canon.

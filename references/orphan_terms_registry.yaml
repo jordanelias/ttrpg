@@ -1,0 +1,94 @@
+register: orphan_terms
+source: references/mechanical_terms_index.md §5
+extracted: '2026-05-10'
+description: Terms in design docs not yet routed to a vocabulary silo.
+total_entries: 22
+entries:
+- term: Companion (Companion Specification)
+  where_seen: settlement_layer affects-list
+  recommended_silo: §15 scale-bridging or §11 faction layer
+  confidence: LOW — needs companion_spec doc read
+- term: Throughline (T1, T2, T3, T7)
+  where_seen: settlement_layer, fieldwork, threadwork preambles
+  recommended_silo: §16 authoring/infrastructure
+  confidence: HIGH
+- term: Stage 6, Stage 6b, Stage 10 (sim)
+  where_seen: conviction_taxonomy, articulation, key_substrate
+  recommended_silo: §16 authoring/infrastructure
+  confidence: HIGH
+- term: Always-Already Self-Rendering
+  where_seen: canon/01
+  recommended_silo: §4 cosmological (added)
+  confidence: DONE
+- term: 5-typology (temperament)
+  where_seen: territory_temperaments §2
+  recommended_silo: §3 territory attributes (already added)
+  confidence: DONE
+- term: Class A / Class B canonical
+  where_seen: most v30 docs
+  recommended_silo: §16 authoring
+  confidence: HIGH
+- term: Class B 5th axis (Conviction extension)
+  where_seen: conviction_taxonomy §2.2
+  recommended_silo: §1 character (already noted as deferred)
+  confidence: DONE
+- term: Co-files (cross-doc updates)
+  where_seen: conviction_taxonomy header
+  recommended_silo: §16 authoring
+  confidence: HIGH
+- term: Approach (Threadwork sub-skill)
+  where_seen: threadwork §2.1 (Approach Training)
+  recommended_silo: §7 threadwork (already covered)
+  confidence: DONE
+- term: Bonded NPC
+  where_seen: articulation §2.3
+  recommended_silo: §1 character (added)
+  confidence: DONE
+- term: Bonds (attribute, "Bonds attribute cap")
+  where_seen: derived_stats §10.1
+  recommended_silo: §1 character — **added to §1.2 this session**
+  confidence: DONE
+- term: Heroic Resource Slot
+  where_seen: (legacy term in settlement_layer §6.1)
+  recommended_silo: §1 or §2
+  confidence: LOW (may be deprecated)
+- term: Stature (Ladder)
+  where_seen: settlement_layer §6.1
+  recommended_silo: §3 territory or §16 (player-progression)
+  confidence: MEDIUM
+- term: Renown
+  where_seen: derived_stats §10.3 (Renown ↔ Derived Value Bridge)
+  recommended_silo: §1 character — **added to §1.2 this session**
+  confidence: DONE
+- term: Bond (vs Knot)
+  where_seen: articulation §2.3
+  recommended_silo: §1 character — already added (Bond / Bonded NPC)
+  confidence: DONE
+- term: TroopCount
+  where_seen: derived_stats §7
+  recommended_silo: §10 mass combat — derived value
+  confidence: MEDIUM (extend silo)
+- term: Settlement Combat Defense Feedback
+  where_seen: derived_stats §10.4
+  recommended_silo: §3 territory or §10 combat
+  confidence: MEDIUM
+- term: Multiplier Tiers
+  where_seen: derived_stats §3
+  recommended_silo: §16 (engine architecture)
+  confidence: MEDIUM
+- term: Concern queue / Memory salience indicator / Bonds register
+  where_seen: articulation §2.1, §2.2, §2.3
+  recommended_silo: UI/protagonist-lens — separate sub-silo of §16
+  confidence: LOW
+- term: Cross-faction Wing Allocation
+  where_seen: settlement_layer §1.4.4
+  recommended_silo: §3 territory (already added)
+  confidence: DONE
+- term: Pastoral Assumption
+  where_seen: settlement_layer §1.7
+  recommended_silo: §3 territory (already added)
+  confidence: DONE
+- term: Niflhel Operative (legacy)
+  where_seen: conflict_architecture (Niflhel struck)
+  recommended_silo: §X-deprecated
+  confidence: DONE (in §6)

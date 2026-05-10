@@ -1,0 +1,201 @@
+register: cross_silo_overlaps
+source: references/mechanical_terms_index.md §2
+extracted: '2026-05-10'
+description: Terms appearing in 2+ vocabulary silos. Intentional polysemy, accidental duplicates, word-class violations.
+total_entries: 55
+entries:
+- word: '**Composure**'
+  silos_where_it_appears: §1 character stat (derived) · §6 debate damage track · §16 (dice engine, indirectly)
+  verdict_+_rationale: INTENTIONAL — debate-system damage track *is* the character's Composure stat being attacked. Same noun, same referent.
+    Glossary cross-lists it. **Keep.**
+- word: '**Coherence**'
+  silos_where_it_appears: §1 character stat · §4 cosmological state · §7 threadwork track
+  verdict_+_rationale: INTENTIONAL — Coherence is one concept (rendering integrity) examined at three scales (personal stat, cosmological substrate,
+    in-operation track). **Keep.**
+- word: '**Mending Stability (MS)**'
+  silos_where_it_appears: §4 world-cosmological · §7 threadwork · §12 clocks · §14 victory
+  verdict_+_rationale: INTENTIONAL — MS is the canonical world-clock; every system that touches it cross-references the same value. **Keep.**
+- word: '**Certainty**'
+  silos_where_it_appears: §1 character stat · §4 solmund-world
+  verdict_+_rationale: INTENTIONAL — Certainty is the cosmology-orthodoxy stat; its definition is rooted in §4 even though it lives on the character
+    sheet. **Keep.**
+- word: '**~~Conviction Track / CV~~**'
+  silos_where_it_appears: §9 (per-territory) · §12 clocks · §14 victory · §6 debate
+  verdict_+_rationale: '**NO LONGER KEPT.** Renamed: territory = Piety Track (PT); contest = Persuasion Track. "Conviction" is a §1 attribute
+    word — silo contamination.'
+- word: '**The 13 Conviction names** (Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue,
+    Honor)'
+  silos_where_it_appears: §1 character attributes · §2 faction attributes (via faction Cascade)
+  verdict_+_rationale: INTENTIONAL — same Conviction set at personal and faction scale (per conviction_taxonomy §1). **Keep but FLAG for §3 collision
+    audit:** a Conviction name appearing as a *mechanic verb* would be a violation. None currently do.
+- word: '**Domain Echo**'
+  silos_where_it_appears: §6 debate (bridge out) · §10 mass combat (bridge out) · §11 faction layer · §15 scale-bridging
+  verdict_+_rationale: INTENTIONAL — Domain Echo is the canonical *bridge mechanism*; every personal-scale system that can trigger it cross-references
+    the same primitive. **Keep.**
+- word: '**Knot**'
+  silos_where_it_appears: §1 character (relationships) · §4 cosmological (Knot Formation during Leap) · §7 threadwork (Knot Strain) · §15 scale-bridging
+  verdict_+_rationale: 'INTENTIONAL — Knot is *one concept* (relational lock) treated at three depths: personal-relationship Knots, cosmological-Leap
+    Knots, threadwork Knot-Strain. Glossary acknowledges. **Keep.**'
+- word: '**Disposition**'
+  silos_where_it_appears: §1 character (NPC attribute) · §8 fieldwork (Disposition Track mechanic)
+  verdict_+_rationale: BORDERLINE INTENTIONAL — Disposition is a noun describing NPC state; the Track is the *mechanic* that operates on it. Different
+    ontological registers. **Acceptable as-is per glossary note (PP-691) but worth a callout:** when used in mechanics writing, distinguish *NPC's
+    disposition* (state) from *Disposition Track* (mechanic operating on it).
+- word: '**Standing**'
+  silos_where_it_appears: §2 faction attribute · §4 (state.standing_change Key type)
+  verdict_+_rationale: INTENTIONAL — Standing is a faction attribute; the Key type names the change-event, which is correct. **Keep.**
+- word: Word
+  silos_where_it_appears: Silos / locations
+  verdict_+_rationale: Problem
+- word: '**Cardinal**'
+  silos_where_it_appears: §2 faction attributes (Church Cardinal NPC role) · NPC-roster terminology · BG strategic context (the Four-Cardinal
+    Structure)
+  verdict_+_rationale: 'Two separate uses: (a) Church Cardinal as named NPC role, (b) Cardinal as cardinal-virtues structural-frame. Resolved
+    if "Cardinal" is exclusively the NPC role and the structural frame is renamed (e.g., "Four-Virtue Structure"). **Recommend rename of structural
+    frame.**'
+- word: '**Authority**'
+  silos_where_it_appears: '§1 (Conviction #2) · §6 (debate Pressure Point Type — **RENAMED to Sanction**) · §2 (faction-attribute parlance, adjacent
+    to Mandate)'
+  verdict_+_rationale: '~~Three uses, one deliberate (Conviction). Authority-as-Pressure-Point-type uses the Conviction''s English root, but mechanically
+    "Authority" the Pressure Point is *not* the Conviction.~~ **RESOLVED: Pressure Point renamed to "Sanction" in params/contest.md. Remaining
+    uses (Conviction #2, faction-attribute parlance) are non-colliding.**'
+- word: '**Equity / Order / Precedent / Continuity / Honor**'
+  silos_where_it_appears: '§1 (Convictions #6/3/8/legacy/13) · debate argument-style classifiers (Citation = Precedent + Revealing; etc.)'
+  verdict_+_rationale: The four Contest Style names (Citation/Vision/Suppression/Knot-required) **already use rename-from-Conviction** so this
+    is mostly clean. But internally in contest §4 and faction_behavior §3.7, these Conviction labels are repeated for argumentation context with
+    no clear Style mapping. **Audit recommendation:** every place a Conviction word appears in a mechanic context, add inline cross-reference
+    to the §1 Conviction definition.
+- word: '**Continuity**'
+  silos_where_it_appears: §1 (LEGACY Conviction tag) · §2 (faction-attribute legacy framework)
+  verdict_+_rationale: LEGACY-only collision; both deprecated PP-684. **Continue using new 13-Conviction names; flag any active-doc "Continuity"
+    references for sweep.**
+- word: '**Categorical Imperative / Faith**'
+  silos_where_it_appears: §1 (LEGACY) · §2 (faction-ethical-framework legacy)
+  verdict_+_rationale: Both replaced by 13-Conviction taxonomy. **Sweep all active docs.**
+- word: '**TC** (abbreviation)'
+  silos_where_it_appears: 'LEGACY: §12 clock for "Theocracy Counter" · §6 debate "Conviction Track"'
+  verdict_+_rationale: RESOLVED at term level (TC no longer used; CI = Church Influence; CT = Conviction Track). **Corpus residuals exist** (npc_behavior
+    swept; mass_battle, throughlines_meta_infill, npc_character_analyses queued). Continue sweep.
+- word: '**CP** (abbreviation)'
+  silos_where_it_appears: §1 (Character Points, current) · §10 (Combat Power, renamed to Power)
+  verdict_+_rationale: 'RESOLVED: ED-136 locks CP to Character Points; CP = Combat Power deprecated. **Sweep complete per alias_registry.**'
+- word: '**TD** (abbreviation)'
+  silos_where_it_appears: §1 (Thread Depth, REMOVED PP-166) · Mermaid `flowchart TD` (top-down syntax)
+  verdict_+_rationale: 'RESOLVED: Thread Depth phantom; never appeared in docs. **No action needed.**'
+- word: '**COMP** (abbreviation)'
+  silos_where_it_appears: §6 debate Composure · COMP general English
+  verdict_+_rationale: 'RESOLVED: write "Composure" in full; COMP not standalone.'
+- word: Attribute word (§1)
+  silos_where_it_appears: Used as mechanic in
+  verdict_+_rationale: Verdict
+- word: Strength
+  silos_where_it_appears: Combat min-requirement (mechanic). Mass-combat unit stat **renamed to Size** (PP-232).
+  verdict_+_rationale: RESOLVED for unit-level. **Personal-combat Strength used both as character stat AND as weapon-min-requirement** — borderline;
+    arguably the mechanic *checks* the stat rather than *being* it. **Acceptable** (the character stat IS the mechanic's input).
+- word: Agility
+  silos_where_it_appears: Combat Pool driver.
+  verdict_+_rationale: 'OK — same pattern: stat → pool.'
+- word: Endurance
+  silos_where_it_appears: Health, Stamina derivation.
+  verdict_+_rationale: OK — same pattern.
+- word: Presence
+  silos_where_it_appears: Argue Pool driver, Command formula input.
+  verdict_+_rationale: OK — same pattern.
+- word: Cognition
+  silos_where_it_appears: Command formula input, Investigation pool driver.
+  verdict_+_rationale: OK — same pattern.
+- word: Spirit
+  silos_where_it_appears: Thread Pool eligibility input.
+  verdict_+_rationale: OK — same pattern.
+- word: Attunement
+  silos_where_it_appears: Fieldwork pool driver.
+  verdict_+_rationale: OK — same pattern.
+- word: Attribute word (§2)
+  silos_where_it_appears: Used as mechanic in
+  verdict_+_rationale: Verdict
+- word: '**Mandate**'
+  silos_where_it_appears: '"Mandate Pool" appears in faction-Domain-Action contexts. Faction stat Mandate is the *driver* of the pool, but the
+    pool name shares the noun.'
+  verdict_+_rationale: BORDERLINE VIOLATION. **Recommend renaming the pool to "Faction Pool" (already used in some places) or "Political Pool"
+    (used in ci_political §3.4, §7.2)** to avoid Mandate-the-stat being conflated with Mandate-the-pool. The alias_registry's `faction_pool` /
+    `political_pool` is correct; ensure all use is collapsed to one.
+- word: '**Influence**'
+  silos_where_it_appears: Used as mechanical phrase "X exerts Influence" in some docs.
+  verdict_+_rationale: OK — verb-use of the noun, not a mechanic NAMED Influence.
+- word: '**Wealth**'
+  silos_where_it_appears: '"Wealth Zero Consequence" — mechanic name. The mechanic is *about* the stat reaching 0 but the mechanic''s name uses
+    the stat noun.'
+  verdict_+_rationale: OK — naming convention is fine; reads as "the consequence of Wealth being zero."
+- word: '**Military**'
+  silos_where_it_appears: '"Military Layer" (a doc title), "Military Stat → Unit Power Ceiling" (a rule). The doc title and rule both use the
+    stat noun.'
+  verdict_+_rationale: BORDERLINE — Military as faction-stat is the driver; the doc and rule are *about* it. Acceptable. **However:** if the project
+    ever names a generic "Military action" verb, that would be a violation. Currently there is none.
+- word: '**Intel**'
+  silos_where_it_appears: '"Intel" the stat, "intelligence work" the activity.'
+  verdict_+_rationale: OK — different word forms (noun vs activity-noun); not collision.
+- word: '**Stability**'
+  silos_where_it_appears: '"Stability Triggers" — mechanic-naming uses the stat noun.'
+  verdict_+_rationale: 'BORDERLINE — same pattern as Wealth Zero Consequence. Acceptable: mechanic is *about* Stability changing. **However:**
+    "Stability Recovery," "Accounting Stability Check," "Stability Triggers" all mention Stability — verify these collectively don''t overload
+    the noun. Current usage is consistent.'
+- word: '**Standing**'
+  silos_where_it_appears: '"Standing change" Key type.'
+  verdict_+_rationale: OK — naming convention.
+- word: Attribute word (§3)
+  silos_where_it_appears: Used as mechanic in
+  verdict_+_rationale: Verdict
+- word: '**Provincial Value (PV)**'
+  silos_where_it_appears: Used as input to Spiritual Weight (which is repurposed PV).
+  verdict_+_rationale: OK — naming consistent.
+- word: '**Piety Track (PT)**'
+  silos_where_it_appears: The track and the attribute share name.
+  verdict_+_rationale: OK — same pattern as Stability.
+- word: '**~~Conviction Track (CV)~~**'
+  silos_where_it_appears: Renamed to Piety Track (PT). No longer polysemous.
+  verdict_+_rationale: '**RESOLVED**'
+- word: '**Spiritual Weight**'
+  silos_where_it_appears: Repurposed PV; used as CI generation input.
+  verdict_+_rationale: OK
+- word: '**Temperament**'
+  silos_where_it_appears: Per-territory attribute; used as input to populace-response computation.
+  verdict_+_rationale: OK
+- word: '**Accord**'
+  silos_where_it_appears: Per-territory attribute; "Accord Domain Echo" mechanic uses the noun.
+  verdict_+_rationale: OK — same pattern.
+- word: Word
+  silos_where_it_appears: Silos
+  verdict_+_rationale: Note
+- word: Action
+  silos_where_it_appears: §5, §6, §7, §8, §11
+  verdict_+_rationale: Generic. **"Domain Action" is the strategic-layer specifier;** elsewhere "action" is just a verb.
+- word: Roll
+  silos_where_it_appears: §5, §6, §7, §8, §10, §16
+  verdict_+_rationale: Dice primitive.
+- word: Pool
+  silos_where_it_appears: §5, §6, §7, §8, §10, §11, §16
+  verdict_+_rationale: Dice primitive.
+- word: Stat
+  silos_where_it_appears: §1, §2, §3, §10
+  verdict_+_rationale: Word-class category, not a mechanic.
+- word: Type
+  silos_where_it_appears: §4, §5, §6, §10, §15
+  verdict_+_rationale: Used in compound names (Interaction Type, Formation Type, Key Type).
+- word: Outcome
+  silos_where_it_appears: §6, §11, §15
+  verdict_+_rationale: Dice primitive.
+- word: Failure / Success / Partial / Overwhelming / Degree
+  silos_where_it_appears: §5, §6, §7, §8, §10, §16
+  verdict_+_rationale: Dice-engine outcomes. **Universal — appears in every system.**
+- word: Pool
+  silos_where_it_appears: §5, §6, §7, §8, §10, §11
+  verdict_+_rationale: Dice primitive.
+- word: Stage
+  silos_where_it_appears: §11, §13, §16
+  verdict_+_rationale: Authoring meta or BG phase reference.
+- word: Phase
+  silos_where_it_appears: §10, §11
+  verdict_+_rationale: BG turn-structure unit.
+- word: Value
+  silos_where_it_appears: §1, §2, §3, §4, §16
+  verdict_+_rationale: Generic.

@@ -1,0 +1,87 @@
+register: synonym
+source: references/mechanical_terms_index.md §4
+extracted: '2026-05-10'
+description: Different words for the same mechanical concept. Canonical winner marked.
+total_entries: 20
+entries:
+- concept: World rendering-stability clock
+  canonical: '**Mending Stability (MS)**'
+  aliases___synonyms: Rendering Stability (RS)
+  source: ED-731. Historical RS retained only in canon/02 annotations by intentional design.
+- concept: Church-faction's institutional reach
+  canonical: '**Church Influence (CI)**'
+  aliases___synonyms: Theocracy Counter (TC)
+  source: ED-782. TC retained in alias_registry collision_table; corpus residuals queued.
+- concept: Mass-combat unit-size stat
+  canonical: '**Size**'
+  aliases___synonyms: Strength (legacy)
+  source: PP-232.
+- concept: Mass-combat offensive stat
+  canonical: '**Power**'
+  aliases___synonyms: Combat Power (CP, legacy)
+  source: PP-232. ED-136 locks CP to Character Points.
+- concept: Mass-combat defensive coherence stat
+  canonical: '**Discipline**'
+  aliases___synonyms: Cohesion (legacy)
+  source: PP-232.
+- concept: Mass-combat command stat
+  canonical: '**Command**'
+  aliases___synonyms: Command Rating (CR, legacy)
+  source: PP-232.
+- concept: Substrate event-record
+  canonical: '**Key**'
+  aliases___synonyms: EventImpact (legacy)
+  source: PP-687.
+- concept: Per-NPC remembered Key reference
+  canonical: '**Memory entry**'
+  aliases___synonyms: Memory record, Memory schema (legacy)
+  source: PP-687.
+- concept: Thread-contact action-economy resource
+  canonical: '**Thread Fatigue**'
+  aliases___synonyms: Contact Rounds (legacy)
+  source: ED-694.
+- concept: Wound-track survival resource (combat)
+  canonical: '**Vitality**'
+  aliases___synonyms: Health (legacy in combat context)
+  source: ED-548 + ED-694. **Note:** Health is still used as the universal name (the personal stat); Vitality is the *combat-instance* of it.
+- concept: Action-card faction-strategic system
+  canonical: '**Card Hands** + **Card → Action Mapping** + **Cooldown Track**'
+  aliases___synonyms: Various legacy formulations of "card system"
+  source: PP-177 unified.
+- concept: Faction-strategic ethical-framework modifier
+  canonical: '**Mission + Cascade + Public Expectation triadic decomposition**'
+  aliases___synonyms: Ethical Framework Modifier (legacy)
+  source: PP-686 / SUPERSESSION-PP686-001.
+- concept: Conviction taxonomy
+  canonical: '**The 13 Convictions** (PP-684)'
+  aliases___synonyms: Categorical Imperative · Virtue · Faith · Scholastic · Equity · Honor · Reason (legacy) · Continuity (legacy)
+  source: PP-684.
+- concept: Engine-resolution model
+  canonical: '**Engine Setup / Resolution**'
+  aliases___synonyms: GM Setup / Resolution (legacy in always-already canon context)
+  source: canon/01 (consciousness-performed rendering).
+- concept: TTRPG mode
+  canonical: '**Tabletop Roleplaying Game (TTRPG)**'
+  aliases___synonyms: (none)
+  source: alias_registry.
+- concept: Hybrid mode (full term)
+  canonical: '**Hybrid (HYB)**'
+  aliases___synonyms: (none — HYB never standalone)
+  source: alias_registry.
+- concept: BG mode
+  canonical: '**Board Game (BG)**'
+  aliases___synonyms: (none)
+  source: alias_registry.
+- concept: World-track for Solmund-orthodoxy at territory scale
+  canonical: '**Piety Track (PT)**'
+  aliases___synonyms: Conviction Track (CT/CV — legacy abbreviation in some docs)
+  source: 'ED-644 explicitly confirms: "Conviction (PT) here is the same per-territory stat as Piety (PT)." Range is 0–5, NOT 0–10. PT is canonical.
+    **RESOLVED — same track.**'
+- concept: ~~Per-territory Solmund-orthodoxy track~~
+  canonical: ~~**Piety Track (PT)** vs **Conviction Track (CV)**~~ — ~~POTENTIAL DUPLICATION~~
+  aliases___synonyms: ~~If PT and CV are the same axis at the same scale, one is redundant.~~
+  source: '**RESOLVED per ED-644: they ARE the same track. PT is canonical. CV/CT are legacy abbreviations.**'
+- concept: Mass Seizure
+  canonical: '**Mass Seizure** (probabilistic, CI ≥ 60)'
+  aliases___synonyms: Old "75-threshold Seizure" (gated, replaced)
+  source: ci_political §2.2 — replacement noted in supersession.
