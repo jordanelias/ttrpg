@@ -1,4 +1,5 @@
 # Unified Character Generation via Choice-Based Questionnaire
+## Status: CANONICAL
 ## Design Direction — accepted 2026-05-08
 ## Status: DESIGN DIRECTION (not yet authored — direction confirmed, question set pending)
 

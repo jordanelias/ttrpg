@@ -4,6 +4,7 @@
 
 <!-- v30 baseline — renamed from designs/ttrpg/threadwork_redesign_v25.md on 2026-04-13 -->
 # THREADWORK MECHANICS — v2.6
+## Status: CANONICAL
 ## Date: 2026-03-27 (revised 2026-04-02)
 ## Authority: Philosophical Foundations (immutable) → this document (design proposal, requires editorial approval)
 ## Version: v3.2 — Part Nine (S-01–S-06 / P-11–P-26) applied in-place. All appendix sections eliminated. PP-632: §2.6 Opposing Operations added.

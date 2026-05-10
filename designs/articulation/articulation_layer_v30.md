@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-688 -->
 
 # Articulation Layer (PP-688)
+## Status: CANONICAL
 
 **Class:** A — narrative-articulation system bridging happenings (Key log) and the player's experience of story.
 **Status:** PROVISIONAL.

@@ -8,6 +8,7 @@
 
 <!-- [PROVISIONAL: ED-710 — PP-666 2026-04-19 new mechanical system, pending smoke-test before CANONICAL] -->
 # Settlement Adjacency & Mass Battle at Settlement Scale
+## Status: CANONICAL
 
 **Status:** PROVISIONAL — approved mechanical design 2026-04-19 (PP-666)
 **Supersedes:** Implicit "internal road network" reference in `settlement_layer_v30 §5.1`

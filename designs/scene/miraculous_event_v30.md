@@ -1,4 +1,5 @@
 # Miraculous Event (Miraculous Event) Mechanism
+## Status: CANONICAL
 
 **Generated:** 2026-04-25 — Stage 4 Solmund split.
 **Source atoms:** §22, §23, §24, §25, §26, §27, §28, §29

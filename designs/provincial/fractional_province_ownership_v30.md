@@ -1,5 +1,6 @@
 <!-- [PROVISIONAL: ED-711 — PP-666 2026-04-19 new mechanical system, pending smoke-test before CANONICAL] -->
 # Fractional Province Ownership (Split-Province Mechanic)
+## Status: CANONICAL
 
 **Status:** PROVISIONAL — approved mechanical design 2026-04-19 (PP-666)
 **Supersedes:** Binary province-transfer rule in `settlement_layer_v30 §5.1` ("When the Seat is captured, provincial control transfers")

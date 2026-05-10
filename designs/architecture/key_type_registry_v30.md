@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-687 -->
 
 # Key Type Registry (PP-687)
+## Status: CANONICAL
 
 **Class:** A — substrate-defining canonical document.
 **Companion:** `designs/architecture/key_substrate_v30.md`.

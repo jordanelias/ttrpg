@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-687 §8.3 / faction_behavior_v30 §6.2 Stage 1 -->
 
 # Doc 12 Procedures — Key-Migration Spec (PP-687 Phase B Stage 1)
+## Status: CANONICAL
 
 **Source spec:** `designs/audit/2026-04-28-political-dynamics-session/12_development_specification.md` (v1.2.2; 1875 lines; Procedures B/C/D/E + DA Proposal Phase + Real-Time Mood).
 

@@ -3,6 +3,7 @@
 
 <!-- v30 baseline — renamed from designs/hybrid/scale_transitions_design_v1.md on 2026-04-13 -->
 # Scale Transitions and Mode Bridge Design
+## Status: CANONICAL
 ## Version: v1.0 | Date: 2026-04-13
 ## Status: DESIGN — canonical for scale transitions and mode bridging
 ## Sources: params_scale_transitions.md, PP-089/090, PP-103, PP-107–112, PP-232, PP-261, PP-340–343

@@ -1,4 +1,5 @@
 # VALORIA — Derived Stat System Specification
+## Status: CANONICAL
 ## Date: 2026-04-18
 ## Status: PROPOSAL — supersedes prior derived_stats_v30.md
 ## Scope: Unified derived value system across personal, unit, settlement, and faction scales

@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-684 -->
 
 # Conviction → Axis Matrix (PP-684)
+## Status: CANONICAL
 
 **Class:** A — substrate-defining canonical document.
 **Status:** PROVISIONAL.

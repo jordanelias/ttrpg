@@ -1,4 +1,5 @@
 # Valoria — Conflict Architecture Proposal
+## Status: CANONICAL
 
 **Date:** 2026-04-19  
 **Status:** CANON — approved by Jordan. Session B propagated Niflhel dissolution + graduated Löwenritter autonomy. Session A propagated 3-scale model + bishop appointment + PP-666 patches.  

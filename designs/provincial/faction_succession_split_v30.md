@@ -1,5 +1,6 @@
 <!-- [PROVISIONAL: ED-712 — PP-666 2026-04-19 new mechanical system, pending smoke-test before CANONICAL] -->
 # Generalized Faction Succession Split & Emergence Trajectories
+## Status: CANONICAL
 
 **Status:** PROVISIONAL — approved mechanical design 2026-04-19 (PP-666)
 **Supersedes:** Baralta-specific succession mechanics in `baralta_crown_claim_v30` are now a special case of the generalized Succession Contest

@@ -3,6 +3,7 @@
 <!-- AUTHORITY: consolidates PP-686 v2 (faction_behavior_v30) + Phase B Stage 5 (faction_state_authoring_v30) + faction-doctrine canon (faction_layer_v30 §1.5) + factions_personal_v30 §8 + stats_1_7_scale + atoms-pending faction-balance findings. -->
 
 # Valoria — Faction Canon (Consolidated)
+## Status: CANONICAL
 ## Status: PROVISIONAL — pending ratification.
 ## Date: 2026-05-07
 ## Companion: `designs/npcs/character_canon_v30.md` (per-NPC sheets) — pending.

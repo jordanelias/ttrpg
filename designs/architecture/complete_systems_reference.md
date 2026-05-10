@@ -1,4 +1,5 @@
 # VALORIA — Complete Game Systems Reference (Revision 2)
+## Status: CANONICAL
 ## Supersedes: valoria_complete_systems.md (Revision 1)
 ## Companion to: valoria_canonical_definitive_r2.md
 ## All issues resolved. All proposals accepted. Recency prioritized.

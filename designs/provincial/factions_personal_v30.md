@@ -8,6 +8,7 @@
 <!-- Authority: designs/ working layer — pending compilation -->
 
 # PART EIGHT: FACTIONS
+## Status: CANONICAL
 
 
 ---

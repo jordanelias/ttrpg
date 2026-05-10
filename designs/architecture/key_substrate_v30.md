@@ -4,6 +4,7 @@
 <!-- SUPERSESSIONS: SUPERSESSION-PP687-001, SUPERSESSION-PP687-002, SUPERSESSION-PP687-003 -->
 
 # Universal Key Substrate (PP-687)
+## Status: CANONICAL
 
 **Class:** A — foundational engine substrate.
 **Status:** PROVISIONAL.

@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-686 v2 (faction_behavior_v30.md §3.4.1) -->
 
 # Per-Territory Public Temperament (PP-686 v2 Phase B Stage 6)
+## Status: CANONICAL
 
 ## §1 Purpose
 

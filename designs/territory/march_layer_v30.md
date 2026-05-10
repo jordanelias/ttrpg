@@ -2,6 +2,7 @@
 <!-- AUTHORITY: ED-780 (Phase 3) / depends-on: ED-779 (Phase 2 geography canon) -->
 
 # VALORIA — March Layer (Strategic Movement)
+## Status: CANONICAL
 
 **Status:** PROVISIONAL — Phase 3 mechanical body authored 2026-05-10 (ED-780 closure). Phase 4 (ED-781) stress tests pending. Naval (§6) deferred to ED-055.
 **Authority:** ED-780 (Phase 3 standing). Depends on Phase 2 canon at `designs/territory/valoria_geography_v30.yaml`.

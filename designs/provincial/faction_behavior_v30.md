@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-686 (this doc); supersedes params/bg/core.md §Ethical Framework Modifiers and partial supersession of Mandate-as-single-scalar. -->
 
 # Faction Behavior Architecture (PP-686 v2)
+## Status: CANONICAL
 
 **Class:** A — strategic-layer system replacing legacy Ethical Framework Modifiers.
 **Status:** PROVISIONAL.

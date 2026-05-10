@@ -3,6 +3,7 @@
 
 <!-- v30 baseline — renamed from designs/board_game/victory_architecture_v1.md on 2026-04-13 -->
 # VALORIA BG — Victory Architecture
+## Status: CANONICAL
 
 <!-- [SUPERSEDED 2026-04-19] VAYNARD THREAD MASTERY (VTM) STRUCK -->
 <!-- Per Jordan decision 2026-04-19 (session): VTM was a placeholder mechanic with no canonical advancement rule. -->

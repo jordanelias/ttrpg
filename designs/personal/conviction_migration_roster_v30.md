@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-685 -->
 
 # Conviction Migration Roster (PP-685)
+## Status: CANONICAL
 
 **Class:** A — mechanical bookkeeping for taxonomy migration.
 **Status:** PROVISIONAL.

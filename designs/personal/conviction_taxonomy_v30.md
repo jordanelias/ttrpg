@@ -3,6 +3,7 @@
 <!-- AUTHORITY: PP-684 (this doc); supersedes legacy "Reason / Continuity" Conviction labels and per-character anachronistic philosophical-tradition labels. -->
 
 # Conviction Taxonomy (PP-684)
+## Status: CANONICAL
 
 **Class:** A — personal-scale and faction-scale interpretive substrate.
 **Status:** PROVISIONAL.
