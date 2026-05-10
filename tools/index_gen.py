@@ -10,6 +10,91 @@ import yaml
 from datetime import datetime, timezone
 
 
+# ── Shared helper: normalize register data across three YAML conventions ──────
+
+def _normalize_register_entries(data, id_pattern: str) -> list[dict]:
+    """
+    Extract a list of entry dicts from any of the three register formats:
+      A) dict-of-dicts at root:  {PP-684: {status: ...}}
+         → [{id: PP-684, status: ...}]
+      B) list under named key:   {patches: [{id: PP-684, ...}]} or {entries: [...]}
+         → [{id: PP-684, ...}]
+      C) bare list at root:      [{id: PP-684, ...}]
+         → [{id: PP-684, ...}]
+
+    id_pattern: regex for valid entry IDs (e.g. r'PP-\\d+', r'ED-\\d+').
+    Used to identify which dict keys are entry IDs in format A.
+    """
+    if isinstance(data, list):
+        # Format C: bare list at root
+        return [e for e in data if isinstance(e, dict)]
+    if not isinstance(data, dict):
+        return []
+
+    # Check for format B first (list under a named key like 'patches' or 'entries')
+    for k, v in data.items():
+        if isinstance(v, list) and v and isinstance(v[0], dict):
+            return v
+
+    # Format A: dict-of-dicts (each key is an ID like PP-684)
+    result = []
+    id_re = re.compile(id_pattern)
+    for key, val in data.items():
+        if isinstance(val, dict) and id_re.match(str(key)):
+            entry = dict(val)
+            entry.setdefault('id', str(key))
+            result.append(entry)
+    return result
+
+
+def _regex_extract_entries(content: str, id_pattern: str) -> list[dict]:
+    """
+    Fallback parser for malformed YAML that yaml.safe_load can't handle.
+
+    Extracts entries by looking for `- id: <ID>` blocks followed by key-value
+    lines at the next indentation level. Handles the legacy archive format
+    where list entries and mapping keys are mixed at root level.
+
+    Returns list of dicts with at least 'id' key, plus whatever simple
+    key-value fields can be extracted.
+    """
+    id_re = re.compile(id_pattern)
+    entries = []
+    current = None
+
+    for line in content.split('\n'):
+        # Match entry start: "- id: ED-NNN" or "  - id: PP-NNN"
+        m = re.match(r'\s*-\s+id:\s+(' + id_pattern + r')\s*$', line)
+        if m:
+            if current:
+                entries.append(current)
+            current = {'id': m.group(1)}
+            continue
+
+        if current is None:
+            continue
+
+        # Match simple key: value on indented lines
+        kv = re.match(r'\s{2,}(\w[\w_]*?):\s+(.+)$', line)
+        if kv:
+            key = kv.group(1)
+            val = kv.group(2).strip().strip('"').strip("'")
+            current[key] = val
+        elif line.strip() == '' or line.startswith('#'):
+            continue
+        elif re.match(r'\s*-\s+', line) and not re.match(r'\s*-\s+id:', line):
+            # Sub-list item (like tags: [x, y]) — skip
+            continue
+        elif re.match(r'\w', line):
+            # Root-level key (like 'editorial_decisions:') — skip, don't break current
+            continue
+
+    if current:
+        entries.append(current)
+
+    return entries
+
+
 def generate_patch_index(active_yaml: str, archive_yamls: dict[str, str] = None) -> str:
     """
     Scan all PP entries across active + archives.
@@ -185,63 +270,76 @@ def _now() -> str:
 
 
 def _collect_pp_entries(active_yaml: str, archive_yamls: dict[str, str] = None) -> list:
-    """Parse PP entries from active + archive YAML files."""
+    """Parse PP entries from active + archive YAML files.
+
+    Handles three data formats:
+      A) dict-of-dicts at root: {PP-684: {status: ...}, ...}
+      B) list under named key:  {patches: [{id: PP-684, status: ...}]}
+      C) bare list at root:     [{id: PP-684, status: ...}]
+    """
     entries = []
     for source_content in [active_yaml] + list((archive_yamls or {}).values()):
         if not source_content:
             continue
+
+        raw_entries = []
         try:
             data = yaml.safe_load(source_content)
+            raw_entries = _normalize_register_entries(data, r'PP-\d+')
         except Exception:
-            continue
-        if not isinstance(data, dict):
-            continue
-        for key, val in data.items():
-            m = re.match(r'(PP-\d+)', str(key))
+            # Fallback: regex extraction for malformed YAML (legacy archives)
+            raw_entries = _regex_extract_entries(source_content, r'PP-\d+')
+
+        for e in raw_entries:
+            pp_id = str(e.get('id', ''))
+            m = re.match(r'(PP-\d+)', pp_id)
             if not m:
                 continue
-            if not isinstance(val, dict):
-                continue
-            pp_id = m.group(1)
             id_num = int(re.search(r'\d+', pp_id).group())
             entries.append({
-                'id': pp_id,
+                'id': m.group(1),
                 'id_num': id_num,
-                'status': str(val.get('status', 'unknown')),
-                'system': str(val.get('system', '')),
-                'date': str(val.get('date', '')),
-                'desc': _truncate(str(val.get('description', val.get('desc', ''))), 60),
+                'status': str(e.get('status', 'unknown')),
+                'system': str(e.get('system', '')),
+                'date': str(e.get('date', '')),
+                'desc': _truncate(str(e.get('description', e.get('desc', ''))), 60),
             })
     return entries
 
 
 def _collect_ed_entries(active_yaml: str, archive_yamls: dict[str, str] = None) -> list:
-    """Parse ED entries from active + archive YAML files."""
+    """Parse ED entries from active + archive YAML files.
+
+    Handles three data formats:
+      A) dict-of-dicts at root: {ED-710: {status: ...}, ...}
+      B) list under named key:  {entries: [{id: ED-710, status: ...}]}
+      C) bare list at root:     [{id: ED-710, status: ...}]
+    """
     entries = []
     for source_content in [active_yaml] + list((archive_yamls or {}).values()):
         if not source_content:
             continue
+
+        raw_entries = []
         try:
             data = yaml.safe_load(source_content)
+            raw_entries = _normalize_register_entries(data, r'ED-\d+')
         except Exception:
-            continue
-        if not isinstance(data, dict):
-            continue
-        for key, val in data.items():
-            m = re.match(r'(ED-\d+)', str(key))
+            raw_entries = _regex_extract_entries(source_content, r'ED-\d+')
+
+        for e in raw_entries:
+            ed_id = str(e.get('id', ''))
+            m = re.match(r'(ED-\d+)', ed_id)
             if not m:
                 continue
-            if not isinstance(val, dict):
-                continue
-            ed_id = m.group(1)
             id_num = int(re.search(r'\d+', ed_id).group())
             entries.append({
-                'id': ed_id,
+                'id': m.group(1),
                 'id_num': id_num,
-                'status': str(val.get('status', 'unknown')),
-                'priority': str(val.get('priority', '')),
-                'system': str(val.get('system', '')),
-                'desc': _truncate(str(val.get('description', val.get('desc', ''))), 60),
+                'status': str(e.get('status', 'unknown')),
+                'priority': str(e.get('priority', e.get('severity', ''))),
+                'system': str(e.get('system', '')),
+                'desc': _truncate(str(e.get('description', e.get('desc', ''))), 60),
             })
     return entries
 

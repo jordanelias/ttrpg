@@ -77,6 +77,13 @@ def archive_by_status(
     """
     Move entries matching rule['auto_archive_status'] from active to archive chunks.
     Returns updated {path: content} for all affected files.
+
+    Handles three data formats:
+      A) dict-of-dicts at root: {PP-684: {status: ...}, ...}
+      B) list under named key:  {patches: [{id: PP-684, status: ...}]} or {entries: [...]}
+      C) bare list at root:     [{id: PP-684, status: ...}]  (legacy archives)
+
+    For format B, header comments are preserved in the active file output.
     """
     archive_statuses = set(rule.get('auto_archive_status', []))
     chunk_by = rule.get('archive_chunk_by', 'pp_range')
@@ -88,58 +95,124 @@ def archive_by_status(
     except Exception as e:
         raise RuntimeError(f"[ATOMIZER] Cannot parse active YAML at {active_path}: {e}")
 
-    if not isinstance(data, dict):
+    # Detect format and extract entries
+    entries_key = None  # 'patches', 'entries', etc.
+    entries_list = None
+    non_entry_data = {}  # preserve any metadata keys
+
+    if isinstance(data, list):
+        # Format C: bare list at root
+        entries_list = data
+    elif isinstance(data, dict):
+        # Check for format B (list under a named key)
+        for k, v in data.items():
+            if isinstance(v, list) and v and isinstance(v[0], dict):
+                entries_key = k
+                entries_list = v
+                break
+        if entries_list is None:
+            # Format A: dict-of-dicts — use original logic
+            keep = {}
+            archive = {}
+            for key, val in data.items():
+                if isinstance(val, dict) and str(val.get('status', '')) in archive_statuses:
+                    archive[key] = val
+                else:
+                    keep[key] = val
+            if not archive:
+                return {}
+            result = {}
+            if keep:
+                result[active_path] = yaml.dump(
+                    keep, default_flow_style=False,
+                    allow_unicode=True, sort_keys=False)
+            else:
+                result[active_path] = "# Empty — all entries archived\n"
+            if chunk_by == 'pp_range':
+                archive_additions = _chunk_entries(archive, chunk_max, pattern, r'PP-(\d+)')
+            elif chunk_by == 'ed_range':
+                archive_additions = _chunk_entries(archive, chunk_max, pattern, r'ED-(\d+)')
+            else:
+                archive_additions = {
+                    pattern.format(range='all'):
+                    yaml.dump(archive, default_flow_style=False,
+                              allow_unicode=True, sort_keys=False)}
+            for arch_path, new_content in archive_additions.items():
+                existing = archive_content_by_range.get(arch_path, '')
+                if existing:
+                    try:
+                        existing_data = yaml.safe_load(existing) or {}
+                    except Exception:
+                        existing_data = {}
+                    new_data = yaml.safe_load(new_content) or {}
+                    existing_data.update(new_data)
+                    result[arch_path] = yaml.dump(
+                        existing_data, default_flow_style=False,
+                        allow_unicode=True, sort_keys=False)
+                else:
+                    result[arch_path] = new_content
+            return result
+        else:
+            non_entry_data = {k: v for k, v in data.items() if k != entries_key}
+    else:
         return {active_path: active_content}
 
-    # Separate active vs archivable entries
-    keep = {}
-    archive = {}
-    for key, val in data.items():
-        if isinstance(val, dict) and str(val.get('status', '')) in archive_statuses:
-            archive[key] = val
-        else:
-            keep[key] = val
+    # Format B or C: list-of-dicts
+    keep_list = [e for e in entries_list
+                 if str(e.get('status', '')) not in archive_statuses]
+    archive_list = [e for e in entries_list
+                    if str(e.get('status', '')) in archive_statuses]
 
-    if not archive:
+    if not archive_list:
         return {}  # nothing to archive
 
-    # Build result
     result = {}
 
-    # Updated active file
-    if keep:
-        result[active_path] = yaml.dump(keep, default_flow_style=False, allow_unicode=True, sort_keys=False)
-    else:
-        result[active_path] = "# Empty — all entries archived\n"
-
-    # Merge archived entries into existing archive chunks
-    if chunk_by == 'pp_range':
-        archive_additions = _chunk_entries(archive, chunk_max, pattern, r'PP-(\d+)')
-    elif chunk_by == 'ed_range':
-        archive_additions = _chunk_entries(archive, chunk_max, pattern, r'ED-(\d+)')
-    else:
-        # Fallback: single archive file
-        archive_additions = {
-            pattern.format(range='all'):
-            yaml.dump(archive, default_flow_style=False, allow_unicode=True, sort_keys=False)
-        }
-
-    # Merge with existing archive content
-    for arch_path, new_content in archive_additions.items():
-        existing = archive_content_by_range.get(arch_path, '')
-        if existing:
-            try:
-                existing_data = yaml.safe_load(existing) or {}
-            except Exception:
-                existing_data = {}
-            new_data = yaml.safe_load(new_content) or {}
-            existing_data.update(new_data)
-            result[arch_path] = yaml.dump(
-                existing_data, default_flow_style=False,
-                allow_unicode=True, sort_keys=False
-            )
+    # Rebuild active file — preserve header comments from raw content
+    header_comments = []
+    for line in active_content.split('\n'):
+        if line.startswith('#'):
+            header_comments.append(line)
+        elif line.strip() == '':
+            continue
         else:
-            result[arch_path] = new_content
+            break
+    header = '\n'.join(header_comments) + '\n\n' if header_comments else ''
+
+    if entries_key:
+        active_data = dict(non_entry_data)
+        active_data[entries_key] = keep_list
+        active_yaml = yaml.dump(
+            active_data, default_flow_style=False,
+            allow_unicode=True, sort_keys=False, indent=2, width=120)
+        result[active_path] = header + active_yaml
+    else:
+        # Format C (bare list) — keep as list
+        result[active_path] = header + yaml.dump(
+            keep_list, default_flow_style=False,
+            allow_unicode=True, sort_keys=False)
+
+    # Archive entries — chunk by ID range using list format
+    archive_data = {entries_key or 'entries': archive_list}
+    archive_yaml = yaml.dump(
+        archive_data, default_flow_style=False,
+        allow_unicode=True, sort_keys=False, indent=2, width=120)
+
+    # For simplicity with list format: single archive file per batch
+    # (chunking by range is complex with list-of-dicts; date-based batches
+    # are the established pattern for recent archives)
+    id_regex = r'PP-(\d+)' if chunk_by == 'pp_range' else r'ED-(\d+)'
+    ids = []
+    for e in archive_list:
+        m = re.search(id_regex, str(e.get('id', '')))
+        if m:
+            ids.append(int(m.group(1)))
+    if ids:
+        range_str = f"{min(ids):03d}_{max(ids):03d}"
+    else:
+        range_str = "misc"
+    arch_path = pattern.format(range=range_str)
+    result[arch_path] = archive_yaml
 
     return result
 
