@@ -28,7 +28,38 @@
         "C1.2 catastrophic-permanent (categorical R+S fail at full NERS)",
         "C1.4 all-permanent (categorical multi-axis fail)"
       ],
-      "open_finding": "Pool floor 5D is load-bearing for permanent-wound asymmetry; Threadwork penalty unfloored is independent stress-test candidate; fieldwork §3 line 364 has stale PP-684 citation needing post-renumber update"
+      "open_finding": "Pool floor 5D is load-bearing for permanent-wound asymmetry; Threadwork penalty unfloored is independent stress-test candidate; fieldwork §3 line 364 has stale PP-684 citation needing post-renumber update",
+      "superseded": "2026-05-09 by PP-716 (commit 6e3a8ae) — built on stale Vitality formula and unfloored +1 Ob Threadwork penalty"
+    },
+    {
+      "module": "1 (v2)",
+      "name": "R1 Wound permanence (PP-716 canon)",
+      "date": "2026-05-09",
+      "supersedes": "Module 1 v1 (commit 45c693e2)",
+      "ledger_entries": [
+        "R1v2-L01",
+        "R1v2-L02",
+        "R1v2-L03",
+        "R1v2-L04",
+        "R1v2-L05",
+        "R1v2-L06",
+        "R1v2-L07",
+        "R1v2-L08",
+        "R1v2-L09",
+        "R1v2-L10",
+        "R1v2-L11",
+        "R1v2-L12",
+        "R1v2-L13",
+        "R1v2-L14",
+        "R1v2-L15"
+      ],
+      "decision": "C1.3 (Knot-tagged via existing Conviction Scar channel) — UNCHANGED from v1",
+      "rationale_change_under_pp716": "v1 cited practitioner-extinction cascade as central rejection of C1.2 (built on +1 Ob Threadwork unfloored). PP-716 reverts to −1D Pool with floor 5D, removing the cascade. C1.2 still rejects, but for ambiguity ('catastrophic' undefined) and direct canon contradiction (R1v2-L07) rather than mechanical cascade. C1.3 recommendation is robust to the canon correction.",
+      "rejected_candidates": [
+        "C1.2 catastrophic-permanent (categorical S-fail + ambiguity P1)",
+        "C1.4 all-permanent (multi-axis categorical fail)"
+      ],
+      "open_finding": "Pool asymmetry persists but is bounded by MW under PP-716 (worst case 12D → 8D at End=7 carry vs 5D at End=1 floor — 3D gap, halved from v1's 7D gap)"
     }
   ],
   "constants": [
@@ -134,6 +165,126 @@
       "value": "Coherence is permanent degradation track",
       "canonical_source": "designs/scene/derived_stats_v30.md",
       "section": "line 241",
+      "quoted_text": "**Coherence** (survival resource): unchanged. 10→0 countdown. Not a derived value — a permanent degradation track."
+    },
+    {
+      "id": "R1v2-L01",
+      "sim_variable": "combat_pool_formula",
+      "value": "(Agility × 2) + Relevant History + 3 (minimum 5)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§1",
+      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "id": "R1v2-L02",
+      "sim_variable": "wound_pool_penalty",
+      "value": "−1D per Wound, cumulative, no Ob",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§7",
+      "quoted_text": "Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds."
+    },
+    {
+      "id": "R1v2-L03",
+      "sim_variable": "wound_penalty_universal",
+      "value": "−1D to ALL Pools (Combat, Thread, mass-Command) per Wound",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 (PP-716 authoritative)",
+      "quoted_text": "Wound penalty | −1D to ALL Pools (Combat, Thread — Leap, Weaving, Pulling, Mending, FR — Hybrid mass-battle Command). Universal rule."
+    },
+    {
+      "id": "R1v2-L04",
+      "sim_variable": "health_formula",
+      "value": "(Endurance + 6) × (Max Wounds + 1)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Formula | `Health (full) = (Endurance + 6) × (Max Wounds + 1)` = WI × (MW+1)"
+    },
+    {
+      "id": "R1v2-L05",
+      "sim_variable": "max_wounds_formula",
+      "value": "floor(Endurance / 2) + 1",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Max Wounds | `Max Wounds = floor(Endurance / 2) + 1`"
+    },
+    {
+      "id": "R1v2-L06",
+      "sim_variable": "wound_interval_formula",
+      "value": "Endurance + 6",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Wound Interval | `WI = Endurance + 6` (range 7–13 across End 1–7)"
+    },
+    {
+      "id": "R1v2-L07",
+      "sim_variable": "wounds_clearance",
+      "value": "All wounds clear at session end",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Wounds clearance | All wounds clear at session end (canonical). Stabilised characters return to action after one full scene of rest."
+    },
+    {
+      "id": "R1v2-L08",
+      "sim_variable": "felling_threshold",
+      "value": "Felled at MW+1 wounds (= 0 Health)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Felled (incapacitated) at 0 Health, which equals MW + 1 wounds accrued."
+    },
+    {
+      "id": "R1v2-L09",
+      "sim_variable": "combat_pool_floor",
+      "value": "minimum 5D, no further wound penalty at floor",
+      "canonical_source": "params/combat.md",
+      "section": "§Pool minimum",
+      "quoted_text": "Combat Pool minimum 5 is a clean floor. No −1D penalty at the floor."
+    },
+    {
+      "id": "R1v2-L10",
+      "sim_variable": "thread_pool_floor",
+      "value": "minimum 5D for Thread Pool",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§Pool floor R-57",
+      "quoted_text": "Pool floor correction (R-57):** Minimum 5 dice before rolling any Pull. Below 5D (from wounds, degradation, low stats):"
+    },
+    {
+      "id": "R1v2-L11",
+      "sim_variable": "conviction_scar_existing",
+      "value": "permanence channel exists, attached to Conviction track",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§Conviction",
+      "quoted_text": "Lifetime; shifts only through Scar accumulation or major narrative events"
+    },
+    {
+      "id": "R1v2-L12",
+      "sim_variable": "knot_lifecycle_strain_capacity",
+      "value": "Distant 4 / Close 7",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "| Distant Knot | 4 strain | Can be upgraded to Close (per §5.6a Success outcome)."
+    },
+    {
+      "id": "R1v2-L13",
+      "sim_variable": "fr_dissolution_wound",
+      "value": "+1 Wound to Knot partner on FR Dissolution",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "Tears the Knot directly; partner-of-rupture takes +1 Wound (no armor)."
+    },
+    {
+      "id": "R1v2-L14",
+      "sim_variable": "dissolution_witness_scar",
+      "value": "scar on all witnesses to Dissolution",
+      "canonical_source": "params/combat.md",
+      "section": "§thread interactions",
+      "quoted_text": "**Dissolution in combat:** RS cost per threadwork_v30 §5.2. Scar on all witnesses per npc_behavior_v30 §3.4."
+    },
+    {
+      "id": "R1v2-L15",
+      "sim_variable": "coherence_track_permanence",
+      "value": "Coherence is permanent degradation track",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§Coherence",
       "quoted_text": "**Coherence** (survival resource): unchanged. 10→0 countdown. Not a derived value — a permanent degradation track."
     }
   ],
