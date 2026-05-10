@@ -94,7 +94,6 @@ files = g.read_files_graphql([
     'session_log_current.md',
     'session_logs/index.md',
     'canon/editorial_ledger_summary.yaml',
-    'references/file_index_summary.md',
     'references/canonical_sources.yaml',
 ])
 # Full registers — load only when needed:
@@ -153,7 +152,6 @@ Thresholds (tokens = chars // 4):
 | session_log_current.md | 2,000 |
 | canon/editorial_ledger.yaml (active) | 2,000 |
 | canon/editorial_ledger_summary.yaml | 1,000 |
-| references/file_index_summary.md | 1,000 |
 | references/canonical_sources.yaml | 5,000 |
 | canon/patch_register_active.yaml | 20,000 |
 | tests/coverage_matrix.md (active) | 5,000 |
@@ -193,8 +191,7 @@ If any fetch returns None or the token is missing, do not proceed regardless.
    - If found: report last stage + next action in ≤3 lines; confirm before proceeding.
    - If not found: new session. Confirm task with user.
 2. From fetched `canon/editorial_ledger_summary.yaml`: read p1_blocker_count and open_count. Report counts only.
-3. From fetched `references/file_index_summary.md`: report propagation-pending count only.
-4. Confirm task with user before proceeding.
+3. Confirm task with user before proceeding.
 
 ## Canonical Hierarchy (immutable)
 1. `canon/00_philosophical_foundations_rules.md` — governs everything
