@@ -90,13 +90,13 @@ Module 0 = manifest + ledger + gates. Modules R1–R10 = the residual risks. Eac
 | 1 | R1 Wound permanence | B + D | M0 | `designs/scene/derived_stats_v30.md §4.1 Health (PP-716)`, `designs/scene/combat_v30.md §7`, `params/combat.md §wounds`, `designs/scene/fieldwork_v30.md §5.6b Knot Lifecycle`, `params/fieldwork.md §knot` | yes (catastrophic-Wound criteria) / no (preserve canonical) / partial (Knot-tagged subset) | **verified v2 — recommend C1.3** (v1 superseded; v2 built on PP-716) |
 | 2 | R2 Skill input layer in C | A + D | M0 | `designs/scene/combat_v30.md §1 Combat Pool`, `designs/scene/combat_v30.md §B (proposed) Duel`, `params/combat.md`, synthesis `05_q4_q5_q6.md §Q4 E5/E7` | pure dice / cap +1 / cap +2 / no cap | **verified — recommend C2.1 (pure dice); C2.2 fallback** |
 | 3 | R3 Mass three-mode reframe | A coverage + D | M0 | `designs/provincial/mass_battle_v30.md §A (TTRPG)`, `§B (Board)`, `§D (World Bridge)`, `params/mass_combat.md` | full reframe / partial / preserve | **verified — recommend C3.3 (preserve + phase-mapping table); synthesis premise partially obsolete (TTRPG/Hybrid merger already done 2026-04-17)** |
-| 4 | R4 Hero participation default | A + B | M0, M3 | `designs/provincial/mass_battle_v30.md §B.5 Hybrid Handoff`, `§D.2 Named officers`, `designs/architecture/scale_transitions_v30.md`, `params/scale_transitions.md` | default-on / default-off / context-sensitive | pending |
-| 5 | R5 Wager stake range | A + B | M0 | `designs/scene/social_contest_system_v2.md §6.1.1 Wager`, `params/contest.md`, `designs/scene/conviction_track_v30.md` (post-rename = piety/persuasion), `params/factions/stats_1_7_scale.md §Reputation` | stake-type table + range table + cross-system effect table | pending |
-| 6 | R6 Fibonacci cap at high N | A | M0 | `designs/scene/combat_v30.md §8 Fibonacci`, `params/combat.md` | cap=8 / cap=N>8 / no-cap asymptote | pending |
-| 7 | R7 Friendly fire & ranged in melee | A + D | M0 | `designs/scene/combat_v30.md §5 Reach/Zone/Cover`, `designs/scene/combat_v30.md §6 Ranged`, `params/combat.md` | no FF / FF on miss / FF separate roll / FF on stress/wound | pending |
-| 8 | R8 Fieldwork ↔ combat tempo shift | B | M0 | `designs/scene/combat_v30.md §11.5 Combat↔Fieldwork`, `designs/scene/fieldwork_v30.md §Exposure`, `designs/scene/fieldwork_exposure.md`, synthesis `05_q4_q5_q6.md §Q6 F2+F3` | full freeze / partial / continuous | pending |
-| 9 | R9 Two-architecture sufficiency | A coverage | M0 | `designs/scene/combat_v30.md §5 Reach/Zone`, synthesis `05_q4_q5_q6.md §Q5`, `04_q3_scene_mass.md §I-candidates` | A+C sufficient / restore B for [shapes] | pending |
-| 10 | R10 IP-gauge actor-count threshold | A | M0 | `designs/scene/combat_v30.md §2 Phase round structure`, synthesis `02_q1_timeshape.md §T2/T4`, `designs/provincial/mass_battle_v30.md §A.7` | full / collapsed at N / hidden at N | pending |
+| 4 | R4 Hero participation default | A + B | M0, M3 | `designs/provincial/mass_battle_v30.md §B.5 Hybrid Handoff`, `§D.2 Named officers`, `designs/architecture/scale_transitions_v30.md`, `params/scale_transitions.md` | default-on / default-off / context-sensitive | **verified (dea58c26) — C4.2 (default-off, Tier 1 strategic baseline; Tier 2 scene-scale opt-in via §B.5 phase-lock)** |
+| 5 | R5 Wager stake range | A + B | M0 | `designs/scene/social_contest_system_v2.md §6.1.1 Wager`, `params/contest.md`, `designs/scene/conviction_track_v30.md` (post-rename = piety/persuasion), `params/factions/stats_1_7_scale.md §Reputation` | stake-type table + range table + cross-system effect table | **verified (d46ad908) — C5.1 (preserve canonical Wager; stake severity via contest type R5-L01); C5.2 reject; C5.3 deferred** |
+| 6 | R6 Fibonacci cap at high N | A | M0 | `designs/scene/combat_v30.md §8 Fibonacci`, `params/combat.md` | cap=8 / cap=N>8 / no-cap asymptote | **verified (856c6098) — C6.1 (preserve canonical +5 Fibonacci cap at 8+ attackers per PP-216)** |
+| 7 | R7 Friendly fire & ranged in melee | A + D | M0 | `designs/scene/combat_v30.md §5 Reach/Zone/Cover`, `designs/scene/combat_v30.md §6 Ranged`, `params/combat.md` | no FF / FF on miss / FF separate roll / FF on stress/wound | **verified (c58bc670) — C7.4 (FF on stress conditions only); C7.1 (no FF) fallback; C7.3 reject (non-canonical d10 channel)** |
+| 8 | R8 Fieldwork ↔ combat tempo shift | B | M0 | `designs/scene/combat_v30.md §11.5 Combat↔Fieldwork`, `designs/scene/fieldwork_v30.md §Exposure`, `designs/scene/fieldwork_exposure.md`, synthesis `05_q4_q5_q6.md §Q6 F2+F3` | full freeze / partial / continuous | **verified (b86b7094) — C8.2 (partial freeze)** |
+| 9 | R9 Two-architecture sufficiency | A coverage | M0 | `designs/scene/combat_v30.md §5 Reach/Zone`, synthesis `05_q4_q5_q6.md §Q5`, `04_q3_scene_mass.md §I-candidates` | A+C sufficient / restore B for [shapes] | **verified (1c31109d) — C9.1 (A+C sufficient); C9.3 refinement option for routine-encounter B reservation** |
+| 10 | R10 IP-gauge actor-count threshold | A | M0 | `designs/scene/combat_v30.md §2 Phase round structure`, synthesis `02_q1_timeshape.md §T2/T4`, `designs/provincial/mass_battle_v30.md §A.7` | full / collapsed at N / hidden at N | **verified (55d520c4) — C10.2 (collapse IP gauge at ≥6 actors)** |
 
 ---
 
@@ -191,21 +191,6 @@ The R1 redo against PP-716 canon may produce a different recommendation. Plan: r
 
 Modules 2–10 remain pending and will use PP-716 canon from the start.
 
-## R4 verified — C4.2
-
-## R5 verified — C5.1
-
-## R6 verified — C6.1
-
-## R7 verified — C7.4 primary; C7.1 fallback
-
-## R8 verified — C8.2
-
-## R9 verified — C9.1
-
-## R10 verified — C10.2
-
-
 ## combat_arch_residual_stress_01 (D module) — ALL 10 R-MODULES VERIFIED 2026-05-10
 
 | R | Decision | Notes |
@@ -230,3 +215,39 @@ Synthesis premises corrected on R3, R5, R8 (canon already mature; questions answ
 - C7.4 stress threshold criteria enumeration
 - C9.3 (B-shape presentation flag) UX refinement option
 - C10.2 aggregation rule (faction-band vs position-band vs IP-cluster)
+
+## D-Stress Test Completion (2026-05-10)
+
+All 10 R-modules of `combat_arch_residual_stress_01` are verified against PP-716 canon.
+
+| # | Module | Recommendation | Commit |
+|---|---|---|---|
+| 1 | R1 Wound permanence (v2) | C1.3 (Knot-tagged via Conviction Scar) | 13e288a8 |
+| 2 | R2 Skill input layer in C | C2.1 (pure dice; cognitive-only) | 27e7983c |
+| 3 | R3 Mass three-mode reframe | C3.3 (preserve + phase-mapping table) | 69c4d829 |
+| 4 | R4 Hero participation default | C4.2 (default-off, Tier 1 strategic) | dea58c26 |
+| 5 | R5 Wager stake range | C5.1 (preserve canonical) | d46ad908 |
+| 6 | R6 Fibonacci cap at high N | C6.1 (preserve +5 cap at 8+) | 856c6098 |
+| 7 | R7 Friendly fire & ranged-in-melee | C7.4 (FF on stress); C7.1 fallback | c58bc670 |
+| 8 | R8 Fieldwork↔combat tempo shift | C8.2 (partial freeze) | b86b7094 |
+| 9 | R9 Two-architecture sufficiency | C9.1 (A+C sufficient) | 1c31109d |
+| 10 | R10 IP-gauge actor-count threshold | C10.2 (collapse at ≥6 actors) | 55d520c4 |
+
+**Synthesis-canon discrepancies surfaced:**
+- R3: synthesis "deprecate Part A TTRPG mode" premise obsolete — v30 already merged TTRPG/Hybrid into Part A on 2026-04-17 per PP-232/PP-233.
+- R5: synthesis "cosmetic-existential stake range" premise partially obsolete — canon's Wager Obligation post-ED-778 encodes stake severity structurally via contest type, not as parallel tag. Cosmetic-stake content routed to fieldwork-Socializing.
+
+**Deferred refinements (Jordan-decision items):**
+- R4 C4.3 context-sensitive default — adopt only after Q5 T-trigger criteria formally specified.
+- R5 C5.3 voluntary stake escalation — separate design initiative if pursued.
+- R7 stress-FF threshold enumeration — explicit list of environmental degradation conditions.
+- R8 partial-freeze ticker selection — which fieldwork timers continue, which freeze.
+- R9 routine-encounter B reservation — formal trigger spec.
+
+**Open editorial items (carryover):**
+- VALORIA_PAT exposure rotation pending.
+- read_active_sessions defect (concurrent-session detection unreliable).
+- fieldwork_v30 §3 line 364 stale "PP-684" citation (should reference PP-711..715 batch).
+- canonical_sources.yaml manifest naming drift (clock_system/territory_model vs clocks/territories).
+
+**Next:** A module (`conviction_stress_01` — Conviction taxonomy + axis matrix) per Jordan's "proceed in order" instruction. Then F (personal-scale lifecycle bundle) and G (setup & ignition).
