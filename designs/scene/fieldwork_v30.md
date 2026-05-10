@@ -488,7 +488,7 @@ The Knot lifecycle was previously specified for formation (§5.6a) and use (§2.
 - Knot-mediated counsel extraction (npc_behavior §3.5.3 ED-664): +0 strain on extraction itself; +1 strain per subsequent retrieval attempt (single-extraction-per-campaign rule means typically 0 cumulative).
 - FR Lock or Dissolution near a Knot partner (threadwork_v30 §6 Knot-substrate inseparability): +1 strain.
 - Witnessing Conviction Scar firing in Knot partner (per Piety Track ≥3 Scar count): +1 strain at next Accounting.
-- Sustained Disposition reduction (Disposition drops below +3 sustained for 2 seasons): +1 strain at Accounting.
+- Sustained Disposition reduction (Disposition drops below +3 for **2 consecutive seasons** — defined as: Disposition value at Accounting in season N is below +3 AND Disposition value at Accounting in season N+1 is below +3, both unbroken): +1 strain at Accounting of season N+1. Non-consecutive seasons below +3 do not aggregate. (PP-719 clarification per EC-F2.A-01 fieldwork_lifecycle_stress_01.)
 
 **Knot break threshold:** A Knot accumulates strain up to capacity. At capacity exceeded, the Knot breaks at the next Accounting.
 

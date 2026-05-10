@@ -569,3 +569,23 @@ patches:
     necessity: pass
     omega: pass
     note: "Class E — editorial fix. N: corrects a P1 drift defect (stale redirect to legacy 9-Conviction doc) surfaced by stress-test conviction_stress_01 (commit 57bd26f4). Ω: replaces stale redirect text with canonical PP-684 references; preserves all semantics. No mechanical change. No simulation required."
+
+- id: PP-719
+  class: E
+  pre-framework: false
+  date: 2026-05-10
+  severity: P3
+  description: "fieldwork §5.6b sustained Disposition reduction strain source clarification. EC-F2.A-01 (surfaced in fieldwork_lifecycle_stress_01 commit ddccbf9a) flagged ambiguity in 'sustained for 2 seasons' — could be read as (a) 2 consecutive seasons below +3 or (b) cumulative 2 seasons (non-consecutive). This PP fixes interpretation as (a) consecutive: at Accounting of season N+1, the strain fires only if Disposition value was below +3 at both Accounting of season N AND Accounting of season N+1. Non-consecutive seasons below +3 do not aggregate. Resets if Disposition rebounds to +3 in any intervening season."
+  finding_id: fieldwork_lifecycle_stress_01 EC-F2.A-01
+  source: editorial
+  affects:
+    - designs/scene/fieldwork_v30.md
+    - references/canonical_sources.yaml
+    - references/propagation_map.md
+  status: applied
+  applied_commit: 2026-05-10 PP-719 (this commit)
+  vetting:
+    class: E
+    necessity: pass
+    omega: pass
+    note: "Class E — editorial clarification. N: removes a P3 spec ambiguity surfaced by stress-test. Ω: 'sustained' read as 'consecutive' is the natural reading; clarification prevents Game Master / engine drift toward cumulative interpretation."
