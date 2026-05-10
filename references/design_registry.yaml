@@ -17,8 +17,10 @@
 version: 30
 established: 2026-04-13
 
-# next_id_note: legacy next_id (486) in editorial_ledger.yaml is stale.
-#   Confirmed items exist up to ED-489. Use 490 as next valid ID.
+# next_id_note: editorial_ledger active set carries `next_id: 789` in its header
+#   (canon/editorial_ledger.yaml). Source of truth is the ledger header itself —
+#   verified 2026-05-10 against the active ledger. This note exists only to
+#   document the location of the counter; do not duplicate the value here.
 
 registry:
 
