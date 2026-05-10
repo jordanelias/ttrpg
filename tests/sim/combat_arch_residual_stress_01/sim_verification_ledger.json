@@ -1,0 +1,49 @@
+{
+  "sim_name": "combat_arch_residual_stress_01",
+  "manifest": "tests/sim/combat_arch_residual_stress_01/module_manifest.md",
+  "schema": "{sim_variable, value, canonical_source, canonical_sha, section, quoted_text}",
+  "rule": "Every mechanical constant used in any R-module code must appear here with verbatim quoted_text from the canonical source. sim_fabrication_check enforces this at commit.",
+  "modules_verified": [],
+  "constants": [],
+  "meta_findings": [
+    {
+      "id": "MF-01",
+      "kind": "registry_drift",
+      "system": "combat",
+      "issue": "canonical_sources.yaml combat.design_doc points to params/combat.md but section-structured combat design lives at designs/scene/combat_v30.md",
+      "action": "fetch both; cite from appropriate file in module ledger entries; flag for editorial realign in open items"
+    },
+    {
+      "id": "MF-02",
+      "kind": "registry_drift",
+      "system": "derived_stats",
+      "issue": "canonical_sources.yaml derived_stats.design_doc points to params/factions/stats_1_7_scale.md but section-structured derived stats design lives at designs/scene/derived_stats_v30.md",
+      "action": "same as MF-01"
+    },
+    {
+      "id": "MF-03",
+      "kind": "patch_id_collision",
+      "issue": "Two PP-684 entries existed: 2026-04-18 (Disposition ceiling = Bonds) and 2026-05-01 (13-Conviction taxonomy). Per fce5953 (2026-05-02), the 04-18 set was renumbered to PP-711..715. Current PP-684 = 13-Conviction taxonomy.",
+      "action": "Verify exact PP-711..715 mapping for Disposition-ceiling rule when R1 module touches Knot Lifecycle"
+    },
+    {
+      "id": "MF-04",
+      "kind": "sha_pending",
+      "system": "mass_combat",
+      "issue": "canonical_sources.yaml mass_combat SHA is PENDING_PP_705 — SHA update follow-up required",
+      "action": "Resolve actual HEAD SHA at fetch time for R3, R4, R10 modules"
+    },
+    {
+      "id": "MF-05",
+      "kind": "session_safety",
+      "issue": "read_active_sessions returned [] — known broken per prior session log. Concurrent-session detection unreliable.",
+      "action": "Cannot detect parallel session; proceeding under user instruction; HEAD-OID check at safe_commit is the only collision guard"
+    }
+  ],
+  "self_audit_corrections_active": [
+    "NERS at full grain (24 cells per candidate option, no compression)",
+    "N-failures categorical (any N=fail rejects outright, no vote-counting)",
+    "Diagonal vs lateral boundary fixed: diagonal=cross-system, lateral=same-scale parallel",
+    "No threshold drift: per-direction scoring criteria fixed at module start"
+  ]
+}
