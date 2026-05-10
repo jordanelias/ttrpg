@@ -277,9 +277,9 @@ characters:
         - {conviction: Authority, weight: 0.20}
       cultural_label: altonian  # [ASSUMPTION: placeholder — altonian template not yet defined in PP-684 §5]
       self_other_initial: -0.20
-      migration_notes: "No prior legacy label. Inferred from role: PROTECTIVE behavioral AI, shields Elske = Warden. Imperial authority = Authority. Per PP-685 §4."
+      conviction_notes: "Virtue primary per Jordan 2026-05-08. Byzantine philosopher-ruler tradition. Periodic visitor with Elske."
     goals: ["Protect Elske's safety", "Maintain province stability", "Sandbag imperial directives"]
-    arc_trajectory: "PROTECTIVE — priority is Elske's safety. Flips if Elske Loyalty ≤ 2 (IP +3 immediately)."
+    arc_trajectory: "PROTECTIVE — priority is Elske's safety. Virtue = Byzantine governance-as-moral-cultivation. Periodic visitor, royal welcome. Flips if Elske Loyalty ≤ 2. Manuel II Palaiologos archetype."
     source: npc_roster_v30 §11
 
   - id: NPC-012
@@ -442,9 +442,10 @@ characters:
     convictions:
       primary:
         - {conviction: Equity, weight: 0.45}
+        - {conviction: Liberty, weight: 0.25}
       cultural_label: valorian_court
       self_other_initial: -0.20
-      conviction_notes: "character_analyses §2: 'Primary Conviction: Equity. She believes caste suppression is wrong and the Crown should be the instrument of reform.' Archivist by training. Pro-Restoration — allied with Yrsa Vossen."
+      conviction_notes: "Equity + Liberty. Caste suppression is wrong (Equity), political self-determination follows (Liberty). Archivist by training. Pro-Restoration. Queen Jadwiga of Poland archetype."
     goals: ["Einhir revival through Crown authority", "Caste dismantlement through royal decree"]
     arc_trajectory: "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent. Pro-Restoration — institutional revivalist, allied with Yrsa Vossen."
     source: npc_character_analyses §2, faction_canon_v30 §Crown
@@ -682,12 +683,11 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Precedent, weight: 0.45}
-        - {conviction: Authority, weight: 0.25}
-        - {conviction: Order, weight: 0.15}
+        - {conviction: Precedent, weight: 0.50}
+        - {conviction: Authority, weight: 0.30}
       cultural_label: hafenmark_procedural
       self_other_initial: -0.30
-      conviction_notes: "Precedent primary per behavior_v30 §2.3: 'Constitutional procedure IS justice.' PP-685 §2.3 misattributed as Faith/ecclesiastical — character_canon D6 already flagged this. Catherine the Great archetype — unshakeable force of conviction, sovereign authority as constitutional principle."
+      conviction_notes: "Precedent primary per behavior_v30 §2.3: 'Constitutional procedure IS justice.' PP-685 §2.3 misattributed as Faith/ecclesiastical — character_canon D6 already flagged this. Maria Theresa archetype — Habsburg empress defending inherited sovereign authority through institutional competence. Unshakeable force of conviction."
     goals: ["Sovereign Authority Doctrine", "Constitutional framework supersedes Church jurisdiction", "Hafenmark parliamentary sovereignty"]
     arc_trajectory: "Six foil pairings per npc_foils_v30: Almud ↔ Baralta (Custodian/Claimant); Lenneth ↔ Baralta (campaign-defining); Baralta ↔ Vaynard (total opposition)."
     source: npc_behavior_v30 §2.3, npc_character_analyses §6, faction_canon_v30
@@ -733,7 +733,7 @@ characters:
       primary:
         - {conviction: Order, weight: 0.60}
         - {conviction: Liberty, weight: 0.20}
-    arc_trajectory: "Drives Autonomy track (Loyal→Restless→Autonomous→Split). Brandt succession if removed. Konrad von Jungingen archetype."
+    arc_trajectory: "Drives Autonomy track (Loyal→Restless→Autonomous→Split). Brandt succession if removed. Konrad von Jungingen archetype — if Autonomy track reaches Split, the Tannenberg parallel completes."
     source: behavior_v30 §2.5
 
   - id: NPC-071
@@ -809,7 +809,7 @@ characters:
         - {conviction: Warden, weight: 0.60}
         - {conviction: Equity, weight: 0.20}
     goals: ["The work. Only the work."]
-    arc_trajectory: "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost."
+    arc_trajectory: "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost. Chernobyl liquidator archetype."
     source: arc_expansion_v30
 
   - id: NPC-080
@@ -826,7 +826,7 @@ characters:
       primary:
         - {conviction: Honor, weight: 0.60}
         - {conviction: Utility, weight: 0.20}
-    arc_trajectory: "Completes missions Sigrid aborts. TS 0 = can't see Thread collateral. Konrad Wallenrod archetype."
+    arc_trajectory: "Completes missions Sigrid aborts. TS 0 = can't see Thread collateral. Pre-germ-theory surgeon archetype — perceptual limitation, not malice. Cannot see Thread collateral (TS 0)."
     source: proposed
 
   - id: NPC-081
@@ -841,7 +841,7 @@ characters:
       primary:
         - {conviction: Community, weight: 0.50}
         - {conviction: Precedent, weight: 0.30}
-    arc_trajectory: "IC seat #4. Succession candidate if Baralta falls (popular mandate). Adrian von Bubenberg archetype."
+    arc_trajectory: "IC seat #4. Succession candidate if Baralta falls (popular mandate). Niklaus von Flüe archetype — Swiss mediator at the Diet of Stans (1481), commune voice against city power-politics."
     source: proposed
 
   - id: NPC-082
@@ -856,7 +856,7 @@ characters:
       primary:
         - {conviction: Identity, weight: 0.60}
         - {conviction: Honor, weight: 0.20}
-    arc_trajectory: "Fights for Einhir, not Vaynard. Fracture line if Vaynard's ego diverges from cause. Sigurd Syr archetype."
+    arc_trajectory: "Fights for Einhir, not Vaynard. Fracture line if Vaynard's ego diverges from cause. Einar Thambarskelfir archetype — conditional loyalty to the cause, not the person."
     source: proposed
 
   - id: NPC-083
@@ -872,7 +872,7 @@ characters:
       primary:
         - {conviction: Authority, weight: 0.50}
         - {conviction: Order, weight: 0.30}
-    arc_trajectory: "Switchboard NPC at geographic chokepoint (5 adjacencies). Isabella d'Este archetype."
+    arc_trajectory: "Switchboard NPC at geographic chokepoint (5 adjacencies). Matilda of Tuscany archetype — governed critical territory at the intersection of Pope and Emperor."
     source: proposed
 
   - id: NPC-084
@@ -886,7 +886,7 @@ characters:
     convictions:
       primary:
         - {conviction: Community, weight: 0.70}
-    arc_trajectory: "Internal opposition to Feldhaus. Pushes Mandate over Wealth. Tommaso Soderini archetype."
+    arc_trajectory: "Internal opposition to Feldhaus. Pushes Mandate over Wealth. Katharina Schütz Zell archetype — guild-class communal advocate."
     source: proposed
 
   - id: NPC-085
