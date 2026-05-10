@@ -30,6 +30,44 @@ EDITORIAL_PATHS = (
 )
 EDITORIAL_MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
 
+# ── Forbidden tokens (PI core_rules) ──────────────────────────────────────────
+# Per Valoria PI core_rules: "Solmund, never Galbados". Promotes the
+# canonical-name rule from Level 2 (skill-side, runs only on prose-writer
+# invocation) to Level 4 (every commit, RuntimeError). The rule is satisfied if:
+#   (a) the file does not contain the forbidden token, OR
+#   (b) the file co-locates the canonical name (Solmund), reflecting actual
+#       repo conventions for rename mappings and meta-discussion, OR
+#   (c) every occurrence of the forbidden token has the exception phrase
+#       ("never") within ±30 chars of immediate context.
+# (a) and (c) are the consistency_check.py rules; (b) reflects actual repo
+# usage patterns where rename-mapping files like references/name_collision_database.yaml
+# legitimately cite both names side-by-side.
+FORBIDDEN_TOKEN_RULES = (
+    {
+        'token_re': re.compile(r'(?i)galbados'),
+        'canonical_name': 'Solmund',
+        'canonical_re':   re.compile(r'(?i)solmund'),
+        'exception_substring': 'never',
+        'exception_window':    30,
+        'description': (
+            'PI core_rules: "Solmund, never Galbados". File must either '
+            'co-locate "Solmund" or have "never" within 30 chars of every '
+            'Galbados occurrence.'
+        ),
+    },
+)
+
+# Files exempt from forbidden-token gate.
+FORBIDDEN_TOKEN_EXEMPT_PREFIXES = (
+    'archives/',                       # frozen historical content
+    'deprecated/',                     # frozen deprecated content
+    'references/atoms_pending/',       # transient atomization staging
+)
+FORBIDDEN_TOKEN_EXEMPT_PATHS = (
+    'skills/prose-writer/scripts/consistency_check.py',
+    'skills/valoria-orchestrator/scripts/valoria_hooks.py',
+)
+
 # Informational — enforcing gate is COMMIT_FORMAT regex below
 VALID_SCOPES    = {'editorial','patch','simulation','compilation','infrastructure','skill','cleanup','godot','phase','fix','bugfix'}
 COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix)\] .{10,}')
@@ -354,6 +392,67 @@ def editorial_gate(path: str, content: str) -> None:
             f"narrative, faction behaviour, ambiguous design intent."
         )
     print(f"[HOOK ✓] editorial_gate — {path}")
+
+
+# ── Hook 3a: Forbidden-token gate (PI core_rules canonical names) ─────────────
+
+def forbidden_token_gate(additions: list) -> None:
+    """
+    Block commits introducing forbidden canonical-name tokens outside their
+    permitted contexts. Implements PI core_rules: "Solmund, never Galbados".
+
+    Promotes a previously Level-2 (skill-side prose-writer/consistency_check.py)
+    rule to Level 4 by enforcing on every commit. CI mirror should run an
+    equivalent check via the consistency_check.py script.
+
+    Logic per FORBIDDEN_TOKEN_RULES entry: a file passes if any of —
+      (a) it does not contain the forbidden token,
+      (b) it also contains the canonical name (e.g. Solmund),
+      (c) every forbidden-token occurrence has the exception phrase
+          (e.g. "never") within ±N chars of immediate context.
+
+    See FORBIDDEN_TOKEN_EXEMPT_PREFIXES / EXEMPT_PATHS for files exempted
+    from the check (archives, deprecated, the rule-defining files themselves,
+    transient atomization staging).
+    """
+    errors = []
+    for path, content in additions:
+        if any(path.startswith(p) for p in FORBIDDEN_TOKEN_EXEMPT_PREFIXES):
+            continue
+        if path in FORBIDDEN_TOKEN_EXEMPT_PATHS:
+            continue
+        for rule in FORBIDDEN_TOKEN_RULES:
+            token_re = rule['token_re']
+            occurrences = list(token_re.finditer(content))
+            if not occurrences:
+                continue  # rule (a)
+            if rule['canonical_re'].search(content):
+                continue  # rule (b)
+            # Rule (c): every occurrence must have exception nearby
+            window = rule['exception_window']
+            exception = rule['exception_substring'].lower()
+            offenders = []
+            for m in occurrences:
+                ctx = content[max(0, m.start() - window): m.end() + window]
+                if exception not in ctx.lower():
+                    line = content[:m.start()].count('\n') + 1
+                    snippet = ctx.strip().replace('\n', ' ')[:80]
+                    offenders.append(f"L{line}: ...{snippet}...")
+            if offenders:
+                errors.append(
+                    f"{path}: {rule['description']}\n  "
+                    + "\n  ".join(offenders)
+                )
+    if errors:
+        raise RuntimeError(
+            "[HOOK VIOLATION] forbidden_token_gate FAILED:\n\n"
+            + "\n\n".join(f"  [{i+1}] {e}" for i, e in enumerate(errors))
+            + "\n\nFix the offending content before committing. "
+              "If the file is genuinely meta-documentation about the rename, "
+              "either co-locate the canonical name in the same file, or add "
+              "the path to FORBIDDEN_TOKEN_EXEMPT_PATHS in valoria_hooks.py."
+        )
+    print(f"[HOOK \u2713] forbidden_token_gate ({len(additions)} files scanned)")
 
 
 # ── Hook 3b: Framework vetting gate (PP-674) ──────────────────────────────────
@@ -685,6 +784,12 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     # Sim fabrication check — catches uncited mechanical constants in sim files
     try:
         sim_fabrication_check(additions)
+    except RuntimeError as e:
+        errors.append(str(e))
+
+    # Forbidden-token gate (PI core_rules canonical names — Solmund, never Galbados)
+    try:
+        forbidden_token_gate(additions)
     except RuntimeError as e:
         errors.append(str(e))
 
