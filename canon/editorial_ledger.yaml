@@ -47,13 +47,12 @@ entries:
     jordan_decision: "2026-05-09 — Niflhel not a faction. Crime/underground exists but not threadwork-related. Reframe 5 arcs around that."
     closure_commit: "2026-05-10 (this commit)"
   - id: ED-780
-    date: 2026-05-01
-    description: "[STANDING] Phase 3 of geography canon work — spec rewrite (depends on ED-779 completion). Approved scope 2026-05-09: (a) rewrite settlement_adjacency_v30 to query geography data rather than abstract edge-types; (b) author march-bubble + encounter-trigger spec (new doc designs/territory/march_layer_v30.md); (c) update mass_battle_v30 §A.9 / §B.5 for geographic battle-terrain derivation at engagement coordinates. Naval mechanics EXCLUDED — ED-055 deferred indefinitely. Output: rewritten settlement_adjacency_v30, new march_layer_v30, updated mass_battle_v30. Cross-references: PP-706, audit §2 G7-G9, §3 C5."
-    status: open
+    date: 2026-05-09
+    description: "[CLOSED 2026-05-10] Phase 3 of geography canon work. Phase 3 mechanical body filled in march_layer_v30 §§1.1-1.4 (cavalry/skirmish/supply/multi-army coordination), §§2.2-2.4 (cache invalidation/UI/route blocking), §§3.1-3.4 (fog/scouting/counter-recon/Thread-Witnessed), §4.3 (bypass), §§5.2-5.4 (multi-edge moves/engagement vs siege/Casus Belli), §§7.2-7.3 (radiation band traversal/Askeheim Gates), §8.2 (hex-grid alignment + geographic battle-terrain derivation). settlement_adjacency_v30 §6 cross-reference to march_layer added; Edge Type → Manoeuvre Modifier mapping preserved as canonical, consumed by march_layer §4.2 by reference. mass_battle_v30 §A.9 ENVIRONMENTAL MODIFIERS extended with Phase 3 geographic-derivation clause (terrain queried at engagement coordinates from valoria_geography_v30.yaml :: terrain_polygons). Naval (§6) deferred to ED-055. Phase 4 stress tests (ED-781) standing."
+    status: closed
+    closed_date: 2026-05-10
     severity: P2
-    source: "Geography canon audit 2026-05-01 — Phase 3"
-    jordan_decision: "2026-05-09 — (a)(b)(c) approved. Naval mechanics out. ED-055 deferred."
-
+    closure_commit: "2026-05-10 (this commit)"
   - id: ED-781
     date: 2026-05-01
     description: "[STANDING] Phase 4 of geography canon work — stress tests (depends on ED-780 completion). Three scenarios queued: (1) Mountain Pass battle (T2/T11 Halvardshelm pass — geometry-constrained engagement, narrow-pass clamp emergence); (2) Open-field cavalry encounter (T2 Kronmark plains — flanking-as-position vs declaratory); (3) Coastal landing (Schoenland → T13 Oastad — amphibious sequencing, no naval mechanics per ED-780 scope). Each stress test exercises the geographic-route model under different geometric stress patterns. Cross-references: PP-706, ED-779, ED-780."

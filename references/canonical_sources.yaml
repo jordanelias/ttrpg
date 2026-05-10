@@ -68,7 +68,7 @@ systems:
     design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
     adjacency: designs/territory/settlement_adjacency_v30.md
-    canonical_sha__designs__territory__settlement_adjacency_v30_md: "81fca625664b0e3a21d232461fd9ded03d4d9a8d"
+    canonical_sha__designs__territory__settlement_adjacency_v30_md: "PENDING_ED_780"
     fractional: designs/provincial/fractional_province_ownership_v30.md
     canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "5399c4b03acd65ad5f967d4d51fcea62faf0b2b6"
     geographic_data: designs/territory/valoria_geography_v30.yaml
@@ -76,10 +76,10 @@ systems:
     geographic_map: designs/territory/valoria_map_v30.svg
     canonical_sha__designs__territory__valoria_map_v30_svg: "de02b31202e54cdf74054d0008c1c51c76f3a651"
     march_layer_skeleton: designs/territory/march_layer_v30.md
-    canonical_sha__designs__territory__march_layer_v30_md: "97fc3561daaecc52a99382154c8af8b7ff00ed18"
+    canonical_sha__designs__territory__march_layer_v30_md: "PENDING_ED_780"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_705"  # ED-770/PP-683/PP-711..715 batch (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
+    canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_ED_780"  # ED-770/PP-683/PP-711..715 batch (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
     params: params/mass_combat.md
     canonical_sha__params__mass_combat_md: "694d7a232a7204a93b634b936596d822ddafe2d2"  # ED-770 — SHA update follow-up required
   social_debate:

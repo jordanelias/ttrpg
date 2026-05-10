@@ -118,6 +118,10 @@ This replaces the current abstraction where an invader "enters a territory" and 
 
 ---
 
+## §6 Cross-reference: March Layer (Phase 3, ED-780)
+
+Strategic movement (march budget, A* pathfinding, vision/recon, route blocking, multi-edge moves, Casus Belli on edge crossing) is canonical at `designs/territory/march_layer_v30.md` (Phase 3 mechanical body authored 2026-05-10 under ED-780). This document (`settlement_adjacency_v30.md`) preserves the authored Edge Type → Manoeuvre Modifier mapping (§2.2) which is consumed by march_layer §4.2 by reference. Future strategic-movement extensions should be authored in march_layer; settlement-scale battle resolution remains here.
+
 ## §5 Open Items
 
 - **Adjacency map file:** `designs/world/settlement_adjacency_map.yaml` needs authoring. Can be derived from `geography_v30` adjacency + settlement Seat positions, but hand-review required for mountain/river/coastal edge classification.

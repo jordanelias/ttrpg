@@ -3,7 +3,7 @@
 
 # VALORIA — March Layer (Strategic Movement)
 
-**Status:** SKELETON — Phase 2 lock-in for structural decisions; full mechanical body authored in Phase 3 under ED-780.
+**Status:** PROVISIONAL — Phase 3 mechanical body authored 2026-05-10 (ED-780 closure). Phase 4 (ED-781) stress tests pending. Naval (§6) deferred to ED-055.
 **Authority:** ED-780 (Phase 3 standing). Depends on Phase 2 canon at `designs/territory/valoria_geography_v30.yaml`.
 **Supersedes (planned):** `designs/territory/settlement_adjacency_v30.md` (PP-666 PROVISIONAL movement abstraction). Banner posted at predecessor pointing here.
 **Affects:** `mass_battle_v30 §A.4–A.11`, `military_layer_v30`, `faction_layer_v30 §2`, `clocks_v30` (Accounting cadence), `geography_v30`.
@@ -24,9 +24,16 @@ march_budget_pixels = Military × 100
 Cost per traversed segment: `distance_px × terrain_cost_multiplier` per `valoria_geography_v30.yaml :: terrain_cost_matrix`.
 
 ### §1.1 Cavalry advantage
+A cavalry-majority army (≥ 50% cavalry by Size composition) gains 1.5× march budget. Mid-tier and Elite cavalry both qualify; partial-cavalry compositions below 50% threshold receive no modifier. Dismounted cavalry (status flag, e.g., siege-bound or terrain-forced) lose the modifier for that march. The 1.5× compounds with skirmish-modifier (§1.2) when both apply, capped at 1.7× total to prevent cumulative explosion in light cavalry skirmish forces.
+
 ### §1.2 Skirmish / chevauchée
+A skirmish-only force (low-tier units only — Levy, Militia, Light Cavalry — with no siege equipment, no Elite, no heavy infantry) gains 1.3× march budget. Tactical purpose: chevauchée operations, scouting columns, raid forces. The skirmish force CANNOT initiate Settlement Siege (per `settlement_layer §6 Siege Declaration`) — siege requires at least one Heavy Infantry or Siege unit in composition. Cavalry-skirmish stack: 1.5 × 1.3 = 1.95, capped at 1.7× (§1.1).
+
 ### §1.3 Supply line attrition (Phase 4 calibration)
+Armies operating beyond a finite supply radius (default 8 settlements from a friendly Mine, Cathedral, or Port supply node) accumulate Attrition strain at +1 per season per 4 settlements over budget. Attrition strain converts to Size loss at season Accounting at 1:1 ratio (rounded down). Friendly territory traversal does NOT contribute to attrition; hostile/contested territory does. Phase 4 stress tests (ED-781) calibrate the supply radius and conversion rates against historical Renaissance-period Italian-state campaigns.
+
 ### §1.4 Multi-army coordination across the budget
+A faction with multiple armies executes march budgets independently per army; budgets do NOT pool. An army with 0 remaining budget cannot participate in a battle scheduled by another friendly army that turn (per `mass_battle §A.4 ENGAGEMENT`). Coordinated arrival at a battle site requires the slower army to commit budget early-season; the faster army may arrive ahead and engage (or wait, declining to engage). Combined-army engagement requires both armies arriving in the same Manoeuvre Phase tick.
 
 ---
 
@@ -38,8 +45,13 @@ Routes computed as A* shortest-path over the terrain-cost field per PP-709 §2.4
 Roads are NOT a separate authored canonical layer. They are A*-cached between settlement pairs and rendered as stable strategic-map roads.
 
 ### §2.2 Cache invalidation
+Cached A* paths invalidate when: (a) a settlement on the path is sieged or hostile-occupied (§2.4 route blocking); (b) a calamity radiation band changes magnitude (terrain-cost matrix updates); (c) a bridge collapses or is destroyed (river crossing penalty changes); (d) weather closure activates a winter-impassable mountain pass. Engine recomputes only paths that pass through the invalidated cell; non-affected paths retain cache.
+
 ### §2.3 Player-visible pathfinding UI
+On Strategic Map (Godot 4.6 implementation per §8.1), clicking a destination settlement renders the proposed march route as a highlighted polyline overlay with per-segment cost annotations and total budget consumption. Alternate routes (within +20% cost) are offered as toggleable variants. Hover-tooltip shows: distance_px, terrain factors applied, cavalry/skirmish modifiers active, expected season-arrival.
+
 ### §2.4 Route blocking (siege, hostile occupation, weather closure)
+A route is blocked if any of: (a) hostile army occupies a settlement on the path with Size ≥ 1 (engagement is forced — march halts at the blocking settlement; battle resolves per `mass_battle §A.5`); (b) sieged settlement on path is hostile-controlled (army must besiege or detour; siege bypass per `settlement_layer §5.1`); (c) winter weather closure on a mountain_pass edge between season Q4 and Q1 (path detours via lowland edges); (d) calamity radiation band ≥ 4 (army takes Forgetting/attrition risk per `calamity_radiation_v30`; player must opt-in to traverse).
 
 ---
 
@@ -54,9 +66,16 @@ effective_vision = base_vision × terrain_factor × weather_factor × season_fac
 Base 240 px; factor tables in `valoria_geography_v30.yaml :: vision_range`.
 
 ### §3.1 Fog of war
+Settlements outside any friendly army's effective_vision (per §3 multiplicative stack) render as fog-of-war; their last-known state (faction control, garrison strength, Prosperity tier) persists until a friendly army or scout re-enters vision range. Hostile army positions in fog-of-war are HIDDEN; faction Intelligence (Investigate Strategic vs Ob 3) can reveal partial state.
+
 ### §3.2 Scouting actions
+Scouting is an army-level action consuming half the march budget for the season. Scout output: full vision of all settlements within 2 hops on the adjacency graph from the scout's starting position; reveals army composition (size, tier mix) but NOT faction priorities or arc-state.
+
 ### §3.3 Counter-reconnaissance
+A faction with active counter-reconnaissance (Intel investment ≥ 3 in territory) imposes +1 Ob on enemy scouting actions and reduces scouted vision range by 1 hop. Counter-recon does not reveal scouting attempts to the defender automatically — only on contested-roll success.
+
 ### §3.4 Thread-Witnessed scouting (TS-gated; not army transport)
+A practitioner with Thread Sensitivity ≥ 50 may observe a settlement's rendered state at distance via Thread-Read operation (per `threadwork_v30 §2.6 Knot-mediated remote Thread-Read`). This reveals settlement state per §3.2 scouting output but does NOT reveal hostile army positions — Threads bind to settlements, not to mobile units in transit. Cost: +1 Knot strain per observation (per F2 `fieldwork_lifecycle_stress_01 F-L06`). Crucially: Thread-Witnessed scouting is observation only; armies cannot be transported via Threads (P-12 relational contagion does not propagate physical mass).
 
 ---
 
@@ -77,7 +96,7 @@ Graph defined in `valoria_geography_v30.yaml :: adjacency` (26 edges across 17 p
 Per `settlement_adjacency_v30 §2.2` (preserved). Manoeuvre Phase modifiers carry forward.
 
 ### §4.3 Bypass rule
-Per `settlement_layer §5.1`. An army may skip a settlement; bypassed settlement remains hostile.
+Per `settlement_layer §5.1`. An army may skip a settlement on its march path; bypassed settlements remain hostile and may be re-engaged on subsequent seasons. Bypass risk: hostile garrison may sortie against the bypassing army's supply line (per §1.3 attrition), forcing engagement at +1 attrition per bypassed hostile settlement at season Accounting. The Crown's classical strategic pattern (Italian condottieri, Renaissance period reference) is a sequence of forced bypass-and-return campaigns.
 
 ---
 
@@ -87,8 +106,13 @@ Per `settlement_layer §5.1`. An army may skip a settlement; bypassed settlement
 Single march budget per army per season. Consumed across multiple edges until exhausted.
 
 ### §5.2 Multi-edge moves
+A march budget may consume multiple edges in sequence. The army moves to each settlement in order; each edge consumes its `distance_px × terrain_cost` from the budget. The army stops at the first settlement where: (a) budget is fully consumed, (b) engagement is forced (§2.4), or (c) player declines further movement. Stopping mid-edge is not permitted; the army arrives at a settlement node or remains at start.
+
 ### §5.3 Engagement-on-arrival vs siege declaration
+On arriving at a hostile-controlled settlement, the player declares either ENGAGEMENT (immediate Manoeuvre Phase per `mass_battle §A.4`, terrain modifiers from §4.2 carry forward) or SIEGE (per `settlement_layer §6`, longer multi-season process with attrition exchange). ENGAGEMENT requires a defending army on-site; if the settlement has only garrison forces (no field army), the choice is SIEGE only — garrison cannot Manoeuvre. The choice is locked at arrival; cannot be changed mid-engagement.
+
 ### §5.4 Inter-faction edge crossing → Casus Belli check
+Crossing an edge into another faction's controlled territory triggers a Casus Belli check per `faction_layer_v30 §3 War Doctrine`. Permitted crossings (treaty, alliance, vassalage) consume budget normally with no political cost. Unauthorised crossings produce: (a) immediate Casus Belli +1 to the territorial faction, (b) IP −2 to the trespassing faction, (c) territorial faction may treat the army as hostile from next Manoeuvre tick (engagement-on-arrival forced if the trespasser does not retreat by next-season Accounting).
 
 ---
 
@@ -113,6 +137,7 @@ Per PP-709 §2.2: zone is overlay, NOT terrain. Entry triggers personnel-layer F
 Per `calamity_radiation_v30` band table referenced from `valoria_geography_v30.yaml :: radiation_bands`.
 
 ### §7.3 Askeheim Gate mechanics (Gate 1 T13, Gate 2 T6)
+The two Askeheim Gates (Gate 1 in T13, Gate 2 in T6) are marsh-edge passage points per `valoria_geography_v30.yaml :: gates` (PP-709 §2.4). Each gate edge imposes attacker −1D in mass-battle Manoeuvre Phase (terrain familiarity favors the side that has held the gate longer). Gate edges are also the only land-route into T15 (Askeheim itself); naval bypass requires Phase 3 ED-055 naval mechanics. Holding a gate confers +1 IP per season (strategic chokepoint value).
 
 ---
 

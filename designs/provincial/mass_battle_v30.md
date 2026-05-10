@@ -431,6 +431,9 @@ or Feigned Retreat to disengage and re-concentrate. *(ED-358 resolved; PROVISION
 | Narrow pass | 1 engagement per side; Fibonacci impossible |
 | Open flat | No modifiers |
 
+**Phase 3 (ED-780) extension — Geographic battle-terrain derivation:**
+When a mass battle resolves at engagement coordinates that intersect `designs/territory/valoria_geography_v30.yaml :: terrain_polygons`, the Terrain row is determined by querying the geography at battle coordinates rather than declaratively assigned. Polygon intersections producing multiple terrains use the dominant polygon (by area weight) at the engagement hex. Combined with `march_layer_v30 §8.2`, this lets battles inherit terrain from the strategic map automatically; no separate declaration required.
+
 ---
 
 ### A.10 THREAD OPERATIONS IN MASS BATTLE
