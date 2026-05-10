@@ -166,24 +166,23 @@ def assert_bootstrap(scope: str = None) -> str:
             auto_fixable = [v for v in violations if v.auto_fixable]
 
             if auto_fixable:
-                print(f"[COMPLIANCE] {len(auto_fixable)} auto-fixable violations. Applying...")
-                additions, msg = cc.auto_fix(auto_fixable, session_commit=False)
-                auth = g._authorize_next_commit()
-                g.atomic_commit(
-                    additions=additions, deletions=[],
-                    message=msg, repo='ttrpg', _auth=auth,
+                # CHANGED 2026-05-10 from auto-commit-during-bootstrap to report-only.
+                # The previous behavior at this site silently committed auto-fix
+                # output to main on every bootstrap, which produced two destructive
+                # commits (a8f7b2f8, 1df4259b) — atomizer.archive_by_status returned
+                # empty new_files dict, then index_gen regenerated summary+index
+                # against empty content (wiping the editorial_ledger_summary and
+                # _index from 7 active P2 entries to next_id:1). Source of truth
+                # editorial_ledger.yaml was unaffected; only the derivative views.
+                # Auto-commit during a non-interactive bootstrap step is too
+                # high-risk; surface violations and let the operator drive the fix.
+                print(
+                    f"[COMPLIANCE ⚠] {len(auto_fixable)} auto-fixable "
+                    f"violation(s) detected. NOT auto-committing — run the "
+                    f"fix manually:"
                 )
-                # Evict all transient fetches from compliance auto-fix.
-                # Compliance reads full design docs for index generation —
-                # those docs are not needed after indexes are committed.
-                evicted = g.cache_evict_pattern(
-                    'designs/', 'tests/', 'params/', 'archives/',
-                    'deprecated/', 'skills/', 'canon/', 'references/',
-                    'docs/', 'tools/',
-                )
-                if evicted:
-                    print(f"[COMPLIANCE] Evicted {evicted} transient cache entries")
-                print(f"[COMPLIANCE ✓] Auto-fixes committed.")
+                for v in auto_fixable:
+                    print(f"  - {v.path} ({v.fix_action})")
 
             # Re-check after auto-fix
             remaining = cc.check_all()
