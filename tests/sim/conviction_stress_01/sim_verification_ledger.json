@@ -1,0 +1,136 @@
+{
+  "harness_id": "conviction_stress_01",
+  "harness_version": "v1",
+  "session_token_started": "2026-05-10",
+  "constants": [
+    {
+      "id": "A-L01",
+      "sim_variable": "conviction_taxonomy_authority",
+      "value": "PP-684 supersedes legacy 9-Conviction set",
+      "canonical_source": "designs/personal/conviction_taxonomy_v30.md",
+      "section": "header",
+      "quoted_text": "AUTHORITY: PP-684 (this doc); supersedes legacy \"Reason / Continuity\" Conviction labels and per-character anachronistic philosophical-tradition labels."
+    },
+    {
+      "id": "A-L02",
+      "sim_variable": "thirteen_convictions_canonical",
+      "value": "13 Convictions",
+      "canonical_source": "designs/personal/conviction_taxonomy_v30.md",
+      "section": "§2",
+      "quoted_text": "## §2 The 13 Convictions"
+    },
+    {
+      "id": "A-L03",
+      "sim_variable": "self_other_orthogonal",
+      "value": "Self-Other separate orthogonal axis",
+      "canonical_source": "designs/personal/conviction_taxonomy_v30.md",
+      "section": "§1",
+      "quoted_text": "**Self-Other orientation** is a separate, orthogonal axis tracking whom an actor primarily benefits — themselves vs the broader populace. Greed, ambition, altruism, and self-sacrifice are represented along this axis, not as Convictions."
+    },
+    {
+      "id": "A-L04",
+      "sim_variable": "structured_concentration",
+      "value": "Primary 1-3 Convictions weight 0.6-0.8; cultural background 0.2-0.4",
+      "canonical_source": "designs/personal/conviction_taxonomy_v30.md",
+      "section": "§4",
+      "quoted_text": "## §4 Structured Concentration"
+    },
+    {
+      "id": "A-L05",
+      "sim_variable": "four_axis_projection",
+      "value": "4-axis: hierarchical, sacred, instrumental, traditional",
+      "canonical_source": "designs/personal/conviction_axis_matrix_v30.md",
+      "section": "§2",
+      "quoted_text": "| Conviction | hierarchical | sacred | instrumental | traditional |"
+    },
+    {
+      "id": "A-L06",
+      "sim_variable": "matrix_calibration_range",
+      "value": "Axis values [-1, +1]",
+      "canonical_source": "designs/personal/conviction_axis_matrix_v30.md",
+      "section": "§2",
+      "quoted_text": "Magnitudes are calibrated within `[-1, +1]`. A value near 0 indicates the Conviction is largely orthogonal to that axis. Magnitudes near ±1 indicate strong polarity."
+    },
+    {
+      "id": "A-L07",
+      "sim_variable": "five_axis_class_b_allowance",
+      "value": "5th-axis allowance Class B if Community/Identity collapse",
+      "canonical_source": "canon/patch_register_active.yaml",
+      "section": "PP-684 description",
+      "quoted_text": "4-axis vectorization (hierarchical/sacred/instrumental/traditional) with 5th-axis allowance as Class B if Stage 10 calibration finds Community/Identity collapse load-bearing."
+    },
+    {
+      "id": "A-L08",
+      "sim_variable": "self_other_decoupled",
+      "value": "Greed/ambition/altruism on Self-Other axis, not in Conviction set",
+      "canonical_source": "designs/personal/conviction_taxonomy_v30.md",
+      "section": "§2.3",
+      "quoted_text": "### §2.3 Greed and ambition are not Convictions"
+    },
+    {
+      "id": "A-L09",
+      "sim_variable": "stale_v1_doc_path",
+      "value": "npc_behavior §1.2 redirects to stale conviction_track_v1.md (9-Conviction set)",
+      "canonical_source": "designs/npcs/npc_behavior_v30.md",
+      "section": "§1.2",
+      "quoted_text": "*The Conviction taxonomy specification has been promoted to its own canonical doc per PP-681.\nSee `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction definitions\n(Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity, Community, Warden).*"
+    },
+    {
+      "id": "A-L10",
+      "sim_variable": "resonant_style_taxonomy",
+      "value": "4 Resonant Styles: Evidence, Consequence, Authority, Solidarity",
+      "canonical_source": "designs/npcs/npc_behavior_v30.md",
+      "section": "§1.3",
+      "quoted_text": "### §1.3 Resonant Style Taxonomy"
+    },
+    {
+      "id": "A-L11",
+      "sim_variable": "provisional_status",
+      "value": "Doc status PROVISIONAL",
+      "canonical_source": "designs/personal/conviction_taxonomy_v30.md",
+      "section": "header",
+      "quoted_text": "**Status:** PROVISIONAL."
+    },
+    {
+      "id": "A-L12",
+      "sim_variable": "sim_battery_passed",
+      "value": "Stage 10 sim 12/14 PASS",
+      "canonical_source": "designs/personal/conviction_taxonomy_v30.md",
+      "section": "header",
+      "quoted_text": "promoted from PROVISIONAL after Stage 10 sim PASS (12/14 battery; commits bb5e293 lateral + 3cb5207 articulation)"
+    }
+  ],
+  "modules_verified": [
+    {
+      "module": "conviction_stress_01",
+      "name": "Conviction Taxonomy + Axis Matrix Stress Test",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "A-L01",
+        "A-L02",
+        "A-L03",
+        "A-L04",
+        "A-L05",
+        "A-L06",
+        "A-L07",
+        "A-L08",
+        "A-L09",
+        "A-L10",
+        "A-L11",
+        "A-L12"
+      ],
+      "decision": "A1 (preserve PP-684 13-Conviction taxonomy + 52-cell axis matrix; address npc_behavior §1.2 redirect drift in follow-up PP)",
+      "drift_defects_surfaced": [
+        "P1 — A-L09: npc_behavior_v30 §1.2 redirects to stale conviction_track_v1.md (9-Conviction set) rather than canonical 13-Conviction taxonomy_v30.md per PP-684"
+      ],
+      "deferred_refinements": [
+        "Community/Identity near-collinearity (Dim 1 Lateral) — monitor for 5th-axis trigger",
+        "Order/Authority near-collinearity (Dim 2 Lateral) — monitor",
+        "5th-axis collapse trigger telemetry threshold undefined per A-L07",
+        "Self-Other UI display affordance (Dim 3 Horizontal)",
+        "Cultural template count for 17 territories (Dim 4 Horizontal)",
+        "Conviction crisis 3-Scar threshold weight-scaling under PP-684 structured concentration"
+      ]
+    }
+  ]
+}
