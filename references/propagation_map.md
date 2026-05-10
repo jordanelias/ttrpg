@@ -1,5 +1,57 @@
 <!-- v30 path update applied 2026-04-13 -->
 # VALORIA PROPAGATION MAP
+
+> **Historical batches archived.** Sections from 2026-05-02 (Mandate audit ED-784, Register cap ED-786, ED-784 Phase 2 sweep commits A–D) moved to `archives/propagation/propagation_map_archive_2026_05_02.md` (this archival sweep). Earlier batches: `references/propagation_map_archive_2026-05-10.md` (root-level), `archives/propagation/propagation_map_archive_2026_05_01*.md` (4 batches). Active file tracks 2026-05-09 onwards.
+
+## PP-716 — Wound mechanic correction (2026-05-09)
+**Source:** Jordan canonical clarification.
+**Files patched:** designs/scene/derived_stats_v30.md (§4.1 authoritative), designs/scene/combat_v30.md (L253-378 wound spec + thread interface), designs/threadwork/threadwork_v30.md (Leap/Weaving/Pulling/Mending/FR pool penalty), params/combat.md (Health formula + Thread interface), params/mass_combat.md (CF Zoom-In).
+**Propagation:** All references to wound-induced +1 Ob (combat→thread, mass-Command, BG-CF) flipped to −1D Pool. All Vitality = End × 10 references reverted to Health = (End+6)×(MW+1). MW = floor(End/2)+1 restored. derived_stats_v30 §4.1 made authoritative source; other files reference §4.1.
+**ED resolved:** ED-789. **ED reverted:** ED-694.
+**Open propagation:** tests/sim/combat_arch_residual_stress_01/r1_wound_permanence.md (Module 1 R1) is SUPERSEDED — banner added; needs redo against PP-716 canon. canonical_sources.yaml SHAs marked PENDING_PP_716 pending freshness_gate refresh.
+
+## PP-717 npc_behavior §1.2 stale-redirect fix (2026-05-10)
+**Class E (editorial); applied this commit.** No mechanical propagation; corrects documentation pointer drift.
+- `designs/npcs/npc_behavior_v30.md §1.2`: redirects updated to point at `designs/personal/conviction_taxonomy_v30.md` (PP-684 canonical) and companion `conviction_axis_matrix_v30.md`.
+- `designs/personal/conviction_track_v1.md`: SUPERSEDED banner added at top; §1 deprecated; §2 Scar accumulation preserved as canonical pending PP-718 weight-scaling review.
+- `references/canonical_sources.yaml`: conviction_track entry annotated as PARTIALLY SUPERSEDED.
+- No code changes. No simulation re-run.
+- Surfaced by: conviction_stress_01 (A-L09 P1 drift) commit 57bd26f4.
+- Cross-reference: this PP unblocks future readers of npc_behavior_v30 §1.2 from learning the legacy 9-Conviction set.
+
+---
+
+*Older entries (before the most recent 8) archived to `references/propagation_map_archive_2026-05-10.md` on 2026-05-10 to keep working file under 15k-token CI limit.*
+
+## PP-719 fieldwork §5.6b sustained Disposition reduction clarification (2026-05-10)
+**Class E (editorial); applied this commit.** Single-line clarification, no mechanical change.
+- `designs/scene/fieldwork_v30.md §5.6b`: "sustained for 2 seasons" → "2 consecutive seasons (defined as Disposition value at Accounting in season N below +3 AND season N+1 below +3, both unbroken). Non-consecutive seasons below +3 do not aggregate."
+- Surfaced by: EC-F2.A-01 in `fieldwork_lifecycle_stress_01` (commit ddccbf9a).
+- No simulation re-run required.
+
+## PP-720 R7 stress-FF threshold spec (2026-05-10)
+**Class C (mechanical — parameter/resolution-path extension); applied this commit.**
+- `designs/scene/combat_v30.md §5`: new subsection "Stress-FF (ranged into melee under stress conditions)" inserted before §6 ARMOUR.
+- Stress conditions: Wounds ≥1 OR Composure ≤3 OR environmental degradation.
+- Resolution: secondary FF roll TN+1 (single-stress) / TN+2 (multi-stress); damage = floor(STR/2) + weapon_mod_vs_armour.
+- No new Ob channel; uses canonical Combat Pool + TN modifier.
+- Tabletop fallback waiver clause preserves Game-Master flexibility.
+- Surfaced by: combat_arch_residual_stress_01 Module 7 R7 (commit c58bc670).
+
+## PP-721 R9 routine-encounter B-mode presentation flag (2026-05-10)
+**Class C (UX/presentation parameter); applied this commit.**
+- `designs/scene/combat_v30.md §8`: new subsection "Architecture-B Presentation Flag" inserted before §9 MASS COMBAT.
+- B-mode flag triggers: (1) fixed-geometry zone, (2) scripted entry positions, (3) single fixed objective, (4) stakes routine (no C-duel triggers).
+- UI effect only: discrete position-cells, narrowed Stunt vocabulary, 8-actor cap. Mechanics unchanged.
+- Tabletop fallback: B-mode is videogame-specific; tabletop ignores.
+- Surfaced by: combat_arch_residual_stress_01 Module 9 R9 (commit 1c31109d C9.3 deferred refinement).
+
+## PP-722 PP-349 stale Niflhel example fix (2026-05-10)
+**Class E (editorial); applied this commit.** Surgical 5-word replacement.
+- `designs/scene/social_contest_v30.md` PP-349 paragraph: "collaborating with Niflhel" → "collaborating with crime or underground networks operating against Church interests".
+- Aligns canonical example with Jordan's 2026-05-09 Niflhel dissolution decision (G-L03 from setup_ignition_stress_01 commit cab3bd85).
+- Surfaced by: F3 Heresy Investigation EC-F3.A-01 (commit 8de82dbb).
+
 ## PP-718 Conviction Scar accumulation per-Conviction clarification (2026-05-10)
 **Class B (system extension); applied this commit.** Closes P1 ambiguity from conviction_stress_01 (commit 57bd26f4); reserved by PP-717 as next_pp.
 - `designs/personal/conviction_track_v1.md §2`: rewritten to specify per-Conviction Scar accumulation under PP-684 structured concentration.
@@ -54,7 +106,3 @@
 - m_summary updated: "5 + · 5 ✓ · 1 ○ · 0 −" with revision-rationale note.
 - Pass/fail verdict unchanged (zero violations both before and after recalibration).
 - Self-review bias acknowledged: this walkthrough was authored about Claude's own prior PP-718 work; recalibration tightens the credit assignment without changing the canonical commit.
-
----
-
-*Older entries (before the most recent 6) archived to `references/propagation_map_archive_2026-05-10b.md` on 2026-05-10 (second rotation this date) to keep working file under 5k-token CI limit.*
