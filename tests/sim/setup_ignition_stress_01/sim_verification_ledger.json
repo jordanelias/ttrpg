@@ -1,0 +1,77 @@
+{
+  "harness_id": "setup_ignition_stress_01",
+  "harness_version": "v1",
+  "session_token_started": "2026-05-10",
+  "constants": [
+    {
+      "id": "G-L01",
+      "sim_variable": "niflhel_dissolved_struck",
+      "value": "Niflhel STRUCK; four-arm structure eliminated",
+      "canonical_source": "designs/npcs/npc_behavior_v30.md",
+      "section": "§2.12",
+      "quoted_text": "**STRUCK** — Niflhel dissolved (conflict_architecture_proposal). Four-arm structure eliminated. Functions distributed to settlement-level phenomena."
+    },
+    {
+      "id": "G-L02",
+      "sim_variable": "ed777_arc_reframe_standing",
+      "value": "5 arcs require reframe; standing",
+      "canonical_source": "canon/editorial_ledger.yaml",
+      "section": "ED-777",
+      "quoted_text": "[STANDING] arc_register_factions.md — 5 arcs require reframe. Niflhel is not a faction. Crime and underground networks exist in Valoria but are not threadwork-related. Affected: ARC-S11, ARC-S54, ARC-S55, NPC-ARC-VIR, ARC-T25."
+    },
+    {
+      "id": "G-L03",
+      "sim_variable": "ed777_jordan_decision",
+      "value": "Jordan 2026-05-09 decision: Niflhel not faction; reframe 5 arcs",
+      "canonical_source": "canon/editorial_ledger.yaml",
+      "section": "ED-777",
+      "quoted_text": "2026-05-09 — Niflhel not a faction. Crime/underground exists but not threadwork-related. Reframe 5 arcs around that."
+    },
+    {
+      "id": "G-L04",
+      "sim_variable": "phase_2_geography_executed",
+      "value": "Phase 2 geography canon executed per ED-779",
+      "canonical_source": "canon/patch_register_active.yaml",
+      "section": "PP-710",
+      "quoted_text": "Phase 2 geography canon executed (ED-779). Authors designs/territory/valoria_geography_v30.yaml as the data canon for Valoria geography at canonical 1920×2880: 17 territory anchors (jsx-derived via"
+    },
+    {
+      "id": "G-L05",
+      "sim_variable": "ed780_phase_3_standing",
+      "value": "Phase 3 spec rewrite + march_layer authored; ED-780 standing",
+      "canonical_source": "canon/editorial_ledger.yaml",
+      "section": "ED-780",
+      "quoted_text": "[STANDING] Phase 3 of geography canon work — spec rewrite (depends on ED-779 completion). Approved scope 2026-05-09: (a) rewrite settlement_adjacency_v30 to query geography data rather than abstract edge-types; (b) author march-bubble + encounter-trigger spec (new doc designs/territory/march_layer_v30.md); (c) update mass_battle_v30 §A.9 / §B.5 for geographic battle-terrain derivation at engagement coordinates."
+    },
+    {
+      "id": "G-L06",
+      "sim_variable": "ed781_phase_4_stress_tests",
+      "value": "Phase 4 stress tests queued (3 scenarios); standing",
+      "canonical_source": "canon/editorial_ledger.yaml",
+      "section": "ED-781",
+      "quoted_text": "[STANDING] Phase 4 of geography canon work — stress tests (depends on ED-780 completion). Three scenarios queued: (1) Mountain Pass battle (T2/T11 Halvardshelm pass — geometry-constrained engagement, narrow-pass clamp emergence); (2) Open-field cavalry encounter (T2 Kronmark plains — flanking-as-position vs declaratory); (3) Coastal landing (Schoenland → T13 Oastad — amphibious sequencing, no naval mechanics per ED-780 scope)."
+    }
+  ],
+  "modules_verified": [
+    {
+      "module": "setup_ignition_stress_01",
+      "name": "Setup & Ignition Audit",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "G-L01",
+        "G-L02",
+        "G-L03",
+        "G-L04",
+        "G-L05",
+        "G-L06"
+      ],
+      "decisions_per_submodule": {
+        "B4_Tensions_Deck": "NOT YET DESIGNED — substantial design initiative requiring Jordan's authoring direction in separate session",
+        "B17_Geography_Phase_2": "COMPLETE per ED-779 / PP-710. ED-780 (Phase 3) and ED-781 (Phase 4) standing carryovers",
+        "B19_Niflhel_dissolution": "DONE in core canon (npc_behavior §2.12 STRUCK). ED-777 5-arc reframe pending per Jordan's 2026-05-09 decision"
+      },
+      "key_finding": "Setup pipeline composite has structural gap: B4 Tensions Deck undesigned; B17 and B19 individually pass but Tensions Deck absence means campaign-startup composition defaults to hardcoded scenario.",
+      "session_status": "D-A-F-G stress sweep COMPLETE"
+    }
+  ]
+}
