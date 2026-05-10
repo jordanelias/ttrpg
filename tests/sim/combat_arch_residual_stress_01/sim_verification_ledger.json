@@ -198,6 +198,24 @@
         "C8.3 continuous tempo (categorical multi-axis fail: contradicts R8-L02 battle-time exclusion; dual-clock bookkeeping; time-laundering optimization)"
       ],
       "key_finding": "Synthesis premise was a spec-gap that doesn't exist: combat_v30 §11.5 specifies the tempo model completely. Partial-freeze with one-way state coupling (Exposure propagates forward at entry; Evidence persists post-combat with seasonal decay; fieldwork state persists across combat with state-preserving resumption) is canonical and mature. R8 answered by re-pointing to canon."
+    },
+    {
+      "module": 9,
+      "name": "R9 Two-architecture sufficiency",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "R9-L01",
+        "R9-L02",
+        "R9-L03",
+        "R9-L04",
+        "R9-L05",
+        "R9-L06"
+      ],
+      "decision": "C9.1 (A+C only — synthesis Q5 reduction holds) primary; C9.3 (A+C with optional B-shape presentation flag) as UX refinement if Jordan wants explicit corridor / fixed-position presentation contrast",
+      "rejected_candidates": [
+        "C9.2 restore B (high cost, low marginal value — three combat UIs, B-as-orphan-mid-tier doesn't extend to mass)"
+      ],
+      "key_finding": "B-shaped encounter coverage entirely replicable by A+S7-hybrid via zone-size + actor-count + Stunt-vocabulary parameters. Mapping verified for: corridor ambush, dungeon room, tavern brawl, field battle, hero+lieutenant+mooks. Variety-via-architecture forfeit (C9.1's 1⚠ Horizontal) is mitigated by variety-via-zone-parameters."
     }
   ],
   "constants": [
@@ -800,6 +818,54 @@
       "canonical_source": "designs/scene/fieldwork_v30.md",
       "section": "§6",
       "quoted_text": "## §6 EXPOSURE"
+    },
+    {
+      "id": "R9-L01",
+      "sim_variable": "three_architectures_baseline",
+      "value": "A (map+move), B (slot formation), C (duel)",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/05_q4_q5_q6.md",
+      "section": "Q5",
+      "quoted_text": "Chunks 1–2 establish **A (map+move), B (slot formation), C (duel)** as three architectures."
+    },
+    {
+      "id": "R9-L02",
+      "sim_variable": "s7_hybrid_collapses_a_b",
+      "value": "S7-hybrid collapses A and B",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/05_q4_q5_q6.md",
+      "section": "Q5",
+      "quoted_text": "Chunk 4 favors S7-hybrid which collapses A and B into the same spatial substrate (continuous within a zone). C remains specialized."
+    },
+    {
+      "id": "R9-L03",
+      "sim_variable": "b_dropped_recommendation",
+      "value": "Drop B as a distinct architecture",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/05_q4_q5_q6.md",
+      "section": "Q5 verdict",
+      "quoted_text": "**Drop B as a distinct architecture.** Use A (S7-hybrid) for all general combat — adjust *zone size, encounter density, animation speed* to span the use cases B would have served"
+    },
+    {
+      "id": "R9-L04",
+      "sim_variable": "c_trigger_six_conditions",
+      "value": "C fires on six discriminable conditions",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/05_q4_q5_q6.md",
+      "section": "Q5 trigger",
+      "quoted_text": "C fires on six discriminable conditions, all canon-adjacent. Default is A."
+    },
+    {
+      "id": "R9-L05",
+      "sim_variable": "combat_pool_formula",
+      "value": "(Agility × 2) + Relevant History + 3 (minimum 5)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§1",
+      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "id": "R9-L06",
+      "sim_variable": "zone_terminology",
+      "value": "Close = Melee range; Far = Ranged distance",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 PP-268",
+      "quoted_text": "**Zone terminology (PP-268):** Close zone renamed **Melee range**; Far zone renamed **Ranged distance** throughout."
     }
   ],
   "meta_findings": [
