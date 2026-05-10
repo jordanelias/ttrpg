@@ -1,16 +1,11 @@
--- Valoria NPC Registry v3
--- 48 NPCs, 13-Conviction taxonomy
+-- Valoria NPC Registry v3.1 — 46 NPCs
 
 BEGIN TRANSACTION;
-CREATE TABLE convictions (
-    npc_id TEXT NOT NULL, conviction TEXT NOT NULL, weight REAL NOT NULL,
-    rank INTEGER, FOREIGN KEY (npc_id) REFERENCES npcs(id)
-);
+CREATE TABLE convictions (npc_id TEXT, conviction TEXT, weight REAL, rank INTEGER);
 INSERT INTO "convictions" VALUES('NPC-001','Warden',0.4,1);
 INSERT INTO "convictions" VALUES('NPC-001','Precedent',0.2,2);
-INSERT INTO "convictions" VALUES('NPC-002','Honor',0.3,1);
-INSERT INTO "convictions" VALUES('NPC-002','Authority',0.3,2);
-INSERT INTO "convictions" VALUES('NPC-002','Identity',0.2,3);
+INSERT INTO "convictions" VALUES('NPC-002','Equity',0.5,1);
+INSERT INTO "convictions" VALUES('NPC-002','Warden',0.3,2);
 INSERT INTO "convictions" VALUES('NPC-003','Equity',0.4,1);
 INSERT INTO "convictions" VALUES('NPC-003','Warden',0.25,2);
 INSERT INTO "convictions" VALUES('NPC-004','Faith',0.6,1);
@@ -48,7 +43,8 @@ INSERT INTO "convictions" VALUES('NPC-036','Order',0.35,1);
 INSERT INTO "convictions" VALUES('NPC-036','Authority',0.25,2);
 INSERT INTO "convictions" VALUES('NPC-037','Precedent',0.35,1);
 INSERT INTO "convictions" VALUES('NPC-037','Authority',0.25,2);
-INSERT INTO "convictions" VALUES('NPC-038','Faith',0.4,1);
+INSERT INTO "convictions" VALUES('NPC-038','Faith',0.6,1);
+INSERT INTO "convictions" VALUES('NPC-038','Authority',0.2,2);
 INSERT INTO "convictions" VALUES('NPC-039','Scholastic',0.35,1);
 INSERT INTO "convictions" VALUES('NPC-039','Faith',0.25,2);
 INSERT INTO "convictions" VALUES('NPC-040','Faith',0.5,1);
@@ -58,8 +54,6 @@ INSERT INTO "convictions" VALUES('NPC-050','Authority',0.25,2);
 INSERT INTO "convictions" VALUES('NPC-050','Order',0.15,3);
 INSERT INTO "convictions" VALUES('NPC-052','Equity',0.35,1);
 INSERT INTO "convictions" VALUES('NPC-052','Utility',0.3,2);
-INSERT INTO "convictions" VALUES('NPC-060','Warden',0.4,1);
-INSERT INTO "convictions" VALUES('NPC-060','Precedent',0.25,2);
 INSERT INTO "convictions" VALUES('NPC-070','Order',0.6,1);
 INSERT INTO "convictions" VALUES('NPC-070','Liberty',0.2,2);
 INSERT INTO "convictions" VALUES('NPC-071','Precedent',0.7,1);
@@ -68,8 +62,6 @@ INSERT INTO "convictions" VALUES('NPC-073','Warden',0.7,1);
 INSERT INTO "convictions" VALUES('NPC-074','Community',0.7,1);
 INSERT INTO "convictions" VALUES('NPC-075','Warden',0.6,1);
 INSERT INTO "convictions" VALUES('NPC-075','Equity',0.2,2);
-INSERT INTO "convictions" VALUES('NPC-076','Faith',0.6,1);
-INSERT INTO "convictions" VALUES('NPC-076','Authority',0.2,2);
 INSERT INTO "convictions" VALUES('NPC-080','Honor',0.6,1);
 INSERT INTO "convictions" VALUES('NPC-080','Utility',0.2,2);
 INSERT INTO "convictions" VALUES('NPC-081','Community',0.5,1);
@@ -91,10 +83,7 @@ INSERT INTO "convictions" VALUES('NPC-089','Identity',0.5,1);
 INSERT INTO "convictions" VALUES('NPC-089','Authority',0.3,2);
 INSERT INTO "convictions" VALUES('NPC-090','Precedent',0.5,1);
 INSERT INTO "convictions" VALUES('NPC-090','Order',0.3,2);
-CREATE TABLE goals (
-    npc_id TEXT NOT NULL, goal TEXT NOT NULL,
-    FOREIGN KEY (npc_id) REFERENCES npcs(id)
-);
+CREATE TABLE goals (npc_id TEXT, goal TEXT);
 INSERT INTO "goals" VALUES('NPC-001','Maintain substrate stability');
 INSERT INTO "goals" VALUES('NPC-001','Protect Southernmost practitioners');
 INSERT INTO "goals" VALUES('NPC-001','Continue the work regardless of interference');
@@ -133,18 +122,10 @@ INSERT INTO "goals" VALUES('NPC-052','Einhir cultural revival at any cost');
 INSERT INTO "goals" VALUES('NPC-052','Varfell military expansion');
 INSERT INTO "goals" VALUES('NPC-052','Dismantle post-war caste order');
 INSERT INTO "goals" VALUES('NPC-052','Intelligence-first approach to RM');
-INSERT INTO "goals" VALUES('NPC-060','Maintain institutional function');
-INSERT INTO "goals" VALUES('NPC-060','Ministry neutrality');
 INSERT INTO "goals" VALUES('NPC-075','The work. Only the work.');
-CREATE TABLE npcs (
-    id TEXT PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT,
-    faction TEXT, role TEXT, status TEXT DEFAULT 'canonical', title TEXT,
-    age TEXT, birthplace TEXT, territory TEXT, ts TEXT, coherence TEXT,
-    certainty TEXT, resonant_style TEXT, self_other_initial REAL,
-    cultural_label TEXT, arc_trajectory TEXT, source TEXT, notes TEXT
-);
+CREATE TABLE npcs (id TEXT PRIMARY KEY, first_name TEXT, last_name TEXT, faction TEXT, role TEXT, status TEXT, title TEXT, age TEXT, birthplace TEXT, territory TEXT, ts TEXT, coherence TEXT, certainty TEXT, resonant_style TEXT, self_other_initial REAL, cultural_label TEXT, arc_trajectory TEXT, source TEXT, notes TEXT);
 INSERT INTO "npcs" VALUES('NPC-001','Edeyja',NULL,'Independent (Southernmost Wardens)','Warden-Chief','canonical',NULL,NULL,'Southernmost','T15 (Southernmost)','75–80','9',NULL,'Evidence',-0.3,'varfell_alpine','Warden-Chief navigating Church pressure and Thread instability','designs/npcs/edeyja_npc.md, npc_roster_v30 §1','Highest TS of any living practitioner. Survived proximity to a major Gap/tear.');
-INSERT INTO "npcs" VALUES('NPC-002','Maret','Uln','Varfell','Practitioner / Succession Fallback','canonical',NULL,NULL,'Western fjords (near southern Einhir communities in Varfell territory)',NULL,'~50',NULL,NULL,NULL,0.1,'lowenritter_military','Dual loyalty — personal sympathy vs professional duty. If Vaynard eliminated, takes Varfell leadership (PP-486).','npc_roster_v30 §2','Vaynard''s intelligence operative. Thread-sensitive. RM-adjacent targets consistently 1 season behind. Southern Einhir solidarity.');
+INSERT INTO "npcs" VALUES('NPC-002','Maret','Uln','Varfell','Practitioner / Succession Fallback','canonical',NULL,NULL,'Western fjords (near southern Einhir communities in Varfell territory)',NULL,'~50',NULL,NULL,NULL,-0.1,'restoration_reformist','Dual loyalty — personal sympathy vs professional duty. If Vaynard eliminated, takes Varfell leadership (PP-486).','npc_roster_v30 §2','Vaynard''s intelligence operative. Thread-sensitive. RM-adjacent targets consistently 1 season behind. Southern Einhir solidarity.');
 INSERT INTO "npcs" VALUES('NPC-003','Yrsa','Vossen','Restoration Movement','RM Leader','canonical',NULL,NULL,NULL,NULL,'25',NULL,NULL,NULL,-0.3,'varfell_alpine','Visibility as vulnerability — permanent Heresy Investigation target','npc_roster_v30 §3','TS 25 — above practitioner threshold but below Forgetting resistance gate (29). PP-665 rename from Maret Vossen.');
 INSERT INTO "npcs" VALUES('NPC-004','Sæmund','Haelgrund','Church','Field Inquisitor (deployed at AP ≥ 3)','canonical',NULL,NULL,NULL,NULL,'15',NULL,NULL,NULL,0.0,'ecclesiastical','Latent TS — doesn''t know he''s Thread Sensitive. PC diagnosis possible (Cognition vs Ob 2).','npc_roster_v30 §4','TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype.');
 INSERT INTO "npcs" VALUES('NPC-005','Sigrid','Torsvald','Löwenritter','TS Riskbreaker (Covert)','canonical',NULL,NULL,NULL,NULL,'35',NULL,NULL,NULL,0.0,'lowenritter_military','Risk-averse on Thread collateral despite Riskbreaker doctrine — TS lets her perceive damage colleagues can''t.','npc_roster_v30 §5',NULL);
@@ -165,21 +146,19 @@ INSERT INTO "npcs" VALUES('NPC-033','Kolbrun','Thale','Crown (Inner Circle)','Sp
 INSERT INTO "npcs" VALUES('NPC-034','Gustav','Linder','Church (dual-loyalty: Crown Inner Circle agent for Himlensendt)','Archbishop''s Representative / Father','canonical','Father',NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.0,'ecclesiastical','Dual-loyalty NPC — Himlensendt''s agent inside Crown Inner Circle. Certainty 5 (highest).','faction_canon_v30 §Crown sub-Organizations',NULL);
 INSERT INTO "npcs" VALUES('NPC-035','Theodor','Kreutz','Crown (Inner Circle) / Löwenritter Liaison','Royal Guard Captain','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-0.1,'lowenritter_military','Pre-designated allegiance to Almud personally. His removal triggers Löwenritter Autonomy escalation toward Split.','faction_canon_v30 §Crown sub-Organizations',NULL);
 INSERT INTO "npcs" VALUES('NPC-036','Wilhelm','Voss','Crown (Inner Circle)','Royal Marshal','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.0,'valorian_court',NULL,'faction_canon_v30 §Crown sub-Organizations',NULL);
-INSERT INTO "npcs" VALUES('NPC-037','Annalie','Reichard','Crown (Inner Circle)','Lord Treasurer','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.0,'valorian_court',NULL,'faction_canon_v30 §Crown sub-Organizations','CORRECTED: previously listed as ''Church / Cardinal Reichard''. Per faction_canon, Annalie Reichard is Crown Inner Circle Lord Treasurer, NOT a Cardinal. The ''Cardinal Reichard'' in PP-685 §2.3 may be a separate entity (artifact 15 sample) or a naming confusion. [OPEN: verify if there is a distinct Cardinal Reichard in Church hierarchy].');
-INSERT INTO "npcs" VALUES('NPC-038','Arnlod','Olafsson','Church','Cardinal (virtue assignment unconfirmed)','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.0,'ecclesiastical',NULL,'faction_canon_v30 §Church','Cardinal virtue assignment not found in faction_canon (Justice = Haelgrund, Temperance = Klapp candidate, Fortitude = Jarnstal candidate, Prudence = Tormann). [OPEN: which virtue does Arnlod hold, or is he a 5th cardinal without virtue assignment?]');
+INSERT INTO "npcs" VALUES('NPC-037','Annalie','Reichard','Crown (Inner Circle)','Lord Treasurer','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.0,'valorian_court',NULL,'faction_canon_v30 §Crown sub-Organizations','Crown Lord Treasurer. Cardinal Reichard STRUCK.');
+INSERT INTO "npcs" VALUES('NPC-038','Arnlod','Olafsson','Church','Cardinal Justice (oversees Inquisition)','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.0,'ecclesiastical',NULL,'faction_canon_v30 §Church','Cardinal Justice. Per Jordan 2026-05-08.');
 INSERT INTO "npcs" VALUES('NPC-039','Magnus','Klapp','Church','Cardinal (Temperance candidate)','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,-0.1,'ecclesiastical','Scholar''s Dilemma — TS exposure via archive work.','faction_canon_v30 §Church','NPC-051 (''Klapp'') references in arcs (Klapp Combat, Klapp Thread, etc.) refer to this character''s surname, not a separate NPC.');
 INSERT INTO "npcs" VALUES('NPC-040','Osten','Jarnstal','Church','Cardinal (Fortitude candidate)','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0.0,'ecclesiastical',NULL,'faction_canon_v30 §Church',NULL);
 INSERT INTO "npcs" VALUES('NPC-041','Aldric','Hann','Restoration Movement','RM Visible Leadership (alongside Yrsa Vossen)','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'faction_canon_v30 §11 (caste/organization hierarchy)','RESOLVED: distinct character from NPC-013 Aldric Tormann (Church Cardinal Prudence). Aldric Hann is RM visible leadership. Two different factions, different surnames.');
 INSERT INTO "npcs" VALUES('NPC-050','Inge','Baralta','Hafenmark','Duchess (Sovereign Authority claimant, Custodian/Claimant foil with Almud)','canonical','Duchess',NULL,NULL,NULL,NULL,NULL,NULL,NULL,-0.3,'hafenmark_procedural','Six foil pairings per npc_foils_v30: Almud ↔ Baralta (Custodian/Claimant); Lenneth ↔ Baralta (campaign-defining); Baralta ↔ Vaynard (total opposition).','npc_behavior_v30 §2.3, npc_character_analyses §6, faction_canon_v30',NULL);
 INSERT INTO "npcs" VALUES('NPC-052','Magnus','Vaynard','Varfell','Duke (Varfell Leader)','canonical','Duke',NULL,NULL,NULL,NULL,NULL,NULL,NULL,-0.4,'lowenritter_military','Von Lohengramm programme — revolutionary expulsion. If eliminated, Maret Uln succession (PP-486).','npc_behavior_v30 §2.4, npc_character_analyses_infill §5, faction_canon_v30','PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan.');
-INSERT INTO "npcs" VALUES('NPC-060','Lennart','Haelgrund','Crown (Ministry)','Registrar (Ministry — Throughline T4)','canonical',NULL,NULL,NULL,NULL,'12 (Hidden)',NULL,NULL,'Consequence',0.0,'valorian_court','Arc A: The System''s Memory. Arc B: The Whistleblower (player shows Evidence that Ministry records have been altered).','npc_behavior_v30 §2.14','DISTINCT from NPC-004 Sæmund Haelgrund (Cardinal Justice, Church). Same surname — relationship unknown. Both TS 12. Ministry Registrar, not Church.');
 INSERT INTO "npcs" VALUES('NPC-070','Lisbeth','Ehrenwall','Löwenritter','Grandmaster','canonical',NULL,NULL,NULL,NULL,'0',NULL,'4','Consequence',-0.1,'lowenritter_military','Drives Autonomy track (Loyal→Restless→Autonomous→Split). Brandt succession if removed. Konrad von Jungingen archetype.','behavior_v30 §2.5',NULL);
 INSERT INTO "npcs" VALUES('NPC-071','Torvi','Heljason','Hafenmark (Inner Council)','Legal Advisor to Baralta','canonical',NULL,NULL,NULL,NULL,NULL,NULL,'5','Evidence',NULL,'hafenmark_procedural',NULL,'behavior_v30 §2.16',NULL);
 INSERT INTO "npcs" VALUES('NPC-072','Olaf','Geirson','Hafenmark (Inner Council)','Military Commander','canonical',NULL,NULL,NULL,NULL,NULL,NULL,'4','Consequence',NULL,'hafenmark_procedural',NULL,'behavior_v30 §2.16',NULL);
 INSERT INTO "npcs" VALUES('NPC-073','Björn','Holdar','Varfell (Jarl Council)','Senior Jarl of the Western Highlands','canonical',NULL,NULL,NULL,NULL,NULL,NULL,'3','Consequence',NULL,'einhir_traditional',NULL,'behavior_v30 §2.17',NULL);
 INSERT INTO "npcs" VALUES('NPC-074','Ingrid','Stenskald','Varfell (Jarl Council)','Skald-Chief','canonical',NULL,NULL,NULL,NULL,NULL,NULL,'3','Solidarity',NULL,'einhir_traditional',NULL,'behavior_v30 §2.17',NULL);
 INSERT INTO "npcs" VALUES('NPC-075','Orm',NULL,'Independent (Southernmost Wardens)','Second Senior Warden','canonical',NULL,NULL,NULL,'T15 (Southernmost)','60',NULL,'0','Evidence',-0.2,'einhir_traditional','Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost.','arc_expansion_v30',NULL);
-INSERT INTO "npcs" VALUES('NPC-076','Henrik','Solvang','Church','Cardinal Justice (oversees Inquisition apparatus)','canonical',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'ecclesiastical',NULL,'behavior_v30 §2.13','Commands Inquisition from Himmelenger. Sæmund Haelgrund (NPC-004) is field operative.');
 INSERT INTO "npcs" VALUES('NPC-080','Vidar','Haldorsen','Löwenritter','Riskbreaker (doctrine-following — foil to Torsvald)','proposed',NULL,NULL,NULL,NULL,'0',NULL,'5','Authority',NULL,'lowenritter_military','Completes missions Sigrid aborts. TS 0 = can''t see Thread collateral. Konrad Wallenrod archetype.','proposed',NULL);
 INSERT INTO "npcs" VALUES('NPC-081','Uta','Falkenrath','Hafenmark (Inner Council','Commune Representative (Banneret)','proposed',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Consequence',NULL,'hafenmark_procedural','"IC seat','proposed',NULL);
 INSERT INTO "npcs" VALUES('NPC-082','Njal','Torberg','Varfell (Jarl Council','Military Jarl','proposed',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Solidarity',NULL,'einhir_traditional','Fights for Einhir, not Vaynard. Fracture line if Vaynard''s ego diverges from cause. Sigurd Syr archetype.','proposed',NULL);
@@ -191,10 +170,7 @@ INSERT INTO "npcs" VALUES('NPC-087','Uwe','Askeland','Restoration Movement','Bud
 INSERT INTO "npcs" VALUES('NPC-088','Carin','Vedel','Restoration Movement','Pamphleteer (suppressed Einhir cultural texts)','proposed',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Evidence',NULL,'restoration_reformist','Propagation mechanism. Pamphlets increase Church AP across map. William Tyndale archetype.','proposed',NULL);
 INSERT INTO "npcs" VALUES('NPC-089','Zoe','Palaiologina','Altonia','Katepano (frontier governor)','proposed',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Consequence',NULL,'altonian_imperial','Decides whether Altonia probes, presses, or invades. Sincere imperialist. Basil Boioannes archetype.','proposed',NULL);
 INSERT INTO "npcs" VALUES('NPC-090','Stephanos','Doukas','Altonia','Kommerkiarios (trade prefect at Schoenland interface)','proposed',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'Authority',NULL,'altonian_imperial','Enforces ancient trade treaties. Counterparty to Solberg. Book of the Eparch archetype.','proposed',NULL);
-CREATE TABLE stats (
-    npc_id TEXT NOT NULL, stat_name TEXT NOT NULL, stat_value TEXT NOT NULL,
-    FOREIGN KEY (npc_id) REFERENCES npcs(id)
-);
+CREATE TABLE stats (npc_id TEXT, stat_name TEXT, stat_value TEXT);
 INSERT INTO "stats" VALUES('NPC-001','cognition','5');
 INSERT INTO "stats" VALUES('NPC-001','focus','5');
 INSERT INTO "stats" VALUES('NPC-001','endurance','4');
