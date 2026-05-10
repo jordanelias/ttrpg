@@ -195,7 +195,8 @@ policies:
     max_tokens: 8000
 
   - match: "references/canonical_sources.yaml"
-    max_tokens: 5000
+    max_tokens: 8000
+    note: "Raised from 5000 after coverage audit registered 14 additional systems (101 total paths)."
 
 
   # ────────────────────────────────────────────────────────────
