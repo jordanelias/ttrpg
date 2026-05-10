@@ -125,10 +125,6 @@ policies:
     target_pattern: "params/factions/{slug}.md"
     index_replaces_canonical: true
 
-  - match: "params/mass_combat.md"
-    max_tokens: 8000
-    on_exceed: "flag_for_next_session"
-
   # Superseded params: frozen for reference. Never shrinks.
   - match: "params/threadwork_superseded.md"
     on_exceed: "skip"
