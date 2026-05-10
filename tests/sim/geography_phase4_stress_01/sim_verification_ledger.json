@@ -1,0 +1,127 @@
+{
+  "harness_id": "geography_phase4_stress_01",
+  "harness_version": "v1",
+  "session_token_started": "2026-05-10",
+  "depends_on": "ED-780 closure (commit 65b918a2)",
+  "constants": [
+    {
+      "id": "GP4-L01",
+      "sim_variable": "t10_t11_mountain_pass_edge",
+      "value": "T10↔T11 mountain_pass edge",
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "adjacency",
+      "quoted_text": "{from: T10, to: T11, type: mountain_pass}"
+    },
+    {
+      "id": "GP4-L02",
+      "sim_variable": "t11_halvardshelm_anchor",
+      "value": "T11 anchor [440, 1280]",
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "T11",
+      "quoted_text": "T11:\n    name: Halvardshelm\n    faction: Varfell\n    region: Central Fjords"
+    },
+    {
+      "id": "GP4-L03",
+      "sim_variable": "t2_kronmark_plains",
+      "value": "T2 Italian-coded farmland",
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "T2",
+      "quoted_text": "Crown heartland between capital and northern pass. Italian-coded farmland."
+    },
+    {
+      "id": "GP4-L04",
+      "sim_variable": "t13_oastad_coastal",
+      "value": "T13 Southern Fjords; gate to Askeheim",
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "T13",
+      "quoted_text": "Varfell southern gate to Askeheim (Gate 1). Calamity-adjacent."
+    },
+    {
+      "id": "GP4-L05",
+      "sim_variable": "t1_t16_coastal_edge",
+      "value": "T1↔T16 coastal",
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "adjacency",
+      "quoted_text": "{from: T1, to: T16, type: coastal}"
+    },
+    {
+      "id": "GP4-L06",
+      "sim_variable": "terrain_cost_matrix",
+      "value": "mountain_pass 2.0; plains 1.0",
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "terrain_cost_matrix",
+      "quoted_text": "mountain_pass: 2.0    # embedded pass strips; gated by fortress"
+    },
+    {
+      "id": "GP4-L07",
+      "sim_variable": "mass_battle_a9_geographic_extension",
+      "value": "Phase 3 geographic-derivation clause",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§A.9",
+      "quoted_text": "**Phase 3 (ED-780) extension — Geographic battle-terrain derivation:**"
+    },
+    {
+      "id": "GP4-L08",
+      "sim_variable": "march_layer_t10_t11_pass_modifier",
+      "value": "mountain_pass attacker −1D",
+      "canonical_source": "designs/territory/march_layer_v30.md",
+      "section": "§4.1",
+      "quoted_text": "| mountain_pass | Highland → lowland; attacker −1D |"
+    },
+    {
+      "id": "GP4-L09",
+      "sim_variable": "march_layer_winter_pass_closure",
+      "value": "Q4-Q1 mountain_pass closure",
+      "canonical_source": "designs/territory/march_layer_v30.md",
+      "section": "§2.4",
+      "quoted_text": "(c) winter weather closure on a mountain_pass edge between season Q4 and Q1 (path detours via lowland edges)"
+    },
+    {
+      "id": "GP4-L10",
+      "sim_variable": "naval_deferred_ed055",
+      "value": "Naval deferred to ED-055",
+      "canonical_source": "designs/territory/march_layer_v30.md",
+      "section": "§6",
+      "quoted_text": "Phase 2 publishes the geographic data that *can support* naval (Port settlements have port metadata; sea polygons exist). Phase 3 specifies fleet types, port loading, sea zones, naval combat, weather-on-sea, Schoenland mediation, Maritime Forgetting interaction."
+    }
+  ],
+  "modules_verified": [
+    {
+      "module": "geography_phase4_stress_01",
+      "name": "Phase 4 Geography Stress Tests (3 scenarios)",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "GP4-L01",
+        "GP4-L02",
+        "GP4-L03",
+        "GP4-L04",
+        "GP4-L05",
+        "GP4-L06",
+        "GP4-L07",
+        "GP4-L08",
+        "GP4-L09",
+        "GP4-L10"
+      ],
+      "scenarios": {
+        "1_mountain_pass_t10_t11": {
+          "result": "Phase 3 mechanics produce coherent narrow-pass-clamp emergence; defender +3D differential",
+          "spec_gaps": "None (calibration playtest recommendation only — pass −1D may need reduction or Guts-pool conversion)"
+        },
+        "2_open_field_cavalry_t2": {
+          "result": "Phase 3 mechanics produce coherent declaratory-flanking + geometry-restricted resolution; cavalry advantage at 1.5× march budget + plains-flanking +1D",
+          "spec_gaps": "None"
+        },
+        "3_coastal_landing_t16_t13": {
+          "result": "Phase 4 stress testing reveals Phase 2 substrate gap — no canonical sea-zone adjacency between non-T1 coastal territories",
+          "spec_gaps": "P1: ED-055 naval scope must populate sea-zone polygon+adjacency definition before amphibious operations are canonically resolvable"
+        }
+      },
+      "decision": "ED-781 closure — Phase 3 verified for land-based mass battle; Phase 4 surfaces P1 sea-zone adjacency gap that ED-055 must close",
+      "key_findings": [
+        "Mountain pass narrow-clamp emerges from geometry (canonical correctness)",
+        "Open-field flanking is declaratory but geometry-restricted (Phase 3 contribution)",
+        "Coastal/amphibious operations require ED-055 substrate work — Phase 4 surfaces this as P1 blocker for Schoenland-pivot scenarios"
+      ]
+    }
+  ]
+}

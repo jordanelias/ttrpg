@@ -54,14 +54,13 @@ entries:
     severity: P2
     closure_commit: "2026-05-10 (this commit)"
   - id: ED-781
-    date: 2026-05-01
-    description: "[STANDING] Phase 4 of geography canon work — stress tests (depends on ED-780 completion). Three scenarios queued: (1) Mountain Pass battle (T2/T11 Halvardshelm pass — geometry-constrained engagement, narrow-pass clamp emergence); (2) Open-field cavalry encounter (T2 Kronmark plains — flanking-as-position vs declaratory); (3) Coastal landing (Schoenland → T13 Oastad — amphibious sequencing, no naval mechanics per ED-780 scope). Each stress test exercises the geographic-route model under different geometric stress patterns. Cross-references: PP-706, ED-779, ED-780."
-    status: open
+    date: 2026-05-09
+    description: "[CLOSED 2026-05-10] Phase 4 of geography canon work — three stress test scenarios executed. Scenario 1 Mountain Pass (T10↔T11 Halvardshelm-area pass): Phase 3 mechanics produce coherent narrow-pass-clamp emergence; defender +3D differential; geometry-driven, no spec gaps. Scenario 2 Open-field cavalry (T2 Kronmark plains): Phase 3 mechanics produce coherent declaratory-flanking + geometry-restricted resolution; cavalry advantage at 1.5× march budget + plains-flanking +1D; no spec gaps. Scenario 3 Coastal landing (Schoenland T16 → T13 Oastad): **P1 spec gap surfaced — no canonical sea-zone adjacency between non-T1 coastal territories**; ED-055 naval scope must populate sea-zone polygon+adjacency definition before amphibious operations are canonically resolvable. Phase 3 verified for land-based mass battle; coastal/amphibious operations blocked on ED-055."
+    status: closed
+    closed_date: 2026-05-10
     severity: P3
-    source: "Geography canon audit 2026-05-01 — Phase 4"
-    jordan_decision: "2026-05-09 — ratified. Always stress test. Coastal landing scenario retained but naval mechanics out of scope."
-
-
+    closure_commit: "2026-05-10 (this commit)"
+    surfaces_p1_gap_for_ed055: "Sea-zone polygon definition + sea-zone adjacency graph + amphibious landing coordinate spec; needed for Schoenland-pivot scenarios"
   - id: ED-788
     date: 2026-05-03
     description: "[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking mechanical work."
