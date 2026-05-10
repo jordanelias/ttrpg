@@ -178,6 +178,26 @@
       ],
       "marginal": "C7.2 FF on every miss — functionally workable but per-miss adjudication overhead; high-frequency mechanic",
       "spec_gap": "Stress threshold criteria need explicit enumeration (P1 ambiguity per EC-D7.A-01): Wound count, Composure threshold, environmental degradation list. Spec gap is filled by Jordan ratification per PP."
+    },
+    {
+      "module": 8,
+      "name": "R8 Fieldwork ↔ combat tempo shift",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "R8-L01",
+        "R8-L02",
+        "R8-L03",
+        "R8-L04",
+        "R8-L05",
+        "R8-L06",
+        "R8-L07"
+      ],
+      "decision": "C8.2 (partial freeze — current canon §11.5)",
+      "rejected_candidates": [
+        "C8.1 full freeze (S-fail: contradicts Exposure / Evidence propagation R8-L01/L05)",
+        "C8.3 continuous tempo (categorical multi-axis fail: contradicts R8-L02 battle-time exclusion; dual-clock bookkeeping; time-laundering optimization)"
+      ],
+      "key_finding": "Synthesis premise was a spec-gap that doesn't exist: combat_v30 §11.5 specifies the tempo model completely. Partial-freeze with one-way state coupling (Exposure propagates forward at entry; Evidence persists post-combat with seasonal decay; fieldwork state persists across combat with state-preserving resumption) is canonical and mature. R8 answered by re-pointing to canon."
     }
   ],
   "constants": [
@@ -724,6 +744,62 @@
       "canonical_source": "designs/scene/combat_v30.md",
       "section": "§8 (R6-L06)",
       "quoted_text": "**Eligibility (PP-290):** Rescue may only be declared if the rescued actor is outnumbered at Phase 1 declaration — facing 2+ attackers with no supporting ally"
+    },
+    {
+      "id": "R8-L01",
+      "sim_variable": "fieldwork_to_combat_exposure",
+      "value": "Combat Exposure: quiet +1, conspicuous +2, public +3",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§11.5 F-TRANS-01/09",
+      "quoted_text": "Combat Exposure codified: quiet engagement +1, conspicuous +2, public +3 Exposure to the fieldwork-active character. Applied before the combat scene opens, not during it."
+    },
+    {
+      "id": "R8-L02",
+      "sim_variable": "combat_does_not_consume_fieldwork_time",
+      "value": "Battle does not consume fieldwork time",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§11.5 F-TRANS-12",
+      "quoted_text": "The battle itself does not consume fieldwork time; only the post-combat investigation does."
+    },
+    {
+      "id": "R8-L03",
+      "sim_variable": "flight_no_state_reset",
+      "value": "Fleeing combat does NOT reset fieldwork state",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§11.5 ED-576",
+      "quoted_text": "Fleeing combat does NOT reset the player's fieldwork state — any active investigation or social engagement in the territory continues from where it was when combat interrupted."
+    },
+    {
+      "id": "R8-L04",
+      "sim_variable": "fled_combat_exposure_persists",
+      "value": "Exposure from fled combat still applies",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§11.5 ED-576",
+      "quoted_text": "Exposure from the fled combat still applies per F-TRANS-01/09 (quiet +1, conspicuous +2, public +3). Flight does not reduce Exposure — witnesses saw the player arrive, even if they left."
+    },
+    {
+      "id": "R8-L05",
+      "sim_variable": "post_combat_investigation_one_scene",
+      "value": "Post-combat investigation = 1 fieldwork scene",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§11.5 F-TRANS-12",
+      "quoted_text": "Post-combat investigation of battle site = 1 fieldwork scene."
+    },
+    {
+      "id": "R8-L06",
+      "sim_variable": "evidence_degrades_over_seasons",
+      "value": "+1 Ob/season Evidence decay at fled-combat site",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§11.5 ED-576",
+      "quoted_text": "Evidence degrades: +1 Ob to investigation per season elapsed since the battle."
+    },
+    {
+      "id": "R8-L07",
+      "sim_variable": "fieldwork_exposure_section_canonical",
+      "value": "Fieldwork §6 Exposure section canonical",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§6",
+      "quoted_text": "## §6 EXPOSURE"
     }
   ],
   "meta_findings": [

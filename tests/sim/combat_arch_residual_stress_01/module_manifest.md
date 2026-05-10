@@ -198,3 +198,5 @@ Modules 2–10 remain pending and will use PP-716 canon from the start.
 ## R6 verified — C6.1
 
 ## R7 verified — C7.4 primary; C7.1 fallback
+
+## R8 verified — C8.2
