@@ -114,3 +114,7 @@
 - Resolves geography_phase4_stress_01 ED-781 finding that mass_battle §A.9 Phase 3 geographic-derivation clause had no settlement-edge data to consume.
 - Two-tier composition: territory adjacency (26 edges, drives strategic march_layer routing) + settlement adjacency (49 edges, drives tactical battle-arrival edge derivation).
 - Vetting: 3 + · 4 ✓ · 4 ○ · 0 − pass. Genuine extensions: M-2 (geography-holds-pressure settlement-granular) and M-5 (two-tier scale composition).
+
+## Patch Register Archival 2026-05-10
+
+19 applied patches (PP-684..688, PP-705..723) archived to `archives/patches/patch_register_archive_2026_05_10.yaml`. No mechanical propagation required — all patches already fully applied and verified in canon. Active register reduced from ~15k to ~1.5k tokens.

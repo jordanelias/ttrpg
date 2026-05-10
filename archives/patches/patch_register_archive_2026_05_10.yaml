@@ -1,0 +1,871 @@
+# Patch Register Archive — 2026-05-10
+# Applied patches batch: PP-684..PP-723
+# Archived from canon/patch_register_active.yaml
+
+patches:
+- id: PP-684
+  date: 2026-05-01
+  severity: P1
+  description: 'Conviction taxonomy v30 — 13-Conviction set with structured concentration, Self-Other orientation axis, and
+    8 cultural background templates. Replaces legacy Reason/Continuity tags and philosophical-tradition labels (Categorical
+    Imperative, Virtue Ethics, Divine Command, Epistemic Reason, Rawlsian, Military Honor) with period-correct vocabulary
+    (Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor).
+    Honor confirmed as 13th Conviction per integration plan D1. Self-Other orientation [-1,+1] decouples greed/altruism from
+    Convictions. 4-axis vectorization (hierarchical/sacred/instrumental/traditional) with 5th-axis allowance as Class B if
+    Stage 10 calibration finds Community/Identity collapse load-bearing. Companion: conviction_axis_matrix_v30 (52-cell matrix
+    with Renaissance-grounded calibration rationale). Architecture session §3 + §16 integration plan §3.4 D1, D2, D8 resolved.'
+  finding_id: arch_session_2026-04-30 §3 PP-684 ratification
+  source: editorial
+  affects:
+  - designs/personal/conviction_taxonomy_v30.md
+  - designs/personal/conviction_axis_matrix_v30.md
+  - references/canonical_sources.yaml
+  - references/alias_registry.yaml
+  - canon/supersession_register.yaml
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu:
+    - Μ-α
+    - Μ-γ
+    m_ratings:
+      M-1: +
+      M-2: ○
+      M-3: +
+      M-4: ✓
+      M-5: +
+      M-6: ✓
+      M-7: ✓
+      M-8: ✓
+      M-9: +
+      M-10: ✓
+      M-11: ✓
+    q: pass
+    note: 'Class A — substrate-defining. N: replaces philosophically-anachronistic vocabulary with period-correct interpretive
+      substrate; load-bearing for PP-686 cascade math and PP-687 axis-projection. Ω: 13-Conviction taxonomy is human-readable;
+      Self-Other axis is intuitive; cultural background templates are authoring-economy. Q: per arch session sims §1 + §1.8
+      (sim v2 confirmed structured-concentration produces smoother aggregates than flat distributions).'
+- id: PP-685
+  date: 2026-05-01
+  severity: P1
+  description: 'Conviction migration roster — per-character mapping from legacy Conviction labels to PP-684 13-Conviction
+    taxonomy with structured concentration. Covers 9 named characters (Almud, Cesare, Lorenzo, Yrsa Vossen, Maret Uln, Solmund,
+    Cardinal Reichard, Baralta, Lenneth) plus 4 placeholder mappings (Hafenmark Speaker, Lowenritter Master, Restoration Spokesperson,
+    Niflhel envoy). Edge cases flagged: Vaynard (post-VTM/CR strike), Vossler, Reinholt — defaults provided per §3, designer
+    review at Phase B. Each entry: prior labels, primary 1-3 Convictions with weights summing 0.6-0.8, cultural background
+    template, initial Self-Other orientation, migration rationale.'
+  finding_id: arch_session_2026-04-30 §3 PP-685 ratification
+  source: editorial
+  affects:
+  - designs/personal/conviction_migration_roster_v30.md
+  - references/canonical_sources.yaml
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu:
+    - Μ-α
+    m_ratings:
+      M-1: +
+      M-2: ○
+      M-3: +
+      M-4: ✓
+      M-5: ✓
+      M-6: ✓
+      M-7: ✓
+      M-8: ✓
+      M-9: ○
+      M-10: ✓
+      M-11: ✓
+    q: pass
+    note: 'Class A — character canon mechanical. N: PP-684 ratification renders all existing Conviction tags non-canonical;
+      migration roster is the bookkeeping that prevents lost character state. Ω: human-readable per-character entries with
+      rationale notes.'
+- id: PP-686
+  date: 2026-05-01
+  severity: P1
+  description: 'Faction behavior architecture v2 — Mission/Cascade/Public Expectation/Legitimacy+Popular Support 4-component
+    architecture replacing the Ethical Framework Modifiers system in params/bg/core.md. Mission: authored telos with aligned/contradicted
+    DA categories from PP-687 da_outcome subtypes; 4 enumerated shift triggers (D4). Cascade: hierarchical α-blending of leader
+    Convictions through supervisor graph; multi-root cascade allowance (D3); orphan/zero-vector edge cases handled (§3.9);
+    crisis-bypass at scars≥3 (C4); Standing-weighted aggregate (C9). Public Expectation: 6 role templates with Honor-bearing
+    variants (sovereign, ecclesiastical, mercantile-procedural, intelligence-diplomatic, reformist, military-order); Cascade
+    Fidelity = cosine_similarity(aggregate, expected). L+PS: separate scalars [0,7] with α/β temperament typology (5 variants
+    per §3.4.1), β-fidelity gating (C5), Self-Other modulation (C7), Strain interaction via env.peninsular_strain_shock (P2-3).
+    DA Ob: triadic decomposition (mission + cascade + expectation) clamped at ±2 (C1, was ±3). Mandate retained as derived
+    value for backward compatibility (§4). Dual-armature NPCs with role_acting flag (P2-1). All audit P1 + P2 items resolved.
+    drift_coef = 0.6 per D12. Sim v1 + v2 validated; ratification PROVISIONAL pending Stage 10 cross-system + Strain interaction
+    + replay determinism.'
+  finding_id: arch_session_2026-04-30 §3 PP-686 v2 ratification
+  source: editorial
+  affects:
+  - designs/provincial/faction_behavior_v30.md
+  - params/bg/core.md
+  - params/factions.md
+  - params/factions_personal.md
+  - params/bg/tracks.md
+  - references/canonical_sources.yaml
+  - references/alias_registry.yaml
+  - canon/supersession_register.yaml
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion (P2 carry-forward)
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu:
+    - Μ-α
+    - Μ-β
+    - Μ-δ
+    m_ratings:
+      M-1: +
+      M-2: ○
+      M-3: +
+      M-4: +
+      M-5: +
+      M-6: +
+      M-7: ✓
+      M-8: ✓
+      M-9: +
+      M-10: ✓
+      M-11: +
+    q: pass
+    note: 'Class A — strategic-layer faction architecture. N: original Ethical Framework Modifiers were anachronistic philosophical
+      labels; replacement is period-correct triadic Mission/Cascade/Expectation decomposition that emerges faction behavior
+      dynamically from authored Mission + leader Convictions + public temperament. Ω: faction state schema is fully introspectable
+      via L, PS, cascade_fidelity, strictness; DA Ob calculation is fully traceable. Q: sim v1 + sim v2 confirmed C1-C10 calibration;
+      sim §1.8 confirmed Self-Other formula produces sensible attribution.'
+- id: PP-687
+  date: 2026-05-01
+  severity: P1
+  description: 'Universal Key substrate — engine-wide event substrate where every consequential happening is a typed, validated,
+    append-only Key. Single update rule (key_substrate_v30 §4.1) consumes Keys and propagates effects to observers, subsystems,
+    and causal-graph. Save state = initial conditions + Key log; replay = deterministic re-execution. 4-axis Conviction projection
+    (hierarchical/sacred/instrumental/traditional) drives armature-mediated interpretation. Type registry: 7 families × 30
+    subtypes total (scene_event:5, da_outcome:5, mechanical_event:4, state_transition:4, environmental:4, scene_outcome:3,
+    system_meta:5 incl. PP-688 Class B additions meta.knot_ruptured + state.belief_revised + meta.legacy_event wrapper). Memory
+    Query API with 3 indexes (axis-relevance, time-window, target-mention) for 1000-3300-entry NPC Memory at 30-100 season
+    campaigns. Determinism guarantees: per-emission RNG seed, stable sort sub-step ordering, x86_64 IEEE-754. Phased rollout
+    per §7.1 with legacy_event wrapper for partial-migration state. Sim §1 confirmed: 2,703 keys × 30 seasons in 144ms; 18,724
+    keys/sec; sub-millisecond 10-hop walks; replay determinism with seed 42 → hash 35e3a499e35e28b9. All audit and OQ items
+    D5/D6/D7/D8/D9 resolved.'
+  finding_id: arch_session_2026-04-30 §3 PP-687 ratification
+  source: editorial
+  affects:
+  - designs/architecture/key_substrate_v30.md
+  - designs/architecture/key_type_registry_v30.md
+  - references/canonical_sources.yaml
+  - references/alias_registry.yaml
+  - canon/supersession_register.yaml
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion (V7/V8 deferred to Phase 5a)
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu:
+    - Μ-α
+    - Μ-β
+    - Μ-γ
+    - Μ-δ
+    m_ratings:
+      M-1: +
+      M-2: ○
+      M-3: +
+      M-4: +
+      M-5: +
+      M-6: +
+      M-7: +
+      M-8: +
+      M-9: +
+      M-10: ✓
+      M-11: +
+    q: pass
+    note: 'Class A — foundational engine substrate. Most architecturally consequential PP in the project to date. N: prior
+      architecture had bespoke event records per system (doc 08 EventImpact, doc 12 procedures, NPC Memory schema, conviction_track
+      Scar trigger schema) with no unified semantics; substrate unifies these. Ω: one schema, one update rule, one save format
+      = full engine introspectability. Q: sim §1 + §1.6 + §1.2 confirmed cycle-freeness, salience monotonicity, visibility
+      correctness, replay determinism, cross-system propagation, performance characteristics.'
+- id: PP-688
+  date: 2026-05-01
+  severity: P1
+  description: 'Articulation layer — three-tier system bridging the Key log (happenings) and the player''s experience of story.
+    Tier 1: protagonist UI lens with Concern queue, Memory salience indicator, Bonds register, Knot/Belief/Inspiration integration,
+    chronicle search. Tier 2: trigger ruleset (8 initial triggers per D10: state.scar_acquired, state.coup_attempted, state.succession
+    contested/emergency/imposed, mechanical.mission_shift, da.covert_betrayal exposed=true, meta.knot_formed, meta.knot_ruptured,
+    env.peninsular_strain_shock severe/crisis); cross-faction clustering deferred as Phase B 9th candidate; significance function
+    with stakes_weight + protagonist_alignment + cascade_event_weight + accumulated_narrative_weight (range 0-13); 5-15s cut
+    scenes scaling with significance. Tier 3: annual chronicle generator with omniscient voice; universal track + protagonist
+    track; ~5-12 paragraphs per year; reads PP-687 Key log + cascade fidelity + accumulated weight. Adds 3 Class B Key types
+    (meta.knot_formed already in registry; meta.knot_ruptured new; state.belief_revised new). Adds 3 scene-event payload extensions
+    (belief_engagement_for, inspirations_engaged_for, knot_partners_present). Pacing deferred per D11. Story-vs-happenings
+    probability raises full-engine estimate from substrate-alone ~15% to PP-688-complete ~75-85%. Phase 5a Godot scope updated
+    +2.5-3.5 sessions for cut scene rendering + chronicle generator + diagnostic UI.'
+  finding_id: arch_session_2026-04-30 §3 PP-688 ratification
+  source: editorial
+  affects:
+  - designs/articulation/articulation_layer_v30.md
+  - designs/architecture/key_type_registry_v30.md
+  - designs/scene/fieldwork_socializing.md
+  - params/core.md
+  - references/canonical_sources.yaml
+  - references/alias_registry.yaml
+  status: applied
+  applied_commit: 2026-05-01 Stage 10 promotion (P2 carry-forward; A6 supports 9th-trigger ADD)
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu:
+    - Μ-α
+    - Μ-γ
+    - Μ-δ
+    m_ratings:
+      M-1: +
+      M-2: ○
+      M-3: +
+      M-4: ✓
+      M-5: +
+      M-6: +
+      M-7: ✓
+      M-8: +
+      M-9: +
+      M-10: ✓
+      M-11: +
+    q: pass
+    note: 'Class A — articulation system. N: substrate alone produces ~15% story-fraction; with articulation layer and K/B/I
+      integration, full engine reaches ~75-85% projected story-fraction. PP-688 closes the artifact-11 happenings-vs-story
+      gap. Ω: 3 tiers are independently testable; significance function fully traceable; cut scenes engine-rendered (no authored
+      content). Q: sim §1 confirmed; Stage 10 articulation simulation per §8 (A1-A6) verifies before promotion to canonical.'
+- id: PP-705
+  date: 2026-05-01
+  severity: P3
+  description: 'Phase 0 cleanup from ecosystem workplan v2 (designs/audit/ecosystem_workplan_v2_2026-04-30.md SHA 6b0d0f424).
+    Three actions executed: (1) T1 — npc_behavior_v30.md priority-tree branches that gate on CI < 75 / CI >= 75 / CI >= 50
+    flagged with [STALE-THRESHOLD] / [NON-CANONICAL-THRESHOLD] markers referencing ci_political_v30 §2.1 canonical milestone
+    set (40/55/60/65/80/100; old 75 territorial-seizure removed per ED-782; Mass Seizure now probabilistic from CI >= 60 with
+    P = ((CI-60)/40)^3.3). 4 lines marked across 4 distinct branches (L1135 CI >= 40 left unmarked — 40 = Church Assertive
+    is canonical). Design-judgment update to canonical thresholds deferred per workplan recommendation (probabilistic Mass
+    Seizure changes branch logic, not just numbers). (2) D1 — corpus grep for broken cross-refs to old glossary part numbers
+    (Part Eleven was COLLISION pre-PP-691, now TOP-LEVEL SYSTEMS; Part Twelve was UNRESOLVED, now COLLISION). 423 files scanned;
+    111 raw matches; all are self-referential documentation in audit folders / propagation_map / patch_register entries describing
+    the rename. No external broken cross-refs found. Closed without code change. (3) B1 — Mode G context-filter case-sensitivity
+    defect. Re-ran with re.IGNORECASE on TC and Niflhel context filters; numerical impact small (Δ -19 in TC dominated by
+    PP-691 sweep, not case fix). Audit folder methodology §8 corrigendum appended; data/mode_g_2026-04-30_corrigendum.json
+    added (audit-time mode_g_2026-04-30.json preserved per frozen-on-creation convention). Methodology fix in code scheduled
+    for Phase 5 of workplan v2. ED-778.'
+  finding_id: workplan_v2 §0 / 2026-04-30 audit content audit T1/D1/B1
+  source: editorial
+  affects:
+  - designs/npcs/npc_behavior_v30.md
+  - designs/audit/2026-04-30-terminology-vector-audit/01_methodology.md
+  - designs/audit/2026-04-30-terminology-vector-audit/02_weakness_register.md
+  - designs/audit/2026-04-30-terminology-vector-audit/data/mode_g_2026-04-30_corrigendum.json
+  - canon/editorial_ledger.yaml
+  - canon/patch_register_active.yaml
+  - references/canonical_sources.yaml
+  - references/propagation_map.md
+  - session_log_current.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: 'Phase 0 cleanup. Class B (parameter-correction + audit-corrigendum; no mechanical change). N pass: stale thresholds
+      in NPC priority trees would cause AI to fire off non-canonical thresholds; methodology defect would undermine future
+      Mode G runs. Ω pass: T1 markers preserve human-readable audit trail; B1 corrigendum preserves audit-time numbers while
+      disclosing defect. Q pass: workplan v2 §0 specified all three actions exactly.'
+- id: PP-706
+  date: 2026-05-01
+  severity: P2
+  description: 'Geography canon audit conducted. Confirmed canon is more substantial than prior session synthesis suggested
+    — narrative regions (geography_v30.md), 17-territory adjacency (jsx + table), 36-settlement registry (settlement_layer
+    §2.1), and visual map (SVG) are largely authored. Cross-reference verification: geography_v30 adjacency table and adjacency_map.jsx
+    edges are in perfect agreement (26/26 symmetric). Faction control matches across canonical sources. Identified 9 gaps
+    (G1-G9) blocking v2 mechanical spec authoring (settlement-level coords, province polygons, typed terrain layer, terrain-cost
+    matrix, vision-range, weather/season-modulated mechanics, march-bubble layer, geographic battle-terrain derivation, naval
+    mechanics) and 5 bugs (C1 coordinate-system disconnect; C2 SVG pass-label errors; C3 Lake Eidursjø geometry conflict with
+    T4 jsx position; C4 SVG is structurally pre-canon — different territory numbering schema; C5 Schoenland sea route flagged
+    but not modeled). Phase 1 strike (this PP): SVG deprecated via banner (retained as historical reference; not deleted because
+    no active mechanical spec depends on it — only index/ledger references; Phase 2 produces replacement). Audit report committed
+    at designs/audit/2026-04-30-geography-audit/00_audit_report.md. Standing items minted ED-779 (Phase 2 data authoring),
+    ED-780 (Phase 3 spec rewrite), ED-781 (Phase 4 stress tests). Also flags pre-existing PP-684..688 collision in patch_register_active:
+    my applied mass-battle-MB-batch entries (date 2026-04-30) collide with another session''s provisional architecture-work
+    entries (date 2026-05-01) — duplicate IDs in active register; flagged for resolution by architecture-session author.'
+  finding_id: editorial 2026-04-30 (geography canon audit)
+  source: editorial
+  affects:
+  - designs/audit/2026-04-30-geography-audit/00_audit_report.md
+  - designs/provincial/valoria_map_v2.svg
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: 'Class A (audit instrument; doesn''t change mechanics, identifies pre-spec-rewrite needs). N pass: audit precedes
+      spec rewrite, surfaces gaps and bugs. Ω pass: SVG deprecation is preservation-not-deletion; no mechanical change. Q
+      pass: Jordan editorial 2026-05-01.'
+- id: PP-707
+  date: 2026-05-01
+  severity: P3
+  description: 'Geography canon Phase 1.5 prep work — workplan + schema + sample populated entries + coordinate transform
+    script. Locks decisions for Phase 2 authoring (ED-779) so the next session is execution rather than relitigation. Decisions
+    locked: (1.1) canonical coordinate system 1920×2880 (Godot screen-friendly, peninsula proportions); (1.2) jsx → canonical
+    migration formula (scale + per-territory geographic correction); (1.3) Lake Eidursjø central-south interior, T4 Grauwald
+    NE shore, T12 Sigurdshelm west shore — resolves audit C3 conflict; (1.4) terrain type taxonomy 8 types (plains, coast,
+    forest, marsh, highland, fjord, mountain, pass) plus annotations (river, bridge, road, forgetting_zone, radiation_band);
+    (1.5) terrain cost matrix seed values (simulation-tunable in Phase 4); (1.6) vision-range tables seed values (simulation-tunable
+    in Phase 4); (1.7) flat queryable schema for valoria_geography_v30.yaml. Five sample populated entries demonstrate end-to-end
+    schema (S-001 Valorsplatz Palace, S-006 Lowenskyst Fortress, S-015 Gransol Parliament, S-026 Sigurdshelm Keep, S-033 Askeheim
+    Ruins; T1 Valorsplatz province; northern_range + lake_eidursjo terrain; r_valoris river feature). Coordinate transform
+    script tools/geography/jsx_to_canonical.py reads adjacency_map.jsx and emits Phase 2 stub with scaled anchors + per-territory
+    correction notes — verified deterministic and produces valid YAML against current jsx (17 territories, 26 edges extracted).
+    Phase 2 authoring session estimated ~160k tokens; comfortable in 1M context as fresh focused session. Outputs: designs/audit/2026-04-30-geography-audit/01_phase2_workplan.md
+    (this), tools/geography/jsx_to_canonical.py.'
+  finding_id: editorial 2026-05-01 (Phase 1.5 prep work)
+  source: editorial
+  affects:
+  - designs/audit/2026-04-30-geography-audit/01_phase2_workplan.md
+  - tools/geography/jsx_to_canonical.py
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: 'Class A (workplan + tool; doesn''t change mechanics, locks decisions for Phase 2 authoring). N pass: workplan reduces
+      decision-thrash and parallel-session collision risk in next phase. Ω pass: pure prep artifact; no canonical mechanics
+      change. Q pass: decisions consistent with audit findings + existing canon (geography_v30.md, settlement_layer §2.1).
+      Transform script tested deterministic against current jsx.'
+- id: PP-708
+  date: 2026-05-01
+  severity: P3
+  description: 'Phase 2 prep — geography canon work leverage. Three documents committed to designs/audit/2026-04-30-geography-audit/
+    as Phase 1.5 (between Phase 1 audit and Phase 2 execution): (1) 00_phase2_workplan.md — locks decisions before authoring
+    begins (canonical coordinate system 2400×2880, Lake Eidursjø position, 8-terrain-type taxonomy, Voronoi-implied province
+    polygons, vision-range multiplicative-composition model, naming conventions, schema), defines schema for valoria_geography_v30.yaml,
+    lists §2.2 validation checklist, plans 3-commit Phase 2 execution structure, defers 5 specific items to execution session;
+    (2) 01_coord_transform.py — Python script projecting jsx 700×600 abstract coordinates to canonical 2400×2880 linearly,
+    validates settlements inside canvas and outside Lake Eidursjø, outputs territory_anchors_canonical.json machine-readable
+    for execution session — verified all 17 territories project cleanly; (3) 02_sample_data.yaml — proof-of-concept demonstrating
+    full schema end-to-end with 1 territory (T1, 3 settlements), 4 terrain polygons, lake, river, road examples, all required
+    top-level keys present, TBD values explicitly null (not literal strings). YAML validates. Resolves audit findings C1 (coordinate-system
+    disconnect — canonical system locked) and C3 (Lake Eidursjø geometry conflict with T4 — repositioned per geography_v30_infill
+    spec; T4 canonical (789, 1512) is 28× away from lake center).'
+  finding_id: editorial 2026-05-01 (Phase 2 prep — workplan + transform + sample)
+  source: editorial
+  affects:
+  - designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md
+  - designs/audit/2026-04-30-geography-audit/01_coord_transform.py
+  - designs/audit/2026-04-30-geography-audit/02_sample_data.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: D
+    note: Class D (preparation/leverage instrument; no mechanical change). Workplan locks decisions, transform script is mechanical/deterministic,
+      sample data is non-canonical proof-of-concept. Phase 2 execution (ED-779) will use these as inputs.
+- id: PP-709
+  date: 2026-05-01
+  severity: P3
+  description: 'Phase 2 workplan reconciliation. Two parallel sessions independently authored Phase 2 workplans within 13
+    minutes of each other on 2026-05-01: PP-707 (commit 0e75ccd0, file 01_phase2_workplan.md) and PP-708 (commit 70c77288,
+    file 00_phase2_workplan.md). Both internally claim AUTHORITY: PP-707. Reconciliation memo committed at designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md
+    identifies three substantive disagreements (canvas dimensions 1920×2880 vs 2400×2880; terrain taxonomy annotation-vs-type
+    split; Lake Eidursjø concrete coordinates vs deferred), recommends resolutions, and adds six decisions absent from both
+    committed workplans (per-settlement coordinate placement rule, Forgetting-zone-as-overlay canon-preservation, march-budget
+    formula Military×100px, roads-as-A*-cached, naval scope explicit Phase 3 deferral, vision multiplicative factor structure
+    with concrete starting values). Designates PP-707''s 01_phase2_workplan.md as canonical workplan-of-record; PP-708''s
+    00_phase2_workplan.md superseded with banner. PP-708''s `fjord_coast` terrain naming adopted into canonical taxonomy.
+    Memo §9 flags parallel-session collision pattern as third such incident in 36 hours (PP-684..688 mass-battle vs architecture;
+    PP-705/ED-778 audit vs ecosystem-cleanup; PP-707/PP-708 workplan duplicates) — suggests follow-up at orchestrator-skill
+    maintenance level.'
+  finding_id: editorial 2026-05-01 (Phase 2 workplan reconciliation)
+  source: editorial
+  affects:
+  - designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md
+  - designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: 'Class A (reconciliation/coordination instrument; no mechanical change). N pass: parallel-session collision creates
+      execution-ambiguity for next session; reconciliation eliminates ambiguity. Ω pass: SUPERSEDED file preserved (banner
+      only); CANONICAL file unchanged in this commit; new memo adds decisions to canonical set without overwriting committed
+      workplans. Q pass: Jordan editorial 2026-05-01.'
+- id: PP-710
+  date: 2026-05-01
+  severity: P3
+  description: 'Phase 2 geography canon executed (ED-779). Authors designs/territory/valoria_geography_v30.yaml as the data
+    canon for Valoria geography at canonical 1920×2880: 17 territory anchors (jsx-derived via 01_coord_transform pattern +
+    per-territory geographic correction), 17 hand-authored Voronoi-style province polygons with settlement-containment validated,
+    36 settlement coordinates with type-bias placement (Ports→coast, Mines→mountain, Cathedrals→interior, Outposts→periphery,
+    Garrisons→fortress-adjacent), 26 adjacency edges (incl. T15 gates T6+T13, T1↔T16 coastal, T10↔T11 mountain_pass per PP-709
+    §2.4), 20 terrain polygons covering all 8 canonical types from PP-709 §2.1 (plains, forest, highland, mountain, mountain_pass,
+    fjord_coast, coast, marsh), Lake Eidursjø ellipse, river Valoris polyline + 2 bridges, forgetting_zone as overlay polygon
+    (canon-preservation per PP-703 universality / PP-709 §2.2), 6 calamity radiation bands, march_budget formula (Military×100px;
+    cavalry 1.5×, skirmish 1.3× per PP-709 §2.3), vision_range multiplicative composition (base 240px × terrain × weather
+    × season per PP-709 §2.6). Concurrently authors designs/territory/valoria_map_v30.svg as replacement map (color-coded
+    terrain, faction-tinted province outlines, settlement glyphs by type, edge classification) and designs/territory/march_layer_v30.md
+    skeleton (Phase 3 ED-780 successor for settlement_adjacency_v30). Banners settlement_adjacency_v30.md (SUPERSESSION-PENDING
+    ED-780) and 00_phase2_workplan.md (SUPERSEDED per PP-709 §3). Deletes deprecated designs/provincial/valoria_map_v2.svg.
+    All locked decisions from PP-707 + PP-709 §2 executed; calibration values (terrain cost coefficients, weather/season multipliers)
+    flagged PROVISIONAL pending Phase 4 stress tests (ED-781).'
+  finding_id: ED-779 Phase 2 execution (geography data canon)
+  source: editorial
+  affects:
+  - designs/territory/valoria_geography_v30.yaml
+  - designs/territory/valoria_map_v30.svg
+  - designs/territory/march_layer_v30.md
+  - designs/territory/settlement_adjacency_v30.md
+  - designs/audit/2026-04-30-geography-audit/00_phase2_workplan.md
+  - designs/provincial/valoria_map_v2.svg
+  - references/canonical_sources.yaml
+  - references/file_index_summary.md
+  - canon/editorial_ledger.yaml
+  - canon/editorial_ledger_summary.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: 'Class A (data canon authoring; no mechanical change to existing rules — calibration TBD via ED-781). N pass: Phase
+      2 was the gating bottleneck for ED-780 spec rewrite and Godot map rendering; coordinate canon eliminates the ambiguity-driven
+      sim drift. Ω pass: superseded files preserved with banners; existing geography_v30.md narrative canon untouched; replacement
+      SVG places deprecated valoria_map_v2.svg into git history. Q pass: workplan PP-707 + reconciliation PP-709 pre-authorize
+      all locked decisions; calibration values explicitly flagged PROVISIONAL pending Phase 4.'
+- id: PP-716
+  date: 2026-05-09
+  severity: P1
+  description: 'Wound mechanic correction — universal patch. Reverts ED-694 simplification (Vitality = Endurance × 10, Max
+    Wounds eliminated): linear formula failed to match WI × (MW+1) total-damage-capacity structure for Endurance values 1,
+    2, 3, 5, 7. Restores: Health = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = floor(Endurance/2) + 1 and Wound
+    Interval = Endurance + 6. Stat name Vitality reverted to Health for consistency with params/combat.md L16 source-of-truth.
+    Universal wound-penalty rule: −1D to ALL Pools (Combat, Thread — Leap/Weaving/Pulling/Mending/FR — Hybrid mass-battle
+    Command, BG-CF tactic) per Wound, cumulative; supersedes prior +1 Ob framings in combat_v30 §10 / §thread, threadwork_v30
+    §2.3 / §3 / §5, params/combat.md §thread, params/mass_combat §CF wound. No Ob penalty from wounds, ever. Designs/scene/derived_stats_v30.md
+    §4.1 made AUTHORITATIVE source for Health formula and wound-penalty universality; combat_v30, threadwork_v30, params/combat,
+    params/mass_combat all updated to point back to derived_stats §4.1 rather than restating. Per-Endurance reference table
+    in derived_stats §4.1 verifies arithmetic (e.g., End=4 → WI=10, MW=3, Health 40 → 30 → 20 → 10 → 0 felled at 4th wound).
+    Naming history note added to derived_stats §4.1 documenting ED-694 reversion. Side effect: tests/sim/combat_arch_residual_stress_01/r1_wound_permanence.md
+    (Module 1 R1, committed 45c693e2) becomes superseded — built on stale Vitality formula and unfloored +1 Ob Threadwork
+    compounding; banner added; module to be redone in subsequent session against corrected canon.'
+  finding_id: ED-789 wound mechanic drift correction
+  source: editorial
+  affects:
+  - designs/scene/derived_stats_v30.md
+  - designs/scene/combat_v30.md
+  - designs/threadwork/threadwork_v30.md
+  - params/combat.md
+  - params/mass_combat.md
+  - tests/sim/combat_arch_residual_stress_01/r1_wound_permanence.md
+  - tests/sim/combat_arch_residual_stress_01/module_manifest.md
+  - canon/editorial_ledger.yaml
+  - canon/editorial_ledger_summary.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: ○
+      M-2: ○
+      M-3: ○
+      M-4: ○
+      M-5: ○
+      M-6: ○
+      M-7: ○
+      M-8: ○
+      M-9: ○
+      M-10: ○
+      M-11: ○
+    q: pass
+    note: 'Class B (mechanical canon correction; reverts ED-694 simplification + flips wound-penalty channel from Ob to −1D
+      Pool universally; affects 5 canonical files + 2 stress harness files). N pass: Jordan canonical clarification 2026-05-09
+      surfaced contradictions in combat_v30 §7 (linear Vitality formula L253 vs table-derived total at L257-262 — mismatched
+      for End 1,2,3,5,7) and inconsistent wound-penalty channel (Combat Pool −1D vs Thread Pool +1 Ob vs mass Command +1 Ob);
+      single source of truth needed. Ω pass: derived_stats §4.1 now authoritative; other files reference it; no orphaned mechanical
+      claims. R-modules (combat_arch_residual_stress_01) are EXPLORATORY — Module 1 R1 superseded explicitly with banner;
+      not retroactively edited (audit trail preserved per Mode G ledger discipline). Q pass: arithmetic verified against End=4
+      worked example (40 → 30 → 20 → 10 → 0); per-Endurance table in derived_stats §4.1 validates all 7 Endurance values;
+      no stale Vitality=E×10 patterns remain in patched canon (verified pre-commit). Source: Jordan canonical clarification
+      chat 2026-05-09.'
+- id: PP-717
+  class: E
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: 'npc_behavior_v30 §1.2 stale-redirect fix. Section §1.2 previously redirected readers to designs/personal/conviction_track_v1.md
+    (legacy 9-Conviction set: Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity, Community, Warden) which was
+    superseded by PP-684 (canonical 2026-05-01 Stage 10 promotion: 13-Conviction set Faith, Authority, Order, Scholastic,
+    Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor). Readers landing on §1.2 learned the
+    wrong taxonomy. Fix: rewrite §1.2 to redirect to canonical conviction_taxonomy_v30.md and conviction_axis_matrix_v30.md;
+    add SUPERSEDED banner to conviction_track_v1.md flagging §1 as superseded while preserving §2 Scar accumulation as canonical
+    pending PP-718 review. Surfaced by stress-test conviction_stress_01 (commit 57bd26f4) as P1 drift defect.'
+  finding_id: conviction_stress_01 P1 drift defect (A-L09)
+  source: editorial
+  affects:
+  - designs/npcs/npc_behavior_v30.md
+  - designs/personal/conviction_track_v1.md
+  - references/canonical_sources.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-717 (this commit)
+  next_pp: PP-718 (review Scar accumulation table for weight-scaling under PP-684 structured concentration)
+  vetting:
+    class: E
+    necessity: pass
+    omega: pass
+    note: 'Class E — editorial fix. N: corrects a P1 drift defect (stale redirect to legacy 9-Conviction doc) surfaced by
+      stress-test conviction_stress_01 (commit 57bd26f4). Ω: replaces stale redirect text with canonical PP-684 references;
+      preserves all semantics. No mechanical change. No simulation required.'
+- id: PP-718
+  class: B
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: 'Conviction Scar accumulation per-Conviction clarification under PP-684 structured concentration. Reserved
+    by PP-717 (commit 55403f74) as the next_pp follow-up. The legacy conviction_track_v1.md §2 table specified Scar thresholds
+    without specifying whether the count was aggregate or per-Conviction. Under the legacy single-primary model, the distinction
+    was moot. Under PP-684''s 1-3 primary Convictions (weight 0.6-0.8) plus distributed cultural background (0.2-0.4), the
+    distinction is load-bearing. PP-718 ratifies the per-Conviction interpretation: Scar counts accumulate on a specific named
+    Conviction (per the §3 Thread Event × Conviction matrix); crisis fires when any single Conviction hits 3+ Scars. NPCs
+    with multiple primaries can Scar each independently. Cultural-background-only crises produce muted narrative drift; primary-Conviction
+    crises produce full arc transition. Roll 5 of the crisis table updated: ''Autonomy (survival instinct)'' → ''Self-Other-orientation
+    override'' since Autonomy is no longer canonical (renamed Liberty per PP-684). Migration: legacy Reason → Scholastic;
+    Continuity → migration-roster-determined primary; Autonomy → Liberty; pre-PP-684 Scar counts attach to migrated Conviction.'
+  finding_id: conviction_stress_01 (commit 57bd26f4) deferred refinement; PP-717 next_pp reservation
+  source: editorial
+  affects:
+  - designs/personal/conviction_track_v1.md
+  - canon/patch_register_active.yaml
+  - references/canonical_sources.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-718 (commit 239922c6, vetting walkthrough this commit)
+  walkthrough_ref: designs/personal/conviction_track_v1_pp718_vetting.md
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu:
+    - Μ-α
+    - Μ-β
+    mu_secondary_preserved:
+    - Μ-γ
+    - Μ-δ
+    m_ratings:
+      M-1: ✓
+      M-2: ○
+      M-3: +
+      M-4: +
+      M-5: +
+      M-6: +
+      M-7: ✓
+      M-8: ✓
+      M-9: ✓
+      M-10: ✓
+      M-11: +
+    m_summary: '5 + · 5 ✓ · 1 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; M-2 ○ is appropriate scope-mismatch,
+      not a fail). Recalibrated 2026-05-10 from prior 7+/3✓ count: M-1 and M-9 stepped down from + to ✓ to avoid double-counting
+      contributions already credited to PP-684 itself (PP-684 carries the M-1 + for vector-pressure-axes and the M-9 + for
+      Self-Other drift); PP-718 faithfully composes with those extensions but does not introduce new pattern instances on
+      M-1 or M-9. Per-Conviction tracking is genuine extension on M-3/M-4/M-5/M-6/M-11 (substrate vectorization through crisis
+      layer; axis-specific institutional erosion; cross-scale axis-specific propagation; per-axis forced-choice; per-axis
+      voluntary cultivation).'
+    t_touches:
+      extends:
+      - T-14
+      - T-22
+      - T-23
+      - T-24
+      - T-25
+      - T-08
+      preserves:
+      - T-09
+      - T-11
+      - T-15a
+      - T-15b
+      - T-15c
+      - T-27
+      - T-32
+      - T-39
+      breaks: []
+    q: pass
+    q_robust: 'Three viable player approaches (axis-specific avoidance, cultural-background-only stacking, Player Conviction
+      Check resistance per ED-664). Visible world-state change (Scar counts engine-readable; Resonant Style activation visible;
+      faction Cascade Fidelity decrements on named axis). Mechanic fires without player action (autonomous-NPC witnessing
+      during faction action). Dramatic legibility: Cardinal-in-Faith-crisis legible per throughlines_meta §5 one-sentence
+      test.'
+    q_smooth: 'Methodology matches Conviction taxonomy vector data structures and conviction_axis_matrix §5 composition rule.
+      Scale-transition specified via PP-686 §3.2 Cascade integration. Temporal: season-cap of 1 Scar/season per NPC from Thread
+      witnessing per conviction_track_v1 §3 preserved; crisis activation 1 season per §2 row 3+.'
+    q_elegant: 'Core rule restatable: ''Scars per Conviction; crisis at 3+ on any one; cultural-background → muted drift.''
+      Second-order predictable: multi-primary more resistant; single-primary most fragile on primary. Dependencies enumerated:
+      PP-684, PP-685, PP-686, ED-663, ED-664; all in conviction_track_v1.md §4.'
+    note: 'Full M-1..M-11 walkthrough with per-pattern reasoning grounded in throughlines_meta_infill §3.4–§3.8 and canonical
+      conviction_taxonomy_v30 / conviction_axis_matrix_v30 / conviction_track_v1 / npc_behavior_v30 §1.3 / migration_roster_v30
+      reads at designs/personal/conviction_track_v1_pp718_vetting.md. Replaces abbreviated vetting block from PP-718 commit
+      239922c6. Two recalibrations applied: (a) m_summary count corrected from 6+ to 7+ for off-by-one in initial walkthrough
+      commit (39bd08c5 → 5a47da16); (b) M-1 and M-9 stepped down from + to ✓ on independent-reviewer reconsideration to avoid
+      double-counting PP-684 contributions (this commit). Final count: 5 + · 5 ✓ · 1 ○ · 0 −. Final ratings: M-3/M-4/M-5/M-6/M-11
+      = 5 + (substrate vectorization through crisis layer; axis-specific institutional erosion; cross-scale axis-specific
+      propagation; per-axis forced-choice; voluntary-pole resolution); M-1/M-7/M-8/M-9/M-10 = 5 ✓ (faithful operation of existing
+      patterns); M-2 = ○ (scope mismatch — PP-718 is personal-scale state-counting, not geographic).'
+- id: PP-719
+  class: E
+  pre-framework: false
+  date: 2026-05-10
+  severity: P3
+  description: 'fieldwork §5.6b sustained Disposition reduction strain source clarification. EC-F2.A-01 (surfaced in fieldwork_lifecycle_stress_01
+    commit ddccbf9a) flagged ambiguity in ''sustained for 2 seasons'' — could be read as (a) 2 consecutive seasons below +3
+    or (b) cumulative 2 seasons (non-consecutive). This PP fixes interpretation as (a) consecutive: at Accounting of season
+    N+1, the strain fires only if Disposition value was below +3 at both Accounting of season N AND Accounting of season N+1.
+    Non-consecutive seasons below +3 do not aggregate. Resets if Disposition rebounds to +3 in any intervening season.'
+  finding_id: fieldwork_lifecycle_stress_01 EC-F2.A-01
+  source: editorial
+  affects:
+  - designs/scene/fieldwork_v30.md
+  - references/canonical_sources.yaml
+  - references/propagation_map.md
+  status: applied
+  applied_commit: 2026-05-10 PP-719 (this commit)
+  vetting:
+    class: E
+    necessity: pass
+    omega: pass
+    note: 'Class E — editorial clarification. N: removes a P3 spec ambiguity surfaced by stress-test. Ω: ''sustained'' read
+      as ''consecutive'' is the natural reading; clarification prevents Game Master / engine drift toward cumulative interpretation.'
+- id: PP-720
+  class: C
+  pre-framework: false
+  date: 2026-05-10
+  severity: P2
+  description: 'R7 stress-FF threshold spec — friendly fire from Ranged into Melee under stress conditions. Per R7 recommendation
+    (commit c58bc670 C7.4 primary, C7.1 fallback). Stress threshold enumerated: ≥1 Wound OR Composure ≤3 OR environmental
+    degradation (low light, weather, smoke, glare, mid-spell-Crisis). Resolution: on stress + Ranged miss into Melee zone,
+    secondary roll TN+1 (single-stress) or TN+2 (multi-stress) vs single most-adjacent friendly actor; on secondary hit, damage
+    = floor(STR/2) + weapon_mod_vs_armour. No new Ob channel — uses canonical −1D-Pool stress channel + TN modifier. Inserts
+    new subsection in combat_v30 §5 (between Ranged Weapons and §6 Armour). Tabletop fallback waiver clause preserves table
+    flexibility.'
+  finding_id: combat_arch_residual_stress_01 R7 (commit c58bc670)
+  source: editorial
+  affects:
+  - designs/scene/combat_v30.md
+  - canon/patch_register_active.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-720 (this commit)
+  vetting:
+    class: C
+    necessity: pass
+    note: 'Class C — parameter/resolution-path extension. Threshold-style addition: enumerates stress conditions and TN modifiers
+      for an existing miss outcome. No new state, no new resource, no new dice channel (uses canonical Combat Pool + TN modifier).
+      Bounded scope (only Ranged-into-Melee under stress + adjacent ally). Tabletop fallback waiver clause preserves table
+      flexibility. T (test) only required per §8.1.'
+- id: PP-721
+  class: C
+  pre-framework: false
+  date: 2026-05-10
+  severity: P3
+  description: 'R9 routine-encounter B-mode presentation flag trigger spec — Class C UX/presentation parameter. Per R9 recommendation
+    (commit 1c31109d C9.3 refinement option). B-mode is a UI flag on top of canonical A scene combat (mechanics unchanged);
+    triggers only when all four criteria hold: (1) fixed-geometry zone (corridor/room/bridge/doorway), (2) scripted entry
+    positions, (3) single fixed objective, (4) stakes routine (no C-duel triggers). UI effect: discrete position-cells, narrowed
+    Stunt vocabulary, 8-actor cap. A scene combat math runs identically. Tabletop fallback: B-mode is videogame-specific UX
+    optimization; tabletop ignores. Inserts new subsection in combat_v30 §8 GROUP COMBAT (between §8 and §9 MASS COMBAT).'
+  finding_id: combat_arch_residual_stress_01 R9 (commit 1c31109d C9.3)
+  source: editorial
+  affects:
+  - designs/scene/combat_v30.md
+  - canon/patch_register_active.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-721 (this commit)
+  vetting:
+    class: C
+    necessity: pass
+    note: Class C — presentation/UX parameter on existing mechanic. No new state, no new resource, no new resolution path.
+      Bounded to encounter authoring metadata flag; engine reads flag and renders simplified UI. T (test) gate via encounter
+      authoring tests in subsequent implementation phase.
+- id: PP-722
+  class: E
+  pre-framework: false
+  date: 2026-05-10
+  severity: P3
+  description: 'PP-349 stale Niflhel example fix. Per Jordan''s 2026-05-09 G-L03 decision (setup_ignition_stress_01 commit
+    cab3bd85), Niflhel is dissolved as a faction; crime/underground networks exist in Valoria but are not threadwork-related.
+    PP-349''s specific example ''collaborating with Niflhel'' in the Church Self-Investigation Exception clause references
+    the dissolved entity. Surgical fix: replace ''collaborating with Niflhel'' with ''collaborating with crime or underground
+    networks operating against Church interests''. Surfaced by F3 Heresy Investigation lifecycle audit (commit 8de82dbb) EC-F3.A-01.'
+  finding_id: fieldwork_lifecycle_stress_01 F3 EC-F3.A-01
+  source: editorial
+  affects:
+  - designs/scene/social_contest_v30.md
+  status: applied
+  applied_commit: 2026-05-10 PP-722 (this commit)
+  vetting:
+    class: E
+    necessity: pass
+    note: Class E — editorial fix. Surgical 5-word replacement aligning canonical example with Jordan's 2026-05-09 Niflhel
+      dissolution decision (G-L03). No mechanical change; example preserves the same semantic category (Church-internal-but-anti-Church
+      behavior).
+- id: PP-723
+  class: B
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: 'Settlement-level adjacency graph authored. Closes the ED-710 placeholder (PP-666 2026-04-19 promised `designs/world/settlement_adjacency_map.yaml`
+    which never existed). Per settlement_adjacency_v30 §1.2 generation rules: hub settlement adjacent to every other settlement
+    in same province (intra-province road edges; hub = Seat preferred, else Cathedral > Fortress > City > Port > Town > Mine
+    > Outpost; tie-break by lowest S-ID); for each territory→territory adjacency, hub-to-hub edge with the territory edge
+    type; hand-specified overrides for canonical port/gate/mine routes (T1↔T16 via Riverside Port, T6↔T15 via Stillhelm Watch+Askeheim
+    Gate, T13↔T15 via Oastad+Askeheim Gate, T8↔T17 via Gransol Harbor+Halvarshelm Mines, T3↔T17 via Lowenskyst Garrison Town+Halvarshelm
+    Mines, T2↔T9 via Kronmark+Himmelenger City, T8↔T9 via Market Quarter+Himmelenger City, T1↔T5 via Riverside+Feldmark);
+    4 Thread-Witnessed special edges (cathedral network, Warden network, scholarly Thread tie, RM covert network). Total:
+    49 edges (19 intra-province, 26 inter-province, 4 thread-witnessed) across 36 settlements; all 36 settlements appear in
+    at least one edge. Authored at `valoria_geography_v30.yaml :: settlement_adjacency:` block alongside territory adjacency
+    for clean two-tier composition. Closes geography_phase4_stress_01 ED-781 ''settlement-edge unreachability'' substrate
+    gap (the mass_battle §A.9 Phase 3 geographic-derivation clause now has settlement-edge data to consume). Unblocks future
+    geography stress tests at settlement granularity.'
+  finding_id: improvement_avenues_2026-05-10 A1 (highest-priority blocking gap surfaced by improvement-avenues review); ED-710
+    placeholder closure
+  source: editorial
+  affects:
+  - designs/territory/valoria_geography_v30.yaml
+  - designs/territory/settlement_adjacency_v30.md
+  - references/canonical_sources.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-723 (this commit)
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu:
+    - Μ-δ
+    - Μ-α
+    mu_secondary_preserved:
+    - Μ-β
+    - Μ-γ
+    m_ratings:
+      M-1: ○
+      M-2: +
+      M-3: ✓
+      M-4: ○
+      M-5: +
+      M-6: ✓
+      M-7: ✓
+      M-8: ○
+      M-9: ○
+      M-10: ✓
+      M-11: ○
+    m_summary: 3 + · 4 ✓ · 4 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the four ○ ratings are appropriate
+      scope-mismatch on patterns where data canon authoring doesn't engage the pattern, not failures). The genuine extensions
+      are M-2 (geography-holds-pressure now settlement-granular), M-5 (cross-scale composition via two-tier adjacency).
+    t_touches:
+      extends:
+      - T-18
+      - T-19
+      - T-23
+      preserves:
+      - T-08
+      - T-09
+      - T-11
+      - T-15
+      - T-16
+      - T-22
+      breaks: []
+    q: pass
+    q_robust: 'Three viable player approaches per settlement-attack: bypass (skip the settlement, accept attrition cost per
+      settlement_layer §5.1), assault (battle resolution at settlement node consuming entry-edge Manoeuvre modifier), siege
+      (settlement Order decay per §2.4). Visible world-state change: settlement controller flips on Assault success; Order
+      decay visible during siege. Mechanic fires without player action: NPC armies move through settlement edges autonomously
+      per faction AI.'
+    q_smooth: 'Methodology matches existing geography YAML schema (extends adjacency: with settlement_adjacency: block; same
+      {from, to, type} shape). Composes with march_layer §4.1 territory edges and mass_battle §A.9 geographic-derivation clause
+      without special-casing.'
+    q_elegant: 'Core rule restatable: ''Hub-per-territory adjacent to all settlements in same province; hub-to-hub for territory
+      borders; named overrides for ports/gates/mines.'' Generation is deterministic, not table-of-49. Second-order consequence
+      predictable: Schoenland''s only land-route to Crown territory is via T1↔T16 coastal Port (S-002↔S-036), which means
+      Schoenland naval+coastal mechanics are load-bearing for Schoenland-pivot scenarios — confirms ED-055 P1 priority surfaced
+      by ED-781 Phase 4 Scenario 3.'
+    note: Data canon authoring closes a P1 substrate gap surfaced by improvement_avenues_2026-05-10 review and inherited from
+      ED-710 placeholder. Subsequent stress test (geography_phase5_stress_01 — recommended) should re-run the three Phase
+      4 scenarios at settlement granularity to confirm coherent battle-terrain derivation; that's deferred follow-up.
