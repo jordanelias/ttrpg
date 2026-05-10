@@ -348,3 +348,10 @@ Final commit. ED-784 Phase 2 work complete.
 - ED-780 status: standing → closed.
 - ED-781 (Phase 4 stress tests) standing.
 - Surfaced by: setup_ignition_stress_01 G-L05 (commit cab3bd85).
+
+## PP-718 vetting walkthrough — full M-1..M-11 (2026-05-10)
+**Class B vetting documentation; commit follows PP-718 mechanical commit 239922c6.** No mechanical change to PP-718; replaces the abbreviated vetting block in patch_register with full per-pattern walkthrough grounded in canonical reads.
+- `canon/patch_register_active.yaml` PP-718 entry: vetting block expanded to per-M reasoning (M-1 through M-11), T-touches enumeration (extends 6, preserves 8, breaks 0), Q-robust/smooth/elegant detail. m_summary: 6+/3✓/1○/0−.
+- `designs/personal/conviction_track_v1_pp718_vetting.md` (NEW): standalone full walkthrough doc with N/Μ/М/Τ/Q sections, M-1..M-11 per-pattern reasoning, per-T touch verdicts. ~273 lines / ~35k chars.
+- `references/canonical_sources.yaml`: pp718_vetting_walkthrough field added under conviction_track entry.
+- Sources read at full depth for the walkthrough: throughlines_meta (skeleton + infill §3.4-§3.8), conviction_taxonomy_v30, conviction_axis_matrix_v30, conviction_track_v1 (post-PP-717/PP-718 state), npc_behavior_v30 §1-§3, conviction_migration_roster_v30.
