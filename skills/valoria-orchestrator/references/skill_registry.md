@@ -5,7 +5,7 @@
 
 ---
 
-## ACTUAL SKILLS ON GITHUB (as of 2026-04-02)
+## ACTUAL SKILLS ON GITHUB (as of 2026-05-10)
 
 ### valoria-orchestrator
 - Path: `skills/valoria-orchestrator/SKILL.md` (directory-based, canonical)
@@ -79,19 +79,26 @@
 - Scripts: `skills/valoria-vector-audit/scripts/vector_audit.py`
 - Note: v3 multi-graph triangulation methodology; supersedes v1+v2 one-off pipelines. Self-exempting on Ω/Μ vetting (Class A analytic instrument). Reference run: designs/audit/2026-04-29-topographic-analysis/. PP-676 / ED-762.
 
+### valoria-atomizer
+- Path: `skills/valoria-atomizer/SKILL.md`
+- Model: Sonnet 4.6
+- Triggers: atomize, index, infill, split design doc, extract index, extract prose, separate mechanics from prose, when a design doc fails the Index Ruleset Principle (>400 lines with explanatory content)
+- Purpose: Split a v30 design doc into index (mechanical-only spec) + infill (prose, rationale, examples, history). Updates `references/design_registry.yaml` atomized field.
+- Input: v30 design doc path from design_registry.yaml
+- Output: `{name}_v30.md` (index) + `{name}_v30_infill.md` + updated registry entry
+- Pre-requisite: design doc exists at canonical_v30 path in design_registry.yaml
+
+### prose-writer
+- Path: `skills/prose-writer/SKILL.md`
+- Model: Sonnet 4.6
+- Triggers: write narrative prose, lore entry, character vignette, settlement description, faction history, dialogue scene, codex entry, cutscene script, flavor text, any creative/narrative text
+- Purpose: Valoria's singular literary voice — coherence-indexed weighted synthesis (Tolkien, Borges, Lispector, Ocampo, Márquez, Ishiguro, Mistry, Tartt, Beckett, Lem, McCarthy, Le Carré). Synthesis weights shift across coherence tiers (10-8, 7-5, 4-3, 2, 1).
+- References: `skills/prose-writer/references/` (techniques-skeleton, anti-patterns-skeleton, calibration-skeleton, coherence-tiers)
+- Scripts: `skills/prose-writer/scripts/consistency_check.py` (Solmund/Galbados Level 2 enforcement; mirrored at Level 4 by valoria_hooks.forbidden_token_gate)
+- Note: Solmund Voice canon at `designs/world/solmund_voice_v30.md` is a scoped override for Church speakers / religious texts / characters with established Certainty levels.
+
 
 ---
-
-
-### valoria-atomizer (PLANNED — not yet built)
-- Path: (not yet created — will be `skills/valoria-atomizer/SKILL.md`)
-- Model: Sonnet 4.6
-- Triggers: atomize, index, infill, split design doc, extract index, extract prose
-- Purpose: Read a v30 design doc, split into index (tables/formulas/procedures/edge cases)
-  and infill (prose, rationale, examples, history). Update design_registry.yaml.
-- Input: v30 design doc path from design_registry.yaml
-- Output: `{name}_v30_index.md` + `{name}_v30_infill.md` + updated registry entry
-- Pre-requisite: design doc must exist at canonical_v30 path in design_registry.yaml
 
 
 ## SIMULATION COMMAND ROUTING
@@ -112,6 +119,8 @@
 | "canon check [mechanic]" | valoria-canon-guard | Full P-01–P-14 pass |
 | "resolve editorials" | valoria-editorial-register | Workflow A |
 | "compile" | valoria-compiler | Full compilation pass (only if requested) |
+| "atomize [doc]" / "split design doc" | valoria-atomizer | Index/infill split + registry update |
+| "write [prose/scene/codex/dialogue]" | prose-writer | Coherence-tiered narrative composition |
 
 ---
 
