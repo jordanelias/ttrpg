@@ -70,7 +70,8 @@ policies:
     read_restriction: "index_first"
 
   - match: "canon/patch_register_index.md"
-    max_tokens: 3000
+    max_tokens: 6000
+    note: "Full-history index across all archives (199+ entries). Raised from 3000 after fixing index_gen to parse all archive formats."
     split_active_only: true
     regenerate_from: "canon/patch_register_active.yaml"
 
