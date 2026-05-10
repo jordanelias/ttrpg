@@ -7,7 +7,7 @@
 
 # NPC Roster — Caste Axis Annotations (2026-04-11)
 ## Companion to: designs/npcs/npc_roster.md
-## Status: CANONICAL — appended to roster as §14
+## Status: DEPRECATED — appended to roster as §14
 ## Context: Deed-monarchy, caste gradient, ruler diamond repositioning
 
 ---

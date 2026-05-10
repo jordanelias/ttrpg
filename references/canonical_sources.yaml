@@ -89,6 +89,10 @@ systems:
   social_debate:
     design_doc: params/contest.md
     canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
+    social_contest_design: designs/scene/social_contest_v30.md
+    canonical_sha__designs__scene__social_contest_v30_md: "e8c92145f6ddebc48e71e29424f34c4ed7fa5676"
+    social_contest_index: designs/scene/social_contest_v30_index.md
+    social_contest_infill: designs/scene/social_contest_v30_infill.md
     params: params/contest.md
     canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
   scale_transitions:
@@ -124,8 +128,9 @@ systems:
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
-    design_doc: designs/personal/conviction_track_v1.md
-    canonical_sha__designs__personal__conviction_track_v1_md: "PENDING_PP_718"
+    design_doc: designs/scene/conviction_track_v30.md
+    canonical_sha__designs__scene__conviction_track_v30_md: "9ccb50e4c147e24925b51416db38c4fdeebe1ec8"
+    conviction_track_index: designs/scene/conviction_track_v30_index.md
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
     params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "fc016ff0ef1272e5f3e70ca490e0c00d1421e160"
@@ -285,3 +290,61 @@ systems:
     canonical_sha__designs__npcs__npc_relational_graph_v30_md: "PENDING_PP_725"
     pp: PP-724
     status: PROVISIONAL
+
+  # ── REGISTERED 2026-05-10: canonical-index coverage audit ──────────────────
+  arc_expansion:
+    design_doc: designs/arcs/arc_expansion_v30.md
+    canonical_sha__designs__arcs__arc_expansion_v30_md: "db91bb86b33c2f37ea3b8e580549c577f5ed0c49"
+    index: designs/arcs/arc_expansion_v30_index.md
+  calamity_radiation:
+    design_doc: designs/world/calamity_radiation_v30.md
+    canonical_sha__designs__world__calamity_radiation_v30_md: "7f5cbeba85265051f18e15686d2cf596d9e17890"
+    infill: designs/world/calamity_radiation_v30_infill.md
+  character_histories:
+    design_doc: designs/world/character_histories_v30.md
+    canonical_sha__designs__world__character_histories_v30_md: "ffcad0a3c0db345000e939831af21a81d1af61a1"
+    index: designs/world/character_histories_v30_index.md
+    infill: designs/world/character_histories_v30_infill.md
+  clock_registry:
+    design_doc: designs/provincial/clock_registry_v30.md
+    canonical_sha__designs__provincial__clock_registry_v30_md: "0377794bfa07a1b52c104da36bd858fb2d46bb4a"
+    infill: designs/provincial/clock_registry_v30_infill.md
+  companion_spec:
+    design_doc: designs/npcs/companion_specification_v30.md
+    canonical_sha__designs__npcs__companion_specification_v30_md: "d6ef0cc1fccb6ff358224148d53ca88f7b000184"
+  edeyja_npc:
+    design_doc: designs/npcs/edeyja_npc.md
+    canonical_sha__designs__npcs__edeyja_npc_md: "51459a407ce6e29c40fff16f2046c6e6a912f978"
+  faction_politics:
+    design_doc: designs/provincial/faction_politics_v30.md
+    canonical_sha__designs__provincial__faction_politics_v30_md: "4e6b5785bf455aecd6095335ff0e6f5ab60c68eb"
+    index: designs/provincial/faction_politics_v30_index.md
+  investigation:
+    design_doc: designs/scene/investigation_systems_v30.md
+    canonical_sha__designs__scene__investigation_systems_v30_md: "0de5220629863b955f87b386020eee7c8e44d5d9"
+    index: designs/scene/investigation_systems_v30_index.md
+  npc_roster:
+    design_doc: designs/npcs/npc_roster_v30.md
+    canonical_sha__designs__npcs__npc_roster_v30_md: "9ddb1d0feb3c520a4afba7697260c77ea74e9850"
+    index: designs/npcs/npc_roster_v30_index.md
+    infill: designs/npcs/npc_roster_v30_infill.md
+  player_agency:
+    design_doc: designs/architecture/player_agency_v30.md
+    canonical_sha__designs__architecture__player_agency_v30_md: "16b9f91758bdd41f6d204dd361b7fcc425ca43f6"
+    index: designs/architecture/player_agency_v30_index.md
+  thread_horizontal_integration:
+    design_doc: designs/threadwork/thread_horizontal_integration_spec.md
+    canonical_sha__designs__threadwork__thread_horizontal_integration_spec_md: "d0ec56f59b1142775c85051ab49e0f2568e3b317"
+    index: designs/threadwork/thread_horizontal_integration_spec_index.md
+  throughline_resolutions:
+    design_doc: designs/arcs/throughline_resolutions_v30.md
+    canonical_sha__designs__arcs__throughline_resolutions_v30_md: "3b90b9ab9ce2a99158dea3bc5637fd2e37de7acf"
+    index: designs/arcs/throughline_resolutions_v30_index.md
+  ui_ux:
+    design_doc: designs/ui/valoria_ui_ux_v4.md
+    canonical_sha__designs__ui__valoria_ui_ux_v4_md: "b6cb4a0410f0b87cec12297e3e378c05f0d0728a"
+    valoria_ui_ux_1: designs/ui/valoria_ui_ux_v4_1.md
+  videogame_mode_spec:
+    design_doc: designs/architecture/videogame_mode_spec.md
+    canonical_sha__designs__architecture__videogame_mode_spec_md: "b29d45e734b2dcaa174f06304691a332f90023b5"
+    index: designs/architecture/videogame_mode_spec_index.md
