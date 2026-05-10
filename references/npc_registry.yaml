@@ -100,25 +100,25 @@ characters:
     first_name: Sæmund
     last_name: Haelgrund
     faction: Church
-    role: Inquisitor (Cardinal Justice)
+    role: Field Inquisitor (deployed at AP ≥ 3)
     status: canonical
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null
-    ts: 12
+    ts: 15  # per Jordan; latent Thread perception
     coherence: null  # [GAP]
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.40}
+        - {conviction: Faith, weight: 0.60}
         - {conviction: Authority, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
-      migration_notes: "No prior legacy label. Inferred from role: Church Inquisitor = Faith primary + Authority. Per PP-685 §4 defaults."
+      conviction_notes: "Field Inquisitor, NOT a Cardinal. Cardinal Justice = Henrik Solvang (NPC-076). Savonarola archetype."
     goals: ["Investigate heresy", "Enforce Church orthodoxy"]
     arc_trajectory: "Latent TS — doesn't know he's Thread Sensitive. PC diagnosis possible (Cognition vs Ob 2)."
     source: npc_roster_v30 §4
-    notes: "TS 12 — barely above practitioner threshold. Attributes hunches to investigative instinct. PROCEDURALIST behavioral AI."
+    notes: "TS 15. Attributes Thread perception to investigative instinct. Field Inquisitor, NOT Cardinal. Savonarola archetype."
 
   - id: NPC-005
     first_name: Sigrid
@@ -239,7 +239,7 @@ characters:
   - id: NPC-010
     first_name: Dalla
     last_name: Virke
-    faction: Niflhel (Virke syndicate)
+    faction: Independent (Virke syndicate — Niflhel DISSOLVED)
     role: Syndicate Broker
     status: canonical
     age: null  # [GAP]
@@ -274,8 +274,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Authority, weight: 0.30}
-        - {conviction: Warden, weight: 0.30}
+        - {conviction: Virtue, weight: 0.50}
+        - {conviction: Authority, weight: 0.20}
       cultural_label: altonian  # [ASSUMPTION: placeholder — altonian template not yet defined in PP-684 §5]
       self_other_initial: -0.20
       migration_notes: "No prior legacy label. Inferred from role: PROTECTIVE behavioral AI, shields Elske = Warden. Imperial authority = Authority. Per PP-685 §4."
@@ -320,9 +320,8 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.30}
-        - {conviction: Order, weight: 0.25}
-        - {conviction: Utility, weight: 0.20}
+        - {conviction: Order, weight: 0.50}
+        - {conviction: Liberty, weight: 0.30}
       cultural_label: ecclesiastical
       self_other_initial: +0.10
       migration_notes: "No prior legacy label. Inferred from role: OPTIMISER (maximises Church Wealth throughput), aggressive tithe = Faith + Order + Utility. Per PP-685 §4."
@@ -490,7 +489,7 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.40}
+        - {conviction: Faith, weight: 0.60}
         - {conviction: Authority, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
@@ -636,9 +635,8 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Honor, weight: 0.35}
-        - {conviction: Faith, weight: 0.25}
-        - {conviction: Authority, weight: 0.15}
+        - {conviction: Faith, weight: 0.50}
+        - {conviction: Order, weight: 0.30}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
       migration_notes: "No prior legacy label. faction_canon: 'Templar arm' for Fortitude cardinal → Honor (military-religious code) + Faith + Authority. Per PP-685 §4."
@@ -745,6 +743,291 @@ characters:
     arc_trajectory: "Arc A: The System's Memory. Arc B: The Whistleblower (player shows Evidence that Ministry records have been altered)."
     source: npc_behavior_v30 §2.14
     notes: "DISTINCT from NPC-004 Sæmund Haelgrund (Cardinal Justice, Church). Same surname — relationship unknown. Both TS 12. Ministry Registrar, not Church."
+
+# ═══════════════════════════════════════════
+# CANON ADDITIONS (behavior_v30, arc_expansion)
+# ═══════════════════════════════════════════
+
+  - id: NPC-070
+    first_name: Lisbeth
+    last_name: Ehrenwall
+    faction: Löwenritter
+    role: Grandmaster
+    status: canonical
+    ts: 0
+    certainty: 4
+    resonant_style: Consequence
+    self_other_initial: -0.10
+    cultural_label: lowenritter_military
+    convictions:
+      primary:
+        - {conviction: Order, weight: 0.60}
+        - {conviction: Liberty, weight: 0.20}
+    arc_trajectory: "Drives Autonomy track (Loyal→Restless→Autonomous→Split). Brandt succession if removed. Konrad von Jungingen archetype."
+    source: behavior_v30 §2.5
+
+  - id: NPC-071
+    first_name: Torvi
+    last_name: Heljason
+    faction: Hafenmark (Inner Council)
+    role: Legal Advisor to Baralta
+    status: canonical
+    certainty: 5
+    resonant_style: Evidence
+    cultural_label: hafenmark_procedural
+    convictions:
+      primary:
+        - {conviction: Precedent, weight: 0.70}
+    source: behavior_v30 §2.16
+
+  - id: NPC-072
+    first_name: Olaf
+    last_name: Geirson
+    faction: Hafenmark (Inner Council)
+    role: Military Commander
+    status: canonical
+    certainty: 4
+    resonant_style: Consequence
+    cultural_label: hafenmark_procedural
+    convictions:
+      primary:
+        - {conviction: Order, weight: 0.70}
+    source: behavior_v30 §2.16
+
+  - id: NPC-073
+    first_name: Björn
+    last_name: Holdar
+    faction: Varfell (Jarl Council)
+    role: Senior Jarl of the Western Highlands
+    status: canonical
+    certainty: 3
+    resonant_style: Consequence
+    cultural_label: einhir_traditional
+    convictions:
+      primary:
+        - {conviction: Warden, weight: 0.70}
+    source: behavior_v30 §2.17
+
+  - id: NPC-074
+    first_name: Ingrid
+    last_name: Stenskald
+    faction: Varfell (Jarl Council)
+    role: Skald-Chief
+    status: canonical
+    certainty: 3
+    resonant_style: Solidarity
+    cultural_label: einhir_traditional
+    convictions:
+      primary:
+        - {conviction: Community, weight: 0.70}
+    source: behavior_v30 §2.17
+
+  - id: NPC-075
+    first_name: Orm
+    last_name: null
+    faction: Independent (Southernmost Wardens)
+    role: Second Senior Warden
+    status: canonical
+    territory: T15 (Southernmost)
+    ts: 60
+    certainty: 0
+    resonant_style: Evidence
+    self_other_initial: -0.20
+    cultural_label: einhir_traditional
+    convictions:
+      primary:
+        - {conviction: Warden, weight: 0.60}
+        - {conviction: Equity, weight: 0.20}
+    goals: ["The work. Only the work."]
+    arc_trajectory: "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost."
+    source: arc_expansion_v30
+
+  - id: NPC-076
+    first_name: Henrik
+    last_name: Solvang
+    faction: Church
+    role: Cardinal Justice (oversees Inquisition apparatus)
+    status: canonical
+    cultural_label: ecclesiastical
+    convictions:
+      primary:
+        - {conviction: Faith, weight: 0.60}
+        - {conviction: Authority, weight: 0.20}
+    notes: "Commands Inquisition from Himmelenger. Sæmund Haelgrund (NPC-004) is field operative."
+    source: behavior_v30 §2.13
+
+# ═══════════════════════════════════════════
+# PROPOSED NPCs — editorial audit 2026-05-08
+# NERS-validated, collision-checked
+# ═══════════════════════════════════════════
+
+  - id: NPC-080
+    first_name: Vidar
+    last_name: Haldorsen
+    faction: Löwenritter
+    role: Riskbreaker (doctrine-following — foil to Torsvald)
+    status: proposed
+    ts: 0
+    certainty: 5
+    resonant_style: Authority
+    cultural_label: lowenritter_military
+    convictions:
+      primary:
+        - {conviction: Honor, weight: 0.60}
+        - {conviction: Utility, weight: 0.20}
+    arc_trajectory: "Completes missions Sigrid aborts. TS 0 = can't see Thread collateral. Konrad Wallenrod archetype."
+    source: proposed
+
+  - id: NPC-081
+    first_name: Uta
+    last_name: Falkenrath
+    faction: Hafenmark (Inner Council #4)
+    role: Commune Representative (Banneret)
+    status: proposed
+    cultural_label: hafenmark_procedural
+    resonant_style: Consequence
+    convictions:
+      primary:
+        - {conviction: Community, weight: 0.50}
+        - {conviction: Precedent, weight: 0.30}
+    arc_trajectory: "IC seat #4. Succession candidate if Baralta falls (popular mandate). Adrian von Bubenberg archetype."
+    source: proposed
+
+  - id: NPC-082
+    first_name: Njal
+    last_name: Torberg
+    faction: Varfell (Jarl Council #5)
+    role: Military Jarl
+    status: proposed
+    cultural_label: einhir_traditional
+    resonant_style: Solidarity
+    convictions:
+      primary:
+        - {conviction: Identity, weight: 0.60}
+        - {conviction: Honor, weight: 0.20}
+    arc_trajectory: "Fights for Einhir, not Vaynard. Fracture line if Vaynard's ego diverges from cause. Sigurd Syr archetype."
+    source: proposed
+
+  - id: NPC-083
+    first_name: Hedda
+    last_name: Kronvald
+    faction: Crown
+    role: Governor of Ehrenfeld (T14)
+    status: proposed
+    territory: T14 (Ehrenfeld)
+    cultural_label: valorian_court
+    resonant_style: Evidence
+    convictions:
+      primary:
+        - {conviction: Authority, weight: 0.50}
+        - {conviction: Order, weight: 0.30}
+    arc_trajectory: "Switchboard NPC at geographic chokepoint (5 adjacencies). Isabella d'Este archetype."
+    source: proposed
+
+  - id: NPC-084
+    first_name: Frieda
+    last_name: Kessler
+    faction: Guilds
+    role: Zunftmeisterin (Guildmaster Council)
+    status: proposed
+    cultural_label: hafenmark_procedural
+    resonant_style: Solidarity
+    convictions:
+      primary:
+        - {conviction: Community, weight: 0.70}
+    arc_trajectory: "Internal opposition to Feldhaus. Pushes Mandate over Wealth. Tommaso Soderini archetype."
+    source: proposed
+
+  - id: NPC-085
+    first_name: Nessa
+    last_name: Grindvold
+    faction: Guilds
+    role: Guild Advocate (legal representative at Crown court)
+    status: proposed
+    cultural_label: hafenmark_procedural
+    resonant_style: Evidence
+    convictions:
+      primary:
+        - {conviction: Liberty, weight: 0.50}
+        - {conviction: Scholastic, weight: 0.30}
+    arc_trajectory: "Defends guild autonomy against Crown regulation. Bartolus de Saxoferrato archetype."
+    source: proposed
+
+  - id: NPC-086
+    first_name: Joren
+    last_name: Bergvall
+    faction: Guilds
+    role: Guild Surveyor (mapping maritime Forgetting boundary)
+    status: proposed
+    cultural_label: hafenmark_procedural
+    resonant_style: Evidence
+    convictions:
+      primary:
+        - {conviction: Scholastic, weight: 0.60}
+        - {conviction: Utility, weight: 0.20}
+    arc_trajectory: "Has data proving southern sea route is physically blocked, not politically. Undermines Varfell conspiracy narrative. Fra Mauro archetype."
+    source: proposed
+
+  - id: NPC-087
+    first_name: Uwe
+    last_name: Askeland
+    faction: Restoration Movement
+    role: Buditel (hedge school teacher)
+    status: proposed
+    cultural_label: restoration_reformist
+    resonant_style: Solidarity
+    convictions:
+      primary:
+        - {conviction: Community, weight: 0.50}
+        - {conviction: Equity, weight: 0.30}
+    arc_trajectory: "Illegal Einhir education in southwest. Player discovery → protect/report/leverage. Josef Dobrovský archetype."
+    source: proposed
+
+  - id: NPC-088
+    first_name: Carin
+    last_name: Vedel
+    faction: Restoration Movement
+    role: Pamphleteer (suppressed Einhir cultural texts)
+    status: proposed
+    cultural_label: restoration_reformist
+    resonant_style: Evidence
+    convictions:
+      primary:
+        - {conviction: Liberty, weight: 0.60}
+        - {conviction: Equity, weight: 0.20}
+    arc_trajectory: "Propagation mechanism. Pamphlets increase Church AP across map. William Tyndale archetype."
+    source: proposed
+
+  - id: NPC-089
+    first_name: Zoe
+    last_name: Palaiologina
+    faction: Altonia
+    role: Katepano (frontier governor)
+    status: proposed
+    cultural_label: altonian_imperial
+    resonant_style: Consequence
+    convictions:
+      primary:
+        - {conviction: Identity, weight: 0.50}
+        - {conviction: Authority, weight: 0.30}
+    arc_trajectory: "Decides whether Altonia probes, presses, or invades. Sincere imperialist. Basil Boioannes archetype."
+    source: proposed
+
+  - id: NPC-090
+    first_name: Stephanos
+    last_name: Doukas
+    faction: Altonia
+    role: Kommerkiarios (trade prefect at Schoenland interface)
+    status: proposed
+    cultural_label: altonian_imperial
+    resonant_style: Authority
+    convictions:
+      primary:
+        - {conviction: Precedent, weight: 0.50}
+        - {conviction: Order, weight: 0.30}
+    arc_trajectory: "Enforces ancient trade treaties. Counterparty to Solberg. Book of the Eparch archetype."
+    source: proposed
+
 
 # ═══════════════════════════════════════════════════════════════
 # REMOVED / MERGED ENTRIES
