@@ -64,7 +64,8 @@ entries:
 
   - id: ED-788
     date: 2026-05-03
-    description: "[STANDING — JORDAN-DECISION] LICENSE / GOV-08 — choose license; populate top-level LICENSE file. Spun out from ED-755 D2.2. Common videogame-design options framed in designs/audit/2026-05-01-stage-10-validation/05_ED-755_resolutions.md §3.2: CC-BY-SA 4.0 (share-alike copyleft), GPL-3 (strong copyleft), Proprietary / All Rights Reserved (locked private IP), CC0 (public domain). Not blocking active mechanical work; blocks any external contribution or repo publication."
-    status: open
+    description: "[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking mechanical work."
+    status: deferred
     severity: P2
     source: "ED-755 D2.2 spin-out 2026-05-03"
+    jordan_decision: "2026-05-09 — skip."

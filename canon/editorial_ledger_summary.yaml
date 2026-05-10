@@ -14,7 +14,7 @@ p2_open:
   - ED-711: "Fractional province ownership (PP-666). Will be superseded by ED-780 spec rewrite."
   - ED-777: "[STANDING] arc_register_factions Niflhel reframe — 5 arcs need plot-level reframe."
   - ED-780: "[STANDING] Geography Phase 3 spec rewrite (settlement_adjacency v2, march_layer, mass_battle terrain-derivation, naval mechanics resolving ED-055). Depends on ED-779."
-  - ED-788: "[STANDING — JORDAN-DECISION] LICENSE / GOV-08 — choose license. Not blocking."
+  - ED-788: "[DEFERRED] LICENSE / GOV-08 — skipped per Jordan 2026-05-09."
 
 p3_open:
   - ED-776: "[STANDING] Hafenmark equipment-quality mechanism — TBD via simulation."
