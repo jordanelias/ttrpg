@@ -279,3 +279,9 @@ systems:
     canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "pending"
     status: design-direction
     added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
+
+  npc_relational_graph:
+    design_doc: designs/npcs/npc_relational_graph_v30.md
+    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "PENDING_PP_724"
+    pp: PP-724
+    status: PROVISIONAL

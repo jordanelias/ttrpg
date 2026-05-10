@@ -126,3 +126,13 @@
 - Pass/fail verdict unchanged (zero violations).
 - Correction applied at archives/patches/patch_register_archive_2026_05_10.yaml (PP-723 was auto-archived between the original commit 0a4a1ff7 and this correction commit, so the fix lands in the archive rather than active register).
 - This is the third off-by-one detection across recent vetting work (PP-718 walkthrough commit 5a47da16; PP-718 recalibration commit 04d026a0; this); a process improvement (D1 from improvement_avenues_2026-05-10) for tighter post-commit verification is now demonstrably load-bearing.
+
+## PP-724 NPC-NPC relational graph framework (2026-05-10)
+**Class A new substrate-defining system; B1.1 of improvement_avenues_2026-05-10.** Authored designs/npcs/npc_relational_graph_v30.md (~585 lines / ~47k chars). Six canonical edge types (sworn-bond, liege-vassal, kinship, patronage, rivalry, feud); per-edge state machine paralleling F2 Knot lifecycle (fieldwork §5.6b); strain accumulation/decay/break/rupture rules; multi-edge composition rules; NPC-NPC Disposition derivation; hooks for B1.2 (defection cascade), B1.3 (faction-Cascade integration), B1.4 (settlement-coupling).
+- `designs/npcs/npc_relational_graph_v30.md`: NEW. PROVISIONAL.
+- `references/canonical_sources.yaml`: npc_relational_graph entry added under Canonical NPC docs.
+- Closes the canon-wide gap surfaced in improvement_avenues §B1: ROTK + CK3 precedents named in settlement_layer §Precedent + settlement_adjacency canon-compliance had no relational-graph mechanic.
+- Composes with PP-684 (Conviction taxonomy), PP-685 (Migration roster), PP-686 (Cascade math, B1.3 hook), PP-718 (per-Conviction Scar; §3.9 Honor-crisis cascade), PP-723 (settlement adjacency, §6 distance-strain hook).
+- Vetting: 6 + · 2 ✓ · 3 ○ · 0 − pass. Genuine extensions on M-1/M-3/M-4/M-5/M-6/M-11; faithful preservation on M-7/M-10; scope-mismatch ○ on M-2 (geography deferred to B1.4), M-8 (access pattern), M-9 (clinical-borrowing pattern).
+- Q-robust: three viable approaches per relational situation (cultivate, exploit, reconcile); world-state visible per-edge; mechanic fires without player action. Q-smooth: methodology mirrors Knot lifecycle. Q-elegant: core rule restatable in one paragraph; second-order Honor-crisis cascade composes cleanly with PP-718.
+- B2 (named-NPC instantiation), B1.2 (defection cascade body), B1.3 (faction-Cascade integration body), B1.4 (settlement-coupling body) all deferred follow-up.
