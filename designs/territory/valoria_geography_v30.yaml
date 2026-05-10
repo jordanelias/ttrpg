@@ -564,6 +564,78 @@ adjacency:
   - {from: T12, to: T13, type: road}
   - {from: T13, to: T15, type: gate}
 
+
+# ─── SETTLEMENT-LEVEL ADJACENCY GRAPH (PP-723, ED-779 follow-up) ───
+# Per settlement_adjacency_v30 §1.2 — fulfills the promised settlement_adjacency_map.yaml.
+# 49 edges across 36 settlements. Composed with the territory-level `adjacency:` block above
+# for two-tier strategic-tactical resolution: territory adjacency drives strategic-layer routing,
+# settlement adjacency drives tactical battle-arrival edge derivation per mass_battle §A.9.
+
+settlement_adjacency:
+  # Generated 2026-05-10 (PP-723) per settlement_adjacency_v30 §1.2 generation rules:
+  # 1. Hub settlement (Seat preferred; else Cathedral > Fortress > City > Port > Town > Mine > Outpost)
+  #    adjacent to every other settlement in same province (intra-province road edges).
+  # 2. For each territory→territory adjacency, hub-to-hub edge with the territory edge type.
+  # 3. Hand-specified overrides for canonical port/gate/mine routes (override notes inline).
+  # 4. Thread-Witnessed special edges: cathedral network, Warden network, scholarly Thread ties, RM covert network.
+  #
+  # Total edges: 49 (19 intra-province, 26 inter-province, 4 thread-witnessed)
+
+  # ─── Intra-province edges (19) ───
+  - {from: S-001, to: S-002, type: road, note: "intra-T1"}
+  - {from: S-001, to: S-003, type: road, note: "intra-T1"}
+  - {from: S-005, to: S-004, type: road, note: "intra-T2"}
+  - {from: S-006, to: S-007, type: road, note: "intra-T3"}
+  - {from: S-028, to: S-029, type: road, note: "intra-T4"}
+  - {from: S-008, to: S-009, type: road, note: "intra-T5"}
+  - {from: S-010, to: S-011, type: road, note: "intra-T6"}
+  - {from: S-015, to: S-016, type: road, note: "intra-T8"}
+  - {from: S-015, to: S-017, type: road, note: "intra-T8"}
+  - {from: S-023, to: S-024, type: road, note: "intra-T9"}
+  - {from: S-023, to: S-025, type: road, note: "intra-T9"}
+  - {from: S-019, to: S-020, type: road, note: "intra-T10"}
+  - {from: S-026, to: S-027, type: road, note: "intra-T12"}
+  - {from: S-031, to: S-032, type: road, note: "intra-T13"}
+  - {from: S-012, to: S-013, type: road, note: "intra-T14"}
+  - {from: S-012, to: S-014, type: road, note: "intra-T14"}
+  - {from: S-033, to: S-034, type: road, note: "intra-T15"}
+  - {from: S-035, to: S-036, type: road, note: "intra-T16"}
+  - {from: S-022, to: S-021, type: road, note: "intra-T17"}
+
+  # ─── Inter-province edges (26) ───
+  - {from: S-001, to: S-005, type: road, note: "inter-T1-T2"}
+  - {from: S-002, to: S-008, type: road, note: "inter-T1-T5 (override)"}
+  - {from: S-001, to: S-012, type: road, note: "inter-T1-T14"}
+  - {from: S-002, to: S-036, type: coastal, note: "inter-T1-T16 (override)"}
+  - {from: S-005, to: S-006, type: road, note: "inter-T2-T3"}
+  - {from: S-004, to: S-024, type: road, note: "inter-T2-T9 (override)"}
+  - {from: S-005, to: S-012, type: road, note: "inter-T2-T14"}
+  - {from: S-006, to: S-023, type: road, note: "inter-T3-T9"}
+  - {from: S-007, to: S-021, type: road, note: "inter-T3-T17 (override)"}
+  - {from: S-028, to: S-018, type: road, note: "inter-T4-T7"}
+  - {from: S-028, to: S-026, type: road, note: "inter-T4-T12"}
+  - {from: S-028, to: S-012, type: road, note: "inter-T4-T14"}
+  - {from: S-008, to: S-010, type: road, note: "inter-T5-T6"}
+  - {from: S-008, to: S-012, type: road, note: "inter-T5-T14"}
+  - {from: S-010, to: S-031, type: road, note: "inter-T6-T13"}
+  - {from: S-011, to: S-034, type: gate, note: "inter-T6-T15 (override)"}
+  - {from: S-018, to: S-015, type: road, note: "inter-T7-T8"}
+  - {from: S-017, to: S-024, type: road, note: "inter-T8-T9 (override)"}
+  - {from: S-015, to: S-019, type: road, note: "inter-T8-T10"}
+  - {from: S-016, to: S-021, type: road, note: "inter-T8-T17 (override)"}
+  - {from: S-023, to: S-012, type: road, note: "inter-T9-T14"}
+  - {from: S-023, to: S-022, type: road, note: "inter-T9-T17"}
+  - {from: S-019, to: S-030, type: mountain_pass, note: "inter-T10-T11"}
+  - {from: S-030, to: S-026, type: road, note: "inter-T11-T12"}
+  - {from: S-026, to: S-031, type: road, note: "inter-T12-T13"}
+  - {from: S-031, to: S-034, type: gate, note: "inter-T13-T15 (override)"}
+
+  # ─── Thread-Witnessed edges (4; character-scale only, no army transport) ───
+  - {from: S-003, to: S-023, type: thread_witnessed, note: "cathedral-network"}
+  - {from: S-011, to: S-033, type: thread_witnessed, note: "warden-watch-ruins"}
+  - {from: S-026, to: S-025, type: thread_witnessed, note: "private-collection-seminary"}
+  - {from: S-029, to: S-032, type: thread_witnessed, note: "rm-einhir-network"}
+
 # ─── TERRAIN LAYER (8 types) ───
 # Types: plains, forest, highland, mountain, mountain_pass, fjord_coast, coast, marsh
 # Annotations are separate (river, bridge, forgetting_zone, radiation_bands).
@@ -825,93 +897,3 @@ scale_anchors:
 # deprecated:          designs/provincial/valoria_map_v2.svg (pre-canon T-numbers)
 
 # === END VALORIA GEOGRAPHY V30 ===
-
-# ─── SETTLEMENT-LEVEL ADJACENCY (PP-723 / ED-710 closure 2026-05-10) ───
-# Per settlement_adjacency_v30 §1.2 generation rule:
-#   1. Every Seat adjacent to every other settlement in same province.
-#   2. Every province-adjacent pair has one inter-settlement edge connecting
-#      primary settlements (Seat where present; else most-connected per §2.1).
-#   3. Special routes (Askeheim gates, T17 mine, coastal Ports,
-#      Thread-Witnessed) hand-specified.
-#
-# 58 edges total: 23 intra-province + 24 inter-province + 11 special.
-# Type vocabulary: road, river, mountain_pass, coastal, gate, thread-witnessed.
-# Notes:
-#   - Thread-Witnessed edges are character-scale Leap only — do NOT transfer armies
-#     per settlement_adjacency_v30 §1.1. They produce parallel mechanical edges
-#     (Cathedral↔Seminary appears as both `road` AND `thread-witnessed`).
-#   - Naval/coastal mechanics deferred to ED-055. Coastal edges marked sea/fjord
-#     are canonical adjacency; loading/transit specs await ED-055.
-#   - Schoenland (T16) is land-unreachable; coastal-only access by design.
-#
-# Network metrics (verified at authoring):
-#   All-edge connectivity from S-001: 36/36 (full graph connected)
-#   Army-graph (excl thread-witnessed) from S-001: 36/36
-#   Land-graph (excl thread + coastal) from S-001: 34/36 (S-035/S-036 island)
-#   Top hubs by degree:
-#     S-023 Himmelenger Cathedral (T9): 8 — ecclesiastical primary
-#     S-012 Ehrenfeld Citadel (T14): 7 — 5-way hub per §2.1, plus Barracks + market
-#     S-001 Valorsplatz Palace (T1): 6 — Crown capital
-#     S-015 Gransol Parliament (T8): 6 — Hafenmark capital
-settlement_adjacency:
-  # ── Intra-province edges (Rule 1; 23 edges) ──
-  - {from: S-001, to: S-002, type: river, terrain: intra-province, crosses: river-valoris, bridge: bridge-valorsplatz}  # overrides intra Seat→Port; Valorsplatz river-crossing via bridge-valorsplatz per geography :: bridges
-  - {from: S-001, to: S-003, type: road, terrain: intra-province}  # Seat→settlement within T1
-  - {from: S-002, to: S-003, type: road, terrain: intra-province}  # non-Seat pairwise within T1
-  - {from: S-004, to: S-005, type: road, terrain: intra-province}  # pairwise within T2 (no Seat)
-  - {from: S-006, to: S-007, type: road, terrain: intra-province}  # pairwise within T3 (no Seat)
-  - {from: S-008, to: S-009, type: road, terrain: intra-province}  # pairwise within T5 (no Seat)
-  - {from: S-010, to: S-011, type: road, terrain: intra-province}  # pairwise within T6 (no Seat)
-  - {from: S-012, to: S-013, type: road, terrain: intra-province}  # pairwise within T14 (no Seat)
-  - {from: S-012, to: S-014, type: road, terrain: intra-province}  # pairwise within T14 (no Seat); also serves as Ehrenfeld Citadel ↔ Barracks command line (Löwenritter-Riskbreaker covert link)
-  - {from: S-013, to: S-014, type: road, terrain: intra-province}  # pairwise within T14 (no Seat)
-  - {from: S-015, to: S-016, type: road, terrain: intra-province}  # Seat→settlement within T8
-  - {from: S-015, to: S-017, type: road, terrain: intra-province}  # Seat→settlement within T8
-  - {from: S-016, to: S-017, type: road, terrain: intra-province}  # non-Seat pairwise within T8
-  - {from: S-019, to: S-020, type: road, terrain: intra-province}  # pairwise within T10 (no Seat)
-  - {from: S-021, to: S-022, type: road, terrain: intra-province}  # pairwise within T17 (no Seat)
-  - {from: S-023, to: S-024, type: road, terrain: intra-province}  # pairwise within T9 (no Seat)
-  - {from: S-023, to: S-025, type: road, terrain: intra-province}  # pairwise within T9 (no Seat)
-  - {from: S-024, to: S-025, type: road, terrain: intra-province}  # pairwise within T9 (no Seat)
-  - {from: S-026, to: S-027, type: road, terrain: intra-province}  # Seat→settlement within T12
-  - {from: S-028, to: S-029, type: road, terrain: intra-province}  # pairwise within T4 (no Seat)
-  - {from: S-031, to: S-032, type: road, terrain: intra-province}  # pairwise within T13 (no Seat)
-  - {from: S-033, to: S-034, type: road, terrain: intra-province}  # pairwise within T15 (no Seat)
-  - {from: S-035, to: S-036, type: road, terrain: intra-province}  # pairwise within T16 (no Seat)
-  # ── Inter-province edges (Rule 2; 24 edges; primary-settlement-to-primary) ──
-  - {from: S-001, to: S-004, type: river, terrain: inter-province, crosses: river-valoris, bridge: bridge-kronmark}  # overrides inter T1↔T2 default road; Kronmark→Lowenskyst routing via bridge-kronmark per geography :: bridges
-  - {from: S-001, to: S-008, type: road, terrain: inter-province}  # inter-province T1↔T5
-  - {from: S-001, to: S-012, type: road, terrain: inter-province}  # inter-province T1↔T14
-  - {from: S-001, to: S-035, type: coastal, terrain: inter-province}  # inter-province T1↔T16
-  - {from: S-004, to: S-006, type: road, terrain: inter-province}  # inter-province T2↔T3
-  - {from: S-004, to: S-012, type: road, terrain: inter-province}  # inter-province T2↔T14
-  - {from: S-004, to: S-023, type: road, terrain: inter-province}  # inter-province T2↔T9
-  - {from: S-006, to: S-022, type: road, terrain: inter-province}  # inter-province T3↔T17
-  - {from: S-006, to: S-023, type: road, terrain: inter-province}  # inter-province T3↔T9
-  - {from: S-008, to: S-010, type: road, terrain: inter-province}  # inter-province T5↔T6
-  - {from: S-008, to: S-012, type: road, terrain: inter-province}  # inter-province T5↔T14
-  - {from: S-010, to: S-031, type: road, terrain: inter-province}  # inter-province T6↔T13
-  - {from: S-023, to: S-012, type: road, terrain: inter-province}  # inter-province T9↔T14
-  - {from: S-028, to: S-012, type: road, terrain: inter-province}  # inter-province T4↔T14
-  - {from: S-018, to: S-015, type: road, terrain: inter-province}  # inter-province T7↔T8
-  - {from: S-015, to: S-019, type: road, terrain: inter-province}  # inter-province T8↔T10
-  - {from: S-015, to: S-022, type: road, terrain: inter-province}  # inter-province T8↔T17
-  - {from: S-015, to: S-023, type: road, terrain: inter-province}  # inter-province T8↔T9
-  - {from: S-028, to: S-018, type: road, terrain: inter-province}  # inter-province T4↔T7
-  - {from: S-019, to: S-030, type: mountain_pass, terrain: inter-province}  # inter-province T10↔T11
-  - {from: S-023, to: S-022, type: road, terrain: inter-province}  # inter-province T9↔T17
-  - {from: S-028, to: S-026, type: road, terrain: inter-province}  # inter-province T4↔T12
-  - {from: S-030, to: S-026, type: road, terrain: inter-province}  # inter-province T11↔T12
-  - {from: S-026, to: S-031, type: road, terrain: inter-province}  # inter-province T12↔T13
-  # ── Special / hand-specified routes (Rule 3; 11 edges) ──
-  - {from: S-027, to: S-031, type: coastal, terrain: fjord}  # special: Sigurdshelm Cove → Oastad (Varfell limited naval; fjord coast)
-  - {from: S-017, to: S-021, type: road, terrain: highland}  # special: Guild mine route — Gransol Market Quarter → Halvarshelm Mines
-  - {from: S-010, to: S-034, type: gate, terrain: marsh}  # overrides inter T6↔T15 default gate; Stillhelm→Askeheim Gate (Gate 2 per geography :: gates; marsh-edge passage)
-  - {from: S-031, to: S-034, type: gate, terrain: marsh}  # overrides inter T13↔T15 default gate; Oastad→Askeheim Gate (Gate 1 per geography :: gates; marsh-edge passage)
-  - {from: S-002, to: S-036, type: coastal, terrain: sea}  # overrides inter T1↔T16 default coastal; Valorsplatz Port → Schoenland Harbor (Altonian sea route — naval mechanics deferred to ED-055)
-  - {from: S-016, to: S-036, type: coastal, terrain: sea}  # special: Gransol Harbor → Schoenland Harbor (Hafenmark-Schoenland Altonian-trade route; naval mechanics deferred to ED-055)
-  - {from: S-003, to: S-023, type: thread-witnessed, terrain: thread}  # Thread-Witnessed: Valorsplatz Cathedral ↔ Himmelenger Cathedral (character-scale Leap only; does NOT transfer armies)
-  - {from: S-011, to: S-033, type: thread-witnessed, terrain: thread}  # Thread-Witnessed: Stillhelm Watch ↔ Askeheim Ruins (Warden monitoring channel)
-  - {from: S-023, to: S-025, type: thread-witnessed, terrain: thread}  # Thread-Witnessed: Himmelenger Cathedral ↔ Himmelenger Seminary (intra-T9 ecclesiastical Thread channel)
-  - {from: S-025, to: S-032, type: thread-witnessed, terrain: thread}  # Thread-Witnessed: Himmelenger Seminary ↔ Oastad Shrine (RM-Church doctrinal Thread tension)
-  - {from: S-029, to: S-032, type: thread-witnessed, terrain: thread}  # Thread-Witnessed: Grauwald Lodge ↔ Oastad Shrine (RM Einhir-preservation network)

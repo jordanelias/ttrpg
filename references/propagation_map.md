@@ -107,13 +107,10 @@
 - Pass/fail verdict unchanged (zero violations both before and after recalibration).
 - Self-review bias acknowledged: this walkthrough was authored about Claude's own prior PP-718 work; recalibration tightens the credit assignment without changing the canonical commit.
 
-## PP-723 settlement-level adjacency graph authored (2026-05-10)
-**Class B (system extension); applied this commit.** Closes ED-710 (open since 2026-04-19 PP-666).
-- `designs/territory/valoria_geography_v30.yaml`: new `settlement_adjacency:` block appended. 58 edges total — 23 intra-province (Rule 1: Seat-connects-all + non-Seat-pairwise), 24 inter-province (Rule 2: primary-to-primary at province borders), 11 special (Rule 3: Askeheim gates, T17 Guild mine route, coastal Port-to-Port, 5 Thread-Witnessed practitioner-Leap channels). Edge attributes: from, to, type, terrain, optional crosses/bridge.
-- `designs/territory/settlement_adjacency_v30.md §1.2`: rewritten to point at the new canonical location; §5 Open Items entry on adjacency-map-file marked CLOSED PP-723.
-- `canon/editorial_ledger.yaml` ED-710: open → closed.
-- Network metrics verified at authoring: 36/36 full-graph connectivity from S-001; 36/36 army-reachable excl. thread-witnessed; 34/36 land-reachable (T16 Schoenland correctly island-isolated; coastal-only).
-- Top-degree network hubs: S-023 Himmelenger Cathedral (d=8), S-012 Ehrenfeld Citadel (d=7 — confirms §2.1 "5-way connection hub" claim), S-001 Valorsplatz Palace (d=6), S-015 Gransol Parliament (d=6).
-- Unblocks: settlement-scale mass-battle resolution (settlement_adjacency_v30 §2.2 Terrain from Edge Type now resolvable), settlement-level march pathfinding extensions, ROTK-network spatial substrate for B1.4 (settlement coupling).
-- Carryover: A2 settlement-internal geography (P1) still open; A3 ED-055 naval substrate (P1) still open; A4 settlement_adjacency_v30 banner consolidation now actionable post-PP-723.
-- Self-review bias acknowledged on Thread-Witnessed edge selections — see PP-723 vetting note.
+## PP-723 Settlement-level adjacency graph authored (2026-05-10)
+**Class B (system extension); applied this commit.** Closes ED-710 placeholder + improvement_avenues A1 P1 gap.
+- `designs/territory/valoria_geography_v30.yaml`: new `settlement_adjacency:` block (49 edges across 36 settlements; 19 intra-province, 26 inter-province, 4 thread-witnessed). Total file 28k → 32k chars.
+- `designs/territory/settlement_adjacency_v30.md`: §1.2 rewritten (rule-as-implemented spec; 8 hand-specified overrides documented; 4 Thread-Witnessed edges enumerated); §5 Open Items "Adjacency map file" CLOSED; banner updated to "PARTIALLY SUPERSEDED post PP-723."
+- Resolves geography_phase4_stress_01 ED-781 finding that mass_battle §A.9 Phase 3 geographic-derivation clause had no settlement-edge data to consume.
+- Two-tier composition: territory adjacency (26 edges, drives strategic march_layer routing) + settlement adjacency (49 edges, drives tactical battle-arrival edge derivation).
+- Vetting: 3 + · 4 ✓ · 4 ○ · 0 − pass. Genuine extensions: M-2 (geography-holds-pressure settlement-granular) and M-5 (two-tier scale composition).

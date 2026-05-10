@@ -1,10 +1,9 @@
-<!-- [PROVISIONAL: ED-710 — PP-666 2026-04-19; SUPERSESSION-PENDING per ED-779/ED-780 2026-05-01] -->
-<!-- BANNER (ED-779 Phase 2 commit 2026-05-01): -->
-<!-- This document remains PROVISIONAL but is on a supersession track. -->
-<!-- Successor: designs/territory/march_layer_v30.md (SKELETON; full body Phase 3 ED-780). -->
-<!-- Phase 2 geographic canon at: designs/territory/valoria_geography_v30.yaml. -->
-<!-- Adjacency graph (26 edges) is now sourced from valoria_geography_v30.yaml :: adjacency. -->
-<!-- The mechanical body below remains operative for mass-battle resolution until march_layer_v30 is CANONICAL. -->
+<!-- [PROVISIONAL: ED-710 — PP-666 2026-04-19; PARTIALLY SUPERSEDED post PP-723 2026-05-10] -->
+<!-- BANNER updates (latest 2026-05-10): -->
+<!-- Strategic movement (march budget, A* pathfinding, vision/recon, route blocking) migrated to march_layer_v30 (Phase 3 closure ED-780, commit 65b918a2). -->
+<!-- Settlement-level adjacency graph (PP-723, this commit) authored at valoria_geography_v30.yaml :: settlement_adjacency: (49 edges across 36 settlements). -->
+<!-- Battle-resolution-at-settlement (this doc §2) consumes the new settlement_adjacency block; mechanic is now reachable. -->
+<!-- The 26 territory-level edges remain canonical at valoria_geography_v30.yaml :: adjacency for strategic-layer routing per march_layer §4.1. -->
 <!-- Reconciliation memo: designs/audit/2026-04-30-geography-audit/04_workplan_reconciliation.md (PP-709 §5 O5). -->
 
 <!-- [PROVISIONAL: ED-710 — PP-666 2026-04-19 new mechanical system, pending smoke-test before CANONICAL] -->
@@ -31,22 +30,31 @@ Every settlement has a defined adjacency list of other settlements it is directl
 | Coastal | 1 (requires naval) | Attacker only via Port-type settlement | Port-to-Port edges. Uses naval mechanics. |
 | Thread-Witnessed | 0 (instantaneous, character-scale only) | n/a | Practitioner Leap connection between Thread-sensitive settlements. Does not transfer armies. |
 
-### §1.2 Canonical Adjacency Set (36 settlements, 58 edges)
+### §1.2 Canonical Adjacency Set (36 settlements)
 
-**The full graph is canonical at `designs/territory/valoria_geography_v30.yaml :: settlement_adjacency:`** (authored 2026-05-10 under PP-723 / ED-710 closure). 58 edges total: 23 intra-province + 24 inter-province + 11 special.
+**Status (PP-723, 2026-05-10):** The full graph is canonical at `designs/territory/valoria_geography_v30.yaml :: settlement_adjacency:` block (49 edges: 19 intra-province, 26 inter-province, 4 thread-witnessed). The earlier ED-710 placeholder pointing to `designs/world/settlement_adjacency_map.yaml` is **superseded** — the data lives in the canonical geography YAML alongside territory adjacency for clean two-tier composition.
 
-Generation rules followed:
-1. Every Seat is adjacent to every other settlement in the same province (Rule 1).
-2. Every province-adjacent pair has one inter-settlement edge connecting primary settlements — Seat where present; else most-connected per `settlement_layer_v30 §2.1` (Rule 2). Primary mapping committed inline in the YAML block header.
-3. Special routes (Askeheim gates, T17 mine route, coastal Port-to-Port, Thread-Witnessed practitioner-Leap channels) hand-specified per `geography_v30 :: gates / bridges` and per ecclesiastical-Thread doctrine (Rule 3).
+Rule for generation (applied at PP-723):
+1. **Hub settlement adjacent to every other settlement in the same province** (intra-province road edges). Hub is the Seat if one exists; otherwise the highest-priority type per `Seat > Cathedral > Fortress > City > Port > Town > Mine > Outpost`, breaking ties by lowest S-ID for stability. Per-territory hubs:
+   - T1 Valorsplatz → S-001 (Seat); T8 Gransol → S-015 (Seat); T12 Sigurdshelm → S-026 (Seat) — three canonical Seats.
+   - T9 Himmelenger → S-023 (Cathedral); T2/T3/T10/T14 → Fortresses; T16 → City; remainder → Towns or Outpost.
+2. **For each territory-adjacency, hub-to-hub edge** with the territory edge type (road / river / mountain_pass / coastal / gate). 26 territory-adjacency edges produce 26 inter-province settlement edges.
+3. **Hand-specified overrides** for canonical port/gate/mine routes:
+   - T1↔T16 coastal: T1's Port (S-002 Riverside), not the Palace, is the canonical sea-trade connection.
+   - T6↔T15 gate: Stillhelm Watch (S-011, Warden contact post) ↔ Askeheim Gate (S-034). Two land sides of the gate.
+   - T13↔T15 gate: Oastad (S-031) ↔ Askeheim Gate (S-034). The other land side.
+   - T8↔T17 mining route: Gransol Harbor (S-016) ↔ Halvarshelm Mines (S-021) — ore transport.
+   - T3↔T17 mining route: Lowenskyst Garrison Town (S-007) ↔ Halvarshelm Mines (S-021) — military/mine.
+   - T2↔T9: Kronmark (S-004) ↔ Himmelenger City (S-024) — Crown→Church border via secular City, not Cathedral.
+   - T8↔T9: Gransol Market Quarter (S-017) ↔ Himmelenger City (S-024) — civic-trade route.
+   - T1↔T5: Riverside (S-002, Port) ↔ Feldmark (S-008) — grain trade by river preferable to overland from Palace.
+4. **Thread-Witnessed special edges** (4 total; character-scale only, no army transport):
+   - Cathedral network: Valorsplatz Cathedral (S-003) ↔ Himmelenger Cathedral (S-023) — Solmundic chain of Light.
+   - Warden network: Stillhelm Watch (S-011) ↔ Askeheim Ruins (S-033) — Calamity monitoring.
+   - Scholarly Thread tie: Sigurdshelm Keep (S-026, housing the Private Collection) ↔ Himmelenger Seminary (S-025).
+   - RM covert network: Grauwald Lodge (S-029) ↔ Oastad Shrine (S-032) — Einhir cultural preservation.
 
-Edge attributes: `from`, `to`, `type` (road / river / mountain_pass / coastal / gate / thread-witnessed), `terrain` (intra-province / inter-province / sea / fjord / marsh / highland / thread), optional `crosses` (river_id), optional `bridge` (bridge_id from `valoria_geography_v30.yaml :: bridges`).
-
-Network properties (verified at authoring):
-- Full-graph connectivity from S-001: 36/36 settlements reachable.
-- Army-graph (excluding Thread-Witnessed): 36/36 reachable.
-- Land-graph (excluding Thread-Witnessed and coastal): 34/36 reachable; Schoenland (T16) is correctly island-isolated (coastal access only).
-- Network hubs: S-023 Himmelenger Cathedral (degree 8, ecclesiastical primary), S-012 Ehrenfeld Citadel (degree 7, "5-way connection hub" per `settlement_layer §2.1`), S-001 Valorsplatz Palace (degree 6, Crown capital), S-015 Gransol Parliament (degree 6, Hafenmark capital).
+**Edge-type-to-Manoeuvre mapping** (consumed by `march_layer §4.1` and `mass_battle §A.9` Phase 3 extension): see §1.1 above. The geographic battle-terrain derivation introduced by ED-780 now has settlement-edge data to consume.
 
 ### §1.3 Army Movement
 
@@ -132,6 +140,6 @@ Strategic movement (march budget, A* pathfinding, vision/recon, route blocking, 
 
 ## §5 Open Items
 
-- **Adjacency map file (CLOSED 2026-05-10 PP-723):** Authored as `settlement_adjacency:` block in `designs/territory/valoria_geography_v30.yaml` (58 edges) per §1.2 rules. ED-710 closed.
+- **Adjacency map file:** ~~`designs/world/settlement_adjacency_map.yaml` needs authoring.~~ **CLOSED 2026-05-10 PP-723** — graph authored as `valoria_geography_v30.yaml :: settlement_adjacency:` block (49 edges); `designs/world/settlement_adjacency_map.yaml` is not used (data lives in geography YAML for clean two-tier composition).
 - **Edge capacity:** should edges have capacity limits (only N armies can traverse per season)? Current spec: unlimited. Flag for rebalance after smoke-test.
 - **Thread-Witnessed edges:** flagged — not yet tested whether practitioner Leap between settlements is a character-scale convenience or a mass-battle transport mechanism. Current spec: character-scale only.

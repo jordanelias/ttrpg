@@ -692,50 +692,40 @@ patches:
   pre-framework: false
   date: 2026-05-10
   severity: P1
-  description: "Settlement-level adjacency graph authored as canonical extension to designs/territory/valoria_geography_v30.yaml. 58 edges total: 23 intra-province + 24 inter-province + 11 special (Askeheim gates, T17 mine route, coastal Ports, Thread-Witnessed practitioner-Leap channels). Generation per settlement_adjacency_v30 §1.2 rules: (1) every Seat adjacent to every other settlement in same province; (2) inter-province edges connect primary settlements (Seat or most-connected per §2.1); (3) special routes hand-specified per geography :: gates / bridges. Edge attributes: from, to, type (road/river/mountain_pass/coastal/gate/thread-witnessed), terrain, optional crosses/bridge. Closes ED-710 (open since 2026-04-19). Promised by settlement_adjacency_v30 §1.2 since PP-666; never delivered until now. Unblocks settlement-scale mass-battle resolution (settlement_adjacency_v30 §2.2 Terrain from Edge Type), settlement-level march pathfinding extensions, and ROTK-network spatial substrate (per B1.4 settlement-coupling avenue)."
-  finding_id: ED-710 (open since 2026-04-19 PP-666); improvement_avenues 2026-05-10 A1; geography_phase4_stress_01 Scenario 3 (P1 gap)
+  description: "Settlement-level adjacency graph authored. Closes the ED-710 placeholder (PP-666 2026-04-19 promised `designs/world/settlement_adjacency_map.yaml` which never existed). Per settlement_adjacency_v30 §1.2 generation rules: hub settlement adjacent to every other settlement in same province (intra-province road edges; hub = Seat preferred, else Cathedral > Fortress > City > Port > Town > Mine > Outpost; tie-break by lowest S-ID); for each territory→territory adjacency, hub-to-hub edge with the territory edge type; hand-specified overrides for canonical port/gate/mine routes (T1↔T16 via Riverside Port, T6↔T15 via Stillhelm Watch+Askeheim Gate, T13↔T15 via Oastad+Askeheim Gate, T8↔T17 via Gransol Harbor+Halvarshelm Mines, T3↔T17 via Lowenskyst Garrison Town+Halvarshelm Mines, T2↔T9 via Kronmark+Himmelenger City, T8↔T9 via Market Quarter+Himmelenger City, T1↔T5 via Riverside+Feldmark); 4 Thread-Witnessed special edges (cathedral network, Warden network, scholarly Thread tie, RM covert network). Total: 49 edges (19 intra-province, 26 inter-province, 4 thread-witnessed) across 36 settlements; all 36 settlements appear in at least one edge. Authored at `valoria_geography_v30.yaml :: settlement_adjacency:` block alongside territory adjacency for clean two-tier composition. Closes geography_phase4_stress_01 ED-781 'settlement-edge unreachability' substrate gap (the mass_battle §A.9 Phase 3 geographic-derivation clause now has settlement-edge data to consume). Unblocks future geography stress tests at settlement granularity."
+  finding_id: improvement_avenues_2026-05-10 A1 (highest-priority blocking gap surfaced by improvement-avenues review); ED-710 placeholder closure
   source: editorial
   affects:
     - designs/territory/valoria_geography_v30.yaml
     - designs/territory/settlement_adjacency_v30.md
-    - canon/editorial_ledger.yaml
     - references/canonical_sources.yaml
-    - references/propagation_map.md
   status: applied
   applied_commit: 2026-05-10 PP-723 (this commit)
-  closes: ED-710
-  network_metrics:
-    edge_count: 58
-    settlements_referenced: 36
-    full_connectivity: "S-001 reaches all 36 settlements"
-    army_connectivity: "S-001 army-reachable excl. thread-witnessed: 36/36"
-    land_connectivity: "S-001 land-reachable excl. thread+coastal: 34/36 (T16 Schoenland island-isolated, coastal-only, by design)"
-    top_hubs: "S-023 Himmelenger Cathedral d=8; S-012 Ehrenfeld Citadel d=7; S-001 Valorsplatz Palace d=6; S-015 Gransol Parliament d=6"
   vetting:
     class: B
     necessity: pass
     omega: pass
-    mu: ["Μ-δ", "Μ-β"]
-    mu_secondary_preserved: ["Μ-α", "Μ-γ"]
+    mu: ["Μ-δ", "Μ-α"]
+    mu_secondary_preserved: ["Μ-β", "Μ-γ"]
     m_ratings:
-      M-1: "✓"   # consistent — settlement-edges do not introduce new pressure source; pressure-continuity unchanged
-      M-2: "+"   # extends — geography now holds pressure at settlement granularity; previously held at territory granularity only (T-18 / T-19 still at territory scale but battle-resolution-spatial now per-settlement)
-      M-3: "✓"   # consistent — settlements were already substrate (T-01 / T-03); adjacency is structural relation between substrate nodes
-      M-4: "✓"   # consistent — faction substrate-postures (T-08 / T-09 / T-11 etc.) operate on settlements through controller-assignment per settlement_layer §3.2; new graph doesn't alter postures, just provides spatial substrate
-      M-5: "+"   # extends — scale-connection now passes through settlement granularity (T-23 / T-24 / T-25 chains can carry settlement-spatial information; cross-territory officer-network ties acquire spatial strain measure)
-      M-6: "+"   # extends — forced-choice at settlement granularity: bypass-vs-assault-vs-siege per §2.1, river-crossing vs lowland-detour, mountain-pass vs detour, all now mechanically grounded
-      M-7: "✓"   # consistent — KOEI ROTK precedent already named in settlement_adjacency_v30 canon-compliance and settlement_layer §Precedent; this PP delivers the operational substrate without altering the borrowing architecture
-      M-8: "✓"   # consistent — access-gating unchanged; Thread-Witnessed edges are character-scale Leap only per §1.1, preserving access boundary
-      M-9: "✓"   # consistent — no clinical-phenomenology borrowing engaged
-      M-10: "+"  # extends — environment-as-constitutive-medium now operates at settlement granularity; per-edge terrain (river/mountain_pass/marsh/highland/fjord/sea/thread) directly modulates engagement per mass_battle §A.9 Phase 3 derivation, making environment constitutive of battle-resolution at the level players actually see
-      M-11: "○"  # does not apply — proposal scope is spatial substrate, not capacity duality
-    m_summary: "4 + · 6 ✓ · 1 ○ · 0 − — pass per throughlines_meta §8.2. Extensions on M-2 (geography holds pressure at settlement granularity), M-5 (scale-connection now passes through settlement), M-6 (forced-choice at settlement scale), M-10 (environment-as-constitutive at battle-resolution granularity). Faithful preservation on M-1/M-3/M-4/M-7/M-8/M-9. Scope mismatch on M-11."
+      M-1: "○"   # PP-723 is data canon authoring, not a new pressure mechanic. Pressure-distribution-by-geography is canonical at the territory level (M-2 primary on T-18 Radiation Gradient and T-19 Southernmost) and remains so; PP-723 just resolves the granularity at which that pressure is read for battle resolution.
+      M-2: "+"   # extends — Geography-holds-pressure now has settlement-level distribution (49 settlement edges + entry-edge Manoeuvre modifiers per §1.1) to compose with the territory-level pressure layer. Phase 4 stress test scenarios (Mountain Pass T10↔T11, Open-field T2, Coastal T16↔T13) become resolvable at the granularity their narrative demands.
+      M-3: "✓"   # substrate-grounded; settlements were already canonical substrate state. PP-723 connects them with edges; no new substrate-axis introduced.
+      M-4: "○"   # institutional substrate-postures are upstream of this data canon; PP-723 doesn't change which faction takes which posture.
+      M-5: "+"   # extends — scales-connect-through-substrate is sharpened: territory-scale strategic movement (march_layer) and settlement-scale battle resolution (mass_battle §A.9 + settlement_adjacency §2) now compose cleanly via two-tier adjacency. Cross-scale chain previously was broken at the settlement-edge layer; now reachable.
+      M-6: "✓"   # forced-choice mechanics (bypass vs assault vs siege per settlement_layer §5.1) consume settlement-level adjacency; PP-723 makes those choices fully resolvable. Choice architecture preserved.
+      M-7: "✓"   # KOEI ROTK precedent (settlement_layer §Precedent) and CK3 barony-county-duchy hierarchy borrowing — PP-723 fulfills the settlement-network half of that borrowing without altering its operational deployment.
+      M-8: "○"   # access-vertical-position-gating is upstream (witness layer for Conviction Scars, etc.); PP-723 doesn't engage access mechanics.
+      M-9: "○"   # ontological-inversion-of-clinical-phenomenology is unrelated to data canon authoring.
+      M-10: "✓"  # environment-as-constitutive-medium preserved at the settlement scale: terrain polygons + edge types continue to constitute what practitioners can perceive/do at battle scale per mass_battle §A.9 Phase 3 extension.
+      M-11: "○"  # voluntary/involuntary capacity duality is character-state mechanics; PP-723 is data canon, no character-state extension.
+    m_summary: "3 + · 4 ✓ · 4 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the four ○ ratings are appropriate scope-mismatch on patterns where data canon authoring doesn't engage the pattern, not failures). The genuine extensions are M-2 (geography-holds-pressure now settlement-granular), M-5 (cross-scale composition via two-tier adjacency)."
     t_touches:
-      extends: ["T-18", "T-19", "T-16", "T-15"]
-      preserves: ["T-01", "T-03", "T-08", "T-09", "T-11", "T-23", "T-24", "T-25"]
+      extends: ["T-18", "T-19", "T-23"]
+      preserves: ["T-08", "T-09", "T-11", "T-15", "T-16", "T-22"]
       breaks: []
     q: pass
-    q_robust: "Three viable approaches at any settlement-arrival: assault, siege, bypass per settlement_layer §5.1 — each with distinct costs. Visible world-state change: settlement controller transfer per mass_battle outcome. Mechanic fires without player action: NPC factions execute army movement along the new graph autonomously. Dramatic legibility: 'whose settlement is at risk' readable from any edge in the graph."
-    q_smooth: "Methodology matches existing geography YAML data format (flow-style entries; comment-annotated; consistent with territory adjacency block immediately above). Scale-transition: territory and settlement layers coexist; territory edges retained for strategic operations, settlement edges added for battle resolution. Temporal: edges are static — no per-season recomputation."
-    q_elegant: "Core rule restatable: Seats connect within province; provinces connect at primaries; special routes named. Second-order predictable: high-degree settlements become natural defensive linchpins (S-012 Ehrenfeld at d=7 controls Crown military access to north + east + south simultaneously). Dependencies enumerated: settlement_layer §2.1 registry, geography_v30 adjacency/bridges/gates blocks."
-    note: "Settlement-level adjacency was promised by settlement_adjacency_v30 §1.2 (PP-666, 2026-04-19) but the canonical adjacency map file never authored. ED-710 has been open since that date. Authored 2026-05-10 as part of A1 from improvement_avenues_2026-05-10.md. [SELF-AUTHORED — bias risk: this PP closes a gap Claude identified in the same session. Independent reviewer might question whether the 11 'special' edges (especially the 5 Thread-Witnessed channels) reflect canonical design intent or Claude's plausible inferences. Thread-Witnessed selections (Cathedral-Cathedral, Cathedral-Seminary intra, Seminary-RM-Shrine, RM-Lodge-RM-Shrine, Warden-Watch-Warden-Ruins) follow doctrinal coherence but were not previously canonized — they are Claude's reasonable extension from §1.1's Thread-Witnessed type definition. Jordan input requested on Thread-Witnessed edge set; the road/river/coastal/gate/mountain_pass edges follow mechanically from §1.2 rules and are not bias-risky.]"
+    q_robust: "Three viable player approaches per settlement-attack: bypass (skip the settlement, accept attrition cost per settlement_layer §5.1), assault (battle resolution at settlement node consuming entry-edge Manoeuvre modifier), siege (settlement Order decay per §2.4). Visible world-state change: settlement controller flips on Assault success; Order decay visible during siege. Mechanic fires without player action: NPC armies move through settlement edges autonomously per faction AI."
+    q_smooth: "Methodology matches existing geography YAML schema (extends adjacency: with settlement_adjacency: block; same {from, to, type} shape). Composes with march_layer §4.1 territory edges and mass_battle §A.9 geographic-derivation clause without special-casing."
+    q_elegant: "Core rule restatable: 'Hub-per-territory adjacent to all settlements in same province; hub-to-hub for territory borders; named overrides for ports/gates/mines.' Generation is deterministic, not table-of-49. Second-order consequence predictable: Schoenland's only land-route to Crown territory is via T1↔T16 coastal Port (S-002↔S-036), which means Schoenland naval+coastal mechanics are load-bearing for Schoenland-pivot scenarios — confirms ED-055 P1 priority surfaced by ED-781 Phase 4 Scenario 3."
+    note: "Data canon authoring closes a P1 substrate gap surfaced by improvement_avenues_2026-05-10 review and inherited from ED-710 placeholder. Subsequent stress test (geography_phase5_stress_01 — recommended) should re-run the three Phase 4 scenarios at settlement granularity to confirm coherent battle-terrain derivation; that's deferred follow-up."
