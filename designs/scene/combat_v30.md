@@ -345,6 +345,33 @@ Rescued actor exemptions expire at round end.
 
 ---
 
+### Architecture-B Presentation Flag (PP-721 — R9 C9.3 refinement)
+
+Architecture B (slot formation) is dropped as a distinct combat architecture per R9 commit 1c31109d (recommended C9.1). However, certain encounter shapes benefit from a simplified-UI presentation that mimics B's fixed-position feel without forking mechanical resolution. This is the **B-mode presentation flag** — a UX hint on top of canonical A scene combat.
+
+**Trigger criteria (all required for B-mode flag):**
+
+| # | Criterion | Definition |
+|---|---|---|
+| 1 | Fixed-geometry zone | The encounter zone has rigid boundaries that constrain position to a small finite set: corridor (1×N grid), single room (≤8m × ≤8m bounded), bridge (1×N choke), doorway-flanking (≤4 actor positions). NOT applicable to open fields, plazas, courtyards, or wilderness zones. |
+| 2 | Scripted entry positions | All combatants enter the zone at pre-defined positions (per scene authoring). No off-screen maneuver phase. Position-shifting still allowed mid-encounter via canonical Stunt rules. |
+| 3 | Single fixed objective | The encounter has exactly one objective at a fixed location: kill-all (no movement objective), defend-the-doorway, control-the-bridge-tile, escort-the-NPC-out (single egress). NOT applicable to multi-objective encounters or chase scenarios. |
+| 4 | Stakes routine | None of the C-duel triggers fires (no T-Wager / T-Cultural / T-Boss / T-Thread / T-Hero-Officer / T-Honor-call per R9-L04). The encounter is contextual combat, not narratively load-bearing single-combat. |
+
+**B-mode presentation effect (UI only — mechanics unchanged):**
+
+- Movement UI presents discrete position-cells (e.g., "front-rank / back-rank") rather than continuous zone position. The A scene combat math runs identically — zone parameters drive resolution.
+- Actor-count cap on screen: 8 (enforced by encounter authoring, not engine-level).
+- Stunt declarations narrow to the fixed-geometry options (e.g., corridor: ranks-shift, choke-point-hold, line-collapse). Other Stunt vocabulary remains valid but rarely fires due to geometry.
+- Fibonacci Group Bonus (R6-L01) still applies normally — the bonus is a math layer, not a presentation layer.
+- §11.5 Fieldwork Transitions still fire normally on encounter end.
+
+**Boundary.** B-mode is a *flag*, not an *architecture*. The flag attaches to encounter authoring metadata (Game-Master / scenario writer sets B_MODE=TRUE for qualifying encounters); the engine reads the flag and renders simplified UI. Disabling B-mode mid-encounter (because a T-trigger fires, e.g., a hero-officer reveal) seamlessly returns to standard A presentation — no mechanical state migration required.
+
+**Tabletop fallback.** Game Master narrates the encounter as fixed-position regardless of UI mode. The B-mode flag is a videogame-specific UX optimization; tabletop doesn't need it. The flag is documented here to ensure videogame implementation has a well-defined trigger criterion rather than designer-by-designer judgment.
+
+**Cross-references:** R9 commit 1c31109d (recommended C9.1 + C9.3 refinement option); R6 commit 856c6098 (Fibonacci cap preserved); §B.5 Hybrid Handoff phase-lock applies independently for mass-battle Zoom In.
+
 ## 9. MASS COMBAT (TTRPG SCALE)
 
 *For full mass combat rules, see designs/mass_combat/mass_battle_v3.md.*

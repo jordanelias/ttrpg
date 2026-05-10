@@ -303,3 +303,11 @@ Final commit. ED-784 Phase 2 work complete.
 - No new Ob channel; uses canonical Combat Pool + TN modifier.
 - Tabletop fallback waiver clause preserves Game-Master flexibility.
 - Surfaced by: combat_arch_residual_stress_01 Module 7 R7 (commit c58bc670).
+
+## PP-721 R9 routine-encounter B-mode presentation flag (2026-05-10)
+**Class C (UX/presentation parameter); applied this commit.**
+- `designs/scene/combat_v30.md §8`: new subsection "Architecture-B Presentation Flag" inserted before §9 MASS COMBAT.
+- B-mode flag triggers: (1) fixed-geometry zone, (2) scripted entry positions, (3) single fixed objective, (4) stakes routine (no C-duel triggers).
+- UI effect only: discrete position-cells, narrowed Stunt vocabulary, 8-actor cap. Mechanics unchanged.
+- Tabletop fallback: B-mode is videogame-specific; tabletop ignores.
+- Surfaced by: combat_arch_residual_stress_01 Module 9 R9 (commit 1c31109d C9.3 deferred refinement).

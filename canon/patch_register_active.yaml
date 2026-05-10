@@ -607,3 +607,21 @@ patches:
     class: C
     necessity: pass
     note: "Class C — parameter/resolution-path extension. Threshold-style addition: enumerates stress conditions and TN modifiers for an existing miss outcome. No new state, no new resource, no new dice channel (uses canonical Combat Pool + TN modifier). Bounded scope (only Ranged-into-Melee under stress + adjacent ally). Tabletop fallback waiver clause preserves table flexibility. T (test) only required per §8.1."
+
+- id: PP-721
+  class: C
+  pre-framework: false
+  date: 2026-05-10
+  severity: P3
+  description: "R9 routine-encounter B-mode presentation flag trigger spec — Class C UX/presentation parameter. Per R9 recommendation (commit 1c31109d C9.3 refinement option). B-mode is a UI flag on top of canonical A scene combat (mechanics unchanged); triggers only when all four criteria hold: (1) fixed-geometry zone (corridor/room/bridge/doorway), (2) scripted entry positions, (3) single fixed objective, (4) stakes routine (no C-duel triggers). UI effect: discrete position-cells, narrowed Stunt vocabulary, 8-actor cap. A scene combat math runs identically. Tabletop fallback: B-mode is videogame-specific UX optimization; tabletop ignores. Inserts new subsection in combat_v30 §8 GROUP COMBAT (between §8 and §9 MASS COMBAT)."
+  finding_id: combat_arch_residual_stress_01 R9 (commit 1c31109d C9.3)
+  source: editorial
+  affects:
+    - designs/scene/combat_v30.md
+    - canon/patch_register_active.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-721 (this commit)
+  vetting:
+    class: C
+    necessity: pass
+    note: "Class C — presentation/UX parameter on existing mechanic. No new state, no new resource, no new resolution path. Bounded to encounter authoring metadata flag; engine reads flag and renders simplified UI. T (test) gate via encounter authoring tests in subsequent implementation phase."
