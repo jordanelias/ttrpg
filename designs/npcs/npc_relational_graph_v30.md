@@ -405,14 +405,14 @@ Distance computation requires knowing each NPC's canonical settlement. PP-725 de
 **Derivation order** (first applicable rule wins):
 1. **Explicit override**: an NPC sheet (per `character_canon §2 How to Read an NPC Sheet`) may include an optional `residence: S-XXX` field. If present, this is canonical.
 2. **Governor assignment**: per `settlement_layer §3.2`, Standing 3+ NPCs assigned as Governor reside at the governed settlement.
-3. **Faction-leader headquarters**: faction leaders without explicit governance reside at the canonical faction-headquarters settlement:
-   - Crown leader → S-001 Valorsplatz Palace (Lion's Table HQ)
-   - Hafenmark Speaker → S-015 Gransol Parliament (Baralta's court)
-   - Church Cardinal of Faith → S-023 Himmelenger Cathedral (Confessor's seat)
-   - Varfell Jarl → S-026 Sigurdshelm Keep (Vaynard's court per canonical prose)
-   - Löwenritter Master → S-012 Ehrenfeld Citadel (military HQ)
-   - RM Spokesperson → S-029 Grauwald Lodge (RM meeting site, hidden)
-   - Wardens lead → S-033 Askeheim Ruins (active Warden operations site)
+3. **Faction-leader headquarters** (per PP-726 corrected granularity — settlements proper, with district contexts noted): faction leaders without explicit governance reside at the canonical faction-headquarters settlement:
+   - Crown leader (Almud, current monarch) → S-001 Valorsplatz (Palace district; Lion's Table HQ)
+   - Hafenmark Duke (Baralta) → S-018 Gransol (Parliament district; Baralta's court on the lake)
+   - Church Confessor (Cardinal of Faith) → S-036 Himmelenger (Cathedral district; sovereign Church city-state)
+   - Varfell Duke (Vaynard) → S-031 Sigurdshelm (the keep itself; Private Collection housed here)
+   - Löwenritter Master → S-014 Ehrenfeld (Citadel and Barracks districts; fortress-city HQ gating crownlands from west and north)
+   - RM Spokesperson → S-026 Grauwald (Lodge sub-feature; covert RM meeting site within Grauwald)
+   - Wardens lead → no settlement (Warden operations are based at Askeheim Ruins, an unincorporated Calamity-zone observation feature; the closest settlement contact-point is S-012 Stillhelm via the Watch outpost and the canonical thread-witnessed network edge to the Ruins)
 4. **Faction-membership default**: Standing 0–2 NPCs reside at their faction-headquarters settlement (rule 3) unless a `character_canon` prose excerpt names a specific scene-location as their habitual setting.
 
 NPC residence may change during play through faction reassignment (§6.4), Governor reassignment per `settlement_layer §3.2`, or canonical narrative events (exile, pilgrimage, taking a new posting).
@@ -460,20 +460,22 @@ When an NPC's residence changes via faction reassignment or Governor posting:
 
 This rule formalizes the hook clause from the original §6: "Officer assignments to distant settlements that strain a sworn-bond: bond-partner left behind in original settlement accrues strain per the scaling above."
 
-### §6.5 Worked examples (sanity check)
+### §6.5 Worked examples (sanity check, retuned PP-726)
 
-Using canonical NPC residences per §6.1 derivation and PP-723 settlement adjacency:
+Using canonical NPC residences per §6.1 derivation and the corrected PP-726 settlement adjacency (supersedes PP-723's wrong-granularity graph):
+
+*Hop distances computed on the PP-726 corrected-granularity 55-edge graph (`valoria_geography_v30.yaml :: settlement_adjacency:`).*
 
 | NPC-A | Settlement | NPC-B | Settlement | Hop Distance | Scaling | Strain Trigger Example |
 |---|---|---|---|---:|---:|---|
-| Almud | S-001 (Crown HQ) | Cesare | S-001 (court) | 0 | ×1.0 | Their rivalry strain accrues at baseline rate (same-court succession competitors). |
-| Almud | S-001 | Yrsa Vossen | S-029 (RM Lodge) | 3 | ×1.5 | Any patronage/sworn-bond/debt edge between Crown and RM scales by 1.5 on universal triggers — long-distance political ties erode 50% faster. |
-| Cardinal Reichard | S-023 (Himmelenger Cathedral) | Vaynard | S-026 (Sigurdshelm Keep) | 3 (road); 2 (Thread-Witnessed bypass if both TS≥30) | ×1.5 → ×1.25 | Church-Varfell ties along the Solmund philosophical chain compose with the cathedral-network thread-witnessed edge (S-026↔S-025 per PP-723) if both NPCs have Thread-contact capacity. |
-| Baralta | S-015 (Gransol Parliament) | Schoenland Governor | S-035 (Schoenland City) | 7 | ×2.0 | Hafenmark-Schoenland trade-partnership patronage strain scales by 2.0 — the longest canonical political tie on the peninsula, validating the "remote tie" boundary. |
-| Almud | S-001 | Cardinal Reichard | S-023 | 2 (Crown→Church border via S-004↔S-024) | ×1.25 | Crown-Church ties around Mandate cooperation accrue strain 25% faster than intra-court ties, reflecting the inter-faction friction. |
-| Stillhelm Watch Warden | S-011 | Askeheim Ruins lead | S-033 | 1 hop via the thread_witnessed Warden network edge (PP-723), if both TS≥30 | ×1.0 (Thread-Witnessed bypass) | The Warden network's substrate-inseparability keeps Calamity-monitoring ties at zero-distance penalty — exactly the canonical Warden-network purpose. |
+| Almud | S-001 Valorsplatz | Cesare | S-001 Valorsplatz | 0 | ×1.0 | Their rivalry strain accrues at baseline rate (same-court succession competitors residing in the Palace district). |
+| Almud | S-001 Valorsplatz | Yrsa Vossen (RM Spokesperson) | S-026 Grauwald | 3 (Valorsplatz→Ehrenfeld→Grauwald, with Lodge as Yrsa's covert sub-feature anchor) | ×1.5 | Any patronage/sworn-bond/debt edge between Crown and RM scales by 1.5 on universal triggers — long-distance political ties erode 50% faster. |
+| Cardinal Reichard | S-036 Himmelenger | Vaynard | S-031 Sigurdshelm | 5 (road via Himmelenger→Ehrenfeld→Grauwald→Sigurdshelm) | ×2.0 | Church-Varfell ties along the Solmund philosophical chain pay maximum geographic-strain on universal triggers; the Sigurdshelm-Seminary thread-witnessed connection at the sub-feature layer (Vaynard's Private Collection ↔ Himmelenger Seminary district) provides Thread-mediated bypass if both have TS ≥ 30, reducing effective distance to 0 for those substrate-grounded ties. |
+| Baralta | S-018 Gransol | Schoenland Governor | S-037 Schoenland | ≥6 (sea-mediated; Gransol→Rendstad→Grauwald→Ehrenfeld→Valorsplatz→Schoenland, with sea-leg at the end) | ×2.0 | Hafenmark-Schoenland trade-partnership patronage strain scales by 2.0 — Hafenmark routes through Crown territory to reach Schoenland because Gransol is on a lake (Switzerland-like landlocked province), not the sea. ED-055 naval-scope expansion would shorten this distance dramatically. |
+| Almud | S-001 Valorsplatz | Cardinal Reichard | S-036 Himmelenger | 3 (Valorsplatz→Ehrenfeld→Nordhain→Himmelenger via the north-gate route) | ×1.5 | Crown-Church ties around Mandate cooperation accrue strain 50% faster than intra-court ties, reflecting the inter-faction friction structurally encoded in the geography. |
+| Stillhelm Watch (Warden contact) | S-012 Stillhelm | Askeheim Ruins (Warden operations) | n/a (unincorporated; sub-feature in Askeheim wilderness) | n/a — Wardens have no settlement at Askeheim; the operational tie to the Ruins is a sub-feature relationship (Stillhelm's Watch outpost faces the Ruins via thread-witnessed Warden network) | ×1.0 (Thread-Witnessed bypass at sub-feature layer) | The Warden network's substrate-inseparability keeps Calamity-monitoring ties at zero-distance penalty — but per PP-726, this is now correctly modeled as a thread-witnessed sub-feature relationship, not a settlement-edge in the canonical graph. |
 
-Note on remote ties: the 7-hop Baralta↔Schoenland distance is canonically intended — Schoenland is an offshore island accessible only via the S-002↔S-036 coastal edge from T1 Valorsplatz. Any non-Crown faction maintaining ties to Schoenland figures pays maximum geographic-strain. This compositional consequence pre-validates the ED-055 naval-scope expansion (improvement_avenues A3): once naval routes are mechanized, Hafenmark may gain a direct sea-route to Schoenland reducing this distance, with significant strategic implications for any standing Hafenmark-Schoenland sworn-bonds or patronages.
+Note on remote ties: per PP-726 corrected graph, Schoenland is foreign-exempt with degree 1 (single sea-edge to Valorsplatz). Hafenmark-Schoenland ties route through the Crown's port at Valorsplatz, paying maximum geographic-strain (×2.0). This compositional consequence reinforces ED-055 naval-scope expansion (improvement_avenues A3) as P1: once naval routes are mechanized, Schoenland gains additional sea-edges (most plausibly Schoenland↔Sundfjord on Varfell's coast, or Schoenland↔Halvardshelm-coast), shortening Hafenmark's effective distance and lifting Schoenland out of the foreign-exempt single-edge condition.
 
 ### §6.6 Integration with §3.2 (revised strain accrual)
 

@@ -192,3 +192,47 @@ patches:
     q: pass
     note: "Class B system extension. Composes PP-723 (settlement-zoomed geography) + PP-724 (ROTK-network framework) per Jordan's specific guidance — B1.4 is the precise intersection point of those two ambitions. Algorithm validated against PP-723's canonical 49-edge settlement graph (BFS connectivity confirmed: all 36 settlements reachable from S-001 in ≤6 hops; max canonical pair-distance is 7 hops at Baralta↔Schoenland Governor). Self-review bias acknowledged: this composes Claude's prior PP-723 with another session's PP-724; coordination verified by reading the committed PP-724 §6 hook in full before authoring extension; PP-724 §6 hook's scaling table (×1.0..×2.0) preserved verbatim from the parallel-session canonization."
 
+- id: PP-726
+  class: A
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: "Substrate canon for the Valoria political hierarchy: Valn peninsula → Kingdom of Valoria → 3 duchies (Valorsmark/Almud-monarch, Hafenmark/Baralta, Varfell/Vaynard) → 14 provinces → 35 settlements (1-3 per province; siege-targets at city/fortress/village/town granularity). Plus Himmelenger Church city-state (sovereign ecclesiastical entity, like Vatican; 1 settlement) and Schoenland foreign Altonian island (politically independent; 1 settlement, sea-connected to Valorsplatz only). Askeheim is unincorporated Calamity-zone wilderness (0 settlements until healing). Resolves the granularity error that ran through PP-666/ED-710/PP-723: those iterations conflated siege-target settlements with subservient districts and outposts (Cathedrals, Markets, Barracks, Harbors, garrison towns, mines, watchtowers, lodges, shrines, watches, storehouses, coves, gates, ruins) at one level, producing a 36-entry §2.1 registry that mixed two granularities and a 49-edge adjacency graph at the wrong level. PP-726 establishes: (a) new substrate doc designs/territory/valoria_political_hierarchy_v30.md defining the duchy/province/settlement hierarchy + fracturing rule (province with faction-split territories canonically fractures into northern/southern or western/eastern sub-provinces) + political-value computation (unified province > sum of constituent territories, structural; specific scalars TBD pending balance pass) + governor assignment (per-settlement, by faction); (b) refactored settlement_layer §2.1 with 37-settlement registry (S-001..S-037) + new §2.2 sub-features registry (22 sub-features as properties of parent settlements) + §2.3 migration map from old S-001..S-036; (c) rebuilt valoria_geography_v30.yaml :: settlement_adjacency: with 55 edges (28 intra-province with 7 triangles + 7 singles; 24 primary inter-province + 1 Schoenland sea-route + 3 second-routes for ≥2-rule resilience); (d) retuned PP-724/PP-725 §6.1 NPC residence canon to settlement names (Almud at Valorsplatz, Baralta at Gransol, Vaynard at Sigurdshelm, Confessor at Himmelenger, etc.) and §6.5 worked examples to corrected hop distances. All 35 Kingdom settlements + Himmelenger have ≥2 march-route connections verified; Schoenland at degree 1 is foreign-exempt awaiting ED-055 naval-scope expansion. Settlement counts: 7 provinces at 3 settlements (Valorsplatz capital, Kronmark+Feldmark breadbaskets, Gransol commerce-on-lake-Switzerland, Halvarshelm mining, Halvardshelm multi-fjord, Sigurdshelm ducal capital), 7 provinces at 2 settlements (Lowenskyst+Spartfell chokepoints, Stillhelm+Oastad Calamity-edge, Ehrenfeld fortress-city itself-the-gate, Rendstad remote valley, Grauwald highland sparse). New settlements authored: Auerheim, Königsbrück, Saatfeld, Goldenfurt, Tiefental, Erntehof, Spelzdorf, Aschenbach, Nordhain, Holzbrück, Niedersol, Saltbrück, Gelbgrund, Erzbach, Schmiedhof, Skogheim, Geirsvik, Yrnastead, Brynjard, Sundfjord, Salgrund (21 new names with culturally-coherent naming per duchy template). Old S-IDs deprecated; lazy migration in non-substrate documents (character_canon, migration_roster, npc_roster, editorial_ledger historical entries) as those documents are next touched. Per Jordan canonical clarification 2026-05-10: settlement = siege-target = city/fortress/village/town; districts/outposts/garrison-towns/mines/watchtowers etc. are subservient sub-features. Ehrenfeld is fortress-city gating crownlands from west and north (no forward defensive screens needed — fortress IS the gate). Gransol is Switzerland-like landlocked lake province (Gransol Harbor district is a lake-harbor not sea-harbor; Hafenmark trade routes overland via lake). Schoenland connects to Valorsplatz via the port (foreign Altonian, exempt from Kingdom's ≥2 rule pending ED-055)."
+  finding_id: Jordan canonical clarification 2026-05-10 (Valn → Kingdom → Duchy → Province → Settlement hierarchy; settlement granularity = siege-target; ED-710 placeholder closure at correct level)
+  source: user
+  affects:
+    - designs/territory/valoria_political_hierarchy_v30.md
+    - designs/territory/settlement_layer_v30.md
+    - designs/territory/valoria_geography_v30.yaml
+    - designs/npcs/npc_relational_graph_v30.md
+    - canon/patch_register_active.yaml
+    - references/canonical_sources.yaml
+    - references/propagation_map.md
+  status: applied
+  applied_commit: 2026-05-10 PP-726 (this commit)
+  vetting:
+    class: A
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α", "Μ-δ"]
+    mu_secondary_preserved: ["Μ-β", "Μ-γ"]
+    m_ratings:
+      M-1: "○"
+      M-2: "+"
+      M-3: "+"
+      M-4: "+"
+      M-5: "+"
+      M-6: "✓"
+      M-7: "✓"
+      M-8: "○"
+      M-9: "○"
+      M-10: "✓"
+      M-11: "○"
+    m_summary: "4 + · 3 ✓ · 4 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the four ○ ratings are appropriate scope-mismatch on patterns where political-hierarchy substrate clarification doesn't engage the pattern, not failures). Genuine extensions: M-2 (geography-holds-pressure operates at correct settlement granularity), M-3 (substrate vectorization at political-administrative axis with explicit duchy/province/settlement state-machine), M-4 (institutional substrate-postures sharpened with explicit duchy/province/territory ownership relations and political-value formula structure), M-5 (full cross-scale chain canonical at every level: kingdom→duchy→province→settlement, no longer collapsed at the duchy/province join)."
+    t_touches:
+      extends: ["T-23", "T-22", "T-18", "T-19", "T-25"]
+      preserves: ["T-08", "T-09", "T-11", "T-14", "T-15a", "T-15b", "T-15c", "T-17", "T-20"]
+      breaks: []
+    q: pass
+    note: "Class A substrate canon. Resolves the granularity error that ran through PP-666 (ED-710 placeholder)/PP-723 (49-edge wrong-granularity adjacency)/PP-725 (worked examples at wrong granularity). Authoritative resolution per Jordan canonical clarification 2026-05-10 in single conversation: settlement = siege-target = city/fortress/village; districts and outposts subservient. Establishes hierarchy + new schema + corrected adjacency + retuned NPC-residence canon in one coordinated commit. Substrate-canonical files updated; downstream document migration (S-ID references in character_canon, migration_roster, npc_roster, etc.) deferred to lazy update as those documents are next touched. PP-723 (49-edge block) and PP-725 (worked-examples table) are superseded by this commit at canonical-substrate level; their patch_register entries remain in archive as historical record."
+

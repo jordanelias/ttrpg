@@ -566,76 +566,99 @@ adjacency:
   - {from: T13, to: T15, type: gate}
 
 
-# ─── SETTLEMENT-LEVEL ADJACENCY GRAPH (PP-723, ED-779 follow-up) ───
-# Per settlement_adjacency_v30 §1.2 — fulfills the promised settlement_adjacency_map.yaml.
-# 49 edges across 36 settlements. Composed with the territory-level `adjacency:` block above
-# for two-tier strategic-tactical resolution: territory adjacency drives strategic-layer routing,
-# settlement adjacency drives tactical battle-arrival edge derivation per mass_battle §A.9.
+# ─── SETTLEMENT-LEVEL ADJACENCY GRAPH (PP-726 supersedes PP-723) ───
+# Per valoria_political_hierarchy_v30 §2.2 — fulfills the ED-710 placeholder at correct granularity.
+# PP-723's 49-edge block was at WRONG GRANULARITY (mixed siege-target settlements with subservient
+# districts and outposts). PP-726 supersedes with 55 edges across 37 march-target settlements at
+# correct settlement = city/fortress/village/town granularity. Sub-features (cathedrals, markets,
+# barracks, harbors, garrison towns, mines, watchtowers, lodges, shrines, watches, storehouses,
+# coves, gates, ruins) collapse into their parent settlement and live in settlement_layer §2.2.
+#
+# 14 provinces in 3 duchies (Valorsmark/Almud, Hafenmark/Baralta, Varfell/Vaynard) = 35 settlements;
+# Himmelenger Church city-state = 1; Schoenland foreign Altonian island = 1; total 37.
+# Askeheim has 0 settlements (Calamity wilderness, no siege targets until healing).
+#
+# Total edges: 55 (28 intra-province + 24 primary inter-province + 1 Schoenland sea + 3 second-routes
+# satisfying ≥2-connection rule for 2-settlement-province spokes).
+# Composes with the territory-level adjacency block above for two-tier strategic-tactical resolution
+# (the territory-level edges = inter-province edges; settlement-level edges = full march-route graph).
 
 settlement_adjacency:
-  # Generated 2026-05-10 (PP-723) per settlement_adjacency_v30 §1.2 generation rules:
-  # 1. Hub settlement (Seat preferred; else Cathedral > Fortress > City > Port > Town > Mine > Outpost)
-  #    adjacent to every other settlement in same province (intra-province road edges).
-  # 2. For each territory→territory adjacency, hub-to-hub edge with the territory edge type.
-  # 3. Hand-specified overrides for canonical port/gate/mine routes (override notes inline).
-  # 4. Thread-Witnessed special edges: cathedral network, Warden network, scholarly Thread ties, RM covert network.
+  # Generated 2026-05-10 (PP-726) — corrected-granularity rebuild superseding PP-723.
+  # Granularity: settlement = siege-target (city/fortress/village/town); 35 Kingdom settlements
+  # in 14 provinces under 3 duchies + Himmelenger Church city-state + Schoenland foreign tributary.
+  # Sub-features (districts, garrison towns, mines, watchtowers, lodges, shrines, watches,
+  # storehouses, harbors, gates, ruins) collapse into their parent settlement and are NOT
+  # separate march-targets — they are listed in settlement_layer_v30 §2.2 sub-features registry.
   #
-  # Total edges: 49 (19 intra-province, 26 inter-province, 4 thread-witnessed)
+  # 56 edges total: 28 intra-province (3-settlement provinces are triangles, 2-settlement
+  # provinces are single edges) + 28 inter-province (24 primary territorial routes from old
+  # T1..T17 adjacency minus 2 Askeheim drops + 1 Schoenland sea-route + 3 second-routes for
+  # ≥2-connection rule resilience).
+  #
+  # All 35 Kingdom settlements + Himmelenger have ≥2 connections (verified). Schoenland at
+  # degree 1 is the foreign-exempt case awaiting ED-055 naval-scope expansion.
 
-  # ─── Intra-province edges (19) ───
-  - {from: S-001, to: S-002, type: road, note: "intra-T1"}
-  - {from: S-001, to: S-003, type: road, note: "intra-T1"}
-  - {from: S-005, to: S-004, type: road, note: "intra-T2"}
-  - {from: S-006, to: S-007, type: road, note: "intra-T3"}
-  - {from: S-028, to: S-029, type: road, note: "intra-T4"}
-  - {from: S-008, to: S-009, type: road, note: "intra-T5"}
-  - {from: S-010, to: S-011, type: road, note: "intra-T6"}
-  - {from: S-015, to: S-016, type: road, note: "intra-T8"}
-  - {from: S-015, to: S-017, type: road, note: "intra-T8"}
-  - {from: S-023, to: S-024, type: road, note: "intra-T9"}
-  - {from: S-023, to: S-025, type: road, note: "intra-T9"}
-  - {from: S-019, to: S-020, type: road, note: "intra-T10"}
-  - {from: S-026, to: S-027, type: road, note: "intra-T12"}
-  - {from: S-031, to: S-032, type: road, note: "intra-T13"}
-  - {from: S-012, to: S-013, type: road, note: "intra-T14"}
-  - {from: S-012, to: S-014, type: road, note: "intra-T14"}
-  - {from: S-033, to: S-034, type: road, note: "intra-T15"}
-  - {from: S-035, to: S-036, type: road, note: "intra-T16"}
-  - {from: S-022, to: S-021, type: road, note: "intra-T17"}
+  # ─── Intra-province edges (28: 7 triangles × 3 + 7 singles × 1) ───
+  - {from: S-001, to: S-002, type: road, note: "intra-Valorsplatz"}
+  - {from: S-001, to: S-003, type: road, note: "intra-Valorsplatz"}
+  - {from: S-002, to: S-003, type: road, note: "intra-Valorsplatz triangle"}
+  - {from: S-004, to: S-005, type: road, note: "intra-Kronmark"}
+  - {from: S-004, to: S-006, type: road, note: "intra-Kronmark"}
+  - {from: S-005, to: S-006, type: road, note: "intra-Kronmark triangle"}
+  - {from: S-007, to: S-008, type: road, note: "intra-Lowenskyst"}
+  - {from: S-009, to: S-010, type: road, note: "intra-Feldmark"}
+  - {from: S-009, to: S-011, type: road, note: "intra-Feldmark"}
+  - {from: S-010, to: S-011, type: road, note: "intra-Feldmark triangle"}
+  - {from: S-012, to: S-013, type: road, note: "intra-Stillhelm"}
+  - {from: S-014, to: S-015, type: road, note: "intra-Ehrenfeld"}
+  - {from: S-016, to: S-017, type: road, note: "intra-Rendstad"}
+  - {from: S-018, to: S-019, type: road, note: "intra-Gransol"}
+  - {from: S-018, to: S-020, type: road, note: "intra-Gransol"}
+  - {from: S-019, to: S-020, type: road, note: "intra-Gransol triangle"}
+  - {from: S-021, to: S-022, type: road, note: "intra-Spartfell"}
+  - {from: S-023, to: S-024, type: road, note: "intra-Halvarshelm"}
+  - {from: S-023, to: S-025, type: road, note: "intra-Halvarshelm"}
+  - {from: S-024, to: S-025, type: road, note: "intra-Halvarshelm triangle"}
+  - {from: S-026, to: S-027, type: road, note: "intra-Grauwald"}
+  - {from: S-028, to: S-029, type: road, note: "intra-Halvardshelm"}
+  - {from: S-028, to: S-030, type: road, note: "intra-Halvardshelm"}
+  - {from: S-029, to: S-030, type: road, note: "intra-Halvardshelm triangle"}
+  - {from: S-031, to: S-032, type: road, note: "intra-Sigurdshelm"}
+  - {from: S-031, to: S-033, type: road, note: "intra-Sigurdshelm"}
+  - {from: S-032, to: S-033, type: road, note: "intra-Sigurdshelm triangle"}
+  - {from: S-034, to: S-035, type: road, note: "intra-Oastad"}
 
-  # ─── Inter-province edges (26) ───
-  - {from: S-001, to: S-005, type: road, note: "inter-T1-T2"}
-  - {from: S-002, to: S-008, type: road, note: "inter-T1-T5 (override)"}
-  - {from: S-001, to: S-012, type: road, note: "inter-T1-T14"}
-  - {from: S-002, to: S-036, type: coastal, note: "inter-T1-T16 (override)"}
-  - {from: S-005, to: S-006, type: road, note: "inter-T2-T3"}
-  - {from: S-004, to: S-024, type: road, note: "inter-T2-T9 (override)"}
-  - {from: S-005, to: S-012, type: road, note: "inter-T2-T14"}
-  - {from: S-006, to: S-023, type: road, note: "inter-T3-T9"}
-  - {from: S-007, to: S-021, type: road, note: "inter-T3-T17 (override)"}
-  - {from: S-028, to: S-018, type: road, note: "inter-T4-T7"}
-  - {from: S-028, to: S-026, type: road, note: "inter-T4-T12"}
-  - {from: S-028, to: S-012, type: road, note: "inter-T4-T14"}
-  - {from: S-008, to: S-010, type: road, note: "inter-T5-T6"}
-  - {from: S-008, to: S-012, type: road, note: "inter-T5-T14"}
-  - {from: S-010, to: S-031, type: road, note: "inter-T6-T13"}
-  - {from: S-011, to: S-034, type: gate, note: "inter-T6-T15 (override)"}
-  - {from: S-018, to: S-015, type: road, note: "inter-T7-T8"}
-  - {from: S-017, to: S-024, type: road, note: "inter-T8-T9 (override)"}
-  - {from: S-015, to: S-019, type: road, note: "inter-T8-T10"}
-  - {from: S-016, to: S-021, type: road, note: "inter-T8-T17 (override)"}
-  - {from: S-023, to: S-012, type: road, note: "inter-T9-T14"}
-  - {from: S-023, to: S-022, type: road, note: "inter-T9-T17"}
-  - {from: S-019, to: S-030, type: mountain_pass, note: "inter-T10-T11"}
-  - {from: S-030, to: S-026, type: road, note: "inter-T11-T12"}
-  - {from: S-026, to: S-031, type: road, note: "inter-T12-T13"}
-  - {from: S-031, to: S-034, type: gate, note: "inter-T13-T15 (override)"}
+  # ─── Inter-province edges (24 primary + 1 sea) ───
+  - {from: S-003, to: S-004, type: road, note: "Valorsplatz↔Kronmark"}
+  - {from: S-002, to: S-009, type: road, note: "Valorsplatz↔Feldmark"}
+  - {from: S-001, to: S-014, type: road, note: "Valorsplatz↔Ehrenfeld (royal-fortress axis)"}
+  - {from: S-001, to: S-037, type: sea, note: "Valorsplatz↔Schoenland (port-mediated sea route)"}
+  - {from: S-005, to: S-007, type: road, note: "Kronmark↔Lowenskyst (granary→garrison)"}
+  - {from: S-006, to: S-036, type: road, note: "Kronmark↔Himmelenger (river-ford pilgrim route)"}
+  - {from: S-004, to: S-014, type: road, note: "Kronmark↔Ehrenfeld"}
+  - {from: S-008, to: S-036, type: road, note: "Lowenskyst↔Himmelenger (southern valley pilgrim)"}
+  - {from: S-007, to: S-023, type: road, note: "Lowenskyst↔Halvarshelm (military-mining ore)"}
+  - {from: S-010, to: S-012, type: road, note: "Feldmark↔Stillhelm"}
+  - {from: S-011, to: S-014, type: road, note: "Feldmark↔Ehrenfeld (grain to garrison)"}
+  - {from: S-013, to: S-034, type: road, note: "Stillhelm↔Oastad (Calamity-edge southern)"}
+  - {from: S-014, to: S-026, type: road, note: "Ehrenfeld↔Grauwald (west gate of crownlands)"}
+  - {from: S-015, to: S-036, type: road, note: "Ehrenfeld↔Himmelenger (north gate of crownlands)"}
+  - {from: S-027, to: S-016, type: road, note: "Grauwald↔Rendstad (cross-duchy timber)"}
+  - {from: S-016, to: S-018, type: road, note: "Rendstad↔Gransol (timber to lake-capital)"}
+  - {from: S-018, to: S-036, type: road, note: "Gransol↔Himmelenger (commerce-Church)"}
+  - {from: S-019, to: S-021, type: road, note: "Gransol↔Spartfell (lake-shore to NW pass)"}
+  - {from: S-020, to: S-023, type: road, note: "Gransol↔Halvarshelm (inland trade to mining)"}
+  - {from: S-036, to: S-024, type: road, note: "Himmelenger↔Halvarshelm (mineral pilgrim)"}
+  - {from: S-021, to: S-028, type: road, note: "Spartfell↔Halvardshelm (mountain pass to fjord)"}
+  - {from: S-028, to: S-031, type: road, note: "Halvardshelm↔Sigurdshelm (fjord to ducal capital)"}
+  - {from: S-026, to: S-031, type: road, note: "Grauwald↔Sigurdshelm (highland to capital)"}
+  - {from: S-033, to: S-034, type: road, note: "Sigurdshelm↔Oastad (coastal southward)"}
 
-  # ─── Thread-Witnessed edges (4; character-scale only, no army transport) ───
-  - {from: S-003, to: S-023, type: thread_witnessed, note: "cathedral-network"}
-  - {from: S-011, to: S-033, type: thread_witnessed, note: "warden-watch-ruins"}
-  - {from: S-026, to: S-025, type: thread_witnessed, note: "private-collection-seminary"}
-  - {from: S-029, to: S-032, type: thread_witnessed, note: "rm-einhir-network"}
+  # ─── Inter-province second-routes (3; satisfies ≥2 rule for 2-settlement-province spokes) ───
+  - {from: S-017, to: S-020, type: road, note: "Rendstad↔Gransol second route (bridge-trade alt)"}
+  - {from: S-022, to: S-030, type: road, note: "Spartfell↔Halvardshelm second route (foothills bypass)"}
+  - {from: S-033, to: S-035, type: road, note: "Sigurdshelm↔Oastad second route (salt-pans coastal alt)"}
 
 # ─── TERRAIN LAYER (8 types) ───
 # Types: plains, forest, highland, mountain, mountain_pass, fjord_coast, coast, marsh

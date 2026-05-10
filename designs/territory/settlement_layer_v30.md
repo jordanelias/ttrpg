@@ -144,78 +144,223 @@ When a settlement has no governor (governor killed, faction collapsed, settlemen
 
 ---
 
-# PART 2: THE 36 SETTLEMENTS
+# PART 2: THE SETTLEMENTS (PP-726 corrected granularity)
+
+**Status note (PP-726, 2026-05-10):** PART 2 has been refactored to operate at correct granularity per `valoria_political_hierarchy_v30 §1.1`. A settlement is a **city/fortress/village/town** — the siege-target. Districts (Cathedral, Market, Barracks, Harbor, Quarter, Parliament, etc.) and outpost-features (garrison towns, watchtowers, mines, lodges, shrines, watches, storehouses, coves, gates, ruins) are subservient to their parent settlement and are NOT separately siegeable; they appear in §2.2 sub-features registry as properties of their parent.
+
+The Kingdom of Valoria has **35 settlements across 14 provinces in 3 duchies**. Two special-case march-targets (Himmelenger Church city-state, Schoenland foreign Altonian island) bring the canonical adjacency-graph total to **37 settlements**. Askeheim is unincorporated Calamity wilderness with 0 settlements (the Ruins and the Gate are observation features, not siege-targets).
 
 ## §2.1 Settlement Registry
 
-| S# | Name | Province | Type | Starting Controller | Starting Stats (P/D/O) | Notes |
-|----|------|----------|------|--------------------|-----------------------|-------|
-| **Crown Provinces** | | | | | | |
-| S-001 | Valorsplatz Palace | T1 Valorsplatz | Seat | Crown | 4/3/4 | Royal court. Lion's Table HQ. Torben resides here. |
-| S-002 | Valorsplatz Riverside | T1 Valorsplatz | Port | Crown (Guild-managed) | 4/1/3 | River trade hub. Guild quarter. Largest market in Valoria. |
-| S-003 | Valorsplatz Cathedral | T1 Valorsplatz | Cathedral | Church | 2/1/4 | Old Solmundic church. Not as grand as Himmelenger but politically significant — Church presence in the capital. |
-| S-004 | Kronmark | T2 Kronmark | Town | Crown | 3/1/3 | Agricultural heartland center. Crown's breadbasket administration. |
-| S-005 | Kronmark Watchtower | T2 Kronmark | Fortress | Crown | 1/3/3 | Guards northern approach to Valorsplatz. |
-| S-006 | Lowenskyst Fortress | T3 Lowenskyst | Fortress | Crown | 1/4/4 | The NE pass fortress. Primary Altonian chokepoint. Fort Level 3 (max 4). |
-| S-007 | Lowenskyst Garrison Town | T3 Lowenskyst | Town | Crown | 2/1/3 | Military support settlement. Soldiers' families, supply depot. |
-| S-008 | Feldmark | T5 Feldmark | Town | Crown | 4/0/3 | Breadbasket territory. Granary complex. Hafenmark food dependency anchor. |
-| S-009 | Feldmark Storehouse | T5 Feldmark | Mine | Crown | 3/0/2 | Strategic food storage and processing. Controls food supply to northern provinces. |
-| S-010 | Stillhelm | T6 Stillhelm | Town | Crown | 2/0/2 | Southern farming settlement. Calamity-adjacent. Population uneasy. |
-| S-011 | Stillhelm Watch | T6 Stillhelm | Outpost | Crown (Warden-aligned) | 0/2/2 | Observation post facing Askeheim. Calamity monitoring. Warden contact point. |
-| S-012 | Ehrenfeld Citadel | T14 Ehrenfeld | Fortress | Crown (Löwenritter-garrisoned) | 1/4/4 | Military headquarters. Löwenritter base. 5-way connection hub. Fort Level 3. |
-| S-013 | Ehrenfeld Market | T14 Ehrenfeld | City | Crown | 3/1/3 | Trade junction at the crossroads. Merchants from all factions. |
-| S-014 | Ehrenfeld Barracks | T14 Ehrenfeld | Fortress | Löwenritter | 1/3/4 | Riskbreaker operations. Separate from Citadel command. |
-| **Hafenmark Provinces** | | | | | | |
-| S-015 | Gransol Parliament | T8 Gransol | Seat | Hafenmark | 4/2/4 | Parliament building. Baralta's court. Constitutional center. |
-| S-016 | Gransol Harbor | T8 Gransol | Port | Hafenmark (Guild-managed) | 4/1/3 | Western sea trade. Schoenland route. |
-| S-017 | Gransol Market Quarter | T8 Gransol | City | Guilds | 5/0/3 | Guild headquarters. Largest trade settlement in Hafenmark. |
-| S-018 | Rendstad | T7 Rendstad | Town | Hafenmark | 2/0/2 | Timber processing. Remote valley settlement. |
-| S-019 | Spartfell Fortress | T10 Spartfell | Fortress | Hafenmark | 1/3/3 | NW pass fortress. Secondary Altonian chokepoint. Fort Level 2. |
-| S-020 | Spartfell Village | T10 Spartfell | Town | Hafenmark | 2/1/2 | Border garrison town. |
-| S-021 | Halvarshelm Mines | T17 Halvarshelm | Mine | Hafenmark (Guild-managed) | 3/0/2 | Primary mining operation. Iron and copper. |
-| S-022 | Halvarshelm Town | T17 Halvarshelm | Town | Hafenmark | 2/0/3 | Miner settlement. Guild labor presence. |
-| **Church Province** | | | | | | |
-| S-023 | Himmelenger Cathedral | T9 Himmelenger | Cathedral | Church | 3/2/5 | Solmundic spiritual center. Confessor's seat. Highest Piety. |
-| S-024 | Himmelenger City | T9 Himmelenger | City | Church | 3/1/4 | Urban population. Scholars. Cardinal of Temperance. |
-| S-025 | Himmelenger Seminary | T9 Himmelenger | Cathedral | Church | 1/1/5 | Church training. Theological center. Inquisitor recruitment. |
-| **Varfell Provinces** | | | | | | |
-| S-026 | Sigurdshelm Keep | T12 Sigurdshelm | Seat | Varfell | 3/2/3 | Vaynard's court. Private Collection housed here. |
-| S-027 | Sigurdshelm Cove | T12 Sigurdshelm | Port | Varfell | 2/1/2 | Fjord access. Varfell's limited naval capability. |
-| S-028 | Grauwald | T4 Grauwald | Town | Varfell | 2/0/2 | Highland settlement. Einhir heritage site. RM presence. |
-| S-029 | Grauwald Lodge | T4 Grauwald | Outpost | RM (covert) | 1/0/2 | Einhir cultural preservation. RM meeting site. Hidden. |
-| S-030 | Halvardshelm | T11 Halvardshelm | Town | Varfell | 2/0/2 | Central fjord settlement. |
-| S-031 | Oastad | T13 Oastad | Town | Varfell | 2/0/2 | Southern fishing settlement. Calamity-adjacent. |
-| S-032 | Oastad Shrine | T13 Oastad | Outpost | RM (overt) | 0/0/1 | Old Einhir ceremonial site. RM stronghold. Lowest CV territory. Community Organizing site. |
-| **Uncontrolled** | | | | | | |
-| S-033 | Askeheim Ruins | T15 Askeheim | Outpost | Wardens | 0/1/1 | Einhir Catastrophe epicenter. Active Warden operations. Forgetting barrier. |
-| S-034 | Askeheim Gate | T15 Askeheim | Outpost | Uncontrolled | 0/0/0 | Southern access point. Observation camp. No permanent population. |
-| **Schoenland** | | | | | | |
-| S-035 | Schoenland City | T16 Schoenland | City | Schoenland | 4/2/4 | Island capital. Altonian trade. Independent governance. |
-| S-036 | Schoenland Harbor | T16 Schoenland | Port | Schoenland | 3/3/4 | Naval base. Passage control. Altonian supply chain. |
+### Valorsmark duchy (Almud — also monarch of Valoria)
 
-**Total: 36 settlements across 17 provinces.**
+**Valorsplatz province** (3 settlements) — 
 
-| Province | # Settlements | Distribution |
-|----------|--------------|-------------|
-| T1 Valorsplatz | 3 | Seat + Port + Cathedral |
-| T2 Kronmark | 2 | Town + Fortress |
-| T3 Lowenskyst | 2 | Fortress + Town |
-| T4 Grauwald | 2 | Town + Outpost (RM) |
-| T5 Feldmark | 2 | Town + Mine |
-| T6 Stillhelm | 2 | Town + Outpost (Warden) |
-| T7 Rendstad | 1 | Town |
-| T8 Gransol | 3 | Seat + Port + City (Guilds) |
-| T9 Himmelenger | 3 | Cathedral + City + Cathedral |
-| T10 Spartfell | 2 | Fortress + Town |
-| T11 Halvardshelm | 1 | Town |
-| T12 Sigurdshelm | 2 | Seat + Port |
-| T13 Oastad | 2 | Town + Outpost (RM) |
-| T14 Ehrenfeld | 3 | Fortress + City + Fortress (Löwenritter) |
-| T15 Askeheim | 2 | Outpost (Warden) + Outpost |
-| T16 Schoenland | 2 | City + Port |
-| T17 Halvarshelm | 2 | Mine + Town |
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-001 | Valorsplatz | Seat | province primary |
+| S-002 | Auerheim | Town | spoke |
+| S-003 | Königsbrück | Town | spoke |
 
----
+**Kronmark province** (3 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-004 | Kronmark | Town | province primary |
+| S-005 | Saatfeld | Village | spoke |
+| S-006 | Goldenfurt | Town | spoke |
+
+**Lowenskyst province** (2 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-007 | Lowenskyst Fortress | Fortress | province primary |
+| S-008 | Tiefental | Village | spoke |
+
+**Feldmark province** (3 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-009 | Feldmark | Town | province primary |
+| S-010 | Erntehof | Village | spoke |
+| S-011 | Spelzdorf | Village | spoke |
+
+**Stillhelm province** (2 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-012 | Stillhelm | Town | province primary |
+| S-013 | Aschenbach | Village | spoke |
+
+**Ehrenfeld province** (2 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-014 | Ehrenfeld | Fortress-City | province primary |
+| S-015 | Nordhain | Village | spoke |
+
+### Hafenmark duchy (Baralta)
+
+**Rendstad province** (2 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-016 | Rendstad | Town | province primary |
+| S-017 | Holzbrück | Village | spoke |
+
+**Gransol province** (3 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-018 | Gransol | City | province primary |
+| S-019 | Niedersol | Town | spoke |
+| S-020 | Saltbrück | Town | spoke |
+
+**Spartfell province** (2 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-021 | Spartfell Fortress | Fortress | province primary |
+| S-022 | Gelbgrund | Village | spoke |
+
+**Halvarshelm province** (3 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-023 | Halvarshelm Town | Town | province primary |
+| S-024 | Erzbach | Village | spoke |
+| S-025 | Schmiedhof | Village | spoke |
+
+### Varfell duchy (Vaynard)
+
+**Grauwald province** (2 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-026 | Grauwald | Town | province primary |
+| S-027 | Skogheim | Village | spoke |
+
+**Halvardshelm province** (3 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-028 | Halvardshelm | Town | province primary |
+| S-029 | Geirsvik | Village | spoke |
+| S-030 | Yrnastead | Village | spoke |
+
+**Sigurdshelm province** (3 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-031 | Sigurdshelm | Seat | province primary |
+| S-032 | Brynjard | Town | spoke |
+| S-033 | Sundfjord | Town | spoke |
+
+**Oastad province** (2 settlements) — 
+
+| S# | Settlement | Type | Role |
+|----|------------|------|------|
+| S-034 | Oastad | Town | province primary |
+| S-035 | Salgrund | Village | spoke |
+
+### Himmelenger Church city-state (Confessor — special case, sovereign ecclesiastical entity, not a province in the duchy hierarchy)
+
+| S# | Settlement | Type | Notes |
+|----|------------|------|-------|
+| S-036 | Himmelenger | Cathedral-City | Sovereign ecclesiastical city-state. Internal districts: Cathedral (the Confessor's seat), City (lay Church administration, Cardinal of Temperance), Seminary (theological training, Inquisitor recruitment). Single siege-target with three districts. |
+
+### Schoenland (foreign Altonian island — special case, politically independent of the Kingdom; sea-connected via Valorsplatz only)
+
+| S# | Settlement | Type | Notes |
+|----|------------|------|-------|
+| S-037 | Schoenland | City | Foreign Altonian island. Internal districts: City (governance), Harbor (Altonian/Valorian trade port). Single sea-edge to Valorsplatz; awaiting ED-055 naval-scope expansion for additional routes. |
+
+**Total: 37 march-target settlements** (35 Kingdom + 1 Church city-state + 1 foreign tributary). Province distribution: Valorsmark 6 provinces (15 settlements), Hafenmark 4 provinces (10), Varfell 4 provinces (10). 7 provinces at 3 settlements (capital/breadbasket/commerce-hub/multi-fjord/industrial-mining/ducal-capital density); 7 provinces at 2 settlements (chokepoint/remote-valley/Calamity-edge/highland-sparse). All 35 Kingdom settlements + Himmelenger have ≥2 march-route connections per `valoria_geography_v30.yaml :: settlement_adjacency:` (PP-726 rebuild). Schoenland at degree 1 is foreign-exempt awaiting ED-055.
+
+## §2.2 Sub-features Registry
+
+Sub-features are NOT separate settlements — they are properties of their parent settlement that confer specific mechanical effects. The full taxonomy:
+
+| Sub-feature | Type | Parent settlement | Effect |
+|-------------|------|-------------------|--------|
+| Valorsplatz Palace district | Royal-court district | S-001 Valorsplatz | Crown's seat of power; Almud's residence; Lion's Table HQ; royal-court scene affordance |
+| Valorsplatz Riverside district | Port district | S-001 Valorsplatz | River+sea trade hub; Guild quarter; sea route to Schoenland connects here |
+| Valorsplatz Cathedral district | Cathedral district | S-001 Valorsplatz | Solmundic Church presence in capital; ecclesiastical scenes; Church-faction footprint in Crown territory |
+| Kronmark Watchtower | Fortified outpost | S-004 Kronmark | Guards northern approach to Valorsplatz; Defense +1 contribution to parent settlement; vision range extension |
+| Lowenskyst Garrison Town | Civilian quarter | S-007 Lowenskyst Fortress | Soldiers' families; supply depot; Population +1 to parent; military-unit support |
+| Feldmark Storehouse | Industrial facility | S-009 Feldmark | Strategic food storage and processing; controls food supply to northern provinces; Wealth income |
+| Stillhelm Watch | Observation outpost | S-012 Stillhelm | Calamity monitoring; Warden contact point; vision into Askeheim wilderness |
+| Ehrenfeld Citadel district | Fortress district | S-014 Ehrenfeld | Crown military HQ; Löwenritter base; Defense +2 to parent settlement |
+| Ehrenfeld Market district | Trade district | S-014 Ehrenfeld | Trade junction at the crossroads; Wealth income; merchants from all factions |
+| Ehrenfeld Barracks district | Military district | S-014 Ehrenfeld | Löwenritter Riskbreaker operations; standing-army production capacity |
+| Gransol Parliament district | Government district | S-018 Gransol | Hafenmark Parliament; Baralta's court; constitutional-action venue |
+| Gransol Harbor district | Lake-harbor district | S-018 Gransol | Lake trade hub (Gransol is on a lake — landlocked Switzerland-like province); inland waterway commerce |
+| Gransol Market Quarter district | Trade district | S-018 Gransol | Guild headquarters; largest trade settlement in Hafenmark; Wealth income |
+| Spartfell Village | Civilian quarter | S-021 Spartfell Fortress | Border garrison support; Population +1 to parent |
+| Halvarshelm Mines | Industrial district | S-023 Halvarshelm Town | Primary mining operation (iron, copper); Wealth income; Guild labor presence |
+| Himmelenger Cathedral district | Cathedral district | S-036 Himmelenger | Solmundic spiritual center; Confessor's seat; highest Piety contribution |
+| Himmelenger City district | Lay-Church district | S-036 Himmelenger | Urban population; scholars; Cardinal of Temperance's quarter |
+| Himmelenger Seminary district | Cathedral district | S-036 Himmelenger | Church theological training; Inquisitor recruitment site |
+| Sigurdshelm Cove | Fjord-port district | S-031 Sigurdshelm | Fjord access; Varfell's limited naval capability; coastal trade |
+| Grauwald Lodge | Hidden site | S-026 Grauwald | RM (covert) meeting site; Einhir cultural preservation; thread-witnessed network endpoint |
+| Oastad Shrine | Sacred site | S-034 Oastad | Old Einhir ceremonial site; RM stronghold; Community Organizing affordance; thread-witnessed network endpoint |
+| Schoenland Harbor district | Port district | S-037 Schoenland | Naval base; Altonian-Valorian trade interface; sea route to Valorsplatz attaches here |
+
+**Askeheim features** (not attached to a parent settlement; canonical observation features in unincorporated wilderness):
+
+| Feature | Type | Notes |
+|---------|------|-------|
+| Askeheim Ruins | Calamity-zone observation site | Einhir Catastrophe epicenter; active Warden operations; Forgetting barrier restricts physical access; thread-witnessed network endpoint (Warden contact at S-012 Stillhelm Watch) |
+| Askeheim Gate | Observation camp | Southern access point; no permanent population; observation only |
+
+These features are NOT siege-targets. They appear in canonical prose (faction operations, Warden activity, thread-witnessed network) but do not participate in the settlement-adjacency march-route graph.
+
+## §2.3 Migration from old §2.1 (PP-726 mapping)
+
+The old §2.1 listed 36 entries (S-001..S-036) mixing settlements with districts and outposts at one granularity. PP-726 re-cuts to 37 settlements (S-001..S-037) at correct granularity. Mapping:
+
+| Old S-ID | Old name | New status |
+|----------|----------|------------|
+| S-001 | Valorsplatz Palace | Promoted to S-001 **Valorsplatz** (settlement; Palace becomes a district) |
+| S-002 | Valorsplatz Riverside | Demoted to Riverside district of S-001 Valorsplatz |
+| S-003 | Valorsplatz Cathedral | Demoted to Cathedral district of S-001 Valorsplatz |
+| S-004 | Kronmark | Retained as settlement, now S-004 **Kronmark** (canonical primary) |
+| S-005 | Kronmark Watchtower | Demoted to Watchtower sub-feature of S-004 Kronmark |
+| S-006 | Lowenskyst Fortress | Retained as settlement, now S-007 **Lowenskyst Fortress** (canonical primary of Lowenskyst province) |
+| S-007 | Lowenskyst Garrison Town | Demoted to Garrison Town civilian quarter of S-007 Lowenskyst Fortress |
+| S-008 | Feldmark | Retained as settlement, now S-009 **Feldmark** |
+| S-009 | Feldmark Storehouse | Demoted to Storehouse industrial facility of S-009 Feldmark |
+| S-010 | Stillhelm | Retained as settlement, now S-012 **Stillhelm** |
+| S-011 | Stillhelm Watch | Demoted to Watch outpost of S-012 Stillhelm |
+| S-012 | Ehrenfeld Citadel | Promoted/merged into S-014 **Ehrenfeld** (fortress-city); Citadel becomes a district |
+| S-013 | Ehrenfeld Market | Demoted to Market district of S-014 Ehrenfeld |
+| S-014 | Ehrenfeld Barracks | Demoted to Barracks district of S-014 Ehrenfeld |
+| S-015 | Gransol Parliament | Promoted/merged into S-018 **Gransol**; Parliament becomes a district |
+| S-016 | Gransol Harbor | Demoted to Harbor (lake-harbor) district of S-018 Gransol |
+| S-017 | Gransol Market Quarter | Demoted to Market Quarter district of S-018 Gransol |
+| S-018 | Rendstad | Retained as settlement, now S-016 **Rendstad** |
+| S-019 | Spartfell Fortress | Retained as settlement, now S-021 **Spartfell Fortress** |
+| S-020 | Spartfell Village | Demoted to Village civilian quarter of S-021 Spartfell Fortress |
+| S-021 | Halvarshelm Mines | Demoted to Mines industrial district of S-023 Halvarshelm Town |
+| S-022 | Halvarshelm Town | Retained as settlement, now S-023 **Halvarshelm Town** (canonical primary of Halvarshelm province) |
+| S-023 | Himmelenger Cathedral | Promoted/merged into S-036 **Himmelenger**; Cathedral becomes a district |
+| S-024 | Himmelenger City | Demoted to City district of S-036 Himmelenger |
+| S-025 | Himmelenger Seminary | Demoted to Seminary district of S-036 Himmelenger |
+| S-026 | Sigurdshelm Keep | Promoted/renamed S-031 **Sigurdshelm** (Vaynard's keep is now the settlement; "Keep" was the keep-district) |
+| S-027 | Sigurdshelm Cove | Demoted to Cove fjord-port district of S-031 Sigurdshelm |
+| S-028 | Grauwald | Retained as settlement, now S-026 **Grauwald** |
+| S-029 | Grauwald Lodge | Demoted to Lodge hidden site of S-026 Grauwald |
+| S-030 | Halvardshelm | Retained as settlement, now S-028 **Halvardshelm** |
+| S-031 | Oastad | Retained as settlement, now S-034 **Oastad** |
+| S-032 | Oastad Shrine | Demoted to Shrine sacred site of S-034 Oastad |
+| S-033 | Askeheim Ruins | Demoted to Askeheim observation feature (no parent settlement; unincorporated wilderness) |
+| S-034 | Askeheim Gate | Demoted to Askeheim observation feature (no parent settlement) |
+| S-035 | Schoenland City | Promoted/merged into S-037 **Schoenland**; City becomes a district |
+| S-036 | Schoenland Harbor | Demoted to Harbor port district of S-037 Schoenland |
+
+22 of the 36 old entries were sub-features at wrong granularity; 14 were settlements (now renumbered). PP-726 adds 21 new settlements (the spokes added to bring each province to ≥2: Auerheim, Königsbrück, Saatfeld, Goldenfurt, Tiefental, Erntehof, Spelzdorf, Aschenbach, Nordhain, Holzbrück, Niedersol, Saltbrück, Gelbgrund, Erzbach, Schmiedhof, Skogheim, Geirsvik, Yrnastead, Brynjard, Sundfjord, Salgrund). Net: 14 retained + 21 new = 35 Kingdom settlements + 1 Himmelenger city-state + 1 Schoenland foreign = 37 total.
+
+References to old S-IDs in non-substrate documents (character_canon Part B per-NPC sheets, migration_roster, npc_roster, editorial_ledger historical entries, propagation_map historical entries) are migrated lazily as those documents are next touched.
 
 # PART 3: DUAL-AUTHORITY GOVERNANCE
 
