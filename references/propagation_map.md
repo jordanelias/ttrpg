@@ -776,3 +776,12 @@ Final commit. ED-784 Phase 2 work complete.
 **Propagation:** All references to wound-induced +1 Ob (combat→thread, mass-Command, BG-CF) flipped to −1D Pool. All Vitality = End × 10 references reverted to Health = (End+6)×(MW+1). MW = floor(End/2)+1 restored. derived_stats_v30 §4.1 made authoritative source; other files reference §4.1.
 **ED resolved:** ED-789. **ED reverted:** ED-694.
 **Open propagation:** tests/sim/combat_arch_residual_stress_01/r1_wound_permanence.md (Module 1 R1) is SUPERSEDED — banner added; needs redo against PP-716 canon. canonical_sources.yaml SHAs marked PENDING_PP_716 pending freshness_gate refresh.
+
+## PP-717 npc_behavior §1.2 stale-redirect fix (2026-05-10)
+**Class E (editorial); applied this commit.** No mechanical propagation; corrects documentation pointer drift.
+- `designs/npcs/npc_behavior_v30.md §1.2`: redirects updated to point at `designs/personal/conviction_taxonomy_v30.md` (PP-684 canonical) and companion `conviction_axis_matrix_v30.md`.
+- `designs/personal/conviction_track_v1.md`: SUPERSEDED banner added at top; §1 deprecated; §2 Scar accumulation preserved as canonical pending PP-718 weight-scaling review.
+- `references/canonical_sources.yaml`: conviction_track entry annotated as PARTIALLY SUPERSEDED.
+- No code changes. No simulation re-run.
+- Surfaced by: conviction_stress_01 (A-L09 P1 drift) commit 57bd26f4.
+- Cross-reference: this PP unblocks future readers of npc_behavior_v30 §1.2 from learning the legacy 9-Conviction set.

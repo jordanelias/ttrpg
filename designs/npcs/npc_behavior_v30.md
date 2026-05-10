@@ -23,9 +23,11 @@ Every named NPC holds three interconnected attributes.
 
 ### §1.2 Conviction Taxonomy
 
-*The Conviction taxonomy specification has been promoted to its own canonical doc per PP-681.
-See `designs/personal/conviction_track_v1.md` §1 for the canonical 9-Conviction definitions
-(Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity, Community, Warden).*
+*The Conviction taxonomy is canonical at `designs/personal/conviction_taxonomy_v30.md` (PP-684, applied 2026-05-01 Stage 10 promotion). The 13 canonical Convictions are: **Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor**. The companion 52-cell axis matrix lives at `designs/personal/conviction_axis_matrix_v30.md` (4-axis projection: hierarchical, sacred, instrumental, traditional). Self-Other orientation [-1, +1] is a separate orthogonal scalar — greed, ambition, altruism, and self-sacrifice are represented along this axis, not as Convictions.*
+
+*Structured concentration: each NPC has 1–3 primary Convictions weighted 0.6–0.8 plus distributed cultural background weighted 0.2–0.4 per `conviction_taxonomy_v30 §4`. Per-character migrations from legacy labels are at `designs/personal/conviction_migration_roster_v30.md` (PP-685).*
+
+*The legacy 9-Conviction set (Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity, Community, Warden) at `conviction_track_v1.md` is **superseded**. Reason and Continuity are deprecated labels; Autonomy is renamed Liberty. Scar accumulation mechanics from `conviction_track_v1.md §2` remain canonical pending PP-718 review of weight-scaling under PP-684 structured concentration (per stress-test `conviction_stress_01` open finding).*
 
 ### §1.3 Resonant Style Taxonomy
 

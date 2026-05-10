@@ -548,3 +548,24 @@ patches:
       M-11: "○"
     q: pass
     note: "Class B (mechanical canon correction; reverts ED-694 simplification + flips wound-penalty channel from Ob to −1D Pool universally; affects 5 canonical files + 2 stress harness files). N pass: Jordan canonical clarification 2026-05-09 surfaced contradictions in combat_v30 §7 (linear Vitality formula L253 vs table-derived total at L257-262 — mismatched for End 1,2,3,5,7) and inconsistent wound-penalty channel (Combat Pool −1D vs Thread Pool +1 Ob vs mass Command +1 Ob); single source of truth needed. Ω pass: derived_stats §4.1 now authoritative; other files reference it; no orphaned mechanical claims. R-modules (combat_arch_residual_stress_01) are EXPLORATORY — Module 1 R1 superseded explicitly with banner; not retroactively edited (audit trail preserved per Mode G ledger discipline). Q pass: arithmetic verified against End=4 worked example (40 → 30 → 20 → 10 → 0); per-Endurance table in derived_stats §4.1 validates all 7 Endurance values; no stale Vitality=E×10 patterns remain in patched canon (verified pre-commit). Source: Jordan canonical clarification chat 2026-05-09."
+
+- id: PP-717
+  class: E
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: "npc_behavior_v30 §1.2 stale-redirect fix. Section §1.2 previously redirected readers to designs/personal/conviction_track_v1.md (legacy 9-Conviction set: Faith, Order, Reason, Equity, Precedent, Autonomy, Continuity, Community, Warden) which was superseded by PP-684 (canonical 2026-05-01 Stage 10 promotion: 13-Conviction set Faith, Authority, Order, Scholastic, Utility, Equity, Liberty, Precedent, Community, Identity, Warden, Virtue, Honor). Readers landing on §1.2 learned the wrong taxonomy. Fix: rewrite §1.2 to redirect to canonical conviction_taxonomy_v30.md and conviction_axis_matrix_v30.md; add SUPERSEDED banner to conviction_track_v1.md flagging §1 as superseded while preserving §2 Scar accumulation as canonical pending PP-718 review. Surfaced by stress-test conviction_stress_01 (commit 57bd26f4) as P1 drift defect."
+  finding_id: conviction_stress_01 P1 drift defect (A-L09)
+  source: editorial
+  affects:
+    - designs/npcs/npc_behavior_v30.md
+    - designs/personal/conviction_track_v1.md
+    - references/canonical_sources.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-717 (this commit)
+  next_pp: PP-718 (review Scar accumulation table for weight-scaling under PP-684 structured concentration)
+  vetting:
+    class: E
+    necessity: pass
+    omega: pass
+    note: "Class E — editorial fix. N: corrects a P1 drift defect (stale redirect to legacy 9-Conviction doc) surfaced by stress-test conviction_stress_01 (commit 57bd26f4). Ω: replaces stale redirect text with canonical PP-684 references; preserves all semantics. No mechanical change. No simulation required."

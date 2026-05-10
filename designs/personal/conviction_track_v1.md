@@ -1,3 +1,6 @@
+<!-- [SUPERSEDED 2026-05-10 — PP-717] -->
+<!-- This file is partially SUPERSEDED. The Conviction taxonomy (§1) is replaced by `designs/personal/conviction_taxonomy_v30.md` (PP-684 13-Conviction set). Use that as canonical for NPC design and Conviction lookups. The Scar accumulation table (§2) and Thread Operation Scar triggers (§3) remain canonical pending PP-718 review of weight-scaling under PP-684 structured concentration. New readers: do not use §1 of this file for Conviction definitions — use conviction_taxonomy_v30.md instead. -->
+
 <!-- [PROVISIONAL: 2026-04-29 — Piety Track promoted to first-class doc per PP-681, addressing PP-676 v3 §V3-5 multi-graph isolate finding] -->
 <!-- STATUS: CANONICAL — extracted from designs/npcs/npc_behavior_v30.md §1.2 + §3.3 + §3.4 -->
 <!-- AUTHORITY: PP-681, ED-768. Source authority: ED-663, ED-664 (Thread Operation triggers); ED-672 (Arc A timing) -->

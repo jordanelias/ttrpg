@@ -121,10 +121,11 @@ systems:
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/personal/conviction_track_v1.md
-    canonical_sha__designs__personal__conviction_track_v1_md: "32d8e3412d17157fc0fd27fed91a0e11262743ef"
+    canonical_sha__designs__personal__conviction_track_v1_md: "PENDING_PP_717"
+    canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684; §2 Scar accumulation + §3 Thread Operation triggers remain canonical pending PP-718 weight-scaling review under structured concentration"
     params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "fc016ff0ef1272e5f3e70ca490e0c00d1421e160"
-    related: designs/npcs/npc_behavior_v30.md  # original source; retains redirect stubs
+    related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "cc86bf253643f81b32896f1d45ad677f649c05af"
