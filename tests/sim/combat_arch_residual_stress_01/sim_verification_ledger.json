@@ -159,6 +159,25 @@
       ],
       "marginal": "C6.2 raise cap to +7 at 21+ — mechanically functional but solves a rare problem at moderate spec/propagation cost",
       "key_finding": "Fibonacci bonus +5 cap (Δ-net +1.65 at saturation) produces tactically significant attacker advantage without breaking defender Pool relevance. Uncapped at 21 attackers (Δ-net +2.31) drowns 12D defender. Mass-scale uncapped at 100+ attackers (Δ-net +4 from bonus alone) collapses canonical resolution math entirely."
+    },
+    {
+      "module": 7,
+      "name": "R7 Friendly fire & ranged in melee",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "R7-L01",
+        "R7-L02",
+        "R7-L03",
+        "R7-L04",
+        "R7-L05",
+        "R7-L06"
+      ],
+      "decision": "C7.4 (FF on stress only — ≥1 Wound, Composure ≤3, or environmental degradation) primary; C7.1 (no FF, preserve canon-silence) fallback if stress-spec work not justified",
+      "rejected_candidates": [
+        "C7.3 separate d10 roll (non-canonical dice channel; stylistically inconsistent with canonical pool-only resolution)"
+      ],
+      "marginal": "C7.2 FF on every miss — functionally workable but per-miss adjudication overhead; high-frequency mechanic",
+      "spec_gap": "Stress threshold criteria need explicit enumeration (P1 ambiguity per EC-D7.A-01): Wound count, Composure threshold, environmental degradation list. Spec gap is filled by Jordan ratification per PP."
     }
   ],
   "constants": [
@@ -656,6 +675,54 @@
       "value": "Rescue eligible if outnumbered (subject to Fibonacci)",
       "canonical_source": "designs/scene/combat_v30.md",
       "section": "§8 Rescue (PP-290)",
+      "quoted_text": "**Eligibility (PP-290):** Rescue may only be declared if the rescued actor is outnumbered at Phase 1 declaration — facing 2+ attackers with no supporting ally"
+    },
+    {
+      "id": "R7-L01",
+      "sim_variable": "ranged_distinct_category",
+      "value": "Ranged distinct from melee 3-axis matrix",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 (ED-129)",
+      "quoted_text": "### Ranged Weapons (distinct category — ED-129 resolved)"
+    },
+    {
+      "id": "R7-L02",
+      "sim_variable": "ranged_weapon_tn_table",
+      "value": "LP TN 7, HP TN 6, Sling TN 8",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Ranged",
+      "quoted_text": "| LP — Light Piercing (bow) | 7 | Min STR 2 |"
+    },
+    {
+      "id": "R7-L03",
+      "sim_variable": "melee_range_zone_renamed",
+      "value": "Close = Melee range; Far = Ranged distance",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 PP-268",
+      "quoted_text": "**Zone terminology (PP-268):** Close zone renamed **Melee range**; Far zone renamed **Ranged distance** throughout."
+    },
+    {
+      "id": "R7-L04",
+      "sim_variable": "ranged_attacker_in_melee_def_tn",
+      "value": "Ranged in Close zone defends at Def TN 8",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Reach Rules",
+      "quoted_text": "Ranged defence at Close zone: a character carrying a ranged weapon may defend at Def TN 8 if forced into Close zone by a melee attacker."
+    },
+    {
+      "id": "R7-L05",
+      "sim_variable": "net_hits_min_zero",
+      "value": "Net hits = Offence − Defence (minimum 0)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Net hits = Offence successes − Defence successes (minimum 0)."
+    },
+    {
+      "id": "R7-L06",
+      "sim_variable": "rescue_eligibility_outnumbered",
+      "value": "Rescue eligible at outnumbered situations",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§8 (R6-L06)",
       "quoted_text": "**Eligibility (PP-290):** Rescue may only be declared if the rescued actor is outnumbered at Phase 1 declaration — facing 2+ attackers with no supporting ally"
     }
   ],
