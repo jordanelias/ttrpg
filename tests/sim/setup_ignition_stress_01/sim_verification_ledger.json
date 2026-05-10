@@ -71,7 +71,8 @@
         "B19_Niflhel_dissolution": "DONE in core canon (npc_behavior §2.12 STRUCK). ED-777 5-arc reframe pending per Jordan's 2026-05-09 decision"
       },
       "key_finding": "Setup pipeline composite has structural gap: B4 Tensions Deck undesigned; B17 and B19 individually pass but Tensions Deck absence means campaign-startup composition defaults to hardcoded scenario.",
-      "session_status": "D-A-F-G stress sweep COMPLETE"
+      "session_status": "D-A-F-G stress sweep COMPLETE",
+      "amendment_2026_05_10": "B4 Tensions Deck IS designed at params/bg/tensions_deck.md per conflict_architecture_proposal.md (CANON 2026-04-18). Original G2.1 finding ('NOT YET DESIGNED') was incorrect due to incomplete source survey. Revised verdict: B4 Tensions Deck COMPLETE; no design initiative needed."
     }
   ]
 }

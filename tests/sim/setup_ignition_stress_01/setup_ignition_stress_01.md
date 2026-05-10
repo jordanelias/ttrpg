@@ -161,3 +161,49 @@ From this session (D + A + F + G):
 | G setup_ignition_stress_01 | (this commit) |
 
 D-A-F-G stress sweep done. Next-session priorities are documented in Section 5.
+
+
+---
+
+## 7. Amendment 2026-05-10 — B4 Tensions Deck IS designed
+
+**Original G2.1 finding was incorrect.** Subsequent canonical-source survey discovered:
+
+- `params/bg/tensions_deck.md` (2,068 bytes) — 6-card spec, draw-1-at-game-start mechanic.
+- Source: `designs/architecture/conflict_architecture_proposal.md` (CANON 2026-04-18 per `references/canonical_sources.yaml` L142).
+- `references/canonical_sources.yaml` L135-138 declares the canonical entry:
+  ```yaml
+  tensions_deck:
+    design_doc: params/bg/tensions_deck.md
+    canonical_sha__params__bg__tensions_deck_md: "c3e77304addce12c41507800bf0c058ea8667d74"
+    source: conflict_architecture_proposal.md
+  ```
+
+**Tensions Deck cards (per params/bg/tensions_deck.md):**
+
+| # | Card | Amplifies | S8+ Event |
+|---|---|---|---|
+| 1 | Royal Crisis | T1 Crown-Church friction + succession | Royal family member assassinated (sub-roll per royal_assassination.md) |
+| 2 | Feldmark Famine | T5 Crown breadbasket | Prosperity collapse → economic crisis |
+| 3 | Cardinal Independence | T1 + T9 Church internal | Rogue Cardinal appoints bishop-governor in Crown settlement |
+| 4 | Guild Fracture | T8 Hafenmark-Guild friction | S017 Guild schism → Market Quarter contested |
+| 5 | Einhir Incident | T4 + T13 Varfell-RM friction | Public confrontation forces faction position-declarations |
+| 6 | Ministry Crisis | T14 Crown-Löwenritter + Crown governance | Ministry collapse → governance vacuum → Church fills |
+
+The Tensions Deck includes a **fuse model** — every card creates a visible fuse from S1 (NPC dialogue, atmospheric events) which the player can investigate and attempt to defuse before the S8+ ignition event.
+
+**Revised G2.1 verdict:** **B4 Tensions Deck is COMPLETE per `conflict_architecture_proposal.md` (CANON 2026-04-18).** No design initiative needed. The G module's earlier "NOT YET DESIGNED" finding stemmed from an incomplete source survey (search was scoped to designs/ paths only and missed the params/bg/ location).
+
+**Revised composite state:**
+
+| Component | State | Next step |
+|---|---|---|
+| B4 Tensions Deck | **COMPLETE per conflict_architecture_proposal.md** | None — canonical |
+| B17 Geography Phase 2 | COMPLETE (ED-779) | ED-780 Phase 3 + ED-781 Phase 4 (standing carryovers) |
+| B19 Niflhel dissolution | DONE in core canon | ED-777 5-arc reframe (standing carryover) |
+
+**Revised NERS coherence:** with B4 complete, the structural gap closes. Setup pipeline is fully canonical; remaining work is ED-777 (arc reframes), ED-780 (Phase 3 geography), and ED-781 (Phase 4 stress tests).
+
+**Surfaced editorial item:** the G module's miss of `params/bg/tensions_deck.md` indicates a discoverability defect — readers looking for "setup-phase mechanics" in the canonical-sources index may not navigate to `params/bg/`. Recommend a small editorial note in `references/canonical_sources.yaml` linking the `tensions_deck` entry from a "Setup & Ignition" section header.
+
+**Updated next-session priorities:** B4 design initiative is REMOVED from the open-followups register. P1 remaining: A1 follow-up complete (PP-717 committed `55403f74`).
