@@ -75,8 +75,12 @@ systems:
     canonical_sha__designs__territory__valoria_geography_v30_yaml: "59bc02f54b3dcd062222093f3f1987bfe06e4991"
     geographic_map: designs/territory/valoria_map_v30.svg
     canonical_sha__designs__territory__valoria_map_v30_svg: "de02b31202e54cdf74054d0008c1c51c76f3a651"
+    geographic_design_doc: designs/world/geography_v30.md
+    canonical_sha__designs__world__geography_v30_md: "c1fc7ffd2547bf08e924fe4e6cde612f25dbadab"
+    geographic_design_doc_infill: designs/world/geography_v30_infill.md
     march_layer_skeleton: designs/territory/march_layer_v30.md
     canonical_sha__designs__territory__march_layer_v30_md: "PENDING_ED_780"
+    note: "geography_v30.md (atomized: index + infill) holds physical-geography canon — terrain regions, RS-band/node-distance matrix, 17-territory roster with starting control, fort levels, sub levels, adjacency. valoria_geography_v30.yaml + valoria_map_v30.svg are the structured/visual companions. Cited as source by sim_verification_ledger.json for territory IDs and counts."
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
     canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_ED_780"  # ED-770/PP-683/PP-711..715 batch (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
@@ -121,7 +125,6 @@ systems:
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/personal/conviction_track_v1.md
-    pp718_vetting_walkthrough: designs/personal/conviction_track_v1_pp718_vetting.md
     canonical_sha__designs__personal__conviction_track_v1_md: "PENDING_PP_718"
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
     params: params/factions/npc_stance_triangles.md
