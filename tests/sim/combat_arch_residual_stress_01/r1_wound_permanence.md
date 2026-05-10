@@ -1,3 +1,7 @@
+> **[SUPERSEDED — 2026-05-09 per PP-716]** This module was authored against the pre-PP-716 canon (Vitality = Endurance × 10; Threadwork +1 Ob per Wound). Both formulations are now reverted: Health = (Endurance + 6) × (Max Wounds + 1) where Max Wounds = floor(Endurance/2) + 1; wound penalty is −1D Pool universally (Combat, Thread, mass Command), never Ob. The ledger entries R1-L03 (Threadwork +1 Ob), R1-L04 (Vitality = End × 10), R1-L05 (Wound Interval / Max Wounds eliminated framing) cite text that is now superseded. The decision-shape recommendation (C1.3 Knot-tagged via Conviction Scar) MAY survive re-analysis under corrected canon — the Pool floor 5D asymmetry argument and the Threadwork-extinction cascade argument both depend on the now-superseded mechanics. Module 1 R1 will be redone against PP-716 canon in a subsequent session and saved as `r1_wound_permanence_v2.md` superseding this file.
+
+---
+
 # R1 — Wound Permanence vs Canonical Recovery
 ## Module 1 of combat_arch_residual_stress_01
 

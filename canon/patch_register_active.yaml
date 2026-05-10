@@ -511,5 +511,40 @@ patches:
       M-11: "○"
     q: pass
     note: "Class A (data canon authoring; no mechanical change to existing rules — calibration TBD via ED-781). N pass: Phase 2 was the gating bottleneck for ED-780 spec rewrite and Godot map rendering; coordinate canon eliminates the ambiguity-driven sim drift. Ω pass: superseded files preserved with banners; existing geography_v30.md narrative canon untouched; replacement SVG places deprecated valoria_map_v2.svg into git history. Q pass: workplan PP-707 + reconciliation PP-709 pre-authorize all locked decisions; calibration values explicitly flagged PROVISIONAL pending Phase 4."
-
-
+- id: PP-716
+  date: 2026-05-09
+  severity: P1
+  description: "Wound mechanic correction — universal patch. Reverts ED-694 simplification (Vitality = Endurance × 10, Max Wounds eliminated): linear formula failed to match WI × (MW+1) total-damage-capacity structure for Endurance values 1, 2, 3, 5, 7. Restores: Health = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = floor(Endurance/2) + 1 and Wound Interval = Endurance + 6. Stat name Vitality reverted to Health for consistency with params/combat.md L16 source-of-truth. Universal wound-penalty rule: −1D to ALL Pools (Combat, Thread — Leap/Weaving/Pulling/Mending/FR — Hybrid mass-battle Command, BG-CF tactic) per Wound, cumulative; supersedes prior +1 Ob framings in combat_v30 §10 / §thread, threadwork_v30 §2.3 / §3 / §5, params/combat.md §thread, params/mass_combat §CF wound. No Ob penalty from wounds, ever. Designs/scene/derived_stats_v30.md §4.1 made AUTHORITATIVE source for Health formula and wound-penalty universality; combat_v30, threadwork_v30, params/combat, params/mass_combat all updated to point back to derived_stats §4.1 rather than restating. Per-Endurance reference table in derived_stats §4.1 verifies arithmetic (e.g., End=4 → WI=10, MW=3, Health 40 → 30 → 20 → 10 → 0 felled at 4th wound). Naming history note added to derived_stats §4.1 documenting ED-694 reversion. Side effect: tests/sim/combat_arch_residual_stress_01/r1_wound_permanence.md (Module 1 R1, committed 45c693e2) becomes superseded — built on stale Vitality formula and unfloored +1 Ob Threadwork compounding; banner added; module to be redone in subsequent session against corrected canon."
+  finding_id: ED-789 wound mechanic drift correction
+  source: editorial
+  affects:
+    - designs/scene/derived_stats_v30.md
+    - designs/scene/combat_v30.md
+    - designs/threadwork/threadwork_v30.md
+    - params/combat.md
+    - params/mass_combat.md
+    - tests/sim/combat_arch_residual_stress_01/r1_wound_permanence.md
+    - tests/sim/combat_arch_residual_stress_01/module_manifest.md
+    - canon/editorial_ledger.yaml
+    - canon/editorial_ledger_summary.yaml
+  status: applied
+  applied_commit: pending
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: []
+    m_ratings:
+      M-1: "○"
+      M-2: "○"
+      M-3: "○"
+      M-4: "○"
+      M-5: "○"
+      M-6: "○"
+      M-7: "○"
+      M-8: "○"
+      M-9: "○"
+      M-10: "○"
+      M-11: "○"
+    q: pass
+    note: "Class B (mechanical canon correction; reverts ED-694 simplification + flips wound-penalty channel from Ob to −1D Pool universally; affects 5 canonical files + 2 stress harness files). N pass: Jordan canonical clarification 2026-05-09 surfaced contradictions in combat_v30 §7 (linear Vitality formula L253 vs table-derived total at L257-262 — mismatched for End 1,2,3,5,7) and inconsistent wound-penalty channel (Combat Pool −1D vs Thread Pool +1 Ob vs mass Command +1 Ob); single source of truth needed. Ω pass: derived_stats §4.1 now authoritative; other files reference it; no orphaned mechanical claims. R-modules (combat_arch_residual_stress_01) are EXPLORATORY — Module 1 R1 superseded explicitly with banner; not retroactively edited (audit trail preserved per Mode G ledger discipline). Q pass: arithmetic verified against End=4 worked example (40 → 30 → 20 → 10 → 0); per-Endurance table in derived_stats §4.1 validates all 7 Endurance values; no stale Vitality=E×10 patterns remain in patched canon (verified pre-commit). Source: Jordan canonical clarification chat 2026-05-09."

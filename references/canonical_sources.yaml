@@ -39,12 +39,12 @@ systems:
     canonical_sha__params__bg__core_md: "6e17c277612b06d843bf4c7a239a4380e881b14b"
   combat:
     design_doc: params/combat.md
-    canonical_sha__params__combat_md: "50c50d0032210e4613bfc2388582961aa46c9f07"
+    canonical_sha__params__combat_md: "PENDING_PP_716"
     params: params/combat.md
-    canonical_sha__params__combat_md: "50c50d0032210e4613bfc2388582961aa46c9f07"
+    canonical_sha__params__combat_md: "PENDING_PP_716"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
-    canonical_sha__designs__threadwork__threadwork_v30_md: "c612066f67e3b5f023ec6461f8713438d6485486"
+    canonical_sha__designs__threadwork__threadwork_v30_md: "PENDING_PP_716"
     params: params/threadwork.md
     canonical_sha__params__threadwork_md: "4ceefd9f09bef1e7e2edd29cf5f765b07c2e4aad"
   clocks:
@@ -81,7 +81,7 @@ systems:
     design_doc: designs/provincial/mass_battle_v30.md
     canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_PP_705"  # ED-770/PP-683/PP-711..715 batch (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
     params: params/mass_combat.md
-    canonical_sha__params__mass_combat_md: "PENDING_PP_705"  # ED-770 — SHA update follow-up required
+    canonical_sha__params__mass_combat_md: "PENDING_PP_716"  # ED-770 — SHA update follow-up required
   social_debate:
     design_doc: params/contest.md
     canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
@@ -112,9 +112,11 @@ systems:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
   derived_stats:
-    design_doc: params/factions/stats_1_7_scale.md
+    design_doc: designs/scene/derived_stats_v30.md
+    canonical_sha__designs__scene__derived_stats_v30_md: "PENDING_PP_716"
+    supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "56eba8a60ee00a25c4c6d8ebeec37515a4699c65"
-    note: "Derived faction stats (1-7 scale). Primary source for Mandate/Influence/Wealth/Military/Intel/Stability starting values and progression rules."
+    note: "PP-716 — derived_stats_v30.md §4.1 is the authoritative source for Health formula and wound-penalty universality. params/factions/stats_1_7_scale.md remains supplemental for faction-scale derived stats (Mandate/Influence/Wealth/Military/Intel/Stability)." 
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:

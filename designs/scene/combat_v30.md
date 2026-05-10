@@ -250,9 +250,9 @@ DR is subtracted from damage after net hits + weapon modifier.
 
 ### Wounds (ED-548, ED-694 — Vitality replaces Health)
 
-**Vitality = Endurance × 10** (range 10–70). Total damage capacity. Equipment adds flat Vitality. Incapacitated at 0. (ED-694, replaces Health formula.)
+**Health (full) = (Endurance + 6) × (Max Wounds + 1)** where `Max Wounds = floor(Endurance/2) + 1`. Total damage capacity (range 14–65). Equipment adds flat Health. Felled (incapacitated) at 0 Health (= MW+1 wounds accrued). **See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec.** (PP-716 reverts ED-694.)
 
-**Wound Interval = Endurance + 6** (range 7–13). Wounds accrue at floor(cumulative_damage / Wound_Interval). Computed on the fly — Max Wounds eliminated. (ED-694, replaces PP-263.)
+**Wound Interval = Endurance + 6** (range 7–13). Wounds accrue at floor(cumulative_damage / Wound_Interval). **Max Wounds = floor(Endurance/2) + 1** (range 1–4). (PP-716 restores Max Wounds; supersedes ED-694.) See `designs/scene/derived_stats_v30.md` §4.1.
 
 | Endurance | Wound Interval | Max Wounds | Total Damage Capacity = WI × (MW + 1) |
 |-----------|----------------|------------|---------------------------------------|
@@ -272,7 +272,7 @@ Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds. (PP-
 Take a Breath restores (Endurance + relevant History) × 2, capped at max.
 At 0: Out of Breath. −2D to all combat rolls.
 
-**Hybrid:** Wound Ob penalties carry into TTRPG mass battle Command checks (PP-232) (see stage11 PP-089 and mass_battle_v3 §A.5). Do NOT reduce BG commander bonus.
+**Hybrid:** Wound −1D Pool penalty carries into TTRPG mass battle Command checks (per `designs/scene/derived_stats_v30.md` §4.1 universal rule; PP-716 supersedes prior +1 Ob framing). Do NOT reduce BG commander bonus.
 
 ---
 
@@ -366,7 +366,7 @@ See compilation/v0.14/stage11_scale_transitions_deprecated.md §11.8.
 
 ## 10. THREAD IN COMBAT
 
-Combat is thread-configurations in violent restructuring (Foundations A1). A wound is a thread disruption at the actualized dimension. Death is a configuration ceasing to cohere. The body's damage impedes substrate-level work (+1 Ob per Wound to all Thread operations — threadwork_v30 §2.3). These are not metaphors; per A1, everything is constituted from threads.
+Combat is thread-configurations in violent restructuring (Foundations A1). A wound is a thread disruption at the actualized dimension. Death is a configuration ceasing to cohere. The body's damage impedes substrate-level work (−1D per Wound to all Thread operation Pools per `designs/scene/derived_stats_v30.md` §4.1). These are not metaphors; per A1, everything is constituted from threads.
 
 **Full Thread operation rules:** designs/ttrpg/threadwork_v30.md.
 
@@ -375,7 +375,7 @@ Combat is thread-configurations in violent restructuring (Foundations A1). A wou
 - **Leap round:** Practitioner commits all pool to Defence during Leap. ~60% hit probability from any opponent who can attack. Real tactical cost.
 - **Coherent Strike (W-24):** Viable only with range protection during Leap.
 - **Rally the Broken (W-33):** Effective only for CP ≥ 3 units.
-- **Wound penalties:** +1 Ob per Wound to all Thread operations (threadwork_v30 §2.3).
+- **Wound penalties:** −1D per Wound to all Thread operation Pools — Leap, Weaving, Pulling, Mending, FR (per `designs/scene/derived_stats_v30.md` §4.1 universal wound-penalty rule; PP-716 supersedes prior +1 Ob framing).
 - **Mass battle:** Coherence −1 per Thread operation. See mass_battle_v30 §A.10.
 
 ### 10.2 Thread Perception in Combat

@@ -45,35 +45,40 @@ Resolution: stats remain 1–7 (correct pool range for d10 probability curves). 
 
 ## §4 — Personal Scale: Combat Resources
 
-### 4.1 Vitality (survival resource)
+### 4.1 Health (survival resource) — AUTHORITATIVE (PP-716)
 
-| Property | Value |
-|----------|-------|
-| Formula | Endurance × 10 |
-| Range | 10–70 |
-| Direction | Drains down from max |
-| Depleted at | 0 (incapacitated) |
-| Equipment | Armor adds flat Vitality (+4 leather, +6 chain, +8 plate). Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
+This section is the source-of-truth for the Health formula and wound mechanic across all systems. Other documents (combat_v30, threadwork_v30, params/combat, params/threadwork, params/mass_combat) reference this section rather than restating.
 
-**Wound Interval = Endurance + 6** (unchanged). Wounds accrue at each interval of cumulative damage: `wounds_taken = floor(total_damage / Wound_Interval)`. Each wound = −1D Combat Pool (unchanged).
+| Aspect | Specification |
+|---|---|
+| Stat name | Health |
+| Underlying attribute | Endurance |
+| Max Wounds | `Max Wounds = floor(Endurance / 2) + 1` |
+| Wound Interval | `WI = Endurance + 6` (range 7–13 across End 1–7) |
+| Formula | `Health (full) = (Endurance + 6) × (Max Wounds + 1)` = WI × (MW+1) |
+| Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. Felled (incapacitated) at 0 Health, which equals MW + 1 wounds accrued. |
+| Damage > WI in one hit | Multiple wounds applied simultaneously (each WI of damage = +1 wound counter). |
+| Wounds clearance | All wounds clear at session end (canonical). Stabilised characters return to action after one full scene of rest. |
+| Equipment | Adds flat Health (+4 leather, +6 chain, +8 plate). Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
+| Wound penalty | −1D to ALL Pools (Combat, Thread — Leap, Weaving, Pulling, Mending, FR — Hybrid mass-battle Command). Universal rule. **No Ob penalty from wounds, ever.** Cumulative; capped by per-Pool floor (Combat Pool floor 5, Thread Pool floor 5 per threadwork §pool-floor). |
 
-Wound Interval checks use raw post-DR damage, not Vitality-scaled damage. Equipment Vitality bonuses affect total capacity before incapacitation; they do not change wound accrual rate. Armor DR still reduces incoming damage before both Vitality deduction and Wound Interval accumulation.
+Per-Endurance reference table:
 
-**Vitality cap:** `max_Vitality = Endurance × 10 + equipment_bonus`. Healing and recovery cannot exceed max_Vitality. If equipment is destroyed mid-combat, max drops but current Vitality is retained until next healing attempt (same pattern as faction Treasury when Wealth drops).
+| End | WI | MW | Health (full) | wounds before felled |
+|-----|----|----|---------------|---------------------|
+| 1 | 7 | 1 | 14 | 1 (felled at 2nd) |
+| 2 | 8 | 2 | 24 | 2 (felled at 3rd) |
+| 3 | 9 | 2 | 27 | 2 (felled at 3rd) |
+| 4 | 10 | 3 | 40 | 3 (felled at 4th) |
+| 5 | 11 | 3 | 44 | 3 (felled at 4th) |
+| 6 | 12 | 4 | 60 | 4 (felled at 5th) |
+| 7 | 13 | 4 | 65 | 4 (felled at 5th) |
 
-**Eliminates:** Max Wounds as a stored stat. Health formula `(End+6)×(floor(End/2)+1)`.
+Endurance-4 worked example (per Jordan canonical clarification 2026-05-09): Health 40 → 30 (1 wound) → 20 (2 wounds) → 10 (3 wounds, still alive at last threshold) → 0 (4 wounds, felled).
 
-| Endurance | Current Health | Vitality (×10) | Wounds before incap (current → new) |
-|-----------|---------------|----------------|--------------------------------------|
-| 1 | 14 | 10 | 2 → 1 |
-| 2 | 24 | 20 | 3 → 2 |
-| 3 | 27 | 30 | 3 → 3 |
-| 4 | 40 | 40 | 4 → 4 |
-| 5 | 44 | 50 | 4 → 4 |
-| 6 | 60 | 60 | 5 → 5 |
-| 7 | 65 | 70 | 5 → 5 |
+**Naming history.** "Vitality = Endurance × 10" was introduced by ED-694 as a simplification proposal. PP-716 reverts the simplification: the linear formula failed to match the WI × (MW+1) total-damage-capacity structure for End values 1, 2, 3, 5, 7 (only End 4 and 6 happened to align numerically). Stat name reverted from Vitality to Health for consistency with `params/combat.md` L16 and Jordan's design intent.
 
-Low-End characters become slightly more fragile (correct — minimal attribute investment should not be padded). Mid-to-high matches exactly or gains slightly.
+**Wound penalty universality.** Prior canon (combat_v30 §thread, threadwork_v30 §2.3, §3, §5; params/combat.md §thread; params/mass_combat §CF wound) variously specified "+1 Ob per Wound" for Thread operations, mass-battle Command checks, and CF Zoom-In tactics. PP-716 unifies all wound penalties as −1D to the relevant Pool. The Ob channel is reserved for non-wound mechanics (Thread Sensitivity Ob bands, Mending Stability Ob, Cover Ob, Stunt Ob).
 
 ### 4.2 Stamina (action economy resource)
 
@@ -464,7 +469,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 
 | Current System | Change | Rationale |
 |---------------|--------|-----------|
-| Health = (End+6) × (floor(End/2)+1) | → Vitality = End × 10 | Simpler, eliminates Max Wounds, opens equipment space |
+| Vitality = End × 10 (proposed by ED-694) | → reverted to Health = (End+6) × (Max Wounds + 1), MW = floor(End/2)+1 | PP-716 — End × 10 misaligned numerically with Wound Interval × wound-count structure; MW restored; equipment space preserved as flat additive bonus |
 | Max Wounds = floor(End/2)+1 | → Eliminated | Wounds computed on the fly: floor(damage / Wound_Interval) |
 | Stamina = End + History + 1 − armour | → Stamina = End × 5; History → recovery; armour → drain modifier | Single-attribute base, variable action costs, BB precedent |
 | Composure = Cha + 6 | → Composure = Cha × 3 | Removes +6 constant, opens social equipment space |

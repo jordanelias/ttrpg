@@ -87,7 +87,7 @@ Module 0 = manifest + ledger + gates. Modules R1–R10 = the residual risks. Eac
 | # | Name | Mode | Depends On | Canonical sources (full-depth fetch required) | Decision shape | Status |
 |---|------|------|------------|-----------------------------------------------|----------------|--------|
 | 0 | Manifest + ledger + gates | — | — | (this file) | gate cleared | in-progress |
-| 1 | R1 Wound permanence | B + D | M0 | `designs/scene/combat_v30.md §13.3 Death Cascade`, `designs/scene/combat_v30.md §4 Wound Interval`, `params/combat.md §wounds`, `designs/scene/derived_stats_v30.md §Vitality`, `designs/scene/fieldwork_v30.md §5.6b Knot Lifecycle`, `params/fieldwork.md §knot` | yes (catastrophic-Wound criteria) / no (preserve canonical) / partial (Knot-tagged subset) | **verified — recommend C1.3** |
+| 1 | R1 Wound permanence | B + D | M0 | `designs/scene/derived_stats_v30.md §4.1 Health (PP-716)`, `designs/scene/combat_v30.md §7`, `params/combat.md §wounds`, `designs/scene/fieldwork_v30.md §5.6b Knot Lifecycle`, `params/fieldwork.md §knot` | yes (catastrophic-Wound criteria) / no (preserve canonical) / partial (Knot-tagged subset) | **SUPERSEDED 2026-05-09 per PP-716 — needs redo against corrected canon** |
 | 2 | R2 Skill input layer in C | A + D | M0 | `designs/scene/combat_v30.md §1 Combat Pool`, `designs/scene/combat_v30.md §B (proposed) Duel`, `params/combat.md`, synthesis `05_q4_q5_q6.md §Q4 E5/E7` | pure dice / cap +1 / cap +2 / no cap | pending |
 | 3 | R3 Mass three-mode reframe | A coverage + D | M0 | `designs/provincial/mass_battle_v30.md §A (TTRPG)`, `§B (Board)`, `§D (World Bridge)`, `params/mass_combat.md` | full reframe / partial / preserve | pending |
 | 4 | R4 Hero participation default | A + B | M0, M3 | `designs/provincial/mass_battle_v30.md §B.5 Hybrid Handoff`, `§D.2 Named officers`, `designs/architecture/scale_transitions_v30.md`, `params/scale_transitions.md` | default-on / default-off / context-sensitive | pending |
@@ -174,3 +174,19 @@ Drawn from Mode G failure mode list:
 ## Changelog
 
 - 2026-05-09 — Initial manifest. Modules 0–10 enumerated. Self-audit findings carried forward. PP-684 collision resolved. Registry drift documented.
+
+## PP-716 supersession (2026-05-09)
+
+The wound mechanic was substantially corrected in PP-716 after Module 1 R1 was committed. The corrections:
+
+1. **Health formula reverted** to `(Endurance + 6) × (Max Wounds + 1)`, where `Max Wounds = floor(Endurance / 2) + 1`. ED-694's `Vitality = End × 10` formula is reverted because it did not match the WI × wound-count structure for End values 1, 2, 3, 5, 7.
+2. **Wound penalty unified** as −1D Pool universally (Combat, Thread, mass-battle Command, BG-CF tactic). The previously canonical "+1 Ob per Wound" for Thread operations, mass Command, and CF Zoom-In is now reverted.
+3. **Authoritative source** is now `designs/scene/derived_stats_v30.md §4.1` (rewritten as canonical Health spec).
+
+Module 1 R1 (`r1_wound_permanence.md`, committed 45c693e2) was authored against the now-superseded canon. It carries a SUPERSEDED banner. Its decision-shape recommendation (C1.3) was based on:
+- Pool floor 5D asymmetry under permanent-wound accumulation (still applies — Combat Pool floor unchanged).
+- Threadwork +1 Ob per Wound unfloored producing practitioner extinction cascade (no longer applies — wounds now give −1D Pool with floor protection, not +Ob).
+
+The R1 redo against PP-716 canon may produce a different recommendation. Plan: redo R1 in a subsequent session, save as `r1_wound_permanence_v2.md`, mark v1 superseded.
+
+Modules 2–10 remain pending and will use PP-716 canon from the start.

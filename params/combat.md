@@ -131,7 +131,7 @@ Exchange 1 initiative: higher Attunement acts last (highest information). Subseq
 
 ## Wounds / Incapacitation (PP-232)
 
-Vitality = Endurance × 10. Total damage capacity. Equipment adds flat Vitality (+4 leather, +6 chain, +8 plate). Max Vitality = End × 10 + equipment bonus. Healing cannot exceed max.
+Health (full) = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = floor(Endurance/2) + 1. Total damage capacity. Equipment adds flat Health (+4 leather, +6 chain, +8 plate). Max Health = (End+6)×(MW+1) + equipment bonus. See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec. (PP-716 reverts ED-694 Vitality formula.) Healing cannot exceed max.
 Wound Interval = Endurance + 6. Wounds accrue at floor(cumulative_damage / Wound_Interval). Computed on the fly — no Max Wounds stat.
 Example: Endurance 4 → Vitality 40, Wound Interval 10. Wounds at 10, 20, 30 cumulative damage; incapacitated at Vitality 0.
 Allows critical hits to deal multiple wounds simultaneously. (ED-694: replaces Health formula, eliminates Max Wounds.)
@@ -300,7 +300,7 @@ Out of Breath (Stamina 0): −2D on Agility disengage roll. Wounds do not penali
 
 Combat mechanics operate on thread-configurations at the rendered level (Foundations A1). The following cross-references apply:
 
-- **Wound → Thread Ob:** +1 Ob per Wound to all Thread operations (threadwork_v30 §2.3). The body's damage impedes substrate-level suspension.
+- **Wound → Thread Pool:** −1D per Wound to all Thread operation Pools — Leap, Weaving, Pulling, Mending, FR (per `designs/scene/derived_stats_v30.md` §4.1 universal rule; PP-716 supersedes prior +1 Ob framing). The body's damage impedes substrate-level suspension.
 - **Incapacitation → Thread contact:** Contact terminates immediately on incapacitation (threadwork_v30 §2.3). Operation in progress resolves as Failure.
 - **Death → Thread cascade:** Killing named NPC fires Knot rupture, Conviction Scar, Scene Slate entries, faction Stability trigger, Exposure (combat_v30 §13.3).
 - **Dissolution in combat:** RS cost per threadwork_v30 §5.2. Scar on all witnesses per npc_behavior_v30 §3.4. Companion Thread departure per companion_specification_v30 §6.1.

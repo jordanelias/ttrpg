@@ -69,3 +69,11 @@ entries:
     severity: P2
     source: "ED-755 D2.2 spin-out 2026-05-03"
     jordan_decision: "2026-05-09 — skip."
+  - id: ED-789
+    date: 2026-05-09
+    description: "Wound mechanic drift correction. ED-694 (Vitality = Endurance × 10, Max Wounds eliminated, ED-202 floor preserved) introduced a linear simplification that did not match the WI × (Max Wounds + 1) total-damage-capacity structure for Endurance values 1, 2, 3, 5, 7 (only End=4 and End=6 happened to align numerically). Concurrent canon variously specified wound penalties as −1D Pool (Combat) vs +1 Ob (Thread, mass Command, BG CF tactic) creating channel inconsistency. PP-716 reverts ED-694 simplification: stat name Health, formula = (Endurance + 6) × (Max Wounds + 1), MW = floor(Endurance/2) + 1, WI = Endurance + 6. Universal wound penalty: −1D Pool, no Ob, ever. designs/scene/derived_stats_v30.md §4.1 made authoritative source. combat_v30, threadwork_v30, params/combat, params/mass_combat all reference §4.1 rather than restating. Cross-references: PP-716, ED-694 (superseded), PP-232."
+    status: resolved
+    severity: P1
+    source: "Jordan canonical clarification 2026-05-09; contradictions surfaced during combat_arch_residual_stress_01 R1 module work"
+    jordan_decision: "2026-05-09 — wounds = −1D Pool universally, never Ob; Health = (End+6)×(MW+1); MW = floor(End/2)+1; revert ED-694; derived_stats §4.1 authoritative; propagate everywhere."
+
