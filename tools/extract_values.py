@@ -2,7 +2,11 @@
 """
 Valoria Values Extractor
 =========================
-Scans all params/*.md files and extracts named mechanical values.
+Scans `params/` (recursively) and `designs/` (recursively, excluding
+designs/audit/) for .md files and extracts named mechanical values.
+
+Files matching `*_superseded.md` or `*_deprecated.md` are excluded — they hold
+historical content and produce noisy conflicts against current canon.
 
 Extracted patterns:
   1. Formula assignments: "X = Y" or "X: Y" where Y is numeric/formulaic
@@ -14,6 +18,11 @@ Output: references/values_master.yaml
   - Each value has a stable key, raw text, extracted numeric (if any),
     formula (if applicable), and surrounding section context.
   - Conflicts between files for the same-named value are surfaced.
+
+Scope expansion 2026-05-10: previously params/ only at the top level. Designs
+now hold mechanical values too; a same-name value disagreeing between
+params/combat.md and designs/scene/combat_v30.md is exactly the drift this
+tool exists to catch.
 """
 import os
 import re
@@ -32,21 +41,58 @@ import urllib.request
 import json
 
 
-def list_params_files():
-    """List all .md files under params/ (not subdirectories for now)."""
-    pat = open('/home/claude/.valoria_pat').read().strip()
+def _list_md_recursive(repo_path: str, pat: str) -> list[str]:
+    """List .md files under repo_path recursively (using GitHub Trees API)."""
     out = []
     req = urllib.request.Request(
-        'https://api.github.com/repos/jordanelias/ttrpg/contents/params?ref=main',
+        f'https://api.github.com/repos/jordanelias/ttrpg/git/trees/main?recursive=1',
         headers={'Authorization': f'token {pat}',
                  'Accept': 'application/vnd.github.v3+json'}
     )
     with urllib.request.urlopen(req) as r:
-        items = json.loads(r.read())
-    for i in items:
-        if i['type'] == 'file' and i['name'].endswith('.md'):
-            out.append(f"params/{i['name']}")
+        data = json.loads(r.read())
+    for entry in data.get('tree', []):
+        if entry.get('type') != 'blob':
+            continue
+        p = entry.get('path', '')
+        if not p.startswith(repo_path):
+            continue
+        if not p.endswith('.md'):
+            continue
+        out.append(p)
+    return out
+
+
+def list_source_files():
+    """
+    List all .md files that hold mechanical content:
+      - params/  (all subdirs, recursive)
+      - designs/ (all subdirs, recursive, EXCEPT designs/audit/)
+
+    Excludes:
+      - *_superseded.md  (historical; produces noisy conflicts vs canon)
+      - *_deprecated.md  (same)
+      - designs/audit/   (audit reports about canon, not canon itself)
+    """
+    pat = open('/home/claude/.valoria_pat').read().strip()
+    candidates = _list_md_recursive('params/', pat) + _list_md_recursive('designs/', pat)
+
+    out = []
+    for p in candidates:
+        if p.startswith('designs/audit/'):
+            continue
+        base = p.rsplit('/', 1)[-1]
+        if base.endswith('_superseded.md') or base.endswith('_deprecated.md'):
+            continue
+        out.append(p)
     return sorted(out)
+
+
+# Backwards-compatible alias — any tool that imported list_params_files()
+# continues to work, but now sees the expanded scope.
+def list_params_files():
+    """DEPRECATED: use list_source_files(). Retained for backward compat."""
+    return list_source_files()
 
 
 # ─── EXTRACTION PATTERNS ──────────────────────────────────────────────────
@@ -308,11 +354,12 @@ def build_registry_yaml(values, conflicts):
     """Emit values grouped by source file."""
     lines = [
         "# Valoria Values Master Registry",
-        "# Auto-extracted from params/*.md by tools/extract_values.py",
+        "# Auto-extracted by tools/extract_values.py from params/ + designs/ (recursive).",
+        "# Files excluded: *_superseded.md, *_deprecated.md, designs/audit/.",
         "# Each entry records a named mechanical value with its source location.",
         "# Conflicts (same name, different values across files) surfaced below.",
         "",
-        "version: 1",
+        "version: 2",
         f"total_values: {len(values)}",
         f"total_conflicts: {len(conflicts)}",
         "",
@@ -361,8 +408,8 @@ def build_registry_yaml(values, conflicts):
 
 
 def main():
-    paths = list_params_files()
-    print(f"[1/3] Fetching {len(paths)} params files...")
+    paths = list_source_files()
+    print(f"[1/3] Fetching {len(paths)} source files (params/ + designs/)...")
     contents = g.read_files_graphql(paths, force_full=True)
     loaded = sum(1 for v in contents.values() if v)
     print(f"  Loaded: {loaded}")
