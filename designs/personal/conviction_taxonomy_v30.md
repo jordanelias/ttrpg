@@ -334,3 +334,15 @@ vetting:
 ---
 
 **End spec. PROVISIONAL pending ratification.**
+
+### altonian_imperial
+Roman-Byzantine amalgam. Imperial administrative tradition fused with civilizational mission.
+- Authority: 0.08 — imperial governance as natural order
+- Order: 0.07 — Roman legal-administrative structure
+- Identity: 0.06 — Almaic civilizational belonging ("we are Rome")
+- Precedent: 0.05 — Roman legal tradition, treaty obligations
+- Virtue: 0.04 — Roman civic virtue (*virtus*, *pietas*)
+- Scholastic: 0.03 — Byzantine intellectual tradition
+- Honor: 0.02 — military discipline
+- Remaining convictions: 0.00
+- Total: 0.35

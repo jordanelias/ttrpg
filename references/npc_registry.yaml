@@ -938,7 +938,7 @@ characters:
     first_name: Carin
     last_name: Vedel
     faction: Restoration Movement
-    role: Pamphleteer (suppressed Einhir cultural texts)
+    role: Copyist (hand-copies suppressed Einhir cultural texts)
     status: proposed
     cultural_label: restoration_reformist
     resonant_style: Evidence
@@ -946,7 +946,7 @@ characters:
       primary:
         - {conviction: Liberty, weight: 0.60}
         - {conviction: Equity, weight: 0.20}
-    arc_trajectory: "Propagation mechanism. Pamphlets increase Church AP across map. William Tyndale archetype."
+    arc_trajectory: "Propagation mechanism. Hand-copied manuscripts increase Church AP. Lollard copyist archetype — each copy takes weeks, possession is a heresy charge, no press to seize."
     source: proposed
 
   - id: NPC-089
