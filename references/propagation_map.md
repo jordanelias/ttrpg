@@ -118,3 +118,11 @@
 ## Patch Register Archival 2026-05-10
 
 19 applied patches (PP-684..688, PP-705..723) archived to `archives/patches/patch_register_archive_2026_05_10.yaml`. No mechanical propagation required — all patches already fully applied and verified in canon. Active register reduced from ~15k to ~1.5k tokens.
+
+## PP-723 vetting m_summary count correction (2026-05-10)
+**Class E (vetting documentation refinement); applied this commit.** No mechanical change to PP-723.
+- PP-723 m_summary corrected from "3 + · 4 ✓ · 4 ○" to "2 + · 4 ✓ · 5 ○": post-commit read-back caught off-by-one against actual ratings.
+- Actual M-ratings: M-1 ○ · M-2 + · M-3 ✓ · M-4 ○ · M-5 + · M-6 ✓ · M-7 ✓ · M-8 ○ · M-9 ○ · M-10 ✓ · M-11 ○ = 2 + · 4 ✓ · 5 ○ · 0 −.
+- Pass/fail verdict unchanged (zero violations).
+- Correction applied at archives/patches/patch_register_archive_2026_05_10.yaml (PP-723 was auto-archived between the original commit 0a4a1ff7 and this correction commit, so the fix lands in the archive rather than active register).
+- This is the third off-by-one detection across recent vetting work (PP-718 walkthrough commit 5a47da16; PP-718 recalibration commit 04d026a0; this); a process improvement (D1 from improvement_avenues_2026-05-10) for tighter post-commit verification is now demonstrably load-bearing.

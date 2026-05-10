@@ -836,9 +836,11 @@ patches:
       M-9: ○
       M-10: ✓
       M-11: ○
-    m_summary: 3 + · 4 ✓ · 4 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the four ○ ratings are appropriate
+    m_summary: 2 + · 4 ✓ · 5 ○ · 0 − — pass per throughlines_meta §8.2 (zero violations; the five ○ ratings are appropriate
       scope-mismatch on patterns where data canon authoring doesn't engage the pattern, not failures). The genuine extensions
-      are M-2 (geography-holds-pressure now settlement-granular), M-5 (cross-scale composition via two-tier adjacency).
+      are M-2 (geography-holds-pressure now settlement-granular) and M-5 (cross-scale composition via two-tier adjacency).
+      Recalibrated 2026-05-10 from initial 3+/4✓/4○: post-commit read-back identified off-by-one count error against actual
+      ratings (M-1/M-4/M-8/M-9/M-11 are all ○; only M-2 and M-5 are +).
     t_touches:
       extends:
       - T-18
