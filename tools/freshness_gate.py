@@ -55,6 +55,13 @@ def get_blob_sha(path):
     obj = result.get("data", {}).get("repository", {}).get("object")
     return obj.get("oid") if obj else None
 
+
+# Public alias used by valoria_hooks.assert_bootstrap freshness check.
+# Kept as a thin alias of get_blob_sha for API stability — callers use
+# whichever name is more readable in context. Do not remove without
+# updating callers (current caller: skills/valoria-orchestrator/scripts/valoria_hooks.py).
+get_live_sha = get_blob_sha
+
 def get_file(path):
     """Return (content_str, rest_blob_sha) for a repo file."""
     url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{path}?ref={BRANCH}"

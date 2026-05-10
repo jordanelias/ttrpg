@@ -24,12 +24,52 @@ _github_ops = None
 def _lazy_import():
     global _atomizer, _doc_index_gen, _index_gen, _github_ops
     if _atomizer is None:
-        # Tools may be in /home/claude or tools/ — handle both
+        # Tools may be in /home/claude or tools/ — handle both.
+        # If a required tool is missing entirely (typical in a fresh container
+        # session — bootstrap only fetches valoria_hooks.py and github_ops.py
+        # by default), pull it from GitHub. Mirrors the auto-fetch pattern in
+        # valoria_hooks.assert_bootstrap.
         for tools_dir in ['/home/claude', '/home/claude/tools', '.']:
             if os.path.isfile(os.path.join(tools_dir, 'atomizer.py')):
                 if tools_dir not in sys.path:
                     sys.path.insert(0, tools_dir)
                 break
+
+        # Auto-fetch any of compliance_check's tool dependencies that aren't
+        # on disk yet. Without this, a fresh session hits "No module named
+        # 'doc_index_gen' — skipping" on every bootstrap.
+        required = ['atomizer.py', 'doc_index_gen.py', 'index_gen.py']
+        missing = [n for n in required
+                   if not any(os.path.isfile(os.path.join(d, n))
+                              for d in sys.path)]
+        if missing:
+            try:
+                import urllib.request, json, base64
+                pat = os.environ.get('GITHUB_PAT', '') or (
+                    open('/home/claude/.valoria_pat').read().strip()
+                    if os.path.isfile('/home/claude/.valoria_pat') else ''
+                )
+                if pat:
+                    for tool_name in missing:
+                        req = urllib.request.Request(
+                            'https://api.github.com/repos/jordanelias/ttrpg/'
+                            f'contents/tools/{tool_name}?ref=main',
+                            headers={
+                                'Authorization': f'token {pat}',
+                                'Accept': 'application/vnd.github.v3+json',
+                            },
+                        )
+                        with urllib.request.urlopen(req) as r:
+                            data = json.loads(r.read())
+                        open(f'/home/claude/{tool_name}', 'w').write(
+                            base64.b64decode(data['content']).decode()
+                        )
+                    if '/home/claude' not in sys.path:
+                        sys.path.insert(0, '/home/claude')
+            except Exception:
+                # If fetch fails the imports below will raise a clearer error.
+                pass
+
         import atomizer as _a
         import doc_index_gen as _s
         import index_gen as _i

@@ -37,7 +37,7 @@ jobs:
           python -m py_compile tools/freshness_gate.py
           python -m py_compile tools/compliance_check.py
           python -m py_compile tools/atomizer.py
-          python -m py_compile tools/skeleton_gen.py
+          python -m py_compile tools/doc_index_gen.py
           python -m py_compile tools/index_gen.py
           echo "All tools: syntax OK"
 
