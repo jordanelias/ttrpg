@@ -642,3 +642,37 @@ patches:
     class: E
     necessity: pass
     note: "Class E — editorial fix. Surgical 5-word replacement aligning canonical example with Jordan's 2026-05-09 Niflhel dissolution decision (G-L03). No mechanical change; example preserves the same semantic category (Church-internal-but-anti-Church behavior)."
+
+- id: PP-718
+  class: B
+  pre-framework: false
+  date: 2026-05-10
+  severity: P1
+  description: "Conviction Scar accumulation per-Conviction clarification under PP-684 structured concentration. Reserved by PP-717 (commit 55403f74) as the next_pp follow-up. The legacy conviction_track_v1.md §2 table specified Scar thresholds without specifying whether the count was aggregate or per-Conviction. Under the legacy single-primary model, the distinction was moot. Under PP-684's 1-3 primary Convictions (weight 0.6-0.8) plus distributed cultural background (0.2-0.4), the distinction is load-bearing. PP-718 ratifies the per-Conviction interpretation: Scar counts accumulate on a specific named Conviction (per the §3 Thread Event × Conviction matrix); crisis fires when any single Conviction hits 3+ Scars. NPCs with multiple primaries can Scar each independently. Cultural-background-only crises produce muted narrative drift; primary-Conviction crises produce full arc transition. Roll 5 of the crisis table updated: 'Autonomy (survival instinct)' → 'Self-Other-orientation override' since Autonomy is no longer canonical (renamed Liberty per PP-684). Migration: legacy Reason → Scholastic; Continuity → migration-roster-determined primary; Autonomy → Liberty; pre-PP-684 Scar counts attach to migrated Conviction."
+  finding_id: conviction_stress_01 (commit 57bd26f4) deferred refinement; PP-717 next_pp reservation
+  source: editorial
+  affects:
+    - designs/personal/conviction_track_v1.md
+    - canon/patch_register_active.yaml
+    - references/canonical_sources.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-718 (this commit)
+  vetting:
+    class: B
+    necessity: pass
+    omega: pass
+    mu: ["Μ-α", "Μ-γ"]
+    m_ratings:
+      M-1: "+"
+      M-2: "+"
+      M-3: "+"
+      M-4: "✓"
+      M-5: "+"
+      M-6: "✓"
+      M-7: "✓"
+      M-8: "✓"
+      M-9: "+"
+      M-10: "+"
+      M-11: "+"
+    q: pass
+    note: "Class B — system extension on existing Conviction mechanic. N: closes a P1 ambiguity surfaced by conviction_stress_01 stress test (commit 57bd26f4); legacy Scar table written for single-primary model is not coherent under PP-684 structured concentration. Ω: per-Conviction interpretation is the natural extension; aggregate interpretation would have NPCs with more primaries crisis faster, which contradicts design intent (more rooted = more primaries = more stability). Q: per arch session sims §1 + §1.8 (PP-684 Stage 10 sim battery 12/14 PASS confirmed structured-concentration produces smoother aggregates than flat distributions; per-Conviction Scar accumulation extends this naturally). M-1 (Domain Tendency Layered): Scar mechanic preserved. M-3 (multi-graph isolation): per-Conviction tracking eliminates aggregate-load isolation defect. M-7 (vector aggregate consistency): per-Conviction is the natural vector aggregation. M-9 (cascade structure): multi-Conviction crisis cascade rule defined. Migration via PP-685 roster preserves legacy Scar counts on migrated Conviction."

@@ -317,3 +317,14 @@ Final commit. ED-784 Phase 2 work complete.
 - `designs/scene/social_contest_v30.md` PP-349 paragraph: "collaborating with Niflhel" → "collaborating with crime or underground networks operating against Church interests".
 - Aligns canonical example with Jordan's 2026-05-09 Niflhel dissolution decision (G-L03 from setup_ignition_stress_01 commit cab3bd85).
 - Surfaced by: F3 Heresy Investigation EC-F3.A-01 (commit 8de82dbb).
+
+## PP-718 Conviction Scar accumulation per-Conviction clarification (2026-05-10)
+**Class B (system extension); applied this commit.** Closes P1 ambiguity from conviction_stress_01 (commit 57bd26f4); reserved by PP-717 as next_pp.
+- `designs/personal/conviction_track_v1.md §2`: rewritten to specify per-Conviction Scar accumulation under PP-684 structured concentration.
+  - Crisis at 3+ Scars on **any single Conviction** (not aggregate count).
+  - Multi-primary NPCs Scar each Conviction independently; concurrent crises possible.
+  - Cultural-background Conviction crises produce muted drift (no full arc transition).
+  - Crisis table roll 5 updated: "Autonomy survival" → Self-Other-orientation override (Autonomy not canonical post-PP-684; renamed Liberty).
+- `references/canonical_sources.yaml` conviction_track entry: status note updated; pending-PP-718 mark cleared.
+- Migration from legacy single-primary model preserves Scar counts on migrated Convictions (Reason→Scholastic, Continuity→roster-determined, Autonomy→Liberty).
+- Surfaced by: conviction_stress_01 deferred-refinement Test 2 (commit 57bd26f4).

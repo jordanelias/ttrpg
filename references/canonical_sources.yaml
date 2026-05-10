@@ -121,8 +121,8 @@ systems:
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/personal/conviction_track_v1.md
-    canonical_sha__designs__personal__conviction_track_v1_md: "PENDING_PP_717"
-    canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684; §2 Scar accumulation + §3 Thread Operation triggers remain canonical pending PP-718 weight-scaling review under structured concentration"
+    canonical_sha__designs__personal__conviction_track_v1_md: "PENDING_PP_718"
+    canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
     params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "fc016ff0ef1272e5f3e70ca490e0c00d1421e160"
     related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md

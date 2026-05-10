@@ -31,21 +31,33 @@ This document is the canonical reference for the Piety Track mechanic. NPC prior
 
 ## §2 Scar Accumulation and Conviction Effects
 
-| Scars | Effect on Conviction | Effect on Resonant Style | Effect on Behavior |
-|---|---|---|---|
-| 0 | Default configuration | Default configuration | Stable institutional behavior |
-| 1 | Secondary Conviction activates alongside primary. Decision Forks increase. | No change | NPC exhibits internal conflict. Both Convictions influence decisions. |
-| 2 | Primary Conviction may shift to secondary (engine judgment based on Scar content). NPC enters arc transition state. | Secondary Resonant Style activates permanently. NPC is now vulnerable on two fronts. | Institutional Tendency may diverge from personal behavior. NPC may take surprising actions. |
-| 3+ | Conviction crisis. NPC acts unpredictably for 1 season (engine rolls on Conviction table below to determine each major decision). | All Resonant Styles active. NPC is socially exposed. | The NPC is in full transformation. Their arc has entered a terminal phase — they will either stabilise into a new configuration or be destroyed. |
+**PP-718 clarification (2026-05-10):** Under PP-684 structured concentration (1–3 primary Convictions weighted 0.6–0.8 plus distributed cultural background 0.2–0.4 per `designs/personal/conviction_taxonomy_v30.md §4`), Scar accumulation is **per-Conviction, not aggregate**. The thresholds below apply to Scar count *on a specific Conviction*. An NPC with three primary Convictions can be Scarred on each independently; crisis fires on any Conviction that hits 3+ Scars.
 
-**Conviction crisis table** (3+ Scars, engine rolls d6 per major decision):
+**Per-Conviction Scar table** (counts Scars accrued on a single named Conviction; §3 matrix below specifies which Conviction is Scarred per Thread event):
+
+| Scars on Conviction X | Effect on Conviction X | Effect on Resonant Style | Effect on Behavior |
+|---|---|---|---|
+| 0 | Default configuration for Conviction X | Default configuration | Stable institutional behavior |
+| 1 | Conviction X destabilises. If X is a primary (weight ≥ 0.6), the NPC's overall stability degrades; if X is cultural background (weight 0.2–0.4), effect is muted but tracked. Decision Forks increase when X is salient. | No change | NPC exhibits internal conflict on situations engaging Conviction X. |
+| 2 | Conviction X weight may shift downward (engine judgment based on Scar content); other primaries gain proportionally. NPC enters arc transition state if X was the highest-weighted primary. | Resonant Style for Conviction X activates permanently. NPC is now socially exposed on the X axis specifically. | Institutional Tendency on X-engaging decisions may diverge from personal behavior. |
+| 3+ | **Conviction crisis on X.** NPC acts unpredictably for 1 season when X is engaged (engine rolls on crisis table below per major X-engaging decision). Other Convictions remain stable unless they also accrue 3+ Scars. | Resonant Style for X is fully exposed; secondary Resonant Styles activate as their underlying Convictions also accrue Scars. | Terminal arc phase for the X-axis: stabilise into a new X-configuration, fold X into another primary, or be destroyed by the X-incoherence. |
+
+**Conviction crisis table** (3+ Scars on Conviction X; engine rolls d6 per major X-engaging decision):
 
 | Roll | NPC acts on... |
 |---|---|
-| 1–2 | Original primary Conviction (habitual regression) |
-| 3–4 | Secondary Conviction (conscious pivot) |
-| 5 | Autonomy (survival instinct overrides both) |
-| 6 | Whichever Conviction most aligns with the last PC interaction (relational pull) |
+| 1–2 | Original Conviction X (habitual regression — the Scarred Conviction reasserts) |
+| 3–4 | Highest-weighted *other* primary Conviction (lateral pivot to next-most-load-bearing value) |
+| 5 | Self-Other-orientation override (per PP-684 §3): if Self-Other > +0.5, self-aggrandizing action; if < −0.5, self-sacrificing; else mid-range pragmatic. Replaces legacy "Autonomy survival" interpretation since Autonomy is no longer canonical (renamed Liberty per PP-684). |
+| 6 | Whichever Conviction most aligns with the last PC interaction (relational pull — preserved from legacy interpretation) |
+
+**Multi-Conviction crisis cascade:** if an NPC is in crisis on multiple Convictions simultaneously (rare but possible — typically requires sustained sustained Resonant Style targeting across distinct vectors), the engine selects the Conviction with the most recent Scar event for each major decision; ties resolve to highest-weighted primary at character creation.
+
+**Cultural background Scar threshold:** Scars accrued on cultural background Convictions (weight 0.2–0.4) follow the same per-Conviction count, but the Behavior column is muted at each step — cultural-background-only crises produce subtle drift rather than full arc transition (engine narrative effect, no mechanical disruption to primaries).
+
+**Migration from legacy single-primary model:** NPCs migrated under PP-685 (Conviction migration roster) carry forward Scars accrued under the legacy 9-Conviction model. Reason → Scholastic; Continuity → most relevant primary per migration roster (typically Warden or Order); Autonomy → Liberty. Pre-PP-684 Scar counts attach to the migrated Conviction.
+
+
 
 ---
 
