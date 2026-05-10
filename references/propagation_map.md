@@ -355,3 +355,9 @@ Final commit. ED-784 Phase 2 work complete.
 - `designs/personal/conviction_track_v1_pp718_vetting.md` (NEW): standalone full walkthrough doc with N/Μ/М/Τ/Q sections, M-1..M-11 per-pattern reasoning, per-T touch verdicts. ~273 lines / ~35k chars.
 - `references/canonical_sources.yaml`: pp718_vetting_walkthrough field added under conviction_track entry.
 - Sources read at full depth for the walkthrough: throughlines_meta (skeleton + infill §3.4-§3.8), conviction_taxonomy_v30, conviction_axis_matrix_v30, conviction_track_v1 (post-PP-717/PP-718 state), npc_behavior_v30 §1-§3, conviction_migration_roster_v30.
+
+## PP-718 vetting walkthrough — m_summary count correction (2026-05-10)
+**Class E (editorial fix); applied this commit.** Off-by-one defect in m_summary count corrected.
+- `canon/patch_register_active.yaml` PP-718 vetting m_summary: "6 + · 3 ✓ · 1 ○ · 0 −" → "7 + · 3 ✓ · 1 ○ · 0 −". Actual M-ratings (M-1+, M-3+, M-4+, M-5+, M-6+, M-9+, M-11+ = 7) verified against per-pattern body.
+- `designs/personal/conviction_track_v1_pp718_vetting.md` §М summary: "Six +, three ✓..." → "Seven +, three ✓..."; final summary table row "**6 + · 3 ✓ ... pass**" → "**7 + · 3 ✓ ... pass**".
+- No mechanical change. Self-review caught the inconsistency between counted ratings (7 +) and summary claim (6 +).

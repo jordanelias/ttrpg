@@ -198,7 +198,7 @@ The crisis-table roll 5 (Self-Other override) is itself voluntary-ish: Self-Othe
 | М-10 | Environment as constitutive medium | ✓ | Cultural-background template environmental constitution preserved; muted-drift is downstream consequence |
 | М-11 | Voluntary and involuntary capacity duality | + | Per-axis voluntary cultivation extends voluntary-pole resolution; roll-5 connects voluntary drift to involuntary crisis |
 
-**Six +, three ✓, one ○, zero −.**
+**Seven +, three ✓, one ○, zero −.**
 
 Per `throughlines_meta §8.2`: "М fail (single) → redesign OR documented tradeoff. М fail (multiple) → redesign required." Zero violations. **М verdict: pass.**
 
@@ -266,7 +266,7 @@ Per `throughlines_meta §8.1` Class B: "Which T's does this touch? For each: ext
 | N | pass |
 | Ω (inherited from PP-684) | pass |
 | Μ | pass — primary Μ-α + Μ-β; Μ-γ + Μ-δ preserved |
-| М (M-1..M-11 walkthrough) | **6 + · 3 ✓ · 1 ○ · 0 −** — pass |
+| М (M-1..M-11 walkthrough) | **7 + · 3 ✓ · 1 ○ · 0 −** — pass |
 | Τ | pass — extends T-14/T-22/T-23/T-24/T-25/T-08; preserves T-09/T-11/T-15a/b/c/T-27/T-32/T-39; no supersessions |
 | Q | pass on robust/smooth/elegant |
 
