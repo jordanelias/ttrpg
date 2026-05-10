@@ -178,6 +178,110 @@
       "canonical_source": "designs/scene/social_contest_v30.md",
       "section": "§7.1",
       "quoted_text": "*The correct strategic counter is preventing the filing, not defending at Tribunal. See §10.1 Parliamentary Stay. Filing can be prevented while CI < 55.*"
+    },
+    {
+      "id": "F4-L01",
+      "sim_variable": "mending_pool_formula",
+      "value": "(Spirit × 2) + History + TPS",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3 Mending",
+      "quoted_text": "**Pool:** (Spirit × 2) + relevant History bonus + Thread Pool Score (PP-616, PP-625 — Attunement and Focus struck from pool dice; Focus still governs Contact Rounds)"
+    },
+    {
+      "id": "F4-L02",
+      "sim_variable": "mending_tn",
+      "value": "TN 7",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3 Mending",
+      "quoted_text": "**TN:** 7"
+    },
+    {
+      "id": "F4-L03",
+      "sim_variable": "mending_requirements",
+      "value": "TS 50+; target Gap/Shifting/Locked",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3 Mending",
+      "quoted_text": "**Requirements:** Thread Sensitivity 50+ · Target must be a Gap, Shifting Object, or Locked Zone border"
+    },
+    {
+      "id": "F4-L04",
+      "sim_variable": "mending_ob_table",
+      "value": "Gap severity → Ob (2..8+)",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3 Mending",
+      "quoted_text": "**Ob by Gap severity:**"
+    },
+    {
+      "id": "F4-L05",
+      "sim_variable": "mending_outcomes",
+      "value": "Overwhelming +2; Success +1; Partial reduce; Failure −2",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3 Mending",
+      "quoted_text": "Overwhelming | Substrate restored. Gap closes cleanly. Mending Stability +2 (strain released). Coherence: 0 (Mending is aligned work — no rendering damage). Mended area +1 Ob to future Gap formation in this zone for 1 season."
+    },
+    {
+      "id": "F4-L06",
+      "sim_variable": "mending_coherence_asymmetry",
+      "value": "Mending costs 0 Coherence",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3 Mending",
+      "quoted_text": "**Mending Coherence Asymmetry:** Mending never costs Coherence."
+    },
+    {
+      "id": "F4-L07",
+      "sim_variable": "seasonal_mending_fatigue",
+      "value": "+1 Ob cumulative per consecutive same-season Mend",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3 Mending",
+      "quoted_text": "**Seasonal Mending Fatigue:** Each consecutive Mending in the same season (not scene — season) adds +1 Ob cumulative."
+    },
+    {
+      "id": "F4-L08",
+      "sim_variable": "ms_range_thresholds",
+      "value": "100→0; 6 bands",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§5.1+§5.3",
+      "quoted_text": "**Range:** 100 (fully stable) → 0 (the Rupture)."
+    },
+    {
+      "id": "F4-L09",
+      "sim_variable": "ms_cumulation_p14",
+      "value": "Lower bands include all higher band effects",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§5.3",
+      "quoted_text": "**Mending Stability threshold cumulation (P-14):** Mending Stability threshold effects are cumulative."
+    },
+    {
+      "id": "F4-L10",
+      "sim_variable": "ms_seasonal_cap",
+      "value": "±10 per season net",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§5.5",
+      "quoted_text": "No double-counting; seasonal cap on Mending Stability change is ±10 per season."
+    },
+    {
+      "id": "F4-L11",
+      "sim_variable": "ms_critical_endgame",
+      "value": "Critical 19-1 = 2-4 season endgame",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§5.3 design note",
+      "quoted_text": "**Design note — Mending Stability Critical as endgame:** Once Mending Stability enters the Critical band (19–1), the campaign is in a 2–4 season endgame without dramatic intervention."
+    },
+    {
+      "id": "F4-L12",
+      "sim_variable": "board_mend_order",
+      "value": "Intelligence vs Ob; +1/-1 MS; draw Co-Movement",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§7.1",
+      "quoted_text": "**Mend** | Intelligence (or faction-specific) vs Ob by Gap category (see below) | Success: Gap closed. Mending Stability +1. Failure: Mending Stability −1. Draw Co-Movement Card."
+    },
+    {
+      "id": "F4-L13",
+      "sim_variable": "board_mend_ob",
+      "value": "Shifting 1, Standard 2, Entrenched 3, Catastrophic 4",
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§7.1",
+      "quoted_text": "**Board game Mend Ob** (lower than TTRPG — faction-level effort abstracts collective resources):"
     }
   ],
   "modules_verified": [
@@ -228,7 +332,25 @@
     },
     {
       "module": "F4 Mending B10/B11",
-      "status": "DEFERRED — separate follow-up session; PP-716 wound-penalty propagation already validated in R1 v2"
+      "status": "VERIFIED 2026-05-10",
+      "ledger_entries": [
+        "F4-L01",
+        "F4-L02",
+        "F4-L03",
+        "F4-L04",
+        "F4-L05",
+        "F4-L06",
+        "F4-L07",
+        "F4-L08",
+        "F4-L09",
+        "F4-L10",
+        "F4-L11",
+        "F4-L12",
+        "F4-L13"
+      ],
+      "decision": "F4.1 (preserve canonical Mending lifecycle); PP-716 propagation through Mending re-validated; no mechanical changes",
+      "key_finding": "Mending lifecycle mature post-PP-616/PP-625 + canonical §5.x Stability track + §7.1 board-game order. 22/24 NERS pass. Two ⚠ Horizontal (Critical-band design intent + board-game discoverability) intentional. PP-716 −1D Pool with floor 5D produces friction loop, not extinction (R1 v2 Chain 2 verdict reaffirmed). Mending Coherence-zero asymmetry unbroken under PP-716. Cross-mode aggregation clean."
     }
-  ]
+  ],
+  "f_bundle_status": "COMPLETE 2026-05-10 — F1 covered in R5 commit d46ad908; F2 Knot Lifecycle commit ddccbf9a; F3 Heresy Investigation commit 8de82dbb; F4 Mending this commit"
 }
