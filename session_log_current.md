@@ -1,12 +1,16 @@
-session_id: 2026-05-08-editorial-conviction-migration
-session_close: 2026-05-08
-phase: editorial
+session_id: 2026-05-10-infrastructure-audit
+session_close: 2026-05-10
+phase: infrastructure
 status: complete
-last_stage: npc_registry v3.2 committed — 46 NPCs, conviction weights validated, analogues corrected
+last_stage: data-management-audit-resolution
 next_action:
   skill: confirm with Jordan
-  detail: promote 11 proposed NPCs to canonical; resolve Haelgrund inquisitor identity
-blockers:
-  - Crown IC membership count (7 vs behavior §2.15 spec of 5)
-  - Haelgrund inquisitor from prompt writer tests unidentified
-  - 11 proposed NPCs need status promotion
+  description: All data-management issues resolved (14 commits). PAT rotation outstanding.
+blockers: []
+open_items:
+  - VALORIA_PAT rotation needed (exposed in chat)
+  - 7 PROVISIONAL files correctly lack CANONICAL header (pending ratification)
+  - PI bootstrap references deleted file_index_summary.md (cosmetic — shows '?')
+commits_this_session: 14
+final_compliance: 0 errors, 0 warnings
+final_freshness: 0 stale, 107 fresh
