@@ -79,6 +79,25 @@
         "C2.4 uncapped (categorical multi-axis fail — tabletop-incompatible R2-L02, inverts stat hierarchy)"
       ],
       "open_finding": "Pirates! E5 + Sekiro E7 already adopted carry C-distinctiveness without motor-skill layer. Genre-expectation gap acknowledged as Horizontal ⚠ but not categorical."
+    },
+    {
+      "module": 3,
+      "name": "R3 Mass-battle three-mode reframe",
+      "date": "2026-05-09",
+      "ledger_entries": [
+        "R3-L01",
+        "R3-L02",
+        "R3-L03",
+        "R3-L04",
+        "R3-L05",
+        "R3-L06",
+        "R3-L07"
+      ],
+      "decision": "C3.3 (preserve canonical structure + add phase-mapping table to top of mass_battle_v30)",
+      "rejected_candidates": [
+        "C3.2 cosmetic rename (high propagation cost for low value)"
+      ],
+      "key_finding": "Synthesis premise partially obsolete: v30 canon already merged TTRPG/Hybrid (R3-L01, R3-L07) on 2026-04-17. R3 re-asked against actual structure: no mechanical restructure needed. Documentation addition (I-tier ↔ Part phase-mapping) is the only output needed."
     }
   ],
   "constants": [
@@ -353,6 +372,62 @@
       "canonical_source": "params/combat.md",
       "section": "§Pool minimum",
       "quoted_text": "Combat Pool minimum 5 is a clean floor. No −1D penalty at the floor."
+    },
+    {
+      "id": "R3-L01",
+      "sim_variable": "three_mode_framing",
+      "value": "TTRPG/Hybrid (A); BG (B); Hybrid Handoff (§B.5)",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "header L9",
+      "quoted_text": "Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)"
+    },
+    {
+      "id": "R3-L02",
+      "sim_variable": "part_a_unified_resolution",
+      "value": "Same dice engine as personal combat",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§A.1 OVERVIEW",
+      "quoted_text": "Mass battle uses the same dice engine as personal combat."
+    },
+    {
+      "id": "R3-L03",
+      "sim_variable": "part_a_effective_pool",
+      "value": "min(Size, Command) + Command",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§A.1",
+      "quoted_text": "**Effective Combat Pool = min(Size, Command) + Command** (PP-233)"
+    },
+    {
+      "id": "R3-L04",
+      "sim_variable": "part_b_design_principle",
+      "value": "BG resolves in single Priority 2 slot, 3-5 min total",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.1",
+      "quoted_text": "BG battles resolve in a single Priority 2 slot. Total resolution time: 3–5\nminutes."
+    },
+    {
+      "id": "R3-L05",
+      "sim_variable": "part_b_strategic_depth",
+      "value": "Strategic depth in preparation, not execution",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.1",
+      "quoted_text": "Strategic depth lives in preparation (unit composition, order\nchoice, tactic card selection), not in turn-by-turn execution."
+    },
+    {
+      "id": "R3-L06",
+      "sim_variable": "b5_phase_lock_protocol",
+      "value": "Three legal phase-lock points for Zoom In",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.5",
+      "quoted_text": "Zoom In may only fire at one of three legal phase-lock points:\n- **After Phase 1** (orders placed, nothing resolved — cleanest entry)\n- **After Phase 3** (manoeuvre complete, pre-Engagement)\n- **After Phase 6 Step 1** (all damage applied, no ghost units)"
+    },
+    {
+      "id": "R3-L07",
+      "sim_variable": "canonical_status",
+      "value": "Canonical, approved 2026-04-17",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "header",
+      "quoted_text": "Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)"
     }
   ],
   "meta_findings": [
