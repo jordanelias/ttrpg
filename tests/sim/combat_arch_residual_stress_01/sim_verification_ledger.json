@@ -60,6 +60,25 @@
         "C1.4 all-permanent (multi-axis categorical fail)"
       ],
       "open_finding": "Pool asymmetry persists but is bounded by MW under PP-716 (worst case 12D → 8D at End=7 carry vs 5D at End=1 floor — 3D gap, halved from v1's 7D gap)"
+    },
+    {
+      "module": 2,
+      "name": "R2 Skill input layer in Architecture C",
+      "date": "2026-05-09",
+      "ledger_entries": [
+        "R2-L01",
+        "R2-L02",
+        "R2-L03",
+        "R2-L04",
+        "R2-L05",
+        "R2-L06"
+      ],
+      "decision": "C2.1 (pure dice, cognitive only) — primary; C2.2 (cap +1 net hit) — fallback if genre-expectation gap is unacceptable",
+      "rejected_candidates": [
+        "C2.3 cap +2 (marginal — stat relevance halved at low pool, cross-system asymmetry)",
+        "C2.4 uncapped (categorical multi-axis fail — tabletop-incompatible R2-L02, inverts stat hierarchy)"
+      ],
+      "open_finding": "Pirates! E5 + Sekiro E7 already adopted carry C-distinctiveness without motor-skill layer. Genre-expectation gap acknowledged as Horizontal ⚠ but not categorical."
     }
   ],
   "constants": [
@@ -286,6 +305,54 @@
       "canonical_source": "designs/scene/derived_stats_v30.md",
       "section": "§Coherence",
       "quoted_text": "**Coherence** (survival resource): unchanged. 10→0 countdown. Not a derived value — a permanent degradation track."
+    },
+    {
+      "id": "R2-L01",
+      "sim_variable": "combat_pool_formula",
+      "value": "(Agility × 2) + Relevant History + 3 (minimum 5)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§1",
+      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "id": "R2-L02",
+      "sim_variable": "tabletop_baseline_constraint",
+      "value": "All mechanics scale from TTRPG baseline",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "header",
+      "quoted_text": "Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)"
+    },
+    {
+      "id": "R2-L03",
+      "sim_variable": "feint_player_skill_precedent",
+      "value": "Cognitive player-skill canonical precedent (commit allocation)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§4 line 95",
+      "quoted_text": "Feint | Player chooses commit: allocate N dice (minimum 3) to Offence for the feint"
+    },
+    {
+      "id": "R2-L04",
+      "sim_variable": "stunt_skill_modifier",
+      "value": "Existing Game-Master-judged skill modifier with cap +5",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§4 line 105",
+      "quoted_text": "Stunt | Declared with Strike. +N dice to Offence from environmental/positional narrative (Game Master sets N, max 5)."
+    },
+    {
+      "id": "R2-L05",
+      "sim_variable": "tn7_baseline",
+      "value": "Standard TN baseline",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5",
+      "quoted_text": "Base TN = 7"
+    },
+    {
+      "id": "R2-L06",
+      "sim_variable": "pool_floor",
+      "value": "Combat Pool minimum 5D",
+      "canonical_source": "params/combat.md",
+      "section": "§Pool minimum",
+      "quoted_text": "Combat Pool minimum 5 is a clean floor. No −1D penalty at the floor."
     }
   ],
   "meta_findings": [
