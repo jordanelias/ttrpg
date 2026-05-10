@@ -39,12 +39,13 @@ entries:
 
   - id: ED-777
     date: 2026-04-30
-    description: "[STANDING] arc_register_factions.md — 5 arcs require reframe. Niflhel is not a faction. Crime and underground networks exist in Valoria but are not threadwork-related. Affected: ARC-S11, ARC-S54, ARC-S55, NPC-ARC-VIR, ARC-T25. Reframe around crime/underground networks, not Niflhel faction, not threadwork items. Cross-references: PP-698."
-    status: open
+    description: "[CLOSED 2026-05-10] arc_register_factions.md — 5 arcs reframed around crime/underground networks per Jordan's 2026-05-09 decision. ARC-S11 (Headless Network → Underground Network Engagement; four-arm structure dissolved), ARC-S54 (Quiet Overreach → Underground Operational Detection; Thread-signature dependency removed), ARC-S55 (Arms Out of Sync → Network Coordination Failure), NPC-ARC-VIR (Virke as smuggling-family criminal network; not Niflhel arm), ARC-T25 (Virke Family Ultimatum reframed around criminal-network ownership). Underground networks now operate at settlement-layer per `designs/territory/settlements_v30.md`; not a unified faction; not threadwork-related. Cross-references: PP-698, G-L02 setup_ignition_stress_01 (commit cab3bd85)."
+    status: closed
+    closed_date: 2026-05-10
     severity: P2
     source: "Niflhel strike scope 2026-04-30 (deferred from PP-698)"
     jordan_decision: "2026-05-09 — Niflhel not a faction. Crime/underground exists but not threadwork-related. Reframe 5 arcs around that."
-
+    closure_commit: "2026-05-10 (this commit)"
   - id: ED-780
     date: 2026-05-01
     description: "[STANDING] Phase 3 of geography canon work — spec rewrite (depends on ED-779 completion). Approved scope 2026-05-09: (a) rewrite settlement_adjacency_v30 to query geography data rather than abstract edge-types; (b) author march-bubble + encounter-trigger spec (new doc designs/territory/march_layer_v30.md); (c) update mass_battle_v30 §A.9 / §B.5 for geographic battle-terrain derivation at engagement coordinates. Naval mechanics EXCLUDED — ED-055 deferred indefinitely. Output: rewritten settlement_adjacency_v30, new march_layer_v30, updated mass_battle_v30. Cross-references: PP-706, audit §2 G7-G9, §3 C5."

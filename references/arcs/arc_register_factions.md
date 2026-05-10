@@ -258,24 +258,35 @@ Crown Royal Decree targets Guilds Wealth AND Guilds Mandate ≤ 3 AND PI ≥ 6 �
 
 ---
 
-### NIFLHEL (fourth tier)
+<!-- [REFRAMED 2026-05-10 — ED-777 closure per Jordan 2026-05-09 G-L03 decision] -->
+<!-- The legacy NIFLHEL faction is dissolved per `designs/npcs/npc_behavior_v30.md §2.12 STRUCK`. Crime and underground networks exist in Valoria but are NOT threadwork-related and NOT a unified faction. The 5 arcs below are reframed around settlement-layer crime/underground network phenomena per Jordan's authoring direction. The Quiet/Reckoners/Burned/Port four-arm structure is dissolved with Niflhel itself; do not reintroduce. Surfaced by setup_ignition_stress_01 G-L02 (commit cab3bd85). -->
+
+### CRIME & UNDERGROUND NETWORKS (settlement-layer phenomena — formerly NIFLHEL fourth-tier)
+
+**Underground networks operate at settlement layer in Valoria.** They are not a unified faction with a hierarchy; each settlement (per `designs/territory/settlements_v30.md` and conflict_architecture_proposal §Niflhel dissolution) hosts local criminal/black-market/intelligence-broker networks of varying organisation and reach. The arcs below operate at the settlement-network layer; "the underground" in arc text refers to whichever local network is dominant for the territory and season in question, not a meta-faction.
 
 ---
 
-**ARC-S11 — Headless Network** `Niflhel | T1, T9, T8 | ALL`
-Four-arm structure (Quiet, Reckoners, Burned, Port) — decentralised. Each arm requires separate influence operation (Intel vs Ob 3). Uncontrolled arms act independently. Quiet is most operationally valuable but approaching Quiet first alerts Reckoners and Burned. Direction: Niflhel's value (intelligence, covert, port access) requires controlling something that is designed to resist control.
+**ARC-S11 — Underground Network Engagement** `crime/underground | T1, T9, T8 | ALL`
+*Reframed from "Headless Network" — the four-arm structure (Quiet, Reckoners, Burned, Port) is dissolved with the Niflhel faction.*
+Underground networks operate at the settlement layer. Engaging an underground network for intelligence, smuggling, or covert operations requires a per-settlement Intel operation: Intel vs Ob 3 to identify the dominant local network in a settlement, then Intel vs Ob 3 to establish working relationship. Each engaged network operates independently; engaging one in T1 does not propagate to T8 or T9 networks. Networks resist consolidation — attempts to coordinate across settlements (e.g., for cross-territory operations) require Intel vs Ob 4 per additional settlement involved, with cooldown 2 seasons per coordination attempt. Direction: underground value (intelligence, covert action, contraband supply) requires per-settlement engagement; networks resist consolidation by their nature.
 
-**ARC-S54 — Quiet Overreach** `Niflhel | T1, T8, T9 | ALL`
-Niflhel deploys Quiet in ≥ 3 territories in one season: TT +1.5. Church Intel detects the Thread signature clustering — not individual operations but the pattern. Church Intel +1D vs Niflhel for 2 seasons. Olafsson responds institutionally: systematic network investigation across all territories where Thread signatures were detected. Direction: Niflhel's own operational frequency generates the detection that threatens it.
+**ARC-S54 — Underground Operational Detection** `crime/underground | T1, T8, T9 | ALL`
+*Reframed from "Quiet Overreach" — the Thread-signature detection mechanic is replaced with operational-pattern detection (no threadwork dependency).*
+A faction operating underground networks in ≥ 3 territories in a single season produces a detectable operational pattern (intelligence chatter, customs anomalies, witness clusters). Church Intel — or Crown Investigative Branch in Crown territories — detects the pattern at season Accounting: pattern signature gains +1D vs the operating faction for 2 seasons in any anti-underground operation. Direction: underground operational frequency generates the detection that threatens it; the more aggressively a faction uses underground networks, the more visible they become to institutional scrutiny.
 
-**ARC-S55 — Arms Out of Sync** `Niflhel | ALL | ALL`
-Players control 2 of 4 arms (partial control from ARC-S11) while 2 remain autonomous. When controlled and autonomous arms operate in the same territory same season: Intel vs Intel contested roll (one roll per encounter — "encounter" = same territory, same season). Winner takes the intelligence product. Autonomous arm victories route to Olafsson. At 2 consecutive autonomous wins: Church counter-times against player-side network (−1D on player-controlled arm Intel for 1 season).
+**ARC-S55 — Network Coordination Failure** `crime/underground | ALL | ALL`
+*Reframed from "Arms Out of Sync" — depended on the dissolved four-arm structure; now reframed around inter-network friction.*
+A faction engaged with networks in 2+ settlements (per ARC-S11) faces coordination friction: when networks the faction has engaged operate in the same territory same season as networks the faction has not engaged (autonomous local networks), an Intel vs Intel contested roll resolves which network controls the intelligence product. Autonomous network victories may route to anti-faction parties (Church Intel, rival faction, or Crown). At 2 consecutive autonomous wins: institutional response (Church or Crown counter-times against the faction's underground assets) — −1D on faction underground operations for 1 season. Direction: networks are not an extension of faction hierarchy; their independence creates compounding intelligence risk for factions overusing them.
 
-**NPC-ARC-VIR — Virke Recall** `Niflhel | T1 | ALL`
-Third protection incident → Virke family intervention, replacement with no local relationships. Trust network collapses: all Niflhel trade +1 Ob permanently. ARC-T25 fires at incident 2 (family ultimatum — 2-season window, three response options). The Recall is the consequence of not responding to the Ultimatum.
+**NPC-ARC-VIR — Virke Family Network Recall** `crime/underground | T1 | ALL`
+*Reframed: Virke is a smuggling/criminal-network family operating in T1, not a Niflhel arm.*
+Third protection incident → the Virke family intervenes, replacing the local broker with a successor who has no established T1 relationships. Trust network collapses: all underground trade through Virke channels +1 Ob permanently in T1. ARC-T25 fires at incident 2 (family ultimatum — 2-season window, three response options). The Recall is the consequence of not responding to the Ultimatum. Direction: Virke is family-controlled criminal network — the family's institutional pressure is what the underground network most fears, not Crown or Church external pressure.
 
-**ARC-T25 — Virke Family Ultimatum** `Niflhel | T1 | TTRPG`
-Incident 2 → family emissary. Virke must produce one significant intelligence product (full trust network names) OR: (a) plant false network data (Intel vs Ob 3), (b) eliminate the emissary (Assassination mode), (c) do nothing (incident 3 fires NPC-ARC-VIR). The family's demand is not personal pressure — it is institutional pressure designed to destroy the network through its owner.
+**ARC-T25 — Virke Family Ultimatum** `crime/underground | T1 | TTRPG`
+*Reframed: Virke family ultimatum about criminal-network ownership, not Niflhel-faction recall.*
+Incident 2 → family emissary arrives. The current local broker must produce one significant intelligence product (full trust network names) OR: (a) plant false network data (Intel vs Ob 3), (b) eliminate the emissary (Assassination mode), (c) do nothing (incident 3 fires NPC-ARC-VIR). The family's demand is not personal pressure — it is institutional pressure designed to test whether the broker can deliver, and to destroy the network through its owner if they cannot. Direction: criminal networks cannot be owned without delivering; failure to produce returns network ownership to the family, which appoints a successor with no relationships.
+
 
 ---
 

@@ -328,3 +328,14 @@ Final commit. ED-784 Phase 2 work complete.
 - `references/canonical_sources.yaml` conviction_track entry: status note updated; pending-PP-718 mark cleared.
 - Migration from legacy single-primary model preserves Scar counts on migrated Convictions (Reason→Scholastic, Continuity→roster-determined, Autonomy→Liberty).
 - Surfaced by: conviction_stress_01 deferred-refinement Test 2 (commit 57bd26f4).
+
+## ED-777 5-arc reframe — closure (2026-05-10)
+**Class C (content reframe per Jordan's 2026-05-09 G-L03 decision); applied this commit.**
+- `references/arcs/arc_register_factions.md` NIFLHEL section: rewritten as "CRIME & UNDERGROUND NETWORKS (settlement-layer phenomena — formerly NIFLHEL fourth-tier)".
+- ARC-S11 reframed: "Headless Network" → "Underground Network Engagement" (per-settlement Intel; four-arm structure dissolved with Niflhel).
+- ARC-S54 reframed: "Quiet Overreach" → "Underground Operational Detection" (Thread-signature dependency removed).
+- ARC-S55 reframed: "Arms Out of Sync" → "Network Coordination Failure".
+- NPC-ARC-VIR reframed: Virke as smuggling/criminal-network family.
+- ARC-T25 reframed: criminal-network ownership ultimatum.
+- ED-777 status: open → closed.
+- Surfaced by: setup_ignition_stress_01 G-L02 (commit cab3bd85).
