@@ -31,14 +31,22 @@ Every settlement has a defined adjacency list of other settlements it is directl
 | Coastal | 1 (requires naval) | Attacker only via Port-type settlement | Port-to-Port edges. Uses naval mechanics. |
 | Thread-Witnessed | 0 (instantaneous, character-scale only) | n/a | Practitioner Leap connection between Thread-sensitive settlements. Does not transfer armies. |
 
-### §1.2 Canonical Adjacency Set (36 settlements)
+### §1.2 Canonical Adjacency Set (36 settlements, 58 edges)
 
-The full graph lives in `designs/world/settlement_adjacency_map.yaml` (generated from this spec + existing `settlement_layer_v30 §2.1` registry + `geography_v30` province adjacency).
+**The full graph is canonical at `designs/territory/valoria_geography_v30.yaml :: settlement_adjacency:`** (authored 2026-05-10 under PP-723 / ED-710 closure). 58 edges total: 23 intra-province + 24 inter-province + 11 special.
 
-Rule for generation:
-1. Every Seat is adjacent to every other settlement in the same province.
-2. Every province-adjacent pair has exactly one inter-settlement edge connecting their most-connected settlements (typically Seat-to-Seat, but `geography_v30` may specify otherwise).
-3. Special routes (Askeheim T15 expedition, T17 mine routes, coastal Ports) are hand-specified per `southernmost_v30` and `geography_v30 Altonian Invasion Routes`.
+Generation rules followed:
+1. Every Seat is adjacent to every other settlement in the same province (Rule 1).
+2. Every province-adjacent pair has one inter-settlement edge connecting primary settlements — Seat where present; else most-connected per `settlement_layer_v30 §2.1` (Rule 2). Primary mapping committed inline in the YAML block header.
+3. Special routes (Askeheim gates, T17 mine route, coastal Port-to-Port, Thread-Witnessed practitioner-Leap channels) hand-specified per `geography_v30 :: gates / bridges` and per ecclesiastical-Thread doctrine (Rule 3).
+
+Edge attributes: `from`, `to`, `type` (road / river / mountain_pass / coastal / gate / thread-witnessed), `terrain` (intra-province / inter-province / sea / fjord / marsh / highland / thread), optional `crosses` (river_id), optional `bridge` (bridge_id from `valoria_geography_v30.yaml :: bridges`).
+
+Network properties (verified at authoring):
+- Full-graph connectivity from S-001: 36/36 settlements reachable.
+- Army-graph (excluding Thread-Witnessed): 36/36 reachable.
+- Land-graph (excluding Thread-Witnessed and coastal): 34/36 reachable; Schoenland (T16) is correctly island-isolated (coastal access only).
+- Network hubs: S-023 Himmelenger Cathedral (degree 8, ecclesiastical primary), S-012 Ehrenfeld Citadel (degree 7, "5-way connection hub" per `settlement_layer §2.1`), S-001 Valorsplatz Palace (degree 6, Crown capital), S-015 Gransol Parliament (degree 6, Hafenmark capital).
 
 ### §1.3 Army Movement
 
@@ -124,6 +132,6 @@ Strategic movement (march budget, A* pathfinding, vision/recon, route blocking, 
 
 ## §5 Open Items
 
-- **Adjacency map file:** `designs/world/settlement_adjacency_map.yaml` needs authoring. Can be derived from `geography_v30` adjacency + settlement Seat positions, but hand-review required for mountain/river/coastal edge classification.
+- **Adjacency map file (CLOSED 2026-05-10 PP-723):** Authored as `settlement_adjacency:` block in `designs/territory/valoria_geography_v30.yaml` (58 edges) per §1.2 rules. ED-710 closed.
 - **Edge capacity:** should edges have capacity limits (only N armies can traverse per season)? Current spec: unlimited. Flag for rebalance after smoke-test.
 - **Thread-Witnessed edges:** flagged — not yet tested whether practitioner Leap between settlements is a character-scale convenience or a mass-battle transport mechanism. Current spec: character-scale only.

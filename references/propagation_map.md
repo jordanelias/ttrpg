@@ -106,3 +106,14 @@
 - m_summary updated: "5 + · 5 ✓ · 1 ○ · 0 −" with revision-rationale note.
 - Pass/fail verdict unchanged (zero violations both before and after recalibration).
 - Self-review bias acknowledged: this walkthrough was authored about Claude's own prior PP-718 work; recalibration tightens the credit assignment without changing the canonical commit.
+
+## PP-723 settlement-level adjacency graph authored (2026-05-10)
+**Class B (system extension); applied this commit.** Closes ED-710 (open since 2026-04-19 PP-666).
+- `designs/territory/valoria_geography_v30.yaml`: new `settlement_adjacency:` block appended. 58 edges total — 23 intra-province (Rule 1: Seat-connects-all + non-Seat-pairwise), 24 inter-province (Rule 2: primary-to-primary at province borders), 11 special (Rule 3: Askeheim gates, T17 Guild mine route, coastal Port-to-Port, 5 Thread-Witnessed practitioner-Leap channels). Edge attributes: from, to, type, terrain, optional crosses/bridge.
+- `designs/territory/settlement_adjacency_v30.md §1.2`: rewritten to point at the new canonical location; §5 Open Items entry on adjacency-map-file marked CLOSED PP-723.
+- `canon/editorial_ledger.yaml` ED-710: open → closed.
+- Network metrics verified at authoring: 36/36 full-graph connectivity from S-001; 36/36 army-reachable excl. thread-witnessed; 34/36 land-reachable (T16 Schoenland correctly island-isolated; coastal-only).
+- Top-degree network hubs: S-023 Himmelenger Cathedral (d=8), S-012 Ehrenfeld Citadel (d=7 — confirms §2.1 "5-way connection hub" claim), S-001 Valorsplatz Palace (d=6), S-015 Gransol Parliament (d=6).
+- Unblocks: settlement-scale mass-battle resolution (settlement_adjacency_v30 §2.2 Terrain from Edge Type now resolvable), settlement-level march pathfinding extensions, ROTK-network spatial substrate for B1.4 (settlement coupling).
+- Carryover: A2 settlement-internal geography (P1) still open; A3 ED-055 naval substrate (P1) still open; A4 settlement_adjacency_v30 banner consolidation now actionable post-PP-723.
+- Self-review bias acknowledged on Thread-Witnessed edge selections — see PP-723 vetting note.

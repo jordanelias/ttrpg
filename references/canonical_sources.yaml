@@ -32,11 +32,11 @@ sources:
 systems:
   core_engine:
     design_doc: designs/architecture/complete_systems_reference.md
-    canonical_sha__designs__architecture__complete_systems_reference_md: "ef12e05028fc1281a6a2b340dc6e2d5fff602925"
+    canonical_sha__designs__architecture__complete_systems_reference_md: "d6ab0a4ead89e25e42e31e152a4047819a7012ca"
     params: params/core.md
     canonical_sha__params__core_md: "15e2543dcf246001575ab616319846615bb3a028"
     bg_params: params/bg/core.md
-    canonical_sha__params__bg__core_md: "ec178db4ae895417484b79ad7e77c07b258d28b6"
+    canonical_sha__params__bg__core_md: "6e17c277612b06d843bf4c7a239a4380e881b14b"
   combat:
     design_doc: params/combat.md
     canonical_sha__params__combat_md: "cf2631d812372b8b7e9dfb599786ec96feafa100"
@@ -49,67 +49,66 @@ systems:
     canonical_sha__params__threadwork_md: "4ceefd9f09bef1e7e2edd29cf5f765b07c2e4aad"
   clocks:
     design_doc: params/bg/clocks.md
-    canonical_sha__params__bg__clocks_md: "7024eaa6d33e909bbd4c999205cc7468ee160c24"
+    canonical_sha__params__bg__clocks_md: "21ebe8ad652737295c855e4ca5ee67166d4421d0"
     params: params/bg/clocks.md
-    canonical_sha__params__bg__clocks_md: "7024eaa6d33e909bbd4c999205cc7468ee160c24"
+    canonical_sha__params__bg__clocks_md: "21ebe8ad652737295c855e4ca5ee67166d4421d0"
   factions:
     design_doc: designs/provincial/factions_personal_v30.md
-    canonical_sha__designs__provincial__factions_personal_v30_md: "658fc46f75b9a81e4211053089d9e321dcdeafbb"
+    canonical_sha__designs__provincial__factions_personal_v30_md: "b4239c12890096bd6c0c61e175facf761dfd16e4"
     params: params/factions.md
-    canonical_sha__params__factions_md: "82f37d33c74f81bef27c7d9c43a69c88a28f4141"
+    canonical_sha__params__factions_md: "3107e624238db2e2e379013f12d3878e39fd1b2d"
     stats: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
+    canonical_sha__params__factions__stats_1_7_scale_md: "56eba8a60ee00a25c4c6d8ebeec37515a4699c65"
   victory:
     design_doc: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "abee368ee5e3a470651e60408693a6d37132c8e0"
+    canonical_sha__designs__provincial__victory_v30_md: "22e72f930b7926efc4e3ff448c0ac1b2e4776095"
     params: params/bg/victory.md
-    canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
+    canonical_sha__params__bg__victory_md: "c1933a090d526de126379edb4f271122e4d8b433"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
     adjacency: designs/territory/settlement_adjacency_v30.md
-    canonical_sha__designs__territory__settlement_adjacency_v30_md: "eae3ed089333bdd540cf1ebc638bca81b02fbb9c"
+    canonical_sha__designs__territory__settlement_adjacency_v30_md: "PENDING_PP_723"
     fractional: designs/provincial/fractional_province_ownership_v30.md
-    canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "a0c37486b73299b47568085e3f59b1cac553ba5e"
+    canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "5399c4b03acd65ad5f967d4d51fcea62faf0b2b6"
     geographic_data: designs/territory/valoria_geography_v30.yaml
-    canonical_sha__designs__territory__valoria_geography_v30_yaml: "59bc02f54b3dcd062222093f3f1987bfe06e4991"
+    canonical_sha__designs__territory__valoria_geography_v30_yaml: "PENDING_PP_723"
     geographic_map: designs/territory/valoria_map_v30.svg
     canonical_sha__designs__territory__valoria_map_v30_svg: "de02b31202e54cdf74054d0008c1c51c76f3a651"
     geographic_design_doc: designs/world/geography_v30.md
     canonical_sha__designs__world__geography_v30_md: "c1fc7ffd2547bf08e924fe4e6cde612f25dbadab"
     geographic_design_doc_infill: designs/world/geography_v30_infill.md
-    canonical_sha__designs__world__geography_v30_infill_md: "18197bd570a375490fb71d9e0b545e0dd56a7b9d"
     march_layer_skeleton: designs/territory/march_layer_v30.md
-    canonical_sha__designs__territory__march_layer_v30_md: "cdbba54e9e9ec50eb02909dc4487f06c573b01e6"
+    canonical_sha__designs__territory__march_layer_v30_md: "PENDING_ED_780"
     note: "geography_v30.md (atomized: index + infill) holds physical-geography canon — terrain regions, RS-band/node-distance matrix, 17-territory roster with starting control, fort levels, sub levels, adjacency. valoria_geography_v30.yaml + valoria_map_v30.svg are the structured/visual companions. Cited as source by sim_verification_ledger.json for territory IDs and counts."
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "a906868cd05c8d154a5f3cd2aff60d03146b1579"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_ED_780"  # ED-770/PP-683/PP-711..715 batch (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
     params: params/mass_combat.md
-    canonical_sha__params__mass_combat_md: "694d7a232a7204a93b634b936596d822ddafe2d2"
+    canonical_sha__params__mass_combat_md: "694d7a232a7204a93b634b936596d822ddafe2d2"  # ED-770 — SHA update follow-up required
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "fb1d1a6791ebe7c7825c9ec7df84500b0bec1611"
+    canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
     params: params/contest.md
-    canonical_sha__params__contest_md: "fb1d1a6791ebe7c7825c9ec7df84500b0bec1611"
+    canonical_sha__params__contest_md: "dd7242654c3428407a723adb8e8b1bcc551d950b"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
-    canonical_sha__designs__architecture__scale_transitions_v30_md: "ccc5019c6b74f7f54414eeea320f0d83d4507c54"
+    canonical_sha__designs__architecture__scale_transitions_v30_md: "4ed8bd67f5570cb6c896d981b21eae3719fd66de"
     params: params/scale_transitions.md
-    canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
+    canonical_sha__params__scale_transitions_md: "0447183aaae0b37e57efe74c98e1615fc1a49f8b"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "02e25c7fae1a0615bd60e04f16fedd4dd1e9dbb0"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "PENDING_PP_705"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
-    canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
+    canonical_sha__designs__provincial__military_layer_v30_md: "PENDING_PP_705"  # ED-770/PP-712, PP-714, PP-715 (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
-    canonical_sha__designs__provincial__ci_political_v30_md: "e22eaedb84c07fdc2141f7b44a692de153e66ab5"
+    canonical_sha__designs__provincial__ci_political_v30_md: "94a54d69cb00737f66685814e56f132d8c428579"
     note: "Renamed from tc_political_redesign_v30 — same doc, CI is Theocracy Counter's politically-active form."
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_md: "0eea6219bbed343ae5515727dc8dd5a4a811e52b"
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "b6ed66db358a71d7ee2967025eb66cab79a99acf"
   settlement_layer:
     design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
@@ -120,18 +119,17 @@ systems:
     design_doc: designs/scene/derived_stats_v30.md
     canonical_sha__designs__scene__derived_stats_v30_md: "bf8247978cad3e1af2f80e78c845f7d68c0ab51a"
     supplemental: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
+    canonical_sha__params__factions__stats_1_7_scale_md: "56eba8a60ee00a25c4c6d8ebeec37515a4699c65"
     note: "PP-716 — derived_stats_v30.md §4.1 is the authoritative source for Health formula and wound-penalty universality. params/factions/stats_1_7_scale.md remains supplemental for faction-scale derived stats (Mandate/Influence/Wealth/Military/Intel/Stability)." 
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/personal/conviction_track_v1.md
-    canonical_sha__designs__personal__conviction_track_v1_md: "ba5ac8932eed88db90ff8e7e8f826d6ca99fe912"
+    canonical_sha__designs__personal__conviction_track_v1_md: "PENDING_PP_718"
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
     params: params/factions/npc_stance_triangles.md
-    canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
+    canonical_sha__params__factions__npc_stance_triangles_md: "fc016ff0ef1272e5f3e70ca490e0c00d1421e160"
     related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "167b66a4cbbf80c2a9271d7c9e7825629480d01e"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "cc86bf253643f81b32896f1d45ad677f649c05af"
@@ -145,13 +143,13 @@ systems:
     source: conflict_architecture_proposal.md
   conflict_architecture:
     design_doc: designs/architecture/conflict_architecture_proposal.md
-    canonical_sha__designs__architecture__conflict_architecture_proposal_md: "0d4fe06c4d5587ff5d2affff85067a296634f42e"
+    canonical_sha__designs__architecture__conflict_architecture_proposal_md: "e65fb4684cc1d25bfc8957ef9ca5b65c0f6c96ba"
     note: "CANON 2026-04-18. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal assassination fuse."
   throughlines_framework:
     design_doc: references/throughlines_meta.md
     canonical_sha__references__throughlines_meta_md: "816e0980955c7277d25121313b2c220d82fdb5da"
     infill: references/throughlines_meta_infill.md
-    canonical_sha__references__throughlines_meta_infill_md: "ec86873295dccfd96f154e7d1b90ae28c5d945b9"
+    canonical_sha__references__throughlines_meta_infill_md: "6c73e593c02616f03fd9690f2b75900d9629ce69"
     note: "Canonical vetting authority for all proposals (PP-672, PP-674)."
 
 # ── World trajectory ───────────────────────────────────────────────────
@@ -206,7 +204,7 @@ systems:
     added: '2026-04-25 Stage 4'
   miraculous_event:
     design_doc: designs/scene/miraculous_event_v30.md
-    canonical_sha__designs__scene__miraculous_event_v30_md: "229b7975e78996a81f2fe5b0d997824743680f62"
+    canonical_sha__designs__scene__miraculous_event_v30_md: "99743a21852a9fe1f9c4b40cf329d434f88882b3"
     status: provisional
     added: '2026-04-25 Stage 4'
   baralta:
@@ -216,7 +214,7 @@ systems:
     added: '2026-04-25 Stage 4 follow-up (extracted from miraculous_event_v30 §21)'
   key_substrate:
     design_doc: designs/architecture/key_substrate_v30.md
-    canonical_sha__designs__architecture__key_substrate_v30_md: "bf6c4a373bff9727bcd892993383121c851204a6"
+    canonical_sha__designs__architecture__key_substrate_v30_md: "62fe16016a0172545cb4f39d8d596a329783eaba"
     status: canonical
     added: '2026-05-01 PP-687 ratification — universal Key substrate'
   key_type_registry:
@@ -226,17 +224,17 @@ systems:
     added: '2026-05-01 PP-687 ratification — Key type registry; amended same date for Phase 5a session 3.5 telemetry substrate (+3 mechanical Class B types)'
   conviction_taxonomy:
     design_doc: designs/personal/conviction_taxonomy_v30.md
-    canonical_sha__designs__personal__conviction_taxonomy_v30_md: "9058d3e4d16a5caa664ce3ebe97e019f69139ddf"
+    canonical_sha__designs__personal__conviction_taxonomy_v30_md: "78235b4aa626a681241fee36d8fc3cf5bbd7ea67"
     status: canonical
     added: '2026-05-01 PP-684 ratification — 13-Conviction taxonomy + Self-Other axis'
   conviction_migration_roster:
     design_doc: designs/personal/conviction_migration_roster_v30.md
-    canonical_sha__designs__personal__conviction_migration_roster_v30_md: "4dc88c22a976b5136a2d8e9c69da4f360285e18f"
+    canonical_sha__designs__personal__conviction_migration_roster_v30_md: "7a92ce020f134482d9202dae53dee16f28651927"
     status: canonical
     added: '2026-05-01 PP-685 ratification — Conviction migration roster'
   faction_behavior:
     design_doc: designs/provincial/faction_behavior_v30.md
-    canonical_sha__designs__provincial__faction_behavior_v30_md: "be9ad7d446d4baefac19824f74785367c7f0f4dd"
+    canonical_sha__designs__provincial__faction_behavior_v30_md: "366b56ec14b2baa2498919bf442b87eac1966849"
     status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
   articulation_layer:
@@ -246,12 +244,12 @@ systems:
     added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687; 2026-05-02 ED-785 §3.1 trigger ruleset finalized (10 triggers, threshold 0.40, belief_revised added)'
   conviction_axis_matrix:
     design_doc: designs/personal/conviction_axis_matrix_v30.md
-    canonical_sha__designs__personal__conviction_axis_matrix_v30_md: "3f16222cee8f6c788608fbd56ef1e124a97acf38"
+    canonical_sha__designs__personal__conviction_axis_matrix_v30_md: "bf23140b8e730f592cc1582d5dbebc5b0d5749c8"
     status: canonical
     added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
   faction_state_authoring:
     design_doc: designs/provincial/faction_state_authoring_v30.md
-    canonical_sha__designs__provincial__faction_state_authoring_v30_md: "331d2c22aac0052f2874280045e1b01f7dedfd61"
+    canonical_sha__designs__provincial__faction_state_authoring_v30_md: "8f98940f77120ba270562f07725f172ee4c03c70"
     status: provisional
     added: '2026-05-01 PP-686 v2 Phase B Stage 5 — per-faction state authoring'
   territory_temperaments:
@@ -267,17 +265,17 @@ systems:
 
   character_canon_consolidation:
     design_doc: designs/npcs/character_canon_v30.md
-    canonical_sha__designs__npcs__character_canon_v30_md: "081a5e9fb35ac3760f22c767eaf133d87435b00e"
+    canonical_sha__designs__npcs__character_canon_v30_md: "pending"
     status: provisional
     added: '2026-05-08 Character canon consolidation — PART A Framework (§§1-11). Per-NPC sheets pending Q1 scope. Supersedes piecemeal lookup across npc_roster/npc_behavior/npc_character_analyses/migration_roster/stance_triangles.'
   faction_canon_consolidation:
     design_doc: designs/provincial/faction_canon_v30.md
-    canonical_sha__designs__provincial__faction_canon_v30_md: "7c13fc38f0d9bb506db8caf599b995bc1d93c5d1"
+    canonical_sha__designs__provincial__faction_canon_v30_md: "pending"
     status: provisional
     added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
 
   character_generation_questionnaire:
     design_doc: designs/personal/character_generation_questionnaire_v30.md
-    canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "bf6e6af92124e408a083e6690c1f7b41e725f11b"
+    canonical_sha__designs__personal__character_generation_questionnaire_v30_md: "pending"
     status: design-direction
     added: '2026-05-08 Unified character generation via choice-based questionnaire — Ogre Battle + DE + Darklands synthesis. Design direction accepted; question set pending authoring.'
