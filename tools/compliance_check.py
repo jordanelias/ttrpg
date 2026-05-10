@@ -150,6 +150,11 @@ def _check_size(path: str, content: str, rule: dict) -> Violation | None:
         return None
 
     on_exceed = rule.get('on_exceed', 'error')
+
+    # 'skip' means explicitly exempted — produce no violation.
+    if on_exceed == 'skip':
+        return None
+
     strategy = rule.get('split_strategy')
 
     # Determine if auto-fixable
