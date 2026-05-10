@@ -3,8 +3,140 @@
   "manifest": "tests/sim/combat_arch_residual_stress_01/module_manifest.md",
   "schema": "{sim_variable, value, canonical_source, canonical_sha, section, quoted_text}",
   "rule": "Every mechanical constant used in any R-module code must appear here with verbatim quoted_text from the canonical source. sim_fabrication_check enforces this at commit.",
-  "modules_verified": [],
-  "constants": [],
+  "modules_verified": [
+    {
+      "module": 1,
+      "name": "R1 Wound permanence",
+      "date": "2026-05-09",
+      "ledger_entries": [
+        "R1-L01",
+        "R1-L02",
+        "R1-L03",
+        "R1-L04",
+        "R1-L05",
+        "R1-L06",
+        "R1-L07",
+        "R1-L08",
+        "R1-L09",
+        "R1-L10",
+        "R1-L11",
+        "R1-L12",
+        "R1-L13"
+      ],
+      "decision": "C1.3 (Knot-tagged via existing Conviction Scar channel)",
+      "rejected_candidates": [
+        "C1.2 catastrophic-permanent (categorical R+S fail at full NERS)",
+        "C1.4 all-permanent (categorical multi-axis fail)"
+      ],
+      "open_finding": "Pool floor 5D is load-bearing for permanent-wound asymmetry; Threadwork penalty unfloored is independent stress-test candidate; fieldwork §3 line 364 has stale PP-684 citation needing post-renumber update"
+    }
+  ],
+  "constants": [
+    {
+      "id": "R1-L01",
+      "sim_variable": "combat_pool_formula",
+      "value": "(Agility × 2) + Relevant History + 3 (minimum 5)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§1 line 34",
+      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "id": "R1-L02",
+      "sim_variable": "wound_pool_penalty",
+      "value": "−1D per Wound, cumulative, no Ob",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§7 line 266",
+      "quoted_text": "Each Wound: −1D Combat Pool only (cumulative). No Ob penalty from wounds."
+    },
+    {
+      "id": "R1-L03",
+      "sim_variable": "wound_threadwork_penalty",
+      "value": "+1 Ob per Wound, all Thread ops",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§thread line 378",
+      "quoted_text": "- **Wound penalties:** +1 Ob per Wound to all Thread operations (threadwork_v30 §2.3)."
+    },
+    {
+      "id": "R1-L04",
+      "sim_variable": "vitality_formula",
+      "value": "Endurance × 10 (+ equipment), range 10–70",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§7 line 253",
+      "quoted_text": "**Vitality = Endurance × 10** (range 10–70). Total damage capacity. Equipment adds flat Vitality. Incapacitated at 0."
+    },
+    {
+      "id": "R1-L05",
+      "sim_variable": "wound_interval",
+      "value": "Endurance + 6, range 7–13",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§7 line 255",
+      "quoted_text": "**Wound Interval = Endurance + 6** (range 7–13). Wounds accrue at floor(cumulative_damage / Wound_Interval)."
+    },
+    {
+      "id": "R1-L06",
+      "sim_variable": "wound_clearance_canonical",
+      "value": "wounds clear at session end",
+      "canonical_source": "params/combat.md",
+      "section": "line 271",
+      "quoted_text": "Session end: all wounds clear"
+    },
+    {
+      "id": "R1-L07",
+      "sim_variable": "stabilised_recovery",
+      "value": "one-scene rest after stabilisation",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§4 line 109",
+      "quoted_text": "Stabilised characters may return to action after one full scene of rest. Wounds clear at end of session (or after extended rest per GM)."
+    },
+    {
+      "id": "R1-L08",
+      "sim_variable": "pool_floor",
+      "value": "5D, no further wound penalty",
+      "canonical_source": "params/combat.md",
+      "section": "§Pool minimum line 274",
+      "quoted_text": "Combat Pool minimum 5 is a clean floor. No −1D penalty at the floor."
+    },
+    {
+      "id": "R1-L09",
+      "sim_variable": "conviction_scar_existing",
+      "value": "permanence channel exists, attached to Conviction not Wound",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§Conviction L195",
+      "quoted_text": "Lifetime; shifts only through Scar accumulation or major narrative events"
+    },
+    {
+      "id": "R1-L10",
+      "sim_variable": "knot_lifecycle_strain_capacity",
+      "value": "Distant 4 / Close 7",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b line 495–498",
+      "quoted_text": "| Distant Knot | 4 strain | Can be upgraded to Close (per §5.6a Success outcome)."
+    },
+    {
+      "id": "R1-L11",
+      "sim_variable": "fr_dissolution_wound",
+      "value": "+1 Wound to Knot partner on FR Dissolution",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b line 515",
+      "quoted_text": "Tears the Knot directly; partner-of-rupture takes +1 Wound (no armor)."
+    },
+    {
+      "id": "R1-L12",
+      "sim_variable": "dissolution_witness_scar",
+      "value": "scar on all witnesses to Dissolution",
+      "canonical_source": "params/combat.md",
+      "section": "line 306",
+      "quoted_text": "**Dissolution in combat:** RS cost per threadwork_v30 §5.2. Scar on all witnesses per npc_behavior_v30 §3.4."
+    },
+    {
+      "id": "R1-L13",
+      "sim_variable": "coherence_track_permanence",
+      "value": "Coherence is permanent degradation track",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "line 241",
+      "quoted_text": "**Coherence** (survival resource): unchanged. 10→0 countdown. Not a derived value — a permanent degradation track."
+    }
+  ],
   "meta_findings": [
     {
       "id": "MF-01",
