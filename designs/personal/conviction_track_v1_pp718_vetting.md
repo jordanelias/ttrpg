@@ -60,7 +60,7 @@ Rubric per `throughlines_meta §3`: **+** extends · **✓** satisfies · **−*
 
 The new mechanic also preserves canonical pressure-continuity from the §3 Thread-event matrix: each Thread operation Scars a named subset of Convictions. Pressure is continuous because the matrix continues to fire on every Thread event witnessed (subject to the season cap of 1 Scar per season per NPC from Thread witnessing per `conviction_track_v1 §3`).
 
-**Rating: +** Extension. Per-Conviction tracking adds new pressure-continuity by axis where aggregate had silent rest-states on untouched primaries.
+**Rating: ✓** Satisfies. **Recalibrated 2026-05-10 from initial +.** On independent-reviewer reconsideration: PP-684 itself carries M-1 + for the vector-pressure-axis instantiation ("Convictions provide axis for continuous-pressure interpretation" per `conviction_taxonomy_v30 §7`). PP-718 ensures the Scar layer composes correctly with that PP-684 extension — eliminating the latent aggregate-rest-state defect — but the per-axis pressure-continuity pattern was *already* introduced by PP-684's structured concentration. PP-718 is faithful operation of an extension already credited; rating it + here would double-count PP-684. The mechanic still satisfies M-1 robustly: per-axis Scar accumulation produces continuous per-axis pressure with no rest-state on the addressed axis.
 
 ### М-2 Geography holds pressure · Parent Μ-α, Μ-δ
 
@@ -154,7 +154,7 @@ PP-718's per-Conviction extension *strengthens* this ontological inversion. Unde
 
 The crisis-table roll 5 update — Self-Other-orientation override — also strengthens М-9 alignment. The Self-Other axis is itself a substrate axis per `conviction_taxonomy_v30 §3`, with canonical drift formula `Δ orient = κ × Σ(outcome_with_self_benefit) − κ × Σ(outcome_with_collective_sacrifice)`. The legacy "Autonomy survival" reading gave the crisis NPC a generic defection escape; the new reading routes the defection through the *substrate state* of Self-Other — a substrate-grounded escape rather than a perceiver-side instinct.
 
-**Rating: +** Extension. Strengthens ontological inversion by anchoring Scar accumulation in named substrate-axis state rather than aggregate counter; replaces perceiver-side defection escape with substrate-grounded routing.
+**Rating: ✓** Satisfies. **Recalibrated 2026-05-10 from initial +.** On independent-reviewer reconsideration: the clinical-moral-injury → substrate-real ontological inversion was canonized in the legacy `conviction_track_v1.md` original (the Scar mechanic itself *is* the inversion: clinical moral injury → substrate-axis-state actually destabilizing, not perceiver pathology). PP-684's own vetting block credited M-9 + specifically for "Self-Other drift is a new state-evolution dynamic" — the substrate-grounded routing PP-718 leverages for roll-5. PP-718 routes the *existing* inversion through PP-684's vector model and routes roll-5 through PP-684 §3.2 drift; both inversion contributions are upstream. Rating + here would double-count: once for PP-684's Self-Other drift, once for PP-684's vector-substrate, once for legacy v1's moral-injury inversion. The mechanic faithfully preserves and composes with all three; that is ✓, not a new instance.
 
 ### М-10 Environment as constitutive medium (bounded by the renderable) · Parent Μ-δ, Μ-γ
 
@@ -186,7 +186,7 @@ The crisis-table roll 5 (Self-Other override) is itself voluntary-ish: Self-Othe
 
 | М | Pattern | Rating | One-line justification |
 |---|---|---|---|
-| М-1 | Pressure is continuous | + | Per-axis pressure-counters eliminate aggregate-counter rest-states on untouched primaries |
+| М-1 | Pressure is continuous | ✓ | Faithful per-axis operation of PP-684's vector-pressure extension (PP-684 itself carries M-1 +); per-Conviction Scar accumulation eliminates the latent aggregate-rest-state defect |
 | М-2 | Geography holds pressure | ○ | Personal-scale state-counting; geography is upstream at Thread-event-frequency layer |
 | М-3 | Substrate grounds all | + | Preserves substrate-vectorization through crisis layer; cultural-background muted-drift is substrate-grounded |
 | М-4 | Institutions stake substrate-postures | + | Axis-specific institutional erosion distinguishes Church/Crown/Varfell load-bearing axes |
@@ -194,11 +194,13 @@ The crisis-table roll 5 (Self-Other override) is itself voluntary-ish: Self-Othe
 | М-6 | Choice is forced | + | Forced-choice per-axis (T-14); defection-escape value-history-grounded (T-22) |
 | М-7 | Borrowings are operational extensions | ✓ | Preserves existing 13-Conviction Renaissance composite without altering borrowing architecture |
 | М-8 | Access is vertical-position gated | ✓ | Access-gating at witness layer preserved; per-Conviction tracking is downstream of witness |
-| М-9 | Ontological inversion of clinical phenomenology | + | Anchors Scar accumulation in substrate-axis state; defection-escape substrate-grounded vs perceiver-instinct |
+| М-9 | Ontological inversion of clinical phenomenology | ✓ | Faithful preservation of legacy v1's moral-injury inversion + PP-684's Self-Other drift contribution; PP-718 routes existing inversions through vector model rather than introducing new instances |
 | М-10 | Environment as constitutive medium | ✓ | Cultural-background template environmental constitution preserved; muted-drift is downstream consequence |
 | М-11 | Voluntary and involuntary capacity duality | + | Per-axis voluntary cultivation extends voluntary-pole resolution; roll-5 connects voluntary drift to involuntary crisis |
 
-**Seven +, three ✓, one ○, zero −.**
+**Five +, five ✓, one ○, zero −.**
+
+**Recalibration note (2026-05-10).** Initial walkthrough (commit 39bd08c5, table-count fix 5a47da16) rated M-1 and M-9 as **+**. Subsequent independent-reviewer-style reconsideration determined both should be **✓**: PP-684 itself already credits M-1 + for vector pressure-axes and M-9 + for Self-Other drift; legacy `conviction_track_v1` carries the moral-injury ontological inversion. PP-718 faithfully composes with all three upstream contributions but does not introduce new pattern instances on those axes. The genuine PP-718 extensions are M-3 (substrate-vectorization through crisis), M-4 (axis-specific institutional erosion), M-5 (cross-scale axis-specificity), M-6 (per-axis forced-choice + roll-5 history-grounding), and M-11 (per-axis voluntary cultivation). This recalibration tightens the rating without changing the pass/fail verdict (zero violations remain).
 
 Per `throughlines_meta §8.2`: "М fail (single) → redesign OR documented tradeoff. М fail (multiple) → redesign required." Zero violations. **М verdict: pass.**
 
@@ -266,8 +268,13 @@ Per `throughlines_meta §8.1` Class B: "Which T's does this touch? For each: ext
 | N | pass |
 | Ω (inherited from PP-684) | pass |
 | Μ | pass — primary Μ-α + Μ-β; Μ-γ + Μ-δ preserved |
-| М (M-1..M-11 walkthrough) | **7 + · 3 ✓ · 1 ○ · 0 −** — pass |
+| М (M-1..M-11 walkthrough) | **5 + · 5 ✓ · 1 ○ · 0 −** — pass (recalibrated 2026-05-10 from prior 7+/3✓; M-1 and M-9 stepped down to ✓ to avoid double-counting PP-684's own M-1 + and M-9 +) |
 | Τ | pass — extends T-14/T-22/T-23/T-24/T-25/T-08; preserves T-09/T-11/T-15a/b/c/T-27/T-32/T-39; no supersessions |
 | Q | pass on robust/smooth/elegant |
 
 **Overall: Class B vetting passes.** Walkthrough grounds the abbreviated rating block authored at PP-718 commit `239922c6`. No mechanical change to PP-718; the canonical mechanic stands as committed. This walkthrough replaces the earlier abbreviated rating note in the patch_register entry and lands in the doc as `designs/personal/conviction_track_v1_pp718_vetting.md` for reference.
+
+**Revision history of this walkthrough:**
+- 2026-05-10 commit `39bd08c5`: initial authoring with 7+/3✓/1○ count.
+- 2026-05-10 commit `5a47da16`: m_summary off-by-one count fix (initial summary said "6 +" against 7 actually-rated).
+- 2026-05-10 commit (this): M-1 and M-9 recalibrated from + to ✓ on independent-reviewer reconsideration to avoid double-counting PP-684's own M-1 + (vector pressure-axes) and M-9 + (Self-Other drift) and legacy v1's moral-injury ontological inversion. PP-718 faithfully composes with these upstream contributions; the vetting framework's ✓ rating ("consistent with the pattern") is more accurate than + ("new instantiation") for what PP-718 actually does at M-1 and M-9. Final count: **5 + · 5 ✓ · 1 ○ · 0 −**. Pass/fail verdict unchanged (zero violations).

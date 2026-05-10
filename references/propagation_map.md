@@ -361,3 +361,14 @@ Final commit. ED-784 Phase 2 work complete.
 - `canon/patch_register_active.yaml` PP-718 vetting m_summary: "6 + · 3 ✓ · 1 ○ · 0 −" → "7 + · 3 ✓ · 1 ○ · 0 −". Actual M-ratings (M-1+, M-3+, M-4+, M-5+, M-6+, M-9+, M-11+ = 7) verified against per-pattern body.
 - `designs/personal/conviction_track_v1_pp718_vetting.md` §М summary: "Six +, three ✓..." → "Seven +, three ✓..."; final summary table row "**6 + · 3 ✓ ... pass**" → "**7 + · 3 ✓ ... pass**".
 - No mechanical change. Self-review caught the inconsistency between counted ratings (7 +) and summary claim (6 +).
+
+## PP-718 vetting walkthrough — M-1/M-9 recalibration (2026-05-10)
+**Class E (vetting documentation refinement); applied this commit.** No mechanical change to PP-718.
+- Initial walkthrough (commit 39bd08c5; count fix 5a47da16) rated M-1 and M-9 as +.
+- Independent-reviewer-style reconsideration determined both should be ✓:
+  - **M-1**: PP-684's own vetting block already credits M-1 + for vector pressure-axes ("Convictions provide axis for continuous-pressure interpretation"). PP-718 ensures the Scar layer composes correctly with that extension but does not introduce a new M-1 pattern instance.
+  - **M-9**: PP-684's vetting credits M-9 + for Self-Other drift ("new state-evolution dynamic"); legacy v1 carries the moral-injury ontological inversion (Scar mechanic itself). PP-718 routes both upstream inversions through the vector model rather than introducing a new ontological inversion.
+- Final ratings: M-3/M-4/M-5/M-6/M-11 = 5 + (substrate vectorization through crisis layer; axis-specific institutional erosion; cross-scale axis-specificity; per-axis forced-choice; per-axis voluntary cultivation); M-1/M-7/M-8/M-9/M-10 = 5 ✓ (faithful preservation of upstream patterns); M-2 = ○ (scope mismatch).
+- m_summary updated: "5 + · 5 ✓ · 1 ○ · 0 −" with revision-rationale note.
+- Pass/fail verdict unchanged (zero violations both before and after recalibration).
+- Self-review bias acknowledged: this walkthrough was authored about Claude's own prior PP-718 work; recalibration tightens the credit assignment without changing the canonical commit.
