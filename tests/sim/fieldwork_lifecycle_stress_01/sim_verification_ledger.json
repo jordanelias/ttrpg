@@ -98,6 +98,86 @@
       "canonical_source": "designs/scene/fieldwork_v30.md",
       "section": "§5.6b editorial",
       "quoted_text": "[EDITORIAL: ED-773 — Knot Lifecycle specified in fieldwork §5.6b. Closes the gap surfaced by audit during stress-test 26: Knot strain accumulation was canonized (multiple use-sites add strain) but Kno"
+    },
+    {
+      "id": "F3-L01",
+      "sim_variable": "hi_filing_prerequisites",
+      "value": "CI ≥ 40, Mandate ≥ 4, Evidence ≥ 3",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§7.1",
+      "quoted_text": "Prerequisites: CI ≥ 40, Church Mandate ≥ 4, Evidence Track ≥ 3 on target from prior HI OR documented Obligation violation OR 2 prior Tribunal convictions."
+    },
+    {
+      "id": "F3-L02",
+      "sim_variable": "et_persuasion_track_start",
+      "value": "Persuasion Track starts at 7",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§7.1",
+      "quoted_text": "Persuasion Track starts at **7** (Church near-decisive before Exchange 1 — institutional fait accompli)"
+    },
+    {
+      "id": "F3-L03",
+      "sim_variable": "et_no_corroboration",
+      "value": "No accused corroboration; Resistance halved",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§7.1",
+      "quoted_text": "No accused corroboration permitted"
+    },
+    {
+      "id": "F3-L04",
+      "sim_variable": "et_npc_consequences",
+      "value": "CI +4; target Mandate −2; Certainty min(2)",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§7.1",
+      "quoted_text": "Named NPC: CI +4; target Mandate −2; Certainty forced to min(current, 2); arc transition; all NPCs Disposition ≥ +1 to target check Certainty Ob 1 or lose Disposition −1."
+    },
+    {
+      "id": "F3-L05",
+      "sim_variable": "et_pc_consequences",
+      "value": "Mandate −3; Standing −2; Faith-Companion Scar 1",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§7.1",
+      "quoted_text": "Player Character: Faction Mandate −3; excluded from Parliamentary motions; Standing −2; Faith-conviction Companions make departure scene check (Scar 1)."
+    },
+    {
+      "id": "F3-L06",
+      "sim_variable": "act_of_contrition_revocation",
+      "value": "Mandate ≥ 5, CI ≥ 50; result: Mandate −1, CI −1, lift",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§7.1",
+      "quoted_text": "Revocation — Act of Contrition:** Church declares (Mandate ≥ 5, CI ≥ 50 required). Target fulfils Obligation abjuring the violation. Result: Church Mandate −1, CI −1, Excommunication lifted."
+    },
+    {
+      "id": "F3-L07",
+      "sim_variable": "church_self_investigation_exception",
+      "value": "Church doesn't file HI against own ordained acting in alignment",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "PP-349",
+      "quoted_text": "**Church Self-Investigation Exception (PP-349):** The Church does not file Heresy Investigation against its own ordained members who are supporting Church interests."
+    },
+    {
+      "id": "F3-L08",
+      "sim_variable": "extra_territorial_jurisdiction",
+      "value": "Heresy authority varies by territory controller per ED-670",
+      "canonical_source": "designs/npcs/npc_behavior_v30.md",
+      "section": "§2.13a",
+      "quoted_text": "Church heresy designation operates differently inside vs outside Church-controlled territories:"
+    },
+    {
+      "id": "F3-L09",
+      "sim_variable": "hafenmark_sovereignty_block",
+      "value": "Hafenmark blocks Church trials; Categorical Imperative framework",
+      "canonical_source": "designs/npcs/npc_behavior_v30.md",
+      "section": "§2.13a",
+      "quoted_text": "Hafenmark's Categorical Imperative framework treats Church heresy proceedings as extra-constitutional. Baralta will not permit Church trials on Hafenmark soil."
+    },
+    {
+      "id": "F3-L10",
+      "sim_variable": "parliamentary_stay_filing_prevention",
+      "value": "Filing can be prevented while CI < 55",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§7.1",
+      "quoted_text": "*The correct strategic counter is preventing the filing, not defending at Tribunal. See §10.1 Parliamentary Stay. Filing can be prevented while CI < 55.*"
     }
   ],
   "modules_verified": [
@@ -130,7 +210,21 @@
     },
     {
       "module": "F3 Heresy Investigation B8",
-      "status": "DEFERRED — separate follow-up session"
+      "status": "VERIFIED 2026-05-10",
+      "ledger_entries": [
+        "F3-L01",
+        "F3-L02",
+        "F3-L03",
+        "F3-L04",
+        "F3-L05",
+        "F3-L06",
+        "F3-L07",
+        "F3-L08",
+        "F3-L09",
+        "F3-L10"
+      ],
+      "decision": "F3.1 (preserve canonical Heresy Investigation lifecycle); one editorial follow-up needed: PP-349 stale Niflhel reference per EC-F3.A-01",
+      "key_finding": "Lifecycle is mature post-ED-625/ED-670/PP-349. 22/24 NERS pass with two ⚠ Horizontal (PC consequence severity scaling — intentional sword-of-Damocles design per F3-L10 strategic-counter framing). Niflhel example stale per Jordan 2026-05-09 dissolution decision; PP-722 editorial follow-up flagged."
     },
     {
       "module": "F4 Mending B10/B11",
