@@ -202,3 +202,31 @@ Modules 2–10 remain pending and will use PP-716 canon from the start.
 ## R8 verified — C8.2
 
 ## R9 verified — C9.1
+
+## R10 verified — C10.2
+
+
+## combat_arch_residual_stress_01 (D module) — ALL 10 R-MODULES VERIFIED 2026-05-10
+
+| R | Decision | Notes |
+|---|---|---|
+| R1 v2 | C1.3 | Knot-tagged via existing Conviction Scar channel; PP-716 canon |
+| R2 | C2.1 | Pure dice (cognitive only); C2.2 fallback |
+| R3 | C3.3 | Preserve canonical structure + add I-tier↔Part phase-mapping table |
+| R4 | C4.2 | Default-off (Tier 1 strategic baseline); Zoom In opt-in |
+| R5 | C5.1 | Preserve canonical Wager Obligation; stake severity via contest type |
+| R6 | C6.1 | Preserve +5 Fibonacci cap at 8+ attackers |
+| R7 | C7.4 / C7.1 | FF on stress (Wound/Composure/environmental) primary; no FF fallback |
+| R8 | C8.2 | Partial freeze (current canon §11.5) |
+| R9 | C9.1 | A+C only; B dropped per synthesis Q5 |
+| R10 | C10.2 | IP gauge collapse at ≥6 actors |
+
+Synthesis premises corrected on R3, R5, R8 (canon already mature; questions answered by re-pointing). PP-716 wound mechanic correction landed mid-task (commit 6e3a8ae); R1 redone as v2.
+
+**Pending Jordan ratification:**
+- C2.2 (cap +1 net hit) decision if genre-expectation gap unacceptable
+- C4.3 (context-sensitive presence) deferred pending Q5 T-trigger spec
+- C5.3 (voluntary stake escalation) — separate design initiative if pursued
+- C7.4 stress threshold criteria enumeration
+- C9.3 (B-shape presentation flag) UX refinement option
+- C10.2 aggregation rule (faction-band vs position-band vs IP-cluster)

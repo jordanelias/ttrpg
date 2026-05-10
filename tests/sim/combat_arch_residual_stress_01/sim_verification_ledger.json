@@ -216,6 +216,28 @@
         "C9.2 restore B (high cost, low marginal value — three combat UIs, B-as-orphan-mid-tier doesn't extend to mass)"
       ],
       "key_finding": "B-shaped encounter coverage entirely replicable by A+S7-hybrid via zone-size + actor-count + Stunt-vocabulary parameters. Mapping verified for: corridor ambush, dungeon room, tavern brawl, field battle, hero+lieutenant+mooks. Variety-via-architecture forfeit (C9.1's 1⚠ Horizontal) is mitigated by variety-via-zone-parameters."
+    },
+    {
+      "module": 10,
+      "name": "R10 IP-gauge actor-count threshold",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "R10-L01",
+        "R10-L02",
+        "R10-L03",
+        "R10-L04",
+        "R10-L05",
+        "R10-L06",
+        "R10-L07",
+        "R10-L08"
+      ],
+      "decision": "C10.2 (collapse individual gauges at ≥6 actors; faction-band or position-band aggregation; player and named NPCs retain individual gauges)",
+      "rejected_candidates": [
+        "C10.1 always full (UX failure at scale — screen real estate exceeded at 8+ actors)",
+        "C10.3 hide at ≥8 (too aggressive; cluttered 6-7 band; loses interrupt-window tactical surface)"
+      ],
+      "marginal": "C10.4 adaptive zoom — workable but adds UX spec coupling; benefits achievable via C10.2 + zoom cosmetics without spec coupling",
+      "key_finding": "Threshold aligns with Fibonacci zone-collapse trigger (3+ combatants = group combat per R10-L08); at 6+ actors the encounter is firmly in group-combat dynamics where individual interrupt-timing decisions become rare. C10.2 preserves canonical priority visualization (R10-L07) at scales where it matters; degrades gracefully at high actor count."
     }
   ],
   "constants": [
@@ -866,6 +888,70 @@
       "canonical_source": "designs/scene/combat_v30.md",
       "section": "§5 PP-268",
       "quoted_text": "**Zone terminology (PP-268):** Close zone renamed **Melee range**; Far zone renamed **Ranged distance** throughout."
+    },
+    {
+      "id": "R10-L01",
+      "sim_variable": "round_structure_phases",
+      "value": "Phase-based: 6 priority phases per round",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§2",
+      "quoted_text": "Phase-based. Priority list within each phase:"
+    },
+    {
+      "id": "R10-L02",
+      "sim_variable": "round_duration",
+      "value": "6-10 seconds narrative",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§2",
+      "quoted_text": "Round duration: 6–10 seconds narrative."
+    },
+    {
+      "id": "R10-L03",
+      "sim_variable": "bg_no_phase_structure",
+      "value": "BG mode: single roll, no phase structure",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§2",
+      "quoted_text": "**Board Game:** Single roll per engagement per turn. No phase structure."
+    },
+    {
+      "id": "R10-L04",
+      "sim_variable": "t2_phase_locked_canonical",
+      "value": "T2 phase-locked simultaneous = canonical",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/02_q1_timeshape.md",
+      "section": "T2/T4 table",
+      "quoted_text": "| T2 | Phase-locked simultaneous (canonical) | Frozen Synapse, combat_v30 §2 |"
+    },
+    {
+      "id": "R10-L05",
+      "sim_variable": "t4_active_time_gauge",
+      "value": "T4 = active-time gauge with interrupt window",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/02_q1_timeshape.md",
+      "section": "T2/T4",
+      "quoted_text": "| T4 | Active-time gauge with interrupt window | Grandia IP, FF IV/IX |"
+    },
+    {
+      "id": "R10-L06",
+      "sim_variable": "t2_t4_hybrid_default",
+      "value": "T2+T4 hybrid as default time-shape",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/02_q1_timeshape.md",
+      "section": "recommendation",
+      "quoted_text": "**T2 + T4 hybrid as default** — canonical phase-locked simultaneous declaration *visualized* as Grandia-IP gauge so players see the canonical priority order play out."
+    },
+    {
+      "id": "R10-L07",
+      "sim_variable": "ip_gauge_canonical_priority",
+      "value": "IP gauge IS canonical priority resolution made visible",
+      "canonical_source": "tests/stress/combat_videogame_arch_2026-05-01/02_q1_timeshape.md",
+      "section": "T4 description",
+      "quoted_text": "IP gauge IS canonical priority resolution made visible. Interrupt = canonical Feint pool reduction surfaced as gameplay"
+    },
+    {
+      "id": "R10-L08",
+      "sim_variable": "fibonacci_zone_collapse_3plus",
+      "value": "Group combat at 3+ combatants in a zone",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§8",
+      "quoted_text": "When 3+ combatants in a zone: combat becomes group combat. Fibonacci bonus applies."
     }
   ],
   "meta_findings": [
