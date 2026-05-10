@@ -61,12 +61,11 @@ characters:
     stats: null  # [GAP: deferred per npc_roster_v30 §Stat Blocks]
     convictions:
       primary:
-        - {conviction: Honor, weight: 0.30}
-        - {conviction: Authority, weight: 0.30}
-        - {conviction: Identity, weight: 0.20}
-      cultural_label: lowenritter_military
-      self_other_initial: +0.10
-      migration_notes: "Per PP-685 §2.2. Prior labels 'Reason' + 'Military Honor'. NPC registry previously had 'Rawlsian' (from infill) — PP-685 roster is authoritative; discrepancy noted."
+        - {conviction: Equity, weight: 0.50}
+        - {conviction: Warden, weight: 0.30}
+      cultural_label: restoration_reformist
+      self_other_initial: -0.10
+      conviction_notes: "Restoration-aligned per Jordan 2026-05-08."
     goals: ["Serve Varfell intelligence", "Privately sympathize with Restoration Movement"]
     arc_trajectory: "Dual loyalty — personal sympathy vs professional duty. If Vaynard eliminated, takes Varfell leadership (PP-486)."
     source: npc_roster_v30 §2
@@ -114,7 +113,7 @@ characters:
         - {conviction: Authority, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
-      conviction_notes: "Field Inquisitor, NOT a Cardinal. Cardinal Justice = Henrik Solvang (NPC-076). Savonarola archetype."
+      conviction_notes: "Field Inquisitor, NOT a Cardinal. Cardinal Justice = Arnlod Olafsson (NPC-038). Savonarola archetype."
     goals: ["Investigate heresy", "Enforce Church orthodoxy"]
     arc_trajectory: "Latent TS — doesn't know he's Thread Sensitive. PC diagnosis possible (Cognition vs Ob 2)."
     source: npc_roster_v30 §4
@@ -566,7 +565,7 @@ characters:
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
     source: faction_canon_v30 §Crown sub-Organizations
-    notes: "CORRECTED: previously listed as 'Church / Cardinal Reichard'. Per faction_canon, Annalie Reichard is Crown Inner Circle Lord Treasurer, NOT a Cardinal. The 'Cardinal Reichard' in PP-685 §2.3 may be a separate entity (artifact 15 sample) or a naming confusion. [OPEN: verify if there is a distinct Cardinal Reichard in Church hierarchy]."
+    notes: "Crown Lord Treasurer. Cardinal Reichard STRUCK."
 
 # ═══════════════════════════════════════════════════════════════
 # CHURCH HIERARCHY — Cardinals
@@ -578,7 +577,7 @@ characters:
     first_name: Arnlod
     last_name: Olafsson  # FILLED: per faction_canon "Cardinal Arnlod Olafsson"
     faction: Church
-    role: Cardinal (virtue assignment unconfirmed)
+    role: Cardinal Justice (oversees Inquisition)
     status: canonical  # verified per faction_canon_v30 §Church
     age: null  # [GAP]
     birthplace: null  # [GAP]
@@ -588,14 +587,15 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.40}
+        - {conviction: Faith, weight: 0.60}
+        - {conviction: Authority, weight: 0.20}
       cultural_label: ecclesiastical
       self_other_initial: 0.00
-      migration_notes: "No prior legacy label. Only Faith inferred from Cardinal role. Per PP-685 §4 defaults."
+      conviction_notes: "Cardinal Justice. Per Jordan."
     goals: null  # [GAP]
     arc_trajectory: null  # [GAP]
     source: faction_canon_v30 §Church
-    notes: "Cardinal virtue assignment not found in faction_canon (Justice = Haelgrund, Temperance = Klapp candidate, Fortitude = Jarnstal candidate, Prudence = Tormann). [OPEN: which virtue does Arnlod hold, or is he a 5th cardinal without virtue assignment?]"
+    notes: "Cardinal Justice. Per Jordan 2026-05-08."
 
   - id: NPC-039
     first_name: Magnus
@@ -718,36 +718,6 @@ characters:
     notes: "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
 
 
-  - id: NPC-060
-    first_name: Lennart
-    last_name: Haelgrund
-    faction: Crown (Ministry)
-    role: Registrar (Ministry — Throughline T4)
-    status: canonical
-    age: null  # [GAP]
-    birthplace: null  # [GAP]
-    territory: null
-    ts: 12 (Hidden)  # per behavior_v30 §2.14: 'Encountered Thread-adjacent phenomena in deep archive'
-    coherence: null  # [GAP]
-    certainty: null  # [GAP]
-    resonant_style: Consequence  # per behavior_v30: 'Show him that the Ministry's neutrality enables harm'
-    self_other_initial: 0.00
-    cultural_label: valorian_court
-    stats: null  # [GAP]
-    convictions:
-      primary:
-        - {conviction: Warden, weight: 0.40}
-        - {conviction: Precedent, weight: 0.25}
-      conviction_notes: "behavior_v30 §2.14: Primary = Continuity ('The work continues regardless of who sits on the throne') → Warden. Secondary = Precedent (procedural correctness fallback). Administrative Proceduralism ethical framework."
-    goals: ["Maintain institutional function", "Ministry neutrality"]
-    arc_trajectory: "Arc A: The System's Memory. Arc B: The Whistleblower (player shows Evidence that Ministry records have been altered)."
-    source: npc_behavior_v30 §2.14
-    notes: "DISTINCT from NPC-004 Sæmund Haelgrund (Cardinal Justice, Church). Same surname — relationship unknown. Both TS 12. Ministry Registrar, not Church."
-
-# ═══════════════════════════════════════════
-# CANON ADDITIONS (behavior_v30, arc_expansion)
-# ═══════════════════════════════════════════
-
   - id: NPC-070
     first_name: Lisbeth
     last_name: Ehrenwall
@@ -841,25 +811,6 @@ characters:
     goals: ["The work. Only the work."]
     arc_trajectory: "Arc C: death-Mending seals one Gap permanently (RS +5). 31 years at the Southernmost."
     source: arc_expansion_v30
-
-  - id: NPC-076
-    first_name: Henrik
-    last_name: Solvang
-    faction: Church
-    role: Cardinal Justice (oversees Inquisition apparatus)
-    status: canonical
-    cultural_label: ecclesiastical
-    convictions:
-      primary:
-        - {conviction: Faith, weight: 0.60}
-        - {conviction: Authority, weight: 0.20}
-    notes: "Commands Inquisition from Himmelenger. Sæmund Haelgrund (NPC-004) is field operative."
-    source: behavior_v30 §2.13
-
-# ═══════════════════════════════════════════
-# PROPOSED NPCs — editorial audit 2026-05-08
-# NERS-validated, collision-checked
-# ═══════════════════════════════════════════
 
   - id: NPC-080
     first_name: Vidar
@@ -1110,14 +1061,3 @@ characters:
 # 15. [RESOLVED] LENNETH CONVICTION: Equity primary. Archivist by
 #     training. Pro-Restoration institutional revivalist.
 #
-# 16. [NEW] LENNART HAELGRUND: Added as NPC-060. Ministry Registrar,
-#     distinct from Cardinal Sæmund Haelgrund (NPC-004). Same
-#     surname, both TS 12. Relationship unknown — needs decision.
-#
-# 17. [OPEN] TORSVALD TS DISCREPANCY: npc_roster_v30 says TS 35,
-#     behavior_v30 table says '20+'. Using 35 (roster is specific).
-#     Behavior table may be a floor value. Needs reconciliation.
-#
-# 18. [OPEN] MARET ULN CONVICTION: character_canon D1 flags
-#     'behavior says Equity/Reason; migration roster says
-#     Honor/Authority/Identity'. Still unresolved.
