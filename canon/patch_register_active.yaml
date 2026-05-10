@@ -589,3 +589,21 @@ patches:
     necessity: pass
     omega: pass
     note: "Class E — editorial clarification. N: removes a P3 spec ambiguity surfaced by stress-test. Ω: 'sustained' read as 'consecutive' is the natural reading; clarification prevents Game Master / engine drift toward cumulative interpretation."
+
+- id: PP-720
+  class: C
+  pre-framework: false
+  date: 2026-05-10
+  severity: P2
+  description: "R7 stress-FF threshold spec — friendly fire from Ranged into Melee under stress conditions. Per R7 recommendation (commit c58bc670 C7.4 primary, C7.1 fallback). Stress threshold enumerated: ≥1 Wound OR Composure ≤3 OR environmental degradation (low light, weather, smoke, glare, mid-spell-Crisis). Resolution: on stress + Ranged miss into Melee zone, secondary roll TN+1 (single-stress) or TN+2 (multi-stress) vs single most-adjacent friendly actor; on secondary hit, damage = floor(STR/2) + weapon_mod_vs_armour. No new Ob channel — uses canonical −1D-Pool stress channel + TN modifier. Inserts new subsection in combat_v30 §5 (between Ranged Weapons and §6 Armour). Tabletop fallback waiver clause preserves table flexibility."
+  finding_id: combat_arch_residual_stress_01 R7 (commit c58bc670)
+  source: editorial
+  affects:
+    - designs/scene/combat_v30.md
+    - canon/patch_register_active.yaml
+  status: applied
+  applied_commit: 2026-05-10 PP-720 (this commit)
+  vetting:
+    class: C
+    necessity: pass
+    note: "Class C — parameter/resolution-path extension. Threshold-style addition: enumerates stress conditions and TN modifiers for an existing miss outcome. No new state, no new resource, no new dice channel (uses canonical Combat Pool + TN modifier). Bounded scope (only Ranged-into-Melee under stress + adjacent ally). Tabletop fallback waiver clause preserves table flexibility. T (test) only required per §8.1."

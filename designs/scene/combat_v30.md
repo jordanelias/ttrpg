@@ -219,6 +219,31 @@ No catastrophic outcome category. Majority-1s produces standard Failure.
 
 ---
 
+### Stress-FF (ranged into melee under stress conditions) — PP-720
+
+**Trigger.** When a Ranged attack into a Melee zone (per R7-L03 zone terminology) misses (Defence ≥ Offence) AND the shooter satisfies any of the stress conditions below:
+
+| Stress condition | Threshold |
+|---|---|
+| Wounds | ≥1 Wound |
+| Composure | ≤3 |
+| Environmental degradation | Low light, weather (rain, fog, snow), smoke, glare, or mid-spell-Crisis |
+
+**Resolution (PP-720).** On trigger:
+1. Identify all friendly actors at Melee range adjacent to the original target (i.e., engaged in the same zone with the target).
+2. Roll a single secondary FF check: shooter's Offence pool (the same dice Pool used for the original miss) vs TN +1 (single-stress: 1 condition met) or TN +2 (multi-stress: 2+ conditions met).
+3. The secondary roll targets the *single most-adjacent* friendly actor (Game Master arbitration if multiple equidistant); allocates Defence per that actor's Combat Pool as normal.
+4. On secondary hit: damage = floor(STR / 2) + weapon_modifier_vs_armour (per R7-L05 net hits min 0; if net hits 0 after Defence, no FF damage).
+5. On secondary miss: no FF damage. The shot lands inert; narrative description.
+
+**Boundary.** No friendly actor adjacent → no FF check fires (no candidate target). Shooter outside Melee range → standard Ranged rules; no FF (the shot is at standard distance, not into a melee).
+
+**No Ob penalty.** PP-720 strictly uses the −1D-Pool stress channel (PP-716 universal wound penalty + Composure/environmental as TN modifier). No new Ob channel.
+
+**Tabletop fallback.** Game Master may waive the secondary roll for cinematic clarity if the table prefers simpler resolution (declare narrative miss, no friendly damage). The mechanic is intentionally light-touch — it surfaces tactical risk without bookkeeping ceiling.
+
+**Cross-references:** R7 commit c58bc670 (recommended C7.4 + C7.1 fallback); PP-716 (wound penalty universality); R2 commit 27e7983c (Architecture C duel preserves cognitive-only player skill — stress-FF is canonical for A scene, not C duels).
+
 ## 6. ARMOUR
 
 ### Armour (PP-232)

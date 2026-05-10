@@ -294,3 +294,12 @@ Final commit. ED-784 Phase 2 work complete.
 - `designs/scene/fieldwork_v30.md §5.6b`: "sustained for 2 seasons" → "2 consecutive seasons (defined as Disposition value at Accounting in season N below +3 AND season N+1 below +3, both unbroken). Non-consecutive seasons below +3 do not aggregate."
 - Surfaced by: EC-F2.A-01 in `fieldwork_lifecycle_stress_01` (commit ddccbf9a).
 - No simulation re-run required.
+
+## PP-720 R7 stress-FF threshold spec (2026-05-10)
+**Class C (mechanical — parameter/resolution-path extension); applied this commit.**
+- `designs/scene/combat_v30.md §5`: new subsection "Stress-FF (ranged into melee under stress conditions)" inserted before §6 ARMOUR.
+- Stress conditions: Wounds ≥1 OR Composure ≤3 OR environmental degradation.
+- Resolution: secondary FF roll TN+1 (single-stress) / TN+2 (multi-stress); damage = floor(STR/2) + weapon_mod_vs_armour.
+- No new Ob channel; uses canonical Combat Pool + TN modifier.
+- Tabletop fallback waiver clause preserves Game-Master flexibility.
+- Surfaced by: combat_arch_residual_stress_01 Module 7 R7 (commit c58bc670).
