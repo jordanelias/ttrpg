@@ -1,0 +1,140 @@
+{
+  "harness_id": "fieldwork_lifecycle_stress_01",
+  "harness_version": "v1",
+  "session_token_started": "2026-05-10",
+  "constants": [
+    {
+      "id": "F-L01",
+      "sim_variable": "knot_formation_prerequisites",
+      "value": "5 prerequisites",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6a",
+      "quoted_text": "**Prerequisites (all required):**"
+    },
+    {
+      "id": "F-L02",
+      "sim_variable": "knot_count_max_formula",
+      "value": "floor(Bonds/2)+1",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6a",
+      "quoted_text": "PC's current Knot count < floor(Bonds/2)+1 (per params_core §Bonds max Knot count)"
+    },
+    {
+      "id": "F-L03",
+      "sim_variable": "bonds_disposition_ceiling",
+      "value": "Disposition ceiling = Bonds (PP-684)",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.1",
+      "quoted_text": "ceiling = Bonds** (PP-684, revised from PP-632 floor formula)"
+    },
+    {
+      "id": "F-L04",
+      "sim_variable": "knot_resolution_spirit_pool",
+      "value": "Spirit×2 vs TN 7 Ob 2",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6a",
+      "quoted_text": "**Resolution:** Spirit pool (Spirit × 2) vs TN 7, Ob 2."
+    },
+    {
+      "id": "F-L05",
+      "sim_variable": "knot_strain_capacity",
+      "value": "Distant 4, Close 7",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "| Distant Knot | 4 strain | Can be upgraded to Close (per §5.6a Success outcome). Upgrade resets strain to 0. |"
+    },
+    {
+      "id": "F-L06",
+      "sim_variable": "knot_strain_sources",
+      "value": "6 strain accumulation mechanisms",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "**Strain accumulation:** A Knot accrues *strain* through several mechanisms:"
+    },
+    {
+      "id": "F-L07",
+      "sim_variable": "knot_break_consequences",
+      "value": "Disposition floor +2/-2; 4 Composure both; benefits cease; slot frees; Close-broken → Conviction Scar +1",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "**Knot break consequences:**"
+    },
+    {
+      "id": "F-L08",
+      "sim_variable": "knot_rupture_triggers",
+      "value": "5 immediate-rupture triggers",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "**Rupture (immediate break, bypassing strain accumulation):**"
+    },
+    {
+      "id": "F-L09",
+      "sim_variable": "knot_strain_decay",
+      "value": "−1/season at Accounting if no strain added AND Disposition ≥+3",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "**Strain decay:** Knot strain decays at −1 per season at Accounting if no strain was added that season AND Disposition is +3 or higher."
+    },
+    {
+      "id": "F-L10",
+      "sim_variable": "fr_dissolution_knot_partner",
+      "value": "Tears Knot; +1 Wound (no armor)",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "Tears the Knot directly; partner-of-rupture takes +1 Wound (no armor)."
+    },
+    {
+      "id": "F-L11",
+      "sim_variable": "conviction_scar_close_knot_break",
+      "value": "Close Knot high-strain break → Conviction Scar +1 both",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b",
+      "quoted_text": "For Close Knots that broke at high strain: Conviction Scar +1 to both partners"
+    },
+    {
+      "id": "F-L12",
+      "sim_variable": "ed773_lifecycle_authority",
+      "value": "ED-773 canonized Knot Lifecycle",
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.6b editorial",
+      "quoted_text": "[EDITORIAL: ED-773 — Knot Lifecycle specified in fieldwork §5.6b. Closes the gap surfaced by audit during stress-test 26: Knot strain accumulation was canonized (multiple use-sites add strain) but Kno"
+    }
+  ],
+  "modules_verified": [
+    {
+      "module": "F2 Knot Lifecycle",
+      "name": "fieldwork_lifecycle_stress_01 — Knot Lifecycle",
+      "date": "2026-05-10",
+      "ledger_entries": [
+        "F-L01",
+        "F-L02",
+        "F-L03",
+        "F-L04",
+        "F-L05",
+        "F-L06",
+        "F-L07",
+        "F-L08",
+        "F-L09",
+        "F-L10",
+        "F-L11",
+        "F-L12"
+      ],
+      "decision": "F2.1 (preserve PP-684/ED-773 Knot Lifecycle as canonical; no mechanical changes recommended)",
+      "key_finding": "Knot Lifecycle is mature post-ED-773. Two ⚠ on Horizontal (Bonds-investment dependency) are intentional design space. R1 v2 C1.3 (Knot-tagged permanence via Conviction Scar) recommendation depends on F-L10 + F-L11 chain — F2 verification confirms R1's grounding.",
+      "spec_gap": "EC-F2.A-01 — 'sustained Disposition reduction' definition (continuous vs cumulative across seasons) — F-L06 source 6 ambiguity"
+    },
+    {
+      "module": "F1 Wager B5",
+      "name": "Covered in R5 (commit d46ad908)",
+      "decision": "C5.1 preserve canonical Wager Obligation post-ED-778 — no further analysis warranted"
+    },
+    {
+      "module": "F3 Heresy Investigation B8",
+      "status": "DEFERRED — separate follow-up session"
+    },
+    {
+      "module": "F4 Mending B10/B11",
+      "status": "DEFERRED — separate follow-up session; PP-716 wound-penalty propagation already validated in R1 v2"
+    }
+  ]
+}
