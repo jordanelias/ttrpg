@@ -192,3 +192,5 @@ The R1 redo against PP-716 canon may produce a different recommendation. Plan: r
 Modules 2–10 remain pending and will use PP-716 canon from the start.
 
 ## R4 verified — C4.2
+
+## R5 verified — C5.1

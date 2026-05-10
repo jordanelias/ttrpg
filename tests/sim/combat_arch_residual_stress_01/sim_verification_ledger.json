@@ -119,6 +119,26 @@
       ],
       "deferred_refinement": "C4.3 context-sensitive — adopt only after Q5 T-trigger criteria (T-Boss / T-Cultural / T-Honor-call) formally specified (P1 ambiguity per EC-D4.A-01)",
       "key_finding": "Three-tier presence model formalized: Tier 0 absent (BG + Where-Were-You), Tier 1 present-strategic (commander, default), Tier 2 present-scene (Zoom In opt-in). §D.3 player wound morale shock R4-L05 designed for exceptional Tier 2 events."
+    },
+    {
+      "module": 5,
+      "name": "R5 Wager stake range",
+      "date": "2026-05-09",
+      "ledger_entries": [
+        "R5-L01",
+        "R5-L02",
+        "R5-L03",
+        "R5-L04",
+        "R5-L05",
+        "R5-L06",
+        "R5-L07"
+      ],
+      "decision": "C5.1 (preserve canonical Wager Obligation per §6.1.1 — stake severity structurally derived from contest type per R5-L01, not from a parallel tag)",
+      "rejected_candidates": [
+        "C5.2 stake-severity tag (functionally redundant with contest-type hierarchy)"
+      ],
+      "deferred_refinement": "C5.3 voluntary stake escalation — genuine player-agency value but substantial cross-system coupling cost; recommend separate design initiative if pursued",
+      "key_finding": "Synthesis premise partially obsolete: canon's Wager Obligation post-ED-778 is mature; stake severity encoded structurally via contest type (Formal/Grand/Royal/Tribunal) rather than as parallel tag. Cosmetic-stake gap (tavern-game / dueling-purse content) belongs to fieldwork-Socializing, not Wager."
     }
   ],
   "constants": [
@@ -513,6 +533,62 @@
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
       "section": "§3",
       "quoted_text": "## §3 Eight Handoff Rules"
+    },
+    {
+      "id": "R5-L01",
+      "sim_variable": "obligation_duration_by_contest_type",
+      "value": "Formal 2 seasons; Grand 4 seasons or until condition; Royal 2 seasons; Tribunal until revoked",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6.1",
+      "quoted_text": "| Formal Contest (Parliament) | 2 seasons | Violating faction: Mandate −1. Reputation shift. Contest Fatigue on faction leader. |"
+    },
+    {
+      "id": "R5-L02",
+      "sim_variable": "grand_contest_violation_consequences",
+      "value": "Mandate −2, Stability −1, +2 Ob next DA targeting violator",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6.1",
+      "quoted_text": "**Condition not met within timeframe:** Obligation fails. Default Grand Contest violation consequences fire (Mandate −2, Stability −1, +2 Ob next DA targeting"
+    },
+    {
+      "id": "R5-L03",
+      "sim_variable": "wager_obligation_definition",
+      "value": "Future-conditional Obligation; verifiable-future-condition framing",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6.1.1",
+      "quoted_text": "**Wager Obligations (extension — verifiable-future-condition framing):** Obligations may take a future-conditional form when the winning side explicitly extends"
+    },
+    {
+      "id": "R5-L04",
+      "sim_variable": "wager_resolution_three_outcomes",
+      "value": "Condition Met / Not Met / Partial",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6.1.1",
+      "quoted_text": "Wager resolution operates on the named condition rather than on duration alone:"
+    },
+    {
+      "id": "R5-L05",
+      "sim_variable": "wager_edge_case_spec_complete",
+      "value": "ED-778 closed spec gap on edge cases",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6.1.1",
+      "quoted_text": "[EDITORIAL: ED-778 — Wager Obligation edge cases specified in §6.1.1. Closes spec gap surfaced by stress-test 49: base Wager spec (Condition Met / Not Met / Par"
+    },
+    {
+      "id": "R5-L06",
+      "sim_variable": "obligation_player_violation_allowed",
+      "value": "Player may violate Obligation; consequences fire",
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6.1",
+      "quoted_text": "**Player Obligations:** When the player loses a contest, they receive an Obligation. The player is not forced to comply — they may violate it. Violation consequ"
+    },
+    {
+      "id": "R5-L07",
+      "sim_variable": "conviction_scar_existing_channel",
+      "value": "Conviction Scar accumulation through major narrative events",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§Conviction (R1v2-L11 cross-ref)",
+      "quoted_text": "Lifetime; shifts only through Scar accumulation or major narrative events"
     }
   ],
   "meta_findings": [
