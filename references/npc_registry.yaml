@@ -86,12 +86,11 @@ characters:
     stats: null  # [GAP: deferred]
     convictions:
       primary:
-        - {conviction: Honor, weight: 0.35}
+        - {conviction: Equity, weight: 0.40}
         - {conviction: Warden, weight: 0.25}
-        - {conviction: Community, weight: 0.20}
       cultural_label: solmund_alpine
       self_other_initial: -0.30
-      migration_notes: "Per PP-685 §2.2. Prior labels in roster 'Continuity' + 'Military Honor'; npc_roster_v30 says 'Rawlsian social contract'. PP-685 mapping used as authoritative. Discrepancy flagged."
+      conviction_notes: "Equity primary per behavior_v30 §RM: 'The community is the only legitimate political unit.' Secondary: Continuity → Warden (cultural preservation fallback). PP-685 mapping (Honor/Warden/Community) superseded by behavior file. Rosa Luxemburg archetype — visibility as vulnerability."
     goals: ["Cultural restoration", "Equity and social contract"]
     arc_trajectory: "Visibility as vulnerability — permanent Heresy Investigation target"
     source: npc_roster_v30 §3
@@ -130,7 +129,7 @@ characters:
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null
-    ts: null  # [GAP — implied high enough for Thread perception]
+    ts: 35  # per npc_roster_v30 §5 'TS 35'; behavior_v30 table says '20+' (floor, not ceiling)
     coherence: null  # [GAP]
     stats: null  # [GAP: deferred]
     convictions:
@@ -399,11 +398,12 @@ characters:
     age: null  # [GAP]
     birthplace: null  # [GAP]
     territory: null  # off-board (Altonia) unless Elske Return arc
-    ts: null  # [GAP]
+    ts: 0  # per behavior_v30 TS/certainty table
     coherence: null  # [GAP]
+    certainty: 3  # per behavior_v30: 'Certainty disrupted by hostage status and competing loyalties'
     stats: null  # [GAP]
     convictions:
-      primary: null  # [GAP: no conviction data in canon]
+      primary: null  # [GAP: no conviction data in canon — off-board]
     goals: null  # [GAP]
     arc_trajectory: "Off-board diplomatic asset. Elske Loyalty stat drives Laskaris PROTECTIVE behavior. Return arc possible."
     source: faction_canon_v30 §Crown
@@ -442,12 +442,15 @@ characters:
     coherence: null  # [GAP]
     stats: null  # [GAP]
     convictions:
-      primary: null  # [GAP: needs Restoration-aligned conviction vector — NOT the ecclesiastical profile in PP-685 §2.3 which is a misattribution]
-      alignment_notes: "Pro-Restoration, allied with Yrsa Vossen. PP-685 §2.3 incorrectly placed Lenneth under Ecclesiastical with Scholastic/Faith/Precedent — that profile is wrong. Conviction vector needs authoring per her actual RM alignment."
-    goals: null  # [GAP]
-    arc_trajectory: "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent. Pro-Restoration — allied with Yrsa Vossen."
-    source: faction_canon_v30 §Crown
-    notes: "Queen Lenneth Almqvist. Pro-Restoration alignment confirmed per Jordan 2026-05-08. PP-685 §2.3 ecclesiastical profile is a misattribution — needs correction in PP-685."
+      primary:
+        - {conviction: Equity, weight: 0.45}
+      cultural_label: valorian_court
+      self_other_initial: -0.20
+      conviction_notes: "character_analyses §2: 'Primary Conviction: Equity. She believes caste suppression is wrong and the Crown should be the instrument of reform.' Archivist by training. Pro-Restoration — allied with Yrsa Vossen."
+    goals: ["Einhir revival through Crown authority", "Caste dismantlement through royal decree"]
+    arc_trajectory: "Arc D The Avenger. If Almud eliminated (Arc F): becomes Widow Regent. Pro-Restoration — institutional revivalist, allied with Yrsa Vossen."
+    source: npc_character_analyses §2, faction_canon_v30 §Crown
+    notes: "Queen Lenneth Almqvist. Archivist by training. PP-685 §2.3 ecclesiastical profile was misattribution. Lenneth archive awakened Torsvald's TS (character_analyses_infill §5)."
 
   - id: NPC-033
     first_name: Kolbrun
@@ -667,10 +670,11 @@ characters:
     notes: "RESOLVED: distinct character from NPC-013 Aldric Tormann (Church Cardinal Prudence). Aldric Hann is RM visible leadership. Two different factions, different surnames."
 
   - id: NPC-050
-    first_name: Baralta
-    last_name: null  # [GAP]
-    faction: Crown (claimant per foil dynamics)
-    role: Claimant (Custodian/Claimant foil with Almud)
+    first_name: Inge
+    last_name: Baralta  # [GAP]
+    faction: Hafenmark
+    role: Duchess (Sovereign Authority claimant, Custodian/Claimant foil with Almud)
+    title: Duchess
     status: canonical  # verified per faction_canon foil pairings + PP-685 §2.3
     age: null  # [GAP]
     birthplace: null  # [GAP]
@@ -680,21 +684,22 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Faith, weight: 0.50}
-        - {conviction: Virtue, weight: 0.20}
-        - {conviction: Warden, weight: 0.10}
-      cultural_label: ecclesiastical
-      self_other_initial: -0.40
-      migration_notes: "Per PP-685 §2.3. Prior labels 'Divine Command' + 'Virtue Ethics'. Selfless devotional archetype."
-    goals: null  # [GAP]
+        - {conviction: Precedent, weight: 0.45}
+        - {conviction: Authority, weight: 0.25}
+        - {conviction: Order, weight: 0.15}
+      cultural_label: hafenmark_procedural
+      self_other_initial: -0.30
+      conviction_notes: "Precedent primary per behavior_v30 §2.3: 'Constitutional procedure IS justice.' PP-685 §2.3 misattributed as Faith/ecclesiastical — character_canon D6 already flagged this. Catherine the Great archetype — unshakeable force of conviction, sovereign authority as constitutional principle."
+    goals: ["Sovereign Authority Doctrine", "Constitutional framework supersedes Church jurisdiction", "Hafenmark parliamentary sovereignty"]
     arc_trajectory: "Six foil pairings per npc_foils_v30: Almud ↔ Baralta (Custodian/Claimant); Lenneth ↔ Baralta (campaign-defining); Baralta ↔ Vaynard (total opposition)."
-    source: arcs_31_35.md, faction_canon_v30, PP-685 §2.3
+    source: npc_behavior_v30 §2.3, npc_character_analyses §6, faction_canon_v30
 
   - id: NPC-052
-    first_name: Vaynard
-    last_name: null  # [GAP]
+    first_name: Magnus
+    last_name: Vaynard  # [GAP]
     faction: Varfell
-    role: Varfell Leader
+    role: Duke (Varfell Leader)
+    title: Duke
     status: canonical  # RESOLVED: confirmed as Varfell faction leader per faction_canon
     age: null  # [GAP]
     birthplace: null  # [GAP]
@@ -704,16 +709,42 @@ characters:
     stats: null  # [GAP]
     convictions:
       primary:
-        - {conviction: Authority, weight: 0.40}
-        - {conviction: Honor, weight: 0.20}
-        - {conviction: Identity, weight: 0.20}
-      cultural_label: lowenritter_military  # per faction_state_authoring_v30 §5
-      self_other_initial: +0.20
-      migration_notes: "PP-685 §3 edge case: 'Authority + Honor + Identity, lowenritter_military background; orientation +0.20 (pragmatic militarist)'. PP-650 STRUCK status noted but Conviction profile provided as placeholder."
-    goals: ["Varfell military expansion", "Intelligence-first approach to RM"]
+        - {conviction: Equity, weight: 0.35}
+        - {conviction: Utility, weight: 0.30}
+      cultural_label: lowenritter_military
+      self_other_initial: -0.40
+      conviction_notes: "Reinhardt von Lohengramm archetype — revolutionary aristocrat. Genuine Einhir revival idealism (Equity) fused with any-cost pragmatism (Utility). Self/Other −0.40: ego-driven, wants to be the one who tears down the order and replaces it. PP-685 §3 mapping (Authority/Honor/Identity) superseded per Jordan 2026-05-08."
+    goals: ["Einhir cultural revival at any cost", "Varfell military expansion", "Dismantle post-war caste order", "Intelligence-first approach to RM"]
     arc_trajectory: "Von Lohengramm programme — revolutionary expulsion. If eliminated, Maret Uln succession (PP-486)."
-    source: faction_canon_v30, npc_roster_v30 (referenced as Maret's superior)
-    notes: "PP-650 STRUCK status applies to Cultural Reformation + VTM associations; character remains active. 'Cunning + pride' doctrine (faction_layer §1.5)."
+    source: npc_behavior_v30 §2.4, npc_character_analyses_infill §5, faction_canon_v30
+    notes: "PP-650 STRUCK on Cultural Reformation + VTM associations; character active. Reinhardt von Lohengramm archetype per Jordan."
+
+
+  - id: NPC-060
+    first_name: Lennart
+    last_name: Haelgrund
+    faction: Crown (Ministry)
+    role: Registrar (Ministry — Throughline T4)
+    status: canonical
+    age: null  # [GAP]
+    birthplace: null  # [GAP]
+    territory: null
+    ts: 12 (Hidden)  # per behavior_v30 §2.14: 'Encountered Thread-adjacent phenomena in deep archive'
+    coherence: null  # [GAP]
+    certainty: null  # [GAP]
+    resonant_style: Consequence  # per behavior_v30: 'Show him that the Ministry's neutrality enables harm'
+    self_other_initial: 0.00
+    cultural_label: valorian_court
+    stats: null  # [GAP]
+    convictions:
+      primary:
+        - {conviction: Warden, weight: 0.40}
+        - {conviction: Precedent, weight: 0.25}
+      conviction_notes: "behavior_v30 §2.14: Primary = Continuity ('The work continues regardless of who sits on the throne') → Warden. Secondary = Precedent (procedural correctness fallback). Administrative Proceduralism ethical framework."
+    goals: ["Maintain institutional function", "Ministry neutrality"]
+    arc_trajectory: "Arc A: The System's Memory. Arc B: The Whistleblower (player shows Evidence that Ministry records have been altered)."
+    source: npc_behavior_v30 §2.14
+    notes: "DISTINCT from NPC-004 Sæmund Haelgrund (Cardinal Justice, Church). Same surname — relationship unknown. Both TS 12. Ministry Registrar, not Church."
 
 # ═══════════════════════════════════════════════════════════════
 # REMOVED / MERGED ENTRIES
@@ -766,8 +797,7 @@ characters:
 # 9. [OPEN] CARDINAL REICHARD COLLISION: PP-685 §2.3 references a
 #    "Cardinal Reichard" in the ecclesiastical faction. NPC-037
 #    Annalie Reichard is Crown Inner Circle Lord Treasurer per
-#    faction_canon. Are these the same person (dual role) or
-#    distinct characters? Needs Jordan decision.
+#    faction_canon. Are these the same person or distinct?
 #
 # 10. [RESOLVED] LENNETH: One character — Queen Lenneth Almqvist.
 #     Pro-Restoration, allied with Yrsa Vossen. PP-685 §2.3
@@ -780,7 +810,31 @@ characters:
 #     four cardinals. Arnlod Olafsson has no virtue assignment.
 #     Fifth cardinal, or does he hold one of the four?
 #
-# 12. [PARTIALLY RESOLVED] CONVICTION DISCREPANCIES: Yrsa Vossen
-#     PP-685 mapping confirmed per Jordan 2026-05-08. Maret Uln
-#     discrepancy still open (registry had 'Rawlsian', PP-685 had
-#     'Reason' + 'Military Honor').
+# 12. [RESOLVED] CONVICTION DISCREPANCIES: behavior_v30 authoritative
+#     over PP-685 for conviction assignments. Baralta → Precedent
+#     (was Faith), Vaynard → Equity/Utility (was Authority/Honor/
+#     Identity), Vossen → Equity (was Honor/Warden/Community),
+#     Hann → Equity/Liberty (was null). Per audit + Jordan 2026-05-08.
+#
+# 13. [RESOLVED] BARALTA NAME + FACTION: Inge Baralta, Duchess of
+#     Hafenmark. Was mislabeled "Crown claimant" with no first name.
+#     character_canon D6 already flagged the PP-685 misattribution.
+#     Catherine the Great archetype per Jordan.
+#
+# 14. [RESOLVED] VAYNARD NAME: Magnus Vaynard, Duke. Reinhardt von
+#     Lohengramm archetype. Equity/Utility, self/other −0.40.
+#
+# 15. [RESOLVED] LENNETH CONVICTION: Equity primary. Archivist by
+#     training. Pro-Restoration institutional revivalist.
+#
+# 16. [NEW] LENNART HAELGRUND: Added as NPC-060. Ministry Registrar,
+#     distinct from Cardinal Sæmund Haelgrund (NPC-004). Same
+#     surname, both TS 12. Relationship unknown — needs decision.
+#
+# 17. [OPEN] TORSVALD TS DISCREPANCY: npc_roster_v30 says TS 35,
+#     behavior_v30 table says '20+'. Using 35 (roster is specific).
+#     Behavior table may be a floor value. Needs reconciliation.
+#
+# 18. [OPEN] MARET ULN CONVICTION: character_canon D1 flags
+#     'behavior says Equity/Reason; migration roster says
+#     Honor/Authority/Identity'. Still unresolved.
