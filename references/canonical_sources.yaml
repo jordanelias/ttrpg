@@ -67,6 +67,7 @@ systems:
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
+    settlement_layer_index: designs/territory/settlement_layer_v30_index.md
     adjacency: designs/territory/settlement_adjacency_v30.md
     canonical_sha__designs__territory__settlement_adjacency_v30_md: "PENDING_PP_723"
     fractional: designs/provincial/fractional_province_ownership_v30.md
@@ -84,6 +85,8 @@ systems:
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
     canonical_sha__designs__provincial__mass_battle_v30_md: "PENDING_ED_780"  # ED-770/PP-683/PP-711..715 batch (mass-battle, post-renumber 2026-05-02) — SHA update follow-up required
+    mass_battle_index: designs/provincial/mass_battle_v30_index.md
+    mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
     params: params/mass_combat.md
     canonical_sha__params__mass_combat_md: "694d7a232a7204a93b634b936596d822ddafe2d2"  # ED-770 — SHA update follow-up required
   social_debate:
@@ -113,12 +116,14 @@ systems:
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
     canonical_sha__designs__provincial__peninsular_strain_v30_md: "b6ed66db358a71d7ee2967025eb66cab79a99acf"
+    peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
   settlement_layer:
     design_doc: designs/territory/settlement_layer_v30.md
     canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
+    campaign_architecture_index: designs/architecture/campaign_architecture_v30_index.md
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
     canonical_sha__designs__scene__derived_stats_v30_md: "bf8247978cad3e1af2f80e78c845f7d68c0ab51a"
@@ -348,3 +353,8 @@ systems:
     design_doc: designs/architecture/videogame_mode_spec.md
     canonical_sha__designs__architecture__videogame_mode_spec_md: "b29d45e734b2dcaa174f06304691a332f90023b5"
     index: designs/architecture/videogame_mode_spec_index.md
+  npc_behavior:
+    design_doc: designs/npcs/npc_behavior_v30.md
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "167b66a4cbbf80c2a9271d7c9e7825629480d01e"
+    npc_behavior_index: designs/npcs/npc_behavior_v30_index.md
+    npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
