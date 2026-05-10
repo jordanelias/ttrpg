@@ -311,3 +311,9 @@ Final commit. ED-784 Phase 2 work complete.
 - UI effect only: discrete position-cells, narrowed Stunt vocabulary, 8-actor cap. Mechanics unchanged.
 - Tabletop fallback: B-mode is videogame-specific; tabletop ignores.
 - Surfaced by: combat_arch_residual_stress_01 Module 9 R9 (commit 1c31109d C9.3 deferred refinement).
+
+## PP-722 PP-349 stale Niflhel example fix (2026-05-10)
+**Class E (editorial); applied this commit.** Surgical 5-word replacement.
+- `designs/scene/social_contest_v30.md` PP-349 paragraph: "collaborating with Niflhel" → "collaborating with crime or underground networks operating against Church interests".
+- Aligns canonical example with Jordan's 2026-05-09 Niflhel dissolution decision (G-L03 from setup_ignition_stress_01 commit cab3bd85).
+- Surfaced by: F3 Heresy Investigation EC-F3.A-01 (commit 8de82dbb).

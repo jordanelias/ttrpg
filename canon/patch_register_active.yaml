@@ -625,3 +625,20 @@ patches:
     class: C
     necessity: pass
     note: "Class C — presentation/UX parameter on existing mechanic. No new state, no new resource, no new resolution path. Bounded to encounter authoring metadata flag; engine reads flag and renders simplified UI. T (test) gate via encounter authoring tests in subsequent implementation phase."
+
+- id: PP-722
+  class: E
+  pre-framework: false
+  date: 2026-05-10
+  severity: P3
+  description: "PP-349 stale Niflhel example fix. Per Jordan's 2026-05-09 G-L03 decision (setup_ignition_stress_01 commit cab3bd85), Niflhel is dissolved as a faction; crime/underground networks exist in Valoria but are not threadwork-related. PP-349's specific example 'collaborating with Niflhel' in the Church Self-Investigation Exception clause references the dissolved entity. Surgical fix: replace 'collaborating with Niflhel' with 'collaborating with crime or underground networks operating against Church interests'. Surfaced by F3 Heresy Investigation lifecycle audit (commit 8de82dbb) EC-F3.A-01."
+  finding_id: fieldwork_lifecycle_stress_01 F3 EC-F3.A-01
+  source: editorial
+  affects:
+    - designs/scene/social_contest_v30.md
+  status: applied
+  applied_commit: 2026-05-10 PP-722 (this commit)
+  vetting:
+    class: E
+    necessity: pass
+    note: "Class E — editorial fix. Surgical 5-word replacement aligning canonical example with Jordan's 2026-05-09 Niflhel dissolution decision (G-L03). No mechanical change; example preserves the same semantic category (Church-internal-but-anti-Church behavior)."

@@ -537,7 +537,7 @@ Special Asymmetric Proceeding (§7) initiated by Church. Prerequisites: CI ≥ 4
 ---
 
 
-**Church Self-Investigation Exception (PP-349):** The Church does not file Heresy Investigation against its own ordained members who are supporting Church interests. An ordained member acting in alignment with Church doctrine, even if their methods are controversial, is shielded from internal investigation. This does not prevent: (1) opposing factions from filing Heresy Investigation against Church members via the standard PP-182 path, or (2) the Church from investigating ordained members who are actively working against Church interests (e.g., aiding the Restoration Movement, collaborating with Niflhel).
+**Church Self-Investigation Exception (PP-349):** The Church does not file Heresy Investigation against its own ordained members who are supporting Church interests. An ordained member acting in alignment with Church doctrine, even if their methods are controversial, is shielded from internal investigation. This does not prevent: (1) opposing factions from filing Heresy Investigation against Church members via the standard PP-182 path, or (2) the Church from investigating ordained members who are actively working against Church interests (e.g., aiding the Restoration Movement, collaborating with crime or underground networks operating against Church interests).
 ## §10.1 Parliamentary Stay (ED-631)
 
 A Parliamentary Stay is a Senator Inward motion that halts an active Church Tribunal filing for 1 season. It represents Parliament asserting civil jurisdiction over an ecclesiastical proceeding.
