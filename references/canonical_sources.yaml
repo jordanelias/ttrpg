@@ -66,8 +66,9 @@ systems:
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "PENDING_PP_726"
-canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "PENDING_PP_726"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "972e0d9f7d172abc55fe827da61c7f05c14e7741"
+    political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
+    canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "c0c9bb7409a570f461c4846a4ff424f29a4cbe46"
     settlement_layer_index: designs/territory/settlement_layer_v30_index.md
     canonical_sha__designs__territory__settlement_layer_v30_index_md: "a0c84f286189ca3fb822d7d2afbdc2f75fa5cb30"
     adjacency: designs/territory/settlement_adjacency_v30.md
@@ -75,7 +76,7 @@ canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "PENDING_
     fractional: designs/provincial/fractional_province_ownership_v30.md
     canonical_sha__designs__provincial__fractional_province_ownership_v30_md: "b36ac24910ceaf54bdadf29be899d3d085d9778b"
     geographic_data: designs/territory/valoria_geography_v30.yaml
-    canonical_sha__designs__territory__valoria_geography_v30_yaml: "PENDING_PP_726"
+    canonical_sha__designs__territory__valoria_geography_v30_yaml: "cce4fdb626a0c2b84e510aece9733602941245ef"
     geographic_map: designs/territory/valoria_map_v30.svg
     canonical_sha__designs__territory__valoria_map_v30_svg: "570bde5ccfb7cd0cada8f326cbb79360b47e6b0b"
     geographic_design_doc: designs/world/geography_v30.md
@@ -303,7 +304,7 @@ canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "PENDING_
 
   npc_relational_graph:
     design_doc: designs/npcs/npc_relational_graph_v30.md
-    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "PENDING_PP_726"
+    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "cfa928bc6dedbc93512c4b08d524957b5323c825"
     pp: PP-724
     status: PROVISIONAL
 
