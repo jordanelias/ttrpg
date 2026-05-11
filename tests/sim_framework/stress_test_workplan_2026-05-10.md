@@ -3,6 +3,8 @@ title: Valoria Mechanical Systems — Comprehensive Stress-Test Workplan
 date: 2026-05-10
 scope: every-system
 status: planning
+revision: V1.1
+revision_basis: stress_workplan_resolutions_2026-05-10.md (Jordan directive 'resolve all, no naval')
 session_token: 279993641470c167
 authoring_model: Claude Opus 4.7
 ---
@@ -42,8 +44,11 @@ A workplan is successful if a downstream session can pick up any phase, fetch th
 6. **`read_active_sessions`** concurrent-session detection (`github_ops`) is broken per prior session log — collision detection currently falls back to fetch-head OID. Either fix or document the fallback as canonical before parallel stress sessions are encouraged.
 7. **`improvement_avenues_2026-05-10.md`** at `/home/claude/work/` — uncommitted, 283 lines, ephemeral. Either commit or discard before relying on its findings.
 8. **PAT rotation** — VALORIA_PAT echoed across chat surfaces; outstanding from prior session.
+9. **Canonize Battle Scale 5-tier table** (`params/mass_combat.md:223`) — strip [PROPOSAL] marker. Per Q8 resolution.
+10. **Author Crisis Scene catalog** (~6–12 templates) for Stability-Crisis Zoom-In trigger (Q10 resolution).
+11. **Commit Influence-split 60/40 spec patch** (B2 ready; Q17 resolution; same 60/40 rule extends to Wealth/Military pending balance test).
 
-Items 1–4 are repo-level. Items 5–6 are infrastructure. Items 7–8 are housekeeping. None block this workplan's authoring, but they block reproducible stress execution.
+Items 1–4 are repo-level. Items 5–6 are infrastructure. Items 7–8 are housekeeping. Items 9–11 are V1.1 canonization tasks deriving from Q-resolutions. None block this workplan's authoring, but they block reproducible stress execution.
 
 ---
 
@@ -137,13 +142,14 @@ System IDs use the convention `<layer><N>` where layer ∈ {E, P, S, W, G, C}. L
 **Suite ID.** `E1_dice_resolution_stress_01` (suite letter **E**).
 
 **Stress modules:**
-- **E1.1 — V1 Formula validation.** Reproduce EV 0.4/die across 1d–20d. Verify boundary outputs: pool=0 (auto-fail or impossible?), pool=1 (canonical bounds: −1 / 0 / +1 / +2), pool ≥ 20 (verify the engine doesn't truncate or overflow).
-- **E1.2 — V2 Probability distribution.** Full distribution tables for 1d, 3d, 5d, 7d, 10d, 15d, 20d. Verify P(net ≥ 0), P(net ≥ +N) for N ∈ {0, 1, 2, 3, 5, 8}. Cross-check against any degree-table assumptions in `combat.md` and `contest.md`.
+- **E1.1 — V1 Formula validation.** Reproduce EV/die across 1d–20d for **all canonical TN variants**. Per Q21: default TN 7 (EV 0.4); TN 6 for Volley Phase (`params/mass_combat.md` PP-503 Power-stat ranged); TN 8 for rushed pre-contest prep. Verify boundary outputs: pool=0 (auto-fail or impossible?), pool=1 (canonical bounds: −1 / 0 / +1 / +2), pool ≥ 20 (verify the engine doesn't truncate or overflow). Additional gate: full grep across `params/` for any `TN \d` token not already enumerated; surface as V1.1.update if found.
+- **E1.2 — V2 Probability distribution.** Full distribution tables for {TN 6, TN 7, TN 8} × {1d, 3d, 5d, 7d, 10d, 15d, 20d}. Verify P(net ≥ 0), P(net ≥ +N) for N ∈ {0, 1, 2, 3, 5, 8}. Cross-check against any degree-table assumptions in `combat.md` and `contest.md`.
 - **E1.3 — V4 NERS edge cases.** Boundary: pool=0 behavior, pool=1 lone-die, max canonical pool (verify there is one). Crunch: simultaneous +2/−1 from a single die — does a 10 also fail the 1-counting? Ambiguity: re-rolls (do any mechanics grant them?), bonus dice, exploding-on-10. Optimal play: when does adding +1D have diminishing return vs +1 TN swing?
 - **E1.4 — V6 Coverage matrix.** Pool × TN × modifier-stack × situational-bonus (advantage / disadvantage if applicable). Verify the resolution surface is closed under composition.
+- **E1.5 — V11 Obligation cap UI flow (engine logic).** Per Q16 resolution. Engine-side stress: when a character would acquire a 4th Obligation, the engine surfaces a forced-choice UI prompt (retire existing / dissolve via Wager / decline new). Verify: (a) all three player paths reach a canonical resolution; (b) state transitions are atomic (no partial Obligation state); (c) decline path leaves the offered Obligation cleanly closed without ghost-state; (d) dissolve-via-Wager invokes F1 Wager mechanic correctly per fieldwork canon.
 
-**Canon gates.** None — dice are foundational.
-**Open questions.** Are there any non-d10-pool resolution mechanics anywhere in the canon? (e.g. flat checks, fixed-degree assignments). If yes, those must be enumerated as exceptions to E1.
+**Canon gates.** None — dice are foundational. **TN-variant enumeration** (Q21 resolution) lists TN 6 / TN 7 / TN 8 as the canonical set.
+**Open questions.** RESOLVED via Q21: the d10 pool is universal; TN varies (6 / 7 / 8). E1.1 includes a grep-sweep gate to catch any unenumerated TN.
 
 ---
 
@@ -158,14 +164,15 @@ System IDs use the convention `<layer><N>` where layer ∈ {E, P, S, W, G, C}. L
 **Suite ID.** `E2_clocks_stress_01` (suite letter **E**).
 
 **Stress modules:**
-- **E2.1 — V1 Formula validation.** For every named clock: declare canonical bounds, fill rate (per source), drain rate (if any), trigger threshold, post-trigger behavior (reset / persist / advance state).
+- **E2.1 — V1 Formula validation per clock.** Canonical clock set (per Q22 resolution — per-system implementations sharing a common 0–100 / banded-effects convention): MS (Mending Stability), CI (Church Influence), IP (Invasion Pressure), PI (Parliamentary Integrity), RDT (Reformed Doctrine Track), TD (Theological Dissatisfaction), WC (Warden Cooperation), WR (Warden Recognition), Torben Loyalty, Elske Loyalty, Patience Counters (Varfell), Coup Counter [REMOVED per Q2 — replaced by Löwenritter Graduated Autonomy state machine, not a clock]. For each: declare canonical bounds, fill rate (per source), drain rate, trigger threshold, post-trigger behavior.
 - **E2.2 — V3 Interaction chain.** When multiple clocks fill from the same source event (e.g., a Seizure attempt advances CI, may advance RS, may interact with Coup Counter). Verify ordering is canonical.
 - **E2.3 — V4 NERS edge cases.** Boundary: clock at 0 with negative input — does it stay at 0 or wrap? Cascade: simultaneous trigger on multiple clocks. Crunch: clock fully fills and over-fills in a single event — does overflow carry? Optimal play: can a player intentionally stall a clock by avoiding source events?
 - **E2.4 — V8 Convergence.** Does every active clock eventually resolve? Are there pathological inputs where a clock stalls indefinitely?
 - **E2.5 — V9 Save/load.** Clock state at save boundary — partial fill, mid-trigger-resolution, mid-cascade.
+- **E2.6 — V6 Coverage matrix per Q22.** Map every clock to: range, fill sources, drain sources, threshold effects, visibility (public/private), interactions with other clocks (couplings per E3.5). Surface missing clocks (orphans referenced elsewhere) or unused clocks (defined but unreferenced).
 
 **Canon gates.** Clock registry consolidated. (`designs/provincial/clock_registry_v30_infill.md` is small at 645 chars — verify it covers all clocks, not just a sample.)
-**Open questions.** Is there a unified clock state machine or are clocks one-off implementations per system?
+**Open questions.** RESOLVED via Q22: per-system implementations sharing scale convention, not a unified state machine.
 
 ---
 
@@ -184,32 +191,44 @@ System IDs use the convention `<layer><N>` where layer ∈ {E, P, S, W, G, C}. L
 - **E3.2 — V3 Phase-boundary chain.** What state crosses phase boundaries? What resets? Faction actions consumed mid-phase but resolved at boundary — verify ordering.
 - **E3.3 — V4 NERS edge cases.** Boundary: zero-action phase, all-skip phase, simultaneous trigger from multiple phases. Ambiguity: a clock fills mid-phase — does the trigger resolve immediately or at phase boundary?
 - **E3.4 — V8 Convergence.** Does every season terminate? Are there inputs that produce infinite within-season loops?
+- **E3.5 — V3 explicit coupling map per Q23.** Tracks are mixed (some orthogonal, some explicitly coupled — RDT→TD direct gating; WR→WC gating; AP→Inquisitor deployment thresholds). Enumerate every active track and list dependencies (other tracks affecting it) and dependents (other tracks affected by it). Surface unintended couplings or coupling gaps.
 
 **Canon gates.** `params/bg/tracks.md` (8,082 chars) — read fully.
-**Open questions.** Are tracks orthogonal (independently advancing) or coupled?
+**Open questions.** RESOLVED via Q23: mixed model — some tracks coupled (RDT→TD, WR→WC), others orthogonal. E3.5 maps coupling explicitly.
 
 ---
 
 #### E4 — Scale transitions
 
-**Description.** Personal ↔ settlement ↔ territory ↔ peninsula handoff. The game's core UX flow per `<design_doc_framing>`.
+**Description.** Multi-scale handoff. The game's core UX flow per `<design_doc_framing>`. Per Q24 correction: canon distinguishes **seven scales**, not four. Canonical taxonomy from `params/scale_transitions.md` Scale Table:
+
+| Scale | Example | Base Ob | Min Thread Sensitivity |
+|---|---|---|---|
+| Object | One item, one wound | 1 | 30+ |
+| Personal | One person | 2 | 30+ |
+| Relational | Small group, social agreement | 3 | 50+ |
+| Territorial | A duchy, a district | 4 | 50+ |
+| Structural | A kingdom, an institution | 5+ | 70+ |
+
+Plus **Mass** (battle) as a distinct scale invoked via mass-combat handoff rules, and **Thread** scale (Leap-triggered contact-duration). Seven scales total with explicit handoff rules between each pair (eight handoff rules in `scale_transitions.md`).
+
 **Canonical.** `params/scale_transitions.md` (6,040 chars), `designs/architecture/scale_transitions_v30_infill.md` (4,535 chars).
 **Coupling.** Every system that exposes player input at multiple scales. Combat, fieldwork, faction, governance.
-**Prior coverage.** R9 (two-architecture sufficiency, A+C confirmed) addresses the personal-scale architectural cardinality. Personal↔settlement transition implicit in fieldwork-combat tempo R8. **Personal↔territory and territory↔peninsula transitions never explicitly stressed.**
+**Prior coverage.** R9 (two-architecture sufficiency, A+C confirmed) addresses the personal-scale architectural cardinality. Personal↔settlement transition implicit in fieldwork-combat tempo R8. **Inter-scale transitions other than Personal↔Mass never explicitly stressed.**
 **Priority.** P0 (UX-load-bearing).
-**Effort.** 2 sessions.
+**Effort.** 2.5–3 sessions (expanded from V1.0's 2 sessions per Q24 — 21 transition pairs, not 6).
 **Suite ID.** `E4_scale_transitions_stress_01`.
 
 **Stress modules:**
-- **E4.1 — V7 Scale transition.** For every transition pair (P↔S, P↔T, P↔Pen, S↔T, S↔Pen, T↔Pen): enumerate state that propagates, resets, recomputes. Verify each direction independently (transitions are not necessarily symmetric).
+- **E4.1 — V7 Scale transition (21 directional pairs).** Seven scales: Object, Personal, Relational, Territorial, Structural, Mass, Thread. 7×6/2 = 21 unique pairs; per-direction = 42 transitions but symmetric pairs reduce to 21 in canon (per scale_transitions.md "Eight Handoff Rules" which canonicalize the load-bearing transitions; remaining 13 pairs are either trivial (Object→Personal is a zoom) or not currently in canon — flag as gap). For each pair: enumerate state that propagates, resets, recomputes. Verify the eight canonical handoff rules (Personal→Thread, Personal→Faction, Personal→Scene, Scene→Faction, Thread→Faction, Thread→Mass, Mass→Personal, Scene→Mass) hold under stress. Surface remaining non-canonical transition pairs as gap-list output.
 - **E4.2 — V3 Cross-scale interaction chain.** A territory-scale decision propagates to settlement-scale opportunities propagates to personal-scale scenes — verify the chain is coherent. Specific test: faction-layer Mass Seizure decision propagates to settlement-level garrison disposition propagates to potential personal-scale arrest scene.
 - **E4.3 — V4 NERS edge cases.** Boundary: zoom-in to scale that has nothing to resolve. Crunch: zoom-out request while a personal-scale clock is mid-fill. Ambiguity: which scale "owns" a given decision (e.g., bishop appointment: settlement or territory?).
 - **E4.4 — V12 Narrative emergence.** Does the player experience scale transition as a meaningful zoom (vs as a UI mode change)? Specifically: does a personal-scale outcome read as having strategic-scale consequence? (Per `<intent_of_game>`: "makes players feel important to the game world.")
 - **E4.5 — V11 NPC coherence across scales.** A named NPC at personal scale must remain the same entity at settlement scale (state, disposition, threadwork knots intact). Verify referential integrity.
 - **E4.6 — V9 Save/load across scale boundary.** Save while transitioning — what state survives?
 
-**Canon gates.** `params/scale_transitions.md` must be fully read; `designs/architecture/scale_transitions_v30_infill.md` consulted. **ED-587 (Stability Crisis Zoom In trigger absent)** must be resolved as part of E4.3 or noted as gap.
-**Open questions.** Are all four scales fully canonical, or does the game only formally distinguish personal vs strategic with finer subdivision implicit?
+**Canon gates.** `params/scale_transitions.md` must be fully read; `designs/architecture/scale_transitions_v30_infill.md` consulted. **ED-587 (Stability Crisis Zoom In trigger absent)** RESOLVED via Q10 proposal — stress against the Q10 baseline.
+**Open questions.** RESOLVED via Q24 — 7 scales canonical. Residual: which of the 13 non-canonical pairs (e.g., Object→Structural skip-transitions) are gap vs intentionally out-of-scope. Surface in E4.1 output.
 
 ---
 
@@ -268,14 +287,14 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Suite ID.** `P2_contest_general_stress_01` (suite letter **P**).
 
 **Stress modules:**
-- **P2.1 — V1 Formula validation.** Stake declaration, opposed pool resolution, degree-to-outcome table.
+- **P2.1 — V1 Formula validation.** Stake declaration, opposed pool resolution, degree-to-outcome table. **Per Q14 resolution: Recall citation bonus (+2D) applies once per cited source per Contest instance. Re-citing the same source within one Contest grants no further bonus. Across separate Contests, the same source may be cited again (fresh adjudication).** Engine logic: per-Contest citation-set tracking.
 - **P2.2 — V3 Interaction chain.** Contest outcome → state change → subsequent contest. Verify cascading contests don't interact pathologically.
 - **P2.3 — V4 NERS edge cases.** Boundary: zero-pool participant (auto-loss?), tied degrees (canonical tiebreak?). Cascade: multi-party contest (>2 sides). Crunch: contest stakes that exceed participant capacity. Optimal play: stake declaration as game-theory problem (do players over-stake or under-stake systematically?).
 - **P2.4 — V10 Dominant strategy probe.** Is there a stake level that strictly dominates? An always-decline-low-stake heuristic?
 - **P2.5 — V11 NPC coherence.** NPC stake selection — does it read as character-driven or mechanically optimal? (Per W6 priority trees.)
 
 **Canon gates.** `params/contest.md` fully read.
-**Open questions.** Is contest a single mechanic or a family? (Fieldwork has Wager as a contest; social contest is P3. How do they relate canonically?) **Open finding SIM5-02 (ED-617) "Grand Contest Recall: once-per-source fix"** belongs here.
+**Open questions.** Contest family relationship across Wager (F1) / social contest (P3) — verify in P2.4 dominant strategy probe. **ED-617 Grand Contest Recall** RESOLVED via Q14 (once-per-source-per-Contest); baseline embedded in P2.1.
 
 ---
 
@@ -372,13 +391,15 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Suite ID.** `S1_mass_combat_stress_01`.
 
 **Stress modules:**
-- **S1.1 — V1 Formula validation.** Force-composition arithmetic, march-budget arithmetic, casualty/strain computation, retreat logic.
+- **S1.1 — V1 Formula validation across all 5 canonical Battle Scales (per Q8: canonize the [PROPOSAL] table).** Skirmish (~10 soldiers, TS 30+) / Company (~100, TS 30+) / Battle (~500, TS 50+) / Campaign (~1,000, TS 50+) / War (~5,000, TS 70+). Per-scale: force-composition arithmetic, march-budget arithmetic, casualty/strain computation (Battles on Valorian soil: MS −1 normally, MS −2 at Campaign/War per `peninsular_strain_v1.md §3`), retreat logic.
 - **S1.2 — V3 Interaction chain.** Mass-combat → casualty propagation to personal-scale (named NPCs in the engagement) → Realm Stability tick → faction Mandate/Influence shift.
 - **S1.3 — V4 NERS edge cases.** Boundary: 0-force vs 0-force, single-unit forces. Cascade: chained engagements in same season. Crunch: simultaneous engagements at multiple territories. Optimal play: dominant force-composition or always-engage / always-decline strategies.
 - **S1.4 — V7 Scale transition.** Mass-combat → zoom-in to personal-scale (named NPC engagement, e.g., Almud leads a charge) → zoom-out back to mass result. Verify state coherence both directions.
-- **S1.5 — Naval gap closure (ED-055).** Block this stress until naval canon written, OR explicitly carve out naval scenarios as deferred. Recommendation: carve out, run S1 land-only, add `S1_mass_combat_naval_addendum_01` post-ED-055.
+- **S1.6 — V4 Campaign-tier edge cases.** Per Q8 promotion. Boundary: 999-soldier vs 1,001-soldier engagement at Battle/Campaign threshold (does Strain cost shift cleanly?). Campaign-scale Dissolution PP-201 application (campaign-altering decision warning). Stress the Strain step-function at scale boundaries.
 
-**Canon gates.** ED-055 naval scope (P1, blocks coastal). PP-726 settlement registry (already landed; verify integration). 37-settlement adjacency map.
+**Naval is OUT OF SCOPE.** Per Q1 directive 2026-05-10. No naval stress modules; no coastal scenarios; Schoenland (T16) remains canonical-tributary with no naval-projection mechanic; coastal-territory adjacency assumed land-only.
+
+**Canon gates.** PP-726 settlement registry (already landed; verify integration). 37-settlement adjacency map. Battle Scale [PROPOSAL] canonization (Phase 0a item).
 **Open questions.** Is march-budget time-based or action-based? How are fortified settlements modeled at mass scale?
 
 ---
@@ -450,16 +471,16 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Canonical.** `params/bg/ci_seizure.md` (10,175 chars).
 **Coupling.** Tensions (S6), Realm Stability (S10), Mass combat (S1), Coup Counter (S8), PI track (S17).
 **Prior coverage.** B3/B4 CI/Mass Seizure timing verified. PT corrected (T9 PT=5 canonical). Hafenmark CI suppression PP-431-COR corrected in B4.
-**Priority.** P2 — primary closed; edge re-stress on PP-716 propagation.
-**Effort.** 1 session.
+**Priority.** P3 — primary mechanic mature per Q4 / Q18 (canon explicit on Failure consequences and CI seasonal cap two-tier structure); only systemic-cycle and cross-system stress remain.
+**Effort.** 0.5 session.
 **Suite ID.** `S5_ci_seizure_extended_stress_01`.
 
 **Stress modules:**
 - **S5.1 — V3 Post-PP-716 propagation check.** Did wound-permanence shift affect any CI inputs? (PP-716 was combat-domain; expect no direct effect, but verify.)
-- **S5.2 — V4 NERS extension.** Crunch: simultaneous Seizure attempts on multiple territories. Cascade: failed Seizure consequences (open finding ED-588/589 territory and **Seizure Failure consequences → Stability−1 + Casus Belli chain** [B4 gap #13]).
+- **S5.2 — V4 NERS extension.** Crunch: simultaneous Seizure attempts on multiple territories. **Failure consequences canonical per Q4: Stability −1 (PP-509) + Casus Belli granted on every attempt (PP-510). Verify simulated cascade matches.** Cascade: chained failed-Seizure → Casus Belli granted → mass combat triggered next season.
 - **S5.3 — V8 Convergence.** Mass-Seizure → resolution → next-season state. Can a faction get stuck in indefinite pre-Seizure buildup?
 
-**Canon gates.** Resolution of B4-gap-#13 (Seizure Failure consequences spec).
+**Canon gates.** None new (per Q4 + Q18 resolutions, B4 gap #13 obsolete and B3 #5 already resolved at PP-504 two-tier cap).
 
 ---
 
@@ -491,38 +512,50 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Canonical.** Referenced in `params/bg/` and B4 batch (Accord revolt cascade tested; **Treaty recovery absent** flagged as gap, B4 gap #14).
 **Coupling.** S3, S5, S10, S6 (some Tensions cards reference treaties).
 **Prior coverage.** B4 Accord revolt cascade Medium confidence; treaty mechanic gap surfaced.
-**Priority.** P1 (gap surfaced, never resolved).
+**Priority.** P2 (Q5 proposal supplies the missing coupling; ratification-pending).
 **Effort.** 1 session.
 **Suite ID.** `S7_treaty_accord_stress_01`.
 
 **Stress modules:**
-- **S7.1 — V1 Treaty mechanic spec gap.** Open finding B4-#14: **Treaty interaction with Strain recovery**. Block stress until canon written; OR carve out subset.
+- **S7.1 — V1 Treaty × Strain coupling per Q5 baseline.** Two-clause proposal: (a) active Treaty between two factions implies no inter-faction battle between them; if a battle occurs anyway, Treaty automatically breaks (Diplomatic Token removed) and Strain advances normally — no double penalty. (b) Treaty violation event = Strain +1 single tick on Diplomatic Token removal. Verify both clauses produce coherent outcomes across multi-party Treaty graphs.
 - **S7.2 — V3 Accord revolt cascade re-stress.** Verify B4 Medium-confidence finding at full simulator fidelity (B4 used simplified-CI).
-- **S7.3 — V4 NERS.** Boundary: treaty with 1 signatory (degenerate). Crunch: multi-party treaty with one defector. Cascade: treaty-violation chain.
-- **S7.4 — V8 Convergence.** Can a treaty deadlock — both sides bound to incompatible actions?
+- **S7.3 — V4 NERS.** Boundary: treaty with 1 signatory (degenerate). Crunch: multi-party treaty with one defector. Cascade: treaty-violation chain producing multiple simultaneous Strain +1 advances.
+- **S7.4 — V8 Convergence.** Can a treaty deadlock — both sides bound to incompatible actions? Q5 clause (b) ensures defection is always Strain-costed, providing the exit-pressure.
 
-**Canon gates.** Treaty/Strain canon (B4 gap #14) must resolve before S7.1.
+**Canon gates.** Q5 ratification (Jordan accepts or refines the two-clause proposal).
 
 ---
 
-#### S8 — Löwenritter Coup
+#### S8 — Löwenritter Graduated Autonomy
 
-**Description.** Coup mechanic for the Löwenritter faction; Coup Counter advances per canonical events; coup effect on Crown Mandate.
-**Canonical.** Referenced in `params/bg/`, B4 batch.
-**Coupling.** S3, S5, S10, S15 (succession), `conflict_architecture_proposal.md` graduated-autonomy variant.
-**Prior coverage.** B4 Löwenritter Coup Medium confidence; **Counter advancement sources** (B4 gap #11) and **Coup effect on Crown Mandate** (B4 gap #12) flagged.
+**Description.** Per Q2/Q3 supersession. Canonical 4-stage state machine (Loyal → Restless → Autonomous → Split) **replacing** the binary Coup Counter from `params/bg/core.md:87–99`. The B4 #11/#12 gaps (Counter advancement sources, Coup effect on Crown Mandate) are obsolete — the canonical state machine specifies all triggers, effects, and reversal rules. S13 (Graduated Löwenritter autonomy) merged into S8.
+**Canonical.** `params/bg/core.md:87–99` (state machine + triggers + effects + reversal rule).
+**Coupling.** S3 (Crown state), S5 (Crown Stability is a primary trigger axis), S10 (Realm Stability indirectly), S15 (succession), threadwork (Ehrenwall Disposition toward Almud is a trigger axis).
+**Prior coverage.** B4 Löwenritter Coup Medium confidence (against the older binary model — superseded). The canonical state machine has not been stressed.
 **Priority.** P1.
 **Effort.** 1.5 sessions.
-**Suite ID.** `S8_lowenritter_coup_stress_01`.
+**Suite ID.** `S8_lowenritter_graduated_autonomy_stress_01`.
+
+**Canonical state machine (per `params/bg/core.md:87–99`):**
+
+| Stage | Trigger | T14 Status | Crown Effect |
+|---|---|---|---|
+| **Loyal** | Start | S014 Barracks answers to Crown via Ehrenwall; garrison deployable | Normal |
+| **Restless** | Crown Stability ≤ 3, OR no military action 4+ seasons, OR Crown loses a province | S014 follows Löwenritter orders for defensive actions only; Crown +1 Ob offensive deployment | Fragmentation checks at T14 Ob +1 |
+| **Autonomous** | Crown Stability ≤ 2, OR Ehrenwall Disposition toward Almud < 0, OR 4+ seasons Restless without resolution | S014 does not respond to Crown; T14 garrison under Ehrenwall exclusively; Crown retains sovereignty claim | Crown Military reduced by T14 garrison; cannot access Fort 3; **PI −1** |
+| **Split** | Crown attacks Löwenritter, OR Crown eliminated, OR 4+ seasons Autonomous without resolution | T14 becomes Löwenritter territory; Löwenritter = separate faction (M3/I2/W3/Mil6/Stab5) | Crown loses T14; **PV drops by 3; PI −3** |
+
+**Reversal:** Stages 1–3 reversible. Crown returns to Loyal by raising Stability above 3, conducting military action validating Löwenritter identity, or improving Ehrenwall Disposition through diplomatic engagement. Stage 4 (Split) is irreversible without reconquest.
 
 **Stress modules:**
-- **S8.1 — Spec gap closure (B4 gaps #11, #12).** Before stress can run, define Counter-advancement source events and Coup-effect-on-Crown-Mandate canonically.
-- **S8.2 — V1 Mechanism validation.** Counter fill rate per source, threshold to trigger, post-coup state.
-- **S8.3 — V3 Interaction chain.** Coup event → Crown state shift → faction-action availability changes → potential cascade to other factions.
-- **S8.4 — V4 NERS.** Boundary: coup attempt at minimum Counter, coup attempt with Crown at max preparation. Crunch: simultaneous internal Crown crisis + coup. Ambiguity: graduated-autonomy variant interaction (per `conflict_architecture_proposal.md`).
-- **S8.5 — V12 Narrative emergence.** Coup as climactic narrative beat — does the engine produce coup events that read as story climaxes?
+- **S8.1 — V1 State machine validation.** Verify all 4 stages canonical with their triggers (3 conditions per stage, OR-composed) and effects. Verify reversal rule for stages 1–3.
+- **S8.2 — V3 Multi-channel interaction chain.** State transitions couple Crown Stability, Ehrenwall Disposition toward Almud (threadwork), military activity tempo (cross-season), Crown territorial holdings (S3), and the PI/PV strategic effects. Run end-to-end chain across 5+ campaigns.
+- **S8.3 — V4 NERS.** Boundary trigger thrash: Crown Stability oscillates 2/3/2/3 around the Restless trigger. Cascade: simultaneous trigger from multiple conditions in one Accounting. Ambiguity: 4-seasons-without-resolution trigger when 3.5 seasons elapse before Reversal then thread breaks again. Optimal play: can Crown intentionally stall Restless by maintaining marginal Stability at 4?
+- **S8.4 — V8 Convergence under hostile inputs.** Does the autonomy state ever deadlock? E.g., Crown blocks Reversal paths (refuses military validation) while Restless trigger remains marginal — does the system reach a stable cycle or a degenerate loop?
+- **S8.5 — V12 Narrative emergence per stage transition.** Each transition (Loyal→Restless, Restless→Autonomous, Autonomous→Split) should read as Löwenritter character development. Stress for 5+ campaigns; count transitions; rate each for narrative legibility (vs state-machine artifact).
+- **S8.6 — V11 NPC coherence: Ehrenwall.** Ehrenwall's Disposition toward Almud is a load-bearing trigger axis. Verify the priority-tree NPC behavior driving Ehrenwall Disposition produces coherent character motion (not random walk).
 
-**Canon gates.** B4 gaps #11 + #12 closed. Graduated-autonomy variant decision (current `conflict_architecture_proposal` is the canonical replacement for binary coup, but verify integration).
+**Canon gates.** None new — canon mature per Q2/Q3.
 
 ---
 
@@ -531,19 +564,21 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Description.** External pressure mechanic. Imperial Pressure (IP) gauge; Altonian Vanguard deployment at IP threshold; AER generation mechanic.
 **Canonical.** Referenced across `params/bg/` and B3/B4.
 **Coupling.** S10 (RS decay drives IP), S1 (mass combat once deployed), S6 (Tensions external cards), S5 (CI suppression interactions).
-**Prior coverage.** B3/B4 Medium confidence; **AER generation mechanic not in any read doc** (B4 gap #8); Warden emergence post-RS40 (B4 gap #9); Campaign-scale vs standard battle distinction (B4 gap #10).
-**Priority.** P1 (gap-dense).
+**Prior coverage.** B3/B4 Medium confidence; **AER removed from canon 2026-05-04 per Q6** (Church-Altonian diplomacy now via Altonian hooks); **Warden emergence post-RS40 reframed per Q7** (PP-605 introduced WC/WR two-track gating — Varfell-private WR gates peninsula-wide WC; supersedes single-trigger model); **Campaign-scale vs standard battle promoted to canon per Q8** (5-tier Battle Scale table canonized).
+**Priority.** P1 (still load-bearing despite gap resolutions — IP/Vanguard chain never simulated at full fidelity).
 **Effort.** 2 sessions.
 **Suite ID.** `S9_altonian_vanguard_stress_01`.
 
 **Stress modules:**
-- **S9.1 — Spec gap closure (B4 gaps #8, #9, #10).** AER generation, Warden emergence, campaign-vs-standard battle.
-- **S9.2 — V1 IP gauge formula validation.** IP fill, drain, threshold for Vanguard deployment, T10→T1 advance schedule.
-- **S9.3 — V3 Interaction chain.** RS decay → IP advance → Vanguard deployment → mass combat. End-to-end campaign-late-game chain.
-- **S9.4 — V4 NERS.** Boundary: high-RS late-game (Vanguard non-deployment scenario), low-RS early-game (premature Vanguard? Canonical block?). Cascade: simultaneous internal crisis + Vanguard arrival.
-- **S9.5 — V5 Full scenario.** S20–S30 campaign with Vanguard as primary external pressure. Match against B3 reference timeline.
+- **S9.1 — V1 IP gauge formula validation.** IP fill, drain, threshold for Vanguard deployment, T10→T3→T2→T1 advance schedule (per `params/bg/clocks.md` PP-568 Vanguard mechanics: 2-consecutive-season uncontested advance, Military-5-equivalent contested-battle at Ob 3, T1 occupation triggers all-factions −1 Stability/season).
+- **S9.2 — V3 Interaction chain.** RS decay → IP advance → Vanguard deployment → mass combat. End-to-end campaign-late-game chain.
+- **S9.3 — V4 NERS.** Boundary: high-RS late-game (Vanguard non-deployment scenario), low-RS early-game (premature Vanguard? Canonical block?). Cascade: simultaneous internal crisis + Vanguard arrival.
+- **S9.4 — V5 Full scenario.** S20–S30 campaign with Vanguard as primary external pressure. Match against B3 reference timeline (Vanguard at T10 by S22–28; T10→T1 advance by S27).
+- **S9.5 — V11 Vanguard NPC behavior.** Per `params/bg/clocks.md`: Vanguard "cannot be negotiated, traded, or Diplomatically managed." Engine NPC behavior is deterministic-on-uncontested. Stress for behavioral coherence: does Vanguard read as inexorable external pressure or as state-machine artifact? [PROVISIONAL ED-340] authorial review status — track separately.
+- **S9.6 — V3 WC × WR × MS interaction (per Q7 reframe).** Verify Varfell-private WR (gates) → peninsula-wide WC (effects) → MS decay modulation chain. WC ≥ 1: +1D Thread peninsula-wide. WC ≥ 2: MS decay halved (−1 → −0.5 floor). WC = 3: MS +2/season (active stabilization). Stress the WC=3 endpoint — does it produce stable MS or thrash?
+- **S9.7 — V4 NERS WC = 3 boundary.** Active MS stabilization vs ongoing radiation effects. Boundary: MS approaches 100 (Restoration complete — what happens to WC?). Cascade: WC drops from 3 to 2 mid-season (rapid drain).
 
-**Canon gates.** Three B4 gaps closed.
+**Canon gates.** [PROVISIONAL ED-340] Vanguard authorial review (faction identity, advance route, elimination conditions). Battle Scale canonization Phase 0a item (Q8).
 
 ---
 
@@ -563,21 +598,25 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 
 #### S11 — Royal Assassination
 
-**Description.** Mechanic for assassination of royal NPCs (e.g., Almud's father per ignition analysis).
-**Canonical.** `params/bg/royal_assassination.md` (2,642 chars — small; read in full).
-**Coupling.** S15 (succession), S3 (Crown faction state), S6 (Tensions card potentially), C1 (ignition mechanism).
-**Prior coverage.** None. Almud's father case discussed in ignition analysis (B4 design decision #7: "strike as backstory, make live via Royal Crisis card?" — unresolved).
-**Priority.** P1.
+**Description.** Per Q20 supersession. Canonical **Royal Crisis Fuse** in `params/bg/royal_assassination.md` (CANON, derived from `designs/architecture/conflict_architecture_proposal.md`). Almud's father is **backstory (struck)** per Session A Patch 7. Live mechanic is the Royal Crisis Tension Card (Card #1) which triggers a Fuse (S0 seed → S8+ fire, succeed-on-fire) with a 3-target sub-roll at game start or card-draw: Lenneth (1–2), Torben (3–4), Almud (5–6). Each target produces a distinct mid-game consequence arc.
+**Canonical.** `params/bg/royal_assassination.md` (full); cross-refs `designs/architecture/conflict_architecture_proposal.md`.
+**Coupling.** S6 (Royal Crisis = Tension Card #1), S15 (succession), S3 (Crown faction state), S8 (Löwenritter graduated-autonomy reaction to Crown crisis), threadwork (target-NPCs are threadwork participants), C1 (ignition).
+**Prior coverage.** None directly. The canonical Fuse + 3-target structure has not been stress-tested.
+**Priority.** P1 (load-bearing for ignition narrative arc; mature canon but never stressed).
 **Effort.** 1 session.
 **Suite ID.** `S11_royal_assassination_stress_01`.
 
 **Stress modules:**
-- **S11.1 — V1 Mechanism enumeration.** Trigger conditions, target eligibility, perpetrator-selection (canonical or emergent), post-event state cascade.
-- **S11.2 — V3 Interaction chain.** Royal assassination → succession trigger (S15) → Crown faction Mandate shift → potential coup window (S8).
-- **S11.3 — V4 NERS.** Boundary: no eligible heir, contested heir. Cascade: multi-royal-death scenarios.
-- **S11.4 — V12 Narrative emergence.** Does an assassination read as a major narrative beat or as a state-machine trigger?
+- **S11.1 — V1 Canonical Fuse + sub-roll validation.** Fuse timeline (S0 seed, S1–S7 escalation visible + player-investigation opportunity, S8–S12 fire). Target sub-roll distribution (uniform across 3 targets). Player-investigation cost vs faction-building tradeoff verified.
+- **S11.2 — V3 Per-target interaction chain.** Three distinct consequence arcs:
+  - **Lenneth → Almud revenge arc.** Crown investigation arc; defensive posture breaks; Crown's Einhir policy hardens; RM PW advances; Southern Accord erodes.
+  - **Torben → Elske retrieval.** Crown military deployment to T4 (Varfell territory); provocation + Altonian diplomatic crisis (IP spike). Succession-question and Altonian-question merge.
+  - **Almud → Lenneth takes throne.** Crown factional identity inverts. Lenneth pro-Einhir, pro-Thread-research, anti-caste-suppression. Crown becomes Varfell+RM ally on Einhir question, Church-heresy-target. Löwenritter forced decision (protect heretic queen vs advance toward Autonomous/Split — couples to S8).
+- **S11.3 — V4 NERS.** Boundary: investigation succeeds at S7 (assassination averted vs un-averted-but-extended-fuse). Cascade: Royal Crisis card drawn early (S1–S4) — does Fuse compress? Ambiguity: target already incapacitated by other event when Fuse fires.
+- **S11.4 — V10 Player investigation strategy.** Investigation costs card slots; competing with faction-building. Stress: is there a dominant investigation-or-ignore strategy?
+- **S11.5 — V12 Narrative emergence per target.** Each of three arcs should produce distinctly different mid-game. Stress 3+ campaigns per target (9+ total). Verify mid-game divergence is legible.
 
-**Canon gates.** B4 decision #7 (Almud's father as live event vs backstory).
+**Canon gates.** None — canon mature per Q20.
 
 ---
 
@@ -600,18 +639,9 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 
 ---
 
-#### S13 — Graduated Löwenritter autonomy
+#### S13 — [REMOVED]
 
-**Description.** Replaces binary coup with graduated-autonomy state per `conflict_architecture_proposal`.
-**Canonical.** `conflict_architecture_proposal.md`.
-**Coupling.** S8 (replaces binary coup mechanic), S3.
-**Prior coverage.** Proposed; not tested.
-**Priority.** P2 (proposed).
-**Effort.** 1 session post-canon.
-**Suite ID.** `S13_lowenritter_graduated_stress_01` (deferred).
-
-**Stress modules.** V1, V3, V4 against the graduated-state machine.
-**Canon gates.** Formalization into `core.md` or dedicated params file (B4 spec patch #3).
+**S13 merged into S8** per Q2/Q3 resolution (2026-05-10). The Graduated Löwenritter Autonomy state machine is canon in `params/bg/core.md:87–99` (not proposal/deferred); S13's V1.0 framing as "needs engine_v4" was based on stale reading. S8 now covers the canonical state-machine stress.
 
 ---
 
@@ -640,12 +670,14 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Suite ID.** `S15_succession_rm_extended_stress_01`.
 
 **Stress modules:**
-- **S15.1 — Open finding closure.** SIM4-01 (ED-588) RM Phase 2 T9 holding condition unreachable. SIM4-02 (ED-589) RM Presence marker mechanics undefined. Block until canon written or carve out.
-- **S15.2 — V3 Cross-system chain.** Royal assassination (S11) → succession → contested heir cascade → potential RM emergence.
+- **S15.1 — RM canonical model (PP-460-superseded).** ED-588/589 references obsolete per Q11/Q12: PP-460 establishes RM as statless faction operating exclusively via Presence markers + Community Weaving. Stress the canonical model: Community Organising pool scales 1D-base + 1D-per-adjacent-Presence-marker; Community Weaving pool = (100−MS)÷20 round up min 1, −1 per Presence marker in territory.
+- **S15.2 — V3 Cross-system chain.** Royal Crisis Fuse outcome (S11.2 — particularly Almud → Lenneth-takes-throne arc) → succession-axis tension → potential RM Presence-marker accumulation acceleration. End-to-end chain.
 - **S15.3 — V4 NERS extension.** Cascade: chain succession (heir dies before resolution). Ambiguity: contender from non-national faction (B1 finding restricted to national, confirm canon).
-- **S15.4 — Open design decisions (B2).** Splinter Influence split (60/40 or unsplit) — Jordan decision required.
+- **S15.4 — Splinter Influence split (Q17 baseline).** Per Q17: **Influence splits 60/40 same as Mandate** (majority-successor 60%, splinter 40%). Wealth/Military follow same 60/40 rule pending balance test. Stress the proposal under multi-stat split scenarios; surface any per-stat asymmetries that break.
+- **S15.5 — V5 full-scenario RM ignition + propagation (new per Q11).** Drive 5+ campaigns with RM enabled (5-player config). Verify Presence markers accumulate to political significance via Community Organising / Community Weaving. If not, surface as rate-tuning issue (not structural gap).
+- **S15.6 — V4 NERS Presence marker removal (new per Q12).** Q12 proposed orphan-prune-only baseline (markers persist until no adjacent territory has any RM presence, OR MS = 100 dissolves RM). Test removal scenarios; verify whichever model Jordan ratifies (orphan-prune-only or with-Community-Suppression).
 
-**Canon gates.** ED-588 + ED-589 resolution. B2 design decision on Splinter Influence split.
+**Canon gates.** Q12 ratification (Jordan picks orphan-prune-only vs with-Community-Suppression). Q17 ratification (Influence-split 60/40 + Wealth/Military follow-on).
 
 ---
 
@@ -705,17 +737,16 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Description.** Peninsular map, territories, terrain types, sea zones.
 **Canonical.** `params/bg/geography.md` (26,470 chars), `designs/world/geography_v30_infill.md` (5,454 chars), `designs/territory/valoria_geography_v30.yaml` (35,053 chars).
 **Coupling.** Every territory-scale system. S1 (mass combat terrain), W2 (settlement adjacency on geography), S9 (Vanguard routes).
-**Prior coverage.** `geography_phase4_stress_01` 2026-05-10 — Phase 3 land-based verified (Mountain Pass, cavalry, coastal landing); **Phase 4 P1 gap on ED-055 sea-zone adjacency.**
-**Priority.** P1.
-**Effort.** 1 session (Phase 4 deferred items + ED-055).
-**Suite ID.** `W1_geography_phase4_extended_stress_01`.
+**Prior coverage.** `geography_phase4_stress_01` 2026-05-10 — Phase 3 land-based verified (Mountain Pass, cavalry, coastal landing); ED-055 naval gap **dropped per Q1 (Jordan directive 2026-05-10)**.
+**Priority.** P2 (land-only remaining; reduced scope).
+**Effort.** 0.5 session.
+**Suite ID.** `W1_geography_land_only_stress_01`.
 
 **Stress modules:**
-- **W1.1 — ED-055 closure.** Author canonical sea-zone polygon + adjacency definition. Then run amphibious-scenarios stress.
-- **W1.2 — V4 Terrain NERS.** Boundary: territory with no land-route (island? exclave?). Cascade: cross-terrain movement when terrain effects compound (river + mountain + forest).
+- **W1.2 — V4 Terrain NERS.** Boundary: territory with no land-route (island? exclave?). Cascade: cross-terrain movement when terrain effects compound (river + mountain + forest). **Naval scenarios excluded.**
 - **W1.3 — V7 Cross-scale terrain consistency.** Terrain at territory scale must be coherent at settlement scale (settlement in forested territory has forest-flavored scenes).
 
-**Canon gates.** ED-055 spec.
+**Canon gates.** None. Naval coverage permanently out of scope per Q1.
 
 ---
 
@@ -804,11 +835,11 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 - **W6.1 — V1 Priority enumeration.** Every named NPC priority. Threshold conditions. Action set.
 - **W6.2 — V3 Priority interaction chain.** Priority A triggers action that changes state used by Priority B; verify no priority-order pathologies.
 - **W6.3 — V4 NERS.** Boundary: NPC with all priorities tied (canonical tiebreak). Crunch: simultaneous priority firing. Ambiguity: priority spec gaps.
-- **W6.4 — Open finding SIM3-04 (ED-586).** Arc state vs Priority 6 at Mandate < 3.
+- **W6.4 — Q9 baseline: Priority 6 at degraded Mandate.** ED-586 resolution proposal: at Mandate < 3 (Legitimacy OR Popular_Support < 3), Priority 6 ("Attacked") response degrades from "Military proportional" to **defensive-only** (no offensive deployment, no covert escalation). Engine logic: substitute Priority 6 action set on Mandate-degradation flag. Verify the proposal produces coherent low-Mandate response under stress; alternative-considered fallbacks per Q9.
 - **W6.5 — V11 NPC coherence cross-cut.** Does the priority tree produce behavior that reads as character?
-- **W6.6 — Crown priority tree at T2 Kronmark** (B3 design decision #6).
+- **W6.6 — Crown priority tree at T2 Kronmark.** Per Q19 resolution: T2 Kronmark defense is already canonical at Priority 4 Default with Varfell-T4-trigger conditional (`params/bg/npc_priority_trees.md:44`). Stress the conditional under degraded-Mandate Crown.
 
-**Canon gates.** ED-586 closure. B3 decision #6.
+**Canon gates.** Q9 ratification (Jordan accepts defensive-only degradation OR refines).
 
 ---
 
@@ -825,9 +856,10 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Stress modules:**
 - **W7.1 — V1 Enumerate special NPCs and their bespoke logic.**
 - **W7.2 — V3 Bespoke-vs-generic interaction.** What happens when a special NPC also matches a generic priority?
-- **W7.3 — Open finding SIM5-04 (ED-618).** Torben Conviction window S1–8 formal def.
+- **W7.3 — Q15 baseline: Torben Conviction window.** ED-618 resolution proposal: S1–S8 = formative window, Torben's Conviction values respond to player interactions / threadwork knots / faction events the player participates in. S9+ = locked. Early lock if Altonian Tutoring Demand fires (IP ≥ 40) before S8. Stress: verify lock semantics; verify formative-window mutability; verify early-lock edge cases.
+- **W7.4 — V11 Torben + Elske + Lenneth NPC coherence (cross-cut with S11 Royal Crisis Fuse).** Each is a Royal Crisis target; each has bespoke special-NPC mechanics. Stress for cross-interaction (e.g., Torben dies → Elske retrieval invokes both Elske Off-Board Card and Torben Loyalty reset path).
 
-**Canon gates.** ED-618 closure (formal def).
+**Canon gates.** Q15 ratification (Jordan accepts S1–S8 window OR refines length — Q15 alternatives consider S1–S5 shorter window).
 
 ---
 
@@ -863,12 +895,12 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Suite ID.** `G2_parliament_stress_01`.
 
 **Stress modules:**
-- **G2.1 — Open finding SIM5-01 (ED-616).** No Parliamentary block on Tribune actions — spec gap.
+- **G2.1 — Q13 baseline: Parliamentary Procedural Block on Tribune.** ED-616 resolution proposal: when Parliament is in active Session AND a Tribune Intel action is declared, opposition factions may move for Procedural Block. Block roll: Influence pool from non-acting factions (each contributing 1D if voting block) vs Ob = (Acting faction PI value) + 1. Success: Tribune action suspended this season; may re-declare next season. Overwhelming: suspended + acting faction PI −1. Failure: Tribune proceeds normally. Limit: one Block attempt per Parliamentary Session.
 - **G2.2 — V1 Action enumeration** — Tribune actions, parliamentary actions, voting mechanic.
 - **G2.3 — V3 Tribune-action → PI-track interaction chain.**
-- **G2.4 — V4 NERS.** Boundary: parliament with deadlock. Crunch: simultaneous tribune challenges.
+- **G2.4 — V4 NERS.** Boundary: parliament with deadlock. Crunch: simultaneous tribune challenges + Block votes.
 
-**Canon gates.** ED-616 spec.
+**Canon gates.** Q13 ratification.
 
 ---
 
@@ -972,9 +1004,9 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 **Stress modules:**
 - **C4.1 — V3 Personal→strategic propagation.** A personal-scale outcome (a duel result, a Wager outcome, a threadwork rupture) that should affect strategic-layer state — verify it does, with correct delay/timing.
 - **C4.2 — V3 Strategic→personal propagation.** A strategic decision (Mass Seizure declared) that creates personal-scale scene opportunities — verify the engine generates appropriate scenes.
-- **C4.3 — Open finding SIM3-07 (ED-587).** Stability Crisis Zoom In trigger absent — specific seam stress.
+- **C4.3 — Q10 baseline: Stability-Crisis Zoom-In trigger.** ED-587 resolution proposal: at any phase boundary, if an active faction has Stability ≤ 1 AND no Crisis Scene has fired this season, engine offers Zoom-In into a Crisis Scene at next legal Phase-Lock entry point (After Phase 1 / 3 / 6 Step 1 per PP-103). Player opt-in. Declined → log narrative beat, no penalty. Accepted → Crisis Scene from canonical catalog (Phase 0a authoring item); resolves at personal scale; Domain Echo to Stability at next Accounting per PP-108/PP-109. Stress: trigger correctness (no double-fire same season), Domain-Echo coherence on accept path, no-penalty semantics on decline path.
 
-**Canon gates.** E4 complete. ED-587 spec.
+**Canon gates.** E4 complete. Q10 ratification + Crisis Scene catalog authored (Phase 0a).
 
 ---
 
@@ -1019,12 +1051,12 @@ Each deferred refinement is a single mini-module (~2–4 hours). Bundle into `co
 
 ### Phase 0 — Prerequisites (§0.4)
 
-Repository-level cleanup. Editorial-ledger archive auto-fix, file_index_summary regeneration, freshness gate update, canonical_sources SHA drift remediation, ED-055 spec, B4 gap closures (#8 #9 #10 #11 #12 #13 #14), ED-586/587/588/589/616/617/618/619, PP-726 SHA pin update, PAT rotation, prior session checkpoint commit.
+Repository-level cleanup + V1.1 canonization tasks + ratification batch.
 
-**Cannot be a single session** — these are heterogeneous. Group into:
+- **Phase 0a** — Repo hygiene + V1.1 canonization. Editorial-ledger archive auto-fix, file_index_summary regeneration, freshness gate update, canonical_sources SHA drift remediation, PP-726 SHA pin update, Battle Scale [PROPOSAL] → canon (Q8), Crisis Scene catalog authoring (Q10), Influence-split 60/40 spec patch commit (Q17), prior session checkpoint commit, PAT rotation (Jordan-side).
+- **Phase 0b** — Ratification batch (post-V1.1). 10 PROPOSED items from Q-resolutions awaiting Jordan decision: Q5 (Treaty/Strain), Q8 (Battle Scale promotion already in 0a), Q9 (Priority 6 degradation), Q10 (Crisis Zoom-In already in 0a as catalog), Q12 (RM Presence removal model), Q13 (Tribune Block), Q14 (Recall once-per-source), Q15 (Torben window), Q16 (Obligation cap UI), Q17 (Influence-split already in 0a). Bundle as one ratification session per V1.1 §6 — each is a single-decision item.
 
-- **Phase 0a** — Repo hygiene (archive auto-fix, file_index, freshness, SHA pin, ledger).
-- **Phase 0b** — Spec-gap closures (8 B-batch gaps + 8 EDs). Each gap is one session.
+**Workplan V1.0 had 8 B-batch gaps + 8 ED gaps slated for Phase 0b. V1.1 post-resolution:** 6 of 8 B-batch gaps were RESOLVED or SUPERSEDED (Q2/Q3/Q4/Q6/Q7/Q18); 5 of 8 EDs were RESOLVED or SUPERSEDED (ED-588/589 via PP-460, ED-587 via Q10, ED-617 via Q14, ED-618 via Q15, ED-619 via Q16, ED-586 via Q9, ED-616 via Q13). Phase 0b session count drops from ~16 to ~1–2 (one ratification bundle session + possibly one follow-up for Crisis Scene catalog content).
 
 ### Phase 1 — Engine substrate
 
@@ -1073,7 +1105,7 @@ S12 (Bishop appointment), S13 (Graduated Löwenritter autonomy), S14 (Three-scal
 
 ### Critical-path summary
 
-**Total estimated sessions: ~55–65** (excluding Phase 7 engine_v4-deferred and excluding open-ended per-session retries on hook fires).
+**Total estimated sessions (V1.1 revised): ~45–55** (excluding Phase 7 engine_v4-deferred and excluding open-ended per-session retries on hook fires). Reduction from V1.0 ~55–65 reflects Phase 0b shrinkage (~9 sessions) partially offset by V1.1 added modules (~3 sessions: E1.5, E2.6, E3.5, S1.6, S8 expanded, S9.6/S9.7, S11.5, S15.5/S15.6).
 
 **Critical path:** Phase 0 → E1 → E2 → E3 → E4 → S6 → C1 → C2. Other phases parallelizable across this critical path once Phase 0 + Phase 1 complete.
 
@@ -1097,9 +1129,11 @@ Single session, ~3 hours. Unblocks every downstream stress.
 
 ### Session-two recommended
 
-**Phase 0b: First spec-gap closure session.**
+**Phase 0b: Ratification batch.**
 
-Pick the gap with the lowest blast radius / clearest constraint set. Recommendation: **ED-055 naval scope** — blocks W1 + S1 (S1.5 carve-out). Single decision, follow-on PP commit.
+Bundle the 10 Q-resolution proposals awaiting Jordan ratification (Q5/Q8/Q9/Q10/Q12/Q13/Q14/Q15/Q16/Q17). Each is a single-decision item with proposal + alternatives surfaced in `stress_workplan_resolutions_2026-05-10.md`. Bulk-ratify in one session; produce one or more PP-commits to canonize accepted proposals.
+
+ED-055 naval scope is **dropped** per Jordan directive 2026-05-10; not in session-two scope.
 
 ### Session-three recommended
 
@@ -1116,39 +1150,35 @@ Phase 3 (strategic) should not parallelize until S6 (Tensions Deck) is verified 
 
 ---
 
-## 7. Open questions for Jordan (canon settlements required)
+## 7. Open questions — residual ratifications pending Jordan
 
-These block specific stress modules. Ordered by blast radius.
+V1.1 post-resolution status. V1.0 listed 25 open questions; Jordan directive "resolve all, no naval" (2026-05-10) processed them — 1 dropped (Q1 naval), 6 RESOLVED via existing canon, 8 SUPERSEDED via later PP/ED, **10 PROPOSED with rationale awaiting ratification.** Full resolution detail in `tests/sim_framework/stress_workplan_resolutions_2026-05-10.md`.
 
-| # | Decision | Blocks | Priority |
+### Residual ratifications
+
+Each is single-decision; bundle as one Phase 0b session per §6.
+
+| Q | Proposal | Decision required | Blocks if unratified |
 |---|---|---|---|
-| Q1 | ED-055 naval scope (sea-zone polygon + adjacency) | W1, S1 (coastal) | P1 |
-| Q2 | B4 #11 Coup Counter advancement source events | S8 | P1 |
-| Q3 | B4 #12 Coup effect on Crown Mandate | S8 | P1 |
-| Q4 | B4 #13 Seizure Failure consequences (Stability−1 + Casus Belli chain) | S5 extended | P1 |
-| Q5 | B4 #14 Treaty mechanic × Strain recovery | S7 | P1 |
-| Q6 | B4 #8 AER generation mechanic | S9 | P1 |
-| Q7 | B4 #9 Warden emergence behavior post-RS40 | S9 | P1 |
-| Q8 | B4 #10 Campaign-scale vs standard battle distinction | S9, S1 | P1 |
-| Q9 | ED-586 Arc state vs Priority 6 at Mandate < 3 | W6 | P2 |
-| Q10 | ED-587 Stability Crisis Zoom In trigger | C4 | P2 |
-| Q11 | ED-588 RM Phase 2 T9 holding condition | S15 | P2 |
-| Q12 | ED-589 RM Presence marker mechanics | S15 | P2 |
-| Q13 | ED-616 Parliamentary block on Tribune actions | G2 | P2 |
-| Q14 | ED-617 Grand Contest Recall once-per-source | P2 (Contest) | P2 |
-| Q15 | ED-618 Torben Conviction window S1–8 formal def | W7 (special NPCs), P6 | P2 |
-| Q16 | ED-619 3-Obligation GM advisory cap → engine logic (no GM in videogame) | E-layer | P2 |
-| Q17 | B1 #4 Splinter Influence split (60/40 or unsplit) | S15 | P2 |
-| Q18 | B3 #5 CI seasonal cap vs Piety Yield at T9 | S5 | P2 |
-| Q19 | B3 #6 T2 Kronmark garrison priority entry | W6 | P2 |
-| Q20 | B4 #7 Almud's father (backstory or Royal Crisis card) | S11, C1 | P2 |
-| Q21 | E1 — non-d10-pool resolution mechanics anywhere in canon? | E1 | P0 (clarification) |
-| Q22 | E2 — unified clock state machine or per-system implementations? | E2 | P0 (clarification) |
-| Q23 | E3 — tracks orthogonal or coupled? | E3 | P0 (clarification) |
-| Q24 | E4 — four scales fully canonical or P/S only with subdivisions? | E4 | P1 (clarification) |
-| Q25 | S3 — faction actions canonically open-info or hidden? | S3 | P1 (clarification) |
+| Q5 | Treaty defection → Strain +1; Treaty break automatic on inter-faction battle | accept / refine / reject | S7.1 |
+| Q8 | Promote Battle Scale 5-tier table from [PROPOSAL] to canon | accept / refine | S1.1, S1.6 |
+| Q9 | Priority 6 at Mandate < 3 → defensive-only response | accept / refine | W6.4 |
+| Q10 | Stability ≤ 1 → engine offers Zoom-In at next Phase-Lock entry; Crisis catalog authored | accept / refine; window length | C4.3 |
+| Q12 | RM Presence markers: orphan-prune-only OR with Community-Suppression action | pick one | S15.6 |
+| Q13 | Parliamentary Procedural Block on Tribune: Influence-pool vs PI Ob, once/Session | accept / refine | G2.1 |
+| Q14 | Recall once-per-source-per-Contest; fresh across Contests | accept / refine | P2.1 |
+| Q15 | Torben Conviction window S1–S8 (formative), lock at S9 or Altonian Tutoring fire | accept / refine; window length | W7.3 |
+| Q16 | Obligation cap: engine surfaces forced-choice on 4th Obligation; retire/dissolve/decline | accept / refine | E1.5 |
+| Q17 | Influence splits 60/40 same as Mandate; Wealth/Military follow pending balance test | accept / refine | S15.4 |
 
-**Recommendation.** Q21–Q25 are clarification-only (Jordan responds with current canon understanding; no design work). Resolve those first. Q1–Q8 are design work; sequence by Phase priority.
+### Resolved Qs (audit trail)
+
+- **DROPPED:** Q1 (naval).
+- **RESOLVED via existing canon:** Q4 (Seizure failure), Q18 (CI cap), Q19 (Kronmark priority), Q21 (TN variants), Q22 (clocks per-system), Q24 (5+ scales corrected).
+- **SUPERSEDED:** Q2/Q3 (Coup → Graduated Autonomy), Q6 (AER removed 2026-05-04), Q7 (Warden via PP-605 WC/WR), Q11/Q12 (RM via PP-460), Q20 (Almud's father → Royal Crisis Fuse).
+- **CLARIFIED:** Q23 (tracks mixed coupling), Q25 (faction actions hybrid visibility).
+
+Detail: `tests/sim_framework/stress_workplan_resolutions_2026-05-10.md`.
 
 ---
 
@@ -1165,6 +1195,7 @@ To prevent scope creep, the following are deliberately excluded from this workpl
 - **Steam / platform integration.** Out of scope.
 - **Balance tuning.** Stress identifies surfaces that work or break, not surfaces that need numerical retuning. Balance is a separate pass post-stress.
 - **Lore-only systems.** Pure narrative content without mechanical surface (e.g., named-place history) is not stressed unless coupled to a mechanic (e.g., a place that grants a faction bonus).
+- **Naval mechanics.** Out of scope per Jordan directive 2026-05-10 (V1.1 Q1 resolution). Schoenland T16 remains in canon as Altonian tributary; no naval-projection mechanic, no coastal-landing scenarios, no sea-zone adjacency. Coastal territories assumed land-only-adjacent. Re-scope only on explicit directive reversal.
 
 ---
 
@@ -1185,6 +1216,7 @@ From prior stress work and session-log open_items:
 
 ## 10. Changelog
 
+- **V1.1 (2026-05-10).** Post-Q-resolution. Jordan directive "resolve all, no naval" processed 25 open questions: 1 dropped (Q1 naval), 6 RESOLVED via existing canon, 8 SUPERSEDED by later PP/ED, 10 PROPOSED with rationale + alternatives + fallback. Workplan deltas: §0.4 +3 canonization prerequisites; §4.E1 add TN 6/8 variants + E1.5 Obligation UI; §4.E2 enumerate clocks + E2.6 coverage matrix; §4.E3 add E3.5 coupling map; §4.E4 expanded 4→7 scales (21 transition pairs); §4.P2.1 Recall once-per-source; §4.S1 explicit 5-scale + drop naval + S1.6; §4.S5 demoted to P3; §4.S7.1 Q5 baseline; §4.S8 rewritten as Löwenritter Graduated Autonomy + S13 merged in; §4.S9 reframe AER/Warden + S9.6/S9.7; §4.S11 canonical Royal Crisis Fuse + 3-target sub-roll; §4.S13 REMOVED; §4.S15 PP-460-supersedes + S15.5/S15.6; §4.W1 land-only; §4.W6.4/W7.3/G2.1/C4.3 Q-proposal baselines; §5 phase counts revised (~55–65 → ~45–55); §6 session-two = ratification batch; §7 collapsed to 10 residual ratifications; §8 naval out-of-scope; Phase 0b shrunk ~16 → ~1–2 sessions. Resolution audit trail: `tests/sim_framework/stress_workplan_resolutions_2026-05-10.md`. Commit: see infrastructure commit message.
 - **V1.0 (2026-05-10).** Initial authorship. Post-bootstrap, post-`context_gate` fix commit `b7f0ad7`. Canonical sources read: simulator SKILL, mechanic-audit SKILL, coverage_matrix, sim_coverage_index, combat manifest, fieldwork stress, workplan_rebuild_2026-04-19 (format exemplar), canonical_sources.yaml (systems registry).
 
 ---
