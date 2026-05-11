@@ -1,33 +1,36 @@
 # Valoria Simulation Coverage Matrix
-## Last updated: 2026-05-11 | SIM-MB-04
-
-This matrix tracks which mechanical systems have been simulated and at what coverage level.
+## Last updated: 2026-05-11 | SIM-MB-05
 
 | System | Last Sim | Scenarios | Findings | P1 Open | Status |
 |--------|----------|-----------|----------|---------|--------|
-| mass_combat (engagement) | SIM-MB-04 | S1,S2,S3 | FINDING-1,2,6 | ED-811,812 | ⚠ Lethality issue |
-| mass_combat (volley) | SIM-MB-04 | S1,S2,S3 | FINDING-2 | ED-812 | ⚠ Over-tuned post-ED-800 |
-| mass_combat (combined attack) | SIM-MB-04 | S2 | FINDING-4 | — | Blocked by ED-812 |
-| mass_combat (rally) | SIM-MB-04 | isolation | — | — | ✓ Formula verified |
-| mass_combat (withdrawal) | SIM-MB-04 | S2 | FINDING-7 | ED-813 | Phase gate ambiguous |
-| mass_combat (stability) | SIM-MB-04 | S1,S2 | FINDING-8 | — | ✓ ED-808 correct |
-| mass_combat (grid map) | SIM-MB-04 | S1,S2,S3 | FINDING-3 | — | Prototype working |
-| mass_combat (discipline) | SIM-MB-04 | partial | — | — | No lethality to trigger |
-| mass_combat (morale) | SIM-MB-04 | partial | — | — | No multi-turn battles in S1/S2 |
+| mass_combat (engagement) | SIM-MB-05 | Line vs Line + matrix | F-G lethality | — | ✓ ED-811 validated 3.95t avg |
+| mass_combat (volley) | SIM-MB-05 | Composition sweep | F-I ranged dominance | ED-822 | ⚠ rebalance needed |
+| mass_combat (composition grid) | SIM-MB-05 | 5 shapes × 4 comps | — | — | ✓ ED-814 distribution validated |
+| mass_combat (shapes) | SIM-MB-05 | 5×5 matrix | F-A,B,C,H | ED-821 | ✓ ED-816 calibrated |
+| mass_combat (drift cascade) | SIM-MB-05 | Disc threshold sweep | — | — | ✓ ED-817 validated |
+| mass_combat (Discipline) | SIM-MB-05 | shape min-Disc tests | — | — | ✓ ED-815 reframing holds |
+| mass_combat (combined attack) | SIM-MB-05 | vs 5 shapes | F-D too dominant | — | ⚠ defensive response needed |
+| mass_combat (rally) | SIM-MB-04 | isolation | — | — | ✓ ED-802 formula verified |
+| mass_combat (withdrawal) | SIM-MB-04 | conceptual | — | ED-813 | Phase 1 fix proposed |
+| mass_combat (stability) | SIM-MB-04 | S1,S2 | — | — | ✓ ED-808 correct |
+| mass_combat (grid map) | SIM-MB-04 | 8x5 grid | — | — | Prototype validated |
 | combat (personal) | SIM-MB-03 | — | — | — | See prior sims |
 | social_contest | sim_d06 | — | — | — | See prior sims |
 | thread | sim_thread_batch_08 | — | — | — | See prior sims |
-| strategic (BG) | sim_bg_ff_01 | — | — | — | See prior sims |
+| strategic | sim_bg_ff_01 | — | — | — | See prior sims |
 
-## SIM-MB-04 Summary
+## SIM-MB-05 Summary
 - Date: 2026-05-11
-- Scope: mass_combat + grid_map prototype
-- EDs tested: 800,801,802,804,805,806,807,808
-- New EDs raised: 811 (engagement formula), 812 (volley lethality), 813 (withdrawal phase gate)
-- Grid prototype: 8×5 confirmed viable for Godot tile system
+- Scope: Phase 2 shape mechanics validation
+- EDs validated: 811,812,814,815,816,817 (post-Branch D/C adjustments)
+- New EDs raised: 821 (Horseshoe targeting), 822 (Volley/Engagement composition balance)
+- Mean battle length: 3.95t (target 3-6 ✓)
+- One-turn kills: 0/600 trials
+- Shape matrix: produces strategic rock-paper-scissors
 
 ## Next simulation priorities
-1. **ED-811 resolution** — clarify engagement damage formula (Jordan ruling needed)
-2. **ED-812 resolution** — recalibrate volley output post-ED-800 (Jordan ruling needed)
-3. After 811+812: re-run S1/S2 for multi-turn battle validation
-4. A3 SCHISM sim (CI, Seizure, Church) per workplan §9.1
+1. **ED-821 resolution** — Horseshoe AI targeting / opponent-takes-bait mechanism
+2. **ED-822 resolution** — Volley TN6→7 test, composition balance recalibration
+3. After resolutions: SIM-MB-06 with all branches stable
+4. Then Phase 5-6 propagation to canonical docs
+5. Then A3 SCHISM
