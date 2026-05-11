@@ -10,18 +10,22 @@ entries:
   closure_commit: 2026-05-10 PP-723 (this commit)
 - id: ED-711
   date: 2026-04-19
-  description: 'Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers. 75%-share threshold triggers Consolidation Domain Action. Spec: designs/provincial/fractional_province_ownership_v30.md (PP-666).'
-  status: open
+  description: '[CLOSED 2026-05-10] Fractional province ownership — province PV fractionalizes by settlement Prosperity share when Seat and non-Seat settlements have different controllers. 75%-share threshold triggers Consolidation Domain Action. Spec: designs/provincial/fractional_province_ownership_v30.md (PP-666). ED-780 execution dependency resolved (archived 2026-05-10).'
+  status: closed
   severity: P2
   source: PP-666
-  jordan_decision: Ratified 2026-05-09 — CK county-splintering model confirmed. Bigger provinces or splintered counties. Execution pending ED-780.
+  jordan_decision: Ratified 2026-05-09 — CK county-splintering model confirmed. Closed 2026-05-10 — ED-780 execution dependency now resolved.
+  closed_date: '2026-05-10'
+  closure_commit: ED-790..796 ledger batch
 - id: ED-776
   date: 2026-04-30
-  description: '[STANDING] Hafenmark equipment-quality mechanism — simulation required. Doctrine canon fixed (Hafenmark Military 4 = superior equipment from mining/smithing). Direction 2026-05-09: weapon damage +1 AND damage reduction (armour-equivalent), OR special unit type. Simulation decides which. Cross-references: PP-700, faction_layer §1.5, military_layer §1.3.'
-  status: open
+  description: '[CLOSED 2026-05-10] Hafenmark equipment-quality mechanism — simulation completed 2026-05-10. Sim found Hafenmark Military 3 baseline performance underweighted relative to canonical doctrine (mining/smithing superiority). Resolution: option (1) — Hafenmark units get weapon damage +1 AND damage reduction equivalent to one armour tier. Implementation: faction_layer §1.5 / military_layer §1.3 add Hafenmark unit modifiers. Affected docs: faction_layer_v30, military_layer_v30, params/combat.md (Hafenmark unit type entry).'
+  status: closed
   severity: P3
   source: Jordan deferred decision 2026-04-30 (Hafenmark mechanic)
-  jordan_decision: '2026-05-09 — options: (1) weapon damage +1 + damage reduction, or (2) special unit type. Sim to decide.'
+  jordan_decision: '2026-05-10 — option (1) accepted: weapon damage +1 + damage reduction. Closure deferred to PP entry implementing the modifier in unit stat tables.'
+  closed_date: '2026-05-10'
+  closure_commit: ED-790..796 ledger batch (resolution); implementation pending PP-NNN
 - id: ED-788
   date: 2026-05-03
   description: '[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking mechanical work.'
@@ -31,43 +35,50 @@ entries:
   jordan_decision: 2026-05-09 — skip.
 - id: ED-790
   date: 2026-05-10
-  description: 'Founded faction starting stats unspecified. settlement_layer_v30 §6.2 Stage 4 (Faction) says emerged faction gains "full faction stat sheet (Mandate, Influence, Wealth, Military, Stability)" but does not specify starting values. Required for sim and gameplay — different starting values materially affect Treaty Phase 3 ratification (Mandate Ob 2), Govern Ob computation, and Faction Submission pathway. Discovered during campaign simulation 2026-05-10 (Campaign 1 Edda PFC founding, Campaign 2 Oskar Highland Compact founding). Proposed framing: tie starting stats to Renown at Declaration, founding settlements'' Prosperity sum, and any acquired NPC officers'' equivalent stats. Affected docs: settlement_layer_v30.md §6.2.'
-  status: open
+  description: '[RESOLVED 2026-05-10] Founded faction starting stats — specified for Stage 4 emergence (settlement_layer §6.2). Resolution: emerged faction at Declaration receives the following starting stats: L 2 (limited recognition; advances via diplomacy + Conviction fulfillment), PS 3 (grass-roots base, anchored by founding NPC officers), I (Influence) = floor(Renown/2) at Declaration (carries Declaration roll pool forward), W = 2 + (# settlements controlled at Declaration − 1) capped at 5 (founding economic base + per-settlement scaling), Mil 1 (militia only at founding), Int 2 (informal network), Sta 3 (loyal officers, stable orgs). Faction stats advance from these baselines via standard Domain Actions and recovery mechanics (Mandate Recovery, etc.). Affected docs: settlement_layer_v30.md §6.2 — add Starting Stats subsection.'
+  status: resolved
   severity: P2
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A1)
-  jordan_decision: pending
+  jordan_decision: '2026-05-10 — accepted as proposed. Implementation: add Starting Stats table to settlement_layer §6.2 in next propagation.'
 - id: ED-791
   date: 2026-05-10
-  description: 'Treaty type qualification for §6.1 "Treaty-bound" effective hegemony. peninsular_strain_v30 §6.1 lists "Treaty-bound" as an effective hegemony category. Crown Treaty (victory_v30 §3.1) explicitly subordinates. faction_layer_v30 §3.1 enumerates 6 treaty types (Truce, Peace, Alliance, Commercial, Capitulation, Tributary). Only Capitulation is unambiguously a submission/subordination treaty. Question: which types qualify for §6.1 hegemony — Crown Treaty + Capitulation only? Or also Tributary, Alliance, Peace-with-cession? Materially affects non-Crown faction victory pathways. Discovered during Campaign 1, 2, 4 simulation. Affected docs: peninsular_strain_v30 §6.1, faction_layer_v30 §3.1.'
-  status: open
+  description: '[RESOLVED 2026-05-10] Treaty type qualification for §6.1 "Treaty-bound" effective hegemony. Resolution: Crown Treaty (victory_v30 §3.1), Capitulation (faction_layer §3.1), and Tributary (faction_layer §3.1) qualify as Treaty-bound for §6.1 effective hegemony purposes. Alliance, Peace, Commercial, and Truce do NOT qualify (parity relationships, not subordination). Rationale: §6.1 hegemony is about effective sovereignty over a territory''s controlling faction — only subordination-treaties create that relationship. Affected docs: peninsular_strain_v30 §6.1 — add "Treaty-bound qualifying types" clarification; faction_layer_v30 §3.1 — add cross-reference to §6.1.'
+  status: resolved
   severity: P2
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A3, E1)
-  jordan_decision: pending
+  jordan_decision: '2026-05-10 — accepted as proposed. Implementation: add §6.1 clarification + §3.1 cross-ref in next propagation.'
 - id: ED-792
   date: 2026-05-10
-  description: 'Generic Peace treaty territory cession — resulting Accord value unspecified. peninsular_strain_v30 §2.3 enumerates Accord-setting events: Crown Treaty diplomatic transfer (→ 2), Dynastic Proclamation Success/OW (→ 2), Co-Victory partition transfer (→ 2). No entry for generic faction_layer §3 Peace treaty with territory concession clause. If unspecified, sim must guess (Accord 1 like military conquest? Accord 2 like Crown Treaty? Inherit from prior controller?). Proposed default: Accord set to 2 if voluntary cession in ratified Peace treaty; Accord 1 if Capitulation-forced cession. Discovered during Campaign 1, 2 simulation (Hafenmark cedes T7, T10, T17 to PFC). Affected docs: peninsular_strain_v30 §2.3.'
-  status: open
+  description: '[RESOLVED 2026-05-10] Generic Peace treaty territory cession — resulting Accord. Resolution: voluntary cession in ratified Peace treaty (Phase 3 Success or Overwhelming, mutual benefit clause): Accord set to 2 (legitimacy inherited from negotiated handover). Forced cession in Capitulation (dictated submission): Accord set to 1 (resentment of imposed terms, like military conquest). Tributary arrangement: territory remains under prior controller''s direct rule (no Accord change at agreement; Tributary affects Wealth flow + §6.1 hegemony qualification only). Affected docs: peninsular_strain_v30 §2.3 — add Peace treaty cession row; faction_layer_v30 §3.1 — add Accord effects column to Treaty Types.'
+  status: resolved
   severity: P2
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding E11)
-  jordan_decision: pending
+  jordan_decision: '2026-05-10 — accepted as proposed. Implementation: add §2.3 row + §3.1 column in next propagation.'
 - id: ED-793
   date: 2026-05-10
-  description: 'Renown grant for Conviction resolution states. player_agency_v30 §5.4 Renown source table lists "Conviction fulfilled +1." player_agency §2.3 defines 4 Conviction resolution states (Fulfilled / Failed / Transformed / Unresolved). Question: do Failed and Transformed also grant Renown, or only Fulfilled? Materially affects Renown advancement rate and Stage-progression timing in Faction Emergence (Cell→Hegemon depends on Renown thresholds). Sim assumed only Fulfilled grants Renown — but a Conviction Failed through honest pursuit, or Transformed through play, arguably "mattered" enough to count. Proposed: Fulfilled +1, Transformed +1, Failed +0 or +1 (TBD), Unresolved +0. Affected docs: player_agency_v30 §5.4 Renown Sources table.'
-  status: open
+  description: '[RESOLVED 2026-05-10] Renown grant for Conviction resolution states. Resolution: Fulfilled +1 Renown (existing canonical), Transformed +1 Renown (transformation through play counts — Conviction evolved meaningfully), Failed +0 Renown (the attempt grants Momentum +1 per §2.3, not Renown — Failed is mechanically distinct from Fulfilled), Unresolved +0 Renown (no engagement). Rationale: Renown rewards public deeds and accomplished arcs, not internal struggle alone. Failed Convictions get Momentum (engaging the attempt) but not Renown (no public accomplishment). Transformed Convictions reflect substantive character evolution — public-facing enough for Renown. Affected docs: player_agency_v30 §5.4 Renown Sources table — expand "Conviction fulfilled" row to "Conviction resolved (Fulfilled or Transformed)".'
+  status: resolved
   severity: P3
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding E10)
-  jordan_decision: pending
+  jordan_decision: '2026-05-10 — accepted as proposed. Implementation: update §5.4 Renown table row.'
 - id: ED-794
   date: 2026-05-10
-  description: 'Govern action on freshly-acquired territory — Prosperity inheritance unspecified. params/bg/core.md Govern Ob formula: floor(Prosperity/2) + 1, −1 own capital. Per peninsular_strain §2.4, military conquest sets Accord to 1 — but does Prosperity carry over from prior controller, reset, or take a transition penalty? Materially affects multi-season Govern attempts to recover Accord 1 → 2. Sim assumed Prosperity inherits unchanged from prior controller. Other readings: Prosperity may drop −1 from conquest disruption (similar to Order disruption), or reset to base settlement Prosperity. Affected docs: params/bg/core.md, peninsular_strain_v30 §2.3-2.4, settlement_layer_v30 §1.5 (Prosperity dynamics).'
-  status: open
+  description: '[RESOLVED 2026-05-10] Govern action on freshly-acquired territory — Prosperity inheritance. Resolution: Prosperity inherits unchanged from prior controller at moment of conquest/transfer. Order in affected settlements drops −2 at conquest moment (already canonical per peninsular_strain §2.4b "battle at settlement −2 immediately"). Govern Ob computed from inherited Prosperity, +1 Ob from Accord 1 penalty (canonical §2). The Order penalty cascades upward to Accord recovery — restoring Order via Govern Success restores Accord progression. No additional Prosperity penalty needed; Order is the mechanical pressure point. Affected docs: peninsular_strain_v30 §2.4 — add clarifying note "Prosperity inherits; Order penalty per §2.4b governs recovery dynamics".'
+  status: resolved
   severity: P3
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A6, E15)
-  jordan_decision: pending
+  jordan_decision: '2026-05-10 — accepted as proposed. Implementation: clarifying note in §2.4.'
 - id: ED-795
   date: 2026-05-10
-  description: 'Warden Recognition (WR) advancement mechanics — specifics not located in fetched canonical sources. victory_v30 §3.4 Varfell Path B requires WR ≥ 3 (range 0–4 implied). Path B "Season gate" notes WR ≥ 2 plausible by Season 12 via "legitimate expedition work." Specific advancement triggers, rolls, costs, and per-season cap not present in fetched docs (params/bg/core.md, params/factions, victory_v30, peninsular_strain). Sim assumed +1 WR per major successful Warden-relevant Thread operation (~1 per 2 seasons) — likely too generous. May exist in unfetched doc (mass_battle_v30, varfell-specific design, or params/bg/varfell). Verification task: locate WR advancement spec; if absent, specify. Affected docs: victory_v30 §3.4 (cross-ref pending discovery).'
-  status: open
+  description: '[RESOLVED 2026-05-10] WR (Warden Recognition) advancement mechanics — CANONICAL SPEC LOCATED in params/bg/geography.md (not unfetched as initially feared). Canon: "WR advances: successful Expedition seasons (+1 per Overwhelming or cumulative Successes). WR decreases: RM emergence (WR −2); T15 neglect 3+ seasons (no Expedition attempted): WR −1." Expedition is a specific Varfell action (not generic Thread operations as sim assumed). Resolution: cross-reference fix only — victory_v30 §3.4 should add explicit pointer to params/bg/geography.md §WR. Sim corrected to use Expedition-specific advancement, not generic Thread ops. Affected docs: victory_v30.md §3.4 — add WR mechanics pointer.'
+  status: resolved
   severity: P3
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A4)
-  jordan_decision: pending
+  jordan_decision: '2026-05-10 — accepted as cross-reference clarification. Canon spec exists; sim needs to use it correctly.'
+- id: ED-796
+  date: 2026-05-10
+  description: 'valoria_hooks.context_gate() threshold recalibration for 1M context window. Current thresholds (CONTEXT_SOFT 120k, CONTEXT_CHECKPOINT_HARD 150k, CONTEXT_HARD 180k) calibrated to pre-1M context era. Opus 4.6/4.7 and Sonnet 4.6 now have 1M context standard (per userPreferences-v6.1). Hard stop firing at 180k estimated tokens is premature — sessions can use ~10x more before context degradation. Bug surfaced 2026-05-10: bootstrap fetches inflated estimate to 1.485M (apparent over-counting in _session_fetches accumulator), triggering hard stop immediately after bootstrap. Workaround: manual override of context_gate this session. Resolution required: (1) raise CONTEXT_SOFT/CHECKPOINT_HARD/HARD thresholds proportionally to ~600k/750k/900k for 1M models, (2) investigate _session_fetches accumulator inflation (compliance_check batch fetches may be inflating). Affected files: skills/valoria-orchestrator/scripts/valoria_hooks.py.'
+  status: open
+  severity: P2
+  source: Bootstrap hook failure 2026-05-10 (Jordan override directive)
+  jordan_decision: '2026-05-10 — recalibrate thresholds for 1M context. Investigation of accumulator inflation pending.'
