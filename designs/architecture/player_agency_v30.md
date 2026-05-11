@@ -405,7 +405,7 @@ Standing (0–5) measures the player's relationship with one faction. Renown (0�
 
 | Source | Renown Gained | Condition |
 |--------|--------------|-----------|
-| Conviction fulfilled | +1 | Conviction completed per §2.3 |
+| Conviction resolved (Fulfilled or Transformed per §2.3) | +1 | Per ED-793. Failed and Unresolved states do NOT grant Renown (Failed grants +1 Momentum only per §2.3; Unresolved grants nothing). |
 | Duty exceeded | +1 | Duty completed with Exceeding result per §3.4 |
 | Domain Echo produced | +1 | Any personal-scale action that fires Domain Echo per scale_transitions §5 |
 | NPC arc influenced | +1 | Player action causes NPC Conviction Scar per npc_behavior §3.2 |

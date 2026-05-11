@@ -123,6 +123,9 @@ Accord represents the population's acceptance of the current controller's govern
 | Dynastic Proclamation (Hafenmark), Success or Overwhelming | Accord set to 2 | Diplomatic transfer with dynastic legitimacy. |
 | ~~Cultural Reformation (Varfell)~~ | STRUCK CR-STRIKE-2026-04-19 | Action dissolved. |
 | Crown Treaty — diplomatic transfer | Accord set to 2 | Legitimacy inherited from prior ruler. |
+| Peace or Truce treaty with territory cession (faction_layer §3) | Accord set to 2 | Diplomatic legitimacy from negotiated transfer. |
+| Capitulation treaty with territory cession (faction_layer §3) | Accord set to 1 | Population views forced cession as humiliation; resists new ruler. |
+| Tributary arrangement with territory cession (faction_layer §3) | Accord set to 2 | Institutional continuity maintained through tribute relationship. |
 | Territory transfer via Co-Victory partition | Accord set to 2 | Negotiated handover. |
 
 ### §2.4 Accord Changes — Losing
@@ -145,6 +148,14 @@ Accord represents the population's acceptance of the current controller's govern
 They are independent: a province at Accord 2 (Compliant governance) may contain a settlement at Order 1 (simmering unrest). Turmoil threshold effects (§4.3) affect province-level Accord. Settlement Order is governed by: garrison presence (+1/season), Govern success (+1 from Success, +2 from Overwhelming in that settlement), battle at settlement (−2 immediately), sustained hostile occupation (−1/season), Church Heresy Investigation at settlement level (Order −1 for non-Church-aligned population in that settlement only).
 
 **Both can reach 0 simultaneously.** When Province Accord 0 and Settlement Order 0 both trigger in the same territory at the same Accounting, resolve in this sequence: **(1) Settlement Order 0 first** — garrison fights Popular Uprising (Military vs Ob 2). Win: territory held, Accord → 1. **(2) Province Accord 0 consequence second** — if garrison won the Uprising: territory is contested but held (Accord at 1 from the garrison win). If garrison lost the Uprising: the garrison has retreated; the territory becomes Uncontrolled per the Accord 0 rule. This ordering means a garrison victory in a Popular Uprising can prevent the Accord 0 Uncontrolled consequence in the same Accounting. (ED-632)
+
+### §2.4c Govern on Freshly-Acquired Territory — Prosperity Inheritance (ED-794)
+
+When a territory transfers controllers (military conquest, Peace treaty cession, Capitulation, or other transfer mechanism), **Prosperity inherits unchanged** from the prior controller. The new controller does not face a Prosperity reset or transition penalty on this axis.
+
+**The conquest cost is paid in Order, not Prosperity.** Per §2.4b above, Order at the affected settlements drops at conquest (typically −2 per `peninsular_strain §2.4b` battle-at-settlement rule). Govern attempts compute Ob from inherited Prosperity (floor(Prosperity/2) + 1), with +1 Ob added by the Accord 1 penalty inherent to freshly-conquered territory.
+
+**Accord recovery is driven by Order recovery.** Restoring Order via Govern Success cascades upward to Accord progression. No additional Prosperity dynamics are needed — Order is the mechanical pressure point. The "freshly-acquired territory feels worse to govern" intuition is captured entirely by the Accord 1 +1 Ob penalty plus the Order-restoration cycle.
 
 ### §2.5 Accord — Restoration Movement Exception
 
@@ -412,9 +423,11 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 | Turmoil | ≤ 6 (peninsula not in Crisis) |
 
 **Effective hegemony** counts rival-held territories toward sovereignty if the rival faction is:
-- Treaty-bound (Crown Treaty or equivalent bilateral agreement), OR
+- Treaty-bound (Crown Treaty, or any treaty type per faction_layer §3 that qualifies — Peace, Alliance, Capitulation, Tributary), OR
 - Submitted (Stability 0, formal submission per ED-318), OR
 - Institutionally dominated (rival Mandate ≤ 1 AND hegemon Mandate ≥ 5)
+
+**Treaty type qualification (ED-791 + faction_layer §3):** Crown Treaty (Crown-only, victory_v30 §3.1) plus Peace, Alliance, Capitulation, and Tributary (faction_layer §3) qualify for Treaty-bound effective hegemony — these represent genuine subordination or recognition relationships. Truce and Commercial treaty do **not** qualify (temporary or economic-only; no political submission).
 
 Territories held by Treaty-bound or Submitted factions do not need to meet Accord ≥ 2 for the hegemon — the legitimacy question belongs to the subordinate.
 

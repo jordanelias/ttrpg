@@ -61,7 +61,7 @@ systems:
     canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
   victory:
     design_doc: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "75810e78d79584feef0f28d73cf92821a948a5bb"
+    canonical_sha__designs__provincial__victory_v30_md: "654cd36c7ccc42b1b6bcdad7315537a3ce52740b"
     params: params/bg/victory.md
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
@@ -122,12 +122,12 @@ canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "PENDING_
     note: "Renamed from tc_political_redesign_v30 — same doc, CI is Theocracy Counter's politically-active form."
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_md: "0eea6219bbed343ae5515727dc8dd5a4a811e52b"
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "6ec46c37124b3e4342fc8e56e82f4619ff1a126a"
     peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
     canonical_sha__designs__provincial__peninsular_strain_v30_index_md: "51b38b8253cf01bff27389c68e79ed72c4554cbd"
   settlement_layer:
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "46565d74f094937d8c01e37d9adde918db5b90a5"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "972e0d9f7d172abc55fe827da61c7f05c14e7741"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
@@ -355,7 +355,7 @@ canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "PENDING_
     canonical_sha__designs__npcs__npc_roster_v30_infill_md: "f03a43911072b8f1258ee970ff6feab7bbe192e5"
   player_agency:
     design_doc: designs/architecture/player_agency_v30.md
-    canonical_sha__designs__architecture__player_agency_v30_md: "16b9f91758bdd41f6d204dd361b7fcc425ca43f6"
+    canonical_sha__designs__architecture__player_agency_v30_md: "db286678adf29a015b968bc2705fc37d11718027"
     index: designs/architecture/player_agency_v30_index.md
     canonical_sha__designs__architecture__player_agency_v30_index_md: "ab2087ab22ca2d9a2ab4255b6aa27dcf5bdc26da"
   thread_horizontal_integration:

@@ -36,45 +36,57 @@ entries:
 - id: ED-790
   date: 2026-05-10
   description: '[RESOLVED 2026-05-10] Founded faction starting stats — specified for Stage 4 emergence (settlement_layer §6.2). Resolution: emerged faction at Declaration receives the following starting stats: L 2 (limited recognition; advances via diplomacy + Conviction fulfillment), PS 3 (grass-roots base, anchored by founding NPC officers), I (Influence) = floor(Renown/2) at Declaration (carries Declaration roll pool forward), W = 2 + (# settlements controlled at Declaration − 1) capped at 5 (founding economic base + per-settlement scaling), Mil 1 (militia only at founding), Int 2 (informal network), Sta 3 (loyal officers, stable orgs). Faction stats advance from these baselines via standard Domain Actions and recovery mechanics (Mandate Recovery, etc.). Affected docs: settlement_layer_v30.md §6.2 — add Starting Stats subsection.'
-  status: resolved
+  status: closed
   severity: P2
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A1)
   jordan_decision: '2026-05-10 — accepted as proposed. Implementation: add Starting Stats table to settlement_layer §6.2 in next propagation.'
+  closed_date: '2026-05-10'
+  closure_commit: 'propagation: settlement_layer §6.2 - Founded Faction Starting Stats subsection added'
 - id: ED-791
   date: 2026-05-10
   description: '[RESOLVED 2026-05-10] Treaty type qualification for §6.1 "Treaty-bound" effective hegemony. Resolution: Crown Treaty (victory_v30 §3.1), Capitulation (faction_layer §3.1), and Tributary (faction_layer §3.1) qualify as Treaty-bound for §6.1 effective hegemony purposes. Alliance, Peace, Commercial, and Truce do NOT qualify (parity relationships, not subordination). Rationale: §6.1 hegemony is about effective sovereignty over a territory''s controlling faction — only subordination-treaties create that relationship. Affected docs: peninsular_strain_v30 §6.1 — add "Treaty-bound qualifying types" clarification; faction_layer_v30 §3.1 — add cross-reference to §6.1.'
-  status: resolved
+  status: closed
   severity: P2
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A3, E1)
   jordan_decision: '2026-05-10 — accepted as proposed. Implementation: add §6.1 clarification + §3.1 cross-ref in next propagation.'
+  closed_date: '2026-05-10'
+  closure_commit: 'propagation: peninsular_strain §6.1 - treaty qualification clarified, aligned with faction_layer §3 (Peace/Alliance/Capitulation/Tributary qualify per faction_layer existing canon)'
 - id: ED-792
   date: 2026-05-10
   description: '[RESOLVED 2026-05-10] Generic Peace treaty territory cession — resulting Accord. Resolution: voluntary cession in ratified Peace treaty (Phase 3 Success or Overwhelming, mutual benefit clause): Accord set to 2 (legitimacy inherited from negotiated handover). Forced cession in Capitulation (dictated submission): Accord set to 1 (resentment of imposed terms, like military conquest). Tributary arrangement: territory remains under prior controller''s direct rule (no Accord change at agreement; Tributary affects Wealth flow + §6.1 hegemony qualification only). Affected docs: peninsular_strain_v30 §2.3 — add Peace treaty cession row; faction_layer_v30 §3.1 — add Accord effects column to Treaty Types.'
-  status: resolved
+  status: closed
   severity: P2
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding E11)
   jordan_decision: '2026-05-10 — accepted as proposed. Implementation: add §2.3 row + §3.1 column in next propagation.'
+  closed_date: '2026-05-10'
+  closure_commit: 'propagation: peninsular_strain §2.3 - Peace/Capitulation/Tributary cession rows added per faction_layer §3 existing canon'
 - id: ED-793
   date: 2026-05-10
   description: '[RESOLVED 2026-05-10] Renown grant for Conviction resolution states. Resolution: Fulfilled +1 Renown (existing canonical), Transformed +1 Renown (transformation through play counts — Conviction evolved meaningfully), Failed +0 Renown (the attempt grants Momentum +1 per §2.3, not Renown — Failed is mechanically distinct from Fulfilled), Unresolved +0 Renown (no engagement). Rationale: Renown rewards public deeds and accomplished arcs, not internal struggle alone. Failed Convictions get Momentum (engaging the attempt) but not Renown (no public accomplishment). Transformed Convictions reflect substantive character evolution — public-facing enough for Renown. Affected docs: player_agency_v30 §5.4 Renown Sources table — expand "Conviction fulfilled" row to "Conviction resolved (Fulfilled or Transformed)".'
-  status: resolved
+  status: closed
   severity: P3
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding E10)
   jordan_decision: '2026-05-10 — accepted as proposed. Implementation: update §5.4 Renown table row.'
+  closed_date: '2026-05-10'
+  closure_commit: 'propagation: player_agency §5.4 - Renown table: Fulfilled OR Transformed grants +1'
 - id: ED-794
   date: 2026-05-10
   description: '[RESOLVED 2026-05-10] Govern action on freshly-acquired territory — Prosperity inheritance. Resolution: Prosperity inherits unchanged from prior controller at moment of conquest/transfer. Order in affected settlements drops −2 at conquest moment (already canonical per peninsular_strain §2.4b "battle at settlement −2 immediately"). Govern Ob computed from inherited Prosperity, +1 Ob from Accord 1 penalty (canonical §2). The Order penalty cascades upward to Accord recovery — restoring Order via Govern Success restores Accord progression. No additional Prosperity penalty needed; Order is the mechanical pressure point. Affected docs: peninsular_strain_v30 §2.4 — add clarifying note "Prosperity inherits; Order penalty per §2.4b governs recovery dynamics".'
-  status: resolved
+  status: closed
   severity: P3
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A6, E15)
   jordan_decision: '2026-05-10 — accepted as proposed. Implementation: clarifying note in §2.4.'
+  closed_date: '2026-05-10'
+  closure_commit: 'propagation: peninsular_strain §2.4c - Govern on Freshly-Acquired Territory subsection added'
 - id: ED-795
   date: 2026-05-10
   description: '[RESOLVED 2026-05-10] WR (Warden Recognition) advancement mechanics — CANONICAL SPEC LOCATED in params/bg/geography.md (not unfetched as initially feared). Canon: "WR advances: successful Expedition seasons (+1 per Overwhelming or cumulative Successes). WR decreases: RM emergence (WR −2); T15 neglect 3+ seasons (no Expedition attempted): WR −1." Expedition is a specific Varfell action (not generic Thread operations as sim assumed). Resolution: cross-reference fix only — victory_v30 §3.4 should add explicit pointer to params/bg/geography.md §WR. Sim corrected to use Expedition-specific advancement, not generic Thread ops. Affected docs: victory_v30.md §3.4 — add WR mechanics pointer.'
-  status: resolved
+  status: closed
   severity: P3
   source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A4)
   jordan_decision: '2026-05-10 — accepted as cross-reference clarification. Canon spec exists; sim needs to use it correctly.'
+  closed_date: '2026-05-10'
+  closure_commit: 'propagation: victory_v30 §3.4 - WR track cross-ref to params/bg/geography.md + npcs_special.md'
 - id: ED-796
   date: 2026-05-10
   description: 'valoria_hooks.context_gate() threshold recalibration for 1M context window. Current thresholds (CONTEXT_SOFT 120k, CONTEXT_CHECKPOINT_HARD 150k, CONTEXT_HARD 180k) calibrated to pre-1M context era. Opus 4.6/4.7 and Sonnet 4.6 now have 1M context standard (per userPreferences-v6.1). Hard stop firing at 180k estimated tokens is premature — sessions can use ~10x more before context degradation. Bug surfaced 2026-05-10: bootstrap fetches inflated estimate to 1.485M (apparent over-counting in _session_fetches accumulator), triggering hard stop immediately after bootstrap. Workaround: manual override of context_gate this session. Resolution required: (1) raise CONTEXT_SOFT/CHECKPOINT_HARD/HARD thresholds proportionally to ~600k/750k/900k for 1M models, (2) investigate _session_fetches accumulator inflation (compliance_check batch fetches may be inflating). Affected files: skills/valoria-orchestrator/scripts/valoria_hooks.py.'

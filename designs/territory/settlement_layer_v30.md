@@ -587,6 +587,22 @@ A player (or NPC actor like RM) can build a faction from the ground up:
 | 3 → 4 | Control 4+ settlements across 2+ provinces. Renown 7+. Declare faction formally (Domain Action: Influence pool = Renown ÷ 2, Ob 3). At least 1 province Seat controlled. |
 | 4 → 5 | Control 2+ province Seats. Renown 9+. Full faction stat sheet. Participate in Parliament or equivalent political body. |
 
+### Founded Faction Starting Stats (ED-790)
+
+When a faction emerges at Stage 4 (Faction Declaration), it receives the following starting stat sheet:
+
+| Stat | Starting Value | Rationale |
+|------|----------------|-----------|
+| Legitimacy (L) | 2 | Limited institutional recognition — newly-declared faction. Advances via Mandate Recovery (+1/season when no hostile DAs target and Stability ≥ 2) and Conviction fulfillment by founder. |
+| Public Support (PS) | 3 | Grass-roots base anchored by founding NPC officers. |
+| Influence (I) | floor(Renown ÷ 2) at Declaration | Carries the Declaration roll pool forward as institutional capacity. |
+| Wealth (W) | 2 + (# settlements controlled − 1), capped at 5 | Founding economic base plus per-settlement scaling. |
+| Military (Mil) | 1 | Militia only at founding; no standing army. Recruits from settlement Order. |
+| Intel (Int) | 2 | Informal network from organizing phase. |
+| Stability (Sta) | 3 | Loyal officers from Stage 2-3 work; stable orgs. |
+
+Faction stats advance from these baselines via standard Domain Actions and recovery mechanics. The founding faction is institutionally weak (L 2, Mil 1) but politically nimble — the asymmetry mirrors RM and early Löwenritter as canonical examples.
+
 ## §6.3 Faction Collapse — National to Local
 
 When a national-level faction loses all its provinces, it does not vanish. It contracts.

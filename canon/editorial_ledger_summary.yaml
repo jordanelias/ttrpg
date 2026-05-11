@@ -1,8 +1,5 @@
 # Editorial Ledger Summary
-# manual refresh 2026-05-10 — pending entries resolved + ED-796 added (context_gate recalibration)
-# Closures: ED-711 (fractional ownership), ED-776 (Hafenmark equipment)
-# Resolutions: ED-790..795 (canon gaps from sim audit, all accepted)
-# New open: ED-796 (context_gate threshold recalibration)
+# manual refresh 2026-05-10 — ED-790..795 propagated to design docs and closed
 
 p1_blocker_count: 0
 open_count: 1
@@ -17,15 +14,13 @@ p2_open:
 
 p3_open: []
 
-# Resolved this batch (2026-05-10):
-#   ED-711 closed: Fractional province ownership (ED-780 dependency resolved)
-#   ED-776 closed: Hafenmark equipment — option (1) accepted
-#   ED-790 resolved: Founded faction starting stats — specified
-#   ED-791 resolved: Treaty types for §6.1 hegemony — Crown Treaty/Capitulation/Tributary qualify
-#   ED-792 resolved: Peace treaty cession Accord — voluntary 2, forced 1
-#   ED-793 resolved: Renown for Conviction states — Fulfilled/Transformed +1, Failed/Unresolved +0
-#   ED-794 resolved: Govern fresh territory — Prosperity inherits, Order drives recovery
-#   ED-795 resolved: WR advancement — canonical spec located in params/bg/geography.md
+# Propagated and closed this batch (2026-05-10):
+#   ED-790 closed: settlement_layer §6.2 Founded Faction Starting Stats subsection added
+#   ED-791 closed: peninsular_strain §6.1 treaty qualification clarified per faction_layer §3
+#   ED-792 closed: peninsular_strain §2.3 Peace/Capitulation/Tributary cession rows added
+#   ED-793 closed: player_agency §5.4 Renown table Fulfilled OR Transformed +1
+#   ED-794 closed: peninsular_strain §2.4c Govern on Freshly-Acquired Territory added
+#   ED-795 closed: victory_v30 §3.4 WR track cross-ref to canonical specs
 
 # Recent archives:
 #   2026-05-10 (compliance): ED-777, ED-780, ED-781, ED-789 → canon/editorial_ledger_archive_2026-05.yaml

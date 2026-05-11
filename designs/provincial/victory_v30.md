@@ -371,7 +371,7 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + CI ≥ 60
 | Warden Recognition (WR) | ≥ 3 |
 | Season | ≥ 12 (Year 3) |
 
-**WR track (0–4):** See params_board_game.md §Varfell Path B for full WR track rules.
+**WR track (0–4):** Full advancement specification in params/bg/geography.md §Warden Recognition Track (PP-425) and params/bg/npcs_special.md §Warden Recognition Track. Per ED-795: WR advances on successful Expedition seasons (Varfell-specific Legionary action toward T15) — +1 per Overwhelming Expedition, +1 per two cumulative Successes. WR decreases on RM emergence (−2) or T15 neglect 3+ seasons (−1). WR is NOT advanced by generic Thread operations or Pulling — Expedition is the specific advancement mechanism.
 **Blocked if:** WR has ever returned to 0 after first advancing past 1.
 **Season gate (ED-666):** Path B represents demonstrated stewardship over time, not just accumulated territorial control. Season 12 is the earliest at which WR ≥ 2 through legitimate expedition work is plausible. Prevents S9 speed-run wins before other factions have reached meaningful development.
 
