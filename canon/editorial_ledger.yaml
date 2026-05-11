@@ -29,3 +29,45 @@ entries:
   severity: P2
   source: ED-755 D2.2 spin-out 2026-05-03
   jordan_decision: 2026-05-09 — skip.
+- id: ED-790
+  date: 2026-05-10
+  description: 'Founded faction starting stats unspecified. settlement_layer_v30 §6.2 Stage 4 (Faction) says emerged faction gains "full faction stat sheet (Mandate, Influence, Wealth, Military, Stability)" but does not specify starting values. Required for sim and gameplay — different starting values materially affect Treaty Phase 3 ratification (Mandate Ob 2), Govern Ob computation, and Faction Submission pathway. Discovered during campaign simulation 2026-05-10 (Campaign 1 Edda PFC founding, Campaign 2 Oskar Highland Compact founding). Proposed framing: tie starting stats to Renown at Declaration, founding settlements'' Prosperity sum, and any acquired NPC officers'' equivalent stats. Affected docs: settlement_layer_v30.md §6.2.'
+  status: open
+  severity: P2
+  source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A1)
+  jordan_decision: pending
+- id: ED-791
+  date: 2026-05-10
+  description: 'Treaty type qualification for §6.1 "Treaty-bound" effective hegemony. peninsular_strain_v30 §6.1 lists "Treaty-bound" as an effective hegemony category. Crown Treaty (victory_v30 §3.1) explicitly subordinates. faction_layer_v30 §3.1 enumerates 6 treaty types (Truce, Peace, Alliance, Commercial, Capitulation, Tributary). Only Capitulation is unambiguously a submission/subordination treaty. Question: which types qualify for §6.1 hegemony — Crown Treaty + Capitulation only? Or also Tributary, Alliance, Peace-with-cession? Materially affects non-Crown faction victory pathways. Discovered during Campaign 1, 2, 4 simulation. Affected docs: peninsular_strain_v30 §6.1, faction_layer_v30 §3.1.'
+  status: open
+  severity: P2
+  source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A3, E1)
+  jordan_decision: pending
+- id: ED-792
+  date: 2026-05-10
+  description: 'Generic Peace treaty territory cession — resulting Accord value unspecified. peninsular_strain_v30 §2.3 enumerates Accord-setting events: Crown Treaty diplomatic transfer (→ 2), Dynastic Proclamation Success/OW (→ 2), Co-Victory partition transfer (→ 2). No entry for generic faction_layer §3 Peace treaty with territory concession clause. If unspecified, sim must guess (Accord 1 like military conquest? Accord 2 like Crown Treaty? Inherit from prior controller?). Proposed default: Accord set to 2 if voluntary cession in ratified Peace treaty; Accord 1 if Capitulation-forced cession. Discovered during Campaign 1, 2 simulation (Hafenmark cedes T7, T10, T17 to PFC). Affected docs: peninsular_strain_v30 §2.3.'
+  status: open
+  severity: P2
+  source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding E11)
+  jordan_decision: pending
+- id: ED-793
+  date: 2026-05-10
+  description: 'Renown grant for Conviction resolution states. player_agency_v30 §5.4 Renown source table lists "Conviction fulfilled +1." player_agency §2.3 defines 4 Conviction resolution states (Fulfilled / Failed / Transformed / Unresolved). Question: do Failed and Transformed also grant Renown, or only Fulfilled? Materially affects Renown advancement rate and Stage-progression timing in Faction Emergence (Cell→Hegemon depends on Renown thresholds). Sim assumed only Fulfilled grants Renown — but a Conviction Failed through honest pursuit, or Transformed through play, arguably "mattered" enough to count. Proposed: Fulfilled +1, Transformed +1, Failed +0 or +1 (TBD), Unresolved +0. Affected docs: player_agency_v30 §5.4 Renown Sources table.'
+  status: open
+  severity: P3
+  source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding E10)
+  jordan_decision: pending
+- id: ED-794
+  date: 2026-05-10
+  description: 'Govern action on freshly-acquired territory — Prosperity inheritance unspecified. params/bg/core.md Govern Ob formula: floor(Prosperity/2) + 1, −1 own capital. Per peninsular_strain §2.4, military conquest sets Accord to 1 — but does Prosperity carry over from prior controller, reset, or take a transition penalty? Materially affects multi-season Govern attempts to recover Accord 1 → 2. Sim assumed Prosperity inherits unchanged from prior controller. Other readings: Prosperity may drop −1 from conquest disruption (similar to Order disruption), or reset to base settlement Prosperity. Affected docs: params/bg/core.md, peninsular_strain_v30 §2.3-2.4, settlement_layer_v30 §1.5 (Prosperity dynamics).'
+  status: open
+  severity: P3
+  source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A6, E15)
+  jordan_decision: pending
+- id: ED-795
+  date: 2026-05-10
+  description: 'Warden Recognition (WR) advancement mechanics — specifics not located in fetched canonical sources. victory_v30 §3.4 Varfell Path B requires WR ≥ 3 (range 0–4 implied). Path B "Season gate" notes WR ≥ 2 plausible by Season 12 via "legitimate expedition work." Specific advancement triggers, rolls, costs, and per-season cap not present in fetched docs (params/bg/core.md, params/factions, victory_v30, peninsular_strain). Sim assumed +1 WR per major successful Warden-relevant Thread operation (~1 per 2 seasons) — likely too generous. May exist in unfetched doc (mass_battle_v30, varfell-specific design, or params/bg/varfell). Verification task: locate WR advancement spec; if absent, specify. Affected docs: victory_v30 §3.4 (cross-ref pending discovery).'
+  status: open
+  severity: P3
+  source: Sim audit 2026-05-10 (campaign walkthroughs v3, finding A4)
+  jordan_decision: pending

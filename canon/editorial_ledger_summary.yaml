@@ -1,10 +1,10 @@
 # Editorial Ledger Summary
-# manual refresh 2026-05-10 — restored after auto-fix wipe (next_id 789→790: ED-789 created/resolved during remediation)
+# manual refresh 2026-05-10 — 6 new entries (ED-790..795) from sim audit canon gaps
 
 p1_blocker_count: 0
-open_count: 3
-total_active: 4
-next_id: 790
+open_count: 9
+total_active: 10
+next_id: 796
 
 p1_blockers: []
 
@@ -12,12 +12,19 @@ p2_open:
   - ED-710: "Settlement adjacency graph — new mechanical layer. Invasions occur at settlement"
   - ED-711: "Fractional province ownership — province PV fractionalizes by settlement Prosper"
   - ED-788: "[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking"  # deferred
+  - ED-790: "Founded faction starting stats unspecified — settlement_layer §6.2 Stage 4 lacks v"
+  - ED-791: "Treaty type qualification for §6.1 Treaty-bound effective hegemony unspecified"
+  - ED-792: "Generic Peace treaty territory cession — resulting Accord value unspecified"
 
 p3_open:
   - ED-776: "[STANDING] Hafenmark equipment-quality mechanism — simulation required. Doctrine"
+  - ED-793: "Renown grant for Conviction resolution states — only Fulfilled listed in table"
+  - ED-794: "Govern action on freshly-acquired territory — Prosperity inheritance unspecified"
+  - ED-795: "Warden Recognition (WR) advancement mechanics — not located in fetched docs"
 
 # Recent archives:
 #   2026-05-10 (compliance): ED-777, ED-780, ED-781, ED-789 → canon/editorial_ledger_archive_2026-05.yaml
 #   2026-05-03 (a): ED-755, ED-786, ED-787
 #   2026-05-02 (b): ED-782, ED-783, ED-784, ED-785
 #   2026-05-02 (a): ED-775, ED-778, ED-779
+
