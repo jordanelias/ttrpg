@@ -424,11 +424,18 @@ def check_register_health(fetched_with_keys: dict) -> None:
 
 def read_files_graphql(paths: list, repo: str = None,
                        skip_health_check: bool = False,
-                       force_full: bool = False) -> dict:
+                       force_full: bool = False,
+                       skip_cache: bool = False) -> dict:
     """
     Batch-read files from a repo via GraphQL.
 
     repo: 'ttrpg' (default) or 'valoria-game'
+    skip_cache: when True, do NOT write fetched content into _session_fetches.
+        Use this for tool-internal scans (compliance, freshness, indexers) whose
+        content never enters Claude's conversation context. Writing those fetches
+        into _session_fetches poisons context_gate's accounting — the gate
+        treats _session_fetches as a Claude-side context proxy, but tool-side
+        bulk fetches don't actually consume the chat window.
     Returns: dict {path -> content_str | None}
     """
     global _health_checked
@@ -462,14 +469,17 @@ def read_files_graphql(paths: list, repo: str = None,
     for alias, path in aliases.items():
         content = repo_data[alias]["text"] if repo_data[alias] else None
         key = _repo_key(path, repo)
-        _session_fetches[key] = content
+        if not skip_cache:
+            _session_fetches[key] = content
         output[path] = content
 
         # Record read depth. If force_full OR path is not a design doc
         # (designs/.../*.md but not _index.md), it's a full read.
         # Design docs that got routed to their _index.md variant are
         # tracked by read_index() when that fires separately.
-        if content is not None:
+        # Skip read-depth tracking on skip_cache fetches — they don't enter
+        # the conversation and shouldn't be credited as reads.
+        if content is not None and not skip_cache:
             is_design_doc = (
                 path.startswith('designs/')
                 and path.endswith('.md')
@@ -480,17 +490,19 @@ def read_files_graphql(paths: list, repo: str = None,
 
     # Record HEAD OID at fetch time for optimistic concurrency protection.
     # One HEAD fetch per batch. All files in the batch share this fetch_head.
-    try:
-        current_head = get_head_oid(repo)
-        for path in paths:
-            key = _repo_key(path, repo)
-            if output.get(path) is not None:
-                _fetch_head[key] = current_head
-    except Exception:
-        pass  # non-fatal — if we can't get HEAD, skip collision tracking
+    # Skip on skip_cache — these fetches aren't followed by writes.
+    if not skip_cache:
+        try:
+            current_head = get_head_oid(repo)
+            for path in paths:
+                key = _repo_key(path, repo)
+                if output.get(path) is not None:
+                    _fetch_head[key] = current_head
+        except Exception:
+            pass  # non-fatal — if we can't get HEAD, skip collision tracking
 
-    _refresh_token()
-    _save_cache()
+        _refresh_token()
+        _save_cache()
 
     # Health check: only for ttrpg, only on first call with threshold-governed files
     if not _health_checked and not skip_health_check and REPOS[repo]['enforce_health']:

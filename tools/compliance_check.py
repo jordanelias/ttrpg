@@ -112,7 +112,7 @@ def _load_rules(repo: str = 'ttrpg') -> dict:
     _lazy_import()
     files = _github_ops.read_files_graphql(
         ['references/atomization_rules.yaml'],
-        repo=repo, skip_health_check=True,
+        repo=repo, skip_health_check=True, skip_cache=True,
     )
     content = files.get('references/atomization_rules.yaml')
     if not content:
@@ -280,7 +280,7 @@ def check_all(repo: str = 'ttrpg') -> list[Violation]:
     repo_files = {}
     for i in range(0, len(paths_to_fetch), 50):
         batch = paths_to_fetch[i:i+50]
-        fetched = _github_ops.read_files_graphql(batch, repo=repo, skip_health_check=True)
+        fetched = _github_ops.read_files_graphql(batch, repo=repo, skip_health_check=True, skip_cache=True)
         repo_files.update(fetched)
 
     # Run checks
@@ -367,7 +367,7 @@ def auto_fix(violations: list[Violation],
             if not canonical_content:
                 # Need to fetch
                 fetched = _github_ops.read_files_graphql(
-                    [v.path], skip_health_check=True
+                    [v.path], skip_health_check=True, skip_cache=True
                 )
                 canonical_content = fetched.get(v.path, '')
             if canonical_content:
@@ -379,7 +379,7 @@ def auto_fix(violations: list[Violation],
 
         elif v.fix_action == 'atomizer.atomize':
             fetched = _github_ops.read_files_graphql(
-                [v.path], skip_health_check=True
+                [v.path], skip_health_check=True, skip_cache=True
             )
             content = fetched.get(v.path, '')
             if content:
@@ -389,7 +389,7 @@ def auto_fix(violations: list[Violation],
                     split_map_path = rule.get('split_map', '')
                     if split_map_path:
                         sm_fetched = _github_ops.read_files_graphql(
-                            [split_map_path], skip_health_check=True
+                            [split_map_path], skip_health_check=True, skip_cache=True
                         )
                         rule['_split_map_content'] = sm_fetched.get(split_map_path, '')
                 new_files = _atomizer.atomize(v.path, content, rule)
@@ -408,7 +408,7 @@ def auto_fix(violations: list[Violation],
         elif v.fix_action == 'atomizer.archive_by_status':
             active_path = v.fix_args.get('active_path', v.path)
             fetched = _github_ops.read_files_graphql(
-                [active_path], skip_health_check=True
+                [active_path], skip_health_check=True, skip_cache=True
             )
             active_content = fetched.get(active_path, '')
             if active_content:

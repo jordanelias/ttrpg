@@ -72,9 +72,12 @@ FORBIDDEN_TOKEN_EXEMPT_PATHS = (
 VALID_SCOPES    = {'editorial','patch','simulation','compilation','infrastructure','skill','cleanup','godot','phase','fix','bugfix'}
 COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix)\] .{10,}')
 
-CONTEXT_SOFT              = 120_000   # 60% — plan handoff
-CONTEXT_CHECKPOINT_HARD   = 150_000   # 75% — commit checkpoint now
-CONTEXT_HARD              = 180_000   # 90% — hard close (existing)
+# Context thresholds — scaled for 1M-token window (Opus 4.6/4.7, Sonnet 4.6).
+# Prior values 120k/150k/180k were calibrated for the legacy 200k window.
+# Percentages remain 60/75/90; absolute values updated 2026-05-10.
+CONTEXT_SOFT              = 600_000   # 60% — plan handoff
+CONTEXT_CHECKPOINT_HARD   = 750_000   # 75% — commit checkpoint now
+CONTEXT_HARD              = 900_000   # 90% — hard close
 CONTEXT_WARN              = CONTEXT_SOFT  # alias for backward compat
 
 TASK_REQUIRED_FILES = {
