@@ -1,29 +1,27 @@
-session_id: 2026-05-11-a2-propagation
+session_id: 2026-05-11-sim-mb-04
 session_close: 2026-05-11
-phase: propagation
+phase: simulation
 status: complete
-last_stage: propagation-ED-797-798-799-803-809-810-closed
+last_stage: SIM-MB-04-committed
 next_action:
-  skill: A3 SCHISM simulation or continue A2 re-sim
+  skill: propagate-ED-800-808-then-re-sim
   description: >
-    6 EDs closed via propagation. 7 EDs remain open (ED-800..808 minus 803) awaiting Jordan decisions
-    on missing mass battle mechanics. Core.md updated with Crown Mil 5, Lowenritter Mil 5, Coup/Split
-    outcomes, IP 80/100 thresholds, Turmoil=Strain alias. phases.md Step 4d corrected.
-    Next sim session should use corrected stats. A3 SCHISM is next per workplan §9.1.
-blockers: []
+    ED-811 and ED-812 require Jordan decisions before mass battle re-sim.
+    ED-811: confirm engagement damage formula (margin vs attacker-only).
+    ED-812: recalibrate volley multiplier post-ED-800.
+    After both resolved: re-run S1/S2 for multi-turn validation, then
+    propagate ED-800..808 to mass_battle_v30.md and params/mass_combat.md.
+    Then A3 SCHISM per workplan 9.1 if mass battle EDs are stable.
+blockers:
+  - ED-811 P1 engagement formula ambiguous jordan_decision pending
+  - ED-812 P1 volley lethality post-ED-800 jordan_decision pending
 commits_this_session:
-  - 27f0ec92 [editorial] A2 TOTAL WAR sim Y1 findings — ED-800..ED-809
-  - 984369ae [editorial] ED-810 — Lowenritter Split/Coup mechanics clarification
-  - df03193f [session] session log close (A2 sim session)
-  - d46bed6b [editorial] propagate ED-797,798,799,803,809,810 — close 6 EDs
+  - 0e67a50 [simulation] SIM-MB-04 mass battle ED-800..808 + grid map prototype
+  - 738832f [editorial] ED-800..802,804..808 closed ED-811..813 opened
 open_items:
-  - ED-800 Volley Power-only pool ignores Size — jordan_decision pending
-  - ED-801 Orderly withdrawal mechanics missing — jordan_decision pending
-  - ED-802 Rally action mechanical specifics unclear — jordan_decision pending
-  - ED-804 Field fortification mechanics missing — jordan_decision pending
-  - ED-805 Combined multi-unit attack resolution unspecified — jordan_decision pending
-  - ED-806 Gransol T8 Fort level not specified — jordan_decision pending
-  - ED-807 Lake-city siege mechanics unresolved — jordan_decision pending
-  - ED-808 Battle loss Stability trigger ambiguity — jordan_decision pending
-  - Coverage matrix initial file still needed
+  - ED-811 engagement damage formula jordan_decision pending
+  - ED-812 volley lethality post-ED-800 jordan_decision pending
+  - ED-813 withdrawal phase gate jordan_decision pending
+  - editorial_ledger.yaml atomizer compliance warning pending
   - VALORIA_PAT rotation outstanding
+  - Propagation pending ED-800,801,802,804,805,806,807,808 to canonical docs
