@@ -20,3 +20,17 @@ entries:
   severity: P2
   source: Handoff granular review 2026-05-10
   jordan_decision: pending
+- id: ED-796
+  date: 2026-05-10
+  description: 'valoria_hooks.context_gate() threshold recalibration for 1M context window. Current thresholds (CONTEXT_SOFT 120k, CONTEXT_CHECKPOINT_HARD 150k, CONTEXT_HARD 180k) calibrated to pre-1M context era. Opus 4.6/4.7 and Sonnet 4.6 now have 1M context standard. Hard stop firing at 180k is premature. Bug: _session_fetches accumulator inflates estimate. Resolution: raise thresholds to ~600k/750k/900k; investigate accumulator inflation. Affected files: skills/valoria-orchestrator/scripts/valoria_hooks.py.'
+  status: open
+  severity: P2
+  source: Bootstrap hook failure 2026-05-10 (Jordan override directive)
+  jordan_decision: '2026-05-10 — recalibrate thresholds for 1M context.'
+- id: ED-798
+  date: 2026-05-10
+  description: 'IP threshold clarification — Altonian invasion escalation ladder. Per Jordan 2026-05-10: IP 80+ triggers Altonian skirmishes / small unit border-testing; IP >= 100 triggers regular large-scale invasion through one or both mountain passes. Currently canon has IP 75 = Altonian Vanguard appears (params/bg/core.md). Gap: explicit IP 80-99 skirmish phase not formalized; Occupation Era wording at IP 100 ambiguous about active invasion vs political occupation (Jordan clarifies: active invasion). Proposed updates: peninsular_strain §6.4 Occupation Era clarification; params/bg/core.md IP escalation ladder; cross-ref PP-568 ED-340 PROVISIONAL Vanguard mechanics. Affected docs: peninsular_strain_v30 §6.4, params/bg/core.md, params/bg/clocks.md.'
+  status: open
+  severity: P2
+  source: Jordan verbal clarification 2026-05-10
+  jordan_decision: 'pending — proposed text updates in description'
