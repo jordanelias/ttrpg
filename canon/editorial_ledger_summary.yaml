@@ -3,28 +3,29 @@
 <!-- auto-generated — 2026-05-11 -->
 
 p1_blocker_count: 0
-open_count: 14
-total_active: 16
+open_count: 7
+total_active: 9
 next_id: 811
 
 p1_blockers:
   - none
 
 p2_open:
-  - ED-797: phases.md Step 4d propagation gap — Strain decay condition conflict
-  - ED-798: IP threshold clarification — Altonian invasion escalation ladder
-  - ED-799: canonical_sources.yaml registry drift on combat and derived_stats blocks
-  - ED-800: Volley Power-only pool ignores Size
-  - ED-801: Orderly withdrawal mechanics missing
-  - ED-802: Rally action mechanical specifics unclear
-  - ED-803: Strain vs Turmoil terminology inconsistency
-  - ED-804: Field fortification mechanics missing
-  - ED-805: Combined multi-unit attack resolution unspecified
-  - ED-806: Gransol (T8) Fort level not specified
-  - ED-807: Lake-city siege mechanics unresolved
-  - ED-808: Battle loss Stability trigger ambiguity
-  - ED-809: core.md Crown Mil 4 / Lowenritter Mil 6 stale — Jordan correction Mil 5 / Mil 5
+  - ED-800: Volley Power-only pool ignores Size — jordan_decision pending
+  - ED-801: Orderly withdrawal mechanics missing — jordan_decision pending
+  - ED-802: Rally action mechanical specifics unclear — jordan_decision pending
+  - ED-804: Field fortification mechanics missing — jordan_decision pending
+  - ED-805: Combined multi-unit attack resolution unspecified — jordan_decision pending
+  - ED-806: Gransol (T8) Fort level not specified — jordan_decision pending
+  - ED-807: Lake-city siege mechanics unresolved — jordan_decision pending
 
-recent_resolutions:
-  - none
-  - ED-810: Lowenritter Split/Coup outcomes — Crown Mil 5->2 on Split; Crown SUSPENDED on Coup
+p2_resolved_this_session:
+  - ED-808: Battle loss Stability trigger — jordan_decision pending (reclassified, kept open)
+
+recent_closures:
+  - ED-797: phases.md Step 4d corrected to match peninsular_strain §4.2
+  - ED-798: IP 80/100 thresholds propagated to core.md
+  - ED-799: canonical_sources.yaml combat block design_doc path fixed
+  - ED-803: Turmoil = Strain alias added to core.md tracks table
+  - ED-809: Crown Mil 4→5, Lowenritter Mil 6→5 propagated to core.md
+  - ED-810: Lowenritter Coup row added to Graduated Autonomy table, Split row updated (Crown Mil→2)

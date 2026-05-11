@@ -79,7 +79,7 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 |-------|-------|-------|-------|
 | Mending Stability (MS) | 72 | 0–100 | Rupture = shared loss |
 | Church Influence (CI) | **28** | 0–100 (no freeze) | CI 60 = Mass Seizure available (one-shot). CI 100 = cap. P-32 sets starting value at 28. |
-| Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard |
+| Invasion Pressure (IP) | 20 | 0–100 | IP 75 = Altonian Vanguard appears. IP 80+ = sustained Vanguard presence + skirmishes / small unit border incursions through mountain passes. IP ≥ 100 = Altonia regularly invades through one or both mountain passes (T10 Spartfell NE pass; second pass location TBD) — large-scale military invasion, not just political occupation. See peninsular_strain §6.4. |
 | Parliament Integrity (PI) | **7** | 0–20 | Cumulative pressure meter. Auto-resolves at PI ≥ 20 (Crown elimination). |
 | | 2 | 0–5 | Near IP clock. |
 | Torben Loyalty | **7** | 0–7 | Active from game start. No IP trigger. On Crown elimination: Torben Loyalty track transfers to Löwenritter (they inherit the succession claim). Löwenritter wins or loses Torben via Influence actions the same way Crown did. Church and Hafenmark may contest via Senator Outward Diplomacy (Ob = current Torben Loyalty ÷ 2). (PP-599: start 7, range 0–7. PP-498 start 3 superseded.) |
@@ -93,12 +93,14 @@ Ob 10 exception: Overwhelming unavailable. Partial requires net ≥ 5.
 | **Loyal** | Start | S014 Barracks answers to Crown via Ehrenwall. Garrison deployable. | Normal. Crown controls T14 fully. |
 | **Restless** | Crown Stability ≤ 3, OR no military action 4+ seasons, OR Crown loses a province | S014 follows Löwenritter orders for defensive actions. Crown +1 Ob offensive deployment. | Fragmentation checks at T14 Ob +1. |
 | **Autonomous** | Crown Stability ≤ 2, OR Ehrenwall Disposition toward Almud < 0, OR 4+ seasons Restless without resolution | S014 does not respond to Crown. T14 garrison under Ehrenwall exclusively. Crown retains sovereignty claim. | Crown Military reduced by T14 garrison. Cannot access Fort 3. PI −1. |
-| **Split** | Crown attacks Löwenritter, OR Crown eliminated, OR 4+ seasons Autonomous without resolution | T14 becomes Löwenritter territory. Löwenritter = separate faction (M3/I2/W3/Mil6/Stab5). PI −3. | Crown loses T14, PV drops by 3. Löwenritter negotiates independently. |
+| **Split** | Crown attacks Löwenritter, OR Crown eliminated, OR 4+ seasons Autonomous without resolution | T14 becomes Löwenritter territory. Löwenritter = separate faction (L3/PS3/Inf2/W3/Mil5/Stab5). PI −3. | Crown Military drops to 2 AND loses most units. Crown loses T14, PV drops by 3. Löwenritter negotiates independently. |
+
+| **Coup** | Löwenritter loses faith in monarch AND has candidate (Torben, Elske, or a Duke with Löwenritter support) | T14 under Löwenritter. Crown faction SUSPENDED. Löwenritter installs new monarch. | If Torben/Elske/Lenneth installed: Crown resumes under new monarch; Löwenritter recedes into Crown military arm. If Duke (Vaynard/Baralta) installed: Crown absorbed into that Duke's faction; Crown ceases as independent faction. Löwenritter recedes into new monarch's military. Crown Military was 5 only because it WAS Löwenritter — without them, Crown Military = 2. |
 
 **Reversal:** Stages 1–3 reversible. Crown can return to Loyal by: raising Stability above 3, conducting military action validating Löwenritter identity, or improving Ehrenwall Disposition through diplomatic engagement. Stage 4 (Split) is irreversible without reconquest.
 | Warden Cooperation (WC) | 0 | 0–3 | Peninsula-wide. WR ≥ 2 required to advance. (PP-605) |
 | Warden Recognition (WR) | 0 | 0–3 | Varfell-only private track. Gates WC. (PP-605) |
-| Turmoil | 0 | 0–10 | Public. Advances from inter-faction battles (+1/season), faction eliminations (+2), revolts (+1). Decays −1/peaceful season. See peninsular_strain_v1.md §4. |
+| Turmoil (= Strain) | 0 | 0–10 | Public. Also called "Strain" in peninsular_strain docs and phases.md §4d. Advances from inter-faction battles (+1/season), faction eliminations (+2), revolts (+1). Decays −1/peaceful season. See peninsular_strain_v1.md §4. |
 
 **Accord (per-territory attribute, range 0–3):** Tracks population acceptance of controller. Modifies effective Prosperity. Accord ≥ 2 required for TCV contribution toward victory. See peninsular_strain_v1.md §2 for full rules.
 
@@ -159,15 +161,15 @@ PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress
 ## Faction Starting Stats (v04 B5)
 | Faction | Legitimacy | Popular_Support | Influence | Wealth | Military | Stability |
 |---------|------------|------------------|-----------|--------|----------|-----------|
-| Crown | 5 | 5 | 5 | 4 | 4 | 4 |
+| Crown | 5 | 5 | 5 | 4 | 5 | 4 |
 | Church | 5 | 5 | 6 | 5 | 4 | 5 |
 | Hafenmark | 4 | 4 | 4 | 5 | 3 | 4 |
 | Varfell | **4** | **4** | 4 | **4** | 4 | 4 |
 | Restoration Movement | — | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
-| Löwenritter (Split) | 3 | 3 | 2 | 3 | 6 | 5 |
+| Löwenritter (Split) | 3 | 3 | 2 | 3 | 5 | 5 |
 | Guilds (NPC) | 3 | 3 | 4 | 6 | 2 | 5 |
 
-CORRECTIONS (PP-191/PP-195): Varfell L 4, PS 4 (seed equal per PP-686 v2 / 2026-05-02 ED-784 — was unsplit Mandate 4), Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
+CORRECTIONS (PP-191/PP-195/ED-809/ED-810): Varfell L 4, PS 4 (seed equal per PP-686 v2 / 2026-05-02 ED-784 — was unsplit Mandate 4), Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
 
 
 

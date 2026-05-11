@@ -16,7 +16,7 @@ entries:
     trigger). phases.md Step 4d is an unfixed propagation gap. Discovered during granular review of handoff_running_simulations.md
     2026-05-10. Fix: update params/bg/phases.md Step 4d to match peninsular_strain §4.2 condition. Affected doc: params/bg/phases.md
     Step 4d.'
-  status: open
+  status: closed
   severity: P2
   source: Handoff granular review 2026-05-10
   jordan_decision: pending
@@ -30,14 +30,15 @@ entries:
 - id: ED-798
   date: 2026-05-10
   description: 'IP threshold clarification — Altonian invasion escalation ladder. Per Jordan 2026-05-10: IP 80+ triggers Altonian skirmishes / small unit border-testing; IP >= 100 triggers regular large-scale invasion through one or both mountain passes. Currently canon has IP 75 = Altonian Vanguard appears (params/bg/core.md). Gap: explicit IP 80-99 skirmish phase not formalized; Occupation Era wording at IP 100 ambiguous about active invasion vs political occupation (Jordan clarifies: active invasion). Proposed updates: peninsular_strain §6.4 Occupation Era clarification; params/bg/core.md IP escalation ladder; cross-ref PP-568 ED-340 PROVISIONAL Vanguard mechanics. Affected docs: peninsular_strain_v30 §6.4, params/bg/core.md, params/bg/clocks.md.'
-  status: open
+  status: closed
+  closure_commit: this-commit
   severity: P2
   source: Jordan verbal clarification 2026-05-10
   jordan_decision: 'pending — proposed text updates in description'
 - id: ED-799
   date: 2026-05-11
   description: '[OPEN] canonical_sources.yaml registry drift on combat and derived_stats blocks. The combat: block declares design_doc: params/combat.md but the section-structured combat design lives at designs/scene/combat_v30.md (with _index.md and _infill.md partners). Same shape on derived_stats: registry → params/factions/stats_1_7_scale.md; section-structured doc → designs/scene/derived_stats_v30.md. Both reference paths are real; the registry design_doc field is incomplete. Same pattern as PP-726 territories block (fixed 2026-05-11 in commit 383184b with a political_hierarchy_doc: companion key). Recommended fix: add companion keys (e.g. params_doc: + designs_doc:) to both combat and derived_stats blocks, mirroring the territories pattern. Source: tests/sim/combat_arch_residual_stress_01/module_manifest.md §Registry drift (explicitly flagged as a Jordan editorial decision). Affected file: references/canonical_sources.yaml.'
-  status: open
+  status: closed
   severity: P3
   source: combat_arch_residual_stress_01 manifest (re-surfaced 2026-05-11)
   jordan_decision: 'pending — Jordan to confirm dual-key schema (params_doc + designs_doc) is correct shape or specify alternative.'
@@ -87,7 +88,8 @@ entries:
     - params/bg/phases.md
     - params/bg/tracks.md
     - designs/provincial/peninsular_strain_v30.md
-  status: open
+  status: closed
+  closure_commit: this-commit
   jordan_decision: pending
 
 - id: ED-804
@@ -158,7 +160,8 @@ entries:
   affected_docs:
     - params/bg/core.md
     - designs/provincial/faction_state_authoring_v30.md
-  status: open
+  status: closed
+  closure_commit: this-commit
   jordan_decision: '2026-05-11 — Crown Mil 5, Lowenritter Mil 5. Lowenritter is Crown military arm until Split.'
 
 - id: ED-810
@@ -171,5 +174,6 @@ entries:
     - params/bg/core.md
     - designs/provincial/faction_state_authoring_v30.md
     - designs/provincial/faction_succession_split_v30.md
-  status: open
+  status: closed
+  closure_commit: this-commit
   jordan_decision: '2026-05-11 — Split = Crown Mil 5->2 + unit loss. Coup = Crown suspended, monarch installed, faction follows monarch identity.'

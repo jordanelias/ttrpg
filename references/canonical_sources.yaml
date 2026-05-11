@@ -36,12 +36,13 @@ systems:
     params: params/core.md
     canonical_sha__params__core_md: "15e2543dcf246001575ab616319846615bb3a028"
     bg_params: params/bg/core.md
-    canonical_sha__params__bg__core_md: "ec178db4ae895417484b79ad7e77c07b258d28b6"
+    canonical_sha__params__bg__core_md: "a714282b4f2404f724e5b870fc186bd78e12184d"
   combat:
-    design_doc: params/combat.md
-    canonical_sha__params__combat_md: "cf2631d812372b8b7e9dfb599786ec96feafa100"
+    design_doc: designs/scene/combat_v30.md
+    canonical_sha__designs__scene__combat_v30_md: "TBD-fetch-needed"
     params: params/combat.md
     canonical_sha__params__combat_md: "cf2631d812372b8b7e9dfb599786ec96feafa100"
+    note: "ED-799 fix — design_doc updated from params/combat.md to designs/scene/combat_v30.md (section-structured doc). params/combat.md retained as params reference."
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__threadwork__threadwork_v30_md: "08e4dcf2657922279bf8b2bf036e465c13572317"
