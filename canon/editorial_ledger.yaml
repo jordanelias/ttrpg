@@ -41,3 +41,122 @@ entries:
   severity: P3
   source: combat_arch_residual_stress_01 manifest (re-surfaced 2026-05-11)
   jordan_decision: 'pending — Jordan to confirm dual-key schema (params_doc + designs_doc) is correct shape or specify alternative.'
+
+- id: ED-800
+  date: 2026-05-11
+  description: 'Volley Power-only pool ignores Size — massing ranged units provides zero additional firepower (Size 2 XBow rolls same 3D as Size 5 XBow). Inconsistent with Engagement pool where min(Size,Command) contributes dice. Removes strategic depth in ranged composition. Source: A2 sim F-006.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - params/mass_combat.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-801
+  date: 2026-05-11
+  description: 'Orderly withdrawal mechanics missing — mass_battle §A.12 covers Rout/Pursuit but no rule for orderly Withdraw battle plan vs Advance pursuers. Speed differential (Standard vs Slow) should permit disengagement but no canonical procedure. Source: A2 sim F-007.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-802
+  date: 2026-05-11
+  description: 'Rally action mechanical specifics unclear — mass_battle §A.7 Phase 6 step 4 lists Rally as general action but no canonical formula (pool, Ob, effect on Morale vs Discipline, success/failure consequences). Source: A2 sim F-008.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - params/mass_combat.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-803
+  date: 2026-05-11
+  description: 'Strain vs Turmoil terminology inconsistency — phases.md §4d uses Strain; tracks.md uses Turmoil; peninsular_strain uses both. Confirm whether these are the same track, sub-components of same system, or distinct mechanics. Source: A2 sim F-010.'
+  severity: P2
+  type: error
+  archetype: A2
+  affected_docs:
+    - params/bg/phases.md
+    - params/bg/tracks.md
+    - designs/provincial/peninsular_strain_v30.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-804
+  date: 2026-05-11
+  description: 'Field fortification mechanics missing — mass_battle §A.9 covers terrain modifiers but no rule for player-constructed fieldworks (earthworks, trenches, barricades). Historical precedent is decisive. Needed for siege approach scenarios. Source: A2 sim F-011.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-805
+  date: 2026-05-11
+  description: 'Combined multi-unit attack resolution unspecified — mass_battle §A.7 allows max 3 engagements but does not specify how 2+ units attacking one defender resolves. Separate rolls? Combined pool? Defender dice allocation across attackers? Source: A2 sim F-012.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - params/mass_combat.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-806
+  date: 2026-05-11
+  description: 'Gransol (T8) Fort level not specified in core.md territory table — T3/T14 are Fort 3, T10 is Fort 2, but T8 Hafenmark capital has no Fort entry. Lake geography provides natural defense but needs formalization. Source: A2 sim F-015.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - params/bg/core.md
+    - designs/territory/settlement_layer_v30.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-807
+  date: 2026-05-11
+  description: 'Lake-city siege mechanics unresolved — Gransol (landlocked lake, Switzerland-analog) cannot be fully encircled. Does lake access prevent starvation siege? Can Crown blockade an inland lake? Distinct from naval Port-to-Port mechanics. Source: A2 sim F-016.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - designs/territory/settlement_layer_v30.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-808
+  date: 2026-05-11
+  description: 'Battle loss Stability trigger ambiguity — mass_battle Part E §E.1 says losing side Stab -1 immediate + §E.2 Stab -1 at Accounting = -2 per battle loss. Combined with territory loss trigger (-1), a single lost battle costs -3 Stability. At starting Stab 4, faction collapses in 2 battles. Verify this severity is intended — may need caps or graduated loss. Source: A2 sim F-017.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - designs/provincial/faction_canon_v30.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-809
+  date: 2026-05-11
+  description: 'core.md Faction Starting Stats table has Crown Military 4 and Lowenritter (Split) Military 6. Per Jordan 2026-05-11: Crown Military is 5, Lowenritter Military is 5. Additionally Lowenritter is not a separate faction at game start — it is Crown military arm. Lowenritter stats only apply IF Split occurs (not guaranteed). core.md table needs update.'
+  severity: P2
+  type: error
+  archetype: A2
+  affected_docs:
+    - params/bg/core.md
+    - designs/provincial/faction_state_authoring_v30.md
+  status: open
+  jordan_decision: '2026-05-11 — Crown Mil 5, Lowenritter Mil 5. Lowenritter is Crown military arm until Split.'
