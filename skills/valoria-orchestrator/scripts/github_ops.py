@@ -315,7 +315,7 @@ def assert_fetched(*paths, repo: str = None) -> str:
 def _authorize_next_commit() -> str:
     """
     Single-use commit authorization. Called by valoria_hooks.safe_commit()
-    and trusted internal callers (safe_session_close, append_to_register).
+    and trusted internal callers.
 
     Caller verification via inspect.stack():
     - valoria_hooks.safe_commit()
@@ -323,6 +323,7 @@ def _authorize_next_commit() -> str:
     - valoria_hooks.write_checkpoint() / close_checkpoint() (session checkpoints)
     - github_ops.safe_session_close()
     - github_ops.append_to_register()
+    - github_ops.start_session_log() / close_session_log() / update_session_log() (session lifecycle)
     - Direct bash_tool calls (<stdin>, /tmp, <string>) for infrastructure work
     """
     frame = inspect.stack()[1]
@@ -331,7 +332,9 @@ def _authorize_next_commit() -> str:
         (caller_fn == 'safe_commit' and 'valoria_hooks' in caller_file) or
         (caller_fn == 'assert_bootstrap' and 'valoria_hooks' in caller_file) or
         (caller_fn in ('write_checkpoint', 'close_checkpoint') and 'valoria_hooks' in caller_file) or
-        (caller_fn in ('safe_session_close', 'append_to_register') and 'github_ops' in caller_file) or
+        (caller_fn in ('safe_session_close', 'append_to_register',
+                       'start_session_log', 'close_session_log', 'update_session_log')
+         and 'github_ops' in caller_file) or
         ('<stdin>' in caller_file or caller_file.startswith('/tmp') or caller_file == '<string>')
     )
     if not approved:
