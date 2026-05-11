@@ -3,9 +3,9 @@
 <!-- auto-generated — 2026-05-11 -->
 
 p1_blocker_count: 0
-open_count: 13
-total_active: 15
-next_id: 810
+open_count: 14
+total_active: 16
+next_id: 811
 
 p1_blockers:
   - none
@@ -27,3 +27,4 @@ p2_open:
 
 recent_resolutions:
   - none
+  - ED-810: Lowenritter Split/Coup outcomes — Crown Mil 5->2 on Split; Crown SUSPENDED on Coup

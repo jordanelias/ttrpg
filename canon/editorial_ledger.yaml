@@ -160,3 +160,16 @@ entries:
     - designs/provincial/faction_state_authoring_v30.md
   status: open
   jordan_decision: '2026-05-11 — Crown Mil 5, Lowenritter Mil 5. Lowenritter is Crown military arm until Split.'
+
+- id: ED-810
+  date: 2026-05-11
+  description: 'Lowenritter faction mechanics clarification per Jordan 2026-05-11. (1) Split outcome: Crown Military drops from 5 to 2 AND loses most units. (2) Coup outcome: Crown faction SUSPENDED until Lowenritter installs new monarch. If Torben/Elske/Lenneth = Crown continues. If Duke (Vaynard/Baralta) = Crown absorbed into that faction. (3) Lowenritter is NOT guaranteed to split or coup — only fires if they lose faith in Crown. core.md Graduated Autonomy table needs these outcomes formalized.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - params/bg/core.md
+    - designs/provincial/faction_state_authoring_v30.md
+    - designs/provincial/faction_succession_split_v30.md
+  status: open
+  jordan_decision: '2026-05-11 — Split = Crown Mil 5->2 + unit loss. Coup = Crown suspended, monarch installed, faction follows monarch identity.'
