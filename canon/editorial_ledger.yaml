@@ -22,11 +22,11 @@ entries:
   jordan_decision: pending
 - id: ED-796
   date: 2026-05-10
-  description: 'valoria_hooks.context_gate() threshold recalibration for 1M context window. Current thresholds (CONTEXT_SOFT 120k, CONTEXT_CHECKPOINT_HARD 150k, CONTEXT_HARD 180k) calibrated to pre-1M context era. Opus 4.6/4.7 and Sonnet 4.6 now have 1M context standard. Hard stop firing at 180k is premature. Bug: _session_fetches accumulator inflates estimate. Resolution: raise thresholds to ~600k/750k/900k; investigate accumulator inflation. Affected files: skills/valoria-orchestrator/scripts/valoria_hooks.py.'
-  status: open
+  description: '[CLOSED 2026-05-10 — commit b7f0ad7] valoria_hooks.context_gate() threshold recalibration + compliance_check pollution fix. Both root causes fixed in single commit: (1) CONTEXT_SOFT/CHECKPOINT_HARD/HARD scaled 5x to 600k/750k/900k (proportional to 1M window, preserving 60/75/90% bands); (2) compliance_check.read_files_graphql calls now use skip_cache=True (5 sites: rules load + bulk scan + 4 auto-fix sites) — tool-internal fetches no longer pollute the _session_fetches dict that context_gate uses as context-usage proxy. Round-trip verified: post-fix bootstrap reports 58k estimated tokens (5.8 percent of 1M) vs pre-fix 1.49M false-positive. NOTE: was previously closed in commit 026c065 but reopened by parallel-session commit 3dc466c which bootstrapped from a stale snapshot — re-closing 2026-05-11. Affected files: skills/valoria-orchestrator/scripts/valoria_hooks.py, skills/valoria-orchestrator/scripts/github_ops.py (skip_cache parameter added), tools/compliance_check.py.'
+  status: closed
   severity: P2
   source: Bootstrap hook failure 2026-05-10 (Jordan override directive)
-  jordan_decision: '2026-05-10 — recalibrate thresholds for 1M context.'
+  jordan_decision: '2026-05-10 — recalibrate + fix pollution; both root causes addressed in commit b7f0ad7. Re-close after parallel-session regression.'
 - id: ED-798
   date: 2026-05-10
   description: 'IP threshold clarification — Altonian invasion escalation ladder. Per Jordan 2026-05-10: IP 80+ triggers Altonian skirmishes / small unit border-testing; IP >= 100 triggers regular large-scale invasion through one or both mountain passes. Currently canon has IP 75 = Altonian Vanguard appears (params/bg/core.md). Gap: explicit IP 80-99 skirmish phase not formalized; Occupation Era wording at IP 100 ambiguous about active invasion vs political occupation (Jordan clarifies: active invasion). Proposed updates: peninsular_strain §6.4 Occupation Era clarification; params/bg/core.md IP escalation ladder; cross-ref PP-568 ED-340 PROVISIONAL Vanguard mechanics. Affected docs: peninsular_strain_v30 §6.4, params/bg/core.md, params/bg/clocks.md.'
@@ -34,3 +34,10 @@ entries:
   severity: P2
   source: Jordan verbal clarification 2026-05-10
   jordan_decision: 'pending — proposed text updates in description'
+- id: ED-799
+  date: 2026-05-11
+  description: '[OPEN] canonical_sources.yaml registry drift on combat and derived_stats blocks. The combat: block declares design_doc: params/combat.md but the section-structured combat design lives at designs/scene/combat_v30.md (with _index.md and _infill.md partners). Same shape on derived_stats: registry → params/factions/stats_1_7_scale.md; section-structured doc → designs/scene/derived_stats_v30.md. Both reference paths are real; the registry design_doc field is incomplete. Same pattern as PP-726 territories block (fixed 2026-05-11 in commit 383184b with a political_hierarchy_doc: companion key). Recommended fix: add companion keys (e.g. params_doc: + designs_doc:) to both combat and derived_stats blocks, mirroring the territories pattern. Source: tests/sim/combat_arch_residual_stress_01/module_manifest.md §Registry drift (explicitly flagged as a Jordan editorial decision). Affected file: references/canonical_sources.yaml.'
+  status: open
+  severity: P3
+  source: combat_arch_residual_stress_01 manifest (re-surfaced 2026-05-11)
+  jordan_decision: 'pending — Jordan to confirm dual-key schema (params_doc + designs_doc) is correct shape or specify alternative.'
