@@ -287,6 +287,15 @@ policies:
     note: "Prose-writer skill support files. Large by design (technique libraries)."
 
 
+  # Simulation framework workplans + resolution docs: large planning artifacts.
+  # Comprehensive workplans enumerating every mechanical system legitimately exceed
+  # the 15k catch-all (V1.1 workplan is ~25k tokens). Splitting would fragment the
+  # single source of truth for stress planning.
+  - match: "tests/sim_framework/*.md"
+    max_tokens: 30000
+    on_exceed: "warn_only"
+    note: "Workplan + resolution docs. Large by design (comprehensive system enumeration)."
+
   # ────────────────────────────────────────────────────────────
   # CATCH-ALL — flag any unrecognized file above safe size
   # ────────────────────────────────────────────────────────────
