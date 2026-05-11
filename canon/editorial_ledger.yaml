@@ -207,8 +207,9 @@ entries:
   affected_docs:
     - designs/provincial/mass_battle_v30.md
     - params/mass_combat.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Volley damage = max(0, net_successes) - ranged_DR. No (1+Power) multiplier. Composition (ED-814) handles scaling via back_pct × volley pool. Attrition contributor, not decisive."
 
 - id: ED-813
   date: 2026-05-11
@@ -220,3 +221,16 @@ entries:
     - designs/provincial/mass_battle_v30.md
   status: open
   jordan_decision: pending
+
+- id: ED-815
+  date: 2026-05-11
+  description: "Discipline redefined as formation coherence under fire — capacity to maintain designed shape, hold assigned column position, execute standing orders while taking casualties. Replaces vague 'organizational integrity' framing. Penalty table interpretation: pool penalty represents shape drift, not generic disorder. A high-Discipline unit holds the horseshoe even as the center bleeds; a low-Discipline unit reverts to local survival behavior — fighting whoever is in front, abandoning flank positions, ignoring orders. Aligns with historical doctrine (Vegetius De Re Militari, Maurice Strategikon, Leo VI Taktika). Triangulates with Command (tactical authority — what tactics are available) and Power (raw combat capability — how hard the unit hits) for clean three-stat unit quality model. Existing formulas (H per Size segment, penalty tiers 5-7/3-4/1-2, Reform Phase Discipline restoration) all remain valid under new framing."
+  severity: P1
+  type: clarification
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Discipline = formation coherence under fire. Sharpens Power/Discipline/Command triangle."
