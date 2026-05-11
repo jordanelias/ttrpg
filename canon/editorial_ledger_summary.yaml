@@ -2,15 +2,16 @@
 # manual refresh 2026-05-10 — ED-790..795 propagated to design docs and closed
 
 p1_blocker_count: 0
-open_count: 1
-total_active: 2
-next_id: 797
+open_count: 2
+total_active: 3
+next_id: 798
 
 p1_blockers: []
 
 p2_open:
   - ED-788: "[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking"  # deferred
   - ED-796: "valoria_hooks.context_gate() threshold recalibration for 1M context window"
+  - ED-797: "phases.md Step 4d propagation gap — Strain decay conflicts with peninsular_strain §4.2 (ED-743)"
 
 p3_open: []
 

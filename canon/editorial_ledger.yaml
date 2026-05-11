@@ -94,3 +94,10 @@ entries:
   severity: P2
   source: Bootstrap hook failure 2026-05-10 (Jordan override directive)
   jordan_decision: '2026-05-10 — recalibrate thresholds for 1M context. Investigation of accumulator inflation pending.'
+- id: ED-797
+  date: 2026-05-10
+  description: 'phases.md Step 4d propagation gap — Strain decay condition conflict with peninsular_strain §4.2 (ED-743). params/bg/phases.md Step 4d states: "If no inter-faction battles AND no Revolts: Strain −1". peninsular_strain §4.2 (ED-743) states: "Strain −1 if ALL territories at Accord ≥ 2 (no territory-instability this season)". These are different conditions — a season with no battles but one territory at Accord 1 gives −1 per phases.md but +1 net per peninsular_strain §4.2 (instability fires, no decay). peninsular_strain §4.2 is authoritative (ED-743 explicitly superseded the battle-occurrence trigger). phases.md Step 4d is an unfixed propagation gap. Discovered during granular review of handoff_running_simulations.md 2026-05-10. Fix: update params/bg/phases.md Step 4d to match peninsular_strain §4.2 condition. Affected doc: params/bg/phases.md Step 4d.'
+  status: open
+  severity: P2
+  source: Handoff granular review 2026-05-10
+  jordan_decision: pending
