@@ -2053,3 +2053,20 @@ review_findings_summary:
   lateral: NERS hasattr-drift is the most material lateral issue; combat_arch PP-684 collision pre-resolution is positive counter-example.
   horizontal: three sessions across the day (NERS, forbidden_token_gate, Phase-3 28-commit run, plus a fourth data-management audit session I initially missed in review).
 commits_this_session: 0
+
+---
+
+# Session Status (auto-generated)
+# DO NOT EDIT — this file is managed by start_session_log / close_session_log
+#
+# Active sessions: 0
+# Last updated: 2026-05-11T05:28:50.448493+00:00
+# See: session_logs/index.md for details
+#
+session_id: pointer
+status: IDLE
+active_sessions: 0
+last_stage: auto-generated
+next_action:
+  skill: see session_logs/index.md
+blockers: []
