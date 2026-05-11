@@ -52,8 +52,9 @@ entries:
   affected_docs:
     - designs/provincial/mass_battle_v30.md
     - params/mass_combat.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Yes. Size affects Volley. Pool = min(Size,Power)+Power dice TN6. Replaces Power-only."
 
 - id: ED-801
   date: 2026-05-11
@@ -63,8 +64,9 @@ entries:
   archetype: A2
   affected_docs:
     - designs/provincial/mass_battle_v30.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Yes. Withdraw plan + Speed advantage (faster than pursuer) = orderly disengage, no engagement."
 
 - id: ED-802
   date: 2026-05-11
@@ -75,8 +77,9 @@ entries:
   affected_docs:
     - designs/provincial/mass_battle_v30.md
     - params/mass_combat.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Rally pool = Morale dice TN7 Ob1. Success/Overwhelming = +1 Morale capped at starting value."
 
 - id: ED-803
   date: 2026-05-11
@@ -100,8 +103,9 @@ entries:
   archetype: A2
   affected_docs:
     - designs/provincial/mass_battle_v30.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — No field fortification during mass battle. Not implemented."
 
 - id: ED-805
   date: 2026-05-11
@@ -112,8 +116,9 @@ entries:
   affected_docs:
     - designs/provincial/mass_battle_v30.md
     - params/mass_combat.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Combined attack via Fibonacci denominators. Lead full Off pool plus supporters floor(pool/Fib(n)). Denoms 2,3,5,8."
 
 - id: ED-806
   date: 2026-05-11
@@ -124,8 +129,9 @@ entries:
   affected_docs:
     - params/bg/core.md
     - designs/territory/settlement_layer_v30.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Gransol T8 Fort level = 2."
 
 - id: ED-807
   date: 2026-05-11
@@ -136,8 +142,9 @@ entries:
   affected_docs:
     - designs/provincial/mass_battle_v30.md
     - designs/territory/settlement_layer_v30.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — No. Lake supply routes not blockadeable. Inland lake is not naval."
 
 - id: ED-808
   date: 2026-05-11
@@ -148,8 +155,9 @@ entries:
   affected_docs:
     - designs/provincial/mass_battle_v30.md
     - designs/provincial/faction_canon_v30.md
-  status: open
-  jordan_decision: pending
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: "2026-05-11 — Defender -1 Stability only on territory loss. Attacker no penalty for failed capture."
 
 - id: ED-809
   date: 2026-05-11
@@ -177,3 +185,38 @@ entries:
   status: closed
   closure_commit: this-commit
   jordan_decision: '2026-05-11 — Split = Crown Mil 5->2 + unit loss. Coup = Crown suspended, monarch installed, faction follows monarch identity.'
+
+- id: ED-811
+  date: 2026-05-11
+  description: "Engagement damage formula ambiguous. Phase 5 pool split does not specify whether damage = (net_successes * 1+Power) for attacker only, or (margin between off/def pools * 1+Power), or other. SIM-MB-04 INTERPRETATION-01 used margin model and produced one-turn kills via margins of 5-6. Needs explicit formula statement. Source: SIM-MB-04 FINDING-1."
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - params/mass_combat.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-812
+  date: 2026-05-11
+  description: "Volley post-ED-800 double-amplified. ED-800 approved min(Size,Power)+Power dice. SIM-MB-04 shows Power 3 unit goes 3 to 6 dice while multiplier 1+Power remains, producing average 21.6 dmg/turn vs units with 9-16 HP. Either pool or multiplier needs recalibration. Source: SIM-MB-04 FINDING-2."
+  severity: P1
+  type: incongruency
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+    - params/mass_combat.md
+  status: open
+  jordan_decision: pending
+
+- id: ED-813
+  date: 2026-05-11
+  description: "ED-801 withdrawal phase gate unspecified. Jordan ruling confirmed Withdraw plan + speed advantage = orderly disengage. SIM-MB-04 implemented as Phase 5 gate but it may be a Phase 3 gate instead, changing positioning logic materially. Source: SIM-MB-04 FINDING-7."
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+    - designs/provincial/mass_battle_v30.md
+  status: open
+  jordan_decision: pending
