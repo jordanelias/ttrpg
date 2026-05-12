@@ -182,3 +182,24 @@
   No flat per-shape dice bonuses. If wrong outcome, either fix geometry or add a real
   geometric mechanism. Forbidden: re-introducing top-down balance fudge.
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
+
+---
+
+## SIM-MB-06 v11 (per-cell octagon angle)
+
+- IN-BAND (10/13) at n=500:
+  H1 Line mirror, H2 Arrowhead/Line, H3 Horseshoe/Line, H4 Horseshoe/Arrowhead,
+  H6 RefusedFlank/Line, H8 GappedLine/Arrowhead, H9 Line/Arrowhead,
+  H10 Line/Horseshoe, H11 Arrowhead/Horseshoe, R3 Ranged mirror
+- OUT-OF-BAND (3/13):
+    M  H5 RefusedFlank/Horseshoe 37.4% (target 50-65%) — unchanged from v10
+    H7 GappedLine/Line 51.6% n=500 (borderline; confirmed in-band at n=500)
+    L  R1 Pure Ranged/Line 69.4% (target 30-50%) — improved from 91% in v10
+- KEY CHANGES from v10:
+  Atom renamed Subunit; per-cell facing vectors; per-cell octagon angle model
+  (GREEN<45=0D, YELLOW 45-90=-1D, RED>=90=-2D); attacker centroid used (not
+  nearest cell) to avoid equidistant non-determinism. GappedLine gap skip removed
+  (geometric). Ranged melee penalty pool//=2.
+- OPEN TENSIONS CARRIED FORWARD:
+    M  H5 RF/HS — targeting issue (GL blocks converge; per-block targets needed)
+    L  R1 Ranged — pool//2 insufficient; needs heavier penalty or volley rebalance
