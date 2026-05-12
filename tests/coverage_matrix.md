@@ -235,3 +235,48 @@
 - DRIFT RISK: octagon_angle / cell_facing_vec is new code; needs Jordan review
   before promotion from EXPLORATORY. Pool sensitivity empirical.
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
+
+## SIM-MB-06 v12 (2026-05-12, EXPLORATORY)
+- BOTTOM-UP TENSION RESOLUTION building on v11 architecture.
+- DIRECTIVE: keep working bottom up, ensure historical precedent results respected top down.
+- CHANGES (5 mechanisms, each with documented historical precedent):
+  1. Column-local targeting: each cell maintains its starting column, steers toward
+     target row at that column. Replaces centroid-attractor convergence pathologies.
+     Historical: infantry held assigned files; lateral drift = breakdown signal.
+     Effect: GappedLine gaps stay open, Horseshoe wings preserve wide footprint,
+     Arrowhead wedge tip leads naturally (cells already at different columns).
+  2. VOLLEY_MAX_RANGE 25 -> 8: ranged units close to within 8 cells before firing.
+     Crécy/Agincourt: killing zones were the final 100 paces (~5 cells).
+  3. Ranged melee penalty pool//2 -> pool//3: archers in close combat were marginal.
+     Agincourt 1415, Crécy 1346: archers contributed little to melee phase.
+  4. Volley HP scaling: 1 size loss = ceil(h_per_size/2) hp, not full h_per_size.
+     Ranged size loss = arrows finding targets (many glance off armor/shields);
+     melee size loss = decisive wounds. This change ALONE moved R1 from 69% -> 35%.
+  5. RefusedFlank front-row speed 2: engaged front rank charges at battle pace
+     ahead of deeper rows. Leuctra 371 BC oblique order: Theban front struck first.
+     Whole-column speed 2 over-tunes vs Line (H6); front-row-only is the partial
+     bonus that helps vs wide formations (HS) without dominating same-width (Line).
+- BATTERY RESULTS (n=500): 12/13 in-band (up from v11's 10/13)
+  IN-BAND (12/13):
+    H1 51.6%, H2 54.4%, H3 59.4%, H4 52.2%, H6 57.4%, H7 51.6%,
+    H8 49.6%, H9 48.2%, H10 39.8%, H11 48.4%, R1 34.6%, R3 47.2%
+  BORDERLINE OUT (1/13):
+    H5 RefusedFlank vs Horseshoe: 47.4% (target 50-65%, 2.6% below floor)
+- TENSIONS RESOLVED FROM v11:
+  - R1 (Ranged vs Line): 69.4% -> 34.6% (in band, was M tension)
+  - H7 (GappedLine vs Line): 51.6% maintained (was borderline)
+  - H2 (Arrowhead vs Line): 49.8% -> 54.4% (was borderline, now solidly in band)
+- TENSIONS CARRIED FORWARD:
+  - H5 (RF vs HS): only 2.6% below floor, but persistent. Mechanism candidates
+    tried (didn't all-clean-fix):
+    * whole-column speed 2: H5=56.8% ✓ but H6=64.8% (broke H6)
+    * front-2-rows speed 2: H5=52.2% ✓ but H6=64.0% (broke H6)
+    * front-row speed 2 (CHOSEN): H5=47.4% (still out), H6=57.4% ✓
+    * engage_frac cap 1.0 -> 1.5: regressed H2/H7
+  - Likely needs geometry-aware mechanism distinguishing wider-than-me vs
+    same-width-as-me opponents. v13 candidate: refused-stub repositioning,
+    depth-ratio pool bonus, anti-wrap defensive mechanism.
+- DRIFT RISK: 5 mechanisms layered atop v11 architecture. Volley HP scaling
+  (change 4) is a canonical-rule modification — needs Jordan review before
+  promotion from EXPLORATORY. Column-local targeting alters movement model.
+- NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
