@@ -66,6 +66,22 @@
   - Lethality 9.7 turns vs 3-6 target — atoms under-damaging
 - NOT YET PROPAGATED to canonical mechanics.
 
+
+## SIM-MB-06 v7 Summary (exploratory, Phase E)
+- Date: 2026-05-12
+- Scope: tip support constraint (Phase E) + tension F discovery
+- Tip support mechanic: fast cells (speed > min in atom) cannot advance
+  more than TIP_SUPPORT_GAP offsets past slowest non-zero-speed cell.
+  Affects Arrowhead only currently (tip 2, base 1).
+- Defaults: ENABLED=True, GAP=2 (no behavioral change for current tests)
+- Validated behavior at X=1:
+  - Arrowhead vs Horseshoe: 17% → 63% (tip stays supported, wedge holds)
+  - Cannae inverts: 65% → 33% (no longer self-isolating)
+  - Arrowhead T2 vs Line T2: 4% → 34%
+- DID NOT resolve Arrowhead T3/T4 vs Line — structural pool formula issue
+- New tension F documented: pool formula penalizes narrow attackers,
+  wedge cannot concentrate force. Four resolution options queued (F-i..F-iv).
+
 ## Next simulation priorities
 1. **SIM-MB-06**: rebuild 3v1 combined attack test harness; validate ED-823 Fibonacci recalibration options
 2. **Composition balance secondary measure**: test melee_pct Ob bonus / Volley pool cap / DR scaling (ED-825 candidate)
