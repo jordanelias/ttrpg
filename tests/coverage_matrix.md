@@ -87,3 +87,7 @@
 2. **Composition balance secondary measure**: test melee_pct Ob bonus / Volley pool cap / DR scaling (ED-825 candidate)
 3. **Workplan Phase 3-6**: propagate ED-811..820 to mass_battle_v30.md and params files
 4. **Then A3 SCHISM**: archetype 3 testing per parent workplan
+
+## Handoff 2026-05-12
+- tests/sim/sim_mb_06_handoff_2026-05-12.md — v7→v8 handoff doc with tension F design (cell-support stacking + puncture momentum + cascading sub-phase resolution with facing rotation)
+
