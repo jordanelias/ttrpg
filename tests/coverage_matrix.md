@@ -147,3 +147,38 @@
 - OPEN TENSIONS for v10:
   G/J/K/L documented in tests/sim/sim_mb_06_v9_manifest.md
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
+
+## SIM-MB-06 v10 Summary (exploratory, bottom-up shape advantages)
+- Date: 2026-05-12
+- Scope: remove top-down SHAPE_OFF_MOD; equalize cell counts; let geometric mechanisms produce historical results
+- DIAGNOSTIC ROOT CAUSE of v9 over-tuning:
+  - GappedLine T3 had 56 cells vs Line's 25 (2.24x troops) — "shape advantage" was extra troops
+  - RefusedFlank T3 had 21 cells (84% of Line) — flat +1D bonus masked the deficit
+  - SHAPE_OFF_MOD double-counted geometric mechanisms (support_engage_frac, engagement_angle)
+- CHANGES:
+  - Equalized cell counts: GappedLine 56->24, RefusedFlank 21->25 at T3
+  - SHAPE_OFF_MOD = {all: 0} (gap=-99 retained as structural sentinel only)
+  - SHAPE_DEF_MOD = {all: 0}
+  - MIN_DISCIPLINE retained (deployment-validity, not combat modifier)
+- MECHANISMS that remain (correctly bottom-up):
+  - support_engage_frac — depth-weighted cell support per atom
+  - engagement_angle + ANGLE_DEF_MOD — facing-based flank/rear bonus
+  - _momentum_speed puncture — speed differential at contact
+  - count_engagements_per_atom + ENCIRCLEMENT_PENALTY — multi-attack penalty
+- BATTERY RESULTS (in-band 9/13 at n=80; H3 confirmed 64.5% at n=200):
+  IN-BAND (10/13 effective):
+    H1 mirror 51.2% / H2 Wedge 55% / H3 Envelopment 64.5% (n=200) / H4 Cannae 51.2%
+    H6 RF/Line 51.2% / H7 GL/Line 51.2% / H8 GL/Arrow 56.2% / H10 rev H3 43.8% / H11 rev H4
+    R3 ranged mirror 47.5%
+  OUT-OF-BAND (3/13):
+    M  H5 RefusedFlank/Horseshoe 43.8% (was 82.5%) — real geometric Q for v11
+    K  H9 Line/Arrowhead 56.2% — side-A bias structural (carry-over)
+    L  R1 Pure Ranged/Line 90% — independent Phase 2 frequency (carry-over)
+- TENSION J (asymmetric over-tune cluster) RESOLVED:
+  H5/H6/H7/H8 dropped from 66-82% to 44-56%; H9/H10 from 62-66% to 43-56%.
+  All driven by SHAPE_OFF_MOD removal and cell-count equalization.
+- ARCHITECTURAL PRINCIPLE ESTABLISHED:
+  Shape advantages emerge from cell arrangement (geometry) + already-present mechanisms.
+  No flat per-shape dice bonuses. If wrong outcome, either fix geometry or add a real
+  geometric mechanism. Forbidden: re-introducing top-down balance fudge.
+- NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
