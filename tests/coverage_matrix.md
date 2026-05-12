@@ -113,3 +113,37 @@
   H: Lethality (t=9.8) — Line mirror → equal momentum, no puncture differential; hp-scale fix needed
   I: T4 draws (55%) — compound of H; resolves when H resolved
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
+
+## SIM-MB-06 v9 Summary (exploratory, unit types + ranged)
+- Date: 2026-05-12
+- Scope: unit_type infrastructure (melee/ranged) + Phase 2 Volley + historical-precedent battery
+- ADDED:
+  - Atom.unit_type field ('melee' default | 'ranged')
+  - volley_phase(): Phase 2 ranged fire at line-of-sight distance (not adjacency)
+  - VOLLEY_TN=6, VOLLEY_MIN_RANGE=2 (no fire when adjacent), VOLLEY_MAX_RANGE=battlefield
+  - RANGED_DR_DEFAULT=2 (Medium armour vs Piercing per params/mass_combat.md)
+  - Unit.discipline_penalty_volley() — pool reduction for ranged
+  - Historical accuracy spec: tests/sim/sim_mb_06_v9_historical_spec.md (H1-H11 + R1-R3 bands)
+- BATTERY (n=80, 13 matchups vs historical-precedent target bands):
+  IN-BAND (5/13):
+    H1  Line vs Line mirror:               51.2%  (target 45-55%)
+    H2  Arrowhead (Wedge) vs Line:         55.0%  (target 50-65%) — design counter holds
+    H4  Horseshoe vs Arrowhead (Cannae):   52.5%  (target 40-60%) — v8 tension F still resolved
+    H11 Arrowhead vs Horseshoe (rev H4):   46.2%  (target 40-60%)
+    R3  Ranged vs Ranged mirror sanity:    47.5%  (target 45-55%)
+  OUT-OF-BAND (8/13) — surfaces 4 tunable tensions:
+    G  H3 Horseshoe vs Line:               43.8% (target 50-65%) — improved from v8's 31.7%, still under
+    J  H5 RefusedFlank vs Horseshoe:       82.5% (target 50-65%) — asymmetric shape over-tuned
+    J  H6 RefusedFlank vs Line:            66.2% (target 45-60%)
+    J  H7 GappedLine vs Line:              68.8% (target 50-65%)
+    J  H8 GappedLine vs Arrowhead:         72.5% (target 45-60%)
+    K  H9 Line vs Arrowhead (rev H2):      62.5% (target 35-50%) — side-A bias amplified
+    K  H10 Line vs Horseshoe (rev H3):     66.2% (target 35-50%)
+    L  R1 Pure Ranged vs Pure Line:        90.0% (target 30-50%) — ranged over-tuned despite DR=2
+- INFRASTRUCTURE DELIVERED:
+  Unit configuration now enables future formation modeling (Shield Wall, Skirmish via
+  formation_modifier, cavalry via Speed-Fast melee, combined-arms via multi-atom units).
+  Phase 2 Volley correctly runs before movement; damage applies simultaneously with engagement.
+- OPEN TENSIONS for v10:
+  G/J/K/L documented in tests/sim/sim_mb_06_v9_manifest.md
+- NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
