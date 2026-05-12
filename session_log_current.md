@@ -1,23 +1,27 @@
-# Valoria Session Log — Current
-last_stage: SIM-MB-06 v7 committed; tension F (wedge piercing) handoff prepared
-next_action: skill: read tests/sim/sim_mb_06_handoff_2026-05-12.md FIRST, then implement F as v8
+session_id: f41be7d36c28f087
+session_close: 2026-05-12
+phase: SIM-MB-06 v8
+status: clean — tension F resolved, commit 1daf87b
+last_stage: SIM-MB-06 v8 committed — tension F (cell support + puncture) resolved
+next_action:
+  description: Horseshoe vs Line investigation (29.5% → target 40-60%) + lethality fix (9.5t → target 3-6)
+  skill: valoria-simulator
+blockers: []
 
-## Active state (handoff at 2026-05-12)
+p1_blocker_count: 0
 
-SIM-MB-06 atom architecture iterated v1→v7 over 2026-05-11 / 2026-05-12 across
-three commits. EXPLORATORY status; ED-814 remains canonical.
+commits_this_session:
+  - sha: 1daf87b
+    message: "[simulation] SIM-MB-06 v8 — tension F: cell support stack + puncture bonus"
 
-Commits:
-- 0121e84 (v5): atom architecture baseline
-- b8e652f (v6): halt-cell bug fix + per-cell facing + angle modifier + Phase C
-- 899ba9f (v7): tip support (Phase E) + tension F documented
+open_tensions:
+  - Horseshoe vs Line T3: 29.5% (target 40-60%) — separate investigation needed
+  - Lethality: 9.5 turns T3 (target 3-6) — under-damage at scale
+  - GappedLine vs Line: 72.7% — possibly over-tuned, not blocking
+  - F-iii cascading sub-phases: not needed for T3; available as v9 enhancement
 
-Side bias eliminated. Cannae works at 62% via angle modifier. Tension F (wedges
-cannot pierce lines) is the unresolved priority — Jordan provided three-part
-design captured in handoff doc:
-  (1) cell-support stacking (cells behind contribute to engage_frac)
-  (2) puncture / momentum bonus on speed differential at contact
-  (3) cascading sub-phase resolution with facing rotation (wedge piercing)
-
-Full handoff at tests/sim/sim_mb_06_handoff_2026-05-12.md
-Next-chat reading order in handoff §"Files to read on next bootstrap".
+ratification_checklist:
+  - Horseshoe vs Line in 40-60% range
+  - Lethality in 3-6 turns
+  - All matchups in 30-70% range (min)
+  - ED-826 written superseding ED-814
