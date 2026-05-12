@@ -30,6 +30,22 @@
 - Shape matrix: produces strategic rock-paper-scissors with Horseshoe H-2 trigger
 - Volley TN7: partial fix for composition imbalance (+8pp pure-melee competitiveness)
 
+
+## SIM-MB-06 v5 Summary (exploratory)
+- Date: 2026-05-11 → 2026-05-12 (Jordan-directed iteration v1→v5)
+- Scope: atom architecture exploration — composite units, per-cell movement,
+  25×25 battlefield w/ 5-cell buffer, side-mirrored patterns
+- Status: EXPLORATORY. Three open design tensions before promotion to canonical:
+  - Cannae envelopment failure (wings advance straight, do not curve in) — B-ii pending
+  - Composite-vs-uniform balance (Bii pool over-penalizes small atoms) — C-i/ii pending
+  - Arrowhead tip isolation (no support requirement) — E pending
+- Mirror rule: Side B patterns flip vertically `(r,c) → (max_r−r, c)`;
+  cell roles/speeds keyed by ORIGINAL pattern coords (preserve role across mirror)
+- 25×25 battlefield expansion (from 21×21): 5-cell buffer per side enables flank arcs
+- Visualization: tests/sim/sim_mb_06_v5_visual.html (8 sections incl. correction §8)
+- NOT YET propagated to canonical mechanics — ED-814 (composition grid) remains
+  the canonical formulation. This atom model would supersede ED-814 if ratified.
+
 ## Next simulation priorities
 1. **SIM-MB-06**: rebuild 3v1 combined attack test harness; validate ED-823 Fibonacci recalibration options
 2. **Composition balance secondary measure**: test melee_pct Ob bonus / Volley pool cap / DR scaling (ED-825 candidate)
