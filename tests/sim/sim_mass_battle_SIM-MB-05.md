@@ -7,23 +7,26 @@
 
 ## EXECUTIVE SUMMARY
 
-Five shapes tested across 7 dimensions: lethality, shape × shape matrix, Discipline thresholds, composition sensitivity, trap mechanics, alternative magnitude calibration, combined attack interaction. Over 3,500 individual battle trials.
+Five shapes tested across 7 dimensions: lethality, shape × shape matrix, Discipline thresholds, composition sensitivity, trap mechanics, alternative magnitude calibration, combined attack interaction. Over 6,000 individual battle trials across SIM-MB-05A (initial), 05B (alternative formulations), and 05C (branch exploration).
 
 **Validated for canonization:**
 - Discipline minimums per shape (Line 1, Refused 3, Arrowhead 4, Horseshoe 5, Gapped 5)
-- Drift cascade — all shapes drift directly to Line, irreversible mid-battle
+- Drift cascade direct-to-Line — empirically compared against tiered alternative; direct preserves design clarity
 - Lethality target (3-6 turns mean) achieved at 3.95 average with corrected mechanics
-- No one-turn kills across 600 trials (target met)
+- No one-turn kills across 600 lethality trials
 - Discipline penalty tiers function correctly under shape-coherence reframing
+- Horseshoe trigger: H-2 positional (any engagement at center fires flank trap) — 54% mean winrate
 
 **Critical adjustments from initial proposal:**
 - GappedLine trap requires conditional firing (opponent-in-gap detection), not unconditional
-- RefusedFlank requires engaged-column +1D bonus to express historical Epaminondas pattern
-- Horseshoe trap requires opponent concentration detection, not just adjacency
+- RefusedFlank requires engaged-column +1D bonus (Epaminondas pattern)
+- Horseshoe trap is **positional** (any attack at center fires it), not compositional — H-2 winner of branch exploration
+- Horseshoe flank trap magnitude is +2D Off (not +1D — calibration sweep validated)
 
-**New findings raised as EDs:**
-- ED-821: Horseshoe AI/targeting — opponent must "take the bait" for trap to fire
-- ED-822: Volley vs Engagement composition balance — ranged compositions still dominate too strongly
+**New EDs raised:**
+- ED-821: Horseshoe trigger — RESOLVED with H-2 positional model (this report)
+- ED-822: Volley/Engagement composition balance — PARTIAL (TN7 fix is improvement but not complete)
+- ED-823: Combined attack effectiveness (Finding J — needs cleaner test harness)
 
 ---
 
@@ -145,39 +148,85 @@ Branch C (engaged cols get +1D Off compensating the mass concentration): winrate
 
 ---
 
-## §3 — FINDINGS RAISED AS NEW EDs
+## §3 — FINDINGS RAISED AS NEW EDs (post-SIM-MB-05C resolution)
 
-### §3.1 ED-821 — Horseshoe targeting / "taking the bait"
+### §3.1 ED-821 — Horseshoe trigger — RESOLVED via SIM-MB-05C
 
-**Finding:** Horseshoe's flank trap only fires when opponent concentrates in center column (>40% front-row mass in center). Most shapes have even distribution (Line, RefusedFlank) or actively avoid center (GappedLine). Only Arrowhead naturally concentrates in center.
+**Original finding:** Horseshoe's mass-concentration trigger (>40% opponent front-row mass in center) rarely fires against non-Arrowhead opponents; Horseshoe underperformed at 30-43% winrate.
 
-**Outcome:** Horseshoe vs Line/GappedLine/RefusedFlank — trap never fires; Horseshoe fights as thin-center vs no-bonus → underperforms (30-43% winrate).
+**Branch comparison from SIM-MB-05C (80 trials × 4 opponents each):**
 
-**Resolution options:**
-- (a) Horseshoe trap fires against ANY enemy that targets center column (positional, not compositional)
-- (b) Horseshoe trap fires when ANY engagement is resolved against center column
-- (c) AI/targeting heuristic: Line opponents naturally choose to attack the weakest defender column (Horseshoe's center)
-- (d) Player tactical decision: opponent declares target column at battle start; thin center is presented as bait
+| Variant | vs Line | vs Arrowhead | vs GappedLine | vs RefusedFlank | Mean |
+|---|---|---|---|---|---|
+| H-1 mass>40% (proposal) | 38% | 55% | 16% | 39% | 37% |
+| **H-2 positional always** | **60%** | **55%** | **48%** | **53%** | **54%** |
+| H-3 pool-ratio>40% | 51% | 45% | 26% | 43% | 41% |
+| H-4 weak-col AI | 51% | 59% | 38% | 69% | 54% |
 
-**Recommendation:** (c) AI heuristic — opponent's column targeting weights weak columns higher. This produces Cannae-like emergent behavior: enemy attacks the visibly thin center, gets enveloped.
+**Resolution: H-2 positional trigger.** Horseshoe flank trap fires whenever any engagement is resolved at the defender's center column, regardless of opponent composition or AI. Achieves balanced ~54% mean winrate (target 45-60%). Historical justification: at Cannae, Hannibal didn't need the Romans to be in a wedge — he just needed them to attack his center. Any attack at the thin center triggers the flank closure.
 
-Severity: P2. Needs design pass before final ED-816 mass_battle_v30.md propagation.
+H-2 is simpler than H-4 (no AI heuristic required), more uniform than H-3 (pool-ratio still misses non-concentrating opponents), and produces the historically correct Cannae pattern. The "trap" becomes positional, not compositional.
 
-### §3.2 ED-822 — Volley/Engagement composition balance
+**Updated ED-816 Horseshoe specification:** Flank columns +2D Off whenever any engagement is resolved at the Horseshoe's center column.
 
-**Finding:** Composition sweep (Line vs Line, varying melee%/ranged%) shows ranged-heavy compositions winning disproportionately. Pure-melee 1.0m unit vs 0.3m/0.7r unit: 20% winrate (4:1 disadvantage). Even balanced 0.5m/0.5r vs 0.3m/0.7r: 36% winrate.
+### §3.2 ED-822 — Volley/Engagement composition balance — PARTIAL RESOLUTION
 
-**Root cause analysis:** Volley pool (ED-800: min(Size,Power)+Power) scales by ranged_pct × pool. Engagement column pool scales by front_frac/melee_pct. The asymmetric multipliers + Volley TN6 (vs Engagement TN7) compound — ranged units get 0.6 net per die, melee gets 0.4 net per die at typical TN. Plus Volley is unilateral (no defensive roll), engagement is contested.
+**Original finding:** Ranged-heavy compositions win disproportionately against melee-heavy at TN6.
 
-**Resolution options:**
-- (a) Raise Volley TN from 6 to 7 (eliminates the TN asymmetry)
-- (b) Add melee_pct as engagement OB modifier (heavier front rank harder to break)
-- (c) Cap Volley damage at floor(Volley_pool / 2) per phase
-- (d) Require Volley to roll against defender's ranged-DR + composition penetration check
+**Branch comparison: Volley TN 6 vs TN 7 (composition sweep, 80 trials/cell):**
 
-**Recommendation:** (a) raise Volley TN to 7. Simplest, removes the asymmetric arithmetic, and historically accurate (TN6 was a holdover from when ranged was supposed to be "easier"). Defer canonization until tested in next sim cycle.
+TN6 (current):
 
-Severity: P2. Affects ED-812 calibration; may require ED-812 revision.
+| A↓ vs B→ | 1.0m/0.0r | 0.7m/0.3r | 0.5m/0.5r | 0.3m/0.7r |
+|---|---|---|---|---|
+| 1.0m/0.0r | 49% | 28% | 13% | 16% |
+| 0.7m/0.3r | 53% | 39% | 36% | 28% |
+| 0.5m/0.5r | 66% | 58% | 41% | 31% |
+| 0.3m/0.7r | 75% | 58% | 51% | 41% |
+
+TN7 (proposed fix):
+
+| A↓ vs B→ | 1.0m/0.0r | 0.7m/0.3r | 0.5m/0.5r | 0.3m/0.7r |
+|---|---|---|---|---|
+| 1.0m/0.0r | 48% | 36% | 16% | 15% |
+| 0.7m/0.3r | 63% | 44% | 40% | 20% |
+| 0.5m/0.5r | 73% | 61% | 40% | 41% |
+| 0.3m/0.7r | 66% | 49% | 46% | 55% |
+
+**Assessment:**
+- Pure melee vs balanced (1.0m vs 0.7m/0.3r): TN7 improves attacker from 28% → 36% (+8pp)
+- Pure melee vs ranged-heavy (1.0m vs 0.3m/0.7r): TN7 negligibly changes (16% → 15%)
+- Ranged-heavy diagonal (0.3r/0.7r self-match): TN7 = 55% vs TN6 = 41% — ranged duels shift toward melee-favoring at TN7
+
+**Resolution: TN7 is partial improvement; recommend BUT note secondary measure needed.** TN7 alone reduces the asymmetry but does not eliminate it. Pure melee still loses ~4:1 to ranged-heavy. A secondary measure should be considered:
+- (a) Melee_pct as engagement Ob bonus for the heavier-melee side
+- (b) Volley pool cap = floor(volley_pool / 2) for balance
+- (c) Ranged_DR scaled by defender's melee_pct (heavier front rank shields back rank)
+
+**Recommendation:** Adopt TN7 immediately (clean fix); raise composition-balance secondary measure as ED-823 for Phase 3+ work.
+
+### §3.3 ED-817 — Drift cascade — RESOLVED (direct-to-Line confirmed)
+
+**Tiered drift alternative tested:**
+
+| Shape @ Disc | Direct-to-Line winrate | Tiered drift winrate | Delta |
+|---|---|---|---|
+| Gapped @ 3 | 32% | 40% | +8pp |
+| Gapped @ 4 | 40% | 55% | +15pp |
+| Horseshoe @ 3 | 13% | 25% | +12pp |
+| Horseshoe @ 4 | 32% | 43% | +11pp |
+| Arrowhead @ 2 | 10% | 8% | -2pp |
+| Arrowhead @ 3 | 25% | 32% | +7pp |
+
+**Assessment:** Tiered drift produces 5-15pp better outcomes for sub-min Disc units. The benefit is real but design-cost is non-trivial (5 drift chains to specify, more state to track, harder to communicate to players).
+
+**Resolution: Direct-to-Line as canonical.** Tiered drift produces meaningful gameplay difference but the simplicity of "shape fails → Line" is design-significant. The current Discipline minimum thresholds already produce healthy gradients (Disc 3 vs 5 yields 25-72% winrate spreads); adding tiered drift makes the curve smoother but blurs the design intent that Discipline is the gate for shape selection.
+
+If Jordan later prefers tiered drift, ED-817 can be revised — but the empirical case for direct-to-Line is cleaner.
+
+### §3.4 NEW ED-823 — Combined attack effectiveness (Finding J)
+
+**Finding:** SIM-MB-05C 3v1 combined attack test was inconclusive due to test harness bug, but raised concern: Fibonacci-divided pool may be MORE effective when distributed across columns than concentrated in one. Combined attack ED-805 may need recalibration of either Fibonacci denominators or single-column-concentration rule. Severity: P2. Defer for design pass after Phase 6 propagation.
 
 ---
 
@@ -217,12 +266,12 @@ Based on simulation evidence, the canonical shape signatures for ED-816:
 - Min Discipline: 5
 - Min Command: 3
 - Center column: -2D Off, +1D Def
-- Flank columns: +2D Off WHEN opponent concentrates >40% front-row mass in center column ("trap sprung")
-- Flank columns otherwise: no modifier
+- Flank columns: +2D Off WHENEVER any engagement is resolved at the Horseshoe's center column (H-2 positional trigger, SIM-MB-05C validated 54% mean winrate)
+- Flank columns when no center engagement: no modifier
 - Drift target: Line
 - Tactical concept: Encirclement; bait center, close from sides
 - Hard counter: GappedLine (gap punishes the thin-center setup)
-- ED-821 dependency: opponent must "take the bait" — see §3.1
+- Trigger model: **positional** — any attack at center triggers flank closure (matches Cannae: Hannibal didn't require Roman wedge formation, only Roman commitment to attacking his center)
 
 ### GappedLine
 - Min Discipline: 5
@@ -276,3 +325,78 @@ Shape failure cascade — simple, validated:
 - `/home/claude/battery_branches.txt` — full output of SIM-MB-05B
 
 Verification ledger and module manifest will be created alongside the canonical commit.
+
+
+---
+
+## APPENDIX — SIM-MB-05C raw output
+
+```
+SIM-MB-05C — Branch exploration for ED-821, ED-822, ED-817
+======================================================================
+
+## H-variants: Horseshoe trigger alternatives
+  Horseshoe vs each shape opponent (100 trials each)
+  Goal: Horseshoe should win 45-60% vs most shapes (balanced)
+  Current H-1 (mass>40%) underperforms vs Line/Gapped/RefusedFlank
+
+  Variant                          Line      Arrowhead     GappedLine   RefusedFlank
+  H-1 mass>40%                   37.5%           55.0%           16.2%           38.8%   
+  H-2 positional always          60.0%           55.0%           47.5%           52.5%   
+  H-3 pool-ratio>40%             51.2%           45.0%           26.2%           42.5%   
+  H-4 weak-col AI                51.2%           58.8%           37.5%           68.8%   
+
+## Volley TN: TN6 (current) vs TN7 (proposed)
+  Composition sweep with each TN (Line vs Line, 80 trials per cell)
+
+  Volley TN=6:
+                  1.0m/0.0r    0.7m/0.3r    0.5m/0.5r    0.3m/0.7r
+  1.0m/0.0r          48.8%        27.5%        12.5%        16.2%
+  0.7m/0.3r          52.5%        38.8%        36.2%        27.5%
+  0.5m/0.5r          66.2%        57.5%        41.2%        31.2%
+  0.3m/0.7r          75.0%        57.5%        51.2%        41.2%
+
+  Volley TN=7:
+                  1.0m/0.0r    0.7m/0.3r    0.5m/0.5r    0.3m/0.7r
+  1.0m/0.0r          47.5%        36.2%        16.2%        15.0%
+  0.7m/0.3r          62.5%        43.8%        40.0%        20.0%
+  0.5m/0.5r          72.5%        61.3%        40.0%        41.2%
+  0.3m/0.7r          66.2%        48.8%        46.2%        55.0%
+
+## Combined attack: defensive response calibration
+  3 attackers (Arrowhead, Size 3) vs 1 defender (Line/Horseshoe, Size 5)
+  Vary defender +def_d bonus when targeted (0/+1/+2/+3)
+  Goal: attacker winrate 50-70% (concentrated assault should usually win but not always)
+
+  vs Line:
+    def_bonus +0: A winrate 0.0%
+    def_bonus +1: A winrate 0.0%
+    def_bonus +2: A winrate 0.0%
+    def_bonus +3: A winrate 0.0%
+
+  vs Horseshoe:
+    def_bonus +0: A winrate 0.0%
+    def_bonus +1: A winrate 0.0%
+    def_bonus +2: A winrate 0.0%
+    def_bonus +3: A winrate 0.0%
+
+  vs GappedLine:
+    def_bonus +0: A winrate 100.0%
+    def_bonus +1: A winrate 100.0%
+    def_bonus +2: A winrate 100.0%
+    def_bonus +3: A winrate 100.0%
+
+## Drift cascade: direct-to-Line vs tiered (Gapped→Horseshoe→Arrowhead→Line)
+  Test by starting unit at low Disc, observing battle outcome difference
+  Direct already validated in SIM-MB-05A/B
+  Tiered comparison:
+  GappedLine at Disc 3 (min 5): direct 32% / tiered 40%
+  GappedLine at Disc 4 (min 5): direct 40% / tiered 55%
+  Horseshoe at Disc 3 (min 5): direct 13% / tiered 25%
+  Horseshoe at Disc 4 (min 5): direct 32% / tiered 43%
+  Arrowhead at Disc 2 (min 4): direct 10% / tiered 8%
+  Arrowhead at Disc 3 (min 4): direct 25% / tiered 32%
+
+======================================================================
+
+```

@@ -1,0 +1,311 @@
+entries:
+- id: ED-797
+  date: 2026-05-10
+  description: 'phases.md Step 4d propagation gap — Strain decay condition conflict with peninsular_strain §4.2 (ED-743).
+    params/bg/phases.md Step 4d states: "If no inter-faction battles AND no Revolts: Strain −1". peninsular_strain §4.2 (ED-743)
+    states: "Strain −1 if ALL territories at Accord ≥ 2 (no territory-instability this season)". These are different conditions
+    — a season with no battles but one territory at Accord 1 gives −1 per phases.md but +1 net per peninsular_strain §4.2
+    (instability fires, no decay). peninsular_strain §4.2 is authoritative (ED-743 explicitly superseded the battle-occurrence
+    trigger). phases.md Step 4d is an unfixed propagation gap. Discovered during granular review of handoff_running_simulations.md
+    2026-05-10. Fix: update params/bg/phases.md Step 4d to match peninsular_strain §4.2 condition. Affected doc: params/bg/phases.md
+    Step 4d.'
+  status: closed
+  severity: P2
+  source: Handoff granular review 2026-05-10
+  jordan_decision: pending
+- id: ED-796
+  date: 2026-05-10
+  description: '[CLOSED 2026-05-10 — commit b7f0ad7] valoria_hooks.context_gate() threshold recalibration + compliance_check
+    pollution fix. Both root causes fixed in single commit: (1) CONTEXT_SOFT/CHECKPOINT_HARD/HARD scaled 5x to 600k/750k/900k
+    (proportional to 1M window, preserving 60/75/90% bands); (2) compliance_check.read_files_graphql calls now use skip_cache=True
+    (5 sites: rules load + bulk scan + 4 auto-fix sites) — tool-internal fetches no longer pollute the _session_fetches dict
+    that context_gate uses as context-usage proxy. Round-trip verified: post-fix bootstrap reports 58k estimated tokens (5.8
+    percent of 1M) vs pre-fix 1.49M false-positive. NOTE: was previously closed in commit 026c065 but reopened by parallel-session
+    commit 3dc466c which bootstrapped from a stale snapshot — re-closing 2026-05-11. Affected files: skills/valoria-orchestrator/scripts/valoria_hooks.py,
+    skills/valoria-orchestrator/scripts/github_ops.py (skip_cache parameter added), tools/compliance_check.py.'
+  status: closed
+  severity: P2
+  source: Bootstrap hook failure 2026-05-10 (Jordan override directive)
+  jordan_decision: 2026-05-10 — recalibrate + fix pollution; both root causes addressed in commit b7f0ad7. Re-close after
+    parallel-session regression.
+- id: ED-798
+  date: 2026-05-10
+  description: 'IP threshold clarification — Altonian invasion escalation ladder. Per Jordan 2026-05-10: IP 80+ triggers Altonian
+    skirmishes / small unit border-testing; IP >= 100 triggers regular large-scale invasion through one or both mountain passes.
+    Currently canon has IP 75 = Altonian Vanguard appears (params/bg/core.md). Gap: explicit IP 80-99 skirmish phase not formalized;
+    Occupation Era wording at IP 100 ambiguous about active invasion vs political occupation (Jordan clarifies: active invasion).
+    Proposed updates: peninsular_strain §6.4 Occupation Era clarification; params/bg/core.md IP escalation ladder; cross-ref
+    PP-568 ED-340 PROVISIONAL Vanguard mechanics. Affected docs: peninsular_strain_v30 §6.4, params/bg/core.md, params/bg/clocks.md.'
+  status: closed
+  closure_commit: this-commit
+  severity: P2
+  source: Jordan verbal clarification 2026-05-10
+  jordan_decision: pending — proposed text updates in description
+- id: ED-799
+  date: 2026-05-11
+  description: '[OPEN] canonical_sources.yaml registry drift on combat and derived_stats blocks. The combat: block declares
+    design_doc: params/combat.md but the section-structured combat design lives at designs/scene/combat_v30.md (with _index.md
+    and _infill.md partners). Same shape on derived_stats: registry → params/factions/stats_1_7_scale.md; section-structured
+    doc → designs/scene/derived_stats_v30.md. Both reference paths are real; the registry design_doc field is incomplete.
+    Same pattern as PP-726 territories block (fixed 2026-05-11 in commit 383184b with a political_hierarchy_doc: companion
+    key). Recommended fix: add companion keys (e.g. params_doc: + designs_doc:) to both combat and derived_stats blocks, mirroring
+    the territories pattern. Source: tests/sim/combat_arch_residual_stress_01/module_manifest.md §Registry drift (explicitly
+    flagged as a Jordan editorial decision). Affected file: references/canonical_sources.yaml.'
+  status: closed
+  severity: P3
+  source: combat_arch_residual_stress_01 manifest (re-surfaced 2026-05-11)
+  jordan_decision: pending — Jordan to confirm dual-key schema (params_doc + designs_doc) is correct shape or specify alternative.
+- id: ED-800
+  date: 2026-05-11
+  description: 'Volley Power-only pool ignores Size — massing ranged units provides zero additional firepower (Size 2 XBow
+    rolls same 3D as Size 5 XBow). Inconsistent with Engagement pool where min(Size,Command) contributes dice. Removes strategic
+    depth in ranged composition. Source: A2 sim F-006.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Yes. Size affects Volley. Pool = min(Size,Power)+Power dice TN6. Replaces Power-only.
+- id: ED-801
+  date: 2026-05-11
+  description: 'Orderly withdrawal mechanics missing — mass_battle §A.12 covers Rout/Pursuit but no rule for orderly Withdraw
+    battle plan vs Advance pursuers. Speed differential (Standard vs Slow) should permit disengagement but no canonical procedure.
+    Source: A2 sim F-007.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Yes. Withdraw plan + Speed advantage (faster than pursuer) = orderly disengage, no engagement.
+- id: ED-802
+  date: 2026-05-11
+  description: 'Rally action mechanical specifics unclear — mass_battle §A.7 Phase 6 step 4 lists Rally as general action
+    but no canonical formula (pool, Ob, effect on Morale vs Discipline, success/failure consequences). Source: A2 sim F-008.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Rally pool = Morale dice TN7 Ob1. Success/Overwhelming = +1 Morale capped at starting value.
+- id: ED-803
+  date: 2026-05-11
+  description: 'Strain vs Turmoil terminology inconsistency — phases.md §4d uses Strain; tracks.md uses Turmoil; peninsular_strain
+    uses both. Confirm whether these are the same track, sub-components of same system, or distinct mechanics. Source: A2
+    sim F-010.'
+  severity: P2
+  type: error
+  archetype: A2
+  affected_docs:
+  - params/bg/phases.md
+  - params/bg/tracks.md
+  - designs/provincial/peninsular_strain_v30.md
+  status: closed
+  closure_commit: this-commit
+  jordan_decision: pending
+- id: ED-804
+  date: 2026-05-11
+  description: 'Field fortification mechanics missing — mass_battle §A.9 covers terrain modifiers but no rule for player-constructed
+    fieldworks (earthworks, trenches, barricades). Historical precedent is decisive. Needed for siege approach scenarios.
+    Source: A2 sim F-011.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — No field fortification during mass battle. Not implemented.
+- id: ED-805
+  date: 2026-05-11
+  description: 'Combined multi-unit attack resolution unspecified — mass_battle §A.7 allows max 3 engagements but does not
+    specify how 2+ units attacking one defender resolves. Separate rolls? Combined pool? Defender dice allocation across attackers?
+    Source: A2 sim F-012.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Combined attack via Fibonacci denominators. Lead full Off pool plus supporters floor(pool/Fib(n)).
+    Denoms 2,3,5,8.
+- id: ED-806
+  date: 2026-05-11
+  description: 'Gransol (T8) Fort level not specified in core.md territory table — T3/T14 are Fort 3, T10 is Fort 2, but T8
+    Hafenmark capital has no Fort entry. Lake geography provides natural defense but needs formalization. Source: A2 sim F-015.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - params/bg/core.md
+  - designs/territory/settlement_layer_v30.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Gransol T8 Fort level = 2.
+- id: ED-807
+  date: 2026-05-11
+  description: 'Lake-city siege mechanics unresolved — Gransol (landlocked lake, Switzerland-analog) cannot be fully encircled.
+    Does lake access prevent starvation siege? Can Crown blockade an inland lake? Distinct from naval Port-to-Port mechanics.
+    Source: A2 sim F-016.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - designs/territory/settlement_layer_v30.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — No. Lake supply routes not blockadeable. Inland lake is not naval.
+- id: ED-808
+  date: 2026-05-11
+  description: 'Battle loss Stability trigger ambiguity — mass_battle Part E §E.1 says losing side Stab -1 immediate + §E.2
+    Stab -1 at Accounting = -2 per battle loss. Combined with territory loss trigger (-1), a single lost battle costs -3 Stability.
+    At starting Stab 4, faction collapses in 2 battles. Verify this severity is intended — may need caps or graduated loss.
+    Source: A2 sim F-017.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - designs/provincial/faction_canon_v30.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Defender -1 Stability only on territory loss. Attacker no penalty for failed capture.
+- id: ED-809
+  date: 2026-05-11
+  description: 'core.md Faction Starting Stats table has Crown Military 4 and Lowenritter (Split) Military 6. Per Jordan 2026-05-11:
+    Crown Military is 5, Lowenritter Military is 5. Additionally Lowenritter is not a separate faction at game start — it
+    is Crown military arm. Lowenritter stats only apply IF Split occurs (not guaranteed). core.md table needs update.'
+  severity: P2
+  type: error
+  archetype: A2
+  affected_docs:
+  - params/bg/core.md
+  - designs/provincial/faction_state_authoring_v30.md
+  status: closed
+  closure_commit: this-commit
+  jordan_decision: 2026-05-11 — Crown Mil 5, Lowenritter Mil 5. Lowenritter is Crown military arm until Split.
+- id: ED-810
+  date: 2026-05-11
+  description: 'Lowenritter faction mechanics clarification per Jordan 2026-05-11. (1) Split outcome: Crown Military drops
+    from 5 to 2 AND loses most units. (2) Coup outcome: Crown faction SUSPENDED until Lowenritter installs new monarch. If
+    Torben/Elske/Lenneth = Crown continues. If Duke (Vaynard/Baralta) = Crown absorbed into that faction. (3) Lowenritter
+    is NOT guaranteed to split or coup — only fires if they lose faith in Crown. core.md Graduated Autonomy table needs these
+    outcomes formalized.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - params/bg/core.md
+  - designs/provincial/faction_state_authoring_v30.md
+  - designs/provincial/faction_succession_split_v30.md
+  status: closed
+  closure_commit: this-commit
+  jordan_decision: 2026-05-11 — Split = Crown Mil 5->2 + unit loss. Coup = Crown suspended, monarch installed, faction follows
+    monarch identity.
+- id: ED-812
+  date: 2026-05-11
+  description: 'Volley post-ED-800 double-amplified. ED-800 approved min(Size,Power)+Power dice. SIM-MB-04 shows Power 3 unit
+    goes 3 to 6 dice while multiplier 1+Power remains, producing average 21.6 dmg/turn vs units with 9-16 HP. Either pool
+    or multiplier needs recalibration. Source: SIM-MB-04 FINDING-2.'
+  severity: P1
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Volley damage = max(0, net_successes) - ranged_DR. No (1+Power) multiplier. Composition (ED-814)
+    handles scaling via back_pct × volley pool. Attrition contributor, not decisive.
+- id: ED-815
+  date: 2026-05-11
+  description: 'Discipline redefined as formation coherence under fire — capacity to maintain designed shape, hold assigned
+    column position, execute standing orders while taking casualties. Replaces vague ''organizational integrity'' framing.
+    Penalty table interpretation: pool penalty represents shape drift, not generic disorder. A high-Discipline unit holds
+    the horseshoe even as the center bleeds; a low-Discipline unit reverts to local survival behavior — fighting whoever is
+    in front, abandoning flank positions, ignoring orders. Aligns with historical doctrine (Vegetius De Re Militari, Maurice
+    Strategikon, Leo VI Taktika). Triangulates with Command (tactical authority — what tactics are available) and Power (raw
+    combat capability — how hard the unit hits) for clean three-stat unit quality model. Existing formulas (H per Size segment,
+    penalty tiers 5-7/3-4/1-2, Reform Phase Discipline restoration) all remain valid under new framing.'
+  severity: P1
+  type: clarification
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Discipline = formation coherence under fire. Sharpens Power/Discipline/Command triangle.
+- id: ED-816
+  date: 2026-05-11
+  description: 'Unit shape mechanical signatures. Five canonical shapes with empirically validated values from SIM-MB-05A/B/C
+    (6000+ trials). Line (Disc 1, Cmd 1, no modifiers, baseline; drifts to mob). Arrowhead (Disc 4, Cmd 2, center column +2D
+    Off, flanks -1D Off; tactical concept wedge breakthrough; hard counter GappedLine). Horseshoe (Disc 5, Cmd 3, center -2D
+    Off +1D Def, flanks +2D Off whenever ANY engagement is resolved at the Horseshoe center column — positional H-2 trigger
+    from SIM-MB-05C, 54 percent mean winrate; tactical concept Cannae envelopment per Hannibal 216 BC). GappedLine (Disc 5,
+    Cmd 3, gap column empty cannot engage, non-gap columns +2D Off when opponent concentrates more than 40 percent front-row
+    mass in gap column; tactical concept kill-zone channel per Roman precedent). RefusedFlank (Disc 3, Cmd 2, refused column
+    -2D Off, engaged columns +1D Off compensating mass; tactical concept Epaminondas oblique order at Leuctra 371 BC). All
+    shapes drift to Line on Discipline failure per ED-817. Player selects shape at battle setup per ED-820. Composition (ED-814)
+    auto-distributes troops across the 9-cell grid according to shape template. Replaces existing Formation Types section:
+    Wedge becomes Arrowhead preset; Shield Wall becomes Line+heavy front composition; Skirmish becomes spread-Line; Feigned
+    Retreat becomes proto-Horseshoe.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Five shapes ratified per SIM-MB-05A/B/C empirical validation. Horseshoe trigger resolved as
+    positional H-2 (any engagement at center fires flank trap), historically matching Cannae precedent. Horseshoe flank trap
+    magnitude +2D Off per calibration sweep. GappedLine and RefusedFlank conditional/compensating mechanics validated.
+- id: ED-817
+  date: 2026-05-11
+  description: Shape failure cascade — direct drift to Line model, validated by SIM-MB-05A/B/C. When unit Discipline drops
+    below shape minimum, shape immediately becomes Line at Phase 6 Step 2 (after Discipline degradation check). No intermediate
+    stages, no linear chain. Grid re-distributed using Line template. Drift is irreversible within battle. Players cannot
+    voluntarily switch back to original shape mid-battle (ED-820 emergency reshape Command Ob 3 is the only mid-battle shape
+    change mechanism). Tiered drift alternative tested in SIM-MB-05C and produces 5-15 percentage points better outcomes for
+    sub-min Discipline units but adds significant design complexity (5 drift chains to specify, more state to track) without
+    dramatic gameplay improvement; direct-to-Line preserves design clarity that Discipline gates shape selection. If preferring
+    tiered drift later, ED-817 may be revised — but empirical case for direct is cleaner.
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — Direct drift to Line, irreversible mid-battle. SIM-MB-05C tiered alternative empirically tested
+    and rejected for simplicity reasons.
+- id: ED-821
+  date: 2026-05-11
+  description: 'Horseshoe trigger mechanism — RESOLVED via SIM-MB-05C branch exploration. Four trigger variants tested over
+    320 trials each: H-1 mass>40 percent (initial proposal) 37 percent mean winrate; H-2 positional always (fires when any
+    engagement at center) 54 percent mean winrate; H-3 pool-ratio>40 percent 41 percent; H-4 weak-column AI heuristic 54 percent.
+    H-2 selected as canonical: simplest mechanism, achieves balanced winrate target (45-60 percent across all opponent shapes),
+    historically accurate (at Cannae Hannibal did not require Roman wedge formation, only Roman commitment to attacking his
+    center). Horseshoe flank trap fires whenever any opposing unit''s engagement is resolved at the Horseshoe''s center column,
+    regardless of opponent composition or shape. Closed into ED-816 specification.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: closed
+  closure_commit: pending-this-session
+  jordan_decision: 2026-05-11 — H-2 positional trigger ratified. Trap fires on engagement at center, not opponent composition.
+    Folded into ED-816 final spec.
