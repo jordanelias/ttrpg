@@ -1,217 +1,124 @@
 {
+  "sim": "SIM-MB-06-v8",
   "entries": [
     {
-      "value": "7",
-      "canonical": "params/bg/core.md \u00a7Dice System \u2014 TN=7"
+      "sim_variable": "BATTLEFIELD_SIZE",
+      "value": 25,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v5 baseline structural constants",
+      "quoted_text": "25\u00d725 battlefield"
     },
     {
-      "value": "3",
-      "canonical": "params/bg/core.md \u00a7Degree Table \u2014 OW floor=3 net successes"
+      "sim_variable": "UNIT_GRID_SIZE",
+      "value": 15,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v5 baseline structural constants",
+      "quoted_text": "15\u00d715 unit grids"
     },
     {
-      "value": "4",
-      "canonical": "params/bg/core.md \u2014 SEASONS_PER_YEAR=4; also UNIT_DISC_DEFAULT=4"
+      "sim_variable": "BUFFER_CELLS",
+      "value": 5,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v5 baseline structural constants",
+      "quoted_text": "5-cell buffer"
     },
     {
-      "value": "5",
-      "canonical": "conviction_track_v30 \u00a71 \u2014 PT_MAX=5"
+      "sim_variable": "SIDE_A_START_ROW",
+      "value": 15,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v5 baseline \u2014 side placement",
+      "quoted_text": "Side A footprint occupies rows 15-19 within active zone 5-19"
     },
     {
-      "value": "6",
-      "canonical": "params/factions/stats_1_7_scale.md \u2014 stat range includes 6"
+      "sim_variable": "SIDE_B_START_ROW",
+      "value": 5,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v5 baseline \u2014 side placement",
+      "quoted_text": "Side B footprint occupies rows 5-9 within active zone"
     },
     {
-      "value": "8",
-      "canonical": "victory_v30 \u00a7Church victory \u2014 CHURCH_TCV=8; also T8 Gransol garrison"
+      "sim_variable": "TROOPS_PER_TIER",
+      "value": {
+        "1": 100,
+        "2": 200,
+        "3": 400,
+        "4": 800
+      },
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v2 tier structural",
+      "quoted_text": "TROOPS_PER_TIER = {1: 100, 2: 200, 3: 400, 4: 800}"
     },
     {
-      "value": "9",
-      "canonical": "designs/world/geography_v30.md \u2014 T9 Himmelenger; also stat scale bound"
+      "sim_variable": "TROOPS_PER_SIZE",
+      "value": 100,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v2 tier structural",
+      "quoted_text": "structural \u2014 v2 tier"
     },
     {
-      "value": "12",
-      "canonical": "designs/world/geography_v30.md \u2014 T12 Sigurdshelm; also Varfell capital garrison"
+      "sim_variable": "ENCIRCLEMENT_PENALTY",
+      "value": 1,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "v4 tuning",
+      "quoted_text": "reduced from 2 per v4 finding"
     },
     {
-      "value": "13",
-      "canonical": "victory_v30 \u00a7HF victory \u2014 HF_TCV=13"
+      "sim_variable": "ANGLE_DEF_MOD",
+      "value": {
+        "FRONT": 0,
+        "FLANK": -1,
+        "REAR": -2
+      },
+      "canonical_source": "tests/sim/sim_mb_06_handoff_2026-05-12.md",
+      "section": "What works now \u2014 Engagement angle",
+      "quoted_text": "ANGLE_DEF_MOD = {FRONT: 0, FLANK: -1, REAR: -2} applied to defender pool"
     },
     {
-      "value": "14",
-      "canonical": "victory_v30 \u00a7Crown victory \u2014 CROWN_TCV=14"
+      "sim_variable": "POOL_VARIANT",
+      "value": "C-ii",
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "Phase C exploration",
+      "quoted_text": "C-ii: Keep both terms, floor at 50% of base \u00d7 engage_frac"
     },
     {
-      "value": "16",
-      "canonical": "designs/world/geography_v30.md \u2014 17 territories; 16 used in sim iteration"
+      "sim_variable": "TIP_SUPPORT_ENABLED",
+      "value": true,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "Phase E tip support constraint",
+      "quoted_text": "TIP_SUPPORT_ENABLED = True"
     },
     {
-      "value": "17",
-      "canonical": "designs/world/geography_v30.md \u2014 17 territories total"
+      "sim_variable": "TIP_SUPPORT_GAP",
+      "value": 2,
+      "canonical_source": "tests/sim/sim_mb_06_v7_manifest.md",
+      "section": "Phase E tip support constraint",
+      "quoted_text": "TIP_SUPPORT_GAP = 2 (default \u2014 no behavioral change for current matchups)"
     },
     {
-      "value": "19",
-      "canonical": "valoria_full_campaign_sim \u2014 2026-04-19 date stamp"
+      "sim_variable": "SUPPORT_WEIGHTS",
+      "value": {
+        "1": 1.0,
+        "2": 0.7,
+        "3": 0.5,
+        "4": 0.3
+      },
+      "canonical_source": "tests/sim/sim_mb_06_handoff_2026-05-12.md",
+      "section": "Jordan three-part design for tension F \u2014 (1) Cell support",
+      "quoted_text": "row 1 behind: full contribution; row 2 behind: diminishing (0.7?); row 3 behind: further diminishing (0.5?); row 4 behind: floor (0.3?)"
     },
     {
-      "value": "20",
-      "canonical": "params/bg/clocks.md \u2014 IP_START=20"
+      "sim_variable": "PUNCTURE_CAP",
+      "value": 3,
+      "canonical_source": "tests/sim/sim_mb_06_handoff_2026-05-12.md",
+      "section": "Jordan three-part design for tension F \u2014 (2) Puncture mechanism",
+      "quoted_text": "Bonus caps at +3D or similar"
     },
     {
-      "value": "21",
-      "canonical": "valoria_full_campaign_sim \u00a721 \u2014 Invade DA section number"
-    },
-    {
-      "value": "22",
-      "canonical": "victory_v30 \u00a7Dominion victory \u2014 DOMINION_TCV=22; also sim \u00a722 section"
-    },
-    {
-      "value": "23",
-      "canonical": "valoria_full_campaign_sim \u00a723 \u2014 Mass Seizure DA section"
-    },
-    {
-      "value": "24",
-      "canonical": "valoria_full_campaign_sim \u00a724 \u2014 Faction AI v2 section"
-    },
-    {
-      "value": "25",
-      "canonical": "valoria_full_campaign_sim \u00a725 \u2014 Tier A corpus section"
-    },
-    {
-      "value": "28",
-      "canonical": "params/bg/clocks.md \u2014 TC_BG=28 (CI starting value)"
-    },
-    {
-      "value": "30",
-      "canonical": "params/bg/tracks.md \u2014 clock threshold value"
-    },
-    {
-      "value": "40",
-      "canonical": "ci_political_v30 \u00a72.2 \u2014 CI milestone 40"
-    },
-    {
-      "value": "42",
-      "canonical": "structural \u2014 random.seed(42) for reproducibility"
-    },
-    {
-      "value": "50",
-      "canonical": "params/bg/tracks.md \u2014 mid-range clock value"
-    },
-    {
-      "value": "54",
-      "canonical": "valoria_sim.py \u2014 net calculation intermediate"
-    },
-    {
-      "value": "55",
-      "canonical": "ci_political_v30 \u00a72.2 \u2014 CI milestone 55"
-    },
-    {
-      "value": "60",
-      "canonical": "ci_political_v30 \u00a72.2 \u2014 CI milestone 60"
-    },
-    {
-      "value": "65",
-      "canonical": "ci_political_v30 \u00a72.2 \u2014 CI milestone 65"
-    },
-    {
-      "value": "70",
-      "canonical": "params/bg/clocks.md \u2014 RS threshold region"
-    },
-    {
-      "value": "72",
-      "canonical": "params/bg/clocks.md \u2014 RS_BG=72 (MS starting value)"
-    },
-    {
-      "value": "75",
-      "canonical": "values_master.yaml \u2014 Altonian Vanguard threshold IP=75"
-    },
-    {
-      "value": "80",
-      "canonical": "ci_political_v30 \u00a72.2 \u2014 CI milestone 80"
-    },
-    {
-      "value": "85",
-      "canonical": "params/bg/tracks.md \u2014 high clock threshold"
-    },
-    {
-      "value": "95",
-      "canonical": "params/bg/tracks.md \u2014 near-max clock threshold"
-    },
-    {
-      "value": "104",
-      "canonical": "valoria_full_campaign_sim \u2014 derived constant"
-    },
-    {
-      "value": "120",
-      "canonical": "valoria_full_campaign_sim \u2014 derived constant"
-    },
-    {
-      "value": "137",
-      "canonical": "valoria_full_campaign_sim \u2014 derived constant"
-    },
-    {
-      "value": "168",
-      "canonical": "params/factions/stats_1_7_scale.md \u00a7Unique Actions \u2014 PP-168"
-    },
-    {
-      "value": "200",
-      "canonical": "valoria_full_campaign_sim \u2014 season iteration cap"
-    },
-    {
-      "value": "256",
-      "canonical": "valoria_full_campaign_sim \u2014 Monte Carlo seed spread"
-    },
-    {
-      "value": "300",
-      "canonical": "valoria_full_campaign_sim \u2014 sim iteration bound"
-    },
-    {
-      "value": "402",
-      "canonical": "conviction_track_v30 \u2014 PP-402 (passive CI repealed)"
-    },
-    {
-      "value": "500",
-      "canonical": "valoria_full_campaign_sim \u2014 sim iteration bound"
-    },
-    {
-      "value": "645",
-      "canonical": "mass_battle_v30 \u2014 PP-645 (Accord damage)"
-    },
-    {
-      "value": "721",
-      "canonical": "ci_political_v30 \u00a77.1 \u2014 ED-721 (CI cap option A)"
-    },
-    {
-      "value": "999",
-      "canonical": "valoria_full_campaign_sim \u2014 sentinel/max value"
-    },
-    {
-      "value": "1701",
-      "canonical": "structural \u2014 not a game constant"
-    },
-    {
-      "value": "2026",
-      "canonical": "structural \u2014 date year 2026"
-    },
-    {
-      "value": "01",
-      "canonical": "structural \u2014 date month fragment"
-    },
-    {
-      "value": "04",
-      "canonical": "structural \u2014 date month fragment"
-    },
-    {
-      "value": "0625",
-      "canonical": "valoria_full_campaign_sim \u2014 probability constant 1/16"
-    },
-    {
-      "value": "125",
-      "canonical": "valoria_full_campaign_sim \u2014 probability constant 1/8"
-    },
-    {
-      "value": "242",
-      "canonical": "params/factions/stats_1_7_scale.md \u2014 PP-242 Church Influence advance"
+      "sim_variable": "PUNCTURE_BONUS_PER_SPEED_UNIT",
+      "value": 1,
+      "canonical_source": "tests/sim/sim_mb_06_handoff_2026-05-12.md",
+      "section": "Jordan three-part design for tension F \u2014 (2) Puncture mechanism",
+      "quoted_text": "Attacker gets +1D per (attacker_momentum - defender_momentum)"
     }
-  ],
-  "note": "Vocabulary sweep 2026-05-08 \u2014 bulk ledger for existing sim files"
+  ]
 }

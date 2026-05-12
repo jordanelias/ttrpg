@@ -91,3 +91,23 @@
 ## Handoff 2026-05-12
 - tests/sim/sim_mb_06_handoff_2026-05-12.md — v7→v8 handoff doc with tension F design (cell-support stacking + puncture momentum + cascading sub-phase resolution with facing rotation)
 
+## SIM-MB-06 v8 Summary (exploratory, tension F)
+- Date: 2026-05-12
+- Scope: tension F resolution — cell support stack (F-i) + puncture/momentum (F-ii)
+- F-i: support_stack_frac() — weighted cells behind contact row contribute to engage_frac
+  Weights: depth 1→1.0, 2→0.7, 3→0.5, 4→0.3; capped at 1.0
+  Root cause fix: engage_frac was penalizing narrow attackers (wedge gets same pool as 1-cell tip)
+- F-ii: puncture_bonus() — attacker speed differential at contact adds +1D/unit, cap +3D
+  last_turn_speed tracked per cell in Atom dataclass
+- Results (n=200, seed 0-199):
+  Arrowhead T3 vs Line T3: 0% → 48.5% ✓ TENSION F RESOLVED (target 40-60%)
+  Arrowhead T2 vs Line T2: 4% → 59% ✓
+  Cannae (Horseshoe vs Arrow T3): 62% → 55% ✓ in range (target 40-60%)
+  Line T3 mirror bias: 49/50 ✓
+  Arrowhead T4 vs Line T4: 33.5% A / 63% draws -- max_turns ceiling (lethality open)
+- Still open:
+  Horseshoe vs Line T3: 29.5% (target 40-60%) — separate investigation needed
+  Lethality: 9.5 turns at T3 vs 3-6 target — under-damage at scale
+  GappedLine vs Line: 72.7% — possibly over-tuned flank mod; not blocking
+- F-iii (cascading sub-phases) not implemented — unnecessary for T3 resolution
+- NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
