@@ -46,6 +46,26 @@
 - NOT YET propagated to canonical mechanics — ED-814 (composition grid) remains
   the canonical formulation. This atom model would supersede ED-814 if ratified.
 
+
+## SIM-MB-06 v6 Summary (exploratory, continued)
+- Date: 2026-05-12
+- Scope: bug hunt + architectural addition + Phase C pool formula
+- Critical fix: halt-cell bug (Side B halted wrong cells due to mirror not applied)
+  - Caused 80/20 Side A bias in mirror matches
+  - Fix in run_battle: halt logic uses oriented_pattern() throughout
+  - Verified: bias collapsed to ~52/48 at n=200 (within noise)
+- Architectural addition: per-cell facing + engagement angle (Jordan request)
+  - cell_facing(advance_dir) → (dr, dc) unit vector for each cell's front face
+  - engagement_angle classifies FRONT / FLANK / REAR per cosine of approach
+  - ANGLE_DEF_MOD = {FRONT: 0, FLANK: -1, REAR: -2} on defender pool
+  - Side effect: Cannae now works at 62% naturally — B-ii may be obsoleted
+- Phase C pool formula: C-ii validated (composite normalizes 5% → 38.3%)
+- Remaining tensions:
+  - E (tip support) — Arrowhead vs Line 0%, tip dies isolated
+  - Horseshoe vs Line 0% — separate investigation needed
+  - Lethality 9.7 turns vs 3-6 target — atoms under-damaging
+- NOT YET PROPAGATED to canonical mechanics.
+
 ## Next simulation priorities
 1. **SIM-MB-06**: rebuild 3v1 combined attack test harness; validate ED-823 Fibonacci recalibration options
 2. **Composition balance secondary measure**: test melee_pct Ob bonus / Volley pool cap / DR scaling (ED-825 candidate)
