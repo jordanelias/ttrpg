@@ -203,3 +203,35 @@
 - OPEN TENSIONS CARRIED FORWARD:
     M  H5 RF/HS — targeting issue (GL blocks converge; per-block targets needed)
     L  R1 Ranged — pool//2 insufficient; needs heavier penalty or volley rebalance
+
+## SIM-MB-06 v11 (2026-05-12, EXPLORATORY)
+- ARCHITECTURE EXTENSION on v10's bottom-up principle.
+- CHANGES:
+  - Atom -> Subunit rename (terminology alignment with Unit/Subunit/Cell)
+  - Per-cell octagon angle: each cell carries raw movement vector facing.
+    GREEN<45deg=0D, YELLOW 45-90deg=-1D, RED>=90deg=-2D.
+    Replaces centroid-to-centroid; _per_cell_angle_mod averages per side.
+  - Vector halt-at-contact: halt_before_enemy() post-movement pullback when
+    cell at distance 0 or at distance 1 with enemy in REAR zone.
+    target_r = er - fr (one step before enemy in facing direction).
+  - GappedLine gap skip removed: -99 sentinel deleted, geometry is mechanism.
+    role_at_contact half_w sizes corrected to match v10 equalized pattern.
+  - Ranged melee penalty: unit_type='ranged' in contact -> pool //= 2.
+- BATTERY RESULTS (n=500): 10/13 in-band, matching v10 count
+  IN-BAND (10/13):
+    H1 51.6%, H3 60.2%, H4 46.4%, H6 57.2%, H7 51.6%, H8 50.8%,
+    H9 45.2%, H10 36.6%, H11 49.0%, R3 45.8%
+  OUT-OF-BAND (2/13) + borderline:
+    M (H5): RefusedFlank/Horseshoe 37.4% — persistent from v10
+    L (R1): Ranged/Line 69.4% — improved from 91% but volley still dominant
+    Borderline H2: Arrow/Line 49.8% (0.2% below 50% floor)
+- TENSIONS CARRIED FORWARD:
+  - M (H5): RF cannot develop angle advantage before HS wings wrap.
+    Likely needs RF wing-pivot or refused-cell defensive bonus.
+  - L (R1): pool//2 halves melee but volley dominates. v12 options:
+    pool//3, reduce VOLLEY_MAX_RANGE, increase target DR vs ranged.
+  - H7 borderline: both GL blocks target shared centroid -> convergence
+    closes gap. Needs per-subunit targeting (each block targets section).
+- DRIFT RISK: octagon_angle / cell_facing_vec is new code; needs Jordan review
+  before promotion from EXPLORATORY. Pool sensitivity empirical.
+- NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
