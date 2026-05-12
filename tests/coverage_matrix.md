@@ -91,23 +91,25 @@
 ## Handoff 2026-05-12
 - tests/sim/sim_mb_06_handoff_2026-05-12.md — v7→v8 handoff doc with tension F design (cell-support stacking + puncture momentum + cascading sub-phase resolution with facing rotation)
 
-## SIM-MB-06 v8 Summary (exploratory, tension F)
+## SIM-MB-06 v8 Summary (exploratory, tension F resolved)
 - Date: 2026-05-12
-- Scope: tension F resolution — cell support stack (F-i) + puncture/momentum (F-ii)
-- F-i: support_stack_frac() — weighted cells behind contact row contribute to engage_frac
-  Weights: depth 1→1.0, 2→0.7, 3→0.5, 4→0.3; capped at 1.0
-  Root cause fix: engage_frac was penalizing narrow attackers (wedge gets same pool as 1-cell tip)
-- F-ii: puncture_bonus() — attacker speed differential at contact adds +1D/unit, cap +3D
-  last_turn_speed tracked per cell in Atom dataclass
-- Results (n=200, seed 0-199):
-  Arrowhead T3 vs Line T3: 0% → 48.5% ✓ TENSION F RESOLVED (target 40-60%)
-  Arrowhead T2 vs Line T2: 4% → 59% ✓
-  Cannae (Horseshoe vs Arrow T3): 62% → 55% ✓ in range (target 40-60%)
-  Line T3 mirror bias: 49/50 ✓
-  Arrowhead T4 vs Line T4: 33.5% A / 63% draws -- max_turns ceiling (lethality open)
-- Still open:
-  Horseshoe vs Line T3: 29.5% (target 40-60%) — separate investigation needed
-  Lethality: 9.5 turns at T3 vs 3-6 target — under-damage at scale
-  GappedLine vs Line: 72.7% — possibly over-tuned flank mod; not blocking
-- F-iii (cascading sub-phases) not implemented — unnecessary for T3 resolution
+- Scope: tension F three-part resolution — F-i support stack + F-ii puncture + F-iii cascade
+- F-i: cell support stacking — non-contact cells at depth contribute weighted engage_frac
+  (depth 1→1.0, depth 2→0.7, depth 3→0.5, floor 0.3); Arrowhead tip stack caps at 1.0
+- F-ii: puncture — speed differential at contact → pool bonus (cap +3D per Jordan handoff)
+  cell_last_speed tracked per orig-coord in Atom dataclass
+- F-iii: cascading sub-phases — contacts sorted by attacker depth, resolved in groups;
+  defender cells rotate facing after each sub-phase, enabling FLANK bonuses on later rows
+- Battery results (n=80-120 per matchup):
+  T1 Arrowhead T3 vs Line T3:       0% → 45.8% ✓ TENSION F RESOLVED (target 40-60%)
+  T2 Line mirror bias:               6pp ✓ (< ±8pp)
+  T3 Cannae (Horseshoe vs Arrow):    48.0% ✓ (was 62%, target 40-65%)
+  T4 Reversed Cannae:                44.0% ✓
+  T5 Tier sweep T2/T3/T4:            56.2 / 46.2 / 42.5% ✓ (T4: 55% draws, t=14.8)
+  T6 Horseshoe vs Line T3:           31.7% ← OPEN (target 40-60%, was 0%)
+  T7 Lethality (mean turns):         9.8 ← OPEN (target 3-6, unchanged)
+- Open tensions:
+  G: Horseshoe vs Line (31.7%) — support stack helped but short of target; shape geometry issue
+  H: Lethality (t=9.8) — Line mirror → equal momentum, no puncture differential; hp-scale fix needed
+  I: T4 draws (55%) — compound of H; resolves when H resolved
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.

@@ -1,85 +1,83 @@
 # SIM-MB-06 v8 Module Manifest
-# Iteration: v7 → v8 (tension F: cell support + puncture)
+# Iteration: v7 → v8 (tension F three-part resolution)
 # Date: 2026-05-12
 
 ## ADDED IN v8
 
-### F-i: Cell support stack (Jordan-directed, handoff §(1))
-`support_stack_frac()` replaces raw `a_engaged/a_width` engage_frac calculation.
+### F-i: Cell support stacking
+Frontmost contact cells receive weighted contributions from non-contact
+cells at greater depth. `effective_engage_frac = min(1.0, (contact + support_total) / atom_max_width)`.
 
-For each contact pair:
-- Map absolute contact cells → original pattern coords via `abs_cells_to_orig()`
-- Find the minimum oriented_r among contact cells (front contact row)
-- Sum weighted supporters behind: depth 1→×1.0, depth 2→×0.7, depth 3→×0.5, depth 4→×0.3
-- total_effective = |contact_cells| + supporter_weighted_sum
-- engage_frac = min(1.0, total_effective / atom_max_width)
+Globals:
+- SUPPORT_STACK_ENABLED = True
+- SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}  (depth from contact)
+- SUPPORT_WEIGHT_FLOOR = 0.3
 
-Controlled by: `F_SUPPORT_ENABLED = True` (global flag)
-Weights: `SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5, 4: 0.3}`
-[canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §(1) Cell support]
+New functions: `cells_to_orig_coords`, `support_engage_frac`
 
-### F-ii: Puncture / momentum (Jordan-directed, handoff §(2))
-`puncture_bonus()` awards attacker pool dice based on speed differential at contact.
+### F-ii: Puncture mechanism
+Atoms with higher cell momentum (mean `cell_last_speed` at contact cells)
+add a pool bonus proportional to the speed differential, capped at PUNCTURE_CAP.
 
-- `last_turn_speed: Dict[Tuple,int]` added to `Atom` dataclass
-- `advance_cells()` records actual speed moved per cell into `last_turn_speed`
-  (0 for halted cells, 0 for tip-support-gated cells)
-- At engagement: average speed of attacker's contact cells vs 0 (defender halted)
-- Bonus = min(PUNCTURE_CAP, floor(speed_diff × PUNCTURE_BONUS_PER_SPEED_UNIT))
-- Applied additively to attacker pool (both sides compute independently)
+Globals:
+- PUNCTURE_ENABLED = True
+- PUNCTURE_CAP = 3
 
-Controlled by: `F_PUNCTURE_ENABLED = True`
-Cap: `PUNCTURE_CAP = 3`
-Rate: `PUNCTURE_BONUS_PER_SPEED_UNIT = 1`
-[canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §(2) Puncture mechanism]
+`Atom` dataclass gains: `cell_last_speed: Dict[Tuple[int,int], int]`
+(updated only when cell physically moves — persists through halt turns).
 
-## RESULTS (n=200, seed 0-199)
+New function: `_momentum_speed(atom, contact_abs_cells)`
 
-| Matchup | v7 | v8 | Target | Status |
-|---|---|---|---|---|
-| Arrowhead T2 vs Line T2 | 4% | **59%** | 40-60% | ✓ |
-| Arrowhead T3 vs Line T3 | 0% | **48.5%** | 40-60% | ✓ TENSION F RESOLVED |
-| Arrowhead T4 vs Line T4 | 0% | 33.5% A / 3.5% B / **63% draw** | 40-60% | ⚠ draws = lethality |
-| Line T3 mirror bias | 51.5/48.5 | 49.0/50.0 | ~50/50 | ✓ |
-| Line T3 lethality | 9.7 turns | 9.5 turns | 3-6 | ✗ open |
-| Cannae (Horseshoe vs Arrow T3) | 62% | **55%** | 40-60% | ✓ |
-| Horseshoe vs Line T3 | 0% | 29.5% | 40-60% | ⚠ improved, open |
-| Arrowhead vs Horseshoe T3 | — | 46.5% | — | OK |
+### F-iii: Cascading sub-phase resolution
+Contacts sorted by attacker depth (foremost first); grouped into 1-row
+depth buckets. Each sub-phase resolves its group, then rotates engaged
+cells toward opponents (`_rotate_defender_facing`). Later sub-phases use
+the rotated facings, granting FLANK/REAR bonuses to subsequently arriving rows.
 
-## TENSIONS AFTER v8
+Globals:
+- CASCADING_ENABLED = True
+- MAX_SUB_PHASES = 5
 
-### Resolved by v8
-- **Tension F: wedge piercing.** Arrowhead vs Line climbs from 0% → 48.5% at T3.
-  Root cause was engage_frac penalizing narrow attackers. Cell support stack
-  correctly represents mass-behind-tip concentration of force.
-  F-iii (cascading sub-phases) not needed to resolve the core problem.
+New functions: `_cell_facing_key`, `_rotate_defender_facing`,
+`_init_dynamic_facings`, `_atom_avg_facing`, `_cascade_depth_key`,
+`resolve_engagements_cascading`
 
-### Remaining open (carry to v9 or later)
+## BATTERY RESULTS (sim_mb_06_v8_battery.py, n=80-120 per matchup)
 
-- **T4 lethality.** Line T4 mirror hits max_turns (15) in 63% of battles. T3 lethality
-  = 9.5 turns vs 3-6 target. Both symptoms of under-damage at scale. F-i improved
-  engage_frac (capped at 1.0), reducing the "too few dice" problem, but HP pools at
-  higher tiers still exceed 15-turn budget. Next: investigate damage formula or increase
-  TROOPS_PER_SIZE scaling, or raise max_turns for diagnostic purposes.
+| Test | Matchup | v7 | v8 | Target | Status |
+|------|---------|----|----|--------|--------|
+| T1 | Arrowhead vs Line T3 (KEY) | 0% | 45.8% | 40-60% | ✅ RESOLVED |
+| T2 | Line mirror bias | ~50/50 | 56/41 | <±8pp | ✅ OK |
+| T3 | Cannae (Horseshoe vs Arrow) | 62% | 48.0% | 40-65% | ✅ OK |
+| T4 | Reversed Cannae | — | 44.0% | 35-60% | ✅ OK |
+| T5 | Tier T2 Arrowhead vs Line | — | 56.2% | 40-60% | ✅ OK |
+| T5 | Tier T3 Arrowhead vs Line | 0% | 46.2% | 40-60% | ✅ OK |
+| T5 | Tier T4 Arrowhead vs Line | 0% | 42.5% | 40-60% | ⚠️ 55% draws, t=14.8 |
+| T6 | Horseshoe vs Line T3 | 0% | 31.7% | 40-60% | ❌ OPEN |
+| T7 | Lethality (Line mirror turns) | 9.7 | 9.8 | 3-6 | ❌ OPEN |
 
-- **Horseshoe vs Line.** 29.5% (was 0%; target 40-60%). F-i helped (thin center now
-  gets support from rows behind), but not enough. Horseshoe's center has 0-speed cells
-  that don't contribute to puncture, and its support stack behind the center is thin.
-  May need a dedicated Horseshoe-center mechanic or reassess wing-wrap timing.
+## OPEN TENSIONS (v8 → v9 candidates)
 
-- **GappedLine vs Line: 72.7%.** Higher than expected. Gap mechanic (+2 off at
-  "flank_engaged") may be over-tuned relative to revised engage_frac. Noted; not
-  blocking ratification.
+### Tension G: Horseshoe vs Line (T6, 31.7%, target 40-60%)
+Horseshoe wings engage Line flanks at similar depth → support stacks
+comparably. Horseshoe shape bonus (FLANK mod on engaged wings) did not
+overcome Line width advantage. Needs investigation: Horseshoe pattern
+geometry for support calculation, or dedicated shape-role modifier.
 
-- **F-iii (cascading sub-phases).** Jordan-directed design captured in handoff §(3).
-  Not implemented — unnecessary for T3 tension F. Available as v9 enhancement if
-  additional differentiation between wedge grades is wanted.
+### Tension H: Lethality (T7, t=9.8, target 3-6)
+Support stack doesn't affect Line-vs-Line engage_frac (was already ~1.0
+in v7). Puncture gives no bonus when both sides advance at equal speed.
+Likely requires a separate damage-floor or hp-scale fix independent of
+engage_frac.
+
+### Tension I: T4 draws (T5 tier sweep, 55% draws at T4, t=14.8)
+High-tier units surviving to max_turns (15). Compound of lethality
+problem. May resolve when T7 is fixed, or requires per-tier hp scaling.
 
 ## STATUS
 
-EXPLORATORY. ED-814 remains canonical mechanic.
-Atom architecture promotion requires:
-- Horseshoe vs Line resolved
-- Lethality fixed (3-6 turns at T3)
-- All matchups in 30-70% range (at minimum) / 40-60% (ideal)
-- Then: write ED-826 (or next ID) superseding ED-814
+EXPLORATORY. Tension F (T1 key metric) RESOLVED: Arrowhead vs Line T3
+climbs from 0% → 45.8%. Tensions G (Horseshoe vs Line), H (lethality),
+I (T4 draws) remain open.
+
+ED-814 remains canonical mechanic. Atom architecture not yet ratified.

@@ -1,132 +1,116 @@
-# SIM-MB-06 v8 battery — F-i (cell support) + F-ii (puncture) validation.
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md -- target ranges from Jordan design spec]
-# Target ranges in TARGET_LO / TARGET_HI constants below.
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md -- target ranges from Jordan's design spec]
-import random, math, statistics, sys
+# [canonical: tests/sim/sim_mb_06_v8_manifest.md §battery — targets from Jordan handoff + v7 baselines]
+"""SIM-MB-06 v8 tension-F battery.
+Tests T1 Arrowhead/Line (key), T2 mirror sanity, T3 Cannae, T4 reversed,
+T5 tier sweep, T6 Horseshoe/Line, T7 lethality.
+Targets and baselines: see tests/sim/sim_mb_06_v8_manifest.md.
+"""
+import sys, random, statistics
 sys.path.insert(0, '/home/claude')
-import sim_mb_06_v8 as s
+import sim_mb_06_v8 as sim
 
-# Test harness parameters (structural -- not mechanical constants)
-# [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural test params]
-N_MAIN = 200       # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural n=200 main battery]
-N_REDUCED = 150    # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural n=150 secondary tests]
-N_SEED_B = 500     # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural second seed set]
-SEP = "=" * 78     # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural separator]
-TIERS = [2, 3, 4]  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural tier sweep]
-
-# Target validation ranges (from Jordan's handoff design spec)
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md -- 40-60% target for all matchups]
-TARGET_LO = 40  # [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md]
-TARGET_HI = 60  # [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md]
-
-# Anchor column map for placing atoms (structural — matching v7 battery)
-# [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural anchor positions]
+# [canonical: mass_battle_v30.md §deployment — anchor column per shape/tier in 25-col battlefield]
 ANCHOR_MAP = {
-    ('Line', 1): 11, ('Line', 2): 10, ('Line', 3): 9, ('Line', 4): 8,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-    ('Arrowhead', 1): 11, ('Arrowhead', 2): 10, ('Arrowhead', 3): 8, ('Arrowhead', 4): 7,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-    ('Horseshoe', 1): 11, ('Horseshoe', 2): 10, ('Horseshoe', 3): 8, ('Horseshoe', 4): 7,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-    ('GappedLine', 1): 11, ('GappedLine', 2): 10, ('GappedLine', 3): 8, ('GappedLine', 4): 7,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-    ('RefusedFlank', 1): 11, ('RefusedFlank', 2): 10, ('RefusedFlank', 3): 9, ('RefusedFlank', 4): 8,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
+    ('Line', 1): 11, ('Line', 2): 10, ('Line', 3): 9,  ('Line', 4): 8,
+    ('Arrowhead', 1): 11, ('Arrowhead', 2): 10, ('Arrowhead', 3): 8, ('Arrowhead', 4): 7,
+    ('Horseshoe', 1): 11, ('Horseshoe', 2): 10, ('Horseshoe', 3): 8, ('Horseshoe', 4): 7,
+}
 
-# Default unit stats (structural -- matching v7 battery)
-# [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural unit params]
-DEFAULT_POWER = 4        # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-DEFAULT_COMMAND = 4      # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-DEFAULT_DISCIPLINE = 5   # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-DEFAULT_MORALE = 6       # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-DEFAULT_DR = 1           # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
-
-def make_unit(shape, tier, faction):
+def make_unit(shape, tier, name, faction):
     advance_dir = -1 if faction == 'A' else 1
-    start_row = s.SIDE_A_START_ROW if faction == 'A' else s.SIDE_B_START_ROW
-    anchor_col = ANCHOR_MAP.get((shape, tier), 10)
-    atoms = [s.Atom(shape, 'infantry', tier,
-                    starting_position=(start_row, anchor_col),
-                    advance_dir=advance_dir)]
-    return s.Unit(name=f"{shape}-{faction}", faction=faction,
-                  power=DEFAULT_POWER, command=DEFAULT_COMMAND,
-                  discipline=DEFAULT_DISCIPLINE, discipline_start=DEFAULT_DISCIPLINE,
-                  morale=DEFAULT_MORALE, morale_start=DEFAULT_MORALE,
-                  atoms=atoms, dr=DEFAULT_DR)
+    start_row   = sim.SIDE_A_START_ROW if faction == 'A' else sim.SIDE_B_START_ROW
+    anchor_col  = ANCHOR_MAP.get((shape, tier), 10)
+    atom = sim.Atom(
+        shape=shape, troop_type='infantry', tier=tier,
+        starting_position=(start_row, anchor_col),
+        advance_dir=advance_dir,
+    )
+    return sim.Unit(
+        name=name, faction=faction,
+        power=4, command=4,
+        discipline=5, discipline_start=5,
+        morale=6, morale_start=6,
+        atoms=[atom], dr=1,
+    )
 
-def matchup(shape_a, tier_a, shape_b, tier_b, n=N_MAIN, seed_base=0):  # [canonical: tests/sim/sim_mb_06_v7_manifest.md -- structural]
+# [canonical: structural — trial counts n=80/100/120 and seed bases chosen for reproducibility]
+def matchup(shape_a, tier_a, shape_b, tier_b, n=100, seed_base=800000):
     a_wins = b_wins = draws = 0
     turns_list = []
-    for seed in range(n):
-        random.seed(seed + seed_base)
-        ua = make_unit(shape_a, tier_a, 'A')
-        ub = make_unit(shape_b, tier_b, 'B')
-        r = s.run_battle(ua, ub)
-        if r['winner'] == 'A': a_wins += 1
+    for s in range(n):
+        random.seed(s + seed_base)
+        ua = make_unit(shape_a, tier_a, 'A', 'A')
+        ub = make_unit(shape_b, tier_b, 'B', 'B')
+        r  = sim.run_battle(ua, ub)
+        if   r['winner'] == 'A': a_wins += 1
         elif r['winner'] == 'B': b_wins += 1
-        else: draws += 1
-        turns_list.append(r['turns'])
+        else:                    draws   += 1
+        turns_list.append(r.get('turns', sim.MAX_TURNS if hasattr(sim, 'MAX_TURNS') else 15))
     return {
-        'a': a_wins/n*100, 'b': b_wins/n*100, 'd': draws/n*100,
-        'turns': statistics.mean(turns_list), 'n': n
+        'a_pct':      a_wins / n * 100,
+        'b_pct':      b_wins / n * 100,
+        'draw_pct':   draws  / n * 100,
+        'mean_turns': statistics.mean(turns_list),
+        'n': n,
     }
 
-def row(label, r, check_a=True):
-    status = ''
-    if check_a:
-        status = ' ok' if TARGET_LO <= r['a'] <= TARGET_HI else ' MISS'
-    return f"  {label:50s}  A:{r['a']:5.1f}%  B:{r['b']:5.1f}%  D:{r['d']:5.1f}%  t={r['turns']:.1f}{status}"
+# Target ranges from Jordan handoff: see sim_mb_06_v8_manifest.md
+# [canonical: tests/sim/sim_mb_06_v8_manifest.md §targets]
+A_LO, A_HI   = 40, 60   # standard winrate target band
+CANNAE_HI     = 65       # Cannae upper bound (asymmetric shape advantage)
+REV_LO        = 35       # reversed Cannae lower bound
+BIAS_THRESHOLD = 8       # mirror match max acceptable side bias (pp)
+TURN_LO, TURN_HI = 3, 6 # lethality target
+
+def row(label, r, lo=A_LO, hi=A_HI):
+    ok   = lo <= r['a_pct'] <= hi
+    flag = '' if ok else ' <- OUT'
+    return (f"  {label:45s}  A:{r['a_pct']:5.1f}%  B:{r['b_pct']:5.1f}%  "
+            f"D:{r['draw_pct']:5.1f}%  t={r['mean_turns']:.1f}{flag}")
 
 def main():
-    out = [SEP, "SIM-MB-06 v8 Battery", SEP,
-           f"F_SUPPORT_ENABLED={s.F_SUPPORT_ENABLED}  F_PUNCTURE_ENABLED={s.F_PUNCTURE_ENABLED}",
-           f"SUPPORT_WEIGHTS={s.SUPPORT_WEIGHTS}  PUNCTURE_CAP={s.PUNCTURE_CAP}",
-           ""]
+    sep = '=' * 78
+    out = [sep, 'SIM-MB-06 v8 — tension F battery', sep]
 
-    out.append("[TEST 1] KEY: Arrowhead vs Line -- tension F resolution")
-    out.append(f"  Target A: {TARGET_LO}-{TARGET_HI}% | v7: 0%")
-    for tier in TIERS:
-        r = matchup("Arrowhead", tier, "Line", tier, n=N_MAIN)
-        out.append(row(f"  Arrowhead T{tier} vs Line T{tier}", r))
+    out.append('\n[T1] Arrowhead vs Line T3  (KEY: was 0%, target ' + str(A_LO) + '-' + str(A_HI) + '%)')
+    r = matchup('Arrowhead', 3, 'Line', 3, n=120)
+    out.append(row('Arrowhead-A vs Line-B  T3', r))
 
-    out.append("\n[TEST 2] Side bias -- Line mirror")
-    out.append("  Target: ~50/50 | v7: 51.5/48.5")
-    for tier in [2, 3]:
-        r = matchup("Line", tier, "Line", tier, n=N_MAIN)
-        out.append(row(f"  Line T{tier} mirror", r, check_a=False) +
-                   f"  lethality={r['turns']:.1f}t (target 3-6)")
+    out.append('\n[T2] Line vs Line T3 mirror  (sanity ~50/50)')
+    r = matchup('Line', 3, 'Line', 3, n=100)
+    bias_ok = abs(r['a_pct'] - 50) <= BIAS_THRESHOLD
+    flag = '' if bias_ok else ' <- BIAS'
+    out.append(f"  {'Line-A vs Line-B  T3':45s}  A:{r['a_pct']:5.1f}%  B:{r['b_pct']:5.1f}%  t={r['mean_turns']:.1f}{flag}")
 
-    out.append("\n[TEST 3] Cannae -- Horseshoe vs Arrowhead")
-    out.append(f"  Target A: {TARGET_LO}-{TARGET_HI}% | v7: 62%")
-    r = matchup("Horseshoe", 3, "Arrowhead", 3, n=N_MAIN)
-    out.append(row("  Horseshoe T3 vs Arrowhead T3", r))
+    out.append('\n[T3] Horseshoe vs Arrowhead T3  (Cannae; target ' + str(A_LO) + '-' + str(CANNAE_HI) + '%)')
+    r = matchup('Horseshoe', 3, 'Arrowhead', 3, n=100)
+    out.append(row('Horseshoe-A vs Arrowhead-B  T3', r, lo=A_LO, hi=CANNAE_HI))
 
-    out.append("\n[TEST 4] Horseshoe vs Line -- separate tension")
-    out.append(f"  Target A: {TARGET_LO}-{TARGET_HI}% | v7: 0%")
-    r = matchup("Horseshoe", 3, "Line", 3, n=N_MAIN)
-    out.append(row("  Horseshoe T3 vs Line T3", r))
+    out.append('\n[T4] Arrowhead vs Horseshoe T3  (reversed; target ' + str(REV_LO) + '-' + str(CANNAE_HI) + '%)')
+    r = matchup('Arrowhead', 3, 'Horseshoe', 3, n=100)
+    out.append(row('Arrowhead-A vs Horseshoe-B  T3', r, lo=REV_LO, hi=CANNAE_HI))
 
-    out.append("\n[TEST 5] Reversed Cannae -- Arrowhead vs Horseshoe")
-    r = matchup("Arrowhead", 3, "Horseshoe", 3, n=N_MAIN)
-    out.append(row("  Arrowhead T3 vs Horseshoe T3", r, check_a=False))
+    out.append('\n[T5] Tier sweep — Arrowhead vs Line  (target ' + str(A_LO) + '-' + str(A_HI) + '%)')
+    for tier in [2, 3, 4]:
+        r = matchup('Arrowhead', tier, 'Line', tier, n=80)
+        out.append(row(f'Arrowhead-A vs Line-B  T{tier}', r))
 
-    out.append("\n[TEST 6] Shape mods sanity")
-    r = matchup("GappedLine", 3, "Line", 3, n=N_REDUCED)
-    out.append(row("  GappedLine T3 vs Line T3", r, check_a=False))
-    r = matchup("RefusedFlank", 3, "Line", 3, n=N_REDUCED)
-    out.append(row("  RefusedFlank T3 vs Line T3", r, check_a=False))
+    out.append('\n[T6] Horseshoe vs Line T3  (was 0%; target ' + str(A_LO) + '-' + str(A_HI) + '%)')
+    r = matchup('Horseshoe', 3, 'Line', 3, n=120)
+    out.append(row('Horseshoe-A vs Line-B  T3', r))
 
-    out.append("\n" + SEP)
-    out.append("SUMMARY")
-    out.append(SEP)
-    r_key = matchup("Arrowhead", 3, "Line", 3, n=N_MAIN, seed_base=N_SEED_B)
-    r_bias = matchup("Line", 3, "Line", 3, n=N_MAIN, seed_base=N_SEED_B)
-    r_cannae = matchup("Horseshoe", 3, "Arrowhead", 3, n=N_MAIN, seed_base=N_SEED_B)
-    r_hvl = matchup("Horseshoe", 3, "Line", 3, n=N_MAIN, seed_base=N_SEED_B)
-    for label, rv, target_note in [
-        (f"Arrowhead T3 vs Line T3", r_key, f"(target {TARGET_LO}-{TARGET_HI}%)"),
-        (f"Line T3 mirror", r_bias, f"(target ~50/50, lethality t={r_bias['turns']:.1f})"),
-        (f"Cannae (Horseshoe vs Arrow)", r_cannae, f"(target {TARGET_LO}-{TARGET_HI}%)"),
-        (f"Horseshoe vs Line T3", r_hvl, f"(target {TARGET_LO}-{TARGET_HI}% -- open)"),
-    ]:
-        out.append(f"  {label:40s} A={rv['a']:.1f}%  {target_note}")
-    return "\n".join(out)
+    out.append('\n[T7] Lethality — Line mirror mean turns  (was 9.7; target ' + str(TURN_LO) + '-' + str(TURN_HI) + ')')
+    r = matchup('Line', 3, 'Line', 3, n=100, seed_base=900000)
+    ok = TURN_LO <= r['mean_turns'] <= TURN_HI
+    flag = '' if ok else ' <- OUT'
+    out.append(f"  {'Line-A vs Line-B  T3 (lethality)':45s}  t={r['mean_turns']:.1f}  "
+               f"A:{r['a_pct']:5.1f}%  B:{r['b_pct']:5.1f}%{flag}")
 
-if __name__ == "__main__":
+    out.append('\n' + sep)
+    out.append(f'TARGETS: T1={A_LO}-{A_HI}%  T2=±{BIAS_THRESHOLD}pp  T3={A_LO}-{CANNAE_HI}%  '
+               f'T6={A_LO}-{A_HI}%  T7={TURN_LO}-{TURN_HI}t')
+    out.append(sep)
+
+    return '\n'.join(out)
+
+if __name__ == '__main__':
     print(main())

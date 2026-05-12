@@ -1,69 +1,71 @@
-# SIM-MB-06 v8 — Tension F implementation: cell support + puncture
-# Session: 2026-05-12 | v7 + F-i (cell support stack) + F-ii (puncture/momentum)
+# SIM-MB-06 v8 — Tension F: wedge piercing
+# Session: 2026-05-12 | Iteration v7 -> v8
+# [canonical: structural — Jordan handoff]
 #
-# v8 changes over v7:
-#   F-i: support_stack_frac() — cells behind contact zone contribute weighted engage_frac
-#        weights: depth 1→1.0, 2→0.7, 3→0.5, 4→0.3; capped at 1.0
-#        [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §F-i]
-#   F-ii: puncture_bonus() — attacker speed differential adds pool dice, cap +3D
-#        last_turn_speed tracked per cell in Atom; halted cells = 0
-#        [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §F-ii]
-#
-# Control flags: F_SUPPORT_ENABLED, F_PUNCTURE_ENABLED — can toggle independently
+# v8 changes (tension F three-part design):
+#   F-i:  Cell support stacking — cells behind contact contribute to engage_frac
+#   F-ii: Puncture mechanism — momentum bonus on speed differential at contact
+#   F-iii:Cascading sub-phase resolution — facing rotation creates sequential flank exposure
 
 import random, math, statistics, time
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
 
-BATTLEFIELD_SIZE = 25     # [canonical: tests/sim/sim_mb_06_v7_manifest.md — 25×25 battlefield]
-UNIT_GRID_SIZE = 15       # [canonical: tests/sim/sim_mb_06_v7_manifest.md — 15×15 unit grids]
-BUFFER_CELLS = 5          # [canonical: tests/sim/sim_mb_06_v7_manifest.md — 5-cell buffer]
-SIDE_A_START_ROW = 15     # [canonical: tests/sim/sim_mb_06_v7_manifest.md — Side A rows 15-19]
-SIDE_B_START_ROW = 5      # [canonical: tests/sim/sim_mb_06_v7_manifest.md — Side B rows 5-9]
+# [canonical: mass_battle_v30.md §map — Jordan design: 25×25 grid, 5-cell buffer per side]
+BATTLEFIELD_SIZE = 25
+# [canonical: mass_battle_v30.md §units — Jordan design: 15×15 cell unit grid fits T4 pattern (9 cols wide)]
+UNIT_GRID_SIZE = 15
+BUFFER_CELLS = 5
+# [canonical: mass_battle_v30.md §deployment — Start rows place units at buffer boundary]
+SIDE_A_START_ROW = 15
+SIDE_B_START_ROW = 5
 
-POOL_VARIANT = "C-ii"     # [canonical: tests/sim/sim_mb_06_v7_manifest.md — Phase C exploration]
-TIP_SUPPORT_ENABLED = True # [canonical: tests/sim/sim_mb_06_v7_manifest.md — Phase E exploration]
-TIP_SUPPORT_GAP = 2        # [canonical: tests/sim/sim_mb_06_v7_manifest.md — X=2 default]
+POOL_VARIANT = "C-ii"
 
-# v8 control flags
-F_SUPPORT_ENABLED = True   # F-i: cell support stack [canonical: handoff §F-i]
-F_PUNCTURE_ENABLED = True  # F-ii: puncture/momentum [canonical: handoff §F-ii]
+TIP_SUPPORT_ENABLED = True
+TIP_SUPPORT_GAP = 2
 
-# F-i weights by depth behind contact row
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md — row weights 1.0/0.7/0.5/0.3]
-SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5, 4: 0.3}
-
-# F-ii: puncture bonus per speed differential unit; cap
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md — +1D/speed-unit, cap +3D]
-PUNCTURE_BONUS_PER_SPEED_UNIT = 1
-PUNCTURE_CAP = 3           # [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md]
-
-TROOPS_PER_TIER = {1: 100, 2: 200, 3: 400, 4: 800}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md]
+# [canonical: mass_battle_v30.md §Scale — T1=100(1 size), T2=200(2), T3=400(4), T4=800(8), base 100]
+TROOPS_PER_TIER = {1: 100, 2: 200, 3: 400, 4: 800}
 TROOPS_PER_SIZE = 100
-ENCIRCLEMENT_PENALTY = 1   # [canonical: tests/sim/sim_mb_06_v7_manifest.md — reduced from 2 per v4]
+ENCIRCLEMENT_PENALTY = 1
 
+# F-i: Cell support stacking [canonical: Jordan handoff §(1)]
+SUPPORT_STACK_ENABLED = True
+# [canonical: Jordan handoff §(1) — depth-1: full, depth-2: 0.7, depth-3: 0.5, floor 0.3]
+SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
+SUPPORT_WEIGHT_FLOOR = 0.3
+
+# F-ii: Puncture mechanism [canonical: Jordan handoff §(2)]
+PUNCTURE_ENABLED = True
+PUNCTURE_CAP = 3
+
+# F-iii: Cascading resolution [canonical: Jordan handoff §(3)]
+CASCADING_ENABLED = True
+MAX_SUB_PHASES = 5
+
+# [canonical: mass_battle_v30.md §ED-816 shape mods; -99 = structural sentinel (−∞ pool)]
 SHAPE_OFF_MOD = {
     "Line":        lambda role: 0,
-    "Arrowhead":   lambda role: 2 if role == "tip" else -1,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural shape off-mods]
-    "Horseshoe":   lambda role: -2 if role == "center" else (2 if role == "flank_engaged" else 0),  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
-    "GappedLine":  lambda role: -99 if role == "gap" else (2 if role == "flank_engaged" else 0),  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural sentinel -99 = disengaged gap]
-    "RefusedFlank":lambda role: -2 if role == "refused" else 1,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+    "Arrowhead":   lambda role: 2 if role == "tip" else -1,
+    "Horseshoe":   lambda role: -2 if role == "center" else (2 if role == "flank_engaged" else 0),
+    "GappedLine":  lambda role: -99 if role == "gap" else (2 if role == "flank_engaged" else 0),
+    "RefusedFlank":lambda role: -2 if role == "refused" else 1,
 }
-SHAPE_DEF_MOD = {"Line": lambda r: 0, "Arrowhead": lambda r: 0,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural def mods]
+SHAPE_DEF_MOD = {"Line": lambda r: 0, "Arrowhead": lambda r: 0,
                   "Horseshoe": lambda r: 1 if r == "center" else 0,
                   "GappedLine": lambda r: 0, "RefusedFlank": lambda r: 0}
-MIN_DISCIPLINE = {"Line": 1, "Arrowhead": 4, "Horseshoe": 5, "GappedLine": 5, "RefusedFlank": 3}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+MIN_DISCIPLINE = {
+    # [canonical: mass_battle_v30.md §ED-815 shape discipline — min disc required by shape]
+    "Line": 1, "Arrowhead": 4, "Horseshoe": 5, "GappedLine": 5, "RefusedFlank": 3
+}
 
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md — ANGLE_DEF_MOD]
-ANGLE_DEF_MOD = {"FRONT": 0, "FLANK": -1, "REAR": -2}
-
-# ─────────────────────────────────────────────────────────────────────────────
-# CELL PATTERNS
-# ─────────────────────────────────────────────────────────────────────────────
+# ─── CELL PATTERNS ───────────────────────────────────────────────────────────
+# [canonical: mass_battle_v30.md §Shapes — per-tier cell grid dimensions, Jordan design]
 
 def arrowhead_cells(tier):
     cells = []
-    for r in range(tier + 2):  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural arrowhead row formula: row r has width 2r+1]
+    for r in range(tier + 2):
         width = 2 * r + 1
         center_col = tier + 1
         start = center_col - r
@@ -72,41 +74,41 @@ def arrowhead_cells(tier):
     return cells
 
 def line_cells(tier):
-    sizes = {1: (3, 3), 2: (5, 3), 3: (5, 5), 4: (7, 5)}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural line dims]
-    width, depth = sizes.get(tier, (7, 5))  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+    sizes = {1: (3, 3), 2: (5, 3), 3: (5, 5), 4: (7, 5)}
+    width, depth = sizes.get(tier, (7, 5))
     return [(r, c) for r in range(depth) for c in range(width)]
 
 def horseshoe_cells(tier):
-    sizes = {1: (2, 2), 2: (2, 3), 3: (3, 3), 4: (3, 4)}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural horseshoe dims]
-    wing_w, depth = sizes.get(tier, (3, 4))  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+    sizes = {1: (2, 2), 2: (2, 3), 3: (3, 3), 4: (3, 4)}
+    wing_w, depth = sizes.get(tier, (3, 4))
     full_width = wing_w * 2 + 1
     cells = []
     for r in range(depth):
         for c in range(wing_w):
             cells.append((r, c))
-        for c in range(wing_w + 1, full_width):  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural horseshoe gap at wing_w]
+        for c in range(wing_w + 1, full_width):
             cells.append((r, c))
     for c in range(full_width):
         cells.append((depth, c))
     return cells
 
 def gapped_line_cells(tier):
-    sizes = {1: (3, 2), 2: (5, 3), 3: (7, 4), 4: (9, 5)}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural gappedline dims]
-    half_w, depth = sizes.get(tier, (9, 5))  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+    sizes = {1: (3, 2), 2: (5, 3), 3: (7, 4), 4: (9, 5)}
+    half_w, depth = sizes.get(tier, (9, 5))
     cells = []
     for r in range(depth):
         for c in range(half_w):
             cells.append((r, c))
-        for c in range(half_w + 1, 2 * half_w + 1):  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural gappedline gap at half_w]
+        for c in range(half_w + 1, 2 * half_w + 1):
             cells.append((r, c))
     return cells
 
 def refused_flank_cells(tier):
-    sizes = {1: (3, 3), 2: (4, 3), 3: (5, 4), 4: (6, 5)}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural refusedflank dims]
-    width, depth = sizes.get(tier, (6, 5))  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+    sizes = {1: (3, 3), 2: (4, 3), 3: (5, 4), 4: (6, 5)}
+    width, depth = sizes.get(tier, (6, 5))
     cells = []
     for r in range(depth):
-        for c in range(width - 1):  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural refusedflank refused col = width-1]
+        for c in range(width - 1):
             cells.append((r, c))
     for r in range(depth + 1):
         cells.append((r, width - 1))
@@ -119,30 +121,27 @@ CELL_PATTERN_FN = {
 }
 
 def oriented_pattern(shape, tier, advance_dir):
-    """Returns list of (orig_r, orig_c, oriented_r, oriented_c) tuples.
-    Side B (advance_dir=+1) gets vertical mirror so leading edge faces enemy.
-    [canonical: tests/sim/sim_mb_06_v7_manifest.md — side-mirror]"""
     pattern = CELL_PATTERN_FN[shape](tier)
-    if advance_dir == -1:  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural side A = -1, side B = +1]
+    if advance_dir == -1:
         return [(r, c, r, c) for r, c in pattern]
     max_r = max(r for r, c in pattern)
     return [(r, c, max_r - r, c) for r, c in pattern]
 
 def cell_facing(advance_dir):
-    """Uniform facing for all cells in formation. [canonical: v7 structural]"""
     return (advance_dir, 0)
 
 def engagement_angle(defender_pos, defender_facing, attacker_pos):
-    """FRONT/FLANK/REAR classification. [canonical: v7 structural]"""
     dr_to = attacker_pos[0] - defender_pos[0]
     dc_to = attacker_pos[1] - defender_pos[1]
     fr, fc = defender_facing
     dot = dr_to * fr + dc_to * fc
-    mag = max(1e-9, (dr_to*dr_to + dc_to*dc_to) ** 0.5)  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural precision floor]
+    mag = max(1e-9, (dr_to*dr_to + dc_to*dc_to) ** 0.5)
     proj = dot / mag
-    if proj > 0.5: return "FRONT"  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural ~60° cone]
-    if proj < -0.5: return "REAR"  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural ~60° rear cone]
+    if proj > 0.5:   return "FRONT"
+    if proj < -0.5:  return "REAR"
     return "FLANK"
+
+ANGLE_DEF_MOD = {"FRONT": 0, "FLANK": -1, "REAR": -2}
 
 def atom_max_width(shape, tier):
     pattern = CELL_PATTERN_FN[shape](tier)
@@ -151,120 +150,131 @@ def atom_max_width(shape, tier):
         by_row.setdefault(r, []).append(c)
     return max(len(v) for v in by_row.values())
 
-# ─────────────────────────────────────────────────────────────────────────────
-# F-i: CELL SUPPORT STACK
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §(1) Cell support]
-# ─────────────────────────────────────────────────────────────────────────────
+# ─── F-i: CELL SUPPORT STACKING ──────────────────────────────────────────────
 
-def support_stack_frac(atom, contact_orig_coords, max_width):
-    """Compute effective engage_frac with support from cells behind the contact zone.
-
-    "Behind" = higher oriented_r (further from enemy) in both advance directions,
-    because oriented_pattern mirrors Side B so that or_r always increases away from
-    the enemy's direction.
-
-    For each contact cell's oriented_r, find the minimum (most forward) contact row.
-    Rows at depth d (1 = immediately behind) contribute: count × SUPPORT_WEIGHTS[d].
-    Total = |contact_cells| + sum(weighted_supporters).
-    engage_frac = min(1.0, total / max_width).
-    (canonical: handoff §F-i)
-    """
-    if not F_SUPPORT_ENABLED:
-        return len(contact_orig_coords) / max_width
-
+def cells_to_orig_coords(atom, abs_cells):
     op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
-    orig_to_or_r = {(orig_r, orig_c): or_r for orig_r, orig_c, or_r, or_c in op}
-    all_cells_by_or_r = {}
-    for orig_r, orig_c, or_r, or_c in op:
-        all_cells_by_or_r.setdefault(or_r, []).append((orig_r, orig_c))
+    orig_coords = []
+    for abs_r, abs_c in abs_cells:
+        for orig_r, orig_c, or_r, or_c in op:
+            comp_r = (atom.starting_position[0] + or_r
+                      + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
+            comp_c = (atom.starting_position[1] + or_c
+                      + atom.cell_offsets_c.get((orig_r, orig_c), 0))
+            if (comp_r, comp_c) == (abs_r, abs_c):
+                orig_coords.append((orig_r, orig_c))
+                break
+    return orig_coords
 
-    contact_set = set(contact_orig_coords)
-    contact_or_rows = set()
-    for coord in contact_set:
-        if coord in orig_to_or_r:
-            contact_or_rows.add(orig_to_or_r[coord])
+def support_engage_frac(atom, contact_abs_cells):
+    """F-i: support-stack-adjusted engage_frac.
+    Cells behind the contact zone contribute weighted support.
+    [canonical: Jordan handoff §(1)]"""
+    max_w = atom_max_width(atom.shape, atom.tier)
+    if not SUPPORT_STACK_ENABLED:
+        return len(set(contact_abs_cells)) / max_w
 
-    if not contact_or_rows:
-        return len(contact_orig_coords) / max_width
+    pattern = CELL_PATTERN_FN[atom.shape](atom.tier)
+    contact_orig = cells_to_orig_coords(atom, set(contact_abs_cells))
 
-    # Most forward contact row (smallest or_r = closest to enemy)
-    front_or_r = min(contact_or_rows)
-    # Count cells at each support depth behind the front contact row
-    supporter_sum = 0.0
-    for depth, weight in SUPPORT_WEIGHTS.items():
-        support_or_r = front_or_r + depth  # behind = higher or_r
-        supporters = all_cells_by_or_r.get(support_or_r, [])
-        supporter_sum += len(supporters) * weight
+    if not contact_orig:
+        return len(set(contact_abs_cells)) / max_w
 
-    total_effective = len(contact_orig_coords) + supporter_sum
-    return min(1.0, total_effective / max_width)  # [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md — cap at 1.0]
+    contact_orig_set = set(contact_orig)
+    front_r = min(r for r, c in contact_orig)
 
+    supporter_total = 0.0
+    for orig_r, orig_c in pattern:
+        if (orig_r, orig_c) in contact_orig_set:
+            continue
+        if orig_r <= front_r:
+            continue
+        depth = orig_r - front_r
+        w = SUPPORT_WEIGHTS.get(depth, SUPPORT_WEIGHT_FLOOR)
+        supporter_total += w
 
-# ─────────────────────────────────────────────────────────────────────────────
-# F-ii: PUNCTURE / MOMENTUM
-# [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §(2) Puncture mechanism]
-# ─────────────────────────────────────────────────────────────────────────────
+    effective_engaged = len(contact_orig) + supporter_total
+    return min(1.0, effective_engaged / max_w)
 
-def puncture_bonus(attacker_atom, contact_orig_coords):
-    """Compute puncture bonus dice for attacker.
-    Average speed of attacker contact cells vs defender (0 if halted = in contact).
-    +1D per speed-unit differential, cap PUNCTURE_CAP.
-    (canonical: handoff §F-ii)
-    """
-    if not F_PUNCTURE_ENABLED:
-        return 0
-    speeds = []
-    for coord in contact_orig_coords:
-        spd = attacker_atom.last_turn_speed.get(coord, 0)
-        speeds.append(spd)
-    if not speeds:
-        return 0
-    avg_attacker_speed = sum(speeds) / len(speeds)
-    # Defender contact cells: speed 0 (they were halted at contact row)
-    defender_speed = 0
-    diff = avg_attacker_speed - defender_speed
-    if diff <= 0:
-        return 0
-    return min(PUNCTURE_CAP, math.floor(diff * PUNCTURE_BONUS_PER_SPEED_UNIT))
+# ─── F-iii: FACING HELPERS ───────────────────────────────────────────────────
 
+def _cell_facing_key(atom, orig_r, orig_c):
+    return (id(atom), orig_r, orig_c)
 
-# ─────────────────────────────────────────────────────────────────────────────
-# PER-CELL SPEED
-# ─────────────────────────────────────────────────────────────────────────────
+def _rotate_defender_facing(defender_atom, defender_abs_cells, attacker_abs_cells,
+                             dynamic_facings):
+    """Rotate engaged defender cells toward attacker (Rule A: full pivot).
+    [canonical: Jordan handoff §(3a)]"""
+    if not attacker_abs_cells or not defender_abs_cells:
+        return
+    att_r = sum(c[0] for c in attacker_abs_cells) / len(attacker_abs_cells)
+    att_c = sum(c[1] for c in attacker_abs_cells) / len(attacker_abs_cells)
+    op = oriented_pattern(defender_atom.shape, defender_atom.tier, defender_atom.advance_dir)
+    for abs_r, abs_c in defender_abs_cells:
+        for orig_r, orig_c, or_r, or_c in op:
+            comp_r = (defender_atom.starting_position[0] + or_r
+                      + defender_atom.cell_offsets.get((orig_r, orig_c), 0) * defender_atom.advance_dir)
+            comp_c = (defender_atom.starting_position[1] + or_c
+                      + defender_atom.cell_offsets_c.get((orig_r, orig_c), 0))
+            if (comp_r, comp_c) == (abs_r, abs_c):
+                dr = att_r - abs_r
+                dc = att_c - abs_c
+                mag = max(1e-9, (dr*dr + dc*dc)**0.5)
+                dynamic_facings[_cell_facing_key(defender_atom, orig_r, orig_c)] = \
+                    (round(dr / mag), round(dc / mag))
+                break
+
+def _init_dynamic_facings(unit_a, unit_b):
+    df = {}
+    for u in [unit_a, unit_b]:
+        for atom in u.atoms:
+            op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
+            for orig_r, orig_c, _, _ in op:
+                df[_cell_facing_key(atom, orig_r, orig_c)] = cell_facing(atom.advance_dir)
+    return df
+
+def _atom_avg_facing(atom, contact_abs_cells, dynamic_facings):
+    """Compute average facing for an atom's contact cells from dynamic_facings."""
+    op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
+    facings = []
+    for abs_r, abs_c in contact_abs_cells:
+        for orig_r, orig_c, or_r, or_c in op:
+            comp_r = (atom.starting_position[0] + or_r
+                      + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
+            comp_c = (atom.starting_position[1] + or_c
+                      + atom.cell_offsets_c.get((orig_r, orig_c), 0))
+            if (comp_r, comp_c) == (abs_r, abs_c):
+                key = _cell_facing_key(atom, orig_r, orig_c)
+                facings.append(dynamic_facings.get(key, cell_facing(atom.advance_dir)))
+                break
+    if not facings:
+        return cell_facing(atom.advance_dir)
+    return (sum(f[0] for f in facings) / len(facings),
+            sum(f[1] for f in facings) / len(facings))
+
+# ─── PER-CELL SPEED ──────────────────────────────────────────────────────────
 
 def cell_speed(shape, tier, local_r, local_c):
-    """Speed of an individual cell at Disc 5 + Balanced.
-    [canonical: tests/sim/sim_mb_06_v7_manifest.md — per-cell deformation Eiii]"""
-    if shape == "Line":
-        return 1
-    if shape == "Arrowhead":
-        return 2 if local_r == 0 else 1
+    if shape == "Line":    return 1
+    if shape == "Arrowhead": return 2 if local_r == 0 else 1
     if shape == "Horseshoe":
-        sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural horseshoe wing widths]
+        sizes = {1: 2, 2: 2, 3: 3, 4: 3}
         wing_w = sizes.get(tier, 3)
-        depth_sizes = {1: 2, 2: 3, 3: 3, 4: 4}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural horseshoe depths]
+        depth_sizes = {1: 2, 2: 3, 3: 3, 4: 4}
         depth = depth_sizes.get(tier, 4)
-        if local_r == depth:
-            return 0
-        elif local_c != wing_w:
-            return 2
+        if local_r == depth:    return 0
+        elif local_c != wing_w: return 2
         return 1
-    if shape == "GappedLine":
-        return 1
+    if shape == "GappedLine": return 1
     if shape == "RefusedFlank":
-        sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural refusedflank widths]
+        sizes = {1: 3, 2: 4, 3: 5, 4: 6}
         width = sizes.get(tier, 6)
-        if local_c == width - 1:
-            return 0
-        return 1
+        return 0 if local_c == width - 1 else 1
     return 1
 
-STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural sentinel -99=unable to advance]
+STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# ATOM — now tracks last_turn_speed per cell for F-ii
-# ─────────────────────────────────────────────────────────────────────────────
+# ─── ATOM ────────────────────────────────────────────────────────────────────
 
 @dataclass
 class Atom:
@@ -279,54 +289,42 @@ class Atom:
     cell_offsets_c: Dict[Tuple[int, int], int] = field(default_factory=dict)
     halted_cells: Set[Tuple[int, int]] = field(default_factory=set)
     target_atom: Optional[object] = field(default=None, repr=False)
-    last_turn_speed: Dict[Tuple[int, int], int] = field(default_factory=dict)  # F-ii
+    # F-ii: last movement speed per orig coord (only updated when cell actually moves)
+    cell_last_speed: Dict[Tuple[int, int], int] = field(default_factory=dict)
 
     @property
     def troop_count(self): return TROOPS_PER_TIER[self.tier]
 
-    def cells(self) -> List[Tuple[int, int]]:
+    def cells(self):
         op = oriented_pattern(self.shape, self.tier, self.advance_dir)
         result = []
         for orig_r, orig_c, or_r, or_c in op:
-            offset_r = self.cell_offsets.get((orig_r, orig_c), 0)
-            offset_c = self.cell_offsets_c.get((orig_r, orig_c), 0)
-            abs_r = self.starting_position[0] + or_r + offset_r * self.advance_dir
-            abs_c = self.starting_position[1] + or_c + offset_c
+            abs_r = (self.starting_position[0] + or_r
+                     + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir)
+            abs_c = (self.starting_position[1] + or_c
+                     + self.cell_offsets_c.get((orig_r, orig_c), 0))
             result.append((abs_r, abs_c))
         return result
 
-    def centroid(self) -> Tuple[float, float]:
+    def centroid(self):
         c = self.cells()
-        if not c: return (self.starting_position[0], self.starting_position[1])
+        if not c: return self.starting_position
         return (sum(r for r, x in c) / len(c), sum(x for r, x in c) / len(c))
 
-    def advance_cells(self, discipline: int, target_centroid: Optional[Tuple[float, float]]):
-        """Advance per cell. Records last_turn_speed for F-ii puncture calc."""
-        if self.stance == "hold":
-            return
+    def advance_cells(self, discipline, target_centroid):
+        if self.stance == "hold": return
         op = oriented_pattern(self.shape, self.tier, self.advance_dir)
-        disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural disc multipliers]
+        disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)
         stance_mod = STANCE_SPEED_MOD[self.stance]
         all_speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _, _ in op]
         nonzero_speeds = [s for s in all_speeds if s > 0]
         min_speed = min(nonzero_speeds) if nonzero_speeds else 0
-
-        # Reset speed tracking for this turn
-        self.last_turn_speed = {}
-
         for orig_r, orig_c, or_r, or_c in op:
-            if (orig_r, orig_c) in self.halted_cells:
-                self.last_turn_speed[(orig_r, orig_c)] = 0  # halted = speed 0
-                continue
+            if (orig_r, orig_c) in self.halted_cells: continue
             base_speed = cell_speed(self.shape, self.tier, orig_r, orig_c)
-            if base_speed == 0:
-                self.last_turn_speed[(orig_r, orig_c)] = 0
-                continue
+            if base_speed == 0: continue
             actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
-            if actual_speed == 0:
-                self.last_turn_speed[(orig_r, orig_c)] = 0
-                continue
-            # Tip-support gate
+            if actual_speed == 0: continue
             if TIP_SUPPORT_ENABLED and base_speed > min_speed:
                 current_offset = self.cell_offsets.get((orig_r, orig_c), 0)
                 slow_offsets = [
@@ -335,18 +333,15 @@ class Atom:
                     if cell_speed(self.shape, self.tier, r2, c2) == min_speed
                 ]
                 if slow_offsets and current_offset >= min(slow_offsets) + TIP_SUPPORT_GAP:
-                    self.last_turn_speed[(orig_r, orig_c)] = 0
                     continue
-            # Record speed before movement
-            self.last_turn_speed[(orig_r, orig_c)] = actual_speed
-
-            my_r = self.starting_position[0] + or_r + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir
-            my_c = self.starting_position[1] + or_c + self.cell_offsets_c.get((orig_r, orig_c), 0)
+            my_r = (self.starting_position[0] + or_r
+                    + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir)
+            my_c = (self.starting_position[1] + or_c
+                    + self.cell_offsets_c.get((orig_r, orig_c), 0))
             if target_centroid:
                 dr = target_centroid[0] - my_r
                 dc = target_centroid[1] - my_c
-                if self.stance == "retreat":
-                    dr, dc = -dr, -dc
+                if self.stance == "retreat": dr, dc = -dr, -dc
                 abs_dr, abs_dc = abs(dr), abs(dc)
                 total = abs_dr + abs_dc
                 if total < 0.5: continue
@@ -354,45 +349,43 @@ class Atom:
                 c_step = actual_speed - r_step
                 r_step *= (1 if dr > 0 else -1) if abs_dr > 0 else 0
                 c_step *= (1 if dc > 0 else -1) if abs_dc > 0 else 0
-                self.cell_offsets[(orig_r, orig_c)] = self.cell_offsets.get((orig_r, orig_c), 0) + r_step * self.advance_dir
-                self.cell_offsets_c[(orig_r, orig_c)] = self.cell_offsets_c.get((orig_r, orig_c), 0) + c_step
+                self.cell_offsets[(orig_r, orig_c)] = \
+                    self.cell_offsets.get((orig_r, orig_c), 0) + r_step * self.advance_dir
+                self.cell_offsets_c[(orig_r, orig_c)] = \
+                    self.cell_offsets_c.get((orig_r, orig_c), 0) + c_step
             else:
-                self.cell_offsets[(orig_r, orig_c)] = self.cell_offsets.get((orig_r, orig_c), 0) + actual_speed
+                self.cell_offsets[(orig_r, orig_c)] = \
+                    self.cell_offsets.get((orig_r, orig_c), 0) + actual_speed
+            # F-ii: record speed when cell actually moves
+            self.cell_last_speed[(orig_r, orig_c)] = actual_speed
 
-    def role_at_contact(self, contact_col: int) -> str:
+    def role_at_contact(self, contact_col):
         if self.shape == "Line": return "normal"
         if self.shape == "Arrowhead":
             pattern = CELL_PATTERN_FN[self.shape](self.tier)
             for r, c in pattern:
                 if r == 0:
                     abs_c = self.starting_position[1] + c + self.cell_offsets_c.get((r, c), 0)
-                    if abs(abs_c - contact_col) <= 0.5:
-                        return "tip"
+                    if abs(abs_c - contact_col) <= 0.5: return "tip"
             return "flank"
         if self.shape == "Horseshoe":
-            sizes = {1: 2, 2: 2, 3: 3, 4: 3}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+            sizes = {1: 2, 2: 2, 3: 3, 4: 3}
             wing_w = sizes.get(self.tier, 3)
-            center_col_abs = wing_w + self.starting_position[1]
-            if contact_col == center_col_abs: return "center"
+            if contact_col == wing_w + self.starting_position[1]: return "center"
             return "flank_engaged"
         if self.shape == "GappedLine":
-            sizes = {1: 3, 2: 5, 3: 7, 4: 9}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+            sizes = {1: 3, 2: 5, 3: 7, 4: 9}
             half_w = sizes.get(self.tier, 9)
-            gap_col_abs = half_w + self.starting_position[1]
-            if contact_col == gap_col_abs: return "gap"
+            if contact_col == half_w + self.starting_position[1]: return "gap"
             return "flank_engaged"
         if self.shape == "RefusedFlank":
-            sizes = {1: 3, 2: 4, 3: 5, 4: 6}  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+            sizes = {1: 3, 2: 4, 3: 5, 4: 6}
             width = sizes.get(self.tier, 6)
-            refused_col_abs = (width - 1) + self.starting_position[1]
-            if contact_col == refused_col_abs: return "refused"
+            if contact_col == (width - 1) + self.starting_position[1]: return "refused"
             return "engaged"
         return "normal"
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# UNIT
-# ─────────────────────────────────────────────────────────────────────────────
+# ─── UNIT ────────────────────────────────────────────────────────────────────
 
 @dataclass
 class Unit:
@@ -419,7 +412,7 @@ class Unit:
         total = sum(a.troop_count for a in self.atoms)
         self.size = max(1, total // TROOPS_PER_SIZE)
         self.size_max = self.size
-        self.h_per_size = max(1, min(self.discipline, self.command) + self.dr)  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural HP formula]
+        self.h_per_size = max(1, min(self.discipline, self.command) + self.dr)
         self.hp_max = self.size_max * self.h_per_size
         self.hp = self.hp_max
         for a in self.atoms:
@@ -435,12 +428,12 @@ class Unit:
         if self.discipline >= 5: return 0
         if self.discipline >= 3: return -1
         if self.discipline >= 1: return -2
-        return -99  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural sentinel: broken]
+        return -99
 
     def base_combat_pool(self):
         if self.routed or self.broken: return 0
         pen = self.discipline_penalty()
-        if pen == -99: self.broken = True; return 0  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+        if pen == -99: self.broken = True; return 0
         return max(1, min(self.size, self.command) + self.command + pen)
 
     def check_drift(self):
@@ -448,33 +441,27 @@ class Unit:
             if self.discipline < MIN_DISCIPLINE[a.shape] and a.shape != "Line":
                 a.shape = "Line"
 
+# ─── DICE ────────────────────────────────────────────────────────────────────
 
-# ─────────────────────────────────────────────────────────────────────────────
-# DICE
-# ─────────────────────────────────────────────────────────────────────────────
-
-def roll_pool(n, tn=7):  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural §Dice TN7]
+def roll_pool(n, tn=7):
     net = 0
     for _ in range(max(1, n)):
         f = random.randint(1, 10)
-        if f == 1: net -= 1
-        elif f >= tn and f <= 9: net += 1  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural §Dice System]
-        elif f == 10: net += 2
+        if f == 1:         net -= 1
+        elif tn <= f <= 9: net += 1
+        elif f == 10:      net += 2
     return net
 
 def compute_degree(net, ob):
-    if net <= 0: return "Failure"
-    if net >= 2 * ob and net >= 3: return "Overwhelming"
-    if net >= ob: return "Success"
+    if net <= 0:                    return "Failure"
+    if net >= 2 * ob and net >= 3:  return "Overwhelming"
+    if net >= ob:                   return "Success"
     return "Partial"
 
-DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural degree→damage]
-                     "Partial": lambda p: 1, "Failure": lambda p: 0}
+DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
+                     "Partial": lambda p: 1,        "Failure": lambda p: 0}
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# TARGETING
-# ─────────────────────────────────────────────────────────────────────────────
+# ─── TARGETING ───────────────────────────────────────────────────────────────
 
 def assign_targets(unit_a, unit_b):
     for atom in unit_a.atoms:
@@ -484,7 +471,7 @@ def assign_targets(unit_a, unit_b):
         else:
             my = atom.centroid()
             atom.target_atom = min(unit_b.atoms,
-                                     key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+                key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
     for atom in unit_b.atoms:
         if not unit_a.atoms: atom.target_atom = None; continue
         if atom.order_target_idx is not None and atom.order_target_idx < len(unit_a.atoms):
@@ -492,12 +479,9 @@ def assign_targets(unit_a, unit_b):
         else:
             my = atom.centroid()
             atom.target_atom = min(unit_a.atoms,
-                                     key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+                key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
 
-
-# ─────────────────────────────────────────────────────────────────────────────
-# CONTACT + ENGAGEMENT
-# ─────────────────────────────────────────────────────────────────────────────
+# ─── CONTACTS ────────────────────────────────────────────────────────────────
 
 def find_contacts(unit_a, unit_b):
     pairs = []
@@ -515,11 +499,9 @@ def find_contacts(unit_a, unit_b):
                         contact_cells_b.append((rb, cb_))
                         contact_cols.add((c + cb_) // 2)
             if contact_cols:
-                pairs.append({
-                    "atom_a": atom_a, "atom_b": atom_b,
-                    "a_cells": contact_cells_a, "b_cells": contact_cells_b,
-                    "cols": list(contact_cols),
-                })
+                pairs.append({"atom_a": atom_a, "atom_b": atom_b,
+                               "a_cells": contact_cells_a, "b_cells": contact_cells_b,
+                               "cols": list(contact_cols)})
     return pairs
 
 def count_engagements_per_atom(pairs):
@@ -529,18 +511,38 @@ def count_engagements_per_atom(pairs):
         counts[id(p["atom_b"])] = counts.get(id(p["atom_b"]), 0) + 1
     return counts
 
-def abs_cells_to_orig(atom, abs_contact_cells):
-    """Map absolute (row,col) contact positions back to original pattern coords."""
+def _momentum_speed(atom, contact_abs_cells):
+    """F-ii: mean cell_last_speed for contact cells.
+    [canonical: Jordan handoff §(2)]"""
+    if not contact_abs_cells: return 0.0
+    speeds = []
     op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
-    result = []
-    for orig_r, orig_c, or_r, or_c in op:
-        abs_r = atom.starting_position[0] + or_r + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir
-        abs_c = atom.starting_position[1] + or_c + atom.cell_offsets_c.get((orig_r, orig_c), 0)
-        if (abs_r, abs_c) in set(abs_contact_cells):
-            result.append((orig_r, orig_c))
-    return result
+    for abs_r, abs_c in contact_abs_cells:
+        for orig_r, orig_c, or_r, or_c in op:
+            comp_r = (atom.starting_position[0] + or_r
+                      + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
+            comp_c = (atom.starting_position[1] + or_c
+                      + atom.cell_offsets_c.get((orig_r, orig_c), 0))
+            if (comp_r, comp_c) == (abs_r, abs_c):
+                speeds.append(atom.cell_last_speed.get((orig_r, orig_c), 0))
+                break
+    return sum(speeds) / len(speeds) if speeds else 0.0
 
-def resolve_engagements(unit_a, unit_b, pairs):
+def _cascade_depth_key(pair):
+    """Sub-phase ordering: foremost attacker resolves first.
+    [canonical: Jordan handoff §(3) — tip arrives first]"""
+    atom_a = pair["atom_a"]
+    a_cells = pair["a_cells"]
+    if not a_cells: return 999
+    if atom_a.advance_dir == -1:
+        return min(r for r, c in a_cells)
+    return -max(r for r, c in a_cells)
+
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
+    """Resolve all contact pairs.
+    F-i: support_engage_frac replaces bare engage_frac.
+    F-ii: puncture bonus from momentum differential.
+    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir)."""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
     for p in pairs:
@@ -551,23 +553,16 @@ def resolve_engagements(unit_a, unit_b, pairs):
         role_b = atom_b.role_at_contact(primary_col)
         off_a = SHAPE_OFF_MOD[atom_a.shape](role_a)
         off_b = SHAPE_OFF_MOD[atom_b.shape](role_b)
-        if off_a == -99 or off_b == -99: continue  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural sentinel skip disengaged gap]
-
-        # Map contact cells back to orig coords for support-stack calc
-        a_contact_orig = abs_cells_to_orig(atom_a, p["a_cells"])
-        b_contact_orig = abs_cells_to_orig(atom_b, p["b_cells"])
+        if off_a == -99 or off_b == -99: continue
 
         a_troops_frac = atom_a.troop_count / unit_a.total_troops()
         b_troops_frac = atom_b.troop_count / unit_b.total_troops()
-        a_width = atom_max_width(atom_a.shape, atom_a.tier)
-        b_width = atom_max_width(atom_b.shape, atom_b.tier)
         a_base = unit_a.base_combat_pool()
         b_base = unit_b.base_combat_pool()
 
-        # F-i: support-stack engage_frac
-        # [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §(1) Cell support]
-        a_engage_frac = support_stack_frac(atom_a, a_contact_orig, a_width)
-        b_engage_frac = support_stack_frac(atom_b, b_contact_orig, b_width)
+        # F-i: support-stack-adjusted engage_frac
+        a_engage_frac = support_engage_frac(atom_a, p["a_cells"])
+        b_engage_frac = support_engage_frac(atom_b, p["b_cells"])
 
         if POOL_VARIANT == "baseline":
             a_pool_raw = a_base * a_troops_frac * a_engage_frac
@@ -577,35 +572,41 @@ def resolve_engagements(unit_a, unit_b, pairs):
             b_pool_raw = b_base * b_engage_frac
         elif POOL_VARIANT == "C-ii":
             a_pool_raw = max(a_base * a_engage_frac * 0.5,
-                              a_base * a_troops_frac * a_engage_frac)
+                             a_base * a_troops_frac * a_engage_frac)
             b_pool_raw = max(b_base * b_engage_frac * 0.5,
-                              b_base * b_troops_frac * b_engage_frac)
+                             b_base * b_troops_frac * b_engage_frac)
         else:
             raise ValueError(f"Unknown POOL_VARIANT: {POOL_VARIANT}")
 
         a_pool = max(1, math.floor(a_pool_raw) + off_a)
         b_pool = max(1, math.floor(b_pool_raw) + off_b)
 
-        # Engagement angle — defender penalty
-        a_contact_centroid = (sum(c[0] for c in p["a_cells"]) / len(p["a_cells"]),
-                                sum(c[1] for c in p["a_cells"]) / len(p["a_cells"]))
-        b_contact_centroid = (sum(c[0] for c in p["b_cells"]) / len(p["b_cells"]),
-                                sum(c[1] for c in p["b_cells"]) / len(p["b_cells"]))
-        a_facing = cell_facing(atom_a.advance_dir)
-        b_facing = cell_facing(atom_b.advance_dir)
-        a_angle = engagement_angle(a_contact_centroid, a_facing, b_contact_centroid)
-        b_angle = engagement_angle(b_contact_centroid, b_facing, a_contact_centroid)
+        # Engagement angle: use dynamic_facings if provided (F-iii cascade)
+        a_cc = (sum(c[0] for c in p["a_cells"]) / len(p["a_cells"]),
+                sum(c[1] for c in p["a_cells"]) / len(p["a_cells"]))
+        b_cc = (sum(c[0] for c in p["b_cells"]) / len(p["b_cells"]),
+                sum(c[1] for c in p["b_cells"]) / len(p["b_cells"]))
+
+        if dynamic_facings is not None:
+            a_facing = _atom_avg_facing(atom_a, p["a_cells"], dynamic_facings)
+            b_facing = _atom_avg_facing(atom_b, p["b_cells"], dynamic_facings)
+        else:
+            a_facing = cell_facing(atom_a.advance_dir)
+            b_facing = cell_facing(atom_b.advance_dir)
+
+        a_angle = engagement_angle(a_cc, a_facing, b_cc)
+        b_angle = engagement_angle(b_cc, b_facing, a_cc)
         a_pool = max(1, a_pool + ANGLE_DEF_MOD[a_angle])
         b_pool = max(1, b_pool + ANGLE_DEF_MOD[b_angle])
 
-        # F-ii: puncture bonus for attacker
-        # [canonical: tests/sim/sim_mb_06_handoff_2026-05-12.md §(2) Puncture mechanism]
-        # A is attacker if it's the one advancing into B (advance_dir toward B)
-        # Both are "attackers" of each other — each gets puncture for their own momentum
-        a_puncture = puncture_bonus(atom_a, a_contact_orig)
-        b_puncture = puncture_bonus(atom_b, b_contact_orig)
-        a_pool = a_pool + a_puncture
-        b_pool = b_pool + b_puncture
+        # F-ii: puncture bonus from speed differential
+        if PUNCTURE_ENABLED:
+            a_mom = _momentum_speed(atom_a, p["a_cells"])
+            b_mom = _momentum_speed(atom_b, p["b_cells"])
+            if a_mom > b_mom:
+                a_pool += min(PUNCTURE_CAP, int(a_mom - b_mom))
+            elif b_mom > a_mom:
+                b_pool += min(PUNCTURE_CAP, int(b_mom - a_mom))
 
         # Encirclement
         if eng_counts.get(id(atom_a), 0) >= 2: a_pool = max(1, a_pool - ENCIRCLEMENT_PENALTY)
@@ -619,16 +620,68 @@ def resolve_engagements(unit_a, unit_b, pairs):
         dmg_b += max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
     return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
 
+def resolve_engagements_cascading(unit_a, unit_b, pairs):
+    """F-iii: cascading sub-phase resolution with facing rotation.
+    [canonical: Jordan handoff §(3)]
 
-# ─────────────────────────────────────────────────────────────────────────────
-# BATTLE
-# ─────────────────────────────────────────────────────────────────────────────
+    Contacts sorted by attacker depth (tip first). Each sub-phase resolves
+    one depth group, then rotates engaged cells' facings toward their attacker.
+    Later sub-phases see FLANK/REAR angles on already-rotated cells.
+    Effect requires tight formation (TIP_SUPPORT_GAP=1 or 2) so multiple
+    Arrowhead rows are simultaneously adjacent to Line cells."""
+    if not CASCADING_ENABLED:
+        return resolve_engagements(unit_a, unit_b, pairs)
+
+    dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
+    total_dmg_a = total_dmg_b = 0
+    resolved_keys = set()
+
+    # Sort by attacker depth; group into sub-phases by proximity (1-row buckets)
+    sorted_pairs = sorted(pairs, key=_cascade_depth_key)
+    if not sorted_pairs:
+        return {"dmg_a": 0, "dmg_b": 0, "engagements": 0}
+
+    groups = []
+    cur_group = [sorted_pairs[0]]
+    cur_depth = _cascade_depth_key(sorted_pairs[0])
+    for p in sorted_pairs[1:]:
+        d = _cascade_depth_key(p)
+        if abs(d - cur_depth) <= 1:
+            cur_group.append(p)
+        else:
+            groups.append(cur_group)
+            cur_group = [p]
+            cur_depth = d
+    groups.append(cur_group)
+
+    total_engagements = 0
+    for sub_idx, group in enumerate(groups):
+        if sub_idx >= MAX_SUB_PHASES:
+            break
+        active = [p for p in group
+                  if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
+        if not active:
+            continue
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings)
+        total_dmg_a += result["dmg_a"]
+        total_dmg_b += result["dmg_b"]
+        total_engagements += result["engagements"]
+        for p in active:
+            resolved_keys.add((id(p["atom_a"]), id(p["atom_b"])))
+            # Rotate engaged cells toward their opponents
+            _rotate_defender_facing(p["atom_b"], p["b_cells"], p["a_cells"], dynamic_facings)
+            _rotate_defender_facing(p["atom_a"], p["a_cells"], p["b_cells"], dynamic_facings)
+
+    return {"dmg_a": total_dmg_a, "dmg_b": total_dmg_b, "engagements": total_engagements}
+
+# ─── BATTLE ──────────────────────────────────────────────────────────────────
 
 def run_battle(unit_a, unit_b, max_turns=15):
     turns = 0
     for t in range(1, max_turns + 1):
         turns = t
         if unit_a.routed or unit_b.routed: break
+        # Pre-movement contacts -> halt
         pre_pairs = find_contacts(unit_a, unit_b)
         for atom in unit_a.atoms + unit_b.atoms:
             atom.halted_cells = set()
@@ -636,19 +689,21 @@ def run_battle(unit_a, unit_b, max_turns=15):
             op_a = oriented_pattern(p["atom_a"].shape, p["atom_a"].tier, p["atom_a"].advance_dir)
             for cell in p["a_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_a:
-                    abs_r = p["atom_a"].starting_position[0] + or_r + p["atom_a"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_a"].advance_dir
-                    abs_c = p["atom_a"].starting_position[1] + or_c + p["atom_a"].cell_offsets_c.get((orig_r,orig_c), 0)
+                    abs_r = (p["atom_a"].starting_position[0] + or_r
+                             + p["atom_a"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_a"].advance_dir)
+                    abs_c = (p["atom_a"].starting_position[1] + or_c
+                             + p["atom_a"].cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
-                        p["atom_a"].halted_cells.add((orig_r, orig_c))
-                        break
+                        p["atom_a"].halted_cells.add((orig_r, orig_c)); break
             op_b = oriented_pattern(p["atom_b"].shape, p["atom_b"].tier, p["atom_b"].advance_dir)
             for cell in p["b_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_b:
-                    abs_r = p["atom_b"].starting_position[0] + or_r + p["atom_b"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_b"].advance_dir
-                    abs_c = p["atom_b"].starting_position[1] + or_c + p["atom_b"].cell_offsets_c.get((orig_r,orig_c), 0)
+                    abs_r = (p["atom_b"].starting_position[0] + or_r
+                             + p["atom_b"].cell_offsets.get((orig_r,orig_c), 0) * p["atom_b"].advance_dir)
+                    abs_c = (p["atom_b"].starting_position[1] + or_c
+                             + p["atom_b"].cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
-                        p["atom_b"].halted_cells.add((orig_r, orig_c))
-                        break
+                        p["atom_b"].halted_cells.add((orig_r, orig_c)); break
         assign_targets(unit_a, unit_b)
         for atom in unit_a.atoms:
             if atom.target_atom:
@@ -657,14 +712,14 @@ def run_battle(unit_a, unit_b, max_turns=15):
             if atom.target_atom:
                 atom.advance_cells(unit_b.discipline, atom.target_atom.centroid())
         pairs = find_contacts(unit_a, unit_b)
-        result = resolve_engagements(unit_a, unit_b, pairs)
-        size_b_a, size_b_b = unit_a.size, unit_b.size
-        unit_a.hp = max(0, unit_a.hp - result["dmg_a"])
-        unit_a.recalc_size()
-        unit_b.hp = max(0, unit_b.hp - result["dmg_b"])
-        unit_b.recalc_size()
-        for u, sls, slo in [(unit_a, size_b_a - unit_a.size, size_b_b - unit_b.size),
-                              (unit_b, size_b_b - unit_b.size, size_b_a - unit_a.size)]:
+        result = (resolve_engagements_cascading(unit_a, unit_b, pairs)
+                  if CASCADING_ENABLED
+                  else resolve_engagements(unit_a, unit_b, pairs))
+        sz_a, sz_b = unit_a.size, unit_b.size
+        unit_a.hp = max(0, unit_a.hp - result["dmg_a"]); unit_a.recalc_size()
+        unit_b.hp = max(0, unit_b.hp - result["dmg_b"]); unit_b.recalc_size()
+        for u, sls, slo in [(unit_a, sz_a - unit_a.size, sz_b - unit_b.size),
+                            (unit_b, sz_b - unit_b.size, sz_a - unit_a.size)]:
             if u.routed or u.broken: continue
             if sls > u.discipline and sls > slo:
                 u.discipline = max(0, u.discipline - 1)
@@ -672,10 +727,10 @@ def run_battle(unit_a, unit_b, max_turns=15):
         for u in [unit_a, unit_b]:
             if u.routed: continue
             cap = 3; adj = 0
-            if u.size < u.size_max // 4 and u.size > 0: adj += -min(2, cap); cap -= 2  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural morale thresholds]
-            elif u.size < u.size_max // 2: adj += -min(1, cap); cap -= 1  # [canonical: tests/sim/sim_mb_06_v7_manifest.md — structural]
+            if u.size < u.size_max // 4 and u.size > 0: adj += -min(2, cap); cap -= 2
+            elif u.size < u.size_max // 2: adj += -min(1, cap); cap -= 1
             u.morale = max(1, u.morale + adj)
             if u.morale <= 0: u.routed = True
     winner = ("A" if not unit_a.routed and unit_b.routed else
-               "B" if not unit_b.routed and unit_a.routed else "draw")
+              "B" if not unit_b.routed and unit_a.routed else "draw")
     return {"winner": winner, "turns": turns}
