@@ -19,6 +19,7 @@
 | social_contest | sim_d06 | — | — | — | See prior sims |
 | thread | sim_thread_batch_08 | — | — | — | See prior sims |
 | strategic | sim_bg_ff_01 | — | — | — | See prior sims |
+| settlement_management | settlement_mgmt_stress_01 (in progress) | manifest committed; modules 1–13 pending | — | — | 🟡 Mode G Session 1 — manifest |
 
 ## SIM-MB-05A/B/C Summary
 - Date: 2026-05-11
@@ -430,3 +431,18 @@
 - NEXT CYCLE: G-1 + G-2 paired implementation on existing phase-boundary hooks.
   Expected: H5 -> 50-65% as RF rotation advantage manifests through stamina
   mechanism; HS routs first at morale threshold.
+
+
+## settlement_mgmt_stress_01 — manifest committed
+- Date: 2026-05-13
+- Scope: general validation, full simulations across settlement_layer_v30
+  + supporting canon (political hierarchy, fractional ownership, scale
+  transitions, faction layer)
+- Mode: G (Incremental Build Protocol) — 13 modules total
+- Status: manifest + empty ledger committed; Module 1 (settlement
+  primitives) begins next session
+- Decisions locked-in (5 defaults — overridable before Module 1):
+  Mode-13 order A→B→C→D→batch; companion scope = settlement-side only;
+  Module 11 stresses both canon 3-mode + videogame collapse; pre-13
+  prior-sim mining session; stop = no unfixed P1/P2 + 50 seeds clean +
+  full coverage

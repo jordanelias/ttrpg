@@ -1,0 +1,8 @@
+{
+  "sim_name": "settlement_mgmt_stress_01",
+  "scope": "custom",
+  "created": "2026-05-13",
+  "status": "scaffold \u2014 Module 1 will populate first entries (settlement primitives, \u00a71.1\u20131.3, \u00a72.1).",
+  "schema_note": "Each entry: {sim_variable: str, value: any, canonical_source: path, section: '\u00a7N.N or \u00a7heading', quoted_text: str (must literally appear in fetched content)}.",
+  "entries": []
+}
