@@ -339,3 +339,56 @@
   deviation from Jordan spec in code docstring and manifest. Charge-through
   framework partially scaffolded — future wiring must use existing primitives.
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
+
+## SIM-MB-06 v14 (2026-05-13, EXPLORATORY)
+- PHASE/TICK STRUCTURE wired into simulation.
+- DIRECTIVE: lock phase = gallop-and-charge cycle; provide structural hooks
+  for stamina, rally, reform, threadwork, morale, rout that subsequent cycles
+  will populate.
+- CHANGES (1 structural addition, zero combat-mechanic changes):
+  TICKS_PER_PHASE = 6. New phase_boundary(unit_a, unit_b, phase_idx) fires
+  every 6 ticks in run_battle, calling 6 empty hook stubs in canonical order:
+  stamina_check, morale_check_phase, rout_resolution, rally_check,
+  reform_check, threadwork_check. Return dict from run_battle now includes
+  'phases' and 'tick_in_phase' fields (additive — existing callers unaffected).
+- HISTORICAL GROUNDING:
+  * Operational Studies Group: "three-hex charge would take about 5 minutes
+    in real time" (1 hex trot + 2 hex gallop). + 1-2 ticks reform-to-position
+    for cycle-charging = 6 ticks total per phase.
+  * Wikipedia cavalry tactics: charge acceleration 400m in 2 min + gallop
+    last 150m + impact + disengage; matches the 6-tick budget.
+  * Hoplite phalanx exhaustion bound: ~10-15 minutes of sustained close
+    combat before exhaustion forces rotation/breakdown. Same 6-tick frame
+    transfers to infantry (ephodos → krousis → doratismos → othismos →
+    pararrhexis).
+- TICK BUDGET WITHIN A PHASE (cavalry calibration):
+  Tick 1-2: approach/closing (infantry braces)
+  Tick 3: impact (gallop hits line, decisive puncture/break moment)
+  Tick 4-5: contact resolution (melee in place if not broken through)
+  Tick 6: disengage/reform (exploit/rout/withdrawal)
+- WHY STRUCTURE BEFORE MECHANISM:
+  Depth-as-replacement design started this session was reverted on research.
+  Historical evidence: depth's real role is stamina-replacement (rear ranks
+  rotate forward to refresh exhausted front-rankers), not casualty-replacement.
+  That needs the stamina_check hook to exist. Wiring phase structure first
+  gives subsequent mechanism work clean landing points.
+- BATTERY RESULTS (n=500): 12/13 in-band (unchanged from v13)
+  IN-BAND (12/13):
+    H1 51.6%, H2 54.4%, H3 61.6%, H4 48.2%, H6 56.8%, H7 51.6%,
+    H8 49.6%, H9 48.2%, H10 37.6%, H11 51.0%, R1 34.6%, R3 47.2%
+  BORDERLINE OUT (1/13):
+    H5 RefusedFlank vs Horseshoe: 47.4% (target 50-65%, 2.6% below floor)
+- CARRIED FORWARD TO LATER CYCLES:
+  - Stamina mechanism on stamina_check hook (depletion per contact tick,
+    depth permits rotation to refresh, low stamina degrades combat pool)
+  - Morale-from-casualty-threshold on morale_check_phase + rout_resolution
+    (real battles end at 5-15% casualties via rout, not 100% destruction —
+    this is expected to be the structural fix for H5)
+  - Rally on rally_check (degraded units attempt recovery)
+  - Reform on reform_check (formation drift correction)
+  - Threadwork on threadwork_check (narrative/agent threadwork at phase seams)
+  - Cavalry charge cycle and cycle-charging — built into phase structure;
+    wires once cavalry units exist in battery
+- DRIFT RISK: zero combat-behavior change. Hooks are explicit no-ops with
+  noqa markers. Return-dict additive only.
+- NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
