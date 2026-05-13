@@ -453,3 +453,14 @@
 - Mode: A + B + D — 12-hypothesis Monte Carlo (N=5000)
 - Status: committed; findings pending Jordan ratification
 - Findings: E7 works; End too dominant [P2]; defense unrewarded [P2]; feint never optimal [P2]
+
+## sim_mb_06_v15 — G-1 stamina + G-2 rout committed
+- Date: 2026-05-13
+- Scope: mass combat simulation v14→v15
+- Mode: G (Incremental Build Protocol) — single module (stamina + rout on existing phase-boundary hooks)
+- Status: committed; battery 11/13 in-band (v14 at same seeds: 10/13)
+- Changes: stamina drain 16/contact-tick, recovery 8/reserve-rank at phase boundary,
+  pool penalty -1 die at exhaustion only, phase-boundary morale check for exhausted+damaged units
+- Findings: H5 RF-vs-HS fixed (47.4→50.2%). H7 GL-vs-Line regressed (51.6→49.4%, structural).
+  0% rout rate — G-3 lethality reduction prerequisite for meaningful rout.
+  G-3 does NOT fall out of G-1+G-2 (contradicts audit prediction).
