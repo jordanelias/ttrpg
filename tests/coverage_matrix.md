@@ -446,3 +446,10 @@
   Module 11 stresses both canon 3-mode + videogame collapse; pre-13
   prior-sim mining session; stop = no unfixed P1/P2 + 50 seeds clean +
   full coverage
+
+## duel_architecture_stress_01 — design + stress test committed
+- Date: 2026-05-13
+- Scope: Architecture C duel composite stress (E5 stance + E7 yield + canonical combat)
+- Mode: A + B + D — 12-hypothesis Monte Carlo (N=5000)
+- Status: committed; findings pending Jordan ratification
+- Findings: E7 works; End too dominant [P2]; defense unrewarded [P2]; feint never optimal [P2]
