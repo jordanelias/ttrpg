@@ -392,3 +392,41 @@
 - DRIFT RISK: zero combat-behavior change. Hooks are explicit no-ops with
   noqa markers. Return-dict additive only.
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
+
+## SIM-MB-06 v14 AUDIT (2026-05-13)
+- AUDIT cycle following v14 phase-structure commit.
+- ARTIFACTS:
+  * tests/sim/instrument_battle.py — reusable tick-by-tick instrumentation tool.
+    Patches v14 sim with verbose logging; renders markdown per-tick record.
+    Captures per-cell position/speed/facing/halted, volley pending, pre-pairs,
+    target assignment, advance deltas, cross-side contention firings,
+    post-movement contacts, full pool decomposition, dice result, per-unit
+    deltas, ASCII grid snapshot.
+  * tests/sim/audit_record_v14_h5.md — H5 RF vs HS seed 1000000 (outstanding
+    tension; B wins T8, RF routed at hp=2/20).
+  * tests/sim/audit_record_v14_h1.md — H1 Line vs Line seed 1000000 (control
+    mirror; B wins this seed, near-symmetric 51.6% A-wins across 500 seeds).
+  * tests/sim/audit_sim_mb_06_v14.md — consolidated audit + NERS analysis.
+    Compared against literal pre-firearms history AND acclaimed-videogame
+    precedents (Total War Medieval II / Three Kingdoms / Attila, Field of
+    Glory II, Battle Brothers, Mount & Blade Bannerlord). Every existing
+    mechanism + every proposed gap scored against project NERS criteria.
+- TOP-LEVEL FINDINGS (5 divergences):
+  1. Per-tick lethality ~5-10x too high (sim tick-scale = historical phase-scale)
+  2. No rout-at-casualty-threshold; battles run to ~100% destruction
+  3. No stamina/exhaustion (THE limiting factor historically; universal in genre)
+  4. No rest/recovery between contact periods
+  5. Front-row-faster-than-rear-rank infantry speed is historically backwards
+- GAP REGISTER:
+  G-1 stamina, G-2 rout-at-threshold — HIGH priority, full NERS pass, PAIRED
+  G-4 formation cohesion, G-5 per-cell nearest-attacker angle — MEDIUM
+  G-6 unit-pace speed (replace per-row) — MEDIUM-HIGH (strict NERS improvement)
+  G-7 rally — MEDIUM, completes rout/rally arc
+  G-3 per-tick lethality recalibration — defer; falls out of G-1+G-2
+  G-8 reform after withdrawal — defer until G-1/G-2 wired
+  G-9 threadwork — needs design clarification from Jordan
+  G-10 sarissa multi-rank projection — defer; subsumed by stamina
+  G-11 cavalry mechanism — HIGH priority; BLOCKED on battery scope
+- NEXT CYCLE: G-1 + G-2 paired implementation on existing phase-boundary hooks.
+  Expected: H5 -> 50-65% as RF rotation advantage manifests through stamina
+  mechanism; HS routs first at morale threshold.
