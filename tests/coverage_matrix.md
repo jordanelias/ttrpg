@@ -19,7 +19,7 @@
 | social_contest | sim_d06 | — | — | — | See prior sims |
 | thread | sim_thread_batch_08 | — | — | — | See prior sims |
 | strategic | sim_bg_ff_01 | — | — | — | See prior sims |
-| settlement_management | settlement_mgmt_stress_01 (in progress) | manifest committed; modules 1–13 pending | — | — | 🟡 Mode G Session 1 — manifest |
+| settlement_management | settlement_mgmt_stress_01 (in progress) | Module 1 verified (15/15); Modules 2–13 pending | F1–F4 surfaced | — | 🟡 Mode G Session 2 — Module 1 verified |
 
 ## SIM-MB-05A/B/C Summary
 - Date: 2026-05-11
@@ -464,3 +464,15 @@
 - Findings: H5 RF-vs-HS fixed (47.4→50.2%). H7 GL-vs-Line regressed (51.6→49.4%, structural).
   0% rout rate — G-3 lethality reduction prerequisite for meaningful rout.
   G-3 does NOT fall out of G-1+G-2 (contradicts audit prediction).
+
+
+## settlement_mgmt_stress_01 — Module 1 verified (2026-05-13)
+- Module: settlement primitives (§1.1, §1.2, §1.3, §2.1 force_full read)
+- File: tests/sim/settlement_mgmt_stress_01/module_01_primitives.py
+- Tests: 15/15 PASS (T1–T15)
+- Ledger entries: 17 (stat scale, derived coefficients, expected counts,
+  worked-example values)
+- Findings F1–F4 surfaced for editorial review (type-list, stats-column,
+  province-count, starting-stat-values inconsistencies)
+- Scope addendum: player action loop (improve/maintain/problem-solve →
+  faction standing + renown) added to Module 13 stress targets.

@@ -479,6 +479,74 @@ propagation vs healing.
 
 ---
 
+## 2026-05-13 Scope addendum — player action loop (Jordan)
+
+The stress test validates not just system mechanics in isolation but the
+**player action loop**: characters manage settlements (improve / maintain /
+problem-solve), settlement state mutates per canonical rules, faction Order
+and Accord shift, faction standing and renown deltas surface, available
+player actions update.
+
+**Loop structure:**
+
+1. Player chooses an action at settlement scope (improvement, maintenance,
+   or problem resolution).
+2. Action resolves per the responsible module's mechanic:
+   - Improvement → Module 3 (facility tier upgrade), Module 4 (Church axis)
+   - Maintenance → Module 7 (garrison/defense), Module 9 (clock pacing)
+   - Problem-solve → Module 6 (settlement event), Module 7 (invasion)
+3. Settlement state mutates (Module 1 substrate: Prosperity / Defense /
+   Order; Module 3 substrate: facility allocation; etc.).
+4. Province Accord recomputes (Module 1 `province_accord_from_settlements`).
+5. Faction Order / Turmoil propagates (Modules 5, 12).
+6. Faction standing delta surfaces; Stature ladder may shift (Module 8).
+7. Domain Echo if Sufficient Scope (Module 11).
+8. Player-visible feedback: renown change, new actions unlock or close.
+
+**Module 13 Mode B chains** must each be triggerable by a player action.
+**Mode D** includes:
+- Action that produces no settlement-state delta (broken loop)
+- State delta with no faction-standing feedback (broken loop)
+- Unintended cascading feedback (over-coupled loop)
+- Action whose feedback is delayed past the player's planning horizon
+  (unreadable loop)
+
+This addendum reframes the stress target without changing the module
+decomposition.
+
+---
+
+## Count correction (2026-05-13)
+
+Total settlements is **37** (35 Kingdom + 1 Church city-state + 1 foreign
+tributary), not "35+1" as drafted in V1 of this manifest. Schoenland
+(S-037) is foreign Altonian per §2.1.
+
+---
+
+## Module status
+
+| # | Name | Status | Date |
+|---|------|--------|------|
+| 1 | Settlement primitives | **verified** (15/15 isolation tests; F1–F4 surfaced) | 2026-05-13 |
+| 2 | Political hierarchy + adjacency | pending | — |
+| 3 | Facility tiers + capacity pressure | pending | — |
+| 4 | Church / parish / pastoral | pending | — |
+| 5 | Dual-authority governance | pending | — |
+| 6 | Settlement events + thread ops | pending | — |
+| 7 | Military granularity | pending | — |
+| 8 | Player progression — Stature | pending | — |
+| 9 | Extended timeline | pending | — |
+| 10 | Fractional province ownership | pending | — |
+| 11 | Scale transitions | pending | — |
+| 12 | Faction layer integration | pending | — |
+| 13 | Integration + stress runner | pending | — |
+
+---
+
 ## Changelog
 
 - 2026-05-13 — manifest created. Mode G Session 1.
+- 2026-05-13 — Module 1 verified (15/15 tests). 2026-05-13 scope addendum:
+  player action loop targets added. Count correction: total is 37
+  (35 + Himmelenger + Schoenland). Findings F1–F4 surfaced.

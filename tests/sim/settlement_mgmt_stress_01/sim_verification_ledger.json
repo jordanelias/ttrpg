@@ -2,7 +2,128 @@
   "sim_name": "settlement_mgmt_stress_01",
   "scope": "custom",
   "created": "2026-05-13",
-  "status": "scaffold \u2014 Module 1 will populate first entries (settlement primitives, \u00a71.1\u20131.3, \u00a72.1).",
-  "schema_note": "Each entry: {sim_variable: str, value: any, canonical_source: path, section: '\u00a7N.N or \u00a7heading', quoted_text: str (must literally appear in fetched content)}.",
-  "entries": []
+  "last_updated": "2026-05-13",
+  "status": "Module 1 entries populated; Modules 2\u201313 will append.",
+  "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
+  "entries": [
+    {
+      "sim_variable": "STAT_MAX",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 Settlement Stats",
+      "quoted_text": "Each settlement has 3 stats tracked on a 0\u20135 scale"
+    },
+    {
+      "sim_variable": "STAT_MIN",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 Settlement Stats",
+      "quoted_text": "Defense 0 = undefended (auto-capture)"
+    },
+    {
+      "sim_variable": "LOCAL_ECONOMY_PER_PROSPERITY",
+      "value": 50,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 derived-values table",
+      "quoted_text": "Prosperity \u00d7 50"
+    },
+    {
+      "sim_variable": "GARRISON_PER_DEFENSE",
+      "value": 20,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 derived-values table",
+      "quoted_text": "Defense \u00d7 20 + Fort Level \u00d7 30"
+    },
+    {
+      "sim_variable": "GARRISON_PER_FORT_LEVEL",
+      "value": 30,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 derived-values table",
+      "quoted_text": "Defense \u00d7 20 + Fort Level \u00d7 30"
+    },
+    {
+      "sim_variable": "PUBLIC_ORDER_PER_ORDER",
+      "value": 20,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 derived-values table",
+      "quoted_text": "Order \u00d7 20"
+    },
+    {
+      "sim_variable": "EXPECTED_TOTAL_SETTLEMENTS",
+      "value": 37,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "Total: 37 march-target settlements"
+    },
+    {
+      "sim_variable": "EXPECTED_KINGDOM_SETTLEMENTS",
+      "value": 35,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "35 Kingdom + 1 Church city-state + 1 foreign tributary"
+    },
+    {
+      "sim_variable": "EXPECTED_VALORSMARK_PROVINCES",
+      "value": 6,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "Valorsmark 6 provinces (15 settlements)"
+    },
+    {
+      "sim_variable": "EXPECTED_VALORSMARK_SETTLEMENTS",
+      "value": 15,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "Valorsmark 6 provinces (15 settlements)"
+    },
+    {
+      "sim_variable": "EXPECTED_HAFENMARK_PROVINCES",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "Hafenmark 4 provinces (10)"
+    },
+    {
+      "sim_variable": "EXPECTED_HAFENMARK_SETTLEMENTS",
+      "value": 10,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "Hafenmark 4 provinces (10), Varfell 4 provinces (10)"
+    },
+    {
+      "sim_variable": "EXPECTED_VARFELL_PROVINCES",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "Varfell 4 provinces (10)"
+    },
+    {
+      "sim_variable": "EXPECTED_VARFELL_SETTLEMENTS",
+      "value": 10,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry summary",
+      "quoted_text": "Varfell 4 provinces (10)"
+    },
+    {
+      "sim_variable": "_we_order_4",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 Province Accord derivation",
+      "quoted_text": "If a province has 3 settlements with Order 4, 2, and 1"
+    },
+    {
+      "sim_variable": "_we_3_settlements",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 Province Accord derivation",
+      "quoted_text": "If a province has 3 settlements with Order 4, 2, and 1"
+    },
+    {
+      "sim_variable": "_we_accord_2",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.3 Province Accord derivation",
+      "quoted_text": "floor(2.33) = 2"
+    }
+  ]
 }
