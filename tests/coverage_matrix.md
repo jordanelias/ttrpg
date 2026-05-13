@@ -280,3 +280,62 @@
   (change 4) is a canonical-rule modification — needs Jordan review before
   promotion from EXPLORATORY. Column-local targeting alters movement model.
 - NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
+
+## SIM-MB-06 v13 (2026-05-12/13, EXPLORATORY)
+- CROSS-SIDE CELL CONTENTION building on v12.
+- DIRECTIVE: historical precedent informs behaviour, bottom-up build, top-down confirm.
+- CHANGES (1 bottom-up mechanism, historically grounded):
+  Cross-side cell contention (resolve_cross_side_contention). After both sides
+  advance, cells from opposing sides may occupy the same abs position
+  (over-run). v13 resolves: faster cell wins position; loser cells that moved
+  this turn revert to pre-move snapshot. Tied speed = no movement resolution
+  (combat decides via engagement).
+- HISTORICAL GROUNDING:
+  * Crécy 1346 / Agincourt 1415: English defenders pre-positioned via faster
+    deployment; French halt at disadvantage. Speed-priority = first to ground.
+  * Leuctra 371 BC: oblique order — strong wing faster, reaches enemy first.
+  * Hoplite mirror: equal-speed disciplined formations resolve via combat
+    (othismos), not movement priority. → tied-speed contests stay co-located.
+- DEVIATION FROM JORDAN FULL SPEC:
+  Full Jordan rule: speed → size → random tiebreakers + cavalry charge-through
+  + end-of-phase displacement. v13 implements STRICT SPEED ONLY. Size/random
+  tiebreakers omitted: they produce battery noise per-position per-turn in
+  symmetric matchups without modelling anything historical (equal infantry
+  formations don't resolve by random; they resolve by combat). Charge-through
+  and end-of-phase displacement deferred — no cavalry in battery; framework
+  scaffolded (snapshot, _moved_this_turn tracking) for v14+ cavalry wiring.
+- WITHIN-SIDE DISCIPLINE-GATED FORMATION HOLD: implemented as
+  Subunit.resolve_internal_collisions but NOT INVOKED. Earlier attempt broke
+  battery (12/13 → 9/13). Reason: midpoint-of-two-forward-vectors is still
+  forward, so the FAIL case has no effective penalty; only PASS revert worked,
+  preferentially helping deep-column shapes (RF, Line) and hurting Arrowhead.
+  Method retained in code for v14+ when paired with proper bad-facing trigger
+  (e.g., wrap-around forcing perpendicular facings).
+- BATTERY RESULTS (n=500): 12/13 in-band (same as v12)
+  IN-BAND (12/13):
+    H1 51.6%, H2 54.4%, H3 61.6%, H4 48.2%, H6 56.8%, H7 51.6%,
+    H8 49.6%, H9 48.2%, H10 37.6%, H11 51.0%, R1 34.6%, R3 47.2%
+  BORDERLINE OUT (1/13):
+    H5 RefusedFlank vs Horseshoe: 47.4% (target 50-65%, 2.6% below floor)
+- MECHANISM FIRING DIAGNOSTICS (50 battles/test):
+    H1 Line-Line: 0.0/battle (tied speed-1)
+    H2 Arrow-Line: 1.0/battle (Arrow tip speed-2 vs Line speed-1)
+    H3 HS-Line: 14.0/battle (HS wings speed-2 sustained vs Line)
+    H5 RF-HS: 0.0/battle (both have speed-2 components, tied)
+    H6 RF-Line: 4.0/battle (RF front speed-2 vs Line speed-1)
+    H7 GL-Line: 0.0/battle (both speed-1)
+    H10 Line-HS: 8.0/battle (symmetric to H3)
+  Mechanism does substantive work in asymmetric matchups; correctly silent in
+  symmetric ones per historical model.
+- TENSIONS CARRIED FORWARD:
+  - H5 (RF vs HS): unchanged at 47.4%. Fundamental insight: H5 is NOT a
+    co-location problem (which v13 resolves). HS wings extend PAST RF's
+    footprint — wrap-around at columns RF doesn't occupy. Speed-priority is
+    the wrong tool for wrap geometry.
+  - v14 candidates: refused-stub repositioning, depth-ratio pool bonus when
+    enemy extends past own footprint, anti-flanking defensive bonus for cells
+    engaging outside-footprint enemies. Geometry-aware, not speed-aware.
+- DRIFT RISK: 1 new mechanism, conservative implementation. Documented
+  deviation from Jordan spec in code docstring and manifest. Charge-through
+  framework partially scaffolded — future wiring must use existing primitives.
+- NOT YET PROPAGATED to canonical mechanics. ED-814 remains canonical.
