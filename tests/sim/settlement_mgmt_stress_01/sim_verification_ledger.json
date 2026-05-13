@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Module 1 entries populated; Modules 2\u201313 will append.",
+  "status": "Modules 1\u20132 entries populated. 28 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -124,6 +124,83 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a71.3 Province Accord derivation",
       "quoted_text": "floor(2.33) = 2"
+    },
+    {
+      "sim_variable": "MIN_SETTLEMENTS_PER_PROVINCE",
+      "value": 2,
+      "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
+      "section": "\u00a72.1 Settlement count per province",
+      "quoted_text": "The minimum is 2 \u2014 every province in the Kingdom must have at least two settlements"
+    },
+    {
+      "sim_variable": "MAX_SETTLEMENTS_PER_PROVINCE",
+      "value": 3,
+      "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
+      "section": "\u00a72.1 Settlement count per province",
+      "quoted_text": "Each province has **1\u20133 settlements**"
+    },
+    {
+      "sim_variable": "MIN_CONNECTIONS_PER_SETTLEMENT",
+      "value": 2,
+      "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
+      "section": "\u00a72.2 Settlement march-route connections",
+      "quoted_text": "Each settlement is connected by road to at least two other settlements"
+    },
+    {
+      "sim_variable": "EXPECTED_KINGDOM_PROVINCES",
+      "value": 14,
+      "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
+      "section": "\u00a72.1 Settlement count per province",
+      "quoted_text": "14 provinces total in the duchy hierarchy = 35 settlements"
+    },
+    {
+      "sim_variable": "EXPECTED_KINGDOM_SETTLEMENTS_PH",
+      "value": 35,
+      "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
+      "section": "\u00a72.1 Settlement count per province",
+      "quoted_text": "14 provinces total in the duchy hierarchy = 35 settlements"
+    },
+    {
+      "sim_variable": "EXPECTED_TOTAL_EDGES",
+      "value": 55,
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "settlement_adjacency: block actual content",
+      "quoted_text": "Sigurdshelm\u2194Oastad second route"
+    },
+    {
+      "sim_variable": "EXPECTED_INTRA_PROVINCE_EDGES",
+      "value": 28,
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "settlement_adjacency: \u2500\u2500\u2500 Intra-province edges \u2500\u2500\u2500",
+      "quoted_text": "Intra-province edges (28: 7 triangles \u00d7 3 + 7 singles \u00d7 1)"
+    },
+    {
+      "sim_variable": "EXPECTED_INTER_PROVINCE_EDGES",
+      "value": 27,
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "settlement_adjacency: inter-province (24 primary + 3 second-routes)",
+      "quoted_text": "Inter-province edges (24 primary + 1 sea)"
+    },
+    {
+      "sim_variable": "HEADER_ASSERTED_TOTAL_EDGES",
+      "value": 56,
+      "canonical_source": "designs/territory/valoria_geography_v30.yaml",
+      "section": "settlement_adjacency: header comment",
+      "quoted_text": "56 edges total: 28 intra-province"
+    },
+    {
+      "sim_variable": "HIMMELENGER_DEGREE",
+      "value": 5,
+      "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
+      "section": "\u00a71.2 Special-case entities \u2014 Himmelenger",
+      "quoted_text": "Its march-route connections (5 edges per `valoria_geography :: settlement_adjacency`)"
+    },
+    {
+      "sim_variable": "SCHOENLAND_DEGREE",
+      "value": 1,
+      "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
+      "section": "\u00a72.2 Settlement march-route connections",
+      "quoted_text": "Schoenland at 1 connection is the canonical foreign-exempt case."
     }
   ]
 }

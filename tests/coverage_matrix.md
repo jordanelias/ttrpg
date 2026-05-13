@@ -475,3 +475,16 @@
   province-count, starting-stat-values inconsistencies)
 - Scope addendum: player action loop (improve/maintain/problem-solve →
   faction standing + renown) added to Module 13 stress targets.
+
+
+## settlement_mgmt_stress_01 — Module 2 verified (2026-05-13)
+- Module: political hierarchy + adjacency (rebuild doc + adjacency v30
+  + geography YAML + march_layer §1)
+- File: tests/sim/settlement_mgmt_stress_01/module_02_hierarchy.py
+- Tests: 22/22 PASS (T1-T22)
+- Ledger: 11 new entries (28 total across M1+M2)
+- F5 NEW: settlement_adjacency header math (56 asserted vs 55 actual)
+- F6 NEW: intra-YAML S-ID granularity drift -- settlements block at
+  pre-rebuild granularity blocks Module 13 Mode C campaign sim.
+- F3 RESOLVED: 14 Kingdom provinces + 3 special-case = 17.
+- F4 PARTIALLY RESOLVED: stats exist but at wrong granularity (F6).

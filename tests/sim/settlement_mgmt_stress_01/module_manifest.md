@@ -529,7 +529,7 @@ tributary), not "35+1" as drafted in V1 of this manifest. Schoenland
 | # | Name | Status | Date |
 |---|------|--------|------|
 | 1 | Settlement primitives | **verified** (15/15 isolation tests; F1–F4 surfaced) | 2026-05-13 |
-| 2 | Political hierarchy + adjacency | pending | — |
+| 2 | Political hierarchy + adjacency | **verified** (22/22 isolation tests; F5-F6 surfaced; F3 resolved; F4 partial) | 2026-05-13 |
 | 3 | Facility tiers + capacity pressure | pending | — |
 | 4 | Church / parish / pastoral | pending | — |
 | 5 | Dual-authority governance | pending | — |
@@ -550,3 +550,8 @@ tributary), not "35+1" as drafted in V1 of this manifest. Schoenland
 - 2026-05-13 — Module 1 verified (15/15 tests). 2026-05-13 scope addendum:
   player action loop targets added. Count correction: total is 37
   (35 + Himmelenger + Schoenland). Findings F1–F4 surfaced.
+- 2026-05-13 — Module 2 verified (22/22 tests). F3 resolved (rebuild §2.1
+  reconciles 17 vs 14+3); F4 partially resolved (stats exist in geography
+  YAML); F5 NEW (adjacency header math: 56 asserted vs 55 actual); F6 NEW
+  (intra-YAML S-ID granularity drift — settlements block at pre-rebuild
+  granularity blocks Module 13 Mode C campaign sim).
