@@ -481,3 +481,11 @@
   H5 RF wins 75.5% in multi-turn (above target — depth stacking).
   Per-turn battery not meaningful at max_turns=18 (most matchups draw).
   Winner/loser ratio 1.4x (historical 2-5x — needs pursuit/cascade).
+
+## duel_architecture_stress_01 — v5: initiative info + PP-294 feint fix
+- Date: 2026-05-13
+- Scope: Duel = scene combat + context layer. Initiative info advantage modeled.
+  PP-294 Feint retains defense (PP-238 Defense=0 overruled). Taunt cost=5.
+- Iterations: v1→v3b→v4→v5
+- Findings: info advantage worth ~3pp; Feint still costly but no longer suicidal;
+  Taunt balanced at cost 5 but Duellist protocol under-strikes; End 5v4 still 88.6%
