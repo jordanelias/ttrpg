@@ -1,5 +1,12 @@
 # Valoria Simulation Coverage Matrix
 
+## HANDOFF_v22 — comprehensive session handoff
+- Date: 2026-05-14
+- Scope: session summary for v21+v22
+- Status: reference document
+- Summary: 4 priorities resolved (BIAS-1, D-3, D-5, G-11). Next: D-8 battery recalibration.
+
+
 ## sim_mb_06_v22 — multi-unit orchestrator + freed-attacker + cascade + cavalry pursuit (D-3, D-5, G-11)
 - Date: 2026-05-14
 - Scope: mass combat simulation v21 to v22

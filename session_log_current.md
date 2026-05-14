@@ -1,11 +1,11 @@
 ---
 session_id: v21-sim-simultaneous
-last_stage: sim_v22_cavalry_pursuit_g11
+last_stage: session_close_handoff_v22
 last_commit: (this commit)
 commits: 4
 next_action:
   skill: valoria-simulator
-  description: Priority 5 — battery band recalibration (D-8). Or comprehensive handoff.
+  description: Next — battery band recalibration (D-8) or discipline degradation. Read HANDOFF_v22.md.
 blockers:
   - canonical_sources.yaml freshness stale for params/combat.md (PP-238 editorial)
 ---
