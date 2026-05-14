@@ -1,11 +1,11 @@
 ---
 session_id: v21-sim-simultaneous
-last_stage: sim_v22_multi_unit_freed_attacker
+last_stage: sim_v22_cavalry_pursuit_g11
 last_commit: (this commit)
-commits: 3 (805f5f2: v21; b2558d0: fix; this: v22 multi-unit)
+commits: 4
 next_action:
   skill: valoria-simulator
-  description: Priority 4 — cavalry/G-11 for pursuit damage. Or priority 5 — battery band recalibration.
+  description: Priority 5 — battery band recalibration (D-8). Or comprehensive handoff.
 blockers:
   - canonical_sources.yaml freshness stale for params/combat.md (PP-238 editorial)
 ---

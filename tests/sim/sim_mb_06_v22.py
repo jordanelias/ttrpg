@@ -967,6 +967,11 @@ class Unit:
     routed: bool = False
     broken: bool = False
     stance: str = "balanced"
+    # v22/G-11: Speed tier — determines pursuit capability.
+    # [canonical: designs/provincial/mass_battle_v30.md L120 — "Slow / Standard / Fast"]
+    # [ASSUMPTION: Cavalry/Knights Templar = Fast; Heavy Infantry = Slow; others = Standard
+    #  — basis: L429 "Cavalry → Standard" in forest implies Fast default]
+    speed: str = "Standard"  # "Slow" | "Standard" | "Fast"
     # G-1: stamina (0–STAMINA_MAX). Drains per contact tick, recovers at phase boundary.
     stamina: int = STAMINA_MAX
     stamina_max: int = STAMINA_MAX
@@ -1783,6 +1788,59 @@ def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
     }
 
 
+# ─── PURSUIT (G-11, v22) ─────────────────────────────────────────────────────
+# [canonical: designs/provincial/mass_battle_v30.md §A.12-514]
+# "Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
+#  Offence successes (no Defence) each turn. Recall: Command Ob 2."
+# "Routing: Slow/Standard cannot fight back. Fast may rearguard at −2D Off."
+REARGUARD_PENALTY = 2  # [canonical: §A.12 — "Fast may rearguard at −2D Off"]
+RECALL_OB = 2  # [canonical: §A.12 — "Recall: Command Ob 2"]
+
+
+def pursuit_damage(pursuer, routing_unit):
+    """Fast pursuer attacks routing unit. Routing unit has no defence
+    unless it is also Fast (rearguard at -2D Off).
+    Returns HP damage dealt.
+    [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
+    if pursuer.speed != "Fast":
+        return 0  # Only Fast units can pursue
+    if pursuer.routed or pursuer.broken:
+        return 0
+    if not routing_unit.routed:
+        return 0
+
+    # [canonical: params/mass_combat.md PP-233 — Pool = min(Size,Cmd)+Cmd]
+    a_pool = pursuer.base_combat_pool()
+    a_net = roll_pool(a_pool)
+
+    # Fast routing unit may rearguard at -2D Off
+    # [canonical: §A.12 — "Fast may rearguard at −2D Off"]
+    if routing_unit.speed == "Fast":
+        rg_pool = max(1, routing_unit.base_combat_pool() - REARGUARD_PENALTY)
+        rg_net = roll_pool(rg_pool)
+        # Rearguard acts as partial defence — reduce pursuer net
+        a_net = max(0, a_net - max(0, rg_net))
+
+    # No defence roll for Slow/Standard routing units
+    # [canonical: §A.12 — "Slow/Standard cannot fight back"]
+
+    # Damage = net successes × (1 + Power), minus DR
+    # [canonical: params/mass_combat.md PP-233]
+    if a_net <= 0:
+        return 0
+    raw_dmg = a_net * (1 + pursuer.power)
+    dmg = max(0, raw_dmg - routing_unit.dr)
+    return dmg
+
+
+def recall_check(pursuer):
+    """General attempts to recall pursuing unit. Command Ob 2.
+    Returns True if recalled (pursuit stops).
+    [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
+    net = roll_pool(pursuer.command)
+    return net >= RECALL_OB
+
+
 # ─── MULTI-UNIT BATTLE ORCHESTRATOR (D-3, D-5, v22) ──────────────────────────
 # Models battles with multiple units per side. Each engagement pair runs through
 # run_battle (1v1). After all pairs resolve: morale cascade, rout contagion,
@@ -1791,7 +1849,7 @@ def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
 #  Rout contagion brake, pursuit rules]
 
 # v22: Morale cascade discipline check — Ob 1, fires at Phase 6 Step 3
-# [canonical: §A.12 L517 — "all friendly units in the same engagement make a
+# [canonical: §A.12 — "all friendly units in the same engagement make a
 #  Discipline check (Ob 1). Failure: Morale −1"]
 MORALE_CASCADE_OB = 1  # [canonical: designs/provincial/mass_battle_v30.md §A.12]
 ROUT_CONTAGION_MORALE_HIT = 1  # [canonical: designs/provincial/mass_battle_v30.md L167]
@@ -1851,6 +1909,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
     # Track active pairings and freed units
     active_pairs = list(range(len(pairings)))
     freed_units = []  # (unit, owner_side, source_pair_idx)
+    pursuing_units = []  # (pursuer, routing_unit, pursuer_side, source_pair_idx)
 
     for battle_turn in range(1, max_battle_turns + 1):
         turn_log = {
@@ -1858,8 +1917,41 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             'engagements': [],
             'cascades': [],
             'freed_attacks': [],
+            'pursuits': [],
             'routs_this_turn': [],
         }
+
+        # ── Pursuit phase: Fast units pursuing routing enemies ──
+        # [canonical: §A.12 L513 — "Routing unit loses Size equal to pursuer
+        #  net Offence successes (no Defence) each turn."]
+        for pursuer, routing, p_side, p_pair in list(pursuing_units):
+            if routing.hp <= 0:
+                # Routing unit destroyed — pursuer becomes freed
+                pursuing_units.remove((pursuer, routing, p_side, p_pair))
+                freed_units.append((pursuer, p_side, p_pair))
+                continue
+            # Recall check — general tries to pull unit back
+            # [canonical: §A.12 — "Recall: Command Ob 2"]
+            if recall_check(pursuer):
+                pursuing_units.remove((pursuer, routing, p_side, p_pair))
+                freed_units.append((pursuer, p_side, p_pair))
+                turn_log['pursuits'].append({
+                    'pursuer': pursuer.name, 'target': routing.name,
+                    'damage': 0, 'recalled': True,
+                })
+                continue
+            # Pursuit damage
+            dmg = pursuit_damage(pursuer, routing)
+            if dmg > 0:
+                routing.hp = max(0, routing.hp - dmg)
+                routing.recalc_size()
+            turn_log['pursuits'].append({
+                'pursuer': pursuer.name, 'target': routing.name,
+                'damage': dmg, 'recalled': False,
+            })
+            if routing.hp <= 0:
+                pursuing_units.remove((pursuer, routing, p_side, p_pair))
+                freed_units.append((pursuer, p_side, p_pair))
 
         # ── Phase: run each active engagement ──
         # [canonical: designs/provincial/mass_battle_v30.md — Phase 2-5 per pair]
@@ -1933,7 +2025,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         turn_log['routs_this_turn'] = [(s, i) for s, i, _ in newly_routed]
 
         # ── Phase 6 Step 3: Morale Cascade ──
-        # [canonical: designs/provincial/mass_battle_v30.md §A.12 L517]
+        # [canonical: designs/provincial/mass_battle_v30.md §A.12]
         for routed_side, routed_idx, pair_idx in newly_routed:
             # All friendly units in the SAME engagement check Discipline Ob 1
             a_idx, b_idx = pairings[pair_idx]
@@ -1977,12 +2069,28 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 # (rout check deferred to next turn's engagement resolution)
 
         # ── Freed-attacker: victor from resolved pair becomes free ──
+        # v22/G-11: Fast victors PURSUE routing unit (§A.12). Non-Fast join adjacent.
         for routed_side, routed_idx, pair_idx in newly_routed:
             a_idx, b_idx = pairings[pair_idx]
+            victor = None
+            routing = None
             if routed_side == 'A' and not side_b[b_idx].routed:
-                freed_units.append((side_b[b_idx], 'B', pair_idx))
+                victor = side_b[b_idx]
+                routing = side_a[a_idx]
+                victor_side = 'B'
             elif routed_side == 'B' and not side_a[a_idx].routed:
-                freed_units.append((side_a[a_idx], 'A', pair_idx))
+                victor = side_a[a_idx]
+                routing = side_b[b_idx]
+                victor_side = 'A'
+
+            if victor:
+                if victor.speed == "Fast" and routing.hp > 0:
+                    # Fast unit pursues — track for ongoing pursuit
+                    # [canonical: §A.12 L513 — "Pursuit: Fast units only"]
+                    pursuing_units.append((victor, routing, victor_side, pair_idx))
+                else:
+                    # Non-Fast: freed attacker joins adjacent engagement
+                    freed_units.append((victor, victor_side, pair_idx))
 
         # ── Remove resolved pairs ──
         active_pairs = [p for p in active_pairs
@@ -1992,6 +2100,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         # ── Log state ──
         turn_log['active_pairs'] = len(active_pairs)
         turn_log['freed_count'] = len(freed_units)
+        turn_log['pursuing_count'] = len(pursuing_units)
         for side, units in [('A', side_a), ('B', side_b)]:
             for i, u in enumerate(units):
                 turn_log[f'{side}{i}_hp'] = round(u.hp / u.hp_max * 100, 1) if u.hp_max else 0
@@ -2000,9 +2109,15 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
         log.append(turn_log)
 
         # ── Check termination ──
+        # [canonical: §A.12 — pursuit continues until recall or routing unit destroyed]
+        # Battle ends when: both sides fully routed, OR no activity remains
+        # (no active pairs, no pursuit, no freed attackers with targets)
         a_all_routed = all(u.routed for u in side_a)
         b_all_routed = all(u.routed for u in side_b)
-        if a_all_routed or b_all_routed or not active_pairs:
+        if a_all_routed and b_all_routed:
+            break  # mutual rout — no one left to pursue
+        if not active_pairs and not pursuing_units:
+            # No engagements and no pursuit — freed attackers can't do anything
             break
 
         # ── Between-turn recovery ──

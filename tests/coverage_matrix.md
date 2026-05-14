@@ -1,17 +1,20 @@
 # Valoria Simulation Coverage Matrix
 
-## sim_mb_06_v22 — multi-unit orchestrator + freed-attacker + morale cascade (D-3, D-5)
+## sim_mb_06_v22 — multi-unit orchestrator + freed-attacker + cascade + cavalry pursuit (D-3, D-5, G-11)
 - Date: 2026-05-14
-- Scope: mass combat simulation v21→v22
-- Mode: G — architectural addition: multi-unit battle orchestrator
+- Scope: mass combat simulation v21 to v22
+- Mode: G — architectural additions: multi-unit orchestrator, cavalry pursuit
 - Status: committed
-- Changes: new run_multi_unit_battle() for 2+ engagement pairs per side.
-  Morale cascade: rout triggers Discipline Ob 1 check on adjacent friendlies (fail = -1 morale).
-  Rout contagion: -1 Morale to adjacent, braked. Freed-attacker: victor flanks adjacent enemy
-  (full pool vs -1D defender). D-3 and D-5 resolved.
-- Validation: 2v2 (command asymmetry) and 3v3 (staggered routs) scenarios.
-  Cascade fires correctly on sequential routs. Freed-attacker 2-3 dmg/turn.
+- Changes (commit a): run_multi_unit_battle() for multiple engagement pairs.
+  Morale cascade (Discipline Ob 1), rout contagion (-1 braked), freed-attacker (flank -1D).
+  D-3 and D-5 resolved.
+- Changes (commit b, G-11): Speed field (Slow/Standard/Fast). Pursuit: Fast victors
+  pursue routing unit (offence pool, no defence for Slow/Standard; Fast rearguard -2D).
+  Recall: Command Ob 2 per turn.
+- Validation: mirror casualty ratio 1.25x (Standard), 1.22x (Fast mirror).
+  Asymmetric Cmd 4 vs 3: 8.4x (Fast) vs 6.1x (Standard) — pursuit adds approx 40%.
   Cascade fail rates: Disc 2=33.5%, Disc 5=17%.
+- D-3 RESOLVED. D-5 RESOLVED. G-11 RESOLVED.
 
 
 ## sim_mb_06_v21 — true simultaneous resolution (BIAS-1 root fix)
