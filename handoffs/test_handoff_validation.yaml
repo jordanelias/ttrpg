@@ -1,0 +1,26 @@
+handoff_id: test_handoff_validation
+scope: infrastructure
+task:
+  skill: none
+  description: Validation test for handoff system — close immediately
+context_files:
+- path: session_log_current.md
+  depth: full
+  reason: Test context file
+working_state:
+  completed:
+  - Schema validation
+  - Bootstrap integration
+  next:
+  - End-to-end test
+  in_progress: []
+owns:
+- handoffs/*
+key_values:
+- This is a test handoff
+schema_version: 1
+status: active
+created_at: '2026-05-14T19:30:39.221065+00:00'
+updated_at: '2026-05-14T19:30:39.221093+00:00'
+created_by_session: eada0a2b76321397
+blockers: []
