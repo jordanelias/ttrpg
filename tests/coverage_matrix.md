@@ -19,7 +19,7 @@
 | social_contest | sim_d06 | — | — | — | See prior sims |
 | thread | sim_thread_batch_08 | — | — | — | See prior sims |
 | strategic | sim_bg_ff_01 | — | — | — | See prior sims |
-| settlement_management | settlement_mgmt_stress_01 (in progress) | Module 1 verified (15/15); Modules 2–13 pending | F1–F4 surfaced | — | 🟡 Mode G Session 2 — Module 1 verified |
+| settlement_management | settlement_mgmt_stress_01 (in progress) | manifest committed; modules 1–13 pending | — | — | 🟡 Mode G Session 1 — manifest |
 
 ## SIM-MB-05A/B/C Summary
 - Date: 2026-05-11
@@ -447,12 +447,12 @@
   prior-sim mining session; stop = no unfixed P1/P2 + 50 seeds clean +
   full coverage
 
-## duel_architecture_stress_01 — v4: scene combat chassis
+## duel_architecture_stress_01 — design + stress test committed
 - Date: 2026-05-13
-- Scope: Duel = scene combat + context layer (E7 yield, Taunt, audience)
-- Iterations: v1 (Pirates!) → v3b (imposed triangle) → v4 (bottom-up emergence)
-- Findings: no natural RPS from canonical; stamina mgmt is THE duel strategy;
-  Taunt broken-strong (92%); End dominance canonical; light weapons dominate duels
+- Scope: Architecture C duel composite stress (E5 stance + E7 yield + canonical combat)
+- Mode: A + B + D — 12-hypothesis Monte Carlo (N=5000)
+- Status: committed; findings pending Jordan ratification
+- Findings: E7 works; End too dominant [P2]; defense unrewarded [P2]; feint never optimal [P2]
 
 ## sim_mb_06_v15 — G-1 stamina + G-2 rout committed
 - Date: 2026-05-13
@@ -465,41 +465,19 @@
   0% rout rate — G-3 lethality reduction prerequisite for meaningful rout.
   G-3 does NOT fall out of G-1+G-2 (contradicts audit prediction).
 
-
-## settlement_mgmt_stress_01 — Module 1 verified (2026-05-13)
-- Module: settlement primitives (§1.1, §1.2, §1.3, §2.1 force_full read)
-- File: tests/sim/settlement_mgmt_stress_01/module_01_primitives.py
-- Tests: 15/15 PASS (T1–T15)
-- Ledger entries: 17 (stat scale, derived coefficients, expected counts,
-  worked-example values)
-- Findings F1–F4 surfaced for editorial review (type-list, stats-column,
-  province-count, starting-stat-values inconsistencies)
-- Scope addendum: player action loop (improve/maintain/problem-solve →
-  faction standing + renown) added to Module 13 stress targets.
-
-
-## settlement_mgmt_stress_01 — Module 2 verified (2026-05-13)
-- Module: political hierarchy + adjacency (rebuild doc + adjacency v30
-  + geography YAML + march_layer §1)
-- File: tests/sim/settlement_mgmt_stress_01/module_02_hierarchy.py
-- Tests: 22/22 PASS (T1-T22)
-- Ledger: 11 new entries (28 total across M1+M2)
-- F5 NEW: settlement_adjacency header math (56 asserted vs 55 actual)
-- F6 NEW: intra-YAML S-ID granularity drift -- settlements block at
-  pre-rebuild granularity blocks Module 13 Mode C campaign sim.
-- F3 RESOLVED: 14 Kingdom provinces + 3 special-case = 17.
-- F4 PARTIALLY RESOLVED: stats exist but at wrong granularity (F6).
-
-
-## settlement_mgmt_stress_01 — Module 3 verified (2026-05-13)
-- Module: facility tiers + capacity pressure (settlement_layer §1.4.1-1.4.4)
-- File: tests/sim/settlement_mgmt_stress_01/module_03_facilities.py
-- Tests: 25/25 PASS (T1-T25)
-- Ledger: 20 new entries (48 total cumulative across M1+M2+M3)
-- First IMPROVEMENT-arm player-action handler now live:
-  expand_institutional_capacity(facility, treasury) -> ActionResult
-  carrying treasury_delta, faction_standing_delta, renown_delta.
-- F7 NEW: §1.4.1 capacity matrix omits §2.1 extra types. 17 of 37
-  settlements affected. Village fallback to Town provisional;
-  Fortress-City + Cathedral-City unmapped (genuine gaps).
-- M1 F1 corrected: Village count is 14, not 15. (15 is the Town count.)
+## sim_mb_06_v16 — G-3 continuous effective_size + lethality recalibration committed
+- Date: 2026-05-13
+- Scope: mass combat simulation v15→v16
+- Mode: G (Incremental Build Protocol) — architectural change + lethality recalibration
+- Status: committed
+- Changes: continuous effective_size (float, not floored); LETHALITY_SCALE=0.10 for ~15%
+  casualties per 3-phase engagement turn; casualty-percentage morale triggers at 30%/50%;
+  max_turns default 18 (3-phase cap per engagement turn)
+- Architecture: 4-level zoom (Peninsula → Territory → Battlefield → Scene).
+  Sim models Battlefield level. Multi-turn battle: 5-8 turns × 3 phases per engagement.
+  Per-unit 25×21 grid (not shared). Adjacent allies join at one depth.
+- Findings: multi-turn rout at ~33% cumulative casualties after 2 turns.
+  Winner casualties ~23%, loser ~33%. 100% rout rate.
+  H5 RF wins 75.5% in multi-turn (above target — depth stacking).
+  Per-turn battery not meaningful at max_turns=18 (most matchups draw).
+  Winner/loser ratio 1.4x (historical 2-5x — needs pursuit/cascade).
