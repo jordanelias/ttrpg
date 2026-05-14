@@ -1,5 +1,22 @@
 # Valoria Simulation Coverage Matrix
 
+## sim_mb_06_v23 — cell-pair damage scaling (bottom-up lethality fix for Issue 1)
+- Date: 2026-05-14
+- Scope: resolve_engagements damage formula
+- Mode: G — bottom-up mechanic (build at cell level, validate via battery)
+- Status: committed
+- Change: per-pair damage scales by cell-pair adjacency count (king-move).
+  Each adjacent cell-pair = one fighting interaction = soldier-vs-soldier exchange.
+  Pool roll stays at subunit-pair level (preserves variance). Damage stays 1:1
+  with soldiers. No global LETHALITY_SCALE multiplier needed.
+- Battery (single-engagement, n=40, no run_multi_turn_battle):
+  7/11 in-band (was 2/8 in v22 multi-turn).
+  Working: H3 Horseshoe vs Line 57.5%, H4 Cannae 45%, H6/H7/H8/H9/H11.
+  Out: H1 mirror 42.5 (likely noise), H2 Arrowhead 35%, H5 RF vs HS 35%, H10 mirror-of-H3 27.5%.
+  Remaining issues: Arrowhead penetration (H2), RefusedFlank vs Horseshoe (H5),
+  ~15pt asymmetry between H3/H10 indicating persistent processing-order bias.
+
+
 ## sim_audit_v5_to_v22 — comprehensive mechanic survival audit
 - Date: 2026-05-14
 - Scope: every mechanic v5 through v22, status in v22

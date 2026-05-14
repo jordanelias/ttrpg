@@ -3,6 +3,9 @@
 **Date:** 2026-05-14
 **Scope:** every mechanic introduced v5 through v22, status in v22, supersession/drop analysis
 **Trigger:** v22 multi-turn battery shows 1-2 of 13 matchups in-band despite v14 achieving 12/13. Audit identifies regressions.
+**Terminology note:** the legacy term *atom* (used in v5-v10 manifests) was renamed to *subunit* in v11. This document uses *subunit* throughout. Cell remains cell.
+
+
 
 ## Method
 

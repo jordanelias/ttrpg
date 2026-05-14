@@ -1,11 +1,11 @@
 ---
 session_id: v21-sim-simultaneous
-last_stage: comprehensive_audit_v5_to_v22
+last_stage: sim_v23_cell_pair_scaling_7_of_11_in_band
 last_commit: (this commit)
 commits: 4
 next_action:
   skill: valoria-simulator
-  description: Next — fix Issue 1 (lethality calibration). Read sim_audit_v5_to_v22.md.
+  description: Next — fix Issue 4 (equal-speed contention) for asymmetry, then Arrowhead penetration (H2), then RefusedFlank (H5).
 blockers:
   - canonical_sources.yaml freshness stale for params/combat.md (PP-238 editorial)
 ---
