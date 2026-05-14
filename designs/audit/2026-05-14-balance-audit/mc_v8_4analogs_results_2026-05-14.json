@@ -1,0 +1,107 @@
+{
+  "canon (no new cards)": {
+    "win_share": {
+      "Crown": 33.4,
+      "Church": 47.6,
+      "Hafenmark": 13.8,
+      "Varfell": 5.2
+    },
+    "final_L_mean": {
+      "Crown": 3.47,
+      "Church": 6.15,
+      "Hafenmark": 3.57,
+      "Varfell": 2.37
+    },
+    "almud_states": {
+      "weak": 88,
+      "stable": 276,
+      "strong": 82,
+      "deposed-mandate-collapse": 53,
+      "deposed-submission": 1
+    }
+  },
+  "canon + 4 analog cards (all)": {
+    "win_share": {
+      "Crown": 27.4,
+      "Church": 62.4,
+      "Hafenmark": 2.6,
+      "Varfell": 7.6
+    },
+    "final_L_mean": {
+      "Crown": 3.34,
+      "Church": 6.45,
+      "Hafenmark": 3.48,
+      "Varfell": 2.5
+    },
+    "almud_states": {
+      "stable": 206,
+      "deposed-mandate-collapse": 68,
+      "weak": 167,
+      "deposed-submission": 31,
+      "strong": 28
+    }
+  },
+  "consent=0.75 + 4 analog cards": {
+    "win_share": {
+      "Crown": 33.0,
+      "Church": 57.2,
+      "Hafenmark": 1.8,
+      "Varfell": 8.0
+    },
+    "final_L_mean": {
+      "Crown": 3.76,
+      "Church": 6.43,
+      "Hafenmark": 3.43,
+      "Varfell": 2.52
+    },
+    "almud_states": {
+      "stable": 210,
+      "deposed-mandate-collapse": 46,
+      "weak": 173,
+      "deposed-submission": 30,
+      "strong": 41
+    }
+  },
+  "consent=0.5 + 4 analogs + 50s": {
+    "win_share": {
+      "Crown": 12.6,
+      "Church": 76.8,
+      "Hafenmark": 4.2,
+      "Varfell": 6.4
+    },
+    "final_L_mean": {
+      "Crown": 3.06,
+      "Church": 6.57,
+      "Hafenmark": 3.48,
+      "Varfell": 2.05
+    },
+    "almud_states": {
+      "weak": 155,
+      "deposed-mandate-collapse": 95,
+      "deposed-submission": 160,
+      "stable": 80,
+      "strong": 10
+    }
+  },
+  "consent=0.5 + 4 analogs + 24s": {
+    "win_share": {
+      "Crown": 52.6,
+      "Church": 21.2,
+      "Hafenmark": 14.6,
+      "Varfell": 11.6
+    },
+    "final_L_mean": {
+      "Crown": 3.39,
+      "Church": 6.41,
+      "Hafenmark": 3.57,
+      "Varfell": 2.9
+    },
+    "almud_states": {
+      "strong": 73,
+      "deposed-mandate-collapse": 42,
+      "stable": 258,
+      "weak": 125,
+      "deposed-submission": 2
+    }
+  }
+}

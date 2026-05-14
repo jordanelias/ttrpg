@@ -1,0 +1,152 @@
+{
+  "canon-v5 baseline (no fixes)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 57.0,
+      "Church": 24.8,
+      "Hafenmark": 15.6,
+      "Varfell": 2.6
+    },
+    "L_mean": {
+      "Crown": 4.74,
+      "Church": 5.19,
+      "Hafenmark": 4.03,
+      "Varfell": 2.09
+    },
+    "terr_mean": {
+      "Crown": 3.84,
+      "Church": 2.8,
+      "Hafenmark": 2.09,
+      "Varfell": 1.41
+    },
+    "direct_rate": 2.8,
+    "turmoil_mean": 31.13,
+    "almud_strong": 46.6,
+    "almud_deposed": 7.6
+  },
+  "Q-1 only (consent=0.75)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 62.2,
+      "Church": 20.2,
+      "Hafenmark": 15.2,
+      "Varfell": 2.4
+    },
+    "L_mean": {
+      "Crown": 5.18,
+      "Church": 5.27,
+      "Hafenmark": 3.94,
+      "Varfell": 2.13
+    },
+    "terr_mean": {
+      "Crown": 4.19,
+      "Church": 2.73,
+      "Hafenmark": 2.16,
+      "Varfell": 1.44
+    },
+    "direct_rate": 6.2,
+    "turmoil_mean": 32.0,
+    "almud_strong": 55.0,
+    "almud_deposed": 5.8
+  },
+  "Q-1 + threshold 11/15": {
+    "n": 500,
+    "win_share": {
+      "Crown": 69.0,
+      "Church": 16.8,
+      "Hafenmark": 12.4,
+      "Varfell": 1.8
+    },
+    "L_mean": {
+      "Crown": 5.21,
+      "Church": 5.3,
+      "Hafenmark": 3.92,
+      "Varfell": 2.32
+    },
+    "terr_mean": {
+      "Crown": 4.41,
+      "Church": 2.18,
+      "Hafenmark": 2.96,
+      "Varfell": 1.85
+    },
+    "direct_rate": 40.6,
+    "turmoil_mean": 23.05,
+    "almud_strong": 60.0,
+    "almud_deposed": 5.2
+  },
+  "v9 INTEGRATED (all fixes)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 69.0,
+      "Church": 16.8,
+      "Hafenmark": 12.4,
+      "Varfell": 1.8
+    },
+    "L_mean": {
+      "Crown": 5.21,
+      "Church": 5.3,
+      "Hafenmark": 3.92,
+      "Varfell": 2.32
+    },
+    "terr_mean": {
+      "Crown": 4.41,
+      "Church": 2.18,
+      "Hafenmark": 2.96,
+      "Varfell": 1.85
+    },
+    "direct_rate": 40.6,
+    "turmoil_mean": 23.05,
+    "almud_strong": 60.0,
+    "almud_deposed": 5.2
+  },
+  "v9 + short campaign (24s)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 75.4,
+      "Church": 5.0,
+      "Hafenmark": 16.0,
+      "Varfell": 3.6
+    },
+    "L_mean": {
+      "Crown": 5.18,
+      "Church": 5.39,
+      "Hafenmark": 3.86,
+      "Varfell": 2.49
+    },
+    "terr_mean": {
+      "Crown": 5.0,
+      "Church": 1.71,
+      "Hafenmark": 3.34,
+      "Varfell": 2.18
+    },
+    "direct_rate": 36.8,
+    "turmoil_mean": 12.78,
+    "almud_strong": 61.8,
+    "almud_deposed": 2.4
+  },
+  "v9 + 50-season campaign": {
+    "n": 500,
+    "win_share": {
+      "Crown": 65.2,
+      "Church": 24.4,
+      "Hafenmark": 9.8,
+      "Varfell": 0.6
+    },
+    "L_mean": {
+      "Crown": 5.16,
+      "Church": 5.23,
+      "Hafenmark": 4.05,
+      "Varfell": 2.11
+    },
+    "terr_mean": {
+      "Crown": 4.06,
+      "Church": 2.31,
+      "Hafenmark": 2.7,
+      "Varfell": 1.44
+    },
+    "direct_rate": 40.8,
+    "turmoil_mean": 36.68,
+    "almud_strong": 59.6,
+    "almud_deposed": 10.6
+  }
+}

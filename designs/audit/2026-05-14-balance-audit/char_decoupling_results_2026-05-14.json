@@ -1,0 +1,279 @@
+{
+  "canon-v5 (consent=0.5, cap=6, 36s)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 30.2,
+      "Church": 48.0,
+      "Hafenmark": 14.4,
+      "Varfell": 7.4
+    },
+    "leader_state_global": {
+      "Crown": {
+        "stable": 258,
+        "strong": 81,
+        "weak": 81,
+        "deposed-mandate-collapse": 60,
+        "deposed-excommunicated": 14,
+        "deposed-proclaimed-against": 6
+      },
+      "Church": {
+        "strong": 395,
+        "deposed-submission": 11,
+        "stable": 62,
+        "weak": 30,
+        "deposed-mandate-collapse": 1,
+        "deposed-proclaimed-against": 1
+      },
+      "Hafenmark": {
+        "weak": 272,
+        "stable": 185,
+        "deposed-excommunicated": 9,
+        "strong": 5,
+        "deposed-submission": 21,
+        "deposed-mandate-collapse": 8
+      },
+      "Varfell": {
+        "deposed-mandate-collapse": 120,
+        "stable": 284,
+        "weak": 87,
+        "deposed-excommunicated": 4,
+        "deposed-proclaimed-against": 5
+      }
+    },
+    "leader_state_by_winner": {
+      "Church": {
+        "strong": 203,
+        "weak": 13,
+        "stable": 22,
+        "deposed-submission": 2
+      },
+      "Crown": {
+        "strong": 76,
+        "stable": 56,
+        "weak": 12,
+        "deposed-mandate-collapse": 5,
+        "deposed-excommunicated": 2
+      },
+      "Varfell": {
+        "stable": 35,
+        "weak": 1,
+        "deposed-mandate-collapse": 1
+      },
+      "Hafenmark": {
+        "stable": 60,
+        "strong": 4,
+        "weak": 7,
+        "deposed-submission": 1
+      }
+    },
+    "almud_strong_pct": 16.2,
+    "almud_deposed_pct": 16.0,
+    "crown_wins_almud_strong_pct": 50.3,
+    "crown_wins_almud_deposed_pct": 4.6
+  },
+  "high consent (Q-1=1.0)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 51.6,
+      "Church": 38.0,
+      "Hafenmark": 7.8,
+      "Varfell": 2.6
+    },
+    "leader_state_global": {
+      "Crown": {
+        "stable": 218,
+        "strong": 161,
+        "deposed-mandate-collapse": 43,
+        "weak": 58,
+        "deposed-excommunicated": 12,
+        "deposed-proclaimed-against": 8
+      },
+      "Church": {
+        "strong": 392,
+        "deposed-submission": 18,
+        "weak": 34,
+        "stable": 54,
+        "deposed-mandate-collapse": 2
+      },
+      "Hafenmark": {
+        "weak": 257,
+        "stable": 192,
+        "deposed-excommunicated": 11,
+        "strong": 6,
+        "deposed-submission": 26,
+        "deposed-mandate-collapse": 8
+      },
+      "Varfell": {
+        "deposed-mandate-collapse": 121,
+        "stable": 283,
+        "weak": 84,
+        "deposed-excommunicated": 7,
+        "deposed-proclaimed-against": 5
+      }
+    },
+    "leader_state_by_winner": {
+      "Church": {
+        "strong": 163,
+        "weak": 12,
+        "stable": 14,
+        "deposed-submission": 1
+      },
+      "Crown": {
+        "strong": 158,
+        "stable": 76,
+        "deposed-mandate-collapse": 6,
+        "weak": 16,
+        "deposed-excommunicated": 2
+      },
+      "Hafenmark": {
+        "stable": 36,
+        "strong": 1,
+        "weak": 2
+      },
+      "Varfell": {
+        "deposed-mandate-collapse": 1,
+        "stable": 12
+      }
+    },
+    "almud_strong_pct": 32.2,
+    "almud_deposed_pct": 12.6,
+    "crown_wins_almud_strong_pct": 61.2,
+    "crown_wins_almud_deposed_pct": 3.1
+  },
+  "short campaign (24s)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 48.6,
+      "Church": 14.4,
+      "Hafenmark": 29.2,
+      "Varfell": 7.8
+    },
+    "leader_state_global": {
+      "Crown": {
+        "stable": 239,
+        "strong": 94,
+        "weak": 127,
+        "deposed-mandate-collapse": 39,
+        "deposed-excommunicated": 1
+      },
+      "Church": {
+        "strong": 460,
+        "stable": 35,
+        "weak": 5
+      },
+      "Hafenmark": {
+        "stable": 251,
+        "weak": 223,
+        "strong": 15,
+        "deposed-submission": 9,
+        "deposed-excommunicated": 2
+      },
+      "Varfell": {
+        "deposed-mandate-collapse": 89,
+        "stable": 336,
+        "weak": 69,
+        "deposed-proclaimed-against": 6
+      }
+    },
+    "leader_state_by_winner": {
+      "Hafenmark": {
+        "stable": 121,
+        "strong": 11,
+        "weak": 14
+      },
+      "Crown": {
+        "strong": 94,
+        "stable": 122,
+        "weak": 23,
+        "deposed-mandate-collapse": 4
+      },
+      "Varfell": {
+        "stable": 39
+      },
+      "Church": {
+        "stable": 2,
+        "strong": 70
+      }
+    },
+    "almud_strong_pct": 18.8,
+    "almud_deposed_pct": 8.0,
+    "crown_wins_almud_strong_pct": 38.7,
+    "crown_wins_almud_deposed_pct": 1.6
+  },
+  "long campaign (60s)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 17.6,
+      "Church": 68.4,
+      "Hafenmark": 10.6,
+      "Varfell": 3.4
+    },
+    "leader_state_global": {
+      "Crown": {
+        "deposed-mandate-collapse": 197,
+        "weak": 34,
+        "stable": 113,
+        "strong": 73,
+        "deposed-excommunicated": 72,
+        "deposed-proclaimed-against": 11
+      },
+      "Church": {
+        "deposed-submission": 211,
+        "strong": 64,
+        "weak": 139,
+        "deposed-mandate-collapse": 32,
+        "stable": 49,
+        "deposed-proclaimed-against": 5
+      },
+      "Hafenmark": {
+        "deposed-mandate-collapse": 79,
+        "weak": 197,
+        "deposed-excommunicated": 85,
+        "stable": 93,
+        "strong": 14,
+        "deposed-submission": 32
+      },
+      "Varfell": {
+        "deposed-mandate-collapse": 268,
+        "stable": 116,
+        "deposed-excommunicated": 35,
+        "weak": 78,
+        "deposed-proclaimed-against": 3
+      }
+    },
+    "leader_state_by_winner": {
+      "Church": {
+        "deposed-submission": 132,
+        "strong": 54,
+        "weak": 115,
+        "stable": 40,
+        "deposed-mandate-collapse": 1
+      },
+      "Crown": {
+        "strong": 53,
+        "weak": 7,
+        "stable": 25,
+        "deposed-mandate-collapse": 2,
+        "deposed-excommunicated": 1
+      },
+      "Hafenmark": {
+        "weak": 21,
+        "stable": 21,
+        "strong": 7,
+        "deposed-excommunicated": 2,
+        "deposed-submission": 1,
+        "deposed-mandate-collapse": 1
+      },
+      "Varfell": {
+        "stable": 5,
+        "deposed-mandate-collapse": 6,
+        "weak": 4,
+        "deposed-excommunicated": 2
+      }
+    },
+    "almud_strong_pct": 14.6,
+    "almud_deposed_pct": 56.0,
+    "crown_wins_almud_strong_pct": 60.2,
+    "crown_wins_almud_deposed_pct": 3.4
+  }
+}
