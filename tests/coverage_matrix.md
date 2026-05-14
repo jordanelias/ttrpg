@@ -490,11 +490,9 @@
   Phase-boundary morale check redundant with per-tick triggers (D-7).
   Multi-turn orchestrator is priority for v17 (D-1, D-9).
 
-## duel_architecture_stress_01 — v6: Duellist protocol + matchup profile
-- Date: 2026-05-13
-- Scope: Scene combat chassis. PP-294 feint. Taunt cost=5. Duellist-v6.
-- v6 findings: Duellist beats Feinter 56%, Defensive 44%; loses to Aggressive 25%,
-  Stamina-fighter 6%. Build (COG6/Agi5/End4/dagger) beats default Adaptive 65%.
+## duel_architecture_stress_01 — v6 complete
+- Date: 2026-05-13. 6 iterations (v1→v6). Scene combat chassis + duel context.
+- FLAT Stamina (15+End×2) fixes End 5v4: 97→57%. Stunt +3D=69%. PP-238 overruled.
 
 
 ## settlement_mgmt_stress_01 — Module 5 verified (2026-05-13)
