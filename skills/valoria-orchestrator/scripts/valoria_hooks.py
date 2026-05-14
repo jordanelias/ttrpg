@@ -270,6 +270,12 @@ def assert_bootstrap(scope: str = None) -> str:
         else:
             raise
 
+    # Report active handoffs — lets new sessions see available workstreams
+    try:
+        report_handoffs()
+    except Exception as _ho_err:
+        print(f"[HANDOFFS] Check skipped: {_ho_err}")
+
     return token
 
 

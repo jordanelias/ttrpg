@@ -324,6 +324,7 @@ def _authorize_next_commit() -> str:
     - github_ops.safe_session_close()
     - github_ops.append_to_register()
     - github_ops.start_session_log() / close_session_log() / update_session_log() (session lifecycle)
+    - github_ops.write_handoff() / archive_handoff() (handoff lifecycle)
     - Direct bash_tool calls (<stdin>, /tmp, <string>) for infrastructure work
     """
     frame = inspect.stack()[1]
@@ -331,9 +332,12 @@ def _authorize_next_commit() -> str:
     approved = (
         (caller_fn == 'safe_commit' and 'valoria_hooks' in caller_file) or
         (caller_fn == 'assert_bootstrap' and 'valoria_hooks' in caller_file) or
-        (caller_fn in ('write_checkpoint', 'close_checkpoint') and 'valoria_hooks' in caller_file) or
+        (caller_fn in ('write_checkpoint', 'close_checkpoint',
+                       'create_handoff', 'update_handoff', 'close_handoff')
+         and 'valoria_hooks' in caller_file) or
         (caller_fn in ('safe_session_close', 'append_to_register',
-                       'start_session_log', 'close_session_log', 'update_session_log')
+                       'start_session_log', 'close_session_log', 'update_session_log',
+                       'write_handoff', 'archive_handoff')
          and 'github_ops' in caller_file) or
         ('<stdin>' in caller_file or caller_file.startswith('/tmp') or caller_file == '<string>')
     )
