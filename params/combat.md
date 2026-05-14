@@ -91,7 +91,11 @@ Ranged weapons require distance from the target to make an Offence roll. At mele
 
 ## Damage Formula (PP-232)
 
-Damage = net hits + STR + weapon modifier vs armour tier (see table below)
+Damage = net hits + (STR × STR multiplier) + weapon modifier vs armour tier (see table below)
+
+**STR multiplier (multiplicative):** Light×1, Heavy×2, Blade×1, Blunt×1.5. Heavy Blunt = ×3.
+Examples at STR 4: Dagger=4, Arming sword=8, Mace=6, Warhammer=12. NOT doubled on crit.
+Jordan directive 2026-05-13.
 
 STR is confirmed as a damage addition (PP-232, resolves ED-092).
 

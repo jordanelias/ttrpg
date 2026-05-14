@@ -168,7 +168,8 @@ Sling ammo modifier (vs medium and heavy armour only):
 
 ### Damage Resolution (PP-232)
 Net hits = Offence successes − Defence successes (minimum 0).
-Damage = net hits + STR + weapon modifier vs armour tier (see table below).
+Damage = net hits + (STR × multiplier) + weapon modifier vs armour tier (see table below).
+STR multiplier: Light×1, Heavy×2, Blade×1, Blunt×1.5. Multiplicative (Heavy Blunt=×3). NOT doubled on crit.
 Critical Hit: net hits ≥ 3 → weapon modifier doubled before applying armour reduction. (PP-211)
 
 STR is confirmed as a damage addition (PP-232).
