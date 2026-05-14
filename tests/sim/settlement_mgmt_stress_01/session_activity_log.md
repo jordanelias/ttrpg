@@ -205,3 +205,48 @@ No action handlers in M2 itself. Graph topology contributes:
   unification bonus.
 
 ---
+
+## Session 4 — 2026-05-13 — Module 3 (facility tiers + capacity pressure)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §1.4.1, §1.4.2, §1.4.3, §1.4.4
+  (re-read with focus on §1.4; total doc ~16.1k tok)
+- `designs/territory/valoria_political_hierarchy_v30.md` (re-fetched for sim_gate; ~5.1k tok)
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_03_facilities.py`
+
+**Isolation tests:** 25/25 PASS (T1 through T25).
+
+**Ledger entries this session:** 20 new (48 total across M1+M2+M3).
+
+**[DECISION] First improvement-arm player-action handler implemented.**
+`expand_institutional_capacity` is the canonical improvement action from §1.4.3 outcome 2. Returns ActionResult with state_mutated=True, treasury_delta=-300, faction_standing_delta=+1 (provisional), renown_delta=+1 (provisional), new_capacity (post-mutation Wing count). Provisional scalars +1 / +1 are placeholder pending Module 5 (governance) and Module 8 (Stature) rebinding to canonical scalars.
+
+**[FINDING] F7 — §1.4.1 capacity matrix omits §2.1 extra types.**
+§1.4.1 covers canonical-eight settlement types (Seat / City / Town / Fortress / Cathedral / Port / Mine / Outpost). §2.1 uses three additional types (Village / Fortress-City / Cathedral-City) — see Module 1 F1. These extra types account for 17 of 37 settlements (46%). Provisional Module-3 mapping: Village falls back to Town (smallest-canonical-analogue); Fortress-City and Cathedral-City are genuinely unmapped (surfaced as gap rather than silently reconciled). Module 13 Mode D should stress-test the unmapped cases.
+
+**[FINDING] M1 F1 typo correction.** M1 report claimed 'Village (used heavily — 15 settlements)'. Registry actually has 14 Villages and 15 Towns. The 15 was misattributed. Module 3 T10 codifies the corrected count. F1's core claim (3 extra types not in §1.2) remains valid; only the per-type count was wrong.
+
+**[ASSUMPTION] Provisional faction_standing_delta and renown_delta both +1 on expand-capacity success — basis:** canonical doc doesn't specify scalars at this layer. The signal direction (positive on success) is intentional and canonical-friendly (institutional improvement should carry positive faction-standing signal). Magnitudes are placeholders for Module 5 and Module 8 to rebind.
+
+**[ASSUMPTION] Village fallback to Town for facility capacity — basis:** §1.2 description 'Town — Smaller settlement. Local governance.' is the closest §1.2 analogue to §2.1 Village usage. Both are spoke settlements in 2-settlement provinces; Town carries minimal Wing/Suite capacity (0/1/3/unlim) which is a reasonable Village default.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate(custom, ['settlement_layer','territories']) ok with 48 ledger entries verified; commit_message ok; sim_fabrication_check ok; forbidden_token ok; pre_commit_gate ok; safe_commit ok.
+
+**Retries this session:** one. T10 initially expected 15 Villages (quoting M1 F1's report); actual is 14. Corrected.
+
+**Player-action loop — improvement arm now live (Module 3):**
+
+Module 3 is the first module with player-action handlers. The closed feedback path:
+
+  improvement action -> facility state mutation -> ActionResult signal -> Module 12 binds treasury_delta to faction Treasury -> Module 5 binds faction_standing_delta to faction Order/Accord -> Module 8 binds renown_delta to player renown UI -> new Wing visible -> Standing-6+ claimants can occupy without capacity pressure.
+
+Degenerate-loop targets for Module 13 Mode D:
+- Broken loop: action succeeds but downstream module zeros the signal.
+- Over-coupled loop: settlement-scale expansion produces faction-scale cascade disproportionate to action (Module 11 Domain Echo misfire).
+- Unreadable loop: new Wing allocated to different controller via §1.4.4 cross-faction rules (player loses the slot they paid for).
+- Decade-cap exhaustion: T18 confirms action fails gracefully; Mode D should verify the failure surfaces a clear UI message rather than silently consuming Treasury.
+
+---

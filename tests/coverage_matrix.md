@@ -488,3 +488,17 @@
   pre-rebuild granularity blocks Module 13 Mode C campaign sim.
 - F3 RESOLVED: 14 Kingdom provinces + 3 special-case = 17.
 - F4 PARTIALLY RESOLVED: stats exist but at wrong granularity (F6).
+
+
+## settlement_mgmt_stress_01 — Module 3 verified (2026-05-13)
+- Module: facility tiers + capacity pressure (settlement_layer §1.4.1-1.4.4)
+- File: tests/sim/settlement_mgmt_stress_01/module_03_facilities.py
+- Tests: 25/25 PASS (T1-T25)
+- Ledger: 20 new entries (48 total cumulative across M1+M2+M3)
+- First IMPROVEMENT-arm player-action handler now live:
+  expand_institutional_capacity(facility, treasury) -> ActionResult
+  carrying treasury_delta, faction_standing_delta, renown_delta.
+- F7 NEW: §1.4.1 capacity matrix omits §2.1 extra types. 17 of 37
+  settlements affected. Village fallback to Town provisional;
+  Fortress-City + Cathedral-City unmapped (genuine gaps).
+- M1 F1 corrected: Village count is 14, not 15. (15 is the Town count.)

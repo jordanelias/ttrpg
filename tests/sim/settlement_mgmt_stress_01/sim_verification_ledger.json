@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1\u20132 entries populated. 28 entries total.",
+  "status": "Modules 1-3 entries populated. 48 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -201,6 +201,146 @@
       "canonical_source": "designs/territory/valoria_political_hierarchy_v30.md",
       "section": "\u00a72.2 Settlement march-route connections",
       "quoted_text": "Schoenland at 1 connection is the canonical foreign-exempt case."
+    },
+    {
+      "sim_variable": "SEAT_WING_CAPACITY",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| Seat | 3 | 5 | 8 | unlimited (shared quarters) |"
+    },
+    {
+      "sim_variable": "SEAT_SUITE_CAPACITY",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| Seat | 3 | 5 | 8 | unlimited (shared quarters) |"
+    },
+    {
+      "sim_variable": "SEAT_CHAMBER_CAPACITY",
+      "value": 8,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| Seat | 3 | 5 | 8 | unlimited (shared quarters) |"
+    },
+    {
+      "sim_variable": "CITY_WING_CAPACITY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| City | 1 | 3 | 5 | unlimited |"
+    },
+    {
+      "sim_variable": "CITY_SUITE_CAPACITY",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| City | 1 | 3 | 5 | unlimited |"
+    },
+    {
+      "sim_variable": "CITY_CHAMBER_CAPACITY",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| City | 1 | 3 | 5 | unlimited |"
+    },
+    {
+      "sim_variable": "MINE_CHAMBER_CAPACITY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| Mine | 0 | 0 | 1 | unlimited |"
+    },
+    {
+      "sim_variable": "CATHEDRAL_WING_CAPACITY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| Cathedral | 1 (Prelate's Palace) | 3 (Bishop's Suites) | 5 (Canon's Chambers) | unlimited (cloister) |"
+    },
+    {
+      "sim_variable": "CATHEDRAL_SUITE_CAPACITY",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| Cathedral | 1 (Prelate's Palace) | 3 (Bishop's Suites) | 5 (Canon's Chambers) | unlimited (cloister) |"
+    },
+    {
+      "sim_variable": "CATHEDRAL_CHAMBER_CAPACITY",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 Facility Slot Capacity by Settlement Type",
+      "quoted_text": "| Cathedral | 1 (Prelate's Palace) | 3 (Bishop's Suites) | 5 (Canon's Chambers) | unlimited (cloister) |"
+    },
+    {
+      "sim_variable": "WING_STANDING_MIN",
+      "value": 6,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 column header",
+      "quoted_text": "Wing Slots (Std 6+)"
+    },
+    {
+      "sim_variable": "SUITE_STANDING_MIN",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.1 column header",
+      "quoted_text": "Suite Slots (Std 5)"
+    },
+    {
+      "sim_variable": "EXPAND_CAPACITY_TREASURY_COST",
+      "value": 300,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.3 Capacity Pressure as Political Mechanic",
+      "quoted_text": "Treasury \u2212300 (derived_stats_v1), scene action at settlement, +1 Wing added; cap: +1 Wing per settlement per decade"
+    },
+    {
+      "sim_variable": "EXPAND_CAPACITY_WING_DELTA",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.3 Capacity Pressure as Political Mechanic",
+      "quoted_text": "+1 Wing added; cap: +1 Wing per settlement per decade"
+    },
+    {
+      "sim_variable": "EXPAND_CAPACITY_DECADE_CAP",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.3 Capacity Pressure as Political Mechanic",
+      "quoted_text": "cap: +1 Wing per settlement per decade"
+    },
+    {
+      "sim_variable": "CAPACITY_PRESSURE_TRIGGER_STANDING",
+      "value": 6,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.3 Capacity Pressure as Political Mechanic",
+      "quoted_text": "If a Seat has 3 Wings occupied (leader + 2 inner circle) and the player reaches Standing 6 as a fourth claimant"
+    },
+    {
+      "sim_variable": "PRINCE_IN_WAITING_SOCIAL_OB",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.3 outcome 3",
+      "quoted_text": "Each season without Wing, player makes social contest (Disposition pool vs Ob 2) to maintain inner-circle standing."
+    },
+    {
+      "sim_variable": "PRINCE_IN_WAITING_FAILURE_STANDING",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.3 outcome 3",
+      "quoted_text": "Failure reverts to Standing 5."
+    },
+    {
+      "sim_variable": "_capacity_pressure_outcomes_count",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a71.4.3 outcome enumeration",
+      "quoted_text": "1. **Existing Wing-holder departs**"
+    },
+    {
+      "sim_variable": "_village_count_registry",
+      "value": 14,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a72.1 Settlement Registry (counted)",
+      "quoted_text": "Total: 37 march-target settlements"
     }
   ]
 }
