@@ -198,3 +198,16 @@
 - bind_faction_standing_delta() canonicalizes the M3-M11 ActionResult
   signal binding to faction-stat-sheet mutations for Module 13.
 - No new findings.
+
+
+## weapon_system_v2 — proposed redesign
+- Date: 2026-05-13
+- Scope: Weapon TN, damage types, attack/defense triangle, STR multiplier
+- Design: weapons as multi-attack-type platforms (Cut/Thrust/Bash per weapon).
+  Attack×Defense triangle (Parry>Cut>Brace>Bash>Deflect>Thrust>Parry).
+  Half-point TN. 4-axis properties. Distance rules. Two-handed bonuses.
+  STR multiplier committed to canon (Heavy×2, Blunt×1.5, multiplicative).
+- Historical: Fiore, Liechtenauer, Vegetius, Uncharted Waters (Koei 1994).
+  Convergence validated: blade useless vs plate, thrust finds gaps (STR-dep),
+  blunt inverted curve. Triangle grounded in physical defense mechanics.
+- Status: PROPOSED. Needs sim validation. Large blast radius (replaces PP-232 weapon system).
