@@ -1881,3 +1881,575 @@ def prompt_resume_from_checkpoint() -> None:
     print("=" * 50 + "\n")
 
     return cp
+
+
+# ── Handoff enforcement ──────────────────────────────────────────────────────
+#
+# Handoffs are the authoritative resumption documents for parallel workstreams.
+# These hooks ensure handoff quality at write time.
+
+def validate_handoff(handoff: dict) -> None:
+    """
+    Validate a handoff dict. Raises RuntimeError if invalid.
+    Call this before g.write_handoff() for pre-flight validation,
+    or rely on write_handoff()'s built-in validation.
+    """
+    if not _bootstrap_confirmed:
+        raise RuntimeError("[HOOK VIOLATION] validate_handoff() before assert_bootstrap().")
+
+    errors = g._validate_handoff_schema(handoff)
+    if errors:
+        raise RuntimeError(
+            "[HANDOFF BLOCKED] Schema validation failed:\n"
+            + "\n".join(f"  - {e}" for e in errors)
+        )
+
+    # Additional hook-level checks beyond schema
+
+    # context_files paths should look like real repo paths (no absolute, no ..)
+    for cf in handoff.get('context_files', []):
+        p = cf.get('path', '')
+        if p.startswith('/') or '..' in p:
+            raise RuntimeError(
+                f"[HANDOFF BLOCKED] context_files path must be relative repo path, got: '{p}'"
+            )
+
+    # owns patterns should be non-empty strings
+    for pattern in handoff.get('owns', []):
+        if not isinstance(pattern, str) or not pattern.strip():
+            raise RuntimeError(
+                f"[HANDOFF BLOCKED] 'owns' entries must be non-empty strings, got: {pattern!r}"
+            )
+
+    # working_state.next must have at least one item
+    ws_next = handoff.get('working_state', {}).get('next', [])
+    if not ws_next:
+        raise RuntimeError(
+            "[HANDOFF BLOCKED] working_state.next must have at least one item — "
+            "what should the resuming session do?"
+        )
+
+    print("[HOOK ✓] handoff validation passed")
+
+
+def require_handoff_on_close(handoff_id: str) -> str:
+    """
+    Validate that a handoff file exists and is valid before session close.
+    Returns the handoff file path for citation in the archived session log.
+
+    Call this before g.close_session_log() to get the path, then pass
+    the handoff_id to close_session_log().
+    """
+    if not _bootstrap_confirmed:
+        raise RuntimeError("[HOOK VIOLATION] require_handoff_on_close() before assert_bootstrap().")
+
+    import yaml
+
+    path = f"handoffs/{handoff_id}.yaml"
+    try:
+        files = g.read_files_graphql([path], repo='ttrpg', skip_health_check=True)
+    except Exception as e:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] Cannot read {path}: {e}\n"
+            f"Write the handoff with g.write_handoff() first."
+        )
+
+    content = files.get(path)
+    if content is None:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] {path} does not exist.\n"
+            f"Write the handoff with g.write_handoff() first."
+        )
+
+    parsed = yaml.safe_load(content)
+    validate_handoff(parsed)
+
+    print(f"[HOOK ✓] Handoff '{handoff_id}' exists and is valid for session close")
+    return path
+
+# ── Handoff system ────────────────────────────────────────────────────────────
+# Per-workstream handoff documents that survive across sessions.
+# Each handoff is a self-contained resumption recipe: task identity, file
+# manifest with fetch depths, working state, and ownership declarations
+# for conflict detection across parallel sessions.
+
+HANDOFF_DIR = 'handoffs'
+HANDOFF_ARCHIVE_DIR = 'archives/handoffs'
+HANDOFF_MAX_CONTEXT_FILES = 15  # prevent over-fetching on resume
+HANDOFF_MAX_OWNS = 20
+
+HANDOFF_REQUIRED_FIELDS = {
+    'handoff_id',       # unique: <scope>_<slug>  e.g. simulation_battery_bands
+    'scope',            # session scope tag
+    'task',             # dict: {skill, description}
+    'context_files',    # list of {path, depth, reason}
+    'working_state',    # dict: {completed[], in_progress[], next[]}
+    'owns',             # list of file paths/globs this workstream modifies
+}
+
+HANDOFF_VALID_DEPTHS = ('skeleton', 'full')
+
+
+def _validate_handoff(handoff: dict) -> list:
+    """
+    Validate handoff dict against schema. Returns list of error strings.
+    Empty list = valid.
+    """
+    errors = []
+
+    # Required fields
+    for field in HANDOFF_REQUIRED_FIELDS:
+        if field not in handoff:
+            errors.append(f"Missing required field: '{field}'")
+
+    if errors:
+        return errors  # can't validate further without required fields
+
+    # handoff_id format
+    hid = handoff['handoff_id']
+    if not re.match(r'^[a-z][a-z0-9_]+$', str(hid)):
+        errors.append(
+            f"handoff_id '{hid}' must be lowercase alphanumeric + underscores, "
+            f"starting with a letter (e.g. 'simulation_battery_bands')"
+        )
+
+    # scope
+    valid_scopes = {'simulation', 'audit', 'editorial', 'design',
+                    'infrastructure', 'godot', 'general', 'compilation'}
+    if handoff['scope'] not in valid_scopes:
+        errors.append(f"scope '{handoff['scope']}' not in {sorted(valid_scopes)}")
+
+    # task structure
+    task = handoff.get('task', {})
+    if not isinstance(task, dict):
+        errors.append("'task' must be a dict with 'skill' and 'description'")
+    else:
+        if 'skill' not in task:
+            errors.append("task.skill is required")
+        if 'description' not in task:
+            errors.append("task.description is required")
+
+    # context_files
+    cf = handoff.get('context_files', [])
+    if not isinstance(cf, list):
+        errors.append("'context_files' must be a list")
+    elif len(cf) > HANDOFF_MAX_CONTEXT_FILES:
+        errors.append(
+            f"context_files has {len(cf)} entries (max {HANDOFF_MAX_CONTEXT_FILES}). "
+            f"Reduce to essential files only."
+        )
+    else:
+        for i, entry in enumerate(cf):
+            if not isinstance(entry, dict):
+                errors.append(f"context_files[{i}] must be a dict")
+                continue
+            if 'path' not in entry:
+                errors.append(f"context_files[{i}] missing 'path'")
+            if 'depth' not in entry:
+                errors.append(f"context_files[{i}] missing 'depth'")
+            elif entry['depth'] not in HANDOFF_VALID_DEPTHS:
+                errors.append(
+                    f"context_files[{i}].depth '{entry['depth']}' "
+                    f"must be one of {HANDOFF_VALID_DEPTHS}"
+                )
+            if 'reason' not in entry:
+                errors.append(f"context_files[{i}] missing 'reason'")
+
+    # working_state
+    ws = handoff.get('working_state', {})
+    if not isinstance(ws, dict):
+        errors.append("'working_state' must be a dict")
+    else:
+        for key in ('completed', 'next'):
+            if key not in ws:
+                errors.append(f"working_state.{key} is required")
+            elif not isinstance(ws[key], list):
+                errors.append(f"working_state.{key} must be a list")
+        # in_progress is optional (may be empty between sessions)
+        if 'in_progress' in ws and not isinstance(ws['in_progress'], list):
+            errors.append("working_state.in_progress must be a list")
+
+    # owns
+    owns = handoff.get('owns', [])
+    if not isinstance(owns, list):
+        errors.append("'owns' must be a list of file paths/globs")
+    elif len(owns) > HANDOFF_MAX_OWNS:
+        errors.append(f"owns has {len(owns)} entries (max {HANDOFF_MAX_OWNS})")
+    elif len(owns) == 0:
+        errors.append("'owns' must not be empty — declare what this workstream modifies")
+
+    return errors
+
+
+def create_handoff(handoff: dict) -> str:
+    """
+    Validate and commit a handoff document to handoffs/<id>.yaml.
+
+    Returns the handoff file path on success.
+    Raises RuntimeError on validation failure or conflict.
+
+    Call at session close (or mid-session when handing off a specific workstream).
+    The returned path is the citation for the next session:
+      "Resume from handoffs/<id>.yaml"
+    """
+    if not _bootstrap_confirmed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] create_handoff() before assert_bootstrap()."
+        )
+
+    # Inject metadata
+    from datetime import datetime, timezone
+    handoff.setdefault('schema_version', 1)
+    handoff.setdefault('status', 'active')
+    handoff.setdefault('created_at', datetime.now(timezone.utc).isoformat())
+    handoff['updated_at'] = datetime.now(timezone.utc).isoformat()
+    handoff.setdefault('created_by_session', g.get_session_token())
+    handoff.get('working_state', {}).setdefault('in_progress', [])
+    handoff.setdefault('blockers', [])
+    handoff.setdefault('key_values', [])
+
+    # Validate
+    errors = _validate_handoff(handoff)
+    if errors:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] Schema validation failed:\n"
+            + "\n".join(f"  - {e}" for e in errors)
+        )
+
+    hid = handoff['handoff_id']
+    handoff_path = f"{HANDOFF_DIR}/{hid}.yaml"
+
+    # Check for ID collision with existing active handoff
+    try:
+        existing = g.read_files_graphql(
+            [handoff_path], skip_health_check=True
+        )
+        if existing.get(handoff_path):
+            raise RuntimeError(
+                f"[HANDOFF BLOCKED] Active handoff already exists at {handoff_path}.\n"
+                f"Either close_handoff('{hid}') first, or use update_handoff('{hid}', ...)."
+            )
+    except Exception as exc:
+        if 'already exists' in str(exc):
+            raise
+        # File doesn't exist — good, proceed
+
+    # Check for ownership conflicts with other active handoffs
+    conflicts = check_handoff_conflicts(handoff['owns'], exclude_id=hid)
+    if conflicts:
+        conflict_report = "\n".join(
+            f"  - {c['handoff_id']} owns '{c['pattern']}' (overlaps with '{c['your_pattern']}')"
+            for c in conflicts
+        )
+        print(
+            f"[HANDOFF ⚠] Ownership overlaps detected:\n{conflict_report}\n"
+            f"Proceeding — but coordinate with those workstreams to avoid collisions."
+        )
+
+    # Serialize
+    import yaml
+    content = yaml.safe_dump(
+        handoff, default_flow_style=False, sort_keys=False, allow_unicode=True
+    )
+
+    # Commit
+    auth = g._authorize_next_commit()
+    oid = g.atomic_commit(
+        additions=[(handoff_path, content)],
+        deletions=[],
+        message=f"[infrastructure] handoff created — {hid}",
+        repo='ttrpg',
+        _auth=auth,
+    )
+
+    print(f"[HANDOFF ✓] Created: {handoff_path} → {oid}")
+    print(f"  Next session: bootstrap, then 'resume {handoff_path}'")
+    return handoff_path
+
+
+def update_handoff(handoff_id: str, updates: dict) -> str:
+    """
+    Update fields on an existing active handoff.
+
+    Only updates provided keys — doesn't overwrite the whole document.
+    Re-validates after merge. Returns commit OID.
+    """
+    if not _bootstrap_confirmed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] update_handoff() before assert_bootstrap()."
+        )
+
+    handoff_path = f"{HANDOFF_DIR}/{handoff_id}.yaml"
+    files = g.read_files_graphql([handoff_path], skip_health_check=True)
+    content = files.get(handoff_path)
+    if not content:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] No active handoff at {handoff_path}."
+        )
+
+    import yaml
+    existing = yaml.safe_load(content)
+    if existing.get('status') != 'active':
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] Handoff '{handoff_id}' is not active (status: {existing.get('status')})."
+        )
+
+    # Merge updates
+    for key, value in updates.items():
+        if key in ('handoff_id', 'schema_version', 'created_at', 'created_by_session'):
+            continue  # immutable fields
+        if isinstance(existing.get(key), dict) and isinstance(value, dict):
+            existing[key].update(value)
+        else:
+            existing[key] = value
+
+    from datetime import datetime, timezone
+    existing['updated_at'] = datetime.now(timezone.utc).isoformat()
+
+    # Re-validate
+    errors = _validate_handoff(existing)
+    if errors:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] Updated handoff fails validation:\n"
+            + "\n".join(f"  - {e}" for e in errors)
+        )
+
+    new_content = yaml.safe_dump(
+        existing, default_flow_style=False, sort_keys=False, allow_unicode=True
+    )
+
+    auth = g._authorize_next_commit()
+    oid = g.atomic_commit(
+        additions=[(handoff_path, new_content)],
+        deletions=[],
+        message=f"[infrastructure] handoff updated — {handoff_id}",
+        repo='ttrpg',
+        _auth=auth,
+    )
+
+    print(f"[HANDOFF ✓] Updated: {handoff_path} → {oid}")
+    return oid
+
+
+def close_handoff(handoff_id: str) -> str:
+    """
+    Archive a handoff to archives/handoffs/ and delete from handoffs/.
+
+    Call when a workstream is complete or being abandoned.
+    Returns commit OID.
+    """
+    if not _bootstrap_confirmed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] close_handoff() before assert_bootstrap()."
+        )
+
+    handoff_path = f"{HANDOFF_DIR}/{handoff_id}.yaml"
+    files = g.read_files_graphql([handoff_path], skip_health_check=True)
+    content = files.get(handoff_path)
+    if not content:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] No handoff at {handoff_path} to close."
+        )
+
+    import yaml
+    from datetime import datetime, timezone
+    handoff = yaml.safe_load(content)
+    handoff['status'] = 'closed'
+    handoff['closed_at'] = datetime.now(timezone.utc).isoformat()
+    handoff['closed_by_session'] = g.get_session_token()
+
+    closed_content = yaml.safe_dump(
+        handoff, default_flow_style=False, sort_keys=False, allow_unicode=True
+    )
+
+    date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    archive_path = f"{HANDOFF_ARCHIVE_DIR}/{handoff_id}_{date_str}.yaml"
+
+    auth = g._authorize_next_commit()
+    oid = g.atomic_commit(
+        additions=[(archive_path, closed_content)],
+        deletions=[handoff_path],
+        message=f"[infrastructure] handoff closed — {handoff_id}",
+        repo='ttrpg',
+        _auth=auth,
+    )
+
+    print(f"[HANDOFF ✓] Closed: {handoff_id} → archived {archive_path} → {oid}")
+    return oid
+
+
+def list_active_handoffs() -> list:
+    """
+    Read all active handoff files from handoffs/ directory.
+
+    Returns list of parsed handoff dicts. Each dict includes 'handoff_path'
+    for reference. Returns empty list if directory doesn't exist or is empty.
+    """
+    try:
+        entries = g.list_directory(HANDOFF_DIR, repo='ttrpg')
+    except Exception:
+        return []  # directory doesn't exist yet
+
+    yaml_files = [e for e in entries if e.endswith('.yaml')]
+    if not yaml_files:
+        return []
+
+    paths = [f"{HANDOFF_DIR}/{f}" for f in yaml_files]
+    files = g.read_files_graphql(paths, skip_health_check=True)
+
+    import yaml
+    handoffs = []
+    for path, content in files.items():
+        if not content:
+            continue
+        try:
+            h = yaml.safe_load(content)
+            if h.get('status') == 'active':
+                h['_handoff_path'] = path
+                handoffs.append(h)
+        except Exception:
+            print(f"[HANDOFF ⚠] Failed to parse {path}")
+            continue
+
+    return handoffs
+
+
+def check_handoff_conflicts(owns_list: list, exclude_id: str = None) -> list:
+    """
+    Check if proposed file ownership overlaps with any active handoff.
+
+    Returns list of conflict dicts: {handoff_id, pattern, your_pattern}.
+    Empty list = no conflicts.
+    """
+    import fnmatch
+
+    active = list_active_handoffs()
+    conflicts = []
+
+    for handoff in active:
+        hid = handoff.get('handoff_id', '?')
+        if hid == exclude_id:
+            continue
+        their_owns = handoff.get('owns', [])
+        for my_pattern in owns_list:
+            for their_pattern in their_owns:
+                # Check both directions: does my pattern match their files,
+                # or does their pattern match my files?
+                if (fnmatch.fnmatch(my_pattern, their_pattern) or
+                    fnmatch.fnmatch(their_pattern, my_pattern) or
+                    my_pattern == their_pattern):
+                    conflicts.append({
+                        'handoff_id': hid,
+                        'pattern': their_pattern,
+                        'your_pattern': my_pattern,
+                    })
+
+    return conflicts
+
+
+def load_handoff_context(handoff_id: str) -> dict:
+    """
+    Read a handoff and fetch all its context_files at declared depths.
+
+    Returns dict with:
+      'handoff': the parsed handoff dict
+      'context': {path: content} for each fetched file
+      'missing': list of paths that returned None
+
+    This is the primary entry point for a new session resuming a workstream.
+    Call after bootstrap, before starting work.
+    """
+    if not _bootstrap_confirmed:
+        raise RuntimeError(
+            "[HOOK VIOLATION] load_handoff_context() before assert_bootstrap()."
+        )
+
+    handoff_path = f"{HANDOFF_DIR}/{handoff_id}.yaml"
+    files = g.read_files_graphql([handoff_path], skip_health_check=True)
+    content = files.get(handoff_path)
+    if not content:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] No handoff at {handoff_path}.\n"
+            f"Active handoffs: {[h.get('handoff_id') for h in list_active_handoffs()]}"
+        )
+
+    import yaml
+    handoff = yaml.safe_load(content)
+    if handoff.get('status') != 'active':
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] Handoff '{handoff_id}' is {handoff.get('status')}, not active."
+        )
+
+    # Fetch context files
+    context_files = handoff.get('context_files', [])
+    paths_to_fetch = [cf['path'] for cf in context_files]
+
+    fetched = {}
+    missing = []
+    if paths_to_fetch:
+        raw = g.read_files_graphql(paths_to_fetch, skip_health_check=True)
+        for cf in context_files:
+            path = cf['path']
+            file_content = raw.get(path)
+            if file_content:
+                fetched[path] = file_content
+            else:
+                missing.append(path)
+
+    if missing:
+        print(f"[HANDOFF ⚠] {len(missing)} context file(s) not found: {missing}")
+
+    print(f"[HANDOFF ✓] Loaded '{handoff_id}': {len(fetched)} files fetched, "
+          f"{len(missing)} missing")
+
+    return {
+        'handoff': handoff,
+        'context': fetched,
+        'missing': missing,
+    }
+
+
+def report_handoffs() -> list:
+    """
+    Print a summary of all active handoffs. Called at bootstrap.
+    Returns the list of active handoff dicts.
+    """
+    active = list_active_handoffs()
+
+    if not active:
+        print("\n[HANDOFFS] No active handoffs.")
+        return []
+
+    print(f"\n{'=' * 50}")
+    print(f"ACTIVE HANDOFFS ({len(active)})")
+    print(f"{'=' * 50}")
+
+    for h in active:
+        hid = h.get('handoff_id', '?')
+        path = h.get('_handoff_path', '?')
+        task = h.get('task', {})
+        skill = task.get('skill', '?')
+        desc = task.get('description', '?')
+        owns = h.get('owns', [])
+        blockers = h.get('blockers', [])
+        ctx_count = len(h.get('context_files', []))
+        next_items = h.get('working_state', {}).get('next', [])
+
+        print(f"\n  {hid}")
+        print(f"    path:     {path}")
+        print(f"    skill:    {skill}")
+        print(f"    task:     {desc[:80]}")
+        print(f"    owns:     {', '.join(owns[:5])}")
+        if len(owns) > 5:
+            print(f"              ... and {len(owns) - 5} more")
+        print(f"    context:  {ctx_count} files to fetch on resume")
+        if blockers:
+            print(f"    blockers: {', '.join(str(b) for b in blockers[:3])}")
+        if next_items:
+            print(f"    next:     {next_items[0]}")
+
+    print(f"\n{'=' * 50}")
+    print("To resume: h.load_handoff_context('<handoff_id>')")
+    print(f"{'=' * 50}\n")
+
+    return active

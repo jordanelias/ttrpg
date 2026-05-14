@@ -907,6 +907,7 @@ def close_session_log(
     scope: str,
     token: str,
     final_log_content: str,
+    handoff_id: str = None,
     extra_additions: list = None,
 ) -> str:
     """
@@ -916,6 +917,11 @@ def close_session_log(
     Removes from: session_logs/index.md
     Updates: session_log_current.md (pointer)
     Deletes: session_logs/<scope>_<token>.md
+
+    handoff_id: if provided, must reference an existing valid handoff file
+    at handoffs/<handoff_id>.yaml. The handoff is the authoritative
+    resumption document for the next session on this workstream.
+    The archived session log will cite the handoff path.
 
     Returns commit OID.
     """
@@ -935,6 +941,35 @@ def close_session_log(
             f"[SESSION] Close log missing fields: {missing}\n"
             f"Required: {REQUIRED_FIELDS}"
         )
+
+    # Validate handoff reference if provided
+    if handoff_id is not None:
+        import yaml as _yaml
+        handoff_path = f"{HANDOFF_DIR}/{handoff_id}.yaml"
+        try:
+            hf = read_files_graphql([handoff_path], repo='ttrpg', skip_health_check=True)
+        except Exception as e:
+            raise RuntimeError(
+                f"[SESSION CLOSE BLOCKED] Cannot read handoff '{handoff_path}': {e}\n"
+                f"Write the handoff with g.write_handoff() before closing the session."
+            )
+        hcontent = hf.get(handoff_path)
+        if hcontent is None:
+            raise RuntimeError(
+                f"[SESSION CLOSE BLOCKED] Handoff '{handoff_path}' does not exist.\n"
+                f"Write the handoff with g.write_handoff() before closing the session."
+            )
+        try:
+            hparsed = _yaml.safe_load(hcontent)
+        except Exception as e:
+            raise RuntimeError(f"[SESSION CLOSE BLOCKED] Handoff '{handoff_path}' is not valid YAML: {e}")
+        herrors = _validate_handoff_schema(hparsed)
+        if herrors:
+            raise RuntimeError(
+                f"[SESSION CLOSE BLOCKED] Handoff '{handoff_path}' failed schema validation:\n"
+                + "\n".join(f"  - {e}" for e in herrors)
+            )
+        print(f"[SESSION] Handoff validated: {handoff_path}")
 
     # Read current index
     fresh = read_files_graphql(
@@ -1100,6 +1135,15 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     import github_ops as _g_mod
     token = _h_mod.assert_bootstrap()
     _h_mod.context_gate()
+
+    # Read and report active handoffs
+    try:
+        _g_mod._active_handoffs = read_all_handoffs()
+        report_handoffs(_g_mod._active_handoffs)
+    except Exception as e:
+        _g_mod._active_handoffs = []
+        print(f"[HANDOFF WARN] Could not read handoffs: {e}")
+
     return _g_mod, _h_mod, files, token
 
 
@@ -1458,3 +1502,300 @@ def verify_reads_for_task(required_paths: list, repo: str = None,
             if depth == 'none':
                 failures.append((path, depth))
     return failures
+
+
+# ── Handoffs ─────────────────────────────────────────────────────────────────
+#
+# Per-workstream handoff files live at handoffs/<id>.yaml.
+# Each handoff is a structured context-loading recipe: what to resume,
+# which files to fetch, what state to carry forward.
+#
+# Multiple handoffs can be active concurrently (parallel workstreams).
+# Conflict detection uses the `owns` field — glob patterns of files
+# each workstream is actively modifying.
+
+HANDOFF_DIR = 'handoffs'
+HANDOFF_ARCHIVE_DIR = 'archives/handoffs'
+
+HANDOFF_REQUIRED_FIELDS = {
+    'id', 'task', 'context_files', 'working_state', 'last_commit',
+}
+HANDOFF_TASK_REQUIRED = {'skill', 'description'}
+HANDOFF_CTX_FILE_REQUIRED = {'path', 'depth'}
+HANDOFF_VALID_DEPTHS = {'full', 'skeleton'}
+
+
+def _validate_handoff_schema(handoff: dict) -> list:
+    """
+    Validate a handoff dict against the schema.
+    Returns list of error strings. Empty = valid.
+    """
+    errors = []
+
+    missing_top = HANDOFF_REQUIRED_FIELDS - set(handoff.keys())
+    if missing_top:
+        errors.append(f"Missing top-level fields: {sorted(missing_top)}")
+
+    task = handoff.get('task', {})
+    if isinstance(task, dict):
+        missing_task = HANDOFF_TASK_REQUIRED - set(task.keys())
+        if missing_task:
+            errors.append(f"task missing fields: {sorted(missing_task)}")
+    else:
+        errors.append("'task' must be a dict with 'skill' and 'description'")
+
+    ctx = handoff.get('context_files', [])
+    if not isinstance(ctx, list):
+        errors.append("'context_files' must be a list")
+    elif len(ctx) == 0:
+        errors.append("'context_files' must not be empty — a resuming session needs at least one file")
+    else:
+        for i, entry in enumerate(ctx):
+            if not isinstance(entry, dict):
+                errors.append(f"context_files[{i}]: must be a dict")
+                continue
+            missing_cf = HANDOFF_CTX_FILE_REQUIRED - set(entry.keys())
+            if missing_cf:
+                errors.append(f"context_files[{i}] missing: {sorted(missing_cf)}")
+            depth = entry.get('depth')
+            if depth and depth not in HANDOFF_VALID_DEPTHS:
+                errors.append(f"context_files[{i}] depth '{depth}' not in {HANDOFF_VALID_DEPTHS}")
+
+    ws = handoff.get('working_state', {})
+    if isinstance(ws, dict):
+        if 'next' not in ws:
+            errors.append("working_state must include 'next' (what the resuming session should do)")
+    else:
+        errors.append("'working_state' must be a dict")
+
+    return errors
+
+
+def write_handoff(handoff: dict, extra_additions: list = None) -> str:
+    """
+    Write or update a handoff file at handoffs/<id>.yaml.
+
+    Validates schema, adds timestamps, commits to GitHub.
+    Returns commit OID.
+
+    The handoff dict must contain at minimum:
+      id, task, context_files, working_state, last_commit
+
+    Optional fields:
+      owns (list of glob patterns), key_values (list), blockers (list),
+      session_token, scope
+    """
+    import yaml
+    from datetime import datetime, timezone
+
+    errors = _validate_handoff_schema(handoff)
+    if errors:
+        raise RuntimeError(
+            f"[HANDOFF BLOCKED] Schema validation failed:\n"
+            + "\n".join(f"  - {e}" for e in errors)
+        )
+
+    hid = handoff['id']
+    if '/' in hid or '\\' in hid or ' ' in hid:
+        raise RuntimeError(f"[HANDOFF BLOCKED] id must be a simple slug, got: '{hid}'")
+
+    now = datetime.now(timezone.utc).isoformat()
+    handoff.setdefault('created', now)
+    handoff['updated'] = now
+    handoff.setdefault('status', 'active')
+    handoff.setdefault('owns', [])
+    handoff.setdefault('key_values', [])
+    handoff.setdefault('blockers', [])
+
+    path = f"{HANDOFF_DIR}/{hid}.yaml"
+    content = yaml.safe_dump(handoff, default_flow_style=False,
+                             sort_keys=False, allow_unicode=True)
+
+    additions = [(path, content)]
+    if extra_additions:
+        additions.extend(extra_additions)
+
+    auth = _authorize_next_commit()
+    oid = atomic_commit(
+        additions=additions, deletions=[],
+        message=f"[infrastructure] handoff write — {hid}",
+        repo='ttrpg', _auth=auth,
+    )
+    print(f"[HANDOFF ✓] Written: {path} → {oid}")
+    return oid
+
+
+def read_all_handoffs() -> list:
+    """
+    Read all active handoff files from handoffs/ directory.
+    Returns list of (id, parsed_dict) tuples, sorted by updated desc.
+    """
+    import yaml
+
+    try:
+        names = list_directory(HANDOFF_DIR, repo='ttrpg')
+    except Exception:
+        return []
+
+    yaml_names = [n for n in names if n.endswith('.yaml')]
+    if not yaml_names:
+        return []
+
+    paths = [f"{HANDOFF_DIR}/{n}" for n in yaml_names]
+    files = read_files_graphql(paths, repo='ttrpg', skip_health_check=True)
+
+    handoffs = []
+    for path, content in files.items():
+        if content is None:
+            continue
+        try:
+            parsed = yaml.safe_load(content)
+            if isinstance(parsed, dict) and parsed.get('status') == 'active':
+                handoffs.append((parsed.get('id', path), parsed))
+        except Exception:
+            print(f"[HANDOFF WARN] Could not parse {path}")
+
+    handoffs.sort(key=lambda x: x[1].get('updated', ''), reverse=True)
+    return handoffs
+
+
+def archive_handoff(handoff_id: str, extra_additions: list = None) -> str:
+    """
+    Archive a handoff: move from handoffs/<id>.yaml to archives/handoffs/<id>_<date>.yaml.
+    Sets status to 'closed'. Returns commit OID.
+    """
+    import yaml
+    from datetime import datetime, timezone
+
+    path = f"{HANDOFF_DIR}/{handoff_id}.yaml"
+
+    try:
+        files = read_files_graphql([path], repo='ttrpg', skip_health_check=True)
+    except Exception:
+        raise RuntimeError(f"[HANDOFF BLOCKED] Cannot read {path}")
+
+    content = files.get(path)
+    if content is None:
+        raise RuntimeError(f"[HANDOFF BLOCKED] {path} does not exist — cannot archive")
+
+    try:
+        parsed = yaml.safe_load(content)
+    except Exception as e:
+        raise RuntimeError(f"[HANDOFF BLOCKED] Cannot parse {path}: {e}")
+
+    parsed['status'] = 'closed'
+    parsed['closed_at'] = datetime.now(timezone.utc).isoformat()
+    date_str = datetime.now(timezone.utc).strftime('%Y-%m-%d')
+    archive_path = f"{HANDOFF_ARCHIVE_DIR}/{handoff_id}_{date_str}.yaml"
+
+    closed_content = yaml.safe_dump(parsed, default_flow_style=False,
+                                    sort_keys=False, allow_unicode=True)
+
+    additions = [(archive_path, closed_content)]
+    if extra_additions:
+        additions.extend(extra_additions)
+
+    auth = _authorize_next_commit()
+    oid = atomic_commit(
+        additions=additions, deletions=[path],
+        message=f"[infrastructure] handoff close — {handoff_id}",
+        repo='ttrpg', _auth=auth,
+    )
+    print(f"[HANDOFF ✓] Archived: {path} → {archive_path} → {oid}")
+    return oid
+
+
+def check_handoff_conflicts(proposed_paths: list) -> list:
+    """
+    Check if proposed file paths conflict with active handoffs' owns fields.
+    Uses fnmatch glob matching.
+
+    Returns list of (path, conflicting_handoff_id) tuples.
+    Empty = no conflicts.
+    """
+    from fnmatch import fnmatch
+
+    handoffs = read_all_handoffs()
+    if not handoffs:
+        return []
+
+    conflicts = []
+    for proposed in proposed_paths:
+        for hid, hdata in handoffs:
+            for pattern in hdata.get('owns', []):
+                if fnmatch(proposed, pattern):
+                    conflicts.append((proposed, hid))
+                    break
+
+    return conflicts
+
+
+def report_handoffs(handoffs: list = None) -> None:
+    """
+    Print a status report of all active handoffs.
+    Called during bootstrap to show what workstreams exist.
+    """
+    if handoffs is None:
+        handoffs = read_all_handoffs()
+
+    print()
+    if not handoffs:
+        print("ACTIVE HANDOFFS: none")
+        return
+
+    print(f"ACTIVE HANDOFFS ({len(handoffs)}):")
+    for i, (hid, hdata) in enumerate(handoffs, 1):
+        task = hdata.get('task', {})
+        skill = task.get('skill', '?')
+        desc = task.get('description', '?')
+        owns = hdata.get('owns', [])
+        blockers = hdata.get('blockers', [])
+        ctx_count = len(hdata.get('context_files', []))
+        updated = hdata.get('updated', '?')
+
+        print(f"  {i}. {hid}")
+        print(f"     skill: {skill} | context_files: {ctx_count}")
+        print(f"     {desc}")
+        if owns:
+            print(f"     owns: {', '.join(owns[:5])}")
+        if blockers:
+            print(f"     blockers: {', '.join(str(b) for b in blockers[:3])}")
+        print(f"     updated: {updated}")
+    print()
+
+
+def load_handoff_context(handoff_id: str) -> dict:
+    """
+    Read a specific handoff and fetch all its context_files.
+    Returns dict with 'handoff' (parsed) and 'files' (path→content).
+
+    This is what a resuming session calls after selecting a handoff.
+    """
+    import yaml
+
+    path = f"{HANDOFF_DIR}/{handoff_id}.yaml"
+    files = read_files_graphql([path], repo='ttrpg', skip_health_check=True)
+    content = files.get(path)
+    if content is None:
+        raise RuntimeError(f"[HANDOFF] {path} not found — cannot load context")
+
+    parsed = yaml.safe_load(content)
+    ctx_files = parsed.get('context_files', [])
+
+    if not ctx_files:
+        return {'handoff': parsed, 'files': {}}
+
+    paths_to_fetch = [cf['path'] for cf in ctx_files]
+    fetched = read_files_graphql(paths_to_fetch, repo='ttrpg', skip_health_check=True)
+
+    # Report what was loaded
+    print(f"\n[HANDOFF] Loaded context for '{handoff_id}':")
+    for cf in ctx_files:
+        p = cf['path']
+        depth = cf.get('depth', 'full')
+        reason = cf.get('reason', '')
+        found = fetched.get(p) is not None
+        status = '✓' if found else '✗ NOT FOUND'
+        print(f"  {status}  {p} ({depth}) — {reason}")
+
+    return {'handoff': parsed, 'files': fetched}
