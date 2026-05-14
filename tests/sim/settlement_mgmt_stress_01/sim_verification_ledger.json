@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-7 entries populated. 142 entries total.",
+  "status": "Modules 1-8 entries populated. 167 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -999,6 +999,181 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a75.1 Fortress chokepoint worked example",
       "quoted_text": "Lowenskyst Fortress (S-006, Defense 4) requires Military 7+ to bypass"
+    },
+    {
+      "sim_variable": "RENOWN_THRESHOLD_SETTLEMENT_GOVERNOR",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.1 The Stature Ladder",
+      "quoted_text": "| 3\u20134 | 3 | **Settlement Governor.** Manage one Town/Outpost. Free governance action per season."
+    },
+    {
+      "sim_variable": "RENOWN_THRESHOLD_MULTI_SETTLEMENT",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.1 The Stature Ladder",
+      "quoted_text": "| 5\u20136 | 4 | **Multi-Settlement.** Manage up to 3 settlements."
+    },
+    {
+      "sim_variable": "RENOWN_THRESHOLD_PROVINCIAL_AUTHORITY",
+      "value": 7,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.1 The Stature Ladder",
+      "quoted_text": "| 7\u20138 | 4\u20135 | **Provincial Authority.** De facto province controller."
+    },
+    {
+      "sim_variable": "RENOWN_THRESHOLD_NATIONAL_ACTOR",
+      "value": 9,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.1 The Stature Ladder",
+      "quoted_text": "| 9\u201310 | 5 | **National Actor.** Found a new faction or take over existing one."
+    },
+    {
+      "sim_variable": "MULTI_SETTLEMENT_MAX_SETTLEMENTS",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.1 \u2014 Multi-Settlement tier",
+      "quoted_text": "Manage up to 3 settlements"
+    },
+    {
+      "sim_variable": "STAGE_2_TO_3_SETTLEMENTS_REQUIRED",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 2->3",
+      "quoted_text": "| 2 \u2192 3 | Control 2+ settlements. Renown 5+. At least 2 NPC officers with Disposition +3. |"
+    },
+    {
+      "sim_variable": "STAGE_2_TO_3_RENOWN_REQUIRED",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 2->3",
+      "quoted_text": "| 2 \u2192 3 | Control 2+ settlements. Renown 5+. At least 2 NPC officers with Disposition +3. |"
+    },
+    {
+      "sim_variable": "STAGE_2_TO_3_OFFICERS_REQUIRED",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 2->3",
+      "quoted_text": "At least 2 NPC officers with Disposition +3"
+    },
+    {
+      "sim_variable": "STAGE_3_TO_4_SETTLEMENTS_REQUIRED",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 3->4",
+      "quoted_text": "| 3 \u2192 4 | Control 4+ settlements across 2+ provinces. Renown 7+. Declare faction formally (Domain Action: Influence pool = Renown \u00f7 2, Ob 3). At least 1 province Seat controlled. |"
+    },
+    {
+      "sim_variable": "STAGE_3_TO_4_PROVINCES_REQUIRED",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 3->4",
+      "quoted_text": "Control 4+ settlements across 2+ provinces"
+    },
+    {
+      "sim_variable": "STAGE_3_TO_4_RENOWN_REQUIRED",
+      "value": 7,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 3->4",
+      "quoted_text": "Renown 7+."
+    },
+    {
+      "sim_variable": "STAGE_3_TO_4_DECLARATION_OB",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 3->4 Declaration",
+      "quoted_text": "Declare faction formally (Domain Action: Influence pool = Renown \u00f7 2, Ob 3)"
+    },
+    {
+      "sim_variable": "STAGE_4_TO_5_SEATS_REQUIRED",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 4->5",
+      "quoted_text": "| 4 \u2192 5 | Control 2+ province Seats. Renown 9+. Full faction stat sheet."
+    },
+    {
+      "sim_variable": "STAGE_4_TO_5_RENOWN_REQUIRED",
+      "value": 9,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 Emergence requirements \u2014 Stage 4->5",
+      "quoted_text": "Control 2+ province Seats. Renown 9+."
+    },
+    {
+      "sim_variable": "FOUNDED_LEGITIMACY_START",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Founded Faction Starting Stats \u2014 Legitimacy",
+      "quoted_text": "| Legitimacy (L) | 2 | Limited institutional recognition"
+    },
+    {
+      "sim_variable": "FOUNDED_PUBLIC_SUPPORT_START",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Founded Faction Starting Stats \u2014 Public Support",
+      "quoted_text": "| Public Support (PS) | 3 | Grass-roots base anchored by founding NPC officers."
+    },
+    {
+      "sim_variable": "FOUNDED_MILITARY_START",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Founded Faction Starting Stats \u2014 Military",
+      "quoted_text": "| Military (Mil) | 1 | Militia only at founding"
+    },
+    {
+      "sim_variable": "FOUNDED_INTEL_START",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Founded Faction Starting Stats \u2014 Intel",
+      "quoted_text": "| Intel (Int) | 2 | Informal network from organizing phase."
+    },
+    {
+      "sim_variable": "FOUNDED_STABILITY_START",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Founded Faction Starting Stats \u2014 Stability",
+      "quoted_text": "| Stability (Sta) | 3 | Loyal officers from Stage 2-3 work"
+    },
+    {
+      "sim_variable": "FOUNDED_WEALTH_BASE",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Founded Faction Starting Stats \u2014 Wealth base",
+      "quoted_text": "| Wealth (W) | 2 + (# settlements controlled \u2212 1), capped at 5 | Founding economic base plus per-settlement scaling."
+    },
+    {
+      "sim_variable": "FOUNDED_WEALTH_MAX",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Founded Faction Starting Stats \u2014 Wealth cap",
+      "quoted_text": "| Wealth (W) | 2 + (# settlements controlled \u2212 1), capped at 5 | Founding economic base plus per-settlement scaling."
+    },
+    {
+      "sim_variable": "MANDATE_RECOVERY_STABILITY_THRESHOLD",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.2 ED-790 Mandate Recovery \u2014 Legitimacy advancement",
+      "quoted_text": "Advances via Mandate Recovery (+1/season when no hostile DAs target and Stability \u2265 2)"
+    },
+    {
+      "sim_variable": "HOLDOUT_ORDER_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.3 Faction Collapse step 1",
+      "quoted_text": "Settlements in that province with governors loyal to the collapsing faction may resist the new controller (Order \u2265 3 + governor Disposition \u2265 +3 toward the faction)"
+    },
+    {
+      "sim_variable": "HOLDOUT_GOVERNOR_DISPOSITION_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.3 Faction Collapse step 1",
+      "quoted_text": "Order \u2265 3 + governor Disposition \u2265 +3 toward the faction"
+    },
+    {
+      "sim_variable": "SUCCESSOR_MIN_STANDING_TO_AVERT_COLLAPSE",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a76.3 Faction Collapse step 4",
+      "quoted_text": "If the faction leader is killed or captured and no successor exists with Standing 4+, the faction dissolves."
     }
   ]
 }

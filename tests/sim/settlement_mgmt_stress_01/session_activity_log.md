@@ -665,3 +665,130 @@ wording against the Lowenskyst worked example.
   (F1, F7, F10, F11, F12, F14).
 
 ---
+
+## Session 9 — 2026-05-13 — Module 8 (Stature ladder + faction emergence + collapse) + retroactive throughline audit
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §6.1, §6.2, §6.3 (PART 6
+  focus)
+- `references/throughlines_meta.md` (full skeleton — NEW canonical
+  source for this sim)
+- `references/throughlines_meta_infill.md` §3.1 T->М tag table
+  (consulted for retroactive M1-M7 throughline audit)
+- `designs/territory/valoria_political_hierarchy_v30.md` (re-fetched)
+- `designs/territory/valoria_geography_v30.yaml` (re-fetched)
+- `designs/territory/settlement_adjacency_v30.md` (re-fetched)
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_08_progression.py`
+
+**Isolation tests:** 38/38 PASS (T1 through T38, no retries).
+
+**[DECISION] Module 8 takes ownership of canonical Renown track.**
+Per §6.1 + player_agency_v30 §5.4 reference, Renown 0-10 is the
+Stature-ladder substrate. Module 8 provides apply_renown_delta(state,
+delta) -> int as the canonical endpoint for the renown_delta signals
+returned by ActionResult from M3-M7. T38 validates the cross-module
+chain: simulated M4+M5+M6 renown_delta=+1 signals fed through
+apply_renown_delta produce a clean StatureScope transition.
+
+**[DECISION] Throughline bindings surfaced explicitly via queryable
+module-level dicts.** Module 8 exposes THROUGHLINE_COVERAGE_BY_THIS_MODULE
+and META_THROUGHLINE_COVERAGE_BY_THIS_MODULE so Module 13 integration
+audit can verify throughline coverage programmatically. Bindings:
+  - T-15 Player Progression: PRIMARY (Stature ladder IS this throughline)
+  - T-23 NPC Arc Emergence: SECONDARY (recruitment-candidate bridge)
+  - T-25 Generational Arc: TERTIARY (substrate; M9 wires clock)
+  - T-20 Two Contests: TERTIARY (collapse-to-city-state choice)
+  - М-5: PRIMARY meta
+  - М-6: SECONDARY meta
+
+**[DECISION] Retroactive throughline audit of M1-M7 included in M8 report.**
+Throughlines framework adoption was post-PP-672 (2026-04-19). Prior
+modules in this sim built before explicit binding. Audit pass identifies
+10 distinct throughlines bound across M1-M8 (T-01, T-08, T-11/15a/15b/15c,
+T-15, T-18, T-19, T-20, T-22, T-23, T-25) and surfaces major coverage
+gaps for Module 13 to track (T-04, T-05, T-06, T-07 — pressure clocks,
+M9 to bind; T-12, T-13, T-17 — character layer, other sims; T-16, T-21,
+T-24 — multi-system, M12-M13).
+
+**[FINDING] F16 — design-doc parenthetical T-NN drift at §4.5/§4.6.**
+settlement_layer_v30 §4.5 reads '(Throughline T7)' but per canonical
+T-NN catalog (throughlines_meta_infill §3.1, post-ED-738 reorganization),
+T-07 is 'Turmoil' (М-1 pressure clock), not Local Actor mechanics.
+T-23 'NPC Arc Emergence' (М-5 scale-connecting) is the canonical match
+for §4.5. Likely the parenthetical was correct under a pre-ED-738
+numbering. §4.4 'Throughline T1' IS canonically correct (T-01 = Everything
+Is Thread). §4.6 'Throughline T3' is tenuous (T-03 = Inseparability;
+Settlement POI templates plausibly relate but the binding is weak).
+Editorial refresh of these parentheticals recommended.
+
+**[DECISION] Meta-throughline-pattern analysis across M1-M8.**
+Counting primary bindings: М-3 substrate-grounds-all (M1, M2, M6: 3
+modules); М-4 institutions-stake-substrate-postures (M3, M4, M5: 3
+modules); М-5 scales-connect (M5, M8 primary): 2; М-2 geography-holds-
+pressure (M2, M7): 2; М-1 pressure-continuous (M4 secondary only;
+NO primary). Pattern: settlement-management sim leans М-3/М-4/М-5;
+structurally weak on М-1 (pressure-continuous). This is structurally
+expected — settlement-management is about static substrate; continuous
+pressure is timeline/clocks (Module 9 territory). M9 must close the
+М-1 gap.
+
+**[ASSUMPTION] Stage 3->4 declaration roll uses Renown // 2 pool +
+raw roll vs Ob 3 — basis:** §6.2 verbatim: 'Influence pool = Renown ÷ 2,
+Ob 3'. Module 8 interprets 'pool + roll >= Ob' as the standard pool-vs-Ob
+check (consistent with §3.2 governance-action format). If the canon
+intends pool-only (no roll) or pool * roll, that's a Module 12 binding
+concern.
+
+**[ASSUMPTION] Renown clamps at [0, 10] — basis:** §6.1 explicitly
+lists Renown 0-10 as the canonical track range (referenced from
+player_agency_v30 §5.4 per the section header). Module 8 clamps
+apply_renown_delta accordingly.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with 165
+ledger entries verified, 6 sources cited (now including
+throughlines_meta + throughlines_meta_infill); commit_message ok;
+sim_fabrication_check ok; forbidden_token ok; pre_commit_gate ok;
+safe_commit ok.
+
+**Retries this session:** zero.
+
+**Cumulative throughline coverage across M1-M8:**
+- T-01 Everything Is Thread (M6 PRIMARY via §4.4 Thread ops)
+- T-08 Church Rendering Reinforcement (M4 PRIMARY)
+- T-11/T-15a/T-15b/T-15c faction postures (M5)
+- T-15 Player Progression (M5 + M8 PRIMARY)
+- T-18 Radiation Gradient (M1, M2)
+- T-19 Southernmost Hidden Front (M2 Schoenland, M7 military)
+- T-20 Two Contests (M7 tactical choice, M8 collapse)
+- T-22 Belief Lattice (M4 Geneva trap)
+- T-23 NPC Arc Emergence (M6 Local Actors, M8 recruitment bridge)
+- T-25 Generational Arc (M8 substrate; M9 wires clock)
+
+**Major throughline gaps for Module 13 to track:**
+- T-04 MS Decay, T-05 CI Accumulation, T-06 IP Accumulation, T-07
+  Turmoil — ALL М-1 PRESSURE clocks. NOT YET BOUND. Module 9 owns.
+- T-12, T-13, T-17 — character-layer (Practitioner Arc, Certainty
+  Journey, Companion Moral Mirror). Outside settlement-mgmt primary
+  scope; verify other sims cover.
+- T-16 Knot Propagation — threadwork system; touched at surface by
+  M6 Thread ops but not propagated through knots. Module 12.
+- T-21 Thread Political Warfare — M4 + M5 surface; warfare layer M12.
+- T-24 Convergence as Crisis — Module 13 integration target.
+
+**Cumulative findings:**
+- F1, F2, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15, F16: open (14)
+- F3 RESOLVED at M2; F4 PARTIALLY RESOLVED at M2 (2)
+- Type-taxonomy drift family: F1, F7, F10, F11, F12, F14 (six surfacings)
+- Documentation drift family: F2, F13, F14, F16 (four surfacings)
+
+**Cumulative status after M8:**
+- 8 modules verified; 244 isolation tests; 165 ledger entries
+- 16 findings (1 resolved, 1 partial, 14 open)
+- 10 throughlines bound across 8 modules
+- 5 meta-throughlines have at least secondary binding (М-1 has none primary)
+- 5 modules remaining before Module 13 integration runner
+
+---
