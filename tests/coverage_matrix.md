@@ -130,3 +130,24 @@
 - Status: committed
 - Contents: bootstrap order, what's built, known issues, priority list,
   throughline/meta-throughline framework, trajectory anchor.
+
+
+## settlement_mgmt_stress_01 — Module 10 verified (2026-05-13)
+- Module: Dissolution emergence + POI templates + system impact catalogue
+  (settlement_layer §4.6, §4.7, §4.8, §4.9, §8.1, §8.2)
+- File: tests/sim/settlement_mgmt_stress_01/module_10_dissolution.py
+- Tests: 27/27 PASS (T1-T27); T27 validates emergent governance-failure ->
+  black-market chain composes across M9 + M10 with no authored coupling.
+- Ledger: 17 new entries (~211 total cumulative)
+- THROUGHLINE BINDINGS: T-27 PRIMARY (Effects Real Explanation Wrong),
+  T-30 SECONDARY (Information Asymmetry), T-03 SECONDARY (Inseparability).
+- META-THROUGHLINE: М-7 BORROWINGS ARE OPERATIONAL EXTENSIONS now PRIMARY
+  (second previously-unbound meta closed; after M9 closed М-1).
+- Audit catalogue: §8.1 11 system-impact predictions + §8.2 6 invariants
+  surfaced as queryable Python data structures for Module 13.
+- F18 NEW: §4.6 POI templates omit §2.1 extra types (Village /
+  Fortress-City / Cathedral-City). SEVENTH surfacing of type-taxonomy
+  drift family (F1, F7, F10, F11, F12, F14, F18). One editorial pass
+  closes all seven.
+- 5 of 6 primary meta-throughlines now primary-bound; only М-6
+  remains primary-unbound (structurally expected — character layer).

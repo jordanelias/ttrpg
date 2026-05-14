@@ -919,3 +919,98 @@ corrections (SiegeState and BypassState are in M7 not M6).
 - T-24 Convergence as Crisis — Module 13 integration target.
 
 ---
+
+## Session 11 — 2026-05-13 — Module 10 (dissolution emergence + POI + system impact catalogue)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §4.6, §4.7, §4.8, §4.9,
+  §8.1, §8.2 (PART 4 dissolution sections + PART 8 system impact)
+- All cumulative sources re-fetched for sim_gate ledger verification.
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_10_dissolution.py`
+
+**Isolation tests:** 27/27 PASS (T1 through T27).
+
+**[DECISION] Closes the М-7 gap surfaced by M8 retroactive audit.**
+Module 10 binds М-7 BORROWINGS ARE OPERATIONAL EXTENSIONS as PRIMARY.
+The three §4.7/§4.8/§4.9 'Niflhel Dissolution' mechanics are the
+canonical operational extensions emerging when official institutions
+fail: black market is the operational extension of trade when
+governance breaks; intel brokers are the operational extension of
+intelligence when no faction sponsors it; thread exploitation is the
+operational extension of threadwork when no warden monitors the site.
+Second previously-unbound primary meta-throughline closed (after M9
+closed М-1).
+
+**[VALIDATION] T27 — Emergent governance-failure -> black-market chain.**
+Pure-predicate composition across M9 and M10 with no authored coupling:
+  - Stats start at Order=2, has_governor=True. predicate_black_market_
+    emerges returns False.
+  - M9.unmanaged_settlement_tick called twice (governor left). Order
+    2 -> 1 -> 0.
+  - With Order=0 and has_governor=False, predicate now True.
+  - Black market emerges from state mutation, not authored event.
+Same architectural property M6/T43 + M7/T41 + M9/T35 demonstrated.
+
+**[FINDING] F18 NEW — §4.6 POI templates omit §2.1 extra types.**
+§4.6 contains exactly 8 type rows (Seat/City/Town/Fortress/Port/Cathedral/
+Mine/Outpost). Village, Fortress-City, Cathedral-City have no canonical
+template. SEVENTH distinct surfacing of the type-taxonomy drift family
+(F1, F7, F10, F11, F12, F14, F18). The audit pattern is now
+unambiguous: §2.1 registry rebuild was not propagated to ANY downstream
+mechanical table.
+
+Pattern lifecycle (audit-grade):
+  1. §2.1 (PP-726) introduces Village/Fortress-City/Cathedral-City
+  2. §1.4.1 facility matrix — extras absent (F7)
+  3. §3.2 governor eligibility — extras absent (F10)
+  4. §3.3 subnational alignment — extras absent (F11)
+  5. §4.5 Local Actor counts — extras absent (F12)
+  6. §4.6 POI templates — extras absent (F18 THIS SESSION)
+  7. §5.1 + adjacency §3 examples — stale S-IDs (F14)
+  8. §1.2 vs §2.1 — original mismatch (F1)
+ONE editorial pass closes all seven. This is the highest-impact
+pending editorial.
+
+**[DECISION] §8.1 + §8.2 surfaced as queryable data.**
+Module 13's integration audit needs §8.1's 11 system-impact predictions
++ §8.2's 6 invariants as queryable Python structures, not just design-
+doc prose. Module 10 supplies SYSTEM_IMPACTS_FROM_SETTLEMENT_LAYER:
+List[SystemImpact] and SYSTEM_INVARIANTS: List[str].
+Severity distribution validates §8.1 self-consistency:
+  - Significant: 1 (Military)
+  - Moderate: 7 (Geography/Faction/Victory/NPC/Mass Combat/Scale/Player Agency)
+  - Low: 3 (Clocks/Fieldwork/Companions)
+
+**[ASSUMPTION] Village fallback to Town POI template — basis:**
+Village is a Town variant by population/density (smaller). No canonical
+ruling on POI mapping; Module 10 surfaces this provisionally and flags
+via F18. Fortress-City and Cathedral-City left unmapped (None) to
+surface as gap rather than silently reconcile.
+
+**[ASSUMPTION] Half-unit encoding for Wealth +0.5 / Accord -0.5 —
+basis:** M4 established the half-unit accumulator pattern for fractional
+stat effects. M10 reuses the pattern: 2 half-units = 1 full Wealth/Accord
+delta. Module 12 will consume the accumulators at province level.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with ~211
+ledger entries verified, 8 sources cited; commit_message ok;
+sim_fabrication_check ok; forbidden_token ok; pre_commit_gate ok;
+safe_commit ok.
+
+**Retries this session:** zero.
+
+**Cumulative status after M10:**
+- 10 modules verified; 307 isolation tests; ~211 ledger entries
+- 18 findings (1 resolved, 1 partial, 16 open)
+- Type-taxonomy drift family: 7 surfacings (F1, F7, F10, F11, F12, F14, F18)
+- Documentation drift family: 5 surfacings (F2, F13, F14, F16, F17)
+- 5 of 6 primary meta-throughlines now primary-bound
+  (М-1 M9, М-2 M2/M7, М-3 M1/M2/M6, М-4 M3/M4/M5, М-5 M5/M8, М-7 M10)
+- Only М-6 CHOICE IS FORCED remains primary-unbound (character-layer)
+- 3 modules remaining: M11 (Provincial Authority + cross-system),
+  M12 (faction integration), M13 (integration runner + NERS audit)
+
+---

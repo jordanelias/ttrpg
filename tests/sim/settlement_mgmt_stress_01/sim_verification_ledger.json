@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-9 entries populated. 194 entries total.",
+  "status": "Modules 1-10 entries populated. 211 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -1363,6 +1363,125 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a77.1 IP row worked example",
       "quoted_text": "30-year game: IP ~80 (Altonian preparation, not yet invasion)"
+    },
+    {
+      "sim_variable": "BLACK_MARKET_ORDER_THRESHOLD",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.7 Black Markets \u2014 emergence",
+      "quoted_text": "Any settlement with Order \u2264 1 or no governor develops a black market."
+    },
+    {
+      "sim_variable": "BLACK_MARKET_DISAPPEAR_ORDER_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.7 Black Markets \u2014 disappearance",
+      "quoted_text": "**Disappearance:** Automatic when settlement Order \u2265 3."
+    },
+    {
+      "sim_variable": "BLACK_MARKET_HALF_WEALTH_DELTA_PER_SEASON",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.7 Black Markets \u2014 effects (half-unit encoding)",
+      "quoted_text": "Settlement Wealth +0.5 (illicit trade is still trade)."
+    },
+    {
+      "sim_variable": "BLACK_MARKET_HALF_ACCORD_DELTA_PER_SEASON",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.7 Black Markets \u2014 effects (half-unit encoding)",
+      "quoted_text": "Settlement Accord \u22120.5 (population distrusts lawless governance)."
+    },
+    {
+      "sim_variable": "INTEL_BROKER_PROSPERITY_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.8 Intelligence Brokers \u2014 placement",
+      "quoted_text": "One broker per settlement with Prosperity \u2265 3 and no governor or governor Stability \u2264 2."
+    },
+    {
+      "sim_variable": "INTEL_BROKER_GOVERNOR_STABILITY_THRESHOLD",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.8 Intelligence Brokers \u2014 placement",
+      "quoted_text": "One broker per settlement with Prosperity \u2265 3 and no governor or governor Stability \u2264 2."
+    },
+    {
+      "sim_variable": "THREAD_EXPLOITATION_PROXIMITY_THRESHOLD",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.9 Thread Exploitation Sites \u2014 emergence",
+      "quoted_text": "Any settlement with Thread Proximity \u2264 2."
+    },
+    {
+      "sim_variable": "THREAD_HARVEST_HALF_RS_PENALTY_PER_HARVEST",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.9 Thread Exploitation Sites \u2014 harvesting (half-unit encoding)",
+      "quoted_text": "RS \u22120.5 per harvest per season."
+    },
+    {
+      "sim_variable": "THREAD_HARVEST_WEALTH_GAIN",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.9 Thread Exploitation Sites \u2014 harvesting",
+      "quoted_text": "Wealth +1 for harvesting faction."
+    },
+    {
+      "sim_variable": "POI_COUNT_MIN",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.6 Settlement POI Templates \u2014 POI count",
+      "quoted_text": "Each settlement has 2\u20134 POIs across Depth levels, authored per settlement type."
+    },
+    {
+      "sim_variable": "POI_COUNT_MAX",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.6 Settlement POI Templates \u2014 POI count",
+      "quoted_text": "Each settlement has 2\u20134 POIs across Depth levels, authored per settlement type."
+    },
+    {
+      "sim_variable": "DEPTH_LEVEL_SURFACE",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.6 POI Templates \u2014 Depth 0 Surface",
+      "quoted_text": "| Type | Depth 0 (Surface) | Depth 1 (Settled) | Depth 2 (Hidden) | Depth 3+ (Buried/Liminal) |"
+    },
+    {
+      "sim_variable": "DEPTH_LEVEL_SETTLED",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.6 POI Templates \u2014 Depth 1 Settled",
+      "quoted_text": "| Type | Depth 0 (Surface) | Depth 1 (Settled) | Depth 2 (Hidden) | Depth 3+ (Buried/Liminal) |"
+    },
+    {
+      "sim_variable": "DEPTH_LEVEL_HIDDEN",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.6 POI Templates \u2014 Depth 2 Hidden",
+      "quoted_text": "| Type | Depth 0 (Surface) | Depth 1 (Settled) | Depth 2 (Hidden) | Depth 3+ (Buried/Liminal) |"
+    },
+    {
+      "sim_variable": "DEPTH_LEVEL_BURIED",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.6 POI Templates \u2014 Depth 3+ Buried/Liminal",
+      "quoted_text": "| Type | Depth 0 (Surface) | Depth 1 (Settled) | Depth 2 (Hidden) | Depth 3+ (Buried/Liminal) |"
+    },
+    {
+      "sim_variable": "_system_impact_row_count",
+      "value": 11,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a78.1 Changes to Existing Systems table",
+      "quoted_text": "## \u00a78.1 Changes to Existing Systems"
+    },
+    {
+      "sim_variable": "_system_invariant_count",
+      "value": 6,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a78.2 What Does NOT Change",
+      "quoted_text": "## \u00a78.2 What Does NOT Change"
     }
   ]
 }
