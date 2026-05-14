@@ -1,48 +1,42 @@
-session_id: 2026-05-13_v15_v17_stamina_through_multiturn
+session_id: 2026-05-13_v15_v18_full_cycle
 session_close: 2026-05-13
 phase: sim-mb-06
 status: closed
-last_stage: v17-committed-ef7e8ec_multi_turn_orchestrator
+last_stage: v18-committed-5b7aafa_discipline_continuous_effective_size
 next_action:
   skill: valoria-simulator
-  task: multi-turn battery band recalibration (design decision); pursuit/cascade (D-4/D-5); discipline with continuous effective_size (D-6)
+  task: D-4 pursuit damage; D-5 rout cascade; D-8 multi-turn battery band recalibration
 blockers: []
-commits: [651bf7d, 55952ac, f3d94ef, ef7e8ec]
+commits: [651bf7d, 55952ac, f3d94ef, ef7e8ec, 5b7aafa]
 notes: |
-  ## Four commits this session
+  ## Five commits — v15 through v18 + audit
 
-  v15 (651bf7d) — G-1 stamina + G-2 rout on phase-boundary hooks.
-  v16 (55952ac) — G-3 continuous effective_size + lethality recalibration.
-  v16 audit (f3d94ef) — formula validation + gap detection, 10 gaps, 0 P1.
-  v17 (ef7e8ec) — multi-turn orchestrator + between-turn rules + D-7 morale separation.
+  v15 (651bf7d) — G-1 stamina + G-2 rout hooks. Battery 11/13.
+  v16 (55952ac) — continuous effective_size + LETHALITY_SCALE=0.10.
+  v16 audit (f3d94ef) — 10 gaps identified (0 P1, 6 P2, 4 P3).
+  v17 (ef7e8ec) — multi-turn orchestrator + between-turn rules + D-7 fix.
+  v18 (5b7aafa) — discipline_check_phase at phase boundary (D-6).
 
-  ## Architecture clarified (Jordan direction)
+  ## Architecture (confirmed by Jordan)
 
   4 zoom levels: Peninsula → Territory → Battlefield (25x21 per unit) → Scene.
   3-phase cap per engagement turn. 5-8 turns per battle.
-  Time is absolute. Adjacent allies at one depth join. Auto-resolve available.
-  30% cumulative casualties for rout (gameplay, not historical 10-15%).
+  Time is absolute. 30% cumulative casualties for rout.
+  Multi-turn compounding is correct behavior (strategic composition > tactics).
+  Battery bands need recalibration for multi-turn model.
 
-  ## Key findings
+  ## Multi-turn results (n=80, v18)
 
-  - Continuous effective_size: pool degrades proportionally. Works.
-  - LETHALITY_SCALE=0.10: ~15% casualties per 3-phase turn. Correct for multi-turn.
-  - Multi-turn compounding: geometric advantages amplify across turns.
-    HS vs Line = 79%, RF vs HS = 74% at equal stats.
-    This is CORRECT (strategic composition > tactical execution).
-    Battery bands need recalibration for multi-turn model.
-  - G-3 confirmed: lethality recalibration enables morale system to work as designed.
-  - Throughline/NERS assessment completed. System sound at conception, over-specified
-    at resolution (48-entry weapon matrix, 8 morale triggers). Streamlining recommended.
+  H1 Line/Line: 52.5% (mirror). H3 HS/Line: 75% (envelopment advantage).
+  H5 RF/HS: 72.5% (depth advantage). H7 GL/Line: 51.2%.
+  Loser casualties ~33% at rout. Winner ~24%. Ratio 1.4x.
+  Battles resolve in ~2 turns.
 
-  ## Gap register (from v16 audit)
+  ## Remaining gaps (from v16 audit)
 
-  D-1 multi-turn orchestrator: IMPLEMENTED (v17)
-  D-7 morale separation: IMPLEMENTED (v17)
-  D-9 between-turn rules: IMPLEMENTED (v17)
-  D-4 pursuit damage: NOT YET
-  D-5 rout cascade: NOT YET
-  D-6 discipline with continuous eff_size: NOT YET
-  D-8 multi-turn battery bands: need design decision from Jordan
-  D-2 per-unit grid: architecture change (later)
-  D-3 multi-unit engagements: architecture change (later)
+  D-4 pursuit damage: NOT YET — diverges winner/loser casualty ratio
+  D-5 rout cascade: NOT YET — requires level-2 orchestrator
+  D-8 battery bands: needs design decision — multi-turn amplifies advantages
+  D-2 per-unit grid: architecture (later)
+  D-3 multi-unit: architecture (later)
+  D-10 pool sensitivity: accepted as-designed (generalship dominance axiom)
