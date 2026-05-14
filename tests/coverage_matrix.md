@@ -1,5 +1,23 @@
 # Valoria Simulation Coverage Matrix
 
+## sim_mb_06_v21 — true simultaneous resolution (BIAS-1 root fix)
+- Date: 2026-05-14
+- Scope: mass combat simulation v20→v21
+- Mode: G — structural fix for T4 simultaneous resolution violation
+- Status: committed
+- Changes: three changes to run_battle for true simultaneous resolution:
+  (1) Target centroid caching before movement — primary fix for ~10% first-arg bias.
+  (2) Simultaneous HP application — both units take damage, then both recalc_size.
+  (3) Simultaneous morale erosion — compute both, then check rout for both.
+  Alternating processing order swap removed from run_multi_turn_battle.
+- Validation (n=40, max_battle_turns=20):
+  Mirror Cmd 4v4: A 50% / B 42.5% / Draw 7.5% (v20: A 55% / B 40% / D 5%).
+  Cmd 7v1: 100% A wins, avg 2.0 turns. Cmd 5v3: 100% A, avg 5.3 turns.
+  Rout threshold ~14.7% (consistent with v20). Winner now determined by dice variance.
+- Residual bias (7.5 pts): structural from grid geometry (SIDE_A/B_START_ROW asymmetry),
+  not processing order. Documented as GEO-1, P3.
+- T4 simultaneous resolution: VALIDATED.
+
 ## sim_mb_06_v16 — G-3 continuous effective_size + lethality recalibration committed
 - Date: 2026-05-13
 - Scope: mass combat simulation v15→v16
