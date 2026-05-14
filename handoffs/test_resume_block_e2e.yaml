@@ -1,0 +1,35 @@
+id: test_resume_block_e2e
+scope: simulation
+task:
+  skill: valoria-simulator
+  description: 'Battery band recalibration (D-8): fix Issue 4 equal-speed contention
+    asymmetry, then H2 Arrowhead penetration, H5 RefusedFlank'
+context_files:
+- path: session_log_current.md
+  depth: full
+  reason: Last sim stage and blockers
+- path: references/canonical_sources.yaml
+  depth: skeleton
+  reason: Canonical source freshness for params/combat.md
+working_state:
+  completed:
+  - BIAS-1 root fix (805f5f2)
+  - GEO-1 closed
+  - Mirror test p=0.62 no bias
+  in_progress: []
+  next:
+  - 'Fix Issue 4: equal-speed contention — currently 58% advantage to first resolver'
+  - H2 Arrowhead penetration test
+  - H5 RefusedFlank outcome distribution
+owns:
+- tests/sim/*
+key_values:
+- 'Mirror Cmd 4v4 (n=40): A 50.0% / B 42.5% / D 7.5% — p=0.62, no processing-order
+  bias'
+- 'Rout threshold: ~14.7% in multi-turn, consistent with v20'
+blockers:
+- canonical_sources.yaml freshness stale for params/combat.md (PP-238 editorial)
+last_commit: 805f5f2
+created: '2026-05-14T22:25:18.548093+00:00'
+updated: '2026-05-14T22:25:18.548093+00:00'
+status: active
