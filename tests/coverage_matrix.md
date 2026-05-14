@@ -1,5 +1,19 @@
 # Valoria Simulation Coverage Matrix
 
+## sim_mb_06_v22 — multi-unit orchestrator + freed-attacker + morale cascade (D-3, D-5)
+- Date: 2026-05-14
+- Scope: mass combat simulation v21→v22
+- Mode: G — architectural addition: multi-unit battle orchestrator
+- Status: committed
+- Changes: new run_multi_unit_battle() for 2+ engagement pairs per side.
+  Morale cascade: rout triggers Discipline Ob 1 check on adjacent friendlies (fail = -1 morale).
+  Rout contagion: -1 Morale to adjacent, braked. Freed-attacker: victor flanks adjacent enemy
+  (full pool vs -1D defender). D-3 and D-5 resolved.
+- Validation: 2v2 (command asymmetry) and 3v3 (staggered routs) scenarios.
+  Cascade fires correctly on sequential routs. Freed-attacker 2-3 dmg/turn.
+  Cascade fail rates: Disc 2=33.5%, Disc 5=17%.
+
+
 ## sim_mb_06_v21 — true simultaneous resolution (BIAS-1 root fix)
 - Date: 2026-05-14
 - Scope: mass combat simulation v20→v21

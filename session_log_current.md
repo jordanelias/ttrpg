@@ -1,11 +1,11 @@
 ---
 session_id: v21-sim-simultaneous
-last_stage: sim_v21_simultaneous_resolution_committed
-last_commit: 805f5f2
-commits: 2 (805f5f2: v21 sim + handoff + coverage; this commit: handoff correction + session log)
+last_stage: sim_v22_multi_unit_freed_attacker
+last_commit: (this commit)
+commits: 3 (805f5f2: v21; b2558d0: fix; this: v22 multi-unit)
 next_action:
   skill: valoria-simulator
-  description: Priority 2+3 from v20 handoff — freed-attacker mechanic + multi-unit orchestrator (D-3). Tightly coupled. Substantial architecture addition.
+  description: Priority 4 — cavalry/G-11 for pursuit damage. Or priority 5 — battery band recalibration.
 blockers:
   - canonical_sources.yaml freshness stale for params/combat.md (PP-238 editorial)
 ---
