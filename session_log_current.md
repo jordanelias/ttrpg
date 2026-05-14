@@ -1,39 +1,40 @@
-session_id: 2026-05-13_v15_v19_full_cycle
+session_id: 2026-05-13_v15_v20_emergent_morale
 session_close: 2026-05-13
 phase: sim-mb-06
 status: closed
-last_stage: v19-committed-334a885_bottom_up_troop_count_pursuit_fix
+last_stage: v20-committed-ae5c716_emergent_morale_erosion
 next_action:
   skill: valoria-simulator
-  task: multi-turn battery band recalibration; D-5 morale cascade; cavalry (G-11) for pursuit
+  task: D-5 morale cascade; G-11 cavalry pursuit; multi-unit engagement; per-unit grid
 blockers: []
-commits: [651bf7d, 55952ac, f3d94ef, ef7e8ec, 5b7aafa, 7f726b8, 334a885]
+commits: [651bf7d, 55952ac, f3d94ef, ef7e8ec, 5b7aafa, 7f726b8, 334a885, ae5c716]
 notes: |
-  ## Seven commits — v15 through v19 + audit + fix
+  ## Eight commits — v15 through v20
 
-  v15 (651bf7d) — G-1 stamina + G-2 rout hooks.
-  v16 (55952ac) — continuous effective_size + lethality recalibration.
-  v16 audit (f3d94ef) — 10 gaps, 0 P1.
-  v17 (ef7e8ec) — multi-turn orchestrator + between-turn rules.
-  v18 (5b7aafa) — discipline with continuous effective_size.
-  v19 (7f726b8) — bottom-up TroopCount HP, LETHALITY_SCALE removed.
-  v19 fix (334a885) — pursuit: Standard infantry cannot pursue per §A.12.
+  v15 (651bf7d) — stamina + rout hooks. v16 (55952ac) — continuous effective_size.
+  v16 audit (f3d94ef). v17 (ef7e8ec) — multi-turn orchestrator. v18 (5b7aafa) — discipline.
+  v19 (7f726b8) — bottom-up TroopCount HP. v19 fix (334a885) — pursuit canonical.
+  v20 (ae5c716) — emergent morale erosion formula.
 
-  ## Key architectural outcome
+  ## Key result: emergent morale erosion
 
-  Bottom-up emergent approach achieved:
-  - HP = TroopCount = Size * BLOCK_SIZE (400 at Company scale)
-  - Damage = soldier casualties from dice (no scaling)
-  - ~7% casualties per 3-phase turn (emergent from pool/TN/DR)
-  - 4 turns to rout at ~31% cumulative (emergent)
-  - 4 zoom levels confirmed: Peninsula → Territory → Battlefield → Scene
-  - 3-phase cap per engagement turn, 5-8 turns per battle
-  - Standard infantry cannot pursue (canonical §A.12)
+  morale_erosion = damage_taken / (discipline * command)
+  30% rout threshold FALLS OUT from: morale=6, dmg~3/tick, disc=5, cmd=4.
+  erosion = 3/20 = 0.15/tick. 6.0/0.15 = 40 ticks. 40 * 0.75%/tick = 30%.
+  No imposed thresholds. No morale floor. General's contribution in denominator.
+  Higher command → slower erosion → later rout. Generalship dominance (T1) structural.
 
-  ## Remaining
+  ## Bottom-up audit findings
 
-  D-5 morale cascade (§A.12): rout triggers Disc check on friendly units
-  D-8 battery bands: need recalibration for multi-turn model
-  G-11 cavalry: Fast speed, pursuit mechanics, charge cycle
-  D-2 per-unit grid (25x21): architecture change
-  D-3 multi-unit engagements: 2v1, 3v1 etc
+  Started with 15/24 imposed constants. v20 removed 3 morale thresholds +
+  flat stamina drain, replacing with emergent formulas. Remaining imposed:
+  STAMINA_MAX (100), STAMINA_DRAIN_PER_CONTACT_CELL (3), STAMINA_RECOVERY_PER_RESERVE_RANK (8),
+  STAMINA_EXHAUSTED_POOL_PENALTY (-1), BETWEEN_TURN_STAMINA_RECOVERY (30),
+  TICKS_PER_PHASE (6), BATTLEFIELD_SIZE (25), BUFFER_CELLS (5).
+  All structural/tuning — no morale thresholds remain.
+
+  ## Architecture confirmed
+
+  4 zoom: Peninsula → Territory → Battlefield (25x21/unit) → Scene.
+  3-phase cap/turn. HP = TroopCount = Size * BLOCK_SIZE. No LETHALITY_SCALE.
+  Standard infantry cannot pursue (§A.12). Pursuit is level-2 + Fast units.
