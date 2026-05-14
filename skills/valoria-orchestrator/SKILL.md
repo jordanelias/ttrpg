@@ -462,23 +462,63 @@ Each type pre-fetches its required files — see `TASK_REQUIRED_FILES` in `valor
 
 **All commits go to GitHub via `h.safe_commit()`, `g.close_session_log()`, or `g.safe_session_close()` (legacy). Direct `g.atomic_commit()` raises RuntimeError without authorization from safe_commit().**
 
-**Per-session logs:** Each session writes to `session_logs/<scope>_<token>.md`. The file `session_log_current.md` is auto-generated — direct writes are blocked by `pre_commit_gate`.
+**Per-session logs (current protocol):** Each session writes to `session_logs/<scope>_<token>.md`. The file `session_log_current.md` is auto-generated — direct writes are blocked by `pre_commit_gate`. Use `g.start_session_log(scope, token)` at session open and `g.close_session_log(scope, token, final_content)` at close. `g.safe_session_close()` is legacy (single-file, no per-session index) — use only if per-session logging is not yet active.
 
-Close a session with `g.close_session_log(scope, token, final_content)`:
+**Concurrent sessions:** Each session has its own `session_logs/<scope>_<token>.md`. Bootstrap reports all active sessions from `session_logs/index.md`. Conflict detection runs through handoff `owns` declarations — see handoff workflow below.
+
+**Session close sequence** — follow in order:
+
+**Step 1 — Write handoff** (required if work continues in a future session):
+```python
+g.write_handoff({
+    'id': '<scope>_<slug>',           # e.g. 'simulation_battery_bands'
+    'scope': '<scope>',               # simulation | editorial | design | infrastructure | godot
+    'task': {
+        'skill': '<skill-name>',
+        'description': '<one-line summary of the continuing task>',
+    },
+    'context_files': [
+        {'path': '<repo-relative-path>', 'depth': 'skeleton|full',
+         'repo': 'ttrpg',             # or 'valoria-game' for Godot files
+         'reason': '<why this file is needed on resume>'},
+    ],
+    'working_state': {
+        'completed': ['<item>', ...],
+        'in_progress': [],
+        'next': ['<first thing to do on resume>', ...],  # non-empty required
+    },
+    'owns': ['<glob>', ...],           # files this workstream modifies — required for conflict detection
+    'key_values': ['<decision or value to carry forward>', ...],
+    'blockers': ['<blocking issue>', ...],
+    'last_commit': '<short-sha>',
+})
+# → prints resumption block — copy it, give it to Jordan for the next session
+```
+
+**Step 2 — Require handoff on close** (validates the file was written correctly):
+```python
+h.require_handoff_on_close('<handoff_id>')
+```
+
+**Step 3 — Close session log:**
 ```yaml
 session_id: <scope>_<token>
 session_close: YYYY-MM-DD HH:mm
 scope: <scope>
 status: CLOSED
-last_stage: [stage name]
+last_stage: <stage name>
 next_action:
-  skill: name
-  input_file: filename
-  parameters: {}
+  skill: <skill-name>
+  description: <what to do on resume>
 blockers: []
 ```
+```python
+g.close_session_log(scope, token, final_content, handoff_id='<handoff_id>')
+```
 
-This archives the log to `archives/session/`, removes the session from the index, and updates the auto-generated pointer.
+This archives the session log to `archives/session/`, removes the session from `session_logs/index.md`, updates the auto-generated pointer, and validates the handoff reference.
+
+**If work is complete** (no continuation): omit `g.write_handoff()` and `h.require_handoff_on_close()`. Call `g.close_session_log()` without `handoff_id`.
 
 ## Token Rules
 - Never re-read a document already fetched this session. Consume fetched content.

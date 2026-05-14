@@ -45,7 +45,7 @@ skills:
       - skills/valoria-orchestrator/scripts/github_ops.py
       - skills/valoria-orchestrator/scripts/valoria_hooks.py
     gating_hooks: []   # orchestrator is the host, not a gate target
-    last_verified: 2026-05-10
+    last_verified: 2026-05-14
 
   - name: valoria-simulator
     path: skills/valoria-simulator/SKILL.md

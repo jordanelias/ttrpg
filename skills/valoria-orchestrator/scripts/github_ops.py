@@ -971,6 +971,18 @@ def close_session_log(
                 f"[SESSION CLOSE BLOCKED] Handoff '{handoff_path}' failed schema validation:\n"
                 + "\n".join(f"  - {e}" for e in herrors)
             )
+        # Hook-level checks (mirrors h.validate_handoff for consistent enforcement)
+        for cf in hparsed.get('context_files', []):
+            p = cf.get('path', '')
+            if p.startswith('/') or '..' in p:
+                raise RuntimeError(
+                    f"[SESSION CLOSE BLOCKED] context_files path must be relative repo path, got: '{p}'"
+                )
+        for pattern in hparsed.get('owns', []):
+            if not isinstance(pattern, str) or not pattern.strip():
+                raise RuntimeError(
+                    f"[SESSION CLOSE BLOCKED] 'owns' entries must be non-empty strings, got: {pattern!r}"
+                )
         print(f"[SESSION] Handoff validated: {handoff_path}")
 
     # Read current index
@@ -1520,10 +1532,10 @@ HANDOFF_DIR = 'handoffs'
 HANDOFF_ARCHIVE_DIR = 'archives/handoffs'
 
 HANDOFF_REQUIRED_FIELDS = {
-    'id', 'task', 'context_files', 'working_state', 'last_commit',
+    'id', 'task', 'context_files', 'working_state', 'last_commit', 'owns',
 }
 HANDOFF_TASK_REQUIRED = {'skill', 'description'}
-HANDOFF_CTX_FILE_REQUIRED = {'path', 'depth'}
+HANDOFF_CTX_FILE_REQUIRED = {'path', 'depth', 'reason'}
 HANDOFF_VALID_DEPTHS = {'full', 'skeleton'}
 
 
@@ -1567,8 +1579,15 @@ def _validate_handoff_schema(handoff: dict) -> list:
     if isinstance(ws, dict):
         if 'next' not in ws:
             errors.append("working_state must include 'next' (what the resuming session should do)")
+        elif not ws['next']:
+            errors.append("working_state.next must not be empty — resuming session needs at least one item")
     else:
         errors.append("'working_state' must be a dict")
+
+    owns = handoff.get('owns', None)
+    if owns is not None:
+        if not isinstance(owns, list) or len(owns) == 0:
+            errors.append("'owns' must be a non-empty list of file paths/globs — required for conflict detection")
 
     return errors
 
@@ -1605,7 +1624,6 @@ def write_handoff(handoff: dict, extra_additions: list = None) -> str:
     handoff.setdefault('created', now)
     handoff['updated'] = now
     handoff.setdefault('status', 'active')
-    handoff.setdefault('owns', [])
     handoff.setdefault('key_values', [])
     handoff.setdefault('blockers', [])
 
@@ -1891,8 +1909,16 @@ def load_handoff_context(handoff_id: str) -> dict:
     if not ctx_files:
         return {'handoff': parsed, 'files': {}}
 
-    paths_to_fetch = [cf['path'] for cf in ctx_files]
-    fetched = read_files_graphql(paths_to_fetch, repo='ttrpg', skip_health_check=True)
+    # Group paths by repo (context_files may span ttrpg and valoria-game)
+    by_repo: dict = {}
+    for cf in ctx_files:
+        repo = cf.get('repo', 'ttrpg')
+        by_repo.setdefault(repo, []).append(cf['path'])
+
+    fetched: dict = {}
+    for repo, paths in by_repo.items():
+        result = read_files_graphql(paths, repo=repo, skip_health_check=True)
+        fetched.update(result)
 
     # Report what was loaded
     print(f"\n[HANDOFF] Loaded context for '{handoff_id}':")
@@ -1900,8 +1926,10 @@ def load_handoff_context(handoff_id: str) -> dict:
         p = cf['path']
         depth = cf.get('depth', 'full')
         reason = cf.get('reason', '')
+        repo = cf.get('repo', 'ttrpg')
         found = fetched.get(p) is not None
         status = '✓' if found else '✗ NOT FOUND'
-        print(f"  {status}  {p} ({depth}) — {reason}")
+        repo_tag = f' [{repo}]' if repo != 'ttrpg' else ''
+        print(f"  {status}  {p} ({depth}){repo_tag} — {reason}")
 
     return {'handoff': parsed, 'files': fetched}
