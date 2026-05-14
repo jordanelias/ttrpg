@@ -76,19 +76,11 @@
   Morale now float. No floor — general's contribution in denominator.
 - Results: loser rout at 29.7% casualties (emergent). Winner ~22%. 4 turns.
 
-
-## settlement_mgmt_stress_01 — Module 7 verified (2026-05-13)
-- Module: military granularity at settlement scope
-  (settlement_layer §5.1, §5.2 + settlement_adjacency §2, §3)
-- File: tests/sim/settlement_mgmt_stress_01/module_07_military.py
-- Tests: 41/41 PASS (T1-T41)
-- Ledger: ~17 new entries (~140 total cumulative)
-- Bottom-up emergent: pure functions for Assault/Siege/Bypass
-  eligibility + terrain + settlement-type modifiers. T41 validates
-  Siege -> Order erosion -> Revolt chain emerges across 3 seasons
-  without authored Siege->Revolt link.
-- Cumulative action handlers: 27 (1 M3 + 6 M4 + 6 M5 + 9 M6 + 5 M7).
-- F14 NEW: stale pre-PP-726 settlement IDs in design-doc examples
-  (sixth surfacing of the type/S-ID drift family).
-- F15 NEW: adjacency §2.2 settlement-type modifier table omits City
-  (suspicious omission given City is §1.2 canonical).
+## sim_mb_06_v20 patches — stamina drain fix + contact-fraction damage scaling
+- Date: 2026-05-13
+- Scope: bottom-up fixes from tick-by-tick diagnostic trace
+- Changes: STAMINA_DRAIN_PER_CONTACT_CELL 3→1 (12-tick exhaustion, matches historical rotation).
+  Engagement damage scaled by opponent's contact fraction (cells_in_contact/total_cells).
+  Envelopment advantage now EMERGES: HS has more cells fighting → deals more damage.
+  Casualty ratio 1.51x (up from 1.4x). Stamina now lasts 2-3 phases.
+- Known issue: H1 mirror 91.7% side-A bias from position reset. Needs D-2 per-unit grid.

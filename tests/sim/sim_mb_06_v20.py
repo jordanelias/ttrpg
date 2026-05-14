@@ -225,9 +225,10 @@ BLOCK_SIZE = 100  # [canonical: designs/provincial/mass_battle_v30.md §A.3 — 
 #  source specifies stamina values; audit G-1 identifies the mechanism gap
 #  without prescribing numbers. Validated against battery.]
 STAMINA_MAX = 100
-STAMINA_DRAIN_PER_CONTACT_CELL = 3   # drain per cell in contact per tick
+STAMINA_DRAIN_PER_CONTACT_CELL = 1   # drain per cell in contact per tick
 # v20: stamina drain proportional to cells in contact — emergent from formation.
-# Line (5 front cells): drain 15/tick. Arrowhead tip (3 cells): drain 9/tick.
+# v20 fix: 1/cell gives ~8 drain/tick at 8 contact cells → 12.5 ticks to exhaust.
+# Historical: front-rank rotation every 2-3 phases (12-18 ticks).
 # [ASSUMPTION: drain per contact cell is a tuning parameter]
 # Recovery at phase boundary: per reserve rank (rows behind front row).
 # Net drain/phase (6 contact ticks × 16 = 96):
@@ -1594,8 +1595,37 @@ def run_battle(unit_a, unit_b, max_turns=18):
         # Reduces R1 (Ranged vs Line) without breaking R3 (mirror — same scaling on both sides).
         # [canonical: Jordan design 2026-05-12 — volley hp scaling tuned for historical match]
         volley_hp_scale = lambda u: max(1, (u.h_per_size + 1) // 2)
-        # v19: damage applies directly to HP (= TroopCount). No scaling.
-        # Each damage point = one soldier casualty. Emergent from pool/TN/DR.
+        # v20: scale engagement damage by contact fraction.
+        # More cells in contact = more soldiers fighting = more damage dealt.
+        # Bottom-up: the envelopment advantage EMERGES from having more cells engaged.
+        # contact_fraction = cells_in_contact / total_cells. Capped at 1.0.
+        if pairs:
+            for u, dmg_key in [(unit_a, "dmg_a"), (unit_b, "dmg_b")]:
+                cells_in_contact = set()
+                total_cells = 0
+                for sub in u.subunits:
+                    total_cells += len(list(sub.cells()))
+                    for p in pairs:
+                        if p.get('atom_a') is sub:
+                            cells_in_contact.update(p.get('a_cells', []))
+                        elif p.get('atom_b') is sub:
+                            cells_in_contact.update(p.get('b_cells', []))
+                # The OPPONENT's contact fraction scales their damage against us
+                # More of the opponent's troops fighting = more damage TO us
+                opp = unit_b if u is unit_a else unit_a
+                opp_cells_contact = set()
+                opp_total = 0
+                for sub in opp.subunits:
+                    opp_total += len(list(sub.cells()))
+                    for p in pairs:
+                        if p.get('atom_a') is sub:
+                            opp_cells_contact.update(p.get('a_cells', []))
+                        elif p.get('atom_b') is sub:
+                            opp_cells_contact.update(p.get('b_cells', []))
+                # Scale damage: opponent's contact fraction → damage to us
+                opp_frac = len(opp_cells_contact) / max(1, opp_total)
+                result[dmg_key] = result[dmg_key] * max(0.2, opp_frac)
+        # Each damage point = one soldier casualty. Emergent from pool/TN/DR + contact.
         unit_a.hp = max(0, unit_a.hp - result["dmg_a"] - volley_dmg_a * volley_hp_scale(unit_a))
         unit_a.recalc_size()
         unit_b.hp = max(0, unit_b.hp - result["dmg_b"] - volley_dmg_b * volley_hp_scale(unit_b))
