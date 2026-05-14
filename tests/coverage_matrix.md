@@ -64,3 +64,14 @@
 - Scope: D-4 pursuit canonical compliance
 - Changes: rout_resolution no longer applies pursuit damage from Standard infantry.
   Pursuit is a level-2 mechanic for Fast units only (canonical: §A.12).
+
+## sim_mb_06_v20 — fully emergent morale erosion + contact-proportional stamina
+- Date: 2026-05-13
+- Scope: mass combat simulation v19→v20
+- Mode: G — bottom-up emergent mechanics
+- Status: committed
+- Changes: morale erosion = damage / (discipline * command). No thresholds.
+  30% rout emerges from canonical stats (morale=6, disc=5, cmd=4, dmg~3/tick).
+  Stamina drain proportional to cells in contact (formation-emergent).
+  Morale now float. No floor — general's contribution in denominator.
+- Results: loser rout at 29.7% casualties (emergent). Winner ~22%. 4 turns.
