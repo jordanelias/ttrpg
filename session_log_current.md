@@ -1,40 +1,67 @@
-session_id: 2026-05-13_v15_stamina_rout
+session_id: 2026-05-13_v16_continuous_troop_count
 session_close: 2026-05-13
 phase: sim-mb-06
 status: closed
-last_stage: v15-committed-651bf7d_stamina_rout_battery_11_of_13
+last_stage: v16-committed-55952ac_continuous_effective_size_lethality_recal
 next_action:
   skill: valoria-simulator
-  task: G-3 lethality recalibration — prerequisite for meaningful rout rates; H7 GL geometric advantage reinforcement
+  task: v17 — multi-turn battle orchestrator; LETHALITY_SCALE fine-tuning; per-unit grid architecture; pursuit/cascade mechanics
 blockers: []
-commits: [651bf7dd3308a808b155afde3511677a8cc649f3]
+commits: [651bf7dd3308a808b155afde3511677a8cc649f3, 55952ac6f7078ce2af37c7328337b678ce5a7972]
 notes: |
-  ## What landed this session
+  ## Session summary
+
+  Two commits this session:
 
   v15 (651bf7d) — G-1 stamina + G-2 rout on phase-boundary hooks.
-    - Stamina: drain 16/contact-tick, recovery 8/reserve-rank at phase boundary.
-      Pool penalty -1 die at exhaustion only (minimalist after 5 tuning iterations).
-    - Rout: phase-boundary morale check for exhausted+damaged units (floor override
-      at 20% casualties). Per-tick morale unchanged from v14.
-    - Battery: 11/13 in-band (v14 at same seeds: 10/13).
-      H5 RF-vs-HS FIXED (47.4 -> 50.2%). R3 Ranged mirror FIXED (44.0 -> 45.4%).
-      H7 GL-vs-Line regressed (51.6 -> 49.4%, structural — GL shallow depth pays
-      stamina cost vs Line depth).
-    - Key finding: G-3 does NOT fall out of G-1+G-2 (contradicts audit prediction).
-      Per-tick lethality (~3 HP/tick) kills units in 7-8 ticks; stamina differential
-      needs 12+ ticks. Rout rate 0% — battles still end by HP death.
+    Stamina: drain 16/contact-tick, recovery 8/reserve-rank. Pool penalty -1 at exhaustion.
+    Battery 11/13 in-band. H5 RF-vs-HS fixed (47.4->50.2%).
 
-  ## Tuning iterations explored
+  v16 (55952ac) — G-3 continuous effective_size + lethality recalibration.
+    Architectural: effective_size as float (not floored). Pool degrades continuously.
+    LETHALITY_SCALE=0.10 for ~15% casualties per 3-phase engagement turn.
+    max_turns=18 (3-phase cap per engagement turn).
+    Casualty-pct morale triggers at 30%/50% replace integer Size triggers.
+    Multi-turn validation: rout at ~33% cumulative after 2 turns. 100% rout rate.
 
-  5 iterations tested: aggressive pool penalties (7/13), moderate (7/13), casualty-based
-  morale triggers (7/13), stamina-gated triggers (4/13), minimalist pool-only (11/13).
-  The -1 exhaustion penalty was the only tuning that improved H5 without destabilizing
-  geometry-driven matchups.
+  ## Design clarifications from Jordan
 
-  ## Gap register update
+  Battle architecture (4 zoom levels):
+    1. Peninsula — faction-level grand strategy
+    2. Territory — terrain, armies, battle turns (5-8 per battle)
+    3. Battlefield — 25x21 grid PER UNIT, 3-phase cap per engagement turn
+    4. Scene — duels, thread, personal encounters
 
-  G-1 stamina: IMPLEMENTED (v15). Mechanism live but effect limited by per-tick lethality.
-  G-2 rout-at-threshold: PARTIALLY IMPLEMENTED (phase-boundary hooks live, 0% rout rate).
-  G-3 lethality recalibration: CONFIRMED NEEDED (not falling out of G-1+G-2 as predicted).
-  G-7 rally, G-8 reform, G-9 threadwork: hooks remain empty.
-  H7 regression: GL geometric advantage needs reinforcement in a later cycle.
+  Key constraints:
+    - Time is absolute — no different tick durations per unit type
+    - 3-phase cap per engagement turn, not per battle
+    - Adjacent allies at one depth join (2v1, 2v2, 3v1)
+    - Auto-resolve available
+    - 30% rout threshold (gameplay, not historical 10-15%)
+
+  ## Throughline/NERS assessment (pre-commit)
+
+  T1 Generalship dominates — strongest throughline, one formula carries it
+  T2 Cascading degradation — now producing its dynamic with v16 lethality
+  T3 Combined arms — well-served by existing mechanics
+  T5 Battles have systemic weight — differentiator from Total War
+  M1 General IS the army — meta-throughline
+  M3 Strategic composition > tactical execution — strongest for videogame
+
+  NERS verdict: sound at conception level, over-specified at resolution level.
+  Weapon effectiveness matrix (48 entries) should collapse to 9-12.
+  Morale trigger list should reduce to 4-5.
+  Phase structure could simplify (5 phases not 7).
+
+  ## Gap register
+
+  G-1 stamina: IMPLEMENTED (v15)
+  G-2 rout-at-threshold: IMPLEMENTED (v15+v16)
+  G-3 lethality recal: IMPLEMENTED (v16)
+  G-3b multi-turn orchestrator: NOT YET — needs proper state persistence across turns
+  Per-unit grid (25x21): NOT YET — sim uses shared grid
+  Multi-unit engagement (2v1 etc): NOT YET
+  Pursuit damage after rout: NOT YET
+  Rout cascade to adjacent units: NOT YET
+  H7 GL regression: still present, structural
+  Winner/loser casualty ratio 1.4x vs historical 2-5x: needs pursuit/cascade
