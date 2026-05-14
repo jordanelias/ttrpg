@@ -1,5 +1,14 @@
 # Valoria Simulation Coverage Matrix
 
+## battery_v22 — D-8 multi-turn band recalibration
+- Date: 2026-05-14
+- Scope: formation matchup battery ported from v9 to v22 multi-turn
+- Mode: G — diagnostic
+- Status: committed
+- Findings: 2/8 in-band. Root cause: no flanking detection. See battery_report_v22.md.
+- D-8: DIAGNOSED.
+
+
 ## HANDOFF_v22 — comprehensive session handoff
 - Date: 2026-05-14
 - Scope: session summary for v21+v22
