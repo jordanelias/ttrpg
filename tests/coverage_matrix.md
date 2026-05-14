@@ -122,3 +122,11 @@
 - All 6 primary meta-throughlines now have at least secondary binding;
   5 have primary; only М-6 remains primary-unbound (structurally
   expected — character layer).
+
+
+## HANDOFF_v20.md — session handoff document
+- Date: 2026-05-13
+- Scope: end-of-session synthesis
+- Status: committed
+- Contents: bootstrap order, what's built, known issues, priority list,
+  throughline/meta-throughline framework, trajectory anchor.
