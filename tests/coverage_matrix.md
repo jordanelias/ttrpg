@@ -250,7 +250,13 @@
   distance, 2H bonus, builds, crits, integration.
 - 3 decision gates: TN+damage → triangle → 2H stacking → ratify/iterate.
 - Priority 1: T1.1, T1.2, T2.1, T2.2, T2.4, T6.1 (must pass before any ratification).
-- Addresses audit issues: longsword dominance, specialist penalty, triangle calibration.
+- Phase 1-2 P1 results: T1.1 conditional pass (ratio 1.98×). T1.2 pass. T2.1 pass.
+  T2.2 PASS — crossover at Medium (blade wins None/Light, blunt wins Med/Heavy).
+  T2.4 FAIL — warhammer dominates all tiers (STR×3 overwhelms TN gap).
+  T6.1 FAIL — longsword dominates (84% vs arming at -1.0 cap; 74% at -0.5 cap).
+  2H cap at -0.5 helps but TN 6.5 vs 7.0 cliff remains. Mace/rapier non-viable.
+  Decision: TN modifiers need redistribution. 1H weapons need TN reduction or
+  2H weapons need further TN increase. The 0.5-point cliff is the structural issue.
 
 
 ## settlement_mgmt_stress_01 — Handoff document committed (2026-05-14)
