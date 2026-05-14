@@ -332,9 +332,7 @@ def _authorize_next_commit() -> str:
     approved = (
         (caller_fn == 'safe_commit' and 'valoria_hooks' in caller_file) or
         (caller_fn == 'assert_bootstrap' and 'valoria_hooks' in caller_file) or
-        (caller_fn in ('write_checkpoint', 'close_checkpoint',
-                       'create_handoff', 'update_handoff', 'close_handoff')
-         and 'valoria_hooks' in caller_file) or
+        (caller_fn in ('write_checkpoint', 'close_checkpoint') and 'valoria_hooks' in caller_file) or
         (caller_fn in ('safe_session_close', 'append_to_register',
                        'start_session_log', 'close_session_log', 'update_session_log',
                        'write_handoff', 'archive_handoff')
