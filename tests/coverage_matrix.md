@@ -490,23 +490,15 @@
   Phase-boundary morale check redundant with per-tick triggers (D-7).
   Multi-turn orchestrator is priority for v17 (D-1, D-9).
 
-## duel_architecture_stress_01 — v6 complete
-- Date: 2026-05-13. 6 iterations (v1→v6). Scene combat chassis + duel context.
-- FLAT Stamina (15+End×2) fixes End 5v4: 97→57%. Stunt +3D=69%. PP-238 overruled.
-
-
-## settlement_mgmt_stress_01 — Module 5 verified (2026-05-13)
-- Module: dual-authority governance (settlement_layer §3.1, §3.2, §3.3)
-- File: tests/sim/settlement_mgmt_stress_01/module_05_governance.py
-- Tests: 35/35 PASS (T1-T35)
-- Ledger: 26 new entries (100 total cumulative across M1+M2+M3+M4+M5)
-- MAINTENANCE arm of player-action loop now live: Develop / Fortify /
-  Pacify / Administer governance actions with canonical Ob formulas.
-- GOVERNANCE-CHANGE problem-solve arm live: grant_subnational_management
-  (Ob 1 administrative) and revoke_subnational_management (Ob = ceil(
-  Influence/2), costs Order -1, Disposition -2).
-- Cumulative action handlers: 13 (1 M3 + 6 M4 + 6 M5).
-- F9 NEW (informational): Pacify Ob formula notational quirk.
-- F10 NEW: §3.2 governor-eligibility omits §2.1 extra types (17/37
-  settlements affected — same gap class as F7).
-- F11 NEW: §3.3 Guilds row references pre-PP-726 Market type.
+## sim_mb_06_v17 — multi-turn orchestrator + D-7 morale separation
+- Date: 2026-05-13
+- Scope: mass combat simulation v16→v17
+- Mode: G — multi-turn battle loop, between-turn state rules, morale concern separation
+- Status: committed
+- Changes: run_multi_turn_battle orchestrator (D-1), between_turn_recovery (D-9),
+  morale_check_phase separated from per-tick casualty triggers (D-7).
+  Between turns: stamina +30, morale +0, HP persists, discipline persists.
+- Multi-turn battery (n=100): geometric advantages compound across turns.
+  H3 HS/Line 79%, H5 RF/HS 74% — higher than single-turn bands.
+  Band recalibration needed for multi-turn model (design decision, not tuning).
+- Winner casualties ~23%, loser ~33%. Ratio 1.4x. Battles resolve in ~2 turns.
