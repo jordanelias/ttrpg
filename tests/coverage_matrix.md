@@ -75,3 +75,20 @@
   Stamina drain proportional to cells in contact (formation-emergent).
   Morale now float. No floor — general's contribution in denominator.
 - Results: loser rout at 29.7% casualties (emergent). Winner ~22%. 4 turns.
+
+
+## settlement_mgmt_stress_01 — Module 7 verified (2026-05-13)
+- Module: military granularity at settlement scope
+  (settlement_layer §5.1, §5.2 + settlement_adjacency §2, §3)
+- File: tests/sim/settlement_mgmt_stress_01/module_07_military.py
+- Tests: 41/41 PASS (T1-T41)
+- Ledger: ~17 new entries (~140 total cumulative)
+- Bottom-up emergent: pure functions for Assault/Siege/Bypass
+  eligibility + terrain + settlement-type modifiers. T41 validates
+  Siege -> Order erosion -> Revolt chain emerges across 3 seasons
+  without authored Siege->Revolt link.
+- Cumulative action handlers: 27 (1 M3 + 6 M4 + 6 M5 + 9 M6 + 5 M7).
+- F14 NEW: stale pre-PP-726 settlement IDs in design-doc examples
+  (sixth surfacing of the type/S-ID drift family).
+- F15 NEW: adjacency §2.2 settlement-type modifier table omits City
+  (suspicious omission given City is §1.2 canonical).

@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-6 entries populated. 125 entries total.",
+  "status": "Modules 1-7 entries populated. 142 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -880,6 +880,125 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a74.5 (computed from \u00a72.1 registry \u00d7 \u00a74.5 counts)",
       "quoted_text": "Count by type:** Seat: 2. City: 2. Town: 1. Fortress: 1. Port: 2. Cathedral: 1. Mine: 1. Outpost: 0."
+    },
+    {
+      "sim_variable": "ASSAULT_MIN_MILITARY_MARGIN",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Invasion and Defense \u2014 Assault row",
+      "quoted_text": "Assault | Military vs Defense + garrison | Success: settlement captured."
+    },
+    {
+      "sim_variable": "SIEGE_MIN_MILITARY_MARGIN",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Invasion and Defense \u2014 Siege row",
+      "quoted_text": "Siege | Military \u2265 Defense | No immediate roll. Each season: defender Order \u22121"
+    },
+    {
+      "sim_variable": "BYPASS_MIN_MILITARY_MARGIN",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Invasion and Defense \u2014 Bypass row",
+      "quoted_text": "Bypass | Military > Defense by 2+"
+    },
+    {
+      "sim_variable": "FORTRESS_BYPASS_MIN_MARGIN",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Fortress chokepoint",
+      "quoted_text": "it cannot be bypassed unless the invader's Military exceeds the Fortress Defense by 3+"
+    },
+    {
+      "sim_variable": "SIEGE_ORDER_DECREMENT_PER_SEASON",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Siege row",
+      "quoted_text": "Each season: defender Order \u22121 (starvation/pressure)."
+    },
+    {
+      "sim_variable": "SIEGE_SURRENDER_ORDER_THRESHOLD",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Siege row",
+      "quoted_text": "When Order = 0, settlement surrenders."
+    },
+    {
+      "sim_variable": "BYPASS_SUPPLY_STRIKE_OB",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Bypass row supply-strike",
+      "quoted_text": "Military vs Ob 1 each season: success = invader takes \u22121 Discipline on all units in the province"
+    },
+    {
+      "sim_variable": "BYPASS_SUPPLY_STRIKE_DISCIPLINE_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Bypass row supply-strike",
+      "quoted_text": "success = invader takes \u22121 Discipline on all units in the province"
+    },
+    {
+      "sim_variable": "POST_SEAT_CAPTURE_RESIST_ORDER_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Province capture",
+      "quoted_text": "Non-Seat settlements with Order \u2265 3 may resist"
+    },
+    {
+      "sim_variable": "MAX_GARRISONS_PER_SETTLEMENT",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.2 Garrison and Defense",
+      "quoted_text": "Each settlement can host a garrison (one military unit)."
+    },
+    {
+      "sim_variable": "FORTRESS_MOBILIZE_HOLD_OB",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Fortress Garrison Mobilization",
+      "quoted_text": "Defense check: Defense pool vs Ob 2."
+    },
+    {
+      "sim_variable": "TERRAIN_DELTA_RIVER",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_adjacency_v30.md",
+      "section": "\u00a72.2 Terrain-from-Edge-Type \u2014 River row",
+      "quoted_text": "| River | Attacker \u22121D (defender benefits from crossing) |"
+    },
+    {
+      "sim_variable": "TERRAIN_DELTA_MOUNTAIN_PASS",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_adjacency_v30.md",
+      "section": "\u00a72.2 Terrain-from-Edge-Type \u2014 Mountain Pass row",
+      "quoted_text": "| Mountain Pass | Attacker \u22121D (fatigue) |"
+    },
+    {
+      "sim_variable": "SEAT_DEFENDER_DISCIPLINE_DELTA",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_adjacency_v30.md",
+      "section": "\u00a72.2 Settlement-Type \u2014 Seat row",
+      "quoted_text": "| Seat | +1 Defender Discipline (capital defense is rallying) |"
+    },
+    {
+      "sim_variable": "PORT_DEFENDER_DICE_BONUS_NAVAL",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_adjacency_v30.md",
+      "section": "\u00a72.2 Settlement-Type \u2014 Port row",
+      "quoted_text": "| Port | Defender gains +1D if naval reinforcements available |"
+    },
+    {
+      "sim_variable": "_lowenskyst_required_military_to_bypass",
+      "value": 7,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Fortress chokepoint worked example",
+      "quoted_text": "Lowenskyst Fortress (S-006, Defense 4) requires Military 7+ to bypass"
+    },
+    {
+      "sim_variable": "_lowenskyst_defense_value",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a75.1 Fortress chokepoint worked example",
+      "quoted_text": "Lowenskyst Fortress (S-006, Defense 4) requires Military 7+ to bypass"
     }
   ]
 }

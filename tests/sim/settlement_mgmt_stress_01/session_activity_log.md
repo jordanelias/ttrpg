@@ -573,3 +573,95 @@ forbidden_token ok; pre_commit_gate ok; safe_commit ok.
   consolidated editorial pass.
 
 ---
+
+## Session 8 — 2026-05-13 — Module 7 (military granularity at settlement scope)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §5.1, §5.2 (PART 5 focus)
+- `designs/territory/settlement_adjacency_v30.md` §2 (Mass Battle at
+  Settlement Scale), §3 (Invasion Sequencing) — NEW canonical source
+  cited in this session's ledger entries
+- `designs/territory/valoria_political_hierarchy_v30.md` (re-fetched for
+  sim_gate ledger-source verification)
+- `designs/territory/valoria_geography_v30.yaml` (re-fetched for ledger
+  verification)
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_07_military.py`
+
+**Isolation tests:** 41/41 PASS (T1 through T41).
+
+**[DECISION] Bottom-up granular emergent architecture (continued from M6).**
+Module 7 carries Jordan's emergent-architecture directive forward:
+  - Every military mechanic is a pure function on settlement state
+    (predicates + transforms). No 'battle manager' object owns the loop.
+  - Composition with M6 events emerges from the per-season sweep.
+  - M7's is_auto_capture and M6's predicate_raid_or_siege evaluate the
+    same canonical condition from different mechanical angles — they
+    compose naturally without explicit coupling.
+
+**[VALIDATION] T41 — Siege -> Revolt emergent chain.**
+Empirical proof of the bottom-up architecture: a Siege at Order 3 ticks
+for 3 seasons (3 -> 2 -> 1 -> 0). At season 3 Order reaches 0 and M6's
+predicate_local_revolt fires. No code anywhere links Siege to Revolt;
+the chain emerges from siege effect mutating state into the revolt
+predicate's match condition.
+
+**[FINDING] F14 — stale pre-PP-726 settlement IDs in design-doc examples.**
+§5.1: 'Lowenskyst Fortress (S-006, Defense 4) requires Military 7+ to
+bypass.' Per M1 registry, S-006 is Goldenfurt (Town, Kronmark), not a
+Fortress named Lowenskyst.
+adjacency §3: references S-015 Gransol Parliament (actual: Nordhain
+Village in Ehrenfeld), S-012 Kronburg Seat (actual: Stillhelm Town),
+S-014 Kronmark Cathedral (actual: Ehrenfeld Fortress-City).
+Mechanical content remains canonically valid; only S-IDs and example
+settlement-name references are stale. Sixth distinct surfacing of the
+type-taxonomy / S-ID drift family (F1, F7, F10, F11, F12, F14).
+
+**[FINDING] F15 — adjacency §2.2 settlement-type modifier table omits
+City.** §2.2 lists 6 of §1.2's 8 canonical types; the §1.2 'City' type
+has no row. Town/Outpost row reads 'No modifier'; City is provisionally
+treated the same. Omission is structurally suspicious given City gets
+distinct treatment in §1.4.1 (facility matrix) and §3.2 (Lieutenant-tier
+governor eligibility). Editorial decision needed.
+
+**[DECISION] Bypass margin semantics.** Canonical wording 'Military >
+Defense by 2+' is interpreted as margin >= 2 (Military >= Defense + 2).
+Validated against §5.1 Lowenskyst worked example: Defense 4 requires
+Military 7+, which is Defense + 3 (Fortress margin). T8/T10 confirm.
+Initial implementation used strict > (which gave margin == 3 for
+non-Fortress); fixed to >=.
+
+**[ASSUMPTION] Casualty values in resolve_assault are provisional.
+Module 7 produces casualty integers via simple max(0, eff_def -
+attacker_military) arithmetic — basis: §5.1 only states attackers
+'take casualties' without specifying values. The mass_battle_v30 sim
+(sim_mb_06, currently at v19) is the canonical source for casualty
+magnitudes; M7 surfaces signal direction without binding to specific
+values. Module 12 will rebind by routing through the mass-combat sim.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with new
+settlement_adjacency_v30 source cited; commit_message ok;
+sim_fabrication_check ok; forbidden_token ok; pre_commit_gate ok;
+safe_commit ok.
+
+**Retries this session:** one — initial can_bypass used strict > causing
+T8 and T10 failures; corrected to >= after re-reading canonical 'by 2+'
+wording against the Lowenskyst worked example.
+
+**Cumulative action-handler inventory after M7:**
+- Improvement arm (7): M3 + M4
+- Maintenance arm (5): M5 four governance actions + M7 reinforce_garrison
+- Problem-solve arm (15): M5 grant/revoke; M6 nine event handlers;
+  M7 resolve_assault, resolve_siege_tick, resolve_bypass_supply_strike,
+  fortress_mobilize_check, can_jump_to_settlement (invasion sequencing)
+- TOTAL: 27 player-action handlers across 7 modules
+
+**Cumulative findings:**
+- F1, F2, F5, F6, F7, F8, F9, F10, F11, F12, F13, F14, F15: open (13)
+- F3 RESOLVED at M2; F4 PARTIALLY RESOLVED at M2 (2)
+- Type-taxonomy / S-ID drift family now SIX distinct surfacings
+  (F1, F7, F10, F11, F12, F14).
+
+---
