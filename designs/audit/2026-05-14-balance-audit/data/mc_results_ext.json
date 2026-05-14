@@ -1,0 +1,98 @@
+{
+  "N_runs": 300,
+  "N_seasons": 16,
+  "scenarios": {
+    "A_canon_tensions": {
+      "winshare_mean": {
+        "Valorsmark": 0.33409518511660347,
+        "Church": 0.19323619723037322,
+        "Hafenmark": 0.27788085546867053,
+        "Varfell": 0.19478776218435281
+      },
+      "winshare_stdev": {
+        "Valorsmark": 0.05290628965440081,
+        "Church": 0.038994222478351576,
+        "Hafenmark": 0.030837038443160245,
+        "Varfell": 0.021652437448749607
+      },
+      "spread_pp": 14.085898788623025,
+      "pi_crisis_rate": 0.8466666666666667,
+      "pi_crisis_persist": 0.8466666666666667,
+      "pi_avg_max": 13.326666666666666,
+      "revolts_mean": 1.7566666666666666,
+      "cascade_rate": 0.5166666666666667,
+      "inq_max_mean": 1.4166666666666667,
+      "inq_end_mean": 0.5533333333333333,
+      "charters_mean": 2.9133333333333336
+    },
+    "B_canon_no_tensions": {
+      "winshare_mean": {
+        "Valorsmark": 0.31817798957322213,
+        "Church": 0.20615455245346123,
+        "Hafenmark": 0.2920160937509107,
+        "Varfell": 0.18365136422240586
+      },
+      "winshare_stdev": {
+        "Valorsmark": 0.05013709354592289,
+        "Church": 0.03719994150652433,
+        "Hafenmark": 0.03226942301656472,
+        "Varfell": 0.019470671109017294
+      },
+      "spread_pp": 13.452662535081627,
+      "pi_crisis_rate": 0.05333333333333334,
+      "pi_crisis_persist": 0.05333333333333334,
+      "pi_avg_max": 6.163333333333333,
+      "revolts_mean": 1.9766666666666666,
+      "cascade_rate": 0.5866666666666667,
+      "inq_max_mean": 1.55,
+      "inq_end_mean": 0.6633333333333333,
+      "charters_mean": 3.0
+    },
+    "C_minviable_tensions": {
+      "winshare_mean": {
+        "Valorsmark": 0.3398094437480354,
+        "Church": 0.18817249603023312,
+        "Hafenmark": 0.27696667676041165,
+        "Varfell": 0.1950513834613198
+      },
+      "winshare_stdev": {
+        "Valorsmark": 0.047570612669022454,
+        "Church": 0.03273300441294828,
+        "Hafenmark": 0.02867650299270134,
+        "Varfell": 0.02033773094980309
+      },
+      "spread_pp": 15.163694771780229,
+      "pi_crisis_rate": 0.7633333333333333,
+      "pi_crisis_persist": 0.7633333333333333,
+      "pi_avg_max": 12.346666666666666,
+      "revolts_mean": 1.5766666666666667,
+      "cascade_rate": 0.41333333333333333,
+      "inq_max_mean": 1.3133333333333332,
+      "inq_end_mean": 0.49,
+      "charters_mean": 2.9033333333333333
+    },
+    "D_fulltweak_tensions": {
+      "winshare_mean": {
+        "Valorsmark": 0.33370880150422805,
+        "Church": 0.19617623980745172,
+        "Hafenmark": 0.27299830621963694,
+        "Varfell": 0.19711665246868326
+      },
+      "winshare_stdev": {
+        "Valorsmark": 0.0500194077970737,
+        "Church": 0.03625753970273074,
+        "Hafenmark": 0.03270633739359969,
+        "Varfell": 0.020936691597167836
+      },
+      "spread_pp": 13.753256169677632,
+      "pi_crisis_rate": 0.7566666666666667,
+      "pi_crisis_persist": 0.7566666666666667,
+      "pi_avg_max": 12.426666666666666,
+      "revolts_mean": 1.5466666666666666,
+      "cascade_rate": 0.4033333333333333,
+      "inq_max_mean": 1.3566666666666667,
+      "inq_end_mean": 0.5566666666666666,
+      "charters_mean": 2.7333333333333334
+    }
+  }
+}

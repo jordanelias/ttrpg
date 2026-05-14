@@ -1,0 +1,122 @@
+{
+  "canon-v4 (canonical rules, no tweaks)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 38.2,
+      "Church": 15.8,
+      "Hafenmark": 43.2,
+      "Varfell": 2.8
+    },
+    "territory_means": {
+      "Crown": 3.24,
+      "Church": 2.42,
+      "Hafenmark": 4.27,
+      "Varfell": 1.27
+    },
+    "inq_mean": 4.14,
+    "crisis_rate": 83.0,
+    "turmoil_mean": 14.82,
+    "direct_sovereignty_rate": 0.0,
+    "avg_campaign_seasons": 24.0
+  },
+  "T-09c only (cap Inquisitor 2)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 35.8,
+      "Church": 13.2,
+      "Hafenmark": 48.8,
+      "Varfell": 2.2
+    },
+    "territory_means": {
+      "Crown": 3.3,
+      "Church": 2.47,
+      "Hafenmark": 4.8,
+      "Varfell": 1.23
+    },
+    "inq_mean": 1.71,
+    "crisis_rate": 83.6,
+    "turmoil_mean": 13.51,
+    "direct_sovereignty_rate": 0.0,
+    "avg_campaign_seasons": 24.0
+  },
+  "T-02a only (Inq familiarity)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 32.8,
+      "Church": 11.6,
+      "Hafenmark": 54.2,
+      "Varfell": 1.4
+    },
+    "territory_means": {
+      "Crown": 3.23,
+      "Church": 2.46,
+      "Hafenmark": 5.18,
+      "Varfell": 1.21
+    },
+    "inq_mean": 4.49,
+    "crisis_rate": 84.2,
+    "turmoil_mean": 9.75,
+    "direct_sovereignty_rate": 0.0,
+    "avg_campaign_seasons": 24.0
+  },
+  "T-X4 only (PA Session +2L+Token)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 27.8,
+      "Church": 12.2,
+      "Hafenmark": 56.8,
+      "Varfell": 3.2
+    },
+    "territory_means": {
+      "Crown": 2.16,
+      "Church": 2.05,
+      "Hafenmark": 5.72,
+      "Varfell": 1.17
+    },
+    "inq_mean": 4.76,
+    "crisis_rate": 85.8,
+    "turmoil_mean": 14.88,
+    "direct_sovereignty_rate": 0.0,
+    "avg_campaign_seasons": 24.0
+  },
+  "combined Parts 3-5 (T-09c+T-02a+T-09b)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 32.6,
+      "Church": 10.0,
+      "Hafenmark": 55.8,
+      "Varfell": 1.6
+    },
+    "territory_means": {
+      "Crown": 3.19,
+      "Church": 2.46,
+      "Hafenmark": 5.17,
+      "Varfell": 1.25
+    },
+    "inq_mean": 1.72,
+    "crisis_rate": 83.2,
+    "turmoil_mean": 10.98,
+    "direct_sovereignty_rate": 0.0,
+    "avg_campaign_seasons": 24.0
+  },
+  "all corrections (T-09c+T-02a+T-09b+T-02c+T-X4)": {
+    "n": 500,
+    "win_share": {
+      "Crown": 22.6,
+      "Church": 9.6,
+      "Hafenmark": 65.8,
+      "Varfell": 2.0
+    },
+    "territory_means": {
+      "Crown": 2.17,
+      "Church": 2.11,
+      "Hafenmark": 6.55,
+      "Varfell": 1.08
+    },
+    "inq_mean": 1.68,
+    "crisis_rate": 84.4,
+    "turmoil_mean": 11.59,
+    "direct_sovereignty_rate": 0.0,
+    "avg_campaign_seasons": 24.0
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "canon": {
+    "n": 500,
+    "win_share": {
+      "Valorsmark": 0.0,
+      "Church": 96.6,
+      "Hafenmark": 3.4000000000000004,
+      "Varfell": 0.0
+    },
+    "score_means": {
+      "Valorsmark": 12.7,
+      "Church": 57.4,
+      "Hafenmark": 40.1,
+      "Varfell": 33.5
+    },
+    "score_stds": {
+      "Valorsmark": 5.0,
+      "Church": 3.3,
+      "Hafenmark": 8.7,
+      "Varfell": 7.3
+    },
+    "territory_means": {
+      "Valorsmark": 1.31,
+      "Church": 5.93,
+      "Hafenmark": 1.94,
+      "Varfell": 2.81
+    },
+    "rev_tok_means": {
+      "Valorsmark": 0.0,
+      "Church": 0.0,
+      "Hafenmark": 0.0,
+      "Varfell": 2.97
+    },
+    "tokens_means": {
+      "Valorsmark": 0.0,
+      "Church": 0.0,
+      "Hafenmark": 1.83,
+      "Varfell": 0.0
+    },
+    "inq_mean": 1.25,
+    "crisis_rate": 57.0,
+    "revolts_mean": 2.93
+  },
+  "tweaks": {
+    "n": 500,
+    "win_share": {
+      "Valorsmark": 0.0,
+      "Church": 94.8,
+      "Hafenmark": 5.0,
+      "Varfell": 0.2
+    },
+    "score_means": {
+      "Valorsmark": 13.2,
+      "Church": 56.7,
+      "Hafenmark": 40.3,
+      "Varfell": 32.6
+    },
+    "score_stds": {
+      "Valorsmark": 4.9,
+      "Church": 2.6,
+      "Hafenmark": 8.9,
+      "Varfell": 7.6
+    },
+    "territory_means": {
+      "Valorsmark": 1.41,
+      "Church": 5.59,
+      "Hafenmark": 2.16,
+      "Varfell": 2.84
+    },
+    "rev_tok_means": {
+      "Valorsmark": 0.0,
+      "Church": 0.0,
+      "Hafenmark": 0.0,
+      "Varfell": 2.76
+    },
+    "tokens_means": {
+      "Valorsmark": 0.0,
+      "Church": 0.0,
+      "Hafenmark": 1.85,
+      "Varfell": 0.0
+    },
+    "inq_mean": 1.03,
+    "crisis_rate": 60.2,
+    "revolts_mean": 2.59
+  }
+}

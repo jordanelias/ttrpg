@@ -1,0 +1,73 @@
+{
+  "N_runs": 300,
+  "N_seasons": 8,
+  "canon": {
+    "winshare_mean": {
+      "Valorsmark": 0.34607136085382806,
+      "Church": 0.21020341085057923,
+      "Hafenmark": 0.26806173634824426,
+      "Varfell": 0.17566349194734845
+    },
+    "winshare_stdev": {
+      "Valorsmark": 0.021859573991369636,
+      "Church": 0.03518348157729666,
+      "Hafenmark": 0.01814525453142368,
+      "Varfell": 0.009384900520497024
+    },
+    "spread_pp": 17.04078689064796,
+    "inq_deploy_rate": 0.73,
+    "pi_crisis_rate": 0.0,
+    "revolts_mean": 0.14333333333333334,
+    "charters_mean": 2.97
+  },
+  "min_viable": {
+    "winshare_mean": {
+      "Valorsmark": 0.3479767577419359,
+      "Church": 0.20580562661670918,
+      "Hafenmark": 0.2695255115678943,
+      "Varfell": 0.17669210407346067
+    },
+    "winshare_stdev": {
+      "Valorsmark": 0.021367702135642663,
+      "Church": 0.033714520283663535,
+      "Hafenmark": 0.017768515585265845,
+      "Varfell": 0.009316619141633216
+    },
+    "spread_pp": 17.128465366847525,
+    "inq_deploy_rate": 0.73,
+    "pi_crisis_rate": 0.0,
+    "revolts_mean": 0.13666666666666666,
+    "charters_mean": 2.966666666666667
+  },
+  "full_tweak": {
+    "winshare_mean": {
+      "Valorsmark": 0.34395225506551635,
+      "Church": 0.20825845486381708,
+      "Hafenmark": 0.26857782967529475,
+      "Varfell": 0.1792114603953718
+    },
+    "winshare_stdev": {
+      "Valorsmark": 0.02377551063875988,
+      "Church": 0.03249175640844643,
+      "Hafenmark": 0.018986189050754793,
+      "Varfell": 0.009115051687799917
+    },
+    "spread_pp": 16.474079467014455,
+    "inq_deploy_rate": 0.74,
+    "pi_crisis_rate": 0.0,
+    "revolts_mean": 0.12,
+    "charters_mean": 2.486666666666667
+  },
+  "delta_canon_to_mv": {
+    "Valorsmark": 0.0019053968881078687,
+    "Church": -0.00439778423387005,
+    "Hafenmark": 0.0014637752196500209,
+    "Varfell": 0.001028612126112216
+  },
+  "delta_canon_to_full": {
+    "Valorsmark": -0.0021191057883117037,
+    "Church": -0.0019449559867621424,
+    "Hafenmark": 0.000516093327050493,
+    "Varfell": 0.003547968448023353
+  }
+}

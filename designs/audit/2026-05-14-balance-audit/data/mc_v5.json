@@ -1,0 +1,146 @@
+{
+  "canon-v5 (canonical rules + slot caps)": {
+    "win_share": {
+      "Crown": 22.8,
+      "Church": 51.4,
+      "Hafenmark": 19.6,
+      "Varfell": 6.2
+    },
+    "territory_means": {
+      "Crown": 2.01,
+      "Church": 3.64,
+      "Hafenmark": 2.13,
+      "Varfell": 1.75
+    },
+    "treaty_means": {
+      "Crown": 1.4,
+      "Church": 0.1,
+      "Hafenmark": 0.6,
+      "Varfell": 0.7
+    },
+    "inq_mean": 3.35,
+    "turmoil_mean": 30.84,
+    "direct_sovereignty_rate": 0.0,
+    "avg_length": 36.0
+  },
+  "T-09c only (cap Inq)": {
+    "win_share": {
+      "Crown": 21.0,
+      "Church": 47.6,
+      "Hafenmark": 26.4,
+      "Varfell": 5.0
+    },
+    "territory_means": {
+      "Crown": 1.97,
+      "Church": 3.88,
+      "Hafenmark": 2.82,
+      "Varfell": 1.87
+    },
+    "treaty_means": {
+      "Crown": 1.41,
+      "Church": 0.08,
+      "Hafenmark": 0.62,
+      "Varfell": 0.71
+    },
+    "inq_mean": 1.57,
+    "turmoil_mean": 27.22,
+    "direct_sovereignty_rate": 0.0,
+    "avg_length": 36.0
+  },
+  "T-02a only (Inq familiarity)": {
+    "win_share": {
+      "Crown": 25.0,
+      "Church": 37.2,
+      "Hafenmark": 35.8,
+      "Varfell": 2.0
+    },
+    "territory_means": {
+      "Crown": 2.26,
+      "Church": 3.77,
+      "Hafenmark": 3.82,
+      "Varfell": 1.83
+    },
+    "treaty_means": {
+      "Crown": 1.43,
+      "Church": 0.13,
+      "Hafenmark": 0.6,
+      "Varfell": 0.7
+    },
+    "inq_mean": 3.93,
+    "turmoil_mean": 18.6,
+    "direct_sovereignty_rate": 0.0,
+    "avg_length": 36.0
+  },
+  "T-X4 only (PA Session +2L+Token)": {
+    "win_share": {
+      "Crown": 13.8,
+      "Church": 46.0,
+      "Hafenmark": 36.4,
+      "Varfell": 3.8
+    },
+    "territory_means": {
+      "Crown": 1.4,
+      "Church": 3.08,
+      "Hafenmark": 3.26,
+      "Varfell": 1.13
+    },
+    "treaty_means": {
+      "Crown": 1.31,
+      "Church": 0.14,
+      "Hafenmark": 0.44,
+      "Varfell": 0.73
+    },
+    "inq_mean": 3.58,
+    "turmoil_mean": 31.86,
+    "direct_sovereignty_rate": 0.0,
+    "avg_length": 36.0
+  },
+  "parts 3-5 set (T-09c+T-02a+T-09b)": {
+    "win_share": {
+      "Crown": 22.2,
+      "Church": 40.2,
+      "Hafenmark": 34.8,
+      "Varfell": 2.8
+    },
+    "territory_means": {
+      "Crown": 2.17,
+      "Church": 3.95,
+      "Hafenmark": 3.75,
+      "Varfell": 1.91
+    },
+    "treaty_means": {
+      "Crown": 1.47,
+      "Church": 0.1,
+      "Hafenmark": 0.65,
+      "Varfell": 0.73
+    },
+    "inq_mean": 1.65,
+    "turmoil_mean": 20.69,
+    "direct_sovereignty_rate": 0.0,
+    "avg_length": 36.0
+  },
+  "all corrections (full Parts 3-5 + emergent)": {
+    "win_share": {
+      "Crown": 17.0,
+      "Church": 29.6,
+      "Hafenmark": 51.8,
+      "Varfell": 1.6
+    },
+    "territory_means": {
+      "Crown": 1.64,
+      "Church": 3.25,
+      "Hafenmark": 4.98,
+      "Varfell": 1.19
+    },
+    "treaty_means": {
+      "Crown": 1.32,
+      "Church": 0.18,
+      "Hafenmark": 0.44,
+      "Varfell": 0.7
+    },
+    "inq_mean": 1.28,
+    "turmoil_mean": 23.72,
+    "direct_sovereignty_rate": 0.0,
+    "avg_length": 36.0
+  }
+}
