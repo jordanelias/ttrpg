@@ -24,4 +24,5 @@ blockers: []
 last_commit: 805f5f2
 created: '2026-05-14T19:28:50.576968+00:00'
 updated: '2026-05-14T19:28:50.576968+00:00'
-status: active
+status: closed
+closed_at: '2026-05-14T19:28:54.634292+00:00'
