@@ -85,22 +85,10 @@
   Casualty ratio 1.51x (up from 1.4x). Stamina now lasts 2-3 phases.
 - Known issue: H1 mirror 91.7% side-A bias from position reset. Needs D-2 per-unit grid.
 
-
-## settlement_mgmt_stress_01 — Module 8 verified (2026-05-13)
-- Module: Stature ladder + faction emergence + faction collapse
-  (settlement_layer §6.1, §6.2, §6.3)
-- File: tests/sim/settlement_mgmt_stress_01/module_08_progression.py
-- Tests: 38/38 PASS (T1-T38)
-- Ledger: 25 new entries (~165 total cumulative)
-- Player-progression layer + canonical Renown track ownership;
-  rebinds M3-M7 provisional renown_delta signals via apply_renown_delta.
-- Throughline bindings: T-15 PRIMARY (Player Progression), T-23
-  SECONDARY (NPC Arc Emergence via recruitment-candidate count),
-  T-25 TERTIARY (Generational Arc substrate), T-20 TERTIARY (Two
-  Contests at faction collapse).
-- Meta-throughline: М-5 PRIMARY, М-6 SECONDARY.
-- F16 NEW: design-doc T-NN parenthetical drift (§4.5 "T7" vs canonical
-  T-23). Editorial refresh recommended.
-- Retroactive throughline audit of M1-M7 included in M8 report.
-- Cumulative action handlers: 27 (M3-M7) + apply_renown_delta +
-  stage-transition handlers (M8) = ~32.
+## v20 general death fix + throughline log
+- Date: 2026-05-13
+- Scope: Command=0 instant rout (M1 throughline) + throughline/meta-throughline audit
+- Changes: Command=0 triggers immediate rout (prevents div-by-zero, models general death).
+  Throughline analysis: T1 fully emergent, T2 partially emergent (needs D-5 cascade),
+  T6 validated (scale-invariant dice engine). M1/M2/M3 meta-throughlines confirmed.
+  Side-A bias 1.6%/turn noted (grid symmetry issue, D-2).

@@ -1645,7 +1645,13 @@ def run_battle(unit_a, unit_b, max_turns=18):
                 total_dmg = result.get("dmg_a", 0) + volley_dmg_a * volley_hp_scale(unit_a)
             else:
                 total_dmg = result.get("dmg_b", 0) + volley_dmg_b * volley_hp_scale(unit_b)
-            if total_dmg > 0 and u.discipline > 0 and u.command > 0:
+            # General death: Command=0 → instant rout (M1: general IS the army)
+            # [canonical: designs/provincial/mass_battle_v30.md §A.4 — "General killed: Morale −2 (uncapped)"]
+            if u.command <= 0:
+                u.morale = 0.0
+                u.routed = True
+                continue
+            if total_dmg > 0 and u.discipline > 0:
                 erosion = total_dmg / (u.discipline * u.command)
                 u.morale -= erosion
             if u.morale <= 0:
