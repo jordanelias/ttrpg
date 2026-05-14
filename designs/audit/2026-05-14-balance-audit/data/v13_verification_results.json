@@ -1,0 +1,54 @@
+{
+  "verification_2000_campaigns": {
+    "46s_c054": {
+      "Crown": 37.1,
+      "Church": 26.4,
+      "Hafenmark": 20.3,
+      "Varfell": 16.2,
+      "dev": 1.4,
+      "in_band": 4,
+      "direct": 12.0
+    },
+    "46s_c052": {
+      "Crown": 37.0,
+      "Church": 27.1,
+      "Hafenmark": 21.1,
+      "Varfell": 14.9,
+      "dev": 1.6,
+      "in_band": 4,
+      "direct": 11.3
+    },
+    "44s_c054": {
+      "Crown": 37.0,
+      "Church": 24.1,
+      "Hafenmark": 20.6,
+      "Varfell": 18.2,
+      "dev": 1.9,
+      "in_band": 4,
+      "direct": 12.0
+    },
+    "46s_c050": {
+      "Crown": 36.7,
+      "Church": 27.6,
+      "Hafenmark": 21.4,
+      "Varfell": 14.3,
+      "dev": 2.0,
+      "in_band": 4,
+      "direct": 10.8
+    },
+    "44s_c050": {
+      "Crown": 36.7,
+      "Church": 25.4,
+      "Hafenmark": 21.8,
+      "Varfell": 16.1,
+      "dev": 1.6,
+      "in_band": 4,
+      "direct": 10.8
+    }
+  },
+  "new_mechanics": {
+    "P9b_Treaty_Scavenging": "Varfell free conquest Ob 2 when Crown Treaty lapses",
+    "P10_Warband_Tribute": "Varfell W+1 per garrisoned territory per season"
+  },
+  "key_finding": "Additive mechanics (P9b+P10) break Hafenmark/Varfell anti-correlation. 4/4 balance achieved at 1.4pp avg deviation."
+}
