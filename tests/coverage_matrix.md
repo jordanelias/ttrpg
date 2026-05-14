@@ -290,3 +290,63 @@
 - 95% CI half-width on a 5%-event drops from ±6% (n=50) to ±2% (n=500);
   1%-events become detectable at ±0.9% CI. Mode-D systematic 9-category
   search benefits structurally.
+
+
+## settlement_mgmt_stress_01 — 500-seed batch executed (2026-05-14)
+- Runner: tests/sim/settlement_mgmt_stress_01/batch_500seed_runner.py
+- Audit: tests/sim/settlement_mgmt_stress_01/audits/batch_500seed_2026-05-14.md
+- Raw: tests/sim/settlement_mgmt_stress_01/audits/batch_500seed_2026-05-14_raw.json
+- 500 seeds × 120 seasons = 60,000 integrated_season_tick calls
+- Wall time: 3.9s (7.9ms/seed) — well under §6.1 spec budget
+- SCOPE: synthetic-stats over CANONICAL M1 REGISTRY settlements
+  sampled per seed (5-8 settlements per seed). F6 Mode-C blocker
+  still open (geography YAML rebuild outstanding) — batch is NOT a
+  full Mode-C canonical-scenario sim, but validates engine stability
+  under perturbation.
+- DISCOVERY DURING BUILD: M6 sweep_season_events iterates the M1
+  REGISTRY (canonical) not arbitrary state-dict keys. Initial synthetic
+  BATCH-S-NNN IDs produced zero events; pivoted to REGISTRY-sample
+  approach. M1 REGISTRY is post-PP-726 canonical (resolved at M2);
+  F6 geography YAML drift does not affect REGISTRY.
+- ACCEPTANCE GATES (§6.1):
+  - zero_state_corruption: PASS (0 corrupt seeds / 500)
+  - tail_faction_elimination_reached: PASS
+  - tail_deep_echo_chain_reached: PASS
+  - tail_events_fire: PASS
+  - MS drift: mean 24.0 (canonical 42; delta -18) — perturbation
+    pushed substrate to crisis state; documents response envelope
+  - IP drift: mean 100.0 (canonical 80; delta +20) — clamped at
+    IP_MAX; all 500 seeds reach IP-saturation crisis
+- DISTRIBUTIONS:
+  - MS: min=14, p05=17, median=24, mean=23.97, p95=31, max=38
+  - CI: all 500 saturated at 100
+  - IP: min=93, mean=99.97, all reach ceiling
+  - GS: all 500 at 6 (canonical generational-shift cap)
+  - Turmoil: median=10, p05=10, max=10
+- EVENT-FIRING AGGREGATE: local_revolt 329k total (658/seed),
+  famine 56k (113/seed), flourishing_festival 1.8k (3.7/seed).
+  RAID_OR_SIEGE, MINE_RESOURCE_SURPLUS, GOVERNANCE_TRANSITION_RM,
+  CONSENSUS_DELAY, RELIGIOUS_EVENT did not fire (require upstream
+  state the batch does not inject).
+- FACTION ELIMINATIONS: 500/500 seeds reach >=1 elimination;
+  mean 3.60, median 4, max 4 (all 4 factions eliminated in many seeds)
+- DOMAIN ECHO CHAINS: 387,732 deep-chain firings (100% depth-2 in
+  the Crown-2-province setup; magnitude -1 always echoes to national)
+- BLACK MARKETS: mean 7.3 new per seed; mean 0.83 disappearances
+- TAIL-EVENT LOG: 1,496 flagged tail events across all seeds
+- BATCH-DESIGN PARAMETERS (not canonical; calibration choices):
+  - GOVERNOR_RESTORATION_PROB_PER_SEASON = 0.05
+  - FACTION_STABILITY_TRIGGER_PROB = 0.05/faction/season
+  - TAIL_PERCENTILE = 95
+  - battle injection 15%/season; contested-territory Brownian drift;
+    settlement-stat 20% drift; governor turnover 10%/season
+- INTERPRETATION: engine survives 60,000 ticks under heavy perturbation
+  with ZERO state corruption. Drift from canonical worked values
+  documents the response envelope of the simulation under stress.
+  Tail-event seeds provide specific reproducers for Mode-D systematic
+  exhaustive search once F6 closes.
+- HANDOFF criteria completed: §6 item 5 (50-seed batch validation)
+  is COMPLETE — upgraded to 500 per amendment 1a1c2de9 and executed
+  this commit. Outstanding: NERS empirical probes (§2 of handoff),
+  editorial P1-P4, F6 unblock, Mode-D systematic search,
+  audit reviewer checklist §4 walkthrough.
