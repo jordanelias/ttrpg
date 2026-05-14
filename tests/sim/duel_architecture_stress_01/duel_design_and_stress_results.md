@@ -1,161 +1,208 @@
-# Architecture C — Duel System Proposed Design v3b + Stress Test Results
+# Architecture C — Duel System v4: Scene Combat Chassis + Context Layer
 ## Date: 2026-05-13
-## Status: PROPOSED (not canonical; pending Jordan ratification)
-## Iteration: v3b (Fiore triangle + Fühlen bind + 2D distance)
-## Sources: historical fencing manuscripts (Fiore dei Liberi ~1410, Liechtenauer ~14th c.), canonical params/combat.md + designs/scene/combat_v30.md, 2026-05-01 synthesis (E5/E7), R1-R10 decisions
+## Status: PROPOSED — canonical chassis validated, context layer in iteration
+## Iteration: v4 (replaces v3b's imposed triangle with bottom-up emergence)
 
 ---
 
-## 1. Design Summary
+## 1. Design Thesis
 
-Architecture C is a specialized duel architecture for 1v1 set-piece combat. Three modifications to canonical combat:
+The duel IS scene combat. Same pool, same actions, same damage, same resolution. The "duel" is a context layer:
 
-**E5 revised — Fiore stance triangle.** Replaces v1's flat Aggressive/Balanced/Defensive with a rock-paper-scissors triangle derived from Fiore dei Liberi's guard classification (*Fior di Battaglia*, ~1410):
+1. **Trigger:** 2 participants + narrative condition (T-Wager / T-Cultural / T-Boss / T-Thread / T-Hero-Officer / T-Honor-call)
+2. **E7 yield:** Stamina=0 → automatic Yield offer (PP-634)
+3. **Taunt (new action):** Cognition vs Composure → opponent must declare pool split first next round
+4. **Audience:** §13.2 Reputation Cascade guaranteed (3+ witnesses)
+5. **Arena Stunts:** environment-specific Stunt flavor
 
-| Stance | Historical basis | Pool split | Wins against | Payoff |
+No imposed triangle. No hardcoded stance→outcome lookup. Win rates emerge from canonical dice engine.
+
+---
+
+## 2. What the Canonical System Actually Produces (N=5000)
+
+### 2.1 Pool-split dynamics — no natural RPS
+
+| A's split | B's split | A wins | B wins | Interpretation |
 |---|---|---|---|---|
-| **Pulsativa** (Striking) | Committed attack in progress | 75% Off / 25% Def | Instabile (catches mid-transition: priority attack, +1 momentum, no counter allowed) | 72.7% win rate |
-| **Stabile** (Stable) | Strong defensive guard | 35% Off / 65% Def | Pulsativa (absorbs → **riposte**: free counter at +50% defense-pool bonus) | 76.4% win rate |
-| **Instabile** (Mutable) | Provocative, baiting position | 50% Off / 50% Def | Stabile (provokes out of guard → **Meisterhau**: +2 bonus dice, defender at 2/3 defense) | 75.9% win rate |
+| 75/25 (aggressive) | 30/70 (defensive) | **59.8%** | 31.9% | Offense dominates raw exchanges |
+| 75/25 (aggressive) | 50/50 (balanced) | 48.3% | 43.6% | Marginal aggressive edge |
+| 30/70 (defensive) | 50/50 (balanced) | 27.5% | **48.8%** | Defensive alone is never optimal |
+| 50/50 mirror | — | 45.7% | 46.5% | Symmetric |
+| Full Guard (0/100) | 75/25 (aggressive) | **89.6%** | 10.4% | **Stamina attrition crushes aggression** |
 
-Mirror matches: Pulsativa×Pulsativa → both strike + **bind contest** (Fühlen). Stabile×Stabile → probing, minimal damage, drains stamina slowly. Instabile×Instabile → probing.
+**Finding:** The canonical system has two modes, not three:
+- **Offense race:** more dice to offense → more hits → win before stamina runs out. Aggressive > Defensive > Balanced in raw striking.
+- **Stamina attrition:** Full Guard / Take a Breath + defensive play outlasts pure aggression. The aggressor burns 5 stamina/round striking; the defender burns 3/round guarding and can Take a Breath to recover.
 
-Lower-initiative player declares stance first (canonical §3). Higher-initiative player reads and counters.
+This isn't RPS — it's a continuum where the optimal split depends on your stamina runway vs your opponent's. The "triangle" lives in the player's read of this tradeoff, not in the stance label.
 
-**E7 — Posture-as-yield.** Unchanged from v1. Stamina=0 ends duel in yield. Fires 15–45% of duels depending on Endurance level.
+### 2.2 Canonical actions in duel context
 
-**Fühlen (bind contest).** When both combatants choose Pulsativa simultaneously, blades meet in a bind. Contested Endurance roll (not Agility) at TN7 determines who wins the bind → winner gets +2D advantage next round + initiative. Bind pulls combatants to Krieg (close) range and costs extra stamina. Derived from Liechtenauer's concept of sensing pressure when blades cross.
+| Matchup | A wins | Mechanism |
+|---|---|---|
+| Feinter (every 3rd round) vs Balanced | 26.1% | PP-294 Defense=0 exposure too punishing for the margin gain |
+| Feint-spam vs Balanced | 0.0% | Confirmed non-exploitable (PP-238 correct) |
+| Stamina-fighter (Take a Breath) vs Aggressive | **79.5%** | **Stamina management is the dominant duel strategy** |
+| Brawler (Tie Up) vs Balanced | 37.5% | Tie Up -2D both sides; doesn't differentially advantage the initiator |
 
-**2D distance.** Three bands: Zufechten (approach, >2.0 — no combat), Striking (1.0–2.0 — full exchanges), Krieg (close, <1.0 — bind range). Duels start at 2.5 (approach). Advancing costs 2 stamina per step; retreating costs 2 but covers less ground. Creates a 1–2 round approach phase before combat begins.
+**Finding:** Take a Breath is the strongest duel action. Recovers (End + History) × 2 stamina at cost of one round's offense — at End 4, History 2, that's 12 stamina recovered. One breath buys 2+ more strike rounds. The player who manages breath timing wins.
 
-**All canonical combat math unchanged:** Combat Pool, Stamina, Health/Wounds/Wound Interval, Feint (PP-294), initiative transfer, damage formula, weapon TN matrix, armour DR.
+**Finding:** Feint (PP-294) is correctly a high-risk/high-reward group-combat tool. In 1v1, the Defense=0 exposure round is too costly. But the 0.82 feints landed per duel at Feinter protocol shows it DOES land — it just doesn't compensate for the damage taken on the exposed round.
 
----
+**Throughline to Fiore/Liechtenauer:** This matches historical swordplay. Liechtenauer emphasizes that every defensive action should simultaneously threaten (Meisterhau); purely defensive actions that create no threat are "bad parries." The canonical system agrees — Full Guard creates no threat but wins via attrition. Historical masters would call that a stalemate, not a victory. The interesting play is in the read: "my opponent is tired, I can commit more offense NOW" — that's Vor.
 
-## 2. Triggers, Flow, Post-Duel
+### 2.3 Taunt (new duel action) — currently broken
 
-Unchanged from v1. Six trigger conditions (T-Wager / T-Cultural / T-Boss / T-Thread / T-Hero-Officer / T-Honor-call). Refusal costs Reputation tag. Post-duel: §13.2 Reputation Cascade, Wager Obligation.
+| Matchup | A wins | Issue |
+|---|---|---|
+| Taunter vs Balanced | 92.1% | Taunt + defensive split = stamina-efficient dominance |
+| Taunter vs Adaptive | 94.2% | Adaptive can't counter the stamina advantage |
+| Taunter (COG 6) vs Balanced | 92.4% | COG boost barely changes outcome — the issue is cost, not effectiveness |
 
----
+**Diagnosis:** Taunt costs 3 stamina (same as defensive stance) but produces a compound advantage: forces opponent to declare first (losing initiative information) + Taunter uses 30/70 defensive split on Taunt rounds (conserving health). The Taunter protocol is effectively Stamina-fighter + initiative disruption. The issue is the stamina cost/benefit ratio, not the mechanic concept.
 
-## 3. Stress Test Results (v3b, N=5000)
+**Fix candidates (to test next iteration):**
+- Raise Taunt stamina cost to 5 (same as Strike) — you're exerting to provoke
+- Require minimum offense allocation on Taunt round (can't Full Guard while Taunting — you have to show something)
+- Make Taunt contested differently: Cognition vs opponent's Cognition (not Composure) — smarter opponents resist better
+- Limit Taunt to once every 3 rounds (like Let It Ride on maneuvers per §11.5)
 
-### 3.1 Triangle validation — PASS
+### 2.4 Build archetypes — End dominance, weapon selection
 
-Triangle legs balanced within 5pp of each other (72.7–76.4%). No degenerate strategy. Nash equilibrium (1/3 each) produces all three special mechanics firing: 0.5 binds, 0.9 ripostes, 0.9 Meisterhau per duel.
-
-### 3.2 Protocol comparison
-
-| Matchup | A wins | B wins | Interpretation |
+| Build A | Build B | A wins | Finding |
 |---|---|---|---|
-| Adaptive vs Adaptive | 50.6% | 49.4% | Symmetric — no first-mover bias |
-| Berserker vs Turtle | 17.0% | 76.4% | **Defensive play rewarded** (v1 had 74% aggressor wins — fully reversed) |
-| Berserker vs Counter-fighter | 71.2% | 25.8% | Counter-fighter's alternating pattern predictable vs pure commitment |
-| Trickster vs Adaptive | 35.4% | 62.7% | Pure instabile not viable alone |
-| Counter-fighter vs Adaptive | 38.7% | 61.3% | Rigid strategy loses to flexibility |
-| Nash vs Nash | 48.7% | 47.6% | Symmetric; all mechanics fire |
-| Distance-weighted vs Adaptive | 59.3% | 36.5% | Distance awareness confers ~10pp edge |
+| Duellist (COG 6, Agi 5, End 3) | Brawler (STR 6, End 5, Agi 3) | **0%** | End 3 = Stamina 15 = dead in 3 rounds regardless of skill |
+| Duellist (default stats) | Adaptive (default stats) | 98.2% | Duellist protocol works IF End isn't crippled |
+| Counter-puncher (End 6, Agi 3) | Aggressive (Agi 5, End 3) | **100%** | End advantage absolutely dominates |
+| Agi 5 vs Agi 3 | — | 72.4% | Pool advantage is meaningful (15 vs 11) but not crushing |
+| End 5 vs End 4 | — | **91.6%** | ONE point of End = 91.6%. Stamina 25 vs 20 = one more round. |
+| STR 6 vs STR 3 | — | 56.8% | Moderate. Healthy range. |
 
-### 3.3 Stat asymmetry
+**Finding:** Endurance dominance is canonical, not duel-specific. The formula Stamina = End × 5 produces a linear stamina curve where each End point = 5 more stamina = 1 more round of strikes. In a system where stamina management IS the dominant strategy, the stat that controls stamina IS the dominant stat.
 
-| Matchup | Advantage | Win % | Assessment |
-|---|---|---|---|
-| Agi 5 vs 3 | Pool 15 vs 11 (+36%) | 93.9% | Too dominant — pool is linear in Agi via (Agi×2) |
-| End 6 vs 3 | Stam 30vs15, HP 60vs27, MW 4vs2 | 94.8% | Too dominant — End triple-dips |
-| End 5 vs 4 | Stam 25vs20, HP 44vs40 | 67.6% | Significant for 1 point; may be acceptable |
-| STR 6 vs 3 | +3 damage per hit | 61.1% | Moderate — healthy range |
+**Decision-shaped finding for Jordan:** This is a CANONICAL BALANCE question, not a duel question. Options:
+- Accept: End IS the duel stat. High End = better duelist. Builds must invest End or lose.
+- Mitigate in C only: duel Stamina = flat base + small End scaling (e.g., 15 + End × 2 instead of End × 5). Flattens the curve without changing canonical combat.
+- Mitigate canonically: change the Stamina formula globally. Much larger blast radius.
 
-### 3.4 Duration by Endurance
+### 2.5 Weapon matchups — light weapons dominate duels
 
-| End | Stamina | HP | Rounds | Yield% | Incap% |
-|---|---|---|---|---|---|
-| 2 | 10 | 24 | 2.9 | 45% | 55% |
-| 3 | 15 | 27 | 3.5 | 27% | 73% |
-| 4 | 20 | 40 | 4.3 | 26% | 74% |
-| 5 | 25 | 44 | 4.8 | 15% | 85% |
-| 6 | 30 | 60 | 5.9 | 19% | 81% |
-| 7 | 35 | 65 | 6.4 | 12% | 88% |
+| Matchup | A wins | TN difference |
+|---|---|---|
+| Dagger TN5 vs Longsword TN7 | **76.7%** | +2 TN gap = more hits per die |
+| Arming sword TN6 vs Longsword TN7 | **68.5%** | +1 TN gap |
+| Arming sword TN6 vs Warhammer TN8 | **90.0%** | +2 TN gap |
+| Dagger TN5 vs Mace TN7 | **79.4%** | +2 TN gap |
 
-Duels are 3–6 rounds (18–60 seconds narrative). At End 4 (default), ~26% yield, ~74% incap. E7 fires most at low Endurance where Stamina runs out before Health.
+**Finding:** Light, fast weapons (low TN) dominate 1v1 duels. Heavy weapons are designed for group combat — the damage modifier vs armour tier (+6 Heavy Blade vs None) doesn't compensate for TN 7 missing more often than TN 5. This is canonical and intentional: the Fibonacci group bonus (+5D cap at 8+) offsets the TN penalty in group combat.
 
----
+**Throughline to historical manuscripts:** This matches real-world dueling history. Renaissance dueling favored the rapier (fast, thrusting, low-TN equivalent) over the longsword (slower, heavier, designed for battlefield). Fiore's system covers both but his rapier/sword-in-one-hand sections are explicitly labeled for single combat. The canonical weapon system already encodes this.
 
-## 4. NERS Audit
+**Implication for player builds:** A duel-specialist build wants ShortLightBlade (TN 5) and invests in Agility (pool) and Endurance (stamina). A battlefield build wants LongHeavyBlade (TN 7) and relies on allies for Fibonacci bonus. These are DIFFERENT BUILDS for different contexts — the game creates build tension naturally.
 
-### Fiore Triangle (E5 revised)
-- **N (Necessary):** Yes — without it, aggressive dominates and defense is unrewarded. Triangle creates meaningful per-round choice with rock-paper-scissors counter dynamics.
-- **R (Robust):** Yes — balanced legs (72–77%), multiple viable protocols, no degenerate strategy. Player can choose approach (aggressive, defensive, tricky, adaptive, mixed) and each has different matchup profiles.
-- **S (Smooth):** Mostly — integrates onto canonical pool-split cleanly; stance IS the pool-split, named and visible. Bind integrates with initiative. Distance integrates with historical Zufechten/Krieg mapping. Remaining gap: weapon reach not yet differentiated in distance model.
-- **E (Elegant):** Yes — three stances, one payoff matrix, one decision per round. Player can intuit: "I'm defending → they'll bait me → I should attack" = the triangle.
+### 2.6 Duration and pacing
 
-### Fühlen Bind
-- **N:** Marginal — fires 0.5/duel at Nash. Statistically rare. BUT: "blades lock, you feel their strength" is a high-drama moment. May be necessary for feel even if rare.
-- **R:** Yes — produces interesting sub-decision (who wins the bind → next round initiative + advantage).
-- **S:** Yes — uses END (physical grapple, not speed), produces Krieg range, costs extra stamina.
-- **E:** Yes — one contested roll, one outcome.
+| End | Stamina | Rounds | Primary end condition | Feints/duel |
+|---|---|---|---|---|
+| 2 | 10 | 2.8 | Yield (80%) | 0 |
+| 3 | 15 | 3.3 | Yield (56%) / Incap (44%) | 0.24 |
+| 4 | 20 | 4.6 | Yield (75%) / Incap (25%) | 0.39 |
+| 5 | 25 | 5.4 | Mixed | 0.40 |
+| 6 | 30 | **10.2** | Incap (90%) | 0.72 |
+| 7 | 35 | **11.6** | Incap (88%) | 1.13 |
 
-### 2D Distance
-- **N:** Partial — creates approach phase and Zufechten→Krieg mapping. But Long vs Short weapons produce identical results because reach advantage isn't implemented.
-- **R:** Partial — distance-weighted protocol wins at 59% over adaptive, showing awareness helps. But distance decisions are shallow.
-- **S:** Clean integration with historical source concepts.
-- **E:** Yes — one axis, three bands, simple.
+**Finding:** Duel duration bifurcates at End 5/6. Below End 5, stamina runs out before health — yield is primary. Above End 5, stamina lasts long enough that the fight becomes a health attrition contest (incap dominates). The transition happens because Stamina = End × 5 means End 6 = 30 stamina = 6 strike rounds, while Health at End 6 = 60 with Wound Interval 12 = can absorb ~5 wounds. The stamina pool outlasts the health pool at high End.
+
+**Design implication:** Duels between low-End characters (End 2–4) are short and often end in yield — narratively satisfying, less lethal. Duels between high-End characters (End 6–7) are prolonged slugfests that usually end in incapacitation — more brutal. The game can use End as a pacing dial: NPC duelist with End 3 creates a 3-round quick draw; boss duel with End 6 creates a 10-round endurance test.
 
 ---
 
-## 5. Throughline: Pirates! → Historical → Fiore Triangle
+## 3. NERS Audit
 
-| Element | Pirates! origin (v1) | Historical grounding (v3b) | Canonical integration |
-|---|---|---|---|
-| Visible stance commit | 3 guards (high/mid/low) | Fiore's 12 guards → 3 classifications (Stabile/Pulsativa/Instabile) | = canonical pool-split, named |
-| Read-and-counter | Attack/block per guard | Liechtenauer Vor/Nach/Indes — lower-init declares first | = canonical initiative transfer §3 |
-| "Defense creates opportunity" | Not in Pirates! | Riposte (Liechtenauer: "good parries apply a thrust in opposition") | NEW mechanic |
-| "Deception provokes error" | Not in Pirates! | Meisterhau (Fiore: Instabile guards "often deceive the other guards") | NEW mechanic; replaces Feint as deceptive option in 1v1 |
-| Blades meet | Not in Pirates! | Fühlen (Liechtenauer: sensing pressure in the bind) | NEW mechanic |
-| Stamina → yield | Misattributed to Pirates! in v1; actually Sekiro | Sekiro posture-as-yield (correctly attributed) | E7 modification to canonical Stamina |
-| Distance bands | Edge-push / positioning | Zufechten / Krieg / Abzug (Liechtenauer) | Maps to canonical Establish Distance §5 |
+### Duel-as-scene-combat (the chassis)
+- **N (Necessary):** YES. No parallel engine. One combat system for all contexts. Reduces cognitive load, implementation cost, and balance surface.
+- **R (Robust):** YES. All canonical actions available (Strike, Feint, Full Guard, Take a Breath, Establish Distance, Tie Up, Disarm, Stunt, Yield, Disengage). Multiple viable strategies (offense-race, stamina attrition, feint setup). Builds differentiate (Agi→pool, End→stamina, STR→damage, COG→taunt).
+- **S (Smooth):** EXCELLENT. Zero new resolution mechanics. Player already knows combat; duel is the same thing with higher stakes and audience. Transitions seamlessly from/to scene combat (no state migration).
+- **E (Elegant):** YES. "It's just combat, but it matters more." One new action (Taunt). Everything else is canonical.
 
-**R2 decision (cognitive-only, no motor-skill layer) still holds.** The triangle is a cognitive pre-commit — choose your stance, see your opponent's stance, resolve per matrix. No timing/animation skill required. This maps to Valoria's canonical "phase-based, blind declaration, then resolution" structure.
+### E7 (yield at Stamina 0)
+- **N:** YES at low End (End 2–4 where yield fires 56–80%). Provides non-lethal duel resolution. Questionable at high End where stamina outlasts health.
+- **R:** YES. Creates distinct pacing — the "yield or die" pressure point. Player can choose to keep fighting at -2D OOB (canonical) instead of yielding.
+- **S:** CLEAN. Uses canonical Stamina rules + canonical Yield (PP-634). No new formula.
+- **E:** YES. "Your arms are lead. Yield, or be cut down." One threshold, one choice.
+
+### Taunt (new action)
+- **N:** QUESTIONABLE in current state (92% win rate = degenerate). Concept is necessary — social pressure IN combat is the duel-vs-fight distinction. Implementation needs rebalancing.
+- **R:** NO — currently dominant strategy. Must be fixed.
+- **S:** Clean mechanically (Cognition vs Composure). But the effect (forced first declaration) interacts badly with defensive pool splits.
+- **E:** YES in concept. "Get in their head." Intuitive for players.
+
+### Stances as labels (Fiore vocabulary)
+- **N:** NO as mechanics (v3b's imposed triangle was top-down). YES as UX vocabulary — naming the player's pool split "Pulsativa" (offense-heavy) or "Stabile" (defense-heavy) adds flavor without adding mechanics.
+- **R:** N/A — labels don't affect resolution.
+- **S:** CLEAN — just UI presentation.
+- **E:** YES — historical flavor at zero mechanical cost.
 
 ---
 
-## 6. Remaining Issues
+## 4. Throughlines
+
+### Historical fencing → canonical combat → duel
+
+| Historical concept | Canonical mechanic | Duel context |
+|---|---|---|
+| **Vor/Nach** (Before/After — initiative) | Initiative holder declares LAST (§3) | Same — the read-and-counter is already here |
+| **Fühlen** (feeling in the bind) | Tie Up (§4) — close range, both -2D, escape requires STR contest | Same — bind IS Tie Up |
+| **Meisterhau** (parry that simultaneously strikes) | Having initiative + reading opponent's commit → optimal pool split allocation | Same — the init holder's advantage IS the Meisterhau |
+| **Stabile** (strong defensive guard) | Full Guard (§4) — all dice to defense | Same, renamed |
+| **Pulsativa** (committed attack) | High offense split (70%+ to offense) | Same, labeled |
+| **Instabile** (provocative, baiting) | Feint (PP-294) — sacrifice defense for next-round advantage | Same — Feint IS the provocation |
+| **Zufechten/Krieg** (approach/close) | Establish Distance (§4) + zone rules (§5) | Same |
+| **Stamina/conditioning** | Stamina = End × 5; Take a Breath; OOB -2D | E7 adds yield-at-0 for duels |
+| **Taunt/provocation** | NOT in canonical combat | **NEW: Taunt action (Cognition vs Composure)** |
+
+### Pirates! → historical → canonical — what survived
+
+| Element | Pirates! (v1) | Historical (v3b) | Canonical (v4) | Status |
+|---|---|---|---|---|
+| Visible stance commit | 3 guards | 3 classifications | Pool-split IS the stance; UI labels it | ✓ — label layer |
+| Imposed triangle | Not in Pirates! | Hardcoded in v3b | **Removed** — emergence only | ✓ — correct |
+| Read-and-counter | Position-based | Vor/Nach | Initiative §3 | ✓ — already canonical |
+| Feint/deception | Not modeled | Meisterhau (imposed) | PP-294 Feint (canonical) | ✓ — already canonical |
+| Stamina → yield | Misattributed | Sekiro (E7) | Stamina + PP-634 Yield | ✓ — E7 |
+| Taunt/provocation | Not in Pirates! | Not in v3b | **NEW action** (needs rebalancing) | ⚠ — WIP |
+
+---
+
+## 5. Remaining Issues
+
+### P1 (blockers before ratification)
+1. **Taunt is broken-strong** (92% win rate). Must rebalance before shipping. See §2.3 fix candidates.
 
 ### P2 (balance concerns)
-1. **Stat dominance at 2:1 ratios.** Both Agi (93.9%) and End (94.8%) produce near-auto-wins at 5 vs 3. This is a property of canonical stat formulas (Pool = Agi×2; Stamina = End×5; Health = (End+6)×(MW+1)), not specific to Architecture C. Possible C-specific mitigations: flat Stamina in duels (15 + End×2 instead of End×5), or cap Pool advantage in C. Jordan decision.
-2. **End 5 vs 4 = 67.6%.** One stat point produces a 35pp swing. May be acceptable (End is "the duel stat" — conditioning matters) or may indicate Stamina formula scales too steeply. Explore alternative: Stamina = 10 + End×3 in C.
+2. **End dominance at all ratios.** End 5v4 = 91.6%. Canonical formula issue. Jordan decision: accept, mitigate in C, or mitigate globally.
+3. **Feint never optimal in 1v1.** PP-294's Defense=0 is too punishing. This is canonical and intentional (group combat tool). In duel context: is this acceptable, or should C modify Feint (e.g., Defense = floor(Pool × 0.25) instead of 0)?
 
 ### P3 (unmodeled)
-3. **Weapon reach.** Long vs Short weapons produce identical results. Reach advantage at Zufechten range (Long can strike, Short must close first) is canonical (§5) but not implemented in the sim.
-4. **Stunt opportunities.** Arena-tagged environmental actions (§4 Stunt, max +5D) not modeled.
-5. **Mirror-match pacing.** Stabile vs Stabile goes 8 rounds of probing into mutual yield — correct behavior (two turtles should stalemate) but may feel tedious in-game. UI should accelerate or auto-resolve stalemate mirrors.
-
-### Gaps
-6. **§13.2 Reputation Cascade integration.** Canonical values verified but not exercised in sim.
-7. **Wager resolution.** R5 C5.1 stake severity not modeled.
-8. **General Duel (§3.7) pacing.** Mass-battle zoom-in (1 exchange per turn, max 5) not modeled.
-9. **Feint (PP-294) in Architecture C.** Not modeled in v3b — Meisterhau replaces Feint's role as the deceptive option. Should PP-294 Feint remain available as a 4th action in C, or does Instabile subsume it? Jordan decision.
+4. **Weapon reach** — Long weapons should have approach-phase advantage per §5 (can strike at distance Short weapons can't). Not simulated.
+5. **Arena Stunts** — max +5D from environmental narrative. Not modeled.
+6. **§13.2 Reputation Cascade** — canonical, verified, not exercised in sim.
+7. **Wager Obligation** — R5 C5.1, not modeled.
+8. **Composure track** — referenced in FF stress conditions; how does it interact with Taunt?
 
 ### Design questions for Jordan
-1. Stat dominance mitigation: flat Stamina in C, or accept that Agi/End are "duel stats"?
-2. Feint in C: keep PP-294 as 4th action alongside triangle, or Instabile replaces it?
-3. Mirror-match stalemate: auto-resolve after N rounds of probing, or force escalation?
+1. **Taunt rebalance:** which fix? (Cost increase / offense requirement / frequency cap / contested differently)
+2. **End dominance:** accept as "the duel stat," mitigate in C only, or canonical rebalance?
+3. **Feint in C:** accept PP-294 as-is, or modify Defense floor for duels?
+4. **Stance labels:** use Fiore vocabulary (Pulsativa/Stabile/Instabile) as UI labels on pool splits, or translate to Valoria-native terms?
 
 ---
 
-## 7. Version History
+## 6. Version History
 
-- **v1 (2026-05-13):** Pirates!-inspired Aggressive/Balanced/Defensive. P2: defense unrewarded, feint never optimal, End dominant. Committed as 3b1c497.
-- **v2 (2026-05-13):** Fiore triangle + Fühlen + 2D. Agi replaced End as dominant stat. Meisterhau too strong (95%). Triangle directionally correct but unbalanced.
-- **v3 (2026-05-13):** Nerfed Meisterhau too hard — Stabile dominant (beat both Pulsativa AND Instabile). Triangle broken.
-- **v3b (2026-05-13):** Meisterhau at +2 bonus + 2/3 defense. Pulsativa +1 momentum. **Triangle balanced: 72–77% on all three legs.** Defensive play rewarded. No degenerate strategy.
-
----
-
-## 8. References
-- Fiore dei Liberi, *Fior di Battaglia* (~1410) — Stabile/Pulsativa/Instabile guard classification. Web-verified 2026-05-13.
-- Johannes Liechtenauer, *Zettel* (~14th c.) — Vor/Nach/Indes, Fühlen (feeling in the bind), Zufechten/Krieg. Web-verified 2026-05-13.
-- `params/combat.md` — Combat Pool, Stamina, Health, Feint, weapons, armour
-- `designs/scene/combat_v30.md` — §1-§4 resolution, §13.2 Reputation Cascade
-- `designs/scene/derived_stats_v30.md §4.1` — PP-716 Health, wound penalty
-- `tests/stress/combat_videogame_arch_2026-05-01/` — E5/E7 synthesis
-- `tests/sim/combat_arch_residual_stress_01/` — R1-R10 decisions
+- **v1** — Pirates! flat stances. Aggressive dominant, defense unrewarded. Committed 3b1c497.
+- **v2** — Fiore triangle imposed. Meisterhau too strong, Agi dominant.
+- **v3** — Overnerfed Meisterhau. Stabile dominant.
+- **v3b** — Triangle balanced at 72–77%. But top-down: hardcoded outcome matrix, not emergent. Committed 306a391.
+- **v4** — Scene combat chassis. No imposed triangle. Bottom-up emergence. Finds: no natural RPS; stamina management is THE duel strategy; Taunt needs rebalancing; End dominance is canonical. This version.

@@ -447,11 +447,12 @@
   prior-sim mining session; stop = no unfixed P1/P2 + 50 seeds clean +
   full coverage
 
-## duel_architecture_stress_01 — v3b: Fiore triangle validated
+## duel_architecture_stress_01 — v4: scene combat chassis
 - Date: 2026-05-13
-- Scope: Architecture C duel — Fiore triangle + Fühlen bind + 2D distance
-- Iterations: v1→v2→v3→v3b; triangle balanced 72-77%
-- Findings: defense rewarded; no degenerate strategy; stat dominance at 2:1 persists
+- Scope: Duel = scene combat + context layer (E7 yield, Taunt, audience)
+- Iterations: v1 (Pirates!) → v3b (imposed triangle) → v4 (bottom-up emergence)
+- Findings: no natural RPS from canonical; stamina mgmt is THE duel strategy;
+  Taunt broken-strong (92%); End dominance canonical; light weapons dominate duels
 
 ## sim_mb_06_v15 — G-1 stamina + G-2 rout committed
 - Date: 2026-05-13
