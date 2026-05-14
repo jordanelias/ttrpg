@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-4 entries populated. 74 entries total.",
+  "status": "Modules 1-5 entries populated. 100 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -523,6 +523,188 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a71.7 Pastoral Assumption revocation",
       "quoted_text": "(Ob = Church Influence \u00f7 2, Order \u22121, Disposition \u22122 with Church)"
+    },
+    {
+      "sim_variable": "TIER_STANDING_MIN_COUNSELOR",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 Governor Assignment standing-tier table",
+      "quoted_text": "3 (Counselor) | Eligible for Governor of one Town or Outpost."
+    },
+    {
+      "sim_variable": "TIER_STANDING_MIN_LIEUTENANT",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 Governor Assignment standing-tier table",
+      "quoted_text": "4 (Lieutenant) | Eligible for Governor of one City, Fortress, or Mine."
+    },
+    {
+      "sim_variable": "TIER_STANDING_MIN_SUCCESSOR",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 Governor Assignment standing-tier table",
+      "quoted_text": "5 (Successor) | Eligible for Governor of a Seat or Cathedral (requires faction leader approval)."
+    },
+    {
+      "sim_variable": "ADMINISTER_OB",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 governance-action table \u2014 Administer row",
+      "quoted_text": "Administer | Attunement + Governance History | 2 | Maintain Order (no decay this season). Reveals one local NPC's active Conviction."
+    },
+    {
+      "sim_variable": "PACIFY_OB_MIN",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 governance-action table \u2014 Pacify row",
+      "quoted_text": "Pacify | Charisma + local History | floor((3 \u2212 Order) + 1), min 1 | Order +1 (cap: 5)"
+    },
+    {
+      "sim_variable": "PACIFY_FORMULA_BASELINE",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 governance-action table \u2014 Pacify row",
+      "quoted_text": "floor((3 \u2212 Order) + 1), min 1"
+    },
+    {
+      "sim_variable": "DEVELOP_FORTIFY_FORMULA_OFFSET",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 governance-action table \u2014 Develop/Fortify rows",
+      "quoted_text": "floor(Prosperity/2) + 1"
+    },
+    {
+      "sim_variable": "PACIFY_OB_AT_ORDER_0",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 Pacify formula at Order 0",
+      "quoted_text": "floor((3 \u2212 Order) + 1), min 1"
+    },
+    {
+      "sim_variable": "PACIFY_OB_AT_ORDER_3",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 Pacify formula at Order 3",
+      "quoted_text": "floor((3 \u2212 Order) + 1), min 1"
+    },
+    {
+      "sim_variable": "PACIFY_OB_AT_ORDER_5",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 Pacify formula at Order 5 (clamped at min 1)",
+      "quoted_text": "min 1"
+    },
+    {
+      "sim_variable": "MINISTRY_ORDER_DECAY_MODIFIER",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Ministry row",
+      "quoted_text": "Ministry | Seat, City | Administrative efficiency: Order decay \u22121 (Order is more stable). Governor uses Influence as primary stat."
+    },
+    {
+      "sim_variable": "LOEWENRITTER_DEFENSE_BONUS",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 L\u00f6wenritter row",
+      "quoted_text": "L\u00f6wenritter | Fortress | Military efficiency: Defense +1 passive."
+    },
+    {
+      "sim_variable": "WARDENS_DETECTION_BAND_SHIFT",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Wardens row",
+      "quoted_text": "Wardens | Outpost (Askeheim, Stillhelm Watch) | Thread monitoring: RS effects detected 1 band earlier."
+    },
+    {
+      "sim_variable": "CHURCH_PIETY_INFLUENCE_PER_SEASON",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Church row",
+      "quoted_text": "Church | Cathedral | +1 Piety Influence per season."
+    },
+    {
+      "sim_variable": "GUILDS_TRADE_PER_SEASON",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Guilds row",
+      "quoted_text": "+1 Trade per season"
+    },
+    {
+      "sim_variable": "RM_CV_POTENTIAL_PER_SEASON",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 RM row",
+      "quoted_text": "Community presence: CV \u22121 potential per season"
+    },
+    {
+      "sim_variable": "RM_RESILIENCE_PRESENCE_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 RM Cell Resilience",
+      "quoted_text": "If RM has Presence markers in \u2265 3 settlements within a province"
+    },
+    {
+      "sim_variable": "RM_RESILIENCE_OB_DELTA",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 RM Cell Resilience",
+      "quoted_text": "Church/Crown suppression actions against RM in that province take +1 Ob"
+    },
+    {
+      "sim_variable": "RM_NATURAL_PT_THRESHOLD",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 RM row natural-availability condition",
+      "quoted_text": "Only available in territories with PT \u2264 2"
+    },
+    {
+      "sim_variable": "NIFLHEL_DETECTION_EVIDENCE_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Niflhel row",
+      "quoted_text": "Investigation (Evidence Track threshold 3)"
+    },
+    {
+      "sim_variable": "GRANT_MANAGEMENT_OB",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Granting management",
+      "quoted_text": "as a Domain Action (Influence, Ob 1 \u2014 it is an administrative act, not a contested one)"
+    },
+    {
+      "sim_variable": "REVOKE_MANAGEMENT_ORDER_COST",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Revoking management",
+      "quoted_text": "Revocation costs Order \u22121 in the settlement"
+    },
+    {
+      "sim_variable": "REVOKE_MANAGEMENT_DISPOSITION_COST",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Revoking management",
+      "quoted_text": "Disposition \u22122 with the subnational faction's leadership"
+    },
+    {
+      "sim_variable": "_revoke_ob_at_influence_5",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Revoking management ceiling worked example",
+      "quoted_text": "Ob = subnational faction's Influence \u00f7 2, round up"
+    },
+    {
+      "sim_variable": "_revoke_ob_at_influence_4",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Revoking management ceiling worked example",
+      "quoted_text": "Ob = subnational faction's Influence \u00f7 2, round up"
+    },
+    {
+      "sim_variable": "COMPANION_GOVERNOR_FREE_ACTIONS_PER_SEASON",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.2 Player/Companion as Governor",
+      "quoted_text": "A companion serving as governor gets 1 free action per season \u2014 social OR governance, player chooses. Not both."
     }
   ]
 }

@@ -495,3 +495,20 @@
 - Scope: Scene combat chassis. PP-294 feint. Taunt cost=5. Duellist-v6.
 - v6 findings: Duellist beats Feinter 56%, Defensive 44%; loses to Aggressive 25%,
   Stamina-fighter 6%. Build (COG6/Agi5/End4/dagger) beats default Adaptive 65%.
+
+
+## settlement_mgmt_stress_01 — Module 5 verified (2026-05-13)
+- Module: dual-authority governance (settlement_layer §3.1, §3.2, §3.3)
+- File: tests/sim/settlement_mgmt_stress_01/module_05_governance.py
+- Tests: 35/35 PASS (T1-T35)
+- Ledger: 26 new entries (100 total cumulative across M1+M2+M3+M4+M5)
+- MAINTENANCE arm of player-action loop now live: Develop / Fortify /
+  Pacify / Administer governance actions with canonical Ob formulas.
+- GOVERNANCE-CHANGE problem-solve arm live: grant_subnational_management
+  (Ob 1 administrative) and revoke_subnational_management (Ob = ceil(
+  Influence/2), costs Order -1, Disposition -2).
+- Cumulative action handlers: 13 (1 M3 + 6 M4 + 6 M5).
+- F9 NEW (informational): Pacify Ob formula notational quirk.
+- F10 NEW: §3.2 governor-eligibility omits §2.1 extra types (17/37
+  settlements affected — same gap class as F7).
+- F11 NEW: §3.3 Guilds row references pre-PP-726 Market type.

@@ -342,3 +342,118 @@ cited from the start.
 - F8: open — §1.5/§1.6 semantic asymmetry (M4).
 
 ---
+
+## Session 6 — 2026-05-13 — Module 5 (dual-authority governance)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §3.1, §3.2, §3.3 (PART 3
+  focus re-read; total doc ~16.1k tok)
+- `designs/territory/valoria_political_hierarchy_v30.md` (re-fetched for
+  sim_gate ledger-source verification, ~5.1k tok)
+- `designs/territory/valoria_geography_v30.yaml` (re-fetched for ledger
+  verification, ~8.8k tok)
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_05_governance.py`
+
+**Isolation tests:** 35/35 PASS (T1 through T35).
+
+**Ledger entries this session:** 26 new (100 total across M1+M2+M3+M4+M5).
+
+**[DECISION] MAINTENANCE arm of player-action loop now live.**
+Four governance actions encoded with canonical Ob formulas:
+- Develop: Ob = floor(Prosperity/2) + 1; effect Prosperity +1
+- Fortify: Ob = floor(Defense/2) + 1; effect Defense +1
+- Pacify:  Ob = max(1, (3 - Order) + 1); effect Order +1
+- Administer: Ob 2; effect Maintain Order (no decay this season),
+  reveals one local NPC's active Conviction
+All four return GovernanceActionResult carrying state_mutated, stat_delta,
+administer_no_decay_flag, reveals_conviction, faction_standing_delta,
+renown_delta.
+
+**[DECISION] GOVERNANCE-CHANGE problem-solve arm live.**
+grant_subnational_management (Ob 1, administrative) and
+revoke_subnational_management (Ob = ceil(Influence/2), costs Order -1,
+Disposition -2). Both return ActionResult with appropriate signals.
+
+**[DECISION] GovernorState upgraded from M4 stub to canonical type.**
+Added: governor_standing, governor_is_player, governor_is_companion,
+governor_is_bishop, managing_subnational, leader_approval_granted.
+M4's stub had only settlement_id / has_governor / current_order; M5's
+canonical type extends with the full governance state model.
+
+**[FINDING] F9 — §3.2 Pacify Ob formula notational quirk.**
+Canonical formula: 'floor((3 − Order) + 1), min 1'. For integer Order in
+[0, 5], floor is mathematically redundant — (3 - Order) + 1 is always
+integer. The min-clamp at 1 IS load-bearing for Order ≥ 3. Module 5
+implements equivalent semantics. F9 is informational only — no
+functional divergence.
+
+**[FINDING] F10 — §3.2 governor-eligibility omits §2.1 extra types.**
+Same gap class as F7 (§1.4.1 facility matrix). §3.2 standing-tier table
+uses canonical §1.2 eight types only. §2.1 extras (Village, Fortress-City,
+Cathedral-City) unmapped at any standing. Affects 17 of 37 settlements
+(46%). is_eligible_governor returns False for extras — surfaces gap,
+does not silently reconcile. Mode D test target: 17 settlements cannot
+have any governor under canonical rules.
+
+**[FINDING] F11 — §3.3 Guilds row references pre-PP-726 'Market' type.**
+§3.3 Guilds natural types listed as 'City, Port, Market, Mine'. Market
+is NOT in §1.2 canonical eight types — per PP-726, Market is a
+sub-feature (district within a settlement), not a settlement type.
+Module 5 omits Market from Guilds tuple. Editorial decision: remove
+Market from §3.3 (handled at sub-feature level), or promote to §1.2
+(unlikely given PP-726 siege-target rationale).
+
+**[ASSUMPTION] Module 5 retains provisional faction_standing_delta = +1
+and renown_delta = +1 (or 0 for Administer) on action success — basis:**
+Module 5 does not yet bind to canonical scalars; Module 12 (faction
+integration) will rebind. The signal direction (positive on improvement-
+type success; zero on invisible Administer work) is canonical-friendly.
+
+**[ASSUMPTION] Bishop-Governor and province fracturing — wired but not
+tested in M5 — basis:** §3.2 mentions 'Bishop-Governor ... Province
+fractionalizes if bishop-governor settlement's controller now differs
+from Seat holder.' Module 5 surfaces the state field (governor_is_bishop)
+but the fracturing-trigger integration test belongs to Module 13 Mode B
+chain (install Bishop in Hafenmark province → check province_is_fractured
+predicate fires).
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with 100
+ledger entries verified; commit_message ok; sim_fabrication_check ok;
+forbidden_token ok; pre_commit_gate ok; safe_commit ok.
+
+**Retries this session:** zero — built cleanly first attempt. All
+fab-check numerics either in ledger or annotated with canonical comments.
+
+**Cumulative action-handler inventory after M5:**
+- Improvement arm (7): expand_institutional_capacity (M3); install_
+  religious_building × 3 tiers + install_templar / install_inquisitor /
+  install_church_governor (M4)
+- Maintenance arm (4): Develop, Fortify, Pacify, Administer (M5)
+- Problem-solve arm (2): grant_subnational_management, revoke_sub-
+  national_management (M5)
+- TOTAL: 13 player-action handlers across 5 modules
+
+**Cumulative findings (Module 13 audit baseline):**
+- F1: open — §1.2 lists 8 types; §2.1 uses 3 extra (M1)
+- F2: open — §1.2 stats column vs §1.3 schema (M1)
+- F3: RESOLVED at M2
+- F4: PARTIALLY RESOLVED at M2 (stats exist, wrong granularity)
+- F5: open — settlement_adjacency header math (M2)
+- F6: open (Mode-C blocker) — intra-YAML S-ID granularity drift (M2)
+- F7: open — §1.4.1 matrix omits §2.1 extra types (M3)
+- F8: open (informational) — §1.5/§1.6 semantic asymmetry (M4)
+- F9: open (informational) — Pacify Ob formula notational quirk (M5)
+- F10: open — §3.2 governor-eligibility omits §2.1 extra types (M5)
+- F11: open — §3.3 Guilds row references pre-PP-726 Market (M5)
+
+**Pattern across findings:** F1 / F7 / F10 / F11 all point to the same
+canonical hygiene need — a comprehensive type taxonomy review. §2.1
+introduced three new types (Village, Fortress-City, Cathedral-City)
+without updating downstream tables (§1.4.1, §3.2). §3.3 retains a
+pre-PP-726 type reference (Market). Recommended editorial pass: one
+consolidated type-taxonomy reconciliation.
+
+---
