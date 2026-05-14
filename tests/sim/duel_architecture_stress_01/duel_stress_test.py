@@ -345,7 +345,7 @@ run("Duellist vs Adaptive", N, wa=W, aa='None', wb=W, ab='None', pa='DUELLIST', 
 run("Duellist vs Aggressive", N, wa=W, aa='None', wb=W, ab='None', pa='DUELLIST', pb='AGGRESSIVE', **B)
 run("Duellist vs Stamina-fighter", N, wa=W, aa='None', wb=W, ab='None', pa='DUELLIST', pb='STAMINA_FIGHTER', **B)
 run("Duellist vs Counter-puncher", N, wa=W, aa='None', wb=W, ab='None', pa='DUELLIST', pb='COUNTER_PUNCHER', **B)
-run("Duellist (COG 6) vs Adaptive", N, wa=W, aa='None', wb=W, ab='None', pa='DUELLIST', pb='ADAPTIVE', cog_a=6, **B)  # [canonical: N/A — test stats]
+run("Duellist (COG 6) vs Adaptive", N, wa=W, aa='None', wb=W, ab='None', pa='DUELLIST', pb='ADAPTIVE', cog_a=6, **B)  # [canonical: N/A — test stats]  # [canonical: N/A — test stats]
 
 # §4: STAT ASYMMETRY
 print("\n~~~ §4: STAT ASYMMETRY ~~~")  # [canonical: N/A — output]

@@ -489,3 +489,9 @@
 - Findings: 10 gaps (0 P1, 6 P2, 4 P3). Pool formula validated across boundary values.
   Phase-boundary morale check redundant with per-tick triggers (D-7).
   Multi-turn orchestrator is priority for v17 (D-1, D-9).
+
+## duel_architecture_stress_01 — v6: Duellist protocol + matchup profile
+- Date: 2026-05-13
+- Scope: Scene combat chassis. PP-294 feint. Taunt cost=5. Duellist-v6.
+- v6 findings: Duellist beats Feinter 56%, Defensive 44%; loses to Aggressive 25%,
+  Stamina-fighter 6%. Build (COG6/Agi5/End4/dagger) beats default Adaptive 65%.
