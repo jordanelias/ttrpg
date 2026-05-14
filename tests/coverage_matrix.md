@@ -482,26 +482,10 @@
   Per-turn battery not meaningful at max_turns=18 (most matchups draw).
   Winner/loser ratio 1.4x (historical 2-5x — needs pursuit/cascade).
 
-## duel_architecture_stress_01 — v5: initiative info + PP-294 feint fix
+## audit_sim_mb_06_v16 — formula validation + gap detection
 - Date: 2026-05-13
-- Scope: Duel = scene combat + context layer. Initiative info advantage modeled.
-  PP-294 Feint retains defense (PP-238 Defense=0 overruled). Taunt cost=5.
-- Iterations: v1→v3b→v4→v5
-- Findings: info advantage worth ~3pp; Feint still costly but no longer suicidal;
-  Taunt balanced at cost 5 but Duellist protocol under-strikes; End 5v4 still 88.6%
-
-
-## settlement_mgmt_stress_01 — Module 4 verified (2026-05-13)
-- Module: Church / parish / pastoral (settlement_layer §1.5, §1.6, §1.7)
-- File: tests/sim/settlement_mgmt_stress_01/module_04_church.py
-- Tests: 25/25 PASS (T1-T25)
-- Ledger: 26 new entries (74 total cumulative across M1+M2+M3+M4)
-- Six new improvement-arm player-action handlers now live:
-  install_religious_building (Chapel/Church/Cathedral),
-  install_templar_station, install_inquisitor_base,
-  install_church_governor (with Pastoral Assumption sub-path).
-- F8 NEW: §1.5/§1.6 semantic asymmetry — PT generation uniform
-  per-season; Order bonus split across three timing patterns
-  (per-season / one-time / structural).
-- Geneva trap mechanic operational — Chapel produces both Order
-  benefit to host settlement AND PT generation to Church faction.
+- Scope: v16 audit (Mode A + Mode D)
+- Status: committed
+- Findings: 10 gaps (0 P1, 6 P2, 4 P3). Pool formula validated across boundary values.
+  Phase-boundary morale check redundant with per-tick triggers (D-7).
+  Multi-turn orchestrator is priority for v17 (D-1, D-9).
