@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-5 entries populated. 100 entries total.",
+  "status": "Modules 1-6 entries populated. 125 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -705,6 +705,181 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a73.2 Player/Companion as Governor",
       "quoted_text": "A companion serving as governor gets 1 free action per season \u2014 social OR governance, player chooses. Not both."
+    },
+    {
+      "sim_variable": "INTRA_PROVINCE_TRAVEL_SCENE_COST",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.1 Scene Slate Settlement Anchoring",
+      "quoted_text": "Moving between settlements in the same province costs no scene action"
+    },
+    {
+      "sim_variable": "INTER_PROVINCE_TRAVEL_SCENE_COST_PER_PROVINCE",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.1 Scene Slate Settlement Anchoring",
+      "quoted_text": "Moving between provinces costs 1 scene per province traversed"
+    },
+    {
+      "sim_variable": "FAMINE_PROSPERITY_THRESHOLD",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Famine row",
+      "quoted_text": "Prosperity 0 | Famine or economic collapse. Population leaving. Order \u22121 automatic."
+    },
+    {
+      "sim_variable": "FAMINE_ORDER_AUTO_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Famine row",
+      "quoted_text": "Order \u22121 automatic"
+    },
+    {
+      "sim_variable": "RAID_DEFENSE_THRESHOLD",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Raid/Siege row",
+      "quoted_text": "Defense 0 + adjacent hostile military | Raid or siege."
+    },
+    {
+      "sim_variable": "REVOLT_ORDER_THRESHOLD",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Local Revolt row",
+      "quoted_text": "Order 0 | Local revolt"
+    },
+    {
+      "sim_variable": "FLOURISHING_ORDER_THRESHOLD",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Flourishing row",
+      "quoted_text": "Order 5 + Prosperity 4+ | Flourishing. Local festival, trade fair, or cultural event. +1 Disposition with all local NPCs."
+    },
+    {
+      "sim_variable": "FLOURISHING_PROSPERITY_THRESHOLD",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Flourishing row",
+      "quoted_text": "Order 5 + Prosperity 4+ | Flourishing."
+    },
+    {
+      "sim_variable": "FLOURISHING_DISPOSITION_BONUS",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Flourishing row",
+      "quoted_text": "+1 Disposition with all local NPCs."
+    },
+    {
+      "sim_variable": "MINE_SURPLUS_PROSPERITY_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Mine Resource Surplus row",
+      "quoted_text": "Mine type + Prosperity 3+ | Resource surplus. Province Treasury +50/season at Accounting"
+    },
+    {
+      "sim_variable": "MINE_SURPLUS_TREASURY_PER_SEASON",
+      "value": 50,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Mine Resource Surplus row",
+      "quoted_text": "Province Treasury +50/season at Accounting"
+    },
+    {
+      "sim_variable": "FORTRESS_MOBILIZE_DEFENSE_OB",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Settlement Events \u2014 Fortress Mobilize row",
+      "quoted_text": "Fortress type + hostile military in province | Garrison mobilization. Defense check: Defense pool vs Ob 2."
+    },
+    {
+      "sim_variable": "DISESTABLISHMENT_ORDER_PENALTY_PER_SEASON",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 RM Governance Transition \u2014 Disestablishment mode",
+      "quoted_text": "\u22121 Order for 2 seasons, then Accord growth +0.5/season; PT \u22121 immediate"
+    },
+    {
+      "sim_variable": "DISESTABLISHMENT_PENALTY_SEASON_COUNT",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 RM Governance Transition \u2014 Disestablishment mode",
+      "quoted_text": "\u22121 Order for 2 seasons"
+    },
+    {
+      "sim_variable": "TRANSFORMATION_DURATION_SEASONS",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 RM Governance Transition \u2014 Transformation mode",
+      "quoted_text": "4-season gradual conversion"
+    },
+    {
+      "sim_variable": "CONSENSUS_DELAY_SEASONS",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Consensus Delay",
+      "quoted_text": "Emergency Domain Actions (Muster, Fortify, Emergency Diplomacy) in RM settlements take +1 season to resolve."
+    },
+    {
+      "sim_variable": "CONSENSUS_DELAY_WAIVER_MANDATE_COST",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Consensus Delay \u2014 waiver",
+      "quoted_text": "RM leader spends 1 Mandate + loses 1 Presence marker in that province"
+    },
+    {
+      "sim_variable": "CONSENSUS_DELAY_WAIVER_PRESENCE_LOSS",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.3 Consensus Delay \u2014 waiver",
+      "quoted_text": "RM leader spends 1 Mandate + loses 1 Presence marker in that province"
+    },
+    {
+      "sim_variable": "THREAD_OP_PER_STAT_PER_SEASON_CAP",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.4 Thread Operations at Settlement Level",
+      "quoted_text": "Cap: \u00b11 per settlement stat per season from Thread operations."
+    },
+    {
+      "sim_variable": "LOCAL_ACTOR_COUNT_SEAT",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.5 Local Actors count-by-type",
+      "quoted_text": "Count by type:** Seat: 2. City: 2. Town: 1. Fortress: 1. Port: 2. Cathedral: 1. Mine: 1. Outpost: 0."
+    },
+    {
+      "sim_variable": "LOCAL_ACTOR_COUNT_OUTPOST",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.5 Local Actors count-by-type",
+      "quoted_text": "Outpost: 0."
+    },
+    {
+      "sim_variable": "DISPOSITION_DRIVER_PUBLIC_COMBAT",
+      "value": -2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.5 Local Actors \u2014 Disposition drivers",
+      "quoted_text": "Public combat in settlement: \u22122."
+    },
+    {
+      "sim_variable": "DISPOSITION_DRIVER_DEFEND_FROM_INVASION",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.5 Local Actors \u2014 Disposition drivers",
+      "quoted_text": "Defend settlement from invasion: +2."
+    },
+    {
+      "sim_variable": "FACTION_EMERGENCE_DISPOSITION_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.5 Local Actors \u2014 recruitment",
+      "quoted_text": "Recruitment pool for faction emergence (Stage 2\u21923 at Disposition +3)"
+    },
+    {
+      "sim_variable": "ACTORS_FROM_CANONICAL_EIGHT_ONLY",
+      "value": 25,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a74.5 (computed from \u00a72.1 registry \u00d7 \u00a74.5 counts)",
+      "quoted_text": "Count by type:** Seat: 2. City: 2. Town: 1. Fortress: 1. Port: 2. Cathedral: 1. Mine: 1. Outpost: 0."
     }
   ]
 }

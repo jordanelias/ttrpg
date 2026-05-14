@@ -58,3 +58,18 @@
   4 turns to rout at ~31% cumulative. No tuning knobs.
 - Multi-turn battery (n=80): H1 58.8%, H3 83.8%, H5 75.0%, H7 45.0%.
   Winner ~23%, loser ~31%. Ratio 1.4x. Battles 4 turns.
+
+
+## settlement_mgmt_stress_01 — Module 6 verified (2026-05-13)
+- Module: settlement events + thread ops + local actors
+  (settlement_layer §4.1, §4.2, §4.3, §4.4, §4.5)
+- File: tests/sim/settlement_mgmt_stress_01/module_06_events.py
+- Tests: 43/43 PASS (T1-T43)
+- Ledger: 23 new entries (123 total cumulative)
+- BOTTOM-UP GRANULAR EMERGENT architecture: 9 atomic event predicates
+  compose into multi-season chains. T43 validates Famine -> Order -> Revolt
+  chain emerges from atomic predicates without authored sequencing.
+- Cumulative action handlers: 22 (1 M3 + 6 M4 + 6 M5 + 9 M6).
+- F12 NEW: §4.5 Local Actor table omits §2.1 extras.
+- F13 NEW: §4.5 prose total "~45-50 across 36 settlements" is
+  pre-PP-rebuild (actual registry: 25 canonical-eight actors / 37 settlements).

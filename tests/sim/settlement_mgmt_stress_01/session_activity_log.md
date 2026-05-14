@@ -457,3 +457,119 @@ pre-PP-726 type reference (Market). Recommended editorial pass: one
 consolidated type-taxonomy reconciliation.
 
 ---
+
+## Session 7 — 2026-05-13 — Module 6 (settlement events + thread ops + local actors)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §4.1, §4.2, §4.3, §4.4, §4.5
+  (PART 4 focus re-read; total doc ~16.1k tok)
+- `designs/territory/valoria_political_hierarchy_v30.md` (re-fetched for
+  sim_gate ledger-source verification, ~5.1k tok)
+- `designs/territory/valoria_geography_v30.yaml` (re-fetched for ledger
+  verification, ~8.8k tok)
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_06_events.py`
+
+**Isolation tests:** 43/43 PASS (T1 through T43).
+
+**Ledger entries this session:** 23 new (123 total cumulative).
+
+**[DECISION] Bottom-up granular emergent architecture.**
+Per Jordan's directive, Module 6 is structured as:
+  1. Pure event-trigger predicates: each is a function of one settlement's
+     state. No predicate depends on another.
+  2. Per-season sweep: sweep_season_events() iterates the registry,
+     evaluates each predicate against each settlement, returns a List of
+     FiredEvent. The list may contain multiple events per settlement.
+  3. Resolution handlers: each event has a resolution function that
+     mutates state and returns ActionResult.
+  4. Emergence: composition happens via state mutation between sweeps.
+     The codebase has no event-to-event link — chains are visible only
+     in season-N+1 sweep results.
+
+T43 (emergent_famine_to_revolt_chain) validates this empirically:
+  - Start: settlement at (Prosperity=0, Order=1)
+  - Season N sweep: Famine fires (predicate matches Prosperity==0)
+  - Resolve Famine: Order -1 automatic per §4.3 -> (Prosperity=0, Order=0)
+  - Season N+1 sweep, SAME CODE: Famine AND Revolt both fire
+  (Famine still matches Prosperity==0; Revolt newly matches Order==0)
+  - No part of the code explicitly links Famine to Revolt.
+
+**[DECISION] Thread-op cap is the emergence safety valve.**
+§4.4: 'Cap: ±1 per settlement stat per season from Thread operations.'
+Module 6 enforces via delta_already_applied_this_season dict passed
+through apply_thread_op. T23 validates: two successful Weaving casts
+in the same season cannot push Order by +2 — the second is refused
+with reason 'thread_op_weaving_capped_order'. This is a canonical
+constraint on emergence — the design wants emergent dynamics to feel
+earned, not exploited.
+
+**[DECISION] Three RM Governance Transition modes encoded as separate
+state-machines.** Disestablishment returns a GovernanceTransitionState
+tracking 2 seasons of Order penalty followed by Accord growth.
+Accommodation returns None (one-shot, no persistent state).
+Transformation returns a state tracking 4-season transition, then
+post-completion PT -1 and Accord growth. Each is a distinct emergent
+trajectory from the same trigger; player choice determines which.
+
+**[FINDING] F12 — §4.5 Local Actor table omits §2.1 extra types.**
+Same gap class as F1 / F7 / F10 / F11 — fifth surfacing of the same
+canonical type-taxonomy hygiene gap. Module 6 surfaces via local_actor_count
+returning None for Village / Fortress-City / Cathedral-City;
+effective_local_actor_count provides provisional sim-side fallback
+(Village -> 1 like Town; composites -> 2). Mode D test target: 16 of
+37 settlements get no canonical Local Actor allocation.
+
+**[FINDING] F13 — §4.5 prose count is pre-PP-rebuild.**
+§4.5: 'Total: ~45-50 across 36 settlements.' Two errors:
+  1. '36 settlements' is pre-rebuild count. Canonical post-rebuild
+     is 37 per §2.1 summary (Module 1 finding F1 correction).
+  2. Computing §4.5 table × actual registry yields 25 actors from
+     canonical-eight types alone (the registry has zero Port,
+     Cathedral, Mine, or Outpost as standalone settlement types —
+     those were folded into composite types or sub-features by the
+     PP rebuild). Adding F12 provisional fallback brings total to ~43;
+     still below the '~45-50' estimate.
+Editorial decision needed: refresh §4.5 actor counts to match
+post-rebuild §2.1 registry.
+
+**[ASSUMPTION] Module 6 resolution-handler standing/renown signal
+directions — basis:** Module 6 sets faction_standing_delta and
+renown_delta on each resolution. Famine resolution: -1/-1 (governance
+failure). Revolt with garrison: -1/0 (contained but visible).
+Revolt without garrison: -2/-2 (governor expelled is severe).
+Flourishing: +1/+1 (visible success). Module 12 will rebind magnitudes
+to canonical scalars; signal directions are canonical-friendly.
+
+**[ASSUMPTION] Module 6 retains Module 5's GovernorState canonical
+type — basis:** M5 upgraded the M4 stub. Module 6 imports from M5,
+so resolve_local_revolt receives the full canonical state object
+with governor_standing, managing_subnational, etc.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with 123
+ledger entries verified; commit_message ok; sim_fabrication_check ok;
+forbidden_token ok; pre_commit_gate ok; safe_commit ok.
+
+**Retries this session:** zero. Built cleanly first attempt.
+
+**Cumulative action-handler inventory after M6:**
+- Improvement arm (7): expand_institutional_capacity (M3); install_
+  religious_building x 3 + install_templar + install_inquisitor +
+  install_church_governor (M4)
+- Maintenance arm (4): Develop, Fortify, Pacify, Administer (M5)
+- Problem-solve arm (11): grant/revoke_subnational_management (M5);
+  resolve_famine, resolve_local_revolt, resolve_flourishing,
+  resolve_rm_governance_transition (3 modes), apply_templar_interrupt,
+  attempt_niflhel_detection, apply_thread_op x 7 variants (M6)
+- TOTAL: 22 player-action handlers across 6 modules
+
+**Cumulative findings (Module 13 audit baseline):**
+- F1, F2, F5, F6, F7, F8, F9, F10, F11, F12, F13: open (11 findings)
+- F3: RESOLVED at M2; F4: PARTIALLY RESOLVED at M2 (2 findings)
+- Pattern: F1 / F7 / F10 / F11 / F12 — five distinct surfacings of
+  the same canonical type-taxonomy hygiene gap. Recommended one
+  consolidated editorial pass.
+
+---

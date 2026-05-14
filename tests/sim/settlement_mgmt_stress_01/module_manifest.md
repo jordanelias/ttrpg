@@ -533,7 +533,7 @@ tributary), not "35+1" as drafted in V1 of this manifest. Schoenland
 | 3 | Facility tiers + capacity pressure | **verified** (25/25 isolation tests; F7 surfaced; M1 F1 village count corrected; first improvement-action handler live) | 2026-05-13 |
 | 4 | Church / parish / pastoral | **verified** (25/25 isolation tests; F8 surfaced; six new improvement actions live) | 2026-05-13 |
 | 5 | Dual-authority governance | **verified** (35/35 isolation tests; F9-F11 surfaced; maintenance arm live; governance-change problem-solve arm live) | 2026-05-13 |
-| 6 | Settlement events + thread ops | pending | — |
+| 6 | Settlement events + thread ops | **verified** (43/43 isolation tests; F12-F13 surfaced; bottom-up emergent chain validated via T43) | 2026-05-13 |
 | 7 | Military granularity | pending | — |
 | 8 | Player progression — Stature | pending | — |
 | 9 | Extended timeline | pending | — |
