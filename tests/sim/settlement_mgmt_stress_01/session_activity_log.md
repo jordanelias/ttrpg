@@ -250,3 +250,95 @@ Degenerate-loop targets for Module 13 Mode D:
 - Decade-cap exhaustion: T18 confirms action fails gracefully; Mode D should verify the failure surfaces a clear UI message rather than silently consuming Treasury.
 
 ---
+
+## Session 5 — 2026-05-13 — Module 4 (Church / parish / pastoral)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §1.5, §1.6, §1.7 (focus
+  re-read of doc, ~16.1k tok total)
+- `designs/territory/valoria_political_hierarchy_v30.md` (re-fetched for
+  sim_gate ledger-source verification, ~5.1k tok)
+- `designs/territory/valoria_geography_v30.yaml` (re-fetched for ledger
+  verification — M2 entries cite it, ~8.8k tok)
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_04_church.py`
+
+**Isolation tests:** 25/25 PASS (T1 through T25).
+
+**Ledger entries this session:** 26 new (74 total across M1+M2+M3+M4).
+
+**[DECISION] Six improvement-arm player-action handlers added.**
+Cumulative improvement-action count: 7 (1 from M3 + 6 from M4):
+- install_religious_building(Chapel | Church | Cathedral) — Axis 1
+  mutually exclusive
+- install_templar_station — Axis 2 binary
+- install_inquisitor_base — Axis 3 binary
+- install_church_governor — Axis 4 binary; carries Pastoral Assumption
+  sub-mode (Ob 1) with state-dependent preconditions (no governor +
+  Chapel/Church/Cathedral present per §1.7).
+
+**[FINDING] F8 — §1.5/§1.6 semantic asymmetry.**
+§1.5 Axis 1 expresses PT generation as uniform per-season rate for all
+three Religious Building tiers. §1.6 expresses Order bonus with three
+different timing patterns: Chapel per-season recurring (+0.5/season
+with 'rounds: +1 every other season' accumulator); Church one-time at
+installation (+1 Order); Cathedral one-time + structural (+1 Order at
+install + Order-decay −1 persistent modifier). Module 4 encodes all
+three patterns explicitly in ParishBonus(installation_order_delta,
+per_season_half_order_units, order_decay_reduction). Asymmetry appears
+intentional (different tiers, different effect profiles); surfaced for
+Module 13 transparency.
+
+**[DECISION] Half-fractional encoding for +0.5/season rates.**
+Module 1 Order stat is integer (0-5). §1.5 +0.5 PT/season and §1.6
++0.5 Order/season are fractional. Module 4 encodes fractional rates as
+half-units (Chapel = 1 half-Order-unit/season, accumulator triggers
++1 every 2 seasons; Chapel = 1 half-PT-unit/season exposed to faction
+consumers). HALF_PT_UNITS_PER_PT = 2 and HALF_ORDER_UNITS_PER_ORDER = 2
+are canonical-cited constants.
+
+**[ASSUMPTION] Accumulator drains regardless of stat cap.**
+If Order is at STAT_MAX (5), Chapel's per-season half-units still
+accumulate and drain at threshold but don't tick the stat. This
+prevents perpetual buildup that would instantly fire when Order drops.
+Module 13 Mode D should stress the cap case.
+
+**[ASSUMPTION] Cathedral upgrade from Church does not double-stack the
++1 installation Order delta.** Module 4 stance: installation Order
+deltas are one-time and permanent (Church's +1 stays even after
+upgrade); Cathedral's +1 applies as a fresh install delta. Net: Church
+→ Cathedral upgrade gives +2 Order total across the two installs.
+Canon doesn't explicitly say. Worth surfacing if Mode D catches it.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with 74
+ledger entries verified; commit_message ok; sim_fabrication_check ok;
+forbidden_token ok; pre_commit_gate ok; safe_commit ok.
+
+**Retries this session:** zero. M4 built cleanly first attempt — fab
+check passed on first run because all numeric constants were canonically
+cited from the start.
+
+**Player-action loop — Geneva trap operational:**
+
+  Crown player governs settlement with decaying Order -> Player accepts
+  Chapel install (no install Order delta but +0.5/season) -> After 4
+  seasons Chapel ticks +2 Order; settlement stable -> But Chapel also
+  generates 2 PT/season to Church faction -> Church PT/CI grows ->
+  approaches CI=100 mass-seizure threshold -> Player faces choice:
+  tolerate Church infrastructure (Geneva trap) or attempt seizure
+  (Cathedral seizure-Ob −2 makes high-tier infrastructure expensive to
+  remove). Closed feedback loop per Jordan's scope addendum.
+
+**Cumulative findings (this is the ledger Module 13 audits against):**
+- F1: open — §1.2 lists 8 types; §2.1 uses 3 extra.
+- F2: open — §1.2 stats column vs §1.3 schema.
+- F3: RESOLVED at M2.
+- F4: PARTIALLY RESOLVED at M2 (stats exist, wrong granularity).
+- F5: open — settlement_adjacency header math (56 vs 55).
+- F6: open (Mode-C blocker) — intra-YAML S-ID granularity drift.
+- F7: open — §1.4.1 matrix omits §2.1 extra types (M3).
+- F8: open — §1.5/§1.6 semantic asymmetry (M4).
+
+---

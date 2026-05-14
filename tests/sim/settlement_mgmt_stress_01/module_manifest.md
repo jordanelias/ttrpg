@@ -531,7 +531,7 @@ tributary), not "35+1" as drafted in V1 of this manifest. Schoenland
 | 1 | Settlement primitives | **verified** (15/15 isolation tests; F1–F4 surfaced) | 2026-05-13 |
 | 2 | Political hierarchy + adjacency | **verified** (22/22 isolation tests; F5-F6 surfaced; F3 resolved; F4 partial) | 2026-05-13 |
 | 3 | Facility tiers + capacity pressure | **verified** (25/25 isolation tests; F7 surfaced; M1 F1 village count corrected; first improvement-action handler live) | 2026-05-13 |
-| 4 | Church / parish / pastoral | pending | — |
+| 4 | Church / parish / pastoral | **verified** (25/25 isolation tests; F8 surfaced; six new improvement actions live) | 2026-05-13 |
 | 5 | Dual-authority governance | pending | — |
 | 6 | Settlement events + thread ops | pending | — |
 | 7 | Military granularity | pending | — |
