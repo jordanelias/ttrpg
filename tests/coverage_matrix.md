@@ -210,4 +210,9 @@
 - Historical: Fiore, Liechtenauer, Vegetius, Uncharted Waters (Koei 1994).
   Convergence validated: blade useless vs plate, thrust finds gaps (STR-dep),
   blunt inverted curve. Triangle grounded in physical defense mechanics.
-- Status: PROPOSED. Needs sim validation. Large blast radius (replaces PP-232 weapon system).
+- Status: PROPOSED. Needs sim validation. Large blast radius.
+- NERS: all components pass. Half-point TN, multi-attack, triangle, STR mult, distance.
+  Pierce STR-dep vs Heavy is the only MODERATE (breaks flat-table pattern, worth it).
+- Throughlines: 9 identified (economy, fieldwork, initiative, identity, scale, distance,
+  faction equipment, high-skill play, formation). Meta: context>strategy, info>power,
+  versatility vs specialization, scale-consistent mechanics.
