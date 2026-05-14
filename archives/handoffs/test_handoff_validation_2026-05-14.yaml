@@ -19,8 +19,10 @@ owns:
 key_values:
 - This is a test handoff
 schema_version: 1
-status: active
+status: closed
 created_at: '2026-05-14T19:30:39.221065+00:00'
 updated_at: '2026-05-14T19:30:39.221093+00:00'
 created_by_session: eada0a2b76321397
 blockers: []
+closed_at: '2026-05-14T19:31:48.379343+00:00'
+closed_by_session: 9aa4ed6fddbfe951
