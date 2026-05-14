@@ -1102,3 +1102,119 @@ not GOVERNANCE_TRANSITION).
   + NERS audit)
 
 ---
+
+## Session 13 — 2026-05-13 — Module 12 (Faction integration — last functional module)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/provincial/faction_layer_v30.md` §1 Stability Triggers,
+  §9 CI Formula — NEW canonical source for this sim
+- `designs/provincial/ci_political_v30.md` §3 CI as Political Legitimacy
+  — NEW canonical source
+- `designs/provincial/mass_battle_v30.md` §E.1+§E.2 Battle Consequences
+  — NEW canonical source
+- Plus cumulative sources for sim_gate ledger verification.
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_12_faction_integration.py`
+
+**Isolation tests:** 40/40 PASS (T1 through T40).
+
+**[DECISION] Closes the last two prior-unbound primary throughlines AND
+the last prior-unbound primary meta-throughline.**
+
+Throughline closures:
+- T-21 Thread Political Warfare PRIMARY. The faction Mandate / Stability
+  mechanics IS the political warfare layer T-21 names. M12 wires §1
+  Stability triggers (territorial occupation -1, capital territories
+  -2/-3 double-magnitude, Suppress-failure named exception) + §9 CI
+  formula (institutional momentum +1, Baralta structural -1 at Mandate
+  >=4, seasonal caps ±3/±5) + §3.2 CI bonus dice + §3.3 Mandate
+  reduction as the canonical mechanism.
+- T-24 Convergence as Crisis PRIMARY. Multiple Stability triggers
+  converging in one season produce emergent crisis. T40 validates the
+  canonical Stability cascade per §1.2 note '>=2 attribute losses in
+  one season': Crown at Stability 4 sustains capital formal loss
+  (-3 -> 1) plus Suppress failure (-1 -> 0 eliminated). The cascade
+  emerges from atomic trigger composition, not from a dedicated
+  controller object.
+
+Meta-throughline closure:
+- М-6 CHOICE IS FORCED now PRIMARY at sim level. Previously unbound
+  across all 11 prior modules (only secondary in M7/M8/M11). M12 binds
+  via capital-territory double-magnitude penalty plus Suppress-failure
+  named exception that force canonical choice architecture. T39
+  validates the sovereignty-vs-survival forced choice.
+- Note: character-layer T-12 Practitioner Arc, T-13 Certainty Journey,
+  T-17 Companion Moral Mirror remain outside settlement-management
+  sim scope. M12 binds М-6 at the *institutional choice* layer, which
+  is the canonical sim-scope binding. Character-layer M-6 belongs in
+  a different sim.
+
+ALL 7 PRIMARY META-THROUGHLINES NOW PRIMARY-BOUND:
+- М-1 PRESSURE IS CONTINUOUS — M9
+- М-2 GEOGRAPHY HOLDS PRESSURE — M2, M7
+- М-3 SUBSTRATE GROUNDS ALL — M1, M2, M6
+- М-4 INSTITUTIONS STAKE POSTURES — M3, M4, M5, M11, M12 (strongest)
+- М-5 SCALES CONNECT — M5, M8, M11
+- М-6 CHOICE IS FORCED — M12 (NEWLY BOUND)
+- М-7 BORROWINGS OPERATIONAL EXTENSIONS — M10
+
+**[VALIDATION] T38 — Emergent M9 + M12 MS composition.**
+M9 year-decay tick (72 -> 71) + M12 Campaign battle penalty (71 -> 69)
+compose naturally. Both functions mutate the same clock_state.ms;
+composition emerges from shared state, not authored coordination.
+
+**[VALIDATION] T39 — Forced-choice capital-territory mechanism.**
+Same apply_stability_trigger function called with is_capital=False
+produces -1 Stability; called with is_capital=True produces -2. The
+doubled penalty IS the forced-choice mechanism the canon prose
+describes — a faction with limited military cannot defend both capital
+and non-capital territories optimally; defending capital is mandatory
+because the penalty for losing it is double-magnitude.
+
+**[VALIDATION] T40 — Convergence-as-crisis cascade.**
+T-24 canonical: 'multiple throughlines intersecting at various scales
+produce emergent crisis.' Crown at Stability 4 sustains two triggers
+in one season -> Stability 0 -> eliminated. The cascade is atomic
+trigger composition; no cascade controller exists. This is the
+strongest M-6/T-24 binding test.
+
+**[DECISION] bind_faction_standing_delta() canonicalizes signal binding.**
+M3-M11 ActionResult.faction_standing_delta is a coarse +/-N signal.
+M12 binds these to canonical FactionDeltaBinding(mandate, influence,
+stability). Mapping:
+  0 -> neutral
+  +1 -> Influence +1
+  +2 -> Mandate +1, Influence +1
+  +N>2 -> Mandate +(N-1), Influence +1
+  -1 -> Influence -1
+  -2 -> Influence -1, Stability -1 (governance crisis)
+  -N<-2 -> Influence -1, Stability +(N+1) (severe penalty)
+Module 13 integration runner consumes this to translate ActionResult
+signals into faction-stat-sheet mutations.
+
+**[FINDING] No new findings this session.** Three fresh canonical
+sources fetched at full depth (faction_layer_v30, ci_political_v30,
+mass_battle_v30); all canonical values match stated form. The
+faction-layer / CI / battle-consequence surface is well-maintained
+relative to the settlement-layer surface where 7 type-taxonomy drifts
+and 5 documentation drifts have accumulated.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with ~246
+ledger entries verified, 11 sources cited; commit_message ok;
+sim_fabrication_check ok; forbidden_token ok; pre_commit_gate ok;
+safe_commit ok.
+
+**Retries this session:** zero functional; standard docstring->comment
+conversions for fab compliance (bare T-NN / Module-NN digits in
+docstrings + canonical comments on test scalars).
+
+**Cumulative status after M12 — last functional module:**
+- 12 modules verified; 377 isolation tests; ~246 ledger entries
+- 18 findings (1 resolved, 1 partial, 16 open) — no new this session
+- 20 distinct throughlines bound across 12 modules
+- ALL 7 primary meta-throughlines now primary-bound
+- 1 module remaining: M13 (integration runner + NERS audit)
+
+---

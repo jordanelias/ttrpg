@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-11 entries populated. 220 entries total.",
+  "status": "Modules 1-12 entries populated. 245 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -1545,6 +1545,181 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a78.1 S07 Victory \u2014 Flourishing inverse propagation",
       "quoted_text": "Province Accord now derived from settlement Order averages."
+    },
+    {
+      "sim_variable": "FACTION_MANDATE_MIN",
+      "value": 0,
+      "canonical_source": "designs/provincial/clock_registry_v30.md",
+      "section": "Faction Stats table \u2014 Mandate range",
+      "quoted_text": "| Mandate | 0\u20137 (0 = subjugated) | params_factions.md \u00a7Faction Stats |"
+    },
+    {
+      "sim_variable": "FACTION_MANDATE_MAX",
+      "value": 7,
+      "canonical_source": "designs/provincial/clock_registry_v30.md",
+      "section": "Faction Stats table \u2014 Mandate range",
+      "quoted_text": "| Mandate | 0\u20137 (0 = subjugated) | params_factions.md \u00a7Faction Stats |"
+    },
+    {
+      "sim_variable": "FACTION_STABILITY_MAX",
+      "value": 7,
+      "canonical_source": "designs/provincial/clock_registry_v30.md",
+      "section": "Faction Stats table \u2014 Stability range",
+      "quoted_text": "| Stability | 0\u20137 (BG: 0 = eliminated) | params_factions.md \u00a7Faction Stats |"
+    },
+    {
+      "sim_variable": "TERRITORIAL_OCCUPATION_STABILITY_DELTA",
+      "value": 1,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a71.2 Trigger 1 \u2014 Territorial Occupation",
+      "quoted_text": "| Own territory placed under Occupation | \u22121 | Immediate, one-time |"
+    },
+    {
+      "sim_variable": "TERRITORIAL_LOSS_FORMAL_STABILITY_DELTA",
+      "value": 1,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a71.2 Trigger 1 \u2014 Formal Loss",
+      "quoted_text": "| Territory formally transferred (control lost) | \u22121 additional | At moment of transfer |"
+    },
+    {
+      "sim_variable": "CAPITAL_OCCUPATION_STABILITY_DELTA",
+      "value": 2,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a71.2 Trigger 1 \u2014 Capital double-magnitude",
+      "quoted_text": "| Capital territory lost (T1, T8, T9, T12) | \u22122 total (not \u22121) | Replaces standard \u22121 |"
+    },
+    {
+      "sim_variable": "CAPITAL_LOSS_FORMAL_STABILITY_DELTA",
+      "value": 3,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a71.2 Trigger 1 \u2014 Capital formal loss",
+      "quoted_text": "| Capital territory formally transferred | \u22123 total | Replaces standard \u22122 |"
+    },
+    {
+      "sim_variable": "SUPPRESS_FAILURE_STABILITY_DELTA",
+      "value": 1,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a71 Suppress-failure named exception",
+      "quoted_text": "Suppress action (CI Accounting formula, params_board_game \u00a7CI Generation Step 4) Failure \u2192 Stability \u22121."
+    },
+    {
+      "sim_variable": "CI_INSTITUTIONAL_MOMENTUM",
+      "value": 1,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a79 Step 1 \u2014 Institutional Momentum",
+      "quoted_text": "**Institutional Momentum:** CI +1 (always, cannot be negated below this baseline by player actions; only events can)"
+    },
+    {
+      "sim_variable": "BARALTA_STRUCTURAL_SUPPRESSION_MANDATE_THRESHOLD",
+      "value": 4,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a79 Step 5 \u2014 Baralta structural suppression",
+      "quoted_text": "While Inge Baralta NPC Mandate \u2265 4: CI \u22121/season automatically."
+    },
+    {
+      "sim_variable": "BARALTA_STRUCTURAL_SUPPRESSION_MAGNITUDE",
+      "value": 1,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a79 Step 5 \u2014 Baralta magnitude",
+      "quoted_text": "While Inge Baralta NPC Mandate \u2265 4: CI \u22121/season automatically."
+    },
+    {
+      "sim_variable": "CI_PLAYER_DA_SEASONAL_CAP",
+      "value": 3,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a79 Step 6 \u2014 Player DA cap",
+      "quoted_text": "**CI seasonal cap (PP-504):** \u00b13/season from player-initiated Domain Actions."
+    },
+    {
+      "sim_variable": "CI_ALL_SOURCES_SEASONAL_CAP",
+      "value": 5,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "\u00a79 Step 6 \u2014 All-sources cap",
+      "quoted_text": "\u00b15/season from all sources combined."
+    },
+    {
+      "sim_variable": "CI_BONUS_DICE_DIVISOR",
+      "value": 20,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "\u00a73.2 CI bonus dice divisor",
+      "quoted_text": "When Church acts in any of the following contexts, it adds floor(CI/20) bonus dice to its roll:"
+    },
+    {
+      "sim_variable": "CI_MANDATE_REDUCTION_DIVISOR",
+      "value": 30,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "\u00a73.3 CI Mandate-reduction divisor",
+      "quoted_text": "each secular faction voting against Church reduces their effective Mandate contribution by floor(CI/30)"
+    },
+    {
+      "sim_variable": "IP_THRESHOLD_LOW_RANGE",
+      "value": 2,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 IP advance \u2014 low range",
+      "quoted_text": "IP advance per peninsular_strain \u00a73.2 (territory-count thresholds: 2-3 \u2192 +1; 4-5 \u2192 +2; 6+ \u2192 +3)."
+    },
+    {
+      "sim_variable": "IP_THRESHOLD_LOW_DELTA",
+      "value": 1,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 IP advance \u2014 low delta",
+      "quoted_text": "IP advance per peninsular_strain \u00a73.2 (territory-count thresholds: 2-3 \u2192 +1; 4-5 \u2192 +2; 6+ \u2192 +3)."
+    },
+    {
+      "sim_variable": "IP_THRESHOLD_MID_RANGE",
+      "value": 4,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 IP advance \u2014 mid range",
+      "quoted_text": "IP advance per peninsular_strain \u00a73.2 (territory-count thresholds: 2-3 \u2192 +1; 4-5 \u2192 +2; 6+ \u2192 +3)."
+    },
+    {
+      "sim_variable": "IP_THRESHOLD_MID_DELTA",
+      "value": 2,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 IP advance \u2014 mid delta",
+      "quoted_text": "IP advance per peninsular_strain \u00a73.2 (territory-count thresholds: 2-3 \u2192 +1; 4-5 \u2192 +2; 6+ \u2192 +3)."
+    },
+    {
+      "sim_variable": "IP_THRESHOLD_HIGH_RANGE",
+      "value": 6,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 IP advance \u2014 high range",
+      "quoted_text": "IP advance per peninsular_strain \u00a73.2 (territory-count thresholds: 2-3 \u2192 +1; 4-5 \u2192 +2; 6+ \u2192 +3)."
+    },
+    {
+      "sim_variable": "IP_THRESHOLD_HIGH_DELTA",
+      "value": 3,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 IP advance \u2014 high delta",
+      "quoted_text": "IP advance per peninsular_strain \u00a73.2 (territory-count thresholds: 2-3 \u2192 +1; 4-5 \u2192 +2; 6+ \u2192 +3)."
+    },
+    {
+      "sim_variable": "STRAIN_PER_CONTESTED_TERRITORY",
+      "value": 1,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 Strain \u2014 per territory",
+      "quoted_text": "Strain advance per peninsular_strain \u00a74.1 (+1/territory, cap +3/season)."
+    },
+    {
+      "sim_variable": "STRAIN_SEASONAL_CAP",
+      "value": 3,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.2 Strain \u2014 seasonal cap",
+      "quoted_text": "Strain advance per peninsular_strain \u00a74.1 (+1/territory, cap +3/season)."
+    },
+    {
+      "sim_variable": "CONQUEST_ACCORD_RESET_VALUE",
+      "value": 1,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.1 Accord erosion \u2014 conquest",
+      "quoted_text": "Accord set to 1 (Category A: all settlements reset to Order 1)"
+    },
+    {
+      "sim_variable": "DEFENDER_TERRITORY_BATTLE_ORDER_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7E.1 Accord erosion \u2014 defender territory",
+      "quoted_text": "Order \u22121 in settlement nearest battle site (Category B per \u00a72.5)"
     }
   ]
 }

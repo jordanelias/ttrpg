@@ -173,3 +173,28 @@
 - Cross-system: systems_affected_by_module(idx) maps every M1-M11 to
   at least one §8.1 system for Module 13 audit consumption.
 - No new findings this session.
+
+
+## settlement_mgmt_stress_01 — Module 12 verified (2026-05-13)
+- Module: Faction integration + CI political pool + battle consequences
+  (faction_layer §1+§9; ci_political §3; mass_battle §E.1+§E.2)
+- File: tests/sim/settlement_mgmt_stress_01/module_12_faction_integration.py
+- Tests: 40/40 PASS (T1-T40)
+- Ledger: 26 new entries (~246 total cumulative)
+- THROUGHLINE BINDINGS: T-21 Thread Political Warfare PRIMARY (closes
+  prior-unbound primary); T-24 Convergence as Crisis PRIMARY (closes
+  second prior-unbound primary); T-08 + T-20 + T-04 EXTENSIONS.
+- META-THROUGHLINE: М-6 CHOICE IS FORCED now PRIMARY at sim level
+  (closes last prior-unbound primary meta). М-4 strongest tally
+  (5 modules).
+- ALL 7 PRIMARY META-THROUGHLINES NOW PRIMARY-BOUND.
+- T38: M9 + M12 MS-composition (year-decay + battle penalty) emerges
+  from shared clock state.
+- T39: capital-territory double-magnitude penalty validates М-6
+  forced-choice mechanism.
+- T40: Stability triggers compose into elimination cascade (capital
+  loss + Suppress failure = Stability 0). T-24 Convergence emerges
+  from atomic trigger composition.
+- bind_faction_standing_delta() canonicalizes the M3-M11 ActionResult
+  signal binding to faction-stat-sheet mutations for Module 13.
+- No new findings.
