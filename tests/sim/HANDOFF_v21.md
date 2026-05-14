@@ -48,7 +48,7 @@ Three changes to `run_battle`:
 | Rout threshold (multi-turn) | ~14.7% | ~14.7% | consistent |
 | Winner determined by dice | No (processing order) | Yes (seed 4001 flips winner) | validated |
 
-**Residual mirror bias (7.5 pts):** Structural, not processing-order. Source: grid geometry asymmetry (SIDE_A_START_ROW=16 vs SIDE_B_START_ROW=8) and advance_dir (-1 vs +1) affecting pattern orientation.
+**Mirror symmetry verified (post-commit):** The 50/42.5 split at n=40 is NOT significant (z=0.49, p=0.62). Grid geometry confirmed symmetric about row 12. No structural bias. GEO-1 closed.
 
 **Rout threshold note:** v20 handoff cited 29.7-29.8% from single-engagement math. Multi-turn mode produces ~14.7% because between-turn stamina recovery extends battles while morale erosion accumulates across turns. Consistent between v20 and v21.
 
@@ -71,7 +71,7 @@ Same as v20 handoff. All bottom-up emergent core intact. 8 imposed constants unc
 | D-3 | P2 | No multi-unit engagements | 2v1, 3v1, 2v2 not modeled. |
 | D-8 | P3 | Battery bands not recalibrated for multi-turn | Single-turn bands stale. |
 | D-10 | accepted | Pool insensitive to high casualties | By design — Command dominance axiom. |
-| GEO-1 | P3 | Residual structural grid bias | SIDE_A/B_START_ROW asymmetry + advance_dir orientation. |
+| ~~GEO-1~~ | closed | ~~Residual structural grid bias~~ | p=0.62 at n=40 — noise. Grid verified symmetric. |
 
 ---
 
@@ -91,7 +91,7 @@ Pursuit damage to close 1.4x to 2-5x winner/loser casualty ratio.
 
 ### 4. Battery band recalibration (D-8)
 
-### 5. Grid geometry symmetry (GEO-1, optional)
+### ~~5. Grid geometry symmetry (GEO-1)~~ — CLOSED, noise not bias
 
 ---
 
@@ -106,5 +106,5 @@ Pursuit damage to close 1.4x to 2-5x winner/loser casualty ratio.
 
 ---
 
-[ASSUMPTION: residual 7.5 pt mirror bias is structural (grid geometry) not processing-order — basis: bias persists regardless of argument order; v20 to v21 cut bias from 15 to 7.5 pts by eliminating centroid asymmetry]
+[ASSUMPTION: mirror is fully symmetric — basis: p=0.62 at n=40; grid verified symmetric about row 12; cell speeds identical; centroid caching eliminates processing-order bias]
 [CONFIDENCE: high — T1 generalship dominance validated; simultaneous resolution eliminates processing-order artifacts; rout threshold consistent between versions]

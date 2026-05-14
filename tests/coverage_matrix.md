@@ -14,8 +14,8 @@
   Mirror Cmd 4v4: A 50% / B 42.5% / Draw 7.5% (v20: A 55% / B 40% / D 5%).
   Cmd 7v1: 100% A wins, avg 2.0 turns. Cmd 5v3: 100% A, avg 5.3 turns.
   Rout threshold ~14.7% (consistent with v20). Winner now determined by dice variance.
-- Residual bias (7.5 pts): structural from grid geometry (SIDE_A/B_START_ROW asymmetry),
-  not processing order. Documented as GEO-1, P3.
+- Post-commit statistical test: 50/42.5 split at n=40 has p=0.62 — NOT significant.
+  Grid geometry verified symmetric. GEO-1 closed. Mirror is fully symmetric.
 - T4 simultaneous resolution: VALIDATED.
 
 ## sim_mb_06_v16 — G-3 continuous effective_size + lethality recalibration committed
