@@ -42,8 +42,8 @@ def mk_hp(end): return mk_wi(end) * (mk_mw(end) + 1)  # [canonical: designs/scen
 # [canonical: N/A — Architecture C flat stamina, replaces canonical End*5 for duels]
 def mk_stam(end): return 15 + end * 2  # [canonical: N/A — C-specific flat stamina]
 
-RATTLE_MAX = 2  # [canonical: N/A — free-rider taunt cumulative cap]
-TAUNT_CD = 2  # [canonical: N/A — taunt cooldown rounds]
+RATTLE_MAX = 1  # tuned down from 2 — cap -1D  # [canonical: N/A — free-rider taunt cumulative cap]
+TAUNT_CD = 3  # tuned up from 2 — 3-round cooldown  # [canonical: N/A — taunt cooldown rounds]
 
 def pick(prot, pool, sf, wounds, has_init, cog,  # [canonical: N/A — protocol]
          op, osf, ohf, ofd, rd, tcd, arena, rat,  # [canonical: N/A]
