@@ -1,5 +1,14 @@
 # Valoria Simulation Coverage Matrix
 
+## sim_audit_v5_to_v22 — comprehensive mechanic survival audit
+- Date: 2026-05-14
+- Scope: every mechanic v5 through v22, status in v22
+- Mode: G — diagnostic audit (no code changes)
+- Status: committed
+- Findings: 7 critical issues. Primary: LETHALITY_SCALE dropped v19 without HP-model
+  compensation (root cause of battery regression).
+
+
 ## battery_v22 — D-8 multi-turn band recalibration
 - Date: 2026-05-14
 - Scope: formation matchup battery ported from v9 to v22 multi-turn

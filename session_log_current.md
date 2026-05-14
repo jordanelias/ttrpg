@@ -1,11 +1,11 @@
 ---
 session_id: v21-sim-simultaneous
-last_stage: d8_battery_diagnosed
+last_stage: comprehensive_audit_v5_to_v22
 last_commit: (this commit)
 commits: 4
 next_action:
   skill: valoria-simulator
-  description: Next — flanking detection in resolve_engagements. Read battery_report_v22.md.
+  description: Next — fix Issue 1 (lethality calibration). Read sim_audit_v5_to_v22.md.
 blockers:
   - canonical_sources.yaml freshness stale for params/combat.md (PP-238 editorial)
 ---
