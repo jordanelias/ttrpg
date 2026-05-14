@@ -382,7 +382,7 @@ F1 ──┬→ F7
 F6 ──→ F4 (partial → resolved)
      └→ Mode-C unblock
         └→ Mode-D systematic search
-            └→ 50-seed batch validation
+            └→ 500-seed batch validation
 
 (F2, F5, F8, F9, F13, F15, F16, F17 are independent)
 ```
@@ -395,7 +395,7 @@ F6 ──→ F4 (partial → resolved)
 |---|---|---|---|---|
 | **P1** | Type-taxonomy reconciliation | F1, F7, F10, F11, F12, F14, F18 (7) | ~2 hours | NERS-S-Vertical confirmation; reduces audit-noise floor |
 | **P2** | Documentation refresh | F2, F13, F16, F17 (4) | ~1 hour | NERS-S-Horizontal confirmation |
-| **P3** | F6 Mode-C unblock | F6, F4 (2) | ~3 hours (YAML rebuild) | Mode-C, Mode-D, 50-seed batch |
+| **P3** | F6 Mode-C unblock | F6, F4 (2) | ~3 hours (YAML rebuild) | Mode-C, Mode-D, 500-seed batch |
 | **P4** | Isolated cleanup | F5, F8, F9, F15 (4) | ~1 hour | NERS-R-Lateral confirmation (F15) |
 
 **Total editorial cleanup: ~7 hours. Cleanest sequence is P1 → P2 → P3 → P4.**
@@ -445,7 +445,7 @@ For an external reviewer (or Jordan acting as reviewer) to verify the M1-M13 wor
 ### 4.8 Editorial readiness
 23. ☐ Is the P1 type-taxonomy reconciliation pass scoped correctly to close exactly 7 findings? *Verify F1+F7+F10+F11+F12+F14+F18 listed.*
 24. ☐ Are the editorial priorities (P1-P4) independent enough to execute in any order? *F4 closes with P3 only; otherwise independent.*
-25. ☐ Does completing P1-P4 leave only Mode-D systematic search + 50-seed batch as outstanding work? *Verify against current state.*
+25. ☐ Does completing P1-P4 leave only Mode-D systematic search + 500-seed batch as outstanding work? *Verify against current state.*
 
 ---
 
@@ -466,11 +466,38 @@ This handoff is complete when:
 2. ☐ Editorial P1 + P2 are complete (closes 11 findings)
 3. ☐ Editorial P3 (F6 geography YAML rebuild) is complete (unblocks Mode-C/D)
 4. ☐ Mode-D systematic 9-category exhaustive search is complete
-5. ☐ 50-seed batch validation is complete
+5. ☐ 500-seed batch validation is complete
 6. ☐ Audit reviewer checklist §4 above shows 25/25 confirmed
 7. ☐ Editorial P4 isolated cleanup is complete (closes 4 findings)
 
 **Estimated total work: ~16 hours across the remaining sessions.** ~8.5 hours NERS probes + ~7 hours editorial + remainder for Mode-D + batch.
+
+---
+
+## 6.1 — 500-seed batch — statistical envelope
+
+The batch size was upgraded from 50 to **500 seeds** for tail-frequency detection. Rationale:
+
+- **At 50 seeds:** distributional shape is visible but the 95% confidence interval on a 5%-frequency event has half-width ≈ ±6% — wider than the effect itself. Rare-tail events (faction elimination cascades, MS rupture, all-province conquest paths) are undetectable.
+- **At 500 seeds:** 95% CI on a 5%-frequency event has half-width ≈ ±2%. 1%-frequency events become detectable with ±0.9% CI. The Mode-D systematic 9-category search benefits structurally — cascade frequencies that single-digit-percent occur in canonical play become measurable.
+
+**Per-seed cost:** ~120 seasons × `integrated_season_tick` per seed. M13 T23 (single 30-year run) executes in <1 second; 500 seeds ≈ 8–10 minutes total wall-time at single-threaded Python. Negligible.
+
+**Output target:** `tests/sim/settlement_mgmt_stress_01/audits/batch_500seed_YYYY-MM-DD.md` with:
+- Per-seed final clock state (MS, CI, IP, Turmoil, Generational Shift)
+- Per-seed event-firing histogram (Famine, Revolt, Flourishing, Raid, Governance Transition counts)
+- Per-seed faction elimination counts
+- Per-seed Domain Echo chain depth distribution
+- Aggregate distributional summary (mean, median, 5th/95th percentiles)
+- Tail-event log (any seed exhibiting MS=0 rupture, total faction elimination, or other canonical-edge condition)
+
+**Seed selection:** seeds 1–500 (deterministic; reproducible). No random sub-sampling.
+
+**Acceptance criteria for batch:**
+- Mean MS at game-end within ±3 of §7.1 canonical worked value (42)
+- Mean IP at game-end within ±5 of §7.1 canonical worked value (80)
+- Zero seeds produce state-corruption errors (all post-tick invariants hold)
+- At least 1 seed exhibits each canonical tail condition (faction elimination, governance transition completion, Domain Echo 2-step chain) — confirms the simulation reaches its design envelope
 
 ---
 

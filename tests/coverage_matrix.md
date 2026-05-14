@@ -271,3 +271,16 @@
   mode progression, emergent architecture, editorial readiness).
 - No new mechanical work; document is the bridge from "structurally complete"
   to "audit-confirmed and Mode-C/D unblocked." Estimated remaining: ~16 hours.
+
+
+## settlement_mgmt_stress_01 — Handoff doc amendment 500-seed batch (2026-05-14)
+- File: tests/sim/settlement_mgmt_stress_01/HANDOFF_ners_test_plan_and_findings_audit.md
+- Amendment: Mode-G batch upgraded from 50 to 500 seeds for tail-frequency
+  detection. Added §6.1 statistical envelope subsection with rationale,
+  per-seed cost (~1s × 500 = 8-10 min wall-time), output target schema,
+  and acceptance criteria (MS mean within ±3 of canonical 42, IP within
+  ±5 of canonical 80, zero state-corruption errors, ≥1 seed reaching each
+  canonical tail condition).
+- 95% CI half-width on a 5%-event drops from ±6% (n=50) to ±2% (n=500);
+  1%-events become detectable at ±0.9% CI. Mode-D systematic 9-category
+  search benefits structurally.
