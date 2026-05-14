@@ -502,3 +502,12 @@
   H3 HS/Line 79%, H5 RF/HS 74% — higher than single-turn bands.
   Band recalibration needed for multi-turn model (design decision, not tuning).
 - Winner casualties ~23%, loser ~33%. Ratio 1.4x. Battles resolve in ~2 turns.
+
+## sim_mb_06_v18 — D-6 discipline with continuous effective_size
+- Date: 2026-05-13
+- Scope: mass combat simulation v17→v18
+- Mode: G — D-6 fix: discipline degradation at phase boundary using cumulative loss
+- Status: committed
+- Changes: discipline_check_phase hook wired into phase_boundary (after stamina, before morale).
+  Cumulative effective_size loss checked against DISCIPLINE_LOSS_THRESHOLD=1.0, asymmetric.
+  Per-tick integer-Size discipline check removed (never fired at LETHALITY_SCALE=0.10).
