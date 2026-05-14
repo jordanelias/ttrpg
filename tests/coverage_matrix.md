@@ -251,3 +251,23 @@
 - 3 decision gates: TN+damage → triangle → 2H stacking → ratify/iterate.
 - Priority 1: T1.1, T1.2, T2.1, T2.2, T2.4, T6.1 (must pass before any ratification).
 - Addresses audit issues: longsword dominance, specialist penalty, triangle calibration.
+
+
+## settlement_mgmt_stress_01 — Handoff document committed (2026-05-14)
+- File: tests/sim/settlement_mgmt_stress_01/HANDOFF_ners_test_plan_and_findings_audit.md
+- Scope: post-completion audit handoff for the structurally-complete sim.
+- NERS empirical test plan: 24 probes (one per 4-property × 6-direction cell)
+  promoting M13 subjective ratings to falsifiable experiments.
+  Per-probe spec: hypothesis, mechanical artifact, procedure, PASS/partial/FAIL
+  criteria, dependencies, execution cost. Total ~8.5 hours of empirical probes,
+  fully parallelizable, zero internal dependencies.
+- Mechanical findings log: 18 findings restated as audit-grade table with
+  evidence-file pointers, dependency graph (Mermaid), editorial-pass closure paths.
+- 4-priority editorial sequence: P1 (closes 7 type-tax-drift), P2 (closes 4
+  doc-drift), P3 (F6 unblock — closes F4 partial as side effect), P4 (4 isolated).
+  Total editorial cleanup: ~7 hours; cleanest order P1→P2→P3→P4.
+- Audit reviewer checklist: 25 yes/no items across 8 categories (architecture,
+  canonical-source compliance, throughline coverage, NERS, findings register,
+  mode progression, emergent architecture, editorial readiness).
+- No new mechanical work; document is the bridge from "structurally complete"
+  to "audit-confirmed and Mode-C/D unblocked." Estimated remaining: ~16 hours.
