@@ -16,6 +16,7 @@ owns:
 last_commit: 446b587
 created: '2026-05-14T19:41:10.250211+00:00'
 updated: '2026-05-14T19:41:10.250211+00:00'
-status: active
+status: closed
 key_values: []
 blockers: []
+closed_at: '2026-05-14T19:41:13.810547+00:00'
