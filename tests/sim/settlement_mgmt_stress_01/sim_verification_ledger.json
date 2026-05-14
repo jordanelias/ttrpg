@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-8 entries populated. 167 entries total.",
+  "status": "Modules 1-9 entries populated. 194 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -1174,6 +1174,195 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a76.3 Faction Collapse step 4",
       "quoted_text": "If the faction leader is killed or captured and no successor exists with Standing 4+, the faction dissolves."
+    },
+    {
+      "sim_variable": "MS_START",
+      "value": 72,
+      "canonical_source": "designs/provincial/clock_registry_v30.md",
+      "section": "Shared Clocks table \u2014 Mending Stability",
+      "quoted_text": "| Mending Stability (MS) | 0\u2013100 | 72 | \u2193 (decay) | params_threadwork.md \u00a7MS. Videogame-only start value. |"
+    },
+    {
+      "sim_variable": "MS_MAX",
+      "value": 100,
+      "canonical_source": "designs/provincial/clock_registry_v30.md",
+      "section": "Shared Clocks table \u2014 MS range",
+      "quoted_text": "| Mending Stability (MS) | 0\u2013100 | 72 | \u2193 (decay) | params_threadwork.md \u00a7MS. Videogame-only start value. |"
+    },
+    {
+      "sim_variable": "CI_START",
+      "value": 28,
+      "canonical_source": "designs/provincial/clock_registry_v30.md",
+      "section": "Shared Clocks table \u2014 Church Influence",
+      "quoted_text": "| Church Influence (CI) | 0\u2013100 | 28 | \u2191 | conviction_track_v30.md \u00a73 (generation), ci_political_v30.md (political effects) |"
+    },
+    {
+      "sim_variable": "IP_START",
+      "value": 20,
+      "canonical_source": "designs/provincial/clock_registry_v30.md",
+      "section": "Shared Clocks table \u2014 Institutional Pressure",
+      "quoted_text": "| Institutional Pressure (IP) | 0\u2013100 | 20 | \u2191 | peninsular_strain_v30.md \u00a74.4, params_board_game.md \u00a7IP [PROVISIONAL: ED-793 \u2014 start value 20 per staleness report item 3; verify against params_bg_core] |"
+    },
+    {
+      "sim_variable": "MS_DECAY_PER_YEAR",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Clock Recalibration \u2014 MS row",
+      "quoted_text": "| MS decay | \u22121/year baseline | \u22121/year baseline (unchanged) | MS is an existential pressure."
+    },
+    {
+      "sim_variable": "SEASONS_PER_YEAR",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 derived from '30-year game = 120 seasons'",
+      "quoted_text": "30-year game = 120 seasons"
+    },
+    {
+      "sim_variable": "CI_ACCUMULATION_CHURCH_MANDATE_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 CI row",
+      "quoted_text": "Passive +1/season if Church Mandate \u2265 3 (existing conditional). 28 start."
+    },
+    {
+      "sim_variable": "CI_PHASE_TRANSITION_THRESHOLD",
+      "value": 75,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 CI row phase transition",
+      "quoted_text": "CI caps at 75 (phase transition)"
+    },
+    {
+      "sim_variable": "IP_ACCUMULATION_SEASON_PERIOD",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 IP row \u2014 recalibrated rate",
+      "quoted_text": "+1/2 seasons baseline (halved)"
+    },
+    {
+      "sim_variable": "GENERATIONAL_SHIFT_YEARS_PER_TICK",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift",
+      "quoted_text": "Rate: +1 per 5 years of game time."
+    },
+    {
+      "sim_variable": "GENERATIONAL_SHIFT_MAX",
+      "value": 10,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift range",
+      "quoted_text": "New clock: Generational Shift (0\u201310)."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_THRESHOLD_FIRST_PENALTY",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 2",
+      "quoted_text": "Threshold 2 (Year 10): First generation leaders begin showing age."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_FIRST_ATTRIBUTE_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 2 penalty",
+      "quoted_text": "All original faction leaders: \u22121 to their highest attribute (age penalty)."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_FIRST_YEAR_MARKER",
+      "value": 10,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 2 year marker",
+      "quoted_text": "Threshold 2 (Year 10): First generation leaders begin showing age."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_THRESHOLD_SECOND_PENALTY",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 4",
+      "quoted_text": "Threshold 4 (Year 20): Second generation leaders emerge."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_SECOND_ATTRIBUTE_PENALTY",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 4 penalty",
+      "quoted_text": "Original leaders who have not been replaced are at \u22122 to highest attribute."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_SECOND_YEAR_MARKER",
+      "value": 20,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 4 year marker",
+      "quoted_text": "Threshold 4 (Year 20): Second generation leaders emerge."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_THRESHOLD_THIRD_PENALTY",
+      "value": 6,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 6",
+      "quoted_text": "Threshold 6 (Year 30): Original leaders who survive are elderly."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_THIRD_ATTRIBUTE_PENALTY",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 6 penalty",
+      "quoted_text": "\u22123 to highest attribute."
+    },
+    {
+      "sim_variable": "GEN_SHIFT_THIRD_YEAR_MARKER",
+      "value": 30,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift Threshold 6 year marker",
+      "quoted_text": "Threshold 6 (Year 30): Original leaders who survive are elderly."
+    },
+    {
+      "sim_variable": "TS_EXEMPTION_FROM_AGE_PENALTY_THRESHOLD",
+      "value": 50,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 Generational Shift TS exemption",
+      "quoted_text": "Characters (NPC or PC) with Thread Sensitivity \u2265 50 are exempt \u2014 the rendering sustains high-TS beings more robustly (metaphysical justification per P-15)."
+    },
+    {
+      "sim_variable": "INTER_FACTION_BATTLE_IP_DELTA",
+      "value": 2,
+      "canonical_source": "params/bg/clocks.md",
+      "section": "params/bg/clocks Battle Consequences",
+      "quoted_text": "Each season with inter-faction battle: IP +2."
+    },
+    {
+      "sim_variable": "BATTLE_MS_PENALTY_CAMPAIGN_WAR",
+      "value": 2,
+      "canonical_source": "params/bg/clocks.md",
+      "section": "params/bg/clocks Battle Consequences MS Campaign/War",
+      "quoted_text": "All battles on Valorian soil: MS \u22121 (MS \u22122 for Campaign/War scale)."
+    },
+    {
+      "sim_variable": "PROTEGE_DISPOSITION_THRESHOLD",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.2 Cross-generational play",
+      "quoted_text": "(a named NPC companion or officer with Disposition +4 and Standing 4+)"
+    },
+    {
+      "sim_variable": "PROTEGE_STANDING_THRESHOLD",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.2 Cross-generational play",
+      "quoted_text": "(a named NPC companion or officer with Disposition +4 and Standing 4+)"
+    },
+    {
+      "sim_variable": "_ms_at_30_year_worked",
+      "value": 42,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 MS row worked example",
+      "quoted_text": "30-year game = MS ~42 at game end (Fragile band)"
+    },
+    {
+      "sim_variable": "_ip_at_30_year_worked",
+      "value": 80,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a77.1 IP row worked example",
+      "quoted_text": "30-year game: IP ~80 (Altonian preparation, not yet invasion)"
     }
   ]
 }

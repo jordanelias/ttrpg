@@ -101,3 +101,24 @@
   Root cause: unit_a processed before unit_b in movement+resolution.
   Remaining bias: ~10% (61/35 mirror). Full fix requires true simultaneous resolution.
 - Also in v20: emergent morale erosion (dmg/(disc*cmd)), contact-proportional stamina.
+
+
+## settlement_mgmt_stress_01 — Module 9 verified (2026-05-13)
+- Module: Extended timeline + pressure clocks + Accounting hook
+  (settlement_layer §7.1, §7.2; clock_registry_v30; params/bg/clocks)
+- File: tests/sim/settlement_mgmt_stress_01/module_09_timeline.py
+- Tests: 36/36 PASS (T1-T36); T35 IS the canonical 30-year-game
+  simulation matching §7.1 prose to the integer (MS=42, IP=80, GS=6)
+- Ledger: 22 new entries (~190 total cumulative)
+- THROUGHLINE BINDINGS PRIMARY: T-04 MS Decay, T-05 CI Accumulation,
+  T-06 IP Accumulation, T-07 Turmoil; SECONDARY: T-25 Generational Arc.
+- META-THROUGHLINE: М-1 PRESSURE IS CONTINUOUS now has PRIMARY binding
+  (closes the gap M8 retroactive audit surfaced).
+- F17 NEW: clock_registry_v30 IP rate not updated to reflect §7.1
+  recalibration (still implies +1/season; §7.1 says +1/2 seasons).
+- per_season_accounting() is the canonical composition function:
+  ticks 5 clocks + advances M4 parishes + M6 transitions + M7 sieges
+  + §7.2 unmanaged-settlement decrement + M6 event sweep + M3 decade reset.
+- All 6 primary meta-throughlines now have at least secondary binding;
+  5 have primary; only М-6 remains primary-unbound (structurally
+  expected — character layer).

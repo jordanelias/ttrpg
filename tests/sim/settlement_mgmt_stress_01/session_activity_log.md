@@ -792,3 +792,130 @@ safe_commit ok.
 - 5 modules remaining before Module 13 integration runner
 
 ---
+
+## Session 10 — 2026-05-13 — Module 9 (extended timeline + clocks)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §7.1, §7.2 (PART 7 focus)
+- `designs/provincial/clock_registry_v30.md` — NEW canonical source
+  this session (Shared Clocks table)
+- `params/bg/clocks.md` — NEW canonical source this session (Clock
+  Environmental Effects + Battle Consequences)
+- `references/throughlines_meta.md` (re-consulted for T-04/T-05/T-06/T-07
+  bindings)
+- `references/throughlines_meta_infill.md` (re-consulted for М-1
+  PRESSURE IS CONTINUOUS canonical justification)
+- Other cumulative sources re-fetched for sim_gate ledger verification.
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_09_timeline.py`
+
+**Isolation tests:** 36/36 PASS (T1 through T36).
+
+**[VALIDATION] T35 — 30-year canonical simulation matches §7.1 to the
+integer.** This is the strongest bottom-up validation in the sim so far.
+Run 120 consecutive seasons through per_season_accounting():
+  - MS at game-end: 42 (matches §7.1 'MS ~42 at game end (Fragile band)')
+  - IP at game-end: 80 (matches §7.1 'IP ~80 (Altonian preparation)')
+  - Generational Shift at game-end: 6 (30/5 = 6 ticks)
+No target value hardcoded; canonical numbers emerge from primitive
+per-season tick functions composing over 120 iterations.
+
+**[DECISION] Closes the М-1 gap surfaced by M8 retroactive audit.**
+Module 9 binds:
+  - T-04 MS Decay PRIMARY (tick_ms_decay)
+  - T-05 CI Accumulation PRIMARY (tick_ci_accumulation, Mandate>=3 gate)
+  - T-06 IP Accumulation PRIMARY (tick_ip_accumulation, §7.1 recalibration)
+  - T-07 Turmoil PRIMARY (tick_turmoil, battle-gated)
+  - T-25 Generational Arc SECONDARY (tick_generational_shift + attribute_penalty)
+Meta-throughline М-1 PRESSURE IS CONTINUOUS now has PRIMARY binding.
+Updated meta-throughline tally: М-1 (1), М-2 (2), М-3 (3), М-4 (3),
+М-5 (2). Only М-6 CHOICE IS FORCED remains primary-unbound — structurally
+expected for settlement-management sim (character-layer territory).
+
+**[DECISION] per_season_accounting() is the canonical composition
+function for the sim's per-season tick.** Bottom-up emergent:
+  1. Year/5-year/decade boundary computation
+  2. 5 pressure-clock ticks (М-1 substrate)
+  3. Per-settlement advances (M4 parishes, M6 transitions, M7 sieges,
+     §7.2 unmanaged-settlement decrement)
+  4. M6 event sweep (emergent events fire from state mutations in step 3)
+  5. Decade-boundary M3 facility-expansion cap reset
+Tests T28-T32 + T36 confirm cross-module composition works correctly.
+
+**[FINDING] F17 — clock-rate drift between settlement_layer §7.1 and
+clock_registry_v30.** §7.1 explicitly recalibrates IP from +1/season to
++1/2 seasons (halved). Neither clock_registry_v30.md nor params/bg/
+clocks.md documents this recalibration. §7.1 is post-recalibration
+canonical; the other files are pre-recalibration. Editorial decision
+needed: propagate §7.1's recalibration into clock_registry, or mark
+§7.1 as governing source for rates. Joins documentation drift family
+(F2, F13, F14, F16, F17 — five surfacings now).
+
+**[AUDIT] Pattern crystallization after 9 modules:**
+Three audit-grade patterns visible across F1-F17:
+1. Type-taxonomy drift family (F1/F7/F10/F11/F12/F14): 6 surfacings.
+   §2.1 registry rebuild (PP-726) not propagated to §1.4.1, §3.2,
+   §3.3, §4.5, §5.1+adjacency §3 examples. ONE editorial pass closes
+   6 findings.
+2. Documentation drift family (F2/F13/F14/F16/F17): 5 surfacings.
+   Prose, counts, T-NN numbers, clock rates lag canonical updates.
+3. Intentional asymmetries (F8/F9): informational only.
+High-impact editorial fix: type-taxonomy reconciliation. Module 13
+NERS audit will highlight Smoothness cost of these drifts.
+
+**[ASSUMPTION] Decade boundary fires at season 40, 80, 120... — basis:**
+10 years × 4 seasons/year = 40 seasons. Module 9 computes
+  is_decade_boundary = is_year_boundary AND years_elapsed % 10 == 0
+T36 validates decade reset fires correctly after 40 seasons.
+
+**[ASSUMPTION] CI 75 phase transition canonical from §7.1 — basis:**
+§7.1 says 'CI caps at 75 (phase transition)'. Module 9 surfaces the
+constant as CI_PHASE_TRANSITION_THRESHOLD but does NOT enforce the cap
+(M9 lets CI accumulate to 100). The phase transition effects are
+Module 12's territory (Mass Seizure Declaration cascades). Module 9
+surfaces the threshold; M12 will gate the cascade.
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with 190
+ledger entries verified, 6 sources cited (now including clock_registry
+and params/bg/clocks); commit_message ok; sim_fabrication_check ok;
+forbidden_token ok; pre_commit_gate ok; safe_commit ok.
+
+**Retries this session:** zero functional retries; 2 import-path
+corrections (SiegeState and BypassState are in M7 not M6).
+
+**Cumulative status after M9:**
+- 9 modules verified; 280 isolation tests; ~190 ledger entries
+- 17 findings (1 resolved, 1 partial, 15 open)
+- 11 distinct throughlines bound + 4 faction-posture (T-11/15a/15b/15c)
+  = 15 total
+- All 6 primary meta-throughlines have at least secondary binding;
+  5 have primary; only М-6 remains primary-unbound (structurally
+  expected — character layer)
+- 4 modules remaining before Module 13 integration runner
+
+**Cumulative throughline coverage after M9 (T-NN -> Module):**
+- T-01 Everything Is Thread: M6 (primary)
+- T-04 MS Decay: **M9 PRIMARY (NEW)**
+- T-05 CI Accumulation: **M9 PRIMARY (NEW)**
+- T-06 IP Accumulation: **M9 PRIMARY (NEW)**
+- T-07 Turmoil: **M9 PRIMARY (NEW)**
+- T-08 Church Rendering Reinforcement: M4 (primary)
+- T-11/15a/15b/15c faction postures: M5
+- T-15 Player Progression: M5, M8 (primary)
+- T-18 Radiation Gradient: M1, M2
+- T-19 Southernmost Hidden Front: M2, M7
+- T-20 Two Contests: M7, M8
+- T-22 Belief Lattice: M4
+- T-23 NPC Arc Emergence: M6, M8
+- T-25 Generational Arc: M8 (substrate), **M9 secondary (clock)**
+
+**Remaining throughline gaps for Module 13:**
+- T-12 Practitioner Arc, T-13 Certainty Journey, T-14 Conviction
+  Architecture, T-17 Companion Moral Mirror — character layer, other sims.
+- T-16 Knot Propagation — Module 12 (threadwork integration).
+- T-21 Thread Political Warfare — Module 12.
+- T-24 Convergence as Crisis — Module 13 integration target.
+
+---
