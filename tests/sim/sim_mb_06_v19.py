@@ -316,21 +316,23 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
 
 
 def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """G-2: units with morale ≤ 0 rout. Pursuit damage applies.
-    [canonical: mass_battle_v30.md §A.12 — "Routing: Slow/Standard cannot fight back.
-     Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
-     Offence successes (no Defence) each turn."
-     NOTE: all sim units are Standard speed; pursuit damage applied as flat Power
-     until Speed attribute exists (G-11 cavalry).]"""
+    """Units with morale ≤ 0 rout.
+    [canonical: designs/provincial/mass_battle_v30.md §A.12 —
+     "Routing: Slow/Standard cannot fight back."
+     "Pursuit: Fast units only. Routing unit loses Size equal to pursuer net
+      Offence successes (no Defence) each turn. Recall: Command Ob 2."]
+    v19: Standard infantry cannot pursue. Pursuit is a level-2 mechanic
+    that fires at the battle-map level when a Fast unit is adjacent.
+    Morale Cascade (§A.12): friendly units in same engagement make
+    Discipline check Ob 1 on rout — modeled when multi-unit engagements exist."""
     for u, opponent in [(unit_a, unit_b), (unit_b, unit_a)]:
         if u.routed or u.broken:
             continue
         if u.morale <= 0:
             u.routed = True
-            if not opponent.routed and not opponent.broken:
-                pursuit_dmg = max(1, opponent.power)
-                u.hp = max(0, u.hp - pursuit_dmg)
-                u.recalc_size()
+            # No pursuit damage from Standard infantry (canonical: Fast only).
+            # Pursuit damage will be handled at the battle-map level (level 2)
+            # when cavalry (G-11) and multi-unit engagements (D-3) are implemented.
 
 
 def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
