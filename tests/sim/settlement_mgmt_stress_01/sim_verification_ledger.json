@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-12 entries populated. 245 entries total.",
+  "status": "Modules 1-13 verified \u2014 sim STRUCTURALLY COMPLETE. 245 entries total. M13 introduces no new mechanics; audit-only module.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {

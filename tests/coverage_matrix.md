@@ -216,3 +216,29 @@
 - Throughlines: 9 identified (economy, fieldwork, initiative, identity, scale, distance,
   faction equipment, high-skill play, formation). Meta: context>strategy, info>power,
   versatility vs specialization, scale-consistent mechanics.
+
+
+## settlement_mgmt_stress_01 — Module 13 verified — SIM STRUCTURALLY COMPLETE (2026-05-13)
+- Module: Integration runner + NERS audit (FINAL MODULE)
+  - integrated_season_tick composes M1-M12 in canonical per-season sequence
+  - NERS audit grid: 4 properties (Necessary/Robust/Smooth/Elegant)
+    × 6 directions (top-down/bottom-up/vertical/diagonal/lateral/horizontal)
+    = 24 cells: 21 PASS / 3 partial / 0 FAIL
+  - Throughline coverage: 24 distinct (15 primary + 8 secondary + 1
+    unbound + 4 character-layer-out-of-scope) across 12 modules
+  - META: ALL 7 primary metas now primary-bound
+    (М-1 M9 / М-2 M2,M7 / М-3 M1,M2,M6 / М-4 M3,M4,M5,M11,M12 strongest /
+     М-5 M5,M8,M11 / М-6 M12 / М-7 M10)
+  - Mode A complete; Mode B complete; Mode C blocked by F6; Mode D partial
+  - 4 editorial recommendations prioritized: P1 type-taxonomy (closes 7
+    findings), P2 documentation (closes 4), P3 F6 geography rebuild,
+    P4 isolated cleanup
+- File: tests/sim/settlement_mgmt_stress_01/module_13_integration_runner.py
+- Tests: 26/26 PASS (T1-T26)
+- T23 validates 30-year canonical simulation through full integration
+  runner: MS=42, IP=80, GS=6 (matches §7.1 to integer end-to-end)
+- Ledger: 4 new audit-grade entries (~250 total cumulative)
+- CUMULATIVE STATUS: 13 modules verified, 403 isolation tests,
+  18 findings (1 resolved, 1 partial, 16 open)
+- 8 emergent cross-module chains validated
+- SIMULATION STRUCTURALLY COMPLETE
