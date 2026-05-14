@@ -242,3 +242,12 @@
   18 findings (1 resolved, 1 partial, 16 open)
 - 8 emergent cross-module chains validated
 - SIMULATION STRUCTURALLY COMPLETE
+
+
+## weapon_system_v2/testing_plan — 9 phases, 23 tests
+- Date: 2026-05-13
+- Scope: Half-point TN, damage tables, multi-attack, defense triangle,
+  distance, 2H bonus, builds, crits, integration.
+- 3 decision gates: TN+damage → triangle → 2H stacking → ratify/iterate.
+- Priority 1: T1.1, T1.2, T2.1, T2.2, T2.4, T6.1 (must pass before any ratification).
+- Addresses audit issues: longsword dominance, specialist penalty, triangle calibration.
