@@ -92,3 +92,12 @@
   Throughline analysis: T1 fully emergent, T2 partially emergent (needs D-5 cascade),
   T6 validated (scale-invariant dice engine). M1/M2/M3 meta-throughlines confirmed.
   Side-A bias 1.6%/turn noted (grid symmetry issue, D-2).
+
+## sim_mb_06_v20 patches — grid symmetry + processing order bias fix
+- Date: 2026-05-13
+- Scope: grid placement bug + processing order bias
+- Changes: SIDE_A_START_ROW=16, SIDE_B_START_ROW=8 (symmetric, 4 from center).
+  Multi-turn orchestrator alternates argument order to neutralize first-arg bias.
+  Root cause: unit_a processed before unit_b in movement+resolution.
+  Remaining bias: ~10% (61/35 mirror). Full fix requires true simultaneous resolution.
+- Also in v20: emergent morale erosion (dmg/(disc*cmd)), contact-proportional stamina.

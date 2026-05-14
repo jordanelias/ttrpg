@@ -155,14 +155,15 @@ import random, math, statistics, time
 from dataclasses import dataclass, field
 from typing import List, Tuple, Optional, Dict, Set
 
-# [canonical: mass_battle_v30.md §map — Jordan design: 25×25 grid, 5-cell buffer per side]
+# [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
 BATTLEFIELD_SIZE = 25
-# [canonical: mass_battle_v30.md §units — Jordan design: 15×15 cell unit grid fits T4 pattern (9 cols wide)]
+# [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 UNIT_GRID_SIZE = 15
 BUFFER_CELLS = 5
-# [canonical: mass_battle_v30.md §deployment — Start rows place units at buffer boundary]
-SIDE_A_START_ROW = 15
-SIDE_B_START_ROW = 5
+# v20 fix: symmetric deployment. Both sides 7 rows from center (row 12).
+# [canonical: designs/provincial/mass_battle_v30.md §deployment]
+SIDE_A_START_ROW = 16  # symmetric: 4 from center
+SIDE_B_START_ROW = 8   # symmetric: 4 from center
 
 POOL_VARIANT = "C-ii"
 
@@ -1723,7 +1724,11 @@ def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
         reset_positions(unit_b, shape_b, anchor_map)
 
         # Run one engagement turn (3 phases max)
-        r = run_battle(unit_a, unit_b)
+        # v20 fix: alternate processing order to neutralize first-arg bias
+        if battle_turn % 2 == 0:
+            r = run_battle(unit_b, unit_a)  # swap order on even turns
+        else:
+            r = run_battle(unit_a, unit_b)
 
         a_loss_turn = (hp_a_before - unit_a.hp) / unit_a.hp_max if unit_a.hp_max else 0
         b_loss_turn = (hp_b_before - unit_b.hp) / unit_b.hp_max if unit_b.hp_max else 0
