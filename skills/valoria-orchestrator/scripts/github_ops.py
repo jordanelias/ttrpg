@@ -1624,7 +1624,111 @@ def write_handoff(handoff: dict, extra_additions: list = None) -> str:
         repo='ttrpg', _auth=auth,
     )
     print(f"[HANDOFF ✓] Written: {path} → {oid}")
+    print_resumption_block(hid)
     return oid
+
+
+def print_resumption_block(handoff_id: str) -> None:
+    """
+    Print a self-contained copy-paste block for resuming a handoff in a new session.
+
+    Called automatically by write_handoff(). Also callable standalone when you
+    need to regenerate the block for an existing handoff.
+
+    The printed block:
+      - bootstraps github_ops + valoria_hooks from repo
+      - calls g.load_handoff_context(handoff_id) to fetch all context_files
+      - prints a status summary (task, completed, next, key_values, blockers)
+      - does NOT start a new session log (that is the operator's decision)
+    """
+    block = f'''
+# ─────────────────────────────────────────────────────────
+# VALORIA HANDOFF RESUME — {handoff_id}
+# Paste this entire block as your first message in a new chat.
+# ─────────────────────────────────────────────────────────
+bootstrap {handoff_id}
+
+```python
+python3 - <<\'RESUME\'
+import os, sys, time, urllib.request, json, base64
+
+PAT = open(\'/mnt/project/VALORIA_PAT\').read().strip()
+os.environ[\'GITHUB_PAT\'] = PAT
+open(\'/home/claude/.valoria_pat\', \'w\').write(PAT)
+REPO = \'jordanelias/ttrpg\'
+HANDOFF_ID = \'{handoff_id}\'
+
+SCRIPTS = [
+    (\'skills/valoria-orchestrator/scripts/github_ops.py\',  \'/home/claude/github_ops.py\'),
+    (\'skills/valoria-orchestrator/scripts/valoria_hooks.py\', \'/home/claude/valoria_hooks.py\'),
+]
+for src, dst in SCRIPTS:
+    if os.path.exists(dst) and (time.time() - os.path.getmtime(dst)) < 3600:
+        continue
+    req = urllib.request.Request(
+        f\'https://api.github.com/repos/{{REPO}}/contents/{{src}}?ref=main\',
+        headers={{\'Authorization\': f\'token {{PAT}}\', \'Accept\': \'application/vnd.github.v3+json\'}}
+    )
+    with urllib.request.urlopen(req) as r:
+        open(dst, \'w\').write(base64.b64decode(json.loads(r.read())[\'content\']).decode())
+
+sys.path.insert(0, \'/home/claude\')
+import github_ops as g, valoria_hooks as h
+
+g.read_files_graphql([\'session_log_current.md\'], skip_health_check=True)
+token = h.assert_bootstrap()
+
+result = g.load_handoff_context(HANDOFF_ID)
+handoff = result[\'handoff\']
+files   = result[\'files\']
+
+print()
+print(\'=\' * 55)
+print(f\'RESUMING: {{HANDOFF_ID}}\')
+print(\'=\' * 55)
+print(f\'Task:     {{handoff["task"]["description"]}}\')
+print(f\'Skill:    {{handoff["task"]["skill"]}}\')
+ws = handoff.get(\'working_state\', {{}})
+completed  = ws.get(\'completed\',  [])
+in_progress = ws.get(\'in_progress\', [])
+next_items = ws.get(\'next\',       [])
+if completed:
+    print(\'\\nCompleted:\')
+    for item in completed:
+        print(f\'  ✓ {{item}}\')
+if in_progress:
+    print(\'\\nIn progress:\')
+    for item in in_progress:
+        print(f\'  ► {{item}}\')
+print(\'\\nNext:\')
+for i, item in enumerate(next_items, 1):
+    print(f\'  {{i}}. {{item}}\')
+kv = handoff.get(\'key_values\', [])
+if kv:
+    print(\'\\nKey values:\')
+    for item in kv:
+        print(f\'  — {{item}}\')
+blockers = handoff.get(\'blockers\', [])
+if blockers:
+    print(\'\\nBlockers:\')
+    for b in blockers:
+        print(f\'  ⚠  {{b}}\')
+last = handoff.get(\'last_commit\')
+if last:
+    print(f\'\\nLast commit: {{last}}\')
+print(f\'\\nContext loaded: {{len(files)}} file(s)\')
+missing = [cf[\'path\'] for cf in handoff.get(\'context_files\', [])
+           if cf[\'path\'] not in files]
+if missing:
+    print(f\'Missing files: {{missing}}\')
+print(\'=\' * 55)
+print(f\'Session token: {{token}}\')
+print(\'\\nContext files now in memory. Confirm task or send new instructions.\')
+print(\'=\' * 55)
+RESUME
+```'''
+
+    print(block)
 
 
 def read_all_handoffs() -> list:
