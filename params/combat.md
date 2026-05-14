@@ -189,6 +189,8 @@ Cover must be declared in Phase 1 to apply that round. GM determines physical av
 ## PP-238 — Feint full-pool
 Feint commits full Combat Pool to Offence; Defence = 0 this round. Feinting character exposed — incoming attacks resolve against Defence 0. On success: opponent −2D Defence next round only.
 
+[EDITORIAL: PP-238 contradicts PP-294 (combat_v30.md §4 L95). PP-294 says "allocate N dice (minimum 3) to Offence for the feint; remaining dice available for Defence this round." PP-294 is newer, more detailed, and produces better gameplay. Jordan directive 2026-05-13: PP-294 governs. PP-238 Defence=0 is overruled. Feint retains remaining dice for Defence. This editorial note to be resolved by updating PP-238 text to match PP-294.]
+
 ## PP-239 — Initiative tiebreaker
 Equal Attunement in Exchange 1: higher Agility acts last. If Agility also equal: GM or coin flip.
 
