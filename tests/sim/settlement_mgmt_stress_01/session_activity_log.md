@@ -1014,3 +1014,91 @@ safe_commit ok.
   M12 (faction integration), M13 (integration runner + NERS audit)
 
 ---
+
+## Session 12 — 2026-05-13 — Module 11 (Provincial Authority + Domain Echo chain)
+
+**Commit OID:** *(this commit)*
+
+**Canonical sources read at full depth this session:**
+- `designs/territory/settlement_layer_v30.md` §3.1 (Two-Tier Authority
+  Model), §3.3 (grant/revoke Domain Action mechanics), §8.1 (cross-system
+  surface — confirmed S17 Scale Transitions reads 'Governor -> Province
+  -> National as Domain Echo chain')
+- All cumulative sources re-fetched for sim_gate ledger verification.
+
+**Module file:** `tests/sim/settlement_mgmt_stress_01/module_11_provincial_authority.py`
+
+**Isolation tests:** 30/30 PASS (T1 through T30).
+
+**[DECISION] Closes M5 deferral.** M5 owned the *receive-side* of
+subnational management (mutating GovernorState when a faction is granted
+or revoked). M11 owns the *issuer-side* — the Provincial Authority
+Domain Actions per §3.3 with canonical Ob 1 (Grant) / ceil(Influence/2)
+(Revoke) and the §3.3 canonical penalty schedule on Revoke (Order -1
++ Disposition -2). issue_grant_management / issue_revoke_management
+are pure functional wrappers around M5's mutating receive-side ops.
+
+**[VALIDATION] T30 — Emergent REVOLT -> province -> national chain.**
+Crown holding 2 provinces. REVOLT at S-001 (Valorsmark): settlement-
+magnitude -2 from echo_magnitudes mapping -> province-effect step -2 ->
+national-effect step (-2 // 2) = -1 dampened by province count. The
+chain emerges from pure functional composition (settlement->province
+step composed with province->national step); no Domain Echo manager
+object. Bottom-up architecture demonstrated again.
+
+**[DECISION] M-5 SCALES CONNECT now has strongest binding via Domain
+Echo chain.** Per the canonical M-5 description and T-23 / T-26 prose,
+the Domain Echo chain IS the institutional-action-layer scale-connecting
+mechanism. M5 and M8 bound M-5 via *progression accumulation*; M11
+binds via *event propagation*. Different vectors, complementary.
+
+**[DECISION] T-26 Recursion as Setting Structure added to cumulative
+throughline coverage.** Per the canonical T-26 description: 'same
+dynamic at multiple scales'. The Domain Echo chain IS recursion-of-
+dynamic-across-scales (the same propagation pattern fires at
+settlement->province AND province->national). M11 surfaces this as
+a queryable secondary binding for Module 13 audit consumption.
+
+**[DECISION] Module-level cross-system mapping function surfaced for
+Module 13 audit.** systems_affected_by_module(idx) returns the §8.1
+systems each prior module touches. Module 13 will consume this to
+verify the sim has realized each §8.1 system-impact prediction. Remaining
+gaps to close in M12: S08 CI (only M4 binds), S15 Mass Combat (only M7).
+
+**[ASSUMPTION] Domain Echo magnitudes are canonical-aligned scalars —
+basis:** §1.3 establishes Province Accord = floor-average of settlement
+Order. M11's echo magnitudes (REVOLT -2, FAMINE -1, FLOURISHING +2,
+RAID/SIEGE -1) are calibrated against the M6 SettlementEvent semantics
++ §1.3 derivation. The specific magnitudes don't have an explicit
+canonical table; they are ledger-cited as derived from §1.3 (Accord
+derivation) and M6 event prose. Module 12 will refine if needed.
+
+**[ASSUMPTION] PA tension threshold = 3 matches M6 transition-cooldown
+pattern — basis:** §3.3 says contested management resolves via social
+contest (per social_contest_v30 §7). M11 surfaces a 3-tick threshold
+as the bridge from passive disagreement to active contested-management
+resolution. Calibration deferred to Module 12 (where social contest
+mechanics integrate).
+
+**Hook firings:** bootstrap ok; task_gate ok; sim_gate ok with ~220
+ledger entries verified, 8 sources cited; commit_message ok;
+sim_fabrication_check ok; forbidden_token ok; pre_commit_gate ok;
+safe_commit ok.
+
+**Retries this session:** zero functional; 3 enum-name fixes
+(M6 SettlementEvent: RAID_OR_SIEGE not RAID_OR_SIEGE_VULNERABILITY;
+FLOURISHING_FESTIVAL not FLOURISHING_BOOM; GOVERNANCE_TRANSITION_RM
+not GOVERNANCE_TRANSITION).
+
+**Cumulative status after M11:**
+- 11 modules verified; 337 isolation tests; ~220 ledger entries
+- 18 findings (no new this session)
+- 18 distinct throughlines bound across 11 modules
+- 5 of 6 primary meta-throughlines now primary-bound
+  (М-1 M9, М-2 M2/M7, М-3 M1/M2/M6, М-4 M3/M4/M5/M11, М-5 M5/M8/M11,
+   М-7 M10)
+- Only М-6 CHOICE IS FORCED remains primary-unbound (character-layer)
+- 2 modules remaining: M12 (faction integration), M13 (integration runner
+  + NERS audit)
+
+---

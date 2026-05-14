@@ -151,3 +151,25 @@
   closes all seven.
 - 5 of 6 primary meta-throughlines now primary-bound; only М-6
   remains primary-unbound (structurally expected — character layer).
+
+
+## settlement_mgmt_stress_01 — Module 11 verified (2026-05-13)
+- Module: Provincial Authority + Domain Echo chain + cross-system bindings
+  (settlement_layer §3.1, §3.3, §8.1 cross-system surface)
+- File: tests/sim/settlement_mgmt_stress_01/module_11_provincial_authority.py
+- Tests: 30/30 PASS (T1-T30); T30 validates emergent REVOLT->province->
+  national chain with dampening by province count (pure functional
+  composition, no Domain Echo manager object).
+- Ledger: 9 new entries (~220 total cumulative)
+- THROUGHLINE BINDINGS: T-23 mechanism wired (Domain Echo chain IS the
+  canonical "personal arc -> faction Domain Echo -> political shift"
+  mechanism); T-26 NEW (Recursion as Setting Structure); T-15 + T-20
+  extended; META: М-5 PRIMARY strongest binding (Domain Echo chain at
+  institutional-action layer); М-4 SECONDARY extension.
+- §3.3 issuer-side: grant_ob() fixed at 1; revoke_ob = ceil(Influence/2);
+  Revoke applies Order -1 + Disposition -2 per canon.
+- Closes M5 deferral: M5 owned subnational management receive-side;
+  M11 owns Provincial Authority issuer-side Domain Actions.
+- Cross-system: systems_affected_by_module(idx) maps every M1-M11 to
+  at least one §8.1 system for Module 13 audit consumption.
+- No new findings this session.

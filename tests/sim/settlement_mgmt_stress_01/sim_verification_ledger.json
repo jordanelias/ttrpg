@@ -3,7 +3,7 @@
   "scope": "custom",
   "created": "2026-05-13",
   "last_updated": "2026-05-13",
-  "status": "Modules 1-10 entries populated. 211 entries total.",
+  "status": "Modules 1-11 entries populated. 220 entries total.",
   "schema_note": "Each entry: {sim_variable, value, canonical_source, section, quoted_text}. quoted_text must literally appear in source.",
   "entries": [
     {
@@ -1482,6 +1482,69 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "\u00a78.2 What Does NOT Change",
       "quoted_text": "## \u00a78.2 What Does NOT Change"
+    },
+    {
+      "sim_variable": "GRANT_MANAGEMENT_DOMAIN_ACTION_OB",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Granting management",
+      "quoted_text": "The province faction may grant management of a settlement to a subnational faction as a Domain Action (Influence, Ob 1 \u2014 it is an administrative act, not a contested one)."
+    },
+    {
+      "sim_variable": "REVOKE_MANAGEMENT_OB_DIVISOR",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Revoking management \u2014 Ob formula",
+      "quoted_text": "The province faction may revoke subnational management as a Domain Action (Influence, Ob = subnational faction's Influence \u00f7 2, round up)."
+    },
+    {
+      "sim_variable": "REVOKE_MANAGEMENT_ORDER_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Revoking management \u2014 Order penalty",
+      "quoted_text": "Revocation costs Order \u22121 in the settlement (the population perceives institutional disruption) and Disposition \u22122 with the subnational faction's leadership."
+    },
+    {
+      "sim_variable": "REVOKE_MANAGEMENT_DISPOSITION_PENALTY",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 Revoking management \u2014 Disposition penalty",
+      "quoted_text": "Revocation costs Order \u22121 in the settlement (the population perceives institutional disruption) and Disposition \u22122 with the subnational faction's leadership."
+    },
+    {
+      "sim_variable": "_pa_domain_count",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.1 Provincial Authority row \u2014 domain count",
+      "quoted_text": "Military deployment, taxation, legal framework, Domain Actions targeting the province"
+    },
+    {
+      "sim_variable": "_sg_domain_count",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.1 Settlement Governor row \u2014 domain count",
+      "quoted_text": "Local governance (Order), economic development (Prosperity), local NPC relationships, settlement-level scene generation"
+    },
+    {
+      "sim_variable": "PA_TENSION_TRANSITION_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a73.3 contested management \u2014 derived from sustained disagreement leading to social contest",
+      "quoted_text": "If the subnational faction's interests conflict with the province faction's orders"
+    },
+    {
+      "sim_variable": "_revolt_echo_magnitude",
+      "value": -2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a78.1 S07 Victory \u2014 derived from Province Accord = settlement Order averages",
+      "quoted_text": "Province Accord now derived from settlement Order averages."
+    },
+    {
+      "sim_variable": "_flourishing_echo_magnitude",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "\u00a78.1 S07 Victory \u2014 Flourishing inverse propagation",
+      "quoted_text": "Province Accord now derived from settlement Order averages."
     }
   ]
 }
