@@ -1315,5 +1315,222 @@ P1 because §A.10 is fully canonized + mechanical + unimplemented.
 
 ---
 
+## Chunk 7 — Force Generation / Supply / Levy / Reinforcement
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+How armies come into existence and persist across battles: muster, prerequisites, experience, attrition, supply, levy restrictions, between-battle reinforcement, persistence of state. **Strategic-layer concerns that bracket mass battle.** Critical because R T-4 / T-5 / M-2 establish that force-generation depth is decisive.
+
+### R says
+
+- **T-4** — Force-generation depth determines what a faction can field. Roman manipular absorbed Cannae; Carthage couldn't replace Hannibal's army.
+- **T-5** — Institutional substrate determines force-generation menu. Macedonian sarissa-phalanx required Hellenistic kingdom; Swiss canton system produced Gewalthaufen; Mongol pastoral economy produced mounted archers.
+- **T-6** — Logistics decides what's actually fieldable. Alexander adapted per region; Roman roads enabled distance; Mongol pastoral logistics extended range.
+- **T-26** — Casualty asymmetry. Winning losses 5–15% absorbable; losing 30–60% destroys structure for years.
+- **M-2** — Institutional depth is the master variable.
+
+### C says
+
+**`mass_battle_v30 §A.13` Reinforcement:**
+- Natural: +1 Size/season.
+- Accelerated: 1 FR per Size point.
+- Max: cannot exceed original Size at creation.
+- Destroyed (Size 0): cannot restore — must raise new at full FR cost.
+- Thread effects persist across battle boundaries.
+- **PP-711:** Morale resets between battles.
+- **PP-712:** Discipline persists between battles. Recovery requires Muster. Wealth-Zero stacks.
+
+**`§A.14b` Campaign Supply:**
+- Hostile territory: −100 Treasury/season per faction (flat). Treasury 0 → Wealth −1.
+- Friendly: free.
+- Devastated (Prosperity 0): Size −1/season.
+- **Altonian exception:** Altonian Vanguard exempt in occupied; Valorian factions operating offensively pay.
+
+**`§A.14c` Levy Restriction:** Levy cannot operate offensively outside home. Defends muster territory. Can move adjacent friendly defensively. Professional+ unrestricted.
+
+**`§A.14` Battle outcome → faction:**
+- Battle on Valorian soil: MS −1 (Campaign/War: MS −2).
+- Inter-faction battle season: IP +2 + Turmoil +1.
+- Popular Uprising: MS −1, no IP / Strain.
+- Altonian battle: MS −1, no IP / Strain.
+- Territory conquered: Accord = 1.
+- Unit destroyed: Military −1 (±2/season cap).
+- Battle lost: Discipline −15.
+- Campaign defeat: Discipline −30 + Mandate −1.
+
+**`military_layer §1.4` Muster Output:**
+- Size 2 base; Power = floor(Mil/2)+1; Disc = min(Cmd, Mil ceiling).
+- Population modifier (Prosperity 1–3: +0; 4–5: +1; 6–7: +2) at Muster only.
+- Aggregation: same-type same-territory may merge at Muster (max Size 7), share lower Disc.
+
+**`military_layer §1.5` Muster Prerequisites:**
+
+| Type | Ob | Prerequisites |
+|---|---|---|
+| Levy | 1 | None |
+| Light Infantry | 1 | None |
+| Heavy Infantry | 2 | Prosperity ≥ 5 AND Wealth Ob 2 |
+| Cavalry | 3 | Prosperity ≥ 6 OR named officer Cavalry History |
+| Ranged | 2 | Named officer Ranged proficiency |
+| Artillery | 4 | Wealth Ob 4 + 1-season delay |
+| Knights Templar | Church only | Sacred Assembly (not standard Muster) |
+
+Muster success but Wealth failure → unit raised as Light Infantry.
+
+**`military_layer §1.6` Experience:** Fresh → Seasoned (+1 Power) → Veteran (+1 more, cap ceiling). Earned by surviving won/drawn battle with Size > 0. Destroyed unit loses all Experience.
+
+**`military_layer §1.7` Wealth-Zero:** HI + Cav Disc −1/Accounting at Wealth 0. Levy + LI unaffected.
+
+**`military_layer §4.2`:** Prosperity → unit quality ceiling.
+
+### S does
+
+**Nothing — force generation is strategic-layer.** Touch points:
+- No persistence between battles. PP-712 not modeled.
+- No Faction stat; Military ceiling not enforced.
+- No Experience tracking.
+- No Wealth-Zero degradation.
+- No unit class (F2.2) — Muster prerequisites cannot apply.
+- No territory awareness; Levy restriction cannot enforce.
+- `between_turn_recovery` (line 2266) is stamina-only within battle, not between battles.
+
+### Three-way comparison
+
+| Element | R | C | S | Alignment |
+|---|---|---|---|---|
+| Force-gen depth | T-4 / M-2 master | Military × Prosperity × Wealth gates | Not enforced | C↔S P3 — F7.1 |
+| Class-gated muster | T-5 institutional substrate | §1.5 (7 types) | No class (F2.2) | P3 (compounds F2.2) |
+| Experience | T-26 veterans irreplaceable | §1.6 3-step | Not modeled | **C↔S P2 — F7.2** |
+| Population → initial Size | (implicit) | §1.4 Prosperity mod | Not modeled | P3 — F7.1 |
+| Reinforcement | T-4 Roman absorption | §A.13 +1 Size + FR | Not modeled | C↔S P2 — F7.3 |
+| Destroyed → cannot restore | T-26 | §A.13 full FR cost | Not modeled | P3 — F7.3 |
+| Morale resets | (silent mass scale) | PP-711 | N/A multi-battle | — |
+| **Discipline persists** | (implicit) | PP-712 + §1.7 stacking | Not modeled | **C↔S P1 — F7.4** |
+| Wealth-Zero degradation | T-6 | §1.7 Disc −1/Acc HI+Cav | Not modeled | P3 — F7.5 |
+| Hostile-territory supply | T-6 | §A.14b −100 Treasury | Not modeled | P3 — F7.5 |
+| Devastated attrition | T-6 / Crusader | §A.14b Size −1/season | Not modeled | P3 — F7.5 |
+| Altonian exception | (no analog) | §A.14b | Not modeled | P3 — F7.5 |
+| Levy offensive restriction | T-5 feudal | §A.14c | Not modeled | **C↔S P2 — F7.6** |
+| Battle → faction cascade | (no analog) | §A.14 | Not modeled (Chunk 8) | Chunk 8 |
+| Knights Templar Sacred Assembly | (Janissary analog) | §1.5 Church-only | F2.2 carryover | P3 — F7.7 |
+
+### Bottom-up sanctity check
+
+| Element | Bottom-up? | Notes |
+|---|---|---|
+| Muster Output formula | ✓ | Composes Military primitive |
+| Muster Prerequisites by Type | ✓ if class is primitive (F2.2) | Composes class + Prosperity + Wealth |
+| Population modifier | ✓ | Composes Prosperity primitive |
+| Aggregation (merge ≤ 7) | ✓ | Composes Size + type |
+| Experience steps | ✓ | State machine |
+| Wealth-Zero | ✓ | Conditional on Faction.Wealth primitive |
+| Hostile-territory supply | ✓ | Composes territory.controller + unit.location |
+| Devastated attrition | ✓ | Composes Prosperity threshold |
+| Levy restriction | ⚠ | class.action_restrictions as primitive — defensible |
+| Altonian exception | ⚠ borderline | Faction-attribute lookup, not recognition rule — admissible |
+| Knights Templar Sacred Assembly | ⚠ | Faction-specific action — admissible as faction primitive |
+
+**Verdict:** Force-generation mechanics largely bottom-up. Faction-specific exceptions defensible as faction-primitive composition — not recognition rules. **M-9 admissibility: faction-specific exceptions are real primitives if Faction itself is real.**
+
+### Top-down historical validation
+
+| R force-gen pattern | C match? | Reproducible at bridge? |
+|---|---|---|
+| Roman manipular absorption (T-4) | ✓ §A.13 +1 Size + FR + new-muster | ✗ persistence not modeled |
+| Carthaginian veteran loss (T-26) | ✓ §1.6 + destroyed cannot restore | ✗ |
+| Macedonian phalanx requires kingdom (T-5/M-2) | ✓ Prosperity ≥ 5 + Wealth Ob 2 | ✗ |
+| Swiss canton recruitment | ~ Prosperity ≥ 5 captures urban; canton-specific absent | ✗ |
+| Mongol pastoral logistics (T-6) | ⚠ Hostile-territory yes; pastoral exception absent | ✗ |
+| Alexander adaptive supply | ⚠ Single supply rule | ✗ |
+| Crusader logistics drain | ✓ §A.14b | ✗ |
+| Feudal levy short-service | ✓ §A.14c | ✗ |
+| Janissary / Templar institutional units | ✓ §1.8 Knights Templar | ✗ |
+
+**Direction surfaced:** C canon covers force-generation primitives well. Strategic-layer implementation is required to validate — Chunk 8 bridging work. No P1 strictly in mass-battle scope except F7.4 (Discipline persistence) where canon explicitly stipulates persistence and S explicitly resets.
+
+### Lateral gameplay validation
+
+| Precedent | Muster | Class gating | Experience | Supply / attrition | Reinforcement |
+|---|---|---|---|---|---|
+| **Total War** | Recruit at building; tier per level | Building unlock per faction tech | Per-unit chevrons + officer XP | Attrition hostile/winter; supply range | Replenish friendly + recruit pool |
+| **Field of Glory II** | Per-scenario force lists | Quality by army list | None in scenarios | None | None |
+| **Ultimate General CW** | HQ + state pool | Brigade composition + officer | Per-regiment XP | Fatigue per battle | From pool |
+| **Combat Mission** | Per-scenario purchase | TO&E by date/faction | None per-scenario | Suppression / casualties | None |
+| **Mount & Blade Bannerlord** | Village + town recruitment by culture | Culture-locked tier trees | Per-soldier XP in squad | Food/morale on march | Hire villages; promote in-squad |
+| **Unicorn Overlord** | Mercenary HQ + storyline | 60+ classes by culture/quest | Per-unit class XP | Stamina + AP per encounter | Heal/revive between deployments |
+| **Football Manager** | Transfer market + youth academy + free agents | Position + role-within-position | Per-player attributes + form + condition | Fatigue + injury + sharpness | Squad rotation + sub windows + recovery |
+
+**Verdict laterally:**
+- Class-gating by faction/culture universal. C §1.5 + §A.14c validated by Bannerlord, UO, FM, TW.
+- Per-unit experience universal (except per-scenario FoG2). C §1.6 at lower granularity but structurally same. **F7.2 well-validated.**
+- **FM is the strongest persistence analog.** Form/condition/injury/sharpness persist across matches. **Lateral validator for PP-712.** Player must manage which units take which battles.
+- Bannerlord village recruitment ≈ §1.4 Population modifier.
+- TW attrition + supply range ≈ §A.14b. Validates canon.
+- UO mercenary HQ + class progression ≈ §1.5 Prerequisites.
+- **All canon mechanics in §A.13/§A.14/§1.4–§1.7 are well-grounded laterally.** Finding is implementation absence, not design.
+
+### Throughlines surfaced (Chunk 7)
+
+- **T-75 (C/R/lateral) — Force-generation depth is the master strategic-layer variable.** Military × Prosperity × Wealth × officers determines fieldable armies. R T-4/M-2 + lateral universal. C captures it in §1.5 + §4.2. Unimplemented piece: cross-system bridge (Chunk 8).
+
+- **T-76 (C/PP-712/FM lateral) — Discipline persistence across battles is the master operational-tempo variable.** Player husbands units that have taken Disc damage. **Valoria's discrete Disc (1–7) more legible than FM's continuous form.**
+
+- **T-77 (C / lateral norm) — Class-gating by faction substrate.** §1.5 = M-1 doctrine triangle as muster prerequisites. Lateral universal.
+
+- **T-78 (C unique) — Altonian / Templar exceptions are faction-primitive composition, not special-case patches.** Cleaner M-9 than "Templar shape gets +X bonus."
+
+- **T-79 (C unique) — Levy-cannot-operate-offensively is class-action restriction at strategic-tactical bridge.** §A.14c constraint at action level. Distinctive in being strictly enforced rather than mediated by morale/fatigue.
+
+- **T-80 (R T-26 / FM lateral) — Veterans are irreplaceable; experience compounds.** All precedents have XP progression. C §1.6 3-step is lower granularity than most. `[QUESTION FOR JORDAN]`: expand to 5 (Fresh/Seasoned/Veteran/Elite/Legendary)?
+
+### Findings (Chunk 7)
+
+**F7.1 — P3 (C↔S):** Faction Military ceiling, Prosperity modifier, named-officer requirements not enforced at Unit instantiation. Chunk 8 bridge.
+
+*Resolution path:* `Unit.__init__` validates `power ≤ faction.military_ceiling`, `discipline ≤ faction.military_ceiling + 1`. Requires `Faction` primitive on Unit.
+
+**F7.2 — P2 (C↔S):** Experience state not modeled.
+
+*Resolution path:* `experience: int = 0` on Unit (0/1/2). `power_effective = power_base + experience` capped at ceiling. At resolution: if won/drew AND size > 0 AND experience < 2: experience += 1. Size 0 → experience persists with destroyed marker; re-muster resets to 0.
+
+**F7.3 — P2 (C↔S):** Reinforcement (§A.13) not modeled.
+
+*Resolution path:* Chunk 8 between-battle layer. Seasonal Accounting: natural +1 Size (if not destroyed AND size < original). FR-accelerated. Destroyed list cannot restore.
+
+**F7.4 — P1 (C↔S):** PP-712 Discipline persistence between battles not modeled. **Master operational-tempo variable (T-76).** P1 because PP-712 is canonized + named + has operational consequence (Wealth-Zero stacking).
+
+*Resolution path:* At battle resolution: `unit.discipline_persisted = unit.discipline_current` (not reset). Morale resets per PP-711. Between-battle: Muster action `unit.discipline = min(unit.discipline_start, unit.discipline + recovery_steps)`. Chunk 8 bridge.
+
+**F7.5 — P3 (C↔S):** Campaign Supply (§A.14b) not modeled.
+
+*Resolution path:* Strategic Accounting: `treasury -= 100` per faction with units hostile; `unit.size -= 1` units in Prosperity-0 territory. Altonian: `faction.id == "altonia" AND territory.occupied_by_altonia: skip`. Chunk 8.
+
+**F7.6 — P2 (C↔S):** Levy offensive restriction (§A.14c) not enforced.
+
+*Resolution path:* At Battle declaration: `if unit.class.type == "Levy" AND battle.territory != unit.home_territory AND battle.purpose == "offensive": raise ValidationError`. Requires F2.2 + unit.home_territory. Chunk 8.
+
+**F7.7 — P3 (C↔S):** Knights Templar Sacred Assembly (Church-only) not modeled. Compounds F2.2.
+
+*Resolution path:* Templar appears in F2.2 class taxonomy as Church-only. `Faction.allowed_classes` includes Templar only if Church. Sacred Assembly distinct action.
+
+**F7.8 — P3 (C↔S):** Wealth-Zero (§1.7) not modeled.
+
+*Resolution path:* Seasonal Accounting: `for unit in faction.units: if faction.wealth == 0 AND unit.class.type in ["Heavy Infantry", "Cavalry"]: unit.discipline -= 1`. Compounds F7.4.
+
+**F7.9 — P3 (C↔S):** Battle outcome → faction cascade (§A.14) not modeled.
+
+*Resolution path:* On resolution emit faction-consequence events. ±2/season Military cap respected. Chunk 8.
+
+### Carried forward
+
+- **F7.1 / F7.3 / F7.5 / F7.6 / F7.7 / F7.8 / F7.9** → Chunk 8 strategic ↔ tactical bridge.
+- **F7.2 (Experience)** → unit-state primitive; implementable in S without full bridge.
+- **F7.4 (Discipline persistence)** → P1 requires bridge; partial-implementation possible via `unit.discipline_persisted` flag.
+- **T-80 (Experience granularity)** → `[QUESTION FOR JORDAN]` canon revision.
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
