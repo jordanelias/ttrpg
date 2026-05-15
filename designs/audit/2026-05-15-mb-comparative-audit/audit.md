@@ -1074,5 +1074,246 @@ Terrain types and effects; ground anchors; weather; visibility/sightline-terrain
 
 ---
 
+## Chunk 6 — Thread Integration
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+How Threadwork interfaces with mass battle: practitioner role, operation timing within phase structure, scale mapping, Coherence cost, Southernmost exclusion. Excludes thread mechanics outside mass battle (philosophical foundations, personal-scale Leap mechanics).
+
+**Framing:** R is silent on Thread (TTRPG-specific; no historical pre-firearm analog). Per project context, **Threadwork is Valoria's firearm-analog** — R T-19/T-20/T-21 (firearms as gradual-transformative ranged technology) reframed. Top-down historical validation is *analogical* — does Threadwork behave structurally like firearms?
+
+### R says (analogical, firearm-pattern)
+
+- **T-19** — Firearms emerge gradually; not a discrete revolution. Crossbow → arquebus → musket overlap with bow and pike for decades.
+- **T-20** — Firearms force formation change: tighter ranks, then pike+shot composite, then linear tactics post-bayonet.
+- **T-21** — Firearms enable defensive parity: Pavia (arquebus from cover stops Swiss pike), Panipat (firearm + wagons defeat outnumbering cavalry).
+- **Reconstructions involving firearm-analog phase**: Pavia 1525 (Tercio precursor), Marignano 1515 (artillery + arquebus stop pike), Panipat 1526 (tulughma + matchlocks).
+- **M-1 application** — Doctrine triangle: firearm doctrine arises from substrate (Italian mercenary, Mughal logistics) and is opposed by adversaries whose existing doctrine is undermined.
+
+Analogue claim: Threadwork in Valoria should produce the same structural pattern — gradual adoption, formation viability change, defensive-parity moments, doctrinal substrate dependency.
+
+### C says
+
+**`mass_battle_v30 §A.10` — Thread Operations in Mass Battle:**
+
+| Battle scale | Thread scale | Min TS | Thread Ob | Coherence auto-cost |
+|---|---|---|---|---|
+| Skirmish | Personal | 30 | 2 | 0 |
+| Company | Object | 30 | 1 | 0 |
+| Battle | Territorial | 50 | 4 | −1/op |
+| Campaign | Territorial | 50 | 4 | −1/op |
+| War | Structural | 70 | 5 | −2/op |
+
+**Coherence depletion (PP-501):** Practitioner operating every turn of 7-turn battle loses 7 Coherence (10 → 3, Dissonant). ≥9 ops from full → Severance (Coherence 1).
+
+**Diagnosis Phase 1; Leap Phase 4 (rear) or Phase 5 (front-line) per PP-101.**
+
+**Combat-type ops:** Phase 4, no Defence allocation unless embedded Threadweaver present. Counter = contested per §2.6.
+
+**Non-combat ops:** Phase 5 or 6.
+
+**Command cost:** General who Threadweaves cannot declare a tactical action that turn. **Hard tradeoff (T-71).**
+
+**Co-movement at mass-battle scale:** Temporal: lose Phase 5 d3 turns. Epistemic: Cmd −1 d3 turns. Actual: 1 Wound.
+
+**Collective operations:** Helpers in Reserve (compounds F2.4 absence). 1 Coherence per helper per op.
+
+**Devout general:** Cannot Threadweave, cannot counter. Enemy embedded Threadweavers operate freely against Devout-led units.
+
+**Severed general (Coherence 1):** +2 Ob all ops. Dissociative episode = lose Phase 5 that turn.
+
+**First Leap during battle:** Resolves Phase 6. Failed (Dissociation) → character unavailable rest of battle.
+
+**Thread Gaps from battle:** Registered on territory card at battle resolution (Chunk 8 bridge).
+
+**`threadwork_v30 §2.4` — Five Operation Types:**
+
+| Op | Scale | TN | Min TS | Failure |
+|---|---|---|---|---|
+| Weave (Cohere) | varies | 7 | 30+ | MS −2, Coherence −1; MS ≤40 = Shifting Object; MS ≤20 = Gap |
+| Pull (Open) | varies | 7 / 8 (POP) | 30+ | 1 Wound, MS −2, Coherence −1 |
+| Lock (Unable to Become) | varies | 8 | 50+ | 2 Wounds, MS −3, adjacent +1 Ob remainder of season |
+| Dissolve (Unable to Be) | varies | 8 | 50+ | **Full Gap tears open, MS −8, Monstrous Incursion immediately, practitioner Incapacitated** |
+| Mend | Gap severity | 7 | 50+ | MS −2; Mending never costs Coherence (substrate alignment) |
+
+**`threadwork_v30 §2.6` Opposing Operations:**
+- Engagement modifier: each practitioner's Ob += floor(opp TPS / 2), min +1.
+- 6-row resolution table by both-side degree.
+- N-way (3+ practitioners, ≥2 opposing): lattice collapse. All ops fail. Gap forms. MS −(2 × n_opposing).
+
+**`threadwork_v30 §3.2` Coherence Reduction:**
+
+| Source | Coherence |
+|---|---|
+| Object / Personal | 0 |
+| Relational / Territorial | −1 |
+| Structural | −2 |
+| FR Lock/Dissolution | −1 additional (exempt from cap, PP-196) |
+| Past-Oriented Pulling | −1 additional |
+| Mending | −1 |
+| Per-op cap | −1 (excluding FR surcharge) |
+
+**`mass_battle_v30 §A.11` — Southernmost:** TS < 30 units **dissolve on entry without awareness** — no casualties, no Morale trigger, no Discipline check. Remove from battle map. Per PP-MB-06 / PP-703: unit Size reduced proportional to TS ≥ 30 fraction (40% TS-capable enters at 40% Size). **No conventional army can operate in Southernmost.** Only Restoration communities and all-TS-30+ expeditions are viable.
+
+### S does
+
+**Nothing for Thread.** `threadwork_check` (line 412) empty hook. No `practitioner` / Coherence / TS / Diagnosis / Leap / contested resolution / MS / Gap registration / Southernmost.
+
+**Largest unimplemented canon system in S after F5.1 terrain.**
+
+### Three-way comparison
+
+| Element | R (firearm-analog) | C | S | Alignment |
+|---|---|---|---|---|
+| Practitioner as battle role | T-19 firearm-adopter | §A.10 + §A.5 general can Threadweave | No `practitioner` field | **P1 — F6.1** |
+| Battle ↔ Thread scale mapping | (analog) | §A.10 table | Not implemented | **P1 — F6.1** |
+| Coherence depletion | (analog: practitioner endurance) | PP-501 per-op | Not modeled | **P1 — F6.1** |
+| Diagnosis Phase 1 | (analog: sight before fire) | §A.10 | Not modeled | P1 — F6.1 |
+| Leap Phase 4/5 by positioning | (analog: ranged positioning) | §A.10 PP-101 | Not modeled | P1 — F6.1 |
+| Combat-type Phase 4 no Defence | (analog: pre-melee volley) | §A.10 | Not modeled | P1 — F6.1 |
+| Threadweave OR tactic | (analog: leader tradeoff) | §A.10 hard tradeoff | Not modeled | **P1 — F6.2** master gameplay primitive |
+| Co-movement at mass scale | (no analog) | §A.10 table | Not modeled | P2 — F6.3 |
+| Collective operations | (analog: massed volley) | §A.10 Reserve helpers | Not modeled (compounds F2.4) | P2 — F6.4 |
+| Devout general restriction | (no analog) | §A.10 | Not modeled | P3 — F6.5 |
+| Severed general penalty | (analog: shell-shock) | §A.10 +2 Ob | Not modeled | P3 — F6.5 |
+| First Leap during battle | (no analog) | §A.10 Phase 6 | Not modeled | P3 — F6.5 |
+| Thread Gaps registered | (analog: aftermath) | §A.10 → territory | Not modeled (Chunk 8) | P2 — F6.6 |
+| Contested thread resolution | (analog: counter-battery) | §2.6 contest table | Not modeled | **P1 — F6.7** |
+| Op types (W/P/L/D/M) | (analog: shoot/suppress/destroy/repair) | §2.4 five types | Not modeled | P1 — F6.1 |
+| MS tracking | (no analog) | Per-op modifier + thresholds | Not modeled | P2 — F6.8 |
+| Southernmost exclusion | (analog: terrain-class restriction) | §A.11 TS<30 dissolves | Not modeled | **P2 — F6.9** |
+
+### Bottom-up sanctity check
+
+| Element | Bottom-up? | Notes |
+|---|---|---|
+| Practitioner as Unit attribute | ✓ | TS, Coherence, History as state primitives |
+| Coherence as state primitive | ✓ | Per-practitioner state; PP-501 = per-op decrement |
+| Battle ↔ Thread scale mapping | ⚠ | Table mapping borderline; could be threshold-function primitive |
+| Diagnosis Phase 1 declaration | ✓ | Phase-boundary declarative action like §A.8 tactics |
+| Leap Phase 4/5 by positioning | ✓ | Cell-position primitive |
+| Combat-type no Defence | ⚠ | Special case rule; defensible via "contested only if embedded Threadweaver" |
+| Co-movement table | ⚠ | Discrete outcome table; defensible as roll-driven primitive |
+| MS as state | ✓ | Per-territory or per-zone primitive |
+| Southernmost as terrain primitive | ✓ | Part of F5.1 ground_type extension |
+| Contested §2.6 | ✓ | Two-pool contest + outcome table — same pattern as opposed tactics |
+
+**Verdict:** Threadwork integration mechanics largely bottom-up sanctified in canon. Two borderline cases defensible. S having zero implementation is the gap, not the design.
+
+### Top-down historical validation (firearm-analog)
+
+| R firearm pattern | C canon match? | S reproducible? |
+|---|---|---|
+| **Gradual adoption** (T-19) | ✓ TS gating (30/50/70) + practitioner rarity | ✗ |
+| **Formation viability change** (T-20) | ⚠ Implicit via Volley + future Thread-volley analog | ✗ |
+| **Defensive parity** (T-21) | ⚠ Implicit via territory-scale Ob + Coherence cost | ✗ |
+| **Doctrinal substrate dependency** (M-1) | ⚠ Implicit via Military × practitioner availability | ✗ |
+| **Range threat changes geometry** | (analog: Diagnosis-to-Leap arc) | ✗ |
+| **Integration with conventional** | (analog: practitioner + non-practitioner in same army) | ✗ |
+
+**Direction surfaced:** Threadwork-as-firearm-analog is **structurally aligned in canon design intent but mechanically unimplemented in S**. Prioritize gradual-adoption + doctrinal-substrate; formation-viability + defensive-parity emerge from these.
+
+### Lateral gameplay validation
+
+| Precedent | Magic-as-system | Caster role | Cost analog | Counter-magic |
+|---|---|---|---|---|
+| **Total War: Warhammer** | Wind of Magic resource pool; spells per turn; lores per faction | Wizards on heroes / lord mounts; spell radius | Wind of Magic depletes/refills | Dispel Scroll + Wizard counter-cast |
+| **King Arthur** (Neocore) | Battle spells alongside units | Hero unit; spell radius | Mana refresh per battle | Limited |
+| **Heroes of Might & Magic III/V** | Hero casts 1 spell/turn in tactical | Hero off-field, casts from edge | Spell points | Anti-magic items |
+| **Unicorn Overlord** | Magic-user classes with active skills | Per-unit class + positioning | AP per skill; refresh per encounter | Magic-resistance gear |
+| **Stormgate / SC2** | RTS active abilities | Per-unit ability + cooldown | Mana/energy + cooldown | Counter-units, EMP |
+| **Football Manager** | N/A | N/A | N/A | N/A |
+| **Field of Glory II** | N/A | N/A | N/A | N/A |
+
+**Verdict laterally:**
+- **TW:Warhammer is the closest mass-scale lateral.** Wind of Magic ≈ Coherence; lores ≈ operation types; wizard radius ≈ practitioner range; Dispel Scrolls ≈ §2.6 contested. **Strong lateral validation of canon design.**
+- **UO is the strongest analog for operation-type axis.** Per-class skills with AP cost + cooldown ≈ §2.4 ops with Coherence cost + per-op cap.
+- **Battle-level vs persistent Coherence is a Valoria signature.** All precedents reset per encounter. Valoria's Coherence persists across battles/seasons, bottoming to Rendering Crisis (NPC conversion). **Practitioner-as-finite-resource economy. Distinctive.**
+- **Devout-general restriction has no lateral analog at this severity.** Closest: TW:Warhammer Witch Hunters; UO class-locks.
+- **Southernmost (§A.11) has no lateral analog** at this severity (TS < 30 → dissolve). Valoria-distinctive.
+- **Mending Stability as world-track** — closest: TW:Warhammer 3 Realm of Chaos rifts. Valoria-original.
+
+### Throughlines surfaced (Chunk 6)
+
+- **T-69 (R-analog / C / lateral) — Threadwork as firearm-analog is structurally coherent in canon design intent.** TS thresholds (30/50/70) provide gradual-adoption gate. Coherence cost provides use-economy gate. Faction Military × practitioner availability provides doctrinal-substrate gate. §A.10 timing provides in-battle integration gate. **Canon design passes T-19/T-20/T-21 analogical validation.**
+
+- **T-70 (C / TW:Warhammer lateral) — Persistent Coherence is a Valoria-distinctive design.** All mass-scale magic precedents reset resource per encounter. Coherence depletes per op, recovers across seasons, bottoms to NPC conversion. Creates **practitioner-as-finite-resource economy** with strategic husband-the-practitioner imperative.
+
+- **T-71 (C §A.10) — Threadweave-OR-tactic per turn (PP-501) is the master gameplay-decision primitive.** Single most consequential rule. General chooses: declare tactic (F2.6) OR Threadweave. Not both. **Tactical-vs-magical opportunity cost.** Lateral closest: HoMM's one-spell-per-turn.
+
+- **T-72 (C) — Devout general is the canon "no-Thread doctrine" alternative.** Solves M-1 doctrine-triangle for anti-Thread substrates (Church). Mechanically: full tactical capacity, zero Thread defence. Counter to lateral "everyone-has-a-wizard" norm.
+
+- **T-73 (C / R-analog) — Southernmost is the canon "no-army terrain class."** No firearm analog (firearms had no no-go terrain). §A.11 hard-excludes non-TS armies. Strategic-layer asymmetry from tactical rule.
+
+- **T-74 (C §2.6) — Contested intentionality produces emergent counter-magic.** Two-pool engagement with TPS-based modifier, full ops with degree tables on both sides. **Lateral distinct from TW's instant Dispel.**
+
+### Findings (Chunk 6)
+
+**F6.1 — P1 (C↔S):** Threadwork integration entirely absent from S. `threadwork_check` empty. All §A.10 + §A.11 + §2.4 + §2.6 + §3.2 unimplemented.
+
+*Resolution path (bottom-up, staged):*
+
+Stage 1 — Practitioner primitives: `Practitioner(thread_sensitivity, coherence=10, history, thread_pool_score, is_devout)`. `practitioner: Optional[Practitioner]` on Unit.
+
+Stage 2 — Phase-integration: Phase 1 declaration; Phase 4 combat ops (no Defence unless embedded); Phase 5/6 non-combat ops; Cascade Phase Coherence decrement.
+
+Stage 3 — Battle ↔ Thread scale mapping per §A.10 table.
+
+Stage 4 — Contested resolution (§2.6) when both sides have embedded practitioners.
+
+Stage 5 — Persistence: Coherence across battles; Gap registration to territory (Chunk 8).
+
+P1 because §A.10 is fully canonized + mechanical + unimplemented.
+
+**F6.2 — P1 (C↔S):** Threadweave-or-tactic hard tradeoff (PP-501) not modeled. Master gameplay-decision primitive (T-71).
+
+*Resolution path:* `general_action_this_turn: Literal["tactic", "thread", None]` on Unit; second declaration raises validation error.
+
+**F6.3 — P2 (C↔S):** Co-movement at mass-battle scale (§A.10) not modeled.
+
+*Resolution path:* `co_movement_check(practitioner)` per §2.6 outcomes. d3 → suspend Phase 5 action; Cmd −1 for duration; general_wounds += 1.
+
+**F6.4 — P2 (C↔S):** Collective operations require Reserve helpers. Compounds F1.1/F2.4.
+
+*Resolution path:* Block on F2.4. Once Reserve exists: `collective_op(primary, helpers)` validates all helpers `combat_mode == "Reserve"` AND have practitioner.
+
+**F6.5 — P3 (C↔S):** Edge cases — Devout (block Threadweave), Severed (+2 Ob, dissociative), First Leap during battle.
+
+*Resolution path:* Boolean flags + state machine.
+
+**F6.6 — P2 (C↔S):** Gap registration at battle resolution. Per EDGE-05.
+
+*Resolution path:* On battle resolution, emit Gap events to territory layer. Deferred to Chunk 8.
+
+**F6.7 — P1 (C↔S):** Contested thread resolution (§2.6) not modeled. Without this, defensive parity (T-21 analog) impossible.
+
+*Resolution path:* When both engagement-pair Units have embedded practitioners: contested resolution fires; both roll pool against Ob + engagement-modifier (floor(opp TPS/2), min 1). 6-row outcome table per §2.6.
+
+**F6.8 — P2 (C↔S):** Mending Stability tracking not modeled. Required for all op outcomes.
+
+*Resolution path:* `mending_stability: int` at battle/territory layer (Chunk 8). Per-op MS deltas. Thresholds: MS ≤ 40 = Shifting Object risk; MS ≤ 20 = Gap risk.
+
+**F6.9 — P2 (C↔S):** Southernmost exclusion (§A.11) not modeled. Cross-layer with F5.1.
+
+*Resolution path:* On Unit entry to Southernmost cell: `ts_30_fraction = count(soldiers TS ≥ 30) / total_size`. `effective_size *= ts_30_fraction` round down. Soldiers without TS dissolve — no Morale, no Discipline (canon explicit).
+
+**F6.10 — P3 (C↔S):** Three-axis Ob system (params_threadwork.md) referenced but not fetched.
+
+*Resolution path:* `[GAP: three-axis Ob system specifics — Chunk 12 cleanup.]` Fetch params_threadwork.md and verify before Stage 2 implementation.
+
+### Carried forward
+
+- **F6.1 (basic integration)** → blocks all Thread v26+ work. Largest canon→sim drift after F5.1.
+- **F6.2 (Threadweave-or-tactic)** → master gameplay-decision primitive.
+- **F6.4 (Collective)** → blocked on F2.4 Reserve.
+- **F6.6 (Gap registration)** → Chunk 8 strategic bridge.
+- **F6.8 (MS tracking)** → Chunk 8 territory layer.
+- **F6.9 (Southernmost)** → cross-layer F5.1.
+- **F6.10 (three-axis Ob)** → Chunk 12 verification.
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
