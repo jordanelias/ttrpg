@@ -1,0 +1,132 @@
+{
+  "sim_file": "mc_v13.py",
+  "scope": "strategic",
+  "entries": [
+    {
+      "sim_variable": "LEGITIMACY_MULTIPLIER",
+      "value": 20,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78 Faction Scale",
+      "quoted_text": "Mandate \u00d7 20, starting = stat \u00d7 20"
+    },
+    {
+      "sim_variable": "DISCIPLINE_MULTIPLIER",
+      "value": 10,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78 Faction Scale",
+      "quoted_text": "Stability \u00d7 10, starting = stat \u00d7 10"
+    },
+    {
+      "sim_variable": "TREASURY_MULTIPLIER",
+      "value": 100,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78 Faction Scale",
+      "quoted_text": "Wealth \u00d7 100, starting = stat \u00d7 100"
+    },
+    {
+      "sim_variable": "REPUTATION_MULTIPLIER",
+      "value": 15,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78 Faction Scale",
+      "quoted_text": "Influence \u00d7 15, starting = stat \u00d7 15"
+    },
+    {
+      "sim_variable": "DISCIPLINE_PEACEFUL_INCOME",
+      "value": 10,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Discipline",
+      "quoted_text": "Seasonal income: +10 per peaceful season"
+    },
+    {
+      "sim_variable": "DISCIPLINE_GOVERN_INCOME",
+      "value": 5,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Discipline",
+      "quoted_text": "Successful Govern: +5"
+    },
+    {
+      "sim_variable": "DISCIPLINE_ACCORD0_DRAIN",
+      "value": -20,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Discipline",
+      "quoted_text": "Accord drops to 0 in any territory: \u221220"
+    },
+    {
+      "sim_variable": "DISCIPLINE_BATTLE_LOSS_DRAIN",
+      "value": -15,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Discipline",
+      "quoted_text": "Battle loss (defending force routed): \u221215"
+    },
+    {
+      "sim_variable": "LEGITIMACY_TERRITORY_INCOME",
+      "value": 5,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Legitimacy",
+      "quoted_text": "Seasonal income: +5 per territory at Accord \u2265 2"
+    },
+    {
+      "sim_variable": "LEGITIMACY_GOVERN_INCOME_MULT",
+      "value": 5,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Legitimacy",
+      "quoted_text": "Successful Govern action: +Mandate \u00d7 5"
+    },
+    {
+      "sim_variable": "LEGITIMACY_UNPOPULAR_DRAIN",
+      "value": -15,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Legitimacy",
+      "quoted_text": "Unpopular Domain Action (drops Accord): \u221215"
+    },
+    {
+      "sim_variable": "LEGITIMACY_BATTLE_OWN_DRAIN",
+      "value": -10,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Legitimacy",
+      "quoted_text": "Battle in own territory: \u221210"
+    },
+    {
+      "sim_variable": "STRAIN_TENSION_LEGITIMACY_DRAIN",
+      "value": -25,
+      "canonical_source": "designs/provincial/peninsular_strain_v30.md",
+      "section": "\u00a74.3 Strain Threshold Effects",
+      "quoted_text": "Tension: All factions: Legitimacy \u221225 at Accounting"
+    },
+    {
+      "sim_variable": "STRAIN_UNREST_GOVERN_OB",
+      "value": 1,
+      "canonical_source": "designs/provincial/peninsular_strain_v30.md",
+      "section": "\u00a74.3",
+      "quoted_text": "Unrest: +1 Ob to all Govern"
+    },
+    {
+      "sim_variable": "STRAIN_TREATY_DECAY",
+      "value": -1,
+      "canonical_source": "designs/provincial/peninsular_strain_v30.md",
+      "section": "\u00a74.2",
+      "quoted_text": "Per active Treaty pair: \u22121 per Treaty pair, capped at \u22122/season"
+    },
+    {
+      "sim_variable": "STRAIN_TREATY_DECAY_CAP",
+      "value": -2,
+      "canonical_source": "designs/provincial/peninsular_strain_v30.md",
+      "section": "\u00a74.2",
+      "quoted_text": "capped at \u22122/season from this source"
+    },
+    {
+      "sim_variable": "DEPLETION_DISCIPLINE_OB",
+      "value": 1,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Discipline",
+      "quoted_text": "Stability check at Accounting (Ob 1). Failure: Stability \u22121"
+    },
+    {
+      "sim_variable": "DEPLETION_LEGITIMACY_OB",
+      "value": 2,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a78.1 Legitimacy",
+      "quoted_text": "Mandate check at Accounting (Ob 2). Failure: Mandate \u22121"
+    }
+  ]
+}
