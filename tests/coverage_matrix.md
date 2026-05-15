@@ -137,3 +137,6 @@ PP-717 Fiore: base 7.0, 2H -0.5. Distance Short/Mid/Long. Action cost 5. Three-a
 
 ### Combat Integration Session A (2026-05-15)
 Phase machine + Strike/Guard/Breath. Canonical values, full ledger. Smoke test passes.
+
+### Session A NERS Audit
+All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity flagged.
