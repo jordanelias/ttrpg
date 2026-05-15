@@ -21,44 +21,32 @@ Pool modifiers:
 - Wounds: −1D per wound (cumulative). No Ob penalty from wounds. (PP-232)
 - Fibonacci group bonus: +dice to Offence allocation only (see below)
 
-## Weapon System (PP-232)
+## Weapon System (PP-232, PP-717 — Fiore revision)
 
-Weapons are defined by three binary axes. Base TN = 7. TN modifiers:
+**Base TN: 7.0 for all weapons.** Two-handed grip bonus: −0.5 TN. No other TN modifiers.
 
-| Axis | Option A | Modifier | Option B | Modifier |
-|------|----------|----------|----------|----------|
-| Reach | Short | −1 | Long | +0 |
-| Weight | Light | −1 | Heavy | +0 |
-| Type | Blade | +0 | Blunt | +1 |
+Grounded in Fiore dei Liberi's *Fior di Battaglia* and the Liechtenauer tradition: a trained fighter's accuracy is determined by skill, not weapon type. Weapons are differentiated by damage output (Cut/Thrust/Bash tables), STR multiplier, reach category, and attack type versatility. The three-axis TN system (PP-232 original) is superseded.
 
-Final Hit TN = 7 + reach modifier + weight modifier + type modifier.
+**Reach categories:** Short, Mid, Long. Determines optimal fighting distance.
+- At optimal range: TN +0 (base)
+- At adjacent range (±1 step): TN +1.0
+- At opposite range (±2 steps): BLOCKED (cannot attack or defend)
 
-**STR minimums:** Each "Heavy" or "Long" axis adds +1 to minimum STR.
-| Combination | Min STR |
-|-------------|---------|
-| Short Light (either type) | 1 |
-| Short Heavy or Long Light | 2 |
-| Long Heavy (either type) | 3 |
-| Long Heavy Blunt | 4 |
+**Establish Distance:** Agility contest (TN 7). Winner shifts distance ±1 step toward their optimal. Cost: 1 action. Defender at −3D while repositioning. Higher-Agi fighter wins the initial engagement.
 
-Penalty if 1 below minimum: −1D Combat Pool. Cannot wield if 2+ below minimum.
+| Weapon | TN | Reach | Attack Types | STR mult | Min STR | Notes |
+|--------|-----|-------|-------------|----------|---------|-------|
+| Dagger | 7.0 | Short | Cut, Thrust | ×1.0 | 1 | Grappling weapon — dominant at Short only |
+| Arming sword | 7.0 | Mid | Cut, Thrust | ×1.0 | 2 | Standard military sidearm |
+| Mace | 7.0 | Mid | Bash | ×1.5 | 2 | Anti-armour specialist |
+| Spear | 7.0 | Long | Thrust | ×1.0 | 2 | Devastating at range, vulnerable inside |
+| Longsword | 6.5 | Long | Cut, Thrust, Bash | ×2.0 | 3 | "King of weapons" — 2H grip bonus |
+| Warhammer | 6.5 | Long | Bash | ×3.0 | 4 | Maximum anti-armour — 2H grip bonus |
+| Unarmed | 8.0 | Short | Bash | ×0.5 | — | Grappling, improvised |
 
-**Blade vs Blunt note:** "Blade" encompasses cutting, piercing, and stabbing weapons. "Blunt" encompasses bludgeoning weapons.
+**Action cost:** 5 stamina per action (strike, feint, establish distance). No arena stunt modifier in videogame.
 
-Example weapons by combination:
-| Combination | TN | Examples |
-|-------------|-----|---------|
-| Short Light Blade | 5 | Dagger, knife |
-| Short Light Blunt | 6 | Sap, hand axe |
-| Short Heavy Blade | 6 | Short sword, arming sword |
-| Long Light Blade | 6 | Spear, light lance |
-| Short Heavy Blunt | 7 | Club, mace (short) |
-| Long Heavy Blade | 7 | Longsword, axe, glaive |
-| Long Light Blunt | 7 | Staff, walking stick |
-| Long Heavy Blunt | 8 | War hammer, pollaxe |
-| Unarmed | 8 | Fists, grappling, improvised |
-
-[EDITORIAL: ED-129 — Ranged weapon TN integration into Short/Long/Light/Heavy/Blade/Blunt matrix pending. Current ranged entries (LP, HP, sling) not yet mapped to new system.]
+[EDITORIAL: ED-129 — Ranged weapon reach categories pending. Crossbow/bow operate at range beyond melee distance system.]
 
 ## Ranged Combat Rules (PP-172)
 

@@ -121,3 +121,6 @@ Archived entries in tests/coverage_matrix_archive.md
 | Mace vs LS Heavy | 52% — both effective vs plate ✓ |
 | **Config** | **Fiore TN (base 7.0, 2H -0.5) + D1-D3 + v9 chassis + distance + arena 0** |
 | Remaining | None at 68% (3pp over). Fiore TN + stunt cost not yet ratified to params. |
+
+### Fiore TN Ratified (v27)
+PP-717 Fiore: base 7.0, 2H -0.5. Distance Short/Mid/Long. Action cost 5. Three-axis system superseded.
