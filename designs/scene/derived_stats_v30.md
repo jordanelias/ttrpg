@@ -54,7 +54,7 @@ This section is the source-of-truth for the Health formula and wound mechanic ac
 |---|---|
 | Stat name | Health |
 | Underlying attribute | Endurance |
-| Max Wounds | `Max Wounds = floor(Endurance / 2) + 1` |
+| Max Wounds | `Max Wounds = min(floor(Endurance / 2) + 1, 3)` — capped at 3 (PP-717) |
 | Wound Interval | `WI = Endurance + 6` (range 7–13 across End 1–7) |
 | Formula | `Health (full) = (Endurance + 6) × (Max Wounds + 1)` = WI × (MW+1) |
 | Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. Felled (incapacitated) at 0 Health, which equals MW + 1 wounds accrued. |
@@ -72,12 +72,14 @@ Per-Endurance reference table:
 | 3 | 9 | 2 | 27 | 2 (felled at 3rd) |
 | 4 | 10 | 3 | 40 | 3 (felled at 4th) |
 | 5 | 11 | 3 | 44 | 3 (felled at 4th) |
-| 6 | 12 | 4 | 60 | 4 (felled at 5th) |
-| 7 | 13 | 4 | 65 | 4 (felled at 5th) |
+| 6 | 12 | 3 | 48 | 3 (felled at 4th) |
+| 7 | 13 | 3 | 52 | 3 (felled at 4th) |
 
 Endurance-4 worked example (per Jordan canonical clarification 2026-05-09): Health 40 → 30 (1 wound) → 20 (2 wounds) → 10 (3 wounds, still alive at last threshold) → 0 (4 wounds, felled).
 
 **Naming history.** "Vitality = Endurance × 10" was introduced by ED-694 as a simplification proposal. PP-716 reverts the simplification: the linear formula failed to match the WI × (MW+1) total-damage-capacity structure for End values 1, 2, 3, 5, 7 (only End 4 and 6 happened to align numerically). Stat name reverted from Vitality to Health for consistency with `params/combat.md` L16 and Jordan's design intent.
+
+**Max Wounds cap (PP-717).** Simulation testing (v22–v24, 26 tests, 6 iteration rounds) found that the uncapped MW formula produces super-linear Health scaling — End 6 at 60 HP is 50% more than End 4 at 40 HP, making Endurance the dominant stat investment at all armour tiers (69–82% win rate for End-6 builds). Capping MW at 3 reduces End 6 to 48 HP (20% over End 4), preserves the WI × (MW+1) wound structure, and leaves End 1–5 unchanged. Sim-validated: top build drops from 69% to ~62% unarmoured (under 65% threshold). Historical precedent: plate armour wearers (high-End builds) were not invulnerable — exhaustion and mobility penalties limited their advantage.
 
 **Wound penalty universality.** Prior canon (combat_v30 §thread, threadwork_v30 §2.3, §3, §5; params/combat.md §thread; params/mass_combat §CF wound) variously specified "+1 Ob per Wound" for Thread operations, mass-battle Command checks, and CF Zoom-In tactics. PP-716 unifies all wound penalties as −1D to the relevant Pool. The Ob channel is reserved for non-wound mechanics (Thread Sensitivity Ob bands, Mending Stability Ob, Cover Ob, Stunt Ob).
 

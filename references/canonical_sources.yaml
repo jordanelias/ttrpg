@@ -140,7 +140,7 @@ systems:
     canonical_sha__designs__scene__derived_stats_v30_md: "2c2bad8297685f997726a19311999b2a5a3c174e"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
-    note: "PP-716 — derived_stats_v30.md §4.1 is the authoritative source for Health formula and wound-penalty universality. params/factions/stats_1_7_scale.md remains supplemental for faction-scale derived stats (Mandate/Influence/Wealth/Military/Intel/Stability)." 
+    note: "PP-716, PP-717 — derived_stats_v30.md §4.1 is the authoritative source for Health formula (MW cap at 3) and wound-penalty universality. params/factions/stats_1_7_scale.md remains supplemental for faction-scale derived stats (Mandate/Influence/Wealth/Military/Intel/Stability)." 
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:

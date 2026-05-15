@@ -11,9 +11,9 @@
 # params_combat.md — Personal Combat
 
 ## Pool Formula
-Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
+Combat Pool = min(Agility, 4) × 2 + max(0, Agility − 4) × 1 + Relevant History + 3 (minimum 5). Diminishing returns above Agility 4 (PP-717). Examples: Agi 3 → 11, Agi 4 → 13, Agi 5 → 14, Agi 6 → 15.
 Stamina = Endurance × 5 (ED-694 canonical; PP-611 superseded). Variable action costs (standard 5, heavy 8, defensive 3). Armor adds to drain per action.
-Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wound threshold every (Endurance + 6) points of damage; Wound counter +1 at each threshold. Incapacitated at 0 HP. (PP-232, ED-438)
+Health = (Endurance + 6) × (max Wounds + 1), where max Wounds = min(floor(End/2)+1, 3) — total pool, never resets. Wound threshold every (Endurance + 6) points of damage; Wound counter +1 at each threshold. Incapacitated at 0 HP. (PP-232, ED-438, PP-717 MW cap)
 
 **Armour wield constraint (PP-232):** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below.
 
@@ -99,7 +99,7 @@ Jordan directive 2026-05-13.
 
 STR is confirmed as a damage addition (PP-232, resolves ED-092).
 
-Critical Hit (net hits ≥ 3): weapon modifier doubled before applying armour reduction.
+Critical Hit (net hits ≥ 4): weapon modifier doubled before applying armour reduction. (PP-717 — raised from ≥ 3. Sim found 60% crit rate at ≥ 3 with arena stunt; ≥ 4 produces 24% without arena, 41% with.)
 
 **Weapon modifier vs armour tier:**
 | Weapon Class | vs None | vs Light | vs Medium | vs Heavy |
@@ -110,6 +110,10 @@ Critical Hit (net hits ≥ 3): weapon modifier doubled before applying armour re
 | Heavy Blunt | +5 | +5 | +5 | +5 |
 
 [EDITORIAL: ED-131 — Exact modifier values require playtesting to confirm. Values above are the design intent from comments; simulation needed before treating as final.]
+
+**Specialist Commitment Bonus (PP-717):** Weapons with base TN > 7.0 and one-handed gain +2D to offense pool. Currently applies only to the mace (TN 7.5). Compensates for TN penalty imposed by the Blunt type modifier (+0.5). Sim-validated: mace reaches 39–42% vs longsword at Heavy armour (from 29% without bonus).
+
+**Defense Type Triangle (PP-717):** Three defense types — Parry (vs Cut), Deflect (vs Thrust), Brace (vs Bash). Wrong defense type → attacker gains +2 flat damage bonus. Correct and neutral defense → no modifier. Specialist weapons (single attack type) face no penalty because the opponent's defense choice doesn't affect base blocking — only the +2 damage bonus. Versatile weapons exploit the triangle ~33% of the time via initiative-based attack selection. Sim-validated: simplified model produces 3–6pp triangle advantage, no specialist penalty.
 
 ## Initiative and Pool Allocation (PP-232)
 
@@ -135,21 +139,21 @@ Exchange 1 initiative: higher Attunement acts last (highest information). Subseq
 
 ## Wounds / Incapacitation (PP-232)
 
-Health (full) = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = floor(Endurance/2) + 1. Total damage capacity. Equipment adds flat Health (+4 leather, +6 chain, +8 plate). Max Health = (End+6)×(MW+1) + equipment bonus. See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec. (PP-716 reverts ED-694 Vitality formula.) Healing cannot exceed max.
+Health (full) = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = min(floor(Endurance/2) + 1, 3). Total damage capacity. Equipment adds flat Health (+4 leather, +6 chain, +8 plate). Max Health = (End+6)×(MW+1) + equipment bonus. See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec. (PP-716 reverts ED-694 Vitality formula. PP-717 caps MW at 3.) Healing cannot exceed max.
 Wound Interval = Endurance + 6. Wounds accrue at floor(cumulative_damage / Wound_Interval). Computed on the fly — no Max Wounds stat.
-Example: Endurance 4 → Vitality 40, Wound Interval 10. Wounds at 10, 20, 30 cumulative damage; incapacitated at Vitality 0.
+Example: Endurance 4 → Health 40, Wound Interval 10. Wounds at 10, 20, 30 cumulative damage; felled at Health 0.
 Allows critical hits to deal multiple wounds simultaneously. (ED-694: replaces Health formula, eliminates Max Wounds.)
 
 Per Wound: **−1D Combat Pool only** (no Ob penalty). (PP-232)
 
-**Wounds computed on the fly:** wounds_taken = floor(total_damage / Wound_Interval). No Max Wounds stat. (ED-694, replaces PP-263 Max Wounds formula.)
+**Wounds computed on the fly:** wounds_taken = floor(total_damage / Wound_Interval). Max Wounds capped at 3 (PP-717). Felled at MW+1 wounds.
 
-| Endurance | Vitality | Wound Interval | Wounds before incap |
-|-----------|----------|----------------|---------------------|
-| 1 | 10 | 7 | 1 |
-| 2–3 | 20–30 | 8–9 | 2–3 |
-| 4–5 | 40–50 | 10–11 | 4 |
-| 6–7 | 60–70 | 12–13 | 5 |
+| Endurance | Health | Wound Interval | Wounds before felled |
+|-----------|--------|----------------|---------------------|
+| 1 | 14 | 7 | 1 |
+| 2–3 | 24–27 | 8–9 | 2 |
+| 4–5 | 40–44 | 10–11 | 3 |
+| 6–7 | 48–52 | 12–13 | 3 |
 
 [ED-130 resolved 2026-04-03] Stage 1 (down) and Stage 2 (dying) incapacitation states STRUCK. No staged incapacitation states in current design. Health track runs to 0 = incapacitated.
 
