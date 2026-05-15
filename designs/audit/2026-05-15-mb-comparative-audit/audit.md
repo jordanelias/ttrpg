@@ -893,5 +893,186 @@ Damage in HP units, **not Size units**.
 
 ---
 
+## Chunk 5 — Environment / Terrain
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+Terrain types and effects; ground anchors; weather; visibility/sightline-terrain interaction; sub-tile features; geographic auto-derivation. Critical: 5 of 9 R reconstructions hinge on terrain (Hastings slope, Crécy slope, Agincourt funnel+mud, Pavia walls, Marignano vineyards).
+
+### R says
+
+- **T-12** — Terrain shapes everything. Aspromonte river, Agincourt mud, Hastings slope, Crécy slope + woods.
+- **T-23** — Ground anchors. Refused-flank-on-river, defensive-position-on-slope, wagon-line-as-fortification.
+- **T-37** — Sub-tile terrain variations matter. Marignano vineyard rows; Adrianople ridge; Agincourt funnel.
+- **F2 archetypes 2 & 6** — Ground-anchored defensive battles are top-level archetype.
+- **Reconstruction-specific** (file 12): Hastings ridge 5–7m, shallow approach; Crécy 6% downhill + mud + sun; Agincourt funnel 1,200→750m + clay + stakes; Marignano vineyards channelling pike + cold overnight; Pavia park wall + arquebusiers from cover; Panipat 6-km wagon-line + sally points + central artillery.
+
+### C says
+
+**§A.9 Environmental Modifiers** (6 terrain types):
+
+| Terrain | Effect |
+|---|---|
+| River crossing | −1 Speed tier; −1D Off; Discipline check (Size lost = 1) |
+| Uphill | Defender +1D Def; attacker −1D Off |
+| Forest / broken | Cavalry → Standard; flanking impossible |
+| Walls / fortifications | Defender +3 DR; no flanking; Slow cannot advance |
+| Narrow pass | 1 engagement per side; Fibonacci impossible |
+| Open flat | No modifiers |
+
+**Phase 3 (ED-780) extension — Geographic battle-terrain derivation:** Battles inherit terrain from `designs/territory/valoria_geography_v30.yaml :: terrain_polygons` at engagement coordinates (dominant polygon by area weight). Bridged via `march_layer_v30 §8.2`.
+
+**§A.13/A.14 Campaign Supply** (Chunk 7 scope): hostile-territory Treasury cost; Prosperity-0 attrition.
+
+**Weather:** C silent.
+
+**Time of day:** C silent.
+
+**Terrain × sightline:** §A.3b sightline is unit-octagon-based, not terrain-modulated.
+
+### S does
+
+**Nothing.** Environment / terrain entirely absent.
+
+- No terrain modifier in `resolve_engagements`.
+- No weather state.
+- No ground type per cell.
+- No PP-780 derivation hook.
+- No time-of-day.
+- The 41×42 battlefield is uniform empty cells.
+- `MIN_DISCIPLINE` per shape (line 470) is the only formation-vs-context constraint.
+
+### Three-way comparison
+
+| Element | R | C | S | Alignment |
+|---|---|---|---|---|
+| Slope / elevation | Hastings, Crécy, Adrianople ridge | §A.9 Uphill: Def +1D / Att −1D | Not modeled | **C↔S P1 — F5.1** |
+| Forest / broken ground | Teutoburg, Hastings flanks | §A.9 Cav → Std, no flank | Not modeled | **C↔S P1 — F5.1** |
+| Walls / fortifications | Pavia park wall, Panipat wagons | §A.9 +3 DR, no flank, Slow halt | Not modeled | **C↔S P1 — F5.1** |
+| Narrow pass / funnel | Agincourt, Thermopylae | §A.9 1 engagement/side, no Fib | Not modeled | **C↔S P1 — F5.1** |
+| River crossing | Granicus, Cannae camp | §A.9 −1 Speed, −1D Off, Disc check | Not modeled | **C↔S P1 — F5.1** |
+| Open flat | Default | §A.9 no mods | Implicit default | ✓ trivial |
+| Mud / wet ground | Agincourt, Crécy, Marignano | (silent) | (silent) | **R↔C/S ∅ — F5.3** |
+| Fog / visibility weather | Pavia | (silent) | (silent) | **R↔C/S ∅ — F5.3** |
+| Sun position / glare | Crécy | (silent) | (silent) | R↔C/S ∅ — F5.5 |
+| Heat / cold / season | Cannae, Marignano | (silent at battle; supply at campaign) | (silent) | R↔C P3 |
+| Sub-tile features (vineyard, ridge, fence, stake) | Marignano, Adrianople, Agincourt | (silent) | (silent) | **R↔C P2 — F5.4** |
+| Time of day | Pavia dawn; Marignano 2-day | (silent) | (silent) | C↔S P3 — F5.5 |
+| PP-780 auto-derivation | (impl detail) | §A.9 line 476 | Not implemented | **C↔S P2 — F5.2** |
+| Terrain × sightline | Forest reduces visibility | (silent) | (silent) | R↔C P2 — F5.4b |
+| Cavalry-disabled by forest | Universal | §A.9 Cav → Std | N/A (G-11 deferred) | F5.6 carryover |
+| Refused-flank-on-terrain | Pharsalus stream; Hastings crest | §A.8 anchor | RefusedFlank pattern, no anchor logic | C↔S P3 — F5.7 |
+
+### Bottom-up sanctity check
+
+| Element | Bottom-up? | Notes |
+|---|---|---|
+| §A.9 6-row terrain table | ⚠ borderline | Categorical buckets. Cleaner: ground primitive (slope, surface, cover, anchor) from which §A.9 emerges |
+| Pool modifier per terrain (Uphill ±1D) | ✓ per-cell from primitive | Composes from cell.ground_attributes |
+| Speed modifier per terrain (River −1 tier) | ✓ per-cell | Composes from cell.ground_attributes |
+| Cavalry-disabled in forest | ✓ class + terrain primitives | Cell flag check |
+| Flanking-impossible-in-forest | ⚠ → ✓ if refactored | C rule is top-down. Bottom-up: forest cell reduces sightline distance → defender doesn't rotate → flank works via reduced perception (T-68) |
+| PP-780 auto-derivation | ✓ from geography primitive | Battle inherits ground from polygon |
+| Weather as state | ✓ if state primitive | precipitation × visibility × wind × temperature attributes |
+| Sub-tile features | ✓ if cell-level | Each cell has features set |
+| Refused-flank-on-terrain | ✓ terrain + facing | Anchor cell's terrain.no_flank_attribute |
+
+**Verdict:** C §A.9 is borderline bottom-up — the categorical table works but a primitive-based refactor (cell.ground_attributes from which Uphill/Forest/etc. emerge) is cleaner and supports sub-tile variation (F5.4). Lateral precedents universally use primitive-based ground at cell/tile level.
+
+### Top-down historical validation
+
+| Battle | Terrain primitives required | C §A.9 coverage | S coverage |
+|---|---|---|---|
+| Hastings | Slope (ridge 5–7m), shallow approach, woods on flanks | ✓ Uphill + Forest | ✗ |
+| Crécy | Slope (6% downhill), mud, woods on flanks, stakes | ⚠ Uphill + Forest; mud absent (F5.3); stakes absent (F5.4) | ✗ |
+| Agincourt | Funnel (1,200→750m), mud, stakes | ⚠ Narrow Pass partial; mud absent | ✗ |
+| Marignano | Vineyards, ditches, 2-day pause | ✗ Vineyards/ditches absent (F5.4) | ✗ |
+| Pavia | Park wall, fog, cover | ⚠ Walls; fog absent (F5.3); cover absent | ✗ |
+| Panipat | Wagon-line on raised ground, sally points | ⚠ Walls partial (wagon-fortress class missing — F2.2) | ✗ |
+| Cannae | Open plain, river-behind retreat-block | ✓ Open + River | ✗ partial via F4.2 retreat-zone |
+| Pharsalus | Stream-bed flanking anchor | ⚠ Open + River; not modeled at tactical | ✗ |
+| Adrianople | Ridge concealing Gothic cavalry | ⚠ Uphill; concealment absent (F5.4) | ✗ |
+
+**Direction surfaced:** F5.1 required for **8 of 9 reconstructions**. F5.3 + F5.4 compound. Without terrain, S can structurally reproduce only Cannae partially.
+
+### Lateral gameplay validation
+
+| Precedent | Terrain detail | Weather | Time of day | Sub-tile | Auto-derivation from strategic |
+|---|---|---|---|---|---|
+| **Total War** | Comprehensive: forest/river/swamp/hill/mountain/snow/sand/mud, slope per-cell | Rain / fog / snow / clear; affects fire / morale / speed | Dawn / noon / dusk / night | Cell-level vegetation/water/fortifications | Inherited from campaign map |
+| **Ultimate General CW** | Elevation per-cell, vegetation cover, roads, buildings | Limited (mostly smoke) | Limited per-scenario | Per-cell vegetation/fence/wall | Per-scenario |
+| **Field of Glory II Digital** | Hex types: forest/marsh/slope/river/fields/road; quality grades | Per-scenario weather slot | Per-scenario | Hex-level features | Per-scenario |
+| **Combat Mission** WEGO | Highly detailed per-tile: surface, vegetation, elevation, structures | Rain / snow / dust; affects LOS + movement | Dawn / day / dusk / night + NV optics | Per-tile sub-features (foxholes, sandbags, walls) | Per-scenario |
+| **Mount & Blade Bannerlord** | Continuous: elevation, vegetation density, water, mud | Weather affects ground type | Day / night | Continuous — every patch unique | Procedural from strategic position |
+| **Unicorn Overlord** | Strategic-layer (forest/river/mountain) affects speed + ambush | Climate per region | Day/night affects unit availability | Strategic-layer only | Strategic terrain visible; tactical abstracted |
+| **Football Manager** | Pitch condition: firm / damp / wet / heavy / frozen; affects ball + player decisions | Rain / snow / wind / temperature; affects play | Match timing fixed | Uniform pitch | Stadium + forecast |
+
+**Verdict laterally:**
+- **Every acclaimed precedent has terrain.** S having NONE is the most conspicuous lateral gap so far.
+- **Pool/speed modifier primitives** (FoG2/TW/UG/Bannerlord) match C §A.9. **Lateral validation for the pool-modifier approach.**
+- **Sub-tile features standard at the high end.** TW/CM/Bannerlord — supports F5.4.
+- **Auto-derivation from strategic map** is in TW + UO + Bannerlord. **Lateral validates PP-780.**
+- **Weather is universal at the top end.** TW/CM/Bannerlord/FoG2/FM all have it. C silence (F5.3) is a notable gap.
+- **FM pitch condition** is closest analog for ground-surface affecting unit decisions. Heavy pitch slows speed, affects passing accuracy — directly analogous to mud terrain.
+
+### Throughlines surfaced (Chunk 5)
+
+- **T-63 (R/C/S) — Environment is first-class.** R T-12/T-23/T-37 + all 9 reconstructions. C §A.9 + PP-780. S has zero. F5.1 P1.
+
+- **T-64 (lateral norm) — Terrain effects are universally pool-modifier or speed-modifier primitives.** M-9-compliant if applied per-cell from ground primitives.
+
+- **T-65 (C unique) — PP-780 geographic auto-derivation is a Valoria-specific design strength.** No mass-battle precedent inherits per-cell tactical terrain from strategic polygons automatically. **Competitive advantage when implemented.**
+
+- **T-66 (R/lateral) — Sub-tile terrain features require finer-grain primitives than canon's 6-type table.** R T-37 explicit + TW/CM/Bannerlord lateral. F5.4 P2.
+
+- **T-67 (C silent / R / lateral) — Weather is universal in acclaimed precedents at mass scale.** TW/CM/FoG2/Bannerlord/FM. **Recommend canonizing weather as orthogonal axis to ground type.**
+
+- **T-68 (M-9 check) — Forest-flanking-impossible should be refactored top-down → bottom-up.** Forest reduces sightline distance → defender doesn't rotate → flank works via reduced perception. No "no flanking in forest" rule needed.
+
+### Findings (Chunk 5)
+
+**F5.1 — P1 (C↔S):** Environment / terrain layer entirely absent from S. Canon §A.9 has 6 terrain types fully specified. **None implemented.** All terrain-relevant R reconstructions non-reproducible. Single largest unimplemented canon mechanic in S.
+
+*Resolution path (bottom-up):* Add `ground_type: GroundType` to each cell. Modifiers apply per-cell to engagement pools, advance speeds, sightline distance. Implementation lives in `Subunit.advance_cells` (speed per cell), `resolve_engagements` (pool mods per engagement pair), `in_sightline` (max_dist per terrain), `Subunit.cell_ref` init. Composition pattern: `cell.ground.attributes: GroundAttributes` from which 6-bucket table emerges.
+
+**F5.2 — P2 (C↔S):** PP-780 geographic battle-terrain derivation not implemented. Requires F5.1 first.
+
+*Resolution path:* At battle init, query strategic geography at engagement coordinates; populate cell ground_attributes from polygon intersections (dominant by area weight). Bridge via `march_layer_v30 §8.2`.
+
+**F5.3 — P2 (R↔C↔S):** Weather mechanics absent from both C and S. Agincourt mud, Crécy sun, Pavia fog, Marignano cold historically decisive.
+
+*Resolution path:* Canon revision — add §A.9b Weather (precipitation × visibility × wind × temperature). Bottom-up via attribute primitives. Sim: `Weather` battle-level state applied per-cell at engagement.
+
+**F5.4 — P2 (R↔C):** Sub-tile terrain features (vineyards, ridges, fences, stakes, ditches) not in §A.9 6-bucket table.
+
+*Resolution path:* `cell.features: Set[Feature]` (vineyard / fence / stakes / ditch / ridge_top / ridge_slope / wagon_part). Each feature has its own pool/speed/sightline modifier. Composable with ground_type.
+
+**F5.4b — P2 (R↔C):** Terrain × sightline interaction not in §A.3b. T-68 refactor recommendation.
+
+*Resolution path:* Forest cells set local `max_sightline_distance = 5` (vs default 15). Defender doesn't see attackers beyond 5 in forest; doesn't rotate; flanking emerges. Refactors F5.1 forest case bottom-up.
+
+**F5.5 — P3 (C↔S):** Time of day not modeled. Pavia dawn fog; Marignano 2-day pause.
+
+*Resolution path:* `time_of_day: float` per battle. Modulates visibility. Multi-turn battles increment per turn. Implement after F5.3.
+
+**F5.6 — Carryover (R↔C↔S):** Cavalry-disabled terrain. G-11 cavalry implementation must include from start.
+
+**F5.7 — P3 (C↔S):** Refused-flank-on-terrain anchor logic. S's RefusedFlank spatial pattern has refused stub but no anchor.
+
+*Resolution path:* When Refused Flank tactic declared, identify anchor cell (terrain feature). Anchored side becomes immune to flank from that direction via sightline-aware terrain primitive (F5.4b). Composes terrain (F5.1) + tactic (F2.6/F3.3).
+
+### Carried forward
+
+- **F5.1 (terrain)** → blocks 8 of 9 R reconstructions. Highest-impact Chunk-5 finding.
+- **F5.2 (PP-780)** → requires F5.1; bridges to strategic (Chunk 8).
+- **F5.3 (weather)** → canon revision.
+- **F5.4 + F5.4b** → refines F5.1 to bottom-up.
+- **F5.6** → G-11 cavalry implementation constraint.
+- **F5.7** → Chunk 6 tactics-execution-with-terrain.
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
