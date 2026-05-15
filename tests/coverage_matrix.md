@@ -529,3 +529,13 @@
 | D4 Mace +2D NERS | N~ E✗ R✓ S~ — recommend redesign (remove Blunt TN penalty) |
 | D5 Wrong def +2 NERS | N~ E✓ R~ S✓ — too small to matter (5% HP/duel) |
 | All-directions | Top-down ✓, Bottom-up ✓, Vertical ✓, Diagonal ✓ (init×triangle weak), Lateral ~ (pool DR combat-only), Horizontal ~ (Heavy arena 0 still fails) |
+
+### PP-717 Revision — D4+D5 Removed (v27, 2026-05-15)
+| Change | Rationale |
+|--------|-----------|
+| D4 removed (+2D mace bonus) | Mace TN 7.0 (no Blunt penalty) produces identical results without bonus dice |
+| D5 removed (defense triangle) | +2 dmg per duel (~5% HP) — redundant with existing Strike/Feint/Defend action triangle |
+| Mace TN 7.5 → 7.0 | Blunt type penalty removed — limitation is already paid through single attack type |
+| **Final config: D1+D2+D3 only** | MW cap, Pool DR, Crit ≥4 — three clean changes, no patches |
+| None matrix | Knight 59% ✓ |
+| Heavy matrix | Strong 77% — historically correct (blunt dominates plate) |

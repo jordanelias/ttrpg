@@ -111,9 +111,9 @@ Critical Hit (net hits ≥ 4): weapon modifier doubled before applying armour re
 
 [EDITORIAL: ED-131 — Exact modifier values require playtesting to confirm. Values above are the design intent from comments; simulation needed before treating as final.]
 
-**Specialist Commitment Bonus (PP-717):** Weapons with base TN > 7.0 and one-handed gain +2D to offense pool. Currently applies only to the mace (TN 7.5). Compensates for TN penalty imposed by the Blunt type modifier (+0.5). Sim-validated: mace reaches 39–42% vs longsword at Heavy armour (from 29% without bonus).
+**Defense type selection (PP-717 revision):** Valoria's tactical combat layer uses the action triangle (Strike/Feint/Defend) inherited from the Burning Wheel Fight! system. Attack type (Cut/Thrust/Bash) determines damage output via the weapon modifier table above — it does not modify defense. The defense-type triangle (Parry/Deflect/Brace) tested in simulation (v22–v24) produced only +2 damage per duel (~5% of HP) and was removed as redundant with the action triangle. Cut/Thrust/Bash remains mechanically significant through the damage tables and crit effects.
 
-**Defense Type Triangle (PP-717):** Three defense types — Parry (vs Cut), Deflect (vs Thrust), Brace (vs Bash). Wrong defense type → attacker gains +2 flat damage bonus. Correct and neutral defense → no modifier. Specialist weapons (single attack type) face no penalty because the opponent's defense choice doesn't affect base blocking — only the +2 damage bonus. Versatile weapons exploit the triangle ~33% of the time via initiative-based attack selection. Sim-validated: simplified model produces 3–6pp triangle advantage, no specialist penalty.
+**Blunt TN modifier removed (PP-717 revision):** The Blunt type penalty (+0.5 TN) was removed. Mace base TN is now 7.0 (was 7.5). Rationale: the mace's limitation is single attack type and predictable defense — imposing a TN penalty on top, then compensating with bonus dice, added two mechanics where zero sufficed. Sim-validated: mace at TN 7.0 without bonus dice produces identical results to TN 7.5 with +2D bonus (39% vs longsword at Heavy).
 
 ## Initiative and Pool Allocation (PP-232)
 
