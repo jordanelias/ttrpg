@@ -1,16 +1,17 @@
 ---
-session_id: v24-weapon-v2-shield-bash-close
+session_id: v25-all-directions-audit
 session_close: "2026-05-15"
 phase: simulation
-status: decision_register_complete
-last_stage: d6_d8_tested_all_decisions_resolved
-last_commit: 190851b
-commits: 1
+status: p0_identified
+last_stage: stamina_cliff_root_cause_isolated
+last_commit: 131a6d4
+commits: 3
 next_action:
   skill: valoria-simulator
-  description: Ratify D1-D5 to params/combat.md and designs/scene/derived_stats_v30.md. Shield system needs loadout design (D6). Remaining — integration test T9.1 with ratified params.
+  description: Fix stamina cliff (P0). Options — variable action costs, breath integration, yield grace period, or non-integer stamina. This is a DUEL SYSTEM fix, not a weapon system fix. Must resolve before any weapon balance results are valid.
 blockers:
-  - D1-D5 ratification (HP, pool, crit, mace, triangle) — tested and confirmed, awaiting commit to params
-  - D6 shield needs loadout system design before implementation
-  - canonical_sources.yaml freshness stale
+  - P0 stamina quantization cliff invalidates all End-dependent balance results
+  - Stam=20+End does NOT fix it (same cliff at 24→25)
+  - Duel model (Architecture C) must change to break floor(stam/cost) boundaries
+  - D1-D5 and D14 are valid weapon-level fixes but D13/D15 are unnecessary (wrong root cause)
 ---
