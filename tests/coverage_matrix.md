@@ -494,3 +494,10 @@
 | 9. Integration | T9.1 | 1 PASS |
 | **TOTAL** | **26 tests** | **12 PASS, 8 PARTIAL, 10 FAIL** |
 | **Open decisions** | **12** | **D1-D12 in audit** |
+
+### D6/D8 Tests (v24, 2026-05-15)
+| Decision | Status |
+|----------|--------|
+| D6 Shield +3D/+4D | DEFERRED — amplifies Tough dominance, needs loadout system design |
+| D8 Bash table +4→+3 | REJECTED — barely changes results (75→74%), gap is STR×3 not table |
+| D1-D5 ratifiable package confirmed | HP, Pool DR, Crit, Mace, Triangle — all tested ✓ |
