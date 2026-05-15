@@ -433,5 +433,229 @@ Power tier becomes quality multiplier on top of class. Faction Military gates bo
 
 ---
 
+## Chunk 3 — Resolution Mechanics + Command/Timing
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+Dice resolution (pool → successes → damage), command and tactic execution, two-stage general death, timing primitives (when actions sequence within and across turns). Excludes morale/rout cascade (Chunk 4) and thread integration (Chunk 6).
+
+### R says
+
+- **M-4** — Command-as-timing is the single signature combat mechanic.
+- **T-9 / T-10** — Plan-execution commit window; once committed, decisions cannot be unmade with full information.
+- **T-29** — Morale cascade as feedback mechanism on dice resolution.
+- **T-30 / T-31 / T-39** — Primitives must be specified before composition; verification by phase-1 achievability + phase-2 counter-play.
+- **Casualty asymmetry O-10** (F2 §VI): winner 5–15% / loser 30–60%, most in collapse + pursuit phases.
+
+### C says
+
+**Core formula PP-233** (`params/mass_combat.md §Core Formula`):
+
+| Term | Value |
+|---|---|
+| H (Health per Size) | min(Discipline, Command) + DR |
+| Total Health | Size × H |
+| Pool | min(Size, Command) + Command |
+| Damage per success | **1 + Power** |
+| Damage dealt | **successes × (1 + Power)** (linear in successes) |
+| Size after round | ⌊ remaining Health ÷ H ⌋ |
+
+Worked example (params lines 81–100): S5/C5/D5/P3/DR2 unit (Pool 10D, H 7, Total Health 35) rolling 4 successes deals 4×4=16 damage; opponent's 5 successes deal 5×2=10. Damage simultaneous (PP-233 key rule).
+
+**Damage formula refinement PP-194 / PARAMS-GAP-05** (line 283): `Size loss = max(0, net hits + Dmg Mod − DR)` with class-dependent Dmg Mod table (Levy LightCut +1, Heavy Infantry HeavyCut +4, Cavalry HeavyCut +5, Knights Templar HeavyBlunt +5, Piercing Bow +0, Crossbow +0 base +1 post-DR vs Med/Heavy, Sling clay/rock/metal/lead +0/+1/+2/+3, Artillery HBl +3).
+
+**Pool split** (PARAMS-GAP-04): Declared Phase 1; min 1D each side; default ½ Off (round down). Reserve exception: PP-MB-04 first-engagement default split.
+
+**Discipline pool penalty** (`§A.4`): Disc 5–7 none, 3–4 −1D, 1–2 −2D, 0 broken.
+
+**Minimum pool PP-273**: 1D floor after all penalties.
+
+**Command** (`§A.5`):
+- ⌈(Charisma + Cognition) / 2⌉.
+- Sub-unit limit: Command (TTRPG hard cap 3).
+- **PP-504**: Command applies in full to each sub-unit.
+- **Two-stage general death (P1-02)**: Stage 1 incap → all units −1 Morale, Command halved (floor 1), Morale floor suspended; Medicine Ob 2 Phase 5 stabilise window. Stage 2 next turn Phase 5 if not stabilised → −2 Morale (outside cap), Command = 0.
+- **PP-506 bilateral personal combat**: both armies uncommanded at PP-273 floor, Line, no tactics, until Cmd Ob 2 re-establishment.
+- **Wounds carry over (D3-P2-01)**: +1 Ob to Cmd tactic rolls per wound.
+
+**Tactics** (`§A.8`): Six declared maneuvers with Cmd Ob rolls + counters.
+
+**Splitting doctrine PP-508**: Splitting dominates concentration by +9–45% win-rate except (a) Narrow Pass, (b) Size at PP-273 floor.
+
+**Volley pool PP-503**: Power dice at TN 6; not PP-233 formula.
+
+### S does
+
+**`base_combat_pool()`** (line 1226):
+
+```python
+raw = min(effective_size, command) + command + discipline_penalty + stamina_penalty
+return max(1, math.floor(raw))
+```
+
+**PP-233 pool implemented exactly** at Unit level.
+
+**`roll_pool(n, tn=7)`** (line 1244): d10 — fumble 1 (−1), success 7–9 (+1), crit 10 (+2).
+
+**`compute_degree(net, ob)`** (line 1253): Failure / Partial / Success / Overwhelming, with `ob = max(1, opponent_net)` — **contested** resolution.
+
+**`DAMAGE_BY_DEGREE`** (line 1259): Overwhelming 1+P / Success P / Partial 1 / Failure 0.
+
+**Damage applied** (line 1645): `dmg += max(0, DAMAGE_BY_DEGREE[deg](power) - dr)`.
+
+**Pool-pair scaling** (`resolve_engagements` 1507–1648): base × engage_frac → POOL_VARIANT C-ii → angle modifier → frontage bonus → attention split.
+
+**HP/Size model**: `h_per_size = min(disc, cmd) + dr` (line 1190) **matches C** but is **not used for hp_max**. `hp_max = size_max × BLOCK_SIZE` (line 1193) — TroopCount architecture. `recalc_size`: `effective_size = hp / BLOCK_SIZE`. `h_per_size` survives only in volley HP scaling.
+
+**Tactics**: None implemented. `rally_check`, `reform_check`, `threadwork_check` empty hooks (lines 402–412).
+
+**General death**: `if command <= 0: morale = 0` (line 1925) — single-stage instant rout.
+
+**Bilateral personal combat (PP-506)**: Not modeled.
+
+**Splitting doctrine (PP-508)**: Not enforced. `assign_targets` (line 1264) → nearest-centroid.
+
+### Three-way comparison
+
+| Element | R | C | S | Alignment |
+|---|---|---|---|---|
+| Pool formula (unit-level) | (silent) | PP-233: `min(Size, Cmd) + Cmd` | `min(eff_size, cmd) + cmd + pen + stam_pen` | C↔S ✓ exact (stamina is sim-only addition) |
+| Damage per success | M-4 generalship dominates | **linear: `successes × (1 + Power)`** | **degree-stepped: 0 / 1 / Power / 1+Power** | **C↔S P1 — F3.1** |
+| Damage abstraction | Compounding via collapse phase | Damage in Health units; Size = ⌊H/H⌋ | Damage in TroopCount units; Size = ⌊HP/BLOCK_SIZE⌋ | **C↔S P2 architectural divergence — F3.2** |
+| Temporal cadence of PP-233 | One decisive commit per battle | Once per Phase 5 per pair per turn | Once per tick per pair (18 ticks/turn) | C↔S **different temporal grain** — F3.3 |
+| Pool split (Off/Def) | (silent) | Phase 1 declared; default ½ Off | Not implemented; whole pool used | C↔S P2 — F3.4 |
+| Pool-pair scaling | (silent) | Implied by Phase 5 split | engage_frac + frontage + attention | C silent; S has decomposition — F3.5 |
+| Class-dependent Dmg Mod | 13-class matchup matrix | PP-194 Dmg Mod table | Not implemented | **C↔S P1 — F3.6 (also surfaces C-internal drift)** |
+| Pool floor PP-273 | (silent) | 1D minimum | `max(1, ...)` line 1235 | C↔S ✓ |
+| Discipline pool penalty | T-29 | 5–7 / 3–4 / 1–2 / 0 → 0/-1/-2/broken | `discipline_penalty()` line 1210 | C↔S ✓ exact |
+| Command per sub-unit | M-4 | PP-504: full Cmd to each | Each subunit uses full unit.command | C↔S ✓ |
+| Two-stage general death | (silent) | Stage 1 → Stage 2 unless stabilised | Single-stage `cmd=0 → morale=0` | **C↔S P2 — F3.7** |
+| Bilateral personal combat | (silent) | PP-506 both armies at PP-273 floor | Not modeled | C↔S P2 — F3.8 |
+| Tactics declarative layer | G-1..G-6 named plays | §A.8 6 tactics with Ob | None | C↔S P2 (restates F2.6) |
+| Splitting doctrine | (silent) | PP-508 split dominates | Not enforced | C↔S P2 — F3.9 |
+| Reform / Rally | T-36 reform after disengage | §A.4 Discipline restoration | Empty hooks | C↔S P2 — F3.10 |
+
+### Bottom-up sanctity check
+
+| Element | Bottom-up? | Notes |
+|---|---|---|
+| PP-233 pool = min(S, C) + C | ✓ C+S | Three primitives compose; no special cases |
+| Damage = successes × (1+Power) (C) | ✓ C | Linear in successes; no degree pattern-match |
+| Damage = DAMAGE_BY_DEGREE (S) | ⚠ S | Degree-based introduces non-linearity at degree boundaries — borderline |
+| Cell-level pool decomposition | ✓ S | Composes from cell-count + zone primitives |
+| Class-dependent Dmg Mod (C PP-194) | ✓ C if class is primitive | Bottom-up if class is real primitive (F2.2) |
+| Two-stage general death | ✓ C | Status state-machine primitive |
+| Tactics as Cmd Ob roll | ✓ C | Declarative intent + check + execution (T-50 pattern) |
+| Splitting doctrine | ✓ C | Assignment-strategy primitive |
+
+**Verdict:** Most Chunk-3 mechanics are bottom-up sanctified. S's degree-based damage is borderline — defensible as contest-emergent but introduces non-linearity at degree boundaries. **Highest-leverage decision point: damage formula choice (F3.1).**
+
+### Top-down historical validation
+
+| Battle | Chunk-3 mechanic critical | C reproducible? | S reproducible? |
+|---|---|---|---|
+| Cannae | Compression damage during encirclement | ~ via PP-194 stacking + PP-683 | ✗ Linear damage; no compression (F1.3) |
+| Pharsalus | Reserve commitment + Caesar's missile-prep timing | ✓ Reserve + Refused Flank | ✗ Reserve absent (F1.1/F2.4) |
+| Adrianople | Cavalry-charge damage in surprise attack window | ⚠ PP-194 Cavalry +5 | ⚠ No cavalry yet (G-11) |
+| Hastings | Cavalry-attrition + shield-wall hold + feigned-retreat exploit | ✓ Shield Wall + FR | ✗ Both absent (F2.3/F2.5) |
+| Crécy / Agincourt | Longbow Volley + dismounted heavy attrition | ✓ PP-103 longbow + PP-188 DR | ⚠ Volley yes; no longbow class (F2.2) |
+| Marignano | Hammer-Anvil two-day hold | ✓ §A.8 + Shield Wall + pause | ⚠ Anvil absent (F2.3); pause partial |
+| Pavia | Arquebus volley from cover during static-line breach | ⚠ no firearm class | ✗ Arquebus class absent; cover absent (Chunk 5) |
+
+**Direction surfaced:** F3.1 is highest-leverage Chunk-3 decision. F3.6 essential for R class diversity. F3.7 matters for reconstructions where general death changed the battle.
+
+### Lateral gameplay validation
+
+| Precedent | Damage formula | Command | Tactic execution | Temporal grain |
+|---|---|---|---|---|
+| **Total War** | Per-soldier hit-roll × dmg | General aura radius | Charge / hold / fire | Real-time per-tick |
+| **Field of Glory II** | D6 modified × quality/protection, single roll per engagement | Command radius modifies cohesion-test | Charge / shoot / regroup | Turn-based, 1/phase |
+| **Ultimate General** | Continuous-fire hit probability per second | Officer aura modifies fatigue/morale | Push back / hold / withdraw | Real-time |
+| **Combat Mission** WEGO | Per-soldier hit chance per action | Command delays orders | Hunt / advance under fire | 1-min WEGO |
+| **Mount & Blade Bannerlord** | Per-weapon-type × armour mitigation | Shouts modify formation | Charge / hold / advance | Real-time |
+| **Unicorn Overlord** | Per-class skill × stat vs opponent stat; row mods | Commander stat modifies AI thresholds | **Programmable per-unit behavior tree** | Auto-resolved encounter |
+| **Football Manager** | Per-action attribute check | Manager shouts + subs | Pre-match instructions + shouts | Real-time match engine |
+
+**Verdict laterally:**
+- **No acclaimed precedent uses degree-stepped damage at mass scale.** FoG2 has cohesion-test categories but damage is per-die. TW is per-soldier. UO is per-skill. **Lateral signal recommends linear (C PP-233) over degree-stepped (S).**
+- **UO programmable behavior trees + FM pre-match instructions validate §A.8 declared-tactics-with-Ob as M-9-compliant.** Lateral confirmation of T-50.
+- **C per-turn cadence** ≈ FoG2 turn structure; **S per-tick cadence** ≈ TW / CM. Both valid abstractions at different layers.
+
+### Throughlines surfaced (Chunk 3)
+
+- **T-52 (R/C/S) — PP-233 pool formula is bottom-up sanctified.** `floor(min(Size, Cmd) + Cmd + penalties)` composes troops, generalship, accumulated wear. No special cases. S implements exactly. **Reference primitive.**
+
+- **T-53 (C/S validates R/M-4) — Command-applies-in-full (PP-504) makes Cmd the master variable.** Generalship dominance emerges from PP-504. v16 audit D-10: command term dominates pool. **Lateral analog: TW aura, UG radius, FM shouts, UO threshold.**
+
+- **T-54 (UO/FM/Bannerlord/C validates M-9) — Declarative-intent + Ob-roll + emergent-execution is the lateral-validated pattern for tactics.**
+
+- **T-55 (C↔S P1) — Damage formula choice: linear-in-successes (C) vs degree-stepped (S) are fundamentally different mechanics.** For 10 successes vs 1: C deals 10× more damage than S. **10× drift in dominant-side damage output.** No mass-scale precedent uses degree-stepped.
+
+- **T-56 (C/S) — Temporal cadence affects total damage even with same formula.** C: 1× per turn. S: 18× per turn. Calibration is hidden free parameter. **Canon should specify cadence explicitly.**
+
+### Findings (Chunk 3)
+
+**F3.1 — P1 (C↔S):** Damage formula drift. C PP-233: linear `successes × (1 + Power)`. S: degree-stepped `DAMAGE_BY_DEGREE`. For dominant rolls, 10× drift. Lateral favors linear.
+
+*Resolution path:* `[QUESTION FOR JORDAN]` three options:
+- **(a) S aligns to C linear:** `dmg = net_successes × (1 + power)` per tick.
+- **(b) C aligns to S degree-stepped:** canon revision; breaks PP-233 worked example.
+- **(c) Distinct mass-vs-personal abstractions ratified:** PP-233 linear for canon/hybrid; S degree-stepped for per-tick within sim. Document cadence-and-cell-decomposition bridge.
+
+Recommendation: (c) with explicit documentation.
+
+**F3.2 — P2 (C↔S):** Total Health model divergence. C: `Total Health = Size × H` (H ≈ 5–9). S: `hp_max = size_max × BLOCK_SIZE` (= 100 × Size). Per derived_stats architecture: HP = TroopCount.
+
+*Resolution path:* Canonize derived_stats as PP-233-successor in `params/mass_combat.md`. C's Health-unit damage becomes TroopCount-unit damage; H retained as wound-tolerance modifier on damage side.
+
+**F3.3 — P2 (C↔S):** Temporal cadence mismatch. C: 1× per Phase 5 per pair per turn. S: 18× per turn per pair. 18× difference in per-turn damage at same formula. Calibration absorbs difference but mismatched cadence is invisible drift.
+
+*Resolution path:* Canon explicitly specifies cadence per layer.
+
+**F3.4 — P2 (C↔S):** Pool split (Off/Def) Phase 1 declaration not implemented in S. Whole pool used per pair. Reserve commit exception (PP-MB-04) ignored. Player cannot declare aggressive/defensive stance.
+
+*Resolution path:* `off_def_split: float = 0.5` per Unit, declared Phase 1. PP-273 floor 1D each side.
+
+**F3.5 — P3 (C↔S):** Cell-level pool decomposition is sim-only — not canonical. Bottom-up sanctity preserved but canon should formalize.
+
+*Resolution path:* Canon §A.4 or §A.4b: document that PP-233 decomposes per pair via cell-contact ratios.
+
+**F3.6 — P1 (C↔S):** Class-dependent Dmg Mod (PP-194) not implemented in S. All units use raw Power. **Also surfaces internal canon drift: PP-233 line 70 (linear damage) vs PARAMS-GAP-05 line 284 (Dmg Mod replacing linear).** `[QUESTION FOR JORDAN]` — canonical relationship?
+
+*Resolution path:* Depends on F2.2 (class taxonomy) + F3.1 (damage formula).
+
+**F3.7 — P2 (C↔S):** Two-stage general death (P1-02). C: Stage 1 incap → Medicine stabilise window → Stage 2 next turn. S: single-stage instant rout.
+
+*Resolution path:* `general_status: Literal["active", "incap", "stabilising", "dead"]` state machine.
+
+**F3.8 — P2 (C↔S):** Bilateral personal combat (PP-506) not modeled.
+
+*Resolution path:* `general_in_personal_combat: bool` flag → uncommanded behavior (PP-273 floor + Line + no tactics) until Cmd Ob 2 re-establishment.
+
+**F3.9 — P2 (C↔S):** Splitting doctrine (PP-508) not enforced. S defaults to nearest-centroid (concentration-like).
+
+*Resolution path:* `target_assignment_strategy: Literal["concentrate", "split"]` per Unit. Declared Phase 1.
+
+**F3.10 — P2 (C↔S):** Reform / Rally not implemented. Empty hooks lines 402, 406.
+
+*Resolution path:* Implement `reform_check` at phase boundary for non-engaged units; restore Discipline per Cmd ≥ Disc+1 AND Cmd ≥ 2 (PP-241).
+
+**F3.11 — P3 (S):** Dead constants. `ANGLE_DMG_MULT` and `FLANKED_BONUS` defined but not invoked. Comment line 1550 explicitly chose pool reduction. Clean up or document.
+
+**F3.12 — P3 (C↔S):** Wounds-carry-over to Command (D3-P2-01) not modeled. Wounded general +1 Ob to tactic rolls.
+
+*Resolution path:* `general_wounds: int = 0` adds to tactic Ob. Requires F2.6 tactic layer first.
+
+### Carried forward
+
+- **F3.1 / F3.6 (damage formula + class Dmg Mod)** → highest priority for v26+ implementation. Block on canon decision.
+- **F3.2 / F3.3 (Total Health + cadence)** → canon revision in `params/mass_combat.md`.
+- **F3.7 (two-stage general death)** → Chunk 4 (Stage 2 Morale −2 outside cap is morale-pipeline interaction).
+- **F3.10 (Reform)** → Chunk 4 (rally is post-rout reform).
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
