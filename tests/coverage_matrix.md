@@ -479,3 +479,18 @@
 | Mace-only commit bonus (+2D for TN > 7.0, 1H) | Tested ✓ — best specialist fix |
 | HP End×5+20 | Tested ✓ — Tough drops to 62% unarmoured |
 | **Best config unarmoured PASS (62%)** | **Iteration 6 final** |
+
+### v23 Complete Audit (2026-05-14)
+| Phase | Tests | Status |
+|-------|-------|--------|
+| 1. Half-point TN | T1.1-T1.3 | 3 PASS |
+| 2. Weapon-armour | T2.1-T2.4 | 1 PASS, 3 PARTIAL |
+| 3. Multi-attack | T3.1-T3.3 | 2 PASS, 1 PARTIAL |
+| 4. Defense triangle | T4.1-T4.4 | 4 FAIL → simplified |
+| 5. Distance | T5.1-T5.3 | 1 PASS, 2 PARTIAL |
+| 6. 2H/Longsword | T6.1-T6.3 | 2 PARTIAL, 1 FAIL |
+| 7. Equal-budget | T7.1-T7.2 | 2 PASS (arena 3+5 unarmoured), 4 FAIL |
+| 8. Crits | T8.1-T8.3 | 2 PASS, 1 P1 |
+| 9. Integration | T9.1 | 1 PASS |
+| **TOTAL** | **26 tests** | **12 PASS, 8 PARTIAL, 10 FAIL** |
+| **Open decisions** | **12** | **D1-D12 in audit** |
