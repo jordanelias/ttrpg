@@ -11,9 +11,9 @@
 # params_combat.md — Personal Combat
 
 ## Pool Formula
-Combat Pool = min(Agility, 4) × 2 + max(0, Agility − 4) × 1 + Relevant History + 3 (minimum 5). Diminishing returns above Agility 4 (PP-717). Examples: Agi 3 → 11, Agi 4 → 13, Agi 5 → 14, Agi 6 → 15.
+Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
 Stamina = Endurance × 5 (ED-694 canonical; PP-611 superseded). Variable action costs (standard 5, heavy 8, defensive 3). Armor adds to drain per action.
-Health = (Endurance + 6) × (max Wounds + 1), where max Wounds = min(floor(End/2)+1, 3) — total pool, never resets. Wound threshold every (Endurance + 6) points of damage; Wound counter +1 at each threshold. Incapacitated at 0 HP. (PP-232, ED-438, PP-717 MW cap)
+Health = (Endurance + 6) × (max Wounds + 1) — total pool, never resets. Wound threshold every (Endurance + 6) points of damage; Wound counter +1 at each threshold. Incapacitated at 0 HP. (PP-232, ED-438)
 
 **Armour wield constraint (PP-232):** A character cannot wear armour whose Stamina modifier would reduce their Stamina to 1 or below.
 
@@ -21,32 +21,44 @@ Pool modifiers:
 - Wounds: −1D per wound (cumulative). No Ob penalty from wounds. (PP-232)
 - Fibonacci group bonus: +dice to Offence allocation only (see below)
 
-## Weapon System (PP-232, PP-717 — Fiore revision)
+## Weapon System (PP-232)
 
-**Base TN: 7.0 for all weapons.** Two-handed grip bonus: −0.5 TN. No other TN modifiers.
+Weapons are defined by three binary axes. Base TN = 7. TN modifiers:
 
-Grounded in Fiore dei Liberi's *Fior di Battaglia* and the Liechtenauer tradition: a trained fighter's accuracy is determined by skill, not weapon type. Weapons are differentiated by damage output (Cut/Thrust/Bash tables), STR multiplier, reach category, and attack type versatility. The three-axis TN system (PP-232 original) is superseded.
+| Axis | Option A | Modifier | Option B | Modifier |
+|------|----------|----------|----------|----------|
+| Reach | Short | −1 | Long | +0 |
+| Weight | Light | −1 | Heavy | +0 |
+| Type | Blade | +0 | Blunt | +1 |
 
-**Reach categories:** Short, Mid, Long. Determines optimal fighting distance.
-- At optimal range: TN +0 (base)
-- At adjacent range (±1 step): TN +1.0
-- At opposite range (±2 steps): BLOCKED (cannot attack or defend)
+Final Hit TN = 7 + reach modifier + weight modifier + type modifier.
 
-**Establish Distance:** Agility contest (TN 7). Winner shifts distance ±1 step toward their optimal. Cost: 1 action. Defender at −3D while repositioning. Higher-Agi fighter wins the initial engagement.
+**STR minimums:** Each "Heavy" or "Long" axis adds +1 to minimum STR.
+| Combination | Min STR |
+|-------------|---------|
+| Short Light (either type) | 1 |
+| Short Heavy or Long Light | 2 |
+| Long Heavy (either type) | 3 |
+| Long Heavy Blunt | 4 |
 
-| Weapon | TN | Reach | Attack Types | STR mult | Min STR | Notes |
-|--------|-----|-------|-------------|----------|---------|-------|
-| Dagger | 7.0 | Short | Cut, Thrust | ×1.0 | 1 | Grappling weapon — dominant at Short only |
-| Arming sword | 7.0 | Mid | Cut, Thrust | ×1.0 | 2 | Standard military sidearm |
-| Mace | 7.0 | Mid | Bash | ×1.5 | 2 | Anti-armour specialist |
-| Spear | 7.0 | Long | Thrust | ×1.0 | 2 | Devastating at range, vulnerable inside |
-| Longsword | 6.5 | Long | Cut, Thrust, Bash | ×2.0 | 3 | "King of weapons" — 2H grip bonus |
-| Warhammer | 6.5 | Long | Bash | ×3.0 | 4 | Maximum anti-armour — 2H grip bonus |
-| Unarmed | 8.0 | Short | Bash | ×0.5 | — | Grappling, improvised |
+Penalty if 1 below minimum: −1D Combat Pool. Cannot wield if 2+ below minimum.
 
-**Action cost:** 5 stamina per action (strike, feint, establish distance). No arena stunt modifier in videogame.
+**Blade vs Blunt note:** "Blade" encompasses cutting, piercing, and stabbing weapons. "Blunt" encompasses bludgeoning weapons.
 
-[EDITORIAL: ED-129 — Ranged weapon reach categories pending. Crossbow/bow operate at range beyond melee distance system.]
+Example weapons by combination:
+| Combination | TN | Examples |
+|-------------|-----|---------|
+| Short Light Blade | 5 | Dagger, knife |
+| Short Light Blunt | 6 | Sap, hand axe |
+| Short Heavy Blade | 6 | Short sword, arming sword |
+| Long Light Blade | 6 | Spear, light lance |
+| Short Heavy Blunt | 7 | Club, mace (short) |
+| Long Heavy Blade | 7 | Longsword, axe, glaive |
+| Long Light Blunt | 7 | Staff, walking stick |
+| Long Heavy Blunt | 8 | War hammer, pollaxe |
+| Unarmed | 8 | Fists, grappling, improvised |
+
+[EDITORIAL: ED-129 — Ranged weapon TN integration into Short/Long/Light/Heavy/Blade/Blunt matrix pending. Current ranged entries (LP, HP, sling) not yet mapped to new system.]
 
 ## Ranged Combat Rules (PP-172)
 
@@ -87,7 +99,7 @@ Jordan directive 2026-05-13.
 
 STR is confirmed as a damage addition (PP-232, resolves ED-092).
 
-Critical Hit (net hits ≥ 4): weapon modifier doubled before applying armour reduction. (PP-717 — raised from ≥ 3. Sim found 60% crit rate at ≥ 3 with arena stunt; ≥ 4 produces 24% without arena, 41% with.)
+Critical Hit (net hits ≥ 3): weapon modifier doubled before applying armour reduction.
 
 **Weapon modifier vs armour tier:**
 | Weapon Class | vs None | vs Light | vs Medium | vs Heavy |
@@ -98,10 +110,6 @@ Critical Hit (net hits ≥ 4): weapon modifier doubled before applying armour re
 | Heavy Blunt | +5 | +5 | +5 | +5 |
 
 [EDITORIAL: ED-131 — Exact modifier values require playtesting to confirm. Values above are the design intent from comments; simulation needed before treating as final.]
-
-**Defense type selection (PP-717 revision):** Valoria's tactical combat layer uses the action triangle (Strike/Feint/Defend) inherited from the Burning Wheel Fight! system. Attack type (Cut/Thrust/Bash) determines damage output via the weapon modifier table above — it does not modify defense. The defense-type triangle (Parry/Deflect/Brace) tested in simulation (v22–v24) produced only +2 damage per duel (~5% of HP) and was removed as redundant with the action triangle. Cut/Thrust/Bash remains mechanically significant through the damage tables and crit effects.
-
-**Blunt TN modifier removed (PP-717 revision):** The Blunt type penalty (+0.5 TN) was removed. Mace base TN is now 7.0 (was 7.5). Rationale: the mace's limitation is single attack type and predictable defense — imposing a TN penalty on top, then compensating with bonus dice, added two mechanics where zero sufficed. Sim-validated: mace at TN 7.0 without bonus dice produces identical results to TN 7.5 with +2D bonus (39% vs longsword at Heavy).
 
 ## Initiative and Pool Allocation (PP-232)
 
@@ -127,21 +135,24 @@ Exchange 1 initiative: higher Attunement acts last (highest information). Subseq
 
 ## Wounds / Incapacitation (PP-232)
 
-Health (full) = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = min(floor(Endurance/2) + 1, 3). Total damage capacity. Equipment adds flat Health (+4 leather, +6 chain, +8 plate). Max Health = (End+6)×(MW+1) + equipment bonus. See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec. (PP-716 reverts ED-694 Vitality formula. PP-717 caps MW at 3.) Healing cannot exceed max.
+Health (full) = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = floor(Endurance/2) + 1. Total damage capacity. Equipment adds flat Health (+4 leather, +6 chain, +8 plate). Max Health = (End+6)×(MW+1) + equipment bonus. See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec. (PP-716 reverts ED-694 Vitality formula.) Healing cannot exceed max.
 Wound Interval = Endurance + 6. Wounds accrue at floor(cumulative_damage / Wound_Interval). Computed on the fly — no Max Wounds stat.
 Example: Endurance 4 → Health 40, Wound Interval 10. Wounds at 10, 20, 30 cumulative damage; felled at Health 0.
 Allows critical hits to deal multiple wounds simultaneously. (ED-694: replaces Health formula, eliminates Max Wounds.)
 
 Per Wound: **−1D Combat Pool only** (no Ob penalty). (PP-232)
 
-**Wounds computed on the fly:** wounds_taken = floor(total_damage / Wound_Interval). Max Wounds capped at 3 (PP-717). Felled at MW+1 wounds.
+**Wounds computed on the fly:** wounds_taken = floor(total_damage / Wound_Interval). Felled at MW+1 wounds.
 
-| Endurance | Health | Wound Interval | Wounds before felled |
-|-----------|--------|----------------|---------------------|
-| 1 | 14 | 7 | 1 |
-| 2–3 | 24–27 | 8–9 | 2 |
-| 4–5 | 40–44 | 10–11 | 3 |
-| 6–7 | 48–52 | 12–13 | 3 |
+| Endurance | Health | Wound Interval | Max Wounds | Wounds before felled |
+|-----------|--------|----------------|------------|---------------------|
+| 1 | 14 | 7 | 1 | 1 |
+| 2 | 24 | 8 | 2 | 2 |
+| 3 | 27 | 9 | 2 | 2 |
+| 4 | 40 | 10 | 3 | 3 |
+| 5 | 44 | 11 | 3 | 3 |
+| 6 | 60 | 12 | 4 | 4 |
+| 7 | 65 | 13 | 4 | 4 |
 
 [ED-130 resolved 2026-04-03] Stage 1 (down) and Stage 2 (dying) incapacitation states STRUCK. No staged incapacitation states in current design. Health track runs to 0 = incapacitated.
 
