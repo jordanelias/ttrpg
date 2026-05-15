@@ -1,17 +1,17 @@
 ---
-session_id: v22-weapon-v2-distance-sim
+session_id: v23-weapon-v2-complete-audit
 session_close: "2026-05-14"
 phase: simulation
-status: iteration_complete
-last_stage: iteration_6_hp_crit_commit_calibration
-last_commit: 4fd8a42
-commits: 3
+status: audit_complete
+last_stage: complete_26_test_audit
+last_commit: 73c5c01
+commits: 4
 next_action:
   skill: valoria-simulator
-  description: T5.2-T5.3 distance details, T9.1 integration, full T7.1 at all conditions with best config, ratify proposed formula changes.
+  description: Ratify D1-D5 (HP, pool, crit, mace, triangle). Test D6 (shield +3D). Remaining — T6.2 retest with shield fix, T7.1 heavy armour with Bash table reduction.
 blockers:
-  - canonical_sources.yaml freshness stale for params/combat.md
-  - HP formula (End×5+20) needs ratification
-  - Crit threshold (>=4) needs ratification
-  - Mace-only +2D commitment bonus needs ratification
+  - 12 open decisions (D1-D12) need ratification
+  - Shield defense bonus needs testing at +3D/+4D (D6)
+  - Heavy armour dominance cap undecided (D8)
+  - Crit threshold change from canonical >=3 needs ratification (D3)
 ---
