@@ -501,3 +501,12 @@
 | D6 Shield +3D/+4D | DEFERRED — amplifies Tough dominance, needs loadout system design |
 | D8 Bash table +4→+3 | REJECTED — barely changes results (75→74%), gap is STR×3 not table |
 | D1-D5 ratifiable package confirmed | HP, Pool DR, Crit, Mace, Triangle — all tested ✓ |
+
+### All-Directions Audit (v25, 2026-05-15)
+| Finding | Status |
+|---------|--------|
+| End ROI +34-48pp per point (P1) | Wound snowball root cause. D15 proposed (wound cap −2D) |
+| Dagger overperformance (P1) | D14 short −2D vs Med/Heavy fixes it (79%→65%) ✓ |
+| Arming sword fails N without shield (P2) | D6 deferred to loadout |
+| Liechtenauer Vor/Nach | +7-14pp init advantage ✓ |
+| Harnischfechten attack selection | Correct (Cut→Thrust at Medium) ✓ |
