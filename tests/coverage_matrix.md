@@ -134,3 +134,6 @@ PP-717 Fiore: base 7.0, 2H -0.5. Distance Short/Mid/Long. Action cost 5. Three-a
 | Internal consistency | 5/5 PASS |
 | External consistency | 4 flags: stamina (End×5 vs 15+End×2), taunt canonicalization, 2H stacking, mass combat untested |
 | P1 actions | Stamina reconciliation, taunt canonicalization |
+
+### Combat Integration Session A (2026-05-15)
+Phase machine + Strike/Guard/Breath. Canonical values, full ledger. Smoke test passes.

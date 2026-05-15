@@ -1,0 +1,238 @@
+{
+  "sim_file": "tests/sim/combat_integration/session_a_chassis.py",
+  "scope": "Combat phase machine + Strike, Full Guard, Take a Breath. Canonical values only, post PP-718 revert.",
+  "notes": "Session A of 6-session integration. No invented mechanics. No PP-717. No 'arena' parameter.",
+  "entries": [
+    {
+      "sim_variable": "combat_pool",
+      "value": "max(5, agi*2 + hist + 3)",
+      "canonical_source": "params/combat.md",
+      "section": "Pool Formula L14",
+      "quoted_text": "Combat Pool = (Agility \u00d7 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "sim_variable": "max_wounds",
+      "value": "end // 2 + 1",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.1 row 'Max Wounds'",
+      "quoted_text": "Max Wounds = floor(Endurance / 2) + 1"
+    },
+    {
+      "sim_variable": "wound_interval",
+      "value": "end + 6",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.1 row 'Wound Interval'",
+      "quoted_text": "WI = Endurance + 6 (range 7\u201313 across End 1\u20137)"
+    },
+    {
+      "sim_variable": "max_health",
+      "value": "WI * (MW + 1)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.1 row 'Formula'",
+      "quoted_text": "Health (full) = (Endurance + 6) \u00d7 (Max Wounds + 1) = WI \u00d7 (MW+1)"
+    },
+    {
+      "sim_variable": "max_stamina",
+      "value": "end * 5",
+      "canonical_source": "params/combat.md",
+      "section": "Stamina ED-694 L177",
+      "quoted_text": "Stamina = Endurance \u00d7 5. Range 5\u201335."
+    },
+    {
+      "sim_variable": "breath_recovery",
+      "value": "(end + hist) * 2",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.2 row 'Recovery'",
+      "quoted_text": "Take a Breath: restores (Endurance + relevant combat History) \u00d7 2, capped at max"
+    },
+    {
+      "sim_variable": "ACTION_COST_strike",
+      "value": 5,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.2 'Variable action costs' Standard attack",
+      "quoted_text": "Standard attack | 5"
+    },
+    {
+      "sim_variable": "ACTION_COST_full_guard",
+      "value": 3,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.2 'Variable action costs' Defensive stance",
+      "quoted_text": "Defensive stance | 3"
+    },
+    {
+      "sim_variable": "ACTION_COST_breath",
+      "value": 0,
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "\u00a74 Actions 'Take a Breath'",
+      "quoted_text": "Take a Breath | No combat action. Recover Stamina by Endurance score."
+    },
+    {
+      "sim_variable": "WOUND_PENALTY_PER_WOUND",
+      "value": 1,
+      "canonical_source": "params/combat.md",
+      "section": "Pool modifiers L21",
+      "quoted_text": "Wounds: \u22121D per wound (cumulative)"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "Pool Formula minimum / ED-203",
+      "quoted_text": "minimum 5"
+    },
+    {
+      "sim_variable": "CRIT_NET_HITS",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "Damage Formula Critical Hit L90",
+      "quoted_text": "Critical Hit (net hits \u2265 3): weapon modifier doubled before applying armour reduction."
+    },
+    {
+      "sim_variable": "OOB_PENALTY",
+      "value": 2,
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.2 row 'Depleted at'",
+      "quoted_text": "Out of Breath: \u22122D all combat rolls"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_dagger",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Short Light Blade | 5 | Dagger, knife"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_arming_sword",
+      "value": 6,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Short Heavy Blade | 6 | Short sword, arming sword"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_spear",
+      "value": 6,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Long Light Blade | 6 | Spear, light lance"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_mace",
+      "value": 7,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Short Heavy Blunt | 7 | Club, mace (short)"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_longsword",
+      "value": 7,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Long Heavy Blade | 7 | Longsword, axe, glaive"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_staff",
+      "value": 7,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Long Light Blunt | 7 | Staff, walking stick"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_warhammer",
+      "value": 8,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Long Heavy Blunt | 8 | War hammer, pollaxe"
+    },
+    {
+      "sim_variable": "WEAPONS_TN_unarmed",
+      "value": 8,
+      "canonical_source": "params/combat.md",
+      "section": "Weapon System example table",
+      "quoted_text": "Unarmed | 8 | Fists, grappling, improvised"
+    },
+    {
+      "sim_variable": "STR_MULT_per_weapon",
+      "value": "dagger=1.0, arming_sword=2.0, mace=1.5, warhammer=3.0",
+      "canonical_source": "params/combat.md",
+      "section": "Damage Formula L85 examples",
+      "quoted_text": "Examples at STR 4: Dagger=4, Arming sword=8, Mace=6, Warhammer=12."
+    },
+    {
+      "sim_variable": "WMOD_LB",
+      "value": "None=3, Light=2, Medium=1, Heavy=0",
+      "canonical_source": "params/combat.md",
+      "section": "Damage Formula weapon modifier table",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "WMOD_HB",
+      "value": "None=6, Light=4, Medium=2, Heavy=0",
+      "canonical_source": "params/combat.md",
+      "section": "Damage Formula weapon modifier table",
+      "quoted_text": "Heavy Blade | +6 | +4 | +2 | +0"
+    },
+    {
+      "sim_variable": "WMOD_LN",
+      "value": "None=3, Light=3, Medium=3, Heavy=3",
+      "canonical_source": "params/combat.md",
+      "section": "Damage Formula weapon modifier table",
+      "quoted_text": "Light Blunt | +3 | +3 | +3 | +3"
+    },
+    {
+      "sim_variable": "WMOD_HN",
+      "value": "None=5, Light=5, Medium=5, Heavy=5",
+      "canonical_source": "params/combat.md",
+      "section": "Damage Formula weapon modifier table",
+      "quoted_text": "Heavy Blunt | +5 | +5 | +5 | +5"
+    },
+    {
+      "sim_variable": "ARMOUR_STAMINA_MOD",
+      "value": "None=0, Light=0, Medium=-1, Heavy=-2",
+      "canonical_source": "params/combat.md",
+      "section": "Armour L152",
+      "quoted_text": "Armour | STR Min | Stamina Mod | None | \u2014 | +0 | Light | 2 | +0 | Medium | 3 | \u22121 | Heavy | 4 | \u22122"
+    },
+    {
+      "sim_variable": "initiative_attunement_then_agi",
+      "value": "PP-232 + PP-239",
+      "canonical_source": "params/combat.md",
+      "section": "Initiative PP-232 + PP-239 tiebreaker",
+      "quoted_text": "Exchange 1 initiative: higher Attunement acts last. Equal Attunement in Exchange 1: higher Agility acts last."
+    },
+    {
+      "sim_variable": "declaration_order_lower_init_first",
+      "value": "PP-232",
+      "canonical_source": "params/combat.md",
+      "section": "Initiative and Pool Allocation PP-232",
+      "quoted_text": "Lower initiative holder declares Offence/Defence split first. Higher initiative holder sees that split, then declares their own."
+    },
+    {
+      "sim_variable": "round_phases_six",
+      "value": "Movement, Range, Declaration, Resolution, Damage, Tracking",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "\u00a72 Round Structure",
+      "quoted_text": "1. Movement declarations 2. Range establishment 3. Action declarations 4. Resolution 5. Damage application 6. Stamina/wound tracking"
+    },
+    {
+      "sim_variable": "action_priority_strike_1",
+      "value": 1,
+      "canonical_source": "params/combat.md",
+      "section": "PP-247 Action priority order",
+      "quoted_text": "Priority | Action | 1 | Strike"
+    },
+    {
+      "sim_variable": "wounds_accrue_on_the_fly",
+      "value": "floor(cum_dmg / WI)",
+      "canonical_source": "params/combat.md",
+      "section": "Wounds / Incapacitation L131",
+      "quoted_text": "Wounds accrue at floor(cumulative_damage / Wound_Interval)."
+    },
+    {
+      "sim_variable": "incapacitated_at_zero_health",
+      "value": "Health <= 0",
+      "canonical_source": "params/combat.md",
+      "section": "Wounds / Incapacitation",
+      "quoted_text": "Incapacitated at 0 HP."
+    }
+  ]
+}
