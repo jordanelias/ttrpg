@@ -140,3 +140,14 @@ Phase machine + Strike/Guard/Breath. Canonical values, full ledger. Smoke test p
 
 ### Session A NERS Audit
 All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity flagged.
+
+### Engine NERS All-Directions Audit (2026-05-15)
+| Layer | Status |
+|-------|--------|
+| Scope | First engine-design NERS at architectural level (dice engine + derived stats + Ob/Pool channels) |
+| Throughlines | 5 derived (TE-1..TE-5); 3 partial, 1 fail (TE-4 Smooth: combat-only DR) |
+| 6 directions | TD/BU/L/V/D/H — 21 findings across all six |
+| Severity | 2 P1 (stale Vitality formula in params/core; stale Concentration formula in params/contest), 8 P2, 11 P3 |
+| Unifications | 9 proposed; U-1 (PP-716/PP-717 propagation) ready for no-call commit; U-2..U-7 need design call |
+| Self-review | Three radical reframings applied: designer-theater (most findings player-invisible); productive-inconsistency (deviations as features); descriptive-vs-prescriptive (throughlines as observation not principle). Recovered finding count after self-review: ~5 substantive |
+| File | tests/audit/engine_ners_2026-05-15.md |
