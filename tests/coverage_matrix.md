@@ -124,3 +124,13 @@ Archived entries in tests/coverage_matrix_archive.md
 
 ### Fiore TN Ratified (v27)
 PP-717 Fiore: base 7.0, 2H -0.5. Distance Short/Mid/Long. Action cost 5. Three-axis system superseded.
+
+### All-Directions NERS Audit (v27)
+| Layer | Status |
+|-------|--------|
+| 5 throughlines | All PASS NERS |
+| 4 meta-throughlines | All PASS NERS (3 minor flags) |
+| 6 directions | 5 PASS, 1 PARTIAL (Vertical: STR uncapped) |
+| Internal consistency | 5/5 PASS |
+| External consistency | 4 flags: stamina (End×5 vs 15+End×2), taunt canonicalization, 2H stacking, mass combat untested |
+| P1 actions | Stamina reconciliation, taunt canonicalization |
