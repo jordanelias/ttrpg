@@ -462,3 +462,12 @@
 | T4.4 Random vs optimal defense | FAIL | inline | 7-8pp gap. Target <5pp |
 | T7.1 Equal-budget matrix | FAIL 5/6 | inline | Tough 69-82%, Soldier 9-17%. Target: no build >65% |
 | T7.2 Protocol swing | PARTIAL PASS | inline | 1-17pp. Target 15-30pp |
+
+### Iteration 4 — Final Config (2026-05-14)
+| Fix | Component | Status |
+|-----|-----------|--------|
+| Linear HP (End×6+16) | Reduces End dominance | Tested ✓ |
+| Pool DR (Agi >4 → +1D) | Compresses Agi advantage | Tested ✓ |
+| 1H commit bonus (+2D) | Specialist viability | Tested ✓ |
+| Wrong def +2 dmg | Simplified triangle | Tested ✓ |
+| **Combined result** | **None: PASS (63%). Heavy: PASS at 75% (Strong 75%)** | **Iteration complete** |
