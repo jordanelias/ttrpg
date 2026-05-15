@@ -471,3 +471,11 @@
 | 1H commit bonus (+2D) | Specialist viability | Tested ✓ |
 | Wrong def +2 dmg | Simplified triangle | Tested ✓ |
 | **Combined result** | **None: PASS (63%). Heavy: PASS at 75% (Strong 75%)** | **Iteration complete** |
+
+### Iterations 5-6 (2026-05-14)
+| Finding | Status |
+|---------|--------|
+| Crit rate 60% at canonical >= 3 | P1 — threshold needs raising to >= 4 or >= 5 |
+| Mace-only commit bonus (+2D for TN > 7.0, 1H) | Tested ✓ — best specialist fix |
+| HP End×5+20 | Tested ✓ — Tough drops to 62% unarmoured |
+| **Best config unarmoured PASS (62%)** | **Iteration 6 final** |
