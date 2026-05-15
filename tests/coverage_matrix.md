@@ -517,3 +517,15 @@
 | End +42.5pp/point | Stamina 24→25 cliff (4.0→4.17 rounds at cost 6) | Stam=20+End |
 | HP contribution only +10.5pp | HP is not the dominant factor | D1 (End×5+20) helps but secondary |
 | Wound cap has no effect | Fights end by yield, not wounds | D15 unnecessary |
+
+### PP-717 NERS Audit (v26, 2026-05-15)
+| Assessment | Result |
+|------------|--------|
+| Mode A (formula validation) | PASS — no boundary issues |
+| Mode C (interaction chains) | PASS — 2 downstream flags (mass combat TC, pool DR × crit double reduction) |
+| D1 MW Cap NERS | N✓ E✓ R~ S✓ |
+| D2 Pool DR NERS | N✓ E~ R✓ S✓ |
+| D3 Crit ≥4 NERS | N✓ E✓ R✓ S~ |
+| D4 Mace +2D NERS | N~ E✗ R✓ S~ — recommend redesign (remove Blunt TN penalty) |
+| D5 Wrong def +2 NERS | N~ E✓ R~ S✓ — too small to matter (5% HP/duel) |
+| All-directions | Top-down ✓, Bottom-up ✓, Vertical ✓, Diagonal ✓ (init×triangle weak), Lateral ~ (pool DR combat-only), Horizontal ~ (Heavy arena 0 still fails) |
