@@ -530,23 +530,15 @@
 | D5 Wrong def +2 NERS | N~ E✓ R~ S✓ — too small to matter (5% HP/duel) |
 | All-directions | Top-down ✓, Bottom-up ✓, Vertical ✓, Diagonal ✓ (init×triangle weak), Lateral ~ (pool DR combat-only), Horizontal ~ (Heavy arena 0 still fails) |
 
-### PP-717 Revision — D4+D5 Removed (v27, 2026-05-15)
-| Change | Rationale |
-|--------|-----------|
-| D4 removed (+2D mace bonus) | Mace TN 7.0 (no Blunt penalty) produces identical results without bonus dice |
-| D5 removed (defense triangle) | +2 dmg per duel (~5% HP) — redundant with existing Strike/Feint/Defend action triangle |
-| Mace TN 7.5 → 7.0 | Blunt type penalty removed — limitation is already paid through single attack type |
-| **Final config: D1+D2+D3 only** | MW cap, Pool DR, Crit ≥4 — three clean changes, no patches |
-| None matrix | Knight 59% ✓ |
-| Heavy matrix | Strong 77% — historically correct (blunt dominates plate) |
+## v25 (2026-05-15) — Geometry expansion + dynamic wide-wing pathing + sightline
 
-### Weapon v2 Final State (v27, 2026-05-15)
-| Component | Status |
-|-----------|--------|
-| D1 MW cap at 3 | RATIFIED ✓ |
-| D2 Pool DR (Agi>4→+1D) | RATIFIED ✓ |
-| D3 Crit ≥ 4 | RATIFIED ✓ |
-| D4 Mace +2D bonus | REMOVED — one-weapon patch |
-| D5 Defense triangle | REMOVED — redundant with BW action triangle |
-| Blunt TN penalty | REMOVED — mace TN 7.0 |
-| ⚠ Dagger TN 6.0 vs AS TN 7.0 | FLAGGED — dagger 76-78% at all tiers, ahistorical |
+**Architecture:** 41×42 connected battlefield (was 25×25); 19×11 formation area within 41×21 per-unit grid; 11-col side buffers; 5-row front/back buffers. Dynamic Horseshoe wing pathing relative to enemy widest column. Sightline mechanic (135° arc, 15-cell range) gating defender rotation. Cell-level adjacency damage zones. Sticky Phase 2 transitions via Subunit.wing_phase_2_cells.
+
+**Status:** in-progress calibration; battery 3/11 in-band at LATERAL_BUFFER=3. Battles 5–7 ticks (target 18+ across 3+ turns).
+
+**Known issues for next iteration:**
+- ANGLE_DMG_MULT and FLANKED_BONUS constants present but not wired into damage formula; pool-averaging via ANGLE_DEF_MOD dilutes single-cell RED zones
+- 17-row vertical gap (formation to formation) may need tightening for current speeds
+- Arrowhead tip mechanic underperforms (H2 Arrowhead vs Line = 25% A; H9 Line vs Arrowhead = 75% A → both indicate tip isn't delivering proportional damage)
+
+**File:** tests/sim/sim_mb_06_v25.py

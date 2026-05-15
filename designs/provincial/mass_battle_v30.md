@@ -88,6 +88,48 @@ Thread Sensitivity minimums per scale still apply.
 
 ---
 
+### A.3b BATTLEFIELD GEOMETRY (NEW 2026-05-15)
+
+Cell-level battlefield for the sim/Godot implementation. Establishes the spatial container in which formations deploy, manoeuvre, and engage. Set by IMPOSED tuning 2026-05-15.
+
+**Per-unit grid:** 41 cols × 21 rows. Within this grid, a formation occupies up to a 19 cols × 11 rows formation area, centered. Surrounding the formation area:
+- Front buffer (toward enemy): 5 rows
+- Back buffer (away from enemy): 5 rows
+- Side buffers (each side): 11 cols
+
+**1v1 battlefield:** two unit grids connect at their fronts to form a 41 cols × 42 rows shared map.
+
+| Constant | Value | Role |
+|---|---|---|
+| BATTLEFIELD_HEIGHT | 42 | rows in connected 1v1 map |
+| BATTLEFIELD_WIDTH | 41 | cols in connected 1v1 map |
+| UNIT_GRID_HEIGHT | 21 | rows per unit's personal grid |
+| UNIT_GRID_WIDTH | 41 | cols per unit's personal grid (= battlefield width) |
+| FORMATION_AREA_WIDTH | 19 | max formation width within unit grid |
+| FORMATION_AREA_DEPTH | 11 | max formation depth within unit grid |
+| FRONT_BACK_BUFFER | 5 | rows between formation area and unit grid edge |
+| SIDE_BUFFER | 11 | cols between formation area and unit grid edge |
+| SIDE_A_START_ROW | 31 | A's formation center row (lower half) |
+| SIDE_B_START_ROW | 10 | B's formation center row (upper half) |
+| BATTLEFIELD_CENTER_COL | 20 | lateral center of 41-wide map (col 0–40) |
+
+**Cell troop counts.** Each cell within a formation holds a player-assigned troop count with min/max bounds. The player shapes the formation's distribution by assigning troops within these bounds at muster. Distribution affects per-cell engagement strength but the formation's overall stats (Size, Power, etc.) integrate across cells.
+
+**Sightline (NEW 2026-05-15):** every cell has a 135° forward sightline arc from its facing direction, with maximum perception distance of 15 cells. Cells cannot perceive enemies outside this arc, and therefore cannot rotate to face attackers they do not see. This is the mechanical justification for flanking effectiveness — a Line cell facing forward does not turn to face Horseshoe wings that have wrapped behind it because those wings are in the cell's blind spot.
+
+| Constant | Value | Role |
+|---|---|---|
+| SIGHTLINE_ARC_HALF | 67.5° | half-angle of 135° forward arc |
+| SIGHTLINE_DISTANCE | 15 cells | max perception range |
+
+**Wing pathing (Horseshoe):** wing cells path relative to the enemy formation's widest occupied column (`enemy_min_col` for left wing, `enemy_max_col` for right wing), not the enemy's centroid. Innermost wing cell targets `WING_LATERAL_BUFFER` cols outside the enemy's lateral edge; outer cells extend progressively wider (margin clamping at cols 1 and BATTLEFIELD_WIDTH−2). Wide spread is followed by inward sweep once the wing reaches its flanking position.
+
+| Constant | Value | Role |
+|---|---|---|
+| WING_LATERAL_BUFFER | 3 (provisional, tuning) | inner wing cell's clearance outside enemy edge |
+
+---
+
 ### A.4 UNIT STAT BLOCK (all 1–7)
 
 **Size** — computed from TroopCount: `Size = floor(TroopCount / block_size)`. At Size 0 (TroopCount < block_size): destroyed. TroopCount is the granular health pool; Size is the integer used by combat formulas. (ED-694)

@@ -89,7 +89,7 @@ systems:
     note: "geography_v30.md (atomized: index + infill) holds physical-geography canon — terrain regions, RS-band/node-distance matrix, 17-territory roster with starting control, fort levels, sub levels, adjacency. valoria_geography_v30.yaml + valoria_map_v30.svg are the structured/visual companions. Cited as source by sim_verification_ledger.json for territory IDs and counts."
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "a906868cd05c8d154a5f3cd2aff60d03146b1579"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "2a1211d389341206bba020af585d1ca71fad3322"
     mass_battle_index: designs/provincial/mass_battle_v30_index.md
     canonical_sha__designs__provincial__mass_battle_v30_index_md: "46d7daf157a1b944ee55c47388c2b1ba4f4c6ea4"
     mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
