@@ -110,3 +110,14 @@ Archived entries in tests/coverage_matrix_archive.md
 | Stamina cliff | stam 24→4rds, stam 25→5rds — ±1 stam flips outcome |
 | Arena 0 (cost 5) | Fast 69%, Tough 53%, spread 31pp — best balance |
 | **Proposal: stunt cost +1→+0** | Preserves stamina, eliminates quantization cliff |
+
+### Videogame Baseline — BEST RESULT (v27)
+| Test | Result |
+|------|--------|
+| None, arena 0 | Fast 68%, spread 30pp |
+| **Heavy, arena 0** | **Tough 63%, spread 25pp — PASS** |
+| Mace vs AS | 45%/73% crossover ✓ |
+| Dagger vs AS | 46%/45% (fixed from 76%) ✓ |
+| Mace vs LS Heavy | 52% — both effective vs plate ✓ |
+| **Config** | **Fiore TN (base 7.0, 2H -0.5) + D1-D3 + v9 chassis + distance + arena 0** |
+| Remaining | None at 68% (3pp over). Fiore TN + stunt cost not yet ratified to params. |
