@@ -539,3 +539,14 @@
 | **Final config: D1+D2+D3 only** | MW cap, Pool DR, Crit ≥4 — three clean changes, no patches |
 | None matrix | Knight 59% ✓ |
 | Heavy matrix | Strong 77% — historically correct (blunt dominates plate) |
+
+### Weapon v2 Final State (v27, 2026-05-15)
+| Component | Status |
+|-----------|--------|
+| D1 MW cap at 3 | RATIFIED ✓ |
+| D2 Pool DR (Agi>4→+1D) | RATIFIED ✓ |
+| D3 Crit ≥ 4 | RATIFIED ✓ |
+| D4 Mace +2D bonus | REMOVED — one-weapon patch |
+| D5 Defense triangle | REMOVED — redundant with BW action triangle |
+| Blunt TN penalty | REMOVED — mace TN 7.0 |
+| ⚠ Dagger TN 6.0 vs AS TN 7.0 | FLAGGED — dagger 76-78% at all tiers, ahistorical |
