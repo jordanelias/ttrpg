@@ -1,0 +1,32 @@
+{
+  "sim_file": "tests/sim/weapon_system_v2/weapon_v2_distance_sim.py",
+  "scope": "combat",
+  "notes": "Weapon system v2 testing sim. Canonical values from params/combat.md and designs/scene/combat_v30.md. Proposed v2 values (half-point TN, Cut/Thrust/Bash tables, distance) from testing_plan.md — these are UNDER TEST, not yet canonical.",
+  "entries": [
+    {"sim_variable": "DICE_ENGINE", "value": "d10 pool, 1s subtract, 10s chain", "canonical_source": "params/combat.md", "section": "Weapon System PP-232", "quoted_text": "d10 pool TN system — inherits from params/core.md"},
+    {"sim_variable": "POOL_FORMULA", "value": "max(5, Agi*2 + Hist + 3)", "canonical_source": "params/combat.md", "section": "Pool Formula L14", "quoted_text": "Combat Pool = max(5, Agi*2 + Hist + 3)"},
+    {"sim_variable": "STR_MULTIPLIER_LIGHT", "value": 1, "canonical_source": "params/combat.md", "section": "Damage Formula PP-232", "quoted_text": "STR multiplier: Light×1, Heavy×2, Blade×1, Blunt×1.5"},
+    {"sim_variable": "STR_MULTIPLIER_HEAVY", "value": 2, "canonical_source": "params/combat.md", "section": "Damage Formula PP-232", "quoted_text": "STR multiplier: Light×1, Heavy×2, Blade×1, Blunt×1.5"},
+    {"sim_variable": "STR_MULTIPLIER_BLADE", "value": 1, "canonical_source": "params/combat.md", "section": "Damage Formula PP-232", "quoted_text": "STR multiplier: Light×1, Heavy×2, Blade×1, Blunt×1.5"},
+    {"sim_variable": "STR_MULTIPLIER_BLUNT", "value": 1.5, "canonical_source": "params/combat.md", "section": "Damage Formula PP-232", "quoted_text": "STR multiplier: Light×1, Heavy×2, Blade×1, Blunt×1.5. Heavy Blunt = ×3"},
+    {"sim_variable": "CRIT_THRESHOLD", "value": 3, "canonical_source": "params/combat.md", "section": "Damage Formula PP-232", "quoted_text": "Critical Hit (net hits >= 3): weapon modifier doubled"},
+    {"sim_variable": "DAMAGE_FORMULA", "value": "net_hits + STR*mult + weapon_mod", "canonical_source": "params/combat.md", "section": "Damage Formula PP-232", "quoted_text": "Damage = net hits + (STR × STR multiplier) + weapon modifier vs armour tier"},
+    {"sim_variable": "INITIATIVE_RULE", "value": "higher Agi declares last", "canonical_source": "designs/scene/combat_v30.md", "section": "§3 Initiative PP-232", "quoted_text": "Initiative determines declaration order. Higher initiative = more information."},
+    {"sim_variable": "WI_FORMULA", "value": "End + 6", "canonical_source": "designs/scene/combat_v30.md", "section": "§7 Wounds", "quoted_text": "Wound Interval = Endurance + 6"},
+    {"sim_variable": "MW_FORMULA", "value": "End // 2 + 1", "canonical_source": "designs/scene/combat_v30.md", "section": "§7 Wounds", "quoted_text": "Max Wounds = floor(End/2) + 1"},
+    {"sim_variable": "HP_FORMULA", "value": "WI * (MW + 1)", "canonical_source": "designs/scene/combat_v30.md", "section": "§7 Wounds", "quoted_text": "Health = WI × (MW + 1)"},
+    {"sim_variable": "FLAT_STAMINA", "value": "15 + End*2", "canonical_source": "tests/sim/duel_architecture_stress_01/duel_stress_test.py", "section": "Architecture C", "quoted_text": "def mk_stam(end): return 15 + end * 2  # C-specific flat stamina"},
+    {"sim_variable": "V2_BASE_TN", "value": 7.0, "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 1", "quoted_text": "Half-point TN modifiers (base 7)"},
+    {"sim_variable": "V2_TN_MOD_LIGHT_WEIGHT", "value": -0.5, "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 1", "quoted_text": "Weight Light -0.5"},
+    {"sim_variable": "V2_TN_MOD_BLUNT", "value": 0.5, "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 1", "quoted_text": "Type Blunt +0.5"},
+    {"sim_variable": "V2_TN_MOD_SHORT_REACH", "value": -0.5, "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 1", "quoted_text": "Reach Short -0.5"},
+    {"sim_variable": "V2_2H_BONUS_CAP", "value": -0.5, "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 6", "quoted_text": "2H bonus capped at -0.5 total per test results"},
+    {"sim_variable": "CUT_DAMAGE_TABLE", "value": [4, 3, 1, 0], "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 2", "quoted_text": "Cut: +4/+3/+1/+0 (None/Light/Med/Heavy)"},
+    {"sim_variable": "THRUST_DAMAGE_TABLE", "value": [3, 3, 2, "floor(STR/2)"], "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 2", "quoted_text": "Thrust: +3/+3/+2/floor(STR/2)"},
+    {"sim_variable": "BASH_DAMAGE_TABLE", "value": [2, 3, 4, 4], "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 2", "quoted_text": "Bash: +2/+3/+4/+4"},
+    {"sim_variable": "DISTANCE_OPTIMAL_PENALTY", "value": 0.0, "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 5", "quoted_text": "Optimal range = no penalty"},
+    {"sim_variable": "DISTANCE_ADJACENT_PENALTY", "value": 1.0, "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 5", "quoted_text": "Adjacent range = +1.0 TN"},
+    {"sim_variable": "DISTANCE_OPPOSITE", "value": "BLOCKED", "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 5", "quoted_text": "Opposite range = BLOCKED"},
+    {"sim_variable": "ESTABLISH_DISTANCE", "value": "Agi contest", "canonical_source": "tests/sim/weapon_system_v2/testing_plan.md", "section": "Phase 5", "quoted_text": "Establish Distance (Agi contest) changes range"}
+  ]
+}

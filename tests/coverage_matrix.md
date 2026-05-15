@@ -347,6 +347,14 @@
   2H cap at -0.5 helps but TN 6.5 vs 7.0 cliff remains. Mace/rapier non-viable.
   Decision: TN modifiers need redistribution. 1H weapons need TN reduction or
   2H weapons need further TN increase. The 0.5-point cliff is the structural issue.
+- Phase 5 distance re-run (2026-05-14): T2.4 + T6.1 re-run with Short/Mid/Long
+  distance mechanics. Sim: weapon_v2_distance_sim.py. N=3000, equal stats, arena 3.
+  T2.4 STILL FAILS — warhammer 59-74% (down from 66-85%). STR×3 overwhelms distance.
+  T6.1 PARTIAL — longsword vs dagger 52.7% (distance works), vs arming 65.8% None
+  (borderline) / 75.7% Heavy (fails), vs warhammer 51.7% (balanced).
+  Root cause: asymmetric range reward (Long = 1.5 TN gap vs Mid = 0.5 gap).
+  Adjacent penalty variant (+0.5 vs +1.0) confirmed values not penalty are the issue.
+  Next: T7.1 equal-budget builds to test stat-allocation self-balancing.
 
 
 ## settlement_mgmt_stress_01 — Handoff document committed (2026-05-14)
