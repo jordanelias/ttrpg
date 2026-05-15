@@ -555,3 +555,12 @@
 | T7.1 None: Tough 92% | FAIL — Mid-start favors Mid-reach weapons |
 | Root cause | Distance + stamina system needs engagement mechanic, not fixed Mid start |
 | **Status** | Fiore TN validated for weapon identity. Build matrix needs distance engagement. |
+
+### Fiore TN + Engagement (v27 continued)
+| Test | Result |
+|------|--------|
+| Agi engagement + Fiore TN | Tough 84% (None), 90% (Heavy) — improved but not passing |
+| Brute (STR6 mace) vs Tough | 19-40% — HP outlasts damage at all tiers |
+| Root cause | Fights end by stamina (4 rounds), not damage. HP >> DPR × rounds. |
+| Sim limitation | Simplified chassis lacks feint/taunt/initiative declaration — full BW tactical layer would create non-attrition win paths |
+| **Fiore TN verdict** | Correct for weapon identity and matchups. Build matrix needs full duel system, not more formula patches. |
