@@ -448,3 +448,17 @@
   this commit. Outstanding: NERS empirical probes (§2 of handoff),
   editorial P1-P4, F6 unblock, Mode-D systematic search,
   audit reviewer checklist §4 walkthrough.
+
+## Weapon System v2 (2026-05-14)
+
+| Test | Status | Sim | Finding |
+|------|--------|-----|---------|
+| T2.4 Warhammer dominance (with distance) | PARTIAL PASS | weapon_v2_distance_sim.py v3 | WH win rate 42-59% (PASS). DPH ratio 1.4-2.4× (FAIL >1.3×) |
+| T5.1 Distance sanity | PASS | weapon_v2_distance_sim.py v3 | Specialist 72-83% at optimal range. Directionality correct |
+| T6.1 Longsword dominance (with distance) | PARTIAL PASS | weapon_v2_distance_sim.py v3 | vs Mid weapons 47-58% (PASS). vs Long weapons 70-77% (FAIL) |
+| T4.1 Triangle modifier | FAIL | inline (3 variants) | Swing 10-20pp at ±0.5/±1.0/±2D. Target 25-35pp |
+| T4.2 Initiative + triangle | FAIL | inline | +1.3pp to +6.3pp. Target 8-15pp |
+| T4.3 Specialist penalty | FAIL | inline | Mace 19-25%. Target 40-50% |
+| T4.4 Random vs optimal defense | FAIL | inline | 7-8pp gap. Target <5pp |
+| T7.1 Equal-budget matrix | FAIL 5/6 | inline | Tough 69-82%, Soldier 9-17%. Target: no build >65% |
+| T7.2 Protocol swing | PARTIAL PASS | inline | 1-17pp. Target 15-30pp |
