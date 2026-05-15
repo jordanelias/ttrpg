@@ -510,3 +510,10 @@
 | Arming sword fails N without shield (P2) | D6 deferred to loadout |
 | Liechtenauer Vor/Nach | +7-14pp init advantage ✓ |
 | Harnischfechten attack selection | Correct (Cut→Thrust at Medium) ✓ |
+
+### P0: Stamina Quantization Cliff (v25, 2026-05-15)
+| Finding | Root Cause | Fix |
+|---------|-----------|-----|
+| End +42.5pp/point | Stamina 24→25 cliff (4.0→4.17 rounds at cost 6) | Stam=20+End |
+| HP contribution only +10.5pp | HP is not the dominant factor | D1 (End×5+20) helps but secondary |
+| Wound cap has no effect | Fights end by yield, not wounds | D15 unnecessary |
