@@ -1,5 +1,18 @@
 # Valoria Simulation Coverage Matrix
 
+## sim_mb_06_v24 — relative-origin cell model ground-up rewrite
+- Date: 2026-05-14
+- Scope: Subunit movement system, cell contention, displacement ripple
+- Mode: G — architectural rewrite
+- Status: committed
+- Changes: cell_ref (fixed per-cell starting pos), cell_pos (current pos), cell_vec (per-cell dir).
+  cells() = list(cell_pos.values()). Both sides symmetric. Horseshoe wing pivot (pass front,
+  then close laterally). Arrowhead tip 2 rows past centroid. Displacement ripple (depth 3).
+  find_contacts dedup fixed. reset_positions updated. _rotate_defender_facing bugfix.
+- Multi-turn calibration: mean 5.8 turns, rout at 29.5% casualties.
+- Battery 2/11 in-band — ANGLE_DEF_MOD (-1/-2 dice) too weak vs pool 11. Documented.
+
+
 ## sim_mb_06_v23 — cell-pair damage scaling (bottom-up lethality fix for Issue 1)
 - Date: 2026-05-14
 - Scope: resolve_engagements damage formula
