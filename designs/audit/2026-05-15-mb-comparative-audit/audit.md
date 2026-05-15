@@ -657,5 +657,241 @@ Recommendation: (c) with explicit documentation.
 
 ---
 
+## Chunk 4 — Cohesion → Rout → Pursuit Pipeline
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+The kill pipeline (R T-34): unit degradation through Discipline / Stamina / Morale → rout threshold → cascade contagion → pursuit lethality → reform/rally. Where most casualties happen (R O-10: 30–60% loser, most in collapse + pursuit). Excludes thread integration (Chunk 6) and post-battle reinforcement (Chunk 7).
+
+### R says
+
+- **T-29** — Morale cascade as feedback mechanism; failure propagates.
+- **T-34** — Kill pipeline: cohesion → break → rout → slaughter. Most casualties at slaughter stage.
+- **M-8** — Compound failure: one system fails → cascades non-linearly to others. Discipline + Stamina + Morale form a coupled triad.
+- **O-10** (F2 §VI) — Winner 5–15% / loser 30–60%; ratio 2–5×. Bulk of loser casualties in collapse + pursuit phases.
+- **Reconstruction calibration:**
+  - Cannae: encircled army couldn't rout (no retreat path) → ~75% Roman casualties.
+  - Adrianople: surrounded pocket → ~67% Roman casualties.
+  - Crécy / Agincourt: pursuit kills exceed line-fight kills; French heavies caught in mud.
+  - Hastings: 9-hour line + rout at Harold's death → most deaths in pursuit, ~30% English casualties.
+  - Marignano: pause overnight, second day's reform → total Swiss collapse on second day.
+
+### C says
+
+**§A.4 Morale triggers** (stepwise):
+- Size <50% of max: −1
+- Size <25%: −1 additional
+- Discipline broken this turn: −1
+- Allied unit routed in same zone: −1
+- General incap (Stage 1): −1
+- General killed (Stage 2): −2 (outside cap)
+- Flanked and lost exchange: −1
+- No engagement for 2+ consecutive turns (idle): −1 (P2-02/P2-04)
+
+**Cap −3 per Cascade Phase** non-general; +general-kill Stage 2 −2 additive. Max −5/Cascade.
+
+**Encirclement exception PP-683**: cap removed when 3-direction flanked AND no retreat zone. Cap restored next turn if retreat opens. Models Cannae / Lake Trasimene.
+
+**Morale floor 1 while general present** (cap removed at general death Stage 1).
+
+**Rout contagion brake** (P1-02): Rout causes −1 Morale adjacent units; secondary loss cannot rout same turn.
+
+**§A.12 Rout / Pursuit:**
+- Routing: Slow/Standard cannot fight back. Fast may rearguard at −2D Off.
+- Pursuit: Fast only. **Routing unit loses Size = pursuer net Offence successes** (no Defence) each turn.
+- Recall: Command Ob 2.
+- Over-pursuing exposes flanks.
+
+**Morale Cascade (ED-688)**: Unit routs (Morale 0) → Phase 6 Step 3 all friendly units in same engagement make Discipline Ob 1. Failure: Morale −1.
+
+**Rout vs Destroyed boundary**: Rout = Morale 0 (cascade fires); Destroyed = Size 0 (no cascade, separate §A.4 entry).
+
+**Stalemate Break (PP-297)**: 3 consecutive turns 0 dmg → Tactical Withdrawal. Cmd Ob 1 to maintain formation.
+
+**§A.4 Discipline restoration**: Reform Phase, +1 Disc, gate Cmd ≥ Disc+1 AND Cmd ≥ 2 (PP-241).
+
+**Discipline persists between battles (PP-712)**; Morale resets (PP-711).
+
+### S does
+
+**Continuous morale erosion** (line 1928):
+```python
+if total_dmg > 0 and u.discipline > 0:
+    erosion = total_dmg / (u.discipline * u.command)
+    u.morale -= erosion
+```
+Per-tick; no thresholds.
+
+**Phase-boundary exhaustion erosion** (line 359): if stamina ≤ 0: `morale -= 1.0 / (disc × cmd)`.
+
+**Rout resolution** (line 364): `morale ≤ 0 → routed`. Also (line 1208): `size == 0 → routed`.
+
+**Pursuit damage** (line 2067):
+```python
+a_pool = pursuer.base_combat_pool()
+a_net = roll_pool(a_pool)
+raw_dmg = a_net * (1 + pursuer.power)
+dmg = max(0, raw_dmg - routing_unit.dr)
+```
+Damage in HP units, **not Size units**.
+
+**Rearguard** (line 2085): `REARGUARD_PENALTY=2` Off. ✓ matches C.
+
+**Recall check** (line 2103): `roll_pool(command) ≥ 2`. ✓.
+
+**Discipline cascade** (line 2126): `discipline_check_cascade` Ob 1. ✓.
+
+**Multi-unit rout cascade** (lines 2283–2336): Disc Ob 1 + ROUT_CONTAGION_MORALE_HIT=1; brake deferred (line 2335).
+
+**Freed-attacker** (line 2135): victor attacks adjacent enemy with `-FREED_ATTACKER_FLANK_PENALTY=1` Off.
+
+**Discipline degradation** (line 384, PP-502): ✓.
+
+**Reform / Rally** (lines 402, 406): empty hooks.
+
+**Not implemented:** Encirclement PP-683; Idle morale loss; Stalemate Break; Over-pursuing flank exposure; Stepwise morale triggers; Morale floor enforcement; Two-stage general death (F3.7 carryover); Stage 1 incap −1 morale all units.
+
+### Three-way comparison
+
+| Element | R | C | S | Alignment |
+|---|---|---|---|---|
+| Morale degradation | T-29 cascade | Stepwise triggers + caps | Continuous erosion | **C↔S divergent — F4.3** |
+| Morale floor while general alive | (implicit) | Floor 1 | No explicit floor | C↔S P2 — F4.3b |
+| Encirclement exception | Cannae compression | PP-683 cap removed | Not implemented | **P2 — F4.2 (compounds F1.3)** |
+| Rout threshold | implicit | Morale 0 → routed | `morale ≤ 0 → routed` | ✓ |
+| Discipline degradation | T-29 | PP-502 deterministic | line 384 | ✓ exact |
+| Reform / Rally | T-36 | §A.4 Reform Phase | Empty hooks | **P2 — F4.6** |
+| Rout contagion | T-29 | −1 morale adj + brake | Adj + brake deferred | ✓ |
+| Morale Cascade Disc Ob 1 | T-29 | §A.12 / ED-688 | line 2126 Ob 1 | ✓ exact |
+| **Pursuit lethality formula** | O-10 catastrophic | **Size loss = net Off successes** | **HP = net × (1+P)** | **P1 — F4.1 (25–30× drift)** |
+| Pursuit Fast-only | T-14 | Fast only | ✓ enforced | ✓ |
+| Rearguard −2D Off | (silent) | Fast may rearguard | `REARGUARD_PENALTY=2` | ✓ |
+| Recall Cmd Ob 2 | (silent) | Ob 2 | Ob 2 | ✓ exact |
+| Over-pursuing flank | implicit | §A.12 | Not modeled | P3 — F4.8 |
+| Stalemate Break | (silent) | PP-297 | Not modeled | P3 — F4.7 |
+| Idle 2+ morale loss | (silent) | −1 morale | Not modeled | P3 — F4.4 |
+| Rout vs Destroyed cascade | (silent) | Cascade fires Morale-rout only | Fires any rout | P3 — F4.9 |
+| Compound failure | M-8 non-linear | Cap of −3 limits | Independent variables | **P2 — F4.5** |
+| Two-stage general death | (silent) | Stage 1 → Stage 2 | Single-stage | P2 (F3.7) |
+| Casualty asymmetry | 5–15% / 30–60% (2–5×) | Emergent | v16 measured 1.4× | **P1 calibration — F4.1 drives** |
+
+### Bottom-up sanctity check
+
+| Element | Bottom-up? | Notes |
+|---|---|---|
+| Continuous erosion `dmg / (disc × cmd)` | ✓ S | Composes damage + general primitives |
+| Stepwise triggers (Size <50%, etc.) | ⚠ C | Borderline discrete pattern |
+| Encirclement cap removal | ✓ C | Composes from retreat-zone primitive |
+| Pursuit Size-loss = net (C) | ✓ C | Direct primitive |
+| Pursuit `net × (1+P) HP` (S) | ✓ architecturally | But doesn't match C — F4.1 |
+| Rout cascade Disc Ob 1 | ✓ C+S | Declarative check |
+| Reform Cmd gate | ✓ C | Composes from general + Disc primitives |
+| Stalemate Break (3-turn rule) | ⚠ C | Borderline; defensible as terminal condition |
+| Compound failure cross-coupling | ∅ S | Not modeled |
+
+**Verdict:** Cohesion / rout / pursuit are mostly bottom-up sanctified. C's stepwise morale triggers are borderline. Pursuit formula drift (F4.1) is primitive-level error.
+
+### Top-down historical validation
+
+| Battle | Winner % | Loser % | Ratio | Drivers | C reproducible? | S reproducible? |
+|---|---|---|---|---|---|---|
+| Cannae | ~10% | ~75% | 7.5× | Encirclement + no retreat (PP-683) | ✓ with PP-683 | ✗ F4.1 + F4.2 + F1.3 |
+| Adrianople | ~10% | ~67% | 6.7× | Cavalry encirclement + pocket | ⚠ Cavalry deferred | ✗ Same as Cannae plus no cavalry |
+| Pharsalus | ~3% | ~22% | 7.3× | Reserve commit + cavalry rout | ✓ with Reserve | ✗ Reserve absent (F1.1) |
+| Hastings | ~30% | ~30% | 1× | 9-hr line + Harold's death + cavalry pursuit | ✓ Shield Wall + FR | ⚠ Pursuit weak |
+| Crécy | ~5% | ~33% | 6.6× | Longbow + cavalry-in-mud + dismounted pursuit | ⚠ Longbow class | ⚠ Same + pursuit |
+| Agincourt | ~3% | ~40% | 13.3× | Funnel + missile + mud + pursuit | ⚠ Funnel/mud missing | ⚠ Same + pursuit |
+
+**Direction surfaced:** F4.1 + F4.2 + F1.3 together produce historical 2–5× casualty ratio. All three missing from S; v16 manifest measured 1.4× — gap explained.
+
+### Lateral gameplay validation
+
+| Precedent | Morale model | Rout cascade | Pursuit lethality | Reform/rally |
+|---|---|---|---|---|
+| **Total War** | Bar w/ multi-trigger erosion | Wide cascade once wing breaks | **Cavalry pursuit catastrophic — 60–90% routed army deaths** | Reform if not under fire + officer |
+| **Ultimate General CW** | Continuous + threshold | Cascade adjacent + chain | Cavalry pursuit lethal | Reform if officer + safe |
+| **Field of Glory II** | Cohesion-test → broken → routed → destroyed | Within-group contagion | Lethal once broken | Rally check after disengage |
+| **Combat Mission** WEGO | Discrete states OK→Cautious→Nervous→Pinned→Broken→Panicked→Routed | Within-platoon spread | Pursuing fire kills broken | Reform after cover + time |
+| **Mount & Blade Bannerlord** | Per-soldier + army-wide cascade | Army-wide on commander death | **Cavalry annihilates routed infantry** | Reform at retreat marker |
+| **Unicorn Overlord** | Class-specific morale | Per-encounter | Resolved within encounter | Returns at deployment |
+| **Football Manager** | Form + morale + fatigue per player | Team mentality cascade | N/A | Substitution + season rotation |
+
+**Verdict laterally:**
+- **Every precedent has catastrophic pursuit.** TW / Bannerlord especially: 60–90% loss for routed armies. Valoria S 1.4× ratio is the outlier. **Lateral signal strongly favors F4.1 fix.**
+- **Continuous morale erosion (S) matches TW + UG + FM.** Validates T-58.
+- **Reform/rally standard feature.** S empty hooks (F4.6) is a lateral gap.
+- **Within-group cascade brake** is a Valoria design strength — prevents runaway cascades.
+
+### Throughlines surfaced (Chunk 4)
+
+- **T-57 (R/C/S) — Cohesion → rout → pursuit is the central kill pipeline.** R T-34. S currently produces ~5× under-weight pursuit lethality (measured 1.4× vs R 2–5×).
+
+- **T-58 (C/S) — Continuous morale erosion vs stepwise triggers is a design-philosophy choice.** Continuous is M-9-compliant. TW/UG/FM lateral validate continuous. **Recommendation: continuous as canonical.**
+
+- **T-59 (C unique) — Encirclement is the only canonized "special case" in cohesion mechanics.** PP-683 cap removal. Composes from retreat-zone primitive — special case admissible because it emerges from primitive, not from recognition.
+
+- **T-60 (R M-8) — Compound failure requires feedback loops.** Cross-coupling terms: low Stamina amplifies morale erosion; broken Discipline amplifies casualty rate. `[QUESTION FOR JORDAN]`.
+
+- **T-61 (C/S) — Rout vs Destroyed boundary matters for cascade.** C explicit; S conflates. Definitional primitive distinction.
+
+- **T-62 (TW/Bannerlord lateral) — Asymmetric pursuit lethality is the engine of historical casualty distributions.** F4.1 is the lever.
+
+### Findings (Chunk 4)
+
+**F4.1 — P1 (R↔C↔S):** Pursuit damage formula drift. C §A.12: **Size loss = pursuer net Offence successes** per turn. S line 2098: `dmg HP = net × (1 + Power) - DR`. At BLOCK_SIZE=100: S deals 0.03–0.10 Size/turn vs C's 2–4 Size/turn. **25–30× drift.** Primary driver of v16's 1.4× ratio vs R's 2–5×.
+
+*Resolution path:* Replace `pursuit_damage` line 2098: `dmg_size = max(0, a_net - dr_size_units)` where `dr_size_units = routing.dr / BLOCK_SIZE` or simply `max(0, a_net)`. Apply: `routing.size = max(0, routing.size - dmg_size); routing.hp = max(0, routing.size * BLOCK_SIZE)`. Pursuit applies directly to Size, then HP follows.
+
+**F4.2 — P2 (R↔C↔S):** PP-683 encirclement exception not implemented. **Compounds with F1.3.** Cannae / Adrianople / Panipat compression mortality require it.
+
+*Resolution path:* Add `available_retreat_zones` primitive per Unit per tick (cells outside `cells_in_contact` neighborhood not adjacent to enemy units). When 0 AND flanked ≥3 directions: `morale_cap_lifted = True` for current Cascade Phase.
+
+**F4.3 — P2 (C↔S):** Stepwise morale triggers absent from S. `[QUESTION FOR JORDAN]` direction: (a) S adds stepwise on top of continuous, or (b) C replaces stepwise with continuous. Recommendation (b) — continuous is M-9-compliant + lateral-validated.
+
+**F4.3b — P2 (C↔S):** Morale floor 1 while general present not enforced in S. Continuous erosion can dip below 0.
+
+*Resolution path:* `if command > 0: morale = max(1, morale_after_erosion)` in line 1930.
+
+**F4.4 — P3 (C↔S):** Idle 2+ turns morale loss not implemented. Discourages stalemate-by-disengagement.
+
+*Resolution path:* Track `turns_since_engagement` per Unit; when > 2: `morale -= 1` at phase boundary.
+
+**F4.5 — P2 (R↔S):** Compound failure (M-8) — no cross-coupling between Disc / Stamina / Morale. Currently independent.
+
+*Resolution path (`[QUESTION FOR JORDAN]`):* Cross-coupling terms (low stamina × 1.5 morale erosion; broken disc × 1.5 incoming damage).
+
+**F4.6 — P2 (C↔S):** Reform / Rally not implemented. Empty hooks. Restates F3.10.
+
+*Resolution path:* Implement `reform_check` at phase boundary for non-engaged units; if Cmd ≥ Disc+1 AND Cmd ≥ 2: Disc += 1 (max disc_start).
+
+**F4.7 — P3 (C↔S):** Stalemate Break (PP-297) not implemented.
+
+*Resolution path:* `zero_damage_turn_count` at multi-turn battle layer; at 3 → Tactical Withdrawal outcome.
+
+**F4.8 — P3 (C↔S):** Over-pursuing exposes flanks. Not modeled.
+
+*Resolution path:* Pursuer facing locks to retreat direction when pursuit_distance > threshold; attacks from non-retreat direction get RED zone bonus.
+
+**F4.9 — P3 (C↔S):** Rout vs Destroyed cascade distinction.
+
+*Resolution path:* Add `rout_reason: Literal["morale", "destruction"]` field; cascade fires only on `rout_reason == "morale"`.
+
+**F4.10 — P3 (C↔S):** Stage 1 general death −1 Morale all units / Stage 2 −2 outside cap. F3.7 carryover.
+
+**F4.11 — P3 (C↔S):** Flanked-and-lost-exchange −1 morale trigger absent.
+
+*Resolution path:* When taking damage from non-GREEN attacker AND lower net than attacker: `morale -= 1` at phase boundary.
+
+### Carried forward
+
+- **F4.1 (pursuit formula) + F4.2 (PP-683) + F1.3 (compression damage)** → **three primitives needed to produce R O-10 casualty asymmetry**. Highest impact for v26+.
+- **F4.3 (continuous vs stepwise morale)** → canon revision (`[QUESTION FOR JORDAN]`).
+- **F4.5 (compound failure)** → optional augmentation (`[QUESTION FOR JORDAN]`).
+- **F4.6 (Reform)** → required for multi-battle campaign play.
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
