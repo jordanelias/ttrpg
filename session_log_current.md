@@ -1,17 +1,16 @@
 ---
-session_id: v23-weapon-v2-complete-audit
-session_close: "2026-05-14"
+session_id: v24-weapon-v2-shield-bash-close
+session_close: "2026-05-15"
 phase: simulation
-status: audit_complete
-last_stage: complete_26_test_audit
-last_commit: 73c5c01
-commits: 4
+status: decision_register_complete
+last_stage: d6_d8_tested_all_decisions_resolved
+last_commit: 190851b
+commits: 1
 next_action:
   skill: valoria-simulator
-  description: Ratify D1-D5 (HP, pool, crit, mace, triangle). Test D6 (shield +3D). Remaining — T6.2 retest with shield fix, T7.1 heavy armour with Bash table reduction.
+  description: Ratify D1-D5 to params/combat.md and designs/scene/derived_stats_v30.md. Shield system needs loadout design (D6). Remaining — integration test T9.1 with ratified params.
 blockers:
-  - 12 open decisions (D1-D12) need ratification
-  - Shield defense bonus needs testing at +3D/+4D (D6)
-  - Heavy armour dominance cap undecided (D8)
-  - Crit threshold change from canonical >=3 needs ratification (D3)
+  - D1-D5 ratification (HP, pool, crit, mace, triangle) — tested and confirmed, awaiting commit to params
+  - D6 shield needs loadout system design before implementation
+  - canonical_sources.yaml freshness stale
 ---
