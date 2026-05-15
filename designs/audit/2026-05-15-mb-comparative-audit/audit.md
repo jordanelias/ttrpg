@@ -1532,5 +1532,237 @@ Muster success but Wealth failure → unit raised as Light Infantry.
 
 ---
 
+## Chunk 8 — Scale Transitions + Consequences Propagation
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+How mass battle nests with the rest of Valoria: three-mode architecture (TTRPG / Board Game / Hybrid), level 1–4 zoom within mass battle, strategic ↔ tactical bridges (auto-resolve and zoom-in), battle-outcome cascade to MS / IP / Strain / Accord / Treasury / Faction. **The "scale transitions" core UX flow per design_doc_framing.** Resolves most of Chunk 7's P3s.
+
+### R says (analogical)
+
+- **M-8** — Compound failure cascades sideways through scales. T-29 morale within unit → cascade across units → cascade to faction.
+- **T-21 analog** — Strategic-tactical bridging: who wins the battle decides territory control; territory control affects future force-generation.
+- **Operational layer (R Phase 0):** Approach is operational/strategic; battles are tactical-instances within campaigns.
+
+### C says
+
+**Three-mode architecture:**
+- TTRPG/Hybrid Part A (§A.1–§A.14) — full zoom-in. 5-phase turns. Cell-level cohesion.
+- Board Game Part B (§B.1–§B.5) — single Priority 2 slot. 3–5 minute resolution. Tactic cards.
+- Hybrid Handoff §B.5 — BG → TTRPG zoom-in trigger.
+
+**Part B mechanics:**
+- §B.1: 3–5 min; strategic depth in preparation.
+- §B.2: BG unit stats (Martial / Endurance / Discipline / Health) with TTRPG-equivalence table including class-dependent Dmg Mod (Levy +1, LI +2, HI +4, Cav +5, Templar +5).
+- §B.3: Tactic-card disposition; pool = sum(Martial) + floor(Mil/2); TN 7; margin → outcome.
+- §B.5: BG → TTRPG state translation.
+
+**TTRPG Dmg Mod (PP-245):** ⌈BG Dmg Mod ÷ 2⌉.
+
+**Part D World Bridge:** `[GAP: not fetched this audit; Chunk 12.]`
+
+**Part E Battle Consequences (ED-542):**
+
+§E.1 Immediate:
+- Substrate Fracture: inter-faction battle → MS −1 (Campaign/War: MS −2).
+- Conqueror's Accord erosion: conquered territory Accord = 1.
+- Defender's Accord erosion: Order −1 nearest settlement.
+
+§E.2 Accounting (ED-743 revised):
+- **Battle-occurrence no longer direct IP / Strain trigger.** Accord erosion at territory level; IP/Strain fire downstream from sustained Accord ≤ 1.
+- "Cost is in the holding, not the conquest" — rapid Govern to Accord ≥ 2 (1–2 seasons) avoids IP/Strain advance.
+
+§E.3 Exceptions: Covert 0; Altonian MS −1 only; Uprising MS −1 only; Löwenritter coup Strain +1 first 2 seasons only.
+
+§E.4 Caps: Battles MS −3/season; other caps in peninsular §3.2 / §4.1.
+
+**peninsular §3.1 Substrate Fracture:** MS −1/−2 per battle type.
+
+**peninsular §3.2 Vulnerability Signal (ED-743):**
+- Accord ≤ 1 territory count: 0–1 → +0 IP; 2–3 → +1; 4–5 → +2; 6+ → +3.
+- CI ≥ 60 sustained → +2 IP/season.
+- Faction eliminated → +2 IP (one-time).
+- NPC battles don't directly advance IP; their resulting Accord ≤ 1 territories DO contribute.
+
+### S does
+
+**Partial — orchestrators only:**
+- `run_multi_turn_battle` (line 1998): up to 8 battle turns. Returns dict with winner / totals. **No emit-events to strategic layer.**
+- `run_multi_unit_battle` (line 2200+): morale cascade + freed-attacker + pursuit + recall. **No bridge to Faction / territory / MS / IP / Strain.**
+- Level 1–4 zoom (v16 manifest): cell → engagement → unit → battle. **Level 5+ (campaign / season / peninsula) not implemented.**
+- `between_turn_recovery` (line 2266): stamina-only within battle, not between battles.
+
+**Not implemented:** Hybrid Handoff; BG-mode mass battle; Battle-outcome cascade (§E.1, §E.2); Accord erosion to nearest settlement; conquered-territory Accord = 1; Substrate Fracture MS; Vulnerability Signal IP; Turmoil Strain; Gap registration (F6.6); Multi-battle persistence (F7.4/F7.5/F7.6/F7.8/F7.9); Auto-resolve.
+
+### Three-way comparison
+
+| Element | R (analog) | C | S | Alignment |
+|---|---|---|---|---|
+| Three-mode architecture | (Valoria-specific) | TTRPG / BG / Hybrid §A/B/B.5 | TTRPG-mode only (Part A subset) | **C↔S P1 — F8.1** |
+| Hybrid Handoff zoom-in | (no analog) | §B.5 | Not modeled | **C↔S P1 — F8.2** |
+| BG battle resolution | (analog: TW auto-resolve) | §B.3 tactic-card + margin | Not modeled | C↔S P1 — F8.1 |
+| Level 1–4 zoom in sim | (analog: tactical scales) | Implicit | v16 manifest 1–4 | ✓ |
+| Level 5+ zoom (campaign / season) | (analog: R Phase 0) | Strategic peninsula layer | Not implemented | **C↔S P1 — F8.3** |
+| Battle resolution emit-events | (analog: outcome → strategic) | §E.1 / §E.2 / peninsular §3 | Not emitted | **C↔S P1 — F8.4** |
+| Substrate Fracture MS −1 | (no analog) | §E.1 + peninsular §3.1 | Not emitted | C↔S P1 — F8.4 |
+| Conqueror's Accord erosion | (analog: post-conquest unrest) | §E.1 Accord = 1 | Not emitted | C↔S P1 — F8.4 |
+| Defender's Accord erosion | (analog: collateral) | §E.1 Order −1 | Not emitted | C↔S P1 — F8.4 |
+| Vulnerability Signal IP | (no analog) | peninsular §3.2 territory-count | Not emitted | C↔S P2 — F8.5 |
+| Turmoil Strain | (no analog) | peninsular §4.1 | Not emitted | C↔S P2 — F8.5 |
+| Battle-outcome Military ±2 cap | T-26 cadre loss | §A.14 | Not emitted (F7.9) | F7.9 |
+| Disc −15 / Disc −30 + Mandate −1 | (no analog) | §A.14 | Not emitted | C↔S P2 — F8.6 |
+| Gap registration to territory | (no analog) | §A.10 EDGE-05 | Not emitted (F6.6) | F6.6 |
+| Disc persistence between battles | T-26 | PP-712 | Not modeled (F7.4) | F7.4 |
+| Hostile-territory Treasury | Crusader logistics | §A.14b | Not modeled (F7.5) | F7.5 |
+| Levy offensive restriction | feudal levy | §A.14c | Not modeled (F7.6) | F7.6 |
+| Auto-resolve when zoom-out | TW/Bannerlord/UO/FM | §B.5 + §B.3 | Not modeled | **C↔S P1 — F8.7** |
+| Territory polygon ↔ cell-grid | (analog: T-23 ground anchor) | T-44 implicit; PP-780 derivation | Not implemented | **C↔S P2 — F8.8** |
+
+### Bottom-up sanctity check
+
+| Element | Bottom-up? | Notes |
+|---|---|---|
+| Battle.emit_outcome_events() | ✓ | Composes from battle-resolution state |
+| Substrate Fracture MS −1 | ✓ | Single decrement per resolution event |
+| Conqueror's Accord erosion | ✓ | Single set when battle.outcome == "conquest" |
+| Vulnerability Signal IP-from-count | ✓ | Per-Accounting threshold lookup |
+| Hybrid Handoff Part B → Part A | ✓ | State-translation function |
+| Level 5+ zoom (season) | ✓ if season is primitive | Season as event-loop trigger |
+| Auto-resolve | ✓ | Deterministic Part B run; outcome to strategic |
+| Territory-cell coordinate bridge | ✓ | territory.polygon → cell.coordinates query |
+| Three-mode mechanic switch | ⚠ borderline | Mode flag is special-case; defensible because mode is a real run-time primitive (player decision, not recognition) |
+
+**Verdict:** Scale-transition mechanics bottom-up. Mode flag borderline but defensible. **No "this looks like a strategic-layer event" recognition — strategic events are explicit emit_event() calls from tactical primitive outcomes.**
+
+### Top-down historical validation
+
+| R battle | Strategic context | C reproducible? | S reproducible? |
+|---|---|---|---|
+| Cannae | Rome's manipular absorbs catastrophic loss; Carthage's cadre irreplaceable | ✓ §A.14 + §A.13 + §1.6 | ✗ no emit, no persistence |
+| Pharsalus | Caesar campaign tempo + Pompey constraint | ✓ §A.14b + campaign-defeat Mandate −1 | ✗ |
+| Marignano | Swiss canton recruitment limits follow-up | ✓ §1.5 Prosperity + §1.4 Population | ✗ |
+| Hastings | William's invasion gamble + Harold's two-front | ⚠ §A.14b partial; multi-front not explicit | ✗ |
+| Crécy / Agincourt | English logistics vs French knightly pool | ✓ §A.14b + §A.14c | ✗ |
+| Pavia | François I captured → Mandate −1 cascade | ✓ §A.14 | ✗ |
+| Panipat | Mughal conquest → governance challenge | ✓ §E.1 + §3.2 Vulnerability Signal | ✗ |
+| Adrianople | Valens campaign attrition before battle | ⚠ §A.14b friendly territory has no cost | ✗ |
+
+**Direction surfaced:** Canon design covers strategic-context patterns well. **F8.4 (emit-events) is the highest-leverage Chunk-8 finding — unblocks every other strategic-tactical interaction.**
+
+### Lateral gameplay validation
+
+| Precedent | Three-mode equivalent | Scale zoom | Auto-resolve | Outcome propagation |
+|---|---|---|---|---|
+| **Total War** | Campaign map + battle map; auto-resolve toggle | Strategic ↔ tactical | Unit-strength formula; casualties + territory + relations | Battle → territory control + casualties + diplomatic shifts |
+| **Field of Glory II** | Single (FoG2 Empires for campaign) | Tactical only | N/A | Per-scenario |
+| **Ultimate General CW** | Campaign + tactical | Per-campaign + per-battle | Reputation / army-strength | Tactical → casualties + brigade rep + army points |
+| **Combat Mission** | Per-scenario / CM packs | Per-scenario | None | Per-scenario via TO&E |
+| **Mount & Blade Bannerlord** | Campaign + tactical + tournament + siege | Strategic ↔ tactical ↔ army-of-armies | **Casualty roll** | Tactical → casualties + morale + captures + relations |
+| **Unicorn Overlord** | Strategic overworld + tactical encounters | Per-encounter | **Auto-resolves after pre-battle setup**; watch outcome | HP/AP persists between deployments |
+| **Football Manager** | Season + match + transfer + tactical screen | Match ↔ season ↔ club career | **Holiday/instant result auto-resolves** | Condition + form + points + season standings |
+| **Heroes of Might & Magic** | World map + tactical hex + town management | Per-battle ↔ per-day ↔ per-week | Quick combat | Battle → hero XP + casualties + town control |
+
+**Verdict laterally:**
+- **Three-mode is Valoria-distinctive at the medium axis (TTRPG / BG / Hybrid).** Lateral has two-mode scope axis (strategic / tactical). Orthogonal.
+- **Auto-resolve universal in acclaimed precedents.** F8.1 / F8.7 match lateral norm.
+- **Hybrid Handoff (§B.5) ≈ TW "view battle" vs "auto-resolve."** F8.2 well-grounded.
+- **Outcome-propagation universal.** §E + peninsular §3 + §A.14 well-specified. F8.4 is gating piece.
+- **FM strongest persistence analog.** Condition/form/sharpness/standings — Valoria's MS/IP/Strain/Accord/Treasury/Military/Mandate cascade has comparable depth.
+- **TW campaign timer (turn/season) ≈ Valoria Accounting.** Time-grain validated.
+- **HoMM hero XP carry-over ≈ §1.6 Experience persistence + general state machine.**
+
+### Throughlines surfaced (Chunk 8)
+
+- **T-81 (C / lateral universal) — Three-mode handles medium-translation; two-scope handles game-state scale.** Orthogonal axes.
+
+- **T-82 (C / lateral universal) — Outcome-propagation cascade is the engine of cross-scale gameplay.** Without emit-events (F8.4), each battle is isolated.
+
+- **T-83 (C §E.2 ED-743) — "Cost is in the holding, not the conquest" is Valoria-distinctive.** Lateral norm taxes conquest directly. ED-743 redirects to held-instability. **Incentivizes rapid pacification over hesitant conquest.** R Pax Romana analog.
+
+- **T-84 (C §B.5 / TW lateral) — Hybrid Handoff ≈ TW "view battle" toggle.** F8.2 can study TW pattern.
+
+- **T-85 (v16 manifest + C) — Level 5+ zoom is the missing scope.** S models 1–4. Strategic is 5+. Bridge = emit-events. F8.4 extends 4 → 5+.
+
+- **T-86 (C / R T-26 / FM lateral) — Persistence is the most consequential strategic mechanic.** Persistence + emit-events foundation pair.
+
+- **T-87 (C §E.2) — Accord-based deferred IP / Strain is mechanically distinctive.** Closest: TW province unrest accumulating. Valoria's binary state → threshold is cleaner.
+
+### Findings (Chunk 8)
+
+**F8.1 — P1 (C↔S):** BG-mode mass battle (§B.1–§B.5) entirely absent from S. One of two full canonical modes unimplemented.
+
+*Resolution path:* `bg_mass_battle.py` module. `resolve_bg_battle(side_a, side_b, tactic_a, tactic_b, ground) → outcome`: tactic-card disposition → pool sum(Martial)+floor(Mil/2) → TN 7 → margin → outcome → emit-cascade.
+
+**F8.2 — P1 (C↔S):** Hybrid Handoff (§B.5) not modeled.
+
+*Resolution path:* `translate_bg_to_ttrpg(bg_state) → ttrpg_state` function. Reverse translation post-zoom-in. Two-way state-mapping; no recognition.
+
+**F8.3 — P1 (C↔S):** Level 5+ zoom not modeled. Strategic layer cannot consume battle outcomes.
+
+*Resolution path:* `StrategicLayer.on_battle_resolved(outcome)` + `accounting()` event loop. Applies §E.1 immediate + records §E.2 deferred + computes peninsular §3.2 / §4.1 at Accounting.
+
+**F8.4 — P1 (C↔S):** Battle-outcome event emission not implemented. **Highest-leverage Chunk-8 finding — unblocks F6.6 / F7.1 / F7.3 / F7.5 / F7.6 / F7.7 / F7.8 / F7.9 when implemented.**
+
+*Resolution path:*
+```python
+@dataclass
+class BattleOutcome:
+    winner: Optional[Side]
+    casualties: Dict[Faction, List[(Unit, int)]]
+    units_destroyed: List[Unit]
+    final_disc: Dict[Unit, int]
+    final_morale: Dict[Unit, int]
+    battle_type: Literal["standard","campaign","war","siege","uprising","altonian"]
+    territory: Territory
+    territory_conquered_by: Optional[Faction]
+    thread_gaps_created: List[Gap]
+    is_inter_faction: bool
+```
+`run_multi_unit_battle` returns `BattleOutcome`; strategic layer consumes via `on_battle_resolved(outcome)`.
+
+**F8.5 — P2 (C↔S):** Vulnerability Signal + Turmoil per-Accounting not modeled.
+
+*Resolution path:* At Accounting: `accord_low_count = count(t.accord <= 1)`. Lookup peninsular §3.2 threshold → IP delta. §4.1: Turmoil += min(3, accord_low_count). Caps respected.
+
+**F8.6 — P2 (C↔S):** Battle-lost → Disc −15 / Campaign-defeat → Disc −30 + Mandate −1 not modeled (§A.14).
+
+*Resolution path:* On BattleOutcome with loser_faction: `loser.derived_discipline -= 15`. Campaign: `−30 + mandate -= 1`. At derived_stats_v1 layer.
+
+**F8.7 — P1 (C↔S):** Auto-resolve at strategic-layer boundary not modeled. Player must always run full tactical battle.
+
+*Resolution path:* `Battle.resolve_mode: Literal["auto", "manual"]`. Auto → `resolve_bg_battle` (F8.1). Manual → `run_multi_unit_battle`. Both return `BattleOutcome`.
+
+**F8.8 — P2 (C↔S):** Territory ↔ cell-grid coordinate bridge not implemented. PP-780 F5.2 requires it.
+
+*Resolution path:* `territory.polygon.intersection(battle.center)` returns dominant ground type at coordinates. Cell grid laid within battle's portion of polygon. `march_layer §8.2` canon-spec for handoff.
+
+**F8.9 — P3 (C↔S):** Three-mode mechanic switch not implemented.
+
+*Resolution path:* `Battle.mode: Literal["ttrpg","bg","hybrid"]`. Dispatch to appropriate resolver. Hybrid mode: BG by default + §B.5 zoom-in at any turn. Mode is real run-time flag.
+
+**F8.10 — P3 (C↔S):** Part D World Bridge not in audit context. `[GAP: Part D content — Chunk 12 fetch.]`
+
+### Carried forward / Resolved-by-Chunk-8
+
+**Resolved by F8.4 (emit-events):**
+- F6.6 (Thread Gaps registered)
+- F7.1 (Military ceiling at instantiation)
+- F7.3 (Reinforcement)
+- F7.5 (Campaign Supply)
+- F7.6 (Levy offensive restriction)
+- F7.7 (Knights Templar Sacred Assembly)
+- F7.8 (Wealth-Zero degradation)
+- F7.9 (Battle → faction cascade)
+
+**Resolved by F8.4 + F7.4 together:** Discipline persistence (cross-scale state propagation).
+
+**Carried to Chunk 12:** F8.10 (Part D fetch); cumulative P1 register for ledger append.
+
+**New for Chunk 9:** F8.4's emit pattern is the substrate on which doctrine-triangle interactions fire.
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
