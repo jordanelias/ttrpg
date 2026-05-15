@@ -544,3 +544,14 @@
 **File:** tests/sim/sim_mb_06_v25.py
 
 **Status update v25 (post-commit):** sim file landed (this commit). 18+ constants ledger entries reference §A.3b. Calibration work continues — battery 3/11 in-band, known issues documented above.
+
+### Fiore TN System (v27, 2026-05-15)
+| Finding | Result |
+|---------|--------|
+| Fiore TN: base 7.0 all, 2H -0.5 only | Weapon matchups excellent with distance |
+| Dagger vs AS: 76% → 31% | **Fixed** — dagger penalized at Mid, must close to Short |
+| Mace vs LS Heavy: 60% | Mace wins at Heavy via positional advantage ✓ |
+| T5.1 directionality | PASS — 74%/83% at optimal |
+| T7.1 None: Tough 92% | FAIL — Mid-start favors Mid-reach weapons |
+| Root cause | Distance + stamina system needs engagement mechanic, not fixed Mid start |
+| **Status** | Fiore TN validated for weapon identity. Build matrix needs distance engagement. |
