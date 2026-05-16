@@ -226,3 +226,15 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | At-risk | Balance Note canonization timing; Decision E scope-validation mismatch; F13/Decision E bundling; Phase 7 End-dominance possibly artifact |
 | Open | Phase 8 (better Smart AI); cross-system audit; End-dominance follow-up; SHA refresh |
 | File | tests/audit/workstream_meta_audit_2026-05-15.md |
+
+### Phase 8 Smart AI v2 (2026-05-15)
+| Test | Result |
+|------|--------|
+| Trigger | WS-H-3, WS-H-4 (meta-audit 2026-05-15) — Phase 7 Smart AI under-tuned |
+| Smart v2 AI fixes | Take Breath threshold ≤8, Full Guard last-stand only, Feint alternation per PP-294 |
+| Fast vs Strong, Smart v2 symmetric | **100% Fast — pool advantage structurally dominant** |
+| Tough vs Strong, Smart v2 symmetric | 63.7% Tough — moderate End-dominance (Phase 7 7.5% was artifact) |
+| Calibration: Agi 3 vs Agi 3 symmetric | 51.2% — sim balanced |
+| KEY FINDING | Phase 7 "34.9% Feint inverts dominance" was partly stamina-management artifact; pool advantage at 17D vs 11D is structurally dominant in skilled-vs-skilled play |
+| Combat Balance Note status | Needs revision — 34.9% claim misleading without stamina-asymmetry caveat |
+| Files | tests/sim/phase8_smart_ai_v2_2026-05-15.{py,md} + phase8_sim_verification_ledger.json |

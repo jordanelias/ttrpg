@@ -1,0 +1,149 @@
+{
+  "sim_file": "tests/sim/phase8_smart_ai_v2_2026-05-15.py",
+  "scope": "custom",
+  "purpose": "Phase 8 better-tuned Smart AI v2 to address Phase 7 sim artifacts (WS-H-3, WS-H-4). Tests whether action triangle balance finding holds when both sides manage stamina properly and use PP-294-aware Feint alternation. Key finding: Phase 7's 'action triangle inverts dominance' was partly stamina-management artifact; pool advantage is structurally dominant when both sides play tactically.",
+  "systems": ["combat"],
+  "entries": [
+    {
+      "sim_variable": "DIE_MEAN_TN7",
+      "value": 0.4,
+      "canonical_source": "params/core.md",
+      "section": "§Expected Value table, TN 7 row (post-F13 fix commit 721acc15)",
+      "quoted_text": "E[net]/die at TN 7 = 0.40"
+    },
+    {
+      "sim_variable": "DIE_STD_TN7",
+      "value": 0.8,
+      "canonical_source": "params/core.md",
+      "section": "§Expected Value table, TN 7 row",
+      "quoted_text": "std per die at TN 7 = 0.8"
+    },
+    {
+      "sim_variable": "TN",
+      "value": 7,
+      "canonical_source": "params/core.md",
+      "section": "§TN Values — Standard",
+      "quoted_text": "Standard | 7 | Default"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 1,
+      "canonical_source": "params/core.md",
+      "section": "L185-187 — pool floor 1D",
+      "quoted_text": "Pool floor: 1D after all penalties."
+    },
+    {
+      "sim_variable": "COMBAT_POOL_FLOOR",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "L14 — combat pool min 5",
+      "quoted_text": "Combat Pool = (Agility * 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "sim_variable": "FEINT_MIN_COMMIT",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "PP-294",
+      "quoted_text": "Player chooses N dice (minimum 3) to Offence for feint; remainder to Defence"
+    },
+    {
+      "sim_variable": "ACTION_COST",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "L15",
+      "quoted_text": "Variable action costs (standard 5, heavy 8, defensive 3)"
+    },
+    {
+      "sim_variable": "TAKE_BREATH_COST",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "L15 — defensive 3",
+      "quoted_text": "defensive 3"
+    },
+    {
+      "sim_variable": "TAKE_BREATH_TRIGGER",
+      "value": 8,
+      "canonical_source": "params/combat.md",
+      "section": "Phase 8 sim refinement; canonical is just action cost = 3, sim heuristic adjusted from Phase 7 (was 5) to fix high-stam-skip artifact",
+      "quoted_text": "Phase 8 raised the Smart AI's Take Breath trigger threshold from <=5 to <=8 stamina to address Phase 7's discrete-action-skip artifact where high-stamina builds bypassed the 3-5 trigger window and exhausted at round 5. Canonical rule unchanged (action cost = 3); only the sim AI heuristic adjusted."
+    },
+    {
+      "sim_variable": "WEAPON_DAMAGE_MOD",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula — Light Blade Cut vs None",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "STR_MULT",
+      "value": 1.0,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula — Light Blade x1",
+      "quoted_text": "STR multiplier: Light x1"
+    },
+    {
+      "sim_variable": "CRIT_MAGNITUDE",
+      "value": 4.0,
+      "canonical_source": "params/combat.md",
+      "section": "L91 — PP-717 D3 crit >=4",
+      "quoted_text": "Critical Hit (net hits >= 4): weapon modifier doubled before applying armour reduction. (PP-717 — raised from >= 3.)"
+    },
+    {
+      "sim_variable": "max_wounds formula",
+      "value": "min(end // 2 + 1, 3)",
+      "canonical_source": "params/combat.md",
+      "section": "L138 (post-F12 commit abf9fc8e)",
+      "quoted_text": "Max Wounds = min(floor(Endurance/2) + 1, 3)"
+    },
+    {
+      "sim_variable": "wound_interval formula",
+      "value": "end + 6",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Wound Interval = End + 6"
+    },
+    {
+      "sim_variable": "max_health formula",
+      "value": "wound_interval(end) * (max_wounds(end) + 1)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Health = (Endurance + 6) * (Max Wounds + 1)"
+    },
+    {
+      "sim_variable": "max_stamina formula",
+      "value": "15 + end * 2",
+      "canonical_source": "tests/sim/weapon_system_v2/weapon_v2_distance_sim.py",
+      "section": "Architecture C sim baseline (matches v27 + Phases 4-7)",
+      "quoted_text": "Architecture C — sim consistency"
+    },
+    {
+      "sim_variable": "Feint mechanic (PP-294)",
+      "value": "Roll Off vs Def; on margin>0, opponent loses [margin] dice next round; floor 1D; non-stacking",
+      "canonical_source": "params/combat.md",
+      "section": "PP-294",
+      "quoted_text": "Non-stacking: Successive Feints reset reduction to current margin; do not accumulate"
+    },
+    {
+      "sim_variable": "Feint alternation strategy (Smart v2)",
+      "value": "Alternate Feint (even rounds) and Strike (odd rounds) when pool-disadvantaged",
+      "canonical_source": "params/combat.md",
+      "section": "PP-294 non-stacking implies alternation is optimal",
+      "quoted_text": "PP-294 says reductions don't stack across consecutive Feints. Therefore Feint-spam wastes the lever. Optimal use: Feint to setup pool reduction, then Strike to exploit the reduced opponent pool. Phase 8 Smart v2 implements this alternation."
+    }
+  ],
+  "sim_limitations": [
+    "Smart v2 alternation is heuristic (rd % 2); not action-history-aware. Phase 9 could implement pending-reduction tracking for principled exploit timing.",
+    "Initiative-knowledge asymmetry (PP-232 — init holder declares last) not modeled",
+    "Single weapon (Light Blade Cut) and armour (None)",
+    "No Distance, Disarm, Establish Distance, Fibonacci group bonus modeled",
+    "Symmetric AI assumption may not match real play variance"
+  ],
+  "key_findings": [
+    "Phase 7's '34.9% Feint inverts dominance' was partly stamina-management artifact (Underdog Fast was strike_only and exhausted at round 5)",
+    "Smart v2 symmetric play: Agi-dominance at 100% Fast (pool advantage structurally dominant at 17D vs 11D)",
+    "Smart v2 symmetric play: End-dominance at 63.7% Tough (real, moderate)",
+    "Symmetric Agi 3 vs Agi 3 produces 51.2% (sim calibrated; deviations are real signal)",
+    "Combat Balance Note's 34.9% claim needs revision (misleading without stamina-asymmetry caveat)",
+    "Decision A's revert of PP-717 D2 may have insufficient compensation from action triangle alone"
+  ]
+}
