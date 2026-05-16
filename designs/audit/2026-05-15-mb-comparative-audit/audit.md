@@ -1937,5 +1937,199 @@ The doctrine triangle (M-1 master organizing principle) and its three constraint
 
 ---
 
+## Chunk 10 — Cross-Corpus Throughlines Synthesis
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing. Throughlines are author's interpretation of patterns across corpora; independent reviewer would cluster differently.
+
+### Scope
+
+Synthesis-only. No new findings, no new R/C/S extraction. Pulls 50 throughlines (T-44 to T-93) from Chunks 1–9 into thematic clusters and identifies validation-by-convergence (≥2 corpora) vs validation-by-derivation (canon → mechanism → test).
+
+### Throughline census
+
+| Corpus involvement | Count | T-numbers |
+|---|---|---|
+| R + C + S converge | 6 | T-44, T-47, T-52, T-57, T-63, T-88 |
+| R + C converge (no S yet) | 8 | T-49, T-59, T-61, T-67, T-69, T-72, T-75, T-93 |
+| C + S converge (R silent at mass scale) | 10 | T-45, T-46, T-48, T-51, T-53, T-56, T-58, T-60, T-65, T-66 |
+| C unique (no R/S analog) | 9 | T-70, T-73, T-78, T-79, T-83, T-84, T-87, T-91, T-92 |
+| Lateral-precedent-derived | 12 | T-50, T-54, T-62, T-64, T-68, T-71, T-74, T-76, T-77, T-80, T-81, T-82 |
+| S-only (sim implements; canon should formalize) | 4 | T-44, T-47, T-51, T-86 |
+| Meta-validation | 5 | T-85, T-86, T-89, T-90, T-92 |
+
+Counts overlap.
+
+### Thematic clusters
+
+#### Cluster A — Scale & Geometry Foundations · T-44 / T-45 / T-46 / T-47 / T-65 / T-66 / T-85
+
+Every mass-battle abstraction begins with a metric substrate. C/S implicitly assume cell ≈ 50 m (T-44); 8-phase R framework and 5-phase C/S framework live at different abstraction layers (T-45); 3-phase engagement cap is budget primitive (T-46); sightline → flanking emergent (T-47); PP-780 geographic auto-derivation Valoria-distinctive (T-65); sub-tile features beyond 6-type table (T-66); level-5+ zoom missing (T-85).
+
+Convergence: **strong R/C/S agreement on metric substrate**; C/S agree on phase abstraction. **Foundation layer sound.**
+
+#### Cluster B — Resolution Mechanics & Damage Architecture · T-52 / T-53 / T-55 / T-56 / T-57
+
+PP-233 pool bottom-up sanctified (T-52); command-applies-in-full makes Cmd master variable (T-53); damage formula linear (C) vs degree-stepped (S) is 10× drift not calibration variant (T-55); temporal cadence drift compounds 18× (T-56); kill pipeline structure (T-57).
+
+Convergence: **PP-233 pool passes triple-corpus validation; damage formula unresolved drift.** Highest-leverage decision domain.
+
+#### Cluster C — Cohesion, Rout, Pursuit · T-57 / T-58 / T-59 / T-60 / T-61 / T-62
+
+Kill pipeline structure (T-57); continuous morale erosion M-9-compliant (T-58); encirclement only canonized special case but composes from retreat-zone primitive (T-59); compound failure requires feedback loops (T-60); rout-vs-destroyed boundary (T-61); asymmetric pursuit lethality is engine of historical casualty distributions (T-62).
+
+Convergence: **R + C + lateral converge on need for catastrophic pursuit + compound failure; S underweights both.** Largest single calibration gap in audit.
+
+#### Cluster D — Environment & Terrain · T-63 / T-64 / T-65 / T-66 / T-67 / T-68
+
+Environment first-class (T-63); pool/speed-modifier primitives lateral universal (T-64); PP-780 Valoria-distinctive (T-65); sub-tile features (T-66); weather universal in acclaimed precedents (T-67); forest-flanking should refactor top-down → bottom-up via sightline-reduction (T-68).
+
+Convergence: **R + C + lateral universally agree environment is first-class; S has zero implementation.** Single largest unimplemented canon mechanic after F6.1 Thread.
+
+#### Cluster E — Thread Integration (Firearm-Analog) · T-69 / T-70 / T-71 / T-72 / T-73 / T-74
+
+Thread-as-firearm-analog coherent in canon design intent (T-69); persistent Coherence Valoria-distinctive (T-70); Threadweave-OR-tactic hard tradeoff master gameplay-decision primitive (T-71); Devout general = canon's "no-Thread doctrine" alternative (T-72); Southernmost = canon's "no-army terrain class" (T-73); contested intentionality produces emergent counter-magic (T-74).
+
+Convergence: **R-analog + C canon design intent align; S zero implementation; TW:Warhammer lateral validates structure.** Canon passes T-19/T-20/T-21 analogical validation.
+
+#### Cluster F — Unit Primitives & Formation Taxonomy · T-48 / T-49 / T-50 / T-51
+
+Two orthogonal axes (spatial × combat-mode) (T-48); class taxonomy + Power tier complementary not equivalent (T-49); declarative-intent + emergent-execution M-9-compliant pattern for tactics (T-50, UO/FM/Bannerlord lateral); discipline-deterministic-threshold reference primitive (T-51, S implements correctly).
+
+Convergence: **C + S + lateral converge on need for axis separation; class taxonomy universal lateral.** F2.1 + F2.2 are gating refactors that unlock 5+ downstream findings — multiplier effect.
+
+#### Cluster G — Force Generation & Persistence · T-75 / T-76 / T-77 / T-78 / T-79 / T-80 / T-86
+
+Force-generation depth master strategic-layer variable (T-75); Discipline persistence master operational-tempo variable (T-76); class-gating by substrate lateral universal (T-77); Altonian/Templar exceptions are faction-primitive composition not patches (T-78); Levy-cannot-operate-offensively at strategic-tactical bridge (T-79); veterans irreplaceable (T-80); persistence most-consequential strategic mechanic (T-86).
+
+Convergence: **R + C + lateral universally agree on persistence + experience + faction-substrate gating.** Strategic-layer canon is well-designed; implementation is the gap.
+
+#### Cluster H — Scale Transitions & Outcome Propagation · T-81 / T-82 / T-83 / T-84 / T-85 / T-86 / T-87
+
+Three-mode handles medium translation; two-scope handles game-state scale — orthogonal (T-81); outcome-propagation cascade lateral universal (T-82); "cost is in the holding, not the conquest" Valoria-distinctive (T-83); Hybrid Handoff ≈ TW view-battle (T-84); level-5+ missing (T-85); persistence most-consequential (T-86); Accord-based deferred IP/Strain mechanically distinctive (T-87).
+
+Convergence: **C design + lateral universal agree on cascade pattern; Valoria-distinctive on T-83 + T-87.** F8.4 master unlock.
+
+#### Cluster I — Doctrine Triangle & Perfect-System Trap · T-88 / T-89 / T-90 / T-91 / T-92 / T-93
+
+Doctrine triangle master organizing principle (T-88); cultural filter binary + graded modes (T-89); perfect-system trap protection via combination (T-90); substrate makes faction identity mechanical (T-91); M-9 at mechanics = M-5 protection at doctrine (T-92, meta); cultural filter as institutional commitment matches R M-6 (T-93).
+
+Convergence: **R M-1 + C design + lateral universally agree.** Meta-validation: canon passes M-1/M-5/M-6 at design-intent level.
+
+#### Cluster J — M-9 / Bottom-Up Sanctity · T-50 / T-51 / T-68 / T-92 / F9.5 refactor
+
+Declarative + emergent for tactics (T-50); discipline-deterministic-threshold reference (T-51); forest-flanking should refactor to sightline (T-68); M-9 at mechanics = M-5 protection at doctrine (T-92); §A.6/§A.8 should emerge from pool arithmetic not table lookup (F9.5).
+
+Convergence: **Cross-cutting meta-cluster. Every chunk's M-9 check converges here.** Audit's strongest meta-conclusion about implementation discipline.
+
+### Validation-pattern analysis
+
+**Convergence-validated** (≥2 corpora):
+
+| T | Pattern | Strength |
+|---|---|---|
+| T-44 cell ≈ 50 m | R+C+S implicit converge | Strong |
+| T-47 sightline → flanking | C+S explicit; R reconstructs | Strong |
+| T-52 PP-233 pool | C explicit; S implements exactly; R silent | Strong (C↔S exact) |
+| T-53 Cmd master variable | C+S explicit; R M-4 confirms | Strong |
+| T-57 kill pipeline | R+C+S align structurally; S has calibration drift | Strong design, weak implementation |
+| T-58 continuous morale | S + lateral (TW/UG/FM); C alternative | Lateral-strong |
+| T-62 catastrophic pursuit | R O-10 + lateral universal | Strong; S underweights |
+| T-69 firearm-analog | R T-19/T-20/T-21 + C canon design | Strong; S absent |
+| T-75 force-gen depth | R T-4/M-2 + C §1.5 + lateral universal | Strong |
+| T-76 Disc persistence | C PP-712 + FM lateral | Strong |
+| T-82 cascade is engine | R analog + C §E + lateral universal | Strong |
+| T-88 doctrine triangle | R M-1 + C + lateral universal | Strong |
+
+**Lateral-derived** (primarily external games):
+
+| T | Lateral source |
+|---|---|
+| T-50 declarative tactics | UO/FM/Bannerlord — universal |
+| T-54 Cmd master | TW aura, UG radius, FM shouts, UO threshold — universal |
+| T-64 terrain pool/speed | TW/FoG2/UG/Bannerlord — universal |
+| T-67 weather universal | TW/CM/FoG2/Bannerlord/FM — universal |
+| T-76 persistence | FM strongest |
+| T-81 three-mode | None directly (Valoria-distinctive medium axis) |
+| T-82 cascade | TW/Bannerlord/UO/FM/HoMM — universal |
+
+**Valoria-distinctive** (no R / no lateral analog):
+
+| T | Distinctive element |
+|---|---|
+| T-70 persistent Coherence | Practitioner-as-finite-resource across campaign |
+| T-71 Threadweave-OR-tactic | Master gameplay-decision at general turn-level |
+| T-72 Devout general | Hard "no-Thread doctrine" for orthodox factions |
+| T-73 Southernmost | No-army terrain class; cross-layer asymmetry |
+| T-78 Altonian/Templar | Faction-primitive composition over patches |
+| T-83 cost is in the holding | Accord-deferred IP/Strain over conquest-direct trigger |
+| T-87 Accord-deferred cascade | Binary state count → threshold over per-province strain |
+| T-92 M-9 ↔ M-5 coherence | Cross-layer design coherence |
+
+**Meta-validation:**
+
+| T | Meta-claim |
+|---|---|
+| T-85 level-5+ missing | Implementation extends via bridge |
+| T-86 persistence most-consequential | Single most cited mechanic class |
+| T-89 binary vs graded filter | Both modes work; canon uses binary |
+| T-90 trap protection in combination | No single mechanism prevents lock-in |
+| T-92 mechanics-doctrine coherence | M-9 at mechanics precondition for M-5 protection |
+
+### Throughlines NOT surfaced (audit gaps)
+
+- **Pre-battle scouting / intelligence layer.** Canon implies via §A.10 Diagnosis (Thread-specific) but no general scouting/recon. `[GAP — Chunk 12.]`
+- **Siege as dedicated battle type.** Walls in §A.9 covered; multi-day siege phases not. `[GAP — partial F5.1 / F4.7.]`
+- **Naval / amphibious.** Hafenmark naval power; out of mass-battle-direct scope. `[GAP — separate audit.]`
+- **Faction-unique class catalogue.** Templar, Altonian Vanguard, Restoration TS-enabled. Partial in F7.7 / F6.9. `[GAP — could expand.]`
+- **NPC general AI behavior at mass scale.** `[GAP — out of audit scope.]`
+- **Asymmetric victory conditions** (escort, hold-N-turns, retrieve). `[GAP — out of standard battle scope.]`
+
+### Cluster prioritization for v26+ implementation
+
+**Priority 1 — foundation primitives (unblocks everything):**
+- F2.1 axis split (spatial × combat-mode)
+- F2.2 class taxonomy
+- F8.4 emit-events
+
+**Priority 2 — calibration unlocks for historical reproduction:**
+- F4.1 pursuit damage formula
+- F4.2 PP-683 encirclement
+- F1.3 compression damage
+- F2.3 Shield Wall
+- F2.4 Reserve
+
+**Priority 3 — large unimplemented systems:**
+- F5.1 terrain (8/9 reconstructions depend)
+- F6.1 Thread integration
+
+**Priority 4 — persistence and economy:**
+- F7.4 Discipline persistence
+- F7.2 Experience
+
+**Priority 5 — canon-revision questions (`[QUESTION FOR JORDAN]`):**
+- F3.1 damage formula linear vs degree-stepped
+- F3.6 Dmg Mod canon-internal drift
+- F4.3 continuous vs stepwise morale
+- F2.7 morale model
+
+**Priority 6 — refactors and augmentations:**
+- F5.4b sightline-terrain refactor
+- F5.3 weather (canon revision)
+- F5.4 sub-tile features
+
+**Priority 7 — P3 deferred design decisions:**
+- F9.2 graded cultural-doctrine score
+- F9.3 doctrine evolution
+- F9.4 opponent-menu learning
+- F4.5 compound failure cross-coupling
+
+### Throughline cohesion check
+
+All 50 new throughlines (T-44..T-93) compose coherently with R's prior 43 throughlines (T-1..T-43) and 13 meta-throughlines (M-1..M-13). **No throughline contradicts a prior throughline.** Two clusters (B + C) introduce calibration drift findings without contradicting design intent — design is sound; implementation has drifted.
+
+**T-92 meta-conclusion** (M-9 at mechanics = M-5 protection at doctrine) is the audit's strongest cross-corpus convergence and the philosophical anchor for R/C/S cohesion. It explains why the audit can be M-9-compliant in its findings: because the design itself is.
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
