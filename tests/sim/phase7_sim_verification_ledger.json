@@ -1,0 +1,150 @@
+{
+  "sim_file": "tests/sim/phase7_action_triangle_2026-05-15.py",
+  "scope": "custom",
+  "purpose": "Phase 7 tests whether the action triangle (Strike/Feint/Full Guard per PP-294) resolves the dominance found in Phase 6. Adds Feint and Full Guard alongside Strike, with AI strategies for each side. Compares three modes: strike_only (Phase 6 baseline), smart (both sides AI), underdog_feint (disadvantaged side actively Feints).",
+  "systems": ["combat"],
+  "entries": [
+    {
+      "sim_variable": "DIE_MEAN_TN7",
+      "value": 0.4,
+      "canonical_source": "params/core.md",
+      "section": "§dice — derived from face distribution at TN 7",
+      "quoted_text": "Per-die expected value at TN 7"
+    },
+    {
+      "sim_variable": "DIE_STD_TN7",
+      "value": 0.8,
+      "canonical_source": "params/core.md",
+      "section": "§dice — std from variance 0.64",
+      "quoted_text": "Per-die std from variance 0.64"
+    },
+    {
+      "sim_variable": "TN",
+      "value": 7,
+      "canonical_source": "params/core.md",
+      "section": "§TN Values — Standard",
+      "quoted_text": "Standard | 7 | Default"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 1,
+      "canonical_source": "params/core.md",
+      "section": "L185-187 — pool floor 1D",
+      "quoted_text": "Pool floor: 1D after all penalties."
+    },
+    {
+      "sim_variable": "COMBAT_POOL_FLOOR",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "L14 — combat pool min 5",
+      "quoted_text": "Combat Pool = (Agility * 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "sim_variable": "FEINT_POOL_FLOOR_AFTER",
+      "value": 1,
+      "canonical_source": "params/combat.md",
+      "section": "PP-294 — Min 1D after Feint reduction",
+      "quoted_text": "Pool reduction floor: Minimum 1D (B cannot be reduced below 1D by Feint)"
+    },
+    {
+      "sim_variable": "FEINT_MIN_COMMIT",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "PP-294 — N>=3",
+      "quoted_text": "Player chooses N dice (minimum 3) to Offence for feint; remainder to Defence"
+    },
+    {
+      "sim_variable": "ACTION_COST",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "L15",
+      "quoted_text": "Variable action costs (standard 5, heavy 8, defensive 3)"
+    },
+    {
+      "sim_variable": "TAKE_BREATH_COST",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "L15 — defensive 3",
+      "quoted_text": "defensive 3"
+    },
+    {
+      "sim_variable": "WEAPON_DAMAGE_MOD",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula — Light Blade Cut vs None",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "STR_MULT",
+      "value": 1.0,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula L82 — Light Blade ×1",
+      "quoted_text": "STR multiplier: Light×1"
+    },
+    {
+      "sim_variable": "CRIT_MAGNITUDE",
+      "value": 4.0,
+      "canonical_source": "params/combat.md",
+      "section": "L91 — PP-717 D3 crit >=4",
+      "quoted_text": "Critical Hit (net hits >= 4): weapon modifier doubled before applying armour reduction. (PP-717 — raised from >= 3.)"
+    },
+    {
+      "sim_variable": "max_wounds formula",
+      "value": "min(end // 2 + 1, 3)",
+      "canonical_source": "params/combat.md",
+      "section": "L138 (post-F12 commit abf9fc8e)",
+      "quoted_text": "Max Wounds = min(floor(Endurance/2) + 1, 3)"
+    },
+    {
+      "sim_variable": "wound_interval formula",
+      "value": "end + 6",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Wound Interval = End + 6"
+    },
+    {
+      "sim_variable": "max_health formula",
+      "value": "wound_interval(end) * (max_wounds(end) + 1)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Health = (Endurance + 6) * (Max Wounds + 1)"
+    },
+    {
+      "sim_variable": "max_stamina formula",
+      "value": "15 + end * 2",
+      "canonical_source": "tests/sim/weapon_system_v2/weapon_v2_distance_sim.py",
+      "section": "Architecture C sim baseline",
+      "quoted_text": "Architecture C — sim consistency with v27/Phase 4/5/6"
+    },
+    {
+      "sim_variable": "Initiative determination",
+      "value": "higher Attunement; ties to higher Agility (PP-239)",
+      "canonical_source": "params/combat.md",
+      "section": "L116-124, PP-239",
+      "quoted_text": "Initiative determines declaration order, not action speed. Higher initiative = more information."
+    },
+    {
+      "sim_variable": "Feint mechanic (PP-294)",
+      "value": "Roll Off vs Def; on margin > 0, opponent loses [margin] dice next round; floor 1D; non-stacking",
+      "canonical_source": "params/combat.md",
+      "section": "PP-294 (Feint — superseded PP-238 per editorial 2026-05-13)",
+      "quoted_text": "Roll: N dice TN 7 vs opponent's Defence pool TN 7. Payoff: B loses [margin] dice from total pool next round. Non-stacking: Successive Feints reset reduction to current margin; do not accumulate."
+    },
+    {
+      "sim_variable": "Take a Breath",
+      "value": "restores Stamina up to base value (Action cost 3)",
+      "canonical_source": "params/combat.md",
+      "section": "L185 §Actions Summary",
+      "quoted_text": "Take a Breath restores Stamina up to base value"
+    }
+  ],
+  "sim_limitations": [
+    "Smart AI heuristics are demonstrably under-tuned — produces 100% Fast in Smart-vs-Smart (Feint applies asymmetrically to higher-pool side); Underdog_Feint mode approximates skilled-underdog play",
+    "No Distance/Reach system (Establish Distance disabled)",
+    "No Disarm/Tie Up/Retrieve",
+    "No Initiative knowledge asymmetry (PP-232 init holder declares last) — both sides choose actions simultaneously in this sim",
+    "No Fibonacci group bonus (1v1)",
+    "Single weapon (Light Blade Cut) and armour (None)"
+  ],
+  "key_finding": "Action triangle (specifically PP-294 Feint mechanic) is a load-bearing lever for combat balance. When disadvantaged side actively Feints, Agi-dominance inverts: Fast 96.7% conditional win drops to 34.9%. End-dominance similarly collapses from 82% to ~7% with tactical play. Combat balance lives in the action triangle, not the pool formula. Pool formula determines tempo, not outcome."
+}

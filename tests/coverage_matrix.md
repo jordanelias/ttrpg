@@ -201,3 +201,16 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Next path | Phase 7 with action triangle (Feint/Defend) OR wound-spiral lever |
 | Implication for canon | Pool/doubling decision becomes design-feel choice, not balance choice |
 | Files | tests/sim/phase6_dominance_solvers_2026-05-15.py + phase6_results.md + phase6_sim_verification_ledger.json |
+
+### Phase 7 Action Triangle Test (2026-05-15)
+| Test | Result |
+|------|--------|
+| Trigger | Phase 6 showed pool formula doesn't solve dominance; test action triangle (PP-294 Feint) |
+| Fast vs Strong, Strike-only baseline | 96.7% Fast cond (matches Phase 6) |
+| Fast vs Strong, Underdog (Strong) actively Feints | **34.9% Fast cond — Strong wins 65%** |
+| Tough vs Strong, Smart play both sides | 6.8% Tough cond (down from 82% Strike-only) |
+| KEY FINDING | **Action triangle (PP-294 Feint) is the load-bearing balance lever** — not the pool formula |
+| Interpretation | When disadvantaged side actively Feints, dominance INVERTS. End-dominance collapses with tactical play. |
+| Implication | Pool formula and Decision A stand. Doubling is design-feel. Combat IS balanced via tactics. |
+| Caveat | Smart AI under-tuned; numbers indicate direction but not point estimates |
+| Files | tests/sim/phase7_action_triangle_2026-05-15.py + phase7_results.md + phase7_sim_verification_ledger.json |
