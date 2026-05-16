@@ -90,3 +90,14 @@ entries:
   status: resolved
   jordan_decision: '2026-05-15 — adopt continuous engine; canonical for videogame implementation.'
   resolution_commit: pending-this-commit
+- id: ED-834
+  date: 2026-05-15
+  description: 'Phase 7 sim 2026-05-15 (tests/sim/phase7_action_triangle_2026-05-15.md) demonstrated empirically that the Strike/Feint/Full Guard action triangle is a load-bearing combat balance mechanism. In Strike-only play, Fast (Agi 6, pool 17D) wins 96.7% conditional vs Strong (Agi 3, pool 11D); when Strong actively employs PP-294 Feint, Fast wins drop to 34.9% (Strong wins 65% of decisive duels). End-dominance (Tough vs Strong) similarly collapses from 82% Strike-only to ~7% with tactical play. Phase 4-7 chain conclusion: pool formula is NOT the structural driver of combat dominance; action triangle is. Decision A (revert PP-717 D2) vindicated; pool softcap was patching the wrong layer. Doubling decision becomes design-feel, not balance, choice. Documented in params/combat.md as Combat Balance Note section. Phase 8 with better-tuned Smart AI pending to confirm magnitude.'
+  severity: P3
+  type: architectural
+  archetype: A3
+  affected_docs:
+  - params/combat.md
+  status: resolved
+  jordan_decision: '2026-05-15 — document Phase 4-7 finding as canonical balance note.'
+  resolution_commit: pending-this-commit
