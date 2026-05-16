@@ -266,3 +266,17 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Known canonical conflicts | (A) settlement_layer_v30 §2.1 vs valoria_geography_v30.yaml — different settlement-registry schemas; M1 sourced from §2.1; geography YAML needs editorial migration. (B) Compliance shows canon/editorial_ledger.yaml auto-fixable but cc052aa landed clean (likely cache/eventual-consistency artifact). |
 | Files | tests/sim/v17-integration/m1_church_infrastructure.py + m1_church_infrastructure_tests.py + m1_sim_verification_ledger.json |
 | Next module | M2 CI Political Revision (depends M1) — CI milestones 55/65 verification, revised Mass Seizure cross-territory, ±5/season CI cap audit |
+
+### M2 CI Political Revision (2026-05-16)
+| Test | Result |
+|------|--------|
+| Trigger | v17 module manifest (74b7f29) — Module 2 of 7; CI cap mechanics, milestone effects, political legitimacy modifiers |
+| Module scope | Seasonal CI cap (±5/season total, ±3 from Domain Actions), CI milestones 28/40/55/65/80/100 with effect queries, Bonus Dice floor(CI/20) and Obstacle Modifier floor(CI/30), Hafenmark suppress (-1 at L≥4), Unification simultaneous-seizure target-list generator (Chapel+ ∩ Church Prominent), Accord-on-Seizure-success formula |
+| Test groups | T1 constants (11 checks) / T2 seasonal cap (5) / T3 DA sub-cap (5) / T4 mixed sources (6) / T5 hard bounds (3) / T6 Bonus Dice + Obstacle Modifier (15) / T7 milestone effects (17) / T8 Hafenmark + Unification targets (10) / T9 Accord (6) |
+| Result | **78 PASSED, 0 FAILED** |
+| Canonical sources verified | ci_political_v30 §2 + §3 + §4.1 + §7.1 (full read), victory_v30 §3.2 (full from M1 session), faction_layer_v30 §5 (full read for default slot cost), mc_v15 mass_seizure_check (Accord formula source) |
+| Ledger | 26 entries; cross-references M1 module constants for Religious-Building / Prominence / PLAYABLE_TERRITORIES |
+| Provisional assumptions held | 5 (ASSUMPTION_ONE..ASSUMPTION_FIVE): source classification by caller, sub-cap precedence ordering, threshold-inclusive milestone semantics, action-classification responsibility, Unification target composition |
+| Dependencies | Module 1 (settlement registry, has_any_church_building, PLAYABLE_TERRITORIES, SPIRITUAL_WEIGHT) |
+| Files | tests/sim/v17-integration/m2_ci_political_revision.py + m2_ci_political_revision_tests.py + m2_sim_verification_ledger.json |
+| Next module | M4 Unit State Management (foundational, no deps) or M5 Settlement-Territory Aggregation (depends M1); per manifest M3 depends on M4 |

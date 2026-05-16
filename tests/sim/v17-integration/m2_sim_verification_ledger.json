@@ -1,0 +1,235 @@
+{
+  "sim_file": "tests/sim/v17-integration/m2_ci_political_revision.py",
+  "scope": "custom",
+  "systems": ["tc_political", "victory", "campaign_architecture"],
+  "module_role": "Module 2 of v17 integration — CI cap mechanics, milestone effect queries, political legitimacy modifiers (Bonus Dice + Obstacle Modifier), Hafenmark suppress, Unification target-list generator. Depends on Module 1.",
+  "entries": [
+    {
+      "sim_variable": "CI_STARTING_VALUE",
+      "value": 28,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.3 Starting Value",
+      "quoted_text": "CI starts at 28 per P-32. Unchanged."
+    },
+    {
+      "sim_variable": "CI_MIN",
+      "value": 0,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 CI Runs to 100",
+      "quoted_text": "CI runs to 100 (no freeze). Lower bound 0 (implicit, never negative)."
+    },
+    {
+      "sim_variable": "CI_MAX",
+      "value": 100,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 CI Runs to 100",
+      "quoted_text": "CI runs to 100 (no freeze)."
+    },
+    {
+      "sim_variable": "CI_SEASONAL_CAP_MAGNITUDE",
+      "value": 5,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.4 Seasonal Cap",
+      "quoted_text": "±5 CI per season from all sources combined (PP-504)."
+    },
+    {
+      "sim_variable": "CI_DOMAIN_ACTION_SUBCAP",
+      "value": 3,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.4 Seasonal Cap",
+      "quoted_text": "±3 from player Domain Actions specifically."
+    },
+    {
+      "sim_variable": "CI_MILESTONE_ASSERTIVE",
+      "value": 40,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone table",
+      "quoted_text": "40 | Church Assertive | Church gains +1D on all Assert and Seizure rolls"
+    },
+    {
+      "sim_variable": "ASSERTIVE_BONUS_DICE",
+      "value": 1,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone 40",
+      "quoted_text": "Church gains +1D on all Assert and Seizure rolls"
+    },
+    {
+      "sim_variable": "CI_MILESTONE_INSTITUTIONAL",
+      "value": 55,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone table",
+      "quoted_text": "55 | Institutional Reach | All factions: Ob +1 to actions directly opposing Church Domain Actions"
+    },
+    {
+      "sim_variable": "INSTITUTIONAL_REACH_OB_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone 55",
+      "quoted_text": "Ob +1 to actions directly opposing Church Domain Actions"
+    },
+    {
+      "sim_variable": "CI_MILESTONE_DOMINANT",
+      "value": 65,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone table",
+      "quoted_text": "65 | Church Dominant | Secular factions must spend an extra action slot ... to pass Parliamentary motions against Church (i.e., two slots not one)"
+    },
+    {
+      "sim_variable": "DOMINANT_EXTRA_SLOT_COST",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone 65",
+      "quoted_text": "two slots not one"
+    },
+    {
+      "sim_variable": "DOMINANT_BASE_SLOT_COST",
+      "value": 1,
+      "canonical_source": "designs/provincial/faction_layer_v30.md",
+      "section": "§5 Parliamentary motion default cost (referenced)",
+      "quoted_text": "Parliamentary motion = 1 card slot (default); doubled to 2 at CI 65 per ci_political §2.1"
+    },
+    {
+      "sim_variable": "CI_MILESTONE_ASCENDANT",
+      "value": 80,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone table",
+      "quoted_text": "80 | Church Ascendant | Seizure Ob reduced by 1 globally. All territory PT drifts +1 toward piety pole at Year-End",
+      "note": "Redeclared from M1 for cross-module use; same value."
+    },
+    {
+      "sim_variable": "CI_MILESTONE_UNIFICATION",
+      "value": 100,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.2",
+      "quoted_text": "When CI reaches 100: CI does not continue to advance; Church publicly declares Papal Sovereignty over the peninsula",
+      "note": "Redeclared from M1 for cross-module use; same value."
+    },
+    {
+      "sim_variable": "CI_BONUS_DICE_DIVISOR",
+      "value": 20,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§3.2 CI Bonus Dice",
+      "quoted_text": "When Church acts in any of the following contexts, it adds floor(CI/20) bonus dice to its roll"
+    },
+    {
+      "sim_variable": "CI_OBSTACLE_DIVISOR",
+      "value": 30,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§3.3 CI Obstacle Modifier",
+      "quoted_text": "each secular faction voting against Church reduces their effective Mandate contribution by floor(CI/30)"
+    },
+    {
+      "sim_variable": "HAFENMARK_CI_SUPPRESS_THRESHOLD",
+      "value": 4.0,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.2 Mass Seizure (Hafenmark suppress note)",
+      "quoted_text": "Hafenmark with L >= 4 applies a flat -1 CI/season to Church (ED-110 resolution)"
+    },
+    {
+      "sim_variable": "HAFENMARK_CI_SUPPRESS_MAGNITUDE",
+      "value": -1.0,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§3.3 (ED-110 resolution note)",
+      "quoted_text": "Baralta (CI -1/season) operates on the CI total."
+    },
+    {
+      "sim_variable": "ci_bonus_dice formula",
+      "value": "floor(CI / CI_BONUS_DICE_DIVISOR)",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§3.2 Example table",
+      "quoted_text": "CI 28: floor(28/20) = +1D ... CI 100: +5D"
+    },
+    {
+      "sim_variable": "ci_obstacle_modifier table",
+      "value": "0..29 → 0; 30..59 → -1; 60..89 → -2; 90+ → -3",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§3.3 reduction-to-voting-Mandate table",
+      "quoted_text": "CI 0-29: 0 reduction; 30-59: -1; 60-89: -2; 90+: -3"
+    },
+    {
+      "sim_variable": "apply_ci_delta behaviour",
+      "value": "DA sub-cap applied first, then total cap, then hard bounds",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.4 Seasonal Cap",
+      "quoted_text": "±5 CI per season from all sources combined (PP-504). ±3 from player Domain Actions specifically.",
+      "assumption": "ASSUMPTION_TWO: ordering — sub-cap applies first, then total cap. Canon does not specify precedence."
+    },
+    {
+      "sim_variable": "apply_ci_delta source classification",
+      "value": "caller responsibility — 'kind' field in each delta",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.4",
+      "quoted_text": "±3 from player Domain Actions specifically",
+      "assumption": "ASSUMPTION_ONE: M2 enforces caps; caller classifies which deltas are Domain-Action vs generated."
+    },
+    {
+      "sim_variable": "milestone threshold semantics",
+      "value": "threshold-inclusive (CI >= N triggers, not CI > N)",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone table phrasing",
+      "quoted_text": "40 | Church Assertive (column header 'CI'); ... 80 | Church Ascendant ... at Year-End",
+      "assumption": "ASSUMPTION_THREE: canonical phrasing 'at CI 40' interpreted as CI >= 40 (standard tier-inclusive semantics)."
+    },
+    {
+      "sim_variable": "anti_church_ob_modifier classification",
+      "value": "M2 returns the constant; caller decides which actions qualify",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone 55",
+      "quoted_text": "actions directly opposing Church Domain Actions (Parliament motions targeting Church, Suppress attempts)",
+      "assumption": "ASSUMPTION_FOUR: M2 exposes the modifier value only; faction-action module classifies which actions qualify as 'directly opposing'."
+    },
+    {
+      "sim_variable": "mass_seizure_unification_targets composition",
+      "value": "Church-Prominent territories with Chapel+ (playable only)",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.2",
+      "quoted_text": "Mass Seizure (one-shot): Church declares simultaneous seizure on all territories with Church buildings. Ob = 10 − PT − infrastructure (floor 1). This is a one-time event.",
+      "assumption": "ASSUMPTION_FIVE: target = (a) has at least Chapel per M1.has_any_church_building AND (b) Church Prominent per §1 definition (controls OR Church Mandate > controlling faction Mandate). Church-controlled territories included (re-affirms during Unification). Inert territories excluded."
+    },
+    {
+      "sim_variable": "accord_on_seizure_success formula",
+      "value": "max(floor(PT/2)+1, 2), clamped to [3, 7]",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/sim/mc_v15.py",
+      "section": "mass_seizure_check function — Accord assignment",
+      "quoted_text": "t.accord = max(3.0, min(7.0, t.pt / 2 + 1))",
+      "note": "v15 used float PT directly; M2 accepts float PT for consistency. Floor + clamp ensures integer-tier-like steps."
+    }
+  ],
+  "provisional_assumptions": [
+    {
+      "id": "ASSUMPTION_ONE",
+      "topic": "Source classification in apply_ci_delta",
+      "decision": "Each delta in the source_deltas list carries a 'kind' field that the caller sets to 'domain_action' or 'generated'. M2 enforces caps based on these labels; M2 does not classify.",
+      "rationale": "Canon §2.4 distinguishes 'from all sources' from 'from player Domain Actions' but does not enumerate which sources count as which. The integration module knows which call sites are Domain Actions.",
+      "follow_up": "M7 integration must verify every CI delta is correctly tagged at the call site. Audit pass after M6 (which expands Domain Actions)."
+    },
+    {
+      "id": "ASSUMPTION_TWO",
+      "topic": "Cap precedence ordering",
+      "decision": "When both caps would clamp, Domain-Action sub-cap is applied first; the (clamped) DA total plus generated total is then clamped against the seasonal total cap. Generated absorbs the residual.",
+      "rationale": "Canon §2.4 lists the caps but does not specify ordering. Sub-cap-first preserves Domain-Action ceiling as a strict ceiling on player-driven change; lets generated sources absorb the cap residual rather than capping the player's intentional Sermons under a piety-yield surge.",
+      "follow_up": "If sim shows generated sources getting under-applied near the cap, reconsider whether DA should absorb residual instead. Recheck after M7 balance sweep."
+    },
+    {
+      "id": "ASSUMPTION_THREE",
+      "topic": "Milestone threshold semantics",
+      "decision": "All milestones are threshold-inclusive: CI >= N triggers the milestone effect.",
+      "rationale": "Canon phrasing 'at CI 40 ... Church Assertive' is standard tier-inclusive language. Strictly-greater interpretation would require crossing 40 to trigger, which has odd interactions with the +/-5/season cap.",
+      "follow_up": "None expected."
+    },
+    {
+      "id": "ASSUMPTION_FOUR",
+      "topic": "anti_church_ob_modifier classification responsibility",
+      "decision": "M2 returns the Ob modifier constant. The faction-action module decides which actions qualify as 'directly opposing Church Domain Actions'.",
+      "rationale": "Canon names 'Parliament motions targeting Church' and 'Suppress attempts' as examples but does not enumerate exhaustively. The action module is where action types live; M2 stays a primitives module.",
+      "follow_up": "M6 must classify every action and apply the modifier where appropriate. Cross-check classification against canon §2.1 milestone 55 examples."
+    },
+    {
+      "id": "ASSUMPTION_FIVE",
+      "topic": "Unification target-list composition",
+      "decision": "mass_seizure_unification_targets returns playable territories where (a) at least one settlement has Chapel+ AND (b) Church Prominent. Church-controlled territories included (re-affirms control during Unification). Inert (T15, T16) excluded.",
+      "rationale": "Canon §2.2 says 'all territories with Church buildings' — Chapel+ matches M1.has_any_church_building. Prominence is the §1 gating concept for CI/Seizure mechanics. Including Church-controlled territories matches the canonical 'simultaneous seizure' wording (Unification publicly re-asserts authority).",
+      "follow_up": "If sim shows Unification under-triggering because Church rarely has Chapel+ outside T9, this signals starting-infrastructure seeding needs expansion (M1 ASSUMPTION_TWO follow-up)."
+    }
+  ]
+}
