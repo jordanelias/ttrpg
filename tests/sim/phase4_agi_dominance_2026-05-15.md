@@ -3,7 +3,7 @@
 **Date:** 2026-05-15
 **Sim:** `tests/sim/phase4_agi_dominance_2026-05-15.py`
 **N:** 2000 duels per matchup, seed=42
-**Triggering decision:** Decision A (ED-828) — Jordan rejected PP-717 D2 (Pool DR) at canon layer 2026-05-15. v27 weapon sim had reported a 55% pool advantage at Agi 6 vs Agi 3 (pool 17 vs 11) without DR. This re-check verifies at current canon (post-Decision A + Decision B + F12 MW cap commit `abf9fc8e`).
+**Triggering decision:** Decision A (ED-828) — Jordan rejected PP-717 D2 (Pool Softcap) at canon layer 2026-05-15. v27 weapon sim had reported a 55% pool advantage at Agi 6 vs Agi 3 (pool 17 vs 11) without DR. This re-check verifies at current canon (post-Decision A + Decision B + F12 MW cap commit `abf9fc8e`).
 
 ---
 
@@ -87,7 +87,7 @@ Fast+Tough (Agi 6, End 6) vs Strong: 100.0% — every duel in 2000 trials. Both 
 
 ### Finding 4 — Decision A's implication realized
 
-The v27 finding ("Without DR, Fast 17D vs Strong 11D = 55% pool advantage that overwhelms weapon-specific differences") is confirmed at current canon parameters. The pool grammar change (no DR) is the dominant factor in the Agi axis.
+The v27 finding ("Without softcap, Fast 17D vs Strong 11D = 55% pool advantage that overwhelms weapon-specific differences") is confirmed at current canon parameters. The pool grammar change (no DR) is the dominant factor in the Agi axis.
 
 ---
 
@@ -108,7 +108,7 @@ The v27 finding ("Without DR, Fast 17D vs Strong 11D = 55% pool advantage that o
 **Options to address (Jordan's call):**
 
 1. **Re-ratify PP-717 D2** as `min(Agi, 4) × 2 + max(0, Agi-4) + H + 3`. Returns to the v27 ratified state for combat. Preserves universal grammar for non-combat systems (which don't have the short-timescale problem).
-2. **Adopt a pool cap** without per-die DR: e.g., `min((Agi × 2) + H + 3, 14)`. Caps the maximum pool size regardless of Agi+H accumulation. Mechanically equivalent at the upper bound but cleaner formula.
+2. **Adopt a pool cap** without per-die softcap: e.g., `min((Agi × 2) + H + 3, 14)`. Caps the maximum pool size regardless of Agi+H accumulation. Mechanically equivalent at the upper bound but cleaner formula.
 3. **Stamina re-cost for high-Agi builds** — each action costs `5 + max(0, Agi - 4)` stamina. Forces fast builds to manage stamina more carefully. Trades dice advantage for stamina disadvantage.
 4. **Weapon-side rebalance** — make Strong/Tough viable via weapon damage scaling rather than pool count. Probably requires a different round of sim work.
 5. **Accept the imbalance** — "Fast builds dominate combat" as a deliberate design statement. Narratively: trained duelists are inherently more dangerous than untrained brawlers. Requires explicit canon acknowledgement and removes "build balance" as a design goal for combat.

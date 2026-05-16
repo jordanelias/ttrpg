@@ -4,7 +4,7 @@ Archived entries in tests/coverage_matrix_archive.md
 
 |-----|-----------|--------|
 | Linear HP (End×6+16) | Reduces End dominance | Tested ✓ |
-| Pool DR (Agi >4 → +1D) | Compresses Agi advantage | Tested ✓ |
+| Pool Softcap (Agi >4 → +1D) | Compresses Agi advantage | Tested ✓ |
 | 1H commit bonus (+2D) | Specialist viability | Tested ✓ |
 | Wrong def +2 dmg | Simplified triangle | Tested ✓ |
 | **Combined result** | **None: PASS (63%). Heavy: PASS at 75% (Strong 75%)** | **Iteration complete** |
@@ -37,7 +37,7 @@ Archived entries in tests/coverage_matrix_archive.md
 |----------|--------|
 | D6 Shield +3D/+4D | DEFERRED — amplifies Tough dominance, needs loadout system design |
 | D8 Bash table +4→+3 | REJECTED — barely changes results (75→74%), gap is STR×3 not table |
-| D1-D5 ratifiable package confirmed | HP, Pool DR, Crit, Mace, Triangle — all tested ✓ |
+| D1-D5 ratifiable package confirmed | HP, Pool Softcap, Crit, Mace, Triangle — all tested ✓ |
 
 ### All-Directions Audit (v25, 2026-05-15)
 | Finding | Status |
@@ -59,13 +59,13 @@ Archived entries in tests/coverage_matrix_archive.md
 | Assessment | Result |
 |------------|--------|
 | Mode A (formula validation) | PASS — no boundary issues |
-| Mode C (interaction chains) | PASS — 2 downstream flags (mass combat TC, pool DR × crit double reduction) |
+| Mode C (interaction chains) | PASS — 2 downstream flags (mass combat TC, Pool Softcap × crit double reduction) |
 | D1 MW Cap NERS | N✓ E✓ R~ S✓ |
-| D2 Pool DR NERS | N✓ E~ R✓ S✓ |
+| D2 Pool Softcap NERS | N✓ E~ R✓ S✓ |
 | D3 Crit ≥4 NERS | N✓ E✓ R✓ S~ |
 | D4 Mace +2D NERS | N~ E✗ R✓ S~ — recommend redesign (remove Blunt TN penalty) |
 | D5 Wrong def +2 NERS | N~ E✓ R~ S✓ — too small to matter (5% HP/duel) |
-| All-directions | Top-down ✓, Bottom-up ✓, Vertical ✓, Diagonal ✓ (init×triangle weak), Lateral ~ (pool DR combat-only), Horizontal ~ (Heavy arena 0 still fails) |
+| All-directions | Top-down ✓, Bottom-up ✓, Vertical ✓, Diagonal ✓ (init×triangle weak), Lateral ~ (Pool Softcap combat-only), Horizontal ~ (Heavy arena 0 still fails) |
 
 ## v25 (2026-05-15) — Geometry expansion + dynamic wide-wing pathing + sightline
 
@@ -145,7 +145,7 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Layer | Status |
 |-------|--------|
 | Scope | First engine-design NERS at architectural level (dice engine + derived stats + Ob/Pool channels) |
-| Throughlines | 5 derived (TE-1..TE-5); 3 partial, 1 fail (TE-4 Smooth: combat-only DR) |
+| Throughlines | 5 derived (TE-1..TE-5); 3 partial, 1 fail (TE-4 Smooth: combat-only Pool Softcap) |
 | 6 directions | TD/BU/L/V/D/H — 21 findings across all six |
 | Severity | 2 P1 (stale Vitality formula in params/core; stale Concentration formula in params/contest), 8 P2, 11 P3 |
 | Unifications | 9 proposed; U-1 (PP-716/PP-717 propagation) ready for no-call commit; U-2..U-7 need design call |
@@ -155,7 +155,7 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 ### Phase 4 Agi-Dominance Re-check (2026-05-15)
 | Test | Result |
 |------|--------|
-| Trigger | Decision A (ED-828) — PP-717 D2 Pool DR rejected at canon |
+| Trigger | Decision A (ED-828) — PP-717 D2 Pool Softcap rejected at canon |
 | Scope | Verify whether Agi-6 vs Agi-3 dominance manifests at current canon |
 | Mechanics | Universal pool (no DR), MW cap 3 (PP-717 D1), Crit threshold ≥4 (PP-717 D3) |
 | Fast vs Strong | 95.6% conditional win — DOMINANT |

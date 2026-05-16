@@ -4,7 +4,7 @@
 # See tests/sim/phase4_agi_dominance_2026-05-15.md for results + analysis  # [canonical: N/A — doc]
 # Verification ledger: tests/sim/phase4_sim_verification_ledger.json  # [canonical: N/A — doc]
 #
-# Trigger: ED-828 / Decision A — Jordan rejected PP-717 D2 (Pool DR) at canon  # [canonical: canon/editorial_ledger.yaml ED-828]
+# Trigger: ED-828 / Decision A — Jordan rejected PP-717 D2 (Pool Softcap) at canon  # [canonical: canon/editorial_ledger.yaml ED-828]
 # Question: at current canon (post-Decision A reject), does Agi 6 still produce
 #           Fast-build dominance over Agi 3 builds?  # [canonical: N/A — doc]
 # Method: minimal duel sim. Two builds, same weapon, same armour, varying Agi.  # [canonical: N/A — structural]
@@ -161,7 +161,7 @@ def main():
     print("=" * 72)  # [canonical: N/A — formatting]
     print("Phase 4 sim — Agi-dominance re-check at current canon")  # [canonical: N/A — header]
     print("=" * 72)  # [canonical: N/A — formatting]
-    print(f"  Pool: (Agi*2)+H+3 NO DR (Decision A)  MW=min(End/2+1,3)  Crit>=4")  # [canonical: N/A — config display]
+    print(f"  Pool: (Agi*2)+H+3 NO softcap (Decision A)  MW=min(End/2+1,3)  Crit>=4")  # [canonical: N/A — config display]
     print(f"  N = 2000 duels per matchup, seed=42")  # [canonical: N/A — config display]
     print()  # [canonical: N/A — formatting]
 

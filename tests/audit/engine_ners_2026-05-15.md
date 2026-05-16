@@ -46,10 +46,10 @@ Five recurring principles that the engine currently expresses:
 | TE-1 Pool=actor, Ob=world | ✓ | ✓ | ✓ | ~ | Rattled (social) breaks separation; Cover Ob is environmental but tied to actor positioning |
 | TE-2 One attribute per role | ✓ | ✓ | ~ | ✓ | Spirit carries Thread Pool + Thread Fatigue + Resolve + Knot — concentrated weight on one attribute |
 | TE-3 Capacity ≠ state | ✓ | ~ | ✓ | ~ | Multiplier values arbitrary across scales; §14 includes non-derived values (Coherence, Resolve) as derived |
-| TE-4 DR above median | ~ | ~ | ✓ | ✗ | Only combat applies it; lateral inconsistency with Thread/Contest/Fieldwork |
+| TE-4 Pool Softcap above median | ~ | ~ | ✓ | ✗ | Only combat applies it; lateral inconsistency with Thread/Contest/Fieldwork |
 | TE-5 Degree scales with Ob | ✓ | ✓ | ~ | ✓ | Foundational Thread ops (Ob 12–13) lose Overwhelming entirely — design intent but underdocumented |
 
-`✓` pass · `~` partial · `✗` fail. Three partials and one fail. The fail (TE-4 Smooth) is the v27 lateral flag promoted to engine-level: PP-717 DR is asserted as a system-wide design philosophy but implemented only in combat.
+`✓` pass · `~` partial · `✗` fail. Three partials and one fail. The fail (TE-4 Smooth) is the v27 lateral flag promoted to engine-level: PP-717 Softcap is asserted as a system-wide design philosophy but implemented only in combat.
 
 ---
 
@@ -75,13 +75,13 @@ The engine substrate supports this **well** at the personal scale: every decisio
 | Thread | ✓ | ✓ (Spi) | ✓ | ✗ |
 | Contest | ✗ (Rattled = +Ob) | ✓ (Primary) | ✓ | ✗ |
 | Fieldwork | ✓ | ✓ (per action) | ~ (Evidence is a clock, not derived) | ✗ |
-| Mass Combat | ✓ (wound = −1D Command) | ✗ (pool uses Size AND Command) | ✓ | ~ (Command caps Size — DR-like) |
+| Mass Combat | ✓ (wound = −1D Command) | ✗ (pool uses Size AND Command) | ✓ | ~ (Command caps Size — softcap-like) |
 | Faction | n/a | ✓ (one stat per action) | ✓ | ✗ |
 | Knot | ✓ | ✓ (Bonds) | ✓ | ✗ |
 
 - **BU-1 · Mass Combat pool composition breaks TE-2.** `Pool = min(Size, Command) + Command` — uses two attributes. Defensible (unit + commander), but it is the only place TE-2 does not hold. Source: `params/mass_combat.md` L77.
 - **BU-2 · Contest Rattled mechanic breaks TE-1.** Rattled adds Ob from actor state breakdown. Could be re-cast as Pool penalty (−1D/Rattled level) to honor PP-716 fully.
-- **BU-3 · Mass Combat already has a DR-like structure.** Pool capping at `min(Size, Command) + Command` means Size above Command stops contributing — a form of DR. TE-4 is honored at unit scale via a different mechanism than at personal scale.
+- **BU-3 · Mass Combat already has a softcap-like structure.** Pool capping at `min(Size, Command) + Command` means Size above Command stops contributing — a form of DR. TE-4 is honored at unit scale via a different mechanism than at personal scale.
 
 ### §4.3 Lateral: peer systems consistency
 
@@ -93,7 +93,7 @@ The engine substrate supports this **well** at the personal scale: every decisio
 | Wound/strain penalty | −1D / wound | −1D / wound | +1 Ob / Rattled level | −1D / wound | Contest is the outlier |
 | Default TN | 7 (weapon-modified 5–8) | 7 (8/9 for some ops) | 7 | 7 | TN-as-difficulty in combat; Ob-as-difficulty elsewhere |
 
-- **L-1 · Combat is the only personal-scale system with DR pool.** (Carries v27 P3 / engine-level F3.)
+- **L-1 · Combat is the only personal-scale system with Pool Softcap.** (Carries v27 P3 / engine-level F3.)
 - **L-2 · Thread uses TPS as pool constant; everyone else uses +3.** Defensible; structural difference imposes cognitive load.
 - **L-3 · Combat uses TN-as-difficulty (weapon TN 5–8); others use Ob-as-difficulty (TN locked at 7).** Two parallel difficulty channels with overlapping function.
 
@@ -141,7 +141,7 @@ The engine substrate supports this **well** at the personal scale: every decisio
 
 | # | Finding | Severity | NERS axis | Source |
 |---|---|---|---|---|
-| TD-1 | "No change to dice engine" violated by PP-717 DR | P2 | Smooth | `derived_stats §1` vs `params/combat L14` |
+| TD-1 | "No change to dice engine" violated by PP-717 Softcap | P2 | Smooth | `derived_stats §1` vs `params/combat L14` |
 | TD-2 | `Attr × multiplier` rule broken by Health formula | P2 | Elegant | `derived_stats §1` vs §4.1 |
 | F1 | `params/core L121` stale Vitality formula | P1 | Smooth | `params/core L121` vs `derived_stats §4.1` |
 | F2 | `params/contest L107, L254` stale Concentration formula | P1 | Smooth | `params/contest` vs `derived_stats §5.2` |
@@ -150,7 +150,7 @@ The engine substrate supports this **well** at the personal scale: every decisio
 | F7 | Coherence taxonomy conflict (derived vs track) | P2 | Elegant | `params/core L127` vs `derived_stats §6` |
 | BU-1 | Mass Combat pool uses two attributes (breaks TE-2) | P3 | Elegant | `params/mass_combat L77` |
 | BU-2 | Contest Rattled = +Ob breaks TE-1 channel separation | P3 | Smooth | `params/contest L111` vs PP-716 |
-| L-1/F3 | Combat alone has DR pool (PP-717) | P2 | Smooth | `params/combat L14` vs peers |
+| L-1/F3 | Combat alone has Pool Softcap (PP-717 D2) | P2 | Smooth | `params/combat L14` vs peers |
 | L-2 | Thread uses TPS as pool constant; others use +3 | P3 | Smooth | `params/threadwork L20` |
 | L-3 | Combat uses TN-as-difficulty; others use Ob-as-difficulty | P3 | Elegant | `params/combat L24` vs others |
 | V-1/F6 | Pool size shock across scales (17D→7D) | P2 | Smooth | `params/combat L14` vs `stats_1_7_scale L60` |
@@ -176,7 +176,7 @@ All proposals framed as options for Jordan's call.
 **Effect:** closes F1, F2, F4. **Status: pure propagation; no design call.**
 
 ### U-2 · Decide on lateral DR propagation (TE-4 unification)
-**Three options:** (a) propagate DR to Thread/Contest/Fieldwork; (b) document combat-only DR as intentional asymmetry; (c) revert PP-717 DR. **Needs design call.**
+**Three options:** (a) propagate DR to Thread/Contest/Fieldwork; (b) document combat-only Pool Softcap as intentional asymmetry; (c) revert PP-717 Softcap. **Needs design call.**
 
 ### U-3 · Convert Rattled from +Ob to −1D (TE-1 unification)
 **Currently:** Rattled = +1 Ob per level. **Proposal:** Rattled = −1D Argue pool per level. Honors PP-716 channel separation fully. **Needs design call** — semantic shift from "the room is harder" to "I'm flustered."
