@@ -210,11 +210,19 @@ def assert_bootstrap(scope: str = None) -> str:
         except Exception:
             pass  # index may not exist yet (pre-migration)
 
-    # Compliance check — blocks work if violations exist
+    # Compliance check — blocks work if violations exist.
+    # F.5 fix (2026-05-16): use cached wrapper. Caches violations result
+    # by HEAD OID + 10-min TTL. Cache hit saves ~30 GraphQL calls per
+    # bootstrap. Cache invalidates on any commit (HEAD moves), which is
+    # the correct freshness boundary for compliance state.
     try:
         sys.path.insert(0, '/home/claude')
         import compliance_check as cc
-        violations = cc.check_all()
+        # Prefer cached entry point when available; fall back to direct
+        # check_all for older compliance_check.py versions that haven't
+        # picked up the F.5 fix yet (graceful degradation during rollout).
+        _check_fn = getattr(cc, 'check_all_cached', cc.check_all)
+        violations = _check_fn()
         if violations:
             auto_fixable = [v for v in violations if v.auto_fixable]
 
@@ -267,7 +275,8 @@ def assert_bootstrap(scope: str = None) -> str:
                         base64.b64decode(tool_data['content']).decode()
                     )
                 import compliance_check as cc
-                violations = cc.check_all()
+                _check_fn2 = getattr(cc, 'check_all_cached', cc.check_all)
+                violations = _check_fn2()
                 if violations:
                     manual = [v for v in violations if v.severity == 'error']
                     if manual:

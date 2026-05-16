@@ -305,6 +305,116 @@ def check_all(repo: str = 'ttrpg') -> list[Violation]:
     return violations
 
 
+# ── F.5 fix (2026-05-16): cached wrapper around check_all ─────────────────────
+#
+# check_all() makes ~6 read_files_graphql calls per invocation, each with
+# skip_cache=True (to avoid poisoning context_gate accounting with tool-side
+# fetches that never enter the conversation). The skip_cache flag was correct
+# for its design intent but caused every bootstrap to re-fetch the same files
+# from GraphQL, contributing ~20-30 GraphQL calls per bootstrap.
+#
+# This wrapper caches the violations result keyed by the repo's current HEAD
+# OID. Cache hit: returns prior result without re-running check_all (saves
+# ~30 GraphQL calls). Cache miss (HEAD moved or TTL expired): full check.
+#
+# Companion to the F.4 freshness-gate cache. Together: bootstrap GraphQL cost
+# drops from ~130/call to ~3-5/call when both caches are warm.
+
+import json as _json_f5, time as _time_f5, os as _os_f5
+
+_COMPLIANCE_CACHE_PATH_TPL = '/home/claude/.compliance_cache_{repo}.json'
+_COMPLIANCE_CACHE_TTL = 600  # 10 min
+
+def _violation_to_dict(v) -> dict:
+    """Serialize Violation dataclass for cache write."""
+    return {
+        'path': v.path, 'rule': v.rule, 'kind': v.kind,
+        'current_tokens': v.current_tokens, 'threshold': v.threshold,
+        'auto_fixable': v.auto_fixable, 'fix_action': v.fix_action,
+        'fix_args': v.fix_args, 'severity': v.severity,
+    }
+
+def _violation_from_dict(d: dict):
+    """Reconstruct Violation dataclass from cache read."""
+    return Violation(
+        path=d['path'], rule=d['rule'], kind=d['kind'],
+        current_tokens=d['current_tokens'], threshold=d['threshold'],
+        auto_fixable=d['auto_fixable'], fix_action=d['fix_action'],
+        fix_args=d.get('fix_args', {}), severity=d.get('severity', 'error'),
+    )
+
+def check_all_cached(repo: str = 'ttrpg') -> list[Violation]:
+    """
+    Cached wrapper for check_all. Returns identical shape to check_all.
+
+    Cache key: current HEAD OID of the repo (any commit invalidates).
+    Cache TTL: 10 minutes (bounds staleness if HEAD lookup fails).
+    Cache miss: runs full check_all + writes cache.
+
+    The HEAD OID is fetched via _github_ops.get_head_oid which itself is
+    one GraphQL call. When the cache is warm, total GraphQL cost is 1
+    (down from ~30 for the full check_all). When cold or invalidated,
+    cost is ~30 (same as before) plus 1 for the HEAD check — slight
+    overhead vs uncached, big win amortized.
+
+    Designed to be a drop-in replacement for check_all in bootstrap-style
+    callers. Direct callers (e.g. CLI invocations, validate_commit) should
+    continue using check_all for freshness guarantees.
+    """
+    _lazy_import()
+
+    cache_path = _COMPLIANCE_CACHE_PATH_TPL.format(repo=repo)
+
+    # Reuse HEAD from session cache if present (avoid extra GraphQL call).
+    head_oid = None
+    try:
+        # _fetch_head is populated by read_files_graphql; any prior fetch
+        # this session has stored it. Prefer this over a fresh call.
+        for key, oid in _github_ops._fetch_head.items():
+            if key.startswith(f"{repo}:"):
+                head_oid = oid
+                break
+    except (AttributeError, KeyError):
+        pass
+
+    if head_oid is None:
+        # Fall back to dedicated lookup (1 GraphQL call).
+        try:
+            head_oid = _github_ops.get_head_oid(repo)
+        except Exception:
+            # Can't determine HEAD — run uncached check.
+            return check_all(repo)
+
+    # Try cache hit
+    try:
+        with open(cache_path) as f:
+            cache = _json_f5.load(f)
+        if (cache.get('head_oid') == head_oid
+            and (_time_f5.time() - cache.get('checked_at', 0)) < _COMPLIANCE_CACHE_TTL):
+            return [_violation_from_dict(v) for v in cache.get('violations', [])]
+    except (FileNotFoundError, _json_f5.JSONDecodeError, KeyError, TypeError):
+        pass
+
+    # Cache miss — run full check
+    violations = check_all(repo)
+
+    # Persist cache (atomic write)
+    try:
+        tmp_path = cache_path + '.tmp'
+        with open(tmp_path, 'w') as f:
+            _json_f5.dump({
+                'head_oid': head_oid,
+                'checked_at': _time_f5.time(),
+                'violations': [_violation_to_dict(v) for v in violations],
+            }, f)
+        _os_f5.replace(tmp_path, cache_path)
+    except Exception:
+        pass  # non-fatal — cache is optimization
+
+    return violations
+
+
+
 def validate_commit(additions: list, deletions: list,
                     repo: str = 'ttrpg') -> list[Violation]:
     """
