@@ -310,3 +310,17 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Theoretical route rates verified | Levy (D=1) always routes; LightInf (D=3) ~50%; HeavyInf (D=4) ~31% per Binomial(4, 0.5) tail; Cavalry (D=5) ~19%; KnightsTemplar (D=6) ~11% |
 | Outstanding for M6 integration | Faction-specific tactic card mechanical effects (Crown Royal Guard +3D, Church Crusade Fervour Discipline-exempt, Varfell Stratagem initiative-inversion, Hafenmark Mercenary Surge +2 units, etc.) require overlay/hook architecture not present in M3 primitives layer |
 | Next module | M5 Settlement-Territory Aggregation (depends M1 ✓) or M6 Faction Action Expansion (depends M1-5) |
+
+### M5 Settlement-Territory Aggregation (2026-05-16)
+| Test | Result |
+|------|--------|
+| Trigger | v17 module manifest — Module 5 of 7; settlement governance state, §3.2 governance actions, §4.3 events, ED-683 RM cell resilience, settlement → territory aggregation |
+| Module scope | SettlementGovernance + SettlementEvent dataclasses (separate from M1.Settlement per M5_ASSUMPTION_ONE); §3.2 governance_action_ob formulas for Develop/Fortify/Pacify/Administer; full §4.3 events table (Famine on P=0, Revolt on O=0 with garrison-suppression, Raid on D=0+hostile, Flourishing at O=5+P=4, Mine surplus at P=3+, Fortress garrison-check Ob 2 on hostile, Cathedral religious event on CV change, Governance Transition 3-mode choice on RM takeover, Consensus Delay on RM-governed emergency); ED-683 RM Cell Resilience (3-settlement threshold → +1 Ob suppression); aggregate_order_to_accord floor-mean policy + aggregate_prosperity_to_wealth continuous rate; province_mine_treasury_contribution flat-per-Mine; province_settlement_summary helper |
+| Test groups | T1 constants (16 checks) / T2 §3.2 Ob formulas (18) / T3 SettlementGovernance dataclass + bounds + apply_governance_action (15) / T4 Famine (4) / T5 Revolt + garrison suppression (8) / T6 Mine/Fortress/Flourishing/Cathedral events (10) / T7 RM Cell Resilience boundary tests (5) / T8 aggregation Order→Accord + Prosperity→Wealth (6) / T9 Governance Transition 3-mode + Consensus Delay (12) / T10 province_settlement_summary (6) |
+| Result | **95 PASSED, 0 FAILED** |
+| Canonical sources verified | settlement_layer_v30 §3.1 (Two-Tier Authority), §3.2 (Governor Assignment table with Pool/Ob/Effect), §3.3 (Subnational governance + RM Cell Resilience ED-683), §4.3 (Settlement Events table — full); integration_plan_v3 §5 Phase 5 (settlement state integration) |
+| Ledger | 28 entries; per-event-row citations to §4.3 table, governance-action Ob formulas to §3.2 table, RM resilience to §3.3 ED-683 |
+| Provisional assumptions held | 5 (M5_ASSUMPTION_ONE..FIVE): governance state in separate dataclass (preserves M1 narrow scope), floor-mean aggregation policy for Order→Accord (canon doesn't specify), boolean RM Presence marker, event records (not state mutation), dual Prosperity→Wealth surfaces (continuous rate + flat-per-Mine) |
+| Dependencies | Module 1 (SETTLEMENT_REGISTRY, territory_settlements, PLAYABLE_TERRITORIES, RB_CATHEDRAL constants) |
+| Files | tests/sim/v17-integration/m5_settlement_aggregation.py + m5_settlement_aggregation_tests.py + m5_sim_verification_ledger.json |
+| Next module | M6 Faction Action Expansion (depends M1-5) — now unblocked |

@@ -1,0 +1,243 @@
+{
+  "sim_file": "tests/sim/v17-integration/m5_settlement_aggregation.py",
+  "scope": "custom",
+  "systems": ["settlement", "victory", "campaign_architecture"],
+  "module_role": "Module 5 of v17 integration — per-settlement governance state (Order/Prosperity/Defense), canonical §3.2 governance-action Ob formulas, §4.3 settlement-events table, RM Cell Resilience (ED-683 / §3.3), settlement -> territory aggregation at arc boundary. Pure primitives — does not mutate world state.",
+  "entries": [
+    {
+      "sim_variable": "ORDER_MIN",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events table",
+      "quoted_text": "Order 0 | Local revolt (analogous to province Accord 0 but at settlement scale)"
+    },
+    {
+      "sim_variable": "ORDER_MAX",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.2 Governor Assignment table Pacify row + §4.3 Order 5 row",
+      "quoted_text": "Pacify | Charisma + local History | floor((3 − Order) + 1), min 1 | Order +1 (cap: 5). Order 5 + Prosperity 4+ | Flourishing"
+    },
+    {
+      "sim_variable": "PROSPERITY_MIN",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Prosperity 0 row",
+      "quoted_text": "Prosperity 0 | Famine or economic collapse"
+    },
+    {
+      "sim_variable": "DEFENSE_MIN",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Defense 0 row",
+      "quoted_text": "Defense 0 + adjacent hostile military | Raid or siege"
+    },
+    {
+      "sim_variable": "FAMINE_PROSPERITY_THRESHOLD",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events",
+      "quoted_text": "Prosperity 0 | Famine or economic collapse. Population leaving. Order −1 automatic."
+    },
+    {
+      "sim_variable": "FAMINE_ORDER_PENALTY",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Prosperity 0 row",
+      "quoted_text": "Order −1 automatic"
+    },
+    {
+      "sim_variable": "REVOLT_ORDER_THRESHOLD",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Order 0 row",
+      "quoted_text": "Order 0 | Local revolt (analogous to province Accord 0 but at settlement scale). Governor expelled unless garrison present."
+    },
+    {
+      "sim_variable": "FLOURISHING_ORDER_THRESHOLD",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Order 5 + Prosperity 4+ row",
+      "quoted_text": "Order 5 + Prosperity 4+ | Flourishing. Local festival, trade fair, or cultural event. +1 Disposition with all local NPCs."
+    },
+    {
+      "sim_variable": "FLOURISHING_PROSPERITY_THRESHOLD",
+      "value": 4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Order 5 + Prosperity 4+ row",
+      "quoted_text": "Order 5 + Prosperity 4+ | Flourishing"
+    },
+    {
+      "sim_variable": "FLOURISHING_DISPOSITION_BONUS",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Order 5 + Prosperity 4+ row",
+      "quoted_text": "+1 Disposition with all local NPCs"
+    },
+    {
+      "sim_variable": "MINE_SURPLUS_PROSPERITY_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Mine type row",
+      "quoted_text": "Mine type + Prosperity 3+ | Resource surplus. Province Treasury +50/season at Accounting (economic contribution, derived_stats_v1)."
+    },
+    {
+      "sim_variable": "MINE_SURPLUS_TREASURY_DELTA",
+      "value": 50,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Mine type row",
+      "quoted_text": "Province Treasury +50/season at Accounting"
+    },
+    {
+      "sim_variable": "FORTRESS_DEFENSE_CHECK_OB",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events Fortress type row",
+      "quoted_text": "Fortress type + hostile military in province | Garrison mobilization. Defense check: Defense pool vs Ob 2. Success: settlement holds. Failure: attacker bypasses or captures."
+    },
+    {
+      "sim_variable": "RM_CELL_RESILIENCE_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.3 Subnational Faction Governance — RM Cell Resilience (ED-683)",
+      "quoted_text": "If RM has Presence markers in ≥ 3 settlements within a province, Church/Crown suppression actions against RM in that province take +1 Ob."
+    },
+    {
+      "sim_variable": "RM_CELL_RESILIENCE_OB_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.3 Subnational Faction Governance — RM Cell Resilience",
+      "quoted_text": "Church/Crown suppression actions against RM in that province take +1 Ob"
+    },
+    {
+      "sim_variable": "CONSENSUS_DELAY_SEASONS",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events RM-governed emergency row",
+      "quoted_text": "Emergency Domain Actions (Muster, Fortify, Emergency Diplomacy) in RM settlements take +1 season to resolve."
+    },
+    {
+      "sim_variable": "CONSENSUS_DELAY_WAIVER_MANDATE_COST",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events RM-governed emergency row",
+      "quoted_text": "Waivable: RM leader spends 1 Mandate + loses 1 Presence marker in that province"
+    },
+    {
+      "sim_variable": "CONSENSUS_DELAY_WAIVER_PRESENCE_COST",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events RM-governed emergency row",
+      "quoted_text": "loses 1 Presence marker in that province (community perceives consensus violation)"
+    },
+    {
+      "sim_variable": "GOVERNANCE_TRANSITION_MODES",
+      "value": ["disestablishment", "accommodation", "transformation"],
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events RM takes control row",
+      "quoted_text": "Player (or Vossen if NPC) chooses: Disestablishment (remove existing governance infrastructure; −1 Order for 2 seasons, then Accord growth +0.5/season; PT −1 immediate); Accommodation (maintain existing infrastructure under RM oversight; no penalty, PT drops 0.5 only, standard Accord); Transformation (4-season gradual conversion; no penalty during transition; PT −1 and Accord +0.5/season after completion)."
+    },
+    {
+      "sim_variable": "governance_action_ob develop formula",
+      "value": "floor(prosperity / 2) + 1",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.2 Governor Assignment table Develop row",
+      "quoted_text": "Develop | Cognition + Wealth-relevant History | floor(Prosperity/2) + 1 | Prosperity +1 (cap: settlement type max)"
+    },
+    {
+      "sim_variable": "governance_action_ob fortify formula",
+      "value": "floor(defense / 2) + 1",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.2 Governor Assignment table Fortify row",
+      "quoted_text": "Fortify | Military-relevant stat + History | floor(Defense/2) + 1 | Defense +1 (cap: settlement type max)"
+    },
+    {
+      "sim_variable": "governance_action_ob pacify formula",
+      "value": "max(1, floor((3 - order) + 1))",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.2 Governor Assignment table Pacify row",
+      "quoted_text": "Pacify | Charisma + local History | floor((3 − Order) + 1), min 1 | Order +1 (cap: 5)"
+    },
+    {
+      "sim_variable": "governance_action_ob administer flat",
+      "value": 2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.2 Governor Assignment table Administer row",
+      "quoted_text": "Administer | Attunement + Governance History | 2 | Maintain Order (no decay this season). Reveals one local NPC's active Conviction."
+    },
+    {
+      "sim_variable": "governance_action_effect mapping",
+      "value": "develop→prosperity_plus_1; fortify→defense_plus_1; pacify→order_plus_1; administer→order_no_decay",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§3.2 Effect on Success column",
+      "quoted_text": "Prosperity +1 / Defense +1 / Order +1 / Maintain Order (no decay this season)"
+    },
+    {
+      "sim_variable": "aggregate_order_to_accord policy",
+      "value": "floor(mean(settlement.order for settlement in province))",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 5 — Settlement state integration Step 2",
+      "quoted_text": "Define settlement → territory aggregation: settlement state → per-territory Accord/PT/infrastructure",
+      "assumption": "M5_ASSUMPTION_TWO: canon does not specify the aggregation function; floor(mean) is the conservative interpretation."
+    },
+    {
+      "sim_variable": "aggregate_prosperity_to_wealth policy",
+      "value": "mean(prosperity) × PROSPERITY_TO_WEALTH_RATE",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 5 Step 2",
+      "quoted_text": "settlement state → per-territory Accord/PT/infrastructure",
+      "assumption": "M5_ASSUMPTION_FIVE: continuous mean-based aggregation supplements canon's flat per-Mine +50/season rate. Both surfaces exposed; integration callers choose which to use."
+    },
+    {
+      "sim_variable": "PROSPERITY_TO_WEALTH_RATE",
+      "value": 0.1,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 5 Step 2 (derived)",
+      "quoted_text": "Provisional rate per M5_ASSUMPTION_FIVE; canon specifies the flat per-Mine +50/season but not a continuous conversion."
+    },
+    {
+      "sim_variable": "SettlementEvent schema",
+      "value": "{sid, event_type, severity, immediate_effects, choice_required, choice_options, suppressed_by_garrison, description}",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§4.3 Settlement Events — feeds Scene Slate at Priority 4 (Territorial)",
+      "quoted_text": "Each settlement generates 0–1 local events per season based on its stats and type. These feed into the Scene Slate at Priority 4 (Territorial)."
+    }
+  ],
+  "provisional_assumptions": [
+    {
+      "id": "M5_ASSUMPTION_ONE",
+      "topic": "Governance state lives in a separate dataclass",
+      "decision": "SettlementGovernance dataclass owns Order/Prosperity/Defense plus rm_presence, garrison_present, governor_faction, rm_governed flags. M1's Settlement class is preserved as church-infrastructure-only.",
+      "rationale": "M1's Settlement is narrow per its design — four church-infrastructure axes. Adding governance state would dilute that focus. Separate dataclass preserves separation of concerns; integration module wires both onto the same sid.",
+      "follow_up": "M7 integration must build the governance map alongside the M1 registry at world construction time."
+    },
+    {
+      "id": "M5_ASSUMPTION_TWO",
+      "topic": "Order → Accord aggregation policy",
+      "decision": "aggregate_order_to_accord uses floor(mean(settlement.order for settlement in province)). Function exposed for override.",
+      "rationale": "Canon §5 Phase 5 specifies that settlement state feeds territory state but does not specify the aggregation function. Floor-mean is conservative (preserves discrete Accord values, rounds toward instability), gives clean integer Accord targets.",
+      "follow_up": "M7 balance sweep may reveal that floor-mean under-represents settlements with high Order. Consider min-max-clipping, weighted (population-weighted), or median alternatives. Document tradeoffs in M7."
+    },
+    {
+      "id": "M5_ASSUMPTION_THREE",
+      "topic": "RM Presence as per-settlement boolean",
+      "decision": "rm_presence is a boolean flag on SettlementGovernance. RM Cell Resilience threshold (>=3 settlements within a province) sums booleans within a province via M1's territory_settlements helper.",
+      "rationale": "Canon §3.3 ED-683 says 'Presence markers in >= 3 settlements within a province'. A boolean marker per settlement is the minimal sufficient representation. Multi-tier presence strength is out of scope for M5.",
+      "follow_up": "If multi-tier RM presence becomes mechanically relevant (e.g., 'strong vs weak Presence'), expand to a counter/enum."
+    },
+    {
+      "id": "M5_ASSUMPTION_FOUR",
+      "topic": "resolve_settlement_events returns event records, does not mutate state",
+      "decision": "Primitives module returns a list of SettlementEvent objects. Caller (integration module) applies immediate_effects to world state at arc boundary. Governance Transition scenes return choice_options for player/Vossen selection.",
+      "rationale": "Keeps M5 pure-primitives consistent with the other v17 modules. State mutation belongs in the integration layer where world has the necessary context (which faction is doing what, what the calendar phase is).",
+      "follow_up": "M7 integration applies events. Caller must handle the Governance Transition choice via a dispatch mechanism (likely npc_behavior_v30 §8 for NPC factions, player UI for player factions)."
+    },
+    {
+      "id": "M5_ASSUMPTION_FIVE",
+      "topic": "Prosperity → Wealth contribution",
+      "decision": "Two surfaces: (1) flat per-Mine MINE_SURPLUS_TREASURY_DELTA=+50 per Mine at Prosperity 3+ (canon §4.3), and (2) continuous aggregate_prosperity_to_wealth = mean(Prosperity) × 0.1 per province (provisional rate).",
+      "rationale": "Canon specifies the flat per-Mine rule explicitly. The continuous rate is needed because integration_plan §5 Phase 5 calls for general settlement-state-to-territory-state aggregation, not just Mine-specific. The 0.1 rate is provisional and should be calibrated empirically in M7.",
+      "follow_up": "M7 balance sweep should report wealth contribution distribution per faction and adjust PROSPERITY_TO_WEALTH_RATE if any faction is materially under- or over-served. Alternative: deprecate the continuous rate and use only the per-Mine flat rate."
+    }
+  ]
+}
