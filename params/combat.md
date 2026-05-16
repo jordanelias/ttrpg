@@ -135,7 +135,7 @@ Exchange 1 initiative: higher Attunement acts last (highest information). Subseq
 
 ## Wounds / Incapacitation (PP-232)
 
-Health (full) = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = floor(Endurance/2) + 1. Total damage capacity. Equipment adds flat Health (+4 leather, +6 chain, +8 plate). Max Health = (End+6)×(MW+1) + equipment bonus. See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec. (PP-716 reverts ED-694 Vitality formula.) Healing cannot exceed max.
+Health (full) = (Endurance + 6) × (Max Wounds + 1), where Max Wounds = min(floor(Endurance/2) + 1, 3). Total damage capacity. Equipment adds flat Health (+4 leather, +6 chain, +8 plate). Max Health = (End+6)×(MW+1) + equipment bonus. See `designs/scene/derived_stats_v30.md` §4.1 for authoritative spec. (PP-716 reverts ED-694 Vitality formula; PP-717 D1 caps MW at 3 — sim-validated v22–v24, reduces End-6 Health from 60 → 48 HP to address End-dominance.) Healing cannot exceed max.
 Wound Interval = Endurance + 6. Wounds accrue at floor(cumulative_damage / Wound_Interval). Computed on the fly — no Max Wounds stat.
 Example: Endurance 4 → Health 40, Wound Interval 10. Wounds at 10, 20, 30 cumulative damage; felled at Health 0.
 Allows critical hits to deal multiple wounds simultaneously. (ED-694: replaces Health formula, eliminates Max Wounds.)
