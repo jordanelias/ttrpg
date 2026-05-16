@@ -104,12 +104,12 @@ Audience resistance: average Stability of factions (round up) − 1, minimum 0. 
 | Composure | Charisma × 3 | 3–21 |
 | Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) | 0–2 |
 | Focus defence | floor(Foc ÷ 2) | 0–3 |
-| Concentration | Focus + Recall | 2–14 |
+| Concentration | Focus × 3 | 3–21 |
 | Read pool | Attunement only | 1–7 |
 
 ## Composure and Rattled
 At strain ≥ Composure: Rattled mark (Composure resets; excess carries over). [Composure = Cha × 3 per ED-694]
-+1 Ob per Rattled level (cumulative). 2 marks = socially incapacitated.
+−1D per Rattled level to Argue pool (cumulative; honors PP-716 channel reservation: actor-state degradation → Pool, not Ob). 2 marks = socially incapacitated. Pool minimum 1D. [Decision-B 2026-05-15: Rattled converted from +Ob to −1D for channel consistency with wounds/Spent.]
 Recovery: 1 mark/scene of non-social activity. Composure restores at scene change.
 Knot buffer: redirect damage to Knot (+1 strain/use).
 
@@ -250,8 +250,8 @@ TIE row in Interaction Types table updated to include CROSS exception.
 In CROSS + TIE: no strain to either orator (PP-236 takes precedence). Persuasion Track +1 toward first-to-speak holder as normal.
 Source: SIM-DB-STRESS-01 D-04 finding. 2026-04-09.
 
-## PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b)
-Concentration maximum = Focus + Recall (= starting value at contest setup).
+## PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b; updated PP-716)
+Concentration maximum = Focus × 3 (= starting value at contest setup; per `designs/scene/derived_stats_v30.md` §5.2).
 Restoration (from Regroup or other effects) cannot raise Concentration above this maximum.
 Source: SIM-DB-STRESS-01 D-08b finding. 2026-04-09.
 

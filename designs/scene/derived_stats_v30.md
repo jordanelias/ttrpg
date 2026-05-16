@@ -17,6 +17,8 @@ One attribute per derived value. No multi-attribute combinations. History and eq
 
 Stats change rarely (structural capability). Derived values change frequently (current state). The two-layer split exists because stats serve the resolution engine (small integers for dice pools) while derived values serve the state engine (large integers for resource tracking). These are different jobs requiring different scales.
 
+**Documented exceptions (TD-1/TD-2, audit 2026-05-15).** The claim "no change to the dice engine" applies to the d10/TN/Ob/degree primitives; small parameter shifts have occurred under PP-717 (crit threshold raised from ≥3 to ≥4) and combat-layer half-step TN conventions (PP-717 Fiore: base 7.0, 2H −0.5). The derived-value formula `attribute × multiplier` has one documented exception: Health uses `(End+6) × (MW+1)` with MW cap 3 (PP-716/PP-717 D1), preserving wound-interval × wound-count structure that a simple multiplier cannot capture. §4.1 is the authoritative spec.
+
 **Output scaling** (TroopCount only): `output = floor(integer_result × derived_value / max_derived_value)`, capped at ratio 1.0. Applied only to active capacity outputs (TroopCount → damage dealt). Not applied to survival resources (Vitality, Composure) — a depleted survival pool makes you easier to kill, not weaker at killing.
 
 ---
@@ -37,10 +39,12 @@ Resolution: stats remain 1–7 (correct pool range for d10 probability curves). 
 
 | Tier | Multiplier | Systems | Rationale |
 |------|-----------|---------|-----------|
-| High | ×10 | Vitality | Combat has most interactions per scene (5–8+ rounds). Fine granularity for gradual degradation, wound thresholds, equipment differentiation. |
+| High | ×10 (effective via MW+1) | Health | Combat has most interactions per scene (5–8+ rounds). Fine granularity for gradual degradation, wound thresholds, equipment differentiation. Note: Health uses non-multiplier `(End+6)×(MW+1)` — documented exception, §4.1 authoritative. |
 | Medium | ×5 | Stamina, Thread Fatigue | Action economy resources deplete per-round/per-operation. Variable action costs (3–10 per action) without inflating numbers. |
 | Low | ×3 | Composure, Concentration | Social contests are 1–5 exchanges. Lower multiplier gives equipment modifiers proportionally more impact. |
 | Faction | ×10–100 | Treasury, Legitimacy, Reputation, Discipline | Seasonal interaction frequency (1–5 events/season). Each calibrated independently. |
+
+**Calibration intent (V-2, audit 2026-05-15).** Multipliers are set per-system to match interaction frequency: more interactions per unit time → smaller multiplier (each tick matters more; smaller numbers track better at high event density). Faction multipliers (×10–100) reflect seasonal interaction frequency at a different timescale than personal-scale (×3–10). The system does not enforce a single derived formula — multipliers were calibrated independently against playtest data. Future systems should pick a multiplier matching their interaction frequency rather than mechanically deriving from a master formula.
 
 ---
 
@@ -54,7 +58,7 @@ This section is the source-of-truth for the Health formula and wound mechanic ac
 |---|---|
 | Stat name | Health |
 | Underlying attribute | Endurance |
-| Max Wounds | `Max Wounds = floor(Endurance / 2) + 1` |
+| Max Wounds | `Max Wounds = min(floor(Endurance / 2) + 1, 3)` — capped at 3 (PP-717) |
 | Wound Interval | `WI = Endurance + 6` (range 7–13 across End 1–7) |
 | Formula | `Health (full) = (Endurance + 6) × (Max Wounds + 1)` = WI × (MW+1) |
 | Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. Felled (incapacitated) at 0 Health, which equals MW + 1 wounds accrued. |
@@ -72,12 +76,14 @@ Per-Endurance reference table:
 | 3 | 9 | 2 | 27 | 2 (felled at 3rd) |
 | 4 | 10 | 3 | 40 | 3 (felled at 4th) |
 | 5 | 11 | 3 | 44 | 3 (felled at 4th) |
-| 6 | 12 | 4 | 60 | 4 (felled at 5th) |
-| 7 | 13 | 4 | 65 | 4 (felled at 5th) |
+| 6 | 12 | 3 | 48 | 3 (felled at 4th) |
+| 7 | 13 | 3 | 52 | 3 (felled at 4th) |
 
 Endurance-4 worked example (per Jordan canonical clarification 2026-05-09): Health 40 → 30 (1 wound) → 20 (2 wounds) → 10 (3 wounds, still alive at last threshold) → 0 (4 wounds, felled).
 
 **Naming history.** "Vitality = Endurance × 10" was introduced by ED-694 as a simplification proposal. PP-716 reverts the simplification: the linear formula failed to match the WI × (MW+1) total-damage-capacity structure for End values 1, 2, 3, 5, 7 (only End 4 and 6 happened to align numerically). Stat name reverted from Vitality to Health for consistency with `params/combat.md` L16 and Jordan's design intent.
+
+**Max Wounds cap (PP-717).** Simulation testing (v22–v24, 26 tests, 6 iteration rounds) found that the uncapped MW formula produces super-linear Health scaling — End 6 at 60 HP is 50% more than End 4 at 40 HP, making Endurance the dominant stat investment at all armour tiers (69–82% win rate for End-6 builds). Capping MW at 3 reduces End 6 to 48 HP (20% over End 4), preserves the WI × (MW+1) wound structure, and leaves End 1–5 unchanged. Sim-validated: top build drops from 69% to ~62% unarmoured (under 65% threshold). Historical precedent: plate armour wearers (high-End builds) were not invulnerable — exhaustion and mobility penalties limited their advantage.
 
 **Wound penalty universality.** Prior canon (combat_v30 §thread, threadwork_v30 §2.3, §3, §5; params/combat.md §thread; params/mass_combat §CF wound) variously specified "+1 Ob per Wound" for Thread operations, mass-battle Command checks, and CF Zoom-In tactics. PP-716 unifies all wound penalties as −1D to the relevant Pool. The Ob channel is reserved for non-wound mechanics (Thread Sensitivity Ob bands, Mending Stability Ob, Cover Ob, Stunt Ob).
 
@@ -416,6 +422,21 @@ Renown governance penalties cap at −2 per season. Does not decay below 0.
 
 Personal combat outcome → settlement derived value → faction derived value income: the most complete personal→faction feedback loop.
 
+
+### §10.5 Propagation timescales (D-1, audit 2026-05-15)
+
+Outcomes propagate at different speeds depending on which engine layer absorbs them:
+
+| Timescale | Propagating outcome | Owner layer |
+|---|---|---|
+| Per-action | Wound penalty to next-round Pool (combat); Rattled to next exchange (contest, post-PP-716 −1D); Thread Fatigue accumulation during contact session | Pool |
+| Per-scene | Composure/Concentration depletion; Saturation Counter resets between battle turns | Derived values |
+| Per-session | Momentum reset; Inspiration scene engagement; wound clearance at session end | Tracks, Momentum |
+| Per-season | Disposition shifts → Reputation income; faction stat changes from territory transfers; PT integration | Faction-scale derived |
+| Per-year | MS baseline decay (−1/year); CI/IP long-term drift | Peninsula clocks |
+
+**Player expectation note.** Combat outcomes register in real time (next round). Social contest outcomes register at scene granularity (Disposition shifts that influence next-season Reputation income). Thread operation outcomes register at peninsula-clock granularity (MS shifts visible across multiple sessions). The asymmetry is intentional — different fictional registers operate at different timescales. UI/tooltip surfaces should make the active timescale legible to the player.
+
 ---
 
 ## §11 — Stat Modification Conversion Registry (PP-680)
@@ -496,23 +517,73 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 
 ---
 
-## §14 — Complete Derived Value Map
+## §14 — Complete Engine Value Map (Decision-C 4-bucket taxonomy)
+
+Four buckets of state in the engine, distinguished by what they represent and how they move. **Decision-C 2026-05-15:** taxonomy standardized across canon docs; `params/core §Derived Scores` references this section as authoritative.
+
+### §14.1 Derived Values — `Stat × multiplier`, actor/faction state, drains and refills
 
 | Scale | Stat | Derived Value | Multiplier | Direction |
 |-------|------|--------------|-----------|-----------|
-| Personal | Endurance | **Vitality** | ×10 | Drains down |
+| Personal | Endurance | **Health** | non-multiplier: `(End+6) × (MW+1)`, MW cap 3 | Drains down |
 | Personal | Endurance | **Stamina** | ×5 | Drains down |
 | Personal | Charisma | **Composure** | ×3 | Drains down |
 | Personal | Focus | **Concentration** | ×3 | Drains down |
 | Personal | Spirit | **Thread Fatigue** | ×5 (threshold) | Counts up |
+| Personal | Spirit | **Resolve / Inspiration cap** | ×1 (passthrough) | Ceiling |
 | Unit | Size | **TroopCount** | ×block_size | Drains down |
-| Faction | Mandate | **Legitimacy** | ×20 | Drains down |
+| Faction | Legitimacy* | **Legitimacy (derived)** | ×20 | Drains down |
 | Faction | Wealth | **Treasury** | ×100 | Drains down |
-| Faction | Military | **Levies Available** | ×2 | Ceiling |
+| Faction | Military | **Levies Available** | ×2 (ceiling) | Ceiling |
 | Faction | Influence | **Reputation** | ×15 | Drains down |
 | Faction | Stability | **Discipline** | ×10 | Drains down |
+| Faction | Intel | **Intelligence Holdings** | (PENDING — derive on use) | (PENDING) |
 | Settlement | Prosperity | **Local Economy** | ×50 | PENDING |
-| Settlement | Defense | **Garrison Strength** | ×20+Fort | PENDING |
+| Settlement | Defense | **Garrison Strength** | ×20 + Fort | PENDING |
 | Settlement | Order | **Public Order** | ×20 | PENDING |
 
-[EDITORIAL: ED-694 — Derived stat system v2. Architectural redesign for videogame layer. Supersedes prior PROPOSAL. Extends personal-scale derived values (Vitality, Stamina, Composure, Concentration, Thread Fatigue), adds unit-scale TroopCount with output scaling, preserves all faction-scale values and PP-680 registry. Does not modify existing dice engine or resolution mechanics.]
+\* PP-686 v2 split the original Mandate stat into Legitimacy (L) + Popular Support (PS). Legitimacy here refers to the post-split stat that produces the derived Legitimacy resource. Popular Support is tracked separately as a derived value of its own (see PP-686 v2 spec).
+
+### §14.2 Tracks — bounded counters representing relationship/character/perceptual state
+
+| Track | Range | Direction | Owner | Notes |
+|-------|-------|-----------|-------|-------|
+| Disposition | −4 to +Bonds | Oscillating | Relational (per NPC) | Bonds caps positive side (PP-684) |
+| Piety Track | 0–10 | Oscillating | Per character | Personal religious standing |
+| Certainty | 0–5 | Drifts down with Thread exposure | Per character | Cosmological worldview |
+| Coherence | 0–10 | Monotonic drain | Per character | Personal rendering legibility — moved from "Derived Scores" per F7 |
+| Thread Sensitivity (TS) | 0–N | Grows | Per character | Cumulative perceptual depth |
+| Renown | varies | Grows | Per character | Reputation in narrow domain |
+| Standing | varies | Oscillating | Per character | Social class indicator |
+
+### §14.3 Clocks — world/scene/campaign progress, mostly monotonic
+
+| Clock | Range | Direction | Scope | Notes |
+|-------|-------|-----------|-------|-------|
+| Mending Stability (MS) | 0–100 | Decays −1/year baseline | Peninsula | Cosmological state |
+| Crown Index (CI) | 0–100 | Bidirectional | Peninsula | Crown legitimacy index |
+| Imperial Pressure (IP) | 0–100 | Grows | Peninsula | Altonian intervention pressure |
+| Piety Territory (PT) | 0–3+ per territory | Bidirectional | Territory | Church seizure progress |
+| Evidence Track | 3/5/8 thresholds | Grows | Per investigation | Investigation progress |
+| Saturation Counter | 0–N | Resets per battle turn | Per battle turn | Thread Ob escalator |
+| Coup Counter (Löwenritter) | 0–N | Grows | Faction-specific | Coup viability |
+
+### §14.4 Pools — dice quantities computed at action time
+
+| Pool | Formula | Default Range | System |
+|------|---------|---------------|--------|
+| Combat Pool | `(Agility × 2) + History + 3`, min 5 | 5–17D | Combat |
+| Argue Pool | `(Primary × 2) + History + 3 + style` | 5–18D | Social Contest |
+| Thread Pool | `(Spirit × 2) + History + TPS`, min 5 | 5–17D+ | Thread Operations |
+| Fieldwork Pool | `(Primary × 2) + History + 3` | 5–17D | Fieldwork |
+| Knot Pool | `(Bonds × 2) + 3` | 5–17D | Knot Formation |
+| Mass Combat Pool | `min(Size, Command) + Command` | 2–14D | Mass Combat (unit) |
+| Faction Domain Pool | bare faction stat | 1–7D | Faction action |
+
+### §14.5 Scale-pool relationship — player-facing note (V-1, audit 2026-05-15)
+
+The same 1–7 attribute number produces dramatically different dice pool sizes across scales. Personal-scale formulas multiply (`×2 + H + 3`) to produce 5–17D pools; faction-scale uses the bare stat (1–7D). A faction Wealth 7 is mechanically not equivalent to a character Cog 7 in terms of dice quantity, even though both occupy the top of the 1–7 range.
+
+**This is intentional.** Faction stats represent collective capacity at a different scale of action — a faction's Wealth roll is the institution committing resources, not a person executing a precise act. The scale-shift is structural, matching scale-of-fiction to scale-of-mechanics. Players reading two character/faction sheets should not expect proportional dice pools from numerically identical stats. Char-sheet UI should surface the active scale so the player can interpret their stats correctly.
+
+[EDITORIAL: ED-694 — Derived stat system v2 (legacy header retained for trace). Architectural redesign for videogame layer. PP-686 v2, PP-716, PP-717 (D1, D3) supersede portions. Decision-C 2026-05-15 standardized this section to 4-bucket taxonomy and added Tracks/Clocks/Pools subsections. Closes F4 (Vitality naming), F5 (Intel + Mandate naming), F7 (Coherence taxonomy), D-3 (Inspiration in map), and V-1 (player-facing scale-pool note).]

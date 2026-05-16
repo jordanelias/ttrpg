@@ -118,7 +118,7 @@ Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute.
 
 | Score | Formula | Range | Notes |
 |-------|---------|-------|-------|
-| Vitality | Endurance × 10 | 10–70 | Total damage capacity. Wounds accrue at each Wound Interval (End + 6) of cumulative damage; −1D per Wound. Incapacitated at 0. Equipment adds flat Vitality. Replaces Health formula. (ED-694) |
+| Health | (End+6) × (MW+1), MW = min(floor(End/2)+1, 3) | 14–48 (cap MW=3) | Total damage capacity. Non-resetting; each wound subtracts WI=(End+6). −1D per Wound; no Ob penalty. Equipment adds flat Health. **See `designs/scene/derived_stats_v30.md` §4.1 as authoritative.** (PP-716 supersedes ED-694; PP-717 D1 MW cap) |
 | Stamina | Endurance × 5 | 5–35 | Combat action economy. Variable action costs (standard 5, heavy 8, defensive 3). Armor adds to drain per action. Take a Breath restores (End + History) × 2. (ED-694) |
 | Composure | Charisma × 3 | 3–21 | Social damage buffer before Rattled. Strain scaled ×3. Equipment (attire, regalia) adds flat Composure. (ED-694, replaces Cha+6) |
 | Combat Pool | (Agility × 2) + weapon History (points + 3) | min 5 | Split Offence/Defence each round. PP-615: doubled formula confirmed canonical; PP-247 note was stale. |
