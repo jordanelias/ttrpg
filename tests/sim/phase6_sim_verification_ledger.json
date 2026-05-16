@@ -1,0 +1,136 @@
+{
+  "sim_file": "tests/sim/phase6_dominance_solvers_2026-05-15.py",
+  "scope": "custom",
+  "purpose": "Phase 6 compares five candidate pool formulas under continuous engine to identify which solves Agi-dominance. Trigger: Phase 5 confirmed continuous engine alone doesn't resolve dominance (97.5% conditional Fast vs Strong); Jordan asked to compare dominance-solver options.",
+  "systems": [
+    "combat"
+  ],
+  "entries": [
+    {
+      "sim_variable": "DIE_MEAN_TN7",
+      "value": 0.4,
+      "canonical_source": "params/core.md",
+      "section": "\u00a7dice \u2014 derived from face distribution at TN 7",
+      "quoted_text": "Per-die expected value: 0.1*(-1) + 0.5*0 + 0.3*1 + 0.1*2 = 0.4"
+    },
+    {
+      "sim_variable": "DIE_VAR_TN7",
+      "value": 0.64,
+      "canonical_source": "params/core.md",
+      "section": "\u00a7dice \u2014 variance from face distribution",
+      "quoted_text": "Per-die variance: 0.8 - 0.4^2 = 0.64; std = 0.8"
+    },
+    {
+      "sim_variable": "TN",
+      "value": 7,
+      "canonical_source": "params/core.md",
+      "section": "\u00a7TN Values \u2014 Standard",
+      "quoted_text": "Standard | 7 | Default"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 1,
+      "canonical_source": "params/core.md",
+      "section": "L185-187 \u2014 pool floor 1D",
+      "quoted_text": "Pool floor: 1D after all penalties."
+    },
+    {
+      "sim_variable": "ACTION_COST",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "L15",
+      "quoted_text": "Variable action costs (standard 5, heavy 8, defensive 3)"
+    },
+    {
+      "sim_variable": "WEAPON_DAMAGE_MOD",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "\u00a7Damage Formula \u2014 Light Blade Cut vs None",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "STR_MULT",
+      "value": 1.0,
+      "canonical_source": "params/combat.md",
+      "section": "\u00a7Damage Formula L82 \u2014 Light Blade \u00d71",
+      "quoted_text": "STR multiplier: Light\u00d71"
+    },
+    {
+      "sim_variable": "CRIT_THRESHOLD_CONT",
+      "value": 4.0,
+      "canonical_source": "params/combat.md",
+      "section": "L91 (PP-717 D3) \u2014 net >=4 discrete, magnitude >=4 continuous",
+      "quoted_text": "Critical Hit (net hits >= 4): weapon modifier doubled before applying armour reduction. (PP-717 \u2014 raised from >= 3.)"
+    },
+    {
+      "sim_variable": "pool_A_status_quo formula",
+      "value": "max(1, agi * 2 + hist + 3)",
+      "canonical_source": "params/combat.md",
+      "section": "L14 \u2014 current canon post-Decision A 2026-05-15",
+      "quoted_text": "Combat Pool = (Agility * 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "sim_variable": "pool_B_drop_doubling formula",
+      "value": "max(1, agi + hist + 3)",
+      "canonical_source": "archives/patches/patch_register_archive_1401_1600.yaml",
+      "section": "PP-612 (the formula PP-612 attempted; PP-615 reversed it)",
+      "quoted_text": "PP-612 concluded Combat Pool uses non-doubled formula (Agi + hist + 3); PP-615 explicitly rejected this. Formula included here as a proposal candidate for sim comparison; not current canon."
+    },
+    {
+      "sim_variable": "pool_C_cap14 formula",
+      "value": "min(agi * 2 + hist + 3, 14)",
+      "canonical_source": "params/combat.md",
+      "section": "L14 \u00a7Pool Formula \u2014 Phase 6 proposal variants derived from canonical formula; not canon themselves",
+      "quoted_text": "Cap value 14 chosen because probability of >=1 success saturates near 12D (per params/core.md L88-94); 14D allows 1 wound penalty before reaching saturation."
+    },
+    {
+      "sim_variable": "pool_D_cap12 formula",
+      "value": "min(agi * 2 + hist + 3, 12)",
+      "canonical_source": "params/combat.md",
+      "section": "L14 \u00a7Pool Formula \u2014 Phase 6 proposal variants derived from canonical formula; not canon themselves",
+      "quoted_text": "Cap value 12 chosen as tighter alternative to cap-14, exploring whether more aggressive ceiling addresses dominance better."
+    },
+    {
+      "sim_variable": "pool_E_softcap formula",
+      "value": "min(agi, 4) * 2 + max(0, agi - 4) + hist + 3",
+      "canonical_source": "tests/audit/all_directions_ners_v27.md",
+      "section": "PP-717 D2 \u2014 ratified in v22-v27 weapon sim, reverted by Decision A 2026-05-15",
+      "quoted_text": "Combat Pool = min(Agi,4)*2 + max(0,Agi-4)*1 + Hist + 3 \u2014 diminishing returns above Agi 4"
+    },
+    {
+      "sim_variable": "max_wounds formula",
+      "value": "min(end // 2 + 1, 3)",
+      "canonical_source": "params/combat.md",
+      "section": "L138 (post-F12 commit abf9fc8e)",
+      "quoted_text": "Max Wounds = min(floor(Endurance/2) + 1, 3)"
+    },
+    {
+      "sim_variable": "wound_interval formula",
+      "value": "end + 6",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.1",
+      "quoted_text": "Wound Interval = End + 6"
+    },
+    {
+      "sim_variable": "max_health formula",
+      "value": "wound_interval(end) * (max_wounds(end) + 1)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "\u00a74.1",
+      "quoted_text": "Health (full) = (Endurance + 6) * (Max Wounds + 1)"
+    },
+    {
+      "sim_variable": "max_stamina formula",
+      "value": "15 + end * 2",
+      "canonical_source": "tests/sim/weapon_system_v2/weapon_v2_distance_sim.py",
+      "section": "Architecture C \u2014 sim baseline matching v27 + Phase 4 + Phase 5",
+      "quoted_text": "Architecture C \u2014 sim consistency with v27/Phase 4/Phase 5. Canonical formula is End*5 per params/combat.md L15."
+    }
+  ],
+  "sim_limitations": [
+    "Strike-only (no Feint, ED, Distance, Initiative) \u2014 disables action triangle counter-play, may inflate dominance numbers",
+    "Fixed 50/50 pool split (no tactical allocation)",
+    "Single weapon (Light Blade Cut) and single armour (None)",
+    "Continuous engine assumes Normal approximation \u2014 validated by Phase 5 distribution equivalence test"
+  ],
+  "key_finding": "Pool formula alone does NOT solve dominance. All five candidates produce >=72% conditional Fast win \u2014 above the 65% dominance threshold. End-dominance is essentially formula-independent (99.6-99.9% across all formulas). The structural drivers are wound-spiral feedback, HP/stamina-window asymmetry, and critical-hit cascade \u2014 not pool sizing. Next sim should test action triangle (Feint/Defend) counter-play or wound-spiral mitigation."
+}

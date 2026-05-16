@@ -188,3 +188,16 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Key finding | **Continuous engine works but does NOT solve Agi-dominance** — doubling is the structural driver, not the dice mechanism |
 | Implication | Adopting continuous engine: yes (independently valuable for fractional modifiers + degree continuity). Solving dominance: requires separate decision (drop doubling, pool cap, or re-ratify softcap) |
 | Files | tests/sim/phase5_continuous_engine_2026-05-15.py + phase5_results.md + phase5_sim_verification_ledger.json |
+
+### Phase 6 Dominance-Solver Comparison (2026-05-15)
+| Test | Result |
+|------|--------|
+| Trigger | Phase 5 showed continuous engine alone doesn't solve dominance |
+| Candidates | (A) status quo, (B) drop doubling, (C) cap 14, (D) cap 12, (E) PP-717 softcap |
+| Fast vs Strong | A: 97.8% / B: 90.2% / C: 89.1% / D: 72.3% / E: 92.6% — **ALL DOMINANT** |
+| Build ROI spread Agi 4→7 | +20pp / +36pp / +8pp / +0pp / +17pp |
+| End-dominance (Tough vs Strong) | 99.6-99.9% across ALL formulas — formula-independent |
+| KEY FINDING | **Pool formula does NOT solve dominance** — structural drivers are wound spiral, HP/stamina window, crit cascade |
+| Next path | Phase 7 with action triangle (Feint/Defend) OR wound-spiral lever |
+| Implication for canon | Pool/doubling decision becomes design-feel choice, not balance choice |
+| Files | tests/sim/phase6_dominance_solvers_2026-05-15.py + phase6_results.md + phase6_sim_verification_ledger.json |
