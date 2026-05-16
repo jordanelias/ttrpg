@@ -145,3 +145,16 @@ entries:
   status: resolved
   jordan_decision: '2026-05-15 — proceed working; update Balance Note with Phase 8 refinement'
   resolution_commit: pending-this-commit
+- id: ED-839
+  date: 2026-05-16
+  description: 'Phase 10 sim (tests/sim/phase10_str_stam_reform_2026-05-16.md) tested two design-question reforms (canonical stamina formula, STR bonus dice on offense) and discovered a sim-side correction with retroactive implications. Primary finding (correction, not reform): Phase 4 through Phase 9 sims used Stamina = 15 + End * 2 (range 21-29) but canonical formula per ED-694 is Stamina = End * 5 (range 15-35) with Take Breath restoring partial stamina (End * 2 not full pool) and +1 stam cost per wound. Prior sims systematically underweighted Endurance. With canonical stamina, every End-investing matchup shifts 4-9pp from prior sim baseline; Fast vs Titan moves from 81.8% to 72.6% before any reform. Phase 8 finding ED-838 (Tough vs Strong 63.7% End-dominance) understates magnitude — direction unchanged, magnitude larger. Secondary finding (reform proposal, pending ratification): STR bonus dice floor(STR/3) on Strike and Disarm offense pool provides 2-6pp uplift to high-STR compensator builds. Best config under canonical stam + STR-strong: Fast vs Titan 67.5/32.5 — meaningful upset rate. Persistent finding: pool dominance survives all reforms. Fast (Agi 6) vs Titan (Agi 3 + max comp) finishes 70/30 even with undouble + 1/End Ob + Disarm + canonical stam + STR-strong; further levers (pool cap past Agi 4, static defense, smaller pools) untested. STR + light blade gap: Mighty (Agi 3, STR 7, light) sits at 98.5% loss to Fast — light weapon str_mult 1.0 + 2pp hit-rate gain from bonus dice cannot overcome 3-die pool gap. Either accept (STR builds wield heavy) or design specific light-weapon STR mechanics. Methodology corrections also recorded: TN vs Ob conflation in prior wound-penalty sims (Ob is net-success threshold not per-die TN shift); Disarm AI threshold bug fixed (opp_weapon_mod >= 3 not >= 4). Combat Balance Note in params/combat.md updated with Phase 10 subsection.'
+  severity: P2
+  type: stale
+  archetype: A2
+  affected_docs:
+  - params/combat.md
+  - tests/sim/phase10_str_stam_reform_2026-05-16.md
+  - tests/sim/scripts/phase10_str_stam_reform.py
+  status: resolved
+  jordan_decision: '2026-05-16 — commit and proceed'
+  resolution_commit: pending-this-commit

@@ -300,6 +300,23 @@ When both sides manage stamina (Smart v2 — Take Breath threshold ≤ 8, PP-294
 **Phase 8 sim limitations:** Smart v2 alternation is `rd % 2` heuristic; a principled AI would track pending pool reductions. Phase 9 could refine. Initiative-knowledge asymmetry (PP-232), Distance, Disarm, Establish Distance, Fibonacci group bonus still unmodeled.
 
 
+### Phase 10 Update (2026-05-16, ED-839)
+
+Phase 10 sim (`tests/sim/phase10_str_stam_reform_2026-05-16.md`) tested two design-question reforms (canonical stamina, STR bonus dice on offense) against the corrected Phase 9 baseline and discovered a sim-side correction with retroactive implications.
+
+**Primary finding — sim correction, not reform:** Phase 4 through Phase 9 sims used `Stamina = 15 + End × 2` (range 21-29). Canonical formula per ED-694 is **`Stamina = End × 5`** (range 15-35) with Take Breath restoring partial stamina (End × 2, not full pool) and +1 stam cost per wound. Prior sims were systematically underweighting Endurance.
+
+With canonical stamina, every End-investing matchup shifts 4-9pp from prior sim baseline. Fast vs Titan moves from 81.8% to 72.6% even before any reform. **Prior Phase 8 finding "Tough vs Strong 63.7%" understates End-dominance magnitude.** Phase 10 picture supersedes Phase 8 magnitude claims; direction (End matters) is unchanged, magnitude (how much) is larger.
+
+**Secondary finding — STR bonus dice (`floor(STR/3)` on offense) is a viable reform proposal:** Adding STR-derived bonus dice to Strike and Disarm offense pool (not Feint) provides 2-6pp uplift to high-STR compensator builds. STR 4 → +1 die, STR 7 → +2 dice, STR 10 → +3 dice. Non-linear breakpoints reward specialization. Best matchup under canonical stam + STR-strong: Fast vs Titan 67.5% (Titan wins 32.5% — meaningful upset rate). Reform changes STR from pure damage-amplifier to also-hit-probability contributor; design ratification pending.
+
+**Persistent finding — pool dominance survives reforms:** Even with all corrections and reforms (undoubled pool + 1/End Ob wound + Disarm + canonical stam + STR-strong), Fast vs Titan finishes at 70/30. A 3-die pool gap at undoubled grammar is still structurally meaningful; reforms move the dial from "dominated" to "competitive losing" but not to balance. Further levers (pool cap past Agi 4, static defense, smaller pools) remain untested.
+
+**STR + light blade gap:** Mighty build (Agi 3, STR 7, light blade) sits at 98.5% loss to Fast even under STR-strong reform. Light weapon `str_mult = 1.0` keeps STR damage contribution low; STR bonus dice add 2pp to hit rate but cannot overcome 3-die pool gap. Either accept ("STR builds wield heavy weapons") or design specific light-weapon STR mechanics (grappling, throws, two-handed-light maneuvers).
+
+**Phase 10 sim limitations:** Tie Up, Establish Distance, Reach mechanics still unmodeled. Symmetric AI assumption persists. Action triangle Phase 7 limitations (PP-294 inversions) not retested under reform conditions. Cross-system audit (CC-1) remains in backlog. The corrected stamina formula should propagate to any future Phase 4-9 re-runs if magnitude precision is needed.
+
+
 ## Resolved Rulings (2026-04-04)
 
 ### No wound cap per hit (ED-200 resolved)
