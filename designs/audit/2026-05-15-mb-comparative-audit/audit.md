@@ -2131,5 +2131,172 @@ All 50 new throughlines (T-44..T-93) compose coherently with R's prior 43 throug
 
 ---
 
+## Chunk 11 — Cross-Corpus Meta-Throughlines Synthesis
+
+`[SELF-AUTHORED — bias risk]` strong here: meta-claims most exposed to author interpretation.
+
+### Scope
+
+Meta-synthesis: patterns about *how the three corpora relate* and what those relationships reveal about the design. Elevates Chunk 10's clusters to meta-throughlines (MT-1 through MT-9) — about the audit, the corpora, the bridges, the architectural choices.
+
+A throughline is a pattern *within* the design. A meta-throughline is a pattern *about how the design is built and how its pieces relate.* R's M-1..M-13 are meta because they describe how doctrines work in general. Audit MT-N continue the logic.
+
+### MT-1 — Design integrity preserved; implementation has drifted
+
+Audit identifies 16 P1, 25+ P2, dozens of P3. **Almost all P1 are implementation gaps (S doesn't model what C canonizes), not design contradictions.** Only "design contradiction" is F3.6 (PP-233 linear vs PARAMS-GAP-05 Dmg Mod) — internal canon ambiguity, not structural problem.
+
+R-validation: canon design captures all 9 reconstructions structurally; gaps are mechanical implementation. Lateral-validation: every Valoria-distinctive mechanic (T-83 / T-87 / T-92) is defensible against acclaimed precedents.
+
+**Valoria's mass-battle design philosophy is sound. Implementation is the work that remains.** Findings should be prioritized for implementation, not redesign.
+
+### MT-2 — Implementation order has multiplicative leverage
+
+Six findings unlock others when implemented:
+
+- **F2.1 (axis split)** → F2.3 / F2.4 / F2.5 / F2.8 (5 findings)
+- **F2.2 (class taxonomy)** → F3.6 / F5.6 / F7.7 + downstream (4+)
+- **F8.4 (emit-events)** → F6.6 / F7.1 / F7.3 / F7.5 / F7.6 / F7.7 / F7.8 / F7.9 (8)
+- **F5.1 (terrain)** → F5.2 / F5.4 / F5.4b / F5.6 / F5.7 / F6.9 (6)
+- **F6.1 (Thread integration)** → F6.2 / F6.3 / F6.4 / F6.5 / F6.6 / F6.7 / F6.8 / F6.9 / F6.10 (9)
+- **F4.1 + F4.2 + F1.3** → R O-10 historical casualty ratios (3 produce 1 calibrated outcome)
+
+**16 P1 findings reduce to ~5–6 implementation projects when ordered by leverage.** Implementing the 6 leverage findings unblocks or partially-resolves >30 of the audit's other findings.
+
+Lateral parallel: FM master implementation refactor is data-model change; subsequent feature work composes. TW master refactor is engine version.
+
+### MT-3 — Bottom-up sanctity is the cohesion principle across all three corpora
+
+R T-30 / T-31 / T-39 / T-40 + C canon constraints P-01..P-15 + S architectural commitment (sim_mb_06_v25 docstring: "no top-down macro-recognition rules") all converge on the same principle.
+
+Throughout audit:
+- T-47 (sightline → flanking emergent) — bottom-up done right in S.
+- T-50 (declarative + emergent) — bottom-up at design level.
+- T-51 (PP-502 deterministic Disc) — bottom-up at canon→sim implementation.
+- T-68 (forest-flanking refactor) — bottom-up refactor.
+- T-92 (M-9 mechanics = M-5 doctrine) — bottom-up coherence across layers.
+- F9.5 (§A.6 / §A.8 via pool arithmetic) — bottom-up refactor.
+
+**Bottom-up sanctity is the most-frequently-cited principle in the audit. It is not just philosophy; it is the cohesion mechanism that lets R/C/S align without contradiction.** Future canon addition or sim implementation must respect bottom-up sanctity or introduce divergence.
+
+### MT-4 — Canon ↔ sim drift is asymmetric
+
+Of 16 P1:
+- **13 are C→S drift** (canon specifies, S doesn't implement): F1.1, F2.3, F2.4, F3.1, F3.6, F4.1, F5.1, F6.1, F6.2, F6.7, F7.4, F8.1, F8.2, F8.3, F8.4, F8.7.
+- **3 are bidirectional or S-canonical**: T-44 (cell ≈ 50 m implicit both), T-58 (continuous morale — S cleaner than C, F4.3 recommends C aligns to S), T-51 (PP-502 — S correctly implements, audit confirms exact match).
+
+**Canon is leading authority; sim is catching up.** Natural state of a design-first project. Two implications:
+1. Recommended priorities (MT-2) close the sim-canon gap, not rebuild.
+2. The 3 S-canonical findings are opportunities for canon revision — particularly F4.3 (continuous morale), which is M-9-cleaner than stepwise and lateral-validated.
+
+### MT-5 — Audit triangulates: R historical, C specification, S verification
+
+Each corpus's role:
+- **R** — "Is the design historically faithful?" — top-down validation via 9 reconstructions.
+- **C** — "What is the design supposed to do?" — specification authority.
+- **S** — "Does implementation produce specified behavior?" — verification mechanism.
+
+Where two converge and one is silent → audit treats as compatible. Where all three converge → strong confidence. Where two converge and one disagrees → finding + resolution path. Where one silent and two disagree → `[QUESTION FOR JORDAN]`.
+
+**Triangulation across R/C/S produces more certain findings than single-corpus review.** Each corpus's blindness checked by others. 50 throughlines all emerged from cross-corpus observation.
+
+Lateral: software engineering "three sources of truth" (intent / specification / implementation) applied to game design.
+
+### MT-6 — Lateral validation is the strongest forcing function for canon-design defensibility
+
+For each Valoria-distinctive mechanic, checked against TW / FoG2 / UG / CM / Bannerlord / UO / FM / HoMM / Phantom Brigade:
+
+- **Strong convergence** (all relevant precedents have): terrain (T-64), weather (T-67), persistence (T-76), cascade (T-82), declarative tactics (T-50), reserve management, pursuit lethality (T-62). **Non-negotiable; floor.**
+- **Mixed lateral** (some have, others don't): graded cultural filter (F9.2), doctrine evolution (F9.3), opponent-menu learning (F9.4). **P3 augmentations.**
+- **Valoria-distinctive** (no clean analog): persistent Coherence (T-70), cost-in-the-holding (T-83), Accord-deferred cascade (T-87), three-mode architecture (T-81). **Design risks AND strengths — need extra-careful playtesting.**
+
+**Lateral validation is asymmetric — identifies what Valoria must not omit, identifies what Valoria does that nothing else does.** Latter category needs extra implementation discipline (no off-the-shelf failure-mode knowledge).
+
+### MT-7 — Persistence is the single largest cross-cutting theme
+
+"Persistence" appears in clusters G, H, and meta-cluster J. Findings: F7.4 (P1), F7.2, F6.6, F8.4 (P1), F7.3, F7.5, F7.8, F6.8.
+
+Throughlines: T-70 (persistent Coherence), T-76 (Disc master), T-86 (most-consequential).
+
+R analog: T-26 (casualty replacement asymmetry).
+
+Lateral universal: FM, Bannerlord, TW, UG, HoMM, UO.
+
+**Persistence is the mechanic class where Valoria's design is most ambitious and where implementation is most absent.** Discipline / Coherence / Experience / Gap / MS / Treasury / Mandate / Military all persist across battles in canon. None persist in current S. **Single largest cross-cutting gap.**
+
+Remediation: F8.4 (emit-events) + F7.4 (Disc persistence) + F7.2 (Experience) establish architecture; subsequent persistence mechanics compose.
+
+### MT-8 — The audit itself is bottom-up
+
+Each chunk extracted from corpora (primitives), compared (relations), checked sanctity (bottom-up), validated against reconstructions (historical), validated against precedents (gameplay), surfaced throughlines (patterns), reported findings (composition). **Audit structure follows T-30 / T-31 / M-9 — primitives before composition.**
+
+Mirror is not accidental:
+- R's M-9 establishes design must be bottom-up.
+- C's canon constraints enforce this.
+- S's commitment to per-cell mechanics implements at sim level.
+- **Audit's methodology applies the same principle to itself.**
+
+**Audit that respects its subject's design principle produces findings consistent with that principle.** Bottom-up methodology is why findings are M-9-compliant. If audit had used top-down recognition ("this is Cannae-like, so..."), it would have introduced findings violating the design's own logic.
+
+`[SELF-AUTHORED — bias risk]` strongest here: I designed the methodology. Independent auditor might frame differently and find the same gaps.
+
+### MT-9 — Audit has a fourth corner: future-self (handoff to v26+)
+
+Findings, throughlines, meta-throughlines are not just analysis — they are **directives for future implementation work.** Every F-finding has Resolution Path; every cluster has Prioritization; every MT has implications.
+
+R/C/S triangulation becomes a quadrant when v26+ is added:
+- **R** (historical) — calibration target.
+- **C** (canon) — specification.
+- **S** (sim) — current state.
+- **V** (v26+ implementation) — future state.
+
+Audit provides bridges:
+- V → R: F4.1 + F4.2 + F1.3 → R O-10 historical ratios.
+- V → C: F1.1 / F2.3 / F2.4 / F5.1 / F6.1 → close 16 P1 C→S drifts.
+- V → S: F2.1 + F2.2 + F8.4 → refactor S architecturally.
+
+**Audit is a handoff document. Value realized when v26+ work consumes findings.** Storage at `designs/audit/2026-05-15-mb-comparative-audit/audit.md` makes discoverable; editorial_ledger appends (Chunk 12) make P1 actionable; throughline cohesion-check ensures findings don't contradict priors.
+
+Incremental commit allowed Jordan to consume chunk-by-chunk and redirect at any point.
+
+### Meta-throughlines census
+
+| MT | Subject | Type |
+|---|---|---|
+| MT-1 | Design integrity vs implementation drift | Diagnosis |
+| MT-2 | Multiplicative leverage of implementation order | Implementation strategy |
+| MT-3 | Bottom-up sanctity as cohesion principle | Design philosophy meta |
+| MT-4 | Canon ↔ sim drift asymmetry | Architecture diagnosis |
+| MT-5 | R/C/S triangulation methodology | Audit methodology |
+| MT-6 | Lateral validation as forcing function | Audit methodology |
+| MT-7 | Persistence as largest cross-cutting theme | Implementation gap |
+| MT-8 | Audit itself is bottom-up | Audit methodology meta |
+| MT-9 | Audit as handoff to v26+ | Audit purpose |
+
+Four about *what found* (MT-1, MT-2, MT-4, MT-7). Three about *how found* (MT-5, MT-6, MT-8). Two about *what for* (MT-3, MT-9).
+
+### Cohesion with R's meta-throughlines
+
+All 9 MT's compose with R M-1..M-13 (no contradictions). Reinforcements:
+- **MT-3** ↔ **R M-9** — same principle at audit-methodology layer.
+- **MT-1** ↔ **R T-30 / T-31** — implementation follows design.
+- **MT-5** ↔ **R T-31** — three-corner verification more robust than single.
+- **MT-6** extends R's historical-validation with gameplay-precedent validation.
+- **MT-7** ↔ **R T-26** — same mechanic class at macroscale.
+
+**Audit's meta-throughlines extend R's framework without contradiction.** 9 MT's add audit-methodology + implementation-strategy dimensions to R's 13 design-domain meta-throughlines.
+
+### Final throughline framework
+
+- **T-1..T-43**: R pre-firearms research throughlines.
+- **T-44..T-93**: 50 new throughlines from this audit.
+- **M-1..M-13**: R-side meta-throughlines.
+- **MT-1..MT-9**: 9 audit meta-throughlines.
+
+Total: **93 throughlines + 22 meta-throughlines = 115 named patterns** for the mass-battle design domain.
+
+Framework that v26+ implementation and subsequent audits inherit.
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
