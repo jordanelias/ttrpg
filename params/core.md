@@ -17,7 +17,8 @@
 | 10 | +2 successes |
 
 Net successes = total successes minus total 1s (including bonus dice results). May be negative.
-Note: expected value of face-10 under chain rule ≈ +1.43 net at TN7 (geometric series). Higher than "+2" model for large pools.
+
+**Canonical:** no chain rule. Face 10 = +2 successes flat (PP-246 confirmed; valoria_master_document §1.1 explicit). Prior note about geometric chain (≈ +1.43 EV under chain) is **NON-CANONICAL** and struck.
 
 ## TN Values
 | Mode | TN | When |
@@ -52,6 +53,26 @@ Overwhelming requires a minimum of 3 net successes regardless of Ob. (PP-232)
 Ob 20 exception: Overwhelming unavailable. Partial requires net ≥ 10.
 
 
+## Continuous Engine (Decision E, 2026-05-15)
+
+The engine MAY be implemented two ways with statistically equivalent outputs:
+
+**Discrete (legacy / TTRPG-mode):** Roll N d10s. Count faces per canonical rule. Net = sum.
+
+**Continuous (videogame-mode / canonical for Godot implementation):** Sample `net ~ Normal(μ·N, σ·√N)` where μ and σ are per-die statistics for the active TN (see EV table above).
+
+**Equivalence validated:** Phase 5 sim 2026-05-15 (tests/sim/phase5_continuous_engine_2026-05-15.py) — max deviation 0.029 in mean, 0.022 in std at pool sizes 5-17. Both engines produce statistically identical outputs.
+
+**Continuous-engine enables:**
+- Fractional Ob (e.g., weapon condition +0.25 Ob)
+- Fractional TN (PP-717 Fiore half-step TN already canonical for combat)
+- Continuous degree resolution (outcome magnitude = net − Ob, as gauge)
+- Linear extension to fractional modifiers (cover quality, terrain, environment)
+
+**Continuous degree thresholds (videogame implementation):** discrete `Success (net ≥ Ob)`, `Overwhelming (net ≥ 2·Ob)`, `Partial (net > 0 < Ob)` map onto continuous magnitude `net − Ob` directly. UI surfaces magnitude as gauge.
+
+**Adoption note:** discrete engine remains canonical for TTRPG-mode play; continuous engine is canonical for Godot implementation. They are interchangeable specifications of the same underlying probability distribution.
+
 ## Coherence 0 — NPC Transition (PP-261)
 At Coherence 0: character becomes NPC (100% functional, player agency ends). See params_threadwork.md for full rule.
 ## Momentum
@@ -78,20 +99,30 @@ MS floor: 0 (Rupture). MS ceiling: 100. Starting value by mode: TTRPG default = 
 No penalty may reduce a pool below 1D. Ob penalties still apply at 1D.
 
 ## Expected Value (per die)
-| TN | E[net] per die |
-|----|---------------|
-| 6 | 0.40 |
-| 7 | 0.30 |
-| 8 | 0.20 |
+
+Canonical face rule (1 = −1, 2-6 = 0, 7-9 = +1, 10 = +2, no chain). Recalculated 2026-05-15 to fix prior error that treated face 10 as +1.
+
+| TN | E[net] per die | σ² per die | σ per die |
+|----|---------------|------------|-----------|
+| 6 | 0.50 | 0.65 | 0.806 |
+| 7 | 0.40 | 0.64 | 0.800 |
+| 8 | 0.30 | 0.61 | 0.781 |
+
+Used by continuous engine to parameterize Normal(μN, σ√N) sampling. See "Continuous Engine" section below.
 
 ## Quick Reference — P(≥N net), TN 7
+
+Monte Carlo (N=100k each) under canonical face rule (no chain), 2026-05-15.
+
 | Pool | E[Net] | P(≥1) | P(≥2) | P(≥3) |
 |------|--------|-------|-------|-------|
-| 4D | 1.3 | ~80% | ~50% | ~25% |
-| 6D | 2.0 | ~92% | ~70% | ~45% |
-| 8D | 2.6 | ~97% | ~82% | ~60% |
-| 10D | 3.3 | ~99% | ~90% | ~73% |
-| 12D | 4.0 | ~99% | ~95% | ~83% |
+| 4D | 1.60 | ~70% | ~45% | ~22% |
+| 6D | 2.40 | ~83% | ~63% | ~40% |
+| 8D | 3.20 | ~89% | ~75% | ~57% |
+| 10D | 4.00 | ~92% | ~83% | ~68% |
+| 12D | 4.80 | ~94% | ~87% | ~76% |
+
+Continuous engine: net ~ Normal(0.4·pool, 0.8·√pool) for TN 7. Sampled distribution matches discrete Monte Carlo to within 0.03 in mean and std at pool sizes 5-17 (Phase 5 validation 2026-05-15).
 
 Full multi-TN tables: references/tn_full_tables.md (generate via dice-model Task 8 if absent).
 

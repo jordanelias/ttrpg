@@ -19,6 +19,8 @@ Stats change rarely (structural capability). Derived values change frequently (c
 
 **Documented exceptions (TD-1/TD-2, audit 2026-05-15).** The claim "no change to the dice engine" applies to the d10/TN/Ob/degree primitives; small parameter shifts have occurred under PP-717 (crit threshold raised from ≥3 to ≥4) and combat-layer half-step TN conventions (PP-717 Fiore: base 7.0, 2H −0.5). The derived-value formula `attribute × multiplier` has one documented exception: Health uses `(End+6) × (MW+1)` with MW cap 3 (PP-716/PP-717 D1), preserving wound-interval × wound-count structure that a simple multiplier cannot capture. §4.1 is the authoritative spec.
 
+**Engine duality (Decision E, 2026-05-15).** The engine is now specified two ways: discrete (d10 dice, legacy/TTRPG mode) and continuous (Normal-distribution sampling, videogame/Godot mode). Both produce statistically equivalent outputs. The continuous specification enables fractional Ob, fractional TN, and continuous degree resolution. See `params/core.md` §Continuous Engine for full spec. Derived stat formulas remain unchanged under either engine.
+
 **Output scaling** (TroopCount only): `output = floor(integer_result × derived_value / max_derived_value)`, capped at ratio 1.0. Applied only to active capacity outputs (TroopCount → damage dealt). Not applied to survival resources (Vitality, Composure) — a depleted survival pool makes you easier to kill, not weaker at killing.
 
 ---

@@ -67,3 +67,26 @@ entries:
   - params/mass_combat.md
   status: open
   jordan_decision: pending
+- id: ED-832
+  date: 2026-05-15
+  description: 'F13 (DISCOVERED during Phase 5 sim 2026-05-15 verification): params/core.md per-die EV table and probability quick-reference table both computed using face 10 = +1 success, NOT the canonical face 10 = +2 successes (per valoria_master_document §1.1, atom 03__1-1-die-face-rule-d10). Canonical values: TN 7 → E[net]/die = 0.40 (not 0.30); 10D pool → P(≥1) = 92% (not 99%). Engine code reading these tables computes wrong dice probabilities by 33%. Ratchet-shifts all downstream balance analyses (build matrices, Ob calibration) that referenced these tables. Also: stale "chain rule" note (≈ +1.43 EV) was flagged NON-CANONICAL by atom 03__1-1-die-face-rule-d10 in April 2026 but never removed from params/core.md. Both defects fixed in this commit.'
+  severity: P1
+  type: stale
+  archetype: A1
+  affected_docs:
+  - params/core.md
+  status: resolved
+  jordan_decision: '2026-05-15 — fix in same commit as Decision E adoption.'
+  resolution_commit: pending-this-commit
+- id: ED-833
+  date: 2026-05-15
+  description: 'Decision E 2026-05-15: continuous engine adopted as canonical specification for videogame (Godot) implementation. The engine is now specified two ways with statistically equivalent outputs: discrete (d10 dice, legacy/TTRPG mode) and continuous (Normal-distribution sampling, videogame mode). Continuous enables fractional Ob, fractional TN (already canonical for combat per PP-717 Fiore), and continuous degree resolution (outcome magnitude = net − Ob). Phase 5 sim 2026-05-15 validated equivalence (max deviation 0.029 in mean, 0.022 in std at pool sizes 5-17). Derived stat formulas, attribute scale, Ob scale, degree thresholds all unchanged. params/core.md §Continuous Engine is the canonical spec. derived_stats §1 acknowledges engine duality.'
+  severity: P2
+  type: architectural
+  archetype: A3
+  affected_docs:
+  - params/core.md
+  - designs/scene/derived_stats_v30.md
+  status: resolved
+  jordan_decision: '2026-05-15 — adopt continuous engine; canonical for videogame implementation.'
+  resolution_commit: pending-this-commit
