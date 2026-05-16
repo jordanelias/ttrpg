@@ -214,3 +214,15 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Implication | Pool formula and Decision A stand. Doubling is design-feel. Combat IS balanced via tactics. |
 | Caveat | Smart AI under-tuned; numbers indicate direction but not point estimates |
 | Files | tests/sim/phase7_action_triangle_2026-05-15.py + phase7_results.md + phase7_sim_verification_ledger.json |
+
+### Workstream Meta-Audit (2026-05-15)
+| Aspect | Result |
+|--------|--------|
+| Subject | 10-commit chain (02e2dd7f..5de02b07) from engine NERS through Combat Balance Note |
+| Method | Six-direction audit + NERS rubric, objective neutral, initial pass |
+| NERS scorecard | N=~, E=✓, R=~, S=✓ — two partials (scope/validation), two passes (execution/integration) |
+| Findings | 0 P1, 4 P2, 5 P3 — all P2/P3 are Robustness concerns; zero correctness defects |
+| What stands | F1/F2/F4/F5/F12/F13 propagation fixes; DR→Softcap; continuous engine validation; hook compliance |
+| At-risk | Balance Note canonization timing; Decision E scope-validation mismatch; F13/Decision E bundling; Phase 7 End-dominance possibly artifact |
+| Open | Phase 8 (better Smart AI); cross-system audit; End-dominance follow-up; SHA refresh |
+| File | tests/audit/workstream_meta_audit_2026-05-15.md |
