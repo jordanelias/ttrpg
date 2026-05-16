@@ -47,11 +47,15 @@ def _graphql(query, variables=None):
 def get_blob_sha(path):
     """Return the current HEAD blob OID for a repo file. None if missing.
 
-    Note: this is the single-path version. For checking many paths, use
-    get_blob_shas_batch() — it batches via GraphQL aliases (1 call for N
-    paths instead of N calls). assert_bootstrap's freshness check uses
-    the batch version; the single version is retained for callers that
-    only need one SHA at a time.
+    Distinguishes API errors (rate limit, auth failure, network) from genuine
+    file-not-found. API errors raise RuntimeError; only a successful query
+    where the repo returns `object: null` yields None ("file truly absent").
+
+    Background: prior implementation silently mapped any response without a
+    populated `data.repository.object` field to None, which conflated
+    rate-limit-induced empty responses with real 404s. That bug surfaced as
+    spurious [MISSING] entries during freshness_gate scans run after heavy
+    GraphQL usage. Fix: inspect response shape before defaulting to None.
     """
     q = """query($owner:String!,$name:String!,$expr:String!){
       repository(owner:$owner,name:$name){
@@ -59,51 +63,38 @@ def get_blob_sha(path):
       }
     }"""
     result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME, "expr": f"HEAD:{path}"})
-    obj = result.get("data", {}).get("repository", {}).get("object")
-    return obj.get("oid") if obj else None
 
+    # Detect API-level errors before interpreting empty data as "file missing"
+    if "errors" in result:
+        err_types = [e.get("type", "") for e in result["errors"]]
+        err_msgs  = [e.get("message", "") for e in result["errors"]]
+        if "RATE_LIMITED" in err_types or "RATE_LIMIT" in err_types or \
+           any("rate limit" in m.lower() for m in err_msgs):
+            raise RuntimeError(
+                f"GitHub GraphQL rate limit hit while resolving HEAD:{path}. "
+                f"Re-run after reset; do NOT trust missing-file reports from this scan."
+            )
+        raise RuntimeError(f"GraphQL error resolving HEAD:{path}: {result['errors']}")
 
-def get_blob_shas_batch(paths):
-    """Return {path: live_sha | None} for many paths via a single GraphQL call.
-
-    Uses GraphQL aliases to batch N path queries into one request. Reduces
-    bootstrap freshness-check cost from N GraphQL calls to 1.
-
-    For N up to ~200 (typical canonical_sources.yaml size: ~110 pairs) this
-    fits comfortably in a single GraphQL request and a single rate-limit
-    point. For larger N, split into batches of 200; GraphQL rate-limit
-    cost is per request, not per alias.
-
-    Returns dict mapping every input path to its current HEAD blob OID
-    (or None if the path doesn't exist on HEAD).
-    """
-    if not paths:
-        return {}
-
-    BATCH_SIZE = 200
-    out = {}
-    for batch_start in range(0, len(paths), BATCH_SIZE):
-        batch = paths[batch_start:batch_start + BATCH_SIZE]
-        aliases = {f"p{i}": p for i, p in enumerate(batch)}
-        fields = "\n".join(
-            f'  {alias}: object(expression: "HEAD:{p}") {{ ... on Blob {{ oid }} }}'
-            for alias, p in aliases.items()
+    if "data" not in result:
+        # No errors key but also no data — unexpected. Raise rather than
+        # silently report missing.
+        raise RuntimeError(
+            f"GraphQL response missing 'data' for HEAD:{path}: {result}"
         )
-        q = f"""query($owner:String!,$name:String!){{
-          repository(owner:$owner,name:$name){{
-        {fields}
-          }}
-        }}"""
-        result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME})
-        if "errors" in result:
-            # Surface the error to the caller — assert_bootstrap will gracefully
-            # degrade to "skipped" rather than halt.
-            raise RuntimeError(f"freshness batch GraphQL failed: {result['errors']}")
-        repo_data = result.get("data", {}).get("repository", {}) or {}
-        for alias, path in aliases.items():
-            obj = repo_data.get(alias)
-            out[path] = obj.get("oid") if obj else None
-    return out
+
+    repo_obj = result["data"].get("repository")
+    if repo_obj is None:
+        # Repo itself unresolvable (auth issue, repo renamed, etc.) — not
+        # a per-file missing condition.
+        raise RuntimeError(
+            f"GraphQL returned null repository for HEAD:{path}: {result}"
+        )
+
+    obj = repo_obj.get("object")
+    # Only here does None genuinely mean "file does not exist at HEAD"
+    return obj["oid"] if obj else None
+
 
 
 # Public alias used by valoria_hooks.assert_bootstrap freshness check.
