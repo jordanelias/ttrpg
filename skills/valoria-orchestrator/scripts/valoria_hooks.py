@@ -138,6 +138,56 @@ def assert_bootstrap(scope: str = None) -> str:
         _session_log_path = f"session_logs/{scope}_{token}.md"
         print(f"[HOOK ✓] session scope: {scope} → {_session_log_path}")
 
+    # F.6 Rate-limit pre-check (added 2026-05-16).
+    # GraphQL budget is per-PAT-user across all concurrent sessions, not
+    # per-session. Surface remaining budget early so operators see the
+    # constraint before hooks consume it, and HARD HALT before the budget
+    # actually exhausts (which produces opaque KeyError('data') failures
+    # mid-commit and orphans in-flight work). REST /rate_limit is itself
+    # not rate-limited and costs one REST call.
+    try:
+        import urllib.request as _ur_rl, json as _j_rl
+        pat_rl = os.environ.get('GITHUB_PAT', '')
+        if pat_rl:
+            _rl_req = _ur_rl.Request(
+                'https://api.github.com/rate_limit',
+                headers={'Authorization': f'token {pat_rl}', 'Accept': 'application/vnd.github.v3+json'}
+            )
+            with _ur_rl.urlopen(_rl_req) as _rl_r:
+                _rl_data = _j_rl.loads(_rl_r.read())
+            _gql = _rl_data.get('resources', {}).get('graphql', {})
+            _rest = _rl_data.get('resources', {}).get('core', {})
+            _gql_remain = _gql.get('remaining', 0)
+            _gql_reset = _gql.get('reset', 0)
+            _rest_remain = _rest.get('remaining', 0)
+            import time as _t_rl
+            _mins_to_reset = max(0, (_gql_reset - int(_t_rl.time())) // 60)
+
+            # Hard halt: a freshness-batch + commit needs ~5-10 GraphQL.
+            # Below 200 means even the bootstrap's own checks will fail
+            # mid-flight. Halt with a clear message instead.
+            if _gql_remain < 200:
+                raise RuntimeError(
+                    f"[BUDGET EXHAUSTED] GraphQL budget critical: "
+                    f"{_gql_remain}/5000 remaining, resets in {_mins_to_reset} min.\n"
+                    f"Bootstrap would fail mid-flight. Wait for reset before retry.\n"
+                    f"Concurrent sessions on the same PAT share this budget — "
+                    f"another session is likely consuming it."
+                )
+            elif _gql_remain < 1000:
+                print(
+                    f"[BUDGET ⚠] GraphQL: {_gql_remain}/5000 remaining "
+                    f"({_mins_to_reset} min to reset). Concurrent-session "
+                    f"load is high; prefer cache hits, defer non-urgent work."
+                )
+            elif _gql_remain < 3000:
+                print(f"[BUDGET] GraphQL: {_gql_remain}/5000 remaining ({_mins_to_reset} min to reset).")
+            # else: silent — budget is healthy
+    except RuntimeError:
+        raise  # re-raise the budget-exhausted halt
+    except Exception:
+        pass  # rate_limit check is advisory — never block bootstrap on it failing
+
     # Print active sessions summary
     if hasattr(g, 'read_active_sessions'):
         try:
@@ -235,33 +285,104 @@ def assert_bootstrap(scope: str = None) -> str:
         except Exception as e2:
             print(f"[COMPLIANCE] Auto-fetch failed: {e2} — skipping")
 
-    # Freshness gate — blocks sim/audit/patch if canonical sources are stale
+    # Freshness gate — blocks sim/audit/patch if canonical sources are stale.
+    #
+    # Cost discipline (added 2026-05-16 — F.4 fix):
+    # The previous implementation fired one GraphQL call per canonical_sha
+    # pair (106 calls per bootstrap, uncached). With multiple concurrent
+    # sessions this exhausted the 5000/hour GraphQL budget. The fix has
+    # three parts:
+    #   (1) batch — use fg.get_blob_shas_batch(paths) to fetch all SHAs in
+    #       a single GraphQL request (1 call vs 106) via alias queries.
+    #   (2) cache — write result to /home/claude/.freshness_cache.json
+    #       keyed by SHA of canonical_sources.yaml content. Hit if the
+    #       canonical_sources.yaml is unchanged AND within 10-min TTL.
+    #   (3) script-TTL — re-fetch freshness_gate.py via REST only if
+    #       local copy is stale (>1 hour, same TTL as the bootstrap
+    #       script-cache discipline).
+    # Net effect: at most 1 GraphQL call per ~10 min per canonical-set,
+    # zero when cache is warm. Was 106 per bootstrap.
     try:
-        import urllib.request as _ur, json as _j, base64 as _b64
+        import urllib.request as _ur, json as _j, base64 as _b64, time as _t, hashlib as _hl
         pat = os.environ.get('GITHUB_PAT', '')
         if pat:
-            _fg_req = _ur.Request(
-                'https://api.github.com/repos/jordanelias/ttrpg/contents/tools/freshness_gate.py?ref=main',
-                headers={'Authorization': f'token {pat}', 'Accept': 'application/vnd.github.v3+json'}
+            _fg_local = '/home/claude/freshness_gate.py'
+            _fg_stale = (
+                not os.path.exists(_fg_local)
+                or (_t.time() - os.path.getmtime(_fg_local)) > 3600
             )
-            with _ur.urlopen(_fg_req) as _fg_r:
-                _fg_data = _j.loads(_fg_r.read())
-            open('/home/claude/freshness_gate.py', 'w').write(
-                _b64.b64decode(_fg_data['content']).decode()
-            )
+            if _fg_stale:
+                _fg_req = _ur.Request(
+                    'https://api.github.com/repos/jordanelias/ttrpg/contents/tools/freshness_gate.py?ref=main',
+                    headers={'Authorization': f'token {pat}', 'Accept': 'application/vnd.github.v3+json'}
+                )
+                with _ur.urlopen(_fg_req) as _fg_r:
+                    _fg_data = _j.loads(_fg_r.read())
+                open(_fg_local, 'w').write(
+                    _b64.b64decode(_fg_data['content']).decode()
+                )
             import freshness_gate as fg
-            content, _ = fg.get_file(fg.CANONICAL_SOURCES_PATH)
+            # Reload so a freshly-fetched module replaces the cached import
+            import importlib as _il
+            _il.reload(fg)
+
+            # Prefer cached canonical_sources content (avoids REST round-trip).
+            # Falls back to fg.get_file() (REST) only on miss — rare after
+            # the first quick_bootstrap of a session populates the cache.
+            _cs_key = g._repo_key(fg.CANONICAL_SOURCES_PATH, 'ttrpg')
+            content = g._session_fetches.get(_cs_key)
+            if content is None:
+                content, _ = fg.get_file(fg.CANONICAL_SOURCES_PATH)
             pairs = fg.parse_canonical_pairs(content)
-            stale_count = 0
-            for path, recorded_sha in pairs:
-                if recorded_sha:
-                    live_sha = fg.get_live_sha(path)
-                    if live_sha and live_sha != recorded_sha:
-                        stale_count += 1
+
+            _cs_sha = _hl.sha256(content.encode()).hexdigest()
+            _fc_path = '/home/claude/.freshness_cache.json'
+            _FC_TTL = 600  # 10 minutes — long enough to span bursts, short
+                           # enough that genuine staleness is caught quickly.
+
+            _use_cache = False
+            try:
+                with open(_fc_path) as _fc_f:
+                    _fc = _j.load(_fc_f)
+                if (_fc.get('cs_yaml_sha') == _cs_sha
+                    and (_t.time() - _fc.get('checked_at', 0)) < _FC_TTL):
+                    stale_paths = _fc.get('stale_paths', [])
+                    pairs_checked = _fc.get('pairs_checked', len(pairs))
+                    _use_cache = True
+            except (FileNotFoundError, _j.JSONDecodeError, KeyError):
+                pass
+
+            if not _use_cache:
+                # Single batched GraphQL call replaces the per-path loop.
+                _paths_to_check = [p for p, sha in pairs if sha]
+                _recorded = {p: sha for p, sha in pairs if sha}
+                live_shas = fg.get_blob_shas_batch(_paths_to_check)
+                stale_paths = [
+                    p for p in _paths_to_check
+                    if live_shas.get(p) and live_shas[p] != _recorded[p]
+                ]
+                pairs_checked = len(pairs)
+                # Persist cache (atomic write: temp + rename) so concurrent
+                # writes don't corrupt the file.
+                try:
+                    _tmp = _fc_path + '.tmp'
+                    with open(_tmp, 'w') as _fc_f:
+                        _j.dump({
+                            'cs_yaml_sha': _cs_sha,
+                            'checked_at': _t.time(),
+                            'pairs_checked': pairs_checked,
+                            'stale_paths': stale_paths,
+                        }, _fc_f)
+                    os.replace(_tmp, _fc_path)
+                except Exception:
+                    pass  # non-fatal — cache is optimization, not requirement
+
+            stale_count = len(stale_paths)
+            _cache_marker = ' (cached)' if _use_cache else ''
             if stale_count:
-                print(f"[FRESHNESS \u26a0] {stale_count} stale canonical source(s) — run freshness_gate.py --update")
+                print(f"[FRESHNESS \u26a0] {stale_count} stale canonical source(s){_cache_marker} — run freshness_gate.py --update")
             else:
-                print(f"[FRESHNESS \u2713] All {len(pairs)} canonical sources fresh.")
+                print(f"[FRESHNESS \u2713] All {pairs_checked} canonical sources fresh{_cache_marker}.")
     except Exception as fg_err:
         print(f"[FRESHNESS] Check skipped: {fg_err}")
     except RuntimeError as e:

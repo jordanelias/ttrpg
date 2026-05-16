@@ -45,7 +45,14 @@ def _graphql(query, variables=None):
         return json.loads(r.read())
 
 def get_blob_sha(path):
-    """Return the current HEAD blob OID for a repo file. None if missing."""
+    """Return the current HEAD blob OID for a repo file. None if missing.
+
+    Note: this is the single-path version. For checking many paths, use
+    get_blob_shas_batch() — it batches via GraphQL aliases (1 call for N
+    paths instead of N calls). assert_bootstrap's freshness check uses
+    the batch version; the single version is retained for callers that
+    only need one SHA at a time.
+    """
     q = """query($owner:String!,$name:String!,$expr:String!){
       repository(owner:$owner,name:$name){
         object(expression:$expr){...on Blob{oid}}
@@ -54,6 +61,49 @@ def get_blob_sha(path):
     result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME, "expr": f"HEAD:{path}"})
     obj = result.get("data", {}).get("repository", {}).get("object")
     return obj.get("oid") if obj else None
+
+
+def get_blob_shas_batch(paths):
+    """Return {path: live_sha | None} for many paths via a single GraphQL call.
+
+    Uses GraphQL aliases to batch N path queries into one request. Reduces
+    bootstrap freshness-check cost from N GraphQL calls to 1.
+
+    For N up to ~200 (typical canonical_sources.yaml size: ~110 pairs) this
+    fits comfortably in a single GraphQL request and a single rate-limit
+    point. For larger N, split into batches of 200; GraphQL rate-limit
+    cost is per request, not per alias.
+
+    Returns dict mapping every input path to its current HEAD blob OID
+    (or None if the path doesn't exist on HEAD).
+    """
+    if not paths:
+        return {}
+
+    BATCH_SIZE = 200
+    out = {}
+    for batch_start in range(0, len(paths), BATCH_SIZE):
+        batch = paths[batch_start:batch_start + BATCH_SIZE]
+        aliases = {f"p{i}": p for i, p in enumerate(batch)}
+        fields = "\n".join(
+            f'  {alias}: object(expression: "HEAD:{p}") {{ ... on Blob {{ oid }} }}'
+            for alias, p in aliases.items()
+        )
+        q = f"""query($owner:String!,$name:String!){{
+          repository(owner:$owner,name:$name){{
+        {fields}
+          }}
+        }}"""
+        result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME})
+        if "errors" in result:
+            # Surface the error to the caller — assert_bootstrap will gracefully
+            # degrade to "skipped" rather than halt.
+            raise RuntimeError(f"freshness batch GraphQL failed: {result['errors']}")
+        repo_data = result.get("data", {}).get("repository", {}) or {}
+        for alias, path in aliases.items():
+            obj = repo_data.get(alias)
+            out[path] = obj.get("oid") if obj else None
+    return out
 
 
 # Public alias used by valoria_hooks.assert_bootstrap freshness check.
