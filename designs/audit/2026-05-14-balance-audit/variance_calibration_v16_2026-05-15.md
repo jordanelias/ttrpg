@@ -154,3 +154,14 @@ Phase 1a analysis code: `/home/claude/phase_1a_dice_calibration.py`
 - 26-matchup wide-range verification
 
 All MC results validate against analytical within ±0.3pp (sampling noise at N=100k).
+
+
+## §10 Jordan Decision — 2026-05-15
+
+**Q4 resolved: Option B — keep quasibinomial.** VFIVE sampling fallback rejected. The game engine uses smooth quasibinomial distribution; VFIVE is legacy board-game heritage, not a constraint for the video game.
+
+**Dice parameters for Phase 1b:** v15 defaults (p=0.5, φ=1.0). No dice code changes. Phase 1b parameter sweep compensates via game parameters (consent rate, treaty lapse, RM decay, victory threshold, plus restored mechanics: RM world process, Altonian Reinforcements).
+
+**Implication:** v12c's balanced parameter values (consent 0.28, lapse 0.90, etc.) were tuned to VFIVE. They are starting points for the sweep, not transfer targets. The sweep grid may need to be wider than planned if v12c params don't converge on quasibinomial.
+
+**Phase 1a status:** COMPLETE. Deliverable accepted with this addendum. Phase 1b unblocked on dice.
