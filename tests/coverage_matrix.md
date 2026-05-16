@@ -176,3 +176,15 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Module manifest | 7 modules, ~7 sessions, critical path M1→M2→M6→M7 |
 | Status | Module manifest and gap analysis committed; Module 1 (Church Settlement Infrastructure) next |
 | Files | tests/sim/v17-integration/gap_analysis.md + module_manifest.md |
+
+### Phase 5 Continuous Engine Prototype (2026-05-15)
+| Test | Result |
+|------|--------|
+| Trigger | Jordan 2026-05-15 — accepted Path 3 (full continuous engine) |
+| Sim A: Distribution equivalence | EQUIVALENT — max deviation 0.029 in mean, 0.022 in std at pool 5-17 |
+| Sim B: Phase 4 re-run on continuous | Matches Phase 4 discrete within sampling noise |
+| Sim C: Discrete vs Continuous head-to-head (N=5000) | 97.8% (discrete) vs 97.5% (continuous) — Δ -0.3pp |
+| Build ROI curve | Identical shape — Agi 7 reaches 99.2% in continuous, 99.5% in discrete |
+| Key finding | **Continuous engine works but does NOT solve Agi-dominance** — doubling is the structural driver, not the dice mechanism |
+| Implication | Adopting continuous engine: yes (independently valuable for fractional modifiers + degree continuity). Solving dominance: requires separate decision (drop doubling, pool cap, or re-ratify softcap) |
+| Files | tests/sim/phase5_continuous_engine_2026-05-15.py + phase5_results.md + phase5_sim_verification_ledger.json |

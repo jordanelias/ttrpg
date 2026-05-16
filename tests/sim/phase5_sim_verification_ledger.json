@@ -1,0 +1,121 @@
+{
+  "sim_file": "tests/sim/phase5_continuous_engine_2026-05-15.py",
+  "scope": "custom",
+  "purpose": "Phase 5 continuous engine prototype — validates Normal-distribution replacement for d10 dice pool; re-runs Phase 4 Fast vs Strong test with continuous engine to determine whether continuous mapping alone resolves the Agi dominance problem. Trigger: Jordan accepted Path 3 (full continuous engine) on 2026-05-15.",
+  "systems": ["combat"],
+  "entries": [
+    {
+      "sim_variable": "DIE_MEAN_TN7",
+      "value": 0.4,
+      "canonical_source": "params/core.md",
+      "section": "§dice — derived from face distribution at TN 7",
+      "quoted_text": "Face 1 = -1 success (0.1 prob), Face 2-6 = 0 successes (0.5 prob), Face 7-9 = +1 success (0.3 prob), Face 10 = +2 successes (0.1 prob). Expected value per die: 0.1*(-1) + 0.5*0 + 0.3*1 + 0.1*2 = 0.4."
+    },
+    {
+      "sim_variable": "DIE_VAR_TN7",
+      "value": 0.64,
+      "canonical_source": "params/core.md",
+      "section": "§dice — variance derived from face distribution",
+      "quoted_text": "E[X^2] = 0.1*1 + 0.5*0 + 0.3*1 + 0.1*4 = 0.8; variance = E[X^2] - mu^2 = 0.8 - 0.16 = 0.64. std = 0.8."
+    },
+    {
+      "sim_variable": "TN",
+      "value": 7,
+      "canonical_source": "params/core.md",
+      "section": "§TN Values — Standard",
+      "quoted_text": "Standard | 7 | Default"
+    },
+    {
+      "sim_variable": "combat_pool formula",
+      "value": "max(5, agi * 2 + hist + 3)",
+      "canonical_source": "params/combat.md",
+      "section": "§Pool Formula L14 (post-Decision A 2026-05-15)",
+      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "sim_variable": "max_wounds formula",
+      "value": "min(end // 2 + 1, 3)",
+      "canonical_source": "params/combat.md",
+      "section": "L138 (post-F12 commit abf9fc8e)",
+      "quoted_text": "Max Wounds = min(floor(Endurance/2) + 1, 3)"
+    },
+    {
+      "sim_variable": "wound_interval formula",
+      "value": "end + 6",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Wound Interval (End + 6)"
+    },
+    {
+      "sim_variable": "max_health formula",
+      "value": "wound_interval(end) * (max_wounds(end) + 1)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Health (full) = (Endurance + 6) × (Max Wounds + 1)"
+    },
+    {
+      "sim_variable": "max_stamina formula",
+      "value": "15 + end * 2",
+      "canonical_source": "tests/sim/weapon_system_v2/weapon_v2_distance_sim.py",
+      "section": "Architecture C — sim baseline matching v27 convention",
+      "quoted_text": "Architecture C — sim consistency with v27 sim that produced Agi-dominance baseline. Canonical formula is End*5 per params/combat.md L15."
+    },
+    {
+      "sim_variable": "ACTION_COST",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "L15",
+      "quoted_text": "Variable action costs (standard 5, heavy 8, defensive 3)"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 1,
+      "canonical_source": "params/core.md",
+      "section": "L185-187 — pool floor 1D",
+      "quoted_text": "Pool floor: 1D after all penalties."
+    },
+    {
+      "sim_variable": "WEAPON_DAMAGE_MOD",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula — Light Blade Cut vs None tier",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "STR_MULT",
+      "value": 1.0,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula L82 — Light Blade ×1",
+      "quoted_text": "STR multiplier (multiplicative): Light×1, Heavy×2, Blade×1, Blunt×1.5"
+    },
+    {
+      "sim_variable": "CRIT_MAGNITUDE (continuous threshold)",
+      "value": 1.0,
+      "canonical_source": "params/combat.md",
+      "section": "L91 (PP-717 D3) — discrete crit at net >=4; continuous mapping at magnitude >=4 (same threshold value, applied to continuous net)",
+      "quoted_text": "Critical Hit (net hits ≥ 4): weapon modifier doubled before applying armour reduction. (PP-717 — raised from ≥ 3.) In continuous engine, crit fires when continuous net >= 4."
+    },
+    {
+      "sim_variable": "DEG_OVERWHELMING_MAG",
+      "value": 3.0,
+      "canonical_source": "params/core.md",
+      "section": "§degree resolution — Overwhelming requires net >= 2*Ob, magnitude mapping (defined for Phase 5 only; not yet canonical)",
+      "quoted_text": "[Phase 5 continuous engine mapping; not yet adopted as canon] Continuous magnitude threshold for Overwhelming: net - Ob >= 3.0"
+    },
+    {
+      "sim_variable": "DEG_PARTIAL_MAG",
+      "value": -1.5,
+      "canonical_source": "params/core.md",
+      "section": "§degree resolution — Partial requires net >= Ob/2, magnitude mapping (defined for Phase 5 only; not yet canonical)",
+      "quoted_text": "[Phase 5 continuous engine mapping; not yet adopted as canon] Continuous magnitude threshold for Partial: net - Ob >= -1.5"
+    }
+  ],
+  "sim_limitations": [
+    "Strike-only (no Feint, ED, Distance, Initiative)",
+    "Fixed 50/50 pool split",
+    "Single weapon (Light Blade Cut) × single armour (None)",
+    "High draw rate at stamina cliff — conditional win rate is reliable signal",
+    "Degree magnitude bands are tentative (defined for sim purposes; not yet canonical)"
+  ],
+  "key_finding": "Continuous engine is statistically equivalent to discrete at canonical pool sizes (max deviation 0.029 in mean, 0.022 in std at pool 5-17). Agi-dominance persists in continuous engine (97.5% conditional Fast vs Strong, vs 97.8% discrete — within sampling noise). Continuous mapping alone does NOT resolve dominance — the doubling formula is the structural driver."
+}
