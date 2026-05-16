@@ -324,3 +324,18 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Dependencies | Module 1 (SETTLEMENT_REGISTRY, territory_settlements, PLAYABLE_TERRITORIES, RB_CATHEDRAL constants) |
 | Files | tests/sim/v17-integration/m5_settlement_aggregation.py + m5_settlement_aggregation_tests.py + m5_sim_verification_ledger.json |
 | Next module | M6 Faction Action Expansion (depends M1-5) — now unblocked |
+
+### M6 Faction Action Expansion (2026-05-16)
+| Test | Result |
+|------|--------|
+| Trigger | v17 module manifest — Module 6 of 7; Crown Initiative + faction analogues + Excommunication + Absolution + RM Uprising + tactic card effects deferred from M3 |
+| Module scope | Crown Initiative 3 modes (Royal Progress / Great Work / Coronation Renewal) per part10 §3.2-§3.4 with full pool/Ob/outcome tables including Mode III Excommunication-recovery (canon §6.4 Q-11 resolution); Church Excommunication per faction_canon §9 + Church sheet (L≥3 prereq, Ob=target_L leader / Ob 2 non-leader, 3-tier outcomes); Church Absolution per §8.2 with M6-declared Pool/Ob/cost; faction analogues (Council of Solmund Ob=floor(CI/30)+2, Charter of Liberties Pool=Inf+tokens Ob=4, Vaynard's Hall Pool=Mil+tribune_active Ob=3) per part10 §5.1-§5.3; RM Cultural Uprising of T9 per victory §3.5 Phase 2 with Phase 1 check (PT≤1 in ≥4 territories), MS≥25 prereq, Ob=clamped(ceil(CI/10)) + 3 modifiers; parametric tactic card effects (10 cards with constant pool modifiers) + 6 cards raising NotImplementedError for resolution-time hooks deferred to M7 |
+| Test groups | T1 Royal Progress (15 checks) / T2 Great Work (10) / T3 Coronation Renewal (16) / T4 Excommunication (11) / T5 Absolution (8) / T6 Faction analogues (15) / T7 RM Uprising (18) / T8 Tactic card effects (16) / T9 Action registry (6) |
+| Result | **125 PASSED, 0 FAILED** |
+| Canonical sources verified | part10_crown_initiative_design §3.1-§3.7 + §5 + §6 + §7 (full 21.2k); faction_canon §8.2 + §9 + Church sheet (full 47.0k); victory_v30 §3.1 + §3.2 + §3.5 + §8 (full 57.2k); peninsular_strain (full 49.8k); mass_battle §B.4 faction-specific tactic cards (cached from M3); factions_personal_v30 + params/factions.md (fetched for sim_gate) |
+| Ledger | 45 entries; per-mode citations to part10 §3.2-§3.4 outcome tables, Excommunication degree table to faction_canon Church sheet, RM Uprising mechanics to victory §3.5 Phase 2 |
+| Provisional assumptions held | 5 (M6_ASSUMPTION_ONE..FIVE): Church Absolution Pool/Ob/cost declared by M6 (canon underspec), Standing as integer modifier (pending canonical track), parametric-vs-hook tactic card split (6 cards deferred to M7 with explicit dispatch reason), Weaver Thread pool as caller-supplied integer, 4-degree outcome semantics with {} default for canon-undefined degrees |
+| Dependencies | M1 (settlement registry for Uprising Phase 1 territory enumeration), M2 (CI milestone queries for Coronation Renewal interactions), M3 (TACTIC_CARDS registry — M6 extends with parametric effects + hook-deferred set) |
+| Files | tests/sim/v17-integration/m6_faction_actions.py + m6_faction_actions_tests.py + m6_sim_verification_ledger.json |
+| M7 integration hooks needed | Stratagem 2-pass init inversion, Crusade Fervour check_route override, Inquisitor's Mark per-unit targeting, Calculated Retreat outcome override, Disappear outcome override, Ducal Call resolution-time state mutation — see TACTIC_CARDS_REQUIRING_HOOKS frozenset in m6_faction_actions.py |
+| Next module | M7 Integration + Balance Sweep — all 6 module dependencies satisfied |

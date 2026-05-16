@@ -1,0 +1,363 @@
+{
+  "sim_file": "tests/sim/v17-integration/m6_faction_actions.py",
+  "scope": "custom",
+  "systems": ["factions", "victory", "peninsular_strain", "mass_combat", "campaign_architecture"],
+  "module_role": "Module 6 of v17 integration — faction-unique action expansion. Crown Initiative 3 modes + faction analogues (Synod, Charter, Vaynard's Hall) + Church Excommunication + Church Absolution + RM Cultural Uprising of T9 + parametric tactic card pool modifiers deferred from M3. Pure primitives — computes pool/Ob/outcome dicts; does not mutate state.",
+  "entries": [
+    {
+      "sim_variable": "CROWN_INITIATIVE_FACTION",
+      "value": "Crown",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.1 Card metadata",
+      "quoted_text": "Faction | Crown (Valorsmark) only"
+    },
+    {
+      "sim_variable": "CROWN_INITIATIVE_SLOT",
+      "value": "Senator Inward",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.1 Card metadata",
+      "quoted_text": "Slot | Senator Inward (new) — 1x per season; shares no slot with Senator Outward (Crown Treaty) or other cards"
+    },
+    {
+      "sim_variable": "CROWN_INITIATIVE_MODES",
+      "value": ["royal_progress", "great_work", "coronation_renewal"],
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.1 Card metadata + §3.2-§3.4 mode specs",
+      "quoted_text": "Modes | Three; player declares mode at play. Mode I - Royal Progress; Mode II - Great Work; Mode III - Coronation Renewal."
+    },
+    {
+      "sim_variable": "ROYAL_PROGRESS_WEALTH_COST",
+      "value": -2,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.2 Mode I — Royal Progress",
+      "quoted_text": "Cost | Wealth -2 (treasury for entertainment, gifts to hosts)"
+    },
+    {
+      "sim_variable": "royal_progress_ob formula",
+      "value": "floor(sum_own_territories_accord / 2)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.2 Mode I — Royal Progress Ob row",
+      "quoted_text": "Ob | floor(sum of own territories Accord / 2) — easier when Accord is high (people aren't restive); harder when realm is in turmoil"
+    },
+    {
+      "sim_variable": "royal_progress_pool formula",
+      "value": "influence + standing_modifier",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.2 Mode I — Royal Progress Pool row",
+      "quoted_text": "Pool | Influence + Standing modifier"
+    },
+    {
+      "sim_variable": "royal_progress_outcome OW",
+      "value": "mandate_delta=+2, standing_delta=+1, accord_1_to_2_all_own=True",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.2 Royal Progress outcome table",
+      "quoted_text": "Overwhelming | Mandate +2; Standing +1; all own territories at Accord 1 -> Accord 2"
+    },
+    {
+      "sim_variable": "royal_progress_outcome Success",
+      "value": "mandate_delta=+1, lowest_accord_territory_plus_1=True",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.2 Royal Progress outcome table",
+      "quoted_text": "Success | Mandate +1; one own territory of choice (lowest Accord) +1 Accord"
+    },
+    {
+      "sim_variable": "royal_progress_outcome Partial",
+      "value": "standing_delta=+1, wealth_cost=-2 (cost still paid)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.2 Royal Progress outcome table",
+      "quoted_text": "Partial | Standing +1 (tour happened, didn't move the needle); cost still paid"
+    },
+    {
+      "sim_variable": "royal_progress_outcome Failure",
+      "value": "standing_delta=-1, wealth_cost=-2 (cost paid)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.2 Royal Progress outcome table",
+      "quoted_text": "Failure | Standing -1 (no welcome at one stop); cost paid; no L gain"
+    },
+    {
+      "sim_variable": "GREAT_WORK_WEALTH_COST_PER_SEASON",
+      "value": -1,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.3 Mode II — Great Work",
+      "quoted_text": "Cost | Wealth -1 per season for 3 seasons (sustained investment) AND uses Senator Inward slot each season"
+    },
+    {
+      "sim_variable": "GREAT_WORK_SEASONS",
+      "value": 3,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.3 Mode II — Great Work",
+      "quoted_text": "I will undertake [codification / monument / charter] over 3 seasons"
+    },
+    {
+      "sim_variable": "GREAT_WORK_FINAL_OB",
+      "value": 4,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.3 Mode II — Great Work Ob row",
+      "quoted_text": "Ob (final season) | 4 — challenging; major project"
+    },
+    {
+      "sim_variable": "great_work_pool_final_season",
+      "value": "mandate",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.3 Mode II — Great Work Pool row",
+      "quoted_text": "Pool (final season) | Mandate (the institutional weight backing the project)"
+    },
+    {
+      "sim_variable": "great_work_outcome OW",
+      "value": "mandate_delta=+2 permanent, charters_govern_ob_minus_1_permanent, standing_delta=+2",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.3 Great Work outcome table",
+      "quoted_text": "Overwhelming | Mandate +2 permanent; all own Charters gain Govern -1 Ob (permanent quality-of-life), Standing +2"
+    },
+    {
+      "sim_variable": "great_work_outcome Failure + mid_pledge_breach",
+      "value": "standing_delta=-2, cohesion_delta=-20, reputation_delta=-15 (mid-pledge only)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.3 Great Work outcome table + Mid-pledge breach row",
+      "quoted_text": "Failure | Standing -2, Cohesion -20 (per PP-515 breach penalties); the project failed publicly. Mid-pledge breach | Standing -2, Cohesion -20, Reputation -15 (PP-515)"
+    },
+    {
+      "sim_variable": "CORONATION_WEALTH_COST",
+      "value": -2,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.4 Mode III — Coronation Renewal",
+      "quoted_text": "Cost | Wealth -2 (ceremony, gifts to Church, hosting clergy)"
+    },
+    {
+      "sim_variable": "coronation_renewal_prerequisite_check",
+      "value": "valid relations: truce/peace/alliance/crown_treaty; blocks if Excomm active",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.4 Mode III — Coronation Renewal Prerequisites",
+      "quoted_text": "Prerequisites | Crown-Church active Truce, Peace, Alliance, or Crown Treaty; Church is not actively prosecuting an Excommunication against Crown this season"
+    },
+    {
+      "sim_variable": "coronation_renewal_ob formula",
+      "value": "floor(church_mandate / 2) + 1",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.4 Mode III — Coronation Renewal Ob row",
+      "quoted_text": "Ob | floor(Church Mandate / 2) + 1"
+    },
+    {
+      "sim_variable": "coronation_renewal_outcome OW",
+      "value": "mandate_delta=+2, lifts_excommunication, standing_delta=+1, crown_church_standing_delta=+1",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.4 Mode III — Coronation Renewal outcome table",
+      "quoted_text": "Overwhelming | Mandate +2; if Crown currently Excommunicated, Excommunication lifted; Standing +1; Crown-Church Standing +1"
+    },
+    {
+      "sim_variable": "coronation_renewal_outcome Success lifts_excommunication",
+      "value": "Mode III Success also lifts Excommunication",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§3.4 Mode III — Coronation Renewal outcome Success row + §6.4",
+      "quoted_text": "Success | Mandate +1; Excommunication lifted if currently active. §6.4: Mode III as the canonical Excommunication-recovery path."
+    },
+    {
+      "sim_variable": "EXCOMMUNICATION_PREREQUISITE_CHURCH_L",
+      "value": 3,
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "Church sheet — Tactic / Unique Actions: Excommunication",
+      "quoted_text": "Requires Church L >= 3. Reversal: Grand Debate (5 exchanges) or new Confessor."
+    },
+    {
+      "sim_variable": "EXCOMMUNICATION_OB_NON_LEADER",
+      "value": 2,
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "§9 Tactic / Unique Action Overview",
+      "quoted_text": "Church | Excommunication | L vs target L (leader) / Ob 2 (non-leader) | Requires Church L >= 3"
+    },
+    {
+      "sim_variable": "excommunication_outcome OW",
+      "value": "target_mandate_delta=-1, strips_circles_bonus, barred_from_public_office, target_personal_reputation_delta=-1",
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "Church sheet Excommunication degree table",
+      "quoted_text": "Overwhelming | Strips target's Circles bonus with Church contacts; target faction L -1; target barred from public office and Church-loyal command; personal Reputation -1 with all factions"
+    },
+    {
+      "sim_variable": "excommunication_outcome Success",
+      "value": "as OW minus the personal Reputation penalty",
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "Church sheet Excommunication degree table",
+      "quoted_text": "Success | As Overwhelming minus the personal Reputation penalty"
+    },
+    {
+      "sim_variable": "excommunication_outcome Failure",
+      "value": "church_mandate_delta=-1, target_mandate_delta=+1 (sympathy martyr)",
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "Church sheet Excommunication degree table",
+      "quoted_text": "Failure | Church L -1; target gains L +1 (sympathy martyr)"
+    },
+    {
+      "sim_variable": "ABSOLUTION_TARGET_STABILITY_BONUS",
+      "value": 1,
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "§8.2 Recovery paths",
+      "quoted_text": "Church Absolution (Church unique action): +1 to target."
+    },
+    {
+      "sim_variable": "ABSOLUTION_OB",
+      "value": 3,
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "§8.2 Recovery paths — M6_ASSUMPTION_ONE",
+      "quoted_text": "Canon specifies +1 Stability effect. Pool/Ob/cost not specified; M6 declares Ob=3 (mid-tier sacrament difficulty) — M6_ASSUMPTION_ONE",
+      "assumption": "M6_ASSUMPTION_ONE: Ob 3 declared by M6; not in canon. Surface for ratification."
+    },
+    {
+      "sim_variable": "ABSOLUTION_CHURCH_MANDATE_COST",
+      "value": -1,
+      "canonical_source": "designs/provincial/faction_canon_v30.md",
+      "section": "§8.2 Recovery paths — M6_ASSUMPTION_ONE",
+      "quoted_text": "Cost not specified in canon; M6 declares Mandate -1 (Church spends institutional capital absolving) — M6_ASSUMPTION_ONE",
+      "assumption": "M6_ASSUMPTION_ONE: Mandate -1 declared by M6."
+    },
+    {
+      "sim_variable": "council_of_solmund_ob formula",
+      "value": "floor(ci / 30) + 2",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§5.1 Church — Synod / Council",
+      "quoted_text": "Ob | floor(CI / 30) + 2 (easier when CI is high — Church has institutional momentum)"
+    },
+    {
+      "sim_variable": "council_of_solmund_outcome OW",
+      "value": "church_mandate_delta=+2, cardinal_focus_permanent, rival_l_delta=-1",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§5.1 Church — Synod / Council Effects (OW)",
+      "quoted_text": "Effects (OW) | Church Mandate +2; choose a Cardinal Focus permanent + select one rival faction's L -> -1 (formal censure)"
+    },
+    {
+      "sim_variable": "CHARTER_OB",
+      "value": 4,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§5.2 Hafenmark — Charter of Liberties",
+      "quoted_text": "Ob | 4"
+    },
+    {
+      "sim_variable": "charter_of_liberties_pool formula",
+      "value": "influence + active_tokens_on_opponents",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§5.2 Hafenmark — Charter of Liberties",
+      "quoted_text": "Pool | Influence + (active Tokens on opponents)"
+    },
+    {
+      "sim_variable": "charter_of_liberties_outcome OW",
+      "value": "hafenmark_mandate_delta=+2, pi_delta=-2, rival_excommunication_ob_delta_campaign=+1",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§5.2 Hafenmark — Charter of Liberties Effects (OW)",
+      "quoted_text": "Effects (OW) | Hafenmark Mandate +2; PI -2; all rival factions face +1 Ob to Excommunication attempts this campaign (constitutional protection)"
+    },
+    {
+      "sim_variable": "VAYNARDS_HALL_OB",
+      "value": 3,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§5.3 Varfell — Vaynard's Hall",
+      "quoted_text": "Ob | 3"
+    },
+    {
+      "sim_variable": "vaynards_hall_pool formula",
+      "value": "military + (1 if tribune_network_active else 0)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md",
+      "section": "§5.3 Varfell — Vaynard's Hall",
+      "quoted_text": "Pool | Mil + (Tribune Network active)"
+    },
+    {
+      "sim_variable": "UPRISING_PHASE_1_PT_THRESHOLD",
+      "value": 1,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.5 Phase 1 — Cultural Majority",
+      "quoted_text": "PT <= 1 in >= 4 of the 15 playable territories (T1-T14, T17) (PP-543)"
+    },
+    {
+      "sim_variable": "UPRISING_PHASE_1_TERRITORY_COUNT",
+      "value": 4,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.5 Phase 1 PP-543",
+      "quoted_text": "PT <= 1 in >= 4 of the 15 playable territories (PP-543: was >= 8; PP-478 had >= 5 — PP-543 supersedes both)"
+    },
+    {
+      "sim_variable": "UPRISING_MS_PREREQUISITE",
+      "value": 25,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.5 Phase 2 — Cultural Uprising of T9 Himmelenger",
+      "quoted_text": "Prerequisites: MS >= 25 (substrate must be stable enough for a coherent popular movement — below 25, physical destabilisation overwhelms cultural organisation). If MS < 25, Cultural Uprising is unavailable regardless of Phase 1 status."
+    },
+    {
+      "sim_variable": "uprising_ob formula",
+      "value": "max(1, min(5, ceil(ci/10))) + modifiers (T9 PT<=1: -1; CI>=50: +1; Mandate>=5: +1)",
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.5 Phase 2 — Cultural Uprising of T9 Himmelenger",
+      "quoted_text": "Weaver Thread pool vs Ob = CI / 10 (round up, min 1, max 5). Modifiers: T9 PT <= 1: Ob -1 (Cathedral already culturally shifted); WC >= 2: +1D (Wardens support the Uprising); CI >= 50 at declaration: Ob +1 (Church institutional authority is strong enough to resist); Church Mandate >= 5: Ob +1 (Church actively suppresses)"
+    },
+    {
+      "sim_variable": "uprising_outcome OW",
+      "value": "t9_transfers_to_rm, church_mandate_delta=-2, ci_delta=-3, t9_pt_delta=-2, auto_presence_markers_t9=+2",
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.5 Phase 2 outcome table + Overwhelming Uprising bonus",
+      "quoted_text": "Overwhelming | T9 transfers to RM administration. Church Mandate -2. CI -3 (institutional rupture). T9 PT -2 (population has decisively shifted). Overwhelming Uprising bonus: +2 Presence markers in T9."
+    },
+    {
+      "sim_variable": "uprising_outcome Failure",
+      "value": "ci_delta=+2, t9_pt_delta=+1, uprising_used_this_arc",
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.5 Phase 2 outcome table Failure row",
+      "quoted_text": "Failure | Uprising crushed. CI +2 (Church authority strengthened by resistance). T9 PT +1. Uprising attempt used up for this arc."
+    },
+    {
+      "sim_variable": "FACTION_TACTIC_CARD_POOL_MODIFIERS",
+      "value": "9 parametric cards: royal_guard, mercenary_surge, sovereign_authority, paid_off, logistics_mastery, assassination, iron_discipline, martial_law, peoples_courage, ambush",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Faction-specific tactic cards table",
+      "quoted_text": "Crown | Royal Guard (Elite unit +3D); Hafenmark | Mercenary Surge (pay 1 Wealth: +2 units this engagement) | Sovereign Authority (immune to Disposition table Ob penalties this engagement); Guilds | Paid Off (opponent unit -1D; costs 1 Wealth) | Logistics Mastery (Strained units fight at full this engagement); Niflhel | Assassination (target opponent commander; -1D all opp. units); Löwenritter | Iron Discipline (immune to Route this engagement) | Martial Law (after winning: territory gains Martial Law next season); Revolution | People's Courage (Discipline +1 all units this engagement) | Ambush (first engagement in Oastad or Stillhelm: opponent no Defence roll)"
+    },
+    {
+      "sim_variable": "TACTIC_CARDS_REQUIRING_HOOKS",
+      "value": ["crusade_fervour", "inquisitors_mark", "stratagem", "calculated_retreat", "disappear", "ducal_call"],
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Faction-specific tactic cards table",
+      "quoted_text": "Stratagem (read opponent's tactic card before locking yours) — 2-pass init inversion; Crusade Fervour (Discipline check exempt this turn) — overrides check_route; Inquisitor's Mark (target unit -2D) — per-unit targeting; Calculated Retreat (withdraw without Overextended penalty) — outcome override; Disappear (withdraw all units; opponent cannot pursue this season) — outcome override; Ducal Call (summon 1 unit from adjacent territory) — resolution-time state mutation.",
+      "note": "M6_ASSUMPTION_THREE: these 6 cards require resolution-time hooks not present in M6 primitives layer. M6's tactic_card_effect() raises NotImplementedError on these; M7 integration wires post-resolution callbacks."
+    },
+    {
+      "sim_variable": "DEGREES",
+      "value": ["Overwhelming", "Success", "Partial", "Failure"],
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/sim/mc_v15.py",
+      "section": "Outcome degree convention (mc_v15)",
+      "quoted_text": "Outcome degree set per mc_v15 sim convention + victory_v30 outcome tables: Overwhelming / Success / Partial / Failure."
+    }
+  ],
+  "provisional_assumptions": [
+    {
+      "id": "M6_ASSUMPTION_ONE",
+      "topic": "Church Absolution mechanic full spec",
+      "decision": "Canon says 'Church Absolution (Church unique action): +1 Stability to target' in §8.2 but does not specify Pool, Ob, or cost. M6 declares: Pool = Church Influence; Ob = 3; cost = Church Mandate -1; Frequency: 1/season. Failure path: Church Standing -1.",
+      "rationale": "+1 Stability is the most powerful single-action recovery in the game (per §8.2 it's the same magnitude as 'Mutual peace treaty' which requires both parties at Stability >=2). Pool=Influence matches the diplomatic-sacred frame. Ob=3 is mid-tier (matching Crown Treaty defensive average). Mandate cost reflects 'absolving target costs Church institutional capital' historical pattern (papacy taking on the disgrace of pardoning a heretic).",
+      "follow_up": "Jordan ratification required. Could alternatively be Pool=Mandate (the absolver's institutional weight), Ob=floor(target_disgrace/2)+1, or other formulations. Compare to Coronation Renewal Ob = floor(Church Mandate / 2) + 1 — Absolution is a symmetric-relationship-affirming action so a flat Ob seems right."
+    },
+    {
+      "id": "M6_ASSUMPTION_TWO",
+      "topic": "Standing as integer modifier in outcome dicts",
+      "decision": "All M6 outcome dicts use 'standing_delta' as an integer. Crown-Church relationship Standing uses 'crown_church_standing_delta'.",
+      "rationale": "Canon (Part 10 §3.2-§3.4) refers to 'Standing +1' / 'Standing -1' as integer modifiers without specifying the underlying stat structure (Standing-as-stat vs Standing-as-track). M6 stays agnostic — caller integrates with whatever Standing tracking mechanism eventually lands in canon.",
+      "follow_up": "When Standing is fully canonized (likely npc_behavior_v30 or faction_state_authoring extensions), revisit whether M6 should clamp Standing deltas to a range or pass through unbounded."
+    },
+    {
+      "id": "M6_ASSUMPTION_THREE",
+      "topic": "Faction-specific tactic card effects — primitives vs resolution-time hooks",
+      "decision": "M6 implements 10 cards with constant pool modifiers as parametric effect dicts (Royal Guard +3D, Mercenary Surge +2 costing W, Sovereign Authority immune-to-Ob-penalties, Paid Off -1D, Logistics Mastery strained-at-full, Assassination -1D, Iron Discipline immune-to-route, Martial Law martial-law-next-season-on-win, People's Courage +1 Discipline, Ambush no-defence-in-specific-territories). M6 raises NotImplementedError for 6 cards requiring resolution-time hooks (Stratagem 2-pass, Crusade Fervour check-route override, Inquisitor's Mark per-unit targeting, Calculated Retreat outcome override, Disappear outcome override, Ducal Call resolution-time state mutation).",
+      "rationale": "Primitives-vs-hooks split keeps M6 self-contained. The 6 deferred cards genuinely require either (a) two-pass tactic resolution (Stratagem), (b) overriding M3's check_route function (Crusade Fervour), (c) per-unit targeting not present in M4's aggregate-count model (Inquisitor's Mark), or (d) post-resolution state mutation beyond what BattleResult expresses (Calculated Retreat / Disappear / Ducal Call). M7 integration is the right home.",
+      "follow_up": "M7 must wire a post-resolution-callback architecture. Specifically: (1) Stratagem requires re-running apply_tactic_cards once defender's card is revealed; (2) Crusade Fervour suppresses the check_route call in M3 for that faction's units this engagement; (3) Inquisitor's Mark requires extending damage allocation to target a specific unit class first; (4) Disappear/Calculated Retreat short-circuit the outcome to a withdrawal state not currently in BattleResult; (5) Ducal Call adds a pre-resolution Muster-from-adjacent step."
+    },
+    {
+      "id": "M6_ASSUMPTION_FOUR",
+      "topic": "RM Cultural Uprising 'Weaver Thread pool' source",
+      "decision": "uprising_pool_modifier() returns +1 if WC >= 2 (canon explicit). The base 'Weaver Thread pool' value is taken as a precomputed integer parameter by the caller — M6 does not compute Weaver Thread aggregation.",
+      "rationale": "The 'Weaver Thread pool' canonical aggregation lives in another doc (likely npc_behavior_v30 or thread mechanics layer, not yet read this session). M6 stays focused on action-level mechanics; the caller (M7 integration) computes Weaver Thread aggregation and passes the result.",
+      "follow_up": "Read the Weaver Thread aggregation rules when M7 wires the full action; M6 can be extended to compute it if needed, or M7 owns the computation."
+    },
+    {
+      "id": "M6_ASSUMPTION_FIVE",
+      "topic": "Outcome degree semantics across all M6 actions",
+      "decision": "DEGREES = ('Overwhelming', 'Success', 'Partial', 'Failure'). Every M6 *_outcome() function accepts a degree string from this set; unknown degrees raise ValueError. Partial/Failure degrees that canon doesn't explicitly define for an action (e.g. Excommunication Partial) return either {} (no effect, cost paid) or a documented minimum-impact dict.",
+      "rationale": "Matches mc_v15 sim convention and victory_v30 outcome tables. Most actions in canon define OW/Success/Partial/Failure explicitly; Excommunication only defines OW/Success/Failure. M6's default for missing degrees is 'cost paid, no effect' — the most conservative interpretation.",
+      "follow_up": "If canon adds Partial cases for actions M6 currently defaults to {} (notably Excommunication Partial, Council Partial/Failure, Charter Partial/Failure, Vaynard's Hall Partial/Failure), update those branches."
+    }
+  ]
+}
