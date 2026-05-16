@@ -73,6 +73,8 @@ The engine MAY be implemented two ways with statistically equivalent outputs:
 
 **Adoption note:** discrete engine remains canonical for TTRPG-mode play; continuous engine is canonical for Godot implementation. They are interchangeable specifications of the same underlying probability distribution.
 
+**Validation scope (WS-D-1, ED-836).** Phase 5 sim demonstrated distribution equivalence at combat-system parameters (pool 5-17D, TN 7). The result is mathematically system-agnostic (CLT applies to any d10 dice pool sum), so it transfers to social contest, thread operations, fieldwork, mass-combat, and faction systems by construction. System-specific validation sims have not been run; faction-scale (bare 1-7D pools) sits at the small-pool boundary where Normal approximation grows shaky and would benefit from dedicated sanity-check.
+
 ## Coherence 0 — NPC Transition (PP-261)
 At Coherence 0: character becomes NPC (100% functional, player agency ends). See params_threadwork.md for full rule.
 ## Momentum

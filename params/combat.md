@@ -269,7 +269,7 @@ Phase 7 sim (tests/sim/phase7_action_triangle_2026-05-15.md) demonstrated empiri
 
 - Strike-only play: Fast (Agi 6, pool 17D) wins 96.7% conditional vs Strong (Agi 3, pool 11D)
 - With Strong actively employing PP-294 Feint: Fast wins drop to 34.9% — Strong wins 65% of decisive duels
-- End-dominance (Tough vs Strong) similarly collapses from 82% Strike-only to ~7% with tactical play
+- End-dominance (Tough vs Strong) shows similar sensitivity to tactical play in early sim, but specific magnitudes are unstable — Phase 7 same-pool matchups produced results suggesting Full Guard / Take Breath interaction artifacts. Direction provisional; magnitude deferred pending Phase 8 confirmation. (WS-H-4, ED-835)
 
 The action triangle is therefore a load-bearing balance mechanism, not flavor. Combat scenarios should ensure tactical depth is available; pure-Strike sequences favor the higher-pool side decisively.
 

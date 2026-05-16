@@ -423,6 +423,17 @@ oid = h.safe_commit(additions, deletions, message)
 # (which includes freshness_gate, broken_dependency_checker, patch_propagation_checker)
 # Raises RuntimeError on any violation — no bypass.
 ```
+
+**Post-commit verification (WS-BU-1, ED-837 — 2026-05-15):** every `safe_commit` MUST be followed by a read-back of each file in the `additions` list, with grep for at least one required content marker per file. Hook chain catches violations pre-commit; post-commit read-back catches the rare cases where the local change does not match what landed on remote (network failure mid-write, content-encoding drift, etc.).
+
+```python
+# After safe_commit returns the SHA, verify:
+for path, expected_content in expected_markers.items():
+    landed = g.read_files_graphql([path])[path]
+    assert expected_content in landed, f"Post-commit verify failed: {path}"
+```
+
+Treat this as a standing practice. Workstream audit 2026-05-15 (`tests/audit/workstream_meta_audit_2026-05-15.md`) found post-commit verification was applied to 4 of 10 commits in the same-day chain; asymmetric verification weakens the audit trail.
 Direct `g.atomic_commit()` is permitted only in infrastructure commits where hooks are being updated.
 
 **Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.

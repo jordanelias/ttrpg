@@ -101,3 +101,36 @@ entries:
   status: resolved
   jordan_decision: '2026-05-15 — document Phase 4-7 finding as canonical balance note.'
   resolution_commit: pending-this-commit
+- id: ED-835
+  date: 2026-05-15
+  description: 'WS-H-4 resolution (workstream meta-audit 2026-05-15). Phase 7 End-dominance "Tough 82% Strike-only → ~7% with tactical play" result is likely a sim artifact: same-pool matchups (both 11D) with same Smart AI rules should produce similar outcomes between Strike-only and Smart modes, but the numbers shift dramatically. Most likely cause: Full Guard / Take Breath interaction in Smart mode that breaks the symmetric expectation. Combat Balance Note in params/combat.md previously canonized both the direction AND the magnitude; this edit retains the direction (tactical sensitivity exists) but defers the magnitude pending Phase 8 confirmation with better-tuned Smart AI. Agi-dominance findings (96.7% → 34.9% via underdog Feinting) are unaffected — they rest on the asymmetric Underdog Feints mode which is more trustworthy than Smart-vs-Smart.'
+  severity: P2
+  type: stale
+  archetype: A2
+  affected_docs:
+  - params/combat.md
+  status: resolved
+  jordan_decision: '2026-05-15 — execute REC-1 from post-audit recommendations.'
+  resolution_commit: pending-this-commit
+- id: ED-836
+  date: 2026-05-15
+  description: 'WS-D-1 resolution (workstream meta-audit 2026-05-15). Decision E (continuous engine, ED-833) canonized the engine for all systems but Phase 5 sim validated only at combat parameters (pool 5-17D, TN 7). This is a documentation gap: the validation IS system-agnostic by Central Limit Theorem (Normal-approximation of d10 pool sums holds for any system using d10 dice), so the canonical scope is mathematically defensible. Edit adds explicit "Validation scope" paragraph to params/core.md §Continuous Engine acknowledging this — combat-validated; system-agnostic by CLT; faction-scale at small-pool boundary warrants dedicated sanity-check sim. No canonical change; clarification only.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - params/core.md
+  status: resolved
+  jordan_decision: '2026-05-15 — execute REC-2 from post-audit recommendations.'
+  resolution_commit: pending-this-commit
+- id: ED-837
+  date: 2026-05-15
+  description: 'WS-BU-1 resolution (workstream meta-audit 2026-05-15). Post-commit verification (read-back of each file in additions list against grep for required content marker) was applied to only 4 of 10 commits in the 2026-05-15 workstream chain. Asymmetric verification weakens the audit trail and risks rare-case drift between local content and what landed on remote. Edit adds explicit "Post-commit verification" subsection to skills/valoria-orchestrator/SKILL.md Commit Protocol, formalizing post-commit read-back as a standing practice. No hook-level enforcement (process change only); promotion to hook enforcement deferred pending observation of practice adherence.'
+  severity: P3
+  type: process
+  archetype: A2
+  affected_docs:
+  - skills/valoria-orchestrator/SKILL.md
+  status: resolved
+  jordan_decision: '2026-05-15 — execute REC-3 from post-audit recommendations.'
+  resolution_commit: pending-this-commit
