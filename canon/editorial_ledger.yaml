@@ -1,69 +1,275 @@
 entries:
-- id: ED-788
-  date: 2026-05-03
-  description: '[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking mechanical work.'
-  status: deferred
-  severity: P2
-  source: ED-755 D2.2 spin-out 2026-05-03
-  jordan_decision: 2026-05-09 — skip.
-- id: ED-811
-  date: 2026-05-11
-  description: 'Engagement damage formula ambiguous. Phase 5 pool split does not specify whether damage = (net_successes *
-    1+Power) for attacker only, or (margin between off/def pools * 1+Power), or other. SIM-MB-04 INTERPRETATION-01 used margin
-    model and produced one-turn kills via margins of 5-6. Needs explicit formula statement. Source: SIM-MB-04 FINDING-1.'
+- id: ED-900
+  date: '2026-05-15'
+  description: 'Reserve formation canonized in mass_battle_v30 §A.6 + PP-MB-04 + PP-499 but absent from sim_mb_06_v25. C explicit:
+    Reserve commitment at Phase 3 of Turn N+1 makes unit immediately available for Phase 5 Engagement same turn. Pharsalus
+    G-2 hidden-4th-line ambush structurally non-reproducible. Resolution path: add committed:bool=False + commitment_pending:bool=False
+    on Unit; reserve units do not advance/engage/drain stamina. Compounds with F2.1 axis split (spatial_pattern x combat_mode
+    separation). F1.1 + F2.4 in 2026-05-15 mass-battle comparative audit.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F1.1 / F2.4
+- id: ED-901
+  date: '2026-05-15'
+  description: 'Shield Wall combat mode canonized in §A.6 + PP-500 (Off -1D, Def +2D, cannot advance, negates one flank/turn,
+    +2D propagates to all simultaneous engagements) but absent from sim_mb_06_v25. Hastings G-6 structurally non-reproducible.
+    C->S correctness drift on ratified canon mechanic. Resolution path: combat_mode=''Shield Wall'' flag with off_pool -=1,
+    def_pool +=2, can_advance=False, flank_negation_remaining=1/turn; PP-500 propagates via existing pair-iteration. Blocks
+    on F2.1 axis split. F2.3 in audit.'
   severity: P1
   type: missing
   archetype: A2
   affected_docs:
   - designs/provincial/mass_battle_v30.md
   - params/mass_combat.md
+  - tests/sim/sim_mb_06_v25.py
   status: open
   jordan_decision: pending
-- id: ED-813
-  date: 2026-05-11
-  description: 'ED-801 withdrawal phase gate unspecified. Jordan ruling confirmed Withdraw plan + speed advantage = orderly
-    disengage. SIM-MB-04 implemented as Phase 5 gate but it may be a Phase 3 gate instead, changing positioning logic materially.
-    Source: SIM-MB-04 FINDING-7.'
-  severity: P2
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F2.3
+- id: ED-902
+  date: '2026-05-15'
+  description: 'Mass-battle damage formula drift between C and S. C PP-233 line 70: linear damage = successes * (1 + Power).
+    S compute_degree + DAMAGE_BY_DEGREE (line 1259): degree-stepped 0/1/Power/(1+Power). For 10 net successes vs 1, C deals
+    10x more damage than S. 10x drift in dominant-side damage output. No mass-scale acclaimed precedent (TW/FoG2/UG/CM/Bannerlord)
+    uses degree-stepped damage. Resolution options: (a) S aligns to C linear; (b) C aligns to S degree-stepped (revises PP-233
+    worked example); (c) distinct mass-vs-personal abstractions ratified with bridge document explaining cadence-and-cell-decomposition
+    relationship. Recommended: (c). F3.1 + T-55 in audit.'
+  severity: P1
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F3.1
+- id: ED-903
+  date: '2026-05-15'
+  description: 'Class-dependent damage modifier (PP-194 / PARAMS-GAP-05 Dmg Mod table: Levy LightCut +1, Light Infantry LightCut
+    +2, Heavy Infantry HeavyCut +4, Cavalry HeavyCut +5, Knights Templar HeavyBlunt +5, etc.) not implemented in S. S uses
+    raw Power as damage source for all units. Also surfaces internal canon drift: PP-233 line 70 specifies linear damage =
+    successes * (1 + Power); PARAMS-GAP-05 line 284 specifies Size loss = max(0, net + Dmg Mod - DR). Two damage formulas
+    in canon with unclear relationship. Resolution path: depends on F3.1 (damage formula) + F2.2 (class taxonomy). When class
+    is a primitive, dmg_mod becomes a class attribute. F3.6 in audit.'
+  severity: P1
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F3.6
+- id: ED-904
+  date: '2026-05-15'
+  description: 'Mass-battle pursuit damage formula drift. C §A.12: routing unit loses Size = pursuer net Offence successes
+    per turn (no Defence allocation). S pursuit_damage line 2098: dmg HP = net * (1 + Power) - DR (HP not Size). At BLOCK_SIZE=100:
+    S deals 0.03-0.10 Size/turn vs C 2-4 Size/turn. 25-30x drift in pursuit lethality. v16 manifest measured 1.4x winner/loser
+    casualty ratio vs R O-10 historical 2-5x. F4.1 + F4.2 + F1.3 together produce historical ratio when implemented. Lateral:
+    TW + Bannerlord pursuit catastrophic 60-90% routed army deaths. Resolution path: replace pursuit_damage line 2098 to apply
+    damage directly to Size (dmg_size = max(0, a_net - dr_size_units)). F4.1 + T-62 in audit.'
+  severity: P1
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F4.1
+- id: ED-905
+  date: '2026-05-15'
+  description: 'Environment / terrain layer entirely absent from sim_mb_06_v25. C §A.9 specifies 6 terrain types (River, Uphill,
+    Forest, Walls, Narrow Pass, Open) with explicit pool/speed/flanking modifiers. PP-780 (§A.9 line 476) specifies geographic
+    battle-terrain derivation from territory_polygons via march_layer §8.2. None implemented in S. All terrain-relevant R
+    reconstructions non-reproducible: Hastings (slope), Crecy (slope+mud), Agincourt (funnel+mud+stakes), Marignano (vineyards+ditches),
+    Pavia (walls+cover), Panipat (wagon-fortress), Adrianople (ridge), Pharsalus (stream-bed anchor). Single largest unimplemented
+    canon mechanic in S. Resolution path: ground_type primitive per cell; pool/speed/sightline modifiers per-cell from ground_attributes.
+    Lateral universal in TW/FoG2/UG/CM/Bannerlord/FM. F5.1 + T-63 in audit. Unlocks F5.2 / F5.4 / F5.4b / F5.6 / F5.7 / F6.9.'
+  severity: P1
   type: missing
   archetype: A2
   affected_docs:
   - designs/provincial/mass_battle_v30.md
+  - tests/sim/sim_mb_06_v25.py
   status: open
   jordan_decision: pending
-- id: ED-822
-  date: 2026-05-11
-  description: 'Volley/Engagement composition balance. SIM-MB-05A composition sweep showed ranged-heavy compositions winning
-    disproportionately (pure-melee vs ranged-heavy 4 to 1 disadvantage). SIM-MB-05C tested TN6 vs TN7 Volley calibration:
-    TN7 improves pure-melee-vs-balanced from 28 percent to 36 percent (8 percentage point gain) but pure-melee-vs-ranged-heavy
-    remains roughly unchanged (15-16 percent). TN7 is partial improvement but does not fully resolve. Recommendation: adopt
-    TN7 as clean primary fix; raise composition-balance secondary measure as ED-825 for Phase 3+ work. Secondary measure options:
-    a) melee_pct as engagement Ob bonus for heavier-melee side; b) Volley pool cap = floor(volley_pool / 2); c) ranged_DR
-    scaled by defender melee_pct (heavier front rank shields back rank). Source: SIM-MB-05C section 3.2.'
-  severity: P2
-  type: incongruency
-  archetype: A2
-  affected_docs:
-  - params/mass_combat.md
-  - designs/provincial/mass_battle_v30.md
-  status: open
-  jordan_decision: pending
-- id: ED-823
-  date: 2026-05-11
-  description: 'Combined attack effectiveness calibration. SIM-MB-05C 3v1 combined-attack test surfaced concern: Fibonacci-divided
-    pool concentrated at one column may be LESS effective than 3 separate column engagements. Lead Power 4 Size 3 Arrowhead
-    with 2 supporters concentrating at center: combined pool ~7 dice vs defender 1 column ~3 dice. Compared to distributed:
-    3 attackers engaging 3 columns each at ~3 dice vs defender split ~3 dice each. Distributed produces 3 simultaneous Successful
-    engagements; combined produces 1 Successful engagement against full defender HP pool. ED-805 Fibonacci denominators (1,2,3,5,8)
-    may be too aggressive. Resolution options: a) reduce denominators (1, 1.5, 2, 3, 5); b) combined attack damages all defender
-    columns proportionally; c) combined attack with single column requires defender to have a single-column shape (e.g., Arrowhead)
-    to be tactically meaningful. Test harness for 3v1 combined was incomplete in SIM-MB-05C; needs SIM-MB-06 rebuild. Severity
-    P2, defer until after Phase 6 propagation.'
-  severity: P2
-  type: incongruency
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F5.1
+- id: ED-906
+  date: '2026-05-15'
+  description: 'Threadwork integration with mass battle entirely absent from sim_mb_06_v25 (threadwork_check empty hook line
+    412). C §A.10 (Thread Operations in Mass Battle) + §A.11 (Southernmost) + threadwork_v30 §2.4 (five op types) + §2.6 (contested
+    intentionality) + §3.2 (Coherence reduction) unimplemented. Largest unimplemented canon system in S after F5.1 terrain.
+    Threadwork is Valoria''s firearm-analog (R T-19/T-20/T-21 reframed) — canon design passes structural validation but mechanically
+    absent. Resolution path: 5-stage implementation: practitioner primitives → phase-integration → scale-mapping → contested
+    resolution → persistence. F6.1 + T-69 in audit. Unlocks F6.2 / F6.3 / F6.4 / F6.5 / F6.6 / F6.7 / F6.8 / F6.9 / F6.10.'
+  severity: P1
+  type: missing
   archetype: A2
   affected_docs:
   - designs/provincial/mass_battle_v30.md
-  - params/mass_combat.md
+  - designs/threadwork/threadwork_v30.md
+  - tests/sim/sim_mb_06_v25.py
   status: open
   jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F6.1
+- id: ED-907
+  date: '2026-05-15'
+  description: 'Threadweave-OR-tactic hard tradeoff (PP-501, §A.10) not modeled in S. Master gameplay-decision primitive:
+    general must choose every turn to declare a tactical action (Envelopment/Hammer-and-Anvil/Refused Flank/etc.) OR Threadweave.
+    Not both. Single most consequential mechanical rule in §A.10. Lateral closest: HoMM hero-cast-one-spell-per-turn scaled
+    up to lead-army-or-weave. Resolution path: general_action_this_turn: Literal[''tactic'',''thread'',None] flag on Unit;
+    second declaration raises validation error. F6.2 + T-71 in audit. Blocks on F6.1.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F6.2
+- id: ED-908
+  date: '2026-05-15'
+  description: 'Contested thread resolution (threadwork_v30 §2.6) not modeled in S. Without this, enemy practitioners cannot
+    defend against incoming ops; defensive parity (R T-21 firearm-analog) impossible. C: when both engagement-pair Units have
+    embedded practitioners, contested resolution fires with engagement modifier Ob += floor(opp TPS/2) min +1, resolved via
+    6-row outcome table. Lateral distinct from TW:Warhammer instant Dispel Scroll — Valoria''s contest is full two-pool engagement
+    at practitioner layer. Resolution path: two-pool contested roll + outcome table — same pattern as opposed §A.8 tactics
+    (F2.6). F6.7 + T-74 in audit. Blocks on F6.1.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/threadwork/threadwork_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F6.7
+- id: ED-909
+  date: '2026-05-15'
+  description: 'PP-712 Discipline persistence between battles not modeled in sim_mb_06_v25. C §A.13 + PP-712: Discipline persists
+    across battles; degradation does NOT auto-recover; recovery requires Muster action; Wealth-Zero stacks. Discipline is
+    a depletable resource. Master operational-tempo variable (T-76 in audit). Without it, players can redeploy worn-Discipline
+    units freely; strategic depth lost. Lateral closest: FM player condition/form/sharpness across matches — Valoria''s discrete
+    Disc (1-7) more legible than continuous form. Resolution path: unit.discipline_persisted = unit.discipline_current at
+    battle resolution (not reset); Morale resets per PP-711; between-battle recovery requires Muster. Blocks on F8.4 strategic-tactical
+    bridge. F7.4 + T-76 in audit.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - designs/provincial/military_layer_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F7.4
+- id: ED-910
+  date: '2026-05-15'
+  description: 'BG-mode mass battle (mass_battle_v30 Part B §B.1-§B.5) entirely absent from sim_mb_06_v25. §B.2 unit-equivalence
+    table + §B.3 tactic-card resolution + §B.4 card deck not modeled. One of two full canonical modes unimplemented. Resolution
+    path: separate bg_mass_battle.py module. resolve_bg_battle(side_a, side_b, tactic_a, tactic_b, ground) -> outcome via
+    tactic-card disposition -> pool sum(Martial)+floor(Mil/2) -> TN 7 -> margin -> outcome. Lateral: TW auto-resolve uses
+    similar quick-resolve formula. F8.1 in audit.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F8.1
+- id: ED-911
+  date: '2026-05-15'
+  description: 'Hybrid Handoff §B.5 not modeled. C: BG <-> TTRPG state translation in both directions: BG stats/tactic-card
+    -> TTRPG stats/declared-tactic + ground; TTRPG outcome -> BG state. Lateral analog: TW ''view battle'' vs ''auto-resolve''
+    toggle. Resolution path: translate_bg_to_ttrpg(bg_state) -> ttrpg_state + reverse translation. Pure state-mapping function;
+    no recognition. F8.2 + T-84 in audit. Blocks on F8.1.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F8.2
+- id: ED-912
+  date: '2026-05-15'
+  description: 'Level 5+ zoom (campaign / season / peninsula) not modeled in S. Per v16 manifest: levels 1-4 only (cell, engagement,
+    unit, battle). Strategic layer cannot consume battle outcomes. Resolution path: StrategicLayer event loop with on_battle_resolved(outcome)
+    + accounting() phase. Applies §E.1 immediate consequences + records §E.2 deferred + computes peninsular §3.2 / §4.1 at
+    Accounting. Bottom-up: season as event-loop trigger primitive. F8.3 + T-85 in audit.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - designs/provincial/peninsular_strain_v30.md
+  - tests/sim/
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F8.3
+- id: ED-913
+  date: '2026-05-15'
+  description: 'Battle-outcome event emission not implemented in sim_mb_06_v25. run_multi_unit_battle does not emit BattleOutcome
+    to strategic layer. Without this, all C strategic mechanics (Part E + peninsular §3 + §A.14) are unreachable from S. MASTER
+    UNLOCK — implementing F8.4 unblocks F6.6 (Gap registration) + F7.1 (faction Military ceiling) + F7.3 (Reinforcement) +
+    F7.5 (Campaign Supply) + F7.6 (Levy offensive restriction) + F7.7 (Knights Templar Sacred Assembly) + F7.8 (Wealth-Zero)
+    + F7.9 (battle-cascade). 8 findings unlocked. Resolution path: BattleOutcome dataclass with winner/casualties/units_destroyed/final_disc/final_morale/battle_type/territory/territory_conquered_by/thread_gaps_created/is_inter_faction.
+    run_multi_unit_battle returns BattleOutcome; strategic layer consumes via on_battle_resolved. F8.4 + T-82 in audit.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - designs/provincial/peninsular_strain_v30.md
+  - designs/provincial/military_layer_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F8.4
+- id: ED-914
+  date: '2026-05-15'
+  description: 'Auto-resolve at strategic-layer boundary not modeled. Player must always run full tactical battle in S. Lateral
+    universal: TW / Bannerlord / UO / FM / HoMM all expose auto-resolve. Resolution path: Battle.resolve_mode: Literal[''auto'',
+    ''manual'']. Auto -> resolve_bg_battle (F8.1). Manual -> run_multi_unit_battle (current S). Both return BattleOutcome.
+    Player choice respected. F8.7 in audit. Blocks on F8.1 (BG-mode resolution function).'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F8.7
+- id: ED-915
+  date: '2026-05-15'
+  description: 'Audit meta-recommendation: bottom-up sanctity (M-9) refactor of §A.6 formation RPS + §A.8 tactic counter table.
+    Currently §A.6 (''Shield Wall negates Wedge'') and §A.8 (''Refused Flank counters Envelopment'') if implemented as table-lookups
+    are top-down recognition rules. M-9-compliant alternative: Shield Wall''s +2D Def is high enough that Wedge''s +2D Off
+    no longer overcomes it via pool arithmetic; negation emerges, not looked up. Hammer & Anvil success emerges from Anvil
+    stamina-hold (combat_mode=Shield Wall) + Hammer Fast envelop into rear cells via pure cell mechanics; not a named-tactic
+    bonus. Consistent with F5.4b sightline-terrain refactor (forest-flanking emerges from sightline reduction, not ''no flanking
+    in forest'' rule). Resolution path: when implementing F2.3 + F2.6, write modifiers as composable arithmetic on existing
+    pool primitives. No special-case lookup tables. F9.5 + T-92 in audit.'
+  severity: P1
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F9.5

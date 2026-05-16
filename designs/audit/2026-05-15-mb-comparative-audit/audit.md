@@ -2298,5 +2298,189 @@ Framework that v26+ implementation and subsequent audits inherit.
 
 ---
 
+## Chunk 12 — Findings Consolidation + Recommendations + Closing
 
-*Audit continues. Subsequent chunks committed incrementally to this file.*
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+Master register of all audit findings; proposed editorial_ledger.yaml entries for P1 findings (canon-actionable); `[GAP]` flags consolidated for follow-up; recommended implementation order with rationale; audit closing.
+
+### Master finding register
+
+**P1 findings (correctness-critical, 16 total):**
+
+| ID | Domain | Description | Resolution gateway |
+|---|---|---|---|
+| F1.1 | Scale / Reserve | Reserve formation canonized §A.6 but absent from S | F2.4 (full canon-axis treatment) |
+| F2.3 | Formation | Shield Wall canonized §A.6 + PP-500 but absent from S | F2.1 (axis split) |
+| F2.4 | Formation | Reserve canonized §A.6 + PP-MB-04 + PP-499 but absent from S | F2.1 (axis split) |
+| F3.1 | Resolution | Damage formula drift: linear (C) vs degree-stepped (S), 10× drift | `[QUESTION FOR JORDAN]` — recommend distinct mass-vs-personal abstractions + bridge doc |
+| F3.6 | Resolution | Class-dependent Dmg Mod (PP-194) absent from S; surfaces internal canon drift PP-233 vs PARAMS-GAP-05 | `[QUESTION FOR JORDAN]` + F2.2 dependency |
+| F4.1 | Cohesion | Pursuit damage formula 25–30× under-weight; v16 measured 1.4× ratio vs R 2–5× | Replace `pursuit_damage` formula |
+| F5.1 | Environment | Entire terrain layer absent from S despite §A.9 + PP-780 canonization | New ground_type primitive |
+| F6.1 | Thread | All §A.10 + §A.11 + §2.4 + §2.6 + §3.2 unimplemented | Staged: practitioner → phase-integration → scale-mapping → contested → persistence |
+| F6.2 | Thread | Threadweave-OR-tactic hard tradeoff (PP-501) not modeled — master gameplay primitive | `general_action_this_turn` flag |
+| F6.7 | Thread | Contested thread resolution (§2.6) not modeled — defensive parity impossible | Two-pool contested resolution |
+| F7.4 | Persistence | PP-712 Discipline persistence between battles not modeled | F8.4 bridge + `unit.discipline_persisted` |
+| F8.1 | Scale | BG-mode mass battle entirely absent from S | Separate `bg_mass_battle.py` module |
+| F8.2 | Scale | Hybrid Handoff §B.5 not modeled | Two-way state translation function |
+| F8.3 | Scale | Level 5+ zoom (campaign / season / peninsula) not modeled | StrategicLayer event loop |
+| F8.4 | Scale | Battle-outcome event emission not implemented — master unlock | BattleOutcome dataclass + `on_battle_resolved` |
+| F8.7 | Scale | Auto-resolve at strategic-layer boundary not modeled | `Battle.resolve_mode` dispatch |
+
+**P2 findings (25 total, abridged — full register in chunk bodies):**
+
+F1.3 compression damage · F1.5 collapse-distinct-from-pursuit · F2.1 axis split (gating) · F2.2 class taxonomy (gating) · F2.5 Feigned Retreat · F2.6 declared tactics · F2.8 Skirmish + Column · F3.2 Total Health model · F3.3 temporal cadence · F3.4 pool split · F3.7 two-stage general death · F3.8 bilateral personal combat · F3.9 splitting doctrine · F3.10 Reform/Rally · F4.2 PP-683 encirclement · F4.3 stepwise vs continuous morale `[Q]` · F4.3b morale floor · F4.5 compound failure `[Q]` · F4.6 Reform · F5.2 PP-780 derivation · F5.3 weather · F5.4 sub-tile features · F5.4b sightline-terrain · F6.3 co-movement · F6.4 collective ops · F6.6 Gap registration · F6.8 MS tracking · F6.9 Southernmost · F7.2 Experience · F7.3 Reinforcement · F7.6 Levy restriction · F8.5 Vulnerability Signal · F8.6 Disc −15 / −30 cascade · F8.8 territory-cell bridge · F9.1 collective binary cultural filter.
+
+**P3 findings (carry-forward / refactor / augmentation — 20+ total):**
+
+F1.2 cavalry gallop · F1.4 cell-scale canonization · F2.7 morale model `[Q]` · F2.9 sub-unit cap · F3.5 cell-level pool decomposition · F3.11 dead constants · F3.12 wounds-carry-over · F4.4 idle morale · F4.7 Stalemate Break · F4.8 over-pursuing flank · F4.9 rout vs destroyed cascade · F4.10 Stage-1/Stage-2 morale · F4.11 flanked-and-lost-exchange morale · F5.5 time of day · F5.6 cavalry-terrain · F5.7 anchored refused flank · F6.5 Devout/Severed/First-Leap edges · F6.10 three-axis Ob `[GAP]` · F7.1 faction ceiling · F7.5 campaign supply · F7.7 Templar Sacred Assembly · F7.8 Wealth-Zero · F7.9 battle-cascade · F8.9 three-mode switch · F8.10 Part D `[GAP]` · F9.2 graded cultural-doctrine `[Q]` · F9.3 doctrine evolution `[Q]` · F9.4 opponent-menu learning `[Q]` · F9.5 §A.6/§A.8 M-9 refactor.
+
+### Implementation priority (consolidated from MT-2)
+
+**Tier 0 — Master refactors (~3 P1):**
+- F2.1 axis split (spatial × combat-mode)
+- F2.2 class taxonomy
+- F8.4 emit-events
+
+**Tier 1 — Historical calibration (~5 P1):**
+- F4.1 pursuit damage formula
+- F4.2 PP-683 encirclement
+- F1.3 compression damage
+- F2.3 Shield Wall
+- F2.4 Reserve
+
+**Tier 2 — Large unimplemented systems (~2 P1):**
+- F5.1 terrain
+- F6.1 Thread integration (+F6.2 + F6.7)
+
+**Tier 3 — Persistence & economy (~2 P1):**
+- F7.4 Discipline persistence
+- F7.2 Experience (P2 but compounds with F7.4)
+
+**Tier 4 — Mode + scale (~3 P1):**
+- F8.1 BG mode
+- F8.2 Hybrid Handoff
+- F8.3 Level 5+ zoom
+- F8.7 Auto-resolve
+
+**Tier 5 — Canon decisions `[QUESTION FOR JORDAN]`:**
+- F3.1 damage formula linear vs degree-stepped
+- F3.6 PP-233 vs PARAMS-GAP-05 internal drift
+- F4.3 continuous vs stepwise morale
+- F2.7 morale model
+- F4.5 compound failure cross-coupling
+- F9.2 / F9.3 / F9.4 doctrine triangle augmentations
+
+**Tier 6 — Refactors and augmentations (P2/P3 cleanup):**
+- F5.4b sightline-terrain refactor
+- F5.3 weather
+- F5.4 sub-tile features
+- F9.5 §A.6 / §A.8 M-9 refactor
+- F3.11 dead constants cleanup
+- F7.8 Wealth-Zero
+
+### Proposed editorial_ledger.yaml appends
+
+Per `task_gate('audit')` instruction: **P1 findings must be appended to canon/editorial_ledger.yaml.** The audit proposes 16 entries (ED-900 through ED-915 to avoid collision with ED-823 highest current). Each entry follows existing format (id / date / description / severity / type / archetype / affected_docs / status / jordan_decision).
+
+The complete ledger-append batch is committed alongside this chunk as a separate canonical update — see commit log.
+
+Sample entry format (F4.1):
+
+```yaml
+- id: ED-903
+  date: 2026-05-15
+  description: 'Mass-battle pursuit damage formula drift. C §A.12: routing unit loses Size = pursuer net Offence successes per turn. S `pursuit_damage` line 2098: dmg HP = net × (1 + Power) - DR. At BLOCK_SIZE=100: S deals 0.03-0.10 Size/turn vs C 2-4 Size/turn. 25-30× drift in pursuit lethality. v16 manifest measured 1.4× winner/loser ratio vs R O-10 historical 2-5×. F4.1 in 2026-05-15 mass-battle comparative audit. Resolution path: replace pursuit_damage line 2098 to apply damage directly to Size (dmg_size = max(0, a_net - dr_size_units)). Lateral signal: TW / Bannerlord pursuit catastrophic 60-90%.'
+  severity: P1
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - tests/sim/sim_mb_06_v25.py
+  status: open
+  jordan_decision: pending
+  source: designs/audit/2026-05-15-mb-comparative-audit/audit.md F4.1
+```
+
+### `[GAP]` consolidation for follow-up
+
+Gaps flagged across chunks for future investigation:
+
+- **F6.10** — params_threadwork.md three-axis Ob system not fetched this audit pass. **Action:** fetch and verify before Stage 2 Thread implementation.
+- **F8.10** — Part D World Bridge not in audit context. **Action:** fetch `mass_battle_v30 Part D` and verify cross-references to strategic layer.
+- **Chunk 10 audit gaps:**
+  - Pre-battle scouting / intelligence layer (canon implies via §A.10 Diagnosis Thread-specific; no general scouting mechanic).
+  - Siege as dedicated battle type (Walls §A.9 covered; multi-day siege phases not).
+  - Naval / amphibious operations (Hafenmark naval power; out of mass-battle-direct scope).
+  - Faction-unique class catalogue (Knights Templar, Altonian Vanguard, Restoration TS-enabled).
+  - NPC general AI behavior at mass scale.
+  - Asymmetric victory conditions (escort / hold-N-turns / retrieve).
+
+Recommended: separate focused audits for siege mechanics and naval/amphibious; class catalogue work folded into F2.2 implementation.
+
+### Lateral-validation matrix summary
+
+| Domain | Convergence with acclaimed precedents | Valoria position |
+|---|---|---|
+| Terrain | Universal (TW/FoG2/UG/CM/Bannerlord/FM/UO/HoMM) | F5.1 absent — must implement |
+| Weather | Universal at top end (TW/CM/FoG2/Bannerlord/FM) | F5.3 absent — canon revision recommended |
+| Persistence | Universal (FM strongest analog) | F7.4 + F8.4 absent — must implement |
+| Reserve management | Universal | F1.1 / F2.4 absent — must implement |
+| Catastrophic pursuit | Universal (TW / Bannerlord 60–90%) | F4.1 25–30× under-weight |
+| Declarative tactics | Universal (UO programmable behaviors, FM pre-match) | F2.6 absent — implement per T-50 pattern |
+| Class diversity | Universal (TW 30–50/faction; UO 60+) | F2.2 absent — Valoria target 8–15 |
+| Bottom-up emergence | Universal best practice (FM, M&B procedural) | ✓ S architecturally |
+| Auto-resolve | Universal (TW / Bannerlord / FM / UO / HoMM) | F8.7 absent |
+| Cultural filter (binary) | FM Bilbao, UO class-locks | ✓ canon design |
+| Persistent magic resource | Valoria-distinctive (no clean lateral) | ✓ canon design; F6.1 absent in S |
+| Three-mode architecture | Valoria-distinctive medium axis | ✓ canon design; F8.1/F8.2 absent in S |
+| Cost-in-the-holding cascade | Valoria-distinctive (TW closest, less clean) | ✓ canon design strength |
+
+**Lateral verdict:** Valoria meets or exceeds acclaimed-precedent expectations at the design level for every domain. Implementation closes the gap.
+
+### Top-down historical-validation matrix summary
+
+Of R's 9 reconstructions, structural reproducibility with canon (assuming implementation):
+
+| Battle | C reproducible? | Required findings |
+|---|---|---|
+| Cannae | ✓ | F4.2 PP-683 + F1.3 compression + F4.1 pursuit |
+| Pharsalus | ✓ | F1.1/F2.4 Reserve + F2.6 declared tactics |
+| Adrianople | ⚠ | + Cavalry G-11 + F1.3 compression |
+| Hastings | ✓ | F2.3 Shield Wall + F2.5 Feigned Retreat + cavalry |
+| Crécy | ⚠ | + Longbow class (F2.2) + slope (F5.1) + mud (F5.3) |
+| Agincourt | ⚠ | + Funnel/mud (F5.1 / F5.3) + Longbow class |
+| Marignano | ⚠ | + Pike class + arquebus class + multi-day pause (partial) |
+| Pavia | ⚠ | + Walls (F5.1) + cover (F5.4) + arquebus class |
+| Panipat | ⚠ | + Wagon-fortress class (F2.2) + cavalry + Thread analog (F6.1) |
+
+**Historical verdict:** 2 fully reproducible after canonized P1 implementations; 7 require additional class/terrain/weather implementations. **F2.2 + F5.1 + F4.1+F4.2+F1.3 together unlock 7 of 9 reconstructions structurally.**
+
+### Closing summary
+
+**Audit deliverable:** comparative analysis of mass-battle mechanics across three corpora (pre-firearms research × canon × sim_mb_06_v25), producing 50 new throughlines (T-44..T-93), 9 audit meta-throughlines (MT-1..MT-9), 16 P1 findings, 25+ P2 findings, 20+ P3 findings, lateral validation against 9 acclaimed precedents (including Unicorn Overlord and Football Manager added mid-audit), top-down validation against 9 R battle reconstructions.
+
+**Audit conclusion (MT-1 restated):** Valoria's mass-battle design philosophy is sound. Canon captures the doctrine triangle (substrate × opponent × cultural filter), implements perfect-system trap protection through combination, encodes Threadwork as firearm-analog with full structural fidelity to R T-19/T-20/T-21, and uses bottom-up sanctity at the mechanical layer as the cohesion principle that lets all three corpora align without contradiction. Implementation is the work that remains; redesign is not indicated.
+
+**Master implementation unlock pattern (MT-2):** Six findings (F2.1, F2.2, F8.4, F5.1, F6.1, F4.1+F4.2+F1.3 as a unit) unlock or partially-resolve >30 of the audit's other findings. Implementation in Tier 0 → 1 → 2 → 3 order produces the largest sim-canon-R coverage per unit of work.
+
+**`[QUESTION FOR JORDAN]` register** (canon-level design decisions):
+- F3.1 damage formula linear vs degree-stepped (recommend distinct abstractions + bridge doc).
+- F3.6 PP-233 vs PARAMS-GAP-05 internal canon drift on Dmg Mod.
+- F4.3 continuous (S, M-9-cleaner) vs stepwise (C) morale (recommend continuous as canonical).
+- F2.7 morale model direction (compound of F4.3).
+- F4.5 compound-failure cross-coupling (P3 augmentation).
+- F9.2 / F9.3 / F9.4 doctrine-triangle augmentations (all P3 deferred).
+
+**Audit handoff (MT-9):** This document, at `designs/audit/2026-05-15-mb-comparative-audit/audit.md` SHA-pending-at-commit, is the handoff to v26+ implementation work. Editorial_ledger entries (ED-900..ED-915) make P1 findings actionable. Throughline framework (T-1..T-93 + M-1..M-13 + MT-1..MT-9 = 115 named patterns) inherited by future audits.
+
+**Bottom-up sanctity confirmed throughout (MT-3, MT-8):** Audit methodology mirrors design philosophy. Findings compose from corpora-primitives; cohesion checks ensure no top-down recognition; throughlines emerge from cross-corpus observation; meta-throughlines emerge from cross-throughline observation.
+
+**Final P1 count:** 16. **Final throughline count:** 50 new + 43 R = 93 throughlines + 22 meta-throughlines (13 R + 9 audit) = 115 total. **Status:** audit complete; pending Jordan review + ledger commit + downstream v26+ implementation work.
+
+---
+
+*Audit closed. See companion editorial_ledger.yaml batch commit for P1 entries ED-900 through ED-915.*
+
