@@ -277,6 +277,28 @@ Phase 4-7 chain conclusion (tests/sim/phase4–phase7_*.md): pool formula is NOT
 
 Caveats: Phase 7 used simplified AI strategies; numbers indicate direction not point estimates. Distance system, Disarm, Initiative-knowledge asymmetry (PP-232), and Fibonacci group bonus not modeled. Phase 8 with better-tuned Smart AI pending to confirm magnitudes. See ED-834.
 
+### Phase 8 Update (2026-05-15, ED-838)
+
+Phase 8 sim (`tests/sim/phase8_smart_ai_v2_2026-05-15.md`) with better-tuned Smart AI revealed that Phase 7's "34.9% Feint inverts dominance" claim was partly stamina-management artifact, not pure action-triangle effect. In Phase 7 Underdog mode, Fast (the dominated side) was `strike_only` — never took Take a Breath — and exhausted at round ~5 in many fights, losing by stamina exhaustion rather than HP depletion.
+
+When both sides manage stamina (Smart v2 — Take Breath threshold ≤ 8, PP-294-aware Feint alternation), the picture changes:
+
+- Fast vs Strong, Smart v2 symmetric: **~100% Fast cond win** — pool advantage at 17D vs 11D is structurally dominant in skilled-vs-skilled play
+- Tough vs Strong, Smart v2 symmetric: **63.7% Tough cond win** — real, moderate End-dominance (not the Phase 7 7.5% artifact)
+- Calibration: Agi 3 vs Agi 3 symmetric produces 51.2% — sim balanced; deviations are signal not noise
+
+**Revised reading of the Phase 4–7 chain:**
+
+- Pool advantage at canonical attribute differences (Agi 6 vs Agi 3 = 6-die gap) is **structurally significant** in skilled play.
+- The action triangle provides **asymmetric leverage** when one side neglects stamina or tactical depth — empirically, Strong drops Fast to ~35% only when Fast is strike-only. The triangle does not bridge a 6-die pool gap when both sides play competently.
+- "Pool size determines tempo, action triangle determines outcome" (top of this section) is too strong. More accurate: **pool size determines outcome at large gaps; action triangle modifies magnitude but does not invert dominance in skilled play.**
+- Decision A (revert PP-717 D2 — combat Pool Softcap) reopened a pool dominance that's NOT compensated by the action triangle in symmetric play. Whether this is acceptable depends on design intent.
+- The doubling formula determines the pool gap; the pool gap determines combat outcome. Doubling IS a balance choice, contra Phase 7's earlier interpretation.
+
+**Open canonical question (deferred to design owner):** does Fast-build personal-combat dominance need a fix (re-ratify PP-717 D2; drop doubling; pool cap; stamina re-cost; or other), or is it the intended design (Reframing 2: combat dominance is fine if Strong/Tough builds dominate cross-system in Mass Combat, Social Contest, Thread, faction-scale actions)? The sim provides empirical picture; design intent is separate.
+
+**Phase 8 sim limitations:** Smart v2 alternation is `rd % 2` heuristic; a principled AI would track pending pool reductions. Phase 9 could refine. Initiative-knowledge asymmetry (PP-232), Distance, Disarm, Establish Distance, Fibonacci group bonus still unmodeled.
+
 
 ## Resolved Rulings (2026-04-04)
 

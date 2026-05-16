@@ -134,3 +134,14 @@ entries:
   status: resolved
   jordan_decision: '2026-05-15 — execute REC-3 from post-audit recommendations.'
   resolution_commit: pending-this-commit
+- id: ED-838
+  date: 2026-05-15
+  description: 'Phase 8 sim (tests/sim/phase8_smart_ai_v2_2026-05-15.md) refines Phase 7 finding (ED-834): the "34.9% Feint inverts dominance" claim was partly stamina-management artifact. Phase 7 Underdog mode had Fast=strike_only (no Take Breath); Fast exhausted around round 5, losing many duels by stam exhaustion rather than damage. When both sides manage stamina via Smart v2 (Take Breath threshold ≤8 + PP-294-aware Feint alternation), Fast vs Strong reverts to ~100% Fast cond win; Tough vs Strong settles at 63.7% (real moderate End-dominance, not Phase 7 7.5% artifact). Calibration: symmetric Agi 3 vs Agi 3 produces 51.2% — sim balanced. Revised reading: pool advantage at canonical attribute differences is structurally significant in skilled play; the action triangle modifies but does not bridge a 6-die pool gap. Decision A (revert PP-717 D2) reopened pool dominance NOT compensated by action triangle alone. Combat Balance Note in params/combat.md updated with Phase 8 subsection. Whether to act on this (re-ratify PP-717 D2, drop doubling, pool cap, accept design) is a Jordan decision deferred.'
+  severity: P2
+  type: stale
+  archetype: A2
+  affected_docs:
+  - params/combat.md
+  status: resolved
+  jordan_decision: '2026-05-15 — proceed working; update Balance Note with Phase 8 refinement'
+  resolution_commit: pending-this-commit
