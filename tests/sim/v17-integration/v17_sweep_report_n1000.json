@@ -1,0 +1,46 @@
+{
+  "n": 1000,
+  "decided": 1000,
+  "elapsed_seconds": 5.7,
+  "campaigns_per_second": 175.1,
+  "wins": {
+    "Crown": 677,
+    "Church": 8,
+    "Hafenmark": 18,
+    "Varfell": 297
+  },
+  "win_share_pct": {
+    "Crown": 67.7,
+    "Church": 0.8,
+    "Hafenmark": 1.8,
+    "Varfell": 29.7
+  },
+  "wilson_95_ci_pct": {
+    "Crown": [
+      64.74,
+      70.53
+    ],
+    "Church": [
+      0.41,
+      1.57
+    ],
+    "Hafenmark": [
+      1.14,
+      2.83
+    ],
+    "Varfell": [
+      26.95,
+      32.61
+    ]
+  },
+  "in_balance_band_20_30": {
+    "Crown": false,
+    "Church": false,
+    "Hafenmark": false,
+    "Varfell": true
+  },
+  "all_factions_in_band": false,
+  "battles_total": 12880,
+  "battles_per_campaign": 12.88,
+  "mean_season_ended": 50.0
+}

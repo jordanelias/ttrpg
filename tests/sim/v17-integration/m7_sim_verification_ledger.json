@@ -1,0 +1,242 @@
+{
+  "sim_file": "tests/sim/v17-integration/mc_v17.py",
+  "scope": "custom",
+  "systems": [
+    "mass_combat",
+    "factions",
+    "victory",
+    "peninsular_strain",
+    "settlement_layer",
+    "campaign_architecture"
+  ],
+  "module_role": "Module 7 of v17 integration \u2014 full integration runner. Wires M1 (settlement registry), M2 (CI constants), M3 (mass-battle resolution), M4 (UnitRoster), M5 (settlement-territory aggregation), and M6 (faction actions) into a runnable simulation extending mc_v15. Adds m7_resolution_hooks for the 6 tactic cards deferred from M3/M6. Includes m7_balance_sweep for N=1000 Wilson 95% CI verification per integration_plan \u00a75 Phase 2d.",
+  "entries": [
+    {
+      "sim_variable": "ResolutionContext schema",
+      "value": "{attacker_faction, defender_faction, attacker_units, defender_units, attacker_mil, defender_mil, attacker_card, defender_card, fort_level, rng, attacker_pool_delta, defender_pool_delta, suppress_route_for_attacker, suppress_route_for_defender, pursuit_blocked, withdrawal_no_penalty, stratagem_used, hooks_fired}",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "\u00a75 Phase 2b \u2014 Workstream B API surface",
+      "quoted_text": "Outputs: BattleResult(winner, attacker_losses, defender_losses, territory_transferred, accord_outcome, stability_triggers)",
+      "assumption": "M7_ASSUMPTION_ONE: ResolutionContext wraps M3 resolve_battle inputs + intermediate state for hooks; HookedBattleResult extends BattleResult with pursuit_blocked, withdrawal_no_penalty, hooks_fired."
+    },
+    {
+      "sim_variable": "hook_stratagem mechanic",
+      "value": "Pre-tactic-resolution: read opponent's card from context, optionally swap own card to varfell_revised_card param, set stratagem_used=True",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Stratagem resolution PP-690",
+      "quoted_text": "At Phase 1 tactic-card resolution, the Varfell general's read of the battlefield triggers first: opposing tactic card is revealed face-up to Varfell. Varfell may then revise their own tactic card from hand once before both reveal simultaneously and resolve normally. Mechanically this is an initiative inversion at the tactic-card layer."
+    },
+    {
+      "sim_variable": "hook_crusade_fervour mechanic",
+      "value": "Sets suppress_route_for_attacker or suppress_route_for_defender = True; route checks for that side bypassed",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Faction-specific tactic cards Church row",
+      "quoted_text": "Crusade Fervour (Brutal + Discipline check exempt this turn)"
+    },
+    {
+      "sim_variable": "hook_inquisitors_mark INQUISITORS_MARK_OPPONENT_POOL_DELTA",
+      "value": -2,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Faction-specific tactic cards Church row",
+      "quoted_text": "Inquisitor's Mark (target unit -2D, any opponent)",
+      "assumption": "M7_ASSUMPTION_THREE: aggregate-count approximation \u2014 canon 'target unit -2D' is per-unit; M4's aggregate-count schema cannot express per-unit modifiers, so M7 applies as -2 opponent pool."
+    },
+    {
+      "sim_variable": "hook_calculated_retreat mechanic",
+      "value": "Sets withdrawal_no_penalty=True; construct_withdrawal_result returns outcome='withdrawal' with no losses, no territory transfer, no Stability penalty",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Faction-specific tactic cards Varfell row",
+      "quoted_text": "Calculated Retreat (withdraw without Overextended penalty)"
+    },
+    {
+      "sim_variable": "hook_disappear mechanic",
+      "value": "Sets withdrawal_no_penalty=True AND pursuit_blocked=True (extends Calculated Retreat with pursuit-block)",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Faction-specific tactic cards Niflhel row",
+      "quoted_text": "Disappear (withdraw all units; opponent cannot pursue this season)"
+    },
+    {
+      "sim_variable": "hook_ducal_call DUCAL_CALL_UNIT_DEFAULT_COUNT",
+      "value": 1,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Faction-specific tactic cards Crown row",
+      "quoted_text": "Ducal Call (summon 1 unit from adjacent territory)",
+      "assumption": "M7_ASSUMPTION_FOUR: caller specifies which class to summon; default Levy per MUSTER_DEFAULT_CLASS. Pre-resolution state mutation on attacker_units or defender_units."
+    },
+    {
+      "sim_variable": "HOOK_ORDER",
+      "value": [
+        "stratagem",
+        "ducal_call",
+        "crusade_fervour",
+        "inquisitors_mark",
+        "calculated_retreat",
+        "disappear"
+      ],
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "M7 architecture (derived per integration_plan \u00a75 Phase 2); M7_ASSUMPTION_FIVE hook firing order",
+      "quoted_text": "Pre-resolution hooks fire in known order: stratagem (revise card before tactic apply), ducal_call (mutate unit roster before pool compute), crusade_fervour (flag for later route suppression), inquisitors_mark (apply pool delta), calculated_retreat + disappear (set withdrawal flag for short-circuit).",
+      "assumption": "M7_ASSUMPTION_FIVE: hook firing order \u2014 stratagem and ducal_call before pool compute; inquisitors_mark applied as pool delta; calculated_retreat and disappear short-circuit before M3 normal resolution path."
+    },
+    {
+      "sim_variable": "withdrawal outcome enum",
+      "value": "withdrawal (M7-only; not in M3.OUTCOME_*)",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Calculated Retreat + Disappear effects",
+      "quoted_text": "Calculated Retreat (withdraw without Overextended penalty); Disappear (withdraw all units; opponent cannot pursue this season)"
+    },
+    {
+      "sim_variable": "Faction.units = UnitRoster (M4)",
+      "value": "Per-faction defaultdict[territory_id][unit_class]=count via m4.UnitRoster",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "\u00a75 Phase 2c \u2014 Unit-token state in Workstream A",
+      "quoted_text": "Add to mc_v16.py \u2192 mc_v17.py: self.units = defaultdict(lambda: defaultdict(int)). Schema-complete (9 classes per mass_battle \u00a7B.2), semantics-partial (3 initially). Active classes: 'Levy', 'LightInf', 'HeavyInf'."
+    },
+    {
+      "sim_variable": "Faction.tactic_hand schema",
+      "value": "4 shared + 2 faction-specific tactic cards per mass_battle \u00a7B.4",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Tactic Cards intro",
+      "quoted_text": "Each faction receives a hand of 6 tactic cards at game start (4 shared + 2 faction-specific). Cards refresh each season."
+    },
+    {
+      "sim_variable": "FACTION_TACTIC_HANDS",
+      "value": "Crown=[shared4 + royal_guard + ducal_call]; Church=[shared4 + crusade_fervour + inquisitors_mark]; Hafenmark=[shared4 + mercenary_surge + sovereign_authority]; Varfell=[shared4 + stratagem + calculated_retreat]",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "\u00a7B.4 Faction-specific tactic cards table",
+      "quoted_text": "Crown | Royal Guard ... Ducal Call; Church | Crusade Fervour ... Inquisitor's Mark; Hafenmark | Mercenary Surge ... Sovereign Authority; Varfell | Stratagem ... Calculated Retreat"
+    },
+    {
+      "sim_variable": "World.settlements seeded from M1",
+      "value": "m1.build_settlement_registry() \u2014 37 settlements at World construction",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "\u00a75 Phase 5 Step 3",
+      "quoted_text": "Replace v17 territory state initialization with settlement-aggregate from M1 REGISTRY"
+    },
+    {
+      "sim_variable": "World.governance per-settlement state",
+      "value": "{sid: m5.SettlementGovernance(sid=sid)} \u2014 default Order=3, Prosperity=2, Defense=2",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "\u00a75 Phase 5 \u2014 Settlement state integration",
+      "quoted_text": "Define settlement \u2192 territory aggregation: settlement state \u2192 per-territory Accord/PT/infrastructure"
+    },
+    {
+      "sim_variable": "ci_generation simplified delta",
+      "value": "Per Church-controlled territory +2 + Cathedral +1 + Inquisitor +1; clamped by M2.CI_SEASONAL_CAP_MAGNITUDE",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "\u00a75 + m2 CI_SEASONAL_CAP_MAGNITUDE",
+      "quoted_text": "v17 territory state initialization with settlement-aggregate from M1 REGISTRY. Caps from M2."
+    },
+    {
+      "sim_variable": "Victory threshold",
+      "value": 11,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "\u00a75 Phase 3a PROP-07",
+      "quoted_text": "PROP-07 | Victory threshold 11/15 | convergence \u00a75.1 | victory_v30.md \u00a70 + peninsular_strain_v30.md \u00a76.1 | Replace 15/15 throughout"
+    },
+    {
+      "sim_variable": "CAMPAIGN_SEASONS default",
+      "value": 50,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/sim/mc_v15.py",
+      "section": "mc_v15 DEFAULT_PARAMS line 992",
+      "quoted_text": "DEFAULT_PARAMS = {'CAMPAIGN_SEASONS': 50, ...}"
+    },
+    {
+      "sim_variable": "WILSON_Z_95",
+      "value": 1.96,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "Standard Wilson score CI formula (1927); referenced from integration_plan \u00a75 Phase 2d; Wilson score interval \u2014 standard formula",
+      "quoted_text": "Standard normal 0.975 quantile = 1.96 for 95% two-sided CI."
+    },
+    {
+      "sim_variable": "Balance band check",
+      "value": "[0.20, 0.30] for all 4 parliamentary factions",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "\u00a75 Phase 2d \u2014 Integration + balance verification",
+      "quoted_text": "Wilson CI check: all factions [20%, 30%] at 95%"
+    },
+    {
+      "sim_variable": "Action dispatch via registry",
+      "value": "ACTION_REGISTRY dict mapping action_id \u2192 callable(faction, target, world, rng, logger)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "M7 architecture (derived per integration_plan \u00a75 Phase 2); M7_ASSUMPTION_TWO",
+      "quoted_text": "mc_v15's apply() is a 200-line if-chain. mc_v17 uses an ACTION_REGISTRY dict mapping action_id \u2192 ApplyFunc. M6's actions get their own apply functions; mc_v15's actions migrate with minimal changes.",
+      "assumption": "M7_ASSUMPTION_TWO: action dispatch via registry, not if-chain."
+    },
+    {
+      "sim_variable": "AI policy probability mix",
+      "value": "30% faction-unique action when favorable; 35% Conquest; 20% Muster; 15% Govern",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "M7 architecture (derived per integration_plan \u00a75 Phase 2); M7_ASSUMPTION_SIX faction_take_action",
+      "quoted_text": "Minimal AI policy probabilistic action mix. Designed to exercise the M-module surface evenly; not intended to model optimal faction play.",
+      "assumption": "M7_ASSUMPTION_SIX: minimal AI for sweep coverage. Not balanced or strategically optimal. Per integration_plan \u00a75 Phase 2d the sweep tests integration correctness; faction-level strategic balance is downstream tuning."
+    },
+    {
+      "sim_variable": "Tactic card default selection",
+      "value": "Attacker always plays standard_advance; defender plays disciplined_defence if garrisoned, else standard_advance",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "M7 architecture (derived per integration_plan \u00a75 Phase 2); M7_ASSUMPTION_SEVEN tactic card selection",
+      "quoted_text": "M7 wires the 20 cards but the AI does not yet learn which to play. Defaults exercise the shared 4 cards; faction-specific cards exercised only when explicitly invoked via test scaffolding.",
+      "assumption": "M7_ASSUMPTION_SEVEN: simple tactic card AI; not optimal. M7 hooks exercised via t2-t6 tests rather than AI selection."
+    },
+    {
+      "sim_variable": "Sweep N=1000 result win shares",
+      "value": "Crown 67.7%, Church 0.8%, Hafenmark 1.8%, Varfell 29.7% (5.7s runtime, 175 campaigns/sec)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "M7 sweep output per integration_plan \u00a75 Phase 2d Wilson CI verification; v17_sweep_report.json",
+      "quoted_text": "Wilson 95% CI: Crown [64.74, 70.53], Church [0.41, 1.57], Hafenmark [1.14, 2.83], Varfell [26.95, 32.61]. Only Varfell's CI overlaps [20%, 30%] balance band. all_factions_in_band=False. battles_per_campaign=12.88, mean_season_ended=50.0.",
+      "note": "Per integration_plan \u00a710 R-03 + Phase 2d: this is the expected sweep behavior \u2014 the harness CORRECTLY detects balance failure rather than papering over it. M7 deliverable is the runner + sweep + Wilson CI verification; fixing balance is downstream tuning work."
+    }
+  ],
+  "provisional_assumptions": [
+    {
+      "id": "M7_ASSUMPTION_ONE",
+      "topic": "ResolutionContext + HookedBattleResult architecture",
+      "decision": "Hooks operate on a ResolutionContext dataclass wrapping M3 resolve_battle inputs + intermediate state. resolve_battle_hooked builds context, applies pre-resolution hooks, then runs M3-compatible resolution with hook-derived pool deltas. HookedBattleResult wraps M3.BattleResult with pursuit_blocked, withdrawal_no_penalty, hooks_fired.",
+      "rationale": "Keeps M3 primitives untouched (M3 doesn't import M7). M7 owns the orchestration layer. Withdrawal short-circuit cleanly skips M3's roll + outcome computation when Calculated Retreat / Disappear fires.",
+      "follow_up": "If more hooks need post-resolution mutation, extend ResolutionContext + apply_post_resolution_hooks. Currently no post-resolution hooks exist."
+    },
+    {
+      "id": "M7_ASSUMPTION_TWO",
+      "topic": "ACTION_REGISTRY dispatch table",
+      "decision": "mc_v17 uses an ACTION_REGISTRY dict mapping action_id \u2192 callable. mc_v15's if-chain is replaced. M6's 9 actions registered as discrete entries (Crown Initiative modes as 3 separate entries).",
+      "rationale": "Cleaner than v15's 200-line if-chain. Allows easy extension by registering new callables without modifying the dispatch path.",
+      "follow_up": "Add remaining mc_v15 actions (Treaty, EA, Spy, etc.) to registry when those become M7 scope. Currently the integration test is for M-module wiring; non-M-module actions left to mc_v15 reference path or unimplemented."
+    },
+    {
+      "id": "M7_ASSUMPTION_THREE",
+      "topic": "Inquisitor's Mark aggregate-count approximation",
+      "decision": "Canon 'target unit -2D' is per-unit; M4's aggregate-count schema cannot express per-unit modifiers. M7 applies as -2 opponent pool delta (aggregate approximation).",
+      "rationale": "Preserves M4's aggregate-count semantics. Per-unit targeting would require expanding M4 to per-unit Health/Discipline tracking \u2014 out of scope.",
+      "follow_up": "If per-unit semantics become required (M8?), expand UnitRoster to track individual unit instances + Health/Discipline state per unit."
+    },
+    {
+      "id": "M7_ASSUMPTION_FOUR",
+      "topic": "Ducal Call adjacent-unit summon",
+      "decision": "Pre-resolution state mutation: caller specifies adjacent_unit_class (default Levy per MUSTER_DEFAULT_CLASS) and adjacent_unit_count (default 1 per canon). Mutates attacker_units or defender_units dict before pool compute.",
+      "rationale": "Canon says 'summon 1 unit from adjacent territory'. Doesn't specify class. Levy default matches new-faction Muster behavior. Caller can override.",
+      "follow_up": "If canon specifies the summoned class, update default. Currently exercise via test scaffolding rather than AI dispatch (AI doesn't yet select tactic cards strategically)."
+    },
+    {
+      "id": "M7_ASSUMPTION_FIVE",
+      "topic": "Hook firing order",
+      "decision": "Order: stratagem (revise card before tactic apply) \u2192 ducal_call (mutate roster before pool) \u2192 crusade_fervour (flag for route bypass) \u2192 inquisitors_mark (pool delta) \u2192 calculated_retreat \u2192 disappear (short-circuit to withdrawal). Only hooks for cards actually in play fire.",
+      "rationale": "Stratagem must happen first (it can change the card). Ducal Call's pre-resolution Muster must happen before pool compute. Crusade Fervour's flag must be set before M3 check_route runs. Withdrawal short-circuits must run last to override outcome.",
+      "follow_up": "If a new hook is added that depends on a different phase ordering, update HOOK_ORDER and document. Currently sufficient for the 6 deferred cards."
+    },
+    {
+      "id": "M7_ASSUMPTION_SIX",
+      "topic": "Minimal AI policy",
+      "decision": "Probabilistic mix: 30% faction-unique action when favorable; 35% Conquest if adjacent hostile + Mil >= 3; 20% Muster; 15% Govern. Per-faction biases (Crown prefers Coronation Renewal when Excommunicated; Church prefers Excommunication on most-powerful rival).",
+      "rationale": "Designed to exercise M-module surface evenly across the sweep. Not intended as balanced or optimal play. Per integration_plan \u00a75 Phase 2d the sweep tests integration correctness; faction-level strategic balance is downstream tuning.",
+      "follow_up": "Replace with v15's scoring-based AI when scope expands. Current sweep result (Crown 67.7%, Varfell 29.7%, Hafenmark 1.8%, Church 0.8%) reflects AI policy more than mechanic balance \u2014 fix AI before tuning mechanics."
+    },
+    {
+      "id": "M7_ASSUMPTION_SEVEN",
+      "topic": "Tactic card selection in AI",
+      "decision": "Attacker always plays 'standard_advance'. Defender plays 'disciplined_defence' if garrisoned, else 'standard_advance'. Faction-specific cards exercised via test scaffolding, not AI dispatch.",
+      "rationale": "AI doesn't yet learn which tactic card to play. Default selection exercises the M3 shared-card surface. Faction-specific cards (and their M7 hooks) are tested directly in t2-t6.",
+      "follow_up": "Add AI tactic-card selection learning the disposition table (mc_v17 ACTION_REGISTRY's tactic_card param). Probably belongs in a future M8 'AI policy refinement' module."
+    }
+  ]
+}
