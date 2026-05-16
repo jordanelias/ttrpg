@@ -163,10 +163,18 @@ def assert_bootstrap(scope: str = None) -> str:
             import time as _t_rl
             _mins_to_reset = max(0, (_gql_reset - int(_t_rl.time())) // 60)
 
-            # Hard halt: a freshness-batch + commit needs ~5-10 GraphQL.
-            # Below 200 means even the bootstrap's own checks will fail
-            # mid-flight. Halt with a clear message instead.
-            if _gql_remain < 200:
+            # Halt thresholds — tuned from measured warm-cache bootstrap cost
+            # after F.4/F.5 fixes landed (2026-05-16):
+            #   warm-cache bootstrap: 2 GraphQL
+            #   cold-cache bootstrap: 12 GraphQL
+            #   bootstrap + commit:   ~5-15 GraphQL
+            # Hard halt at 30 = 2× cold-bootstrap+commit cost; leaves margin
+            # for retry on collision. Initial deploy of F.6 (d72cc86) used
+            # 200/1000/3000 as conservative placeholders since the measured
+            # cost wasn't known at write-time; those values were ~100×
+            # over-provisioned and produced false positives blocking
+            # legitimate commits at moderate budget pressure. Re-tuned here.
+            if _gql_remain < 30:
                 raise RuntimeError(
                     f"[BUDGET EXHAUSTED] GraphQL budget critical: "
                     f"{_gql_remain}/5000 remaining, resets in {_mins_to_reset} min.\n"
@@ -174,13 +182,13 @@ def assert_bootstrap(scope: str = None) -> str:
                     f"Concurrent sessions on the same PAT share this budget — "
                     f"another session is likely consuming it."
                 )
-            elif _gql_remain < 1000:
+            elif _gql_remain < 150:
                 print(
                     f"[BUDGET ⚠] GraphQL: {_gql_remain}/5000 remaining "
                     f"({_mins_to_reset} min to reset). Concurrent-session "
                     f"load is high; prefer cache hits, defer non-urgent work."
                 )
-            elif _gql_remain < 3000:
+            elif _gql_remain < 500:
                 print(f"[BUDGET] GraphQL: {_gql_remain}/5000 remaining ({_mins_to_reset} min to reset).")
             # else: silent — budget is healthy
     except RuntimeError:

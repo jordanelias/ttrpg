@@ -103,6 +103,76 @@ def get_blob_sha(path):
 # updating callers (current caller: skills/valoria-orchestrator/scripts/valoria_hooks.py).
 get_live_sha = get_blob_sha
 
+
+def get_blob_shas_batch(paths):
+    """Return {path: live_sha | None} for many paths via a single GraphQL call.
+
+    Uses GraphQL aliases to batch N path queries into one request. Reduces
+    bootstrap freshness-check cost from N GraphQL calls to 1.
+
+    For N up to ~200 (typical canonical_sources.yaml size: ~110 pairs) this
+    fits comfortably in a single GraphQL request and a single rate-limit
+    point. For larger N, split into batches of 200; GraphQL rate-limit
+    cost is per request, not per alias.
+
+    Distinguishes API errors (rate limit, auth failure, network) from genuine
+    file-not-found, matching the error-distinction pattern in get_blob_sha.
+    API errors raise RuntimeError; only a successful query where the alias's
+    `object` field is null yields None for that path ("file truly absent").
+
+    Returns dict mapping every input path to its current HEAD blob OID
+    (or None if the path doesn't exist on HEAD).
+    """
+    if not paths:
+        return {}
+
+    BATCH_SIZE = 200
+    out = {}
+    for batch_start in range(0, len(paths), BATCH_SIZE):
+        batch = paths[batch_start:batch_start + BATCH_SIZE]
+        aliases = {f"p{i}": p for i, p in enumerate(batch)}
+        fields = "\n".join(
+            f'  {alias}: object(expression: "HEAD:{p}") {{ ... on Blob {{ oid }} }}'
+            for alias, p in aliases.items()
+        )
+        q = f"""query($owner:String!,$name:String!){{
+          repository(owner:$owner,name:$name){{
+        {fields}
+          }}
+        }}"""
+        result = _graphql(q, {"owner": REPO_OWNER, "name": REPO_NAME})
+
+        # Detect API-level errors before interpreting empty data as "files missing"
+        if "errors" in result:
+            err_types = [e.get("type", "") for e in result["errors"]]
+            err_msgs  = [e.get("message", "") for e in result["errors"]]
+            if "RATE_LIMITED" in err_types or "RATE_LIMIT" in err_types or \
+               any("rate limit" in m.lower() for m in err_msgs):
+                raise RuntimeError(
+                    f"GitHub GraphQL rate limit hit during freshness batch "
+                    f"({len(batch)} paths). Re-run after reset; do NOT trust "
+                    f"missing-file reports from this scan."
+                )
+            raise RuntimeError(f"freshness batch GraphQL failed: {result['errors']}")
+
+        if "data" not in result:
+            raise RuntimeError(
+                f"GraphQL response missing 'data' for freshness batch: {result}"
+            )
+
+        repo_obj = result["data"].get("repository")
+        if repo_obj is None:
+            raise RuntimeError(
+                f"GraphQL returned null repository for freshness batch: {result}"
+            )
+
+        for alias, path in aliases.items():
+            obj = repo_obj.get(alias)
+            # Only here does None genuinely mean "file does not exist at HEAD"
+            out[path] = obj["oid"] if obj else None
+    return out
+
+
 def get_file(path):
     """Return (content_str, rest_blob_sha) for a repo file."""
     url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{path}?ref={BRANCH}"

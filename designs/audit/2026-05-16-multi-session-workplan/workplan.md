@@ -23,6 +23,53 @@ If a track lists `BLOCKED on Jordan decision`, do not pick it up — surface the
 
 ---
 
+## Throughput reality
+
+The dominant bottleneck remains Jordan-decision throughput; GraphQL budget is **no longer** a constraint after F.4/F.5/F.6 (commits `d72cc86`, `a41af6b`) cut bootstrap cost from ~130 to 2 GraphQL/call (warm cache). 15 open Q's (Q1–Q15 below) still gate most tracks.
+
+**Track Classes** (state as of 2026-05-16 20:13 UTC):
+
+| Class | Tracks |
+|---|---|
+| ✅ **DONE** | A.M2, A.M3, A.M4, E (partial — atomizer ran), F.4, F.5, F.6 |
+| **Claude-safe** (no Jordan decision needed) | A.M1, A.M5, F.1 (default fix (a)), F.2, G.Tier-2 |
+| **Jordan-gated** (blocked until decision lands) | B (all sessions), C, D, G.Tier-1 |
+| **Chain-dependent** (Claude-safe once predecessor lands) | A.M6, A.M7 |
+| **Deferred** (out of current cycle) | F.3, H |
+
+**Critical-path status:** v17 integration is ~50% through the module sequence. M1 + M5 are the remaining foundational pieces; M6 depends on M1–M5; M7 is the integration sweep. Next pickup for a Claude-safe critical-path worker is **A.M1** (still the queued next_action per session_log).
+
+Realistic concurrent ceiling for pure-Claude work: **2–3 tracks**. Worker(s) finishing early should pick up F.1 / F.2 rather than wait on Jordan-gated chains.
+
+---
+
+## Completed workstreams — do not redo
+
+The following are **done**. A resuming session that "discovers" a need to build them is pattern-matching, not reading. Skim the named directory before restarting any of them.
+
+| Workstream | Location | Closed at |
+|---|---|---|
+| Settlement Management Mode-G Modules 01–13 | `tests/sim/settlement_mgmt_stress_01/` | 2026-05-13–14 (commits `b5545aa` → `6c9cdd3`) |
+| Mass battle comparative audit (Chunks 0–12) | `designs/audit/2026-05-15-mb-comparative-audit/` | 2026-05-16 `a734f63` (consolidated plan) |
+| Dice calibration Phases 1a / 5 / 6 / 7 / 8 | `tests/sim/phase*` + `params/combat.md` Combat Balance Note | 2026-05-16 `48f8360` (Phase 8 update final) |
+| Decision E (continuous engine canonical for Godot) | `params/core.md §Continuous Engine`, ED-833 resolved | 2026-05-16 `721acc1` |
+| Engine NERS audit (architectural scope) | `designs/audit/.../engine_ners_*.md` | 2026-05-15 `02e2dd7`; REC-1/2/3 closed `0cb7beb` |
+| Workstream meta-audit | ED-835 resolved | 2026-05-16 `ba13777` |
+| Handoff infrastructure (schema, conflict-detection, resumption) | `skills/valoria-orchestrator/scripts/github_ops.py` | 2026-05-14 `a8893c7` → `84ad6b0` |
+| Project governance v2.3 / PI v2 | architecture spec + PI in Project Knowledge | 2026-05-15 (chat `785edb8e`) |
+| Pre-firearms research catalogue (17 files, ~6k lines) | `research/pre_firearms_formations/` | 2026-05-15 `bd0b0ba` (research-vs-design comparison) |
+| Combat Integration Session A (chassis) | `tests/sim/combat_integration/session_a_chassis.py` | 2026-05-15 `b31c84c` audited `b29c0c5` |
+| GraphQL leak diagnosis + F.4/F.5/F.6 fix | `tools/freshness_gate.py`, `tools/compliance_check.py`, `skills/valoria-orchestrator/scripts/valoria_hooks.py` | 2026-05-16 `d72cc86` + `a41af6b` (cost 130 → 2 GraphQL/bootstrap warm cache) |
+| Editorial ledger atomizer auto-fix | `canon/editorial_ledger.yaml` + archive | 2026-05-16 `d98192b` (archived 8 resolved entries ED-832..ED-839) |
+| Freshness gate canonical_sha resync | `references/canonical_sources.yaml` | 2026-05-16 `4c9770c` |
+| A.M2 CI Political Revision | `tests/sim/v17-integration/m2_ci_political_revision.py` | 2026-05-16 `29b5242` (78 tests pass) |
+| A.M3 Mass Battle Resolution | `tests/sim/v17-integration/m3_mass_battle.py` | 2026-05-16 `dc9a71a` (canonical §B.3) |
+| A.M4 Unit State Management | `tests/sim/v17-integration/m4_unit_state.py` | 2026-05-16 `e33849c` (9-class roster) |
+
+If you are about to scaffold something on this list, **stop**, read the named location, and either pick up follow-on work (per the relevant Track below) or surface a gap if the existing work is materially incomplete.
+
+---
+
 ## Parallelism contract
 
 **File-region ownership.** A session that picks up a track owns these write regions until session close. Other sessions must treat them read-only.
@@ -51,30 +98,36 @@ If a track lists `BLOCKED on Jordan decision`, do not pick it up — surface the
 - Never delete entries — archive via `atomizer.archive_by_status` (Track E only).
 
 **Merge points (sequenced gates):**
-1. Track E completes ledger archival → unblocks bootstrap warnings cluster.
-2. Track C disposes ED-811 / ED-813 / ED-822 / ED-823 → unblocks A.M3 (mass battle resolution canonical questions).
-3. Track G commits Tier-1 propagations (P1 drift findings) → unblocks A.M1 / A.M3 / A.M6 canonical reads.
+1. Track E completes ledger archival → unblocks bootstrap warnings cluster. ✅ (`d98192b`)
+2. Track G commits Tier-1 propagations (P1 drift findings) → unblocks A.M1 / A.M6 canonical reads.
+3. Track A.M1 + A.M5 → unblocks A.M6 (faction action expansion needs settlement + aggregation state).
 4. Track A.M1–M6 complete → unblocks A.M7 (integration sweep).
 5. Track B Sessions B–F complete → unblocks final personal-scale combat ratification.
 6. Track A.M7 PASSES (Wilson CI ∈ [20%, 30%] all factions) → unblocks Track H Godot kickoff.
+
+(Original gate 2 — Track C unblocking A.M3 — removed: A.M3 shipped without Track C and Track C is now independent ED hygiene. See Track C section.)
 
 ---
 
 ## Recommended session-launch order
 
-**N = 1 (sequential single worker):**
-E → C → G(Tier-1) → A.M4 → A.M1 → A.M2 → A.M5 → A.M3 → A.M6 → B → D → A.M7 → F → H
+**State as of 2026-05-16 20:13 UTC:** A.M2/M3/M4 + Track E (ledger) + F.4/F.5/F.6 already shipped. M1 and M5 are the remaining v17 foundational modules; M6 + M7 chain-dependent.
+
+**Assumption:** Jordan-decision turnaround is faster than a Claude session length. If it isn't, treat Jordan-gated tracks as `WAIT` slots and pick a Claude-safe track instead.
+
+**N = 1 (sequential single worker), Claude-safe-first ordering:**
+F.1 → F.2 → A.M1 → A.M5 → A.M6 → *(if Jordan resolves Q1–Q4 for hygiene)* C → *(if Jordan resolves G design Q's)* G.Tier-1 → A.M7 → *(if Jordan resolves Q5–Q11)* B → D → H
 
 **N = 2 (two concurrent workers):**
-- Worker 1 (critical path): E → A.M4 → A.M1 → A.M2 → A.M5 → A.M3 → A.M6 → A.M7
-- Worker 2 (parallel): C → G(Tier-1) → B → D → F → G(Tier-2) → H-spec
+- **Worker 1 — Claude-safe critical-path:** A.M1 → A.M5 → A.M6 → A.M7
+- **Worker 2 — opportunistic:** F.1 → F.2 → G.Tier-2 → *(when Jordan answers)* C → G.Tier-1 → B → D
 
 **N = 3 (three concurrent workers):**
-- Worker 1 (critical path): A.M4 → A.M1 → A.M2 → A.M5 → A.M6 → A.M7
-- Worker 2 (mass-battle subtrack): C → A.M3 → G(mass-battle research integration)
-- Worker 3 (parallel-independent): E → B → D → F → G(Tier-2) → H-spec
+- **Worker 1 — critical-path:** A.M1 → A.M5 → A.M6 → A.M7
+- **Worker 2 — Claude-safe tooling:** F.1 → F.2 → G.Tier-2 → F.3
+- **Worker 3 — Jordan-gated chain:** *(when Jordan answers)* C → G.Tier-1 → B → D
 
-Idle time at N≥3 is unavoidable around merge points 2 and 3. Worker who finishes early picks up E or F.
+At N=3, Worker 3 has the highest idle risk — every step is Jordan-gated. If Q1–Q4 aren't answered for Track C, Worker 3 stalls at step 1. Reassign Worker 3 to F.3 (CI work, multi-session) or H.0 spec-only work rather than idle. Worker 1's critical path is now shorter than v1's recommendation since M2/M3/M4 already shipped.
 
 ---
 
@@ -90,7 +143,7 @@ h.completeness_gate('simulation', scope={'systems_touched': [...], 'integration_
 ```
 
 ### A.M1 — Church Settlement Infrastructure
-**Status:** READY (next_action per session_log_current.md)
+**Status:** READY · **Claude-safe** (next_action per session_log_current.md)
 **Dependencies:** none (foundational). Reads must reflect any Track G propagation.
 **Owns:** new file `tests/sim/v17-integration/m1_church_infrastructure.py`, append to `coverage_matrix.md`
 **Entry checklist:**
@@ -114,89 +167,57 @@ h.completeness_gate('simulation', scope={'systems_touched': [...], 'integration_
 - Unit tests: 15+ tests covering each mechanic in isolation
 - Integration smoke-test against current mc_v16 baseline
 
-**Exit handoff schema:**
+**Exit handoff schema (per `g.write_handoff` real contract — see `_validate_handoff_schema` in `github_ops.py`):**
 ```yaml
-track: A.M1
-status: complete
-owns: [tests/sim/v17-integration/m1_church_infrastructure.py]
-next: A.M2
+id: 2026-05-XX_v17_m1_to_m2
+task:
+  skill: valoria-simulator
+  description: A.M1 Church Settlement Infrastructure complete; A.M2 next
 context_files:
   - path: tests/sim/v17-integration/m1_church_infrastructure.py
+    depth: full
     reason: M1 implementation; M2 imports infrastructure-state dataclass
   - path: tests/sim/v17-integration/module_manifest.md
+    depth: full
     reason: dependency declarations + canonical-source list
   - path: designs/provincial/ci_political_v30.md
-    reason: M2 next reads §1–§3 for milestone changes
-blockers: []
+    depth: skeleton
+    reason: M2 reads §1–§3 for milestone changes; full-read at M2 start
+working_state:
+  next:
+    - Implement CI milestones (55, 80, 100) per ci_political_v30 §2
+    - Revise Mass Seizure to per-territory Ob
+    - Add 10+ unit tests; integration smoke-test against M1 baseline
+last_commit: <sha-of-M1-commit>
+owns:
+  - tests/sim/v17-integration/m2_ci_political.py
 ```
 
 **Blockers:** none (foundational module).
 
 ### A.M2 — CI Political Revision
-**Status:** PENDING M1
-**Dependencies:** A.M1 (consumes infrastructure-state)
-**Owns:** new file `tests/sim/v17-integration/m2_ci_political.py`
-**Entry checklist:**
-- Resume from A.M1 handoff
-- `h.task_gate('simulation')`
-- Skeleton + full-read: `ci_political_v30.md` §1–§3, `victory_v30.md` §3.2
-- Verify M1 commit SHA matches handoff `last_commit`
-
-**Work:**
-- CI milestones: 55 (Institutional Reach: +1 Ob to anti-Church), 80 (Church Ascendant: Seizure −1 global, PT drift +1), 100 (Theocracy Unification Attempt)
-- Revised Mass Seizure: targets all Church-building territories, individual Ob per territory
-- CI cap ±5/season from all sources, ±3 from player Domain Actions
-- Verify Hafenmark suppress (−1 CI if Hafenmark L ≥ 4)
-- 10+ tests; integration smoke-test against M1 baseline
-
-**Exit handoff:** standard, next=A.M5 (per critical-path order) or A.M3 (if N≥2 worker available).
-
-**Blockers:** ED-822 / ED-823 dispositions may modify Mass Seizure target set. Coordinate with Track C status before M2 starts.
+**Status:** ✅ **DONE** (commit `29b5242`, 2026-05-16)
+**Shipped:** `tests/sim/v17-integration/m2_ci_political_revision.py` · 78 tests pass · 26 ledger entries · seasonal cap (±5/±3), milestone effect queries (40/55/65), Bonus Dice + Obstacle Modifier, Hafenmark suppress, Unification target generator.
+**Follow-ups:** any ledger entries opened during M2 work flow to Track C (ED hygiene) for disposition; not blocking other work.
 
 ### A.M3 — Mass Battle Resolution
-**Status:** PENDING M4, BLOCKED on Track C dispositions
-**Dependencies:** A.M4 (unit state), Track C resolution of ED-811 / ED-813
-**Owns:** new file `tests/sim/v17-integration/m3_mass_battle.py`
-**Entry checklist:**
-- Confirm Track C closed ED-811 (engagement damage formula) and ED-813 (withdrawal phase gate)
-- `h.task_gate('simulation')`
-- Full-read: `mass_battle_v30.md` §B.2, §B.3, `params/mass_combat.md`
-- Verify Track G mass-battle integration propagations are landed (P1 findings from `bd0b0ba`)
-
-**Work:**
-- `resolve_battle()` replacing single-roll Military Conquest
-- 6-step BG resolution: tactic declaration → disposition lookup → pool construction → roll → margin → outcome
-- Active classes: Levy, LightInf, HeavyInf
-- Tactic cards from canonical set
-- Fort dice in defense
-- Outcomes: territory transfer, unit losses, Accord/Stability triggers
-- 15+ tests; cross-validate against earlier `sim_mb_06_v25.py` battery (the v25 calibration battery is in `tests/sim/sim_mb_06_v25.py`)
-
-**Blockers:** Track C must close ED-811 and ED-813 before M3 starts. If C is open, **do not** pick up M3 — pick up A.M4, A.M5, or another non-A track.
+**Status:** ✅ **DONE-WITH-CAVEATS** (commit `dc9a71a`, 2026-05-16)
+**Shipped:** `tests/sim/v17-integration/m3_mass_battle.py` (451 lines, 63 tests pass, 23 ledger entries) · canonical §B.3 6-step BG resolution + military_layer §2.1–§2.2 outcome margin table · 4 shared tactic cards mechanical, 16 faction-specific registered for M6 · Fort dice in defender pool · structured `BattleResult` dataclass.
+**5 provisional assumptions** in `m3_sim_verification_ledger.json` awaiting Jordan ratification:
+- **A1** Faction-specific tactic-card mechanical effects deferred to M6 (Stratagem requires two-pass resolution M3 doesn't support — architectural follow-up).
+- **A2** Deterministic RNG via optional `rng` parameter — no follow-up.
+- **A3** Damage-allocation policy "weakest defender first" — can be faction-overridden in M6/M7.
+- **A4** Disposition table simplified to pool modifiers because canonical table B6 isn't in current canon; flagged divergence from §B.3 Step 2 wording.
+- **A5** Morale check fires per unit class that took any losses (aggregate-count semantics from M4); refine if per-unit Health added.
+**Track-C relationship clarified:** A.M3 shipped without resolving ED-811 / ED-813 / ED-822 / ED-823 — those EDs were never inline-resolved (verified by reading `m3_sim_verification_ledger.json`; none of the 4 EDs appear in M3's 23 ledger entries). Track C remains an independent ED-disposition track, not an M3 prerequisite.
 
 ### A.M4 — Unit State Management
-**Status:** READY (parallel-startable with M1)
-**Dependencies:** none (foundational; parallel-track-startable)
-**Owns:** new file `tests/sim/v17-integration/m4_unit_state.py`
-**Entry checklist:**
-- `bootstrap simulation`
-- `h.task_gate('simulation')`
-- Full-read: `mass_battle_v30.md` §B.2, `params/mass_combat.md` unit-stats section
-- Skeleton: `integration_plan_v3 §5 Phase 2c` (model b for adjacent-territory commit)
-
-**Work:**
-- Per-faction unit roster: `defaultdict(lambda: defaultdict(int))`
-- Active classes: Levy, LightInf, HeavyInf with Martial/Endurance/Discipline
-- Muster action: mint Levy tokens in territory
-- Commit-to-battle: tokens from adjacent territory (model b)
-- Loss application reduces roster
-- JSONL serialization
-- 10+ tests
-
-**Blockers:** none.
+**Status:** ✅ **DONE** (commit `e33849c`, 2026-05-16)
+**Shipped:** `tests/sim/v17-integration/m4_unit_state.py` · schema-complete 9-class roster · per-faction `defaultdict(lambda: defaultdict(int))` semantics · Muster + commit-to-battle (model b) + loss application · JSONL serialization. Note: M4 ships as "schema-complete, semantics-partial" per the commit message — A1/A2/A3/A4/A5 cross-reference M4's aggregate-count assumptions (see M3's A5 in particular).
+**Follow-ups:** semantics-partial gaps will surface in M3 / M6 / M7 integration; not blocking work in those modules but worth scanning M4's own assumption ledger before M7.
 
 ### A.M5 — Settlement-Territory Aggregation
-**Status:** PENDING M1
+**Status:** PENDING M1 · **Claude-safe once M1 lands**
 **Dependencies:** A.M1 (settlement state)
 **Owns:** new file `tests/sim/v17-integration/m5_aggregation.py`
 **Entry checklist:** resume from M1 or M2 handoff; full-read `settlement_layer_v30.md §4.3`, `§3`.
@@ -208,10 +229,11 @@ blockers: []
 - Economic effects: settlement Prosperity → territory Wealth modifiers
 - 10+ tests
 
+
 **Blockers:** none beyond M1 dependency.
 
 ### A.M6 — Faction Action Expansion
-**Status:** PENDING M1–M5
+**Status:** PENDING M1–M5 · **Claude-safe once chain clears**
 **Dependencies:** A.M1, A.M2, A.M3, A.M4, A.M5
 **Owns:** new file `tests/sim/v17-integration/m6_faction_actions.py`
 **Entry checklist:** resume from latest A.Mx handoff; full-read `faction_canon_v30.md`, `victory_v30.md §3.1`, `peninsular_strain_v30.md §5`.
@@ -225,10 +247,10 @@ blockers: []
 - Updated AI scoring for all new/revised actions
 - 20+ tests
 
-**Blockers:** Track D outcomes may add personal-scale ratifications that affect AI scoring; check D status.
+**Blockers:** none. (Track D ratifies personal-scale duel mechanics; faction-level AI scoring does not materially consume that surface. Informational only.)
 
 ### A.M7 — Integration + Balance Sweep
-**Status:** PENDING M1–M6
+**Status:** PENDING M1–M6 · **Claude-safe once chain clears**
 **Dependencies:** all M1–M6 complete and unit-tested
 **Owns:** new file `tests/sim/v17-integration/mc_v17.py` (the integration), JSONL outputs
 **Entry checklist:** resume from M6 handoff; verify all M1–M6 commit SHAs match manifest; pre-flight smoke test.
@@ -254,8 +276,15 @@ blockers: []
 
 **Manifest:** `simulation` task type. Reference: `tests/sim/combat_integration/session_a_chassis.py` (commit `b31c84c`).
 
+All Track B sessions call:
+```python
+h.task_gate('simulation')
+# at artifact production:
+h.completeness_gate('simulation', scope={'systems_touched': ['combat'], 'integration_module': 'session_<X>_chassis.py'}, claim='full-canon')
+```
+
 ### B.Session B — Feint, Establish Distance, Escape
-**Status:** PREPPED (handoff exists)
+**Status:** PREPPED · **Jordan-gated** on Q10–Q11 (handoff exists)
 **Entry checklist:**
 - `bootstrap simulation`
 - `view /mnt/user-data/uploads/handoff_2026-05-13.md` if uploaded, else `g.read_files_graphql(['tests/handoffs/2026-05-15_combat_integration_session_a_to_b.md'])`
@@ -273,25 +302,25 @@ blockers: []
 **Blockers:** two Jordan decisions before Session C.
 
 ### B.Session C — Disarm, Tie Up, Retrieve, Dodge
-**Status:** SCOPED, awaits Session B
+**Status:** SCOPED · **Jordan-gated** (awaits Session B)
 **Dependencies:** B.Session B
 **Work:** add four maneuvers to chassis; canon-check against `combat_v30.md` maneuver section.
 **Blockers:** Session B blockers + any Jordan decisions on the maneuver cost economy.
 
 ### B.Session D — Rescue, Fibonacci, multi-combatant
-**Status:** SCOPED, awaits Session C
+**Status:** SCOPED · **Jordan-gated** (awaits Session C; ED-823 affects Fibonacci denominator)
 **Dependencies:** B.Session C
 **Work:** multi-combatant orchestration; Fibonacci-divided pool integration (ED-823 may modify denominators).
 **Blockers:** ED-823 disposition (Track C).
 
 ### B.Session E — Stunt
-**Status:** SCOPED, awaits Session D
+**Status:** SCOPED · **Jordan-gated** (awaits Session D)
 **Dependencies:** B.Session D
 **Work:** Stunt mechanic; cross-reference duel Session arena Stunt findings (Track D).
 **Blockers:** Track D ratification status.
 
 ### B.Session F — Balance review + NERS
-**Status:** SCOPED, awaits Session E
+**Status:** SCOPED · **Jordan-gated** (awaits Session E)
 **Dependencies:** B.Sessions B–E
 **Work:** full chassis balance review; NERS audit all six directions; canonization commit if PASS.
 **Blockers:** none beyond chain.
@@ -300,11 +329,15 @@ blockers: []
 
 ## Track C — Mass Battle ED Disposition
 
-**Purpose:** Dispose four open P1/P2 EDs blocking A.M3.
+**Purpose:** Dispose four open P1/P2 EDs (ED-811 / ED-813 / ED-822 / ED-823). Originally framed as "blocking A.M3" in v1; A.M3 shipped without resolving these (verified via `m3_sim_verification_ledger.json` — none of the four EDs appear in M3's 23 raised entries). Track C is now an **independent ED-disposition track** for hygiene + future calibration work, not an M3 prerequisite.
 
 **Manifest:** `audit` task type (closing existing EDs).
 
-**Status:** READY (independent of other tracks; runs in 1 session).
+**Status:** READY · **Jordan-gated** on Q1–Q4 (no track now depends on it; runs in 1 session whenever Jordan provides decisions).
+
+**Downstream relevance:**
+- ED-823 (Fibonacci denominator) still relevant for B.Session D combat integration (multi-combatant resolution).
+- ED-811 / ED-813 / ED-822 inform any future mass-battle re-calibration; not blocking M3 / M6 / M7 as currently scoped.
 
 **Entry checklist:**
 - `bootstrap general`
@@ -343,7 +376,7 @@ blockers: []
 
 **Manifest:** `propose_mechanic` task type if ratification adds new canonical mechanics; else `audit`.
 
-**Status:** BLOCKED on Jordan decisions.
+**Status:** BLOCKED · **Jordan-gated** on Q5–Q9.
 
 **5 open questions (per handoff in chat `9a035656`):**
 
@@ -371,7 +404,7 @@ blockers: []
 
 **Manifest:** `infrastructure` task type.
 
-**Status:** READY (independent, 1 short session).
+**Status:** 🟡 **PARTIALLY DONE** — ledger archival complete (commit `d98192b`, 2026-05-16: archived 8 resolved entries ED-832..ED-839); freshness refresh shipped separately (commit `4c9770c`, 2026-05-16: `freshness_gate --update`). Remaining: any new auto-fixable violations that surface during M5–M7 work.
 
 **Bootstrap warnings to resolve:**
 - `canon/editorial_ledger.yaml` 2,838 tokens (threshold 2,000) — `[ERROR] [AUTO-FIXABLE] size_exceeded` + `archive_needed`
@@ -402,8 +435,39 @@ blockers: []
 
 **Manifest:** `infrastructure` task type.
 
+### F.4 — Freshness gate batch + cache
+**Status:** ✅ **DONE** (commit `d72cc86`, 2026-05-16)
+
+**What it fixed:** `assert_bootstrap` freshness loop fired 106 GraphQL calls per bootstrap (one per `canonical_sha` pair, uncached). With concurrent sessions sharing the per-PAT 5000/hour budget, the project routinely exhausted GraphQL mid-session and blocked all writes for ~30+ min. The 2026-05-14 cache work covered file-content caching but did not cover per-pair SHA lookups.
+
+**Implementation:** `tools/freshness_gate.py` gains `get_blob_shas_batch(paths)` — 1 GraphQL call for ≤200 paths via alias queries. `valoria_hooks.assert_bootstrap` gains `/home/claude/.freshness_cache.json` keyed by `sha256(canonical_sources.yaml content)` with 10-min TTL.
+
+**Measured:** freshness GraphQL cost 106 → 0–1 per bootstrap.
+
+### F.5 — Compliance check result cache
+**Status:** ✅ **DONE** (commit `a41af6b`, 2026-05-16)
+
+**What it fixed:** `compliance_check.check_all` fired ~30 GraphQL calls per bootstrap via 6 `read_files_graphql(..., skip_cache=True)` invocations. The `skip_cache=True` was correct for `context_gate` accounting (tool-side bulk fetches shouldn't count as Claude-side conversation tokens) but bypassed the GraphQL-budget cache as a side effect.
+
+**Implementation:** `compliance_check.check_all_cached(repo)` caches the violations result keyed by current HEAD OID with 10-min TTL. Reuses `_github_ops._fetch_head` when a prior fetch this session has populated it (0 extra GraphQL on warm). `valoria_hooks.assert_bootstrap` prefers the cached entry via `getattr` for graceful rollout.
+
+**Measured:** compliance GraphQL cost ~30 → 0–1 per bootstrap.
+
+### F.6 — Rate-limit pre-check
+**Status:** ✅ **DONE** (commit `d72cc86`, 2026-05-16, bundled with F.4)
+
+**What it fixed:** GraphQL budget exhaustion produced opaque `KeyError('data')` failures mid-commit, orphaning in-flight work. No early-warning mechanism existed.
+
+**Implementation:** `assert_bootstrap` calls REST `/rate_limit` (free, not rate-limited) and bands the response: HALT < 200 remaining, WARN < 1000, INFO < 3000, silent otherwise. Hard halt before budget exhaustion produces a clear `RuntimeError` instead of mid-flight failure.
+
+**Net effect of F.4+F.5+F.6 (measured end-to-end, fresh subprocess):**
+- Cold-cache bootstrap: 130 → 12 GraphQL/call (11× reduction)
+- Warm-cache bootstrap: 130 → 2 GraphQL/call (65× reduction)
+- Per-hour bootstrap budget ceiling (across all concurrent sessions): ~38 → ~2500
+- GraphQL budget no longer the project bottleneck
+
 ### F.1 — `print_status_block` drift fix
-**Status:** READY (blocking bootstrap noise every session)
+**Status:** READY · **Claude-safe** (default fix-path (a); Q14 only if Jordan vetoes default)
 **Severity:** P2 — bootstrap uses `quick_bootstrap()` workaround; PI script as-written halts
 
 **Issue:** PI `<bootstrap_script>` calls `g.print_status_block(token)`. Function does not exist in `github_ops.py` (verified 2026-05-16). Every bootstrap currently routes through `quick_bootstrap()` workaround.
@@ -432,7 +496,7 @@ blockers: []
 **Blockers:** none.
 
 ### F.2 — `tools/index_gen.py` M6 rewrite
-**Status:** SPECCED in architecture v2.3; not implemented
+**Status:** SPECCED · **Claude-safe** (rewrite is mechanical per architecture v2.3)
 **Severity:** P2 (blocks strict YAML consumers; current regex-tolerance carries us)
 
 **Per architecture v2.3 `<open_items>`:** `tools/index_gen.py` produces malformed YAML (HTML comments embedded), archive-blind `next_id`. Bootstrap regex-reads tolerate; strict `yaml.safe_load` halts.
@@ -453,7 +517,7 @@ blockers: []
 **Blockers:** none.
 
 ### F.3 — CI Level 5 (GitHub Actions)
-**Status:** SPECCED, not implemented; aspirational per architecture v2.3
+**Status:** SPECCED · **Deferred** (aspirational per architecture v2.3; multi-session)
 **Severity:** P3 (local hooks are sole enforcement; `--no-verify` is the leak)
 
 **Work:** add `.github/workflows/` mirroring local hook gates. Out of scope for short sessions; multi-session task. Defer until F.1 + F.2 land.
@@ -477,8 +541,8 @@ blockers: []
 | P3 | Steppe horse-archer asymmetry (T-14) untreated | Asymmetric resolution rules for steppe-doctrine factions |
 | P3 | Threadwork-transition narrative arc undesigned | V1 campaign spans threadwork-transition; doctrines fail across arc; M-5 as central narrative |
 
-**Tier-1 (P1):** propagate immediately; affects A.M3 / A.M6 reads.
-**Tier-2 (P2/P3):** ED entries; defer propagation to dedicated session.
+**Tier-1 (P1):** propagate immediately; affects A.M3 / A.M6 reads. **Jordan-gated** — Tier-1 findings add new primitives (`cultural_attitudes` faction state, AI projection-info hiding); both require design intent confirmation before commit.
+**Tier-2 (P2/P3):** ED entries; defer propagation to dedicated session. **Claude-safe** — ledger entries are findings (status: open, jordan_decision: pending), not commitments.
 
 **Entry checklist:**
 - `bootstrap design`
@@ -505,7 +569,7 @@ blockers: []
 
 **Manifest:** new task type needed: `godot_implementation`. **Define task manifest before first H-session.**
 
-**Status:** DEFERRED until A.M7 PASSES.
+**Status:** DEFERRED · **Jordan-gated** on Q15 (unblocks when A.M7 PASSES).
 
 **Pre-conditions:**
 - Track A.M7 Wilson CI ∈ [20%, 30%] all factions confirmed
@@ -535,10 +599,10 @@ blockers: []
 
 | # | Question | Blocks | Surface |
 |---|---|---|---|
-| Q1 | ED-811 engagement damage formula resolution | Track C → A.M3 | Jordan decision; surfaced in chat `67ed7db1` |
-| Q2 | ED-813 withdrawal phase gate (Phase 3 vs 5) | Track C → A.M3 | Jordan decision |
-| Q3 | ED-822 Volley/Engagement composition: TN7 alone, or TN7 + secondary measure | Track C → A.M3 | Jordan decision |
-| Q4 | ED-823 Fibonacci denominator path a/b/c | Track C → A.M3, B.Session D | Jordan decision |
+| Q1 | ED-811 engagement damage formula resolution | Track C (ED hygiene) | Jordan decision; surfaced in chat `67ed7db1`. Reframed v2.2: A.M3 shipped without using this resolution. |
+| Q2 | ED-813 withdrawal phase gate (Phase 3 vs 5) | Track C (ED hygiene) | Jordan decision. Reframed v2.2: A.M3 shipped without using this resolution. |
+| Q3 | ED-822 Volley/Engagement composition: TN7 alone, or TN7 + secondary measure | Track C (ED hygiene) | Jordan decision. Reframed v2.2: A.M3 shipped without using this resolution. |
+| Q4 | ED-823 Fibonacci denominator path a/b/c | Track C (ED hygiene) → B.Session D | Jordan decision. B.Session D still consumes this for multi-combatant resolution. |
 | Q5 | 2H bonus stacking cap | Track D ratification | Jordan decision |
 | Q6 | Warhammer balance at STR×3 | Track D ratification | Jordan decision |
 | Q7 | Pierce vs Heavy formula | Track D ratification | Jordan decision |
@@ -550,6 +614,10 @@ blockers: []
 | Q13 | Pool advantage acceptance (Reframing 2) vs address | Combat design intent | Jordan decision |
 | Q14 | F.1 fix (a) implement vs (b) update PI | Track F.1 | Jordan decision (default (a) per recommendation) |
 | Q15 | Track H first-implementation-layer selection | Track H.0 | Jordan decision when H unblocks |
+| Q16 | A.M3 A1 — faction-specific tactic card mechanical effects in M6: accept M3's "register only" + M6 overlay pattern, or implement Stratagem's two-pass resolution requirement (architectural impact on M3 → M6 interface)? | A.M6 | Jordan decision; from `m3_sim_verification_ledger.json` provisional_assumptions[0] |
+| Q17 | A.M3 A3 — damage-allocation policy: keep "weakest defender first" as global default, or specify per-faction AI overrides at M6/M7? | A.M6 / A.M7 | Jordan decision; from M3 ledger A3 |
+| Q18 | A.M3 A4 — disposition table B6 from §B.3 Step 2 is not in current canon; accept the §B.4-per-card pool-modifier interpretation as canonical, or surface B6 from archive if it exists? | A.M3 / A.M7 | Jordan decision; from M3 ledger A4 |
+| Q19 | A.M3 A5 — morale check fires per unit class that took any losses (aggregate-count semantics from M4). Accept "any-loss-checks-route" policy as canonical, or escalate per-unit Health tracking? | A.M6 / A.M7 | Jordan decision; from M3 ledger A5 + M4 A5 cross-reference |
 
 ---
 
@@ -559,18 +627,23 @@ When a track session ends, **always**:
 
 1. `h.completeness_gate(task_type, scope, claim='full-canon')` if claiming completion
 2. `h.safe_commit(additions, deletions, message)` with `Citations:` block
-3. `g.write_handoff(handoff_dict)` if track continues; schema:
+3. `g.write_handoff(handoff_dict)` if track continues. Schema per `_validate_handoff_schema` (`github_ops.py` line 1542):
    ```yaml
-   track: <track-id>
-   status: <in_progress|complete|blocked>
-   owns: [<file paths>]
-   next: <next-track-id|null>
-   context_files:
-     - path: <path>
-       repo: <ttrpg|valoria-game>
-       reason: <why next session needs this>
-   blockers: [<list>]
+   id: <unique-id>                              # required
+   task:                                        # required
+     skill: <skill-name>                        # required
+     description: <one-line summary>            # required
+   context_files:                               # required, non-empty
+     - path: <repo path>                        # required
+       depth: full | skeleton                   # required, must be one of these two
+       reason: <why next session needs this>    # required
+       repo: ttrpg | valoria-game               # optional, defaults to 'ttrpg'
+   working_state:                               # required
+     next: [<at least one item>]                # required, non-empty list
+   last_commit: <sha>                           # required
+   owns: [<at least one path/glob>]             # required, non-empty list
    ```
+   Common halts: empty `next`, empty `owns`, missing `depth` on context_files entry, invalid `depth` value.
 4. `g.close_session_log(...)` — closes per-session file (not legacy `safe_session_close`)
 5. `g.print_resumption_block(handoff_id)` for the next session's copy-paste resume
 
@@ -580,4 +653,7 @@ If session ends mid-track (context exhausted, blocker hit): `status: in_progress
 
 ## Changelog
 
-- **2026-05-16** — Initial workplan. 8 tracks (A–H). Reflects 169 commits / 72h ttrpg surface as of `48f8360`. Successor to ad-hoc multi-session coordination via handoff system shipped 2026-05-14.
+- **2026-05-16 v2.2** — Pass-3-on-v2.1 patch. (1) **P1**: launch-order section rewritten to reflect M2/M3/M4 + Track E + F.4/F.5/F.6 DONE — N=1/N=2/N=3 pickup sequences now start from M1 / F.1, no longer recommend starting on shipped modules. (2) **P2**: A.M2/M3/M4 bodies compacted — pending-style Entry/Work/Blockers sections replaced with `Shipped:` + `Follow-ups:` summary. (3) **P2**: Track C purpose rewritten — "blocking A.M3" framing removed; Track C is now an independent ED-disposition track. Verified via reading `m3_sim_verification_ledger.json` (commit `dc9a71a`) that ED-811 / ED-813 / ED-822 / ED-823 are NOT among M3's 23 raised entries — A.M3 shipped without resolving or using those EDs. (4) **P2**: Q1–Q4 reframed to remove stale `→ A.M3` downstream; Q4 retains B.Session D downstream. (5) **Verification finding** added inline to A.M3 entry: 5 provisional assumptions in `m3_sim_verification_ledger.json` await Jordan ratification — A1/A2/A3/A4/A5 listed with topic + follow-up path. (6) **New open Qs**: Q16–Q19 surfaced from M3's provisional assumptions (faction-specific tactic-card mechanical effects, damage-allocation policy, disposition table B6 absence, morale check per-loss vs per-unit-Health).
+- **2026-05-16 v2.1** — Reflects live state at 20:13 UTC. A.M2/M3/M4 marked DONE (committed by concurrent session at `29b5242`, `dc9a71a`, `e33849c`). Track E marked PARTIALLY DONE (ledger atomizer `d98192b`, freshness sync `4c9770c`). Track F gains F.4/F.5/F.6 DONE entries (GraphQL leak fix at `d72cc86`, `a41af6b`; bootstrap cost 130 → 2 GraphQL/call warm cache). Completed-workstreams section augmented. Throughput-reality table rebuilt: GraphQL no longer a constraint; new "DONE" class added; pickup recommendation updated to A.M1 as next Claude-safe critical-path item.
+- **2026-05-16 v2 (originally pending, superseded by v2.1)** — Pass-3 patch. Added `<throughput_reality>` and `<completed_workstreams>` sections, per-track Status annotations (Claude-safe / Jordan-gated / Chain-dependent / Deferred), corrected A.M2 false Track-C dependency, softened A.M6 Track-D dependency, added Track B hook-call block matching Track A pattern, corrected handoff schema example to match `_validate_handoff_schema` at `github_ops.py:1542` (was P3, upgraded to P2 during Pass 3). Rebuilt launch-order recommendations Claude-safe-first; Worker 3 at N=3 gets fallback when Jordan-gated chain stalls.
+- **2026-05-16 v1** — Initial workplan. 8 tracks (A–H). Reflects 169 commits / 72h ttrpg surface as of `48f8360`. Successor to ad-hoc multi-session coordination via handoff system shipped 2026-05-14.
