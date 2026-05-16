@@ -1,0 +1,208 @@
+{
+  "sim_file": "tests/sim/v17-integration/m3_mass_battle.py",
+  "scope": "custom",
+  "systems": ["mass_combat", "campaign_architecture"],
+  "module_role": "Module 3 of v17 integration — canonical 6-step BG battle resolution per mass_battle_v30 §B.3 + military_layer §2.1-§2.2 outcome margin table. Tactic card disposition handling per §B.4 (4 shared cards mechanically implemented, 16 faction-specific registered for routing). BattleResult dataclass with structured outcome (winner, damage, territory transfer, accord/stability/military deltas, route triggers). Pure primitives — does not mutate world state.",
+  "entries": [
+    {
+      "sim_variable": "TN",
+      "value": 7,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 BG Battle Resolution Step 3 — Roll",
+      "quoted_text": "Pool = sum of all engaged unit Martial values + commander bonus. Commander bonus = floor(faction Military / 2). [PP-555] TN 7."
+    },
+    {
+      "sim_variable": "MARGIN_DECISIVE",
+      "value": 2,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 Step 4 outcome table",
+      "quoted_text": "Attacker net ≥ Defender net + 2 | Attacker wins | Territory captured; Defender Military −1"
+    },
+    {
+      "sim_variable": "DISCIPLINE_CHECK_OB",
+      "value": 2,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 Step 6 — Morale",
+      "quoted_text": "Formation Break → Discipline check Ob 2 → Route on fail."
+    },
+    {
+      "sim_variable": "BATTLE_LOSS_MILITARY_PENALTY",
+      "value": -1,
+      "canonical_source": "designs/provincial/military_layer_v30.md",
+      "section": "§2.2 Battle Outcome (Margin System)",
+      "quoted_text": "Attacker wins | Territory captured; Defender Military −1 ... Defender wins | No territory change; Attacker Military −1"
+    },
+    {
+      "sim_variable": "PARTIAL_ATTACKER_STABILITY_LOSS",
+      "value": -1,
+      "canonical_source": "designs/provincial/military_layer_v30.md",
+      "section": "§2.2 Battle Outcome",
+      "quoted_text": "Partial | Margin ≤ 1 either direction | No territory change; Attacker Stability −1 (commitment cost)"
+    },
+    {
+      "sim_variable": "ACCORD_ON_CAPTURE_NEW_OWNER",
+      "value": 1,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 PP-645",
+      "quoted_text": "Territory gained via BG Battle: Accord set to 1 (Resistant). See peninsular_strain_v1.md §2.4."
+    },
+    {
+      "sim_variable": "ACCORD_ON_DEFEND_DEFENDER",
+      "value": -1,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 PP-645",
+      "quoted_text": "Defender loses Accord −1 in defended territory (war came to their home)."
+    },
+    {
+      "sim_variable": "DISPOSITION_BASE_OB",
+      "value": 2,
+      "canonical_source": "designs/provincial/military_layer_v30.md",
+      "section": "§2.1 Pool Formula",
+      "quoted_text": "Tactic card disposition sets Ob (base Ob 2 for Standard Advance vs. Standard Advance)"
+    },
+    {
+      "sim_variable": "TACTIC_CARDS shared count",
+      "value": 4,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Shared tactic cards table",
+      "quoted_text": "Each faction receives a hand of 6 tactic cards at game start (4 shared + 2 faction-specific). Shared tactic cards (4): Standard Advance | Disciplined Defence | Feigned Retreat | Concentrated Strike"
+    },
+    {
+      "sim_variable": "TACTIC_CARDS faction-specific count",
+      "value": 16,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Faction-specific tactic cards table",
+      "quoted_text": "Faction-specific cards (2 per faction): 8 factions × 2 cards = 16. Crown | Church | Hafenmark | Varfell | Guilds | Niflhel | Löwenritter | Revolution. Tactic cards confirmed canonical (PP-283)."
+    },
+    {
+      "sim_variable": "Standard Advance disposition",
+      "value": "offensive",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Shared tactic cards row",
+      "quoted_text": "Standard Advance | Offensive | No additional effect"
+    },
+    {
+      "sim_variable": "Disciplined Defence effect",
+      "value": "plus_1d_vs_offensive_or_brutal",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Shared tactic cards row",
+      "quoted_text": "Disciplined Defence | Defensive | If opponent plays Offensive or Brutal: +1D Defence this engagement"
+    },
+    {
+      "sim_variable": "Feigned Retreat effect",
+      "value": "overextended_on_loss",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Shared tactic cards row",
+      "quoted_text": "Feigned Retreat | Balanced | On loss: opponent's winning units are Overextended (−2D next season in same territory)"
+    },
+    {
+      "sim_variable": "Concentrated Strike effect",
+      "value": "plus_2d_concentrated",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Shared tactic cards row",
+      "quoted_text": "Concentrated Strike | Offensive | One unit of your choice rolls +2D this engagement"
+    },
+    {
+      "sim_variable": "Crusade Fervour disposition",
+      "value": "brutal",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Faction-specific Church row",
+      "quoted_text": "Church | Crusade Fervour (Brutal + Discipline check exempt this turn) | Inquisitor's Mark (target unit −2D, any opponent)"
+    },
+    {
+      "sim_variable": "compute_pool formula",
+      "value": "Σ Martial + floor(commander_mil / 2) + fort_level (defender only)",
+      "canonical_source": "designs/provincial/military_layer_v30.md",
+      "section": "§2.1 Pool Formula",
+      "quoted_text": "Battle pool = Σ(Martial of all engaged unit tokens) + floor(faction Military / 2). Each unit token physically present in the territory contributes its Martial value. Commander bonus = floor(Military stat / 2) — this is the generalship abstraction (PP-555). Fort Level adds bonus dice to the defending pool (per existing rule)."
+    },
+    {
+      "sim_variable": "Fort dice apply to defender pool",
+      "value": "Bonus dice to defender pool (not Ob modifier)",
+      "canonical_source": "designs/provincial/military_layer_v30.md",
+      "section": "§2.2 — Fort bonus dice clarification",
+      "quoted_text": "Fort bonus dice to defender: applies to the defender's pool, not as Ob. A Fort 3 territory gives the defender +3 dice on top of their Martial sum + commander bonus. This represents fortifications giving defenders a material advantage in the engagement, not making attackers less accurate."
+    },
+    {
+      "sim_variable": "Outcome margin table",
+      "value": "att_net - def_net >= 2 → attacker_wins; <= -2 → defender_wins; |margin| <= 1 → partial",
+      "canonical_source": "designs/provincial/military_layer_v30.md",
+      "section": "§2.2 Battle Outcome",
+      "quoted_text": "Attacker wins | Attacker net ≥ Defender net + 2 | Territory captured; Defender Military −1. Partial | Margin ≤ 1 either direction | No territory change; Attacker Stability −1. Defender wins | Defender net ≥ Attacker net + 2 | No territory change; Attacker Military −1."
+    },
+    {
+      "sim_variable": "apply_tactic_cards Disciplined Defence trigger",
+      "value": "defender +1D if attacker plays offensive or brutal disposition",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.4 Disciplined Defence row",
+      "quoted_text": "If opponent plays Offensive or Brutal: +1D Defence this engagement"
+    },
+    {
+      "sim_variable": "apply_damage_lowest_martial_first policy",
+      "value": "Sort defender units by Martial ascending; allocate damage to weakest first; net_successes × dmg_mod = total damage in Health units",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 Step 5 — Apply damage",
+      "quoted_text": "Apply damage. Reduce Health per Step 3 net successes × unit damage modifier − DR. Formation Break at Health 0.",
+      "assumption": "M3_ASSUMPTION_THREE: deterministic AI policy — attacker prioritizes lowest-Martial defender units (weakest-first). Canon §B.3 Step 5 says 'attacker chooses which units take damage'; M3 implements one canonical policy and surfaces the choice for override."
+    },
+    {
+      "sim_variable": "check_route mechanic",
+      "value": "pool of d6 = Discipline, success ≥4, route on successes < Ob 2",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 Step 6 — Morale",
+      "quoted_text": "Formation Break → Discipline check Ob 2 → Route on fail.",
+      "note": "BW success threshold (≥4 per d6) per mc_v15 quasibinomial_successes convention. Theoretical route rates: Levy (D=1) always routes (cannot reach Ob 2 with 1 die), LightInf/Archer (D=3) ~50%, HeavyInf (D=4) ~31%, Cavalry (D=5) ~19%, KnightsTemplar (D=6) ~11%."
+    },
+    {
+      "sim_variable": "roll_pool d6 success threshold",
+      "value": 4,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/sim/mc_v15.py",
+      "section": "quasibinomial_successes convention",
+      "quoted_text": "BW success threshold: each d6 succeeds on 4+ for routine rolls. mass_battle §B.3 'TN 7' = Difficulty 7 sets pool's total success Ob, not per-die threshold. Per-die threshold is the BW standard ≥4."
+    },
+    {
+      "sim_variable": "BattleResult schema",
+      "value": "{outcome, winner, attacker_net, defender_net, margin, attacker_pool_total, defender_pool_total, territory_transferred, attacker_losses, defender_losses, route_triggers, attacker_stability_delta, attacker_military_delta, defender_military_delta, accord_changes, side_effects}",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2b — Workstream B API surface",
+      "quoted_text": "Outputs: BattleResult(winner, attacker_losses, defender_losses, territory_transferred, accord_outcome, stability_triggers)"
+    }
+  ],
+  "provisional_assumptions": [
+    {
+      "id": "M3_ASSUMPTION_ONE",
+      "topic": "Faction-specific tactic card mechanical effects",
+      "decision": "M3 registers all 16 faction-specific tactic cards (§B.4 table) with name, faction, and disposition. Mechanical effects (Crown's Royal Guard '+3D Elite', Church's Crusade Fervour 'Discipline check exempt', Varfell's Stratagem 'read opposing card first', etc.) are NOT implemented in M3.",
+      "rationale": "Faction-specific mechanics belong to M6 Faction Action Expansion. M3 stays the primitives layer. The disposition routing (e.g. Crusade Fervour = Brutal triggers Disciplined Defence bonus) IS implemented in M3.",
+      "follow_up": "M6 must implement faction-specific card effects as overlay modifications to BattleResult or pre-resolve hooks. Specifically Stratagem (initiative inversion at tactic card layer) requires a two-pass resolution that M3's current architecture does not support."
+    },
+    {
+      "id": "M3_ASSUMPTION_TWO",
+      "topic": "Dice rolls deterministic with explicit RNG",
+      "decision": "resolve_battle accepts an optional rng parameter (random.Random instance). Default uses system entropy. Tests pass seeded instances for byte-identical replays.",
+      "rationale": "Matches mc_v15 sim discipline. Required for sim_gate's reproducibility check and N=1000 balance sweeps in M7.",
+      "follow_up": "None."
+    },
+    {
+      "id": "M3_ASSUMPTION_THREE",
+      "topic": "Damage allocation AI policy",
+      "decision": "apply_damage_lowest_martial_first implements one canonical attacker policy: strike weakest defender unit first. Total damage = net_successes × dmg_mod (in Health units). Reduce defender units in Martial-ascending order until damage exhausted or no defender units remain.",
+      "rationale": "Canon §B.3 Step 5 says 'attacker chooses which units take damage'; in an automated sim, this requires a deterministic policy. Weakest-first matches historical doctrine (Vegetius: 'rout the enemy's weakest division'). Other policies (preserve-strongest-defender, scatter, target-cavalry-first) are valid alternative AI policies.",
+      "follow_up": "M6 or M7 may override with faction-specific policies (e.g. Church Crusade Fervour might target Anti-Armour units first to neutralise siege threat). Surface as callable parameter."
+    },
+    {
+      "id": "M3_ASSUMPTION_FOUR",
+      "topic": "Disposition table simplified to pool modifiers",
+      "decision": "Tactic card dispositions interact at the pool-modifier level: Disciplined Defence vs Offensive/Brutal → defender +1D pool; Concentrated Strike → attacker +2D pool; Feigned Retreat → no immediate pool change but flags overextended_next_season on winner if loser played it. Ob remains DISPOSITION_BASE_OB = 2 across all combinations.",
+      "rationale": "§B.3 Step 2 says 'Read attacker's row, defender's column. Apply Ob and dice modifier.' Without the full disposition matrix (which §B.3 inherits from 'existing disposition table B6' — a v3 doc artifact not in current canon), the M3 implementation expresses each tactic card's effect as direct pool modifiers, matching §B.4's per-card 'Additional effect' column.",
+      "follow_up": "If a complete disposition table B6 surfaces in canon, M3 should be updated to apply Ob modifiers per disposition pair. Currently this is a known divergence from the §B.3 Step 2 wording in favour of the §B.4 effect-per-card semantics."
+    },
+    {
+      "id": "M3_ASSUMPTION_FIVE",
+      "topic": "Morale check mechanic + Formation Break trigger",
+      "decision": "Discipline check fires per unit class that took any losses (not on 'Formation Break at Health 0' strictly, since M3 operates on aggregate counts not per-unit health). Mechanic: roll a d6 pool of size Discipline, count successes on ≥4, route on successes < DISCIPLINE_CHECK_OB (2). Levy (D=1) always routes; HeavyInf (D=4) routes ~31% per Binomial(4, 0.5) tail.",
+      "rationale": "M4's aggregate-count semantics (M4_ASSUMPTION_FIVE) don't track per-unit Health. The canonical Formation-Break-at-Health-0 trigger is approximated by 'any unit class that lost units this engagement makes a Discipline check.' This is conservative — every loss potentially triggers route.",
+      "follow_up": "If per-unit Health tracking is added in a later module, refine the trigger condition. Until then, the every-loss-checks-route policy is the canonical interpretation that fits aggregate-count semantics."
+    }
+  ]
+}

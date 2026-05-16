@@ -294,3 +294,19 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Dependencies | none (foundational) — Module 3 (Mass Battle Resolution) will consume this |
 | Files | tests/sim/v17-integration/m4_unit_state.py + m4_unit_state_tests.py + m4_sim_verification_ledger.json |
 | Next module | M3 Mass Battle Resolution (now unblocked) or M5 Settlement-Territory Aggregation (depends M1 ✓) |
+
+### M3 Mass Battle Resolution (2026-05-16)
+| Test | Result |
+|------|--------|
+| Trigger | v17 module manifest — Module 3 of 7; canonical 6-step BG battle resolution + tactic cards + Fort dice |
+| Module scope | Pure primitives 6-step resolution per mass_battle_v30 §B.3 + military_layer §2.1-§2.2: compute_pool (Σ Martial + floor(Mil/2) + Fort), apply_tactic_cards (disposition routing for 4 shared cards mechanically + 16 faction-specific registered for M6 routing), roll_pool (d6 ≥4 BW success per mc_v15 convention), check_route (BW Discipline check Ob 2), apply_damage_lowest_martial_first (deterministic weakest-first AI policy), resolve_battle (full BattleResult dataclass), validate_tactic_card + cards_available_to_faction |
+| Test groups | T1 constants (8 checks) / T2 pool computation (7) / T3 tactic card dispositions (9) / T4 roll mechanics (8) / T5 margin outcomes (8) / T6 damage allocation (5) / T7 tactic card registry (10) / T8 full resolve integration (8) |
+| Result | **63 PASSED, 0 FAILED** |
+| Canonical sources verified | mass_battle_v30 §B.1 + §B.3 + §B.4 (full read), military_layer_v30 §2.1 + §2.2 (full read 26.7k), integration_plan_v3 §5 Phase 2b BattleResult schema, mc_v15 quasibinomial_successes convention (BW d6 ≥4 success threshold) |
+| Ledger | 23 entries; canonical citations for TN, MARGIN_DECISIVE, accord/military/stability deltas, pool formula, Fort-dice-to-defender rule, all 20 tactic cards with disposition routing |
+| Provisional assumptions held | 5 (M3_ASSUMPTION_ONE..FIVE): faction-specific card mechanical effects deferred to M6, RNG explicit for determinism, weakest-first damage policy, pool-modifier disposition simplification, every-loss-checks-route morale trigger (compatible with M4 aggregate-count semantics) |
+| Dependencies | Module 4 (UnitRoster, UNIT_STATS, pool_contribution) — now unblocked |
+| Files | tests/sim/v17-integration/m3_mass_battle.py + m3_mass_battle_tests.py + m3_sim_verification_ledger.json |
+| Theoretical route rates verified | Levy (D=1) always routes; LightInf (D=3) ~50%; HeavyInf (D=4) ~31% per Binomial(4, 0.5) tail; Cavalry (D=5) ~19%; KnightsTemplar (D=6) ~11% |
+| Outstanding for M6 integration | Faction-specific tactic card mechanical effects (Crown Royal Guard +3D, Church Crusade Fervour Discipline-exempt, Varfell Stratagem initiative-inversion, Hafenmark Mercenary Surge +2 units, etc.) require overlay/hook architecture not present in M3 primitives layer |
+| Next module | M5 Settlement-Territory Aggregation (depends M1 ✓) or M6 Faction Action Expansion (depends M1-5) |
