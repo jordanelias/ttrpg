@@ -1,0 +1,115 @@
+{
+  "sim_file": "tests/sim/phase4_agi_dominance_2026-05-15.py",
+  "scope": "custom",
+  "purpose": "Phase 4 Agi-dominance re-check at current canon (post-Decision A reject of PP-717 D2, post-F12 MW cap propagation commit abf9fc8e)",
+  "systems": ["core_engine", "combat"],
+  "entries": [
+    {
+      "sim_variable": "TN",
+      "value": 7,
+      "canonical_source": "params/core.md",
+      "section": "§TN Values L22-27",
+      "quoted_text": "Standard | 7 | Default"
+    },
+    {
+      "sim_variable": "combat_pool formula",
+      "value": "max(5, agi * 2 + hist + 3)",
+      "canonical_source": "params/combat.md",
+      "section": "§Pool Formula L14 (post-Decision A 2026-05-15)",
+      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "sim_variable": "max_wounds formula",
+      "value": "min(end // 2 + 1, 3)",
+      "canonical_source": "params/combat.md",
+      "section": "L138 (post-F12 commit abf9fc8e)",
+      "quoted_text": "Max Wounds = min(floor(Endurance/2) + 1, 3)"
+    },
+    {
+      "sim_variable": "wound_interval formula",
+      "value": "end + 6",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Wound Interval (End + 6)"
+    },
+    {
+      "sim_variable": "max_health formula",
+      "value": "wound_interval(end) * (max_wounds(end) + 1)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1",
+      "quoted_text": "Health (full) = (Endurance + 6) × (Max Wounds + 1)"
+    },
+    {
+      "sim_variable": "max_stamina formula",
+      "value": "15 + end * 2",
+      "canonical_source": "tests/sim/weapon_system_v2/weapon_v2_distance_sim.py",
+      "section": "Architecture C (sim baseline; matches v27 convention)",
+      "quoted_text": "Flat stamina, yield, initiative: duel_stress_test.py v9 (Architecture C). Note: params/combat.md L15 canonical Stamina = End × 5; this sim uses Architecture C for consistency with v27 results which produced the original Agi-dominance finding."
+    },
+    {
+      "sim_variable": "ACTION_COST",
+      "value": 5,
+      "canonical_source": "params/combat.md",
+      "section": "L15",
+      "quoted_text": "Variable action costs (standard 5, heavy 8, defensive 3)"
+    },
+    {
+      "sim_variable": "CRIT_THRESHOLD",
+      "value": 4,
+      "canonical_source": "params/combat.md",
+      "section": "L91 (PP-717 D3)",
+      "quoted_text": "Critical Hit (net hits ≥ 4): weapon modifier doubled before applying armour reduction. (PP-717 — raised from ≥ 3.)"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 1,
+      "canonical_source": "params/core.md",
+      "section": "§Pool Floor L185-187",
+      "quoted_text": "Pool floor: 1D after all penalties."
+    },
+    {
+      "sim_variable": "WEAPON_DAMAGE_MOD (Light Blade Cut vs None)",
+      "value": 3,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula, Weapon modifier vs armour tier table L94",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "STR_MULT (Light Blade)",
+      "value": 1.0,
+      "canonical_source": "params/combat.md",
+      "section": "§Damage Formula L82",
+      "quoted_text": "STR multiplier (multiplicative): Light×1, Heavy×2, Blade×1, Blunt×1.5"
+    },
+    {
+      "sim_variable": "dice face values",
+      "value": "1=-1, 2-6=0, 7-9=+1, 10=+2 (no chain in this sim — simplification)",
+      "canonical_source": "params/core.md",
+      "section": "L10-19 §Dice Engine",
+      "quoted_text": "Face 1 = −1 success. Face 2–6 = 0. Face 7–9 = +1. Face 10 = +2. NOTE: this sim does not implement 10-chain (geometric continuation) for simplicity; the chain produces +0.13 expected net per die on average, suppressed in this sim. Both builds equally affected — does not bias the matchup."
+    },
+    {
+      "sim_variable": "Pool split rule (50/50 off/def)",
+      "value": "fixed 50/50",
+      "canonical_source": "params/combat.md",
+      "section": "§Initiative and Pool Allocation",
+      "quoted_text": "Split Offence/Defence each round (PP-232). Note: this sim uses fixed 50/50 split. Canonical allows tactical allocation — sim is a controlled lower-bound test."
+    },
+    {
+      "sim_variable": "wound penalty",
+      "value": "-1D per wound to pool, no Ob",
+      "canonical_source": "params/combat.md",
+      "section": "L17 Pool modifiers",
+      "quoted_text": "Wounds: −1D per wound (cumulative). No Ob penalty from wounds. (PP-232)"
+    }
+  ],
+  "sim_limitations_noted_in_results": [
+    "No Feint, no ED, no Distance, no Initiative asymmetry — Strike-only",
+    "Single weapon (Light Blade Cut), single armour (None)",
+    "Fixed 50/50 pool split (no tactical allocation)",
+    "No 10-chain on dice (suppresses ~0.13 net/die expected, both sides)",
+    "High draw rate at stamina cliff (~85% in main test) — conditional win rate is the meaningful signal"
+  ],
+  "is_lower_bound": true,
+  "rationale_lower_bound": "Full v9 chassis (Feint, ED, Distance, Initiative) would likely amplify pool advantage further — initiative-holders pick counter-attacks; feints break defense allocation; ED forces opponent into adjacent-range TN penalty. This sim measures the floor of Agi-dominance under simplified mechanics."
+}

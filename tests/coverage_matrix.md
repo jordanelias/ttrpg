@@ -151,3 +151,17 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Unifications | 9 proposed; U-1 (PP-716/PP-717 propagation) ready for no-call commit; U-2..U-7 need design call |
 | Self-review | Three radical reframings applied: designer-theater (most findings player-invisible); productive-inconsistency (deviations as features); descriptive-vs-prescriptive (throughlines as observation not principle). Recovered finding count after self-review: ~5 substantive |
 | File | tests/audit/engine_ners_2026-05-15.md |
+
+### Phase 4 Agi-Dominance Re-check (2026-05-15)
+| Test | Result |
+|------|--------|
+| Trigger | Decision A (ED-828) — PP-717 D2 Pool DR rejected at canon |
+| Scope | Verify whether Agi-6 vs Agi-3 dominance manifests at current canon |
+| Mechanics | Universal pool (no DR), MW cap 3 (PP-717 D1), Crit threshold ≥4 (PP-717 D3) |
+| Fast vs Strong | 95.6% conditional win — DOMINANT |
+| Build-investment ROI Agi 3→7 | +46.6pp conditional win at top — steep, never inverting |
+| Tough vs Strong (End 6 vs 4) | 99.6% conditional — End-dominance also persists |
+| Fast+Tough vs Strong | 100% — compound dominance unrecoverable |
+| Conclusion | Agi-dominance reopens at current canon. PP-717 D2 was addressing real problem. Recommend Jordan reconsider. |
+| Sim limitations | Strike-only; 50/50 split; single weapon/armour; lower-bound estimate |
+| Files | tests/sim/phase4_agi_dominance_2026-05-15.py + phase4_results.md + sim_verification_ledger.json |
