@@ -34,14 +34,14 @@ systems:
     design_doc: designs/architecture/complete_systems_reference.md
     canonical_sha__designs__architecture__complete_systems_reference_md: "48f0c86a6d00d1a408feedbfb2cbb9fe474460e4"
     params: params/core.md
-    canonical_sha__params__core_md: "15e2543dcf246001575ab616319846615bb3a028"
+    canonical_sha__params__core_md: "7d0b7447b99c2e837f92aab0fb9e9bacda6690b5"
     bg_params: params/bg/core.md
     canonical_sha__params__bg__core_md: "a714282b4f2404f724e5b870fc186bd78e12184d"
   combat:
     design_doc: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "TBD-fetch-needed"
+    canonical_sha__designs__scene__combat_v30_md: "9e207cdd883aa2fa559a81dab08a0592447b29d5"
     params: params/combat.md
-    canonical_sha__params__combat_md: "cf2631d812372b8b7e9dfb599786ec96feafa100"
+    canonical_sha__params__combat_md: "878cbe8243fd3ca649087949e84271756edb8360"
     note: "ED-799 fix — design_doc updated from params/combat.md to designs/scene/combat_v30.md (section-structured doc). params/combat.md retained as params reference."
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
@@ -98,7 +98,7 @@ systems:
     canonical_sha__params__mass_combat_md: "694d7a232a7204a93b634b936596d822ddafe2d2"
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "fb1d1a6791ebe7c7825c9ec7df84500b0bec1611"
+    canonical_sha__params__contest_md: "8ae7640948c4b4f3c7358f1aa0654788ec78d930"
     social_contest_design: designs/scene/social_contest_v30.md
     canonical_sha__designs__scene__social_contest_v30_md: "e8c92145f6ddebc48e71e29424f34c4ed7fa5676"
     social_contest_index: designs/scene/social_contest_v30_index.md
@@ -106,7 +106,7 @@ systems:
     social_contest_infill: designs/scene/social_contest_v30_infill.md
     canonical_sha__designs__scene__social_contest_v30_infill_md: "8b3e0837939d528091069fb406cc0f1b4dfda99d"
     params: params/contest.md
-    canonical_sha__params__contest_md: "fb1d1a6791ebe7c7825c9ec7df84500b0bec1611"
+    canonical_sha__params__contest_md: "8ae7640948c4b4f3c7358f1aa0654788ec78d930"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "17e75c6e4c17bfa7f1d17ef8fc5e4999b52091c1"
@@ -137,7 +137,7 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "TBD-pending-2026-05-15-decE"
+    canonical_sha__designs__scene__derived_stats_v30_md: "8f9e426b05b5d31fea6006f4fea162cc54bbde3f"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
     note: "PP-716, PP-717 — derived_stats_v30.md §4.1 is the authoritative source for Health formula (MW cap at 3) and wound-penalty universality. §14 (4-bucket taxonomy: Derived Values / Tracks / Clocks / Pools) is the authoritative engine-value map across canon docs (ED-830, 2026-05-15). §10.5 holds propagation timescales. §1 documents engine duality (Decision E ED-833, 2026-05-15): discrete and continuous engines are statistically equivalent specifications; params/core.md §Continuous Engine is the canonical spec. params/factions/stats_1_7_scale.md remains supplemental for faction-scale derived stats (Legitimacy/Popular_Support/Influence/Wealth/Military/Intel/Stability per PP-686 v2)." 
