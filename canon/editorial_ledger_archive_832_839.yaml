@@ -1,0 +1,152 @@
+entries:
+- id: ED-832
+  date: 2026-05-15
+  description: 'F13 (DISCOVERED during Phase 5 sim 2026-05-15 verification): params/core.md per-die EV table and probability
+    quick-reference table both computed using face 10 = +1 success, NOT the canonical face 10 = +2 successes (per valoria_master_document
+    §1.1, atom 03__1-1-die-face-rule-d10). Canonical values: TN 7 → E[net]/die = 0.40 (not 0.30); 10D pool → P(≥1) = 92% (not
+    99%). Engine code reading these tables computes wrong dice probabilities by 33%. Ratchet-shifts all downstream balance
+    analyses (build matrices, Ob calibration) that referenced these tables. Also: stale "chain rule" note (≈ +1.43 EV) was
+    flagged NON-CANONICAL by atom 03__1-1-die-face-rule-d10 in April 2026 but never removed from params/core.md. Both defects
+    fixed in this commit.'
+  severity: P1
+  type: stale
+  archetype: A1
+  affected_docs:
+  - params/core.md
+  status: resolved
+  jordan_decision: 2026-05-15 — fix in same commit as Decision E adoption.
+  resolution_commit: pending-this-commit
+- id: ED-833
+  date: 2026-05-15
+  description: 'Decision E 2026-05-15: continuous engine adopted as canonical specification for videogame (Godot) implementation.
+    The engine is now specified two ways with statistically equivalent outputs: discrete (d10 dice, legacy/TTRPG mode) and
+    continuous (Normal-distribution sampling, videogame mode). Continuous enables fractional Ob, fractional TN (already canonical
+    for combat per PP-717 Fiore), and continuous degree resolution (outcome magnitude = net − Ob). Phase 5 sim 2026-05-15
+    validated equivalence (max deviation 0.029 in mean, 0.022 in std at pool sizes 5-17). Derived stat formulas, attribute
+    scale, Ob scale, degree thresholds all unchanged. params/core.md §Continuous Engine is the canonical spec. derived_stats
+    §1 acknowledges engine duality.'
+  severity: P2
+  type: architectural
+  archetype: A3
+  affected_docs:
+  - params/core.md
+  - designs/scene/derived_stats_v30.md
+  status: resolved
+  jordan_decision: 2026-05-15 — adopt continuous engine; canonical for videogame implementation.
+  resolution_commit: pending-this-commit
+- id: ED-834
+  date: 2026-05-15
+  description: 'Phase 7 sim 2026-05-15 (tests/sim/phase7_action_triangle_2026-05-15.md) demonstrated empirically that the
+    Strike/Feint/Full Guard action triangle is a load-bearing combat balance mechanism. In Strike-only play, Fast (Agi 6,
+    pool 17D) wins 96.7% conditional vs Strong (Agi 3, pool 11D); when Strong actively employs PP-294 Feint, Fast wins drop
+    to 34.9% (Strong wins 65% of decisive duels). End-dominance (Tough vs Strong) similarly collapses from 82% Strike-only
+    to ~7% with tactical play. Phase 4-7 chain conclusion: pool formula is NOT the structural driver of combat dominance;
+    action triangle is. Decision A (revert PP-717 D2) vindicated; pool softcap was patching the wrong layer. Doubling decision
+    becomes design-feel, not balance, choice. Documented in params/combat.md as Combat Balance Note section. Phase 8 with
+    better-tuned Smart AI pending to confirm magnitude.'
+  severity: P3
+  type: architectural
+  archetype: A3
+  affected_docs:
+  - params/combat.md
+  status: resolved
+  jordan_decision: 2026-05-15 — document Phase 4-7 finding as canonical balance note.
+  resolution_commit: pending-this-commit
+- id: ED-835
+  date: 2026-05-15
+  description: 'WS-H-4 resolution (workstream meta-audit 2026-05-15). Phase 7 End-dominance "Tough 82% Strike-only → ~7% with
+    tactical play" result is likely a sim artifact: same-pool matchups (both 11D) with same Smart AI rules should produce
+    similar outcomes between Strike-only and Smart modes, but the numbers shift dramatically. Most likely cause: Full Guard
+    / Take Breath interaction in Smart mode that breaks the symmetric expectation. Combat Balance Note in params/combat.md
+    previously canonized both the direction AND the magnitude; this edit retains the direction (tactical sensitivity exists)
+    but defers the magnitude pending Phase 8 confirmation with better-tuned Smart AI. Agi-dominance findings (96.7% → 34.9%
+    via underdog Feinting) are unaffected — they rest on the asymmetric Underdog Feints mode which is more trustworthy than
+    Smart-vs-Smart.'
+  severity: P2
+  type: stale
+  archetype: A2
+  affected_docs:
+  - params/combat.md
+  status: resolved
+  jordan_decision: 2026-05-15 — execute REC-1 from post-audit recommendations.
+  resolution_commit: pending-this-commit
+- id: ED-836
+  date: 2026-05-15
+  description: 'WS-D-1 resolution (workstream meta-audit 2026-05-15). Decision E (continuous engine, ED-833) canonized the
+    engine for all systems but Phase 5 sim validated only at combat parameters (pool 5-17D, TN 7). This is a documentation
+    gap: the validation IS system-agnostic by Central Limit Theorem (Normal-approximation of d10 pool sums holds for any system
+    using d10 dice), so the canonical scope is mathematically defensible. Edit adds explicit "Validation scope" paragraph
+    to params/core.md §Continuous Engine acknowledging this — combat-validated; system-agnostic by CLT; faction-scale at small-pool
+    boundary warrants dedicated sanity-check sim. No canonical change; clarification only.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - params/core.md
+  status: resolved
+  jordan_decision: 2026-05-15 — execute REC-2 from post-audit recommendations.
+  resolution_commit: pending-this-commit
+- id: ED-837
+  date: 2026-05-15
+  description: WS-BU-1 resolution (workstream meta-audit 2026-05-15). Post-commit verification (read-back of each file in
+    additions list against grep for required content marker) was applied to only 4 of 10 commits in the 2026-05-15 workstream
+    chain. Asymmetric verification weakens the audit trail and risks rare-case drift between local content and what landed
+    on remote. Edit adds explicit "Post-commit verification" subsection to skills/valoria-orchestrator/SKILL.md Commit Protocol,
+    formalizing post-commit read-back as a standing practice. No hook-level enforcement (process change only); promotion to
+    hook enforcement deferred pending observation of practice adherence.
+  severity: P3
+  type: process
+  archetype: A2
+  affected_docs:
+  - skills/valoria-orchestrator/SKILL.md
+  status: resolved
+  jordan_decision: 2026-05-15 — execute REC-3 from post-audit recommendations.
+  resolution_commit: pending-this-commit
+- id: ED-838
+  date: 2026-05-15
+  description: 'Phase 8 sim (tests/sim/phase8_smart_ai_v2_2026-05-15.md) refines Phase 7 finding (ED-834): the "34.9% Feint
+    inverts dominance" claim was partly stamina-management artifact. Phase 7 Underdog mode had Fast=strike_only (no Take Breath);
+    Fast exhausted around round 5, losing many duels by stam exhaustion rather than damage. When both sides manage stamina
+    via Smart v2 (Take Breath threshold ≤8 + PP-294-aware Feint alternation), Fast vs Strong reverts to ~100% Fast cond win;
+    Tough vs Strong settles at 63.7% (real moderate End-dominance, not Phase 7 7.5% artifact). Calibration: symmetric Agi
+    3 vs Agi 3 produces 51.2% — sim balanced. Revised reading: pool advantage at canonical attribute differences is structurally
+    significant in skilled play; the action triangle modifies but does not bridge a 6-die pool gap. Decision A (revert PP-717
+    D2) reopened pool dominance NOT compensated by action triangle alone. Combat Balance Note in params/combat.md updated
+    with Phase 8 subsection. Whether to act on this (re-ratify PP-717 D2, drop doubling, pool cap, accept design) is a Jordan
+    decision deferred.'
+  severity: P2
+  type: stale
+  archetype: A2
+  affected_docs:
+  - params/combat.md
+  status: resolved
+  jordan_decision: 2026-05-15 — proceed working; update Balance Note with Phase 8 refinement
+  resolution_commit: pending-this-commit
+- id: ED-839
+  date: 2026-05-16
+  description: 'Phase 10 sim (tests/sim/phase10_str_stam_reform_2026-05-16.md) tested two design-question reforms (canonical
+    stamina formula, STR bonus dice on offense) and discovered a sim-side correction with retroactive implications. Primary
+    finding (correction, not reform): Phase 4 through Phase 9 sims used Stamina = 15 + End * 2 (range 21-29) but canonical
+    formula per ED-694 is Stamina = End * 5 (range 15-35) with Take Breath restoring partial stamina (End * 2 not full pool)
+    and +1 stam cost per wound. Prior sims systematically underweighted Endurance. With canonical stamina, every End-investing
+    matchup shifts 4-9pp from prior sim baseline; Fast vs Titan moves from 81.8% to 72.6% before any reform. Phase 8 finding
+    ED-838 (Tough vs Strong 63.7% End-dominance) understates magnitude — direction unchanged, magnitude larger. Secondary
+    finding (reform proposal, pending ratification): STR bonus dice floor(STR/3) on Strike and Disarm offense pool provides
+    2-6pp uplift to high-STR compensator builds. Best config under canonical stam + STR-strong: Fast vs Titan 67.5/32.5 —
+    meaningful upset rate. Persistent finding: pool dominance survives all reforms. Fast (Agi 6) vs Titan (Agi 3 + max comp)
+    finishes 70/30 even with undouble + 1/End Ob + Disarm + canonical stam + STR-strong; further levers (pool cap past Agi
+    4, static defense, smaller pools) untested. STR + light blade gap: Mighty (Agi 3, STR 7, light) sits at 98.5% loss to
+    Fast — light weapon str_mult 1.0 + 2pp hit-rate gain from bonus dice cannot overcome 3-die pool gap. Either accept (STR
+    builds wield heavy) or design specific light-weapon STR mechanics. Methodology corrections also recorded: TN vs Ob conflation
+    in prior wound-penalty sims (Ob is net-success threshold not per-die TN shift); Disarm AI threshold bug fixed (opp_weapon_mod
+    >= 3 not >= 4). Combat Balance Note in params/combat.md updated with Phase 10 subsection.'
+  severity: P2
+  type: stale
+  archetype: A2
+  affected_docs:
+  - params/combat.md
+  - tests/sim/phase10_str_stam_reform_2026-05-16.md
+  - tests/sim/scripts/phase10_str_stam_reform.py
+  status: resolved
+  jordan_decision: 2026-05-16 — commit and proceed
+  resolution_commit: pending-this-commit
