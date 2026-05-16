@@ -165,3 +165,14 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Conclusion | Agi-dominance reopens at current canon. PP-717 D2 was addressing real problem. Recommend Jordan reconsider. |
 | Sim limitations | Strike-only; 50/50 split; single weapon/armour; lower-bound estimate |
 | Files | tests/sim/phase4_agi_dominance_2026-05-15.py + phase4_results.md + sim_verification_ledger.json |
+
+### v17 Full-Workstream Integration (2026-05-15 — in progress)
+| Test | Result |
+|------|--------|
+| Trigger | Phase 1a finding: v16 structurally incomplete (Church 0%, Varfell 0%) |
+| Scope | Gap analysis of mc_v16.py against all canonical design docs |
+| Finding | 27 mechanics missing across 5 workstreams (7 Critical, 11 High, 7 Medium, 2 Low) |
+| Root cause | Church dies because settlement infrastructure (Religious Buildings, Templar Stations) not modeled; CI generation depends on PT which RM destroys; Mass Battle absent |
+| Module manifest | 7 modules, ~7 sessions, critical path M1→M2→M6→M7 |
+| Status | Module manifest and gap analysis committed; Module 1 (Church Settlement Infrastructure) next |
+| Files | tests/sim/v17-integration/gap_analysis.md + module_manifest.md |
