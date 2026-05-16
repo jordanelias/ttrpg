@@ -1764,5 +1764,178 @@ class BattleOutcome:
 
 ---
 
+## Chunk 9 — Doctrine-Substrate-Opponent + Cultural Filter + Perfect-System Trap
+
+`[SELF-AUTHORED — bias risk]` per Chunk 0 framing.
+
+### Scope
+
+The doctrine triangle (M-1 master organizing principle) and its three constraints: substrate-dependency (T-5), opponent-menu adaptation (T-17/T-18), cultural-victory-conditions (M-6 cultural filter). The perfect-system trap (M-5). Meta-level chunk: audits whether canon design *protects against* the trap and *honors* the filter.
+
+### R says
+
+- **M-1** — Every doctrine = institutional substrate (T-4/T-5/M-2) × opponent menu historically faced (T-17/T-18) × cultural-victory-conditions (M-6 cultural filter).
+- **T-17** — Each doctrine has weaknesses; no doctrine universally optimal.
+- **T-18** — Doctrines optimized for one menu fail against different menu (Roman vs Gothic cavalry at Adrianople).
+- **M-5 (perfect-system trap)** — Dominant doctrine becomes locked-in; opponents adapt; formerly perfect doctrine becomes failure mode. Macedonian phalanx vs Roman legion; Swiss pike vs arquebus+artillery (Marignano day 1 won, Pavia lost).
+- **M-6 (cultural filter)** — Cultures refuse tactically-superior options violating cultural-victory-conditions. French chivalric mounted charge at Crécy/Agincourt despite catastrophic loss; Swiss refusal to abandon Gewalthaufen after Pavia; Roman triarii rejection in middle Republic for egalitarian ideology.
+
+### C says
+
+**C does not name M-1 but encodes its mechanics:**
+
+**Substrate dependency:**
+- `military_layer §1.3` — Military stat → Power + Discipline ceiling per faction.
+- `military_layer §1.5` — Muster prerequisites by faction (Prosperity ≥ 5 HI; Prosperity ≥ 6 OR named-officer Cav; Wealth Ob 4 Artillery).
+- `military_layer §4.2` — Prosperity → unit quality gate.
+- `military_layer §1.8` — Knights Templar Church-only.
+- `mass_battle_v30 §A.14b` — Altonian Vanguard supply exception.
+- `mass_battle_v30 §A.14c` — Levy offensive restriction.
+
+**Opponent-menu (RPS):**
+- `mass_battle_v30 §A.6` — 7 formations: Wedge beats Line; Shield Wall negates Wedge; Skirmish cannot be flanked; Column +1 Speed no engage; Refused Flank counter Envelopment.
+- `mass_battle_v30 §A.8` — 6 declared tactics with explicit counters (Envelopment Ob 2 / Refused Flank; Feigned Retreat Ob 3 / Cmd Ob 2 recognise; Ambush Ob 4 / Scouting; Hammer & Anvil Ob 3 / Break Anvil first).
+- `params/mass_combat.md` — Weapon × armour (Anti-Armour HeavyBlunt +2D vs HI/Cav/Templar; Crossbow +1 vs Med/Heavy post-DR).
+
+**Cultural filter:**
+- `mass_battle_v30 §A.10` — Devout general cannot Threadweave/counter.
+- `mass_battle_v30 §A.11` — Southernmost / Forgetting. TS < 30 dissolves. Cultural-substrate-tied to Restoration communities.
+- `military_layer §1.8` — Knights Templar Church-only (cultural-doctrine production constraint).
+- Implicit: faction-specific identity (Crown / Hafenmark / Church / Varfell / Altonia).
+
+**Perfect-system trap protection:**
+- §A.6 7-formation RPS prevents single-formation dominance.
+- §A.8 6-tactic counter table prevents single-tactic dominance.
+- PP-508 splitting doctrine prevents single-target-focus dominance.
+- §A.9 6 terrain types modulate formation viability.
+- §1.5 faction-specific muster paths prevent single-class dominance.
+- §A.10 Threadweave-OR-tactic hard tradeoff prevents stacking.
+
+**C does NOT have:**
+- Doctrine *evolution* (no tech tree analog).
+- Cultural-doctrine *score* (graded preferences) — only binary exclusions.
+- Opponent-menu *learning* (factions don't adapt based on prior battles).
+
+### S does
+
+**Nothing for doctrine triangle directly.** S has implicit M-9 compliance at mechanical layer (no top-down recognition) — the anti-pattern *protection layer* that M-5 depends on at the mechanical level. Doctrine-level layer above absent.
+
+### Three-way comparison
+
+| Element | R | C | S | Alignment |
+|---|---|---|---|---|
+| Substrate (Military × Prosperity × Wealth gates) | T-4 / T-5 / M-2 master | §1.3 / §1.5 / §4.2 | Not enforced (F7.1 / F8.4) | C↔S P1 via F7.1 |
+| Faction-specific muster | T-5 institutional | §1.5 + §1.8 + §A.14c | Not modeled (F2.2 + F7.7) | C↔S P3 |
+| RPS formation/tactic counters | T-17 / T-18 | §A.6 + §A.8 declared | Spatial pattern emergent (no §A.8) | C↔S P2 (F2.6) |
+| Weapon × armour matchup | T-18 opponent-menu | PP-194 Dmg Mod + Anti-Armour | Not modeled (F3.6) | C↔S P1 |
+| Cultural filter (Devout/Templar/Levy/Forgetting) | M-6 | §A.6 / §A.10 / §A.11 / §1.8 / §A.14c | Not modeled | **C↔S P2 — F9.1** |
+| Cultural-doctrine score (graded) | M-6 implies graded | Not in canon | N/A | **R↔C P3 — F9.2** |
+| Doctrine evolution per faction | M-1 + T-19 | (silent) | Not modeled | **R↔C P3 — F9.3** |
+| Opponent-menu learning | T-18 + M-5 | (silent) | Not modeled | **R↔C P3 — F9.4** |
+| Perfect-system trap protection: formation RPS | M-5 prevention | §A.6 | Spatial pattern emergent | C↔S ✓ canon; partial S |
+| Perfect-system trap protection: tactic counters | M-5 prevention | §A.8 explicit | Not modeled (F2.6) | C↔S P2 |
+| Perfect-system trap protection: terrain modulation | M-5 prevention | §A.9 | Not modeled (F5.1) | C↔S P1 |
+| Perfect-system trap protection: hard tradeoffs | M-5 prevention | §A.10 PP-501 | Not modeled (F6.2) | C↔S P1 |
+| Splitting doctrine | (implicit) | PP-508 | Not enforced (F3.9) | C↔S P2 |
+| Bottom-up sanctity mechanical layer | T-30 / M-9 | Implicit canon | ✓ S architecturally | ✓ |
+
+### Bottom-up sanctity check (meta-level)
+
+| Mechanism | M-9-compliant? | Notes |
+|---|---|---|
+| Substrate gates | ✓ | Per-faction state primitives |
+| Faction-specific muster path | ✓ | Faction is real primitive |
+| Devout-general restriction | ✓ | Boolean flag at action declaration |
+| Southernmost / Forgetting | ✓ | Terrain primitive + per-soldier TS attribute |
+| Levy offensive restriction | ✓ | Class.action_restrictions primitive |
+| Formation RPS (§A.6) | ⚠ | If implemented as "Shield Wall negates Wedge" lookup → recognition. **Cleaner: Shield Wall's +2D Def overcomes Wedge's +2D Off via pool arithmetic; negation emerges, not looked up.** |
+| Tactic counter table (§A.8) | ⚠ | Same. Cleaner: counter emerges from declarative-Ob + execution-via-primitives (T-50 / F2.6) |
+| Perfect-system trap protection | N/A meta | Emerges from combination, not single mechanism |
+
+**Verdict:** Most canon doctrine-triangle mechanisms M-9-compliant when implemented via primitives. §A.6/§A.8 borderline if implemented as table-lookups; cleaner via pool-arithmetic emergence — consistent with F5.4b refactor.
+
+### Top-down historical validation
+
+| Battle | M-1 mechanism | C captures? | Verdict |
+|---|---|---|---|
+| Cannae | T-17 Roman linear vs envelopment | ✓ §A.8 + §A.6 + retreat-zone | Reproducible |
+| Adrianople | T-18 Roman doctrine vs new opponent class | ✓ Cavalry class + §A.6 + counter table | Reproducible after F2.2 + F2.6 |
+| Crécy | M-6 French chivalric culture | ⚠ Binary exclusions exist; graded score absent (F9.2) | Partial via class restriction (Cavalry × Knight) |
+| Agincourt | M-6 + T-21 defensive + funnel | ✓ §A.6 Refused Flank + Skirmish + §A.9 Narrow | Reproducible |
+| Marignano | T-18 Swiss pike vs arquebus mid-campaign | ⚠ F2.2 required | Pending |
+| Pavia | M-5 Swiss perfect-system trap | ⚠ Same | Pending |
+| Hastings | T-18 Saxon shield-wall vs Norman combined | ✓ §A.6 Shield Wall + FR + Cavalry | Reproducible after F2.3 + F2.5 |
+| Pharsalus | T-17 Pompey linear vs Caesar reserve | ✓ Reserve §A.6 + Refused Flank §A.8 | Reproducible after F2.4 + F2.6 |
+| Panipat | T-19/T-20 firearm-analog | ⚠ Thread + wagon-fortress class | Reproducible after F6.1 + F2.2 |
+
+**Direction surfaced:** Canon captures M-1/T-17/T-18 substantially. Gap is M-6 graded score (F9.2) + T-19 evolution (F9.3). Both P3.
+
+### Lateral gameplay validation
+
+| Precedent | Substrate | Opponent menu | Cultural filter | Perfect-system protection |
+|---|---|---|---|---|
+| **Total War** | Tech tree + building tree → unit pool | Diverse matchups | Faction-unique units + conversion | Tech tree tradeoffs |
+| **Field of Glory II** | Army-list-locked | RPS between army types | Army list determines units | Match-up matrix |
+| **Ultimate General CW** | State recruitment + officers | Limited (2-side) | Union/Confederate doctrine | Limited |
+| **Combat Mission** | TO&E by date/faction | Date determines opp equipment | Faction-historical | Per-scenario; no in-game evolution |
+| **Mount & Blade Bannerlord** | Culture-locked troop trees | All cultures interact | Culture preferences (NPC noble alliances) | Player choice + persistence |
+| **Unicorn Overlord** | Class progression tree | Per-encounter class | Class composition by region/quest | Class-level RPS + positioning |
+| **Football Manager** | Club youth + transfer + finances | Per-match opp profile | **Club identity: Bilbao Basque-only (binary); Barça La Masia (graded); RB transfer model (graded)** | **Tactical familiarity decay** — system actively prevents one tactic dominating |
+| **Hearts of Iron IV** | Industry + research tree | Doctrine choice + opponent doctrine | National focus tree | Doctrine trees mutually exclusive |
+
+**Verdict laterally:**
+- **TW + FoG2 strongest analogs for substrate-locked unit pools.** §1.5/§1.8 + Faction Military matches.
+- **Bannerlord culture-locked troops ≈ §1.5 + §A.14c.** Validates F7.7.
+- **FM club identity is strongest M-6 graded analog.** Bilbao Basque-only is binary (matches Devout). Barça La Masia, RB model are graded — no Valoria equivalent. **No M-6 graded in canon.**
+- **FM tactical familiarity decay is strongest perfect-system protection.** Dynamic: opponents adapt over multiple matches. Valoria's §A.6/§A.8 is *static* protection. Dynamic absent (F9.4).
+- **HoI4 doctrine trees ≈ in-campaign evolution.** No Valoria equivalent (F9.3).
+- **Lateral signal: static is acceptable; dynamic is competitive advantage.** F9.3/F9.4 are P3 not P2.
+
+### Throughlines surfaced (Chunk 9)
+
+- **T-88 (R M-1 / C / lateral) — Doctrine triangle is master organizing principle at strategic-tactical interface.** Substrate × opponent-menu × cultural filter combine to make every faction's army a real doctrine. Valoria canon encodes all three legs. Strong canon.
+
+- **T-89 (C / FM lateral) — Cultural filter has binary (exclusion) and graded (preference) modes.** Canon has binary (Devout/Templar/Forgetting/Levy). FM shows both work. Graded is P3 enhancement.
+
+- **T-90 (R M-5 / C / FM lateral) — Perfect-system trap protection achieved via combination of RPS + tradeoffs + cultural filter + terrain.** No single mechanism prevents lock-in; protection is in interaction. Canon has static pieces; dynamic feedback missing (F9.4). **Static protection is multiply-redundant — design strength.**
+
+- **T-91 (C / lateral) — Substrate dependency makes faction identity mechanical.** Each faction has unique muster paths, restrictions, exemptions. **Faction identity emerges from per-faction substrate primitives, not from name/color.**
+
+- **T-92 (C / R M-5 meta) — Bottom-up sanctity at mechanical layer is precondition for perfect-system protection at doctrine layer.** M-9 violations at mechanics would hard-code one dominant pattern. Because mechanics bottom-up, dominant patterns can emerge briefly then be defeated by adaptation (RPS), terrain, substrate change. **M-9 at mechanics = M-5 protection at doctrine.** The two cohere.
+
+- **T-93 (R M-6 / FM Bilbao lateral) — Cultural filter as institutional commitment, not soft preference, is the canon position.** All canonical filters are hard exclusions. Consistent with R M-6's "cultures refused tactically-superior options" framing — refusal was institutional, not negotiable. **Canon matches R observation.**
+
+### Findings (Chunk 9)
+
+**F9.1 — P2 (C↔S) [collective marker]:** Cultural filter not modeled in S. Tracked via F6.5 (Devout) + F6.9 (Forgetting + F5.1) + F7.6 (Levy) + F7.7 (Templar). No new path beyond constituent findings.
+
+**F9.2 — P3 (R↔C):** Cultural-doctrine score (graded M-6) not in canon. `[QUESTION FOR JORDAN]` — design decision. Lateral support: FM Bilbao/Barça/RB. Implementation: per-faction `cultural_preferences: Dict[ActionClass, float]` modifying Ob, not excluding. Recommendation: defer until binary cultural-filter (F9.1) implemented.
+
+**F9.3 — P3 (R↔C):** Doctrine evolution per faction not modeled. `[QUESTION FOR JORDAN]`. Lateral: HoI4 doctrine trees, TW tech. Implementation: `faction.doctrine_track: DoctrineTrack` per-season advance. Recommendation: P3 deferred; may emerge from F2.2 + Faction primitive without dedicated track.
+
+**F9.4 — P3 (R↔C):** Opponent-menu learning not modeled. Static RPS provides protection; dynamic FM-equivalent absent. `[QUESTION FOR JORDAN]`. Implementation: per-faction memory of opp tactics → Cmd-Ob modifier for recognizing prior tactics. Recommendation: P3 deferred; static protection sufficient for design integrity.
+
+**F9.5 — P3 (C internal):** §A.6 formation RPS + §A.8 tactic counters should be implemented via pool-arithmetic emergence, not table-lookup. **M-9 refactor consistent with F5.4b.**
+
+*Resolution path:* When implementing F2.3 + F2.6: modifiers as composable arithmetic. Shield Wall's +2D Def overcomes Wedge's +2D Off via arithmetic — no "Shield Wall negates Wedge" lookup. Hammer & Anvil success emerges from Anvil stamina-hold + Hammer Fast envelop — not from named-tactic bonus. Bottom-up.
+
+### Carried forward
+
+- **F9.1 (collective binary cultural filter)** → no new findings; tracked via F6.5 / F6.9 / F7.6 / F7.7.
+- **F9.2 / F9.3 / F9.4** → `[QUESTION FOR JORDAN]` deferred; all P3.
+- **F9.5 (M-9 refactor)** → folds into F2.3 / F2.6 implementation discipline.
+
+### Meta-finding: canon design integrity
+
+**Canon passes M-1 / M-5 / M-6 audit at design-intent level.** Implementation incomplete but design encodes:
+- Substrate × opponent × cultural triangle (§1.3 / §1.5 / §A.6 / §A.8 / §A.10 / §A.11 / §A.14c).
+- Static perfect-system trap protection via combination of RPS + cultural filter + terrain + tradeoffs.
+- Bottom-up sanctity at mechanical layer (T-92).
+- Canon constraints P-01..P-15 enforce bottom-up philosophy.
+
+**Audit cannot identify design-level vulnerability in canon's doctrine-triangle treatment. Canon is well-designed at this level; implementation is the gap, not the philosophy.**
+
+---
+
 
 *Audit continues. Subsequent chunks committed incrementally to this file.*
