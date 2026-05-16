@@ -67,3 +67,26 @@ entries:
   - params/mass_combat.md
   status: open
   jordan_decision: pending
+- id: ED-840
+  date: 2026-05-16
+  description: 'Royal Progress Ob formula contradicts its own descriptive text. Part 10 §3.2 (Mode I — Royal Progress)
+    canonical statement is: "Ob | floor(sum of own territories Accord / 2) — easier when Accord is high (people aren''t
+    restive); harder when realm is in turmoil". The formula floor(sum_accord/2) produces the OPPOSITE behavior from
+    the descriptive clause: as sum_accord rises, Ob rises (action gets HARDER), not easier. Surfaced by M7
+    balance sweep N=1000 (commit d94f1e3e): Crown Royal Progress fails at game-start because starting sum_accord ≈ 30-33
+    across 6 Crown territories produces Ob 15-16 vs Pool = Influence (5) + Standing (0) = 5; mathematically unwinnable
+    without modifier stacking. Possible resolutions: (a) revise formula to floor((max_possible - sum) / 2) where
+    max_possible = 7 × num_owned_territories, making low-Accord realms HARDER not easier; (b) revise descriptive text
+    to say "harder when Accord is high (king must show face to many contented subjects across long itineraries)" — but
+    this contradicts the Henry I / Elizabeth I historical anchor; (c) accept the formula as-is, treat Royal Progress as
+    a recovery-from-crisis action (low Accord → low Ob) and revise descriptive text accordingly. M6 implements as canon
+    literally says (option c interpretation by default). Source: M7 balance sweep + Pass-3 finding #4.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md
+  - tests/sim/v17-integration/m6_faction_actions.py
+  status: open
+  jordan_decision: pending
+
