@@ -238,3 +238,17 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | KEY FINDING | Phase 7 "34.9% Feint inverts dominance" was partly stamina-management artifact; pool advantage at 17D vs 11D is structurally dominant in skilled-vs-skilled play |
 | Combat Balance Note status | Needs revision — 34.9% claim misleading without stamina-asymmetry caveat |
 | Files | tests/sim/phase8_smart_ai_v2_2026-05-15.{py,md} + phase8_sim_verification_ledger.json |
+
+### M1 Church Settlement Infrastructure (2026-05-16)
+| Test | Result |
+|------|--------|
+| Trigger | v17 module manifest (74b7f29) — Module 1 of 7 in strategic-sim integration plan; canonical primitives for four-axis Church infrastructure |
+| Module scope | Settlement dataclass, 37-settlement registry from settlement_layer §2.1, Seizure Ob formula (10 − PT − infra, floor 1, −4/settlement cap), SW-weighted Piety Yield, Mass Seizure declaration P((CI−60)/40)^3.3, Parish Order yields, Pastoral Assumption eligibility, Ascendant PT drift, Unification phase tracking |
+| Test groups | T1 registry integrity (24 checks) / T2 starting state (38) / T3 Seizure Ob boundaries (9) / T4 PT generation (12) / T5 CI generation (8) / T6 Inquisitor/Parish/Pastoral (9) / T7 Mass Seizure mechanics (7) / T8 Unification (7) / T9 PT drift (10) |
+| Result | **128 PASSED, 0 FAILED** |
+| Canonical sources verified | settlement_layer_v30 §1.5 §1.6 §1.7 §2.1 §2.2 (full read), ci_political_v30 §1 §2.1 §2.2 (full read), victory_v30 §3.2 (full read), mc_v15.py PT_MAP + ADJACENCY (full read), campaign_architecture_v30 (full read), params/bg/victory.md (full read) |
+| Ledger | 49 entries citing each constant to canonical source + section + quoted text |
+| Provisional assumptions held | 6 (ASSUMPTION_ONE..ASSUMPTION_SIX corresponding to GAP-A..GAP-F): registry source-of-truth, starting infrastructure seeding, playable territory count, Cathedral adjacency stacking rules, PT drift granularity, Warden Cooperation gate. All documented in ledger.provisional_assumptions; held for Jordan ratification before integration sim runs. |
+| Known canonical conflicts | (A) settlement_layer_v30 §2.1 vs valoria_geography_v30.yaml — different settlement-registry schemas; M1 sourced from §2.1; geography YAML needs editorial migration. (B) Compliance shows canon/editorial_ledger.yaml auto-fixable but cc052aa landed clean (likely cache/eventual-consistency artifact). |
+| Files | tests/sim/v17-integration/m1_church_infrastructure.py + m1_church_infrastructure_tests.py + m1_sim_verification_ledger.json |
+| Next module | M2 CI Political Revision (depends M1) — CI milestones 55/65 verification, revised Mass Seizure cross-territory, ±5/season CI cap audit |

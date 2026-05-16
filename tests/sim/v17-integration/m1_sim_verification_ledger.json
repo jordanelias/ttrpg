@@ -1,0 +1,403 @@
+{
+  "sim_file": "tests/sim/v17-integration/m1_church_infrastructure.py",
+  "scope": "custom",
+  "systems": ["settlement_layer", "tc_political", "victory", "campaign_architecture"],
+  "module_role": "Module 1 of v17 integration — canonical primitives only, no World/Faction/Territory classes. Wired into mc_v17 by Module 7.",
+  "entries": [
+    {
+      "sim_variable": "PT_YIELD_PER_RB[Chapel]",
+      "value": 0.5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 1",
+      "quoted_text": "Chapel (+0.5 PT/season)"
+    },
+    {
+      "sim_variable": "PT_YIELD_PER_RB[Church]",
+      "value": 1.0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 1",
+      "quoted_text": "Church (+1 PT/season)"
+    },
+    {
+      "sim_variable": "PT_YIELD_PER_RB[Cathedral]",
+      "value": 2.0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 1",
+      "quoted_text": "Cathedral (+2 PT/season, +0.5 PT to adjacent territories)"
+    },
+    {
+      "sim_variable": "PT_CATHEDRAL_ADJACENCY_BONUS",
+      "value": 0.5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 1",
+      "quoted_text": "Cathedral ... +0.5 PT to adjacent territories",
+      "assumption": "ASSUMPTION-4: stacks linearly per Cathedral, direct-adjacent only, no cap, no decay"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_MODIFIER[chapel]",
+      "value": 0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers + victory_v30 §3.2 table",
+      "quoted_text": "Chapel −0"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_MODIFIER[church]",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers",
+      "quoted_text": "Church −1"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_MODIFIER[cathedral]",
+      "value": -2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers",
+      "quoted_text": "Cathedral −2"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_MODIFIER[templar]",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers + victory_v30 §3.2 table",
+      "quoted_text": "Templar −1"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_MODIFIER[inquisitor]",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers",
+      "quoted_text": "Inquisitor −1"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_MODIFIER[governor]",
+      "value": -2,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers",
+      "quoted_text": "Church Governor −2"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_PER_SETTLEMENT_CAP",
+      "value": -4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers",
+      "quoted_text": "Cap: −4 per settlement (campaign_architecture_v1 refinement)"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_FLOOR",
+      "value": 1,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.2",
+      "quoted_text": "Church Seizure Ob: 10 − PT − infrastructure modifiers (floor 1)"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T1]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T1 | Valorsplatz | PV 5 | SW 2"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T2]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T2 | Kronmark | PV 1 | SW 2"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T3]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T3 | Lowenskyst | PV 3 | SW 2"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T4]",
+      "value": 1,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T4 | Grauwald | PV 1 | SW 1"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T5]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T5 | Feldmark | PV 1 | SW 2"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T6]",
+      "value": 1,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T6 | Stillhelm | PV 1 | SW 1"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T7]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T7 | Rendstad | PV 1 | SW 2"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T8]",
+      "value": 3,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T8 | Gransol | PV 4 | SW 3 (trading city; strong Church commercial presence)"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T9]",
+      "value": 5,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T9 | Himmelenger | PV 5 | SW 5 (cathedral city; Church's primary anchor)"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T10]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T10 | Spartfell | PV 1 | SW 2"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T11]",
+      "value": 1,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T11 | Halvardshelm | PV 1 | SW 1"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T12]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T12 | Sigurdshelm | PV 4 | SW 2"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T13]",
+      "value": 1,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T13 | Oastad | PV 1 | SW 1"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T14]",
+      "value": 3,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T14 | Ehrenfeld | PV 3 | SW 3 (military stronghold with significant Church benediction tradition)"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T15]",
+      "value": 0,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T15 | Askeheim | PV 0 | SW 0 (Calamity ground; Church presence impossible)"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T16]",
+      "value": 1,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T16 | Schoenland | SW 1"
+    },
+    {
+      "sim_variable": "SPIRITUAL_WEIGHT[T17]",
+      "value": 2,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table",
+      "quoted_text": "T17 | Halvarshelm | PV 1 | SW 2"
+    },
+    {
+      "sim_variable": "SW_TOTAL_CANONICAL",
+      "value": 32,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§1 Spiritual Weight table foot",
+      "quoted_text": "Total SW: 32"
+    },
+    {
+      "sim_variable": "PARISH_ORDER_RULES[Chapel].order_per_season",
+      "value": 0.5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.6 Parish Social Services",
+      "quoted_text": "Chapel | +0.5 Order/season (rounds: +1 every other season)"
+    },
+    {
+      "sim_variable": "PARISH_ORDER_RULES[Church].order_install_bonus",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.6 Parish Social Services",
+      "quoted_text": "Church | +1 Order at installation (one-time)"
+    },
+    {
+      "sim_variable": "PARISH_ORDER_RULES[Cathedral].order_install_bonus",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.6 Parish Social Services",
+      "quoted_text": "Cathedral | +1 Order at installation + Order decay −1"
+    },
+    {
+      "sim_variable": "PARISH_ORDER_RULES[Cathedral].order_decay_modifier",
+      "value": -1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.6 Parish Social Services",
+      "quoted_text": "Cathedral | ... Order decay −1 (Order is more stable)"
+    },
+    {
+      "sim_variable": "CI_MILESTONE_ASCENDANT",
+      "value": 80,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone table",
+      "quoted_text": "80 | Church Ascendant | Seizure Ob reduced by 1 globally. All territory PT drifts +1 toward piety pole at Year-End (unless Warden Cooperation ≥ 2)"
+    },
+    {
+      "sim_variable": "CI_MILESTONE_UNIFICATION",
+      "value": 100,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone table",
+      "quoted_text": "100 | Theocracy Unification Attempt | See §2.2"
+    },
+    {
+      "sim_variable": "CI_MASS_SEIZURE_AVAILABLE",
+      "value": 60,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.2",
+      "quoted_text": "The Church may declare a Mass Seizure when CI ≥ 60"
+    },
+    {
+      "sim_variable": "MASS_SEIZURE_DECLARE_EXPONENT",
+      "value": 3.3,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.2",
+      "quoted_text": "Formula: P(declare) = ((CI − 60) / 40)^3.3, clamped to [0, 1]"
+    },
+    {
+      "sim_variable": "MASS_SEIZURE_DECLARE_RANGE",
+      "value": 40.0,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.2",
+      "quoted_text": "(CI − 60) / 40"
+    },
+    {
+      "sim_variable": "MASS_SEIZURE_POOL_DIVISOR",
+      "value": 15,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.2",
+      "quoted_text": "Church Seizure Pool: Influence + floor(CI / 15)"
+    },
+    {
+      "sim_variable": "CI_POLITICAL_BONUS_DIVISOR",
+      "value": 20,
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§3.2",
+      "quoted_text": "Church ... adds floor(CI/20) bonus dice to its roll",
+      "note": "Constant declared in M1 for cross-module reference; not used by M1 primitives. Applied by M2."
+    },
+    {
+      "sim_variable": "PT_TIER_TO_FLOAT",
+      "value": "{0:1.0, 1:2.5, 2:4.0, 3:5.5, 4:6.5, 5:7.0}",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/sim/mc_v15.py",
+      "section": "PT_MAP constant",
+      "quoted_text": "PT_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 6.5, 5: 7.0}"
+    },
+    {
+      "sim_variable": "PLAYABLE_TERRITORIES",
+      "value": "{T1..T14, T17} (15 territories)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/sim/mc_v15.py",
+      "section": "ALL_PLAYABLE_15 constant",
+      "quoted_text": "ALL_PLAYABLE_15 = {'T1','T2','T3','T4','T5','T6','T7','T8','T9','T10','T11','T12','T13','T14','T17'}",
+      "assumption": "ASSUMPTION-3: 15 playable territories matches v15 scope; T15 Askeheim (Calamity, no settlements) and T16 Schoenland (foreign-exempt) excluded from CI/PT/Seizure mechanics"
+    },
+    {
+      "sim_variable": "INERT_TERRITORIES",
+      "value": "{T15, T16}",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§2.1",
+      "quoted_text": "Askeheim is unincorporated Calamity wilderness with 0 settlements (the Ruins and the Gate are observation features, not siege-targets). ... Schoenland at degree 1 is foreign-exempt awaiting ED-055."
+    },
+    {
+      "sim_variable": "ADJACENCY",
+      "value": "16-territory neighbour graph (T1..T17 excluding implicit T16-S-037 edge handling)",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/sim/mc_v15.py",
+      "section": "ADJACENCY constant",
+      "quoted_text": "ADJACENCY = { 'T1':{'T2','T5','T14','T16'}, ... }",
+      "note": "Mirrors v15's ADJACENCY exactly for behavioural compatibility. Underlying canon source is valoria_geography_v30.yaml :: adjacency:."
+    },
+    {
+      "sim_variable": "SETTLEMENT_REGISTRY",
+      "value": "37 entries (35 Kingdom + S-036 Himmelenger + S-037 Schoenland)",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§2.1 Settlement Registry (PP-726 rebuild)",
+      "quoted_text": "Total: 37 march-target settlements (35 Kingdom + 1 Church city-state + 1 foreign tributary). Province distribution: Valorsmark 6 provinces (15 settlements), Hafenmark 4 provinces (10), Varfell 4 provinces (10).",
+      "assumption": "ASSUMPTION-1 (GAP-A): Source-of-truth conflict between settlement_layer §2.1 (37 settlements with siege-target granularity per PP-726 rebuild) and valoria_geography_v30.yaml (36 settlements with district-as-settlement schema; tagged PP-726 in commit message but data not migrated). M1 sourced from settlement_layer §2.1. Separate editorial fix needed to migrate geography YAML."
+    },
+    {
+      "sim_variable": "SETTLEMENT_REGISTRY[S-036 starting infrastructure]",
+      "value": "Cathedral + Templar + Governor",
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§2.1 + §2.2 Himmelenger districts",
+      "quoted_text": "S-036 Himmelenger ... Sovereign ecclesiastical city-state. Internal districts: Cathedral (the Confessor's seat), City (lay Church administration, Cardinal of Temperance), Seminary (theological training, Inquisitor recruitment).",
+      "assumption": "ASSUMPTION-2 (GAP-B): Only S-036 starts with Church infrastructure (Cathedral + Templar Station + Church Governor; Inquisitor Base = false). Backwards-compatible with mc_v15's `Territory.templar = (tid == 'T9')`. All other 36 settlements start clean. Conservative seeding pending Jordan ratification of a fuller starting registry."
+    },
+    {
+      "sim_variable": "ci_ascendant_pt_drift behaviour",
+      "value": "Snap to next canon-tier boundary, cap at tier 5",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone CI 80",
+      "quoted_text": "All territory PT drifts +1 toward piety pole at Year-End (unless Warden Cooperation ≥ 2)",
+      "assumption": "ASSUMPTION-5: +1 interpreted in canon-tier units (not v15 float units). Implementation: pt_float_to_tier → +1 → PT_TIER_TO_FLOAT lookup. Capped at tier 5 (float 7.0)."
+    },
+    {
+      "sim_variable": "Warden Cooperation gate",
+      "value": "Universally 0 (drift always fires when triggered by CI 80)",
+      "canonical_source": "designs/provincial/ci_political_v30.md",
+      "section": "§2.1 milestone CI 80",
+      "quoted_text": "(unless Warden Cooperation ≥ 2)",
+      "assumption": "ASSUMPTION-6: Warden Cooperation not modelled in mc_v15. Treated as 0 universally until M5 or later. Drift fires unconditionally at CI 80. M5 implementer must add Warden Cooperation tracking and revise this primitive's call site."
+    }
+  ],
+  "provisional_assumptions": [
+    {
+      "id": "ASSUMPTION-1",
+      "topic": "GAP-A: Settlement registry source of truth",
+      "decision": "Use settlement_layer_v30 §2.1 (37 settlements; siege-target granularity per PP-726 rebuild)",
+      "alternative_rejected": "valoria_geography_v30.yaml (36 settlements, district-as-settlement schema; tagged PP-726 in commit but data not migrated)",
+      "follow_up": "Editorial fix: migrate valoria_geography_v30.yaml settlements: dict to match §2.1 registry. Separate task from M1."
+    },
+    {
+      "id": "ASSUMPTION-2",
+      "topic": "GAP-B: Starting infrastructure state per settlement",
+      "decision": "S-036 Himmelenger: Cathedral + Templar + Church Governor (Inquisitor: false). All other 36 settlements: no Church infrastructure.",
+      "rationale": "Backwards-compatible with mc_v15.py `templar = (tid == 'T9')`. Canon §2.2 supports Cathedral at Himmelenger via internal districts. Conservative seeding.",
+      "follow_up": "Jordan to ratify or expand starting registry (e.g., Valorsplatz Chapel? Ehrenfeld Chapel given T14 SW=3?). Editorial entry needed."
+    },
+    {
+      "id": "ASSUMPTION-3",
+      "topic": "GAP-C: Playable territory count",
+      "decision": "15 playable territories matching mc_v15's ALL_PLAYABLE_15: T1..T14, T17. T15 (Askeheim, Calamity) and T16 (Schoenland, foreign) registered but inert.",
+      "rationale": "Manifest says '37 settlements mapped to 15 territories'. ci_political §1 SW table has 17 entries; 2 are inert. Consistent with v15 scope.",
+      "follow_up": "None — this aligns scope across all modules."
+    },
+    {
+      "id": "ASSUMPTION-4",
+      "topic": "GAP-D: Cathedral adjacency PT bonus mechanics",
+      "decision": "+0.5 PT per Cathedral to each direct-adjacent territory. Stacks linearly. No cap, no distance decay.",
+      "rationale": "Canon (§1.5 Axis 1) specifies +0.5 PT to adjacent but does not specify stacking/cap/decay.",
+      "follow_up": "Sim feedback may reveal degenerate cases (e.g., Cathedral cluster in T9 + T8 + T14 → T1 receives massive PT drift). Re-examine after M7 balance sweep."
+    },
+    {
+      "id": "ASSUMPTION-5",
+      "topic": "GAP-E: CI=80 PT drift granularity",
+      "decision": "Drift +1 in canon-tier units (0..5), snapping to PT_TIER_TO_FLOAT. Capped at tier 5.",
+      "rationale": "Canon (§2.1) says '+1 toward piety pole'. v15 PT space is float 1.0–7.0 with non-uniform tier spacing. Canon-tier-aware drift is the canonical interpretation.",
+      "follow_up": "Sim feedback may reveal undesirable PT lock-in patterns. Reconsider if drift produces homogeneity."
+    },
+    {
+      "id": "ASSUMPTION-6",
+      "topic": "GAP-F: Warden Cooperation gate on PT drift",
+      "decision": "Warden Cooperation = 0 universally; drift always fires when CI 80 triggers.",
+      "rationale": "Warden Cooperation is not modelled in mc_v15. Drift suppression is the canonical fallback (per §2.1).",
+      "follow_up": "Module 5 (Settlement-Territory Aggregation) or later must add Warden Cooperation tracking. Re-thread ci_ascendant_pt_drift's warden_cooperation argument at integration time."
+    }
+  ]
+}
