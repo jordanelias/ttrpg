@@ -1,0 +1,204 @@
+{
+  "sim_file": "tests/sim/v17-integration/m4_unit_state.py",
+  "scope": "custom",
+  "systems": ["mass_combat", "campaign_architecture"],
+  "module_role": "Module 4 of v17 integration — per-faction unit roster, mutation operations (Muster, commit, apply losses), and JSONL serialization. Foundational module with no v17 dependencies. Module 3 (Mass Battle Resolution) will consume this.",
+  "entries": [
+    {
+      "sim_variable": "UNIT_CLASSES",
+      "value": ["Levy", "LightInf", "HeavyInf", "Cavalry", "Archer", "Crossbow", "Sling", "Artillery", "KnightsTemplar"],
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG UNIT STATS (pre-printed on unit tokens)",
+      "quoted_text": "Levy | Light Infantry | Heavy Infantry | Cavalry | Archer | Crossbow | Sling | Artillery | Knights Templar — 9 BG unit classes per the §B.2 table"
+    },
+    {
+      "sim_variable": "ACTIVE_UNIT_CLASSES",
+      "value": ["Levy", "LightInf", "HeavyInf"],
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — Unit-token state in Workstream A",
+      "quoted_text": "Active classes: 'Levy', 'LightInf', 'HeavyInf'"
+    },
+    {
+      "sim_variable": "RESERVED_UNIT_CLASSES",
+      "value": ["Cavalry", "Archer", "Crossbow", "Sling", "Artillery", "KnightsTemplar"],
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — Unit-token state in Workstream A",
+      "quoted_text": "Reserved: 'Cavalry', 'Archer', 'Crossbow', 'Sling', 'Artillery', 'KnightsTemplar'"
+    },
+    {
+      "sim_variable": "UNIT_STATS.Levy",
+      "value": "martial 1, endurance 1, discipline 1, health 7, bg_dmg_mod 1, ttrpg_dmg_mod 1, armour None",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Levy row",
+      "quoted_text": "Levy | 1 | 1 | 1 | 7 | 1 | 3 | 2 | LightCut | None | +1"
+    },
+    {
+      "sim_variable": "UNIT_STATS.LightInf",
+      "value": "martial 3, endurance 3, discipline 3, health 9, bg_dmg_mod 2, ttrpg_dmg_mod 1, armour Light",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Light Infantry row",
+      "quoted_text": "Light Infantry | 3 | 3 | 3 | 9 | 3 | 4 | 4 | LightCut | Light | +2"
+    },
+    {
+      "sim_variable": "UNIT_STATS.HeavyInf",
+      "value": "martial 4, endurance 4, discipline 4, health 10, bg_dmg_mod 4, ttrpg_dmg_mod 2, armour Medium",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Heavy Infantry row",
+      "quoted_text": "Heavy Infantry | 4 | 4 | 4 | 10 | 4 | 5 | 5 | HeavyCut | Medium | +4"
+    },
+    {
+      "sim_variable": "UNIT_STATS.Cavalry",
+      "value": "martial 4, endurance 3, discipline 5, health 9, bg_dmg_mod 5, ttrpg_dmg_mod 3, armour Heavy",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Cavalry row",
+      "quoted_text": "Cavalry | 4 | 3 | 5 | 9 | 5 | 4 | 5 | HeavyCut | Heavy | +5"
+    },
+    {
+      "sim_variable": "UNIT_STATS.Archer",
+      "value": "martial 3, endurance 2, discipline 3, health 8, bg_dmg_mod 0, ttrpg_dmg_mod 0, armour Light, volley True",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Archer row",
+      "quoted_text": "Archer | 3 | 2 | 3 | 8 | 3 | 3 | 3 | Piercing/Bow | Light | +0"
+    },
+    {
+      "sim_variable": "UNIT_STATS.Crossbow",
+      "value": "martial 3, endurance 2, discipline 3, health 8, bg_dmg_mod 0, ttrpg_dmg_mod 0, armour Light, volley True",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Crossbow row",
+      "quoted_text": "Crossbow | 3 | 2 | 3 | 8 | 3 | 3 | 3 | Piercing/Crossbow | Light | +0 base (+1 vs med+heavy post-DR)"
+    },
+    {
+      "sim_variable": "UNIT_STATS.Sling",
+      "value": "martial 2, endurance 2, discipline 2, health 8, bg_dmg_mod 0, ttrpg_dmg_mod 0, armour Light, volley True",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Sling row",
+      "quoted_text": "Sling | 2 | 2 | 2 | 8 | 2 | 3 | 3 | Blunt/Sling | Light | by ammo (−2D)"
+    },
+    {
+      "sim_variable": "UNIT_STATS.Artillery",
+      "value": "martial 2, endurance 2, discipline 2, health 8, bg_dmg_mod 3, ttrpg_dmg_mod 2, armour None, anti_armour True, volley True",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Artillery row + Anti-Armour keyword + Volley keyword",
+      "quoted_text": "Artillery | 2 | 2 | 2 | 8 | 2 | 3 | 3 | HBl (siege) | None | +3; Anti-Armour keyword pre-printed on Artillery; Volley keyword on Ranged + Artillery"
+    },
+    {
+      "sim_variable": "UNIT_STATS.KnightsTemplar",
+      "value": "martial 5, endurance 5, discipline 6, health 11, bg_dmg_mod 5, ttrpg_dmg_mod 3, armour Heavy, anti_armour True",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 BG Unit Stats table — Knights Templar row + Anti-Armour keyword",
+      "quoted_text": "Knights Templar | 5 | 5 | 6 | 11 | 5 | 6 | 6 | HeavyBlunt | Heavy | +5; Anti-Armour keyword pre-printed on Knights Templar tokens"
+    },
+    {
+      "sim_variable": "MUSTER_DEFAULT_CLASS",
+      "value": "Levy",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — Unit-token state",
+      "quoted_text": "Muster action: mints Levy tokens in territory (expandable to per-faction recruitment doctrine later)."
+    },
+    {
+      "sim_variable": "COMMITMENT_ADJACENCY_MODEL",
+      "value": "adjacent_to_target",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — GAP: unit movement model",
+      "quoted_text": "(b) Commit from adjacent-to-target only (closer to canon; adds March prerequisite). Recommend (b) for canon fidelity, with March as implicit",
+      "assumption": "M4_ASSUMPTION_ONE: option (b) adopted as default per integration_plan recommendation. Canon does not finalize; M4 exposes constant for future override."
+    },
+    {
+      "sim_variable": "UnitRoster schema",
+      "value": "defaultdict(lambda: defaultdict(int)) — outer key territory_id, inner key unit_class, value count",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — Unit-token state in Workstream A",
+      "quoted_text": "self.units = defaultdict(lambda: defaultdict(int))"
+    },
+    {
+      "sim_variable": "UnitRoster.to_dict serialization",
+      "value": "{k: dict(v) for k, v in faction.units.items()}",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — Serialization note",
+      "quoted_text": "Serialization: json.dumps({k: dict(v) for k, v in faction.units.items()}) — defaultdict doesn't serialize directly."
+    },
+    {
+      "sim_variable": "pool_contribution formula",
+      "value": "Σ(unit_count × UNIT_STATS[unit_class]['martial'])",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 BG Battle Resolution Step 3 — Roll",
+      "quoted_text": "Pool = sum of all engaged unit Martial values + commander bonus. Commander bonus = floor(faction Military / 2). [PP-555] TN 7. Ob from table.",
+      "note": "M4 supplies the unit-Martial-sum component; the commander bonus and TN are M3 responsibility."
+    },
+    {
+      "sim_variable": "Anti-Armour keyword roster",
+      "value": "Pre-printed on Artillery and KnightsTemplar (HeavyBlunt units)",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 — Anti-Armour keyword",
+      "quoted_text": "Anti-Armour keyword (HeavyBlunt units): +2D when targeting Heavy Infantry, Cavalry, or Knights Templar. Pre-printed on Artillery and Knights Templar tokens."
+    },
+    {
+      "sim_variable": "Volley keyword roster",
+      "value": "Pre-printed on Ranged (Archer, Crossbow, Sling) and Artillery",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.2 — Volley keyword",
+      "quoted_text": "Volley keyword (Ranged, Artillery): fires in Priority 1 before melee. Ranged cannot attack in melee same turn they Volley."
+    },
+    {
+      "sim_variable": "Muster scope",
+      "value": "Single-territory, active classes only",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — Muster action",
+      "quoted_text": "Muster action: mints Levy tokens in territory (expandable to per-faction recruitment doctrine later).",
+      "assumption": "M4_ASSUMPTION_THREE: single-territory Muster only; multi-territory recruitment, doctrine variation, and Levy Restriction (§A.14c) out of scope for M4."
+    },
+    {
+      "sim_variable": "Commit validation",
+      "value": "Adjacency required; active class only; sufficient count required",
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/integration_plan_v3_2026-05-15.md",
+      "section": "§5 Phase 2c — Conquest action",
+      "quoted_text": "Conquest action: commits tokens from territory to battle.",
+      "assumption": "M4_ASSUMPTION_TWO: only active classes commitable. Reserved classes raise ValueError."
+    },
+    {
+      "sim_variable": "Battle losses semantics",
+      "value": "Aggregate count reduction; no per-token identity",
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "§B.3 Step 5 — Apply damage",
+      "quoted_text": "Apply damage. Reduce Health per Step 3 net successes × unit damage modifier − DR. Formation Break at Health 0.",
+      "assumption": "M4_ASSUMPTION_FIVE: aggregate-count semantics. A loss of N units reduces the count; per-unit token identity not tracked at M4 layer."
+    }
+  ],
+  "provisional_assumptions": [
+    {
+      "id": "M4_ASSUMPTION_ONE",
+      "topic": "Unit movement model — adjacency requirement for commit-to-battle",
+      "decision": "COMMITMENT_ADJACENCY_MODEL = 'adjacent_to_target' (option b per integration_plan_v3 §5 Phase 2c).",
+      "rationale": "Canon does not finalize the movement model. Integration plan recommends option (b) for canon fidelity. M4 implements (b) and exposes the constant for future override by M6 or M7.",
+      "follow_up": "Jordan decision required to ratify or change. If movement model changes, only the COMMITMENT_ADJACENCY_MODEL constant + commit_to_battle adjacency check need to change."
+    },
+    {
+      "id": "M4_ASSUMPTION_TWO",
+      "topic": "Active vs reserved class semantics enforcement",
+      "decision": "All 9 classes are schema-complete in UNIT_STATS. Muster and commit_to_battle validate against ACTIVE_UNIT_CLASSES (3 classes). Reserved-class Muster or Commit raises ValueError.",
+      "rationale": "Integration plan §5 Phase 2c specifies schema-complete + semantics-partial. M4 enforces the partial-semantics constraint with explicit ValueError rather than silent no-op so integration bugs surface immediately.",
+      "follow_up": "When future modules activate reserved classes (e.g. Cavalry recruitment via Knights doctrine), they expand ACTIVE_UNIT_CLASSES. The validation gate then permits those classes automatically."
+    },
+    {
+      "id": "M4_ASSUMPTION_THREE",
+      "topic": "Muster scope — single territory, default Levy",
+      "decision": "Muster operates on a single territory at a time. Default class is Levy per integration_plan. Multi-territory recruitment, per-faction doctrine variation, and Levy Restriction (mass_battle §A.14c) are out of scope.",
+      "rationale": "Integration plan explicitly defers these: 'expandable to per-faction recruitment doctrine later'. M4 stays narrow.",
+      "follow_up": "M6 (Faction Action Expansion) is the natural home for doctrine-specific recruitment overrides."
+    },
+    {
+      "id": "M4_ASSUMPTION_FOUR",
+      "topic": "Per-faction state, not per-world",
+      "decision": "UnitRoster is per-faction state. Each faction owns its own roster instance. M4 does not coordinate cross-faction roster access.",
+      "rationale": "Integration plan §5 Phase 2c codes it as 'self.units' on a Faction-equivalent object. M7 wires UnitRoster onto Faction objects.",
+      "follow_up": "M7 integration must attach a UnitRoster to each Faction at construction time."
+    },
+    {
+      "id": "M4_ASSUMPTION_FIVE",
+      "topic": "Battle losses operate on aggregate counts, not per-unit tokens",
+      "decision": "apply_battle_losses takes {unit_class: count_to_remove} and reduces aggregate counts. There is no per-unit token identity at the M4 layer.",
+      "rationale": "Integration plan and §B.3 Step 5 describe damage as a count-reducing operation (Formation Break at Health 0 is a per-class threshold, not a per-token state). Tracking per-unit identity would require a richer model not specified by canon.",
+      "follow_up": "If named-unit-officers (§D.2 NPC named officers) becomes mechanically significant, that's a separate state layer (likely in a future module) that overlays per-faction unit rosters."
+    }
+  ]
+}

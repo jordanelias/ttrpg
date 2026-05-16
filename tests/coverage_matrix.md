@@ -280,3 +280,17 @@ All 5 throughlines pass NERS. All 3 meta-throughlines pass. STR mult ambiguity f
 | Dependencies | Module 1 (settlement registry, has_any_church_building, PLAYABLE_TERRITORIES, SPIRITUAL_WEIGHT) |
 | Files | tests/sim/v17-integration/m2_ci_political_revision.py + m2_ci_political_revision_tests.py + m2_sim_verification_ledger.json |
 | Next module | M4 Unit State Management (foundational, no deps) or M5 Settlement-Territory Aggregation (depends M1); per manifest M3 depends on M4 |
+
+### M4 Unit State Management (2026-05-16)
+| Test | Result |
+|------|--------|
+| Trigger | v17 module manifest — Module 4 of 7; foundational module, blocks M3 |
+| Module scope | Per-faction unit roster (defaultdict[territory_id][unit_class] = count), 9-class schema with semantics-partial split (3 active: Levy/LightInf/HeavyInf, 6 reserved: Cavalry/Archer/Crossbow/Sling/Artillery/KnightsTemplar), UNIT_STATS dict baked from §B.2 (Martial/Endurance/Discipline/Health/BG_Dmg/TTRPG_Dmg/Armour/Anti-Armour/Volley per class), Muster mints Levy in single territory, commit_to_battle with adjacent-to-target adjacency model (option b), apply_battle_losses with auto-prune zero counts, JSONL-safe to_dict/from_dict/to_json/from_json round-trip, pool_contribution helper (Σ count×Martial) for M3's resolve_battle §B.3 Step 3 |
+| Test groups | T1 schema (16 checks) / T2 canonical stat values (14) / T3 anti_armour+volley flags (11) / T4 basic ops (12) / T5 adjacency commitment (11) / T6 serialization round-trip (9) / T7 pool_contribution (8) |
+| Result | **95 PASSED, 0 FAILED** |
+| Canonical sources verified | mass_battle_v30 §B.2 (BG Unit Stats table, full read 63.1k) + §B.3 Step 3 (pool formula), integration_plan_v3 §5 Phase 2c (defaultdict schema, active/reserved split, option-b movement model, JSON serialization), params/mass_combat.md (33.0k full read) |
+| Ledger | 22 entries; per-class stat-block citations to §B.2 rows, schema/active/reserved citations to integration_plan §5 Phase 2c |
+| Provisional assumptions held | 5 (M4_ASSUMPTION_ONE..FIVE): adjacent-to-target movement model (option b), active-class-only Muster/Commit enforcement, single-territory single-class Muster default Levy, per-faction roster (not per-world), aggregate-count loss semantics (no per-token identity) |
+| Dependencies | none (foundational) — Module 3 (Mass Battle Resolution) will consume this |
+| Files | tests/sim/v17-integration/m4_unit_state.py + m4_unit_state_tests.py + m4_sim_verification_ledger.json |
+| Next module | M3 Mass Battle Resolution (now unblocked) or M5 Settlement-Territory Aggregation (depends M1 ✓) |
