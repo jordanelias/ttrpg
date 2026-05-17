@@ -21,6 +21,15 @@ sources:
       replacement: "Varfell expands via military conquest only. Tribune intel remains (reveals enemy stats for target selection). Thread operations remain as personal-scale actions available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer bonuses."
       commits: [297f892, 13b8f30, 613ebf9, dc13a75, "pending-PP-664"]
 
+    - id: "FACTION-SPECIFIC-VICTORY-PATHS"
+      name: "All faction-specific victory conditions (8 alternates + Partition co-victory)"
+      reason: "STRUCK by GD-1 (canon/02_canon_constraints.md §B, canonized 2026-05-17). Peninsular Sovereignty (11/15 territories sustained 2 seasons) is the sole victory condition. Includes: Altonian Theocracy (PP-414), Hollow Victory (PP-415), Southernmost Dominion (PP-417 Path B including all conditional and calamity-healed variants), Thread Supremacy as victory path (PP-417 Path C — first-mover advantage in threadwork remains as tactical lever toward universal victory), Co-Victory Varfell+RM (PP-418), Hafenmark Dynastic Assertion, Church Theocratic Bid, Löwenritter Military Regency, Partition Co-Victory."
+      eds: ["pending-batch-Pass-2k"]
+      replacement: "Universal Peninsular Sovereignty (designs/provincial/victory_v30.md §0). Faction-specific tactical content (territorial actions, faction levers, Mandate-gain actions, mass-battle outcomes) remains valid as approach-to-universal-victory; only victory-trigger language is struck. The faction-unique advantages (Crown Treaty network, Church Mass Seizure, Hafenmark Charter of Liberties + Altonian Reinforcements + equipment, Varfell threadwork first-mover + Einhir Revival, RM extra-parliamentary emergence) are tactical leverage toward the universal goal, not alternate paths to it."
+      commits: ["fe367105 (GD-1 canonization Pass 2b)", "pending (Pass 2c propagation in this commit)"]
+      gd_constraint: "GD-1"
+      date: "2026-05-17"
+
 # Patch history (PP-665..PP-674 and beyond) → canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
 
 

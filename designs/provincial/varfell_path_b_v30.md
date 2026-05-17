@@ -4,6 +4,11 @@
 <!-- v30 baseline — renamed from designs/board_game/varfell_path_b_redesign_ed311.md on 2026-04-13 -->
 # Varfell Path B — Southernmost Dominion (Redesign Proposal)
 
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES the Southernmost Dominion victory path absolutely, including all conditional and calamity-healed variants. This entire document is preserved as supersession-trail evidence; the mechanic it proposes is no longer canonical. Date: 2026-05-17.
+
+---
+
+
 <!-- [SUPERSEDED 2026-04-19] VAYNARD THREAD MASTERY (VTM) STRUCK -->
 <!-- Per Jordan decision 2026-04-19 (session): VTM was a placeholder mechanic with no canonical advancement rule. -->
 <!-- Cultural Reformation (Varfell's primary territorial action) was also STRUCK — incompatible with Vaynard's identity. -->

@@ -15,7 +15,7 @@
 
 ## ED-306 Resolution (v3 — geography_design.md territory numbering, CI 100 canonical, PT cap clarified)
 ## PP-540–546 (2026-04-10): Balance patches — solo + co-victory timeline normalisation
-## Date: 2026-04-06 | Status: DESIGN — pending Varfell Path B user decision (ED-311)
+## Date: 2026-04-06 | Status: DESIGN — sections §0.1, §3.1-§3.6, §4, §8 SUPERSEDED-BY GD-1 (2026-05-17 — peninsula-only victory); §0 Universal Peninsular Sovereignty remains canonical and is the sole victory path
 ## Supersedes: v2 (same path), params_board_game.md §Victory Conditions, all Deed-based victory systems
 ## Dependencies: ED-302 (PT confirmed), ED-303 (CI cap at 100), ED-304 (Partition Victory), ED-305 (WA=0), ED-307 (Baralta cadet branch), BALANCE-001 (equal win probability), BALANCE-004 (Askeheim purpose)
 ## Territory numbering: geography_design.md canonical (all T-numbers match geography_design.md)
@@ -49,6 +49,8 @@ All conditions simultaneous at Accounting, held for 2 consecutive Accountings:
 **Full rules:** See designs/board_game/peninsular_strain_v1.md §6.
 
 ### 0.1 Peninsular Partition (Co-Victory — Alliance-Stalemate Negotiation)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 When exactly two factions remain AND those factions have a formal alliance or treaty on record (Formal Crown Treaty, Partition Agreement, or any Diplomatic Card that established mutual non-aggression) AND the stalemate conditions below are met — the game surfaces a negotiation prompt.
 
@@ -181,6 +183,8 @@ Key rules:
 
 
 ### 3.1 Crown — Peninsula Sovereignty
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **All conditions simultaneous at Accounting:**
 
@@ -211,6 +215,8 @@ PV ≥ 22 AND every other playable faction eliminated (Stability 0). No treaties
 ---
 
 ### 3.2 Church of Solmund — Solmundan Orthodoxy
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **Church Seizure (one-time event):** The Church may declare a Mass Seizure when CI ≥ 60. This is a one-shot bid — the Church gets exactly one attempt. CI determines the Seizure pool; the higher the CI, the stronger the bid.
 
@@ -325,6 +331,8 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + CI ≥ 60
 ---
 
 ### 3.3 Hafenmark — Dynastic Assertion (Primary)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **[Parliamentary Sovereignty STRUCK — replaced by Dynastic Assertion as primary per peninsular_strain_v1.md. Baralta's identity is divine-right claimant, not constitutional reformer.]**
 
@@ -351,6 +359,8 @@ Altonian Ecclesiastical Accord (AEA) track 0–5. Milestone: AEA = 5 + CI ≥ 60
 ---
 
 ### 3.4 Varfell — Vaynard's Three Paths
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 #### Path A — Intelligence Hegemony (PP-663 revised — VTM row struck)
 
@@ -382,6 +392,8 @@ Thread Supremacy as a faction-scale victory condition is dissolved. Thread maste
 ---
 
 ### 3.5 Restoration Movement — Cultural Revolution (5 players only, hardest mode)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 
 **Two-phase win condition:**
@@ -447,6 +459,8 @@ If either condition fails at Accounting, T9 reverts to the prior controller (or 
 ---
 
 ### 3.6 Löwenritter — Military Regency (conditional faction, post-coup)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **[Design note: Löwenritter is a transitional faction, not a conventional winning faction. Post-coup, Löwenritter holds government until a legitimate successor is installed and their own faction takes over — that new ruler leads Crown (or whichever faction claimed the capital), not Löwenritter. Regency Establishment marks a successful handoff, not a Löwenritter victory in the traditional sense. Military Consolidation represents the edge case where no legitimate successor emerges within 8 seasons — a contested end state, not a stable governance resolution.]**
 
@@ -517,6 +531,8 @@ When Löwenritter Autonomy reaches Split and Löwenritter activates: <!-- per ED
 ---
 
 ## 4. Co-Victory Pairings
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 
 | Pair | Conditions (all simultaneous at Accounting) |
@@ -665,6 +681,8 @@ Starting CI: 28. CI caps at 100. Church may declare Mass Seizure at CI ≥ 60 (o
 ---
 
 ## 8. RM Founding Mechanic (ED-620 — approved 2026-04-17)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 WA-based spontaneous emergence struck (PP-478). RM emergence in Hybrid mode is exclusively via the Founding Mechanic.
 
@@ -795,6 +813,8 @@ Simulation confirms that spoiler strategies are functional. Key findings:
 - Institutional Mandate trigger scope: [EDITORIAL: ED-324 — confirm trigger fires on Mandate-targeting actions only.]
 
 ## PP-478 Override — §3.5 Restoration Movement
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **[PP-478 SUPERSEDES §3.5 above for mode applicability.]**
 

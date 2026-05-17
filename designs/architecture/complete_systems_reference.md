@@ -198,6 +198,8 @@ Battle consequences: MS −1 (Campaign −2), IP +2/season, Political Stability 
 ---
 
 # PART 7: FACTION LAYER & VICTORY
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES all faction-specific alternate victory paths and the Partition co-victory. Universal Peninsular Sovereignty (11/15 territories sustained 2 seasons) is the sole victory condition. Content below preserved as supersession-trail evidence; victory-trigger language is struck; faction-specific tactical content remains valid as approach-to-universal-victory. Date: 2026-05-17.
+
 
 **Stability:** PP-403 repealed. Five triggers + Suppress Failure exception + Accounting Check + Consolidation recovery.
 

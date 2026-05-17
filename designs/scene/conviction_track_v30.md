@@ -4,7 +4,7 @@
 <!-- v30 baseline — renamed from designs/conviction_track/opus_design_proposal.md on 2026-04-13 -->
 # Valoria BG — Piety Track & Church Victory Redesign
 ## PP-406 through PP-418
-## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied 2026-04-17 (ED-643)
+## Date: 2026-04-05 | Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance) | Solmund correction applied | Sections §4.2, §4.3, §6, §7 SUPERSEDED-BY GD-1 (2026-05-17 — peninsula-only victory)2026-04-17 (ED-643)
 ## Scope: Piety Track, Church Seizure, CI Generation, ED-110 Victory, RM Emergence, Varfell Paths B/C, Co-Victory
 
 > **Glossary note:** **CI** = Church Influence (Church institutional advancement clock, 0–100; renamed from Church Influence per ED-782). Piety Track (CT) is always written in full. (ED-756)
@@ -249,6 +249,8 @@ This gives a 20-season timeline to CI 75 under active Church play with moderate 
 **Erosion:** If PT drops below 2 in a Church-held territory, Stability check required (see §2). Loss of territory reduces TCV sum — Church can lose its victory position.
 
 ### 4.2 Alternate Victory — Altonian Theocracy Path (PP-414)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 
 **Mechanic:** Altonian Ecclesiastical Accord (AEA) clock. Range: 0–5.
@@ -275,6 +277,8 @@ This gives a 20-season timeline to CI 75 under active Church play with moderate 
 **Interaction with Primary path:** AEA and CI accumulation run in parallel. The Church player can pursue either or both. AEA victory requires less territorial control (only T9 mandatory) but more diplomatic conditions.
 
 ### 4.3 Hollow Victory — Church + Hafenmark (PP-415)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **Trigger conditions (all must be met simultaneously):**
 - Crown Mandate ≤ 1
@@ -364,8 +368,12 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 ---
 
 ## 6. Varfell Paths B & C — Redesign (PP-417)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 ### 6.1 Path B — Southernmost Dominion (full redesign)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **Deed structure: 3 Deeds. All must be completed.**
 
@@ -378,6 +386,8 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 
 
 ### 6.2 Path C — Thread Supremacy (territory name correction + validation)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **Deed structure: 3 Deeds. Unchanged except territory references.**
 
@@ -394,6 +404,8 @@ RM **emerges as an active NPC faction** when ALL of the following are true at Ac
 ---
 
 ## 7. Co-Victory Replacement — Varfell + RM (PP-418)
+> **[SUPERSEDED-BY: GD-1]** Canon §B GD-1 (peninsula-only victory; see `canon/02_canon_constraints.md`) STRIKES this section. Content preserved as supersession-trail evidence. Date: 2026-05-17.
+
 
 **Old co-victory (DISSOLVED):** Varfell Thread Supremacy + Restoration Network Victory (both MS ≥ 50). Invalid — RM is no longer a primary faction with its own victory path.
 
