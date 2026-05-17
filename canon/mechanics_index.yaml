@@ -305,6 +305,14 @@ mechanics:
     test_status: not_implemented
     notes: "Sections 1-3 and 5 of conviction_track_v30 remain canonical post-GD-1. Sections 4.2, 4.3, 6, 7 SUPERSEDED-BY GD-1."
 
+  companion:
+    scale: personal
+    faction: universal
+    canon_sources: ["designs/godot/scene_tree_architecture.md#CompanionScene"]
+    sim_module: sim/personal/companion.py
+    test_status: not_implemented
+    notes: "Companion scene resolution. Pass 2l armature stub. Canon source is Godot scene architecture, not a design doc."
+
   beliefs:
     scale: personal
     faction: universal

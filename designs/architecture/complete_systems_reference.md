@@ -209,7 +209,7 @@ Battle consequences: MS −1 (Campaign −2), IP +2/season, Political Stability 
 
 **Acquisition:** Crown Treaty, Graduated Seizure (Ob = 6−Piety on 0–4), Dynastic Proclamation, Martial Governance. <!-- Cultural Reformation STRUCK CR-STRIKE-2026-04-19 -->
 
-**Victory:** Universal Peninsular Sovereignty (all 15, Accord ≥ 2, Political Stability ≤ 6, 2 consecutive). 8 faction-specific alternates. Partition co-victory. Shared loss: Rupture (MS 0), Altonian Conquest (IP 100), Anarchy.
+**Victory:** Universal Peninsular Sovereignty (all 15, Accord ≥ 2, Political Stability ≤ 6, 2 consecutive). ~~8 faction-specific alternates. Partition co-victory.~~ [SUPERSEDED-BY: GD-1] Shared loss: Rupture (MS 0), Altonian Conquest (IP 100), Anarchy.
 
 ---
 
