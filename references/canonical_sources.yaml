@@ -30,6 +30,15 @@ sources:
       gd_constraint: "GD-1"
       date: "2026-05-17"
 
+
+# ── Pass 2 additions (2026-05-17) ────────────────────────────────────────
+
+  mass_battle_integration_v18:
+    design_doc: designs/provincial/mass_battle_integration_v30.md
+    note: "Pass 2n companion to mass_battle_v30. Integration spec for porting sim_mb_06_v22 features into sim/provincial/massbattle.py. Does not supersede mass_battle_v30."
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2n"
+
 # Patch history (PP-665..PP-674 and beyond) → canon/patch_register_active.yaml + canon/patch_register_archive_*.yaml.
 
 

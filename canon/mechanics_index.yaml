@@ -477,7 +477,7 @@ mechanics:
       - reform_check_hook
       - threadwork_check_hook
       - lethality_scale_restoration
-    integration_plan_doc: "designs/provincial/massbattle_v18_integration_v30.md (Pass 2n pending)"
+    integration_plan_doc: "designs/provincial/mass_battle_integration_v30.md (Pass 2n canonized 2026-05-17)"
     notes: "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage."
 
   units:
