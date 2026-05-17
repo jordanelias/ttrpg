@@ -1,0 +1,983 @@
+# Valoria Mechanics Index
+#
+# Canonical registry of every mechanical system in the simulation, mapping each
+# to its canon source, sim module path, test status, dependencies, and GD constraint
+# applicability. Replaces ad-hoc grepping when reasoning about "what mechanics exist
+# at scale X for faction Y."
+#
+# Schema authoring conventions: see tools/mechanics_index_gen.py for validation rules.
+# Updates require co-commit of mechanics_index_gen.py validation pass.
+
+schema_version: 1
+last_authored: "2026-05-17"
+authoring_pass: "Pass 2j armature index v1"
+generator: "tools/mechanics_index_gen.py"
+authoring_mode: "manual_v1"
+note: |
+  Initial index population by Pass 2j manual authoring. Generator at v1 validates
+  structure and cross-references; auto-population from canon-doc scanning is
+  deferred to v2. Every entry traces to a canonical source doc and a sim/ module path.
+
+# ─── Reference metadata ────────────────────────────────────────────────────
+
+scales:
+  primitive: "Dice engine + foundational rules (params/core.md)"
+  service: "Infrastructure (state, season loop, scene manager, registry — not game mechanics per se)"
+  personal: "Character-scale individual actions"
+  thread: "Thread-layer operations (substrate mechanics)"
+  provincial: "Mass battle + provincial-scale faction actions"
+  territory: "Settlement + infrastructure layer"
+  peninsular: "Strategic-scale world tracks + season/accounting"
+  world: "Background processes (RM PT decay, miraculous events, insurgency)"
+  cross_scale: "Inter-scale handoff / echo / zoom / articulation"
+
+gd_constraints:
+  GD-1: "Peninsular Sovereignty is the sole victory condition"
+  GD-2: "Deterministic threat response precedes stochastic action selection"
+  GD-3: "Revolt -> Insurgency -> Faction emergence pipeline"
+
+test_status_values:
+  not_implemented: "stub raising NotImplementedError; canon source declared but no impl"
+  provisional: "implementation present but balance-untested"
+  validated_n100: "tested at N >= 100 sample"
+  validated_n500: "tested at N >= 500 sample"
+  validated_n1000: "tested at N >= 1000 sample"
+  canonical: "validated at N >= 1000 + matches canon expectation + GD-compliant"
+  contested: "depends on canon claim flagged as Claude-overreach contamination per Jordan diagnosis 2026-05-17 - awaiting audit"
+  superseded: "mechanic STRUCK by GD constraint - preserved as supersession-trail evidence only"
+
+# ─── Mechanics ─────────────────────────────────────────────────────────────
+
+mechanics:
+
+  # ─── PRIMITIVES (params/core.md) ─────────────────────────────────────────
+
+  die_rule_d10:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Die Rule"]
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+    notes: "d10 with chain on 10s, subtract on 1s. Foundational dice primitive."
+
+  tn_values:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#TN Values"]
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+    notes: "TN scale 5-9 mapping to action difficulty tiers."
+
+  obstacle_scale:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Obstacle Scale"]
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+
+  degrees_of_success:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Degrees of Success"]
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+    notes: "Overwhelming / Success / Partial / Failure"
+
+  continuous_engine_quasibinomial:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Continuous Engine Decision E"]
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+    notes: "Quasibinomial sampling phi ~= 2.67, p_hit=0.4. Canonized 2026-05-15."
+
+  pool_minimum:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Pool Minimum"]
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+    notes: "Pool floor 5."
+
+  net_successes_floor:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Net Successes Floor"]
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+    notes: "PP-246 floor."
+
+  momentum:
+    scale: primitive
+    faction: universal
+    canon_sources:
+      - "params/core.md#Momentum"
+      - "params/core.md#Momentum Carry"
+    sim_module: sim/autoload/dice_engine.py
+    test_status: not_implemented
+    notes: "PP-255 momentum carry mechanic."
+
+  ms_baseline_decay:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#MS Baseline Decay"]
+    sim_module: sim/peninsular/ms_track.py
+    test_status: not_implemented
+    notes: "PP-255. MS world-track per-arc decay."
+
+  coherence_zero_transition:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Coherence 0 NPC Transition"]
+    sim_module: sim/thread/coherence.py
+    test_status: not_implemented
+    notes: "PP-261. Coherence reaches 0 -> NPC."
+
+  ed_301_orthogonality:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#ED-301 Propagation"]
+    sim_module: sim/thread/coherence.py
+    test_status: not_implemented
+    notes: "TS / Coherence orthogonality."
+
+  certainty_track:
+    scale: primitive
+    faction: universal
+    canon_sources: ["params/core.md#Certainty Track"]
+    sim_module: sim/personal/conviction.py
+    test_status: not_implemented
+    notes: "PP-551 redesigned."
+
+  # ─── SERVICES (sim/autoload/) ────────────────────────────────────────────
+
+  game_state_service:
+    scale: service
+    faction: universal
+    canon_sources: ["designs/architecture/complete_systems_reference.md"]
+    sim_module: sim/autoload/game_state.py
+    test_status: not_implemented
+    notes: "Global state container - not a game mechanic, infrastructure."
+
+  season_manager_service:
+    scale: service
+    faction: universal
+    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    sim_module: sim/autoload/season_manager.py
+    test_status: not_implemented
+
+  scene_slate_service:
+    scale: service
+    faction: universal
+    canon_sources: ["designs/architecture/scale_transitions_v30.md"]
+    sim_module: sim/autoload/scene_slate.py
+    test_status: not_implemented
+
+  npc_ai_service:
+    scale: service
+    faction: universal
+    canon_sources: ["designs/architecture/complete_systems_reference.md#part-1"]
+    sim_module: sim/autoload/npc_ai.py
+    test_status: contested
+    notes: "Priority-stack contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending."
+
+  victory_check_service:
+    scale: service
+    faction: universal
+    canon_sources:
+      - "canon/02_canon_constraints.md#section-b-gd-1"
+      - "designs/provincial/victory_v30.md#section-0"
+    sim_module: sim/autoload/victory.py
+    test_status: not_implemented
+    gd_applicable: [GD-1]
+    notes: "GD-1 enforcement boundary. Sole module producing game-end faction-victory triggers."
+
+  mechanics_registry_service:
+    scale: service
+    faction: universal
+    canon_sources: ["canon/mechanics_index.yaml"]
+    sim_module: sim/autoload/registry.py
+    test_status: not_implemented
+    notes: "Loads this very index file."
+
+  # ─── PERSONAL (sim/personal/) ────────────────────────────────────────────
+
+  combat:
+    scale: personal
+    faction: universal
+    canon_sources:
+      - "designs/scene/combat_v30.md"
+      - "designs/architecture/complete_systems_reference.md#part-2"
+    params: "params/combat.md"
+    sim_module: sim/personal/combat.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [die_rule_d10, degrees_of_success]
+    notes: "Personal combat resolution. Includes Strike / Feint / Disarm / Parry / etc."
+
+  social_contest:
+    scale: personal
+    faction: universal
+    canon_sources:
+      - "designs/scene/social_contest_v30.md"
+      - "designs/architecture/complete_systems_reference.md#part-3"
+    params: "params/contest.md"
+    sim_module: sim/personal/contest.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [die_rule_d10, conviction_scar, beliefs]
+    notes: "Full Argue Pool / Exchange / Initiative / Post-Contest engine. v17 missing entirely (degenerate single-roll only)."
+
+  excommunication_tribunal:
+    scale: personal
+    faction: Church
+    canon_sources: ["designs/scene/social_contest_v30.md#section-7-1"]
+    sim_module: sim/personal/tribunal.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [social_contest, conviction_scar]
+    notes: "ED-625 Asymmetric Proceeding. Currently degenerate in v17 as single roll."
+
+  parliamentary_vote:
+    scale: personal
+    faction: universal
+    canon_sources: ["designs/scene/social_contest_v30.md#section-10"]
+    sim_module: sim/personal/parliamentary_vote.py
+    test_status: not_implemented
+    gd_applicable: [GD-3]
+    dependencies:
+      mechanics: [social_contest]
+    notes: "BG Parliamentary Vote contest. GD-3 enforcement point: extra-parliamentary status flag gates vote eligibility (promoted-RM cannot cast)."
+
+  parliamentary_stay:
+    scale: personal
+    faction: universal
+    canon_sources: ["designs/scene/social_contest_v30.md#section-10-1"]
+    sim_module: sim/personal/parliamentary_stay.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [parliamentary_vote]
+    notes: "ED-631 motion-pause mechanism."
+
+  fieldwork:
+    scale: personal
+    faction: universal
+    canon_sources:
+      - "designs/scene/fieldwork_v30.md"
+      - "designs/architecture/complete_systems_reference.md#part-5"
+    params: "params/fieldwork.md"
+    sim_module: sim/personal/fieldwork.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [die_rule_d10, investigation_npe, disposition_track, evidence_track]
+    notes: "Exploration / Investigation / Socializing. Includes Disposition Track, Evidence Track, Stealth, Exposure."
+
+  investigation_npe:
+    scale: personal
+    faction: universal
+    canon_sources: ["designs/scene/investigation_systems_v30.md"]
+    sim_module: sim/personal/investigation.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [fieldwork, npe]
+    notes: "NPE + Investigation Interface + Dialogue Lattice + Response Resolution Matrix five-filter."
+
+  disposition_track:
+    scale: personal
+    faction: universal
+    canon_sources: ["designs/scene/fieldwork_v30.md#section-5"]
+    sim_module: sim/personal/fieldwork.py
+    test_status: not_implemented
+    notes: "Cap by Bonds attribute (same formula as Knot Max per derived_stats §10.1)."
+
+  evidence_track:
+    scale: personal
+    faction: universal
+    canon_sources: ["designs/scene/fieldwork_v30.md"]
+    sim_module: sim/personal/fieldwork.py
+    test_status: not_implemented
+
+  conviction_scar:
+    scale: personal
+    faction: universal
+    canon_sources: ["designs/scene/conviction_track_v30.md#section-1"]
+    sim_module: sim/personal/conviction.py
+    test_status: not_implemented
+    notes: "Sections 1-3 and 5 of conviction_track_v30 remain canonical post-GD-1. Sections 4.2, 4.3, 6, 7 SUPERSEDED-BY GD-1."
+
+  beliefs:
+    scale: personal
+    faction: universal
+    canon_sources:
+      - "designs/scene/fieldwork_v30.md#section-5-5"
+      - "designs/scene/social_contest_v30.md#section-9-5"
+      - "designs/articulation/articulation_layer_v30.md#section-3-5"
+    sim_module: sim/personal/beliefs.py
+    test_status: not_implemented
+    notes: "Cross-doc system. Unified canon doc target similar to knots; deferred to future synthesis pass."
+
+  knots:
+    scale: personal
+    faction: universal
+    canon_sources:
+      - "designs/architecture/complete_systems_reference.md#part-8"
+      - "designs/threadwork/threadwork_v30.md#section-2-6"
+      - "designs/threadwork/threadwork_v30.md#section-3-5"
+      - "designs/scene/fieldwork_v30.md#section-2-6"
+      - "designs/scene/fieldwork_v30.md#section-5-6"
+      - "designs/scene/social_contest_v30.md#section-9-4"
+      - "designs/articulation/articulation_layer_v30.md#section-2-4"
+      - "designs/articulation/articulation_layer_v30.md#section-6"
+      - "designs/scene/derived_stats_v30.md#section-10-1"
+    unified_canon_target: "designs/personal/knots_v30.md (Pass 2g, pending)"
+    sim_module: sim/personal/knots.py
+    pp: PP-632
+    test_status: not_implemented
+    dependencies:
+      mechanics: [coherence_track, disposition_track]
+    primitives:
+      pool: "(Bonds*2)+3"
+      max: "floor(Bonds/2)+1"
+      tiers: {close: 5, medium: 2, loose: 1}
+      rupture: "Disposition -> -4"
+      loss: "Coherence -1 mandatory"
+    notes: "Mechanically complete across 9 canon doc fragments. Pass 2g unifies into single doc."
+
+  # ─── THREAD (sim/thread/) ────────────────────────────────────────────────
+
+  thread_leap:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    params: "params/threadwork.md"
+    sim_module: sim/thread/operations.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [die_rule_d10, coherence_track]
+
+  thread_weaving:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    sim_module: sim/thread/operations.py
+    test_status: not_implemented
+
+  thread_pulling:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    sim_module: sim/thread/operations.py
+    test_status: not_implemented
+
+  thread_past_pulling:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    sim_module: sim/thread/operations.py
+    test_status: not_implemented
+
+  thread_locking:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    sim_module: sim/thread/operations.py
+    test_status: not_implemented
+
+  thread_dissolution:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    sim_module: sim/thread/operations.py
+    test_status: not_implemented
+
+  thread_mending:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-2"]
+    sim_module: sim/thread/operations.py
+    test_status: not_implemented
+    notes: "Depth Ob -1, immune to opposition."
+
+  collective_thread_operations:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#section-2-5"]
+    sim_module: sim/thread/collective.py
+    test_status: not_implemented
+    notes: "Multi-practitioner Thread operations."
+
+  opposing_thread_operations:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#section-2-6"]
+    sim_module: sim/thread/opposing.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [knots]
+    notes: "PP-632 - Knot Strain interaction with opposing operations."
+
+  coherence_track:
+    scale: thread
+    faction: universal
+    canon_sources:
+      - "designs/threadwork/threadwork_v30.md#part-3"
+      - "canon/02_canon_constraints.md#section-a-p-10"
+      - "canon/02_canon_constraints.md#section-a-p-15"
+    sim_module: sim/thread/coherence.py
+    test_status: not_implemented
+    notes: "Coherence 10-to-0 track per Foundations P-10, P-15."
+
+  co_movement:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-4"]
+    sim_module: sim/thread/co_movement.py
+    test_status: not_implemented
+    notes: "Version C with 15 cards. Inseparability P-01 enforcement."
+
+  rendering_stability:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-5"]
+    sim_module: sim/thread/rendering.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [coherence_track]
+    notes: "P-07 - Calamity = rendered-side."
+
+  threadcut_beings:
+    scale: thread
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-6"]
+    sim_module: sim/thread/threadcut.py
+    test_status: not_implemented
+    notes: "P-06 - no layer-2 self-rendering."
+
+  # ─── PROVINCIAL (sim/provincial/) ────────────────────────────────────────
+
+  mass_battle:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "designs/provincial/mass_battle_v30.md"
+      - "designs/architecture/complete_systems_reference.md#part-6"
+    params: "params/mass_combat.md"
+    sim_module: sim/provincial/massbattle.py
+    test_status: not_implemented
+    gd_applicable: [GD-1]
+    v22_features_pending:
+      - multi_unit_orchestrator
+      - freed_attacker_flanking
+      - morale_cascade_ob_1_on_rout
+      - rout_contagion_minus_1_morale_braked
+      - cavalry_pursuit_speed_tiers
+      - simultaneous_resolution_centroid_caching
+      - cell_displacement_ripple
+      - rally_check_hook
+      - reform_check_hook
+      - threadwork_check_hook
+      - lethality_scale_restoration
+    integration_plan_doc: "designs/provincial/massbattle_v18_integration_v30.md (Pass 2n pending)"
+    notes: "v17 M3 has <5% of v22 feature surface. Pass 2n authors the full port plan from sim_mb_06_v22 lineage."
+
+  units:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "designs/scene/combat_v30.md#section-11"
+      - "designs/provincial/mass_battle_v30.md"
+    sim_module: sim/provincial/units.py
+    test_status: not_implemented
+    notes: "Levy / LightInf / HeavyInf / Cavalry. Martial / Endurance / Discipline stats per Tier 2 gap_analysis."
+
+  tactic_cards:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "designs/provincial/mass_battle_v30.md"
+      - "tests/sim/v17-integration/m6_faction_actions.py"
+    sim_module: sim/provincial/tactic_cards.py
+    test_status: contested
+    notes: "Card pool contents may include Claude-overreach contamination per Jordan diagnosis 2026-05-17. Audit pending before authoring new cards."
+
+  royal_progress:
+    scale: provincial
+    faction: Crown
+    canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-1"]
+    sim_module: sim/provincial/crown_initiative.py
+    test_status: not_implemented
+    open_editorial: ED-840
+    notes: "Royal Progress Ob iteration pending Pass 2h - ED-840 formula contradiction (canon text says easier-when-Accord-high but formula gives opposite)."
+
+  great_work:
+    scale: provincial
+    faction: Crown
+    canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-1"]
+    sim_module: sim/provincial/crown_initiative.py
+    test_status: not_implemented
+
+  coronation_renewal:
+    scale: provincial
+    faction: Crown
+    canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-1"]
+    sim_module: sim/provincial/crown_initiative.py
+    test_status: not_implemented
+
+  excommunication_action:
+    scale: provincial
+    faction: Church
+    canon_sources:
+      - "designs/provincial/faction_canon_v30.md#section-8-2"
+      - "designs/scene/social_contest_v30.md#section-7-1"
+    sim_module: sim/provincial/excommunication.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [excommunication_tribunal]
+    notes: "Current v17 implementation is degenerate single-roll. Full tribunal procedure required."
+
+  absolution:
+    scale: provincial
+    faction: Church
+    canon_sources: ["designs/provincial/faction_canon_v30.md#section-8"]
+    sim_module: sim/provincial/absolution.py
+    test_status: not_implemented
+
+  council_solmund:
+    scale: provincial
+    faction: Church
+    canon_sources: ["designs/provincial/faction_canon_v30.md"]
+    sim_module: sim/provincial/council_solmund.py
+    test_status: not_implemented
+    notes: "Rare 1/arc gathering."
+
+  charter_of_liberties:
+    scale: provincial
+    faction: Hafenmark
+    canon_sources: ["designs/provincial/faction_canon_v30.md#section-6"]
+    sim_module: sim/provincial/charter_liberties.py
+    test_status: not_implemented
+
+  vaynards_hall:
+    scale: provincial
+    faction: Varfell
+    canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-3"]
+    sim_module: sim/provincial/vaynards_hall.py
+    test_status: contested
+    notes: "Module name placeholder pending Jordan rename. Current canon mechanic (W -1 + Mil -1 -> +1 L) flagged broken by Jordan 2026-05-17 (double-cost asymmetry). Current canon flavor framing (mead-hall / Tribune Network / Heorot / Althing anchors stitched into Reinhardt anchor) flagged as contamination. Canonical Vaynard identity per canon/supersession_register.yaml CR-STRIKE-2026-04-19 is Reinhardt-coded military conqueror. Mechanic + name redesign pending."
+
+  einhir_revival:
+    scale: provincial
+    faction: Varfell
+    canon_sources:
+      - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-1"
+    canon_authoring_target: "designs/provincial/einhir_revival_v30.md (Pass 2d, pending)"
+    sim_module: sim/provincial/einhir_revival.py
+    test_status: validated_n1000_v12c
+    test_results:
+      v12c_n1000: {varfell_win_rate: 22.5, in_band_20_30: true}
+    dependencies:
+      mechanics: [restoration_movement, territory_temperaments]
+    notes: "v12c balance-validated mechanic shape. Pass 2d canon authoring pending faction contamination audit. Replaces CR-STRIKE-2026-04-19 Cultural Reformation as Varfell's territorial mechanic."
+
+  altonian_reinforcements:
+    scale: provincial
+    faction: Hafenmark
+    canon_sources:
+      - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-3"
+    canon_authoring_target: "designs/provincial/altonian_reinforcements_v30.md (Pass 2e, pending)"
+    sim_module: sim/provincial/altonian_reinforcements.py
+    test_status: validated_n1000_v12c
+    notes: "v12c version was auto-at-arc-boundary. Pass 2e iteration adds choice-lock (Jordan 2026-05-17): once invoked, Hafenmark Standing-with-other-parliamentaries permanently locked <= +1."
+
+  hafenmark_equipment:
+    scale: provincial
+    faction: Hafenmark
+    canon_sources: []
+    canon_authoring_target: "designs/provincial/hafenmark_equipment_v30.md (Pass 2e, pending)"
+    sim_module: sim/provincial/tactic_cards.py
+    test_status: contested
+    notes: "Wagenburg + Bombards tactic cards per Jordan 2026-05-17 (Hussite battle wagons + proto-firearms). Pass 2e canon authoring pending contamination audit. Dependency: tactic_cards module pool may need to be partially struck before adding new cards."
+
+  infrastructure_reclamation:
+    scale: provincial
+    faction: Church
+    canon_sources: []
+    canon_authoring_target: "designs/provincial/infrastructure_reclamation_v30.md (Pass 2f, pending)"
+    sim_module: sim/provincial/infrastructure_reclamation.py
+    test_status: not_implemented
+    notes: "When Church invades territory with existing Church-built infrastructure (Religious Buildings / Templar Stations / Inquisitor Bases), attacker pool +(infra_count + max(0, PT-3)), defender pool -min(3, floor(bonus/2)). Cap +6/-3. Pass 2f canon authoring pending."
+
+  home_sanctuary_t9:
+    scale: provincial
+    faction: Church
+    canon_sources: []
+    canon_authoring_target: "designs/provincial/home_sanctuary_t9_v30.md (Pass 2f, pending)"
+    sim_module: sim/provincial/home_sanctuary.py
+    test_status: not_implemented
+    notes: "T9 invasion Ob +4 for first 12 seasons. End conditions: Church PT<3 OR Church L<2.5 OR any faction holds CB vs Church."
+
+  parliamentary_transfer:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-4"
+    canon_authoring_target: "designs/provincial/parliamentary_transfer_v30.md (Pass 2h, pending)"
+    sim_module: sim/provincial/parliamentary_transfer.py
+    test_status: validated_n1000_v12c
+    dependencies:
+      mechanics: [parliamentary_vote]
+    notes: "CB-required, 4 modes (adversarial / consensual / punishment / appeasement). Crown auto-CB <6. Pass 2h canon authoring pending."
+
+  mass_seizure:
+    scale: provincial
+    faction: Church
+    canon_sources:
+      - "designs/scene/conviction_track_v30.md#section-2"
+      - "designs/provincial/ci_political_v30.md#section-7-6"
+      - "designs/provincial/victory_v30.md#section-3-2"
+    sim_module: sim/provincial/mass_seizure.py
+    test_status: not_implemented
+    gd_applicable: [GD-1]
+    pp: PP-411
+    notes: "3 canon sources potentially drifted. Pass 2f reconciliation pending. Per supersession_register 250715f: declaration probabilistic P(declare) = ((CI-60)/40)^3.3. GD-1: produces territorial conversion, not game-end victory trigger."
+
+  crown_treaty:
+    scale: provincial
+    faction: Crown
+    canon_sources: []
+    canon_authoring_target: "designs/provincial/treaty_v30.md (Pass 2h, pending - currently no dedicated canon doc)"
+    sim_module: sim/provincial/treaty.py
+    test_status: not_implemented
+
+  treaty_expiration:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-5"
+    canon_authoring_target: "designs/provincial/treaty_expiration_v30.md (Pass 2h, pending)"
+    sim_module: sim/provincial/treaty.py
+    test_status: validated_n1000_v12c
+    notes: "90-95%/arc lapse per v12c balance. Crown nerf primary effect."
+
+  faction_action_dispatch:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "canon/02_canon_constraints.md#section-b-gd-2"
+      - "designs/provincial/faction_canon_v30.md"
+    params: "params/factions.md"
+    sim_module: sim/provincial/faction_action.py
+    test_status: not_implemented
+    gd_applicable: [GD-2]
+    notes: "GD-2 enforcement boundary. Mandatory actions before stochastic candidate generation. Up to 3 mandatories per faction per season."
+
+  military_conquest:
+    scale: provincial
+    faction: universal
+    canon_sources:
+      - "designs/provincial/mass_battle_v30.md"
+      - "canon/02_canon_constraints.md#section-b-gd-1"
+    sim_module: sim/provincial/faction_action.py
+    test_status: not_implemented
+    dependencies:
+      mechanics: [mass_battle]
+    notes: "HR-8 hard rule: military conquest = mass battles, NOT single Mil-vs-Ob rolls."
+
+  govern:
+    scale: provincial
+    faction: universal
+    canon_sources: ["designs/provincial/faction_canon_v30.md"]
+    sim_module: sim/provincial/faction_action.py
+    test_status: not_implemented
+    gd_applicable: [GD-2]
+    notes: "GD-2 mandatory trigger: Accord <= 2 garrisoned territory."
+
+  muster:
+    scale: provincial
+    faction: universal
+    canon_sources: ["designs/provincial/faction_canon_v30.md"]
+    sim_module: sim/provincial/faction_action.py
+    test_status: not_implemented
+    gd_applicable: [GD-2]
+    notes: "GD-2 mandatory trigger: Accord <= 3 ungarrisoned territory."
+
+  # ─── TERRITORY (sim/territory/) ──────────────────────────────────────────
+
+  settlement_state:
+    scale: territory
+    faction: universal
+    canon_sources: ["designs/territory/settlement_layer_v30.md"]
+    sim_module: sim/territory/settlement.py
+    test_status: not_implemented
+    notes: "Order / Prosperity / Population stats. Tier 2 gap per gap_analysis.md."
+
+  infrastructure:
+    scale: territory
+    faction: universal
+    canon_sources:
+      - "designs/territory/settlement_layer_v30.md"
+      - "tests/sim/v17-integration/gap_analysis.md"
+    sim_module: sim/territory/infrastructure.py
+    test_status: not_implemented
+    notes: "Religious Buildings + Templar Stations + Inquisitor Bases + Forts. Canon-declared, implementation pending."
+
+  territory_adjacency:
+    scale: territory
+    faction: universal
+    canon_sources:
+      - "designs/territory/settlement_adjacency_v30.md"
+      - "designs/territory/valoria_geography_v30.yaml"
+    sim_module: sim/territory/adjacency.py
+    test_status: not_implemented
+
+  territory_temperaments:
+    scale: territory
+    faction: universal
+    canon_sources: ["designs/territory/territory_temperaments_v30.md"]
+    sim_module: sim/territory/temperaments.py
+    test_status: not_implemented
+    notes: "5-temperament typology."
+
+  # ─── PENINSULAR (sim/peninsular/) ────────────────────────────────────────
+
+  season_loop:
+    scale: peninsular
+    faction: universal
+    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    sim_module: sim/peninsular/season.py
+    test_status: not_implemented
+
+  accounting_cascade:
+    scale: peninsular
+    faction: universal
+    canon_sources: ["designs/architecture/campaign_architecture_v30.md"]
+    sim_module: sim/peninsular/accounting.py
+    test_status: not_implemented
+    notes: "13-step end-of-season cascade."
+
+  ci_track:
+    scale: peninsular
+    faction: Church
+    canon_sources: ["designs/scene/conviction_track_v30.md#section-3"]
+    sim_module: sim/peninsular/ci_track.py
+    test_status: not_implemented
+    pp: PP-412
+    notes: "Church Influence world-track. SW-weighted CI generation per Tier 2 gap."
+
+  rs_track:
+    scale: peninsular
+    faction: universal
+    canon_sources: ["designs/threadwork/threadwork_v30.md#part-5"]
+    sim_module: sim/peninsular/rs_track.py
+    test_status: not_implemented
+    notes: "Rendering Stability world-track."
+
+  ms_track:
+    scale: peninsular
+    faction: universal
+    canon_sources: ["params/core.md#MS Baseline Decay"]
+    sim_module: sim/peninsular/ms_track.py
+    test_status: not_implemented
+    notes: "Mass Suspension world-track. PP-255 baseline decay."
+
+  ip_track:
+    scale: peninsular
+    faction: Hafenmark
+    canon_sources: ["designs/provincial/peninsular_strain_v30.md"]
+    sim_module: sim/peninsular/ip_track.py
+    test_status: not_implemented
+    notes: "Altonian Imperial Pressure world-track."
+
+  peninsular_sovereignty:
+    scale: peninsular
+    faction: universal
+    canon_sources:
+      - "canon/02_canon_constraints.md#section-b-gd-1"
+      - "designs/provincial/victory_v30.md#section-0"
+    sim_module: sim/autoload/victory.py
+    test_status: not_implemented
+    gd_applicable: [GD-1]
+    notes: "GD-1 sole victory condition. 11+ of 15 territories sustained 2 consecutive seasons with Accord >= 2 and Political Stability <= 6."
+
+  # ─── WORLD (sim/world/) ──────────────────────────────────────────────────
+
+  restoration_movement:
+    scale: world
+    faction: emergent
+    canon_sources:
+      - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-2"
+      - "designs/scene/conviction_track_v30.md#section-5"
+    canon_authoring_target: "designs/provincial/restoration_movement_v30.md (Pass 2d, pending)"
+    sim_module: sim/world/restoration_movement.py
+    test_status: validated_n1000_v12c
+    gd_applicable: [GD-3]
+    dependencies:
+      mechanics: [insurgency_pipeline]
+    notes: "World-level PT decay (0.35 chance/arc, skips Church-held + Inquisitor-held; Varfell-coopt bonus). RM emergence pipeline per GD-3."
+
+  miraculous_event:
+    scale: world
+    faction: universal
+    canon_sources: ["designs/scene/miraculous_event_v30.md"]
+    sim_module: sim/world/miraculous_event.py
+    test_status: not_implemented
+
+  insurgency_pipeline:
+    scale: world
+    faction: emergent
+    canon_sources: ["canon/02_canon_constraints.md#section-b-gd-3"]
+    canon_authoring_target: "designs/world/insurgency_pipeline_v30.md (Pass 2i, pending)"
+    sim_module: sim/world/insurgency_pipeline.py
+    test_status: not_implemented
+    gd_applicable: [GD-3]
+    notes: "GD-3 enforcement boundary. State machine: disorganized -> emergent -> extra-parliamentary | parliamentary. Promoted-RM with PT<3 emergence is extra-parliamentary."
+
+  npe:
+    scale: world
+    faction: universal
+    canon_sources: ["designs/scene/investigation_systems_v30.md"]
+    sim_module: sim/world/npe.py
+    test_status: not_implemented
+    notes: "NPC Population Engine."
+
+  # ─── CROSS-SCALE (sim/cross_scale/) ──────────────────────────────────────
+
+  domain_echo:
+    scale: cross_scale
+    faction: universal
+    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-5"]
+    sim_module: sim/cross_scale/domain_echo.py
+    test_status: not_implemented
+    notes: "Scene -> Faction propagation. ED-300 autonomous resolution."
+
+  zoom_in_out:
+    scale: cross_scale
+    faction: universal
+    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-4"]
+    sim_module: sim/cross_scale/zoom_in_out.py
+    test_status: not_implemented
+
+  handoff_rules:
+    scale: cross_scale
+    faction: universal
+    canon_sources: ["designs/architecture/scale_transitions_v30.md#section-3"]
+    sim_module: sim/cross_scale/handoff_rules.py
+    test_status: not_implemented
+    notes: "8 handoff rules: Personal<->Thread, Personal<->Faction, Personal<->Scene, Scene<->Faction Domain Echo, Thread<->Faction, Thread<->Mass, Mass<->Personal General Duel, Scene<->Mass, Fieldwork<->All."
+
+  articulation_layer:
+    scale: cross_scale
+    faction: universal
+    canon_sources: ["designs/articulation/articulation_layer_v30.md"]
+    sim_module: sim/cross_scale/articulation.py
+    test_status: not_implemented
+    pp: PP-688
+    notes: "Tier 1 Protagonist UI Lens / Tier 2 Trigger Ruleset / Tier 3 Chronicle Generator."
+
+# ─── Categorical groupings ─────────────────────────────────────────────────
+
+categories:
+
+  victory_paths:
+    # GD-1: exactly one entry permitted
+    - peninsular_sovereignty
+
+  faction_unique_actions:
+    Crown:
+      - royal_progress
+      - great_work
+      - coronation_renewal
+      - crown_treaty
+    Church:
+      - excommunication_action
+      - absolution
+      - council_solmund
+      - mass_seizure
+      - infrastructure_reclamation
+      - home_sanctuary_t9
+    Hafenmark:
+      - charter_of_liberties
+      - altonian_reinforcements
+      - hafenmark_equipment
+    Varfell:
+      - vaynards_hall
+      - einhir_revival
+    universal:
+      - military_conquest
+      - parliamentary_transfer
+      - govern
+      - muster
+    emergent:
+      - restoration_movement
+      - insurgency_pipeline
+
+  cross_scale_bridges:
+    - domain_echo
+    - zoom_in_out
+    - handoff_rules
+    - articulation_layer
+
+  primitives:
+    - die_rule_d10
+    - tn_values
+    - obstacle_scale
+    - degrees_of_success
+    - continuous_engine_quasibinomial
+    - pool_minimum
+    - net_successes_floor
+    - momentum
+    - ms_baseline_decay
+    - coherence_zero_transition
+    - certainty_track
+
+  derived_stats:
+    # cross-scale stat-system - canon designs/scene/derived_stats_v30.md
+    note: "Vitality / Stamina / Composure / Concentration / Thread Fatigue / Disposition cap / Knot max - implemented across multiple sim modules, not a single mechanic"
+
+# ─── Drift report (filled by generator) ────────────────────────────────────
+
+drift_report:
+  last_generation: "2026-05-17"
+  mechanics_total: 70
+  by_test_status:
+    not_implemented: 60
+    contested: 4
+    validated_n1000_v12c: 5
+    superseded: 0
+    canonical: 0
+  contamination_flags:
+    - vaynards_hall: "mechanic + name redesign pending"
+    - npc_ai_service: "priority-stack contents pending audit"
+    - tactic_cards: "card pool contents pending audit"
+    - hafenmark_equipment: "depends on tactic_cards audit"
+  gd_constraint_coverage:
+    GD-1: [victory_check_service, peninsular_sovereignty, mass_battle, mass_seizure]
+    GD-2: [faction_action_dispatch, govern, muster]
+    GD-3: [insurgency_pipeline, restoration_movement, parliamentary_vote]
+  missing_canon_doc:
+    # mechanics with canon_authoring_target but no canon_sources yet
+    - hafenmark_equipment
+    - infrastructure_reclamation
+    - home_sanctuary_t9
+    - crown_treaty
+  pending_canon_authoring:
+    Pass_2d:
+      - einhir_revival
+      - restoration_movement
+    Pass_2e:
+      - altonian_reinforcements
+      - hafenmark_equipment
+    Pass_2f:
+      - infrastructure_reclamation
+      - home_sanctuary_t9
+    Pass_2g:
+      - knots
+    Pass_2h:
+      - royal_progress (Ob iteration)
+      - parliamentary_transfer
+      - treaty_expiration
+      - crown_treaty
+    Pass_2i:
+      - insurgency_pipeline
+    Pass_2n:
+      - mass_battle (v22-rich port plan)
