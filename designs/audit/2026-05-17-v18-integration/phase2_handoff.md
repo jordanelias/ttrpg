@@ -2,6 +2,17 @@
 
 ## Status: HANDOFF — authored 2026-05-17
 
+---
+
+## Copy-paste for next chat
+
+```
+bootstrap simulation
+Read the handoff at designs/audit/2026-05-17-v18-integration/phase2_handoff.md (commit 279e2e56). Resume v18 integration — next priority is Phase 5 (faction-unique actions: Crown Initiative, Excommunication, Absolution, Council of Solmund) to diversify the win distribution from Crown 75.5% dominance.
+```
+
+---
+
 ## Session summary
 
 This chat executed Pass 3 verdict on the v18 integration audit, then implemented Phases 1-2 of the 12-phase integration plan.
