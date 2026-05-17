@@ -32,6 +32,20 @@ sources:
 
 
 # ── Pass 2 additions (2026-05-17) ────────────────────────────────────────
+  parliamentary_transfer_v18:
+    design_doc: designs/provincial/parliamentary_transfer_v30.md
+    note: "Pass 2h canonization of v12c §4.4 Parliamentary Territory Transfer (universal mechanic, validated_n1000_v12c). 4 modes (Adversarial / Consensual / Punishment / Appeasement). 8 CB sources. Resolution wrapped in Parliamentary Vote contest per social_contest §10. Forward-flags PARL-MODE-DRIFT-001, PARL-VOTE-MODIFIER-001, PARL-PROTECTION-001."
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2h"
+
+  treaty_expiration_v18:
+    design_doc: designs/provincial/treaty_expiration_v30.md
+    note: "Pass 2h canonization of v12c §4.5 Treaty Expiration (universal mechanic, validated_n1000_v12c, primary Crown-nerf lever). 90-95%/arc lapse rate. Re-binding via Senator Outward (part10 Mode III). Forward-flags TREATY-VIOLATION-001, TREATY-NARRATIVE-001, TREATY-MEMORYLESS-001."
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2h"
+    related_eds:
+      - ED-840 (closed in this commit; Royal Progress Ob iteration)
+
   knots_unified:
     design_doc: designs/personal/knots_v30.md
     note: "Pass 2g synthesis. Consolidates Knot mechanic spec from 9 canon fragments (PP-632 + threadwork §2.6 §3.5 §3.7 + fieldwork §2.6 §2.8 §5.1 §5.6 §5.6a §5.6b + social_contest §4 + articulation §2.4 §3.1 §3.5 §6.1 §6.2 + derived_stats §10.1 §14.4). Surfaces TIER-DRIFT-001 + COMPOSURE-DRIFT-001 + TRUNC-DRIFT-001 contradictions for Pass 2k resolution. Does not supersede source canon."

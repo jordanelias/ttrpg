@@ -87,6 +87,18 @@ entries:
   affected_docs:
   - designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md
   - tests/sim/v17-integration/m6_faction_actions.py
-  status: open
-  jordan_decision: pending
+  status: closed
+  resolution_date: 2026-05-17
+  resolution_pass: Pass 2h
+  resolution_commit: pending
+  jordan_decision: Option A ratified 2026-05-17 (Jordan directive earlier this session for iteration; formula matches descriptive text)
+  resolution: |
+    Ob formula iterated to max(2, floor((sum_max - sum_current) / 2)) where
+    sum_max = 7 * num_owned_territories, sum_current = sum of own-territory
+    Accord values. Matches descriptive text ("easier when Accord is high").
+    Floor 2 prevents trivial auto-success at peak Accord. Cost (W -2),
+    Pool (I + Standing modifier), outcome table unchanged. part10 §3.2
+    amended with iteration note + verification table at illustrative Crown
+    states. Design intent clarified: Royal Progress is maintenance action,
+    not crisis recovery (use Coronation Renewal or Great Work for crisis).
 

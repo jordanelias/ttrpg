@@ -506,8 +506,8 @@ mechanics:
     canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-1"]
     sim_module: sim/provincial/crown_initiative.py
     test_status: not_implemented
-    open_editorial: ED-840
-    notes: "Royal Progress Ob iteration pending Pass 2h - ED-840 formula contradiction (canon text says easier-when-Accord-high but formula gives opposite)."
+    open_editorial: ED-840 (closed 2026-05-17 Pass 2h, commit pending)
+    notes: "Royal Progress Ob iteration ratified 2026-05-17 Pass 2h: Ob = max(2, floor((sum_max - sum_current) / 2)) where sum_max = 7 × num_owned_territories. Matches descriptive text. part10 §3.2 amended."
 
   great_work:
     scale: provincial
@@ -621,7 +621,7 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-4"
-    canon_authoring_target: "designs/provincial/parliamentary_transfer_v30.md (Pass 2h, pending)"
+    canon_authoring_target: "designs/provincial/parliamentary_transfer_v30.md (Pass 2h canonized 2026-05-17)"
     sim_module: sim/provincial/parliamentary_transfer.py
     test_status: validated_n1000_v12c
     dependencies:
@@ -654,7 +654,7 @@ mechanics:
     faction: universal
     canon_sources:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-5"
-    canon_authoring_target: "designs/provincial/treaty_expiration_v30.md (Pass 2h, pending)"
+    canon_authoring_target: "designs/provincial/treaty_expiration_v30.md (Pass 2h canonized 2026-05-17)"
     sim_module: sim/provincial/treaty.py
     test_status: validated_n1000_v12c
     notes: "90-95%/arc lapse per v12c balance. Crown nerf primary effect."

@@ -112,12 +112,29 @@ This shape is the design template for the Crown Initiative card.
 |----------|-------|
 | **Cost** | Wealth −2 (treasury for entertainment, gifts to hosts) |
 | **Pool** | Influence + Standing modifier |
-| **Ob** | floor(sum of own territories Accord / 2) — easier when Accord is high (people aren't restive); harder when realm is in turmoil |
+| **Ob** | `max(2, floor((sum_max - sum_current) / 2))` where `sum_max = 7 × num_owned_territories`, `sum_current = Σ(territory.Accord for territory in owned)`. Discontent-driven: easier when Accord is high (small `sum_max - sum_current`); harder when realm is in turmoil. Floor at 2 prevents trivial auto-success at peak Accord. **[ITERATED 2026-05-17 per ED-840 closure, Pass 2h. Previous formula `floor(sum_accord/2)` produced OPPOSITE behavior; was canon-vs-text contradiction.]** |
 | **Outcomes** |  |
 | Overwhelming | Mandate +2; Standing +1; all own territories at Accord 1 → Accord 2 |
 | Success | Mandate +1; one own territory of choice (lowest Accord) +1 Accord |
 | Partial | Standing +1 (tour happened, didn't move the needle); cost still paid |
 | Failure | Standing −1 (no welcome at one stop); cost paid; no L gain |
+
+**ED-840 closure note (2026-05-17, Pass 2h):**
+
+The Ob formula was iterated to match the descriptive text. Prior canon stated `floor(sum_accord/2)` which produced OPPOSITE behavior from the descriptive clause (action got HARDER as Accord rose, not EASIER). M7 balance sweep N=1000 surfaced the contradiction: starting sum_accord ≈ 30-33 across 6 Crown territories produced Ob 15-16 vs Pool 5, mathematically unwinnable. Pass 2h ratifies Option A from ED-840: revise formula to `max(2, floor((sum_max - sum_current) / 2))` where `sum_max = 7 × num_owned_territories`. Behavior matches descriptive text. Floor 2 prevents trivial auto-success at peak Accord.
+
+Verification at illustrative Crown states (Cost: W -2; Pool: I=5 + Standing):
+
+| State | sum_current / sum_max | Ob | Net (Pool 5) | Outcome density |
+|---|---|---|---|---|
+| Peak (Accord 7 × 6 terr) | 42/42 | 2 (floor) | +3 | Overwhelming likely |
+| Starting (Accord 5.5 × 6) | 33/42 | 4 | +1 | Partial-Success boundary |
+| Strained (Accord 4 × 6) | 24/42 | 9 | −4 | Failure likely |
+| Collapsing (Accord 3 × 3) | 9/21 | 6 | ≤−2 (reduced Standing) | Failure |
+
+Design intent: Royal Progress is the *maintenance* action for governing Crowns, not a recovery action. Cannot restore a collapsing realm. Crisis recovery uses Coronation Renewal (Mode II) or Great Work (next §). Historical anchor (Henry I touring settled realm; Elizabeth I touring loyal counties) is preserved — both monarchs progressed at peak governance, not in crisis.
+
+ED-840 closed.
 
 **Flavor:** The King travels through his realm, holds court at each stop,
 hears petitions, dispenses justice. Accord-1 territories get the Sovereign's
