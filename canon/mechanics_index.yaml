@@ -329,7 +329,7 @@ mechanics:
       - "designs/articulation/articulation_layer_v30.md#section-2-4"
       - "designs/articulation/articulation_layer_v30.md#section-6"
       - "designs/scene/derived_stats_v30.md#section-10-1"
-    unified_canon_target: "designs/personal/knots_v30.md (Pass 2g, pending)"
+    unified_canon_target: "designs/personal/knots_v30.md (Pass 2g canonized 2026-05-17)"
     sim_module: sim/personal/knots.py
     pp: PP-632
     test_status: not_implemented
