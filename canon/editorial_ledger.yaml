@@ -374,3 +374,13 @@ entries:
   status: open
   proposed_resolution: Confirm per-faction split (faster delivery per-faction).
   jordan_decision: pending
+- id: ED-864
+  date: '2026-05-17'
+  severity: P2
+  type: audit_decisions_filed
+  description: 'Scene combat + Contest! audit decisions (6 records) filed at designs/audit/2026-05-17-scene-combat-contest/decisions.md. Covers: combat C4 direction; Contest! ED-295 Option D; Contest! ED-296 floor fix; Contest! ED-297 acceptance; M3+print_status_block hook drift; Contest! plain-English renames.'
+  affected_docs:
+    - designs/audit/2026-05-17-scene-combat-contest/decisions.md
+  status: open
+  proposed_resolution: 'Doc propagation (contest.md rename + math fixes) ships next commit. BattleCON study + sim follow.'
+  jordan_decision: 'ratified 2026-05-17'
