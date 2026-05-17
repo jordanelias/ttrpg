@@ -1,16 +1,10 @@
 entries:
-- id: ED-788
-  date: 2026-05-03
-  description: '[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking mechanical work.'
-  status: deferred
-  severity: P2
-  source: ED-755 D2.2 spin-out 2026-05-03
-  jordan_decision: 2026-05-09 — skip.
 - id: ED-811
   date: 2026-05-11
-  description: 'Engagement damage formula ambiguous. Phase 5 pool split does not specify whether damage = (net_successes *
-    1+Power) for attacker only, or (margin between off/def pools * 1+Power), or other. SIM-MB-04 INTERPRETATION-01 used margin
-    model and produced one-turn kills via margins of 5-6. Needs explicit formula statement. Source: SIM-MB-04 FINDING-1.'
+  description: 'Engagement damage formula ambiguous. Phase 5 pool split does not specify whether damage = (net_successes
+    * 1+Power) for attacker only, or (margin between off/def pools * 1+Power), or other. SIM-MB-04 INTERPRETATION-01
+    used margin model and produced one-turn kills via margins of 5-6. Needs explicit formula statement. Source:
+    SIM-MB-04 FINDING-1.'
   severity: P1
   type: missing
   archetype: A2
@@ -21,9 +15,9 @@ entries:
   jordan_decision: pending
 - id: ED-813
   date: 2026-05-11
-  description: 'ED-801 withdrawal phase gate unspecified. Jordan ruling confirmed Withdraw plan + speed advantage = orderly
-    disengage. SIM-MB-04 implemented as Phase 5 gate but it may be a Phase 3 gate instead, changing positioning logic materially.
-    Source: SIM-MB-04 FINDING-7.'
+  description: 'ED-801 withdrawal phase gate unspecified. Jordan ruling confirmed Withdraw plan + speed advantage
+    = orderly disengage. SIM-MB-04 implemented as Phase 5 gate but it may be a Phase 3 gate instead, changing positioning
+    logic materially. Source: SIM-MB-04 FINDING-7.'
   severity: P2
   type: missing
   archetype: A2
@@ -33,13 +27,14 @@ entries:
   jordan_decision: pending
 - id: ED-822
   date: 2026-05-11
-  description: 'Volley/Engagement composition balance. SIM-MB-05A composition sweep showed ranged-heavy compositions winning
-    disproportionately (pure-melee vs ranged-heavy 4 to 1 disadvantage). SIM-MB-05C tested TN6 vs TN7 Volley calibration:
-    TN7 improves pure-melee-vs-balanced from 28 percent to 36 percent (8 percentage point gain) but pure-melee-vs-ranged-heavy
-    remains roughly unchanged (15-16 percent). TN7 is partial improvement but does not fully resolve. Recommendation: adopt
-    TN7 as clean primary fix; raise composition-balance secondary measure as ED-825 for Phase 3+ work. Secondary measure options:
-    a) melee_pct as engagement Ob bonus for heavier-melee side; b) Volley pool cap = floor(volley_pool / 2); c) ranged_DR
-    scaled by defender melee_pct (heavier front rank shields back rank). Source: SIM-MB-05C section 3.2.'
+  description: 'Volley/Engagement composition balance. SIM-MB-05A composition sweep showed ranged-heavy compositions
+    winning disproportionately (pure-melee vs ranged-heavy 4 to 1 disadvantage). SIM-MB-05C tested TN6 vs TN7 Volley
+    calibration: TN7 improves pure-melee-vs-balanced from 28 percent to 36 percent (8 percentage point gain) but
+    pure-melee-vs-ranged-heavy remains roughly unchanged (15-16 percent). TN7 is partial improvement but does not
+    fully resolve. Recommendation: adopt TN7 as clean primary fix; raise composition-balance secondary measure as
+    ED-825 for Phase 3+ work. Secondary measure options: a) melee_pct as engagement Ob bonus for heavier-melee side;
+    b) Volley pool cap = floor(volley_pool / 2); c) ranged_DR scaled by defender melee_pct (heavier front rank shields
+    back rank). Source: SIM-MB-05C section 3.2.'
   severity: P2
   type: incongruency
   archetype: A2
@@ -50,15 +45,16 @@ entries:
   jordan_decision: pending
 - id: ED-823
   date: 2026-05-11
-  description: 'Combined attack effectiveness calibration. SIM-MB-05C 3v1 combined-attack test surfaced concern: Fibonacci-divided
-    pool concentrated at one column may be LESS effective than 3 separate column engagements. Lead Power 4 Size 3 Arrowhead
-    with 2 supporters concentrating at center: combined pool ~7 dice vs defender 1 column ~3 dice. Compared to distributed:
-    3 attackers engaging 3 columns each at ~3 dice vs defender split ~3 dice each. Distributed produces 3 simultaneous Successful
-    engagements; combined produces 1 Successful engagement against full defender HP pool. ED-805 Fibonacci denominators (1,2,3,5,8)
-    may be too aggressive. Resolution options: a) reduce denominators (1, 1.5, 2, 3, 5); b) combined attack damages all defender
-    columns proportionally; c) combined attack with single column requires defender to have a single-column shape (e.g., Arrowhead)
-    to be tactically meaningful. Test harness for 3v1 combined was incomplete in SIM-MB-05C; needs SIM-MB-06 rebuild. Severity
-    P2, defer until after Phase 6 propagation.'
+  description: 'Combined attack effectiveness calibration. SIM-MB-05C 3v1 combined-attack test surfaced concern:
+    Fibonacci-divided pool concentrated at one column may be LESS effective than 3 separate column engagements.
+    Lead Power 4 Size 3 Arrowhead with 2 supporters concentrating at center: combined pool ~7 dice vs defender 1
+    column ~3 dice. Compared to distributed: 3 attackers engaging 3 columns each at ~3 dice vs defender split ~3
+    dice each. Distributed produces 3 simultaneous Successful engagements; combined produces 1 Successful engagement
+    against full defender HP pool. ED-805 Fibonacci denominators (1,2,3,5,8) may be too aggressive. Resolution options:
+    a) reduce denominators (1, 1.5, 2, 3, 5); b) combined attack damages all defender columns proportionally; c)
+    combined attack with single column requires defender to have a single-column shape (e.g., Arrowhead) to be tactically
+    meaningful. Test harness for 3v1 combined was incomplete in SIM-MB-05C; needs SIM-MB-06 rebuild. Severity P2,
+    defer until after Phase 6 propagation.'
   severity: P2
   type: incongruency
   archetype: A2
@@ -67,38 +63,314 @@ entries:
   - params/mass_combat.md
   status: open
   jordan_decision: pending
-- id: ED-840
-  date: 2026-05-16
-  description: 'Royal Progress Ob formula contradicts its own descriptive text. Part 10 §3.2 (Mode I — Royal Progress)
-    canonical statement is: "Ob | floor(sum of own territories Accord / 2) — easier when Accord is high (people aren''t
-    restive); harder when realm is in turmoil". The formula floor(sum_accord/2) produces the OPPOSITE behavior from
-    the descriptive clause: as sum_accord rises, Ob rises (action gets HARDER), not easier. Surfaced by M7
-    balance sweep N=1000 (commit d94f1e3e): Crown Royal Progress fails at game-start because starting sum_accord ≈ 30-33
-    across 6 Crown territories produces Ob 15-16 vs Pool = Influence (5) + Standing (0) = 5; mathematically unwinnable
-    without modifier stacking. Possible resolutions: (a) revise formula to floor((max_possible - sum) / 2) where
-    max_possible = 7 × num_owned_territories, making low-Accord realms HARDER not easier; (b) revise descriptive text
-    to say "harder when Accord is high (king must show face to many contented subjects across long itineraries)" — but
-    this contradicts the Henry I / Elizabeth I historical anchor; (c) accept the formula as-is, treat Royal Progress as
-    a recovery-from-crisis action (low Accord → low Ob) and revise descriptive text accordingly. M6 implements as canon
-    literally says (option c interpretation by default). Source: M7 balance sweep + Pass-3 finding #4.'
+- id: ED-841
+  date: '2026-05-17'
   severity: P2
-  type: incongruency
-  archetype: A2
+  type: contradiction
+  source_pass: Pass 2g
+  forward_flag_id: TIER-DRIFT-001
+  description: '3-way Knot tier canon contradiction: PP-632 (Loose/Medium/Close 1/2/5) vs ED-773 fieldwork §5.6b
+    (Distant/Close 4/7) vs articulation §2.4 (mixed).'
   affected_docs:
-  - designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md
-  - tests/sim/v17-integration/m6_faction_actions.py
-  status: closed
-  resolution_date: 2026-05-17
-  resolution_pass: Pass 2h
-  resolution_commit: pending
-  jordan_decision: Option A ratified 2026-05-17 (Jordan directive earlier this session for iteration; formula matches descriptive text)
-  resolution: |
-    Ob formula iterated to max(2, floor((sum_max - sum_current) / 2)) where
-    sum_max = 7 * num_owned_territories, sum_current = sum of own-territory
-    Accord values. Matches descriptive text ("easier when Accord is high").
-    Floor 2 prevents trivial auto-success at peak Accord. Cost (W -2),
-    Pool (I + Standing modifier), outcome table unchanged. part10 §3.2
-    amended with iteration note + verification table at illustrative Crown
-    states. Design intent clarified: Royal Progress is maintenance action,
-    not crisis recovery (use Coronation Renewal or Great Work for crisis).
-
+  - complete_systems_reference.md
+  - fieldwork_v30.md §5.6b
+  - articulation_layer_v30.md §2.4
+  - knots_v30.md
+  status: open
+  proposed_resolution: 'Option A: ED-773 supersedes chronologically (Distant/Close 2-tier 4/7). Alternatives: B
+    (PP-632 stands), C (4-tier merge).'
+  jordan_decision: pending
+- id: ED-842
+  date: '2026-05-17'
+  severity: P3
+  type: citation_error
+  source_pass: Pass 2g
+  forward_flag_id: COMPOSURE-DRIFT-001
+  description: articulation §2.4 cites "Composure damage (5 default per ED-773)" but ED-773 fieldwork §5.6b spec
+    text says 4.
+  affected_docs:
+  - articulation_layer_v30.md §2.4
+  status: open
+  proposed_resolution: Correct articulation §2.4 citation 5 -> 4.
+  jordan_decision: pending
+- id: ED-843
+  date: '2026-05-17'
+  severity: P3
+  type: incomplete_source
+  source_pass: Pass 2g
+  forward_flag_id: TRUNC-DRIFT-001
+  description: threadwork §3.3 Coherence-1 Severed row truncated in Pass 2g extract ("All Knots +2 strain"). Need
+    full-canon verification.
+  affected_docs:
+  - threadwork_v30.md §3.3
+  - knots_v30.md §8.1
+  status: open
+  proposed_resolution: Re-fetch §3.3 in full; verify; correct knots_v30 if mismatch.
+  jordan_decision: pending
+- id: ED-844
+  date: '2026-05-17'
+  severity: P3
+  type: derivation
+  source_pass: Pass 2h
+  forward_flag_id: PARL-MODE-DRIFT-001
+  description: Parliamentary Transfer mode-specific narrative effects (Punishment no L+1, Appeasement +2 Accord)
+    are Pass 2h additions not in v12c §4.4.
+  affected_docs:
+  - parliamentary_transfer_v30.md §2
+  status: open
+  proposed_resolution: Ratify Pass 2h additions or strike (v12c §4.4 differentiates modes only by CB filter).
+  jordan_decision: pending
+- id: ED-845
+  date: '2026-05-17'
+  severity: P3
+  type: derivation
+  source_pass: Pass 2h
+  forward_flag_id: PARL-VOTE-MODIFIER-001
+  description: Parliamentary Transfer vote-bloc Pool modifier (+1D/-1D/0) is Pass 2h interpretive; not in v12c §4.4
+    or social_contest §10.
+  affected_docs:
+  - parliamentary_transfer_v30.md §4
+  status: open
+  proposed_resolution: Ratify dice-pool deltas, revise magnitudes, or strike entirely.
+  jordan_decision: pending
+- id: ED-846
+  date: '2026-05-17'
+  severity: P3
+  type: derivation_confirmation
+  source_pass: Pass 2h
+  forward_flag_id: PARL-PROTECTION-001
+  description: Parliamentary Transfer self-transfer block (§1.3) is Pass 2h derivation; v12c §4.4 does not forbid
+    self-targeting explicitly.
+  affected_docs:
+  - parliamentary_transfer_v30.md §1.3
+  status: open
+  proposed_resolution: Confirm self-transfer block (obvious case).
+  jordan_decision: pending
+- id: ED-847
+  date: '2026-05-17'
+  severity: P2
+  type: derivation
+  source_pass: Pass 2h
+  forward_flag_id: TREATY-VIOLATION-001
+  description: Treaty violation magnitudes (Standing -2/+1) in treaty_expiration §3 are Pass 2h derivation; v12c
+    §4.4.1 refs violation-CB but does not spec magnitudes.
+  affected_docs:
+  - treaty_expiration_v30.md §3
+  status: open
+  proposed_resolution: Ratify magnitudes or revise. Confirm immediate Treaty-voiding.
+  jordan_decision: pending
+- id: ED-848
+  date: '2026-05-17'
+  severity: P2
+  type: design_alternative
+  source_pass: Pass 2h
+  forward_flag_id: TREATY-NARRATIVE-001
+  description: 'Treaty Expiration 90-95%/arc lapse v12c-validated but §8.3 flagged "narratively extreme." Alternative:
+    active-maintenance model.'
+  affected_docs:
+  - treaty_expiration_v30.md §4
+  status: open
+  proposed_resolution: Keep 90%/arc (current canonical) or revise to active-maintenance (requires sim re-validation
+    N=1000).
+  jordan_decision: pending
+- id: ED-849
+  date: '2026-05-17'
+  severity: P3
+  type: derivation_confirmation
+  source_pass: Pass 2h
+  forward_flag_id: TREATY-MEMORYLESS-001
+  description: Treaty Expiration memoryless invariant (no aging effect) is Pass 2h-stated from v12c independent-per-arc-roll
+    framing.
+  affected_docs:
+  - treaty_expiration_v30.md §1.3
+  status: open
+  proposed_resolution: Confirm memoryless invariant.
+  jordan_decision: pending
+- id: ED-850
+  date: '2026-05-17'
+  severity: P2
+  type: derivation
+  source_pass: Pass 2i
+  forward_flag_id: INSURGENCY-STATS-001
+  description: Insurgency Stage 3 specific stats (I 2-3, Sta 2, W 0-1, Mil variable) are Pass 2i derivation; GD-3
+    (b) only says "L=1.0, low stats."
+  affected_docs:
+  - insurgency_pipeline_v30.md §4.2
+  - canon/02_canon_constraints.md §B GD-3
+  status: open
+  proposed_resolution: Ratify Pass 2i values or specify alternatives. Could canonize in GD-3 itself.
+  jordan_decision: pending
+- id: ED-851
+  date: '2026-05-17'
+  severity: P2
+  type: derivation
+  source_pass: Pass 2i
+  forward_flag_id: INSURGENCY-STATUS-MUTABILITY-001
+  description: Promoted Faction parliamentary status persistence (fixed after promotion) is Pass 2i derivation;
+    GD-3 (c-e) does not specify mutability.
+  affected_docs:
+  - insurgency_pipeline_v30.md §5.2
+  status: open
+  proposed_resolution: Confirm persistence (simpler) or specify mutability mechanic.
+  jordan_decision: pending
+- id: ED-852
+  date: '2026-05-17'
+  severity: P2
+  type: missing_spec
+  source_pass: Pass 2i
+  forward_flag_id: INSURGENCY-CONVICTION-DERIVATION-001
+  description: Promoted Faction Conviction derivation algorithm undefined. GD-3 (c-e) says "set by emergence conditions"
+    but no algorithm.
+  affected_docs:
+  - insurgency_pipeline_v30.md §5.4
+  - conviction_track_v30.md
+  status: open
+  proposed_resolution: 'Author algorithm: weight PT trajectory + territorial-source Convictions + action history.'
+  jordan_decision: pending
+- id: ED-853
+  date: '2026-05-17'
+  severity: P2
+  type: missing_spec
+  source_pass: Pass 2i
+  forward_flag_id: INSURGENCY-DISSOLUTION-001
+  description: Insurgency Stage 3 suppression mechanic not in GD-3.
+  affected_docs:
+  - insurgency_pipeline_v30.md §6.2
+  status: open
+  proposed_resolution: 'Option A: dissolve at territory=0 (cleaner). Option B: dissolve at L<1.0 AND territories<2
+    (mirrors formation symmetry).'
+  jordan_decision: pending
+- id: ED-854
+  date: '2026-05-17'
+  severity: P2
+  type: missing_spec
+  source_pass: Pass 2i
+  forward_flag_id: INSURGENCY-PROMOTED-DISSOLUTION-001
+  description: 'Promoted Faction Stage 4 dissolution thresholds not specified. Pass 2i §6.3 candidate: L=0 AND territory=0
+    OR Scar threshold.'
+  affected_docs:
+  - insurgency_pipeline_v30.md §6.3
+  status: open
+  proposed_resolution: Author thresholds. Same as starting-faction rules or different for emergents?
+  jordan_decision: pending
+- id: ED-855
+  date: '2026-05-17'
+  severity: P3
+  type: derivation
+  source_pass: Pass 2i
+  forward_flag_id: INSURGENCY-DEMOTE-DIRECTION-001
+  description: 'Insurgency pipeline non-symmetric model (stages 3-4 do not demote back) is Pass 2i derivation. Alternative:
+    full demote-chain.'
+  affected_docs:
+  - insurgency_pipeline_v30.md §6.4
+  status: open
+  proposed_resolution: Confirm non-symmetric (cleaner state machine) or specify full demote-chain.
+  jordan_decision: pending
+- id: ED-856
+  date: '2026-05-17'
+  severity: P2
+  type: framework_clarification
+  source_pass: Pass 2i
+  forward_flag_id: LATENT-RM-vs-INSURGENCY-RM-001
+  description: Latent RM (conviction_track §5 PP-416) vs Insurgency RM-variant (GD-3 (d)). Pass 2i adopted layered
+    interpretation (different stages of same phenomenon).
+  affected_docs:
+  - insurgency_pipeline_v30.md §1
+  - conviction_track_v30.md §5
+  - canon/02_canon_constraints.md §B GD-3
+  status: open
+  proposed_resolution: 'Confirm layered. Alternatives: A (GD-3 supersedes §5), B (§5 supersedes (d)), C (distinct
+    mechanisms).'
+  jordan_decision: pending
+- id: ED-857
+  date: '2026-05-17'
+  severity: P2
+  type: missing_spec
+  source_pass: Pass 2n
+  forward_flag_id: SPEED-1
+  description: 'Mass battle Speed tier table not canonized. sim_mb_06_v22 uses [ASSUMPTION]: Cavalry=Fast, Heavy
+    Inf=Slow, others=Standard (inferred from L429).'
+  affected_docs:
+  - mass_battle_v30.md
+  - params/mass_combat.md
+  - mass_battle_integration_v30.md
+  status: open
+  proposed_resolution: Canonize speed tier table in params/mass_combat.md. Determines cavalry pursuit (G-11) and
+    rearguard.
+  jordan_decision: pending
+- id: ED-858
+  date: '2026-05-17'
+  severity: P3
+  type: uncited_constant
+  source_pass: Pass 2n
+  forward_flag_id: POOL-0.5
+  description: POOL_VARIANT C-ii uses uncited 0.5 multiplier in max(base * 0.5 * engage_frac, base * troops_frac
+    * engage_frac). Not in patch ledger.
+  affected_docs:
+  - params/mass_combat.md
+  - mass_battle_v30.md
+  status: open
+  proposed_resolution: Canonize 0.5 with PP-NNN derivation, or remove and re-validate balance.
+  jordan_decision: pending
+- id: ED-859
+  date: '2026-05-17'
+  severity: P3
+  type: implementation_canon_drift
+  source_pass: Pass 2n
+  forward_flag_id: D-2
+  description: Mass battle uses shared grid in sim. Canon may require per-unit grid (HANDOFF_v22 §D-2).
+  affected_docs:
+  - mass_battle_v30.md
+  - mass_battle_integration_v30.md
+  status: open
+  proposed_resolution: Confirm shared grid (validated_n1000 in v17/v22) or refactor to per-unit (substantial).
+  jordan_decision: pending
+- id: ED-860
+  date: '2026-05-17'
+  severity: P3
+  type: design_decision_confirmation
+  source_pass: Pass 2n
+  forward_flag_id: D-8-interim
+  description: battery_report_v22 proposed interim multi-turn bands (broken-behavior). Pass 2n explicitly NOT canonizing.
+  affected_docs:
+  - mass_battle_integration_v30.md
+  - tests/sim/battery_report_v22.md
+  status: open
+  proposed_resolution: 'Ratify: v9 historical bands remain canonical target; sim implements missing mechanics.'
+  jordan_decision: pending
+- id: ED-861
+  date: '2026-05-17'
+  severity: P3
+  type: process_target
+  source_pass: Pass 2m
+  forward_flag_id: INTEGRATION-WEEK-CADENCE-001
+  description: v18 integration plan §6 proposed 9-week cadence Phase 1 -> Phase 12 exit. Process target.
+  affected_docs:
+  - integration_plan_v18.md §6
+  status: open
+  proposed_resolution: Confirm 9-week or adjust at first weekly check-in.
+  jordan_decision: pending
+- id: ED-862
+  date: '2026-05-17'
+  severity: P3
+  type: process_threshold
+  source_pass: Pass 2m
+  forward_flag_id: V17-V18-PARITY-TOLERANCE-001
+  description: Pass 2m §8.3 proposed ±2pp per-faction win-rate parity tolerance for v17/v18 cross-check.
+  affected_docs:
+  - integration_plan_v18.md §8.3
+  status: open
+  proposed_resolution: Ratify ±2pp or specify alternative. Tighter catches drift earlier but more false positives.
+  jordan_decision: pending
+- id: ED-863
+  date: '2026-05-17'
+  severity: P3
+  type: sequencing
+  source_pass: Pass 2m
+  forward_flag_id: PHASE-9-SEQUENCING-001
+  description: Pass 2m §11 proposed Phase 9 (faction-specific) may split per-faction if contamination audit splits.
+  affected_docs:
+  - integration_plan_v18.md §11
+  status: open
+  proposed_resolution: Confirm per-faction split (faster delivery per-faction).
+  jordan_decision: pending
