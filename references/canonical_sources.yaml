@@ -32,6 +32,12 @@ sources:
 
 
 # ── Pass 2 additions (2026-05-17) ────────────────────────────────────────
+  faction_systems_overview:
+    design_doc: designs/factions/faction_systems_overview_v30.md
+    note: "Pass 2 follow-up. Single-pane reference cataloging ~50 faction-touched mechanics across 6 layers (primitives -> peninsular). Points at canon; does not duplicate. ~80% of Pass 2 forward-flags concentrate on faction surface."
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2 follow-up"
+
   v18_integration_plan:
     design_doc: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
     note: "Pass 2m. Build roadmap mapping 72 sim/ modules to 12-phase implementation sequence with test plan + validation gates + dependency graph. 23 forward-flags accumulated for Pass 2k. v17→v18 migration discipline."
