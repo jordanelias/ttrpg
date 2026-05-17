@@ -829,6 +829,111 @@ def assert_unique_ids(additions: list) -> None:
         )
 
 
+def placeholder_names_gate(additions: list) -> None:
+    """
+    Check canon/placeholder_names.yaml for expired placeholders that still
+    appear in committed content. Halts if any expired placeholder is referenced
+    by file path or file content in this commit, UNLESS the commit itself
+    transitions that placeholder from 'expired' to 'resolved' (signaling rename
+    + content replacement happening in this very commit).
+
+    Status lifecycle (Jordan-controlled): pending -> expired -> resolved.
+      pending: hook does not halt (placeholder still in active use, audit pending)
+      expired: hook HALTS (Jordan ratified replacement decision; rename required)
+      resolved: hook does not halt (placeholder rename complete)
+
+    Registry: canon/placeholder_names.yaml
+    """
+    registry_path = "canon/placeholder_names.yaml"
+
+    # Try to load the registry from disk. If absent, skip (registry not yet
+    # deployed). This is bootstrap-safe.
+    try:
+        import os
+        if not os.path.exists(registry_path):
+            # Maybe we're running outside the repo; try a relative-to-cwd fallback
+            candidate_paths = [
+                registry_path,
+                os.path.join(os.getcwd(), registry_path),
+                "/home/claude/" + registry_path,
+            ]
+            registry_path = next((p for p in candidate_paths if os.path.exists(p)), None)
+            if registry_path is None:
+                # Registry not yet deployed; skip silently
+                return
+
+        with open(registry_path) as f:
+            registry_content = f.read()
+    except (OSError, IOError):
+        return  # Cannot read registry; skip
+
+    # Also accept the registry from the commit itself (if Jordan is updating it
+    # this very commit, use the new version, not the stale on-disk one)
+    for path, content in additions:
+        if path == "canon/placeholder_names.yaml":
+            registry_content = content
+            break
+
+    try:
+        import yaml
+        registry = yaml.safe_load(registry_content)
+    except (yaml.YAMLError, ImportError):
+        return  # Cannot parse; let other hooks handle
+
+    if not registry or "placeholders" not in registry:
+        return
+
+    expired_with_violation = []
+
+    # Iterate placeholders
+    for entry in registry.get("placeholders", []):
+        status = entry.get("deadline_status", "pending")
+        if status != "expired":
+            continue  # pending or resolved: hook does not enforce
+
+        placeholder_name = entry.get("placeholder_name", "")
+        if not placeholder_name:
+            continue
+
+        # Check if commit transitions this placeholder to 'resolved' (allowed)
+        # Look in commit's registry update: if status changed to 'resolved'
+        # in this commit, allow the placeholder to still appear in other files
+        # (the rename may not be complete across all files in this same commit).
+        # Conservative: require the registry-update commit AND no other content
+        # touch in same commit. For now: any placeholder marked 'expired' in
+        # the committed registry triggers halt.
+
+        # Search committed content for the placeholder
+        for path, content in additions:
+            if path == registry_path:
+                continue  # Don't scan the registry itself
+            if placeholder_name in path or (content and placeholder_name in content):
+                expired_with_violation.append({
+                    "id": entry.get("id", "unknown"),
+                    "placeholder_name": placeholder_name,
+                    "found_in": path,
+                    "canonical_name_pending": entry.get("canonical_name_pending", "unknown"),
+                })
+
+    if expired_with_violation:
+        msg_lines = ["[HOOK VIOLATION] placeholder_names_gate: expired placeholder(s) still in use:"]
+        for v in expired_with_violation:
+            msg_lines.append(
+                f"  - {v['id']}: '{v['placeholder_name']}' found in {v['found_in']}"
+            )
+            msg_lines.append(
+                f"      Canonical name pending: {v['canonical_name_pending']}"
+            )
+        msg_lines.append("")
+        msg_lines.append(
+            "Resolution: rename placeholder to canonical name in all paths, "
+            "OR revert deadline_status to 'pending' if audit not yet complete."
+        )
+        raise RuntimeError("\n".join(msg_lines))
+
+    print(f"[HOOK ✓] placeholder_names_gate")
+
+
 def pre_commit_gate(additions: list, deletions: list = None) -> None:
     """
     Hard gate before every commit. Checks:
@@ -977,7 +1082,14 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     except RuntimeError as e:
         errors.append(str(e))
 
-    # Supersession check — warn (non-blocking) if commit touches files flagged
+    # Placeholder-name gate: check canon/placeholder_names.yaml for expired
+    # placeholders that still appear in committed content
+    try:
+        placeholder_names_gate(additions)
+    except RuntimeError as e:
+        errors.append(str(e))
+
+        # Supersession check — warn (non-blocking) if commit touches files flagged
     # as propagation risks in canon/supersession_register.yaml
     supersession_check(additions)
 

@@ -1,0 +1,217 @@
+# Valoria Placeholder Names Registry
+#
+# Tracks generic-named modules and content-pending mechanics that ship with
+# placeholder identity pending Jordan's contamination audit. Enforced by
+# valoria_hooks.placeholder_names_gate.
+#
+# Lifecycle:
+#   1. Module ships with placeholder name + placeholder identity content.
+#      Status: 'pending'. Hook does not halt.
+#   2. Jordan conducts contamination audit for the relevant faction.
+#   3. Jordan flips status to 'expired' after audit, indicating: replacement
+#      decision made (canonical name + cleaned content authored).
+#   4. Next commit triggers placeholder_names_gate halt UNLESS the placeholder
+#      name + paths have been updated to canonical name in this commit.
+#
+# This creates a forcing function: Jordan's audit triggers the rename,
+# which becomes a precondition for further work on those modules.
+
+schema_version: 1
+last_authored: "2026-05-17"
+authoring_pass: "Pass 2 follow-up (Option A from Jordan directive 2026-05-17)"
+enforcement: "valoria_hooks.placeholder_names_gate"
+
+placeholders:
+
+  - id: VARFELL-MANDATE-ACTION-001
+    placeholder_name: varfell_mandate_action
+    prior_name: vaynards_hall
+    rename_reason: |
+      Original name 'vaynards_hall' carries identity-coded flavor (Reinhardt-anchored
+      mead-hall framing per canon/supersession_register.yaml CR-STRIKE-2026-04-19;
+      Vaynard is Reinhardt von Lohengramm-coded military conqueror per CR-STRIKE).
+      Mechanism W-1 + Mil-1 -> +1 L flagged broken by Jordan 2026-05-17
+      (double-cost asymmetry vs other faction Mandate actions). Both name AND
+      mechanic redesign pending contamination audit for Varfell faction.
+    canonical_name_pending: TBD post-Varfell-contamination-audit
+    deadline_pass: "Pass 3 (post-audit)"
+    deadline_status: pending
+    blocks_canonization: yes
+    paths_using_placeholder:
+      - sim/provincial/varfell_mandate_action.py
+      - canon/mechanics_index.yaml::mechanics.varfell_mandate_action
+    contamination_audit_scope: |
+      Audit Vaynard's identity claims across faction_canon, designs/audit/...,
+      params/factions.md, and prior session inserts. Strike contaminated flavor
+      (mead-hall / Tribune Network / Althing-anchor stitching). Vaynard's
+      Reinhardt-coded military-conqueror identity per CR-STRIKE-2026-04-19 is
+      the canonical anchor.
+
+  - id: VARFELL-TERRITORIAL-ACQUISITION-001
+    placeholder_name: varfell_territorial_acquisition
+    prior_name: einhir_revival
+    rename_reason: |
+      Original name 'einhir_revival' uses 'Einhir' cultural framing which may or
+      may not be canonical (cultural-Restoration framing per v12c §4.1 references
+      'Einhir revivalists' but the cultural-identity content has not been audit-
+      validated). Mechanism shape (v12c §4.1 spec) is balance-validated_n1000;
+      identity framing requires audit.
+    canonical_name_pending: TBD post-Varfell-contamination-audit
+    deadline_pass: "Pass 3 (post-audit)"
+    deadline_status: pending
+    blocks_canonization: no  # mechanism canonized; only name + identity-claims placeholder
+    paths_using_placeholder:
+      - sim/provincial/varfell_territorial_acquisition.py
+      - canon/mechanics_index.yaml::mechanics.varfell_territorial_acquisition
+    contamination_audit_scope: |
+      Validate or strike 'Einhir' cultural framing. v12c §4.1 mechanism (Pool I;
+      Ob = max(1, 1+PT*weight) for uncontrolled; PT degradation effect) is canon.
+      Identity wrapping around the mechanism (cultural-revival narrative, Einhir
+      designation as Restoration Movement vector for Varfell) needs audit.
+
+  - id: HAFENMARK-EXTERNAL-MILITARY-CONTENT-001
+    placeholder_name: altonian_reinforcements
+    prior_name: altonian_reinforcements  # name retained, content placeholder
+    rename_reason: |
+      Name 'altonian_reinforcements' is mechanism-descriptive (functional naming,
+      not identity-loaded). Retained. Content placeholder: mechanism shape from
+      v12c §4.3 (validated_n1000 auto-version) is canonized; choice-lock iteration
+      per Jordan 2026-05-17 (once invoked, Hafenmark Standing-with-other-
+      parliamentaries permanently locked <=+1) is unimplemented in v12c. Content
+      authoring blocks on Hafenmark contamination audit.
+    canonical_name_pending: altonian_reinforcements (name confirmed; content TBD)
+    deadline_pass: "Pass 3 (post-audit)"
+    deadline_status: pending
+    blocks_canonization: no  # mechanism canonized; only content-finalization placeholder
+    paths_using_placeholder:
+      - sim/provincial/altonian_reinforcements.py
+      - canon/mechanics_index.yaml::mechanics.altonian_reinforcements
+    contamination_audit_scope: |
+      Audit Hafenmark identity claims (Altonian/Schoenland relationship,
+      Wagenburg/Bombards equipment framing per Pass 2e backlog). Strike
+      identity contamination. Author choice-lock iteration spec.
+
+  - id: CHURCH-INFRASTRUCTURE-INVASION-CONTENT-001
+    placeholder_name: infrastructure_reclamation
+    prior_name: infrastructure_reclamation
+    rename_reason: |
+      Name 'infrastructure_reclamation' is mechanism-descriptive. Retained.
+      Content placeholder: Jordan 2026-05-17 directive specifies mechanism
+      (when Church invades territory with existing Church-built infrastructure
+      Religious Buildings / Templar Stations / Inquisitor Bases, attacker pool
+      +infra_count + max(0, PT-3), defender pool -min(3, floor(bonus/2)),
+      cap +6/-3). Pass 2f canon authoring pending Church contamination audit.
+    canonical_name_pending: infrastructure_reclamation (name confirmed; content TBD)
+    deadline_pass: "Pass 3 (post-audit)"
+    deadline_status: pending
+    blocks_canonization: yes  # mechanism not yet canonized
+    paths_using_placeholder:
+      - sim/provincial/infrastructure_reclamation.py
+      - canon/mechanics_index.yaml::mechanics.infrastructure_reclamation
+    contamination_audit_scope: |
+      Audit Church identity claims. Author infrastructure_reclamation_v30.md
+      canon doc. Reconcile 3-source Mass Seizure drift (conviction_track §2
+      PP-411, ci_political §7.6, victory_v30 §3.2) at same audit.
+
+  - id: CHURCH-STARTING-PROTECTION-CONTENT-001
+    placeholder_name: home_sanctuary
+    prior_name: home_sanctuary
+    rename_reason: |
+      Name 'home_sanctuary' is mechanism-descriptive (T9 Solmundheim early-game
+      protection). Retained. Content placeholder: Jordan 2026-05-17 directive
+      specifies T9 invasion Ob +4 for first 12 seasons, end conditions
+      (Church PT<3 OR Church L<2.5 OR any faction holds CB vs Church). Pass 2f
+      canon authoring pending Church contamination audit.
+    canonical_name_pending: home_sanctuary (name confirmed; content TBD)
+    deadline_pass: "Pass 3 (post-audit)"
+    deadline_status: pending
+    blocks_canonization: yes
+    paths_using_placeholder:
+      - sim/provincial/home_sanctuary.py
+      - canon/mechanics_index.yaml::mechanics.home_sanctuary_t9
+    contamination_audit_scope: |
+      Audit Church identity claims. Author home_sanctuary_t9_v30.md canon doc.
+
+  - id: HAFENMARK-TACTIC-EXTENSION-CONTENT-001
+    placeholder_name: hafenmark_equipment
+    prior_name: hafenmark_equipment
+    rename_reason: |
+      Name 'hafenmark_equipment' is mechanism-descriptive. Retained. Content
+      placeholder: Wagenburg + Bombards tactic cards per Jordan 2026-05-17
+      (Hussite battle wagons + proto-firearms). Dependency: tactic_cards module
+      may need partial-strike before adding new cards (current tactic_cards
+      contents are flagged as audit-pending per the broader Hafenmark
+      contamination concern).
+    canonical_name_pending: hafenmark_equipment (name confirmed; content TBD)
+    deadline_pass: "Pass 3 (post-audit)"
+    deadline_status: pending
+    blocks_canonization: yes
+    paths_using_placeholder:
+      - sim/provincial/hafenmark_equipment.py
+      - canon/mechanics_index.yaml::mechanics.hafenmark_equipment
+    contamination_audit_scope: |
+      Audit Hafenmark identity claims AND tactic_cards module contents
+      (per separate tactic_cards audit). Author hafenmark_equipment_v30.md
+      canon doc on cleaned base.
+
+# ─── Audit-pending-only entries (not name placeholders) ──────────────────────
+# Modules with content audit needs but no name rename requirement.
+
+  - id: NPC-AI-PRIORITY-STACK-001
+    placeholder_name: npc_ai_service
+    prior_name: npc_ai_service
+    rename_reason: |
+      Module name is functional (npc_ai_service). Content placeholder:
+      priority-stack contents (faction AI priority entries) flagged as
+      contamination-pending per Jordan diagnosis 2026-05-17.
+    canonical_name_pending: npc_ai_service (name confirmed; content TBD)
+    deadline_pass: "Pass 3 (post-audit, per-faction)"
+    deadline_status: pending
+    blocks_canonization: yes
+    paths_using_placeholder:
+      - sim/autoload/npc_ai.py
+      - canon/mechanics_index.yaml::mechanics.npc_ai_service
+    contamination_audit_scope: |
+      Per-faction audit of priority-stack entries. Strike contaminated AI
+      priorities (e.g., Varfell espionage-prioritization). Re-author against
+      clean trait base.
+
+  - id: TACTIC-CARDS-POOL-001
+    placeholder_name: tactic_cards
+    prior_name: tactic_cards
+    rename_reason: |
+      Module name is functional (tactic_cards). Content placeholder: card pool
+      contents (FACTION_TACTIC_CARD_POOL_MODIFIERS entries) flagged as
+      contamination-pending per Jordan diagnosis 2026-05-17.
+    canonical_name_pending: tactic_cards (name confirmed; content TBD)
+    deadline_pass: "Pass 3 (post-audit, per-faction)"
+    deadline_status: pending
+    blocks_canonization: yes
+    paths_using_placeholder:
+      - sim/provincial/tactic_cards.py
+      - canon/mechanics_index.yaml::mechanics.tactic_cards
+    contamination_audit_scope: |
+      Per-faction audit of card pool contents. Strike contaminated cards.
+      Re-author against clean trait base. Dependency for hafenmark_equipment.
+
+# ─── Hook enforcement notes ──────────────────────────────────────────────────
+#
+# valoria_hooks.placeholder_names_gate() checks this file on every safe_commit.
+# Behavior:
+#   - For each placeholder with deadline_status == 'expired':
+#       If placeholder_name appears in any committed file path OR content,
+#       AND the commit does not include an entry in canon/placeholder_names.yaml
+#       moving it from 'expired' to 'resolved' (with canonical_name_assigned field):
+#         HALT with RuntimeError listing the placeholder.
+#   - Placeholders with deadline_status == 'pending' do not trigger halt.
+#   - Status flips ('pending' -> 'expired' -> 'resolved') are Jordan-controlled.
+#
+# Jordan workflow:
+#   1. Conduct contamination audit (per id's contamination_audit_scope)
+#   2. Flip deadline_status from 'pending' to 'expired' on the audit-complete
+#      entry. Commit that flip.
+#   3. Next session, when authoring the replacement: include canonical_name_assigned
+#      field + flip status to 'resolved' + update paths_using_placeholder to
+#      reflect rename. Commit replacement work + status flip in same commit.
+#
+# Hook is single-direction: pending -> expired -> resolved. No reverse flips.

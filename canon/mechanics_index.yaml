@@ -10,7 +10,7 @@
 
 schema_version: 1
 last_authored: "2026-05-17"
-authoring_pass: "Pass 2j armature index v1"
+authoring_pass: "Pass 2j armature index v1; renamed entries Pass 2 follow-up Option A 2026-05-17"
 generator: "tools/mechanics_index_gen.py"
 authoring_mode: "manual_v1"
 note: |
@@ -557,27 +557,27 @@ mechanics:
     sim_module: sim/provincial/charter_liberties.py
     test_status: not_implemented
 
-  vaynards_hall:
+  varfell_mandate_action:
     scale: provincial
     faction: Varfell
     canon_sources: ["designs/audit/2026-05-14-balance-audit/part10_crown_initiative_design_2026-05-14.md#section-5-3"]
-    sim_module: sim/provincial/vaynards_hall.py
+    sim_module: sim/provincial/varfell_mandate_action.py
     test_status: contested
     notes: "Module name placeholder pending Jordan rename. Current canon mechanic (W -1 + Mil -1 -> +1 L) flagged broken by Jordan 2026-05-17 (double-cost asymmetry). Current canon flavor framing (mead-hall / Tribune Network / Heorot / Althing anchors stitched into Reinhardt anchor) flagged as contamination. Canonical Vaynard identity per canon/supersession_register.yaml CR-STRIKE-2026-04-19 is Reinhardt-coded military conqueror. Mechanic + name redesign pending."
 
-  einhir_revival:
+  varfell_territorial_acquisition:
     scale: provincial
     faction: Varfell
     canon_sources:
       - "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md#section-4-1"
-    canon_authoring_target: "designs/provincial/einhir_revival_v30.md (Pass 2d, pending)"
-    sim_module: sim/provincial/einhir_revival.py
+    canon_authoring_target: "designs/provincial/varfell_territorial_acquisition_v30.md (Pass 2d, pending; placeholder-named per VARFELL-TERRITORIAL-ACQUISITION-001)"
+    sim_module: sim/provincial/varfell_territorial_acquisition.py
     test_status: validated_n1000_v12c
     test_results:
       v12c_n1000: {varfell_win_rate: 22.5, in_band_20_30: true}
     dependencies:
       mechanics: [restoration_movement, territory_temperaments]
-    notes: "v12c balance-validated mechanic shape. Pass 2d canon authoring pending faction contamination audit. Replaces CR-STRIKE-2026-04-19 Cultural Reformation as Varfell's territorial mechanic."
+    notes: "v12c balance-validated mechanic shape. Pass 2d canon authoring pending faction contamination audit. Replaces CR-STRIKE-2026-04-19 Cultural Reformation as Varfell's territorial mechanic. Renamed from einhir_revival 2026-05-17 per VARFELL-TERRITORIAL-ACQUISITION-001 (cultural framing pending audit)."
 
   altonian_reinforcements:
     scale: provincial
@@ -900,8 +900,8 @@ categories:
       - altonian_reinforcements
       - hafenmark_equipment
     Varfell:
-      - vaynards_hall
-      - einhir_revival
+      - varfell_mandate_action
+      - varfell_territorial_acquisition
     universal:
       - military_conquest
       - parliamentary_transfer
@@ -946,7 +946,7 @@ drift_report:
     superseded: 0
     canonical: 0
   contamination_flags:
-    - vaynards_hall: "mechanic + name redesign pending"
+    - varfell_mandate_action: "mechanism redesign pending Varfell contamination audit (renamed from vaynards_hall 2026-05-17 per VARFELL-MANDATE-ACTION-001)"
     - npc_ai_service: "priority-stack contents pending audit"
     - tactic_cards: "card pool contents pending audit"
     - hafenmark_equipment: "depends on tactic_cards audit"
@@ -962,7 +962,7 @@ drift_report:
     - crown_treaty
   pending_canon_authoring:
     Pass_2d:
-      - einhir_revival
+      - varfell_territorial_acquisition
       - restoration_movement
     Pass_2e:
       - altonian_reinforcements

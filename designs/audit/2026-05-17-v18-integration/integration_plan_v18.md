@@ -79,8 +79,8 @@ The Pass 2 canonization work produced **5 new canonical docs**, **3 amended cano
 | `sim/provincial/absolution.py` | `faction_canon §8` | **READY** |
 | `sim/provincial/council_solmund.py` | `faction_canon` | **READY** |
 | `sim/provincial/charter_liberties.py` | `faction_canon §6` (Hafenmark) | **READY** (mechanic-canon; flavor frame is faction-identity-territory) |
-| `sim/provincial/vaynards_hall.py` | placeholder | **BLOCKED** on contamination audit + name redesign + mechanic redesign |
-| `sim/provincial/einhir_revival.py` | v12c §4.1 (validated_n1000) + `einhir_revival_v30.md` (Pass 2d pending) | **BLOCKED** on Pass 2d + contamination audit |
+| `sim/provincial/varfell_mandate_action.py` | placeholder (renamed from vaynards_hall 2026-05-17 per VARFELL-MANDATE-ACTION-001) | **READY** (placeholder-name; mechanism authoring proceeds Pass 2d) |
+| `sim/provincial/varfell_territorial_acquisition.py` | v12c §4.1 (validated_n1000) + canon doc Pass 2d pending | **READY** (placeholder-name; mechanism v12c-canonized; identity wrapping pending audit) |
 | `sim/provincial/altonian_reinforcements.py` | v12c §4.3 (validated_n1000) + `altonian_reinforcements_v30.md` (Pass 2e pending) | **BLOCKED** on Pass 2e + contamination audit |
 | `sim/provincial/infrastructure_reclamation.py` | `infrastructure_reclamation_v30.md` (Pass 2f pending) | **BLOCKED** on Pass 2f + contamination audit |
 | `sim/provincial/home_sanctuary.py` | `home_sanctuary_t9_v30.md` (Pass 2f pending) | **BLOCKED** on Pass 2f + contamination audit |
@@ -439,22 +439,17 @@ Resolution = Jordan ratification at Pass 2k batch:
 | D-2 (mass battle) | massbattle.py | Phase 7 (shared vs per-unit grid) |
 | D-8-interim (mass battle) | tests/sim/battery_v22.py | Phase 7 (interim-band canonization decision; doc resolves "no" already) |
 
-### §7.2 Blocked on Contamination Audit (Jordan diagnosis 2026-05-17)
+### §7.2 Blocked on Contamination Audit (Jordan diagnosis 2026-05-17) — RESOLVED via Placeholder Registry (Option A, 2026-05-17)
 
-Per the project-state-stamp from Jordan: faction-identity claims in canon have been re-inserted by prior Claude sessions. Faction-specific modules cannot proceed against contaminated traits.
+**Status update 2026-05-17 (Pass 2 follow-up Option A):** Faction-specific module implementation UNBLOCKED via the generic-name placeholder mechanism. Two modules renamed (`vaynards_hall` → `varfell_mandate_action`; `einhir_revival` → `varfell_territorial_acquisition`); four functional-named modules + 2 audit-pending modules (`tactic_cards`, `npc_ai`) registered in `canon/placeholder_names.yaml` with `deadline_status: pending`. Hook `valoria_hooks.placeholder_names_gate` enforces rename precondition once Jordan flips status to `expired` post-audit.
 
-| Module | Blocked content |
-|---|---|
-| `npc_ai.py` | priority-stack contents (Faction AI priority entries) |
-| `tactic_cards.py` | card pool contents (FACTION_TACTIC_CARD_POOL_MODIFIERS entries) |
-| `vaynards_hall.py` | mechanic + name redesign + flavor cleanup |
-| `einhir_revival.py` | Pass 2d canon authoring on cleaned trait base |
-| `altonian_reinforcements.py` | Pass 2e canon authoring on cleaned trait base |
-| `infrastructure_reclamation.py` | Pass 2f canon authoring on cleaned trait base |
-| `home_sanctuary.py` | Pass 2f canon authoring on cleaned trait base |
-| `hafenmark_equipment.py` | Pass 2e canon authoring (depends on tactic_cards audit) |
+Mechanic shape implementation can proceed against:
+- Renamed modules (`varfell_mandate_action`, `varfell_territorial_acquisition`) using generic placeholder names + mechanism-only specs
+- Functional-named modules (`altonian_reinforcements`, `infrastructure_reclamation`, `home_sanctuary`, `hafenmark_equipment`, `tactic_cards`, `npc_ai`) using mechanism-only specs without identity content
 
-Resolution = Jordan-led per-faction mechanical contamination audit (1 turn per faction recommended in Pass 2a-3) → strike contaminated traits from canon → Pass 2d/2e/2f canon authoring against clean base.
+Pass 2d/e/f authoring can now proceed against placeholder identity. Contamination audit becomes a follow-on rename-and-content-audit pass (target: post-Pass-3, before any Phase-9 implementation work).
+
+Registry: `canon/placeholder_names.yaml` (8 entries; canonical_name_pending fields track replacement decisions).
 
 ### §7.3 Blocked on Pass 2d (Varfell canon)
 
