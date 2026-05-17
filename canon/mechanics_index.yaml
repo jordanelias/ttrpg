@@ -826,7 +826,7 @@ mechanics:
     scale: world
     faction: emergent
     canon_sources: ["canon/02_canon_constraints.md#section-b-gd-3"]
-    canon_authoring_target: "designs/world/insurgency_pipeline_v30.md (Pass 2i, pending)"
+    canon_authoring_target: "designs/world/insurgency_pipeline_v30.md (Pass 2i canonized 2026-05-17)"
     sim_module: sim/world/insurgency_pipeline.py
     test_status: not_implemented
     gd_applicable: [GD-3]

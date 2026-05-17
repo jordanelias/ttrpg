@@ -32,6 +32,13 @@ sources:
 
 
 # ── Pass 2 additions (2026-05-17) ────────────────────────────────────────
+  insurgency_pipeline_v30:
+    design_doc: designs/world/insurgency_pipeline_v30.md
+    note: "Pass 2i canonization of GD-3 generic Insurgency Pipeline. 4-stage layered model: Stage 1 world PT decay (v12c §4.2) → Stage 2 Latent RM (conviction_track §5 PP-416) → Stage 3 Insurgency formation (GD-3 a-b) → Stage 4 Promoted Faction (GD-3 c-e). Specifies parliamentary status semantics, sim enforcement boundaries (GD-1 + GD-2 + GD-3 cross-bindings), suppression mechanics. Forward-flags 7 derivation items to Pass 2k."
+    canonized: "2026-05-17"
+    canonized_pass: "Pass 2i"
+    gd_binding: ["GD-1", "GD-2", "GD-3"]
+
   parliamentary_transfer_v18:
     design_doc: designs/provincial/parliamentary_transfer_v30.md
     note: "Pass 2h canonization of v12c §4.4 Parliamentary Territory Transfer (universal mechanic, validated_n1000_v12c). 4 modes (Adversarial / Consensual / Punishment / Appeasement). 8 CB sources. Resolution wrapped in Parliamentary Vote contest per social_contest §10. Forward-flags PARL-MODE-DRIFT-001, PARL-VOTE-MODIFIER-001, PARL-PROTECTION-001."
