@@ -1,30 +1,26 @@
 """
-sim/territory/adjacency.py — Territory adjacency graph queries
+sim/territory/adjacency.py — Territory adjacency map
 
-Canon source: designs/territory/settlement_adjacency_v30.md; designs/territory/valoria_geography_v30.yaml
-Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
-
-Dependencies:
-  - none — root data
-
-Entry points:
-  - adjacent_territories(territory_id: str) -> list[str]
-  - is_adjacent(t1: str, t2: str) -> bool
-  - contiguous_owned(faction_id: str, world: GameState) -> list[list[str]]
-
+Canon source: m1_church_infrastructure.py L276-293; settlement_layer_v30 + valoria_geography
+Status: [CANONICAL — Phase 2 implementation 2026-05-17]
 """
 from __future__ import annotations
 
-# [PROVISIONAL — Pass 2l armature stub; implementation pending against canonical source]
-
-
-def adjacent_territories(territory_id: str):
-    raise NotImplementedError("sim/territory/adjacency.py — Pass 2l armature stub")
-
-
-def is_adjacent(t1: str, t2: str):
-    raise NotImplementedError("sim/territory/adjacency.py — Pass 2l armature stub")
-
-
-def contiguous_owned(faction_id: str, world: GameState):
-    raise NotImplementedError("sim/territory/adjacency.py — Pass 2l armature stub")
+ADJACENCY: dict[str, set[str]] = {
+    'T1':  {'T2', 'T5', 'T14', 'T16'},
+    'T2':  {'T1', 'T3', 'T9', 'T14'},
+    'T3':  {'T2', 'T9', 'T17'},
+    'T4':  {'T7', 'T12', 'T14'},
+    'T5':  {'T1', 'T6', 'T14'},
+    'T6':  {'T5', 'T13', 'T15'},
+    'T7':  {'T4', 'T8'},
+    'T8':  {'T7', 'T9', 'T10', 'T17'},
+    'T9':  {'T2', 'T3', 'T8', 'T14', 'T17'},
+    'T10': {'T8', 'T11'},
+    'T11': {'T10', 'T12'},
+    'T12': {'T4', 'T11', 'T13'},
+    'T13': {'T6', 'T12', 'T15'},
+    'T14': {'T1', 'T2', 'T4', 'T5', 'T9'},
+    'T15': {'T6', 'T13'},
+    'T17': {'T3', 'T8', 'T9'},
+}

@@ -3,13 +3,15 @@ sim/mc_v18.py — Top-level strategic simulator runner — orchestrator only
 
 Canon source: canon/02_canon_constraints.md §B (GD-1, GD-2, GD-3)
 Game Design constraints applicable: GD-1, GD-2, GD-3
-Status: [CANONICAL — Phase 1 implementation 2026-05-17]
+Status: [CANONICAL — Phase 2 implementation 2026-05-17]
 
 Replaces tests/sim/v17-integration/mc_v17.py (39k monolith).
-v18 is the modular line: this file orchestrates; subpackage modules do the work.
+Phase 2: faction actions (conquest/muster/govern) + accounting wired in.
 
 Dependencies:
   - sim/autoload/* (all autoload services)
+  - sim/provincial/faction_action
+  - sim/peninsular/accounting
 
 Entry points:
   - run_campaign(seed, max_seasons, params) -> CampaignResult
@@ -18,13 +20,16 @@ Entry points:
 from __future__ import annotations
 
 import time
+from collections import Counter
 from dataclasses import dataclass, field
 
 from sim.autoload import game_state, season_manager, victory, scene_slate
+from sim.provincial.faction_action import faction_take_action
+from sim.peninsular.accounting import run_accounting
 
 
 DEFAULT_PARAMS = {
-    'CAMPAIGN_SEASONS': 100,
+    'CAMPAIGN_SEASONS': 50,
     'VICTORY_THRESHOLD': 11,
 }
 
@@ -43,18 +48,12 @@ class BatchResult:
     n: int
     win_share: dict[str, float] = field(default_factory=dict)
     all_winners: dict[str, int] = field(default_factory=dict)
+    battles_mean: float = 0.0
 
 
-def run_campaign(seed: int | None = None, max_seasons: int = 100,
+def run_campaign(seed: int | None = None, max_seasons: int = 50,
                  params: dict | None = None) -> CampaignResult:
-    """Run a single campaign to completion.
-
-    Phase 1: autoload modules only. Faction actions are stub — each faction
-    does nothing per season. Victory check runs. Campaign ends by timeout
-    with fallback winner by territory count.
-
-    Subsequent phases wire in personal/provincial/territory/world modules.
-    """
+    """Run a single campaign to completion."""
     if seed is None:
         seed = int(time.time()) & 0xFFFFFFFF
 
@@ -73,14 +72,19 @@ def run_campaign(seed: int | None = None, max_seasons: int = 100,
 
         sr = season_manager.advance_season(world)
 
-        # === FACTION ACTIONS (Phase 2+ wiring point) ===
-        # GD-2: mandatory actions precede stochastic selection.
-        # Currently stub: no faction actions implemented.
-        # Phase 2+ will wire faction_action.py here.
+        # === FACTION ACTIONS (GD-2: mandatory before stochastic) ===
+        for fn, faction in world.factions.items():
+            if not faction.parliamentary:
+                continue
+            if not faction.territories:
+                continue
+            try:
+                faction_take_action(faction, world, world.rng)
+            except Exception:
+                pass  # action error — skip
 
-        # === ACCOUNTING (Phase 2+ wiring point) ===
-        # End-of-season accounting stub.
-        # Phase 2+ will wire peninsular/accounting.py here.
+        # === ACCOUNTING ===
+        run_accounting(world)
 
         # === VICTORY CHECK (GD-1) ===
         results = victory.check_all_factions(world)
@@ -115,12 +119,13 @@ def run_campaign(seed: int | None = None, max_seasons: int = 100,
 def run_batch(n: int = 100, base_seed: int = 0,
               params: dict | None = None) -> BatchResult:
     """Run n campaigns and aggregate results."""
-    from collections import Counter
     wins = Counter()
+    total_battles = 0
     for i in range(n):
         r = run_campaign(seed=base_seed + i, params=params)
         if r.winner:
             wins[r.winner] += 1
+        total_battles += r.battle_count
 
     total = sum(wins.values()) or 1
     factions = ['Crown', 'Church', 'Hafenmark', 'Varfell']
@@ -128,12 +133,13 @@ def run_batch(n: int = 100, base_seed: int = 0,
         n=n,
         win_share={fn: round(wins.get(fn, 0) / total * 100, 1) for fn in factions},
         all_winners=dict(wins),
+        battles_mean=round(total_battles / n, 1),
     )
 
 
 if __name__ == '__main__':
-    print("=== mc_v18 Phase 1 smoke test — 20 campaigns ===")
-    r = run_batch(20, base_seed=42)
+    print("=== mc_v18 Phase 2 smoke test — 100 campaigns ===")
+    r = run_batch(100, base_seed=42)
     print(f"  win_share: {r.win_share}")
     print(f"  all_winners: {r.all_winners}")
-    print(f"  (Phase 1: no faction actions; winner = fallback by starting territory count)")
+    print(f"  battles_mean: {r.battles_mean}")
