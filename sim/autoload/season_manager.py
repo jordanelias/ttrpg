@@ -1,33 +1,48 @@
 """
-sim/autoload/season_manager.py — Season-loop orchestration: arc boundaries, season transitions, end-of-season Accounting trigger
+sim/autoload/season_manager.py — Season-loop orchestration
 
-Canon source: designs/architecture/campaign_architecture_v30.md
-Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17]
+Canon source: designs/architecture/campaign_architecture_v30.md; mc_v17.py L691-710
+Status: [CANONICAL — Phase 1 implementation 2026-05-17]
+
+Arc structure: 4 seasons per arc (mc_v17 L694: season % 4 == 1 triggers new arc).
 
 Dependencies:
   - sim/autoload/game_state
-  - sim/peninsular/season
-  - sim/peninsular/accounting
 
 Entry points:
-  - advance_season() -> SeasonResult
-  - advance_arc() -> ArcResult
+  - advance_season(world) -> SeasonResult
   - check_arc_boundary(season: int) -> bool
-
 """
 from __future__ import annotations
 
-# [PROVISIONAL — Pass 2l armature stub; implementation pending against canonical source]
+from dataclasses import dataclass
 
 
-def advance_season():
-    raise NotImplementedError("sim/autoload/season_manager.py — Pass 2l armature stub")
+SEASONS_PER_ARC = 4
 
 
-def advance_arc():
-    raise NotImplementedError("sim/autoload/season_manager.py — Pass 2l armature stub")
+@dataclass
+class SeasonResult:
+    season: int
+    arc: int
+    new_arc: bool
 
 
-def check_arc_boundary(season: int):
-    raise NotImplementedError("sim/autoload/season_manager.py — Pass 2l armature stub")
+def advance_season(world) -> SeasonResult:
+    """Advance the world by one season. Returns season metadata."""
+    world.season += 1
+    new_arc = (world.season % SEASONS_PER_ARC == 1)
+    if new_arc:
+        world.arc += 1
+        # Reset per-arc faction flags
+        for f in world.factions.values():
+            pass  # Arc-level resets handled by faction_action module
+    # Reset per-season faction flags
+    for f in world.factions.values():
+        f.reset_seasonal()
+    return SeasonResult(season=world.season, arc=world.arc, new_arc=new_arc)
 
+
+def check_arc_boundary(season: int) -> bool:
+    """True if this season is the first of a new arc."""
+    return season % SEASONS_PER_ARC == 1
