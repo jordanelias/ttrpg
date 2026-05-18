@@ -1,0 +1,162 @@
+id: 2026-05-18-phase-7-regression-fix
+status: active
+task:
+  skill: valoria-simulator
+  description: 'Phase 7 regression fix. Prior session (c6ecb5b9, 2026-05-18 d88a9cb2)
+    landed the v22 mass-battle bare port + faction_action wiring for Phase 7 C2 scope,
+    but execution surfaces RecursionError in Subunit.__eq__ via target_atom cycle
+    after assign_targets. Operationally: _try_conquest now calls resolve_mass_battle
+    which raises; mc_v18.faction_take_action catches in try/except Exception:pass
+    — so the campaign sim still completes, but every Conquest attempt silently fails
+    (battle_count stays 0; territory turnover via Conquest stops). Muster/Govern/faction-unique
+    paths unaffected. SCOPE: surgical fix only — override Subunit (and Unit if needed)
+    __eq__/__hash__ to use identity, OR add eq=False to the target_atom dataclass
+    field, OR change assign_targets to store an index/handle instead of a direct Subunit
+    reference. Validate via mc_v18.run_batch(10, seed=42) showing battle_count > 0
+    AND direct invocation of resolve_mass_battle on a constructed faction pair returning
+    a degree result without raising. Steps 2-9 of canon §4 (LETHALITY, flanking, penetration,
+    ripple, tiebreakers, phase hooks, internal collision, cleanup) + Step 10 sub-steps
+    1-2 (domain_echo, accounting) + faction→unit construction richening — all deferred
+    to subsequent handoffs. canon §4.1 PROVISIONAL flex clause applies: bare port
+    may flex on call signature if statistical equivalence holds; identity-based __eq__
+    does not change observable mass-battle outcomes (target_atom is set-by-reference
+    throughout the engine, never compared by value).'
+last_commit: c6ecb5b910a7a6ac1a89a31629a64d4378238241
+owns:
+- sim/provincial/units.py
+- sim/provincial/massbattle.py
+context_files:
+- path: sim/provincial/units.py
+  depth: full
+  reason: Contains Subunit + Unit dataclasses; primary fix surface. Subunit.target_atom
+    field is the cycle source.
+- path: sim/provincial/massbattle.py
+  depth: full
+  reason: Contains assign_targets (alternative fix surface) + resolve_mass_battle
+    adapter + late-binding tail import. Verify any change preserves run_battle / run_multi_unit_battle
+    / volley_phase signatures.
+- path: sim/provincial/faction_action.py
+  depth: full
+  reason: _try_conquest is the call site. Verify after fix that the engine path actually
+    returns a degree (not just stops raising).
+- path: sim/mc_v18.py
+  depth: full
+  reason: Smoke validation target. run_batch(10, seed=42) at the __main__ block. Note
+    the try/except Exception:pass around faction_take_action — that is the silent-failure
+    mask; fix exposes whether Conquest now produces battles.
+- path: tests/sim/sim_mb_06_v22.py
+  depth: skeleton
+  reason: Source engine pre-port. Reference for assign_targets behavior + Subunit.target_atom
+    usage pattern. Confirms target_atom is set as a direct reference (lines around
+    1057 — assign_targets). v22 itself runs validated_n1000 without this error in
+    v17 sweep, so check what test harness setup avoided it.
+- path: designs/provincial/mass_battle_v30.md
+  depth: skeleton
+  reason: Canon. §A.4 stats, §A.7 volley/tactic. Reference only — no new mechanic
+    decisions in this scope.
+- path: designs/provincial/mass_battle_integration_v30.md
+  depth: full
+  reason: Step plan. §4.1 PROVISIONAL flex clause licenses the identity-eq fix. §5
+    test plan references tests/sim/battery_v22.py (may not exist yet — confirm before
+    invoking).
+- path: tests/sim/v18-integration/module_manifest.md
+  depth: full
+  reason: Mode G manifest committed in d86a213a. May need an updated status row reflecting
+    regression-fix completion + next-after-next plan.
+- path: canon/02_canon_constraints.md
+  depth: skeleton
+  reason: GD-1 binding (mass-battle resolution produces deltas only). Fix must not
+    introduce victory-trigger semantics.
+- path: skills/valoria-simulator/SKILL.md
+  depth: skeleton
+  reason: Mode G + sim_gate protocol. Verification ledger still deferred per c6ecb5b9
+    commit body — confirm next handoff inherits that deferral.
+- path: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
+  depth: skeleton
+  reason: §Phase 7 deliverables. §1.4 readiness. Cross-reference for Step 10 sub-steps
+    1-2 (deferred from this session).
+working_state:
+  completed:
+  - 'Phase 7 C2: manifest commit d86a213a (Mode G manifest + coverage_matrix row)'
+  - 'Phase 7 C2: port commit c6ecb5b9 (massbattle.py 87KB / 1822 lines, units.py 19KB
+    / 378 lines, tactic_cards.py 1.6KB BLOCKED stub, faction_action.py _try_conquest
+    rewire)'
+  - 'Pass-3 verified against live HEAD: 5 single-roll markers gone; resolve_mass_battle
+    invocation present; GD-1 no world.winner write; v22 17 public functions intact;
+    Subunit/Unit dataclass fields intact; circular import resolved (24 _mb.* refs)'
+  - Smoke test surfaced RecursionError in Subunit.__eq__ — root cause identified (target_atom
+    cycle after assign_targets)
+  next:
+  - 'Step A: Bootstrap + load this handoff (context_files load via load_handoff_context)'
+  - 'Step B: Read sim/provincial/units.py at full depth. Identify Subunit dataclass
+    declaration (currently no eq=False qualifier on @dataclass; target_atom field
+    has repr=False but not eq=False).'
+  - 'Step C: Decision point — pick fix approach: (1) @dataclass(eq=False) on Subunit
+    + Unit, relying on default object identity __eq__/__hash__; OR (2) keep field-based
+    __eq__ but add eq=False to target_atom (and any other reference-cycle fields like
+    cell_offsets, cell_offsets_c if they hold Subunit refs — verify); OR (3) change
+    assign_targets in massbattle.py to store (side_index, subunit_index) tuple instead
+    of direct reference. Approach (1) is smallest patch + most robust. Approach (3)
+    is closer to v22 behavior but requires touching engine call sites.'
+  - 'Step D: Implement chosen approach. If (1) or (2): edit sim/provincial/units.py
+    only. If (3): edit sim/provincial/massbattle.py assign_targets + any caller that
+    derefs .target_atom.'
+  - 'Step E: Smoke test 1 — direct invocation. Construct two mock factions (Crown
+    Mil=5, Church Mil=4.5), call resolve_mass_battle, assert returns dict with degree
+    in {Overwhelming, Success, Partial, Failure} without raising.'
+  - 'Step F: Smoke test 2 — mc_v18 batch. Run mc_v18.run_batch(10, base_seed=42).
+    Confirm result.battles_mean > 0 (was 0 post-c6ecb5b9 due to silent Exception catch).'
+  - 'Step G: task_gate("simulation"); safe_commit Phase 7 file set (units.py or massbattle.py
+    per approach choice) with Citations block. Commit message format: [simulation]
+    fix Subunit.__eq__ recursion (Phase 7 regression).'
+  - 'Step H: Pass 3 — re-read modified file from live HEAD; verify fix landed; verify
+    mc_v18 smoke still passes from fresh fetch.'
+  - 'Step I: Update tests/sim/v18-integration/module_manifest.md status row for Phase
+    7 C2 → "Phase 7 C2 verified end-to-end" + add row for Phase 7 follow-on plan (Steps
+    2-9 + Step 10 sub-steps 1-2 + faction→unit richening as separate handoffs).'
+  - 'Step J: safe_session_close + archive this handoff (target met). Optionally archive
+    the original 2026-05-18-phase-7-mass-battle handoff if still active.'
+key_values:
+- 'mass_battle_integration_v30.md §4.1 PROVISIONAL clause: "byte-equivalence target
+  may need to flex if dataclass extraction changes call signatures. Acceptable if
+  statistical equivalence (Mirror Cmd 4v4 still p>0.05) holds." — licenses identity-eq
+  fix.'
+- 'canon/02_canon_constraints.md §B GD-1: mass-battle resolution produces faction
+  stat / territorial-control deltas only; no mass_battle_outcome → game_victory triggers.'
+- 'mc_v18.faction_take_action catches Exception silently: `try: faction_take_action(...)
+  except Exception: pass`. This is THE reason the regression was invisible to the
+  existing batch test. Fix exposes the engine path; if engine still misbehaves, the
+  silent-catch will continue masking — so end-to-end test must inspect result.battle_count
+  or result.win_share heavily, not just "did it complete".'
+- 'Subunit.target_atom field declaration in units.py: `target_atom: Optional[object]
+  = field(default=None, repr=False)`. repr=False prevents repr() recursion; eq=False
+  is what is missing.'
+- Phase 8 Strategic AI replaces faction_take_action 30% faction-unique stochastic
+  slot — natural after-Phase-7 work, NOT in this handoff scope.
+- 'Verification ledger (sim_gate requirement) remains deferred per c6ecb5b9 [GAP]
+  — bare port replicates v22 constants verbatim with inline `# [canonical: …]` comments
+  preserved. Will land with Step 4.2 LETHALITY recalibration.'
+blockers:
+- 'GAP-1 from c6ecb5b9: faction→unit construction uses minimum-viable defaults (shape=Line,
+  tier=2, single Subunit, command=4, discipline=morale=5, power=int(faction.Mil)).
+  _GarrisonStub uses Mil=1.5 for uncontrolled territories. No canonical spec exists.
+  Step 10 sub-step 2 (sim/peninsular/accounting.py §E.1/§E.2) is the proper home —
+  NOT in this regression-fix scope. If the regression fix passes Step E direct invocation
+  but produces unreasonable battle outcomes (e.g. always Overwhelming for attacker,
+  or always Failure), that signals the defaults need richening — escalate to a new
+  handoff, do not improvise.'
+- M3 completeness_gate referenced in valoria PI but not implemented in valoria_hooks.py
+  (architecture v2.3 open_items confirms). Continue using sim_gate semantics + Mode
+  G manifest as the fallback discipline.
+- M6 tools/index_gen.py rewrite specced 2026-05-15 but not implemented. canon/editorial_ledger_summary.yaml
+  ships malformed; bootstrap regex-reads tolerate this. Do not migrate to strict yaml.safe_load
+  consumers in this handoff.
+- 'Path corrections for canonical_sources registry: derived_stats_v30.md is at designs/scene/
+  (not designs/provincial/); params/core.md + params/mass_combat.md live at repo-root
+  params/ (not designs/provincial/params/); core_engine registry adds designs/architecture/complete_systems_reference.md
+  as a fifth design doc. Use g.read_files_graphql with these corrected paths — the
+  previous handoff path list was approximate.'
+session_token_origin: d88a9cb2e000d0e7
+scope: surgical-regression-fix
+created: '2026-05-18T05:28:03.442643+00:00'
+updated: '2026-05-18T05:28:03.442643+00:00'
