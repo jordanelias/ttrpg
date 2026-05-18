@@ -302,3 +302,19 @@ M1 Church Settlement Infrastructure (commit `4f27949e`, 128 tests, 49 ledger ent
 | Dependencies | Phase 10 baseline (params/combat.md ED-694 stamina; STR-strong bonus dice; 1/End Ob wound; Disarm) |
 | Status | Implemented + run. Reframing 2 verdict deferred pending Phase 12 mass-battle archetype test. |
 | Open | Tune M1 softer vs accept Reframing 2 vs add C2 hybrid — decision after Phase 12. |
+
+
+## Phase 12 (2026-05-17) — Mass-battle archetype test (Reframing 2 verification)
+
+| Field | Value |
+|---|---|
+| Scope | Mass-battle scale. Test whether Heavy/Strong archetypes dominate at mass scale at comparable or greater magnitude to scene-scale Agi dominance. Cross-scale balance check for Reframing 2. |
+| Sim | tests/sim/scripts/phase12_mass_archetype_v0.py |
+| Writeup | tests/sim/phase12_mass_archetype_v0_2026-05-17.md |
+| Trials | N=2000 per matchup; Levy vs Levy calibration 46.7%/48.5% cond |
+| Coverage | Light/Heavy archetype matchups; weapon-class penetration; Power-tier diffs; HeavyBlunt anti-armor |
+| Findings | Mass-battle dominance is CATEGORICAL (100/0) when weapon-class fails to penetrate armor-class, not statistical. Light vs Heavy: 0/100. Heavy vs Heavy: 100% draw (canonical stalemate without tactical levers). HeavyBlunt (Knights Templar): 100/0 vs everything — anti-armor universal. Reframing 2 supported with asymmetric magnitudes. |
+| Provisional assumptions | Default pool split ½/½; H baseline +2 per worked example; max_rounds=40; draw threshold ratio 1.2x; tactic cards / flanking / Command / terrain UNMODELED |
+| Dependencies | params/mass_combat.md Core Formula PP-233; DR Table PP-104; Weapon Effectiveness table |
+| Status | Implemented + run. Reframing 2 ratified. Two audit flags surfaced: HeavyBlunt universal anti-armor; Heavy-vs-Heavy stalemate needs tactical levers to produce interesting resolution. |
+| Open | Verify Heavy-vs-Heavy resolves interestingly via tactic cards / flanking / Command in M3-engine sim (deferred). HeavyBlunt audit deferred. |
