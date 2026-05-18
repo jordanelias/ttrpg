@@ -36,7 +36,7 @@ def advance_season(world) -> SeasonResult:
         world.arc += 1
         # Reset per-arc faction flags
         for f in world.factions.values():
-            pass  # Arc-level resets handled by faction_action module
+            f.reset_arc()
     # Reset per-season faction flags
     for f in world.factions.values():
         f.reset_seasonal()

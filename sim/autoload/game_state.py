@@ -67,6 +67,9 @@ class Faction:
     consul_used: bool = False
     peaceful: bool = True
     standing: int = 0
+    # NEW Phase 5/9 faction-unique action flags
+    excommunicated: bool = False
+    council_used_this_arc: bool = False
 
     def adjust(self, stat: str, granular_delta: float,
                floor: float = 0.5, ceiling: float = 7.0):
@@ -78,6 +81,10 @@ class Faction:
     def reset_seasonal(self):
         self.senator_inward_used = False
         self.consul_used = False
+
+    def reset_arc(self):
+        """Called by season_manager on arc boundary (new_arc=True)."""
+        self.council_used_this_arc = False
 
 
 @dataclass
@@ -153,7 +160,9 @@ def serialize_world(world: World) -> dict:
         'factions': {
             fn: {'L': f.L, 'Sta': f.Sta, 'W': f.W, 'I': f.I, 'Mil': f.Mil,
                  'territories': list(f.territories), 'parliamentary': f.parliamentary,
-                 'standing': f.standing}
+                 'standing': f.standing,
+                 'excommunicated': f.excommunicated,
+                 'council_used_this_arc': f.council_used_this_arc}
             for fn, f in world.factions.items()
         },
         'territories': {
@@ -178,6 +187,8 @@ def restore_world(snapshot: dict) -> World:
                     I=fd['I'], Mil=fd['Mil'], parliamentary=fd.get('parliamentary', True),
                     standing=fd.get('standing', 0))
         f.territories = set(fd['territories'])
+        f.excommunicated = fd.get('excommunicated', False)
+        f.council_used_this_arc = fd.get('council_used_this_arc', False)
         w.factions[fn] = f
     for tid, td in snapshot['territories'].items():
         t = Territory(tid=tid, owner=td['owner'], accord=td['accord'], pt=td['pt'],

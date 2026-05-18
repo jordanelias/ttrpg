@@ -3,7 +3,8 @@ sim/provincial/faction_action.py — Faction action selection + resolution
 
 Canon source: mc_v17.py faction_take_action; GD-2 (mandatory before stochastic)
 Game Design constraints applicable: GD-1, GD-2
-Status: [CANONICAL — Phase 2 implementation 2026-05-17]
+Status: [CANONICAL — Phase 2 implementation 2026-05-17; Phase 5/9 faction-unique
+         dispatch wired 2026-05-17]
 
 v17 port: probabilistic action mix (M7_ASSUMPTION_SIX).
 30% faction-unique | 35% Conquest | 20% Muster | 15% Govern.
@@ -11,12 +12,20 @@ v17 port: probabilistic action mix (M7_ASSUMPTION_SIX).
 Dependencies:
   - sim/autoload/game_state
   - sim/territory/adjacency
+  - sim/provincial/crown_initiative (Phase 5/9)
+  - sim/provincial/excommunication (Phase 5/9)
+  - sim/provincial/absolution (Phase 5/9)
+  - sim/provincial/council_solmund (Phase 5/9)
 """
 from __future__ import annotations
 
 import math
 from sim.autoload.game_state import MULTS, ALL_PLAYABLE_15
 from sim.territory.adjacency import ADJACENCY
+from sim.provincial import crown_initiative
+from sim.provincial import excommunication
+from sim.provincial import absolution
+from sim.provincial import council_solmund
 
 
 def _successes(pool: float, rng) -> int:
@@ -41,12 +50,16 @@ def faction_take_action(faction, world, rng) -> str:
 
     GD-2: mandatory threat-response before stochastic selection.
     Currently simplified: probabilistic mix per v17.
+    Phase 5/9: 30% slot routes to faction-unique actions per faction.name.
     """
     roll = rng.random()
 
-    # 30% faction-unique
+    # 30% faction-unique (Phase 5/9 dispatch)
     if roll < 0.30:
-        pass  # Faction-unique actions deferred to Phase 5+
+        unique_result = _try_faction_unique(faction, world, rng)
+        if unique_result != 'invalid':
+            return unique_result
+        # fall through to Conquest if faction-unique unavailable
 
     # 35% Conquest (cumulative 65%)
     if roll < 0.65:
@@ -62,6 +75,58 @@ def faction_take_action(faction, world, rng) -> str:
 
     # 15% Govern (fallback)
     return _try_govern(faction, world, rng)
+
+
+def _try_faction_unique(faction, world, rng) -> str:
+    """Phase 5/9 dispatch — faction-unique action routing by faction.name.
+
+    Crown: Crown Initiative (3 modes via select_initiative_mode heuristic).
+    Church: Excommunication / Absolution / Council, picked by situational priority:
+        1. Council if not used this arc (rare, high value)
+        2. Excommunication if a viable target exists (highest-L rival not already excomm)
+        3. Absolution otherwise (recovery + Stability support — Church always has L cost)
+    Varfell/Hafenmark: deferred (Pass 2d/2e + contamination audit BLOCKED).
+    """
+    if faction.name == 'Crown':
+        mode = crown_initiative.select_initiative_mode(faction, world, rng)
+        if mode is None:
+            return 'invalid'
+        if mode == 'royal_progress':
+            r = crown_initiative.attempt_royal_progress(faction, world, rng)
+        elif mode == 'great_work':
+            r = crown_initiative.attempt_great_work(faction, world, rng)
+        elif mode == 'coronation_renewal':
+            r = crown_initiative.attempt_coronation_renewal(faction, world, rng)
+        else:
+            return 'invalid'
+        if r.status != 'resolved':
+            return 'invalid'
+        return f'CrownInitiative_{mode}:{r.degree.value}'
+
+    if faction.name == 'Church':
+        # Priority 1: Excommunication (primary offensive, high strategic impact)
+        if faction.L >= excommunication.EXCOMM_PREREQ_L_LIGHT:
+            target = excommunication.select_excommunication_target(faction, world, rng)
+            if target is not None:
+                r = excommunication.attempt_excommunication(faction, target, world, rng)
+                if r.status == 'resolved':
+                    return f'Excommunication:{r.degree.value}'
+        # Priority 2: Council (1/arc, rare but high-value Mandate boost)
+        if not getattr(faction, 'council_used_this_arc', False):
+            r = council_solmund.attempt_council(faction, world, rng)
+            if r.status == 'resolved':
+                return f'Council:{r.degree.value}'
+        # Priority 3: Absolution — only when Church.L >= 4 (cost is L-1; protect Excomm prereq)
+        if faction.L >= 4.0:
+            target = absolution.select_absolution_target(faction, world, rng)
+            if target is not None:
+                r = absolution.attempt_absolution(faction, target, world, rng)
+                if r.status == 'resolved':
+                    return f'Absolution:{r.degree.value}'
+        return 'invalid'
+
+    # Varfell + Hafenmark — BLOCKED on Pass 2d/2e + contamination audit
+    return 'invalid'
 
 
 def _try_conquest(faction, world, rng) -> str:
