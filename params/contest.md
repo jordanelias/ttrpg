@@ -36,12 +36,12 @@ Genre + orientation presented as a single choice per exchange:
 
 | Style | = Genre + Orientation | Flavour |
 |-------|----------------------|---------|
-| Precedent | Memory + Revealing | Citing what happened openly |
-| Suppression | Memory + Obscuring | Burying inconvenient history |
-| Vision | Projection + Revealing | Proposing a transparent future |
-| Insinuation | Projection + Obscuring | Implying unstated consequences |
+| Cite Precedent | Past + Direct | Citing what happened openly |
+| Bury Precedent | Past + Indirect | Burying inconvenient history |
+| Propose Vision | Future + Direct | Proposing a transparent future |
+| Imply Consequence | Future + Indirect | Implying unstated consequences |
 
-Interaction type derived: same style = REINFORCE, same genre opposite orientation = CLASH, different genre = CROSS.
+Interaction type derived: same style = Echo Match, same genre opposite orientation = Head-On, different genre = Cross-Time.
 ## Genre and Orientation Bonus Dice
 | Source | Bonus | Condition |
 |--------|-------|-----------|
@@ -52,11 +52,11 @@ Interaction type derived: same style = REINFORCE, same genre opposite orientatio
 ## Faction Boosts (single axis per faction)
 | Faction | Ethical Mode | Boost | Axis |
 |---------|-------------|-------|------|
-| Church | Faith | Obscuring | Orientation |
-| Crown | Virtue | Revealing | Orientation |
+| Church | Faith | Indirect | Orientation |
+| Crown | Virtue | Direct | Orientation |
 | Varfell | Consequentialism | Projection | Genre |
 | Hafenmark | Categorical Imperative | Memory | Genre |
-| Restoration | Equity Social Contract | Revealing | Orientation |
+| Restoration | Equity Social Contract | Direct | Orientation |
 | Guilds | Moral Relativism | GM picks | Either |
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
 <!-- Niflhel row deleted 2026-04-30 — STRUCK per CR-STRIKE-2026-04-19 / ED-764. Was: ~~Niflhel~~ STRUCK | — | — | — | Per ED-764. -->
@@ -75,7 +75,7 @@ Step 1 — Read (Attunement, TN 7, Ob 1):
 | Success (2) | Full boost identified |
 | Overwhelming (3+) | Boost + one specific detail (Belief, threshold, emotional state) |
 
-Step 2 — Choose genre (Memory/Projection) + orientation (Revealing/Obscuring).
+Step 2 — Choose genre (Memory/Projection) + orientation (Direct/Indirect).
 Step 2b — Corroborate (automatic when Bonds ≥ 3 symmetric or ≥ 4 asymmetric disadvantaged; +1D on success. PP-235).
 Step 3 — Argue (pool per §Pools + genre/orientation bonus).
 Step 4 — Resolve (see Interaction Types).
@@ -86,12 +86,12 @@ Step 7 — GM records.
 ## Interaction Types (3 + TIE)
 | Type | Condition | Resolution | Strain |
 |------|-----------|------------|--------|
-| CLASH | Same genre, opposite orientation | Compare; margin vs resistance → track movement | Margin + Cha modifier − Foc defence (min 0) |
-| REINFORCE | Same genre, same orientation | Same as CLASH | max(0, (Margin − 1) + Cha modifier − Foc defence) | (PP-401, ED-296 fix: floor at 0) |
-| CROSS | Different genres | Each side: floor(successes ÷ 2) vs resistance; net movement = difference | None |
-| TIE | Equal successes, any type | Both take 1 strain (except CROSS: no strain — PP-236); track +1 toward first-to-speak holder | 1 each (except CROSS: 0 — PP-236) |
+| Head-On | Same genre, opposite orientation | Compare; margin vs resistance → track movement | Margin + Cha modifier − Foc defence (min 0) |
+| Echo Match | Same genre, same orientation | Same as Head-On | max(0, (Margin − 1) + Cha modifier − Foc defence) | (PP-401, ED-296 fix: floor at 0) |
+| Cross-Time | Different genres | Each side: floor(successes ÷ 2) vs resistance; net movement = difference | None |
+| TIE | Equal successes, any type | Both take 1 strain (except Cross-Time: no strain — PP-236); track +1 toward first-to-speak holder | 1 each (except Cross-Time: 0 — PP-236) |
 
-Obscuring win: no track movement; place Doubt Marker on opponent (−2 to opponent's next winning margin; one active at a time; consumed on use).
+Indirect win: no track movement; place Suspicion Token on opponent (−2 to opponent's next winning margin; one active at a time; consumed on use).
 
 ## Persuasion Track
 Range: 0–10. Side A wins ≥ 7. Side B wins ≤ 3. Compromise zone: 4–6.
@@ -167,8 +167,8 @@ Resolved questions cannot be re-contested without significantly changed circumst
 <!-- patch_history: references/params_contest_history.md -->
 <!-- canonical_sources: references/canonical_sources.yaml -->
 
-## PP-236 — CROSS Tie no-strain
-CROSS interaction + equal successes: no strain to either orator. CROSS no-strain rule overrides Tie +1-strain. Persuasion Track +1 toward first-to-speak holder as normal.
+## PP-236 — Cross-Time Tie no-strain
+Cross-Time interaction + equal successes: no strain to either orator. Cross-Time no-strain rule overrides Tie +1-strain. Persuasion Track +1 toward first-to-speak holder as normal.
 
 ## PP-237 — Coalition Concentration shared pool
 Shared pool = sum of all coalition members' (Focus+Recall) at setup. Depletes 1/exchange (+1 on loss) regardless of Lead rotation. Spent at 0; resets to setup total.
@@ -223,93 +223,45 @@ MS consequence fires automatically when:
 (a) Contest subject is a Thread-factual claim, OR (b) Thread op used in a Contest exchange.
 All other subjects: no MS consequence. No GM discretion required.
 
-## BG Doubt Marker Analog
+## BG Suspicion Token Analog
 No analog needed. BG debate fully abstracted. Parliamentary Vote (ED-053) handles faction-level outcomes.
 
 
 ## P1 Findings — Awaiting Resolution (2026-04-04)
 
-### ED-295: CLASH movement stalls at median
+### ED-295: Head-On movement stalls at median
 floor(margin × genre_weight × orientation_weight − resistance) produces 0 movement
-when margin barely exceeds resistance. At median dice results, CLASH advances
+when margin barely exceeds resistance. At median dice results, Head-On advances
 the Persuasion Track by 0 — contest stalls. Four fix options proposed (A-D).
 **User decision required.**
 
-### ED-296: REINFORCE produces negative movement
+### ED-296: Echo Match produces negative movement
 (margin − 1) × modifiers − resistance goes negative when the stronger orator's
-margin is small. Fix: apply max(0, ...) floor to REINFORCE movement.
+margin is small. Fix: apply max(0, ...) floor to Echo Match movement.
 **Mechanical fix — can apply without user decision if authorized.**
 
-### ED-297: AMPLIFY dominant over CLASH
-AMPLIFY produces ~5 movement/exchange vs CLASH ~0 at median. Coalitions are
+### ED-297: Coalition Push dominant over Head-On
+Coalition Push produces ~5 movement/exchange vs Head-On ~0 at median. Coalitions are
 mechanically superior to solo advocacy. May be intended design (rewarding alliances).
 **User decision required: confirm or rebalance.**
 
-## PP-NEW-A — TIE/CROSS no-strain exception (SIM-DB-STRESS-01 D-04)
-TIE row in Interaction Types table updated to include CROSS exception.
-In CROSS + TIE: no strain to either orator (PP-236 takes precedence). Persuasion Track +1 toward first-to-speak holder as normal.
-Source: SIM-DB-STRESS-01 D-04 finding. 2026-04-09.
 
-## PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b; updated PP-716)
-Concentration maximum = Focus × 3 (= starting value at contest setup; per `designs/scene/derived_stats_v30.md` §5.2).
-Restoration (from Regroup or other effects) cannot raise Concentration above this maximum.
-Source: SIM-DB-STRESS-01 D-08b finding. 2026-04-09.
+---
 
-## Evidence Track Findings in Contest (PP-636)
+## Extensions
 
-Findings from completed fieldwork investigations may be cited in Contest opening (§9.1).
+Additional canonical rules for Contest! are filed at `params/contest_extensions.md`:
+- PP-NEW-A — TIE/Cross-Time no-strain exception (SIM-DB-STRESS-01 D-04)
+- PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b; updated PP-716)
+- Evidence Track Findings in Contest (PP-636)
+- Resonant Style Targeting (from npc_behavior_system_v1.md §6)
+- Temporal Axis Conflict (PP-351 — canonical)
+- Church Self-Investigation Exception (PP-349 — canonical)
 
-| Findings cited | Exchange 1 bonus |
-|---|---|
-| 1 Finding | +1D |
-| 2+ Findings | +2D (cap) |
+## P1 Findings — Resolved 2026-05-17 (audit ED-864)
 
-Findings are **not consumed** by citation — remain on Evidence Track. Must be declared at contest setup. GM determines scope relevance (Finding must relate to contest subject). Stacks with §9.1 preparation bonus (+1D), for maximum Exchange 1 pool bonus of +3D when both available.
+- **ED-295** (Head-On stalls at median margin): Option D — audience resistance erodes per exchange. Per-exchange erosion: `Stab_resistance_t = max(0, Stab_resistance_0 − ⌊exchange_count / 2⌋)`. First exchange uses baseline resistance; every two exchanges thereafter reduces audience resistance by 1. Long contests resolve organically; short contests retain current dynamics. Spec applies to all Interaction Types (Head-On, Echo Match, Cross-Time, Coalition Push).
+- **ED-296** (Echo Match negative movement): floor at 0 — already applied in Interaction Types table (`max(0, (Margin − 1) + Cha modifier − Foc defence)`).
+- **ED-297** (Coalition Push magnitude ~5/exchange vs solo ~0): RATIFIED as canonical design. Coalitions mechanically dominate solo advocacy by intent (parliamentary politics).
 
-Source: fieldwork_investigation.md §2.3 / F-TRANS-11. social_contest_system_v2.md §9.1.
-
-## Resonant Style Targeting (from npc_behavior_system_v1.md §6)
-<!-- Source: designs/systems/npc_behavior_system_v1.md. Canonical. -->
-
-### Appraise Revelation
-| Appraise net | Resonant Style info |
-|---|---|
-| Overwhelming (3+) | Primary Resonant Style revealed (in addition to one Belief per existing rules) |
-| Overwhelming (4+) | Both primary and secondary Resonant Style revealed |
-
-### Targeting Declaration
-Before Argue roll (Step 3): player declares "targeting Resonant Style." GM confirms match.
-Requires: (a) argument uses Contest style mapping to the declared MS, (b) content addresses a known Belief, (c) player has previously discovered the MS.
-
-### Targeting Effects
-| MS | Required form | On confirmed targeting |
-|---|---|---|
-| Evidence | Memory + Revealing. Must cite specific named verifiable claim. | +1D Argue. On win: Persuasion Track +1 additional (bypasses 1 resistance). |
-| Consequence | Projection + Revealing. Must project specific outcome framework fails to prevent. | +1D Argue. On win: NPC +2 strain. |
-| Sanction | Invoke specific binding authority contradicting NPC's position. | +1D Argue. Doubt Marker placed regardless of outcome. |
-| Solidarity | Requires active Knot with NPC. Must invoke the relationship. | +1D Argue. On win: no strain, NPC Belief revision Ob −1. |
-
-### TS Gate (P-08 compliance)
-Thread-level evidence invalid as Evidence targeting vs TS 0 NPCs. Ontical evidence only. Exception: TS 30+ NPCs accept Thread-level evidence.
-
-### Wrong-Style Penalty (Church Martyrdom extension)
-Wrong MS vs Church institutional NPC (Himlensendt, Olafsson, Klapp, Cardinals) in public venue with Failure/Partial: Church Stability +1 (PP-259 fires).
-
-### Stacking
-Max positional bonus: +5D (genre +1, audience +1, MS targeting +1, Recall +2). Each prerequisite independently costly. Practical pools 12–18D; 25D+ extreme.
-
-## Temporal Axis Conflict (PP-351 — canonical)
-
-If a practitioner initiates a Thread operation on a temporal axis that opposes
-the contest's primary temporal orientation, the Thread operation's co-movement
-effects apply to the contest's Persuasion Track (±1 shift per co-movement
-card drawn during the contest scene).
-
-## Church Self-Investigation Exception (PP-349 — canonical)
-
-The Church does not file Heresy Investigation against its own ordained members
-who are supporting Church institutional interests (CI advancement, PT increase,
-infrastructure expansion). Self-investigation only triggers when an ordained
-member acts against Church interests (supporting RM, lowering PT, aiding
-Varfell Thread programs).
-
+Source: `designs/audit/2026-05-17-scene-combat-contest/decisions.md`
