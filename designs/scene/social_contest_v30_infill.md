@@ -12,9 +12,9 @@
 - Presence → Charisma (Cha). "Presence" reserved as Husserlian technical term: the immediacy of being given to consciousness.
 - All other attributes unchanged: Agility (Agi), Endurance (End), Strength (Str), Cognition (Cog), Focus (Foc), Attunement (Att), Bonds (Bon), Spirit (Spi).
 ### Genre restructure
-- "Present" is not a temporal position but the operation site where rendering occurs (Husserlian presence). "Character/Present" arguments decompose into retention (Memory) or protention (Projection) claims.
-- Memory = temporal retention, actual, epistemically accessible. What has been given to consciousness.
-- Projection = temporal protention, potential, epistemically inaccessible. What has yet to be given to consciousness.
+- "Present" is not a temporal position but the operation site where rendering occurs (Husserlian presence). "Character/Present" arguments decompose into retention (Past) or protention (Future) claims.
+- Past = temporal retention, actual, epistemically accessible. What has been given to consciousness.
+- Future = temporal protention, potential, epistemically inaccessible. What has yet to be given to consciousness.
 ## §1 CORE PRINCIPLE: FORMAT FOLLOWS CONTEXT
 The contest system does not have a fixed format. Exchange count, role structure, audience weight, and available actions vary by institutional context and adjudicator type. The Game Master (GM) sets the format at setup; players know it before the contest begins.
 **A contest is initiated when:** (a) two or more parties with opposed positions are present, AND (b) the outcome is uncertain and consequential. GMs should not call for a contest when one side has no plausible case or when the outcome is predetermined by prior Domain Actions.
@@ -25,9 +25,9 @@ If the question does not clearly favour one genre, the GM assigns whichever is m
 ## §3 ARGUE POOL CONSTRUCTION
 **Design note:** the three social attributes (Cognition, Charisma, Attunement) each have a domain where they are primary. High-Cognition characters excel before judges and tribunals. High-Charisma characters excel before crowds and parliaments. High-Attunement characters excel in private dealings. This produces meaningful character differentiation across social contexts without adding mechanical complexity — the formula is the same; only the base attribute changes.
 ## §4 EXCHANGE STRUCTURE
-**Step 2 — Choose:** Each orator selects genre (Memory or Projection) and orientation (Revealing or Obscuring).
-One orator invokes what has been (Memory); the other projects what could become (Projection). The fundamental rhetorical collision.
-**OBSCURING WIN** (winning any exchange with Obscuring orientation in CLASH or REINFORCE; see CROSS clause for CROSS-specific Doubt Marker rule):
+**Step 2 — Choose:** Each orator selects genre (Past or Future) and orientation (Direct or Indirect).
+One orator invokes what has been (Past); the other projects what could become (Future). The fundamental rhetorical collision.
+**INDIRECT WIN** (winning any exchange with Indirect orientation in Head-On or Echo Match; see Cross-Time clause for Cross-Time-specific Suspicion Token rule):
 - At strain ≥ Composure: take a **Rattled** mark (Composure resets to full, excess strain carries over).
 - At 2 Rattled marks: socially incapacitated — cannot participate in formal social scenes until recovered. Informal conversation still possible.
 - Knot as Composure buffer: redirect Composure damage to a Knot (+1 strain per use). Prevents Rattled but accelerates Knot decay.
