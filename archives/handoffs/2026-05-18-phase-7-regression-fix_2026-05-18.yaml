@@ -1,5 +1,5 @@
 id: 2026-05-18-phase-7-regression-fix
-status: active
+status: closed
 task:
   skill: valoria-simulator
   description: 'Phase 7 regression fix. Prior session (c6ecb5b9, 2026-05-18 d88a9cb2)
@@ -160,3 +160,4 @@ session_token_origin: d88a9cb2e000d0e7
 scope: surgical-regression-fix
 created: '2026-05-18T05:28:03.442643+00:00'
 updated: '2026-05-18T05:28:03.442643+00:00'
+closed_at: '2026-05-18T22:24:35.943552+00:00'
