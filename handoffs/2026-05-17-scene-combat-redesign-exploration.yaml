@@ -1,0 +1,143 @@
+id: 2026-05-17-scene-combat-redesign-exploration
+task:
+  description: "Continue scene combat redesign exploration. Five design directions\
+    \ remain on the table — analysis phase, not commit-ready. Decision-owner is Jordan;\
+    \ assistant role is exploration support, NOT recommendation. Do not push a particular\
+    \ direction; surface trade-offs.\n\nPrior session traced Agility-pool dominance\
+    \ in scene combat from Phase 8/10/11/12 sim work to a structural mismatch with\
+    \ how real combat resolves. Reframing 2 (cross-scale niche dominance) was sim-validated.\
+    \ C4 was drafted as one specific reform direction but became too thin once the\
+    \ deeper question surfaced: scene combat fails to capture the five convergent\
+    \ observations from treatises/sports/games:\n  1. Initiative is a state, not a\
+    \ number\n  2. Weapon choice changes engagement profile, not just damage\n  3.\
+    \ The bind/engaged-distance is the decision sub-game\n  4. Commitment is asymmetric\
+    \ per moment\n  5. Reading the opponent is its own skill\n\nCurrent Valoria engine\
+    \ captures none.\n\nFive remaining directions (struck FFT/Octopath/FFX init-meter\
+    \ and Disco Elysium narrative-check per Jordan 2026-05-17):\n  1. Three-axis attack/defense\
+    \ + advantage bar (Sid Meier Pirates, Silver time hierarchy)\n  2. One-hit kill\
+    \ + posture/limb subsystem (Bushido Blade, Hellish Quart, Kendo, Liechtenauer)\n\
+    \  3. Directional commitment + feint (For Honor, Bannerlord, Liechtenauer)\n \
+    \ 4. Stance counters opponent archetype (Ghost of Tsushima, Fiore)\n  5. Posture/HP\
+    \ dual tracks (Sekiro, Liechtenauer Vor/Nach)\n\nHellish Quart added to videogame\
+    \ survey 2026-05-17: physics-based HEMA dueling, 4 attack angles, autoguard, mocap\
+    \ from HEMA practitioners, no health bars, single-strike kills, weapon physically\
+    \ blocks weapon. Closest existing videogame to Liechtenauer-tradition combat.\
+    \ Stylistic successor to Bushido Blade with European twist.\n\nNext session: deepen\
+    \ exploration of each direction with concrete mechanical proposals, present trade-offs,\
+    \ await Jordan decision on direction. Do not push tiered framing or any other\
+    \ synthesis — bias was called out in prior session."
+  skill: valoria-mechanic-audit
+context_files:
+- path: designs/audit/2026-05-17-scene-combat-contest/decisions.md
+  depth: full
+  reason: Prior session decision record. Combat C4 direction, Contest! decisions,
+    Reframing 2.
+- path: designs/audit/2026-05-17-scene-combat-contest/battlecon_extraction.md
+  depth: full
+  reason: BattleCON study + Phase 8/10 sim findings — closes transitive citation gap
+    for C4.
+- path: designs/audit/2026-05-17-scene-combat-contest/mass_battle_audit_flags.md
+  depth: full
+  reason: Phase 12 audit flags (HeavyBlunt + Heavy-vs-Heavy) — comparator review.
+- path: designs/scene/combat_c4_draft_v0.md
+  depth: full
+  reason: Draft C4 spec (M1+M2+M3). Superseded by exploration; do not merge into combat_v30
+    yet.
+- path: tests/sim/phase11_c4_v0_2026-05-17.md
+  depth: full
+  reason: Phase 11 scene C4 sim writeup. Calibration baseline.
+- path: tests/sim/phase12_mass_archetype_v0_2026-05-17.md
+  depth: full
+  reason: Phase 12 mass-battle archetype sim. Reframing 2 verification.
+- path: params/combat.md
+  depth: full
+  reason: Current scene combat canonical. Combat Pool formula, action economy, weapon
+    table.
+- path: params/contest.md
+  depth: full
+  reason: Contest! reference — multi-attribute pool rotation pattern (mirror for combat).
+- path: params/core.md
+  depth: full
+  reason: Dice engine + continuous engine spec + universal mechanical principles.
+- path: designs/scene/combat_v30_index.md
+  depth: skeleton
+  reason: Combat design canonical doc structure. Skeleton-first per M5.
+- path: designs/scene/combat_v30_infill.md
+  depth: full
+  reason: Combat design canonical doc body. After skeleton.
+- path: designs/personal/character_generation_questionnaire_v30.md
+  depth: full
+  reason: Ogre Battle + Disco Elysium + Darklands synthesis. Narrative-first direction
+    — player never sees numbers. Constrains acceptable mechanic visibility.
+- path: canon/02_canon_constraints.md
+  depth: full
+  reason: P-01..P-15 metaphysics + GD-1..GD-3 directives. Audit task_gate prereq.
+- path: skills/valoria-mechanic-audit/SKILL.md
+  depth: full
+  reason: Audit task_gate prereq.
+- path: tests/coverage_matrix.md
+  depth: full
+  reason: Phase 11 + Phase 12 entries; sim status register.
+working_state:
+  phase: exploration
+  completed:
+  - Phase 8/10 sim direct reads (closed transitive-citation gap)
+  - BattleCON mechanic extraction memo filed
+  - Phase 11 scene C4 sim implemented + run
+  - Phase 12 mass-battle archetype sim implemented + run
+  - 'Reframing 2 sim-validated (asymmetric magnitudes: scene 94/6 statistical, mass
+    100/0 categorical)'
+  - C4 draft spec filed but not merged into canonical combat_v30
+  - 'Historical treatises corpus established: Liechtenauer, Fiore, Silver, Vegetius,
+    Clausewitz'
+  - Combat sports W:R empirical table established (Frontiers 2024 meta-analysis)
+  - 'Videogame duel-system survey: Pirates, UWNH, Bushido Blade, For Honor, Ghost
+    of Tsushima, Bannerlord, Sekiro, Hellish Quart'
+  - Seven directions reduced to five per Jordan strikes
+  - Mid-session synthesis push (tiered framing) called out by Jordan; assistant retracted
+  next:
+  - Deepen each of the 5 directions with concrete mechanical proposals (action types,
+    resolution math, stat-attribute roles)
+  - Surface compatibility trade-offs against character_generation_questionnaire (narrative-first,
+    numbers-hidden)
+  - Surface implementation cost trade-offs (sim work preserved vs invalidated)
+  - Present trade-offs WITHOUT pushing a direction; await Jordan decision
+  - 'After direction decision: re-spec or replace C4 draft; design Phase 13 sim against
+    chosen direction'
+  bias_warnings:
+  - Confirmation bias toward tiered framing — surfaced once and was withdrawn; do
+    not re-introduce as synthesis without Jordan request
+  - Recommendation-reflex when faced with multiple options — exploration mode, not
+    verdict mode
+  - Easiest-to-justify ≠ best design — direction that preserves prior sim work has
+    visible-cost bias
+  open_questions:
+  - Which of 5 directions does Jordan want to deepen, or does Jordan want all 5 deepened?
+  - Compatibility constraint with character_generation_questionnaire is real — visible
+    meters / RPS UIs may conflict with "player never sees numbers"
+  - Phase 13 sim shape depends on direction selected — cannot pre-design
+last_commit: c2d4800
+owns:
+- designs/scene/combat_v30*.md
+- designs/scene/combat_c4_draft_v0.md
+- designs/audit/2026-05-17-scene-combat-contest/**
+- params/combat.md
+- tests/sim/scripts/phase11_*.py
+- tests/sim/scripts/phase12_*.py
+block: 'Two constraints on resuming work:
+
+  1. Jordan owns the direction decision. Assistant role is surface trade-offs; do
+  not push a particular direction. Mid-session a "tiered design" recommendation was
+  issued and called out as confirmation-bias + recommendation-reflex + easiest-to-justify
+  rationalization. Hold the line on exploration vs synthesis.
+
+  2. designs/personal/character_generation_questionnaire_v30.md commits the project
+  to "Ogre Battle + Disco Elysium + Darklands synthesis" where player never sees stats.
+  Any direction proposal must be compatible with that — visible meters, RPS UIs, and
+  similar surface elements may conflict with the questionnaire''s narrative-first
+  direction.'
+created: '2026-05-18T05:08:28.022208+00:00'
+updated: '2026-05-18T05:08:28.022208+00:00'
+status: active
+key_values: []
+blockers: []
