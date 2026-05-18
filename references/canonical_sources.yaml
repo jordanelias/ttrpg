@@ -34,12 +34,14 @@ sources:
 # ── Pass 2 additions (2026-05-17) ────────────────────────────────────────
   faction_systems_overview:
     design_doc: designs/factions/faction_systems_overview_v30.md
+    canonical_sha__designs__factions__faction_systems_overview_v30_md: "b56962522ab7f71fd82ac63abfae21c539679855"
     note: "Pass 2 follow-up. Single-pane reference cataloging ~50 faction-touched mechanics across 6 layers (primitives -> peninsular). Points at canon; does not duplicate. ~80% of Pass 2 forward-flags concentrate on faction surface."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2 follow-up"
 
   v18_integration_plan:
     design_doc: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
+    canonical_sha__designs__audit__2026-05-17-v18-integration__integration_plan_v18_md: "0696479924f7fbf4f786ad4a43efeb0e673beb12"
     note: "Pass 2m. Build roadmap mapping 72 sim/ modules to 12-phase implementation sequence with test plan + validation gates + dependency graph. 23 forward-flags accumulated for Pass 2k. v17→v18 migration discipline."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2m"
@@ -47,6 +49,7 @@ sources:
 
   insurgency_pipeline_v30:
     design_doc: designs/world/insurgency_pipeline_v30.md
+    canonical_sha__designs__world__insurgency_pipeline_v30_md: "ed71450fdf4e023925c86cb49ab0b222ff8625c5"
     note: "Pass 2i. GD-3 4-stage layered model: world PT decay → Latent RM → Insurgency → Promoted Faction. GD-1/2/3 cross-bindings. 7 forward-flags."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2i"
@@ -54,12 +57,14 @@ sources:
 
   parliamentary_transfer_v18:
     design_doc: designs/provincial/parliamentary_transfer_v30.md
+    canonical_sha__designs__provincial__parliamentary_transfer_v30_md: "3029e6a2faeb81fabb1233c3ef420a7a4b7610cd"
     note: "Pass 2h. v12c §4.4 universal mechanic, validated_n1000_v12c. 4 modes; 8 CB sources. Wraps Parliamentary Vote contest. 3 forward-flags."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2h"
 
   treaty_expiration_v18:
     design_doc: designs/provincial/treaty_expiration_v30.md
+    canonical_sha__designs__provincial__treaty_expiration_v30_md: "acd5560ede45a95c83abf3ffeff6d338581371c1"
     note: "Pass 2h. v12c §4.5 universal mechanic, validated_n1000_v12c, primary Crown-nerf. 90-95%/arc lapse. Re-bind via Senator Outward. 3 forward-flags."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2h"
@@ -68,6 +73,7 @@ sources:
 
   knots_unified:
     design_doc: designs/personal/knots_v30.md
+    canonical_sha__designs__personal__knots_v30_md: "6571d73ea3018d725092ad853fb9ffa8cec75290"
     note: "Pass 2g synthesis of Knot mechanic from 9 canon fragments. Forward-flags 3 contradictions to Pass 2k."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2g"
@@ -79,6 +85,7 @@ sources:
 
   mass_battle_integration_v18:
     design_doc: designs/provincial/mass_battle_integration_v30.md
+    canonical_sha__designs__provincial__mass_battle_integration_v30_md: "b64877b0b473d08728d10c3f8921da1bf40e0b69"
     note: "Pass 2n. Integration spec for porting sim_mb_06_v22 features. Does not supersede mass_battle_v30."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2n"
@@ -94,7 +101,7 @@ sources:
 systems:
   core_engine:
     design_doc: designs/architecture/complete_systems_reference.md
-    canonical_sha__designs__architecture__complete_systems_reference_md: "48f0c86a6d00d1a408feedbfb2cbb9fe474460e4"
+    canonical_sha__designs__architecture__complete_systems_reference_md: "17771c5cc2650ee65dae304c23ea48a4f77a9d43"
     params: params/core.md
     canonical_sha__params__core_md: "7d0b7447b99c2e837f92aab0fb9e9bacda6690b5"
     bg_params: params/bg/core.md
@@ -124,7 +131,7 @@ systems:
     canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
   victory:
     design_doc: designs/provincial/victory_v30.md
-    canonical_sha__designs__provincial__victory_v30_md: "654cd36c7ccc42b1b6bcdad7315537a3ce52740b"
+    canonical_sha__designs__provincial__victory_v30_md: "afe6086b287489659b2356bb9dfb2c74d1480127"
     params: params/bg/victory.md
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
@@ -160,15 +167,15 @@ systems:
     canonical_sha__params__mass_combat_md: "694d7a232a7204a93b634b936596d822ddafe2d2"
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "8ae7640948c4b4f3c7358f1aa0654788ec78d930"
+    canonical_sha__params__contest_md: "4534909c7d8875417a7c66fcc0ba5a5796765a3e"
     social_contest_design: designs/scene/social_contest_v30.md
     canonical_sha__designs__scene__social_contest_v30_md: "e8c92145f6ddebc48e71e29424f34c4ed7fa5676"
     social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "601365398399b133b2592b4ae94d1ab61df5445a"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
-    canonical_sha__designs__scene__social_contest_v30_infill_md: "8b3e0837939d528091069fb406cc0f1b4dfda99d"
+    canonical_sha__designs__scene__social_contest_v30_infill_md: "15f1b0f6a916bbf0343405955210f9145cd95418"
     params: params/contest.md
-    canonical_sha__params__contest_md: "8ae7640948c4b4f3c7358f1aa0654788ec78d930"
+    canonical_sha__params__contest_md: "4534909c7d8875417a7c66fcc0ba5a5796765a3e"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "17e75c6e4c17bfa7f1d17ef8fc5e4999b52091c1"
@@ -207,7 +214,7 @@ systems:
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
     design_doc: designs/scene/conviction_track_v30.md
-    canonical_sha__designs__scene__conviction_track_v30_md: "9ccb50e4c147e24925b51416db38c4fdeebe1ec8"
+    canonical_sha__designs__scene__conviction_track_v30_md: "07a7279e59bbb70433ccf88a4917c4895022cf75"
     conviction_track_index: designs/scene/conviction_track_v30_index.md
     canonical_sha__designs__scene__conviction_track_v30_index_md: "f1cccb40b3d590d5eb1426d49afee26106a54fb7"
     canonical_status: "PARTIALLY SUPERSEDED — §1 (9-Conviction set) replaced by designs/personal/conviction_taxonomy_v30.md per PP-684. §2 Scar accumulation now per-Conviction (PP-718 ratified 2026-05-10): crisis at 3+ Scars on any single Conviction; multi-primary NPCs can Scar each independently. §3 Thread Operation triggers remain canonical (matrix still applies to migrated Convictions per PP-685)."
