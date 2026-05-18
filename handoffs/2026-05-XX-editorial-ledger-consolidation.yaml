@@ -1,0 +1,148 @@
+id: 2026-05-XX-editorial-ledger-consolidation
+task:
+  skill: valoria-orchestrator
+  description: 'Editorial ledger consolidation. Active ledger (canon/editorial_ledger.yaml)
+    sits at 3,822/4,000 tokens with auto-fix BLOCKED because tools/compliance_check.auto_fix
+    line 527 has stubbed archive discovery (archive_contents = {}). Running auto-fix
+    now creates a third overlapping archive scheme rather than merging. Pre-investigation
+    (2026-05-18 session d88a9cb2) confirmed: 14 ledger files exist across 3 parallel
+    schemes (date-keyed _2026-04_*, ID-range _NNN_NNN, unsuffixed _archive). 174 unique
+    IDs across 210 entry-instances. 35 IDs duplicate across files. _archive_2026-04_b.yaml
+    had a YAML parse error at L246 (in-memory fix verified — 56 entries; needs commit).
+    CRITICAL FINDING: 17 entries in _archive_2026-04_b.yaml have status:provisional
+    with descriptions shaped [PROPOSED: ...] containing inline references to ED-N
+    as OPEN — these are prose-extract scraps, not real ledger entries. Provenance
+    unknown without corpus grep or Jordan-side judgment per row. Approach: B1 quarantine
+    (proposed) — migrate 157 clean entries to consolidated ID-range scheme, quarantine
+    the 17 provisional rows to canon/editorial_ledger_quarantine.yaml with provenance
+    note. Scope: 4-step Pass 2 plan documented in working_state.next.'
+context_files:
+- path: canon/editorial_ledger.yaml
+  depth: full
+  reason: Active ledger — 28 open entries, ID 811-864
+- path: canon/editorial_ledger_archive.yaml
+  depth: full
+  reason: Unsuffixed empty stub — deletion candidate
+- path: canon/editorial_ledger_archive_2026-04_a.yaml
+  depth: full
+  reason: Date-keyed archive, 71 entries 600-771, needs migration to ID-range scheme
+- path: canon/editorial_ledger_archive_2026-04_b.yaml
+  depth: full
+  reason: 56 entries 129-783 AFTER in-memory YAML fix; contains the 17 provisional
+    rows
+- path: canon/editorial_ledger_archive_2026-05.yaml
+  depth: full
+  reason: 4 entries 777-789, migration candidate
+- path: canon/editorial_ledger_archive_2026-05b.yaml
+  depth: full
+  reason: 5 entries 788-823; CONTAINS 4 misfiled open duplicates (ED-811/813/822/823)
+- path: canon/editorial_ledger_archive_710_796.yaml
+  depth: full
+  reason: Existing ID-range archive, 10 entries 710-796
+- path: canon/editorial_ledger_archive_788_840.yaml
+  depth: full
+  reason: Existing ID-range archive, 2 entries — OVERLAPS 826-831 and 832-839
+- path: canon/editorial_ledger_archive_796_821.yaml
+  depth: full
+  reason: Existing ID-range archive, 20 entries — overlaps 710-796 and 788-840
+- path: canon/editorial_ledger_archive_826_831.yaml
+  depth: full
+  reason: Existing ID-range archive, 6 entries — contained in 788-840
+- path: canon/editorial_ledger_archive_832_839.yaml
+  depth: full
+  reason: Existing ID-range archive, 8 entries — overlaps 788-840
+- path: canon/editorial_ledger_index.md
+  depth: full
+  reason: 'STALE: shows total_entries=13, actual=28; regen target'
+- path: canon/editorial_ledger_summary.yaml
+  depth: full
+  reason: 'STALE: next_id=824, actual max=864; regen target'
+- path: references/atomization_rules.yaml
+  depth: full
+  reason: 'policies[7] = editorial_ledger rule. Canonical scheme: ed_range chunks,
+    max_tokens=2000, auto_archive_status=[resolved/closed/struck/superseded], index_file
+    + summary_file regen on any_change'
+- path: tools/compliance_check.py
+  depth: full
+  reason: auto_fix line 527 has stubbed archive_contents={} — bug; investigate whether
+    to fix tool or do manual consolidation
+- path: tools/atomizer.py
+  depth: full
+  reason: archive_by_status handles 3 input formats; useful but driver is broken
+- path: tools/index_gen.py
+  depth: full
+  reason: 'Per architecture spec <open_items>: M6 pending — known to emit malformed
+    YAML (HTML comments embedded) and archive-blind next_id. Hand-verify outputs.'
+working_state:
+  completed:
+  - 'Inventory complete: 14 files cataloged across 3 parallel naming schemes'
+  - 'YAML parse error in _archive_2026-04_b.yaml diagnosed: bare quoted string at
+    L246 needs resolution_note: key — fix verified in-memory but NOT committed'
+  - 'Dedupe logic prototyped: 210 entry-instances → 174 unique IDs (36 duplicate copies
+    identified by ID + status; chosen kept by status priority then richness)'
+  - 'Decision D1: deferred entries stay active (rule consistency)'
+  - 'Decision D2: ED-768 resolution_note recovery — insert key with existing string'
+  - 'Decision D3: freshness update commits separately'
+  - 'Decision D4: defer M6 (index_gen rewrite)'
+  - 'BLOCKER discovered: 17 provisional rows in _archive_2026-04_b.yaml are prose
+    scraps (description shape [PROPOSED: ...]; IDs 129/131/200/295/297/539/545/547/577/588/618/663/670/694/706/738/783).
+    Provenance unknown.'
+  - 'Approach decided: B1 quarantine (move provisional rows to canon/editorial_ledger_quarantine.yaml
+    with provenance note)'
+  next:
+  - 'Step A: Commit YAML fix for _archive_2026-04_b.yaml L246 (insert resolution_note:
+    key) as standalone commit BEFORE consolidation — produces a parseable baseline'
+  - 'Step B: Re-run inventory and dedupe against the committed baseline; produce consolidated
+    entry set of 157 clean entries + 17 quarantined entries'
+  - 'Step C: Chunk 157 entries into ID-range archives ≤10k tokens. Expected: ~3-4
+    chunks covering 129-864 with ID-range boundaries chosen to avoid overlap. Likely
+    ranges: 129-500, 500-750, 750-820, 820-864 (verify mid-points against actual ID
+    density). Write canon/editorial_ledger_quarantine.yaml with the 17 provisional
+    rows + provenance header.'
+  - 'Step D: Delete 5 obsolete files: editorial_ledger_archive.yaml (empty), editorial_ledger_archive_2026-04_a.yaml,
+    _2026-04_b.yaml, _2026-05.yaml, _2026-05b.yaml'
+  - 'Step E: Hand-write regenerated index.md + summary.yaml (do not use tools/index_gen.py
+    directly; verify next_id matches max(IDs)+1, total_entries matches active count)'
+  - 'Step F: safe_commit with full Citations block listing all touched files + references/atomization_rules.yaml
+    + tools/compliance_check.py (cited for the archive_contents stub bug context)'
+  - 'Step G: Re-run h.assert_bootstrap() and verify compliance check returns clean
+    (no editorial_ledger.yaml size violation)'
+  gotchas:
+  - DO NOT use tools/compliance_check.auto_fix — line 527 archive_contents={} stub
+    means it does not read existing archives and will create a 3rd overlapping scheme
+  - 'tools/index_gen.py is M6-pending per architecture spec <open_items>: known to
+    emit HTML comments embedded in YAML and archive-blind next_id. Hand-write index/summary
+    OR fix index_gen.py first (separate scope).'
+  - 'STATUS_PRIORITY for dedupe: resolved=4, closed=3, struck=3, superseded=3, deferred=2,
+    open=1. Tie-break: richer entry (more keys) wins. Open-in-active always beats
+    open-in-archive (the 4 ED-811/813/822/823 misfilings).'
+  - 'The 17 provisional rows are NOT canonical statuses per atomization_rules. Their
+    description shape ([PROPOSED: ...] containing inline ED-N references) indicates
+    regex harvest from prose elsewhere in corpus. ED-295 and ED-738 reference themselves
+    as OPEN inline — meaning real entries may exist elsewhere. Quarantine preserves
+    the data without promoting them into the canonical scheme.'
+  - archive_chunk_max=10000 tokens per atomization_rules policies[7]. Verify chunk
+    sizes after dedupe; some entries (especially long resolution notes) push high.
+  - Existing ID-range files (710_796, 788_840, 796_821, 826_831, 832_839) have overlapping
+    ranges. The consolidation rewrites them under non-overlapping boundaries; do not
+    preserve the old files.
+last_commit: 4d38997d817418d68644ebe3d22db4de3ee222d3
+owns:
+- canon/editorial_ledger.yaml
+- canon/editorial_ledger_archive*.yaml
+- canon/editorial_ledger_index.md
+- canon/editorial_ledger_summary.yaml
+- canon/editorial_ledger_quarantine.yaml
+blockers:
+- tools/compliance_check.auto_fix line 527 has stubbed archive_contents={}. Either
+  fix the tool (separate scope, ~1 file) or do manual consolidation. Manual chosen
+  for this handoff since fixing the tool also requires deciding archive-discovery
+  semantics which is the same decision-space as manual consolidation.
+- 17 provisional rows in _archive_2026-04_b.yaml have unknown provenance. Quarantine
+  avoids the decision but leaves it as future work. Resolution requires either corpus
+  grep per ID or Jordan-side judgment.
+scope: infrastructure
+created: '2026-05-18T03:09:23.499673+00:00'
+updated: '2026-05-18T03:09:23.499673+00:00'
+status: active
+key_values: []
