@@ -177,9 +177,10 @@ session_token: dc7caf0855051e93
 scope: simulation
 created: '2026-05-18T00:39:03.863123+00:00'
 updated: '2026-05-18T04:55:09.686513+00:00'
-status: active
+status: closed
 session_commits_d88a9cb2:
 - b2cf660b — write ledger-consolidation handoff
 - freshness_gate --update commit (canonical_sources.yaml SHAs)
 - 60f76efd — bump atomization_rules.yaml threshold (cosmetic)
 - e686623d — bump github_ops.py TOKEN_THRESHOLDS (actual gate)
+closed_at: '2026-05-18T22:24:37.556216+00:00'
