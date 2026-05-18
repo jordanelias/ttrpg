@@ -60,7 +60,7 @@ TOKEN_THRESHOLDS = {
     "canon/editorial_ledger.yaml":             4_000,   # raised 2_000 → 4_000 (2026-05-02): ED entries are 800-1200 chars; 4 entries/session typical
     "canon/editorial_ledger_summary.yaml":     2_000,   # raised 1_000 → 2_000 (2026-05-02): paired with parent
     "references/file_index_summary.md":        2_000,   # raised 1_000 → 2_000 (2026-05-02): file count grows with project
-    "references/canonical_sources.yaml":       8_000,   # raised 5_000 → 8_000 (2026-05-02): every new design doc adds entry; linear growth with design surface
+    "references/canonical_sources.yaml":       9_000,   # raised 5_000 → 8_000 (2026-05-02), → 9_000 (2026-05-18): freshness_gate --update added 115 canonical_sha fields, pushing file to 8086 tokens
     "skills/valoria-orchestrator/SKILL.md":    8_000,
     "canon/patch_register_active.yaml":       18_000,   # raised 15_000 → 18_000 (2026-05-02): modest cushion to prevent collision incidents under heavy work
     "tests/coverage_matrix.md":                8_000,   # raised 5_000 → 8_000 (2026-05-02): was at 4983/5000; Stage tests growing
