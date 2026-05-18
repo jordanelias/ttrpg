@@ -286,3 +286,19 @@ M1 Church Settlement Infrastructure (commit `4f27949e`, 128 tests, 49 ledger ent
 | Files | tests/sim/v17-integration/mc_v17.py + m7_resolution_hooks.py + m7_integration_tests.py + m7_balance_sweep.py + m7_sim_verification_ledger.json |
 | **v17 integration plan status** | **PHASE 2D COMPLETE per integration_plan §5: mass-battle + Workstream C surface wired; N=1000 Wilson CI verification executed; harness correctly flags balance band failure. Downstream tuning (rebalance AI / faction-action calibration) is post-M7 work surfaced to Jordan.** |
 | Pass-3 findings | (1) Crown 67.7% dominance reflects AI policy more than mechanic balance — fixing AI before tuning mechanics. (2) Church 0.8% — Excommunication's Failure -1 L without recovery path creates a death spiral. (3) Hafenmark 1.8% — no faction-unique action wired (Charter of Liberties not in AI dispatch). (4) Royal Progress Ob formula floor(sum_accord/2) makes the action HARDER as Accord rises (canonical text says "easier when Accord is high" — possible canon defect, surface to Jordan). (5) Mean season=50 = no Crown territory-threshold victory before campaign end; all wins are tie-break-by-territory-held. |
+
+
+## Phase 11 (2026-05-17) — Scene combat C4 (M1+M2+M3) empirical test
+
+| Field | Value |
+|---|---|
+| Scope | Personal-scale combat. Test M1 (reach gate) + M2 (4-stance counter) + M3 (init preempt) atop Phase 10 baseline. |
+| Sim | tests/sim/scripts/phase11_c4_v0.py |
+| Writeup | tests/sim/phase11_c4_v0_2026-05-17.md |
+| Trials | N=3000 per matchup; symmetric calibrations 49.9% and 48.5% (~50/50 ✓) |
+| Coverage | Light/light (incl. Mighty-light F3 gap), light/heavy, light/polearm, M3 preempt, balanced-vs-Fast |
+| Findings | M1 dominant; M2/M3 secondary. Dominance redistributed not eliminated: light-vs-light 94% Fast; light-vs-heavy 22% Fast (inverted). Polearm vs Fast 56/44 cleanest. F3 gap mostly persists. Balanced non-viable. |
+| Provisional assumptions | M2 counter magnitudes empirical (−3D Decisive-v-Patience, degree-cap-1.0 Cautious-v-Pressure); M3 preempt heuristics (HP<0.6, init gap >= 2); STARTING_DISTANCE=2; closing-action 1-stam per band |
+| Dependencies | Phase 10 baseline (params/combat.md ED-694 stamina; STR-strong bonus dice; 1/End Ob wound; Disarm) |
+| Status | Implemented + run. Reframing 2 verdict deferred pending Phase 12 mass-battle archetype test. |
+| Open | Tune M1 softer vs accept Reframing 2 vs add C2 hybrid — decision after Phase 12. |
