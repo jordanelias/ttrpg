@@ -1,12 +1,11 @@
 id: 2026-05-18-phase-7-mass-battle
 task:
   skill: valoria-simulator
-  description: 'Phase 7 Mass Battle port. Convert single-roll Conquest in sim/provincial/faction_action.py
-    to multi-unit mass-battle resolution per mass_battle_integration_v30.md 10-step
-    plan. Source engine: tests/sim/v17-integration/m3_mass_battle.py (26k, validated_n1000
-    in v17 sweep). Target: sim/provincial/massbattle.py (stub, ~3-4k currently). Per
-    integration_plan_v18.md §1.4 status: massbattle.py READY (canon complete, 10-step
-    migration plan authored). No Pass-2 blockers.'
+  description: 'Phase 7 Mass Battle port. Pass 1 (2026-05-18 d88a9cb2) complete. SCOPE
+    NARROWED to C2: canon §4 Step 1 (bare port sim_mb_06_v22.py -> sim/) + Step 10
+    wiring (_try_conquest -> resolve_mass_battle). Steps 2-9 deferred. HANDOFF CORRECTION:
+    prior handoff cited m3_mass_battle.py as source engine; canon §4.1 names tests/sim/sim_mb_06_v22.py.
+    v22 is correct.'
 context_files:
 - path: designs/provincial/mass_battle_integration_v30.md
   depth: full
@@ -52,52 +51,45 @@ context_files:
   reason: Phase 7 section (line 256) + §1.4 readiness + dependency graph
 working_state:
   completed:
-  - Phase 1 — 6 autoload modules + mc_v18 orchestrator (commits 6b8daa2d)
-  - Phase 2 — faction_action conquest/muster/govern + adjacency + accounting (commit
-    4e81887b)
-  - Phase 5/9 — Crown Initiative + Church faction-unique actions (commit 7ea85723)
+  - 'Pass 1 reads: 6 canonical (force_full) + 10 working files'
+  - 'sim_gate prereqs satisfied: core_engine, mass_combat, derived_stats, military_layer'
+  - Mode G module manifest drafted at /home/claude/sim_module_manifest.md (uncommitted)
+  - Catalog of 10 canon steps mapped from mass_battle_integration_v30.md §4
+  - 'Scope decision: C2 (minimum Phase 7 = Step 1 + Step 10)'
+  - 'Blockers reconciled: source-engine mismatch (canon wins, use v22); tactic_cards
+    contamination = empty dict + marker'
   next:
-  - 'Step 1: bootstrap + task_gate(simulation) + sim_gate(custom, [''core_engine'',
-    ''mass_combat'', ''derived_stats'', ''military_layer'']) — sim_gate registry path
-    for mass_combat must be fetched'
-  - 'Step 2: Pass 1 — read all context_files, catalog the 10-step plan as work items,
-    decide port granularity (one commit per step vs. coupled steps)'
-  - 'Step 3: Pass 2 — port m3_mass_battle.py to sim/provincial/massbattle.py preserving
-    v17 API surface; port m4_unit_state.py to sim/provincial/units.py'
-  - 'Step 4: Wire _try_conquest in faction_action.py to call massbattle.resolve when
-    both attacker and defender Mil>=4 (canon threshold); fall back to single-roll
-    otherwise'
-  - 'Step 5: Excommunication integration — read faction.excommunicated in massbattle
-    and apply canonical penalty (per mass_battle_v30 — verify exact penalty during
-    Pass 1)'
-  - 'Step 6: Regression tests — port m3_mass_battle_tests.py; smoke + N=200 batch
-    + 5×N=200 Wilson CI vs. Phase-5/9 baseline (Crown 71.6% [68.7%, 74.3%], Varfell
-    26.0% [23.4%, 28.8%], Church 1.0% [0.5%, 1.8%], Hafenmark 1.4% [0.8%, 2.3%])'
-  - 'Step 7: safe_commit with Citations block; M3 mechanics_index.yaml status promotion
-    to IMPLEMENTED for mass_battle + units'
+  - 'Step A: Fetch tests/sim/sim_mb_06_v22.py (force_full=True)'
+  - 'Step B: Bare port v22 -> sim/provincial/massbattle.py (canon §4.1 step 1)'
+  - 'Step C: Extract Unit/Subunit/Cell dataclasses -> sim/provincial/units.py'
+  - 'Step D: Extract FACTION_TACTIC_CARD_POOL_MODIFIERS structure -> sim/provincial/tactic_cards.py
+    with empty dict + [BLOCKED: contamination audit] marker'
+  - 'Step E: Verify port: import test + spot-check signatures match v22'
+  - 'Step F: Rewrite sim/provincial/faction_action.py::_try_conquest to call resolve_mass_battle
+    (canon §4.10 step 3). Replace single-roll with engine invocation.'
+  - 'Step G: Smoke run sim/mc_v18.py — confirm Conquest action triggers mass-battle
+    path'
+  - 'Step H: completeness_gate(simulation, scope={systems_touched:[mass_combat,military_layer]})
+    + commit'
+  - 'Step I: Pass 3 re-review: re-read modified files; verify _try_conquest wiring;
+    verify no orphan single-roll paths remain'
   gotchas:
-  - PI bootstrap script references g.print_status_block() which does not exist in
-    current github_ops.py — use quick_bootstrap() instead per skills/valoria-orchestrator
-  - 'Granular convention: canonical "L -1" maps to adjust("L", -1 * MULTS[L]) where
-    MULTS[L]=20 (W=100, Sta=10, accord=10, Mil=10). v17 mc_v17.py:530 is the reference
-    pattern.'
-  - Royal Progress in v17 M6 (m6_faction_actions.py) uses PRE-ED-840 formula floor(sum_accord/2)
-    which is broken. Phase 5/9 sim/provincial/crown_initiative.py uses POST-ED-840
-    closure formula max(2, floor((sum_max - sum_current) / 2)). If Phase 7 touches
-    anything Royal Progress-adjacent, use the closure formula.
-  - canon/task_manifests/ directory does not exist (404) — M1 manifest infra not yet
-    landed per architecture spec <open_items>. h.completeness_gate may no-op or fail
-    soft; do not block work on it.
-  - references/file_index_summary.md is 99-char stub (M6 pending). Tree-walks via
-    direct REST API not the index.
-  - 'Intervening v18 Phase 1-2 session (commits 760f2d61..4e81887b + handoff 279e2e56)
-    did not call safe_session_close. phase2_handoff.md is directory-resident, not
-    registry-resident. Session-close discipline: phase2_handoff was archived into
-    prior session log via safe_session_close on 2026-05-18 (this session, commit 4d38997d).'
-  - sim_gate enforces canonical_sources.yaml registry paths — register may point at
-    older split docs (e.g. params/contest.md instead of designs/scene/social_contest_v30.md).
-    Fetch registry paths to pass the gate; cite the consolidated paths in the ledger.
-last_commit: 4d38997d817418d68644ebe3d22db4de3ee222d3
+  - Source engine is tests/sim/sim_mb_06_v22.py, NOT m3_mass_battle.py. Canon §4.1
+    binds.
+  - tactic_cards.py contamination audit is still open. Port structure with empty pool
+    dict.
+  - sim_gate canonical paths must be fetched with force_full=True; the v30 design
+    docs are atomized and auto-route to _index.md otherwise.
+  - Subprocess state DOES NOT PERSIST in github_ops._session_fetches / _full_reads.
+    Each subprocess must re-fetch task_gate prereqs + sim_gate prereqs.
+  - Mode G manifest must be committed before sim_gate re-passes (sim_gate raises on
+    multi-system custom scope without manifest).
+  - Steps 2-9 of canon §4 deferred to a follow-up handoff. Do NOT do balance work
+    in this pass — LETHALITY_SCALE, flanking, ripple, etc. all stay in v22-as-ported
+    state.
+  - 'Bootstrap data files modified this session: github_ops.py (TOKEN_THRESHOLDS bump),
+    atomization_rules.yaml (cosmetic), canonical_sources.yaml (freshness SHAs).'
+last_commit: e686623d
 owns:
 - sim/provincial/massbattle.py
 - sim/provincial/units.py
@@ -184,5 +176,10 @@ blockers:
 session_token: dc7caf0855051e93
 scope: simulation
 created: '2026-05-18T00:39:03.863123+00:00'
-updated: '2026-05-18T00:39:03.863123+00:00'
+updated: '2026-05-18T04:55:09.686513+00:00'
 status: active
+session_commits_d88a9cb2:
+- b2cf660b — write ledger-consolidation handoff
+- freshness_gate --update commit (canonical_sources.yaml SHAs)
+- 60f76efd — bump atomization_rules.yaml threshold (cosmetic)
+- e686623d — bump github_ops.py TOKEN_THRESHOLDS (actual gate)
