@@ -36,8 +36,18 @@ from typing import Dict, List, Optional, Set, Tuple
 from sim.provincial import massbattle as _mb
 
 
-@dataclass
+@dataclass(eq=False)
 class Subunit:
+    # eq=False: fall back to object identity __eq__/__hash__. Required because
+    # target_atom holds a direct Subunit reference (assign_targets, massbattle.py
+    # L619/622/627/630), and after both sides are populated A.target_atom→B and
+    # B.target_atom→A form a cycle; default field-walking __eq__ recurses.
+    # target_atom is set-by-reference and never compared by value throughout
+    # the engine (verified: no `subunit == subunit` call sites; sets/dicts
+    # already use id() — massbattle.py L749-750).
+    # [canonical: designs/provincial/mass_battle_integration_v30.md §4.1
+    #  PROVISIONAL flex — call-signature flex licensed where statistical
+    #  equivalence holds; identity-eq does not change observable outcomes]
     shape: str
     troop_type: str           # 'infantry'|'cavalry' etc. — anatomical type (v8 legacy)
     tier: int
@@ -289,8 +299,12 @@ class Subunit:
 
 # ─── UNIT ────────────────────────────────────────────────────────────────────
 
-@dataclass
+@dataclass(eq=False)
 class Unit:
+    # eq=False: see Subunit decorator above. Unit.subunits is List[Subunit]
+    # and would walk into the Subunit cycle if Unit.__eq__ were generated.
+    # Identity semantics are correct for both classes — Units are mutable
+    # state containers, not value objects.
     name: str
     faction: str
     power: int
