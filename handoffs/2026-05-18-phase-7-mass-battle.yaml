@@ -1,0 +1,188 @@
+id: 2026-05-18-phase-7-mass-battle
+task:
+  skill: valoria-simulator
+  description: 'Phase 7 Mass Battle port. Convert single-roll Conquest in sim/provincial/faction_action.py
+    to multi-unit mass-battle resolution per mass_battle_integration_v30.md 10-step
+    plan. Source engine: tests/sim/v17-integration/m3_mass_battle.py (26k, validated_n1000
+    in v17 sweep). Target: sim/provincial/massbattle.py (stub, ~3-4k currently). Per
+    integration_plan_v18.md §1.4 status: massbattle.py READY (canon complete, 10-step
+    migration plan authored). No Pass-2 blockers.'
+context_files:
+- path: designs/provincial/mass_battle_integration_v30.md
+  depth: full
+  reason: Pass 2n 10-step migration plan — the executable port spec
+- path: designs/provincial/mass_battle_v30.md
+  depth: full
+  reason: Mass Battle mechanic canon — Coherence Rating, tactic cards, casualty resolution,
+    mode coverage
+- path: tests/sim/v17-integration/m3_mass_battle.py
+  depth: full
+  reason: v17 reference engine — validated_n1000 in v17 sweep; the port source
+- path: tests/sim/v17-integration/m3_mass_battle_tests.py
+  depth: full
+  reason: v17 mass-battle test suite — port these as regression baseline
+- path: tests/sim/v17-integration/m4_unit_state.py
+  depth: full
+  reason: Unit-roster module — mass_battle calls into it; required for v18 wiring
+- path: sim/provincial/massbattle.py
+  depth: full
+  reason: Current v18 stub — target for the port
+- path: sim/provincial/units.py
+  depth: full
+  reason: v18 unit stub — needs M4 UnitRoster port (handoff phase2 line 66 flagged)
+- path: sim/provincial/faction_action.py
+  depth: full
+  reason: _try_conquest is the call site that switches from single-roll to mass-battle
+- path: sim/provincial/excommunication.py
+  depth: full
+  reason: Excommunicated factions should face canonical mass-battle penalties — Phase
+    5/9 sets faction.excommunicated; Phase 7 reads it
+- path: sim/mc_v18.py
+  depth: full
+  reason: Orchestrator — battle_count increment site moves into massbattle module
+- path: sim/CONVENTIONS.md
+  depth: full
+  reason: Module-stub anatomy, naming, dependency direction
+- path: canon/mechanics_index.yaml
+  depth: full
+  reason: mass_battle + tactic_cards + units entries — status promotion target after
+    port
+- path: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
+  depth: full
+  reason: Phase 7 section (line 256) + §1.4 readiness + dependency graph
+working_state:
+  completed:
+  - Phase 1 — 6 autoload modules + mc_v18 orchestrator (commits 6b8daa2d)
+  - Phase 2 — faction_action conquest/muster/govern + adjacency + accounting (commit
+    4e81887b)
+  - Phase 5/9 — Crown Initiative + Church faction-unique actions (commit 7ea85723)
+  next:
+  - 'Step 1: bootstrap + task_gate(simulation) + sim_gate(custom, [''core_engine'',
+    ''mass_combat'', ''derived_stats'', ''military_layer'']) — sim_gate registry path
+    for mass_combat must be fetched'
+  - 'Step 2: Pass 1 — read all context_files, catalog the 10-step plan as work items,
+    decide port granularity (one commit per step vs. coupled steps)'
+  - 'Step 3: Pass 2 — port m3_mass_battle.py to sim/provincial/massbattle.py preserving
+    v17 API surface; port m4_unit_state.py to sim/provincial/units.py'
+  - 'Step 4: Wire _try_conquest in faction_action.py to call massbattle.resolve when
+    both attacker and defender Mil>=4 (canon threshold); fall back to single-roll
+    otherwise'
+  - 'Step 5: Excommunication integration — read faction.excommunicated in massbattle
+    and apply canonical penalty (per mass_battle_v30 — verify exact penalty during
+    Pass 1)'
+  - 'Step 6: Regression tests — port m3_mass_battle_tests.py; smoke + N=200 batch
+    + 5×N=200 Wilson CI vs. Phase-5/9 baseline (Crown 71.6% [68.7%, 74.3%], Varfell
+    26.0% [23.4%, 28.8%], Church 1.0% [0.5%, 1.8%], Hafenmark 1.4% [0.8%, 2.3%])'
+  - 'Step 7: safe_commit with Citations block; M3 mechanics_index.yaml status promotion
+    to IMPLEMENTED for mass_battle + units'
+  gotchas:
+  - PI bootstrap script references g.print_status_block() which does not exist in
+    current github_ops.py — use quick_bootstrap() instead per skills/valoria-orchestrator
+  - 'Granular convention: canonical "L -1" maps to adjust("L", -1 * MULTS[L]) where
+    MULTS[L]=20 (W=100, Sta=10, accord=10, Mil=10). v17 mc_v17.py:530 is the reference
+    pattern.'
+  - Royal Progress in v17 M6 (m6_faction_actions.py) uses PRE-ED-840 formula floor(sum_accord/2)
+    which is broken. Phase 5/9 sim/provincial/crown_initiative.py uses POST-ED-840
+    closure formula max(2, floor((sum_max - sum_current) / 2)). If Phase 7 touches
+    anything Royal Progress-adjacent, use the closure formula.
+  - canon/task_manifests/ directory does not exist (404) — M1 manifest infra not yet
+    landed per architecture spec <open_items>. h.completeness_gate may no-op or fail
+    soft; do not block work on it.
+  - references/file_index_summary.md is 99-char stub (M6 pending). Tree-walks via
+    direct REST API not the index.
+  - 'Intervening v18 Phase 1-2 session (commits 760f2d61..4e81887b + handoff 279e2e56)
+    did not call safe_session_close. phase2_handoff.md is directory-resident, not
+    registry-resident. Session-close discipline: phase2_handoff was archived into
+    prior session log via safe_session_close on 2026-05-18 (this session, commit 4d38997d).'
+  - sim_gate enforces canonical_sources.yaml registry paths — register may point at
+    older split docs (e.g. params/contest.md instead of designs/scene/social_contest_v30.md).
+    Fetch registry paths to pass the gate; cite the consolidated paths in the ledger.
+last_commit: 4d38997d817418d68644ebe3d22db4de3ee222d3
+owns:
+- sim/provincial/massbattle.py
+- sim/provincial/units.py
+- sim/provincial/tactic_cards.py
+- sim/provincial/faction_action.py
+- sim/mc_v18.py
+- canon/mechanics_index.yaml
+key_values:
+- name: phase_5_9_baseline_n1000_wilson
+  value:
+    crown_p: 71.6
+    crown_ci:
+    - 68.7
+    - 74.3
+    varfell_p: 26.0
+    varfell_ci:
+    - 23.4
+    - 28.8
+    church_p: 1.0
+    church_ci:
+    - 0.5
+    - 1.8
+    hafenmark_p: 1.4
+    hafenmark_ci:
+    - 0.8
+    - 2.3
+    battles_mean: 2.52
+    n_total: 1000
+    blocks:
+    - 0
+    - 200
+    - 400
+    - 600
+    - 800
+    block_size: 200
+  source: Run on commit 7ea85723 via /home/claude/phase5_work/build/seed_variance.py
+    2026-05-18
+  usage: 'Phase 7 regression: any battle_mean shift >0.5 or any per-faction p shift
+    outside CI bounds requires investigation before commit'
+- name: phase_5_9_provisional_flags
+  value:
+  - sim/provincial/excommunication.py — Circles, Reputation, Domain-Action Ob modifiers
+    not in v18 schema
+  - sim/provincial/crown_initiative.py — Charters (§3.3 OW), Cohesion (§3.3 Failure
+    PP-515), Crown-Church relation (§3.4 prereq) not in v18 schema
+  - sim/provincial/council_solmund.py — Cardinal Focus (§5.1) not in v18 schema
+  - sim/personal/tribunal.py — Multi-Exchange Contest engine (Persuasion Track tick-by-tick)
+    deferred to canonical Phase 5; current is single-roll abstraction
+  - sim/provincial/crown_initiative.py Great Work — multi-season Open Pledge (PP-515)
+    collapsed to instant-resolution; canonical pledge tracking belongs to Phase 5
+    personal/pledge module (not yet built)
+  source: commit 7ea85723 module docstrings + result.notes
+  usage: Phase 7 may interact with mass-battle-specific provisional flags (tactic
+    cards card-pool BLOCKED on contamination audit per integration_plan §1.4). Do
+    not pretend these are resolved.
+- name: church_winrate_finding
+  value: 'Church.p = 1.0% [0.5%, 1.8%] vs pre-Phase-5/9 baseline 6.0%. The decline
+    is decisively real (CI excludes baseline). Cause: Phase 5/9 made Church 30% faction-unique
+    slot state-mutating (was no-op falling to Conquest); Excomm/Council/Absolution
+    never gain territory and can cost L on Failure. Mass Seizure (CI>=60 Territorial
+    Seizure per faction_canon §9 row 2) is the missing territory-gaining lever, BLOCKED
+    on Pass 2f Church canon (contamination audit).'
+  source: seed_variance.py 5×N=200 run on commit 7ea85723
+  usage: Phase 7 alone will not restore Church to baseline. Surface in Phase 7 commit
+    body that Church regression persists until Mass Seizure / Phase 8 Strategic AI
+    lands.
+- name: phase_5_9_commit
+  value: 7ea85723f43b1c644ad5c1b3e04f2393c3768ccd
+  source: safe_commit return 2026-05-18
+  usage: Diff base for Phase 7 changes if needed
+- name: m3_mass_battle_v17_validated
+  value: validated_n1000 status per v17 sweep (tests/sim/v17-integration/v17_sweep_report_n1000.json
+    + m3_sim_verification_ledger.json). 23 ledger entries.
+  source: integration_plan_v18.md §1.4 + tests/sim/v17-integration/m3_*
+  usage: Phase 7 port preserves API; regression tests port forward; existing ledger
+    entries port forward with path remap (tests/sim/v17-integration -> sim/provincial)
+blockers:
+- sim/provincial/tactic_cards.py is BLOCKED on contamination audit (card pool contents)
+  per integration_plan_v18.md §1.4. Phase 7 should port mass-battle resolution but
+  NOT make assumptions about tactic-card content. The mechanism (apply card effects)
+  ports; the card-pool definitions stay stubbed/empty until audit completes.
+- Phase 8 Strategic AI is the natural follow-on to Phase 7 — Phase 7 alone keeps stochastic
+  dispatch (30% faction-unique slot). Mention as next-after-next in the Phase 7 close.
+session_token: dc7caf0855051e93
+scope: simulation
+created: '2026-05-18T00:39:03.863123+00:00'
+updated: '2026-05-18T00:39:03.863123+00:00'
+status: active
