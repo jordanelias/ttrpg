@@ -130,7 +130,18 @@ def _try_faction_unique(faction, world, rng) -> str:
 
 
 def _try_conquest(faction, world, rng) -> str:
-    """Attempt military conquest of adjacent territory."""
+    """Attempt military conquest of adjacent territory.
+
+    Phase 7 (§4.10 sub-step 3): single-roll path replaced with
+    `resolve_mass_battle` engine invocation per
+    designs/provincial/mass_battle_integration_v30.md §4.10.
+    GD-1 binding: produces faction stat / territorial-control deltas only —
+    no victory triggers from the battle outcome itself.
+
+    Citations:
+      - designs/provincial/mass_battle_integration_v30.md §4.10 step 3
+      - canon/02_canon_constraints.md §B GD-1
+    """
     adj = set()
     for tid in faction.territories:
         adj |= ADJACENCY.get(tid, set())
@@ -144,13 +155,19 @@ def _try_conquest(faction, world, rng) -> str:
     target = rng.choice(targets)
     t = world.territories[target]
 
-    # Legacy single-roll path (v17 L350-368)
-    pool = faction.Mil
-    ob = 2 if t.is_uncontrolled() else 4
-    net = _successes(pool, rng) - ob
-    deg = _degree(net)
+    # Phase 7 §4.10.3 — mass-battle engine invocation (replaces v17 single-roll path).
+    # Defender is the territory owner faction, or None (uncontrolled garrison stub).
+    from sim.provincial.massbattle import resolve_mass_battle
+    defender_faction = world.factions.get(t.owner) if t.owner else None
+    battle = resolve_mass_battle(
+        faction_a=faction,
+        faction_b=defender_faction,
+        terrain=None,  # [GAP: terrain modifiers deferred to Phase 7 follow-on Steps 2-9]
+        world=world,
+    )
+    deg = battle['degree']
 
-    if deg in ('Overwhelming', 'Success'):
+    if battle['attacker_wins']:
         old = t.owner
         if old and old in world.factions:
             world.factions[old].territories.discard(target)
