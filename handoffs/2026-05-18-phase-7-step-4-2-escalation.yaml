@@ -1,0 +1,215 @@
+id: 2026-05-18-phase-7-step-4-2-escalation
+session_token: 55b1a63b21c5c3de
+task:
+  skill: valoria-orchestrator
+  description: 'ESCALATION — Step 4.2 LETHALITY calibration discovered a spec/engine
+    mismatch that requires Jordan-side resolution before commit.
+
+
+    CONTEXT. The Step 4.2 (LETHALITY_SCALE restoration) handoff (2026-05-18-phase-7-step-4-2-lethality)
+    was loaded and the patch implemented in working tree (NOT committed):
+
+    - LETHALITY_SCALE constant declared at sim/provincial/massbattle.py
+
+    - Multiplier applied at 3 HP-damage sites: engagement (L915-916), pursuit_damage,
+    freed_attacker_damage
+
+    - Float-accumulate per engagement; floor at aggregate return (per-engagement floor
+    zeroed out small values)
+
+
+    PATCH IS CORRECTLY APPLIED. The mismatch is in CALIBRATION.
+
+
+    SPEC EXPECTATION (§3.1, designs/provincial/mass_battle_integration_v30.md):
+
+    - Initial LETHALITY = 0.10 (v17 baseline)
+
+    - Calibration license: "iterate within 0.05-0.20 if T3 casualty target missed"
+
+    - Target: ~14-16% per-turn casualties at T3 P4/C4/D5/M6 mirror Line vs Line
+
+    - Underlying assumption: v22 inherited v17''s baseline lethality (damage formula
+    `(1+Power) - DR ≈ 3-5 per success`) but with 20× HP inflation; multiplier of 0.10
+    compensates.
+
+
+    OBSERVED REALITY (40-run sweep, mirror T3 Line vs Line, P4/C4/D5/M6):
+
+    | LETHALITY | per-turn casualties | resolution turns | winners |
+
+    |-----------|---------------------|------------------|---------|
+
+    | 0.05      | 0.00%               | 8.0 (cap)        | 40 draws |
+
+    | 0.10      | 0.00%               | 8.0 (cap)        | 40 draws |
+
+    | 0.20      | 0.00%               | 8.0 (cap)        | 40 draws |
+
+    | 0.50      | 1.71%               | 8.0 (cap)        | 40 draws |
+
+    | 1.00      | 3.96%               | 6.8              | balanced |
+
+    | 2.00      | 6.86%               | 3.9              | balanced |
+
+    | 3.00      | 10.06%              | 2.6              | balanced |
+
+    | 4.00      | 13.23%              | 2.0              | balanced |
+
+    | **5.50**  | **14.61%**          | **1.8**          | **balanced (A21/B18/D1)**
+    |
+
+    | 7.00      | 23.08%              | 1.1              | balanced |
+
+
+    The entire spec-licensed range (0.05-0.20) produces effectively zero per-turn
+    casualties — 27× outside target.
+
+
+    ROOT CAUSE DIAGNOSIS. The v22 engine baseline lethality (no scaling, L=1.0) only
+    produces 3.96% per-turn casualties, not the ~80%/tick the spec assumes was carried
+    through from v17. The §3.1 author''s mental model of the engine baseline appears
+    to be wrong — likely because v19/v20/v21/v22 refactors made damage more conservative
+    than the spec assumed. The literal §3.1 formula `LETHALITY × ((1+Power) × net_successes
+    - DR × defender_size)` is also NOT the actual code shape: code uses discrete `DAMAGE_BY_DEGREE`
+    buckets {Overwhelming: 1+p, Success: p, Partial: 1, Failure: 0} of net_successes,
+    not net_successes directly.
+
+
+    DECISION REQUIRED FROM JORDAN. Two paths:
+
+
+    (A) Accept LETHALITY_SCALE = 5.5 as the calibrated value.
+
+    - Preserves v22 discrete-degree damage formula exactly.
+
+    - Hits target band cleanly (14.61% per-turn, balanced winners, 1.8 turns to resolution).
+
+    - Documents in commit that 5.5 is 27× outside spec-licensed range and explains
+    why (engine baseline drift since v17).
+
+    - Pragmatic; smallest delta to working code.
+
+
+    (B) Rewrite damage formula to be net_successes-continuous per §3.1 LITERAL.
+
+    - Damage formula becomes: `LETHALITY × ((1+Power) × net_successes - DR × defender_size)`.
+
+    - Drops discrete DAMAGE_BY_DEGREE buckets entirely (or repurposes for narrative
+    degree label only).
+
+    - LETHALITY = 0.10 likely lands close to target band under this formula (since
+    unscaled net_successes × (1+power) ≈ 4 × 5 = 20 vs current max 5 from Overwhelming
+    bucket — 4× hotter, plus DR × defender_size term subtracts more).
+
+    - Closer to spec author intent but larger semantic change. Affects steps 4.3+
+    (flanking, penetration, ripple all interact with damage shape).
+
+    - Re-calibration required after rewrite.
+
+
+    (C) Escalate to spec author for clarification on §3.1 intent.
+
+    - Was the literal formula a careful spec, or shorthand for the existing degree-bucket
+    model?
+
+    - What does "v17 baseline" mean if v22 already differs from v17 in damage shape?
+
+
+    WHAT THIS HANDOFF DOES NOT DO. Does not commit. Working-tree changes to sim/provincial/massbattle.py
+    exist locally but are NOT pushed to main. b0185f05 (Phase 7 C2 regression fix)
+    remains the live HEAD; LETHALITY work is uncommitted.
+
+
+    WHAT THIS HANDOFF NEEDS. Jordan picks (A), (B), or (C). Each path has a different
+    follow-on handoff.'
+last_commit: b0185f05217409ff025418daf92e455add091e9a
+owns:
+- sim/provincial/massbattle.py
+- designs/provincial/mass_battle_integration_v30.md
+context_files:
+- path: designs/provincial/mass_battle_integration_v30.md
+  depth: full
+  reason: Spec source — §3.1 LETHALITY canon. §4.2 5-step migration procedure. PROVISIONAL
+    clause licensing calibration. Read this BEFORE deciding (A)/(B)/(C).
+- path: sim/provincial/massbattle.py
+  depth: full
+  reason: Current state of damage formula. L915-916 engagement, L1389-1390 pursuit,
+    L1444 freed-attacker. DAMAGE_BY_DEGREE definition L610-611. compute_degree L604-608.
+    Working-tree changes (LETHALITY constant + multiplier at 3 sites) are LOCAL ONLY
+    — re-fetching from main shows pre-Step-4.2 state.
+- path: tests/sim/sim_mb_06_v22.py
+  depth: skeleton
+  reason: v22 source — identical DAMAGE_BY_DEGREE structure to current massbattle.py.
+    Confirms the discrete-degree formula is faithful to v22 baseline; the spec drift
+    is from v17 ASSUMPTIONS, not v22 implementation.
+- path: designs/provincial/mass_battle_v30.md
+  depth: skeleton
+  reason: Companion canon §A.4 / §A.7. If Path B (formula rewrite), §A.4 stats table
+    should be cross-referenced to confirm intended damage shape.
+- path: params/mass_combat.md
+  depth: full
+  reason: PP-233 damage formula declaration. Verify whether params declares the discrete-degree
+    formula or the continuous-net-successes formula. This is the tiebreaker between
+    paths (A) and (B).
+- path: sim/provincial/units.py
+  depth: full
+  reason: hp_max calculation (Size × BLOCK_SIZE = 400 for T3). h_per_size still computed
+    (line 325). If Path B rewrites damage, may also rationalize hp_max relationship.
+working_state:
+  completed:
+  - Phase 7 C2 regression fix landed (b0185f05) — baseline operational.
+  - 'Step 4.2 LETHALITY patch implemented in working tree: constant + multiplier at
+    3 damage sites with canonical citations. NOT COMMITTED.'
+  - Calibration sweep N=40 across L = [0.05, 0.10, ..., 10.0]. Spec-licensed range
+    (0.05-0.20) confirmed inadequate. L=5.5 hits target band 14.61% per-turn at T3
+    mirror.
+  - 'Diagnosis: v22 engine baseline lethality is 3.96% per-turn (L=1.0, no scaling).
+    Spec §3.1 assumed v17 baseline ~80%/tick was preserved through v22. The 20× HP
+    inflation rationale is correct but the unmodified damage formula was ALSO conservatized
+    between v17 and v22 — both effects compound.'
+  next:
+  - 'Step A: Jordan reads this handoff + sweep table + diagnosis.'
+  - 'Step B: Jordan decides path (A) accept L=5.5, (B) rewrite to continuous net_successes,
+    or (C) further clarification needed.'
+  - 'Step C-A (if path A): write handoff "phase-7-step-4-2-commit-L55" — load Step
+    4.2 handoff working tree state, commit LETHALITY_SCALE=5.5 with extensive commit-body
+    explanation citing the spec/engine baseline mismatch. sim_gate ledger entry for
+    LETHALITY=5.5 with sweep data as attestation.'
+  - 'Step C-B (if path B): write handoff "phase-7-step-4-2-formula-rewrite" — drop
+    the per-engagement DAMAGE_BY_DEGREE multiplication; rewrite as net_successes-continuous
+    per §3.1 literal. Re-sweep to find calibrated L. Likely 0.10-0.30 range. Touches
+    every engagement-resolver in massbattle.py + sim_mb_06_v22.py reference + battery
+    (when exists).'
+  - 'Step C-C (if path C): direct dialogue with Jordan re §3.1 spec intent. Then return
+    to A or B.'
+  - 'Step D: After decision lands, archive both this escalation handoff AND the original
+    step-4-2-lethality handoff (which is superseded by whichever path Jordan picks).'
+key_values:
+- 'Calibrated LETHALITY=5.5 at T3 mirror P4/C4/D5/M6 Line vs Line, N=40: per-turn
+  casualty mean 14.61%, median 15.60%, stdev 10.20%, battle-turns mean 1.8, winners
+  21A/18B/1D.'
+- 'Pure baseline (L=1.0, no scaling): per-turn casualty 3.96%, battle-turns 6.8, winners
+  19A/21B. This is the floor — without LETHALITY scaling, mass battle does not produce
+  decisive outcomes.'
+- §3.1 PROVISIONAL clause licenses calibration but specifies range 0.05-0.20. Sweep
+  shows L<1.0 cannot reach target band (max 1.71% per-turn at L=0.5). Range mismatch
+  is 27×.
+- Sweep persisted to /home/claude/ctx/sweep_results.txt (local; rebuild via re-run
+  if container reset).
+- Patch sites confirmed identical between v22 source (tests/sim/sim_mb_06_v22.py L1357-1358)
+  and ported sim/provincial/massbattle.py L915-916. Spec drift is NOT a port defect
+  — it is a v17→v22 evolution that §3.1 did not account for.
+- Working-tree changes are local to this container. Not committed to main. b0185f05
+  remains HEAD.
+blockers:
+- 'BLOCKING: Spec/engine baseline mismatch requires Jordan-side decision before commit.
+  See task description.'
+- Once decision lands, Steps 4.3+ (flanking, penetration, ripple) inherit the damage-formula
+  shape. Path B (formula rewrite) means re-evaluating those steps before they land.
+- tests/sim/battery_v22.py existence still unverified (carried from prior handoff).
+  Battery validation gate per §3.2 is post-commit; either path will need to confirm
+  battery exists or defer to Step 4.2b as previously planned.
+created: '2026-05-19T18:47:35.320337+00:00'
+updated: '2026-05-19T18:47:35.320337+00:00'
+status: active
