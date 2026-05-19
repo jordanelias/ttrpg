@@ -1,0 +1,171 @@
+id: 2026-05-18-phase-7-step-4-2-lethality
+session_token: 713c33cc5a94decd
+task:
+  skill: valoria-simulator
+  description: "Phase 7 Step 4.2 — LETHALITY_SCALE restoration per mass_battle_integration_v30.md\
+    \ §3.1 and §4.2 (Audit Issue 1, highest severity). Prereq (Phase 7 C2 verified\
+    \ end-to-end, commit b0185f05) is now satisfied: massbattle engine no longer raises;\
+    \ mc_v18.run_batch(10, seed=42) yields battles_mean=30.0.\n\nSCOPE. Three deliverables:\n\
+    \  (1) Restore LETHALITY_SCALE constant in sim/provincial/massbattle.py. v17 baseline\
+    \ 0.10. v19 dropped it when switching HP model Size×h_per_size (~5 HP/soldier)\
+    \ → Size×BLOCK_SIZE (100 HP — 20× inflation), but the damage formula was unchanged.\
+    \ Apply per spec: damage_applied = floor(LETHALITY_SCALE × ((1 + Power) × net_successes\
+    \ - DR × defender_size)). Locate damage application site in massbattle.py (NOT\
+    \ in pursuit_damage/freed_attacker_damage — core melee damage step; grep for HP\
+    \ mutations + tick_resolve flow).\n  (2) Calibration sweep. Run mirror Line vs\
+    \ Line at T3 equal stats (P4 / C4 / D5 / M6) — start with the engine's own run_battle\
+    \ harness at N≥30. Measure per-turn casualty rate. Iterate LETHALITY_SCALE within\
+    \ 0.05–0.20 to hit 14–16% per-turn casualty target. Commit the calibrated value\
+    \ with citation to the sweep result.\n  (3) Verification ledger entry per sim_gate\
+    \ for LETHALITY_SCALE (+ any other constants newly introduced).\n\nVALIDATION\
+    \ GATE (per §3.1): D-8 battery tests/sim/battery_v22.py must run within new band\
+    \ ranges per §3.2 recalibration. CONFIRM EXISTENCE FIRST — prior handoff flagged\
+    \ \"may not exist yet.\" If absent, building it is its own handoff; this one can\
+    \ deliver (1) + (2) + ledger and defer battery validation to a follow-on Step\
+    \ 4.2b.\n\nDEFERRED to subsequent handoffs (do NOT expand scope into these):\n\
+    \  - Steps 4.3–4.6: flanking detection (§3.2 P1), penetration morale shock (§3.2\
+    \ P2), cell displacement ripple (§3.3), equal-speed tiebreakers (§3.4).\n  - Steps\
+    \ 4.7–4.9: phase-boundary hooks, internal collision wiring, cleanup.\n  - Step\
+    \ 10.1 domain_echo + Step 10.2 accounting + faction→unit richening (resolves GAP-1).\n\
+    \nPROVISIONAL clause (§3.1 last line): \"0.10 starting value untested at v22's\
+    \ multi-turn structure. Calibration sweep required at first port — adjust toward\
+    \ ~14-16% per-turn casualty target.\" Implies the committed value may NOT be 0.10\
+    \ if calibration moves it; whatever lands must be cited to the sweep run."
+last_commit: b0185f05217409ff025418daf92e455add091e9a
+owns:
+- sim/provincial/massbattle.py
+- tests/sim/v18-integration/module_manifest.md
+- tests/coverage_matrix.md
+- tests/sim/battery_v22.py
+context_files:
+- path: sim/provincial/massbattle.py
+  depth: full
+  reason: Patch target. Locate core damage formula (NOT pursuit_damage/freed_attacker_damage
+    — those are post-rout). L103 explicit comment "No LETHALITY_SCALE" marks the absent
+    constant. Damage application likely in resolve_engagements / tick loop around
+    L1462 run_battle.
+- path: designs/provincial/mass_battle_integration_v30.md
+  depth: full
+  reason: Canonical spec. §3.1 LETHALITY rationale + damage formula; §3.2 battery
+    recalibration bands; §4.2 5-step migration procedure for this exact deliverable.
+- path: designs/provincial/mass_battle_v30.md
+  depth: skeleton
+  reason: Companion canon §A.4 (Power/DR stats), §A.7 (Volley/Tactic — referenced
+    by LETHALITY table at integration_v30 L174). Skeleton first per M5; full only
+    if §A.4 needs deep dive.
+- path: params/mass_combat.md
+  depth: full
+  reason: Canonical mass-combat parameters. May already declare LETHALITY_SCALE or
+    related constants. Verify before adding new constant.
+- path: params/core.md
+  depth: skeleton
+  reason: Core engine params; BLOCK_SIZE (~100 HP value, the 20× inflator) declared
+    here per derived_stats architecture.
+- path: tests/sim/sim_mb_06_v22.py
+  depth: skeleton
+  reason: Source engine pre-port. Reference for v22 damage application pattern (LETHALITY
+    was already dropped in v19; v22 inherits the no-LETHALITY state). Use as comparison
+    baseline only.
+- path: sim/provincial/units.py
+  depth: full
+  reason: Subunit/Unit dataclasses. Unit.h_per_size, BLOCK_SIZE, hp computation. Damage
+    applied to Unit.hp; recalc_size triggers rout. Critical for understanding the
+    inflated-HP-vs-unscaled-damage problem §3.1 describes.
+- path: sim/mc_v18.py
+  depth: full
+  reason: Smoke validation after Step 4.2 lands. run_batch(10, seed=42) baseline pre-fix
+    battles_mean=30.0 (commit b0185f05). Post-LETHALITY, expect battles_mean shifts
+    as decisive outcomes become reachable in fewer turns.
+- path: skills/valoria-simulator/SKILL.md
+  depth: skeleton
+  reason: 'sim_gate ledger requirement: every mechanical constant needs a verification
+    ledger entry. LETHALITY_SCALE is a new mechanical constant; ledger entry required
+    at commit.'
+- path: canon/02_canon_constraints.md
+  depth: skeleton
+  reason: GD-1 binding (deltas only, no victory triggers). LETHALITY change affects
+    damage magnitude only — should not introduce victory semantics; sanity check.
+- path: tests/sim/v18-integration/module_manifest.md
+  depth: full
+  reason: Co-file. P7-3 (massbattle.py) row updates from "verified — bare port" to
+    "verified — bare port + LETHALITY 0.10 (or calibrated value)". New row for Step
+    4.2 if granular tracking warranted.
+working_state:
+  completed:
+  - Phase 7 C2 bare port + regression fix (b0185f05) — massbattle engine no longer
+    raises; mc_v18.run_batch(10, seed=42) battles_mean=30.0; resolve_mass_battle returns
+    valid degree dict for Crown 5.0 vs Church 4.5.
+  next:
+  - 'Step A: Bootstrap + load this handoff via load_handoff_context.'
+  - 'Step B: Skeleton-fetch designs/provincial/mass_battle_v30.md (M5 ordering) +
+    read params/mass_combat.md full + params/core.md skeleton. Confirm whether LETHALITY_SCALE
+    already lives in params/ — if so, declare-in-params + import-in-massbattle (cleaner
+    than constant-in-source).'
+  - 'Step C: Locate the core damage application site in massbattle.py. Anti-pattern:
+    do NOT patch pursuit_damage / freed_attacker_damage (those handle rout pursuit,
+    not main combat). Likely sites: run_battle tick loop (L1462+), resolve_engagements,
+    or a dedicated apply_damage function. Use grep for u.hp -= / u.hp = ... patterns.'
+  - 'Step D: Implement per §3.1 formula: damage_applied = floor(LETHALITY_SCALE ×
+    ((1 + Power) × net_successes - DR × defender_size)). LETHALITY_SCALE = 0.10 initial.
+    Add canonical citation comment [canonical: mass_battle_integration_v30.md §3.1].'
+  - 'Step E: Calibration sweep — mirror Line vs Line, T3, equal stats (P4 / C4 / D5
+    / M6), N=30 runs. Measure per-turn casualty rate via (1 - hp_remaining/hp_max)
+    at each phase boundary. Target band 14–16%. If outside, iterate LETHALITY_SCALE
+    within 0.05–0.20 per §3.1 PROVISIONAL clause. Document final value + sweep results
+    in commit body.'
+  - 'Step F: Confirm whether tests/sim/battery_v22.py exists. If yes: run it post-fix
+    and capture band-pass count (§3.2 target: D-8 12/13 in-band — but §3.2 recalibration
+    may shift bands). If no: defer battery to Step 4.2b handoff; mention deferral
+    in commit body.'
+  - 'Step G: Smoke test — mc_v18.run_batch(10, base_seed=42). Compare battles_mean
+    and win_share against pre-LETHALITY baseline (battles_mean=30.0, Crown 40 / Varfell
+    50 / Church 10). LETHALITY restoration should change distribution magnitudes (more
+    decisive outcomes faster); pathological collapse (one faction 90%+) signals over-calibration.'
+  - 'Step H: sim_gate ledger entry for LETHALITY_SCALE. Every mechanical constant
+    in the sim must have a ledger entry — per skills/valoria-simulator/SKILL.md sim_gate
+    protocol.'
+  - 'Step I: task_gate("simulation"); safe_commit with Citations block (massbattle.py
+    + module_manifest.md + coverage_matrix.md co-files; ledger entry path; calibration
+    writeup path if separate).'
+  - 'Step J: Pass 3 — fresh fetch from main, verify @canonical citation present, LETHALITY_SCALE
+    = <calibrated value>, ledger entry committed, smoke still passes.'
+  - 'Step K: safe_session_close + archive this handoff (target met). Write follow-on
+    handoffs for Steps 4.3+ from the module_manifest follow-on plan.'
+key_values:
+- 'mass_battle_integration_v30.md §3.1: damage_applied = floor(LETHALITY_SCALE × ((1
+  + Power) × net_successes - DR × defender_size)). LETHALITY_SCALE initial = 0.10
+  (v17 baseline). Calibration band 14–16% per-turn at T3 mirror Line.'
+- 'L103 in current massbattle.py: explicit "# No LETHALITY_SCALE — casualty rates
+  emerge from pool/TN/DR mechanics directly." This is the comment that lies; v19 dropped
+  LETHALITY but never recalibrated the damage formula to match the 20× HP inflation
+  (Size×BLOCK_SIZE).'
+- '§3.1 PROVISIONAL: "0.10 starting value untested at v22 multi-turn structure. Calibration
+  sweep required at first port — adjust toward ~14-16% per-turn casualty target."
+  Implies committed value may differ from 0.10.'
+- 'Test exit (§3.2): D-8 battery tests/sim/battery_v22.py must run within new band
+  ranges. Prior handoff flagged "may not exist yet — confirm before invoking." If
+  absent, Step 4.2b is a separate handoff.'
+- 'sim_gate (skills/valoria-simulator/SKILL.md): every mechanical constant needs a
+  ledger entry. LETHALITY_SCALE qualifies.'
+- 'Pre-fix baseline: b0185f05 mc_v18.run_batch(10, seed=42) → battles_mean=30.0, win_share
+  Crown 40 / Varfell 50 / Church 10. Use as A/B baseline.'
+blockers:
+- tests/sim/battery_v22.py existence unknown — prior handoff said "may not exist yet."
+  If absent, battery validation defers to Step 4.2b; do not block Step 4.2 (a + b)
+  on building the battery.
+- 'GAP-1 from c6ecb5b9 / b0185f05: faction→unit construction uses minimum-viable defaults.
+  NOT in this handoff scope (Step 10.2 owns the richening). If LETHALITY recalibration
+  produces pathological outcomes only at faction-mediated battles (mc_v18) but NOT
+  at direct run_battle, the gap is _faction_to_unit, not LETHALITY — escalate to Step
+  10.2 handoff, do not improvise.'
+- M3 completeness_gate still not implemented (architecture v2.4 open_items). Continue
+  sim_gate + Mode G manifest fallback.
+- M6 tools/index_gen.py rewrite still not landed. editorial_ledger_summary.yaml ships
+  malformed; do not migrate to strict yaml.safe_load in this handoff.
+- 'PI bootstrap_script drift (surfaced 2026-05-18 this session): PI calls h.assert_bootstrap()
+  before read_files_graphql() establishes session token, and references nonexistent
+  g.print_status_block(). Use quick_bootstrap() instead. PI reconciliation is a separate
+  infrastructure commit, not in this scope.'
+created: '2026-05-19T17:02:36.061658+00:00'
+updated: '2026-05-19T17:02:36.061658+00:00'
+status: active
