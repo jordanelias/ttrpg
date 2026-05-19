@@ -319,32 +319,18 @@ M1 Church Settlement Infrastructure (commit `4f27949e`, 128 tests, 49 ledger ent
 | Status | Implemented + run. Reframing 2 ratified. Two audit flags surfaced: HeavyBlunt universal anti-armor; Heavy-vs-Heavy stalemate needs tactical levers to produce interesting resolution. |
 | Open | Verify Heavy-vs-Heavy resolves interestingly via tactic cards / flanking / Command in M3-engine sim (deferred). HeavyBlunt audit deferred. |
 
-## Phase 7 (2026-05-18) — v18 mass-battle bare port (Mode G manifest)
+
+## Phase 13 (2026-05-17) — Intermediating layer test (Reframing 2 floor analysis)
 
 | Field | Value |
 |---|---|
-| Scope | Infrastructure: Mode G module manifest for Phase 7 mass-battle port. Scope C2 narrow — canon §4.1 Step 1 + §4.10 sub-step 3. Steps 2–9 deferred. |
-| Sim | tests/sim/v18-integration/module_manifest.md (this commit); subsequent port commits land in sim/provincial/{massbattle,units,tactic_cards,faction_action}.py + sim/mc_v18.py |
-| Writeup | This manifest + designs/provincial/mass_battle_integration_v30.md §4 |
-| Trials | None — manifest only. Battery (tests/sim/battery_v22.py) deferred to Step 5 of canon §4.1, not in C2. |
-| Coverage | Phase 7 modules declared; tactic_cards.py stub remains BLOCKED on contamination audit per integration_plan_v18 §1.4. |
-| Findings | Source-engine is sim_mb_06_v22.py (per canon §4.1), not m3_mass_battle.py. v22 dataclass extraction needs late-binding to avoid circular import (units.py ↔ massbattle.py constants). |
-| Provisional assumptions | Bare-port flex acceptable per canon §4.1 PROVISIONAL clause (signatures may shift if statistical equivalence holds on Mirror Cmd 4v4 p>0.05). |
-| Dependencies | designs/provincial/mass_battle_v30.md; designs/provincial/mass_battle_integration_v30.md; designs/provincial/military_layer_v30.md; designs/scene/derived_stats_v30.md; params/mass_combat.md; params/core.md. |
-| Status | Manifest committed. Port commit follows. |
-| Open | Verification ledger (per sim_gate) deferred — bare-port replicates v22 constants verbatim. Phase 8 strategic AI successor. |
-
-## Phase 7 C2 (2026-05-18) — regression fix: Subunit.__eq__ recursion
-
-| Field | Value |
-|---|---|
-| Scope | Surgical regression fix for c6ecb5b9 (Phase 7 C2 bare port). RecursionError in Subunit.__eq__ via target_atom cycle after assign_targets blocked every Conquest battle silently (mc_v18.faction_take_action's try/except Exception:pass masked the raise). |
-| Sim | mc_v18.run_batch(10, base_seed=42) — direct invocation smoke against resolve_mass_battle(Crown Mil=5, Church Mil=4.5). |
-| Writeup | tests/sim/v18-integration/module_manifest.md (status updates) + commit body. |
-| Trials | 10 batch runs (n=10). Pre-fix: battles_mean=0 (silent fail). Post-fix: battles_mean=30.0. Direct invocation returns degree dict {'attacker_wins': True, 'degree': 'Success', 'attacker_size_pct': 0.89, 'defender_size_pct': 0.775}. |
-| Coverage | sim/provincial/units.py: @dataclass(eq=False) on Subunit + Unit. Falls back to object identity __eq__/__hash__. Zero call-site changes. |
-| Findings | Cycle source: assign_targets (massbattle.py L619/622/627/630) sets atom.target_atom as direct Subunit reference on both sides; A.target_atom→B and B.target_atom→A form a cycle. Literal trigger: list.remove of tuple-of-Unit at massbattle.py L1488/1494/1511/1537 (pursuit/rout tracking). Audited: zero `subunit == subunit` value-equality sites; existing set/dict keys already use id() (L749-750). |
-| Provisional assumptions | Identity-eq does not change observable mass-battle outcomes — basis: canon §4.1 PROVISIONAL flex clause; target_atom set-by-reference throughout the engine, never compared by value. win_share spread Crown 40 / Varfell 50 / Church 10 (no pathological degenerate state) confirms _faction_to_unit MV-defaults are tolerable for C2; GAP-1 not escalated. |
-| Dependencies | designs/provincial/mass_battle_integration_v30.md §4.1 PROVISIONAL clause; canon/02_canon_constraints.md §B GD-1. |
-| Status | Verified end-to-end. Conquest path unblocked. |
-| Open | Phase 7 follow-on splits into separate handoffs (Step 4.2 LETHALITY; Steps 4.3-4.6 flanking/ripple/tiebreakers; Steps 4.7-4.9 phase hooks/collision/cleanup; Step 10.1 domain_echo; Step 10.2 accounting + faction→unit richening — resolves GAP-1). |
+| Scope | Test three intermediating layer candidates (Layer A Posture, Layer B Advantage Bar, Layer C Stamina-primary) atop Phase 10 baseline. Question: which layer compresses within-class Agi dominance from 99% baseline to 60-70% target? |
+| Sim | tests/sim/scripts/phase13_layers.py |
+| Writeup | tests/sim/phase13_layers_2026-05-17.md |
+| Trials | N=2000 per matchup per layer |
+| Coverage | Calibration matchups; within-class Agi gap; End-investment; F3 gap; cross-class via heavy; balanced build |
+| Findings | All three layers structurally compress within-class dominance. Layer A inverts (36% Fast — STR/End rebalanced); Layer B floors via binomial exchange (83% — mathematical bound); Layer C modest compression (88% — preserves current dynamics). None hit 60-70% target cleanly at first-pass tuning; structural mechanisms validated. Calibration draw rates high for Layers A and B. |
+| Provisional assumptions | All Phase 13 magnitudes (POSTURE_NET_PER_STEP, POSITION_PER_NET, HP_DAMAGE_THRESHOLD etc.) are first-pass; tuning sensitive; smart-AI strike-when-vulnerable applied but more sophisticated AI would shift results |
+| Dependencies | Phase 10 baseline; planning_v0.md root cause identification |
+| Status | Three layer candidates implemented and tested. Reading split: A) tuning works; B) layer + companion mechanism; C) layer insufficient at current pool magnitudes. Decision: Jordan to choose layer or reject. |
+| Open | F4 calibration draws need tuning resolution. F5 cross-class still requires reach gate (M1). F6 balanced builds non-viable across all layers. Reading C poses deeper question about pool magnitudes themselves. |

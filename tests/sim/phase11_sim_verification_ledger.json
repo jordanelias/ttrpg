@@ -478,5 +478,84 @@
       "section": "Phase 12 sim heuristic",
       "quoted_text": "Surviving health ratio > 1.2x = win; else draw at max_rounds"
     }
+  ],
+  "phase13_additions": [
+    {
+      "sim_variable": "POSTURE_MAX",
+      "value": 3,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer A",
+      "quoted_text": "Posture states: Steady=0, Pressed=1, Reeling=2, Broken=3"
+    },
+    {
+      "sim_variable": "POSTURE_NET_PER_STEP",
+      "value": 1.0,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer A",
+      "quoted_text": "1 posture step per 1.0 net successes"
+    },
+    {
+      "sim_variable": "VULNERABILITY_DAMAGE_MULT",
+      "value": 2.0,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer A",
+      "quoted_text": "Strike during Vulnerability \u00d7 2 damage"
+    },
+    {
+      "sim_variable": "POSTURE_RECOVERY_PER_BREATH",
+      "value": 1,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer A",
+      "quoted_text": "1 step recovered per Take Breath"
+    },
+    {
+      "sim_variable": "POSITION_MID",
+      "value": 10,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer B",
+      "quoted_text": "Position track 0-20, mid 10, A wins at 0, B wins at 20"
+    },
+    {
+      "sim_variable": "POSITION_PER_NET",
+      "value": 1.5,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer B",
+      "quoted_text": "Position movement per net (discrete: 1 per exchange win)"
+    },
+    {
+      "sim_variable": "POSITION_WIN_THRESHOLD",
+      "value": 10,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer B",
+      "quoted_text": "Distance from mid for match decision"
+    },
+    {
+      "sim_variable": "STAM_DRAIN_PER_NET",
+      "value": 2.0,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer C",
+      "quoted_text": "Stamina drained per opponent net success"
+    },
+    {
+      "sim_variable": "HP_DAMAGE_THRESHOLD",
+      "value": 3.0,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer C",
+      "quoted_text": "Net successes above which direct HP damage fires"
+    },
+    {
+      "sim_variable": "SPENT_DAMAGE_MULT",
+      "value": 2.5,
+      "canonical_source": "N/A",
+      "section": "Phase 13 Layer C",
+      "quoted_text": "Strike on Spent target \u00d7 2.5 damage"
+    },
+    {
+      "sim_variable": "phase13_trial_count",
+      "value": 2000,
+      "canonical_source": "N/A",
+      "section": "Phase 13 sim parameter",
+      "quoted_text": "N=2000 per matchup per layer"
+    }
   ]
 }
