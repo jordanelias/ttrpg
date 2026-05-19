@@ -1,6 +1,6 @@
 # Sim Module Manifest — v18 Integration / Phase 7 (Mass Battle)
 
-Status: Phase 7 C2 verified end-to-end 2026-05-18 (regression fix landed)
+Status: Step 4.2 LETHALITY landed 2026-05-18 (PP-233 formula correction + LETHALITY_SCALE=1.25 calibrated)
 Scope: C2 narrow — canon §4.1 Step 1 (bare port v22 → sim/) + §4.10 Step 3 (faction_action wiring). Steps 2–9 deferred.
 Source canon: `designs/provincial/mass_battle_integration_v30.md` §4.1, §4.10
 Source engine: `tests/sim/sim_mb_06_v22.py` (2143 lines; per canon §4.1 — NOT m3_mass_battle.py)
@@ -11,7 +11,7 @@ Source engine: `tests/sim/sim_mb_06_v22.py` (2143 lines; per canon §4.1 — NOT
 |---|---|---|---|---|
 | P7-1 | `sim/provincial/units.py` | massbattle (late-bind for constants/utils) | `designs/provincial/mass_battle_v30.md §A.3–A.4`; `designs/scene/derived_stats_v30.md` (TroopCount / block_size); v22 dataclass surface | **verified** — `@dataclass(eq=False)` on Subunit + Unit (canon §4.1 PROVISIONAL flex; identity __eq__ resolves target_atom cycle) |
 | P7-2 | `sim/provincial/tactic_cards.py` | — | `designs/provincial/mass_battle_v30.md §A.7`; `integration_plan_v18 §1.4` (BLOCKED on contamination audit) | stub-only — empty dict + marker per Jordan 2026-05-17 |
-| P7-3 | `sim/provincial/massbattle.py` | `units`, `tactic_cards`; `params/mass_combat.md`; `params/core.md` | `designs/provincial/mass_battle_v30.md` (full); `designs/provincial/military_layer_v30.md`; `designs/provincial/mass_battle_integration_v30.md`; v22 source | **verified** — `resolve_mass_battle(Crown 5.0 vs Church 4.5)` returns degree dict; no raise |
+| P7-3 | `sim/provincial/massbattle.py` | `units`, `tactic_cards`; `params/mass_combat.md`; `params/core.md` | `designs/provincial/mass_battle_v30.md` (full); `designs/provincial/military_layer_v30.md`; `designs/provincial/mass_battle_integration_v30.md`; v22 source | **verified + Step 4.2 landed** — PP-233 continuous formula at engagement / pursuit / freed-attacker damage sites; LETHALITY_SCALE=1.25 calibrated; mc_v18 smoke battles_mean=40.1 |
 | P7-4 | `sim/provincial/faction_action.py` | `massbattle.resolve_mass_battle`; `sim/territory/adjacency`; `sim/autoload/game_state` | `mass_battle_integration_v30.md §4.10 step 3` (faction_action invokes resolve_mass_battle for Military Conquest, HR-8 / §B GD-1) | **verified** — `mc_v18.run_batch(10, seed=42)` yields `battles_mean=30.0` (was 0 pre-fix); spread across factions (Crown 40 / Varfell 50 / Church 10) |
 | P7-5 | `sim/mc_v18.py` | `faction_action` | `canon/02_canon_constraints.md §B (GD-1/2/3)` | no-op for C2 (battle_count already incremented in faction_action) |
 
@@ -48,7 +48,7 @@ After C2 verified end-to-end, the deferred work splits into independent handoffs
 
 | Handoff | Scope | Files | Prereq |
 |---|---|---|---|
-| Phase 7 — Step 4.2 LETHALITY recalibration | restore lethality scaling factors per §3.1 | `sim/provincial/massbattle.py`; `params/mass_combat.md` | C2 verified ✓ |
+| Phase 7 — Step 4.2 LETHALITY recalibration | restore lethality scaling factors per §3.1 | `sim/provincial/massbattle.py`; `params/mass_combat.md` | **landed** — PP-233 formula correction (continuous net_successes) + LETHALITY_SCALE=1.25 calibrated to 14.48% mean / 16.45% median per-turn at T3 mirror N=60 |
 | Phase 7 — Steps 4.3–4.6 (flanking + ripple + tiebreakers) | §3.2–§3.4 | `sim/provincial/massbattle.py` | 4.2 landed |
 | Phase 7 — Steps 4.7–4.9 (phase hooks + collision + cleanup) | §3.5–§3.9 | `sim/provincial/massbattle.py` | 4.6 landed |
 | Phase 7 — Step 10.1 domain_echo | cross-scale battle-result echo | `sim/cross_scale/domain_echo.py` (new) | C2 verified ✓ |

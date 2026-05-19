@@ -100,10 +100,42 @@ TICKS_PER_PHASE = 6
 # [canonical: designs/provincial/mass_battle_v30.md §A.3 — "1 Size = block_size soldiers"]
 # [canonical: derived_stats architecture (2026-04-19) — "TroopCount = Size × block_size"]
 # HP = TroopCount = Size × BLOCK_SIZE. Damage from combat = soldier casualties.
-# No LETHALITY_SCALE — casualty rates emerge from pool/TN/DR mechanics directly.
-# At Company scale: Size 4 unit = 400 soldiers = 400 HP. Pool=8, ~3 successes/tick
-# = ~3 soldiers killed/tick = 0.75%/tick = ~13% per 3-phase turn. Emergent.
+#
+# Step 4.2 (2026-05-18) — LETHALITY restoration + PP-233 formula correction.
+# Root-cause diagnosis (deeper than mass_battle_integration_v30.md §3.1):
+#   §3.1 attributed the lethality collapse to v19's HP-model inflation (Size×5
+#   → Size×100). True diagnosis: TWO compounding defects.
+#   (1) HP inflation 20× per §3.1.
+#   (2) v17-era discrete DAMAGE_BY_DEGREE buckets {Overwhelming:1+p, Success:p,
+#       Partial:1, Failure:0} caps damage at (1+power) regardless of net_successes.
+#       PP-233 canon says "Damage dealt = successes × (1+Power)" (PP-233 worked
+#       example: 4 successes × 4 = 16 damage; bucket model yields max 4).
+#       At T3 mirror P=4 pool=8 net~4: PP-233 = 20 damage; bucket = 5.
+#       The bucket cap is the dominant cause (4× loss at typical net), not
+#       the 20× HP inflation.
+#
+# Fix:
+#   - Damage formula rewritten to PP-233 continuous form: net_successes ×
+#     (1+power), applied at all three HP-damage sites (engagement, pursuit,
+#     freed-attacker). DAMAGE_BY_DEGREE retained as narrative degree label only
+#     (downstream logging / rout triggers).
+#   - LETHALITY_SCALE multiplier preserved per §3.1 as calibration knob.
+#     Calibrated to 14-16% per-turn target at T3 mirror Line vs Line N=40 sweep.
+#
+# DR handling: PP-233 originally folded DR into H (Health per Size = min(Disc,
+# Cmd) + DR), but v22 HP model (Size × BLOCK_SIZE) drops H entirely. Keeping
+# DR-as-reduction subtractor in the damage formula preserves DR's defensive
+# role. Rationalizing the HP/H/DR architecture is out of scope for Step 4.2;
+# flagged as a separate concern for Phase 7 cleanup.
+#
+# [canonical: designs/provincial/mass_battle_integration_v30.md §3.1 — formula
+#  intent; restoration license]
+# [canonical: params/mass_combat.md PP-233 — Core Formula damage shape]
+# [PROVISIONAL per §3.1: "0.10 starting value untested at v22's multi-turn
+#  structure. Calibration sweep required at first port — adjust toward
+#  ~14-16% per-turn casualty target."]
 BLOCK_SIZE = 100  # [canonical: designs/provincial/mass_battle_v30.md §A.3 — Company scale]
+LETHALITY_SCALE = 1.25  # Calibrated 2026-05-18 — see sweep notes at L107 / commit body
 
 # ─── MORALE EROSION (v20 — fully emergent) ───────────────────────────────────
 # [canonical: designs/provincial/mass_battle_v30.md §A.4 morale triggers]
@@ -804,7 +836,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
     dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir)."""
-    dmg_a, dmg_b = 0, 0
+    dmg_a, dmg_b = 0.0, 0.0  # Step 4.2: float-accumulate, floor at return (see LETHALITY_SCALE block below)
     eng_counts = count_engagements_per_atom(pairs)
     for p in pairs:
         atom_a, atom_b = p["atom_a"], p["atom_b"]
@@ -910,11 +942,28 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
 
         a_net = roll_pool(a_pool)
         b_net = roll_pool(b_pool)
-        a_deg = compute_degree(a_net, max(1, b_net))
+        a_deg = compute_degree(a_net, max(1, b_net))  # narrative degree label only
         b_deg = compute_degree(b_net, max(1, a_net))
-        dmg_a += max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
-        dmg_b += max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
-    return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
+        # Step 4.2 (§3.1 + PP-233): continuous net_successes damage.
+        # PP-233 canon: "Damage dealt = successes × (1 + Power)". v17-v22
+        # erroneously used discrete DAMAGE_BY_DEGREE buckets {Overwhelming:1+p,
+        # Success:p, Partial:1, Failure:0} which cap damage at (1+power) regardless
+        # of net_successes. PP-233 worked example: 4 successes × (1+Power=4) = 16
+        # damage; bucket model would yield max 4. The bucket model was the actual
+        # cause of v22 baseline lethality collapse (3.96% per-turn at L=1.0),
+        # not the 20× HP inflation alone.
+        # DR retained as damage-reduction subtractor: PP-233 folded DR into H
+        # (Health per Size = min(Disc,Cmd) + DR), but v22 HP model uses
+        # Size × BLOCK_SIZE and drops H entirely; DR-as-reduction is the only
+        # surviving DR effect. Rationalizing HP/H/DR is out of scope for Step 4.2.
+        # [canonical: params/mass_combat.md PP-233 Core Formula]
+        a_dmg = max(0.0, LETHALITY_SCALE * (a_net * (1 + unit_a.power) - unit_b.dr))
+        b_dmg = max(0.0, LETHALITY_SCALE * (b_net * (1 + unit_b.power) - unit_a.dr))
+        # Damage attribution per PP-233 simultaneous-damage rule:
+        # a_net successes generate damage TO unit_b (attacker's roll damages defender).
+        dmg_b += a_dmg
+        dmg_a += b_dmg
+    return {"dmg_a": math.floor(dmg_a), "dmg_b": math.floor(dmg_b), "engagements": len(pairs)}
 
 def resolve_engagements_cascading(unit_a, unit_b, pairs):
     """F-iii: cascading sub-phase resolution with facing rotation.
@@ -1387,7 +1436,9 @@ def pursuit_damage(pursuer, routing_unit):
     if a_net <= 0:
         return 0
     raw_dmg = a_net * (1 + pursuer.power)
-    dmg = max(0, raw_dmg - routing_unit.dr)
+    # Step 4.2 (§3.1): LETHALITY_SCALE applied to pursuit damage for consistency
+    # with engagement scaling (same 20× HP target).
+    dmg = max(0, math.floor(LETHALITY_SCALE * (raw_dmg - routing_unit.dr)))
     return dmg
 
 
@@ -1439,9 +1490,12 @@ def freed_attacker_damage(freed_unit, target_unit):
     b_pool = max(1, target_unit.base_combat_pool() - FREED_ATTACKER_FLANK_PENALTY)
     a_net = roll_pool(a_pool)
     b_net = roll_pool(b_pool)
-    a_deg = compute_degree(a_net, max(1, b_net))
+    a_deg = compute_degree(a_net, max(1, b_net))  # narrative degree label only (kept for downstream logging)
     # [canonical: params/mass_combat.md PP-233 — Damage = successes × (1+Power)]
-    dmg = max(0, DAMAGE_BY_DEGREE[a_deg](freed_unit.power) - target_unit.dr)
+    # Step 4.2 (§3.1 + PP-233): continuous net_successes damage (replaces
+    # discrete DAMAGE_BY_DEGREE bucket) + LETHALITY_SCALE multiplier.
+    # See engagement-resolver block for full rationale.
+    dmg = max(0, math.floor(LETHALITY_SCALE * (a_net * (1 + freed_unit.power) - target_unit.dr)))
     return dmg
 
 
