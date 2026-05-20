@@ -624,10 +624,14 @@ STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
 
 # ─── DICE ────────────────────────────────────────────────────────────────────
 
-def roll_pool(n, tn=7):
+def roll_pool(n, tn=7, rng=None):
+    # rng: optional random.Random for deterministic batch runs (world.rng).
+    # Falls back to module-level `random` when None (preserves legacy callers
+    # and standalone test harnesses that seed via random.seed).
+    _r = rng if rng is not None else random
     net = 0
     for _ in range(max(1, n)):
-        f = random.randint(1, 10)
+        f = _r.randint(1, 10)
         if f == 1:         net -= 1
         elif tn <= f <= 9: net += 1
         elif f == 10:      net += 2
@@ -831,11 +835,13 @@ def _cascade_depth_key(pair):
         return min(r for r, c in a_cells)
     return -max(r for r, c in a_cells)
 
-def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
+def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None, rng=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
     F-ii: puncture bonus from momentum differential.
-    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir)."""
+    dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir).
+    rng: optional random.Random threaded through roll_pool calls (world.rng for
+    deterministic batches). None falls back to module random."""
     dmg_a, dmg_b = 0.0, 0.0  # Step 4.2: float-accumulate, floor at return (see LETHALITY_SCALE block below)
     eng_counts = count_engagements_per_atom(pairs)
     for p in pairs:
@@ -940,8 +946,8 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         if atom_a.unit_type == 'ranged': a_pool = max(1, a_pool // 3)
         if atom_b.unit_type == 'ranged': b_pool = max(1, b_pool // 3)
 
-        a_net = roll_pool(a_pool)
-        b_net = roll_pool(b_pool)
+        a_net = roll_pool(a_pool, rng=rng)
+        b_net = roll_pool(b_pool, rng=rng)
         a_deg = compute_degree(a_net, max(1, b_net))  # narrative degree label only
         b_deg = compute_degree(b_net, max(1, a_net))
         # Step 4.2 (§3.1 + PP-233): continuous net_successes damage.
@@ -965,7 +971,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         dmg_a += b_dmg
     return {"dmg_a": math.floor(dmg_a), "dmg_b": math.floor(dmg_b), "engagements": len(pairs)}
 
-def resolve_engagements_cascading(unit_a, unit_b, pairs):
+def resolve_engagements_cascading(unit_a, unit_b, pairs, rng=None):
     """F-iii: cascading sub-phase resolution with facing rotation.
     [canonical: Jordan handoff §(3)]
 
@@ -973,9 +979,12 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
     one depth group, then rotates engaged cells' facings toward their attacker.
     Later sub-phases see FLANK/REAR angles on already-rotated cells.
     Effect requires tight formation (TIP_SUPPORT_GAP=1 or 2) so multiple
-    Arrowhead rows are simultaneously adjacent to Line cells."""
+    Arrowhead rows are simultaneously adjacent to Line cells.
+
+    rng: optional random.Random threaded to resolve_engagements (world.rng for
+    deterministic batches). None falls back to module random."""
     if not CASCADING_ENABLED:
-        return resolve_engagements(unit_a, unit_b, pairs)
+        return resolve_engagements(unit_a, unit_b, pairs, rng=rng)
 
     dynamic_facings = _init_dynamic_facings(unit_a, unit_b)
     total_dmg_a = total_dmg_b = 0
@@ -1007,7 +1016,7 @@ def resolve_engagements_cascading(unit_a, unit_b, pairs):
                   if (id(p["atom_a"]), id(p["atom_b"])) not in resolved_keys]
         if not active:
             continue
-        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings)
+        result = resolve_engagements(unit_a, unit_b, active, dynamic_facings, rng=rng)
         total_dmg_a += result["dmg_a"]
         total_dmg_b += result["dmg_b"]
         total_engagements += result["engagements"]
@@ -1041,16 +1050,20 @@ def _atom_distance(atom_a, atom_b):
     return best
 
 
-def _roll_volley_pool(power_dice):
+def _roll_volley_pool(power_dice, rng=None):
     """Roll power_dice d10s vs TN=VOLLEY_TN. Returns net successes (count of d>=TN)
     with the standard fumble/crit: 1 = -1 net, 10 = +2 net.
     [canonical: mass_battle_v30.md §A.1 dice engine — TN-based successes, 1=-1, 10=+2]
+
+    rng: optional random.Random for deterministic batch runs (world.rng).
+    Falls back to module-level `random` when None.
     """
     if power_dice <= 0:
         return 0
+    _r = rng if rng is not None else random
     net = 0
     for _ in range(power_dice):
-        roll = random.randint(1, 10)
+        roll = _r.randint(1, 10)
         if roll == 1:
             net -= 1
         elif roll == 10:
@@ -1060,11 +1073,14 @@ def _roll_volley_pool(power_dice):
     return max(0, net)  # floor at 0; PP-273 minimum pool is for engagement, not volley result
 
 
-def volley_phase(unit_a, unit_b):
+def volley_phase(unit_a, unit_b, rng=None):
     """Phase 2 Volley. Each ranged atom selects nearest in-range enemy atom and fires.
     Returns dict of total Size-loss to each side (applied simultaneously at end of turn).
     Pool = Power; TN = VOLLEY_TN; ranged DR subtracts from net successes.
     [canonical: mass_battle_v30.md §A.7 Phase 2 Volley; params/mass_combat.md §Ranged DR Table]
+
+    rng: optional random.Random threaded to _roll_volley_pool (world.rng for
+    deterministic batches). None falls back to module random.
     """
     if not VOLLEY_ENABLED:
         return {"loss_a": 0, "loss_b": 0, "shots": 0}
@@ -1087,7 +1103,7 @@ def volley_phase(unit_a, unit_b):
             return 0, None
         # Pool = unit Power dice (PP-503). Discipline penalty applies (per §A.4).
         pool = max(1, shooter_unit.power - shooter_unit.discipline_penalty_volley())
-        net = _roll_volley_pool(pool)
+        net = _roll_volley_pool(pool, rng=rng)
         # DR subtracts from net successes (Ranged DR Table)
         net_after_dr = max(0, net - RANGED_DR_DEFAULT)
         return net_after_dr, best_target
@@ -1108,12 +1124,15 @@ def volley_phase(unit_a, unit_b):
 
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
 
-def run_battle(unit_a, unit_b, max_turns=18):
+def run_battle(unit_a, unit_b, max_turns=18, rng=None):
     """Run one engagement turn (up to 3 phases = 18 ticks).
     v16: max_turns=18 = one battle turn's engagement cap (3 phases).
     Multi-turn battles call this repeatedly with persistent unit state.
     [canonical: Jordan direction — "limit of three phases per simultaneous
      engagement per turn"]
+
+    rng: optional random.Random threaded to volley_phase / resolve_engagements
+    (world.rng for deterministic batches). None falls back to module random.
 
     Returns:
       {"winner": "A"|"B"|"draw", "turns": int, "phases": int, "tick_in_phase": int}
@@ -1126,7 +1145,7 @@ def run_battle(unit_a, unit_b, max_turns=18):
         # Phase 2 — Volley. Ranged atoms fire at range BEFORE movement.
         # Damage accumulated here, applied with Phase 5 damage at end of turn.
         # [canonical: mass_battle_v30.md §A.7 Phase 2; PP-503]
-        vol = volley_phase(unit_a, unit_b)
+        vol = volley_phase(unit_a, unit_b, rng=rng)
         volley_dmg_a = vol["loss_a"]
         volley_dmg_b = vol["loss_b"]
         # Pre-movement contacts -> halt
@@ -1202,9 +1221,9 @@ def run_battle(unit_a, unit_b, max_turns=18):
                         cells_in_contact += len(p.get('b_cells', []))
                 drain = max(1, cells_in_contact) * STAMINA_DRAIN_PER_CONTACT_CELL
                 u.stamina = max(0, u.stamina - drain)
-        result = (resolve_engagements_cascading(unit_a, unit_b, pairs)
+        result = (resolve_engagements_cascading(unit_a, unit_b, pairs, rng=rng)
                   if CASCADING_ENABLED
-                  else resolve_engagements(unit_a, unit_b, pairs))
+                  else resolve_engagements(unit_a, unit_b, pairs, rng=rng))
         sz_a, sz_b = unit_a.size, unit_b.size
         # Apply Phase 2 Volley + Phase 5 Engagement damage simultaneously at Phase 6 Step 1
         # [canonical: mass_battle_v30.md §A.7 — Volley/Thread/Engagement damage applied together]
@@ -1336,9 +1355,10 @@ def reset_positions(unit, shape, anchor_map):
 
 
 def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
-                          max_battle_turns=8):
+                          max_battle_turns=8, rng=None):
     """Run a multi-turn battle. Each turn = 3 phases of engagement.
     Returns list of per-turn result dicts + final outcome.
+    rng: optional random.Random; None falls back to module random.
     [canonical: Jordan direction — 5-8 turns per battle, 3 phases per turn]"""
     log = []
     for battle_turn in range(1, max_battle_turns + 1):
@@ -1352,7 +1372,7 @@ def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
         # Run one engagement turn (3 phases max)
         # v21: alternating swap removed — simultaneous resolution makes
         # run_battle symmetric regardless of argument order.
-        r = run_battle(unit_a, unit_b)
+        r = run_battle(unit_a, unit_b, rng=rng)
 
         a_loss_turn = (hp_a_before - unit_a.hp) / unit_a.hp_max if unit_a.hp_max else 0
         b_loss_turn = (hp_b_before - unit_b.hp) / unit_b.hp_max if unit_b.hp_max else 0
@@ -1404,10 +1424,11 @@ REARGUARD_PENALTY = 2  # [canonical: §A.12 — "Fast may rearguard at −2D Off
 RECALL_OB = 2  # [canonical: §A.12 — "Recall: Command Ob 2"]
 
 
-def pursuit_damage(pursuer, routing_unit):
+def pursuit_damage(pursuer, routing_unit, rng=None):
     """Fast pursuer attacks routing unit. Routing unit has no defence
     unless it is also Fast (rearguard at -2D Off).
     Returns HP damage dealt.
+    rng: optional random.Random; None falls back to module random.
     [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
     if pursuer.speed != "Fast":
         return 0  # Only Fast units can pursue
@@ -1418,13 +1439,13 @@ def pursuit_damage(pursuer, routing_unit):
 
     # [canonical: params/mass_combat.md PP-233 — Pool = min(Size,Cmd)+Cmd]
     a_pool = pursuer.base_combat_pool()
-    a_net = roll_pool(a_pool)
+    a_net = roll_pool(a_pool, rng=rng)
 
     # Fast routing unit may rearguard at -2D Off
     # [canonical: §A.12 — "Fast may rearguard at −2D Off"]
     if routing_unit.speed == "Fast":
         rg_pool = max(1, routing_unit.base_combat_pool() - REARGUARD_PENALTY)
-        rg_net = roll_pool(rg_pool)
+        rg_net = roll_pool(rg_pool, rng=rng)
         # Rearguard acts as partial defence — reduce pursuer net
         a_net = max(0, a_net - max(0, rg_net))
 
@@ -1442,11 +1463,12 @@ def pursuit_damage(pursuer, routing_unit):
     return dmg
 
 
-def recall_check(pursuer):
+def recall_check(pursuer, rng=None):
     """General attempts to recall pursuing unit. Command Ob 2.
     Returns True if recalled (pursuit stops).
+    rng: optional random.Random; None falls back to module random.
     [canonical: designs/provincial/mass_battle_v30.md §A.12]"""
-    net = roll_pool(pursuer.command)
+    net = roll_pool(pursuer.command, rng=rng)
     return net >= RECALL_OB
 
 
@@ -1465,19 +1487,21 @@ ROUT_CONTAGION_MORALE_HIT = 1  # [canonical: designs/provincial/mass_battle_v30.
 FREED_ATTACKER_FLANK_PENALTY = 1  # [canonical: §A.4 octagon YELLOW = -1D]
 
 
-def discipline_check_cascade(unit):
+def discipline_check_cascade(unit, rng=None):
     """Discipline check Ob 1 for morale cascade.
     Returns True if unit PASSES (resists cascade).
+    rng: optional random.Random; None falls back to module random.
     [canonical: designs/provincial/mass_battle_v30.md §A.12 — Ob 1 check]"""
     # [canonical: params/mass_combat.md — roll_pool uses TN 7 default]
-    net = roll_pool(unit.discipline)
+    net = roll_pool(unit.discipline, rng=rng)
     return net >= MORALE_CASCADE_OB
 
 
-def freed_attacker_damage(freed_unit, target_unit):
+def freed_attacker_damage(freed_unit, target_unit, rng=None):
     """Freed unit attacks target from the flank.
     The freed unit rolls its full pool. Target defends at -1D (flank).
     Returns damage dealt to target.
+    rng: optional random.Random; None falls back to module random.
     [canonical: designs/provincial/mass_battle_v30.md §A.12 — implied by
      rout freeing the victor to attack adjacent enemies]"""
     if freed_unit.routed or freed_unit.broken:
@@ -1488,8 +1512,8 @@ def freed_attacker_damage(freed_unit, target_unit):
     a_pool = freed_unit.base_combat_pool()
     # [canonical: designs/provincial/mass_battle_v30.md §A.4 — YELLOW zone -1D]
     b_pool = max(1, target_unit.base_combat_pool() - FREED_ATTACKER_FLANK_PENALTY)
-    a_net = roll_pool(a_pool)
-    b_net = roll_pool(b_pool)
+    a_net = roll_pool(a_pool, rng=rng)
+    b_net = roll_pool(b_pool, rng=rng)
     a_deg = compute_degree(a_net, max(1, b_net))  # narrative degree label only (kept for downstream logging)
     # [canonical: params/mass_combat.md PP-233 — Damage = successes × (1+Power)]
     # Step 4.2 (§3.1 + PP-233): continuous net_successes damage (replaces
@@ -1500,7 +1524,7 @@ def freed_attacker_damage(freed_unit, target_unit):
 
 
 def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
-                          anchor_map, max_battle_turns=8):
+                          anchor_map, max_battle_turns=8, rng=None):
     """Run a multi-unit battle with morale cascade and freed-attacker.
 
     Args:
@@ -1544,7 +1568,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 continue
             # Recall check — general tries to pull unit back
             # [canonical: §A.12 — "Recall: Command Ob 2"]
-            if recall_check(pursuer):
+            if recall_check(pursuer, rng=rng):
                 pursuing_units.remove((pursuer, routing, p_side, p_pair))
                 freed_units.append((pursuer, p_side, p_pair))
                 turn_log['pursuits'].append({
@@ -1553,7 +1577,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 })
                 continue
             # Pursuit damage
-            dmg = pursuit_damage(pursuer, routing)
+            dmg = pursuit_damage(pursuer, routing, rng=rng)
             if dmg > 0:
                 routing.hp = max(0, routing.hp - dmg)
                 routing.recalc_size()
@@ -1578,7 +1602,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
             reset_positions(ub, shapes_b[b_idx], anchor_map)
 
             # Run 3-phase engagement
-            r = run_battle(ua, ub)
+            r = run_battle(ua, ub, rng=rng)
             turn_log['engagements'].append({
                 'pair': pair_idx, 'a_idx': a_idx, 'b_idx': b_idx,
                 'result': r['winner'], 'ticks': r['turns'],
@@ -1608,7 +1632,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     break
 
             if target:
-                dmg = freed_attacker_damage(freed_unit, target)
+                dmg = freed_attacker_damage(freed_unit, target, rng=rng)
                 if dmg > 0:
                     # [canonical: params/mass_combat.md PP-233 — simultaneous damage]
                     target.hp = max(0, target.hp - dmg)
@@ -1663,7 +1687,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                 if friend.routed:
                     continue
                 # Morale cascade: Discipline check Ob 1
-                if not discipline_check_cascade(friend):
+                if not discipline_check_cascade(friend, rng=rng):
                     friend.morale -= 1
                     turn_log['cascades'].append({
                         'unit': friend.name, 'trigger': f'{routed_side}{routed_idx} routed',
@@ -1799,7 +1823,12 @@ def resolve_mass_battle(faction_a, faction_b, terrain, world):
 
     # Single-encounter run — multi-unit orchestrator overkill for C2 scope.
     # Phase 7 Step 10 sub-steps 1-2 will route through run_multi_unit_battle.
-    result = run_battle(unit_a, unit_b, max_turns=18)
+    # [BUG FIX 2026-05-20 — non-determinism 03ce9c79: thread world.rng through
+    #  run_battle so batch reproducibility no longer requires a global
+    #  random.seed() pin. roll_pool / _roll_volley_pool consume world.rng
+    #  end-to-end. Pre-fix run_batch results varied between runs at the same
+    #  seed; post-fix, byte-identical at the same seed.]
+    result = run_battle(unit_a, unit_b, max_turns=18, rng=world.rng)
 
     # Map v22 result → degree shape that faction_action expects
     a_size_pct = unit_a.effective_size / max(1, unit_a.size_max)
