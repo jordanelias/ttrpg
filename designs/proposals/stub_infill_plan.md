@@ -306,3 +306,75 @@ stub-infill scope (this is a pre-existing bug, not introduced by infill).
 
 Filed as a follow-on. Recommend Jordan triage as part of Step 4.3+
 follow-on work or a dedicated determinism-audit pass.
+
+
+## Amendment 2026-05-19d — Closeout summary + deferred migration batch
+
+This session arc (commits 6669592f through d2941cde) closed the Pass 2l
+stub-infill plan:
+
+**Tier 0**: 14 stubs → 10 verified + 1 partial (combat handoff). 3 canon-
+gated reclassified (charter_liberties, varfell_mandate_action, npc_ai).
+
+**Schema migration #1**: 6 World registries (94dac72e).
+
+**Tier 1**: 6 modules across 4 commits (b4d7632f, 8285efd3, 0deffaf6,
+5c61a20a). 1 canon-gated (restoration_movement).
+
+**Tier 2**: 8 modules across 4 commits (f145e4b6, ec3727fc, ce4c0663,
+91d49dc1). 2 canon-gated (infrastructure_reclamation, varfell_territorial
+_acquisition).
+
+**Latent bug fix**: canonical PT/Accord bucketing (ec3727fc).
+
+**mc_v18 non-determinism filed**: 03ce9c79.
+
+**Schema migration #2**: 8 additional World registries (d2941cde).
+
+Total: 8 simulation commits + 3 infrastructure commits. 103-entry ledger,
+all canon-verified.
+
+### Deferred Migration Batch (recommended next pass)
+
+These three migrations share a single blast radius — each changes mc_v18
+batch results, requiring Phase 7 smoke re-baseline. Recommend Jordan
+batch them as a dedicated determinism + canonical-pipeline pass:
+
+1. **mc_v18 non-determinism fix** (Amendment 2026-05-19c). Thread
+   world.rng through massbattle.run_battle → roll_pool / volley_roll_pool.
+2. **accounting._ci_generation → ci_track.compute_seasonal_ci_delta**.
+   Legacy simplified +2/Church-owned-territory replaced by PP-412 5-step
+   canonical pipeline.
+3. **accounting._ms_decay → ms_track.apply_ms_baseline_decay**. Legacy
+   inline replaced by canonical ms_track module.
+4. **mc_v18 inline season loop → season.run_season**. Legacy advance
+   replaced by canonical season module.
+
+Each is mechanically straightforward (function-call substitution) but
+the cumulative behavior shift changes win_share distributions and
+battles_mean. Phase 7 smoke baselines + balance-audit baselines need
+re-recording after the batch.
+
+### Per-Record Serializers for World Registries (separate workstream)
+
+serialize_world / restore_world do not yet snapshot the 14 new registries
+from migrations #1 and #2. Required for production save format. Per-
+record serializers needed:
+  - CoherenceState.to_dict / from_dict
+  - InsurgencyRecord, NPC, TreatyRecord
+  - ConvictionState, Belief, Knot
+  - InfrastructureState, ThreadcutState
+  - drift floats + counters (trivial)
+  - co-movement deck (list of tuples — trivial)
+
+Lands when production save format is actually exercised.
+
+### Status: Pass 2l stub infill — COMPLETE
+
+37/45 stubs implementable. 8 canon-gated pending Pass 2d/2e/2f/2h/2i
+canon authoring (charter_liberties, varfell_mandate_action,
+varfell_territorial_acquisition, restoration_movement, hafenmark_equipment,
+altonian_reinforcements, home_sanctuary, infrastructure_reclamation,
+propose_treaty, insurgency_pipeline body, npc_ai contamination audit,
+threadwork §6.1 Ontological Status body, knots TIER-DRIFT-001 Jordan
+resolution).
