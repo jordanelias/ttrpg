@@ -65,7 +65,7 @@ Per `designs/proposals/stub_infill_plan.md` (commit 6669592f). Tier 0 = 14 stubs
 | # | Module | Canon | Status |
 |---|---|---|---|
 | T0-1 | `sim/territory/settlement.py` | `designs/territory/settlement_layer_v30.md §1.2-1.3` | **verified** — derives SettlementState + ProvinceState per §1.3 multipliers (50/20/30/20); 1:1 territory→settlement mapping pending registry |
-| T0-2 | `sim/thread/coherence.py` | `designs/threadwork/threadwork_v30.md Part 3` | pending |
+| T0-2 | `sim/thread/coherence.py` | `designs/threadwork/threadwork_v30.md Part 3` | **verified** — Coherence 10-0 track with §3.3 bands (Stable/Dissonant/Fragmented/Fractured/Severed/Rendering Crisis); apply_coherence_delta + check_coherence_zero_transition; module-level practitioner registry pending World schema |
 | T0-3 | `sim/cross_scale/handoff_rules.py` | `designs/architecture/scale_transitions_v30.md §3` | pending |
 | T0-4 | `sim/__init__.py` | (declarations) | pending |
 | T0-5 | `sim/peninsular/ms_track.py` | `params/core.md §MS Baseline Decay PP-255` | pending |

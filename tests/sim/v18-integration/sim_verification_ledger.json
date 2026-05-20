@@ -86,6 +86,69 @@
       "canonical_source": "designs/territory/settlement_layer_v30.md",
       "section": "§1.3 Settlement Stats",
       "quoted_text": "Each settlement has 3 stats tracked on a 0–5 scale"
+    },
+    {
+      "sim_variable": "COHERENCE_MAX",
+      "value": 10,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.1 What Coherence Measures",
+      "quoted_text": "**Range:** 10 (fully coherent) → 0 (rendering crisis)."
+    },
+    {
+      "sim_variable": "COHERENCE_MIN",
+      "value": 0,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.1 What Coherence Measures",
+      "quoted_text": "**Range:** 10 (fully coherent) → 0 (rendering crisis)."
+    },
+    {
+      "sim_variable": "COHERENCE_START",
+      "value": 10,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.1 What Coherence Measures",
+      "quoted_text": "**Starting value:** 10 (all practitioners)."
+    },
+    {
+      "sim_variable": "COHERENCE_STABLE_LOW",
+      "value": 8,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.3 Coherence Thresholds",
+      "quoted_text": "| 10–8 | Stable |"
+    },
+    {
+      "sim_variable": "COHERENCE_DISSONANT_LOW",
+      "value": 5,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.3 Coherence Thresholds",
+      "quoted_text": "| 7–5 | Dissonant |"
+    },
+    {
+      "sim_variable": "COHERENCE_FRAGMENTED_LOW",
+      "value": 3,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.3 Coherence Thresholds",
+      "quoted_text": "| 4–3 | Fragmented |"
+    },
+    {
+      "sim_variable": "COHERENCE_FRACTURED",
+      "value": 2,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.3 Coherence Thresholds",
+      "quoted_text": "| 2 | Fractured |"
+    },
+    {
+      "sim_variable": "COHERENCE_SEVERED",
+      "value": 1,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.3 Coherence Thresholds",
+      "quoted_text": "| 1 | Severed |"
+    },
+    {
+      "sim_variable": "COHERENCE_CRISIS",
+      "value": 0,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.3 Coherence Thresholds",
+      "quoted_text": "| 0 | Rendering Crisis"
     }
   ],
   "updated_at": "2026-05-19"
