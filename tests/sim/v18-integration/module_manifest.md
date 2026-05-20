@@ -70,11 +70,11 @@ Per `designs/proposals/stub_infill_plan.md` (commit 6669592f). Tier 0 = 14 stubs
 | T0-4 | `sim/__init__.py` | (declarations) | **verified** — module docstring updated to reflect Tier 0 progress |
 | T0-5 | `sim/peninsular/ms_track.py` | `params/core.md §MS Baseline Decay PP-255` | **verified** — apply_ms_baseline_decay + apply_ms_delta; floor/ceiling clamps; drift noted vs accounting._ms_decay |
 | T0-6 | `sim/peninsular/season.py` | `designs/architecture/campaign_architecture_v30.md` | **verified** — composes advance_season + caller-actions + run_accounting; drift noted vs mc_v18 inline |
-| T0-7 | `sim/provincial/treaty.py` | balance audit memo | pending |
-| T0-8 | `sim/provincial/charter_liberties.py` | `faction_canon_v30.md §6` | pending |
-| T0-9 | `sim/provincial/varfell_mandate_action.py` | balance audit §part10 | pending |
-| T0-10 | `sim/world/insurgency_pipeline.py` | `canon/02_canon_constraints.md §B GD-3` | pending |
-| T0-11 | `sim/world/npe.py` | `designs/scene/investigation_systems_v30.md` (NPE) | pending |
+| T0-7 | `sim/provincial/treaty.py` | `faction_balance_convergence_v12c §4.5 + §4.7` | **partial** — process_treaty_expirations against §4.5 (lapse_rate=0.90); register_treaty/get_active_treaties helpers; propose_treaty CANON-GATED on Pass 2h (treaty_expiration_v30.md pending) |
+| T0-8 | `sim/provincial/charter_liberties.py` | (canon ref incorrect — §6 is Public Temperament not Charter Liberties) | **CANON-GATED** — no implementable spec exists. Pass 2e Hafenmark canon authoring required. |
+| T0-9 | `sim/provincial/varfell_mandate_action.py` | (current canon flagged broken by Jordan 2026-05-17) | **CANON-GATED** — Pass 2d Varfell contamination audit pending; both name and mechanism redesign needed |
+| T0-10 | `sim/world/insurgency_pipeline.py` | `canon/02_canon_constraints.md §B GD-3` | **verified** — check_insurgency_triggers detects 2+ contiguous Uncontrolled, 2-season streak; check_insurgency_promotion gates on L/territories/Accord; RM-vs-parliamentary on PT threshold |
+| T0-11 | `sim/world/npe.py` | `designs/scene/investigation_systems_v30.md` SYSTEM 1 | **verified** — Territory Social Ecology weights, NPC Genome 5-axis, Two-Tier Generation (archetype seed + d6 deviation), simulate_npc_actions for season-end stance drift |
 | T0-12 | `sim/cross_scale/zoom_in_out.py` | `scale_transitions_v30.md §4` | **verified** — Zoom In legal entry points (PP-103) + board-degree scene Ob modifier; Zoom Out domain-echo queue + PC incap + Contested Figure wound; 8 mandatory triggers (§4.3.2) enumerated |
 | T0-13 | `sim/cross_scale/domain_echo.py` | `scale_transitions_v30.md §5` | **verified** — §5.2 amount-by-degree, §5.5 Accord Echo with 4 scene-outcome rules, §5.6 Thread Echo with 6 event-type rules; PP-329 cap acknowledged |
-| T0-14 | `sim/autoload/npc_ai.py` | `complete_systems_reference.md Part 1` | pending |
+| T0-14 | `sim/autoload/npc_ai.py` | (priority-stack contamination flagged by Jordan 2026-05-17) | **CANON-GATED** — audit pending before content authoring |

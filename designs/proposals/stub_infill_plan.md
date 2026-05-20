@@ -171,3 +171,53 @@ Before any further mass-battle balance work or claims about the sim's outputs:
 5. *Then* decide whether to continue infilling vs work the Pass 2d/e/f canon-authoring track.
 
 Tier 3+ and canon-gated stubs are still important but the marginal cost of leaving them as stubs while Tier 0-2 lands is smaller than the marginal cost of running balance experiments on the current 70%-stub sim.
+
+
+## Amendment 2026-05-19 — Tier 0 execution status + canon-gate reclassifications
+
+Tier 0 work executed across commits fbc08811, 6754aadb, 1d6d616c, edff2cb0
+plus one batch commit covering treaty/insurgency/npe. Status after this
+work:
+
+**Implemented (8/14 Tier 0)**: settlement, coherence, handoff_rules,
+zoom_in_out, domain_echo, sim/__init__, ms_track, season, insurgency_pipeline,
+npe, plus treaty (partial). Total 8 fully-verified + 1 partial.
+
+**Reclassified to canon-gated bucket (3/14 Tier 0)**:
+- **T0-8 charter_liberties** — stub cited `faction_canon_v30 §6` but that
+  section is "Public Temperament", not Charter Liberties. No mechanical
+  spec exists for Charter Liberties anywhere in canon. Requires Pass 2e
+  Hafenmark canon authoring.
+- **T0-9 varfell_mandate_action** — stub docstring explicitly notes
+  "Current canon mechanism (W -1 + Mil -1 -> +1 L) flagged broken by
+  Jordan 2026-05-17". Both name (placeholder VARFELL-MANDATE-ACTION-001)
+  and mechanism redesign pending Pass 2d Varfell contamination audit.
+- **T0-14 npc_ai** — stub docstring explicitly notes "priority-stack
+  contents may contain contamination per Jordan diagnosis 2026-05-17 —
+  audit pending before content authoring".
+
+**Partial (1)**: T0-7 treaty — process_treaty_expirations implemented
+against §4.5; propose_treaty canon-gated on Pass 2h
+(treaty_expiration_v30.md pending).
+
+**Updated total canon-gated count**: original plan listed 5 canon-gated
+stubs (altonian_reinforcements, home_sanctuary, infrastructure_reclamation,
+hafenmark_equipment, restoration_movement). Add 3 more from Tier 0
+reclassification: charter_liberties, varfell_mandate_action, npc_ai.
+**8 stubs total now canon-gated**; reduces implementable surface to
+37 of 45 stubs until Pass 2d/2e/2f/2h/2i canon authoring lands.
+
+**Implementation pattern observed**: nearly every Tier 0 module hit the
+same wall — canon assumes a richer game_state model than exists
+(Settlement registry, Practitioner registry, Knot registry, NPC registry,
+Insurgency registry, Treaty registry). Module-level state stores with
+ASSUMPTION/DRIFT notes are the consistent workaround; schema migration
+to World is a separate workstream best done when an implemented module
+needs editing for unrelated reasons.
+
+**Recommendation**: before Tier 1, do a schema-migration commit that adds
+the missing registries to game_state.World (practitioners, NPCs,
+insurgencies, treaties, settlements). The Tier 0 modules' module-level
+stores migrate cleanly, signatures unchanged. This unblocks consumer-side
+state queries (mc_v18, Godot scene controllers) without breaking the
+Tier 0 surface.

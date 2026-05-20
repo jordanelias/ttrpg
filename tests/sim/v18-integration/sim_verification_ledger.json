@@ -261,6 +261,83 @@
       "canonical_source": "params/core.md",
       "section": "§MS Baseline Decay (PP-255)",
       "quoted_text": "Board Game default = 72"
+    },
+    {
+      "sim_variable": "TREATY_LAPSE_RATE_DEFAULT",
+      "value": 0.9,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md",
+      "section": "§4.5 + §5.1",
+      "quoted_text": "TREATY_LAPSE_RATE | 0.90"
+    },
+    {
+      "sim_variable": "TREATY_CONSENT_RATE_DEFAULT",
+      "value": 0.28,
+      "canonical_source": "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md",
+      "section": "§5.1 Primary recommended config",
+      "quoted_text": "CONSENT_RATE | 0.28"
+    },
+    {
+      "sim_variable": "INSURGENCY_TRIGGER_MIN_TERRITORIES",
+      "value": 2,
+      "canonical_source": "canon/02_canon_constraints.md",
+      "section": "§B GD-3",
+      "quoted_text": "2+ contiguous territories at Uncontrolled status"
+    },
+    {
+      "sim_variable": "INSURGENCY_TRIGGER_SUSTAINED_SEASONS",
+      "value": 2,
+      "canonical_source": "canon/02_canon_constraints.md",
+      "section": "§B GD-3",
+      "quoted_text": "sustained 2 consecutive seasons"
+    },
+    {
+      "sim_variable": "INSURGENCY_STARTING_L",
+      "value": 1.0,
+      "canonical_source": "canon/02_canon_constraints.md",
+      "section": "§B GD-3",
+      "quoted_text": "Insurgency starts at L=1.0"
+    },
+    {
+      "sim_variable": "INSURGENCY_PROMOTE_MIN_L",
+      "value": 3,
+      "canonical_source": "canon/02_canon_constraints.md",
+      "section": "§B GD-3",
+      "quoted_text": "L ≥ 3, 2+ territories held"
+    },
+    {
+      "sim_variable": "INSURGENCY_PROMOTE_MIN_ACCORD",
+      "value": 4,
+      "canonical_source": "canon/02_canon_constraints.md",
+      "section": "§B GD-3",
+      "quoted_text": "Accord ≥ 4 averaged across holdings"
+    },
+    {
+      "sim_variable": "INSURGENCY_RM_PT_THRESHOLD",
+      "value": 3,
+      "canonical_source": "canon/02_canon_constraints.md",
+      "section": "§B GD-3",
+      "quoted_text": "PT < 3 average across held territories"
+    },
+    {
+      "sim_variable": "DEVIATION_DIE_THRESHOLD",
+      "value": 5,
+      "canonical_source": "designs/scene/investigation_systems_v30.md",
+      "section": "§Two-Tier Generation",
+      "quoted_text": "On 5–6: one axis is rolled against the opposite extreme"
+    },
+    {
+      "sim_variable": "DEVIATION_ARC_VECTOR_THRESHOLD",
+      "value": 5,
+      "canonical_source": "designs/scene/investigation_systems_v30.md",
+      "section": "§Two-Tier Generation",
+      "quoted_text": "Deviation ≥ 5 also makes the NPC eligible to become an arc vector"
+    },
+    {
+      "sim_variable": "FACTION_DEFAULT_WEIGHT_PCT",
+      "value": 60,
+      "canonical_source": "designs/scene/investigation_systems_v30.md",
+      "section": "§Territory Social Ecology",
+      "quoted_text": "Controlling faction's ethical framework is the default for 60% of generated NPCs"
     }
   ],
   "updated_at": "2026-05-19"
