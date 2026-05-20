@@ -556,6 +556,48 @@
       "canonical_source": "designs/scene/combat_v30.md",
       "section": "§5 Damage Resolution",
       "quoted_text": "Critical Hit: net hits ≥ 3 → weapon modifier doubled"
+    },
+    {
+      "sim_variable": "CI_INSTITUTIONAL_MOMENTUM",
+      "value": 1,
+      "canonical_source": "designs/scene/conviction_track_v30.md",
+      "section": "§3 Step 1 CI Generation",
+      "quoted_text": "CI +1. (Unchanged from PP-402."
+    },
+    {
+      "sim_variable": "CI_YIELD_BY_PT.5",
+      "value": 1.0,
+      "canonical_source": "designs/scene/conviction_track_v30.md",
+      "section": "§3 Step 2 Conviction Yield",
+      "quoted_text": "| 5 | +1 |"
+    },
+    {
+      "sim_variable": "CI_YIELD_BY_PT.4",
+      "value": 0.5,
+      "canonical_source": "designs/scene/conviction_track_v30.md",
+      "section": "§3 Step 2 Conviction Yield",
+      "quoted_text": "| 4 | +0.5"
+    },
+    {
+      "sim_variable": "CI_STARTING",
+      "value": 28,
+      "canonical_source": "designs/scene/conviction_track_v30.md",
+      "section": "§3 CI Generation",
+      "quoted_text": "Starting CI:** 28"
+    },
+    {
+      "sim_variable": "CI_PHASE_TRANSITION",
+      "value": 75,
+      "canonical_source": "designs/scene/conviction_track_v30.md",
+      "section": "§3 CI Generation",
+      "quoted_text": "Phase transition:** CI 75"
+    },
+    {
+      "sim_variable": "HAFENMARK_BARALTA_THRESHOLD_MANDATE",
+      "value": 4,
+      "canonical_source": "designs/scene/conviction_track_v30.md",
+      "section": "§3 Step 5",
+      "quoted_text": "Baralta's Mandate ≥ 4"
     }
   ],
   "updated_at": "2026-05-19"

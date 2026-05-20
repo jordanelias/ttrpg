@@ -121,3 +121,10 @@ UNBLOCKS Tier 2: peninsular/ci_track (needs infrastructure ✓);
 provincial/mass_seizure (needs ci_track + infrastructure ✓);
 provincial/infrastructure_reclamation (canon-gated but dep ✓);
 provincial/varfell_territorial_acquisition (needs temperaments ✓ + restoration_movement canon-gated).
+
+
+## Tier 2 Stub Infill (2026-05-19+)
+
+| # | Module | Canon | Status |
+|---|---|---|---|
+| T2-1 | `sim/peninsular/ci_track.py` | `conviction_track_v30 §3 PP-412` | **verified** — PP-412 5-step seasonal CI calc (Momentum +1; Conviction Yield by PT; Assert; Suppress; Hafenmark suppression -1 at L≥4); apply_ci_delta for non-seasonal (Excommunication +4); drift noted vs accounting._ci_generation |
