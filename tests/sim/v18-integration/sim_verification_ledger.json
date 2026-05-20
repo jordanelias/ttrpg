@@ -8,36 +8,85 @@
       "sim_variable": "LETHALITY_SCALE",
       "value": 1.25,
       "canonical_source": "designs/provincial/mass_battle_integration_v30.md",
-      "section": "\u00a73.1 LETHALITY_SCALE restoration (Audit Issue 1, highest severity)",
+      "section": "§3.1 LETHALITY_SCALE restoration (Audit Issue 1, highest severity)",
       "quoted_text": "Damage formula applies LETHALITY_SCALE multiplier",
       "calibration": {
-        "target_band_per_turn_casualty_pct": [14, 16],
+        "target_band_per_turn_casualty_pct": [
+          14,
+          16
+        ],
         "test_config": "T3 mirror Line vs Line, P4 C4 D5 M6",
         "n_runs": 60,
         "observed_mean_pct": 14.48,
         "observed_median_pct": 16.45,
         "observed_stdev_pct": 9.77,
         "observed_battle_turns_mean": 1.9,
-        "winners": {"A": 26, "B": 32, "draw": 2},
-        "robustness_across_5_seed_batches_pct": [14.25, 15.48, 14.52, 15.17, 16.03]
+        "winners": {
+          "A": 26,
+          "B": 32,
+          "draw": 2
+        },
+        "robustness_across_5_seed_batches_pct": [
+          14.25,
+          15.48,
+          14.52,
+          15.17,
+          16.03
+        ]
       },
-      "notes": "Spec \u00a73.1 stated initial value 0.10 with \"iterate within 0.05-0.20\" PROVISIONAL license. Calibrated value 1.25 is outside that range because PP-233 formula correction (continuous net_successes) raises baseline lethality from 3.96%/turn (discrete-bucket model at L=1.0) to 13.38%/turn (continuous at L=1.0). With the correct formula shape, LETHALITY_SCALE acts as fine-tune around \u22481.0 rather than gross compensation. See commit body for full diagnosis."
+      "notes": "Spec §3.1 stated initial value 0.10 with \"iterate within 0.05-0.20\" PROVISIONAL license. Calibrated value 1.25 is outside that range because PP-233 formula correction (continuous net_successes) raises baseline lethality from 3.96%/turn (discrete-bucket model at L=1.0) to 13.38%/turn (continuous at L=1.0). With the correct formula shape, LETHALITY_SCALE acts as fine-tune around ≈1.0 rather than gross compensation. See commit body for full diagnosis."
     },
     {
       "sim_variable": "PP-233 damage formula shape",
       "value": "net_successes * (1 + Power) - DR",
       "canonical_source": "params/mass_combat.md",
       "section": "Core Formula (PP-233)",
-      "quoted_text": "Damage dealt | successes \u00d7 (1 + Power)",
-      "notes": "v17-v22 implemented as discrete DAMAGE_BY_DEGREE buckets {Overwhelming:1+p, Success:p, Partial:1, Failure:0}. PP-233 specifies continuous successes \u00d7 (1+Power). Step 4.2 corrects implementation to match PP-233. DAMAGE_BY_DEGREE dict retained as narrative degree label for downstream logging only. DR retained as damage-reduction subtractor: PP-233 originally folded DR into H (Health per Size); v22 HP model uses Size \u00d7 BLOCK_SIZE and drops H entirely, leaving DR-as-reduction as the only surviving DR effect."
+      "quoted_text": "Damage dealt | successes × (1 + Power)",
+      "notes": "v17-v22 implemented as discrete DAMAGE_BY_DEGREE buckets {Overwhelming:1+p, Success:p, Partial:1, Failure:0}. PP-233 specifies continuous successes × (1+Power). Step 4.2 corrects implementation to match PP-233. DAMAGE_BY_DEGREE dict retained as narrative degree label for downstream logging only. DR retained as damage-reduction subtractor: PP-233 originally folded DR into H (Health per Size); v22 HP model uses Size × BLOCK_SIZE and drops H entirely, leaving DR-as-reduction as the only surviving DR effect."
     },
     {
       "sim_variable": "BLOCK_SIZE",
       "value": 100,
       "canonical_source": "designs/provincial/mass_battle_v30.md",
-      "section": "\u00a7A.3 Troop count",
+      "section": "§A.3 Troop count",
       "quoted_text": "1 Size = block_size soldiers",
-      "notes": "HP = TroopCount = Size \u00d7 BLOCK_SIZE. Company scale: Size 4 unit = 400 HP. Pre-existing constant; ledgered in Step 4.2 because LETHALITY_SCALE calibration depends on the HP scale this constant produces."
+      "notes": "HP = TroopCount = Size × BLOCK_SIZE. Company scale: Size 4 unit = 400 HP. Pre-existing constant; ledgered in Step 4.2 because LETHALITY_SCALE calibration depends on the HP scale this constant produces."
+    },
+    {
+      "sim_variable": "PROSPERITY_TO_LOCAL_ECONOMY",
+      "value": 50,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.3 Settlement Stats",
+      "quoted_text": "Prosperity × 50"
+    },
+    {
+      "sim_variable": "DEFENSE_BASE_TO_GARRISON",
+      "value": 20,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.3 Settlement Stats",
+      "quoted_text": "Defense × 20 + Fort Level × 30"
+    },
+    {
+      "sim_variable": "FORT_LEVEL_TO_GARRISON",
+      "value": 30,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.3 Settlement Stats",
+      "quoted_text": "Defense × 20 + Fort Level × 30"
+    },
+    {
+      "sim_variable": "ORDER_TO_PUBLIC_ORDER",
+      "value": 20,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.3 Settlement Stats",
+      "quoted_text": "Order × 20"
+    },
+    {
+      "sim_variable": "SETTLEMENT_STAT_MAX",
+      "value": 5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.3 Settlement Stats",
+      "quoted_text": "Each settlement has 3 stats tracked on a 0–5 scale"
     }
-  ]
+  ],
+  "updated_at": "2026-05-19"
 }

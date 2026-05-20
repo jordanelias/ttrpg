@@ -146,3 +146,11 @@ _v25 section (2026-05-15) archived to `tests/coverage_matrix_archive.md` 2026-05
 | Dependencies | designs/provincial/mass_battle_integration_v30.md §3.1; params/mass_combat.md PP-233 Core Formula. |
 | Status | Landed. Calibration in band. |
 | Open | (1) Church win-share dropped 10% → 0% at L=1.25 vs b0185f05 baseline (n=10 too small, re-test in Step 4.2b). (2) T2 outperforms T3 at equal stats in spot-check — likely morale-erosion pathology (bigger units accumulate damage→morale faster); not introduced by Step 4.2, flagged for separate audit. (3) tests/sim/battery_v22.py existence unverified; battery validation gate (§3.2) deferred to Step 4.2b. (4) sim_verification_ledger.json created for v18-integration; future sim_gate calls must use this ledger. |
+
+## Tier 0 Stub Infill (2026-05-19+) — designs/proposals/stub_infill_plan.md (6669592f)
+
+One row per module. Trial detail in commit body + sim_verification_ledger.json.
+
+| Module | Commit | Canon | Verification |
+|---|---|---|---|
+| `sim/territory/settlement.py` | (T0-1) | `settlement_layer_v30.md §1.2-1.3` | SettlementState/ProvinceState derivation per §1.3 multipliers; smoke on T1 Seat + T9 Cathedral; 5 ledger entries with canon-verified quoted_text |
