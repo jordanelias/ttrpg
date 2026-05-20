@@ -1,62 +1,109 @@
 ---
-session_id: "2026-05-17-v18-phase-9-faction-unique-actions"
-session_close: "2026-05-18T01:00:00Z"
-phase: simulation
+session_id: "2026-05-20-pass-2l-stub-infill-arc-COMPLETE-plus-serializers"
+session_close: "2026-05-20T08:30:00Z"
+phase: simulation + infrastructure
 status: complete
-last_stage: phase_9_faction_unique_actions_committed
+last_stage: per_record_serializers_landed_307e86ca
+
+prior_session_pointer: "2026-05-17-v18-phase-9-faction-unique-actions (7ea85723)"
+current_head: "307e86ca per-record serializers for 14 World registries"
+
 next_action:
-  skill: valoria-simulator
-  task: "Phase 7 Mass Battle port (per integration_plan §3 Phase 7, mass_battle_integration_v30.md 10-step plan). Phase 7 unblocked, READY per §1.4. Converts single-roll Conquest to multi-unit resolution and gives Excommunication state strategic teeth via canonical mass-battle penalties on excommunicated factions."
-  files:
-    - designs/provincial/mass_battle_integration_v30.md
-    - designs/provincial/mass_battle_v30.md
-    - tests/sim/v17-integration/m3_mass_battle.py
-    - sim/provincial/massbattle.py
-    - sim/provincial/units.py
+  recommended: option_A_deferred_migration_batch
+  option_A:
+    skill: valoria-simulator
+    task: "Deferred Migration Batch — 4 mc_v18-behavior-changing migrations as one commit. See deferred_migration_batch."
+    files:
+      - sim/provincial/massbattle.py
+      - sim/mc_v18.py
+      - sim/peninsular/accounting.py
+      - sim/peninsular/ci_track.py
+      - sim/peninsular/ms_track.py
+      - sim/peninsular/season.py
+      - tests/sim/v17-integration/m3_mass_battle.py
+  option_B:
+    skill: valoria-canon-authoring
+    task: "Resolve 8 canon-gated stubs (requires Jordan input)."
+    blocked_on: Jordan
+
+arc_summary:
+  description: "Closed Pass 2l stub-infill plan (6669592f → 307e86ca)."
+  commits_this_arc: 18
+  tier_status:
+    tier_0: "10 verified + 1 partial / 14 (3 canon-gated reclassified)"
+    tier_1: "6 modules / 7 stubs (1 canon-gated)"
+    tier_2: "8 modules / 10 stubs (2 canon-gated)"
+  ledger_entries: 104
+  schema_migrations: 2
+  world_registries_total: 14
+  per_record_serializers: 9_dataclasses
+  bug_fixed: "canonical PT/Accord bucketing (ec3727fc) — affected ci_track + npe + nascent mass_seizure"
+  bug_filed_unfixed: "mc_v18 non-determinism (massbattle.py L630 + L1053) — 03ce9c79"
+
 blockers:
-  - "Church win-share dropped 6.0% to 0.5% — Mass Seizure (CI>=60 Territorial Seizure per faction_canon §9 row 2) is Church's missing territory-gaining lever; depends on Pass 2f Church canon authoring which is BLOCKED on contamination audit"
-  - "Phase 8 Strategic AI (GD-2 mandatory threat-response) deferred — current dispatch is stochastic 30% slot per M7_ASSUMPTION_SIX"
-  - "7 PROVISIONAL flags in committed modules tracking v18 schema gaps (Circles, Reputation, public-office bar, Cohesion, Charters, Cardinal Focus, Crown-Church relations)"
-commits:
-  - "7ea85723: Phase 5/9 — wire Crown Initiative + Church faction-unique actions (5 modules + dispatch + Faction schema)"
-decisions:
-  - "Phase 5 in handoff (279e2e56) = Phase 9 in canonical integration_plan_v18.md §3; per §1.4 Provincial readiness table all four target modules marked READY"
-  - "Excommunication: full §7.1 Tribunal procedure (Q1=B) — single-roll abstraction of multi-Exchange procedure; full Contest engine deferred to canonical Phase 5"
-  - "Royal Progress Ob: POST-ED-840 closure formula max(2, floor((sum_max - sum_current) / 2)) — v17 M6 uses pre-closure broken formula"
-  - "Church drop interpretation: committed honest data (option A) over dispatch-% tuning (option B); tuning invents game design without canonical basis per M7_ASSUMPTION_SIX"
-v18_phase_9_summary:
-  modules_implemented: 5
-  modules_with_provisional_flags: 7
-  ledger_entries: 33
-  canonical_sources_cited: 7
-  sim_gate_scope: "custom: core_engine, factions, social_debate"
-  smoke_tests_passing: "T2 (excomm + tribunal), T3 (crown_initiative + absolution + council)"
-  batch_n_200_base_seed_0:
-    pre_phase_9_baseline:
-      crown: 75.5
-      varfell: 17.0
-      church: 6.0
-      hafenmark: 1.5
-      battles_mean: 3.0
-    post_phase_9:
-      crown: 70.0
-      varfell: 28.0
-      church: 0.5
-      hafenmark: 1.5
-      battles_mean: 2.4
-    delta:
-      crown: -5.5
-      varfell: +11.0
-      church: -5.5
-      hafenmark: 0
-  drift_flags_surfaced:
-    - "PI bootstrap script references g.print_status_block() not present in current github_ops.py"
-    - "PI bootstrap script orders assert_bootstrap before read_files_graphql (corrected by quick_bootstrap)"
-    - "Intervening session (Phase 1-2 commits 760f2d61..4e81887b plus handoff 279e2e56) did not run safe_session_close — directory-resident phase2_handoff.md substituted for log"
-pass_3_findings_for_jordan:
-  - "Church win-share regression is real strategic consequence, not bug — 30% faction-unique slot was previously no-op (returned 'invalid' -> fell through to Conquest); now state-mutating actions that cost L on Failure and never gain territory"
-  - "Win-share diversification went to Varfell (no unique actions wired) — pure residual effect, not Varfell-mechanic strength"
-  - "Seed variance ±2pp across base_seed=0 runs (74/22, 70/28, 69.5/29.5); committed numbers are one-slice, not confidence-interval validated"
-  - "Crown Royal Progress dispatch rate low (~5% of Crown turns) — heuristic gate (Ob <= Pool+1) rejects RP at default Crown state (sum_accord ~30, Ob ~6, Pool 5); falls to Great Work when Wealth sufficient"
-  - "Excommunication formal-grounds path (CI>=40 + Church.L>=4) rarely triggers — default CI=30, slow growth; need Phase 7+8 to make formal Excomm a viable Church strategy"
+  - "Deferred Migration Batch: 4 mc_v18-behavior-changing migrations. See deferred_migration_batch."
+  - "8 canon-gated stubs need Jordan input. See canon_gated_stubs."
+  - "knots TIER-DRIFT-001: implemented Option A. Jordan decision pending (A/B/C) — ED-841."
+  - "threadwork §6.1 Ontological Status body EMPTY — header only. Filed as canon gap."
+
+deferred_migration_batch:
+  shared_blast_radius: mc_v18_baseline
+  ordering:
+    1: "Fix mc_v18 non-determinism FIRST (massbattle.py L630 roll_pool + L1053 volley_roll_pool → world.rng)"
+    2: "Migrate accounting._ms_decay → ms_track.apply_ms_baseline_decay"
+    3: "Migrate accounting._ci_generation → ci_track.apply_seasonal_ci (canon-accurate; large CI behavior shift)"
+    4: "Migrate mc_v18 inline season → season.run_season"
+  post_batch_required:
+    - "Re-baseline mc_v18 batch (N=100, base_seed=0)"
+    - "Update tests/sim/v17-integration/m3_mass_battle.py expected ranges"
+    - "Document baseline shift in stub_infill_plan as new Amendment"
+  diagnosis_references:
+    mc_v18_ndet: "03ce9c79 + stub_infill_plan Amendment 2026-05-19c"
+    accounting_drift: "T0-4 commit message edff2cb0; T0-6 same; T2-1 f145e4b6"
+
+canon_gated_stubs:
+  count: 8
+  pass_2d_varfell:
+    - sim/world/varfell_mandate_action.py
+    - sim/world/varfell_territorial_acquisition.py
+    - sim/world/restoration_movement.py
+  pass_2e_hafenmark:
+    - sim/world/charter_liberties.py
+    - sim/world/hafenmark_equipment.py
+    - sim/world/altonian_reinforcements.py
+  pass_2f_church:
+    - sim/world/home_sanctuary.py
+    - sim/world/infrastructure_reclamation.py
+  also_blocked_canon_holes:
+    - "threadwork §6.1 body empty"
+    - "knots TIER-DRIFT-001 (ED-841 pending)"
+    - "Pass 2h treaty_expiration_v30.md body"
+    - "Pass 2i insurgency_pipeline_v30.md body"
+    - "npc_ai priority-stack contamination audit"
+
+ed_open: 28
+ledger_entries: 104
+
+last_known_mc_v18_run:
+  context: "run_batch(5, base_seed=42) at HEAD 307e86ca with random.seed(0) pin per ndet finding"
+  battles_mean: 38.0
+  win_share: {Crown: 40.0, Church: 0.0, Hafenmark: 0.0, Varfell: 60.0}
+  note: "Without random.seed(0) pin, results vary between runs (filed unfixed)."
+
+consumer_guidance:
+  - "MUST use canonical_pt() / canonical_accord() helpers — NEVER int(t.pt) / int(t.accord)"
+  - "Cyclic module pairs use late-imports inside function bodies (knots→coherence, knots→conviction, conviction↔beliefs)"
+  - "Schema migration #2 (d2941cde) routes 8 stores through World fields. Always pass world to keep state per-world."
+  - "Bootstrap is quick_bootstrap() in github_ops.py — returns (g, h, files, token). PI bootstrap_script text drift to print_status_block is stale."
+
+drift_flags_at_handoff:
+  - "PI bootstrap_script references g.print_status_block() not in github_ops.py. quick_bootstrap() returns tuple instead. PI text-only drift."
+  - "accounting.py contains legacy duplicates of ci_track + ms_track + season — in-scope for deferred migration batch."
+  - "tests/sim/v17-integration/m3_mass_battle.py expected ranges need re-baselining after deferred batch."
+
+pending_followons_not_in_scope:
+  - "Mending integration: CO_MOVEMENT_CARDS CM-16/17/18 (Mending-specific per §7.1) deferred."
+  - "Combat Tier 2+: Feint multi-turn pool (PP-294), Rescue interception (PP-292), Stunt, group Fibonacci, Vitality-based wound thresholds (PP-269)."
+  - "Tribunal.py audit (1 NotImplementedError despite mostly-implemented status)."
+  - "Phase 7 Steps 4.3-4.9 (flanking, ripple, tiebreakers, phase hooks, collision, cleanup)."
 ---
