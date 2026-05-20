@@ -100,3 +100,20 @@ Validated cross-world isolation (w1.practitioners ≠ w2.practitioners) + mc_v18
 backward-compat (battles_mean=31.8 at seed=42 N=5; no regression vs prior baseline).
 Serialize/restore does NOT yet snapshot new registries — lands separately when
 production save format is needed.
+
+
+## Tier 1 Stub Infill (2026-05-19) — first batch landed
+
+Per stub_infill_plan: Tier 1 stubs have all dependencies on implemented
+modules. First batch: territory/infrastructure + territory/temperaments
+(both depend on settlement, landed at fbc08811).
+
+| # | Module | Canon | Status |
+|---|---|---|---|
+| T1-1 | `sim/territory/infrastructure.py` | `settlement_layer_v30 §1.5-§1.7` | **verified** — 4-axis Church infrastructure (Religious Building / Templar / Inquisitor / Church Governor); build_infrastructure + count + seizure_ob_modifier with -4 cap; Templar seed from Territory.templar |
+| T1-2 | `sim/territory/temperaments.py` | `territory_temperaments_v30` | **verified** — 5-typology authored for 17 territories (T1-T17); temperament_of + temperament_modifiers (α/β + drift); apply_strain_shock per §4 drift formula; faction aggregates per §3 |
+
+UNBLOCKS Tier 2: peninsular/ci_track (needs infrastructure ✓);
+provincial/mass_seizure (needs ci_track + infrastructure ✓);
+provincial/infrastructure_reclamation (canon-gated but dep ✓);
+provincial/varfell_territorial_acquisition (needs temperaments ✓ + restoration_movement canon-gated).

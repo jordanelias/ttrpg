@@ -346,6 +346,69 @@
       "section": "Amendment 2026-05-19",
       "quoted_text": "before Tier 1, do a schema-migration commit that adds\nthe missing registries to game_state.World",
       "notes": "Plumbing change. World gains 6 fields; Tier 0 modules route stores through world when supplied, fall back to module-level when not. Backwards-compatible with mc_v18 batch sim (verified battles_mean=31.8 at seed=42 N=5). serialize_world doesn't snapshot new registries yet."
+    },
+    {
+      "sim_variable": "PT_GAIN_CHAPEL",
+      "value": 0.5,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 1",
+      "quoted_text": "Chapel (+0.5 PT/season)"
+    },
+    {
+      "sim_variable": "PT_GAIN_CHURCH",
+      "value": 1.0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 1",
+      "quoted_text": "Church (+1 PT/season)"
+    },
+    {
+      "sim_variable": "PT_GAIN_CATHEDRAL",
+      "value": 2.0,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 1",
+      "quoted_text": "Cathedral (+2 PT/season"
+    },
+    {
+      "sim_variable": "CI_GAIN_TEMPLAR",
+      "value": 1,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Axis 2",
+      "quoted_text": "+1 CI/season in territory"
+    },
+    {
+      "sim_variable": "SEIZURE_OB_CAP",
+      "value": -4,
+      "canonical_source": "designs/territory/settlement_layer_v30.md",
+      "section": "§1.5 Seizure Ob Modifiers",
+      "quoted_text": "Cap: −4 per settlement"
+    },
+    {
+      "sim_variable": "TEMPERAMENT_WEIGHTS.pragmatic",
+      "value": "α=0.7 β=0.3",
+      "canonical_source": "designs/territory/territory_temperaments_v30.md",
+      "section": "§1",
+      "quoted_text": "| pragmatic | 0.7 | 0.3 |"
+    },
+    {
+      "sim_variable": "TEMPERAMENT_WEIGHTS.principled",
+      "value": "α=0.2 β=0.8",
+      "canonical_source": "designs/territory/territory_temperaments_v30.md",
+      "section": "§1",
+      "quoted_text": "| principled | 0.2 | 0.8 |"
+    },
+    {
+      "sim_variable": "TEMPERAMENT_WEIGHTS.outcomes-only",
+      "value": "α=0.9 β=0.1",
+      "canonical_source": "designs/territory/territory_temperaments_v30.md",
+      "section": "§1",
+      "quoted_text": "| outcomes-only | 0.9 | 0.1 |"
+    },
+    {
+      "sim_variable": "DRIFT_PER_STRAIN_UNIT",
+      "value": 0.1,
+      "canonical_source": "designs/territory/territory_temperaments_v30.md",
+      "section": "§4",
+      "quoted_text": "0.1 × strain_delta"
     }
   ],
   "updated_at": "2026-05-19"
