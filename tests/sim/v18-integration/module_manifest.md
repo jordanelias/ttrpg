@@ -128,6 +128,9 @@ provincial/varfell_territorial_acquisition (needs temperaments ✓ + restoration
 | # | Module | Canon | Status |
 |---|---|---|---|
 | T2-1 | `sim/peninsular/ci_track.py` | `conviction_track_v30 §3 PP-412` | **verified** — PP-412 5-step seasonal CI calc (Momentum +1; Conviction Yield by PT; Assert; Suppress; Hafenmark suppression -1 at L≥4); apply_ci_delta for non-seasonal (Excommunication +4); drift noted vs accounting._ci_generation |
+| T2-2 | `sim/provincial/mass_seizure.py` | `victory_v30 §3.2 + supersession 250715f` | **verified** (landed with bug fix at ec3727fc) — probabilistic declaration; one-shot lifetime; PP-534 self-control |
+| T2-3 | `sim/personal/contest.py` | `social_contest_v30 §1-§9` | **verified** — Argue Pool (PA×2)+History; resolve_exchange; Persuasion Track 1-9; Belief alignment integration via late-import |
+| T2-4 | `sim/personal/knots.py` | `knots_v30 (Pass 2g)` | **verified (Option A)** — 2-tier Distant/Close per ED-773 supersession; formation prerequisites + roll; strain accumulation + break; rupture triggers + -1 Coherence per PP-632 |
 
 
 ## Bug fix 2026-05-19 — canonical PT/Accord bucketing

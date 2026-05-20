@@ -605,6 +605,83 @@
       "canonical_source": "designs/provincial/victory_v30.md",
       "section": "§3.2",
       "quoted_text": "Influence + floor(CI / 15)"
+    },
+    {
+      "sim_variable": "ARGUE_POOL_TN",
+      "value": 7,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§3 Argue Pool Construction",
+      "quoted_text": "TN: 7 (Standard)"
+    },
+    {
+      "sim_variable": "PERSUASION_WIN_THRESHOLD",
+      "value": 7,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6",
+      "quoted_text": "Persuasion Track ≥ 7 = Side A wins"
+    },
+    {
+      "sim_variable": "PERSUASION_TOTAL_VICTORY",
+      "value": 9,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§6",
+      "quoted_text": "Persuasion Track ≥ 9 or ≤ 1"
+    },
+    {
+      "sim_variable": "CONCENTRATION_MULTIPLIER",
+      "value": 3,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§4",
+      "quoted_text": "Concentration restores to max (Focus × 3)"
+    },
+    {
+      "sim_variable": "KNOT_DISPOSITION_MIN",
+      "value": 5,
+      "canonical_source": "designs/personal/knots_v30.md",
+      "section": "§3.1",
+      "quoted_text": "Disposition +5"
+    },
+    {
+      "sim_variable": "KNOT_BONDS_MIN",
+      "value": 5,
+      "canonical_source": "designs/personal/knots_v30.md",
+      "section": "§3.1",
+      "quoted_text": "PC Bonds ≥ 5"
+    },
+    {
+      "sim_variable": "KNOT_FORMATION_OB",
+      "value": 2,
+      "canonical_source": "designs/personal/knots_v30.md",
+      "section": "§3.2",
+      "quoted_text": "TN 7**, **Ob 2"
+    },
+    {
+      "sim_variable": "TIER_CAPACITY.Distant",
+      "value": 4,
+      "canonical_source": "designs/personal/knots_v30.md",
+      "section": "§6.1 Option A",
+      "quoted_text": "| Distant Knot | 4 strain |"
+    },
+    {
+      "sim_variable": "TIER_CAPACITY.Close",
+      "value": 7,
+      "canonical_source": "designs/personal/knots_v30.md",
+      "section": "§6.1 Option A",
+      "quoted_text": "| Close Knot | 7 strain |"
+    },
+    {
+      "sim_variable": "RUPTURE_COHERENCE_LOSS",
+      "value": -1,
+      "canonical_source": "designs/personal/knots_v30.md",
+      "section": "§6.2",
+      "quoted_text": "rupture imposes mandatory **−1 Coherence**"
+    },
+    {
+      "sim_variable": "CLOSE_BREAK_SCAR_STRAIN_THRESHOLD",
+      "value": 6,
+      "canonical_source": "designs/personal/knots_v30.md",
+      "section": "§6.1 Option A",
+      "quoted_text": "Close Knots broken at high strain (Option A: strain ≥ 6 of 7)"
     }
   ],
   "updated_at": "2026-05-19"
