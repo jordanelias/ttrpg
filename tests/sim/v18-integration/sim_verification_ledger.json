@@ -149,6 +149,76 @@
       "canonical_source": "designs/threadwork/threadwork_v30.md",
       "section": "§3.3 Coherence Thresholds",
       "quoted_text": "| 0 | Rendering Crisis"
+    },
+    {
+      "sim_variable": "TS_BATTLE_MIN",
+      "value": 50,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§3.6 Thread → Mass",
+      "quoted_text": "Battle/Campaign (TS ≥ 50, Coherence cost −1/op)"
+    },
+    {
+      "sim_variable": "TS_WAR_MIN",
+      "value": 70,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§3.6 Thread → Mass",
+      "quoted_text": "War (TS ≥ 70, Coherence cost −2/op)"
+    },
+    {
+      "sim_variable": "GENERAL_DUEL_MAX_EXCHANGES",
+      "value": 5,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§3.7 Mass → Personal",
+      "quoted_text": "Maximum 5 exchanges before forced disengage or incapacitation"
+    },
+    {
+      "sim_variable": "SCENE_OB_MODIFIER_BY_DEGREE.Failure",
+      "value": 1,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§4.1 Zoom In",
+      "quoted_text": "Board FAILURE → scene Ob +1 (harder)"
+    },
+    {
+      "sim_variable": "SCENE_OB_MODIFIER_BY_DEGREE.Overwhelming",
+      "value": -2,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§4.1 Zoom In",
+      "quoted_text": "Board OVERWHELMING → scene Ob −2"
+    },
+    {
+      "sim_variable": "ECHO_AMOUNT_BY_DEGREE.Overwhelming",
+      "value": 2,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§5.2 Amount",
+      "quoted_text": "Overwhelming | ±2 to most relevant faction stat"
+    },
+    {
+      "sim_variable": "ECHO_AMOUNT_BY_DEGREE.Success",
+      "value": 1,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§5.2 Amount",
+      "quoted_text": "Success | ±1 to most relevant faction stat"
+    },
+    {
+      "sim_variable": "ECHO_STAT_CAP",
+      "value": 2,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§5.2 Amount",
+      "quoted_text": "Cap: ±2 per stat per Echo."
+    },
+    {
+      "sim_variable": "PP_329_ECHO_PER_SCENE_PER_FACTION",
+      "value": 1,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§5.1 Trigger",
+      "quoted_text": "One Domain Echo maximum per scene per faction (PP-329)"
+    },
+    {
+      "sim_variable": "ACCORD_ECHO_PER_TERRITORY_CAP",
+      "value": 1,
+      "canonical_source": "designs/architecture/scale_transitions_v30.md",
+      "section": "§5.5 Accord Domain Echo",
+      "quoted_text": "Cap: ±1 Accord in one territory per Zoom In"
     }
   ],
   "updated_at": "2026-05-19"

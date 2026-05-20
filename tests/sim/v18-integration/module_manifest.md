@@ -66,7 +66,7 @@ Per `designs/proposals/stub_infill_plan.md` (commit 6669592f). Tier 0 = 14 stubs
 |---|---|---|---|
 | T0-1 | `sim/territory/settlement.py` | `designs/territory/settlement_layer_v30.md §1.2-1.3` | **verified** — derives SettlementState + ProvinceState per §1.3 multipliers (50/20/30/20); 1:1 territory→settlement mapping pending registry |
 | T0-2 | `sim/thread/coherence.py` | `designs/threadwork/threadwork_v30.md Part 3` | **verified** — Coherence 10-0 track with §3.3 bands (Stable/Dissonant/Fragmented/Fractured/Severed/Rendering Crisis); apply_coherence_delta + check_coherence_zero_transition; module-level practitioner registry pending World schema |
-| T0-3 | `sim/cross_scale/handoff_rules.py` | `designs/architecture/scale_transitions_v30.md §3` | pending |
+| T0-3 | `sim/cross_scale/handoff_rules.py` | `designs/architecture/scale_transitions_v30.md §3` | **verified** — 8 handoff rules §3.1-§3.8 + §3.9 fieldwork dispatcher; TS-banded coherence cost; HandoffResult procedure descriptor |
 | T0-4 | `sim/__init__.py` | (declarations) | pending |
 | T0-5 | `sim/peninsular/ms_track.py` | `params/core.md §MS Baseline Decay PP-255` | pending |
 | T0-6 | `sim/peninsular/season.py` | `designs/architecture/campaign_architecture_v30.md` | pending |
@@ -75,6 +75,6 @@ Per `designs/proposals/stub_infill_plan.md` (commit 6669592f). Tier 0 = 14 stubs
 | T0-9 | `sim/provincial/varfell_mandate_action.py` | balance audit §part10 | pending |
 | T0-10 | `sim/world/insurgency_pipeline.py` | `canon/02_canon_constraints.md §B GD-3` | pending |
 | T0-11 | `sim/world/npe.py` | `designs/scene/investigation_systems_v30.md` (NPE) | pending |
-| T0-12 | `sim/cross_scale/zoom_in_out.py` | `scale_transitions_v30.md §4` | pending |
-| T0-13 | `sim/cross_scale/domain_echo.py` | `scale_transitions_v30.md §5` | pending |
+| T0-12 | `sim/cross_scale/zoom_in_out.py` | `scale_transitions_v30.md §4` | **verified** — Zoom In legal entry points (PP-103) + board-degree scene Ob modifier; Zoom Out domain-echo queue + PC incap + Contested Figure wound; 8 mandatory triggers (§4.3.2) enumerated |
+| T0-13 | `sim/cross_scale/domain_echo.py` | `scale_transitions_v30.md §5` | **verified** — §5.2 amount-by-degree, §5.5 Accord Echo with 4 scene-outcome rules, §5.6 Thread Echo with 6 event-type rules; PP-329 cap acknowledged |
 | T0-14 | `sim/autoload/npc_ai.py` | `complete_systems_reference.md Part 1` | pending |
