@@ -514,6 +514,48 @@
       "canonical_source": "designs/threadwork/threadwork_v30.md",
       "section": "§3.2 FR surcharge",
       "quoted_text": "Forced Resolution (FR) surcharge (−1 Coherence additional for Lock or Dissolution)"
+    },
+    {
+      "sim_variable": "COMBAT_POOL_HISTORY_CONSTANT",
+      "value": 3,
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§1 Combat Pool",
+      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+    },
+    {
+      "sim_variable": "COMBAT_POOL_MIN",
+      "value": 5,
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§1 Combat Pool",
+      "quoted_text": "minimum 5"
+    },
+    {
+      "sim_variable": "WOUND_PENALTY_PER",
+      "value": -1,
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§1 Combat Pool",
+      "quoted_text": "Wounds: −1D per wound (cumulative)"
+    },
+    {
+      "sim_variable": "WEAPON_TN_BASE",
+      "value": 7,
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon System",
+      "quoted_text": "Base TN = 7"
+    },
+    {
+      "sim_variable": "STR_MULT_BLUNT",
+      "value": 1.5,
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Blunt×1.5"
+    },
+    {
+      "sim_variable": "CRIT_NET_HITS_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Critical Hit: net hits ≥ 3 → weapon modifier doubled"
     }
   ],
   "updated_at": "2026-05-19"

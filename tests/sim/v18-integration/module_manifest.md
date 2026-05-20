@@ -115,6 +115,7 @@ modules. First batch: territory/infrastructure + territory/temperaments
 | T1-3a | `sim/personal/conviction.py` | `designs/personal/conviction_track_v1.md §2-§3` (PP-718 per-Conviction Scar) | **verified** — Scar accumulation per-Conviction (not aggregate); 0/1/2/3+ thresholds; crisis at 3+; Certainty scaling; season cap for Thread witnessing; cycle pair with beliefs |
 | T1-3b | `sim/personal/beliefs.py` | `designs/scene/fieldwork_v30.md §5.5; designs/scene/social_contest_v30.md §9.5` | **verified** — add_belief/revise_belief/social_success; +1 Momentum on aligned win (cap 4); challenging win marks revision pending; late-import resolves cycle |
 | T1-4 | `sim/thread/operations.py` | `threadwork_v30.md Part 2 + params/threadwork.md` | **verified** — 7 entry points (Leap + Weaving + Pulling + POP + Locking + Dissolution + Mending); Three-Axis Ob; FR surcharge; integrates with coherence.apply_coherence_delta |
+| T1-5 | `sim/personal/combat.py` | `combat_v30.md §1-§7` | **verified (partial)** — Strike + Full Guard + Take a Breath + Dodge + Establish Distance implemented; Feint/Rescue/Disarm/Tie Up explicitly deferred to Tier 2+. §1 Combat Pool, §5 Weapon TN matrix, §5 PP-232 damage formula with armor tiers, §4 resolution-order ordering |
 
 UNBLOCKS Tier 2: peninsular/ci_track (needs infrastructure ✓);
 provincial/mass_seizure (needs ci_track + infrastructure ✓);
