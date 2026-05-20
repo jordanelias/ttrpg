@@ -320,3 +320,28 @@ in the Deferred Migration Batch section above:
 | N=10 base_seed=0 | 34.1 | Crown 40 / Church 10 / Hafenmark 0 / Varfell 50 | {Crown:4, Church:1, Varfell:5} |
 | N=10 base_seed=42 | 33.0 | Crown 10 / Church 0 / Hafenmark 0 / Varfell 90 | {Varfell:9, Crown:1} |
 | N=5 base_seed=42 | 32.8 | Crown 20 / Church 0 / Hafenmark 0 / Varfell 80 | {Varfell:4, Crown:1} |
+
+
+## Wire-up batch — 2026-05-20 — landed
+
+Closes two "module verified but not invoked" gaps from the
+post-Deferred-Migration roadmap. Both modules were T0-verified
+(T0-10 insurgency, T0-11 npe) but never invoked from the season loop;
+mc_v18 batch runs ignored their existence.
+
+| Wire | Site | Canon |
+|---|---|---|
+| Insurgency emergence (GD-3 a-b) | accounting.run_accounting -> check_insurgency_triggers | canon/02_canon_constraints.md §B GD-3 |
+| Insurgency promotion (GD-3 c-e) | accounting.run_accounting -> check_insurgency_promotion | canon/02_canon_constraints.md §B GD-3 |
+| NPC ecology drift | accounting.run_accounting -> simulate_npc_actions | investigation_systems_v30.md SYSTEM 1 |
+
+Authoritative N=100 baseline post-wire-up:
+
+| Run | battles_mean | win_share | winners |
+|---|---|---|---|
+| N=100 base_seed=0 | 34.2 | Crown 40 / Church 5 / Hafenmark 1 / Varfell 54 | {Crown:40, Varfell:54, Church:5, Hafenmark:1} |
+
+Thread-during-battle (mass_battle_v30 §A.7 Phase 4) NOT wired in this
+batch. Engine has no practitioner-attached-to-unit schema; threadwork_check
+in massbattle.py is explicitly empty pending canonical design (G-9 marker).
+Reclassified from "no canon dep" wire-up to canon-design item.
