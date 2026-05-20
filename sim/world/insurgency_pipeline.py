@@ -47,9 +47,23 @@ INSURGENCY_PROMOTE_MIN_ACCORD = 4
 INSURGENCY_PROMOTE_SUSTAINED_SEASONS = 2
 INSURGENCY_RM_PT_THRESHOLD = 3  # PT < 3 → RM variant; PT >= 3 → parliamentary
 
-# Module-level insurgency state
+# Module-level insurgency state — fallback when world is None
+# Post-2026-05-19 schema migration: when world is supplied, state lives on
+# world.insurgencies and world.uncontrolled_streaks.
 _insurgencies: dict[str, "InsurgencyRecord"] = {}
 _uncontrolled_streaks: dict[frozenset, int] = {}  # contiguous-group → consecutive seasons
+
+
+def _ins_store(world):
+    if world is not None and hasattr(world, 'insurgencies'):
+        return world.insurgencies
+    return _insurgencies
+
+
+def _streak_store(world):
+    if world is not None and hasattr(world, 'uncontrolled_streaks'):
+        return world.uncontrolled_streaks
+    return _uncontrolled_streaks
 
 
 @dataclass
@@ -115,6 +129,8 @@ def check_insurgency_triggers(world) -> list[InsurgencyEvent]:
     """
     events = []
     groups = _contiguous_uncontrolled_groups(world)
+    insurgencies = _ins_store(world)
+    streaks = _streak_store(world)
 
     # Update streaks
     seen_now = set()
@@ -123,17 +139,17 @@ def check_insurgency_triggers(world) -> list[InsurgencyEvent]:
             continue
         key = frozenset(g)
         seen_now.add(key)
-        _uncontrolled_streaks[key] = _uncontrolled_streaks.get(key, 0) + 1
+        streaks[key] = streaks.get(key, 0) + 1
 
-        if _uncontrolled_streaks[key] >= INSURGENCY_TRIGGER_SUSTAINED_SEASONS:
+        if streaks[key] >= INSURGENCY_TRIGGER_SUSTAINED_SEASONS:
             # Check if already-formed insurgency exists for this group
             existing = any(
                 set(rec.territory_ids) == set(g) and not rec.promoted
-                for rec in _insurgencies.values()
+                for rec in insurgencies.values()
             )
             if not existing:
-                ins_id = f"INS-{world.season:04d}-{len(_insurgencies)+1:03d}"
-                _insurgencies[ins_id] = InsurgencyRecord(
+                ins_id = f"INS-{world.season:04d}-{len(insurgencies)+1:03d}"
+                insurgencies[ins_id] = InsurgencyRecord(
                     insurgency_id=ins_id,
                     territory_ids=list(g),
                     formed_season=world.season,
@@ -157,9 +173,9 @@ def check_insurgency_triggers(world) -> list[InsurgencyEvent]:
             ))
 
     # Reset streaks for groups that broke up
-    for key in list(_uncontrolled_streaks.keys()):
+    for key in list(streaks.keys()):
         if key not in seen_now:
-            del _uncontrolled_streaks[key]
+            del streaks[key]
 
     return events
 
@@ -171,11 +187,12 @@ def check_insurgency_promotion(insurgency_id: str, world) -> PromotionResult:
     holdings, sustained 2 consecutive seasons. PT < 3 average → RM variant
     (extra-parliamentary); PT ≥ 3 → parliamentary candidate.
     """
-    if insurgency_id not in _insurgencies:
+    insurgencies = _ins_store(world)
+    if insurgency_id not in insurgencies:
         return PromotionResult(promoted=False, insurgency_id=insurgency_id,
                                new_status=None, reason="insurgency not found")
 
-    rec = _insurgencies[insurgency_id]
+    rec = insurgencies[insurgency_id]
     if rec.promoted:
         return PromotionResult(promoted=False, insurgency_id=insurgency_id,
                                new_status=rec.parliamentary_status,
@@ -222,12 +239,12 @@ def check_insurgency_promotion(insurgency_id: str, world) -> PromotionResult:
     )
 
 
-def get_insurgencies() -> dict[str, InsurgencyRecord]:
+def get_insurgencies(world=None) -> dict[str, InsurgencyRecord]:
     """Inspection helper."""
-    return dict(_insurgencies)
+    return dict(_ins_store(world))
 
 
-def reset_for_world():
-    """Test helper — clear module state."""
-    _insurgencies.clear()
-    _uncontrolled_streaks.clear()
+def reset_for_world(world=None):
+    """Test helper — clear insurgency state."""
+    _ins_store(world).clear()
+    _streak_store(world).clear()

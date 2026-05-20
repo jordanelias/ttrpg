@@ -78,3 +78,25 @@ Per `designs/proposals/stub_infill_plan.md` (commit 6669592f). Tier 0 = 14 stubs
 | T0-12 | `sim/cross_scale/zoom_in_out.py` | `scale_transitions_v30.md §4` | **verified** — Zoom In legal entry points (PP-103) + board-degree scene Ob modifier; Zoom Out domain-echo queue + PC incap + Contested Figure wound; 8 mandatory triggers (§4.3.2) enumerated |
 | T0-13 | `sim/cross_scale/domain_echo.py` | `scale_transitions_v30.md §5` | **verified** — §5.2 amount-by-degree, §5.5 Accord Echo with 4 scene-outcome rules, §5.6 Thread Echo with 6 event-type rules; PP-329 cap acknowledged |
 | T0-14 | `sim/autoload/npc_ai.py` | (priority-stack contamination flagged by Jordan 2026-05-17) | **CANON-GATED** — audit pending before content authoring |
+
+
+## Schema migration 2026-05-19 — World registries
+
+Per stub_infill_plan amendment (f40bb51a): game_state.World gains 6 registry
+fields collapsing the Tier 0 module-level stores. Backwards-compatible —
+modules check `hasattr(world, '<registry>')` and fall back to module-level
+when absent. Status: **landed**.
+
+| Field | Owning module | Purpose |
+|---|---|---|
+| `practitioners` | sim/thread/coherence | actor_id → CoherenceState (10-0 track) |
+| `insurgencies` | sim/world/insurgency_pipeline | insurgency_id → InsurgencyRecord (GD-3 state machine) |
+| `uncontrolled_streaks` | sim/world/insurgency_pipeline | frozenset[tid] → consecutive Uncontrolled seasons |
+| `npcs` | sim/world/npe | territory_id → list[NPC] |
+| `npc_counter` | sim/world/npe | incrementing NPC id source |
+| `treaties` | sim/provincial/treaty | frozenset[parties] → TreatyRecord |
+
+Validated cross-world isolation (w1.practitioners ≠ w2.practitioners) + mc_v18
+backward-compat (battles_mean=31.8 at seed=42 N=5; no regression vs prior baseline).
+Serialize/restore does NOT yet snapshot new registries — lands separately when
+production save format is needed.

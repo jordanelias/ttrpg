@@ -338,6 +338,14 @@
       "canonical_source": "designs/scene/investigation_systems_v30.md",
       "section": "§Territory Social Ecology",
       "quoted_text": "Controlling faction's ethical framework is the default for 60% of generated NPCs"
+    },
+    {
+      "sim_variable": "World registries (schema migration 2026-05-19)",
+      "value": "practitioners + insurgencies + uncontrolled_streaks + npcs + npc_counter + treaties",
+      "canonical_source": "designs/proposals/stub_infill_plan.md",
+      "section": "Amendment 2026-05-19",
+      "quoted_text": "before Tier 1, do a schema-migration commit that adds\nthe missing registries to game_state.World",
+      "notes": "Plumbing change. World gains 6 fields; Tier 0 modules route stores through world when supplied, fall back to module-level when not. Backwards-compatible with mc_v18 batch sim (verified battles_mean=31.8 at seed=42 N=5). serialize_world doesn't snapshot new registries yet."
     }
   ],
   "updated_at": "2026-05-19"

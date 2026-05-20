@@ -72,9 +72,26 @@ ACTIVE_ISSUES = ("Thread reality", "Church authority", "Altonian threat",
                  "RM legitimacy", "Varfell autonomy")
 
 
-# Module-level NPC store keyed by territory_id → list of NPC
+# Module-level NPC store — fallback when world is None
+# Post-2026-05-19 schema migration: when world is supplied, NPCs live on
+# world.npcs (dict[territory_id, list[NPC]]) and counter on world.npc_counter.
 _npcs_by_territory: dict[str, list["NPC"]] = {}
 _npc_counter = [0]
+
+
+def _npc_store(world):
+    if world is not None and hasattr(world, 'npcs'):
+        return world.npcs
+    return _npcs_by_territory
+
+
+def _next_npc_id(world):
+    """Increment and return the next NPC id counter (world-keyed or module-level)."""
+    if world is not None and hasattr(world, 'npc_counter'):
+        world.npc_counter += 1
+        return world.npc_counter
+    _npc_counter[0] += 1
+    return _npc_counter[0]
 
 
 @dataclass
@@ -236,9 +253,9 @@ def generate_npc(faction: Optional[str], role: Optional[str], world,
             # Volatility extreme
             volatility = VOLATILITY_MIN if volatility >= 3 else VOLATILITY_MAX
 
-    _npc_counter[0] += 1
+    _next_npc_id_val = _next_npc_id(world)
     npc = NPC(
-        npc_id=f"NPC-{_npc_counter[0]:05d}",
+        npc_id=f"NPC-{_next_npc_id_val:05d}",
         territory_id=territory_id,
         stance=stance,
         worldview=worldview,
@@ -249,7 +266,8 @@ def generate_npc(faction: Optional[str], role: Optional[str], world,
         deviation_roll=dev_roll,
         is_arc_vector=is_arc_vector,
     )
-    _npcs_by_territory.setdefault(territory_id, []).append(npc)
+    store = _npc_store(world)
+    store.setdefault(territory_id, []).append(npc)
     return npc
 
 
@@ -266,7 +284,8 @@ def simulate_npc_actions(world) -> list[NPCAction]:
         import random
         rng = random.Random()
 
-    for tid, npcs in _npcs_by_territory.items():
+    store = _npc_store(world)
+    for tid, npcs in store.items():
         # All pairs in same territory; same worldview overlap; adjacent stance
         for i, a in enumerate(npcs):
             for b in npcs[i+1:]:
@@ -302,11 +321,15 @@ def simulate_npc_actions(world) -> list[NPCAction]:
     return actions
 
 
-def get_npcs_in_territory(territory_id: str) -> list[NPC]:
-    return list(_npcs_by_territory.get(territory_id, []))
+def get_npcs_in_territory(territory_id: str, world=None) -> list[NPC]:
+    store = _npc_store(world)
+    return list(store.get(territory_id, []))
 
 
-def reset_npcs():
+def reset_npcs(world=None):
     """Test helper."""
-    _npcs_by_territory.clear()
-    _npc_counter[0] = 0
+    _npc_store(world).clear()
+    if world is not None and hasattr(world, 'npc_counter'):
+        world.npc_counter = 0
+    else:
+        _npc_counter[0] = 0

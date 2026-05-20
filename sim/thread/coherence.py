@@ -46,9 +46,20 @@ COHERENCE_FRACTURED = 2        # 2 = Fractured
 COHERENCE_SEVERED = 1          # 1 = Severed
 COHERENCE_CRISIS = 0           # 0 = Rendering Crisis
 
-# Module-level practitioner state store
+# Module-level practitioner state store — fallback when world is None
+# Post-2026-05-19 schema migration: when world is supplied, state lives on
+# world.practitioners. Module-level store survives for legacy callers and
+# tests that don't construct a World.
 # Key: actor id (str); Value: CoherenceState
 _practitioner_state: dict[str, "CoherenceState"] = {}
+
+
+def _store(world):
+    """Return the practitioner store: world.practitioners if world supplied,
+    else module-level fallback."""
+    if world is not None and hasattr(world, 'practitioners'):
+        return world.practitioners
+    return _practitioner_state
 
 
 @dataclass
@@ -96,11 +107,12 @@ def _band_for(c: int) -> str:
     return "Rendering Crisis"
 
 
-def _get_or_create(actor: str) -> CoherenceState:
+def _get_or_create(actor: str, world=None) -> CoherenceState:
     """Initialise a practitioner's track at the §3.1 starting value if first seen."""
-    if actor not in _practitioner_state:
-        _practitioner_state[actor] = CoherenceState(actor=actor, coherence=COHERENCE_START, band="Stable")
-    return _practitioner_state[actor]
+    store = _store(world)
+    if actor not in store:
+        store[actor] = CoherenceState(actor=actor, coherence=COHERENCE_START, band="Stable")
+    return store[actor]
 
 
 def apply_coherence_delta(actor: str, delta: int, source: str, world=None) -> CoherenceState:
@@ -110,12 +122,12 @@ def apply_coherence_delta(actor: str, delta: int, source: str, world=None) -> Co
            Positive = recovery (non-practice season, Anchoring Scene, Einhir).
     source: free-text describing the cause for log purposes (e.g.
             "Weave Relational", "FR Lock Territorial", "Anchoring Scene").
-    world: GameState — currently unused (state is module-level); preserved in
-           signature for forward compatibility when state moves onto World.
+    world: GameState — if supplied, state lives on world.practitioners.
+           If None, module-level fallback is used (legacy compatibility).
 
     Returns the updated CoherenceState.
     """
-    state = _get_or_create(actor)
+    state = _get_or_create(actor, world=world)
     before = state.coherence
     # Clamp to [0, 10] per §3.5 "Cannot exceed 10" and §3.1 "0 (rendering crisis)" floor
     # [canonical: §3.5 "Cannot exceed 10" + §3.1 range 10->0]
@@ -134,7 +146,7 @@ def check_coherence_zero_transition(actor: str, world=None) -> ZeroTransitionRes
     time it observes coherence==0, and reports just_transitioned=True only
     for that first observation.
     """
-    state = _get_or_create(actor)
+    state = _get_or_create(actor, world=world)
     crisis_now = (state.coherence == COHERENCE_CRISIS)
     just_transitioned = crisis_now and not state.crisis_active
     if crisis_now:
@@ -151,12 +163,14 @@ def check_coherence_zero_transition(actor: str, world=None) -> ZeroTransitionRes
     )
 
 
-def get_state(actor: str) -> Optional[CoherenceState]:
+def get_state(actor: str, world=None) -> Optional[CoherenceState]:
     """Inspection helper — returns the practitioner's current state, or None
     if the practitioner has never had a coherence delta applied."""
-    return _practitioner_state.get(actor)
+    store = _store(world)
+    return store.get(actor)
 
 
-def reset_all():
-    """Test helper — clear the module-level store. Not for production use."""
-    _practitioner_state.clear()
+def reset_all(world=None):
+    """Test helper — clear the practitioner store. Not for production use."""
+    store = _store(world)
+    store.clear()

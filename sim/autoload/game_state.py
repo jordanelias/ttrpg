@@ -119,6 +119,20 @@ class World:
     winner: str | None = None
     battle_count: int = 0
     rng: random.Random = field(default_factory=random.Random)
+    # ─── Schema migration 2026-05-19 ──────────────────────────────────────
+    # Registries for Tier 0 modules that previously held module-level state.
+    # Values use Any-typing because the owning module defines its own
+    # dataclass (CoherenceState, InsurgencyRecord, NPC, TreatyRecord) and
+    # bidirectional typing would create import cycles. Consumer modules
+    # check type at runtime.
+    # [canonical: designs/proposals/stub_infill_plan.md Amendment 2026-05-19
+    #  "schema-migration commit that adds the missing registries"]
+    practitioners: dict = field(default_factory=dict)            # actor_id → CoherenceState (from sim/thread/coherence)
+    insurgencies: dict = field(default_factory=dict)             # insurgency_id → InsurgencyRecord (from sim/world/insurgency_pipeline)
+    uncontrolled_streaks: dict = field(default_factory=dict)     # frozenset[tid] → consecutive seasons (from sim/world/insurgency_pipeline)
+    npcs: dict = field(default_factory=dict)                     # territory_id → list[NPC] (from sim/world/npe)
+    npc_counter: int = 0                                          # incrementing id source for NPC generation
+    treaties: dict = field(default_factory=dict)                 # frozenset[parties] → TreatyRecord (from sim/provincial/treaty)
 
 
 def create_world(seed: int | None = None) -> World:

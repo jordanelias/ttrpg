@@ -41,9 +41,16 @@ TREATY_LAPSE_RATE_DEFAULT = 0.90  # balanced value per §5.1 (table 0.90-0.95 ra
 TREATY_CONSENT_RATE_DEFAULT = 0.28
 
 
-# Module-level treaty registry (until Faction.treaties lands)
-# Key: (party_a, party_b) tuple sorted; Value: TreatyRecord
+# Module-level treaty registry — fallback when world is None
+# Post-2026-05-19 schema migration: when world is supplied, treaties live
+# on world.treaties.
 _treaty_registry: dict[tuple, "TreatyRecord"] = {}
+
+
+def _treaty_store(world):
+    if world is not None and hasattr(world, 'treaties'):
+        return world.treaties
+    return _treaty_registry
 
 
 @dataclass
@@ -98,8 +105,9 @@ def process_treaty_expirations(world, lapse_rate: float = TREATY_LAPSE_RATE_DEFA
     # [canonical: §4.5 — "Lapsed Treaty: cleared from both factions' treaty
     #  registers. Crown may re-bind via Senator Outward action."]
     rng = world.rng if world is not None and hasattr(world, 'rng') else None
+    store = _treaty_store(world)
     results = []
-    for key, treaty in list(_treaty_registry.items()):
+    for key, treaty in list(store.items()):
         if not treaty.active:
             continue
         roll = rng.random() if rng else 0.95  # default to high-lapse if no rng
@@ -110,22 +118,23 @@ def process_treaty_expirations(world, lapse_rate: float = TREATY_LAPSE_RATE_DEFA
     return results
 
 
-def register_treaty(parties: list, terms: dict, bound_arc: int, bound_season: int) -> TreatyRecord:
+def register_treaty(parties: list, terms: dict, bound_arc: int, bound_season: int,
+                    world=None) -> TreatyRecord:
     """Test/scaffolding helper: directly insert a treaty without going
     through propose_treaty (which is canon-gated). Used until Pass 2h lands
     and the proposal protocol becomes the supported insertion path."""
     key = tuple(sorted(parties))
     record = TreatyRecord(parties=key, terms=terms,
                           bound_arc=bound_arc, bound_season=bound_season)
-    _treaty_registry[key] = record
+    _treaty_store(world)[key] = record
     return record
 
 
-def get_active_treaties() -> list[TreatyRecord]:
+def get_active_treaties(world=None) -> list[TreatyRecord]:
     """Inspection helper — active treaties only."""
-    return [t for t in _treaty_registry.values() if t.active]
+    return [t for t in _treaty_store(world).values() if t.active]
 
 
-def reset_registry():
+def reset_registry(world=None):
     """Test helper."""
-    _treaty_registry.clear()
+    _treaty_store(world).clear()
