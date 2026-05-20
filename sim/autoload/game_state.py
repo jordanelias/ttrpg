@@ -90,7 +90,7 @@ class Faction:
     W: float = 2.0
     I: float = 2.0
     Mil: float = 3.0
-    territories: set = field(default_factory=set)
+    territories: list = field(default_factory=list)  # [hash-seed fix 2026-05-20] was set; set iteration depends on PYTHONHASHSEED for str keys, producing cross-process variance in mc_v18 batches. list preserves insertion order; faction territories ≤15 so O(n) membership is negligible.
     # Seasonal resets
     senator_inward_used: bool = False
     consul_used: bool = False
@@ -184,7 +184,8 @@ def create_world(seed: int | None = None) -> World:
     factions = {}
     for name, stats in STARTING_STATS.items():
         f = Faction(name=name, **stats)
-        f.territories = {tid for tid, o in STARTING_OWNER.items() if o == name}
+        # [hash-seed fix 2026-05-20] set-comp → list-comp; ordered by STARTING_OWNER dict-insertion order (deterministic)
+        f.territories = [tid for tid, o in STARTING_OWNER.items() if o == name]
         factions[name] = f
 
     territories = {}
@@ -290,7 +291,7 @@ def restore_world(snapshot: dict) -> World:
         f = Faction(name=fn, L=fd['L'], Sta=fd['Sta'], W=fd['W'],
                     I=fd['I'], Mil=fd['Mil'], parliamentary=fd.get('parliamentary', True),
                     standing=fd.get('standing', 0))
-        f.territories = set(fd['territories'])
+        f.territories = list(fd['territories'])  # [hash-seed fix 2026-05-20] was set(...)
         f.excommunicated = fd.get('excommunicated', False)
         f.council_used_this_arc = fd.get('council_used_this_arc', False)
         w.factions[fn] = f

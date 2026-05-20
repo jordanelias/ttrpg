@@ -145,9 +145,13 @@ def _try_conquest(faction, world, rng) -> str:
     adj = set()
     for tid in faction.territories:
         adj |= ADJACENCY.get(tid, set())
-    targets = [tid for tid in adj
-               if tid in world.territories
-               and world.territories[tid].owner not in (faction.name, None)]
+    # [hash-seed fix 2026-05-20] sort before rng.choice — adj is built from
+    # ADJACENCY set-literals whose iteration order depends on PYTHONHASHSEED.
+    # Sorting collapses that into a deterministic candidate list; rng.choice
+    # then makes a world.rng-deterministic selection from it.
+    targets = sorted(tid for tid in adj
+                     if tid in world.territories
+                     and world.territories[tid].owner not in (faction.name, None))
 
     if not targets or faction.Mil < 3.0:
         return 'invalid'
@@ -170,10 +174,14 @@ def _try_conquest(faction, world, rng) -> str:
     if battle['attacker_wins']:
         old = t.owner
         if old and old in world.factions:
-            world.factions[old].territories.discard(target)
+            # [hash-seed fix 2026-05-20] .discard() → list guard-remove
+            if target in world.factions[old].territories:
+                world.factions[old].territories.remove(target)
             world.factions[old].adjust('L', -10)
         t.owner = faction.name
-        faction.territories.add(target)
+        # [hash-seed fix 2026-05-20] .add() → guarded append (preserves set-like idempotence)
+        if target not in faction.territories:
+            faction.territories.append(target)
         t.garrison = True
         t.adjust_accord(-25)
         world.battle_count += 1

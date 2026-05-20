@@ -296,3 +296,27 @@ session-log handoff line. m3_mass_battle is a fully decoupled v17
 PRIMITIVES module (own d6 dice, own roll_pool already rng-threaded,
 no imports from sim/) and is not on the mc_v18 path. No re-baseline
 required for that file.
+
+
+## Hash-seed nondeterminism — RESOLVED 2026-05-20
+
+The GAP filed in the Deferred Migration Batch section above is now
+closed. Two leaks identified and fixed:
+
+| Site | Fix |
+|---|---|
+| `Faction.territories: set` (game_state.py L93) | -> `list` with insertion order from STARTING_OWNER (deterministic) |
+| `_try_conquest` candidate set (faction_action.py L145-150) | candidates wrapped in `sorted()` before `rng.choice` |
+
+Post-fix verification: identical batch results across PYTHONHASHSEED in
+{0, 1, 7, 42, 99999} at N=10 base_seed=0. PYTHONHASHSEED pin no longer
+required for cross-process reproducibility.
+
+Authoritative post-fix baseline supersedes the PYTHONHASHSEED=0 figures
+in the Deferred Migration Batch section above:
+
+| Run | battles_mean | win_share | winners |
+|---|---|---|---|
+| N=10 base_seed=0 | 34.1 | Crown 40 / Church 10 / Hafenmark 0 / Varfell 50 | {Crown:4, Church:1, Varfell:5} |
+| N=10 base_seed=42 | 33.0 | Crown 10 / Church 0 / Hafenmark 0 / Varfell 90 | {Varfell:9, Crown:1} |
+| N=5 base_seed=42 | 32.8 | Crown 20 / Church 0 / Hafenmark 0 / Varfell 80 | {Varfell:4, Crown:1} |
