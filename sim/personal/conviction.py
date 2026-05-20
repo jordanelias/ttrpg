@@ -89,6 +89,19 @@ class ScarRecord:
     before: int                # Scar count on this Conviction before
     after: int                 # Scar count after
 
+    def to_dict(self) -> dict:
+        return {'actor': self.actor, 'conviction': self.conviction,
+                'source': self.source, 'magnitude': self.magnitude,
+                'season': self.season,
+                'before': self.before, 'after': self.after}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ScarRecord":
+        return cls(actor=d['actor'], conviction=d['conviction'],
+                   source=d['source'], magnitude=d['magnitude'],
+                   season=d['season'],
+                   before=d['before'], after=d['after'])
+
 
 @dataclass
 class ConvictionState:
@@ -106,6 +119,29 @@ class ConvictionState:
     last_scar_season: dict[str, int] = field(default_factory=dict)
     # Log of all Scar events
     log: list[ScarRecord] = field(default_factory=list)
+
+    def to_dict(self) -> dict:
+        return {
+            'actor': self.actor,
+            'scars': dict(self.scars),
+            'resonant_active': sorted(self.resonant_active),
+            'in_crisis': sorted(self.in_crisis),
+            'pending_belief_revisions': list(self.pending_belief_revisions),
+            'last_scar_season': dict(self.last_scar_season),
+            'log': [r.to_dict() for r in self.log],
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ConvictionState":
+        return cls(
+            actor=d['actor'],
+            scars=dict(d.get('scars', {})),
+            resonant_active=set(d.get('resonant_active', [])),
+            in_crisis=set(d.get('in_crisis', [])),
+            pending_belief_revisions=list(d.get('pending_belief_revisions', [])),
+            last_scar_season=dict(d.get('last_scar_season', {})),
+            log=[ScarRecord.from_dict(r) for r in d.get('log', [])],
+        )
 
 
 @dataclass

@@ -75,6 +75,19 @@ class ThreadcutState:
     deactualisation_round: int = 0   # 0 = not started; 1/2/3 per §6.4
     notes: list[str] = field(default_factory=list)
 
+    def to_dict(self) -> dict:
+        return {'being_id': self.being_id,
+                'rendering_strain': self.rendering_strain,
+                'deactualisation_round': self.deactualisation_round,
+                'notes': list(self.notes)}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "ThreadcutState":
+        return cls(being_id=d['being_id'],
+                   rendering_strain=d.get('rendering_strain', 0),
+                   deactualisation_round=d.get('deactualisation_round', 0),
+                   notes=list(d.get('notes', [])))
+
 
 def mark_threadcut(being_id: str, world=None) -> ThreadcutState:
     """Register a being as threadcut (P-06). Idempotent."""

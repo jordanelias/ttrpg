@@ -194,3 +194,43 @@ isolates w1 ≠ w2; module-level fallback survives for world=None callers;
 mc_v18 backwards-compat verified (battles_mean=37.4 with random.seed(0)
 pin per ndet finding 2026-05-19c). serialize_world unchanged — new
 registries still not in snapshot format, same limitation as migration #1.
+
+
+## Per-record serializers — 2026-05-20 — Production save format
+
+serialize_world / restore_world now snapshot all 14 World registries
+from schema migrations #1 (94dac72e) and #2 (d2941cde). Each owning
+dataclass exposes .to_dict() and .from_dict(); serialize_world calls
+.to_dict() with hasattr-fallback (defensive against legacy module-level
+state); restore_world reconstructs via late-imports on owning modules
+(no module-load-time import cycles).
+
+| Dataclass | Module | Round-trip verified |
+|---|---|---|
+| `CoherenceLogEntry` | sim/thread/coherence | ✓ (nested under CoherenceState.log) |
+| `CoherenceState` | sim/thread/coherence | ✓ (Alice 4 deltas, log roundtrip exact) |
+| `InsurgencyRecord` | sim/world/insurgency_pipeline | ✓ (L, territory_ids, formed_season) |
+| `NPC` | sim/world/npe | ✓ (5-axis: stance, worldview, affiliation, compromise, volatility) |
+| `TreatyRecord` | sim/provincial/treaty | ✓ (parties tuple, terms dict) |
+| `ScarRecord` | sim/personal/conviction | ✓ (nested under ConvictionState.log) |
+| `ConvictionState` | sim/personal/conviction | ✓ (scars, resonant_active, in_crisis, log) |
+| `Belief` | sim/personal/beliefs | ✓ (statement, underlying_convictions, revision history with non-serializable evidence handling) |
+| `Knot` | sim/personal/knots | ✓ (strain, tier, active, formed_season, log) |
+| `InfrastructureState` | sim/territory/infrastructure | ✓ (4-axis: religious_building, templar_station, inquisitor_base, church_governor) |
+| `ThreadcutState` | sim/thread/threadcut | ✓ (rendering_strain, deactualisation_round) |
+
+Non-dataclass registries handled inline in serialize_world:
+- `uncontrolled_streaks` (frozenset keys → list-of-dicts via sorted tids)
+- `treaties` (frozenset keys → list-of-dicts with parties_key)
+- `npc_drift_state` (dict[str, float] — straight roundtrip)
+- `comovement_deck` (tuples in remaining/discard → lists for JSON, tuples on restore)
+- `npc_counter`, `knot_id_counter` (int — straight roundtrip)
+
+VALIDATION.
+
+26/26 round-trip checks pass through `json.dumps()`/`json.loads()` cycle.
+14/14 old-schema tolerance checks pass — snapshots produced by code
+predating migrations #1 / #2 load cleanly with registries defaulting
+to empty containers (via .get(key, default) pattern).
+
+mc_v18 backwards-compat verified.

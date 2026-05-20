@@ -75,6 +75,22 @@ class InsurgencyRecord:
     promoted: bool = False
     parliamentary_status: Optional[str] = None  # 'parliamentary' / 'extra-parliamentary' / None
 
+    def to_dict(self) -> dict:
+        return {'insurgency_id': self.insurgency_id,
+                'territory_ids': list(self.territory_ids),
+                'L': self.L, 'formed_season': self.formed_season,
+                'promoted': self.promoted,
+                'parliamentary_status': self.parliamentary_status}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "InsurgencyRecord":
+        return cls(insurgency_id=d['insurgency_id'],
+                   territory_ids=list(d['territory_ids']),
+                   L=d.get('L', INSURGENCY_STARTING_L),
+                   formed_season=d.get('formed_season', 0),
+                   promoted=d.get('promoted', False),
+                   parliamentary_status=d.get('parliamentary_status'))
+
 
 @dataclass
 class InsurgencyEvent:

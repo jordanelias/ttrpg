@@ -106,6 +106,26 @@ class Knot:
     formed_season: int = 0
     log: list[dict] = field(default_factory=list)
 
+    def to_dict(self) -> dict:
+        return {
+            'knot_id': self.knot_id, 'actor_a': self.actor_a, 'actor_b': self.actor_b,
+            'tier': self.tier, 'strain': self.strain,
+            'disposition': self.disposition, 'active': self.active,
+            'formed_season': self.formed_season,
+            'log': list(self.log),
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Knot":
+        return cls(
+            knot_id=d['knot_id'], actor_a=d['actor_a'], actor_b=d['actor_b'],
+            tier=d['tier'], strain=d.get('strain', 0),
+            disposition=d.get('disposition', 5),
+            active=d.get('active', True),
+            formed_season=d.get('formed_season', 0),
+            log=list(d.get('log', [])),
+        )
+
 
 @dataclass
 class KnotState:

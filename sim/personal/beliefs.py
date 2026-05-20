@@ -57,6 +57,34 @@ class Belief:
     revision_pressure: int = 0  # Accumulated 'challenging' social wins; triggers revision opportunity
     history: list[dict] = field(default_factory=list)  # Revision events
 
+    def to_dict(self) -> dict:
+        # history entries may contain non-serializable 'evidence' fields;
+        # coerce to string for storage safety
+        safe_history = []
+        for h in self.history:
+            entry = {k: v for k, v in h.items() if k != 'evidence'}
+            ev = h.get('evidence')
+            entry['evidence'] = None if ev is None else (
+                ev if isinstance(ev, (str, int, float, bool, list, dict)) else str(ev))
+            safe_history.append(entry)
+        return {
+            'belief_id': self.belief_id, 'actor': self.actor,
+            'statement': self.statement, 'position': self.position,
+            'underlying_convictions': list(self.underlying_convictions),
+            'revision_pressure': self.revision_pressure,
+            'history': safe_history,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "Belief":
+        return cls(
+            belief_id=d['belief_id'], actor=d['actor'],
+            statement=d['statement'], position=d['position'],
+            underlying_convictions=list(d.get('underlying_convictions', [])),
+            revision_pressure=d.get('revision_pressure', 0),
+            history=list(d.get('history', [])),
+        )
+
 
 @dataclass
 class RevisionResult:

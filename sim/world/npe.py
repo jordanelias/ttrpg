@@ -116,6 +116,36 @@ class NPC:
     is_arc_vector: bool = False
     persistent_state: dict = field(default_factory=dict)
 
+    def to_dict(self) -> dict:
+        return {
+            'npc_id': self.npc_id, 'territory_id': self.territory_id,
+            'stance': dict(self.stance), 'worldview': list(self.worldview),
+            'affiliation_faction': self.affiliation_faction,
+            'affiliation_loyalty': self.affiliation_loyalty,
+            'hidden_allegiance': self.hidden_allegiance,
+            'compromise_category': self.compromise_category,
+            'volatility': self.volatility,
+            'deviation_roll': self.deviation_roll,
+            'is_arc_vector': self.is_arc_vector,
+            'persistent_state': dict(self.persistent_state),
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "NPC":
+        return cls(
+            npc_id=d['npc_id'], territory_id=d['territory_id'],
+            stance=dict(d.get('stance', {})),
+            worldview=list(d.get('worldview', [])),
+            affiliation_faction=d.get('affiliation_faction'),
+            affiliation_loyalty=d.get('affiliation_loyalty', 1),
+            hidden_allegiance=d.get('hidden_allegiance'),
+            compromise_category=d.get('compromise_category', 'Economic'),
+            volatility=d.get('volatility', 3),
+            deviation_roll=d.get('deviation_roll', 0),
+            is_arc_vector=d.get('is_arc_vector', False),
+            persistent_state=dict(d.get('persistent_state', {})),
+        )
+
 
 @dataclass
 class NPCAction:

@@ -70,6 +70,15 @@ class CoherenceLogEntry:
     before: int
     after: int
 
+    def to_dict(self) -> dict:
+        return {'delta': self.delta, 'source': self.source,
+                'before': self.before, 'after': self.after}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "CoherenceLogEntry":
+        return cls(delta=d['delta'], source=d['source'],
+                   before=d['before'], after=d['after'])
+
 
 @dataclass
 class CoherenceState:
@@ -79,6 +88,17 @@ class CoherenceState:
     band: str = "Stable"
     log: list[CoherenceLogEntry] = field(default_factory=list)
     crisis_active: bool = False
+
+    def to_dict(self) -> dict:
+        return {'actor': self.actor, 'coherence': self.coherence,
+                'band': self.band, 'crisis_active': self.crisis_active,
+                'log': [e.to_dict() for e in self.log]}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "CoherenceState":
+        return cls(actor=d['actor'], coherence=d['coherence'],
+                   band=d['band'], crisis_active=d['crisis_active'],
+                   log=[CoherenceLogEntry.from_dict(e) for e in d.get('log', [])])
 
 
 @dataclass

@@ -61,6 +61,21 @@ class TreatyRecord:
     bound_season: int
     active: bool = True
 
+    def to_dict(self) -> dict:
+        return {'parties': list(self.parties),
+                'terms': dict(self.terms),
+                'bound_arc': self.bound_arc,
+                'bound_season': self.bound_season,
+                'active': self.active}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "TreatyRecord":
+        return cls(parties=tuple(d['parties']),
+                   terms=dict(d.get('terms', {})),
+                   bound_arc=d['bound_arc'],
+                   bound_season=d['bound_season'],
+                   active=d.get('active', True))
+
 
 @dataclass
 class TreatyResult:

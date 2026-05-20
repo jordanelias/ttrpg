@@ -754,6 +754,14 @@
       "section": "Amendment 2026-05-19 + #1 precedent at 94dac72e",
       "quoted_text": "schema-migration commit that adds",
       "notes": "Tier 1/2 module-level stores migrated to World fields. Extends migration #1 (94dac72e) which added 6 registries. Same Any-typing rationale + _store(world) router pattern. 6 consumer modules (conviction, beliefs, knots, infrastructure, temperaments, threadcut, co_movement) updated; each retains module-level fallback for world=None. Cross-world isolation verified across all 7 registries (knot_id_counter w1=1 vs w2=0; T9 infrastructure w1 has Cathedral, w2 empty; co_movement deck w1 has 14 remaining vs w2=0). mc_v18 backwards-compat verified (battles_mean=37.4 with random.seed(0) pin per ndet finding 2026-05-19c). serialize_world unchanged."
+    },
+    {
+      "sim_variable": "Per-record serializers for 14 World registries (2026-05-20)",
+      "value": "to_dict/from_dict on 9 dataclasses + serialize_world/restore_world extended",
+      "canonical_source": "designs/proposals/stub_infill_plan.md",
+      "section": "Amendment 2026-05-19d (Per-Record Serializers workstream)",
+      "quoted_text": "Per-Record Serializers for World Registries (separate workstream)",
+      "notes": "Production save format support. 9 dataclasses gain to_dict/from_dict: CoherenceState (+ CoherenceLogEntry), InsurgencyRecord, NPC, TreatyRecord, ConvictionState (+ ScarRecord), Belief, Knot, InfrastructureState, ThreadcutState. serialize_world extended with 14 new top-level keys; restore_world reconstructs via late-imports on owning modules. 26/26 round-trip checks pass through JSON; 14/14 old-schema tolerance checks pass (missing registry keys default to empty containers). mc_v18 backwards-compat verified (battles_mean=38.0 with random.seed(0) pin per ndet finding)."
     }
   ],
   "updated_at": "2026-05-19"

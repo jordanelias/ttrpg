@@ -209,7 +209,13 @@ def create_world(seed: int | None = None) -> World:
 
 
 def serialize_world(world: World) -> dict:
-    """Snapshot world state for save/restore."""
+    """Snapshot world state for save/restore.
+
+    Includes the 14 registries from schema migrations #1 (94dac72e) and
+    #2 (d2941cde). Each owning dataclass exposes .to_dict() — see modules:
+    coherence, insurgency_pipeline, npe, treaty, conviction, beliefs,
+    knots, infrastructure, threadcut.
+    """
     return {
         'season': world.season, 'arc': world.arc, 'winner': world.winner,
         'battle_count': world.battle_count,
@@ -228,11 +234,52 @@ def serialize_world(world: World) -> dict:
                   'fort_level': t.fort_level, 'templar': t.templar}
             for tid, t in world.territories.items()
         },
+        # ─── Schema migration #1 registries ──────────────────────────────
+        'practitioners': {k: (v.to_dict() if hasattr(v, 'to_dict') else v)
+                          for k, v in world.practitioners.items()},
+        'insurgencies': {k: (v.to_dict() if hasattr(v, 'to_dict') else v)
+                         for k, v in world.insurgencies.items()},
+        # uncontrolled_streaks: keys are frozensets — encode as sorted-list-of-tids
+        'uncontrolled_streaks': [{'tids': sorted(list(fs)), 'streak': cnt}
+                                  for fs, cnt in world.uncontrolled_streaks.items()],
+        'npcs': {tid: [n.to_dict() if hasattr(n, 'to_dict') else n
+                       for n in npc_list]
+                 for tid, npc_list in world.npcs.items()},
+        'npc_counter': world.npc_counter,
+        # treaties: keys are frozensets — encode as sorted-list-of-parties
+        'treaties': [{'parties_key': sorted(list(fs)),
+                      'record': (rec.to_dict() if hasattr(rec, 'to_dict') else rec)}
+                     for fs, rec in world.treaties.items()],
+        # ─── Schema migration #2 registries ──────────────────────────────
+        'convictions': {k: (v.to_dict() if hasattr(v, 'to_dict') else v)
+                        for k, v in world.convictions.items()},
+        'beliefs': {k: [b.to_dict() if hasattr(b, 'to_dict') else b
+                        for b in v]
+                    for k, v in world.beliefs.items()},
+        'knots': {k: (v.to_dict() if hasattr(v, 'to_dict') else v)
+                  for k, v in world.knots.items()},
+        'knot_id_counter': world.knot_id_counter,
+        'territory_infrastructure': {k: (v.to_dict() if hasattr(v, 'to_dict') else v)
+                                     for k, v in world.territory_infrastructure.items()},
+        'npc_drift_state': dict(world.npc_drift_state),
+        'threadcut_beings': {k: (v.to_dict() if hasattr(v, 'to_dict') else v)
+                             for k, v in world.threadcut_beings.items()},
+        # comovement_deck: tuples in 'remaining' / 'discard' lists — coerce to lists
+        'comovement_deck': {
+            'remaining': [list(c) for c in world.comovement_deck.get('remaining', [])],
+            'discard': [list(c) for c in world.comovement_deck.get('discard', [])],
+        },
     }
 
 
 def restore_world(snapshot: dict) -> World:
-    """Restore world state from snapshot."""
+    """Restore world state from snapshot.
+
+    Reconstructs all 14 World registries via late-imports on the owning
+    modules' .from_dict() classmethods. Snapshots produced by an older
+    schema version (pre-migration #1 or pre-#2) are tolerated: missing
+    registry keys default to empty dicts.
+    """
     w = World()
     w.season = snapshot['season']
     w.arc = snapshot['arc']
@@ -252,4 +299,58 @@ def restore_world(snapshot: dict) -> World:
                       garrison=td['garrison'], prosperity=td['prosperity'],
                       fort_level=td['fort_level'], templar=td.get('templar', False))
         w.territories[tid] = t
+
+    # ─── Schema migration #1 registries ──────────────────────────────────
+    # Late-import each owning module's dataclass for .from_dict
+    if 'practitioners' in snapshot:
+        from sim.thread.coherence import CoherenceState
+        w.practitioners = {k: CoherenceState.from_dict(v)
+                            for k, v in snapshot['practitioners'].items()}
+    if 'insurgencies' in snapshot:
+        from sim.world.insurgency_pipeline import InsurgencyRecord
+        w.insurgencies = {k: InsurgencyRecord.from_dict(v)
+                           for k, v in snapshot['insurgencies'].items()}
+    if 'uncontrolled_streaks' in snapshot:
+        w.uncontrolled_streaks = {frozenset(entry['tids']): entry['streak']
+                                   for entry in snapshot['uncontrolled_streaks']}
+    if 'npcs' in snapshot:
+        from sim.world.npe import NPC
+        w.npcs = {tid: [NPC.from_dict(n) for n in npc_list]
+                   for tid, npc_list in snapshot['npcs'].items()}
+    w.npc_counter = snapshot.get('npc_counter', 0)
+    if 'treaties' in snapshot:
+        from sim.provincial.treaty import TreatyRecord
+        w.treaties = {frozenset(entry['parties_key']): TreatyRecord.from_dict(entry['record'])
+                       for entry in snapshot['treaties']}
+
+    # ─── Schema migration #2 registries ──────────────────────────────────
+    if 'convictions' in snapshot:
+        from sim.personal.conviction import ConvictionState
+        w.convictions = {k: ConvictionState.from_dict(v)
+                          for k, v in snapshot['convictions'].items()}
+    if 'beliefs' in snapshot:
+        from sim.personal.beliefs import Belief
+        w.beliefs = {k: [Belief.from_dict(b) for b in v]
+                      for k, v in snapshot['beliefs'].items()}
+    if 'knots' in snapshot:
+        from sim.personal.knots import Knot
+        w.knots = {k: Knot.from_dict(v) for k, v in snapshot['knots'].items()}
+    w.knot_id_counter = snapshot.get('knot_id_counter', 0)
+    if 'territory_infrastructure' in snapshot:
+        from sim.territory.infrastructure import InfrastructureState
+        w.territory_infrastructure = {k: InfrastructureState.from_dict(v)
+                                       for k, v in snapshot['territory_infrastructure'].items()}
+    if 'npc_drift_state' in snapshot:
+        w.npc_drift_state = dict(snapshot['npc_drift_state'])
+    if 'threadcut_beings' in snapshot:
+        from sim.thread.threadcut import ThreadcutState
+        w.threadcut_beings = {k: ThreadcutState.from_dict(v)
+                               for k, v in snapshot['threadcut_beings'].items()}
+    if 'comovement_deck' in snapshot:
+        # Restore tuples from saved lists (matches CO_MOVEMENT_CARDS shape)
+        w.comovement_deck = {
+            'remaining': [tuple(c) for c in snapshot['comovement_deck'].get('remaining', [])],
+            'discard': [tuple(c) for c in snapshot['comovement_deck'].get('discard', [])],
+        }
+
     return w

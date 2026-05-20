@@ -83,6 +83,21 @@ class InfrastructureState:
     inquisitor_base: bool = False                 # Axis 3
     church_governor: bool = False                 # Axis 4
 
+    def to_dict(self) -> dict:
+        return {'territory_id': self.territory_id,
+                'religious_building': self.religious_building,
+                'templar_station': self.templar_station,
+                'inquisitor_base': self.inquisitor_base,
+                'church_governor': self.church_governor}
+
+    @classmethod
+    def from_dict(cls, d: dict) -> "InfrastructureState":
+        return cls(territory_id=d['territory_id'],
+                   religious_building=d.get('religious_building', BUILDING_NONE),
+                   templar_station=d.get('templar_station', False),
+                   inquisitor_base=d.get('inquisitor_base', False),
+                   church_governor=d.get('church_governor', False))
+
 
 @dataclass
 class BuildResult:
