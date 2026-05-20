@@ -137,9 +137,10 @@ def apply_comovement_effects(card: CoMovementCard, op_result, world) -> dict:
     Returns dict with applied effects.
     """
     ms_before = world.clocks.get('MS', 80.0)
-    # MS_FLOOR 0, MS_CEILING 100 per ms_track
-    new_ms = max(0, min(100, ms_before + card.ms_delta))
-    world.clocks['MS'] = new_ms
+    # [2026-05-20 migration] route through ms_track.apply_ms_delta — single
+    # canonical surface for MS arithmetic per PP-255. Was: inline clamp.
+    from sim.peninsular.ms_track import apply_ms_delta
+    new_ms = apply_ms_delta(card.ms_delta, source=f"co_movement {card.card_id}", world=world)
     return {
         'card_id': card.card_id,
         'card_name': card.name,
