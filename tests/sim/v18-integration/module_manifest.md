@@ -112,6 +112,8 @@ modules. First batch: territory/infrastructure + territory/temperaments
 |---|---|---|---|
 | T1-1 | `sim/territory/infrastructure.py` | `settlement_layer_v30 §1.5-§1.7` | **verified** — 4-axis Church infrastructure (Religious Building / Templar / Inquisitor / Church Governor); build_infrastructure + count + seizure_ob_modifier with -4 cap; Templar seed from Territory.templar |
 | T1-2 | `sim/territory/temperaments.py` | `territory_temperaments_v30` | **verified** — 5-typology authored for 17 territories (T1-T17); temperament_of + temperament_modifiers (α/β + drift); apply_strain_shock per §4 drift formula; faction aggregates per §3 |
+| T1-3a | `sim/personal/conviction.py` | `designs/personal/conviction_track_v1.md §2-§3` (PP-718 per-Conviction Scar) | **verified** — Scar accumulation per-Conviction (not aggregate); 0/1/2/3+ thresholds; crisis at 3+; Certainty scaling; season cap for Thread witnessing; cycle pair with beliefs |
+| T1-3b | `sim/personal/beliefs.py` | `designs/scene/fieldwork_v30.md §5.5; designs/scene/social_contest_v30.md §9.5` | **verified** — add_belief/revise_belief/social_success; +1 Momentum on aligned win (cap 4); challenging win marks revision pending; late-import resolves cycle |
 
 UNBLOCKS Tier 2: peninsular/ci_track (needs infrastructure ✓);
 provincial/mass_seizure (needs ci_track + infrastructure ✓);

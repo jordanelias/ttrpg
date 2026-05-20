@@ -409,6 +409,48 @@
       "canonical_source": "designs/territory/territory_temperaments_v30.md",
       "section": "§4",
       "quoted_text": "0.1 × strain_delta"
+    },
+    {
+      "sim_variable": "SCAR_CRISIS",
+      "value": 3,
+      "canonical_source": "designs/personal/conviction_track_v1.md",
+      "section": "§2 Scar Accumulation",
+      "quoted_text": "**Conviction crisis on X.**"
+    },
+    {
+      "sim_variable": "SCAR_SEASON_CAP_THREAD",
+      "value": 1,
+      "canonical_source": "designs/personal/conviction_track_v1.md",
+      "section": "§3 Conditions",
+      "quoted_text": "Max 1 Scar per season from Thread witnessing per NPC"
+    },
+    {
+      "sim_variable": "CERTAINTY_SCALING.C5",
+      "value": 1,
+      "canonical_source": "designs/personal/conviction_track_v1.md",
+      "section": "§3 Conditions",
+      "quoted_text": "C5: +1 Scar severity"
+    },
+    {
+      "sim_variable": "CERTAINTY_SCALING.C0",
+      "value": -1,
+      "canonical_source": "designs/personal/conviction_track_v1.md",
+      "section": "§3 Conditions",
+      "quoted_text": "C0: −1 Scar severity"
+    },
+    {
+      "sim_variable": "MOMENTUM_CAP",
+      "value": 4,
+      "canonical_source": "designs/scene/fieldwork_v30.md",
+      "section": "§5.5 Socializing and Beliefs",
+      "quoted_text": "+1 Momentum (if below cap 4)"
+    },
+    {
+      "sim_variable": "BELIEF_MOMENTUM_PER_CONTEST_CAP",
+      "value": 1,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "§9.5 Beliefs Integration",
+      "quoted_text": "Max 1 Momentum per contest from Belief alignment"
     }
   ],
   "updated_at": "2026-05-19"
