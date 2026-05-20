@@ -451,6 +451,69 @@
       "canonical_source": "designs/scene/social_contest_v30.md",
       "section": "§9.5 Beliefs Integration",
       "quoted_text": "Max 1 Momentum per contest from Belief alignment"
+    },
+    {
+      "sim_variable": "TN_STANDARD",
+      "value": 7,
+      "canonical_source": "params/threadwork.md",
+      "section": "§TN Modifiers",
+      "quoted_text": "All standard operations (Weave, Pull, Mend, Leap, Community Weave) | 7"
+    },
+    {
+      "sim_variable": "TN_BINDING",
+      "value": 8,
+      "canonical_source": "params/threadwork.md",
+      "section": "§TN Modifiers",
+      "quoted_text": "Binding Ops (Lock, Dissolution) | 8"
+    },
+    {
+      "sim_variable": "TN_POP",
+      "value": 8,
+      "canonical_source": "params/threadwork.md",
+      "section": "§TN Modifiers",
+      "quoted_text": "Past-Oriented Pulling (POP) | 8"
+    },
+    {
+      "sim_variable": "DEPTH_OB.Object",
+      "value": 1,
+      "canonical_source": "params/threadwork.md",
+      "section": "§Depth Ob",
+      "quoted_text": "Object | 1"
+    },
+    {
+      "sim_variable": "DEPTH_OB.Structural",
+      "value": 8,
+      "canonical_source": "params/threadwork.md",
+      "section": "§Depth Ob",
+      "quoted_text": "Structural | 8"
+    },
+    {
+      "sim_variable": "DEPTH_OB.Foundational",
+      "value": 13,
+      "canonical_source": "params/threadwork.md",
+      "section": "§Depth Ob",
+      "quoted_text": "Foundational | 13"
+    },
+    {
+      "sim_variable": "LEAP_OB_TS_LOW",
+      "value": 2,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§2.3 The Leap Roll",
+      "quoted_text": "Thread Sensitivity 30–49 = 2"
+    },
+    {
+      "sim_variable": "LEAP_OB_TS_HIGH",
+      "value": 1,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§2.3 The Leap Roll",
+      "quoted_text": "Thread Sensitivity 50+ = 1"
+    },
+    {
+      "sim_variable": "FR_SURCHARGE",
+      "value": -1,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§3.2 FR surcharge",
+      "quoted_text": "Forced Resolution (FR) surcharge (−1 Coherence additional for Lock or Dissolution)"
     }
   ],
   "updated_at": "2026-05-19"
