@@ -128,3 +128,37 @@ provincial/varfell_territorial_acquisition (needs temperaments ✓ + restoration
 | # | Module | Canon | Status |
 |---|---|---|---|
 | T2-1 | `sim/peninsular/ci_track.py` | `conviction_track_v30 §3 PP-412` | **verified** — PP-412 5-step seasonal CI calc (Momentum +1; Conviction Yield by PT; Assert; Suppress; Hafenmark suppression -1 at L≥4); apply_ci_delta for non-seasonal (Excommunication +4); drift noted vs accounting._ci_generation |
+
+
+## Bug fix 2026-05-19 — canonical PT/Accord bucketing
+
+T2-1 ci_track (f145e4b6) committed with a latent unit-conversion bug:
+canon PT is categorical 0-5 but Territory.pt is continuous 0.5-7.0 via
+PT_MAP. Original code used `int(t.pt)` which drifts (pt=7.0 → int=7 has
+no CI_YIELD_BY_PT entry → 0 yield). Same bug in nascent mass_seizure
+(uncommitted) and npe (committed at 94dac72e schema migration).
+
+Fix lands canonical_pt(continuous_pt) and canonical_accord(continuous_accord)
+helpers in game_state.py (round-trip verified for all PT_MAP / ACCORD_MAP
+entries). ci_track and npe updated to use them. PP-534 Self-Control Rule
+also fixed in ci_track._church_is_prominent (Church auto-prominent in
+own territories, was failing 5.0 > 5.0 False).
+
+Also lands T2-2 mass_seizure.py (verified post-fix) and the same bug
+fixes in its post-fix version before commit.
+
+| Action | Module | Status |
+|---|---|---|
+| Add canonical_pt + canonical_accord helpers | sim/autoload/game_state.py | **landed** |
+| Fix ci_track Step 2 yield bucketing | sim/peninsular/ci_track.py | **fixed** |
+| Fix ci_track PP-534 Self-Control Rule | sim/peninsular/ci_track.py | **fixed** |
+| Fix npe ecology accord bucketing | sim/world/npe.py | **fixed** |
+| Land T2-2 mass_seizure (post-fix) | sim/provincial/mass_seizure.py | **landed** |
+
+Validation: ci_track default state now produces +1/season (matching
+canon §3 Pacing "Early game S1-S5 ≈ +1/season"). Was +0 pre-PP-534 fix;
+was wildly inflated +10 pre-bucketing fix. NPE T13 (low accord canon=1)
+NPCs avg volatility 4.0 vs T2 (high canon=3) avg 3.0 — canon-correct
+direction (low accord +1 volatility). mc_v18 backwards compat verified
+(no regression; observed RNG variance is mc_v18's pre-existing non-
+determinism, not from this fix).

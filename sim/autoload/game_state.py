@@ -43,6 +43,35 @@ STARTING_STATS = {
 
 ACCORD_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 7.0}
 PT_MAP = {0: 1.0, 1: 2.5, 2: 4.0, 3: 5.5, 4: 6.5, 5: 7.0}
+
+
+# Reverse mappers — continuous → canonical-int.
+# Canon PT/Accord are categorical 0-5 / 0-4; game_state stores continuous
+# values via PT_MAP / ACCORD_MAP. Modules that look up canon-keyed tables
+# (CI_YIELD_BY_PT, Seizure Ob, Ecology weights) MUST bucket through these
+# helpers, not via int(t.pt) which drifts (pt=7.0 → int=7 is no canon bucket).
+# [canonical: game_state PT_MAP/ACCORD_MAP — the inverse is forced by these tables.]
+
+def canonical_pt(continuous_pt: float) -> int:
+    """Map continuous PT (range 0.5-7.0 per PT_MAP) → canonical integer 0-5.
+    Uses nearest-neighbor with midpoints between successive canonical floats.
+    PT_MAP: 1.0, 2.5, 4.0, 5.5, 6.5, 7.0. Midpoints: 1.75, 3.25, 4.75, 6.0, 6.75."""
+    if continuous_pt < 1.75: return 0
+    if continuous_pt < 3.25: return 1
+    if continuous_pt < 4.75: return 2
+    if continuous_pt < 6.0:  return 3
+    if continuous_pt < 6.75: return 4
+    return 5
+
+
+def canonical_accord(continuous_accord: float) -> int:
+    """Map continuous Accord (range 0.5-7.0 per ACCORD_MAP) → canonical integer 0-4.
+    ACCORD_MAP: 1.0, 2.5, 4.0, 5.5, 7.0. Midpoints: 1.75, 3.25, 4.75, 6.25."""
+    if continuous_accord < 1.75: return 0
+    if continuous_accord < 3.25: return 1
+    if continuous_accord < 4.75: return 2
+    if continuous_accord < 6.25: return 3
+    return 4
 STARTING_ACCORD = {'T1': 3, 'T2': 3, 'T3': 3, 'T4': 2, 'T5': 2, 'T6': 2,
                    'T7': 2, 'T8': 3, 'T9': 4, 'T10': 2, 'T11': 2, 'T12': 2,
                    'T13': 1, 'T14': 3, 'T15': 0, 'T17': 2}

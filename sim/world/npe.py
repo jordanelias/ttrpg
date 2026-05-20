@@ -134,8 +134,12 @@ def _ecology_weights(world, territory_id: str) -> dict:
         return {}
     t = world.territories[territory_id]
 
-    # Map Territory.accord (continuous 0.5-7.0) to settlement-like 0-5 buckets
-    accord_int = int(max(0, min(5, t.accord)))
+    # Map Territory.accord (continuous 0.5-7.0 via ACCORD_MAP) → canonical
+    # integer 0-4 via canonical_accord. Direct int() drifts: t.accord=5.5
+    # (canon Accord 3) → int=5 → falsely triggers ACCORD_HIGH=4.
+    # [BUG FIX 2026-05-19 — see game_state.canonical_accord helper.]
+    from sim.autoload.game_state import canonical_accord
+    accord_int = canonical_accord(t.accord)
 
     weights = {
         'piety_high': 0, 'piety_low': 0,

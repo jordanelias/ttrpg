@@ -598,6 +598,13 @@
       "canonical_source": "designs/scene/conviction_track_v30.md",
       "section": "§3 Step 5",
       "quoted_text": "Baralta's Mandate ≥ 4"
+    },
+    {
+      "sim_variable": "POOL_CI_DIVISOR",
+      "value": 15,
+      "canonical_source": "designs/provincial/victory_v30.md",
+      "section": "§3.2",
+      "quoted_text": "Influence + floor(CI / 15)"
     }
   ],
   "updated_at": "2026-05-19"

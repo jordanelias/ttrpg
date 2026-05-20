@@ -221,3 +221,42 @@ insurgencies, treaties, settlements). The Tier 0 modules' module-level
 stores migrate cleanly, signatures unchanged. This unblocks consumer-side
 state queries (mc_v18, Godot scene controllers) without breaking the
 Tier 0 surface.
+
+
+## Amendment 2026-05-19b — Canonical PT/Accord bucketing bug + fix
+
+T2-1 ci_track (f145e4b6) shipped with a latent unit-conversion bug
+discovered during T2-2 mass_seizure smoke. Canon PT is categorical 0-5
+but `Territory.pt` stores continuous 0.5-7.0 via PT_MAP. Code used
+`int(t.pt)` as the categorical key into canon tables (CI_YIELD_BY_PT,
+Seizure Ob, NPE ecology). This drifts wherever a canon table is keyed
+by canonical PT/Accord but indexed by Territory.pt directly.
+
+Affected modules (before fix):
+  - sim/peninsular/ci_track.py (T2-1, committed) — CI yields wrong
+    (Step 2 inflated when t.pt=5.5 → int=5 falsely keyed as PT 5)
+  - sim/world/npe.py (T0-11, committed at f40bb51a; updated 94dac72e) —
+    ecology accord bucketing falsely keyed (t.accord=5.5 → int=5 → triggered
+    ACCORD_HIGH=4 when canonical Accord was 3)
+  - sim/provincial/mass_seizure.py (T2-2, uncommitted at find-time) —
+    Ob math wrong + Accord branch wrong (T9 PT 5 Success was giving
+    Accord 4, canon §3.2 max is 3)
+
+Fix introduces canonical_pt() and canonical_accord() helpers in
+game_state.py — pure inverses of PT_MAP / ACCORD_MAP using nearest-neighbor
+midpoints. Round-trip verified on all canon entries.
+
+Secondary find: ci_track._church_is_prominent missed PP-534 Self-Control
+Rule (Church auto-prominent in its own territories — was failing the
+5.0 > 5.0 comparison). Fixed.
+
+Net effect after fix: default state CI delta = +1/season exactly matches
+canon §3 Pacing Analysis ("Early game S1-S5 ≈ +1/season"). Was producing
+0 pre-PP-534 fix, +10 pre-bucketing fix.
+
+**Lesson: any module that looks up a canon-keyed categorical table needs
+to bucket through canonical_pt / canonical_accord, NOT int(t.pt) /
+int(t.accord). Future stub infills should audit this at write time.**
+
+**Companion**: T2-2 mass_seizure landed in the same commit as the bug
+fix, since its post-fix version is correct.

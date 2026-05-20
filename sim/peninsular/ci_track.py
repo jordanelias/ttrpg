@@ -65,13 +65,20 @@ CI_CEILING = 100
 
 def _church_is_prominent(world, territory_id: str) -> bool:
     """A territory is 'Church prominent' iff Church Mandate > controlling
-    faction's Mandate. Per §3 Step 2 definition."""
+    faction's Mandate. Per §3 Step 2 definition + PP-534 Self-Control Rule
+    (Church is automatically Prominent in territories it controls)."""
     if territory_id not in world.territories:
         return False
     t = world.territories[territory_id]
-    if t.owner is None:
-        return False
     if 'Church' not in world.factions:
+        return False
+    # PP-534 Self-Control Rule: auto-prominent in own territories
+    # [canonical: victory_v30 §3.2 PP-534 — "The Church is automatically
+    #  Prominent in all territories it controls, regardless of Mandate
+    #  comparison."]
+    if t.owner == 'Church':
+        return True
+    if t.owner is None:
         return False
     church_mandate = world.factions['Church'].L
     controller_mandate = world.factions[t.owner].L if t.owner in world.factions else 0
@@ -103,11 +110,15 @@ def compute_seasonal_ci_delta(world,
     }
 
     # Step 2: Conviction Yield
+    # [BUG FIX 2026-05-19: canon PT is categorical 0-5 but Territory.pt is
+    #  continuous 0.5-7.0 via PT_MAP. Must bucket through canonical_pt;
+    #  int(t.pt) drifts (pt=7.0 → int=7 has no CI_YIELD entry → 0 yield).]
+    from sim.autoload.game_state import canonical_pt
     raw_yield = 0.0
     for tid, t in world.territories.items():
         if not _church_is_prominent(world, tid):
             continue
-        pt_int = max(0, min(5, int(t.pt)))
+        pt_int = canonical_pt(t.pt)
         contribution = CI_YIELD_BY_PT.get(pt_int, 0.0)
         if contribution > 0:
             breakdown['conviction_yield_per_territory'][tid] = contribution
