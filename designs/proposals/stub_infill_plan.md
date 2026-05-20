@@ -260,3 +260,49 @@ int(t.accord). Future stub infills should audit this at write time.**
 
 **Companion**: T2-2 mass_seizure landed in the same commit as the bug
 fix, since its post-fix version is correct.
+
+
+## Amendment 2026-05-19c — mc_v18 non-determinism finding (mass-battle dice)
+
+Surfaced during the canonical PT/Accord bug-fix smoke (ec3727fc): two
+consecutive runs of `run_batch(5, base_seed=42)` produce different
+`battles_mean` and `win_share`. Initial hypothesis was that the bug fix
+caused regression; closer audit showed mc_v18 was already non-deterministic
+before any stub-infill work.
+
+ROOT CAUSE.
+
+`sim/provincial/massbattle.py` calls `random.randint(1, 10)` directly
+in two places:
+  - L630: `roll_pool(n, tn=7)` — the main d10 dice engine for fight phase
+  - L1053: volley_roll_pool — Phase 2 Volley ranged-fire dice
+
+Both bypass `world.rng` (which `mc_v18.run_campaign` correctly seeds via
+`game_state.create_world(seed=seed)`). The module-level `random` module
+state persists across runs and is not seeded by mc_v18, producing the
+observed variance.
+
+CONFIRMATION.
+
+Manual test: `random.seed(0)` before run_batch produces identical results
+across consecutive runs (Run 1 battles_mean=32.8 = Run 2 battles_mean=32.8;
+win_share Crown 80 / Varfell 20 in both runs). Without the global seed,
+runs diverge. Diagnosis confirmed.
+
+FIX SCOPE.
+
+  - Thread `world` (or rng directly) through `run_battle` and `volley_phase`
+  - Replace `random.randint(1, 10)` with `rng.randint(1, 10)` at both sites
+  - Audit massbattle.py for any other module-level `random` calls
+  - Re-baseline Phase 7 mass-battle smoke tests (deterministic behavior
+    will produce different numerical results than the current undefined-
+    behavior baseline)
+
+NOT FIXED THIS SESSION.
+
+The fix is mechanical but behavior-changing: every mc_v18 batch result
+shifts. Phase 7 smoke tests need re-baselining. That's outside Tier 2
+stub-infill scope (this is a pre-existing bug, not introduced by infill).
+
+Filed as a follow-on. Recommend Jordan triage as part of Step 4.3+
+follow-on work or a dedicated determinism-audit pass.

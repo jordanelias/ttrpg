@@ -738,6 +738,14 @@
       "canonical_source": "designs/threadwork/threadwork_v30.md",
       "section": "§2.5",
       "quoted_text": "apply +1 Ob (lattice fracture)"
+    },
+    {
+      "sim_variable": "mc_v18 non-determinism finding (2026-05-19c)",
+      "value": "massbattle.py L630 + L1053 use module-level random.randint",
+      "canonical_source": "designs/proposals/stub_infill_plan.md",
+      "section": "Amendment 2026-05-19c",
+      "quoted_text": "L630: `roll_pool(n, tn=7)` — the main d10 dice engine for fight phase",
+      "notes": "Documented finding; not fixed. Two consecutive run_batch(5, base_seed=42) produce different results because massbattle.py bypasses world.rng. random.seed(0) before run_batch produces deterministic output, confirming diagnosis. Fix is mechanical (thread world.rng through run_battle → roll_pool / volley_roll_pool) but behavior-changing — every mc_v18 batch result shifts. Filed as follow-on per scope boundary of stub_infill work."
     }
   ],
   "updated_at": "2026-05-19"
