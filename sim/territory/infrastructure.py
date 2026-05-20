@@ -98,10 +98,10 @@ _infra_state: dict[str, InfrastructureState] = {}
 
 
 def _infra_store(world):
-    """Return the infrastructure store — module-level for now (not yet on
-    World schema). Returns module dict regardless of world."""
-    # Future: when game_state.World gains a territory_infrastructure dict
-    # field, route through it here. For now module-level fallback only.
+    """Return the infrastructure store: world.territory_infrastructure
+    if world supplied, else module-level fallback."""
+    if world is not None and hasattr(world, 'territory_infrastructure'):
+        return world.territory_infrastructure
     return _infra_state
 
 

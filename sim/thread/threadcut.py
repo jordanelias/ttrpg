@@ -61,6 +61,10 @@ _threadcut_registry: dict = {}
 
 
 def _store(world):
+    """Threadcut store: world.threadcut_beings if world supplied,
+    else module-level fallback."""
+    if world is not None and hasattr(world, 'threadcut_beings'):
+        return world.threadcut_beings
     return _threadcut_registry
 
 

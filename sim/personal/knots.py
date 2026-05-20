@@ -123,7 +123,10 @@ _knot_id_counter = [0]
 
 
 def _store(world):
-    """Future-proofed router (no schema field yet on World for knots)."""
+    """Return the knot store: world.knots if world supplied,
+    else module-level fallback."""
+    if world is not None and hasattr(world, 'knots'):
+        return world.knots
     return _knots
 
 
@@ -197,7 +200,11 @@ def form_knot(actor_a: str, actor_b: str, world=None,
         return None
 
     _knot_id_counter[0] += 1
-    knot_id = f"KNOT-{_knot_id_counter[0]:04d}"
+    if world is not None and hasattr(world, 'knot_id_counter'):
+        world.knot_id_counter += 1
+        knot_id = f"KNOT-{world.knot_id_counter:04d}"
+    else:
+        knot_id = f"KNOT-{_knot_id_counter[0]:04d}"
     knot = Knot(
         knot_id=knot_id, actor_a=actor_a, actor_b=actor_b,
         tier=tier, strain=0, disposition=disp,
@@ -330,4 +337,6 @@ def get_active_knots(world=None) -> list[Knot]:
 def reset_knots(world=None):
     """Test helper."""
     _store(world).clear()
+    if world is not None and hasattr(world, 'knot_id_counter'):
+        world.knot_id_counter = 0
     _knot_id_counter[0] = 0

@@ -746,6 +746,14 @@
       "section": "Amendment 2026-05-19c",
       "quoted_text": "L630: `roll_pool(n, tn=7)` — the main d10 dice engine for fight phase",
       "notes": "Documented finding; not fixed. Two consecutive run_batch(5, base_seed=42) produce different results because massbattle.py bypasses world.rng. random.seed(0) before run_batch produces deterministic output, confirming diagnosis. Fix is mechanical (thread world.rng through run_battle → roll_pool / volley_roll_pool) but behavior-changing — every mc_v18 batch result shifts. Filed as follow-on per scope boundary of stub_infill work."
+    },
+    {
+      "sim_variable": "Schema migration #2 — 8 World fields added (2026-05-19)",
+      "value": "convictions + beliefs + knots + knot_id_counter + territory_infrastructure + npc_drift_state + threadcut_beings + comovement_deck",
+      "canonical_source": "designs/proposals/stub_infill_plan.md",
+      "section": "Amendment 2026-05-19 + #1 precedent at 94dac72e",
+      "quoted_text": "schema-migration commit that adds",
+      "notes": "Tier 1/2 module-level stores migrated to World fields. Extends migration #1 (94dac72e) which added 6 registries. Same Any-typing rationale + _store(world) router pattern. 6 consumer modules (conviction, beliefs, knots, infrastructure, temperaments, threadcut, co_movement) updated; each retains module-level fallback for world=None. Cross-world isolation verified across all 7 registries (knot_id_counter w1=1 vs w2=0; T9 infrastructure w1 has Cathedral, w2 empty; co_movement deck w1 has 14 remaining vs w2=0). mc_v18 backwards-compat verified (battles_mean=37.4 with random.seed(0) pin per ndet finding 2026-05-19c). serialize_world unchanged."
     }
   ],
   "updated_at": "2026-05-19"

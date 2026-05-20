@@ -67,6 +67,10 @@ _deck_state: dict = {'remaining': [], 'discard': []}
 
 
 def _store(world):
+    """Co-Movement deck state: world.comovement_deck if world supplied,
+    else module-level fallback."""
+    if world is not None and hasattr(world, 'comovement_deck'):
+        return world.comovement_deck
     return _deck_state
 
 

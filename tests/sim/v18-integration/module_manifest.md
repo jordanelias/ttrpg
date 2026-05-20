@@ -169,3 +169,28 @@ NPCs avg volatility 4.0 vs T2 (high canon=3) avg 3.0 — canon-correct
 direction (low accord +1 volatility). mc_v18 backwards compat verified
 (no regression; observed RNG variance is mc_v18's pre-existing non-
 determinism, not from this fix).
+
+
+## Schema migration #2 — 2026-05-19 — Tier 1/2 World registries
+
+Extends migration #1 (94dac72e) with 8 additional fields for Tier 1/2
+modules. Same Any-typing rationale + _store(world) router pattern.
+Modules retain module-level fallback for world=None (legacy callers
+and tests).
+
+| Field | Owning module | Purpose |
+|---|---|---|
+| `convictions` | sim/personal/conviction | actor_id → ConvictionState (per-Conviction Scar counts) |
+| `beliefs` | sim/personal/beliefs | actor_id → list[Belief] |
+| `knots` | sim/personal/knots | knot_id → Knot (Distant/Close tiers) |
+| `knot_id_counter` | sim/personal/knots | incrementing Knot id source |
+| `territory_infrastructure` | sim/territory/infrastructure | territory_id → InfrastructureState (4-axis Church) |
+| `npc_drift_state` | sim/territory/temperaments | territory_id → drift float (strain shock cumulative) |
+| `threadcut_beings` | sim/thread/threadcut | being_id → ThreadcutState (rendering strain, de-actualisation round) |
+| `comovement_deck` | sim/thread/co_movement | global deck state (remaining + discard) |
+
+Validated cross-world isolation: 7-test smoke confirms each registry
+isolates w1 ≠ w2; module-level fallback survives for world=None callers;
+mc_v18 backwards-compat verified (battles_mean=37.4 with random.seed(0)
+pin per ndet finding 2026-05-19c). serialize_world unchanged — new
+registries still not in snapshot format, same limitation as migration #1.

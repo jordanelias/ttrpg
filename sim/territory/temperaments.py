@@ -87,7 +87,10 @@ _drift_state: dict[str, float] = {}
 
 
 def _drift_store(world=None):
-    """Drift store — module-level for now."""
+    """Drift store: world.npc_drift_state if world supplied,
+    else module-level fallback."""
+    if world is not None and hasattr(world, 'npc_drift_state'):
+        return world.npc_drift_state
     return _drift_state
 
 

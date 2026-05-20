@@ -162,6 +162,20 @@ class World:
     npcs: dict = field(default_factory=dict)                     # territory_id → list[NPC] (from sim/world/npe)
     npc_counter: int = 0                                          # incrementing id source for NPC generation
     treaties: dict = field(default_factory=dict)                 # frozenset[parties] → TreatyRecord (from sim/provincial/treaty)
+    # ─── Schema migration #2 — 2026-05-19 ─────────────────────────────────
+    # Tier 1/2 registries. Same Any-typing rationale + _store(world) router
+    # pattern as migration #1. Modules retain module-level fallback when
+    # world is None (legacy callers + tests).
+    # [canonical: designs/proposals/stub_infill_plan.md Amendment 2026-05-19c
+    #  follow-on "Schema migration #2 to add world.convictions, world.beliefs..."]
+    convictions: dict = field(default_factory=dict)              # actor_id → ConvictionState (from sim/personal/conviction)
+    beliefs: dict = field(default_factory=dict)                  # actor_id → list[Belief] (from sim/personal/beliefs)
+    knots: dict = field(default_factory=dict)                    # knot_id → Knot (from sim/personal/knots)
+    knot_id_counter: int = 0                                      # incrementing id source for Knot generation
+    territory_infrastructure: dict = field(default_factory=dict) # territory_id → InfrastructureState (from sim/territory/infrastructure)
+    npc_drift_state: dict = field(default_factory=dict)          # territory_id → drift float (from sim/territory/temperaments)
+    threadcut_beings: dict = field(default_factory=dict)         # being_id → ThreadcutState (from sim/thread/threadcut)
+    comovement_deck: dict = field(default_factory=lambda: {'remaining': [], 'discard': []})  # global deck state (from sim/thread/co_movement)
 
 
 def create_world(seed: int | None = None) -> World:
