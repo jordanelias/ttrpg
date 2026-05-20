@@ -1,17 +1,24 @@
 """
 sim/mc_v18.py — Top-level strategic simulator runner — orchestrator only
 
-Canon source: canon/02_canon_constraints.md §B (GD-1, GD-2, GD-3)
+Canon source: canon/02_canon_constraints.md §B (GD-1, GD-2, GD-3);
+              designs/architecture/campaign_architecture_v30.md (campaign flow).
 Game Design constraints applicable: GD-1, GD-2, GD-3
-Status: [CANONICAL — Phase 2 implementation 2026-05-17]
+Status: [CANONICAL — Phase 2 implementation 2026-05-17;
+                    Deferred Migration Batch 2026-05-20]
 
 Replaces tests/sim/v17-integration/mc_v17.py (39k monolith).
 Phase 2: faction actions (conquest/muster/govern) + accounting wired in.
 
+[2026-05-20 — Deferred Migration Batch: inline season block deleted.
+ Composition (advance_season → faction actions → accounting) now routes
+ through sim.peninsular.season.run_season with action_callback.
+ Pure refactor — ordering identical to v17/Phase-2 inline path.]
+
 Dependencies:
   - sim/autoload/* (all autoload services)
+  - sim/peninsular/season (season composition)
   - sim/provincial/faction_action
-  - sim/peninsular/accounting
 
 Entry points:
   - run_campaign(seed, max_seasons, params) -> CampaignResult
@@ -23,9 +30,9 @@ import time
 from collections import Counter
 from dataclasses import dataclass, field
 
-from sim.autoload import game_state, season_manager, victory, scene_slate
+from sim.autoload import game_state, victory, scene_slate
 from sim.provincial.faction_action import faction_take_action
-from sim.peninsular.accounting import run_accounting
+from sim.peninsular.season import run_season
 
 
 DEFAULT_PARAMS = {
@@ -51,6 +58,25 @@ class BatchResult:
     battles_mean: float = 0.0
 
 
+def _faction_actions_callback(world):
+    """Per-season faction action dispatch — passed to season.run_season.
+
+    GD-2 mandatory-actions precedence is enforced inside faction_take_action
+    (mandatory pass before stochastic candidates per HR-9). Parliamentary +
+    territory-holding gate matches the pre-migration inline block at
+    mc_v18 L75-87 prior to 2026-05-20.
+    """
+    for fn, faction in world.factions.items():
+        if not faction.parliamentary:
+            continue
+        if not faction.territories:
+            continue
+        try:
+            faction_take_action(faction, world, world.rng)
+        except Exception:
+            pass  # action error — skip
+
+
 def run_campaign(seed: int | None = None, max_seasons: int = 50,
                  params: dict | None = None) -> CampaignResult:
     """Run a single campaign to completion."""
@@ -70,21 +96,10 @@ def run_campaign(seed: int | None = None, max_seasons: int = 50,
         if world.winner:
             break
 
-        sr = season_manager.advance_season(world)
-
-        # === FACTION ACTIONS (GD-2: mandatory before stochastic) ===
-        for fn, faction in world.factions.items():
-            if not faction.parliamentary:
-                continue
-            if not faction.territories:
-                continue
-            try:
-                faction_take_action(faction, world, world.rng)
-            except Exception:
-                pass  # action error — skip
-
-        # === ACCOUNTING ===
-        run_accounting(world)
+        # season.run_season composes: advance_season → action_callback → run_accounting
+        # [canonical: designs/architecture/campaign_architecture_v30.md;
+        #  Deferred Migration Batch 2026-05-20 — replaces inline composition]
+        run_season(world, action_callback=_faction_actions_callback)
 
         # === VICTORY CHECK (GD-1) ===
         results = victory.check_all_factions(world)

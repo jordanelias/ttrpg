@@ -234,3 +234,65 @@ predating migrations #1 / #2 load cleanly with registries defaulting
 to empty containers (via .get(key, default) pattern).
 
 mc_v18 backwards-compat verified.
+
+## Deferred Migration Batch — 2026-05-20 — landed
+
+Per session 2026-05-20-pass-2l-stub-infill-arc-COMPLETE-plus-serializers
+next_action option_A. Closes three "drift noted vs [legacy duplicate]"
+markers from T0-5 / T0-6 / T2-1 by deleting the legacy paths and
+routing all callers through the canonical surfaces. Also closes
+non-determinism bug 03ce9c79 (filed but unfixed) by threading world.rng
+through the entire mass-battle stack.
+
+| Migration | Commit | Action |
+|---|---|---|
+| RNG → world.rng | 54277ae | sim/provincial/massbattle.py — rng=None param added to 12 functions (roll_pool, _roll_volley_pool, volley_phase, resolve_engagements, resolve_engagements_cascading, run_battle, run_multi_turn_battle, run_multi_unit_battle, pursuit_damage, recall_check, discipline_check_cascade, freed_attacker_damage); 21 internal stochastic callsites thread rng=rng; resolve_mass_battle passes world.rng |
+| _ms_decay deletion | (this) | sim/peninsular/accounting.py — legacy inline `world.clocks['MS'] = max(0.0, ... - 1.0)` replaced with ms_track.apply_ms_baseline_decay(world) call gated on `world.season % SEASONS_PER_YEAR == 0` |
+| _ci_generation deletion | (this) | sim/peninsular/accounting.py — legacy `+2 per Church-held territory` (canon-violating) replaced with ci_track.apply_seasonal_ci(world) — canon PP-412 5-step calc with caller-driven Assert/Suppress at False |
+| mc_v18 inline season block | (this) | sim/mc_v18.py — L73-87 inline `advance_season → faction actions → run_accounting` block replaced with `run_season(world, action_callback=_faction_actions_callback)`. Pure refactor; identical ordering |
+
+**Behavior change.** Pre-migration: CI gained `+2 × num_church_territories`
+per season from accounting._ci_generation (Church starts at 4 territories
+→ +8/season → CI ceiling within ~9 seasons). Post-migration: CI gains
+follow PP-412 §3 5-step calculation — Institutional Momentum +1,
+PT-bucketed Conviction Yield (0 at PT≤3, +0.5 at PT=4, +1 at PT=5),
+Hafenmark Structural Suppression -1 at Baralta Mandate ≥ 4. Early-game
+Church default ≈ +1/season per canon §3 Pacing ("S1-S5 ≈ +1/season").
+
+**Authoritative post-migration baseline** (PYTHONHASHSEED=0):
+
+| Run | battles_mean | win_share | winners |
+|---|---|---|---|
+| N=10 base_seed=0 | 35.5 | Crown 30 / Church 0 / Hafenmark 0 / Varfell 70 | {Varfell:7, Crown:3} |
+| N=10 base_seed=42 | 33.4 | Crown 40 / Church 30 / Hafenmark 0 / Varfell 30 | {Church:3, Varfell:3, Crown:4} |
+| N=5 base_seed=42 | 37.6 | Crown 20 / Church 40 / Hafenmark 0 / Varfell 40 | {Church:2, Varfell:2, Crown:1} |
+
+The three baseline figures recorded in this manifest pre-Deferred-Batch
+(P7-3 L14 smoke battles_mean=40.1; P7-4 L15 run_batch(10,42)=30.0;
+schema-migration #1 L100 battles_mean=31.8; schema-migration #2 L194
+battles_mean=37.4 with random.seed(0) pin) are superseded by the
+authoritative figures above.
+
+**Determinism verified**:
+- Same seed, same Python process: byte-identical (world.rng is the
+  only stochastic source consumed by the engine).
+- Same seed, varied global random.seed() pollution: byte-identical
+  (PYTHONHASHSEED=0 required for cross-process reproducibility — see
+  GAP below).
+
+[GAP: hash-seed nondeterminism — separate from 03ce9c79. Within-process
+ determinism is intact (world.rng is the only RNG consumed by the
+ engine post-fix). Cross-Python-process variance observed at N=10 with
+ default PYTHONHASHSEED=random: battles_mean drifts 32.4 / 32.5 / 35.2
+ across processes. Root cause is Python's per-process hash randomization
+ affecting dict/set iteration order somewhere in the engine
+ (likely faction iteration, territory iteration, or registry walks).
+ Mitigation today: pin PYTHONHASHSEED=0 in any cross-process test
+ invocation. Fix deferred to its own session — out of Deferred
+ Migration Batch scope.]
+
+**m3_mass_battle.py was NOT in scope** as initially feared by the
+session-log handoff line. m3_mass_battle is a fully decoupled v17
+PRIMITIVES module (own d6 dice, own roll_pool already rng-threaded,
+no imports from sim/) and is not on the mc_v18 path. No re-baseline
+required for that file.
