@@ -131,6 +131,10 @@ provincial/varfell_territorial_acquisition (needs temperaments ✓ + restoration
 | T2-2 | `sim/provincial/mass_seizure.py` | `victory_v30 §3.2 + supersession 250715f` | **verified** (landed with bug fix at ec3727fc) — probabilistic declaration; one-shot lifetime; PP-534 self-control |
 | T2-3 | `sim/personal/contest.py` | `social_contest_v30 §1-§9` | **verified** — Argue Pool (PA×2)+History; resolve_exchange; Persuasion Track 1-9; Belief alignment integration via late-import |
 | T2-4 | `sim/personal/knots.py` | `knots_v30 (Pass 2g)` | **verified (Option A)** — 2-tier Distant/Close per ED-773 supersession; formation prerequisites + roll; strain accumulation + break; rupture triggers + -1 Coherence per PP-632 |
+| T2-5 | `sim/thread/co_movement.py` | `threadwork_v30 Part 4 + §4.3 ED-577` | **verified** — 15-card canonical deck; Object/Personal → unactualized, Relational+ → actualized; deck reshuffle on exhaustion (16-draw verified) |
+| T2-6 | `sim/thread/collective.py` | `threadwork_v30 §2.5` | **verified** — Anchor (highest TS) + Helpers; floor(Cognition/2) bonus dice; lattice fracture +1 Ob if pool drops below half expected; per-practitioner Coherence cost |
+| T2-7 | `sim/thread/threadcut.py` | `threadwork_v30 Part 6` | **verified** — registry-based threadcut flag; §6.2 5-band perception table; §6.3 +1 Rendering Strain per external op; §6.4 De-Actualisation Round 1/2/3 trigger at strain ≥ Health |
+| T2-8 | `sim/thread/opposing.py` | `threadwork_v30 §2.6` | **verified** — Opposing Ob modifier floor(opponent_TPS/2), min +1; 7-cell resolution matrix (Meets/Partial/Failure × 2); Knot strain via late-import; FR-vs-standard penalty distinction |
 
 
 ## Bug fix 2026-05-19 — canonical PT/Accord bucketing

@@ -682,6 +682,62 @@
       "canonical_source": "designs/personal/knots_v30.md",
       "section": "§6.1 Option A",
       "quoted_text": "Close Knots broken at high strain (Option A: strain ≥ 6 of 7)"
+    },
+    {
+      "sim_variable": "CO_MOVEMENT_CARDS count",
+      "value": 15,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§4.3 ED-577",
+      "quoted_text": "Co-Movement Cards 1–15 (ED-577 — canonical card list)"
+    },
+    {
+      "sim_variable": "OPPOSING_OB_MODIFIER_MIN",
+      "value": 1,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§2.6 Opposing Engagement Modifier",
+      "quoted_text": "+floor(opponent's Thread Pool Score ÷ 2), minimum +1"
+    },
+    {
+      "sim_variable": "KNOT_STRAIN_STANDARD_LOSER (opposing)",
+      "value": 1,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§2.6 Knot Strain",
+      "quoted_text": "+1 Ob next Thread op this scene. 2 Composure."
+    },
+    {
+      "sim_variable": "KNOT_STRAIN_FR_LOSER (opposing)",
+      "value": 2,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§2.6 Knot Strain",
+      "quoted_text": "+2 Ob. 4 Composure."
+    },
+    {
+      "sim_variable": "RENDERING_STRAIN_PER_EXTERNAL_OP",
+      "value": 1,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§6.3",
+      "quoted_text": "each external Thread operation adds +1 Rendering Strain"
+    },
+    {
+      "sim_variable": "DEACTUALISATION_R1_OB",
+      "value": 2,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§6.4",
+      "quoted_text": "All operations +2 Ob"
+    },
+    {
+      "sim_variable": "DEACTUALISATION_R2_OB",
+      "value": 4,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§6.4",
+      "quoted_text": "Operations +4 Ob"
+    },
+    {
+      "sim_variable": "LATTICE_FRACTURE_OB_PENALTY",
+      "value": 1,
+      "canonical_source": "designs/threadwork/threadwork_v30.md",
+      "section": "§2.5",
+      "quoted_text": "apply +1 Ob (lattice fracture)"
     }
   ],
   "updated_at": "2026-05-19"
