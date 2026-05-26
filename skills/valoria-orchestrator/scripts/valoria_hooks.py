@@ -69,8 +69,8 @@ FORBIDDEN_TOKEN_EXEMPT_PATHS = (
 )
 
 # Informational — enforcing gate is COMMIT_FORMAT regex below
-VALID_SCOPES    = {'editorial','patch','simulation','compilation','infrastructure','skill','cleanup','godot','phase','fix','bugfix'}
 COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix)\] .{10,}')
+COMMIT_SCOPES   = tuple(COMMIT_FORMAT.pattern.split('(')[1].split(')')[0].split('|'))
 
 # Context thresholds — scaled for 1M-token window (Opus 4.6/4.7, Sonnet 4.6).
 # Prior values 120k/150k/180k were calibrated for the legacy 200k window.
@@ -705,7 +705,7 @@ def commit_message_gate(message: str) -> None:
         raise RuntimeError(
             f"[HOOK VIOLATION] Bad commit message: '{message}'\n"
             f"Required: '[scope] description — PP-NNN / ED-NNN if applicable'\n"
-            f"Valid scopes: {sorted(VALID_SCOPES)}"
+            f"Valid scopes: {sorted(COMMIT_SCOPES)}"
         )
     print(f"[HOOK ✓] commit_message_gate")
 
