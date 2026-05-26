@@ -409,10 +409,8 @@ def assert_bootstrap(scope: str = None) -> str:
             raise
 
     # Report active handoffs — lets new sessions see available workstreams
-    try:
-        g.report_handoffs()
-    except Exception as _ho_err:
-        print(f"[HANDOFFS] Check skipped: {_ho_err}")
+    # Handoff report emitted by github_ops.quick_bootstrap (caches _active_handoffs
+    # in the same block). Dedupe per audit 2026-05-25 Phase 0.8.
 
     return token
 
