@@ -9,6 +9,14 @@ defaults:
   compliance_check_on_bootstrap: true
   compliance_check_on_commit: true
   compliance_check_on_close: true
+  # NOTE (audit 2026-05-25 — Phase 0 item 0.4):
+  # auto_fix_on_violation is HONORED at commit time (pre_commit_gate_mutating
+  # calls compliance_check.apply_auto_fixes_to_additions) but OVERRIDDEN to
+  # print-only at bootstrap time (valoria_hooks.assert_bootstrap). The bootstrap
+  # override landed 2026-05-10 after auto-fix-during-bootstrap produced two
+  # destructive commits (a8f7b2f8, 1df4259b) that wiped editorial_ledger_summary
+  # by running atomizer on empty content. See architecture <compliance_subsystem>
+  # (V2.5+) for full context.
   auto_fix_on_violation: true
   force_skeleton_routing_for_design_docs: true
   skeleton_threshold_tokens: 5000
