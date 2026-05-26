@@ -9,7 +9,7 @@
 
 ---
 
-## ACTUAL SKILLS ON GITHUB (as of 2026-05-15)
+## ACTUAL SKILLS ON GITHUB (as of 2026-05-25)
 
 ### valoria-orchestrator
 - Path: `skills/valoria-orchestrator/SKILL.md` (directory-based, canonical)

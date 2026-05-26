@@ -1,7 +1,7 @@
 ---
 name: valoria-orchestrator
 description: >
-  Orchestrate multi-skill workflows for the Valoria videogame project (Godot 4.3).
+  Orchestrate multi-skill workflows for the Valoria videogame project (Godot 4.6).
   ALWAYS use this skill at the start of any Valoria task, to decompose it into the correct
   skill sequence, manage inter-skill handoffs, enforce the editorial gate, track the gap register,
   and ensure outputs feed forward correctly. Trigger on: "start work", "resume", "audit the ruleset",
@@ -31,7 +31,7 @@ specific content decisions. Report to Jordan — do not guess.
 
 ## PROJECT CONTEXT — VIDEOGAME ONLY
 
-**As of 2026-04-17, Valoria is a videogame project.** TTRPG, board game, and hybrid modes are abandoned. All design work targets the Godot 4.3 implementation in `jordanelias/valoria-game`.
+**As of 2026-04-17, Valoria is a videogame project.** TTRPG, board game, and hybrid modes are abandoned. All design work targets the Godot 4.6 implementation in `jordanelias/valoria-game`.
 
 **Implications for all skills:**
 - Design docs containing TTRPG/BG/Hybrid mode-branching tables: extract the videogame-relevant rules only. Do not design for tabletop play.
@@ -186,7 +186,7 @@ Run Step 0 via `bash_tool`. Output Session Status Block.
 
 If any fetch returns None or the token is missing, do not proceed regardless.
 
-## Session Start Protocol
+### Session Status Block — Contents
 1. From fetched `session_log_current.md`: extract active resumption block.
    - If found: report last stage + next action in ≤3 lines; confirm before proceeding.
    - If not found: new session. Confirm task with user.
