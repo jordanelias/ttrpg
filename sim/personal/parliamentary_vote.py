@@ -3,7 +3,7 @@ sim/personal/parliamentary_vote.py — BG-scale Parliamentary Vote contest
 
 Canon source: designs/scene/social_contest_v30.md §10
 Game Design constraints applicable: GD-3
-Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17 (extra-parliamentary status flag (GD-3) gates vote eligibility — promoted-RM cannot cast votes)]
+Status: [STUB — armature 2026-05-17; canon ready (social_contest_v30 §10). Implementation pending (review 2026-05-26). GD-3 gates vote eligibility — promoted-RM cannot cast votes]
 
 Dependencies:
   - sim/personal/contest

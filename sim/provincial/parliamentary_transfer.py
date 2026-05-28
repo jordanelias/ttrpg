@@ -1,8 +1,8 @@
 """
 sim/provincial/parliamentary_transfer.py — Universal CB-required territorial transfer through Parliamentary Vote
 
-Canon source: designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.4 (validated N=1000); designs/provincial/parliamentary_transfer_v30.md (canon authoring pending Pass 2h)
-Status: [PROVISIONAL — Pass 2l armature stub 2026-05-17 (Pass 2h canon authoring pending. 4 modes per v12c: adversarial / consensual / punishment / appeasement. Crown auto-CB if Standing<6)]
+Canon source: designs/provincial/parliamentary_transfer_v30.md (CANONICAL, Pass 2h 2026-05-17); designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.4 (validated N=1000)
+Status: [STUB — armature 2026-05-17; canon ready (parliamentary_transfer_v30 CANONICAL). Implementation pending CB economy + parliamentary_vote contest (review 2026-05-26). 4 modes per canon §2: adversarial / consensual / punishment / appeasement. Crown constitutional-restoration CB when territories<6 per §3]
 
 Dependencies:
   - sim/personal/parliamentary_vote

@@ -1,20 +1,22 @@
 """
 sim/provincial/treaty.py — Crown Treaties + Treaty Expiration (90-95%/arc lapse per v12c)
 
-Canon source: designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.5 + §4.7
+Canon source: designs/provincial/treaty_expiration_v30.md (CANONICAL, Pass 2h
+2026-05-17); designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.5 + §4.7
 
-PARTIAL IMPLEMENTATION:
-  - process_treaty_expirations: implemented against §4.5 (Treaty Expiration
-    at arc boundary, TREATY_LAPSE_RATE).
-  - propose_treaty: canon-gated. The proposal protocol references
-    designs/provincial/treaty_expiration_v30.md (canon authoring pending
-    Pass 2h). Stub form retained — raises NotImplementedError with explicit
-    canon-gate note.
+IMPLEMENTATION STATUS (2026-05-26 review):
+  - process_treaty_expirations: implemented against treaty_expiration_v30 §1
+    (Treaty Expiration at arc boundary, TREATY_LAPSE_RATE).
+  - propose_treaty: still raises. Canon for the *proposal* protocol is the
+    Senator Outward re-binding action (treaty_expiration_v30 §2), which lives
+    in crown_initiative, not here. propose_treaty is retained as a direct
+    insertion entry point for non-Senator-Outward paths; until a non-Crown
+    treaty-formation path is canonized it raises. register_treaty is the
+    supported scaffolding insertion.
 
-[ASSUMPTION: treaty registry on Faction — basis: treaties are bilateral
- (Crown<->target) and naturally faction-scoped. game_state.Faction does
- not currently expose a treaties field. process_treaty_expirations reads
- from world-level dict if available, falls back to module state.]
+Treaty storage: World.treaties (game_state L164) is the canonical store and
+exists with serialize/deserialize support. The module-level _treaty_registry
+is a fallback only for world=None callers (legacy tests).
 
 Dependencies:
   - sim/autoload/dice_engine
@@ -22,8 +24,9 @@ Dependencies:
 
 Entry points:
   - propose_treaty(parties: list, terms: dict, world: GameState) -> TreatyResult
-    [CANON-GATED — Pass 2h authoring pending]
+    [raises — no canonized non-Senator-Outward formation path yet]
   - process_treaty_expirations(world: GameState) -> list[ExpirationResult]
+  - register_treaty(...) — scaffolding insertion (supported)
 """
 from __future__ import annotations
 
@@ -92,20 +95,19 @@ class ExpirationResult:
 
 
 def propose_treaty(parties: list, terms: dict, world=None) -> TreatyResult:
-    """[CANON-GATED] Propose a treaty between parties.
+    """Propose a treaty between parties.
 
-    Canon authoring for the proposal protocol (Pass 2h) is pending per the
-    stub's original canon-source declaration. The decision tree (who can
-    initiate, what terms are bindable, how consent is rolled, what
-    constitutes a Casus Belli per §4.4.1, the Senator Outward action's role
-    per §4.5) is not yet specified in implementable detail. Raises until
-    canon lands.
+    Canon (treaty_expiration_v30.md, 2026-05-17) specifies the Crown re-binding
+    path as the Senator Outward action (§2), which is resolved in
+    crown_initiative — not through a generic propose_treaty. No canonized
+    non-Senator-Outward treaty-formation protocol exists yet, so this entry
+    point raises. Use register_treaty for scaffolding/test insertion and
+    Senator Outward (crown_initiative) for the canonical Crown path.
     """
     raise NotImplementedError(
-        "sim/provincial/treaty.py:propose_treaty — Pass 2h canon authoring pending. "
-        "§4.5 references Senator Outward action; §4.7 CONSENT_RATE specified but "
-        "the consent decision protocol is not. Awaiting designs/provincial/"
-        "treaty_expiration_v30.md."
+        "sim/provincial/treaty.py:propose_treaty — no canonized generic "
+        "formation path. Canon formation is Senator Outward (treaty_expiration_v30 "
+        "§2, resolved in crown_initiative). Use register_treaty for test insertion."
     )
 
 
