@@ -17,9 +17,9 @@
 #   pending_decisions[]  — short id + one-line framing of each open decision
 
 schema_version: 1
-updated: 2026-05-25
+updated: 2026-05-26
 source_workplan: "valoria-audit-workplan.md (Pass 2, rev. post-Phase-0)"
-current_phase: 1
+current_phase: 2
 
 phases:
   - id: 0
@@ -30,24 +30,23 @@ phases:
     items_done: 9
   - id: 1
     name: "Stale-claim cleanup"
-    status: in_progress
+    status: complete
+    completed: 2026-05-26
     items_total: 9
-    items_done: 0
-    next_actions:
-      - "1.1 architecture canon/ schema (6 → 17+ files)"
-      - "1.2 architecture references/ schema (2 → 50+ files)"
-      - "1.3 architecture skills enum (1 → 13, cite skill_registry)"
-      - "1.4 architecture tools enum (1 → 27)"
-      - "1.5 architecture valoria-game layout correction"
-      - "1.6 M6 status (summary regenerates; file_index → valoria_index.sql)"
-      - "1.7 CI status (Level 5 wired, not aspirational)"
-      - "1.8 cut canon/task_manifests/ refs (per D4)"
-      - "1.9 hook count + behavior (~6 → 27 functions)"
+    items_done: 9
+    deliverable: "valoria-arch-phase1-patches.md (3 patches + 2 V2.4.1-covered items); architecture → V2.5 on apply"
   - id: 2
     name: "Document undocumented subsystems"
-    status: not_started
+    status: in_progress
     items_total: 11
     items_done: 0
+    next_actions:
+      - "2.1 handoff subsystem (read_all_handoffs, validate_handoff, write/archive)"
+      - "2.2 checkpoint subsystem (write/close/read/prompt_resume)"
+      - "2.3 compliance subsystem (compliance_check, print-only since 2026-05-10)"
+      - "2.4 freshness subsystem (freshness_gate, 115 sources, 10-min cache)"
+      - "2.5 per-session-log subsystem (session_logs/ + index + pointer)"
+      - "2.6 CI subsystem (4 ci_*.py + 2 workflow yml)"
   - id: 3
     name: "Strategic implementation (gated on D2-D6)"
     status: not_started
