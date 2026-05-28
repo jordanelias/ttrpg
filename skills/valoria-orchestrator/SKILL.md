@@ -191,7 +191,8 @@ If any fetch returns None or the token is missing, do not proceed regardless.
    - If found: report last stage + next action in ≤3 lines; confirm before proceeding.
    - If not found: new session. Confirm task with user.
 2. From fetched `canon/editorial_ledger_summary.yaml`: read p1_blocker_count and open_count. Report counts only.
-3. Confirm task with user before proceeding.
+3. **Roadmap position.** `quick_bootstrap` calls `report_roadmap()`, which reads `references/roadmap_state.yaml` and prints a `ROADMAP POSITION` block: current phase + item progress, next actions, completed phases, phases ahead, and pending decisions. Update `roadmap_state.yaml` (bump `updated` + counts) whenever a phase/item completes or a decision resolves — stale roadmap state is a defect of the same class as a stale session log.
+4. Confirm task with user before proceeding.
 
 ## Canonical Hierarchy (immutable)
 1. `canon/00_philosophical_foundations_rules.md` — governs everything
