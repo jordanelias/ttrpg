@@ -102,6 +102,15 @@
 - Note: Solmund Voice canon at `designs/world/solmund_voice_v30.md` is a scoped override for Church speakers / religious texts / characters with established Certainty levels.
 
 
+### valoria-resolution-diagnostic
+- Path: `skills/valoria-resolution-diagnostic/SKILL.md`
+- Model: Opus 4.6
+- Triggers: is this NERS compliant, diagnose this system, stress test, small pool problem, resolution audit, balance audit, death spiral, runaway loop, cliff check, does this scale
+- Purpose: Three-stage NERS-compliance diagnostic wrapper: (1) Phase 0–6 resolution stress test decomposes system into dice/deterministic/clock components and locates stress points, (2) maps findings to six scoped design lessons, (3) produces per-system N/R/S/E verdict with lesson-mapped remediation. Stage 4 re-tests proposed fixes.
+- Relationship: runs AFTER valoria-mechanic-audit (consistency); this skill checks resolution fitness under stress.
+- Note: Three mechanic categories (continuous resource / discrete accumulator / base parameter). Clocks are legitimately 100% linear.
+
+
 ---
 
 
@@ -120,6 +129,8 @@
 | "vocabulary debt" / "find struck terms still in use" | valoria-vector-audit | Mode G only (fast) |
 | "find isolates" / "what's disconnected" | valoria-vector-audit | Modes E + H |
 | "find implied connections" | valoria-vector-audit | Modes B + C |
+| "is this NERS compliant" / "resolution audit" / "balance audit" | valoria-resolution-diagnostic | Full Stage 1–4 pipeline |
+| "stress test resolution" / "small pool problem" / "death spiral" | valoria-resolution-diagnostic | Stage 1 diagnostic or full pipeline |
 | "canon check [mechanic]" | valoria-canon-guard | Full P-01–P-14 pass |
 | "resolve editorials" | valoria-editorial-register | Workflow A |
 | "compile" | valoria-compiler | Full compilation pass (only if requested) |
