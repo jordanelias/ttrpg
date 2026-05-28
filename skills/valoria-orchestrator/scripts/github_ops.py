@@ -1129,6 +1129,7 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
         'canon/editorial_ledger_summary.yaml',
         'references/file_index_summary.md',
         'references/canonical_sources.yaml',
+        'references/roadmap_state.yaml',
     ]
     all_needed = session_paths + [p for p in (extra_paths or []) if p not in session_paths]
 
@@ -1157,6 +1158,12 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     except Exception as e:
         _g_mod._active_handoffs = []
         print(f"[HANDOFF WARN] Could not read handoffs: {e}")
+
+    # Report roadmap position (non-blocking; absent file degrades gracefully)
+    try:
+        report_roadmap(files.get('references/roadmap_state.yaml'))
+    except Exception as e:
+        print(f"[ROADMAP WARN] Could not read roadmap state: {e}")
 
     return _g_mod, _h_mod, files, token
 
@@ -1852,6 +1859,63 @@ def check_handoff_conflicts(proposed_paths: list) -> list:
                     break
 
     return conflicts
+
+
+def report_roadmap(content: str = None) -> None:
+    """
+    Print the project's roadmap position in the bootstrap Status Block.
+
+    Reads references/roadmap_state.yaml (passed in from the bootstrap fetch
+    cache). Degrades gracefully if the file is absent or malformed — roadmap
+    surfacing is informational, never blocking.
+    """
+    import yaml
+
+    print()
+    if not content:
+        print("ROADMAP POSITION: not tracked (references/roadmap_state.yaml absent)")
+        return
+    try:
+        rm = yaml.safe_load(content)
+    except Exception as e:
+        print(f"ROADMAP POSITION: unreadable (references/roadmap_state.yaml — {e})")
+        return
+
+    updated = rm.get('updated', '?')
+    cur_id = rm.get('current_phase')
+    phases = rm.get('phases', [])
+    by_id = {p.get('id'): p for p in phases}
+
+    print(f"ROADMAP POSITION (references/roadmap_state.yaml · updated {updated}):")
+
+    cur = by_id.get(cur_id)
+    if cur:
+        done = cur.get('items_done', 0)
+        total = cur.get('items_total', '?')
+        print(f"  \u25b8 CURRENT: Phase {cur_id} \u2014 {cur.get('name','?')} ({done}/{total} items done)")
+        for na in (cur.get('next_actions') or [])[:5]:
+            print(f"      next: {na}")
+        extra = len(cur.get('next_actions') or []) - 5
+        if extra > 0:
+            print(f"      next: (+{extra} more)")
+
+    done_phases = [p for p in phases if p.get('status') == 'complete']
+    if done_phases:
+        labels = [f"Phase {p['id']} ({p.get('items_done','?')}/{p.get('items_total','?')})" for p in done_phases]
+        print(f"  \u2713 done: {', '.join(labels)}")
+
+    todo = [p for p in phases if p.get('status') == 'not_started']
+    if todo:
+        labels = [f"P{p['id']} {p.get('name','?')}" for p in todo]
+        print(f"  \u25e6 ahead: {'; '.join(labels)}")
+
+    pend = rm.get('pending_decisions', [])
+    if pend:
+        ids = []
+        for d in pend:
+            ids.append(str(d).split(' \u2014 ')[0].split(' -')[0].strip())
+        print(f"  \u2691 pending decisions: {', '.join(ids)}")
+    print()
 
 
 def report_handoffs(handoffs: list = None) -> None:
