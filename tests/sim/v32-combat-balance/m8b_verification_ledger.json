@@ -1,0 +1,40 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m8b_historical_sweep.py",
+  "scope": "re-sweep under M9 bottom-up wound model + historical validation",
+  "module": "M8b",
+  "note": "Re-runs the M8 balance question with M9's bottom-up wound model (no crits/multipliers) + short fights. TWO axes: (A) HISTORICAL validation top-down = PASS 5/5 (armour decisive 96.8%; anti-armour weapons thrust 9.3% > cut 0.1% vs plate; reach 63%; skill>strength 87.5%; fights short 7.85 exchanges). (B) BUILD-AXIS balance within armour tier = STILL NOT BALANCED at both none and heavy (74/72 of 90 significant). KEY FINDING: removing multipliers was necessary but not sufficient; the bottleneck MOVED from weapon-category/damage-scaling (M8) to COMBAT POOL SIZE (M2: Agi*2 + History) — the d10 S-curve compounds a pool-size edge; low-pool builds (Strong, Init-build) lose the exchange race before damage type matters. This is the √N small-pool dynamic the resolution-diagnostic skill flags. Recommended next lever: compress the Combat Pool spread (Agi*2 amplifies) BEFORE re-tuning damage. M-method/Class-C harness constants cited to prep; mechanics from M1..M9. PROPOSAL — no canon edited.",
+  "entries": [
+    {
+      "sim_variable": "SHORT_EXCHANGE_CAP",
+      "value": 8,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M8b historical sweep",
+      "quoted_text": "per-fight exchange cap for the historical model (fights are short/decisive, not the 30-exchange attrition that let Endurance compound in M8)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_REACH",
+      "value": "light_blade->short, heavy_weapon->long, polearm->long",
+      "class": "C-proposed (bottom-up redesign; NOT canonical)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M8b historical sweep",
+      "quoted_text": "reach by weapon category for the reach-Ob lever (M9): polearm/heavy long, light short"
+    },
+    {
+      "sim_variable": "HIST_ARMORED_WINRATE_MIN",
+      "value": 0.7,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M8b historical sweep",
+      "quoted_text": "historical validation target: plate-armored vs unarmored (same build) should win >= 70% — armour was decisive (modeling target, not a measured historical statistic)"
+    },
+    {
+      "sim_variable": "HIST_SKILL_BEATS_STRENGTH_MIN",
+      "value": 0.5,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M8b historical sweep",
+      "quoted_text": "historical validation target: high-skill (Agi/History) build beats high-Str low-skill build > 50% unarmored — skill/measure over force"
+    }
+  ]
+}
