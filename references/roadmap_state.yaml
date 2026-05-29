@@ -1,24 +1,22 @@
 # Roadmap State — single source of truth for "where are we" at session start.
 #
-# Read by bootstrap (quick_bootstrap → report_roadmap) and printed in the
-# Status Block under "ROADMAP POSITION". The companion human-facing document
-# is the Pass-2 workplan artifact (valoria-audit-workplan.md), which lives
-# outside the repo; THIS file is the in-repo mirror the bootstrap consumes.
+# Read by bootstrap (quick_bootstrap -> report_roadmap) and printed in the
+# Status Block under "ROADMAP POSITION". Companion human-facing documents are the
+# Pass-2 workplan (valoria-audit-workplan.md) and the 2026-05-29 consolidation
+# master (valoria-master-workplan-2026-05-29.md), both out-of-repo.
 #
-# UPDATE DISCIPLINE: bump `updated` and the relevant phase/item counts whenever
-# a phase or item completes, or a decision resolves. Stale roadmap state is a
-# defect of the same class as a stale session log — surface, don't hide.
+# UPDATE DISCIPLINE: bump `updated` and the relevant phase/item counts whenever a
+# phase or item completes, or a decision resolves. Stale roadmap state is a defect
+# of the same class as a stale session log -- surface, don't hide.
 #
-# Schema:
-#   current_phase        — integer id of the phase in progress
-#   phases[]             — id, name, status (complete|in_progress|not_started),
-#                          items_total, items_done, optional completed date,
-#                          optional next_actions[] (only for in_progress)
-#   pending_decisions[]  — short id + one-line framing of each open decision
+# Schema (report_roadmap reads only these; extra keys are tolerated/ignored):
+#   current_phase, phases[] (id,name,status,items_total,items_done,next_actions[]),
+#   pending_decisions[]. Extended 2026-05-29 with resolved_decisions[],
+#   design_threads[], integrity_actions_open[] (informational only).
 
 schema_version: 1
-updated: 2026-05-26
-source_workplan: "valoria-audit-workplan.md (Pass 2, rev. post-Phase-0)"
+updated: 2026-05-29
+source_workplan: "valoria-audit-workplan.md (Pass 2) + valoria-master-workplan-2026-05-29.md (consolidation pass)"
 current_phase: 2
 
 phases:
@@ -34,7 +32,7 @@ phases:
     completed: 2026-05-26
     items_total: 9
     items_done: 9
-    deliverable: "valoria-arch-phase1-patches.md (3 patches + 2 V2.4.1-covered items); architecture → V2.5 on apply"
+    deliverable: "valoria-arch-phase1-patches.md; architecture -> V2.5 on apply"
   - id: 2
     name: "Document undocumented subsystems"
     status: in_progress
@@ -45,10 +43,10 @@ phases:
       - "2.2 checkpoint subsystem (write/close/read/prompt_resume)"
       - "2.3 compliance subsystem (compliance_check, print-only since 2026-05-10)"
       - "2.4 freshness subsystem (freshness_gate, 115 sources, 10-min cache)"
-      - "2.5 per-session-log subsystem (session_logs/ + index + pointer)"
+      - "2.5 per-session-log subsystem (session_logs/ + index + pointer) -- D5 resolved: complete this"
       - "2.6 CI subsystem (4 ci_*.py + 2 workflow yml)"
   - id: 3
-    name: "Strategic implementation (gated on D2-D6)"
+    name: "Strategic implementation (gated on Wave-3 design decisions)"
     status: not_started
     items_total: 5
     items_done: 0
@@ -73,10 +71,37 @@ phases:
     items_total: 1
     items_done: 0
 
+design_threads:
+  - id: combat-v32
+    status: in_progress
+    note: "combat_v32_proposal (state-graph reframe of v31, per Jordan 2026-05-28 vision). NERS improved, not-yet-compliant. F1/F2 fixed; F7/N4 addressed; F3/N1/N3/N5 open. Supersedes combat_v30 sections 1-4 on ratification. I-17 build-axis sim validating (8-module decomposition, 0271da2)."
+  - id: faction-action-layer
+    status: blocked_on_decision
+    note: "Sole NON-COMPLIANT resolution system (R/S/E fail). Gated on FAC-F2 Ob-formula contradiction + faction-resolver direction."
+
+resolved_decisions:
+  - "D0 -- branch protection: LEAVE DISABLED (proven writable; direct commits 05-28/29). Validates striking the stale B6-blocked claim."
+  - "D2 -- M3 completeness_gate: CUT (chat-side discipline + in-code TASK_REQUIRED_FILES substitute). Impl: PI/arch text."
+  - "D3 -- M4 citation enforcement: SOFT-WARN (pre_commit_gate regex, non-halting). Impl: pending in valoria_hooks.py + PI text."
+  - "D4 -- task_manifests/ YAML: CUT from spec; in-code dict canonical. Impl: PI/arch text."
+  - "D5 -- session-log migration: COMPLETE the per-session-log system (= roadmap 2.5)."
+  - "D6 -- scope-vocab unification: UNIFY (TASK_REQUIRED_FILES / SESSION_SCOPES / COMMIT_FORMAT -> one set). Impl: pending."
+  - "OWN-1/2 -- LOCKED (Jordan, passC): MS net-decays by default; start MS=60 (resolves 60-vs-72 -> 60); passive Warden Mending exists but degradable. Propagation: annotate ms_trajectory + clock_registry (start 72->60); add Warden-interruption events."
+  - "OWN-3 -- RESOLVED (passC): maintain = de-escalate + heal (no WC buff). Open piece -> pending (closure threshold)."
+
 pending_decisions:
-  - "D0 — branch protection rulesets (disabled 2026-05-25; recommend leave disabled)"
-  - "D2 — M3 completeness_gate: build (reduced scope) or cut"
-  - "D3 — M4 citation enforcement: downgrade to soft-warn (recommended)"
-  - "D4 — canon/task_manifests/ YAML: cut from spec (recommended); in-code dict canonical"
-  - "D5 — session log migration: complete (recommended) or retire new system"
-  - "D6 — scope vocabulary unification (10+7+11 → ~10 entries)"
+  - "FR -- faction-resolver direction (aggregate-pool vs det+stochastic); prereq: resolve FAC-F2 Ob-formula contradiction"
+  - "PT -- PT+Treaty: provisional-canon a/b/c + balance target x/y/z + ratify ED-844-856 (recommend accept declared defaults)"
+  - "CMB -- combat_v32 trade-offs: N3 sigma-space propagate-vs-ratify-combat-only; N4 set-bonus cliff vs graded; N5 weapon-handling keep-vs-cut"
+  - "OWN-3T -- maintain-victory closure threshold (N Foundational Mends / site-wound target)"
+  - "OWN-4 -- insurgency dissolution: confirm multi-path (military / sponsor-withdrawal / amnesty / persist)"
+  - "OWN-5 -- defection cascade (B1.2/B1.3): scheduling -- build as specced + fragility-multiplier + suppression-brake"
+  - "CAP -- MS -10/s heavy-tearing cap (recommend adopt -10/s Force-3 guardrail)"
+  - "LIC -- LICENSE / GOV-08 (= ED-788; non-blocking)"
+
+integrity_actions_open:
+  - "Strike stale B6-blocked claim corpus-wide (PI + architecture [Jordan-settings] + audit docs)"
+  - "Re-issue engine_replacement_reconciled finding register (strike GD-2 miscite ED-865; drop manufactured 0-P1 ED-866)"
+  - "Add [SUPERSEDED-BY] markers to ners_verdict_faction + resolution_diagnostic_faction (corrected P=0.070/0.010, ED-867)"
+  - "File staged ED backlog with de-dup across 24h-correction (868-877) + owner_decisions_1to5 + sql-index-and-ners"
+  - "Editorial ledger open load: 79 open + 94 ID-conflict + 20 _migration_partial"
