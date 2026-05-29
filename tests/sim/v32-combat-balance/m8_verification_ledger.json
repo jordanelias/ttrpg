@@ -1,0 +1,56 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m8_integration_sweep.py",
+  "scope": "custom: core_engine + combat — Module 8 (integration + archetype sweep)",
+  "module": "M8",
+  "note": "Integration engine wiring M1-M7 + symmetric archetype sweep + Wilson 95% CI verdict. M-method constants (Wilson z=1.96, acceptance band 0.40-0.60, N=2000, exchange cap 30) cited to i17_simulation_prep. Class B: modal Committed depth (§4.6). All MECHANICAL numbers come from M1-M7 ledgers (no new mechanical constants). VERDICT: v32 build axis NOT BALANCED in the frontal-symmetric baseline (77/90 significant imbalances, 4/10 non-viable). Discriminator is weapon category (heavy_weapon dominates light_blade) more than raw End/Str. Engine invariants PASS (self-matchups ~50%, Wilson CI, felled contest). Run honestly — no constant tuned to force a pass. FLAGS: [ASSUMPTION] symmetric doctrine not Nash solve (mean-zero, cyclic matrix); [ASSUMPTION] frontal facing baseline (M7 flank/rear not exercised); [GAP] §4.5 Reading->sigma not modeled (carried from M7). Verdict sound for the frontal baseline stated; NOT yet a verdict on the full positional game — re-run with Reading wired + positional variant before concluding the axis itself is mis-weighted.",
+  "entries": [
+    {
+      "sim_variable": "WILSON_Z",
+      "value": 1.96,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "acceptance criteria / sim methodology",
+      "quoted_text": "Wilson score interval z for 95% confidence (standard normal two-sided 0.975 quantile)"
+    },
+    {
+      "sim_variable": "BALANCE_BAND_LOW",
+      "value": 0.4,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "acceptance criteria / sim methodology",
+      "quoted_text": "acceptance band lower edge — archetype matchups land 40-60% (i17_simulation_prep acceptance; skill §8.8 band)"
+    },
+    {
+      "sim_variable": "BALANCE_BAND_HIGH",
+      "value": 0.6,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "acceptance criteria / sim methodology",
+      "quoted_text": "acceptance band upper edge — archetype matchups land 40-60% (i17_simulation_prep acceptance; skill §8.8 band)"
+    },
+    {
+      "sim_variable": "MC_SAMPLES",
+      "value": 2000,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "acceptance criteria / sim methodology",
+      "quoted_text": "Monte Carlo fights per ordered matchup (N>=1000 required by prep doc; 2000 for tighter Wilson CI)"
+    },
+    {
+      "sim_variable": "MAX_EXCHANGES",
+      "value": 30,
+      "class": "M-method (statistical/sim-harness)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "acceptance criteria / sim methodology",
+      "quoted_text": "per-fight exchange cap (decisive-by-attrition fallback if neither felled; prevents non-terminating loops)"
+    },
+    {
+      "sim_variable": "MODAL_COMMIT_DEPTH",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6",
+      "quoted_text": "modal attack depth = Committed (depth 3, canonical Standard attack) — symmetric doctrine for the integration baseline"
+    }
+  ]
+}
