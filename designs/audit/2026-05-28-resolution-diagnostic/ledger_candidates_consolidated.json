@@ -71,15 +71,15 @@
     {
       "id": "ED-878",
       "date": "2026-05-28",
-      "severity": "P2",
+      "severity": "resolved",
       "type": "contradiction",
-      "status": "open",
-      "description": "Threadwork FR (Lock/Dissolution) Coherence surcharge contradiction (T2). threadwork_v30 \u00a73.2 base table: FR Lock/Dissolution any scale = -1 additional, Lock/Dissolution minimum total -2. Same section PP-196 PROVISIONAL revises to -1 total at Object/Personal (FR surcharge only, scale cost 0). Both values in current canon side-by-side. Decide: ratify PP-196 (update base table) or strike PP-196 (preserve -2 minimum).",
+      "status": "resolved-not-a-conflict",
+      "description": "RE-ASSESSED \u2014 NOT a contradiction (corrects my own ED-878 framing). Full read of threadwork_v30 \u00a73.2: L622 base table ('FR Lock/Dissolution any scale: -1 additional; min total -2') and L631-633 PP-196 ('Object/Personal: -1 total [scale 0 + FR -1]; Relational: -2 total [-1 scale + -1 FR]; FR surcharge cap-EXEMPT') describe ONE coherent rule across scales, not two competing values. The 'min total -2' holds at Relational+ where FR is typically used; PP-196 clarifies the smaller-scale totals and the cap-exemption. Independently corroborated at L177 (fieldwork note cites 'FR/Binding cap-exempt per PP-196' as established). PP-196 is a consistent elaboration, not a divergence. No patch needed; do not file as a contradiction. (CC-4 lesson: read fully before asserting a defect.)",
       "affected_docs": [
         "designs/threadwork/threadwork_v30.md"
       ],
       "source": "resolution_diagnostic T2 (session c93a36df)",
-      "jordan_decision": "pending"
+      "jordan_decision": "n/a \u2014 false contradiction, resolved by full read"
     },
     {
       "id": "ED-879",
@@ -87,14 +87,14 @@
       "severity": "P2",
       "type": "clarity",
       "status": "open",
-      "description": "Combat secondary consistency items (consolidated, C3/C5/C6). C3: out-of-bounds x Pool-Floor-5 interaction underspecified (does the floor apply when a combatant is pushed OOB?). C5: Health super-linear at low Endurance via (End+6)(MW+1) MW step (now also captured quantitatively in ED-826 + the I-1 win-rate refinement below). C6: Strength damage-multiplier vs Power terminology ambiguity. Combat is mechanically sound (NERS PASS); these are clarity/consistency, not balance.",
+      "description": "Combat secondary consistency items (consolidated, C3/C5/C6). C3: out-of-bounds x Pool-Floor-5 interaction underspecified (does the floor apply when a combatant is pushed OOB?). C5: Health super-linear at low Endurance via (End+6)(MW+1) MW step (now also captured quantitatively in ED-826 + the I-1 win-rate refinement below). C6: Strength damage-multiplier vs Power terminology ambiguity. Combat is mechanically sound (NERS PASS); these are clarity/consistency, not balance. RE-ASSESSED: not evidence-patchable. C6 'Strength multiplier' appears only in Garrison Strength (settlement-defense formula, unrelated to the personal-combat Strength stat); personal combat uses clear floor(STR/2) terms \u2014 no live terminology conflict found. C3 out-of-bounds x Pool-Floor: no defined OOB mechanic surfaces in combat_v30 \u2014 it is underspecified-by-ABSENCE, and specifying what OOB should do is owner-intent (design), not an evidence patch. C5 already captured in ED-826. Combat is NERS-PASS; these are low-priority clarity items requiring Jordan's design intent, retained as such.",
       "affected_docs": [
         "designs/scene/combat_v30.md",
         "designs/scene/derived_stats_v30.md",
         "params/combat.md"
       ],
       "source": "resolution_diagnostic C3/C5/C6 (session c93a36df)",
-      "jordan_decision": "pending"
+      "jordan_decision": "pending \u2014 C3/C6 need owner design intent (clarity, low priority); C5 -> ED-826"
     },
     {
       "id": "ED-880",
@@ -145,5 +145,6 @@
   "_ed876_applied": "ED-876 Fix-A applied to faction_layer_v30 (commit 2327adc4): Condition-C pool>=6 cliff removed from gate, kept as cost escalator. Ledger ingestion of resolved status is the JSONL migration's.",
   "_ed880": "Varfell 'purely military' prose reconciled to live Cultural Reclamation (Piety-alignment, non-military, VTM-free); applied to faction_layer + params/bg/core; sole victory = peninsula (GD-1).",
   "_resolver_spec": "Domain Action deterministic+stochastic resolver spec produced (tested candidate, Stage-4 PASS). Two-phase migration recommended: Domain Actions first; Suppress/Rebuttal/\u00a71.4 as a consistency set. Not applied \u2014 Jordan's adopt/tune decision.",
-  "_precedent_reconciliation": "Reconciled vs ners_historical_precedent_matrix.md (2026-05-28). NO conflicts; every faction remediation confirmed or strengthened by precedent. ED-868 collapse loop = RESOLVED-BOUNDED (matrix/Tainter: collapse=simplification+reconstitution; diagnostic Lesson-5 RETRACTED) \u2014 sim confirms bounds REACHABLE but resolver-dependent (bare dice make reconstitution near-unreachable at low Influence P~0.004; d+s makes it real -> SECOND justification for ED-865/874). ED-876 backed by morale-cascade precedent (du Picq/Clausewitz, matrix entry 7). ED-865/874 backed by COIN/structural-contest precedent (matrix entry 2: outcomes are structure-driven w/ stochastic tail = exactly deterministic-odds+stochastic-resolution). See reconciliation_session_vs_precedent_matrix.md + sim_collapse_recovery_results.md."
+  "_precedent_reconciliation": "Reconciled vs ners_historical_precedent_matrix.md (2026-05-28). NO conflicts; every faction remediation confirmed or strengthened by precedent. ED-868 collapse loop = RESOLVED-BOUNDED (matrix/Tainter: collapse=simplification+reconstitution; diagnostic Lesson-5 RETRACTED) \u2014 sim confirms bounds REACHABLE but resolver-dependent (bare dice make reconstitution near-unreachable at low Influence P~0.004; d+s makes it real -> SECOND justification for ED-865/874). ED-876 backed by morale-cascade precedent (du Picq/Clausewitz, matrix entry 7). ED-865/874 backed by COIN/structural-contest precedent (matrix entry 2: outcomes are structure-driven w/ stochastic tail = exactly deterministic-odds+stochastic-resolution). See reconciliation_session_vs_precedent_matrix.md + sim_collapse_recovery_results.md.",
+  "_gap_sweep_2026-05-29": "Open-gap sweep: ED-878 RE-ASSESSED as a false contradiction (PP-196 is a consistent cross-scale elaboration, not a competing value) \u2014 corrects my own earlier framing. ED-879 C3/C6 re-assessed as needing owner design intent (not evidence-patchable); C5 -> ED-826. ED-874/875 sigma-leverage remediation = the d+s resolver candidate (Jordan adopt). ED-881 down-path = tested candidate (Jordan ratify). Net: no remaining gap is unilaterally patchable by Claude without either (a) owner design intent or (b) Jordan ratification of a tested candidate. All evidence-resolvable items resolved."
 }
