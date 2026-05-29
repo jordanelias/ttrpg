@@ -1,0 +1,192 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m2_attribute_pool_builder.py",
+  "scope": "custom: core_engine + derived_stats — Module 2 (attribute->pool builder)",
+  "module": "M2",
+  "note": "Class A = canonical (params/core.md, derived_stats_v30.md). Class B = archetype stat blocks carried forward from tests/sim/scripts/phase11_c4_v0.py as sim-inputs; attribute values are NOT game-canon.",
+  "entries": [
+    {
+      "sim_variable": "COMBAT_POOL_AGI_MULT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Derived Scores",
+      "quoted_text": "Combat Pool | (Agility × 2) + weapon History (points + 3) | min 5"
+    },
+    {
+      "sim_variable": "COMBAT_POOL_HISTORY_BASE",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Derived Scores",
+      "quoted_text": "(Agility × 2) + weapon History (points + 3)"
+    },
+    {
+      "sim_variable": "COMBAT_POOL_FLOOR",
+      "value": 5,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "4.1 Health",
+      "quoted_text": "capped by per-Pool floor (Combat Pool floor 5 ...)"
+    },
+    {
+      "sim_variable": "MAXWOUNDS_END_DIV",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "4.1 Health",
+      "quoted_text": "Max Wounds = min(floor(Endurance / 2) + 1, 3)"
+    },
+    {
+      "sim_variable": "MAXWOUNDS_BASE",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "4.1 Health",
+      "quoted_text": "min(floor(Endurance / 2) + 1, 3)"
+    },
+    {
+      "sim_variable": "MAXWOUNDS_CAP",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "4.1 Health",
+      "quoted_text": "capped at 3 (PP-717)"
+    },
+    {
+      "sim_variable": "WOUND_INTERVAL_BASE",
+      "value": 6,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "4.1 Health",
+      "quoted_text": "WI = Endurance + 6 (range 7–13 across End 1–7)"
+    },
+    {
+      "sim_variable": "STAMINA_MULT",
+      "value": 5,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "4.2 Stamina",
+      "quoted_text": "Formula | Endurance × 5"
+    },
+    {
+      "sim_variable": "COMPOSURE_MULT",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "5.1 Composure",
+      "quoted_text": "Formula | Charisma × 3"
+    },
+    {
+      "sim_variable": "CONCENTRATION_MULT",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "5.2 Concentration",
+      "quoted_text": "Formula | Focus × 3"
+    },
+    {
+      "sim_variable": "WOUND_POOL_PENALTY",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "4.1 Health",
+      "quoted_text": "Wound penalty | −1D to ALL Pools ... No Ob penalty from wounds, ever."
+    },
+    {
+      "sim_variable": "ATTR_AVG",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Attributes",
+      "quoted_text": "Range: 1–7 (all attributes). Average human: 3."
+    },
+    {
+      "sim_variable": "ATTR_MAX",
+      "value": 7,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Attributes",
+      "quoted_text": "Advancement max: 7."
+    },
+    {
+      "sim_variable": "ARCHETYPE_FAST",
+      "value": "agi=6,end=4,str=4,foc=3,cha=3,weapon=light_blade,hist=2,attn=5",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Fast', 6, 4, 4, 'light_blade', attn=5)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_STRONG",
+      "value": "agi=3,end=4,str=4,foc=3,cha=3,weapon=light_blade,hist=2,attn=3",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Strong', 3, 4, 4, 'light_blade', attn=3)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_TOUGH",
+      "value": "agi=3,end=6,str=4,foc=3,cha=3,weapon=light_blade,hist=2,attn=3",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Tough', 3, 6, 4, 'light_blade', attn=3)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_TOUGH_HEAVY",
+      "value": "agi=3,end=6,str=6,foc=3,cha=3,weapon=heavy_weapon,hist=2,attn=3",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Tough-h', 3, 6, 6, 'heavy_weapon', attn=3)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_TITAN",
+      "value": "agi=3,end=6,str=7,foc=3,cha=3,weapon=heavy_weapon,hist=2,attn=3",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Titan', 3, 6, 7, 'heavy_weapon', attn=3)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_MIGHTY_HEAVY",
+      "value": "agi=3,end=4,str=7,foc=3,cha=3,weapon=heavy_weapon,hist=2,attn=3",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Mighty-h', 3, 4, 7, 'heavy_weapon', attn=3)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_MIGHTY_LIGHT",
+      "value": "agi=3,end=4,str=7,foc=3,cha=3,weapon=light_blade,hist=2,attn=3",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Mighty-l', 3, 4, 7, 'light_blade', attn=3)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_POLEARM",
+      "value": "agi=3,end=5,str=5,foc=3,cha=3,weapon=polearm,hist=2,attn=3",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Polearm', 3, 5, 5, 'polearm', attn=3)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_INIT_BUILD",
+      "value": "agi=3,end=5,str=4,foc=3,cha=3,weapon=light_blade,hist=2,attn=8",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Init-build', 3, 5, 4, 'light_blade', attn=8)"
+    },
+    {
+      "sim_variable": "ARCHETYPE_BALANCED",
+      "value": "agi=5,end=4,str=5,foc=3,cha=3,weapon=light_blade,hist=2,attn=5",
+      "class": "B-sim-input (carried forward; NOT canon)",
+      "canonical_source": "tests/sim/scripts/phase11_c4_v0.py",
+      "section": "main() matchups",
+      "quoted_text": "build('Balanced', 5, 4, 5, 'light_blade', attn=5)"
+    }
+  ]
+}
