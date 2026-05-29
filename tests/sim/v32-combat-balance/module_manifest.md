@@ -9,7 +9,8 @@ Acceptance: archetype matchups 40–60% (skill §8.8 band), no inversion, no non
 | 1 | Dice + σ-space core | — | params/core.md; modifier_system_spec.md (§12.3 rewrite) | verified (b9b6d4e) |
 | 2 | Attribute → pool builder | 1 | params/core.md §Attributes/§Derived Scores; derived_stats_v30.md §4–§5; combat_v32 §2.1/§11 | verified (6d7b0e9) |
 | 3 | Weapon-class layer | 1,2 | combat_v32 §8; combat_v30 §5 | verified |
-| 4 | Bout state graph + sub-actions | 1,3 | combat_v32 §4.7, §12.1–12.4 | pending |
+| 4a | Bout state graph + control flow | 1 | combat_v32 §4.6–§4.9, §12.5–§12.6 | verified |
+| 4b | Sub-action mechanics (Pool/Ob/degree) | 1,3,4a | combat_v32 §12.1–§12.4 | pending |
 | 5 | Stance + Reaction + coherence | 4 | combat_v32 §7.1–7.3 | pending |
 | 6 | Dual-resource economy | 4 | combat_v32 §11.5–11.6, §4.9 | pending |
 | 7 | Facing / FoV (optional; stub-first) | 4 | combat_v32 §11.2 | pending |

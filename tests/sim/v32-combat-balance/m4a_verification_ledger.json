@@ -1,0 +1,224 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m4a_bout_state_graph.py",
+  "scope": "custom: core_engine + combat + derived_stats — Module 4a (bout state graph)",
+  "module": "M4a",
+  "note": "M4 split into M4a (state graph/control) + M4b (sub-action mechanics) per manifest. Class A = canonical (derived_stats_v30 §4.1/§4.2). Class B = v32 draft sim-seeds (combat_v32_proposal §4.6-§4.9, §12.5-§12.6); depth costs/caps/thresholds sim-tunable, NOT canonical.",
+  "entries": [
+    {
+      "sim_variable": "DEPTH3_STAMINA",
+      "value": 5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Committed | 5 | 1 | 4 sub-actions"
+    },
+    {
+      "sim_variable": "DEPTH4_STAMINA",
+      "value": 7,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Deep | 7 | 2 | 6 sub-actions"
+    },
+    {
+      "sim_variable": "DEPTH5_STAMINA",
+      "value": 10,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Full | 10 | 4 | unlimited"
+    },
+    {
+      "sim_variable": "DEPTH2_STAMINA",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Preparatory | 3 | 0 | 2 sub-actions"
+    },
+    {
+      "sim_variable": "DEPTH3_CONCENTRATION",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Committed ... Concentration cost 1"
+    },
+    {
+      "sim_variable": "DEPTH4_CONCENTRATION",
+      "value": 2,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Deep ... Concentration cost 2"
+    },
+    {
+      "sim_variable": "DEPTH5_CONCENTRATION",
+      "value": 4,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Full ... Concentration cost 4"
+    },
+    {
+      "sim_variable": "DEPTH3_CHAIN_CAP",
+      "value": 4,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 / §12.6",
+      "quoted_text": "Committed ... 4 sub-actions"
+    },
+    {
+      "sim_variable": "DEPTH4_CHAIN_CAP",
+      "value": 6,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 / §12.6",
+      "quoted_text": "Deep ... 6 sub-actions"
+    },
+    {
+      "sim_variable": "DEPTH_CEILING_UNWOUNDED",
+      "value": 5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Unwounded: depth cap 5"
+    },
+    {
+      "sim_variable": "DEPTH_CEILING_WOUNDED",
+      "value": 4,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Wounded ... cap 4"
+    },
+    {
+      "sim_variable": "DEPTH_CEILING_HEAVILY_WOUNDED",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.6 Commit",
+      "quoted_text": "Heavily wounded (>= MW-1) ... cap 3"
+    },
+    {
+      "sim_variable": "RESOURCE_CRITICAL_FRACTION",
+      "value": 0.3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.7 Termination",
+      "quoted_text": "either fighter <30% -> forced to Phase 7"
+    },
+    {
+      "sim_variable": "WOUND_TRANSITION_OFFSET",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.7 Termination",
+      "quoted_text": "net successes >= Ob + (current wound count + 1) -> Wounded"
+    },
+    {
+      "sim_variable": "BASE_OB_MIN",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.7 Bout",
+      "quoted_text": "Effective Ob = base Ob (1-3)"
+    },
+    {
+      "sim_variable": "BASE_OB_MAX",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.7 Bout",
+      "quoted_text": "Effective Ob = base Ob (1-3)"
+    },
+    {
+      "sim_variable": "DISENGAGE_CLEAN_STAMINA",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.8 Disengage",
+      "quoted_text": "Clean withdrawal ... Cost: 1 Stamina"
+    },
+    {
+      "sim_variable": "DISENGAGE_DEFENSIVE_STAMINA",
+      "value": 2,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.8 Disengage",
+      "quoted_text": "Defensive disengage ... Cost: 2 Stamina; +2 Ob to pursuit"
+    },
+    {
+      "sim_variable": "DISENGAGE_SUDDEN_STAMINA",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.8 Disengage",
+      "quoted_text": "Sudden disengage ... Cost: 3 Stamina + 1 Concentration"
+    },
+    {
+      "sim_variable": "DISENGAGE_DEFENSIVE_PURSUIT_OB",
+      "value": 2,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.8 Disengage",
+      "quoted_text": "Defensive ... +2 Ob to opponent's pursuit"
+    },
+    {
+      "sim_variable": "DISENGAGE_CLEAN_NET",
+      "value": 2,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.8 Disengage",
+      "quoted_text": "Net >= +2 -> Clean break"
+    },
+    {
+      "sim_variable": "DISENGAGE_FAILURE_NET",
+      "value": -3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.8 Disengage",
+      "quoted_text": "Net <= -3 -> Disengage failure with consequence"
+    },
+    {
+      "sim_variable": "COHERENCE_RECOVERY",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§4.9 Return to stance",
+      "quoted_text": "Coherence recovery: +1 if no Thread-op this pass (P-15)"
+    },
+    {
+      "sim_variable": "STAMINA_RECOVERY_MULT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.2 Stamina",
+      "quoted_text": "Take a Breath: restores (Endurance + relevant combat History) × 2"
+    },
+    {
+      "sim_variable": "OUT_OF_BREATH_PENALTY",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.2 Stamina",
+      "quoted_text": "Depleted at 0 (Out of Breath: −2D all combat rolls)"
+    },
+    {
+      "sim_variable": "WOUND_POOL_PENALTY_M4",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 Health",
+      "quoted_text": "Wound penalty | −1D to ALL Pools ... No Ob penalty"
+    },
+    {
+      "sim_variable": "FELLED_WOUND_OFFSET",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 Health",
+      "quoted_text": "Felled ... at 0 Health, which equals MW + 1 wounds accrued"
+    }
+  ]
+}
