@@ -1,0 +1,120 @@
+id: 2026-05-29-resolution-diagnostic-faction-ratifications
+scope: audit
+task:
+  skill: valoria-resolution-diagnostic
+  description: 'Resolution-and-balance diagnostic of the faction cluster (+ precedent
+    reconciliation) is COMPLETE and its tested remediations are RATIFIED to canon.
+    Three Jordan-directed ratifications landed this session: the deterministic+stochastic
+    Domain Action resolver, the insurgency dissolution down-path, and MS band hysteresis
+    + warning signal. ONLY remaining work is Jordan-judgment design intent on two
+    items with no tested candidate (ED-879 C3 out-of-bounds; ED-875 mass-battle low-Command
+    sigma-leverage).'
+last_commit: 677c4038dfc1919da6049c34f8212ea475be38d8
+owns:
+- designs/audit/2026-05-28-resolution-diagnostic/**
+- params/factions/stats_1_7_scale.md (Domain Action Resolution section)
+- designs/world/insurgency_pipeline_v30.md (§6.2/§6.3)
+- designs/world/ms_trajectory_v1.md (§5.1)
+context_files:
+- path: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
+  depth: full
+  reason: the single consolidated master for this workstream — ED-874..ED-882 with
+    statuses + Jordan-decision flags
+- path: designs/audit/2026-05-28-resolution-diagnostic/reconciliation_session_vs_precedent_matrix.md
+  depth: full
+  reason: maps every faction finding to the historical-precedent matrix; the unifying
+    doc
+- path: designs/audit/2026-05-28-sql-index-and-ners/ners_historical_precedent_matrix.md
+  depth: full
+  reason: the external/precedent axis (Tainter/RAND/du Picq/Scheffer-Holling/Weber)
+    — source of all precedent linkages
+- path: params/factions/stats_1_7_scale.md
+  depth: full
+  reason: RESOLVER now canonical here (Domain Action Resolution section); legacy Ob
+    method marked superseded
+- path: designs/world/insurgency_pipeline_v30.md
+  depth: full
+  reason: ED-881 dissolution ratified §6.2/§6.3; §9 forward-flags marked RESOLVED
+- path: designs/world/ms_trajectory_v1.md
+  depth: full
+  reason: ED-882 hysteresis+warning ratified §5.1; falling-direction §5 crossings
+    unchanged
+- path: skills/valoria-resolution-diagnostic/SKILL.md
+  depth: skeleton
+  reason: Stages 1-5; Stage 5 (historical-precedent validation) is already canonical
+    in the skill
+working_state:
+  summary: Faction-cluster resolution diagnostic complete; all tested remediations
+    ratified to canon, each precedent-validated (Stage 5) and Stage-4 re-tested. Repo
+    fully committed; nothing staged locally.
+  done:
+  - 'ED-876 Trigger-5 non-monotonic cliff: FIXED in canon (2327adc4) — removed pool>=6
+    auto-fire from the gate; firing now monotonic in Command. Precedent: du Picq/Clausewitz
+    morale cascade.'
+  - 'ED-880 Varfell prose reconciliation: APPLIED to canon (7e1699f2) — Cultural Reclamation
+    (Piety-alignment, VTM-free) vs struck Cultural Reformation; "purely military"
+    stale prose corrected. No mechanical change. GD-1 reaffirmed.'
+  - 'ED-865/874 deterministic+stochastic resolver: RATIFIED to canon (c203d4fd) —
+    P_success=clamp(0.50+0.10*M,0.05,0.90) graded; constant 0.10/pt leverage (closes
+    sigma-leverage non-uniformity by construction); bare-stat checks migrated (Suppress/Rebuttal
+    hooks + §1.4<->§1.3 co-design preserved); dice systems unchanged. Precedent: COIN/structural-contest
+    (matrix entry 2).'
+  - 'ED-881 insurgency dissolution down-path: RATIFIED to canon (6e98fd74) — 4-path
+    (military/sponsor-withdrawal/amnesty/persist) in insurgency_pipeline §6.2/§6.3;
+    closes GD-3 R-FAIL. Precedent: RAND How Insurgencies End (89 cases) — defeat modal,
+    sponsor-loss dominant.'
+  - 'ED-882 MS band hysteresis + leading warning signal: RATIFIED to canon (677c4038)
+    — recovery edges +8 above collapse edges (28/48/68); warning within 12 MS of an
+    edge; falling-direction unchanged (no regression). Precedent: Scheffer/Holling
+    regime-shift (matrix entry 1).'
+  - 'ED-868 collapse loop: RESOLVED-BOUNDED (c3b9a459) — matrix retracted the diagnostic
+    Lesson-5 via Tainter; sim_collapse_recovery confirms bounds reachable but resolver-dependent
+    (cross-finding: d+s makes reconstitution real). No new safeguard.'
+  - 'ED-877 (Stability recovery) + ED-878 (FR Coherence surcharge): RESOLVED by full
+    read (were unread/false-contradiction, not defects). CC-4 lesson.'
+  - 'Precedent reconciliation (c3b9a459): zero conflicts; every faction remediation
+    confirmed or strengthened by the historical matrix.'
+  next:
+  - 'JORDAN DESIGN INTENT (ED-879 C3): define what out-of-bounds should do in combat
+    (OOB x Pool-Floor). No mechanic exists in canon; no precedent anchor. Claude will
+    develop+test+ratify a candidate once intent is given, but must NOT invent it (project-owner
+    contract). Low priority; combat is NERS-PASS.'
+  - 'JORDAN DESIGN DECISION (ED-875, P3): whether to touch mass-battle low-Command
+    sigma-leverage at all. Mass battle stays dice (healthy aggregated pool, scope
+    boundary); no clean dice-side fix exists. Leave-it or redesign — owner call.'
+  - 'OPTIONAL TUNING (Jordan): resolver params (BASE 0.50/SLOPE 0.10/FLOOR 0.05/CAP
+    0.90) and ED-881 P(sponsor-loss) knob and ED-882 gap+8/window 12 are all ratified-but-tunable.
+    Each is a clean parameter change if play wants a different feel.'
+  - 'NOT THIS WORKSTREAM: the 94 ID-conflicts + 21 partials belong to the jsonl-migration
+    handoff; combat_v32 balance belongs to the I-17 handoff (see relationship note).'
+blockers:
+- NONE blocking. The diagnostic is complete and canon reflects it.
+- The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
+  — Claude cannot proceed without inventing, which the owner contract forbids.
+key_values:
+- 'resolver_ratify_commit: c203d4fd'
+- 'dissolution_ratify_commit: 6e98fd74'
+- 'ms_hysteresis_ratify_commit: 677c4038'
+- 'trigger5_fix_commit: 2327adc4'
+- 'varfell_commit: 7e1699f2'
+- 'reconciliation_commit: c3b9a459'
+- 'resolver_form: P_success=clamp(0.50+0.10*M, 0.05, 0.90), graded degrees, leverage
+  0.10/pt constant'
+- 'dissolution_paths: military / sponsor-withdrawal / amnesty / persist (RAND-grounded)'
+- 'ms_hysteresis: collapse edges 20/40/60, recovery edges 28/48/68 (gap +8), warning
+  window 12'
+- 'consolidated_master: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
+  (ED-874..882)'
+- 'open_owner_items: ED-879 C3 (OOB design intent), ED-875 (mass sigma-leverage decision)'
+- 'all_remediations_precedent_validated: Tainter / RAND / du Picq-Clausewitz / Scheffer-Holling
+  / COIN'
+relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no overlap,
+  no consolidation needed. (1) 2026-05-28-editorial-ledger-jsonl-migration owns canon/editorial_ledger.jsonl
+  + hooks/tools; this workstream only WROTE candidate entries into its own consolidated
+  master and never touched the live JSONL ledger (migration owner ingests). (2) 2026-05-28-i17-v32-balance-sim
+  owns combat_v32 build-balance under tests/sim/v32-combat-balance/; this workstream's
+  combat finding (ED-879) is a separate clarity item on combat_v30, not the v32 build.
+  This handoff is the resolution-diagnostic/faction-cluster master.
+status: active
+created: '2026-05-29T23:03:43.540918+00:00'
+updated: '2026-05-29T23:03:43.540918+00:00'
