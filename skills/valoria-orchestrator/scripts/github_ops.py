@@ -163,6 +163,7 @@ SESSION_PERMANENT_PATTERNS = (
     'canonical_sources.yaml',
     'patch_register_active.yaml',
     'editorial_ledger.yaml',
+    'editorial_ledger.jsonl',          # canonical editorial store (post-2026-05-28 JSONL migration)
     'propagation_map.md',
     'coverage_matrix.md',
 )
@@ -737,6 +738,10 @@ def append_to_register(path: str, new_entries: str,
     repo = repo or 'ttrpg'
     fresh = read_files_graphql([path], repo=repo, skip_health_check=True)
     current = fresh.get(path) or ""
+    # JSONL stores are line-delimited: guarantee a newline boundary so an append
+    # cannot fuse the last existing object with the first new one ( }{ ... ).
+    if path.endswith('.jsonl') and current and not current.endswith('\n'):
+        current = current + '\n'
     combined = current + new_entries
     tokens = len(combined) // 4
     threshold = TOKEN_THRESHOLDS.get(path)
@@ -1126,7 +1131,10 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     session_paths = [
         'session_log_current.md',
         'session_logs/index.md',
-        'canon/editorial_ledger_summary.yaml',
+        # canon/editorial_ledger_summary.yaml retired in the 2026-05-28 JSONL cutover.
+        # The canonical canon/editorial_ledger.jsonl is fetched on demand by editorial
+        # tasks (task_gate 'editorial'/'propose_mechanic'/'design_proposal'), not at
+        # every bootstrap — it is a consolidated store, not a kept-small register.
         'references/file_index_summary.md',
         'references/canonical_sources.yaml',
         'references/roadmap_state.yaml',
