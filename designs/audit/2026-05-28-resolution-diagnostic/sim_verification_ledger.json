@@ -1,5 +1,5 @@
 {
-  "sim_file": "designs/audit/2026-05-28-resolution-diagnostic/sim_faction_remediation.py (+ sim_compound_collapse.py)",
+  "sim_file": "designs/audit/2026-05-28-resolution-diagnostic/{sim_compound_collapse.py, sim_faction_remediation.py, sim_domain_resolver.py}",
   "scope": "custom",
   "systems": [
     "faction_layer",
@@ -477,6 +477,160 @@
       "canonical_source": "N/A \u2014 harness/derived",
       "section": "faction remediation sim",
       "quoted_text": "derived P 0.626 digit-run"
+    },
+    {
+      "sim_variable": "dr_50",
+      "value": 50,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "BASE 0.50 digit-run"
+    },
+    {
+      "sim_variable": "dr_0_35",
+      "value": 0.35,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "[PROPOSED] resolver OVW_OFFSET"
+    },
+    {
+      "sim_variable": "dr_35",
+      "value": 35,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "OVW_OFFSET 0.35 digit-run"
+    },
+    {
+      "sim_variable": "dr_0_55",
+      "value": 0.55,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "[PROPOSED] resolver OVW_CAP"
+    },
+    {
+      "sim_variable": "dr_55",
+      "value": 55,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "OVW_CAP 0.55 digit-run"
+    },
+    {
+      "sim_variable": "dr_0_2",
+      "value": 0.2,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "[PROPOSED] resolver PARTIAL_BAND"
+    },
+    {
+      "sim_variable": "dr_0_97",
+      "value": 0.97,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "[PROPOSED] resolver FAIL_FLOOR \u2014 residual failure ceiling"
+    },
+    {
+      "sim_variable": "dr_97",
+      "value": 97,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "FAIL_FLOOR 0.97 digit-run"
+    },
+    {
+      "sim_variable": "dr_0_069",
+      "value": 0.069,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "derived: dice floor-degeneracy P 0.069"
+    },
+    {
+      "sim_variable": "dr_69",
+      "value": 69,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "0.069 digit-run"
+    },
+    {
+      "sim_variable": "dr_300",
+      "value": 300,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "0.300 digit-run"
+    },
+    {
+      "sim_variable": "dr_0_399",
+      "value": 0.399,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "derived: dice even-peer P 0.399"
+    },
+    {
+      "sim_variable": "dr_399",
+      "value": 399,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "0.399 digit-run"
+    },
+    {
+      "sim_variable": "dr_0_727",
+      "value": 0.727,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "derived: dice dominant P 0.727"
+    },
+    {
+      "sim_variable": "dr_727",
+      "value": 727,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "0.727 digit-run"
+    },
+    {
+      "sim_variable": "dr_200000",
+      "value": 200000,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "Monte Carlo trial count \u2014 harness"
+    },
+    {
+      "sim_variable": "dr_0_45",
+      "value": 0.45,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "[PROPOSED-ALT] BASE alternative (defender edge) \u2014 discussed in spec"
+    },
+    {
+      "sim_variable": "dr_45",
+      "value": 45,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "0.45 digit-run"
+    },
+    {
+      "sim_variable": "dr_0_12",
+      "value": 0.12,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "[PROPOSED-ALT] SLOPE alternative \u2014 discussed"
+    },
+    {
+      "sim_variable": "dr_0_85",
+      "value": 0.85,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "[PROPOSED-ALT] CAP alternative \u2014 discussed"
+    },
+    {
+      "sim_variable": "dr_85",
+      "value": 85,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "domain resolver sim",
+      "quoted_text": "0.85 digit-run"
+    },
+    {
+      "sim_variable": "dr_78",
+      "value": 78,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "domain resolver sim",
+      "quoted_text": "console separator width \u2014 harness"
     }
   ],
   "provisional_assumptions": [
