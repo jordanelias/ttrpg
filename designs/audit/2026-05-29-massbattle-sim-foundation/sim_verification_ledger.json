@@ -1,0 +1,48 @@
+{
+  "sim_file": "sim_mb_06_v22.py (Issue-1 lethality recalibration)",
+  "scope": "custom:mass_combat",
+  "entries": [
+    {
+      "sim_variable": "DAMAGE_BY_DEGREE[Overwhelming]",
+      "value": "1+Power",
+      "canonical_source": "params/mass_combat.md",
+      "section": "Core Formula (PP-233)",
+      "quoted_text": "<!--         Damage per success = 1+Power. Size after = \u230aremaining Health\u00f7H\u230b. -->"
+    },
+    {
+      "sim_variable": "DAMAGE_BY_DEGREE[Success]",
+      "value": "Power",
+      "canonical_source": "params/mass_combat.md",
+      "section": "Core Formula (PP-233)",
+      "quoted_text": "<!--         Damage per success = 1+Power. Size after = \u230aremaining Health\u00f7H\u230b. -->"
+    },
+    {
+      "sim_variable": "BLOCK_SIZE (Company)",
+      "value": 100,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "A.3 BATTLE SCALE / block_size (ED-694)",
+      "quoted_text": "| Company | 100 |"
+    },
+    {
+      "sim_variable": "VOLLEY_TN",
+      "value": 6,
+      "canonical_source": "designs/provincial/mass_battle_v30.md",
+      "section": "A.7 Phase 2 Volley (ED-037)",
+      "quoted_text": "Projectile units fire. Roll [Power stat] dice vs TN 6. Power stat = unit quality tier (1\u20137). Distinct from engagement pool formula (PP-233) \u2014 ranged output is g"
+    },
+    {
+      "sim_variable": "ENGAGEMENT_TN",
+      "value": 7,
+      "canonical_source": "params/mass_combat.md",
+      "section": "Battle Plan Templates / Command check (PP-235)",
+      "quoted_text": "Phase 1: select one battle plan covering all units. Individual unit orders derived from plan. General may override one unit per turn with a Command check (TN 7,"
+    },
+    {
+      "sim_variable": "LETHALITY_SCALE (re-introduced; TUNING SEED \u2014 Class B, not canon)",
+      "value": "calibrated to target",
+      "canonical_source": "tests/sim/sim_audit_v5_to_v22.md",
+      "section": "Issue 1 \u2014 lethality calibration target",
+      "quoted_text": "**What:** v17 introduced `LETHALITY_SCALE = 0.10` to calibrate ~15% casualties per 3-phase engagement. v18 kept it. **v19 dropped it** alongside switching HP mo"
+    }
+  ]
+}
