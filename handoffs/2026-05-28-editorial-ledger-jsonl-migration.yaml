@@ -1,72 +1,86 @@
 id: 2026-05-28-editorial-ledger-jsonl-migration
 task:
   skill: valoria-orchestrator
-  description: 'Editorial ledger JSONL migration + hook cutover COMPLETE (5c07bff0
-    data, 1aa78a03 hooks). JSONL is now hook-live. Remaining: Phase 2.3 remove old
-    YAML files + 2.4 resolve 94 conflicts + 2.5 verify 21 partials.'
+  description: 'Editorial ledger JSONL migration + Phase 2 tooling cutover — COMPLETE.
+    Single store canon/editorial_ledger.jsonl is now hook-live; all legacy YAML deprecated.
+    ONLY remaining work is Jordan-judgment: 94 ID-conflict resolutions + 21 _migration_partial
+    re-verifications.'
 scope: editorial
-last_commit: 1aa78a035bb4f752ea9ba0fc1fc2edb8fc7242e2
-session_token: 00729b21413b11c5
+last_commit: 325043e8e238668a503d80f989e6ae8991fbc421
+session_token: d5f098b069765283
 context_files:
 - path: canon/editorial_ledger.jsonl
   depth: skeleton
-  reason: live single-source ledger (605 entries); hooks now read this
+  reason: the single canonical editorial store (605 entries); hook-live since 6a42b1f1
 - path: canon/editorial_ledger_migration_2026-05-28.md
   depth: full
-  reason: 'migration report: lossless stats, 94 conflicts list, 21 partials, phase
-    plan'
+  reason: 'migration report: lossless stats + the 94-conflict list (L20-114)'
 - path: skills/valoria-orchestrator/scripts/valoria_hooks.py
   depth: skeleton
-  reason: 'cutover live: assert_unique_ids JSONL branch + jsonl_ledger_gate validator'
+  reason: validate_ledger_jsonl + editorial readers now on JSONL
 - path: skills/valoria-orchestrator/scripts/github_ops.py
   depth: skeleton
-  reason: 'cutover live: append_to_register JSONL append + threshold'
+  reason: bootstrap/fetch/append on JSONL; summary de-listed
 owns:
 - canon/editorial_ledger.jsonl
-- canon/editorial_ledger*.yaml
-- archives/editorial*/**
+- deprecated/canon/editorial_ledger*
 - skills/valoria-orchestrator/scripts/valoria_hooks.py
 - skills/valoria-orchestrator/scripts/github_ops.py
+- tools/index_gen.py
+- references/atomization_rules.yaml
 working_state:
-  summary: JSONL migration (5c07bff0) + hook cutover (1aa78a03) done; full pre_commit_gate
-    incl. jsonl_ledger_gate verified end-to-end. 605 entries, deduplicated, hook-live.
-    Old YAML files still present (not yet removed).
+  summary: JSONL cutover COMPLETE. Editorial readers (task_gate editorial/propose_mechanic/design_proposal,
+    propose_mechanic_gate, bootstrap) all read canon/editorial_ledger.jsonl. Commit-time
+    integrity via validate_ledger_jsonl (round-trip + required-fields {id,status}
+    + global id-uniqueness). Legacy YAML (editorial_ledger.yaml + summary + index_md
+    + 10 archives = 13 files) deprecated to deprecated/canon/, byte-preserved tombstones.
+    index_gen editorial generators annotated SUPERSEDED (not deleted). canon/ now
+    holds only editorial_ledger.jsonl + the migration report.
   done:
-  - 'JSONL migration committed 5c07bff0: 24 files -> 1, 602 IDs -> 605 lines, lossless,
-    0 dup'
-  - ED-865/866/867 filed
-  - 'Hook cutover committed 1aa78a03: TASK_REQUIRED_FILES[editorial]=jsonl; assert_unique_ids
-    JSONL branch; NEW jsonl_ledger_gate (hard-fail invalid-JSON/empty-id, warn shape/missing-desc);
-    append_to_register JSONL append; threshold 200k'
-  - 9/9 gate unit tests pass; full pre_commit_gate verified by committing the hooks
-    themselves; committed hooks re-fetched from main and confirmed live
-  - External audit committed cb32edb5
+  - 'JSONL migration (5c07bff0): 605 entries, lossless, 0 dup ids, all valid JSON
+    [prior session]'
+  - 'Phase 2.2 validator (c0e6f508): validate_ledger_jsonl + assert_unique_ids JSONL
+    dispatch'
+  - 'Phase 2.1 reader cutover (6a42b1f1): TASK_REQUIRED_FILES + propose_mechanic_gate
+    + bootstrap + append_to_register + SESSION_PERMANENT -> JSONL; summary dropped
+    from bootstrap'
+  - 'editorial_ledger.yaml deprecated (2218eedd): moved to deprecated/canon/, de-listed
+    from atomization_rules/TOKEN_THRESHOLDS/SESSION_PERMANENT/assert_unique_ids; killed
+    the recurring atomizer compliance flag'
+  - 'Phase 2.3 (325043e8): summary + index_md + 10 archives deprecated to deprecated/canon/
+    (byte-preserved); archive glob rule removed; index_gen generate_editorial_summary/_index
+    annotated SUPERSEDED'
+  - 'Verified cold-cache on main: canon/ clean, freshness 115/115 PASS, register health
+    PASS, task_gate(editorial) resolves to JSONL'
   next:
-  - 'Phase 2.3: remove/deprecate the 24 old canon/editorial_ledger*.yaml + archives/editorial*/*
-    files (now superseded by the live JSONL). Verify no other reader depends on them
-    first (grep github_ops/valoria_hooks for residual *.yaml ledger reads — e.g. editorial_ledger_summary.yaml
-    is still referenced by propose_mechanic/design_proposal gates and the bootstrap
-    fetch; regenerate or repoint those before deleting).'
-  - 'Phase 2.4: resolve 94 true ID-conflicts (flagged _migration_flag/_migration_alt;
-    list in migration report) — JORDAN judgment per ID'
-  - 'Phase 2.5: re-verify 20-21 regex-recovered entries (flagged _migration_partial)'
-  caveat: editorial_ledger_summary.yaml (generated digest) and bootstrap session-fetch
-    still reference YAML; propose_mechanic/design_proposal task gates still require
-    editorial_ledger_summary.yaml. Cutover repointed the *editorial* gate + uniqueness
-    + append + validator; summary-regeneration pipeline is NOT yet repointed. Do 2.3
-    carefully.
+  - 'JORDAN: resolve 94 true ID-conflicts (richest line = primary, alternates in _migration_alt/_migration_flag;
+    list in migration report L20-114). Claude can build a field-diffed adjudication
+    set on request but must NOT pick winners (project-owner contract).'
+  - 'JORDAN: re-verify 21 _migration_partial entries (regex-recovered; need manual
+    confirmation against deprecated/canon/ originals + git history).'
+  - PI V2.3 + architecture V2.4 text edits handed to Jordan separately (docs say hooks
+    read editorial_ledger.yaml — now false). Claude cannot commit these (Project Knowledge,
+    not repo).
+  - 'OPTIONAL later: delete the 13 deprecated/canon/ tombstones once confident (git
+    history retains); delete index_gen editorial generators if the digest is confirmed
+    unwanted.'
 blockers:
-- 94 true ID-conflicts unresolved (Jordan judgment per ID)
-- 20-21 partial-recovered entries unverified
-- editorial_ledger_summary.yaml generation not yet repointed to JSONL (propose_mechanic/design_proposal
-  still depend on the YAML summary)
+- NONE blocking — cutover complete. The two remaining items are Jordan-judgment, not
+  blocked work.
+- '94 ID-conflicts: Jordan decision per ID (canon authority, not mechanical).'
+- '21 _migration_partial entries: Jordan re-verification.'
 key_values:
-- 'data_commit: 5c07bff0'
-- 'hooks_commit: 1aa78a03'
+- 'migration_commit: 5c07bff0'
+- 'validator_commit: c0e6f508'
+- 'reader_cutover_commit: 6a42b1f1'
+- 'yaml_deprecate_commit: 2218eedd'
+- 'phase23_commit: 325043e8'
 - 'jsonl_entries: 605'
-- 'conflicts: 94'
-- 'partials: 21'
-- 'non_standard_ids: 12 (PP-/BALANCE/variant, legit)'
-created: '2026-05-29T02:44:09.395159+00:00'
-updated: '2026-05-29T02:44:09.395159+00:00'
+- 'ed_high_water: ED-867'
+- 'conflicts_flagged: 94'
+- 'partials_flagged: 21'
+- 'live_ledger: canon/editorial_ledger.jsonl'
+- 'deprecated_count: 13 files in deprecated/canon/'
+created: '2026-05-29T00:06:13.937940+00:00'
 status: active
+updated: '2026-05-29T02:44:39.744971+00:00'
