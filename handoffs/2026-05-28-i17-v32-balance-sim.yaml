@@ -1,0 +1,117 @@
+id: 2026-05-28-i17-v32-balance-sim
+scope: simulation
+task:
+  skill: valoria-simulator
+  description: 'Execute I-17: validate the combat_v32 build axis via the Mode-G incremental-build
+    protocol. The decomposition is DONE (8-module manifest + constant inventory +
+    harness audit, committed 0271da2). This handoff is for the dedicated sim-build
+    sessions that run it, one module per session. Acceptance: archetype matchups land
+    40-60% under tuned constants, with NO inversion and NO non-viable baseline build.
+    I-17 is a TUNING effort (~20 of 34 constants are v32-own draft values, Class B)
+    and is empowered to return ''v32 build axis is NOT balanced'' — that is a finding,
+    not a failure.'
+working_state:
+  phase: prep complete; module execution not started
+  done:
+  - combat_v32 proposal complete + triple-pass reviewed (designs/proposals/combat_v32_proposal.md)
+  - NERS verdict IMPROVED-not-yet-compliant; F1/F2/F4 resolved, F7+N4 closed post-verdict
+  - I-13b anti-armor closed (Long Heavy Blunt 7th class + Targeted-line sub-action)
+  - 'Structural-sanity sim PASS (9b08fdd): terminates (mean 2.6 steps), monotonic
+    in pool advantage, F2 holds at bout level (~2% floor, never 0). STRUCTURE validated,
+    NOT balance.'
+  - mechanical armature extracted (5bbf85c) — cross-system adjudication tool, application
+    DEFERRED
+  - 'I-17 Mode-G decomposition committed (0271da2): manifest + constant inventory
+    + harness audit'
+  next:
+  - 'MODULE 1 (dice + sigma-space core) is the first runnable session. Promote the
+    sanity-sim code (commit 9b08fdd; doc designs/audit/2026-05-28-combat-reframe/v32_bout_structural_sanity_sim.md)
+    to a ledgered Mode-G module: full-read params/core.md + combat_v32 12.3; build
+    sim_verification_ledger.json (d10 faces/TN/sigma=0.80 Class A cite params/core.md;
+    M_max=1.5 + level->dsigma + base-Ob Class B cite proposal, mark ''draft sim-seed
+    tuned I-17''); h.sim_gate(''custom'', systems=[''combat'']); write module with
+    inline # [canonical:] per constant; run isolation; safe_commit to tests/sim/v32-combat-balance/
+    WITH a tests/coverage_matrix.md entry (co-file rule: sim outputs under tests/sim/
+    require it — this is why the prep doc lives in designs/audit).'
+  - Then Modules 2->3->4->5->6->(7 opt)->8 per the manifest, one per session, deps
+    acyclic. Module 4 (bout state graph + sub-actions) is the risk module — may split;
+    checkpoint, never compress reads.
+  - 'Module 8 (integration sweep) runs the acceptance matrix: Fast/Strong, the heavy-inversion
+    pair, F3 STR-gap, balanced-build viability, init floor — N>=1000 Wilson 95% CI
+    per the v17 precedent.'
+  hard_rules:
+  - 'Mode-G: no multi-module code in one session; no constant without a ledger entry
+    or inline # [canonical:]; no assuming a prior module is correct (re-verify imported
+    values); no cross-module patching in integration (flag for rebuild); NO batch
+    run until every module status: verified (the sim_v2 failure).'
+  - simulation task_gate requires reading canon/02_canon_constraints.md + skills/valoria-simulator/SKILL.md
+    each subprocess before commit (hook state resets per bash block).
+  - RuntimeError from any hook = hard halt, report verbatim, stop.
+last_commit: 0271da29b2f4f396e41b340db108eee7997deadb
+owns:
+- tests/sim/v32-combat-balance/**
+- designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md
+- designs/audit/2026-05-28-combat-reframe/v32_bout_structural_sanity_sim.md
+- tests/coverage_matrix.md
+context_files:
+- path: designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md
+  depth: full
+  reason: THE plan — 8-module manifest, constant inventory (Class A/B), harness-reuse
+    audit, acceptance matrix. Read first.
+- path: designs/proposals/combat_v32_proposal.md
+  depth: full
+  reason: system under test; modules full-read their relevant sections (12.3 sigma-space,
+    8 weapons, 4.7/12 bout, 7 stance/reaction, 11 resources)
+- path: designs/audit/2026-05-28-combat-reframe/v32_bout_structural_sanity_sim.md
+  depth: full
+  reason: Module 1 starting point — verified dice+sigma+bout core with embedded reproducible
+    code
+- path: designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md
+  depth: full
+  reason: what is/isn't resolved; open findings the sweep should keep visible
+- path: skills/valoria-simulator/SKILL.md
+  depth: full
+  reason: Mode-G protocol + ledger/manifest/fabrication-check conventions the sessions
+    must follow
+- path: tests/sim/scripts/phase11_c4_v0.py
+  depth: skeleton
+  reason: prior (superseded) engine — source of the balance QUESTIONS, not reusable
+    code; skim for the matchup set
+- path: tests/sim/phase11_c4_v0_2026-05-17.md
+  depth: full
+  reason: prior balance findings = the v32 acceptance matrix (94/6, 22/78 inversion,
+    F3 gap, 17.8% non-viable, 26.7% init floor)
+- path: params/core.md
+  depth: full
+  reason: Module 1 canonical source — d10 engine, TN, per-die sigma, pool floors
+- path: designs/scene/derived_stats_v30.md
+  depth: full
+  reason: Module 2 canonical source — Health/Stamina/Composure/Concentration/MaxWounds
+    formulas
+key_values:
+- 'Acceptance band: 40-60% symmetric-optimization matchups, no inversion, no non-viable
+  baseline'
+- 'Constant split: ~20 of 34 are Class B (v32-own draft) -> ledger cites proposal,
+  not canon'
+- 'Sim name / dir: tests/sim/v32-combat-balance/ (created by Module 1, with coverage_matrix.md
+  entry)'
+- 'First session: Module 1 (dice + sigma-space core), promotes commit 9b08fdd'
+blockers:
+- None blocking Module 1. Module 5 magnitudes (set bonuses, Reaction coeffs, Stance
+  Counter Ob) are draft sim-seeds — fine to seed-and-tune, but their starting values
+  are a Jordan calibration input if he wants specific anchors.
+- Module 7 (facing/FoV) optional for build-balance (frontal symmetric duels don't
+  exercise it); required before any positional-balance claim. Stub-first recommended.
+- Cross-system Concentration shared-pool (F3 / I-15) is OUT of I-17 scope (cross-system);
+  Module 6 builds Concentration within combat only.
+relationship_to_other_handoffs: 'Supersedes the DESIGN-EXPLORATION phase of handoff
+  2026-05-17-scene-combat-redesign-exploration: that handoff held 5 directions open
+  with ''no recommendation''; Jordan subsequently directed the state-graph direction,
+  and combat_v32 is its built+tested realization. The exploration handoff may now
+  be stale. WHETHER to archive it is a JORDAN DECISION (did exploration conclude,
+  or are the other four directions still live?) — not resolved here per the project-owner
+  contract. This I-17 handoff is the combat-workstream master going forward; it does
+  not touch the jsonl-migration handoff (separate infra).'
+created: '2026-05-29T02:37:04.172074+00:00'
+updated: '2026-05-29T02:37:04.172074+00:00'
+status: active
