@@ -1,0 +1,85 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m9_wound_model_bottomup.py",
+  "scope": "bottom-up wound-model redesign (Jordan-authorized 2026-05-29)",
+  "module": "M9",
+  "note": "Bottom-up replacement for the v32 multiplicative damage model that M8 found imbalanced. severity = net + bounded_strength(floor(Str/2) cap 3) - armour_resist(type, tier); decisive vs unarmored (net>=3 wounds directly); reach = -1 Ob closing, NOT damage. NO crit doubling, NO Str/weapon multiplier. Class A = retained canonical anchors (net-as-severity, weapon-type taxonomy). Class C = PROPOSED redesign (Jordan-authorized, NOT canonical, sim-tunable): bounded-Str cap, per-type ARMOR_RESIST (plate negates cut / weak vs blunt), decisive threshold, reach Ob. Self-test 7/7 = unit-level HISTORICAL validation (plate negates cuts; blunt+thrust defeat plate; strength bounded edge not multiplier; unarmoured lethal; reach=tempo; armour monotonic). Historical grounding: half-sword/estoc (thrust-vs-plate), poleaxe/warhammer (blunt-vs-plate), Liechtenauer/Fiore (skill/measure over force), 'spear is king' (reach). Does NOT edit canon; presented as proposal for Jordan ratification.",
+  "entries": [
+    {
+      "sim_variable": "WOUND_NET_BASE",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Degree Table",
+      "quoted_text": "net hits (margin of success) is the primary wound-severity input; degree bands 0/1/2/3+"
+    },
+    {
+      "sim_variable": "WEAPON_TYPE_TAXONOMY",
+      "value": "cut | thrust | blunt",
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5/§8",
+      "quoted_text": "weapon damage type from reach/weight/type: Blade vs Blunt; thrust-primary vs cut-primary (combat_v30 §8.1)"
+    },
+    {
+      "sim_variable": "BOUNDED_STR_DIV",
+      "value": 2,
+      "class": "C-proposed (bottom-up redesign; Jordan-authorized, NOT canonical)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M9 bottom-up wound model",
+      "quoted_text": "Strength contributes additively and BOUNDED: floor(Str/2), capped — replaces multiplicative Str x weapon-mult. Historical: a stronger arm helps but does not multiply lethality; placement/edge/target dominate."
+    },
+    {
+      "sim_variable": "BOUNDED_STR_CAP",
+      "value": 3,
+      "class": "C-proposed (bottom-up redesign; Jordan-authorized, NOT canonical)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M9 bottom-up wound model",
+      "quoted_text": "Strength bonus hard cap (floor(Str/2) capped at 3, i.e. Str>=6 gives +3). Prevents the Str-7 runaway that M8 surfaced; keeps the strong-vs-skilled contest historical."
+    },
+    {
+      "sim_variable": "ARMOR_RESIST",
+      "value": {
+        "none": {
+          "cut": 0,
+          "thrust": 0,
+          "blunt": 0
+        },
+        "light": {
+          "cut": 1,
+          "thrust": 1,
+          "blunt": 0
+        },
+        "medium": {
+          "cut": 2,
+          "thrust": 1,
+          "blunt": 1
+        },
+        "heavy": {
+          "cut": 4,
+          "thrust": 2,
+          "blunt": 1
+        }
+      },
+      "class": "C-proposed (bottom-up redesign; Jordan-authorized, NOT canonical)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M9 bottom-up wound model",
+      "quoted_text": "Per-type wound resistance by armor tier (severity subtractor). Bottom-up from historical arms-and-armor: plate (heavy) NEGATES cuts (resist 4 ~ defeats all but exceptional hits), is moderate vs thrust (resist 2 — thrust-to-gaps, estoc/half-sword), and WEAK vs blunt (resist 1 — concussive trauma transmits through plate; poleaxe/warhammer were the armor-defeating weapons). Light/medium scale down. Magnitudes proposed, sim-tunable."
+    },
+    {
+      "sim_variable": "DECISIVE_NET_THRESHOLD",
+      "value": 3,
+      "class": "C-proposed (bottom-up redesign; Jordan-authorized, NOT canonical)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M9 bottom-up wound model",
+      "quoted_text": "Against an UNARMORED target a clean hit (net>=3) inflicts a wound directly rather than chip severity — models historical lethality of solid blows to soft targets (fights are short and decisive, not attritional). Threshold proposed, sim-tunable."
+    },
+    {
+      "sim_variable": "REACH_OB_ADVANTAGE",
+      "value": 1,
+      "class": "C-proposed (bottom-up redesign; Jordan-authorized, NOT canonical)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md",
+      "section": "M9 bottom-up wound model",
+      "quoted_text": "Longer reach grants the opener an Ob advantage (effective -1 Ob to the longer weapon while closing) rather than a damage bonus. Historical: 'the spear is king' — reach controls the measure and the first tempo, not the wound size. Proposed, sim-tunable."
+    }
+  ]
+}

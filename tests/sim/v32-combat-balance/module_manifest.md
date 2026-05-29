@@ -18,3 +18,9 @@ Acceptance: archetype matchups 40–60% (skill §8.8 band), no inversion, no non
 
 Hard rules: one module/session; every constant ledgered or `# [canonical:]`; re-verify imported module values; no batch run until all modules verified.
 Class split: ~14 of 34 constants Class A (canonical); ~20 Class B (v32 draft sim-seeds, tuned here).
+
+## Remediation iteration (post-I-17, Jordan-authorized 2026-05-29)
+
+| Module | Scope | Source | Status |
+|---|---|---|---|
+| M9 (bottom-up wound model) | replace multiplicative damage (M8 finding) with bottom-up severity; historical validation | combat_v30 §5/§8 (anchors) + proposed Class-C redesign | verified |
