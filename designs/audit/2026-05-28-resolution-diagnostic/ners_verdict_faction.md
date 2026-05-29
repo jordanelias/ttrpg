@@ -31,7 +31,10 @@ N: PASS    — Removing the dice apparatus or the Trigger surface would worsen p
 
 R: FAIL    — F1, F3, F6, F7 all bite at extremes. The system does not hold:
              • Bare 2D pool vs Ob 4 at TN 7 → P ≈ 0 on pivotal Domain Actions
-               (F1) — Lesson 3.
+               (F1) — Lesson 3. [SUPERSEDED-BY ED-867 / correction note +
+               engine_replacement_reconciled §1: corrected to P = 0.070 @ Ob 3,
+               0.010 @ Ob 4 under the authoritative die rule. "P ≈ 0" used a
+               simplified >=7 model; degenerate but not zero. Post-F2-ruling P2 not P1.]
              • Anti-death-spiral floor caps Ob at 4 but pool is still 2D — safeguard
                present, safeguard cannot save (F3) — Lesson 3 + 4.
              • L1 collapse loop terminal-unbounded; recovery rate +1/clean-season
@@ -58,7 +61,7 @@ E: FAIL    — The player cannot intuit the system's failure modes from the
              surface. A faction at Stab 2 reads as "fragile but recoverable"
              (Stability is a 1–7 stat, 2 is not the bottom; anti-death-spiral
              floor exists as a stated safeguard); the player is not given the
-             information that Stab 2 produces P ≈ 0 Accounting Check passes
+             information that Stab 2 produces P ≈ 0 Accounting Check passes [SUPERSEDED-BY ED-867: corrected to ~0.26 pass under canonical Ob = floor(stat/2)+1; the floor is FUNCTIONAL, not inert — the "P ≈ 0" here was the wrong-Ob artifact; see correction note]
              and is mechanically a doomed state. The safeguard *appears
              strong* and *misleads intuition*. Independent of F1/F3, the F10
              concern (Stab triple-role) is borderline-elegant but resolves to
