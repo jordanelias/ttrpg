@@ -1,5 +1,13 @@
 -- valoria_index.sql
 -- Schema + curated data for Valoria file index.
+-- Last updated: 2026-05-28T22:46:01Z
+-- Generated tables (files, entities, entity_aliases) are rebuilt at
+-- session start by tools/regenerate_file_index.py — never hand-edit those.
+-- Curated tables (concepts, aliases, concept_files) are safe to edit here.
+
+-- ── Schema ─────────────────────────────────────────────────────────────────
+-- valoria_index.sql
+-- Schema + curated data for Valoria file index.
 -- Last updated: 2026-05-08T01:46:34Z
 -- Generated tables (files, entities, entity_aliases) are rebuilt at
 -- session start by tools/regenerate_file_index.py — never hand-edit those.
@@ -154,6 +162,18 @@ INSERT OR REPLACE INTO meta (key, value) VALUES ('ttrpg_sha', '');
 INSERT OR REPLACE INTO meta (key, value) VALUES ('file_count', '1262');
 
 -- concepts: 49 rows
+
+-- aliases: 334 rows
+
+-- concept_files: 189 rows
+
+-- meta: 4 rows
+INSERT OR REPLACE INTO meta (key, value) VALUES ('version', '1');
+INSERT OR REPLACE INTO meta (key, value) VALUES ('generated', '2026-05-28T22:44:31Z');
+INSERT OR REPLACE INTO meta (key, value) VALUES ('ttrpg_sha', '');
+INSERT OR REPLACE INTO meta (key, value) VALUES ('file_count', '1710');
+
+-- concepts: 82 rows
 INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('1', 'character_histories', 'world', 'Lifepath-based backstory system. Stages 1–8.');
 INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('2', 'caste', 'world', 'Social stratification, mobility, station.');
 INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('3', 'geography', 'world', 'Physical geography, provinces, terrain.');
@@ -203,6 +223,39 @@ INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('46', 'params_
 INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('47', 'params_combat', 'params', 'Combat parameters.');
 INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('48', 'params_factions', 'params', 'Faction parameters.');
 INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('49', 'params_threadwork', 'params', 'Threadwork parameters.');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('50', 'arc_expansion', 'arcs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('51', 'parliamentary_transfer', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('52', 'integration_proposal', 'architecture', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('53', 'generational_transition', 'architecture', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('54', 'conviction_taxonomy', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('55', 'hybrid_gaps', 'architecture', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('56', 'campaign_modes', 'architecture', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('57', 'insurgency_pipeline', 'world', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('58', 'handoff_2026-05-15', 'audit', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('59', 'conviction_migration_roster', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('60', 'mass_battle_redesign_workplan', 'references', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('61', 'franchise', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('62', 'key_substrate', 'architecture', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('63', 'fractional_province_ownership', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('64', 'mass_battle_integration', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('65', 'articulation_layer', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('66', 'conviction_axis_matrix', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('67', 'valoria_political_hierarchy', 'territory', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('68', 'knots', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('69', 'key_type_registry', 'architecture', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('70', 'political_dynamics_keys_migration', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('71', 'character_canon', 'npcs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('72', 'character_generation_questionnaire', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('73', 'faction_canon', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('74', 'varfell_path_b', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('75', 'faction_systems_overview', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('76', 'simulation_workplan', 'references', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('77', 'integration_plan', 'audit', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('78', 'treaty_expiration', 'provincial', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('79', 'throughline_resolutions', 'arcs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('80', 'valoria_ui_ux', 'ui', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('81', 'conviction_track', 'designs', 'A2: previously-unregistered active design doc');
+INSERT OR REPLACE INTO concepts (id, name, domain, notes) VALUES ('82', 'npc_relational_graph', 'npcs', 'A2: previously-unregistered active design doc');
 
 -- aliases: 334 rows
 INSERT OR REPLACE INTO aliases (id, concept_id, alias) VALUES ('1', '1', 'character histories');
@@ -540,7 +593,7 @@ INSERT OR REPLACE INTO aliases (id, concept_id, alias) VALUES ('332', '49', 'thr
 INSERT OR REPLACE INTO aliases (id, concept_id, alias) VALUES ('333', '49', 'threadwork parameters');
 INSERT OR REPLACE INTO aliases (id, concept_id, alias) VALUES ('334', '49', 'threadwork values');
 
--- concept_files: 189 rows
+-- concept_files: 231 rows
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('1', 'designs/world/character_histories_v30_infill.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('1', 'designs/world/character_histories_v30_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('1', 'designs/world/character_histories_v30.md');
@@ -730,3 +783,45 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('48', 'params/bg
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('49', 'params/threadwork_superseded.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('49', 'params/history/threadwork.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('49', 'params/threadwork.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('50', 'designs/arcs/arc_expansion_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('50', 'designs/arcs/arc_expansion_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('51', 'designs/provincial/parliamentary_transfer_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('52', 'designs/architecture/integration_proposal_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('52', 'designs/architecture/integration_proposal_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('53', 'designs/architecture/generational_transition_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('54', 'designs/personal/conviction_taxonomy_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('55', 'designs/architecture/hybrid_gaps_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('55', 'designs/architecture/hybrid_gaps_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('56', 'designs/architecture/campaign_modes_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('56', 'params/campaign_modes.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('56', 'designs/architecture/campaign_modes_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('57', 'designs/world/insurgency_pipeline_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('58', 'designs/audit/2026-05-14-balance-audit/handoff_2026-05-15_v15.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('59', 'designs/personal/conviction_migration_roster_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('60', 'references/mass_battle_redesign_workplan_v1.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('61', 'designs/provincial/franchise_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('62', 'designs/architecture/key_substrate_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('63', 'designs/provincial/fractional_province_ownership_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('63', 'designs/provincial/fractional_province_ownership_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('64', 'designs/provincial/mass_battle_integration_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('65', 'designs/articulation/articulation_layer_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('66', 'designs/personal/conviction_axis_matrix_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('67', 'designs/territory/valoria_political_hierarchy_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('68', 'designs/personal/knots_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('69', 'designs/architecture/key_type_registry_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('70', 'designs/provincial/political_dynamics_keys_migration_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('71', 'designs/npcs/character_canon_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('72', 'designs/personal/character_generation_questionnaire_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('73', 'designs/provincial/faction_canon_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('74', 'designs/provincial/varfell_path_b_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('74', 'designs/provincial/varfell_path_b_v30_infill.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('75', 'designs/factions/faction_systems_overview_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('76', 'references/simulation_workplan_v1.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('77', 'designs/audit/2026-05-17-v18-integration/integration_plan_v18.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('78', 'designs/provincial/treaty_expiration_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'designs/arcs/throughline_resolutions_v30.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('79', 'designs/arcs/throughline_resolutions_v30_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/ui/valoria_ui_ux_v4.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/ui/valoria_ui_ux_v4_index.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('81', 'designs/personal/conviction_track_v1.md');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('82', 'designs/npcs/npc_relational_graph_v30.md');
