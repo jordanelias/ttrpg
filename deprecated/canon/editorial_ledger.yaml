@@ -1,3 +1,14 @@
+# ============================================================================
+# DEPRECATED 2026-05-28 — superseded by canon/editorial_ledger.jsonl
+#
+# This file was the YAML editorial ledger. It was consolidated into the
+# line-delimited JSON store canon/editorial_ledger.jsonl (JSONL migration,
+# commit 5c07bff0; reader cutover commit 6a42b1f1) and moved here. No hook,
+# gate, or bootstrap path reads it. Retained for history only — DO NOT EDIT,
+# DO NOT treat as canonical. The live editorial ledger is the JSONL store.
+# Full provenance: canon/editorial_ledger_migration_2026-05-28.md
+# ============================================================================
+
 entries:
 - id: ED-811
   date: 2026-05-11

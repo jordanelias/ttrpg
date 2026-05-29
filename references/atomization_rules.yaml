@@ -86,16 +86,11 @@ policies:
   # ────────────────────────────────────────────────────────────
   # REGISTERS — editorial ledger
   # ────────────────────────────────────────────────────────────
-  - match: "canon/editorial_ledger.yaml"
-    max_tokens: 2000
-    auto_archive_status: [resolved, closed, struck, superseded]
-    archive_target_pattern: "canon/editorial_ledger_archive_{range}.yaml"
-    archive_chunk_max: 10000
-    archive_chunk_by: ed_range
-    index_file: "canon/editorial_ledger_index.md"
-    summary_file: "canon/editorial_ledger_summary.yaml"
-    summary_max_tokens: 1000
-    regenerate_summary_on: [any_change]
+  # canon/editorial_ledger.yaml rule removed 2026-05-28: the YAML ledger was
+  # superseded by canon/editorial_ledger.jsonl (JSONL migration) and deprecated
+  # to deprecated/canon/editorial_ledger.yaml. No active register to atomize.
+  # The editorial_ledger_archive*.yaml rule below still governs the 23 legacy
+  # archive files until their removal (Phase 2.3).
 
   - match: "canon/editorial_ledger_archive*.yaml"
     max_tokens: 10000

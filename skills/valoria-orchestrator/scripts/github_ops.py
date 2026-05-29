@@ -57,7 +57,6 @@ REPOS = {
 TOKEN_THRESHOLDS = {
     "session_log_current.md":                  2_000,   # session-bounded; rotates each session
     "session_logs/index.md":                   2_000,   # tiny index file
-    "canon/editorial_ledger.yaml":             4_000,   # raised 2_000 → 4_000 (2026-05-02): ED entries are 800-1200 chars; 4 entries/session typical
     "canon/editorial_ledger_summary.yaml":     2_000,   # raised 1_000 → 2_000 (2026-05-02): paired with parent
     "references/file_index_summary.md":        2_000,   # raised 1_000 → 2_000 (2026-05-02): file count grows with project
     "references/canonical_sources.yaml":       9_000,   # raised 5_000 → 8_000 (2026-05-02), → 9_000 (2026-05-18): freshness_gate --update added 115 canonical_sha fields, pushing file to 8086 tokens
@@ -162,7 +161,6 @@ SESSION_PERMANENT_PATTERNS = (
     'file_index_summary.md',
     'canonical_sources.yaml',
     'patch_register_active.yaml',
-    'editorial_ledger.yaml',
     'editorial_ledger.jsonl',          # canonical editorial store (post-2026-05-28 JSONL migration)
     'propagation_map.md',
     'coverage_matrix.md',
