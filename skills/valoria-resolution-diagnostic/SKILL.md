@@ -6,6 +6,8 @@ description: >
   stress, (2) tests each finding against the six scoped design lessons, and (3) produces
   a per-system NERS (Necessary / Robust / Smooth / Elegant) verdict with lesson-mapped
   remediation. A fourth validation stage re-tests proposed fixes against the same pipeline.
+  A fifth stage validates the system's behaviour against real-world historical and scientific
+  precedent (never videogame/genre convention) as the external check on NERS-Robustness.
   ALWAYS use this skill when checking whether a system is NERS-compliant,
   diagnosing balancing or resolution problems, stress-testing small pools, checking for
   death spirals / runaway loops, threshold cliffs, or non-uniform modifiers. Trigger on:
@@ -191,6 +193,33 @@ RE-TEST: <pass | new findings>
 
 ---
 
+## STAGE 5 — VALIDATE AGAINST HISTORICAL PRECEDENT
+
+Stages 1–4 are **internal**: they check the system against itself (consistency, the six lessons, NERS, fix-retest). They cannot tell you whether the system *behaves like the thing it models*. Stage 5 is the **external** axis, and it is the strongest evidence for **NERS-R**: the game's intent is believable emergent narrative, and the test of believable emergence is whether a mechanic's behavior matches how the real phenomenon actually behaves.
+
+**Validate against real-world history and science — NEVER against videogame or genre convention.** Genre convention is derivative (games copy each other) and frequently unrealistic; matching it is not evidence of NERS-fitness. The yardstick is reality.
+
+Run on the system verdict (Stage 3) AND on any proposed remediation (Stage 4 output):
+
+1. **Identify the real-world phenomenon** the mechanic models (faction collapse → real polity collapse; defection cascade → real military/elite defection; succession split → real succession wars; insurgency → real COIN; morale rout → real battle-morale collapse; reality-maintenance → systemic decay/regime-shift).
+2. **Find the precedent** — cite a real historical case or a scholarly model (e.g. Tainter on collapse, RAND *How Insurgencies End*, ecological regime-shift / Holling-Scheffer on hysteresis, Weber on charismatic authority). Cite it; do not assert "history shows…" from memory.
+3. **Compare behavior**, not surface. Does the mechanic produce the dynamics the precedent exhibits (e.g. collapse-as-simplification-then-reconstitution; expectation-driven cascades sensitive to small triggers; hysteresis on recovery)?
+   - **Match** → strong evidence for R; record it (it confirms the system will read as believable).
+   - **Divergence** → a finding. Decide which kind: (a) the mechanic is *unrealistic* and should be corrected toward precedent, or (b) the divergence is a *deliberate, defensible game-feel choice* (state the justification). Do not silently accept divergence.
+
+**Scope boundary.** Precedent validates cleanly for political / military / social / religious systems. For the **metaphysical layer** (threadwork, reality-state, Calamity), there is no direct historical analog — validate its *systemic dynamics* analogically (entropy/maintenance, ecological regime-shift, complexity-collapse) and say so. **Do not fabricate historical analogs for invented metaphysics.**
+
+**Stage 5 output:** append to `ners_verdict_<system>.md`:
+```
+PRECEDENT: <phenomenon modeled>
+  source: <cited historical case / scholarly model>
+  behavior match: <match | divergence>
+  finding: <none | unrealistic→correct-toward-precedent | deliberate-divergence (justification)>
+```
+A Stage-5 divergence feeds back into the Stage-3 R verdict and may reopen Stages 2/4.
+
+---
+
 ## GUARDRAILS
 
 - **Never defend prior output.** If diagnosing a system you (or a prior session) designed, prepend `[SELF-AUTHORED — bias risk]` and actively surface the criticism an independent reviewer would raise. Treat all work as external.
@@ -199,6 +228,7 @@ RE-TEST: <pass | new findings>
 - **Goal over form.** Target uniform *impact*, bounded *loops*, smooth *approach* — not the surface form ("proportional", "one cliff"). Proportional-in-dice ≠ uniform-in-probability.
 - **Small pools are primarily architectural.** Route through Lessons 3/4 (don't roll it, or clock it) or aggregate the pool. Parameter-level adjustments (fractional TN, μ/σ calibration, probit remapping) are valid complements, not substitutes.
 - **Ground every claim.** Loops, intent, frequency — cite the canonical mechanism or flag `[UNGROUNDED]`. Do not assert from memory.
+- **Validate against reality, not genre (Stage 5).** Historical/scientific precedent is the external check on NERS-R. Videogame/genre convention is derivative and is NOT evidence of fitness — never validate against it. Cite the precedent; do not assert "history shows…" from memory.
 - **RuntimeError from any hook = hard halt.** Report verbatim, stop.
 
 ---

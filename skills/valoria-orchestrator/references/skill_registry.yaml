@@ -303,7 +303,7 @@ routing:
 
   - intent: "is this NERS compliant / resolution audit / balance audit"
     skill: valoria-resolution-diagnostic
-    modes: ["full pipeline Stage 1-4"]
+    modes: ["full pipeline Stage 1-5 (incl. historical-precedent validation)"]
   - intent: "stress test resolution / small pool problem / death spiral / cliff check"
     skill: valoria-resolution-diagnostic
     modes: ["Stage 1 diagnostic only, or full pipeline"]

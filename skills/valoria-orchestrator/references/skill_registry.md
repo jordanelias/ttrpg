@@ -129,7 +129,7 @@
 | "vocabulary debt" / "find struck terms still in use" | valoria-vector-audit | Mode G only (fast) |
 | "find isolates" / "what's disconnected" | valoria-vector-audit | Modes E + H |
 | "find implied connections" | valoria-vector-audit | Modes B + C |
-| "is this NERS compliant" / "resolution audit" / "balance audit" | valoria-resolution-diagnostic | Full Stage 1–4 pipeline |
+| "is this NERS compliant" / "resolution audit" / "balance audit" | valoria-resolution-diagnostic | Full Stage 1–5 pipeline |
 | "stress test resolution" / "small pool problem" / "death spiral" | valoria-resolution-diagnostic | Stage 1 diagnostic or full pipeline |
 | "canon check [mechanic]" | valoria-canon-guard | Full P-01–P-14 pass |
 | "resolve editorials" | valoria-editorial-register | Workflow A |
