@@ -144,5 +144,6 @@ blockers:
 scope: infrastructure
 created: '2026-05-18T03:09:23.499673+00:00'
 updated: '2026-05-18T03:09:23.499673+00:00'
-status: active
+status: closed
 key_values: []
+closed_at: '2026-05-29T00:05:46.392498+00:00'
