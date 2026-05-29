@@ -5,6 +5,8 @@
 **Purpose:** Single closeout note for the 2026-05-28 audit work. (1) Corrects defects now live on `main` in the committed diagnostic files. (2) Records the self-review's load-bearing findings. (3) Stages all P1 editorial-ledger candidates with pre-assigned IDs for ingestion — **not** appended directly to `canon/editorial_ledger.yaml` because the `2026-05-XX-editorial-ledger-consolidation` handoff is active and a direct write would collide.
 **Bias:** `[SELF-AUTHORED — bias risk]` on all referenced artifacts (diagnostic batches 1–2, engine assessments v1+v2). Two of the corrections below fix my own arithmetic errors.
 
+> **UPDATE 2026-05-28 (post-Jordan ruling on F2):** Jordan confirmed **`Ob = floor(stat/2)+1` is the canonical, always-intended Domain Action Ob**; the `faction_layer` "Ob = target stat directly" reading is the stale one. This **resolves ED-866** and **materially downgrades the faction severity** in the less-severe direction. Corrected numbers and revised ledger entries below (see §1a and the amended ED-865/ED-867/ED-868). The catastrophic "weak factions cannot act / deterministic collapse" framing is **retracted**; a narrower smoothness finding survives. The pre-update text is retained for trail; §1a is authoritative where it conflicts.
+
 ---
 
 ## §1 — Corrections to committed artifacts
@@ -48,7 +50,34 @@ Neither engine-side fix appears on `references/roadmap_state.yaml` (currently Ph
 
 ---
 
-## §2 — Editorial-ledger candidates (STAGED, pre-numbered; NOT appended)
+## §1a — Faction severity, re-derived under canonical Ob = floor(stat/2)+1 (AUTHORITATIVE)
+
+Jordan ruled F2: **`Ob = floor(stat/2)+1` was always intended.** Re-derivation (MC 400k, authoritative die rule, μ/die sanity 0.40):
+
+**Success matrix — acting-faction stat (= pool) × target stat (sets Ob):**
+
+| Target (Ob) | 1D | 2D | 3D | 4D | 5D | 6D | 7D |
+|---|---|---|---|---|---|---|---|
+| stat 1–2 (Ob 1–2) | 0.40 / 0.10 | 0.58 / 0.26 | 0.68 / 0.40 | 0.75 / 0.51 | 0.80 / 0.60 | 0.84 / 0.67 | 0.86 / 0.73 |
+| stat 3 (Ob 2) | 0.10 | 0.26 | 0.40 | 0.51 | 0.60 | 0.67 | 0.73 |
+| stat 4–5 (Ob 3) | 0.00 | 0.07 | 0.17 | 0.28 | 0.38 | 0.47 | 0.55 |
+| stat 6–7 (Ob 4) | 0.00 | 0.01 | 0.05 | 0.12 | 0.20 | 0.28 | 0.36 |
+
+**What the ruling fixes (severity DOWN):**
+- A weak faction (Mil-2 → 2D) acting against a **typical peer** (target stat 2–3, Ob 2) succeeds **~26%**, not ~7% and not zero. Bottom-tier factions **can** function. The catastrophic framing is **retracted** — it was anchored to the wrong (target-stat) Ob.
+- Ob now compresses into a **1–4 band** (not 1–7), so no faction faces an Ob it structurally cannot meet against same-or-weaker opponents.
+
+**What survives (the narrower, real finding):**
+- **Punching-up is near-impossible.** Weak faction (2D) vs strong target (stat 6–7, Ob 4) = **1%**. A small faction effectively cannot act on its strongest rivals — bounded by design or a defect, Jordan's call, but it is a real asymmetry.
+- **Jagged even/odd peer matchups (smoothness defect).** Ob steps only at even stat boundaries (`floor(2/2)+1 = floor(3/2)+1 = 2`), so the **symmetric** (equal-stat) matchup is **non-monotonic**: stat-2-vs-peer = 0.26 but stat-3-vs-peer = 0.40. Equal-strength factions have materially different odds of affecting each other depending on which even/odd tier they occupy. This is a genuine NERS-S (smoothness) finding independent of pool size.
+- **No Pool Floor / small-pool variance unchanged.** `floor(stat/2)+1` lowers the *target*, not the *variance*; a single die still swings pivotal 2D outcomes. The ED-865 finding survives **as a calibration+variance issue, not a death-spiral.**
+
+**F3 (anti-death-spiral floor) — substantially downgraded, arguably closed.** Under canonical Ob, a Stab-2 faction Accounting Check is 2D vs Ob 2 = **~26% pass**, not the ~1% I reported under the erroneous "Ob capped at 4" reading. That is a meaningful per-season recovery chance — **the floor is functional, not inert.** The "mathematically inactive safeguard" finding was an artifact of the wrong Ob. **Retracted; F3 closed pending confirmation the Accounting Check uses the same Ob formula.**
+
+**Net corrected faction verdict:** still **NON-COMPLIANT**, but on narrower grounds — NERS-S (jagged even/odd peer interaction) + NERS-R (punching-up wall + no variance floor) — **not** the catastrophic "weak factions are doomed" basis originally stated. The fix is calibration/aggregation (smooth the Ob curve so it's monotonic in target strength; add a variance floor), **not** rescue-from-collapse.
+
+---
+
 
 **Why staged not filed:** `2026-05-XX-editorial-ledger-consolidation` handoff is active (orchestrator editing `canon/editorial_ledger.yaml`). Direct append would collide. These entries are pre-assigned from **ED-865** (live ledger ends at ED-864) for the consolidation owner to ingest. Schema mirrors existing entries; `type`/`archetype` subject to consolidation normalization. **ED-841 is NOT re-filed (C-4).** Mass-battle MB1–MB4 / MB9 are NOT re-filed (already in the 2026-04-29 pipeline / ledger).
 
@@ -58,64 +87,72 @@ Neither engine-side fix appears on `references/roadmap_state.yaml` (currently Ph
 
 - id: ED-865
   date: 2026-05-28
-  description: 'Faction Domain Action resolves on a BARE faction-stat d10 pool (1-7D)
-    vs Ob, statistically degenerate where stakes are highest. Military-2 faction = 2D:
-    P(success) = 0.070 at Ob 3, 0.010 at Ob 4 (authoritative die rule, MC 300k). The
-    only scale rolling bare small pools; every other scale aggregates or is deterministic.
-    Fix: aggregate the pool (mass-battle summed-pool model, ER-9) OR deterministic+stochastic
-    resolver (GD-2 mandate; CK3/EU/KoDP precedent). Resolver-design change at faction
-    scale only; NOT an engine replacement. Prerequisite: ED-866 (Ob formula).'
-  severity: P1
+  description: 'Faction Domain Action resolves on a BARE faction-stat d10 pool (1-7D) with no
+    Pool Floor. Under CANONICAL Ob = floor(target_stat/2)+1 (Jordan-confirmed; supersedes the
+    stale "Ob = target stat" reading), the catastrophic case is averted: Mil-2 (2D) vs a peer
+    (Ob 2) = 0.26. But two real defects survive: (a) NERS-S - the success curve is NON-MONOTONIC
+    in target strength because Ob steps only at even boundaries (stat-2-vs-peer = 0.26 but
+    stat-3-vs-peer = 0.40), so equal-strength factions interact with jagged, tier-dependent
+    odds; (b) NERS-R - punching-up is near-impossible (2D vs stat-6/7 target, Ob 4 = 0.01) and
+    small-pool variance is unbounded (one die swings pivotal 2D outcomes). Fix is CALIBRATION +
+    aggregation (smooth Ob to be monotonic in target strength; add a variance floor or aggregate
+    the pool per ER-9), NOT rescue-from-collapse. Earlier "weak factions cannot act /
+    deterministic" framing RETRACTED (was anchored to wrong Ob).'
+  severity: P2
   type: design_defect
   affected_docs: [designs/provincial/faction_layer_v30.md, params/factions/stats_1_7_scale.md]
   status: open
   jordan_decision: pending
-  source: resolution_diagnostic F1 / engine_reconciled ER-1
+  source: resolution_diagnostic F1 / engine_reconciled ER-1 (severity corrected post-F2-ruling)
 
 - id: ED-866
   date: 2026-05-28
-  description: 'Faction Domain Action Ob formula contradiction. faction_layer design doc
-    sets Ob = target stat directly; params/factions sets Ob = floor(stat/2)+1. The two
-    give materially different degeneracy severities (design-doc: weak factions auto-near-fail
-    above stat-2 targets). Determines the real severity of ED-865 and must resolve before
-    the ED-865 resolver fix is specified.'
+  description: 'RESOLVED 2026-05-28 (Jordan): faction Domain Action Ob = floor(stat/2)+1 was
+    always the intended formula. The faction_layer design-doc "Ob = target stat directly"
+    reading is the STALE one and should be corrected to match params/factions. Action: align
+    faction_layer Ob language to floor(stat/2)+1; no open decision remains. Resolution
+    materially downgraded the severity of ED-865 and effectively closed the F3 finding
+    (ED-867).'
   severity: P1
   type: contradiction
   affected_docs: [designs/provincial/faction_layer_v30.md, params/factions.md]
-  status: open
-  jordan_decision: pending
-  source: resolution_diagnostic F2 (prerequisite for ED-865)
+  status: resolved
+  jordan_decision: 'floor(stat/2)+1 canonical (2026-05-28); fix faction_layer to match'
+  source: resolution_diagnostic F2
 
 - id: ED-867
   date: 2026-05-28
-  description: 'Anti-death-spiral floor is mathematically inert. The Accounting Stability
-    Check caps Ob at 4 for low-Stability factions as a safeguard, but a Stab-2 faction
-    rolls 2D, which passes Ob 4 with P ~= 0.010. Capping the TARGET without raising the
-    POOL is not a safeguard. Dissolved by the ED-865 resolver fix (aggregation raises the
-    pool); standalone, the cap should raise the pool or convert to deterministic recovery.'
-  severity: P2
-  type: design_defect
+  description: 'RESOLVED/CLOSED 2026-05-28 by the F2 ruling. The anti-death-spiral floor was
+    flagged "mathematically inert" ONLY under the erroneous "Ob capped at 4" reading (Stab-2
+    2D vs Ob 4 = 0.01). Under canonical Ob = floor(stat/2)+1, the Stab-2 Accounting Check is
+    2D vs Ob 2 = ~0.26 - a meaningful per-season recovery chance. The floor is FUNCTIONAL,
+    not inert. Earlier finding was an artifact of the wrong Ob; RETRACTED. Confirm only that
+    the Accounting Stability Check uses the floor(stat/2)+1 formula; if so, no action.'
+  severity: P3
+  type: verification
   affected_docs: [designs/provincial/faction_layer_v30.md]
-  status: open
-  jordan_decision: pending
-  source: resolution_diagnostic F3
+  status: resolved
+  jordan_decision: 'closed by floor(stat/2)+1 ruling; confirm Accounting Check uses same Ob'
+  source: resolution_diagnostic F3 (retracted post-F2-ruling)
 
 - id: ED-868
   date: 2026-05-28
-  description: 'Faction collapse cascade loops under-bounded. L1 collapse loop terminates at
-    Stability 0 = faction extinction (a termination, not a recoverable bound); L7 Wealth-0 ->
-    Military-1/season cascade is undamped on the Military dimension; decrease>increase
-    asymmetry (multiple Stability-loss triggers vs +1 per clean season). Probabilistic and
-    heavily loss-weighted (NOT deterministic - earlier "deterministic" wording retracted);
-    every recovery gate is itself a small-pool roll (~1-7% at the floor). ED-865 resolver fix
-    raises recovery odds; a bound short of extinction and a Military-side damper are the
-    structural fixes.'
-  severity: P1
+  description: 'Faction collapse cascade loops. L1 collapse loop terminates at Stability 0 =
+    extinction (a termination, not a recoverable bound); L7 Wealth-0 -> Military-1/season is
+    undamped on the Military dimension; decrease>increase asymmetry on Stability. Under
+    canonical Ob = floor(stat/2)+1, the per-gate recovery odds are HEALTHIER than first
+    reported (e.g. Stab-2 Accounting recovery ~0.26, not ~0.01), so the slide is clearly
+    PROBABILISTIC and recoverable in the common case - NOT deterministic (earlier
+    "deterministic" wording RETRACTED). Residual structural finding: the terminal state is
+    still extinction (no bound short of it) and the Military-side cascade still lacks a damper.
+    Fix: a bound short of extinction + a Military-side recovery path; lower priority than first
+    assessed.'
+  severity: P2
   type: design_defect
   affected_docs: [designs/provincial/faction_layer_v30.md, designs/provincial/military_layer_v30.md]
   status: open
   jordan_decision: pending
-  source: resolution_diagnostic F5/F6/F7 (consolidated; corrected severity)
+  source: resolution_diagnostic F5/F6/F7 (severity corrected post-F2-ruling)
 
 - id: ED-869
   date: 2026-05-28
