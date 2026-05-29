@@ -226,22 +226,30 @@ Per conviction_track §5.4. Latent RM can be suppressed back to latency if ANY o
 
 Suppression returns RM to ambient background-process state (Stage 1). RM may re-emerge to Latent (Stage 2) on subsequent §3.1 trigger.
 
-### §6.2 Stage 3 → ??? (Insurgency suppression)
+### §6.2 Stage 3 → Dissolution (Insurgency) — RATIFIED (ED-881, 2026-05-29)
 
-[PROVISIONAL: GD-3 does not specify Insurgency suppression / de-escalation back to non-Insurgency. Two candidate mechanics surfaced by Pass 2i for Pass 2k ratification:
+**[RATIFIED 2026-05-29, ED-881 — Jordan-directed.** Replaces forward-flag INSURGENCY-DISSOLUTION-001. Tested candidate: `designs/audit/2026-05-28-resolution-diagnostic/insurgency_dissolution_proposal.md` + `sim_insurgency_dissolution.py`. Validated against precedent (RAND *How Insurgencies End*, 89 cases, via `ners_historical_precedent_matrix.md` entry 4): insurgent **defeat is the modal outcome**; **loss of sanctuary/sponsorship is the strongest predictor of defeat**.]**
 
-- **Option A** — Insurgency dissolves when territorial count drops to 0 (all territories reconquered by other factions). Promoted Faction status disappears; no de-escalation back to Latent RM.
-- **Option B** — Insurgency dissolves when Legitimacy drops below 1.0 AND territorial count drops below 2. Same final state as Option A but different threshold.
+An Insurgency (Stage 3) dissolves via the **first** of these to trigger at Accounting, evaluated in order:
 
-Forward-flag INSURGENCY-DISSOLUTION-001.]
+1. **Military defeat** — territorial count drops to 0 (all territories reconquered), **OR** Legitimacy < 1.0 **AND** territorial count < 2. (Subsumes the former Options A and B as the "military" exit.)
+2. **Sponsor withdrawal** — if the Insurgency has an external **sponsor** (a faction backing it via an informal alliance, pipeline §4.3), and that sponsor is lost — the sponsor faction collapses (ED-675), signs a treaty renouncing support, or is itself militarily defeated — the Insurgency loses sanctuary: Legitimacy decays −0.5/season, and it dissolves on crossing the Legitimacy floor with a shrunk base. *This is the historically dominant defeat path (RAND: sanctuary loss is the strongest predictor) and is the highest-value addition over the former territory-only options.*
+3. **Amnesty / negotiated** — the controlling/parent faction may offer terms (a Senator/Social action). Acceptance is a contested resolution (parent Mandate vs Insurgency Resolve, via the Domain Action Resolver, `params/factions/stats_1_7_scale.md`); a committed Insurgency usually fights on, so this is a genuine but **minority** exit. On acceptance the Insurgency dissolves into the political settlement (held territories revert by agreement; no further conflict).
+4. **Persist (stalemate)** — none of the above this season; the Insurgency continues (RAND's stalemate exit; a real, minority steady-state).
 
-### §6.3 Stage 4 → ??? (Promoted Faction dissolution)
+On dissolution the Insurgency's status flags clear and its territories follow the §6.4 non-symmetric rule (return to "non-existence," not to Latent RM). **Sponsorship knob:** P(sponsor-loss/season) is the key tuning value (it sets the sponsor-vs-military split among defeats); set so that aggregate defeat remains modal — see the proposal §4 tuning note. **GD-1 binding:** dissolution produces stat/territorial deltas only; it is never a victory or defeat *of the game* (sole victory is Peninsular Sovereignty).
 
-[PROVISIONAL: GD-3 does not specify Promoted Faction dissolution. Candidate:
+### §6.3 Stage 4 → Dissolution (Promoted Faction) — RATIFIED (ED-881, 2026-05-29)
 
-- **Promoted Faction dissolution conditions:** Legitimacy = 0 AND territorial count = 0, OR via Conviction Scar accumulation past survival threshold (specific value TBD).
+**[RATIFIED 2026-05-29, ED-881.** Replaces forward-flag INSURGENCY-PROMOTED-DISSOLUTION-001.]**
 
-Forward-flag INSURGENCY-PROMOTED-DISSOLUTION-001.]
+A Promoted Faction (Stage 4, parliamentary or extra-parliamentary) dissolves via the **same four paths** as §6.2, with the promoted-faction thresholds: a Promoted Faction is more resilient than a raw Insurgency, so —
+1. **Military defeat** — territorial count = 0, OR Legitimacy < 1.0 AND territorial count < 2 (same as a fully-collapsed faction; a Promoted Faction at Stability 0 also follows the standard **Collapse Exit Procedure**, faction_layer §1.5 / ED-675 — collapse-as-simplification, reconstitution possible).
+2. **Sponsor withdrawal** — as §6.2.
+3. **Amnesty / negotiated** — as §6.2; a Promoted Faction may instead be folded via treaty (it has parliamentary/treaty surface).
+4. **Persist.**
+
+A Promoted Faction does **not** demote back to Insurgency (§6.4 unidirectional); it either persists, collapses (ED-675, recoverable), or dissolves by negotiation. This closes the GD-3 R-FAIL (the pipeline could previously only escalate, never represent the modal real outcome of insurgent defeat).
 
 ### §6.4 Suppression non-symmetric
 
@@ -319,8 +327,8 @@ Insurgency formation triggers GD-2 mandatory threat response by the parent facti
 | **INSURGENCY-STATS-001** | §4.2 Insurgency starting stat values (I 2-3, Sta 2, W 0-1, Mil variable) are Pass 2i derivation. GD-3 specifies "L=1.0, low stats (I, Sta < starting-faction baselines)" — specific values not canonized. | Jordan ratify specific values or revise. |
 | **INSURGENCY-STATUS-MUTABILITY-001** | §5.2 persistence rule (status flag set at promotion is persistent for rest of campaign) is Pass 2i derivation. GD-3 specifies trigger conditions but not post-promotion mutability. | Confirm persistence rule or specify mutability mechanic. |
 | **INSURGENCY-CONVICTION-DERIVATION-001** | §5.4 Convictions set by emergence conditions — algorithm not specified in canon. | Author derivation algorithm (PT trajectory weighting, territorial source weighting, action-history weighting) or revise. |
-| **INSURGENCY-DISSOLUTION-001** | §6.2 Insurgency suppression / de-escalation mechanic not specified in GD-3. Pass 2i surfaces 2 candidate options. | Jordan ratify Option A or Option B or specify alternative. |
-| **INSURGENCY-PROMOTED-DISSOLUTION-001** | §6.3 Promoted Faction dissolution conditions not specified in GD-3. | Jordan author dissolution thresholds. |
+| **INSURGENCY-DISSOLUTION-001** | RESOLVED (ED-881, 2026-05-29): §6.2 ratified 4-path dissolution (military/sponsor/amnesty/persist), RAND-validated. | Jordan ratify Option A or Option B or specify alternative. |
+| **INSURGENCY-PROMOTED-DISSOLUTION-001** | RESOLVED (ED-881, 2026-05-29): §6.3 ratified (same 4 paths, promoted thresholds; ED-675 collapse for Stab-0). | Jordan ratified. |
 | **INSURGENCY-DEMOTE-DIRECTION-001** | §6.4 non-symmetric model (stages 3-4 do not demote back; only Stage 2 ↔ Stage 1 is reversible) is Pass 2i derivation. Alternative would be full demote-chain. | Confirm or revise. |
 | **LATENT-RM-vs-INSURGENCY-RM-001** | §1 layering interprets conviction_track §5 (Latent RM) and GD-3 (d) RM-variant Insurgency as **different stages of the same in-fiction phenomenon**. Alternative interpretations exist (Option A: GD-3 supersedes §5; Option B: §5 supersedes GD-3 (d); Option C: distinct mechanisms). Pass 2i adopts the layered interpretation. | Jordan confirm layering, or ratify alternative. |
 

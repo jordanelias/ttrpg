@@ -49,7 +49,8 @@ sources:
 
   insurgency_pipeline_v30:
     design_doc: designs/world/insurgency_pipeline_v30.md
-    canonical_sha__designs__world__insurgency_pipeline_v30_md: "ed71450fdf4e023925c86cb49ab0b222ff8625c5"
+    canonical_sha__designs__world__insurgency_pipeline_v30_md: "04f91ee43a8041dd692661c2595c6d132f8528ac"
+    note: "ED-881 (2026-05-29): §6.2/§6.3 insurgency dissolution down-path ratified (4-path: military/sponsor-withdrawal/amnesty/persist), RAND-validated; closes GD-3 R-FAIL. Jordan-directed."
     note: "Pass 2i. GD-3 4-stage layered model: world PT decay → Latent RM → Insurgency → Promoted Faction. GD-1/2/3 cross-bindings. 7 forward-flags."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2i"
