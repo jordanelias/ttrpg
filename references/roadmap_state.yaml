@@ -76,8 +76,8 @@ design_threads:
     status: in_progress
     note: "combat_v32_proposal (state-graph reframe of v31, per Jordan 2026-05-28 vision). NERS improved, not-yet-compliant. F1/F2 fixed; F7/N4 addressed; F3/N1/N3/N5 open. Supersedes combat_v30 sections 1-4 on ratification. I-17 build-axis sim validating (8-module decomposition, 0271da2)."
   - id: faction-action-layer
-    status: blocked_on_decision
-    note: "Sole NON-COMPLIANT resolution system (R/S/E fail). Gated on FAC-F2 Ob-formula contradiction + faction-resolver direction."
+    status: decision_made_impl_pending
+    note: "Was the sole NON-COMPLIANT resolution system (R/S/E fail). Jordan 2026-05-29: resolver = AGGREGATE pool + monotonic Ob (FAC-F2 already ruled Ob=floor(stat/2)+1). Implementation pending: faction_layer resolution rewrite + ED-865/868 update."
 
 resolved_decisions:
   - "D0 -- branch protection: LEAVE DISABLED (proven writable; direct commits 05-28/29). Validates striking the stale B6-blocked claim."
@@ -88,16 +88,17 @@ resolved_decisions:
   - "D6 -- scope-vocab unification: UNIFY (TASK_REQUIRED_FILES / SESSION_SCOPES / COMMIT_FORMAT -> one set). Impl: pending."
   - "OWN-1/2 -- LOCKED (Jordan, passC): MS net-decays by default; start MS=60 (resolves 60-vs-72 -> 60); passive Warden Mending exists but degradable. Propagation: annotate ms_trajectory + clock_registry (start 72->60); add Warden-interruption events."
   - "OWN-3 -- RESOLVED (passC): maintain = de-escalate + heal (no WC buff). Open piece -> pending (closure threshold)."
+  - "FR -- RESOLVED (Jordan 2026-05-29): faction-resolver = AGGREGATE the pool + smooth Ob monotonic in target strength. Kills the bare-stat small-pool binary (the R/S/E failure). Impl pending: faction_layer resolution rewrite + ED-865/ED-868 update."
+  - "PT -- RESOLVED (Jordan 2026-05-29): RATIFY ED-844-856 + apply declared defaults (a/b/c, x/y/z). Execution pending: flip ED-844-856 status to ratified in a focused editorial turn."
+  - "CMB -- DEFERRED (Jordan 2026-05-29): combat_v32 N3/N4/N5 moved to a dedicated combat-testing chat + I-17 build-axis sim; not decided here."
+  - "OWN-3T -- RESOLVED (Jordan 2026-05-29): maintain-victory closure at a 1:2 damage:healing ratio -- one season of tearing requires two seasons of mending to undo (~2 seasons per wound-point; supersedes the 3.5-season estimate). Foundational Mend rate / site-wound counter tuned to this ratio (sim-tuning)."
+  - "CAP -- RESOLVED (Jordan 2026-05-29): build/adopt the -10/s Force-3 heavy-tearing guardrail. Propagation pending: params + ms section 5."
+  - "LIC -- RESOLVED (Jordan 2026-05-29): LICENSE created (all-rights-reserved, (c) 2026 Jordan Elias) for GOV-08 / ED-788. Mirror to valoria-game pending Jordan confirm."
 
 pending_decisions:
-  - "FR -- faction-resolver direction (aggregate-pool vs det+stochastic); prereq: resolve FAC-F2 Ob-formula contradiction"
-  - "PT -- PT+Treaty: provisional-canon a/b/c + balance target x/y/z + ratify ED-844-856 (recommend accept declared defaults)"
-  - "CMB -- combat_v32 trade-offs: N3 sigma-space propagate-vs-ratify-combat-only; N4 set-bonus cliff vs graded; N5 weapon-handling keep-vs-cut"
-  - "OWN-3T -- maintain-victory closure threshold (N Foundational Mends / site-wound target)"
-  - "OWN-4 -- insurgency dissolution: confirm multi-path (military / sponsor-withdrawal / amnesty / persist)"
-  - "OWN-5 -- defection cascade (B1.2/B1.3): scheduling -- build as specced + fragility-multiplier + suppression-brake"
-  - "CAP -- MS -10/s heavy-tearing cap (recommend adopt -10/s Force-3 guardrail)"
-  - "LIC -- LICENSE / GOV-08 (= ED-788; non-blocking)"
+  - "OWN-4 -- insurgency dissolution: confirm multi-path (military / sponsor-withdrawal / amnesty / persist); sponsor-withdrawal high-value add (only OWN-3T of the tail answered 2026-05-29)"
+  - "OWN-5 -- defection cascade (B1.2/B1.3): build scheduling -- build as specced + fragility-multiplier + suppression-brake (still open)"
+  - "IDR -- ED-865/866/867 ID collision: cb32edb5 (engine-replacement) vs c93a36df (faction F1/F2) claim the same 3 IDs. Renumber direction is Jordan's call (recommend keep cb32edb5 at 865-867; renumber faction set to 874+)"
 
 integrity_actions_open:
   - "Strike stale B6-blocked claim corpus-wide (PI + architecture [Jordan-settings] + audit docs)"
