@@ -1,0 +1,72 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m6_dual_resource_economy.py",
+  "scope": "custom: core_engine + combat — Module 6 (dual-resource economy)",
+  "module": "M6",
+  "note": "The stateful Stamina + Concentration economy (combat_v32_proposal §11.5/§11.6/§4.9 + derived_stats §4.2/§5.2). Boundary: M4a owns commit-depth cost / chain cap / wound ceiling / disengage cost / recovery formula; M6 owns the stateful pools, the full per-action drain (movement + sub-action + armour + per-exchange), the threshold bands for both resources, and the §11.6 dual-resource shape. Class A = canonical (derived_stats armour drain, -3/exchange Concentration, Out-of-Breath/Spent -2D). Class B = v32 draft drain costs + threshold fractions (sim-tunable). Composes M2 (maxima) + M4a (commit/disengage/recovery).",
+  "entries": [
+    {
+      "sim_variable": "ARMOR_PASSIVE_DRAIN",
+      "value": "{none:0, light:0, medium:1, heavy:2}",
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.2",
+      "quoted_text": "armor Stamina drain per action: Light/None +0, Medium +1, Heavy +2 (Out of Breath at 0: -2D)"
+    },
+    {
+      "sim_variable": "CONCENTRATION_PER_EXCHANGE",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§5.2",
+      "quoted_text": "Concentration = Focus x3, range 3-21, -3 per exchange"
+    },
+    {
+      "sim_variable": "SPENT_PENALTY",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§5.2",
+      "quoted_text": "Concentration Spent at 0: -2D all combat rolls; resets to max (canonical social-contest Regroup)"
+    },
+    {
+      "sim_variable": "MOVEMENT_STAMINA",
+      "value": "{direct_press:0, drawing:0, feinted:0, angled:1, explosive:3}",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.5",
+      "quoted_text": "Phase 3 movement Stamina: Direct press/Drawing/Feinted 0; Angled 1; Explosive close 3"
+    },
+    {
+      "sim_variable": "SUBACTION_STAMINA",
+      "value": "{cut/thrust/yield/void:1, press/wind/displace:2, grip_change:3}",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.5",
+      "quoted_text": "Phase 6 Bout sub-action per step: 1 (Cut/Thrust/Yield/Void) — 2 (Press/Wind/Displace) — 3 (Grip-change)"
+    },
+    {
+      "sim_variable": "STAMINA_THRESHOLDS",
+      "value": "{0.30 chain-1, 0.20 depth ceiling-1, 0.10 probe/prep only} + 0 Out-of-Breath -2D",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.5",
+      "quoted_text": "Threshold effects: 0 Out of Breath -2D; <30% chain max -1; <20% Commit depth ceiling -1; <10% Commit probe/preparatory only"
+    },
+    {
+      "sim_variable": "CONCENTRATION_THRESHOLDS",
+      "value": "{0.30 Reading-1D+oppOb, 0.20 depth-1, 0.10 no-Bout} + 0 Spent -2D",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.4",
+      "quoted_text": "<30% Reading sub-channel -1D + opponent +0.5 Ob; <20% Commit depth ceiling -1; <10% cannot enter Bout (Disengage forced); 0 Spent -2D"
+    },
+    {
+      "sim_variable": "CONCENTRATION_OPP_OB",
+      "value": 0.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.4",
+      "quoted_text": "<30% of max Concentration: opponent gains +0.5 Ob advantage during Bout"
+    }
+  ]
+}
