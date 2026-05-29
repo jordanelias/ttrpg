@@ -769,6 +769,89 @@ def supersession_check(additions: list) -> None:
         print("  Verify commit does not regress the superseded authority. (non-blocking)\n")
 
 
+# ── Editorial-ledger JSONL integrity (Phase 2.2 — 2026-05-28 JSONL migration) ──
+# The editorial ledger migrated from 24 fragmented YAML files (3 archive schemes,
+# 6 unparseable) to one line-delimited JSON store: canon/editorial_ledger.jsonl
+# (605 entries, globally-unique ids, 0 duplicates — verified at migration). This
+# function is the "DB-grade integrity guarantee in text" the migration report
+# calls for: every committed JSONL ledger round-trip-parses, carries the required
+# fields on every entry, and has a globally unique id per line.
+#
+# Required-fields are deliberately the empirically-universal set {id, status}
+# (100% present across all 605 current entries). `description` is NOT required:
+# 16 legacy/partial entries lack it, and requiring it would permanently block
+# every JSONL commit until the 21 `_migration_partial` re-verifications and the
+# 94 conflict resolutions land. Tighten EDITORIAL_JSONL_REQUIRED once that data
+# is clean — that is a Jordan decision, not an automatic one.
+#
+# NOTE (transition state): the live editorial gate / bootstrap still READ the
+# legacy canon/editorial_ledger.yaml. Repointing the readers + the size-governance
+# model for a 79k-token consolidated store is Phase 2.1, pending Jordan's choice
+# of fetch model. This validator is fetch-model-independent: it validates whatever
+# JSONL ledger content appears in a commit, so it is safe to land ahead of 2.1.
+EDITORIAL_JSONL_LEDGERS = ('canon/editorial_ledger.jsonl',)
+EDITORIAL_JSONL_REQUIRED = ('id', 'status')
+
+
+def validate_ledger_jsonl(path: str, content: str) -> list:
+    """
+    Validate one editorial-ledger JSONL file. Pure function — no I/O, no halt.
+    Returns a list of error strings (empty == valid); callers aggregate and raise.
+
+    Checks, in order:
+      1. round-trip parse  — every non-blank line is a valid JSON object;
+      2. required-fields   — every entry carries EDITORIAL_JSONL_REQUIRED;
+      3. global id-unique  — no id repeats across lines (the core migration fix).
+    """
+    import json
+    errors = []
+    seen, dupes = {}, []
+    missing_required, parse_errs = [], []
+    for lineno, line in enumerate(content.splitlines(), 1):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            item = json.loads(line)
+        except Exception as e:
+            parse_errs.append((lineno, str(e)[:80]))
+            continue
+        if not isinstance(item, dict):
+            parse_errs.append((lineno, f"line is {type(item).__name__}, expected object"))
+            continue
+        miss = [f for f in EDITORIAL_JSONL_REQUIRED
+                if f not in item or item.get(f) in (None, "")]
+        if miss:
+            missing_required.append((lineno, miss))
+        iid = item.get('id')
+        if iid is None:
+            continue
+        if iid in seen:
+            dupes.append(iid)
+        else:
+            seen[iid] = True
+    if parse_errs:
+        errors.append(
+            f"LEDGER_JSONL: {path}: {len(parse_errs)} unparseable line(s) — "
+            + "; ".join(f"L{n}: {m}" for n, m in parse_errs[:5])
+            + (" …" if len(parse_errs) > 5 else "")
+        )
+    if missing_required:
+        errors.append(
+            f"LEDGER_JSONL: {path}: {len(missing_required)} line(s) missing required "
+            f"field(s) {list(EDITORIAL_JSONL_REQUIRED)} — "
+            + "; ".join(f"L{n}: {fld}" for n, fld in missing_required[:5])
+            + (" …" if len(missing_required) > 5 else "")
+        )
+    if dupes:
+        errors.append(
+            f"LEDGER_JSONL: {path}: duplicate id(s) {sorted(set(dupes))}. "
+            f"Each JSONL line must have a unique id (the core fix of the 2026-05-28 "
+            f"migration; cf. ED-762 collision 2026-04-29)."
+        )
+    return errors
+
+
 def assert_unique_ids(additions: list) -> None:
     """
     Enforce id uniqueness in ledger and register files.
@@ -778,8 +861,10 @@ def assert_unique_ids(additions: list) -> None:
     fail fast rather than after CI or via downstream propagation defects.
 
     Files checked:
-      canon/editorial_ledger.yaml          (entries: list with .id)
-      canon/editorial_ledger_archive.yaml  (entries: list with .id)
+      canon/editorial_ledger.jsonl         (line-delimited JSON → validate_ledger_jsonl:
+                                            round-trip + required-fields + id-uniqueness)
+      canon/editorial_ledger.yaml          (entries: list with .id) [legacy/transition]
+      canon/editorial_ledger_archive.yaml  (entries: list with .id) [legacy/transition]
       canon/patch_register_active.yaml     (top-level list with .id)
       canon/patch_register_archive.yaml    (top-level list with .id)
     """
@@ -792,6 +877,11 @@ def assert_unique_ids(additions: list) -> None:
     import yaml
     errors = []
     for path, content in additions:
+        # JSONL ledgers (post-2026-05-28 migration) get the full DB-grade validator:
+        # round-trip parse + required-fields + global id-uniqueness.
+        if path in EDITORIAL_JSONL_LEDGERS:
+            errors.extend(validate_ledger_jsonl(path, content))
+            continue
         if path not in LEDGER_FILES:
             continue
         try:
