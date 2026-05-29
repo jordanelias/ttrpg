@@ -652,6 +652,111 @@
       "canonical_source": "N/A \u2014 harness/derived",
       "section": "collapse-recovery sim",
       "quoted_text": "console separator width \u2014 harness"
+    },
+    {
+      "sim_variable": "ins_1_0",
+      "value": 1.0,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "Legitimacy floor"
+    },
+    {
+      "sim_variable": "ins_1_5",
+      "value": 1.5,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "amnesty gate"
+    },
+    {
+      "sim_variable": "ins_0_25",
+      "value": 0.25,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "reconquest chance"
+    },
+    {
+      "sim_variable": "ins_74",
+      "value": 74,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "separator"
+    },
+    {
+      "sim_variable": "ins_89",
+      "value": 89,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "RAND case count digit-run / dup"
+    },
+    {
+      "sim_variable": "ins_0_61",
+      "value": 0.61,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "derived sponsor-share"
+    },
+    {
+      "sim_variable": "ins_61",
+      "value": 61,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "0.61 digit-run"
+    },
+    {
+      "sim_variable": "ins_0_73",
+      "value": 0.73,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "derived persist"
+    },
+    {
+      "sim_variable": "ins_73",
+      "value": 73,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "dup"
+    },
+    {
+      "sim_variable": "ins_0_88",
+      "value": 0.88,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "derived"
+    },
+    {
+      "sim_variable": "ins_88",
+      "value": 88,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "dup"
+    },
+    {
+      "sim_variable": "ins_0_78",
+      "value": 0.78,
+      "canonical_source": "N/A \u2014 PROPOSED/derived/harness",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "derived"
+    },
+    {
+      "sim_variable": "ins2_30",
+      "value": 30,
+      "canonical_source": "N/A \u2014 harness/sweep",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "0.30 digit-run (accept rate / sweep)"
+    },
+    {
+      "sim_variable": "ins2_25",
+      "value": 25,
+      "canonical_source": "N/A \u2014 harness/sweep",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "0.25 digit-run (reconquest)"
+    },
+    {
+      "sim_variable": "ins2_0.0",
+      "value": 0.0,
+      "canonical_source": "N/A \u2014 harness/sweep",
+      "section": "insurgency dissolution sim",
+      "quoted_text": "sweep zero"
     }
   ],
   "provisional_assumptions": [

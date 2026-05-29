@@ -116,14 +116,14 @@
       "date": "2026-05-29",
       "severity": "P2",
       "type": "missing",
-      "status": "open",
-      "description": "GD-3 (Revolt -> Insurgency -> Faction) has NO down-path: the pipeline can escalate but cannot DISSOLVE. Per ners_historical_precedent_matrix entry 4 (RAND, How Insurgencies End, 89 cases): insurgent defeat is the MODAL outcome; loss of sanctuary/sponsorship is the strongest predictor of defeat; ~10yr average duration. GD-3 currently cannot represent the most common real outcome -> NERS R-FAIL on the missing down-path. Recommend owner-authored multi-path dissolution: military defeat / sponsor-withdrawal / amnesty-negotiated / else-persist, with sponsor-withdrawal the high-value add. Surfaced by the precedent reconciliation, not by this session's faction-collapse work (collapse itself is bounded \u2014 ED-868).",
+      "status": "resolved-candidate",
+      "description": "GD-3 (Revolt -> Insurgency -> Faction) has NO down-path: the pipeline can escalate but cannot DISSOLVE. Per ners_historical_precedent_matrix entry 4 (RAND, How Insurgencies End, 89 cases): insurgent defeat is the MODAL outcome; loss of sanctuary/sponsorship is the strongest predictor of defeat; ~10yr average duration. GD-3 currently cannot represent the most common real outcome -> NERS R-FAIL on the missing down-path. Recommend owner-authored multi-path dissolution: military defeat / sponsor-withdrawal / amnesty-negotiated / else-persist, with sponsor-withdrawal the high-value add. Surfaced by the precedent reconciliation, not by this session's faction-collapse work (collapse itself is bounded \u2014 ED-868). RESOLVED-CANDIDATE (insurgency_dissolution_proposal): tested 4-path down-path (military defeat / sponsor withdrawal / amnesty / persist) subsuming pipeline Options A/B as the military exit + adding the RAND-dominant sponsor path. 8k MC: defeat MODAL (0.97), sponsor-loss the dominant defeat driver tracking P(sponsor-loss) per RAND, amnesty a minority exit, stalemate reachable; Stage-4 found+fixed 2 defects (sponsor misattribution, amnesty over-fire). Completes pipeline forward-flags INSURGENCY-DISSOLUTION-001 + INSURGENCY-PROMOTED-DISSOLUTION-001. NOT written to canon (GD-3 \u00a7B requires Jordan ratification). Amnesty path uses the d+s resolver (ED-865/874 cross-dep).",
       "affected_docs": [
         "canon/02_canon_constraints.md (GD-3)",
         "designs/provincial/faction_layer_v30.md"
       ],
       "source": "ners_historical_precedent_matrix entry 4 (RAND) via reconciliation 2026-05-29",
-      "jordan_decision": "pending \u2014 owner-authored dissolution design"
+      "jordan_decision": "pending ratification \u2014 adopt/tune the 4-path mechanic + P(sponsor-loss) knob"
     }
   ],
   "refinements_to_existing": [
