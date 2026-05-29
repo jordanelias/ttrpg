@@ -13,7 +13,7 @@ Acceptance: archetype matchups 40–60% (skill §8.8 band), no inversion, no non
 | 4b | Sub-action mechanics (Pool/Ob/degree) | 1,3,4a | combat_v32 §12.1–§12.4 | verified |
 | 5 | Stance + Reaction + coherence | 4 | combat_v32 §7.1–7.3 | verified |
 | 6 | Dual-resource economy | 4 | combat_v32 §11.5–11.6, §4.9 | verified |
-| 7 | Facing / FoV (optional; stub-first) | 4 | combat_v32 §11.2 | pending |
+| 7 | Facing / FoV (optional; stub-first) | 4 | combat_v32 §11.2 | verified |
 | 8 | Integration + archetype sweep | all | — (wires modules) | pending |
 
 Hard rules: one module/session; every constant ledgered or `# [canonical:]`; re-verify imported module values; no batch run until all modules verified.

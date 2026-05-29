@@ -1,0 +1,56 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m7_facing_fov.py",
+  "scope": "custom: core_engine + combat — Module 7 (perception / facing / FoV)",
+  "module": "M7",
+  "note": "v32 facing model (combat_v32_proposal §11.2): facing's effect is EMERGENT from perception, replacing v31's authored Facing Ob table. FoV zones (Central/Near/Far/Blind) -> FoV factor scales sight-mediated Reading (Tactile exempt) + gates reaction availability. Emergent facing advantage DERIVED from two compounding channels (Reading scaledown + reaction loss), composing M5.reaction_sigma; reproduces v31 ≈ -1 flank / -2 rear. All Class B §11.2 drafts (FoV factors + angular bands sim-tunable). [ASSUMPTION] emergent magnitude uses unit base Reading δσ; exact value from Phase-4 Reading net-success table (§4.5) wired in M8. [GAP] §4.5 Reading->δσ not modelled in M7 (structure validated; magnitude deferred). Built with depth per Jordan directive (not stubbed).",
+  "entries": [
+    {
+      "sim_variable": "FOV_FACTORS",
+      "value": "{central:1.0, near_peripheral:0.6, far_peripheral:0.3, blind:0.0}",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.2",
+      "quoted_text": "FoV factor per zone: Central 1.0, Near-peripheral 0.6, Far-peripheral 0.3, Blind (rear) 0.0"
+    },
+    {
+      "sim_variable": "ANGULAR_BANDS",
+      "value": "{central:±30°, near:30-70°, far:70-110°, blind:>110°}",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.2",
+      "quoted_text": "FoV zones by relative angular position: Central ±~30°, Near-peripheral ~30-70°, Far-peripheral ~70-110°, Blind >~110°"
+    },
+    {
+      "sim_variable": "REACTIONS_BY_ZONE",
+      "value": "{central:all, near:Hand-led+Body-led, far:Hand-led only, blind:none}",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.2",
+      "quoted_text": "Reaction availability: Central all reactive; Near-peripheral Hand-led+Body-led only; Far-peripheral Hand-led only (reflexive); Blind none. You cannot void what you cannot see."
+    },
+    {
+      "sim_variable": "READING_FOV_SCALING",
+      "value": "Effective Reading Pool (channel) = base Reading Pool x FoV_factor; Tactile exempt",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.2",
+      "quoted_text": "Each sight-mediated Reading channel Pool scaled by opponent FoV factor; Tactile (the bind) is contact-mediated, not FoV-scaled"
+    },
+    {
+      "sim_variable": "FLANK_OB_TARGET",
+      "value": -1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.2",
+      "quoted_text": "emergent advantage reproduces ≈ -1 effective Ob at flank (v31 authored value emerges from perception model, reframe_blueprint §4)"
+    },
+    {
+      "sim_variable": "REAR_OB_TARGET",
+      "value": -2,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§11.2",
+      "quoted_text": "emergent advantage reproduces ≈ -2 effective Ob at rear; compounds super-linearly (Reading scaledown + reaction loss)"
+    }
+  ]
+}
