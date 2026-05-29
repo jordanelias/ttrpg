@@ -86,16 +86,11 @@ policies:
   # ────────────────────────────────────────────────────────────
   # REGISTERS — editorial ledger
   # ────────────────────────────────────────────────────────────
-  # canon/editorial_ledger.yaml rule removed 2026-05-28: the YAML ledger was
-  # superseded by canon/editorial_ledger.jsonl (JSONL migration) and deprecated
-  # to deprecated/canon/editorial_ledger.yaml. No active register to atomize.
-  # The editorial_ledger_archive*.yaml rule below still governs the 23 legacy
-  # archive files until their removal (Phase 2.3).
-
-  - match: "canon/editorial_ledger_archive*.yaml"
-    max_tokens: 10000
-    on_exceed: "error"
-    read_restriction: "index_first"
+  # Editorial ledger fully migrated to canon/editorial_ledger.jsonl (JSONL
+  # migration 5c07bff0; reader cutover 6a42b1f1). The YAML ledger and all 10
+  # editorial_ledger_archive*.yaml files were deprecated 2026-05-28 to
+  # deprecated/canon/ — no active editorial YAML register remains to atomize.
+  # The JSONL store is integrity-checked at commit by validate_ledger_jsonl.
 
   # ────────────────────────────────────────────────────────────
   # REGISTERS — coverage matrix

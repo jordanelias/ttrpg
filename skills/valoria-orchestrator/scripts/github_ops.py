@@ -57,7 +57,6 @@ REPOS = {
 TOKEN_THRESHOLDS = {
     "session_log_current.md":                  2_000,   # session-bounded; rotates each session
     "session_logs/index.md":                   2_000,   # tiny index file
-    "canon/editorial_ledger_summary.yaml":     2_000,   # raised 1_000 → 2_000 (2026-05-02): paired with parent
     "references/file_index_summary.md":        2_000,   # raised 1_000 → 2_000 (2026-05-02): file count grows with project
     "references/canonical_sources.yaml":       9_000,   # raised 5_000 → 8_000 (2026-05-02), → 9_000 (2026-05-18): freshness_gate --update added 115 canonical_sha fields, pushing file to 8086 tokens
     "skills/valoria-orchestrator/SKILL.md":    8_000,
@@ -157,7 +156,6 @@ def _repo_key(path: str, repo: str) -> str:
 SESSION_PERMANENT_PATTERNS = (
     'session_log_current.md',
     'session_logs/index.md',
-    'editorial_ledger_summary.yaml',
     'file_index_summary.md',
     'canonical_sources.yaml',
     'patch_register_active.yaml',

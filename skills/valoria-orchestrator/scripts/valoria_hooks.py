@@ -863,15 +863,14 @@ def assert_unique_ids(additions: list) -> None:
     Files checked:
       canon/editorial_ledger.jsonl         (line-delimited JSON → validate_ledger_jsonl:
                                             round-trip + required-fields + id-uniqueness)
-      canon/editorial_ledger_archive.yaml  (entries: list with .id) [legacy; until 2.3]
       canon/patch_register_active.yaml     (top-level list with .id)
       canon/patch_register_archive.yaml    (top-level list with .id)
 
-    canon/editorial_ledger.yaml was deprecated 2026-05-28 (→ deprecated/canon/) and
-    is no longer gated here; the JSONL store is the live editorial ledger.
+    The editorial_ledger YAML + its 10 archive files were deprecated 2026-05-28
+    (→ deprecated/canon/) and are no longer gated here; the JSONL store is the live
+    editorial ledger, integrity-checked by validate_ledger_jsonl.
     """
     LEDGER_FILES = {
-        'canon/editorial_ledger_archive.yaml': 'entries',
         'canon/patch_register_active.yaml':    None,
         'canon/patch_register_archive.yaml':   None,
     }

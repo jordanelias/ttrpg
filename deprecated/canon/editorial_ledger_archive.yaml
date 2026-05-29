@@ -1,3 +1,12 @@
+# ============================================================================ 
+# DEPRECATED 2026-05-28 — superseded by canon/editorial_ledger.jsonl 
+# 
+# Consolidated into the JSONL editorial store (migration 5c07bff0; reader 
+# cutover 6a42b1f1) and moved here. No hook/gate/bootstrap reads it. History 
+# only — DO NOT EDIT, DO NOT treat as canonical. Provenance: 
+# canon/editorial_ledger_migration_2026-05-28.md 
+# ============================================================================ 
+
 # Valoria Editorial Ledger — Archive INDEX (split 2026-05-10)
 # Original single archive exceeded 10k token limit; split into chunks below.
 # Migrated 2026-04-20 from canon/editorial_ledger.yaml; chunked 2026-05-10.

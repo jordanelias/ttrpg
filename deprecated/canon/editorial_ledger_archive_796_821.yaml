@@ -1,3 +1,12 @@
+# ============================================================================ 
+# DEPRECATED 2026-05-28 — superseded by canon/editorial_ledger.jsonl 
+# 
+# Consolidated into the JSONL editorial store (migration 5c07bff0; reader 
+# cutover 6a42b1f1) and moved here. No hook/gate/bootstrap reads it. History 
+# only — DO NOT EDIT, DO NOT treat as canonical. Provenance: 
+# canon/editorial_ledger_migration_2026-05-28.md 
+# ============================================================================ 
+
 entries:
 - id: ED-797
   date: 2026-05-10
