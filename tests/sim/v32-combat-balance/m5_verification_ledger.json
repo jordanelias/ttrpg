@@ -1,0 +1,64 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m5_stance_reaction_coherence.py",
+  "scope": "custom: core_engine + combat — Module 5 (stance + reaction + coherence)",
+  "module": "M5",
+  "note": "The three sigma-space matchup modifiers (combat_v32_proposal §7.1/§7.2/§7.3 + §6.11). ALL Class B draft sim-seeds — the matchup tables the I-17 balance pass exists to tune (Stance Counter cell values, Reaction baseline/slope coefficients, named-set bonus levels, antagonism penalty). Reuses M1 LEVEL_SIGMA for all level->delta-sigma conversion. FLAGGED for Jordan: these are the prep-doc draft magnitudes (Phase 11 stance tuning to Fast-vs-Titan 50-60%; Phase 14 coherence; reaction params sim-tunable I-17) — NOT canonical, NOT pre-decided.",
+  "entries": [
+    {
+      "sim_variable": "STANCE_COUNTER_MATRIX",
+      "value": "authored 5x5 anti-symmetric; cells in {-2,-1,0,1,2}",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§7.1",
+      "quoted_text": "Per-stance × per-stance σ-space modifier, state-gated to Closing. Anti-symmetric ([A][B]=−[B][A]); diagonal 0. Kept authored (≈85% cyclic, only 19/25 reproduced by low-D). Magnitudes draft; Phase 11 tunes to Fast-vs-Titan 50–60%."
+    },
+    {
+      "sim_variable": "STANCE_OB_TO_LEVEL",
+      "value": "{1: Moderate (0.5 δσ), 2: Strong (0.75 δσ)}",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§7.1",
+      "quoted_text": "values are legacy Ob magnitudes mapped to σ-space levels: ±1 → Moderate 0.5δσ; ±2 → Strong 0.75δσ; sign negative = Aggressor advantaged"
+    },
+    {
+      "sim_variable": "REACTION_PARAMS",
+      "value": "Voiding(+0.40,−0.35) Pressing(+0.30,−0.25) Hand-led(0.00,−0.25) Body-led(+0.10,+0.15) Yielding(+0.10,+0.35)",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§7.2",
+      "quoted_text": "Reaction δσ = baseline_r + slope_r·(depth−3). slope<0 punishes hesitation; slope>0 punishes overcommitment. Exact parameters draft; sim-tunable I-17."
+    },
+    {
+      "sim_variable": "DEPTH_CENTRE",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§7.2",
+      "quoted_text": "depth ∈ {1..5}, centred at Committed (3)"
+    },
+    {
+      "sim_variable": "NAMED_SETS",
+      "value": "Thrust Duelist/Bind Fighter +Moderate; Counter-time/Burst +Strong; Continuous-flow +Moderate",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§6.11.2 / §7.3",
+      "quoted_text": "Coherent loadouts recognized as named sets granting a σ-space set bonus (state-gated). Set-bonus magnitudes draft; sim-tunable Phase 14."
+    },
+    {
+      "sim_variable": "SET_BONUS_DOWNGRADE",
+      "value": "Strong→Moderate→Minor→none",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§6.11.2",
+      "quoted_text": "full set = stated bonus; near-set (exactly one core missing) = one level lower (Strong→Moderate→Minor→none); fewer = nothing (N4 cliff smoothing)"
+    },
+    {
+      "sim_variable": "ANTAGONISMS",
+      "value": "Anticipation×Reaction; Commitment×Disengage — each −Moderate (δσ −0.5)",
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§6.11.3 / §7.3",
+      "quoted_text": "Two pairings do not fold into the set structure: −Moderate (δσ −0.5) when both co-fire on a sub-action. No general 36-pair matrix is retained."
+    }
+  ]
+}

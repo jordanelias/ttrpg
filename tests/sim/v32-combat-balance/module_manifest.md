@@ -11,7 +11,7 @@ Acceptance: archetype matchups 40–60% (skill §8.8 band), no inversion, no non
 | 3 | Weapon-class layer | 1,2 | combat_v32 §8; combat_v30 §5 | verified |
 | 4a | Bout state graph + control flow | 1 | combat_v32 §4.6–§4.9, §12.5–§12.6 | verified |
 | 4b | Sub-action mechanics (Pool/Ob/degree) | 1,3,4a | combat_v32 §12.1–§12.4 | verified |
-| 5 | Stance + Reaction + coherence | 4 | combat_v32 §7.1–7.3 | pending |
+| 5 | Stance + Reaction + coherence | 4 | combat_v32 §7.1–7.3 | verified |
 | 6 | Dual-resource economy | 4 | combat_v32 §11.5–11.6, §4.9 | pending |
 | 7 | Facing / FoV (optional; stub-first) | 4 | combat_v32 §11.2 | pending |
 | 8 | Integration + archetype sweep | all | — (wires modules) | pending |
