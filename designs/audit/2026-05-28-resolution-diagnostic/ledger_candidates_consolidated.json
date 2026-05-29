@@ -45,28 +45,28 @@
     {
       "id": "ED-876",
       "date": "2026-05-28",
-      "severity": "P2",
+      "severity": "P1",
       "type": "design_defect",
       "status": "open",
-      "description": "Trigger-5 firing is NON-MONOTONIC in faction strength because Condition C stacks a pool-size cliff (pool >= 6) onto a magnitude threshold (net <= -2). Computed firing rate by defender pool (recovery-independent MC): Cmd-1 (2D)=0pct [Cond A blocks], Cmd-2 (4D)=1.9pct [needs rare net<=-2], Cmd-3 (6D)=16.6pct [pool>=6 auto-fires C on ANY failure], declining to ~8pct for strong factions. A single Command point (Cmd 2->3) jumps battle->Stability exposure 8.7x. Mid-tier factions are MOST exposed to battle-driven Stability loss; the weakest are shielded. Consider smoothing C (e.g. severity scaled by margin rather than a hard pool>=6 auto-fire). Corrects the earlier hand-traced assumption that weak-faction battles drive a deterministic Stability spiral (CC-2).",
+      "description": "Trigger-5 firing is NON-MONOTONIC in faction strength because Condition C stacks a pool-size cliff (pool >= 6) onto a magnitude threshold (net <= -2). Computed firing rate by defender pool (recovery-independent MC): Cmd-1 (2D)=0pct [Cond A blocks], Cmd-2 (4D)=1.9pct [needs rare net<=-2], Cmd-3 (6D)=16.6pct [pool>=6 auto-fires C on ANY failure], declining to ~8pct for strong factions. A single Command point (Cmd 2->3) jumps battle->Stability exposure 8.7x. Mid-tier factions are MOST exposed to battle-driven Stability loss; the weakest are shielded. Consider smoothing C (e.g. severity scaled by margin rather than a hard pool>=6 auto-fire). Corrects the earlier hand-traced assumption that weak-faction battles drive a deterministic Stability spiral (CC-2). STRENGTHENED (CC-5): with the canonical Institutional Consolidation recovery, the cliff propagates to COLLAPSE \u2014 compound collapse jumps ~25x from Cmd 2 (0.9pct) to Cmd 3 (22.6pct), declining at Cmd 4 (18.6pct), because a fired Trigger-5 denies the deterministic clean-season +1 recovery. A single Command point swinging collapse 25x is a robustness defect -> P1.",
       "affected_docs": [
         "designs/provincial/faction_layer_v30.md"
       ],
-      "source": "sim_compound_collapse CC-1 (session c93a36df)",
+      "source": "sim_compound_collapse CC-1 (session c93a36df) + CC-5 (cc4_resolution)",
       "jordan_decision": "pending"
     },
     {
       "id": "ED-877",
       "date": "2026-05-28",
-      "severity": "P1",
+      "severity": "resolved",
       "type": "missing",
-      "status": "open",
-      "description": "Faction Accounting Stability-RECOVERY mechanic is unspecified or unlocated in the canon read this session. It is the missing damper that every faction-collapse analysis implicitly depends on (F3 anti-death-spiral floor, F5 decrease>increase asymmetry, F6 collapse loop, and the compound-collapse sim CC-4). The compound-sim sensitivity sweep shows collapse-magnitude is DOMINATED by this unspecified mechanic (a placeholder conditional-recovery model failed sanity at 21pct strong-faction collapse; the ER-9 counterfactual inverted as an artifact). Until the canonical recovery mechanic is located (faction_layer Accounting steps 1-13) or specified, no faction-collapse-RATE result is trustworthy. PREREQUISITE for quantifying ED-867/868/F3/F5/F6 and re-running the compound sim.",
+      "status": "resolved",
+      "description": "RESOLVED (was UNREAD, not absent). The faction Stability-recovery mechanic EXISTS: faction_layer_v30 \u00a71.3 Institutional Consolidation = DETERMINISTIC +1 Stability on any Trigger-1-5-free ('clean') season; canon explicitly states it 'replaces the abstract simulator recovery rule.' Conditional paths: peace treaty, recapture territory, Parliamentary Overwhelming, Church Absolution, Lowenritter endorsement; seasonal cap +-2. \u00a71.4 Accounting Stability Check is a cascade-DAMAGE check (fires only on >=2 attr-pts lost), not recovery. Compound sim re-run with this canonical mechanic; SANITY passes; collapse magnitudes now trustworthy. Do NOT file as an open gap.",
       "affected_docs": [
         "designs/provincial/faction_layer_v30.md"
       ],
       "source": "sim_compound_collapse CC-4 (session c93a36df)",
-      "jordan_decision": "pending \u2014 locate or specify recovery mechanic"
+      "jordan_decision": "n/a \u2014 resolved by reading \u00a71.3"
     },
     {
       "id": "ED-878",
@@ -110,5 +110,6 @@
   "deferred_pending_verification": [
     "SC3 genre-weight 0.5 near-inert (D-01), SC4 Regroup-on-Spent (D-04), SC5 Focus-1 Regroup trap (D-05): NOT filed \u2014 status needs a currency check first (these are pre-flagged 2026-04-08 stress-test items whose post-patch status is unverified). File only after verifying against current social_contest canon.",
     "T7 COMPOSURE-DRIFT: already in live ledger (do not re-file)."
-  ]
+  ],
+  "_cc4_update": "ED-877 resolved-was-unread (recovery = \u00a71.3 Institutional Consolidation); ED-876 strengthened P2->P1 (CC-5 collapse-level cliff). See cc4_resolution.md."
 }

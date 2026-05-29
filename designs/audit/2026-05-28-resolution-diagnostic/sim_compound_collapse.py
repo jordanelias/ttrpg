@@ -108,18 +108,20 @@ def threadwork_step(prac, saturated=False):
 # monkeypatch alive flag
 Practitioner.alive_flag = lambda s: s.crisis_resolved is not False
 
-def accounting(faction, recovery_pool_mode='stab'):
-    """Stability recovery check + L7 Wealth cascade. Returns nothing; mutates."""
-    # L7: Wealth-0 -> Military -1 each Accounting
-    if faction.wealth <= 0:
-        faction.mil = max(0, faction.mil - 1)
-    # [A1] Stability recovery check (F3-corrected): pool vs Ob=floor(stat/2)+1
-    if recovery_pool_mode == 'stab':
-        pool = max(1, faction.stab)
-    else:
-        pool = max(1, faction.mil)              # alt sweep: recovery gated on Military
-    deg, x = degree(pool, ob_of(faction.stab))
-    if deg in ("success", "overwhelming"):
+def accounting(faction, trigger_fired, attr_loss):
+    """CANONICAL recovery (faction_layer §1.3) + §1.4 cascade check + L7.
+    [canonical: designs/provincial/faction_layer_v30.md §1.3 Institutional Consolidation]
+    Institutional Consolidation: DETERMINISTIC +1 Stability if NO Trigger fired this season
+    (canon explicitly 'replaces the abstract simulator recovery rule'). §1.4 Accounting
+    Stability Check fires only if >=2 attribute pts lost: roll Stab vs Ob=loss_mag;
+    Failure -> -1, Overwhelming -> +1."""
+    # §1.4 cascade-damage check (only when >=2 attribute pts lost this season)
+    if attr_loss >= 2:
+        deg, x = degree(max(1, faction.stab), attr_loss)
+        if deg == "failure":      faction.stab = max(0, faction.stab - 1)
+        elif deg == "overwhelming": faction.stab = min(7, faction.stab + 1)
+    # §1.3 Institutional Consolidation: deterministic +1 on a clean (Trigger-free) season
+    if not trigger_fired and faction.stab < 7:
         faction.stab = min(7, faction.stab + 1)
 
 def domain_echo(faction, deg):
@@ -143,22 +145,31 @@ def run_campaign(stab0, mil0, wealth0, cmd0, coh0, seasons=20,
         if battle_each_season:
             deg, x, pool = mass_battle_engagement(f, attacker_cmd, attacker_cmd, attack_ob)
             # 3. Trigger 5 cross-scale -> faction Stability
+            stab_start = f.stab; attr_loss = 0; trigger_fired = False
             d = trigger5_stab_delta(deg, x, pool)
-            f.stab = max(0, f.stab + d)
-            # battle win feeds Domain Echo (mil recovery)
+            if d != 0:
+                trigger_fired = True; f.stab = max(0, f.stab + d); attr_loss += abs(d)
             if deg in ("success", "overwhelming"):
                 domain_echo(f, deg)
-            # battle loss => territory-loss pressure on muster (L1)
             terr_lost = (deg == "failure" and x <= -2)
             if terr_lost:
-                f.mil = max(0, f.mil - terr_muster_penalty)
+                m0 = f.mil; f.mil = max(0, f.mil - terr_muster_penalty)
+                attr_loss += (m0 - f.mil); trigger_fired = True
+        else:
+            stab_start = f.stab; attr_loss = 0; trigger_fired = False
         # 4. Threadwork (practitioner Structural op in the territory)
         saturated = battle_each_season               # battle => saturated substrate
         rs_pressure = threadwork_step(p, saturated=saturated)
         if rs_pressure:
-            f.stab = max(0, f.stab - rs_couple)       # [A3] RS drain -> faction Stab
-        # 5. Accounting (L7 cascade + Stability recovery)
-        accounting(f, recovery_pool_mode=recovery_mode)
+            s0 = f.stab; f.stab = max(0, f.stab - rs_couple); attr_loss += (s0 - f.stab); trigger_fired = True
+        # 5. L7 Wealth-0 -> Military -1, then Accounting (canonical §1.3/§1.4 recovery)
+        if f.wealth <= 0:
+            m0 = f.mil; f.mil = max(0, f.mil - 1); attr_loss += (m0 - f.mil)
+        accounting(f, trigger_fired, attr_loss)
+        # seasonal cap +-2 (FACTION_STAT_SEASONAL_CAP)
+        nc = f.stab - stab_start
+        if nc > 2: f.stab = stab_start + 2
+        if nc < -2: f.stab = max(0, stab_start - 2)
         # 6. Collapse check
         if f.stab <= 0:
             f.alive = False
