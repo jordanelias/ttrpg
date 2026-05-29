@@ -1,0 +1,152 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m1_dice_sigma_core.py",
+  "scope": "custom: core_engine — Module 1 (dice + sigma-space core)",
+  "module": "M1",
+  "note": "Class A = canonical (params/core.md). Class B = v32 draft sim-seeds (modifier_system_spec.md, the §12.3 rewrite); tuned in later I-17 modules, NOT canonical.",
+  "entries": [
+    {
+      "sim_variable": "FACE_1",
+      "value": -1,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Die Rule (d10)",
+      "quoted_text": "| 1 | −1 success |"
+    },
+    {
+      "sim_variable": "FACE_2_6",
+      "value": 0,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Die Rule (d10)",
+      "quoted_text": "| 2–6 | 0 |"
+    },
+    {
+      "sim_variable": "FACE_7_9",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Die Rule (d10)",
+      "quoted_text": "| 7–9 | +1 success |"
+    },
+    {
+      "sim_variable": "FACE_10",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Die Rule (d10)",
+      "quoted_text": "| 10 | +2 successes |"
+    },
+    {
+      "sim_variable": "TN_STANDARD",
+      "value": 7,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "TN Values",
+      "quoted_text": "| Standard | 7 | Default |"
+    },
+    {
+      "sim_variable": "MU_PER_DIE_TN7",
+      "value": 0.4,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Expected Value (per die)",
+      "quoted_text": "| 7 | 0.40 | 0.64 | 0.800 |"
+    },
+    {
+      "sim_variable": "SIGMA_PER_DIE_TN7",
+      "value": 0.8,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Expected Value (per die)",
+      "quoted_text": "| 7 | 0.40 | 0.64 | 0.800 |"
+    },
+    {
+      "sim_variable": "MU_PER_DIE_TN6",
+      "value": 0.5,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Expected Value (per die)",
+      "quoted_text": "| 6 | 0.50 | 0.65 | 0.806 |"
+    },
+    {
+      "sim_variable": "SIGMA_PER_DIE_TN6",
+      "value": 0.806,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Expected Value (per die)",
+      "quoted_text": "| 6 | 0.50 | 0.65 | 0.806 |"
+    },
+    {
+      "sim_variable": "MU_PER_DIE_TN8",
+      "value": 0.3,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Expected Value (per die)",
+      "quoted_text": "| 8 | 0.30 | 0.61 | 0.781 |"
+    },
+    {
+      "sim_variable": "SIGMA_PER_DIE_TN8",
+      "value": 0.781,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Expected Value (per die)",
+      "quoted_text": "| 8 | 0.30 | 0.61 | 0.781 |"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Pool Floor (all systems)",
+      "quoted_text": "**Pool floor: 1D.** All dice pools have a minimum of 1D regardless of cumulative penalties."
+    },
+    {
+      "sim_variable": "SOFT_CAP_M_MAX",
+      "value": 1.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "3.1 Saturating function",
+      "quoted_text": "effective_σ = M_max · tanh(net_raw_σ / M_max)        [M_max = 1.5σ, sim-tunable]"
+    },
+    {
+      "sim_variable": "SIGMA_N_COEFF",
+      "value": 0.8,
+      "class": "B-draft (=canonical TN7 σ reused)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "2.1 The transform",
+      "quoted_text": "σ_N = 0.8√N"
+    },
+    {
+      "sim_variable": "LEVEL_MINOR_SIGMA",
+      "value": 0.25,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "2.3 Player-facing abstraction",
+      "quoted_text": "| Minor | ±0.25σ | ±0.7 |"
+    },
+    {
+      "sim_variable": "LEVEL_MODERATE_SIGMA",
+      "value": 0.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "2.3 Player-facing abstraction",
+      "quoted_text": "| Moderate | ±0.50σ | ±1.4 |"
+    },
+    {
+      "sim_variable": "LEVEL_STRONG_SIGMA",
+      "value": 0.75,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "2.3 Player-facing abstraction",
+      "quoted_text": "| Strong | ±0.75σ | ±2.1 |"
+    },
+    {
+      "sim_variable": "LEVEL_MAJOR_SIGMA",
+      "value": 1.0,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "2.3 Player-facing abstraction",
+      "quoted_text": "| Major | ±1.00σ | ±2.8 |"
+    }
+  ]
+}
