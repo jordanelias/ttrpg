@@ -1052,7 +1052,7 @@ A loadout that combines a named set with one of these antagonisms (e.g., the Bur
 
 ## 8. WEAPON CLASSES (PHASE-KEYED STRENGTHS)
 
-**Six weapon classes.** Each maps to the canonical 3-axis weapon TN matrix (combat_v30 §5: Reach × Weight × Type) and adds phase-keyed Pool/TN modifiers.
+**Seven weapon classes.** Each maps to the canonical 3-axis weapon TN matrix (combat_v30 §5: Reach × Weight × Type) and adds phase-keyed Pool/TN modifiers.
 
 ### 8.1 Canonical mapping + base TN
 
@@ -1065,6 +1065,7 @@ A loadout that combines a named set with one of these antagonisms (e.g., the Bur
 | Long pole (staff) | Long × Light × Blunt | 7 | 2 | Quarterstaff, bo |
 | Paired short | Short × Light × Blade (×2) | 5 each | 1 | Dagger pair, paired short swords |
 | Single short | Short × Light × Blade | 5 | 1 | Dagger, short sword, arming sword (in close-grip) |
+| Long Heavy Blunt | Long × Heavy × Blunt | 8 | 4 | War hammer, pollaxe, poleaxe (STR ×3 multiplier per canon §5) |
 
 ### 8.2 Weapon handling (ease-of-use)
 
@@ -1101,6 +1102,7 @@ Handling value by Proficiency (verified):
 | Long pole (staff) | **Forgiving** | accessible percussive control |
 | Paired short | **Demanding** | two-blade coordination punishes low skill |
 | Single short | **Forgiving** | simple, close, accessible; low ceiling |
+| Long Heavy Blunt | **Demanding** | knightly armored-combat weapon (cf. Le Jeu de la Hache); high STR floor, high mastery ceiling |
 
 Handling H feeds the weapon's contribution to Commit/sub-action Pools (replacing a flat weapon-proficiency term for weapon-dependent actions). Exact Pool-coupling and assignments draft; sim-tunable I-17.
 
@@ -1118,8 +1120,9 @@ Each weapon class inherits canonical weapon-modifier-vs-armor-tier. No change to
 | Long pole staff (Light Blunt) | +3 | +3 | +3 | +3 |
 | Paired short (Light Blade ×2) | +3 each | +2 each | +1 each | +0 each |
 | Single short (Light Blade) | +3 | +2 | +1 | +0 |
+| Long Heavy Blunt (Heavy Blunt) | +5 | +5 | +5 | +5 |
 
-**Heavy plate implication:** Long thrust, Curved cut, Spear, Paired short, Single short all hit Heavy plate at +0 weapon modifier (must rely on net hits + STR damage; insufficient against high WI). Long cut-and-thrust also hits +0 at Heavy. **Only Heavy Blunt weapons (war hammer, pollaxe; canonical Long Heavy Blunt TN 8) bypass Heavy plate** — but this proposal's 6-class scheme doesn't include Long Heavy Blunt as a default class. Heavy-Blunt fighters use canonical Long Heavy Blunt (TN 8) and map to a 7th implicit class outside the proposal-canonical 6 (sim-tunable; possibly added per I-13b).
+**Heavy plate — closed (I-13b).** Light/medium blades hit Heavy plate at +0 weapon modifier (cannot wound through plate on the modifier alone). v32 closes this two ways: (1) the **Long Heavy Blunt** class above (+5 vs *all* tiers — concussive force transmits through plate; STR ×3, TN 8) — the *bring-the-right-tool* answer; (2) the **Targeted-line** sub-action (§12.4) — the *skill-instead-of-tool* answer: a precise thrust to an armor gap (visor, armpit, groin, joint) that recomputes damage against a lower armor tier at a precision penalty. A light-weapon fighter is no longer helpless against plate — they pay in precision (Targeted-line) where the Heavy-Blunt fighter pays in speed (TN 8, slow).
 
 ### 8.4 Phase-keyed Pool/TN modifiers
 
@@ -1132,6 +1135,7 @@ Each weapon class inherits canonical weapon-modifier-vs-armor-tier. No change to
 | Long pole (staff) | Phase 2 Position; Phase 6 Bout Press/Displace (Blunt force in bind) | Phase 5 Commit (no cutting; lower wound transition rate) | Cut/Thrust sub-actions; weapon is Blunt only | 0 |
 | Paired short | Phase 6 Bout (flow — both blades active); Reaction sub-actions (off-hand parry) | Phase 5 Commit (no decisive single strike with one blade) | Depth-5 Commits (Paired short cannot achieve full-commit decisive strike); Grip-change (paired grip locked) | +2.5 |
 | Single short | Phase 6 Bout (close-range); Reaction speed | Phase 3 distance control (short reach loses zone) | Reach-dependent options (cannot engage at Long Reach without closing) | +3 |
+| Long Heavy Blunt | Phase 5 Commit (depth ≥3, STR ×3 concussive); Phase 6 Press/Displace (plate-cracking force in bind) | Phase 3 Approach (slow, heavy); Reaction speed (slowest) | Fine in-bind precision (Wind); fast Void; Sudden disengage at depth ≥4 | −0.5 |
 
 ### 8.5 Sub-actions available per weapon class
 
@@ -1146,11 +1150,12 @@ Cross-reference §12.1 (engagement state × sub-action options). Weapon class **
 | Long pole (staff) | Cut (Blunt force); **Press (preferred)**; Displace; Throw-strike; Disengage; NO Thrust, Wind, Grip-change |
 | Paired short | Cut; Thrust; **Coordinated sub-actions (both blades fire — counts as one declaration)**; Void (speed); Yield; Disengage; NO depth-5 commits; NO Wind without specific Paired-Wind technique |
 | Single short | Cut; Thrust; **Void (preferred)**; Yield; Disengage; NO Sustained-bind, NO Grip-change |
+| Long Heavy Blunt | **Press (preferred, concussive); Displace; Cut (blunt); Thrust (spike/beak); Targeted-line (spike to gap, §12.4)**; Grip-change (half-haft); Break-bind; NO fine Wind; NO fast Void |
 
 ### 8.6 Cross-armor combat considerations
 
 - **Heavy plate vs Heavy plate**: combat keys to seeking gaps (grip-change, half-sword, grappling sub-actions); Long cut-and-thrust + Half-grip-available aspect is the canonical answer
-- **Light vs Heavy plate**: light attacker (typically Single short / Paired short / Long thrust) must seek joint/gap lines through advanced techniques (Targeted-line sub-action, I-13b); otherwise reduced consequence per canonical weapon-modifier-vs-armor table — typical outcome: many sub-actions land but no wound transition
+- **Light vs Heavy plate**: the light attacker now has two answers (I-13b, specified): the **Targeted-line** sub-action (§12.4 — gap-thrust, precision penalty, recompute vs a lower armor tier), or switching to the **Long Heavy Blunt** class (§8.1, +5 vs all tiers). Without either, reduced consequence per the canonical weapon-modifier table — many sub-actions land, no wound transition
 - **Heavy plate's Stamina tax**: per canonical derived_stats §4.2 + this proposal §9.1, Heavy plate +2 Stamina per phase action. Sustained engagement against Light attacker depletes Heavy-plate Stamina before wounds accrue. Stamina-economy fighter (Sustained Commitment) in Light armor may outlast Heavy plate
 
 ### 8.7 Weapon-class fit with combat Histories
@@ -1163,12 +1168,13 @@ Cross-reference §12.1 (engagement state × sub-action options). Weapon class **
 | Long pole | Formation-and-discipline (formation pole arms); Mounted multi-weapon (lance variant) |
 | Paired short | Continuous-flow (paired grip + Triangular footwork); Conditioning-and-grappling (off-hand for grappling support) |
 | Single short | Conditioning-and-grappling (close-range backup); any tradition for off-hand backup |
+| Long Heavy Blunt | Conditioning-and-grappling (armored close combat); Formation-and-discipline (poleaxe in the line) |
 
 Wielding a weapon outside its best-fit Tradition is mechanically suboptimal — the character's aspect specializations don't reinforce the weapon's strong phases. Possible but penalized.
 
 ### 8.8 Sim validation
 
-Phase 11 sim (I-17 post-pivot) validates that weapon class differentiation produces distinct viable builds — Fast (Single short, Paired short) vs Strong (Long cut-and-thrust) vs Reach (Long pole) at 50–60% balance across symmetric optimization.
+Phase 11 sim (I-17 post-pivot) validates that weapon class differentiation produces distinct viable builds — Fast (Single short, Paired short) vs Strong (Long cut-and-thrust) vs Reach (Long pole) vs Plate-breaker (Long Heavy Blunt) at 50–60% balance across symmetric optimization.
 
 Phase 11b sim (open, I-13b): validates per-armor weapon balance — does Long cut-and-thrust dominate against Heavy plate? Does Long pole (staff Blunt) provide a viable anti-armor option? Targeted-line sub-action (gap-seeking) needs specification before this sim runs.
 
@@ -1453,8 +1459,8 @@ This section is the substantive detail for Phase 6 (§4.7). Per Jordan directive
 | Engagement state | Sub-action options |
 |---|---|
 | **Out-of-contact** (entering Bout from a commit miss; both fighters in measure but no weapon contact) | Probe-cut, Probe-thrust, Step-around, Disengage-to-Phase-7 |
-| **Closing** (weapons in striking distance, contact imminent) | Cut, Thrust, Press-the-bind, Yield-to-bind, Void-and-counter, Disengage |
-| **In-bind** (weapons in sustained contact; Tactile channel active) | Wind, Yield, Press, Displace, Break-bind, Grip-change (weapon-class dependent), Throw-strike |
+| **Closing** (weapons in striking distance, contact imminent) | Cut, Thrust, Press-the-bind, Yield-to-bind, Void-and-counter, Targeted-line (vs heavy armor, needs Reading success), Disengage |
+| **In-bind** (weapons in sustained contact; Tactile channel active) | Wind, Yield, Press, Displace, Break-bind, Grip-change (weapon-class dependent), Targeted-line (gap-thrust), Throw-strike |
 | **Breaking** (one fighter committed to disengage; other has choice to follow or release) | Pursue, Release, Throw-strike (pursue with attack of opportunity) — leads to Phase 7 |
 
 Each engagement state surfaces 3–6 sub-action options. Aspect Reaction specialization gates which options are surfaced as **player-default** in AI-driven mode; other options surface only on player intervention.
@@ -1484,6 +1490,7 @@ Aspect Proficiency here is that of the **equipped** specialization in the releva
 | Step-around | Agility | Footwork |
 | Throw-strike | Strength | Disengage + Commitment |
 | Disengage | Agility | Disengage |
+| Targeted-line | Agility | Reaction + Anticipation (precision; requires the gap seen or felt) |
 
 **Wound penalty applies** (canonical PP-716 / derived_stats §4.1): −1D per Wound on all sub-action Pools.
 
@@ -1543,8 +1550,11 @@ Effective Ob = base Ob − eff_σ · σ_N          σ_N = 0.8·√Pool
 | Grip-change | Weapon dropped | Partial change (half-effective grip) | Grip changed; new sub-action options surface | Grip changed + free Phase 5 probe depth commit |
 | Break-bind | Bind held | Partial separation (still in bind) | Bind broken; engagement state → Out-of-contact | Clean break + free disengage to Phase 7 |
 | Probe | Telegraphed; opponent +0.5 Ob | Light contact; no wound | Probe lands; minor wound check (depth 1 damage formula) | Probe + counter info revealed |
+| Targeted-line | Misses gap; thrust slides off plate (no wound), exposed | Hits plate; armor NOT bypassed (glances) | Gap hit — damage recomputed vs armor tier −1 (Heavy→Light); wound check | Deep gap thrust — recompute vs None + critical |
 
 Magnitudes draft; sim-tunable I-17.
+
+**Targeted-line (anti-armor, I-13b).** A precise thrust to an armor gap (visor, armpit, groin, joint), available at **Closing** (requires a Reading success this round — you must perceive the opening) or **In-bind** (you can feel it), to thrust-capable weapons (Long thrust, Long cut-and-thrust, spear, Single short, the Long Heavy Blunt spike). Mechanic: a **precision penalty** (Strong adverse, δσ −0.75 on the attacker — the gap is small) in exchange for **recomputing the hit's damage against an armor tier one lower** (Heavy plate → treated as Light; overwhelming → None). This is the *skill-instead-of-tool* anti-armor path (§8.3): a light-weapon fighter wounds plate by paying in precision rather than switching to Long Heavy Blunt. It does not bypass armor for free — most attempts glance (partial), and a missed gap leaves the attacker exposed.
 
 ### 12.5 Edge case rulings (consolidated from §4.7)
 
@@ -1784,7 +1794,7 @@ Documents requiring update on ratification:
 
 - **I-11** (sim): named-set bonus magnitudes + Reaction 2-param coefficients + per-spec mechanical magnitudes (currently draft; the 36-pair matrix was retired in v32 per matchup_derivation_analysis)
 - **I-12** (Pass 2c expansion): Valoria-faction-binding for additional 5 traditions (Long-thrust geometric, Curved-blade cavalry, Continuous-flow, Mounted multi-weapon, Formation-and-discipline); Tradition technique trees
-- **I-13** (Pass 2c expansion): Weapon TN matrix refresh — six weapon classes' canonical 3-axis mapping + phase-strength values
+- **I-13** Weapon TN matrix refresh — seven weapon classes' canonical 3-axis mapping + phase-strength values. **I-13b done** (this session): Long Heavy Blunt 7th class + Targeted-line anti-armor sub-action added.
 - **I-14** (deferred to UI design pass): Conditional Logic Profile UI/syntax — priority list vs decision-tree builder vs natural-language rules
 - **I-15** (sim work): Concentration combat formula scaling — current proposal uses canonical `Focus × 3`; may need separate combat formula if shared pool produces cross-system imbalance
 - **I-17** (Phase 11 sim refit per §15.7 above)
@@ -1803,7 +1813,7 @@ Documents requiring update on ratification:
 | Aspect specialization framework (10 aspects × 5 specs) | dueling_combat_proposal.md §5 |
 | Tradition learning bundles (recast as Histories) | dueling_combat_proposal.md §6; reframed per audit principle #4 |
 | Reading sub-channels (source 5 mundane; consolidated to 4 in v32 per F7 — Kinetic merge) + Thread + Intent | dueling_combat_proposal.md §3; Intent extracted to separate track per Jordan canon override 2026-05-XX; F7 consolidation this session |
-| Six weapon classes with phase strengths | dueling_combat_proposal.md §7; mapped to canonical 3-axis weapon TN matrix |
+| Seven weapon classes with phase strengths (Long Heavy Blunt added per I-13b) | dueling_combat_proposal.md §7 + canon §5; mapped to canonical 3-axis weapon TN matrix |
 | Four armor levels with sensor degradation | dueling_combat_proposal.md §7; canonical Stamina mod preserved |
 | Three-state wound display | dueling_combat_proposal.md §4; reframed as UI compression over canonical 4-wound math |
 | Stance Counter / Reaction-aspect / Aspect coherence matrices | dueling_combat_proposal.md §5 (aspect coherence framing) + extracted matchup logic |
@@ -1857,6 +1867,7 @@ v32 is a reframe of combat_v31_proposal (checkpointed at designs/proposals/comba
 - **§12.3** — additive fractional Ob → σ-space + soft cap + state-gating (resolves diagnostic F1 non-uniform impact and F2 compound foreclosure).
 - **§6.11** — added equip-loadout layer (trained pool vs equipped loadout; named set bonuses; incompatibility warnings).
 - **§6.11.2 (N4, post-verdict)** — set bonus smoothed from all-or-nothing to 2-step graded (full / near-set one level lower / none); resolves the build-axis cliff the test flagged, per armature A2.
+- **§8, §12 (I-13b)** — anti-armor gap closed: Long Heavy Blunt 7th weapon class (+5 vs all tiers, STR ×3, TN 8) + Targeted-line gap-thrust sub-action (precision penalty, recompute vs lower armor tier). Light weapons no longer helpless vs plate.
 
 Diagnostic targets and how v32 addresses them: F1 (non-uniform modifier impact) → σ-space (§12.3); F2 (compound foreclosure) → soft cap + state-gating (§12.3, §4.7); F6 (E failure / over-complexity) → front-loading + derivations + matrix retirement (§1 P2, §7); F7 (Reading over-split) → addressed: Temporal+Biomechanical merged into Kinetic (§4.5/§6.5, post-verdict this session; 5 mundane channels → 4); Facing → emergent (§11.2). F4 (loop-winner definition) remains a noted open item (see test pass).
 
