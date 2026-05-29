@@ -1,0 +1,61 @@
+id: 2026-05-28-editorial-ledger-jsonl-migration
+task:
+  skill: valoria-orchestrator
+  description: 'Editorial ledger consolidation — COMPLETE via JSONL migration (commit
+    5c07bff0). Supersedes the prior 14-file / 35-duplicate / B1-quarantine plan. Remaining:
+    Phase 2 tooling cutover + flagged-conflict resolution.'
+scope: editorial
+last_commit: 5c07bff0b8e91d82c4d9fce06d44ba360ae06865
+session_token: 98b3622531030b85
+context_files:
+- path: canon/editorial_ledger.jsonl
+  depth: skeleton
+  reason: new consolidated single-source ledger (605 entries, deduplicated)
+- path: canon/editorial_ledger_migration_2026-05-28.md
+  depth: full
+  reason: 'migration report: lossless stats, 94 flagged conflicts, 21 partials, Phase
+    2 plan'
+- path: skills/valoria-orchestrator/scripts/valoria_hooks.py
+  depth: skeleton
+  reason: 'Phase 2.1: cut editorial gate / assert_unique_ids over to JSONL'
+- path: skills/valoria-orchestrator/scripts/github_ops.py
+  depth: skeleton
+  reason: 'Phase 2.1: cut fetch / append_to_register / compliance over to JSONL'
+owns:
+- canon/editorial_ledger.jsonl
+- canon/editorial_ledger*.yaml
+- archives/editorial*/**
+- skills/valoria-orchestrator/scripts/valoria_hooks.py
+- skills/valoria-orchestrator/scripts/github_ops.py
+working_state:
+  summary: '24 fragmented YAML ledger files -> single canon/editorial_ledger.jsonl.
+    Lossless: 602 source IDs -> 605 lines (+ED-865/866/867), 0 lost, 0 dup, all valid
+    JSON. Old YAML left in place (non-destructive).'
+  done:
+  - 'JSONL migration committed (5c07bff0): 605 entries, deduplicated, verified lossless'
+  - ED-865/866/867 (engine_replacement audit findings) filed into the JSONL
+  - 'Migration report committed: canon/editorial_ledger_migration_2026-05-28.md'
+  - External audit of engine_replacement_reconciled committed (cb32edb5)
+  next:
+  - 'Phase 2.1: point ledger-reading hooks/bootstrap at editorial_ledger.jsonl; parse
+    JSONL not YAML'
+  - 'Phase 2.2: add validator hook — round-trip parse + global ID uniqueness + required-fields'
+  - 'Phase 2.3: remove/deprecate the 24 old YAML/archive ledger files once hooks cut
+    over'
+  - 'Phase 2.4: resolve 94 true ID-conflicts (flagged in JSONL; list in migration
+    report) — Jordan decisions'
+  - 'Phase 2.5: re-verify 21 regex-recovered entries (flagged _migration_partial)'
+blockers:
+- Phase 2 hook cutover not done — hooks still read canon/editorial_ledger.yaml; JSONL
+  is canonical-data but not yet hook-live; ED-865/866/867 invisible to editorial gate
+  until cutover
+- 94 true ID-conflicts unresolved (Jordan judgment per ID)
+- 21 partial-recovered entries unverified
+key_values:
+- 'migration_commit: 5c07bff0'
+- 'jsonl_entries: 605'
+- 'conflicts_flagged: 94'
+- 'partials_flagged: 21'
+created: '2026-05-29T00:06:13.937940+00:00'
+updated: '2026-05-29T00:06:13.937940+00:00'
+status: active
