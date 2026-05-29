@@ -53,7 +53,46 @@ Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_perso
 | Institutional Pressure | 20 | 20 | — |
 | Public Instability | — | 5 | — |
 
-## Domain Action Rules (TTRPG)
+## Domain Action Resolution (deterministic+stochastic) — CANONICAL (ED-865/874, ratified 2026-05-29)
+
+**This is the canonical resolution method for faction Domain Actions and bare-stat faction checks.** It supersedes the bare-stat-pool-vs-Ob dice approach (retained below for legacy/Zoom-In reference only). Jordan-directed ratification of the Stage-1/4/5-tested candidate (`designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md`).
+
+**Why deterministic+stochastic.** The bare-stat d10 pool gave neither legible odds nor uniform leverage at the small pools faction stats produce (1–7), making *noise* decisive on pivotal, irreversible outcomes where structure should be. Validated against precedent (Stage 5): the COIN / political-contest literature (`ners_historical_precedent_matrix.md` entry 2) finds real seizures/votes/coups are **structure-decisive with a stochastic tail, not low-variance coin-flips** — exactly what this resolver produces. It also restores consistency with the faction layer's deterministic-accounting spine.
+
+**Resolver.**
+
+```
+margin  M = acting_stat − difficulty
+   difficulty = the contested target's relevant stat (contested actions),
+                OR a fixed action-difficulty rating (non-contested actions).
+   Legacy Ob mapping: an action previously "vs Ob O" has difficulty D = max(1, (O−1)·2).
+
+P_success(M)        = clamp(0.50 + 0.10·M, 0.05, 0.90)            # at-least-Success
+P_overwhelming(M)   = clamp(0.50 + 0.10·M − 0.35, 0, 0.55)
+P_atleast_partial   = clamp(0.50 + 0.10·M + 0.20, P_success, 0.97)
+
+draw r ~ U[0,1)  (lower = better):
+   r < P_overwhelming                     → Overwhelming
+   P_overwhelming ≤ r < P_success         → Success
+   P_success ≤ r < P_atleast_partial      → Partial
+   r ≥ P_atleast_partial                  → Failure
+```
+
+**Canonical parameters** (ratified; tunable by future Jordan-logged ratification): BASE 0.50 (even contest is fair), SLOPE **0.10 — leverage is +10% per stat-point of margin, CONSTANT across the whole 1–7 range** (this is what closes the σ-leverage non-uniformity, ED-874; no dice pool can — leverage ∝ 1/√N is irreducible for pools), FLOOR 0.05 (punching-up is hard but never impossible — fixes the ~1% wall), CAP 0.90 (overmatch reliable but never certain), plus the band offsets above. Live leverage zone M ∈ [−4, +4]; beyond, FLOOR/CAP clamp.
+
+**Output is unchanged.** The resolver emits the same four-degree ladder (Failure/Partial/Success/Overwhelming) the dice system did, so Domain Echo (`scale_transitions_v30` §5: Success +1, Overwhelming +2, cap ±2) and all cost tables are untouched — only the resolution *method* changes.
+
+**Governed checks (migration, ratified 2026-05-29).** The following faction bare-stat checks resolve via this method, with their named outcome-hooks preserved on the corresponding degree:
+- **All faction Domain Actions** (Assert, Reconstitute, Govern, Claim Masterless, etc.). Assert: M = Influence − 2 (legacy Ob 2 → difficulty 2). Reconstitute: M = Influence − 6 (legacy Ob 4 → difficulty 6).
+- **Suppress** — M = Mandate − (Church-L difficulty); **Failure → Stability −1 retained** (the PP-403 named exception attaches to the resolver's Failure degree).
+- **Parliamentary Rebuttal** — **Overwhelming → +1 effect retained** (attaches to the resolver's Overwhelming degree).
+- **§1.4 Accounting Stability Check** — M = Stability − loss_magnitude; resolves via this method. **Co-designed with §1.3 Institutional Consolidation recovery (CC-4):** §1.4 is the cascade-DAMAGE check (Failure → −1); §1.3 is the deterministic clean-season +1 recovery. They operate on different triggers and do not double-count.
+
+**Scope boundary.** This method governs **bare-stat faction checks only.** Healthy dice systems — personal combat, social contest (pools 5–18D), aggregated mass battle — **remain dice** (NERS-N/E: replacing them would add complexity without fixing a defect). Trigger-5 (mass-battle resolution, ED-876) is dice and **orthogonal** to this resolver.
+
+## Domain Action Rules (TTRPG) — SUPERSEDED for faction Domain Actions (legacy / Zoom-In reference)
+
+> **[SUPERSEDED 2026-05-29, ED-865/874]** For faction Domain Actions, the deterministic+stochastic resolver above is canonical. The bare-stat-pool-vs-Ob method below is retained only as the legacy reference and for any explicit TTRPG-era Zoom-In context.
 
 Ob = floor(relevant stat / 2) + 1.
 Attacker bonus dice: own faction's relevant stat if holding faction leadership.

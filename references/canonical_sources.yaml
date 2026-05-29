@@ -128,7 +128,8 @@ systems:
     params: params/factions.md
     canonical_sha__params__factions_md: "82f37d33c74f81bef27c7d9c43a69c88a28f4141"
     stats: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
+    canonical_sha__params__factions__stats_1_7_scale_md: "2ca08b557f4f61a53c22677d8815f487db0b9321"
+    note: "ED-865/874 (2026-05-29): deterministic+stochastic resolver ratified as canonical Domain Action resolution; bare-stat-vs-Ob superseded for faction Domain Actions; bare-stat checks migrated (hooks preserved); dice systems unchanged. Jordan-directed."
   victory:
     design_doc: designs/provincial/victory_v30.md
     canonical_sha__designs__provincial__victory_v30_md: "afe6086b287489659b2356bb9dfb2c74d1480127"
