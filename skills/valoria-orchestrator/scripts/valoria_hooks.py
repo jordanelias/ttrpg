@@ -96,9 +96,9 @@ TASK_REQUIRED_FILES = {
     "editorial":       ["canon/editorial_ledger.jsonl"],
     "patch":           ["canon/patch_register_active.yaml"],
     "compilation":     ["references/canonical_sources.yaml", "canon/patch_register_active.yaml"],
-    "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml",
+    "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger.jsonl",
                         "skills/valoria-mechanic-audit/SKILL.md"],
-    "design_proposal": ["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml",
+    "design_proposal": ["references/canonical_sources.yaml", "canon/editorial_ledger.jsonl",
                         "references/throughlines_meta.md"],
     "design":          ["references/canonical_sources.yaml"],
     "infrastructure":  [],
@@ -463,7 +463,7 @@ def task_gate(task_type: str) -> None:
             "\n[TASK GATE: audit] Required before any audit work:\n"
             "  → Never audit from memory — fetch canonical source for target system.\n"
             "  → All mechanical values must be cited with source file + section.\n"
-            "  → P1 findings must be appended to canon/editorial_ledger.yaml.\n"
+            "  → P1 findings must be appended to canon/editorial_ledger.jsonl.\n"
             "  → Check tests/audit/ for prior audit outputs on this system first.\n"
         )
 
@@ -778,14 +778,15 @@ def assert_unique_ids(additions: list) -> None:
     fail fast rather than after CI or via downstream propagation defects.
 
     Files checked:
-      canon/editorial_ledger.yaml          (entries: list with .id)
-      canon/editorial_ledger_archive.yaml  (entries: list with .id)
+      canon/editorial_ledger.jsonl         (JSONL store → round-trip parse + id-uniqueness;
+                                            integrity/required-fields via jsonl_ledger_gate)
       canon/patch_register_active.yaml     (top-level list with .id)
       canon/patch_register_archive.yaml    (top-level list with .id)
+
+    The editorial_ledger YAML + its archive files were deprecated 2026-05-28
+    (→ deprecated/canon/); the live editorial ledger is the JSONL store.
     """
     LEDGER_FILES = {
-        'canon/editorial_ledger.yaml':         'entries',
-        'canon/editorial_ledger_archive.yaml': 'entries',
         'canon/patch_register_active.yaml':    None,
         'canon/patch_register_archive.yaml':   None,
     }
@@ -1227,7 +1228,7 @@ def propose_mechanic_gate(system: str) -> None:
     """
     Call before any mechanic proposal. Enforces full prerequisite chain:
     1. canonical_sources.yaml fetched
-    2. editorial_ledger_summary.yaml fetched
+    2. canon/editorial_ledger.jsonl fetched
     3. Canonical design doc for the system fetched
     """
     cs_key = g._repo_key('references/canonical_sources.yaml', 'ttrpg')
@@ -1237,12 +1238,12 @@ def propose_mechanic_gate(system: str) -> None:
             f"  canonical_sources.yaml not fetched.\n"
             f"  Cannot propose mechanics without knowing which doc is canonical."
         )
-    els_key = g._repo_key('canon/editorial_ledger_summary.yaml', 'ttrpg')
+    els_key = g._repo_key('canon/editorial_ledger.jsonl', 'ttrpg')
     if els_key not in g._session_fetches or g._session_fetches[els_key] is None:
         raise RuntimeError(
             f"[HOOK VIOLATION] propose_mechanic_gate('{system}'):\n"
-            f"  editorial_ledger_summary.yaml not fetched.\n"
-            f"  Required before proposing mechanics."
+            f"  canon/editorial_ledger.jsonl not fetched.\n"
+            f"  Required before proposing mechanics (editorial ledger is the JSONL store post-2026-05-28)."
         )
     # Delegate to task_gate_with_system for canonical doc verification
     task_gate_with_system('propose_mechanic', system, g._session_fetches[cs_key])
