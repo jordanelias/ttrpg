@@ -1,0 +1,78 @@
+id: 2026-05-28-resolution-ledger-candidates-and-concessions
+task:
+  skill: valoria-orchestrator
+  description: Ingest the new ledger candidates ED-868..ED-873 (JSONL-ready, attached
+    at designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_jsonl_ready.jsonl)
+    into canon/editorial_ledger.jsonl, AND apply the three remediations conceded for
+    the migration-owner's ED-865/866/867 (filed against this session's artifacts).
+    My earlier YAML staging block (ED-865..877) is VOID and renumbered here.
+scope: editorial
+last_commit: 84d81252b849bd1634bb5d767057ccf219d2ff2a
+session_token: 03024218b97d38b8
+context_files:
+- path: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_jsonl_ready.jsonl
+  depth: full
+  reason: the 6 new candidates ED-868..873 to ingest, schema-matched JSONL
+- path: canon/editorial_ledger.jsonl
+  depth: skeleton
+  reason: target store; max id ED-867, append from ED-868
+- path: canon/02_canon_constraints.md
+  depth: full
+  reason: GD-2 §B verbatim — confirms ED-865 miscite (GD-2 = action-selection ordering,
+    not resolver)
+- path: designs/audit/2026-05-28-engine-replacement/engine_replacement_reconciled.md
+  depth: full
+  reason: artifact to fix per ED-865 (strike GD-2-mandate language) + ED-866 (re-issue
+    register with in/out-scope tags)
+- path: designs/audit/2026-05-28-resolution-diagnostic/ners_verdict_faction.md
+  depth: full
+  reason: add SUPERSEDED-BY markers per ED-867 (F1 P~0 -> 0.070@Ob3/0.010@Ob4)
+- path: designs/audit/2026-05-28-resolution-diagnostic/resolution_diagnostic_correction_and_ledger_staging.md
+  depth: full
+  reason: holds the VOID ED-865..877 YAML block + secondary candidates (T2/T7,C3/C5/C6,SC3-5)
+working_state:
+  summary: All 2026-05-28 resolution/engine/armature/intensification artifacts on
+    main (84d81252, 8a96cf2c, 67c10722). Ledger migrated to JSONL by parallel session
+    cb32edb5/d5f098b0 (max ED-867). That session audited THIS session's artifacts
+    and filed ED-865 (GD-2 miscite), ED-866 (manufactured 0-P1), ED-867 (F1 P~0).
+    All three VERIFIED/conceded below. My old YAML staging (ED-865..877) collides
+    and is VOID — renumbered to ED-868..873 (new-only; duplicates dropped).
+  next:
+  - Ingest ED-868..ED-873 from ledger_candidates_jsonl_ready.jsonl into editorial_ledger.jsonl
+    (append; DEDUPE-CHECK ED-873 vs any existing MW-cap/vitality entry ED-826/839
+    before treating as distinct).
+  - 'Apply ED-865 fix: strike every ''GD-2 mandate(s)'' phrase re the RESOLVER in
+    engine_replacement_reconciled §0/§6/§7. GD-2 (canon/02 §B) = faction action-SELECTION
+    ordering only (mandatory threat-response before stochastic candidate gen), NOT
+    resolver choice. Deterministic+stochastic remains a precedent-supported option
+    (CK3/EU/KoDP), not a GD-2 mandate. ''Aggregate the pool'' (ER-9) half unaffected.'
+  - 'Apply ED-866 fix: re-issue engine_replacement_reconciled §6 register with explicit
+    in-scope/out-of-scope tags; do not present ''0 P1'' as a resolution. NOTE the
+    later F2-ruling downgrades (commit 67c10722) ARE argued; the pre-ruling register
+    ED-866 cites was not.'
+  - 'Apply ED-867 fix: add SUPERSEDED-BY markers at ners_verdict_faction.md and resolution_diagnostic_faction.md
+    F1 rows -> corrected 0.070@Ob3 / 0.010@Ob4.'
+  - 'Do NOT re-file: T6 (=ED-841), C2 PP-717-D2 (likely =ED-828, verify), MB2/MB3
+    (=ED-743 + 2026-04-29 pipeline), F1 P~0 (=owner ED-867).'
+  - 'Secondary candidates (lower value, not encoded as JSONL): threadwork T2/T7, combat
+    C3/C5/C6, social SC3/SC4/SC5 (needs-verification) — in resolution_diagnostic_correction_and_ledger_staging.md
+    + ners_verdict_* if you want them filed.'
+owns:
+- designs/audit/2026-05-28-resolution-diagnostic/*
+- designs/audit/2026-05-28-combat-reframe/armature_compliance_all_systems.md
+key_values:
+- 'NEW: ED-868 threadwork-Mending-contradiction P1; ED-869 mass-no-Pool-Floor P1;
+  ED-870 faction-sigma-leverage-nonuniform P2; ED-871 mass-Command-sigma-leverage
+  P3; ED-872 continuity-correction(refines ED-833) P3; ED-873 MW-cap-parity-break
+  P2(dedupe-check).'
+- 'CONCESSIONS verified this session: ED-865 GD-2 miscite (CORRECT), ED-866 manufactured-0-P1
+  (substantially fair for the pre-F2 register), ED-867 F1 P~0->0.010 (matches own
+  retraction).'
+blockers:
+- ED-873 needs dedupe-check vs existing MW-cap/vitality ledger entry (ED-826/ED-839
+  territory) before filing as distinct.
+- Secondary candidates (T2/T7, C3/C5/C6, SC3-5) deferred — Jordan/owner to decide
+  whether to file.
+created: '2026-05-29T04:12:06.091853+00:00'
+updated: '2026-05-29T04:12:06.091853+00:00'
+status: active
