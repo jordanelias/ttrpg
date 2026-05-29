@@ -1,0 +1,22 @@
+# ============================================================================ 
+# DEPRECATED 2026-05-28 — superseded by canon/editorial_ledger.jsonl 
+# 
+# Consolidated into the JSONL editorial store (migration 5c07bff0; reader 
+# cutover 6a42b1f1) and moved here. No hook/gate/bootstrap reads it. History 
+# only — DO NOT EDIT, DO NOT treat as canonical. Provenance: 
+# canon/editorial_ledger_migration_2026-05-28.md 
+# ============================================================================ 
+
+# Valoria Editorial Ledger — Archive INDEX (split 2026-05-10)
+# Original single archive exceeded 10k token limit; split into chunks below.
+# Migrated 2026-04-20 from canon/editorial_ledger.yaml; chunked 2026-05-10.
+#
+# Chunks:
+#   - canon/editorial_ledger_archive_2026-04_a.yaml: 71 entries, ED-id range 600..771 (non-monotonic)
+#   - canon/editorial_ledger_archive_2026-04_b.yaml:   56 entries, ED-id range 129..783 (non-monotonic)
+#
+# To find a specific ED-id: grep both chunks. Non-monotonic range in each chunk because the
+# original archive's append order didn't sort by ED-id.
+# New archival batches go to whichever chunk has space, OR create a new chunk if both are full.
+
+entries: []

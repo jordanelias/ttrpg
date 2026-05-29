@@ -1,0 +1,78 @@
+# ============================================================================ 
+# DEPRECATED 2026-05-28 — superseded by canon/editorial_ledger.jsonl 
+# 
+# Consolidated into the JSONL editorial store (migration 5c07bff0; reader 
+# cutover 6a42b1f1) and moved here. No hook/gate/bootstrap reads it. History 
+# only — DO NOT EDIT, DO NOT treat as canonical. Provenance: 
+# canon/editorial_ledger_migration_2026-05-28.md 
+# ============================================================================ 
+
+entries:
+- id: ED-788
+  date: 2026-05-03
+  description: '[DEFERRED — SKIP] LICENSE / GOV-08 — skipped per Jordan 2026-05-09. Not blocking mechanical work.'
+  status: deferred
+  severity: P2
+  source: ED-755 D2.2 spin-out 2026-05-03
+  jordan_decision: 2026-05-09 — skip.
+- id: ED-811
+  date: 2026-05-11
+  description: 'Engagement damage formula ambiguous. Phase 5 pool split does not specify whether damage = (net_successes *
+    1+Power) for attacker only, or (margin between off/def pools * 1+Power), or other. SIM-MB-04 INTERPRETATION-01 used margin
+    model and produced one-turn kills via margins of 5-6. Needs explicit formula statement. Source: SIM-MB-04 FINDING-1.'
+  severity: P1
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: open
+  jordan_decision: pending
+- id: ED-813
+  date: 2026-05-11
+  description: 'ED-801 withdrawal phase gate unspecified. Jordan ruling confirmed Withdraw plan + speed advantage = orderly
+    disengage. SIM-MB-04 implemented as Phase 5 gate but it may be a Phase 3 gate instead, changing positioning logic materially.
+    Source: SIM-MB-04 FINDING-7.'
+  severity: P2
+  type: missing
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  status: open
+  jordan_decision: pending
+- id: ED-822
+  date: 2026-05-11
+  description: 'Volley/Engagement composition balance. SIM-MB-05A composition sweep showed ranged-heavy compositions winning
+    disproportionately (pure-melee vs ranged-heavy 4 to 1 disadvantage). SIM-MB-05C tested TN6 vs TN7 Volley calibration:
+    TN7 improves pure-melee-vs-balanced from 28 percent to 36 percent (8 percentage point gain) but pure-melee-vs-ranged-heavy
+    remains roughly unchanged (15-16 percent). TN7 is partial improvement but does not fully resolve. Recommendation: adopt
+    TN7 as clean primary fix; raise composition-balance secondary measure as ED-825 for Phase 3+ work. Secondary measure options:
+    a) melee_pct as engagement Ob bonus for heavier-melee side; b) Volley pool cap = floor(volley_pool / 2); c) ranged_DR
+    scaled by defender melee_pct (heavier front rank shields back rank). Source: SIM-MB-05C section 3.2.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - params/mass_combat.md
+  - designs/provincial/mass_battle_v30.md
+  status: open
+  jordan_decision: pending
+- id: ED-823
+  date: 2026-05-11
+  description: 'Combined attack effectiveness calibration. SIM-MB-05C 3v1 combined-attack test surfaced concern: Fibonacci-divided
+    pool concentrated at one column may be LESS effective than 3 separate column engagements. Lead Power 4 Size 3 Arrowhead
+    with 2 supporters concentrating at center: combined pool ~7 dice vs defender 1 column ~3 dice. Compared to distributed:
+    3 attackers engaging 3 columns each at ~3 dice vs defender split ~3 dice each. Distributed produces 3 simultaneous Successful
+    engagements; combined produces 1 Successful engagement against full defender HP pool. ED-805 Fibonacci denominators (1,2,3,5,8)
+    may be too aggressive. Resolution options: a) reduce denominators (1, 1.5, 2, 3, 5); b) combined attack damages all defender
+    columns proportionally; c) combined attack with single column requires defender to have a single-column shape (e.g., Arrowhead)
+    to be tactically meaningful. Test harness for 3v1 combined was incomplete in SIM-MB-05C; needs SIM-MB-06 rebuild. Severity
+    P2, defer until after Phase 6 propagation.'
+  severity: P2
+  type: incongruency
+  archetype: A2
+  affected_docs:
+  - designs/provincial/mass_battle_v30.md
+  - params/mass_combat.md
+  status: open
+  jordan_decision: pending

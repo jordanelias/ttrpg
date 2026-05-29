@@ -1,0 +1,41 @@
+# ============================================================================ 
+# DEPRECATED 2026-05-28 — superseded by canon/editorial_ledger.jsonl 
+# 
+# Consolidated into the JSONL editorial store (migration 5c07bff0; reader 
+# cutover 6a42b1f1) and moved here. No hook/gate/bootstrap reads it. History 
+# only — DO NOT EDIT, DO NOT treat as canonical. Provenance: 
+# canon/editorial_ledger_migration_2026-05-28.md 
+# ============================================================================ 
+
+entries:
+- id: ED-777
+  date: 2026-04-30
+  description: '[CLOSED 2026-05-10] arc_register_factions.md — 5 arcs reframed around crime/underground networks per Jordan''s 2026-05-09 decision. ARC-S11 (Headless Network → Underground Network Engagement; four-arm structure dissolved), ARC-S54 (Quiet Overreach → Underground Operational Detection; Thread-signature dependency removed), ARC-S55 (Arms Out of Sync → Network Coordination Failure), NPC-ARC-VIR (Virke as smuggling-family criminal network; not Niflhel arm), ARC-T25 (Virke Family Ultimatum reframed around criminal-network ownership). Underground networks now operate at settlement-layer per `designs/territory/settlements_v30.md`; not a unified faction; not threadwork-related. Cross-references: PP-698, G-L02 setup_ignition_stress_01 (commit cab3bd85).'
+  status: closed
+  closed_date: 2026-05-10
+  severity: P2
+  source: Niflhel strike scope 2026-04-30 (deferred from PP-698)
+  jordan_decision: 2026-05-09 — Niflhel not a faction. Crime/underground exists but not threadwork-related. Reframe 5 arcs around that.
+  closure_commit: 2026-05-10 (this commit)
+- id: ED-780
+  date: 2026-05-09
+  description: '[CLOSED 2026-05-10] Phase 3 of geography canon work. Phase 3 mechanical body filled in march_layer_v30 §§1.1-1.4 (cavalry/skirmish/supply/multi-army coordination), §§2.2-2.4 (cache invalidation/UI/route blocking), §§3.1-3.4 (fog/scouting/counter-recon/Thread-Witnessed), §4.3 (bypass), §§5.2-5.4 (multi-edge moves/engagement vs siege/Casus Belli), §§7.2-7.3 (radiation band traversal/Askeheim Gates), §8.2 (hex-grid alignment + geographic battle-terrain derivation). settlement_adjacency_v30 §6 cross-reference to march_layer added; Edge Type → Manoeuvre Modifier mapping preserved as canonical, consumed by march_layer §4.2 by reference. mass_battle_v30 §A.9 ENVIRONMENTAL MODIFIERS extended with Phase 3 geographic-derivation clause (terrain queried at engagement coordinates from valoria_geography_v30.yaml :: terrain_polygons). Naval (§6) deferred to ED-055. Phase 4 stress tests (ED-781) standing.'
+  status: closed
+  closed_date: 2026-05-10
+  severity: P2
+  closure_commit: 2026-05-10 (this commit)
+- id: ED-781
+  date: 2026-05-09
+  description: '[CLOSED 2026-05-10] Phase 4 of geography canon work — three stress test scenarios executed. Scenario 1 Mountain Pass (T10↔T11 Halvardshelm-area pass): Phase 3 mechanics produce coherent narrow-pass-clamp emergence; defender +3D differential; geometry-driven, no spec gaps. Scenario 2 Open-field cavalry (T2 Kronmark plains): Phase 3 mechanics produce coherent declaratory-flanking + geometry-restricted resolution; cavalry advantage at 1.5× march budget + plains-flanking +1D; no spec gaps. Scenario 3 Coastal landing (Schoenland T16 → T13 Oastad): **P1 spec gap surfaced — no canonical sea-zone adjacency between non-T1 coastal territories**; ED-055 naval scope must populate sea-zone polygon+adjacency definition before amphibious operations are canonically resolvable. Phase 3 verified for land-based mass battle; coastal/amphibious operations blocked on ED-055.'
+  status: closed
+  closed_date: 2026-05-10
+  severity: P3
+  closure_commit: 2026-05-10 (this commit)
+  surfaces_p1_gap_for_ed055: Sea-zone polygon definition + sea-zone adjacency graph + amphibious landing coordinate spec; needed for Schoenland-pivot scenarios
+- id: ED-789
+  date: 2026-05-09
+  description: 'Wound mechanic drift correction. ED-694 (Vitality = Endurance × 10, Max Wounds eliminated, ED-202 floor preserved) introduced a linear simplification that did not match the WI × (Max Wounds + 1) total-damage-capacity structure for Endurance values 1, 2, 3, 5, 7 (only End=4 and End=6 happened to align numerically). Concurrent canon variously specified wound penalties as −1D Pool (Combat) vs +1 Ob (Thread, mass Command, BG CF tactic) creating channel inconsistency. PP-716 reverts ED-694 simplification: stat name Health, formula = (Endurance + 6) × (Max Wounds + 1), MW = floor(Endurance/2) + 1, WI = Endurance + 6. Universal wound penalty: −1D Pool, no Ob, ever. designs/scene/derived_stats_v30.md §4.1 made authoritative source. combat_v30, threadwork_v30, params/combat, params/mass_combat all reference §4.1 rather than restating. Cross-references: PP-716, ED-694 (superseded), PP-232.'
+  status: resolved
+  severity: P1
+  source: Jordan canonical clarification 2026-05-09; contradictions surfaced during combat_arch_residual_stress_01 R1 module work
+  jordan_decision: 2026-05-09 — wounds = −1D Pool universally, never Ob; Health = (End+6)×(MW+1); MW = floor(End/2)+1; revert ED-694; derived_stats §4.1 authoritative; propagate everywhere.
