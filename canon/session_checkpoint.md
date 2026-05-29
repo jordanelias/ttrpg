@@ -2,7 +2,7 @@
 schema_version: 1
 session_token: 6a51d0a7a54a8ce3
 created_at: '2026-04-20T02:25:29.184099+00:00'
-status: active
+status: closed
 task_scope: Full campaign simulation — Session 1 done, Session 2 pending
 context_tokens_at_checkpoint: 50361
 files_verified:
@@ -49,6 +49,7 @@ next_bootstrap_actions:
 - Read designs/provincial/ci_political_v30.md §1 for Piety Yield formula
 - Extend valoria_full_campaign_sim.py with §6 Territory, §7 Domain Actions, §8 Contests
 - Append ledger entries for each new constant
+closed_at: '2026-05-29T04:08:03.301156+00:00'
 ---
 
 # Session Checkpoint — 2026-04-20 02:25 UTC
