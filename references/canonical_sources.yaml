@@ -183,7 +183,8 @@ systems:
     canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "1385668894a209e5dc83b23c227501294f843efd"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "405f45e244f40482afa20fd36025bbe610844b1c"
+    note: "ED-880 (2026-05-29): Varfell 'purely military' prose corrected to acknowledge Cultural Reclamation (Piety-alignment, non-military, VTM-free). VTM/Reformation stay struck; not a control transfer or victory path; sole victory remains Peninsular Sovereignty (GD-1). Authority unchanged."
     note: "ED-876 (2026-05-28): Trigger-5 Condition-C pool>=6 cliff removed from gate, retained as cost-table escalator. Authority unchanged; mechanical patch only."
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md

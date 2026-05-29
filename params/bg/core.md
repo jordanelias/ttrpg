@@ -7,6 +7,7 @@
 <!-- Tribune intel (reveals enemy stats for target selection) remains. Thread operations remain as personal-scale actions -->
 <!-- available to Varfell first due to southern TS baseline + RM proximity, NOT as BG-layer combat/territorial bonuses. -->
 <!-- See commits: 297f892 (engine), 13b8f30 (workplan), 13b8f30 (canon audit workplan). -->
+<!-- [CORRECTED 2026-05-29, ED-880] The 'Varfell expansion is purely military / does not convert populations ideologically' claim above is SUPERSEDED. The 2026-04-19 strike validly removed the VTM-dependent Cultural REFORMATION (VTM remains struck); the Conviction-Track redesign (designs/scene/conviction_track_v30.md) reintroduced the ideological-conversion capability VTM-free as Cultural RECLAMATION (Varfell: Influence vs Ob 2, target-territory Piety -1 toward Einhir Restoration). This acts on religious/cultural ALIGNMENT (Piety), NOT territory control, and is NOT a victory path. Varfell also takes all universal faction actions. Per GD-1 the SOLE victory condition for all factions is Peninsular Sovereignty (control 11+ of 15 territories) — no faction-specific or non-military victory path exists. -->
 
 ## FACTION ASSIGNMENT (canonical, v04 B1)
 
@@ -223,7 +224,7 @@ When a faction is eliminated (Stability 0 and no recovery action taken):
 | Community Organising (Restoration) | 2 | Pool: 1D base + 1D per adjacent territory with RM Presence marker. Failure: no Stability cost (RM has no Stability). Try again next season. (PP-460) |
 | Community Weaving (Restoration) | (100−MS)÷20 round up min 1 | −1 per Presence marker in territory |
 | Dynastic Proclamation (Hafenmark) | floor(target Stability / 2) + 1 | Diplomat card. Hafenmark M ≥ 4, M > target controller M. +1 Ob if PT ≤ 1. −1 Ob if Diplomatic Token on target. See peninsular_strain_v1.md §5.3. |
-| Cultural Reformation (Varfell) | STRUCK CR-STRIKE-2026-04-19 | Action removed. Varfell expansion is military-only. See canon/supersession_register.yaml. |
+| Cultural Reformation (Varfell) | STRUCK CR-STRIKE-2026-04-19 (VTM-dependent; VTM struck) | Reformation removed. SUPERSEDED by Cultural Reclamation (conviction_track_v30, Influence-based, VTM-free): a non-military Piety-ALIGNMENT action (PT −1 toward Einhir Restoration) — not a control transfer, not a victory path. 'Military-only' framing corrected per ED-880 (2026-05-29). See canon/supersession_register.yaml. |
 | Martial Governance (Löwenritter) | floor(Prosperity / 2) + 2 | Löwenritter only. Military pool. Accord +1 (cap 2). |
 | Fortify | Fort level + 1 | — |
 

@@ -95,6 +95,21 @@
       ],
       "source": "resolution_diagnostic C3/C5/C6 (session c93a36df)",
       "jordan_decision": "pending"
+    },
+    {
+      "id": "ED-880",
+      "date": "2026-05-29",
+      "severity": "resolved-applied",
+      "type": "contradiction",
+      "status": "resolved-applied",
+      "description": "RESOLVED-APPLIED 2026-05-29. faction_layer \u00a7Varfell and params/bg/core asserted 'Varfell expansion is purely military / does not convert populations ideologically' \u2014 the rationale for the 2026-04-19 Cultural REFORMATION strike (VTM-dependent action; VTM was a placeholder, validly struck). But the Conviction-Track redesign (conviction_track_v30) reintroduced the ideological-conversion capability VTM-FREE as Cultural RECLAMATION (Varfell: Influence vs Ob 2, target-territory Piety -1 toward Einhir Restoration pole). The stale 'purely military' prose was never reconciled. Per Jordan 2026-05-29: Varfell takes ALL universal faction actions and has Cultural Reclamation as a non-military Piety-ALIGNMENT vector (NOT a control transfer, NOT a victory path). Reconciled the prose in faction_layer_v30 \u00a7Varfell + params/bg/core (L5 comment + L226 row) toward the live mechanic; Reformation + VTM remain struck. SOLE victory condition remains Peninsular Sovereignty (GD-1) \u2014 no faction-specific/religious/non-military victory path. Documentation reconciliation; no mechanical change (Cultural Reclamation was already live).",
+      "affected_docs": [
+        "designs/provincial/faction_layer_v30.md",
+        "params/bg/core.md",
+        "canon/supersession_register.yaml (CR-STRIKE/VTM entries still carry the historical 'purely military' rationale \u2014 flagged for editorial owner to add a forward-pointer to ED-880; not edited here to preserve the audit trail)"
+      ],
+      "source": "Jordan flag 2026-05-29; repo investigation (conviction_track_v30 Cultural Reclamation)",
+      "jordan_decision": "reconcile toward live Cultural Reclamation; Reformation/VTM stay struck; Piety-alignment only (no control, no victory); peninsula sole victory (GD-1)"
     }
   ],
   "refinements_to_existing": [
@@ -113,5 +128,6 @@
   ],
   "_cc4_update": "ED-877 resolved-was-unread (recovery = \u00a71.3 Institutional Consolidation); ED-876 strengthened P2->P1 (CC-5 collapse-level cliff). See cc4_resolution.md.",
   "_stage4_update": "Faction remediation Stage-4 tested (faction_remediation_development.md): ED-876 Fix-A is a clean win (recommend); ED-865 floor degeneracy fixable by EITHER aggregation or deterministic+stochastic; ED-874 sigma-leverage fixable ONLY by deterministic+stochastic. Design fork surfaced for Jordan.",
-  "_ed876_applied": "ED-876 Fix-A applied to faction_layer_v30 (commit 2327adc4): Condition-C pool>=6 cliff removed from gate, kept as cost escalator. Ledger ingestion of resolved status is the JSONL migration's."
+  "_ed876_applied": "ED-876 Fix-A applied to faction_layer_v30 (commit 2327adc4): Condition-C pool>=6 cliff removed from gate, kept as cost escalator. Ledger ingestion of resolved status is the JSONL migration's.",
+  "_ed880": "Varfell 'purely military' prose reconciled to live Cultural Reclamation (Piety-alignment, non-military, VTM-free); applied to faction_layer + params/bg/core; sole victory = peninsula (GD-1)."
 }
