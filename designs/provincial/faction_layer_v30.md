@@ -20,6 +20,7 @@
 | TC_SUPPRESS_STABILITY | Suppress Failure → Stability −1 is RETAINED. It is a named exception to PP-403 repeal, not covered by the new trigger system. |
 | CROWN_TREATY_STABILITY_DELTA | Crown Treaty degree effects (victory_v30.md §3.1) are canonical and unchanged. General treaty table in §3 applies to non-Crown-Treaty treaties only. |
 | ACCOUNTING_STABILITY_CHECK | Existing Phase 5 Step 2 (Stability pool roll on ≥2 attribute loss) is RETAINED alongside new trigger system. |
+| TRIGGER5_POOL_CLIFF (ED-876) | Trigger-5 Condition C clause "Engaged pool ≥ 6" REMOVED from the gate, retained in the cost table as a severity escalator only. Eliminated a non-monotonic battle→Stability exposure (single Command point swinging compound-collapse ~25×). Stage-4 re-tested; routs still penalized, large-force routs still escalate to −2. |
 | PARLIAMENT_MANOEUVRE_EXISTING | Parliamentary Manoeuvre is Hafenmark's existing Priority-4 Social action. New Parliament convening is a separate Accounting-phase system. See §5.2 for phase placement. |
 | OCCUPATION_TCV_UNSPECIFIED | Occupied territories count 0 TCV for both parties. Control transfer (formal or treaty) required for TCV to count. |
 
@@ -149,8 +150,9 @@ Three-condition gate. ALL three must be met simultaneously.
 
 **Condition C — Severity threshold.** At least one of:
 - Net successes ≤ −2 (rout, not mere repulse)
-- Engaged pool ≥ 6 (major-force commitment)
 - Named officer NPC attached to action and captured or killed in associated scene
+
+> **[ED-876 patch, 2026-05-28]** The former Condition-C clause "Engaged pool ≥ 6 (major-force commitment)" has been **removed from the gate** and retained only in the cost table below as a *severity escalator*. Rationale: as a gate clause it auto-fired Trigger 5 on *any* failure once a faction's pool reached 6D, making battle→Stability exposure non-monotonic in faction strength — a single Command point (2→3, pool 4D→6D) raised compound-collapse probability ~25× (mid-tier factions became the most collapse-prone, weakest the most shielded). With the clause moved to cost-only, the gate fires on a genuine rout (net ≤ −2) or officer loss; a large force that fails *without* routing (net 0/−1) takes no Stability hit — consistent with Condition B's "disciplined withdrawal, no Stability cost." Stage-4 re-test: firing rate flattened to monotonic; 100% of genuine routs still penalized; large-force routs still escalate to −2 via the cost table. See `designs/audit/2026-05-28-resolution-diagnostic/faction_remediation_development.md`.
 
 **Costs when gate met:**
 

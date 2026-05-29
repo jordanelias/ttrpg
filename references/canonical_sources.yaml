@@ -183,7 +183,8 @@ systems:
     canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "02e25c7fae1a0615bd60e04f16fedd4dd1e9dbb0"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "1385668894a209e5dc83b23c227501294f843efd"
+    note: "ED-876 (2026-05-28): Trigger-5 Condition-C pool>=6 cliff removed from gate, retained as cost-table escalator. Authority unchanged; mechanical patch only."
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
     canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
