@@ -1,5 +1,5 @@
 {
-  "sim_file": "designs/audit/2026-05-28-resolution-diagnostic/sim_compound_collapse.py",
+  "sim_file": "designs/audit/2026-05-28-resolution-diagnostic/sim_faction_remediation.py (+ sim_compound_collapse.py)",
   "scope": "custom",
   "systems": [
     "faction_layer",
@@ -281,6 +281,202 @@
       "canonical_source": "N/A \u2014 simulation harness parameter",
       "section": "sim harness",
       "quoted_text": "trace horizon seasons \u2014 harness"
+    },
+    {
+      "sim_variable": "rem_0_4",
+      "value": 0.4,
+      "canonical_source": "see note",
+      "section": "faction remediation sim",
+      "quoted_text": "mu per die (sigma-leverage formula numerator) \u2014 params/core.md die rule mu=0.40"
+    },
+    {
+      "sim_variable": "rem_0_8",
+      "value": 0.8,
+      "canonical_source": "see note",
+      "section": "faction remediation sim",
+      "quoted_text": "sigma per die (sigma-leverage formula denominator) \u2014 params/core.md sigma=0.80"
+    },
+    {
+      "sim_variable": "rem_0_3",
+      "value": 0.3,
+      "canonical_source": "see note",
+      "section": "faction remediation sim",
+      "quoted_text": "armature A6 reference sigma-leverage \u2014 attribute_weight_standard"
+    },
+    {
+      "sim_variable": "rem_0_24",
+      "value": 0.24,
+      "canonical_source": "see note",
+      "section": "faction remediation sim",
+      "quoted_text": "armature A6 band lower bound (0.30 -20pct) \u2014 attribute_weight_standard"
+    },
+    {
+      "sim_variable": "rem_0_36",
+      "value": 0.36,
+      "canonical_source": "see note",
+      "section": "faction remediation sim",
+      "quoted_text": "armature A6 band upper bound (0.30 +20pct) \u2014 attribute_weight_standard"
+    },
+    {
+      "sim_variable": "rem_0_1",
+      "value": 0.1,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "[PROPOSED] deterministic+stochastic base AND slope \u2014 illustrative, untuned"
+    },
+    {
+      "sim_variable": "rem_0_9",
+      "value": 0.9,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "[PROPOSED] deterministic+stochastic cap \u2014 illustrative, prevents auto-success"
+    },
+    {
+      "sim_variable": "rem_0_354",
+      "value": 0.354,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "computed sigma-leverage bare pool at stat 2 (derived, not input)"
+    },
+    {
+      "sim_variable": "rem_0_189",
+      "value": 0.189,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "computed sigma-leverage bare pool at stat 7 (derived)"
+    },
+    {
+      "sim_variable": "rem_0_5",
+      "value": 0.5,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "computed sigma-leverage display value / 0.4-over-0.8 ratio (derived)"
+    },
+    {
+      "sim_variable": "rem_11",
+      "value": 11,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "flat-agg pool at stat 7 (stat 7 + K 4) \u2014 derived scenario value"
+    },
+    {
+      "sim_variable": "rem_60000",
+      "value": 60000,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "Monte Carlo trial count (firing/rout checks) \u2014 harness"
+    },
+    {
+      "sim_variable": "rem_120000",
+      "value": 120000,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "Monte Carlo trial count (P-success) \u2014 harness"
+    },
+    {
+      "sim_variable": "rem_95",
+      "value": 95,
+      "canonical_source": "N/A \u2014 sim-harness/derived/PROPOSED",
+      "section": "faction remediation sim",
+      "quoted_text": "new-defect auto-success threshold P>0.95 (0.95) \u2014 analysis convention"
+    },
+    {
+      "sim_variable": "d_24",
+      "value": 24,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "band lower 0.24 digit-run"
+    },
+    {
+      "sim_variable": "d_36",
+      "value": 36,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "band upper 0.36 digit-run"
+    },
+    {
+      "sim_variable": "d_72",
+      "value": 72,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "console separator width \u2014 harness/cosmetic"
+    },
+    {
+      "sim_variable": "d_90",
+      "value": 90,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "cap 0.90 digit-run [PROPOSED]"
+    },
+    {
+      "sim_variable": "d_840",
+      "value": 840,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived rout-count display (Stage-4 check output, MC-dependent)"
+    },
+    {
+      "sim_variable": "d_661",
+      "value": 661,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived rout-count display (Stage-4 check output, MC-dependent)"
+    },
+    {
+      "sim_variable": "d_165",
+      "value": 165,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived sigma-leverage spread 0.165 digit-run"
+    },
+    {
+      "sim_variable": "d_53",
+      "value": 53,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived spread 0.053 digit-run"
+    },
+    {
+      "sim_variable": "d_233",
+      "value": 233,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived spread 0.233 digit-run"
+    },
+    {
+      "sim_variable": "d_204",
+      "value": 204,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived sigma-leverage 0.204 digit-run"
+    },
+    {
+      "sim_variable": "d_267",
+      "value": 267,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived 0.267 digit-run"
+    },
+    {
+      "sim_variable": "d_471",
+      "value": 471,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived P 0.471 digit-run"
+    },
+    {
+      "sim_variable": "d_865",
+      "value": 865,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived P 0.865 digit-run"
+    },
+    {
+      "sim_variable": "d_626",
+      "value": 626,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "faction remediation sim",
+      "quoted_text": "derived P 0.626 digit-run"
     }
   ],
   "provisional_assumptions": [
