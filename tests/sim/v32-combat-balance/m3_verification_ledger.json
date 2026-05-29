@@ -1,0 +1,296 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m3_weapon_class_layer.py",
+  "scope": "custom: core_engine + combat — Module 3 (weapon-class layer)",
+  "module": "M3",
+  "note": "Class A = canonical (combat_v30 §5/§6). Class B = v32 draft sim-seeds (combat_v32_proposal §8); handling + Weapon Speed sim-tunable, NOT canonical.",
+  "entries": [
+    {
+      "sim_variable": "WEAPON_BASE_TN",
+      "value": 7,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Base TN = 7."
+    },
+    {
+      "sim_variable": "REACH_SHORT_MOD",
+      "value": -1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Reach | Short | −1 | Long | +0"
+    },
+    {
+      "sim_variable": "WEIGHT_LIGHT_MOD",
+      "value": -1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Weight | Light | −1 | Heavy | +0"
+    },
+    {
+      "sim_variable": "TYPE_BLUNT_MOD",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Type | Blade | +0 | Blunt | +1"
+    },
+    {
+      "sim_variable": "STR_MULT_HEAVY",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "STR multiplier: Light×1, Heavy×2"
+    },
+    {
+      "sim_variable": "STR_MULT_BLUNT",
+      "value": 1.5,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Blade×1, Blunt×1.5. Multiplicative (Heavy Blunt=×3)."
+    },
+    {
+      "sim_variable": "STR_MULT_LIGHT",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Light×1"
+    },
+    {
+      "sim_variable": "STR_MIN_SHORT_LIGHT",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Short Light (either type) | 1"
+    },
+    {
+      "sim_variable": "STR_MIN_ONE_HEAVY_OR_LONG",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Short Heavy or Long Light | 2"
+    },
+    {
+      "sim_variable": "STR_MIN_LONG_HEAVY",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Long Heavy (either type) | 3"
+    },
+    {
+      "sim_variable": "STR_MIN_LONG_HEAVY_BLUNT",
+      "value": 4,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Long Heavy Blunt | 4"
+    },
+    {
+      "sim_variable": "WIELD_UNDER_MIN_PENALTY",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Weapon TN Matrix",
+      "quoted_text": "Penalty if 1 below minimum: −1D Combat Pool."
+    },
+    {
+      "sim_variable": "LIGHT_BLADE_VS_NONE",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "LIGHT_BLADE_VS_LIGHT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Light Blade | +3 | +2 | +1 | +0"
+    },
+    {
+      "sim_variable": "HEAVY_BLADE_VS_NONE",
+      "value": 6,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Heavy Blade | +6 | +4 | +2 | +0"
+    },
+    {
+      "sim_variable": "HEAVY_BLADE_VS_LIGHT",
+      "value": 4,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Heavy Blade | +6 | +4 | +2 | +0"
+    },
+    {
+      "sim_variable": "LIGHT_BLUNT_ALL",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Light Blunt | +3 | +3 | +3 | +3"
+    },
+    {
+      "sim_variable": "HEAVY_BLUNT_ALL",
+      "value": 5,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Heavy Blunt | +5 | +5 | +5 | +5"
+    },
+    {
+      "sim_variable": "ARMOR_STR_MIN_LIGHT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§6 Armour",
+      "quoted_text": "Light | 2 | +0"
+    },
+    {
+      "sim_variable": "ARMOR_STR_MIN_MEDIUM",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§6 Armour",
+      "quoted_text": "Medium | 3 | −1"
+    },
+    {
+      "sim_variable": "ARMOR_STR_MIN_HEAVY",
+      "value": 4,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§6 Armour",
+      "quoted_text": "Heavy | 4 | −2"
+    },
+    {
+      "sim_variable": "DEGREE_PARTIAL_MIN",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Degree Table",
+      "quoted_text": "1 | Partial"
+    },
+    {
+      "sim_variable": "DEGREE_SUCCESS_MIN",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Degree Table",
+      "quoted_text": "2 | Success"
+    },
+    {
+      "sim_variable": "DEGREE_OVERWHELMING_MIN",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Degree Table",
+      "quoted_text": "3+ | Overwhelming"
+    },
+    {
+      "sim_variable": "HANDLING_FORGIVING_BONUS",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.2 Weapon handling",
+      "quoted_text": "Forgiving | min(P + 1, 3)"
+    },
+    {
+      "sim_variable": "HANDLING_FORGIVING_CAP",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.2 Weapon handling",
+      "quoted_text": "Forgiving | min(P + 1, 3)"
+    },
+    {
+      "sim_variable": "HANDLING_STANDARD_CAP",
+      "value": 4,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.2 Weapon handling",
+      "quoted_text": "Standard | min(P, 4)"
+    },
+    {
+      "sim_variable": "HANDLING_DEMANDING_PENALTY",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.2 Weapon handling",
+      "quoted_text": "Demanding | min(max(P − 1, 0), 5)"
+    },
+    {
+      "sim_variable": "HANDLING_DEMANDING_CAP",
+      "value": 5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.2 Weapon handling",
+      "quoted_text": "Demanding | min(max(P − 1, 0), 5)"
+    },
+    {
+      "sim_variable": "SPEED_LONG_THRUST",
+      "value": 1.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.4 Phase-keyed",
+      "quoted_text": "Long thrust-primary ... Weapon Speed +1.5"
+    },
+    {
+      "sim_variable": "SPEED_LONG_CUT_THRUST",
+      "value": 0.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.4 Phase-keyed",
+      "quoted_text": "Long cut-and-thrust ... +0.5"
+    },
+    {
+      "sim_variable": "SPEED_CURVED",
+      "value": 2,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.4 Phase-keyed",
+      "quoted_text": "Curved cut-primary ... +2"
+    },
+    {
+      "sim_variable": "SPEED_POLE",
+      "value": 0,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.4 Phase-keyed",
+      "quoted_text": "Long pole (spear/staff) ... 0"
+    },
+    {
+      "sim_variable": "SPEED_PAIRED_SHORT",
+      "value": 2.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.4 Phase-keyed",
+      "quoted_text": "Paired short ... +2.5"
+    },
+    {
+      "sim_variable": "SPEED_SINGLE_SHORT",
+      "value": 3,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.4 Phase-keyed",
+      "quoted_text": "Single short ... +3"
+    },
+    {
+      "sim_variable": "SPEED_LONG_HEAVY_BLUNT",
+      "value": -0.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§8.4 Phase-keyed",
+      "quoted_text": "Long Heavy Blunt ... −0.5"
+    }
+  ]
+}
