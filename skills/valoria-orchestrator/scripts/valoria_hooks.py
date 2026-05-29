@@ -96,9 +96,9 @@ TASK_REQUIRED_FILES = {
     "editorial":       ["canon/editorial_ledger.jsonl"],
     "patch":           ["canon/patch_register_active.yaml"],
     "compilation":     ["references/canonical_sources.yaml", "canon/patch_register_active.yaml"],
-    "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger.jsonl",
+    "propose_mechanic":["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml",
                         "skills/valoria-mechanic-audit/SKILL.md"],
-    "design_proposal": ["references/canonical_sources.yaml", "canon/editorial_ledger.jsonl",
+    "design_proposal": ["references/canonical_sources.yaml", "canon/editorial_ledger_summary.yaml",
                         "references/throughlines_meta.md"],
     "design":          ["references/canonical_sources.yaml"],
     "infrastructure":  [],
@@ -463,7 +463,7 @@ def task_gate(task_type: str) -> None:
             "\n[TASK GATE: audit] Required before any audit work:\n"
             "  → Never audit from memory — fetch canonical source for target system.\n"
             "  → All mechanical values must be cited with source file + section.\n"
-            "  → P1 findings must be appended to canon/editorial_ledger.jsonl.\n"
+            "  → P1 findings must be appended to canon/editorial_ledger.yaml.\n"
             "  → Check tests/audit/ for prior audit outputs on this system first.\n"
         )
 
@@ -769,89 +769,6 @@ def supersession_check(additions: list) -> None:
         print("  Verify commit does not regress the superseded authority. (non-blocking)\n")
 
 
-# ── Editorial-ledger JSONL integrity (Phase 2.2 — 2026-05-28 JSONL migration) ──
-# The editorial ledger migrated from 24 fragmented YAML files (3 archive schemes,
-# 6 unparseable) to one line-delimited JSON store: canon/editorial_ledger.jsonl
-# (605 entries, globally-unique ids, 0 duplicates — verified at migration). This
-# function is the "DB-grade integrity guarantee in text" the migration report
-# calls for: every committed JSONL ledger round-trip-parses, carries the required
-# fields on every entry, and has a globally unique id per line.
-#
-# Required-fields are deliberately the empirically-universal set {id, status}
-# (100% present across all 605 current entries). `description` is NOT required:
-# 16 legacy/partial entries lack it, and requiring it would permanently block
-# every JSONL commit until the 21 `_migration_partial` re-verifications and the
-# 94 conflict resolutions land. Tighten EDITORIAL_JSONL_REQUIRED once that data
-# is clean — that is a Jordan decision, not an automatic one.
-#
-# NOTE (transition state): the live editorial gate / bootstrap still READ the
-# legacy canon/editorial_ledger.yaml. Repointing the readers + the size-governance
-# model for a 79k-token consolidated store is Phase 2.1, pending Jordan's choice
-# of fetch model. This validator is fetch-model-independent: it validates whatever
-# JSONL ledger content appears in a commit, so it is safe to land ahead of 2.1.
-EDITORIAL_JSONL_LEDGERS = ('canon/editorial_ledger.jsonl',)
-EDITORIAL_JSONL_REQUIRED = ('id', 'status')
-
-
-def validate_ledger_jsonl(path: str, content: str) -> list:
-    """
-    Validate one editorial-ledger JSONL file. Pure function — no I/O, no halt.
-    Returns a list of error strings (empty == valid); callers aggregate and raise.
-
-    Checks, in order:
-      1. round-trip parse  — every non-blank line is a valid JSON object;
-      2. required-fields   — every entry carries EDITORIAL_JSONL_REQUIRED;
-      3. global id-unique  — no id repeats across lines (the core migration fix).
-    """
-    import json
-    errors = []
-    seen, dupes = {}, []
-    missing_required, parse_errs = [], []
-    for lineno, line in enumerate(content.splitlines(), 1):
-        line = line.strip()
-        if not line:
-            continue
-        try:
-            item = json.loads(line)
-        except Exception as e:
-            parse_errs.append((lineno, str(e)[:80]))
-            continue
-        if not isinstance(item, dict):
-            parse_errs.append((lineno, f"line is {type(item).__name__}, expected object"))
-            continue
-        miss = [f for f in EDITORIAL_JSONL_REQUIRED
-                if f not in item or item.get(f) in (None, "")]
-        if miss:
-            missing_required.append((lineno, miss))
-        iid = item.get('id')
-        if iid is None:
-            continue
-        if iid in seen:
-            dupes.append(iid)
-        else:
-            seen[iid] = True
-    if parse_errs:
-        errors.append(
-            f"LEDGER_JSONL: {path}: {len(parse_errs)} unparseable line(s) — "
-            + "; ".join(f"L{n}: {m}" for n, m in parse_errs[:5])
-            + (" …" if len(parse_errs) > 5 else "")
-        )
-    if missing_required:
-        errors.append(
-            f"LEDGER_JSONL: {path}: {len(missing_required)} line(s) missing required "
-            f"field(s) {list(EDITORIAL_JSONL_REQUIRED)} — "
-            + "; ".join(f"L{n}: {fld}" for n, fld in missing_required[:5])
-            + (" …" if len(missing_required) > 5 else "")
-        )
-    if dupes:
-        errors.append(
-            f"LEDGER_JSONL: {path}: duplicate id(s) {sorted(set(dupes))}. "
-            f"Each JSONL line must have a unique id (the core fix of the 2026-05-28 "
-            f"migration; cf. ED-762 collision 2026-04-29)."
-        )
-    return errors
-
-
 def assert_unique_ids(additions: list) -> None:
     """
     Enforce id uniqueness in ledger and register files.
@@ -861,26 +778,47 @@ def assert_unique_ids(additions: list) -> None:
     fail fast rather than after CI or via downstream propagation defects.
 
     Files checked:
-      canon/editorial_ledger.jsonl         (line-delimited JSON → validate_ledger_jsonl:
-                                            round-trip + required-fields + id-uniqueness)
+      canon/editorial_ledger.yaml          (entries: list with .id)
+      canon/editorial_ledger_archive.yaml  (entries: list with .id)
       canon/patch_register_active.yaml     (top-level list with .id)
       canon/patch_register_archive.yaml    (top-level list with .id)
-
-    The editorial_ledger YAML + its 10 archive files were deprecated 2026-05-28
-    (→ deprecated/canon/) and are no longer gated here; the JSONL store is the live
-    editorial ledger, integrity-checked by validate_ledger_jsonl.
     """
     LEDGER_FILES = {
+        'canon/editorial_ledger.yaml':         'entries',
+        'canon/editorial_ledger_archive.yaml': 'entries',
         'canon/patch_register_active.yaml':    None,
         'canon/patch_register_archive.yaml':   None,
     }
-    import yaml
+    JSONL_LEDGERS = {'canon/editorial_ledger.jsonl'}
+    import yaml, json
     errors = []
     for path, content in additions:
-        # JSONL ledgers (post-2026-05-28 migration) get the full DB-grade validator:
-        # round-trip parse + required-fields + global id-uniqueness.
-        if path in EDITORIAL_JSONL_LEDGERS:
-            errors.extend(validate_ledger_jsonl(path, content))
+        if path in JSONL_LEDGERS:
+            # JSONL: one JSON object per line; uniqueness across the whole file.
+            items = []
+            for ln_no, ln in enumerate(content.splitlines(), 1):
+                if not ln.strip():
+                    continue
+                try:
+                    items.append(json.loads(ln))
+                except json.JSONDecodeError as e:
+                    errors.append(f"UNIQUE_IDS: {path}: line {ln_no} invalid JSON — {e}")
+            seen, dupes = {}, []
+            for item in items:
+                if not isinstance(item, dict):
+                    continue
+                iid = item.get('id')
+                if iid is None:
+                    continue
+                if iid in seen:
+                    dupes.append(iid)
+                else:
+                    seen[iid] = True
+            if dupes:
+                errors.append(
+                    f"UNIQUE_IDS: {path}: duplicate ID(s) {sorted(set(dupes))}. "
+                    f"Each JSONL entry must have a unique id."
+                )
             continue
         if path not in LEDGER_FILES:
             continue
@@ -914,6 +852,56 @@ def assert_unique_ids(additions: list) -> None:
         raise RuntimeError(
             "[HOOK VIOLATION] assert_unique_ids FAILED:\n"
             + "\n".join(f"  [{i+1}] {e}" for i, e in enumerate(errors))
+        )
+
+
+def jsonl_ledger_gate(additions: list) -> None:
+    """
+    Validate canon/editorial_ledger.jsonl on commit (DB-grade integrity in text):
+      - every non-empty line is valid JSON (round-trip)
+      - every entry is an object with required fields: id, status, description
+      - id matches ED-<int>
+    Uniqueness is enforced separately by assert_unique_ids. Raises RuntimeError on violation.
+    """
+    import json, re as _re
+    JSONL_PATH = 'canon/editorial_ledger.jsonl'
+    HARD = ('id',)          # integrity: file is a keyed store — id is mandatory
+    SOFT = ('description', 'status')  # data quality: warn, do not halt
+    errors, warnings = [], []
+    for path, content in additions:
+        if path != JSONL_PATH:
+            continue
+        for ln_no, ln in enumerate(content.splitlines(), 1):
+            if not ln.strip():
+                continue
+            try:
+                obj = json.loads(ln)
+            except json.JSONDecodeError as e:
+                errors.append(f"line {ln_no}: invalid JSON — {e}")
+                continue
+            if not isinstance(obj, dict):
+                errors.append(f"line {ln_no}: not a JSON object")
+                continue
+            iid = obj.get('id', '')
+            if iid in (None, ''):
+                errors.append(f"line {ln_no}: missing/empty id (keyed store requires id)")
+            elif not _re.match(r'^ED-\d+$', str(iid)):
+                warnings.append(f"line {ln_no}: non-standard id '{iid}' (expected ED-<int>)")
+            miss_soft = [f for f in SOFT if f not in obj or obj.get(f) in (None, '', '[unrecovered]')]
+            if miss_soft:
+                warnings.append(f"line {ln_no} (id={iid or '?'}): missing/empty {miss_soft}")
+    if warnings:
+        print(f"[HOOK ⚠ jsonl_ledger_gate] {len(warnings)} data-quality warning(s) "
+              f"(missing description/status — non-blocking):")
+        for w in warnings[:15]:
+            print(f"    - {w}")
+        if len(warnings) > 15:
+            print(f"    ... and {len(warnings)-15} more")
+    if errors:
+        raise RuntimeError(
+            "[HOOK VIOLATION] jsonl_ledger_gate FAILED on canon/editorial_ledger.jsonl:\n"
+            + "\n".join(f"  [{i+1}] {e}" for i, e in enumerate(errors[:40]))
+            + (f"\n  ... and {len(errors)-40} more" if len(errors) > 40 else "")
         )
 
 
@@ -1161,6 +1149,7 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     # Unique-ID check on ledger/register files (prevents ED-762-style collisions)
     try:
         assert_unique_ids(additions)
+        jsonl_ledger_gate(additions)
     except RuntimeError as e:
         errors.append(str(e))
 
@@ -1238,7 +1227,7 @@ def propose_mechanic_gate(system: str) -> None:
     """
     Call before any mechanic proposal. Enforces full prerequisite chain:
     1. canonical_sources.yaml fetched
-    2. canon/editorial_ledger.jsonl fetched
+    2. editorial_ledger_summary.yaml fetched
     3. Canonical design doc for the system fetched
     """
     cs_key = g._repo_key('references/canonical_sources.yaml', 'ttrpg')
@@ -1248,12 +1237,12 @@ def propose_mechanic_gate(system: str) -> None:
             f"  canonical_sources.yaml not fetched.\n"
             f"  Cannot propose mechanics without knowing which doc is canonical."
         )
-    els_key = g._repo_key('canon/editorial_ledger.jsonl', 'ttrpg')
+    els_key = g._repo_key('canon/editorial_ledger_summary.yaml', 'ttrpg')
     if els_key not in g._session_fetches or g._session_fetches[els_key] is None:
         raise RuntimeError(
             f"[HOOK VIOLATION] propose_mechanic_gate('{system}'):\n"
-            f"  canon/editorial_ledger.jsonl not fetched.\n"
-            f"  Required before proposing mechanics (editorial ledger is the JSONL store post-2026-05-28)."
+            f"  editorial_ledger_summary.yaml not fetched.\n"
+            f"  Required before proposing mechanics."
         )
     # Delegate to task_gate_with_system for canonical doc verification
     task_gate_with_system('propose_mechanic', system, g._session_fetches[cs_key])

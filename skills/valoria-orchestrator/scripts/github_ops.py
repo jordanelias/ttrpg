@@ -57,6 +57,9 @@ REPOS = {
 TOKEN_THRESHOLDS = {
     "session_log_current.md":                  2_000,   # session-bounded; rotates each session
     "session_logs/index.md":                   2_000,   # tiny index file
+    "canon/editorial_ledger.yaml":             4_000,   # raised 2_000 → 4_000 (2026-05-02): ED entries are 800-1200 chars; 4 entries/session typical
+    "canon/editorial_ledger.jsonl":            200_000, # JSONL single-source (2026-05-28): whole-ledger file, never loaded whole at bootstrap; high cap, append-by-line
+    "canon/editorial_ledger_summary.yaml":     2_000,   # raised 1_000 → 2_000 (2026-05-02): paired with parent
     "references/file_index_summary.md":        2_000,   # raised 1_000 → 2_000 (2026-05-02): file count grows with project
     "references/canonical_sources.yaml":       9_000,   # raised 5_000 → 8_000 (2026-05-02), → 9_000 (2026-05-18): freshness_gate --update added 115 canonical_sha fields, pushing file to 8086 tokens
     "skills/valoria-orchestrator/SKILL.md":    8_000,
@@ -156,10 +159,11 @@ def _repo_key(path: str, repo: str) -> str:
 SESSION_PERMANENT_PATTERNS = (
     'session_log_current.md',
     'session_logs/index.md',
+    'editorial_ledger_summary.yaml',
     'file_index_summary.md',
     'canonical_sources.yaml',
     'patch_register_active.yaml',
-    'editorial_ledger.jsonl',          # canonical editorial store (post-2026-05-28 JSONL migration)
+    'editorial_ledger.yaml',
     'propagation_map.md',
     'coverage_matrix.md',
 )
@@ -734,11 +738,13 @@ def append_to_register(path: str, new_entries: str,
     repo = repo or 'ttrpg'
     fresh = read_files_graphql([path], repo=repo, skip_health_check=True)
     current = fresh.get(path) or ""
-    # JSONL stores are line-delimited: guarantee a newline boundary so an append
-    # cannot fuse the last existing object with the first new one ( }{ ... ).
-    if path.endswith('.jsonl') and current and not current.endswith('\n'):
-        current = current + '\n'
-    combined = current + new_entries
+    if path.endswith('.jsonl'):
+        # JSONL: ensure newline separation; new_entries is one or more JSON lines.
+        if current and not current.endswith("\n"):
+            current += "\n"
+        combined = current + (new_entries if new_entries.endswith("\n") else new_entries + "\n")
+    else:
+        combined = current + new_entries
     tokens = len(combined) // 4
     threshold = TOKEN_THRESHOLDS.get(path)
     if threshold and tokens > threshold:
@@ -1127,10 +1133,7 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     session_paths = [
         'session_log_current.md',
         'session_logs/index.md',
-        # canon/editorial_ledger_summary.yaml retired in the 2026-05-28 JSONL cutover.
-        # The canonical canon/editorial_ledger.jsonl is fetched on demand by editorial
-        # tasks (task_gate 'editorial'/'propose_mechanic'/'design_proposal'), not at
-        # every bootstrap — it is a consolidated store, not a kept-small register.
+        'canon/editorial_ledger_summary.yaml',
         'references/file_index_summary.md',
         'references/canonical_sources.yaml',
         'references/roadmap_state.yaml',
