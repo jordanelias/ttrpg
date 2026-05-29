@@ -2,6 +2,8 @@
 
 `[SELF-AUTHORED — bias risk]` This diagnoses a proposal I built this session. Per the resolution-diagnostic skill's first guardrail, I treat it as external work and actively surface the criticism an independent reviewer would raise — the failure mode here is confirming the reframe "fixed everything." It did not.
 
+> **POST-VERDICT UPDATE (same session):** Per Jordan's directive to address findings in priority order, **F7 was consolidated immediately after this verdict** — the two intra-attack Reading channels (Temporal + Biomechanical) merged into a single **Kinetic** channel (5 mundane → 4), the minimal Lesson-1 fix (combat_v32_proposal §4.5/§6.5/§11.1, §16.4). The verdict below is preserved as the **state at test time** (F7 open) — it is the honest test record, not edited retroactively. **Current proposal state:** F7 addressed; F3, N1, N3, N4, N5 remain per the remediation list.
+
 **Method:** `valoria-resolution-diagnostic` skill, Stages 1–4, applied to designs/proposals/... (v32 working copy). NERS criteria per canon/definitions.yaml. Compared against the v31 diagnostic (designs/audit/2026-05-28-resolution-diagnostic + the v31 follow-up).
 
 ---

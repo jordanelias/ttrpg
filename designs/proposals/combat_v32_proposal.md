@@ -115,7 +115,7 @@ This section enumerates canonical primitives the proposal builds on. The proposa
 - **Cog**: Reading sub-channel Pools (Geometric, Intent); Anticipation
 - **Rec**: caps History points per History (limits training depth)
 - **Foc**: Concentration_max combat, sustained-commit duration, Intent Reading attention discipline
-- **Att**: Reading sub-channel Pools (Tactile, Temporal, Biomechanical, Rhythmic, Thread); Initiative
+- **Att**: Reading sub-channel Pools (Tactile, Kinetic, Rhythmic, Thread); Initiative
 - **Spi**: Thread-op commits in combat; Coherence interaction
 - **Bon, Cha**: not combat-active by default; Bon factors into Death Cascade via Knot mechanics (combat_v30 §13.3 + threadwork Knot rules); Cha affects Composure (social fallback if combat de-escalates)
 
@@ -303,12 +303,13 @@ Reading is a continuous state variable that *peaks* immediately before Commit. S
 | Channel | Works at | Reveals | Pool composition |
 |---|---|---|---|
 | Tactile | In Bout (Phase 6) bind state | Pressure, intent through contact | `(Att × 2) + AspProf(Reading-Tactile) + History` |
-| Temporal | Free of bind, at measure | Opponent's commitment-window timing | `(Att × 2) + AspProf(Reading-Temporal) + History` |
+| Kinetic | Measure → during opponent's Commit | Incoming attack: commitment-window timing + initiation order/type | `(Att × 2) + AspProf(Reading-Kinetic) + History` |
 | Geometric | Stable Positions (Phase 1–2) | Positional vulnerabilities | `(Cog × 2) + AspProf(Reading-Geometric) + History` |
-| Biomechanical | During opponent's Commit (Phase 5) | Initiation order of opponent's motion | `(Att × 2) + AspProf(Reading-Biomechanical) + History` |
 | Rhythmic | Multi-pass (after pass 2) | Opponent's cadence | `(Att × 2) + AspProf(Reading-Rhythmic) + History` |
 | **Thread** | TS ≥ 30 (params/threadwork) | Opponent's thread state, Coherence integrity, Conviction strain | `(Spirit × 2) + History + TPS` per Thread Pool canon |
 | **Intent** | At measure before Commit (Phase 4–5); higher tiers in Bout | Opponent's pre-motor state; tier-keyed abilities | `(Cog × 2) + Intent Reading track value` (see §6) |
+
+**Channel set (F7 consolidation).** v31's five mundane channels over-split the reading role (diagnostic F7, Lesson 1). v32 merges the two intra-attack channels — *commitment timing* and *initiation order*, both Att-based reads of the incoming attack — into one **Kinetic** channel. The four remaining mundane channels carry distinct roles: Kinetic (incoming attack), Geometric (spatial/positional, Cog-based), Rhythmic (cross-round cadence — a distinct meta-temporal role), Tactile (contact/bind). This is a *minimal* Lesson-1 merge; further consolidation would risk collapsing genuinely distinct roles (Lesson-1 over-merge), and whether four is still over-split is a sim/playtest judgment.
 
 **Field-of-view scaling (§11.2).** Each *sight-mediated* channel's Pool is scaled by the opponent's position in the reader's field of view (central 1.0 / near-peripheral 0.6 / far-peripheral 0.3 / blind 0.0). **Tactile is exempt** (contact-mediated — read through the bind regardless of gaze). This is how facing produces its effect: an opponent in your periphery is read at reduced Pool.
 
@@ -491,16 +492,16 @@ A character's History points are capped per History at the character's **Recall*
 
 | # | Tradition (History name) | Aspect bundle | Valoria faction binding | Intent Reading teaches up to | Weapon-class fit |
 |---|---|---|---|---|---|
-| 1 | Long-thrust dueling tradition | Forward-point stance + Linear footwork + Standard grip + Direct/Explosive approach + Temporal reading + Hand-led reactions + Decisive commitment + Clean/Pursuing disengage | Hafenmark formal duelists; Crown court fencing | Tier 2 (Steady) | Long thrust-primary |
+| 1 | Long-thrust dueling tradition | Forward-point stance + Linear footwork + Standard grip + Direct/Explosive approach + Kinetic reading + Hand-led reactions + Decisive commitment + Clean/Pursuing disengage | Hafenmark formal duelists; Crown court fencing | Tier 2 (Steady) | Long thrust-primary |
 | 2 | Long-blade contact tradition | Centered/Raised stances + Linear + Standard grip with half-grip-available + Direct press + Tactile reading + Yielding/Pressing reactions + Sustained commitment + Defensive disengage | Crown infantry; mixed faction soldiery | Tier 1 (Surface) | Long cut-and-thrust |
 | 3 | Long-thrust geometric tradition | Forward-point + Curvilinear footwork + Standard grip + Angled approach + Geometric reading + Hand-led + Cautious commitment + Defensive disengage | Crown court advanced fencing academy (theoretical/mathematical training); Löwenritter officer training | Tier 1 (Surface) | Long thrust-primary |
-| 4 | Counter-time tradition | Centered/Side stances + Linear + Standard + Drawing approach + Temporal/Biomechanical reading + Reactive anticipation + Hand-led counter reactions + Defensive disengage | Crown court fencing masters; Hafenmark senior duelists; rare in other factions | **Tier 4 (Pre-empt)** | Long thrust-primary; Long cut-and-thrust |
+| 4 | Counter-time tradition | Centered/Side stances + Linear + Standard + Drawing approach + Kinetic reading + Reactive anticipation + Hand-led counter reactions + Defensive disengage | Crown court fencing masters; Hafenmark senior duelists; rare in other factions | **Tier 4 (Pre-empt)** | Long thrust-primary; Long cut-and-thrust |
 | 5 | Single-strike tradition | Stance-flux mid-Bout (per §5.5.1 Apprentice technique) + Linear + Standard + Direct/Drawing + Intent reading focus + Body-led reactions + Decisive commitment + Clean disengage | Niflhel sword-saints (peripheral monastic lineage); rare Restoration Movement contemplative wing | **Tier 5 (Master)** | Long cut-and-thrust; Single short (formal seppuku-equivalent context) |
 | 6 | Curved-blade cavalry tradition | Variable stance + Bursting footwork + Thumb-anchor grip + Direct press approach + Rhythmic reading + Pressing reactions + Burst commitment + Pursuing disengage | Crown light cavalry; Varfell highland raiders; Hafenmark merchant-escort cavalry | Tier 1 (Surface) | Curved cut-primary |
 | 7 | Continuous-flow tradition | Continuous (no discrete stance) + Triangular footwork + Paired grip + Angled approach + Rhythmic reading + Voiding reactions + Sustained commitment + Sudden disengage | Niflhel highland practice (paired-blade form); Restoration Movement Thread-aware practitioners (continuous flow as Thread-state combat) | Tier 2 (Steady) | Paired short; secondary Continuous-blade variant |
-| 8 | Mounted multi-weapon tradition | Mode-dependent stance + Bursting footwork + Variable grip + Direct approach + Geometric/Temporal reading + Pressing reactions + Burst commitment + Pursuing disengage | Löwenritter knightly cavalry (signature tradition); Crown heavy cavalry | Tier 2 (Steady) | Long pole (lance); Curved cut-primary (saber dismounted); Long cut-and-thrust (sword dismounted) |
+| 8 | Mounted multi-weapon tradition | Mode-dependent stance + Bursting footwork + Variable grip + Direct approach + Geometric/Kinetic reading + Pressing reactions + Burst commitment + Pursuing disengage | Löwenritter knightly cavalry (signature tradition); Crown heavy cavalry | Tier 2 (Steady) | Long pole (lance); Curved cut-primary (saber dismounted); Long cut-and-thrust (sword dismounted) |
 | 9 | Conditioning-and-grappling tradition | Centered + Linear + (body grip) + Direct + Body-contact reading + Yielding/Pressing + Sustained + Clean | Niflhel highland practice; Varfell light infantry; Restoration Movement militia training | Tier 1 (Surface) | Single short (close-range backup); unarmed |
-| 10 | Formation-and-discipline tradition | Variable + Linear with formation positioning + Variable + Coordinated approach + Temporal + Disciplined defaults + Patterned anticipation + Defensive | Crown infantry (line formation); Church Templars (formal protocol); Löwenritter ground formation | Tier 1 (Surface) | Long pole (spear/pike); Long cut-and-thrust (formation backup) |
+| 10 | Formation-and-discipline tradition | Variable + Linear with formation positioning + Variable + Coordinated approach + Kinetic + Disciplined defaults + Patterned anticipation + Defensive | Crown infantry (line formation); Church Templars (formal protocol); Löwenritter ground formation | Tier 1 (Surface) | Long pole (spear/pike); Long cut-and-thrust (formation backup) |
 
 **Valoria-faction binding rationale:**
 - **Crown** has the broadest combat-tradition footprint — court fencing (1, 3, 4), infantry (2, 10), cavalry (6, 8). Reflects Crown's politically central + militarily diverse role.
@@ -524,7 +525,7 @@ A character's primary combat History grants full Aspect Proficiency access to it
 **Example hybrid (preserved from proposal §6):** A fencer trained primarily in Long-thrust dueling History (3 points, Tradition Depth 3) who additionally studies Counter-time tradition (2 points, Tradition Depth 2):
 - Stance: Forward-point (both teach; Aspect Prof from Long-thrust at 3 cap)
 - Footwork: Linear (both teach)
-- Reading: Temporal primary (Long-thrust) AspProf 3; Biomechanical secondary (Counter-time) AspProf 2 cap
+- Reading: Kinetic primary AspProf 3 (Long-thrust + Counter-time lineage)
 - Reaction: Hand-led counter (both teach)
 - Anticipation: Reactive (Counter-time exclusive; AspProf 2 cap)
 - Plays as a Long-thrust duellist with counter-time counter-attack capability — mechanically a hybrid.
@@ -579,7 +580,7 @@ The four traditions below have detailed trees as design exemplars. Trees for the
 | Depth | Technique | Phase | Mechanical effect |
 |---|---|---|---|
 | 1 (Apprentice) | Counter-thrust drawing | Phase 3 + Phase 6 | Drawing approach (Phase 3) + when opponent pursues with Thrust at Phase 6 entry, +1D Pool on counter-Yield sub-action |
-| 1 (Apprentice) | Tempo-read setup | Phase 4 Reading peak | Temporal channel + Biomechanical channel attention split with no Conc penalty (normally costs 1 Conc) |
+| 1 (Apprentice) | Tempo-read setup | Phase 4 Reading peak | Kinetic channel read with no Conc penalty (normally costs 1 Conc) |
 | 2 (Journeyman) | Counter-thrust deflection | Phase 6 Bout | When opponent commits depth-3+ Thrust, Hand-led Reaction at +2D Pool; on Success, opponent's commit reduced by 2D (counter-time disrupts opponent's flow) |
 | 2 (Journeyman) | Reactive Anticipation refinement | Phase 4 | Reactive Anticipation: Reading channels fire at +1D *during* opponent's Phase 5 Commit, not just at Phase 4 peak |
 | 3 (Adept) | Indes (in-tempo strike) | Phase 6 Bout | Mid-Bout, when sensor channels reveal opponent's commit class transition, free counter-strike sub-action at +1 Ob to opponent |
@@ -646,9 +647,9 @@ This section enumerates the 10 aspects, their specializations, and mechanical ef
 |---|---|---|---|---|
 | Centered guard | Universal (cut, thrust, parry) | Tactile (bind-ready) | Medium | Standard (+Focus per Phase 8) |
 | Raised guard | Descending cuts | Geometric (high overview) | High (telegraphed) | Standard |
-| Low guard | Rising attacks; bind-baiting | Temporal (reads opponent commitment cleanly) | Low (concealed) | +1 (low-stress posture) |
-| Side guard | Angled cuts; voiding | Biomechanical (reads opponent's motion clearly) | Medium | Standard |
-| Forward-point guard | Thrusts; counter-time | Temporal + Intent (with §10 track) | Low (concealed; weapon as line) | −1 (tense posture) |
+| Low guard | Rising attacks; bind-baiting | Kinetic (reads opponent commitment cleanly) | Low (concealed) | +1 (low-stress posture) |
+| Side guard | Angled cuts; voiding | Kinetic (reads opponent's motion clearly) | Medium | Standard |
+| Forward-point guard | Thrusts; counter-time | Kinetic + Intent (with §10 track) | Low (concealed; weapon as line) | −1 (tense posture) |
 
 **Stance Counter Matrix** (§7.1) provides a σ-space modifier per stance-vs-stance matchup, state-gated to the Closing state (§12.3).
 
@@ -690,14 +691,13 @@ This section enumerates the 10 aspects, their specializations, and mechanical ef
 
 ### 6.5 Reading
 
-**Primary sensor channel preference.** The 5 mundane channels + Thread (TS-gated) are the Phase 4 Reading peak menu (§4.5). Specialization raises Aspect Proficiency in one or more channels.
+**Primary sensor channel preference.** The 4 mundane channels + Thread (TS-gated) are the Phase 4 Reading peak menu (§4.5). Specialization raises Aspect Proficiency in one or more channels.
 
 | Specialization | Reading channel preferred | Notes |
 |---|---|---|
 | Tactile | Bout (bind state); Phase 6-active | Primarily reads in-bind opponent |
-| Temporal | Phase 4 peak vs Free-of-bind opponent | Reads commitment timing |
+| Kinetic | Phase 4 measure → Phase 5 commit | Reads the incoming attack: commitment timing + motion order/type |
 | Geometric | Phase 1-2 (stable positions) | Reads positional vulnerabilities |
-| Biomechanical | Phase 5 (during opponent commit) | Reads motion order |
 | Rhythmic | Multi-pass (pass 2+) | Reads cadence; long-fight channel |
 | Thread | TS 30+ required (canonical) | Reads thread state; canon per combat_v30 §10.2 |
 
@@ -710,7 +710,7 @@ This section enumerates the 10 aspects, their specializations, and mechanical ef
 | Specialization | Mechanical effect |
 |---|---|
 | Predictive | Attention split bonus: secondary channel at 0.5 Pool instead of 0.3 |
-| Reactive | Reading bonus *during* opponent's Commit: Biomechanical channel fires at +1D when opponent depths ≥3 |
+| Reactive | Reading bonus *during* opponent's Commit: Kinetic channel fires at +1D when opponent depths ≥3 |
 | Proactive | Phase 5 Commit fires before Reading peak if Initiative high; trades Reading info for tempo |
 | Adaptive | Attention split adjusts mid-Bout: can re-allocate sensor focus on player intervention triggers |
 | Patterned | Phase 6 Bout: opponent's repeated sub-actions raise Reading channel bonuses cumulatively (+0.25 Ob per repeat, capped at +1.5) |
@@ -828,7 +828,7 @@ Actions are declarative — they specify *which option to take in which phase* o
 - `phase_1 := "Centered guard"` (Stance choice — must be trained specialization)
 - `phase_2 := "thrust-line"` (Position choice — Position names are defined per Stance in §4.3, not enumerated as discrete specs)
 - `phase_3 := "Direct press"` (Approach choice from the 5 options)
-- `phase_4 := { primary: "Temporal", split: 70/30, secondary: "Intent" }` (attention allocation)
+- `phase_4 := { primary: "Kinetic", split: 70/30, secondary: "Intent" }` (attention allocation)
 - `phase_5 := { action: "thrust", depth: 3 }` (Commit class + depth)
 - `phase_5 := { technique: "Counter-thrust" }` (named technique reference — uses character's trained techniques from §5.5; technique declarations include their own canonical class+depth from §5.5)
 - `phase_5 := { thread_op: "Mend", target: "self_wound" }` (Thread-op commit)
@@ -869,7 +869,7 @@ THEN phase_5 := { technique: "Counter-thrust" }  // Long-thrust dueling Journeym
 [priority 3]
 WHEN opponent.signal = "low"
 THEN phase_3 := "Feinted approach"
-ALSO phase_4 := { primary: "Intent", split: 70/30, secondary: "Temporal" }
+ALSO phase_4 := { primary: "Intent", split: 70/30, secondary: "Kinetic" }
 
 [priority 4]
 WHEN bout_state = "in-bind" AND bout_steps >= 2
@@ -903,7 +903,7 @@ ALSO phase_3 := "Drawing approach"  // draws opponent into commitment
 
 [priority 4]
 WHEN bout_state = "closing"
-THEN phase_4 := { primary: "Biomechanical", split: 50/50, secondary: "Intent" }
+THEN phase_4 := { primary: "Kinetic", split: 50/50, secondary: "Intent" }
 // reads opponent's commit timing
 
 [priority 5]
@@ -974,9 +974,9 @@ The aspects above (§6.1–6.10) describe a character's **trained pool** — eve
 
 | Set | Core equipped aspects | Set bonus (σ-space, state-gated) | Weapon affinity (§8) | Inherent tension |
 |---|---|---|---|---|
-| **Thrust Duelist** | Forward-point Stance · Linear Footwork · Standard grip · Direct/Explosive Approach · Temporal Reading · Hand-led Reaction · Decisive Commitment · Clean Disengage | +Moderate on Thrust commits at **Closing** | Long thrust-primary | — |
+| **Thrust Duelist** | Forward-point Stance · Linear Footwork · Standard grip · Direct/Explosive Approach · Kinetic Reading · Hand-led Reaction · Decisive Commitment · Clean Disengage | +Moderate on Thrust commits at **Closing** | Long thrust-primary | — |
 | **Bind Fighter** | Centered/Raised Stance · Linear Footwork · Standard grip (Half-grip-available) · Direct-press Approach · Tactile Reading · Patterned Anticipation · Yielding Reaction · Sustained Commitment | +Moderate on Wind/Press/Yield at **In-bind** | Long cut-and-thrust | — |
-| **Counter-time** | Centered/Side Stance · Linear Footwork · Drawing Approach · Temporal+Biomechanical Reading · Reactive Anticipation · Hand-led counter Reaction · Cautious Commitment | +Strong on reactive sub-actions **when a Reading channel succeeded** (else +0) | Long thrust-primary | — |
+| **Counter-time** | Centered/Side Stance · Linear Footwork · Drawing Approach · Kinetic Reading · Reactive Anticipation · Hand-led counter Reaction · Cautious Commitment | +Strong on reactive sub-actions **when a Reading channel succeeded** (else +0) | Long thrust-primary | — |
 | **Burst** | Bursting Footwork · Explosive Approach · Burst Commitment · Sudden Disengage | +Strong on the **opening Closing transition**; no In-bind bonus (intentionally short-engagement) | Single short / Paired short | — |
 | **Continuous-flow** | Side guard (stance-flux) · Triangular Footwork · Paired grip · Angled Approach · Rhythmic Reading · Voiding Reaction · Sustained Commitment · Sudden Disengage | +Moderate on consecutive sub-actions / Voiding flow | **Paired short (required)** | Commitment × Disengage (Sustained + Sudden) — characteristic whiplash cost |
 
@@ -1220,11 +1220,11 @@ This **does not modify the canonical wound math**; the canonical −1D-per-wound
 
 ## 10. INTENT READING TRACK
 
-Reading Intent is the foundational perceptual discipline of pre-motor opponent reading. Per Jordan canonical override (2026-05-XX), Intent maintains its own progression track and unlocks specific abilities at training tiers — separate from the Reading aspect's other channels (Tactile, Temporal, Geometric, Biomechanical, Rhythmic, Thread).
+Reading Intent is the foundational perceptual discipline of pre-motor opponent reading. Per Jordan canonical override (2026-05-XX), Intent maintains its own progression track and unlocks specific abilities at training tiers — separate from the Reading aspect's other channels (Tactile, Kinetic, Geometric, Rhythmic, Thread).
 
 ### 10.1 Why separate
 
-Intent Reading is qualitatively distinct from the other Reading sub-channels. Where Tactile reads pressure and Geometric reads positions, Intent reads the *pre-motor state* — what opponent is about to do, before their body commits. This requires perceptual training that doesn't transfer from general martial proficiency. A master swordsman who never studied fühlen-equivalent Intent reading may have all five mundane channels at Master tier (5) Aspect Proficiency and Intent at Surface (1) on this track.
+Intent Reading is qualitatively distinct from the other Reading sub-channels. Where Tactile reads pressure and Geometric reads positions, Intent reads the *pre-motor state* — what opponent is about to do, before their body commits. This requires perceptual training that doesn't transfer from general martial proficiency. A master swordsman who never studied fühlen-equivalent Intent reading may have all four mundane channels at Master tier (5) Aspect Proficiency and Intent at Surface (1) on this track.
 
 ### 10.2 Track structure
 
@@ -1308,7 +1308,7 @@ Five continuous state variables run throughout an engagement. They update across
 
 Quality of the character's current sensor-channel information about opponent. Defined and detailed in §4.5 (Phase 4 Reading peak) and §6.5 (Reading aspect).
 
-**Builds across Phases 1–3** (ambient observation; Geometric channel in Phases 1–2; Temporal at Phase 4 measure).
+**Builds across Phases 1–3** (ambient observation; Geometric channel in Phases 1–2; Kinetic at Phase 4 measure).
 **Peaks at Phase 4** before Commit.
 **Updates from Phase 6 Bout** (Tactile in bind-active states; Intent at Tier 2+ Sustained Read).
 **Partial reset in Phase 7–8** (sensor-channel state preserved selectively; Rhythmic channel reads persist across passes).
@@ -1332,7 +1332,7 @@ Reading produces a **Reading-modifier** — a σ-space δσ contribution (§12.3
 ```
 Effective Reading Pool (channel) = base Reading Pool × FoV_factor(opponent position)
 ```
-Tactile reading (the bind) is the exception — it is contact-mediated, not sight-mediated, so it is **not** FoV-scaled (you feel the bind regardless of where you are looking). All sight-mediated channels (Geometric, Biomechanical, Temporal, Rhythmic) are scaled.
+Tactile reading (the bind) is the exception — it is contact-mediated, not sight-mediated, so it is **not** FoV-scaled (you feel the bind regardless of where you are looking). All sight-mediated channels (Geometric, Kinetic, Rhythmic) are scaled.
 
 **Effect on reaction.** Reactive aspects (Body-led, Yielding, Voiding) require the incoming line to be within the defender's FoV at the listed factor or better. An attack arriving from the defender's blind rear permits **no reactive aspect**; from far-peripheral, only the reflexive Hand-led at a penalty. You cannot void what you cannot see.
 
@@ -1802,7 +1802,7 @@ Documents requiring update on ratification:
 | Engagement state graph (SETUP→BOUT→RESET; bout = probability-weighted subgraph) | v31 eight-phase loop, reframed per designs/audit/2026-05-28-combat-reframe/reframe_blueprint.md (Jordan top-down vision) |
 | Aspect specialization framework (10 aspects × 5 specs) | dueling_combat_proposal.md §5 |
 | Tradition learning bundles (recast as Histories) | dueling_combat_proposal.md §6; reframed per audit principle #4 |
-| Reading sub-channels (5 mundane + Thread + Intent) | dueling_combat_proposal.md §3; Intent extracted to separate track per Jordan canon override 2026-05-XX |
+| Reading sub-channels (source 5 mundane; consolidated to 4 in v32 per F7 — Kinetic merge) + Thread + Intent | dueling_combat_proposal.md §3; Intent extracted to separate track per Jordan canon override 2026-05-XX; F7 consolidation this session |
 | Six weapon classes with phase strengths | dueling_combat_proposal.md §7; mapped to canonical 3-axis weapon TN matrix |
 | Four armor levels with sensor degradation | dueling_combat_proposal.md §7; canonical Stamina mod preserved |
 | Three-state wound display | dueling_combat_proposal.md §4; reframed as UI compression over canonical 4-wound math |
@@ -1853,10 +1853,11 @@ v32 is a reframe of combat_v31_proposal (checkpointed at designs/proposals/comba
 - **§7** — Reaction table → 2-param formula; aspect coherence 36-pair matrix → named sets + 2 exceptions; Stance Counter kept authored but state-gated. (Per matchup_derivation_analysis: Reaction derives, coherence mostly derives, Stance Counter does not.)
 - **§8** — added §8.2 weapon handling (ease-of-use curve).
 - **§11.2** — Facing authored-Ob table → perception/field-of-view; Facing advantage now emergent.
+- **§4.5/§6.5/§11.1 (F7, post-verdict)** — Reading channels consolidated: Temporal + Biomechanical → **Kinetic** (Lesson-1 minimal merge, 5 mundane → 4); addresses the F7 over-split the test flagged as not-done.
 - **§12.3** — additive fractional Ob → σ-space + soft cap + state-gating (resolves diagnostic F1 non-uniform impact and F2 compound foreclosure).
 - **§6.11** — added equip-loadout layer (trained pool vs equipped loadout; named set bonuses; incompatibility warnings).
 
-Diagnostic targets and how v32 addresses them: F1 (non-uniform modifier impact) → σ-space (§12.3); F2 (compound foreclosure) → soft cap + state-gating (§12.3, §4.7); F6 (E failure / over-complexity) → front-loading + derivations + matrix retirement (§1 P2, §7); F7 (Reading over-split) → addressed via consolidation (verify in test); Facing → emergent (§11.2). F4 (loop-winner definition) remains a noted open item (see test pass).
+Diagnostic targets and how v32 addresses them: F1 (non-uniform modifier impact) → σ-space (§12.3); F2 (compound foreclosure) → soft cap + state-gating (§12.3, §4.7); F6 (E failure / over-complexity) → front-loading + derivations + matrix retirement (§1 P2, §7); F7 (Reading over-split) → addressed: Temporal+Biomechanical merged into Kinetic (§4.5/§6.5, post-verdict this session; 5 mundane channels → 4); Facing → emergent (§11.2). F4 (loop-winner definition) remains a noted open item (see test pass).
 
 ---
 
