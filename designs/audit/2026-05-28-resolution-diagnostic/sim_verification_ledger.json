@@ -631,6 +631,27 @@
       "canonical_source": "N/A \u2014 harness/derived",
       "section": "domain resolver sim",
       "quoted_text": "console separator width \u2014 harness"
+    },
+    {
+      "sim_variable": "cr_40",
+      "value": 40,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "collapse-recovery sim",
+      "quoted_text": "Reconstitute recovery observation horizon \u2014 harness"
+    },
+    {
+      "sim_variable": "cr_8000",
+      "value": 8000,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "collapse-recovery sim",
+      "quoted_text": "MC trial count \u2014 harness"
+    },
+    {
+      "sim_variable": "cr_76",
+      "value": 76,
+      "canonical_source": "N/A \u2014 harness/derived",
+      "section": "collapse-recovery sim",
+      "quoted_text": "console separator width \u2014 harness"
     }
   ],
   "provisional_assumptions": [
