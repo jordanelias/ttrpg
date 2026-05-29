@@ -1,0 +1,121 @@
+id: 2026-05-29-combat-armature-sigma-leverage
+scope: simulation
+status: active
+last_commit: 0e5474fe62228c2ff83524f905deb6eaec7be17c
+task:
+  skill: valoria-simulator
+  description: 'Rebuild + validate the NEW combat armature on the SIGMA-LEVERAGE ENGINE.
+    CRITICAL: the I-17 module work (M1-M9 + M8b, all committed under tests/sim/v32-combat-balance/)
+    MISFRAMED combat as a TTRPG HP-attrition brawl; this handoff resets it. Valoria
+    combat is a multi-phase resolution where the player sets up strategically beforehand,
+    resolved by the sigma-leverage engine: stacked strategic-setup advantages as delta-sigma,
+    tanh soft-capped, converted to an Ob shift scaled by sigma_N=0.8*sqrt(Pool) so
+    probability impact is UNIFORM regardless of pool size -- which is precisely the
+    C-04 (Agi-OP) fix (outcome decoupled from raw pool/dice count). Do NOT reproduce
+    C-04/C-05; do NOT preserve combat_v30/31; broad mechanical latitude but preserve
+    the game vibe (fiction/names/HEMA texture are Jordan''s). First settle the resolution
+    STRUCTURE with Jordan (one decisive strike vs short bounded exchange -- NOT attrition;
+    the resolution pool''s role; commit-depth-driven consequence without crits/multipliers),
+    then build/validate on the right axes (equal-budget 31-pt builds at optimal setup
+    land in band with no pool dominance; reading/positioning/stance decide fights;
+    M8b historical 5/5 holds), then vet the armature through the omega N/Omega/Mu/M/Q
+    framework as a Class-A new system.'
+owns:
+- designs/audit/2026-05-29-combat-armature/**
+context_files:
+- path: designs/audit/2026-05-29-combat-armature/sigma_leverage_handoff.md
+  depth: full
+  reason: THE handoff master -- sigma-leverage engine spec (the resolution core),
+    the new combat armature, the omega N/Omega/Mu/M/Q vetting framework, the session
+    work log (which modules are sound vs the attrition misframe), full governance/tooling
+    reference, decisions for Jordan, next steps. Read first.
+- path: references/modifier_system_spec.md
+  depth: full
+  reason: 'canonical sigma-leverage engine spec: sigma_N=0.8*sqrt(Pool), level->delta-sigma
+    (Minor .25/Moderate .5/Strong .75/Major 1.0), tanh soft cap M_max=1.5, state-gating.
+    The resolution core to KEEP.'
+- path: references/throughlines_meta.md
+  depth: full
+  reason: the omega system -- N/Omega/Mu/M/Q vetting framework the armature must pass
+    (Class-A new system); enforced by valoria_hooks.vetting_gate (PP-674).
+- path: designs/audit/2026-05-28-combat-reframe/i17_simulation_prep.md
+  depth: full
+  reason: the I-17 decomposition + the C-03/C-04/C-06/C-07 findings (the problems
+    the armature must FIX -- NOT reproduce).
+- path: params/core.md
+  depth: full
+  reason: the d10 engine constants the sigma-leverage engine sits on (per-die 1/-1..10/+2,
+    TN 6/7/8, per-die sigma 0.80).
+working_state:
+  summary: 'I-17 modules M1-M9 + M8b built and committed, but the INTEGRATION (M8/M8b)
+    modeled combat as 30-round HP attrition -- the wrong object. The session ended
+    on the framing correction: combat is the sigma-leverage engine driven by multi-phase
+    strategic setup. A substantial handoff document (DOC_PATH) was written capturing
+    the engine, the armature, the omega framework, the per-module sound-vs-misframed
+    status, and the tooling. Repo otherwise fully committed; nothing staged locally.'
+  done:
+  - M1 sigma-leverage core (b9b6d4e) -- SOUND, this IS the engine (per-die, sigma_N,
+    tanh soft cap, eff_ob, level->dsigma). REUSE.
+  - M3 weapon-class layer (a51fadb) -- reusable weapon taxonomy + TN.
+  - M5 stance + reaction + coherence (3cf0def) -- reusable delta-sigma levers (Stance
+    Counter 5x5, Reaction 2-param, named sets).
+  - M7 facing/FoV (9a0ddc3) -- reusable positioning lever (C-07 fix; emergent flank/rear
+    delta-sigma).
+  - M9 bottom-up wound model (83166e8) -- right direction for damage (no crits/multipliers;
+    historical 5/5). Refit to commit-depth-driven.
+  - M2 (6d7b0e9), M4a (ffd4443), M4b (a1c6d2f), M6 (e061fab) -- partially reusable;
+    Combat-Pool=Agi*2 is C-04, archetypes not equal-budget, Concentration-as-combat-state
+    was cut.
+  - M8 integration sweep (dcbe4cc) + M8b re-sweep (96471e4) -- MISFRAMED (attrition).
+    M8b historical suite (armour decisive / blunt+thrust beat plate / reach / skill>strength
+    / short fights) IS sound and reusable; the build-axis sweep is the misframe.
+  - Substantial handoff document written (this commit) at DOC_PATH.
+  next:
+  - SETTLE THE RESOLUTION STRUCTURE WITH JORDAN FIRST (doc section 2.5). Do not build/simulate
+    until agreed. Reconstructing attrition from old canon is the failure to avoid.
+  - 'Build the sigma-leverage resolution (doc section 1) as the combat core: configure
+    a strike via phase choices -> accumulate state-gated delta-sigma -> tanh soft
+    cap -> Effective Ob -> resolve. Reuse M1/M5/M7/M3/M9 + the Wilson-CI sweep harness.'
+  - 'Validate on the RIGHT axes: equal-budget 31-pt builds at optimal setup land in
+    band with NO Agi/pool dominance (C-04 gone); reading/positioning/stance actually
+    decide fights (C-03/06/07 fixed); M8b historical 5/5 holds. DO NOT validate against
+    C-04/C-05.'
+  - 'Vet the armature through the omega N/Omega/Mu/M/Q framework as a Class-A new
+    system before any canon commit; produce the vetting: block.'
+key_values:
+- 'sigma_leverage_engine: sigma_N=0.8*sqrt(Pool); Ob_shift=delta-sigma*sigma_N; net_sigma=sum(state-gated
+  dsigma); eff_sigma=1.5*tanh(net_sigma/1.5); Effective_Ob = base - eff_sigma*sigma_N'
+- 'level_to_dsigma: Minor 0.25 / Moderate 0.50 / Strong 0.75 / Major 1.00'
+- 'F1_fix: uniform probability impact across pool sizes (~25.8pp at 50% for dsigma=1.0)
+  -- the C-04 decoupling'
+- 'F2_fix: tanh soft cap leaves worst-case ~9% not 0% -- no foreclosure'
+- 'C-findings_to_FIX (not reproduce): C-03 thin tactics, C-04 Agi-OP (Combat Pool
+  Agi*2+History+3), C-06 no reading, C-07 no positioning'
+- 'builds: 31 attribute points (point-buy), 10 attributes; equal-budget required for
+  a fair build-axis test'
+- 'reusable_modules: M1(engine) M3(weapons) M5(levers) M7(positioning) M9(damage direction)
+  + Wilson-CI sweep harness'
+- 'misframed: M8/M8b attrition sweep (discard model; keep M8b historical 5/5 suite)'
+- 'omega_framework: N(necessity)->Omega(intent a/b/c/d)->Mu(4 modes)->M(11 patterns
+  +/check/-/o)->Tau(25)->Q(robust/smooth/elegant); vetting_gate PP-674; armature is
+  Class-A'
+- 'vibe_rule: numbers+resolution-structure are mechanical (latitude); fiction/names/flavor
+  are Jordan''s (off-limits)'
+- 'cumulative_ledger: /home/claude/sim_verification_ledger.json (151 entries, local
+  working file)'
+blockers:
+- 'JORDAN DESIGN DECISION (doc 2.5): the resolution structure (one decisive strike
+  vs short bounded exchange -- NOT attrition; resolution-pool role; commit-depth-driven
+  consequence). Build is blocked until this is set -- Claude must not invent it (project-owner
+  contract).'
+- NONE blocking the handoff itself. The combat build is gated on the 2.5 decision.
+relationship_to_other_handoffs: 'CORRECTS/SUPERSEDES the FRAMING of 2026-05-28-i17-v32-balance-sim:
+  that handoff framed combat as a v32 build-balance attrition sweep (the misframe
+  this session executed and Jordan rejected). The i17 handoff still nominally owns
+  tests/sim/v32-combat-balance/** (where M1-M9+M8b live); whether to archive it is
+  a Jordan decision (its modules'' math is reusable; its attrition framing is wrong).
+  This handoff owns only designs/audit/2026-05-29-combat-armature/** to avoid an ownership
+  conflict. DISTINCT from 2026-05-28-editorial-ledger-jsonl-migration (infra) and
+  2026-05-29-resolution-diagnostic-faction-ratifications (faction cluster) -- no overlap.'
+created: '2026-05-29T23:06:13.958018+00:00'
+updated: '2026-05-29T23:06:13.958018+00:00'
