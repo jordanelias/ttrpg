@@ -1,0 +1,80 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/m4b_subaction_mechanics.py",
+  "scope": "custom: core_engine + combat — Module 4b (sub-action mechanics)",
+  "module": "M4b",
+  "note": "M4 split: M4a (state graph) + M4b (this, sub-action mechanics). Class A = canonical (combat_v30 §5 weapon/degree/crit; params/core pool grammar). Class B = v32 draft sim-seeds (combat_v32_proposal §12.4 effect magnitudes). Imports M1/M2/M3. THREE flagged Jordan decisions (sigma-space vs dice-space; Yield=Foc; Displace composite); TWO flagged proposal drifts (worked-example crit omission; Targeted-line Heavy->Light).",
+  "entries": [
+    {
+      "sim_variable": "SUBACTION_POOL_ATTR_MULT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "Derived Scores",
+      "quoted_text": "Sub-action Pool = (relevant-attribute × 2) + Aspect Proficiency + History (echoes Combat Pool ×2, PP-615)"
+    },
+    {
+      "sim_variable": "OVERWHELMING_NET_MIN",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Degree Table",
+      "quoted_text": "3+ | Overwhelming (combat_v32 §12.4: net >= 3)"
+    },
+    {
+      "sim_variable": "CRITICAL_NET_MIN",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution",
+      "quoted_text": "Critical Hit: net hits >= 3 -> weapon modifier doubled (PP-211)"
+    },
+    {
+      "sim_variable": "DEGREE_OVERWHELMING_OB_MULT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 / §12.4",
+      "quoted_text": "Overwhelming (net >= 2·Ob AND net >= 3)"
+    },
+    {
+      "sim_variable": "TARGETED_LINE_PRECISION_SIGMA",
+      "value": -0.75,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§12.4 Targeted-line",
+      "quoted_text": "precision penalty (Strong adverse, δσ −0.75 on the attacker)"
+    },
+    {
+      "sim_variable": "TARGETED_LINE_ARMOR_DOWNGRADE",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§12.4 Targeted-line",
+      "quoted_text": "recompute the hit's damage against an armor tier one lower"
+    },
+    {
+      "sim_variable": "PRESS_HELD_OB",
+      "value": 0.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§12.4",
+      "quoted_text": "Press Partial: Held; opponent +0.5 Ob next step"
+    },
+    {
+      "sim_variable": "PROBE_TELEGRAPH_OB",
+      "value": 0.5,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§12.4",
+      "quoted_text": "Probe Failure: Telegraphed; opponent +0.5 Ob"
+    },
+    {
+      "sim_variable": "NEXT_STEP_BONUS_D",
+      "value": 1,
+      "class": "B-draft (sim-tunable)",
+      "canonical_source": "designs/proposals/combat_v32_proposal.md",
+      "section": "§12.4",
+      "quoted_text": "Press/Wind Success: aggressor +1D next step (also Yield redirect -1D, Displace stance -1)"
+    }
+  ]
+}
