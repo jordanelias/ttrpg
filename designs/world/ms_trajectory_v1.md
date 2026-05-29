@@ -86,6 +86,24 @@ As MS rises, territories at each node distance lose radiation effects progressiv
 | 60 | Fragile → Strained | ~140–150 AG | d2 territories (T5, T12) exit Folklore → Normal |
 | 80 | Strained → Stable | *not reached* | MS maxes at 72 at game start; d1 territories (T6, T13) remain at Folklore level; T15 never normalises within game timeframe |
 
+### §5.1 Band Hysteresis and Leading Warning Signal — RATIFIED (ED-882, 2026-05-29)
+
+**[RATIFIED 2026-05-29, ED-882 — Jordan-directed.** Tested candidate: `designs/audit/2026-05-28-resolution-diagnostic/sim_ms_hysteresis.py`. Validated against ecological regime-shift precedent (Scheffer, Holling; via `ners_historical_precedent_matrix.md` entry 1): real alternative-stable-state systems show **hysteresis** (the recovery threshold sits above the collapse threshold — the reverse path is not the forward path) and **leading warning signals** (critical slowing / rising variance) before a tip. The band crossings above were symmetric single thresholds — the one behavior real regime-shifts do not exhibit.]**
+
+**Hysteresis (asymmetric band edges).** The MS thresholds in the table above are the **collapse (falling) edges** — MS dropping past 20 / 40 / 60 enters the worse band at those values (unchanged; the territory-normalisation crossings above are the falling direction and are canonical as written). **Recovery (rising) requires climbing past the edge + a hysteresis gap of +8 MS** to escape the worse band:
+
+| Transition | Falling (collapse) edge | Rising (recovery) edge |
+|---|---|---|
+| Critical to/from Fractured | MS 20 | MS 28 |
+| Fractured to/from Fragile | MS 40 | MS 48 |
+| Fragile to/from Strained | MS 60 | MS 68 |
+
+So a substrate that has fallen into Fractured does not return to Fragile at MS 40 — it must be restored to **MS 48** (over-correction past a different bifurcation point). This is path-dependent: the same MS value maps to a worse band when recovering than when collapsing. The gap (8) is bounded below the minimum band width (20), so no band can be skipped, and sufficient recovery always escapes (not a trap). Falling-direction lookups are unchanged — no regression to the §5 territory-effect crossings.
+
+**Leading warning signal.** When MS is within **12** of a collapse edge *from above* (approaching a tip from the safer band), a diegetic early-warning trend activates — rising Shifting-Object frequency / variance (extends the canonical Fragile-band "spontaneous Shifting Objects" from a state into a *legible trend the player reads before the tip*). This is the critical-slowing analog; it improves Smoothness and Elegance (the player can intuit the approaching band change rather than being surprised by a step).
+
+**Parameters** (ratified, tunable by future Jordan-logged ratification): hysteresis gap +8 MS; warning window 12 MS. **P-07 compliance:** this is a property of how the *rendered world's band effects* resolve, not a claim that the substrate heals (Ein Sof is constitutive; Force-1 recovery remains as specified). GD-1 unaffected (no victory interaction).
+
 **Distance 5 (T3, T8, T17):** Never experienced Calamity effects at any MS band (canonical matrix: d5 = Normal in all bands). The far north.
 
 ---

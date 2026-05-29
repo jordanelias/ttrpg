@@ -124,6 +124,19 @@
       ],
       "source": "ners_historical_precedent_matrix entry 4 (RAND) via reconciliation 2026-05-29",
       "jordan_decision": "RATIFIED to insurgency_pipeline \u00a76.2/\u00a76.3 per Jordan 2026-05-29"
+    },
+    {
+      "id": "ED-882",
+      "date": "2026-05-29",
+      "severity": "P3",
+      "type": "design_gap",
+      "status": "resolved-applied",
+      "description": "RESOLVED-APPLIED to canon 2026-05-29 (Jordan-directed ratification). MS engine band edges were SYMMETRIC single thresholds (20/40/60), the one behavior real regime-shifts do not show. Ratified ED-882 to ms_trajectory_v1 \u00a75.1: (a) HYSTERESIS \u2014 recovery (rising) edges sit +8 MS above the collapse (falling) edges (28/48/68); falling direction unchanged (no regression to \u00a75 territory crossings); path-dependent, bounded below min band width (no skip), not a trap; (b) LEADING WARNING SIGNAL within 12 MS of an edge from above (critical-slowing analog, extends Fragile spontaneous Shifting Objects into a legible pre-tip trend). Precedent: Scheffer/Holling regime-shift (matrix entry 1) \u2014 MATCH. P-07 compliant (rendered-world band effects, not substrate healing); GD-1 unaffected. Params PROPOSED/tunable (gap +8, window 12).",
+      "affected_docs": [
+        "designs/world/ms_trajectory_v1.md \u00a75.1"
+      ],
+      "source": "ners_historical_precedent_matrix entry 1 (Scheffer/Holling) via reconciliation 2026-05-29",
+      "jordan_decision": "RATIFIED per Jordan 2026-05-29 (gap +8 / window 12 tunable)"
     }
   ],
   "refinements_to_existing": [
