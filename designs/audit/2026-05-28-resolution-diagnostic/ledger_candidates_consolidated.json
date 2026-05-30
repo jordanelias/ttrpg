@@ -333,5 +333,42 @@
       "params/factions/stats_1_7_scale.md (§Domain Action Resolution ED-865/874)",
       "canon/02_canon_constraints.md (GD-1, P-15)"
     ]
+  },
+  "_clock_registry_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of clock_registry_v30 (registry-level) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "nature": "REGISTRY / reference catalog of clocks-tracks-counters pointing at authoritative sources. NO resolution mechanic of its own.",
+    "verdict": {
+      "N": "PASS — a single-source-of-truth registry is necessary (prevents per-doc clock drift).",
+      "R": "PASS (resolution lens) — no clock here is a roll-fed shallow disguised-binary (Lesson-4): the shallow clocks (Warden Cooperation 0-3, Warden Recognition 0-4) advance from multiple slow arc/season conditions, not per-roll; the one shallow roll-fed clock class (Evidence 0-3) is owned by fieldwork_v30 §4.1 (deterministic five-filter chain), not the registry.",
+      "S": "PASS (resolution lens) — registry ranges consistent with the systems diagnosed this session (CI 0-100/28, Turmoil 0-10/0, Mandate 0-7).",
+      "E": "PASS — registry is a flat legible catalog."
+    },
+    "overall": "NERS-COMPLIANT (no resolution/balance defect — it has no resolution mechanic).",
+    "drift_flags_for_editorial_orchestrator_line": [
+      {
+        "id": "CKREG-DRIFT-1",
+        "severity": "P3",
+        "type": "naming-drift",
+        "detail": "Per-Territory Tracks: Accord 1 labeled 'Restive'; canonical peninsular_strain_v30 §2 table labels Accord 1 'Resistant'. Safe evidence-backed correction (Restive->Resistant) — registry-hygiene, route to editorial/orchestrator (registry maintenance owner), NOT a resolution ratification.",
+        "source": "peninsular_strain_v30 §2"
+      },
+      {
+        "id": "CKREG-DRIFT-2",
+        "severity": "P3",
+        "type": "wrong-cross-ref (METAPHYSICS-tag — do NOT auto-fix)",
+        "detail": "Reputation cites 'bg_v05 §Standing (P-14)' and Standing cites '(P-15)'. But P-14/P-15 in canon/02_canon_constraints.md are the metaphysics constraints (P-14=Board/VG inseparability; P-15=three-layer being-persistence), NOT Standing/Reputation rules. The (P-14)/(P-15) tags are mis-applied. FLAG ONLY — the correct Standing reference is unknown to me and the tag touches the canon-metaphysics layer; owner (Jordan/editorial) must supply the right cross-ref. NOT chat-side fixable.",
+        "source": "canon/02_canon_constraints.md P-14/P-15"
+      }
+    ],
+    "routed_not_in_scope": "Self-reported PROVISIONAL/STRUCK flags (Intel Advancement ED-794, Popular Will ED-795, Intelligence stat ED-796, IP start ED-793): editorial-ledger verification items (is a struck track still listed?), owned by the jsonl-migration/editorial line. Not resolution/balance defects.",
+    "canon_writes": "NONE — registry has no resolution mechanic; the drift flags are routed to the editorial/orchestrator (registry-maintenance) line, and CKREG-DRIFT-2 touches the metaphysics-citation layer (flag-only, not Claude's to set).",
+    "citations": [
+      "designs/provincial/clock_registry_v30.md (full)",
+      "designs/provincial/peninsular_strain_v30.md §2 (Accord labels)",
+      "canon/02_canon_constraints.md (P-14/P-15)",
+      "params/factions/stats_1_7_scale.md (Mandate range)"
+    ]
   }
 }
