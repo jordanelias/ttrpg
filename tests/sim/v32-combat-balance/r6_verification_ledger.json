@@ -1,0 +1,16 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/r6_equal_value_resweep.py",
+  "scope": "custom: combat + derived_stats -- R6 equal-value re-sweep (armature reset 2026-05-29)",
+  "module": "R6",
+  "note": "Equal-value re-sweep wiring R5's Str leverage + recomposed Stamina into the decisive phrase, six-attribute (Agi/Str/End/Reading/Spirit). STATUS: IN-PROGRESS HARNESS, NOT A PARITY VERDICT. Single-loadout traces show Str's new channels WORK (Str beats Agi 2072-927; in its heavy-blunt-vs-plate niche 2666-331), but the field-rate aggregate is confounded by loadout-averaging + shared-weapon symmetry (when both fighters share a loadout the armour-defeat/weapon terms cancel), so the field numbers (Str 6.6%) are NOT trustworthy as an equal-value verdict yet. The harness needs per-loadout isolation + asymmetric-loadout handling before its field rates mean anything. Committed for continuity, explicitly flagged. Reuses R1/R2/R5/M5/M7 (already ledgered) + Class-M sweep params + Class-A budget.",
+  "entries": [
+    {"sim_variable": "ATTR_CREATION_MAX", "value": 5, "class": "A-canonical",
+     "canonical_source": "params/core.md", "section": "§Attributes", "quoted_text": "Creation max: 5 (one attribute only)."},
+    {"sim_variable": "DECISIVE_OB", "value": 3, "class": "A-canonical",
+     "canonical_source": "designs/scene/combat_v30.md", "section": "§5 Degree Table", "quoted_text": "decisive sub-action Ob = 3 (Difficult); degree band is canonical."},
+    {"sim_variable": "TRIALS", "value": 4000, "class": "M-method", "canonical_source": "skills/valoria-simulator/SKILL.md", "section": "Mode-G sweep", "quoted_text": "trials per matchup at M8/M8b harness scale."},
+    {"sim_variable": "WILSON_Z", "value": 1.96, "class": "M-method", "canonical_source": "skills/valoria-simulator/SKILL.md", "section": "Mode-G Wilson interval", "quoted_text": "95% CI z-score 1.96."},
+    {"sim_variable": "BAND_LO_HI", "value": "0.40-0.60", "class": "M-method", "canonical_source": "skills/valoria-simulator/SKILL.md", "section": "§8.8 band", "quoted_text": "archetype matchups 40-60%."},
+    {"sim_variable": "STAMINA_HEAVY_FRACTION", "value": 3, "class": "M-method (harness action-mix; NOT mechanic)", "canonical_source": "skills/valoria-simulator/SKILL.md", "section": "Mode-G action mix", "quoted_text": "a heavy/committed action every Nth sub-action -- harness mix parameter, not a game constant."}
+  ]
+}
