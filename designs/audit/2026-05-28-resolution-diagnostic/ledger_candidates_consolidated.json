@@ -440,5 +440,54 @@
       "designs/personal/fieldwork_v30.md (resolution engine, referenced)",
       "canon/02_canon_constraints.md (GD-1/GD-3)"
     ]
+  },
+  "_faction_state_authoring_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of faction_state_authoring_v30 (PP-686 Stage 5)",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "nature": "Per-faction DATA-AUTHORING doc feeding faction_behavior_v30 (Mission/cascade_roots/institutional_culture/init L+PS). No resolution mechanic of its own.",
+    "verdict": {
+      "N": "PASS",
+      "R": "PASS — no resolution mechanic; authored values within consuming bounds (institutional_culture ⊂ [-0.2,+0.2]; init L+PS ⊂ [0,7]); single-root cascade default consistent with §3.2.2.",
+      "S": "PASS-after-FSA-1",
+      "E": "PASS — references faction_politics for hierarchy (no duplication)."
+    },
+    "overall": "NERS-COMPLIANT after FSA-1.",
+    "finding": {
+      "prov_id": "FSA-1",
+      "severity": "P3",
+      "lens": "canon-consistency (GD-1) — continuation of CIP-2",
+      "summary": "mission.primary_objective fields frame faction-specific paths as VICTORY tracks (victory.solmundan_orthodoxy 'CI=100 path', dynastic_assertion, cultural_revolution, varfell_path_b) — framing GD-1 + peninsular_strain §6.2 STRUCK (sole victory=Peninsular Sovereignty; these are approaches). Same superseded Church-victory framing as CIP-2; plus doubly-stale faction_behavior §3.1 example ('Hafenmark Parliamentary Sovereignty victory milestone').",
+      "fix": "RATIFIED (GD-1-anchored, surgical, not balance-pinned): faction_state_authoring §1 GD-1 reconciliation note (primary_objective=approach/telos, not victory trigger); faction_behavior §3.1 example corrected to GD-1-consistent Peninsular Sovereignty.",
+      "disposition": "RATIFIED to canon."
+    },
+    "routed_flags": [
+      {
+        "id": "FSA-STATUS-1",
+        "severity": "P3",
+        "detail": "canonical-vs-provisional status tension (cluster-wide PP-686 pattern: HTML 'PROVISIONAL' vs header 'CANONICAL'). Route to editorial."
+      },
+      {
+        "id": "FSA-OPEN-1",
+        "severity": "P3",
+        "detail": "§9 self-tracked authoring/sim items (Baralta-leader verification, multi-root enablement, RM stat scope, Löwenritter mission-shift handler). Route to designer/sim."
+      },
+      {
+        "id": "CSRC-SIZE-1",
+        "severity": "P2",
+        "detail": "references/canonical_sources.yaml hit its 9,000-token pre_commit_gate ceiling this session (provenance notes accumulated). Editorial/orchestrator line should ARCHIVE old provenance notes (don't lose them) to restore headroom. Flagged, not chat-fixed (archival is the editorial line's owned operation)."
+      }
+    ],
+    "applied_canon": [
+      "faction_state_authoring_v30 §1 (GD-1 note)",
+      "faction_behavior_v30 §3.1 (stale victory-example corrected)"
+    ],
+    "citations": [
+      "designs/provincial/faction_state_authoring_v30.md",
+      "designs/provincial/faction_behavior_v30.md §3.1",
+      "canon/02_canon_constraints.md (GD-1)",
+      "designs/provincial/peninsular_strain_v30.md §6.2",
+      "designs/provincial/ci_political_v30.md §2.2 (CIP-2)"
+    ]
   }
 }

@@ -337,6 +337,7 @@ systems:
     added: '2026-05-01 PP-685 ratification — Conviction migration roster'
   faction_behavior:
     design_doc: designs/provincial/faction_behavior_v30.md
+    note__fsa1: "FSA-1 2026-05-30: §3.1 stale victory example fixed per GD-1."
     canonical_sha__designs__provincial__faction_behavior_v30_md: "c4b6000bcc99c991f155aaf39226346ba8077a15"
     status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
@@ -352,6 +353,7 @@ systems:
     added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
   faction_state_authoring:
     design_doc: designs/provincial/faction_state_authoring_v30.md
+    note__fsa1: "FSA-1 2026-05-30: §1 GD-1 note (primary_objective=approach not victory). NERS-compliant data doc."
     canonical_sha__designs__provincial__faction_state_authoring_v30_md: "d2febb37cb690ea83ea1121751c681124495b1d2"
     status: provisional
     added: '2026-05-01 PP-686 v2 Phase B Stage 5 — per-faction state authoring'

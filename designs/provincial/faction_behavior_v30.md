@@ -88,7 +88,7 @@ mission_alignment_modifier(da_outcome_key, mission):
 
 **Mission shift triggers** (resolves 686-OQ8). Mission shifts on any of:
 
-1. **Victory-track milestone passes/fails** — faction crosses (or definitively fails to cross) a victory-condition threshold (e.g., Hafenmark Parliamentary Sovereignty victory milestone).
+1. **Victory-track milestone passes/fails** — faction crosses (or definitively fails to cross) a victory-condition threshold (e.g., a faction crossing — or definitively failing — the Peninsular Sovereignty territory threshold; per GD-1 this is the sole universal victory and faction-specific tracks in victory_v30 §3 are *approaches*, not win triggers — peninsular_strain_v30 §6.2, FSA-1).
 2. **Leader replacement under exceptional circumstances** — `state.succession` Key with `succession_mode in [contested, emergency, imposed]`.
 3. **Mission failure threshold reached** — ≥4 consecutive seasons of Mission-contradicting outcomes (counted via `da_outcome.*` Key stream filtered by `mission_alignment == penalty`).
 4. **Authored event in scenario** — explicit Mission-shift trigger from scenario authoring.

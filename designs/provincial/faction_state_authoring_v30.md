@@ -19,6 +19,8 @@ This document covers the 6 canonical factions: Crown, Church of Solmund, Hafenma
 - `cascade_roots` declaration (multi-root vs single-root per faction structure)
 - `role` mapping to PP-686 §3.3.1 role templates
 
+> **[GD-1 reconciliation, FSA-1, 2026-05-30]** `mission.primary_objective` denotes each faction's **asymmetric strategic approach (telos)** — what it is *trying to do* — and drives Mission-alignment + Mission-shift evaluation in faction_behavior_v30 §3.1. It is **not** a separate victory trigger. Per **GD-1** (canon/02_canon_constraints.md §B) and the victory restructure (peninsular_strain_v30 §6.2 STRUCK; ci_political_v30 §2.2 CIP-2), the **sole** victory condition for every faction is **Peninsular Sovereignty**; the faction-specific tracks in victory_v30 §3.2–3.5 (`solmundan_orthodoxy`, `dynastic_assertion`, `varfell_path_b`, `cultural_revolution`) are reframed as **approaches toward** that universal goal, not win conditions. Only Crown's `primary_objective` (`peninsular_sovereignty`) coincides with the universal victory itself; the others name the faction's path to it. The `victory.` namespace labels below are retained as approach-track identifiers for engine wiring, read under this reconciliation.
+
 ---
 
 ## §2 Crown — Sovereign
