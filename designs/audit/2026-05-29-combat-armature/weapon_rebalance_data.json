@@ -1,0 +1,215 @@
+{
+  "weapon_audit": {
+    "field": {
+      "long_thrust_primary": 35.7,
+      "long_cut_and_thrust": 69.9,
+      "curved_cut_primary": 35.0,
+      "long_pole_spear": 36.0,
+      "long_pole_staff": 62.5,
+      "paired_short": 37.9,
+      "single_short": 37.6,
+      "long_heavy_blunt": 83.3
+    },
+    "by_armor": {
+      "none": {
+        "long_thrust_primary": 43,
+        "long_cut_and_thrust": 73,
+        "curved_cut_primary": 42,
+        "long_pole_spear": 42,
+        "long_pole_staff": 44,
+        "paired_short": 44,
+        "single_short": 42,
+        "long_heavy_blunt": 73
+      },
+      "light": {
+        "long_thrust_primary": 36,
+        "long_cut_and_thrust": 74,
+        "curved_cut_primary": 35,
+        "long_pole_spear": 35,
+        "long_pole_staff": 58,
+        "paired_short": 39,
+        "single_short": 38,
+        "long_heavy_blunt": 81
+      },
+      "medium": {
+        "long_thrust_primary": 32,
+        "long_cut_and_thrust": 69,
+        "curved_cut_primary": 32,
+        "long_pole_spear": 33,
+        "long_pole_staff": 68,
+        "paired_short": 37,
+        "single_short": 37,
+        "long_heavy_blunt": 87
+      },
+      "heavy": {
+        "long_thrust_primary": 32,
+        "long_cut_and_thrust": 64,
+        "curved_cut_primary": 31,
+        "long_pole_spear": 34,
+        "long_pole_staff": 81,
+        "paired_short": 32,
+        "single_short": 32,
+        "long_heavy_blunt": 92
+      }
+    }
+  },
+  "weapon_rebalance": {
+    "canonical_field": {
+      "long_heavy_blunt": 83.3,
+      "long_cut_and_thrust": 69.9,
+      "long_pole_staff": 62.5,
+      "paired_short": 37.9,
+      "single_short": 37.6,
+      "long_pole_spear": 36.0,
+      "long_thrust_primary": 35.7,
+      "curved_cut_primary": 35.0
+    },
+    "proposed_field": {
+      "long_thrust_primary": 38.9,
+      "long_cut_and_thrust": 64.0,
+      "curved_cut_primary": 44.4,
+      "long_pole_spear": 22.6,
+      "long_pole_staff": 47.2,
+      "paired_short": 54.1,
+      "single_short": 60.4,
+      "long_heavy_blunt": 68.9
+    },
+    "by_armor": {
+      "none": {
+        "long_thrust_primary": 46,
+        "long_cut_and_thrust": 66,
+        "curved_cut_primary": 49,
+        "long_pole_spear": 30,
+        "long_pole_staff": 31,
+        "paired_short": 59,
+        "single_short": 64,
+        "long_heavy_blunt": 55
+      },
+      "light": {
+        "long_thrust_primary": 39,
+        "long_cut_and_thrust": 71,
+        "curved_cut_primary": 46,
+        "long_pole_spear": 23,
+        "long_pole_staff": 44,
+        "paired_short": 54,
+        "single_short": 61,
+        "long_heavy_blunt": 66
+      },
+      "medium": {
+        "long_thrust_primary": 37,
+        "long_cut_and_thrust": 63,
+        "curved_cut_primary": 42,
+        "long_pole_spear": 21,
+        "long_pole_staff": 49,
+        "paired_short": 54,
+        "single_short": 60,
+        "long_heavy_blunt": 72
+      },
+      "heavy": {
+        "long_thrust_primary": 33,
+        "long_cut_and_thrust": 56,
+        "curved_cut_primary": 41,
+        "long_pole_spear": 17,
+        "long_pole_staff": 65,
+        "paired_short": 49,
+        "single_short": 56,
+        "long_heavy_blunt": 83
+      }
+    },
+    "proposed_armor_table": {
+      "light_blade": {
+        "none": 3,
+        "light": 2,
+        "medium": 1,
+        "heavy": 0
+      },
+      "heavy_blade": {
+        "none": 6,
+        "light": 4,
+        "medium": 2,
+        "heavy": 0
+      },
+      "light_blunt": {
+        "none": 3,
+        "light": 3,
+        "medium": 2,
+        "heavy": 2
+      },
+      "heavy_blunt": {
+        "none": 5,
+        "light": 5,
+        "medium": 4,
+        "heavy": 3
+      }
+    },
+    "speed_tempo": 0.138
+  },
+  "attribute_parity_under_rebalance": {
+    "attribute_field_under_proposed_weapons": {
+      "Agi": 0.463,
+      "Str": 0.691,
+      "End": 0.508,
+      "Reading": 0.671,
+      "Spirit": 0.171
+    },
+    "loadout_chosen": {
+      "Agi": [
+        "long_cut_and_thrust",
+        "heavy"
+      ],
+      "Str": [
+        "long_heavy_blunt",
+        "heavy"
+      ],
+      "End": [
+        "single_short",
+        "heavy"
+      ],
+      "Reading": [
+        "single_short",
+        "heavy"
+      ],
+      "Spirit": [
+        "long_cut_and_thrust",
+        "heavy"
+      ]
+    }
+  },
+  "strength_calibration": {
+    "1.0": {
+      "Agi": 58,
+      "Str": 83,
+      "End": 47,
+      "Reading": 42,
+      "Spirit": 18
+    },
+    "0.5": {
+      "Agi": 60,
+      "Str": 80,
+      "End": 47,
+      "Reading": 44,
+      "Spirit": 18
+    },
+    "0.3": {
+      "Agi": 60,
+      "Str": 79,
+      "End": 46,
+      "Reading": 45,
+      "Spirit": 18
+    },
+    "0.15": {
+      "Agi": 61,
+      "Str": 78,
+      "End": 47,
+      "Reading": 45,
+      "Spirit": 18
+    },
+    "0.0": {
+      "Agi": 61,
+      "Str": 76,
+      "End": 46,
+      "Reading": 46,
+      "Spirit": 19
+    }
+  }
+}
