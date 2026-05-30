@@ -529,6 +529,11 @@
         "id": "FCN-SCHEMA",
         "severity": "P3",
         "detail": "§5.2/§5.3 6-stat (factions_personal §8.1) vs 7-stat (stats_1_7_scale post-ED-787) schema conflict — self-surfaced by design; doc uses 7-stat as primary, 'source-file propagation a separate commit cycle'. Editorial/schema-reconciliation item, not resolution/balance. Route."
+      },
+      {
+        "id": "FCN-SEIZURE-DRIFT",
+        "severity": "P2",
+        "detail": "faction_canon §9 Tactic table carries STALE/WRONG formulas vs authoritative sources: (a) CI-60 Seizure §9 'L vs floor(target L/2)+1' but authoritative faction_layer §2.7 = 'Influence+floor(CI/15) vs Ob=7-PT' (entirely different); (b) Royal Decree §9 'Legitimacy vs Ob 2' but factions_personal §8.2 = 'Mandate vs Ob 2'; (c) Sovereign Authority Doctrine §9 'L vs Ob 4' but factions_personal §8.4 = 'Mandate vs Ob 4'. The §9 table modernized stat names to L/PS but mis-stated Seizure entirely and drifted Mandate->Legitimacy. faction_canon §9 should be REGENERATED from authoritative sources (consolidation-accuracy). Route to editorial."
       }
     ],
     "canon_writes": "NONE — consolidation/review artifact (does not commit per its own body); all findings are source-level (FCN-1 sim-deferred to source+sim; FCN-GD1 inherits FSA-1 on regeneration) or editorial (status/schema). Nothing chat-ratifiable here.",
@@ -537,6 +542,23 @@
       "params/factions/stats_1_7_scale.md (§Domain Action Resolution governed list)",
       "canon/02_canon_constraints.md (GD-1)",
       "designs/provincial/faction_state_authoring_v30.md §1 (FSA-1)"
-    ]
+    ],
+    "FCN-1_source_verification_2026-05-30": {
+      "note": "FCN-1 was surfaced from faction_canon §9 (a CONSOLIDATION, not authoritative). Verified each tactic against its source doc per the audit-gate discipline. Result REFINES FCN-1 substantially.",
+      "CORRECTION": "FCN-1 originally listed 5 tactics as the residual bare-stat set from the consolidation; source-verification confirms only 3 are bare-stat, refines Seizure OUT (false positive — consolidation formula stale), and leaves Excommunication source-unconfirmed.",
+      "confirmed_bare_stat_resolver_migration_candidates": {
+        "Royal Decree": "Mandate vs Ob 2 (factions_personal_v30 §8.2; faction_actions PP-435 'Special/Unique Power, Ob 2'). Failure: Mandate -1. 1/season, +1 Ob/consecutive.",
+        "Sovereign Authority Doctrine": "Mandate vs Ob 4 (factions_personal_v30 §8.4). Degree table Overwhelming/Success/Partial/Failure. 1/campaign arc.",
+        "Private Collection": "Intel vs Ob 2 (factions_personal_v30 §8.5). Long-term Thread-Sensitivity cost."
+      },
+      "refined_OUT": {
+        "CI-60 Territorial Seizure": "AUTHORITATIVE = Influence + floor(CI/15) vs Ob = 7-PT (faction_layer_v30 §2.7) — a POOL roll in the Domain-Action family, NOT a bare-single-stat tactic. The faction_canon §9 formula 'L vs floor(target L/2)+1' is STALE/WRONG. Seizure is therefore NOT a distinct residual bare-stat finding; it is a Domain-Action-family pool roll (within/adjacent to the resolver Assert-family scope already addressed). Becomes a consolidation drift, not a migration item."
+      },
+      "source_unconfirmed": {
+        "Excommunication": "Not located in designs/scene/social_contest_v30.md under 'Excommunicat' (despite faction_politics citing social_contest §7.1); faction_layer Priority 6 lists it as Special/Unique but no formula. faction_canon §9 says 'L vs target-L / Ob 2'. OWNER must point to the authoritative doc before sim-migration."
+      },
+      "revised_resolver_migration_set": "CONFIRMED bare-stat faction checks awaiting resolver migration + sim-revalidation: { parliamentary_transfer core roll (PT-PARL-1), treaty_expiration Senator re-bind (TE-1), Royal Decree (Mandate vs Ob 2), Sovereign Authority Doctrine (Mandate vs Ob 4), Private Collection (Intel vs Ob 2) }. PLUS source-pending: Excommunication. REMOVED: CI-60 Seizure (pool roll, not bare-stat).",
+      "migration_note_for_sim_line": "Under ED-865/874: D = max(1,(Ob-1)*2) so Ob 2 -> D=2, Ob 4 -> D=6; M = stat - D; P=clamp(0.5+0.1M,0.05,0.90). Royal Decree/Private Collection (Ob 2->D2) and Sovereign Authority Doctrine (Ob 4->D6) are the same migration shape as the governed set. Re-run at N=1000 to confirm the v12c 20-30% band holds (these touch Crown/Church/Hafenmark/Varfell levers)."
+    }
   }
 }
