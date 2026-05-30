@@ -1,0 +1,80 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/r1_sigma_resolution.py",
+  "scope": "custom: core_engine + combat + derived_stats -- R1 corrected-model resolution atom (armature reset 2026-05-29)",
+  "module": "R1",
+  "note": "The single-Action sigma-leverage resolution the combat armature hangs on. Demoted, Agility-INDEPENDENT, History-driven resolution pool (closes the C-04 channel the M8b re-sweep pinned: Agi->bigger pool->base-rate dominance; M8b recommended compressing the pool spread). Agility moves to a sigma-leverage tempo delta-sigma (uniform impact). Reuses the verified M1 engine (eff_ob/soft_cap/p_success/roll) and the M5 levers. Canonical degree band; a crit is an Overwhelming-degree strike, not a random roll; magnitude=net-Ob is the 'how well struck' gauge for downstream wound severity. Class A = canonical (params/core.md degree table + Ob/pool floors; modifier_system_spec state-gating). Class C = PROPOSED armature redesign (demoted-pool base, Agi-as-leverage magnitude); sim-tunable, NOT canonical; the values the equal-budget Agi/Str/End parity sweep exists to tune. Does NOT edit canon; presented as proposal for Jordan ratification (decision A: History-driven vs flat base). sigma-space level magnitudes + soft cap imported from M1 (Class B there).",
+  "entries": [
+    {
+      "sim_variable": "OB_FLOOR",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "\u00a7Obstacle Scale",
+      "quoted_text": "Ob minimum: 1. No modifier may reduce Ob below 1. (PP-232)"
+    },
+    {
+      "sim_variable": "POOL_FLOOR",
+      "value": 5,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "\u00a7Derived Scores (Combat Pool)",
+      "quoted_text": "Combat Pool | (Agility x 2) + weapon History (points + 3) | min 5"
+    },
+    {
+      "sim_variable": "OVERWHELMING_OB_MULT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "\u00a7Degrees of Success",
+      "quoted_text": "Overwhelming | Net >= 2x Ob AND net >= 3 (+1 Momentum)"
+    },
+    {
+      "sim_variable": "OVERWHELMING_NET_MIN",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "\u00a7Degrees of Success",
+      "quoted_text": "Overwhelming requires a minimum of 3 net successes regardless of Ob. (PP-232)"
+    },
+    {
+      "sim_variable": "ATTR_AVERAGE",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "\u00a7Attributes",
+      "quoted_text": "Range: 1-7 (all attributes). Average human: 3."
+    },
+    {
+      "sim_variable": "HISTORY_MAX",
+      "value": 7,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "\u00a7Attributes",
+      "quoted_text": "Advancement max: 7. Recall (Rec) ... sets the per-History point cap \u2014 a History can never hold more points than the character's Recall score (so History points <= 7)."
+    },
+    {
+      "sim_variable": "STATE_GATING",
+      "value": "per-state live delta-sigma source sets (live counts 5/6/6/4)",
+      "class": "A-canonical",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "\u00a74 State-gating",
+      "quoted_text": "LIVE COUNT: Out-of-contact 5, Closing 6, In-bind 6, Breaking 4. Stance Counter live Closing only; Reaction Closing+In-bind; Reading Out/Closing/In-bind; Set bonus + Weapon phase-strength all states; Perception/Facing Out/Closing/Breaking; Tactile+Grip In-bind only; Approach Out-of-contact; Disengage Breaking."
+    },
+    {
+      "sim_variable": "BASE_POOL",
+      "value": 6,
+      "class": "C-proposed (armature redesign; NOT canonical; sim-tunable)",
+      "canonical_source": "tests/sim/v32-combat-balance/wound_model_resweep_results.md",
+      "section": "Build-axis finding / recommended next lever",
+      "quoted_text": "bottleneck MOVED from weapon-category/damage (M8) to COMBAT POOL SIZE (M2 Agi x2 + History) -- the d10 S-curve compounds a pool-size edge. Recommended next lever: compress the Combat Pool spread before re-tuning damage."
+    },
+    {
+      "sim_variable": "AGI_TEMPO_PER_POINT",
+      "value": 0.125,
+      "class": "C-proposed (armature redesign; NOT canonical; sim-tunable parity knob)",
+      "canonical_source": "tests/sim/v32-combat-balance/wound_model_resweep_results.md",
+      "section": "Build-axis finding / recommended next lever",
+      "quoted_text": "compress the Combat Pool spread -- i.e. move attribute differentiation off raw pool size. Defined as LEVEL_SIGMA[minor]/2 = 0.125. Agility is re-expressed as a sigma-leverage tempo delta-sigma (uniform impact across pool size, per modifier_system_spec \u00a72.1), magnitude tuned in the equal-budget Agi/Str/End parity sweep."
+    }
+  ]
+}

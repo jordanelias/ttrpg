@@ -25,3 +25,11 @@ Class split: ~14 of 34 constants Class A (canonical); ~20 Class B (v32 draft sim
 |---|---|---|---|
 | M9 (bottom-up wound model) | replace multiplicative damage (M8 finding) with bottom-up severity; historical validation | combat_v30 §5/§8 (anchors) + proposed Class-C redesign | verified |
 | M8b (re-sweep under M9) | historical validation (PASS 5/5) + build-axis balance stratified by armour tier | M9 wound model + i17_simulation_prep harness | verified |
+
+## Combat armature reset (2026-05-29 — σ-leverage build on the corrected model)
+
+Supersedes the M8/M8b attrition integration. Reuses M1/M3/M5/M9; replaces the Agility-scaled Combat Pool (the M8b-identified bottleneck) with a demoted History-driven pool + Agility-as-σ-leverage. Design spec: designs/audit/2026-05-29-combat-armature/ (Build-0).
+
+| Module | Scope | Canonical sources | Status |
+|---|---|---|---|
+| R1 (σ-leverage resolution atom) | demoted Agi-independent pool + state-gated δσ → Effective Ob → degree/crit; crit = Overwhelming strike | params/core §Degrees/§Obstacle/§Derived/§Attributes + modifier_system_spec §4 (Class A); wound_model_resweep_results (Class C anchor) | verified (self-test 6/6) |
