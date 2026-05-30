@@ -243,5 +243,34 @@
       "designs/world/ms_trajectory_v1.md (§5/§5.1 ED-882)",
       "canon/02_canon_constraints.md (GD-1, P-07)"
     ]
+  },
+  "_parliamentary_transfer_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of parliamentary_transfer_v30 (Stages 1-4) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "decomposition": "One bare-stat dice action (Pool=Proposer Influence; Ob=Holder Legitimacy+2) wrapped in a parliamentary vote contest (tally; +1D/-1D/0 bloc modifier) + CB economy (per-pair discrete accumulator). Success/OW => territory TRANSFERS (load-bearing, GD-1 control delta).",
+    "verdict": {
+      "N": "PASS — mechanic is necessary (one of three v12c territorial vectors that de-dominate Crown; without it Crown 55-90%).",
+      "R": "PARTIAL FAIL — core roll is a bare-stat small-pool dice resolution on a pivotal transfer (sigma-leverage non-uniformity + ~1% wall for weak proposers vs high-L holders) — the exact ED-865/874 pattern. Retry loop (Partial->free CB) is bounded (1/arc throttle + action-slot cost + Failure penalties + last-territory cap) => passes Lesson 5, but Partial 'replaces consumed CB' mildly bypasses the CB-economy damper (design note).",
+      "S": "FAIL — resolution paradigm-inconsistent with the migrated faction layer: faction Domain Actions/Suppress/Rebuttal/Treaty now resolve via the d+s resolver; this structurally-identical bare-stat check is still raw dice (authored on the pre-ED-865/874 paradigm; v12c predates the resolver).",
+      "E": "PASS — mechanic core legible; 4-mode taxonomy clear."
+    },
+    "finding": {
+      "prov_id": "PT-PARL-1",
+      "severity": "P2",
+      "lens": "Lesson 3 + Lesson 2 + Smooth",
+      "fix_in_principle": "Migrate the core roll to the d+s resolver (M = Proposer Influence - difficulty(Holder Legitimacy)), consistent with the rest of the faction layer.",
+      "BLOCKER": "BALANCE-LOAD-BEARING. parliamentary_transfer was balance-validated at N=1000 on the DICE engine (v12c: Crown 24.7/Church 28.6/HF 24.2/Varfell 22.5). The resolver's FLOOR 0.05 raises weak-proposer odds off the ~1% wall => more transfers => SHIFTS the validated equilibrium. A naive chat-side method-swap FAILS Stage-4 re-test (introduces a balance regression). The difficulty(L) mapping is a balance parameter that must be SIM-RE-TUNED, not hand-set.",
+      "disposition": "[OPEN: needs sim re-validation] — NOT applied to canon. The fix is correct in principle but its parameters belong to a simulation re-run of sim/provincial/parliamentary_transfer.py at N=1000, owned by the faction-balance sim line (v12c). Route to that sim session, or Jordan-directed re-tune.",
+      "precedent": "COIN/structural-contest (matrix entry 2) supports resolver-on-pivotal-transfer in principle; balance equilibrium is the v12c empirical constraint."
+    },
+    "design_note": "PARL-CB-001: Partial outcome 'replaces consumed CB' lets indefinite re-attempts at no CB cost (action-slot + Failure-risk + 1/arc throttle still apply). Not a Lesson-5 violation; flag for CB-economy intent review.",
+    "canon_writes": "NONE — candidate only. Unlike ci_political (Treaty rolls not balance-pinned) and peninsular_strain (pure warning extension), this fix requires sim re-validation before any canon change.",
+    "citations": [
+      "designs/provincial/parliamentary_transfer_v30.md (§1-§10 full)",
+      "params/factions/stats_1_7_scale.md (§Domain Action Resolution ED-865/874)",
+      "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.4/§5 (referenced, balance source)",
+      "canon/02_canon_constraints.md (GD-1, GD-3)"
+    ]
   }
 }
