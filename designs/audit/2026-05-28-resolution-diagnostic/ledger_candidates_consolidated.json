@@ -399,5 +399,46 @@
       "params/factions/stats_1_7_scale.md (§Domain Action Resolution ED-865/874)",
       "canon/02_canon_constraints.md"
     ]
+  },
+  "_faction_politics_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of faction_politics_v30 (PP-660 rank-ladder register, ~39k tokens) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "nature": "Rank-ladder / institutional-progression patch register. ~90% deterministic progression scaffolding (titles/halls/livery/mentors/Duty-count gates/Disposition thresholds/confirmation votes) + caste layer + CI×rank + Baralta×rank + Ministry×4 + generational shift + cross-faction parity.",
+    "verdict": {
+      "N": "PASS — rank depth necessary (doc's own A-01: 5 ranks too shallow); Part 9 parity table prevents cross-faction asymmetry. Complexity is progression-flavor, not resolution overhead.",
+      "R": "PASS — progression deterministic; pivotal rolls route to EXISTING personal engines (fieldwork Ob 2/3, social_contest Ob 2) on larger personal pools, NOT the bare-stat faction small-pool family; accumulator tracks (Deniability Debt 0-7, Shadow Renown 0-10, Readiness) bounded with graduated+spaced thresholds and self-damping reduction paths; ladder Std 0-7 hard-bounded. One catastrophic roll (§3.6.2 Conviction Reformation, Spirit Ob 3) is a WATCH but recoverable (2-season resume) + heavily gated (3+ caste-transgressive engagements/yr to trigger) => not an irreversible Lesson-3 defect.",
+      "S": "PASS (resolution lens) — resolution routes to existing personal engines consistently; introduces NO bare-stat faction small-pool checks (personal-scale progression, outside the faction-resolver family; no PT-PARL-1 analog).",
+      "E": "PASS (with caveat) — very large surface, but resolution complexity is LOW (all delegated to existing engines); the apparatus is progression scaffolding where richness is the explicit design goal (Skyrim-pattern), parity-enforced."
+    },
+    "overall": "NERS-COMPLIANT (resolution/balance lens). No resolution defect.",
+    "balance": "Self-deferred to simulation by the doc itself (SIM-POL-R01..R05: progression pacing Std0->5 by S14, caste-gate winnability, Baralta-ceremony exploit, CI×rank, generational outcomes) + design-level parity-enforced (Part 9). Not chat-side ratifiable; route SIM-POL items to the sim line.",
+    "watch": {
+      "id": "FP-WATCH-1",
+      "ref": "§3.6.2 Conviction Reformation arc",
+      "detail": "Catastrophic-on-Failure (PT reset 5/5/5; -1 rank in all non-caste-aligned factions; 2-season NPC-state) on a single Spirit-pool Ob 3 roll. Recoverable + heavily gated (3+ caste-transgressive engagements/year) + dramatic-intent, so a WATCH not a hard defect. If sim ever shows it firing too readily or the Spirit pool is small, reconsider as a Lesson-3 item.",
+      "severity": "P3-watch"
+    },
+    "routed_flags_for_editorial_line": [
+      {
+        "id": "FP-STATUS-1",
+        "severity": "P2",
+        "type": "status-contradiction",
+        "detail": "Header: 'Status: CANONICAL (approved Jordan 2026-04-17, commit PP-660)'. Footer: 'No canon mutations performed; this is a proposal document in /mnt/user-data/outputs/ for downstream approval'. Direct contradiction (canonical vs proposal-pending). Likely stale proposal-boilerplate footer on an approved doc, but it's a canonical-STATUS determination (Jordan/editorial's call), not a resolution defect and not chat-side fixable. FLAG + route to editorial."
+      },
+      {
+        "id": "FP-TAIL-1",
+        "severity": "P3",
+        "type": "editorial-tail",
+        "detail": "~25 open ED items (ED-634..ED-658; mostly P2 NPC-naming/Stance-Triangle + 3 proposed new files rank_ladder_v1/caste_integration_v1/ministry_system_v2) + 5 SIM-DEBT. Already self-tracked by the doc. Route to editorial/sim lines; not resolution/balance."
+      }
+    ],
+    "canon_writes": "NONE — resolution-compliant; balance sim-deferred + parity-enforced; the named problems (FP-STATUS-1, FP-TAIL-1) are editorial/status and routed, not chat-side fixable.",
+    "citations": [
+      "designs/provincial/faction_politics_v30.md (Parts 0-11 full)",
+      "designs/scene/social_contest_v30.md (resolution engine, referenced)",
+      "designs/personal/fieldwork_v30.md (resolution engine, referenced)",
+      "canon/02_canon_constraints.md (GD-1/GD-3)"
+    ]
   }
 }
