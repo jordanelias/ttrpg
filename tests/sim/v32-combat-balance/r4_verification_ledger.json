@@ -1,0 +1,96 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/r4_full_channel_parity.py",
+  "scope": "custom: core_engine + combat + derived_stats -- R4 full-channel equal-value sweep (armature reset 2026-05-29)",
+  "module": "R4",
+  "note": "Executes Jordan's directive (wire as required + all attributes equal value). Wires the full sigma-leverage stack (Agi initiative+tempo+facing[M7]+reaction[M5]; Reading[Cog/Att]) into a DECISIVE one-phrase exchange and tunes Class-C seeds toward equal value across combat-active attributes. FINDING: C-04 stays closed; decisive frame tamed End's R3 attrition dominance (63%->66%, now co-equal with Agi not runaway); Reading reached parity (46%, in-band); but STRENGTH is structurally dead (23%, loses to everyone) because it brings +0.00 sigma-leverage (only damage) and in a decisive duel LANDING decides, not magnitude. Equalising Str needs a LANDING/CONTROL channel (bind/stagger/armour-defeat-opens-window/decisive-by-damage) = a NEW MECHANIC = Jordan design decision, NOT a Class-C knob. End's residual co-dominance is canonical Health depth (PP-716/717) = Jordan canonical decision. Class-C seeds LOCKED at best-balanced (spread 43pp). Canonical Health/damage/degree NOT altered. Reuses R1/R2/M3/M5/M7 (already ledgered). Class A = canonical budget/degree; Class C = channel-wiring + decisive-frame seeds (tuned, sim-tunable, NOT canon); Class M = sweep-method stats. PROPOSAL -- no canon edited; the sweep is the tuning oracle and the finding is the deliverable.",
+  "entries": [
+    {
+      "sim_variable": "POINT_BUY",
+      "value": 31,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "§Attributes",
+      "quoted_text": "Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute."
+    },
+    {
+      "sim_variable": "ATTR_CREATION_MAX",
+      "value": 5,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "§Attributes",
+      "quoted_text": "Creation max: 5 (one attribute only; all others <= 4)."
+    },
+    {
+      "sim_variable": "DECISIVE_DEGREE",
+      "value": "overwhelming",
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "§Degrees of Success",
+      "quoted_text": "Overwhelming | Net >= 2x Ob AND net >= 3 -- the decisive-quality strike."
+    },
+    {
+      "sim_variable": "AGI_INITIATIVE_PER_POINT",
+      "value": 0.0625,
+      "class": "C-proposed (channel-wiring seed; tuned toward equal value; NOT canon)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "§2.3 (level->sigma; Minor 0.25)",
+      "quoted_text": "Agi initiative edge per point off average = LEVEL_SIGMA[minor]/4 = 0.0625 sigma-units; tuned down across passes (initiative was over-rewarding Agi). Minor=0.25 is the canonical level anchor; the /4 divisor is the Class-C seed."
+    },
+    {
+      "sim_variable": "READING_PER_POINT",
+      "value": 0.25,
+      "class": "C-proposed (channel-wiring seed; tuned toward equal value; NOT canon)",
+      "canonical_source": "designs/audit/2026-05-28-combat-reframe/modifier_system_spec.md",
+      "section": "§2.3 (level->sigma; Minor 0.25)",
+      "quoted_text": "Reading dsig per mental (Cog/Att) point off average = LEVEL_SIGMA[minor] = 0.25; raised across passes to bring the mental channel to parity (now 46%, in-band)."
+    },
+    {
+      "sim_variable": "DECISIVE_OB",
+      "value": 3,
+      "class": "C-proposed (decisive-frame seed; NOT canon)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Degree Table",
+      "quoted_text": "decisive sub-action Ob = 3 (a Difficult sub-action; the phrase resolves on strike quality + felling, not attrition). Ob scale is canonical; the choice of 3 for the decisive sub-action is the Class-C seed."
+    },
+    {
+      "sim_variable": "PHRASE_SUBACTIONS",
+      "value": 5,
+      "class": "C-proposed (decisive-frame seed; NOT canon)",
+      "canonical_source": "designs/audit/2026-05-29-combat-armature/sigma_leverage_handoff.md",
+      "section": "§2.5 exchange structure (Jordan: 6-10s phrase)",
+      "quoted_text": "a 6-10s phrase = a few exchanges; 5 sub-actions long enough for Str's per-hit damage to convert against End's wound-gate depth while remaining a phrase, not attrition. Jordan fixed the 6-10s phrase; the sub-action count is the Class-C seed."
+    },
+    {
+      "sim_variable": "DEPTH_DECISIVE",
+      "value": 4,
+      "class": "C-proposed (decisive-frame seed; NOT canon)",
+      "canonical_source": "tests/sim/v32-combat-balance/m5_stance_reaction_coherence.py",
+      "section": "DEPTH_CENTRE / reaction depth 1-5",
+      "quoted_text": "commit depth 4 (toward Committed/Full, M5 depth scale 1-5 centred at 3) for the decisive strike; feeds M5 reaction_sigma and M7 facing advantage. Depth scale is M5 (Class-B); the choice of 4 is the Class-C seed."
+    },
+    {
+      "sim_variable": "TRIALS",
+      "value": 4000,
+      "class": "M-method (statistical; NOT game mechanic)",
+      "canonical_source": "skills/valoria-simulator/SKILL.md",
+      "section": "Mode-G archetype sweep",
+      "quoted_text": "trials per matchup at the M8/M8b harness scale (N=2000-4000); Wilson CI shrinks with N."
+    },
+    {
+      "sim_variable": "WILSON_Z",
+      "value": 1.96,
+      "class": "M-method (statistical; NOT game mechanic)",
+      "canonical_source": "skills/valoria-simulator/SKILL.md",
+      "section": "Mode-G Wilson interval",
+      "quoted_text": "95% CI z-score 1.96 for the Wilson score interval; standard statistic used by the M8/M8b sweeps."
+    },
+    {
+      "sim_variable": "BAND_LO_HI",
+      "value": "0.40-0.60",
+      "class": "M-method (acceptance band; simulator skill §8.8)",
+      "canonical_source": "skills/valoria-simulator/SKILL.md",
+      "section": "§8.8 acceptance band",
+      "quoted_text": "archetype matchups 40-60% (skill §8.8 band), no inversion, no non-viable baseline build."
+    }
+  ]
+}
