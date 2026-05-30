@@ -1,0 +1,48 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/r3_parity_sweep.py",
+  "scope": "custom: core_engine + combat + derived_stats -- R3 cross-attribute parity sweep (armature reset 2026-05-29)",
+  "module": "R3",
+  "note": "The headline validation: does the corrected model achieve cross-attribute parity at EQUAL budget (the correctly-framed C-04 = Ω-d no-dominant-strategy)? Wires R1 (resolution + Agi sigma-leverage) + R2 (consequence + Str/End) into one decisive 6-10s exchange. HONEST RESULT: C-04 CLOSED (Agi no longer dominates, now weakest at 40.1%) but dominance MOVED to Endurance wound-gate depth (End-heavy 63.4%, CI excludes band) -- reproduces PP-717's independent End-dominance finding. Parity does NOT yet pass; the End/Str/Agi channel magnitudes are the Class-C tuning knob (Jordan calibration; project-owner contract bars Claude from retconning balance). Class A = canonical character-budget (31-pt buy, attr 1-7, creation max 5); reuses R1/R2/M3 (already ledgered). Class M = sweep-method params (trial count, Wilson z, acceptance band, exchange cap -- statistical harness, NOT game mechanics). PROPOSAL -- no canon edited; the sweep is the tuning oracle.",
+  "entries": [
+    {
+      "sim_variable": "POINT_BUY",
+      "value": 31,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "§Attributes",
+      "quoted_text": "Point pool at creation: 31 points across 10 attributes. Minimum 1 per attribute."
+    },
+    {
+      "sim_variable": "ATTR_CREATION_MAX",
+      "value": 5,
+      "class": "A-canonical",
+      "canonical_source": "params/core.md",
+      "section": "§Attributes",
+      "quoted_text": "Creation max: 5 (one attribute only; all others <= 4). Advancement max: 7."
+    },
+    {
+      "sim_variable": "TRIALS",
+      "value": 4000,
+      "class": "M-method (statistical harness; NOT game mechanic)",
+      "canonical_source": "skills/valoria-simulator/SKILL.md",
+      "section": "Mode-G acceptance / archetype sweep",
+      "quoted_text": "trials per matchup -- statistical sample size at the M8/M8b harness scale (N=2000-4000/matchup); Wilson CI shrinks with N."
+    },
+    {
+      "sim_variable": "WILSON_Z",
+      "value": 1.96,
+      "class": "M-method (statistical; NOT game mechanic)",
+      "canonical_source": "skills/valoria-simulator/SKILL.md",
+      "section": "Mode-G acceptance / Wilson interval",
+      "quoted_text": "95% confidence z-score (1.96) for the Wilson score interval on a binomial proportion -- standard statistic used by the M8/M8b sweeps."
+    },
+    {
+      "sim_variable": "BAND_LO_HI",
+      "value": "0.40-0.60",
+      "class": "M-method (acceptance band; from simulator skill §8.8)",
+      "canonical_source": "skills/valoria-simulator/SKILL.md",
+      "section": "§8.8 archetype-matchup acceptance band",
+      "quoted_text": "archetype matchups 40-60% (skill §8.8 band), no inversion, no non-viable baseline build."
+    }
+  ]
+}

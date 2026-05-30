@@ -1,0 +1,88 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/r2_consequence_wounds.py",
+  "scope": "custom: core_engine + combat + derived_stats -- R2 consequence atom (armature reset 2026-05-29)",
+  "module": "R2",
+  "note": "Wound severity on a landing strike + the authoritative wound-gate tracker -- where Strength and Endurance get their teeth against Agility's sigma-leverage (R1). Canonical damage formula reinstated by Jordan this session (M9 had removed multipliers): damage = net + STR x multiplier + weapon-modifier-vs-armour-tier; crit (net>=3) doubles ONLY the weapon modifier (PP-211), NOT the STR term. The armour model is ALREADY UNIFIED in canon (combat_v30 §6: 'DR is subsumed into the weapon modifier vs armour tier table') -- the Build-0 §3.1 reconcile is resolved BY CANON, not by a design choice; M9's per-type armour_resist is retained only as the historical validation ORACLE (plate negates cut / blunt defeats plate), never as a second subtractor. Wound-gate tracker is derived_stats §4.1 AUTHORITATIVE (supersedes combat_v30 §7's uncapped MW): Health=(End+6)x(MW+1), MW=min(floor(End/2)+1,3) PP-717 cap, WI=End+6, non-resetting, a hit>WI crosses multiple gates, felled at MW+1, -1D/wound no Ob. This bounds the reinstated multiplier: one-exchange phrase + MW+1<=4 gate cap + armour-typed resistance => the M8 30-round attrition runaway cannot recur. Reuses M3 (Class A weapon layer). Class A = canonical; Class C = the one proposed framing (decisive multi-gate applied per-exchange not per-round). PROPOSAL -- no canon edited.",
+  "entries": [
+    {
+      "sim_variable": "DAMAGE_FORMULA",
+      "value": "net + (STR x multiplier) + weapon-modifier-vs-armour-tier",
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution (PP-232)",
+      "quoted_text": "Damage = net hits + (STR x multiplier) + weapon modifier vs armour tier. STR multiplier: Light x1, Heavy x2, Blade x1, Blunt x1.5. Multiplicative (Heavy Blunt=x3). NOT doubled on crit."
+    },
+    {
+      "sim_variable": "CRIT_NET_MIN",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution (PP-211)",
+      "quoted_text": "Critical Hit: net hits >= 3 -> weapon modifier doubled before applying armour reduction. (PP-211)"
+    },
+    {
+      "sim_variable": "CRIT_WEAPON_MOD_MULT",
+      "value": 2,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution (PP-211)",
+      "quoted_text": "weapon modifier doubled before applying armour reduction. ... NOT doubled on crit [refers to STR multiplier term; the weapon modifier is the doubled term]."
+    },
+    {
+      "sim_variable": "UNIFIED_ARMOUR_MODEL",
+      "value": "weapon-modifier-vs-armour-tier table (DR subsumed)",
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§6 Armour (PP-232)",
+      "quoted_text": "Damage Reduction (DR) is subsumed into the weapon modifier vs armour tier table (see Damage Resolution above)."
+    },
+    {
+      "sim_variable": "WEAPON_ARMOR_MOD_TABLE",
+      "value": "Light Blade +3/+2/+1/+0; Heavy Blade +6/+4/+2/+0; Light Blunt +3 all; Heavy Blunt +5 all",
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "§5 Damage Resolution (weapon modifier vs armour tier)",
+      "quoted_text": "Weapon modifier vs armour tier: Light Blade +3/+2/+1/+0; Heavy Blade +6/+4/+2/+0; Light Blunt +3/+3/+3/+3; Heavy Blunt +5/+5/+5/+5 (vs None/Light/Medium/Heavy)."
+    },
+    {
+      "sim_variable": "WOUND_INTERVAL_BASE",
+      "value": 6,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 Health (AUTHORITATIVE, PP-716)",
+      "quoted_text": "WI = Endurance + 6 (range 7-13 across End 1-7)."
+    },
+    {
+      "sim_variable": "MAXWOUNDS_CAP",
+      "value": 3,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 Health (PP-717 Max Wounds cap)",
+      "quoted_text": "Max Wounds = min(floor(Endurance / 2) + 1, 3) -- capped at 3 (PP-717)."
+    },
+    {
+      "sim_variable": "HEALTH_FORMULA",
+      "value": "(End + 6) x (Max Wounds + 1)",
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 Health (AUTHORITATIVE, PP-716)",
+      "quoted_text": "Health (full) = (Endurance + 6) x (Max Wounds + 1) = WI x (MW+1). Non-resetting grand total. Each wound subtracts WI. Felled at 0 Health = MW+1 wounds. Damage > WI in one hit: multiple wounds applied simultaneously."
+    },
+    {
+      "sim_variable": "WOUND_POOL_PENALTY",
+      "value": 1,
+      "class": "A-canonical",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 Health (wound penalty universality)",
+      "quoted_text": "Wound penalty: -1D to ALL Pools. Universal rule. No Ob penalty from wounds, ever. Cumulative; capped by per-Pool floor (Combat Pool floor 5)."
+    },
+    {
+      "sim_variable": "DECISIVE_MULTI_GATE",
+      "value": "single hit > WI crosses multiple gates at once (per-exchange, not per-round attrition)",
+      "class": "C-proposed (armature framing; canonical formula applied per-exchange; NOT a new constant)",
+      "canonical_source": "designs/scene/derived_stats_v30.md",
+      "section": "§4.1 Health (Damage > WI in one hit)",
+      "quoted_text": "Damage > WI in one hit: multiple wounds applied simultaneously (each WI of damage = +1 wound counter). [Armature framing: applied within ONE 6-10s exchange, not summed over a 30-round attrition loop -- the gate cap MW+1<=4 + armour-typed resistance bound the reinstated multiplier so the M8 runaway cannot recur.]"
+    }
+  ]
+}
