@@ -2,19 +2,34 @@ id: 2026-05-29-resolution-diagnostic-faction-ratifications
 scope: audit
 task:
   skill: valoria-resolution-diagnostic
-  description: 'Resolution-and-balance diagnostic of the faction cluster (+ precedent
-    reconciliation) is COMPLETE and its tested remediations are RATIFIED to canon.
-    Three Jordan-directed ratifications landed this session: the deterministic+stochastic
-    Domain Action resolver, the insurgency dissolution down-path, and MS band hysteresis
-    + warning signal. ONLY remaining work is Jordan-judgment design intent on two
-    items with no tested candidate (ED-879 C3 out-of-bounds; ED-875 mass-battle low-Command
-    sigma-leverage).'
-last_commit: 677c4038dfc1919da6049c34f8212ea475be38d8
+  description: 'Resolution-and-balance diagnostic of the faction cluster. CORRECTION
+    (2026-05-30): the prior ''cluster COMPLETE'' claim was an OVER-CLAIM — only the
+    faction ACTION LAYER (+ spillover: resolver ED-865/874, insurgency ED-881, MS
+    hysteresis ED-882, trigger-5 ED-876, Varfell ED-880) had been decomposed. ~10
+    other canonical faction/provincial systems were never run. This session (under
+    Jordan design-authority grant) decomposed + ratified TWO more: (A) ci_political_v30
+    — NON-COMPLIANT -> fixed: CIP-1 CI political-forum weight made paradigm-consistent
+    (Parliament=Mandate tally w/ +floor(CI/20) Church votes & opponent max(0,Mandate-floor(CI/30))
+    FLOORED AT 0; resolver checks =margin), CIP-2 §2.2 Theocracy-Unification VICTORY
+    struck per GD-1, CIP-3 Govern/Trade prose; PLUS Treaty positioning+ratification
+    MIGRATED to the d+s resolver (precedent: power-structural treaty-making) across
+    ci_political/faction_layer/stats_1_7_scale (commit 270915da). (B) peninsular_strain_v30
+    — NERS-COMPLIANT after PST-1 (extended ED-882''s 12-MS leading warning to the
+    MS<=12 approach to MS=0; commit c3b805fc). REMAINING uncovered faction/provincial
+    systems (never diagnosed): faction_politics, faction_behavior, faction_state_authoring,
+    parliamentary_transfer, treaty_expiration, faction_succession_split, clock_registry,
+    faction_canon. PRE-EXISTING owner-design items still open: ED-879 C3 (OOB combat)
+    and ED-875 (mass-battle sigma-leverage).'
+last_commit: c3b805fc882183d3696825427418274aca24fef5
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
 - designs/world/insurgency_pipeline_v30.md (§6.2/§6.3)
 - designs/world/ms_trajectory_v1.md (§5.1)
+- designs/provincial/ci_political_v30.md (§2.2/§3.2/§3.3/§3.4/§4.2/§4.3 — CIP-1/2/3)
+- designs/provincial/faction_layer_v30.md (§3.3 Treaty resolver migration; §5.3 CI
+  cross-ref)
+- designs/provincial/peninsular_strain_v30.md (§6.4 — PST-1 pointer)
 context_files:
 - path: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
   depth: full
@@ -117,4 +132,29 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-29T23:03:43.540918+00:00'
+updated: '2026-05-30T19:05:20.194597+00:00'
+session_2026_05_30_additions:
+  design_authority: Jordan granted explicit authority to make precedent-anchored design
+    choices respecting canon worldbuilding/metaphysics/characterization.
+  commits:
+  - 84de52cf (ci_political CIP candidates -> master)
+  - '270915da (ci_political CIP-1/2/3 + Treaty migration ratified to canon: ci_political/faction_layer/stats_1_7_scale/canonical_sources)'
+  - 'c3b805fc (peninsular_strain PST-1: ms_trajectory §5.1 warning ext + §6.4 pointer
+    + master)'
+  ci_political: 'NERS-compliant (was non-compliant). RETRACTION recorded: in-chat
+    draft sqrt(N)-on-Parliament finding was wrong — Parliament is a deterministic
+    Mandate tally (faction_layer §5.3), not dice.'
+  peninsular_strain: NERS-compliant after PST-1 (single S-consistency fix). Loops
+    capped+damped; accumulators category-exempt; Popular Uprising recoverable.
+  treaty_migration_decision: Treaty positioning (contested M=own Influence-target
+    Influence) + ratification (M=Mandate-2) now resolver-governed; Guarantor +1D->+1M;
+    Grand Debate degree->margin; Grand Debate social contest stays dice (scope boundary).
+  uncovered_next:
+  - faction_politics_v30
+  - faction_behavior_v30
+  - faction_state_authoring_v30
+  - parliamentary_transfer_v30
+  - treaty_expiration_v30
+  - faction_succession_split_v30
+  - clock_registry_v30
+  - faction_canon_v30
