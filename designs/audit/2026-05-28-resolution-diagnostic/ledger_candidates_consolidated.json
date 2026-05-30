@@ -489,5 +489,54 @@
       "designs/provincial/peninsular_strain_v30.md §6.2",
       "designs/provincial/ci_political_v30.md §2.2 (CIP-2)"
     ]
+  },
+  "_faction_canon_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of faction_canon_v30 (consolidation doc, ~11.7k tokens) — NEW system, never previously decomposed; COMPLETES the faction/provincial cluster",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "nature": "CONSOLIDATION / review artifact. References (does not duplicate) faction_layer/faction_behavior/faction_state_authoring/faction_politics/faction_succession_split/factions_personal/stats_1_7_scale. Its own body: 'Does not commit. This file lands as artifact for Jordan review' + 'surfaces every conflict rather than silently resolving'. NO resolution mechanic of its own.",
+    "verdict": {
+      "N": "PASS — a single consolidated per-faction sheet is useful (supersedes piecemeal lookup); references sources, no duplication.",
+      "R": "PASS — introduces no new resolution mechanic; mirrors source mechanics already diagnosed.",
+      "S": "PASS (as a mirror) — but it faithfully SURFACES two source-level consistency issues (FCN-1, FCN-GD1) by design.",
+      "E": "PASS — flat reference sheet."
+    },
+    "overall": "NERS-COMPLIANT (consolidation; no new resolution mechanic). Findings are source-level, surfaced by the consolidation, routed.",
+    "findings": [
+      {
+        "prov_id": "FCN-1",
+        "severity": "P2",
+        "lens": "Lesson 3 + Smooth (paradigm-consistency) — EXTENDS PT-PARL-1 / TE-1 class",
+        "summary": "§9 Tactic table surfaces a RESIDUAL SET of bare-stat faction Unique-Action/Tactic checks NOT in the resolver's governed-checks list (stats_1_7_scale): Crown Royal Decree (Legitimacy vs Ob 2); Church Excommunication (L vs target-L leader / Ob 2 non-leader); Church CI-60 Territorial Seizure (L vs floor(target L/2)+1); Hafenmark Sovereign Authority Doctrine (L vs Ob 4); Varfell Private Collection (Intel vs Ob 2). Same bare-stat small-pool / paradigm-inconsistency pattern as PT-PARL-1/TE-1.",
+        "disposition": "[OPEN: needs sim re-validation] — candidate, NO canon write. (a) Authoritative resolution method for each tactic lives in its SOURCE doc (faction_layer / ci_political / faction-mechanics), not this consolidation — confirm + fix there, not here. (b) Several are v12c balance levers (Excommunication Ob, CI-60 Seizure) => balance-pinned, sim-deferred like PT-PARL-1/TE-1. Route to source docs + the faction-balance sim line. This CONSOLIDATES the full 'residual bare-stat faction-tactic set' awaiting resolver migration: {parliamentary_transfer core roll, treaty_expiration re-bind, Royal Decree, Excommunication, CI-60 Seizure, Sovereign Authority Doctrine, Private Collection}.",
+        "precedent": "ED-865/874 resolver scope ('bare-stat faction checks'); v12c empirical balance constraint."
+      },
+      {
+        "prov_id": "FCN-GD1",
+        "severity": "P3",
+        "lens": "canon-consistency (GD-1) — FSA-1 propagation",
+        "summary": "Part B copies Mission verbatim incl. 'Win path: victory.solmundan_orthodoxy (CI 100 Mass Seizure path)' etc. — carries the FSA-1/GD-1 victory-framing drift, and adds explicit 'Win path:' framing. Per GD-1 the sole victory is Peninsular Sovereignty; these are approaches.",
+        "disposition": "ROUTE (no chat-edit) — faction_canon is a pending-ratification consolidation artifact ('does not commit') that should be REGENERATED from its (now GD-1-reconciled, FSA-1) sources; the verbatim Win-path framing will inherit the reconciliation on regeneration. Route to editorial; do not hand-edit a review artifact that should be source-regenerated."
+      }
+    ],
+    "routed_flags": [
+      {
+        "id": "FCN-STATUS",
+        "severity": "P2",
+        "detail": "Blatant status contradiction: consecutive header lines '## Status: CANONICAL' and '## Status: PROVISIONAL — pending ratification', and body 'Does not commit... artifact for Jordan review'. Canonical-status determination (Jordan/editorial). Route — strongest instance of the cluster-wide PP-686 status-hygiene issue (also FP-STATUS-1, FSA-STATUS-1)."
+      },
+      {
+        "id": "FCN-SCHEMA",
+        "severity": "P3",
+        "detail": "§5.2/§5.3 6-stat (factions_personal §8.1) vs 7-stat (stats_1_7_scale post-ED-787) schema conflict — self-surfaced by design; doc uses 7-stat as primary, 'source-file propagation a separate commit cycle'. Editorial/schema-reconciliation item, not resolution/balance. Route."
+      }
+    ],
+    "canon_writes": "NONE — consolidation/review artifact (does not commit per its own body); all findings are source-level (FCN-1 sim-deferred to source+sim; FCN-GD1 inherits FSA-1 on regeneration) or editorial (status/schema). Nothing chat-ratifiable here.",
+    "citations": [
+      "designs/provincial/faction_canon_v30.md (Parts A-B full)",
+      "params/factions/stats_1_7_scale.md (§Domain Action Resolution governed list)",
+      "canon/02_canon_constraints.md (GD-1)",
+      "designs/provincial/faction_state_authoring_v30.md §1 (FSA-1)"
+    ]
   }
 }
