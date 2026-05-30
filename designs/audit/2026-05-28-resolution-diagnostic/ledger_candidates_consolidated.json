@@ -302,5 +302,36 @@
       "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.5/§5 (balance source, referenced)",
       "canon/02_canon_constraints.md (GD-1)"
     ]
+  },
+  "_faction_succession_split_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of faction_succession_split_v30 (Stages 1-4) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "decomposition": "(A) Succession Contest: contenders roll pool vs Ob3, highest net successes wins [dice, mid pools]; (B) margin-based SPLIT trigger (winner margin<2 => faction fragments) [threshold on noisy quantity]; (C) deterministic asset %-split; (D) Disposition gates; (E) Settlement Emergence Order==0 hard threshold. PROVISIONAL (PP-666), NOT v12c-pinned.",
+    "verdict_pre": {
+      "N": "PASS — generalized succession is necessary (only Crown succession was modeled; others fell to generic collapse).",
+      "R": "FAIL — the SPLIT/UNIFIED structural fork (load-bearing, ~irreversible: re-merge needs both Mandate>=3+treaty) turned on a <2 net-success margin in a small-pool roll: sim showed ~50% split at ALL near-peer successions REGARDLESS of strategic power balance — variance, not strategy, fragmenting the realm.",
+      "S": "FAIL — bare highest-net-successes contest + Ob3 counting, paradigm-inconsistent with the migrated resolver faction layer.",
+      "E": "FAIL — one roll-margin carried TWO independent roles (WHO wins + WHETHER splits) = Lesson-1 role conflation; player cannot intuit fragmentation."
+    },
+    "finding": {
+      "prov_id": "FSS-1",
+      "severity": "P2",
+      "lens": "Lesson 1 (role) + Lesson 3 (small-pool pivotal) + cliff (noisy fork) + Smooth",
+      "fix": "Two-stage resolution. STAGE 1 (who leads): contested resolver M = strength(top1)-strength(top2). STAGE 2 (whether splits): deterministic strength gap G = strength(top1)-strength(top2): G>=3 UNIFIED, G==2 fractious-unified (Disposition-gated), G<=1 SPLIT; dice tail = leader Overwhelming consolidates a G<=1 split / leader Failure fractures a G>=3. Strength = the EXISTING contest pool (no new variable). Ob3/net-success counting retired for the fork.",
+      "precedent": "Succession-war fragmentation tracks claimant power balance (Carolingian divisio, Diadochi, Ottoman) — near-peer partition, dominant consolidate. COIN/structural-contest resolver shape (matrix entry 2).",
+      "stage4": "N pass (no new variable), R pass (fragmentation tracks strategic gap, no variance fork), S pass (resolver-consistent, gap-band not noisy cliff), E pass+improved (WHO and WHETHER-SPLIT separated -> role-conflation resolved; legible). Loops unchanged-bounded.",
+      "disposition": "RATIFIED to canon (doc was PROVISIONAL, NOT v12c-pinned => no balance equilibrium to protect; unlike PT-PARL-1/TE-1). Precedent-anchored under design-authority grant."
+    },
+    "verdict_post": "NERS-COMPLIANT after FSS-1.",
+    "applied_canon": [
+      "designs/provincial/faction_succession_split_v30.md §2.2 (two-stage resolution), §2.3 (gap-band split fork + rationale + dice tail), §3 (worked example recomputed)"
+    ],
+    "not_in_scope": "Settlement Emergence cooldown (§4, 1/province/4-seasons) flagged by doc for smoke-test balance — a tuning item, not a resolution defect; left to its smoke-test. RM emergence stages = existing canonical pathway, no defect.",
+    "citations": [
+      "designs/provincial/faction_succession_split_v30.md (§1-§6 full)",
+      "params/factions/stats_1_7_scale.md (§Domain Action Resolution ED-865/874)",
+      "canon/02_canon_constraints.md (GD-1, P-15)"
+    ]
   }
 }

@@ -41,30 +41,40 @@ The contest opens at next Accounting. All contenders stake claims. A contender m
 - Institutional claim (holds a ministerial / committee / dicastery / council position per `faction_politics §7`)
 - External backing (another faction's Diplomat action declaring support — costs Diplomatic Token)
 
-**Resolution:** Each contender rolls a contest pool vs Ob 3 (TN 7).
+**Contender strength** (deterministic; no roll) per claim type:
 
-| Contender Type | Pool |
+| Contender Type | Strength |
 |-|-|
 | Blood heir | Mandate + Influence |
 | Institutional candidate | Influence + faction's rank-specific stat (Crown=Mandate, Hafenmark=Influence, Church=Influence, Varfell=Intelligence) |
 | External-backed candidate | Diplomatic backer's Influence + own Standing |
 
-Highest net successes wins. Ties broken by: faction's dominant stat (Military → military candidate, Mandate → political candidate, etc.).
+**Resolution (two-stage; ED-865/874 resolver, FSS-1 2026-05-30).** The succession answers two *independent* questions — **who leads** and **whether the realm fragments** — so it resolves in two stages rather than collapsing both onto one roll-margin (the prior "highest net successes; split if margin < 2" conflated them, letting dice variance alone decide fragmentation — see §2.3 rationale).
+
+- **Stage 1 — Who leads (contested resolver).** Between the two highest-strength contenders, resolve M = strength(top1) − strength(top2) via the deterministic+stochastic resolver (`params/factions/stats_1_7_scale.md §Domain Action Resolution`). Success/Overwhelming → top1 leads; Failure → the runner-up (top2) takes the lead instead (a weaker claimant *can* prevail, but the FLOOR/CAP keep it a tail, not a coin-flip). Multi-contender fields resolve pairwise from the top down. Tie in strength: faction's dominant stat decides which is "top1" for the roll (Military→military candidate, Mandate→political candidate, etc.).
+- **Stage 2 — Whether it splits (deterministic strength gap G = strength(top1) − strength(top2)).** See §2.3.
 
 ### §2.3 Outcomes
 
-**Clear winner (2+ net success margin over runner-up):**
-- Winner becomes faction leader.
-- Runner-up may accept (Disposition check: Disposition ≥ 0 → accepts; below 0 → splits, see below).
-- Faction continues unified. Stability −1, Mandate −1 from legitimacy turnover.
+Outcomes are keyed to the **deterministic strength gap G = strength(top1) − strength(top2)** (Stage 2), with the Stage-1 roll degree as a bounded tail. **Rationale:** historically, succession *fragmentation* tracks the balance of power among claimants — near-equal claimants partition the realm (Carolingian *divisio*, the Diadochi, contested Ottoman successions), a clearly dominant claimant consolidates it. Fragmentation should therefore follow the strategic gap, not raw dice variance; the prior "split if roll-margin < 2" let a one-success swing fragment a realm at ~50% of all near-peer successions regardless of the actual power balance.
 
-**Narrow winner (< 2 net success margin over runner-up):**
-- Faction **splits**. The winner holds the formal faction name and ~60% of assets. The runner-up takes their own faction-splinter with ~40%.
-- Asset split (see §3).
+**G ≥ 3 — decisive dominance → UNIFIED.**
+- The Stage-1 leader becomes faction leader; runner-up submits. Faction continues unified. Stability −1, Mandate −1 (legitimacy turnover).
+- *Dice tail:* a Stage-1 **Failure** by the leader → fractious Regency this Accounting instead (the dominant claimant stumbled publicly).
 
-**No clear winner (all fail Ob 3 or tied ties):**
+**G = 2 — dominant but contested → UNIFIED, fractious.**
+- Leader inherits unified. Runner-up Disposition check: Disposition ≥ 0 → accepts (unified); below 0 → **splits** (see §2.4).
+- Stability −1, Mandate −1.
+
+**G ≤ 1 — near-peer claimants → SPLIT.**
+- Faction **splits** (§2.4). The Stage-1 leader holds the formal faction name and ~60% of assets; the runner-up takes a faction-splinter with ~40%.
+- *Dice tail:* a Stage-1 **Overwhelming** by the leader → the realm holds UNIFIED instead (a decisive personal victory consolidates an otherwise even contest).
+
+**No qualifying contender (no contender meets a §2.2 claim basis, or all candidates' strength is 0):**
 - Regency. Faction operates under NPC council governance. No leader stat bonuses. Faction may attempt another contest at next Accounting.
 - If 3 consecutive Accountings produce no winner: faction collapses per `faction_layer §1.5`.
+
+*(Ob 3 / net-success counting is retired for the succession fork: Stage 1 uses the resolver's four-degree ladder; Stage 2 uses the deterministic gap. The contest is decided by claimant strength with dice as a tail, not by a small-pool success-count margin.)*
 
 ### §2.4 Faction Split Mechanics
 
@@ -115,7 +125,7 @@ Rolls (hypothetical):
 - Tribune Captain: 9d10 vs Ob 3 → 4 net successes (Success).
 - RM candidate: 5d10 vs Ob 3 → 1 net success (Partial).
 
-Tribune Captain wins by 1 net success margin over Uln → **narrow winner, faction splits.**
+Under FSS-1 (2026-05-30): strengths are Tribune Captain 9 (Influence 4 + Intelligence 5) vs Maret Uln 7 (Mandate 3 + Influence 4), so **gap G = 2** — *dominant but contested*. Stage 1 (resolver, M = 9 − 7 = +2) → Tribune Captain leads. Stage 2 (G = 2) → **UNIFIED but fractious**, pending Uln's Disposition check: Uln at Disposition +2 toward the apparatus (≥ 0) → **accepts; Varfell stays unified** under the Tribune Captain. *(Had Uln's Disposition been below 0, the realm would split per §2.4 — the example below illustrates the split asset-division for that branch.)*
 
 **Asset split:**
 - Tribune Captain takes Varfell historical capital (Sigurdshelm T12 + Oastad T13). Name retained: Varfell.

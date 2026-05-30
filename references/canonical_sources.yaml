@@ -232,6 +232,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_md: "167b66a4cbbf80c2a9271d7c9e7825629480d01e"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
+    note__fss1: "FSS-1 (2026-05-30, resolution-diagnostic ratification): §2.2 succession resolution split into two stages (Stage-1 contested resolver for WHO leads; Stage-2 deterministic strength-gap G for WHETHER it splits) — fixes the prior variance-driven structural fork (roll-margin<2 fragmented ~50% of near-peer successions regardless of power balance) + role-conflation. Split now tracks claimant power balance (Carolingian/Diadochi/Ottoman precedent), dice a bounded tail. Doc was PROVISIONAL/not-v12c-pinned (ratifiable). §3 example recomputed."
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "9c33df49ccde19bb7ef1da43f80b1932ae92d157"
   royal_assassination_fuse:
     design_doc: params/bg/royal_assassination.md
