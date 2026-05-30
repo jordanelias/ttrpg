@@ -1,5 +1,5 @@
 {
-  "consolidated": "2026-05-28 resolution/engine/armature/sim session \u2014 outstanding ledger candidates",
+  "consolidated": "2026-05-28 resolution/engine/armature/sim session — outstanding ledger candidates",
   "live_ledger_max_at_consolidation": "ED-873",
   "next_id": "ED-874",
   "already_ingested_do_not_refile": [
@@ -19,7 +19,7 @@
       "severity": "P2",
       "type": "design_defect",
       "status": "resolved-applied",
-      "description": "RESOLVED-APPLIED to canon 2026-05-29 (Jordan-directed adopt/tune). Deterministic+stochastic resolver ratified as the canonical Domain Action resolution method in params/factions/stats_1_7_scale.md: P_success=clamp(0.50+0.10*M, 0.05, 0.90) with graded degree bands; constant 0.10/pt leverage (closes the sigma-leverage non-uniformity by construction); bare-stat-vs-Ob superseded for faction Domain Actions. Bare-stat checks migrated (Suppress Failure->Stab-1, Rebuttal Overwhelming->+1 hooks preserved; \u00a71.4 co-designed with \u00a71.3 recovery). Dice systems (combat/social/mass-battle) unchanged. Precedent-backed (COIN/structural-contest, matrix entry 2). Faction sigma-leverage is NON-UNIFORM across the faction stat range (armature A6, computed MC). Bare-stat pool => baseline = stat, so sigma-leverage ~ 1/sqrt(stat): 0.354/pt at stat 2 (+17pct vs 0.30 ref) decaying to 0.189/pt at stat 7 (-37pct, OUT OF BAND low). A point of stat buys decaying leverage as the faction strengthens, compounding the post-F2-ruling punching-up wall (strong rivals hard to act on AND strong-faction stat investment leverage-poor). Distinct from ED-868 (collapse loops) and the artifact-error ED-865/866; this is the underlying attribute-economy property. Aggregating the faction pool (cf. mass-battle ER-9) flattens it. STAGE-4 TESTED: sigma-leverage non-uniformity is NOT fixable by pool aggregation - sigma-leverage ~ 1/sqrt(baseline) is irreducibly non-uniform for any dice pool (flat-agg narrows spread 0.165->0.053 but pushes leverage below band; x2 mult makes low-stat too high, spread 0.233). Only a deterministic+stochastic resolver (constant leverage = slope by construction) fixes it. Strengthens the deterministic+stochastic option on the sigma-leverage dimension specifically. RESOLVER SPEC PRODUCED (domain_action_resolver_spec): tuned deterministic+stochastic candidate P=clamp(0.50+0.10*M, 0.05, 0.90) with graded degree bands; constant 0.10/pt leverage (ED-874 fixed by construction), floor degeneracy 0.069->0.300, punching-up 0.010->0.050, capped ceiling; all Stage-4 checks PASS; Domain Echo OUTPUT unchanged (drop-in). Interface note covers Suppress, Parliamentary Rebuttal, \u00a71.4 Accounting Stability Check (co-design w/ \u00a71.3 recovery, CC-4). Candidate ready for Jordan adopt/tune; NOT applied to canon. Params PROPOSED/untuned. PRECEDENT-BACKED (ners_historical_precedent_matrix entry 2, COIN/structural-contest literature): real political contests are structure-decisive with a stochastic tail, NOT low-variance coin-flips \u2014 exactly what deterministic-odds+stochastic-resolution delivers. SECOND justification: the d+s resolver is also what makes the ED-868 faction-collapse bound (Reconstitution) reachable (bare dice leave it near-unreachable at low Influence).",
+      "description": "RESOLVED-APPLIED to canon 2026-05-29 (Jordan-directed adopt/tune). Deterministic+stochastic resolver ratified as the canonical Domain Action resolution method in params/factions/stats_1_7_scale.md: P_success=clamp(0.50+0.10*M, 0.05, 0.90) with graded degree bands; constant 0.10/pt leverage (closes the sigma-leverage non-uniformity by construction); bare-stat-vs-Ob superseded for faction Domain Actions. Bare-stat checks migrated (Suppress Failure->Stab-1, Rebuttal Overwhelming->+1 hooks preserved; §1.4 co-designed with §1.3 recovery). Dice systems (combat/social/mass-battle) unchanged. Precedent-backed (COIN/structural-contest, matrix entry 2). Faction sigma-leverage is NON-UNIFORM across the faction stat range (armature A6, computed MC). Bare-stat pool => baseline = stat, so sigma-leverage ~ 1/sqrt(stat): 0.354/pt at stat 2 (+17pct vs 0.30 ref) decaying to 0.189/pt at stat 7 (-37pct, OUT OF BAND low). A point of stat buys decaying leverage as the faction strengthens, compounding the post-F2-ruling punching-up wall (strong rivals hard to act on AND strong-faction stat investment leverage-poor). Distinct from ED-868 (collapse loops) and the artifact-error ED-865/866; this is the underlying attribute-economy property. Aggregating the faction pool (cf. mass-battle ER-9) flattens it. STAGE-4 TESTED: sigma-leverage non-uniformity is NOT fixable by pool aggregation - sigma-leverage ~ 1/sqrt(baseline) is irreducibly non-uniform for any dice pool (flat-agg narrows spread 0.165->0.053 but pushes leverage below band; x2 mult makes low-stat too high, spread 0.233). Only a deterministic+stochastic resolver (constant leverage = slope by construction) fixes it. Strengthens the deterministic+stochastic option on the sigma-leverage dimension specifically. RESOLVER SPEC PRODUCED (domain_action_resolver_spec): tuned deterministic+stochastic candidate P=clamp(0.50+0.10*M, 0.05, 0.90) with graded degree bands; constant 0.10/pt leverage (ED-874 fixed by construction), floor degeneracy 0.069->0.300, punching-up 0.010->0.050, capped ceiling; all Stage-4 checks PASS; Domain Echo OUTPUT unchanged (drop-in). Interface note covers Suppress, Parliamentary Rebuttal, §1.4 Accounting Stability Check (co-design w/ §1.3 recovery, CC-4). Candidate ready for Jordan adopt/tune; NOT applied to canon. Params PROPOSED/untuned. PRECEDENT-BACKED (ners_historical_precedent_matrix entry 2, COIN/structural-contest literature): real political contests are structure-decisive with a stochastic tail, NOT low-variance coin-flips — exactly what deterministic-odds+stochastic-resolution delivers. SECOND justification: the d+s resolver is also what makes the ED-868 faction-collapse bound (Reconstitution) reachable (bare dice leave it near-unreachable at low Influence).",
       "affected_docs": [
         "designs/provincial/faction_layer_v30.md",
         "params/factions/stats_1_7_scale.md",
@@ -34,7 +34,7 @@
       "severity": "P3",
       "type": "design_defect",
       "status": "open",
-      "description": "Mass-battle Command sigma-leverage is HIGH at low Command (armature A6, computed): 0.500/pt at Cmd 2 decaying to in-band at Cmd 4-7. Low-Command early-game generals get oversized per-point leverage. Closes attribute_weight_standard GAP #2 (was magnitude-unverified). Same 1/sqrt(baseline) mechanism as ED-874; non-uniform across range. NOTE 2026-05-29: NOT addressed by the d+s resolver (mass battle stays dice per scope boundary \u2014 healthy aggregated pool). The low-Command sigma-leverage is an edge property of an otherwise NERS-PASS dice system; left as a P3 flag (no clean dice-side fix without disrupting the aggregated pool). Owner decision whether to act.",
+      "description": "Mass-battle Command sigma-leverage is HIGH at low Command (armature A6, computed): 0.500/pt at Cmd 2 decaying to in-band at Cmd 4-7. Low-Command early-game generals get oversized per-point leverage. Closes attribute_weight_standard GAP #2 (was magnitude-unverified). Same 1/sqrt(baseline) mechanism as ED-874; non-uniform across range. NOTE 2026-05-29: NOT addressed by the d+s resolver (mass battle stays dice per scope boundary — healthy aggregated pool). The low-Command sigma-leverage is an edge property of an otherwise NERS-PASS dice system; left as a P3 flag (no clean dice-side fix without disrupting the aggregated pool). Owner decision whether to act.",
       "affected_docs": [
         "designs/provincial/mass_battle_v30.md",
         "designs/audit/2026-05-28-combat-reframe/attribute_weight_standard.md"
@@ -48,12 +48,12 @@
       "severity": "P1",
       "type": "design_defect",
       "status": "resolved-applied",
-      "description": "RESOLVED-APPLIED to canon 2026-05-28 (commit 2327adc4). Trigger-5 firing is NON-MONOTONIC in faction strength because Condition C stacks a pool-size cliff (pool >= 6) onto a magnitude threshold (net <= -2). Computed firing rate by defender pool (recovery-independent MC): Cmd-1 (2D)=0pct [Cond A blocks], Cmd-2 (4D)=1.9pct [needs rare net<=-2], Cmd-3 (6D)=16.6pct [pool>=6 auto-fires C on ANY failure], declining to ~8pct for strong factions. A single Command point (Cmd 2->3) jumps battle->Stability exposure 8.7x. Mid-tier factions are MOST exposed to battle-driven Stability loss; the weakest are shielded. Consider smoothing C (e.g. severity scaled by margin rather than a hard pool>=6 auto-fire). Corrects the earlier hand-traced assumption that weak-faction battles drive a deterministic Stability spiral (CC-2). STRENGTHENED (CC-5): with the canonical Institutional Consolidation recovery, the cliff propagates to COLLAPSE \u2014 compound collapse jumps ~25x from Cmd 2 (0.9pct) to Cmd 3 (22.6pct), declining at Cmd 4 (18.6pct), because a fired Trigger-5 denies the deterministic clean-season +1 recovery. A single Command point swinging collapse 25x is a robustness defect -> P1. STAGE-4 TESTED (sim_faction_remediation): Fix-A = remove the pool>=6 clause from Condition C's GATE (keep it in the COST table). Firing curve goes monotonic/flat (~1-2pct, Cmd-3 spike removed) and 100pct of genuine routs (net<=-2) are still punished; only disciplined net 0/-1 large-force withdrawals are spared (matches canon intent). Recommend apply. Independent of the ED-865/874 resolver fork.",
+      "description": "RESOLVED-APPLIED to canon 2026-05-28 (commit 2327adc4). Trigger-5 firing is NON-MONOTONIC in faction strength because Condition C stacks a pool-size cliff (pool >= 6) onto a magnitude threshold (net <= -2). Computed firing rate by defender pool (recovery-independent MC): Cmd-1 (2D)=0pct [Cond A blocks], Cmd-2 (4D)=1.9pct [needs rare net<=-2], Cmd-3 (6D)=16.6pct [pool>=6 auto-fires C on ANY failure], declining to ~8pct for strong factions. A single Command point (Cmd 2->3) jumps battle->Stability exposure 8.7x. Mid-tier factions are MOST exposed to battle-driven Stability loss; the weakest are shielded. Consider smoothing C (e.g. severity scaled by margin rather than a hard pool>=6 auto-fire). Corrects the earlier hand-traced assumption that weak-faction battles drive a deterministic Stability spiral (CC-2). STRENGTHENED (CC-5): with the canonical Institutional Consolidation recovery, the cliff propagates to COLLAPSE — compound collapse jumps ~25x from Cmd 2 (0.9pct) to Cmd 3 (22.6pct), declining at Cmd 4 (18.6pct), because a fired Trigger-5 denies the deterministic clean-season +1 recovery. A single Command point swinging collapse 25x is a robustness defect -> P1. STAGE-4 TESTED (sim_faction_remediation): Fix-A = remove the pool>=6 clause from Condition C's GATE (keep it in the COST table). Firing curve goes monotonic/flat (~1-2pct, Cmd-3 spike removed) and 100pct of genuine routs (net<=-2) are still punished; only disciplined net 0/-1 large-force withdrawals are spared (matches canon intent). Recommend apply. Independent of the ED-865/874 resolver fork.",
       "affected_docs": [
         "designs/provincial/faction_layer_v30.md"
       ],
       "source": "sim_compound_collapse CC-1 (session c93a36df) + CC-5 (cc4_resolution)",
-      "jordan_decision": "Fix-A applied per Jordan instruction; faction_layer_v30 \u00a70 + Trigger-5 patched; canonical_sources SHA refreshed"
+      "jordan_decision": "Fix-A applied per Jordan instruction; faction_layer_v30 §0 + Trigger-5 patched; canonical_sources SHA refreshed"
     },
     {
       "id": "ED-877",
@@ -61,12 +61,12 @@
       "severity": "resolved",
       "type": "missing",
       "status": "resolved",
-      "description": "RESOLVED (was UNREAD, not absent). The faction Stability-recovery mechanic EXISTS: faction_layer_v30 \u00a71.3 Institutional Consolidation = DETERMINISTIC +1 Stability on any Trigger-1-5-free ('clean') season; canon explicitly states it 'replaces the abstract simulator recovery rule.' Conditional paths: peace treaty, recapture territory, Parliamentary Overwhelming, Church Absolution, Lowenritter endorsement; seasonal cap +-2. \u00a71.4 Accounting Stability Check is a cascade-DAMAGE check (fires only on >=2 attr-pts lost), not recovery. Compound sim re-run with this canonical mechanic; SANITY passes; collapse magnitudes now trustworthy. Do NOT file as an open gap.",
+      "description": "RESOLVED (was UNREAD, not absent). The faction Stability-recovery mechanic EXISTS: faction_layer_v30 §1.3 Institutional Consolidation = DETERMINISTIC +1 Stability on any Trigger-1-5-free ('clean') season; canon explicitly states it 'replaces the abstract simulator recovery rule.' Conditional paths: peace treaty, recapture territory, Parliamentary Overwhelming, Church Absolution, Lowenritter endorsement; seasonal cap +-2. §1.4 Accounting Stability Check is a cascade-DAMAGE check (fires only on >=2 attr-pts lost), not recovery. Compound sim re-run with this canonical mechanic; SANITY passes; collapse magnitudes now trustworthy. Do NOT file as an open gap.",
       "affected_docs": [
         "designs/provincial/faction_layer_v30.md"
       ],
       "source": "sim_compound_collapse CC-4 (session c93a36df)",
-      "jordan_decision": "n/a \u2014 resolved by reading \u00a71.3"
+      "jordan_decision": "n/a — resolved by reading §1.3"
     },
     {
       "id": "ED-878",
@@ -74,12 +74,12 @@
       "severity": "resolved",
       "type": "contradiction",
       "status": "resolved-not-a-conflict",
-      "description": "RE-ASSESSED \u2014 NOT a contradiction (corrects my own ED-878 framing). Full read of threadwork_v30 \u00a73.2: L622 base table ('FR Lock/Dissolution any scale: -1 additional; min total -2') and L631-633 PP-196 ('Object/Personal: -1 total [scale 0 + FR -1]; Relational: -2 total [-1 scale + -1 FR]; FR surcharge cap-EXEMPT') describe ONE coherent rule across scales, not two competing values. The 'min total -2' holds at Relational+ where FR is typically used; PP-196 clarifies the smaller-scale totals and the cap-exemption. Independently corroborated at L177 (fieldwork note cites 'FR/Binding cap-exempt per PP-196' as established). PP-196 is a consistent elaboration, not a divergence. No patch needed; do not file as a contradiction. (CC-4 lesson: read fully before asserting a defect.)",
+      "description": "RE-ASSESSED — NOT a contradiction (corrects my own ED-878 framing). Full read of threadwork_v30 §3.2: L622 base table ('FR Lock/Dissolution any scale: -1 additional; min total -2') and L631-633 PP-196 ('Object/Personal: -1 total [scale 0 + FR -1]; Relational: -2 total [-1 scale + -1 FR]; FR surcharge cap-EXEMPT') describe ONE coherent rule across scales, not two competing values. The 'min total -2' holds at Relational+ where FR is typically used; PP-196 clarifies the smaller-scale totals and the cap-exemption. Independently corroborated at L177 (fieldwork note cites 'FR/Binding cap-exempt per PP-196' as established). PP-196 is a consistent elaboration, not a divergence. No patch needed; do not file as a contradiction. (CC-4 lesson: read fully before asserting a defect.)",
       "affected_docs": [
         "designs/threadwork/threadwork_v30.md"
       ],
       "source": "resolution_diagnostic T2 (session c93a36df)",
-      "jordan_decision": "n/a \u2014 false contradiction, resolved by full read"
+      "jordan_decision": "n/a — false contradiction, resolved by full read"
     },
     {
       "id": "ED-879",
@@ -87,14 +87,14 @@
       "severity": "P2",
       "type": "clarity",
       "status": "open",
-      "description": "Combat secondary consistency items (consolidated, C3/C5/C6). C3: out-of-bounds x Pool-Floor-5 interaction underspecified (does the floor apply when a combatant is pushed OOB?). C5: Health super-linear at low Endurance via (End+6)(MW+1) MW step (now also captured quantitatively in ED-826 + the I-1 win-rate refinement below). C6: Strength damage-multiplier vs Power terminology ambiguity. Combat is mechanically sound (NERS PASS); these are clarity/consistency, not balance. RE-ASSESSED: not evidence-patchable. C6 'Strength multiplier' appears only in Garrison Strength (settlement-defense formula, unrelated to the personal-combat Strength stat); personal combat uses clear floor(STR/2) terms \u2014 no live terminology conflict found. C3 out-of-bounds x Pool-Floor: no defined OOB mechanic surfaces in combat_v30 \u2014 it is underspecified-by-ABSENCE, and specifying what OOB should do is owner-intent (design), not an evidence patch. C5 already captured in ED-826. Combat is NERS-PASS; these are low-priority clarity items requiring Jordan's design intent, retained as such.",
+      "description": "Combat secondary consistency items (consolidated, C3/C5/C6). C3: out-of-bounds x Pool-Floor-5 interaction underspecified (does the floor apply when a combatant is pushed OOB?). C5: Health super-linear at low Endurance via (End+6)(MW+1) MW step (now also captured quantitatively in ED-826 + the I-1 win-rate refinement below). C6: Strength damage-multiplier vs Power terminology ambiguity. Combat is mechanically sound (NERS PASS); these are clarity/consistency, not balance. RE-ASSESSED: not evidence-patchable. C6 'Strength multiplier' appears only in Garrison Strength (settlement-defense formula, unrelated to the personal-combat Strength stat); personal combat uses clear floor(STR/2) terms — no live terminology conflict found. C3 out-of-bounds x Pool-Floor: no defined OOB mechanic surfaces in combat_v30 — it is underspecified-by-ABSENCE, and specifying what OOB should do is owner-intent (design), not an evidence patch. C5 already captured in ED-826. Combat is NERS-PASS; these are low-priority clarity items requiring Jordan's design intent, retained as such.",
       "affected_docs": [
         "designs/scene/combat_v30.md",
         "designs/scene/derived_stats_v30.md",
         "params/combat.md"
       ],
       "source": "resolution_diagnostic C3/C5/C6 (session c93a36df)",
-      "jordan_decision": "pending \u2014 C3/C6 need owner design intent (clarity, low priority); C5 -> ED-826"
+      "jordan_decision": "pending — C3/C6 need owner design intent (clarity, low priority); C5 -> ED-826"
     },
     {
       "id": "ED-880",
@@ -102,11 +102,11 @@
       "severity": "resolved-applied",
       "type": "contradiction",
       "status": "resolved-applied",
-      "description": "RESOLVED-APPLIED 2026-05-29. faction_layer \u00a7Varfell and params/bg/core asserted 'Varfell expansion is purely military / does not convert populations ideologically' \u2014 the rationale for the 2026-04-19 Cultural REFORMATION strike (VTM-dependent action; VTM was a placeholder, validly struck). But the Conviction-Track redesign (conviction_track_v30) reintroduced the ideological-conversion capability VTM-FREE as Cultural RECLAMATION (Varfell: Influence vs Ob 2, target-territory Piety -1 toward Einhir Restoration pole). The stale 'purely military' prose was never reconciled. Per Jordan 2026-05-29: Varfell takes ALL universal faction actions and has Cultural Reclamation as a non-military Piety-ALIGNMENT vector (NOT a control transfer, NOT a victory path). Reconciled the prose in faction_layer_v30 \u00a7Varfell + params/bg/core (L5 comment + L226 row) toward the live mechanic; Reformation + VTM remain struck. SOLE victory condition remains Peninsular Sovereignty (GD-1) \u2014 no faction-specific/religious/non-military victory path. Documentation reconciliation; no mechanical change (Cultural Reclamation was already live).",
+      "description": "RESOLVED-APPLIED 2026-05-29. faction_layer §Varfell and params/bg/core asserted 'Varfell expansion is purely military / does not convert populations ideologically' — the rationale for the 2026-04-19 Cultural REFORMATION strike (VTM-dependent action; VTM was a placeholder, validly struck). But the Conviction-Track redesign (conviction_track_v30) reintroduced the ideological-conversion capability VTM-FREE as Cultural RECLAMATION (Varfell: Influence vs Ob 2, target-territory Piety -1 toward Einhir Restoration pole). The stale 'purely military' prose was never reconciled. Per Jordan 2026-05-29: Varfell takes ALL universal faction actions and has Cultural Reclamation as a non-military Piety-ALIGNMENT vector (NOT a control transfer, NOT a victory path). Reconciled the prose in faction_layer_v30 §Varfell + params/bg/core (L5 comment + L226 row) toward the live mechanic; Reformation + VTM remain struck. SOLE victory condition remains Peninsular Sovereignty (GD-1) — no faction-specific/religious/non-military victory path. Documentation reconciliation; no mechanical change (Cultural Reclamation was already live).",
       "affected_docs": [
         "designs/provincial/faction_layer_v30.md",
         "params/bg/core.md",
-        "canon/supersession_register.yaml (CR-STRIKE/VTM entries still carry the historical 'purely military' rationale \u2014 flagged for editorial owner to add a forward-pointer to ED-880; not edited here to preserve the audit trail)"
+        "canon/supersession_register.yaml (CR-STRIKE/VTM entries still carry the historical 'purely military' rationale — flagged for editorial owner to add a forward-pointer to ED-880; not edited here to preserve the audit trail)"
       ],
       "source": "Jordan flag 2026-05-29; repo investigation (conviction_track_v30 Cultural Reclamation)",
       "jordan_decision": "reconcile toward live Cultural Reclamation; Reformation/VTM stay struck; Piety-alignment only (no control, no victory); peninsula sole victory (GD-1)"
@@ -117,13 +117,13 @@
       "severity": "P2",
       "type": "missing",
       "status": "resolved-applied",
-      "description": "RESOLVED-APPLIED to canon 2026-05-29 (Jordan-directed ratification). GD-3 (Revolt -> Insurgency -> Faction) has NO down-path: the pipeline can escalate but cannot DISSOLVE. Per ners_historical_precedent_matrix entry 4 (RAND, How Insurgencies End, 89 cases): insurgent defeat is the MODAL outcome; loss of sanctuary/sponsorship is the strongest predictor of defeat; ~10yr average duration. GD-3 currently cannot represent the most common real outcome -> NERS R-FAIL on the missing down-path. Recommend owner-authored multi-path dissolution: military defeat / sponsor-withdrawal / amnesty-negotiated / else-persist, with sponsor-withdrawal the high-value add. Surfaced by the precedent reconciliation, not by this session's faction-collapse work (collapse itself is bounded \u2014 ED-868). RESOLVED-CANDIDATE (insurgency_dissolution_proposal): tested 4-path down-path (military defeat / sponsor withdrawal / amnesty / persist) subsuming pipeline Options A/B as the military exit + adding the RAND-dominant sponsor path. 8k MC: defeat MODAL (0.97), sponsor-loss the dominant defeat driver tracking P(sponsor-loss) per RAND, amnesty a minority exit, stalemate reachable; Stage-4 found+fixed 2 defects (sponsor misattribution, amnesty over-fire). Completes pipeline forward-flags INSURGENCY-DISSOLUTION-001 + INSURGENCY-PROMOTED-DISSOLUTION-001. NOT written to canon (GD-3 \u00a7B requires Jordan ratification). Amnesty path uses the d+s resolver (ED-865/874 cross-dep).",
+      "description": "RESOLVED-APPLIED to canon 2026-05-29 (Jordan-directed ratification). GD-3 (Revolt -> Insurgency -> Faction) has NO down-path: the pipeline can escalate but cannot DISSOLVE. Per ners_historical_precedent_matrix entry 4 (RAND, How Insurgencies End, 89 cases): insurgent defeat is the MODAL outcome; loss of sanctuary/sponsorship is the strongest predictor of defeat; ~10yr average duration. GD-3 currently cannot represent the most common real outcome -> NERS R-FAIL on the missing down-path. Recommend owner-authored multi-path dissolution: military defeat / sponsor-withdrawal / amnesty-negotiated / else-persist, with sponsor-withdrawal the high-value add. Surfaced by the precedent reconciliation, not by this session's faction-collapse work (collapse itself is bounded — ED-868). RESOLVED-CANDIDATE (insurgency_dissolution_proposal): tested 4-path down-path (military defeat / sponsor withdrawal / amnesty / persist) subsuming pipeline Options A/B as the military exit + adding the RAND-dominant sponsor path. 8k MC: defeat MODAL (0.97), sponsor-loss the dominant defeat driver tracking P(sponsor-loss) per RAND, amnesty a minority exit, stalemate reachable; Stage-4 found+fixed 2 defects (sponsor misattribution, amnesty over-fire). Completes pipeline forward-flags INSURGENCY-DISSOLUTION-001 + INSURGENCY-PROMOTED-DISSOLUTION-001. NOT written to canon (GD-3 §B requires Jordan ratification). Amnesty path uses the d+s resolver (ED-865/874 cross-dep).",
       "affected_docs": [
         "canon/02_canon_constraints.md (GD-3)",
         "designs/provincial/faction_layer_v30.md"
       ],
       "source": "ners_historical_precedent_matrix entry 4 (RAND) via reconciliation 2026-05-29",
-      "jordan_decision": "RATIFIED to insurgency_pipeline \u00a76.2/\u00a76.3 per Jordan 2026-05-29"
+      "jordan_decision": "RATIFIED to insurgency_pipeline §6.2/§6.3 per Jordan 2026-05-29"
     },
     {
       "id": "ED-882",
@@ -131,9 +131,9 @@
       "severity": "P3",
       "type": "design_gap",
       "status": "resolved-applied",
-      "description": "RESOLVED-APPLIED to canon 2026-05-29 (Jordan-directed ratification). MS engine band edges were SYMMETRIC single thresholds (20/40/60), the one behavior real regime-shifts do not show. Ratified ED-882 to ms_trajectory_v1 \u00a75.1: (a) HYSTERESIS \u2014 recovery (rising) edges sit +8 MS above the collapse (falling) edges (28/48/68); falling direction unchanged (no regression to \u00a75 territory crossings); path-dependent, bounded below min band width (no skip), not a trap; (b) LEADING WARNING SIGNAL within 12 MS of an edge from above (critical-slowing analog, extends Fragile spontaneous Shifting Objects into a legible pre-tip trend). Precedent: Scheffer/Holling regime-shift (matrix entry 1) \u2014 MATCH. P-07 compliant (rendered-world band effects, not substrate healing); GD-1 unaffected. Params PROPOSED/tunable (gap +8, window 12).",
+      "description": "RESOLVED-APPLIED to canon 2026-05-29 (Jordan-directed ratification). MS engine band edges were SYMMETRIC single thresholds (20/40/60), the one behavior real regime-shifts do not show. Ratified ED-882 to ms_trajectory_v1 §5.1: (a) HYSTERESIS — recovery (rising) edges sit +8 MS above the collapse (falling) edges (28/48/68); falling direction unchanged (no regression to §5 territory crossings); path-dependent, bounded below min band width (no skip), not a trap; (b) LEADING WARNING SIGNAL within 12 MS of an edge from above (critical-slowing analog, extends Fragile spontaneous Shifting Objects into a legible pre-tip trend). Precedent: Scheffer/Holling regime-shift (matrix entry 1) — MATCH. P-07 compliant (rendered-world band effects, not substrate healing); GD-1 unaffected. Params PROPOSED/tunable (gap +8, window 12).",
       "affected_docs": [
-        "designs/world/ms_trajectory_v1.md \u00a75.1"
+        "designs/world/ms_trajectory_v1.md §5.1"
       ],
       "source": "ners_historical_precedent_matrix entry 1 (Scheffer/Holling) via reconciliation 2026-05-29",
       "jordan_decision": "RATIFIED per Jordan 2026-05-29 (gap +8 / window 12 tunable)"
@@ -146,20 +146,73 @@
     },
     {
       "refines": "ED-873",
-      "note": "continuity correction also pre-existing as ED-515; ED-873 (mine) and ED-515 cover the same fix (Ob-0.5) \u2014 flag for the consolidation owner to merge/cross-reference rather than carry two."
+      "note": "continuity correction also pre-existing as ED-515; ED-873 (mine) and ED-515 cover the same fix (Ob-0.5) — flag for the consolidation owner to merge/cross-reference rather than carry two."
     }
   ],
   "deferred_pending_verification": [
-    "SC3 genre-weight 0.5 near-inert (D-01), SC4 Regroup-on-Spent (D-04), SC5 Focus-1 Regroup trap (D-05): NOT filed \u2014 status needs a currency check first (these are pre-flagged 2026-04-08 stress-test items whose post-patch status is unverified). File only after verifying against current social_contest canon.",
+    "SC3 genre-weight 0.5 near-inert (D-01), SC4 Regroup-on-Spent (D-04), SC5 Focus-1 Regroup trap (D-05): NOT filed — status needs a currency check first (these are pre-flagged 2026-04-08 stress-test items whose post-patch status is unverified). File only after verifying against current social_contest canon.",
     "T7 COMPOSURE-DRIFT: already in live ledger (do not re-file)."
   ],
-  "_cc4_update": "ED-877 resolved-was-unread (recovery = \u00a71.3 Institutional Consolidation); ED-876 strengthened P2->P1 (CC-5 collapse-level cliff). See cc4_resolution.md.",
+  "_cc4_update": "ED-877 resolved-was-unread (recovery = §1.3 Institutional Consolidation); ED-876 strengthened P2->P1 (CC-5 collapse-level cliff). See cc4_resolution.md.",
   "_stage4_update": "Faction remediation Stage-4 tested (faction_remediation_development.md): ED-876 Fix-A is a clean win (recommend); ED-865 floor degeneracy fixable by EITHER aggregation or deterministic+stochastic; ED-874 sigma-leverage fixable ONLY by deterministic+stochastic. Design fork surfaced for Jordan.",
   "_ed876_applied": "ED-876 Fix-A applied to faction_layer_v30 (commit 2327adc4): Condition-C pool>=6 cliff removed from gate, kept as cost escalator. Ledger ingestion of resolved status is the JSONL migration's.",
   "_ed880": "Varfell 'purely military' prose reconciled to live Cultural Reclamation (Piety-alignment, non-military, VTM-free); applied to faction_layer + params/bg/core; sole victory = peninsula (GD-1).",
-  "_resolver_spec": "Domain Action deterministic+stochastic resolver spec produced (tested candidate, Stage-4 PASS). Two-phase migration recommended: Domain Actions first; Suppress/Rebuttal/\u00a71.4 as a consistency set. Not applied \u2014 Jordan's adopt/tune decision.",
-  "_precedent_reconciliation": "Reconciled vs ners_historical_precedent_matrix.md (2026-05-28). NO conflicts; every faction remediation confirmed or strengthened by precedent. ED-868 collapse loop = RESOLVED-BOUNDED (matrix/Tainter: collapse=simplification+reconstitution; diagnostic Lesson-5 RETRACTED) \u2014 sim confirms bounds REACHABLE but resolver-dependent (bare dice make reconstitution near-unreachable at low Influence P~0.004; d+s makes it real -> SECOND justification for ED-865/874). ED-876 backed by morale-cascade precedent (du Picq/Clausewitz, matrix entry 7). ED-865/874 backed by COIN/structural-contest precedent (matrix entry 2: outcomes are structure-driven w/ stochastic tail = exactly deterministic-odds+stochastic-resolution). See reconciliation_session_vs_precedent_matrix.md + sim_collapse_recovery_results.md.",
-  "_gap_sweep_2026-05-29": "Open-gap sweep: ED-878 RE-ASSESSED as a false contradiction (PP-196 is a consistent cross-scale elaboration, not a competing value) \u2014 corrects my own earlier framing. ED-879 C3/C6 re-assessed as needing owner design intent (not evidence-patchable); C5 -> ED-826. ED-874/875 sigma-leverage remediation = the d+s resolver candidate (Jordan adopt). ED-881 down-path = tested candidate (Jordan ratify). Net: no remaining gap is unilaterally patchable by Claude without either (a) owner design intent or (b) Jordan ratification of a tested candidate. All evidence-resolvable items resolved.",
+  "_resolver_spec": "Domain Action deterministic+stochastic resolver spec produced (tested candidate, Stage-4 PASS). Two-phase migration recommended: Domain Actions first; Suppress/Rebuttal/§1.4 as a consistency set. Not applied — Jordan's adopt/tune decision.",
+  "_precedent_reconciliation": "Reconciled vs ners_historical_precedent_matrix.md (2026-05-28). NO conflicts; every faction remediation confirmed or strengthened by precedent. ED-868 collapse loop = RESOLVED-BOUNDED (matrix/Tainter: collapse=simplification+reconstitution; diagnostic Lesson-5 RETRACTED) — sim confirms bounds REACHABLE but resolver-dependent (bare dice make reconstitution near-unreachable at low Influence P~0.004; d+s makes it real -> SECOND justification for ED-865/874). ED-876 backed by morale-cascade precedent (du Picq/Clausewitz, matrix entry 7). ED-865/874 backed by COIN/structural-contest precedent (matrix entry 2: outcomes are structure-driven w/ stochastic tail = exactly deterministic-odds+stochastic-resolution). See reconciliation_session_vs_precedent_matrix.md + sim_collapse_recovery_results.md.",
+  "_gap_sweep_2026-05-29": "Open-gap sweep: ED-878 RE-ASSESSED as a false contradiction (PP-196 is a consistent cross-scale elaboration, not a competing value) — corrects my own earlier framing. ED-879 C3/C6 re-assessed as needing owner design intent (not evidence-patchable); C5 -> ED-826. ED-874/875 sigma-leverage remediation = the d+s resolver candidate (Jordan adopt). ED-881 down-path = tested candidate (Jordan ratify). Net: no remaining gap is unilaterally patchable by Claude without either (a) owner design intent or (b) Jordan ratification of a tested candidate. All evidence-resolvable items resolved.",
   "_resolver_ratified": "d+s resolver RATIFIED to canon (stats_1_7_scale, commit pending). ED-874 resolved-applied; ED-865 closed with it.",
-  "_ed881_ratified": "ED-881 dissolution down-path RATIFIED to insurgency_pipeline \u00a76.2/\u00a76.3 (4-path, RAND-validated). Closes GD-3 R-FAIL."
+  "_ed881_ratified": "ED-881 dissolution down-path RATIFIED to insurgency_pipeline §6.2/§6.3 (4-path, RAND-validated). Closes GD-3 R-FAIL.",
+  "_ci_political_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of ci_political_v30 (Stages 1-4) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "self_authored_bias_note": "prior handoff over-claimed 'faction cluster diagnostic COMPLETE'; actual prior scope = action layer + spillover. ci_political (+~10 provincial systems) never run.",
+    "RETRACTION": "In-chat draft Finding A claimed CI bonus dice cause sqrt(N) non-uniformity on Parliament ROLLS. RETRACTED: faction_layer §5.3 resolves Parliament as a DETERMINISTIC Mandate TALLY (votes=Mandate, Majority/Supermajority), not a dice pool. Error = pattern-match off ci_political §7.2 stale '10D vs Ob 2' framing instead of authoritative §5.3.",
+    "decomposition": {
+      "parliament_motion": "deterministic Mandate tally (faction_layer §5.3) — NO roll",
+      "rebuttal_diplomacy_domain_actions": "d+s RESOLVER (stats_1_7_scale, ED-865/874) — NO dice",
+      "treaty_positioning_ratification": "raw d10 pool vs Ob 2 (faction_layer §3.3) — dice, NOT resolver-migrated"
+    },
+    "verdict": {
+      "N": "PASS — CI one-quantity, milestone ladder, card economy necessary; do NOT split CI",
+      "R": "FAIL — (i) DEFINITIONAL GAP: §3.3/§3.4 opponent -floor(CI/30) undefined below 0 (CI>=90 Mandate-2 -> -1 votes -> 112.5% FOR-share). (ii) §2.2 stale 'Theocracy Unification VICTORY' vs GD-1 + §7.1.",
+      "S": "FAIL — CI modifier single 'bonus dice'/'pool' paradigm (§3.2/§3.4) attaches to THREE resolution methods (tally/resolver/raw dice); inconsistent. §4.2/§4.3 Govern/Trade prose legacy-dice post-migration; §5.3 lacks CI-vote-modifier cross-ref.",
+      "E": "PASS — fix improves it (fewer paradigms)"
+    },
+    "findings": [
+      {
+        "prov_id": "CIP-1",
+        "severity": "P2",
+        "lens": "S(+R gap)",
+        "summary": "CI political-forum modifier paradigm-mismatched to 3 resolution methods + undefined negative-vote floor",
+        "fix": "Parliament(tally): CI=VOTE-COUNT modifier, Church +floor(CI/20), opponent-of-Church -floor(CI/30) FLOORED AT 0. Rebuttal/Diplomacy/Domain Actions(resolver): CI=MARGIN term in M (constant +10%/pt; FLOOR 0.05 -> no wall). Treaty(raw dice): OPEN — migrate to resolver (CI=margin) OR keep dice (residual sqrt(N)).",
+        "stage4": "floor removes undefined-negative, monotone, no new cliff; resolver-margin uniform+floor; no new variable; fewer paradigms. High-CI Church dominance PRESERVED.",
+        "open_design_choice_JORDAN": "Treaty-roll migration timing: now vs defer with Suppress/Rebuttal/§1.4 batch."
+      },
+      {
+        "prov_id": "CIP-2",
+        "severity": "P3",
+        "lens": "R/consistency",
+        "summary": "§2.2 stale Theocracy Unification VICTORY vs GD-1 + §7.1",
+        "fix": "strike/reconcile §2.2 victory language to Peninsular-Sovereignty-only; Mass Seizure = recoverable territorial event, not victory trigger. Parallel ED-880. GD-1 strike-propagation does not currently list §2.2 — propagates it.",
+        "stage4": "prose-only; demotes Mass Seizure Phase-2 stakes."
+      },
+      {
+        "prov_id": "CIP-3",
+        "severity": "P3",
+        "lens": "S/prose",
+        "summary": "§4.2/§4.3 Govern/Trade legacy-dice prose post-resolver; §5.3 lacks CI-vote-modifier cross-ref",
+        "fix": "annotate §4.2/§4.3 resolver-governed (point to stats_1_7_scale §Domain Action Resolution); add §5.3 cross-ref to ci_political §3.4.",
+        "stage4": "mechanically covered by ED-865/874; prose/co-ref only."
+      }
+    ],
+    "provisional_id_note": "NO live ED IDs claimed (94-ID-conflict backlog + migration-owner authority). Owner assigns final IDs on ingest.",
+    "canon_writes_status": "HELD for Jordan: ci_political canon edits drafted/ready (§2.2 strike, §3.2/§3.4 rewrite, §4.2/§4.3 annotation, §5.3 cross-ref). Canon write = ratification step (ED-865/874 precedent). CIP-1 has one design choice (Treaty migration timing).",
+    "citations": [
+      "designs/provincial/ci_political_v30.md",
+      "designs/provincial/faction_layer_v30.md (§5.3-§5.6,§3.2-§3.3,Trigger3,§9)",
+      "params/factions/stats_1_7_scale.md (§Domain Action Resolution)",
+      "canon/02_canon_constraints.md (GD-1)"
+    ]
+  }
 }
