@@ -2,25 +2,21 @@ id: 2026-05-29-resolution-diagnostic-faction-ratifications
 scope: audit
 task:
   skill: valoria-resolution-diagnostic
-  description: 'Resolution-and-balance diagnostic of the faction cluster. CORRECTION
-    (2026-05-30): the prior ''cluster COMPLETE'' claim was an OVER-CLAIM — only the
-    faction ACTION LAYER (+ spillover: resolver ED-865/874, insurgency ED-881, MS
-    hysteresis ED-882, trigger-5 ED-876, Varfell ED-880) had been decomposed. ~10
-    other canonical faction/provincial systems were never run. This session (under
-    Jordan design-authority grant) decomposed + ratified TWO more: (A) ci_political_v30
-    — NON-COMPLIANT -> fixed: CIP-1 CI political-forum weight made paradigm-consistent
-    (Parliament=Mandate tally w/ +floor(CI/20) Church votes & opponent max(0,Mandate-floor(CI/30))
-    FLOORED AT 0; resolver checks =margin), CIP-2 §2.2 Theocracy-Unification VICTORY
-    struck per GD-1, CIP-3 Govern/Trade prose; PLUS Treaty positioning+ratification
-    MIGRATED to the d+s resolver (precedent: power-structural treaty-making) across
-    ci_political/faction_layer/stats_1_7_scale (commit 270915da). (B) peninsular_strain_v30
-    — NERS-COMPLIANT after PST-1 (extended ED-882''s 12-MS leading warning to the
-    MS<=12 approach to MS=0; commit c3b805fc). REMAINING uncovered faction/provincial
-    systems (never diagnosed): faction_politics, faction_behavior, faction_state_authoring,
-    parliamentary_transfer, treaty_expiration, faction_succession_split, clock_registry,
-    faction_canon. PRE-EXISTING owner-design items still open: ED-879 C3 (OOB combat)
-    and ED-875 (mass-battle sigma-leverage).'
-last_commit: c3b805fc882183d3696825427418274aca24fef5
+  description: 'Resolution-and-balance diagnostic of the faction/provincial cluster.
+    The prior ''cluster COMPLETE'' claim was an OVER-CLAIM (only the action layer
+    was decomposed). This session (Jordan design-authority grant) decomposed ALL 10
+    previously-uncovered faction/provincial systems via the valoria-resolution-diagnostic
+    skill. CLUSTER NOW COMPLETE. RATIFIED to canon (precedent-anchored, not balance-pinned):
+    ci_political (CIP-1/2/3 + Treaty->resolver migration, 270915da), peninsular_strain
+    (PST-1 MS=0 warning, c3b805fc), faction_succession_split (FSS-1 two-stage gap-keyed
+    split, 7f96ede3), faction_state_authoring + faction_behavior (FSA-1 GD-1 victory-framing
+    reconciliation, c1a11c31). NERS-COMPLIANT (no canon change needed): faction_behavior
+    (dominant-strategy already sim-fixed C1 ±2), faction_politics (rank-ladder; resolution
+    routes to existing personal engines), clock_registry (registry, no mechanic),
+    treaty_expiration (tuned random event, intended), faction_canon (consolidation
+    artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
+    (keys _<system>_diagnostic_2026-05-30).'
+last_commit: 47f7e6c1eda0bc40474478d2eb917a7c165241f1
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -30,6 +26,9 @@ owns:
 - designs/provincial/faction_layer_v30.md (§3.3 Treaty resolver migration; §5.3 CI
   cross-ref)
 - designs/provincial/peninsular_strain_v30.md (§6.4 — PST-1 pointer)
+- designs/provincial/faction_succession_split_v30.md
+- designs/provincial/faction_state_authoring_v30.md (§1)
+- designs/provincial/faction_behavior_v30.md (§3.1)
 context_files:
 - path: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
   depth: full
@@ -132,7 +131,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-30T19:05:20.194597+00:00'
+updated: '2026-05-30T20:47:42.210985+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
@@ -158,3 +157,71 @@ session_2026_05_30_additions:
   - faction_succession_split_v30
   - clock_registry_v30
   - faction_canon_v30
+session_2026_05_30_cluster_complete:
+  systems_diagnosed_10:
+  - ci_political (RATIFIED 270915da)
+  - peninsular_strain (RATIFIED c3b805fc)
+  - faction_succession_split (RATIFIED 7f96ede3)
+  - faction_state_authoring+faction_behavior (RATIFIED FSA-1 c1a11c31)
+  - faction_behavior (NERS-pass, candidate)
+  - faction_politics (NERS-pass, candidate b538f9f6)
+  - clock_registry (NERS-pass, candidate c11fb0cb)
+  - treaty_expiration (NERS-pass, candidate 0551905b)
+  - parliamentary_transfer (R/S-fail, candidate sim-deferred e01608eb)
+  - faction_canon (NERS-pass consolidation, candidate 47f7e6c1)
+  commits:
+  - 84de52cf
+  - 270915da
+  - c3b805fc
+  - e01608eb
+  - 0551905b
+  - 7f96ede3
+  - c11fb0cb
+  - c7c7e8e7
+  - b538f9f6
+  - c1a11c31
+  - 47f7e6c1
+  - 74d172fc (handoff)
+  disposition_framework: 'RATIFY (precedent-anchored + not balance-pinned) | SIM-DEFER
+    (correct fix but moves v12c N=1000 equilibrium) | ROUTE (outside resolution/balance:
+    registry hygiene, metaphysics citations, status, schema, editorial).'
+  CONSOLIDATED_SIM_DEFERRED_resolver_migration_set:
+    finding_class: Residual bare-stat faction checks structurally identical to the
+      ED-865/874 resolver-governed set but still on raw dice AND pinned to the v12c
+      N=1000 balance equilibrium (Crown 24.7/Church 28.6/HF 24.2/Varfell 22.5). Migrating
+      each to the d+s resolver is correct in principle but shifts the validated win-rates
+      (resolver FLOOR raises weak-side odds) => requires SIM re-validation, NOT chat-side
+      hand-set.
+    members:
+    - 'parliamentary_transfer core roll (PT-PARL-1: Proposer Influence vs Holder Legitimacy+2)'
+    - 'treaty_expiration Senator Outward re-bind (TE-1: Influence+Standing vs target
+      Sta)'
+    - 'Crown Royal Decree (FCN-1: Legitimacy vs Ob 2)'
+    - 'Church Excommunication (FCN-1: L vs target-L / Ob 2)'
+    - 'Church CI-60 Territorial Seizure (FCN-1: L vs floor(target L/2)+1)'
+    - 'Hafenmark Sovereign Authority Doctrine (FCN-1: L vs Ob 4)'
+    - 'Varfell Private Collection (FCN-1: Intel vs Ob 2)'
+    route: faction-balance sim line (owns v12c) — migrate-and-revalidate each at N=1000
+      so the 20-30% band holds; confirm authoritative resolution method in each SOURCE
+      doc first (faction_canon §9 is a consolidation, not authoritative).
+  ROUTED_editorial_items:
+  - CKREG-DRIFT-1 (Accord "Restive" vs canonical "Resistant")
+  - CKREG-DRIFT-2 (Reputation/Standing mis-cite P-14/P-15 metaphysics constraints
+    — FLAG-ONLY, owner supplies correct ref)
+  - FP-STATUS-1 / FSA-STATUS-1 / FCN-STATUS (cluster-wide PP-686 CANONICAL-vs-PROVISIONAL
+    status contradiction)
+  - FCN-SCHEMA (§5.2/5.3 6-stat vs 7-stat schema conflict)
+  - FCN-GD1 (faction_canon Win-path framing inherits FSA-1 on regeneration)
+  - CSRC-SIZE-1 (references/canonical_sources.yaml at its 9,000-token pre_commit_gate
+    ceiling — archive old provenance notes to restore headroom)
+  - FB-VET-M2 (faction_behavior vetting M-2 "○", PP-674 axis)
+  - PARL-CB-001 (parliamentary_transfer Partial "replaces consumed CB" bypasses CB-economy
+    damper — intent review)
+  WATCH:
+  - faction_politics §3.6.2 Conviction Reformation arc — catastrophic-on-Failure on
+    single Spirit Ob 3 roll; recoverable+heavily-gated; reconsider if sim shows it
+    firing readily
+  corrections_logged:
+  - 'ci_political RETRACTION: in-chat sqrt(N)-on-Parliament finding was WRONG (Parliament
+    = deterministic Mandate tally, faction_layer §5.3, not dice) — retracted; committed
+    verdict is corrected.'
