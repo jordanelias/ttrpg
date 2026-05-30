@@ -38,9 +38,9 @@ STAMINA_PER_SPIRIT = 2             # [canonical: derived_stats §4.2 -- proposed
 # At End3/Spi3: 3*3 + 2*3 = 15 (matches old End3 Stamina = 15). End raises durability+reserve; Spirit raises reserve only.
 
 # ===== Class C-proposed: Strength leverage channel magnitudes (new mechanics; sim-tunable) =====
-STR_BIND_PER_POINT = LEVEL_SIGMA["minor"]         # [canonical: armature-seed -- bind-win dsig per Str point of advantage; sim-tunable]
-STR_STAGGER_WINDOW = LEVEL_SIGMA["strong"]         # [canonical: armature-seed -- sigma-window opened on the next strike by a heavy Overwhelming hit; sim-tunable]
-STR_ARMOUR_DEFEAT_WINDOW = LEVEL_SIGMA["moderate"] # [canonical: armature-seed -- leverage window from defeating armour with a heavy/blunt profile at sufficient Str; sim-tunable]
+STR_BIND_PER_POINT = LEVEL_SIGMA["minor"] / 2         # [canonical: armature-seed -- bind-win dsig per Str point of advantage; sim-tunable]
+STR_STAGGER_WINDOW = LEVEL_SIGMA["minor"]         # [canonical: armature-seed -- sigma-window opened on the next strike by a heavy Overwhelming hit; sim-tunable]
+STR_ARMOUR_DEFEAT_WINDOW = LEVEL_SIGMA["minor"] / 2 # [canonical: armature-seed -- leverage window from defeating armour with a heavy/blunt profile at sufficient Str; sim-tunable]
 STR_STAMINA_EFFICIENCY = 1         # [canonical: armature-seed -- per-point Str above weapon req reduces per-action Stamina cost by this; below req raises it; sim-tunable]
 
 
