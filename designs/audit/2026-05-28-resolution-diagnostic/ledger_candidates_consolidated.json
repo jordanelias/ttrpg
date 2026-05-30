@@ -214,5 +214,34 @@
       "params/factions/stats_1_7_scale.md (§Domain Action Resolution)",
       "canon/02_canon_constraints.md (GD-1)"
     ]
+  },
+  "_peninsular_strain_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of peninsular_strain_v30 (Stages 1-4) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "decomposition": "Strain 0-10 (accumulator, 4 spaced thresholds) + Accord 0-3 (per-territory, derived floor(mean Order)) + IP (accumulator, stepwise) + dice sub-actions (Govern/Seizure/DynProc = resolver-governed; Popular Uprising = bare-stat Military vs Ob2).",
+    "verdict": {
+      "N": "PASS — Strain/Accord/IP/toolkits all necessary; no redundancy; no over-apparatus.",
+      "R": "PASS — Strain advance capped (+3/season) and damped (decay -1 + treaty pairs -2); §4.4 Strain<->IP cross-feed explicitly broken; Accord-0/Order-0 co-trigger deterministically ordered (§2.4b ED-632, paired safeguard); Popular Uprising binary is RECOVERABLE (Uncontrolled, not faction-death) and not a pivotal-irreversible roll (Lesson-3 scope). MS=0 Post-Calamity is intended (P-07) + safeguarded (recovery path).",
+      "S": "FAIL (single, minor) — PST-1: the MS=0 Post-Calamity transition (§6.4) had NO leading warning; ED-882's ratified warning band covers only the 20/40/60 edges. By ED-882's own Scheffer/Holling precedent (deepest bifurcation = where critical-slowing warning matters most) the deepest tip should also signal. Smooth/legibility drift, not an R/loop defect.",
+      "E": "PASS — accumulators are legible; thresholds intuitable; fix adds no new threshold."
+    },
+    "finding": {
+      "prov_id": "PST-1",
+      "severity": "P3",
+      "lens": "S / consistency-with-ratified-ED-882",
+      "fix": "Extend ED-882's 12-MS leading-warning window to the MS<=12 approach toward MS=0 (falling direction only). Forward-pointer added in peninsular_strain §6.4. No new threshold; MS=0 trigger + recovery unchanged.",
+      "stage4": "falling-direction signal only; adds no threshold, no loop, no cliff; consistent-by-construction with §5.1; NERS N/R/E unaffected, S restored.",
+      "precedent": "Scheffer/Holling regime-shift critical-slowing (same anchor as ED-882, matrix entry 1)."
+    },
+    "applied_canon": [
+      "designs/world/ms_trajectory_v1.md §5.1 (PST-1 warning extension)",
+      "designs/provincial/peninsular_strain_v30.md §6.4 (forward-pointer)"
+    ],
+    "citations": [
+      "designs/provincial/peninsular_strain_v30.md (§1-§10 full)",
+      "designs/world/ms_trajectory_v1.md (§5/§5.1 ED-882)",
+      "canon/02_canon_constraints.md (GD-1, P-07)"
+    ]
   }
 }
