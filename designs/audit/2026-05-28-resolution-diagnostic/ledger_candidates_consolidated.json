@@ -272,5 +272,35 @@
       "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.4/§5 (referenced, balance source)",
       "canon/02_canon_constraints.md (GD-1, GD-3)"
     ]
+  },
+  "_treaty_expiration_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of treaty_expiration_v30 (Stages 1-4) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "decomposition": "(1) Lapse check: per-Treaty independent Bernoulli(0.90) at arc boundary — a TUNED RANDOM EVENT, no actor stat feeds it, memoryless. (2) Re-bind: Senator Outward (Pool=Influence+Standing, Ob=target Sta) — bare-stat, resolver-eligible. (3) Violation: deterministic consequence table.",
+    "verdict": {
+      "N": "PASS — the PRIMARY Crown-nerf lever; without it Crown 55-90% (fails balance). Necessary.",
+      "R": "PASS — lapse bounded+memoryless, safeguarded by Senator Outward re-bind; re-bind<->lapse is NEGATIVE (self-damping) feedback; violation deterministic; no runaway, no undefined state.",
+      "S": "PASS (with note TE-1) — re-bind (Senator Outward) is RAW DICE while sibling faction actions are resolver-governed (ED-865/874). Paradigm-consistency gap, balance-pinned (see TE-1).",
+      "E": "PASS — lapse model dead-simple. The 90% 'narrative extremity' the doc flags (§4) is a FEEL critique with a doc-owned deferred alternative (active-maintenance), NOT a NERS resolution defect."
+    },
+    "overall": "NERS-COMPLIANT.",
+    "finding": {
+      "prov_id": "TE-1",
+      "severity": "P3",
+      "lens": "Smooth / paradigm-consistency (== PT-PARL-1 class)",
+      "summary": "Senator Outward Treaty re-bind is a bare-stat faction action (Influence+Standing vs Ob=target Sta) still on raw dice post-ED-865/874, paradigm-inconsistent with the migrated faction layer.",
+      "fix_in_principle": "Migrate re-bind to the d+s resolver (M = (Influence+Standing-mod) - difficulty(target Sta)).",
+      "BLOCKER": "BALANCE-LOAD-BEARING — the re-bind SUCCESS RATE sets the Crown per-arc treaty-maintenance cost the v12c N=1000 equilibrium depends on (Crown 24.7%). Resolver FLOOR/CAP would shift it. Needs SIM re-validation, NOT a chat-side hand-set ratify.",
+      "disposition": "[OPEN: needs sim re-validation] — identical class & routing as PT-PARL-1. Route to the faction-balance sim line (v12c) / Jordan. NO canon change applied."
+    },
+    "note": "90% lapse narrative-extremity (§4 active-maintenance alternative) is a Jordan FEEL/design decision, doc-owned & deferred (would require sim re-validation). Not a defect; not Claude's to ratify.",
+    "canon_writes": "NONE — clean NERS-compliant verdict; the one residual (TE-1) is balance-pinned and sim-deferred.",
+    "citations": [
+      "designs/provincial/treaty_expiration_v30.md (§1-§10 full)",
+      "params/factions/stats_1_7_scale.md (§Domain Action Resolution ED-865/874)",
+      "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md §4.5/§5 (balance source, referenced)",
+      "canon/02_canon_constraints.md (GD-1)"
+    ]
   }
 }
