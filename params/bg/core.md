@@ -160,15 +160,16 @@ PV hierarchy: 5 = Crown/Church capital · 4 = duchy/faction seat · 3 = fortress
 <!-- [PP-686 v2 NOTE 2026-05-01] Mandate is now derived per designs/provincial/faction_behavior_v30.md §4: Mandate = round(0.5 × Legitimacy + 0.5 × Popular_Support). Starting Mandate values below are preserved as initial conditions: Legitimacy_init = Popular_Support_init = current authored Mandate. After first Accounting, dynamics replace seed values. See L+PS Starting Values section below. -->
 
 ## Faction Starting Stats (v04 B5)
-| Faction | Legitimacy | Popular_Support | Influence | Wealth | Military | Stability |
-|---------|------------|------------------|-----------|--------|----------|-----------|
-| Crown | 5 | 5 | 5 | 4 | 5 | 4 |
-| Church | 5 | 5 | 6 | 5 | 4 | 5 |
-| Hafenmark | 4 | 4 | 4 | 5 | 3 | 4 |
-| Varfell | **4** | **4** | 4 | **4** | 4 | 4 |
-| Restoration Movement | — | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
-| Löwenritter (Split) | 3 | 3 | 2 | 3 | 5 | 5 |
-| Guilds (NPC) | 3 | 3 | 4 | 6 | 2 | 5 |
+| Faction | Legitimacy | Popular_Support | Influence | Wealth | Military | Intel | Stability |
+| --------- | ------------ | ------------------ | ----------- | -------- | ---------- | ------- | ----------- |
+| Crown | 5 | 5 | 5 | 4 | 5 | 3 | 4 |
+| Church | 5 | 5 | 6 | 5 | 4 | 4 | 5 |
+| Hafenmark | 4 | 4 | 4 | 5 | 3 | 3 | 4 |
+| Varfell | **4** | **4** | 4 | **4** | 4 | 4 | 4 |
+| Restoration Movement | — | — | — | — | — | — | — | No faction stats. Operates via Presence markers and Community Weaving only. (PP-460) |
+| Löwenritter (Split) | 3 | 3 | 2 | 3 | 5 | 3 | 5 |
+| Guilds (NPC) | 3 | 3 | 4 | 6 | 2 | 4 | 5 |
+<!-- [RECONCILED 2026-05-30, session 801b97c5: Intel column added per canonical 7-stat schema (ED-787; values from params/factions/stats_1_7_scale.md — Crown 3, Church 4, Hafenmark 3, Varfell 4, Löwenritter 3, Guilds 4). Gap-fill only; existing values untouched. UNRESOLVED (Jordan): Crown Military here=5 CONFLICTS with stats_1_7_scale.md=4 (direction undetermined). See ED-869. Jordan-vetoable. ] -->
 
 CORRECTIONS (PP-191/PP-195/ED-809/ED-810): Varfell L 4, PS 4 (seed equal per PP-686 v2 / 2026-05-02 ED-784 — was unsplit Mandate 4), Wealth 4. Varfell starts with 4 territories (T4/T11/T12/T13). Handicap is defensive: mountain range + Thread Wounds hem in expansion. Handicap is defensive: mountain range + Thread Wounds hem in expansion. Intelligence path is correct. Fortification constraint (PP-191) applies to outward expansion, not inward security. CI = 28 (P-32). CI Mass Seizure threshold = 60, cap = 100 (per victory_v30.md §7).
 
