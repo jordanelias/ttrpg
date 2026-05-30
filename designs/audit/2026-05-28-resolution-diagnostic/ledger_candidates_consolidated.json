@@ -370,5 +370,34 @@
       "canon/02_canon_constraints.md (P-14/P-15)",
       "params/factions/stats_1_7_scale.md (Mandate range)"
     ]
+  },
+  "_faction_behavior_diagnostic_2026-05-30": {
+    "task": "resolution-and-balance diagnostic of faction_behavior_v30 (PP-686 v2, Class-A) — NEW system, never previously decomposed",
+    "skill": "valoria-resolution-diagnostic",
+    "date": "2026-05-30",
+    "decomposition": "Class-A behavior architecture (Mission/Cascade/Public-Expectation/Legitimacy+Popular-Support). Mostly DETERMINISTIC accounting (no dice). The one resolution-relevant output is §3.7 Domain Action Ob_modifier feeding the (resolver-governed) DA roll. Stage-10 sim PASS (12/14 battery); ±3->±2 dominant-strategy fix already applied (C1).",
+    "verdict": {
+      "N": "PASS — replaces legacy Ethical Framework Modifiers; Legitimacy/Popular-Support split is necessary (Mandate-as-single-scalar lost information).",
+      "R": "PASS — §3.7 Ob_modifier clamped ±2; all feedback loops bounded+damped (hard caps: Legitimacy/PS [0,7], cascade_fidelity [-1,1], Ob ±2, λ<1, drift_coef 0.6). Crisis-bypass (scars>=3 suspends damping) is undamped-but-BOUNDED (intended visible-instability window; downstream still clamped) => PASSES Lesson 5 (not undamped+unbounded).",
+      "S": "PASS — §3.7 Ob_modifier feeds the d+s resolver and INHERITS its uniform Ob->probability impact (a +1 Ob = constant -0.20 P by ED-865/874 design); Lesson-2 satisfied downstream; consistent with the migrated faction layer.",
+      "E": "PASS (with caveat) — architecture is complex (4 components, cascade graphs, 13-Conviction vectors) but the complexity is load-bearing (dynamic emergent behavior) and the player-facing OUTPUT is a legible ±2 Ob shift. Necessity-justified."
+    },
+    "overall": "NERS-COMPLIANT (resolution/balance lens). No new finding.",
+    "notes": [
+      "The headline dominant-strategy risk (±3 producing dominant-strategy at high alignment) was ALREADY caught and fixed (C1 ±2 cap) and sim-validated (v1+v2). No re-finding.",
+      "§3.7 rounding (strictness crossing 0.5 flips expectation term 0->±1) is a gentle threshold on a SLOW accumulator (Legitimacy/PS integrate over seasons), not an accidental cliff on a fast input — acceptable/legible.",
+      "Mandate now DERIVED (0.5L+0.5PS) — Lesson-1 role-split already done correctly (L=acceptance, PS=active backing carry distinct jobs)."
+    ],
+    "flag_routed": {
+      "id": "FB-VET-M2",
+      "detail": "Vetting block §7 rates M-2 '○' (the only non-pass; all else +/✓). M-2 is a PP-674/throughlines-meta vetting axis not defined in this doc; whether it's a resolution/balance gap cannot be determined here. [UNDETERMINED — non-resolution vetting axis]. Routed to the vetting/PP-674 owner. NOT a resolution defect.",
+      "severity": "P3-flag"
+    },
+    "canon_writes": "NONE — clean NERS-compliant verdict; no resolution/balance change warranted.",
+    "citations": [
+      "designs/provincial/faction_behavior_v30.md (§1-§8 full)",
+      "params/factions/stats_1_7_scale.md (§Domain Action Resolution ED-865/874)",
+      "canon/02_canon_constraints.md"
+    ]
   }
 }
