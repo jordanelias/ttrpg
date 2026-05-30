@@ -334,8 +334,10 @@ Any active faction may declare treaty intent as a **Senator (Social) action** in
 
 ### §3.3 Negotiation Structure (Three Phases)
 
-**Phase 1 — Positioning roll.**
-Both parties roll Influence vs Ob 2. Higher net successes controls opening terms (sets first demand). Tie: higher current Mandate controls.
+> **[ED-865/874 migration, 2026-05-30]** Phase-1 positioning and Phase-3 ratification resolve via the deterministic+stochastic resolver (params/factions/stats_1_7_scale.md §Domain Action Resolution), not bare d10 pools. Precedent: early-modern treaty-making is power-structure-decisive (terms track the Mandate/Influence balance; chance is a tail) — the resolver's shape, and it removes the small-pool ratification wall (a Mandate-2 faction no longer fails to ratify its own negotiated treaty ~84% of the time).
+
+**Phase 1 — Positioning roll (resolver, contested).**
+Initiator resolves **M = own Influence − target Influence**. Success or Overwhelming → initiator controls opening terms (sets first demand); Partial → terms split, neither controls (tie-break: higher current Mandate controls); Failure → target controls opening terms.
 
 **Phase 2 — Concession declaration.**
 No roll. Players/GM declare demands and concessions. Available concession categories:
@@ -349,8 +351,8 @@ No roll. Players/GM declare demands and concessions. Available concession catego
 | Military restriction | No military_advance vs specified territories for N seasons |
 | Recognition | Formal acknowledgment of territorial claim |
 
-**Phase 3 — Ratification roll.**
-Each signatory rolls Mandate vs Ob 2.
+**Phase 3 — Ratification roll (resolver).**
+Each signatory resolves **M = Mandate − 2** (legacy Ob 2 → difficulty 2).
 
 | Result | Effect |
 |---|---|
@@ -359,11 +361,11 @@ Each signatory rolls Mandate vs Ob 2.
 | Success | Full ratification |
 | Overwhelming | Ratifies + may extract one additional concession |
 
-**Guarantor option:** A third faction offers guarantee (Mandate roll Ob 1 to offer). If accepted: both ratification rolls +1D. Guarantor must sanction any breach (military_advance or Parliamentary Censure within 1 season) or loses Mandate −1.
+**Guarantor option:** A third faction offers guarantee (Mandate roll, difficulty 1, to offer). If accepted: each ratifier gains **+1 to M**. Guarantor must sanction any breach (military_advance or Parliamentary Censure within 1 season) or loses Mandate −1.
 
 **BG mode (no personal scene):** Phases 1–3 proceed as Domain Actions. Phase 2 is player negotiation at the table (no roll; this is design space). Grand Debate Zoom In unavailable.
 
-**Hybrid/TTRPG mode:** Stalled negotiation may Zoom In to Grand Debate (social_contest_v30.md) at either party's declaration. Grand Debate outcome modifies ratification roll: Overwhelming → +2D; Success → +1D; Partial → 0; Failure → −1D (min 1D).
+**Hybrid/TTRPG mode:** Stalled negotiation may Zoom In to Grand Debate (social_contest_v30.md) at either party's declaration. The Grand Debate itself remains a **dice social contest** (pools 5–18D; resolver scope boundary). Its outcome modifies the ratification **margin M**: Overwhelming → **+2 M**; Success → **+1 M**; Partial → 0; Failure → **−1 M** (FLOOR 0.05 subsumes the old 'min 1D').
 
 ### §3.4 Treaty Effects on Stability
 
@@ -428,6 +430,8 @@ Each active faction contributes votes equal to its current Mandate. The targeted
 Church **Sacred Veto:** Cadence — available once per 4 consecutive seasons (ED-751). Reset triggers on the season when used (e.g., used Season 12 → next available Season 16). Per-Veto-use cooldown, not per-game-year cycle. Free action; costs Mandate −1 if used against a motion that would have passed. Eligible for Veto: Censure, Embargo, Outlawry, Recognition Challenge, Succession Endorsement, Treaty Ratification. Not eligible: War Authorisation, Blockade, Subsidy.
 
 If Church uses Sacred Veto to block a motion that protects Church interests: additional Mandate −1 (self-interested veto is transparent; reputation cost).
+
+**CI institutional weight (cross-ref):** in motions, Church's vote contribution is **Mandate + ⌊CI/20⌋**; a faction voting against Church in a motion targeting Church contributes **max(0, Mandate − ⌊CI/30⌋)** (floored at 0). See ci_political_v30 §3.3/§3.4.
 
 ### §5.4 Parliamentary Actions
 

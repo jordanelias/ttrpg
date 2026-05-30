@@ -94,7 +94,7 @@ When CI reaches 100:
 - **Mass Seizure (one-shot):** Church declares simultaneous seizure on all territories with Church buildings. Ob = 10 − PT − infrastructure (floor 1). This is a one-time event.
 - Secular factions each get one free Parliamentary motion (no card slot) to oppose Church per season while Unification is active
 - Mass Seizure bid fails if: Church loses 3 territories to counterattack in a single Year-End, OR Church Mandate drops to 3 or below. No second attempt.
-- If Church successfully controls ≥ 10 territories while Unification is active for 2 consecutive Year-Ends: Church wins (Theocracy Unification victory)
+- ~~If Church successfully controls ≥ 10 territories while Unification is active for 2 consecutive Year-Ends: Church wins (Theocracy Unification victory)~~ **[SUPERSEDED-BY: GD-1, 2026-05-30]** — Peninsular Sovereignty (control 11/15 territories sustained 2 seasons, treaties counting) is the **sole** victory condition for all factions (canon/02_canon_constraints.md §B GD-1; §7.1 ED-NEW-CI-10). The Theocracy Unification Attempt remains a **late-game CI-100 event**: its territorial gains are a powerful approach toward the universal Peninsular Sovereignty goal, not a separate win trigger. Mass Seizure is a recoverable territorial event, not a victory.
 
 ### §2.3 Starting Value
 
@@ -114,26 +114,30 @@ In the Italian peninsula of the 15th and 16th centuries, the Pope's political we
 
 This maps directly to CI as a modifier: high CI = Church's institutional claims are credible and hard to dismiss in public forums. Low CI = Church is one voice among many.
 
-### §3.2 CI Bonus Dice (Church in Political Forums)
+### §3.2 CI Institutional Weight (Church in Political Forums)
 
-When Church acts in any of the following contexts, it adds floor(CI/20) bonus dice to its roll:
+> **[ED-865/874 consistency, 2026-05-30]** Post-resolver-migration the CI contribution is expressed in the units of whichever resolution method the forum uses — it is **not "bonus dice"** on any path (no forum still rolls a raw stat pool after the Treaty migration below). Magnitude (⌊CI/20⌋ for Church; ⌊CI/30⌋ opposition penalty per §3.3) is unchanged; only its *expression* is made consistent.
 
-| Context | Roll affected |
-|---|---|
-| Parliamentary motion (proposing or defending) | Mandate pool |
-| Treaty positioning roll | Influence pool |
-| Treaty ratification roll | Mandate pool |
-| Crown Treaty targeting Church as subject | Church defensive Rebuttal roll |
-| Diplomacy vs PLAYABLE faction (Senator Outward) | Influence pool |
+Church's CI institutional weight = **⌊CI/20⌋**, applied per the forum's resolution method:
 
-**Examples:**
-- CI 28 (start): floor(28/20) = +1D
-- CI 40: +2D
-- CI 60: +3D
-- CI 80: +4D
-- CI 100: +5D
+| Context | Resolution method | CI applied as |
+|---|---|---|
+| Parliamentary motion (proposing or defending) | Deterministic Mandate **tally** (faction_layer §5.3) | **+⌊CI/20⌋ votes** to Church's contribution |
+| Crown Treaty targeting Church as subject | d+s **resolver** (Church Rebuttal; ED-865/874) | **+⌊CI/20⌋ to margin M** |
+| Diplomacy vs PLAYABLE faction (Senator Outward) | d+s **resolver** (Domain Action) | **+⌊CI/20⌋ to margin M** |
+| Treaty positioning | d+s **resolver** (contested; faction_layer §3.3) | **+⌊CI/20⌋ to margin M** |
+| Treaty ratification | d+s **resolver** (faction_layer §3.3) | **+⌊CI/20⌋ to margin M** |
 
-This is a large bonus at high CI. It is by design. A Church operating at CI 80 is historically comparable to the papacy of Julius II or Innocent III — a genuinely dominant institutional force that secular rulers cannot dismiss without cost.
+Margin contributions are clamped by the resolver's FLOOR 0.05 / CAP 0.90 like any other margin term; vote contributions add to the Parliament tally. **No forum uses "bonus dice."**
+
+**Magnitude by band** (votes in Parliament; margin-points in resolver checks):
+- CI 28 (start): ⌊28/20⌋ = +1
+- CI 40: +2
+- CI 60: +3
+- CI 80: +4
+- CI 100: +5
+
+This is a large weight at high CI. It is by design. A Church operating at CI 80 is historically comparable to the papacy of Julius II or Innocent III — a genuinely dominant institutional force that secular rulers cannot dismiss without cost.
 
 ### §3.3 CI Obstacle Modifier (Opposing Church)
 
@@ -148,6 +152,8 @@ Ob of the vote threshold calculation is unchanged, but each secular faction voti
 | 60–89 | −2 |
 | 90+ | −3 |
 
+**Floor (ED-865/874 consistency, 2026-05-30):** a faction's effective vote contribution is **floored at 0** — the CI penalty can reduce an opponent to abstention but never to a negative vote count. (Prior spec left sub-zero contributions undefined: at CI 90+ a Mandate-2 opponent computed to −1 votes, i.e. a nonsensical >100% bloc share. Floored, that opponent contributes 0; Church's bloc dominance at high CI is preserved and the tally stays well-defined.)
+
 This represents the political cost of being seen to oppose the Church publicly when the Church has high institutional legitimacy. Secular rulers whose populations attend church, who depend on Church welfare networks, and who need Church endorsement for legitimacy can't simply vote to Embargo the Church without consequence.
 
 **Design note (ED-110 resolution):** This gives Church more ways to exert political power than Baralta can suppress. Baralta (CI −1/season) operates on the CI total. Church's parliamentary immunity grows with CI, meaning Hafenmark's structural suppression is a long game — it slows Church's rise but doesn't neutralise its political leverage once CI is already high.
@@ -156,10 +162,11 @@ This represents the political cost of being seen to oppose the Church publicly w
 
 For all factions including Church, the working political pool in Parliamentary motions is:
 
-**Political pool = Mandate + floor(CI/20) [Church only] + any modifiers**
+**Parliament vote contribution (tally, faction_layer §5.3):**
+- Church: **Mandate + ⌊CI/20⌋** votes.
+- Non-Church faction voting against Church (motion targeting Church): **max(0, Mandate − ⌊CI/30⌋)** votes — floored at 0 per §3.3.
 
-For non-Church factions, the political pool in Parliament is:
-**Political pool = Mandate − floor(CI/30) [if voting against Church in a motion targeting Church]**
+For **resolver-governed** Church actions (Rebuttal, Diplomacy, Treaty positioning/ratification — faction_layer §3.3, §5.5), the CI weight ⌊CI/20⌋ is added to the **margin M** (not a separate pool); the resolver's FLOOR/CAP bound it.
 
 This creates an asymmetry that mirrors historical reality: the Church's opponents pay a legitimacy cost proportional to CI; the Church gains a legitimacy bonus proportional to CI.
 
@@ -211,7 +218,7 @@ Stats change through Domain Actions and Trigger events. The seasonal cap (±2 pe
 
 ### §4.2 Govern Action — Full Effect
 
-Govern (Consul Inward) pool = Mandate, Ob = floor(Prosperity/2)+1, −1 in own capital.
+Govern (Consul Inward): **resolves via the deterministic+stochastic resolver** — M = Mandate − difficulty, difficulty = max(1, (Ob−1)·2), Ob = floor(Prosperity/2)+1 (−1 Ob in own capital). The degree table below is the resolver's output ladder. See params/factions/stats_1_7_scale.md §Domain Action Resolution (ED-865/874).
 
 | Degree | Effect |
 |---|---|
@@ -224,7 +231,7 @@ Govern (Consul Inward) pool = Mandate, Ob = floor(Prosperity/2)+1, −1 in own c
 
 ### §4.3 Trade Action — Full Effect
 
-Trade (Consul Outward) pool = Wealth, Ob = floor(Prosperity/2)+1. +1 Ob at IP≥30. +1 Ob at T2.
+Trade (Consul Outward): **resolves via the deterministic+stochastic resolver** — M = Wealth − difficulty, difficulty = max(1, (Ob−1)·2), Ob = floor(Prosperity/2)+1 (+1 Ob at IP≥30; +1 Ob at T2). Degree table below is the resolver's output ladder. See stats_1_7_scale §Domain Action Resolution (ED-865/874).
 
 | Degree | Effect |
 |---|---|
