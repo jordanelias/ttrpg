@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: 47f7e6c1eda0bc40474478d2eb917a7c165241f1
+last_commit: 498fb5f89a7aba18cb063031e2ae6287c5e891fb
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -131,7 +131,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-30T20:47:42.210985+00:00'
+updated: '2026-05-30T20:54:00.325906+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
@@ -196,14 +196,21 @@ session_2026_05_30_cluster_complete:
     - 'parliamentary_transfer core roll (PT-PARL-1: Proposer Influence vs Holder Legitimacy+2)'
     - 'treaty_expiration Senator Outward re-bind (TE-1: Influence+Standing vs target
       Sta)'
-    - 'Crown Royal Decree (FCN-1: Legitimacy vs Ob 2)'
-    - 'Church Excommunication (FCN-1: L vs target-L / Ob 2)'
-    - 'Church CI-60 Territorial Seizure (FCN-1: L vs floor(target L/2)+1)'
-    - 'Hafenmark Sovereign Authority Doctrine (FCN-1: L vs Ob 4)'
-    - 'Varfell Private Collection (FCN-1: Intel vs Ob 2)'
+    - Royal Decree — CONFIRMED Mandate vs Ob 2 (factions_personal §8.2)
+    - Sovereign Authority Doctrine — CONFIRMED Mandate vs Ob 4 (factions_personal
+      §8.4)
+    - Private Collection — CONFIRMED Intel vs Ob 2 (factions_personal §8.5)
     route: faction-balance sim line (owns v12c) — migrate-and-revalidate each at N=1000
       so the 20-30% band holds; confirm authoritative resolution method in each SOURCE
       doc first (faction_canon §9 is a consolidation, not authoritative).
+    SOURCE_VERIFIED_2026-05-30: FCN-1 verified against source docs (faction_canon
+      §9 is a consolidation, not authoritative).
+    source_pending: Excommunication — authoritative source not located (faction_canon
+      §9 says L vs target-L/Ob 2; NOT in social_contest_v30); owner must locate before
+      sim-migration.
+    removed_false_positive: CI-60 Territorial Seizure — authoritative faction_layer
+      §2.7 = Influence+floor(CI/15) vs Ob=7-PT (POOL roll, Domain-Action family),
+      NOT bare-stat; faction_canon §9 formula was stale.
   ROUTED_editorial_items:
   - CKREG-DRIFT-1 (Accord "Restive" vs canonical "Resistant")
   - CKREG-DRIFT-2 (Reputation/Standing mis-cite P-14/P-15 metaphysics constraints
@@ -217,6 +224,9 @@ session_2026_05_30_cluster_complete:
   - FB-VET-M2 (faction_behavior vetting M-2 "○", PP-674 axis)
   - PARL-CB-001 (parliamentary_transfer Partial "replaces consumed CB" bypasses CB-economy
     damper — intent review)
+  - 'FCN-SEIZURE-DRIFT (faction_canon §9 tactic table has stale/wrong formulas vs
+    source: Seizure entirely wrong; Royal Decree + Sovereign Authority Doctrine drifted
+    Mandate->Legitimacy — regenerate §9 from authoritative sources)'
   WATCH:
   - faction_politics §3.6.2 Conviction Reformation arc — catastrophic-on-Failure on
     single Spirit Ob 3 roll; recoverable+heavily-gated; reconsider if sim shows it
