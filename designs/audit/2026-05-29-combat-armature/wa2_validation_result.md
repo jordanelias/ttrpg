@@ -1,68 +1,61 @@
-# Weapon Axes v2 — Validation (bottom-up build, top-down precedent check)
+# Weapon Axes v2 — Validation v2 (refined to historical coherence)
 
-**Date:** 2026-05-29 · **Module:** `tests/sim/v32-combat-balance/weapon_axes_v2.py` (self-test 7/7) · **Status:** Class-C proposal; no canon edited except the flagged `POINT_ARMOR_MOD`.
+**Supersedes the first validation.** Date 2026-05-29 · Module `weapon_axes_v2.py` (self-test 10/10) · Class-C proposal; no canon edited except the flagged `POINT_ARMOR_MOD`.
 
-Per Jordan directive: developed the v2 axes **bottom-up** (substrate module, each axis→modifier grounded in canonical/ratified values, self-tested) then **validated top-down** against historical precedent (the duel/battlefield audit + the per-weapon precedent check below).
+Per Jordan: refined bottom-up and re-validated top-down until **everything makes sense historically**. It now does, across all three combat contexts. `[CONFIDENCE: high — substrate self-tested 10/10; the three-context picture matches the research's own characterisation of every weapon.]` `[SELF-AUTHORED — bias risk: see honest-limits.]`
 
-`[CONFIDENCE: high — substrate self-tested 7/7; audit on validated primitives (M1/R1/R2).]` `[READ: the three historical-precedents docs — full, this session.]`
+## The key insight that made it cohere
 
-## Bottom-up: the substrate (self-test 7/7)
+The first audit conflated two contexts and ignored skill. The fix is a **two-context resolution**, each governed by a *different* variable — itself the historical truth:
 
-The axes produce, by construction: the point-vs-armour gap-row, the canonical STR multipliers (heavy-blunt ×3 etc.), axis-derived wield-min, the head σ-bias by engagement state, the 2H bind amplification + 1H off-hand defence (and the mace/poleaxe split by hands), the curved draw-cut, and the tonfa-defensive / flail-flexible flags. All verified in isolation before any audit (the harness-defect lesson: validate units first).
+- **Duel (unarmoured)** = a **telling-hit finesse race.** Unarmoured, the first clean hit decides for *any* weapon (a sword thrust and a mace blow to an unarmoured man are both fight-enders), so **reach, tempo, defence, skill (σ-leverage) govern — weapon DAMAGE magnitude is irrelevant.** This is why a rapier beats a war hammer in a duel: not less damage, but it lands first/safely.
+- **Battlefield (armoured, engaged)** = **attrition through armour.** Armour forces multiple hits, so **DAMAGE magnitude governs and defence is suppressed (R10)** — exactly why blunt percussion dominates here and nowhere else.
 
-## Top-down: the audit (full roster, validated primitives)
+Plus the **handling skill-curve** (crossover at proficiency 4, m3 §8.2): forgiving weapons reward low skill / cap early; demanding weapons punish low skill / scale high.
 
-**Battlefield — strikes to fell an ENGAGED foe in heavy armour** (defence suppressed; lower = better):
+## Two grounded handling corrections (from the research, not curve-fitting)
 
-| 3 strikes | 4.2–4.3 | 5.5–5.6 | 6.2–6.3 |
-|---|---|---|---|
-| **mace, poleaxe, war flail** | greatsword, longsword, curved-2h, staff, tonfa | estoc, spear, rapier | arming-sword, sidesword, dagger, paired, messer, sabre |
+- **Longsword: Standard → Demanding.** The Liechtenauer art is the canonical *highly technical* tradition (the seven-axes doc's tactile/bind exemplar). A master is formidable; a novice flails. Demanding fits; the draft "standard" did not.
+- **War flail: Demanding → Forgiving.** The blunt-weapon survey grades it a *crude Hussite peasant equaliser* — low floor, no refined art. Its parry-bypass is a *quirk*, not a high skill-ceiling.
 
-→ **Blunt percussion fells in 3 vs blades' 5.5–6.3** — the anti-armour dominance, exactly as the research says.
+## The three-context result (historically coherent)
 
-**Duel — field win-rate, neutral Str-4, all-vs-all × armour:**
+**Skilled unarmoured duel (History 6):** rapier 72 · curved-2h 69 · sabre 64 · paired 62 · **longsword 59** · greatsword 59 · tonfa 55 · sidesword 55 · estoc 53 · arming 53 · poleaxe 51 · messer 43 · dagger 42 · spear 32 · staff 29 · **mace 26 · war flail 25** → trained fencing weapons top; forgiving/levy weapons bottom. ✓
 
-| weapon | duel % | weapon | duel % |
-|---|---|---|---|
-| mace | 73.6 ⚑ | longsword | 47.5 |
-| war flail | 66.3 | estoc | 46.3 |
-| curved-2h | 65.2 | greatsword | 44.3 |
-| poleaxe | 63.0 | messer | 42.3 |
-| tonfa | 60.9 | paired-short | 41.2 |
-| sabre | 55.7 | arming-sword | 37.5 |
-| rapier | 52.0 | sidesword | 36.5 |
-| dagger | 51.9 | staff | 35.0 |
-| | | spear | 29.8 |
+**Low-skill unarmoured duel (History 1):** messer 81 · dagger 81 · spear 71 · staff 68 · sabre 65 · **war flail 65 · mace 64** · tonfa 55 · estoc 55 · arming 54 · sidesword 52 · rapier 32 · curved-2h 30 · paired 22 · longsword 20 · greatsword 19 · poleaxe 14 → forgiving weapons dominate; demanding fail untrained. ✓
 
-## Per-weapon historical-precedent check
+**Battlefield — strikes to fell an engaged heavy-armoured foe:** mace 3.1 · poleaxe 3.1 · war flail 3.1 · greatsword/curved-2h/longsword/staff/tonfa 4.2–4.4 · point/blade 5.5–6.3 → blunt fells in 3; blades twice as long. ✓
 
-| Weapon | History predicts (research) | Sim observed | Verdict |
-|---|---|---|---|
-| Rapier (point) | thrust finds gaps; reach; weak bound | 52% duel; **beats cut vs armoured field**; battlefield 5.6 | ✓ match |
-| Estoc (point) | anti-armour needle | point armour-row; battlefield 5.5 (best blade vs plate) | ✓ match |
-| Spear (point) | reach king at distance, weak closed | wins approach, low duel (29.8% — closed-on) | ✓ match (its duel low is the R9 result; reach shines vs multiple/at range) |
-| Sabre (curved-cut) | draw-cut, flow, anti-flesh, poor vs armour | 55.7% duel, draw-cut bonus vs unarmoured, weak vs plate | ✓ match |
-| Arming sword (c&t) | versatile generalist, off-hand-capable | mid-low (37.5%), no edge/penalty, off-hand defence | ✓ match (generalist) |
-| Longsword (2H c&t) | bind leverage (Stark/Schwach), versatile | 2H bind ×1.5; mid (47.5%) | ✓ match |
-| Messer/greatsword (straight-cut) | percussive cut, strong in close | bind-strong; mid-low | ✓ match |
-| Poleaxe (2H blunt) | technical plate-breaker | battlefield 3.0; demanding | ✓ match |
-| War flail (flexible) | strikes around the parry/shield | parry-bypass → 66% duel; battlefield 3.0 | ✓ match (the distinct mechanic works) |
-| Tonfa (defensive short-blunt) | block + trap (kobudō) | defensive δσ; 60.9% duel (defence-driven) | ✓ match (fills the short-blunt gap) |
-| **Mace (1H blunt)** | **forgiving, levy weapon — mediocre in a skilled duel** | **tops the duel at 73.6%** | **✗ ARTIFACT** |
+## Per-weapon historical niche (the payoff — every weapon makes sense)
 
-## The one artifact — and it's the war-hammer finding, generalized
+| Weapon | Skilled duel | Low-skill duel | Battlefield | Historical reading |
+|---|---|---|---|---|
+| Rapier | **top** | weak | weak | the duellist's weapon — finesse; useless untrained or vs plate ✓ |
+| Longsword | **top** | weak | mid | the master's versatile art (Liechtenauer) ✓ |
+| Sabre | high | high | weak | cavalry/duelling cut — strong trained *and* taught to troops ✓ |
+| Arming/sidesword | mid | mid | weak | versatile civilian companion ✓ |
+| Paired / greatsword / curved-2h | high | **weak** | mid | demanding specialists — reward training ✓ |
+| Estoc | mid | mid | mid | anti-armour needle ✓ |
+| Spear | weak (1v1) | **high** | mid | formation/levy weapon — beaten when closed 1v1 ✓ |
+| Staff | weak | **high** | mid | forgiving reach weapon ✓ |
+| Dagger / messer | low | **high** | weak | simple, deadly in a brawl, outclassed by a trained sword ✓ |
+| **Mace** | **bottom** | high | **top** | the levy weapon: dangerous untrained, mediocre in a duel, lethal vs armour ✓ |
+| Poleaxe | mid | weak | **top** | the technical plate-breaker ✓ |
+| War flail | **bottom** | high | **top** | the peasant equaliser — bypasses parries, crude, anti-armour ✓ |
+| Tonfa | mid | mid | mid | the defensive short-blunt (kobudō) — versatile, unspectacular ✓ |
 
-**Bare mace tops the duel (73.6%) — wrong twice over.** (1) Per our own research the bare mace is the *forgiving, low-technique* weapon; it should be *mediocre* in a skilled duel, not top. (2) The cause is the **same blunt-damage artifact** we already diagnosed for the war hammer (R10): blunt's ×1.5 multiplier + the non-degrading light-blunt armour row + short-reach (dodging the reach disadvantage) stack into raw damage the duel model over-rewards.
+**The bare-mace artifact is fully resolved** — by context + skill, *not* by nerfing canonical blunt damage. Its three faces are all historically correct.
 
-**Resolution is the one we already ratified, not a new nerf:** blunt **percussion** weapons (mace, poleaxe, war flail) are **battlefield / forgiving-floor weapons, not duel-balanced** — their duel number is the wrong test, exactly as for the war hammer. Per R10 + the handling curve, they belong to the armoured-press / low-skill-floor niche. Excluding the blunt percussion family from the *duel*-balance target, the **dueling roster reads correctly**: sabre 55.7, rapier 52, dagger 51.9, longsword 47.5, estoc 46.3, greatsword 44.3, messer 42.3, paired 41.2, arming-sword 37.5, sidesword 36.5, staff 35, spear 29.8 — a coherent spread where the generalists sit mid, the point/cut weapons split by armour, and the reach weapons (spear/staff) trade duel-weakness for distance/formation value.
+## Honest limits (self-review)
 
-**So the v2 substrate validates:** every blade and pole weapon behaves as historical precedent predicts, and the only outlier (bare mace) is the already-understood blunt-is-a-battlefield-weapon result — *consistent with the design*, not a defect in it.
+- **Robust:** the *niche structure* and *orderings* — the handling crossover, the duel/battlefield split, every weapon's three-context profile. These follow from the model's structure and match the research.
+- **Tunable (soft):** the exact percentages. The σ-magnitudes (`HANDLING_SLOPE`=moderate, the reach/tempo seeds), the "first-to-2 telling-hits" duel abstraction, and the leverage→net scaling are grounded seeds; they yield historically-sensible rankings but the precise numbers are calibration, not canon.
+- **A reviewer would add:** the duel model now carries *no* damage differentiation (every telling hit equal) — correct for unarmoured combat, but weapon damage matters *only* on the battlefield by design. Two mild watch-items: tonfa sits a touch high in the skilled duel (its defensive δσ); the demanding poleaxe holds parity in the skilled duel (high-skill bonus offsets slowness). Neither is a historical error.
 
-## Status / canon
+## Canon status
 
-- **One canon-touching piece:** `POINT_ARMOR_MOD` (the point-vs-armour gap row, +3/+3/+2/+1). Validated (it gives the thrust its modest armour edge without breaking balance). Awaits ratification, same status as W1.
-- **The blunt-percussion duel artifact** is resolved by *context* (R10 — already ratified), not by changing the canonical blunt damage. No new canon change needed.
-- The v2 σ-leverage seeds are sim-tunable Class-C; the blunt-in-duel could additionally be dialed by the handling curve (forgiving weapons hit a lower skilled ceiling) if you want the mediocre-mace result to show numerically in a *skilled* duel — a tuning option, flagged.
+- One canon-touching piece, unchanged: **`POINT_ARMOR_MOD`** (point-vs-armour gap row) — awaits ratification, same status as W1.
+- The handling corrections (longsword→demanding, war_flail→forgiving) are sim-substrate Class-C, not canon edits; they update the v32 draft handling and are flagged for your sign-off if you want them propagated.
+- No canonical damage values changed; the blunt artifact resolved by context.
 
-`[GAP: the duel model rewards blunt raw damage the same way it did the war hammer; the principled fix (handling-curve skill ceiling so the forgiving mace underperforms a skilled fencer) is a tuning option for you, distinct from the context resolution.]`
-`[ASSUMPTION: neutral Str-4 both sides isolates weapon profile; the off-hand/defensive/flexible modifiers are applied as δσ; battlefield = defence-suppressed engaged foe (R10).]`
+`[GAP: none blocking — the picture is historically coherent. Remaining items are tuning (exact %) and the two flagged handling reassignments for your sign-off.]`

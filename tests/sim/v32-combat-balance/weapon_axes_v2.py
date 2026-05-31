@@ -32,7 +32,7 @@ WEAPONS_V2 = {
     # blade -- cut_and_thrust (versatile generalist)
     "arming_sword":  {"reach": "long",  "weight": "light", "hands": 1, "head": "cut_and_thrust", "speed": 1.5, "handling": "standard"},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
     "sidesword":     {"reach": "long",  "weight": "light", "hands": 1, "head": "cut_and_thrust", "speed": 1.4, "handling": "standard"},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
-    "longsword":     {"reach": "long",  "weight": "heavy", "hands": 2, "head": "cut_and_thrust", "speed": 0.5, "handling": "standard"},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
+    "longsword":     {"reach": "long",  "weight": "heavy", "hands": 2, "head": "cut_and_thrust", "speed": 0.5, "handling": "demanding"},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
     "dagger":        {"reach": "short", "weight": "light", "hands": 1, "head": "cut_and_thrust", "speed": 3.0, "handling": "forgiving"},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
     "paired_short":  {"reach": "short", "weight": "light", "hands": 1, "head": "cut_and_thrust", "speed": 2.5, "handling": "demanding", "paired": True},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
     # blade -- straight_cut (percussive cut, strong in bind)
@@ -46,7 +46,7 @@ WEAPONS_V2 = {
     "mace":          {"reach": "short", "weight": "heavy", "hands": 1, "head": "blunt",          "speed": 0.5, "handling": "forgiving"},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
     "poleaxe":       {"reach": "long",  "weight": "heavy", "hands": 2, "head": "blunt",          "speed": -0.5, "handling": "demanding"},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
     "tonfa":         {"reach": "short", "weight": "light", "hands": 1, "head": "blunt",          "speed": 2.2, "handling": "standard", "paired": True, "defensive": True},
-    "war_flail":     {"reach": "long",  "weight": "heavy", "hands": 2, "head": "blunt",          "speed": -0.5, "handling": "demanding", "flexible": True},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
+    "war_flail":     {"reach": "long",  "weight": "heavy", "hands": 2, "head": "blunt",          "speed": -0.5, "handling": "forgiving", "flexible": True},  # [canonical: combat_v30 §5 / weapon_axes_v2 §3 -- grounded seed/fixture]
 }
 
 # ===== derived: damage family + armour table (ratified W1 + the point row §4) =====
@@ -130,6 +130,32 @@ def strike_damage_v2(net, strength, w, armor):
     return max(0, int(round(dmg)))
 
 
+# ===== handling skill-curve + reach-control (refinement: the duel finesse-race) =====
+# Two-context resolution (validated against historical precedent):
+#   DUEL (unarmoured) = a telling-hit race -- the first clean hit decides for any weapon, so reach/tempo/
+#     skill (sigma-leverage) govern; weapon DAMAGE magnitude is irrelevant unarmoured.
+#   BATTLEFIELD (armoured, engaged) = attrition through armour -- DAMAGE magnitude governs, defence suppressed (R10).
+HANDLING_SLOPE     = LEVEL_SIGMA["moderate"]          # [canonical: m3 §8.2 handling skill-curve; grounded seed]
+HANDLING_CROSSOVER = 4                                # [canonical: m3 §8.2 -- crossover proficiency 4]
+REACH_TEMPO_DSIG   = LEVEL_SIGMA["minor"] * 0.7       # [canonical: R9 weapon_engagement -- reach-control advantage on the approach; grounded seed]
+REACH_BIND_DSIG    = LEVEL_SIGMA["minor"] * 0.6       # [canonical: R9 -- reach inverts once bound; grounded seed]
+
+def handling_dsig(handling, proficiency, slope=HANDLING_SLOPE):
+    """Forgiving = high floor / low ceiling (+ below crossover, - above); Demanding = inverse; Standard = flat.
+    proficiency = relevant combat History (the skill-analogue). Crossover at HANDLING_CROSSOVER."""
+    f = (proficiency - HANDLING_CROSSOVER) / HANDLING_CROSSOVER
+    if handling == "demanding": return slope * f
+    if handling == "forgiving": return -slope * f
+    return 0.0
+
+def reach_score(w):
+    """Reach-control by axis: a balanced heavy BLADE keeps its reach; a head-heavy BLUNT loses it; short = none.
+    (Refines R9's flat heavy-fraction: the longsword is long-heavy but nimble; the war hammer long-heavy but not.)"""
+    if w["reach"] == "short": return 0.0
+    s = 1.0 if w["weight"] == "light" else (0.4 if w["head"] == "blunt" else 0.7)  # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed/fixture]
+    if w["hands"] == 2: s += 0.15  # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed/fixture]
+    return s
+
 # ============================== self-test ==============================
 if __name__ == "__main__":
     checks = []
@@ -189,6 +215,34 @@ if __name__ == "__main__":
     c7 = (d_sabre > d_arm)
     checks.append(c7)
     print(f"(7) draw-cut vs unarmoured (net2,STR4): sabre {d_sabre} > arming-sword {d_arm}: {'OK' if c7 else 'FAIL'}")
+
+    # (8) handling crossover at proficiency 4: forgiving>demanding below, demanding>forgiving above, equal at 4
+    c8 = (handling_dsig("forgiving", 1) > handling_dsig("demanding", 1)
+          and handling_dsig("demanding", 7) > handling_dsig("forgiving", 7)  # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed/fixture]
+          and abs(handling_dsig("forgiving", 4)) < 1e-9 and abs(handling_dsig("demanding", 4)) < 1e-9  # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed/fixture]
+          and handling_dsig("standard", 1) == 0.0)
+    checks.append(c8)
+    print(f"(8) handling crossover @4: low-skill forgiving {handling_dsig('forgiving',1):+.2f} > demanding "
+          f"{handling_dsig('demanding',1):+.2f}; high-skill demanding {handling_dsig('demanding',7):+.2f} > forgiving "
+          f"{handling_dsig('forgiving',7):+.2f}; equal@4: {'OK' if c8 else 'FAIL'}")
+
+    # (9) reach-control: balanced heavy blade (longsword) keeps reach > head-heavy blunt (poleaxe), both long+heavy+2H
+    c9 = (reach_score(W("longsword")) > reach_score(W("poleaxe")) and reach_score(W("rapier")) >= reach_score(W("longsword"))
+          and reach_score(W("dagger")) == 0.0)
+    checks.append(c9)
+    print(f"(9) reach-control: rapier {reach_score(W('rapier')):.2f} >= longsword {reach_score(W('longsword')):.2f} "
+          f"> poleaxe(head-heavy) {reach_score(W('poleaxe')):.2f}; dagger(short) {reach_score(W('dagger')):.2f}: {'OK' if c9 else 'FAIL'}")
+
+    # (10) context coherence -- the mace's three faces: in a SKILLED duel its finesse profile is poor
+    #      (forgiving low-ceiling + short = no reach), but on the BATTLEFIELD its damage profile dominates.
+    mace_skilled_finesse = (handling_dsig(W("mace")["handling"], 6) + reach_score(W("mace")))   # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed]  both terms low/negative
+    rapier_skilled_finesse = (handling_dsig(W("rapier")["handling"], 6) + reach_score(W("rapier")))  # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed/fixture]
+    mace_bf_dmg = strike_damage_v2(2, 4, W("mace"), "heavy")  # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed/fixture]
+    rapier_bf_dmg = strike_damage_v2(2, 4, W("rapier"), "heavy")  # [canonical: m3 §8.2 / R9 / weapon_axes_v2 §3 -- grounded seed/fixture]
+    c10 = (mace_skilled_finesse < rapier_skilled_finesse and mace_bf_dmg > rapier_bf_dmg)
+    checks.append(c10)
+    print(f"(10) context: skilled-duel finesse mace {mace_skilled_finesse:+.2f} < rapier {rapier_skilled_finesse:+.2f}; "
+          f"battlefield dmg-vs-plate mace {mace_bf_dmg} > rapier {rapier_bf_dmg}: {'OK' if c10 else 'FAIL'}")
 
     print(rule)
     bad = [i + 1 for i, c in enumerate(checks) if not c]
