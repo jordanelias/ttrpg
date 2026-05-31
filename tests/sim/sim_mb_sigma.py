@@ -790,6 +790,11 @@ class Subunit:
             base_speed = cell_speed(self.shape, self.tier, orig_r, orig_c)
             if base_speed == 0: continue
             actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
+            if PER_CELL and self.troop_type == 'cavalry' and actual_speed > 0:
+                # Increment 4-followup: cavalry velocity primitive — cavalry closes faster, producing the
+                # momentum differential that triggers the depth-absorbed charge (Incr5). [ASSUMPTION:
+                # cavalry speed x2 — basis: shock cavalry close far faster than infantry. Class-B, vetoable.]
+                actual_speed = int(math.floor(actual_speed * PC_CAVALRY_SPEED_MULT))
             if actual_speed == 0: continue
             if TIP_SUPPORT_ENABLED and base_speed > min_speed:
                 current_offset = self.cell_offsets.get((orig_r, orig_c), 0)
@@ -1300,6 +1305,7 @@ PC_ENVELOP_SIGMA   = 0.0    # DISABLED: depth-aware contact fraction (Incr4) alr
                             # (NERS-N/E: do not add unneeded apparatus.) _envelopment_sigma retained, dormant at 0.
 PC_CHARGE_SIGMA    = 0.55   # per-rank-of-unabsorbed-penetration delta-sigma a charger gets on impact
 PC_CHARGE_TICKS    = 3      # charge shock applies only for the first few ticks of contact
+PC_CAVALRY_SPEED_MULT = 2.0  # cavalry velocity primitive: cavalry closes this much faster (PER_CELL), triggering the charge
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
