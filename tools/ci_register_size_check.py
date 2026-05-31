@@ -11,9 +11,8 @@ THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
     "session_log_current.md":                  2_000,
     "session_logs/index.md":                   2_000,
-    "canon/editorial_ledger.yaml":             2_000,
-    "canon/editorial_ledger_summary.yaml":     1_000,
-    "references/file_index_summary.md":        1_000,
+    # editorial store + file index moved to JSONL/SQL (2026-05-28 cutover);
+    # editorial_ledger.jsonl is checked soft below; valoria_index.sql is generated.
     "references/canonical_sources.yaml":       5_000,
     "skills/valoria-orchestrator/SKILL.md":    8_000,
     "canon/patch_register_active.yaml":       20_000,
@@ -24,8 +23,8 @@ THRESHOLDS = {
     # ── Archives (soft limits — warn when approaching split threshold) ──────
     # These are large by design; alert when year-split is needed
     "canon/patch_register_archive.yaml":     100_000,
-    "canon/editorial_ledger_archive.yaml":    80_000,
-    "session_log_archive.md":               100_000,
+    "canon/editorial_ledger.jsonl":         150_000,  # live append-only editorial store (post-2026-05-28 cutover); large by design
+    "archives/session/session_log_archive_part_7.md": 100_000,
     "canon/patch_register_index.md":         20_000,
 }
 
