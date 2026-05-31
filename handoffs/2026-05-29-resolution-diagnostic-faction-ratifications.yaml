@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: cf2c1c27f5f0c48b14c36d803d4807a02fd736fd
+last_commit: 30a8c6433bc4f2a4ce0994dd36e26dd0c336e673
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -210,6 +210,25 @@ working_state:
       fetch tracker from the 534-doc repo-wide scan; NOT actual context-window usage,
       which is well under 1M/Opus). Repo committed & consistent at cf2c1c27 (LPS-2d);
       nothing staged. Remaining work fully specified for next session.
+  last_commit: 30a8c6433bc4f2a4ce0994dd36e26dd0c336e673
+  lps_2e: 'L/PS re-grained faction->SETTLEMENT (LPS-1 used the 17 geography territories;
+    Jordan ruling 2026-05-30). Settlement Weight W=base(Type)+Prosperity+FacilityTier
+    (operationalizes unscaled §1.2 Population). Mandate=clamp(round(7*T/(T+K))), T=sum_s
+    W_s*(0.5L_s+0.5PS_s)/7, K=6 -- size-weighted, saturating, bounded. Stage-4 sim:
+    one-big-province>many-small (6 vs 5), range [0,7], Mandate<->settlement feedback
+    convergent. geography ''territory'' (T1-T17) kept as province-tier label (option
+    2) + reconciliation note in §1.8. Faction aggregate L/PS now W-weighted means.'
+  remaining:
+  - 'LPS consumer rewiring (staged LPS-2+ in master ledger _lps_structural_redesign_2026-05-30):
+    faction_behavior strictness, derived_stats footnote, LPS-2/2c/2d demotion docs
+    now point at a settlement-grained §1.8 -- terminology covered by §1.8 reconciliation
+    note; explicit per-doc redirects optional.'
+  - 'Jordan count-correction (chat, canon outranks memory): canon=14 provinces in
+    3 duchies + Himmelenger+Schoenland specials; Askeheim=geography T15 Uncontrolled,
+    Calamity epicentre (NOT a governed province). Jordan''s ''15 provinces / Askeheim+Himmelenger
+    specials'' was off. ''Valn'' peninsula name NOT found in geography reads (gap).'
+  - Workplan artifact valoria_forward_workplan_2026-05-30.md still uncommitted ->
+    reconcile into references/roadmap_state.yaml.
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -240,7 +259,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T03:31:31.159551+00:00'
+updated: '2026-05-31T05:06:00.465875+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
