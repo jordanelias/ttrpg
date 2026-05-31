@@ -295,6 +295,18 @@ policies:
     note: "Workplan + resolution docs. Large by design (comprehensive system enumeration)."
 
   # ────────────────────────────────────────────────────────────
+  # RESEARCH NOTES + SIM ACTIVITY LOGS — reference/historical, not governed registers
+  # (added 2026-05-31, Lane B item 5.6; precedent: deprecated/** · archives/** · tests/sim/sim_*.md skip-policies)
+  # ────────────────────────────────────────────────────────────
+  - match: "research/**"
+    on_exceed: "skip"
+    note: "Historical/HEMA research notes feeding design. Long-form reference prose, not a splittable register."
+
+  - match: "tests/sim/**/session_activity_log.md"
+    on_exceed: "skip"
+    note: "Per-run sim activity logs. Frozen historical output (same class as tests/sim/sim_*.md)."
+
+  # ────────────────────────────────────────────────────────────
   # CATCH-ALL — flag any unrecognized file above safe size
   # ────────────────────────────────────────────────────────────
   - match: "**/*.md"
