@@ -2,12 +2,13 @@ id: lane-b-2026-05-31
 scope: infrastructure
 task:
   skill: valoria-orchestrator
-  description: 'Lane B (Infrastructure/Tooling/Governance) of the 3-session write-disjoint
+  description: 'Lane B (Infrastructure/Tooling/Governance), 3-session write-disjoint
     model. Done this session: enablers (5.11 lane spec + report_lane, 5.10 id_reservations),
     5.5 freshness refresh, 5.6 compliance exemption, 1.17 stale-branch cleanup (partial),
-    7.2 hook-test coverage for the pure-logic gates. Both standing bootstrap warnings
-    clear. Remaining: 5.2 (subsystem docs — needs a location call), 5.8 (scope-vocab
-    refactor), 5.10-wiring (parked), hygiene batch.'
+    7.2 hook-test coverage (pure-logic gates), 5.2 Phase-2 subsystem docs (all 6).
+    Bootstrap clean. Remaining: 5.8 scope-vocab refactor, 7.2-followup (network-gated
+    gates), 5.10-wiring (parked), hygiene batch, + roadmap Phase-2 progress bump at
+    lane close.'
 owns:
 - skills/valoria-orchestrator/scripts/**
 - references/**
@@ -20,94 +21,88 @@ owns:
 context_files:
 - path: references/lane_assignments.yaml
   depth: full
-  reason: Lane B owns; all-lane owns/ranges/scopes/entry-items + launch protocol +
-    shared-file discipline.
+  reason: Lane B owns; all-lane owns/ranges/scopes + launch protocol + shared-file
+    discipline.
 - path: references/id_reservations.yaml
   depth: full
-  reason: 'Reserved ID blocks (B: ED 940-969 / PP 760-779); auto-allocation wiring
-    spec inside (parked).'
+  reason: 'Reserved ID blocks (B: ED 940-969 / PP 760-779); parked auto-allocation
+    spec inside.'
+- path: references/subsystems/ci_subsystem.md
+  depth: full
+  reason: 5.2 output; carries the 3 CI DRIFT findings needing Jordan/arch correction.
 - path: references/atomization_rules.yaml
   depth: full
-  reason: Compliance size policy; 5.6 added research/** + sim activity-log skip exemptions.
+  reason: Compliance size policy; 5.6 exemptions; first-match order matters.
 - path: skills/valoria-orchestrator/scripts/github_ops.py
   depth: skeleton
-  reason: report_lane added; append_to_register (L827) is the target of parked 5.10
-    auto-allocation.
+  reason: report_lane added; append_to_register L827 = target of parked 5.10.
 - path: skills/valoria-orchestrator/scripts/valoria_hooks.py
   depth: skeleton
-  reason: Gate chain Lane B operates under; 7.2 tests target these; test path now
-    in FORBIDDEN_TOKEN_EXEMPT_PATHS.
-- path: tests/hooks/test_correctness_gates.py
-  depth: skeleton
-  reason: 7.2 suite (33 tests) — the pattern to extend for the still-untested network-gated
-    gates.
+  reason: Gate chain; 7.2 tests target these; test path in FORBIDDEN_TOKEN_EXEMPT_PATHS;
+    scope sets for 5.8.
 working_state:
   done:
-  - 5.11 lane spec + report_lane; 5.10 id_reservations (verified ED 884 / PP 726).
-    Commit b5d5f5fb2c736047724bede59287318c8e519af8.
-  - '5.5 freshness: 12 stale + 2 missing SHAs synced; FRESHNESS clean. Commit ad98144d258f4597dec8c83eee5e12af2f657ed6.'
-  - '5.6 compliance: research/** + sim activity-log exempted; COMPLIANCE clean. Commit
-    c6465ea16f3b4bd5c67f4d52ada317e6d930578d.'
-  - '1.17 stale branches (PARTIAL, ref op, no commit): DELETED cleanup/remove-deprecated
-    (merged); FLAGGED (unmerged, NOT deleted) claude/refresh-state-3m7nL (17 commits)
-    + mb-sim-foundation-2026-05-29 (1). Workplan 1.17''s ''delete 3'' was wrong for
-    2 of 3.'
-  - '7.2 hook tests (PARTIAL): tests/hooks/test_correctness_gates.py — 33 tests, pass+fail
-    per gate, covering commit_message_gate / forbidden_token_gate / assert_unique_ids
-    / jsonl_ledger_gate / sim_fabrication_check / github_ops._validate_handoff_schema.
-    Verified green against the fetched repo copy. Same commit added the test path
-    to FORBIDDEN_TOKEN_EXEMPT_PATHS (its fixtures carry bare ''Galbados'' by design).
+  - 5.11 lane spec + report_lane; 5.10 id_reservations (ED 884 / PP 726). Commit b5d5f5fb2c736047724bede59287318c8e519af8.
+  - '5.5 freshness: 12 stale + 2 missing SHAs synced. Commit ad98144d258f4597dec8c83eee5e12af2f657ed6.'
+  - '5.6 compliance: research/** + sim activity-log exempted. Commit c6465ea16f3b4bd5c67f4d52ada317e6d930578d.'
+  - '1.17 stale branches (PARTIAL, ref op): DELETED cleanup/remove-deprecated (merged);
+    FLAGGED claude/refresh-state-3m7nL (17 commits) + mb-sim-foundation-2026-05-29
+    (1) — NOT deleted.'
+  - '7.2 hook tests (PARTIAL): tests/hooks/test_correctness_gates.py — 33 tests over
+    commit_message/forbidden_token/assert_unique_ids/jsonl_ledger/sim_fabrication/handoff-schema.
     Commit 772dfbb4b2c851c6dad4c9efd50065246c77ee98.'
+  - '5.2 Phase-2 subsystem docs (ALL 6): references/subsystems/{handoff,checkpoint,compliance,freshness,session_log,ci}_subsystem.md
+    — bottom-up from source reads. Commit 5d34727dd0d38657572f1373cebb08fdee69f6be.'
   next:
-  - '5.2 document undocumented subsystems (roadmap 2.1-2.6). LARGE. FIRST confirm
-    with Jordan: new references/ docs (Lane B can commit) vs feed the architecture
-    spec (Jordan-applied). Strongest fresh grounding: handoff (2.1), freshness (2.4),
-    compliance (2.3).'
-  - 5.8 D6 scope-vocab unification (TASK_REQUIRED_FILES / COMMIT_SCOPES regex / SESSION_SCOPES
-    -> one ~10-set; keep lane scopes first-class). Ship WITH tests.
-  - '7.2-FOLLOWUP: the network-gated gates remain untested — safe_commit, task_gate,
-    assert_bootstrap, context_gate, pre_commit co-file mutation. Need fetch/commit
-    mocking or a throwaway test branch. Extend test_correctness_gates.py pattern.'
-  - '5.10-WIRING [PARKED]: g.allocate_id(lane,id_class) reading/incrementing id_reservations.next_free
+  - 'ROADMAP BUMP (lane close): mark Phase-2 6 subsystem docs done + reconcile items_total
+    (1.19b: header says 0/11 but 6 subsystem next_actions — confirm the 11 sub-item
+    count vs 6 headers). roadmap_state.yaml is close-time/shared per lane spec — do
+    at close/integration, not mid-lane.'
+  - '5.8 D6 scope-vocab unification: SESSION_SCOPES (github_ops L936, 7 keys) vs TASK_REQUIRED_FILES
+    (10) vs COMMIT_FORMAT scopes (valoria_hooks L72, 11) -> one ~10-set; keep lane
+    scopes first-class. Ship WITH tests.'
+  - '7.2-FOLLOWUP: network-gated gates untested — safe_commit, task_gate, assert_bootstrap,
+    context_gate, co-file mutation. Need fetch/commit mocking or a throwaway branch.'
+  - '5.10-WIRING [PARKED]: g.allocate_id(lane,id_class) on id_reservations.next_free
     + co-commit; ship WITH a tests/hooks/ test. Read append_to_register (github_ops
     L827) first.'
-  - 'hygiene: 1.3 strike B6 (NOTE: 06_B6_fix.md is under designs/audit — NOT Lane
-    B owns; reassign/confirm); 1.10b repoint 6 files off editorial_ledger.yaml->.jsonl;
-    1.15 consolidate 3 editorial-archive dirs; 1.18 archive references/atoms_pending/2026-04-25
-    (27 files)+correct arch ~380; 1.19 roadmap staleness (combat-v32 status + Phase-2
-    ''0/11'' count — at lane close per shared-file rule); 1.20 sweep ~18 inline markers.'
+  - 'hygiene: 1.3 strike B6 (06_B6_fix.md is designs/audit — NOT Lane B owns; reassign/confirm);
+    1.10b repoint 6 files off editorial_ledger.yaml->.jsonl (PAIRS with the CI stale-threshold
+    drift); 1.15 consolidate 3 editorial-archive dirs; 1.18 archive references/atoms_pending/2026-04-25
+    (27 files)+correct arch ~380; 1.20 sweep ~18 inline markers.'
   solo_outside_parallel_window:
   - 5.1A SQLite wire OR retire SQL artifact + correct arch.
-  - 5.3 canonical_sources SHA-split -> references/canonical_freshness.yaml — NEVER
-    during parallel window. ALSO dedup the 5 DUPLICATE-ENTRY paths (workplan 5.4 undercounted
-    as 2).
+  - 5.3 canonical_sources SHA-split -> references/canonical_freshness.yaml (documented
+    in freshness_subsystem.md) — NEVER during parallel window (co-file SHA hook).
+    ALSO dedup the 5 DUPLICATE-ENTRY paths (5.4 undercounted as 2).
 key_values:
-- 'Reserved-block ID maxima verified: ED 884 (<890), PP 726 (<727).'
-- Lane declared via env VALORIA_LANE or /home/claude/.valoria_lane; report_lane prints
-  the Status-Block line.
-- 'Bootstrap warnings cleared this session: FRESHNESS 14->0 (5.5); COMPLIANCE 3->0
-  (5.6).'
-- '7.2: tests/hooks now has 2 files (placeholder_names + correctness_gates, 33 tests).
-  Run: python3 -m pytest tests/hooks -q (needs valoria_hooks+github_ops on path at
-  /home/claude per existing convention). pytest not preinstalled locally.'
-- FORBIDDEN_TOKEN_EXEMPT_PATHS now includes tests/hooks/test_correctness_gates.py
-  (alongside consistency_check.py, valoria_hooks.py).
-- 'Branches on ttrpg: main, deprecated (intentional), claude/refresh-state-3m7nL (flagged),
-  mb-sim-foundation-2026-05-29 (flagged).'
-- '5.3/5.4 FINDING: canonical_sources.yaml = 110 unique of 115 pairs -> 5 duplicate-entry
-  paths; 8.3k/12k tokens (not near-cap).'
+- 'Reserved-block ID maxima: ED 884 (<890), PP 726 (<727).'
+- Lane via env VALORIA_LANE or /home/claude/.valoria_lane; report_lane prints the
+  Status-Block line.
+- FORBIDDEN_TOKEN_EXEMPT_PATHS now includes tests/hooks/test_correctness_gates.py.
+- 5.2 docs live at references/subsystems/*.md (NOT added to canonical_sources — they
+  are docs, not freshness-tracked canon; keeps the hot-path file lean for 5.3).
+- 'CI DRIFT (in ci_subsystem.md, for Jordan/arch — arch is Jordan-applied): (1) .github/workflows/valoria-ci.yml
+  EXISTS + runs 8 jobs (syntax-check/register-sizes/hooks-verifier/co-file-check/editorial-check/integrity/compliance-check/skills-lint)
+  — arch <open_items> wrongly says CI ''not implemented''; accurate = built-but-non-enforcing
+  (branch protection off, D0). (2) roadmap 2.6 says ''2 workflow yml'' — only 1 present.
+  (3) ci_register_size_check.py THRESHOLDS still key on deprecated pre-JSONL files
+  (editorial_ledger.yaml/_summary.yaml, file_index_summary.md, session_log_archive.md).'
+- '5.8 scope sets located: SESSION_SCOPES github_ops L936; COMMIT_FORMAT/COMMIT_SCOPES
+  valoria_hooks L72-73; TASK_REQUIRED_FILES valoria_hooks ~L83.'
+- '5.3/5.4: canonical_sources.yaml 110 unique of 115 pairs -> 5 duplicate-entry paths;
+  ~8.3k/12k tokens.'
 blockers:
 - 'JORDAN-VERIFY (1.17): claude/refresh-state-3m7nL (17 unmerged commits) + mb-sim-foundation-2026-05-29
-  (1) carry work not in main. Confirm superseded/captured before any deletion. Do
-  NOT blind-delete.'
+  (1) carry work not in main. Confirm superseded/captured before any deletion.'
 - 'LANE-A LAUNCH NOT CONFLICT-FREE: overlaps the active faction handoff on params/**
   + designs/{provincial,world,personal}/** (9 paths). Track 1.1 before Lane A opens.
   Lane B + Lane C clear.'
 - 'SHARED FILE: references/canonical_sources.yaml co-claimed by faction handoff (co-file
   SHA hook). No 5.3 SHA-split during the parallel window.'
-- 'JORDAN-APPLIED (do not self-commit): PI/arch text. Open question: does 5.2 produce
-  references/ docs or feed the arch spec?'
-last_commit: 772dfbb4b2c851c6dad4c9efd50065246c77ee98
-created: '2026-05-31T22:30:00.319759+00:00'
-updated: '2026-05-31T22:30:00.319759+00:00'
+- 'JORDAN-APPLIED (do not self-commit): PI/arch text — incl. the 3 CI drift corrections
+  above + the M3/M4 decisions.'
+last_commit: 5d34727dd0d38657572f1373cebb08fdee69f6be
+created: '2026-05-31T22:47:59.482162+00:00'
+updated: '2026-05-31T22:47:59.482162+00:00'
 status: active
