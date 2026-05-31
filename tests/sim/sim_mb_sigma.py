@@ -1280,6 +1280,7 @@ PC_STAMINA_DRAIN   = 12     # front-column stamina lost per clash it fights
 PC_STAMINA_REST    = 5      # a non-engaged (reserve-fed) column recovers this per tick
 PC_ROTATE_FLOOR    = 50     # below this a fatigued front rotates if a fresher reserve rank exists
 PC_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights worse; thin lines can't rotate)
+PC_DEPTH_ROTATE    = 1.0    # depth fatigue-damping: effective drain = PC_STAMINA_DRAIN/(1+PC_DEPTH_ROTATE*(depth-1))
 PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density
 PC_FLANK_DEPTH_RESIST = 0.6 # depth blunts flank/overhang delta-sigma
 PC_FRONT_RANKS     = 2      # ranks a column must hold on its front; deeper ranks are free to reform to a flank
@@ -1352,6 +1353,39 @@ def distribute_casualties(unit, dmg, pairs):
         return
     for b in targets:
         b.density = max(0.0, b.density - dmg * (b.density / tot))
+
+def _fatigue_sigma(unit, engaged_cols):
+    """Increment 3: fatigue of the engaged front as a delta-sigma. 0 at full stamina, down to
+    -PC_STAM_SIGMA as the fighting columns tire. Density-weighted over the engaged columns.
+    [historical anchor: du Picq — a tiring front loses combat effectiveness; depth that can
+     rotate fresh ranks forward sustains it, a thin line that cannot rotate wears out.]"""
+    grid = getattr(unit, 'col_grid', None)
+    if not grid:
+        return 0.0
+    blocks = [b for b in grid if b.col in engaged_cols and b.alive()]
+    if not blocks:
+        blocks = [b for b in grid if b.alive()]
+    tot = sum(b.density for b in blocks)
+    if tot <= 0:
+        return 0.0
+    frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
+    return PC_STAM_SIGMA * (frac - 1.0)
+
+def update_stamina(unit, pairs):
+    """Increment 3: drain stamina of engaged columns (damped by depth — deeper rotates fresh
+    ranks forward, so it tires slower), rest non-engaged columns. Depth is the fatigue counter."""
+    grid = getattr(unit, 'col_grid', None)
+    if not grid:
+        return
+    eng = _engaged_cols(unit, pairs)
+    for b in grid:
+        if not b.alive():
+            continue
+        if b.col in eng:
+            drain = PC_STAMINA_DRAIN / (1.0 + PC_DEPTH_ROTATE * (b.depth - 1))  # deeper -> slower drain
+            b.stamina = max(0.0, b.stamina - drain)
+        else:
+            b.stamina = min(float(STAMINA_MAX), b.stamina + PC_STAMINA_REST)
 
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     """Resolve all contact pairs.
@@ -1455,6 +1489,9 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             if atom_b.unit_type == 'ranged': ns_b += RANGED_MELEE_SIGMA
             ns_a += _morale_sigma(unit_a)    # graded morale effectiveness (du Picq): low morale -> worse exchange
             ns_b += _morale_sigma(unit_b)
+            if PER_CELL:    # Increment 3: fatigue of the engaged front (depth-damped) as delta-sigma
+                ns_a += _fatigue_sigma(unit_a, set(c for r, c in p["a_cells"]))
+                ns_b += _fatigue_sigma(unit_b, set(c for r, c in p["b_cells"]))
             a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
             b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
@@ -1772,6 +1809,8 @@ def run_battle(unit_a, unit_b, max_turns=18):
             # Increment 2: mirror the same total casualties onto the per-column grid (keeps sum==hp).
             distribute_casualties(unit_a, result["dmg_a"] + volley_dmg_a * volley_hp_scale(unit_a), pairs)
             distribute_casualties(unit_b, result["dmg_b"] + volley_dmg_b * volley_hp_scale(unit_b), pairs)
+            update_stamina(unit_a, pairs)   # Increment 3: drain engaged (depth-damped), rest others
+            update_stamina(unit_b, pairs)
         unit_a.recalc_size()
         unit_b.recalc_size()
         # v18: discipline degradation moved to phase_boundary (D-6).
