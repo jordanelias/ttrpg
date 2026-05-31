@@ -1,0 +1,71 @@
+id: lane-c-2026-05-31
+scope: simulation
+task:
+  skill: valoria-simulator
+  description: Lane C (Simulation / Implementation) of the 3-session write-disjoint
+    operating model (workplan v2 2026-05-31). Launch steps 1-4 complete; working the
+    Lane C entry queue in priority order (6.1 -> 6.3 -> 6.4 -> 6.5 -> 8.1 -> 1.16;
+    6.2 canon-gated). valoria-game is a separate repo -> implementation work is collision-free
+    with A/B.
+owns:
+- sim/**
+- tests/sim/**
+- tests/coverage_matrix.md
+- valoria-game/**
+- tests/sim/HANDOFF_*
+context_files:
+- path: references/lane_assignments.yaml
+  depth: full
+  reason: Lane C owns/range/entry-items source of truth + launch protocol + shared-file
+    discipline (read full this session).
+- path: references/id_reservations.yaml
+  depth: full
+  reason: 'Lane C reserved ID blocks: ED 970-999 next_free 970 / PP 780-799 next_free
+    780; allocate ONLY from block.'
+working_state:
+  done:
+  - 'LAUNCHED proceed-lane-C 2026-05-31. Steps 1-4: bootstrapped simulation/godot;
+    read lane_assignments.yaml (spec LIVE — Lane B committed 5.11/5.10 @ b5d5f5fb)
+    + id_reservations.yaml; check_handoff_conflicts(owns)=[] (conflict-free vs all
+    3 active handoffs); lane declared via /home/claude/.valoria_lane=C (bootstrap
+    LANE C line prints).'
+  next:
+  - '6.1 RE-INVENTORY sim stubs vs current main: real git-tree walk of sim/ + tests/sim/
+    + grep ''raise NotImplementedError''; tier each per stub_infill_plan. STARTING
+    NEXT. (Code-search undercounts via default-branch index lag — do the real tree
+    walk.)'
+  - '6.3 finish Tier 3 (6) + Tier 4 (4) non-canon-gated stubs; preserve docstrings;
+    [canonical: path §] at every constant.'
+  - 6.4 investigate sim/personal/tribunal.py partial (1 NotImplementedError despite
+    mostly-implemented; confirm not a silent no-op hot path).
+  - 6.5 re-validate the 'balance claims invalid until Tier 0-2' caveat (tiers landed;
+    state trustworthy vs still-stubbed; combat is on the armature, separate).
+  - '8.1 valoria-game design-sync/divergence audit: ttrpg 707 commits ahead of last
+    sync (9057663f, 2026-05-04); re-run docs/design_sync.md + conversion_ledger.md
+    vs current HEAD; flag L/PS->per-territory/settlement relocation (LPS-1..2e) as
+    STRUCTURAL contradiction in existing Mandate/Legitimacy code.'
+  - 1.16 promote tests/sim/HANDOFF_massbattle_foundation_M3.md to a real write_handoff
+    entry; archive stale loose pile (HANDOFF_v20/21/22, sim_mb_06_handoff, sim_x_*).
+  canon_gated:
+  - 6.2 re-eval 8 canon-gated stubs (Varfell/Hafenmark/Church/treaty/insurgency) —
+    much canon now landed (faction cluster ratified, treaty_expiration diagnosed,
+    insurgency dissolution ED-883 ratified); identify which are now buildable.
+  notes:
+  - report_lane prints correctly INSIDE bootstrap once .valoria_lane=C is set (LANE
+    C line confirmed). Earlier standalone g.report_lane() 'not found' was premature
+    usage, NOT a Lane-B defect.
+  - 'BOUNDARY: combat-armature handoff (#3) works de-facto under tests/sim/v32-combat-balance/
+    though its declared owns is only designs/audit/2026-05-29-combat-armature/**;
+    Lane C will NOT write into tests/sim/v32-combat-balance/.'
+key_values:
+- 'Reserved IDs (allocate ONLY from block): ED 970-999 next_free 970; PP 780-799 next_free
+  780.'
+- Lane C launch_ready:true per lane_assignments.yaml; conflict-free confirmed this
+  session via check_handoff_conflicts.
+blockers:
+- NONE blocking. 6.2 is canon-gated (not blocked work — re-eval which stubs are now
+  unblocked).
+last_commit: e056195df2cc2fbc88b8aa982a48027c989913f4
+created: '2026-05-31T22:15:16.814034+00:00'
+updated: '2026-05-31T22:15:16.814034+00:00'
+status: active
