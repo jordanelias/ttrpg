@@ -5,7 +5,7 @@
 <!-- v30 baseline — renamed from designs/combat/combat_design_v1.md on 2026-04-13 -->
 # VALORIA — COMBAT DESIGN (v1)
 ## Date: 2026-04-02
-## Version: v1.6 (PP-238, PP-239, PP-247 applied; PP-232: weapon system rebuild, wound penalty, initiative, Health/Stamina, Stage 1/2 struck; PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
+## Version: v1.7 [combat-armature ratified decisions 2026-05-29/30 propagated: R1 pool (Agi-independent, supersedes PP-247), D1 damage (Impact×Coupling×Quality, supersedes the STR-multiplier formula + crit-doubles-PP-211), W1/W5 weapon-vs-armour subsumed into Coupling, L1 leverage→degree. See designs/audit/2026-05-29-combat-armature/RATIFIED*.] (PP-238, PP-239, PP-247 superseded-in-part; PP-232: PP-238, PP-239, PP-247 applied; PP-232: weapon system rebuild, wound penalty, initiative, Health/Stamina, Stage 1/2 struck; PP-210–218: audit gap fixes — Health formula, Critical Hit, Feint timing, Tie Up, Rescue, Dodge, Fibonacci, Anti-Armour, PP-086)
 ## Status: WORKING DESIGN — not compiled. This is the design-layer source for personal combat.
 ## Authority: Philosophical Foundations → this document → compilation (when ready)
 ## Mode applicability: ALL (TTRPG baseline; scales to Hybrid and Board Game via params)
@@ -31,7 +31,7 @@ Translation rules for each scale are noted inline.
 ## 1. COMBAT POOL
 
 **TTRPG:**
-Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)
+Combat Pool = max(5, Relevant History + 6)   [RATIFIED 2026-05-29 R1: Agility-INDEPENDENT resolution pool; supersedes the (Agility × 2) + History + 3 form and PP-247's pool clause. Agility instead feeds the σ-leverage TEMPO channel (initiative/quickness), not the pool size — closing the cross-attribute pool-dominance defect (C-04).]
 
 
 Modifiers:
@@ -168,13 +168,18 @@ Sling ammo modifier (vs medium and heavy armour only):
 
 ### Damage Resolution (PP-232)
 Net hits = Offence successes − Defence successes (minimum 0).
-Damage = net hits + (STR × multiplier) + weapon modifier vs armour tier (see table below).
-STR multiplier: Light×1, Heavy×2, Blade×1, Blunt×1.5. Multiplicative (Heavy Blunt=×3). NOT doubled on crit.
-Critical Hit: net hits ≥ 3 → weapon modifier doubled before applying armour reduction. (PP-211)
+Damage = Impact × Coupling × Quality   [RATIFIED 2026-05-30 D1 — ground-up rebuild; SUPERSEDES "net + (STR × multiplier) + weapon modifier".]
+  • Impact = Strength + Heft(weight)  — ADDITIVE force; NO Strength×weight multiplier (the ×1/×1.5/×2/×3 lookup is struck).
+  • Coupling = Delivery(head) × Transmission(material, mode) × GapAccess(coverage)  — derived from material resistance-per-mode (percussion / shear / puncture). The weapon-vs-armour interaction EMERGES from this (it subsumes the +mod table below, reproducing the same relationships: cut deflected by plate, point via gaps, blunt transmits, thrust beats mail).
+  • Quality = degree-of-success factor (Partial 0.6 / Success 1.0 / Overwhelming 1.5) — SUPERSEDES crit-doubles-weapon-mod.
+  • σ-leverage (tempo/reach/skill) gates the degree (RATIFIED L1): a finesse/skill edge lands Overwhelming more → more damage.
+  Calibrated so an even Success hit ≈ 1 Wound Interval. The wound model (WI = End+6) is unchanged.
+[STRUCK — RATIFIED D1: the STR-multiplier lookup is removed. Force is additive (Impact = Strength + Heft), and the head/weight/armour interaction is carried by Coupling, not a flat multiplier. Heavy weapons hit harder via Heft; blunt defeats armour via the percussion-transmission of Coupling — both derived, not looked up.]
+Critical/telling hit: handled by the Quality factor (Overwhelming, net ≥ 2×Ob ∧ ≥ 3, ×1.5) — RATIFIED D1 supersedes PP-211's "weapon modifier doubled". A telling blow amplifies the whole blow (vital placement), not just the weapon mod.
 
 STR is confirmed as a damage addition (PP-232).
 
-**Weapon modifier vs armour tier:**
+**Weapon modifier vs armour tier** [RATIFIED 2026-05-30: these values, with the W1 blunt taper and W5 point-gap row, are now the RELATIONSHIP REFERENCE reproduced by the damage Coupling (material resistance-per-mode); they are no longer a separate additive term — armour is counted once, in Coupling. Retained here as the canonical relationship the Coupling matches.]:
 | Weapon Class | vs None | vs Light | vs Medium | vs Heavy |
 |--------------|---------|----------|-----------|----------|
 | Light Blade | +3 | +2 | +1 | +0 |

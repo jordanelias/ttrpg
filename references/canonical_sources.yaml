@@ -101,7 +101,7 @@ systems:
     canonical_sha__params__bg__core_md: "a714282b4f2404f724e5b870fc186bd78e12184d"
   combat:
     design_doc: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "9e207cdd883aa2fa559a81dab08a0592447b29d5"
+    canonical_sha__designs__scene__combat_v30_md: "01af63f3918ea2723820bc6cbe99ab08e5fbd1cf1f530de0f7f8bff0ffbca603"
     params: params/combat.md
     canonical_sha__params__combat_md: "878cbe8243fd3ca649087949e84271756edb8360"
   threadwork:
