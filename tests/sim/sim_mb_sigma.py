@@ -992,6 +992,8 @@ class Unit:
         self.stamina_max = STAMINA_MAX
         for a in self.subunits:
             if a.stance == "balanced": a.stance = self.stance
+        # Increment 1: per-column block grid (state only; resolution wires in at Increment 2).
+        self.col_grid = build_column_grid(self) if PER_CELL else None
 
     def total_troops(self): return sum(a.troop_count for a in self.subunits)
 
@@ -1265,6 +1267,60 @@ def _sigma_softcap(x, m=1.5):                 # [canonical: modifier_system_spec
 def _sigma_net_boost(net_sigma, pool, tn=7):  # mu-shift; [canonical: params/core.md continuous engine; modifier_system_spec §2.1]
     _SIG = {6: 0.806, 7: 0.800, 8: 0.781}     # sigma per die at TN [canonical: params/core.md EV table]
     return _sigma_softcap(net_sigma) * _SIG.get(tn, 0.800) * math.sqrt(max(1, pool))
+
+# === PER-CELL (per-column) COMBAT MODEL — Increment 1: state only (Jordan 2026-05-31) ===
+# Diagnostic-settled (ners_verdict_percell_resolution.md, corrected by the 2026-05-31 double-check):
+# T3 units carry only ~400 troops, so >=100-troop multi-rank blocks are infeasible. The grid is
+# COLUMN-level (frontage columns; each column = density + stamina + depth=rank count), and combat
+# (later increments) resolves per column-pair via the CONTINUOUS sigma path (mu-shift, stable at small N).
+# PER_CELL OFF reproduces the committed engine (0dea67d1) EXACTLY: the grid is built but unused.
+PER_CELL = _sigma_os.environ.get('PER_CELL', '0') == '1'   # default OFF; ON enables per-column density/depth/fatigue/charge
+# class-B tunables ported from per_cell_combat.py (validated prototype 75908b9e); Jordan-vetoable
+PC_STAMINA_DRAIN   = 12     # front-column stamina lost per clash it fights
+PC_STAMINA_REST    = 5      # a non-engaged (reserve-fed) column recovers this per tick
+PC_ROTATE_FLOOR    = 50     # below this a fatigued front rotates if a fresher reserve rank exists
+PC_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights worse; thin lines can't rotate)
+PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density
+PC_FLANK_DEPTH_RESIST = 0.6 # depth blunts flank/overhang delta-sigma
+PC_FRONT_RANKS     = 2      # ranks a column must hold on its front; deeper ranks are free to reform to a flank
+PC_ENVELOP_SIGMA   = 0.5    # overhang column attacking an enemy flank
+PC_CHARGE_SIGMA    = 0.55   # per-rank-of-unabsorbed-penetration delta-sigma a charger gets on impact
+PC_CHARGE_TICKS    = 3      # charge shock applies only for the first few ticks of contact
+
+class _ColBlock:
+    """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
+    Depth is the reserve queue (refill + fatigue rotation + flank-refusal in later increments)."""
+    __slots__ = ('col', 'density', 'start_density', 'stamina', 'depth')
+    def __init__(self, col, density, depth):
+        self.col = col
+        self.density = float(density)
+        self.start_density = float(density)
+        self.stamina = float(STAMINA_MAX)
+        self.depth = int(depth)
+    def size(self):
+        return self.density / BLOCK_SIZE
+    def alive(self):
+        return self.density > 0.5
+
+def build_column_grid(unit):
+    """Derive a per-column block grid from the unit's CURRENT cell footprint (continuous-sigma granularity).
+    frontage = distinct columns; per column: troops = (#cells in column) * troops/cell; depth = #ranks.
+    Returns list[_ColBlock] ordered left->right. State only — resolution wires in at Increment 2."""
+    cells = []
+    for a in unit.subunits:
+        cells.extend(a.cells())
+    if not cells:
+        return []
+    ncells = len(cells)
+    tpc = unit.total_troops() / ncells           # troops per native cell
+    bycol = {}
+    for (r, c) in cells:
+        bycol.setdefault(c, []).append(r)
+    grid = []
+    for c in sorted(bycol):
+        ranks = bycol[c]
+        grid.append(_ColBlock(col=c, density=tpc * len(ranks), depth=len(ranks)))
+    return grid
 
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     """Resolve all contact pairs.
