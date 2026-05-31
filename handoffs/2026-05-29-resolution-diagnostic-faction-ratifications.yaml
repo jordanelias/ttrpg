@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: 30a8c6433bc4f2a4ce0994dd36e26dd0c336e673
+last_commit: 8a35173d26b698f52a9b9c4a13a1e406b6ccd697
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -211,24 +211,36 @@ working_state:
       which is well under 1M/Opus). Repo committed & consistent at cf2c1c27 (LPS-2d);
       nothing staged. Remaining work fully specified for next session.
   last_commit: 30a8c6433bc4f2a4ce0994dd36e26dd0c336e673
-  lps_2e: 'L/PS re-grained faction->SETTLEMENT (LPS-1 used the 17 geography territories;
-    Jordan ruling 2026-05-30). Settlement Weight W=base(Type)+Prosperity+FacilityTier
-    (operationalizes unscaled §1.2 Population). Mandate=clamp(round(7*T/(T+K))), T=sum_s
-    W_s*(0.5L_s+0.5PS_s)/7, K=6 -- size-weighted, saturating, bounded. Stage-4 sim:
-    one-big-province>many-small (6 vs 5), range [0,7], Mandate<->settlement feedback
-    convergent. geography ''territory'' (T1-T17) kept as province-tier label (option
-    2) + reconciliation note in §1.8. Faction aggregate L/PS now W-weighted means.'
+  lps_2e: 'DONE. L/PS RE-GRAINED faction->SETTLEMENT + SIZE-WEIGHTED Mandate (Jordan
+    ruling 2026-05-30). 3 commits: 30a8c643 (settlement_layer §1.8 re-grain + Settlement
+    Weight W=base(Type)+Prosperity+FacilityTier [operationalizes unscaled §1.2 Population]
+    + Mandate=clamp(round(7*T/(T+K))), T=sum_s W_s*(0.5L_s+0.5PS_s)/7, K=6, size-weighted
+    saturating bounded; sim: big-province>many-small 6v5, [0,7], feedback convergent);
+    f69546f9 (5 consumer docs: faction_behavior §2 schema + faction_canon §3.4/§5.1/§5.2
+    + faction_state_authoring §8 inits + stats_1_7_scale headline+Mandate Recovery
+    + derived_stats §8 footnote -> settlement-grain, Mandate formula points at §1.8
+    as authoritative); 8a35173d (faction_behavior §3.4/§3.5/§3.6 terminology territory->settlement;
+    strictness already read aggregate_L/PS). geography ''territory'' T1-T17 kept as
+    province-tier label (option 2) + reconciliation note in §1.8. All verified live.'
   remaining:
-  - 'LPS consumer rewiring (staged LPS-2+ in master ledger _lps_structural_redesign_2026-05-30):
-    faction_behavior strictness, derived_stats footnote, LPS-2/2c/2d demotion docs
-    now point at a settlement-grained §1.8 -- terminology covered by §1.8 reconciliation
-    note; explicit per-doc redirects optional.'
+  - 'RESIDUAL (separate per-effect decision, NOT in wiring pass): Church per-territory
+    L-STRIP effects in stats_1_7_scale (Excommunication/Heresy/Baralta ''-1 Legitimacy
+    per controlled territory'') still authored per-territory; whether they now apply
+    per-SETTLEMENT or per-PROVINCE is a magnitude decision for Jordan (they cite §1.8).'
+  - faction_behavior §3.4/§3.5 ΔL/ΔPS APPLICATION prose ('per controlled territory')
+    -> covered by §1.8 reconciliation note; optional further tightening.
+  - Master ledger _lps_structural_redesign_2026-05-30 entry NOT yet updated to mark
+    LPS-2e done (no create_file_graphql helper; update on next safe_commit touching
+    designs/audit, or leave -- handoff carries state).
   - 'Jordan count-correction (chat, canon outranks memory): canon=14 provinces in
-    3 duchies + Himmelenger+Schoenland specials; Askeheim=geography T15 Uncontrolled,
-    Calamity epicentre (NOT a governed province). Jordan''s ''15 provinces / Askeheim+Himmelenger
-    specials'' was off. ''Valn'' peninsula name NOT found in geography reads (gap).'
+    3 duchies + Himmelenger+Schoenland specials; Askeheim=geography T15 Uncontrolled
+    Calamity epicentre (NOT a governed province). ''Valn'' peninsula name NOT found
+    in geography reads (gap).'
   - Workplan artifact valoria_forward_workplan_2026-05-30.md still uncommitted ->
     reconcile into references/roadmap_state.yaml.
+  - 'Remaining diagnostic systems untouched (skill hypotheses): personal combat (-1D
+    wound at 5D floor, live Lesson-2 candidate), social contest, mass battle, investigation,
+    peninsula/victory, threadwork Coherence.'
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -259,7 +271,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T05:06:00.465875+00:00'
+updated: '2026-05-31T06:00:58.020616+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
