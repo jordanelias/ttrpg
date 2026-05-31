@@ -34,8 +34,15 @@ working_state:
     Jordan.'
   - '1.8 VERIFIED: ED-868-873 filed + dup-free; ED-874-877 legitimately reserved-unfiled
     (875/879 = Jordan-gated faction candidates, GATE G8). No refile/dedup needed.'
+  - 'needs-read deep pass COMPLETE — all 28 re-bucketed; 0 Lane-A-actionable. Routed:
+    15 faction-deferred (incl the 3.2 ED-844-855 derivation cluster), 4 -> Lane C
+    mass-battle (ED-872 P1 Pool-Floor; 857/858/859), 2 -> Jordan (ED-883 P1 resolver;
+    ED-651 character/narrative = not Claude''s), 2 evidence-correctable in UNOWNED
+    designs/{articulation,threadwork}, 4 gap-fill scope-deferred, 1 audit-ingestion.
+    No stale-kills. Artifact updated.'
   in_progress:
-  - none — applicable narrowed-scope work is exhausted; remainder blocked (see next/blockers).
+  - none — Lane A entry queue fully triaged + routed; no in-scope work remains pending
+    prerequisites.
   next:
   - 'AWAIT prerequisites + Jordan: the recon-zone fill (ED-874-882, items 1.8/1.11)
     is BLOCKED on the P1 resolver dispute (blocker #1) — do NOT file until resolved.'
@@ -70,9 +77,13 @@ blockers:
 - 'UN-LANED (Track 1.1): archive the COMPLETED faction handoff so its claim on params/factions
   + designs/{world,provincial} clears and Lane A can re-claim full scope (ED-879 C3
   + ED-875 carried at GATE G8).'
+- 'CROSS-LANE -> Lane B (NEW, F-NR1 lane-gap): designs/articulation, designs/threadwork
+  (and designs/scene, designs/audit) are in NO lane''s owns -> ED-842/843 (evidence-correctable
+  value/extract fixes) + ED-617/864 have content no lane can write. Assign these subdirs
+  in lane_assignments.yaml or mark integration-only.'
 last_commit: 52c4d946448fca2badbda6650ec15e6971961607
 session_token: cd96a77164db7b9e
 created: '2026-05-31T23:25:59.126735+00:00'
-updated: '2026-05-31T23:42:48.764393+00:00'
+updated: '2026-05-31T23:55:00.187266+00:00'
 status: active
 key_values: []
