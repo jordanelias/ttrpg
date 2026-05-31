@@ -1291,10 +1291,13 @@ PC_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights wors
 PC_DEPTH_ROTATE    = 1.0    # depth fatigue-damping: effective drain = PC_STAMINA_DRAIN/(1+PC_DEPTH_ROTATE*(depth-1))
 PC_FRONTAGE_BLEND  = 0.0    # Incr4 contact-fraction: 0=pure width (more cols=more men), 1=pure frontage (depth-neutral)
 PC_FRONTAGE_REF    = 7.0    # reference frontage (columns) for the width term normalization
+PC_FLANK_CAP       = 3      # max overhang columns that count toward envelopment
 PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density
 PC_FLANK_DEPTH_RESIST = 0.6 # depth blunts flank/overhang delta-sigma
 PC_FRONT_RANKS     = 2      # ranks a column must hold on its front; deeper ranks are free to reform to a flank
-PC_ENVELOP_SIGMA   = 0.5    # overhang column attacking an enemy flank
+PC_ENVELOP_SIGMA   = 0.0    # DISABLED: depth-aware contact fraction (Incr4) already captures the width/envelopment
+                            # advantage; a separate envelopment delta-sigma double-counts and breaks H4 Cannae.
+                            # (NERS-N/E: do not add unneeded apparatus.) _envelopment_sigma retained, dormant at 0.
 PC_CHARGE_SIGMA    = 0.55   # per-rank-of-unabsorbed-penetration delta-sigma a charger gets on impact
 PC_CHARGE_TICKS    = 3      # charge shock applies only for the first few ticks of contact
 
@@ -1380,6 +1383,29 @@ def _fatigue_sigma(unit, engaged_cols):
         return 0.0
     frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
     return PC_STAM_SIGMA * (frac - 1.0)
+
+def _envelopment_sigma(wide_unit, narrow_unit):
+    """Increment 6: the wider formation's overhang wheels into the narrow side's flanks (a delta-sigma
+    advantage to the WIDER side), but the narrow side's RESERVE DEPTH refuses it — reserve ranks beyond
+    PC_FRONT_RANKS reform to meet each enveloper evenly. Returns (sigma_to_wide, sigma_to_narrow_penalty=0).
+    [historical anchor: envelopment (Cannae) vs a deep formation refusing/bending its flank.]"""
+    wg = getattr(wide_unit, 'col_grid', None)
+    ng = getattr(narrow_unit, 'col_grid', None)
+    if not wg or not ng:
+        return 0.0
+    w_cols = sum(1 for b in wg if b.alive())
+    n_cols = sum(1 for b in ng if b.alive())
+    overhang = w_cols - n_cols
+    if overhang <= 0:
+        return 0.0
+    overhang = min(overhang, PC_FLANK_CAP)
+    # narrow side's reserve depth available to reform to the flanks
+    n_min_depth = min((b.depth for b in ng if b.alive()), default=1)
+    reform_capacity = max(0, n_min_depth - PC_FRONT_RANKS)
+    enveloping = max(0, overhang - reform_capacity)        # overhang columns NOT refused by depth
+    if enveloping <= 0:
+        return 0.0
+    return PC_ENVELOP_SIGMA * enveloping
 
 def _defender_depth(unit, contact_cells):
     """Increment 5: representative depth of the defender's engaged columns (charge absorption).
@@ -1523,6 +1549,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             if PER_CELL:    # Increment 3: fatigue of the engaged front (depth-damped) as delta-sigma
                 ns_a += _fatigue_sigma(unit_a, set(c for r, c in p["a_cells"]))
                 ns_b += _fatigue_sigma(unit_b, set(c for r, c in p["b_cells"]))
+            if PER_CELL:    # Increment 6: envelopment — wider side pressures flanks, refused by enemy depth
+                env_a = _envelopment_sigma(unit_a, unit_b)   # A wider -> A gets the envelopment bonus
+                env_b = _envelopment_sigma(unit_b, unit_a)   # B wider -> B gets it
+                ns_a += env_a
+                ns_b += env_b
             a_net = roll_pool(a_pool) + _sigma_net_boost(ns_a, a_pool)
             b_net = roll_pool(b_pool) + _sigma_net_boost(ns_b, b_pool)
         else:
