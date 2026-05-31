@@ -2,15 +2,11 @@ id: lane-a-2026-05-31
 scope: editorial
 task:
   skill: valoria-orchestrator
-  description: 'Lane A (Canon/Editorial/Design-content), write-disjoint 3-session
-    model. LAUNCHED ON A VERIFIED-DISJOINT REDUCED SCOPE (canon/** + designs/{personal,proposals}/**).
-    Full Lane A owns (params/**, designs/{world,provincial}/**, references/propagation_map.md)
-    DEFERRED: they overlap the active faction handoff (8 params/designs paths) + lane-b
-    (propagation_map). Track 1.1 reconciliation unmet AND check_handoff_conflicts
-    is broken for glob owns (false-empty), so disjointness was verified manually with
-    a correct prefix-component overlap check. Working ledger-scoped items: 2.14 open-backlog
-    triage (flagship), 3.2 ED-844..856 status flips, 1.8 ED 868..877 filing-verify,
-    ledger portions of 1.2/1.11/1.13.'
+  description: Lane A (Canon/Editorial/Design-content), write-disjoint model, VERIFIED-DISJOINT
+    REDUCED scope (canon/** + designs/{personal,proposals}/**). 2.14 triage + 1.8
+    verify DONE. Remaining queue is faction-coupled and BLOCKED on prerequisites +
+    a newly-surfaced P1 resolver-ratification dispute (see blockers). Full scope (params/**,
+    designs/{world,provincial}/**, references/propagation_map.md) still deferred.
 owns:
 - canon/**
 - designs/personal/**
@@ -18,65 +14,65 @@ owns:
 context_files:
 - path: references/lane_assignments.yaml
   depth: full
-  reason: 'Lane A assignment: owns/ranges/scopes + launch protocol + shared-file discipline.'
+  reason: Lane A assignment + launch protocol + shared-file discipline.
 - path: canon/editorial_ledger.jsonl
   depth: full
-  reason: 2.14 triage target (326KB; parsed on-disk to avoid context bloat).
+  reason: Triage target + recon-zone (326KB; parsed on-disk).
+- path: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
+  depth: full
+  reason: Source for recon-zone ED-874-882 (DEFERRED — encodes resolver dispute).
 - path: canon/02_canon_constraints.md
   depth: full
-  reason: P-01..P-15 canon authority for evidence-correctable rulings.
-- path: references/id_reservations.yaml
-  depth: full
-  reason: Lane A reserved ED 890-939 / PP 727-759 / recon-zone 874-889.
+  reason: Canon authority for evidence-correctable rulings.
 working_state:
   done:
-  - Lane A opened on verified-disjoint reduced scope (canon/** + designs/{personal,proposals}).
-    Disjointness PROVEN via correct overlap algorithm (the live check_handoff_conflicts
-    is broken for glob owns).
+  - Lane A opened on verified-disjoint reduced scope; disjointness PROVEN with a correct
+    overlap algorithm (live check_handoff_conflicts is broken for glob owns).
+  - '2.14 open-backlog triage COMPLETE — 85 entries (counts 73 open + 12 prov VERIFIED).
+    Buckets: migration-id-conflict 23 (Jordan/G7-IDR), needs-read 28, gap-fill 16,
+    evidence-correctable 8, jordan 6, sim-tunable 4 (Lane C). Artifact delivered to
+    Jordan.'
+  - '1.8 VERIFIED: ED-868-873 filed + dup-free; ED-874-877 legitimately reserved-unfiled
+    (875/879 = Jordan-gated faction candidates, GATE G8). No refile/dedup needed.'
   in_progress:
-  - 2.14 — triaging 73 open + 12 provisional ledger entries into evidence-correctable
-    / gap-fill-mechanical-tier / Jordan-decision / stale-kill (counts to be verified
-    against live ledger).
+  - none — applicable narrowed-scope work is exhausted; remainder blocked (see next/blockers).
   next:
-  - 3.2 flip ED-844..856 -> ratified (ledger-only)
-  - 1.8 verify ED 868..877 filed+deduped (ledger-only)
-  - ledger portions of 1.2/1.11/1.13
-  - re-claim deferred scope once prerequisites clear
+  - 'AWAIT prerequisites + Jordan: the recon-zone fill (ED-874-882, items 1.8/1.11)
+    is BLOCKED on the P1 resolver dispute (blocker #1) — do NOT file until resolved.'
+  - Re-claim deferred scope (params/**, designs/{world,provincial}/**, propagation_map)
+    after Track 1.1 + propagation_map fix.
+  - 'Jordan decisions feed: 6 design-decisions + 23 migration ID-conflicts + ED-869
+    Crown-Military confirm.'
+  - Route 4 sim-tunable EDs to Lane C / Track 4.4.
   deferred:
-  - 3.1 (designs/provincial + params), 3.3/3.4 (params + designs/world ms_trajectory),
-    1.7 (designs/audit) — faction-owned; blocked until Track 1.1 archives the COMPLETED
-    faction handoff.
+  - '3.2 RE-CHARACTERIZED: ED-844-856 are NOT flip-to-ratified — they are Pass-2h/2i
+    derivation-provenance flags (faction-owned content); mostly Jordan design-decisions
+    + gap-fills. Deferred/Jordan, not a Lane-A ledger flip.'
+  - 3.1/3.3/3.4 (params + designs/world ms_trajectory), 1.7 (designs/audit engine_replacement_reconciled
+    = ED-866) — faction-owned; blocked on Track 1.1.
 blockers:
-- 'CROSS-LANE -> Lane B (1): check_handoff_conflicts is BROKEN for glob owns. It does
-  fnmatch(proposed, pattern) with proposed=lane owns (globs) -> only matches when
-  a lane owns entry is a concrete path under another handoff''s glob; misses all glob-vs-path
-  overlaps (returned false-empty for the faction overlap). Fix: prefix-component region-overlap,
-  strip section annotations, match both directions; add tests/hooks coverage (7.2).'
+- 'P1 CANON-INTEGRITY (VERIFIED, ED-883/865/866): the deterministic+stochastic Domain
+  Action resolver is asserted CANONICAL in params/factions/stats_1_7_scale.md L55/L91/L94/L100
+  citing ED-865/874 (+ED-885 ''Jordan-ratified''), BUT ED-865 [open,P1] STRIKES the
+  resolver''s GD-2 justification as a miscitation, ED-874 + ED-885 are UNWRITTEN,
+  and ED-866 [open,P1] says engine_replacement_reconciled MANUFACTURED a 0-P1 bill
+  (dropped F4/F5/F8/F9). The faction ratifications (270915da: ci_political/faction_layer/treaty
+  positioning) + Lane C''s canon-gated stubs DEPEND on this resolver. Needs JORDAN
+  adjudication + Track 1.7 (re-issue register, strike GD-2 miscite; designs/audit,
+  faction-owned) BEFORE the resolver is ratified-true and recon-zone ED-874-882 can
+  be filed. Cross-lane: faction handoff + Lane C.'
+- 'CROSS-LANE -> Lane B (1): check_handoff_conflicts BROKEN for glob owns (fnmatch(proposed,pattern),
+  proposed=globs -> false-empty; missed the faction overlap). Fix: prefix-component
+  region-overlap + strip annotations + both directions; tests/hooks (7.2).'
 - 'CROSS-LANE -> Lane B (2): references/propagation_map.md double-claimed (Lane A
-  explicit owns vs lane-b references/**). Co-file rule assigns propagation_map ->
-  Lane A. Add it to lane-b shared_not_exclusive + narrow lane-b owns.'
-- 'UN-LANED prerequisite (Track 1.1): archive the COMPLETED faction handoff ''2026-05-29-resolution-diagnostic-faction-ratifications''
-  (work ratified to canon; only ED-879 C3 + ED-875 remain, carried at GATE G8) so
-  its claim on params/factions + designs/{world,provincial} clears and Lane A can
-  re-claim full scope.'
-- 'DEFERRED SCOPE held until the above clear: params/**, designs/{world,provincial}/**,
-  references/propagation_map.md.'
-last_commit:
-  ttrpg:session_log_current.md: 52c4d946448fca2badbda6650ec15e6971961607
-  ttrpg:session_logs/index.md: 158980444886602e99ea5776beb7360907b35e38
-  ttrpg:references/file_index_summary.md: 52c4d946448fca2badbda6650ec15e6971961607
-  ttrpg:references/canonical_sources.yaml: 52c4d946448fca2badbda6650ec15e6971961607
-  ttrpg:references/roadmap_state.yaml: 52c4d946448fca2badbda6650ec15e6971961607
-  ttrpg:references/lane_assignments.yaml: e219376fd67937584d6b79915b381e1e9abbdbeb
-  ttrpg:handoffs/2026-05-29-combat-armature-sigma-leverage.yaml: 158980444886602e99ea5776beb7360907b35e38
-  ttrpg:handoffs/2026-05-29-resolution-diagnostic-faction-ratifications.yaml: 158980444886602e99ea5776beb7360907b35e38
-  ttrpg:handoffs/lane-b-2026-05-31.yaml: 158980444886602e99ea5776beb7360907b35e38
-  ttrpg:handoffs/lane-c-2026-05-31.yaml: 158980444886602e99ea5776beb7360907b35e38
-  ttrpg:references/id_reservations.yaml: e219376fd67937584d6b79915b381e1e9abbdbeb
-  ttrpg:canon/editorial_ledger.jsonl: fb024547ebff95af176a3cd64ce8f8ea8df3474c
-  ttrpg:canon/02_canon_constraints.md: fb024547ebff95af176a3cd64ce8f8ea8df3474c
-session_token: 2b33697aa63bc788
+  explicit vs lane-b references/**); co-file rule -> Lane A. Add to lane-b shared_not_exclusive
+  + narrow owns.'
+- 'UN-LANED (Track 1.1): archive the COMPLETED faction handoff so its claim on params/factions
+  + designs/{world,provincial} clears and Lane A can re-claim full scope (ED-879 C3
+  + ED-875 carried at GATE G8).'
+last_commit: 52c4d946448fca2badbda6650ec15e6971961607
+session_token: cd96a77164db7b9e
 created: '2026-05-31T23:25:59.126735+00:00'
-updated: '2026-05-31T23:25:59.126735+00:00'
+updated: '2026-05-31T23:42:48.764393+00:00'
 status: active
 key_values: []
