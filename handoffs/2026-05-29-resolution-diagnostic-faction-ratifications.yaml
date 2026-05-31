@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: b339335cb4a6f085955c90c32a3a5862f5a85e2e
+last_commit: d8382baa302ad1d7a36815e940d571a08bebbda8
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -223,25 +223,33 @@ working_state:
     strictness already read aggregate_L/PS). geography ''territory'' T1-T17 kept as
     province-tier label (option 2) + reconciliation note in §1.8. All verified live.'
   remaining:
-  - 'Hafenmark Sovereign Authority Doctrine (bare Mandate vs Ob 4, once/arc) NOT migrated
-    -- same bare-stat class + the §3B 0%-wall example, but the audit §2 includes it
-    in F-RESID while §7/ED-885 listed only 4 (excludes it). Flagged in stats_1_7_scale
-    governed-checks note. Jordan call: migrate too (M=Mandate-6) or hold (Hafenmark-identity
-    high bar).'
-  - 'F-BAL [P2 blocker, ED-886]: parliamentary_transfer + treaty re-bind -- resolver-correct
-    but balance-load-bearing (floor 0.05 shifts v12c N=1000 equilibrium). Needs N=1000
-    re-sweep on the resolver + re-tune before migrating. OPEN TRADE-OFF, Jordan balance
-    decision.'
-  - sigma-leverage engine itself (engine/sigma_leverage_engine_armature.md) is Class-B,
-    NOT canonized -- pending Jordan + Omega vetting (§H) before it can be a canon
-    engine spec; the faction d+sigma resolver (ED-865/874) is its only canon instance.
-  - 'F-LESS2 [P3]: open Lesson-2 residual (prior faction-layer ''F4'' absolute modifier)
-    -- carried forward, not closed.'
-  - ED-885/886/887 staged in faction_sigma_engine_audit §8 + editorial_ledger.jsonl
-    pending (no append helper this session); ED-885 now APPLIED.
-  - 'Untouched diagnostic systems: personal combat (-1D wound at 5D floor -- the engine''s
-    textbook port candidate, §G), social contest (healthy, do-not-port), mass battle,
-    investigation, peninsula/victory, threadwork Coherence.'
+  - '[NERS P2 INTENT - top decision] ''few huge > many small'' is value-dependent:
+    the size-weighted Mandate is PURE total-population-mass, so many moderate settlements
+    can out-mass a few large ones (holds ''few huge > many small'' only when W_huge
+    > ~4*W_small). CONFIRM: is Mandate pure population-mass (current, correct as mass)
+    OR should a huge capital carry a super-linear hugeness premium (widen Weight range
+    / add per-settlement size term)? Re-sim before adopting a premium (snowball risk).'
+  - '[NERS P2 N/Lesson-1] Settlement Weight (base+Prosperity+FacilityTier) may double-count
+    development -- Prosperity 0-5 and FacilityTier 0-3 both rise with investment,
+    likely correlated. Measure correlation against the 37-settlement registry values;
+    if high, collapse Weight to fewer terms (keep a type/infra term so a low-Prosperity
+    fortress/cathedral isn''t under-weighted).'
+  - '[NERS P3 E] size mechanic is the elegance cost (Weight composite + saturation
+    + K=6); direction intuitable, magnitude not. Optional: simpler Weight / surface
+    Mandate drivers in-UI / justify-or-tune K=6 (sim-calibrated, not principle-derived).'
+  - Hafenmark Sovereign Authority Doctrine (bare Mandate vs Ob 4) NOT migrated --
+    same bare-stat class + the §3B 0%-wall example; audit §2 includes it in F-RESID,
+    §7/ED-885 listed only 4. Migrate (M=Mandate-6) or hold (Hafenmark identity)?
+  - 'F-BAL [P2 blocker, ED-886]: parliamentary_transfer + treaty re-bind resolver
+    migration is balance-load-bearing (shifts v12c N=1000 equilibrium); needs N=1000
+    re-sweep + re-tune before migrating.'
+  - sigma-leverage engine (engine/) Class-B, NOT canonized -- pending Jordan + Omega
+    vetting (§H); only the d+sigma resolver (ED-865/874) is its canon instance.
+  - ED-885 APPLIED; ED-886/887 + the NERS-audit P2 findings staged, editorial_ledger.jsonl
+    append pending (no helper this session).
+  - 'Untouched diagnostic systems: personal combat (-1D wound at 5D floor -- engine''s
+    textbook port candidate), social contest (healthy/do-not-port), mass battle, investigation,
+    peninsula/victory, threadwork Coherence.'
   lps_2e_audit_patch: 'VERIFIED LIVE on HEAD=72111826. Audit of the LPS-2e re-grain
     found + fixed: (a) a missed SECOND Mandate-aggregation spec in faction_behavior
     §4 (was old plain-mean/territory) -> W-weighted settlement means + size-weighted
@@ -273,6 +281,13 @@ working_state:
     drift); degree tables preserved; governed-checks list extended (closes F-RESID/S
     self-contradiction). Numerically confirmed: uniform +10pp/pt, floor 0.05, contested
     underdog 5% (was ~0%).'
+  ners_audit: 'COMPREHENSIVE ALL-DIRECTIONS NERS AUDIT committed (d8382baa, designs/audit/2026-05-30-lps-mandate-ners-audit/).
+    Verdict: NERS-COMPLIANT AS BUILT -- no hard mechanical defect (conquest snowball
+    bounded by saturation+0-7 cap; collapse spiral floored by resolver 0.05; Mandate<->settlement
+    feedback mean-reverting+convergent; Church L-strip -1/settlement = -1 aggregate,
+    bounded; resolver uniform +10pp/pt). Self-authored: CORRECTED the prior session''s
+    ''size test passes 6 vs 5'' -> value-dependent (pure population-mass; 12 moderate
+    villages out-mass 3 large, tie at 6; equal mass ties 5=5).'
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -303,7 +318,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T06:52:38.879202+00:00'
+updated: '2026-05-31T07:14:34.841730+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
