@@ -98,10 +98,10 @@ systems:
     params: params/core.md
     canonical_sha__params__core_md: "7d0b7447b99c2e837f92aab0fb9e9bacda6690b5"
     bg_params: params/bg/core.md
-    canonical_sha__params__bg__core_md: "a714282b4f2404f724e5b870fc186bd78e12184d"
+    canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
   combat:
     design_doc: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "01af63f3918ea2723820bc6cbe99ab08e5fbd1cf1f530de0f7f8bff0ffbca603"
+    canonical_sha__designs__scene__combat_v30_md: "512ad246626b7a76b4dc094361e49ad2eb9cf797"
     params: params/combat.md
     canonical_sha__params__combat_md: "878cbe8243fd3ca649087949e84271756edb8360"
   threadwork:
@@ -116,11 +116,11 @@ systems:
     canonical_sha__params__bg__clocks_md: "7024eaa6d33e909bbd4c999205cc7468ee160c24"
   factions:
     design_doc: designs/provincial/factions_personal_v30.md
-    canonical_sha__designs__provincial__factions_personal_v30_md: "bde4d10902feb5f7c0370dcc57f99a296aeadfa6"
+    canonical_sha__designs__provincial__factions_personal_v30_md: "1d7d217a3d722e974817188144392733ff86605a"
     params: params/factions.md
     canonical_sha__params__factions_md: "82f37d33c74f81bef27c7d9c43a69c88a28f4141"
     stats: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "2ca08b557f4f61a53c22677d8815f487db0b9321"
+    canonical_sha__params__factions__stats_1_7_scale_md: "20166a102bf9c3012193cb3ffa71dc2f5ec530ab"
   victory:
     design_doc: designs/provincial/victory_v30.md
     canonical_sha__designs__provincial__victory_v30_md: "afe6086b287489659b2356bb9dfb2c74d1480127"
@@ -128,7 +128,7 @@ systems:
     canonical_sha__params__bg__victory_md: "67e17f2566af8291784e03e0ec95c70e0065948b"
   territories:
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "972e0d9f7d172abc55fe827da61c7f05c14e7741"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "549f539f915d5dccb04e6849d22bce5d6930c329"
     political_hierarchy_doc: designs/territory/valoria_political_hierarchy_v30.md
     canonical_sha__designs__territory__valoria_political_hierarchy_v30_md: "c0c9bb7409a570f461c4846a4ff424f29a4cbe46"
     settlement_layer_index: designs/territory/settlement_layer_v30_index.md
@@ -174,16 +174,16 @@ systems:
     canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    canonical_sha__designs__provincial__faction_layer_v30_md: "405f45e244f40482afa20fd36025bbe610844b1c"
+    canonical_sha__designs__provincial__faction_layer_v30_md: "21a0839ef95f3a5486c6d271d3faf5a827f390a5"
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
     canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
-    canonical_sha__designs__provincial__ci_political_v30_md: "e22eaedb84c07fdc2141f7b44a692de153e66ab5"
+    canonical_sha__designs__provincial__ci_political_v30_md: "32b30e19e986dcbda51f54ffddc0057a52fb5acc"
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
-    canonical_sha__designs__provincial__peninsular_strain_v30_md: "6ec46c37124b3e4342fc8e56e82f4619ff1a126a"
+    canonical_sha__designs__provincial__peninsular_strain_v30_md: "01097df17fa52083779a0611c73270db73913fd8"
     peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
     canonical_sha__designs__provincial__peninsular_strain_v30_index_md: "51b38b8253cf01bff27389c68e79ed72c4554cbd"
   settlement_layer:
@@ -192,7 +192,7 @@ systems:
     note__lps1b: "LPS-1b (2026-05-30 self-review remediation): §1.8 += zero-territory Mandate=0 handling (Restoration/Lowenritter) + aggregation note (plain mean; temperament is the sibling rollup, both await numeric per-territory population for population-weighting — LPS-3). F4 dispositioned RESOLVED-BY-RESOLVER (no new mechanic). Detail: master."
     note__lps1: "LPS-1 (2026-05-30 Jordan structural ruling): §1.8 added — L/PS PER-TERRITORY (0-7); faction Mandate = round(mean controlled-territory 0.5L+0.5PS); mean-reverting Mandate->territory feedback (sim-stable). Supersedes faction-level L/PS in PP-686 v2. Rewiring staged LPS-2+. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/territory/settlement_layer_v30.md
-    canonical_sha__designs__territory__settlement_layer_v30_md: "972e0d9f7d172abc55fe827da61c7f05c14e7741"
+    canonical_sha__designs__territory__settlement_layer_v30_md: "549f539f915d5dccb04e6849d22bce5d6930c329"
   campaign_architecture:
     design_doc: designs/architecture/campaign_architecture_v30.md
     canonical_sha__designs__architecture__campaign_architecture_v30_md: "6a58a2d774bad7a6b8967a7fea6646e980939a1a"
@@ -200,9 +200,9 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "a564d50407a2bbaae5e72422005844e1430bd93ae6742078ac074b9379a4c75d"
+    canonical_sha__designs__scene__derived_stats_v30_md: "0215099b424f873954d5436a72c56d17e501f56d"
     supplemental: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
+    canonical_sha__params__factions__stats_1_7_scale_md: "20166a102bf9c3012193cb3ffa71dc2f5ec530ab"
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
@@ -217,7 +217,7 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_md: "167b66a4cbbf80c2a9271d7c9e7825629480d01e"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
-    canonical_sha__designs__provincial__faction_succession_split_v30_md: "9c33df49ccde19bb7ef1da43f80b1932ae92d157"
+    canonical_sha__designs__provincial__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
   royal_assassination_fuse:
     design_doc: params/bg/royal_assassination.md
     canonical_sha__params__bg__royal_assassination_md: "0388ed54ad203d5a5c3632b00c9e4fc8e0400432"
@@ -238,7 +238,7 @@ systems:
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
     design_doc: designs/world/ms_trajectory_v1.md
-    canonical_sha__designs__world__ms_trajectory_v1_md: "a2ebeea4801e0dabae5b9edf3fb631fa8995ca91"
+    canonical_sha__designs__world__ms_trajectory_v1_md: "f029a064ed5d26b2a7b73636a0ac844a28d1d05f"
 
 # ── Foundations amendments (canonical philosophy) ──────────────────────
   leap_mechanism:
@@ -315,7 +315,7 @@ systems:
   faction_behavior:
     note__lps2: "LPS-2 (2026-05-30): faction-level L/PS DEMOTED per LPS-1 — faction_behavior §2/§3.4/§3.5/§3.6/§4 (Mandate now = round(mean controlled-territory 0.5L+0.5PS); strictness reads aggregate), faction_canon §3.4/§5.1/§5.2(RESOLVED)/§5.3, faction_state_authoring §8 (per-territory seed), stats_1_7_scale (6-stat header), derived_stats footnote. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/provincial/faction_behavior_v30.md
-    canonical_sha__designs__provincial__faction_behavior_v30_md: "c4b6000bcc99c991f155aaf39226346ba8077a15"
+    canonical_sha__designs__provincial__faction_behavior_v30_md: "928f61aaff6ff5cfb2d6be06fee45891faa2349d"
     status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
   articulation_layer:
@@ -330,7 +330,7 @@ systems:
     added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
   faction_state_authoring:
     design_doc: designs/provincial/faction_state_authoring_v30.md
-    canonical_sha__designs__provincial__faction_state_authoring_v30_md: "d2febb37cb690ea83ea1121751c681124495b1d2"
+    canonical_sha__designs__provincial__faction_state_authoring_v30_md: "fbad9f30bf97e522de4918112d65dc5d62cdb6fa"
     status: provisional
     added: '2026-05-01 PP-686 v2 Phase B Stage 5 — per-faction state authoring'
   territory_temperaments:
@@ -352,7 +352,7 @@ systems:
   faction_canon_consolidation:
     note__lps2b: "LPS-2b (2026-05-30): faction tactics rolling faction-level L demoted to Mandate (Royal Decree/Excommunication/Sovereign Authority) in faction_canon §9 + Crown/Church sheets + stats_1_7_scale (matches factions_personal §8.2/8.4); PART B L/PS Dynamics marked per-territory; Seizure flagged FCN-SEIZURE-DRIFT. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/provincial/faction_canon_v30.md
-    canonical_sha__designs__provincial__faction_canon_v30_md: "babd0457fbb65369e9807f6ec4a8a9c4b2cc1719"
+    canonical_sha__designs__provincial__faction_canon_v30_md: "0c55fda67160acc88f8b4c298b03c17766730c7b"
     status: provisional
     added: '2026-05-08 Faction canon consolidation — Stage 1: Framework (§§1-12) + Crown + Church sheets. Stages 2-3 pending. Supersedes piecemeal lookup across faction_layer/faction_behavior/faction_state_authoring/factions_personal.'
 
