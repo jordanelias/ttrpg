@@ -2,10 +2,9 @@ id: lane-c-2026-05-31
 scope: simulation
 task:
   skill: valoria-simulator
-  description: Lane C (Simulation / Implementation) of the 3-session write-disjoint
-    operating model (workplan v2 2026-05-31). Launch steps 1-4 complete; working the
-    Lane C entry queue in priority order (6.1 -> 6.3 -> 6.4 -> 6.5 -> 8.1 -> 1.16;
-    6.2 canon-gated). valoria-game is a separate repo -> implementation work is collision-free
+  description: Lane C (Simulation/Implementation), 3-session write-disjoint model
+    (workplan v2 2026-05-31). Launch complete; entry queue 6.1->6.3->6.4->6.5->8.1->1.16
+    (6.2 canon-gated). 6.1+6.4 DONE this session. valoria-game separate repo -> collision-free
     with A/B.
 owns:
 - sim/**
@@ -16,56 +15,95 @@ owns:
 context_files:
 - path: references/lane_assignments.yaml
   depth: full
-  reason: Lane C owns/range/entry-items source of truth + launch protocol + shared-file
-    discipline (read full this session).
+  reason: Lane C owns/range/entry-items + launch protocol + shared-file discipline.
 - path: references/id_reservations.yaml
   depth: full
-  reason: 'Lane C reserved ID blocks: ED 970-999 next_free 970 / PP 780-799 next_free
-    780; allocate ONLY from block.'
+  reason: Lane C reserved ED 970-999/PP 780-799; allocate ONLY from block.
+- path: designs/proposals/stub_infill_plan.md
+  depth: full
+  reason: Tiering authority for 6.1/6.3; 380L incl 4 amendments (Tier0-2 status, canon-gate
+    reclass, PT/Accord bug, mc_v18 non-determinism).
+- path: skills/valoria-simulator/SKILL.md
+  depth: skeleton
+  reason: Mode-G build protocol + sim_gate + ledger discipline for 6.3.
 working_state:
-  done:
-  - 'LAUNCHED proceed-lane-C 2026-05-31. Steps 1-4: bootstrapped simulation/godot;
-    read lane_assignments.yaml (spec LIVE — Lane B committed 5.11/5.10 @ b5d5f5fb)
-    + id_reservations.yaml; check_handoff_conflicts(owns)=[] (conflict-free vs all
-    3 active handoffs); lane declared via /home/claude/.valoria_lane=C (bootstrap
-    LANE C line prints).'
+  completed:
+  - '6.1 DONE — re-inventory vs main@4ee54f28: real tree-walk + grep + full read of
+    stub_infill_plan.md. TRUE STATE = 22 stubbed sim/ files (34 raise-sites) + 2 tests/sim
+    harness stubs. The plan''s closeout label ''COMPLETE/37-of-45-implementable''
+    is MISLEADING: Tier 0/1/2 landed (~25 modules) but the 11 implementable Tier 3/4
+    were NEVER built.'
+  - 6.4 DONE — tribunal.py@149 = run_tribunal generic §7.2/7.3 (Succession Contest
+    + Heresy lifecycle) dispatch. RAISES LOUDLY (not a silent no-op). mc_v18 uses
+    run_excommunication_tribunal (§7.1, implemented) so the generic path never fires
+    in batch -> NOT a hot-path risk. Gated on the Phase-5 personal-scale Contest engine,
+    not on missing canon.
+  tiered_inventory:
+  - 'CANON-GATED raise-sites (10): npc_ai, altonian_reinforcements, charter_liberties,
+    hafenmark_equipment, home_sanctuary, infrastructure_reclamation, restoration_movement,
+    varfell_mandate_action, varfell_territorial_acquisition, treaty.propose_treaty.'
+  - 'IMPLEMENTABLE Tier 3/4 (11, deps-permitting): READY NOW = articulation (knots+beliefs
+    done), parliamentary_vote (contest done). CASCADE: parliamentary_vote->parliamentary_stay+parliamentary_transfer.
+    CYCLIC PAIR A investigation+fieldwork (npe done)->companion. CYCLIC PAIR B rendering+rs_track->miraculous_event.
+    ip_track stays dep-blocked by canon-gated altonian.'
+  - 'PARTIALS: tribunal.py(6.4, see completed); treaty.py propose_treaty = intentional
+    guard (below).'
+  canon_2_reeval:
+  - 'VERIFIED IN CLONE: Varfell canon NOW EXISTS (designs/provincial/varfell_path_b_v30.md
+    + _infill) -> varfell_mandate_action + varfell_territorial_acquisition CANDIDATE-UNBLOCKED.
+    MUST verify path_b covers the mechanics + confirm the Jordan-flagged-broken mandate
+    mechanism (W-1+Mil-1->+1L) was redesigned before building.'
+  - 'treaty.propose_treaty = INTENTIONAL GUARD, not a stub: treaty_expiration_v30
+    §2 routes formation to Senator Outward (resolved in crown_initiative); no generic
+    formation path exists by design. RECLASSIFY OUT of stub backlog.'
+  - 'STILL HARD-GATED (canon genuinely ABSENT in designs/ — verified <NONE>): altonian_reinforcements,
+    charter_liberties, hafenmark_equipment, home_sanctuary, infrastructure_reclamation,
+    restoration_movement, npc_ai(contamination audit) = 7. Authoring these is Lane
+    A + Jordan (faction creative-layer); Lane C does NOT author canon.'
+  cross_cutting_defects:
+  - 'PRIORITY: mc_v18 NON-DETERMINISM (Amendment 19c, UNFIXED). sim/provincial/massbattle.py
+    L630 roll_pool + L1053 volley_roll_pool call random.randint(1,10) DIRECTLY, bypassing
+    world.rng -> batch results non-reproducible -> ALL balance output untrustworthy.
+    In Lane C. Mechanical fix (thread world.rng). Behavior-shifting -> Phase-7 smoke
+    re-baseline.'
+  - 'Deferred Migration Batch (19d; all sim/**=Lane C): (1) rng threading [=determinism
+    fix]; (2) accounting._ci_generation->ci_track.compute_seasonal_ci_delta (PP-412
+    5-step); (3) accounting._ms_decay->ms_track.apply_ms_baseline_decay; (4) mc_v18
+    inline season loop->season.run_season. One cumulative re-baseline. Plan deferred
+    to Jordan triage.'
+  - Per-record serializers MISSING for 14 World registries (serialize_world/restore_world)
+    -> production save format (Godot). Lane C.
+  - '6.3 WRITE-TIME DISCIPLINE (19b): stubs touching canon-keyed categorical tables
+    must bucket via canonical_pt()/canonical_accord(), NOT int(t.pt)/int(t.accord).'
+  finding_6_5:
+  - '6.5 caveat re-validated: Tier 0+1+2 landed -> core territorial/threadwork/conviction
+    loop IS exercised -> scoped balance claims structurally possible BUT NOT-TRUSTWORTHY
+    until the mc_v18 determinism fix + re-baseline. ''Balance valid after Tier 0-2''
+    is necessary-not-sufficient; the unfixed global-random in massbattle is the live
+    blocker.'
   next:
-  - '6.1 RE-INVENTORY sim stubs vs current main: real git-tree walk of sim/ + tests/sim/
-    + grep ''raise NotImplementedError''; tier each per stub_infill_plan. STARTING
-    NEXT. (Code-search undercounts via default-branch index lag — do the real tree
-    walk.)'
-  - '6.3 finish Tier 3 (6) + Tier 4 (4) non-canon-gated stubs; preserve docstrings;
-    [canonical: path §] at every constant.'
-  - 6.4 investigate sim/personal/tribunal.py partial (1 NotImplementedError despite
-    mostly-implemented; confirm not a silent no-op hot path).
-  - 6.5 re-validate the 'balance claims invalid until Tier 0-2' caveat (tiers landed;
-    state trustworthy vs still-stubbed; combat is on the armature, separate).
-  - '8.1 valoria-game design-sync/divergence audit: ttrpg 707 commits ahead of last
-    sync (9057663f, 2026-05-04); re-run docs/design_sync.md + conversion_ledger.md
-    vs current HEAD; flag L/PS->per-territory/settlement relocation (LPS-1..2e) as
-    STRUCTURAL contradiction in existing Mandate/Legitimacy code.'
-  - 1.16 promote tests/sim/HANDOFF_massbattle_foundation_M3.md to a real write_handoff
-    entry; archive stale loose pile (HANDOFF_v20/21/22, sim_mb_06_handoff, sim_x_*).
-  canon_gated:
-  - 6.2 re-eval 8 canon-gated stubs (Varfell/Hafenmark/Church/treaty/insurgency) —
-    much canon now landed (faction cluster ratified, treaty_expiration diagnosed,
-    insurgency dissolution ED-883 ratified); identify which are now buildable.
-  notes:
-  - report_lane prints correctly INSIDE bootstrap once .valoria_lane=C is set (LANE
-    C line confirmed). Earlier standalone g.report_lane() 'not found' was premature
-    usage, NOT a Lane-B defect.
-  - 'BOUNDARY: combat-armature handoff (#3) works de-facto under tests/sim/v32-combat-balance/
-    though its declared owns is only designs/audit/2026-05-29-combat-armature/**;
-    Lane C will NOT write into tests/sim/v32-combat-balance/.'
+  - 'DECISION FOR JORDAN (sequencing, not design): highest-leverage Lane C work =
+    the Determinism+Canonical-Pipeline Migration Batch (4 substitutions, one re-baseline)
+    -> unblocks trustworthy balance (6.5); vs 6.3 Tier 3/4 stub-infill. Batch was
+    deferred to Jordan triage + shifts all mc_v18 baselines. Confirm (a) migration
+    batch first OR (b) 6.3 stub-infill first.'
+  - 'If 6.3 first: order = articulation, parliamentary_vote (ready) -> cascade; one
+    stub/session (Mode G); h.sim_gate + ledger entry per constant; canonical_pt/accord
+    bucketing audit.'
+  - '6.2-Varfell: verify designs/provincial/varfell_path_b_v30.md covers mandate+territorial
+    mechanics + mandate-redesign status before building those 2.'
+  parked:
+  - '7 hard-gated stubs: canon absent; authoring is Lane A + Jordan. Note the missing-v30
+    request to Lane A; do NOT author canon from Lane C.'
 key_values:
-- 'Reserved IDs (allocate ONLY from block): ED 970-999 next_free 970; PP 780-799 next_free
-  780.'
-- Lane C launch_ready:true per lane_assignments.yaml; conflict-free confirmed this
-  session via check_handoff_conflicts.
+- 'Reserved IDs: ED 970-999 next_free 970; PP 780-799 next_free 780.'
+- 22 stubbed sim/ files / 34 raise-sites @ main 4ee54f28. Clone at /home/claude/ttrpg_clone.
+- 'Canon existence verified: Varfell EXISTS (path_b); treaty_expiration EXISTS (guard);
+  Hafenmark/Church/altonian/restoration/charter ABSENT.'
 blockers:
-- NONE blocking. 6.2 is canon-gated (not blocked work — re-eval which stubs are now
-  unblocked).
-last_commit: e056195df2cc2fbc88b8aa982a48027c989913f4
-created: '2026-05-31T22:15:16.814034+00:00'
-updated: '2026-05-31T22:15:16.814034+00:00'
+- NONE blocking ungated work. 6.2-Varfell candidate-unblocked pending path_b verification.
+  7 hard-gated stubs need Lane-A/Jordan canon (do not self-author).
+last_commit: c5b3a01219fb043322304b6a3571b9cb1af0a729
+created: '2026-05-31T22:44:19.587775+00:00'
+updated: '2026-05-31T22:44:19.587775+00:00'
 status: active
