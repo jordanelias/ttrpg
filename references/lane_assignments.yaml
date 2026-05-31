@@ -1,0 +1,149 @@
+# references/lane_assignments.yaml
+# =====================================================================================
+# THREE-LANE OPERATING MODEL — write-disjoint concurrent sessions.
+# Source of truth a cold "proceed lane X" session reads. Built bottom-up from the
+# Valoria Master Workplan v2 (2026-05-31) "Three-Lane Operating Model"; lane-disjointness
+# and reserved ranges verified against live repo state this session (ED max 884, PP max 726).
+#
+# A session DECLARES its lane via:  env VALORIA_LANE=<A|B|C>   OR   file /home/claude/.valoria_lane
+# The bootstrap Status Block then prints that lane's line (github_ops.report_lane).
+#
+# This file is the enabler (workplan 5.11). Companion: references/id_reservations.yaml (5.10).
+# =====================================================================================
+version: 1
+updated: "2026-05-31"
+source: "valoria_master_workplan_v2_2026-05-31 — Three-Lane Operating Model (item 5.11)"
+
+boundary_rule: >
+  A lane NEVER writes outside its owns: set. Need another lane's file changed? Read its
+  committed state and note the request in your handoff for that lane — do not reach across.
+  Allocate ED/PP IDs ONLY from your reserved block (references/id_reservations.yaml).
+  On commit: catch CollisionError -> re-fetch touched paths -> re-apply -> retry.
+  Never collision_check=False (that is the --no-verify anti-pattern). A genuine hook
+  RuntimeError still hard-halts: report verbatim, stop.
+
+launch_protocol:           # what "bootstrap; proceed lane X" expands to, autonomously
+  - "1. bootstrap the lane scope (A -> editorial/design, B -> infrastructure, C -> simulation/godot); declare lane (VALORIA_LANE or marker file)."
+  - "2. read references/lane_assignments.yaml -> your owns globs, reserved ID range, ordered entry items."
+  - "3. open/refresh your lane handoff handoffs/lane-<X>-<date>.yaml declaring those owns globs."
+  - "4. run g.check_handoff_conflicts(owns) -> MUST be empty. If not, lanes overlap: stop and report, do not write."
+  - "5. work entry items in priority order, staying inside owns; allocate IDs only from your reserved block."
+  - "6. commit via safe_commit; on CollisionError re-fetch + re-apply + retry."
+  - "7. park any Jordan-gated item (note in handoff); continue with the next ungated item — do not stall the lane."
+  - "8. at close: update your handoff (progress + parked items); session log too if 5.7 is revived."
+
+lanes:
+  A:
+    name: "Canon / Editorial / Design-content"
+    bootstrap_scope: ["editorial", "design"]
+    owns:                         # write-exclusive globs (fnmatch; '*' spans '/')
+      - "canon/**"                # incl. canon/editorial_ledger.jsonl + patch_register_active.yaml; the ledger is APPEND-SHARED per shared_files (canon/** = structural authority, not an append lock)
+      - "params/**"
+      - "designs/provincial/**"
+      - "designs/world/**"
+      - "designs/personal/**"
+      - "designs/proposals/**"
+      - "references/propagation_map.md"
+    reserved_ed: "890-939"
+    reserved_pp: "727-759"
+    reconciliation_zone_ed: "874-889"   # Lane A ONLY — Track 1.8/1.11 cleanup of reserved-unfiled 874-882,885
+    entry_items: ["2.14", "3.1", "3.2", "3.3", "3.4", "3.5", "1.2", "1.7", "1.8", "1.11", "1.13"]
+    notes: >
+      Structural ledger ops (re-issue register, strike, supersede, dedup — items 1.2/1.7/1.13)
+      are Lane A ONLY, so two lanes never rewrite the same existing ledger rows.
+      editorial_ledger.jsonl is append-only; each lane appends only within its reserved ED range.
+    launch_ready: false
+    launch_blocker: >
+      Overlaps active handoff '2026-05-29-resolution-diagnostic-faction-ratifications' on
+      params/factions/stats_1_7_scale.md and several designs/{provincial,world} docs.
+      Track 1.1 (park combat-armature handoff, reconcile the faction handoff) must run first,
+      else check_handoff_conflicts(Lane A) is non-empty. (Verified this session.)
+
+  B:
+    name: "Infrastructure / Tooling / Governance"
+    bootstrap_scope: ["infrastructure"]
+    owns:
+      - "skills/valoria-orchestrator/scripts/**"
+      - "references/**"                 # EXCEPT the shared_files below (canonical_sources / canonical_freshness)
+      - "tests/hooks/**"
+      - "tests/index/**"
+      - "session_logs/**"
+      - "tools/**"
+      - "archives/**"
+      - "skills/valoria-orchestrator/references/skill_registry.yaml"
+    shared_not_exclusive:             # under references/** but co-owned — see shared_files
+      - "references/canonical_sources.yaml"
+      - "references/canonical_freshness.yaml"
+    reserved_ed: "940-969"
+    reserved_pp: "760-779"
+    entry_items: ["5.11", "5.10", "5.2", "5.5", "5.6", "5.8", "7.2", "1.3", "1.10", "1.15", "1.17", "1.18", "1.19", "1.20"]
+    solo_items: ["5.1A", "5.3"]       # structural rewrites of shared infra — run OUTSIDE the parallel window
+    notes: >
+      PI / architecture text edits are Jordan-applied: propose, do not self-commit.
+      5.7 (session-log revive) optional — handoffs already give disjointness + visibility.
+      5.1A (SQLite wire) and 5.3 (canonical_sources SHA-split) are full-file restructures of
+      shared infra: sequence solo (before/after the parallel phase), never during it.
+    launch_ready: true
+
+  C:
+    name: "Simulation / Implementation"
+    bootstrap_scope: ["simulation", "godot"]
+    owns:
+      - "sim/**"
+      - "tests/sim/**"
+      - "tests/coverage_matrix.md"
+      - "valoria-game/**"             # SEPARATE REPO — fully disjoint from A/B
+      - "tests/sim/HANDOFF_*"
+    reserved_ed: "970-999"
+    reserved_pp: "780-799"
+    entry_items: ["6.1", "6.3", "6.4", "6.5", "8.1", "1.16"]
+    canon_gated: ["6.2"]              # unblocks as faction/treaty/insurgency canon lands
+    notes: >
+      valoria-game is a separate repo, so Lane C implementation work is collision-free with A/B.
+    launch_ready: true
+
+shared_files:                         # the unavoidable cross-lane writes — handle by discipline, not ownership
+  - path: "canon/editorial_ledger.jsonl"
+    rule: >
+      APPEND-ONLY; each lane uses ONLY its reserved ED range -> ID-collision impossible.
+      File-level race on near-simultaneous appends resolves via CollisionError -> re-fetch +
+      re-append + retry (append is idempotent on re-fetch). STRUCTURAL ops (re-issue register,
+      strike, supersede, dedup — items 1.2/1.7/1.13) are Lane A ONLY. (This append-shared rule
+      OVERRIDES Lane A's canon/** exclusivity for THIS file: every lane appends its own
+      reserved-range IDs; only structural rewrites are Lane-A-gated.)
+  - path: "references/canonical_sources.yaml | references/canonical_freshness.yaml"
+    rule: >
+      NOT cleanly Lane-B-exclusive: the co-file hook (valoria_hooks pre_commit_gate) forces any
+      designs/*_v30.md edit to co-commit canonical_sources.yaml with a refreshed SHA. So the
+      EDITING lane co-commits its own SHA row; CollisionError-retry on races. Consequences:
+      (a) design-doc edits CANNOT batch SHAs at integration — the hook blocks the commit without it;
+      (b) Lane B must NOT run the 5.3 SHA-split during the parallel window (a full-file restructure
+      while Lane A edits rows = semantic conflict, not a retryable collision).
+  - path: "references/roadmap_state.yaml"
+    rule: >
+      Edited ONLY at lane-session close; structural fields (phase status, decisions) by integration;
+      per-lane progress as a note. CollisionError -> retry. Low frequency -> rare collision.
+  - path: "handoffs/<id>.yaml"
+    rule: >
+      One file per lane (distinct id) — concurrent-safe by design. THREE active handoffs is the
+      new normal (not a consolidation trigger — see workplan M4). Bootstrap prints all three, so
+      each lane sees the others without the session-log registry.
+  - path: "co-files (propagation_map / coverage_matrix / skill_registry)"
+    rule: >
+      Each owned by the SAME lane as its trigger (patches->A, sim->C, skills->B) -> no cross-lane
+      co-file write. Exception: a brand-new designs/ doc forces a canonical_sources registration row
+      (handled by the canonical_sources rule above).
+
+coordination:
+  conflict_check: "g.check_handoff_conflicts(owns) — NOT auto-run; each lane calls it before work."
+  id_discipline: "allocate only from your reserved block (id_reservations.yaml); never read-max-and-add."
+  cross_lane_dependency: "need another lane's output? read its current committed state and proceed; do not block, do not reach into its owned files."
+  sequence_solo: "the two structural rewrites (canonical_sources SHA-split 5.3; SQLite wire 5.1A) run solo — before the round or at an integration pause, never while A/C are committing."
+  integration_seam: "rotating or a short 4th pass between rounds: roadmap structural bump; check_handoff_conflicts; ID-range exhaustion check; within-lane handoff consolidation; queued solo rewrites."
+  gate_is_read_only: "Jordan's GATE (G1-G12) answers feed all lanes; no lane writes the decision sheet. Each lane has ungated work so none idles on a decision."
+
+launch_prerequisites:
+  - "[DONE 2026-05-31] Commit this lane spec where bootstrap surfaces it (item 5.11)."
+  - "[DONE 2026-05-31] references/id_reservations.yaml committed (item 5.10 — reserved blocks)."
+  - "[OPTIONAL] Revive the session-log/index registry (5.7) for the active-session line; NOT a hard prerequisite (handoffs carry disjointness + visibility)."
+  - "[BEFORE LANE A] Run Track 1.1 reconciliation so Lane A's owns no longer overlap the faction handoff."

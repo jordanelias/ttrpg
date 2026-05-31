@@ -1,0 +1,56 @@
+# references/id_reservations.yaml
+# =====================================================================================
+# PER-LANE RESERVED ID BLOCKS — the durable fix for the "max+1" concurrent-allocation
+# collision class (the ED-865/867 and ED-782/783 incidents). No ID-counter file existed;
+# concurrent sessions both read max and added, colliding. With disjoint reserved blocks,
+# cross-lane ID collision is impossible BY CONSTRUCTION.
+#
+# Source: Valoria Master Workplan v2 (2026-05-31) — RESERVED ID RANGES + item 5.10.
+# Live maxima VERIFIED this session (don't trust the doc blind): ED 884, PP 726 — so every
+# reserved block below is clear of existing IDs.
+#
+# ALLOCATION PROTOCOL (manual, until auto-allocation lands — see wiring_status):
+#   1. To allocate, take `next_free` for your lane + id_class.
+#   2. Form your ledger/register entry with that ID.
+#   3. Increment `next_free` and co-commit this file with your entry. Lane B owns this file;
+#      other lanes either (a) note the bump in their handoff for Lane B, or (b) interim:
+#      bump it themselves within their reserved range and let CollisionError-retry serialize.
+#   Reserved blocks are disjoint, so step-3 races are append-safe (retryable, never a real clash).
+# =====================================================================================
+version: 1
+updated: "2026-05-31"
+source: "valoria_master_workplan_v2_2026-05-31 (item 5.10)"
+
+verified_live_max:                 # measured from the live store this session
+  ED: 884                          # canon/editorial_ledger.jsonl (max ED referenced)
+  PP: 726                          # canon/patch_register_active.yaml (max PP referenced)
+  verified_on: "2026-05-31"
+
+reservations:
+  A:
+    ED: { block: "890-939", next_free: 890 }
+    PP: { block: "727-759", next_free: 727 }
+    reconciliation_zone_ED: "874-889"   # Lane A ONLY: cleanup of reserved-unfiled 874-882,885 (Track 1.8/1.11)
+  B:
+    ED: { block: "940-969", next_free: 940 }
+    PP: { block: "760-779", next_free: 760 }
+  C:
+    ED: { block: "970-999", next_free: 970 }
+    PP: { block: "780-799", next_free: 780 }
+
+# When all three lanes exhaust their blocks, the integration seam allocates the next
+# round of disjoint blocks (extend each by the same stride) and bumps `version`.
+exhaustion_policy: "at integration: assign the next disjoint blocks per lane; never overlap a prior block; bump version."
+
+wiring_status:
+  file_live: true
+  manual_allocation: "ACTIVE — use the ALLOCATION PROTOCOL above."
+  auto_allocation: "PARKED"
+  auto_allocation_spec: >
+    Add g.allocate_id(lane, id_class) to github_ops: read this file, return next_free for
+    (lane, id_class), increment next_free, and co-commit this file (CollisionError-retry).
+    Optionally have append_to_register call it when a new ED/PP entry is detected. SHIP WITH a
+    tests/hooks/ test (synthetic: two sequential allocations return N then N+1; allocation outside
+    a lane's block raises) per architecture <migration_and_growth> "hook ships only after tests
+    pass". Hook coverage is currently ~1/29 (Track 7.2), which is why this half of 5.10 is parked
+    rather than landed blind. Full spec also carried in the lane-b handoff.

@@ -1239,6 +1239,7 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
         'references/file_index_summary.md',
         'references/canonical_sources.yaml',
         'references/roadmap_state.yaml',
+        'references/lane_assignments.yaml',
     ]
     all_needed = session_paths + [p for p in (extra_paths or []) if p not in session_paths]
 
@@ -1273,6 +1274,12 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
         report_roadmap(files.get('references/roadmap_state.yaml'))
     except Exception as e:
         print(f"[ROADMAP WARN] Could not read roadmap state: {e}")
+
+    # Report current lane (3-session mode; non-blocking; silent if no lane declared)
+    try:
+        report_lane(files.get('references/lane_assignments.yaml'))
+    except Exception as e:
+        print(f"[LANE WARN] Could not read lane assignment: {e}")
 
     return _g_mod, _h_mod, files, token
 
@@ -1968,6 +1975,49 @@ def check_handoff_conflicts(proposed_paths: list) -> list:
                     break
 
     return conflicts
+
+
+def report_lane(lane_assignments_content: str = None) -> None:
+    """Print the current session's lane line in the bootstrap Status Block (3-session mode).
+
+    Lane is declared via env VALORIA_LANE=<A|B|C> or the marker file /home/claude/.valoria_lane.
+    Degrades silently when no lane is declared (single-session mode) and gracefully when the
+    spec is absent/unparseable — mirrors report_roadmap. Reads references/lane_assignments.yaml.
+    """
+    import os
+    lane = os.environ.get('VALORIA_LANE')
+    if not lane:
+        try:
+            with open('/home/claude/.valoria_lane') as _f:
+                lane = _f.read().strip()
+        except Exception:
+            lane = None
+    if not lane:
+        return  # no lane declared — single-session mode, print nothing
+    lane = lane.strip().upper()
+    if not lane_assignments_content:
+        print(f"\n[LANE {lane}] declared, but references/lane_assignments.yaml not found — run lane-spec setup (workplan 5.11).")
+        return
+    try:
+        import yaml
+        spec = yaml.safe_load(lane_assignments_content) or {}
+    except Exception as e:
+        print(f"\n[LANE {lane}] lane spec unparseable: {e}")
+        return
+    lanes = spec.get('lanes', {}) or {}
+    info = lanes.get(lane) or lanes.get(lane.lower())
+    if not info:
+        print(f"\n[LANE {lane}] not defined in lane_assignments.yaml (defined: {sorted(lanes)}).")
+        return
+    owns = info.get('owns', []) or []
+    items = info.get('entry_items', []) or []
+    print(f"\nLANE {lane} — {info.get('name','')}")
+    print(f"  owns ({len(owns)}): " + ", ".join(owns[:6]) + (" …" if len(owns) > 6 else ""))
+    print(f"  reserved: ED {info.get('reserved_ed','?')} · PP {info.get('reserved_pp','?')}")
+    print(f"  entry items: " + ", ".join(str(i) for i in items[:10]) + (" …" if len(items) > 10 else ""))
+    if info.get('launch_ready') is False:
+        print(f"  ⚠ launch_ready: FALSE — {info.get('launch_blocker','(see lane_assignments.yaml)')}")
+    print(f"  boundary: write only inside owns; allocate IDs only from your reserved block; CollisionError -> re-fetch + retry.")
 
 
 def report_roadmap(content: str = None) -> None:
