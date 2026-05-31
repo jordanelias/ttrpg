@@ -224,7 +224,7 @@ A faction whose stated Mission contradicts its role's expected Convictions reads
 
 ### §3.4 Popular Support
 
-> **[SUPERSEDED-BY LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue faction_canon flagged.]** Popular Support is a **per-territory** value (0–7), not faction state. The ΔPopular_Support dynamics below apply **per controlled territory**; the faction's **aggregate Popular Support** (mean across controlled territories) feeds Mandate. Per-territory model + aggregation are canonical in settlement_layer §1.8.
+> **[SUPERSEDED-BY LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue faction_canon flagged.]** Popular Support is a **per-settlement** value (0–7), not faction state. The ΔPopular_Support dynamics below apply **per controlled territory**; the faction's **aggregate Popular Support** (mean across controlled territories) feeds Mandate. Per-territory model + aggregation are canonical in settlement_layer §1.8.
 
 A scalar `[0, 7]` tracking active populace backing **in a settlement**. Updates per Accounting (per controlled settlement):
 
@@ -284,7 +284,7 @@ Faction's effective temperament is recomputed at Accounting from per-territory c
 
 > **[SUPERSEDED-BY LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** Legitimacy is a **per-settlement** value (0–7), not faction state. The ΔLegitimacy dynamics below apply **per controlled territory**; the faction's **aggregate Legitimacy** (mean across controlled territories) feeds Mandate (settlement_layer §1.8).
 
-A scalar `[0, 7]` tracking populace acceptance **in a territory**. Slower-moving than Popular Support; integrates over many seasons.
+A scalar `[0, 7]` tracking populace acceptance **in a settlement**. Slower-moving than Popular Support; integrates over many seasons.
 
 ```
 ΔLegitimacy per season =
@@ -393,19 +393,19 @@ This resolves the major audit P2-1 ambiguity: the architecture supports both, wi
 
 ---
 
-## §4 Mandate (canonical faction aggregate — REVISED by LPS-1)
+## §4 Mandate (canonical faction aggregate — REVISED by LPS-2e)
 
-> **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** Mandate is **not** transitional and is **not** derived from faction-level L/PS (which do not exist — L/PS are per-territory). Mandate is the **canonical faction headline stat, derived by aggregating per-territory Legitimacy and Popular Support:**
+> **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** Mandate is **not** transitional and is **not** derived from faction-level L/PS (which do not exist — L/PS are per-settlement). Mandate is the **canonical faction headline stat, derived by aggregating per-settlement Legitimacy and Popular Support (size-weighted):**
 
 ```
-aggregate_Legitimacy(faction)      = mean over controlled territories of Legitimacy_t
-aggregate_Popular_Support(faction) = mean over controlled territories of Popular_Support_t
-Mandate(faction) = clamp(round(0.5 × aggregate_Legitimacy + 0.5 × aggregate_Popular_Support), 0, 7)
+aggregate_Legitimacy(faction)      = W-weighted mean over controlled settlements of Legitimacy_s (weights W_s)
+aggregate_Popular_Support(faction) = W-weighted mean over controlled settlements of Popular_Support_s (weights W_s)
+Mandate(faction) = clamp(round(7 · T / (T + K)), 0, 7),  T = Σ_s W_s·(0.5·L_s + 0.5·PS_s)/7,  K = 6   # size-weighted, saturating (settlement_layer §1.8)
 ```
 
-PP-686's 0.5L+0.5PS blend, aggregated by the canonical mean-of-tier idiom (cf. Province Accord = floor(mean settlement Order)). Existing Mandate consumers (Church Excommunication Ob, victory conditions, Parliament votes per faction_layer §5.3) read this aggregate unchanged. A mean-reverting feedback runs Mandate → controlled-territory L/PS (settlement_layer §1.8).
+PP-686's 0.5L+0.5PS blend, now SIZE-WEIGHTED and saturating per settlement_layer §1.8 (Weight W=base(Type)+Prosperity+FacilityTier; K=6); faction aggregate L/PS are the W-weighted settlement means used by strictness. Existing Mandate consumers (Church Excommunication Ob, victory conditions, Parliament votes per faction_layer §5.3) read this aggregate unchanged. A mean-reverting feedback runs Mandate → controlled-settlement L/PS (settlement_layer §1.8).
 
-**Engine init (LPS-1 migration):** per-territory L and PS seed from the controlling faction's prior authored value (faction_state_authoring §8) — each territory starts at that faction's old {Legitimacy, Popular_Support}; thereafter per-territory dynamics (§3.4–§3.5 per territory) and the Mandate aggregation/feedback take over.
+**Engine init (LPS-2e migration):** per-settlement L and PS seed from the controlling faction's prior authored value (faction_state_authoring §8) — each settlement starts at that faction's old {Legitimacy, Popular_Support}; thereafter per-territory dynamics (§3.4–§3.5 per settlement) and the Mandate aggregation/feedback take over.
 
 ---
 

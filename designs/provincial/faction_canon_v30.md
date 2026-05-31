@@ -23,7 +23,7 @@ This document consolidates per-faction texture canon scattered across:
 - `designs/provincial/faction_politics_v30.md` (rank ladders, Inner Circle Named NPCs, caste integration)
 - `designs/provincial/faction_succession_split_v30.md` (succession + split mechanics)
 - `designs/provincial/factions_personal_v30.md` (TTRPG-mode faction specs §8.1–§8.12; substrate-postures T-15a/T-15b/T-15c)
-- `params/factions/stats_1_7_scale.md` (post-ED-787 7-stat lineup; canonical L+PS+I+W+M+Int+Sta)
+- `params/factions/stats_1_7_scale.md` (post-ED-787; per LPS-2e the faction lineup is 6-stat (Mandate headline) — L/PS are per-settlement (settlement_layer §1.8), NOT faction stats)
 - `params/factions/npc_stance_triangles.md` (Framework Drift table — superseded labels retained as descriptive tags)
 - `params/factions/riskbreakers_identity.md` (sub-org identity sample)
 - `params/bg/faction_actions.md` (BG faction action lists)
@@ -36,7 +36,7 @@ This document consolidates per-faction texture canon scattered across:
 
 **What this consolidation does NOT do:**
 - Does not retcon Mission text. The Stage 5 author's values are canonical.
-- Does not silently fix the 6-stat (`factions_personal §8.1`) vs 7-stat (`stats_1_7_scale` post-ED-787) schema conflict at source. Surfaces both; uses 7-stat as primary per most-recent-canonical, with Mandate shown as derived. Source-file propagation is a separate commit cycle.
+- Does not silently fix the 6-stat (`factions_personal §8.1`) vs 7-stat (`stats_1_7_scale` post-ED-787) schema conflict at source. Surfaces both; [RESOLVED by LPS-2e: 6-stat canonical; L/PS per-settlement, not faction stats] formerly used 7-stat as primary per most-recent-canonical, with Mandate shown as derived. Source-file propagation is a separate commit cycle.
 - Does not author missing substrate-postures (Crown / Church / Varfell / Guilds — all four are flagged `[GAP — Phase B]`).
 - Does not commit. This file lands as artifact for Jordan review.
 
@@ -150,7 +150,7 @@ Range `[-1, +1]`. 1 = perfect role fidelity; 0 = orthogonal; -1 = inverse.
 
 ### §3.4 Legitimacy + Popular Support
 
-> **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue below.]** Legitimacy and Popular Support are **per-territory** values (0–7 each), **not** faction scalars. Faction **Mandate is the aggregate** (round(mean over controlled territories of 0.5L+0.5PS)); the faction retains derived **aggregate_Legitimacy / aggregate_Popular_Support** (territory means) for consumers (e.g. strictness). See settlement_layer §1.8.
+> **[REVISED by LPS-1 → LPS-2e (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue below.]** Legitimacy and Popular Support are **per-settlement** values (0–7 each), **not** faction scalars. Faction **Mandate is the aggregate** (round(mean over controlled territories of 0.5L+0.5PS)); the faction retains derived **aggregate_Legitimacy / aggregate_Popular_Support** (territory means) for consumers (e.g. strictness). See settlement_layer §1.8.
 
 Two per-settlement scalars `[0, 7]` tracking populace relation **in a settlement** (Mandate aggregates them per §5 / settlement_layer §1.8).
 
@@ -196,7 +196,7 @@ Per PP-686 §3.3.1. Templates use the 13-Conviction taxonomy from PP-684 §2.
 
 ### §5.1 The faction stat lineup — REVISED by LPS-1 (Jordan ruling 2026-05-30; resolves §5.2)
 
-> **The faction stat lineup is 6-stat: Mandate (headline, derived) / Influence / Wealth / Military / Intel / Stability.** Legitimacy and Popular Support are **per-territory** values (0–7 each, settlement_layer §1.8), **not** faction stats — the prior "7-stat" faction lineup put them at the wrong level (the §5.2 design-issue, now resolved). The two rows below are retained as the per-territory value definitions.
+> **The faction stat lineup is 6-stat: Mandate (headline, derived) / Influence / Wealth / Military / Intel / Stability.** Legitimacy and Popular Support are **per-settlement** values (0–7 each, settlement_layer §1.8), **not** faction stats — the prior "7-stat" faction lineup put them at the wrong level (the §5.2 design-issue, now resolved). The two rows below are retained as the per-territory value definitions.
 
 | Stat | Range | Renaissance analogue |
 |---|---|---|
@@ -238,7 +238,7 @@ Neither resolves cleanly. The mechanic needs either:
 
 ### §5.3 Stat schema conflict (RESOLVED 2026-05-30 by LPS-1 / Jordan ruling)
 
-`factions_personal_v30 §8.1` documents a 6-stat faction sheet (Mandate / Influence / Wealth / Military / Intel / Stability). `params/factions/stats_1_7_scale.md` (post-ED-787) documented a 7-stat lineup adding faction-level Legitimacy + Popular Support. **Jordan ruling (2026-05-30): the 6-stat faction lineup is correct** — L and PS are per-territory, not faction stats; Mandate (headline) aggregates them (settlement_layer §1.8). The "7-stat" faction lineup was the defect. Propagation: this consolidation + LPS-2 (stats_1_7_scale header + faction_behavior + faction_state_authoring corrected this session).
+`factions_personal_v30 §8.1` documents a 6-stat faction sheet (Mandate / Influence / Wealth / Military / Intel / Stability). `params/factions/stats_1_7_scale.md` (post-ED-787; 7-stat header superseded — L/PS per-settlement per LPS-2e, lineup is 6-stat) documented a 7-stat lineup adding faction-level Legitimacy + Popular Support. **Jordan ruling (2026-05-30): the 6-stat faction lineup is correct** — L and PS are per-territory, not faction stats; Mandate (headline) aggregates them (settlement_layer §1.8). The "7-stat" faction lineup was the defect. Propagation: this consolidation + LPS-2 (stats_1_7_scale header + faction_behavior + faction_state_authoring corrected this session).
 
 ---
 
@@ -307,7 +307,7 @@ Each player faction has one signature mechanic. Detailed degree tables in factio
 
 | Faction | Unique Action | Roll | Resource cost |
 |---|---|---|---|
-| Crown | Royal Decree | Mandate vs Ob 2 | 1/season; +1 Ob/season consecutive |  <!-- LPS-1: L per-territory, not a faction roll stat; Mandate is the faction stat (matches factions_personal §8.2). Method = sim-deferred resolver migration. -->
+| Crown | Royal Decree | Mandate vs Ob 2 | 1/season; +1 Ob/season consecutive |  <!-- LPS-2e: L per-settlement, not a faction roll stat; Mandate is the faction stat (matches factions_personal §8.2). Method = sim-deferred resolver migration. -->
 | Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Requires Church Mandate ≥ 3 |  <!-- LPS-1: L→Mandate; 'faction L' effects reconcile to Mandate / per-territory L per settlement_layer §1.8 -->
 | Church | CI 60 Territorial Seizure | Influence + floor(CI/15) vs Ob = 7 − PT | Per-territory; CI ≥ 60 trigger; AUTHORITATIVE per faction_layer §2.7; Failure → Mandate −1 (FCN-SEIZURE-DRIFT reconciled; was stale L-based) |
 | Hafenmark | Sovereign Authority Doctrine | Mandate vs Ob 4 | 1/campaign arc |  <!-- LPS-1: L→Mandate (matches factions_personal §8.4) -->
@@ -355,7 +355,7 @@ Decisions made in producing this consolidation. Surfaced rather than silently re
 |---|---|---|
 | **D1** | Convictions when sources conflict (faction role template vs leader cascade) | Use PP-686 §3.3.1 role template as `expected_convictions`; show leader's `personal_convictions` from migration roster as cascade input. Both legitimate; serve different roles. |
 | **D2** | Ethical Framework labels (SUPERSEDED by PP-686 §3.7) | Retain as **descriptive disposition tag** with `[SUPERSEDED → mechanical role replaced by PP-686 §3.7 triadic Ob calc]` note. Don't silently re-derive Ob modifiers. |
-| **D3** | Stat schema conflict (6-stat factions_personal vs 7-stat stats_1_7_scale) | 7-stat primary (post-ED-787 most-recent canonical). Mandate shown derived. Source-file propagation deferred. |
+| **D3** | Stat schema conflict (6-stat factions_personal vs 7-stat stats_1_7_scale) | 6-stat canonical post-LPS-2e — L/PS per-settlement (settlement_layer §1.8), not faction stats. Mandate shown derived. Source-file propagation deferred. |
 | **D4** | Substrate-Posture gaps for Crown / Church / Varfell / Guilds | Mark `[GAP — Phase B authoring]`. Do not invent. Three factions (Hafenmark / Restoration / Löwenritter) have authored T-15 postures; rest pending per ED-717. |
 | **D5** | Inspirations field — lift scattered Venice/Florence/Lohengramm/Talleyrand prose into structured `inspiration` field | Two facets per faction: `historical_parallel` (period-realistic anchor) + `in_character_aspiration` (in-fiction aim). Where no parallel is documented, mark `[GAP]`. |
 | **D6** | Niflhel — STRUCK across all canonical files (CR-STRIKE-2026-04-19) | Preserve as `## §Historical — Niflhel (DISSOLVED)` marker section pointing to settlement-layer §4.7-4.9 redirect. No full sheet. |
@@ -486,7 +486,7 @@ Arcs D/E/F mutually exclusive — one sub-roll determines which (if any) fires p
 
 ### Legitimacy / Popular Support Dynamics
 
-> **[Per LPS-1 (settlement_layer §1.8):** these dynamics operate **per controlled territory** — builds/erodes apply to the faction's held territories' L/PS; the aggregate (territory means) feeds Mandate.]
+> **[Per LPS-1 (settlement_layer §1.8):** these dynamics operate **per controlled settlement** — builds/erodes apply to the faction's held settlements' L/PS; the aggregate (W-weighted settlement means) feeds Mandate.]
 
 - **Builds L:** routine governance, peace treaties signed, succession events under `mode == normal`, formal acknowledgement by foreign powers.
 - **Erodes L:** exposed `da.covert_betrayal`, coup attempts, Total Dismissal of Crown leader, sustained Cascade Fidelity violation (Almud acting against sovereign role expectations for ≥4 seasons).
@@ -619,13 +619,13 @@ Influence 6 is the highest single-stat in the Starting Stats table — Church's 
 
 #### Excommunication
 
-Roll: Mandate vs target Mandate (faction leader) / Ob 2 (non-leader).  <!-- LPS-1: L→Mandate; the 'faction L ±1' degree effects reconcile to Mandate / per-territory L per settlement_layer §1.8 (entangled — see master ledger) -->
+Roll: Mandate vs target Mandate (faction leader) / Ob 2 (non-leader).  <!-- LPS-2e: L→Mandate; the 'faction L ±1' degree effects reconcile to Mandate / per-settlement L per settlement_layer §1.8 (entangled — see master ledger) -->
 
 | Degree | Result |
 |---|---|
-| Overwhelming | Strips target's Circles bonus with Church contacts; −1 Legitimacy to each of the target's controlled territories (lowers aggregate L → Mandate, settlement_layer §1.8); target barred from public office and Church-loyal command; personal Reputation −1 with all factions |
+| Overwhelming | Strips target's Circles bonus with Church contacts; −1 Legitimacy to each of the target's controlled settlements (lowers aggregate L → Mandate, settlement_layer §1.8); target barred from public office and Church-loyal command; personal Reputation −1 with all factions |
 | Success | As Overwhelming minus the personal Reputation penalty |
-| Failure | −1 Legitimacy to each Church-controlled territory; target gains +1 Legitimacy in each of its controlled territories (sympathy martyr) |
+| Failure | −1 Legitimacy to each Church-controlled settlement; target gains +1 Legitimacy in each of its controlled settlements (sympathy martyr) |
 
 Requires Church Mandate ≥ 3. Reversal: Grand Debate (5 exchanges) or new Confessor.
 
@@ -662,7 +662,7 @@ Highest baseline (Stability 5) — theological coherence + institutional consoli
 
 ### Legitimacy / Popular Support Dynamics
 
-> **[Per LPS-1 (settlement_layer §1.8):** these dynamics operate **per controlled territory**; the aggregate (territory means) feeds Mandate.]
+> **[Per LPS-1 (settlement_layer §1.8):** these dynamics operate **per controlled settlement**; the aggregate (W-weighted settlement means) feeds Mandate.]
 
 - **Builds L:** procedural-event Keys (consecrations, ordinations, formal alliances), `meta.miraculous_event` favorable, sustained Cascade Fidelity to ecclesiastical role (high default at scenario init).
 - **Erodes L:** exposed Inquisition overreach, Cardinal defection, miraculous_event unfavorable to Church (heresy declaration against itself), Thread-revelation publicly tied to Church suppression.

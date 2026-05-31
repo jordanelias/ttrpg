@@ -149,8 +149,8 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 | Faction | Action | Roll | Effect |
 |---------|--------|------|--------|
 | Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |  <!-- LPS-1: L→Mandate -->
-| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; −1 Legitimacy to each of the target's controlled territories (settlement_layer §1.8). Reversal: Grand Debate (5 exchanges) or new Confessor. |
-| Church | Church Influence 60 Territorial Seizure | L vs floor(owner's L / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Church L −1. |
+| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; −1 Legitimacy to each of the target's controlled settlements (settlement_layer §1.8). Reversal: Grand Debate (5 exchanges) or new Confessor. |
+| Church | Church Influence 60 Territorial Seizure | Influence + floor(CI/15) vs Ob = 7 − PT | Per-province seizure roll; AUTHORITATIVE per faction_layer §2.7. Success: administrative control. Failure: Mandate −1. |
 | Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending PS prerequisite: COMMUNITY-level PS ≥ 1 in a Presence locality (RM territoryless; faction_state_authoring §6 / LPS-1) |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Löwenritter unique actions not extracted |
 
@@ -172,7 +172,7 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 |-----|---------|--------|
 | Ehrenwall | Coup trigger | Martial Law; Crown Loyalty check |
 | Vaynard | TK threshold | Research acceleration |
-| Baralta | Church Influence suppression | −1 Legitimacy/season to each Church-controlled territory (settlement_layer §1.8) while Baralta L ≥ 4 |
+| Baralta | Church Influence suppression | −1 Legitimacy/season to each Church-controlled settlement (settlement_layer §1.8) while Baralta L ≥ 4 |
 | Schoenland | Active spoiler | Various faction disruptions |
 
 Mending Stability ≤ 10 adds +1 to coup/succession trigger check pools.
@@ -192,7 +192,7 @@ Cannot target Intel. Effect is immediate and unilateral.
 Roll: Mandate vs floor(target Mandate / 2) + 1 (faction leader) or Ob 2 (non-leader).  <!-- LPS-1: L→Mandate (faction-vs-faction); effects reconcile per settlement_layer §1.8 -->
 | Degree | Result |
 |--------|--------|
-| Success | Strips target's Circles bonus; −1 Legitimacy to each of the target's controlled territories (settlement_layer §1.8) |
+| Success | Strips target's Circles bonus; −1 Legitimacy to each of the target's controlled settlements (settlement_layer §1.8) |
 | Failure | — |
 Reversal: Grand Debate (5 exchanges) or new Confessor appointed.
 
@@ -209,8 +209,8 @@ Riskbreaker exposure removes seized territory and prevents re-seizure for one se
 Roll: Mandate vs Ob 4. Once per campaign arc.  <!-- LPS-1: L→Mandate -->
 | Degree | Result |
 |--------|--------|
-| Overwhelming | Church Influence −3; −1 Legitimacy to each Church-controlled territory (settlement_layer §1.8); Heresy Investigation blocked this season; +1D social vs Church for the arc |
-| Success | Church Influence −2; −1 Legitimacy to each Church-controlled territory (settlement_layer §1.8); Heresy Investigation opens (Ob 4 to pursue) |
+| Overwhelming | Church Influence −3; −1 Legitimacy to each Church-controlled settlement (settlement_layer §1.8); Heresy Investigation blocked this season; +1D social vs Church for the arc |
+| Success | Church Influence −2; −1 Legitimacy to each Church-controlled settlement (settlement_layer §1.8); Heresy Investigation opens (Ob 4 to pursue) |
 | Partial | Church Influence −1; Heresy Investigation opens immediately; Church Influence +1 |
 | Failure | Church Influence +1; Heresy Investigation immediate; Baralta's L −1 |
 CI Suppression: while Baralta's L ≥ 4, Church Influence −1/season. Suppression ends if L < 4 or excommunication (CI +4 immediately).
@@ -263,9 +263,9 @@ Counter never decrements. Fires at next seasonal accounting once at 4. (PP-577: 
 
 ## Mandate Recovery (L + PS independently, ED-066b — REVISED by LPS-2e 2026-05-30: per controlled SETTLEMENT)
 
-> **[REVISED by LPS-1 (settlement_layer §1.8).]** L and PS are per-territory; this recovery applies **per controlled territory** (a territory with L/PS below its seed recovers +1/season under the conditions), then Mandate re-aggregates.
+> **[REVISED by LPS-2e (settlement_layer §1.8).]** L and PS are per-settlement; this recovery applies **per controlled settlement** (a settlement with L/PS below its seed recovers +1/season under the conditions), then Mandate re-aggregates.
 
-A controlled territory with L < its seed value recovers +1 L/season AND with PS < its seed value recovers +1 PS/season independently when:
+A controlled settlement with L < its seed value recovers +1 L/season AND with PS < its seed value recovers +1 PS/season independently when:
 - No hostile Domain Action targeting that faction this season
 - Stability ≥ 2
 Cap: neither L nor PS can recover above its starting value via this mechanic. [PROVISIONAL]

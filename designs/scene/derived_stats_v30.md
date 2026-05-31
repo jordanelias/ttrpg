@@ -288,7 +288,7 @@ Player sees: **"Heavy Infantry — 4,428 / 5,000 (Size 4)"**
 
 | Stat | Derived Value | Derivation | What It Represents |
 |------|--------------|------------|-------------------|
-| Mandate | **Legitimacy** | Mandate × 20, starting = stat × 20 | Popular/institutional trust capital |
+| Mandate | **Legitimacy** | Mandate × 20, starting = stat × 20 | Popular/institutional trust capital (meter spans 0–140 at Mandate 0–7; ×20 calibration pre-dates the 0–7 range — confirm vs intended 0–100) |
 | Wealth | **Treasury** | Wealth × 100, starting = stat × 100 | Accumulated economic resources |
 | Military | **Levies Available** | Military × 2 (ceiling) | Force projection capacity — not spendable, constrains active unit count |
 | Influence | **Reputation** | Influence × 15, starting = stat × 15 | Political capital across factions |
