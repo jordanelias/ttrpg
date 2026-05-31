@@ -1,8 +1,8 @@
 ## Stats (1–7 scale)
 
-Legitimacy / Popular_Support / Influence / Wealth / Military / Intel / Stability
+**Faction stats (6): Mandate / Influence / Wealth / Military / Intel / Stability.** Mandate is the headline (DERIVED — aggregates per-territory Legitimacy + Popular Support; settlement_layer §1.8). **Legitimacy / Popular_Support are PER-TERRITORY values (0–7 each), NOT faction stats** — relocated per the Jordan ruling 2026-05-30 (LPS-1). The former "7-stat" faction lineup (faction-level L+PS) was the defect.
 
-The 7-stat schema. Intel restored as canonical 6th stat (between Military and
+Intel restored as canonical stat (between Military and
 Stability) per ED-787 Position A 2026-05-03 — c2effdd Renaissance political-
 infrastructure review carried; ED-748 STRUCK ruling overridden. Spy Ob formula
 `floor(target Intel / 2) + 1` is no longer broken; institutional intelligence
@@ -261,9 +261,11 @@ No standard Unique Action roll — Löwenritter action is triggered by Graduated
 Counter never decrements. Fires at next seasonal accounting once at 4. (PP-577: threshold unified to 4, per params_board_game canonical)
 **Martial Law effects:** All non-Military Domain Actions in Crown territories require secondary Military check (Löwenritter Military pool, TN 7, Ob 2); failure blocks the action. Persists until players remove it (Influence vs Ob = Löwenritter Military ÷ 2, round up, min Ob 3) or Church Influence drops below 40.
 
-## Mandate Recovery (L + PS independently, ED-066b resolved — provisional, post PP-686 v2)
+## Mandate Recovery (L + PS independently, ED-066b — REVISED by LPS-1 2026-05-30)
 
-Factions with L < starting value recover +1 L/season AND factions with PS < starting value recover +1 PS/season independently when:
+> **[REVISED by LPS-1 (settlement_layer §1.8).]** L and PS are per-territory; this recovery applies **per controlled territory** (a territory with L/PS below its seed recovers +1/season under the conditions), then Mandate re-aggregates.
+
+A controlled territory with L < its seed value recovers +1 L/season AND with PS < its seed value recovers +1 PS/season independently when:
 - No hostile Domain Action targeting that faction this season
 - Stability ≥ 2
 Cap: neither L nor PS can recover above its starting value via this mechanic. [PROVISIONAL]

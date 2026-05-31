@@ -150,7 +150,9 @@ Range `[-1, +1]`. 1 = perfect role fidelity; 0 = orthogonal; -1 = inverse.
 
 ### §3.4 Legitimacy + Popular Support
 
-Two scalars `[0, 7]` tracking populace relation. Replace Mandate-as-single-scalar (Mandate retained as derived per §5).
+> **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue below.]** Legitimacy and Popular Support are **per-territory** values (0–7 each), **not** faction scalars. Faction **Mandate is the aggregate** (round(mean over controlled territories of 0.5L+0.5PS)); the faction retains derived **aggregate_Legitimacy / aggregate_Popular_Support** (territory means) for consumers (e.g. strictness). See settlement_layer §1.8.
+
+Two per-territory scalars `[0, 7]` tracking populace relation **in a territory** (Mandate aggregates them per §5 / settlement_layer §1.8).
 
 - **Legitimacy** (slow-moving): populace acceptance. Integrates over many seasons via `λ_continuity`, `λ_procedural`, `λ_expectation`, `λ_violation`.
 - **Popular Support** (faster-moving): active populace backing. Integrates Mission outcomes + Cascade Fidelity + random shocks per Public Temperament.
@@ -192,25 +194,29 @@ Per PP-686 §3.3.1. Templates use the 13-Conviction taxonomy from PP-684 §2.
 
 **[PROVISIONAL — every stat in Part B is flagged PROVISIONAL.]**
 
-### §5.1 The 7-stat lineup (post-ED-787 2026-05-03 — most-recent canonical)
+### §5.1 The faction stat lineup — REVISED by LPS-1 (Jordan ruling 2026-05-30; resolves §5.2)
+
+> **The faction stat lineup is 6-stat: Mandate (headline, derived) / Influence / Wealth / Military / Intel / Stability.** Legitimacy and Popular Support are **per-territory** values (0–7 each, settlement_layer §1.8), **not** faction stats — the prior "7-stat" faction lineup put them at the wrong level (the §5.2 design-issue, now resolved). The two rows below are retained as the per-territory value definitions.
 
 | Stat | Range | Renaissance analogue |
 |---|---|---|
-| **Legitimacy** | 0–7 | Populace acceptance — papal bulls, dynastic claims, constitutional authority |
-| **Popular Support** | 0–7 | Active populace backing — Florentine signoria support, urban guild mobilization |
+| **Legitimacy** (per-territory, settlement_layer §1.8) | 0–7 | Populace acceptance — papal bulls, dynastic claims, constitutional authority |
+| **Popular Support** (per-territory, settlement_layer §1.8) | 0–7 | Active populace backing — Florentine signoria support, urban guild mobilization |
 | **Influence** | 1–7 | Diplomatic reach — Medici banking diplomacy, Venetian diplomatic service |
 | **Wealth** | 1–7 | Economic resources — trade revenue, mercenary funding, treasury |
 | **Military** | 1–7 | Armed forces — standing armies, fortification networks |
 | **Intel** | 1–7 | Institutional intelligence — Venice's Council of Ten, papal nuncio network |
 | **Stability** | 0–7 | Internal cohesion — Pazzi conspiracy resistance, Visconti-Sforza succession discipline |
 
-Mandate is **derived**, transitional per PP-686 §4:
+Mandate is **the faction headline stat, derived by aggregation** (LPS-1; no longer "transitional"):
 
 ```
-Mandate(faction) = round(0.5 × Legitimacy + 0.5 × Popular_Support)
+Mandate(faction) = clamp(round(mean over controlled territories of (0.5 × Legitimacy_t + 0.5 × Popular_Support_t)), 0, 7)
 ```
 
-### §5.2 [DESIGN-ISSUE — flagged 2026-05-07 by Jordan]
+### §5.2 [DESIGN-ISSUE — flagged 2026-05-07 by Jordan; RESOLVED 2026-05-30 by LPS-1]
+
+> **[RESOLVED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** L and PS are **per-territory** (0–7); faction **Mandate = round(mean over controlled territories of 0.5L+0.5PS)**. Territorial scope is captured intrinsically: a one-province faction's Mandate is the mean over its single territory (perfect L/PS on one province → Mandate from that province alone); a peninsula-spanning faction's Mandate is the mean over all its territories. This is option (b)/(c) below (territorial aggregation), realized as the mean-of-tier idiom matching Province Accord. Original issue text retained for trace.
 
 > **A faction could have perfect Legitimacy and Popular Support but hold only one province, and the system would compute Mandate normally — but the underlying mechanic doesn't capture territorial scope.**
 
@@ -230,9 +236,9 @@ Neither resolves cleanly. The mechanic needs either:
 
 **Stat values in Part B are PROVISIONAL pending design resolution of this issue.** Per-faction stat tables are reproduced from current canonical sources (`stats_1_7_scale.md` Starting Stats table) but should not be treated as load-bearing until scope is resolved.
 
-### §5.3 Stat schema conflict (informational)
+### §5.3 Stat schema conflict (RESOLVED 2026-05-30 by LPS-1 / Jordan ruling)
 
-`factions_personal_v30 §8.1` documents a 6-stat sheet (Mandate / Influence / Wealth / Military / Intel / Stability) — pre-PP-686 lineup. `params/factions/stats_1_7_scale.md` (post-ED-787) documents the 7-stat lineup above. Source files are inconsistent; this consolidation uses 7-stat per most-recent-canonical. Source-file propagation pending.
+`factions_personal_v30 §8.1` documents a 6-stat faction sheet (Mandate / Influence / Wealth / Military / Intel / Stability). `params/factions/stats_1_7_scale.md` (post-ED-787) documented a 7-stat lineup adding faction-level Legitimacy + Popular Support. **Jordan ruling (2026-05-30): the 6-stat faction lineup is correct** — L and PS are per-territory, not faction stats; Mandate (headline) aggregates them (settlement_layer §1.8). The "7-stat" faction lineup was the defect. Propagation: this consolidation + LPS-2 (stats_1_7_scale header + faction_behavior + faction_state_authoring corrected this session).
 
 ---
 

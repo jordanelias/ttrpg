@@ -544,7 +544,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Settlement | Defense | **Garrison Strength** | ×20 + Fort | PENDING |
 | Settlement | Order | **Public Order** | ×20 | PENDING |
 
-\* PP-686 v2 split the original Mandate stat into Legitimacy (L) + Popular Support (PS). Legitimacy here refers to the post-split stat that produces the derived Legitimacy resource. Popular Support is tracked separately as a derived value of its own (see PP-686 v2 spec).
+\* LPS-1 (Jordan ruling 2026-05-30): Legitimacy and Popular Support are PER-TERRITORY values (0–7; settlement_layer §1.8), NOT a faction-level split of Mandate. Mandate is the faction headline stat that AGGREGATES per-territory L/PS; the derived faction "Legitimacy" meter here (= Mandate × 20) is the displayed aggregate (faction-wide legitimacy capital), consistent with LPS-1. (Supersedes the earlier "PP-686 split Mandate into faction-level L+PS" framing.)
 
 ### §14.2 Tracks — bounded counters representing relationship/character/perceptual state
 

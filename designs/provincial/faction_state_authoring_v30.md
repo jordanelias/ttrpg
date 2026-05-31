@@ -322,7 +322,9 @@ institutional_culture: -0.1              # mildly rigid (military-order
 
 ## §8 Initial Legitimacy + Popular Support Values
 
-Per PP-686 v2 §4 (transitional retention) + Phase B Stage 3 (params/factions_personal.md):
+> **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** L and PS are **per-territory**, not faction-level. These authored per-faction values now **seed each faction's controlled territories** — every territory a faction starts controlling begins at that faction's {Legitimacy, Popular_Support} below (LPS-1 migration; preserves authored intent at the new grain). Faction Mandate is then the aggregate (settlement_layer §1.8). Jordan may re-author individual per-territory starting values.
+
+Per-faction seed values (→ per-territory init):
 
 ```yaml
 init_state:
@@ -335,7 +337,7 @@ init_state:
   lowenritter:     {Legitimacy: 0, Popular_Support: 0}    # no Mandate; embedded under Crown initially
 ```
 
-Sourced from `params/bg/core.md §Faction Starting Stats` / `params/factions_personal.md §Starting Values` Mandate column. After first Accounting, faction_behavior_v30 §3.4–3.5 dynamics replace these seed values.
+Sourced from `params/bg/core.md §Faction Starting Stats` / `params/factions_personal.md §Starting Values` Mandate column. After first Accounting, per-territory dynamics (faction_behavior_v30 §3.4–3.5, applied per controlled territory) and the Mandate aggregation/feedback (settlement_layer §1.8) take over.
 
 ---
 

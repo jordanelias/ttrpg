@@ -627,6 +627,16 @@
       "stats_1_7_scale",
       "derived_stats_v30 §8",
       "canon/02 §GD-1"
-    ]
+    ],
+    "LPS-2_committed": {
+      "scope": "Propagation of LPS-1: demote faction-level L/PS at all sources + rewire root consumers. 17 asserted edits / 5 docs, atomic.",
+      "faction_behavior_v30": "§2 schema: legitimacy/popular_support commented out as per-territory (SUPERSEDED); added derived aggregate_legitimacy/aggregate_popular_support + mandate=round(0.5*aggL+0.5*aggPS). §3.4/§3.5: SUPERSEDED-BY LPS-1 markers, ΔL/ΔPS now apply per controlled territory. §3.6 strictness reads aggregate_L/aggregate_PS. §4 'Mandate (Transitional)' -> 'canonical faction aggregate': Mandate=round(mean controlled-territory 0.5L+0.5PS); engine init = per-territory L/PS seed from faction's prior value.",
+      "faction_canon_v30": "§3.4 REVISED-by-LPS-1 marker; §5.1 lineup -> 6-stat faction (L/PS tagged per-territory); Mandate-derived block 'transitional'->aggregation; §5.2 DESIGN-ISSUE (Jordan 2026-05-07) marked RESOLVED by LPS-1 (territorial aggregation = option b/c); §5.3 schema-conflict RESOLVED (6-stat correct).",
+      "faction_state_authoring_v30": "§8 per-faction {L,PS} reframed as PER-TERRITORY SEED (each controlled territory starts at faction's value; LPS-1 migration; Jordan may re-author per-territory).",
+      "stats_1_7_scale": "header -> '6-stat faction: Mandate/Influence/Wealth/Military/Intel/Stability'; L/PS marked per-territory; 'Mandate Recovery' now per controlled territory.",
+      "derived_stats_v30": "footnote corrected: L/PS per-territory (not a faction split of Mandate); faction Legitimacy meter = Mandate*20 is the displayed aggregate, consistent with LPS-1.",
+      "aggregation_refinement_flag": "faction_canon §3.4 aggregates Public Temperament by POPULATION-WEIGHTED mean across territories; LPS-1 Mandate uses PLAIN mean (Accord idiom). Consistency option: population-weight Mandate too (needs per-territory population). Flagged vetoable refinement (LPS-3 candidate), not changed now.",
+      "verified": "all 17 edits asserted single-occurrence; committed atomically; verified at SHA"
+    }
   }
 }

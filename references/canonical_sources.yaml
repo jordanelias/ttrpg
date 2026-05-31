@@ -310,6 +310,7 @@ systems:
     status: canonical
     added: '2026-05-01 PP-685 ratification — Conviction migration roster'
   faction_behavior:
+    note__lps2: "LPS-2 (2026-05-30): faction-level L/PS DEMOTED per LPS-1 — faction_behavior §2/§3.4/§3.5/§3.6/§4 (Mandate now = round(mean controlled-territory 0.5L+0.5PS); strictness reads aggregate), faction_canon §3.4/§5.1/§5.2(RESOLVED)/§5.3, faction_state_authoring §8 (per-territory seed), stats_1_7_scale (6-stat header), derived_stats footnote. Detail: master _lps_structural_redesign_2026-05-30."
     design_doc: designs/provincial/faction_behavior_v30.md
     canonical_sha__designs__provincial__faction_behavior_v30_md: "c4b6000bcc99c991f155aaf39226346ba8077a15"
     status: canonical
