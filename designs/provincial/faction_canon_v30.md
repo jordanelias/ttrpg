@@ -307,10 +307,10 @@ Each player faction has one signature mechanic. Detailed degree tables in factio
 
 | Faction | Unique Action | Roll | Resource cost |
 |---|---|---|---|
-| Crown | Royal Decree | Legitimacy vs Ob 2 | 1/season; +1 Ob/season consecutive |
-| Church | Excommunication | L vs target L (leader) / Ob 2 (non-leader) | Requires Church L ≥ 3 |
+| Crown | Royal Decree | Mandate vs Ob 2 | 1/season; +1 Ob/season consecutive |  <!-- LPS-1: L per-territory, not a faction roll stat; Mandate is the faction stat (matches factions_personal §8.2). Method = sim-deferred resolver migration. -->
+| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Requires Church Mandate ≥ 3 |  <!-- LPS-1: L→Mandate; 'faction L' effects reconcile to Mandate / per-territory L per settlement_layer §1.8 -->
 | Church | CI 60 Territorial Seizure | L vs floor(target L / 2) + 1 | Per-territory; CI ≥ 60 trigger |
-| Hafenmark | Sovereign Authority Doctrine | L vs Ob 4 | 1/campaign arc |
+| Hafenmark | Sovereign Authority Doctrine | Mandate vs Ob 4 | 1/campaign arc |  <!-- LPS-1: L→Mandate (matches factions_personal §8.4) -->
 | Varfell | The Private Collection | Intel vs Ob 2 | 1/season; long-term TS cost |
 | Guilds | Economic Leverage | Wealth vs target Wealth | Requires Guild Favour ≥ 5 in territory |
 | Restoration | Community Weaving (PP-616 canonical) | (Spirit × 2) + History + TPS pool | Thread operation, not DA; PS ≥ 1 prerequisite |
@@ -452,7 +452,7 @@ Crown standing army is **Löwenritter Order** (`faction_layer §1.5`). All Crown
 
 ### Tactic / Unique Action — Royal Decree
 
-Roll: Legitimacy vs Ob 2. Once per season.
+Roll: Mandate vs Ob 2. Once per season.  <!-- LPS-1: L→Mandate -->
 
 | Degree | Result |
 |---|---|
@@ -485,6 +485,8 @@ Above-average baseline (Stability 4) but exposed to Trigger 1 (territorial loss 
 Arcs D/E/F mutually exclusive — one sub-roll determines which (if any) fires per `params/bg/royal_assassination.md`.
 
 ### Legitimacy / Popular Support Dynamics
+
+> **[Per LPS-1 (settlement_layer §1.8):** these dynamics operate **per controlled territory** — builds/erodes apply to the faction's held territories' L/PS; the aggregate (territory means) feeds Mandate.]
 
 - **Builds L:** routine governance, peace treaties signed, succession events under `mode == normal`, formal acknowledgement by foreign powers.
 - **Erodes L:** exposed `da.covert_betrayal`, coup attempts, Total Dismissal of Crown leader, sustained Cascade Fidelity violation (Almud acting against sovereign role expectations for ≥4 seasons).
@@ -617,7 +619,7 @@ Influence 6 is the highest single-stat in the Starting Stats table — Church's 
 
 #### Excommunication
 
-Roll: L vs target L (faction leader) / Ob 2 (non-leader).
+Roll: Mandate vs target Mandate (faction leader) / Ob 2 (non-leader).  <!-- LPS-1: L→Mandate; the 'faction L ±1' degree effects reconcile to Mandate / per-territory L per settlement_layer §1.8 (entangled — see master ledger) -->
 
 | Degree | Result |
 |---|---|
@@ -625,13 +627,13 @@ Roll: L vs target L (faction leader) / Ob 2 (non-leader).
 | Success | As Overwhelming minus the personal Reputation penalty |
 | Failure | Church L −1; target gains L +1 (sympathy martyr) |
 
-Requires Church L ≥ 3. Reversal: Grand Debate (5 exchanges) or new Confessor.
+Requires Church Mandate ≥ 3. Reversal: Grand Debate (5 exchanges) or new Confessor.
 
 #### CI 60 Territorial Seizure
 
 Trigger: Church Influence (CI) reaches 60. Fires once per territory.
 
-Roll: L vs floor(target faction's L / 2) + 1.
+Roll: L vs floor(target faction's L / 2) + 1.  <!-- FCN-SEIZURE-DRIFT: stale — authoritative Seizure = faction_layer §2.7 (Influence + floor(CI/15) vs Ob 7−PT). Under LPS-1 'target faction's L' reads as the target TERRITORY's per-territory Legitimacy (settlement_layer §1.8). Reconcile via FCN-SEIZURE-DRIFT. -->
 
 | Degree | Result |
 |---|---|
@@ -659,6 +661,8 @@ Highest baseline (Stability 5) — theological coherence + institutional consoli
 - **Arc C — Confrontation.** Public confrontation. If Confessor heretic publicly known: Church Stability −3. CI may decrease rapidly as institutional engine loses driver. **The vacuum may be worse — Cardinal of Justice or Fortitude may seize control and be more dangerous than Himlensendt ever was.**
 
 ### Legitimacy / Popular Support Dynamics
+
+> **[Per LPS-1 (settlement_layer §1.8):** these dynamics operate **per controlled territory**; the aggregate (territory means) feeds Mandate.]
 
 - **Builds L:** procedural-event Keys (consecrations, ordinations, formal alliances), `meta.miraculous_event` favorable, sustained Cascade Fidelity to ecclesiastical role (high default at scenario init).
 - **Erodes L:** exposed Inquisition overreach, Cardinal defection, miraculous_event unfavorable to Church (heresy declaration against itself), Thread-revelation publicly tied to Church suppression.

@@ -637,6 +637,16 @@
       "derived_stats_v30": "footnote corrected: L/PS per-territory (not a faction split of Mandate); faction Legitimacy meter = Mandate*20 is the displayed aggregate, consistent with LPS-1.",
       "aggregation_refinement_flag": "faction_canon §3.4 aggregates Public Temperament by POPULATION-WEIGHTED mean across territories; LPS-1 Mandate uses PLAIN mean (Accord idiom). Consistency option: population-weight Mandate too (needs per-territory population). Flagged vetoable refinement (LPS-3 candidate), not changed now.",
       "verified": "all 17 edits asserted single-occurrence; committed atomically; verified at SHA"
+    },
+    "LPS-2b_committed": {
+      "residual_closed": "Faction tactics rolling faction-level Legitimacy demoted to Mandate: Royal Decree (Mandate vs Ob 2), Excommunication (Mandate vs target Mandate / Ob 2), Sovereign Authority Doctrine (Mandate vs Ob 4) — faction_canon §9 + Crown/Church sheets + stats_1_7_scale Unique Actions. Matches authoritative factions_personal §8.2/§8.4 (FCN-1 verified); forced by ruling (L not a faction roll stat); resolution METHOD unchanged (= sim-deferred resolver migration).",
+      "narrative": "faction_canon PART B Crown + Church 'Legitimacy / Popular Support Dynamics' marked per-territory per LPS-1.",
+      "flagged_entangled": [
+        "CI-60 Seizure 'L vs floor(owner's/target faction's L/2)+1' annotated FCN-SEIZURE-DRIFT (authoritative faction_layer §2.7 Influence-based); under LPS-1 the target L = target TERRITORY's per-territory Legitimacy",
+        "Restoration Community Weaving 'PS ≥ 1 prerequisite' edge case (Restoration emergent, no territories)",
+        "Excommunication degree effects 'faction L ±1' reconcile to Mandate / per-territory L (noted inline, not yet mechanized)"
+      ],
+      "vetoable": "L→Mandate tactic reconciliation logged Jordan-vetoable."
     }
   }
 }

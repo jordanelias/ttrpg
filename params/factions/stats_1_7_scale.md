@@ -148,8 +148,8 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 
 | Faction | Action | Roll | Effect |
 |---------|--------|------|--------|
-| Crown | Royal Decree | L vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |
-| Church | Excommunication | L vs target L (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction L −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
+| Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |  <!-- LPS-1: L→Mandate -->
+| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction L −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
 | Church | Church Influence 60 Territorial Seizure | L vs floor(owner's L / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Church L −1. |
 | Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending PS prerequisite: PS ≥ 1 |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Löwenritter unique actions not extracted |
@@ -180,7 +180,7 @@ Mending Stability ≤ 10 adds +1 to coup/succession trigger check pools.
 ## Unique Actions — All Factions (PP-168)
 
 ### Crown — Royal Decree
-Roll: L vs Ob 2. Once per season.
+Roll: Mandate vs Ob 2. Once per season.  <!-- LPS-1: L→Mandate -->
 | Degree | Result |
 |--------|--------|
 | Overwhelming | One faction stat ±1 immediate; consecutive seasons: +1 Ob/season |
@@ -189,7 +189,7 @@ Roll: L vs Ob 2. Once per season.
 Cannot target Intel. Effect is immediate and unilateral.
 
 ### Church — Excommunication
-Roll: L vs floor(target L / 2) + 1 (faction leader) or Ob 2 (non-leader).
+Roll: Mandate vs floor(target Mandate / 2) + 1 (faction leader) or Ob 2 (non-leader).  <!-- LPS-1: L→Mandate (faction-vs-faction); effects reconcile per settlement_layer §1.8 -->
 | Degree | Result |
 |--------|--------|
 | Success | Strips target's Circles bonus; target faction L −1 |
@@ -198,7 +198,7 @@ Reversal: Grand Debate (5 exchanges) or new Confessor appointed.
 
 ### Church — CI 60 Territorial Seizure
 Trigger: Church Influence (CI) reaches 60. Fires once per territory.
-Roll: L vs floor(owner's L / 2) + 1.
+Roll: L vs floor(owner's L / 2) + 1.  <!-- FCN-SEIZURE-DRIFT: stale — authoritative = faction_layer §2.7 (Influence + floor(CI/15) vs Ob 7−PT). Under LPS-1 'owner's L' = target territory's per-territory Legitimacy (settlement_layer §1.8). -->
 | Degree | Result |
 |--------|--------|
 | Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Flat Church Influence value fires immediately. |
@@ -206,7 +206,7 @@ Roll: L vs floor(owner's L / 2) + 1.
 Riskbreaker exposure removes seized territory and prevents re-seizure for one season.
 
 ### Hafenmark — Sovereign Authority Doctrine
-Roll: L vs Ob 4. Once per campaign arc.
+Roll: Mandate vs Ob 4. Once per campaign arc.  <!-- LPS-1: L→Mandate -->
 | Degree | Result |
 |--------|--------|
 | Overwhelming | Church Influence −3; Church L −1; Heresy Investigation blocked this season; +1D social vs Church for the arc |
