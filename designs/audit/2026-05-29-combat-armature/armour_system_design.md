@@ -64,7 +64,7 @@ Off-preset combos the new axes unlock: **breastplate** (plate, partial — betwe
 
 Armour is **damage mitigation purchased with tempo and fatigue** — never a strict upgrade. Each cost reproduces or extends a canonical hook:
 
-- **Fatigue — per-action Stamina drain (CANONICAL, reproduced):** +0/+0/+1/+2 by tier (→ derived by weight from material+coverage). Against ratified Stamina = 3·End + 2·Spirit, heavier armour reaches **Out-of-Breath (0 → −2D)** faster. *This is the real cost*: in a long fight you gas out. (Worked: End 4 → Stamina ~20; +2 drain heavy → effective ~7 actions/round-budget before Out-of-Breath, per derived_stats.)
+- **Fatigue — per-action Stamina drain (CANONICAL, reproduced):** +0/+0/+1/+2 by tier. Against ratified Stamina = 3·End + 2·Spirit, heavier armour reaches **Out-of-Breath (0 → −2D)** faster and shrinks the action budget. **NB (corrected by validation):** fatigue is a **cost/constraint** (action budget, the Stamina-floor wield-limit, campaign/day attrition) — it does **NOT** equalise a 1v1 duel against plate (symmetric fatigue cancels; tested and confirmed). The real 1v1 counters to plate are blunt, gaps, and grappling — not endurance. See the validation result §3.
 - **Tempo — σ-leverage penalty (NEW, gap-fill):** armour imposes a modest **initiative/tempo δσ penalty** scaled by weight (plate is mobile but *slower* than unarmoured — the historically-accurate "tiring and a step slow," **not** the Hollywood "can't move"). This is the duel cost: in a finesse race, tempo is everything.
 - **Health — flat bonus (CANONICAL, reproduced):** +4/+6/+8 (leather/chain/plate) feeds the wound model's effective Health.
 - **STR-min (CANONICAL, reproduced):** 0/2/3/4; wearing above your STR penalises (parallels under-STR weapon wielding).
@@ -76,7 +76,7 @@ Armour is **damage mitigation purchased with tempo and fatigue** — never a str
 
 The validated two-context model falls **out of the armour trade-off** rather than being asserted:
 - **Duel (unarmoured by convention):** no mitigation → a **finesse race** where tempo/reach/skill decide. Armour's tempo+fatigue cost is exactly why a duellist *chooses* light/none. Damage magnitude is irrelevant (any clean hit ends it).
-- **Battlefield (armoured):** mitigation dominates → **attrition** → damage magnitude governs → **blunt wins** (plate transmits percussion) and **fatigue bites** (heavy armour gasses out in a long melee) and **the point finds gaps** (coverage). Defence is suppressed when engaged (R10).
+- **Battlefield (armoured):** mitigation dominates → **attrition** → damage magnitude governs → **blunt wins** (plate transmits percussion) and **the point finds gaps** (coverage). Plate is ~95% dominant 1v1 vs the unarmoured (historically correct); its counters are blunt/gaps/grappling, not fatigue. Fatigue is a campaign/action-budget cost. Defence is suppressed when engaged (R10).
 
 So whether you armour up *is* the choice of which resolution regime you fight in. This unifies the armour system with the ratified duel/battlefield contexts.
 
