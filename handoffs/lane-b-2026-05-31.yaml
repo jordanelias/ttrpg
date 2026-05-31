@@ -2,12 +2,12 @@ id: lane-b-2026-05-31
 scope: infrastructure
 task:
   skill: valoria-orchestrator
-  description: 'Lane B (Infra/Tooling/Governance), write-disjoint model. Done: enablers,
-    5.5, 5.6, 7.2 hook tests, 5.2 (6 docs), 5.8 scope-vocab safe core, 1.10b CI fix
-    + roadmap note, 1.18 retire atoms_pending (381 files). Remaining autonomous: INDEX
-    REFRESH + regen-CLI-defect fix, 7.2-followup, 1.20. HELD: 5.8-reduction (lane-c),
-    1.3 (out of owns). Jordan-gated: 1.17 disposition, CI arch corrections, roadmap
-    reconcile. See working_state.'
+  description: 'Lane B (Infra/Tooling/Governance). Done: enablers, 5.5, 5.6, 7.2 hook
+    tests, 5.2 (6 docs), 5.8 scope-vocab safe core, 1.10b CI fix + roadmap note, 1.18
+    retire atoms_pending (381 files). Remaining autonomous: INDEX-REFRESH+generator-fix
+    (2 defects, focused), check_handoff_conflicts glob-bug fix, propagation_map owns-narrow,
+    7.2-followup, 1.20. HELD: 5.8-reduction (3 lanes active), 1.3. Jordan-gated: 1.17,
+    CI arch corrections, roadmap reconcile. See working_state.'
 owns:
 - skills/valoria-orchestrator/scripts/**
 - references/**
@@ -20,109 +20,113 @@ owns:
 context_files:
 - path: references/lane_assignments.yaml
   depth: full
-  reason: Lane B owns; all-lane owns/ranges/scopes + launch protocol + shared-file
-    discipline.
+  reason: Lane B owns; needs propagation_map owns-narrow (Lane A finding).
 - path: references/scope_vocabulary.md
   depth: full
-  reason: 5.8 canonical vocab + ~10 reduction proposal + migration discipline.
+  reason: 5.8 canonical vocab + reduction proposal.
 - path: references/subsystems/ci_subsystem.md
   depth: full
   reason: 5.2; CI drift findings for Jordan-applied arch.
 - path: references/id_reservations.yaml
   depth: full
-  reason: Reserved ID blocks; parked 5.10 allocation spec.
+  reason: Reserved ID blocks; parked 5.10 spec.
 - path: skills/valoria-orchestrator/scripts/valoria_hooks.py
   depth: skeleton
-  reason: Gate chain; COMMIT_FORMAT L73 / TASK_REQUIRED_FILES L84 (5.8); FORBIDDEN_TOKEN_EXEMPT_PATHS.
+  reason: Gate chain; COMMIT_FORMAT L73 / TASK_REQUIRED_FILES L84; FORBIDDEN_TOKEN_EXEMPT_PATHS.
 - path: skills/valoria-orchestrator/scripts/github_ops.py
   depth: skeleton
-  reason: SESSION_SCOPES L936; report_lane; append_to_register L827 (5.10); bootstrap
-    session_paths (1.10b shared question).
+  reason: SESSION_SCOPES L936; check_handoff_conflicts (glob bug); append_to_register
+    L827 (5.10); bootstrap session_paths.
 working_state:
   done:
-  - 5.11+5.10 enablers (lane spec, report_lane, id_reservations). b5d5f5fb2c736047724bede59287318c8e519af8.
-  - 5.5 freshness; 5.6 compliance exemptions. ad98144d258f4597dec8c83eee5e12af2f657ed6
-    / c6465ea16f3b4bd5c67f4d52ada317e6d930578d.
-  - 7.2 hook tests (33, pure-logic gates). 772dfbb4b2c851c6dad4c9efd50065246c77ee98.
-  - 5.2 all 6 subsystem docs. 5d34727dd0d38657572f1373cebb08fdee69f6be.
-  - 5.8 scope-vocab single-source + drift-guard (safe core, zero live-gate change).
-    ecef73676665b231520a2dd217bf0e2b3ffbd1f5.
-  - 1.10b CI active-wiring fix (THRESHOLDS off dead files -> editorial_ledger.jsonl
-    soft 150k + session_log_archive_part_7.md) + roadmap Phase-2 progress_note. 665b8f7b6c44dee381169511a79ab201612a8042.
-  - 1.18 RETIRE references/atoms_pending/2026-04-25 (consumed staging) — 381 files
-    deleted in one atomic commit, 0 remaining; recoverable via git history. fb024547ebff95af176a3cd64ce8f8ea8df3474c.
-  - '1.17 (PARTIAL): cleanup/remove-deprecated DELETED (merged); 2 branches FLAGGED
-    not-deleted (see investigations).'
+  - 5.11+5.10 enablers; 5.5 freshness; 5.6 compliance. b5d5f5fb2c736047724bede59287318c8e519af8/ad98144d258f4597dec8c83eee5e12af2f657ed6/c6465ea16f3b4bd5c67f4d52ada317e6d930578d.
+  - 7.2 hook tests (33). 772dfbb4b2c851c6dad4c9efd50065246c77ee98. | 5.2 all 6 subsystem
+    docs. 5d34727dd0d38657572f1373cebb08fdee69f6be.
+  - 5.8 scope-vocab single-source + drift-guard (safe core). ecef73676665b231520a2dd217bf0e2b3ffbd1f5.
+  - 1.10b CI active-wiring fix + roadmap Phase-2 progress_note. 665b8f7b6c44dee381169511a79ab201612a8042.
+  - 1.18 RETIRE references/atoms_pending/2026-04-25 — 381 files deleted, 0 remaining,
+    recoverable via git. fb024547ebff95af176a3cd64ce8f8ea8df3474c.
+  - '1.17 (PARTIAL): cleanup/remove-deprecated DELETED; 2 branches FLAGGED not-deleted
+    (investigations).'
   next:
-  - 'INDEX REFRESH [follow-on, separate from 1.18]: references/valoria_index.sql is
-    BROADLY STALE — predates this session (missing scope_vocabulary.md, lane_assignments.yaml,
-    id_reservations.yaml, the 6 subsystem docs, the 2 new test files) AND the 1.18
-    delete left 1 dangling concept_files row (L605, concept_id ''2'' -> a deleted
-    atoms_pending file). REGEN: regenerate_file_index.py CLI is a NO-OP (DEFECT: no
-    `if __name__==main` guard; entrypoint block unreachable) -> must `import regenerate_file_index;
-    run(full=True, schema_sql=<CREATE-TABLE lines from existing valoria_index.sql>,
-    write_sql_to=...)`. run() also imports entities from registries; confirm whether
-    it fetches via GraphQL or needs local files. VERIFY the regenerated dump (file
-    count ~= live tree, new files present, no atoms_pending, sane size) BEFORE committing
-    — it rewrites a governance file. ~20-30 GraphQL batches (shared PAT budget; coordinate
-    with lane-c).'
-  - 'REGEN-CLI DEFECT [Lane B, tools/]: fix regenerate_file_index.py entrypoint (add
-    `if __name__==''__main__'': main()` or hoist the argparse/run block to module
-    level). Read L497-595 structure first (the argparse block at ~L564 is indented
-    under no reachable guard).'
+  - 'INDEX REFRESH + GENERATOR FIX [focused task — do NOT ship piecemeal]: regenerate_file_index.py
+    has TWO defects. (1) __main__ unreachable: the argparse/run/print entrypoint sits
+    as DEAD CODE after run_fast()''s return (no `if __name__==main` guard) -> `python3
+    tools/regenerate_file_index.py ...` is a NO-OP. (2) CURATED-DATA LOSS: the entrypoint
+    builds schema_sql = existing-index lines minus ALL ''INSERT'' lines -> strips
+    the curated tables too; a full run() then dumps EMPTY concepts(82)/aliases(334)/concept_files(231)
+    = destroys 647 authored rows. Confirmed: committed valoria_index.sql = schema
+    + curated tables ONLY (files/entities are runtime-rebuilt, NEVER committed — dump_to_sql
+    include_generated=False by design). CORRECT FIX: hoist entrypoint to `if __name__==main`,
+    AND make schema/seed load CREATE-TABLEs PLUS curated INSERTs (concepts/aliases/concept_files/meta)
+    into the DB before run(), so the dump preserves them. Ship WITH a test (assert
+    curated rowcounts preserved). Also drops the 1 dangling concept_files row (atoms_pending)
+    as a side effect.'
+  - 'check_handoff_conflicts GLOB BUG [Lane B, github_ops — from Lane A]: fnmatch(proposed,
+    pattern) returns false-empty when `proposed` is itself a glob (missed the faction
+    overlap). Fix: prefix-component region-overlap + strip annotations + check BOTH
+    directions. Add tests/hooks (folds into 7.2). NOTE: my session''s checks used
+    CONCRETE paths -> were valid; the bug bites glob-vs-glob.'
+  - 'propagation_map OWNS-NARROW [Lane B, lane_assignments.yaml — from Lane A]: references/propagation_map.md
+    is double-claimed (Lane A explicit via co-file rule vs lane-b references/**).
+    Move it to lane-b shared_not_exclusive; co-file rule -> Lane A owns it.'
   - '7.2-FOLLOWUP [big]: network-gated gate tests (safe_commit, task_gate, assert_bootstrap,
-    context_gate, co-file mutation) — needs github_ops mocking or a throwaway branch.'
-  - '1.20 [scope first]: grep inline markers in Lane B owns; resolve stale ones.'
-  - '5.10-WIRING [PARKED]: allocate_id on id_reservations + co-commit; ship WITH a
-    test; read append_to_register (github_ops L827) first.'
-  - 'COMPLIANCE: bootstrap shows 1 NON-BLOCKING warning (persisted across this turn''s
-    commits) — run compliance_check verbose to identify the file/rule; fix or exempt.'
+    context_gate, co-file). Mock github_ops or throwaway branch.'
+  - '1.20 [scope first]: inline-marker sweep in Lane B owns.'
+  - '5.10-WIRING [PARKED]: allocate_id + co-commit + test; read append_to_register
+    (github_ops L827) first.'
+  - 'COMPLIANCE: 1 non-blocking bootstrap warning persists — run compliance_check
+    verbose to find the file/rule.'
   - 'ROADMAP structural reconcile [integration/close]: items_total 11->6 (1.19b),
-    current_phase advance, status.'
+    current_phase advance.'
   held:
-  - '5.8-REDUCTION [HOLD: lane-c active]: ~10 reduction removes live COMMIT_FORMAT
-    scopes (shared gate) -> would break lane-c. Run only when no other lane active.
-    Spec in scope_vocabulary.md.'
-  - '1.3 [HOLD: out of Lane B owns]: 06_B6_fix.md under designs/audit/ -> Lane A.'
-  - '1.15-ACTION [HOLD: partially out of owns]: editorial-archive consolidation touches
-    deprecated/canon/ (canon-side). See 1.15-finding.'
+  - '5.8-REDUCTION [HOLD: A+C active]: removes live COMMIT_FORMAT scopes (shared gate)
+    -> breaks other lanes. THREE lanes now active -> hold firmly. Spec in scope_vocabulary.md.'
+  - '1.3 [HOLD: out of owns]: 06_B6_fix.md under designs/audit/ -> Lane A.'
+  - '1.15-ACTION [HOLD: partly canon-side]: editorial-archive consolidation touches
+    deprecated/canon/.'
   investigations:
-  - '1.17-DISPOSITION (do NOT delete; Jordan call): claude/refresh-state-3m7nL = 17
-    SUBSTANTIVE unmerged commits ~2026-04-20 (ED-717/721/722/723-728 closures w/ Jordan
-    editorial permission, engine_v4_per_settlement proposal, ED-721/722 sim re-run
-    on engine_v3, index regens). Confirm these are captured/superseded in main''s
-    editorial_ledger.jsonl before deleting. mb-sim-foundation-2026-05-29 = 1 commit
-    ''mass-battle sim validation foundation M1 gauge + M2 D-B model'' (sim/** = LANE
-    C territory) -> Lane C/Jordan call.'
-  - '1.15-FINDING: editorial archives across THREE dirs incl. typo-twin: archives/editorial/
-    AND archives/editorials/ both exist, PLUS deprecated/canon/. archives/editorials/
-    -> archives/editorial/ merge is Lane B (verify path citations first); deprecated/canon/
-    stays / Jordan-Lane-A.'
+  - '1.17-DISPOSITION (Jordan): claude/refresh-state-3m7nL = 17 SUBSTANTIVE commits
+    (ED-717/721/722/723-728 closures w/ editorial permission, engine_v4 proposal,
+    ED-721/722 sim re-run, index regens). Confirm captured/superseded in main''s editorial_ledger.jsonl
+    before delete. mb-sim-foundation = 1 commit (sim/** = Lane C) -> Lane C/Jordan.'
+  - '1.15-FINDING: editorial archives across archives/editorial/ + archives/editorials/
+    (typo-twin, both exist) + deprecated/canon/. editorials->editorial merge is Lane
+    B; deprecated/canon/ canon-side.'
+  - 'CONTEXT-GATE LESSON: a full index regen (run(full=True), 1476-file fetch + multi-MB
+    valoria.db) inflates the on-disk fetch estimate to ~7M -> context_gate hard-stops.
+    FIX: rm /home/claude/valoria.db + scratch idxrepo + .valoria_cache.json + .freshness_cache.json,
+    re-bootstrap (estimate returns ~13k). NOT real conversation context (1M model).'
 key_values:
 - 'Reserved-block ID maxima: ED 884 (<890), PP 726 (<727).'
-- valoria_index.sql does NOT densely track staging — atoms_pending had only 1 indexed
-  reference (a concept_files link row), not 381. The index is curated/selective.
-- 'regenerate_file_index.py: schema self-bootstraps from existing valoria_index.sql
-  CREATE-TABLE lines (no repo-root schema.sql); writes locally via write_sql_to for
-  caller to safe_commit; runtime DB /home/claude/valoria.db never committed; delete_removed()
-  drops files absent from live tree.'
-- '1.10b scoping: most deprecated-name code-search hits are CORRECT historical mentions
-  (archives/**, deprecated/**, audit docs) — leave them. Only active wirings repointed
-  (CI THRESHOLDS done). github_ops bootstrap session_paths still references deprecated
-  summaries per PI -> shared-bootstrap change, verify + non-parallel-window.'
+- 'valoria_index.sql is SELECTIVE by design: committed = schema + curated tables (meta
+  8, concepts 82, aliases 334, concept_files 231). files/entities = runtime-only,
+  rebuilt each session, NEVER committed (dump_to_sql include_generated=False). A naive
+  full-regen-then-commit DESTROYS the 647 curated rows.'
+- 'regenerate_file_index.py: run() is self-contained (fetches tree + all files + proper_noun_registry.yaml
+  via GraphQL); writes via write_sql_to for caller to safe_commit; runtime DB /home/claude/valoria.db
+  never committed; ~78 batches/154s for full. CLI entrypoint currently a no-op (defect
+  above).'
 - 5.8 canonical vocab = 17-member union; test_scope_vocabulary.py is the drift guard.
+- '1.10b: CI THRESHOLDS fixed. Most other deprecated-name hits are correct historical
+  mentions; github_ops bootstrap session_paths still lists deprecated summaries (shared-bootstrap,
+  non-parallel-window).'
 - 'tests/hooks: 3 files (placeholder_names, correctness_gates 33, scope_vocabulary
   6). pip install pytest --break-system-packages.'
+- THREE lanes now active (A reduced-scope canon/designs, B infra, C sim). Collisions
+  on commit are routine -> use re-fetch+retry; shared-enforcement edits (5.8-reduction,
+  5.3) held firmly.
 blockers:
-- 'JORDAN-VERIFY (1.17): 17 substantive commits (refresh-state) + 1 sim commit (mb-sim,
-  Lane C). Confirm superseded before any deletion. Do NOT blind-delete.'
-- 'LANE-A LAUNCH NOT CONFLICT-FREE: overlaps active faction handoff on params/** +
-  designs/{provincial,world,personal}/** (9 paths). Track 1.1 first. Lane B+C clear.'
-- 'NON-PARALLEL-WINDOW gated (shared enforcement): 5.3 (canonical_sources SHA-split)
-  + 5.8-reduction (COMMIT_FORMAT). Not while another lane active.'
-- 'JORDAN-APPLIED (do not self-commit): PI/arch text — CI drift arch corrections,
-  M3/M4, 5.8 merge calls, arch atoms_pending count.'
+- 'JORDAN-VERIFY (1.17): 17 substantive commits + 1 sim commit. Confirm superseded
+  before deletion.'
+- 'CROSS-LANE from Lane A: (1) check_handoff_conflicts glob bug (Lane B fix, github_ops
+  + 7.2 test). (2) propagation_map.md double-claim -> narrow lane-b owns. (3) Lane
+  A P1 resolver-ratification dispute (ED-883/865/866) — faction/Jordan, not Lane B.'
+- 'NON-PARALLEL-WINDOW gated: 5.3 (canonical_sources SHA-split) + 5.8-reduction (COMMIT_FORMAT).
+  Three lanes active -> do not run.'
+- 'JORDAN-APPLIED: PI/arch text — CI drift corrections, M3/M4, 5.8 merge calls, arch
+  atoms_pending count.'
 last_commit: fb024547ebff95af176a3cd64ce8f8ea8df3474c
-created: '2026-05-31T23:22:32.594013+00:00'
-updated: '2026-05-31T23:22:32.594013+00:00'
+created: '2026-05-31T23:56:26.070814+00:00'
+updated: '2026-05-31T23:56:26.070814+00:00'
 status: active
