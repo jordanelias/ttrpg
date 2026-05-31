@@ -1322,6 +1322,37 @@ def build_column_grid(unit):
         grid.append(_ColBlock(col=c, density=tpc * len(ranks), depth=len(ranks)))
     return grid
 
+def _engaged_cols(unit, pairs):
+    """Absolute columns of `unit` that are in contact this tick (from find_contacts pairs)."""
+    cols = set()
+    sub_ids = {id(a) for a in unit.subunits}
+    for p in pairs:
+        if id(p.get("atom_a")) in sub_ids:
+            cols.update(c for (r, c) in p.get("a_cells", []))
+        if id(p.get("atom_b")) in sub_ids:
+            cols.update(c for (r, c) in p.get("b_cells", []))
+    return cols
+
+def distribute_casualties(unit, dmg, pairs):
+    """Increment 2: apply `dmg` troop-casualties across the unit's ENGAGED front columns,
+    proportional to each engaged column's current density. Keeps sum(col densities) == hp:
+    the same total `dmg` run_battle subtracts from unit.hp is subtracted here across columns.
+    Transparent substrate — does NOT feed back into resolution yet (later increments read this state)."""
+    grid = getattr(unit, 'col_grid', None)
+    if not grid or dmg <= 0:
+        return
+    eng = _engaged_cols(unit, pairs)
+    targets = [b for b in grid if b.col in eng and b.alive()]
+    if not targets:
+        targets = [b for b in grid if b.alive()]      # fallback: spread over the line
+    if not targets:
+        return
+    tot = sum(b.density for b in targets)
+    if tot <= 0:
+        return
+    for b in targets:
+        b.density = max(0.0, b.density - dmg * (b.density / tot))
+
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
@@ -1737,6 +1768,10 @@ def run_battle(unit_a, unit_b, max_turns=18):
         #  Both sides deal and receive damage before Size is recalculated."]
         unit_a.hp = max(0, unit_a.hp - result["dmg_a"] - volley_dmg_a * volley_hp_scale(unit_a))
         unit_b.hp = max(0, unit_b.hp - result["dmg_b"] - volley_dmg_b * volley_hp_scale(unit_b))
+        if PER_CELL:
+            # Increment 2: mirror the same total casualties onto the per-column grid (keeps sum==hp).
+            distribute_casualties(unit_a, result["dmg_a"] + volley_dmg_a * volley_hp_scale(unit_a), pairs)
+            distribute_casualties(unit_b, result["dmg_b"] + volley_dmg_b * volley_hp_scale(unit_b), pairs)
         unit_a.recalc_size()
         unit_b.recalc_size()
         # v18: discipline degradation moved to phase_boundary (D-6).
