@@ -93,8 +93,8 @@ Endurance-4 worked example (per Jordan canonical clarification 2026-05-09): Heal
 
 | Property | Value |
 |----------|-------|
-| Formula | Endurance × 5 |
-| Range | 5–35 |
+| Formula | (3 × Endurance) + (2 × Spirit)  [RATIFIED 2026-05-29 S1: replaces Endurance × 5. Stamina now draws on both Endurance (raw conditioning) and Spirit (will to keep going), per S2's expanded Spirit role. Armour remains a per-action drain modifier (below), not a base-Stamina reduction — resolving the armour-atom S⚠ flag.] |
+| Range | 5–47 (Spirit/End 1–7) |
 | Direction | Drains down from max |
 | Depleted at | 0 (Out of Breath: −2D all combat rolls) |
 | Recovery | Take a Breath: restores (Endurance + relevant combat History) × 2, capped at max |
@@ -495,7 +495,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 |---------------|--------|-----------|
 | Vitality = End × 10 (proposed by ED-694) | → reverted to Health = (End+6) × (Max Wounds + 1), MW = floor(End/2)+1 | PP-716 — End × 10 misaligned numerically with Wound Interval × wound-count structure; MW restored; equipment space preserved as flat additive bonus |
 | Max Wounds = floor(End/2)+1 | → Eliminated | Wounds computed on the fly: floor(damage / Wound_Interval) |
-| Stamina = End + History + 1 − armour | → Stamina = End × 5; History → recovery; armour → drain modifier | Single-attribute base, variable action costs, BB precedent |
+| Stamina = End + History + 1 − armour | → Stamina = End × 5 [SUPERSEDED by RATIFIED S1: now (3×End)+(2×Spirit)]; History → recovery; armour → drain modifier | Single-attribute base, variable action costs, BB precedent |
 | Composure = Cha + 6 | → Composure = Cha × 3 | Removes +6 constant, opens social equipment space |
 | Concentration = Focus + Recall | → Concentration = Focus × 3 | Removes Recall (wrong attribute), single-attribute derivation |
 | Contact Rounds = Focus | → Thread Fatigue threshold = Spirit × 5; Focus → max ops per session | Separates duration (Spirit) from skill (Focus), variable costs |
@@ -528,7 +528,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Scale | Stat | Derived Value | Multiplier | Direction |
 |-------|------|--------------|-----------|-----------|
 | Personal | Endurance | **Health** | non-multiplier: `(End+6) × (MW+1)`, MW cap 3 | Drains down |
-| Personal | Endurance | **Stamina** | ×5 | Drains down |
+| Personal | Endurance + Spirit | **Stamina** | `(3×End)+(2×Spirit)` (RATIFIED S1; was ×5) | Drains down |
 | Personal | Charisma | **Composure** | ×3 | Drains down |
 | Personal | Focus | **Concentration** | ×3 | Drains down |
 | Personal | Spirit | **Thread Fatigue** | ×5 (threshold) | Counts up |
