@@ -144,6 +144,29 @@ When a settlement has no governor (governor killed, faction collapsed, settlemen
 
 ---
 
+## §1.8 Territory Legitimacy & Popular Support → Faction Mandate (LPS-1 — Jordan structural ruling, 2026-05-30; derived bottom-up + historical, Jordan-vetoable)
+
+**Jordan ruling (2026-05-30, structural/metaphysical layer):** Legitimacy (L) and Popular Support (PS) are **per-territory** political-acceptance values — **NOT faction-level stats.** Faction **Mandate is the aggregate** of them, with a stabilizing feedback from Mandate back to territory L/PS. This **supersedes the faction-level L/PS canonized in PP-686 v2** (`faction_behavior_v30 §2/§3.4/§3.5/§4`, `faction_state_authoring_v30 §8`, `faction_canon_v30 §3.4/§5`, `params/factions/stats_1_7_scale.md` "7-stat" header) — those put L/PS at the wrong level and "should not have been canonized." PP-686 had the right stats (L, PS, 0–7) and the right blend; only the *level* was wrong. This section is the corrected canonical home.
+
+**Per-territory values.** Each of the 17 territories (`geography_v30`) tracks, for its controlling faction:
+- **Legitimacy (L), 0–7** — institutional/constitutional acceptance of the faction's rule in that territory (slow-moving: dynastic claims, papal bulls, constitutional authority).
+- **Popular Support (PS), 0–7** — active populace backing in that territory (faster-moving: mobilization, local approval).
+
+These sit at the territory tier alongside **Accord**. They are **distinct from Accord and from settlement Order** (Accord/Order = civil compliance, `floor(mean settlement Order)` per §1.3; L/PS = faction-political acceptance) — not conflated.
+
+**Faction Mandate (the aggregate).**
+- Faction **aggregate L** = mean(L_t over territories the faction currently controls); **aggregate PS** = mean(PS_t).
+- **Mandate = round(0.5 · aggregate_L + 0.5 · aggregate_PS)**, clamped 0–7 — equivalently `round(mean over controlled territories of (0.5·L_t + 0.5·PS_t))`. This is PP-686's `0.5L + 0.5PS` blend, relocated to per-territory and aggregated by the canonical mean-of-tier idiom (cf. Province Accord = `floor(mean settlement Order)`, §1.3). **Round** (not floor) because Mandate is a capability stat, not a gating threshold like Accord.
+- Only currently-controlled territories count; gaining/losing territory recomputes the mean (lose a high-L territory → Mandate falls). The N=1 case (a faction holding one territory, e.g. Church) computes normally: Mandate = round(0.5·L + 0.5·PS) of that territory.
+
+**Feedback (Mandate → territory L/PS) — mean-reverting / stabilizing.** Each Accounting, held territories drift toward the faction's Mandate (local acceptance regresses toward the realm's overall standing): a territory whose own `0.5L+0.5PS` sits ≥1 **below** Mandate gets **L +1** (capped 7); ≥1 **above** gets **PS −1** (capped 0); at most ±1 per territory per season, within the ±2 faction-stat seasonal cap. This is a **negative (stabilizing)** feedback. **Stage-4 sim (2026-05-30):** the coupled Mandate↔territory system converges and stays bounded 0–7 over 30 seasons under mission shocks (no runaway) for N ∈ {1,3,6}, while Mandate still tracks external drivers (mission outcomes, territory loss). Historical anchor: a ruler's overall standing reinforces or erodes local acceptance (CK3 crown authority ↔ county opinion; KOEI ruler standing ↔ city loyalty).
+
+**Faction-level mission outcomes** (the PP-686 cascade-fidelity / procedural / violation events that produced ΔL/ΔPS) now apply their ΔL/ΔPS **to the faction's controlled territories** (uniformly, clamped 0–7), which re-aggregate into Mandate — keeping per-territory L/PS as the canonical state and Mandate as the pure derived aggregate.
+
+**Consumers.** PP-686 Public Expectation strictness `base + 0.5·(L/7) − 0.3·(PS/7)` reads the faction **aggregate** L and PS defined above. `derived_stats_v30`'s faction Legitimacy meter (`= Mandate × 20`) is the displayed aggregate and remains consistent (Mandate is now the territory-L/PS aggregate); its footnote claiming "PP-686 split Mandate into faction-level L+PS" is corrected by this section. **The detailed rewiring of these consumers is staged as a follow-on (LPS-2+) — see master ledger `_lps_structural_redesign_2026-05-30`.**
+
+**GD-1 synergy.** Parliament votes = current Mandate (`faction_layer §5.3`), and Mandate now aggregates territorial legitimacy → a faction's political weight emerges from its territorial standing, coherent with GD-1 (Peninsular Sovereignty / territorial control as the win condition).
+
 # PART 2: THE SETTLEMENTS (PP-726 corrected granularity)
 
 **Status note (PP-726, 2026-05-10):** PART 2 has been refactored to operate at correct granularity per `valoria_political_hierarchy_v30 §1.1`. A settlement is a **city/fortress/village/town** — the siege-target. Districts (Cathedral, Market, Barracks, Harbor, Quarter, Parliament, etc.) and outpost-features (garrison towns, watchtowers, mines, lodges, shrines, watches, storehouses, coves, gates, ruins) are subservient to their parent settlement and are NOT separately siegeable; they appear in §2.2 sub-features registry as properties of their parent.

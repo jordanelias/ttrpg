@@ -592,5 +592,41 @@
       "resolution_diagnostic_faction.md",
       "engine_replacement_reconciled.md"
     ]
+  },
+  "_lps_structural_redesign_2026-05-30": {
+    "trigger": "Jordan structural ruling (2026-05-30): L and Popular Support are per-settlement/territory values, NOT faction; Mandate derived from them; Mandate rising/lowering affects them. Faction-level L/PS = defect, should not have been canonized.",
+    "reframes_F8": "6-stat faction lineup (Mandate AS the faction stat) is structurally CORRECT; faction-level L+PS ('7-stat') is the DEFECT. L/PS belong to territory layer; Mandate is their faction aggregate.",
+    "self_correction": "[SELF-AUTHORED bias risk] faction_behavior diagnostic this session wrongly blessed faction-level L/PS ('Mandate now derived 0.5L+0.5PS — Lesson-1 split done correctly'); mischaracterized the LEVEL. Corrected.",
+    "blast_radius": [
+      "faction_behavior_v30 §2/§3.4/§3.5/§4/§3.6 (PP-686 v2 ROOT)",
+      "faction_state_authoring_v30 §8 inits",
+      "faction_canon_v30 §3.4/§5 stat table",
+      "params/factions/stats_1_7_scale.md 7-stat header",
+      "derived_stats_v30 §8 footnote + Legitimacy=Mandate*20 (reconciled)"
+    ],
+    "LPS-1_committed": {
+      "where": "settlement_layer_v30 §1.8",
+      "model": "L,PS per-TERRITORY 0-7 (17 terr); Mandate=round(mean controlled-terr 0.5L+0.5PS) clamp 0-7 (mean-of-tier idiom; round not floor); feedback Mandate->territory MEAN-REVERTING (+-1/terr/season, stabilizing); faction aggregate L/PS for strictness; mission ΔL/PS -> controlled territories then re-aggregate",
+      "grain": "TERRITORY (Jordan-vetoable; settlement alt)",
+      "feedback": "mean-reverting (sim-stable, bounded 0-7, no runaway N in {1,3,6}); Jordan-vetoable",
+      "anchor": "CK3 crown-authority<->county-opinion; KOEI ruler<->city loyalty; Accord=floor(mean settlement Order)"
+    },
+    "staged_next_LPS-2+": [
+      "SUPERSEDED-BY [LPS-1] markers at 4 source sites (re-read exact text first)",
+      "rewire strictness->aggregate L/PS; cascade/procedural/violation ΔL/PS->controlled territories",
+      "reconcile derived_stats footnote + Mandate*20 direction",
+      "relocate faction_state_authoring §8 inits to per-territory",
+      "re-run Stage-4 on full rewired model; update handoff"
+    ],
+    "citations": [
+      "settlement_layer_v30 §1.1/§1.3",
+      "geography_v30",
+      "faction_behavior_v30 §2/§3.4/§3.5/§4/§3.6",
+      "faction_canon_v30 §3.4/§5",
+      "faction_state_authoring_v30 §8",
+      "stats_1_7_scale",
+      "derived_stats_v30 §8",
+      "canon/02 §GD-1"
+    ]
   }
 }
