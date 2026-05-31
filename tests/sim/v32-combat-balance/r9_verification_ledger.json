@@ -2,19 +2,47 @@
   "sim_file": "tests/sim/v32-combat-balance/r9_weapon_engagement.py",
   "scope": "custom: combat -- R9 phase-dependent reach + speed tempo (armature reset 2026-05-29)",
   "module": "R9",
-  "note": "The spear fix. Phase-dependent reach + speed tempo: reach governs the closing/breaking measure (longer weapon controls approach -- canonical 'reach = -1 Ob closing'), speed governs the bind (faster weapon wins once closed; reach INVERTS to a liability -- HEMA measure/bind dynamic). Self-test 5/5. Grounded bottom-up (canonical reach + per-weapon speed, combat_v30 §5 + m3) AND top-down (HEMA). Gap-completion: canon says 'spear is king' but the sim left it dead (the gap between canonical intent and mechanical realization); does NOT overwrite an authored value. FINDING (honest): R9 gives the spear/dagger their correct phase niches (self-tested), but landing all 8 weapons strictly in-band is a JOINT-FIT problem -- reach helps every LONG weapon (spear AND war hammer), so the war hammer stays high (76-79%) even with the armour taper AND a hypothetical x3->x2 multiplier taper; the two 'long-weapon advantages' (reach-at-distance + heavy damage/survivability) compound and no single knob separates them. Full convergence needs a joint fit or a design call (e.g. reach benefits light-long but not heavy-long weapons), flagged for Jordan. R9 is the validated MECHANISM; the magnitudes are sim-tunable. Class A = canonical reach/speed (combat_v30 §5; m3). Class C = phase-tempo magnitudes (grounded; sim-tunable). PROPOSAL -- Jordan-vetoable; no canon file edited.",
+  "note": "The spear fix. Phase-dependent reach + speed tempo: reach governs the closing/breaking measure (longer weapon controls approach -- canonical 'reach = -1 Ob closing'), speed governs the bind (faster weapon wins once closed; reach INVERTS to a liability -- HEMA measure/bind dynamic). Self-test 5/5. Grounded bottom-up (canonical reach + per-weapon speed, combat_v30 \u00a75 + m3) AND top-down (HEMA). Gap-completion: canon says 'spear is king' but the sim left it dead (the gap between canonical intent and mechanical realization); does NOT overwrite an authored value. FINDING (honest): R9 gives the spear/dagger their correct phase niches (self-tested), but landing all 8 weapons strictly in-band is a JOINT-FIT problem -- reach helps every LONG weapon (spear AND war hammer), so the war hammer stays high (76-79%) even with the armour taper AND a hypothetical x3->x2 multiplier taper; the two 'long-weapon advantages' (reach-at-distance + heavy damage/survivability) compound and no single knob separates them. Full convergence needs a joint fit or a design call (e.g. reach benefits light-long but not heavy-long weapons), flagged for Jordan. R9 is the validated MECHANISM; the magnitudes are sim-tunable. Class A = canonical reach/speed (combat_v30 \u00a75; m3). Class C = phase-tempo magnitudes (grounded; sim-tunable). PROPOSAL -- Jordan-vetoable; no canon file edited. [V2: reach-CONTROL now scales with LIGHTNESS (light long = full, heavy long = 0.25) + speed is an all-phase term -> a heavy slow weapon (war hammer) is disadvantaged in EVERY duel phase; its damage edge only pays off in the battlefield context (R10). Confirmed: war hammer duel dominance is DAMAGE not tempo (fells in 3 strikes vs blades' 4-6); no tempo channel offsets a 2x damage gap.]",
   "entries": [
-    {"sim_variable":"REACH_TEMPO_APPROACH","value":"0.8*minor = 0.2","class":"C-proposed (grounded; sim-tunable)",
-     "canonical_source":"designs/scene/combat_v30.md","section":"§5 reach rule",
-     "quoted_text":"Reach: long weapon imposes -1 Ob on the opponent during closing (reach = -1 Ob closing). Expressed as a sigma-leverage edge to the longer weapon in the closing/breaking phases; magnitude 0.8*LEVEL_SIGMA[minor]. Bottom-up: canonical reach rule. Top-down: HEMA -- reach dominates the approach."},
-    {"sim_variable":"SPEED_TEMPO_BIND","value":"0.45*minor = 0.1125","class":"C-proposed (grounded; sim-tunable)",
-     "canonical_source":"tests/sim/v32-combat-balance/m3_weapon_class_layer.py","section":"WEAPON_CLASSES speed",
-     "quoted_text":"In the bind, the faster weapon wins the close exchange; dsig per canonical speed-point gap = 0.45*LEVEL_SIGMA[minor]. Bottom-up: canonical per-weapon speed. Top-down: HEMA -- the faster/shorter weapon dominates the grapple."},
-    {"sim_variable":"SPEED_TEMPO_APPROACH","value":"0.15*minor = 0.0375","class":"C-proposed (grounded; sim-tunable)",
-     "canonical_source":"tests/sim/v32-combat-balance/m3_weapon_class_layer.py","section":"WEAPON_CLASSES speed",
-     "quoted_text":"Minor speed edge in the closing phase (quickness helps a little even at range); 0.15*LEVEL_SIGMA[minor]. Smaller than the bind speed term -- speed matters most once closed."},
-    {"sim_variable":"REACH_BIND_PENALTY","value":"0.5*minor = 0.125","class":"C-proposed (grounded; sim-tunable)",
-     "canonical_source":"designs/scene/combat_v30.md","section":"§5 reach rule (inversion in the bind)",
-     "quoted_text":"Reach inverts to a liability in the bind: the long weapon cannot bring its point to bear inside the measure; penalty 0.5*LEVEL_SIGMA[minor] per reach-step. Top-down: HEMA -- a spearman who lets you close past the point is in trouble. The canonical rule names reach as a closing advantage; the bind-inversion is the grounded gap-fill."}
+    {
+      "sim_variable": "REACH_TEMPO_APPROACH",
+      "value": "0.8*minor = 0.2",
+      "class": "C-proposed (grounded; sim-tunable)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "\u00a75 reach rule",
+      "quoted_text": "Reach: long weapon imposes -1 Ob on the opponent during closing (reach = -1 Ob closing). Expressed as a sigma-leverage edge to the longer weapon in the closing/breaking phases; magnitude 0.8*LEVEL_SIGMA[minor]. Bottom-up: canonical reach rule. Top-down: HEMA -- reach dominates the approach."
+    },
+    {
+      "sim_variable": "SPEED_TEMPO_BIND",
+      "value": "0.45*minor = 0.1125",
+      "class": "C-proposed (grounded; sim-tunable)",
+      "canonical_source": "tests/sim/v32-combat-balance/m3_weapon_class_layer.py",
+      "section": "WEAPON_CLASSES speed",
+      "quoted_text": "In the bind, the faster weapon wins the close exchange; dsig per canonical speed-point gap = 0.45*LEVEL_SIGMA[minor]. Bottom-up: canonical per-weapon speed. Top-down: HEMA -- the faster/shorter weapon dominates the grapple."
+    },
+    {
+      "sim_variable": "SPEED_TEMPO_APPROACH",
+      "value": "0.15*minor = 0.0375",
+      "class": "C-proposed (grounded; sim-tunable)",
+      "canonical_source": "tests/sim/v32-combat-balance/m3_weapon_class_layer.py",
+      "section": "WEAPON_CLASSES speed",
+      "quoted_text": "Minor speed edge in the closing phase (quickness helps a little even at range); 0.15*LEVEL_SIGMA[minor]. Smaller than the bind speed term -- speed matters most once closed."
+    },
+    {
+      "sim_variable": "REACH_BIND_PENALTY",
+      "value": "0.5*minor = 0.125",
+      "class": "C-proposed (grounded; sim-tunable)",
+      "canonical_source": "designs/scene/combat_v30.md",
+      "section": "\u00a75 reach rule (inversion in the bind)",
+      "quoted_text": "Reach inverts to a liability in the bind: the long weapon cannot bring its point to bear inside the measure; penalty 0.5*LEVEL_SIGMA[minor] per reach-step. Top-down: HEMA -- a spearman who lets you close past the point is in trouble. The canonical rule names reach as a closing advantage; the bind-inversion is the grounded gap-fill."
+    },
+    {
+      "sim_variable": "HEAVY_REACH_FRACTION",
+      "value": 0.25,
+      "class": "C-proposed (grounded; sim-tunable)",
+      "canonical_source": "tests/sim/v32-combat-balance/m3_weapon_class_layer.py",
+      "section": "WEAPON_CLASSES weight",
+      "quoted_text": "Heavy long weapons retain only 0.25 of full reach-CONTROL: they have the reach but commit to each swing and cannot fence at distance. Bottom-up: canonical weight axis. Top-down: HEMA -- a light spear out-fences a heavy hammer at the same length."
+    }
   ]
 }

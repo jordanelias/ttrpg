@@ -110,3 +110,31 @@ This produces the correct niches by construction (self-tested): spear wins the a
 **Status of weapon balance:** the *mechanisms* are built and validated (armour taper §2A, speed-tempo §2B, phase-reach §8). The *magnitudes* for strict 8-way convergence await either the design call above or a joint optimization. The distribution is already far healthier than canon (war hammer no longer armour-blind; fast blades revived; correct armour niches), and the attribute-parity payoff (§4: Str 85→69%, spread 42→23pp) holds regardless.
 
 **Updated pending decisions:** add **(8) phase-reach magnitudes / the light-long-vs-heavy-long reach question** (design) to the list in §6. (Reading σ-tune from item 5/7 applied in R8: `READING_PER_POINT` lowered toward band.)
+
+---
+
+## 9. RESOLUTION — duel vs battlefield context (Build-10, per Jordan's insight)
+
+**Jordan's reframe:** some weapons were never meant to function in a duel — their utility is the battlefield, striking a foe already engaged/tied up by someone else. This *resolves* the convergence problem.
+
+**Confirmed mechanism (strikes-to-fell, proposed table, Str-4 vs medium armour):**
+
+| weapon | dmg/strike | strikes to fell |
+|---|---|---|
+| war hammer | 18 | **3** |
+| longsword | 12 | 4 |
+| dagger / spear | 7 | 6 |
+
+The war hammer's duel dominance is **canonical damage** (~2× — Heavy-Blunt ×3 + armour mod), not tempo. A 2× damage gap fells before σ-leverage (a fraction of a die) can matter — so **no tempo channel can make the war hammer lose a duel, and it shouldn't.** It is a battlefield weapon.
+
+**Resolution — two contexts, not one balanced weapon (R9 v2 + R10):**
+
+- **R9 v2** (`r9_weapon_engagement.py`, self-test 5/5): reach-*control* now scales with **lightness** — a light long weapon (spear) fences and controls the measure; a heavy long weapon (war hammer) has the reach but commits to each swing (0.25× control). Plus speed is an all-phase term. So a **spear out-fences a war hammer at distance**, and the war hammer is disadvantaged in every *duel* phase (only its damage saves it).
+- **DUEL audit (R9 v2 + armour taper):** the 7 *dueling* weapons cluster — spread **29pp**, mean 47% (longsword 65, staff 61, saber 46, thrust 43, single-short 41, paired 38, spear 36). The war hammer at 75% is **excluded from the duel-balance target** — its high duel number is the artifact of duels being the wrong test for a battlefield weapon.
+- **R10** (`r10_battlefield_context.py`, self-test 3/3): the BATTLEFIELD context — an engaged foe (occupied by a third party) cannot defend, so the duel's defensive σ-leverage is suppressed and raw armour-defeating damage governs. There the war hammer **dominates**: fells an engaged armoured foe in **2.3 strikes** vs a longsword's 4.3 and a dagger's 6.3, and its advantage **grows with armour** — the exact inverse of its duel weakness. Its true niche.
+
+**Net:** every weapon has a place across the two contexts. Dueling weapons win duels; heavy weapons win the armoured press. **No canonical damage nerf required** — the war hammer's canonical ×3 + armour mod is *correct* for its battlefield role; it just isn't a dueling sidearm. This is the grounded resolution (primitives → history → balance) Jordan's insight points to.
+
+**Implication for the §2 proposal:** the armour-table taper (§2A) and speed-tempo (§2B) still apply — they balance the *dueling* roster and keep blunt from being armour-*blind*. The Heavy-Blunt ×3 multiplier (earlier flagged for taper) should likely **stay** — it is the war hammer's battlefield identity. The earlier "war hammer over-tuned" finding is superseded: it is correctly tuned *for the battlefield*, and the duel simply isn't its arena.
+
+**Updated pending decisions:** decision (4) "taper the war hammer" is **downgraded** — recommend KEEP the canonical Heavy-Blunt profile; instead gate the war hammer by *context/availability* (battlefield weapon, not a civilian duel sidearm). The duel-vs-battlefield context distinction (R10) is itself a new mechanic for ratification: **(9) duel/battlefield resolution contexts** — does the game model the "engaged foe" battlefield condition? (It should, for mass-battle ↔ personal-scale integration.)

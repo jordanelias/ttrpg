@@ -1,0 +1,17 @@
+{
+  "sim_file": "tests/sim/v32-combat-balance/r10_battlefield_context.py",
+  "scope": "custom: combat -- R10 duel-vs-battlefield resolution context (armature reset 2026-05-29)",
+  "module": "R10",
+  "note": "Resolves the weapon-convergence thread per Jordan's battlefield insight. Strikes-to-fell analysis proved the war hammer's duel dominance is DAMAGE-driven (fells in ~2-3 strikes vs blades' 4-6, a 2x armour-defeating advantage sigma-tempo cannot offset) -- so it cannot be made duel-weak by any tempo channel, AND SHOULD NOT BE: it is a BATTLEFIELD weapon (poleaxe/war-hammer/maul), used against an armoured foe ALREADY ENGAGED with a third party (tied up, cannot defend/reposition). This module models the two CONTEXTS rather than balancing one weapon across both: DUEL (R8/R9, full defence -- the 7 dueling weapons cluster ~29pp spread; war hammer excluded from the duel-balance target) vs BATTLEFIELD (defensive sigma-leverage SUPPRESSED -- engaged foe cannot defend; raw armour-defeating damage governs; war hammer dominates -- fells engaged-armoured foe in 2.3 strikes vs longsword 4.3, dagger 6.3, advantage GROWS with armour, the inverse of its duel weakness). Grounded bottom-up (canonical damage + weapon-vs-armour, combat_v30 §5; the duel channels this suppresses) + top-down (Jordan's battlefield insight + historical poleaxe role). Gap-completion: gives heavy weapons the context canon intends, NOT a nerf to canonical damage. Reuses R1/R2/M3. Class-C = battlefield defence-suppression factor. PROPOSAL -- Jordan-vetoable; no canon file edited.",
+  "entries": [
+    {"sim_variable":"ENGAGED_DEFENCE_RETAINED","value":0.0,"class":"C-proposed (sim-tunable)",
+     "canonical_source":"designs/scene/combat_v30.md","section":"§5 (contested vs uncontested strike)",
+     "quoted_text":"Fraction of defensive sigma-leverage an ENGAGED foe retains; 0 = fully occupied by a third party (the battlefield press). The duel's defensive channels (reaction, facing, bind contest, declining the exchange) are canonical; suppressing them for an engaged foe is the battlefield-context model."},
+    {"sim_variable":"BATTLEFIELD_OB","value":2,"class":"A-canonical (degree band)",
+     "canonical_source":"designs/scene/combat_v30.md","section":"§5 Degree Table / Ob band",
+     "quoted_text":"A strike on an undefended/occupied foe resolves at an easier Ob (2, Routine-Difficult) than a contested duel sub-action (3). Ob scale canonical."},
+    {"sim_variable":"STRIKES_PER_ENGAGEMENT","value":3,"class":"C-proposed (sim-tunable)",
+     "canonical_source":"designs/audit/2026-05-29-combat-armature/sigma_leverage_handoff.md","section":"§2.5 exchange structure",
+     "quoted_text":"Opportunistic strikes a battlefield attacker lands on an engaged foe before the tableau shifts; harness parameter for the battlefield context, not a canonical constant."}
+  ]
+}
