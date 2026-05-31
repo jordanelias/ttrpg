@@ -38,3 +38,29 @@ P4. Validate H3/H5/H6 (should rise — enveloping shapes finally get the flank a
     H4 (Arrowhead is convex/centre-heavy, generates little overhang-wheel) or the mirror. Re-run NERS Stage 4.
 Note: this is geometry/movement, not a delta-sigma — it should REPLACE the dormant _envelopment_sigma,
 not add to it (NERS-N/E). Validate that the octagon flank penalties alone produce the effect.
+
+## IMPLEMENTATION STATUS (2026-05-31, committed)
+P1/P2 DONE + committed (e822c1d9): the WHEEL. In advance_cells, an overhang cell (column beyond the
+enemy frontage span) targets the nearest enemy cell instead of its own column -> wheels inward, and
+cell_facing_vec rotates inward. Horseshoe now has 4/18 cells with lateral facing (was 0/18). Gated
+PER_CELL+PC_WHEEL; PER_CELL=0 reproduces committed 120/120. Jordan's rotation hypothesis is now FIXED
+in the engine: cells rotate to face their movement vector.
+
+P3 (combat payoff via _per_cell_angle_mod centroid->nearest-attacker): ATTEMPTED, REVERTED. Making each
+defender cell judge the nearest attacker (the wheeled cell) instead of the centroid DID fire the octagon
+flank detection, but the effect was the wrong shape: H3 (the target) did NOT rise (43, still low), H4 rose
+to 56, H11 went HIGH (62), H6/H9 worsened. Net aggregate worse, target unmet -> reverted (NERS-E). Engine
+unchanged from e822c1d9.
+
+WHY P3 didn't land H3: Horseshoe's overhang is only 2 columns (8 and 14) beyond a 5-wide Line (9-13). Two
+wing cells wheeling cannot meaningfully WRAP a 5-wide Line within the battle horizon — the wrap is too
+shallow to flip the matchup, and the symmetric nearest-attacker rule also lets the Line's own geometry
+register flanks, shifting reverse-pair matchups (H11) unpredictably. The rotation is necessary but not
+sufficient; a decisive envelopment payoff needs MORE: deeper/faster wheel penetration so wing cells reach
+behind the enemy flank, AND likely an asymmetric "who is enveloping whom" gate so only the genuine
+encircler's wheeled cells confer the flank penalty (not both sides' incidental geometry).
+
+OPEN (next, design-led): (a) tune wheel depth/speed so overhang cells reach the enemy flank+rear, not just
+abreast; (b) gate the flank-penalty to the side with net overhang (the encircler), to avoid reverse-pair
+noise; (c) then P4 validate H3/H5/H6 rise without breaking H4/H11/mirror + NERS Stage 4. The rotation
+foundation (P1/P2) is in place and committed; the payoff is a focused follow-on, not a re-architecture.
