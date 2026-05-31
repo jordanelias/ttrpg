@@ -351,3 +351,9 @@ Reclassified from "no canon dep" wire-up to canon-design item.
 | Module | Depends On | Canonical Sources | Status |
 |---|---|---|---|
 | `sim/personal/parliamentary_vote.py` | `contest` (§6 threshold constants); `dice_engine`; `game_state` | `designs/scene/social_contest_v30.md §10` (BG Parliamentary Vote); `canon/02_canon_constraints.md §B GD-3` | **verified** — §10 BG faction-scale vote: per-side Mandate(=Faction.L) pool + genre/audience +1D, TN7 roll, movement = net−resistance, Persuasion-Track 7 pass/3 fail/4–6 committee, Total Victory ≥9/≤1 → losing dominant Mandate −1. GD-3 enforced (extra-parliamentary excluded). Reuses contest §6 constants (no redefine). Smoke 4/4 (pass / committee / fail+total-victory / zero-zero), no exceptions. 11 ledger entries. |
+
+## Pass 2l Stub Infill — parliamentary_stay (Lane C 2026-05-31)
+
+| Module | Depends On | Canonical Sources | Status |
+|---|---|---|---|
+| `sim/personal/parliamentary_stay.py` | `parliamentary_vote` (§10 vote); `game_state` (world.clocks['CI']) | `designs/scene/social_contest_v30.md §10.1` (Parliamentary Stay, ED-631) | **verified** — `invoke_stay` + `resolve_stay_lift`: Senator Inward motion halting an active Church Tribunal filing 1 season via the §10 BG vote. Side A = invoker+supporters (≥2 required), Side B = Church; available only while CI < 55; pass → suspend 1 season (re-file following season), else proceed. Returns suspension for caller to apply (tribunal.py convention; no world tribunal-filing registry). [FLAG] floor(CI/20) Church pool bonus not wired (CI<55 gate subsumes it; scope unpinned). Verified: 60-seed sweep (40 granted/20 denied = correct §10 variance) + unavailable(CI≥55)/invalid(<2)/season-gating. |

@@ -47,3 +47,9 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 | Module | Commit | Canon | Verification |
 |---|---|---|---|
 | `sim/personal/parliamentary_vote.py` | (Lane C 2026-05-31) | `social_contest_v30 §10` + `02_canon_constraints §B GD-3` | `run_parliamentary_vote` §10 BG vote — Mandate(=L) pool + genre/audience +1D, TN7, track thresholds 7/3/4–6, total-victory ≥9/≤1 → Mandate −1; GD-3 extra-parliamentary filter; reuses contest §6 constants. Smoke 4 scenarios verified. 11 §10 ledger entries appended. |
+
+## Tier 3 Stub Infill — parliamentary_stay (Lane C 2026-05-31) — designs/proposals/stub_infill_plan.md
+
+| Module | Commit | Canon | Verification |
+|---|---|---|---|
+| `sim/personal/parliamentary_stay.py` | (Lane C 2026-05-31) | `social_contest_v30 §10.1` (ED-631) | `invoke_stay`/`resolve_stay_lift` — §10.1 Stay via §10 vote; CI<55 availability gate, ≥2 Side A + Church Side B, pass→suspend 1 season else proceed. Verified across 60 seeds (granted/denied) + unavailable/invalid + resolve_stay_lift season-gating. 3 §10.1 ledger entries. |

@@ -839,6 +839,27 @@
       "canonical_source": "designs/scene/social_contest_v30.md",
       "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Total Victory",
       "quoted_text": "Total Victory: Persuasion Track \u2265 9 or \u2264 1 \u2192 losing coalition's dominant faction takes Mandate \u22121 for one season."
+    },
+    {
+      "sim_variable": "STAY_CI_AVAILABILITY_MAX",
+      "value": 55,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710.1 Parliamentary Stay (ED-631) \u2014 Availability",
+      "quoted_text": "Availability: Only while CI < 55. At CI 55+, the Church's CI political pool bonus (floor(CI/20)) makes the Stay motion effectively unpassable."
+    },
+    {
+      "sim_variable": "STAY_MIN_SIDE_A_FACTIONS",
+      "value": 2,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710.1 Parliamentary Stay (ED-631) \u2014 Requirements",
+      "quoted_text": "Requirements: 2+ factions on Side A (the filing-suspension side). Church on Side B. Standard BG Parliamentary Vote resolution (\u00a710)."
+    },
+    {
+      "sim_variable": "STAY_SUSPENSION_SEASONS",
+      "value": 1,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710.1 Parliamentary Stay (ED-631) \u2014 Effect",
+      "quoted_text": "A Parliamentary Stay is a Senator Inward motion that halts an active Church Tribunal filing for 1 season."
     }
   ],
   "updated_at": "2026-05-31"
