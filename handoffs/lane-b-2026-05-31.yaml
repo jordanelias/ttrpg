@@ -3,9 +3,10 @@ scope: infrastructure
 task:
   skill: valoria-orchestrator
   description: 'Lane B (Infrastructure/Tooling/Governance) of the 3-session write-disjoint
-    operating model. Done: enablers (5.11 lane spec + report_lane, 5.10 id_reservations),
-    5.5 freshness refresh, 5.6 compliance exemption. Both standing bootstrap warnings
-    (freshness, compliance) now clear. Remaining Lane B queue parked below.'
+    operating model. Done this session: enablers (5.11 lane spec + report_lane, 5.10
+    id_reservations), 5.5 freshness refresh, 5.6 compliance exemption, 1.17 stale-branch
+    cleanup (partial). Both standing bootstrap warnings clear. Remaining substantive
+    items (5.2 / 5.8 / 7.2) are large and best done in a fresh context.'
 owns:
 - skills/valoria-orchestrator/scripts/**
 - references/**
@@ -36,48 +37,59 @@ context_files:
   reason: Gate chain Lane B operates under; 7.2 hook tests target these.
 - path: references/roadmap_state.yaml
   depth: full
-  reason: Lane B owns roadmap reconciliation (1.19); edits at lane close.
+  reason: Lane B owns roadmap reconciliation (1.19); edit at lane close per shared-file
+    rule.
 working_state:
   done:
   - 5.11 lane spec + report_lane Status-Block line; 5.10 id_reservations (verified
     ED 884 / PP 726). Commit b5d5f5fb2c736047724bede59287318c8e519af8.
-  - '5.5 freshness refresh: 12 stale SHAs re-synced + 2 missing (combat_v30, derived_stats_v30)
-    filled; bootstrap now FRESHNESS OK. Commit ad98144d258f4597dec8c83eee5e12af2f657ed6.'
-  - '5.6 compliance: research/** + tests/sim/**/session_activity_log.md exempted (skip)
-    above the catch-all; 3 standing warnings cleared (verified cc._match_rule + bootstrap
-    COMPLIANCE OK). Commit c6465ea16f3b4bd5c67f4d52ada317e6d930578d.'
+  - '5.5 freshness refresh: 12 stale SHAs re-synced + 2 missing filled; bootstrap
+    FRESHNESS OK. Commit ad98144d258f4597dec8c83eee5e12af2f657ed6.'
+  - '5.6 compliance: research/** + tests/sim/**/session_activity_log.md exempted (skip);
+    3 warnings cleared; bootstrap COMPLIANCE OK. Commit c6465ea16f3b4bd5c67f4d52ada317e6d930578d.'
+  - '1.17 stale branches (PARTIAL, no commit — ref ops): DELETED cleanup/remove-deprecated
+    (ahead_by=0, fully merged). NOT deleted (unmerged work, flagged): claude/refresh-state-3m7nL
+    (17 unique commits) + mb-sim-foundation-2026-05-29 (1 unique commit). Workplan
+    1.17''s ''delete 3'' was wrong for 2 of 3.'
   next:
-  - '5.2 document undocumented subsystems (roadmap 2.1-2.6: handoff / checkpoint /
-    compliance / freshness / per-session-log / CI) — stated current phase.'
+  - '5.2 document undocumented subsystems (roadmap 2.1-2.6). LARGE (6 subsystems).
+    NOTE: confirm with Jordan whether these live as new references/ docs (Lane B)
+    or feed the architecture spec (Jordan-applied) before writing. Strongest fresh
+    grounding right now: handoff (2.1), freshness (2.4), compliance (2.3).'
   - 5.8 D6 scope-vocab unification (TASK_REQUIRED_FILES 10 / COMMIT_SCOPES 11 / SESSION_SCOPES
-    7 -> one ~10-set; keep lane scopes first-class).
+    7 -> one ~10-set; keep lane scopes first-class). Code change to valoria_hooks
+    + github_ops — ship WITH tests (couple with 7.2).
   - 7.2 hook tests ~1/29 -> safe_commit, task_gate, assert_unique_ids, jsonl_ledger_gate,
     sim_gate, context_gate, forbidden_token_gate, co-file — worst-first.
   - '5.10-WIRING [PARKED]: g.allocate_id(lane,id_class) reading/incrementing id_reservations.next_free
     + co-commit; ship WITH a tests/hooks/ test. Read append_to_register (github_ops
     L827) first.'
-  - 'hygiene: 1.3 strike B6 from audit docs; 1.10b repoint 6 files off editorial_ledger.yaml->.jsonl;
-    1.15 consolidate 3 editorial-archive dirs; 1.17 delete 3 stale branches; 1.18
-    archive atoms_pending/2026-04-25 (27 files)+correct arch ~380 count; 1.19 roadmap
-    staleness; 1.20 sweep ~18 inline markers.'
+  - 'hygiene (1.17 partial done): 1.3 strike B6 (NOTE: 06_B6_fix.md is under designs/audit
+    — NOT in Lane B owns; reassign to Lane A or confirm scope); 1.10b repoint 6 files
+    off editorial_ledger.yaml->.jsonl; 1.15 consolidate 3 editorial-archive dirs;
+    1.18 archive references/atoms_pending/2026-04-25 (27 files)+correct arch ~380;
+    1.19 roadmap staleness (combat-v32 status + Phase-2 ''0/11'' count — do at lane
+    close per shared-file rule); 1.20 sweep ~18 inline markers.'
   solo_outside_parallel_window:
-  - 5.1A SQLite wire (index_bootstrap into quick_bootstrap) OR retire SQL artifact
-    + correct arch.
+  - 5.1A SQLite wire OR retire SQL artifact + correct arch.
   - 5.3 canonical_sources SHA-split -> references/canonical_freshness.yaml — NEVER
     during parallel window. ALSO dedup the 5 DUPLICATE-ENTRY paths found this session
     (npc_behavior_v30, settlement_layer_v30, params/bg/clocks.md, params/contest.md,
     stats_1_7_scale); workplan 5.4 undercounted as 2 — actual 5.
 key_values:
 - 'Reserved-block ID maxima verified: ED 884 (<890), PP 726 (<727).'
-- 'check_handoff_conflicts(Lane B writes)=[] verified; Lane B owns disjoint from active
-  handoffs #1/#2.'
 - Lane declared via env VALORIA_LANE or /home/claude/.valoria_lane; report_lane prints
   the Status-Block line.
 - 'Bootstrap warnings cleared this session: FRESHNESS 14->0 (5.5); COMPLIANCE 3->0
   (5.6).'
+- 'Branches on ttrpg now: main, deprecated (intentional keep), claude/refresh-state-3m7nL
+  (flagged), mb-sim-foundation-2026-05-29 (flagged).'
 - '5.3/5.4 FINDING: canonical_sources.yaml = 110 unique of 115 pairs -> 5 duplicate-entry
-  paths (workplan said 2); file at 8.3k/12k tokens (not near-cap).'
+  paths (workplan said 2); 8.3k/12k tokens (not near-cap).'
 blockers:
+- 'JORDAN-VERIFY (1.17): claude/refresh-state-3m7nL (17 unmerged commits) + mb-sim-foundation-2026-05-29
+  (1 unmerged commit) were NOT deleted — they carry work not in main. Confirm that
+  work is superseded/captured before any deletion. Do NOT blind-delete.'
 - 'LANE-A LAUNCH NOT CONFLICT-FREE: Lane A owns params/** + designs/{provincial,world,personal}/**
   overlapping the active faction handoff (9 paths). Track 1.1 must run before Lane
   A opens. Lane B + Lane C clear now.'
@@ -86,6 +98,6 @@ blockers:
 - 'JORDAN-APPLIED (do not self-commit): PI/arch text. Optional proposal — bootstrap
   script could export VALORIA_LANE so report_lane needs no manual env.'
 last_commit: c6465ea16f3b4bd5c67f4d52ada317e6d930578d
-created: '2026-05-31T21:53:22.429567+00:00'
-updated: '2026-05-31T21:53:22.429567+00:00'
+created: '2026-05-31T22:13:29.100468+00:00'
+updated: '2026-05-31T22:13:29.100468+00:00'
 status: active
