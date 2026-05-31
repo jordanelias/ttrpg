@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: 498fb5f89a7aba18cb063031e2ae6287c5e891fb
+last_commit: 685063adeab2a0e08b601d1524a1d6aad7f8dcbe
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -29,6 +29,10 @@ owns:
 - designs/provincial/faction_succession_split_v30.md
 - designs/provincial/faction_state_authoring_v30.md (§1)
 - designs/provincial/faction_behavior_v30.md (§3.1)
+- designs/territory/settlement_layer_v30.md (§1.8 — LPS-1 territory L/PS + Mandate
+  aggregation)
+- designs/scene/derived_stats_v30.md (§8 footnote — LPS-2)
+- references/canonical_sources.yaml (+ references/canonical_sources_provenance.md)
 context_files:
 - path: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
   depth: full
@@ -57,10 +61,16 @@ context_files:
   depth: skeleton
   reason: Stages 1-5; Stage 5 (historical-precedent validation) is already canonical
     in the skill
+- path: designs/territory/settlement_layer_v30.md
+  depth: full
+  reason: §1.8 = corrected per-territory L/PS model + faction Mandate aggregation
+    + mean-reverting feedback (LPS-1) — canonical home of the redesign
 working_state:
-  summary: Faction-cluster resolution diagnostic complete; all tested remediations
-    ratified to canon, each precedent-validated (Stage 5) and Stage-4 re-tested. Repo
-    fully committed; nothing staged locally.
+  summary: 'L/PS STRUCTURAL REDESIGN COMPLETE (2026-05-30, Jordan ruling): Legitimacy
+    & Popular Support relocated faction->per-territory; faction Mandate = territory
+    aggregate; sim-validated; faction-level L/PS fully demoted (0 unmarked residuals
+    across 7 docs). PRECEDED by the faction-cluster resolution diagnostic (complete
+    + ratified — below). Repo fully committed; nothing staged.'
   done:
   - 'ED-876 Trigger-5 non-monotonic cliff: FIXED in canon (2327adc4) — removed pool>=6
     auto-fire from the gate; firing now monotonic in Command. Precedent: du Picq/Clausewitz
@@ -101,6 +111,57 @@ working_state:
     Each is a clean parameter change if play wants a different feel.'
   - 'NOT THIS WORKSTREAM: the 94 ID-conflicts + 21 partials belong to the jsonl-migration
     handoff; combat_v32 balance belongs to the I-17 handoff (see relationship note).'
+  session_2026_05_30_LPS_redesign:
+    jordan_ruling: 'Legitimacy and Popular Support are PER-TERRITORY values, NOT faction
+      values; faction Mandate is derived (aggregated) from them; Mandate rising/falling
+      feeds back to them. Anything saying L/PS are faction-level is incorrect and
+      should not have been canonized. Reframes diagnostic F8: 6-stat faction lineup
+      (Mandate the headline) is CORRECT; faction-level L+PS ("7-stat") was the defect.'
+    commits:
+    - 'dcd1783c (CSRC-SIZE-1 CLEARED: 30 decorative canonical_sources notes archived
+      -> references/canonical_sources_provenance.md; 8955->7271 tok)'
+    - '3c39b322 (LPS-1: settlement_layer_v30 §1.8 = corrected per-territory L/PS model
+      + Mandate aggregation + mean-reverting feedback; canonical home)'
+    - 'ed18a350 (LPS-2: demote faction-level L/PS across faction_behavior/faction_canon/faction_state_authoring/stats_1_7_scale/derived_stats
+      — 17 asserted edits, atomic)'
+    - '685063ad (LPS-2b: faction tactics rolling faction-level L -> Mandate (Royal
+      Decree/Excommunication/Sovereign Authority) §9 + sheets + stats_1_7_scale; PART
+      B Dynamics per-territory; Seizure flagged FCN-SEIZURE-DRIFT)'
+    canonical_model: 'L,PS per-TERRITORY (17 territories per geography_v30), 0-7 each.
+      Faction aggregate_L=mean(controlled-territory L); aggregate_PS=mean(controlled-territory
+      PS). Mandate=clamp(round(0.5*aggL+0.5*aggPS),0,7) = PP-686 blend via mean-of-tier
+      idiom (cf Province Accord=floor(mean settlement Order)). Feedback Mandate->territory
+      = MEAN-REVERTING (held territories drift toward Mandate; +-1/territory/season;
+      STABILIZING). Strictness reads aggregate L/PS. Faction mission deltaL/deltaPS
+      apply per controlled territory then re-aggregate. Tactics roll Mandate (not
+      L). Canonical: settlement_layer_v30 §1.8.'
+    sim: 'Stage-4 (2026-05-30): aggregation sensible (Crown 6/Varfell 4/Hafenmark
+      3/Church 1); coupled Mandate<->territory feedback convergent+bounded 0-7 over
+      30-40 seasons under shocks for N in {1,3,6}, NO runaway; rewired strictness
+      in [0,1] across 2000 random multi-territory factions (0 violations). Final sweep:
+      0 unmarked faction-level L/PS mechanical assertions across 7 docs.'
+    derived_choices_VETOABLE: GRAIN=territory (not settlement; same tier as Accord,
+      GD-1 control grain, no 5->7 rescale). FEEDBACK=mean-reverting (stabilizing).
+      AGGREGATION=plain mean (Accord idiom). All Jordan-vetoable.
+    resolves: faction_canon §5.2 [DESIGN-ISSUE flagged by Jordan 2026-05-07] RESOLVED
+      via territorial aggregation (its option b/c); diagnostic F8 / FCN-SCHEMA; CSRC-SIZE-1
+      cleared.
+    OPEN_for_Jordan:
+    - 'PER-TERRITORY INITIAL VALUES: faction_state_authoring §8 seeds each controlled
+      territory from its faction prior value (Crown/Church 5/5, Hafenmark/Varfell
+      4/4, Guilds 3/3, Restoration/Lowenritter 0/0). Authored per-territory starting
+      values for 17 territories are Jordan to author.'
+    - 'AGGREGATION REFINEMENT (vetoable, LPS-3): temperament uses POPULATION-WEIGHTED
+      territory mean (faction_canon §3.4); Mandate uses PLAIN mean. Population-weight
+      Mandate for consistency (needs per-territory population)?'
+    - 'ENTANGLED RESIDUALS (follow-on): CI-60 Seizure -> FCN-SEIZURE-DRIFT (authoritative
+      faction_layer §2.7 Influence; under LPS-1 target L = target territory per-territory
+      L); Restoration "PS>=1 prerequisite" edge (emergent, no territories); Excommunication
+      degree effects "faction L +-1" -> mechanize to Mandate/per-territory L.'
+    - F4 (diagnostic Lesson-2 absolute-stat-damage uniformity) — ratifiable next,
+      no schema fork.
+    master_detail: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
+      key _lps_structural_redesign_2026-05-30.
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -131,7 +192,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-30T20:54:00.325906+00:00'
+updated: '2026-05-31T02:42:41.962277+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
