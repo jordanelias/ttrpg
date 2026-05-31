@@ -446,3 +446,4 @@ systems:
     npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "5e0aa77c05af685ff1d2b19b1555bad52ae96a6e"
 # LPS-2e (2026-05-30): settlement_layer_v30 §1.8 re-grained — L/PS per-settlement (was faction-level); Mandate = size-weighted saturating aggregate, W=base(Type)+Prosperity+FacilityTier, K=6; geography "territory" (T1-T17)=province-tier, retained.
+# LPS-2+ consumer wiring (2026-05-30): faction_behavior/faction_canon/faction_state_authoring/stats_1_7_scale/derived_stats wired to settlement-grain + size-weighted Mandate; settlement_layer §1.8 (LPS-2e) is authoritative for Weight + formula.

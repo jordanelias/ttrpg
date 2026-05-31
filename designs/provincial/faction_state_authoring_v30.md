@@ -322,9 +322,9 @@ institutional_culture: -0.1              # mildly rigid (military-order
 
 ## §8 Initial Legitimacy + Popular Support Values
 
-> **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** L and PS are **per-territory**, not faction-level. These authored per-faction values now **seed each faction's controlled territories** — every territory a faction starts controlling begins at that faction's {Legitimacy, Popular_Support} below (LPS-1 migration; preserves authored intent at the new grain). Faction Mandate is then the aggregate (settlement_layer §1.8). Jordan may re-author individual per-territory starting values.
+> **[REVISED by LPS-1 → LPS-2e (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** L and PS are **per-settlement**, not faction-level. These seed each controlled settlement's L/PS at game start (per-settlement init); Mandate is their size-weighted aggregate (§1.8).
 
-Per-faction seed values (→ per-territory init):
+Per-faction seed values (→ per-settlement init):
 
 ```yaml
 init_state:

@@ -152,7 +152,7 @@ Range `[-1, +1]`. 1 = perfect role fidelity; 0 = orthogonal; -1 = inverse.
 
 > **[REVISED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue below.]** Legitimacy and Popular Support are **per-territory** values (0–7 each), **not** faction scalars. Faction **Mandate is the aggregate** (round(mean over controlled territories of 0.5L+0.5PS)); the faction retains derived **aggregate_Legitimacy / aggregate_Popular_Support** (territory means) for consumers (e.g. strictness). See settlement_layer §1.8.
 
-Two per-territory scalars `[0, 7]` tracking populace relation **in a territory** (Mandate aggregates them per §5 / settlement_layer §1.8).
+Two per-settlement scalars `[0, 7]` tracking populace relation **in a settlement** (Mandate aggregates them per §5 / settlement_layer §1.8).
 
 - **Legitimacy** (slow-moving): populace acceptance. Integrates over many seasons via `λ_continuity`, `λ_procedural`, `λ_expectation`, `λ_violation`.
 - **Popular Support** (faster-moving): active populace backing. Integrates Mission outcomes + Cascade Fidelity + random shocks per Public Temperament.
@@ -200,8 +200,8 @@ Per PP-686 §3.3.1. Templates use the 13-Conviction taxonomy from PP-684 §2.
 
 | Stat | Range | Renaissance analogue |
 |---|---|---|
-| **Legitimacy** (per-territory, settlement_layer §1.8) | 0–7 | Populace acceptance — papal bulls, dynastic claims, constitutional authority |
-| **Popular Support** (per-territory, settlement_layer §1.8) | 0–7 | Active populace backing — Florentine signoria support, urban guild mobilization |
+| **Legitimacy** (per-settlement, settlement_layer §1.8) | 0–7 | Populace acceptance — papal bulls, dynastic claims, constitutional authority |
+| **Popular Support** (per-settlement, settlement_layer §1.8) | 0–7 | Active populace backing — Florentine signoria support, urban guild mobilization |
 | **Influence** | 1–7 | Diplomatic reach — Medici banking diplomacy, Venetian diplomatic service |
 | **Wealth** | 1–7 | Economic resources — trade revenue, mercenary funding, treasury |
 | **Military** | 1–7 | Armed forces — standing armies, fortification networks |
@@ -211,12 +211,12 @@ Per PP-686 §3.3.1. Templates use the 13-Conviction taxonomy from PP-684 §2.
 Mandate is **the faction headline stat, derived by aggregation** (LPS-1; no longer "transitional"):
 
 ```
-Mandate(faction) = clamp(round(mean over controlled territories of (0.5 × Legitimacy_t + 0.5 × Popular_Support_t)), 0, 7)
+Mandate(faction) = clamp( round( 7 · T / (T + K) ), 0, 7 ),   T = Σ over controlled settlements of W_s·(0.5 × Legitimacy_s + 0.5 × Popular_Support_s)/7,   K = 6   (size-weighted, saturating; Settlement Weight W and full spec authoritative in settlement_layer §1.8, LPS-2e)
 ```
 
 ### §5.2 [DESIGN-ISSUE — flagged 2026-05-07 by Jordan; RESOLVED 2026-05-30 by LPS-1]
 
-> **[RESOLVED by LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** L and PS are **per-territory** (0–7); faction **Mandate = round(mean over controlled territories of 0.5L+0.5PS)**. Territorial scope is captured intrinsically: a one-province faction's Mandate is the mean over its single territory (perfect L/PS on one province → Mandate from that province alone); a peninsula-spanning faction's Mandate is the mean over all its territories. This is option (b)/(c) below (territorial aggregation), realized as the mean-of-tier idiom matching Province Accord. Original issue text retained for trace.
+> **[RESOLVED by LPS-1 → LPS-2e (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** L and PS are **per-settlement** (0–7); faction **Mandate is the size-weighted saturating aggregate** of controlled settlements' L/PS (Weight W=base(Type)+Prosperity+FacilityTier; Mandate=clamp(round(7·T/(T+K))), K=6; full spec §1.8). The "perfect L/PS, one province" concern is resolved: a small holding gives modest total weighted legitimacy → modest Mandate; a large loyal holding → high Mandate.
 
 > **A faction could have perfect Legitimacy and Popular Support but hold only one province, and the system would compute Mandate normally — but the underlying mechanic doesn't capture territorial scope.**
 

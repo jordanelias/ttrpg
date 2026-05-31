@@ -54,18 +54,18 @@ faction:
   institutional_culture: <-0.2..+0.2>        # α_institution adjustment
 
   # Stateful — RELOCATED per LPS-1 (settlement_layer_v30 §1.8, Jordan ruling 2026-05-30):
-  #   legitimacy and popular_support are NOT faction state — they are PER-TERRITORY values (0..7 each).
-  # legitimacy: <0..7>        # SUPERSEDED — now per-territory (settlement_layer §1.8)
-  # popular_support: <0..7>   # SUPERSEDED — now per-territory (settlement_layer §1.8)
+#   legitimacy and popular_support are NOT faction state — they are PER-SETTLEMENT values (0..7 each); the faction reads their W-weighted aggregate (settlement_layer §1.8).
+# legitimacy: <0..7>        # SUPERSEDED — now per-settlement (settlement_layer §1.8)
+# popular_support: <0..7>   # SUPERSEDED — now per-settlement (settlement_layer §1.8)
 
   # Derived (recomputed each Accounting; emit cascade_resolution Key)
   aggregate_effective_convictions: {<conviction>: <weight>, ...}
   cascade_fidelity: <-1..+1>
   expected_convictions: {<conviction>: <weight>, ...}
-  aggregate_legitimacy: <0..7>               # DERIVED — mean of controlled territories' Legitimacy (LPS-1)
-  aggregate_popular_support: <0..7>          # DERIVED — mean of controlled territories' Popular Support (LPS-1)
+aggregate_legitimacy: <0..7>               # DERIVED — W-weighted mean of controlled SETTLEMENTS' Legitimacy (LPS-2e, settlement_layer §1.8)
+aggregate_popular_support: <0..7>          # DERIVED — W-weighted mean of controlled SETTLEMENTS' Popular Support (LPS-2e, settlement_layer §1.8)
   strictness: <0..1>
-  mandate: <0..7>                            # DERIVED — round(0.5*agg_L + 0.5*agg_PS); faction headline stat (LPS-1)
+mandate: <0..7>                            # DERIVED — size-weighted saturating aggregate of controlled settlements' L/PS per settlement_layer §1.8 (W=base(Type)+Prosperity+FacilityTier; Mandate=clamp(round(7·T/(T+K))), K=6). Faction headline stat (LPS-2e).
 ```
 
 ---
