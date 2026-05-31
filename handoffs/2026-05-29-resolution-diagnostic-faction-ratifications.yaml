@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: 685063adeab2a0e08b601d1524a1d6aad7f8dcbe
+last_commit: 8f975c08ff7bd7ce06c84a9d91e95125719a5be8
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -70,7 +70,8 @@ working_state:
     & Popular Support relocated faction->per-territory; faction Mandate = territory
     aggregate; sim-validated; faction-level L/PS fully demoted (0 unmarked residuals
     across 7 docs). PRECEDED by the faction-cluster resolution diagnostic (complete
-    + ratified — below). Repo fully committed; nothing staged.'
+    + ratified — below). Self-review remediation (LPS-1b) applied; F4 dispositioned
+    resolved-by-resolver. Repo fully committed; nothing staged.'
   done:
   - 'ED-876 Trigger-5 non-monotonic cliff: FIXED in canon (2327adc4) — removed pool>=6
     auto-fire from the gate; firing now monotonic in Command. Precedent: du Picq/Clausewitz
@@ -127,6 +128,8 @@ working_state:
     - '685063ad (LPS-2b: faction tactics rolling faction-level L -> Mandate (Royal
       Decree/Excommunication/Sovereign Authority) §9 + sheets + stats_1_7_scale; PART
       B Dynamics per-territory; Seizure flagged FCN-SEIZURE-DRIFT)'
+    - '8f975c08 (LPS-1b self-review remediation: §1.8 zero-territory Mandate=0 + aggregation
+      note; F4 dispositioned RESOLVED-BY-RESOLVER)'
     canonical_model: 'L,PS per-TERRITORY (17 territories per geography_v30), 0-7 each.
       Faction aggregate_L=mean(controlled-territory L); aggregate_PS=mean(controlled-territory
       PS). Mandate=clamp(round(0.5*aggL+0.5*aggPS),0,7) = PP-686 blend via mean-of-tier
@@ -158,10 +161,17 @@ working_state:
       faction_layer §2.7 Influence; under LPS-1 target L = target territory per-territory
       L); Restoration "PS>=1 prerequisite" edge (emergent, no territories); Excommunication
       degree effects "faction L +-1" -> mechanize to Mandate/per-territory L.'
-    - F4 (diagnostic Lesson-2 absolute-stat-damage uniformity) — ratifiable next,
-      no schema fork.
     master_detail: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
       key _lps_structural_redesign_2026-05-30.
+    self_review_2026_05_30: '[SELF-AUTHORED bias-risk] review confirmed: demotion
+      complete across 11 docs (0 residuals), consumers read the aggregate, feedback
+      non-circular. Fixed: §1.8 N=0 zero-territory case (Mandate=0) + aggregation
+      note (plain mean; temperament sibling; population-weighting deferred LPS-3).'
+    F4_DISPOSITIONED: 'F4 (absolute-stat-damage non-uniform, Lesson 2) = RESOLVED-BY-RESOLVER
+      (ED-865/874): resolver constant 0.10/pt leverage makes −1 stat = −0.10 P uniformly.
+      Residually live only for the bare-stat tactics already queued for resolver migration
+      (subsumed). NO new mechanic (proportional-damage fix would be over-engineering).
+      Master: _F4_disposition_2026-05-30.'
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -192,7 +202,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T02:42:41.962277+00:00'
+updated: '2026-05-31T02:50:22.171743+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
