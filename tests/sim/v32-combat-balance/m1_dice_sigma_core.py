@@ -4,8 +4,10 @@ m1_dice_sigma_core.py -- Module 1 of the v32 combat-balance sim (dice + sigma-sp
 Promotes the verified primitive from v32_bout_structural_sanity_sim.md into a
 ledgered, self-validating engine:
   - canonical d10 engine, discrete + continuous (params/core.md)
-  - v32 sigma-space modifier: level -> delta-sigma, soft cap, Ob shift
-    (modifier_system_spec.md, the implementation-pass modifier rewrite)
+  - v32 sigma-space modifier: level -> delta-sigma, soft cap, mu-shift outcome boost
+    (advantage boosts the roll; base_Ob and TN are unchanged, so the canonical Ob
+    floor is never breached -- see engine/sigma_leverage_engine_armature.md and the
+    sigma-leverage audit for the rationale)
 
 Constant provenance: tests/sim/v32-combat-balance/m1_verification_ledger.json
   Class A = canonical (params/core.md).
@@ -80,9 +82,21 @@ def sigma_space_ob_shift(net_sigma, pool):
 
 
 def eff_ob(base_ob, pool, net_sigma):
-    """Effective Ob after sigma-space + soft cap:
-    base_Ob - [M*tanh(net_sigma/M)] * sigma_N."""
-    return base_ob - soft_cap(net_sigma) * sigma_n(pool)
+    """DISPLAY ONLY (not the resolution value): an 'effective difficulty' a UI may
+    surface. Floored at the canonical Ob minimum. Resolution uses p_success (the
+    mu-shift), which leaves base_Ob untouched and boosts the roll instead."""
+    raw = base_ob - soft_cap(net_sigma) * sigma_n(pool)
+    return max(1.0, float(raw))                   # [canonical: params/core.md §Obstacle Scale]
+
+
+def net_boost(net_sigma, pool, tn=TN_STANDARD, capped=True):
+    """Advantage as an additive boost to the expected net (the mu-shift):
+    eff_sigma * sigma_per_die[TN] * sqrt(N). The sigma cancels in the z-score, so the
+    modifier shifts the outcome's z by exactly eff_sigma at every pool size and every
+    TN (uniform impact, TN-exact). This is the resolution-path modifier."""
+    mu, sigma = PER_DIE[tn]
+    eff = soft_cap(net_sigma) if capped else net_sigma
+    return eff * sigma * np.sqrt(max(1, pool))    # [canonical: params/core.md §Continuous Engine]
 
 
 def levels_to_net_sigma(aggressor=None, defender=None):
@@ -100,11 +114,12 @@ def _phi(z):
 
 
 def p_success(base_ob, pool, net_sigma=0.0, tn=TN_STANDARD, capped=True):
-    """P(net >= effective Ob) under the continuous engine."""
+    """P(net >= base_Ob) under the continuous engine, advantage applied as a mu-shift
+    (the roll is boosted; base_Ob and TN are NOT modified, so the Ob floor is never
+    breached):  shifted_mean = mu*N + net_boost ;  P = 1 - Phi((base_Ob - shifted_mean)/(sigma*sqrt(N)))."""
     mu, sigma = PER_DIE[tn]
-    ob = (eff_ob(base_ob, pool, net_sigma) if capped
-          else base_ob - sigma_space_ob_shift(net_sigma, pool))
-    z = (ob - mu * pool) / (sigma * np.sqrt(max(1, pool)))
+    shifted_mean = mu * pool + net_boost(net_sigma, pool, tn, capped)
+    z = (base_ob - shifted_mean) / (sigma * np.sqrt(max(1, pool)))   # [canonical: params/core.md §Continuous Engine]
     return 1.0 - _phi(z)
 
 

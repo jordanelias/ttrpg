@@ -1,6 +1,6 @@
 # σ-Leverage Engine — Portable Resolution Armature
 
-**Consolidation · 2026-05-30 · status: CONSOLIDATED MASTER — NOT committed (placement + canonization are Jordan calls; see §I)**
+**Consolidation · 2026-05-30 · status: COMMITTED to `engine/` (4e6df85); audit-revised — advantage reformulated as a μ-shift (resolves the P-232 conflict). Canonization still pending Jordan + Omega vetting (§H/§I).**
 **Scope: a system-agnostic resolution engine + the interface and method for porting it to any Valoria dice-resolved system.**
 
 `[SELF-AUTHORED — bias risk]` This consolidates sim work authored by prior sessions (Claude). It is treated as external: where the source over-claimed (a dead canonical reference; a misattributed verification figure) the consolidation flags and corrects it rather than carrying it forward.
@@ -16,12 +16,17 @@ This armature **extracts the system-agnostic resolution engine** out of the in-p
 | Part | Canon class | Where it lives | Verified? |
 |---|---|---|---|
 | d10 substrate (face map, per-TN μ/σ, σ_N, continuous engine, pool floor) | **A — canonical** | `params/core.md` | ✅ read + recomputed |
-| σ-leverage layer (δσ levels, `tanh` soft cap, Ob-shift) | **B — draft sim-seed, NOT canonical** | `tests/sim/v32-combat-balance/m1_dice_sigma_core.py` + design conv `e401c72d` | ✅ reference impl read + recomputed |
+| σ-leverage layer (δσ levels, `tanh` soft cap, **μ-shift** outcome boost) | **B — draft sim-seed, NOT canonical** | `tests/sim/v32-combat-balance/m1_dice_sigma_core.py` + design conv `e401c72d` | ✅ reference impl read, recomputed, **audited 2026-05-30** |
 | Combat application (levers, state-gating, 8-phase UI, wounding) | mixed / blocked | `designs/audit/2026-05-29-combat-armature/**` | partial; **resolution structure BLOCKED on Jordan** |
 
 **Two drift findings surfaced during consolidation** (detail in §I):
 - `[DRIFT]` The leverage layer's cited canonical home — `references/modifier_system_spec.md` (§2.1/§2.3/§3.1, and "§12.3" in the handoff) — **does not exist in the repo.** The layer is presently un-canonized; the M1 module's `[canonical: modifier_system_spec.md …]` comments point at a phantom file (they satisfy the fabrication scanner's *pattern*, not a real source). The module's own docstring is honest: "Class B = v32 draft sim-seed … NOT canonical."
 - `[DRIFT]` The handoff (`sigma_leverage_handoff.md` §1a) states the uniform impact is "≈25.8pp at the 50% baseline for δσ = 1.0; verified 5D–18D." The reference implementation's actual verified result (M1 check c) is **+25.8pp for a +0.7σ modifier across 3D–20D**. Φ(0.7)−0.5 = 25.8pp confirms it analytically. For **δσ = 1.0** the impact is **34.1pp** (pre-cap) / **30.9pp** (post-cap). The 25.8pp figure is correct *for +0.7σ*, misattributed in the prose.
+
+**Audit 2026-05-30 (`sigma_leverage_engine_audit.md` + `engine_audit_harness.py`).** A granular logic-pipeline audit found the engine's math internally exact (reference impl == its own continuous spec to 1e-16) but surfaced two real findings, resolved/scoped here:
+- **F1 [was P1] — RESOLVED.** The prior **Ob-reduction** form (`Eff_Ob = base_Ob − eff_σ·σ_N`) drove Effective Ob below 1 — violating canon **P-232** ("Ob minimum 1; no modifier may reduce Ob below 1") — and made the Overwhelming threshold `2·Eff_Ob` nonsensical when Ob went negative. **Fix (mechanical-tier, Jordan-vetoable):** advantage is now a **μ-shift** — it boosts the *roll* (`mean += eff_σ·σ·√N`) and leaves `base_Ob`/TN untouched, so P-232 is never triggered. Identical odds at TN7, TN-exact elsewhere. The P-232-*exemption* alternative was considered and rejected (it leaves F3 + the degree-ladder bug unsolved). Logged **ED-884**.
+- **F3 [PORT-1] — RESOLVED by the same change.** The hardcoded `SIGMA_N_COEFF = 0.8` was the TN7 σ; the μ-shift uses the system's own σ, so uniform impact is exact at every TN by construction.
+- **F2 [P2] — scoped.** Uniform impact is a *continuous-engine* property; under *discrete* success-counting it degrades at small pools (canon ED-836 flags bare 1–7D as "shaky"). Stated wherever the uniform claim appears. Godot resolves continuously, so it holds there.
 
 ---
 
@@ -32,11 +37,11 @@ The reason a *portable armature* exists at all: the resolution mechanism is **co
 | | **ENGINE (portable, system-agnostic)** | **APPLICATION (per-system, owned by each system)** |
 |---|---|---|
 | What it is | Convert a set of signed advantages (in σ-units) into an Effective Ob and a success probability, with impact uniform across pool size and no foreclosure. | What the advantages *are*, when each is live, how the player accrues and sees them, and what a success/failure *means*. |
-| Owns | `sigma_n`, `levels_to_net_sigma`, `soft_cap`, `eff_ob`, `p_success`; the level→δσ table; `M_MAX`. | The lever catalogue; the state-gating table; level-surfacing UI; the resolution structure (one roll vs sequence); consequence/wounding. |
+| Owns | `levels_to_net_sigma`, `soft_cap`, `net_boost`, `p_success`; the level→δσ table; `M_MAX`. (`eff_ob`/`sigma_n` are now a P-232-floored *display* helper, not resolution.) | The lever catalogue; the state-gating table; level-surfacing UI; the resolution structure (one roll vs sequence); consequence/wounding. |
 | Changes when | Almost never (it's math). | Per system, per design pass, per Jordan decision. |
 | Combat instance | §C (the engine) | §F (combat levers, gating, the **blocked** resolution structure) |
 
-**Thesis.** Any Valoria system that (a) resolves on a d10 success-pool and (b) applies modifiers can drive resolution through this engine. The engine guarantees the modifier's *probability impact is the same whether the pool is 2D or 18D* — which is precisely the architectural fix for the small-pool / non-uniform-impact defect class the `valoria-resolution-diagnostic` skill exists to find (its √N small-pool insight is *why* this engine was built; see §E).
+**Thesis.** Any Valoria system that (a) resolves on a d10 success-pool and (b) applies modifiers can drive resolution through this engine. Under the continuous engine (canonical for Godot), the engine guarantees the modifier's *probability impact is the same whether the pool is 2D or 18D* (exact at all pools incl. 1D) — which is precisely the architectural fix for the small-pool / non-uniform-impact defect class the `valoria-resolution-diagnostic` skill exists to find (its √N small-pool insight is *why* this engine was built; see §E). *Caveat: this is a continuous-engine identity. Under literal discrete success-counting the modifier's impact is lumpy at small pools — canon ED-836 flags bare 1–7D as "shaky" — so a discrete-resolved port needs its own small-pool handling (clock/aggregate, per the diagnostic). Godot resolves continuously, so it holds there.*
 
 ---
 
@@ -79,14 +84,13 @@ Reference implementation: `tests/sim/v32-combat-balance/m1_dice_sigma_core.py` (
 **The four engine functions** (exact):
 
 ```
-σ_N(pool)            = SIGMA_N_COEFF · √pool          # SIGMA_N_COEFF = 0.8   (see §D portability note)
 net_σ                = Σ(advantage levels) − Σ(adverse levels)      # signed, pre-cap, in σ-units
-eff_σ  = soft_cap    = M_MAX · tanh(net_σ / M_MAX)    # M_MAX = 1.5
-Effective Ob         = base_Ob − eff_σ · σ_N
-P(success)           = Φ( (μ·N − Effective Ob) / (σ·√N) )          # continuous engine
+eff_σ  = soft_cap    = M_MAX · tanh(net_σ / M_MAX)                  # M_MAX = 1.5
+net boost (μ-shift)  = eff_σ · σ_per_die[TN] · √N                   # advantage boosts the ROLL
+P(success)           = Φ( (μ·N + boost − base_Ob) / (σ·√N) )       # = Φ(z_base + eff_σ); base_Ob & TN untouched
 ```
 
-**Why impact is uniform (the F1 property).** `Ob shift = δσ · σ_N` and the z-score of that shift is `shift / σ_N = δσ`. The `√N` and the per-die σ cancel, so a given δσ moves the outcome's z by exactly δσ **at every pool size** → the same probability change everywhere. (A flat *dice* modifier's impact scales with 1/√N — small pools swing wildly; σ-leverage does not. This is what stops raw pool/dice count from dominating — the C-04 fix in combat terms.)
+**Why impact is uniform (the F1 property), and why μ-shift not Ob-reduction.** The boost `eff_σ·σ·√N` enters the z-score over `σ·√N`, so the per-die σ and `√N` cancel and the modifier moves the outcome's z by exactly `eff_σ` at **every pool size and every TN** → the same probability change everywhere, TN-exact. Advantage is applied to the *roll* (a μ-shift), **not** as an Ob reduction: the earlier Ob-reduction form drove Effective Ob below 1 (violating canon P-232) and corrupted the degree ladder; the μ-shift leaves `base_Ob`/TN fixed and is identical at TN7. (A flat *dice* modifier's impact scales with 1/√N — small pools swing wildly under the continuous engine; σ-leverage does not. This is the C-04 fix in combat terms.)
 
 **Verified properties** (recomputed this session, continuous engine, 50% baseline; pre-cap unless noted):
 
@@ -101,7 +105,7 @@ P(success)           = Φ( (μ·N − Effective Ob) / (σ·√N) )          # co
 | 17D | 50.0% | 75.8% | +25.8pp |
 | 20D | 50.0% | 75.8% | +25.8pp |
 
-Spread across pools = **0.0pp**. (Φ(0.7)−0.5 = 25.8pp.) This reproduces M1 check (c).
+Spread across pools = **0.0pp** (Φ(0.7)−0.5 = 25.8pp), and now **TN-exact** at TN6/7/8 under the μ-shift. This reproduces M1 check (c). *Continuous-engine property; under discrete resolution it degrades at small pools — canon ED-836 (see §E).*
 
 *Per-level impact (corrected — supersedes the handoff's δσ=1.0/25.8pp):*
 
@@ -112,11 +116,11 @@ Spread across pools = **0.0pp**. (Φ(0.7)−0.5 = 25.8pp.) This reproduces M1 ch
 | 0.75 (Strong) | +27.3pp | +25.6pp |
 | 1.00 (Major) | **+34.1pp** | +30.9pp |
 
-*Soft cap (M_MAX = 1.5):* `0.5σ→0.482 · 1.0σ→0.874 · 2.0σ→1.305 · 3.0σ→1.446`; saturates to ±1.5σ. **No dead-zone** (a hard clamp would create a threshold cliff — NERS Lesson 6; `tanh` does not).
+*Soft cap (M_MAX = 1.5):* `0.5σ→0.482 · 1.0σ→0.874 · 2.0σ→1.305 · 3.0σ→1.446`; saturates to ±1.5σ. No hard clamp (which would be a threshold cliff — NERS Lesson 6; `tanh` is smooth, slope 1 at 0, so small modifiers apply ~fully). Marginal value falls off **steeply**, though — per added *major* (50% base): +30.9 / +9.5 / +2.2 / +0.5 pp; past ~2 stacked advantages the next is nearly worthless (intended Lesson-5 bound, but the player cannot easily intuit it — F4).
 
 *No foreclosure (the F2 property):* a fully saturated adverse stack caps at −1.5σ → at a 50% baseline the disadvantaged side floors at **Φ(−1.5) = 6.7%**, never 0%. Maximum single-direction swing = Φ(1.5)−0.5 = **43.3pp**, uniform across pool. (The handoff's "~9% / ~43pp": 43pp confirmed; the floor at a *50% baseline* is 6.7% — "~9%" is a specific non-50% engagement baseline, not the general floor.)
 
-*Worked conversion (re-checked):* Closing, attacker Pool 6D, base Ob 2, live = Stance Counter Moderate (+0.50) + favourable Reaction Moderate (+0.50) + Reading Minor (+0.25) + perception Minor (+0.25) → net_σ = +1.50 → eff_σ = 1.5·tanh(1.0) = 1.142 → Effective Ob = 2 − 1.142·1.960 = **−0.239 → floored to 0**. ✓
+*Worked conversion (re-checked, μ-shift):* Closing, attacker Pool 6D, base Ob 2, live = Stance Counter Moderate (+0.50) + favourable Reaction Moderate (+0.50) + Reading Minor (+0.25) + perception Minor (+0.25) → net_σ = +1.50 → eff_σ = 1.5·tanh(1.0) = 1.142 → boost = 1.142·(0.8·√6) = **+2.238** → shifted mean 2.40 → **4.64**, base Ob stays **2** → P = Φ((4.64−2)/1.96) = **91.1%**. Overwhelming threshold stays 2·Ob = 4. (The old Ob-reduction form gave Eff_Ob = −0.239 — a P-232 breach; see §0 F1.) ✓
 
 ---
 
@@ -130,25 +134,19 @@ A consuming system talks to the engine through exactly this contract.
 3. `TN` — the system's target number for this roll (6 / 7 / 8).
 4. A signed set of **δσ contributors** — each one of its modifiers, classified at a level (Minor/Moderate/Strong/Major → δσ via the §C table), with a sign (favouring the actor = +, opposing = −), and **gated** so only contributors physically relevant to the current state are non-zero.
 
-**The engine returns:** `Effective Ob`, and `P(success)` under the continuous engine. (Resolution sampling, degrees, and consequence are the *system's* business — see §A/§F.)
+**The engine returns:** `P(success)` under the continuous engine (advantage applied as a μ-shift; `base_Ob` and TN unchanged), plus an optional P-232-floored *display* "effective difficulty." (Resolution sampling, degrees, and consequence are the *system's* business — see §A/§F.)
 
-**Portability generalization** `[ASSUMPTION: σ_N should track the system's own TN — basis: bottom-up = the M1 z-cancellation derivation; top-down = the engine's stated goal of exact uniform impact. Jordan-vetoable. Combat is unaffected (it uses TN7 where 0.8 is exact).]`
+**Portability generalization — RESOLVED by the μ-shift (audit 2026-05-30, ED-884).** The engine no longer carries a hardcoded `σ_N` coefficient in resolution: the μ-shift uses the system's own `σ_per_die[TN]·√N`, so the uniform-impact guarantee is **exact at every TN by construction** (the σ and `√N` cancel in the z-score). The former hardcoded `SIGMA_N_COEFF = 0.8` (the TN7 σ) survives only in the P-232-floored *display* helper `eff_ob`, never in resolution.
 
-The reference implementation hardcodes `SIGMA_N_COEFF = 0.8`, which is **only** the per-die σ at **TN7**. For systems resolving at other TNs, the uniform-impact guarantee is exact only if `σ_N` uses *that system's* per-die σ:
+What the prior hardcoded-0.8 form drifted by (δσ=+0.7σ, 50% baseline) — now eliminated:
 
-```
-σ_N(pool, TN) = σ_per_die[TN] · √pool      # 6→0.806, 7→0.800, 8→0.781   (from params/core.md §B)
-```
-
-Drift from using the hardcoded 0.8 instead (δσ=+0.7σ, 50% baseline):
-
-| TN | hardcoded-0.8 | per-TN σ (exact) |
+| TN | old hardcoded-0.8 | μ-shift (per-TN, exact) |
 |---|---|---|
-| 6 | 25.6pp | 25.8pp |
-| 7 | 25.8pp | 25.8pp |
-| 8 | **26.3pp** | 25.8pp |
+| 6 | 25.6pp | **25.8pp** |
+| 7 | 25.8pp | **25.8pp** |
+| 8 | 26.3pp | **25.8pp** |
 
-Small (≤0.5pp), but the engine's *one promise* is exact uniformity, so the portable form should parameterize by TN. **Recommendation:** replace the constant `SIGMA_N_COEFF` with a per-TN lookup keyed to the canonical `params/core.md` σ table. This is the only change the engine needs to be system-general; it introduces nothing new (the σ values are already canonical).
+So a faction (TN6) or thread (TN8) port inherits exact uniformity with no extra calibration. No new values — the σ table is canonical (`params/core.md §B`).
 
 ---
 
@@ -208,8 +206,8 @@ These are **candidates only.** I have not read these systems' canonical docs thi
 Per the Omega framework (`references/throughlines_meta.md`; handoff §3), **the σ-leverage engine is a Class-A new system** → full `N → Ω → Μ → М → Τ → Q` vetting and a `vetting:` block are **required before any canon commit** (enforced by `vetting_gate` on `patch_register_active.yaml` entries id ≥ PP-674). N/Ω/Μ are Jordan's to affirm — I do not assert them.
 
 Provisional **Q-tier** self-assessment (Claude applies Q autonomously; iterate-don't-reject):
-- **Elegant** — one rule a player can restate: *advantage is measured in σ-units and always changes your odds by the same amount, no matter your pool.* The math is hidden behind four levels.
-- **Robust** — holds at the small-pool extreme (the F1 reason it exists); no foreclosure (F2, floors ~7%); modifiers are uniform-impact.
+- **Elegant** — one rule a player can restate: *advantage always changes your odds by the same amount, no matter your pool.* The math is hidden behind four levels. (Caveat F4: stacking saturates steeply — the 4th advantage is ~worthless, and the player cannot easily intuit that.)
+- **Robust** — uniform impact and no foreclosure (the *modifier* floors at Φ(z_base−1.5) = 6.7% at a 50% base; never 0/1). **Uniform impact holds exactly under the continuous engine at all pools incl. 1D; under discrete resolution it degrades at small pools (canon ED-836 — 1–7D "shaky"), so discrete-resolved ports need their own small-pool handling.** The P-232 conflict is resolved via the μ-shift (no Ob reduction).
 - **Smooth** — the *same* engine resolves every system that adopts it; no special-casing across scales; `tanh` removes the threshold cliff a hard cap would add.
 
 `[N/Ω flag for Jordan]` Necessity/Intent are not mine to rule. The N case to make: this models how a leader's *prepared advantages* (position, reading, setup) decide a confrontation independent of raw stat-bulk — a real leadership dynamic. Flagged, not asserted.
@@ -218,14 +216,15 @@ Provisional **Q-tier** self-assessment (Claude applies Q autonomously; iterate-d
 
 ## §I — Findings & decisions for Jordan (consolidated, worst-first)
 
-1. **`[DRIFT — structural]` The leverage layer is un-canonized; its cited home `references/modifier_system_spec.md` does not exist.** Decision: **canonize this armature as the engine spec** (creating the missing `modifier_system_spec.md` / an engine-level doc, which also clears the M1 module's phantom `[canonical:]` citations) — *or* keep the layer Class-B draft. Canonization requires the §H Omega vetting. **This is the load-bearing decision; the engine cannot be "ported to systems" as canon until it is itself canon.**
-2. **⛔ Combat resolution structure (§2.5)** — BLOCKED, Jordan-only: one strike vs bounded exchange (not attrition); resolution-pool role; commit-depth consequence. The engine does not need it; combat does.
-3. **`[DRIFT — factual]` Correct the handoff's uniform-impact figure.** It reads "25.8pp for δσ=1.0 / 5D–18D"; verified truth is **+25.8pp for +0.7σ across 3D–20D**; δσ=1.0 = 34.1pp pre-cap / 30.9pp capped. (Corrected throughout this doc.)
-4. **`[PORT-1]` Generalize `σ_N` to per-TN** (§D): `σ_N(pool,TN)=σ_per_die[TN]·√pool` so the uniform-impact guarantee is exact for TN6/TN8 systems (faction/thread). No new values — uses the canonical σ table. Combat unaffected. Jordan-vetoable mechanical refinement.
-5. **`[CANDIDATE PORTS]`** Approve/deny per-system targeting (§G). Faction action layer is the strongest candidate; social contest likely should be excluded (over-engineering).
-6. **Combat-application tuning** (war hammer, speed-tempo, phase-reach, Reading magnitude, Stamina, Spirit) — Jordan-pending **canon** calls, out of engine scope; detail in the source files.
+1. **`[RESOLVED — mechanical tier, Jordan-vetoable]` F1: P-232 conflict.** The Ob-reduction form violated canon P-232 (drove Eff_Ob < 1). **Fixed** by the μ-shift (advantage boosts the roll; `base_Ob`/TN untouched) — applied to the M1 reference impl and this doc; logged **ED-884**. You can **veto** in favour of the alternative (exempt the σ-transform from P-232), but that is strictly worse: it leaves F3 and the degree-ladder bug unsolved.
+2. **`[RESOLVED — same change]` F3 (PORT-1): TN calibration.** The μ-shift is TN-exact by construction; the hardcoded `SIGMA_N_COEFF = 0.8` is out of the resolution path.
+3. **`[OPEN — load-bearing]` Canonize this armature as the engine spec?** Still the gating decision — the engine cannot be "ported as canon" until it *is* canon, and canonizing clears the phantom `references/modifier_system_spec.md` reference. Requires the §H Omega vetting. (Sequence: this audit + μ-shift fix → your ratification → Omega vet → canon.)
+4. **⛔ Combat resolution structure (§2.5)** — BLOCKED, Jordan-only: one strike vs bounded exchange (not attrition); resolution-pool role; commit-depth consequence. The engine does not need it; combat does.
+5. **`[CANDIDATE PORTS]`** Approve/deny per-system targeting (§G). Faction action layer (TN6) is the strongest candidate — and now inherits exact uniformity for free; social contest likely excluded (over-engineering).
+6. **Combat-application tuning** (war hammer, speed-tempo, phase-reach, Reading magnitude, Stamina, Spirit) — Jordan-pending **canon** calls, out of engine scope.
+7. **`[DOC-FIXED]` F2 (scope) + F4 (saturation framing) + the handoff's δσ=1.0/25.8pp drift** — corrected throughout this doc (uniform impact scoped to the continuous engine, ED-836 cited; saturation table added).
 
-**Why this master was not committed:** (a) placement of a *cross-system* engine doc is an architecture decision broader than the combat-armature handoff's owned paths; (b) canonical_sources.yaml is at 8,892 / 9,000 tokens — adding a new design-doc source (co-file rule) risks the size gate; (c) elevating the Class-B leverage layer to canon needs Jordan's ratification + Omega vetting (§H). On your word I will commit it — name the path (candidates: `designs/audit/2026-05-29-combat-armature/sigma_leverage_engine_armature.md` as a consolidation artifact, or an engine-level home such as `references/modifier_system_spec.md` / `designs/architecture/` if it is to become the canonical engine spec) — and stage the `vetting:` block + the supersession note for the engine portion of `sigma_leverage_handoff.md` §1.
+**Status.** This master is **committed to `engine/sigma_leverage_engine_armature.md`** (initial `4e6df85`; this revision adds the μ-shift + audit corrections). It remains a **Class-B consolidation artifact** — deliberately *not* registered in `references/canonical_sources.yaml` — pending the canonization decision (#3) and Omega vetting (§H).
 
 ---
 
@@ -239,7 +238,10 @@ Provisional **Q-tier** self-assessment (Claude applies Q autonomously; iterate-d
 - `[READ: tests/sim/v32-combat-balance/m1_dice_sigma_core.py — full (9,652 chars; reference implementation + self-test)]`
 - `[READ: params/core.md — engine-relevant sections (face rule, per-TN μ/σ, continuous engine, pool floor)]`
 - `[READ: references/canonical_sources.yaml — searched for engine/modifier/leverage sources; confirmed modifier_system_spec.md absent]`
+- `[READ: engine/sigma_leverage_engine_armature.md — this doc, prior commit 4e6df85]`
+- `[VERIFIED: audit 2026-05-30 (sigma_leverage_engine_audit.md + engine_audit_harness.py) — T1 code==spec 1e-16; T2 continuous uniformity exact incl. 1D; T3 discrete/continuous divergence; T4 P-232 breach quantified; T5 TN drift; μ-shift re-test RT1–RT6 PASS]`
+- `[FIXED: F1 (P-232) + F3 (PORT-1) via μ-shift in m1_dice_sigma_core.py (self-test 7/7); F2/F4 doc-scoped; logged ED-884]`
 - `[VERIFIED: uniform-impact, per-level ΔP, soft-cap checkpoints, foreclosure floor, TN-portability drift, worked example — recomputed this session, continuous engine, math.erf]`
-- `[CONFIDENCE: high — substrate confirmed against canon; leverage layer reproduced from reference impl + recomputed; the two drift findings are evidenced (file-absence check; analytic Φ(0.7)=25.8pp).]`
+- `[CONFIDENCE: high — substrate confirmed against canon; leverage layer reproduced from reference impl + recomputed; findings evidenced numerically; μ-shift fix re-tested.]`
 
-*Engine vs application is the whole armature: the σ-leverage engine resolves any d10 success-pool with uniform impact and no foreclosure; each system supplies its own levers, gating, and meaning. Porting it to a given system — and canonizing it — is the next, Jordan-gated step.*
+*Engine vs application is the whole armature: under the continuous engine the σ-leverage kernel resolves any d10 success-pool with uniform, TN-exact impact and no foreclosure, applying advantage as a μ-shift that never reduces Ob below 1; each system supplies its own levers, gating, and meaning. Canonizing it is the next, Jordan-gated step.*
