@@ -48,24 +48,33 @@ REPOS = {
 }
 
 # ── Token thresholds (ttrpg only) ─────────────────────────────────────────────
-# TOKEN_THRESHOLDS — token caps per file (raised 2026-05-02 per ED-786)
+# TOKEN_THRESHOLDS — token caps per file (raised 2026-05-02 per ED-786; 2026-05-30 per Jordan)
 # Rationale: The 2026-05-02 register-collision incidents (ED-782, ED-783) traced to chronic
 # cap pressure on editorial_ledger and canonical_sources during heavy editorial sessions.
 # Caps below were raised to give realistic headroom for routine work (2-3 commits per session).
 # Combined with the chunking discipline documented in workplan §6.x, registers should now
 # stay under 80% of cap during normal operations.
+# 2026-05-30 (Jordan directive): hand-edited register/accumulator class -> uniform 20_000
+# (design_registry, patch_register_active, propagation_map, coverage_matrix; arc_register already
+# 20_000). On-demand fetches, NOT in the bootstrap session set -- headroom here is rate-budget-free.
+# NOT raised: bootstrap-loaded summaries (@ 2_000) + SKILL.md (@ 8_000) load every subprocess / stay lean.
+# editorial_ledger.jsonl already @ 200_000. canonical_sources.yaml: interim 9_000->12_000 to clear an
+# imminent commit-blocking OVER; NOT the fix -- bloat is 115 freshness canonical_sha fields. Root-cause
+# fix queued (own infra task): split SHA store -> references/canonical_freshness.yaml (writer
+# tools/freshness_gate.py) so canonical_sources reverts to ~5k declarations on the hot bootstrap path.
+# Deferred -- freshness-subsystem refactor; subsystem undocumented (roadmap 2.4).
 TOKEN_THRESHOLDS = {
-    "session_log_current.md":                  2_000,   # session-bounded; rotates each session
-    "session_logs/index.md":                   2_000,   # tiny index file
-    "canon/editorial_ledger.jsonl":            200_000, # JSONL single-source (2026-05-28): whole-ledger file, never loaded whole at bootstrap; high cap, append-by-line
-    "references/file_index_summary.md":        2_000,   # raised 1_000 → 2_000 (2026-05-02): file count grows with project
-    "references/canonical_sources.yaml":       9_000,   # raised 5_000 → 8_000 (2026-05-02), → 9_000 (2026-05-18): freshness_gate --update added 115 canonical_sha fields, pushing file to 8086 tokens
-    "skills/valoria-orchestrator/SKILL.md":    8_000,
-    "canon/patch_register_active.yaml":       18_000,   # raised 15_000 → 18_000 (2026-05-02): modest cushion to prevent collision incidents under heavy work
-    "tests/coverage_matrix.md":                8_000,   # raised 5_000 → 8_000 (2026-05-02): was at 4983/5000; Stage tests growing
-    "references/arc_register.md":             20_000,
-    "references/propagation_map.md":          15_000,
-    "references/design_registry.yaml":         8_000,
+    "session_log_current.md":                  2_000,   # bootstrap-loaded; rotates each session
+    "session_logs/index.md":                   2_000,   # bootstrap-loaded; tiny index
+    "canon/editorial_ledger.jsonl":            200_000, # JSONL single-source (2026-05-28): never loaded whole at bootstrap; append-by-line
+    "references/file_index_summary.md":        2_000,   # bootstrap-loaded; grows with project
+    "references/canonical_sources.yaml":      12_000,   # bootstrap-loaded; 5_000->8_000->9_000; 2026-05-30 INTERIM 9_000->12_000 (was 8_955/9_000); SHA-split queued
+    "skills/valoria-orchestrator/SKILL.md":    8_000,   # skill doc -- kept lean on purpose (composability)
+    "canon/patch_register_active.yaml":       20_000,   # register; 2026-05-30 18_000->20_000 (uniform register class)
+    "tests/coverage_matrix.md":               20_000,   # accumulator (grows per sim/test); 2026-05-30 8_000->20_000
+    "references/arc_register.md":             20_000,   # register (already 20_000 -- class anchor)
+    "references/propagation_map.md":          20_000,   # co-file map; 2026-05-30 15_000->20_000 (uniform register class)
+    "references/design_registry.yaml":        20_000,   # register; 2026-05-30 8_000->20_000 (uniform register class)
 }
 ARCHIVE_WARN_THRESHOLD = 100_000
 
