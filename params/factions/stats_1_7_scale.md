@@ -149,9 +149,9 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 | Faction | Action | Roll | Effect |
 |---------|--------|------|--------|
 | Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |  <!-- LPS-1: L→Mandate -->
-| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; target faction L −1. Reversal: Grand Debate (5 exchanges) or new Confessor. |
+| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; −1 Legitimacy to each of the target's controlled territories (settlement_layer §1.8). Reversal: Grand Debate (5 exchanges) or new Confessor. |
 | Church | Church Influence 60 Territorial Seizure | L vs floor(owner's L / 2) + 1 | Per-territory roll. Success: administrative control. Failure: Church L −1. |
-| Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending PS prerequisite: PS ≥ 1 |
+| Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending PS prerequisite: COMMUNITY-level PS ≥ 1 in a Presence locality (RM territoryless; faction_state_authoring §6 / LPS-1) |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Löwenritter unique actions not extracted |
 
 ## Nine Political Axes (qualitative — not tracked numerically)
@@ -198,7 +198,7 @@ Reversal: Grand Debate (5 exchanges) or new Confessor appointed.
 
 ### Church — CI 60 Territorial Seizure
 Trigger: Church Influence (CI) reaches 60. Fires once per territory.
-Roll: L vs floor(owner's L / 2) + 1.  <!-- FCN-SEIZURE-DRIFT: stale — authoritative = faction_layer §2.7 (Influence + floor(CI/15) vs Ob 7−PT). Under LPS-1 'owner's L' = target territory's per-territory Legitimacy (settlement_layer §1.8). -->
+Roll: Influence + floor(CI/15) vs Ob = 7 − PT (AUTHORITATIVE per faction_layer §2.7; supersedes the stale L-based formula). Failure → Mandate −1.
 | Degree | Result |
 |--------|--------|
 | Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Flat Church Influence value fires immediately. |

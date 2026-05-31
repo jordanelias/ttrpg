@@ -309,11 +309,11 @@ Each player faction has one signature mechanic. Detailed degree tables in factio
 |---|---|---|---|
 | Crown | Royal Decree | Mandate vs Ob 2 | 1/season; +1 Ob/season consecutive |  <!-- LPS-1: L per-territory, not a faction roll stat; Mandate is the faction stat (matches factions_personal §8.2). Method = sim-deferred resolver migration. -->
 | Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Requires Church Mandate ≥ 3 |  <!-- LPS-1: L→Mandate; 'faction L' effects reconcile to Mandate / per-territory L per settlement_layer §1.8 -->
-| Church | CI 60 Territorial Seizure | L vs floor(target L / 2) + 1 | Per-territory; CI ≥ 60 trigger |
+| Church | CI 60 Territorial Seizure | Influence + floor(CI/15) vs Ob = 7 − PT | Per-territory; CI ≥ 60 trigger; AUTHORITATIVE per faction_layer §2.7; Failure → Mandate −1 (FCN-SEIZURE-DRIFT reconciled; was stale L-based) |
 | Hafenmark | Sovereign Authority Doctrine | Mandate vs Ob 4 | 1/campaign arc |  <!-- LPS-1: L→Mandate (matches factions_personal §8.4) -->
 | Varfell | The Private Collection | Intel vs Ob 2 | 1/season; long-term TS cost |
 | Guilds | Economic Leverage | Wealth vs target Wealth | Requires Guild Favour ≥ 5 in territory |
-| Restoration | Community Weaving (PP-616 canonical) | (Spirit × 2) + History + TPS pool | Thread operation, not DA; PS ≥ 1 prerequisite |
+| Restoration | Community Weaving (PP-616 canonical) | (Spirit × 2) + History + TPS pool | Thread operation, not DA; PS ≥ 1 prerequisite = COMMUNITY-level PS in a Presence locality (RM is territoryless; per faction_state_authoring §6 / PP-460 its L/PS are community-scoped — settlement_layer §1.8) |
 | Löwenritter | Martial Law / Coup Trigger | No roll — Graduated Autonomy stage 4 | Triggered by Crown failure conditions |
 
 ---
@@ -623,9 +623,9 @@ Roll: Mandate vs target Mandate (faction leader) / Ob 2 (non-leader).  <!-- LPS-
 
 | Degree | Result |
 |---|---|
-| Overwhelming | Strips target's Circles bonus with Church contacts; target faction L −1; target barred from public office and Church-loyal command; personal Reputation −1 with all factions |
+| Overwhelming | Strips target's Circles bonus with Church contacts; −1 Legitimacy to each of the target's controlled territories (lowers aggregate L → Mandate, settlement_layer §1.8); target barred from public office and Church-loyal command; personal Reputation −1 with all factions |
 | Success | As Overwhelming minus the personal Reputation penalty |
-| Failure | Church L −1; target gains L +1 (sympathy martyr) |
+| Failure | −1 Legitimacy to each Church-controlled territory; target gains +1 Legitimacy in each of its controlled territories (sympathy martyr) |
 
 Requires Church Mandate ≥ 3. Reversal: Grand Debate (5 exchanges) or new Confessor.
 
@@ -633,7 +633,7 @@ Requires Church Mandate ≥ 3. Reversal: Grand Debate (5 exchanges) or new Confe
 
 Trigger: Church Influence (CI) reaches 60. Fires once per territory.
 
-Roll: L vs floor(target faction's L / 2) + 1.  <!-- FCN-SEIZURE-DRIFT: stale — authoritative Seizure = faction_layer §2.7 (Influence + floor(CI/15) vs Ob 7−PT). Under LPS-1 'target faction's L' reads as the target TERRITORY's per-territory Legitimacy (settlement_layer §1.8). Reconcile via FCN-SEIZURE-DRIFT. -->
+Roll: Influence + floor(CI/15) vs Ob = 7 − PT (AUTHORITATIVE per faction_layer §2.7; supersedes the stale L-based formula). Failure → Mandate −1.
 
 | Degree | Result |
 |---|---|
