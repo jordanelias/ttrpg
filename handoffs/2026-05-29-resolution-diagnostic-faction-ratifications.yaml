@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: 8f975c08ff7bd7ce06c84a9d91e95125719a5be8
+last_commit: cf2c1c27f5f0c48b14c36d803d4807a02fd736fd
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -71,7 +71,9 @@ working_state:
     aggregate; sim-validated; faction-level L/PS fully demoted (0 unmarked residuals
     across 7 docs). PRECEDED by the faction-cluster resolution diagnostic (complete
     + ratified — below). Self-review remediation (LPS-1b) applied; F4 dispositioned
-    resolved-by-resolver. Repo fully committed; nothing staged.'
+    resolved-by-resolver. LPS-2c/2d closed all functional residuals; faction system
+    VERIFIED end-to-end (0 faction-level L/PS across 11 docs). Repo fully committed;
+    nothing staged.'
   done:
   - 'ED-876 Trigger-5 non-monotonic cliff: FIXED in canon (2327adc4) — removed pool>=6
     auto-fire from the gate; firing now monotonic in Command. Precedent: du Picq/Clausewitz
@@ -130,6 +132,8 @@ working_state:
       B Dynamics per-territory; Seizure flagged FCN-SEIZURE-DRIFT)'
     - '8f975c08 (LPS-1b self-review remediation: §1.8 zero-territory Mandate=0 + aggregation
       note; F4 dispositioned RESOLVED-BY-RESOLVER)'
+    - 'cf2c1c27 (LPS-2d final residual close: degree-effect faction-L -> per-territory
+      L / Mandate-on-Seizure-fail; 0 residuals verified)'
     canonical_model: 'L,PS per-TERRITORY (17 territories per geography_v30), 0-7 each.
       Faction aggregate_L=mean(controlled-territory L); aggregate_PS=mean(controlled-territory
       PS). Mandate=clamp(round(0.5*aggL+0.5*aggPS),0,7) = PP-686 blend via mean-of-tier
@@ -157,10 +161,6 @@ working_state:
     - 'AGGREGATION REFINEMENT (vetoable, LPS-3): temperament uses POPULATION-WEIGHTED
       territory mean (faction_canon §3.4); Mandate uses PLAIN mean. Population-weight
       Mandate for consistency (needs per-territory population)?'
-    - 'ENTANGLED RESIDUALS (follow-on): CI-60 Seizure -> FCN-SEIZURE-DRIFT (authoritative
-      faction_layer §2.7 Influence; under LPS-1 target L = target territory per-territory
-      L); Restoration "PS>=1 prerequisite" edge (emergent, no territories); Excommunication
-      degree effects "faction L +-1" -> mechanize to Mandate/per-territory L.'
     master_detail: designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
       key _lps_structural_redesign_2026-05-30.
     self_review_2026_05_30: '[SELF-AUTHORED bias-risk] review confirmed: demotion
@@ -172,6 +172,15 @@ working_state:
       Residually live only for the bare-stat tactics already queued for resolver migration
       (subsumed). NO new mechanic (proportional-damage fix would be over-engineering).
       Master: _F4_disposition_2026-05-30.'
+    functional_verification: 'END-TO-END VERIFIED 2026-05-30 (through LPS-2d): broadened
+      same-line sweep = 0 faction-level L/PS mechanical assertions across 11 docs;
+      data-flow chain fully connected (territory L/PS -> aggregate -> Mandate -> strictness/votes/tactics=Mandate/Seizure=Influence+CI
+      -> mean-reverting feedback); Restoration community-PS functional; zero/N=1/N=0
+      handled; Seizure FAIL = Mandate −1 (authoritative §2.7). Faction system runs
+      end-to-end under LPS-1.'
+    ENTANGLED_RESIDUALS_CLOSED: 'All closed (LPS-2c+2d): Seizure->authoritative §2.7;
+      Excommunication/Heresy/Baralta effects->per-territory L; Seizure-FAIL->Mandate−1;
+      Restoration PS->community-level (FSA §6).'
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -202,7 +211,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T02:50:22.171743+00:00'
+updated: '2026-05-31T03:21:48.245872+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
