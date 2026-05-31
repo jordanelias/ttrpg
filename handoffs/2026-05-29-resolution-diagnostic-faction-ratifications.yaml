@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: 8a35173d26b698f52a9b9c4a13a1e406b6ccd697
+last_commit: 72111826761ee47e2357c0e888f35106912af92e
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -223,24 +223,40 @@ working_state:
     strictness already read aggregate_L/PS). geography ''territory'' T1-T17 kept as
     province-tier label (option 2) + reconciliation note in §1.8. All verified live.'
   remaining:
-  - 'RESIDUAL (separate per-effect decision, NOT in wiring pass): Church per-territory
-    L-STRIP effects in stats_1_7_scale (Excommunication/Heresy/Baralta ''-1 Legitimacy
-    per controlled territory'') still authored per-territory; whether they now apply
-    per-SETTLEMENT or per-PROVINCE is a magnitude decision for Jordan (they cite §1.8).'
-  - faction_behavior §3.4/§3.5 ΔL/ΔPS APPLICATION prose ('per controlled territory')
-    -> covered by §1.8 reconciliation note; optional further tightening.
-  - Master ledger _lps_structural_redesign_2026-05-30 entry NOT yet updated to mark
-    LPS-2e done (no create_file_graphql helper; update on next safe_commit touching
-    designs/audit, or leave -- handoff carries state).
-  - 'Jordan count-correction (chat, canon outranks memory): canon=14 provinces in
-    3 duchies + Himmelenger+Schoenland specials; Askeheim=geography T15 Uncontrolled
-    Calamity epicentre (NOT a governed province). ''Valn'' peninsula name NOT found
-    in geography reads (gap).'
-  - Workplan artifact valoria_forward_workplan_2026-05-30.md still uncommitted ->
-    reconcile into references/roadmap_state.yaml.
-  - 'Remaining diagnostic systems untouched (skill hypotheses): personal combat (-1D
-    wound at 5D floor, live Lesson-2 candidate), social contest, mass battle, investigation,
-    peninsula/victory, threadwork Coherence.'
+  - 'FLAGGED (separate balance decision, NOT blocking): Mandate x20 / 0-7 meter calibration
+    -- Legitimacy meter = Mandate x20 spans 0-140 at Mandate 0-7; if a 0-100 meter
+    is intended, multiplier needs recalibration AND the -25/-30/-20 event magnitudes
+    recalibrate with it (cascading) -> separate pass. Flagged in derived_stats L291
+    + §1.8, not changed.'
+  - 'Jordan count-correction (delivered in chat; canon already correct): 14 provinces
+    in 3 duchies + Himmelenger+Schoenland specials; Askeheim = geography T15 Uncontrolled
+    Calamity epicentre. ''Valn'' peninsula name not found in geography reads (gap).'
+  - Workplan artifact valoria_forward_workplan_2026-05-30.md uncommitted -> reconcile
+    into references/roadmap_state.yaml.
+  - Master ledger _lps_structural_redesign_2026-05-30 entry not updated to mark LPS-2e
+    done (no create_file_graphql helper; handoff carries state).
+  - 'Untouched diagnostic systems (skill hypotheses): personal combat (-1D wound at
+    5D floor), social contest, mass battle, investigation, peninsula/victory, threadwork
+    Coherence.'
+  lps_2e_audit_patch: 'VERIFIED LIVE on HEAD=72111826. Audit of the LPS-2e re-grain
+    found + fixed: (a) a missed SECOND Mandate-aggregation spec in faction_behavior
+    §4 (was old plain-mean/territory) -> W-weighted settlement means + size-weighted
+    saturating formula + per-settlement init; (b) ALL Church L-strip effects (Excommunication/Heresy/Baralta
+    ''-1 Legitimacy per controlled X'') -> PER-SETTLEMENT per Jordan ruling 2026-05-30
+    (note: -1 L to each controlled settlement = -1 to W-weighted aggregate L = bounded,
+    not a runaway); (c) faction_canon 6-vs-7-stat conflict RESOLVED (6-stat canonical,
+    Mandate headline; L/PS per-settlement, not faction stats); (d) CI60 seizure row
+    reconciled to authoritative faction_layer §2.7 (Failure->Mandate-1); (e) corrected
+    my false ''Mandate x20 remains consistent'' claim. Re-audit at HEAD = CLEAN (zero
+    per-territory L-strip residual).'
+  ratification: 'RATIFIED. L/PS settlement re-grain + size-weighted Mandate + per-settlement
+    Church effects canon-written across settlement_layer §1.8 (authoritative) + 5
+    consumers, verified live. Necessity: corrects wrong-tier grain (L/PS at settlement
+    base unit) + adds Jordan''s size mechanic + per-settlement effects. Evidence:
+    precedent-anchored (CK3/EU4/Victoria/KOEI), Stage-4 sim-validated (big-province>many-small
+    6v5, bounded [0,7], convergent feedback). Reversibility: §1.8 single source, consumers
+    point at it. Simplicity: Weight=3 transparent terms, no over-engineering. Commits
+    30a8c643/f69546f9/8a35173d/72111826 all verified live.'
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -271,7 +287,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T06:00:58.020616+00:00'
+updated: '2026-05-31T06:23:16.465663+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
