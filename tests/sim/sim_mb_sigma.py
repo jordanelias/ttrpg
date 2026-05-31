@@ -822,6 +822,18 @@ class Subunit:
             if target_centroid:
                 my_starting_col = self.starting_position[1] + or_c
                 cell_target = (target_centroid[0], my_starting_col)
+                # ENVELOPMENT WHEEL (Jordan 2026-05-31): an OVERHANG cell — one with no enemy in its
+                # file (beyond the enemy frontage) — wheels toward the nearest enemy cell (the flank)
+                # instead of holding its column. Lateral movement -> the facing vector (set below at
+                # cell_facing_vec) rotates inward -> the octagon angle reads the enemy's flank/rear.
+                # "the front of the cell should be the same as its vector." Gated; toggle-off untouched.
+                if PER_CELL and PC_WHEEL and enemy_cells:
+                    e_cols = [ec for (_er, ec) in enemy_cells]
+                    emin, emax = min(e_cols), max(e_cols)
+                    # overhang = my column lies BEYOND the enemy's frontage span (past either flank)
+                    if my_c < emin or my_c > emax:
+                        cell_target = min(enemy_cells,
+                                          key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
             if cell_target:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c
@@ -1306,6 +1318,7 @@ PC_ENVELOP_SIGMA   = 0.0    # DISABLED: depth-aware contact fraction (Incr4) alr
 PC_CHARGE_SIGMA    = 0.55   # per-rank-of-unabsorbed-penetration delta-sigma a charger gets on impact
 PC_CHARGE_TICKS    = 3      # charge shock applies only for the first few ticks of contact
 PC_CAVALRY_SPEED_MULT = 2.0  # cavalry velocity primitive: cavalry closes this much faster (PER_CELL), triggering the charge
+PC_WHEEL = _sigma_os.environ.get('PC_WHEEL', '1') == '1'   # envelopment wheel: overhang cells wheel toward the enemy flank (PER_CELL); A/B via env
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
