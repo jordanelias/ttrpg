@@ -3,9 +3,10 @@ scope: simulation
 task:
   skill: valoria-simulator
   description: Lane C (Simulation/Implementation), 3-session write-disjoint model
-    (workplan v2 2026-05-31). Launch complete; queue 6.1->6.3->6.4->6.5->8.1->1.16
-    (6.2 canon-gated). 6.1+6.4 DONE; 6.3 IN PROGRESS (parliamentary_vote shipped).
-    valoria-game separate repo -> collision-free with A/B.
+    (workplan v2 2026-05-31). Queue 6.1->6.3->6.4->6.5->8.1->1.16 (6.2 canon-gated).
+    6.1+6.4 DONE; 6.3 IN PROGRESS (parliamentary_vote + parliamentary_stay shipped;
+    cascade continues). Lane C writes sim/**+tests/** only -> write-disjoint from
+    Lane A (canon/designs) and Lane B (infra).
 owns:
 - sim/**
 - tests/sim/**
@@ -18,76 +19,90 @@ context_files:
   reason: Lane C owns/range/entry-items + launch protocol.
 - path: references/id_reservations.yaml
   depth: full
-  reason: Lane C reserved ED 970-999/PP 780-799.
+  reason: Lane C reserved ED 970-999/PP 780-799 (none allocated; parliamentary vote/stay
+    used no ED/PP).
 - path: designs/proposals/stub_infill_plan.md
   depth: full
-  reason: Tiering authority for 6.1/6.3 (380L, 4 amendments).
+  reason: 'Tiering authority for 6.1/6.3. NOTE: designs/proposals now Lane-A-owned
+    -> READ-ONLY for Lane C.'
 - path: designs/scene/social_contest_v30.md
   depth: full
-  reason: §10 BG Parliamentary Vote canon (6.3 parliamentary_vote); §10.1 Parliamentary
-    Stay also here; §6 Persuasion-Track thresholds reused.
+  reason: §10 BG Parliamentary Vote + §10.1 Stay + §6 Persuasion-Track thresholds.
+    designs/scene NOT in Lane A reduced scope -> safe to read.
 - path: skills/valoria-simulator/SKILL.md
   depth: skeleton
-  reason: Mode-G build protocol; sim_gate is run-grounding (NOT a module-commit gate).
+  reason: Mode-G; sim_gate is run-grounding, NOT a module-commit gate.
 working_state:
   completed:
-  - '6.1 DONE — true stub state @ main: 22 stubbed sim/ files (34 raise-sites) + 2
-    tests/sim harness stubs. Plan ''COMPLETE/37-of-45'' misleading: Tier 0/1/2 landed,
-    the 11 implementable Tier 3/4 were never built.'
-  - 6.4 DONE — tribunal.py@149 = run_tribunal generic §7.2/7.3 dispatch; RAISES LOUDLY
-    (not silent no-op); mc_v18 uses run_excommunication_tribunal (§7.1) so generic
-    path never fires; gated on Phase-5 personal Contest engine, not canon.
-  - '6.3 parliamentary_vote §10 IMPLEMENTED + COMMITTED (d0f3c0bd). Faction-scale
-    BG Mandate-pool vote (NOT personal argue-pool): per-side Mandate(=Faction.L) pool
-    + genre/audience +1D, TN7, movement=net-resistance, track 7 pass/3 fail/4-6 committee,
-    Total Victory >=9/<=1 -> losing dominant Mandate -1. GD-3 enforced (parliamentary==False
-    excluded). Reuses contest §6 constants. 11 ledger entries (104->115). coverage_matrix+module_manifest
-    co-updated. Smoke 4/4 (pass/committee/fail+TV/zero-zero), no exceptions. 207 lines.'
+  - '6.1 DONE — true stub state: 22 stubbed sim/ files (34 raise-sites) + 2 tests/sim
+    harness stubs. Plan ''COMPLETE/37-of-45'' misleading: 11 implementable Tier 3/4
+    never built.'
+  - 6.4 DONE — tribunal.py@149 run_tribunal generic §7.2/7.3 dispatch RAISES LOUDLY;
+    mc_v18 uses run_excommunication_tribunal (§7.1) so generic path never fires; gated
+    on Phase-5 personal Contest, not canon.
+  - '6.3 parliamentary_vote §10 COMMITTED d0f3c0bd. Faction-scale BG Mandate-pool
+    vote: per-side Mandate(=Faction.L) pool + genre/audience +1D, TN7, movement=max(0,net-resistance),
+    track 7/3/4-6, total-victory >=9/<=1 -> losing dominant Mandate -1. GD-3 enforced.
+    Reuses contest §6 constants. 11 ledger entries. Smoke 4/4. CONFIRMED bug-free
+    (60-seed sweep, seed-0 pass introspection clean).'
+  - '6.3 parliamentary_stay §10.1 (ED-631) COMMITTED 251c5528. invoke_stay + resolve_stay_lift:
+    Senator Inward motion halting a Church Tribunal filing 1 season via the §10 vote.
+    Side A=invoker+supporters(>=2), Side B=Church; available CI<55; pass->suspend
+    1 season(re-file following), else proceed. Returns suspension for caller (tribunal.py
+    convention). 3 ledger entries (118 total). Verified: 60-seed sweep (40 granted/20
+    denied), unavailable(CI>=55)/invalid(<2)/season-gating. [FLAG] floor(CI/20) Church
+    pool bonus not wired (CI<55 gate subsumes; scope unpinned).'
   next:
-  - '6.3 NEXT (cascade now unblocked by parliamentary_vote): parliamentary_stay (§10.1
-    ED-631, same doc) + parliamentary_transfer (both dep on parliamentary_vote). Then
-    articulation (knots+beliefs done — ready). Then cyclic pairs investigation+fieldwork
-    (npe done) and rendering+rs_track (single-session each, mutual imports). Then
-    companion, miraculous_event.'
-  - 'Per-stub Mode-G: read canon force_full -> ledger entries (each constant, quoted_text)
-    -> implement bottom-up (canonical_pt/accord bucketing per 19b) -> smoke in clone
-    -> safe_commit (sim co-file rule REQUIRES tests/coverage_matrix.md when touching
-    tests/sim/**) -> manifest/coverage_matrix rows.'
-  - 'ALT high-value (Jordan sequencing decision, recommended): Determinism+Migration
-    Batch (massbattle rng threading + 3 canonical-pipeline subs) -> unblocks trustworthy
-    balance (6.5). Behavior-shifting (one re-baseline).'
+  - '6.3 NEXT: parliamentary_transfer (dep parliamentary_vote, ready). Then articulation
+    (knots+beliefs done). Then cyclic pairs investigation+fieldwork (npe done) and
+    rendering+rs_track (single-session each, mutual imports). Then companion, miraculous_event.'
+  - 'Per-stub Mode-G: read canon force_full -> ledger entries -> implement bottom-up
+    (canonical_pt/accord bucketing per 19b) -> smoke in clone (sweep seeds for variance,
+    verify each branch) -> safe_commit (sim co-file rule REQUIRES tests/coverage_matrix.md
+    when touching tests/sim/**) -> manifest/coverage_matrix rows.'
+  - 'ALT high-value (Jordan sequencing, recommended): Determinism+Migration Batch
+    (massbattle rng threading L630/L1053 + 3 canonical-pipeline subs) -> trustworthy
+    balance (6.5). Behavior-shifting, one re-baseline.'
+  cross_lane:
+  - Lane A LAUNCHED (lane-a-2026-05-31), REDUCED scope canon/** + designs/{personal,proposals}/**.
+    Lane C write-disjoint confirmed (writes sim/+tests/ only; reads social_contest
+    §10 from designs/scene, NOT Lane-A-owned).
+  - 'P1 CANON-INTEGRITY (Lane A, ED-883/865/866): Domain Action resolver ratification
+    disputed. AFFECTS Lane C''s CANON-GATED stubs (7 hard-gated + Varfell) + faction
+    Domain Action layer. Does NOT affect the §10 parliamentary mechanics shipped (Mandate-pool/dice_engine.roll_pool,
+    independent of the disputed resolver). Needs Jordan adjudication + Track 1.7.'
   canon_2_reeval:
-  - Varfell canon EXISTS (designs/provincial/varfell_path_b_v30.md +_infill) -> varfell_mandate_action
-    + varfell_territorial_acquisition candidate-unblocked (verify path_b mechanics
-    + mandate-redesign first).
-  - treaty.propose_treaty = INTENTIONAL GUARD not a stub (treaty_expiration_v30 §2
-    routes formation to Senator Outward/crown_initiative). Reclassify out.
-  - 'STILL HARD-GATED (canon ABSENT, Lane-A/Jordan authoring): altonian_reinforcements,
+  - Varfell canon EXISTS (varfell_path_b_v30 +_infill) -> varfell_mandate_action +
+    varfell_territorial_acquisition candidate-unblocked (verify path_b + mandate-redesign
+    first; ALSO gated by the P1 resolver dispute).
+  - treaty.propose_treaty = INTENTIONAL GUARD not a stub (treaty_expiration §2 routes
+    to Senator Outward/crown_initiative). Reclassify out.
+  - '7 STILL HARD-GATED (canon ABSENT, Lane-A/Jordan authoring): altonian_reinforcements,
     charter_liberties, hafenmark_equipment, home_sanctuary, infrastructure_reclamation,
-    restoration_movement, npc_ai = 7. Lane C does NOT author canon.'
+    restoration_movement, npc_ai. Lane C does NOT author canon.'
   cross_cutting_defects:
-  - 'PRIORITY: mc_v18 NON-DETERMINISM (UNFIXED) — massbattle.py L630/L1053 use random.randint
-    bypassing world.rng -> balance output untrustworthy. Lane C, mechanical, behavior-shifting.'
-  - Deferred Migration Batch (4 subs, all sim/**); Per-record serializers missing
-    for 14 World registries; 19b canonical_pt/accord bucketing discipline for new
-    stubs.
+  - 'PRIORITY: mc_v18 NON-DETERMINISM (UNFIXED) — massbattle.py L630/L1053 random.randint
+    bypass world.rng -> balance untrustworthy. Lane C, mechanical, behavior-shifting.'
+  - Deferred Migration Batch (4 subs, all sim/**); per-record serializers missing
+    for 14 World registries; 19b canonical_pt/accord bucketing for new stubs.
   notes:
-  - sim_gate(scope,systems) is RUN-GROUNDING (preset + full-depth reads + LOCAL /home/claude/sim_verification_ledger.json),
-    NOT a module-commit gate -> correctly skipped for stub-infill commits; safe_commit
-    gate chain (commit_message+editorial+size+co-file+compliance) is the control.
-    (Corrects the stub-plan/task_gate 'call sim_gate' framing for commits.)
-  - 'BOUNDARY: do NOT write into tests/sim/v32-combat-balance/ (combat-armature handoff''s
-    de-facto area).'
+  - sim_gate(scope,systems)=RUN-GROUNDING (preset+full-depth reads+LOCAL /home/claude/sim_verification_ledger.json),
+    NOT a module-commit gate -> skipped for stub-infill; safe_commit chain is the
+    control.
+  - 'Verification discipline: SWEEP SEEDS (single seed misleads — parliamentary_stay
+    S1 looked denied on seed 2 but is 67% granted). BOUNDARY: do NOT write tests/sim/v32-combat-balance/
+    (combat-armature area).'
 key_values:
-- 'Reserved IDs: ED 970-999 next_free 970; PP 780-799 next_free 780 (none allocated
-  yet — parliamentary_vote used no ED/PP).'
-- Mandate==Faction.L (per crown_initiative); GD-3 extra-parliamentary==Faction.parliamentary
-  False. Clone at /home/claude/ttrpg_clone.
-- 'Commits this session: handoff 4ee54f28/07da3ead; parliamentary_vote d0f3c0bd.'
+- 'Reserved IDs: ED 970-999 next 970; PP 780-799 next 780 (none allocated).'
+- Mandate==Faction.L; GD-3 extra-parliamentary==Faction.parliamentary False; CI==world.clocks['CI']
+  (0-100, start 30). Church faction key 'Church'. Clone /home/claude/ttrpg_clone.
+- 'Commits this session: parliamentary_vote d0f3c0bd; parliamentary_stay 251c5528.
+  Ledger 118 entries.'
 blockers:
-- NONE blocking ungated work. 6.2-Varfell pending path_b verification. 7 hard-gated
-  stubs need Lane-A/Jordan canon.
-last_commit: d0f3c0bdc5da32f7f48615e07687ff8b51ea432c
-created: '2026-05-31T23:23:32.120825+00:00'
-updated: '2026-05-31T23:23:32.120825+00:00'
+- NONE blocking ungated work (parliamentary_transfer + articulation + cyclic pairs
+  are ready). Canon-gated stubs + Varfell also gated by Lane-A P1 resolver dispute.
+  7 hard-gated need Lane-A/Jordan canon.
+last_commit: 251c5528a4ce2a03095e5b127386a2eabc5086c0
+created: '2026-05-31T23:53:33.144833+00:00'
+updated: '2026-05-31T23:53:33.144833+00:00'
 status: active
