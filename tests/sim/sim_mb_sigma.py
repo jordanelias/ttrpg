@@ -1281,6 +1281,8 @@ PC_STAMINA_REST    = 5      # a non-engaged (reserve-fed) column recovers this p
 PC_ROTATE_FLOOR    = 50     # below this a fatigued front rotates if a fresher reserve rank exists
 PC_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights worse; thin lines can't rotate)
 PC_DEPTH_ROTATE    = 1.0    # depth fatigue-damping: effective drain = PC_STAMINA_DRAIN/(1+PC_DEPTH_ROTATE*(depth-1))
+PC_FRONTAGE_BLEND  = 0.0    # Incr4 contact-fraction: 0=pure width (more cols=more men), 1=pure frontage (depth-neutral)
+PC_FRONTAGE_REF    = 7.0    # reference frontage (columns) for the width term normalization
 PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density
 PC_FLANK_DEPTH_RESIST = 0.6 # depth blunts flank/overhang delta-sigma
 PC_FRONT_RANKS     = 2      # ranks a column must hold on its front; deeper ranks are free to reform to a flank
@@ -1796,7 +1798,20 @@ def run_battle(unit_a, unit_b, max_turns=18):
                         elif p.get('atom_b') is sub:
                             opp_cells_contact.update(p.get('b_cells', []))
                 # Scale damage: opponent's contact fraction → damage to us
-                opp_frac = len(opp_cells_contact) / max(1, opp_total)
+                if PER_CELL and getattr(opp, 'col_grid', None):
+                    # Increment 4: depth-aware BLEND. Frontage term (engaged cols / total cols) removes the
+                    # reserve-depth penalty; width term (engaged cols / reference frontage) keeps the legitimate
+                    # "a wider front brings more men to bear" effect. PC_FRONTAGE_BLEND in [0,1] trades between them.
+                    grid = opp.col_grid
+                    eng_cols = _engaged_cols(opp, pairs)
+                    alive_cols = [b for b in grid if b.alive()]
+                    n_alive = len(alive_cols)
+                    n_eng = sum(1 for b in alive_cols if b.col in eng_cols)
+                    frontage_term = (n_eng / n_alive) if n_alive else 0.0          # depth-neutral
+                    width_term = min(1.0, n_eng / PC_FRONTAGE_REF)                  # more engaged columns = more men
+                    opp_frac = PC_FRONTAGE_BLEND * frontage_term + (1.0 - PC_FRONTAGE_BLEND) * width_term
+                else:
+                    opp_frac = len(opp_cells_contact) / max(1, opp_total)
                 result[dmg_key] = result[dmg_key] * max(0.2, opp_frac)
         # v21: SIMULTANEOUS HP — apply damage to both units, THEN recalc_size
         # for both. Prevents size recalc of unit_a from affecting anything
