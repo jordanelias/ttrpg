@@ -35,14 +35,12 @@ sources:
   faction_systems_overview:
     design_doc: designs/factions/faction_systems_overview_v30.md
     canonical_sha__designs__factions__faction_systems_overview_v30_md: "b56962522ab7f71fd82ac63abfae21c539679855"
-    note: "Pass 2 follow-up. Single-pane reference cataloging ~50 faction-touched mechanics across 6 layers (primitives -> peninsular). Points at canon; does not duplicate. ~80% of Pass 2 forward-flags concentrate on faction surface."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2 follow-up"
 
   v18_integration_plan:
     design_doc: designs/audit/2026-05-17-v18-integration/integration_plan_v18.md
     canonical_sha__designs__audit__2026-05-17-v18-integration__integration_plan_v18_md: "0696479924f7fbf4f786ad4a43efeb0e673beb12"
-    note: "Pass 2m. Build roadmap mapping 72 sim/ modules to 12-phase implementation sequence with test plan + validation gates + dependency graph. 23 forward-flags accumulated for Pass 2k. v17→v18 migration discipline."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2m"
     declares_pass_2_content_complete: true
@@ -50,8 +48,6 @@ sources:
   insurgency_pipeline_v30:
     design_doc: designs/world/insurgency_pipeline_v30.md
     canonical_sha__designs__world__insurgency_pipeline_v30_md: "04f91ee43a8041dd692661c2595c6d132f8528ac"
-    note: "ED-881 (2026-05-29): §6.2/§6.3 insurgency dissolution down-path ratified (4-path: military/sponsor-withdrawal/amnesty/persist), RAND-validated; closes GD-3 R-FAIL. Jordan-directed."
-    note: "Pass 2i. GD-3 4-stage layered model: world PT decay → Latent RM → Insurgency → Promoted Faction. GD-1/2/3 cross-bindings. 7 forward-flags."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2i"
     gd_binding: ["GD-1", "GD-2", "GD-3"]
@@ -59,14 +55,12 @@ sources:
   parliamentary_transfer_v18:
     design_doc: designs/provincial/parliamentary_transfer_v30.md
     canonical_sha__designs__provincial__parliamentary_transfer_v30_md: "3029e6a2faeb81fabb1233c3ef420a7a4b7610cd"
-    note: "Pass 2h. v12c §4.4 universal mechanic, validated_n1000_v12c. 4 modes; 8 CB sources. Wraps Parliamentary Vote contest. 3 forward-flags."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2h"
 
   treaty_expiration_v18:
     design_doc: designs/provincial/treaty_expiration_v30.md
     canonical_sha__designs__provincial__treaty_expiration_v30_md: "acd5560ede45a95c83abf3ffeff6d338581371c1"
-    note: "Pass 2h. v12c §4.5 universal mechanic, validated_n1000_v12c, primary Crown-nerf. 90-95%/arc lapse. Re-bind via Senator Outward. 3 forward-flags."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2h"
     related_eds:
@@ -75,7 +69,6 @@ sources:
   knots_unified:
     design_doc: designs/personal/knots_v30.md
     canonical_sha__designs__personal__knots_v30_md: "6571d73ea3018d725092ad853fb9ffa8cec75290"
-    note: "Pass 2g synthesis of Knot mechanic from 9 canon fragments. Forward-flags 3 contradictions to Pass 2k."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2g"
     contradictions_pending:
@@ -87,7 +80,6 @@ sources:
   mass_battle_integration_v18:
     design_doc: designs/provincial/mass_battle_integration_v30.md
     canonical_sha__designs__provincial__mass_battle_integration_v30_md: "b64877b0b473d08728d10c3f8921da1bf40e0b69"
-    note: "Pass 2n. Integration spec for porting sim_mb_06_v22 features. Does not supersede mass_battle_v30."
     canonized: "2026-05-17"
     canonized_pass: "Pass 2n"
 
@@ -112,7 +104,6 @@ systems:
     canonical_sha__designs__scene__combat_v30_md: "9e207cdd883aa2fa559a81dab08a0592447b29d5"
     params: params/combat.md
     canonical_sha__params__combat_md: "878cbe8243fd3ca649087949e84271756edb8360"
-    note: "ED-799 fix — design_doc updated from params/combat.md to designs/scene/combat_v30.md (section-structured doc). params/combat.md retained as params reference."
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__threadwork__threadwork_v30_md: "08e4dcf2657922279bf8b2bf036e465c13572317"
@@ -130,8 +121,6 @@ systems:
     canonical_sha__params__factions_md: "82f37d33c74f81bef27c7d9c43a69c88a28f4141"
     stats: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "2ca08b557f4f61a53c22677d8815f487db0b9321"
-    note: "ED-865/874 ext (2026-05-30): Treaty positioning+ratification (faction_layer §3.3) added to the resolver governed-checks list. Resolution-diagnostic ratification (CIP-1)."
-    note: "ED-865/874 (2026-05-29): deterministic+stochastic resolver ratified as canonical Domain Action resolution; bare-stat-vs-Ob superseded for faction Domain Actions; bare-stat checks migrated (hooks preserved); dice systems unchanged. Jordan-directed."
   victory:
     design_doc: designs/provincial/victory_v30.md
     canonical_sha__designs__provincial__victory_v30_md: "afe6086b287489659b2356bb9dfb2c74d1480127"
@@ -158,7 +147,6 @@ systems:
     canonical_sha__designs__world__geography_v30_infill_md: "18197bd570a375490fb71d9e0b545e0dd56a7b9d"
     march_layer_skeleton: designs/territory/march_layer_v30.md
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
-    note: "geography_v30.md (atomized: index + infill) holds physical-geography canon — terrain regions, RS-band/node-distance matrix, 17-territory roster with starting control, fort levels, sub levels, adjacency. valoria_geography_v30.yaml + valoria_map_v30.svg are the structured/visual companions. Cited as source by sim_verification_ledger.json for territory IDs and counts."
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
     canonical_sha__designs__provincial__mass_battle_v30_md: "2a1211d389341206bba020af585d1ca71fad3322"
@@ -186,22 +174,15 @@ systems:
     canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
-    note__fssloop: "FSS-LOOP-1/2+F2 2026-05-30 res-diag ratif: §1.4 determ Stab<=2 floor (supersedes Ob-4; GD-3 preserved); §5.7 Wealth>=1 Mil re-muster; F2 contested=tgt-stat/non=floor2+1. Detail: master _faction_layer_loop_ratifications_2026-05-30."
     canonical_sha__designs__provincial__faction_layer_v30_md: "405f45e244f40482afa20fd36025bbe610844b1c"
-    note: "ED-865/874 ext (2026-05-30): §3.3 Treaty positioning (contested) + ratification migrated to the deterministic+stochastic resolver; Guarantor +1D->+1 M, Grand Debate degree->margin; Grand Debate social contest stays dice. §5.3 CI vote-contribution cross-ref added. Resolution-diagnostic ratification (CIP-1)."
-    note: "ED-880 (2026-05-29): Varfell 'purely military' prose corrected to acknowledge Cultural Reclamation (Piety-alignment, non-military, VTM-free). VTM/Reformation stay struck; not a control transfer or victory path; sole victory remains Peninsular Sovereignty (GD-1). Authority unchanged."
-    note: "ED-876 (2026-05-28): Trigger-5 Condition-C pool>=6 cliff removed from gate, retained as cost-table escalator. Authority unchanged; mechanical patch only."
   military_layer:
     design_doc: designs/provincial/military_layer_v30.md
     canonical_sha__designs__provincial__military_layer_v30_md: "3f2dc238411478032c6a54637a9c547f605fd104"
   tc_political:
     design_doc: designs/provincial/ci_political_v30.md
     canonical_sha__designs__provincial__ci_political_v30_md: "e22eaedb84c07fdc2141f7b44a692de153e66ab5"
-    note: "CIP-1/2/3 (2026-05-30, resolution-diagnostic ratification): §3.2/§3.3/§3.4 CI political-forum weight made paradigm-consistent (Parliament tally vote-mod, floored at 0; resolver checks margin; no bonus dice). §2.2 Theocracy-Unification VICTORY struck per GD-1 (Mass Seizure = recoverable event). §4.2/§4.3 Govern/Trade annotated resolver-governed."
-    note: "Renamed from tc_political_redesign_v30 — same doc, CI is Theocracy Counter's politically-active form."
   peninsular_strain:
     design_doc: designs/provincial/peninsular_strain_v30.md
-    note__pst1: "PST-1 (2026-05-30, resolution-diagnostic): §6.4 Post-Calamity (MS=0) forward-pointer to the ms_trajectory §5.1 leading warning. Verdict NERS-compliant after PST-1 (only S-consistency fix). All Strain/IP loops capped+damped; accumulators category-exempt."
     canonical_sha__designs__provincial__peninsular_strain_v30_md: "6ec46c37124b3e4342fc8e56e82f4619ff1a126a"
     peninsular_strain_index: designs/provincial/peninsular_strain_v30_index.md
     canonical_sha__designs__provincial__peninsular_strain_v30_index_md: "51b38b8253cf01bff27389c68e79ed72c4554cbd"
@@ -218,7 +199,6 @@ systems:
     canonical_sha__designs__scene__derived_stats_v30_md: "8f9e426b05b5d31fea6006f4fea162cc54bbde3f"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "e4c0912ca4540d63c369b081ebafcc7bfff86867"
-    note: "PP-716, PP-717 — derived_stats_v30.md §4.1 is the authoritative source for Health formula (MW cap at 3) and wound-penalty universality. §14 (4-bucket taxonomy: Derived Values / Tracks / Clocks / Pools) is the authoritative engine-value map across canon docs (ED-830, 2026-05-15). §10.5 holds propagation timescales. §1 documents engine duality (Decision E ED-833, 2026-05-15): discrete and continuous engines are statistically equivalent specifications; params/core.md §Continuous Engine is the canonical spec. params/factions/stats_1_7_scale.md remains supplemental for faction-scale derived stats (Legitimacy/Popular_Support/Influence/Wealth/Military/Intel/Stability per PP-686 v2)." 
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
@@ -233,7 +213,6 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_md: "167b66a4cbbf80c2a9271d7c9e7825629480d01e"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
-    note__fss1: "FSS-1 (2026-05-30, resolution-diagnostic ratification): §2.2 succession resolution split into two stages (Stage-1 contested resolver for WHO leads; Stage-2 deterministic strength-gap G for WHETHER it splits) — fixes the prior variance-driven structural fork (roll-margin<2 fragmented ~50% of near-peer successions regardless of power balance) + role-conflation. Split now tracks claimant power balance (Carolingian/Diadochi/Ottoman precedent), dice a bounded tail. Doc was PROVISIONAL/not-v12c-pinned (ratifiable). §3 example recomputed."
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "9c33df49ccde19bb7ef1da43f80b1932ae92d157"
   royal_assassination_fuse:
     design_doc: params/bg/royal_assassination.md
@@ -246,31 +225,24 @@ systems:
   conflict_architecture:
     design_doc: designs/architecture/conflict_architecture_proposal.md
     canonical_sha__designs__architecture__conflict_architecture_proposal_md: "4f29b47e950acdbb4fafe01b4f1cd30c6685533e"
-    note: "CANON 2026-04-18. Niflhel dissolution + Löwenritter graduated autonomy + Tensions Deck + Royal assassination fuse."
   throughlines_framework:
     design_doc: references/throughlines_meta.md
     canonical_sha__references__throughlines_meta_md: "816e0980955c7277d25121313b2c220d82fdb5da"
     infill: references/throughlines_meta_infill.md
     canonical_sha__references__throughlines_meta_infill_md: "ec86873295dccfd96f154e7d1b90ae28c5d945b9"
-    note: "Canonical vetting authority for all proposals (PP-672, PP-674)."
 
 # ── World trajectory ───────────────────────────────────────────────────
   ms_trajectory:
     design_doc: designs/world/ms_trajectory_v1.md
-    note__pst1: "PST-1 (2026-05-30): §5.1 ED-882 leading-warning window extended to the MS<=12 approach toward MS=0 (deepest tip; falling direction only). No new threshold. Resolution-diagnostic of peninsular_strain."
     canonical_sha__designs__world__ms_trajectory_v1_md: "a2ebeea4801e0dabae5b9edf3fb631fa8995ca91"
-    note: "ED-882 (2026-05-29): §5.1 band hysteresis (recovery edges +8 above collapse) + leading warning signal (within 12 MS); Scheffer/Holling-validated; falling-direction unchanged. Jordan-directed."
-    note: "Canonical for peninsula-wide Mending Stability values at specific historical dates. D-1 (12y emergence) + PR-3 (MS terminology) resolved 2026-04-20. Two provisional elements: colonial revolts §8 gap 1; Himmelenger R-7 §8 gap 2. ED-722/ED-731."
 
 # ── Foundations amendments (canonical philosophy) ──────────────────────
   leap_mechanism:
     design_doc: canon/02_foundations_amendment_leap_mechanism.md
     canonical_sha__canon__02_foundations_amendment_leap_mechanism_md: "c7c416a570de69b5fb32dbafba2625ac7a4d17fe"
-    note: "Canonical for Leap suspension dynamics, knot formation, and operation-type taxonomy (restorative/manipulative/destructive). Supplements canon/01 Amendments 1-4. ED-730."
   self_rendering:
     design_doc: canon/01_foundations_amendment_self_rendering.md
     canonical_sha__canon__01_foundations_amendment_self_rendering_md: "4f0a67e15cae6ce7c8864527ab2000f31fbfc951"
-    note: "Canonical for three-layer being-persistence, Leap definition, Coherence definition, Coherence 0 TS-gated outcomes."
 
 # ────────────────────────────────────────────────────────────────────────
 # All 17 full_stack systems mapped. sim_gate('full_stack') will pass after a
@@ -338,7 +310,6 @@ systems:
     added: '2026-05-01 PP-685 ratification — Conviction migration roster'
   faction_behavior:
     design_doc: designs/provincial/faction_behavior_v30.md
-    note__fsa1: "FSA-1 2026-05-30: §3.1 stale victory example fixed per GD-1."
     canonical_sha__designs__provincial__faction_behavior_v30_md: "c4b6000bcc99c991f155aaf39226346ba8077a15"
     status: canonical
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
@@ -354,7 +325,6 @@ systems:
     added: '2026-05-01 PP-684 ratification — Conviction → axis matrix with Renaissance-grounded calibration rationale'
   faction_state_authoring:
     design_doc: designs/provincial/faction_state_authoring_v30.md
-    note__fsa1: "FSA-1 2026-05-30: §1 GD-1 note (primary_objective=approach not victory). NERS-compliant data doc."
     canonical_sha__designs__provincial__faction_state_authoring_v30_md: "d2febb37cb690ea83ea1121751c681124495b1d2"
     status: provisional
     added: '2026-05-01 PP-686 v2 Phase B Stage 5 — per-faction state authoring'
