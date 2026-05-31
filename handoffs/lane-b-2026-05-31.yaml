@@ -2,12 +2,12 @@ id: lane-b-2026-05-31
 scope: infrastructure
 task:
   skill: valoria-orchestrator
-  description: 'Lane B (Infrastructure/Tooling/Governance), 3-session write-disjoint
-    model. Done this session: enablers (5.11+5.10), 5.5 freshness, 5.6 compliance,
-    1.17 branches (partial), 7.2 hook tests (pure-logic gates), 5.2 all 6 subsystem
-    docs, 5.8 scope-vocab single-source + drift-guard (safe core; ~10 reduction deferred).
-    Remaining: 5.8-reduction (Jordan+non-parallel), 7.2-followup, 5.10-wiring (parked),
-    hygiene, roadmap bump at close.'
+  description: 'Lane B (Infra/Tooling/Governance), 3-session write-disjoint model.
+    Done: enablers(5.11+5.10), 5.5, 5.6, 1.17(partial), 7.2 hook tests, 5.2 all 6
+    subsystem docs, 5.8 scope-vocab safe core, 1.10b CI-threshold fix + roadmap note.
+    Remaining autonomous: 1.18 (retire atoms_pending — own turn), 7.2-followup, 1.20.
+    HELD: 5.8-reduction (lane-c), 1.3 (out of owns). Jordan-gated: 1.17 disposition,
+    CI arch corrections, roadmap structural reconcile. See working_state.'
 owns:
 - skills/valoria-orchestrator/scripts/**
 - references/**
@@ -24,92 +24,107 @@ context_files:
     discipline.
 - path: references/scope_vocabulary.md
   depth: full
-  reason: 5.8 canonical vocab + ~10 reduction PROPOSAL (Jordan-decision merges) +
-    migration discipline.
+  reason: 5.8 canonical vocab + ~10 reduction proposal (Jordan merges) + migration
+    discipline.
 - path: references/subsystems/ci_subsystem.md
   depth: full
-  reason: 5.2 output; carries the 3 CI DRIFT findings for Jordan/arch.
+  reason: 5.2; CI drift findings (2 remain for Jordan-applied arch).
 - path: references/id_reservations.yaml
   depth: full
-  reason: 'Reserved ID blocks (B: ED 940-969 / PP 760-779); parked auto-allocation
-    spec.'
+  reason: Reserved ID blocks; parked auto-allocation spec (5.10).
 - path: skills/valoria-orchestrator/scripts/valoria_hooks.py
   depth: skeleton
-  reason: Gate chain; COMMIT_FORMAT L73 / TASK_REQUIRED_FILES L84 (5.8 targets); FORBIDDEN_TOKEN_EXEMPT_PATHS.
+  reason: Gate chain; COMMIT_FORMAT L73 / TASK_REQUIRED_FILES L84 (5.8); FORBIDDEN_TOKEN_EXEMPT_PATHS.
 - path: skills/valoria-orchestrator/scripts/github_ops.py
   depth: skeleton
-  reason: SESSION_SCOPES L936 (5.8); report_lane; append_to_register L827 = parked
-    5.10 target.
+  reason: SESSION_SCOPES L936; report_lane; append_to_register L827 (5.10); bootstrap
+    session_paths (1.10b shared-bootstrap question).
 working_state:
   done:
-  - 5.11 lane spec + report_lane; 5.10 id_reservations (ED 884 / PP 726). Commit b5d5f5fb2c736047724bede59287318c8e519af8.
-  - '5.5 freshness: 12 stale + 2 missing SHAs synced. Commit ad98144d258f4597dec8c83eee5e12af2f657ed6.'
-  - '5.6 compliance: research/** + sim activity-log exempted. Commit c6465ea16f3b4bd5c67f4d52ada317e6d930578d.'
-  - '1.17 stale branches (PARTIAL, ref op): DELETED cleanup/remove-deprecated (merged);
-    FLAGGED claude/refresh-state-3m7nL (17 commits) + mb-sim-foundation-2026-05-29
-    (1) — NOT deleted.'
-  - '7.2 hook tests (PARTIAL): tests/hooks/test_correctness_gates.py — 33 tests, pure-logic
-    gates. Commit 772dfbb4b2c851c6dad4c9efd50065246c77ee98.'
-  - '5.2 Phase-2 subsystem docs (ALL 6): references/subsystems/*.md, bottom-up. Commit
-    5d34727dd0d38657572f1373cebb08fdee69f6be.'
-  - '5.8 D6 scope-vocab (PARTIAL — safe core, zero live-gate change): references/scope_vocabulary.md
-    (canonical vocab = current 17-member union as single source of truth + per-axis
-    map + ~10 reduction PROPOSAL) + tests/hooks/test_scope_vocabulary.py (drift guard,
-    6 tests). Commit ecef73676665b231520a2dd217bf0e2b3ffbd1f5.'
+  - 5.11 lane spec + report_lane; 5.10 id_reservations. Commit b5d5f5fb2c736047724bede59287318c8e519af8.
+  - 5.5 freshness refresh (12 stale + 2 missing). Commit ad98144d258f4597dec8c83eee5e12af2f657ed6.
+  - 5.6 compliance exemptions (research/** + sim activity-log). Commit c6465ea16f3b4bd5c67f4d52ada317e6d930578d.
+  - '1.17 (PARTIAL, ref op): DELETED cleanup/remove-deprecated (merged). 2 branches
+    FLAGGED (see 1.17-disposition below) — NOT deleted.'
+  - '7.2 hook tests: tests/hooks/test_correctness_gates.py (33). Commit 772dfbb4b2c851c6dad4c9efd50065246c77ee98.'
+  - '5.2 all 6 subsystem docs: references/subsystems/*.md. Commit 5d34727dd0d38657572f1373cebb08fdee69f6be.'
+  - '5.8 scope-vocab single-source + drift-guard (safe core, zero live-gate change):
+    references/scope_vocabulary.md + tests/hooks/test_scope_vocabulary.py (6). Commit
+    ecef73676665b231520a2dd217bf0e2b3ffbd1f5.'
+  - '1.10b (CI active-wiring fix) + roadmap Phase-2 progress note: tools/ci_register_size_check.py
+    THRESHOLDS repointed off dead files (editorial_ledger.yaml/_summary.yaml/file_index_summary.md/editorial_ledger_archive.yaml/session_log_archive.md)
+    -> live editorial_ledger.jsonl (soft 150k; was strict 2k for the deleted summary)
+    + archives/session/session_log_archive_part_7.md; roadmap_state.yaml Phase-2 gained
+    progress_note (6/6 docs done). Commit 665b8f7b6c44dee381169511a79ab201612a8042.'
   next:
-  - '5.8-REDUCTION [JORDAN DECISION + NON-PARALLEL WINDOW]: execute the ~10 reduction
-    per scope_vocabulary.md (merge fix/bugfix/phase/cleanup/skill; canon_check->canon;
-    propose_mechanic/design_proposal->design). REMOVES live commit scopes -> breaks
-    any lane using a dropped scope; COMMIT_FORMAT is the shared gate -> do NOT run
-    while lanes active. Update the 3 constructs + EXPECTED_* in test_scope_vocabulary.py
-    + the doc in ONE commit.'
-  - 'ROADMAP BUMP (lane close): mark Phase-2 6 subsystem docs done + reconcile items_total
-    (1.19b: header 0/11 vs 6 subsystem next_actions). roadmap_state.yaml is close-time/shared
-    per lane spec.'
-  - '7.2-FOLLOWUP: network-gated gates untested — safe_commit, task_gate, assert_bootstrap,
-    context_gate, co-file mutation. Need fetch/commit mocking or a throwaway branch.'
-  - '5.10-WIRING [PARKED]: g.allocate_id(lane,id_class) on id_reservations.next_free
-    + co-commit; ship WITH a tests/hooks/ test. Read append_to_register (github_ops
-    L827) first.'
-  - 'hygiene: 1.3 strike B6 (06_B6_fix.md is designs/audit — NOT Lane B owns; reassign/confirm);
-    1.10b repoint 6 files off editorial_ledger.yaml->.jsonl (PAIRS with CI stale-threshold
-    drift); 1.15 consolidate 3 editorial-archive dirs; 1.18 archive references/atoms_pending/2026-04-25
-    (27 files)+correct arch ~380; 1.20 sweep ~18 inline markers.'
-  solo_outside_parallel_window:
-  - 5.1A SQLite wire OR retire SQL artifact + correct arch.
-  - 5.3 canonical_sources SHA-split -> references/canonical_freshness.yaml (see freshness_subsystem.md)
-    — NEVER during parallel window (co-file SHA hook). ALSO dedup the 5 DUPLICATE-ENTRY
-    paths (5.4 undercounted as 2).
-  - 5.8-reduction (in next[0]) is also non-parallel-window.
+  - '1.18 [READY, own turn]: retire references/atoms_pending/2026-04-25/ — consumed
+    staging, arch-flagged for retirement, NO active external deps (code-search: refs
+    are self/historical/the file index only). Plan: enumerate the tree (git ls-tree
+    -r), safe_commit deletions of ALL paths, regenerate references/valoria_index.sql
+    (tools/regenerate_file_index.py), verify tree gone + index clean. (arch ~380-count
+    correction is Jordan-applied.)'
+  - '7.2-FOLLOWUP [big]: network-gated gate tests — safe_commit, task_gate, assert_bootstrap,
+    context_gate, co-file mutation. Needs github_ops mocking or a throwaway branch.'
+  - '1.20 [scope first]: grep inline markers ([ASSUMPTION:]/[DRIFT:]/[GAP:]/[OPEN)
+    in Lane B owns; resolve/remove stale ones (~18 claimed). Scope to Lane B paths
+    only.'
+  - '5.10-WIRING [PARKED]: g.allocate_id on id_reservations.next_free + co-commit;
+    ship WITH a test. Read append_to_register (github_ops L827) first.'
+  - 'COMPLIANCE: bootstrap now shows 1 NON-BLOCKING warning (appeared after recent
+    commits) — identify which file (likely a references/ doc or roadmap growth vs
+    an atomization_rules threshold); fix or add exemption.'
+  - 'ROADMAP structural reconcile [integration/close]: items_total 11->6 (1.19b),
+    current_phase advance, status. Deferred (entangled; not mid-lane).'
+  held:
+  - '5.8-REDUCTION [HOLD: lane-c active]: ~10 reduction removes live COMMIT_FORMAT
+    scopes (shared gate every lane imports) -> would break lane-c. Execute only when
+    no other lane is active (or Jordan confirms lane-c done). Spec in scope_vocabulary.md.'
+  - '1.3 [HOLD: out of Lane B owns]: 06_B6_fix.md is under designs/audit/ (Lane A
+    / faction-audit territory). Reassign to Lane A.'
+  - '1.15-ACTION [HOLD: partially out of owns]: editorial-archive consolidation spans
+    deprecated/canon/ (canon-side, not Lane B). See 1.15-finding.'
+  investigations:
+  - '1.17-DISPOSITION (do NOT delete; Jordan call): claude/refresh-state-3m7nL = 17
+    SUBSTANTIVE unmerged commits from ~2026-04-20 (ED-717/721/722/723-728 closures
+    w/ Jordan editorial permission, engine_v4_per_settlement proposal, ED-721/722
+    sim re-run on engine_v3, index regens). Question: are ED-717/721-728 + engine_v4
+    captured in main''s current editorial_ledger.jsonl / superseded? If yes -> safe
+    delete; if no -> branch carries unre-done work. mb-sim-foundation-2026-05-29 =
+    1 commit ''mass-battle sim validation foundation M1 gauge + M2 D-B model'' (sim/**
+    = LANE C territory) -> Lane C/Jordan disposition, not Lane B''s to delete.'
+  - '1.15-FINDING: editorial-ledger archives are split across THREE dirs incl. a typo-twin:
+    archives/editorial/ AND archives/editorials/ (both exist) PLUS deprecated/canon/.
+    The archives/editorial(s)/ merge is Lane B (archives/) but the deprecated/canon/
+    piece is canon-side. Recommend: consolidate archives/editorials/ -> archives/editorial/
+    (Lane B, but verify no path citations break first); deprecated/canon/ stays (frozen)
+    or Jordan/Lane-A call.'
 key_values:
 - 'Reserved-block ID maxima: ED 884 (<890), PP 726 (<727).'
-- '5.8: canonical scope vocab = 17-member union of COMMIT_SCOPES(11)+SESSION_SCOPES(7)+TASK_REQUIRED_FILES(10);
-  test_scope_vocabulary.py is the drift guard (a scope change must co-update test
-  EXPECTED_* + scope_vocabulary.md).'
-- '5.8 scope sources: COMMIT_FORMAT valoria_hooks L73 (COMMIT_SCOPES auto-derived
-  L74); SESSION_SCOPES github_ops L936; TASK_REQUIRED_FILES valoria_hooks L84.'
-- FORBIDDEN_TOKEN_EXEMPT_PATHS includes tests/hooks/test_correctness_gates.py (NOT
-  test_scope_vocabulary.py — no forbidden tokens in it).
-- 5.2 docs at references/subsystems/*.md (not in canonical_sources — docs, not freshness-tracked).
-- 'CI DRIFT (ci_subsystem.md, for Jordan/arch): (1) valoria-ci.yml EXISTS + 8 jobs
-  — arch wrongly says CI ''not implemented'' (accurate=built-but-non-enforcing, D0).
-  (2) roadmap 2.6 ''2 yml'' but only 1. (3) ci_register_size_check.py THRESHOLDS key
-  on deprecated pre-JSONL files.'
-- 'tests/hooks now has 3 files: placeholder_names, correctness_gates (33), scope_vocabulary
-  (6). Run: python3 -m pytest tests/hooks -q (pip install pytest --break-system-packages
-  first).'
+- '1.10b scoping: most deprecated-name code-search hits are CORRECT historical mentions
+  (archives/**, deprecated/**, audit workplans, ci_subsystem.md drift note, this handoff)
+  — leave them. Only ACTIVE WIRINGS get repointed; the CI THRESHOLDS dict was the
+  one in Lane B owns. The github_ops bootstrap session_paths (PI lists editorial_ledger_summary.yaml
+  + file_index_summary.md) is a SHARED-bootstrap question — verify whether quick_bootstrap
+  still fetches deprecated summaries; if so, repoint is a non-parallel-window shared-script
+  change.'
+- 5.8 canonical vocab = 17-member union; test_scope_vocabulary.py is the drift guard.
+- 'CI DRIFT status: ci_register_size_check.py THRESHOLDS now FIXED (665b8f7b). Remaining
+  CI drift = Jordan-applied arch corrections (valoria-ci.yml EXISTS+8 jobs vs arch
+  ''not implemented''; roadmap 2.6 ''2 yml'' vs 1 present).'
+- 'tests/hooks: 3 files (placeholder_names, correctness_gates 33, scope_vocabulary
+  6). pytest not preinstalled (pip install pytest --break-system-packages).'
 blockers:
-- 'JORDAN-VERIFY (1.17): claude/refresh-state-3m7nL (17 unmerged commits) + mb-sim-foundation-2026-05-29
-  (1) carry work not in main. Confirm superseded/captured before any deletion.'
-- 'LANE-A LAUNCH NOT CONFLICT-FREE: overlaps the active faction handoff on params/**
-  + designs/{provincial,world,personal}/** (9 paths). Track 1.1 before Lane A opens.
-  Lane B + Lane C clear.'
-- 'SHARED-ENFORCEMENT changes gated to NON-PARALLEL window: 5.3 (canonical_sources
-  SHA-split, co-file hook) AND 5.8-reduction (COMMIT_FORMAT shared commit gate). Do
-  not run while any other lane is active.'
-- 'JORDAN-APPLIED (do not self-commit): PI/arch text — the 3 CI drift corrections,
-  the M3/M4 decisions, the 5.8 reduction merge calls.'
-last_commit: ecef73676665b231520a2dd217bf0e2b3ffbd1f5
-created: '2026-05-31T22:57:43.841811+00:00'
-updated: '2026-05-31T22:57:43.841811+00:00'
+- 'JORDAN-VERIFY (1.17): see investigations — 17 substantive commits (refresh-state)
+  + 1 sim commit (mb-sim, Lane C). Confirm superseded/captured before any deletion.
+  Do NOT blind-delete.'
+- 'LANE-A LAUNCH NOT CONFLICT-FREE: overlaps active faction handoff on params/** +
+  designs/{provincial,world,personal}/** (9 paths). Track 1.1 before Lane A. Lane
+  B + Lane C clear.'
+- 'NON-PARALLEL-WINDOW gated (shared enforcement): 5.3 (canonical_sources SHA-split)
+  + 5.8-reduction (COMMIT_FORMAT). Do not run while another lane is active.'
+- 'JORDAN-APPLIED (do not self-commit): PI/arch text — CI drift arch corrections,
+  M3/M4 decisions, 5.8 reduction merge calls, arch atoms_pending ~380 count.'
+last_commit: 665b8f7b6c44dee381169511a79ab201612a8042
+created: '2026-05-31T23:11:27.895094+00:00'
+updated: '2026-05-31T23:11:27.895094+00:00'
 status: active
