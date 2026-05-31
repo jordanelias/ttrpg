@@ -1432,6 +1432,7 @@ def update_stamina(unit, pairs):
     if not grid:
         return
     eng = _engaged_cols(unit, pairs)
+    joined = len(eng) > 0
     for b in grid:
         if not b.alive():
             continue
@@ -1439,7 +1440,12 @@ def update_stamina(unit, pairs):
             drain = PC_STAMINA_DRAIN / (1.0 + PC_DEPTH_ROTATE * (b.depth - 1))  # deeper -> slower drain
             b.stamina = max(0.0, b.stamina - drain)
         else:
-            b.stamina = min(float(STAMINA_MAX), b.stamina + PC_STAMINA_REST)
+            # Only GENUINE reserves recover: a column not adjacent to any engaged column (truly behind the
+            # fighting), and only while battle is joined. A front-line column momentarily out of this tick's
+            # contact set is NOT a reserve and must not spuriously heal (which masked front fatigue).
+            adjacent_to_front = any(abs(b.col - ec) <= 1 for ec in eng)
+            if joined and not adjacent_to_front:
+                b.stamina = min(float(STAMINA_MAX), b.stamina + PC_STAMINA_REST)
 
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     """Resolve all contact pairs.
