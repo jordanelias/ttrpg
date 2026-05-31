@@ -15,7 +15,7 @@
 #   design_threads[], integrity_actions_open[] (informational only).
 
 schema_version: 1
-updated: 2026-05-29
+updated: 2026-05-30
 source_workplan: "valoria-audit-workplan.md (Pass 2) + valoria-master-workplan-2026-05-29.md (consolidation pass)"
 current_phase: 2
 
@@ -42,7 +42,7 @@ phases:
       - "2.1 handoff subsystem (read_all_handoffs, validate_handoff, write/archive)"
       - "2.2 checkpoint subsystem (write/close/read/prompt_resume)"
       - "2.3 compliance subsystem (compliance_check, print-only since 2026-05-10)"
-      - "2.4 freshness subsystem (freshness_gate, 115 sources, 10-min cache)"
+      - "2.4 freshness subsystem (freshness_gate, 115 sources, 10-min cache) -- incl. queued SHA-split (2026-05-30): move the 115 canonical_sha fields out of canonical_sources.yaml -> references/canonical_freshness.yaml (writer tools/freshness_gate.py), dropping canonical_sources to ~5k declarations on the hot bootstrap path. canonical_sources at INTERIM 12k cap (was 9k/99.5%; 633f5e57). Do with/after documenting this subsystem -- not a blind refactor."
       - "2.5 per-session-log subsystem (session_logs/ + index + pointer) -- D5 resolved: complete this"
       - "2.6 CI subsystem (4 ci_*.py + 2 workflow yml)"
   - id: 3
