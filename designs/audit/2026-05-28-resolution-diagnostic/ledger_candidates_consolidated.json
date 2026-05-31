@@ -647,6 +647,23 @@
         "Excommunication degree effects 'faction L ±1' reconcile to Mandate / per-territory L (noted inline, not yet mechanized)"
       ],
       "vetoable": "L→Mandate tactic reconciliation logged Jordan-vetoable."
+    },
+    "LPS-1b_self_review_remediation": {
+      "trigger": "[SELF-AUTHORED — bias risk] adversarial self-review of the LPS redesign (skill guardrail).",
+      "confirmed_sound": [
+        "per-territory population is NOT a numeric tracked stat (categorical at settlement level) -> plain-mean Mandate justified; temperament's population-weighting also cannot compute a weight, so both reduce to plain mean",
+        "demotion COMPLETE: 0 faction-level L/PS residuals in victory_v30/parliamentary_transfer_v30/ci_political_v30/faction_layer_v30 (11 docs now checked total); Mandate consumers verified reading the aggregate (faction_layer §5.3 'votes = current Mandate'; ci_political 'Church Mandate >= 4')",
+        "feedback ordering non-circular (aggregate->Mandate->feedback adjusts territories for next Accounting); Stage-4 confirmed convergent"
+      ],
+      "fix_applied": "settlement_layer §1.8 += (1) zero-territory case: a faction controlling 0 territories has Mandate 0 (empty-set mean defined as 0), consistent with emergent/embedded factions (Restoration, Lowenritter pre-coup) seeded at L/PS 0 in faction_state_authoring §8; (2) aggregation note: plain mean; temperament (faction_canon §3.4) is the sibling rollup and is population-weighted in text, but neither has numeric per-territory population, so both use plain mean in practice — population-weighting deferred for both (LPS-3).",
+      "still_vetoable": "grain=territory, feedback=mean-reverting, aggregation=plain-mean (now justified vs the temperament sibling)."
+    },
+    "_F4_disposition_2026-05-30": {
+      "finding": "F4 (resolution_diagnostic_faction L134/L191/L229): absolute −1 stat damage has NON-UNIFORM probability impact (sharper at mid-pool than high-pool, meaningless at the 2D floor) — Lesson 2, under the BARE d10 success-pool.",
+      "disposition": "RESOLVED-BY-RESOLVER (ED-865/874). The ratified deterministic+stochastic resolver P_success=clamp(0.50+0.10·M,0.05,0.90), M=acting_stat−difficulty, makes a −1 stat damage = −0.10 P_success CONSTANT across stat level (within clamp) — uniform impact by construction, exactly the Lesson-2 goal. Same mechanism that closed the sigma-leverage non-uniformity.",
+      "residual": "Live only for the bare-stat faction tactics NOT yet migrated to the resolver (the sim-deferred set: PT-PARL-1, TE-1, Royal Decree, Sovereign Authority, Private Collection) — and those are ALREADY queued for resolver migration, which closes F4 there too. F4 is SUBSUMED by the pending resolver-migration set, not a separate fix.",
+      "no_new_mechanic": "The diagnostic's Option-(a) 'convert stat-damage to proportional' is now redundant — adding it would fail NERS-N/E (over-engineering a problem the resolver already solves). F4 requires NO independent ratification.",
+      "out_of_faction_scope": "Personal-combat 'flat −1D wound at 5D floor' is a separate Lesson-2 candidate (personal-combat dice, skill initial hypotheses) — not this cluster."
     }
   }
 }
