@@ -737,6 +737,14 @@ class Subunit:
     @property
     def troop_count(self): return TROOPS_PER_TIER[self.tier]
 
+    @property
+    def charge_pen(self):
+        # Increment 5: intrinsic charge penetration (ranks punched through on impact).
+        # Cavalry charge is the stubbed mechanic being wired ("noted but not wired").
+        # [ASSUMPTION: cavalry charge_pen=3 ranks — basis: real shock-cavalry penetration of
+        #  thin lines; absorbed by deep formations (pike/deep infantry). Class-B, Jordan-vetoable.]
+        return 3 if self.troop_type == 'cavalry' else 0
+
     def cells(self):
         op = oriented_pattern(self.shape, self.tier, self.advance_dir)
         result = []
@@ -1373,6 +1381,18 @@ def _fatigue_sigma(unit, engaged_cols):
     frac = sum((b.stamina / STAMINA_MAX) * b.density for b in blocks) / tot
     return PC_STAM_SIGMA * (frac - 1.0)
 
+def _defender_depth(unit, contact_cells):
+    """Increment 5: representative depth of the defender's engaged columns (charge absorption).
+    Deeper columns absorb more of a charge's penetration."""
+    grid = getattr(unit, 'col_grid', None)
+    if not grid:
+        return 0.0
+    cols = set(c for r, c in contact_cells)
+    blocks = [b for b in grid if b.col in cols and b.alive()]
+    if not blocks:
+        return 0.0
+    return sum(b.depth for b in blocks) / len(blocks)
+
 def update_stamina(unit, pairs):
     """Increment 3: drain stamina of engaged columns (damped by depth — deeper rotates fresh
     ranks forward, so it tires slower), rest non-engaged columns. Depth is the fatigue counter."""
@@ -1483,8 +1503,17 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             if PUNCTURE_ENABLED:
                 a_mom = _momentum_speed(atom_a, p["a_cells"])
                 b_mom = _momentum_speed(atom_b, p["b_cells"])
-                if a_mom > b_mom:   ns_a += min(PUNCTURE_CAP, int(a_mom - b_mom)) * SIGMA_PER_D
-                elif b_mom > a_mom: ns_b += min(PUNCTURE_CAP, int(b_mom - a_mom)) * SIGMA_PER_D
+                a_pen = (a_mom - b_mom) if a_mom > b_mom else 0.0
+                b_pen = (b_mom - a_mom) if b_mom > a_mom else 0.0
+                if PER_CELL:
+                    # Increment 5: intrinsic charge (cavalry) presses while out-momentuming; the
+                    # DEFENDER's engaged-column depth absorbs the charge — deep absorbs, thin is punched through.
+                    if a_pen > 0: a_pen += atom_a.charge_pen
+                    if b_pen > 0: b_pen += atom_b.charge_pen
+                    a_pen = max(0.0, a_pen - _defender_depth(unit_b, p["b_cells"]))
+                    b_pen = max(0.0, b_pen - _defender_depth(unit_a, p["a_cells"]))
+                if a_pen > 0: ns_a += min(PUNCTURE_CAP, int(a_pen)) * SIGMA_PER_D
+                if b_pen > 0: ns_b += min(PUNCTURE_CAP, int(b_pen)) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA
