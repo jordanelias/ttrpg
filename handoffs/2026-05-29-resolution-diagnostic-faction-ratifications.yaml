@@ -16,7 +16,7 @@ task:
     treaty_expiration (tuned random event, intended), faction_canon (consolidation
     artifact). The 10 diagnostic verdicts are in designs/audit/2026-05-28-resolution-diagnostic/ledger_candidates_consolidated.json
     (keys _<system>_diagnostic_2026-05-30).'
-last_commit: 72111826761ee47e2357c0e888f35106912af92e
+last_commit: b339335cb4a6f085955c90c32a3a5862f5a85e2e
 owns:
 - designs/audit/2026-05-28-resolution-diagnostic/**
 - params/factions/stats_1_7_scale.md (Domain Action Resolution section)
@@ -223,21 +223,25 @@ working_state:
     strictness already read aggregate_L/PS). geography ''territory'' T1-T17 kept as
     province-tier label (option 2) + reconciliation note in §1.8. All verified live.'
   remaining:
-  - 'FLAGGED (separate balance decision, NOT blocking): Mandate x20 / 0-7 meter calibration
-    -- Legitimacy meter = Mandate x20 spans 0-140 at Mandate 0-7; if a 0-100 meter
-    is intended, multiplier needs recalibration AND the -25/-30/-20 event magnitudes
-    recalibrate with it (cascading) -> separate pass. Flagged in derived_stats L291
-    + §1.8, not changed.'
-  - 'Jordan count-correction (delivered in chat; canon already correct): 14 provinces
-    in 3 duchies + Himmelenger+Schoenland specials; Askeheim = geography T15 Uncontrolled
-    Calamity epicentre. ''Valn'' peninsula name not found in geography reads (gap).'
-  - Workplan artifact valoria_forward_workplan_2026-05-30.md uncommitted -> reconcile
-    into references/roadmap_state.yaml.
-  - Master ledger _lps_structural_redesign_2026-05-30 entry not updated to mark LPS-2e
-    done (no create_file_graphql helper; handoff carries state).
-  - 'Untouched diagnostic systems (skill hypotheses): personal combat (-1D wound at
-    5D floor), social contest, mass battle, investigation, peninsula/victory, threadwork
-    Coherence.'
+  - 'Hafenmark Sovereign Authority Doctrine (bare Mandate vs Ob 4, once/arc) NOT migrated
+    -- same bare-stat class + the §3B 0%-wall example, but the audit §2 includes it
+    in F-RESID while §7/ED-885 listed only 4 (excludes it). Flagged in stats_1_7_scale
+    governed-checks note. Jordan call: migrate too (M=Mandate-6) or hold (Hafenmark-identity
+    high bar).'
+  - 'F-BAL [P2 blocker, ED-886]: parliamentary_transfer + treaty re-bind -- resolver-correct
+    but balance-load-bearing (floor 0.05 shifts v12c N=1000 equilibrium). Needs N=1000
+    re-sweep on the resolver + re-tune before migrating. OPEN TRADE-OFF, Jordan balance
+    decision.'
+  - sigma-leverage engine itself (engine/sigma_leverage_engine_armature.md) is Class-B,
+    NOT canonized -- pending Jordan + Omega vetting (§H) before it can be a canon
+    engine spec; the faction d+sigma resolver (ED-865/874) is its only canon instance.
+  - 'F-LESS2 [P3]: open Lesson-2 residual (prior faction-layer ''F4'' absolute modifier)
+    -- carried forward, not closed.'
+  - ED-885/886/887 staged in faction_sigma_engine_audit §8 + editorial_ledger.jsonl
+    pending (no append helper this session); ED-885 now APPLIED.
+  - 'Untouched diagnostic systems: personal combat (-1D wound at 5D floor -- the engine''s
+    textbook port candidate, §G), social contest (healthy, do-not-port), mass battle,
+    investigation, peninsula/victory, threadwork Coherence.'
   lps_2e_audit_patch: 'VERIFIED LIVE on HEAD=72111826. Audit of the LPS-2e re-grain
     found + fixed: (a) a missed SECOND Mandate-aggregation spec in faction_behavior
     §4 (was old plain-mean/territory) -> W-weighted settlement means + size-weighted
@@ -257,6 +261,18 @@ working_state:
     6v5, bounded [0,7], convergent feedback). Reversibility: §1.8 single source, consumers
     point at it. Simplicity: Weight=3 transparent terms, no over-engineering. Commits
     30a8c643/f69546f9/8a35173d/72111826 all verified live.'
+  sigma_engine_followups: '(1) Mandate x20 meter RESOLVED (3e2dc1c2): not a defect
+    -- derived_stats §3 sets multipliers per-system (Treasury x100/Reputation x15/Discipline
+    x10/Legitimacy x20), no 0-100 master scale; sigma engine governs Mandate RESOLUTION
+    (d+sigma resolver), not the meter buffer. Removed my ungrounded 0-100 flag. (2)
+    F-RESID MIGRATED (b339335c, ED-885, Jordan-ratified): Royal Decree (M=Mandate-2),
+    Excommunication (contested faction-leader M=Mandate-target Mandate; non-leader
+    M=Mandate-2), Private Collection (M=Intel-2), Economic Leverage (contested M=Wealth-target
+    Wealth) moved to the d+sigma resolver in stats_1_7_scale + faction_canon; D=max(1,(O-1)*2);
+    contested=target stat (also fixed the Excommunication summary-vs-detail difficulty
+    drift); degree tables preserved; governed-checks list extended (closes F-RESID/S
+    self-contradiction). Numerically confirmed: uniform +10pp/pt, floor 0.05, contested
+    underdog 5% (was ~0%).'
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -287,7 +303,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T06:23:16.465663+00:00'
+updated: '2026-05-31T06:52:38.879202+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
