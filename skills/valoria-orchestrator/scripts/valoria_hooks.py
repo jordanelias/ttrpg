@@ -66,6 +66,7 @@ FORBIDDEN_TOKEN_EXEMPT_PREFIXES = (
 FORBIDDEN_TOKEN_EXEMPT_PATHS = (
     'skills/prose-writer/scripts/consistency_check.py',
     'skills/valoria-orchestrator/scripts/valoria_hooks.py',
+    'tests/hooks/test_correctness_gates.py',   # gate test fixtures contain bare 'Galbados' by design
 )
 
 # Informational — enforcing gate is COMMIT_FORMAT regex below
