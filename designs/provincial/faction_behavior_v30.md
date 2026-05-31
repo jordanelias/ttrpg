@@ -226,7 +226,7 @@ A faction whose stated Mission contradicts its role's expected Convictions reads
 
 > **[SUPERSEDED-BY LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30 — resolves the §5.2 design-issue faction_canon flagged.]** Popular Support is a **per-territory** value (0–7), not faction state. The ΔPopular_Support dynamics below apply **per controlled territory**; the faction's **aggregate Popular Support** (mean across controlled territories) feeds Mandate. Per-territory model + aggregation are canonical in settlement_layer §1.8.
 
-A scalar `[0, 7]` tracking active populace backing **in a territory**. Updates per Accounting (per controlled territory):
+A scalar `[0, 7]` tracking active populace backing **in a settlement**. Updates per Accounting (per controlled settlement):
 
 ```
 ΔPopular_Support per season =
@@ -282,7 +282,7 @@ Faction's effective temperament is recomputed at Accounting from per-territory c
 
 ### §3.5 Legitimacy
 
-> **[SUPERSEDED-BY LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** Legitimacy is a **per-territory** value (0–7), not faction state. The ΔLegitimacy dynamics below apply **per controlled territory**; the faction's **aggregate Legitimacy** (mean across controlled territories) feeds Mandate (settlement_layer §1.8).
+> **[SUPERSEDED-BY LPS-1 (settlement_layer_v30 §1.8), Jordan ruling 2026-05-30.]** Legitimacy is a **per-settlement** value (0–7), not faction state. The ΔLegitimacy dynamics below apply **per controlled territory**; the faction's **aggregate Legitimacy** (mean across controlled territories) feeds Mandate (settlement_layer §1.8).
 
 A scalar `[0, 7]` tracking populace acceptance **in a territory**. Slower-moving than Popular Support; integrates over many seasons.
 
@@ -323,7 +323,7 @@ strictness(faction) = clamp(
   , 0, 1)
 ```
 
-with `base_strictness = 0.4` default. **LPS-1:** Legitimacy/Popular_Support here are the faction's territory-mean aggregates (settlement_layer §1.8), not faction-level stats.
+with `base_strictness = 0.4` default. **LPS-1:** Legitimacy/Popular_Support here are the faction's settlement-level W-weighted aggregates (settlement_layer §1.8), not faction-level stats.
 
 | Legitimacy | Popular Support | Strictness | Effect |
 |---|---|---|---|
