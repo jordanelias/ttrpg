@@ -3,10 +3,9 @@ scope: infrastructure
 task:
   skill: valoria-orchestrator
   description: 'Lane B (Infrastructure/Tooling/Governance) of the 3-session write-disjoint
-    operating model. Launch increment committed the enablers: references/lane_assignments.yaml
-    (5.11), references/id_reservations.yaml (5.10 data+protocol), and the bootstrap
-    Status-Block lane print (github_ops.report_lane). Remaining Lane B queue parked
-    below in priority order.'
+    operating model. Done: enablers (5.11 lane spec + report_lane, 5.10 id_reservations),
+    5.5 freshness refresh, 5.6 compliance exemption. Both standing bootstrap warnings
+    (freshness, compliance) now clear. Remaining Lane B queue parked below.'
 owns:
 - skills/valoria-orchestrator/scripts/**
 - references/**
@@ -19,86 +18,74 @@ owns:
 context_files:
 - path: references/lane_assignments.yaml
   depth: full
-  reason: Lane B owns this; defines all three lanes' owns/ranges/scopes/entry-items
-    + launch protocol + shared-file discipline.
+  reason: Lane B owns; all-lane owns/ranges/scopes/entry-items + launch protocol +
+    shared-file discipline.
 - path: references/id_reservations.yaml
   depth: full
-  reason: Reserved ID blocks; Lane B allocates ED 940-969 / PP 760-779; auto-allocation
-    wiring spec inside (parked).
+  reason: 'Reserved ID blocks (B: ED 940-969 / PP 760-779); auto-allocation wiring
+    spec inside (parked).'
+- path: references/atomization_rules.yaml
+  depth: full
+  reason: Compliance size policy; 5.6 added research/** + sim activity-log skip exemptions.
 - path: skills/valoria-orchestrator/scripts/github_ops.py
   depth: skeleton
-  reason: report_lane added (quick_bootstrap prints the declared lane). append_to_register
-    (L827) is the target of the parked 5.10 auto-allocation wiring.
+  reason: report_lane added; append_to_register (L827) is the target of the parked
+    5.10 auto-allocation wiring.
 - path: skills/valoria-orchestrator/scripts/valoria_hooks.py
   depth: skeleton
-  reason: Gate chain (safe_commit/pre_commit_gate/task_gate) Lane B operates under;
-    the hook tests in 7.2 target these functions.
+  reason: Gate chain Lane B operates under; 7.2 hook tests target these.
 - path: references/roadmap_state.yaml
   depth: full
-  reason: Lane B owns roadmap reconciliation (1.19); roadmap edits happen at lane
-    close.
+  reason: Lane B owns roadmap reconciliation (1.19); edits at lane close.
 working_state:
   done:
-  - 5.11 lane spec committed (references/lane_assignments.yaml) + Status-Block lane
-    print (report_lane, env VALORIA_LANE or /home/claude/.valoria_lane).
-  - 5.10 id_reservations.yaml committed (reserved blocks A/B/C; verified vs live max
-    ED=884, PP=726). Auto-allocation half PARKED with full spec (see next).
-  - Both landed in commit b5d5f5fb2c736047724bede59287318c8e519af8.
+  - 5.11 lane spec + report_lane Status-Block line; 5.10 id_reservations (verified
+    ED 884 / PP 726). Commit b5d5f5fb2c736047724bede59287318c8e519af8.
+  - '5.5 freshness refresh: 12 stale SHAs re-synced + 2 missing (combat_v30, derived_stats_v30)
+    filled; bootstrap now FRESHNESS OK. Commit ad98144d258f4597dec8c83eee5e12af2f657ed6.'
+  - '5.6 compliance: research/** + tests/sim/**/session_activity_log.md exempted (skip)
+    above the catch-all; 3 standing warnings cleared (verified cc._match_rule + bootstrap
+    COMPLIANCE OK). Commit c6465ea16f3b4bd5c67f4d52ada317e6d930578d.'
   next:
   - '5.2 document undocumented subsystems (roadmap 2.1-2.6: handoff / checkpoint /
-    compliance / freshness / per-session-log / CI) — the stated current phase.'
-  - 5.5 run tools/freshness_gate.py --update to clear the 14 stale canonical SHAs
-    (immediate; writes canonical_sources.yaml — safe SOLO while no A/C running, else
-    shared-file retry).
-  - '5.6 compliance: trim/split the 3 oversized .md OR add a research/**+sim-log size-exemption
-    to references/atomization_rules.yaml OR document advisory-only and stop surfacing.'
+    compliance / freshness / per-session-log / CI) — stated current phase.'
   - 5.8 D6 scope-vocab unification (TASK_REQUIRED_FILES 10 / COMMIT_SCOPES 11 / SESSION_SCOPES
-    7 -> one ~10-set; keep lane scopes editorial/design/infrastructure/simulation/godot
-    as first-class commit scopes).
-  - 7.2 hook test coverage ~1/29 -> tests for safe_commit, task_gate, assert_unique_ids,
-    jsonl_ledger_gate, sim_gate, context_gate, forbidden_token_gate, co-file rules
-    — worst-first.
-  - '5.10-WIRING [PARKED]: add g.allocate_id(lane,id_class) reading/incrementing id_reservations.next_free
-    + co-commit (CollisionError-retry); optionally have append_to_register call it.
-    SHIP WITH a tests/hooks/ test (two sequential allocations -> N, N+1; out-of-block
-    allocation raises) per arch <migration_and_growth>. Read append_to_register (github_ops
-    L827) + atomic_commit auth flow first. Parked because editing a commit primitive
-    with hooks ~1/29 tested warrants the test alongside; the file + manual allocation-from-block
-    already deliver the collision fix.'
-  - 'hygiene: 1.3 strike stale B6 from audit docs (06_B6_fix.md + refs); 1.10b repoint
-    6 skill/tool files off editorial_ledger.yaml -> .jsonl; 1.15 consolidate 3 editorial-archive
-    dirs; 1.17 delete 3 stale branches; 1.18 archive references/atoms_pending/2026-04-25
-    (27 files) + correct arch''s ~380 count; 1.19 roadmap staleness (combat-v32 status;
-    Phase-2 0/11 -> enumerates 6); 1.20 sweep ~18 inline markers.'
+    7 -> one ~10-set; keep lane scopes first-class).
+  - 7.2 hook tests ~1/29 -> safe_commit, task_gate, assert_unique_ids, jsonl_ledger_gate,
+    sim_gate, context_gate, forbidden_token_gate, co-file — worst-first.
+  - '5.10-WIRING [PARKED]: g.allocate_id(lane,id_class) reading/incrementing id_reservations.next_free
+    + co-commit; ship WITH a tests/hooks/ test. Read append_to_register (github_ops
+    L827) first.'
+  - 'hygiene: 1.3 strike B6 from audit docs; 1.10b repoint 6 files off editorial_ledger.yaml->.jsonl;
+    1.15 consolidate 3 editorial-archive dirs; 1.17 delete 3 stale branches; 1.18
+    archive atoms_pending/2026-04-25 (27 files)+correct arch ~380 count; 1.19 roadmap
+    staleness; 1.20 sweep ~18 inline markers.'
   solo_outside_parallel_window:
-  - 5.1A SQLite wire (index_bootstrap into quick_bootstrap, ~3-line paste G12a) OR
-    retire the SQL artifact + correct arch.
-  - 5.3 canonical_sources SHA-split (115 canonical_sha -> references/canonical_freshness.yaml
-    via tools/freshness_gate.py) — NEVER during the parallel window (full-file restructure
-    vs Lane A row edits = semantic conflict).
+  - 5.1A SQLite wire (index_bootstrap into quick_bootstrap) OR retire SQL artifact
+    + correct arch.
+  - 5.3 canonical_sources SHA-split -> references/canonical_freshness.yaml — NEVER
+    during parallel window. ALSO dedup the 5 DUPLICATE-ENTRY paths found this session
+    (npc_behavior_v30, settlement_layer_v30, params/bg/clocks.md, params/contest.md,
+    stats_1_7_scale); workplan 5.4 undercounted as 2 — actual 5.
 key_values:
-- 'Verified live max this session: ED=884 (<890 OK), PP=726 (<727 OK) — every reserved
-  block is clear of existing IDs.'
-- 'Lane B owns is disjoint from active handoffs #1 (faction: designs/+params) and
-  #2 (combat-armature: designs/audit). check_handoff_conflicts(Lane B writes)=[] verified
-  pre-commit.'
-- 'Lane declaration: env VALORIA_LANE=<A|B|C> or /home/claude/.valoria_lane; report_lane
-  prints the line in the Status Block (silent if undeclared, graceful if spec absent).'
-- 'Lane launch-readiness: B=ready, C=ready, A=NOT ready (overlaps faction handoff
-  — see blockers).'
+- 'Reserved-block ID maxima verified: ED 884 (<890), PP 726 (<727).'
+- 'check_handoff_conflicts(Lane B writes)=[] verified; Lane B owns disjoint from active
+  handoffs #1/#2.'
+- Lane declared via env VALORIA_LANE or /home/claude/.valoria_lane; report_lane prints
+  the Status-Block line.
+- 'Bootstrap warnings cleared this session: FRESHNESS 14->0 (5.5); COMPLIANCE 3->0
+  (5.6).'
+- '5.3/5.4 FINDING: canonical_sources.yaml = 110 unique of 115 pairs -> 5 duplicate-entry
+  paths (workplan said 2); file at 8.3k/12k tokens (not near-cap).'
 blockers:
-- 'LANE-A LAUNCH NOT CONFLICT-FREE YET: Lane A owns params/** + designs/{provincial,world,personal}/**
-  which fnmatch-overlap active handoff #1 (faction) owned docs (verified: 9 paths).
-  Track 1.1 (park #2, reconcile #1) must run before Lane A opens, else check_handoff_conflicts(Lane
-  A) is non-empty. Lane C and Lane B are clear now.'
-- 'SHARED FILE: references/canonical_sources.yaml is co-claimed by handoff #1 (co-file
-  SHA hook). Encoded as shared_not_exclusive in lane_assignments.yaml. Lane B must
-  NOT run 5.3 (SHA-split) during the parallel window. Design-doc edits cannot batch
-  SHAs (the hook blocks the commit without canonical_sources co-update).'
-- 'JORDAN-APPLIED (do not self-commit): PI/arch text edits. Optional convenience proposal
-  — the bootstrap script could `export VALORIA_LANE` so report_lane needs no manual
-  env set; proposed, not committed.'
-last_commit: b5d5f5fb2c736047724bede59287318c8e519af8
-created: '2026-05-31T21:19:40.555220+00:00'
-updated: '2026-05-31T21:19:40.555220+00:00'
+- 'LANE-A LAUNCH NOT CONFLICT-FREE: Lane A owns params/** + designs/{provincial,world,personal}/**
+  overlapping the active faction handoff (9 paths). Track 1.1 must run before Lane
+  A opens. Lane B + Lane C clear now.'
+- 'SHARED FILE: references/canonical_sources.yaml co-claimed by handoff #1 (co-file
+  SHA hook). Lane B must NOT run 5.3 SHA-split during the parallel window.'
+- 'JORDAN-APPLIED (do not self-commit): PI/arch text. Optional proposal — bootstrap
+  script could export VALORIA_LANE so report_lane needs no manual env.'
+last_commit: c6465ea16f3b4bd5c67f4d52ada317e6d930578d
+created: '2026-05-31T21:53:22.429567+00:00'
+updated: '2026-05-31T21:53:22.429567+00:00'
 status: active
