@@ -345,3 +345,9 @@ Thread-during-battle (mass_battle_v30 §A.7 Phase 4) NOT wired in this
 batch. Engine has no practitioner-attached-to-unit schema; threadwork_check
 in massbattle.py is explicitly empty pending canonical design (G-9 marker).
 Reclassified from "no canon dep" wire-up to canon-design item.
+
+## Pass 2l Stub Infill — Lane C (2026-05-31)
+
+| Module | Depends On | Canonical Sources | Status |
+|---|---|---|---|
+| `sim/personal/parliamentary_vote.py` | `contest` (§6 threshold constants); `dice_engine`; `game_state` | `designs/scene/social_contest_v30.md §10` (BG Parliamentary Vote); `canon/02_canon_constraints.md §B GD-3` | **verified** — §10 BG faction-scale vote: per-side Mandate(=Faction.L) pool + genre/audience +1D, TN7 roll, movement = net−resistance, Persuasion-Track 7 pass/3 fail/4–6 committee, Total Victory ≥9/≤1 → losing dominant Mandate −1. GD-3 enforced (extra-parliamentary excluded). Reuses contest §6 constants (no redefine). Smoke 4/4 (pass / committee / fail+total-victory / zero-zero), no exceptions. 11 ledger entries. |

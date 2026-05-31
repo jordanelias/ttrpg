@@ -8,7 +8,7 @@
       "sim_variable": "LETHALITY_SCALE",
       "value": 1.25,
       "canonical_source": "designs/provincial/mass_battle_integration_v30.md",
-      "section": "§3.1 LETHALITY_SCALE restoration (Audit Issue 1, highest severity)",
+      "section": "\u00a73.1 LETHALITY_SCALE restoration (Audit Issue 1, highest severity)",
       "quoted_text": "Damage formula applies LETHALITY_SCALE multiplier",
       "calibration": {
         "target_band_per_turn_casualty_pct": [
@@ -34,309 +34,309 @@
           16.03
         ]
       },
-      "notes": "Spec §3.1 stated initial value 0.10 with \"iterate within 0.05-0.20\" PROVISIONAL license. Calibrated value 1.25 is outside that range because PP-233 formula correction (continuous net_successes) raises baseline lethality from 3.96%/turn (discrete-bucket model at L=1.0) to 13.38%/turn (continuous at L=1.0). With the correct formula shape, LETHALITY_SCALE acts as fine-tune around ≈1.0 rather than gross compensation. See commit body for full diagnosis."
+      "notes": "Spec \u00a73.1 stated initial value 0.10 with \"iterate within 0.05-0.20\" PROVISIONAL license. Calibrated value 1.25 is outside that range because PP-233 formula correction (continuous net_successes) raises baseline lethality from 3.96%/turn (discrete-bucket model at L=1.0) to 13.38%/turn (continuous at L=1.0). With the correct formula shape, LETHALITY_SCALE acts as fine-tune around \u22481.0 rather than gross compensation. See commit body for full diagnosis."
     },
     {
       "sim_variable": "PP-233 damage formula shape",
       "value": "net_successes * (1 + Power) - DR",
       "canonical_source": "params/mass_combat.md",
       "section": "Core Formula (PP-233)",
-      "quoted_text": "Damage dealt | successes × (1 + Power)",
-      "notes": "v17-v22 implemented as discrete DAMAGE_BY_DEGREE buckets {Overwhelming:1+p, Success:p, Partial:1, Failure:0}. PP-233 specifies continuous successes × (1+Power). Step 4.2 corrects implementation to match PP-233. DAMAGE_BY_DEGREE dict retained as narrative degree label for downstream logging only. DR retained as damage-reduction subtractor: PP-233 originally folded DR into H (Health per Size); v22 HP model uses Size × BLOCK_SIZE and drops H entirely, leaving DR-as-reduction as the only surviving DR effect."
+      "quoted_text": "Damage dealt | successes \u00d7 (1 + Power)",
+      "notes": "v17-v22 implemented as discrete DAMAGE_BY_DEGREE buckets {Overwhelming:1+p, Success:p, Partial:1, Failure:0}. PP-233 specifies continuous successes \u00d7 (1+Power). Step 4.2 corrects implementation to match PP-233. DAMAGE_BY_DEGREE dict retained as narrative degree label for downstream logging only. DR retained as damage-reduction subtractor: PP-233 originally folded DR into H (Health per Size); v22 HP model uses Size \u00d7 BLOCK_SIZE and drops H entirely, leaving DR-as-reduction as the only surviving DR effect."
     },
     {
       "sim_variable": "BLOCK_SIZE",
       "value": 100,
       "canonical_source": "designs/provincial/mass_battle_v30.md",
-      "section": "§A.3 Troop count",
+      "section": "\u00a7A.3 Troop count",
       "quoted_text": "1 Size = block_size soldiers",
-      "notes": "HP = TroopCount = Size × BLOCK_SIZE. Company scale: Size 4 unit = 400 HP. Pre-existing constant; ledgered in Step 4.2 because LETHALITY_SCALE calibration depends on the HP scale this constant produces."
+      "notes": "HP = TroopCount = Size \u00d7 BLOCK_SIZE. Company scale: Size 4 unit = 400 HP. Pre-existing constant; ledgered in Step 4.2 because LETHALITY_SCALE calibration depends on the HP scale this constant produces."
     },
     {
       "sim_variable": "PROSPERITY_TO_LOCAL_ECONOMY",
       "value": 50,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.3 Settlement Stats",
-      "quoted_text": "Prosperity × 50"
+      "section": "\u00a71.3 Settlement Stats",
+      "quoted_text": "Prosperity \u00d7 50"
     },
     {
       "sim_variable": "DEFENSE_BASE_TO_GARRISON",
       "value": 20,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.3 Settlement Stats",
-      "quoted_text": "Defense × 20 + Fort Level × 30"
+      "section": "\u00a71.3 Settlement Stats",
+      "quoted_text": "Defense \u00d7 20 + Fort Level \u00d7 30"
     },
     {
       "sim_variable": "FORT_LEVEL_TO_GARRISON",
       "value": 30,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.3 Settlement Stats",
-      "quoted_text": "Defense × 20 + Fort Level × 30"
+      "section": "\u00a71.3 Settlement Stats",
+      "quoted_text": "Defense \u00d7 20 + Fort Level \u00d7 30"
     },
     {
       "sim_variable": "ORDER_TO_PUBLIC_ORDER",
       "value": 20,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.3 Settlement Stats",
-      "quoted_text": "Order × 20"
+      "section": "\u00a71.3 Settlement Stats",
+      "quoted_text": "Order \u00d7 20"
     },
     {
       "sim_variable": "SETTLEMENT_STAT_MAX",
       "value": 5,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.3 Settlement Stats",
-      "quoted_text": "Each settlement has 3 stats tracked on a 0–5 scale"
+      "section": "\u00a71.3 Settlement Stats",
+      "quoted_text": "Each settlement has 3 stats tracked on a 0\u20135 scale"
     },
     {
       "sim_variable": "COHERENCE_MAX",
       "value": 10,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.1 What Coherence Measures",
-      "quoted_text": "**Range:** 10 (fully coherent) → 0 (rendering crisis)."
+      "section": "\u00a73.1 What Coherence Measures",
+      "quoted_text": "**Range:** 10 (fully coherent) \u2192 0 (rendering crisis)."
     },
     {
       "sim_variable": "COHERENCE_MIN",
       "value": 0,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.1 What Coherence Measures",
-      "quoted_text": "**Range:** 10 (fully coherent) → 0 (rendering crisis)."
+      "section": "\u00a73.1 What Coherence Measures",
+      "quoted_text": "**Range:** 10 (fully coherent) \u2192 0 (rendering crisis)."
     },
     {
       "sim_variable": "COHERENCE_START",
       "value": 10,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.1 What Coherence Measures",
+      "section": "\u00a73.1 What Coherence Measures",
       "quoted_text": "**Starting value:** 10 (all practitioners)."
     },
     {
       "sim_variable": "COHERENCE_STABLE_LOW",
       "value": 8,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.3 Coherence Thresholds",
-      "quoted_text": "| 10–8 | Stable |"
+      "section": "\u00a73.3 Coherence Thresholds",
+      "quoted_text": "| 10\u20138 | Stable |"
     },
     {
       "sim_variable": "COHERENCE_DISSONANT_LOW",
       "value": 5,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.3 Coherence Thresholds",
-      "quoted_text": "| 7–5 | Dissonant |"
+      "section": "\u00a73.3 Coherence Thresholds",
+      "quoted_text": "| 7\u20135 | Dissonant |"
     },
     {
       "sim_variable": "COHERENCE_FRAGMENTED_LOW",
       "value": 3,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.3 Coherence Thresholds",
-      "quoted_text": "| 4–3 | Fragmented |"
+      "section": "\u00a73.3 Coherence Thresholds",
+      "quoted_text": "| 4\u20133 | Fragmented |"
     },
     {
       "sim_variable": "COHERENCE_FRACTURED",
       "value": 2,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.3 Coherence Thresholds",
+      "section": "\u00a73.3 Coherence Thresholds",
       "quoted_text": "| 2 | Fractured |"
     },
     {
       "sim_variable": "COHERENCE_SEVERED",
       "value": 1,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.3 Coherence Thresholds",
+      "section": "\u00a73.3 Coherence Thresholds",
       "quoted_text": "| 1 | Severed |"
     },
     {
       "sim_variable": "COHERENCE_CRISIS",
       "value": 0,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.3 Coherence Thresholds",
+      "section": "\u00a73.3 Coherence Thresholds",
       "quoted_text": "| 0 | Rendering Crisis"
     },
     {
       "sim_variable": "TS_BATTLE_MIN",
       "value": 50,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§3.6 Thread → Mass",
-      "quoted_text": "Battle/Campaign (TS ≥ 50, Coherence cost −1/op)"
+      "section": "\u00a73.6 Thread \u2192 Mass",
+      "quoted_text": "Battle/Campaign (TS \u2265 50, Coherence cost \u22121/op)"
     },
     {
       "sim_variable": "TS_WAR_MIN",
       "value": 70,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§3.6 Thread → Mass",
-      "quoted_text": "War (TS ≥ 70, Coherence cost −2/op)"
+      "section": "\u00a73.6 Thread \u2192 Mass",
+      "quoted_text": "War (TS \u2265 70, Coherence cost \u22122/op)"
     },
     {
       "sim_variable": "GENERAL_DUEL_MAX_EXCHANGES",
       "value": 5,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§3.7 Mass → Personal",
+      "section": "\u00a73.7 Mass \u2192 Personal",
       "quoted_text": "Maximum 5 exchanges before forced disengage or incapacitation"
     },
     {
       "sim_variable": "SCENE_OB_MODIFIER_BY_DEGREE.Failure",
       "value": 1,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§4.1 Zoom In",
-      "quoted_text": "Board FAILURE → scene Ob +1 (harder)"
+      "section": "\u00a74.1 Zoom In",
+      "quoted_text": "Board FAILURE \u2192 scene Ob +1 (harder)"
     },
     {
       "sim_variable": "SCENE_OB_MODIFIER_BY_DEGREE.Overwhelming",
       "value": -2,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§4.1 Zoom In",
-      "quoted_text": "Board OVERWHELMING → scene Ob −2"
+      "section": "\u00a74.1 Zoom In",
+      "quoted_text": "Board OVERWHELMING \u2192 scene Ob \u22122"
     },
     {
       "sim_variable": "ECHO_AMOUNT_BY_DEGREE.Overwhelming",
       "value": 2,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§5.2 Amount",
-      "quoted_text": "Overwhelming | ±2 to most relevant faction stat"
+      "section": "\u00a75.2 Amount",
+      "quoted_text": "Overwhelming | \u00b12 to most relevant faction stat"
     },
     {
       "sim_variable": "ECHO_AMOUNT_BY_DEGREE.Success",
       "value": 1,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§5.2 Amount",
-      "quoted_text": "Success | ±1 to most relevant faction stat"
+      "section": "\u00a75.2 Amount",
+      "quoted_text": "Success | \u00b11 to most relevant faction stat"
     },
     {
       "sim_variable": "ECHO_STAT_CAP",
       "value": 2,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§5.2 Amount",
-      "quoted_text": "Cap: ±2 per stat per Echo."
+      "section": "\u00a75.2 Amount",
+      "quoted_text": "Cap: \u00b12 per stat per Echo."
     },
     {
       "sim_variable": "PP_329_ECHO_PER_SCENE_PER_FACTION",
       "value": 1,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§5.1 Trigger",
+      "section": "\u00a75.1 Trigger",
       "quoted_text": "One Domain Echo maximum per scene per faction (PP-329)"
     },
     {
       "sim_variable": "ACCORD_ECHO_PER_TERRITORY_CAP",
       "value": 1,
       "canonical_source": "designs/architecture/scale_transitions_v30.md",
-      "section": "§5.5 Accord Domain Echo",
-      "quoted_text": "Cap: ±1 Accord in one territory per Zoom In"
+      "section": "\u00a75.5 Accord Domain Echo",
+      "quoted_text": "Cap: \u00b11 Accord in one territory per Zoom In"
     },
     {
       "sim_variable": "MS_FLOOR",
       "value": 0,
       "canonical_source": "params/core.md",
-      "section": "§MS Baseline Decay (PP-255)",
+      "section": "\u00a7MS Baseline Decay (PP-255)",
       "quoted_text": "MS floor: 0 (Rupture)"
     },
     {
       "sim_variable": "MS_CEILING",
       "value": 100,
       "canonical_source": "params/core.md",
-      "section": "§MS Baseline Decay (PP-255)",
+      "section": "\u00a7MS Baseline Decay (PP-255)",
       "quoted_text": "MS ceiling: 100"
     },
     {
       "sim_variable": "MS_BASELINE_DECAY_PER_YEAR",
       "value": -1,
       "canonical_source": "params/core.md",
-      "section": "§MS Baseline Decay (PP-255)",
-      "quoted_text": "**−1 per in-game year**"
+      "section": "\u00a7MS Baseline Decay (PP-255)",
+      "quoted_text": "**\u22121 per in-game year**"
     },
     {
       "sim_variable": "SEASONS_PER_YEAR (ms_track)",
       "value": 4,
       "canonical_source": "params/core.md",
-      "section": "§MS Baseline Decay (PP-255)",
-      "quoted_text": "TTRPG: −1 MS per 4-season year"
+      "section": "\u00a7MS Baseline Decay (PP-255)",
+      "quoted_text": "TTRPG: \u22121 MS per 4-season year"
     },
     {
       "sim_variable": "MS_START_TTRPG",
       "value": 60,
       "canonical_source": "params/core.md",
-      "section": "§MS Baseline Decay (PP-255)",
+      "section": "\u00a7MS Baseline Decay (PP-255)",
       "quoted_text": "TTRPG default = 60"
     },
     {
       "sim_variable": "MS_START_BOARD_GAME",
       "value": 72,
       "canonical_source": "params/core.md",
-      "section": "§MS Baseline Decay (PP-255)",
+      "section": "\u00a7MS Baseline Decay (PP-255)",
       "quoted_text": "Board Game default = 72"
     },
     {
       "sim_variable": "TREATY_LAPSE_RATE_DEFAULT",
       "value": 0.9,
       "canonical_source": "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md",
-      "section": "§4.5 + §5.1",
+      "section": "\u00a74.5 + \u00a75.1",
       "quoted_text": "TREATY_LAPSE_RATE | 0.90"
     },
     {
       "sim_variable": "TREATY_CONSENT_RATE_DEFAULT",
       "value": 0.28,
       "canonical_source": "designs/audit/2026-05-14-balance-audit/faction_balance_convergence_v12c_2026-05-14.md",
-      "section": "§5.1 Primary recommended config",
+      "section": "\u00a75.1 Primary recommended config",
       "quoted_text": "CONSENT_RATE | 0.28"
     },
     {
       "sim_variable": "INSURGENCY_TRIGGER_MIN_TERRITORIES",
       "value": 2,
       "canonical_source": "canon/02_canon_constraints.md",
-      "section": "§B GD-3",
+      "section": "\u00a7B GD-3",
       "quoted_text": "2+ contiguous territories at Uncontrolled status"
     },
     {
       "sim_variable": "INSURGENCY_TRIGGER_SUSTAINED_SEASONS",
       "value": 2,
       "canonical_source": "canon/02_canon_constraints.md",
-      "section": "§B GD-3",
+      "section": "\u00a7B GD-3",
       "quoted_text": "sustained 2 consecutive seasons"
     },
     {
       "sim_variable": "INSURGENCY_STARTING_L",
       "value": 1.0,
       "canonical_source": "canon/02_canon_constraints.md",
-      "section": "§B GD-3",
+      "section": "\u00a7B GD-3",
       "quoted_text": "Insurgency starts at L=1.0"
     },
     {
       "sim_variable": "INSURGENCY_PROMOTE_MIN_L",
       "value": 3,
       "canonical_source": "canon/02_canon_constraints.md",
-      "section": "§B GD-3",
-      "quoted_text": "L ≥ 3, 2+ territories held"
+      "section": "\u00a7B GD-3",
+      "quoted_text": "L \u2265 3, 2+ territories held"
     },
     {
       "sim_variable": "INSURGENCY_PROMOTE_MIN_ACCORD",
       "value": 4,
       "canonical_source": "canon/02_canon_constraints.md",
-      "section": "§B GD-3",
-      "quoted_text": "Accord ≥ 4 averaged across holdings"
+      "section": "\u00a7B GD-3",
+      "quoted_text": "Accord \u2265 4 averaged across holdings"
     },
     {
       "sim_variable": "INSURGENCY_RM_PT_THRESHOLD",
       "value": 3,
       "canonical_source": "canon/02_canon_constraints.md",
-      "section": "§B GD-3",
+      "section": "\u00a7B GD-3",
       "quoted_text": "PT < 3 average across held territories"
     },
     {
       "sim_variable": "DEVIATION_DIE_THRESHOLD",
       "value": 5,
       "canonical_source": "designs/scene/investigation_systems_v30.md",
-      "section": "§Two-Tier Generation",
-      "quoted_text": "On 5–6: one axis is rolled against the opposite extreme"
+      "section": "\u00a7Two-Tier Generation",
+      "quoted_text": "On 5\u20136: one axis is rolled against the opposite extreme"
     },
     {
       "sim_variable": "DEVIATION_ARC_VECTOR_THRESHOLD",
       "value": 5,
       "canonical_source": "designs/scene/investigation_systems_v30.md",
-      "section": "§Two-Tier Generation",
-      "quoted_text": "Deviation ≥ 5 also makes the NPC eligible to become an arc vector"
+      "section": "\u00a7Two-Tier Generation",
+      "quoted_text": "Deviation \u2265 5 also makes the NPC eligible to become an arc vector"
     },
     {
       "sim_variable": "FACTION_DEFAULT_WEIGHT_PCT",
       "value": 60,
       "canonical_source": "designs/scene/investigation_systems_v30.md",
-      "section": "§Territory Social Ecology",
+      "section": "\u00a7Territory Social Ecology",
       "quoted_text": "Controlling faction's ethical framework is the default for 60% of generated NPCs"
     },
     {
@@ -351,392 +351,392 @@
       "sim_variable": "PT_GAIN_CHAPEL",
       "value": 0.5,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.5 Axis 1",
+      "section": "\u00a71.5 Axis 1",
       "quoted_text": "Chapel (+0.5 PT/season)"
     },
     {
       "sim_variable": "PT_GAIN_CHURCH",
       "value": 1.0,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.5 Axis 1",
+      "section": "\u00a71.5 Axis 1",
       "quoted_text": "Church (+1 PT/season)"
     },
     {
       "sim_variable": "PT_GAIN_CATHEDRAL",
       "value": 2.0,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.5 Axis 1",
+      "section": "\u00a71.5 Axis 1",
       "quoted_text": "Cathedral (+2 PT/season"
     },
     {
       "sim_variable": "CI_GAIN_TEMPLAR",
       "value": 1,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.5 Axis 2",
+      "section": "\u00a71.5 Axis 2",
       "quoted_text": "+1 CI/season in territory"
     },
     {
       "sim_variable": "SEIZURE_OB_CAP",
       "value": -4,
       "canonical_source": "designs/territory/settlement_layer_v30.md",
-      "section": "§1.5 Seizure Ob Modifiers",
-      "quoted_text": "Cap: −4 per settlement"
+      "section": "\u00a71.5 Seizure Ob Modifiers",
+      "quoted_text": "Cap: \u22124 per settlement"
     },
     {
       "sim_variable": "TEMPERAMENT_WEIGHTS.pragmatic",
-      "value": "α=0.7 β=0.3",
+      "value": "\u03b1=0.7 \u03b2=0.3",
       "canonical_source": "designs/territory/territory_temperaments_v30.md",
-      "section": "§1",
+      "section": "\u00a71",
       "quoted_text": "| pragmatic | 0.7 | 0.3 |"
     },
     {
       "sim_variable": "TEMPERAMENT_WEIGHTS.principled",
-      "value": "α=0.2 β=0.8",
+      "value": "\u03b1=0.2 \u03b2=0.8",
       "canonical_source": "designs/territory/territory_temperaments_v30.md",
-      "section": "§1",
+      "section": "\u00a71",
       "quoted_text": "| principled | 0.2 | 0.8 |"
     },
     {
       "sim_variable": "TEMPERAMENT_WEIGHTS.outcomes-only",
-      "value": "α=0.9 β=0.1",
+      "value": "\u03b1=0.9 \u03b2=0.1",
       "canonical_source": "designs/territory/territory_temperaments_v30.md",
-      "section": "§1",
+      "section": "\u00a71",
       "quoted_text": "| outcomes-only | 0.9 | 0.1 |"
     },
     {
       "sim_variable": "DRIFT_PER_STRAIN_UNIT",
       "value": 0.1,
       "canonical_source": "designs/territory/territory_temperaments_v30.md",
-      "section": "§4",
-      "quoted_text": "0.1 × strain_delta"
+      "section": "\u00a74",
+      "quoted_text": "0.1 \u00d7 strain_delta"
     },
     {
       "sim_variable": "SCAR_CRISIS",
       "value": 3,
       "canonical_source": "designs/personal/conviction_track_v1.md",
-      "section": "§2 Scar Accumulation",
+      "section": "\u00a72 Scar Accumulation",
       "quoted_text": "**Conviction crisis on X.**"
     },
     {
       "sim_variable": "SCAR_SEASON_CAP_THREAD",
       "value": 1,
       "canonical_source": "designs/personal/conviction_track_v1.md",
-      "section": "§3 Conditions",
+      "section": "\u00a73 Conditions",
       "quoted_text": "Max 1 Scar per season from Thread witnessing per NPC"
     },
     {
       "sim_variable": "CERTAINTY_SCALING.C5",
       "value": 1,
       "canonical_source": "designs/personal/conviction_track_v1.md",
-      "section": "§3 Conditions",
+      "section": "\u00a73 Conditions",
       "quoted_text": "C5: +1 Scar severity"
     },
     {
       "sim_variable": "CERTAINTY_SCALING.C0",
       "value": -1,
       "canonical_source": "designs/personal/conviction_track_v1.md",
-      "section": "§3 Conditions",
-      "quoted_text": "C0: −1 Scar severity"
+      "section": "\u00a73 Conditions",
+      "quoted_text": "C0: \u22121 Scar severity"
     },
     {
       "sim_variable": "MOMENTUM_CAP",
       "value": 4,
       "canonical_source": "designs/scene/fieldwork_v30.md",
-      "section": "§5.5 Socializing and Beliefs",
+      "section": "\u00a75.5 Socializing and Beliefs",
       "quoted_text": "+1 Momentum (if below cap 4)"
     },
     {
       "sim_variable": "BELIEF_MOMENTUM_PER_CONTEST_CAP",
       "value": 1,
       "canonical_source": "designs/scene/social_contest_v30.md",
-      "section": "§9.5 Beliefs Integration",
+      "section": "\u00a79.5 Beliefs Integration",
       "quoted_text": "Max 1 Momentum per contest from Belief alignment"
     },
     {
       "sim_variable": "TN_STANDARD",
       "value": 7,
       "canonical_source": "params/threadwork.md",
-      "section": "§TN Modifiers",
+      "section": "\u00a7TN Modifiers",
       "quoted_text": "All standard operations (Weave, Pull, Mend, Leap, Community Weave) | 7"
     },
     {
       "sim_variable": "TN_BINDING",
       "value": 8,
       "canonical_source": "params/threadwork.md",
-      "section": "§TN Modifiers",
+      "section": "\u00a7TN Modifiers",
       "quoted_text": "Binding Ops (Lock, Dissolution) | 8"
     },
     {
       "sim_variable": "TN_POP",
       "value": 8,
       "canonical_source": "params/threadwork.md",
-      "section": "§TN Modifiers",
+      "section": "\u00a7TN Modifiers",
       "quoted_text": "Past-Oriented Pulling (POP) | 8"
     },
     {
       "sim_variable": "DEPTH_OB.Object",
       "value": 1,
       "canonical_source": "params/threadwork.md",
-      "section": "§Depth Ob",
+      "section": "\u00a7Depth Ob",
       "quoted_text": "Object | 1"
     },
     {
       "sim_variable": "DEPTH_OB.Structural",
       "value": 8,
       "canonical_source": "params/threadwork.md",
-      "section": "§Depth Ob",
+      "section": "\u00a7Depth Ob",
       "quoted_text": "Structural | 8"
     },
     {
       "sim_variable": "DEPTH_OB.Foundational",
       "value": 13,
       "canonical_source": "params/threadwork.md",
-      "section": "§Depth Ob",
+      "section": "\u00a7Depth Ob",
       "quoted_text": "Foundational | 13"
     },
     {
       "sim_variable": "LEAP_OB_TS_LOW",
       "value": 2,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§2.3 The Leap Roll",
-      "quoted_text": "Thread Sensitivity 30–49 = 2"
+      "section": "\u00a72.3 The Leap Roll",
+      "quoted_text": "Thread Sensitivity 30\u201349 = 2"
     },
     {
       "sim_variable": "LEAP_OB_TS_HIGH",
       "value": 1,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§2.3 The Leap Roll",
+      "section": "\u00a72.3 The Leap Roll",
       "quoted_text": "Thread Sensitivity 50+ = 1"
     },
     {
       "sim_variable": "FR_SURCHARGE",
       "value": -1,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§3.2 FR surcharge",
-      "quoted_text": "Forced Resolution (FR) surcharge (−1 Coherence additional for Lock or Dissolution)"
+      "section": "\u00a73.2 FR surcharge",
+      "quoted_text": "Forced Resolution (FR) surcharge (\u22121 Coherence additional for Lock or Dissolution)"
     },
     {
       "sim_variable": "COMBAT_POOL_HISTORY_CONSTANT",
       "value": 3,
       "canonical_source": "designs/scene/combat_v30.md",
-      "section": "§1 Combat Pool",
-      "quoted_text": "Combat Pool = (Agility × 2) + Relevant History + 3 (minimum 5)"
+      "section": "\u00a71 Combat Pool",
+      "quoted_text": "Combat Pool = (Agility \u00d7 2) + Relevant History + 3 (minimum 5)"
     },
     {
       "sim_variable": "COMBAT_POOL_MIN",
       "value": 5,
       "canonical_source": "designs/scene/combat_v30.md",
-      "section": "§1 Combat Pool",
+      "section": "\u00a71 Combat Pool",
       "quoted_text": "minimum 5"
     },
     {
       "sim_variable": "WOUND_PENALTY_PER",
       "value": -1,
       "canonical_source": "designs/scene/combat_v30.md",
-      "section": "§1 Combat Pool",
-      "quoted_text": "Wounds: −1D per wound (cumulative)"
+      "section": "\u00a71 Combat Pool",
+      "quoted_text": "Wounds: \u22121D per wound (cumulative)"
     },
     {
       "sim_variable": "WEAPON_TN_BASE",
       "value": 7,
       "canonical_source": "designs/scene/combat_v30.md",
-      "section": "§5 Weapon System",
+      "section": "\u00a75 Weapon System",
       "quoted_text": "Base TN = 7"
     },
     {
       "sim_variable": "STR_MULT_BLUNT",
       "value": 1.5,
       "canonical_source": "designs/scene/combat_v30.md",
-      "section": "§5 Damage Resolution",
-      "quoted_text": "Blunt×1.5"
+      "section": "\u00a75 Damage Resolution",
+      "quoted_text": "Blunt\u00d71.5"
     },
     {
       "sim_variable": "CRIT_NET_HITS_THRESHOLD",
       "value": 3,
       "canonical_source": "designs/scene/combat_v30.md",
-      "section": "§5 Damage Resolution",
-      "quoted_text": "Critical Hit: net hits ≥ 3 → weapon modifier doubled"
+      "section": "\u00a75 Damage Resolution",
+      "quoted_text": "Critical Hit: net hits \u2265 3 \u2192 weapon modifier doubled"
     },
     {
       "sim_variable": "CI_INSTITUTIONAL_MOMENTUM",
       "value": 1,
       "canonical_source": "designs/scene/conviction_track_v30.md",
-      "section": "§3 Step 1 CI Generation",
+      "section": "\u00a73 Step 1 CI Generation",
       "quoted_text": "CI +1. (Unchanged from PP-402."
     },
     {
       "sim_variable": "CI_YIELD_BY_PT.5",
       "value": 1.0,
       "canonical_source": "designs/scene/conviction_track_v30.md",
-      "section": "§3 Step 2 Conviction Yield",
+      "section": "\u00a73 Step 2 Conviction Yield",
       "quoted_text": "| 5 | +1 |"
     },
     {
       "sim_variable": "CI_YIELD_BY_PT.4",
       "value": 0.5,
       "canonical_source": "designs/scene/conviction_track_v30.md",
-      "section": "§3 Step 2 Conviction Yield",
+      "section": "\u00a73 Step 2 Conviction Yield",
       "quoted_text": "| 4 | +0.5"
     },
     {
       "sim_variable": "CI_STARTING",
       "value": 28,
       "canonical_source": "designs/scene/conviction_track_v30.md",
-      "section": "§3 CI Generation",
+      "section": "\u00a73 CI Generation",
       "quoted_text": "Starting CI:** 28"
     },
     {
       "sim_variable": "CI_PHASE_TRANSITION",
       "value": 75,
       "canonical_source": "designs/scene/conviction_track_v30.md",
-      "section": "§3 CI Generation",
+      "section": "\u00a73 CI Generation",
       "quoted_text": "Phase transition:** CI 75"
     },
     {
       "sim_variable": "HAFENMARK_BARALTA_THRESHOLD_MANDATE",
       "value": 4,
       "canonical_source": "designs/scene/conviction_track_v30.md",
-      "section": "§3 Step 5",
-      "quoted_text": "Baralta's Mandate ≥ 4"
+      "section": "\u00a73 Step 5",
+      "quoted_text": "Baralta's Mandate \u2265 4"
     },
     {
       "sim_variable": "POOL_CI_DIVISOR",
       "value": 15,
       "canonical_source": "designs/provincial/victory_v30.md",
-      "section": "§3.2",
+      "section": "\u00a73.2",
       "quoted_text": "Influence + floor(CI / 15)"
     },
     {
       "sim_variable": "ARGUE_POOL_TN",
       "value": 7,
       "canonical_source": "designs/scene/social_contest_v30.md",
-      "section": "§3 Argue Pool Construction",
+      "section": "\u00a73 Argue Pool Construction",
       "quoted_text": "TN: 7 (Standard)"
     },
     {
       "sim_variable": "PERSUASION_WIN_THRESHOLD",
       "value": 7,
       "canonical_source": "designs/scene/social_contest_v30.md",
-      "section": "§6",
-      "quoted_text": "Persuasion Track ≥ 7 = Side A wins"
+      "section": "\u00a76",
+      "quoted_text": "Persuasion Track \u2265 7 = Side A wins"
     },
     {
       "sim_variable": "PERSUASION_TOTAL_VICTORY",
       "value": 9,
       "canonical_source": "designs/scene/social_contest_v30.md",
-      "section": "§6",
-      "quoted_text": "Persuasion Track ≥ 9 or ≤ 1"
+      "section": "\u00a76",
+      "quoted_text": "Persuasion Track \u2265 9 or \u2264 1"
     },
     {
       "sim_variable": "CONCENTRATION_MULTIPLIER",
       "value": 3,
       "canonical_source": "designs/scene/social_contest_v30.md",
-      "section": "§4",
-      "quoted_text": "Concentration restores to max (Focus × 3)"
+      "section": "\u00a74",
+      "quoted_text": "Concentration restores to max (Focus \u00d7 3)"
     },
     {
       "sim_variable": "KNOT_DISPOSITION_MIN",
       "value": 5,
       "canonical_source": "designs/personal/knots_v30.md",
-      "section": "§3.1",
+      "section": "\u00a73.1",
       "quoted_text": "Disposition +5"
     },
     {
       "sim_variable": "KNOT_BONDS_MIN",
       "value": 5,
       "canonical_source": "designs/personal/knots_v30.md",
-      "section": "§3.1",
-      "quoted_text": "PC Bonds ≥ 5"
+      "section": "\u00a73.1",
+      "quoted_text": "PC Bonds \u2265 5"
     },
     {
       "sim_variable": "KNOT_FORMATION_OB",
       "value": 2,
       "canonical_source": "designs/personal/knots_v30.md",
-      "section": "§3.2",
+      "section": "\u00a73.2",
       "quoted_text": "TN 7**, **Ob 2"
     },
     {
       "sim_variable": "TIER_CAPACITY.Distant",
       "value": 4,
       "canonical_source": "designs/personal/knots_v30.md",
-      "section": "§6.1 Option A",
+      "section": "\u00a76.1 Option A",
       "quoted_text": "| Distant Knot | 4 strain |"
     },
     {
       "sim_variable": "TIER_CAPACITY.Close",
       "value": 7,
       "canonical_source": "designs/personal/knots_v30.md",
-      "section": "§6.1 Option A",
+      "section": "\u00a76.1 Option A",
       "quoted_text": "| Close Knot | 7 strain |"
     },
     {
       "sim_variable": "RUPTURE_COHERENCE_LOSS",
       "value": -1,
       "canonical_source": "designs/personal/knots_v30.md",
-      "section": "§6.2",
-      "quoted_text": "rupture imposes mandatory **−1 Coherence**"
+      "section": "\u00a76.2",
+      "quoted_text": "rupture imposes mandatory **\u22121 Coherence**"
     },
     {
       "sim_variable": "CLOSE_BREAK_SCAR_STRAIN_THRESHOLD",
       "value": 6,
       "canonical_source": "designs/personal/knots_v30.md",
-      "section": "§6.1 Option A",
-      "quoted_text": "Close Knots broken at high strain (Option A: strain ≥ 6 of 7)"
+      "section": "\u00a76.1 Option A",
+      "quoted_text": "Close Knots broken at high strain (Option A: strain \u2265 6 of 7)"
     },
     {
       "sim_variable": "CO_MOVEMENT_CARDS count",
       "value": 15,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§4.3 ED-577",
-      "quoted_text": "Co-Movement Cards 1–15 (ED-577 — canonical card list)"
+      "section": "\u00a74.3 ED-577",
+      "quoted_text": "Co-Movement Cards 1\u201315 (ED-577 \u2014 canonical card list)"
     },
     {
       "sim_variable": "OPPOSING_OB_MODIFIER_MIN",
       "value": 1,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§2.6 Opposing Engagement Modifier",
-      "quoted_text": "+floor(opponent's Thread Pool Score ÷ 2), minimum +1"
+      "section": "\u00a72.6 Opposing Engagement Modifier",
+      "quoted_text": "+floor(opponent's Thread Pool Score \u00f7 2), minimum +1"
     },
     {
       "sim_variable": "KNOT_STRAIN_STANDARD_LOSER (opposing)",
       "value": 1,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§2.6 Knot Strain",
+      "section": "\u00a72.6 Knot Strain",
       "quoted_text": "+1 Ob next Thread op this scene. 2 Composure."
     },
     {
       "sim_variable": "KNOT_STRAIN_FR_LOSER (opposing)",
       "value": 2,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§2.6 Knot Strain",
+      "section": "\u00a72.6 Knot Strain",
       "quoted_text": "+2 Ob. 4 Composure."
     },
     {
       "sim_variable": "RENDERING_STRAIN_PER_EXTERNAL_OP",
       "value": 1,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§6.3",
+      "section": "\u00a76.3",
       "quoted_text": "each external Thread operation adds +1 Rendering Strain"
     },
     {
       "sim_variable": "DEACTUALISATION_R1_OB",
       "value": 2,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§6.4",
+      "section": "\u00a76.4",
       "quoted_text": "All operations +2 Ob"
     },
     {
       "sim_variable": "DEACTUALISATION_R2_OB",
       "value": 4,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§6.4",
+      "section": "\u00a76.4",
       "quoted_text": "Operations +4 Ob"
     },
     {
       "sim_variable": "LATTICE_FRACTURE_OB_PENALTY",
       "value": 1,
       "canonical_source": "designs/threadwork/threadwork_v30.md",
-      "section": "§2.5",
+      "section": "\u00a72.5",
       "quoted_text": "apply +1 Ob (lattice fracture)"
     },
     {
@@ -744,11 +744,11 @@
       "value": "massbattle.py L630 + L1053 use module-level random.randint",
       "canonical_source": "designs/proposals/stub_infill_plan.md",
       "section": "Amendment 2026-05-19c",
-      "quoted_text": "L630: `roll_pool(n, tn=7)` — the main d10 dice engine for fight phase",
-      "notes": "Documented finding; not fixed. Two consecutive run_batch(5, base_seed=42) produce different results because massbattle.py bypasses world.rng. random.seed(0) before run_batch produces deterministic output, confirming diagnosis. Fix is mechanical (thread world.rng through run_battle → roll_pool / volley_roll_pool) but behavior-changing — every mc_v18 batch result shifts. Filed as follow-on per scope boundary of stub_infill work."
+      "quoted_text": "L630: `roll_pool(n, tn=7)` \u2014 the main d10 dice engine for fight phase",
+      "notes": "Documented finding; not fixed. Two consecutive run_batch(5, base_seed=42) produce different results because massbattle.py bypasses world.rng. random.seed(0) before run_batch produces deterministic output, confirming diagnosis. Fix is mechanical (thread world.rng through run_battle \u2192 roll_pool / volley_roll_pool) but behavior-changing \u2014 every mc_v18 batch result shifts. Filed as follow-on per scope boundary of stub_infill work."
     },
     {
-      "sim_variable": "Schema migration #2 — 8 World fields added (2026-05-19)",
+      "sim_variable": "Schema migration #2 \u2014 8 World fields added (2026-05-19)",
       "value": "convictions + beliefs + knots + knot_id_counter + territory_infrastructure + npc_drift_state + threadcut_beings + comovement_deck",
       "canonical_source": "designs/proposals/stub_infill_plan.md",
       "section": "Amendment 2026-05-19 + #1 precedent at 94dac72e",
@@ -762,7 +762,84 @@
       "section": "Amendment 2026-05-19d (Per-Record Serializers workstream)",
       "quoted_text": "Per-Record Serializers for World Registries (separate workstream)",
       "notes": "Production save format support. 9 dataclasses gain to_dict/from_dict: CoherenceState (+ CoherenceLogEntry), InsurgencyRecord, NPC, TreatyRecord, ConvictionState (+ ScarRecord), Belief, Knot, InfrastructureState, ThreadcutState. serialize_world extended with 14 new top-level keys; restore_world reconstructs via late-imports on owning modules. 26/26 round-trip checks pass through JSON; 14/14 old-schema tolerance checks pass (missing registry keys default to empty containers). mc_v18 backwards-compat verified (battles_mean=38.0 with random.seed(0) pin per ndet finding)."
+    },
+    {
+      "sim_variable": "BG_VOTE_TN",
+      "value": 7,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Resolution",
+      "quoted_text": "Pool: sum of Mandate of all factions on each side. Roll combined pool TN 7."
+    },
+    {
+      "sim_variable": "BG_VOTE_GENRE_BONUS",
+      "value": 1,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Resolution",
+      "quoted_text": "Genre bonus: +1D if the side's genre matches the primary genre of the question."
+    },
+    {
+      "sim_variable": "BG_VOTE_AUDIENCE_BONUS",
+      "value": 1,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Resolution",
+      "quoted_text": "Audience boost: +1D if the side's genre matches the Parliament's dominant faction boost."
+    },
+    {
+      "sim_variable": "BG_VOTE_ABSTAIN_STABILITY_THRESHOLD",
+      "value": 6,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Setup step 3",
+      "quoted_text": "If a faction with Stability \u2265 6 Abstains: +1 resistance (max +2)."
+    },
+    {
+      "sim_variable": "BG_VOTE_RESISTANCE_MAX",
+      "value": 2,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Setup step 3",
+      "quoted_text": "If a faction with Stability \u2265 6 Abstains: +1 resistance (max +2)."
+    },
+    {
+      "sim_variable": "BG_VOTE_LOBBY_OFFSET_MAX",
+      "value": 2,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Setup step 4",
+      "quoted_text": "Each successful Diplomacy action targeting this vote in preceding season: +1 toward lobbying side (max \u00b12)."
+    },
+    {
+      "sim_variable": "BG_VOTE_LOBBY_START_MAX",
+      "value": 6,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Lobby cap (ED-621)",
+      "quoted_text": "Maximum starting Persuasion Track: 6."
+    },
+    {
+      "sim_variable": "BG_VOTE_LOBBY_START_MIN",
+      "value": 4,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Lobby cap (ED-621)",
+      "quoted_text": "Minimum starting track: 4."
+    },
+    {
+      "sim_variable": "BG_VOTE_PASS_THRESHOLD",
+      "value": 7,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Resolution",
+      "quoted_text": "Persuasion Track \u2265 7 = motion passes; \u2264 3 = motion fails; 4\u20136 = referred to committee."
+    },
+    {
+      "sim_variable": "BG_VOTE_FAIL_THRESHOLD",
+      "value": 3,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Resolution",
+      "quoted_text": "Persuasion Track \u2265 7 = motion passes; \u2264 3 = motion fails; 4\u20136 = referred to committee."
+    },
+    {
+      "sim_variable": "BG_VOTE_TOTAL_VICTORY_MANDATE_DELTA",
+      "value": -1,
+      "canonical_source": "designs/scene/social_contest_v30.md",
+      "section": "\u00a710 BOARD GAME PARLIAMENTARY VOTE \u2014 Total Victory",
+      "quoted_text": "Total Victory: Persuasion Track \u2265 9 or \u2264 1 \u2192 losing coalition's dominant faction takes Mandate \u22121 for one season."
     }
   ],
-  "updated_at": "2026-05-19"
+  "updated_at": "2026-05-31"
 }
