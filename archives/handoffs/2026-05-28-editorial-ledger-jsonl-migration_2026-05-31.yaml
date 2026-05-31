@@ -82,5 +82,6 @@ key_values:
 - 'live_ledger: canon/editorial_ledger.jsonl'
 - 'deprecated_count: 13 files in deprecated/canon/'
 created: '2026-05-29T00:06:13.937940+00:00'
-status: active
+status: closed
 updated: '2026-05-29T02:44:39.744971+00:00'
+closed_at: '2026-05-31T20:58:32.676073+00:00'
