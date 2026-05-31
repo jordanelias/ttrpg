@@ -92,6 +92,8 @@ draw r ~ U[0,1)  (lower = better):
 - **Treaty positioning & ratification** (faction_layer_v30 §3.3; ED-865/874 extension, 2026-05-30). Positioning (contested): M = own Influence − target Influence (Success+ → initiator sets opening terms). Ratification: M = Mandate − 2 (legacy Ob 2 → difficulty 2). Guarantor option → +1 M; Grand Debate Zoom-In degree → margin (Overwhelming +2 / Success +1 / Partial 0 / Failure −1). The Grand Debate social contest itself remains dice (scope boundary). CI institutional weight (Church) = +⌊CI/20⌋ to M (ci_political_v30 §3.2). Precedent: power-structural treaty-making (COIN/structural-contest, matrix entry 2).
 - **§1.4 Accounting Stability Check** — M = Stability − loss_magnitude; resolves via this method. **Co-designed with §1.3 Institutional Consolidation recovery (CC-4):** §1.4 is the cascade-DAMAGE check (Failure → −1); §1.3 is the deterministic clean-season +1 recovery. They operate on different triggers and do not double-count.
 
+- **Unique Actions (migrated 2026-05-30, ED-885 — Jordan-ratified).** Formerly bare-stat "vs Ob" rolls; now resolve via this method with named degree effects preserved on the ladder: **Royal Decree** M = Mandate − 2 (legacy Ob 2); **Excommunication** contested (faction leader) M = Mandate − target Mandate, non-leader M = Mandate − 2; **Private Collection** M = Intel − 2; **Economic Leverage** contested M = Wealth − target Wealth. A degree band an action's table omits takes the next-lower listed result (a Success/Failure action treats Partial as Failure). *(Hafenmark Sovereign Authority Doctrine — bare Mandate vs Ob 4 — is the same class but was not in the ratified four; pending decision.)*
+
 **Scope boundary.** This method governs **bare-stat faction checks only.** Healthy dice systems — personal combat, social contest (pools 5–18D), aggregated mass battle — **remain dice** (NERS-N/E: replacing them would add complexity without fixing a defect). Trigger-5 (mass-battle resolution, ED-876) is dice and **orthogonal** to this resolver.
 
 ## Domain Action Rules (TTRPG) — SUPERSEDED for faction Domain Actions (legacy / Zoom-In reference)
@@ -148,8 +150,8 @@ Crown: 2 | Church: 3 | Hafenmark: 2 | Varfell: 2 | Guilds: 2 | Restoration Movem
 
 | Faction | Action | Roll | Effect |
 |---------|--------|------|--------|
-| Crown | Royal Decree | Mandate vs Ob 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |  <!-- LPS-1: L→Mandate -->
-| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Strips Circles bonus; −1 Legitimacy to each of the target's controlled settlements (settlement_layer §1.8). Reversal: Grand Debate (5 exchanges) or new Confessor. |
+| Crown | Royal Decree | d+σ resolver: M = Mandate − 2 | One faction stat ±1 immediate. Consecutive: +1 Ob/season. Cannot target Intel. |  <!-- LPS-1: L→Mandate -->
+| Church | Excommunication | d+σ resolver: M = Mandate − target Mandate (leader) / Mandate − 2 (non-leader) | Strips Circles bonus; −1 Legitimacy to each of the target's controlled settlements (settlement_layer §1.8). Reversal: Grand Debate (5 exchanges) or new Confessor. |
 | Church | Church Influence 60 Territorial Seizure | Influence + floor(CI/15) vs Ob = 7 − PT | Per-province seizure roll; AUTHORITATIVE per faction_layer §2.7. Success: administrative control. Failure: Mandate −1. |
 | Restoration Movement | Community Weaving | Presence markers −1 Ob (base Ob 2) | Mending PS prerequisite: COMMUNITY-level PS ≥ 1 in a Presence locality (RM territoryless; faction_state_authoring §6 / LPS-1) |
 | [Others] | See stage6_factions.md §8.4–8.9 | — | Hafenmark, Varfell, Guilds, Löwenritter unique actions not extracted |
@@ -180,7 +182,7 @@ Mending Stability ≤ 10 adds +1 to coup/succession trigger check pools.
 ## Unique Actions — All Factions (PP-168)
 
 ### Crown — Royal Decree
-Roll: Mandate vs Ob 2. Once per season.  <!-- LPS-1: L→Mandate -->
+Resolution: d+σ resolver (§Domain Action Resolution) — M = Mandate − 2 (legacy Ob 2). Once per season. Consecutive seasons: difficulty +2/season (legacy +1 Ob).  <!-- LPS-1: L→Mandate -->
 | Degree | Result |
 |--------|--------|
 | Overwhelming | One faction stat ±1 immediate; consecutive seasons: +1 Ob/season |
@@ -189,7 +191,7 @@ Roll: Mandate vs Ob 2. Once per season.  <!-- LPS-1: L→Mandate -->
 Cannot target Intel. Effect is immediate and unilateral.
 
 ### Church — Excommunication
-Roll: Mandate vs floor(target Mandate / 2) + 1 (faction leader) or Ob 2 (non-leader).  <!-- LPS-1: L→Mandate (faction-vs-faction); effects reconcile per settlement_layer §1.8 -->
+Resolution: d+σ resolver (§Domain Action Resolution) — contested (faction leader): M = Mandate − target Mandate; non-leader: M = Mandate − 2 (legacy Ob 2).  <!-- LPS-1: L→Mandate (faction-vs-faction); effects reconcile per settlement_layer §1.8 -->
 | Degree | Result |
 |--------|--------|
 | Success | Strips target's Circles bonus; −1 Legitimacy to each of the target's controlled settlements (settlement_layer §1.8) |
@@ -216,7 +218,7 @@ Roll: Mandate vs Ob 4. Once per campaign arc.  <!-- LPS-1: L→Mandate -->
 CI Suppression: while Baralta's L ≥ 4, Church Influence −1/season. Suppression ends if L < 4 or excommunication (CI +4 immediately).
 
 ### Varfell — The Private Collection
-Roll: Intel vs Ob 2. Once per season.
+Resolution: d+σ resolver (§Domain Action Resolution) — M = Intel − 2 (legacy Ob 2). Once per season.
 | Degree | Result |
 |--------|--------|
 | Success (choose one) | +2D to one Thread-related Domain Action this season; OR reveal one hidden faction attribute; OR −1 Ob to one Einhir Research action this season |
@@ -226,7 +228,7 @@ Player Character takeover: collection transfers as institutional asset; triggers
 
 ### Guilds — Economic Leverage
 Trigger: Guild Favour ≥ 5 in target territory (1–7 territory track).
-Roll: Wealth vs target faction's Wealth.
+Resolution: d+σ resolver (§Domain Action Resolution) — contested: M = Wealth − target faction's Wealth.
 | Degree | Result |
 |--------|--------|
 | Overwhelming | Target loses 1 Wealth + 1 Prosperity in that territory |

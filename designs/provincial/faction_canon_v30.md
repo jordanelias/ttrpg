@@ -307,12 +307,12 @@ Each player faction has one signature mechanic. Detailed degree tables in factio
 
 | Faction | Unique Action | Roll | Resource cost |
 |---|---|---|---|
-| Crown | Royal Decree | Mandate vs Ob 2 | 1/season; +1 Ob/season consecutive |  <!-- LPS-2e: L per-settlement, not a faction roll stat; Mandate is the faction stat (matches factions_personal §8.2). Method = sim-deferred resolver migration. -->
-| Church | Excommunication | Mandate vs target Mandate (leader) / Ob 2 (non-leader) | Requires Church Mandate ≥ 3 |  <!-- LPS-1: L→Mandate; 'faction L' effects reconcile to Mandate / per-territory L per settlement_layer §1.8 -->
+| Crown | Royal Decree | d+σ resolver: M = Mandate − 2 | 1/season; +1 Ob/season consecutive |  <!-- LPS-2e: L per-settlement, not a faction roll stat; Mandate is the faction stat (matches factions_personal §8.2). Method = sim-deferred resolver migration. -->
+| Church | Excommunication | d+σ resolver: M = Mandate − target Mandate (leader) / Mandate − 2 (non-leader) | Requires Church Mandate ≥ 3 |  <!-- LPS-1: L→Mandate; 'faction L' effects reconcile to Mandate / per-territory L per settlement_layer §1.8 -->
 | Church | CI 60 Territorial Seizure | Influence + floor(CI/15) vs Ob = 7 − PT | Per-territory; CI ≥ 60 trigger; AUTHORITATIVE per faction_layer §2.7; Failure → Mandate −1 (FCN-SEIZURE-DRIFT reconciled; was stale L-based) |
 | Hafenmark | Sovereign Authority Doctrine | Mandate vs Ob 4 | 1/campaign arc |  <!-- LPS-1: L→Mandate (matches factions_personal §8.4) -->
-| Varfell | The Private Collection | Intel vs Ob 2 | 1/season; long-term TS cost |
-| Guilds | Economic Leverage | Wealth vs target Wealth | Requires Guild Favour ≥ 5 in territory |
+| Varfell | The Private Collection | d+σ resolver: M = Intel − 2 | 1/season; long-term TS cost |
+| Guilds | Economic Leverage | d+σ resolver: M = Wealth − target Wealth | Requires Guild Favour ≥ 5 in territory |
 | Restoration | Community Weaving (PP-616 canonical) | (Spirit × 2) + History + TPS pool | Thread operation, not DA; PS ≥ 1 prerequisite = COMMUNITY-level PS in a Presence locality (RM is territoryless; per faction_state_authoring §6 / PP-460 its L/PS are community-scoped — settlement_layer §1.8) |
 | Löwenritter | Martial Law / Coup Trigger | No roll — Graduated Autonomy stage 4 | Triggered by Crown failure conditions |
 
@@ -619,7 +619,7 @@ Influence 6 is the highest single-stat in the Starting Stats table — Church's 
 
 #### Excommunication
 
-Roll: Mandate vs target Mandate (faction leader) / Ob 2 (non-leader).  <!-- LPS-2e: L→Mandate; the 'faction L ±1' degree effects reconcile to Mandate / per-settlement L per settlement_layer §1.8 (entangled — see master ledger) -->
+Resolution: d+σ resolver (stats_1_7_scale §Domain Action Resolution) — contested (faction leader): M = Mandate − target Mandate; non-leader: M = Mandate − 2 (legacy Ob 2).  <!-- LPS-2e: L→Mandate; the 'faction L ±1' degree effects reconcile to Mandate / per-settlement L per settlement_layer §1.8 (entangled — see master ledger) -->
 
 | Degree | Result |
 |---|---|
