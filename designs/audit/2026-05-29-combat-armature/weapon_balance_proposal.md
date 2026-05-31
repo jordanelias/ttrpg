@@ -89,3 +89,24 @@ Re-running the **attribute** parity (each archetype best-loadout, asymmetric) *u
 
 `[CONFIDENCE: high — audit + rebalance + attribute payoff all on the budget-asserted, file-read harness. The spear gap and residual outliers are reported, not hidden.]`
 `[ASSUMPTION: weapon-only audit uses a neutral Str-4 build both sides to isolate weapon profiles; attribute payoff uses the 6-attr equal-budget builds. Proposed magnitudes are sim-tunable seeds; the table values are canonical pending your ratification.]`
+
+---
+
+## 8. R9 — phase-dependent reach (the spear-fix mechanism) + the convergence finding
+
+**Added Build-9.** `r9_weapon_engagement.py` (self-test 5/5) implements the spear fix as a **phase-dependent** reach+speed channel, replacing the flat reach channel that over-corrected:
+- **Closing / breaking:** reach governs — the longer weapon controls the measure (canonical `reach = −1 Ob closing`).
+- **In-bind:** speed governs — the faster weapon wins once closed, and reach **inverts** to a liability (HEMA: a spearman who lets you close past the point is in trouble).
+
+This produces the correct niches by construction (self-tested): spear wins the approach/loses the bind; dagger loses the approach/dominates the bind; war hammer wins the approach but is *worst* in the bind (slowest). **Grounding:** bottom-up = canonical reach + per-weapon `speed`; top-down = the HEMA measure/bind dynamic. Gap-completion of canon's "spear is king."
+
+**The honest convergence finding.** R9 is the right *mechanism*, but landing all 8 weapons strictly in-band is a **joint-fit problem, not a single-knob tune**:
+- Reach (R9) helps **every long weapon** — the spear *and* the war hammer (both long). So adding reach lifts the spear (23→33%) but re-lifts the war hammer (69→79%).
+- Tapering the canonical Heavy-Blunt **×3→×2** multiplier *on top of* R9 + the armour taper barely moved the hammer (79→76%) — because in the R9 configuration the hammer's edge is now its **reach-at-distance + survivability**, not only its damage.
+- **Two "long-weapon advantages" (reach-at-distance + heavy damage/survivability) compound on the war hammer, and no single knob separates them.** Short fast weapons stay ~37% because they only win 1 of 3 phases (the bind).
+
+**This is a design call, not a seed tune (for Jordan):** the clean separation would be e.g. *reach benefits light-long weapons (spear) but not heavy-long weapons (war hammer)* — i.e. a heavy weapon is too unwieldy to fully exploit reach-as-tempo. That's a combat-engagement design decision. Alternatives: make the bind phase weigh more (2 of 3 sub-actions) so fast weapons matter more; or accept the war hammer as a deliberate apex anti-armour weapon balanced by availability/cost outside the duel.
+
+**Status of weapon balance:** the *mechanisms* are built and validated (armour taper §2A, speed-tempo §2B, phase-reach §8). The *magnitudes* for strict 8-way convergence await either the design call above or a joint optimization. The distribution is already far healthier than canon (war hammer no longer armour-blind; fast blades revived; correct armour niches), and the attribute-parity payoff (§4: Str 85→69%, spread 42→23pp) holds regardless.
+
+**Updated pending decisions:** add **(8) phase-reach magnitudes / the light-long-vs-heavy-long reach question** (design) to the list in §6. (Reading σ-tune from item 5/7 applied in R8: `READING_PER_POINT` lowered toward band.)
