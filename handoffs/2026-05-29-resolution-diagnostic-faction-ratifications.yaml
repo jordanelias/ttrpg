@@ -181,6 +181,35 @@ working_state:
     ENTANGLED_RESIDUALS_CLOSED: 'All closed (LPS-2c+2d): Seizure->authoritative §2.7;
       Excommunication/Heresy/Baralta effects->per-territory L; Seizure-FAIL->Mandate−1;
       Restoration PS->community-level (FSA §6).'
+    REMAINING_in_scope_videogame: 'stats_1_7_scale.md ONLY (2 asserted edits): (1)
+      L114 Suppress Ob ''floor(Church L / 2) + 1'' -> ''floor(Church aggregate_L /
+      2) + 1'' (aggregate_L = the LPS-1 faction-level replacement for the old faction-scalar
+      L; consistent with §3.6 strictness reading aggregate_L). (2) L153 Seizure SUMMARY
+      row ''L vs floor(owner''s L / 2) + 1 | Per-territory roll. ... Failure: Church
+      L −1.'' -> AUTHORITATIVE faction_layer §2.7: ''Influence + floor(CI/15) vs Ob
+      = 7 − PT | Per-territory. ... Failure: Mandate −1.'' (matches the Seizure DETAIL
+      L199-206 already reconciled in LPS-2c/2d; L153 is the stale summary the marker-excused
+      sweep missed because it contains ''Per-territory''). After these two, the videogame
+      faction canon (designs/* + params/factions/stats_1_7_scale) is 0 faction-level
+      L/PS.'
+    SCOPE_FINDING_2026_05_30: 'Repo-wide RAW scan (534 designs/+params/ docs, no marker
+      exclusion) found ~59 faction-level-L refs; classification: (a) designs/audit/2026-*
+      = HISTORICAL audit/sim/report artifacts (architecture L114 ''date-keyed audit
+      results, simulations, reports'') — NEVER edit (point-in-time records); (b) params/bg/*
+      (faction_actions, institutions, parliament, tracks, core, ci_seizure) = BOARD-GAME
+      ruleset — bare d10 pool ''L vs Ob = floor(target L/2)+1'', the resolution form
+      the videogame deterministic+stochastic resolver REPLACED; project is VIDEOGAME-ONLY
+      and the entire LPS redesign deliberately never touched params/bg -> treated
+      OUT OF SCOPE (bringing the board game into per-territory L would be a separate,
+      large redesign of a different artifact — Jordan to confirm/override if intended);
+      (c) params/factions/riskbreakers_identity.md (5 refs; Token/VTM/Senator board-game-flavored)
+      = SCOPE TBD, flag for Jordan; (d) IN SCOPE residuals = stats_1_7_scale L114/L153
+      ONLY (see REMAINING_in_scope_videogame). All other designs/provincial|territory|scene
+      docs scanned CLEAN.'
+    session_close_reason: context_gate FETCH hard-stop fired (~2.82M = cumulative
+      fetch tracker from the 534-doc repo-wide scan; NOT actual context-window usage,
+      which is well under 1M/Opus). Repo committed & consistent at cf2c1c27 (LPS-2d);
+      nothing staged. Remaining work fully specified for next session.
 blockers:
 - NONE blocking. The diagnostic is complete and canon reflects it.
 - The two open items (ED-879 C3, ED-875) are Jordan design-intent, not blocked work
@@ -211,7 +240,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   This handoff is the resolution-diagnostic/faction-cluster master.
 status: active
 created: '2026-05-29T23:03:43.540918+00:00'
-updated: '2026-05-31T03:21:48.245872+00:00'
+updated: '2026-05-31T03:31:31.159551+00:00'
 session_2026_05_30_additions:
   design_authority: Jordan granted explicit authority to make precedent-anchored design
     choices respecting canon worldbuilding/metaphysics/characterization.
