@@ -186,6 +186,7 @@ systems:
     canonical_sha__params__scale_transitions_md: "9952246289bc40036ff8bb50e377048a29872883"
   faction_layer:
     design_doc: designs/provincial/faction_layer_v30.md
+    note__fssloop: "FSS-LOOP-1/2+F2 2026-05-30 res-diag ratif: §1.4 determ Stab<=2 floor (supersedes Ob-4; GD-3 preserved); §5.7 Wealth>=1 Mil re-muster; F2 contested=tgt-stat/non=floor2+1. Detail: master _faction_layer_loop_ratifications_2026-05-30."
     canonical_sha__designs__provincial__faction_layer_v30_md: "405f45e244f40482afa20fd36025bbe610844b1c"
     note: "ED-865/874 ext (2026-05-30): §3.3 Treaty positioning (contested) + ratification migrated to the deterministic+stochastic resolver; Guarantor +1D->+1 M, Grand Debate degree->margin; Grand Debate social contest stays dice. §5.3 CI vote-contribution cross-ref added. Resolution-diagnostic ratification (CIP-1)."
     note: "ED-880 (2026-05-29): Varfell 'purely military' prose corrected to acknowledge Cultural Reclamation (Piety-alignment, non-military, VTM-free). VTM/Reformation stay struck; not a control transfer or victory path; sole victory remains Peninsular Sovereignty (GD-1). Authority unchanged."

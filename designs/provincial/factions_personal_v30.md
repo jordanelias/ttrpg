@@ -57,6 +57,8 @@ Range: 0–10. Starting value: 5 (BG). Not a separate track in TTRPG mode (effec
 
 **Domain Ob:** Target faction's relevant stat directly (1–7 scale; no division). A faction at stat 4 sets Ob 4. The rolling character may add their own faction's relevant stat as bonus dice if they hold leadership of that faction.
 
+> **[F2 reconciliation, FSS-F2, 2026-05-30 — resolution-diagnostic; Jordan-delegated, logged & vetoable.]** This "Ob = target stat directly" form is the **contested** Domain Action case. It is **not** in conflict with the `params` form `Ob = floor(stat/2)+1`; the two are the **two difficulty sources** the ratified deterministic+stochastic resolver already distinguishes (`params/factions/stats_1_7_scale.md §Domain Action Resolution`, ED-865/874): *contested* actions use **difficulty = the target's relevant stat directly** (this line → resolver `M = acting_stat − target_stat`); *non-contested* actions use a **fixed action-difficulty rating**, for which the legacy `Ob = floor(stat/2)+1` maps via `D = max(1,(O−1)·2)`. The prior "conflicting canon" (diagnostic F2) was only that neither doc stated *which applies when*; resolved here by scoping, not by striking either formula. Bottom-up: both formulas are live and used (CI-60 Seizure and defensive-Spy use the ⌊/2⌋+1 rating; faction-vs-faction Asserts use stat-vs-stat). Top-down: the opposed-check-vs-fixed-difficulty split is the CK3/EU idiom.
+
 
 **Domain Action → Social Contest escalation (PP-246):** A Domain Action always produces a mechanical outcome on its own. Escalation to a full Social Contest occurs only when all three hold: (a) both parties are personally present, (b) stakes are explicitly contested by both, AND (c) the DA roll produces a Partial. On Partial: GM may call a Contest at Piety Track 5 (neutral); DA outcome held pending Contest resolution. On Success or Failure: outcome is final, no Contest.
 
@@ -419,7 +421,7 @@ At the end of each campaign season (~4 sessions):
 
 - Failure: Stability −1
 - Overwhelming (net ≥ 2× Ob): Stability +1 (max 7)
-- **Anti-death-spiral floor:** Faction at Stability 2 or lower is treated as Ob 4 regardless of actual pressure. Prevents immediate cascade; gives players a window to intervene.
+- **Anti-death-spiral floor** `[SUPERSEDED-BY FSS-LOOP-1 (faction_layer_v30 §1.4), 2026-05-30]`: ~~Faction at Stability 2 or lower is treated as Ob 4 regardless of actual pressure.~~ The "treated as Ob 4" form was non-functional (a 2D pool vs Ob 4 ≈ 1% success; 1D at Stab 1 ≈ 0%). Replaced by the **deterministic** floor: at Stability ≤ 2 the Accounting Stability Check **cannot reduce Stability** (minimum Partial; Overwhelming may still raise it). Collapse remains reachable only via active Trigger/attribute loss, preserving GD-3. See faction_layer_v30 §1.4.
 
 3. Apply Thread Tension drift and all Thread Tension-lowering events
 4. Check floors (Stability 0 = collapse event) and ceilings (Mandate or Stability 7 = dominance event)

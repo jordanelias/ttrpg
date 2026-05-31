@@ -64,6 +64,9 @@ Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_perso
 ```
 margin  M = acting_stat − difficulty
    difficulty = the contested target's relevant stat (contested actions),
+            # [F2 reconciliation, FSS-F2, 2026-05-30] This is the canonical home of the "Ob = target stat
+            #  directly" form in factions_personal_v30 §8.1 — the CONTESTED case. The factions_personal §8.1
+            #  line and this resolver line are the SAME rule, not conflicting canon (diagnostic F2 closed).
                 OR a fixed action-difficulty rating (non-contested actions).
    Legacy Ob mapping: an action previously "vs Ob O" has difficulty D = max(1, (O−1)·2).
 

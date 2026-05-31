@@ -199,6 +199,8 @@ Phase 5 Step 2 (existing, params_board_game): any faction with ≥2 attribute po
 
 This check fires AFTER Trigger 1–5 consequences are applied. It can fire in the same Accounting as a Trigger event.
 
+**Deterministic low-Stability floor (FSS-LOOP-1, 2026-05-30 — resolution-diagnostic ratification; supersedes the §8.12 / factions_personal "Stab ≤ 2 → treated as Ob 4" floor and subsumes the §1.5 Survival Exception's check-path protection).** When a faction is at **Stability ≤ 2**, the Accounting Stability Check **cannot reduce Stability** (it resolves at minimum Partial; an Overwhelming may still raise it). Rationale (NERS-R / Lesson 3 + Lesson 5): the prior "treated as Ob 4" floor was non-functional — a 2D pool vs Ob 4 succeeds ~1% of the time (1D at Stab 1 ≈ 0%), so the "window to intervene" the floor promised was ~1% wide and the passive dice-decay arm of the death-spiral ran essentially unchecked. The deterministic floor removes the **passive** (random-check) path to collapse entirely. **Collapse (Stability 0) remains reachable only via Trigger 1–5 consequences (§1.2) or direct attribute reduction** — i.e. by *active* pressure (occupation, lost battles, hostile votes, subterfuge), never by a bad Accounting roll. This bounds the spiral short of extinction (Lesson 5) while preserving active collapse and therefore the GD-3 Revolt → Insurgency → Faction emergence pathway (canon/02 §GD-3). Historical anchor: polities in crisis are pushed under by active defeat (Byzantine 1204; Habsburg state bankruptcies shrink but do not delete the army), not by passive institutional decay — the floor models a regency/receivership breathing space, deterministic by nature. Stage-4 sim (2026-05-30): under the fixed floor a besieged faction holds at Stab 1–2 and climbs via Institutional Consolidation (§1.3) once trigger pressure relents, while sustained triggers still drive active collapse (P(collapse) 0.41 → 0.97 across rising pressure). **Composes with F5:** Institutional Consolidation (§1.3, +1 for a trigger-free season) is the **universal** recovery path every faction has — the floor makes it reachable by stopping the bleed; no new per-faction recovery apparatus is added (would fail NERS-N/E).
+
 ---
 
 ### §1.5 Faction Collapse Exit Procedure (ED-675)
@@ -479,9 +481,9 @@ Parliamentary vote to lift an Embargo/Blockade: Strain −1 (diplomatic resoluti
 When a faction's Wealth reaches 0 at any Accounting:
 - Muster (Legionary Inward) action unavailable until Wealth ≥ 1
 - Military −1 at each subsequent Accounting while Wealth = 0 (mercenaries unpaid)
-- Recovery: any Wealth gain restores stat; Military stat does not auto-recover (must be re-mustered)
+- Recovery: any Wealth gain restores the Wealth stat. **Military re-muster (FSS-LOOP-2, 2026-05-30 — resolution-diagnostic ratification; Lesson 5, couple the damper to the degrading dimension):** while **Wealth ≥ 1**, Military restores **+1 per Accounting** (re-muster), up to the Military value the faction held at the Accounting when Wealth **first** reached 0, subject to the normal Muster (Legionary Inward) prerequisites and the ±2 Military seasonal cap. Re-muster does not exceed the pre-collapse value (recovery, not growth). Rationale: the prior rule left Military as a one-way ratchet (Military −1 per Accounting at Wealth 0, with no coupled recovery), so a temporary blockade inflicted **permanent** Military loss — an undamped loop on the Military dimension. Coupling recovery to solvency bounds it. Historical anchor: the early-modern fiscal-military cycle — bankrupt states demobilize and **re-muster when bullion returns** (Spanish Habsburg bankruptcies). Stage-4 sim (2026-05-30): a 3-season blockade takes Military 5 → 2; under the coupled rule it recovers 2 → 5 over the subsequent solvent seasons, vs the prior rule pinning it at 2 permanently.
 
-This makes sustained Blockade + Embargo an existential threat to Guilds and Hafenmark (Wealth-primary factions).
+This makes sustained Blockade + Embargo a serious — but no longer permanently crippling — threat to Guilds and Hafenmark (Wealth-primary factions).
 
 ### §5.8 NPC Vote Behavior
 
