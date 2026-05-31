@@ -1,0 +1,82 @@
+id: lane-a-2026-05-31
+scope: editorial
+task:
+  skill: valoria-orchestrator
+  description: 'Lane A (Canon/Editorial/Design-content), write-disjoint 3-session
+    model. LAUNCHED ON A VERIFIED-DISJOINT REDUCED SCOPE (canon/** + designs/{personal,proposals}/**).
+    Full Lane A owns (params/**, designs/{world,provincial}/**, references/propagation_map.md)
+    DEFERRED: they overlap the active faction handoff (8 params/designs paths) + lane-b
+    (propagation_map). Track 1.1 reconciliation unmet AND check_handoff_conflicts
+    is broken for glob owns (false-empty), so disjointness was verified manually with
+    a correct prefix-component overlap check. Working ledger-scoped items: 2.14 open-backlog
+    triage (flagship), 3.2 ED-844..856 status flips, 1.8 ED 868..877 filing-verify,
+    ledger portions of 1.2/1.11/1.13.'
+owns:
+- canon/**
+- designs/personal/**
+- designs/proposals/**
+context_files:
+- path: references/lane_assignments.yaml
+  depth: full
+  reason: 'Lane A assignment: owns/ranges/scopes + launch protocol + shared-file discipline.'
+- path: canon/editorial_ledger.jsonl
+  depth: full
+  reason: 2.14 triage target (326KB; parsed on-disk to avoid context bloat).
+- path: canon/02_canon_constraints.md
+  depth: full
+  reason: P-01..P-15 canon authority for evidence-correctable rulings.
+- path: references/id_reservations.yaml
+  depth: full
+  reason: Lane A reserved ED 890-939 / PP 727-759 / recon-zone 874-889.
+working_state:
+  done:
+  - Lane A opened on verified-disjoint reduced scope (canon/** + designs/{personal,proposals}).
+    Disjointness PROVEN via correct overlap algorithm (the live check_handoff_conflicts
+    is broken for glob owns).
+  in_progress:
+  - 2.14 — triaging 73 open + 12 provisional ledger entries into evidence-correctable
+    / gap-fill-mechanical-tier / Jordan-decision / stale-kill (counts to be verified
+    against live ledger).
+  next:
+  - 3.2 flip ED-844..856 -> ratified (ledger-only)
+  - 1.8 verify ED 868..877 filed+deduped (ledger-only)
+  - ledger portions of 1.2/1.11/1.13
+  - re-claim deferred scope once prerequisites clear
+  deferred:
+  - 3.1 (designs/provincial + params), 3.3/3.4 (params + designs/world ms_trajectory),
+    1.7 (designs/audit) — faction-owned; blocked until Track 1.1 archives the COMPLETED
+    faction handoff.
+blockers:
+- 'CROSS-LANE -> Lane B (1): check_handoff_conflicts is BROKEN for glob owns. It does
+  fnmatch(proposed, pattern) with proposed=lane owns (globs) -> only matches when
+  a lane owns entry is a concrete path under another handoff''s glob; misses all glob-vs-path
+  overlaps (returned false-empty for the faction overlap). Fix: prefix-component region-overlap,
+  strip section annotations, match both directions; add tests/hooks coverage (7.2).'
+- 'CROSS-LANE -> Lane B (2): references/propagation_map.md double-claimed (Lane A
+  explicit owns vs lane-b references/**). Co-file rule assigns propagation_map ->
+  Lane A. Add it to lane-b shared_not_exclusive + narrow lane-b owns.'
+- 'UN-LANED prerequisite (Track 1.1): archive the COMPLETED faction handoff ''2026-05-29-resolution-diagnostic-faction-ratifications''
+  (work ratified to canon; only ED-879 C3 + ED-875 remain, carried at GATE G8) so
+  its claim on params/factions + designs/{world,provincial} clears and Lane A can
+  re-claim full scope.'
+- 'DEFERRED SCOPE held until the above clear: params/**, designs/{world,provincial}/**,
+  references/propagation_map.md.'
+last_commit:
+  ttrpg:session_log_current.md: 52c4d946448fca2badbda6650ec15e6971961607
+  ttrpg:session_logs/index.md: 158980444886602e99ea5776beb7360907b35e38
+  ttrpg:references/file_index_summary.md: 52c4d946448fca2badbda6650ec15e6971961607
+  ttrpg:references/canonical_sources.yaml: 52c4d946448fca2badbda6650ec15e6971961607
+  ttrpg:references/roadmap_state.yaml: 52c4d946448fca2badbda6650ec15e6971961607
+  ttrpg:references/lane_assignments.yaml: e219376fd67937584d6b79915b381e1e9abbdbeb
+  ttrpg:handoffs/2026-05-29-combat-armature-sigma-leverage.yaml: 158980444886602e99ea5776beb7360907b35e38
+  ttrpg:handoffs/2026-05-29-resolution-diagnostic-faction-ratifications.yaml: 158980444886602e99ea5776beb7360907b35e38
+  ttrpg:handoffs/lane-b-2026-05-31.yaml: 158980444886602e99ea5776beb7360907b35e38
+  ttrpg:handoffs/lane-c-2026-05-31.yaml: 158980444886602e99ea5776beb7360907b35e38
+  ttrpg:references/id_reservations.yaml: e219376fd67937584d6b79915b381e1e9abbdbeb
+  ttrpg:canon/editorial_ledger.jsonl: fb024547ebff95af176a3cd64ce8f8ea8df3474c
+  ttrpg:canon/02_canon_constraints.md: fb024547ebff95af176a3cd64ce8f8ea8df3474c
+session_token: 2b33697aa63bc788
+created: '2026-05-31T23:25:59.126735+00:00'
+updated: '2026-05-31T23:25:59.126735+00:00'
+status: active
+key_values: []
