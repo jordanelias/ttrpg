@@ -638,7 +638,7 @@ Roll: Influence + floor(CI/15) vs Ob = 7 − PT (AUTHORITATIVE per faction_layer
 | Degree | Result |
 |---|---|
 | Success | Administrative control of territory. Domain Actions vs Church authority require +2 Ob. Church Influence (territory-level value) fires immediately. |
-| Failure | Church L −1 |
+| Failure | Mandate −1 (authoritative faction_layer §2.7) |
 
 Riskbreaker exposure removes seized territory and prevents re-seizure for one season.
 
