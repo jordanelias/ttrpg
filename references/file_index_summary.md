@@ -3,7 +3,7 @@
 This file is no longer the canonical file index for the Valoria repos.
 
 **Use instead:** `references/valoria_index.sql` — committed text dump generated
-by `tools/regenerate_file_index.py` from real `git ls-tree` walks. Runtime
+by `regenerate_file_index.py` from real `git ls-tree` walks. Runtime
 SQLite database lives at `/home/claude/valoria.db` (never committed).
 
 This stub is retained as a redirect note per the `<retirement>` protocol

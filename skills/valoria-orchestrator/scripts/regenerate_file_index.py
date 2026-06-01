@@ -3,7 +3,7 @@
 regenerate_file_index.py — Build/update references/valoria_index.sql from repo state.
 
 Usage (in-session, PAT already in env):
-    python3 tools/regenerate_file_index.py [--dry-run] [--full]
+    python3 regenerate_file_index.py [--dry-run] [--full]
 
     --dry-run : print what would change, don't write
     --full    : ignore stored SHAs, re-fetch all files (use after schema changes)
