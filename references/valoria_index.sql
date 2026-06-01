@@ -101,6 +101,15 @@ CREATE INDEX IF NOT EXISTS idx_entity_aliases_entity ON entity_aliases(entity_id
 
 -- ── FTS5 — unified search across files + entities ────────────────────────────
 
+CREATE TABLE IF NOT EXISTS stubs (
+  module       TEXT PRIMARY KEY,   -- sim/<layer>/<name>.py
+  layer        TEXT,               -- domain layer (personal/provincial/thread/...)
+  tier         INTEGER,            -- infill dependency tier 0-5 (NULL if unset)
+  status       TEXT,               -- verified | partial | stub | canon_gated
+  canon_source TEXT,               -- canonical design doc (joins concept_files.path), or NULL
+  blocked_on   TEXT                -- canon-gate reason when status=canon_gated, else NULL
+);
+
 CREATE VIRTUAL TABLE IF NOT EXISTS files_fts USING fts5(
   path      UNINDEXED,
   filename,
@@ -801,3 +810,51 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/u
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('80', 'designs/ui/valoria_ui_ux_v4_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('81', 'designs/personal/conviction_track_v1.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('82', 'designs/npcs/npc_relational_graph_v30.md');
+
+-- stubs: 45 rows (curated mirror of designs/proposals/stub_infill_plan.md +
+--   tests/sim/v18-integration/module_manifest.md, status as of 2026-05-19; regenerable)
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/__init__.py', '(root)', 0, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/autoload/npc_ai.py', 'autoload', 0, 'canon_gated', NULL, 'contamination audit');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/cross_scale/articulation.py', 'cross_scale', 3, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/cross_scale/domain_echo.py', 'cross_scale', 0, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/cross_scale/handoff_rules.py', 'cross_scale', 0, 'verified', 'designs/architecture/scale_transitions_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/cross_scale/zoom_in_out.py', 'cross_scale', 0, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/peninsular/ci_track.py', 'peninsular', 2, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/peninsular/ip_track.py', 'peninsular', 3, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/peninsular/ms_track.py', 'peninsular', 0, 'verified', 'params/core.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/peninsular/rs_track.py', 'peninsular', 3, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/peninsular/season.py', 'peninsular', 0, 'verified', 'designs/architecture/campaign_architecture_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/beliefs.py', 'personal', 1, 'verified', 'designs/scene/fieldwork_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/combat.py', 'personal', 1, 'partial', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/companion.py', 'personal', 4, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/contest.py', 'personal', 2, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/conviction.py', 'personal', 1, 'verified', 'designs/personal/conviction_track_v1.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/fieldwork.py', 'personal', 3, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/investigation.py', 'personal', 3, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/knots.py', 'personal', 2, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/parliamentary_stay.py', 'personal', 4, 'verified', 'designs/scene/social_contest_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/parliamentary_vote.py', 'personal', 3, 'verified', 'designs/scene/social_contest_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/altonian_reinforcements.py', 'provincial', 5, 'canon_gated', 'designs/provincial/altonian_reinforcements_v30.md', 'Pass 2e Hafenmark');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/charter_liberties.py', 'provincial', 0, 'canon_gated', NULL, 'Pass 2e Hafenmark');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/hafenmark_equipment.py', 'provincial', 5, 'canon_gated', NULL, 'Pass 2e Hafenmark');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/home_sanctuary.py', 'provincial', 5, 'canon_gated', 'designs/provincial/home_sanctuary_t9_v30.md', 'Pass 2f Church');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/infrastructure_reclamation.py', 'provincial', 2, 'canon_gated', 'designs/provincial/infrastructure_reclamation_v30.md', 'Pass 2f Church');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/mass_seizure.py', 'provincial', 2, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/parliamentary_transfer.py', 'provincial', 4, 'partial', 'designs/provincial/parliamentary_transfer_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/treaty.py', 'provincial', 0, 'partial', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/varfell_mandate_action.py', 'provincial', 0, 'canon_gated', NULL, 'Pass 2d Varfell');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/varfell_territorial_acquisition.py', 'provincial', 2, 'canon_gated', NULL, 'Pass 2d Varfell');
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/territory/infrastructure.py', 'territory', 1, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/territory/settlement.py', 'territory', 0, 'verified', 'designs/territory/settlement_layer_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/territory/temperaments.py', 'territory', 1, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/co_movement.py', 'thread', 2, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/coherence.py', 'thread', 0, 'verified', 'designs/threadwork/threadwork_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/collective.py', 'thread', 2, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/operations.py', 'thread', 1, 'verified', 'params/threadwork.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/opposing.py', 'thread', 2, 'partial', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/rendering.py', 'thread', 3, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/threadcut.py', 'thread', 2, 'verified', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/world/insurgency_pipeline.py', 'world', 0, 'verified', 'canon/02_canon_constraints.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/world/miraculous_event.py', 'world', 4, 'stub', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/world/npe.py', 'world', 0, 'verified', 'designs/scene/investigation_systems_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/world/restoration_movement.py', 'world', 1, 'canon_gated', 'designs/provincial/restoration_movement_v30.md', 'Pass 2d Varfell');

@@ -347,7 +347,7 @@ def dump_to_sql(conn: sqlite3.Connection, out_path: str = None,
 
     By default (include_generated=False), emits only:
       - Schema (CREATE TABLE / INDEX / TRIGGER / VIRTUAL TABLE statements)
-      - Curated data: concepts, aliases, concept_files, meta
+      - Curated data: concepts, aliases, concept_files, stubs, meta
 
     The files, entities, and entity_aliases tables are GENERATED at session
     start by run_fast() / run() and are never committed — they are always
@@ -364,7 +364,7 @@ def dump_to_sql(conn: sqlite3.Connection, out_path: str = None,
         f'-- Last updated: {now}',
         '-- Generated tables (files, entities, entity_aliases) are rebuilt at',
         '-- session start by regenerate_file_index.py — never hand-edit those.',
-        '-- Curated tables (concepts, aliases, concept_files) are safe to edit here.',
+        '-- Curated tables (concepts, aliases, concept_files, stubs) are safe to edit here.',
         '',
     ]
 
@@ -374,7 +374,7 @@ def dump_to_sql(conn: sqlite3.Connection, out_path: str = None,
         lines.append('')
 
     # Curated tables — always emit
-    curated = ['meta', 'concepts', 'aliases', 'concept_files']
+    curated = ['meta', 'concepts', 'aliases', 'concept_files', 'stubs']
     # Generated tables — emit only when explicitly requested
     generated = ['files', 'entities', 'entity_aliases']
 

@@ -163,3 +163,32 @@ def search(conn, term):
         "WHERE c.name LIKE ? OR a.alias LIKE ? ORDER BY c.name",
         (f'%{term}%', f'%{term}%')).fetchall()
     return [r[0] for r in rows]
+
+
+def stub_status(conn, system):
+    """Implementation status of the sim modules backing a concept/system.
+
+    Joins the curated `stubs` table to the concept graph via
+    canon_source -> concept_files -> concepts. Returns rows of
+    (module, status, tier, blocked_on) for the named concept.
+    """
+    return conn.execute(
+        "SELECT s.module, s.status, s.tier, s.blocked_on FROM stubs s "
+        "JOIN concept_files cf ON cf.path = s.canon_source "
+        "JOIN concepts c ON c.id = cf.concept_id "
+        "WHERE c.name = ? ORDER BY s.module", (system,)).fetchall()
+
+
+def stubs_by_status(conn, status):
+    """All sim modules in a given implementation status.
+
+    status in {'verified','partial','stub','canon_gated'}.
+    """
+    return [m for (m,) in conn.execute(
+        "SELECT module FROM stubs WHERE status = ? ORDER BY module", (status,))]
+
+
+def stub_summary(conn):
+    """{status: count} across all tracked sim stub modules."""
+    return dict(conn.execute(
+        "SELECT status, COUNT(*) FROM stubs GROUP BY status ORDER BY status").fetchall())
