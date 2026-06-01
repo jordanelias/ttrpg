@@ -1216,13 +1216,19 @@ def _generate_pointer(index_content: str) -> str:
         f"blockers: []\n"
     )
 
-def quick_bootstrap(extra_paths: list = None) -> tuple:
+def quick_bootstrap(extra_paths: list = None, force_full: bool = False) -> tuple:
     """
     Standard preamble for every bash_tool block after the initial bootstrap.
 
     Uses disk cache to avoid re-fetching files already read this session.
     Only fetches from GitHub when: (a) cache miss, or (b) extra_paths not cached.
     atomic_commit() invalidates cache for committed paths, ensuring freshness.
+
+    Status reporting (handoffs / roadmap / lane / index summary) prints only on
+    the FIRST bootstrap of a session (cold cache). Warm re-bootstraps in the same
+    session print a single terse line instead — the full block re-prints unchanged
+    state (~2k tokens) every bash_tool block otherwise. Pass force_full=True to
+    re-show the full block on a warm call.
 
     Returns: (g, h, files, token) — ready to use immediately.
 
@@ -1238,6 +1244,11 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
 
     # Restore session state from disk cache (written by previous bash_tool blocks)
     cache_hit = _load_cache()
+    # First bootstrap of a session = cold cache (no fetches restored). Warm
+    # re-bootstraps reload hook state but restore data from disk; they suppress
+    # the verbose status block, which otherwise re-prints unchanged handoffs /
+    # roadmap / index (~2k tokens) on every bash_tool block. force_full overrides.
+    first_bootstrap = (not cache_hit) or force_full
 
     session_paths = [
         'session_log_current.md',
@@ -1272,30 +1283,33 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     token = _h_mod.assert_bootstrap()
     _h_mod.context_gate()
 
-    # Read and report active handoffs
+    # Read active handoffs every block (state used later); report only on first bootstrap.
     try:
         _g_mod._active_handoffs = read_all_handoffs()
-        report_handoffs(_g_mod._active_handoffs)
+        if first_bootstrap:
+            report_handoffs(_g_mod._active_handoffs)
     except Exception as e:
         _g_mod._active_handoffs = []
-        print(f"[HANDOFF WARN] Could not read handoffs: {e}")
+        if first_bootstrap:
+            print(f"[HANDOFF WARN] Could not read handoffs: {e}")
 
-    # Report roadmap position (non-blocking; absent file degrades gracefully)
-    try:
-        report_roadmap(files.get('references/roadmap_state.yaml'))
-    except Exception as e:
-        print(f"[ROADMAP WARN] Could not read roadmap state: {e}")
-
-    # Report current lane (3-session mode; non-blocking; silent if no lane declared)
-    try:
-        report_lane(files.get('references/lane_assignments.yaml'))
-    except Exception as e:
-        print(f"[LANE WARN] Could not read lane assignment: {e}")
+    # Roadmap + lane: pure prints, files already cached — first bootstrap only.
+    if first_bootstrap:
+        try:
+            report_roadmap(files.get('references/roadmap_state.yaml'))
+        except Exception as e:
+            print(f"[ROADMAP WARN] Could not read roadmap state: {e}")
+        try:
+            report_lane(files.get('references/lane_assignments.yaml'))
+        except Exception as e:
+            print(f"[LANE WARN] Could not read lane assignment: {e}")
 
     # Load the SQL file-index (concept/alias find-by-context + files manifest).
     # Non-blocking: any failure degrades to name-keyed fetch. load_index uses
     # run_fast (tree-only) + a 600s cache, so it adds no tracked-fetch tokens and
     # does not inflate context_gate (verified delta 0). First call ~3s; cached after.
+    # The connection is loaded every block (fetch_system needs it); only the
+    # summary print is gated to the first bootstrap.
     try:
         import os as _ios, urllib.request as _iu, json as _ij, base64 as _ib, time as _it
         _ipat = open('/home/claude/.valoria_pat').read().strip()
@@ -1312,10 +1326,17 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
                 open(_idst, 'w').write(_ib.b64decode(_ij.loads(_ir.read())['content']).decode())
         import index_bootstrap as _ix
         _iconn, _irep = _ix.load_index(g=_g_mod, strict=False)
-        _ix.print_index_summary(_irep)
+        if first_bootstrap:
+            _ix.print_index_summary(_irep)
         _g_mod._index_conn = _iconn
     except Exception as _ie:
-        print(f"[INDEX WARN] file-index not loaded ({_ie}); name-keyed fetch still works")
+        if first_bootstrap:
+            print(f"[INDEX WARN] file-index not loaded ({_ie}); name-keyed fetch still works")
+
+    # Warm re-bootstrap: one terse line instead of the full status block.
+    if not first_bootstrap:
+        _n = len(getattr(_g_mod, '_active_handoffs', []) or [])
+        print(f"[bootstrap ✓ warm] token {token} · {_n} active handoff(s) · gate ok · status suppressed (force_full=True to show)")
 
     return _g_mod, _h_mod, files, token
 
