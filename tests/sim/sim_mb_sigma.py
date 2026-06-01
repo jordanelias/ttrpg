@@ -1516,7 +1516,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         # [canonical: Jordan design — octagon, GREEN<45°, YELLOW 45-90°, RED≥90°]
         # For each contact cell-pair, compute angle using defender's per-cell facing vector.
         # Average the modifier across all contact cell-pairs per side.
-        def _per_cell_angle_mod(defender_subunit, defender_cells, attacker_cells):
+        def _per_cell_angle_mod(defender_subunit, defender_cells, attacker_cells, attacker_subunit=None):
             if not defender_cells or not attacker_cells: return 0
             # Use attacker CENTROID rather than nearest-cell to avoid non-determinism
             # when a defender cell is equidistant between attacker cells (e.g. Arrowhead tip
@@ -1546,7 +1546,21 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 # wrappers, so a frontal/mirror clash incurs no envelopment penalty regardless of integer-
                 # movement stagger. Also fixes the enveloper self-flank (F2): the wider side's narrower
                 # enemy cannot wrap it, so an enveloper is never penalised for its own inward-rotated facing.
-                _wrappers = [a for a in atk_sorted if a[1] < _dmin or a[1] > _dmax]
+                # F3 (mirror fix): only a NOMINALLY WIDER attacker can wrap. Width = column SPAN (extent)
+                # of the static oriented pattern, symmetric under A<->B — a true mirror has equal span ->
+                # NO wrappers regardless of dynamic drift (mirror == refuse-off). SPAN not distinct-count, so
+                # a gapped formation (GappedLine) is correctly "wide" by its reach.
+                _dc = [t[3] for t in op]; _def_front = max(_dc) - min(_dc) + 1
+                if attacker_subunit is not None:
+                    _op_atk = oriented_pattern(attacker_subunit.shape, attacker_subunit.tier,
+                                               attacker_subunit.advance_dir)
+                    _ac = [t[3] for t in _op_atk]; _atk_front = max(_ac) - min(_ac) + 1
+                else:
+                    _atk_front = _def_front + 1
+                if _atk_front > _def_front:
+                    _wrappers = [a for a in atk_sorted if a[1] < _dmin or a[1] > _dmax]
+                else:
+                    _wrappers = []
                 # depth (reserves) per column from the defender's CURRENT footprint — a deep column
                 # resists the wrap (reserves pivot to face the envelopers; Clausewitz oblique reserves).
                 _depth_by_col = {}
@@ -1587,9 +1601,9 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             return sum(mods) / len(mods) if mods else 0
 
         a_angle_mod = _per_cell_angle_mod(atom_a, list(set(p["a_cells"])),
-                                           list(set(p["b_cells"])))
+                                           list(set(p["b_cells"])), atom_b)
         b_angle_mod = _per_cell_angle_mod(atom_b, list(set(p["b_cells"])),
-                                           list(set(p["a_cells"])))
+                                           list(set(p["a_cells"])), atom_a)
         # === SIGMA-LEVERAGE HEAD (prototype) ===
         # Advantages (octagon angle, puncture, encirclement, ranged-in-melee) enter as a
         # delta-sigma net-boost on the offensive net successes (uniform impact across pool

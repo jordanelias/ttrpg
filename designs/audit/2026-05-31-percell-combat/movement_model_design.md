@@ -148,3 +148,31 @@ identically; (b) replace the extremum detection with a symmetric net-overhang me
 minus B's overhang of A) so a true mirror nets to zero wrappers regardless of drift. Option (b) is the
 more tractable and directly targets the asymmetry. PER_CELL=0 and PER_CELL=1/refuse-off remain byte-exact
 to the committed wheel engine (verified this session).
+
+## F3 — MIRROR FIXED BY CONSTRUCTION (nominal-width/span gate), 2026-05-31
+Fix: a wrapper requires the attacker to be NOMINALLY WIDER than the defender, measured by the column SPAN
+of the static oriented pattern (not drifted live positions, and not distinct-column count). Span is
+symmetric under the A<->B swap, so a true mirror has equal span -> ZERO wrappers -> the refusal path
+contributes nothing. PROVEN: in a Line-v-Line mirror, mod=-1 is byte-identical to mod=0 (envelopment inert)
+at multiple seeds -> mirror unbiased BY CONSTRUCTION (not merely on average). SPAN (not count) so a gapped
+formation is correctly "wide" by reach.
+
+[CORRECTION] This supersedes the prior-commit flag that M3 "biases the mirror +4". That was an OVERREAD of
+sampling variance: at n<=120 the mirror swings ~+/-7 per seed (42-57); the +4 came from two same-direction
+seeds, and a third seed gave -5.7. Aggregated over seeds the mirror was ~50 throughout. F3 removes both the
+spurious-wrapper noise and the conceptual concern; the mirror is now inert-by-construction.
+
+RESULT (F3 span gate, mod=-1.0, resist=0.3, 2-seed aggregate n=120): 6/10 IN —
+  H1 48.6, H2 52.6, H3 64.5 (headline, IN), H4 40.7, H9 36.6, H10 44.0.
+  H11 60.2 (marginally HIGH), H5 39.4 LO, H7 43.8 LO, H6 34.6 LO.
+Remaining (all NON-mirror, dormant-path only):
+ - H5 RefusedFlank-v-Horseshoe LO: a refused/deep flank should RESIST the wrap (needs the refused-flank
+   facing mechanic — refused cells face outward to meet envelopers; depth alone is insufficient because the
+   refused column is shallow).
+ - H6 RefusedFlank-v-Line LO: equal SPAN -> envelopment-inert -> this is the PRE-EXISTING base value, not M3.
+ - H7 GappedLine-v-Line LO: the gap dynamics (Line cells sit in the gaps) blunt the wrap; needs inspection.
+ - H11 marginally HIGH: Arrowhead (widest) over-wraps Horseshoe; within ~0.2 of band.
+
+STATUS: envelopment EMERGES, is PROVABLY mirror-clean, H3 in band, 6/10 IN. Still DORMANT (PC_REFUSE off);
+flipping default-on is Jordan's call pending H5/H7 + a high-n NERS Stage-4. PER_CELL=0 and PER_CELL=1/
+refuse-off remain byte-exact to the committed wheel engine (verified).
