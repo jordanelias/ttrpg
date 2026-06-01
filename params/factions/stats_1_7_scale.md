@@ -16,7 +16,7 @@ Seasonal cap: ±2 per stat per season (TTRPG); ±varies (BG — see accounting).
 
 | Faction | L (TTRPG) | PS (TTRPG) | L (BG) | PS (BG) | I | W (TTRPG) | W (BG) | Mil | Int | Sta |
 |---------|-----------|------------|--------|---------|---|-----------|--------|-----|-----|-----|
-| Crown | 5 | 5 | 5 | 5 | 5 | 4 | 4 | 4 | 3 | 4 |
+| Crown | 5 | 5 | 5 | 5 | 5 | 4 | 4 | 5/6 | 3 | 4 | <!-- Mil: Crown fields the Löwenritter (5/6); prior value 4 struck per ED-869 / Jordan 2026-05-31 -->
 | Church | 5 | 5 | 5 | 5 | 6 | 5 | 5 | 4 | 4 | 5 |
 | Hafenmark | 4 | 4 | 4 | 4 | 4 | 5 | 5 | 3 | 3 | 4 |
 | Varfell | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 | 4 |
@@ -53,7 +53,7 @@ Note: Varfell BG L 4 / PS 4 (post PP-686 v2 split, seed equal per factions_perso
 | Institutional Pressure | 20 | 20 | — |
 | Public Instability | — | 5 | — |
 
-## Domain Action Resolution (deterministic+stochastic) — CANONICAL (ED-865/874, ratified 2026-05-29)
+## Domain Action Resolution (deterministic+stochastic) — CANONICAL (ED-874, ratified 2026-05-31; basis: ER-1 degeneracy + CK3/EU/KoDP precedent + Jordan authority — not GD-2)
 
 **This is the canonical resolution method for faction Domain Actions and bare-stat faction checks.** It supersedes the bare-stat-pool-vs-Ob dice approach (retained below for legacy/Zoom-In reference only). Jordan-directed ratification of the Stage-1/4/5-tested candidate (`designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md`).
 
@@ -89,16 +89,16 @@ draw r ~ U[0,1)  (lower = better):
 - **All faction Domain Actions** (Assert, Reconstitute, Govern, Claim Masterless, etc.). Assert: M = Influence − 2 (legacy Ob 2 → difficulty 2). Reconstitute: M = Influence − 6 (legacy Ob 4 → difficulty 6).
 - **Suppress** — M = Mandate − (Church-L difficulty); **Failure → Stability −1 retained** (the PP-403 named exception attaches to the resolver's Failure degree).
 - **Parliamentary Rebuttal** — **Overwhelming → +1 effect retained** (attaches to the resolver's Overwhelming degree).
-- **Treaty positioning & ratification** (faction_layer_v30 §3.3; ED-865/874 extension, 2026-05-30). Positioning (contested): M = own Influence − target Influence (Success+ → initiator sets opening terms). Ratification: M = Mandate − 2 (legacy Ob 2 → difficulty 2). Guarantor option → +1 M; Grand Debate Zoom-In degree → margin (Overwhelming +2 / Success +1 / Partial 0 / Failure −1). The Grand Debate social contest itself remains dice (scope boundary). CI institutional weight (Church) = +⌊CI/20⌋ to M (ci_political_v30 §3.2). Precedent: power-structural treaty-making (COIN/structural-contest, matrix entry 2).
+- **Treaty positioning & ratification** (faction_layer_v30 §3.3; ED-874 extension, 2026-05-30). Positioning (contested): M = own Influence − target Influence (Success+ → initiator sets opening terms). Ratification: M = Mandate − 2 (legacy Ob 2 → difficulty 2). Guarantor option → +1 M; Grand Debate Zoom-In degree → margin (Overwhelming +2 / Success +1 / Partial 0 / Failure −1). The Grand Debate social contest itself remains dice (scope boundary). CI institutional weight (Church) = +⌊CI/20⌋ to M (ci_political_v30 §3.2). Precedent: power-structural treaty-making (COIN/structural-contest, matrix entry 2).
 - **§1.4 Accounting Stability Check** — M = Stability − loss_magnitude; resolves via this method. **Co-designed with §1.3 Institutional Consolidation recovery (CC-4):** §1.4 is the cascade-DAMAGE check (Failure → −1); §1.3 is the deterministic clean-season +1 recovery. They operate on different triggers and do not double-count.
 
-- **Unique Actions (migrated 2026-05-30, ED-885 — Jordan-ratified).** Formerly bare-stat "vs Ob" rolls; now resolve via this method with named degree effects preserved on the ladder: **Royal Decree** M = Mandate − 2 (legacy Ob 2); **Excommunication** contested (faction leader) M = Mandate − target Mandate, non-leader M = Mandate − 2; **Private Collection** M = Intel − 2; **Economic Leverage** contested M = Wealth − target Wealth. A degree band an action's table omits takes the next-lower listed result (a Success/Failure action treats Partial as Failure). *(Hafenmark Sovereign Authority Doctrine — bare Mandate vs Ob 4 — is the same class but was not in the ratified four; pending decision.)*
+- **Unique Actions (migrated 2026-05-30, ED-874 — Jordan-ratified 2026-05-31).** Formerly bare-stat "vs Ob" rolls; now resolve via this method with named degree effects preserved on the ladder: **Royal Decree** M = Mandate − 2 (legacy Ob 2); **Excommunication** contested (faction leader) M = Mandate − target Mandate, non-leader M = Mandate − 2; **Private Collection** M = Intel − 2; **Economic Leverage** contested M = Wealth − target Wealth. A degree band an action's table omits takes the next-lower listed result (a Success/Failure action treats Partial as Failure). *(Hafenmark Sovereign Authority Doctrine — bare Mandate vs Ob 4 — is the same class but was not in the ratified four; pending decision.)*
 
 **Scope boundary.** This method governs **bare-stat faction checks only.** Healthy dice systems — personal combat, social contest (pools 5–18D), aggregated mass battle — **remain dice** (NERS-N/E: replacing them would add complexity without fixing a defect). Trigger-5 (mass-battle resolution, ED-876) is dice and **orthogonal** to this resolver.
 
 ## Domain Action Rules (TTRPG) — SUPERSEDED for faction Domain Actions (legacy / Zoom-In reference)
 
-> **[SUPERSEDED 2026-05-29, ED-865/874]** For faction Domain Actions, the deterministic+stochastic resolver above is canonical. The bare-stat-pool-vs-Ob method below is retained only as the legacy reference and for any explicit TTRPG-era Zoom-In context.
+> **[SUPERSEDED 2026-05-31, ED-874]** For faction Domain Actions, the deterministic+stochastic resolver above is canonical. The bare-stat-pool-vs-Ob method below is retained only as the legacy reference and for any explicit TTRPG-era Zoom-In context.
 
 Ob = floor(relevant stat / 2) + 1.
 Attacker bonus dice: own faction's relevant stat if holding faction leadership.
