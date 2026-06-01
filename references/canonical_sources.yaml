@@ -366,7 +366,7 @@ systems:
     design_doc: designs/npcs/npc_relational_graph_v30.md
     canonical_sha__designs__npcs__npc_relational_graph_v30_md: "cfa928bc6dedbc93512c4b08d524957b5323c825"
     pp: PP-724
-    status: PROVISIONAL
+    status: provisional
 
   # ── REGISTERED 2026-05-10: canonical-index coverage audit ──────────────────
   arc_expansion:
