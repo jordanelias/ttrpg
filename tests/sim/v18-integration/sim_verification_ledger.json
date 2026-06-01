@@ -860,6 +860,55 @@
       "canonical_source": "designs/scene/social_contest_v30.md",
       "section": "\u00a710.1 Parliamentary Stay (ED-631) \u2014 Effect",
       "quoted_text": "A Parliamentary Stay is a Senator Inward motion that halts an active Church Tribunal filing for 1 season."
+    },
+    {
+      "sim_variable": "PARL_MAJORITY_OB_BONUS",
+      "value": 2,
+      "canonical_source": "designs/provincial/parliamentary_transfer_v30.md",
+      "section": "\u00a71.1 + \u00a75",
+      "quoted_text": "Ob | Holder Legitimacy + PARL_MAJORITY_OB_BONUS (default 2). [\u00a75] PARL_MAJORITY_OB_BONUS = 2 is the tested value ... 2 is the canonical default."
+    },
+    {
+      "sim_variable": "PARL_TRANSFER_TN",
+      "value": 7,
+      "canonical_source": "designs/provincial/parliamentary_transfer_v30.md",
+      "section": "\u00a74 step 5 (params/core.md Continuous Engine)",
+      "quoted_text": "Pool-vs-Ob roll resolved per params/core.md Continuous Engine + degree table. (Standard TN 7.)"
+    },
+    {
+      "sim_variable": "PARL_VOTE_POOL_MOD",
+      "value": 1,
+      "canonical_source": "designs/provincial/parliamentary_transfer_v30.md",
+      "section": "\u00a74 step 4 (PROVISIONAL PARL-VOTE-MODIFIER-001)",
+      "quoted_text": "Majority bloc favoring proposer: Pool +1D. Majority bloc favoring holder: Pool -1D. Split bloc: no modifier."
+    },
+    {
+      "sim_variable": "PARL_LAST_TERRITORY_FLOOR",
+      "value": 1,
+      "canonical_source": "designs/provincial/parliamentary_transfer_v30.md",
+      "section": "\u00a71.3",
+      "quoted_text": "Last-territory protection. Cannot strip a faction's last territory. If holder has only 1 territory remaining, Parliamentary Transfer against that territory is blocked at the action-declaration stage (not rolled)."
+    },
+    {
+      "sim_variable": "PARL_TRANSFER_ACCORD",
+      "value": 1,
+      "canonical_source": "designs/provincial/parliamentary_transfer_v30.md",
+      "section": "\u00a71.2",
+      "quoted_text": "Territory transfers from holder to proposer. Transferred territory Accord = 1."
+    },
+    {
+      "sim_variable": "PARL_TRANSFER_ACCORD_APPEASEMENT",
+      "value": 2,
+      "canonical_source": "designs/provincial/parliamentary_transfer_v30.md",
+      "section": "\u00a72 Appeasement (PROVISIONAL PARL-MODE-DRIFT-001)",
+      "quoted_text": "Accord granted +2 instead of +1 on Success (the transfer is meant to defuse, not subjugate)."
+    },
+    {
+      "sim_variable": "PARL_CROWN_RESTORATION_TERRITORY_MAX",
+      "value": 6,
+      "canonical_source": "designs/provincial/parliamentary_transfer_v30.md",
+      "section": "\u00a73 CB sources",
+      "quoted_text": "Crown constitutional restoration | Auto-justified when Crown territories < 6 (starting count). Crown faction only. Refreshes per arc if condition holds."
     }
   ],
   "updated_at": "2026-05-31"

@@ -54,3 +54,9 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 |---|---|---|---|
 | `sim/personal/parliamentary_stay.py` | (Lane C 2026-05-31) | `social_contest_v30 §10.1` (ED-631) | `invoke_stay`/`resolve_stay_lift` — §10.1 Stay via §10 vote; CI<55 availability gate, ≥2 Side A + Church Side B, pass→suspend 1 season else proceed. Verified across 60 seeds (granted/denied) + unavailable/invalid + resolve_stay_lift season-gating. 3 §10.1 ledger entries. |
 | `tests/sim/sim_mb_sigma.py` (envelopment wheel P1/P2) | overhang cells wheel toward enemy flank; facing follows | canon set aside per owner 2026-05-31; validated vs real warfare + Jordan rotation hypothesis (confirmed) | advance_cells: an overhang cell (column beyond the enemy frontage span) targets the nearest enemy cell instead of its own column -> wheels inward -> cell_facing_vec rotates inward (Horseshoe 4/18 cells now lateral, was 0/18). Gated PER_CELL+PC_WHEEL; PER_CELL=0 reproduces committed 120/120. Cells now ROTATE (hypothesis fix). Combat payoff NOT yet realized: _per_cell_angle_mod uses attacker CENTROID (still frontal) not the wheeled cell -> next step is centroid->nearest-attacker for flank detection. |
+
+## Tier 3 Stub Infill — parliamentary_transfer (Lane C 2026-05-31) — designs/proposals/stub_infill_plan.md
+
+| Module | Commit | Canon | Verification |
+|---|---|---|---|
+| `sim/provincial/parliamentary_transfer.py` | (Lane C 2026-05-31) | `parliamentary_transfer_v30 §§1-4` (CANONICAL Pass 2h, v12c N=1000) | `propose_transfer` — CB-gated territorial transfer via §10 vote; Influence-vs-(Legitimacy+2) Continuous-Engine roll → 4-degree §1.2 outcomes; 4 modes (§2), 8 CB sources (§3), §1.3 protections. Verified: GD-3/self/last-territory/no-CB blocks + Crown auto-CB 80-seed sweep (24 transferred/41 partial/15 failed) + territory+Accord mutation + failure/punishment/appeasement mode effects. 7 ledger entries. |
