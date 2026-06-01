@@ -104,6 +104,11 @@ def validate(conn, strict=False):
     orphan_cf = conn.execute(
         "SELECT COUNT(*) FROM concept_files cf "
         "LEFT JOIN concepts c ON c.id = cf.concept_id WHERE c.id IS NULL").fetchone()[0]
+    try:
+        stub_counts = dict(conn.execute(
+            "SELECT status, COUNT(*) FROM stubs GROUP BY status ORDER BY status").fetchall())
+    except Exception:
+        stub_counts = {}
     report = {
         'concepts': conn.execute("SELECT COUNT(*) FROM concepts").fetchone()[0],
         'concept_files': conn.execute("SELECT COUNT(*) FROM concept_files").fetchone()[0],
@@ -112,6 +117,7 @@ def validate(conn, strict=False):
         'dangling': dangling,
         'uncovered': uncovered,
         'orphan_concept_files': orphan_cf,
+        'stubs': stub_counts,
     }
     if orphan_cf:
         raise RuntimeError(
@@ -127,6 +133,9 @@ def validate(conn, strict=False):
 def print_index_summary(report):
     print(f"[INDEX] {report['concepts']} concepts / {report['concept_files']} "
           f"concept_files / {report['files_active']} active files")
+    if report.get('stubs'):
+        print("[INDEX] sim stubs: " + " / ".join(
+            f"{v} {k}" for k, v in sorted(report['stubs'].items())))
     if report['dangling']:
         print(f"[INDEX DRIFT] {len(report['dangling'])} manifest path(s) point at "
               f"missing files (rename/delete not propagated):")

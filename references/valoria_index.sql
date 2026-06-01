@@ -585,9 +585,7 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('1', 'designs/wo
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/world/southernmost_v30_infill.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/world/worldbuilding_v30_infill.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/world/worldbuilding_v30.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/npcs/npc_roster_caste_annotations_deprecated.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/world/worldbuilding_v30_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'references/atoms_pending/2026-04-25/valoria_master_document/122__v-4-caste-social-structure.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/territory/territory_temperaments_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('2', 'designs/world/southernmost_v30.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('3', 'designs/territory/settlement_adjacency_v30.md');
@@ -726,9 +724,7 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('34', 'canon/02_
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('34', 'canon/00_philosophical_foundations_rules.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('35', 'canon/02_canon_constraints.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('36', 'canon/03_canonical_timeline.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('37', 'canon/editorial_ledger.yaml');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('37', 'canon/editorial_ledger_index.md');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('37', 'canon/editorial_ledger_summary.yaml');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('37', 'canon/editorial_ledger.jsonl');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('38', 'canon/patch_register_active.yaml');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('38', 'canon/patch_register_index.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('39', 'references/canonical_sources.yaml');
@@ -825,7 +821,7 @@ INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/peninsular/rs_track.py', 'peninsular', 3, 'stub', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/peninsular/season.py', 'peninsular', 0, 'verified', 'designs/architecture/campaign_architecture_v30.md', NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/beliefs.py', 'personal', 1, 'verified', 'designs/scene/fieldwork_v30.md', NULL);
-INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/combat.py', 'personal', 1, 'partial', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/combat.py', 'personal', 1, 'verified', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/companion.py', 'personal', 4, 'stub', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/contest.py', 'personal', 2, 'verified', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/personal/conviction.py', 'personal', 1, 'verified', 'designs/personal/conviction_track_v1.md', NULL);
@@ -840,7 +836,7 @@ INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/home_sanctuary.py', 'provincial', 5, 'canon_gated', 'designs/provincial/home_sanctuary_t9_v30.md', 'Pass 2f Church');
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/infrastructure_reclamation.py', 'provincial', 2, 'canon_gated', 'designs/provincial/infrastructure_reclamation_v30.md', 'Pass 2f Church');
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/mass_seizure.py', 'provincial', 2, 'verified', NULL, NULL);
-INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/parliamentary_transfer.py', 'provincial', 4, 'partial', 'designs/provincial/parliamentary_transfer_v30.md', NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/parliamentary_transfer.py', 'provincial', 4, 'verified', 'designs/provincial/parliamentary_transfer_v30.md', NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/treaty.py', 'provincial', 0, 'partial', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/varfell_mandate_action.py', 'provincial', 0, 'canon_gated', NULL, 'Pass 2d Varfell');
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/provincial/varfell_territorial_acquisition.py', 'provincial', 2, 'canon_gated', NULL, 'Pass 2d Varfell');
@@ -851,7 +847,7 @@ INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/coherence.py', 'thread', 0, 'verified', 'designs/threadwork/threadwork_v30.md', NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/collective.py', 'thread', 2, 'verified', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/operations.py', 'thread', 1, 'verified', 'params/threadwork.md', NULL);
-INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/opposing.py', 'thread', 2, 'partial', NULL, NULL);
+INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/opposing.py', 'thread', 2, 'verified', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/rendering.py', 'thread', 3, 'stub', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/thread/threadcut.py', 'thread', 2, 'verified', NULL, NULL);
 INSERT OR REPLACE INTO stubs (module, layer, tier, status, canon_source, blocked_on) VALUES ('sim/world/insurgency_pipeline.py', 'world', 0, 'verified', 'canon/02_canon_constraints.md', NULL);

@@ -64,7 +64,7 @@ DOMAIN_MAP = [
 ]
 
 # Extensions to index (skip binaries)
-INDEXED_EXTENSIONS = {'.md', '.yaml', '.yml', '.py', '.sql', '.toml', '.json', '.txt'}
+INDEXED_EXTENSIONS = {'.md', '.yaml', '.yml', '.py', '.sql', '.toml', '.json', '.jsonl', '.txt'}
 
 # Skip these directories entirely (binary/generated/irrelevant)
 SKIP_DIR_PREFIXES = ('.github',)
