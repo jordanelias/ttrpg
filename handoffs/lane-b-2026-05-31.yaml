@@ -94,6 +94,14 @@ working_state:
     a forced reload to appear). atomic_commit now removes /home/claude/.index_cache.json
     after the oid is obtained -> next bootstrap rebuilds. Guarded; cannot affect commit
     success.'
+  - 'Stubs table (Commit H 6c5af643): curated `stubs` in valoria_index.sql, 45 rows
+    linked to concept graph via canon_source->concept_files->concepts; ix.stub_status/stubs_by_status/stub_summary;
+    added to dump_to_sql curated round-trip; hermetic test tests/index/test_stubs_table.py.
+    Audit fixes (a166d52c): code-ground-truth on sim/ (NotImplementedError scan) ->
+    combat/opposing/parliamentary_transfer partial->verified (now 27v/1p/8s/9cg);
+    editorial_ledger 3 dangling concept_files -> 1 live canon/editorial_ledger.jsonl;
+    INDEXED_EXTENSIONS+=.jsonl; 2 caste dead pointers removed; dangling 5->0; bootstrap
+    [INDEX] now prints stub breakdown.'
   next:
   - 'P1 RESOLVER follow-ons [Lane B mechanism done; activation + extras remain]: (a)
     WIRE validate_ed_citations.py into enforcement -- CI (tools/ci_* + workflow) and/or
@@ -163,6 +171,10 @@ key_values:
 - THREE lanes now active (A reduced-scope canon/designs, B infra, C sim). Collisions
   on commit are routine -> use re-fetch+retry; shared-enforcement edits (5.8-reduction,
   5.3) held firmly.
+- 'Stub table dist (code-ground-truth this session): 27 verified / 1 partial (treaty)
+  / 8 stub / 9 canon-gated. concept_files now 227. Editorial store = canon/editorial_ledger.jsonl
+  (now indexed; .jsonl added to INDEXED_EXTENSIONS). validate() real uncovered=2 (not
+  353; broad query was wrong).'
 blockers:
 - 'JORDAN-VERIFY (1.17): 17 substantive commits + 1 sim commit. Confirm superseded
   before deletion.'
@@ -185,7 +197,13 @@ blockers:
   0)? Then either WRITE real ED-874/885 (+the 874-882 block) with genuine ratification,
   or WITHDRAW the canonical assertion. DOWNSTREAM inherits the broken foundation:
   faction 270915da treaty positioning + Lane C canon-gated stubs.'
-last_commit: ba4d7460e4105680a6bdac0a80580e863d9eb030
+- '[JORDAN canon-status, non-blocking, default=leave] 2 uncovered docs: designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md
+  + designs/audit/2026-05-29-combat-armature/weapon_axes_v2.md — map to ''combat''
+  if canonical, else audit intermediates (left as warnings).'
+- '[JORDAN canon, non-blocking, default=leave] concept ''caste'' (id 2) now fileless
+  after removing 2 dead pointers; caste docs deprecated/deleted, no tree successor
+  — retire concept or rehome.'
+last_commit: a166d52ccf12de2618948c99e2b724fd238cea9f
 created: '2026-06-01T00:22:36.206463+00:00'
-updated: '2026-06-01T03:12:52.955183+00:00'
+updated: '2026-06-01T04:08:59.928860+00:00'
 status: active
