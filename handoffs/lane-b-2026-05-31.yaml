@@ -88,6 +88,12 @@ working_state:
     INSERT held the tools/ string). LESSON: never apply a whole-file string .replace()
     to a dump that mixes schema comments with curated data — scope edits to the schema
     region only.'
+  - 'INDEX CACHE INVALIDATION fixed [ba4d7460]: load_index caches the built DB 600s;
+    nothing cleared that marker on commit, so the now-activated index served PRE-commit
+    curated/files for up to 10min after any commit (observed: the F repoint needed
+    a forced reload to appear). atomic_commit now removes /home/claude/.index_cache.json
+    after the oid is obtained -> next bootstrap rebuilds. Guarded; cannot affect commit
+    success.'
   next:
   - 'P1 RESOLVER follow-ons [Lane B mechanism done; activation + extras remain]: (a)
     WIRE validate_ed_citations.py into enforcement -- CI (tools/ci_* + workflow) and/or
@@ -179,7 +185,7 @@ blockers:
   0)? Then either WRITE real ED-874/885 (+the 874-882 block) with genuine ratification,
   or WITHDRAW the canonical assertion. DOWNSTREAM inherits the broken foundation:
   faction 270915da treaty positioning + Lane C canon-gated stubs.'
-last_commit: c8a0a4ae41ccadfe90e11238d697ed06102ae503
+last_commit: ba4d7460e4105680a6bdac0a80580e863d9eb030
 created: '2026-06-01T00:22:36.206463+00:00'
-updated: '2026-06-01T03:08:26.435079+00:00'
+updated: '2026-06-01T03:12:52.955183+00:00'
 status: active
