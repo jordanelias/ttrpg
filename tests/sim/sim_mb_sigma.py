@@ -1328,6 +1328,12 @@ PC_PIN_REACH = 1.5                                         # an attacker within 
 PC_REFUSE = _sigma_os.environ.get('PC_REFUSE', '0') == '1' # M3 (DORMANT, default off): refusal-gated envelopment — emerges but mirror-biased; WIP
 PC_ENVELOP_MOD = float(_sigma_os.environ.get('PC_ENVELOP_MOD', '-1.0'))  # rear-wrap penalty magnitude (M3); tunable
 PC_ENVELOP_DEPTH_RESIST = float(_sigma_os.environ.get('PC_ENVELOP_DEPTH_RESIST', '0.3'))  # defender column depth resists the wrap (Clausewitz reserves)
+# Pocket / gap-trap (Polybius: maniple gaps "lured hoplites in... surrounded"; also the concave Cannae pocket):
+# an enemy cell that penetrates LEVEL between two of our cells (attackers on both lateral sides, same rank) is
+# surrounded -> not refusable. Mirror-safe: parallel lines put attackers AHEAD (a different rank), never beside
+# on both flanks; only a penetration into a gap/concavity produces it.
+PC_POCKET_MOD = float(_sigma_os.environ.get('PC_POCKET_MOD', '-1.0'))   # surround penalty magnitude
+PC_POCKET_REACH = int(_sigma_os.environ.get('PC_POCKET_REACH', '2'))    # lateral column reach to count a flanker
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -1594,6 +1600,20 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     if worst_mod < 0:
                         _cd = _depth_by_col.get(d_pos[1], 1)
                         worst_mod *= 1.0 / (1.0 + PC_ENVELOP_DEPTH_RESIST * max(0, _cd - 1))
+                    # pocket / gap-trap: only where the WRAP did not already fire (worst_mod==0). The gap-
+                    # flanking maniples sit WITHIN the defender's span (not wrappers), so a cell trapped level
+                    # between them gets the pocket; a Horseshoe's concave wings are BEYOND the span (wrappers),
+                    # so those cells take the depth-scaled wrap instead — no double-count. Enemy level on BOTH
+                    # lateral sides; not refusable. Mirror-safe (parallel lines never put enemies beside on both).
+                    if worst_mod == 0:
+                        _hl = _hr = False
+                        for a in atk_sorted:
+                            if abs(a[0] - d_pos[0]) <= 0.5:
+                                _dcol = a[1] - d_pos[1]
+                                if -PC_POCKET_REACH <= _dcol < 0: _hl = True
+                                elif 0 < _dcol <= PC_POCKET_REACH: _hr = True
+                        if _hl and _hr:
+                            worst_mod = PC_POCKET_MOD
                     mods.append(worst_mod)
                 else:
                     zone, _ = octagon_angle(atk_centroid, d_pos, facing)
