@@ -69,30 +69,40 @@ working_state:
     MECHANICAL core (Evidence Track clock + Disposition + dice scene resolution) MIGHT
     be a buildable subset, but the investigation<->fieldwork cycle + editorial gaps
     + UI scope make the pair questionable.'
+  - 'DETERMINISM+MIGRATION BATCH = ALREADY DONE (2026-05-20). VERIFIED vs code + PROVEN:
+    massbattle threads world.rng through every roll (no direct random.*; bugfix 03ce9c79);
+    accounting imports ci_track.apply_seasonal_ci + ms_track.apply_ms_baseline_decay
+    (routed, not inline); mc_v18 uses season.run_season (inline block deleted 2026-05-20);
+    create_world(seed)->world.rng, run_batch reseeds per run. run_batch(10,seed=42)
+    twice -> IDENTICAL; seed42!=seed999. My session summary''s ''batch pending / massbattle
+    non-deterministic'' claim was STALE; my 4x Path-B recommendation was based on
+    stale state. mc_v18 balance output is already trustworthy.'
+  - '6.5 STARTED: mc_v18 deterministic balance n=10 seed42 = Varfell 90 / Crown 10
+    / Church 0 / Hafenmark 0 (battles_mean 33) -> DIVERGES from v12c claim (all 20-30%).
+    CAUSE (verified via sim/provincial/faction_action.py faction_take_action): dispatch
+    = 30% faction-unique (crown_initiative/excommunication/...) + 35% Conquest + 20%
+    Muster + 15% Govern; it does NOT exercise the v12c territorial vectors (parliamentary_transfer
+    / einhir_revival / altonian_reinforcements). My parliamentary_transfer (8feb7526)
+    is implemented but UNWIRED. n=100 run_batch > 250s (perf: full validation needs
+    batching/longer budget).'
   next:
-  - 'PATTERN FINDING (2 of 2 remaining ''ready'' stubs reclassified): the 3 shipped
-    (parliamentary family) were the genuinely-mechanical FACTION-scale stubs. The
-    remaining unimplemented sim stubs appear to be predominantly PERSONAL-scale narrative/dialogue/UI/threadwork
-    systems (articulation, investigation, dialogue, companion arcs, rendering/threadwork)
-    that the FACTION-BALANCE sim (mc_v18) does not model + does not need for balance
-    — they are Godot/UX-layer + editorial-content. The ''11 implementable'' (6.1)
-    was over-optimistic; the genuinely-balance-relevant mechanical stubs are largely
-    done.'
-  - 'RECOMMENDATION (reaffirmed, stronger): PIVOT to the determinism+migration batch
-    (Path B) — the higher-value remaining SIM work. massbattle.py L630/L1053 random.randint
-    -> world.rng + 3 canonical-pipeline subs (accounting._ci_generation->ci_track,
-    ._ms_decay->ms_track, mc_v18 season-loop->season.run_season). Behavior-shifting,
-    one re-baseline. Unblocks 6.5 trustworthy balance. Needs Jordan go (moves balance
-    numbers).'
-  - 'ALT if continuing stub-infill: read fieldwork_v30 (899L) full to determine if
-    its MECHANICAL core (Evidence Track + Disposition + dice scene resolution) is
-    buildable as a subset independent of the investigation dialogue-UI — uncertain
-    given the cycle + editorial gaps. OR Jordan SCOPE CALL: confirm the personal/narrative/dialogue/UI
-    stubs are valoria-game/Godot scope (not balance-sim), and close them out of the
-    Lane-C sim queue.'
-  - 'Other remaining stubs unchanged: rendering+rs_track (threadwork, likely same
-    UI/narrative pattern — verify), miraculous_event (dep rendering), 7 hard-gated
-    (Lane-A/Jordan canon), Varfell (P1-resolver-gated).'
+  - 'GENUINE in-scope Lane-C work (batch is done; narrative/UI stubs out of scope):'
+  - (a) WIRE parliamentary_transfer into faction_take_action (a territorial-vector
+    action slot) so the engine exercises it -> moves balance toward v12c. BUT requires
+    the CB economy (NOT modeled in game_state -> my impl duck-types world.casus_belli)
+    + faction-AI decision logic (when a faction proposes a transfer, with what mode/target).
+    Substantial + partly blocked on the CB-economy gap. Behavior-shifting (balance
+    re-baseline) -> Jordan-aware. Decide whether to model a minimal CB economy first.
+  - (b) 8.1 valoria-game design-sync audit (ttrpg ahead of last sync 9057663f; L/PS
+    re-grain structural drift) — in-scope, independent, NO balance shift. Lowest-risk
+    next.
+  - (c) Full 6.5 balance re-validation at n>=100 (now unblocked/trustworthy) — needs
+    a perf approach (n=100 > 250s/block; chunk or raise budget) AND the territorial
+    vectors wired to be a fair v12c comparison.
+  - (d) Validate Lane A's tunable provisionals ED-841/871/868/872 (tagged 'Lane C-validate')
+    once they land.
+  - (e) 1.16 promote tests/sim/HANDOFF_massbattle_foundation_M3.md to a real handoff;
+    archive stale loose pile (housekeeping).
   cross_lane:
   - All 3 lanes active. Lane C write-disjoint (sim/+tests/ only). Lane B notes non-parallel-window
     items held while 3 lanes active (not Lane C's concern).
@@ -130,9 +140,12 @@ key_values:
 - 'Commits this session: parliamentary_vote d0f3c0bd; parliamentary_stay 251c5528;
   parliamentary_transfer 8feb7526. Ledger 125 entries.'
 blockers:
-- NONE blocking ungated work (articulation + cyclic pairs ready). Canon-gated stubs
-  + Varfell gated by Lane-A P1 resolver dispute. 7 hard-gated need Lane-A/Jordan canon.
+- NONE blocking the in-scope work above. The determinism batch is DONE (no longer
+  a blocker for 6.5). parliamentary_transfer wiring is gated on the CB-economy modeling
+  gap (game_state has no Casus Belli ledger). Narrative/dialogue/UI stubs (articulation/investigation/fieldwork/etc.)
+  reclassified out of balance-sim scope. 7 hard-gated + Varfell still need Lane-A/Jordan
+  canon (Lane A actively resolving the P1 resolver dispute).
 last_commit: 8feb752627b2586cdcc46eb6c8429aaa98e1d329
 created: '2026-06-01T00:14:00.830306+00:00'
-updated: '2026-06-01T00:49:07.293766+00:00'
+updated: '2026-06-01T01:28:53.268896+00:00'
 status: active
