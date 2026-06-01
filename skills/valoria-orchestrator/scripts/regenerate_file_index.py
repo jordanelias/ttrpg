@@ -363,7 +363,7 @@ def dump_to_sql(conn: sqlite3.Connection, out_path: str = None,
         '-- Schema + curated data for Valoria file index.',
         f'-- Last updated: {now}',
         '-- Generated tables (files, entities, entity_aliases) are rebuilt at',
-        '-- session start by tools/regenerate_file_index.py — never hand-edit those.',
+        '-- session start by regenerate_file_index.py — never hand-edit those.',
         '-- Curated tables (concepts, aliases, concept_files) are safe to edit here.',
         '',
     ]
@@ -610,10 +610,14 @@ def run_fast(schema_sql: str = '') -> dict:
     schema_sql = ''
     for sc in schema_candidates:
         if sc.exists():
-            # Extract just the CREATE TABLE portion (before INSERT lines)
+            # Extract schema: drop any leading header/comment block (prevents
+            # header accretion on repeated regen) and all INSERT data rows.
             raw = sc.read_text()
-            schema_lines = [l for l in raw.splitlines()
-                            if not l.startswith('INSERT')]
+            _lines = raw.splitlines()
+            _start = next((i for i, l in enumerate(_lines)
+                           if l.lstrip().upper().startswith('CREATE')), 0)
+            schema_lines = [l for l in _lines[_start:]
+                            if not l.lstrip().upper().startswith('INSERT')]
             schema_sql = '\n'.join(schema_lines)
             break
 
