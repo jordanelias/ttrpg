@@ -1,0 +1,54 @@
+id: massbattle-speed-facing-resume
+scope: simulation
+task:
+  skill: valoria-simulator
+  description: Speed/facing combat wiring for the per-cell mass engine. Resume from
+    the 2026-06-01 stub/wiring audit + workplan.
+owns:
+- tests/sim/sim_mb_sigma.py
+- tests/coverage_matrix.md
+- designs/audit/2026-06-01-massbattle-stub-wiring/**
+context_files:
+- path: designs/audit/2026-06-01-massbattle-stub-wiring/resume_audit_workplan.md
+  depth: full
+  reason: The audit (S1-S10) + sequenced workplan (Phase 0-5). Primary resume doc.
+- path: tests/sim/sim_mb_sigma.py
+  depth: skeleton
+  reason: Engine @8b50144c; puncture ~1721-1734, _defender_depth, Unit.speed L1039,
+    _support_along_vector.
+- path: designs/provincial/mass_battle_v30.md
+  depth: skeleton
+  reason: Canonical Slow/Standard/Fast speed tier (L120); octagon; pursuit.
+- path: tests/coverage_matrix.md
+  depth: full
+  reason: Co-file for any sim edit; current per-cell coverage rows.
+working_state:
+  done:
+  - 'RATIFIED: roll-up + vectorized depth committed 733cbc67; engine @8b50144c; PER_CELL=0
+    byte-exact base 0dea67d1 (120/120). Per-cell gauge 11/13 CI-consistent.'
+  - Stub/wiring audit + workplan committed 56a23365.
+  next:
+  - 'Phase 0 (PREREQUISITE): add cavalry/Fast matchups to the gauge battery — ZERO
+    coverage now (S2).'
+  - 'Phase 1: wire canonical Unit.speed into combat (pursuit-only; two disconnected
+    speed models) (S1).'
+  - 'Phase 2: vectorized + speed-scaled penetration — _defender_depth -> _support_along_vector
+    along charge vector (S4).'
+  - 'Phase 3: prepared-defense-gated morale shock (du Picq; deep+disciplined+braced
+    repels) (S6 + anchor).'
+  - 'Phase 4: verify facing->deals-less emergence; wire explicit only if insufficient
+    (S5,S3).'
+  - 'Phase 5: reconcile/retire _envelopment_sigma + superseded v14 items; docstring
+    (S7,S9,S8).'
+key_values:
+- Engine 8b50144c; ratify 733cbc67; audit/workplan 56a23365.
+- 'Each phase: bottom-up -> top-down (du Picq/Waterloo squares/Leuthen) -> full gauge
+  incl cavalry -> toggle-off 120/120 -> commit. All PER_CELL=1; PER_CELL=0 byte-exact.'
+blockers:
+- 'JORDAN before Phase 3: (1) morale-shock magnitude + which defender states negate
+  vs amplify; (2) whether facing->deals-less stays emergent or gets an explicit attacker-output
+  gate.'
+last_commit: 56a23365489956ce94773e4b829790c93853e255
+created: '2026-06-01T03:55:56.391334+00:00'
+updated: '2026-06-01T03:55:56.391334+00:00'
+status: active
