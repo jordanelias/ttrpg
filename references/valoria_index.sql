@@ -729,7 +729,7 @@ INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('40', 'reference
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('41', 'references/glossary.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('42', 'references/propagation_map.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('43', 'references/proper_noun_registry.yaml');
-INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('44', 'regenerate_file_index.py');
+INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('44', 'skills/valoria-orchestrator/scripts/regenerate_file_index.py');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('44', 'tools/file_lookup.py');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('44', 'references/file_index_summary.md');
 INSERT OR REPLACE INTO concept_files (concept_id, path) VALUES ('44', 'references/valoria_index.sql');
