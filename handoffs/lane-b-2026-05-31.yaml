@@ -48,7 +48,18 @@ working_state:
     recoverable via git. fb024547ebff95af176a3cd64ce8f8ea8df3474c.
   - '1.17 (PARTIAL): cleanup/remove-deprecated DELETED; 2 branches FLAGGED not-deleted
     (investigations).'
+  - 'P1 RESOLVER citation-rot: DIAGNOSED on ledger evidence + PREVENTION shipped (5946268aaa747e9f6bc05f646acf0ae8adfc3449):
+    tools/validate_ed_citations.py + tests/hooks/test_ed_citation_integrity.py (8/8
+    hermetic). Validator confirmed on the real doc: catches ED-874/885/876/174 NONEXISTENT
+    + ED-865 OPEN_AS_BASIS, no false-positives across the 601-id universe.'
   next:
+  - 'P1 RESOLVER follow-ons [Lane B mechanism done; activation + extras remain]: (a)
+    WIRE validate_ed_citations.py into enforcement -- CI (tools/ci_* + workflow) and/or
+    a NON-BLOCKING pre_commit soft-warn; shared-enforcement, do in a calmer window.
+    (b) PP/patch-register support: load active+archived patch registers, checked_prefixes+=''PP''.
+    (c) the validator surfaced TWO citation defects BEYOND the resolver -- ED-876
+    (L97 mass-battle) + ED-174 (L427 PI cascade brake) are cited but UNWRITTEN; route
+    to Jordan/faction.'
   - 'INDEX REFRESH + GENERATOR FIX [focused task — do NOT ship piecemeal]: regenerate_file_index.py
     has TWO defects. (1) __main__ unreachable: the argparse/run/print entrypoint sits
     as DEAD CODE after run_fast()''s return (no `if __name__==main` guard) -> `python3
@@ -126,7 +137,19 @@ blockers:
   Three lanes active -> do not run.'
 - 'JORDAN-APPLIED: PI/arch text — CI drift corrections, M3/M4, 5.8 merge calls, arch
   atoms_pending count.'
-last_commit: fb024547ebff95af176a3cd64ce8f8ea8df3474c
-created: '2026-05-31T23:56:26.070814+00:00'
-updated: '2026-05-31T23:56:26.070814+00:00'
+- 'P1 RESOLVER BILL (Lane B diagnosed; CANNOT fix -- params/factions/stats_1_7_scale.md
+  + canon/editorial_ledger.jsonl are Lane A/faction territory and the ''is it canon''
+  call is Jordan''s). EVIDENCE-FIXABLE (verified vs the 613-entry ledger): stats_1_7_scale.md
+  L56/L84/L92/L101 cite ED-874 (UNWRITTEN), L95 cites ED-885 (UNWRITTEN), L97 cites
+  ED-876 (UNWRITTEN), L427 cites ED-174 (UNWRITTEN); L56/L92/L101 cite ED-865 [OPEN]
+  as canonical/extension/superseded though ED-865''s text STRIKES the resolver''s
+  GD-2 justification (does not ratify). JORDAN-ADJUDICATION: is the resolver canon
+  on its merits? does ED-865''s strike stand? do ED-866''s dropped F4/F5/F8/F9 reopen
+  the bill (the diagnostic had 5 P1 + 2 P1-canon-defect, the register manufactured
+  0)? Then either WRITE real ED-874/885 (+the 874-882 block) with genuine ratification,
+  or WITHDRAW the canonical assertion. DOWNSTREAM inherits the broken foundation:
+  faction 270915da treaty positioning + Lane C canon-gated stubs.'
+last_commit: 5946268aaa747e9f6bc05f646acf0ae8adfc3449
+created: '2026-06-01T00:22:36.206463+00:00'
+updated: '2026-06-01T00:22:36.206463+00:00'
 status: active
