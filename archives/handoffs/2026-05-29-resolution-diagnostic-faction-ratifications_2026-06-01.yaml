@@ -316,7 +316,7 @@ relationship_to_other_handoffs: DISTINCT from the two other active handoffs; no 
   owns combat_v32 build-balance under tests/sim/v32-combat-balance/; this workstream's
   combat finding (ED-879) is a separate clarity item on combat_v30, not the v32 build.
   This handoff is the resolution-diagnostic/faction-cluster master.
-status: active
+status: closed
 created: '2026-05-29T23:03:43.540918+00:00'
 updated: '2026-05-31T07:14:34.841730+00:00'
 session_2026_05_30_additions:
@@ -422,3 +422,4 @@ session_2026_05_30_cluster_complete:
   - 'ci_political RETRACTION: in-chat sqrt(N)-on-Parliament finding was WRONG (Parliament
     = deterministic Mandate tally, faction_layer §5.3, not dice) — retracted; committed
     verdict is corrected.'
+closed_at: '2026-06-01T00:24:36.643281+00:00'
