@@ -80,6 +80,14 @@ working_state:
     schema-only). Shipped WITH tests/index/test_regen_preserves_curated.py (hermetic,
     mocked): asserts curated rowcounts preserved + no header accretion + files excluded
     from dump. Defects 1 AND 2 closed.'
+  - 'CORRECTION shipped [c8a0a4ae]: be20f80''s global tools/->bare scrub had silently
+    mutated ONE curated concept_files value (concept ''file_index'' id 44: ''tools/regenerate_file_index.py''
+    -> bare ''regenerate_file_index.py''). Repointed it to the real post-retirement
+    path skills/valoria-orchestrator/scripts/regenerate_file_index.py (surgical: 1
+    line; counts unchanged). Only that one row was affected (verified: exactly 1 pre-scrub
+    INSERT held the tools/ string). LESSON: never apply a whole-file string .replace()
+    to a dump that mixes schema comments with curated data — scope edits to the schema
+    region only.'
   next:
   - 'P1 RESOLVER follow-ons [Lane B mechanism done; activation + extras remain]: (a)
     WIRE validate_ed_citations.py into enforcement -- CI (tools/ci_* + workflow) and/or
@@ -105,13 +113,13 @@ working_state:
     verbose to find the file/rule.'
   - 'ROADMAP structural reconcile [integration/close]: items_total 11->6 (1.19b),
     current_phase advance.'
-  - 'INDEX CURATED DRIFT [Lane B; needs delete-vs-rename judgment]: validate() surfaces
-    6 concept_files rows pointing at missing files + 2 active design docs mapped to
-    no concept. NOT a blind prune: each dangling path is either a DELETE (atoms_pending/*
-    [1.18], *_deprecated.md -> remove the row) or a RENAME (repoint the row) -> reconcile
-    per-path, then add concepts for the 2 uncovered docs (which concept = Jordan/curation).
-    CORRECTION: which_concepts is NOT broken (it uses cf.path correctly; my earlier
-    ''file_path column'' note was my own test query, not the function).'
+  - 'INDEX CURATED DRIFT [Lane B]: validate() dangling needs per-path triage, and
+    includes UNINDEXED-FILETYPE FALSE-POSITIVES (e.g. .py paths are legitimately mapped
+    but not in the indexed files table). Real drift to reconcile: canon/editorial_ledger.yaml
+    + _index.md + _summary.yaml (all deprecated in the 2026-05-28 JSONL cutover ->
+    repoint to editorial_ledger.jsonl or remove the rows); atoms_pending/* [1.18 delete]
+    + *_deprecated.md (remove). Plus 2 active design docs mapped to no concept ->
+    add concepts (which = Jordan/curation). which_concepts is NOT broken (uses cf.path).'
   held:
   - '5.8-REDUCTION [HOLD: A+C active]: removes live COMMIT_FORMAT scopes (shared gate)
     -> breaks other lanes. THREE lanes now active -> hold firmly. Spec in scope_vocabulary.md.'
@@ -171,7 +179,7 @@ blockers:
   0)? Then either WRITE real ED-874/885 (+the 874-882 block) with genuine ratification,
   or WITHDRAW the canonical assertion. DOWNSTREAM inherits the broken foundation:
   faction 270915da treaty positioning + Lane C canon-gated stubs.'
-last_commit: c9e19869fc825391631a74514cd589cbb8c1efd6
+last_commit: c8a0a4ae41ccadfe90e11238d697ed06102ae503
 created: '2026-06-01T00:22:36.206463+00:00'
-updated: '2026-06-01T03:05:43.525042+00:00'
+updated: '2026-06-01T03:08:26.435079+00:00'
 status: active
