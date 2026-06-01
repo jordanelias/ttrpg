@@ -51,21 +51,34 @@ working_state:
     Applies mutations + returns result (crown_initiative convention). NOT P1-gated.
     7 entries (125 total). Verified: 4 blocks + 80-seed sweep (24/41/15) + transfer
     mutation + mode effects.'
+  - 6.3 articulation RECLASSIFIED — NOT buildable as a sim stub. articulation_layer_v30
+    (PP-688) consumes the PP-687 Key substrate (Key log, typed Keys w/ salience+cascade_fidelity_history+symbolic_dimensions+scale_signature,
+    CAUSAL_GRAPH, Concern queue, Memory API) — ALL absent from sim (0 files each).
+    Also a UI/narrative layer (Tier 1 Lens / Tier 2 cut scenes / Tier 3 Chronicle
+    — 'Phase 5a Godot scope'), not a balance mechanic. The stub's declared deps (knots+beliefs)
+    drastically understate the canon's real deps. BLOCKED on PP-687 substrate + belongs
+    to valoria-game/Godot UI. Do NOT build hollow.
   next:
-  - '6.3 NEXT: articulation (sim/cross_scale/articulation.py; deps knots+beliefs both
-    implemented; CLEANER than transfer — no CB economy). Then cyclic pairs investigation+fieldwork
-    (npe done) and rendering+rs_track (single-session each, mutual imports). Then
-    companion (dep contest+fieldwork), miraculous_event (dep rendering). REMINDER:
-    verify each target''s canon via its docstring ''Canon source:'' + read force_full
-    before building (the plan dep-list is imprecise on canon).'
-  - 'Per-stub Mode-G: docstring canon-source -> read canon force_full -> ledger entries
-    -> implement bottom-up (canonical_pt/accord per 19b; mirror sibling mutation convention)
-    -> smoke in clone (SWEEP SEEDS, verify every branch) -> safe_commit (sim co-file
-    REQUIRES tests/coverage_matrix.md when touching tests/sim/**) -> manifest/coverage_matrix
-    rows.'
-  - 'ALT high-value (Jordan sequencing, recommended): Determinism+Migration Batch
-    (massbattle L630/L1053 rng + 3 canonical-pipeline subs) -> trustworthy balance
-    (6.5).'
+  - 'DECISION POINT (Jordan): the clean small mechanical-stub vein (parliamentary
+    family, 3 shipped) is exhausted. Remaining stub-infill is either LARGE or blocked.
+    Two paths: (A) build investigation+fieldwork; (B) PIVOT to the determinism+migration
+    batch (RECOMMENDED — makes mc_v18 balance output trustworthy, the sim''s actual
+    goal / 6.5).'
+  - 'PATH A — investigation+fieldwork: VERIFIED buildable (deps npe+conviction+dice_engine
+    implemented; canons fieldwork_v30 899L + investigation_systems_v30 457L have ZERO
+    Key-substrate dep). BUT true cyclic pair (mutual imports) -> build BOTH together
+    in one session; ~1356 lines canon to read full (Mode-G); 6 entry points (resolve_npe_response/evaluate_dialogue_lattice/apply_response_matrix
+    + run_fieldwork_scene/advance_disposition/advance_evidence). After it: companion
+    unblocks (dep contest+fieldwork).'
+  - 'PATH B — determinism+migration batch: massbattle.py L630/L1053 random.randint
+    -> world.rng + 3 canonical-pipeline subs (accounting._ci_generation->ci_track,
+    ._ms_decay->ms_track, mc_v18 season-loop->season.run_season). Behavior-shifting,
+    one re-baseline. Unblocks 6.5 trustworthy balance.'
+  - 'Other remaining stubs: rendering+rs_track (cyclic pair, threadwork — substrate
+    UNVERIFIED, check before building); miraculous_event (dep rendering); 7 hard-gated
+    (Lane-A/Jordan canon); Varfell mandate/territorial (P1-resolver-gated). Per-stub:
+    VERIFY canon''s real substrate deps exist in sim BEFORE building (stub dep-lists
+    understate — articulation lesson).'
   cross_lane:
   - All 3 lanes active. Lane C write-disjoint (sim/+tests/ only). Lane B notes non-parallel-window
     items held while 3 lanes active (not Lane C's concern).
@@ -107,5 +120,5 @@ blockers:
   + Varfell gated by Lane-A P1 resolver dispute. 7 hard-gated need Lane-A/Jordan canon.
 last_commit: 8feb752627b2586cdcc46eb6c8429aaa98e1d329
 created: '2026-06-01T00:14:00.830306+00:00'
-updated: '2026-06-01T00:14:00.830306+00:00'
+updated: '2026-06-01T00:18:37.301750+00:00'
 status: active
