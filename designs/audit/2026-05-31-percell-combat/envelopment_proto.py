@@ -141,3 +141,105 @@ def wrap_demo():
 
 if __name__ == "__main__":
     demo(); wrap_demo()
+
+
+# ════════════════════════════════════════════════════════════════════════════
+# FOUNDATIONAL MOVEMENT + PERCEPTION MODEL (Jordan 2026-05-31 directives)
+# Directives:
+#  1. Cells move ANY direction (forward / lateral / backward) — forward-only is a foundational error.
+#  2. Cells face ANY direction (facing = movement vector).
+#  3. PINNING: a cell engaged in front cannot rotate to defend a flank (it is pinned down).
+#  4. FOV: a cell cannot perceive/react to a threat outside its 135deg field of view (from facing tip).
+#  5. Therefore reactive rotation (flank-refusal) requires: NOT pinned AND threat within FOV.
+# FOV interpretation [CONFIRM]: 135deg TOTAL cone centred on facing => visible if angle-from-facing <= 67.5deg.
+# ════════════════════════════════════════════════════════════════════════════
+FOV_TOTAL_DEG = 135.0            # [Jordan; CONFIRM interpretation] total field-of-view cone width
+FOV_HALF = FOV_TOTAL_DEG / 2.0   # visible if angle from facing <= this (67.5deg)
+
+def move_step(pos, objective, speed=1):
+    """ANY-DIRECTION movement (directive 1). Step `speed` toward objective; sign of r/c is free, so
+    forward, lateral, AND backward all fall out. Facing = the step taken (directive 2)."""
+    dr = objective[0] - pos[0]; dc = objective[1] - pos[1]
+    if abs(dr) + abs(dc) < 1e-9:
+        return pos, (0, 0)
+    total = abs(dr) + abs(dc)
+    r_step = round(speed * abs(dr) / total) * (1 if dr > 0 else -1)
+    c_step = (speed - abs(r_step)) * (1 if dc > 0 else -1) if abs(dc) > 0 else 0
+    new = (pos[0] + r_step, pos[1] + c_step)
+    facing = (r_step, c_step) if (r_step or c_step) else (0, 0)
+    return new, facing
+
+def angle_from_facing(facing, observer, target):
+    """Angle (deg) between the observer's facing and the direction to target. 0 = dead ahead."""
+    fr, fc = facing; fmag = max(1e-9, (fr*fr+fc*fc)**0.5)
+    dr = target[0]-observer[0]; dc = target[1]-observer[1]; dmag = max(1e-9,(dr*dr+dc*dc)**0.5)
+    cos_a = max(-1.0, min(1.0, (dr*fr+dc*fc)/(dmag*fmag)))
+    return math.degrees(math.acos(cos_a))
+
+def in_fov(facing, observer, target, fov_half=FOV_HALF):
+    """Directive 4: can the observer SEE the target? Only within the FOV cone from its facing tip."""
+    return angle_from_facing(facing, observer, target) <= fov_half
+
+def is_pinned(pos, facing, enemy_positions, reach=1.5):
+    """Directive 3: pinned = an enemy is engaged adjacent in the FRONT arc (cell is locked, cannot turn)."""
+    for e in enemy_positions:
+        d = ((e[0]-pos[0])**2 + (e[1]-pos[1])**2) ** 0.5
+        if d <= reach and angle_from_facing(facing, pos, e) < 45.0:   # adjacent AND in front (GREEN arc)
+            return True
+    return False
+
+def can_refuse(pos, facing, threat, enemy_positions):
+    """Directive 5: a cell may ROTATE to meet a threat only if NOT pinned AND it can SEE the threat."""
+    return (not is_pinned(pos, facing, enemy_positions)) and in_fov(facing, pos, threat)
+
+
+def foundational_demo():
+    print("\n" + "="*74)
+    print("FOUNDATIONAL MOVEMENT + PERCEPTION DEMO (Jordan's 5 directives)")
+    print("="*74)
+
+    # (1) ANY-DIRECTION MOVEMENT — same cell, three objectives: ahead, beside, behind.
+    print("\n(1) MOVEMENT FREEDOM — a cell at (10,10) stepping toward objectives in 3 directions:")
+    for label, obj in [("forward (enemy ahead)", (8,10)), ("lateral (wheel to flank)", (10,13)),
+                       ("BACKWARD (refuse/reposition)", (12,10))]:
+        new, fac = move_step((10,10), obj, speed=2)
+        print(f"     {label:30} obj {obj}: -> moved to {new}, facing {fac}")
+    print("     => forward, lateral, AND backward all work; facing = movement vector. (was forward-only)")
+
+    # (3)+(4) FOV + PINNING — a defender facing 'up' (-1,0), threats at various angles.
+    print("\n(3/4) FOV (135deg cone, +/-67.5deg) + PINNING — defender at (10,10) facing (-1,0):")
+    defender, dfac = (10,10), (-1,0)
+    threats = {"dead ahead (0deg)":(8,10), "front-flank (~45deg)":(9,12),
+               "side (~90deg)":(10,13), "rear-flank (~135deg)":(11,12), "dead rear (180deg)":(12,10)}
+    for label, t in threats.items():
+        ang = angle_from_facing(dfac, defender, t)
+        seen = in_fov(dfac, defender, t)
+        print(f"     threat {label:22} angle {ang:5.0f}deg -> {'SEEN (can react)' if seen else 'BLIND (cannot react)'}")
+
+    # PINNING demonstration
+    print("\n     PINNING: defender (10,10) facing (-1,0) with an enemy engaged at its front (9,10):")
+    pinned = is_pinned(defender, dfac, [(9,10)])
+    print(f"       is_pinned = {pinned}  -> while pinned, CANNOT rotate to defend any flank.")
+
+    # (5) COMBINED ENVELOPMENT with the refusal gate.
+    print("\n(5) ENVELOPMENT + REFUSAL GATE — defender (10,10) facing (-1,0), flank attacker at (10,13):")
+    flank_atk = (10,13)
+    for scen, enemies, note in [
+        ("PINNED in front (enemy at 9,10)", [(9,10),(10,13)], "pinned -> cannot refuse"),
+        ("FREE, flank attacker within FOV?", [(10,13)], "check FOV+pin"),
+        ("FREE, attacker in DEAD REAR (12,10), outside FOV", [(12,10)], "blind -> cannot refuse"),
+    ]:
+        threat = enemies[-1] if 'REAR' not in scen else (12,10)
+        refuse = can_refuse(defender, dfac, threat, enemies)
+        # octagon zone the attacker achieves IF defender cannot refuse (facing stays forward):
+        zone,_ = octagon_angle(threat, defender, dfac)
+        outcome = "REFUSED -> defender turns, attack neutralized (GREEN)" if refuse else f"NOT refused -> octagon {zone} (def_mod {ANGLE_DEF_MOD[zone]})"
+        print(f"     {scen:42}: can_refuse={refuse}  [{note}] -> {outcome}")
+    print("="*74)
+    print("All five directives demonstrated. Port plan: replace column-local-only targeting with")
+    print("move_step toward each cell's tactical objective; gate flank-refusal by can_refuse(); the")
+    print("octagon then yields envelopment for pinned/blind defenders and refusal for free/sighted ones.")
+    print("="*74)
+
+if __name__ == "__main__":
+    demo(); wrap_demo(); foundational_demo()
