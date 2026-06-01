@@ -52,6 +52,19 @@ working_state:
     tools/validate_ed_citations.py + tests/hooks/test_ed_citation_integrity.py (8/8
     hermetic). Validator confirmed on the real doc: catches ED-874/885/876/174 NONEXISTENT
     + ED-865 OPEN_AS_BASIS, no false-positives across the 601-id universe.'
+  - 'INDEX de-accretion + fetch_system [this session: be20f80 + cee23ae]: committed
+    valoria_index.sql de-accreted 3->1 header blocks; 647 curated rows (concepts 82/aliases
+    334/concept_files 231) + FTS5 layer + 3 triggers verified PRESERVED via round-trip
+    through the FK-fixed open_db. dump_to_sql header path genericized (live). fetch_system
+    now provisional-aware (lowercases status, warns on ''provisional'' -> 12 systems
+    surface as stubs at fetch) + normalized the 1 uppercase canonical_sources status:PROVISIONAL->provisional.
+    find-by-context PROVEN: concept_files + alias resolution resolve on the cleaned
+    index.'
+  - 'CORRECTION (be20f80 generator edit is PARTLY INERT): the schema-extraction header-strip
+    added to the entrypoint sits in DEAD code (indented inside run_fast after its
+    return; no if __name__ guard) -> NO runtime effect until the entrypoint is hoisted.
+    Only the dump_to_sql header-text change (live) + the committed-file de-accretion
+    are effective. Generator Defects 1+2 (next) remain UNFIXED.'
   next:
   - 'P1 RESOLVER follow-ons [Lane B mechanism done; activation + extras remain]: (a)
     WIRE validate_ed_citations.py into enforcement -- CI (tools/ci_* + workflow) and/or
@@ -60,19 +73,17 @@ working_state:
     (c) the validator surfaced TWO citation defects BEYOND the resolver -- ED-876
     (L97 mass-battle) + ED-174 (L427 PI cascade brake) are cited but UNWRITTEN; route
     to Jordan/faction.'
-  - 'INDEX REFRESH + GENERATOR FIX [focused task — do NOT ship piecemeal]: regenerate_file_index.py
-    has TWO defects. (1) __main__ unreachable: the argparse/run/print entrypoint sits
-    as DEAD CODE after run_fast()''s return (no `if __name__==main` guard) -> `python3
-    tools/regenerate_file_index.py ...` is a NO-OP. (2) CURATED-DATA LOSS: the entrypoint
-    builds schema_sql = existing-index lines minus ALL ''INSERT'' lines -> strips
-    the curated tables too; a full run() then dumps EMPTY concepts(82)/aliases(334)/concept_files(231)
-    = destroys 647 authored rows. Confirmed: committed valoria_index.sql = schema
-    + curated tables ONLY (files/entities are runtime-rebuilt, NEVER committed — dump_to_sql
-    include_generated=False by design). CORRECT FIX: hoist entrypoint to `if __name__==main`,
-    AND make schema/seed load CREATE-TABLEs PLUS curated INSERTs (concepts/aliases/concept_files/meta)
-    into the DB before run(), so the dump preserves them. Ship WITH a test (assert
-    curated rowcounts preserved). Also drops the 1 dangling concept_files row (atoms_pending)
-    as a side effect.'
+  - 'INDEX GENERATOR FIX [STILL OPEN — header-accretion handled at FILE level only;
+    2 core defects remain]: (1) CLI entrypoint is DEAD CODE: argparse/run/print is
+    indented inside run_fast() AFTER its return, no if __name__==main guard, in BOTH
+    tools/ and scripts/ -> `python3 regenerate_file_index.py` is a NO-OP. (2) CURATED-LOSS:
+    entrypoint builds schema_sql = dump minus ALL INSERT lines -> a fresh-DB run()
+    dumps EMPTY concepts/aliases/concept_files = destroys 647 rows. FIX: hoist entrypoint
+    out of run_fast to if __name__==main (ALSO activates the header-strip already
+    added at be20f80), AND seed-load curated INSERTs into the DB before run(). Ship
+    WITH a hermetic test (mock fetch_tree/fetch_contents_batch; assert curated rowcounts
+    preserved). Verify open_db freshness semantics so run()''s open_db does not wipe
+    the pre-seeded curated rows.'
   - 'check_handoff_conflicts GLOB BUG [Lane B, github_ops — from Lane A]: fnmatch(proposed,
     pattern) returns false-empty when `proposed` is itself a glob (missed the faction
     overlap). Fix: prefix-component region-overlap + strip annotations + check BOTH
@@ -90,6 +101,22 @@ working_state:
     verbose to find the file/rule.'
   - 'ROADMAP structural reconcile [integration/close]: items_total 11->6 (1.19b),
     current_phase advance.'
+  - 'TWO-COPIES RETIREMENT [Lane B; Jordan call on delete]: scripts/ copy (NEWER:
+    _split_sql + FK/FTS5-fixed open_db) vs tools/ copy (OLDER: naive executescript
+    = committed-dump FK round-trip bug). Docs/redirect (references/file_index_summary.md)
+    + index_bootstrap header all point at the STALE BUGGY tools/ copy. Consolidate
+    to scripts/, fix the path refs, retire tools/ (git-recoverable; don''t silent-delete).'
+  - 'INDEX CONSUMER GAPS [Lane B]: (a) index_bootstrap.load_index does `import regenerate_file_index`
+    but nothing places it on sys.path -> import fails even if wired. (b) which_concepts()
+    queries a `file_path` column absent from concept_files -> broken reverse lookup.
+    (c) curated dangling: concept_files rows reference deleted files (atoms_pending/*
+    [retired 1.18], *_deprecated.md) -> needs a run()-populated files table for the
+    true dangling set, then mechanical dead-path prune (ambiguous remaps -> Jordan).'
+  - 'BOOTSTRAP WIRING [Jordan/PI — cannot self-edit]: the whole index pipeline is
+    dark — index_bootstrap.load_index is never called. PI bootstrap script must fetch
+    index_bootstrap.py + regenerate_file_index.py to /home/claude and call ix.load_index(g,
+    strict=False) after quick_bootstrap() (non-halting; validate() halts on FK corruption
+    otherwise). Snippet handed to Jordan this session.'
   held:
   - '5.8-REDUCTION [HOLD: A+C active]: removes live COMMIT_FORMAT scopes (shared gate)
     -> breaks other lanes. THREE lanes now active -> hold firmly. Spec in scope_vocabulary.md.'
@@ -149,7 +176,7 @@ blockers:
   0)? Then either WRITE real ED-874/885 (+the 874-882 block) with genuine ratification,
   or WITHDRAW the canonical assertion. DOWNSTREAM inherits the broken foundation:
   faction 270915da treaty positioning + Lane C canon-gated stubs.'
-last_commit: 5946268aaa747e9f6bc05f646acf0ae8adfc3449
+last_commit: cee23ae5e2be9d17742beb53021452079fb67bea
 created: '2026-06-01T00:22:36.206463+00:00'
-updated: '2026-06-01T00:22:36.206463+00:00'
+updated: '2026-06-01T02:18:13.217830+00:00'
 status: active
