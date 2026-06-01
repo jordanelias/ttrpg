@@ -58,3 +58,38 @@ M4. VALIDATE: H3/H5/H6 (enveloping shapes) should rise as their wheels reach pin
 
 NOTE: this is a foundational movement re-architecture. It is gated entirely behind PER_CELL so the ratified
 engine (PER_CELL=0) is never at risk; each M-step is validated toggle-off-exact before commit.
+
+## ENGINE PORT — M2/M3 IMPLEMENTED (DORMANT), commit 0b21c20c (2026-05-31)
+M2 perception (committed): REAR_BLIND_DEG=150 (visible +/-105deg, grounded in the ~210deg human visual
+field), PC_PIN_REACH=1.5. M3 refusal (committed, in _per_cell_angle_mod, gated PER_CELL+PC_REFUSE): each
+defender cell is judged against its WORST-flanking attacker and REFUSES (negates the penalty) only if NOT
+pinned AND the flanker is within FOV; otherwise the flank/rear penalty lands. This is the fixing-force +
+flank-refusal doctrine expressed in the octagon.
+
+RESULT (PC_REFUSE=1, A/B vs wheel-only, multi n=55): envelopment EMERGES —
+  H3 Horseshoe-v-Line 47->58 (IN), H4 Cannae 43->50 (IN), H7 GappedLine-v-Line 40->57 (IN),
+  H2/H5/H9 also IN. The wheel's rotation finally produces a combat payoff.
+BUT three correctness problems block making it the default:
+  1. MIRROR BIAS (disqualifying): H1 Line-v-Line -> 57-62% (n=120: 57.3) vs the required ~50. The
+     worst-flanking-attacker detection is an extremum, hypersensitive to the sub-cell stagger that integer
+     movement + advance_dir sign produce; A and B see systematically different worst angles -> directional bias.
+     [The centroid method it replaced averaged this out and was mirror-stable.]
+  2. REVERSE-PAIR INVERSION: H10 (Line-v-Horseshoe) and H11 (Arrowhead-v-Horseshoe) go HIGH — the
+     enveloped side wins MORE. [ASSUMPTION — basis: geometry] a wheeling enveloper's cells face inward, so in
+     the symmetric octagon their rotated facing EXPOSES their own flank to the main enemy line, penalizing the
+     enveloper instead of the enveloped. The wheel and the defensive octagon interact backwards.
+  3. H6 (RefusedFlank-v-Line) drops to 21.
+Per NERS-E this is NOT shippable as default -> retained DORMANT (PC_REFUSE default off; PER_CELL=0 and
+PER_CELL=1-default both reproduce the committed wheel engine 120/120), mirroring the dormant Incr6 delta-sigma.
+
+## NEXT (focused, design-led — the two fixes)
+F1. MIRROR-STABLE FLANK DETECTION: replace the position-sensitive worst-single-attacker with a method robust
+    to sub-cell stagger — e.g. only count an attacker as a flanker if its angle exceeds a margin above the
+    octagon YELLOW boundary (so frontal-diagonal neighbours at ~45deg never register), or detect envelopers
+    structurally (attackers beyond the defender's frontage span) rather than by raw angle extremum. Must
+    restore H1 ~50 and reverse-pair symmetry.
+F2. ENVELOPER-SELF-FLANK: a cell that has deliberately wheeled to envelop should not be scored as defensively
+    flanked for its rotated facing vs the cells it is NOT engaging. Restrict the per-cell defensive angle to
+    the attackers the cell is actually in contact with, or exempt wheeled offensive cells from the self-flank
+    penalty. Must fix the H10/H11 inversion.
+Then re-run the full 13-test set + NERS Stage-4; confirm PER_CELL=0 unchanged at every step.
