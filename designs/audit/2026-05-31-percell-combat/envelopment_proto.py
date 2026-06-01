@@ -153,8 +153,12 @@ if __name__ == "__main__":
 #  5. Therefore reactive rotation (flank-refusal) requires: NOT pinned AND threat within FOV.
 # FOV interpretation [CONFIRM]: 135deg TOTAL cone centred on facing => visible if angle-from-facing <= 67.5deg.
 # ════════════════════════════════════════════════════════════════════════════
-FOV_TOTAL_DEG = 135.0            # [Jordan; CONFIRM interpretation] total field-of-view cone width
-FOV_HALF = FOV_TOTAL_DEG / 2.0   # visible if angle from facing <= this (67.5deg)
+# FOV grounded in visual physiology + military scholarship (searched 2026-05-31):
+#  human horizontal visual field ~190-210deg (Wikipedia 'slightly over 210'; per-eye ~107deg temporal)
+#  => anatomical REAR BLIND ARC ~150deg (visible +/-105deg). Jordan suggested 135deg blind; evidence -> 150.
+#  Pinning models the attentional lock separately, so FOV = raw perception (anatomical max).
+REAR_BLIND_DEG = 150.0                       # [grounded; Class-B tunable] rear arc the cell cannot perceive
+FOV_HALF = 180.0 - REAR_BLIND_DEG / 2.0      # visible if angle-from-facing <= this (105deg)
 
 def move_step(pos, objective, speed=1):
     """ANY-DIRECTION movement (directive 1). Step `speed` toward objective; sign of r/c is free, so
@@ -177,7 +181,7 @@ def angle_from_facing(facing, observer, target):
     return math.degrees(math.acos(cos_a))
 
 def in_fov(facing, observer, target, fov_half=FOV_HALF):
-    """Directive 4: can the observer SEE the target? Only within the FOV cone from its facing tip."""
+    """Directive 4: SEEN only if within +/-105deg of facing (i.e. NOT in the ~150deg rear blind arc)."""
     return angle_from_facing(facing, observer, target) <= fov_half
 
 def is_pinned(pos, facing, enemy_positions, reach=1.5):
