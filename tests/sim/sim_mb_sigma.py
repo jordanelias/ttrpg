@@ -545,6 +545,44 @@ def octagon_angle(attacker_pos, defender_pos, defender_facing_vec):
     if angle_deg < 90.0:   return "YELLOW", angle_deg  # [canonical: designs/provincial/mass_battle_v30.md §octagon]
     return "RED", angle_deg
 
+
+def _support_along_vector(cell, attacker_pos, friendly_cells):
+    """Supporting depth behind `cell` measured PARALLEL to the attacker's approach
+    vector, with partial-cell weighting.
+
+    Two geometric corrections over the old Y-column depth (`_depth_by_col`):
+      (1) Depth is counted along the push direction d = normalize(cell - attacker_pos),
+          NOT the formation's Y-column. A frontal hit therefore counts the file (Y),
+          a flank hit counts the row (X), a diagonal hit counts along the diagonal.
+          A cell hit along X no longer gets backed up by the cell behind it in Y.
+      (2) Each friendly cell counts by how much the 1-wide attack lane cuts through it:
+          weight = max(0, 1 - perp), where perp is the cell's perpendicular distance
+          from the lane axis. A cardinal lane counts only the exact line (perp 0 -> 1,
+          perp 1 -> 0); a diagonal lane counts on-lane cells fully and clipped cells
+          partially -- so we don't over-count cells barely in the path.
+
+    Only cells at or behind `cell` along d (t >= 0, i.e. away from the attacker) count
+    as supporting depth. Returns >= 1.0 (the cell itself, perp 0, contributes 1).
+    """
+    dr = cell[0] - attacker_pos[0]
+    dc = cell[1] - attacker_pos[1]
+    mag = (dr * dr + dc * dc) ** 0.5
+    if mag < 1e-9:
+        return 1.0
+    dr /= mag; dc /= mag
+    tot = 0.0
+    for (fr, fc) in friendly_cells:
+        rr = fr - cell[0]; rc = fc - cell[1]
+        t = rr * dr + rc * dc            # parallel distance along away-from-attacker dir
+        if t < -1e-9:                    # in front of cell (toward attacker): not depth
+            continue
+        pr = rr - t * dr; pc = rc - t * dc
+        perp = (pr * pr + pc * pc) ** 0.5
+        w = 1.0 - perp
+        if w > 0.0:
+            tot += w
+    return tot if tot > 0.0 else 1.0
+
 ANGLE_DEF_MOD = {
     # v11: per-cell octagon. GREEN < 45° = 0D; YELLOW 45-90° = -1D; RED ≥ 90° = -2D.
     # [canonical: Jordan design]
@@ -1334,6 +1372,25 @@ PC_ENVELOP_DEPTH_RESIST = float(_sigma_os.environ.get('PC_ENVELOP_DEPTH_RESIST',
 # on both flanks; only a penetration into a gap/concavity produces it.
 PC_POCKET_MOD = float(_sigma_os.environ.get('PC_POCKET_MOD', '-1.0'))   # surround penalty magnitude
 PC_POCKET_REACH = int(_sigma_os.environ.get('PC_POCKET_REACH', '2'))    # lateral column reach to count a flanker
+# Oblique-offense ROLL-UP (Leuthen/Leuctra: a concentrated DEEP wing crushes a thinner enemy wing at the point of
+# contact). At an in-contact pair, depth is measured PARALLEL to the contact vector for BOTH sides (Jordan's
+# vectorized depth). If the attacker's local push-depth exceeds our supporting depth by more than a margin, that
+# local superiority rolls the cell up. Fires ONLY where neither wrap nor pocket fired (no double-count) and only
+# in contact (a recessed/refused cell that no one is yet in contact with is not rolled up -- this protects a
+# deliberately thin Cannae centre). Mirror-safe: equal formations have equal depth, so excess <= 0 everywhere.
+PC_ROLLUP_PER_RANK = float(_sigma_os.environ.get('PC_ROLLUP_PER_RANK', '0.4'))  # penalty per rank of depth excess past the margin
+PC_ROLLUP_MARGIN   = float(_sigma_os.environ.get('PC_ROLLUP_MARGIN', '1.0'))    # local depth superiority needed before roll-up bites
+PC_ROLLUP_REACH    = float(_sigma_os.environ.get('PC_ROLLUP_REACH', '1.6'))     # contact distance (~adjacent incl. diagonal) to be rollable
+PC_ROLLUP_CAP      = float(_sigma_os.environ.get('PC_ROLLUP_CAP', '-1.0'))      # floor on the roll-up penalty (octagon RED scale)
+# A roll-up is a FLANK phenomenon: you concentrate a wing and roll the enemy line up FROM ITS END (Leuthen,
+# Leuctra). The interior of a line is not directly rolled up -- its collapse is a downstream morale consequence.
+# So the roll-up penalty bites only on cells at the defender's lateral extreme; a recessed/penetrated centre
+# (e.g. a Cannae concave) is handled by the pocket, not the roll-up.
+PC_ROLLUP_FLANK_REACH = float(_sigma_os.environ.get('PC_ROLLUP_FLANK_REACH', '1.0'))  # cols from a lateral edge to count as a wing
+# A roll-up breaks a still-FORMED but out-massed wing (a deep wing rolling a thinner one by design); it must not
+# mop up a cell already attrited to a single rank -- that cell is already losing on troop count, and penalising it
+# again double-counts attrition. So the defender cell must retain real depth (>= floor) to be rollable.
+PC_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('PC_ROLLUP_MIN_DEPTH', '2.0'))  # defender must still have this depth
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -1567,11 +1624,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     _wrappers = [a for a in atk_sorted if a[1] < _dmin or a[1] > _dmax]
                 else:
                     _wrappers = []
-                # depth (reserves) per column from the defender's CURRENT footprint — a deep column
-                # resists the wrap (reserves pivot to face the envelopers; Clausewitz oblique reserves).
-                _depth_by_col = {}
-                for (_rr, _cc) in defender_subunit.cells():
-                    _depth_by_col[_cc] = _depth_by_col.get(_cc, 0) + 1
+                # full defender footprint, for vectorized depth resistance: reserves resist the wrap
+                # measured along the WRAPPER'S approach vector, not the Y-column (Clausewitz reserves;
+                # Jordan's geometric correction). Captured once per call.
+                _def_cells = list(defender_subunit.cells())
+                _atk_full = list(attacker_subunit.cells())   # full attacker footprint, for roll-up push-depth
             for d_pos in defender_cells:
                 if d_pos in seen: continue
                 seen.add(d_pos)
@@ -1590,16 +1647,19 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                         if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= PC_PIN_REACH
                                 and _a < 45.0):
                             pinned = True; break
-                    worst_mod = 0; worst_ang = 0.0
+                    worst_mod = 0; worst_ang = 0.0; worst_pos = None
                     for a in _wrappers:
                         zone, ang = octagon_angle(a, d_pos, facing)
                         if zone == "RED" and PC_ENVELOP_MOD < worst_mod:
-                            worst_mod = PC_ENVELOP_MOD; worst_ang = ang
+                            worst_mod = PC_ENVELOP_MOD; worst_ang = ang; worst_pos = a
                     if worst_mod < 0 and (not pinned) and worst_ang <= FOV_HALF_DEG:
                         worst_mod = 0   # refused: free to turn AND can see the threat
                     if worst_mod < 0:
-                        _cd = _depth_by_col.get(d_pos[1], 1)
-                        worst_mod *= 1.0 / (1.0 + PC_ENVELOP_DEPTH_RESIST * max(0, _cd - 1))
+                        # depth resists the wrap, measured PARALLEL to the wrapper's approach (Jordan):
+                        # a flank wrap is blunted by ROW depth, a rear wrap by FILE depth -- not the
+                        # Y-column. A cell hit along X no longer draws spurious support from y-1.
+                        _cd = _support_along_vector(d_pos, worst_pos, _def_cells)
+                        worst_mod *= 1.0 / (1.0 + PC_ENVELOP_DEPTH_RESIST * max(0.0, _cd - 1.0))
                     # pocket / gap-trap: only where the WRAP did not already fire (worst_mod==0). The gap-
                     # flanking maniples sit WITHIN the defender's span (not wrappers), so a cell trapped level
                     # between them gets the pocket; a Horseshoe's concave wings are BEYOND the span (wrappers),
@@ -1614,6 +1674,30 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                                 elif 0 < _dcol <= PC_POCKET_REACH: _hr = True
                         if _hl and _hr:
                             worst_mod = PC_POCKET_MOD
+                    # oblique-offense roll-up: fires only where neither wrap nor pocket fired, and the
+                    # cell is actually in contact. Depth is measured PARALLEL to the contact vector for
+                    # both sides (Jordan); if the nearest attacker's local push-depth out-masses our
+                    # supporting depth past the margin, the local concentration rolls the cell up
+                    # (Leuthen deep wing vs thin wing). A recessed/refused cell with no attacker in
+                    # contact is NOT rolled up -- protects a deliberately thin Cannae centre.
+                    if worst_mod == 0:
+                        _cols = [c for (_r, c) in _def_cells]
+                        _cmn = min(_cols); _cmx = max(_cols)
+                        _is_wing = ((d_pos[1] - _cmn) <= PC_ROLLUP_FLANK_REACH
+                                    or (_cmx - d_pos[1]) <= PC_ROLLUP_FLANK_REACH)
+                        _na = None; _nd = 1e9
+                        if _is_wing:
+                            for a in atk_sorted:
+                                _dd = ((a[0] - d_pos[0]) ** 2 + (a[1] - d_pos[1]) ** 2) ** 0.5
+                                if _dd < _nd:
+                                    _nd = _dd; _na = a
+                        if _na is not None and _nd <= PC_ROLLUP_REACH:
+                            _ds = _support_along_vector(d_pos, _na, _def_cells)
+                            _ap = _support_along_vector(_na, d_pos, _atk_full)
+                            _excess = _ap - _ds
+                            if _excess > PC_ROLLUP_MARGIN and _ds >= PC_ROLLUP_MIN_DEPTH:
+                                worst_mod = max(PC_ROLLUP_CAP,
+                                                -PC_ROLLUP_PER_RANK * (_excess - PC_ROLLUP_MARGIN))
                     mods.append(worst_mod)
                 else:
                     zone, _ = octagon_angle(atk_centroid, d_pos, facing)
