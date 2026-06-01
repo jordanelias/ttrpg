@@ -2,13 +2,21 @@ id: lane-a-2026-05-31
 scope: editorial
 task:
   skill: valoria-orchestrator
-  description: Lane A (Canon/Editorial/Design-content), write-disjoint model, VERIFIED-DISJOINT
-    REDUCED scope (canon/** + designs/{personal,proposals}/**). 2.14 triage + 1.8
-    verify DONE. Remaining queue is faction-coupled and BLOCKED on prerequisites +
-    a newly-surfaced P1 resolver-ratification dispute (see blockers). Full scope (params/**,
-    designs/{world,provincial}/**, references/propagation_map.md) still deferred.
+  description: 'Lane A (Canon/Editorial/Design-content). Jordan mandate 2026-05-31:
+    ''resolve it all, best judgment.'' Scope RE-CLAIMED to full (faction handoff archived,
+    Track 1.1 done) EXCEPT references/propagation_map.md (lane-b conflict, routed).
+    DONE: #2 26 ID-conflicts (13 dedupe/8 close/5 split->ED-890-894), #5 Crown=Löwenritter
+    recorded (ED-869). REMAINING (driving, logged+vetoable): #1 resolver ratification
+    (write ED-874, strike ED-865 GD-2 miscite, re-issue ED-866, fix stats_1_7 header
+    + engine_replacement_reconciled); #5 apply stats_1_7 Crown-Mil edit; #3 structural
+    calls (ED-586/656; ED-661 closed) + tunable provisionals (ED-841/871/868/872->Lane
+    C-validate); #4 Markamt provisional+flag; recon-zone fill ED-874-882 (resolves
+    ED-883).'
 owns:
 - canon/**
+- params/**
+- designs/world/**
+- designs/provincial/**
 - designs/personal/**
 - designs/proposals/**
 context_files:
@@ -40,17 +48,22 @@ working_state:
     ED-651 character/narrative = not Claude''s), 2 evidence-correctable in UNOWNED
     designs/{articulation,threadwork}, 4 gap-fill scope-deferred, 1 audit-ingestion.
     No stale-kills. Artifact updated.'
+  - '#2 COMMITTED 1d508f3d — 26 ID-conflicts resolved (13 dedupe, 8 close-resolved,
+    5 split to ED-890-894).'
+  - '#5 RECORDED on ED-869 — Crown Mil 4 struck; Crown military = Löwenritter (5/6);
+    stats file edit pending full-scope apply.'
+  - Track 1.1 DONE — faction handoff archived; faction-owned files unblocked; scope
+    re-claimed to full minus propagation_map.
   in_progress:
-  - none — Lane A entry queue fully triaged + routed; no in-scope work remains pending
-    prerequisites.
+  - '#1 resolver ratification (next): write ED-874 on correct basis, strike ED-865
+    GD-2 miscite, re-issue ED-866.'
   next:
-  - 'AWAIT prerequisites + Jordan: the recon-zone fill (ED-874-882, items 1.8/1.11)
-    is BLOCKED on the P1 resolver dispute (blocker #1) — do NOT file until resolved.'
-  - Re-claim deferred scope (params/**, designs/{world,provincial}/**, propagation_map)
-    after Track 1.1 + propagation_map fix.
-  - 'Jordan decisions feed: 6 design-decisions + 23 migration ID-conflicts + ED-869
-    Crown-Military confirm.'
-  - Route 4 sim-tunable EDs to Lane C / Track 4.4.
+  - '#5 apply stats_1_7_scale.md Crown-Mil edit'
+  - '#3 ED-586/656 structural (anchored, logged) + ED-841/871/868/872 provisional->Lane
+    C'
+  - '#4 Markamt Stance-Triangle + provisional name [Jordan-confirm]'
+  - recon-zone fill ED-874-882 -> resolves ED-883
+  - 'ledger residue: 41 malformed entries + non-standard IDs (1.13)'
   deferred:
   - '3.2 RE-CHARACTERIZED: ED-844-856 are NOT flip-to-ratified — they are Pass-2h/2i
     derivation-provenance flags (faction-owned content); mostly Jordan design-decisions
@@ -74,16 +87,16 @@ blockers:
 - 'CROSS-LANE -> Lane B (2): references/propagation_map.md double-claimed (Lane A
   explicit vs lane-b references/**); co-file rule -> Lane A. Add to lane-b shared_not_exclusive
   + narrow owns.'
-- 'UN-LANED (Track 1.1): archive the COMPLETED faction handoff so its claim on params/factions
-  + designs/{world,provincial} clears and Lane A can re-claim full scope (ED-879 C3
-  + ED-875 carried at GATE G8).'
 - 'CROSS-LANE -> Lane B (NEW, F-NR1 lane-gap): designs/articulation, designs/threadwork
   (and designs/scene, designs/audit) are in NO lane''s owns -> ED-842/843 (evidence-correctable
   value/extract fixes) + ED-617/864 have content no lane can write. Assign these subdirs
   in lane_assignments.yaml or mark integration-only.'
-last_commit: 52c4d946448fca2badbda6650ec15e6971961607
+- 'ROUTED to Lane B (live): broken check_handoff_conflicts; propagation_map double-claim;
+  articulation/threadwork lane-gap. ROUTED to Lane C: validate the provisional balance
+  values (#3 tunables) + mass-battle sim (857/858/859/872).'
+last_commit: a1427960e6a1754bb72e2de80435e90105b88a4c
 session_token: cd96a77164db7b9e
 created: '2026-05-31T23:25:59.126735+00:00'
-updated: '2026-05-31T23:55:00.187266+00:00'
+updated: '2026-06-01T00:24:38.223655+00:00'
 status: active
 key_values: []
