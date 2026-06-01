@@ -1326,6 +1326,7 @@ REAR_BLIND_DEG = 150.0                                     # [grounded; Class-B 
 FOV_HALF_DEG = 180.0 - REAR_BLIND_DEG / 2.0                # visible if angle-from-facing <= this (105deg)
 PC_PIN_REACH = 1.5                                         # an attacker within this distance in the front arc PINS the cell
 PC_REFUSE = _sigma_os.environ.get('PC_REFUSE', '0') == '1' # M3 (DORMANT, default off): refusal-gated envelopment — emerges but mirror-biased; WIP
+PC_ENVELOP_MOD = float(_sigma_os.environ.get('PC_ENVELOP_MOD', '-1.0'))  # rear-wrap penalty magnitude (M3); tunable
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -1536,6 +1537,15 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             seen = set()
             _pc_refuse = PER_CELL and PC_REFUSE
             atk_sorted = sorted(set(attacker_cells)) if _pc_refuse else None
+            if _pc_refuse:
+                _dcols = [c for (_r, c) in defender_cells]
+                _dmin, _dmax = min(_dcols), max(_dcols)
+                # F1 structural: envelopers = attacker cells wrapped BEYOND the defender's frontage span
+                # (past either flank). Mirror-stable BY CONSTRUCTION — equal-width formations produce NO
+                # wrappers, so a frontal/mirror clash incurs no envelopment penalty regardless of integer-
+                # movement stagger. Also fixes the enveloper self-flank (F2): the wider side's narrower
+                # enemy cannot wrap it, so an enveloper is never penalised for its own inward-rotated facing.
+                _wrappers = [a for a in atk_sorted if a[1] < _dmin or a[1] > _dmax]
             for d_pos in defender_cells:
                 if d_pos in seen: continue
                 seen.add(d_pos)
@@ -1543,21 +1553,22 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 facing = (defender_subunit.get_cell_facing(*orig)
                           if orig else (defender_subunit.advance_dir, 0))
                 if _pc_refuse:
-                    # Envelopment + refusal (fixing-force doctrine): judge this cell against its
-                    # WORST-flanking attacker. A cell PINNED in front (attacker engaged adjacent in
-                    # the front arc) cannot reorient; a flanker outside the cell's FOV cannot be seen.
-                    # The cell REFUSES (turns to face -> no penalty) only if NOT pinned AND it can see
-                    # the flanker; otherwise the flank/rear penalty lands.
+                    # Envelopment + refusal (fixing-force doctrine). A cell PINNED in front (attacker
+                    # engaged adjacent in the front arc) cannot reorient; a flanker outside the cell's
+                    # FOV cannot be seen. The cell REFUSES (turns to face -> no penalty) only if NOT
+                    # pinned AND it can see the threat; otherwise the rear penalty lands. The threat is a
+                    # STRUCTURAL wrapper (attacker beyond the defender frontage) in this cell's REAR.
                     pinned = False
-                    worst_mod = 0; worst_ang = 0.0
                     for a in atk_sorted:
+                        _z, _a = octagon_angle(a, d_pos, facing)
+                        if (((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5 <= PC_PIN_REACH
+                                and _a < 45.0):
+                            pinned = True; break
+                    worst_mod = 0; worst_ang = 0.0
+                    for a in _wrappers:
                         zone, ang = octagon_angle(a, d_pos, facing)
-                        dist = ((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5
-                        if dist <= PC_PIN_REACH and ang < 45.0:
-                            pinned = True
-                        m = ANGLE_DEF_MOD[zone]
-                        if m < worst_mod:
-                            worst_mod = m; worst_ang = ang
+                        if zone == "RED" and PC_ENVELOP_MOD < worst_mod:
+                            worst_mod = PC_ENVELOP_MOD; worst_ang = ang
                     if worst_mod < 0 and (not pinned) and worst_ang <= FOV_HALF_DEG:
                         worst_mod = 0   # refused: free to turn AND can see the threat
                     mods.append(worst_mod)
