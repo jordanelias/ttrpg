@@ -93,3 +93,31 @@ F2. ENVELOPER-SELF-FLANK: a cell that has deliberately wheeled to envelop should
     the attackers the cell is actually in contact with, or exempt wheeled offensive cells from the self-flank
     penalty. Must fix the H10/H11 inversion.
 Then re-run the full 13-test set + NERS Stage-4; confirm PER_CELL=0 unchanged at every step.
+
+## F1/F2 STRUCTURAL FIX — committed 855b619 (2026-05-31, still dormant)
+F1/F2 root cause (revised): the mirror bias was NOT the 45deg YELLOW boundary — RED-only didn't fix it
+(H1 stayed 63). Integer-movement stagger creates "same-row-beside" attackers (~90deg, RED) asymmetrically
+between A and B; any angle-EXTREMUM method inherits the asymmetry. FIX: detect envelopers STRUCTURALLY —
+an attacker cell wrapped BEYOND the defender's frontage span [min_col, max_col]. Mirror-stable BY
+CONSTRUCTION: equal-width formations produce zero wrappers -> H1 = 50.0. This ALSO fixes F2 (the enveloper
+self-flank inversion): the wider side's narrower enemy cannot wrap it, so the enveloper is never penalised
+for its own inward-rotated facing -> H10 inversion resolved. RED-zone wrapper penalty = PC_ENVELOP_MOD
+(default -1.0), refusal-gated (pinned/blind -> lands; free+sighted -> refused).
+
+RESULT (PC_REFUSE=1, PC_ENVELOP_MOD=-1.0, n=50-60): H1 50, H2 57, H4 49, H7 52, H10 41 -> IN.
+REMAINING — needs a depth-resistance mechanic, NOT a scalar:
+ - H3 (Horseshoe-v-Line) still HIGH (66-68): width alone over-rewards wide enveloping shapes; the wrap is
+   too easy/strong even at low magnitude.
+ - H5/H6 (RefusedFlank-v-Horseshoe/Line) LOW (22-47): a REFUSED or DEEP flank should RESIST being wrapped
+   (Clausewitz: "formation in depth... more corps in the rear to envelop those enveloping us"; the refused
+   column should pivot to face the enveloper). Currently width alone decides wrapping, so RefusedFlank is
+   crushed despite its refusal.
+ - H9 (Line-v-Arrowhead) LOW (28-32): Arrowhead (widest) over-wraps Line.
+
+## NEXT — DEPTH-RESISTANCE (the missing mechanic)
+A wrapped flank cell backed by reserve DEPTH should resist/refuse the wrap (reserves face outward and
+counter the envelopers). Scale or negate the wrapper penalty by the defender's local column depth at the
+wrapped flank: deep/refused flank -> strong resistance (penalty -> ~0); thin flank -> full penalty. This
+should simultaneously pull H3 DOWN (Line's flanks have some depth) and lift H5/H6 (RefusedFlank's refused
+column resists). Then re-run the full 13-test set + NERS Stage-4; PER_CELL=0 unchanged at every step.
+DORMANT remains until the set is clean enough to consider PC_REFUSE default-on.
