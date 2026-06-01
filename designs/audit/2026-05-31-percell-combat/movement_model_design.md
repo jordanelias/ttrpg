@@ -205,3 +205,33 @@ envelopment is correct, H5 is a refused-vs-double-envelopment balance question, 
 These four are design/balance decisions (band expectations, GappedLine gap advantage, RefusedFlank strength)
 for Jordan, not mechanic work. M3 remains DORMANT (PC_REFUSE off); the engine default is the ratified
 wheel-only PER_CELL=0, byte-exact and untouched.
+
+## POCKET / GAP-TRAP PRIMITIVE (Polybius-grounded), committed 218d69bc — 2026-05-31, dormant
+Research (top-down): the manipular quincunx gaps were NOT a weakness vs a rigid line — Polybius/Wikipedia:
+gaps "lured hoplites in and disrupted their formation, after which they became disorganized, SURROUNDED,
+and easy prey"; gaps in each line were covered by the line behind. So a gapped line should BEAT a solid
+line via the gap-trap; band 50-65 is historically right. Missing primitive: an enemy cell that pushes into
+a gap is surrounded on both sides.
+
+Primitive (bottom-up): a defender cell with enemy cells LEVEL (same rank) on BOTH lateral sides is pocketed
+(PC_POCKET_MOD=-1.0, reach 2), not refusable (cannot turn to face both). Fired ONLY where the wrap did not
+(worst_mod==0): the gap-flanking maniples sit WITHIN the defender's frontage span (not wrappers), so the
+trapped cell gets the pocket; the Horseshoe's concave wings are BEYOND the span (wrappers), so those cells
+take the depth-scaled wrap instead — no double-count. Mirror-safe by construction: parallel lines put
+enemies AHEAD (a different rank), never beside on both flanks.
+
+RESULT (2-seed n=100): 7/10 IN (up from 6). H7 GappedLine-v-Line 44.7->48.9 (borderline IN — the gap-trap
+emerging); H11 came INTO band (the no-double-count routing); H3 held 60.4 (NOT over-boosted, vs 71 when the
+pocket double-counted); H1 mirror 50.6 (clean). Iteration that got here: unrestricted pocket lifted H7 but
+double-boosted H3->71; a friendly-beside test wrongly suppressed H7 too; the worst_mod==0 gate cleanly
+separates gap-trap (H7) from concave (H3).
+
+Remaining:
+ - H5 RefusedFlank-v-Horseshoe LO (39.8): the refused-flank RESISTANCE mechanic is the next piece — a
+   refused flank (col 4 pulled back) should deny the enveloping wing on its side; needs the refused cells to
+   face/meet the wrapper rather than be wrapped. (Research next: oblique order / refused flank vs envelopment.)
+ - H6 RefusedFlank-v-Line LO (22.8, regressed): plausibly CORRECT top-down — a refused flank is WASTED vs a
+   frontal line (no flank threat to refuse, just surrendered frontage), so RefusedFlank should lose to an
+   equal Line; band 45-60 is likely optimistic. A Jordan band call, not forced here.
+STATUS: mirror-clean by construction, H3 in band, gap-trap grounded + emerging, 7/10 IN. DORMANT (PC_REFUSE
+off); PER_CELL=0 ratified engine byte-exact and untouched.
