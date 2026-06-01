@@ -1327,6 +1327,7 @@ FOV_HALF_DEG = 180.0 - REAR_BLIND_DEG / 2.0                # visible if angle-fr
 PC_PIN_REACH = 1.5                                         # an attacker within this distance in the front arc PINS the cell
 PC_REFUSE = _sigma_os.environ.get('PC_REFUSE', '0') == '1' # M3 (DORMANT, default off): refusal-gated envelopment — emerges but mirror-biased; WIP
 PC_ENVELOP_MOD = float(_sigma_os.environ.get('PC_ENVELOP_MOD', '-1.0'))  # rear-wrap penalty magnitude (M3); tunable
+PC_ENVELOP_DEPTH_RESIST = float(_sigma_os.environ.get('PC_ENVELOP_DEPTH_RESIST', '0.3'))  # defender column depth resists the wrap (Clausewitz reserves)
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -1546,6 +1547,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 # movement stagger. Also fixes the enveloper self-flank (F2): the wider side's narrower
                 # enemy cannot wrap it, so an enveloper is never penalised for its own inward-rotated facing.
                 _wrappers = [a for a in atk_sorted if a[1] < _dmin or a[1] > _dmax]
+                # depth (reserves) per column from the defender's CURRENT footprint — a deep column
+                # resists the wrap (reserves pivot to face the envelopers; Clausewitz oblique reserves).
+                _depth_by_col = {}
+                for (_rr, _cc) in defender_subunit.cells():
+                    _depth_by_col[_cc] = _depth_by_col.get(_cc, 0) + 1
             for d_pos in defender_cells:
                 if d_pos in seen: continue
                 seen.add(d_pos)
@@ -1571,6 +1577,9 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                             worst_mod = PC_ENVELOP_MOD; worst_ang = ang
                     if worst_mod < 0 and (not pinned) and worst_ang <= FOV_HALF_DEG:
                         worst_mod = 0   # refused: free to turn AND can see the threat
+                    if worst_mod < 0:
+                        _cd = _depth_by_col.get(d_pos[1], 1)
+                        worst_mod *= 1.0 / (1.0 + PC_ENVELOP_DEPTH_RESIST * max(0, _cd - 1))
                     mods.append(worst_mod)
                 else:
                     zone, _ = octagon_angle(atk_centroid, d_pos, facing)

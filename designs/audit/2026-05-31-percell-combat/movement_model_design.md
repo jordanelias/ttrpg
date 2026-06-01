@@ -121,3 +121,30 @@ wrapped flank: deep/refused flank -> strong resistance (penalty -> ~0); thin fla
 should simultaneously pull H3 DOWN (Line's flanks have some depth) and lift H5/H6 (RefusedFlank's refused
 column resists). Then re-run the full 13-test set + NERS Stage-4; PER_CELL=0 unchanged at every step.
 DORMANT remains until the set is clean enough to consider PC_REFUSE default-on.
+
+## [CORRECTION] MIRROR IS NOT UNBIASED — depth-resistance added but M3 still mirror-biased (2026-05-31)
+Prior claim (855b619) that structural wrap detection is "mirror-stable BY CONSTRUCTION (H1 50.0)" is
+FALSIFIED. n=100 at a different seed base showed H1 57.8 / H3 68.4, and a direct diagnostic confirmed M3
+shifts the mirror: Line-v-Line refuse-off vs refuse-on at seed+222 = 54.1 -> 57.8; at seed+1,000,000 =
+45.4 -> 50.0. Refuse-on is NOT identical to refuse-off and consistently favours A by ~+4.
+
+Root cause: the static "equal width -> no wrappers" argument does NOT hold during the DYNAMIC battle —
+integer movement + the advance_dir sign make A's and B's column spans DRIFT unequally, so wrappers appear
+asymmetrically even in a nominal mirror. M3's wrapper/RED detection (an extremum-style test) amplifies that
+sub-cell asymmetry into a consistent directional bias; the refuse-off centroid path averages it out (which
+is why the wheel-only mirror sits ~50 with only seed noise: 54.1/45.4). The structural fix REDUCED the bias
+(from +7-12 down to +4) but did not remove it.
+
+DEPTH-RESISTANCE (committed, dormant): PC_ENVELOP_DEPTH_RESIST=0.3 scales the rear-wrap penalty by the
+wrapped column's depth (reserves resist the wrap; Clausewitz). This is a real BALANCE gain — H3 falls from
+~80 to ~60-68 (borderline IN/HIGH, seed-dependent), and at n=50 the set reached 6 IN (H1/H2/H3/H4/H10/H11)
+with H5/H7/H9 near-miss. But it does NOT touch the mirror bias (orthogonal: detection asymmetry, not magnitude).
+
+NET STATUS: envelopment EMERGES and BALANCES far better than any prior version, but M3 remains DORMANT and
+is NOT default-viable until the mirror bias is eliminated. The gating problem is fundamental: any position-
+sensitive flank detection amplifies the asymmetric integer-movement drift between A (advance -1) and B
+(advance +1). Candidate fixes (next): (a) make advance/​wheel rounding exactly symmetric so A/B spans drift
+identically; (b) replace the extremum detection with a symmetric net-overhang measure (A's overhang of B
+minus B's overhang of A) so a true mirror nets to zero wrappers regardless of drift. Option (b) is the
+more tractable and directly targets the asymmetry. PER_CELL=0 and PER_CELL=1/refuse-off remain byte-exact
+to the committed wheel engine (verified this session).
