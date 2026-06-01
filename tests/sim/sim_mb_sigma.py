@@ -1319,6 +1319,13 @@ PC_CHARGE_SIGMA    = 0.55   # per-rank-of-unabsorbed-penetration delta-sigma a c
 PC_CHARGE_TICKS    = 3      # charge shock applies only for the first few ticks of contact
 PC_CAVALRY_SPEED_MULT = 2.0  # cavalry velocity primitive: cavalry closes this much faster (PER_CELL), triggering the charge
 PC_WHEEL = _sigma_os.environ.get('PC_WHEEL', '1') == '1'   # envelopment wheel: overhang cells wheel toward the enemy flank (PER_CELL); A/B via env
+# Perception model (Jordan 2026-05-31; grounded in visual physiology + military scholarship):
+#   human horizontal visual field ~190-210deg -> REAR BLIND ARC ~150deg, visible +/-105deg.
+#   Pinning models the attentional lock of an engaged cell separately (fixing-force doctrine).
+REAR_BLIND_DEG = 150.0                                     # [grounded; Class-B tunable] rear arc a cell cannot perceive
+FOV_HALF_DEG = 180.0 - REAR_BLIND_DEG / 2.0                # visible if angle-from-facing <= this (105deg)
+PC_PIN_REACH = 1.5                                         # an attacker within this distance in the front arc PINS the cell
+PC_REFUSE = _sigma_os.environ.get('PC_REFUSE', '0') == '1' # M3 (DORMANT, default off): refusal-gated envelopment — emerges but mirror-biased; WIP
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -1527,14 +1534,36 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                          + defender_subunit.cell_offsets_c.get((orig_r, orig_c), 0))
                 abs_to_orig[(abs_r, abs_c)] = (orig_r, orig_c)
             seen = set()
+            _pc_refuse = PER_CELL and PC_REFUSE
+            atk_sorted = sorted(set(attacker_cells)) if _pc_refuse else None
             for d_pos in defender_cells:
                 if d_pos in seen: continue
                 seen.add(d_pos)
                 orig = abs_to_orig.get(d_pos)
                 facing = (defender_subunit.get_cell_facing(*orig)
                           if orig else (defender_subunit.advance_dir, 0))
-                zone, _ = octagon_angle(atk_centroid, d_pos, facing)
-                mods.append(ANGLE_DEF_MOD[zone])
+                if _pc_refuse:
+                    # Envelopment + refusal (fixing-force doctrine): judge this cell against its
+                    # WORST-flanking attacker. A cell PINNED in front (attacker engaged adjacent in
+                    # the front arc) cannot reorient; a flanker outside the cell's FOV cannot be seen.
+                    # The cell REFUSES (turns to face -> no penalty) only if NOT pinned AND it can see
+                    # the flanker; otherwise the flank/rear penalty lands.
+                    pinned = False
+                    worst_mod = 0; worst_ang = 0.0
+                    for a in atk_sorted:
+                        zone, ang = octagon_angle(a, d_pos, facing)
+                        dist = ((a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2) ** 0.5
+                        if dist <= PC_PIN_REACH and ang < 45.0:
+                            pinned = True
+                        m = ANGLE_DEF_MOD[zone]
+                        if m < worst_mod:
+                            worst_mod = m; worst_ang = ang
+                    if worst_mod < 0 and (not pinned) and worst_ang <= FOV_HALF_DEG:
+                        worst_mod = 0   # refused: free to turn AND can see the threat
+                    mods.append(worst_mod)
+                else:
+                    zone, _ = octagon_angle(atk_centroid, d_pos, facing)
+                    mods.append(ANGLE_DEF_MOD[zone])
             return sum(mods) / len(mods) if mods else 0
 
         a_angle_mod = _per_cell_angle_mod(atom_a, list(set(p["a_cells"])),
