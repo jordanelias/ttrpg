@@ -235,3 +235,34 @@ Remaining:
    equal Line; band 45-60 is likely optimistic. A Jordan band call, not forced here.
 STATUS: mirror-clean by construction, H3 in band, gap-trap grounded + emerging, 7/10 IN. DORMANT (PC_REFUSE
 off); PER_CELL=0 ratified engine byte-exact and untouched.
+
+## H5 DIAGNOSIS (researched + instrumented), 2026-05-31 — refusal works; the gap is an oblique OFFENSE model
+PC_REFUSE flipped default ON (commit b2a7af80): the envelopment model is now active in the per-cell path.
+PER_CELL still default OFF -> shipped engine (PER_CELL=0 = base 0dea67d1) byte-exact, unchanged.
+
+Research (top-down, Frederick/Leuthen, Epaminondas/Leuctra, oblique order): refusing a flank (a) WITHDRAWS
+and protects the weak flank ("protected that part of the line not yet engaged"), (b) FIXES the enemy facing
+it, and (c) lets you CONCENTRATE the strong wing to ROLL UP one enemy flank. It is an OFFENSIVE maneuver,
+not a defense against being enveloped.
+
+Instrumentation (per-column worst_mod, RefusedFlank(A) vs Horseshoe(B), abs cols 9-13 = oriented 0-4):
+  col 9 (or0) -0.406 | col 10 (or1) -0.435 | col 11 (or2, CENTRE) -0.745 ~pocket | col 12 (or3) -0.336 |
+  col 13 (or4, the REFUSED flank) NOT penalised.
+=> The refusal WORKS — the withdrawn flank (col 13) is correctly never wrapped. RefusedFlank loses because
+its CENTRE is Cannae-pocketed by the Horseshoe's concave as it advances in, and its near-flanks wrapped. The
+engine is correctly modelling "advance into a concave -> get enveloped." A refused flank does NOT defend
+against that; its historical value is the OBLIQUE OFFENSE (concentrate the deep wing, roll up one Horseshoe
+wing before the mouth closes), which the current envelopment-GEOMETRY resolution does not model.
+
+Two honest paths for H5 (band 50-65, gets ~40):
+ (a) BAND RECONSIDERATION: a refused-flank formation that simply advances into a Cannae double-envelopment
+     SHOULD lose; the band assumes RefusedFlank executes its oblique offense. If the engine resolves shapes
+     by advancing-and-enveloping (no concentrated breakthrough maneuver), RefusedFlank-beats-Horseshoe is
+     optimistic. Jordan band call.
+ (b) OBLIQUE-OFFENSE PRIMITIVE (substantial): model the concentrated strong-wing breakthrough — a deep,
+     concentrated wing that contacts a thinner enemy wing rolls it up (local depth/mass breakthrough), giving
+     RefusedFlank (and any oblique attacker) an offensive edge that can pre-empt the concave. This is a new
+     maneuver primitive (asymmetric concentration + flank roll-up), warranting its own focused build, not a
+     scalar. Validate top-down vs Leuthen/Leuctra (the refused-wing-then-roll-up sequence).
+RECOMMENDATION: build (b) as the next focused primitive (it also enriches Arrowhead/wedge breakthrough), or
+take (a) if the resolution model is meant to stay envelopment-only. NOT forced here.
