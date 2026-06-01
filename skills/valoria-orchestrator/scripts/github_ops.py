@@ -1281,6 +1281,31 @@ def quick_bootstrap(extra_paths: list = None) -> tuple:
     except Exception as e:
         print(f"[LANE WARN] Could not read lane assignment: {e}")
 
+    # Load the SQL file-index (concept/alias find-by-context + files manifest).
+    # Non-blocking: any failure degrades to name-keyed fetch. load_index uses
+    # run_fast (tree-only) + a 600s cache, so it adds no tracked-fetch tokens and
+    # does not inflate context_gate (verified delta 0). First call ~3s; cached after.
+    try:
+        import os as _ios, urllib.request as _iu, json as _ij, base64 as _ib, time as _it
+        _ipat = open('/home/claude/.valoria_pat').read().strip()
+        for _isrc, _idst in (
+            ('skills/valoria-orchestrator/scripts/index_bootstrap.py', '/home/claude/index_bootstrap.py'),
+            ('skills/valoria-orchestrator/scripts/regenerate_file_index.py', '/home/claude/regenerate_file_index.py'),
+        ):
+            if _ios.path.exists(_idst) and (_it.time() - _ios.path.getmtime(_idst)) < 3600:
+                continue
+            _ireq = _iu.Request(
+                f'https://api.github.com/repos/jordanelias/ttrpg/contents/{_isrc}?ref=main',
+                headers={'Authorization': f'token {_ipat}', 'Accept': 'application/vnd.github.v3+json'})
+            with _iu.urlopen(_ireq) as _ir:
+                open(_idst, 'w').write(_ib.b64decode(_ij.loads(_ir.read())['content']).decode())
+        import index_bootstrap as _ix
+        _iconn, _irep = _ix.load_index(g=_g_mod, strict=False)
+        _ix.print_index_summary(_irep)
+        _g_mod._index_conn = _iconn
+    except Exception as _ie:
+        print(f"[INDEX WARN] file-index not loaded ({_ie}); name-keyed fetch still works")
+
     return _g_mod, _h_mod, files, token
 
 
