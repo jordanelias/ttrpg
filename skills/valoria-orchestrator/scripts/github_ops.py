@@ -821,6 +821,17 @@ def atomic_commit(
         _session_token = None
     _save_cache()
 
+    # The committed change alters the repo tree (and possibly the curated index),
+    # so the loaded SQL file-index is now stale. Clear its freshness marker so the
+    # next bootstrap's load_index rebuilds files + reloads curated (load_index removes
+    # the .db itself before rebuilding). Pure cleanup — runs only after the commit oid
+    # is obtained, so it can never affect commit success.
+    try:
+        import os as _cos
+        _cos.remove('/home/claude/.index_cache.json')
+    except Exception:
+        pass
+
     return oid
 
 
