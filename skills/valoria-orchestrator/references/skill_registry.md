@@ -104,11 +104,12 @@
 
 ### valoria-resolution-diagnostic
 - Path: `skills/valoria-resolution-diagnostic/SKILL.md`
-- Model: Opus 4.6
-- Triggers: is this NERS compliant, diagnose this system, stress test, small pool problem, resolution audit, balance audit, death spiral, runaway loop, cliff check, does this scale
-- Purpose: Three-stage NERS-compliance diagnostic wrapper: (1) Phase 0–6 resolution stress test decomposes system into dice/deterministic/clock components and locates stress points, (2) maps findings to six scoped design lessons, (3) produces per-system N/R/S/E verdict with lesson-mapped remediation. Stage 4 re-tests proposed fixes.
-- Relationship: runs AFTER valoria-mechanic-audit (consistency); this skill checks resolution fitness under stress.
-- Note: Three mechanic categories (continuous resource / discrete accumulator / base parameter). Clocks are legitimately 100% linear.
+- Model: Opus
+- Scope: ROLLING ENGINES ONLY — any mechanism resolving an outcome by a draw (dice, U[0,1), card). NOT a general "any mechanic" auditor; non-rolling systems (character sheet, pure ledger, static stat block, bare clock) are OUT OF SCOPE -> valoria-mechanic-audit.
+- Triggers: is this rolling engine NERS compliant, diagnose this resolver, stress test this roll, resolution audit, is this sigma-leverage or deterministic+stochastic, does this resolution scale, leverage non-uniformity, clamp/Ob-floor conflict
+- Purpose: Tests a rolling engine against five engine properties (legible odds / in-band uniform leverage / bounded+monotonic / graded recoverable / right engine for the pool regime), using two current canonical instances — sigma-leverage (Continuous Engine) and deterministic+stochastic (Domain Action resolver, ratified ED-874) — plus a [NEW ENGINE] branch for any third/novel rolled mechanic. Pipeline: Stage 0 validate the skill vs adjudicated cases (ED-874/884/ER-2) -> Phase 0–6 stress test -> lesson/property mapping -> per-engine NERS verdict -> Stage 4 re-test.
+- Relationship: runs AFTER valoria-mechanic-audit (consistency); checks rolling-engine resolution fitness under stress and the loops/cliffs a rolling engine drives.
+- Note: raw d10-vs-Ob is legacy TTRPG-mode only (a defect flag in videogame canon). Non-rolling components inside a composite are recognized-and-routed-out, not diagnosed.
 
 
 ---

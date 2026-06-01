@@ -1,261 +1,351 @@
 ---
 name: valoria-resolution-diagnostic
 description: >
-  Three-stage NERS-compliance wrapper for any Valoria mechanical system: (1) runs the
-  resolution-and-balance diagnostic (Phase 0–6) to locate where a system fails under
-  stress, (2) tests each finding against the six scoped design lessons, and (3) produces
-  a per-system NERS (Necessary / Robust / Smooth / Elegant) verdict with lesson-mapped
-  remediation. A fourth validation stage re-tests proposed fixes against the same pipeline.
-  A fifth stage validates the system's behaviour against real-world historical and scientific
-  precedent (never videogame/genre convention) as the external check on NERS-Robustness.
-  ALWAYS use this skill when checking whether a system is NERS-compliant,
-  diagnosing balancing or resolution problems, stress-testing small pools, checking for
-  death spirals / runaway loops, threshold cliffs, or non-uniform modifiers. Trigger on:
-  "is this NERS compliant", "diagnose this system", "stress test", "small pool problem",
-  "resolution audit", "balance audit", "death spiral", "runaway loop", "cliff check",
-  "does this scale", or when the orchestrator routes a resolution/balance diagnosis.
+  Diagnostic + NERS-compliance wrapper for any Valoria **rolling engine** — any mechanism
+  that turns a contest or state into an outcome via a draw (dice, U[0,1), card, etc.). It is
+  NOT a general "any mechanic" auditor: systems with no draw (character sheets, pure
+  deterministic ledgers, static stat blocks, bare accumulators) are OUT OF SCOPE and route to
+  valoria-mechanic-audit. The skill tests a rolling engine against five engine properties,
+  using the two current canonical instances (sigma-leverage continuous engine;
+  deterministic+stochastic resolver) plus an explicit branch for any new/third rolling engine.
+  Pipeline: (Stage 0) validate the skill against adjudicated cases; (1) Phase 0–6 diagnostic
+  to locate where the engine fails under stress; (2) map findings to the scoped lessons;
+  (3) per-engine NERS verdict + remediation; (4) re-test the fix. ALWAYS use when checking
+  whether a ROLLING ENGINE is NERS-compliant, stress-testing a resolver, or checking leverage
+  uniformity / clamp-or-floor cliffs / wrong-engine-for-the-pool. Trigger on: "is this rolling
+  engine NERS compliant", "diagnose this resolver", "stress test this roll", "resolution
+  audit", "is this sigma-leverage or deterministic+stochastic", "does this resolution scale",
+  "leverage non-uniformity", "clamp/Ob-floor conflict", or when the orchestrator routes a
+  resolution diagnosis. Do NOT trigger to audit a character sheet, inventory, pure economy
+  ledger, or other non-rolling system — that is valoria-mechanic-audit's job.
 ---
 
-**Prerequisite:** Bootstrap complete — `assert_bootstrap()` via `quick_bootstrap()` before invoking. This skill reads canonical mechanics; never diagnose from memory or project-file copies. Fetch the target system's canonical design doc (via `references/canonical_sources.yaml` lookup) and `canon/02_canon_constraints.md` (P-01–P-15) this session before running.
+**Prerequisite:** Bootstrap complete — `assert_bootstrap()` via `quick_bootstrap()` before invoking. This skill reads canonical mechanics; never diagnose from memory or project-file copies. This session, fetch (via the tracked path `g.read_files_graphql` / `g.fetch_system`):
+- `params/core.md` — core engine: **Die Rule (legacy/TTRPG), Continuous Engine (Decision E), Degrees, Obstacle Scale, Expected Value table, Pool Floor**.
+- `designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md` — the **deterministic+stochastic resolver** spec (ratified per ED-874).
+- `designs/audit/2026-05-28-engine-replacement/engine_replacement_reconciled.md` — the engine-replacement reconciliation (continuity correction; resolver-vs-engine boundary).
+- `canon/02_canon_constraints.md` (P-01–P-15 + GD-1/2/3) and `canon/definitions.yaml` (NERS criteria).
+- Target rolling engine's canonical design doc (resolve path via `references/canonical_sources.yaml`).
 
 **Model:** Opus (multi-system cross-referencing + quantitative reasoning).
 
-**Relationship to `valoria-mechanic-audit`:** that skill checks *internal consistency* (formulas, gaps, redundancy). This skill checks *resolution and balance fitness under stress*, and ends in an explicit NERS verdict. Run consistency first if the system is unverified; run this when the question is "does it hold up at its extremes, and is it NERS-compliant."
+**Relationship to `valoria-mechanic-audit`:** that skill checks *internal consistency* (formulas, gaps, redundancy) for **any** system, rolling or not. This skill checks **resolution fitness under stress for rolling engines specifically**, plus the loops/cliffs a rolling engine's output drives, and ends in a NERS verdict. A non-rolling system, or pure non-roll balance (a deterministic feedback loop with no draw), belongs to `valoria-mechanic-audit` or a dedicated balance pass — not here. Run consistency first if the engine is unverified; run this when the question is "does this rolling engine hold up at its extremes, on the right engine model, and is it NERS-compliant."
+
+---
+
+## SCOPE GATE (apply first — before any phase)
+
+**Is there a rolling engine here?** A *rolling engine* = a mechanism that resolves an outcome by a **draw** (dice net, `U[0,1)`, card, shuffle, any randomized resolution). If the answer is **no** — the target is pure state (a character sheet, attribute block, inventory), a pure deterministic ledger (CI economy math, Treasury accounting with no draw), or a bare accumulator/clock with no per-segment roll — **this skill DOES NOT APPLY.** Say so plainly and route to `valoria-mechanic-audit` (consistency) or a balance pass. Do not manufacture a NERS verdict for a non-rolling system.
+
+**Non-rolling components inside a composite are recognized, not diagnosed.** Most systems are composites (a social contest = an exchange *roll* + a Persuasion *clock*; mass battle = engagement *rolls* + a TroopCount *ledger* + a Morale *clock*). Tag the non-rolling parts only to **bound scope** — so a linear clock feeding a roll is not mis-flagged as a cliff, and a stat that feeds a pool is treated as the roll's *input*, not as a thing this skill verdicts. The one apparent-non-roll that IS in scope: a **shallow clock where one roll ≈ one segment** is a disguised rolling binary — treat it as a rolling engine (Lesson 4).
+
+> Recognize-and-route-out (do not diagnose here): deterministic-accounting (no draw); continuous resources (Health, Stamina, Composure, Coherence — data that *feeds* a roll); base parameters (1–7 stats — roll *inputs*); bare/deep accumulators (Evidence, CI, MS — legitimately linear, multi-threshold; not a resolver). Guard: a linear clock is not a cliff, a multi-threshold tracker is not a Lesson-6 violation, a base parameter is not a pool.
 
 ---
 
 ## WHY THIS SKILL EXISTS
 
-Valoria's resolution engine is a d10 success-counting pool; its probability response is an **S-curve**, and the marginal value of a die scales with `1/√N`. Consequently the engine does its **worst work at small pools** (faction bare 1–7D, depleted units, low-stat actors), where variance is high, a single die swings outcomes violently, and the continuous (Normal) approximation is inaccurate below ~5D. Balancing and resolution defects concentrate at these stress points. This skill finds them and maps each to its fix.
+Valoria no longer resolves anything by **raw d10-vs-raw-obstacle success-counting**. That discrete success-pool is retained **only** as the legacy TTRPG-mode specification (`params/core.md §Die Rule (d10)`); it is **not** the videogame's resolution path, and any claim that a live videogame system "rolls N d10 and counts successes ≥ TN against a flat Ob" is a defect to flag (Lesson 3), not a baseline.
 
-**The primary fix for small-pool defects is architectural** — one of the six lessons below. Parameter-level adjustments (fractional TN, continuous-engine μ/σ calibration, probit-axis modifier remapping) are valid complementary fixes but do not substitute for architectural corrections when the defect is structural.
-
----
-
-## INPUT
-
-The operator provides:
-1. **Target system name** (e.g., "faction action layer," "personal combat," "mass battle").
-2. **Scope** — full system or specific sub-component (e.g., "the CI accounting pipeline only").
-3. The canonical design doc path is resolved via `references/canonical_sources.yaml`; the operator need not know it.
-
-The skill fetches the canonical doc, `canon/02_canon_constraints.md`, and any cross-referenced system docs needed for Phase 4 (cross-system loops).
+A rolling engine fails at the **extremes of its input range** and at the **boundaries between engines**, not at "the small dice pool where 1/√N bites" — both current engines were built to kill that. The live failure surface:
+- a component on the **wrong engine for its pool regime** (raw dice on a bare strategic pool; a deterministic resolver bolted onto a healthy skill contest that wanted leverage);
+- **leverage that escapes its band** at an input extreme (sigma-leverage runs too hot at low base-stat — ED-875);
+- **clamp / floor collisions** (the continuous engine's Ob-shift hitting the P-232 Ob≥1 floor — ED-884; a resolver's `FLOOR`/`CAP` saturating);
+- the continuous engine **missing its continuity correction** and misreading small-pool odds (ER-2);
+- and a **new/third rolling engine** that satisfies none of the property guarantees the two canonical engines were designed to give.
 
 ---
 
-## THE THREE MECHANIC CATEGORIES (read first — load-bearing)
+## THE ROLLING-ENGINE PROPERTY TEST (genericity core — read before diagnosing)
 
-Every Valoria quantity is one of three kinds. The lessons apply differently to each; conflating them produces false findings.
+A rolling engine is diagnosed against **five properties**, regardless of which engine it is. The two named modes below are the *current canonical instances* that satisfy them; a rolled component matching neither is diagnosed against these properties directly.
 
-| Category | Examples | Behaviour rule | Governed by |
-|---|---|---|---|
-| **Continuous resource** | pools, Health, TroopCount, Composure, Stamina, Coherence (10→0, variable-cost depletion) | Degrade **smoothly**; uniform-impact steps; no accidental cliffs. | Lessons 2, 6 |
-| **Discrete accumulator** | clocks/trackers — Evidence (3/5/8), Persuasion (0–10), CI (0–100), Morale thresholds, MS (0–100) | **Legitimately 100% linear and stepped.** Equal increments are correct; multiple thresholds are intended and legible. | Lesson 4; **exempt** from Lessons 2 and 6 |
-| **Base parameter** | integer stats (1–7) — Military, Charisma, Stability, Cognition, Attunement, etc. | Feed pools and derived values. Change by ±1 at accounting or structural events. Source of the small-pool problem when used as bare pools. | Lesson 2 applies (±1 impact is non-uniform at different stat levels); Lesson 3 applies (don't roll them bare at high stakes) |
+| # | Property | Failing looks like |
+|---|---|---|
+| **P-i** | **Legible odds** — the player can read/predict their chance from the board. | Odds emerge only from opaque dice interactions; the player cannot anticipate them. |
+| **P-ii** | **Uniform / in-band leverage** — a unit of advantage moves P(success) by a consistent, in-band amount across the *whole* input range. | Per-point dP varies wildly by scale (1/√N), or spikes out of band at an extreme (ED-875). |
+| **P-iii** | **Bounded + monotonic response** — no cliffs; respects floors/caps; more advantage never lowers success. | A continuous input crosses a discrete boundary that jumps the outcome (ED-884 Ob-floor; stacked cliffs). |
+| **P-iv** | **Graded, recoverable output** — emits degrees (not a fragile binary) on pivotal stakes; failure is survivable. | A bare binary on an irreversible, load-bearing outcome; no underdog floor. |
+| **P-v** | **Right engine for the pool regime** — the resolution method fits the pool size and the presence/absence of a setup axis. | Raw bare-stat dice on a pivotal action; a deterministic resolver on a healthy skill contest. |
 
-Classify every quantity before judging it. A linear clock is not a Lesson-2 violation; a multi-threshold tracker is not a Lesson-6 violation; a base parameter is not a pool.
+### Instance A — Sigma-leverage (Continuous Engine)
+
+**Base distribution** (`params/core.md §Continuous Engine`, §Expected Value): `net ~ Normal(μ·N, σ·√N)`.
+
+| TN | μ (E[net]/die) | σ/die |
+|---|---|---|
+| 6 (Controlled) | 0.50 | 0.806 |
+| 7 (Standard) | 0.40 | 0.800 |
+| 8 (Desperate) | 0.30 | 0.781 |
+
+At TN 7: `net ~ Normal(0.4·pool, 0.8·√pool)`; **`σ_N = 0.8·√Pool`** is the spread the leverage layer scales against.
+
+**Continuity correction (REQUIRED for fidelity; ER-2, `engine_replacement_reconciled §2/§5`).** Raw continuous `P(success)` runs **4–32% low** vs discrete below ~5D (missing continuity term). Fix: resolve against **`net − (Ob − 0.5)`** → agreement to ~1–3% across the whole range (0.067 vs 0.070 at 2D, Ob 3). One-line engine edit — **status: recommended, not yet landed in `params/core.md §Continuous Engine`** (`[OPEN — landing the continuity term]`). A continuous component without it = a P-iii/P-i defect: TTRPG and videogame modes disagree on the same action's odds.
+
+**Leverage layer** (`designs/audit/2026-05-29-combat-armature/`, handoff `2026-05-29-combat-armature-sigma-leverage`): strategic-setup advantages accumulate as **Δσ**, **tanh soft-capped**, converted to an **Ob shift scaled by `σ_N`**, so probability impact is **uniform regardless of pool size** (P-ii). This is the **C-04 (Agi-OP) fix**: outcome decoupled from raw pool/dice count.
+
+**Degree output** (`params/core.md §Degrees of Success`): magnitude `net − Ob` as a gauge; Overwhelming (`net ≥ 2·Ob` AND `net ≥ 3`), Success (`net ≥ Ob`), Partial (`0 < net < Ob`), Failure (`net ≤ 0`). Ob cap 20, **Ob min 1 (P-232)**. Pool floor 1D.
+
+**Scope:** healthy pools with a real setup/skill axis — personal combat (~5–18D), social contest, thread operations, **aggregated** mass battle.
+
+**Stress points (where it violates a property):**
+- **Low-input leverage spike (P-ii; ED-875, OPEN, Gate G8):** sigma-leverage is **hot at low Command (~0.500/pt at Cmd 2)**, in-band only by Cmd 4–7. Check per-point dP across the *whole* range, not the midpoint.
+- **Ob-floor collision (P-iii; ED-884, resolved):** advantage as an Ob reduction can push `eff_Ob` below the P-232 floor of 1; it must saturate at the floor (or convert to magnitude), never violate Ob≥1.
+- **Sub-5D approximation (P-i/P-iii):** below ~5D the Normal model is shaky; with the continuity correction it tracks, without it it does not. Routine sub-5D use without the correction = finding.
+
+### Instance B — Deterministic+stochastic resolver (Domain Action Resolver)
+
+**Concept** (`domain_action_resolver_spec.md §0`): *deterministic odds, stochastic resolution* (P-i by construction). `P(success)` is a clean function of the stat contest the player can read; the outcome is still drawn. Chance is kept (a deterministic outcome would be exploitable); only the **odds** are made legible. CK3/EU/KoDP idiom; removes the faction layer's NERS-S inconsistency of dice on a deterministic ledger.
+
+**Resolver** (`domain_action_resolver_spec.md §1`):
+- Margin **`M = acting_stat − difficulty`** (difficulty = contested target's stat, or a fixed action-difficulty). Ob inverts via **`D = max(1, (Ob − 1)·2)`** (ED-885).
+- `P_success(M)        = clamp(BASE + SLOPE·M, FLOOR, CAP)`
+- `P_overwhelming(M)   = clamp(BASE + SLOPE·M − OVW_OFFSET, 0, OVW_CAP)`
+- `P_atleast_partial(M)= clamp(BASE + SLOPE·M + PARTIAL_BAND, P_success, FAIL_FLOOR)`
+- Draw `r ~ U[0,1)` (lower better): `< P_overwhelming` → Overwhelming; `< P_success` → Success; `< P_atleast_partial` → Partial; else Failure.
+
+**Tuned parameters (PROPOSED — Jordan's to ratify/tune; *form* canonical, *numbers* a starting point):** BASE 0.50, SLOPE 0.10 (**flat +10%/pt — uniform legible leverage, P-ii**), FLOOR 0.05, CAP 0.90, OVW_OFFSET 0.35, OVW_CAP 0.55, PARTIAL_BAND 0.20, FAIL_FLOOR 0.97 (≥3% residual failure even at max overmatch — P-iv).
+
+**Pathologies it fixes** (`domain_action_resolver_spec.md §3`, vs the legacy bare dice):
+
+| Pathology | Legacy bare dice | Deterministic+stochastic |
+|---|---|---|
+| Floor degeneracy (stat 2 vs Ob 3) | 0.069 | 0.300 |
+| Punching-up wall (stat 2 vs strong 7, Ob 4) | 0.010 | 0.050 |
+| Leverage uniformity | non-uniform (1/√N: 0.354/pt @ stat 2 → 0.189/pt @ stat 7) | **flat 0.10/pt** |
+
+The leverage-uniformity row is the one the Stage-4 aggregation sweep **proved cannot be fixed by any pool transformation** — only deterministic+stochastic makes leverage constant.
+
+**Drop-in output** (`§4`): same four-degree ladder → Domain Echo (`scale_transitions_v30 §5`: Success → +1, Overwhelming → +2, cap ±2), cost tables, CI formula all unchanged. Only the resolution *method* changes.
+
+**Scope** (`§5`): bare-stat faction checks — **Domain Actions** (Assert, Reconstitute, Govern, Claim Masterless; ratified ED-874), **Suppress** (Mandate; Failure → Stab −1 preserved on the Failure degree), **Parliamentary Rebuttal** (graded; Overwhelming → +1 preserved), **§1.4 Accounting Stability Check** (`M = Stability − loss_magnitude`; **co-design with §1.3 recovery, CC-4** — don't double-count). **Keep dice** for aggregated mass battle and personal/social (5–18D, healthy).
+
+**Authority note (ED-865):** the resolver is **not** mandated by GD-2. GD-2 (`canon/02 §B`) governs faction action-**selection** ordering, not resolution; the "GD-2 mandates a deterministic+stochastic resolver" text was a struck miscitation. The resolver stands on acclaimed-game precedent, ratified by ED-874 ("works well", Jordan 2026-05-31).
+
+**Stress points:** clamp saturation outside `M ∈ [−4, +4]` (intended bounds, not cliffs — verify monotonic across the boundary, `§6` confirms for the proposed params); parameter calibration ("form right, numbers unverified" → `[OPEN — Jordan tuning]`, not a structural defect); hook preservation (Suppress→Stab−1, Rebuttal-Overwhelming→+1 must attach to the right degree).
+
+### Instance C — `[NEW ENGINE]` (anything matching neither A nor B)
+
+A rolled component that is neither the continuous engine nor the deterministic+stochastic resolver — e.g., a card/deck draw, an opposed-pool contest with different statistics, a timing mechanic, a weighted-event table — is **diagnosed against P-i…P-v directly**, not forced into A or B. Output: a property-by-property verdict plus `[NEW ENGINE — diagnose by properties; surface for canon ratification]`. The remedy is normally to bring it onto an engine that satisfies the five properties, or to ratify it as a new canonical instance after it passes them.
+
+### The legacy raw-d10 pattern
+
+`params/core.md §Die Rule (d10)` (face 1 = −1, 2–6 = 0, 7–9 = +1, 10 = +2; net may be negative; no chain) is **TTRPG-mode only**. In videogame canon it is superseded: healthy pools → A; bare-stat strategic → B. **Flag any videogame system whose canonical resolution is "roll a bare pool vs a flat Ob and count successes" as a wrong-engine defect** (Lesson 3).
+
+---
+
+## ENGINE-SELECTION DECISION RULE (apply in Phase 0; testable)
+
+For each rolling component, pick the engine by this rule (not by feel):
+
+- **pool ≥ ~5D AND a genuine setup/skill axis exists** → **Instance A (sigma-leverage).**
+- **bare stat (1–7D), pivotal/load-bearing outcome, no aggregation available** → **Instance B (deterministic+stochastic).**
+- **pool is aggregable** (sum unit/derived values to a healthy pool, as mass battle does) → **aggregate, then A.**
+- **shallow clock (one roll ≈ one segment)** → a disguised rolling binary → route to B or deepen the clock (Lesson 4).
+- **matches neither / ambiguous** → **Instance C** property test + `[NEW ENGINE]` flag.
+
+`~5D` is the boundary because below it the continuous Normal model needs the continuity correction to stay faithful (ER-2) and bare dice become degenerate at high stakes (the faction 0.069/0.010 case).
+
+---
+
+## STAGE 0 — VALIDATION (run once to confirm the skill is calibrated)
+
+Before trusting the skill's verdicts, confirm it reproduces canon-adjudicated ground truth. **The skill is correct iff, run blind, it returns these known answers; if it does not, fix the *skill*, not the canon.** Re-run after any change to the skill's logic (regression guard).
+
+| Calibration case | Adjudicated answer the skill must reproduce | Source |
+|---|---|---|
+| **Pre-resolver faction layer** (bare-stat Domain Actions) | **NON-COMPLIANT** (R/S/E fail: fragile bare-stat binary on pivotal, irreversible outcomes; dice on a deterministic ledger) → remedy "route bare-stat Domain Actions to deterministic+stochastic." | engine_replacement_reconciled §0/§3 (diagnostic NON-COMPLIANT ≡ repair-and-keep); ED-874 |
+| **Post-resolver faction layer** | **Compliant** for the resolved Domain Actions (legible, flat-leverage, ledger-consistent). | ED-874 ("works well") |
+| **Continuous engine used below 5D without `Ob − 0.5`** | **Finding** — fidelity defect (P-iii/P-i), TTRPG vs videogame odds diverge 4–32%. | ER-2, engine_replacement §2 |
+| **Sigma-leverage advantage driving `eff_Ob < 1`** | **Finding** — Ob-floor cliff (P-iii); must respect P-232 Ob≥1. | ED-884 |
+| **Mass-battle Size/Command pre-fix cliff** | **Finding** — stacked cliff (Lesson 6); resolved by the ED-876 fix. `[verify ED-876 internals before relying on this row]` | engine_replacement §3 (MB5/ER-9); ED-876 |
+
+A run that flips a verdict on any row, or invents a defect canon ratified as fine, means the skill is miscalibrated — diagnose the skill.
 
 ---
 
 ## STAGE 1 — THE DIAGNOSTIC (Phase 0–6)
 
-Run in order. Phase 0 routes which later phases apply.
+Run in order. Phase 0 applies the Scope Gate + Engine-Selection Rule and routes the rest.
 
-### Phase 0 — Decompose into resolution components
-Do **not** classify the system as a single type. Instead, identify which **components** are:
-- **Dice-resolved** (a pool is rolled for an outcome)
-- **Deterministic-accounting** (values computed from formulas/ledgers, no roll)
-- **Clock-driven** (an accumulator advances by increments toward thresholds)
+### Phase 0 — Scope gate, decompose, assign engine
+1. **Scope gate:** is there a rolling engine? If none → out of scope; route to mechanic-audit; stop.
+2. **Decompose** the system; for each **rolling** component assign its engine via the Decision Rule (A / B / C). **Recognize** non-rolling components only to bound scope (do not diagnose them).
+3. **Flag raw-d10 leaks** — any rolling component whose canonical resolution is bare-pool-vs-flat-Ob.
 
-Most Valoria systems are composites: social contest is dice (exchange rolls) + clock (Persuasion Track); mass battle is dice (engagements) + deterministic (TroopCount output scaling) + clock (Morale thresholds). Tag each component; run the applicable phases on each.
-
-### Phase 1 — Locate the stress point (not just the floor)
-- **1a.** For dice components: smallest pool **by design** (stat range) AND smallest pool **after degradation** (penalties dragging a healthy pool down). Two distinct sources. For deterministic components: the steepest point on the response curve or the most extreme input combination. For clocks: the shallowest clock (fewest segments to threshold).
-- **1b. Exposure frequency:** how often is the stress point actually reached, and under what conditions? Estimation methods (use one or more):
-  - **Condition enumeration:** list the specific game states that produce the floor (e.g., "Military 1–2 faction under occupation with −1 penalty"). How many factions / actors / scenarios reach this?
-  - **Degradation path count:** how many penalty sources stack toward the floor (wounds + fatigue + environment + …)? More paths = higher exposure.
-  - **Canon frequency signals:** does the design doc flag the stress case as "rare," "edge," or "routine"? (e.g., faction collapse is designed as rare; low-stat starting factions are routine.)
+### Phase 1 — Locate the stress point (per engine)
+- *Instance A:* the **low-input end** (low stat / low Command) where per-point leverage runs hot (ED-875), AND the sub-5D continuity-correction region.
+- *Instance B:* the **clamp boundaries** (`M` near FLOOR/CAP) and any matchup pushing `M` outside `[−4, +4]`.
+- *Instance C:* the input extremes where each of P-i…P-v is most likely to break.
+- **1b. Exposure:** how often the stress point is reached — (i) condition enumeration, (ii) degradation/advantage-path count, (iii) canon frequency signals. Weak/low-stat actors are routine, not edge.
 
 ### Phase 2 — Characterize what the stress point decides
-- **2a. Outcome type:** binary verdict / **graded magnitude** / clock increment. For clocks, record **depth** (segments to threshold) — a shallow clock (one roll ≈ one segment) is a disguised binary. Graded-magnitude outcomes at a small pool are *also* dangerous (magnitude swings violently).
+- **2a. Outcome type:** binary / graded magnitude / clock increment. For B, the four-degree ladder is graded — preserve the *degree distribution*, not just P(success).
 - **2b. Stakes & reversibility:** low / recoverable / irreversible-load-bearing.
-- **2c. Preliminary risk profile** (qualitative composite — not arithmetic):
+- **2c. Risk profile (operationalized — tie to numbers, not feel):**
 
-  | Dimension | Low | Medium | High |
+  | Dimension | Low | Medium | High (flag) |
   |---|---|---|---|
-  | Impact | magnitude swing small; outcome non-critical | swing moderate; outcome affects one track | swing large; outcome flips state or is load-bearing |
-  | Exposure | stress point reached only in extreme/rare states | reached in a minority of play scenarios | reached routinely or by design |
-  | Irreversibility | outcome retryable or Fail-Forward | recoverable within 1–2 seasons | permanent or structurally compounding |
+  | Impact | per-point dP in-band; outcome non-critical | dP near a band edge; affects one track | **dP outside the engine's target band, OR the outcome flips a load-bearing state** |
+  | Exposure | extreme/rare states only | minority of scenarios | routine or by design |
+  | Irreversibility | retryable / Fail-Forward | recoverable in 1–2 seasons | permanent or compounding |
 
-  Rank as (H/M/L, H/M/L, H/M/L). Any dimension at H is a flag; two or more H dimensions is a candidate finding. Carry forward.
+  Rank (H/M/L)³. Any H is a flag; two+ H is a candidate finding.
 
-### Phase 3 — Check the effect curves
-- **3a. Impact uniformity (dice-resolved and base-parameter components only):** is a fixed modifier's **impact** uniform across scale? The goal is uniform *impact*, not the *form* "proportional" — proportional-in-dice is still non-uniform-in-probability via √N. *(Does not apply to deterministic-accounting or clock components.)*
-- **3b. Threshold cliffs (all components):** does a continuous input cross a discrete boundary that jumps the outcome? Do multiple unrelated cliffs **stack** at one point (e.g., Size = Command firing pool-drop + morale + discipline together)? *Intended, spaced clock thresholds are not cliffs in this sense.*
-- **3c. Role conflation (all components):** does one variable carry more than one independent role (capacity AND cohesion AND collapse)?
+### Phase 3 — Check the engine's curves (and the loops/cliffs its output drives)
+- **3a. Leverage uniformity (P-ii):** does the engine deliver in-band uniform leverage across the *whole* input range? (Both A and B target this by construction; ED-875 proves it can still fail at an extreme.)
+- **3b. Cliffs (P-iii):** continuous input crossing a discrete boundary that jumps the outcome; engine-internal risks — the sigma Ob-shift hitting the P-232 floor (ED-884), Mode-B clamp edges (verify monotonic). **Scope:** cliffs *in the engine's response* or that a discrete boundary forces on the engine's output. A cliff in a purely non-roll quantity → mechanic-audit.
+- **3c. Continuity correction (Instance A):** resolving against `net − (Ob − 0.5)`? Absent + routinely-small-pool = finding (ER-2).
+- **3d. Role conflation, scoped to the roll:** does a variable that **feeds or reads** this engine carry more than one independent role (capacity AND cohesion AND collapse), such that the roll's input/output is overloaded? Pure non-roll role conflation → mechanic-audit.
 
-### Phase 4 — Check the loops (highest severity; all components)
-- **4a.** Identify feedback loops, **including cross-system / cross-scale couplings** (e.g., combat death → faction Stability → muster → combat). Per-system reading alone is blind to these — list inter-system edges explicitly. Fetch cross-referenced system docs if needed.
-- **4b.** For each loop: **damper present?** (gain < 1 per iteration of the loop's natural cycle — where "cycle" = one complete traversal of the loop's causal chain, e.g., one season for an accounting loop, one battle turn for a combat loop, one exchange for a social loop) and **cap present?** (hard bound on the variable being amplified) — two separate checks. The defect is a loop that is **both undamped and unbounded.**
+### Phase 4 — Check the loops the engine participates in (highest severity)
+- **4a.** Identify feedback loops whose gain runs **through this rolling engine's output, or that gate its input** — including cross-system / cross-scale couplings (e.g., a resolved Domain-Action/Suppress outcome → Stability → territory → muster → military → back into the resolver's inputs). List inter-system edges; fetch cross-referenced docs. *(A feedback loop with no rolling engine in its cycle is out of scope — route to mechanic-audit or a balance pass.)*
+- **4b.** For each in-scope loop: **damper present?** (gain < 1 per loop cycle) and **cap present?** (hard bound on the amplified variable) — two separate checks; defect = **both undamped and unbounded**. *(Re-evaluate gain under the correct engine: `engine_replacement_reconciled §6` reclassified faction collapse from "deterministic" to "probabilistic, loss-weighted" once bare dice → Mode B; the resolver raises recovery odds.)*
 
-### Phase 5 — Intent gate (applied to every candidate finding)
-For each candidate finding: is the discontinuity / asymmetry / absolute-effect / loop **serving a deliberate design purpose**?
-
-Evidence of intent (require at least one):
-- Explicit design-doc statement naming the effect and its purpose (e.g., "encirclement removes the −3 cap — models Cannae").
-- The effect has a paired safeguard explicitly designed for it (e.g., the −3 cap itself is the safeguard for morale loss).
-- Designer confirmation (Jordan) in conversation or editorial annotation.
-
-If intent is underdetermined (no evidence in either direction): flag as `[INTENT UNDETERMINED]` and carry forward as a candidate finding with a note. Do not guess intent.
-
-Safeguard adequacy: a safeguard is adequate if it bounds the loop/cliff to a recoverable state within the system's natural recovery timescale (e.g., a cap that prevents rout in one turn is adequate if Morale can recover in Reform phase).
-
-- Deliberate **with** adequate safeguard → pass.
-- Deliberate **without** adequate safeguard → true finding (the intent is good but the execution is unsafe).
-- Accidental or intent-undetermined → true finding.
+### Phase 5 — Intent gate (every candidate finding)
+Is the discontinuity / asymmetry / absolute-effect / loop **deliberate**? Evidence (≥1): explicit design-doc statement; a paired safeguard designed for it; designer (Jordan) confirmation. Underdetermined → `[INTENT UNDETERMINED]`, carry forward. Don't guess.
+Safeguard adequacy: adequate if it bounds the loop/cliff to a recoverable state within the system's natural recovery timescale.
+- Deliberate **with** adequate safeguard → pass. Deliberate **without** → true finding. Accidental / undetermined → true finding.
 
 ### Phase 6 — Score & triage
-Per system, output a risk profile using the same three dimensions as Phase 2c (impact / exposure / irreversibility), ranked worst-first. Carry each true finding forward to Stage 2.
+Per engine, risk profile (impact / exposure / irreversibility), worst-first. Carry each true finding to Stage 2.
 
-**Stage 1 output:** `resolution_diagnostic_<system>.md`
+**Stage 1 output:** `resolution_diagnostic_<engine>.md`
 ```
-| Finding | Component | Stress point | Outcome@floor | Impact | Exposure | Irreversibility | Intent | Phase | Severity |
+| Finding | Component | Engine (A/B/C) | Property (P-i..P-v) | Stress point | Outcome@stress | Impact | Exposure | Irreversibility | Intent | Phase | Severity |
 ```
 
 ---
 
-## STAGE 2 — TEST FINDINGS AGAINST THE SIX LESSONS
+## STAGE 2 — MAP FINDINGS TO LESSONS
 
-Each true finding from Stage 1 maps to **one or more** corrective lessons. Multi-defect systems will have findings across phases, each mapping to its lesson; a compound defect (e.g., small-pool + non-uniform + unlooped) legitimately requires several lessons acting together. The lessons are **scoped conditions, not universals** — apply only within the stated scope.
+Each true finding maps to one or more corrective lessons. Lessons are **scoped conditions, not universals**; several are now **embodied by the engines** — the lesson is "use/verify the engine that delivers the property," not "hand-build it."
 
-| # | Lesson (scoped) | Scope | Fixes finding type |
+| # | Lesson (scoped) | Property | Fixes |
 |---|---|---|---|
-| **1** | **One variable, one role.** Split a variable only where it genuinely carries two independent jobs. *(Apply minimally — over-splitting harms Elegance.)* | All components | Phase 3c role conflation |
-| **2** | **Continuous resources and base parameters take uniform-*impact* steps.** Effects on a resolution pool, capacity, or stat should have scale-invariant impact. **Exempt:** accumulators (linear is correct) and deliberate, legible absolute effects. | Continuous resources; base parameters | Phase 3a non-uniform impact |
-| **3** | **Dice only on healthy pools, for graded/recoverable outcomes.** Keep dice off small-pool, load-bearing, binary decisions. *(Master lesson.)* | Dice components; base parameters used as bare pools | Phase 1+2 small-pool load-bearing roll |
-| **4** | **Route unavoidable small rolls through a clock deep enough to average.** A shallow clock (one roll ≈ one segment) is a disguised binary and does not count. | Dice → clock routing | Phase 2 binary@small-pool that must remain a roll |
-| **5** | **No loop — including cross-system — both undamped and unbounded.** One safeguard, sized to the loop's gain per cycle. *(Doubly critical: `intent_of_game` is itself a positive feedback loop.)* | Any component with feedback | Phase 4 undamped+unbounded loop |
-| **6** | **Continuous quantities degrade continuously; never stack accidental cliffs at one point.** Intended, spaced thresholds — especially clock thresholds — are exempt and may be multiple. | Continuous resources | Phase 3b stacked/accidental cliffs |
+| **1** | **One variable, one role** — split only where a roll-input/output variable genuinely carries two independent jobs. *(Minimal — over-splitting harms Elegance.)* | — | Phase 3d role conflation |
+| **2** | **Leverage must be empirically in-band across the whole input range** — verify it, don't assume it. The engine *targets* uniform impact; this lesson is the *verification obligation* that catches the extreme where it doesn't (ED-875). | P-ii | Phase 3a out-of-band leverage |
+| **3** | **Right engine for the pool regime (master lesson)** — apply the Decision Rule. Healthy pool + axis → A; bare-stat pivotal → B; neither → C. **Raw d10-vs-Ob on a bare strategic pool is the defect** this removes. Don't put a roll where deterministic-accounting/clock is the right tool, and don't put a deterministic resolver on a healthy skill contest. | P-v | Phase 0/1/2 wrong-engine |
+| **4** | **Route unavoidable accumulation through a clock deep enough to average** — a shallow clock (one roll ≈ one segment) is a disguised binary and is in scope as a rolling engine. *(Distinct from Lesson 3: clocks are for genuine accumulation; a single pivotal decisive check routes to B, not a 1-segment clock.)* | P-iv | disguised-binary clock |
+| **5** | **No loop the engine drives — including cross-system — both undamped and unbounded.** One safeguard sized to per-cycle gain. *(`intent_of_game` is itself a positive feedback loop — doubly critical.)* | P-iii/P-iv | Phase 4 undamped+unbounded loop |
+| **6** | **Bounded, continuous engine response; never stack cliffs** — sigma Ob-shift respects P-232 Ob≥1 (ED-884); Mode-B clamps stay monotonic; the continuity correction is present (ER-2). | P-iii | Phase 3b/3c cliffs / missing continuity |
 
-**Mapping rule:** if a finding maps to no lesson, either it is not a real resolution/balance defect (recheck Phase 5 intent) or a seventh lesson is needed — surface that explicitly rather than forcing a fit. If a finding maps to multiple lessons, list all that apply; compound remediation is expected for multi-defect systems.
+**Mapping rule:** a finding mapping to no lesson is either not a real resolution defect (recheck Phase 5) or needs a seventh lesson — surface it. For an **Instance-C** finding, map to the violated property (P-i…P-v) directly. Multi-defect engines map to several lessons.
 
-**Stage 2 output:** append lesson mapping to each finding row:
-```
-| Finding | ... | Lesson(s) | Remediation |
-```
+**Stage 2 output:** append `| Lesson(s)/Property | Remediation |` to each finding row.
 
 ---
 
 ## STAGE 3 — NERS VERDICT
 
-Convert the lesson-tested findings into the canonical NERS criteria (`canon/definitions.yaml`). A system is **NERS-compliant** only when it passes all four. State the verdict per criterion with the specific defect, severity, and the lesson whose application closes it.
+Convert lesson-tested findings into the canonical NERS criteria (`canon/definitions.yaml`). The verdict is **the rolling engine's contribution to system NERS** (this skill scopes to the engine, not the whole system). NERS-compliant only when all four pass.
 
-| Criterion | Pass test (resolution/balance lens) |
+> **Verdict framework note.** NERS (N/R/S/E) is in active use in the 2026-05-29 resolver/engine docs and is the verdict here. A separate **"omega" Class-A-new-system vetting framework** is referenced in the combat-armature handoff; its spec was **not read this session** (`[UNVERIFIED — omega not read; do not assume it supersedes NERS]`). A brand-new Class-A engine additionally goes through omega; do not substitute it for NERS here without reading its definition.
+
+| Criterion | Pass test (rolling-engine lens) |
 |---|---|
-| **Necessary (N)** | No variable or roll is redundant; nothing here could be removed without worsening play. Watch the inverse: a Lesson-1/Lesson-5 fix that *adds* apparatus must itself be necessary — do not over-engineer. |
-| **Robust (R)** | Holds at its extremes: small-pool floor produces no fragile binary; modifiers are uniform-impact; no unstated exceptions; loops bounded. "Fully formed, error-free, complete." |
-| **Smooth (S)** | Degrades and transitions cleanly across scales; calculations consistent with sibling systems; no friction at category boundaries (continuous vs accumulator vs base parameter handled correctly). |
-| **Elegant (E)** | The system as-is is logically simple with no unnecessary overhead; player can intuit outcomes. If remediations are proposed, they must preserve or improve elegance — a fix that bolts on structure the system does not need fails E. |
+| **Necessary (N)** | No roll redundant. Watch the inverse: do **not** migrate a healthy dice engine to Mode B (over-correction — `domain_action_resolver_spec.md §5`). A Lesson-1/5 fix that *adds* apparatus must itself be necessary. |
+| **Robust (R)** | Holds at its extremes: leverage in-band across the *whole* range (ED-875); continuity correction present (ER-2); Ob-floor respected (ED-884); clamps monotonic; loops bounded; no fragile bare-stat binary; graded recoverable output. |
+| **Smooth (S)** | Transitions cleanly across scales; resolution consistent with sibling engines and with any deterministic spine it sits on (faction layer's old S-failure was dice-on-a-ledger — Mode B removes it). |
+| **Elegant (E)** | Player can intuit outcomes from legible odds (Mode B: P read off the board, flat SLOPE/pt). A fix that bolts on structure the engine doesn't need fails E. |
 
-**Verdict format** (review discipline: verdict first, severity-ranked, no false balance):
+**Verdict format** (verdict first, severity-ranked, no false balance):
 ```
-SYSTEM: <name>   COMPONENTS: <dice | deterministic | clock> per Phase 0
+ENGINE: <name>   INSTANCE: <A | B | C>   COMPONENTS: <per Phase 0>
 VERDICT: NERS-compliant | non-compliant — <one-line reason>
 
-N: pass/fail — <defect, severity, lesson>
-R: pass/fail — <defect, severity, lesson>
-S: pass/fail — <defect, severity, lesson>
-E: pass/fail — <defect, severity, lesson>
+N: pass/fail — <defect, severity, lesson/property>
+R: pass/fail — <defect, severity, lesson/property>
+S: pass/fail — <defect, severity, lesson/property>
+E: pass/fail — <defect, severity, lesson/property>
 
 REMEDIATION (worst-first):
-  <severity> <finding> → Lesson <n>: <concrete fix>
+  <severity> <finding> → Lesson <n> / P-<x>: <concrete fix>
 ```
-**Output:** `ners_verdict_<system>.md`. P1/P2/P3 findings that are canonical gaps append to `canon/editorial_ledger.yaml` (subject to commit gate; if blocked, stage inline and flag `[DRIFT]`).
+**Output:** `ners_verdict_<engine>.md`. P1/P2/P3 canonical-gap findings append to `canon/editorial_ledger.jsonl` (commit gate; if blocked, stage inline and flag `[DRIFT]`).
 
 ---
 
 ## STAGE 4 — RE-TEST PROPOSED FIXES
 
-After Stage 3 produces remediations, run the diagnostic (Stage 1 Phases 1–6) on the **proposed fix** — not the original system — to verify the fix does not introduce new defects.
+Run Stage 1 Phases 1–6 on the **proposed fix**, not the original, to verify no new defect. Then re-run the **Stage 0 calibration** if the fix touched the skill's logic.
 
-Common re-test failures:
-- Lesson 1 fix (split variable) → creates a redundant variable (fails N) or over-engineers (fails E).
-- Lesson 3 fix (remove roll, route to accounting) → one accounting variable now carries two roles (fails Lesson 1 / Phase 3c).
-- Lesson 5 fix (add damper/cap) → the damper itself creates a new threshold cliff (fails Lesson 6 / Phase 3b).
+Common re-test failures (engine-aware):
+- Lesson 3 fix (route bare-stat → B) → resolver params left at illustrative defaults without flagging them as Jordan's (fails R-claim honesty); or one resolver variable now carries two roles (Lesson 1).
+- Lesson 6 fix (Ob-shift floor for sigma-leverage) → the saturation itself creates a new cliff at the floor (re-check monotonicity).
+- Lesson 3 over-application → migrating a **healthy** dice engine to Mode B (fails N/E — over-correction).
+- Continuity correction added → verify it does not shift already-validated 5–17D combat odds (should not, by construction; confirm).
+- Instance-C engine "fixed" by forcing it into A/B → confirm the forced fit actually satisfies P-i…P-v rather than hiding the violation.
 
-If the re-test surfaces new findings: revise the remediation and re-test again. Iterate until clean or flag the remaining tension as an `[OPEN TRADE-OFF]` requiring a design decision.
+Iterate until clean or flag `[OPEN TRADE-OFF]`.
 
-**Stage 4 output:** append to `ners_verdict_<system>.md`:
-```
-RE-TEST: <pass | new findings>
-  <any new findings and revised remediation>
-```
-
----
-
-## STAGE 5 — VALIDATE AGAINST HISTORICAL PRECEDENT
-
-Stages 1–4 are **internal**: they check the system against itself (consistency, the six lessons, NERS, fix-retest). They cannot tell you whether the system *behaves like the thing it models*. Stage 5 is the **external** axis, and it is the strongest evidence for **NERS-R**: the game's intent is believable emergent narrative, and the test of believable emergence is whether a mechanic's behavior matches how the real phenomenon actually behaves.
-
-**Validate against real-world history and science — NEVER against videogame or genre convention.** Genre convention is derivative (games copy each other) and frequently unrealistic; matching it is not evidence of NERS-fitness. The yardstick is reality.
-
-Run on the system verdict (Stage 3) AND on any proposed remediation (Stage 4 output):
-
-1. **Identify the real-world phenomenon** the mechanic models (faction collapse → real polity collapse; defection cascade → real military/elite defection; succession split → real succession wars; insurgency → real COIN; morale rout → real battle-morale collapse; reality-maintenance → systemic decay/regime-shift).
-2. **Find the precedent** — cite a real historical case or a scholarly model (e.g. Tainter on collapse, RAND *How Insurgencies End*, ecological regime-shift / Holling-Scheffer on hysteresis, Weber on charismatic authority). Cite it; do not assert "history shows…" from memory.
-3. **Compare behavior**, not surface. Does the mechanic produce the dynamics the precedent exhibits (e.g. collapse-as-simplification-then-reconstitution; expectation-driven cascades sensitive to small triggers; hysteresis on recovery)?
-   - **Match** → strong evidence for R; record it (it confirms the system will read as believable).
-   - **Divergence** → a finding. Decide which kind: (a) the mechanic is *unrealistic* and should be corrected toward precedent, or (b) the divergence is a *deliberate, defensible game-feel choice* (state the justification). Do not silently accept divergence.
-
-**Scope boundary.** Precedent validates cleanly for political / military / social / religious systems. For the **metaphysical layer** (threadwork, reality-state, Calamity), there is no direct historical analog — validate its *systemic dynamics* analogically (entropy/maintenance, ecological regime-shift, complexity-collapse) and say so. **Do not fabricate historical analogs for invented metaphysics.**
-
-**Stage 5 output:** append to `ners_verdict_<system>.md`:
-```
-PRECEDENT: <phenomenon modeled>
-  source: <cited historical case / scholarly model>
-  behavior match: <match | divergence>
-  finding: <none | unrealistic→correct-toward-precedent | deliberate-divergence (justification)>
-```
-A Stage-5 divergence feeds back into the Stage-3 R verdict and may reopen Stages 2/4.
+**Stage 4 output:** append `RE-TEST: <pass | new findings + revised remediation>` to `ners_verdict_<engine>.md`.
 
 ---
 
 ## GUARDRAILS
 
-- **Never defend prior output.** If diagnosing a system you (or a prior session) designed, prepend `[SELF-AUTHORED — bias risk]` and actively surface the criticism an independent reviewer would raise. Treat all work as external.
-- **No false universals.** Every lesson is scoped. A linear clock, a multi-threshold tracker, and a deliberate absolute effect are NOT violations — check the category (three-category table) and Phase 5 intent before flagging.
-- **Over-engineering is a defect.** Lessons 1 and 5 add structure; apply only where the failure they prevent is actually present and live (Phase 1b exposure). An added variable or safeguard that isn't necessary fails NERS-N and NERS-E.
-- **Goal over form.** Target uniform *impact*, bounded *loops*, smooth *approach* — not the surface form ("proportional", "one cliff"). Proportional-in-dice ≠ uniform-in-probability.
-- **Small pools are primarily architectural.** Route through Lessons 3/4 (don't roll it, or clock it) or aggregate the pool. Parameter-level adjustments (fractional TN, μ/σ calibration, probit remapping) are valid complements, not substitutes.
-- **Ground every claim.** Loops, intent, frequency — cite the canonical mechanism or flag `[UNGROUNDED]`. Do not assert from memory.
-- **Validate against reality, not genre (Stage 5).** Historical/scientific precedent is the external check on NERS-R. Videogame/genre convention is derivative and is NOT evidence of fitness — never validate against it. Cite the precedent; do not assert "history shows…" from memory.
+- **Rolling engines only.** No draw → out of scope; route to `valoria-mechanic-audit`. Do not verdict a character sheet, ledger, or bare clock.
+- **Loops/cliffs/roles are in scope only where a rolling engine drives them.** Pure non-roll balance → mechanic-audit or a balance pass.
+- **Never defend prior output.** Self/prior-session work → prepend `[SELF-AUTHORED — bias risk]`; surface the independent reviewer's criticism. Treat all work as external.
+- **No false universals.** Every lesson is scoped. A linear clock, a multi-threshold tracker, a deliberate absolute effect, and a clamp boundary are NOT violations — check the Scope Gate and Phase 5 intent first.
+- **Over-engineering is a defect.** Lessons 1 and 5 add structure; apply only where the failure is live (Phase 1b exposure). Migrating a healthy dice engine to Mode B is the canonical over-correction.
+- **Engine parameters are Jordan's.** Mode-B BASE/SLOPE/CAP/offsets and the sigma tanh cap / `σ_N` constant are tuned; *form* is canonical (Decision E, ED-874), *numbers* are ratify/tune calls → `[OPEN — Jordan tuning]`, not a structural defect.
+- **Goal over form.** Target the five properties on the correct engine — not a surface form.
+- **Ground every claim.** Cite the canonical mechanism (file + section) for every mechanical value, loop, and intent; else flag `[UNGROUNDED]`. Do not assert from memory.
 - **RuntimeError from any hook = hard halt.** Report verbatim, stop.
 
 ---
 
-## WORKED EXAMPLE — Faction Action Layer
+## WORKED EXAMPLE 1 — Faction Action Layer (Instance B; also the Stage-0 anchor)
 
-*(Abbreviated; a real run produces the full output tables.)*
+*(Abbreviated; a real run produces full tables.)*
 
-- **Phase 0 (decompose):** two components — (A) deterministic accounting (CI economy, Treasury/Legitimacy ledgers), (B) dice-resolved discrete actions (Assert, Suppress, Parliamentary Vote using bare faction stat 1–7D as pool).
-- **Phase 1:** Component B floor = 1–2D (low-stat faction under occupation with penalty). Exposure: routine — weak/occupied factions are a standard game state, not an edge case. Component A: steepest response at CI near seizure thresholds (60, 100).
-- **Phase 2:** Component B: a bare 2D roll delivers a **binary verdict** on pivotal outcomes (seizure, vote). Stakes: irreversible-load-bearing. Risk profile: (H, H, H) — three-high, candidate finding.
-- **Phase 3a:** Component B: stat damage is absolute (−1 Military). Impact at Military 2: −31% relative P(success); at Military 6: −9%. Non-uniform. **3b:** Stability-0 collapse is a single cliff (check if others stack at the same point). **3c:** Stability carries both "political health" and "collapse trigger" — role conflation candidate.
-- **Phase 4:** Cross-system loop identified: faction collapse → territory loss → reduced muster → weaker military → further collapse. Canonical mechanism: `faction_layer_v30 §1.5 Faction Collapse Exit Procedure` + `military_layer_v30 §1.5 Muster Prerequisites` (Military stat gates muster quality). Damper: Stability recovery exists (§1.3, +1 per season under conditions). Cap: Stability floor = 0 (collapse), which is a termination, not a bound. **Loop is damped (slow recovery) but the terminal state is irreversible collapse — no cap short of extinction.** True finding.
-- **Phase 5:** The bare-stat roll for faction actions: `[INTENT UNDETERMINED]` — no design doc states "faction actions intentionally roll bare stats at high stakes." The TTRPG-era design predates the videogame-only pivot; inherited without explicit re-evaluation. True finding.
-- **Stage 2 mapping:** Finding 1 (small-pool binary on pivotal outcome) → **Lesson 3** (route consequence through deterministic accounting; aggregate pool when roll is needed) + **Lesson 4** (clock the action instead of pass/fail). Finding 2 (non-uniform stat damage) → **Lesson 2** (uniform-impact). Finding 3 (role conflation) → **Lesson 1** (split if genuine dual role confirmed). Finding 4 (undamped terminal loop) → **Lesson 5** (add a bound short of extinction, or a recovery path from collapse).
-- **Stage 3 verdict:** **Non-compliant.** Fails R (fragile small-pool binary on pivotal, irreversible outcomes), S (dice resolution inconsistent with the deterministic layer it sits on), and E (the bare-stat roll adds complexity without strategic depth — a roll the player cannot meaningfully influence).
+- **Phase 0:** scope gate — rolling engine present (Domain Action resolution). Components: (B) **deterministic+stochastic** Domain Actions (Assert, Suppress, Rebuttal) — **ratified ED-874**; recognize-and-exclude the CI economy / Treasury ledgers (deterministic-accounting → out of scope) and the CI/Mandate clocks (accumulators → out of scope). No raw-d10 leak post-ED-874.
+- **Phase 1:** Instance-B stress = clamp edges (`M` near ±4) and the punching-up corner (stat 2 vs 7). Exposure: routine.
+- **Phase 2:** graded four-degree ladder on pivotal outcomes; some irreversible-load-bearing (Suppress→Stab−1). Pre-resolver profile was (H,H,H); **under the resolver, Impact + Irreversibility are mitigated** (legible odds, 5% floor, 3% residual) — the (H,H,H) bare-dice finding is **closed by ED-874**.
+- **Phase 3:** 3a leverage **flat 0.10/pt by construction** (P-ii satisfied). 3b clamp edges monotonic (`§6`: pass); no Ob-floor collision (margin-based, not Ob-shift — N/A). 3d Stability carries political-health AND collapse-trigger (a roll-input role conflation) → Lesson-1 candidate.
+- **Phase 4:** loop through the resolver's output: resolved Suppress/Domain outcome → Stability → territory → muster → military → back into resolver inputs. **Loss-weighted probabilistic, not deterministic** (`engine_replacement_reconciled §6`); recovery odds raised, but terminal Stability-0 collapse is a bound-by-extinction, not a recovery cap → Lesson-5 finding (recovery path short of extinction).
+- **Phase 5:** the resolver is **ratified** (ED-874) — intent confirmed. Open items are Jordan's: BASE/SLOPE values; full bare-stat migration vs Domain Actions only; §1.4 ↔ §1.3 (CC-4).
+- **Stage 3:** **R/S/E for the resolved Domain Actions: PASS** (legible, uniform, ledger-consistent) — reversing the pre-resolver NON-COMPLIANT verdict (this reversal is exactly the Stage-0 calibration). **Residual:** Lesson-5 collapse-loop bound; Lesson-1 Stability split; param calibration + migration scope (`[OPEN — Jordan]`); §1.4↔CC-4.
+
+## WORKED EXAMPLE 2 — Social Contest (Instance A; proves genericity off-faction)
+
+*(Sketch — a real run fetches the system doc. System-specific values below are flagged `[verify: params/contest.md / social_contest_v30 — not read this session]`.)*
+
+- **Phase 0:** scope gate — rolling engine present (the exchange roll). Components: (A) **sigma-leverage** exchange roll on a healthy pool `[verify ~5–18D]`; recognize-and-exclude the **Persuasion clock** (0–10 accumulator → out of scope as a resolver) and **Composure** (continuous resource feeding the roll → roll-input, not diagnosed). Engine-Selection Rule → A (pool ≥ ~5D, genuine setup/skill axis via stance/reading).
+- **Phase 1:** Instance-A stress = the **bottom of the pool band** (a Rattled/Spent contestant dragged toward the 5D floor) and the **sub-5D continuity-correction** region if penalties push below 5D; NOT a faction-style bare-stat binary.
+- **Phase 3:** 3a verify leverage (stance/positioning advantage) is in-band across the pool range — the same ED-875-class check (does a point of social setup move P uniformly at 5D and 16D?). 3c **continuity correction present?** — if the social roll can drop below 5D and resolves without `net − (Ob − 0.5)`, that is the finding (ER-2). 3b the Persuasion clock's thresholds are intended/spaced → not cliffs.
+- **Phase 4:** if a social outcome feeds a loop (Composure damage → worse pool → worse outcome), check damper/cap; Composure floor + recovery is the candidate damper `[verify]`.
+- **Stage 3 (expected):** likely **compliant** as a healthy Mode-A contest, with the one live caveat being **continuity-correction presence** at the low-pool edge — the same Robustness check as combat, demonstrating the pipeline runs identically on a non-faction engine.
+
+This example exercises Instance A, the Scope Gate (clock + resource recognized-and-excluded), and the continuity-correction check — none faction-specific — proving the diagnostic is generic across rolling engines, not faction-fitted.
 
 ---
 
 ## INITIAL HYPOTHESES (untested — validate by running the pipeline)
 
-These are starting assessments based on session analysis, **not** pipeline-confirmed results. Each must be validated by a full Stage 1–4 run before being treated as a verdict.
+Starting assessments, **not** pipeline-confirmed. Each needs a full Stage 0→4 run.
 
-- **Investigation / fieldwork** — likely compliant: deterministic five-filter chain owns decisions; dice only feed the Evidence clock.
-- **Social contest** — likely compliant, healthy contested case: fully layered, pools 5–18D.
-- **Mass battle** — likely compliant, well-bounded spiral: small pools exist but the state machine carries the weight; loops appear damped.
-- **Faction action layer** — likely **non-compliant**, priority target (worked example above).
-- **Personal combat** — likely mostly compliant; watch the flat −1D wound at the 5D floor (Lesson 2 candidate).
-- **Peninsula / victory** — likely compliant: deterministic clocks, no dice.
-- **Threadwork** — likely compliant for operations; Coherence is a **depleting resource** (continuous, variable-cost) — validate that its depletion and threshold effects satisfy Lessons 2 and 6.
+- **Faction Domain Actions (Instance B)** — likely **compliant** post-ED-874; residual: collapse-loop bound, Stability role split, Jordan's param/migration calls.
+- **Social contest (Instance A)** — likely compliant; live check is continuity-correction presence at the low-pool edge (Worked Example 2).
+- **Thread operations (Instance A)** — likely compliant; Coherence is a depleting continuous resource feeding the roll — verify in-band leverage + continuity correction; recognize-and-exclude Coherence-as-resource from the verdict.
+- **Personal combat (Instance A)** — **gated**: the armature/resolution *structure* is Jordan's (handoff 2026-05-29 doc 2.5). Validate the **engine** (continuity correction, in-band leverage) separately from the **structure**.
+- **Mass battle (Instance A, aggregated)** — pool aggregated/healthy; **watch ED-875** (low-Command leverage too hot, OPEN Gate G8).
+- **Non-rolling systems** (CI economy, Treasury, peninsula/victory clocks, investigation five-filter, character sheet) — **out of scope**; route to `valoria-mechanic-audit`.
+- **Continuity correction (ER-2)** — `[OPEN]` one-line edit to `params/core.md §Continuous Engine`; recommend landing regardless.
+- **Settlement resolver (ER-6)** — **unspecified**; specify deterministic-first to avoid importing the faction degeneracy.
+
+---
+
+## OPEN / JORDAN-DECISION POINTS
+
+- `[OPEN — Jordan tuning]` Mode-B parameter values (BASE/SLOPE/FLOOR/CAP/offsets) — *form* ratified (ED-874), *numbers* illustrative.
+- `[OPEN — Jordan scope]` Full bare-stat migration (Domain Actions + Suppress + Rebuttal + §1.4) vs Domain Actions only (`domain_action_resolver_spec.md §5`).
+- `[OPEN — Gate G8, Jordan]` ED-875: mass-battle low-Command sigma-leverage too hot (~0.500/pt @ Cmd 2).
+- `[OPEN — co-design]` §1.4 Accounting Stability Check ↔ §1.3 recovery (CC-4) — avoid double-counting.
+- `[OPEN — landing]` Continuity correction `Ob − 0.5` not yet in `params/core.md §Continuous Engine` (ER-2).
+- `[OPEN — Jordan, gated]` Personal-combat resolution STRUCTURE (handoff 2026-05-29 doc 2.5) — must not be invented; build blocked until set.
+- `[UNVERIFIED]` "omega" Class-A-new-system vetting framework — spec not read this session; NERS retained as the verdict.
+- `[CALIBRATION DEPENDENCY]` Stage 0 assumes ED-876 (mass-battle cliff fix) and ED-884 (Ob-floor) as settled ground truth; if either reopens, recalibrate Stage 0.
+- `[HOUSEKEEPING]` The deterministic+stochastic resolver lives as a ratified candidate spec under `designs/audit/2026-05-28-resolution-diagnostic/` + ED-874. Promote the ratified form into `params/core.md` (or a canonical resolution doc) so this skill's primary reference is canon, not an audit-dir file. (The property abstraction above reduces but does not remove this dependency.)

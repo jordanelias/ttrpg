@@ -242,19 +242,18 @@ skills:
     path: skills/valoria-resolution-diagnostic/SKILL.md
     model: claude-opus-4-6
     triggers:
-      - is this NERS compliant
-      - diagnose this system
-      - stress test resolution
-      - small pool problem
+      - is this rolling engine NERS compliant
+      - diagnose this resolver
+      - stress test this roll
       - resolution audit
-      - balance audit
-      - death spiral
-      - runaway loop
-      - cliff check
-      - does this scale
-    purpose: "Three-stage NERS-compliance diagnostic: Phase 0-6 resolution stress test → six-lesson remediation mapping → NERS verdict with re-test."
+      - is this sigma-leverage or deterministic+stochastic
+      - does this resolution scale
+      - leverage non-uniformity
+      - clamp/Ob-floor conflict
+      # NOT non-rolling systems (character sheet, pure ledger, bare clock) -> valoria-mechanic-audit
+    purpose: "Rolling-engine resolution diagnostic (rolling engines ONLY; non-rolling systems -> valoria-mechanic-audit). Five-property engine test; sigma-leverage (Continuous Engine) + deterministic+stochastic (Domain Action resolver, ED-874) as instances + [NEW ENGINE] branch. Pipeline: Stage 0 validate vs adjudicated cases -> Phase 0-6 stress test -> lesson/property mapping -> per-engine NERS verdict -> re-test."
     gating_hooks: []
-    last_verified: 2026-05-28
+    last_verified: 2026-06-01
 
 # ── Routing matrix (consumed by orchestrator) ────────────────────────────────
 # Maps user-intent phrases to (skill, modes/workflows). Authoritative for
@@ -303,7 +302,7 @@ routing:
 
   - intent: "is this NERS compliant / resolution audit / balance audit"
     skill: valoria-resolution-diagnostic
-    modes: ["full pipeline Stage 1-5 (incl. historical-precedent validation)"]
+    modes: ["full pipeline Stage 0-5 (incl. Stage-0 calibration + historical-precedent validation)"]
   - intent: "stress test resolution / small pool problem / death spiral / cliff check"
     skill: valoria-resolution-diagnostic
     modes: ["Stage 1 diagnostic only, or full pipeline"]
