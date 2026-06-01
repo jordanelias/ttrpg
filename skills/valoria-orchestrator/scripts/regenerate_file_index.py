@@ -3,7 +3,7 @@
 regenerate_file_index.py — Build/update references/valoria_index.sql from repo state.
 
 Usage (in-session, PAT already in env):
-    python3 regenerate_file_index.py [--dry-run] [--full]
+    python3 tools/regenerate_file_index.py [--dry-run] [--full]
 
     --dry-run : print what would change, don't write
     --full    : ignore stored SHAs, re-fetch all files (use after schema changes)
@@ -592,7 +592,8 @@ def run_fast(schema_sql: str = '') -> dict:
             'active': active, 'elapsed_s': elapsed}
 
 
-
+if __name__ == '__main__':
+    import os as _os
     parser = argparse.ArgumentParser(description='Regenerate Valoria file index')
     parser.add_argument('--dry-run', action='store_true',
                         help='Print what would change without writing')
@@ -602,24 +603,40 @@ def run_fast(schema_sql: str = '') -> dict:
                         help='Write SQL dump to this local path')
     args = parser.parse_args()
 
-    # Load schema
+    # Load the committed index. Two derivations from the same source:
+    #   seed_sql   = the full dump (schema + curated INSERTs) — seeds the curated
+    #                tables (concepts/aliases/concept_files/meta) into the DB.
+    #   schema_sql = schema only (leading header block + all INSERT rows stripped)
+    #                — passed to run() so dump_to_sql's SCHEMA_SQL stays clean
+    #                (no header accretion, no duplicated data).
     schema_candidates = [
         Path(__file__).parent.parent / 'references' / 'valoria_index.sql',
         Path('/home/claude/schema.sql'),
     ]
+    seed_sql = None
     schema_sql = ''
     for sc in schema_candidates:
         if sc.exists():
-            # Extract schema: drop any leading header/comment block (prevents
-            # header accretion on repeated regen) and all INSERT data rows.
-            raw = sc.read_text()
-            _lines = raw.splitlines()
+            seed_sql = sc.read_text()
+            _lines = seed_sql.splitlines()
             _start = next((i for i, l in enumerate(_lines)
                            if l.lstrip().upper().startswith('CREATE')), 0)
-            schema_lines = [l for l in _lines[_start:]
-                            if not l.lstrip().upper().startswith('INSERT')]
-            schema_sql = '\n'.join(schema_lines)
+            schema_sql = '\n'.join(l for l in _lines[_start:]
+                                   if not l.lstrip().upper().startswith('INSERT'))
             break
+    if seed_sql is None:
+        raise SystemExit('[regenerate] no index source found to seed curated tables')
+
+    # Seed curated rows into a FRESH DB before run(). open_db loads schema + curated;
+    # because every CREATE is `IF NOT EXISTS`, run()'s subsequent open_db is an
+    # idempotent no-op and the curated rows survive. Without this, run() on an empty
+    # DB would dump EMPTY curated tables — destroying authored data.
+    for _f in (str(DB_PATH), str(DB_PATH) + '-wal', str(DB_PATH) + '-shm'):
+        try:
+            _os.remove(_f)
+        except FileNotFoundError:
+            pass
+    open_db(DB_PATH, seed_sql)
 
     result = run(
         dry_run  = args.dry_run,
