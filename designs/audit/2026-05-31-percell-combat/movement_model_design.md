@@ -176,3 +176,32 @@ Remaining (all NON-mirror, dormant-path only):
 STATUS: envelopment EMERGES, is PROVABLY mirror-clean, H3 in band, 6/10 IN. Still DORMANT (PC_REFUSE off);
 flipping default-on is Jordan's call pending H5/H7 + a high-n NERS Stage-4. PER_CELL=0 and PER_CELL=1/
 refuse-off remain byte-exact to the committed wheel engine (verified).
+
+## H5 / H7 DIAGNOSIS (instrumented, 2026-05-31) — mechanic validated; remaining misses are design questions
+Per-tick a_angle_mod/b_angle_mod capture (seed 42, multi-turn), F3 defaults:
+ - H7 GappedLine(A)-v-Line(B): A_mod mean +0.000 (0/47 ticks penalised), B_mod mean -0.206 (47/47).
+   => the envelopment fires CORRECTLY — Line is wrapped, GappedLine is not. GappedLine still loses in
+   aggregate (H7 43.8) because of its OPEN GAP: pattern cols [0,1,2,3,5,6,7,8] (gap at col 4), 24 cells vs
+   Line's 25, so it is frontally weaker. The mechanic is right; the gap is a base-combat disadvantage.
+   DESIGN QUESTION: should a single gapped line beat a solid line of equal troops (band 50-65)? The open
+   gap is a real vulnerability; the manipular gap historically relied on covering depth lines, which a
+   single subunit does not have. Either the band is optimistic, or GappedLine's gap should confer a
+   non-combat advantage (flexibility/rotation) not modelled here. NOT a mechanic fix to invent — Jordan call.
+ - H5 RefusedFlank(A)-v-Horseshoe(B): A_mod mean -0.186 (50/53 penalised), B_mod +0.000.
+   Geometry: RefusedFlank cols 0-3 front at row 0 (depth 6); col 4 is a single cell at row 6 — genuinely
+   PULLED BACK = the angled refusal. That refusal denies the Horseshoe's wing on the col-4 side, but the
+   Horseshoe is a DOUBLE envelopment (both wings, span 7 > 5): the UNREFUSED deep flank (col 0) is wrapped,
+   which is the -0.186. So RefusedFlank takes a half-envelopment. A refused-column exemption would not move
+   this (the penalty is on the unrefused flank, not col 4).
+   DESIGN QUESTION: should a one-side refused flank beat a double-envelopment shape (band 50-65)? Refusing
+   one wing blunts the pincer to a single envelopment; whether RefusedFlank's depth then wins is a balance
+   call, not a correctness bug. Cranking magnitudes to hit the band without a principled anchor is barred by
+   the project-owner contract — Jordan call.
+
+CONCLUSION: the envelopment model is mechanically SOUND and validated — mirror unbiased by construction,
+H3 (Horseshoe-v-Line) in band, 6/10 IN. The remaining misses are NOT envelopment bugs: H6 is the
+pre-existing base value (equal span -> envelopment-inert), H7 is a base gap-disadvantage where the
+envelopment is correct, H5 is a refused-vs-double-envelopment balance question, H11 is marginal (~0.2 over).
+These four are design/balance decisions (band expectations, GappedLine gap advantage, RefusedFlank strength)
+for Jordan, not mechanic work. M3 remains DORMANT (PC_REFUSE off); the engine default is the ratified
+wheel-only PER_CELL=0, byte-exact and untouched.
