@@ -1325,7 +1325,7 @@ PC_WHEEL = _sigma_os.environ.get('PC_WHEEL', '1') == '1'   # envelopment wheel: 
 REAR_BLIND_DEG = 150.0                                     # [grounded; Class-B tunable] rear arc a cell cannot perceive
 FOV_HALF_DEG = 180.0 - REAR_BLIND_DEG / 2.0                # visible if angle-from-facing <= this (105deg)
 PC_PIN_REACH = 1.5                                         # an attacker within this distance in the front arc PINS the cell
-PC_REFUSE = _sigma_os.environ.get('PC_REFUSE', '0') == '1' # M3 (DORMANT, default off): refusal-gated envelopment — emerges but mirror-biased; WIP
+PC_REFUSE = _sigma_os.environ.get('PC_REFUSE', '1') == '1' # M3 envelopment (wheel+perception+refusal+wrap+pocket); ACTIVE in the per-cell path (PER_CELL=1). PER_CELL itself still gates the whole layer.
 PC_ENVELOP_MOD = float(_sigma_os.environ.get('PC_ENVELOP_MOD', '-1.0'))  # rear-wrap penalty magnitude (M3); tunable
 PC_ENVELOP_DEPTH_RESIST = float(_sigma_os.environ.get('PC_ENVELOP_DEPTH_RESIST', '0.3'))  # defender column depth resists the wrap (Clausewitz reserves)
 # Pocket / gap-trap (Polybius: maniple gaps "lured hoplites in... surrounded"; also the concave Cannae pocket):
