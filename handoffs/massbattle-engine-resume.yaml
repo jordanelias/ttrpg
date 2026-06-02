@@ -1,12 +1,12 @@
 id: massbattle-engine-resume
 scope: simulation
-last_commit: a5fc9d0e2f73e47d2fabd332d06117c5952424c6
+last_commit: 7e878ade3c45ae171631a1c533a883b0a49e6fed
 task:
   skill: valoria-simulator
-  description: 'Mass-battle engine workplan: P-A modularize DONE, P-B death->capture
-    DONE, P-L Lanchester attrition substrate DONE (committed a5fc9d0e). NEXT = P-C
-    FM compositional formation system (XL; design-capture prereq). Resume from workplan
-    v2 (943687d3) + mb_engine_workplan.md.'
+  description: 'Mass-battle engine. P-A modularize / P-B capture / P-L Lanchester
+    DONE. COMMAND-ONLY sigma base DONE (2cf3feb6) + canon record ED-899 (c8ba5b7f)
+    + strengthened signature law-exponent guard (7e878ade). NEXT: re-tune gauge bands
+    to the new model, then canon-doc reconciliation, then P-C FM formations.'
 owns:
 - tests/sim/mass_battle/**
 - tests/sim/sim_mb_sigma.py
@@ -59,118 +59,60 @@ context_files:
     python3 -m mass_battle.lanchester_signature. All PASS PER_CELL 0 and 1.
 working_state:
   done:
-  - 'ENV: repo jordanelias/ttrpg. Bootstrap each bash subprocess: sys.path.insert(0,''/home/claude'');
-    from github_ops import quick_bootstrap; g,h,files,token=quick_bootstrap(). PAT
-    /mnt/project/VALORIA_PAT; scripts cached /home/claude/. No other active sessions.'
-  - 'P-A MODULARIZATION COMPLETE (5 commits): 4d073403 config -> 720fdbb2 geometry
-    -> c5fc0903 percell -> 6e26dd76 resolution -> e60fd184 orchestration+engine.py+MECHANICS+shim.
-    Engine = package tests/sim/mass_battle/{config,geometry,percell,resolution,orchestration,engine}.py;
-    sim_mb_sigma.py = 5-line shim `from mass_battle.engine import *`; gauge_mb.py
-    exec()s shim unchanged. engine.py: MECHANICS registry (27) + mechanics_selftest()
-    PASS. EVERY stage PER_CELL=0 BYTE-EXACT to 7cfa44d5; PER_CELL=1 clean, C1-C4 in
-    band. Behaviour frozen.'
-  - 'P-A GOTCHAS (reuse): (1) `from X import *` SKIPS underscore names -> every module
-    needs explicit __all__ (incl _helpers); engine.py __all__ = UNION of all modules''
-    __all__ or config consts (SIDE_A_START_ROW) won''t re-export via shim. (2) Re-grep
-    def/class line numbers after EACH extraction (they shift). (3) Verify: PER_CELL=0
-    python3 gauge_mb.py <engine>, diff vs /tmp baseline, normalize echoed filename
-    `sed ''s/_x.py/sim_mb_sigma.py/g''`.'
-  - 'P-B GENERAL-DEATH->CAPTURE COMPLETE (2 commits): 00eedf9d canon reframe (ED-898)
-    + d35f3468 engine comment relabel. mass_battle_v30.md A.5 two-stage death->incapacitation
-    (Stage2 captured if field lost, general SURVIVES; -2 morale/Command=0/uncommanded
-    UNCHANGED), A.4 triggers, D.2 officer death->incapacitation/capture (+ companion
-    combat-death->battlefield capture), A.7/A.8 incidental phrasings. Canonical ''No
-    character death from mass battle'' clause added: engine emits ''incapacitated/captured''+side-holding-field;
-    consequence (ransom/imprison/escape) WORLD-LAYER, OUT of container (Jordan r2
-    -- NOT designed). Engine relabel comment-only (Command<=0->rout already matched).
-    Magnitudes/timing unchanged.'
-  - 'P-L LANCHESTER SPECCED (81ea569d), NOT implemented. Bottom-up: melee = degree
-    x Power - DR, NO force-on-force term (orchestration resolve_engagements ~L1258-59);
-    numbers enter only via pool; volley separate (square seam). Top-down: linear law=ancient
-    melee/frontage-capped (per-cell _engaged_cols provides the cap), square law=ranged/volley.
-    JORDAN CONFIRMED SPLIT (linear melee / square volley; NOT blended 1.5).'
-  - 'CONFIRMED: P-A split done. Capture consequence OUT of container. Terrain (P-E)=STUB
-    only. Phase-3 cavalry-shock 9 PC_SHOCK_* magnitudes RATIFIED. FM formation system
-    (P-C) GROUNDED in prior conversation (ED-814 ''adjustable allocation grid, FM
-    analogy exact'' + SI/FM architecture pivot + team-instruction layer) via conversation_search;
-    NOT in canon/ledger yet -> design-capture is P-C prerequisite.'
-  - 'COMMIT MECHANICS: safe_commit(additions:list[(path,content)], deletions, message)
-    in ONE bash block. Scopes = editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix
-    (''audit'' is a task_gate type, NOT a commit scope -> [editorial] for audit/design
-    docs). Co-files: ANY tests/sim/** commit REQUIRES tests/coverage_matrix.md; ANY
-    designs/*_v30.md edit REQUIRES references/canonical_sources.yaml (UPDATE git-blob
-    SHA = sha1(b''blob ''+len+b''\x00''+content)). sim_fabrication_check scans tests/sim/**/*.py
-    for uncited numeric literals -> need `# [canonical: ...]` comment OR value in
-    LOCAL /home/claude/sim_verification_ledger.json (45 entries, value-based; exempt
-    0,1,2,10,100; leading-zero decimals mismatch int ledger -> use comment). CollisionError
-    = NORMAL (own commits move HEAD) -> re-fetch touched paths, confirm orthogonal,
-    retry. Next free editorial id = ED-899 (898 used).'
-  - 'GAUGE: PER_CELL=0 python3 gauge_mb.py sim_mb_sigma.py = fast full battery (baseline
-    single 0/13 multi 5/13). PER_CELL=1 slow ~185-250s -> use `timeout 280`. C-rows
-    C1-C7 (cavalry/charge) are PER_CELL=1-only. Baseline /tmp/refbase_pc0.txt regenerable
-    from committed shim (byte-exact to 7cfa44d5).'
-  - 'P-L LANCHESTER COMPLETE (commit a5fc9d0e, scope [simulation]). Files: mass_battle/config.py
-    (4 consts), mass_battle/orchestration.py (linear melee term + opp_frac skip-under-Lanchester
-    + volley square term + _lanchester_strength helper), NEW mass_battle/lanchester_signature.py,
-    coverage_matrix.md co-file. Gated behind LANCHESTER_ENABLED (default ON; OFF byte-exact
-    to pre-P-L, VERIFIED PER_CELL=0 AND =1).'
-  - 'P-L DESIGN (as built): MELEE Linear Law in resolve_engagements -> casualties
-    to X = K_LINEAR * _lanchester_strength(enemy contact cells) * max(0, DAMAGE_BY_DEGREE[deg](power)-dr).
-    _lanchester_strength = distinct contact COLUMNS / LANCHESTER_STRENGTH_REF (frontage-capped
-    by construction, mode-agnostic). VOLLEY Square Law in volley_phase fire(): net_after_dr
-    *= K_SQUARE * shooter.effective_size (cap lifted, ~N). DOUBLE-COUNT GUARD: run_battle
-    opp_frac post-scaler SKIPPED when LANCHESTER_ENABLED (numbers-in-contact lives
-    ONLY in the linear term; Lesson 1; also yields byte-exact toggle-off). FEEDS morale/rout,
-    does NOT replace it.'
-  - 'P-L CONSTANTS (config.py, all env-overridable, class-B sim-tunable, Jordan-vetoable):
-    LANCHESTER_ENABLED=''1''(ON), K_LINEAR=4, K_SQUARE=0.25, LANCHESTER_STRENGTH_REF=4.
-    [OPEN CONFIRM] coefficient VALUES surfaced for Jordan veto (not pre-decided).'
-  - 'P-L VALIDATION: signatures ALL PASS PER_CELL 0+1 (LINEAR melee 2:1 big-win 88-91%
-    cas-diff +46-48; SQUARE volley cas-exchange ratio 17.8 >> linear ~2; NO-ANNIHILATION
-    mirror max-cas ~28% loser hp ~72%). Battery: PER_CELL=0 holds 5/13 multi (no regression
-    vs committed 5/13) + 3/13 single; PER_CELL=1 14/20 multi with ALL C1-C7 charge
-    bands IN-BAND (C5 moved IN 91.7->86.7) + 7/13 H/R. Toggle-off byte-exact BOTH
-    modes (diff empty vs committed baseline). PER_CELL=1 battery ~200s -> timeout
-    280, ONE run per block (two slow runs in one block exceeds wall clock).'
-  - 'LEDGER NOTE: container reset wiped the prior local 45-entry /home/claude/sim_verification_ledger.json.
-    Rebuilt with 11 honest P-L+canonical entries + 24 value-coverage entries reconstructed
-    from committed-file constants (sim_fabrication_check is VALUE-based + whole-file;
-    needs every non-exempt literal''s value in ledger OR a [canonical:] comment).
-    If re-committing mass_battle/*.py in a fresh container, rebuild this coverage
-    first (extract via valoria_hooks._extract_uncited_constants).'
-  - 'GATE SEQUENCE (each bash block): quick_bootstrap() -> read_files_graphql(req,force_full=True)
-    -> task_gate(''simulation'') -> for sim_gate use sim_gate(''custom'', systems=[''mass_combat''])
-    (single-system, manifest-exempt; system key is ''mass_combat'' NOT ''mass_battle'';
-    requires mass_battle_v30.md force_full + params/mass_combat.md + the ledger).
-    Commit via h.safe_commit(additions,[],msg) NOT g.; scope [simulation]; tests/sim/**
-    co-file REQUIRES tests/coverage_matrix.md.'
-  - 'HANDOFF OVERLAP RESOLVED THIS SESSION: #1(this) and #2(massbattle-speed-facing-resume)
-    both claim coverage_matrix.md + the package. P-L commit touched coverage_matrix.md
-    + mass_battle/{config,orchestration}.py + new signature file; did NOT touch the
-    sim_mb_sigma.py shim. No conflict introduced; re-fetch coverage_matrix before
-    #2 writes.'
+  - 'COMMAND-ONLY SIGMA BASE COMMITTED 2cf3feb6 (config.py + orchestration.py + coverage).
+    Per Jordan canon-structure directive: canonical Size-based pool (min(Size,Command)+Command,
+    PP-233/derived_stats L276) SET ASIDE. base_combat_pool = COMMAND_POOL_MULT(2)*command
+    + pen + stam_pen when COMMAND_SIGMA_ENABLED (default ON; OFF = canonical pool,
+    BYTE-EXACT to committed verified via ISOLATED run — note: cwd /home/claude shadows
+    mass_battle, so run committed refs with cwd INSIDE the package dir). Size enters
+    outcomes ONLY via the Lanchester frontage term.'
+  - 'Command DERIVED: derive_command(cha,cog)=clamp(round((CMD_CHA_WEIGHT*cha+CMD_COG_WEIGHT*cog)/(sum)),1,7)
+    = clamp(round((2*Cha+Cog)/3),1,7); Cha primary, Cog secondary. Unit gains optional
+    charisma/cognition fields (default None); __post_init__ derives command when both
+    supplied (else explicit command stat). Gauge units pass command directly -> derivation
+    inert there.'
+  - 'Constants (config.py, class-B sim-tunable, Jordan-confirmed 2026-06-02): COMMAND_SIGMA_ENABLED(env,default
+    ON), COMMAND_POOL_MULT=2, CMD_CHA_WEIGHT=2, CMD_COG_WEIGHT=1.'
+  - 'ED-899 recorded (c8ba5b7f, editorial_ledger.jsonl): canon-structure decision.
+    NEXT free ED id now 900.'
+  - 'Signature test STRENGTHENED 7e878ade: added check_law_exponents() (no-rout conserved-quantity
+    fit) — melee must conserve A-B (p<=1.4 LINEAR), volley A^2-B^2 (p>=1.6 SQUARE).
+    PASSES under Command-only (melee 1.25/volley 2.00); FAILS under Size-based pool
+    (melee 1.65) — catches the contamination the old win%/cas-diff checks missed.'
+  - 'VALIDATION COMPLETE (the coefficient-confirmation Jordan asked for): conserved-quantity
+    exponent (no-rout primitive, OR-literature method): Size-based pool contaminated
+    melee to p~1.7; Command-only base restores melee to TRUE LINEAR p~1.0 (CV@1 0.01),
+    volley stays SQUARE p~2.0 (CV@2 0.002). Coefficient-INVARIANT (melee~1/volley
+    2 across K_LINEAR in {2,4,8}) -> K sets timescale NOT law. Magnitude historical:
+    melee 2:1 big-win 77%/cas-diff +39 (du Picq winner<5%); no-annihilation rout-decided
+    (mirror ~30%, loser ~70% hp); square concentration 17.8x (Cannae/Pharsalus). Coefficients
+    K_LINEAR=4/K_SQUARE=0.25/LANCHESTER_STRENGTH_REF=4 CONFIRMED, contingent on the
+    Command-only base.'
+  - 'NO-REGRESSION on historically-validated behaviors (new-model PER_CELL=1 battery):
+    charge C1(58)/C2 braced(18)/C3(55)/C4 envelopment(80) + H4 Cannae(40/55) ALL IN
+    BAND; H1 mirror now 45/52 BALANCED (old ~57-60% A-side bias FIXED). Multi 12/20
+    (vs old 14/20) = band-calibration artifact (bands fit to old pool), NOT physics
+    regression.'
   next:
-  - 'P-C FM COMPOSITIONAL FORMATION SYSTEM (next; XL, multi-increment). PREREQ design-capture:
-    pull ED-814 ''adjustable allocation grid / FM analogy exact'' + SI/FM architecture
-    pivot + team-instruction layer from prior conversation (conversation_search ''ED-814
-    allocation grid'' / ''football manager formation instructions'') INTO a canon
-    design doc FIRST (conversation-only today). Three levels: army doctrine (Aggression/Cohesion)
-    -> unit formation (default template OR custom % allocation, auto-distribute+manual
-    override = ED-814 surface) -> subunit role/subformation + standing instructions.
-    A.6 formations become templates (carry dice rules), A.8 tactics become declarable
-    maneuvers. Build incrementally in new formations.py/tactics.py; gauge-validate
-    each increment vs A.6/A.8 counter-logic + precedent; PER_CELL=0 byte-exact preserved.'
-  - P-D two-stage general EVENT (capture-only, on existing command/morale machinery;
-    consequence out-of-container). P-E terrain STUB (reserve seam, build nothing).
-    P-F speed-into-combat S1 + vectorized penetration S4 (_defender_depth -> _support_along_vector).
-    P-G cleanup/retire S7/S8/S9 + deep formula-consistency audit (valoria-mechanic-audit
-    over modular engine).
-  - 'P-L OPEN: surface K_LINEAR/K_SQUARE/LANCHESTER_STRENGTH_REF VALUES to Jordan
-    for veto (class-B). Residual non-P-L: PER_CELL=0/1 H/R bands H1/H5/H6/H7 + R1/R3
-    remain OUT (pre-existing engine state, not P-L regression; the committed baseline
-    was 5/13 multi). Mirror A-side ~57-60% bias is pre-existing.'
+  - 'RE-TUNE gauge bands to the Command-only model (class-B/M, were calibrated to
+    the old Size-based pool). OUT under new model: H5/H6/H7/H8/H11 (formation), R1/R3
+    (ranged), C5 (cav-vs-shaken 98% — band 58-90 likely TOO LOW; top-down a shaken
+    line charged by cavalry routs -> widen). Re-characterize each band top-down (du
+    Picq/precedent), do NOT overfit to noise; PER_CELL=1 battery ~200s (timeout 285,
+    ONE slow run/block). gauge_mb.py bands are Class-B/M, Jordan-vetoable.'
+  - 'CANON-DOC RECONCILIATION (ED-899 follow-up): update params/mass_combat.md (PP-233
+    pool) + derived_stats_v30.md (Command derivation) to match the engine (Command-only
+    base; Command=f(Cha-primary,Cog-secondary)). Engine leads, docs lag. Needs Jordan
+    structural sign-off on doc wording (canon edit -> [editorial] scope + canonical_sources
+    co-file + the ED-899 link).'
+  - THEN P-C FM compositional formation system (original workplan next; XL; design-capture
+    prereq ED-814 allocation grid / FM instructions into a canon design doc first).
+  - 'OPEN: melee 4v2 exponent dips to ~0.85 (discreteness at tiny pools; unambiguously
+    linear, CV@1<<CV@2; cosmetic). Magnitude grounding partly inherited from the ~30%-rout
+    calibration (gameplay threshold runs hotter than the historical ~10-15% stand)
+    — acceptable but noted.'
 status: active
 key_values: []
 blockers: []
-created: '2026-06-02T18:28:48.398231+00:00'
-updated: '2026-06-02T18:28:48.398231+00:00'
+created: '2026-06-02T20:41:40.600485+00:00'
+updated: '2026-06-02T20:41:40.600485+00:00'
