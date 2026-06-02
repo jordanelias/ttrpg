@@ -103,9 +103,71 @@ def check_no_annihilation():
             f"max_cas={worst_cas:.1f}%% (≤{NOANNIH_MAX_CAS}) loser_hp={loser_hp:.1f}%% (>0)")
 
 
+# --- conserved-quantity exponent guard (the rigorous law check) ---
+# A no-rout attrition trajectory must conserve A^p−B^p with p≈1 for melee (linear law)
+# and p≈2 for volley (square law). This catches law-contamination the win%/cas-diff
+# checks above miss (e.g. the Size-based pool emerges at p≈1.7, failing LIN_EXP_MAX).
+LIN_EXP_MAX = 1.4   # [canonical: mb_lanchester_design.md §4 — melee must fit linear (p≤1.4), not square; class-B tolerance]
+SQ_EXP_MIN  = 1.6   # [canonical: mb_lanchester_design.md §4 — volley must fit square (p≥1.6), not linear; class-B tolerance]
+TRAJ_SEEDS  = 40    # [canonical: mb_lanchester_design.md §4 — exponent-fit sample; class-B]
+TRAJ_TICKS  = 160   # [canonical: mb_lanchester_design.md §4 — max no-rout ticks; class-B]
+NO_ROUT_MORALE = 1e9   # [canonical: mb_lanchester_design.md §4 — huge morale disables rout for pure-attrition measurement; class-B]
+TRAJ_FLOOR  = 0.25     # [canonical: mb_lanchester_design.md §4 — stop at 25%% of one block remaining; class-B]
+FIT_P_LO, FIT_P_HI, FIT_P_STEP = 0.5, 2.51, 0.05   # [canonical: mb_lanchester_design.md §4 — exponent scan grid; class-B]
+BIG_CV = 9.0   # [canonical: mb_lanchester_design.md §4 — CV sentinel (no conservation); class-B]
+
+
+def _trajectory(big_tier, small_tier, unit_type, stance):
+    import statistics
+    series = []
+    for s in range(TRAJ_SEEDS):
+        random.seed(s + SEED_BASE)
+        # huge morale disables rout → pure attrition
+        ua = _mk('Line', big_tier, 'A', unit_type, stance); ua.morale = ua.morale_start = NO_ROUT_MORALE
+        ub = _mk('Line', small_tier, 'B', unit_type, stance); ub.morale = ub.morale_start = NO_ROUT_MORALE
+        bs = ua.hp_max / ua.size_max
+        tr = []
+        for _ in range(TRAJ_TICKS):
+            run_battle(ua, ub, max_turns=1)
+            tr.append((ua.hp, ub.hp))
+            if ua.hp <= TRAJ_FLOOR * bs or ub.hp <= TRAJ_FLOOR * bs or ua.routed or ub.routed:
+                break
+        series.append(tr)
+    L = min(len(x) for x in series)
+    A = [statistics.mean(series[s][t][0] for s in range(TRAJ_SEEDS)) for t in range(L)]
+    B = [statistics.mean(series[s][t][1] for s in range(TRAJ_SEEDS)) for t in range(L)]
+    return A, B
+
+
+def _best_exponent(A, B):
+    import statistics
+    pts = [(a, b) for a, b in zip(A, B) if a > 0 and b > 0][1:]
+    best_p, best_cv = None, BIG_CV
+    p = FIT_P_LO
+    while p <= FIT_P_HI:
+        C = [a**p - b**p for a, b in pts]
+        m = statistics.mean(C)
+        cv = statistics.pstdev(C) / abs(m) if m else BIG_CV
+        if cv < best_cv:
+            best_p, best_cv = round(p, 2), cv
+        p += FIT_P_STEP
+    return best_p
+
+
+def check_law_exponents():
+    """Rigorous: melee must conserve the LINEAR difference (p≤1.4), volley the SQUARE
+    difference (p≥1.6). Requires the Command-only base (COMMAND_SIGMA on); the Size-based
+    pool contaminates melee to p≈1.7 and FAILS this guard by design."""
+    pm = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'melee', 'balanced'))
+    pv = _best_exponent(*_trajectory(BIG_TIER, MIRROR_TIER, 'ranged', 'hold'))
+    ok = pm <= LIN_EXP_MAX and pv >= SQ_EXP_MIN
+    return ('LAW EXPONENTS (linear/square)', ok,
+            f"melee p={pm:.2f} (≤{LIN_EXP_MAX} linear) volley p={pv:.2f} (≥{SQ_EXP_MIN} square)")
+
+
 def run():
     assert LANCHESTER_ENABLED, "signatures require LANCHESTER_ENABLED=1"
-    results = [check_linear(), check_square(), check_no_annihilation()]
+    results = [check_linear(), check_square(), check_no_annihilation(), check_law_exponents()]
     print("=== P-L Lanchester signature tests (PER_CELL=%s) ===" % os.environ.get('PER_CELL'))
     allok = True
     for name, ok, detail in results:
