@@ -25,30 +25,51 @@ context_files:
 working_state:
   done:
   - 'RATIFIED: roll-up + vectorized depth committed 733cbc67; engine @8b50144c; PER_CELL=0
-    byte-exact base 0dea67d1 (120/120). Per-cell gauge 11/13 CI-consistent.'
+    byte-exact base 0dea67d1 (120/120).'
   - Stub/wiring audit + workplan committed 56a23365.
+  - 'PHASE 0 COMPLETE (commit b7116bc4, audit S2): gauge_mb.py make_unit parameterized
+    (troop_type/speed, backward-compatible); cavalry rows C1-C4 added PER_CELL=1-only.
+    Bands observed under PC=1, validated top-down (Waterloo squares/schiltrons/Cannae/Adrianople/Hastings).
+    PER_CELL=0 BYTE-EXACT to baseline (single 0/13 multi 5/13, cav excluded); PER_CELL=1
+    multi existing-13 identical + 4 cav IN-band (10/17). 29-entry sim_verification_ledger.json
+    (LOCAL working file at /home/claude/ — NOT committed; rebuild if needed: anchors
+    A, defaults/braced B, bands+method M, cav-bands B). C1 52-80 obs55.0 / C2 braced
+    8-42 obs21.7 / C3 mirror 42-58 obs51.7 / C4 envelop 70-92 obs83.3.'
   next:
-  - 'Phase 0 (PREREQUISITE): add cavalry/Fast matchups to the gauge battery — ZERO
-    coverage now (S2).'
-  - 'Phase 1: wire canonical Unit.speed into combat (pursuit-only; two disconnected
-    speed models) (S1).'
-  - 'Phase 2: vectorized + speed-scaled penetration — _defender_depth -> _support_along_vector
-    along charge vector (S4).'
-  - 'Phase 3: prepared-defense-gated morale shock (du Picq; deep+disciplined+braced
-    repels) (S6 + anchor).'
-  - 'Phase 4: verify facing->deals-less emergence; wire explicit only if insufficient
-    (S5,S3).'
-  - 'Phase 5: reconcile/retire _envelopment_sigma + superseded v14 items; docstring
-    (S7,S9,S8).'
+  - 'Phase 1 (NEXT, autonomous): wire canonical Unit.speed (Slow/Standard/Fast, L1039)
+    into combat closing-speed (S1). Currently speed feeds pursuit ONLY (L2235/2248/2517)
+    — two disconnected speed models. Canon (mass_battle_v30 A.4 L162 + A.12 L554)
+    defines NO direct combat effect for speed -> route combat closing through the
+    canonical tier, do NOT invent a new canon effect. C1-C4 are the regression guard.'
+  - 'Phase 2: vectorized + speed-scaled penetration -> _defender_depth (mean col_grid)
+    replaced by _support_along_vector along the charge vector, speed-scaled (S4, Jordan
+    B). C2 braced-repulse is the guard against ahistorical dominance.'
+  - 'Phase 3 (JORDAN-GATED, STOP): prepared-defense-gated morale shock (S6). PC_CHARGE_SIGMA=0.55
+    / PC_CHARGE_TICKS=3 are DEFINED-BUT-UNUSED dangling constants (L1356-57). C2 is
+    the emergent-repulse anchor to make explicit.'
+  - 'Phase 4: verify facing->deals-less emergence (octagon); wire explicit attacker-output
+    gate only if insufficient (S5, S3). charge_pen flat=3 (L779-784, max 0.6sigma
+    via PUNCTURE_CAP*SIGMA_PER_D) is the lever.'
+  - 'Phase 5: reconcile/retire _envelopment_sigma (dormant, PC_ENVELOP_SIGMA=0) +
+    superseded v14 items; stale docstring (S7,S9,S8).'
 key_values:
-- Engine 8b50144c; ratify 733cbc67; audit/workplan 56a23365.
+- Engine 8b50144c; ratify 733cbc67; audit/workplan 56a23365; PHASE-0 cav-coverage
+  b7116bc4.
 - 'Each phase: bottom-up -> top-down (du Picq/Waterloo squares/Leuthen) -> full gauge
-  incl cavalry -> toggle-off 120/120 -> commit. All PER_CELL=1; PER_CELL=0 byte-exact.'
+  incl cavalry C1-C4 -> toggle-off PER_CELL=0 byte-exact -> commit. All work PER_CELL=1.'
+- 'GAUGE RUN: `PER_CELL=1 PC_REFUSE=1 PC_WHEEL=1 python3 /home/claude/gauge_mb.py
+  /home/claude/sim_mb_sigma.py` (~185-250s, n=60). NO /usr/bin/time (absent -> exit
+  127). PER_CELL=1 baseline multi=6/13 strict (the ''11/13'' in older notes = n=80
+  CI-consistent, not strict band).'
+- 'sim_fabrication_check is ledger-gated: needs /home/claude/sim_verification_ledger.json
+  (LOCAL, not in repo) covering band literals, else halts. Repo ledgers are per-phase
+  (phaseN_sim_verification_ledger.json).'
 blockers:
-- 'JORDAN before Phase 3: (1) morale-shock magnitude + which defender states negate
-  vs amplify; (2) whether facing->deals-less stays emergent or gets an explicit attacker-output
-  gate.'
-last_commit: 56a23365489956ce94773e4b829790c93853e255
+- 'JORDAN before Phase 3: (1) morale-shock magnitude + exactly which defender states
+  (stance/discipline floor/MIN_DEPTH) negate vs amplify cavalry shock; (2) whether
+  facing->deals-less stays emergent (octagon) or gets an explicit attacker-output
+  gate. Do NOT invent these (project-owner contract).'
+last_commit: b7116bc4562785e8bbcfae1827bd4266fb80c0ec
 created: '2026-06-01T03:55:56.391334+00:00'
-updated: '2026-06-01T03:55:56.391334+00:00'
+updated: '2026-06-02T02:56:13.540156+00:00'
 status: active
