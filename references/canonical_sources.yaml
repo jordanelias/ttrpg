@@ -149,7 +149,7 @@ systems:
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "2a1211d389341206bba020af585d1ca71fad3322"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "14f4cbc1c6025ea48bb2a90d7dd8ea871a2d5a8c"
     mass_battle_index: designs/provincial/mass_battle_v30_index.md
     canonical_sha__designs__provincial__mass_battle_v30_index_md: "46d7daf157a1b944ee55c47388c2b1ba4f4c6ea4"
     mass_battle_infill: designs/provincial/mass_battle_v30_infill.md

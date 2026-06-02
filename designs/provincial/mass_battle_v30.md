@@ -191,16 +191,16 @@ Morale degradation triggers:
 - Discipline broken this turn: −1
 - Allied unit routed in same zone: −1
 - General incapacitated (Stage 1): −1
-- General killed (Stage 2): −2
+- General incapacitated/captured (Stage 2): −2
 - Flanked and lost exchange: −1
 - No engagement for 2+ consecutive turns (idle army): −1 *[P2-02/P2-04]*
 
-**Morale cap: −3 per Cascade Phase.** General killed (Stage 2) deals −2
+**Morale cap: −3 per Cascade Phase.** General incapacitation (Stage 2) deals −2
 separately, not subject to the cap. *[P1-03]*
 
-> **Clarification:** "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply Stage 2 general death −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general kill)."
+> **Clarification:** "Application order: Apply all non-general Morale changes first, capping the total at −3 from these sources. Then apply Stage 2 general incapacitation −2 additionally (this −2 is separate and not subject to the cap). Maximum total Morale loss in one Cascade Phase: −5 (−3 capped + −2 general incapacitation)."
 
-> **Encirclement exception (PP-683, MB-08):** A unit with no valid retreat path — flanked from 3 simultaneous directions, OR all retreat zones occupied by enemy units — has the −3 Morale cap removed for that Cascade Phase only. Cap restored next turn if retreat path opens. Models historical catastrophic collapse (Cannae, Lake Trasimene) where encircled armies routed beyond what normal cohesion could absorb. Stage 2 general kill remains additive on top.
+> **Encirclement exception (PP-683, MB-08):** A unit with no valid retreat path — flanked from 3 simultaneous directions, OR all retreat zones occupied by enemy units — has the −3 Morale cap removed for that Cascade Phase only. Cap restored next turn if retreat path opens. Models historical catastrophic collapse (Cannae, Lake Trasimene) where encircled armies routed beyond what normal cohesion could absorb. Stage 2 general incapacitation remains additive on top.
 
 > **Artillery cascade ruling (PP-198):** Multiple simultaneous HBl unit destructions in one Cascade Phase each trigger Morale −1 (allied unit routed). Total non-general Morale loss still capped at −3. No runaway cascade possible from Artillery alone.
 
@@ -257,11 +257,21 @@ Cha+Cog derivation. *[Command-P2-02]*
 
 **Command applies in full to each sub-unit (PP-504):** The general's full Command value applies to each commanded sub-unit's pool independently. Command is not divided across sub-units. Sub-unit limit (max = Command, TTRPG cap: 3) governs count, not distribution. Note: §A.8 splitting guidance is under revision — see ED-358. *(PROVISIONAL marker stripped per editorial approval 2026-04-30.)*
 
-**General two-stage death:** *[P1-02]*
+**General two-stage incapacitation (capture, never death — ED-898):** *[P1-02]*
 - Stage 1 (incapacitated): −1 Morale all units, Command halved (floor, minimum 1), Morale floor suspended. Stabilise in Phase 5 with Medicine Ob 2 (1-turn window). *(Command halving: floor(Command÷2), min 1. A Stage 1 general retains at least 1 Command, preserving the Stage 1 / Stage 2 distinction.)*
-- Stage 2 (killed): Stage 2 fires at start of following turn's Phase 5
-  if not stabilised. −2 Morale (outside cap), Command = 0, all units uncommanded.
-  *[NEW-P2-02 — Stage 1 → 2 timing confirmed]*
+- Stage 2 (incapacitated → captured if the field is lost): fires at start of following turn's Phase 5
+  if not stabilised. −2 Morale (outside cap), Command = 0, all units uncommanded. The general is
+  removed from command but **survives** — captured if their side loses the field, otherwise recovered.
+  No mass-battle mechanic kills the general; the post-capture consequence is a world-layer event
+  resolved outside the battle container.
+  *[NEW-P2-02 — Stage 1 → 2 timing confirmed; ED-898 — outcome reframed killed→incapacitated/captured, Jordan 2026-06-01, timing unchanged]*
+
+> **No character death from mass battle (ED-898, Jordan directive 2026-06-01):** No mass-battle
+> mechanic kills a player or named character. The worst battlefield outcome for a general or officer
+> is incapacitation and — if their side loses the field — capture. Death of a named character, if it
+> ever occurs, is a narrative/world-layer event, never an automatic result of battle resolution. The
+> engine emits an "incapacitated/captured" state plus which side holds the field; the consequence
+> (ransom, imprisonment, escape, return) is rendered by the world layer, outside the battle container.
 
 **General in personal combat:** suspends all Command effects. Re-establish command
 with Command check Ob 2 in Phase 1 of any subsequent turn. *[P2-10]*
@@ -296,7 +306,7 @@ execution rolls. A 2-wound general has tactic success probability halved.
 | Feigned Retreat | — | — | See Tactics |
 | Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn *[P3-02]* |
 
-> **Clarification:** "Roll a number of d10s equal to the opposing general's Command score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is killed): pursuing side pursues normally and suffers the Discipline check."
+> **Clarification:** "Roll a number of d10s equal to the opposing general's Command score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is incapacitated/captured): pursuing side pursues normally and suffers the Discipline check."
 
 > **Feigned Retreat Discipline check Ob (PP-256):** The pursuing-side Discipline check is **Ob 1**. Discipline-4 unit: ~87% success. Discipline-1 unit: ~40% success.
 
@@ -420,7 +430,7 @@ defensive success (min 0). Exempt: Shield Wall.
    Volley (Phase 2) + Offensive Thread (Phase 4) + Engagement (Phase 5).
    Units reduced to 0 Size are destroyed. Pyrrhic mutual destruction valid.
 2. Discipline checks (deterministic — per §A.4)
-3. Morale checks (triggers + cap per §A.4; PP-082 general kill separate)
+3. Morale checks (triggers + cap per §A.4; PP-082 general incapacitation separate)
 4. General action (one): Rally / Reinforce Discipline / **Support Threadweave**
    (Weaving, Mending — see below) / Personal combat / Stabilise incapacitated
    general
@@ -864,18 +874,18 @@ Each mustered unit has one named officer NPC. The officer is generated at Muster
 - Player orders the unit into a situation that costs Size ≥ 2: −1
 - Player is absent from a battle where the unit fights: −1
 
-**Officer death (recalibrated per ED-754, scoped per ED-765):** Roll once per battle resolution, not per Size-loss event. Computation: total Size lost in battle by the unit → roll 1d20. On result ≤ total Size lost, the officer is killed. Example: unit loses 2 Size in volley + 3 in engagement = 5 total → officer killed on 1-5 (25% rate). Per-battle resolution is significantly cleaner than per-event: it produces a known-bounded probability, doesn't double-count multi-stage attrition, and surfaces a single named-officer death moment per battle for narrative clarity.
+**Officer incapacitation/capture (recalibrated per ED-754, scoped per ED-765; death reframed to capture per ED-898):** Roll once per battle resolution, not per Size-loss event. Computation: total Size lost in battle by the unit → roll 1d20. On result ≤ total Size lost, the officer is incapacitated — and captured if their side loses the field. Example: unit loses 2 Size in volley + 3 in engagement = 5 total → officer incapacitated/captured on 1-5 (25% rate). Per-battle resolution is significantly cleaner than per-event: it produces a known-bounded probability, doesn't double-count multi-stage attrition, and surfaces a single named-officer capture moment per battle for narrative clarity. The officer is never killed by the battle; their fate (ransom, imprisonment, escape, return) is a world-layer event resolved outside the battle container.
 
-Prior calibration (1d10) produced 50% officer death at routine 5-Size loss — campaigns lost all named officers in 4-6 battles. The 1d20 + per-battle calibration preserves narrative jeopardy (catastrophic losses still kill officers reliably) while permitting named officer NPCs to persist across multiple campaign battles.
+Prior calibration (1d10) produced 50% officer incapacitation at routine 5-Size loss — campaigns lost all named officers in 4-6 battles. The 1d20 + per-battle calibration preserves narrative jeopardy (catastrophic losses still reliably remove officers from the field, captured) while permitting named officer NPCs to persist across multiple campaign battles.
 
-**Death consequences:**
-- Player receives notification: "Captain [Name] fell at [location]."
-- If Disposition was ≥ +2: player's Conviction may be strained (same mechanic as combat death cascade in combat_v30 §13.3).
+**Capture consequences (engine emits state; world layer renders outcome):**
+- Player receives notification: "Captain [Name] was taken / fell from the line at [location]."
+- If Disposition was ≥ +2: player's Conviction may be strained (same mechanic as the loss cascade in combat_v30 §13.3).
 - If the unit had been with the player for 3+ seasons: +1 Renown (the loss is publicly mourned — the player's leadership is noted).
 
 **Officer as settlement governor:** After a battle, a named officer at Disposition ≥ +2 may be assigned as governor of the battle settlement or any garrisoned settlement (per settlement_layer_v30 §3.2). The military officer transitions to civil administrator — the ROTK post-conquest appointment.
 
-**Officer at Disposition +3:** The officer becomes eligible for companionship (per companion_specification_v30 §2.1). A unit officer who travels with the player as a companion still commands their unit in battle — dual role. If the companion-officer is killed in battle, the departure scene fires as a combat death, not a social departure.
+**Officer at Disposition +3:** The officer becomes eligible for companionship (per companion_specification_v30 §2.1). A unit officer who travels with the player as a companion still commands their unit in battle — dual role. If the companion-officer is incapacitated/captured in battle, the departure scene fires as a battlefield capture (the companion is removed from the field, not killed), not a social departure.
 
 ### §D.3 Player Morale Effect
 
