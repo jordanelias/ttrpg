@@ -1325,6 +1325,39 @@ def _morale_sigma(u):
     if not MORALE_FIX or not getattr(u, 'morale_start', 0): return 0.0
     frac = max(0.0, min(1.0, u.morale / u.morale_start))
     return MORALE_SIGMA_SCALE * (frac - 1.0)
+def _charge_shock_sigma(defender, def_cells, zone):
+    """Phase 3: DEFENDER moral-shock delta-sigma (<=0) on a charge impact.
+    Cavalry's weapon is the MORAL impulse (du Picq), gated by the defender's preparedness:
+    near-zero vs a braced+disciplined+deep defender facing the charge (Waterloo squares),
+    catastrophic vs an in-line / shallow / rear-charged / already-shaken defender (Albuera,
+    Cannae, Hastings-post-feint). Applied to the defender's offensive net successes -> it
+    fights worse that exchange. Composes with _morale_sigma (one morale channel, Lesson 1).
+    [historical anchor: du Picq Battle Studies; Waterloo/Albuera; precedents_warfare §1.1.
+     bottom-up: stance/discipline/_defender_depth/octagon zone/morale_start — all engine state.]
+    """
+    if not PER_CELL:
+        return 0.0
+    # facing gate: can the defender face the charge?
+    if zone == "GREEN":   g_face = PC_SHOCK_FRONT      # faced charge mostly absorbed
+    elif zone == "RED":   g_face = PC_SHOCK_REAR       # rear bypass (cannot face it)
+    else:                 g_face = 1.0                 # YELLOW flank
+    # brace gate (multiplicative): hold-stance x discipline x depth, floored
+    b_stance = PC_SHOCK_HOLD_BRACE if getattr(defender, 'stance', 'balanced') == 'hold' else 1.0
+    disc = getattr(defender, 'discipline', 5)
+    if disc >= 5:   b_disc = PC_SHOCK_DISC_FULL
+    elif disc <= 2: b_disc = 1.0
+    else:           b_disc = PC_SHOCK_DISC_FULL + (1.0 - PC_SHOCK_DISC_FULL) * (5 - disc) / 3.0
+    depth = _defender_depth(defender, def_cells)
+    if depth >= PC_SHOCK_DEPTH_REF: b_depth = PC_SHOCK_DEPTH_FULL
+    elif depth <= 1.0:              b_depth = 1.0
+    else:                           b_depth = 1.0 - (1.0 - PC_SHOCK_DEPTH_FULL) * (depth - 1.0) / (PC_SHOCK_DEPTH_REF - 1.0)
+    g_brace = max(PC_SHOCK_BRACE_FLOOR, min(1.0, b_stance * b_disc * b_depth))
+    # shaken amplifier: a wavering defender takes more
+    ms = getattr(defender, 'morale_start', 0) or 0
+    frac = max(0.0, min(1.0, defender.morale / ms)) if ms else 1.0
+    a_shaken = 1.0 + PC_SHOCK_SHAKEN_GAIN * (1.0 - frac)
+    return -PC_CHARGE_SIGMA * g_face * g_brace * a_shaken
+
 def _sigma_softcap(x, m=1.5):                 # [canonical: modifier_system_spec.md §3.1 saturating]
     return m * math.tanh(x / m)
 def _sigma_net_boost(net_sigma, pool, tn=7):  # mu-shift; [canonical: params/core.md continuous engine; modifier_system_spec §2.1]
@@ -1353,8 +1386,27 @@ PC_FRONT_RANKS     = 2      # ranks a column must hold on its front; deeper rank
 PC_ENVELOP_SIGMA   = 0.0    # DISABLED: depth-aware contact fraction (Incr4) already captures the width/envelopment
                             # advantage; a separate envelopment delta-sigma double-counts and breaks H4 Cannae.
                             # (NERS-N/E: do not add unneeded apparatus.) _envelopment_sigma retained, dormant at 0.
-PC_CHARGE_SIGMA    = 0.55   # per-rank-of-unabsorbed-penetration delta-sigma a charger gets on impact
-PC_CHARGE_TICKS    = 3      # charge shock applies only for the first few ticks of contact
+PC_CHARGE_SIGMA    = 0.55   # MAX defender moral-shock delta-sigma on a charge impact (du Picq: cavalry's
+                            # weapon is the MORAL impulse, not physical collision). This is a CAP reached only
+                            # vs a rear-charged / already-shaken defender; the prepared-defence gate below
+                            # scales it toward ~0 for a braced+disciplined+deep defender (Waterloo squares:
+                            # "virtually impossible for cavalry to break a well-disciplined square"). Applied
+                            # to the DEFENDER's morale channel (not the charger's offence — that is the
+                            # puncture path, L1733; a charger-offence wiring would double-count it, the
+                            # NERS-N/E defect that disabled _envelopment_sigma). [class-B; Jordan-vetoable]
+# PC_CHARGE_TICKS RETIRED 2026-06-01: the shock fires only while a momentum differential exists
+# (a_mom>b_mom, L1724); once both bodies lock into stationary melee the differential vanishes and the shock
+# stops EMERGENTLY (du Picq: the moral impulse is spent once the charge stalls). A separate tick counter was
+# redundant apparatus (NERS-E). Window is now emergent from the speed dynamics.
+# --- prepared-defence gate (Phase 3; calibrated in Stage-4 vs the C1-C7 historical bands) ---
+PC_SHOCK_FRONT       = 0.15  # GREEN (faced) charge: mostly absorbed by the formation (square holds frontally)
+PC_SHOCK_REAR        = 1.6   # RED (rear) charge: bracing bypassed (Cannae/Adrianople — cannot face the rear)
+PC_SHOCK_BRACE_FLOOR = 0.05  # [canonical: Stage-4 calibration vs Waterloo-square bands] braced+disciplined+deep -> shock ~0 (the square Ney could not break)
+PC_SHOCK_HOLD_BRACE  = 0.35  # 'hold' stance (Shield Wall, cannot advance) alone cuts shock to ~1/3
+PC_SHOCK_DISC_FULL   = 0.35  # discipline>=5 (steady troops hold formation) cuts shock to ~1/3
+PC_SHOCK_DEPTH_FULL  = 0.5   # deep (>=PC_SHOCK_DEPTH_REF ranks) halves shock (mass absorbs)
+PC_SHOCK_DEPTH_REF   = 4.0   # rank depth treated as fully "deep"
+PC_SHOCK_SHAKEN_GAIN = 1.0   # already-shaken defender (morale<<start) takes up to 2x shock (Hastings-post-feint)
 PC_CAVALRY_SPEED_MULT = 2.0  # cavalry velocity primitive: cavalry closes this much faster (PER_CELL), triggering the charge
 PC_WHEEL = _sigma_os.environ.get('PC_WHEEL', '1') == '1'   # envelopment wheel: overhang cells wheel toward the enemy flank (PER_CELL); A/B via env
 # Perception model (Jordan 2026-05-31; grounded in visual physiology + military scholarship):
@@ -1732,6 +1784,19 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     b_pen = max(0.0, b_pen - _defender_depth(unit_a, p["a_cells"]))
                 if a_pen > 0: ns_a += min(PUNCTURE_CAP, int(a_pen)) * SIGMA_PER_D
                 if b_pen > 0: ns_b += min(PUNCTURE_CAP, int(b_pen)) * SIGMA_PER_D
+                # Phase 3: a landed charge also delivers a DEFENDER moral shock (du Picq), gated by the
+                # defender's preparedness (facing/brace/depth/shaken). Charger A out-momentums B -> B is
+                # shocked (applied to B's offence); and vice versa. Distinct from puncture: puncture is the
+                # charger's PHYSICAL penetration (depth-absorbed, boosts charger); shock is the defender's
+                # MORAL collapse (discipline/stance/facing-gated, lowers defender). Zone = defender's octagon
+                # facing-vs-charger (b_angle_mod for B: GREEN 0 / YELLOW -1 / RED -2 via ANGLE_DEF_MOD).
+                if PER_CELL:
+                    if a_pen > 0:
+                        _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb)
+                    if b_pen > 0:
+                        _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za)
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA

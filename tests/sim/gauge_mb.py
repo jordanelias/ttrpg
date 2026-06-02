@@ -102,6 +102,22 @@ CAV_TESTS = [
     # Cannae rear-charge; Adrianople 378 flank; Hastings counter-charge on broken English.
     ('C4','Cav flank/envelopment vs Line','Horseshoe','Line',
         dict(CAV),{},70,92),
+    # --- Phase 3 gate probes (shock primitive): isolate facing / brace / shaken ---
+    # C5: cav vs an ALREADY-SHAKEN line (morale 2/6) -> shock amplifier fires; charge breaks a
+    # wavering line. Precedent: Albuera (line caught -> ~76% loss); Hastings post-feint. HIGH.
+    ('C5','Cav vs SHAKEN Line (morale2)','Arrowhead','Line',
+        dict(CAV),{'morale':2},58,90),
+    # C6: cav vs a BRACED but SHALLOW line (hold+disc8, no depth bonus) -> the square mechanic is
+    # formation+discipline, not mass alone; a faced brace still repels frontally. LOW/contested.
+    # (Tier-3 footprints are shallow, so this is brace-without-depth by construction.) Precedent:
+    # Waterloo squares held frontally; "best cavalry is contemptible to a steady regiment."
+    ('C6','Cav vs BRACED-shallow Line (hold+d8)','Arrowhead','Line',
+        dict(CAV),{'stance':'hold','discipline':8},8,45),
+    # C7: cav ENVELOPS a braced line (Horseshoe vs hold+disc8) -> bracing is BYPASSED from the
+    # flank/rear (octagon RED); you cannot face what wraps you. Precedent: Cannae/Adrianople — an
+    # encircled disciplined body still collapses. Must be >> C6 (frontal brace) and >= C2. HIGH.
+    ('C7','Cav envelop vs BRACED Line (hold+d8)','Horseshoe','Line',
+        dict(CAV),{'stance':'hold','discipline':8},55,88),
 ]
 
 def winner_of(r):
