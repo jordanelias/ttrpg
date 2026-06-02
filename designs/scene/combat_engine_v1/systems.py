@@ -110,18 +110,21 @@ def armor_defeat_sigma(aggressor, defender, cfg):
     a=cfg['ADEF_W'][defender.armor]
     if a==0.0: return 0.0
     head=aggressor.w['head']
-    # mode-shift: cut-and-thrust swords half-sword to thrust gaps in armour (count as point); pure cutters stay cut
-    if head=='blunt': mode='blunt'
-    elif head=='point': mode='point'
-    elif head=='cut_thrust': mode='point' if defender.armor in ('medium','heavy') else 'cut'
-    else: mode='cut'
-    cap={'blunt':cfg['ADEF_BLUNT'],'point':cfg['ADEF_POINT'],'cut':cfg['ADEF_CUT']}[mode]
-    # gap-thrust control vs armour requires a precise, rigid point: scale the POINT credit by the weapon's gap
-    # precision (estoc/rondel/half-sword keep it; rapier/plain sword lose it). Blunt/cut unaffected by gap.
-    if mode=='point': cap *= aggressor.w['gap']
+    # capability = the BEST mode available to this head vs armour. A cut-and-thrust sword may CUT or half-sword to a
+    # gap-thrust POINT; it uses whichever is more effective — so a defender taking MORE armour never flips the
+    # attacker into a suddenly-stronger mode (removes the light->medium cliff). Pure cutters cut; points thrust.
+    if head=='blunt':
+        cap=cfg['ADEF_BLUNT']
+    elif head=='point':
+        cap=cfg['ADEF_POINT']*aggressor.w['gap']
+    elif head=='cut_thrust':
+        cut_cap=cfg['ADEF_CUT']
+        point_cap=cfg['ADEF_POINT']*aggressor.w['gap']     # half-sword gap-thrust (precision-scaled)
+        cap=max(cut_cap, point_cap)                         # take the better of cut vs half-sword at THIS armour level
+    else:                                                   # straight/curved pure cut
+        cap=cfg['ADEF_CUT']
     # RELATIVE to a per-state threshold: capability above the bar = control (+); below = the defender's armour
-    # SHIELDS against you (−). This is the missing defensive primitive — a plated defender now dominates an attacker
-    # who cannot defeat the armour (fixes plate-vs-naked), not merely reduces damage.
+    # SHIELDS against you (−). The threshold RISES with armour, so more armour is monotonically harder to defeat.
     return a*(cap - cfg['ADEF_THRESHOLD'][defender.armor])
 
 def leverage(c, cfg):
