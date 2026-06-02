@@ -133,6 +133,7 @@ working_state:
     veto). P-C template/instruction catalog + sigma-magnitudes.'
 created: '2026-06-02T05:47:51.240961+00:00'
 updated: '2026-06-02T05:48:17.522980+00:00'
-status: active
+status: closed
 key_values: []
 blockers: []
+closed_at: '2026-06-02T18:28:50.360024+00:00'
