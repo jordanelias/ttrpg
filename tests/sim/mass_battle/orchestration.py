@@ -1584,8 +1584,9 @@ def run_battle(unit_a, unit_b, max_turns=18):
         total_dmg_b_morale = result.get("dmg_b", 0) + volley_dmg_b * volley_hp_scale(unit_b)
         for u, total_dmg in [(unit_a, total_dmg_a_morale), (unit_b, total_dmg_b_morale)]:
             if u.routed: continue
-            # General death: Command=0 → instant rout (M1: general IS the army)
-            # [canonical: designs/provincial/mass_battle_v30.md §A.4 — "General killed: Morale −2 (uncapped)"]
+            # General incapacitated/captured (ED-898): Command=0 → instant rout (M1: general IS the army).
+            # Command=0 models a general removed from command (incapacitated, captured if field lost) — never killed.
+            # [canonical: designs/provincial/mass_battle_v30.md §A.4/§A.5 — "General incapacitated/captured (Stage 2): Morale −2 (uncapped), Command=0"; ED-898 death→capture reframe]
             if u.command <= 0:
                 u.morale = 0.0
                 continue  # rout check below
