@@ -141,7 +141,7 @@
 #   - Cell counts equalized across shapes at each tier (no shape gets free troops)
 #     Was at T3: Line=25, Arrow=25, Horse=25, Gap=56(!), Refused=21
 #     Now at T3: all ≈ 25 cells; advantages come from arrangement, not extra cells
-#   - SHAPE_OFF_MOD and SHAPE_DEF_MOD zeroed (flat per-shape bonuses removed)
+#   - SHAPE_OFF_MOD and SHAPE_DEF_MOD RETIRED (flat per-shape bonuses removed entirely; formation effects emerge from geometry)
 #   - Shape advantages must emerge from existing geometric mechanisms:
 #       support_engage_frac    — wedge concentration via depth-stack support
 #       engagement_angle       — flank/rear bonus from facing geometry
@@ -1059,14 +1059,6 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     eng_counts = count_engagements_per_atom(pairs)
     for p in pairs:
         atom_a, atom_b = p["atom_a"], p["atom_b"]
-        cols = p["cols"]
-        primary_col = sorted(cols)[len(cols)//2]
-        role_a = atom_a.role_at_contact(primary_col)
-        role_b = atom_b.role_at_contact(primary_col)
-        off_a = SHAPE_OFF_MOD[atom_a.shape](role_a)
-        off_b = SHAPE_OFF_MOD[atom_b.shape](role_b)
-        if off_a == -99 or off_b == -99: continue
-
         a_troops_frac = atom_a.troop_count / unit_a.total_troops()
         b_troops_frac = atom_b.troop_count / unit_b.total_troops()
         a_base = unit_a.base_combat_pool()
@@ -1090,8 +1082,8 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         else:
             raise ValueError(f"Unknown POOL_VARIANT: {POOL_VARIANT}")
 
-        a_pool = max(1, math.floor(a_pool_raw) + off_a)
-        b_pool = max(1, math.floor(b_pool_raw) + off_b)
+        a_pool = max(1, math.floor(a_pool_raw))
+        b_pool = max(1, math.floor(b_pool_raw))
 
         # v11: Per-cell octagon angle — replace centroid-to-centroid with per-cell raw vectors
         # [canonical: Jordan design — octagon, GREEN<45°, YELLOW 45-90°, RED≥90°]
