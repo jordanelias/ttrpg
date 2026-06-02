@@ -35,23 +35,38 @@ working_state:
     (LOCAL working file at /home/claude/ — NOT committed; rebuild if needed: anchors
     A, defaults/braced B, bands+method M, cav-bands B). C1 52-80 obs55.0 / C2 braced
     8-42 obs21.7 / C3 mirror 42-58 obs51.7 / C4 envelop 70-92 obs83.3.'
+  - 'PHASE 3 COMPLETE (commit 7cfa44d5, audit S6) — Jordan-delegated under mechanical-tier
+    grant. Cavalry shock built as a MORAL primitive (_charge_shock_sigma): a landed
+    charge lowers the DEFENDER''s morale-channel offence by -PC_CHARGE_SIGMA x G_face
+    x G_brace x A_shaken, gated by real engine state (octagon facing GREEN/YELLOW/RED;
+    hold-stance x discipline x _defender_depth; morale/morale_start). Distinct from
+    puncture (no double-count; the _envelopment_sigma trap avoided). PC_CHARGE_TICKS
+    retired (momentum differential bounds the window emergently). Top-down anchored:
+    du Picq (''no shock of infantry on infantry, but a moral impulse''); Waterloo
+    squares (cavalry-proof); Albuera 1811 (line caught ~76% lost); Cannae/Adrianople
+    (rear bypass); Hastings post-feint. VALIDATED (multi n=40): C1-C7 all in band;
+    emergent ordering reproduces history — frontal-braced 25 < frontal-unbraced 62
+    < envelopment 88 ~ rear-braced 78 < shaken 90; C7>>C6 (77.5 vs 25) = facing bypasses
+    brace. Unit-gate asserted (facing -0.014/-0.096/-0.154; brace ->-0.005; rear-braced
+    -0.054). PER_CELL=0 BYTE-EXACT. ANSWERS gate-Q2 (Phase 4 / S5): facing->deals-less
+    is sufficient EMERGENTLY (octagon+shock) — NO explicit attacker-output gate (NERS-E);
+    S5 closed by validation. Design doc: designs/audit/2026-06-01-massbattle-stub-wiring/cavalry_shock_design.md.
+    41-entry ledger. PROPOSAL — all shock constants Class-B, Jordan-vetoable. LIMITATIONS
+    [SELF-AUTHORED]: C6==C2 (tier-3 brace is shallow -> depth-isolation unit-tested
+    not gauge-distinct); bands calibrated at scoring n.'
   next:
   - 'Phase 1 (NEXT, autonomous): wire canonical Unit.speed (Slow/Standard/Fast, L1039)
-    into combat closing-speed (S1). Currently speed feeds pursuit ONLY (L2235/2248/2517)
-    — two disconnected speed models. Canon (mass_battle_v30 A.4 L162 + A.12 L554)
-    defines NO direct combat effect for speed -> route combat closing through the
-    canonical tier, do NOT invent a new canon effect. C1-C4 are the regression guard.'
-  - 'Phase 2: vectorized + speed-scaled penetration -> _defender_depth (mean col_grid)
-    replaced by _support_along_vector along the charge vector, speed-scaled (S4, Jordan
-    B). C2 braced-repulse is the guard against ahistorical dominance.'
-  - 'Phase 3 (JORDAN-GATED, STOP): prepared-defense-gated morale shock (S6). PC_CHARGE_SIGMA=0.55
-    / PC_CHARGE_TICKS=3 are DEFINED-BUT-UNUSED dangling constants (L1356-57). C2 is
-    the emergent-repulse anchor to make explicit.'
-  - 'Phase 4: verify facing->deals-less emergence (octagon); wire explicit attacker-output
-    gate only if insufficient (S5, S3). charge_pen flat=3 (L779-784, max 0.6sigma
-    via PUNCTURE_CAP*SIGMA_PER_D) is the lever.'
-  - 'Phase 5: reconcile/retire _envelopment_sigma (dormant, PC_ENVELOP_SIGMA=0) +
-    superseded v14 items; stale docstring (S7,S9,S8).'
+    into combat closing-speed (S1). Speed feeds pursuit ONLY today; canon (A.4 L162,
+    A.12 L554) gives speed NO direct combat effect -> route combat closing through
+    the canonical tier, don''t invent. C1-C7 are the regression guard.'
+  - 'Phase 2: vectorized + speed-scaled penetration -> _defender_depth replaced by
+    _support_along_vector along the charge vector, speed-scaled (S4, Jordan B). C2/C6
+    braced-repulse + C7 rear-bypass are the guards against ahistorical dominance.'
+  - 'Phase 5: reconcile/retire _envelopment_sigma (dormant PC_ENVELOP_SIGMA=0) + superseded
+    v14 items; stale docstring (S7,S9,S8).'
+  - 'NOTE: Phase 3 (S6) DONE; Phase 4 (S5 facing-gate) RESOLVED by Phase-3 validation
+    (keep emergent). Remaining autonomous: P1, P2, P5. P3 morale-shock MAGNITUDES
+    are a proposal awaiting Jordan veto/ratify (commit 7cfa44d5).'
 key_values:
 - Engine 8b50144c; ratify 733cbc67; audit/workplan 56a23365; PHASE-0 cav-coverage
   b7116bc4.
@@ -65,11 +80,11 @@ key_values:
   (LOCAL, not in repo) covering band literals, else halts. Repo ledgers are per-phase
   (phaseN_sim_verification_ledger.json).'
 blockers:
-- 'JORDAN before Phase 3: (1) morale-shock magnitude + exactly which defender states
-  (stance/discipline floor/MIN_DEPTH) negate vs amplify cavalry shock; (2) whether
-  facing->deals-less stays emergent (octagon) or gets an explicit attacker-output
-  gate. Do NOT invent these (project-owner contract).'
-last_commit: b7116bc4562785e8bbcfae1827bd4266fb80c0ec
+- 'JORDAN RATIFY/VETO (Phase 3 proposal, commit 7cfa44d5): the 9 PC_SHOCK_* / PC_CHARGE_SIGMA
+  magnitudes are Class-B sim-tunable starting values calibrated to the C1-C7 historical
+  bands. Mechanism (moral-channel, prepared-defence-gated) is validated; the numbers
+  are tunable. No further Jordan gate blocks P1/P2/P5.'
+last_commit: 7cfa44d5cacfc6f13d12140e3908a8c9b12de62d
 created: '2026-06-01T03:55:56.391334+00:00'
-updated: '2026-06-02T02:56:13.540156+00:00'
+updated: '2026-06-02T03:32:45.185601+00:00'
 status: active
