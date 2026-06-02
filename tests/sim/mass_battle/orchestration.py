@@ -1009,6 +1009,21 @@ PC_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('PC_ROLLUP_MIN_DEPTH', '2.0'))
 
 from mass_battle.percell import *  # P-A stage 3: percell extracted
 
+def _lanchester_strength(contact_cells):
+    """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged
+    contact-frontage (distinct contact columns) normalized to ~1 at LANCHESTER_STRENGTH_REF
+    so K_LINEAR composes with the canonical exchange scale (PP-233 successes×(1+Power)).
+    Frontage-capped BY CONSTRUCTION: contact columns can never exceed the meeting frontage,
+    so numerical superiority is a LINEAR edge (via overlap/envelopment), never square.
+    Mode-agnostic: contact cells exist under PER_CELL 0 and 1; depletion enters via the
+    pool (effective_size→degree) and, under PER_CELL=1, via dead columns leaving contact.
+    [spec mb_lanchester_design.md §3a; Lanchester Linear Law = frontage-capped ancient melee.]
+    """
+    if not contact_cells:
+        return 0.0
+    n_eng_cols = len(set(c for r, c in contact_cells))
+    return n_eng_cols / LANCHESTER_STRENGTH_REF
+
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     """Resolve all contact pairs.
     F-i: support_engage_frac replaces bare engage_frac.
@@ -1255,8 +1270,18 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             b_net = roll_pool(b_pool)
         a_deg = compute_degree(a_net, max(1, b_net))
         b_deg = compute_degree(b_net, max(1, a_net))
-        dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
-        dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
+        if LANCHESTER_ENABLED:
+            # P-L Linear Law: casualties to X scale with the ENEMY's engaged strength in
+            # contact (frontage-capped); DAMAGE_BY_DEGREE retained as per-soldier exchange
+            # quality. Numbers-in-contact lives ONLY here under Lanchester (the run_battle
+            # opp_frac post-scaler is skipped) — one variable, one role (Lesson 1).
+            lin_b = _lanchester_strength(p["b_cells"])   # B's contacting strength -> casualties to A
+            lin_a = _lanchester_strength(p["a_cells"])   # A's contacting strength -> casualties to B
+            dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
+            dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
+        else:
+            dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
+            dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
     return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
 
 def resolve_engagements_cascading(unit_a, unit_b, pairs):
@@ -1384,6 +1409,12 @@ def volley_phase(unit_a, unit_b):
         net = _roll_volley_pool(pool)
         # DR subtracts from net successes (Ranged DR Table)
         net_after_dr = max(0, net - RANGED_DR_DEFAULT)
+        if LANCHESTER_ENABLED:
+            # P-L Square Law: aimed fire lifts the frontage cap — every shooter engages the
+            # target area, so volley effectiveness scales with SHOOTER COUNT (toward N²-type
+            # concentration over the integral). Distinct from the frontage-capped melee linear
+            # term. [spec mb_lanchester_design.md §3b; Lanchester Square Law = ranged/aimed fire.]
+            net_after_dr = net_after_dr * K_SQUARE * shooter_unit.effective_size
         return net_after_dr, best_target
 
     for atom in unit_a.subunits:
@@ -1516,7 +1547,10 @@ def run_battle(unit_a, unit_b, max_turns=18):
         # More cells in contact = more soldiers fighting = more damage dealt.
         # Bottom-up: the envelopment advantage EMERGES from having more cells engaged.
         # contact_fraction = cells_in_contact / total_cells. Capped at 1.0.
-        if pairs:
+        # P-L: SKIPPED under LANCHESTER_ENABLED — numbers-in-contact is carried by the
+        # linear term in resolve_engagements (one role, one place). Skipping here also
+        # makes LANCHESTER_ENABLED=0 byte-exact to the pre-P-L engine.
+        if pairs and not LANCHESTER_ENABLED:
             for u, dmg_key in [(unit_a, "dmg_a"), (unit_b, "dmg_b")]:
                 cells_in_contact = set()
                 total_cells = 0
@@ -2068,4 +2102,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle']
+__all__ = ['_formation_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle']
