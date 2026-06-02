@@ -24,6 +24,9 @@ CFG = dict(
   # short phase, costs stamina, readable (a defender who reads it gains a small counter-edge). Tuned not-overpowered.
   FEINT_ENABLE=True, FEINT_P=0.30, FEINT_MAX_STREAK=3, FEINT_BEAT_COST=0.3, FEINT_STAMINA=1.0,
   FEINT_DEBUFF=0.30, FEINT_PUNISH=0.12,
+  # hilt/guard primitive: blade_guard (cross/quillons/rings) catches the blade in the bind & enhances winding;
+  # hand_guard protects the hand in the parry ("don't parry with your hands"). Modulated around a neutral cross.
+  BIND_GUARD_K=0.55, PARRY_GUARD_K=0.45, WIND_GUARD_K=0.40, GUARD_NEUTRAL=0.45,
   ADEF_W={'none':0.0,'light':0.4,'medium':1.0,'heavy':1.7}, ADEF_BLUNT=1.3, ADEF_POINT=1.0, ADEF_CUT=-0.9,
   ADEF_THRESHOLD={'none':0.0,'light':0.15,'medium':0.40,'heavy':0.72},
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0,

@@ -78,9 +78,16 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     ftw=footwork_eff(defender,fat_d,cfg); strn=defender.strength
     base=cfg['READ_K']*rd*(1.3 if read_win else 0.7)
     cap=GATE[defender.weapon][mode]
-    if mode=='parry':   sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*(tech-3))/3 + defender.skill('parry')
-    elif mode=='dodge': sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill('dodge')
-    else:               sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + cfg['CHOKE_BIND_K']*choke + defender.skill('bind')
+    if mode=='parry':
+        sig=cfg['PARRY_K']*(0.45*(rfx-3)+0.45*(tech-3))/3 + defender.skill('parry')
+        # "don't parry with your hands!": an unguarded weapon's parry exposes the hand -> penalised; a guarded one
+        # parries confidently. Scales the parry around a neutral simple-cross guard.
+        sig += cfg['PARRY_GUARD_K']*(defender.w['hand_guard']-cfg['GUARD_NEUTRAL'])
+    elif mode=='dodge':
+        sig=cfg['DODGE_K']*(0.30*(rfx-3)+0.70*(ftw-3))/3 + defender.skill('dodge')
+    else:               # wind (in the bind): fore/thumb-rings "enhance winding"
+        sig=cfg['WIND_K']*(0.45*(tech-3)+0.45*(strn-aggressor.strength))/3 + cfg['CHOKE_BIND_K']*choke + defender.skill('bind')
+        sig += cfg['WIND_GUARD_K']*(defender.w['blade_guard']-cfg['GUARD_NEUTRAL'])
     if mode=='parry' and commit>=4: sig-=0.25
     if mode=='dodge' and commit>=4: sig+=0.10
     if mode=='dodge' and commit<=2: sig-=0.10
@@ -206,12 +213,14 @@ def reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
     return min(cfg['REOPEN_MAX'], p)
 
 def bind_sigma(aggressor, defender, cfg, TR):
-    """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + TACTILE read (Fuhlen),
-    Strength minor. +ve favours the aggressor winning the bind. Pure."""
+    """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
+    cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross
+    excels) + TACTILE read (Fuhlen); Strength minor. +ve favours the aggressor winning the bind. Pure."""
     lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*0.06 \
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
           * (TR.channel_weight(aggressor.tradition,'leverage')/TR.channel_weight(defender.tradition,'leverage'))
+    catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
     tac = (reading(aggressor)*TR.channel_weight(aggressor.tradition,'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
            - reading(defender)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*0.04
     strq = (aggressor.strength-defender.strength)*0.0156
-    return lev + tac + strq
+    return lev + catch + tac + strq
