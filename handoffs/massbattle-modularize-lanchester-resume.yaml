@@ -47,10 +47,11 @@ context_files:
   depth: full
   reason: Co-file REQUIRED in every tests/sim/ commit. Rows incl P-A stages 1-5 +
     P-B.
-- path: designs/provincial/mass_battle_v30.md
+- path: designs/provincial/mass_battle_v30_index.md
   depth: skeleton
-  reason: Canon. ED-898 reframe (death->capture) landed @00eedf9d at A.5/A.4/D.2.
-    Lanchester is an engine substrate, not canon.
+  reason: Canon index (skeleton). Full doc designs/provincial/mass_battle_v30.md;
+    ED-898 death->capture reframe landed @00eedf9d at A.5/A.4/D.2. Lanchester is an
+    engine substrate, not canon.
 working_state:
   done:
   - 'ENV: repo jordanelias/ttrpg. Bootstrap each bash subprocess: sys.path.insert(0,''/home/claude'');
@@ -131,7 +132,7 @@ working_state:
   - 'OPEN CONFIRMS: P-L coefficient VALUES (Class-B, sim-tuned at impl, surfaced for
     veto). P-C template/instruction catalog + sigma-magnitudes.'
 created: '2026-06-02T05:47:51.240961+00:00'
-updated: '2026-06-02T05:47:51.240961+00:00'
+updated: '2026-06-02T05:48:17.522980+00:00'
 status: active
 key_values: []
 blockers: []
