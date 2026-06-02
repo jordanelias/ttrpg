@@ -39,28 +39,14 @@ def engagement(A, B, first, cfg, rng):
         # withdrawal needs FOOTWORK; and the attempt is READABLE — the shorter weapon's own read can deny it.
         if closed and beats>1 and reopen_moment:
             base_gap=er[longer]-er[shorter]
-            # longer weapon must read the moment and out-foot the opponent; shorter weapon reads to deny.
-            id_read = reading(longer)*TR.channel_weight(longer.tradition,'visual')
-            deny_read = reading(shorter)*TR.channel_weight(shorter.tradition,'visual')
-            read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))           # longer's chance to seize vs shorter's denial
-            foot = S.footwork_eff(longer,0,cfg)/3
-            reopen_p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/0.62
-            if push_avail: reopen_p += cfg['PUSH_REOPEN_BONUS']*foot   # freed-hand shove adds a creating path
-            if base_gap>0.3 and rng.random()<min(cfg['REOPEN_MAX'],reopen_p):
+            if base_gap>0.3 and rng.random()<S.reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
                 closed=False; measure_gap=base_gap; ready={A:0.0,B:0.0}
                 reopen_moment=False; push_avail=False
                 continue
         reopen_moment=False   # the moment is fleeting; consumed/expires each beat unless re-created below
         # ----- APPROACH: longer weapon threatens (stop-hits) while shorter closes -----
         if not closed:
-            # DISPLACEMENT-ON-APPROACH (lever-arm primitive): a higher-leverage closer can set aside the longer
-            # weapon's point with grip+mass as it steps in (longsword vs committed spear), IF the longer weapon
-            # thrusts (point) — suppressing its stop-hit threat and speeding the close. Reading helps time it.
-            lever_edge = S.leverage(shorter,cfg) - S.leverage(longer,cfg)
-            displ = 0.0
-            if longer.w['head']=='point' and lever_edge>0:
-                rd = (reading(shorter)-reading(longer))
-                displ = min(cfg['APPROACH_DISPLACE_MAX'], cfg['APPROACH_DISPLACE_K']*lever_edge*(1+0.1*rd))
+            displ = S.approach_displace(shorter, longer, cfg)        # lever-arm: set aside a thrusting point on approach
             close_rate=cfg['CLOSE_RATE_K']*S.footwork_eff(shorter,0,cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2
             close_rate *= (1+displ)                                  # displacing the point lets you close faster
             measure_gap=max(0.0, measure_gap-close_rate)
@@ -101,49 +87,23 @@ def engagement(A, B, first, cfg, rng):
         mental_fat_d=fat_d*(1-cfg['FOCUS_MENTAL_K']*max(0,min(1,cfrac_d)))
         # tradition channel-weights (cognitive-mode biases over the shared substrate; neutral=1.0)
         ta=aggressor.tradition; td=defender.tradition
-        # REACH as a STANDING advantage (reference structure): the longer weapon keeps a measure edge EVERY exchange,
-        # proportional to the reach gap, weighted HIGH unarmoured and FALLING as armour rises (in plate the contest
-        # rotates to armour-defeat/clinch, so reach matters less). Does not vanish on closing.
-        gap=er[defender]-er[aggressor]            # +ve => defender out-reaches aggressor
-        foot_meas=cfg['FOOT_MEASURE_K']*(S.footwork_eff(defender,fat_d,cfg)*TR.channel_weight(td,'footwork')
-                                         - S.footwork_eff(aggressor,fat_a,cfg)*TR.channel_weight(ta,'footwork'))
-        meas_w = TR.channel_weight(td,'measure')/TR.channel_weight(ta,'measure')
-        reach_edge=(gap*cfg['REACH_FRAC']+foot_meas)*meas_w
-        reach_wt = cfg['REACH_W'][defender.armor]   # armour-decreasing weight (A0 high -> plate low)
-        reach_pen=reach_wt*reach_edge               # +ve lowers attacker's net (defender's reach helps defender)
+        # standing reach advantage (module): defender's reach lowers the attacker's net, falling with armour.
+        reach_pen=S.reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR)
         # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
         init=cfg['INIT_K']*(aggressor.agi-defender.agi)*TR.channel_weight(ta,'tempo')
         consistency_a=cfg['FOCUS_CONSISTENCY_K']*(aggressor.focus-3)
-        # FEINTING (modulate the attack): the aggressor may commit to a NON-EXISTENT action so the defender reacts to
-        # it, degrading the defender's real-attack defence/footwork/reaction/read. Short phase (a fraction of a beat).
-        # Capped at 3 in a row. NOT overpowered: costs stamina, and is READABLE — a defender who reads the feint is
-        # NOT fooled and gains a small counter-window (so feint-spam into a good reader backfires).
-        feint_debuff=0.0
-        do_feint = (cfg['FEINT_ENABLE'] and feint_streak < cfg['FEINT_MAX_STREAK']
-                    and rng.random() < cfg['FEINT_P'] and aggressor.stamina>0)
-        if do_feint:
-            feint_streak += 1
-            beats += cfg['FEINT_BEAT_COST']                       # occupies only a short slice of the bout
-            aggressor.stamina -= cfg['FEINT_STAMINA']
-            feint_q = (reading(aggressor)+aggressor.skill('technique'))*TR.channel_weight(ta,'tempo')
-            def_read = reading(defender)*TR.channel_weight(td,'visual')*(1-0.4*mental_fat_d)
-            read_feint = rng.random() < 1/(1+exp(-(def_read-feint_q)/2.0))
-            feint_debuff = -cfg['FEINT_PUNISH'] if read_feint else cfg['FEINT_DEBUFF']
-        else:
-            feint_streak = 0                                      # streak resets when no feint is thrown
+        # feinting (module): wrapper applies the state changes the pure evaluator returns.
+        fv=S.feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR)
+        feint_debuff=fv['debuff']; feint_streak=fv['new_streak']
+        if fv['do']:
+            beats += fv['beat_cost']; aggressor.stamina -= fv['stamina_cost']
         # VISUAL read (pre-contact anticipation; temporal-spatial). Weighted by tradition's visual emphasis, DEGRADED
         # vs an unfamiliar aggressor (knowledge-of-others), and MODULATED BY MOVEMENT LEGIBILITY (correction 4):
         # large/lateral movement is easier to perceive than in-line motion. A thrust (in-line, point/high-gap) is
         # HARD to read; a swing/cut (lateral arc) is EASY; and a deeper commit / lunge = more biomechanical action =
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
         fam = TR.familiarity(td, ta)
-        ah=aggressor.w['head']
-        if ah in ('straight_cut','curved_cut'): legib=cfg['LEGIB_SWING']       # broad lateral arc — easy to read
-        elif ah=='point':                       legib=cfg['LEGIB_THRUST']      # in-line — hard to read
-        elif ah=='blunt':                        legib=cfg['LEGIB_SWING']       # percussion swings — lateral
-        else:                                    legib=1.0                      # cut_thrust — mixed/neutral
-        legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)                          # bigger commit/lunge = more readable
-        if getattr(aggressor,'grip','normal')=='lunge': legib += cfg['LEGIB_LUNGE']
+        legib=S.legibility(aggressor, commit, cfg)   # module: swings/lunges easy to read, thrusts hard
         read_d=reading(defender)*TR.channel_weight(td,'visual')*fam*legib*(1-0.4*mental_fat_d)*(1-feint_debuff)
         read_a=reading(aggressor)*TR.channel_weight(ta,'visual')+consistency_a
         read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
@@ -214,17 +174,7 @@ def engagement(A, B, first, cfg, rng):
         if bind:
             for _ in range(3):
                 beats+=1
-                # BIND resolves on LEVERAGE (Stark/Schwach: technique + measure quality) + TACTILE read (Fuhlen),
-                # NOT raw strength ("winding asks you to be clever rather than strong"). Strength is a minor factor.
-                lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*0.06 \
-                      + (S.leverage(aggressor,cfg) - S.leverage(defender,cfg)) \
-                      * (TR.channel_weight(ta,'leverage')/TR.channel_weight(td,'leverage'))
-                # tactile read: each fighter feels the bind; weighted by tradition's tactile emphasis, degraded vs
-                # an unfamiliar opponent (you misread an unfamiliar tradition's pressure/intent in the bind).
-                tac = (reading(aggressor)*TR.channel_weight(ta,'tactile')*TR.familiarity(ta,td)
-                       - reading(defender)*TR.channel_weight(td,'tactile')*TR.familiarity(td,ta))*0.04
-                strq = (aggressor.strength-defender.strength)*0.0156   # minor: half the old weight
-                bsig = lev + tac + strq
+                bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor
                 if rng.random() < 1/(1+exp(-bsig)):
                     if rng.random()<0.4:
                         d=core.damage('success',aggressor.weight,aggressor.head,aggressor.strength,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'])

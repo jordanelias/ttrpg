@@ -142,3 +142,76 @@ def halfsword_switch(c, closed, opp_armor, cfg):
     if not closed: want_half=False                           # at reach, keep the full-length cutting form
     c.weapon = HALFSWORD_FORM[base] if want_half else base
     return want_half
+
+# ============================================================================
+# RESOLUTION-CONTRIBUTION MODULES (functional: pure, role-objects-in, contribution-out).
+# The wrapper owns ALL state mutation; these never index raw A/B and never mutate combatants.
+# Each takes Combatant OBJECTS by role (aggressor/defender or longer/shorter) so roles cannot invert inside them.
+# ============================================================================
+
+def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
+    """Standing measure-domain sigma the DEFENDER's reach imposes on the aggressor (proportional to gap, weighted
+    high unarmoured, falling with armour). +ve lowers the attacker's net. Pure."""
+    gap=er[defender]-er[aggressor]
+    foot_meas=cfg['FOOT_MEASURE_K']*(footwork_eff(defender,fat_d,cfg)*TR.channel_weight(defender.tradition,'footwork')
+                                     - footwork_eff(aggressor,fat_a,cfg)*TR.channel_weight(aggressor.tradition,'footwork'))
+    meas_w = TR.channel_weight(defender.tradition,'measure')/TR.channel_weight(aggressor.tradition,'measure')
+    reach_edge=(gap*cfg['REACH_FRAC']+foot_meas)*meas_w
+    return cfg['REACH_W'][defender.armor]*reach_edge
+
+def legibility(aggressor, commit, cfg):
+    """Read-legibility multiplier on the DEFENDER's visual read of the aggressor's attack: swings/lunges easy
+    (lateral, large), thrusts hard (in-line); deeper commit/lunge = more readable. Pure."""
+    ah=aggressor.w['head']
+    if ah in ('straight_cut','curved_cut'): legib=cfg['LEGIB_SWING']
+    elif ah=='point':                       legib=cfg['LEGIB_THRUST']
+    elif ah=='blunt':                        legib=cfg['LEGIB_SWING']
+    else:                                    legib=1.0
+    legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
+    if getattr(aggressor,'grip','normal')=='lunge': legib += cfg['LEGIB_LUNGE']
+    return legib
+
+def feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR):
+    """Decide/resolve a feint. Pure (reads rng): returns dict {do, debuff, new_streak, beat_cost, stamina_cost}.
+    A fooled defender's real-attack defence/read is degraded; a defender who READS it gains a small counter-edge.
+    Capped at FEINT_MAX_STREAK; short phase; costs stamina. Wrapper applies the state changes."""
+    do = (cfg['FEINT_ENABLE'] and feint_streak < cfg['FEINT_MAX_STREAK']
+          and rng.random() < cfg['FEINT_P'] and aggressor.stamina>0)
+    if not do:
+        return dict(do=False, debuff=0.0, new_streak=0, beat_cost=0.0, stamina_cost=0.0)
+    feint_q = (reading(aggressor)+aggressor.skill('technique'))*TR.channel_weight(aggressor.tradition,'tempo')
+    def_read = reading(defender)*TR.channel_weight(defender.tradition,'visual')*(1-0.4*mental_fat_d)
+    read_feint = rng.random() < 1/(1+exp(-(def_read-feint_q)/2.0))
+    debuff = -cfg['FEINT_PUNISH'] if read_feint else cfg['FEINT_DEBUFF']
+    return dict(do=True, debuff=debuff, new_streak=feint_streak+1,
+                beat_cost=cfg['FEINT_BEAT_COST'], stamina_cost=cfg['FEINT_STAMINA'])
+
+def approach_displace(shorter, longer, cfg):
+    """Lever-arm displacement-on-approach: a higher-leverage closer sets aside a THRUSTING longer weapon's point,
+    suppressing its stop-hit and speeding the close. Returns a fraction in [0, APPROACH_DISPLACE_MAX]. Pure."""
+    lever_edge = leverage(shorter,cfg) - leverage(longer,cfg)
+    if longer.w['head']!='point' or lever_edge<=0: return 0.0
+    rd=(reading(shorter)-reading(longer))
+    return min(cfg['APPROACH_DISPLACE_MAX'], cfg['APPROACH_DISPLACE_K']*lever_edge*(1+0.1*rd))
+
+def reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
+    """Probability the LONGER weapon regains distance given a created moment exists: reads to seize vs shorter's
+    denial, executes with footwork, scaled by armour; freed-hand shove adds a path. Pure (returns a probability)."""
+    id_read = reading(longer)*TR.channel_weight(longer.tradition,'visual')
+    deny_read = reading(shorter)*TR.channel_weight(shorter.tradition,'visual')
+    read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
+    foot = footwork_eff(longer,0,cfg)/3
+    p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/0.62
+    if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
+    return min(cfg['REOPEN_MAX'], p)
+
+def bind_sigma(aggressor, defender, cfg, TR):
+    """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + TACTILE read (Fuhlen),
+    Strength minor. +ve favours the aggressor winning the bind. Pure."""
+    lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*0.06 \
+          + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
+          * (TR.channel_weight(aggressor.tradition,'leverage')/TR.channel_weight(defender.tradition,'leverage'))
+    tac = (reading(aggressor)*TR.channel_weight(aggressor.tradition,'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
+           - reading(defender)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*0.04
+    strq = (aggressor.strength-defender.strength)*0.0156
+    return lev + tac + strq
