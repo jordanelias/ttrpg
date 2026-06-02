@@ -1,0 +1,103 @@
+"""mass_battle.config — module-level tunables/constants (behaviour-frozen P-A extract). Canonical comments preserved."""
+import os
+import os as _os
+import os as _sigma_os
+import math
+
+BATTLEFIELD_SIZE = 25
+UNIT_GRID_SIZE = 15
+BUFFER_CELLS = 5
+SIDE_A_START_ROW = 16  # symmetric: 4 from center
+SIDE_B_START_ROW = 8   # symmetric: 4 from center
+POOL_VARIANT = "C-ii"
+TIP_SUPPORT_ENABLED = True
+TIP_SUPPORT_GAP = 2
+TROOPS_PER_TIER = {1: 100, 2: 200, 3: 400, 4: 800}
+TROOPS_PER_SIZE = 100
+ENCIRCLEMENT_PENALTY = 1
+SUPPORT_STACK_ENABLED = True
+SUPPORT_WEIGHTS = {1: 1.0, 2: 0.7, 3: 0.5}
+SUPPORT_WEIGHT_FLOOR = 0.3
+PUNCTURE_ENABLED = True
+PUNCTURE_CAP = 3
+CASCADING_ENABLED = True
+MAX_SUB_PHASES = 5
+TICKS_PER_PHASE = 6
+BLOCK_SIZE = 100  # [canonical: designs/provincial/mass_battle_v30.md §A.3 — Company scale]
+CASUALTY_SCALE = float(_os.environ.get('CASUALTY_SCALE','4'))  # D-B: per-tick lethality. Default 4 = even units take ~3 turns to resolve (playable). TUNING.
+STAMINA_MAX = 100
+STAMINA_DRAIN_PER_CONTACT_CELL = 1   # drain per cell in contact per tick
+STAMINA_RECOVERY_PER_RESERVE_RANK = 8
+STAMINA_POOL_THRESHOLDS = [(1, 0)]  # no penalty while stamina > 0
+STAMINA_EXHAUSTED_POOL_PENALTY = -1  # stamina == 0: -1 die
+ROUT_FLOOR_LOSS_PCT = 0.20          # casualty% at which exhausted unit loses morale floor
+ROUT_EXHAUSTION_MORALE_HIT = 1      # morale loss per phase boundary when exhausted
+MORALE_PHASE_CAP = 3
+DISCIPLINE_LOSS_THRESHOLD = 1.0  # [canonical: params/mass_combat.md §Discipline Degradation]
+VOLLEY_ENABLED = True
+VOLLEY_TN = 6
+RANGED_DR_DEFAULT = 2
+VOLLEY_MIN_RANGE = 2
+VOLLEY_MAX_RANGE = 8
+SHAPE_OFF_MOD = {
+    "Line":        lambda role: 0,
+    "Arrowhead":   lambda role: 0,
+    "Horseshoe":   lambda role: 0,
+    "GappedLine":  lambda role: 0,
+    "RefusedFlank":lambda role: 0,
+}
+SHAPE_DEF_MOD = {"Line": lambda r: 0, "Arrowhead": lambda r: 0,
+                  "Horseshoe": lambda r: 0,
+                  "GappedLine": lambda r: 0, "RefusedFlank": lambda r: 0}
+MIN_DISCIPLINE = {
+    # [canonical: mass_battle_v30.md §ED-815 shape discipline — min disc required by shape]
+    "Line": 1, "Arrowhead": 4, "Horseshoe": 5, "GappedLine": 5, "RefusedFlank": 3
+}
+ANGLE_DEF_MOD = {
+    # v11: per-cell octagon. GREEN < 45° = 0D; YELLOW 45-90° = -1D; RED ≥ 90° = -2D.
+    # [canonical: Jordan design]
+    "GREEN": 0, "YELLOW": -1, "RED": -2,
+    "FRONT": 0, "FLANK": -1, "REAR": -2,  # legacy aliases
+}
+STANCE_SPEED_MOD = {"aggressive": 1, "balanced": 0, "hold": -99, "retreat": 0}
+DAMAGE_BY_DEGREE = {"Overwhelming": lambda p: 1+p, "Success": lambda p: p,
+                     "Partial": lambda p: 1,        "Failure": lambda p: 0}
+SIGMA_HEAD_ENABLED = _sigma_os.environ.get('SIGMA_HEAD', '1') == '1'   # toggle via SIGMA_HEAD env; default ON
+SIGMA_PER_D = 0.2            # [class-B sim-tunable] sigma-units per die-equivalent of a legacy pool modifier
+RANGED_MELEE_SIGMA = -1.0    # [class-B sim-tunable] ranged-in-melee disadvantage as delta-sigma (replaces pool//3)
+MORALE_FIX = _sigma_os.environ.get('MORALE_FIX', '1') == '1'   # toggle; OFF reproduces the pre-fix sigma prototype exactly
+MORALE_EROSION_DAMP = 0.7    # [class-B] <1 slows morale erosion -> longer, more attritional battles
+MORALE_SIGMA_SCALE  = 0.8    # [class-B] morale->effectiveness: falling morale lowers a unit's sigma-leverage
+PER_CELL = _sigma_os.environ.get('PER_CELL', '0') == '1'   # default OFF; ON enables per-column density/depth/fatigue/charge
+PC_STAMINA_DRAIN   = 12     # front-column stamina lost per clash it fights
+PC_STAMINA_REST    = 5      # a non-engaged (reserve-fed) column recovers this per tick
+PC_ROTATE_FLOOR    = 50     # below this a fatigued front rotates if a fresher reserve rank exists
+PC_STAM_SIGMA      = 1.5    # fatigue -> delta-sigma (a winded front fights worse; thin lines can't rotate)
+PC_DEPTH_ROTATE    = 1.0    # depth fatigue-damping: effective drain = PC_STAMINA_DRAIN/(1+PC_DEPTH_ROTATE*(depth-1))
+PC_FRONTAGE_BLEND  = 0.0    # Incr4 contact-fraction: 0=pure width (more cols=more men), 1=pure frontage (depth-neutral)
+PC_FRONTAGE_REF    = 7.0    # reference frontage (columns) for the width term normalization
+PC_FLANK_CAP       = 3      # max overhang columns that count toward envelopment
+PC_REFILL_FLOOR    = 0.60   # column pulls a rear rank forward below this fraction of its start density
+PC_FLANK_DEPTH_RESIST = 0.6 # depth blunts flank/overhang delta-sigma
+PC_FRONT_RANKS     = 2      # ranks a column must hold on its front; deeper ranks are free to reform to a flank
+PC_ENVELOP_SIGMA   = 0.0    # DISABLED: depth-aware contact fraction (Incr4) already captures the width/envelopment
+PC_CHARGE_SIGMA    = 0.55   # MAX defender moral-shock delta-sigma on a charge impact (du Picq: cavalry's
+                            # weapon is the MORAL impulse, not physical collision). This is a CAP reached only
+PC_SHOCK_FRONT       = 0.15  # GREEN (faced) charge: mostly absorbed by the formation (square holds frontally)
+PC_SHOCK_REAR        = 1.6   # RED (rear) charge: bracing bypassed (Cannae/Adrianople — cannot face the rear)
+PC_SHOCK_BRACE_FLOOR = 0.05  # [canonical: Stage-4 calibration vs Waterloo-square bands] braced+disciplined+deep -> shock ~0 (the square Ney could not break)
+PC_SHOCK_HOLD_BRACE  = 0.35  # 'hold' stance (Shield Wall, cannot advance) alone cuts shock to ~1/3
+PC_SHOCK_DISC_FULL   = 0.35  # discipline>=5 (steady troops hold formation) cuts shock to ~1/3
+PC_SHOCK_DEPTH_FULL  = 0.5   # deep (>=PC_SHOCK_DEPTH_REF ranks) halves shock (mass absorbs)
+PC_SHOCK_DEPTH_REF   = 4.0   # rank depth treated as fully "deep"
+PC_SHOCK_SHAKEN_GAIN = 1.0   # already-shaken defender (morale<<start) takes up to 2x shock (Hastings-post-feint)
+PC_CAVALRY_SPEED_MULT = 2.0  # cavalry velocity primitive: cavalry closes this much faster (PER_CELL), triggering the charge
+PC_WHEEL = _sigma_os.environ.get('PC_WHEEL', '1') == '1'   # envelopment wheel: overhang cells wheel toward the enemy flank (PER_CELL); A/B via env
+REAR_BLIND_DEG = 150.0                                     # [grounded; Class-B tunable] rear arc a cell cannot perceive
+FOV_HALF_DEG = 180.0 - REAR_BLIND_DEG / 2.0                # visible if angle-from-facing <= this (105deg)
+PC_PIN_REACH = 1.5                                         # an attacker within this distance in the front arc PINS the cell
+PC_REFUSE = _sigma_os.environ.get('PC_REFUSE', '1') == '1' # M3 envelopment (wheel+perception+refusal+wrap+pocket); ACTIVE in the per-cell path (PER_CELL=1). PER_CELL itself still gates the whole layer.
+PC_ENVELOP_MOD = float(_sigma_os.environ.get('PC_ENVELOP_MOD', '-1.0'))  # rear-wrap penalty magnitude (M3); tunable
+PC_ENVELOP_DEPTH_RESIST = float(_sigma_os.environ.get('PC_ENVELOP_DEPTH_RESIST', '0.3'))  # defender column depth resists the wrap (Clausewitz reserves)
+PC_POCKET_MOD = float(_sigma_os.environ.get('PC_POCKET_MOD', '-1.0'))   # surround penalty magnitude
+PC_POCKET_REACH = int(_sigma_os.environ.get('PC_POCKET_REACH', '2'))    # lateral column reach to count a flanker
