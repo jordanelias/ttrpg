@@ -209,7 +209,7 @@ Still open:
 | pike-beats-cavalry (frontal, prepared) | EMERGENT (brace mechanism) | braced+deep+disc 75% / shallow-green ridden down 0% (post arch-fix #1) / braced-vs-inf neutral. Courtrai/Swiss/Hussite. |
 | cavalry-rides-the-shaken | EMERGENT (`PC_SHOCK_SHAKEN_GAIN`) | the same prepared wall, wavering, 75% -> 28%. Hastings (once the wall broke)/Adrianople. |
 | cavalry-catches-archers | EMERGENT (`RANGED_MELEE_SIGMA`) | ranged in melee vs cavalry: defender 55% -> 5%. |
-| missiles-attrit-the-dense | WIRED, direction-correct | mult Line-t4 1.43 / t2 0.5; dense -0.6pp / shallow +0.5pp ON-vs-OFF. Small in single-engagement (volley is a brief DR-eaten chip); compounds at the standoff/multi-turn scale. Carrhae/Agincourt. |
+| missiles-attrit-the-dense | WIRED, direction-correct (standoff-compounding = hypothesis, unmeasured pending kiting) | mult Line-t4 1.43 / t2 0.5; dense -0.6pp / shallow +0.5pp ON-vs-OFF. Small in single-engagement (volley is a brief DR-eaten chip); compounds at the standoff/multi-turn scale. Carrhae/Agincourt. |
 
 **Measured baseline** (the finding that drove the brace mechanism): the pre-brace primitives did NOT produce pike-beats-cavalry. A braced *shape* / hold-stance dented a charge but the hold-stance was net-negative (traded offense for too little protection), and depth — not brace — was the de-facto anti-cavalry primitive; the charger paid no cost for hitting a braced wall. The brace mechanism supplies the missing reciprocal term.
 
@@ -217,3 +217,20 @@ Still open:
 - **KITING** (the research's #1 troop type): mobility-missile standoff / retreat-and-shoot at the multi-turn scale; also the amplifier that makes missile-density decisive. Next priority.
 - **TERRAIN** (the research's #1 variable): a separate scene/territory layer, not P-C.
 - Restore the `0.806/0.800/0.781` EV entries to the reconstructed `sim_verification_ledger.json`.
+
+
+## 12. Provenance & validation discipline
+
+**Rule.** Every historical anchor in this document must trace to the project research report (the pre-firearms troop-role taxonomy, c. 220 BC-1600 AD). A battle recalled from general knowledge — even when historically correct — is a provenance failure: it has not been validated against the designated source, and it may fall outside the report's scope (the report stops at the gunpowder threshold, so Napoleonic examples are out of bounds). Code mechanics are grounded bottom-up (read the resolution, calibrate by measurement); validation prose is grounded against the report. Same discipline, two surfaces.
+
+**Pattern-matching audit (self-review).** A granular audit found the engineering grounded — mechanisms read from the actual charge/volley resolution, constants calibrated by measurement, byte-exactness proven — but pattern-matching concentrated in the validation prose, where a remembered famous battle was substituted for the source. It was invisible precisely because the recalled facts were true.
+
+| # | Finding | Status |
+|---|---|---|
+| 1 | Anchors Waterloo + Albuera cited for pike-beats-cavalry / cavalry-rides-shaken — absent from the report, Napoleonic (out of scope) | FIXED (sec 11): corrected to the report's in-period anchors Courtrai/Swiss/Hussite and Hastings/Adrianople |
+| 2 | `_SIG` EV values 0.806 / 0.800 / 0.781 cited to params/core.md, not re-verified | VERIFIED present in params/core.md at TN 6/7/8 |
+| 3 | "missile-density compounds at standoff scale" stated as near-result | HYPOTHESIS: single-engagement sign measured (-0.6pp dense / +0.5pp shallow); compounding magnitude unmeasured pending the kiting build |
+| 4 | "melee never charges -> gauge byte-exact" inferred, not instrumented | VERIFIED: `_charge_shock_sigma` fires 0 times across 10 Standard-vs-Standard melee battles (a_pen=0); not load-bearing regardless — the gate re-expression is byte-exact unconditionally |
+| 5 | ROLE_SPEC instruction packages (Skirmish->loose+harass, etc.) | DESIGN-INFERENCE: roles are report-grounded, the specific instruction tuples are an inferred mapping; committed as inert data with no battle-path consumer (contained) |
+
+The durable lesson: code-grounding discipline held; the validation prose needs the same rule. A remembered battle that happens to be correct is still wrong-provenance, and must be replaced by a source-grounded anchor or dropped.
