@@ -59,6 +59,9 @@ def str_demand(c, cfg):
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
+def disp_lean(c):
+    """Disposition lean on the aggression axis: (disp-4)/3 in [-1,1]; +ve aggressive, -ve cautious, 0 = neutral (default)."""
+    return (c.disp-4)/3.0
 def balance_eff(c, fat, cfg):
     # effective balance = aptitude (stat+skill, fatigued) modulated by CURRENT poise (kuzushi disruption). Folded so a
     # broken-balance fighter is worse at everything balance governs — dodge, measure, stance, anti-overcommit. At full

@@ -40,6 +40,10 @@ def engagement(A, B, first, cfg, rng):
         # INITIATIVE DECAY (damper) — per-tradition HOLD: high measure (destreza) decays slower, holding the Vor longer.
         A.initiative=S.clamp_initiative(A.initiative*S.init_hold_decay(A,cfg,TR), cfg)
         B.initiative=S.clamp_initiative(B.initiative*S.init_hold_decay(B,cfg,TR), cfg)
+        # DISPOSITION (initiative lever): aggressive temperament drifts the Vor UP (pressing builds Vor), cautious DOWN
+        # (cedes it) — the standing pressure that makes both poles cost. Neutral (lean 0) = no drift; bounded by clamp.
+        A.initiative=S.clamp_initiative(A.initiative + cfg['DISP_INIT_K']*S.disp_lean(A), cfg)
+        B.initiative=S.clamp_initiative(B.initiative + cfg['DISP_INIT_K']*S.disp_lean(B), cfg)
         # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
         A.poise=S.clamp_poise(A.poise+cfg['POISE_RECOVER']*(1-A.poise), cfg)
         B.poise=S.clamp_poise(B.poise+cfg['POISE_RECOVER']*(1-B.poise), cfg)
@@ -92,7 +96,14 @@ def engagement(A, B, first, cfg, rng):
         aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
         defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
         ready[aggressor]-=cfg['ACT_THRESHOLD']
-        commit=int(rng.integers(2,6))
+        # DISPOSITION (commit skew): aggressive leans deep (4,5), cautious shallow (2,3); neutral = uniform {2,3,4,5}.
+        _ln=S.disp_lean(aggressor)
+        if abs(_ln)<1e-9:
+            commit=int(rng.integers(2,6))
+        else:
+            _k=cfg['DISP_COMMIT_K']*_ln
+            _w=[max(0.05,1-_k), max(0.05,1-0.5*_k), max(0.05,1+0.5*_k), max(0.05,1+_k)]
+            _s=sum(_w); commit=int(rng.choice([2,3,4,5], p=[x/_s for x in _w]))
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
         oob=cfg['OOB'] if aggressor.stamina<=0 else 0
         fat_a=max(0.0,1-aggressor.stamina/max(1,aggressor.stamina_max)); fat_d=max(0.0,1-defender.stamina/max(1,defender.stamina_max))
@@ -144,7 +155,8 @@ def engagement(A, B, first, cfg, rng):
             # SINGLE-TIME COUNTER (a tier of the unified counter): reading a committed aggressor opens a counter IN THE
             # SAME tempo. Universal, but SELECTION is tempo-driven (how often you reach for it); SUCCESS (below) is
             # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
-            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')
+            # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
+            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))
         pool=core.resolution_pool(aggressor.history)
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)

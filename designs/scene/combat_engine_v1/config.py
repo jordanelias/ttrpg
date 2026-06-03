@@ -84,6 +84,13 @@ CFG = dict(
   # shallow/marginally-read one barely shifts it. Bounded [FLOOR,CEIL]x here, and further σ-bounded downstream by
   # initiative_sigma (tanh) — impactful, not auto-win. At commit4 + neutral margin the scale is ~1.0 (the prior flat value).
   INDES_COMMIT_K=0.4, INDES_READ_K=0.15, INDES_SCALE_FLOOR=0.5, INDES_SCALE_CEIL=2.0,
+  # disposition (temperament, aggression axis; base param disp 1-7, 4=neutral, lean=(disp-4)/3). Orthogonal to tradition
+  # (tradition=competence, disposition=propensity). THREE hooks: (1) COMMIT skew — aggressive leans deep (4,5), cautious
+  # shallow (2,3); (2) COUNTER-selection tilt — cautious favours the single-time counter (reactive), aggressive presses
+  # instead; (3) the INITIATIVE LEVER — aggressive drifts the Vor UP (pressing builds Vor), cautious DOWN (cedes it), so
+  # BOTH poles cost: aggression risks overcommit (its deep commits raise existing exposure), caution bleeds the Vor. At
+  # lean=0 every hook is a no-op (default fighters unchanged). Anchored to the German Vor/Nach doctrine (S2).
+  DISP_COMMIT_K=0.8, DISP_COUNTER_K=0.5, DISP_INIT_K=0.10,
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )
