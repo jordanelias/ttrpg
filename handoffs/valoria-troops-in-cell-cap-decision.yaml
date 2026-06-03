@@ -1,0 +1,87 @@
+id: valoria-troops-in-cell-cap-decision
+task:
+  skill: valoria-orchestrator
+  description: Wire troops-in-cell density into the melee EXCHANGE (denser cell deals
+    more AND sustains more), bounded by a per-cell CAP so the Lanchester LINEAR law
+    survives. BLOCKED on Jordan's CAP value.
+owns:
+- tests/sim/mass_battle/**
+- tests/sim/mass_battle_stress.py
+- tests/sim/gauge_mb.py
+- tests/sim/sim_mb_sigma.py
+- tests/coverage_matrix.md
+context_files:
+- path: tests/sim/mass_battle/orchestration.py
+  depth: full
+  reason: _lanchester_strength (1105-1118) + call sites (1374-1375) = where density
+    enters the exchange; resolve_engagements melee path
+- path: tests/sim/mass_battle/percell.py
+  depth: full
+  reason: build_column_grid (25) tpc=total/ncells uniform, NO cap; _ColBlock density;
+    cap-derived footprint lands here
+- path: tests/sim/mass_battle/geometry.py
+  depth: skeleton
+  reason: CELL_PATTERN_FN shape footprints sizes.get(tier); support_engage_frac
+- path: tests/sim/mass_battle/config.py
+  depth: skeleton
+  reason: K_LINEAR, LANCHESTER_STRENGTH_REF, PER_CELL; the new CAP constant lands
+    here
+- path: tests/sim/mass_battle/lanchester_signature.py
+  depth: skeleton
+  reason: linear-exponent validator; reads 3/4 at HEAD (see signature_flag)
+- path: tests/sim/mass_battle_stress.py
+  depth: skeleton
+  reason: config_sweep/ners_dimensions harness for dense-vs-sparse + NERS measurement
+- path: tests/coverage_matrix.md
+  depth: skeleton
+  reason: required co-file for any tests/sim commit
+working_state:
+  next:
+  - WAIT for Jordan's CAP value (max fighting troops per cell) — the one blocking
+    design input.
+  - 'Then: strength = SUM over contacting cells of min(troops-per-cell, CAP) in _lanchester_strength
+    + pass the unit to the two call sites (1374-1375).'
+  - Make footprints cap-derived (more troops -> more cells, each <= CAP) in build_column_grid/geometry.
+  - Re-validate LINEAR exponent + mechanics selftest + re-calibrate signatures.
+  - Reconcile the 3/4-vs-4/4 exponent-signature discrepancy during re-validation.
+  ontology: 'CELL=grid square holding troops-in-cell(density). SUBUNIT=container aggregating
+    same-troop-type+same-instruction cells in a SHAPE; the subunit COLLATES its cells.
+    UNIT=aggregate of subunits. Image 1780506336878_image.png: each colour=one subunit
+    (yellow=arrowhead, orange/blue=gapped_line, red=column, green=block, purple=horseshoe).
+    Engine shapes ARE these. Jordan''s authority — do not argue.'
+  goal: A denser cell DEALS more AND SUSTAINS more, emergent, collated by the subunit.
+  measured: 'Engine byte-exact (all 7 modules == HEAD). (a) baseline dense-vs-sparse
+    identical footprint sparse=0.6x troops/cell: dense 11/sparse 9 win but dense sustains
+    85% vs 42% hp -> density buys SUSTAIN strongly, DEAL barely. (b) PROTOTYPE _lanchester_strength
+    weighted by troops-per-front-cell (density/depth)/REF instead of column-COUNT:
+    dense 14/sparse 1 (DEAL delivered)+sustains 91/44 BUT melee exponent->p=2.05 SQUARE,
+    breaking LINEAR (the 2cf3feb6 contamination). REVERTED byte-exact.'
+  why: 'LINEAR preserved by the FRONTAGE CAP: only contacting columns fight, contact
+    frontage set by meeting geometry -> extra troops go to DEPTH=sustain not kill-RATE.
+    Density-weighting removes the cap -> rate scales with numbers -> compounds ->
+    square.'
+  reconciliation: 'cap-per-cell (Jordan''s ''max cap per cell before another required'').
+    strength=SUM min(troops-per-cell,CAP) over contacting cells. Density deals more
+    UP TO CAP; troops beyond CAP overflow to a NEW cell (frontage/width=linear edge
+    OR depth=sustain) -> numbers past cap stay LINEAR. CAP HEIGHT is the dial: high=density
+    dominates(square-ward), low=frontage(linear). BLOCKING INPUT=the CAP VALUE, Jordan''s
+    call, NOT YET PROVIDED.'
+  signature_flag: 'At HEAD lanchester_signature reads 3/4 DETERMINISTICALLY: melee
+    p=1.45(>1.4 linear), volley p=1.30(<1.6 square); LINEAR/SQUARE/NO-ANNIHILATION
+    qualitative PASS. Earlier-session 4/4(p=1.25/2.00) NOT reproducible with all files
+    byte-exact -> earlier note from different env/config or wrong. Exponent-fit is
+    the strict discriminator (caught prototype 2.05 vs baseline 1.45).'
+  standing: 'tier-1 double-rout RESOLVED as INTENDED (Jordan: size<1->rout; recalc_size
+    floor correct; fighting-unit stress range=Size 2+). Combined-arms DROPPED (must
+    emerge). Terrain SET ASIDE (field size a proxy). Side-skew cancelled in MEASUREMENT
+    (config_sweep cancel_order=True), engine fix deferred (decision A).'
+  run: PER_CELL=1 PYTHONHASHSEED=0 PYTHONPATH=/home/claude python3 -m mass_battle_stress
+    (cwd /home/claude/mass_battle). Local copies /home/claude/mass_battle/ + /home/claude/{gauge_mb,mass_battle_stress,sim_mb_sigma}.py
+    == HEAD byte-exact.
+last_commit: '613a3e87 broaden stress sweep: config_sweep generalization + NERS dimensions
+  probe (harness only; engine untouched)'
+created: '2026-06-03T17:26:32.122858+00:00'
+updated: '2026-06-03T17:26:32.122858+00:00'
+status: active
+key_values: []
+blockers: []
