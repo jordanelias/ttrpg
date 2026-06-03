@@ -202,7 +202,7 @@ systems:
     design_doc: designs/scene/derived_stats_v30.md
     canonical_sha__designs__scene__derived_stats_v30_md: "0215099b424f873954d5436a72c56d17e501f56d"
     supplemental: params/factions/stats_1_7_scale.md
-    canonical_sha__params__factions__stats_1_7_scale_md: "20166a102bf9c3012193cb3ffa71dc2f5ec530ab"
+    canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
 # ── Supporting param specs (referenced by multiple systems) ──────────────
   conviction_track:
