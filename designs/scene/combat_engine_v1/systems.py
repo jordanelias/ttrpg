@@ -167,14 +167,19 @@ def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     reach_edge=(gap*cfg['REACH_FRAC']+foot_meas)*meas_w
     return cfg['REACH_W'][defender.armor]*reach_edge
 
-def legibility(aggressor, commit, cfg):
-    """Read-legibility multiplier on the DEFENDER's visual read of the aggressor's attack: swings/lunges easy
-    (lateral, large), thrusts hard (in-line); deeper commit/lunge = more readable. Pure."""
+def legibility(aggressor, commit, cfg, opp_armor='none'):
+    """Read-legibility multiplier on the DEFENDER's visual read: a THRUST (in-line) is hard to read; a SWING/CUT
+    (lateral arc) and a percussive BLUNT blow are easy; deeper commit/lunge = more readable. Legibility follows the
+    MODE the head actually fights in vs this armour (the cut->half-sword-thrust shift `coupling` models): a cut-and-
+    thrust sword swings (easy) unarmoured but thrusts to gaps (hard) vs plate. Pure."""
     ah=aggressor.w['head']
-    if ah in ('straight_cut','curved_cut'): legib=cfg['LEGIB_SWING']
-    elif ah=='point':                       legib=cfg['LEGIB_THRUST']
-    elif ah=='blunt':                        legib=cfg['LEGIB_SWING']
-    else:                                    legib=1.0
+    if ah=='point':                       legib=cfg['LEGIB_THRUST']      # always a thrust
+    elif ah in ('straight_cut','curved_cut'): legib=cfg['LEGIB_SWING']   # pure cutters always swing
+    elif ah=='blunt':                     legib=cfg['LEGIB_SWING']       # percussive arc, easy to read
+    elif ah=='cut_thrust':
+        # shifts to a controlled gap-thrust vs plate (hard to read), otherwise cuts (easy) — matches coupling's mode-shift
+        legib=cfg['LEGIB_THRUST'] if opp_armor in ('medium','heavy') else cfg['LEGIB_SWING']
+    else:                                 legib=1.0
     legib += cfg['LEGIB_COMMIT_K']*max(0,commit-3)
     if getattr(aggressor,'grip','normal')=='lunge': legib += cfg['LEGIB_LUNGE']
     return legib

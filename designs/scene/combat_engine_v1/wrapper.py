@@ -103,7 +103,7 @@ def engagement(A, B, first, cfg, rng):
         # HARD to read; a swing/cut (lateral arc) is EASY; and a deeper commit / lunge = more biomechanical action =
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
         fam = TR.familiarity(td, ta)
-        legib=S.legibility(aggressor, commit, cfg)   # module: swings/lunges easy to read, thrusts hard
+        legib=S.legibility(aggressor, commit, cfg, defender.armor)   # mode-aware: swings/blunt easy, thrusts (incl. half-sword vs plate) hard
         read_d=S.reading(defender)*TR.channel_weight(td,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
         read_a=S.reading(aggressor)*TR.channel_weight(ta,'visual')+consistency_a
         read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
