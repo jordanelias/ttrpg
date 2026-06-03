@@ -101,31 +101,38 @@ working_state:
     ~10% casualty -> effective_size 0.9 -> floor 0 -> instant rout at 90% strength.
     ANY casualty destroys a Size-1 unit. Size>=2 has headroom (rout ~50%+ loss). Defect
     specific to the Size-1 floor.'
+  - 'RESOLVED 2026-06-03 (Jordan): (1) size < 1 -> rout is INTENDED (''no point keeping
+    them around'') -- recalc_size 816-817 is CORRECT; the tier-1 ''double-rout'' I
+    flagged is NOT a defect, just a unit starting AT the Size-1 floor. No fix. (2)
+    Lanchester-LINEAR (size -> linear combat edge via numbers) confirmed correct,
+    and should EMERGE from per-cell density rather than be read off the top-down _lanchester_strength
+    frontage term.'
+  - INVESTIGATED the per-cell melee path end-to-end (percell.py + resolve_engagements
+    + geometry footprint) to locate where size-granularity does/doesn't enter combat.
+    Conclusion in key_values.
   next:
-  - 'TIER-1 SIZE-1 FLOOR-ROUT [Jordan decision]: does the game have Size-1 (~100-troop
-    / TROOPS_PER_SIZE) units? If YES -> floor(effective_size)+rout-at-Size-0 destroys
-    them at ~90% strength = too fragile; fix = floor->round OR base the destruction-rout
-    on a low effective_size threshold (not integer Size==0). Fix is CALIBRATION-AFFECTING
-    (re-run + re-calibrate signatures). If the min real unit is Size>=2, tier-1 is
-    below the realistic floor (test artifact) -> sweep from Size 2+. Root: orchestration
-    recalc_size 816-817.'
-  - '(A) DEFERRED ENGINE FIX [decision C]: make the per-pair contest order-independent
-    so the ENGINE is symmetric (not just the measurement). CHANGES RNG consumption
-    -> shifts ALL outcomes -> requires re-validating mechanics_selftest (30) + RE-CALIBRATING
-    the 4 historical signatures. Do LATER when calibration can absorb it. Root = resolve_engagements
-    a_net-before-b_net (~orchestration 1349-1350); mirror_sweep(cancel_order=False)
-    reproduces the raw skew.'
-  - 'Broaden the stress sweep: shapes, stances, troop types; threshold CLIFFS, runaway/death-spiral
-    LOOPS, non-uniform-modifier checks (resolution-diagnostic / NERS concerns). mirror_sweep
-    already generalizes to non-mirror configs (wins-by-config, order-cancelled).'
-  - TERRAIN LAYER -- SET ASIDE per Jordan ('until we get everything else going').
-    Field size already a terrain proxy (25=constrained, 45+long=open). Resume after
-    stress-testing/logging + the deferred items.
-  - 'Arch-debt (fix when composites/instructions arrive): #2 generalize apply_instructions
-    dispatch (kite hook = 1st instruction-driven behavior); #3 per-atom brace/density
+  - '[Jordan design decision + build] Make per-cell troops-in-cell DENSITY grade the
+    melee EXCHANGE continuously so 2.9 > 2.1 emerges under equal conditions. Today
+    melee magnitude = K_LINEAR * enemy LIVE-COLUMN frontage * max(0, DAMAGE_BY_DEGREE[deg](power)
+    - dr); density only touches survival/sigma/volley. DESIGN (bottom-up): (a) a density-ratio
+    -> per-cell exchange-edge function (denser cell wins, equal conditions); (b) the
+    max-cap-per-cell value (Jordan named it; is there a canonical source? build_column_grid
+    currently spreads tpc=total/ncells UNIFORMLY with NO explicit cap); (c) decide
+    whether density grades the EXCHANGE (net/damage) or stays survival-only. VALIDATE:
+    re-run the 4 Lanchester signatures + mechanics_selftest after; expect re-calibration.
+    Jordan-vetoable.'
+  - '[deferred (A), decision C] engine order-independent contest -- root: resolve_engagements
+    a_net-before-b_net (orchestration ~1349-1350); removes the side-skew in the engine
+    but CHANGES RNG consumption -> re-validate selftest + RE-CALIBRATE the 4 signatures.
+    Side-skew is currently cancelled in MEASUREMENT (config_sweep cancel_order=True),
+    engine byte-exact.'
+  - '[ready] broaden the sweep -- shapes / stances / troop-types via config_sweep
+    + ners_dimensions (both generalize). Mass-battle stress harness = tests/sim/mass_battle_stress.py
+    (HEAD).'
+  - '[set aside] terrain layer (Jordan''s later direction; field size is a proven
+    proxy: 25=constrained, 45+long=open).'
+  - '[arch debt] #2 generalize apply_instructions dispatch; #3 per-atom brace/density
     for composites; #4 derive PC_VOLLEY_DENSITY_REF from a canonical formation.'
-  - 'Optional: restore _SIG EV entries (0.806/0.800/0.781) to /home/claude/sim_verification_ledger.json
-    (record hygiene; gate already passes via canonical comment).'
   architecture: 'Three-level FM surface: L1 army doctrine (Aggression/Cohesion-priority)
     | L2 unit formation = SHAPE (arrangement only, NO bonus) | L3 subunit ROLE = troop-type-gated
     INSTRUCTION package. Governance triangle: Command orchestrates (adapt strategy
@@ -182,13 +189,18 @@ working_state:
     kiting fight compounds the small per-turn chip into a decisive win (field 45 /
     40 turns -> infantry to 80%).'
   in_progress:
-  - 'ROBUST STRESS-TESTING + MECHANICAL LOGGING (terrain set aside). DONE: harness
-    (aea3a264); side-skew diagnosed+cancelled C-B (a1142887); per-mechanic trace (454adef4);
-    NERS dimensions + config_sweep (613a3e87); tier-1 double-rout root-caused (Size-1
-    floor-rout). NEXT: Jordan decision on Size-1 floor-rout; then deferred (A) engine
-    fix; broaden sweep further (shapes/stances/troop-types) if wanted.'
-last_commit: 613a3e87 (config_sweep + NERS dimensions probe) -- on 454adef4 (per-mechanic
-  trace) on a1142887 (C-B) on aea3a264 (harness)
+  - 'PER-CELL DENSITY-COMBAT GRANULARITY (Jordan design direction 2026-06-03). Intent:
+    the size granularity (effective_size 2.9 > 2.1 under 100% equal conditions) must
+    EMERGE from per-cell troops-in-cell DENSITY combat -- ''more troops in one cell
+    betters fewer troops in one cell'' -- decomposed via subunits distributed through
+    the formation grid, each cell holding a troop count up to a max-cap-per-cell before
+    overflow to a new cell. FINDING (this session): the engine does NOT do this yet
+    -- melee magnitude is frontage-discrete, not density-continuous (see key_values
+    GAP). NEXT: design the density-graded per-cell exchange + define the max-cap-per-cell,
+    then validate against the 4 signatures + selftest. No code changed this session
+    (investigation only).'
+last_commit: 613a3e87 (config_sweep + NERS dimensions) -- no new commits this thread
+  (per-cell investigation only). Engine byte-exact at HEAD.
 owns:
 - designs/audit/2026-06-01-massbattle-stub-wiring/**
 - designs/proposals/pc_formation_system.md
@@ -197,7 +209,7 @@ owns:
 - tests/sim/gauge_mb.py
 - tests/sim/mass_battle/*.py
 - tests/sim/sim_mb_sigma.py
-session_token: 06c45e45d334ee22
+session_token: 0517c078f9073244
 key_values:
 - Command = round((2*Cha + Cog)/3), Charisma primary (ED-899); COMMAND_SIGMA_ENABLED
   default ON, OFF == canonical Size pool (byte-exact)
@@ -260,6 +272,28 @@ key_values:
   by config, order-cancelled. mirror_sweep = a_kw==b_kw case. make_unit now takes
   power/command/discipline/morale/dr overrides (default None -> module fixtures).
   ners_dimensions() = the cliff/runaway/uniformity probe.'
+- 'MELEE MAGNITUDE (current, COMMAND_SIGMA_ENABLED): casualties to X = K_LINEAR *
+  enemy LIVE-COLUMN frontage (_lanchester_strength = count of distinct contact columns)
+  * max(0, DAMAGE_BY_DEGREE[deg](power) - dr). Pool = base_combat_pool (COMMAND-ONLY
+  per Jordan 2026-06-02) * troop_frac * engage_frac. NO density in the pool or the
+  damage. orchestration: pool 1128-1145, damage 1370-1379.'
+- 'PER-CELL DENSITY consumers (current): _ColBlock.density (troops/column) feeds ONLY
+  -> _fatigue_sigma (1343-44), _envelopment_sigma (1346-47, depth/overhang), _volley_density_mult
+  (1482-94, RANGED only), distribute_casualties (1723-24, WHERE casualties land).
+  NONE feed the melee magnitude. percell.py: _ColBlock(density/depth/stamina); column
+  ''live'' while density > 0.5 (line 23); build_column_grid tpc=total_troops/ncells
+  (uniform, no explicit cap).'
+- 'FOOTPRINT is DISCRETE: CELL_PATTERN_FN[shape](tier) -> width,depth = sizes.get(tier)
+  (geometry.py 21/57/277). Shape+tier based, NOT continuous effective_size. So same
+  tier+shape => same footprint; effective_size 2.9 vs 2.1 = different DENSITY in the
+  SAME cells, NOT different frontage.'
+- 'THE GAP (Jordan 2026-06-03 intent vs engine): melee magnitude tracks the COUNT
+  of live columns (frontage), which STEPS down only when a column empties past density
+  0.5 -- it is NOT continuous in troops-in-cell density. So 2.9 and 2.1 deal the SAME
+  melee damage at equal live-column count; the density gap shows up only in survival
+  (hp/depth) and as a stepped frontage drop at column death. Jordan wants CONTINUOUS
+  density-graded per-cell combat. [CONFIDENCE: high -- code reading; an effective_size-degradation
+  trace would confirm end-to-end].'
 blockers:
 - DENSITY PRIMITIVE (B) MAGNITUDE -- how much brace raises density + density damps
   penetration (calibration target in working_state). Behaviour-cascading; Jordan to
@@ -278,5 +312,5 @@ blockers:
   commit 7cfa44d5): 9 PC_SHOCK_*/PC_CHARGE_SIGMA Class-B sim-tunable values calibrated
   to C1-C7 historical bands; mechanism validated, numbers tunable.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T16:04:03.185024+00:00'
+updated: '2026-06-03T16:32:12.766079+00:00'
 status: active
