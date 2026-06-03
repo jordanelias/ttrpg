@@ -80,36 +80,60 @@ def format_trace(trace):
     return "\n".join(out)
 
 
-def mirror_sweep(tier, n_seeds=_SEEDS, **unit_kw):
-    """Identical units A vs B across seeds. A symmetric engine -> ~50/50 wins, bounded A_hp std.
-    Returns dict(a_wins, b_wins, draws, a_hp_mean, a_hp_std, skew)."""
-    rows = []
+_REMAP = {'A': 'B', 'B': 'A', 'draw': 'draw'}   # run_battle winner is by arg-POSITION; remap to config when args are swapped
+
+
+def _one_mirror(tier, seed, swap, unit_kw):
+    """One mirror battle at (tier, seed). swap=False: configA is unit_a (drawn first);
+    swap=True: configA is unit_b (drawn second). Returns (winner_by_CONFIG, configA_hp_pct)."""
+    random.seed(seed)
+    a = make_unit('A', tier=tier, **unit_kw)
+    b = make_unit('B', tier=tier, **unit_kw)
+    if not swap:
+        r = run_battle(a, b, max_turns=_ENGAGEMENT_TICKS); win = r['winner']
+    else:
+        r = run_battle(b, a, max_turns=_ENGAGEMENT_TICKS); win = _REMAP[r['winner']]
+    return win, (a.hp / a.hp_max * 100 if a.hp_max else 0)
+
+
+def mirror_sweep(tier, n_seeds=_SEEDS, cancel_order=True, **unit_kw):
+    """Identical configs A vs B across seeds; wins tallied by CONFIG.
+
+    cancel_order=True (default): each seed is run in BOTH arg-orders and counted by config, so the
+    known second-mover RNG-stream-order bias (the engine defect, fix deferred per decision C) CANCELS
+    in measurement -- the engine itself is left byte-exact. A symmetric engine then gives ~50/50 by
+    config; a residual config win-rate gap here is a REAL effect, not the order artifact. This is the
+    valid symmetry / small-pool-variance stress tool.
+
+    cancel_order=False: single arg-order (configA first) -- EXPOSES the raw order skew (diagnostic).
+
+    Returns dict(a_wins, b_wins, draws, a_hp_mean, a_hp_std, skew, trials)."""
+    orders = (False, True) if cancel_order else (False,)
+    wins, hp = [], []
     for s in range(n_seeds):
-        random.seed(s)
-        a = make_unit('A', tier=tier, **unit_kw)
-        b = make_unit('B', tier=tier, **unit_kw)
-        r = run_battle(a, b, max_turns=_ENGAGEMENT_TICKS)
-        rows.append((r['winner'], a.hp / a.hp_max * 100 if a.hp_max else 0))
-    aw = sum(w == 'A' for w, _ in rows)
-    bw = sum(w == 'B' for w, _ in rows)
-    dr = sum(w == 'draw' for w, _ in rows)
-    hp = [h for _, h in rows]
+        for swap in orders:
+            w, h = _one_mirror(tier, s, swap, unit_kw)
+            wins.append(w); hp.append(h)
+    aw = wins.count('A'); bw = wins.count('B'); dr = wins.count('draw')
     return dict(a_wins=aw, b_wins=bw, draws=dr,
                 a_hp_mean=statistics.mean(hp), a_hp_std=statistics.pstdev(hp),
-                skew=abs(aw - bw))
+                skew=abs(aw - bw), trials=len(wins))
 
 
 def stress_suite():
-    """Default stress suite: mirror-match symmetry + small-pool variance across tiers."""
-    print("=== mirror-match symmetry + small-pool variance (Line, %d seeds) ===" % _SEEDS)
-    print("    (identical A vs B: expect ~50/50 and bounded variance; side-skew = defect)")
+    """Default stress suite: mirror symmetry (order-cancelled) + small-pool variance across tiers."""
+    print("=== mirror symmetry + small-pool variance (Line, %d seeds, order-cancelled) ===" % _SEEDS)
+    print("    (identical configs A vs B, wins by config over BOTH arg-orders: expect ~50/50)")
     for tier in sorted(TROOPS_PER_TIER):
-        r = mirror_sweep(tier)
-        mark = "  <-- SIDE-SKEW" if r['skew'] > _SKEW_FLAG else ""
+        r = mirror_sweep(tier, cancel_order=True)
+        raw = mirror_sweep(tier, cancel_order=False)
+        mark = "  <-- RESIDUAL ASYMMETRY" if r['skew'] > _SKEW_FLAG else ""
         print(f"  tier{tier} pool{TROOPS_PER_TIER[tier]:>4}: "
-              f"A{r['a_wins']}/B{r['b_wins']}/D{r['draws']}  "
+              f"A{r['a_wins']}/B{r['b_wins']}/D{r['draws']} ({r['trials']} trials)  "
               f"A_hp mean={r['a_hp_mean']:>3.0f} std={r['a_hp_std']:>2.0f}  "
-              f"skew={r['skew']}{mark}")
+              f"cancelled-skew={r['skew']}{mark}   [raw 1-order skew={raw['skew']}]")
+    print("    raw skew = the known second-mover RNG-order bias (engine defect; fix deferred per decision C).")
+    print("    cancelled-skew ~0 confirms the engine is otherwise symmetric and the measurement is now valid.")
 
 
 if __name__ == '__main__':
