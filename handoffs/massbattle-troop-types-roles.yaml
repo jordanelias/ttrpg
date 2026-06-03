@@ -58,19 +58,25 @@ working_state:
     -> melee gauge byte-exact; volley-exponent signature preserved (p=2.00).'
   - Counter-cycle validation log + measured baseline folded into designs/proposals/pc_formation_system.md
     (§11) and committed — durable record (compaction-safe).
+  - 'Arch review #1 committed (051a8d4c): unified discipline/depth preparedness into
+    shared _disc_prep/_depth_prep (gate independent, recoil conjunctive). Gate byte-exact
+    (proven); 4 edges hold; no re-calibration.'
   next:
-  - 'KITING primitive (report''s #1 troop type + the amplifier for missile-density):
-    mobility-missile standoff/retreat-and-shoot at the multi-turn scale -> unlocks
-    mounted_archers/Kite AND makes the volley-density coupling matter (sustained shooting).
-    Use run_multi_turn_battle.'
-  - Wire remaining instructions' primitive-modulation (skirmish->loose, screen, pin,
-    advance, lure) each behind its instruction (instruction-less byte-exact) + validate
-    each on the gauge
-  - Consider unified apply_instructions(subunit) (role->instructions->primitive settings)
-    as more instructions land (brace + volley-density currently read primitives directly)
-  - 'TERRAIN (report''s #1 variable): separate scene/territory layer, not P-C'
-  - Fold the counter-cycle validation log into designs/proposals/pc_formation_system.md
-  - Restore 0.806/0.800/0.781 EV entries to reconstructed sim_verification_ledger.json
+  - 'KITING primitive (research''s #1 troop type + amplifier for missile-density):
+    standoff/retreat-and-shoot at the multi-turn scale (run_multi_turn_battle) ->
+    unlocks mounted_archers/Kite.'
+  - 'Stress-test defensive fixes (cheap, do before the spatial layer): (a) tier validation
+    -> clear error/clamp instead of raw KeyError on tier not in 1..4; (b) battlefield-bounds
+    clamp in cells() -> off-grid cells (negative / >BATTLEFIELD_SIZE) at edge anchors.'
+  - 'Arch debt (fix when composites/instructions arrive, not urgent): #2 build apply_instructions(subunit)
+    dispatch (ROLE_SPEC/role field/role_at_contact currently inert; instruction-reading
+    will sprawl); #3 per-atom (not unit-wide) brace/density for composite formations;
+    #4 derive PC_VOLLEY_DENSITY_REF from a canonical formation instead of hardcoded
+    80.'
+  - 'TERRAIN (research''s #1 variable): separate scene/territory layer, not P-C.'
+  - Restore 0.806/0.800/0.781 EV entries to reconstructed sim_verification_ledger.json.
+  - Fold remaining arch-review findings into design doc if desired (currently in this
+    handoff + commit msgs).
   architecture: 'Three-level FM surface: L1 army doctrine (Aggression/Cohesion-priority)
     | L2 unit formation = SHAPE (arrangement only, NO bonus) | L3 subunit ROLE = troop-type-gated
     INSTRUCTION package. Governance triangle: Command orchestrates (adapt strategy
@@ -94,7 +100,7 @@ working_state:
     + gauge_mb.py. Run committed/isolated with cwd INSIDE the engine dir (sys.path
     shadowing makes import mass_battle resolve to cwd). PER_CELL=1 enables the per-cell
     layer; PYTHONHASHSEED=0 deterministic.
-last_commit: a6ae38add64d2d371e2c0240c3dfab2231ab798d
+last_commit: 051a8d4c706bcd92aa3449a6c48ef5523c60ac92
 owns:
 - tests/sim/mass_battle/*.py
 - tests/coverage_matrix.md
@@ -130,5 +136,5 @@ blockers:
   (ED-899 follow-up); VERIFY recovered A.5/A.6/A.8/A.12 + troop-type canon against
   mass_battle_v30.md.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T03:01:47.729655+00:00'
+updated: '2026-06-03T03:44:19.591132+00:00'
 status: active
