@@ -5,7 +5,7 @@ import sys; sys.path.insert(0,'/home/claude/combat_engine')
 from math import exp
 from config import HANDLE_RANK
 import core
-from combatant import WEAPONS
+from combatant import WEAPONS, GEOMETRY
 
 # ---------- reach (continuous, derived) ----------
 def reach_base(c, cfg):
@@ -34,9 +34,9 @@ def close_tempo(c, cfg, fatigue=0.0):
     toward the mean so action-frequency is a secondary edge, not the deciding axis (reach governs)."""
     t=weapon_tempo(c,cfg,fatigue)
     w=c.w; grip=getattr(c,'grip','normal')
-    is_long_pole = (w['hands']==2 and w['reach']=='long' and w['spd']<=0.0 and w['wt']=='light')  # spear, staff
-    # a long pole pays the closed penalty UNLESS it has choked up to fight close (grip adjustment offsets it)
-    if is_long_pole and grip!='choke': t -= cfg['POLE_CLOSE_PENALTY']
+    # a long pole (spear/staff: data flag `closes_poorly`) pays the closed penalty UNLESS it has choked up to fight
+    # close (grip adjustment offsets it). Explicit weapon DATA, not an attribute-conjunction guess.
+    if w.get('closes_poorly', False) and grip!='choke': t -= cfg['POLE_CLOSE_PENALTY']
     t=max(cfg['TEMPO_FLOOR'],t)
     return cfg['CLOSE_TEMPO_MEAN'] + (t-cfg['CLOSE_TEMPO_MEAN'])*cfg['CLOSE_TEMPO_COMPRESS']
 
@@ -73,6 +73,11 @@ GATE={
  'poleaxe':{'parry':0.8,'dodge':0.5,'wind':1.0},
  'longsword_halfsword':{'parry':1.0,'dodge':0.5,'wind':1.0},
 }
+
+# fail-fast: the three hand-maintained weapon dicts must stay key-synchronised (a missing GATE key -> KeyError at
+# mode_sigma; a missing GEOMETRY key -> silent stale gap). Catch drift at import, not mid-fight.
+assert set(GATE)>=set(WEAPONS), f"GATE missing weapons: {set(WEAPONS)-set(GATE)}"
+assert set(GEOMETRY)>=set(WEAPONS), f"GEOMETRY missing weapons: {set(WEAPONS)-set(GEOMETRY)}"
 def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
     rd=reading(defender)-reading(aggressor)
@@ -94,16 +99,6 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     if mode=='dodge' and commit>=4: sig+=0.10
     if mode=='dodge' and commit<=2: sig-=0.10
     return (base+sig)*cap
-
-def armor_defeat_bonus(c, defender, cfg):
-    """Slow heavy weapons (poleaxe/mace) land FEW but armour-DEFEATING blows. Within the 3-exchange bout cap they
-    can't out-volume, so each blow that lands on heavy armour gets an impact bonus reflecting its plate-defeating
-    momentum (the war-hammer/poleaxe role). Scales with the defender's armour weight and the weapon's slowness."""
-    w=c.w
-    is_slow_heavy = (w['wt']=='heavy' and w['head']=='blunt' and w['spd']<=0.0)   # mace, poleaxe
-    if not is_slow_heavy: return 0.0
-    armor_factor={'none':0.0,'light':0.3,'medium':0.7,'heavy':1.0}[defender.armor]
-    return cfg['SLOW_WEAPON_IMPACT_K']*armor_factor
 
 def armor_defeat_sigma(aggressor, defender, cfg):
     """In armour, the weapon that CAN defeat the armour controls the exchange (reference 'lethality-in-state' term,
@@ -146,17 +141,15 @@ def leverage(c, cfg):
 HALFSWORD_FORM = {'longsword':'longsword_halfsword'}
 HALFSWORD_BASE = {'longsword_halfsword':'longsword'}
 
-def halfsword_switch(c, closed, opp_armor, cfg):
-    """Auto-switch a half-sword-capable weapon between its normal and shortened forms by distance/technique
-    (mit dem kurzen Schwert). Half-sword is chosen when CLOSED and/or facing ARMOUR (its gap-thrust + leverage
-    excel there); normal form is resumed at reach / vs the unarmoured at distance. Reversible; only toggles `weapon`.
-    Returns True if half-sword form is now active."""
+def halfsword_target(c, closed, opp_armor):
+    """PURE predicate: the weapon-form a half-sword-capable fighter SHOULD be in for the current range/armour
+    (mit dem kurzen Schwert). Half-sword vs ARMOUR in the CLOSE (gap-thrust/leverage excel); full form at reach / vs
+    unarmoured. Returns the target weapon string; the WRAPPER applies the mutation (mutation stays wrapper-owned).
+    Weapons without a half-sword form return their current weapon unchanged."""
     base = HALFSWORD_BASE.get(c.weapon, c.weapon)
-    if base not in HALFSWORD_FORM: return c.weapon.endswith('_halfsword')
-    want_half = closed and opp_armor in ('medium','heavy')   # half-sword's purpose: gap-thrust/leverage vs armour in the close
-    if not closed: want_half=False                           # at reach, keep the full-length cutting form
-    c.weapon = HALFSWORD_FORM[base] if want_half else base
-    return want_half
+    if base not in HALFSWORD_FORM: return c.weapon
+    want_half = closed and opp_armor in ('medium','heavy')
+    return HALFSWORD_FORM[base] if want_half else base
 
 # ============================================================================
 # RESOLUTION-CONTRIBUTION MODULES (functional: pure, role-objects-in, contribution-out).
@@ -224,11 +217,11 @@ def bind_sigma(aggressor, defender, cfg, TR):
     """One bind iteration's net sigma: LEVERAGE (technique+skill + physical lever-arm) + BLADE-GUARD catch (the
     cross/quillons/rings that catch & control the opposing blade — a guardless pole binds poorly, a long cross
     excels) + TACTILE read (Fuhlen); Strength minor. +ve favours the aggressor winning the bind. Pure."""
-    lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*0.06 \
+    lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*cfg['BIND_TECH_K'] \
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
           * (TR.channel_weight(aggressor.tradition,'leverage')/TR.channel_weight(defender.tradition,'leverage'))
     catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
     tac = (reading(aggressor)*TR.channel_weight(aggressor.tradition,'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
-           - reading(defender)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*0.04
-    strq = (aggressor.strength-defender.strength)*0.0156
+           - reading(defender)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
+    strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     return lev + catch + tac + strq

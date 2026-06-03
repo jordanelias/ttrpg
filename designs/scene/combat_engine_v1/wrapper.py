@@ -56,11 +56,11 @@ def engagement(A, B, first, cfg, rng):
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ)  # point set aside
             if rng.random() < stophit_p:
                 pool=core.resolution_pool(longer.history)
-                nsig=cfg['REACH_DISADV_K']*measure_gap + 0.4
+                nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
                 ob=core.effective_ob(pool, nsig); net=core.roll_net(pool, rng)
                 deg=core.degree(net, ob)
                 if deg in ('success','overwhelming'):
-                    d=core.damage(deg, longer.weight, longer.head, longer.strength, shorter.armor, False, cfg['DAMAGE_SCALE'], cfg['CAP_END'], longer.w['gap'], longer.w.get('percussion',8))
+                    d=core.strike(longer, shorter, deg, False, cfg)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     if shorter.felled: return shorter
             if not closed:
@@ -75,8 +75,8 @@ def engagement(A, B, first, cfg, rng):
             aggressor = actors[0]
         defender = B if aggressor is A else A
         # half-sword auto-switch (mit dem kurzen Schwert): adopt the form fitting the current range/armour
-        S.halfsword_switch(aggressor, closed, defender.armor, cfg)
-        S.halfsword_switch(defender, closed, aggressor.armor, cfg)
+        aggressor.weapon = S.halfsword_target(aggressor, closed, defender.armor)   # wrapper owns the mutation
+        defender.weapon  = S.halfsword_target(defender, closed, aggressor.armor)
         ready[aggressor]-=cfg['ACT_THRESHOLD']
         commit=int(rng.integers(2,6))
         aggressor.stamina-=S.act_cost(aggressor,commit,cfg)
@@ -104,13 +104,13 @@ def engagement(A, B, first, cfg, rng):
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
         fam = TR.familiarity(td, ta)
         legib=S.legibility(aggressor, commit, cfg)   # module: swings/lunges easy to read, thrusts hard
-        read_d=reading(defender)*TR.channel_weight(td,'visual')*fam*legib*(1-0.4*mental_fat_d)*(1-feint_debuff)
-        read_a=reading(aggressor)*TR.channel_weight(ta,'visual')+consistency_a
+        read_d=S.reading(defender)*TR.channel_weight(td,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
+        read_a=S.reading(aggressor)*TR.channel_weight(ta,'visual')+consistency_a
         read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
         modes=['parry','dodge','wind']
         msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
         mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
-        dsig=msig[mode]*(1-0.3*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
+        dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
         atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         net_sigma=atk_sig - dsig - reach_pen + adef
@@ -122,25 +122,22 @@ def engagement(A, B, first, cfg, rng):
         overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg)
         # ----- outcome mapping (deg = AGGRESSOR's degree; defender mode can neutralize) -----
         hit=0; riposte=False; bind=False
-        # armour-defeat: slow heavy blunt (poleaxe/mace) lands few but plate-defeating blows; boost effective impact
-        # vs armour (audit triad C). Applied as effective strength so it flows through coupling consistently.
-        astr = aggressor.strength + S.armor_defeat_bonus(aggressor, defender, cfg)
         # neutralize is a FIXED mode-shape (parry deflects / dodge voids / wind binds) — NOT re-scaled by dsig,
         # which already shaped the roll via net_sigma (audit C-2: avoid double-counting defender skill).
         neutralize=cfg['NEUTRALIZE_PARRY'] if mode=='parry' else (cfg['NEUTRALIZE_DODGE'] if mode=='dodge' else cfg['NEUTRALIZE_WIND'])
         if deg=='fail':
             riposte=(rng.random() < min(0.95, cfg['RIPOSTE_ON_FAIL']+overcommit_exposure))
         elif deg=='partial':
-            if mode=='dodge': hit=core.damage('graze',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8)) if rng.random()<0.4 else 0
-            elif mode=='parry': hit=core.damage('graze',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8)) if rng.random()<0.30 else 0
+            if mode=='dodge': hit=core.strike(aggressor, defender, 'graze', close, cfg) if rng.random()<cfg['PARTIAL_DODGE_GRAZE'] else 0
+            elif mode=='parry': hit=core.strike(aggressor, defender, 'graze', close, cfg) if rng.random()<cfg['PARTIAL_PARRY_GRAZE'] else 0
             else: bind=True
         elif deg=='success':
-            if mode=='wind' and rng.random()<0.55: bind=True
-            elif rng.random()<neutralize: riposte=(rng.random() < min(0.95, 0.20+overcommit_exposure))
-            else: hit=core.damage('success',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
+            if mode=='wind' and rng.random()<cfg['WIND_BIND_P']: bind=True
+            elif rng.random()<neutralize: riposte=(rng.random() < min(0.95, cfg['RIPOSTE_ON_NEUTRALIZE']+overcommit_exposure))
+            else: hit=core.strike(aggressor, defender, 'success', close, cfg)
         else:
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
-            else: hit=core.damage('overwhelming',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
+            else: hit=core.strike(aggressor, defender, 'overwhelming', close, cfg)
         sim=(hit>0 and riposte)
         # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
         # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the
@@ -152,7 +149,7 @@ def engagement(A, B, first, cfg, rng):
                 if not closed: closed=True; measure_gap=0.0; ready={A:0.0,B:0.0}
                 # pull-back of the committed thrust can still graze the closing defender
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
-                    d=core.damage('graze',aggressor.weight,aggressor.head,aggressor.strength,defender.armor,False,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
+                    d=core.strike(aggressor, defender, 'graze', False, cfg)
                     defender.apply_wound(d)
                     if defender.felled: return defender
                 riposte=True   # defender now inside with initiative
@@ -176,8 +173,8 @@ def engagement(A, B, first, cfg, rng):
                 beats+=1
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor
                 if rng.random() < 1/(1+exp(-bsig)):
-                    if rng.random()<0.4:
-                        d=core.damage('success',aggressor.weight,aggressor.head,aggressor.strength,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
+                    if rng.random()<cfg['BIND_HIT_P']:
+                        d=core.strike(aggressor, defender, 'success', close, cfg)
                         defender.apply_wound(d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
                         if defender.felled: return defender
                         break
@@ -186,14 +183,14 @@ def engagement(A, B, first, cfg, rng):
             if sim:
                 # concentration disruption-resistance: focus lets aggressor still complete despite the blow
                 if rng.random() > 1/(1+exp(-cfg['DISRUPT_K']*(aggressor.focus-3))):
-                    d=core.damage('graze',defender.weight,defender.head,defender.strength,aggressor.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],defender.w['gap'], defender.w.get('percussion',8))
+                    d=core.strike(defender, aggressor, 'graze', close, cfg)
                     aggressor.apply_wound(d); aggressor.conc=max(0,aggressor.conc-cfg['CONC_DRAIN_HIT'])
                     if aggressor.felled: return aggressor
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
         exchanges+=1
         if exchanges>=cfg['MAX_EXCHANGES_PER_BOUT']: return None
-        if A.stamina<=-4 or B.stamina<=-4 or rng.random()<0.03: return None
+        if A.stamina<=-4 or B.stamina<=-4 or rng.random()<cfg['SEPARATION_P']: return None
     return None
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
@@ -219,4 +216,3 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     if result!=0 and rng.random()<cfg['UPSET_FLOOR']:
         result = -result
     return result
-def reading(c): return (c.cog+c.att)/2

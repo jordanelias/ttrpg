@@ -22,14 +22,6 @@ RESIST={'none':{'blunt':0,'point':0,'cut':0},
         'medium':{'blunt':.20,'point':.45,'cut':.80},
         'heavy':{'blunt':.30,'point':.70,'cut':.95}}
 DELIVERY={'blunt':1.6,'point':1.45,'cut':1.35}
-def head_mode(head, armor='none'):
-    if head=='blunt': return 'blunt'
-    if head=='point': return 'point'
-    # MODE-SHIFT (reference): cut-and-thrust swords half-sword/rondel-thrust to gaps in armour -> fight as 'point';
-    # pure cutters (straight_cut, curved_cut) CANNOT mode-shift and stay 'cut' (collapse vs plate).
-    if head=='cut_thrust':
-        return 'point' if armor in ('medium','heavy') else 'cut'
-    return 'cut'   # straight_cut, curved_cut — no mode-shift
 def _mode_transmit(mode, armor, close, gap, perc=8):
     """Transmit fraction for a single resolved mode (blunt/point/cut) vs an armour state. Blunt scales with PERCUSSION
     authority (a wooden staff transmits little through plate; a steel hammer transmits fully)."""
@@ -58,3 +50,11 @@ def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, 
     imp=HEFT[weapon_wt]+min(max((strength-3)//2,-1),2)
     cap=1.2*(cap_end+6)
     return int(round(QUAL[deg]*cap*tanh(imp*coupling(weapon_head,armor,close,gap,perc)*scale/cap)))
+
+def strike(attacker, defender, deg, close, cfg):
+    """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
+    DEFENDER, returning the int damage. Single call-site for every blow so the 11-arg positional surface (the
+    transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
+    subsystem contract."""
+    return damage(deg, attacker.weight, attacker.head, attacker.strength, defender.armor, close,
+                  cfg['DAMAGE_SCALE'], cfg['CAP_END'], attacker.w['gap'], attacker.w.get('percussion', 8))

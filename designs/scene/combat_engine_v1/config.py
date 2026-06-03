@@ -44,11 +44,16 @@ CFG = dict(
   # strength handling + endurance fatigue
   D0=1.0, D_LEN=0.35, D_WT=1.0, D_HAND=0.6, D_2H=0.4, HANDLE_K=0.10,
   FATIGUE_HANDLE_K=0.20, FATIGUE_FOOT_K=0.30, FOOT_COMMIT_DISC_K=0.06, FOOT_STANCE_K=0.05,
-  # armour-defeat support: slow heavy weapons get per-blow weighting so the 3-exchange cap doesn't starve them
-  SLOW_WEAPON_IMPACT_K=0.0,   # tuning hook for the poleaxe-vs-plate fix (joint re-tune)
   # outcome-mapping (audit C-2: neutralize is a fixed per-mode shape, not dsig-scaled)
   NEUTRALIZE_PARRY=0.55, NEUTRALIZE_DODGE=0.62, NEUTRALIZE_WIND=0.50, NEUTRALIZE_OVERWHELM_DROP=0.45,
   RIPOSTE_ON_FAIL=0.32, COMMIT_EXPOSE_K=0.06,
+  # bind iteration weights (calibrated): technique/skill, tactile (Fuhlen), strength — moved out of bind_sigma inline
+  BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
+  # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
+  STOPHIT_NSIG_BASE=0.4, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,
+  RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4, SEPARATION_P=0.03,
+  # mental-fatigue weights (calibrated): how much fatigue degrades the read vs the defence
+  MENTAL_FAT_READ_K=0.4, MENTAL_FAT_DEF_K=0.3,
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )

@@ -18,8 +18,8 @@ WEAPONS = {
  'sabre':    dict(reach='long', wt='light', hands=1, head='curved_cut', spd=2.0, hand='Standard', gap=0.40, head_len=2.6, grip_len=0.7, hand_guard=0.70, blade_guard=0.45, reach_adj=-0.1, clinch=3, percussion=1),
  'dagger':   dict(reach='short',wt='light', hands=1, head='cut_thrust', spd=3.0, hand='Forgiving', gap=1.00, head_len=0.7, grip_len=0.4, hand_guard=0.30, blade_guard=0.40, clinch=10, percussion=1),
  'paired_short':dict(reach='short',wt='light',hands=1,head='cut_thrust', spd=2.5, hand='Demanding', gap=0.65, head_len=1.4, grip_len=0.5, hand_guard=0.55, blade_guard=0.50, reach_adj=1.4, clinch=5, percussion=2),
- 'spear':    dict(reach='long', wt='light', hands=2, head='point',  spd=0.0, hand='Forgiving', gap=0.70, head_len=5.5, grip_len=1.2, hand_guard=0.10, blade_guard=0.20, clinch=2, percussion=1),
- 'staff':    dict(reach='long', wt='light', hands=2, head='blunt',  spd=0.0, hand='Forgiving', gap=0.20, head_len=2.8, grip_len=2.8, hand_guard=0.15, blade_guard=0.30, reach_adj=0.5, clinch=3, percussion=4),
+ 'spear':    dict(reach='long', wt='light', hands=2, head='point',  spd=0.0, hand='Forgiving', gap=0.70, head_len=5.5, grip_len=1.2, hand_guard=0.10, blade_guard=0.20, clinch=2, percussion=1, closes_poorly=True),
+ 'staff':    dict(reach='long', wt='light', hands=2, head='blunt',  spd=0.0, hand='Forgiving', gap=0.20, head_len=2.8, grip_len=2.8, hand_guard=0.15, blade_guard=0.30, reach_adj=0.5, clinch=3, percussion=4, closes_poorly=True),
  'mace':     dict(reach='long', wt='heavy', hands=1, head='blunt',  spd=0.0, hand='Forgiving', gap=0.20, head_len=1.8, grip_len=0.7, hand_guard=0.45, blade_guard=0.30, reach_adj=-0.55, clinch=4, percussion=8),
  'poleaxe':  dict(reach='long', wt='heavy', hands=2, head='blunt',  spd=-0.5,hand='Demanding', gap=0.85, head_len=2.2, grip_len=2.2, hand_guard=0.30, blade_guard=0.60, reach_adj=-0.05, clinch=5, percussion=8),
  # half-sword: the SHORTENED longsword (mit dem kurzen Schwert) — one hand grips the blade. Auto-switched form (see
