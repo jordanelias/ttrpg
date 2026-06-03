@@ -111,8 +111,9 @@ working_state:
     linear, CV@1<<CV@2; cosmetic). Magnitude grounding partly inherited from the ~30%-rout
     calibration (gameplay threshold runs hotter than the historical ~10-15% stand)
     — acceptable but noted.'
-status: active
+status: closed
 key_values: []
 blockers: []
 created: '2026-06-02T20:41:40.600485+00:00'
 updated: '2026-06-02T20:41:40.600485+00:00'
+closed_at: '2026-06-03T06:32:23.050230+00:00'
