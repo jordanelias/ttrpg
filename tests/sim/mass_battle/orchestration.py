@@ -599,6 +599,19 @@ class Subunit:
             else:
                 self.cell_offsets[(orig_r, orig_c)] = \
                     self.cell_offsets.get((orig_r, orig_c), 0) + actual_speed
+            # EDGE-CORNERING (§13 follow-up / dynamic-bounds): a cell cannot move off the battlefield.
+            # Clamp the resulting absolute position to [0, BATTLEFIELD_SIZE) and back-solve the offset
+            # so it does not accumulate past the edge (no hysteresis when the cell later moves back).
+            # Inward-moving units never reach an edge -> byte-exact; a retreating kiter pinned at the
+            # edge can be overtaken (the vs-cavalry / cornering counter; Patay/Arsuf).
+            _abs_r = self.starting_position[0] + or_r + self.cell_offsets[(orig_r, orig_c)] * self.advance_dir
+            _abs_c = self.starting_position[1] + or_c + self.cell_offsets_c.get((orig_r, orig_c), 0)
+            _cl_r = min(BATTLEFIELD_SIZE - 1, max(0, _abs_r))
+            _cl_c = min(BATTLEFIELD_SIZE - 1, max(0, _abs_c))
+            if _cl_r != _abs_r:
+                self.cell_offsets[(orig_r, orig_c)] = (_cl_r - self.starting_position[0] - or_r) * self.advance_dir
+            if _cl_c != _abs_c:
+                self.cell_offsets_c[(orig_r, orig_c)] = _cl_c - self.starting_position[1] - or_c
             # F-ii: record speed when cell actually moves
             self.cell_last_speed[(orig_r, orig_c)] = actual_speed
             # v11: record raw movement vector for octagon angle
