@@ -132,7 +132,10 @@ def engagement(A, B, first, cfg, rng):
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
         counter_attempt=False
         if read_win and commit>=4:
-            steal=cfg['INIT_STEAL_INDES']*S.init_steal_factor(defender, mode=='wind', TR)
+            # steal scales with commit-DEPTH x read-MARGIN (a deep commit read cleanly -> near-complete flip), bounded.
+            indes_scale=max(cfg['INDES_SCALE_FLOOR'], min(cfg['INDES_SCALE_CEIL'],
+                            (1+cfg['INDES_COMMIT_K']*(commit-4))*(1+cfg['INDES_READ_K']*(read_d-read_a))))
+            steal=cfg['INIT_STEAL_INDES']*S.init_steal_factor(defender, mode=='wind', TR)*indes_scale
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
             # SINGLE-TIME COUNTER (a tier of the unified counter): reading a committed aggressor opens a counter IN THE

@@ -79,6 +79,11 @@ CFG = dict(
   # is a desperate-idiot move that mostly fails and is punished (eats the attack undefended, cedes the seized Vor).
   # The basic two-time riposte (on miss/neutralize) stays the universal, disadvantaged fallback. Abilities modulate later.
   COUNTER_SELECT_BASE=0.45, COUNTER_SUCCESS_BASE=0.50, COUNTER_TRAIN_K=0.10, COUNTER_REFLEX_K=0.05,
+  # Indes flip refinement: the steal magnitude scales with commit-DEPTH (a deeper commit leaves more to exploit) and
+  # read-MARGIN (how cleanly the defender out-read it). A deep commit read cleanly is a near-complete Vor flip; a
+  # shallow/marginally-read one barely shifts it. Bounded [FLOOR,CEIL]x here, and further σ-bounded downstream by
+  # initiative_sigma (tanh) — impactful, not auto-win. At commit4 + neutral margin the scale is ~1.0 (the prior flat value).
+  INDES_COMMIT_K=0.4, INDES_READ_K=0.15, INDES_SCALE_FLOOR=0.5, INDES_SCALE_CEIL=2.0,
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )
