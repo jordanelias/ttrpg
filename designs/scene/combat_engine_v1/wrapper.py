@@ -19,7 +19,10 @@ def engagement(A, B, first, cfg, rng):
     aggressor = first; defender = B if first is A else A
     erA=S.reach_base(A,cfg); erB=S.reach_base(B,cfg)
     er={A:erA, B:erB}
-    longer = A if erA>=erB else B; shorter = B if longer is A else A
+    # FAIRNESS: on EXACTLY equal reach the longer/shorter label is a coin-flip — not always A. The label feeds the
+    # reopen-moment logic, so always-A on ties put a latent bias into every same-reach matchup (mirrors, armour, stat
+    # matchups), which the attacker-favouring mechanics amplified. Different reach is deterministic as before.
+    longer = A if erA>erB else (B if erB>erA else (A if rng.random()<0.5 else B)); shorter = B if longer is A else A
     measure_gap=max(0.0, er[longer]-er[shorter]); closed=(measure_gap<=0.3)
     # INITIATIVE SEIZURE (pre-contact): a graded contest of read + balance + reach + composure sets who enters the
     # first exchange holding the Vor. Frame-safe: initiative_seize returns (init_A, init_B) for the objects in order.
