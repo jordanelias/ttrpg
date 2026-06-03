@@ -1292,6 +1292,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         # Spine (degree -> DAMAGE_BY_DEGREE -> casualties) unchanged.
         # [canonical resolution: mass_combat.md §A.4 net-success exchange; sigma math:
         #  params/core.md continuous engine + modifier_system_spec.md §2.1/§3.1]
+        ns_a = ns_b = 0.0   # legacy-path default so the mechanical trace can read these uniformly
         if SIGMA_HEAD_ENABLED:
             ns_a = a_angle_mod * SIGMA_PER_D     # a_angle_mod<=0 when A flanked -> A disadvantaged
             ns_b = b_angle_mod * SIGMA_PER_D
@@ -1377,6 +1378,10 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         else:
             dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
             dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
+        trace_event('melee', a_pool=a_pool, b_pool=b_pool,
+                    ns_a=round(ns_a, 3), ns_b=round(ns_b, 3),
+                    a_net=round(a_net, 2), b_net=round(b_net, 2),
+                    a_deg=a_deg, b_deg=b_deg)
     return {"dmg_a": dmg_a, "dmg_b": dmg_b, "engagements": len(pairs)}
 
 def resolve_engagements_cascading(unit_a, unit_b, pairs):
@@ -1526,7 +1531,12 @@ def volley_phase(unit_a, unit_b):
             # concentration over the integral). Distinct from the frontage-capped melee linear
             # term. [spec mb_lanchester_design.md §3b; Lanchester Square Law = ranged/aimed fire.]
             net_after_dr = net_after_dr * K_SQUARE * shooter_unit.effective_size
-        return net_after_dr * _volley_density_mult(target_unit), best_target
+        dens = _volley_density_mult(target_unit)
+        out = net_after_dr * dens
+        trace_event('volley', shooter=getattr(shooter_unit, 'name', '?'), d=best_dist,
+                    pool=pool, net=net, net_dr=round(net_after_dr, 2),
+                    dens=round(dens, 3), loss=round(out, 2))
+        return out, best_target
 
     for atom in unit_a.subunits:
         dmg, tgt = fire(atom, unit_a, unit_b)
@@ -1558,6 +1568,7 @@ def run_battle(unit_a, unit_b, max_turns=18):
     current_phase = 0
     for t in range(1, max_turns + 1):
         turns = t
+        trace_event('tick', t=t)
         if unit_a.routed or unit_b.routed: break
         # Phase 2 — Volley. Ranged atoms fire at range BEFORE movement.
         # Damage accumulated here, applied with Phase 5 damage at end of turn.

@@ -4,7 +4,28 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_wall_prep', '_disc_prep', '_depth_prep']
+__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace']
+
+# ─── passive mechanical-trace collector ─────────────────────────────────────
+# Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) when ON.
+# Default OFF -> trace_event is a no-op -> ENGINE BYTE-EXACT. The trace never feeds back into any
+# mechanic, so ON and OFF produce identical outcomes; it only makes a run auditable down to the
+# mechanic that produced each value.
+_battle_trace = []
+_trace_on = False
+def start_trace(on=True):
+    """Clear the buffer and enable/disable mechanical tracing for the next run."""
+    global _battle_trace, _trace_on
+    _battle_trace = []
+    _trace_on = bool(on)
+def trace_event(cat, **kw):
+    """Append one mechanical event. No-op unless tracing is ON (byte-exact when off)."""
+    if _trace_on:
+        kw['cat'] = cat
+        _battle_trace.append(kw)
+def get_trace():
+    """Return a copy of the recorded events."""
+    return list(_battle_trace)
 
 def roll_pool(n, tn=7):
     net = 0

@@ -21,6 +21,7 @@ import random
 from mass_battle.engine import Subunit, Unit, run_battle
 from mass_battle.orchestration import _atom_distance
 from mass_battle.config import BATTLEFIELD_SIZE, TROOPS_PER_TIER
+from mass_battle.resolution import start_trace, get_trace
 
 # --- test fixtures (stress-harness inputs, NOT engine mechanics) ---
 _PWR = 4; _CMD = 4; _DISC = 5; _MOR = 6; _DR = 1   # [class-B test-fixture: neutral mid-scale actor]
@@ -56,27 +57,45 @@ def _snapshot(unit_a, unit_b, tick):
     return dict(tick=tick, dist=d, A=_state(unit_a), B=_state(unit_b))
 
 
-def trace_battle(unit_a, unit_b, ticks=_ENGAGEMENT_TICKS):
+def trace_battle(unit_a, unit_b, ticks=_ENGAGEMENT_TICKS, mechanical=True):
     """Tick-by-tick mechanical trace of one engagement. Mutates the units (persistent state).
-    Returns (trace, final_result). trace[0] is the pre-combat snapshot."""
+    With mechanical=True each tick's snapshot also carries the per-MECHANIC events (melee contest
+    pools/sigma/nets/degrees, volley fire detail) from that tick, via the engine's passive
+    observe-only trace collector (byte-exact; ON==OFF). Returns (trace, final_result);
+    trace[0] is the pre-combat snapshot."""
     trace = [_snapshot(unit_a, unit_b, 0)]
     result = None
     for t in range(1, ticks + 1):
+        if mechanical:
+            start_trace(True)
         result = run_battle(unit_a, unit_b, max_turns=1)
-        trace.append(_snapshot(unit_a, unit_b, t))
+        snap = _snapshot(unit_a, unit_b, t)
+        if mechanical:
+            snap['mech'] = [e for e in get_trace() if e['cat'] in ('melee', 'volley')]
+        trace.append(snap)
         if unit_a.routed or unit_b.routed:
             break
+    if mechanical:
+        start_trace(False)   # leave the collector off after tracing
     return trace, result
 
 
 def format_trace(trace):
-    """Human-readable audit log of a trace_battle() result."""
+    """Human-readable audit log of a trace_battle() result: per-tick state + per-mechanic detail."""
     out = []
     for s in trace:
         flag = ('  A-ROUT' if s['A']['rout'] else '') + ('  B-ROUT' if s['B']['rout'] else '')
         out.append(f"t{s['tick']:>2} d={s['dist']}  "
                    f"A hp{s['A']['hp']:>5} m{s['A']['mor']:>4} st{s['A']['stam']}  "
                    f"B hp{s['B']['hp']:>5} m{s['B']['mor']:>4} st{s['B']['stam']}{flag}")
+        for e in s.get('mech', []):
+            if e['cat'] == 'melee':
+                out.append(f"        melee  pool A{e['a_pool']}/B{e['b_pool']}  "
+                           f"sigma A{e['ns_a']:+}/B{e['ns_b']:+}  "
+                           f"net A{e['a_net']}/B{e['b_net']}  deg A={e['a_deg']}/B={e['b_deg']}")
+            elif e['cat'] == 'volley':
+                out.append(f"        volley {e['shooter']}  d{e['d']} pool{e['pool']} "
+                           f"net{e['net']}->dr{e['net_dr']} dens{e['dens']} loss{e['loss']}")
     return "\n".join(out)
 
 
