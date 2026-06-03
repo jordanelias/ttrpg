@@ -502,6 +502,18 @@ class Subunit:
         [canonical: Jordan design — vector halt at first adjacency]
         """
         if self.stance == "hold": return
+        # KITING (§13): a ranged unit with the 'kite' instruction regulates its distance to stay in
+        # the volley band [VOLLEY_MIN_RANGE, VOLLEY_MAX_RANGE] instead of closing to melee. Distance
+        # metric matches volley's _atom_distance (Chebyshev, nearest cells) so "in band" == "can shoot".
+        # INERT without the 'kite' instruction -> byte-exact for every existing scenario.
+        kite_mode = None
+        if PC_KITE_ENABLED and self.unit_type == 'ranged' and 'kite' in self.instructions and enemy_cells:
+            mine = self.cells()
+            if mine:
+                d = min(max(abs(mr - er), abs(mc - ec)) for (mr, mc) in mine for (er, ec) in enemy_cells)
+                if d < PC_KITE_STANDOFF:     kite_mode = 'away'    # too close -> open the gap (retreat vector)
+                elif d > VOLLEY_MAX_RANGE:   kite_mode = 'toward'  # out of range -> close into the band
+                else:                        return                # in band -> hold position, keep volleying
         # v13: snapshot offsets and facings before advance, used to revert any cell
         # whose new position would collide with another cell of this subunit (and
         # the discipline check passes — formation held). Without snapshot, we can't
@@ -523,7 +535,7 @@ class Subunit:
             base_speed = cell_speed(self.shape, self.tier, orig_r, orig_c)
             if base_speed == 0: continue
             actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
-            if PER_CELL and self.troop_type == 'cavalry' and actual_speed > 0:
+            if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and actual_speed > 0:
                 # Increment 4-followup: cavalry velocity primitive — cavalry closes faster, producing the
                 # momentum differential that triggers the depth-absorbed charge (Incr5). [ASSUMPTION:
                 # cavalry speed x2 — basis: shock cavalry close far faster than infantry. Class-B, vetoable.]
@@ -571,6 +583,7 @@ class Subunit:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c
                 if self.stance == "retreat": dr, dc = -dr, -dc
+                if kite_mode == 'away': dr, dc = -dr, -dc  # kiter opens the gap; 'toward' keeps dr,dc (closes in); 'hold' returned above
                 abs_dr, abs_dc = abs(dr), abs(dc)
                 total = abs_dr + abs_dc
                 if total < 0.5: continue
