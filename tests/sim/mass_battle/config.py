@@ -4,7 +4,7 @@ import os as _os
 import os as _sigma_os
 import math
 
-__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'TROOP_TYPE_ROLES']
+__all__ = ['BATTLEFIELD_SIZE', 'UNIT_GRID_SIZE', 'BUFFER_CELLS', 'SIDE_A_START_ROW', 'SIDE_B_START_ROW', 'POOL_VARIANT', 'TIP_SUPPORT_ENABLED', 'TIP_SUPPORT_GAP', 'TROOPS_PER_TIER', 'TROOPS_PER_SIZE', 'ENCIRCLEMENT_PENALTY', 'SUPPORT_STACK_ENABLED', 'SUPPORT_WEIGHTS', 'SUPPORT_WEIGHT_FLOOR', 'PUNCTURE_ENABLED', 'PUNCTURE_CAP', 'CASCADING_ENABLED', 'MAX_SUB_PHASES', 'TICKS_PER_PHASE', 'BLOCK_SIZE', 'CASUALTY_SCALE', 'STAMINA_MAX', 'STAMINA_DRAIN_PER_CONTACT_CELL', 'STAMINA_RECOVERY_PER_RESERVE_RANK', 'STAMINA_POOL_THRESHOLDS', 'STAMINA_EXHAUSTED_POOL_PENALTY', 'ROUT_FLOOR_LOSS_PCT', 'ROUT_EXHAUSTION_MORALE_HIT', 'MORALE_PHASE_CAP', 'DISCIPLINE_LOSS_THRESHOLD', 'VOLLEY_ENABLED', 'VOLLEY_TN', 'RANGED_DR_DEFAULT', 'VOLLEY_MIN_RANGE', 'VOLLEY_MAX_RANGE', 'MIN_DISCIPLINE', 'ANGLE_DEF_MOD', 'STANCE_SPEED_MOD', 'DAMAGE_BY_DEGREE', 'SIGMA_HEAD_ENABLED', 'SIGMA_PER_D', 'RANGED_MELEE_SIGMA', 'MORALE_FIX', 'MORALE_EROSION_DAMP', 'MORALE_SIGMA_SCALE', 'PER_CELL', 'PC_STAMINA_DRAIN', 'PC_STAMINA_REST', 'PC_ROTATE_FLOOR', 'PC_STAM_SIGMA', 'PC_DEPTH_ROTATE', 'PC_FRONTAGE_BLEND', 'PC_FRONTAGE_REF', 'PC_FLANK_CAP', 'PC_REFILL_FLOOR', 'PC_FLANK_DEPTH_RESIST', 'PC_FRONT_RANKS', 'PC_ENVELOP_SIGMA', 'PC_CHARGE_SIGMA', 'PC_SHOCK_FRONT', 'PC_SHOCK_REAR', 'PC_SHOCK_BRACE_FLOOR', 'PC_SHOCK_HOLD_BRACE', 'PC_SHOCK_DISC_FULL', 'PC_SHOCK_DEPTH_FULL', 'PC_SHOCK_DEPTH_REF', 'PC_SHOCK_SHAKEN_GAIN', 'PC_CAVALRY_SPEED_MULT', 'PC_WHEEL', 'REAR_BLIND_DEG', 'FOV_HALF_DEG', 'PC_PIN_REACH', 'PC_REFUSE', 'PC_ENVELOP_MOD', 'PC_ENVELOP_DEPTH_RESIST', 'PC_POCKET_MOD', 'PC_POCKET_REACH', 'LANCHESTER_ENABLED', 'K_LINEAR', 'K_SQUARE', 'LANCHESTER_STRENGTH_REF', 'COMMAND_SIGMA_ENABLED', 'COMMAND_POOL_MULT', 'CMD_CHA_WEIGHT', 'CMD_COG_WEIGHT', 'TROOP_TYPE_ROLES', 'ROLE_SPEC']
 
 BATTLEFIELD_SIZE = 25
 UNIT_GRID_SIZE = 15
@@ -126,12 +126,35 @@ CMD_COG_WEIGHT = float(_sigma_os.environ.get('CMD_COG_WEIGHT', '1'))  # [canonic
 # Troop type gates the role menu (the FM "position"→role model). This is a STARTING POINT for the
 # historical troop-type/role research — expect the taxonomy and per-type role lists to be revised.
 TROOP_TYPE_ROLES = {
-    # target taxonomy (design §3.5)
-    "heavy_infantry": ["ShieldWall", "Hold", "Anvil", "Push"],
-    "light_infantry": ["Skirmish", "Gap", "Pursue"],
-    "cavalry":        ["Shock", "Flanker", "Feint", "Screen", "Pursue"],
-    "archers":        ["VolleyLine", "Harass"],
+    # taxonomy grounded in the historical troop-roles research (Research_Report.md) + design §3.5
+    "heavy_infantry":  ["ShieldWall", "Hold", "Anvil", "Push"],
+    "light_infantry":  ["Skirmish", "Screen", "Pursue"],
+    "cavalry":         ["Shock", "Flanker", "Feint", "Screen", "Pursue"],
+    "archers":         ["VolleyLine", "Harass"],
+    "mounted_archers": ["Kite", "Harass", "Feint"],   # report's #1 troop type; Kite blocked on the kiting primitive (gap)
     # generic fallbacks for the engine's current coarse troop_type values ('infantry'/'cavalry')
-    "infantry":       ["Hold", "Push", "ShieldWall"],
-    "any":            ["Support", "Reserve"],
+    "infantry":        ["Hold", "Push", "ShieldWall"],
+    "any":             ["Support", "Reserve"],
+}
+
+# Each role = a typical shape + an instruction package (the FM "role + tactics" model). Instructions
+# are the behaviour layer; they MODULATE foundational primitives (brace->density/hold, charge->momentum,
+# etc.) and never add flat numbers. Behaviour wiring + calibration is the next step -- the brace mechanism
+# in particular needs strengthening per the measured baseline (see pc_formation_design.md). Data only here.
+ROLE_SPEC = {
+    "ShieldWall": {"shape": "Line",       "instructions": ("brace", "hold")},
+    "Hold":       {"shape": "Line",       "instructions": ("hold",)},
+    "Anvil":      {"shape": "Line",       "instructions": ("brace", "pin")},
+    "Push":       {"shape": "Line",       "instructions": ("advance",)},
+    "Skirmish":   {"shape": "GappedLine", "instructions": ("loose", "harass")},
+    "Screen":     {"shape": "Line",       "instructions": ("screen",)},
+    "Pursue":     {"shape": "Line",       "instructions": ("pursue",)},
+    "Shock":      {"shape": "Arrowhead",  "instructions": ("charge",)},
+    "Flanker":    {"shape": "Line",       "instructions": ("envelop",)},   # Column shape not yet defined; Line placeholder
+    "Feint":      {"shape": "Line",       "instructions": ("lure",)},
+    "VolleyLine": {"shape": "Line",       "instructions": ("volley", "hold")},
+    "Harass":     {"shape": "GappedLine", "instructions": ("loose", "shoot_move")},
+    "Kite":       {"shape": "GappedLine", "instructions": ("kite", "shoot_move")},   # blocked on the kiting primitive
+    "Support":    {"shape": "Line",       "instructions": ("reserve",)},
+    "Reserve":    {"shape": "Line",       "instructions": ("reserve",)},
 }
