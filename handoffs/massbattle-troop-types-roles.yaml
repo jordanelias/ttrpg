@@ -62,24 +62,17 @@ working_state:
     shared _disc_prep/_depth_prep (gate independent, recoil conjunctive). Gate byte-exact
     (proven); 4 edges hold; no re-calibration.'
   next:
-  - 'KITING DECISIVENESS [Jordan design call]: 18-turn volley attrits only ~12%. Should
-    sustained volley be stronger (decisive kiting) or is "untouched kiter + slow attrition
-    = material advantage" the intent? Balance decision.'
-  - 'KITING vs-CAVALRY COUNTER [mechanical, but design-coupled]: add edge-cornering
-    so a retreating kiter pinned at the map edge gets caught (validates Arsuf/Patay-style
-    cornering). CAREFUL: advance_cells offset<->abs applies advance_dir twice (offset
-    accumulates r_step*advance_dir; cells() re-applies *advance_dir; net cancels)
-    — clamp the OFFSET, not just abs, to avoid hysteresis. Addresses the dynamic-bounds
-    item. Byte-exact-safe (inward-moving units never hit edges).'
-  - 'TERRAIN / field-size meaning [Jordan design call]: the 25-cell field IS the kiting
-    constraint (no terrain layer). Open plains (kiting dominates, Carrhae) vs constrained
-    (kiting countered, Arsuf)? Couples to the deferred terrain layer.'
+  - 'TERRAIN LAYER [Jordan design call — the report #1 variable, now clearly coupled
+    to kiting]: make SPACE a scenario parameter. Minimal model = variable battlefield
+    size (open vs constrained); fuller = cover / LOS-blocking / movement-cost. Field
+    size already behaves as a terrain proxy (measured: 25=constrained/contested, 45+long=open/kiting-dominates).'
   - 'Arch-debt (fix when composites/instructions arrive): #2 apply_instructions dispatch
-    (the "kite" hook is the FIRST instruction-driven behavior — generalize when a
-    2nd instruction needs it); #3 per-atom brace/density for composites; #4 derive
-    PC_VOLLEY_DENSITY_REF from a canonical formation.'
-  - 'Optional: restore 0.806/0.800/0.781 EV entries to the local sim_verification_ledger.json
-    (record hygiene; gate already passes via # comment).'
+    (the kite hook is the FIRST instruction-driven behavior; generalize when a 2nd
+    instruction needs it); #3 per-atom brace/density for composites; #4 derive PC_VOLLEY_DENSITY_REF
+    from a canonical formation.'
+  - 'Optional: kiting decisiveness (volley strength) is now adequately balanced by
+    cornering+terrain; revisit only if terrain modeling shows a gap. Restore _SIG
+    EV entries to local ledger (record hygiene).'
   architecture: 'Three-level FM surface: L1 army doctrine (Aggression/Cohesion-priority)
     | L2 unit formation = SHAPE (arrangement only, NO bonus) | L3 subunit ROLE = troop-type-gated
     INSTRUCTION package. Governance triangle: Command orchestrates (adapt strategy
@@ -125,10 +118,21 @@ working_state:
   - 'Kiting MEASURED (PER_CELL=1, Line t4, 20 seeds): kiter vs infantry = kiter 100%
     HP / inf 88% / DRAW; no-kite ranged control closes + loses 16/20 at 81% (proves
     the hook works); kiter vs cavalry == vs infantry (no cornering counter).'
+  - 'Edge-cornering committed (adf9fb9e): advance_cells clamps cell abs to [0,BATTLEFIELD_SIZE),
+    back-solves offset (no hysteresis). Closes the dynamic-bounds item. Byte-exact
+    (selftest 30, signatures 4/4, gauge ON==OFF).'
+  - 'KITING RPS VALIDATED + §13.1 as-built folded into design: vs cavalry kiter LOSES
+    13/20 (cornered+caught = Patay/Arsuf); vs infantry contested on 25-field (87/87,
+    cornered) but DOMINATES on open field+time (45 cells/40 turns -> 14/20, kiter
+    97% / inf 80% = Carrhae).'
+  - 'Item-3 compounding CONFIRMED by measurement: sustained volley over a long open-field
+    kiting fight compounds the small per-turn chip into a decisive win (field 45 /
+    40 turns -> infantry to 80%).'
   in_progress:
-  - DECISION POINT — kiting primitive works but balance forks need Jordan direction
-    (see next).
-last_commit: 9159c22c (kiting primitive wired) — design forks open
+  - Kiting mechanic complete + validated (hook + mounted speed + edge-cornering).
+    Next major direction is the TERRAIN layer (design call).
+last_commit: adf9fb9e (edge-cornering / dynamic-bounds) — kiting RPS validated; §13.1
+  as-built folded
 owns:
 - tests/sim/mass_battle/*.py
 - tests/coverage_matrix.md
@@ -180,5 +184,5 @@ blockers:
   (ED-899 follow-up); VERIFY recovered A.5/A.6/A.8/A.12 + troop-type canon against
   mass_battle_v30.md.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T05:50:19.661913+00:00'
+updated: '2026-06-03T05:58:59.466025+00:00'
 status: active

@@ -265,3 +265,21 @@ The gap is narrow: ranged units currently CLOSE to melee. Kiting needs them to M
 **Measurement protocol:** build mounted_archers(ranged, kite, mounted) vs (a) Line infantry, (b) cavalry; trace hp attrition per turn + win rates over max_turns; tune PC_KITE_STANDOFF for the band-held-vs-infantry / band-lost-vs-cavalry split; confirm byte-exact for non-kite scenarios (selftest, signatures 4/4, gauge ON==OFF -- none carry the 'kite' instruction). Then read the three dynamics against the report (in-period anchors only).
 
 **Out of scope (separate concerns):** dynamic-movement off-grid (a kiter retreating off the battlefield edge -- couples to the dynamic-bounds item); the full instruction-dispatch layer (arch-debt #2) beyond this single 'kite' hook.
+
+
+### 13.1 As-built + validation (implemented)
+
+Implemented across two commits (9159c22c maintain-range hook + mounted speed; adf9fb9e edge-cornering) and measured. The hook + mounted speed + edge-cornering together reproduce the historical RPS and its terrain dependence.
+
+**Measured RPS (PER_CELL=1, Line t4, mounted_archers kiter vs target, 20 seeds):**
+- vs cavalry (Fast): kiter LOSES (13/20; kiter 79% / cavalry 90%). The cavalry corners the kiter at the map edge and catches it. Validates cavalry-beats-unprotected-missile + cornering (Patay 1429 / Arsuf).
+- vs infantry (slow), constrained field (25 cells, 18 turns): contested (87%/87%, mostly draws) -- the kiter is cornered before attrition wins.
+- vs infantry, OPEN field + sustained fight (45 cells, 40 turns): kiter DOMINATES (14/20; kiter 97% / infantry 80%) -- untouched, attrits the infantry to a loss. Validates Carrhae 53 BC / Mohi 1241 (horse archers shoot heavy infantry apart on open plains over a long engagement).
+
+**Item-3 compounding CONFIRMED.** The single-engagement volley chip is small (DR-eaten), but the kiting STRUCTURE -- sustained standoff over many turns on open ground -- compounds it to a decisive result (45-cell field, 40 turns: infantry to 80%, kiter wins while ~untouched). The earlier "compounds at standoff/multi-turn scale" hypothesis (sec 11, sec 12 item 3) is now measured: it does, given space and time.
+
+**Two levers emerge (currently implicit in field size + engagement length):**
+- SPACE (battlefield size): constrained -> kiting cornered/countered; open -> kiting dominates. The 25-cell field behaves as "constrained terrain"; Carrhae-style dominance needs an open (larger) field. Too much room is also sub-optimal (the kiter wastes turns repositioning after over-retreating -- field 70 gave 100% HP but fewer wins than field 45).
+- TIME (engagement length): kiting attrition is slow per turn; a decisive kiting win needs a long fight (40+ turns), matching day-long historical horse-archer battles.
+
+**Next (design direction needed):** make SPACE/terrain a real scenario parameter -- the terrain layer (the report's #1 variable). Field size as an open-vs-constrained proxy is the minimal first model; richer terrain (cover, LOS blocking, movement cost) is the fuller layer. Decisiveness (volley strength) is now adequately balanced by cornering + terrain, so it is no longer a pressing standalone lever.
