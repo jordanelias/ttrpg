@@ -127,17 +127,18 @@ def engagement(A, B, first, cfg, rng):
         atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
-        net_sigma=atk_sig - dsig - reach_pen + adef + init_edge
+        net_sigma=atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS']  # first-mover/Vor edge (bounded; mirror stays 50 — aggressor alternates)
         # INDES / sen-no-sen STEAL (forced-to-Nach by READING): a defender who out-read a deeply-committed aggressor
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
-        contratempo=False
+        counter_attempt=False
         if read_win and commit>=4:
             steal=cfg['INIT_STEAL_INDES']*S.init_steal_factor(defender, mode=='wind', TR)
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
-            # CONTRATEMPO / single-time counter: reading a committed aggressor, the defender may counter in the SAME
-            # tempo (rapier counterattack-in-opposition / Indes through the opening). Scaled by tempo (Italian).
-            contratempo = rng.random() < cfg['CONTRATEMPO_BASE']*TR.channel_weight(defender.tradition,'tempo')
+            # SINGLE-TIME COUNTER (a tier of the unified counter): reading a committed aggressor opens a counter IN THE
+            # SAME tempo. Universal, but SELECTION is tempo-driven (how often you reach for it); SUCCESS (below) is
+            # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
+            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')
         pool=core.resolution_pool(aggressor.history)
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)
@@ -166,8 +167,19 @@ def engagement(A, B, first, cfg, rng):
         else:
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
             else: hit=core.strike(aggressor, defender, 'overwhelming', close, cfg)
-        if contratempo:
-            hit=0; bind=False; riposte=True   # single-time counter: committed attack voided in-tempo, defender ripostes
+        if counter_attempt:
+            # SUCCESS scales with training (history) + reflex; the untrained single-time counter mostly fails — a
+            # desperate-idiot move. Tradition abilities will modulate this upward (added later).
+            succ=cfg['COUNTER_SUCCESS_BASE']+cfg['COUNTER_TRAIN_K']*(defender.history-3)+cfg['COUNTER_REFLEX_K']*(S.reflex(defender,cfg)-3)
+            if rng.random() < max(0.05, min(0.92, succ)):
+                hit=0; bind=False; riposte=True            # LANDS: committed attack voided in-tempo, defender ripostes (keeps the seized Vor)
+            else:
+                # MISS: the botched counter cedes the seized Vor and leaves the defender eating the attack UNDEFENDED
+                # (no mode reduction); the hit-block below then applies the wound + further Vor/poise loss — the downside.
+                defender.initiative=S.clamp_initiative(defender.initiative-steal, cfg)
+                aggressor.initiative=S.clamp_initiative(aggressor.initiative+steal, cfg)
+                bind=False; riposte=False
+                hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', close, cfg) if deg in ('partial','success','overwhelming') else 0
         sim=(hit>0 and riposte)
         # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
         # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the

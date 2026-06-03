@@ -70,9 +70,15 @@ CFG = dict(
   # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
   POISE_FLOOR=0.5, POISE_EFFECT_FLOOR=0.88, POISE_RECOVER=0.20,
   POISE_BREAK_OVERCOMMIT=0.09, POISE_BREAK_BIND=0.05, POISE_BREAK_HIT=0.07, POISE_SOLID_HIT=8.0,
-  # contratempo / single-time counter: base chance the defender counters a committed aggressor IN THE SAME tempo on
-  # an out-read (the Indes/sen-no-sen moment), scaled by the defender's tempo channel (Italian). Reuses the riposte path.
-  CONTRATEMPO_BASE=0.15,
+  # attacker bias: a small per-exchange edge to the aggressor (first-mover / Vor-holder) so under equal circumstances
+  # the one who moves first is favoured — an EDGE, not determinism (defence still works); the mirror stays 50 because
+  # the aggressor role alternates over a fight. Added to net_sigma.
+  ATTACKER_BIAS=0.12,
+  # single-time counter (a tier of the unified counter): UNIVERSAL but skill-gated. SELECTION is tempo-driven (how
+  # often a fighter reaches for it); SUCCESS scales with training (history)+reflex — the untrained single-time counter
+  # is a desperate-idiot move that mostly fails and is punished (eats the attack undefended, cedes the seized Vor).
+  # The basic two-time riposte (on miss/neutralize) stays the universal, disadvantaged fallback. Abilities modulate later.
+  COUNTER_SELECT_BASE=0.45, COUNTER_SUCCESS_BASE=0.50, COUNTER_TRAIN_K=0.10, COUNTER_REFLEX_K=0.05,
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )
