@@ -1,0 +1,127 @@
+id: massbattle-troop-types-roles
+task:
+  skill: valoria-simulator
+  description: 'Develop historical troop types + their roles, wired into the P-C compositional
+    formation system. Turn the troop-type/role research into: (1) revised config.TROOP_TYPE_ROLES
+    (FM position->role gating); (2) ROLE_SPEC role->(shape+instructions); (3) the
+    instruction->primitive modulation (brace->+density, skirmish->-density, charge->concentration),
+    wired so each role effect EMERGES from primitives (NO flat bonuses), gated by
+    Discipline, conditioned by troop type. Validate every role effect on the gauge
+    before committing; keep toggle-OFF byte-exact.'
+scope: simulation
+context_files:
+- path: designs/proposals/pc_formation_system.md
+  depth: full
+  reason: 'the P-C design-capture: 3-level FM surface, Discipline/Command/Morale split,
+    S3.5 roles/instructions/troop-type gating + the A/B/C(=C+B) resolution, shapes,
+    engine mapping, open decisions'
+- path: tests/sim/mass_battle/config.py
+  depth: full
+  reason: TROOP_TYPE_ROLES scaffold to populate + COMMAND_*/LANCHESTER_* constants
+- path: tests/sim/mass_battle/orchestration.py
+  depth: full
+  reason: Subunit.role/instructions + roles_for/role_allowed gating + command_base_pool
+    + base_combat_pool + per-cell primitives instructions will modulate (_defender_depth,
+    build_column_grid)
+- path: tests/sim/mass_battle/geometry.py
+  depth: full
+  reason: CELL_PATTERN_FN shapes, cell_speed, _support_along_vector -- geometry roles
+    map onto
+- path: tests/sim/mass_battle/resolution.py
+  depth: skeleton
+  reason: _charge_shock_sigma + sigma head -- where charge/brace effects land
+- path: tests/sim/mass_battle/engine.py
+  depth: skeleton
+  reason: MECHANICS registry -- register density/instruction mechanics when wired
+- path: designs/provincial/mass_battle_v30.md
+  depth: skeleton
+  reason: A.5 Command / A.6 formations / A.8 tactics / A.12 rout + canonical troop
+    types -- VERIFY (recovered from conversation, not fresh-read)
+- path: canon/editorial_ledger.jsonl
+  depth: skeleton
+  reason: ED-814 allocation surface, ED-815 MIN_DISCIPLINE, ED-899 Command-only base,
+    ED-136 stratagem-degrades-Discipline (open)
+working_state:
+  done:
+  - Design-captured the P-C compositional formation architecture (designs/proposals/pc_formation_system.md,
+    committed with this handoff).
+  - 'Resolved the shield-wall toughness question: C (role = shape + instruction) +
+    B (brace instruction raises effective density; density defends); A (depth-as-defense)
+    rejected as instruction-blind.'
+  - 'Established: a shield wall is a ROLE (heavy-infantry + brace), not a shape; bracing
+    is an instruction; troop type gates the role menu (FM position->role).'
+  - 'Scaffolded (INERT, byte-exact): config.TROOP_TYPE_ROLES gating menu + orchestration.roles_for/role_allowed
+    accessors + Subunit.role/instructions fields (commits 6d8eb3b7, 7d8e262f).'
+  - 'Code review: retired dead SHAPE_OFF/DEF_MOD scaffolding (e677a11f); extracted
+    command_base_pool so command_sigma_base resolves to a function not a constant
+    (7d8e262f); MECHANICS registry current (30, selftest green).'
+  next:
+  - 1. Populate/revise config.TROOP_TYPE_ROLES from the historical troop-type/role
+    research (taxonomy + per-type role menus).
+  - '2. Add ROLE_SPEC: role -> {shape, instructions}.'
+  - '3. Wire the instruction->primitive modulation (BEHAVIOUR-CASCADING, moves gauge
+    bands): brace->+density (density primitive B), skirmish->-density, charge->concentration;
+    gated by Discipline, conditioned by troop type; register mechanics in engine.MECHANICS.'
+  - 4. Validate each role effect EMERGES on the gauge (no flat bonuses); then re-tune
+    the gauge bands to the Command-only model.
+  architecture: 'Three-level FM surface: L1 army doctrine (Aggression/Cohesion-priority)
+    | L2 unit formation = SHAPE (arrangement only, NO bonus) | L3 subunit ROLE = troop-type-gated
+    INSTRUCTION package. Governance triangle: Command orchestrates (adapt strategy
+    / interpret events / reinforce Discipline / rally Morale / stratagems / coordination-cap;
+    Command = derived Cha-primary + Cog-secondary) -> Discipline holds shape+tactics
+    (MIN_DISCIPLINE adopt-gate; formation breaks at 0) -> Morale sustains (rout resource,
+    rallied by Command). EMERGENCE PRINCIPLE (load-bearing): formations grant NO flat
+    bonuses; all effects emerge from primitives (frontage/Lanchester, depth-damping,
+    support, facing, charge-shock, density). SHAPE_OFF/DEF_MOD retired to make this
+    structural.'
+  methodology: 'Build geometry/instruction -> MEASURE on the gauge -> iterate until
+    the historical intent emerges. SHIELD-WALL LESSON this session: a narrow+deep+braced
+    SHAPE did NOT make defense emerge (-1pp vs melee; +3pp vs charge only) -> shield-wall
+    must be a brace-INSTRUCTION raising density, not a shape. Do not repeat the shape
+    approach.'
+  calibration_target: (proposed; Jordan to ratify) A braced heavy-infantry shield
+    wall should ~hold its ground vs an equal melee line (parity, not -1pp) AND meaningfully
+    blunt a cavalry charge (well above the +3pp brace-only). Tune the density primitive
+    to this.
+  bootstrap: Standard. Engine = tests/sim/mass_battle/ package + shim sim_mb_sigma.py
+    + gauge_mb.py. Run committed/isolated with cwd INSIDE the engine dir (sys.path
+    shadowing makes import mass_battle resolve to cwd). PER_CELL=1 enables the per-cell
+    layer; PYTHONHASHSEED=0 deterministic.
+last_commit: 7d8e262f2aeabae1ed5431142f51afc7bb09f380
+owns:
+- tests/sim/mass_battle/*.py
+- tests/coverage_matrix.md
+- designs/proposals/pc_formation_system.md
+session_token: 5697f2ca3775a8ff
+key_values:
+- Command = round((2*Cha + Cog)/3), Charisma primary (ED-899); COMMAND_SIGMA_ENABLED
+  default ON, OFF == canonical Size pool (byte-exact)
+- 'Engine grid is UNBOUNDED: BATTLEFIELD_SIZE/UNIT_GRID_SIZE/BUFFER_CELLS nominal/unused;
+  only start-rows + cell layouts matter. Wider/shallower grid = allocation surface
+  + template proportions, not an engine box.'
+- 'Shapes in CELL_PATTERN_FN: Line/Arrowhead/Horseshoe/GappedLine/RefusedFlank. Canonical
+  Shield-wall=role (NOT shape); Skirmish/Column/Wedge/Reserve TBD as shapes or roles.'
+- role_at_contact (Subunit) is ORPHANED (callers removed with SHAPE retirement) --
+  positional-role helper; decide retain-vs-retire when L3 positional roles are designed.
+- 'orchestration uses an explicit __all__ at end-of-file: any new public symbol MUST
+  be added to it (caught by validation this session).'
+- 'Session commits: a5fc9d0e P-L | 2cf3feb6 Command-only | c8ba5b7f ED-899 | 7e878ade
+  signature-guard | c13269c4 registry | e677a11f SHAPE-retire | 6d8eb3b7 role-scaffold
+  | 7d8e262f command_base_pool.'
+- Gauge bands PENDING re-tune to the Command-only model (formation/ranged/cav-vs-shaken
+  bands OUT == calibration artifacts, not physics regressions).
+blockers:
+- DENSITY PRIMITIVE (B) MAGNITUDE -- how much brace raises density + density damps
+  penetration (calibration target in working_state). Behaviour-cascading; Jordan to
+  ratify the target.
+- CONFIRM troop-type->role gating table (S3.5) + instruction vocabulary (brace/hold/advance/charge/skirmish/refuse/lure/harass)
+  -- pending the historical research.
+- MIN_DISCIPLINE hard-gate vs smooth emergence; stratagems-degrade-Discipline (ED-136);
+  intervention cadence; custom-allocation UX; subunit coordination cap (design open
+  decisions).
+- 'CANON-DOC reconciliation: strip A.6 flat dice rules + update A.5 Command to Cha-primary
+  (ED-899 follow-up); VERIFY recovered A.5/A.6/A.8/A.12 + troop-type canon against
+  mass_battle_v30.md.'
+created: '2026-06-03T00:52:10.734036+00:00'
+updated: '2026-06-03T00:52:10.734036+00:00'
+status: active
