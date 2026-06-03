@@ -66,10 +66,10 @@ CFG = dict(
   INIT_STEAL_INDES=0.36, INIT_LOSS_OVERCOMMIT=0.14,      # read-based steal (Indes/sen-no-sen) / overcommit bleeds grip
   # kuzushi / structure (dynamic balance): broken by overcommit / losing the bind / a solid blow; while broken it
   # degrades tempo AND defence; recovers each beat toward 1.0. This is the DYNAMIC tempo-vs-structure fix deferred
-  # from the initiative build (replaces the rejected static footwork->tempo coupling — structure is dynamic, footwork
+  # from the initiative build (replaces the rejected static balance->tempo coupling — structure is dynamic, balance
   # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
-  STRUCT_FLOOR=0.5, STRUCT_EFFECT_FLOOR=0.88, STRUCT_RECOVER=0.20,
-  STRUCT_BREAK_OVERCOMMIT=0.09, STRUCT_BREAK_BIND=0.05, STRUCT_BREAK_HIT=0.07, STRUCT_SOLID_HIT=8.0,
+  POISE_FLOOR=0.5, POISE_EFFECT_FLOOR=0.88, POISE_RECOVER=0.20,
+  POISE_BREAK_OVERCOMMIT=0.09, POISE_BREAK_BIND=0.05, POISE_BREAK_HIT=0.07, POISE_SOLID_HIT=8.0,
   # contratempo / single-time counter: base chance the defender counters a committed aggressor IN THE SAME tempo on
   # an out-read (the Indes/sen-no-sen moment), scaled by the defender's tempo channel (Italian). Reuses the riposte path.
   CONTRATEMPO_BASE=0.15,

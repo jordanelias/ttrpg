@@ -27,7 +27,7 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     elif grip=='lunge':pen += cfg['LUNGE_TEMPO_PEN']    # extended/lunge: slower to repeat (reach/commit gain elsewhere)
     t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']-pen
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
-    t*=struct_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
+    t*=poise_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
     return max(cfg['TEMPO_FLOOR'],t)
 def close_tempo(c, cfg, fatigue=0.0):
     """Cadence IN THE CLOSE — conditional (fatigue/grip). A long two-handed pole (spear/staff) is SLOW to recover
@@ -59,10 +59,13 @@ def str_demand(c, cfg):
 def handling_penalty(c, fat, cfg):
     deficit=max(0.0, str_demand(c,cfg)-c.strength)
     return cfg['HANDLE_K']*deficit + cfg['FATIGUE_HANDLE_K']*fat
-def footwork_eff(c, fat, cfg):
-    return (c.footwork + c.skill('footwork'))*(1-cfg['FATIGUE_FOOT_K']*fat)
-def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(footwork_eff(c,fat,cfg)-3)
-def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(footwork_eff(c,fat,cfg)-3)
+def balance_eff(c, fat, cfg):
+    # effective balance = aptitude (stat+skill, fatigued) modulated by CURRENT poise (kuzushi disruption). Folded so a
+    # broken-balance fighter is worse at everything balance governs — dodge, measure, stance, anti-overcommit. At full
+    # poise (1.0) this is 1.0× (default/undisrupted fighters unaffected).
+    return (c.balance + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)
+def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
+def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
 # ---------- defense modes (parry/dodge/wind) ----------
 GATE={
@@ -83,7 +86,7 @@ def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
     rd=reading(defender)-reading(aggressor)
     rfx=reflex(defender,cfg); tech=defender.history+defender.skill('technique')
-    ftw=footwork_eff(defender,fat_d,cfg); strn=defender.strength
+    ftw=balance_eff(defender,fat_d,cfg); strn=defender.strength
     base=cfg['READ_K']*rd*(1.3 if read_win else 0.7)
     cap=GATE[defender.weapon][mode]
     if mode=='parry':
@@ -162,8 +165,8 @@ def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     """Standing measure-domain sigma the DEFENDER's reach imposes on the aggressor (proportional to gap, weighted
     high unarmoured, falling with armour). +ve lowers the attacker's net. Pure."""
     gap=er[defender]-er[aggressor]
-    foot_meas=cfg['FOOT_MEASURE_K']*(footwork_eff(defender,fat_d,cfg)*TR.channel_weight(defender.tradition,'footwork')
-                                     - footwork_eff(aggressor,fat_a,cfg)*TR.channel_weight(aggressor.tradition,'footwork'))
+    foot_meas=cfg['FOOT_MEASURE_K']*(balance_eff(defender,fat_d,cfg)*TR.channel_weight(defender.tradition,'balance')
+                                     - balance_eff(aggressor,fat_a,cfg)*TR.channel_weight(aggressor.tradition,'balance'))
     meas_w = TR.channel_weight(defender.tradition,'measure')/TR.channel_weight(aggressor.tradition,'measure')
     reach_edge=(gap*cfg['REACH_FRAC']+foot_meas)*meas_w
     return cfg['REACH_W'][defender.armor]*reach_edge
@@ -210,11 +213,11 @@ def approach_displace(shorter, longer, cfg):
 
 def reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
     """Probability the LONGER weapon regains distance given a created moment exists: reads to seize vs shorter's
-    denial, executes with footwork, scaled by armour; freed-hand shove adds a path. Pure (returns a probability)."""
+    denial, executes with balance, scaled by armour; freed-hand shove adds a path. Pure (returns a probability)."""
     id_read = reading(longer)*TR.channel_weight(longer.tradition,'visual')
     deny_read = reading(shorter)*TR.channel_weight(shorter.tradition,'visual')
     read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
-    foot = footwork_eff(longer,0,cfg)/3
+    foot = balance_eff(longer,0,cfg)/3
     p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/0.62
     if push_avail: p += cfg['PUSH_REOPEN_BONUS']*foot
     return min(cfg['REOPEN_MAX'], p)
@@ -237,7 +240,7 @@ def seizure_score(c, reach_val, cfg, TR):
     """Pre-contact seizure factors — who would land the first credible threat: the READ (anticipation, precommit /
     sen-sen-no-sen), REACH (the longer weapon threatens first in the approach, measure-weighted), and CONCENTRATION
     (composure to commit). Footwork is deliberately NOT here — its 'step in first' role already lives in the approach
-    close-rate; double-counting it over-weights footwork. Pure. Higher = seizes the Vor."""
+    close-rate; double-counting it over-weights balance. Pure. Higher = seizes the Vor."""
     rd = reading(c) * TR.channel_weight(c.tradition,'precommit')
     cc = c.conc/max(1.0, c.conc_max)
     return (cfg['INIT_SEIZE_READ']*rd
@@ -284,13 +287,13 @@ def init_overcommit_loss(aggressor, exposure, cfg, TR):
     return cfg['INIT_LOSS_OVERCOMMIT'] * exposure / TR.channel_weight(aggressor.tradition,'tempo')
 
 # ---------- kuzushi / structure (dynamic balance) ----------
-def struct_factor(c, cfg):
-    """Maps current structure [STRUCT_FLOOR,1] to a [STRUCT_EFFECT_FLOOR,1] multiplier on tempo and defence: a
+def poise_factor(c, cfg):
+    """Maps current structure [POISE_FLOOR,1] to a [POISE_EFFECT_FLOOR,1] multiplier on tempo and defence: a
     broken-balance (kuzushi'd) fighter acts and defends worse. At full structure (1.0) returns 1.0 (no effect), so
     full-structure fighters are unaffected. Pure."""
-    s=max(cfg['STRUCT_FLOOR'], min(1.0, c.structure))
-    return cfg['STRUCT_EFFECT_FLOOR'] + (1-cfg['STRUCT_EFFECT_FLOOR'])*(s-cfg['STRUCT_FLOOR'])/(1-cfg['STRUCT_FLOOR'])
+    s=max(cfg['POISE_FLOOR'], min(1.0, c.poise))
+    return cfg['POISE_EFFECT_FLOOR'] + (1-cfg['POISE_EFFECT_FLOOR'])*(s-cfg['POISE_FLOOR'])/(1-cfg['POISE_FLOOR'])
 
-def clamp_structure(x, cfg):
-    """Bound structure to [STRUCT_FLOOR, 1.0]."""
-    return max(cfg['STRUCT_FLOOR'], min(1.0, x))
+def clamp_poise(x, cfg):
+    """Bound structure to [POISE_FLOOR, 1.0]."""
+    return max(cfg['POISE_FLOOR'], min(1.0, x))

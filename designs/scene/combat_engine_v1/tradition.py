@@ -13,7 +13,7 @@ Substrate channels a tradition weights (all resolve in the engine's physical sub
   leverage  — bind leverage emphasis (Stark/Schwach / winding-over-strength)
   tempo     — commitment-window exploitation (tempo / Indes / sen timing)
   measure   — distance-control emphasis (misura / maai / circulo)
-  footwork  — geometric position emphasis (compases / FoV)
+  balance  — geometric position emphasis (compases / FoV)
 A weight of 1.0 = neutral; >1 emphasises that channel, <1 de-emphasises. Weights are RELATIVE biases applied to the
 substrate channels the engine already computes; they re-weight, they do not add new physics.
 """
@@ -22,28 +22,28 @@ substrate channels the engine already computes; they re-weight, they do not add 
 # Seeded from the bridge's explicit set<->tradition mapping and the throughlines master cross-reference.
 TRADITIONS = {
     # German Liechtenauer — Bind Fighter: tactile/Fuhlen + leverage in the bind; Indes timing. (bridge: Bind Fighter)
-    'german':   dict(visual=0.95, tactile=1.35, precommit=1.00, leverage=1.30, tempo=1.10, measure=1.05, footwork=1.00,
+    'german':   dict(visual=0.95, tactile=1.35, precommit=1.00, leverage=1.30, tempo=1.10, measure=1.05, balance=1.00,
                      set='Bind Fighter', mode='tactile'),
     # Italian (Fiore->Bolognese->rapier) — Thrust Duelist: temporal-spatial; tempo + measure + visual. (bridge: Thrust Duelist)
-    'italian':  dict(visual=1.20, tactile=1.00, precommit=1.00, leverage=0.95, tempo=1.30, measure=1.25, footwork=1.05,
+    'italian':  dict(visual=1.20, tactile=1.00, precommit=1.00, leverage=0.95, tempo=1.30, measure=1.25, balance=1.05,
                      set='Thrust Duelist', mode='temporal-spatial'),
-    # Spanish Destreza — geometric: measure off the circulo + footwork; visual. (throughlines: geometric mode)
-    'spanish':  dict(visual=1.15, tactile=0.95, precommit=1.00, leverage=0.95, tempo=1.05, measure=1.35, footwork=1.30,
+    # Spanish Destreza — geometric: measure off the circulo + balance; visual. (throughlines: geometric mode)
+    'spanish':  dict(visual=1.15, tactile=0.95, precommit=1.00, leverage=0.95, tempo=1.05, measure=1.35, balance=1.30,
                      set='Thrust Duelist', mode='geometric'),
     # Japanese koryu — consciousness/intent: the finest pre-commitment tier (sen-sen-no-sen) + tactile. (bridge: sen)
-    'japanese': dict(visual=1.05, tactile=1.15, precommit=1.35, leverage=1.05, tempo=1.20, measure=1.10, footwork=1.10,
+    'japanese': dict(visual=1.05, tactile=1.15, precommit=1.35, leverage=1.05, tempo=1.20, measure=1.10, balance=1.10,
                      set='Counter-time', mode='intentional'),
     # Chinese — energetic + reach/thrust (qiang the deepest spear corpus); fa jin burst. (bridge: Burst ~ fa jin)
-    'chinese':  dict(visual=1.05, tactile=1.20, precommit=1.05, leverage=1.15, tempo=1.05, measure=1.20, footwork=1.15,
+    'chinese':  dict(visual=1.05, tactile=1.20, precommit=1.05, leverage=1.15, tempo=1.05, measure=1.20, balance=1.15,
                      set='Burst', mode='kinetic-rhythmic'),
-    # Filipino FMA — flow: kinetic-rhythmic continuous-flow; tactile (hubud) + footwork. (bridge: Continuous-flow)
-    'filipino': dict(visual=1.00, tactile=1.25, precommit=1.05, leverage=1.00, tempo=1.15, measure=1.05, footwork=1.25,
+    # Filipino FMA — flow: kinetic-rhythmic continuous-flow; tactile (hubud) + balance. (bridge: Continuous-flow)
+    'filipino': dict(visual=1.00, tactile=1.25, precommit=1.05, leverage=1.00, tempo=1.15, measure=1.05, balance=1.25,
                      set='Continuous-flow', mode='kinetic-rhythmic'),
     # English (Silver) — true-times biomechanical: fast-part-first, anti-overcommit; measure. (throughlines: biomech)
-    'english':  dict(visual=1.10, tactile=1.05, precommit=1.00, leverage=1.05, tempo=1.15, measure=1.15, footwork=1.10,
+    'english':  dict(visual=1.10, tactile=1.05, precommit=1.00, leverage=1.05, tempo=1.15, measure=1.15, balance=1.10,
                      set='Counter-time', mode='biomechanical'),
     # Neutral / untrained baseline — no tradition emphasis (all channels 1.0). Used for stat-only fighters.
-    'none':     dict(visual=1.00, tactile=1.00, precommit=1.00, leverage=1.00, tempo=1.00, measure=1.00, footwork=1.00,
+    'none':     dict(visual=1.00, tactile=1.00, precommit=1.00, leverage=1.00, tempo=1.00, measure=1.00, balance=1.00,
                      set=None, mode=None),
 }
 

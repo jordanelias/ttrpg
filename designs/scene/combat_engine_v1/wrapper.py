@@ -11,7 +11,7 @@ def _init_live(c, cfg):
     c.conc_max=S.conc_max(c,cfg);   c.conc=c.conc_max
     c.ready=0.0
     c.initiative=0.0
-    c.structure=1.0
+    c.poise=1.0
 
 def engagement(A, B, first, cfg, rng):
     """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. Returns the
@@ -21,7 +21,7 @@ def engagement(A, B, first, cfg, rng):
     er={A:erA, B:erB}
     longer = A if erA>=erB else B; shorter = B if longer is A else A
     measure_gap=max(0.0, er[longer]-er[shorter]); closed=(measure_gap<=0.3)
-    # INITIATIVE SEIZURE (pre-contact): a graded contest of read + footwork + reach + composure sets who enters the
+    # INITIATIVE SEIZURE (pre-contact): a graded contest of read + balance + reach + composure sets who enters the
     # first exchange holding the Vor. Frame-safe: initiative_seize returns (init_A, init_B) for the objects in order.
     A.initiative, B.initiative = S.initiative_seize(A, B, er, cfg, TR)
     # tempo is CONDITIONAL (grip/stance/fatigue), recomputed per-beat below — not a static pre-loop property.
@@ -38,12 +38,12 @@ def engagement(A, B, first, cfg, rng):
         A.initiative=S.clamp_initiative(A.initiative*S.init_hold_decay(A,cfg,TR), cfg)
         B.initiative=S.clamp_initiative(B.initiative*S.init_hold_decay(B,cfg,TR), cfg)
         # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
-        A.structure=S.clamp_structure(A.structure+cfg['STRUCT_RECOVER']*(1-A.structure), cfg)
-        B.structure=S.clamp_structure(B.structure+cfg['STRUCT_RECOVER']*(1-B.structure), cfg)
+        A.poise=S.clamp_poise(A.poise+cfg['POISE_RECOVER']*(1-A.poise), cfg)
+        B.poise=S.clamp_poise(B.poise+cfg['POISE_RECOVER']*(1-B.poise), cfg)
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
-        # REACH RE-OPENING (corrections: a created moment, not just footwork+reach). The longer weapon can make
+        # REACH RE-OPENING (corrections: a created moment, not just balance+reach). The longer weapon can make
         # distance only when a MOMENT exists — the opponent over-committed (must recover balance), OR the longer
         # weapon won a defensive maneuver last exchange (bind/parry/deflect created the gap), OR it frees a hand to
         # shove (grappling-manual one-handed push at reach). Identifying the moment needs READING; executing the
@@ -58,7 +58,7 @@ def engagement(A, B, first, cfg, rng):
         # ----- APPROACH: longer weapon threatens (stop-hits) while shorter closes -----
         if not closed:
             displ = S.approach_displace(shorter, longer, cfg)        # lever-arm: set aside a thrusting point on approach
-            close_rate=cfg['CLOSE_RATE_K']*S.footwork_eff(shorter,0,cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2
+            close_rate=cfg['CLOSE_RATE_K']*S.balance_eff(shorter,0,cfg)/3 * S.weapon_tempo(shorter,cfg,ffat[shorter])/2
             close_rate *= (1+displ)                                  # displacing the point lets you close faster
             measure_gap=max(0.0, measure_gap-close_rate)
             just_closed = (measure_gap<=0.3)
@@ -121,7 +121,9 @@ def engagement(A, B, first, cfg, rng):
         modes=['parry','dodge','wind']
         msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
         mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
-        dsig=(msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg))*S.struct_factor(defender,cfg)
+        # poise (balance disruption) now reaches defence through its balance components (dodge mode_sigma, stance_stability)
+        # via balance_eff — no separate blanket multiply here (would double-count the stance term).
+        dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
         atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
@@ -140,12 +142,12 @@ def engagement(A, B, first, cfg, rng):
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
-        # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; footwork-balance curbs it.
+        # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
         overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg)
         # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
         if overcommit_exposure>0:
             aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)
-            aggressor.structure=S.clamp_structure(aggressor.structure - cfg['STRUCT_BREAK_OVERCOMMIT']*overcommit_exposure, cfg)  # overextended = off-balance
+            aggressor.poise=S.clamp_poise(aggressor.poise - cfg['POISE_BREAK_OVERCOMMIT']*overcommit_exposure, cfg)  # overextended = off-balance
         # ----- outcome mapping (deg = AGGRESSOR's degree; defender mode can neutralize) -----
         hit=0; riposte=False; bind=False
         # neutralize is a FIXED mode-shape (parry deflects / dodge voids / wind binds) — NOT re-scaled by dsig,
@@ -198,7 +200,7 @@ def engagement(A, B, first, cfg, rng):
             # forced-to-Nach by DAMAGE: the aggressor presses the advantage (gains the Vor); the struck defender loses it.
             aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
-            defender.structure=S.clamp_structure(defender.structure - cfg['STRUCT_BREAK_HIT']*min(1.0, hit/cfg['STRUCT_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
+            defender.poise=S.clamp_poise(defender.poise - cfg['POISE_BREAK_HIT']*min(1.0, hit/cfg['POISE_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
             if defender.felled: return defender
         if bind:
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
@@ -209,7 +211,7 @@ def engagement(A, B, first, cfg, rng):
             bw.initiative=S.clamp_initiative(bw.initiative+g, cfg)
             bl.initiative=S.clamp_initiative(bl.initiative-g, cfg)
             # KUZUSHI: the bind winner breaks the loser's balance through the bind, scaled by leverage (Stärke-Schwäche).
-            bl.structure=S.clamp_structure(bl.structure - cfg['STRUCT_BREAK_BIND']*TR.channel_weight(bw.tradition,'leverage'), cfg)
+            bl.poise=S.clamp_poise(bl.poise - cfg['POISE_BREAK_BIND']*TR.channel_weight(bw.tradition,'leverage'), cfg)
             for _ in range(3):
                 beats+=1
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor

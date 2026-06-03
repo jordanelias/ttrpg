@@ -55,11 +55,11 @@ for _w, _params in GEOMETRY.items():
 
 class Combatant:
     def __init__(self, label, strength=4, agi=4, end=4, cog=3, att=3, spirit=3, focus=3,
-                 history=3, footwork=3, weapon='arming', armor='light', skills=None, tradition='none'):
+                 history=3, balance=3, weapon='arming', armor='light', skills=None, tradition='none'):
         self.label=label
         self.strength=strength; self.agi=agi; self.end=end
         self.cog=cog; self.att=att; self.spirit=spirit; self.focus=focus
-        self.history=history; self.footwork=footwork
+        self.history=history; self.balance=balance
         self.weapon=weapon; self.armor=armor
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
         self.grip='normal'                   # grip/stance state: normal | choke (close, leverage) | lunge (reach, commit)
@@ -73,7 +73,7 @@ class Combatant:
         self.conc=0.0; self.conc_max=0.0
         self.ready=0.0
         self.initiative=0.0                  # the Vor/Nach state (signed; +ve = holds initiative). Reset/managed by wrapper.
-        self.structure=1.0                   # kuzushi/balance (1.0=balanced, broken downward). Reset/managed by wrapper.
+        self.poise=1.0                   # kuzushi/balance (1.0=balanced, broken downward). Reset/managed by wrapper.
     # weapon vector accessors
     @property
     def w(self): return WEAPONS[self.weapon]
