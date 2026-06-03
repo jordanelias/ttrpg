@@ -4,7 +4,7 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_brace_prep']
+__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_wall_prep', '_disc_prep', '_depth_prep']
 
 def roll_pool(n, tn=7):
     net = 0
@@ -35,15 +35,23 @@ def _unit_braced(unit):
     (the historical gauge + signature scenarios) -> byte-exact."""
     return any('brace' in getattr(su, 'instructions', ()) for su in getattr(unit, 'subunits', ()))
 
-def _brace_prep(unit, contact_cells):
-    """Wall solidity for the reciprocal charge-recoil: high only when disciplined AND deep (0..1).
-    [bottom-up: discipline + _defender_depth -- the prepared pike wall that breaks a charge.]"""
-    disc = getattr(unit, 'discipline', 5)                          # [class-B] default disc mirrors _charge_shock_sigma
-    disc_prep = max(0.0, min(1.0, (disc - 2) / 4.0))               # [class-B] disc 2->0 .. 6->1 prep ramp
-    depth = _defender_depth(unit, contact_cells)
+def _disc_prep(disc):
+    """Discipline -> preparedness 0..1. SHARED by the charge-shock brace gate (independent retention)
+    and the recoil (conjunctive) so the disc curve has one source. disc 2 -> 0, disc 5 -> 1 (saturates)."""
+    return max(0.0, min(1.0, (disc - 2) / 3.0))                    # [class-B] shared disc prep curve
+
+def _depth_prep(depth):
+    """Engaged depth -> preparedness 0..1. SHARED (one source for the depth curve).
+    depth 1 -> 0, depth >= PC_SHOCK_DEPTH_REF -> 1."""
     ref = PC_SHOCK_DEPTH_REF if PC_SHOCK_DEPTH_REF > 1.0 else 2.0   # [class-B] depth-ref guard
-    depth_prep = max(0.0, min(1.0, (depth - 1.0) / (ref - 1.0)))   # [class-B] depth 1->0 .. >=ref->1
-    return disc_prep * depth_prep
+    return max(0.0, min(1.0, (depth - 1.0) / (ref - 1.0)))
+
+def _wall_prep(unit, contact_cells):
+    """Conjunctive wall-preparedness for the reciprocal charge-recoil: high only when disciplined
+    AND deep (a true prepared pike block, not a deep mob or a thin elite line). Uses the shared
+    _disc_prep/_depth_prep curves. [bottom-up: discipline x _defender_depth -- the wall that breaks a charge.]"""
+    disc = getattr(unit, 'discipline', 5)                          # [class-B] default disc mirrors _charge_shock_sigma
+    return _disc_prep(disc) * _depth_prep(_defender_depth(unit, contact_cells))
 
 def _charge_shock_sigma(defender, def_cells, zone):
     """Phase 3: DEFENDER moral-shock delta-sigma (<=0) on a charge impact.
@@ -64,13 +72,9 @@ def _charge_shock_sigma(defender, def_cells, zone):
     # brace gate (multiplicative): hold-stance x discipline x depth, floored
     b_stance = PC_SHOCK_HOLD_BRACE if (getattr(defender, 'stance', 'balanced') == 'hold' or _unit_braced(defender)) else 1.0
     disc = getattr(defender, 'discipline', 5)
-    if disc >= 5:   b_disc = PC_SHOCK_DISC_FULL
-    elif disc <= 2: b_disc = 1.0
-    else:           b_disc = PC_SHOCK_DISC_FULL + (1.0 - PC_SHOCK_DISC_FULL) * (5 - disc) / 3.0
+    b_disc = 1.0 - _disc_prep(disc) * (1.0 - PC_SHOCK_DISC_FULL)        # independent disc retention (shared prep curve)
     depth = _defender_depth(defender, def_cells)
-    if depth >= PC_SHOCK_DEPTH_REF: b_depth = PC_SHOCK_DEPTH_FULL
-    elif depth <= 1.0:              b_depth = 1.0
-    else:                           b_depth = 1.0 - (1.0 - PC_SHOCK_DEPTH_FULL) * (depth - 1.0) / (PC_SHOCK_DEPTH_REF - 1.0)
+    b_depth = 1.0 - _depth_prep(depth) * (1.0 - PC_SHOCK_DEPTH_FULL)    # independent depth retention (shared prep curve)
     g_brace = max(PC_SHOCK_BRACE_FLOOR, min(1.0, b_stance * b_disc * b_depth))
     # shaken amplifier: a wavering defender takes more
     ms = getattr(defender, 'morale_start', 0) or 0

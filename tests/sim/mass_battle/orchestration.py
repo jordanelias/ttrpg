@@ -1286,9 +1286,9 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
                     if PC_BRACE_ENABLED:
                         if a_mom > b_mom and _unit_braced(unit_b):
-                            ns_a -= PC_CHARGE_RECOIL * _brace_prep(unit_b, p["b_cells"]) * SIGMA_PER_D
+                            ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"]) * SIGMA_PER_D
                         elif b_mom > a_mom and _unit_braced(unit_a):
-                            ns_b -= PC_CHARGE_RECOIL * _brace_prep(unit_a, p["a_cells"]) * SIGMA_PER_D
+                            ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"]) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA
