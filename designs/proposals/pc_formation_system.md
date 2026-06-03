@@ -191,3 +191,27 @@ Still open:
 - Prior conversation: the three-level FM surface + SI/FM intervention pivot + team-instruction layer (recorded design).
 - This session (Jordan, 2026-06-02): shield-wall is a *role* not a shape; roles = troop-type-gated instruction packages (FM position→role); bracing is an instruction; the §1 toughness resolution C+B / reject A.
 - `mass_battle_v30.md` §A.5 (Command), §A.6 (formations), §A.8 (tactics), §A.12 (rout/morale) — *recovered; verify on canonization.*
+
+
+## 11. Validation status & emergent counter-cycle (measured top-down vs the research; 2026-06)
+
+**Committed mechanics** (engine `tests/sim/mass_battle/`):
+- Report-grounded taxonomy + `ROLE_SPEC` (role = shape + instruction package) + `mounted_archers` — commit `dd3d7a1b`.
+- **Brace mechanism** — commit `7691eb6a`. The brace instruction (a) engages the charge-shock gate without the hold-stance offense penalty, and (b) adds a reciprocal charge-recoil (`PC_CHARGE_RECOIL`, prep = discipline x depth): a charge into a braced+deep+disciplined wall shatters the charger. Gated by the brace instruction so instruction-less scenarios are byte-exact.
+- **Missile-density coupling** — commit `a6ae38ad`. Volley casualties scale with the target formation's `col_grid` density (`_volley_density_mult`): packed/deep columns bleed more, dispersed/shallow less. Ranged-only path so melee is byte-exact.
+
+**Emergent counter-cycle**, validated on `gauge_mb` (40 seeds, `PER_CELL=1`), no flat bonuses:
+
+| Edge | Status | Measured |
+|---|---|---|
+| pike-beats-cavalry (frontal, prepared) | EMERGENT (brace mechanism) | braced+deep+disc 75% / shallow-green 12% / braced-vs-inf neutral. Courtrai/Swiss/Waterloo. |
+| cavalry-rides-the-shaken | EMERGENT (`PC_SHOCK_SHAKEN_GAIN`) | the same prepared wall, wavering, 75% -> 28%. Albuera. |
+| cavalry-catches-archers | EMERGENT (`RANGED_MELEE_SIGMA`) | ranged in melee vs cavalry: defender 55% -> 5%. |
+| missiles-attrit-the-dense | WIRED, direction-correct | mult Line-t4 1.43 / t2 0.5; dense -0.6pp / shallow +0.5pp ON-vs-OFF. Small in single-engagement (volley is a brief DR-eaten chip); compounds at the standoff/multi-turn scale. Carrhae/Agincourt. |
+
+**Measured baseline** (the finding that drove the brace mechanism): the pre-brace primitives did NOT produce pike-beats-cavalry. A braced *shape* / hold-stance dented a charge but the hold-stance was net-negative (traded offense for too little protection), and depth — not brace — was the de-facto anti-cavalry primitive; the charger paid no cost for hitting a braced wall. The brace mechanism supplies the missing reciprocal term.
+
+**Open gaps** (not closed here):
+- **KITING** (the research's #1 troop type): mobility-missile standoff / retreat-and-shoot at the multi-turn scale; also the amplifier that makes missile-density decisive. Next priority.
+- **TERRAIN** (the research's #1 variable): a separate scene/territory layer, not P-C.
+- Restore the `0.806/0.800/0.781` EV entries to the reconstructed `sim_verification_ledger.json`.

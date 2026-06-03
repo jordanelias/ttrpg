@@ -56,6 +56,8 @@ working_state:
     casualties by target col_grid density (Carrhae/Agincourt). Correct direction (dense
     bleeds more), small in single-engagement, compounds at standoff scale. Ranged-only
     -> melee gauge byte-exact; volley-exponent signature preserved (p=2.00).'
+  - Counter-cycle validation log + measured baseline folded into designs/proposals/pc_formation_system.md
+    (§11) and committed — durable record (compaction-safe).
   next:
   - 'KITING primitive (report''s #1 troop type + the amplifier for missile-density):
     mobility-missile standoff/retreat-and-shoot at the multi-turn scale -> unlocks
@@ -128,5 +130,5 @@ blockers:
   (ED-899 follow-up); VERIFY recovered A.5/A.6/A.8/A.12 + troop-type canon against
   mass_battle_v30.md.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T02:55:27.838374+00:00'
+updated: '2026-06-03T03:01:47.729655+00:00'
 status: active
