@@ -10,6 +10,7 @@ def _init_live(c, cfg):
     c.stamina_max=S.stamina_max(c); c.stamina=float(c.stamina_max)
     c.conc_max=S.conc_max(c,cfg);   c.conc=c.conc_max
     c.ready=0.0
+    c.initiative=0.0
 
 def engagement(A, B, first, cfg, rng):
     """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. Returns the
@@ -19,6 +20,9 @@ def engagement(A, B, first, cfg, rng):
     er={A:erA, B:erB}
     longer = A if erA>=erB else B; shorter = B if longer is A else A
     measure_gap=max(0.0, er[longer]-er[shorter]); closed=(measure_gap<=0.3)
+    # INITIATIVE SEIZURE (pre-contact): a graded contest of read + footwork + reach + composure sets who enters the
+    # first exchange holding the Vor. Frame-safe: initiative_seize returns (init_A, init_B) for the objects in order.
+    A.initiative, B.initiative = S.initiative_seize(A, B, er, cfg, TR)
     # tempo is CONDITIONAL (grip/stance/fatigue), recomputed per-beat below — not a static pre-loop property.
     ready={A:0.0,B:0.0}
     beats=0; exchanges=0; soft=8
@@ -29,6 +33,10 @@ def engagement(A, B, first, cfg, rng):
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
         # cadence; it is not a static weapon property. Approach uses general cadence; closed uses close-cadence.
         ffat={A:max(0.0,1-A.stamina/max(1,A.stamina_max)), B:max(0.0,1-B.stamina/max(1,B.stamina_max))}
+        # INITIATIVE DECAY (the damper): the Vor bleeds toward contested each beat — you hold it only by continuing to
+        # threaten. This is the bounded-loop safeguard (gain < 1 per cycle) the NERS audit requires for this state.
+        A.initiative=S.clamp_initiative(A.initiative*cfg['INIT_DECAY'], cfg)
+        B.initiative=S.clamp_initiative(B.initiative*cfg['INIT_DECAY'], cfg)
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -113,13 +121,22 @@ def engagement(A, B, first, cfg, rng):
         dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
         atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
-        net_sigma=atk_sig - dsig - reach_pen + adef
+        init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
+        net_sigma=atk_sig - dsig - reach_pen + adef + init_edge
+        # INDES / sen-no-sen STEAL (forced-to-Nach by READING): if the defender out-read a deeply-committed aggressor,
+        # the defender acts within the aggressor's tempo and STEALS the Vor (the sign flips toward the defender).
+        if read_win and commit>=4:
+            defender.initiative=S.clamp_initiative(defender.initiative+cfg['INIT_STEAL_INDES'], cfg)
+            aggressor.initiative=S.clamp_initiative(aggressor.initiative-cfg['INIT_STEAL_INDES'], cfg)
         pool=core.resolution_pool(aggressor.history)
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; footwork-balance curbs it.
         overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg)
+        # forced-to-Nach by losing BALANCE/grip: a deep commit that left exposure bleeds the aggressor's initiative.
+        if overcommit_exposure>0:
+            aggressor.initiative=S.clamp_initiative(aggressor.initiative-cfg['INIT_LOSS_OVERCOMMIT']*overcommit_exposure, cfg)
         # ----- outcome mapping (deg = AGGRESSOR's degree; defender mode can neutralize) -----
         hit=0; riposte=False; bind=False
         # neutralize is a FIXED mode-shape (parry deflects / dodge voids / wind binds) — NOT re-scaled by dsig,
@@ -167,6 +184,9 @@ def engagement(A, B, first, cfg, rng):
             push_avail=True; reopen_moment=True
         if hit>0:
             defender.apply_wound(hit); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
+            # forced-to-Nach by DAMAGE: the aggressor presses the advantage (gains the Vor); the struck defender loses it.
+            aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
+            defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
             if defender.felled: return defender
         if bind:
             for _ in range(3):

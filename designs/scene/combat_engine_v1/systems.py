@@ -2,7 +2,7 @@
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
 import sys; sys.path.insert(0,'/home/claude/combat_engine')
-from math import exp
+from math import exp, tanh
 from config import HANDLE_RANK
 import core
 from combatant import WEAPONS, GEOMETRY
@@ -230,3 +230,32 @@ def bind_sigma(aggressor, defender, cfg, TR):
            - reading(defender)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     return lev + catch + tac + strq
+
+# ---------- initiative substrate (three-phase Vor / Nach / Indes ~ sen; culture-neutral) ----------
+def seizure_score(c, reach_val, cfg, TR):
+    """Pre-contact seizure factors — who would land the first credible threat: the READ (anticipation, precommit /
+    sen-sen-no-sen), REACH (the longer weapon threatens first in the approach, measure-weighted), and CONCENTRATION
+    (composure to commit). Footwork is deliberately NOT here — its 'step in first' role already lives in the approach
+    close-rate; double-counting it over-weights footwork. Pure. Higher = seizes the Vor."""
+    rd = reading(c) * TR.channel_weight(c.tradition,'precommit')
+    cc = c.conc/max(1.0, c.conc_max)
+    return (cfg['INIT_SEIZE_READ']*rd
+            + cfg['INIT_SEIZE_REACH']*reach_val*TR.channel_weight(c.tradition,'measure') + cfg['INIT_SEIZE_CONC']*cc)
+
+def initiative_seize(a, b, er, cfg, TR):
+    """Initial graded initiative from the pre-contact seizure contest. Returns (init_a, init_b), signed, bounded by
+    INIT_SEIZE_K, symmetric (equal fighters -> 0/0). Decides who enters the first exchange holding the Vor. Pure."""
+    sa = seizure_score(a, er[a], cfg, TR); sb = seizure_score(b, er[b], cfg, TR)
+    edge = cfg['INIT_SEIZE_K']*tanh((sa-sb)/cfg['INIT_SEIZE_SCALE'])
+    return edge, -edge
+
+def initiative_sigma(aggressor, defender, cfg):
+    """The bounded sigma-edge the initiative state confers on whoever holds the Vor, on BOTH attack and defence.
+    = INIT_SIGMA_K*tanh((aggressor.initiative - defender.initiative)/INIT_SCALE). Decoupled from the per-beat
+    aggressor role: a DEFENDER holding the Vor produces a NEGATIVE term against the acting aggressor — realising
+    'hold the Vor while defending'. Pure, tanh-bounded (cannot exceed INIT_SIGMA_K)."""
+    return cfg['INIT_SIGMA_K']*tanh((aggressor.initiative - defender.initiative)/cfg['INIT_SCALE'])
+
+def clamp_initiative(x, cfg):
+    """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""
+    return max(-cfg['INIT_CAP'], min(cfg['INIT_CAP'], x))

@@ -72,6 +72,7 @@ class Combatant:
         self.stamina=0.0; self.stamina_max=0.0
         self.conc=0.0; self.conc_max=0.0
         self.ready=0.0
+        self.initiative=0.0                  # the Vor/Nach state (signed; +ve = holds initiative). Reset/managed by wrapper.
     # weapon vector accessors
     @property
     def w(self): return WEAPONS[self.weapon]
