@@ -397,6 +397,16 @@ from mass_battle.geometry import *  # P-A stage 2: geometry extracted
 
 # ─── ATOM ────────────────────────────────────────────────────────────────────
 
+# P-C scaffold: troop_type→role gating (the FM position→role model). Pure accessors over
+# TROOP_TYPE_ROLES; INERT until the instruction→primitive modulation lands. See design §3.5.
+def roles_for(troop_type):
+    """Roles a troop type may be assigned (its gated menu); falls back to the 'any' menu."""
+    return TROOP_TYPE_ROLES.get(troop_type, TROOP_TYPE_ROLES.get("any", []))
+
+def role_allowed(troop_type, role):
+    """True iff `role` is in `troop_type`'s gated menu."""
+    return role in roles_for(troop_type)
+
 @dataclass
 class Subunit:
     shape: str
@@ -434,6 +444,11 @@ class Subunit:
     # Used by resolve_cross_side_contention to distinguish moving vs static cells.
     # Reset at top of advance_cells. [canonical: Jordan design 2026-05-12 — speed priority]
     _moved_this_turn: Set[Tuple[int, int]] = field(default_factory=set)
+    # P-C scaffold (INERT): role drawn from the troop_type-gated menu (FM position→role) + the
+    # instruction package the role applies. Not consumed yet — wiring instructions to primitives
+    # (brace→+density, etc.) is the behaviour-cascading next step (design §3.5/§9.1).
+    role: Optional[str] = None
+    instructions: Tuple[str, ...] = ()
 
     @property
     def troop_count(self): return TROOPS_PER_TIER[self.tier]
@@ -2120,4 +2135,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle']
+__all__ = ['_formation_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed']
