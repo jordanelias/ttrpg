@@ -204,8 +204,10 @@ Still open:
 
 | Edge | Status | Measured |
 |---|---|---|
-| pike-beats-cavalry (frontal, prepared) | EMERGENT (brace mechanism) | braced+deep+disc 75% / shallow-green 12% / braced-vs-inf neutral. Courtrai/Swiss/Waterloo. |
-| cavalry-rides-the-shaken | EMERGENT (`PC_SHOCK_SHAKEN_GAIN`) | the same prepared wall, wavering, 75% -> 28%. Albuera. |
+> Validation anchors are restricted to the research report's in-period (pre-firearms) battles. Earlier drafts cited Waterloo/Albuera (historically apt but Napoleonic, outside the report's scope) — corrected to the report's own anchors.
+
+| pike-beats-cavalry (frontal, prepared) | EMERGENT (brace mechanism) | braced+deep+disc 75% / shallow-green ridden down 0% (post arch-fix #1) / braced-vs-inf neutral. Courtrai/Swiss/Hussite. |
+| cavalry-rides-the-shaken | EMERGENT (`PC_SHOCK_SHAKEN_GAIN`) | the same prepared wall, wavering, 75% -> 28%. Hastings (once the wall broke)/Adrianople. |
 | cavalry-catches-archers | EMERGENT (`RANGED_MELEE_SIGMA`) | ranged in melee vs cavalry: defender 55% -> 5%. |
 | missiles-attrit-the-dense | WIRED, direction-correct | mult Line-t4 1.43 / t2 0.5; dense -0.6pp / shallow +0.5pp ON-vs-OFF. Small in single-engagement (volley is a brief DR-eaten chip); compounds at the standoff/multi-turn scale. Carrhae/Agincourt. |
 
