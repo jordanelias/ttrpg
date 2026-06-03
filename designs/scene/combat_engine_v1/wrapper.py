@@ -208,8 +208,8 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
         for c in (A,B):
             c.stamina=min(c.stamina_max, c.stamina+cfg['RECOVERY_FRAC']*(c.stamina_max-c.stamina)*(c.stamina_max/cfg['STAMINA_REF']))
             c.conc=max(0,min(c.conc_max, c.conc-cfg['CONC_DRAIN_BOUT']+cfg['CONC_RECOVER_FRAC']*(c.conc_max-c.conc)))
-    if result==0:
-        result = 1 if B.wt.wounds>A.wt.wounds else (-1 if A.wt.wounds>B.wt.wounds else 0)
+    # NO automatic tiebreak (Jordan 2026-06-02): if neither fighter is felled, the round ends UNRESOLVED (result 0).
+    # We do not foreclose by awarding the round on wound-count — an undecided fight is a legitimate outcome.
     # 95% cap (videogame rule): no matchup is ever certain. With probability UPSET_FLOOR, the decided LOSER steals
     # the win — a "lucky blow"/critical-opening that the model otherwise suppresses. Applied only to decided fights,
     # symmetric in form, so an X% raw win-rate is clamped toward [UPSET_FLOOR, 1-UPSET_FLOOR].
