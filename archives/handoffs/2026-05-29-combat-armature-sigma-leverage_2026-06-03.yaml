@@ -1,6 +1,6 @@
 id: 2026-05-29-combat-armature-sigma-leverage
 scope: simulation
-status: active
+status: closed
 last_commit: 0e5474fe62228c2ff83524f905deb6eaec7be17c
 task:
   skill: valoria-simulator
@@ -119,3 +119,4 @@ relationship_to_other_handoffs: 'CORRECTS/SUPERSEDES the FRAMING of 2026-05-28-i
   2026-05-29-resolution-diagnostic-faction-ratifications (faction cluster) -- no overlap.'
 created: '2026-05-29T23:06:13.958018+00:00'
 updated: '2026-05-29T23:06:13.958018+00:00'
+closed_at: '2026-06-03T06:32:25.764371+00:00'
