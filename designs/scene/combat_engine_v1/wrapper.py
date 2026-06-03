@@ -156,13 +156,13 @@ def engagement(A, B, first, cfg, rng):
             # SAME tempo. Universal, but SELECTION is tempo-driven (how often you reach for it); SUCCESS (below) is
             # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
             # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
-            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))
+            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
         pool=core.resolution_pool(aggressor.history)
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
-        overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg)
+        overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')
         # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
         if overcommit_exposure>0:
             aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)
@@ -188,7 +188,7 @@ def engagement(A, B, first, cfg, rng):
         if counter_attempt:
             # SUCCESS scales with training (history) + reflex; the untrained single-time counter mostly fails — a
             # desperate-idiot move. Tradition abilities will modulate this upward (added later).
-            succ=cfg['COUNTER_SUCCESS_BASE']+cfg['COUNTER_TRAIN_K']*(defender.history-3)+cfg['COUNTER_REFLEX_K']*(S.reflex(defender,cfg)-3)
+            succ=cfg['COUNTER_SUCCESS_BASE']+cfg['COUNTER_TRAIN_K']*(defender.history-3)+cfg['COUNTER_REFLEX_K']*(S.reflex(defender,cfg)-3)+TR.ability_bonus(defender,'counter_success')
             if rng.random() < max(0.05, min(0.92, succ)):
                 hit=0; bind=False; riposte=True            # LANDS: committed attack voided in-tempo, defender ripostes (keeps the seized Vor)
             else:

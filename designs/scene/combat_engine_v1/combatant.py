@@ -55,7 +55,7 @@ for _w, _params in GEOMETRY.items():
 
 class Combatant:
     def __init__(self, label, strength=4, agi=4, end=4, cog=3, att=3, spirit=3, focus=3,
-                 history=3, balance=3, disp=4, weapon='arming', armor='light', skills=None, tradition='none'):
+                 history=3, balance=3, disp=4, weapon='arming', armor='light', skills=None, equipped=None, tradition='none'):
         self.label=label
         self.strength=strength; self.agi=agi; self.end=end
         self.cog=cog; self.att=att; self.spirit=spirit; self.focus=focus
@@ -65,6 +65,7 @@ class Combatant:
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
         self.grip='normal'                   # grip/stance state: normal | choke (close, leverage) | lunge (reach, commit)
         self.skills=skills or {}            # equippable per-axis skill biases (mastery-stack + set bonuses)
+        self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
         # derived (canonical)
         self.pool=max(5, history+6)
         self.wt=r8.WoundTracker(end)

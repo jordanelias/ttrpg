@@ -71,3 +71,66 @@ def profile(trad):
 
 def channel_weight(trad, channel):
     return TRADITIONS.get(trad, TRADITIONS['none']).get(channel, 1.0)
+
+# ─────────────────────────── EQUIPPABLE ABILITIES (scaffold) ───────────────────────────
+# Traditions grant equippable abilities that MODULATE the vocabulary (improve a competence or phase-behaviour) — they
+# do NOT unlock it. The channel-weights above are the substrate competences; abilities are tradition-learned modulators
+# a fighter EQUIPS on top (c.equipped, default empty -> no change -> invariant-safe). Each ability targets a LEVER with
+# an op: '+' (additive bonus) or '*' (multiplicative factor).
+#
+# GROUNDING (provisional; per corpus 10-rewrite): abilities are drawn from the documented martial record and are
+# CONFIDENT only for the well-anchored core — German/Italian/Japanese (S1/S2) and Iberian Destreza (S2/S3, flagged).
+# The selection-effect lesson is honoured: counterattack-prestige is European/Japanese (not universal), and the
+# priority-gap traditions (Polish szabla, Hungarian sabre, Filipino, Chinese-technique, …) get NO ability until an
+# S1/S2 anchor exists. 'grade' records the source tier.
+#
+# LIVE levers this version (wired at their engine sites): 'seize' (+ seizure score), 'counter_success' (+ single-time
+#   counter success), 'counter_select' (* counter selection rate), 'anti_overcommit' (+ commitment discipline).
+# CHANNEL levers ('measure','tempo','leverage','visual','tactile','precommit','balance') are registered but INERT until
+#   the channel-weight sites are routed through eff_cw() (the next pass; ~21 sites). Abilities below marked "(channel;
+#   pending)" therefore have no effect yet — registered, not live.
+ABILITIES = {
+    # German (Liechtenauer; S1/S2 — critically edited)
+    'indes':          dict(tradition='german',   grade='S1/S2', lever='counter_success', op='+', value=0.15,
+                           desc="Indes / Fühlen — feeling the bind, the simultaneous counter in the same tempo"),
+    'vorschlag':      dict(tradition='german',   grade='S1/S2', lever='seize',           op='+', value=4.0,
+                           desc="Vorschlag — the first-strike that seizes the Vor before the opponent acts"),
+    'staerke_schwaeche': dict(tradition='german', grade='S1/S2', lever='leverage',       op='*', value=1.20,
+                           desc="Stärke-Schwäche — strong/weak leverage in the bind (channel; pending)"),
+    # Italian (Fiore -> rapier; S2)
+    'mezzo_tempo':    dict(tradition='italian',  grade='S2',    lever='counter_select',  op='*', value=1.40,
+                           desc="Mezzo tempo — the half-time counterattack; reaches for the in-tempo counter more readily"),
+    'misura':         dict(tradition='italian',  grade='S2',    lever='measure',         op='*', value=1.15,
+                           desc="Misura — distance / measure control (channel; pending)"),
+    # Japanese (koryū; S2)
+    'sen_no_sen':     dict(tradition='japanese', grade='S2',    lever='seize',           op='+', value=4.0,
+                           desc="Sen-no-sen — pre-emptive seizing, taking the initiative as the opponent commits"),
+    # English (Silver; S2)
+    'true_times':     dict(tradition='english',  grade='S2',    lever='anti_overcommit', op='+', value=0.25,
+                           desc="True Times — Silver's true-vs-false times: commitment discipline, fewer over-commits"),
+    # Iberian Destreza (S2/S3 — partly reliable; flagged)
+    'atajo':          dict(tradition='spanish',  grade='S2/S3', lever='measure',         op='*', value=1.18,
+                           desc="Atajo — Destreza blade-constraint / measure off the círculo (channel; pending; S2/S3)"),
+}
+
+def ability_bonus(c, lever):
+    """Sum of ADDITIVE ('+') modulations for `lever` across the fighter's equipped abilities. Default 0.0 (no change)."""
+    tot=0.0
+    for name in getattr(c,'equipped',()) or ():
+        a=ABILITIES.get(name)
+        if a and a['lever']==lever and a['op']=='+': tot+=a['value']
+    return tot
+
+def ability_factor(c, lever):
+    """Product of MULTIPLICATIVE ('*') modulations for `lever` across the fighter's equipped abilities. Default 1.0."""
+    f=1.0
+    for name in getattr(c,'equipped',()) or ():
+        a=ABILITIES.get(name)
+        if a and a['lever']==lever and a['op']=='*': f*=a['value']
+    return f
+
+def eff_cw(c, channel):
+    """Effective channel weight = substrate (tradition) weight × equipped-ability channel modulators. The channel-lever
+    wiring path: replace TR.channel_weight(c.tradition, ch) with TR.eff_cw(c, ch) at the call sites to make channel
+    abilities (misura, atajo, Stärke-Schwäche, …) live. Default (no abilities) == channel_weight (invariant-safe)."""
+    return channel_weight(c.tradition, channel) * ability_factor(c, channel)

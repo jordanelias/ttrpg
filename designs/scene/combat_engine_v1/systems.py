@@ -247,7 +247,8 @@ def seizure_score(c, reach_val, cfg, TR):
     rd = reading(c) * TR.channel_weight(c.tradition,'precommit')
     cc = c.conc/max(1.0, c.conc_max)
     return (cfg['INIT_SEIZE_READ']*rd
-            + cfg['INIT_SEIZE_REACH']*reach_val + cfg['INIT_SEIZE_CONC']*cc)
+            + cfg['INIT_SEIZE_REACH']*reach_val + cfg['INIT_SEIZE_CONC']*cc
+            + TR.ability_bonus(c,'seize'))   # equipped seize abilities (Vorschlag / sen-no-sen) raise the pre-contact score
 
 def initiative_seize(a, b, er, cfg, TR):
     """Initial graded initiative from the pre-contact seizure contest. Returns (init_a, init_b), signed, bounded by
