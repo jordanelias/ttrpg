@@ -18,7 +18,7 @@ def degree(net, ob):
 HEFT={'light':4,'heavy':6}
 QUAL={'partial':0.6,'graze':0.35,'success':1.0,'overwhelming':1.5}
 RESIST={'none':{'blunt':0,'point':0,'cut':0},
-        'light':{'blunt':.10,'point':.15,'cut':.35},
+        'light':{'blunt':.10,'point':.18,'cut':.60},
         'medium':{'blunt':.20,'point':.45,'cut':.80},
         'heavy':{'blunt':.30,'point':.70,'cut':.95}}
 DELIVERY={'blunt':1.6,'point':1.45,'cut':1.35}
