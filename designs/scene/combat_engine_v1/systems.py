@@ -63,10 +63,10 @@ def disp_lean(c):
     """Disposition lean on the aggression axis: (disp-4)/3 in [-1,1]; +ve aggressive, -ve cautious, 0 = neutral (default)."""
     return (c.disp-4)/3.0
 def balance_eff(c, fat, cfg):
-    # effective balance = aptitude (stat+skill, fatigued) modulated by CURRENT poise (kuzushi disruption). Folded so a
-    # broken-balance fighter is worse at everything balance governs — dodge, measure, stance, anti-overcommit. At full
-    # poise (1.0) this is 1.0× (default/undisrupted fighters unaffected).
-    return (c.balance + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)
+    # BALANCE is NOT a stat (Jordan): it is GOVERNED BY AGILITY, modulated by CURRENT poise (kuzushi context); ability
+    # modulation (Destreza compás etc.) arrives with the channel-wiring pass. The `agi-1` aligns Agility's neutral (4)
+    # to the engine's balance-neutral (3), so a default fighter's substrate is unchanged. Still 1.0× at full poise.
+    return (c.agi - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 

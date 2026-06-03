@@ -55,11 +55,11 @@ for _w, _params in GEOMETRY.items():
 
 class Combatant:
     def __init__(self, label, strength=4, agi=4, end=4, cog=3, att=3, spirit=3, focus=3,
-                 history=3, balance=3, disp=4, weapon='arming', armor='light', skills=None, equipped=None, tradition='none'):
+                 history=3, disp=4, weapon='arming', armor='light', skills=None, equipped=None, tradition='none'):
         self.label=label
         self.strength=strength; self.agi=agi; self.end=end
         self.cog=cog; self.att=att; self.spirit=spirit; self.focus=focus
-        self.history=history; self.balance=balance
+        self.history=history
         self.disp=disp                       # disposition / temperament, aggression axis (1-7, 4=neutral); lean=(disp-4)/3, orthogonal to tradition
         self.weapon=weapon; self.armor=armor
         self.tradition=tradition             # cognitive-mode profile (selection-weights over the substrate)
