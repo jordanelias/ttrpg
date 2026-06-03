@@ -33,15 +33,22 @@ _SKEW_FLAG = 5                                       # [class-B test-param: |A-B
 
 
 def make_unit(faction, troop='infantry', unit_type='melee', tier=4,
-              shape='Line', instructions=(), speed='Standard', stance='balanced'):
-    """Build a deployed test unit. 'A' starts near the high-row edge facing in; 'B' mirrors it."""
+              shape='Line', instructions=(), speed='Standard', stance='balanced',
+              power=None, command=None, discipline=None, morale=None, dr=None):
+    """Build a deployed test unit. 'A' starts near the high-row edge facing in; 'B' mirrors it.
+    Stat args default to the module fixtures (None -> _PWR/_CMD/_DISC/_MOR/_DR); override to sweep."""
     ad = -1 if faction == 'A' else 1
     row = (BATTLEFIELD_SIZE - _EDGE_GAP) if faction == 'A' else (_EDGE_GAP - 1)
+    pwr = _PWR if power is None else power
+    cmd = _CMD if command is None else command
+    dis = _DISC if discipline is None else discipline
+    mor = _MOR if morale is None else morale
+    drv = _DR if dr is None else dr
     su = Subunit(shape=shape, troop_type=troop, tier=tier, starting_position=(row, _COL),
                  advance_dir=ad, unit_type=unit_type, instructions=instructions)
-    return Unit(name=faction, faction=faction, power=_PWR, command=_CMD,
-                discipline=_DISC, discipline_start=_DISC, morale=_MOR, morale_start=_MOR,
-                subunits=[su], dr=_DR, stance=stance, speed=speed)
+    return Unit(name=faction, faction=faction, power=pwr, command=cmd,
+                discipline=dis, discipline_start=dis, morale=mor, morale_start=mor,
+                subunits=[su], dr=drv, stance=stance, speed=speed)
 
 
 def _state(u):
@@ -102,12 +109,13 @@ def format_trace(trace):
 _REMAP = {'A': 'B', 'B': 'A', 'draw': 'draw'}   # run_battle winner is by arg-POSITION; remap to config when args are swapped
 
 
-def _one_mirror(tier, seed, swap, unit_kw):
-    """One mirror battle at (tier, seed). swap=False: configA is unit_a (drawn first);
-    swap=True: configA is unit_b (drawn second). Returns (winner_by_CONFIG, configA_hp_pct)."""
+def _one_battle(tier, seed, swap, a_kw, b_kw):
+    """One battle: configA (a_kw overrides) vs configB (b_kw overrides). swap=False -> configA is
+    unit_a (drawn first); swap=True -> configA is unit_b (drawn second). Returns
+    (winner_by_CONFIG, configA_hp_pct)."""
     random.seed(seed)
-    a = make_unit('A', tier=tier, **unit_kw)
-    b = make_unit('B', tier=tier, **unit_kw)
+    a = make_unit('A', tier=tier, **a_kw)
+    b = make_unit('B', tier=tier, **b_kw)
     if not swap:
         r = run_battle(a, b, max_turns=_ENGAGEMENT_TICKS); win = r['winner']
     else:
@@ -115,28 +123,30 @@ def _one_mirror(tier, seed, swap, unit_kw):
     return win, (a.hp / a.hp_max * 100 if a.hp_max else 0)
 
 
-def mirror_sweep(tier, n_seeds=_SEEDS, cancel_order=True, **unit_kw):
-    """Identical configs A vs B across seeds; wins tallied by CONFIG.
-
-    cancel_order=True (default): each seed is run in BOTH arg-orders and counted by config, so the
-    known second-mover RNG-stream-order bias (the engine defect, fix deferred per decision C) CANCELS
-    in measurement -- the engine itself is left byte-exact. A symmetric engine then gives ~50/50 by
-    config; a residual config win-rate gap here is a REAL effect, not the order artifact. This is the
-    valid symmetry / small-pool-variance stress tool.
-
-    cancel_order=False: single arg-order (configA first) -- EXPOSES the raw order skew (diagnostic).
-
+def config_sweep(tier, a_kw=None, b_kw=None, n_seeds=_SEEDS, cancel_order=True):
+    """configA(a_kw) vs configB(b_kw) across seeds; wins tallied by CONFIG. a_kw/b_kw are make_unit
+    overrides (e.g. {'discipline': 6}); None -> {} (the make_unit baseline). cancel_order=True
+    (default) runs each seed in BOTH arg-orders so the second-mover RNG-order bias cancels in
+    measurement -> a residual A/B win gap is a REAL config effect, not the order artifact.
     Returns dict(a_wins, b_wins, draws, a_hp_mean, a_hp_std, skew, trials)."""
+    a_kw = a_kw or {}; b_kw = b_kw or {}
     orders = (False, True) if cancel_order else (False,)
     wins, hp = [], []
     for s in range(n_seeds):
         for swap in orders:
-            w, h = _one_mirror(tier, s, swap, unit_kw)
+            w, h = _one_battle(tier, s, swap, a_kw, b_kw)
             wins.append(w); hp.append(h)
     aw = wins.count('A'); bw = wins.count('B'); dr = wins.count('draw')
     return dict(a_wins=aw, b_wins=bw, draws=dr,
                 a_hp_mean=statistics.mean(hp), a_hp_std=statistics.pstdev(hp),
                 skew=abs(aw - bw), trials=len(wins))
+
+
+def mirror_sweep(tier, n_seeds=_SEEDS, cancel_order=True, **unit_kw):
+    """Identical configs A vs B (config_sweep with a_kw == b_kw == unit_kw). A symmetric engine ->
+    ~50/50 by config with cancel_order; the small-pool A_hp variance is the other signal."""
+    return config_sweep(tier, a_kw=dict(unit_kw), b_kw=dict(unit_kw),
+                         n_seeds=n_seeds, cancel_order=cancel_order)
 
 
 def stress_suite():
@@ -155,5 +165,30 @@ def stress_suite():
     print("    cancelled-skew ~0 confirms the engine is otherwise symmetric and the measurement is now valid.")
 
 
+def ners_dimensions(n_seeds=_SEEDS):
+    """NERS stress dimensions beyond mirror symmetry, via order-cancelled config_sweep:
+    modifier impact across scale (non-uniformity), a stat response curve (threshold-cliff check),
+    and edge->advantage scaling (runaway / loop-gain). configB advantage in percentage points =
+    (configB_wins - configA_wins) / trials. Prints a report."""
+    def gap(r):
+        return 100 * (r['b_wins'] - r['a_wins']) / r['trials']
+    tiers = sorted(TROOPS_PER_TIER)
+    print("=== NERS modifier impact across scale (configB advantage pp; scale-invariant => uniform) ===")
+    for stat, base in (('power', _PWR), ('discipline', _DISC), ('morale', _MOR)):
+        cells = [f"t{t}:{gap(config_sweep(t, b_kw={stat: base + 1}, n_seeds=n_seeds)):>+4.0f}" for t in tiers]
+        print(f"  +1 {stat:<10}: " + "  ".join(cells))
+    print("=== NERS discipline response curve, top tier (smooth => no threshold cliff) ===")
+    top = tiers[-1]; prev = None
+    for d in range(_DISC - 2, _DISC + 3):
+        g = gap(config_sweep(top, a_kw={'discipline': _DISC}, b_kw={'discipline': d}, n_seeds=n_seeds))
+        step = f"  step{g - prev:>+4.0f}" if prev is not None else ""
+        print(f"  configB disc{d}: {g:>+4.0f}pp{step}"); prev = g
+    print("=== NERS edge -> advantage, top tier (proportional => damped, not a runaway loop) ===")
+    for dp in (1, 2, 3):
+        print(f"  +{dp} power: {gap(config_sweep(top, b_kw={'power': _PWR + dp}, n_seeds=n_seeds)):>+4.0f}pp")
+
+
 if __name__ == '__main__':
     stress_suite()
+    print()
+    ners_dimensions()
