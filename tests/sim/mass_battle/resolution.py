@@ -4,7 +4,7 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost']
+__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_brace_prep']
 
 def roll_pool(n, tn=7):
     net = 0
@@ -29,6 +29,22 @@ def _morale_sigma(u):
     if not MORALE_FIX or not getattr(u, 'morale_start', 0): return 0.0
     frac = max(0.0, min(1.0, u.morale / u.morale_start))
     return MORALE_SIGMA_SCALE * (frac - 1.0)
+def _unit_braced(unit):
+    """True if any subunit carries the 'brace' instruction (the FM brace tactic). Gates the brace
+    benefit (charge-resistance) and the reciprocal charge-recoil; INERT for instruction-less units
+    (the historical gauge + signature scenarios) -> byte-exact."""
+    return any('brace' in getattr(su, 'instructions', ()) for su in getattr(unit, 'subunits', ()))
+
+def _brace_prep(unit, contact_cells):
+    """Wall solidity for the reciprocal charge-recoil: high only when disciplined AND deep (0..1).
+    [bottom-up: discipline + _defender_depth -- the prepared pike wall that breaks a charge.]"""
+    disc = getattr(unit, 'discipline', 5)                          # [class-B] default disc mirrors _charge_shock_sigma
+    disc_prep = max(0.0, min(1.0, (disc - 2) / 4.0))               # [class-B] disc 2->0 .. 6->1 prep ramp
+    depth = _defender_depth(unit, contact_cells)
+    ref = PC_SHOCK_DEPTH_REF if PC_SHOCK_DEPTH_REF > 1.0 else 2.0   # [class-B] depth-ref guard
+    depth_prep = max(0.0, min(1.0, (depth - 1.0) / (ref - 1.0)))   # [class-B] depth 1->0 .. >=ref->1
+    return disc_prep * depth_prep
+
 def _charge_shock_sigma(defender, def_cells, zone):
     """Phase 3: DEFENDER moral-shock delta-sigma (<=0) on a charge impact.
     Cavalry's weapon is the MORAL impulse (du Picq), gated by the defender's preparedness:
@@ -46,7 +62,7 @@ def _charge_shock_sigma(defender, def_cells, zone):
     elif zone == "RED":   g_face = PC_SHOCK_REAR       # rear bypass (cannot face it)
     else:                 g_face = 1.0                 # YELLOW flank
     # brace gate (multiplicative): hold-stance x discipline x depth, floored
-    b_stance = PC_SHOCK_HOLD_BRACE if getattr(defender, 'stance', 'balanced') == 'hold' else 1.0
+    b_stance = PC_SHOCK_HOLD_BRACE if (getattr(defender, 'stance', 'balanced') == 'hold' or _unit_braced(defender)) else 1.0
     disc = getattr(defender, 'discipline', 5)
     if disc >= 5:   b_disc = PC_SHOCK_DISC_FULL
     elif disc <= 2: b_disc = 1.0
@@ -65,5 +81,5 @@ def _charge_shock_sigma(defender, def_cells, zone):
 def _sigma_softcap(x, m=1.5):                 # [canonical: modifier_system_spec.md §3.1 saturating]
     return m * math.tanh(x / m)
 def _sigma_net_boost(net_sigma, pool, tn=7):  # mu-shift; [canonical: params/core.md continuous engine; modifier_system_spec §2.1]
-    _SIG = {6: 0.806, 7: 0.800, 8: 0.781}     # sigma per die at TN [canonical: params/core.md EV table]
+    _SIG = {6: 0.806, 7: 0.800, 8: 0.781}     # [canonical: params/core.md EV table] sigma per die at TN
     return _sigma_softcap(net_sigma) * _SIG.get(tn, 0.800) * math.sqrt(max(1, pool))

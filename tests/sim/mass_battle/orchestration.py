@@ -1279,6 +1279,16 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za)
+                    # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
+                    # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
+                    # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
+                    # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
+                    # pikes break a cavalry charge, a loose/shallow line is still ridden down.
+                    if PC_BRACE_ENABLED:
+                        if a_mom > b_mom and _unit_braced(unit_b):
+                            ns_a -= PC_CHARGE_RECOIL * _brace_prep(unit_b, p["b_cells"]) * SIGMA_PER_D
+                        elif b_mom > a_mom and _unit_braced(unit_a):
+                            ns_b -= PC_CHARGE_RECOIL * _brace_prep(unit_a, p["a_cells"]) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA
