@@ -1,23 +1,30 @@
-# Social Contest — modular build (ground-up, from the corpus)
+# Social Contest — modular build (ground-up, corrected)
 
-Built from the rhetoric corpus and the shared resolution engine. No v30 reference — no Memory/Projection, no genre axis, no Evidence-clock, no inherited formulas or trackers. Structure is corpus-grounded; every number is a tunable `[SEED]` (history validates structure, not numbers). 36/36 tests pass.
+Built ground-up from the rhetoric corpus; corrected per the code-architecture review into a clean
+**wrapper-over-modules** shape. No v30 reference. Numbers are tunable `[SEED]`s. **34/34 tests pass.**
 
-## Layers (each file a layer; modules are separable and unit-tested)
-- **engine.py** — the shared stochastic core (σ-leverage + base d10 engine), verified constants. Mode-agnostic; fixed, not tuned.
-- **primitives.py** — one module per corpus primitive: Stasis (terrain + fallback ladder), Appeal (ethos/pathos/logos), Standing (spendable resource), Reserve (action economy), SelfGating (licit-tactics triage), Leverage (δσ into the engine), Merits (accumulation clock), DefeatConditions (the named-fault loss catalogue).
-- **resolver.py** — the composite resolution: a deterministic wrapper (turn order, live stasis ground, merits clock, defeat-condition checklist, ledgers) around a small stochastic core (per-move reception). A contest ends by a **deterministic clinch** (a side incurs a defeat-condition) or by **merits** crossing threshold.
-- **modes.py** — modes of discourse as distinct contests. The contested-debate core (deliberative + forensic flavors) is implemented; dyadic counsel, royal appeal, negotiation, and ceremonial are honest scaffolds (declared with their separate win conditions, not faked), because the corpus says they are different games.
-- **policy.py** — decoupled policies (read-only view → Move); never touch internals.
-- **tests.py** — unit tests per primitive + integration per mode.
+## Layers
+- **contract.py** — shared types (`Move`, `ContestView`, `FaultState`, `Adjudicator`, side identity `A/B`/`other`). Depends on nothing; breaks the former resolver↔policy import cycle.
+- **engine.py** — the shared stochastic core (σ-leverage + base d10), verified, fixed.
+- **primitives.py** — one module per primitive: Stasis (+ladder), Appeal, Standing/Reserve (stateful), Pool, SelfGating (triage), Leverage (static), Room (pathos's target), Merits (verdict clock), DefeatConditions (`check → (side, reason)`).
+- **resolver.py** — the **wrapper** (`Bout`): owns state, composes modules, adds no mechanics beyond sequencing.
+- **modes.py** — contested-debate core (deliberative/forensic flavors); the distinct sub-systems are honest scaffolds.
+- **policy.py** — decoupled policies via the contract; no resolver internals.
+- **tests.py** — per-module unit tests + wrapper invariants + integration.
 
-## The two resolution paths (the diagnostic's composite, realized)
-- **Clinch (deterministic):** the defeat-condition catalogue — barred device (an unlicensed hard tactic, gated by SelfGating), self-contradiction (an illegitimate ground-switch), evasion (repeated off-ground argument), silence (forced passes). Adjudicated against a checklist, no roll. Tests show each fires against the right side, deterministically.
-- **Merits (accumulation):** where nothing clinches, on-ground successful reception accrues toward the threshold. The stochastic surface is only the per-move reception magnitude.
+## Corrections applied (from the review)
+- **Appeals are now functional** (were inert): logos→merits, ethos→standing, pathos→room. Unit-tested ("appeals matter": pure-ethos cannot win the verdict).
+- **Circular dependency removed** via `contract.py` (no lazy import).
+- **Hidden `_opp_standing` side-channel removed** — the opponent is passed explicitly.
+- **`_process` god-function split** into dispatch (`_apply`) / reception (`_reception`) / scoring (`_score`).
+- **Turn-order bug fixed**: merits judged at the **exchange boundary** (both move, then judge); a clinch still ends immediately. Symmetry is now a **unit invariant** (identical contestants ~50/50), not just an integration hope.
+- **Single fault-state** (`FaultState`); `check` returns `(side, reason)` in one pass (`_why` deleted). Side identity defined once in `contract`.
+- **Leverage made static**; **Pool moved into primitives**; **adjudicator split out of `Config`**; **boundary validation** (bad move/ground raises `ValueError`); dead imports and a duplicated default removed.
 
-## What the tests demonstrate
-- Each primitive behaves in isolation (engine math, stasis ladder, standing build/strip, reserve exhaustion/regroup, self-gating licence rule, leverage, merits, every defeat-condition).
-- Honest play beats each faulty style: the overreacher always loses by a barred-device clinch; the staller always loses (usually on merits before the silence clinch); off-ground play loses. Clean-vs-clean never clinches (clean play incurs no fault) and resolves by merits.
-- A legitimate fallback shift up the stasis ladder does not trip self-contradiction.
+## Resolution (the two paths)
+A bout ends by a **deterministic clinch** (a side incurs a named defeat-condition — barred device, self-contradiction, evasion, silence; tested to fire against the right side) or by **merits accumulation** at the boundary. The stochastic surface is only the per-move reception.
 
-## Not done here (honest scope)
-The four distinct sub-systems are scaffolds. Numbers are untuned `[SEED]`s — balance (threshold, reserve sizes, lever magnitudes, the reception variance band) is a separate sim-validation pass on this foundation, and how much reception variance to retain is a feel decision for Jordan.
+## Remaining (honest scope)
+- **Balance `[SEED]` pass** on the now-fair resolver (threshold, reserve sizes, lever magnitudes, defeat-condition counts, and the reception-variance band — the last a Jordan feel call).
+- **Deeper deliberative/forensic differentiation** (distinct win conditions/decision rules beyond opening ground).
+- The four scaffold sub-systems (dyadic, appeal, negotiation, ceremonial).
