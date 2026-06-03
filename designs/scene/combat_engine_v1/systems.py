@@ -9,7 +9,9 @@ from combatant import WEAPONS
 
 # ---------- reach (continuous, derived) ----------
 def reach_base(c, cfg):
-    w=c.w; return cfg['L0']+cfg['LONG']*(w['reach']=='long')+cfg['HANDS2']*(w['hands']==2)+cfg['HEADR']*cfg['HEAD_REACH'][w['head']]
+    w=c.w
+    return (cfg['L0']+cfg['LONG']*(w['reach']=='long')+cfg['HANDS2']*(w['hands']==2)
+            +cfg['HEADR']*cfg['HEAD_REACH'][w['head']] + w.get('reach_adj',0.0))
 
 # ---------- tempo ----------
 def weapon_tempo(c, cfg, fatigue=0.0):

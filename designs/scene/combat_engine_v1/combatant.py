@@ -11,17 +11,17 @@ WEAPONS = {
  # -> swept/cup ~0.9): governs how safely the hand can be committed forward + parry without being hit.
  # blade_guard (0-1) = ACTIVE blade-catching/winding utility of the cross/quillons/rings (none on a guardless pole;
  # high on a long cross; fore/thumb-rings "enhance winding"): governs bind-catch + wind capability.
- 'rapier':   dict(reach='long', wt='light', hands=1, head='point',  spd=1.5, hand='Demanding', gap=0.40, head_len=3.2, grip_len=0.6, hand_guard=0.90, blade_guard=0.45),
- 'arming':   dict(reach='long', wt='light', hands=1, head='cut_thrust', spd=1.5, hand='Standard', gap=0.65, head_len=2.4, grip_len=0.8, hand_guard=0.40, blade_guard=0.55),
- 'longsword':dict(reach='long', wt='heavy', hands=2, head='cut_thrust', spd=0.5, hand='Standard', gap=0.90, head_len=2.8, grip_len=1.6, hand_guard=0.45, blade_guard=0.85),
- 'greatsword':dict(reach='long',wt='heavy', hands=2, head='straight_cut', spd=0.0, hand='Demanding', gap=0.70, head_len=3.6, grip_len=1.8, hand_guard=0.55, blade_guard=0.70),
- 'sabre':    dict(reach='long', wt='light', hands=1, head='curved_cut', spd=2.0, hand='Standard', gap=0.40, head_len=2.6, grip_len=0.7, hand_guard=0.70, blade_guard=0.45),
+ 'rapier':   dict(reach='long', wt='light', hands=1, head='point',  spd=1.5, hand='Demanding', gap=0.40, head_len=3.2, grip_len=0.6, hand_guard=0.90, blade_guard=0.45, reach_adj=0.15),
+ 'arming':   dict(reach='long', wt='light', hands=1, head='cut_thrust', spd=1.5, hand='Standard', gap=0.65, head_len=2.4, grip_len=0.8, hand_guard=0.40, blade_guard=0.55, reach_adj=-0.6),
+ 'longsword':dict(reach='long', wt='heavy', hands=2, head='cut_thrust', spd=0.5, hand='Standard', gap=0.90, head_len=2.8, grip_len=1.6, hand_guard=0.45, blade_guard=0.85, reach_adj=-0.9),
+ 'greatsword':dict(reach='long',wt='heavy', hands=2, head='straight_cut', spd=0.0, hand='Demanding', gap=0.70, head_len=3.6, grip_len=1.8, hand_guard=0.55, blade_guard=0.70, reach_adj=-0.05),
+ 'sabre':    dict(reach='long', wt='light', hands=1, head='curved_cut', spd=2.0, hand='Standard', gap=0.40, head_len=2.6, grip_len=0.7, hand_guard=0.70, blade_guard=0.45, reach_adj=-0.1),
  'dagger':   dict(reach='short',wt='light', hands=1, head='cut_thrust', spd=3.0, hand='Forgiving', gap=1.00, head_len=0.7, grip_len=0.4, hand_guard=0.30, blade_guard=0.40),
- 'paired_short':dict(reach='short',wt='light',hands=1,head='cut_thrust', spd=2.5, hand='Demanding', gap=0.65, head_len=1.4, grip_len=0.5, hand_guard=0.55, blade_guard=0.50),
+ 'paired_short':dict(reach='short',wt='light',hands=1,head='cut_thrust', spd=2.5, hand='Demanding', gap=0.65, head_len=1.4, grip_len=0.5, hand_guard=0.55, blade_guard=0.50, reach_adj=1.4),
  'spear':    dict(reach='long', wt='light', hands=2, head='point',  spd=0.0, hand='Forgiving', gap=0.70, head_len=5.5, grip_len=1.2, hand_guard=0.10, blade_guard=0.20),
- 'staff':    dict(reach='long', wt='light', hands=2, head='blunt',  spd=0.0, hand='Forgiving', gap=0.20, head_len=2.8, grip_len=2.8, hand_guard=0.15, blade_guard=0.30),
- 'mace':     dict(reach='long', wt='heavy', hands=1, head='blunt',  spd=0.0, hand='Forgiving', gap=0.20, head_len=1.8, grip_len=0.7, hand_guard=0.45, blade_guard=0.30),
- 'poleaxe':  dict(reach='long', wt='heavy', hands=2, head='blunt',  spd=-0.5,hand='Demanding', gap=0.85, head_len=2.2, grip_len=2.2, hand_guard=0.30, blade_guard=0.60),
+ 'staff':    dict(reach='long', wt='light', hands=2, head='blunt',  spd=0.0, hand='Forgiving', gap=0.20, head_len=2.8, grip_len=2.8, hand_guard=0.15, blade_guard=0.30, reach_adj=0.5),
+ 'mace':     dict(reach='long', wt='heavy', hands=1, head='blunt',  spd=0.0, hand='Forgiving', gap=0.20, head_len=1.8, grip_len=0.7, hand_guard=0.45, blade_guard=0.30, reach_adj=-0.55),
+ 'poleaxe':  dict(reach='long', wt='heavy', hands=2, head='blunt',  spd=-0.5,hand='Demanding', gap=0.85, head_len=2.2, grip_len=2.2, hand_guard=0.30, blade_guard=0.60, reach_adj=-0.05),
  # half-sword: the SHORTENED longsword (mit dem kurzen Schwert) — one hand grips the blade. Auto-switched form (see
  # halfsword_switch): short reach, supreme gap-thrust + leverage for the bind/armour, but loses cutting & cadence.
  'longsword_halfsword':dict(reach='short', wt='heavy', hands=2, head='point', spd=-0.5, hand='Demanding', gap=1.00, head_len=1.4, grip_len=2.6, hand_guard=0.35, blade_guard=0.25, base='longsword'),
