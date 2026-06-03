@@ -64,18 +64,47 @@ working_state:
   - '[CONSOLIDATION 2026-06-03] Single mass-battle MASTER handoff. Subsumes archived
     massbattle-engine-resume (gauge re-tune folded) + massbattle-speed-facing-resume
     (Phase-3 Jordan gate folded).'
+  - 'STRESS-TEST + MECHANICAL-LOGGING harness committed (aea3a264): NON-INVASIVE tick-by-tick
+    driver (run_battle max_turns=1; byte-exact run_battle(N)==N x run_battle(1)) ->
+    trace_battle() per-tick mechanical trace (hp/morale/stamina/distance/rout) + mirror_sweep()
+    symmetry/variance stress. Engine UNTOUCHED (observes state only).'
+  - 'SIDE-SKEW found by harness + FULLY DIAGNOSED: mirror match favours the 2nd-PROCESSED
+    unit ~70% (tier4 raw single-order A5/B14/D1 skew9; grows with battle length, biggest
+    at tier4). Emergent from sequential RNG-stream consumption x the multi-tick morale-feedback
+    loop -- roll_pool consecutive draws iid (9848:9908), deterministic-roll mirror
+    = 20/20 draws, resolve_engagements symmetric under A<->B relabel, but arg-order
+    swap FLIPS the winner. Sub-dominant to real force gaps (disc6-vs-disc4 wins BOTH
+    arg-orders 14/20 & 18/20 -- shifts margin ~20pts not winner). Root: resolve_engagements
+    draws a_net before b_net (~orchestration 1349-1350).'
+  - 'DECISION C (Jordan) on side-skew: (B) DONE (a1142887) -- mirror_sweep(cancel_order=True,
+    default) runs each seed BOTH arg-orders + tallies by config -> order-bias CANCELS
+    in measurement (cancelled-skew=0 ALL tiers, 40 trials); engine byte-exact. Coverage
+    figures corrected (the aea3a264 note had 24-seed A5/B18 mislabeled 20-seed).'
   next:
-  - 'TERRAIN LAYER [Jordan design call — the report #1 variable, now clearly coupled
-    to kiting]: make SPACE a scenario parameter. Minimal model = variable battlefield
-    size (open vs constrained); fuller = cover / LOS-blocking / movement-cost. Field
-    size already behaves as a terrain proxy (measured: 25=constrained/contested, 45+long=open/kiting-dominates).'
-  - 'Arch-debt (fix when composites/instructions arrive): #2 apply_instructions dispatch
-    (the kite hook is the FIRST instruction-driven behavior; generalize when a 2nd
-    instruction needs it); #3 per-atom brace/density for composites; #4 derive PC_VOLLEY_DENSITY_REF
-    from a canonical formation.'
-  - 'Optional: kiting decisiveness (volley strength) is now adequately balanced by
-    cornering+terrain; revisit only if terrain modeling shows a gap. Restore _SIG
-    EV entries to local ledger (record hygiene).'
+  - '(A) DEFERRED ENGINE FIX [decision C]: make the per-pair contest order-independent
+    so the ENGINE is symmetric (not just the measurement). CHANGES RNG consumption
+    -> shifts ALL outcomes -> requires re-validating mechanics_selftest (30) + RE-CALIBRATING
+    the 4 historical signatures. Do LATER when calibration can absorb it. Root = resolve_engagements
+    a_net-before-b_net (~orchestration 1349-1350); mirror_sweep(cancel_order=False)
+    reproduces the raw skew.'
+  - 'Extend the mechanical trace to per-MECHANIC INTERNALS (volley net successes,
+    charge momentum/a_pen, sigma terms): the non-invasive tick-snapshot sees STATE
+    not mechanism internals -> add a light PASSIVE module-level trace collector (_TRACE_ON
+    default off -> byte-exact).'
+  - 'Broaden the stress sweep: shapes, stances, troop types; threshold CLIFFS, runaway/death-spiral
+    LOOPS, non-uniform-modifier checks (resolution-diagnostic / NERS concerns). mirror_sweep
+    already generalizes to non-mirror configs (wins-by-config, order-cancelled).'
+  - 'Investigate tier-1 IMMEDIATE DOUBLE-ROUT at first contact (~tick3): smallest
+    pools break both sides at once -- first-contact morale check too punishing for
+    small pools? (small-pool fragility, NERS Lesson-3).'
+  - TERRAIN LAYER -- SET ASIDE per Jordan ('until we get everything else going').
+    Field size already a terrain proxy (25=constrained, 45+long=open). Resume after
+    stress-testing/logging + the deferred items.
+  - 'Arch-debt (fix when composites/instructions arrive): #2 generalize apply_instructions
+    dispatch (kite hook = 1st instruction-driven behavior); #3 per-atom brace/density
+    for composites; #4 derive PC_VOLLEY_DENSITY_REF from a canonical formation.'
+  - 'Optional: restore _SIG EV entries (0.806/0.800/0.781) to /home/claude/sim_verification_ledger.json
+    (record hygiene; gate already passes via canonical comment).'
   architecture: 'Three-level FM surface: L1 army doctrine (Aggression/Cohesion-priority)
     | L2 unit formation = SHAPE (arrangement only, NO bonus) | L3 subunit ROLE = troop-type-gated
     INSTRUCTION package. Governance triangle: Command orchestrates (adapt strategy
@@ -132,10 +161,11 @@ working_state:
     kiting fight compounds the small per-turn chip into a decisive win (field 45 /
     40 turns -> infantry to 80%).'
   in_progress:
-  - Kiting mechanic complete + validated (hook + mounted speed + edge-cornering).
-    Next major direction is the TERRAIN layer (design call).
-last_commit: adf9fb9e (edge-cornering / dynamic-bounds) — kiting RPS validated; §13.1
-  as-built folded
+  - 'ROBUST STRESS-TESTING + MECHANICAL LOGGING (Jordan directive; terrain set aside):
+    harness built+committed; side-skew diagnosed+cancelled (C-B); engine fix deferred
+    (C-A). Next: per-mechanic-internal trace + broaden the sweep.'
+last_commit: a1142887 (harness order-cancellation C-B + coverage figure correction)
+  -- on aea3a264 (stress+logging harness)
 owns:
 - designs/audit/2026-06-01-massbattle-stub-wiring/**
 - designs/proposals/pc_formation_system.md
@@ -144,7 +174,7 @@ owns:
 - tests/sim/gauge_mb.py
 - tests/sim/mass_battle/*.py
 - tests/sim/sim_mb_sigma.py
-session_token: 5697f2ca3775a8ff
+session_token: aa2327f5cf6ed8aa
 key_values:
 - Command = round((2*Cha + Cog)/3), Charisma primary (ED-899); COMMAND_SIGMA_ENABLED
   default ON, OFF == canonical Size pool (byte-exact)
@@ -178,6 +208,17 @@ key_values:
   Care needed for any movement-clamping (edge-cornering).'
 - PC_KITE_STANDOFF=5 (band [2,8]); kiter holds+volleys in [5,8], retreats when d<5,
   closes when d>8.
+- 'STRESS HARNESS tests/sim/mass_battle_stress.py: make_unit / trace_battle(ticks)->per-tick
+  snapshot / format_trace / mirror_sweep(tier,cancel_order=True default; both arg-orders,
+  wins-by-config) / stress_suite. _SEEDS=20 (fabrication gate: 24 FLAGGED, <=~18-20
+  exempt; [class-B] does NOT exempt in scanned non-config sim files -- only [canonical:]/ledger).
+  Run: PER_CELL=1 PYTHONHASHSEED=0 PYTHONPATH=<dir> python3 -m mass_battle_stress.'
+- 'NON-INVASIVE tick-driver VERIFIED byte-exact: run_battle(N)==N x run_battle(max_turns=1).
+  Harness drives the engine turn-by-turn + snapshots STATE; sees no mechanism internals
+  (that needs the deferred passive trace collector).'
+- 'SIDE-SKEW: 2nd-drawn unit favored ~70% raw; CANCELLED in measurement via cancel_order
+  both-orders (cancelled-skew=0); engine byte-exact; deferred fix (C-A) = order-independent
+  contest + signature re-calibration.'
 blockers:
 - DENSITY PRIMITIVE (B) MAGNITUDE -- how much brace raises density + density damps
   penetration (calibration target in working_state). Behaviour-cascading; Jordan to
@@ -196,5 +237,5 @@ blockers:
   commit 7cfa44d5): 9 PC_SHOCK_*/PC_CHARGE_SIGMA Class-B sim-tunable values calibrated
   to C1-C7 historical bands; mechanism validated, numbers tunable.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T06:32:03.317631+00:00'
+updated: '2026-06-03T15:15:33.333876+00:00'
 status: active
