@@ -88,7 +88,27 @@ working_state:
     events; format_trace renders a full per-tick + per-mechanic AUDIT LOG. Byte-exact
     PROVEN: trace ON==OFF, mechanics_selftest (True,[]), signatures 4/4 (volley p=2.00),
     stress_suite cancelled-skew=0 unchanged.'
+  - 'NERS STRESS DIMENSIONS probed + committed (613a3e87): config_sweep generalization
+    (configA vs configB, order-cancelled; make_unit stat-overrides) + ners_dimensions().
+    FINDINGS: NO threshold cliff (discipline response smooth/monotonic, steepest at
+    parity = competitive S-curve); NO runaway loop (edges scale ~proportionally then
+    saturate, power +1/+2/+3 -> +20/+50/+55pp); modifiers express above t1 (power
+    ~+20pp uniform t2-t4); NON-UNIFORM at smallest pool (t1 = +0pp, swamped by the
+    double-rout). Engine mostly NERS-healthy.'
+  - 'TIER-1 DOUBLE-ROUT ROOT-CAUSED (via the new mech trace): NOT morale -- it is
+    SIZE-depletion. orchestration recalc_size (line 816) = max(0, math.floor(effective_size));
+    size==0 -> routed (line 817). tier-1 = Size 1 (TROOPS_PER_SIZE; 100 troops); first
+    ~10% casualty -> effective_size 0.9 -> floor 0 -> instant rout at 90% strength.
+    ANY casualty destroys a Size-1 unit. Size>=2 has headroom (rout ~50%+ loss). Defect
+    specific to the Size-1 floor.'
   next:
+  - 'TIER-1 SIZE-1 FLOOR-ROUT [Jordan decision]: does the game have Size-1 (~100-troop
+    / TROOPS_PER_SIZE) units? If YES -> floor(effective_size)+rout-at-Size-0 destroys
+    them at ~90% strength = too fragile; fix = floor->round OR base the destruction-rout
+    on a low effective_size threshold (not integer Size==0). Fix is CALIBRATION-AFFECTING
+    (re-run + re-calibrate signatures). If the min real unit is Size>=2, tier-1 is
+    below the realistic floor (test artifact) -> sweep from Size 2+. Root: orchestration
+    recalc_size 816-817.'
   - '(A) DEFERRED ENGINE FIX [decision C]: make the per-pair contest order-independent
     so the ENGINE is symmetric (not just the measurement). CHANGES RNG consumption
     -> shifts ALL outcomes -> requires re-validating mechanics_selftest (30) + RE-CALIBRATING
@@ -98,9 +118,6 @@ working_state:
   - 'Broaden the stress sweep: shapes, stances, troop types; threshold CLIFFS, runaway/death-spiral
     LOOPS, non-uniform-modifier checks (resolution-diagnostic / NERS concerns). mirror_sweep
     already generalizes to non-mirror configs (wins-by-config, order-cancelled).'
-  - 'Investigate tier-1 IMMEDIATE DOUBLE-ROUT at first contact (~tick3): smallest
-    pools break both sides at once -- first-contact morale check too punishing for
-    small pools? (small-pool fragility, NERS Lesson-3).'
   - TERRAIN LAYER -- SET ASIDE per Jordan ('until we get everything else going').
     Field size already a terrain proxy (25=constrained, 45+long=open). Resume after
     stress-testing/logging + the deferred items.
@@ -165,15 +182,13 @@ working_state:
     kiting fight compounds the small per-turn chip into a decisive win (field 45 /
     40 turns -> infantry to 80%).'
   in_progress:
-  - 'ROBUST STRESS-TESTING + MECHANICAL LOGGING (Jordan directive; terrain set aside).
-    DONE: harness (aea3a264); side-skew diagnosed + cancelled C-B (a1142887); per-mechanic
-    trace logging (454adef4), all byte-exact. NEXT: broaden the sweep to the remaining
-    NERS stress dimensions (threshold cliffs, runaway/death-spiral loops, non-uniform-modifier
-    impact-across-scale) -- needs a config_sweep generalization (configA vs configB,
-    order-cancelled; mirror_sweep is the identical-config case); + the tier-1 double-rout.
-    Then the deferred (A) engine fix.'
-last_commit: 454adef4 (per-mechanic trace logging, passive/byte-exact) -- on a1142887
-  (C-B order-cancellation) on aea3a264 (stress+logging harness)
+  - 'ROBUST STRESS-TESTING + MECHANICAL LOGGING (terrain set aside). DONE: harness
+    (aea3a264); side-skew diagnosed+cancelled C-B (a1142887); per-mechanic trace (454adef4);
+    NERS dimensions + config_sweep (613a3e87); tier-1 double-rout root-caused (Size-1
+    floor-rout). NEXT: Jordan decision on Size-1 floor-rout; then deferred (A) engine
+    fix; broaden sweep further (shapes/stances/troop-types) if wanted.'
+last_commit: 613a3e87 (config_sweep + NERS dimensions probe) -- on 454adef4 (per-mechanic
+  trace) on a1142887 (C-B) on aea3a264 (harness)
 owns:
 - designs/audit/2026-06-01-massbattle-stub-wiring/**
 - designs/proposals/pc_formation_system.md
@@ -182,7 +197,7 @@ owns:
 - tests/sim/gauge_mb.py
 - tests/sim/mass_battle/*.py
 - tests/sim/sim_mb_sigma.py
-session_token: 48824379b7a0b3cf
+session_token: 06c45e45d334ee22
 key_values:
 - Command = round((2*Cha + Cog)/3), Charisma primary (ED-899); COMMAND_SIGMA_ENABLED
   default ON, OFF == canonical Size pool (byte-exact)
@@ -237,6 +252,14 @@ key_values:
   registry check (NOT 30 behavioural checks); python3 -m mass_battle.lanchester_signature
   -> 4 signatures (LINEAR/SQUARE/NO-ANNIHILATION/EXPONENTS, volley p=2.00). Both +
   gauge ON==OFF + trace ON==OFF are the byte-exact battery.'
+- 'SIZE/ROUT: orchestration Subunit/Unit -- size init max(1, total//TROOPS_PER_SIZE)
+  (line 795); recalc_size = max(0, math.floor(effective_size)) + size==0 -> self.routed=True
+  (816-817). So rout has TWO causes: morale<=0 (run_battle 1742-44) AND size->0 (recalc_size).
+  tier-1 Size-1 floor-routs on any casualty.'
+- 'config_sweep(tier, a_kw, b_kw, n_seeds, cancel_order) in harness: configA vs configB
+  by config, order-cancelled. mirror_sweep = a_kw==b_kw case. make_unit now takes
+  power/command/discipline/morale/dr overrides (default None -> module fixtures).
+  ners_dimensions() = the cliff/runaway/uniformity probe.'
 blockers:
 - DENSITY PRIMITIVE (B) MAGNITUDE -- how much brace raises density + density damps
   penetration (calibration target in working_state). Behaviour-cascading; Jordan to
@@ -255,5 +278,5 @@ blockers:
   commit 7cfa44d5): 9 PC_SHOCK_*/PC_CHARGE_SIGMA Class-B sim-tunable values calibrated
   to C1-C7 historical bands; mechanism validated, numbers tunable.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T15:47:10.127419+00:00'
+updated: '2026-06-03T16:04:03.185024+00:00'
 status: active
