@@ -1,0 +1,47 @@
+id: combat-engine-v1-ratification
+task:
+  skill: valoria-simulator
+  description: Personal-combat resolution. combat_engine_v1 (655 lines, 6 modules;
+    modular multimodal cross-tradition sigma-leverage resolver) BUILT + matrix-validated
+    (sha 6e9b6aa); ratification + deprecation proposal STAGED for Jordan. Structural
+    canonization is Jordan's call (project-owner contract) — staged, not applied.
+    Replaces the stale 2026-05-29-combat-armature handoff (which read "build blocked";
+    build is done).
+scope: simulation
+context_files:
+- path: designs/audit/2026-06-02-combat-engine/ratification_and_deprecation_proposal.md
+  depth: full
+  reason: proposal + Jordan ratification checklist + deprecation set + validation
+    evidence
+- path: designs/scene/combat_engine_v1/
+  depth: full
+  reason: the engine being canonized (wrapper/core/tradition/primitives)
+- path: designs/scene/combat_v30.md
+  depth: skeleton
+  reason: canonical incumbent; resolution layer proposed partially-superseded
+owns:
+- designs/scene/combat_engine_v1/**
+- designs/audit/2026-06-02-combat-engine/**
+last_commit: 6e9b6aa6
+working_state:
+  next: 'Await Jordan ratification of combat_engine_v1 (proposal checklist). On approval:
+    3 safe_commits — (1) canonize engine + add to canonical_sources.yaml; (2) combat_v30
+    canonical_status -> PARTIALLY SUPERSEDED; (3) deprecate params/combat.md -> deprecated/params/.
+    Then post-ratification magnitude tuning.'
+  done:
+  - combat_engine_v1 built (6 modules, 655 lines) + matrix-validated A0-A3 (inversions
+    fixed; |Δ| ~23-29pp, dir-agree ~61-76%)
+  - ratification_and_deprecation_proposal.md committed (staged for Jordan)
+  - wound-count tiebreak removed -> undecided round = UNRESOLVED (Jordan directive,
+    9e7ce85a)
+  - code-audit P1/P2 behavior-preserving cleanup (core.strike collapse, dead-code
+    removal)
+  validation:
+  - 'invariants hold: mirror 50, mastery dominant, traditions modest ~48, feint mirror-neutral,
+    no one-shot, 95% cap'
+created: '2026-06-03T06:32:03.174090+00:00'
+updated: '2026-06-03T06:32:04.430102+00:00'
+status: active
+session_token: 282d07bdf90c7e8a
+key_values: []
+blockers: []
