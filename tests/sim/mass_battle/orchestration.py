@@ -450,6 +450,23 @@ class Subunit:
     role: Optional[str] = None
     instructions: Tuple[str, ...] = ()
 
+    def __post_init__(self):
+        # Construction-time validation (arch review / stress-test hardening): turn the cryptic
+        # KeyError (invalid tier/shape) and silent off-grid placement into clear errors at the
+        # point of construction, so resolution never sees a malformed atom. Valid in-bounds
+        # formations are unaffected (byte-exact). Bounds are checked on the initial formation
+        # (cell_offsets are 0 here); dynamic movement past the edge is a separate concern.
+        if self.shape not in CELL_PATTERN_FN:
+            raise ValueError(f"Subunit shape {self.shape!r} unknown; valid shapes: {sorted(CELL_PATTERN_FN)}")
+        if self.tier not in TROOPS_PER_TIER:
+            raise ValueError(f"Subunit (shape={self.shape}) tier must be one of {sorted(TROOPS_PER_TIER)}, got {self.tier!r}")
+        for ar, ac in self.cells():
+            if not (0 <= ar < BATTLEFIELD_SIZE and 0 <= ac < BATTLEFIELD_SIZE):
+                raise ValueError(
+                    f"Subunit (shape={self.shape}, tier={self.tier}) at anchor {self.starting_position} "
+                    f"places a cell at ({ar},{ac}) outside the {BATTLEFIELD_SIZE}x{BATTLEFIELD_SIZE} battlefield; "
+                    f"move the anchor inward so the formation fits.")
+
     @property
     def troop_count(self): return TROOPS_PER_TIER[self.tier]
 
