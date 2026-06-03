@@ -43,27 +43,29 @@ context_files:
     ED-136 stratagem-degrades-Discipline (open)
 working_state:
   done:
-  - Design-captured the P-C compositional formation architecture (designs/proposals/pc_formation_system.md,
-    committed with this handoff).
-  - 'Resolved the shield-wall toughness question: C (role = shape + instruction) +
-    B (brace instruction raises effective density; density defends); A (depth-as-defense)
-    rejected as instruction-blind.'
-  - 'Established: a shield wall is a ROLE (heavy-infantry + brace), not a shape; bracing
-    is an instruction; troop type gates the role menu (FM position->role).'
-  - 'Scaffolded (INERT, byte-exact): config.TROOP_TYPE_ROLES gating menu + orchestration.roles_for/role_allowed
-    accessors + Subunit.role/instructions fields (commits 6d8eb3b7, 7d8e262f).'
-  - 'Code review: retired dead SHAPE_OFF/DEF_MOD scaffolding (e677a11f); extracted
-    command_base_pool so command_sigma_base resolves to a function not a constant
-    (7d8e262f); MECHANICS registry current (30, selftest green).'
+  - P-C role scaffold + command_base_pool refactor + report-grounded taxonomy (TROOP_TYPE_ROLES
+    + ROLE_SPEC + mounted_archers) committed; design doc + handoff in repo
+  - 'BRACE MECHANISM committed (7691eb6a): brace instruction engages the charge-shock
+    gate w/o hold-stance penalty + reciprocal charge-recoil (PC_CHARGE_RECOIL=6, prep=disc
+    x depth). Emergent pike-beats-cavalry, gated by the ''brace'' instruction -> instruction-less
+    byte-exact (proven brace ON==OFF, PER_CELL 0+1)'
+  - 'Counter-cycle validated top-down (gauge, 40 seeds): pike-beats-cavalry braced+deep+disc
+    ~75% / shallow-green ~12% / braced-vs-inf neutral; cavalry-rides-shaken 75%->28%;
+    cavalry-catches-archers def 55%->5%'
   next:
-  - 1. Populate/revise config.TROOP_TYPE_ROLES from the historical troop-type/role
-    research (taxonomy + per-type role menus).
-  - '2. Add ROLE_SPEC: role -> {shape, instructions}.'
-  - '3. Wire the instruction->primitive modulation (BEHAVIOUR-CASCADING, moves gauge
-    bands): brace->+density (density primitive B), skirmish->-density, charge->concentration;
-    gated by Discipline, conditioned by troop type; register mechanics in engine.MECHANICS.'
-  - 4. Validate each role effect EMERGES on the gauge (no flat bonuses); then re-tune
-    the gauge bands to the Command-only model.
+  - 'GAP missile-attrits-dense: volley casualties do not couple to target density
+    (dense vs loose B_hp ~identical) -- couple volley hits to target density/depth,
+    validate vs massed-formation missile-vulnerability'
+  - 'GAP horse-archer KITING (report''s #1 troop type): no standoff/retreat-and-shoot
+    primitive -> unlocks mounted_archers/Kite'
+  - 'GAP terrain (report''s #1 variable): separate scene/territory layer, not P-C'
+  - Wire remaining instructions' primitive-modulation (skirmish->loose, screen, pin,
+    advance, lure) each behind its instruction (instruction-less byte-exact) + validate
+    each on the gauge
+  - Consider unified apply_instructions(subunit) (role->instructions->primitive settings)
+    as more instructions land (brace currently read directly by _unit_braced)
+  - Fold the counter-cycle validation log into designs/proposals/pc_formation_system.md
+  - Restore 0.806/0.800/0.781 EV entries to reconstructed sim_verification_ledger.json
   architecture: 'Three-level FM surface: L1 army doctrine (Aggression/Cohesion-priority)
     | L2 unit formation = SHAPE (arrangement only, NO bonus) | L3 subunit ROLE = troop-type-gated
     INSTRUCTION package. Governance triangle: Command orchestrates (adapt strategy
@@ -87,7 +89,7 @@ working_state:
     + gauge_mb.py. Run committed/isolated with cwd INSIDE the engine dir (sys.path
     shadowing makes import mass_battle resolve to cwd). PER_CELL=1 enables the per-cell
     layer; PYTHONHASHSEED=0 deterministic.
-last_commit: 7d8e262f2aeabae1ed5431142f51afc7bb09f380
+last_commit: 7691eb6a74ff0e152a24f42d048945aac1774166
 owns:
 - tests/sim/mass_battle/*.py
 - tests/coverage_matrix.md
@@ -123,5 +125,5 @@ blockers:
   (ED-899 follow-up); VERIFY recovered A.5/A.6/A.8/A.12 + troop-type canon against
   mass_battle_v30.md.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T00:52:10.734036+00:00'
+updated: '2026-06-03T02:42:46.160083+00:00'
 status: active
