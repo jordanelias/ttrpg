@@ -234,3 +234,34 @@ Still open:
 | 5 | ROLE_SPEC instruction packages (Skirmish->loose+harass, etc.) | DESIGN-INFERENCE: roles are report-grounded, the specific instruction tuples are an inferred mapping; committed as inert data with no battle-path consumer (contained) |
 
 The durable lesson: code-grounding discipline held; the validation prose needs the same rule. A remembered battle that happens to be correct is still wrong-provenance, and must be replaced by a source-grounded anchor or dropped.
+
+
+## 13. Kiting primitive — design & build plan (grounded bottom-up)
+
+**Finding.** Kiting is far more expressible than the "missile-engine gap" framing implied; the engine already supplies every piece except a distance-regulation decision:
+- `volley_phase` fires EVERY turn for any ranged atom with an enemy in [VOLLEY_MIN_RANGE=2, VOLLEY_MAX_RANGE=8]; loss already scales with target density (`_volley_density_mult`). Sustained standoff -> cumulative attrition is already supported.
+- `advance_cells` already has a `retreat` stance that reverses the movement vector (~line 573).
+- Cavalry get a speed mult (`PC_CAVALRY_SPEED_MULT`, ~line 526) -> a mounted unit can outpace infantry.
+- Ranged atoms are already weak in melee (`pool//3` + `RANGED_MELEE_SIGMA`, ~lines 1311/1336) -> a caught kiter dies.
+
+The gap is narrow: ranged units currently CLOSE to melee. Kiting needs them to MAINTAIN the volley band instead, plus mounted_archers need mounted speed.
+
+**Build (three coupled changes, all INERT for existing scenarios -> byte-exact):**
+1. **Mounted speed** (`advance_cells` ~526): replace `self.troop_type == 'cavalry'` with a MOUNTED set `{'cavalry','mounted_archers'}` for the speed mult only. `charge_pen` stays cavalry-only (horse archers kite, not shock). No existing gauge unit is mounted_archers -> byte-exact.
+2. **Maintain-range hook** (`advance_cells` ~570, gated on `'kite' in self.instructions and unit_type=='ranged'`): replace the close-toward step with distance regulation vs the nearest enemy cell d:
+   - d < PC_KITE_STANDOFF (too close): step AWAY (retreat vector) -- open the gap.
+   - d > VOLLEY_MAX_RANGE (out of range): step TOWARD -- close into band.
+   - else: hold column (stay in band, keep volleying).
+   Gated on the 'kite' instruction -> only kiters diverge -> byte-exact for all current scenarios.
+3. **Wiring**: mounted_archers units built with `unit_type='ranged'` + `instructions=('kite',...)`. This is the FIRST instruction to actually drive behaviour -- the seed of the instruction-dispatch layer (arch-debt #2). ROLE_SPEC already maps Kite -> GappedLine + ('kite','shoot_move') and mounted_archers -> ['Kite',...] (both currently "blocked on the kiting primitive").
+
+**New constant (class-B, calibrate by measurement):** `PC_KITE_STANDOFF` -- the retreat-trigger distance (initial guess mid-band, ~VOLLEY_MIN_RANGE+1..4; tune so the band holds vs infantry but is lost vs cavalry). `PC_KITE_ENABLED` toggle (inert without the 'kite' instruction regardless).
+
+**Expected emergent dynamic + report validation (the acceptance test):**
+- vs slower infantry (Line, Standard): kiter maintains [2,8] -> volleys every turn -> attrition without melee -> kiter wins. Validates Carrhae 53 BC / Hattin 1187 / Mohi 1241 (horse archers shoot heavy infantry apart on open ground).
+- vs cavalry (equal/faster): kiter cannot open the gap -> caught -> melee (pool//3) -> kiter dies. Validates Patay 1429 (cavalry catches unprotected archers).
+- vs combined arms (infantry screening the kiter's targets): screen blocks LOS/approach -> validates the report's screening / combined-arms principle.
+
+**Measurement protocol:** build mounted_archers(ranged, kite, mounted) vs (a) Line infantry, (b) cavalry; trace hp attrition per turn + win rates over max_turns; tune PC_KITE_STANDOFF for the band-held-vs-infantry / band-lost-vs-cavalry split; confirm byte-exact for non-kite scenarios (selftest, signatures 4/4, gauge ON==OFF -- none carry the 'kite' instruction). Then read the three dynamics against the report (in-period anchors only).
+
+**Out of scope (separate concerns):** dynamic-movement off-grid (a kiter retreating off the battlefield edge -- couples to the dynamic-bounds item); the full instruction-dispatch layer (arch-debt #2) beyond this single 'kite' hook.

@@ -112,7 +112,8 @@ working_state:
     -> clear ValueError (was KeyError/off-grid); byte-exact, selftest 30 + signatures
     4/4 + gauge ON==OFF'
   in_progress:
-  - KITING primitive — beginning bottom-up grounding (volley + movement mechanics)
+  - 'Kiting: bottom-up grounding done + code-level build plan folded into design §13.
+    Ready to implement (3 coupled changes specced + measurement protocol).'
 last_commit: 1e4e643629b6a4d067a11eea120cc99047cea9f2 (Subunit construction guard)
 owns:
 - tests/sim/mass_battle/*.py
@@ -156,5 +157,5 @@ blockers:
   (ED-899 follow-up); VERIFY recovered A.5/A.6/A.8/A.12 + troop-type canon against
   mass_battle_v30.md.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T05:05:37.712543+00:00'
+updated: '2026-06-03T05:10:11.165055+00:00'
 status: active
