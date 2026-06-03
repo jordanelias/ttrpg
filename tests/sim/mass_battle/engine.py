@@ -60,7 +60,7 @@ MECHANICS = {
     "between_turn_recovery":{"fn":"between_turn_recovery","toggle":None,       "source":"mass_battle_v30 §A.13", "status":"WIRED"},
     # attrition substrate (P-L) + command-only resolution (canon-structure, ED-899)
     "lanchester_attrition":{"fn":"_lanchester_strength","toggle":"LANCHESTER_ENABLED","source":"mb_lanchester_design.md §3 — linear melee / square volley (P-L)", "status":"WIRED"},
-    "command_sigma_base": {"fn":"COMMAND_POOL_MULT",    "toggle":"COMMAND_SIGMA_ENABLED","source":"ED-899 / Jordan 2026-06-02 — Command-only base; sets aside PP-233 Size pool", "status":"WIRED"},
+    "command_sigma_base": {"fn":"command_base_pool",   "toggle":"COMMAND_SIGMA_ENABLED","source":"ED-899 / Jordan 2026-06-02 — Command-only base; sets aside PP-233 Size pool", "status":"WIRED"},
     "command_derivation": {"fn":"derive_command",       "toggle":"COMMAND_SIGMA_ENABLED","source":"ED-899 — Command = f(Charisma primary, Cognition secondary)", "status":"WIRED"},
 }
 

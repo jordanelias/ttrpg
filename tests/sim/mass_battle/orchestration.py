@@ -702,6 +702,15 @@ def derive_command(charisma, cognition):
     return max(1, min(7, int(val)))
 
 
+def command_base_pool(command, pen, stam_pen):
+    """Command-only base exchange pool (the COMMAND_SIGMA branch): MULT×Command + pool advantages.
+    Module-level so the MECHANICS 'command_sigma_base' entry resolves to a real callable rather than
+    a bare constant. [canonical: Jordan canon-structure directive — base driven SOLELY by
+    Command; Size enters outcomes only via the Lanchester frontage term; MULT=2 matches
+    min(Size,Cmd)+Cmd at Size≥Cmd.]"""
+    return COMMAND_POOL_MULT * command + pen + stam_pen
+
+
 @dataclass
 class Unit:
     name: str
@@ -793,7 +802,7 @@ class Unit:
             #  SOLELY by Command (sigma-leverage quality); Size enters outcomes ONLY via the
             #  Lanchester frontage term. Replaces min(Size,Command)+Command (size-dependent →
             #  super-linear melee). pen/stam_pen remain pool-side advantages (sigma head unchanged).]
-            raw = COMMAND_POOL_MULT * self.command + pen + stam_pen
+            raw = command_base_pool(self.command, pen, stam_pen)
         else:
             raw = min(self.effective_size, self.command) + self.command + pen + stam_pen
         return max(1, math.floor(raw))
@@ -2135,4 +2144,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed']
+__all__ = ['_formation_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed']
