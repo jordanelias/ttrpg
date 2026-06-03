@@ -30,8 +30,9 @@ def head_mode(head, armor='none'):
     if head=='cut_thrust':
         return 'point' if armor in ('medium','heavy') else 'cut'
     return 'cut'   # straight_cut, curved_cut — no mode-shift
-def _mode_transmit(mode, armor, close, gap):
-    """Transmit fraction for a single resolved mode (blunt/point/cut) vs an armour state."""
+def _mode_transmit(mode, armor, close, gap, perc=8):
+    """Transmit fraction for a single resolved mode (blunt/point/cut) vs an armour state. Blunt scales with PERCUSSION
+    authority (a wooden staff transmits little through plate; a steel hammer transmits fully)."""
     if mode=='point':
         if armor in ('medium','heavy'):
             gap_transmit = (cfg_gap_a(armor) + cfg_gap_b(armor)*gap) if close else 0.12*gap
@@ -39,20 +40,21 @@ def _mode_transmit(mode, armor, close, gap):
         t = max(1.0-RESIST[armor]['point'], 0.5*gap if close else 0.15*gap)
         return t*DELIVERY['point']
     t = 1.0-RESIST[armor][mode]
+    if mode=='blunt': t *= (perc/8.0)                    # percussion authority (perc 8 = steel-hammer reference)
     return t*DELIVERY[mode]
-def coupling(head, armor, close, gap=0.65):
+def coupling(head, armor, close, gap=0.65, perc=8):
     """Damage transmit. A cut-and-thrust head uses its BEST mode (cut vs half-sword point) at each armour level, so a
     defender taking more armour never flips the attacker to a suddenly-better transmit (removes the light->medium
-    cliff). Pure cutters cannot half-sword and stay 'cut' (collapse vs plate)."""
-    if head=='blunt':  return _mode_transmit('blunt', armor, close, gap)
-    if head=='point':  return _mode_transmit('point', armor, close, gap)
+    cliff). Pure cutters cannot half-sword and stay 'cut' (collapse vs plate). Blunt scales with percussion."""
+    if head=='blunt':  return _mode_transmit('blunt', armor, close, gap, perc)
+    if head=='point':  return _mode_transmit('point', armor, close, gap, perc)
     if head=='cut_thrust':
-        return max(_mode_transmit('cut', armor, close, gap), _mode_transmit('point', armor, close, gap))
-    return _mode_transmit('cut', armor, close, gap)      # straight_cut, curved_cut — no mode-shift
+        return max(_mode_transmit('cut', armor, close, gap, perc), _mode_transmit('point', armor, close, gap, perc))
+    return _mode_transmit('cut', armor, close, gap, perc)      # straight_cut, curved_cut — no mode-shift
 def cfg_gap_a(armor): return {'medium':0.10,'heavy':0.06}[armor]   # baseline gap-find transmit (low)
 def cfg_gap_b(armor): return {'medium':0.40,'heavy':0.40}[armor]   # precision payoff: high-gap points reach gaps
-def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, gap=0.65):
+def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, gap=0.65, perc=8):
     if deg not in ('graze','success','overwhelming'): return 0
     imp=HEFT[weapon_wt]+min(max((strength-3)//2,-1),2)
     cap=1.2*(cap_end+6)
-    return int(round(QUAL[deg]*cap*tanh(imp*coupling(weapon_head,armor,close,gap)*scale/cap)))
+    return int(round(QUAL[deg]*cap*tanh(imp*coupling(weapon_head,armor,close,gap,perc)*scale/cap)))

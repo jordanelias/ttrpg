@@ -116,7 +116,10 @@ def armor_defeat_sigma(aggressor, defender, cfg):
     # gap-thrust POINT; it uses whichever is more effective — so a defender taking MORE armour never flips the
     # attacker into a suddenly-stronger mode (removes the light->medium cliff). Pure cutters cut; points thrust.
     if head=='blunt':
-        cap=cfg['ADEF_BLUNT']
+        # blunt armour-defeat scales with PERCUSSION AUTHORITY (§4): a steel hammer/beak (mace/poleaxe, perc 8)
+        # defeats plate; a wooden quarterstaff (perc 4) does not — wood transmits little through plate. Reference =
+        # perc 8 (full credit); lower percussion weapons get proportionally less armour-defeat.
+        cap=cfg['ADEF_BLUNT']*(aggressor.w.get('percussion',8)/8.0)
     elif head=='point':
         cap=cfg['ADEF_POINT']*aggressor.w['gap']
     elif head=='cut_thrust':

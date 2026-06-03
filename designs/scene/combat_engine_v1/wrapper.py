@@ -60,7 +60,7 @@ def engagement(A, B, first, cfg, rng):
                 ob=core.effective_ob(pool, nsig); net=core.roll_net(pool, rng)
                 deg=core.degree(net, ob)
                 if deg in ('success','overwhelming'):
-                    d=core.damage(deg, longer.weight, longer.head, longer.strength, shorter.armor, False, cfg['DAMAGE_SCALE'], cfg['CAP_END'], longer.w['gap'])
+                    d=core.damage(deg, longer.weight, longer.head, longer.strength, shorter.armor, False, cfg['DAMAGE_SCALE'], cfg['CAP_END'], longer.w['gap'], longer.w.get('percussion',8))
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     if shorter.felled: return shorter
             if not closed:
@@ -131,16 +131,16 @@ def engagement(A, B, first, cfg, rng):
         if deg=='fail':
             riposte=(rng.random() < min(0.95, cfg['RIPOSTE_ON_FAIL']+overcommit_exposure))
         elif deg=='partial':
-            if mode=='dodge': hit=core.damage('graze',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap']) if rng.random()<0.4 else 0
-            elif mode=='parry': hit=core.damage('graze',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap']) if rng.random()<0.30 else 0
+            if mode=='dodge': hit=core.damage('graze',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8)) if rng.random()<0.4 else 0
+            elif mode=='parry': hit=core.damage('graze',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8)) if rng.random()<0.30 else 0
             else: bind=True
         elif deg=='success':
             if mode=='wind' and rng.random()<0.55: bind=True
             elif rng.random()<neutralize: riposte=(rng.random() < min(0.95, 0.20+overcommit_exposure))
-            else: hit=core.damage('success',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'])
+            else: hit=core.damage('success',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
         else:
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
-            else: hit=core.damage('overwhelming',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'])
+            else: hit=core.damage('overwhelming',aggressor.weight,aggressor.head,astr,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
         sim=(hit>0 and riposte)
         # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
         # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the
@@ -152,7 +152,7 @@ def engagement(A, B, first, cfg, rng):
                 if not closed: closed=True; measure_gap=0.0; ready={A:0.0,B:0.0}
                 # pull-back of the committed thrust can still graze the closing defender
                 if rng.random() < cfg['DISPLACE_PULLBACK_GRAZE']:
-                    d=core.damage('graze',aggressor.weight,aggressor.head,aggressor.strength,defender.armor,False,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'])
+                    d=core.damage('graze',aggressor.weight,aggressor.head,aggressor.strength,defender.armor,False,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
                     defender.apply_wound(d)
                     if defender.felled: return defender
                 riposte=True   # defender now inside with initiative
@@ -177,7 +177,7 @@ def engagement(A, B, first, cfg, rng):
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor
                 if rng.random() < 1/(1+exp(-bsig)):
                     if rng.random()<0.4:
-                        d=core.damage('success',aggressor.weight,aggressor.head,aggressor.strength,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'])
+                        d=core.damage('success',aggressor.weight,aggressor.head,aggressor.strength,defender.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],aggressor.w['gap'], aggressor.w.get('percussion',8))
                         defender.apply_wound(d); defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_HIT'])
                         if defender.felled: return defender
                         break
@@ -186,7 +186,7 @@ def engagement(A, B, first, cfg, rng):
             if sim:
                 # concentration disruption-resistance: focus lets aggressor still complete despite the blow
                 if rng.random() > 1/(1+exp(-cfg['DISRUPT_K']*(aggressor.focus-3))):
-                    d=core.damage('graze',defender.weight,defender.head,defender.strength,aggressor.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],defender.w['gap'])
+                    d=core.damage('graze',defender.weight,defender.head,defender.strength,aggressor.armor,close,cfg['DAMAGE_SCALE'],cfg['CAP_END'],defender.w['gap'], defender.w.get('percussion',8))
                     aggressor.apply_wound(d); aggressor.conc=max(0,aggressor.conc-cfg['CONC_DRAIN_HIT'])
                     if aggressor.felled: return aggressor
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
