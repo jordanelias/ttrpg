@@ -62,18 +62,24 @@ working_state:
     shared _disc_prep/_depth_prep (gate independent, recoil conjunctive). Gate byte-exact
     (proven); 4 edges hold; no re-calibration.'
   next:
-  - 'KITING (research #1 troop type + item-3 amplifier): ranged unit faster than target
-    maintains range + volleys each turn (vs single volley-then-close); needs run_multi_turn_battle;
-    unlocks mounted_archers/Kite. Measure missile-attrition-over-distance; validate
-    vs report (Carrhae/Hattin/Mohi horse-archer attrition).'
-  - 'Arch-debt (fix when composites/instructions arrive): #2 apply_instructions(subunit)
-    dispatch (ROLE_SPEC/role/instructions still INERT); #3 per-atom (not unit-mean)
-    brace/density for composites; #4 derive PC_VOLLEY_DENSITY_REF=80 from a canonical
-    formation.'
-  - 'Dynamic-movement off-grid: guard covers INITIAL placement only; cells moving
-    past battlefield edge during resolution is a separate latent concern.'
-  - 'Optional record hygiene: restore 0.806/0.800/0.781 EV entries to /home/claude/sim_verification_ledger.json
-    (gate already passes via # comment).'
+  - 'KITING DECISIVENESS [Jordan design call]: 18-turn volley attrits only ~12%. Should
+    sustained volley be stronger (decisive kiting) or is "untouched kiter + slow attrition
+    = material advantage" the intent? Balance decision.'
+  - 'KITING vs-CAVALRY COUNTER [mechanical, but design-coupled]: add edge-cornering
+    so a retreating kiter pinned at the map edge gets caught (validates Arsuf/Patay-style
+    cornering). CAREFUL: advance_cells offset<->abs applies advance_dir twice (offset
+    accumulates r_step*advance_dir; cells() re-applies *advance_dir; net cancels)
+    — clamp the OFFSET, not just abs, to avoid hysteresis. Addresses the dynamic-bounds
+    item. Byte-exact-safe (inward-moving units never hit edges).'
+  - 'TERRAIN / field-size meaning [Jordan design call]: the 25-cell field IS the kiting
+    constraint (no terrain layer). Open plains (kiting dominates, Carrhae) vs constrained
+    (kiting countered, Arsuf)? Couples to the deferred terrain layer.'
+  - 'Arch-debt (fix when composites/instructions arrive): #2 apply_instructions dispatch
+    (the "kite" hook is the FIRST instruction-driven behavior — generalize when a
+    2nd instruction needs it); #3 per-atom brace/density for composites; #4 derive
+    PC_VOLLEY_DENSITY_REF from a canonical formation.'
+  - 'Optional: restore 0.806/0.800/0.781 EV entries to the local sim_verification_ledger.json
+    (record hygiene; gate already passes via # comment).'
   architecture: 'Three-level FM surface: L1 army doctrine (Aggression/Cohesion-priority)
     | L2 unit formation = SHAPE (arrangement only, NO bonus) | L3 subunit ROLE = troop-type-gated
     INSTRUCTION package. Governance triangle: Command orchestrates (adapt strategy
@@ -111,10 +117,18 @@ working_state:
   - 'Subunit construction guard (1e4e6436): __post_init__ validates shape/tier/bounds
     -> clear ValueError (was KeyError/off-grid); byte-exact, selftest 30 + signatures
     4/4 + gauge ON==OFF'
+  - Kiting plan folded into design §13 (161421ac)
+  - 'Kiting primitive WIRED + committed (9159c22c): config PC_KITE_ENABLED/PC_KITE_STANDOFF=5[class-B]
+    + advance_cells maintain-range hook (gated on the "kite" instruction, Chebyshev
+    to match volley) + mounted-speed for mounted_archers. Byte-exact (selftest 30,
+    signatures 4/4, gauge ON==OFF).'
+  - 'Kiting MEASURED (PER_CELL=1, Line t4, 20 seeds): kiter vs infantry = kiter 100%
+    HP / inf 88% / DRAW; no-kite ranged control closes + loses 16/20 at 81% (proves
+    the hook works); kiter vs cavalry == vs infantry (no cornering counter).'
   in_progress:
-  - 'Kiting: bottom-up grounding done + code-level build plan folded into design §13.
-    Ready to implement (3 coupled changes specced + measurement protocol).'
-last_commit: 1e4e643629b6a4d067a11eea120cc99047cea9f2 (Subunit construction guard)
+  - DECISION POINT — kiting primitive works but balance forks need Jordan direction
+    (see next).
+last_commit: 9159c22c (kiting primitive wired) — design forks open
 owns:
 - tests/sim/mass_battle/*.py
 - tests/coverage_matrix.md
@@ -144,6 +158,15 @@ key_values:
   commit paths are unchanged at live HEAD (refs API), set G._fetch_head["ttrpg:"+path]=HEAD
   for each, then safe_commit. Safe when no other session + no real conflict.'
 - designs/proposals/pc_formation_system.md now ~23756 chars (§11 corrected + §12 provenance/audit).
+- 'KITE measured numbers (PER_CELL=1, Line t4, 20 seeds): kiter-vs-inf A_win=0 B_win=0
+  draw=20 (A 100% / B 88%); no-kite-ranged-vs-inf A_win=3 B_win=16 (A 81% / B 90%);
+  kiter-vs-cav == kiter-vs-inf.'
+- 'advance_cells offset semantics: abs = starting_position + oriented + offset*advance_dir;
+  the offset itself accumulates r_step*advance_dir, so advance_dir appears twice and
+  cancels (abs ~ sp + or + Sum(r_step)). r_step already carries the toward/away sign.
+  Care needed for any movement-clamping (edge-cornering).'
+- PC_KITE_STANDOFF=5 (band [2,8]); kiter holds+volleys in [5,8], retreats when d<5,
+  closes when d>8.
 blockers:
 - DENSITY PRIMITIVE (B) MAGNITUDE -- how much brace raises density + density damps
   penetration (calibration target in working_state). Behaviour-cascading; Jordan to
@@ -157,5 +180,5 @@ blockers:
   (ED-899 follow-up); VERIFY recovered A.5/A.6/A.8/A.12 + troop-type canon against
   mass_battle_v30.md.'
 created: '2026-06-03T00:52:10.734036+00:00'
-updated: '2026-06-03T05:10:11.165055+00:00'
+updated: '2026-06-03T05:50:19.661913+00:00'
 status: active
