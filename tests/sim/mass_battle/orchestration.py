@@ -1431,6 +1431,20 @@ def _roll_volley_pool(power_dice):
     return max(0, net)  # floor at 0; PP-273 minimum pool is for engagement, not volley result
 
 
+def _volley_density_mult(target_unit):
+    """Missile-vulnerability of the TARGET formation: packed/deep columns catch overshoot and
+    cannot disperse, so they bleed more under volley (Carrhae/Agincourt/Crecy); a dispersed or
+    shallow line takes far fewer hits. 1.0 at the reference line density. Ranged-only path ->
+    the melee gauge never reaches it (byte-exact).
+    [bottom-up: col_grid density = troops/cell x ranks. historical anchor: massed-formation missile losses.]"""
+    if not PC_VOLLEY_DENSITY_ENABLED:
+        return 1.0
+    grid = getattr(target_unit, 'col_grid', None)
+    if not grid:
+        return 1.0
+    mean_density = sum(b.density for b in grid) / len(grid)
+    return max(PC_VOLLEY_DENSITY_FLOOR, min(PC_VOLLEY_DENSITY_CAP, mean_density / PC_VOLLEY_DENSITY_REF))
+
 def volley_phase(unit_a, unit_b):
     """Phase 2 Volley. Each ranged atom selects nearest in-range enemy atom and fires.
     Returns dict of total Size-loss to each side (applied simultaneously at end of turn).
@@ -1443,10 +1457,12 @@ def volley_phase(unit_a, unit_b):
     loss_a = loss_b = 0
     shots = 0
 
-    def fire(shooter_atom, shooter_unit, target_atoms):
-        """Pick nearest in-range target atom, roll Power vs TN, return Size loss inflicted."""
+    def fire(shooter_atom, shooter_unit, target_unit):
+        """Pick nearest in-range target atom, roll Power vs TN, return Size loss inflicted.
+        Volley loss scales with the TARGET formation's density (_volley_density_mult)."""
         if shooter_atom.unit_type != "ranged":
             return 0, None
+        target_atoms = target_unit.subunits
         best_target = None
         best_dist = float('inf')
         for t in target_atoms:
@@ -1467,15 +1483,15 @@ def volley_phase(unit_a, unit_b):
             # concentration over the integral). Distinct from the frontage-capped melee linear
             # term. [spec mb_lanchester_design.md §3b; Lanchester Square Law = ranged/aimed fire.]
             net_after_dr = net_after_dr * K_SQUARE * shooter_unit.effective_size
-        return net_after_dr, best_target
+        return net_after_dr * _volley_density_mult(target_unit), best_target
 
     for atom in unit_a.subunits:
-        dmg, tgt = fire(atom, unit_a, unit_b.subunits)
+        dmg, tgt = fire(atom, unit_a, unit_b)
         if tgt is not None:
             loss_b += dmg
             shots += 1
     for atom in unit_b.subunits:
-        dmg, tgt = fire(atom, unit_b, unit_a.subunits)
+        dmg, tgt = fire(atom, unit_b, unit_a)
         if tgt is not None:
             loss_a += dmg
             shots += 1
