@@ -128,10 +128,14 @@ def engagement(A, B, first, cfg, rng):
         net_sigma=atk_sig - dsig - reach_pen + adef + init_edge
         # INDES / sen-no-sen STEAL (forced-to-Nach by READING): a defender who out-read a deeply-committed aggressor
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
+        contratempo=False
         if read_win and commit>=4:
             steal=cfg['INIT_STEAL_INDES']*S.init_steal_factor(defender, mode=='wind', TR)
             defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
             aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
+            # CONTRATEMPO / single-time counter: reading a committed aggressor, the defender may counter in the SAME
+            # tempo (rapier counterattack-in-opposition / Indes through the opening). Scaled by tempo (Italian).
+            contratempo = rng.random() < cfg['CONTRATEMPO_BASE']*TR.channel_weight(defender.tradition,'tempo')
         pool=core.resolution_pool(aggressor.history)
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)
@@ -160,6 +164,8 @@ def engagement(A, B, first, cfg, rng):
         else:
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
             else: hit=core.strike(aggressor, defender, 'overwhelming', close, cfg)
+        if contratempo:
+            hit=0; bind=False; riposte=True   # single-time counter: committed attack voided in-tempo, defender ripostes
         sim=(hit>0 and riposte)
         # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
         # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the

@@ -70,6 +70,9 @@ CFG = dict(
   # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
   STRUCT_FLOOR=0.5, STRUCT_EFFECT_FLOOR=0.88, STRUCT_RECOVER=0.20,
   STRUCT_BREAK_OVERCOMMIT=0.09, STRUCT_BREAK_BIND=0.05, STRUCT_BREAK_HIT=0.07, STRUCT_SOLID_HIT=8.0,
+  # contratempo / single-time counter: base chance the defender counters a committed aggressor IN THE SAME tempo on
+  # an out-read (the Indes/sen-no-sen moment), scaled by the defender's tempo channel (Italian). Reuses the riposte path.
+  CONTRATEMPO_BASE=0.15,
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )
