@@ -367,6 +367,30 @@ def run_update():
             deletions=[],
             message="[infrastructure] freshness_gate --update: sync canonical_sha fields",
         )
+        # Invalidate the bootstrap fetch-cache for the path just committed so the
+        # NEXT bootstrap freshness check reads the new content and recomputes.
+        # atomic_commit (unlike safe_commit) does not evict, so without this the
+        # same session keeps reporting the pre-update (stale) SHAs until cache TTL
+        # or container reset. This uses the existing cache_evict API and adds no
+        # new on-disk cache state of its own -- storage-agnostic, so it rides any
+        # future SQLite-backed cache substrate unchanged.
+        try:
+            # cache_evict (hard delete + persist) — NOT cache_evict_committed, whose
+            # session-permanent branch updates memory without saving to disk, and which
+            # atomic_commit does not invoke. Hard-evicting forces a fresh re-fetch of
+            # canonical_sources on the next bootstrap so freshness recomputes correctly.
+            g.cache_evict(CANONICAL_SOURCES_PATH, repo=REPO_NAME)
+            # Also drop the stale fetch_head entry so the next bootstrap cannot
+            # short-circuit the re-fetch on a HEAD match. Mirrors the verified
+            # cache state that makes the freshness check recompute clean.
+            try:
+                g._fetch_head.pop(f"{REPO_NAME}:{CANONICAL_SOURCES_PATH}", None)
+                g._save_cache()
+            except Exception:
+                pass
+        except Exception as _evict_err:
+            print(f"[WARN] post-commit cache eviction failed: {_evict_err} "
+                  f"(re-bootstrap or container reset will clear the stale warning)")
     except Exception:
         # Fallback: direct REST commit (CI environment, no github_ops)
         put_file(
@@ -375,6 +399,13 @@ def run_update():
             "[infrastructure] freshness_gate --update: sync canonical_sha fields",
             sha=rest_sha
         )
+        # Best-effort eviction if github_ops is importable in the fallback path.
+        try:
+            import github_ops as _g
+            _g._load_cache()
+            _g.cache_evict(CANONICAL_SOURCES_PATH, repo=REPO_NAME)
+        except Exception:
+            pass
     print("\n[DONE] canonical_sources.yaml updated with current SHAs.")
     print("Run 'python3 tools/freshness_gate.py' to verify.")
     sys.exit(0)
