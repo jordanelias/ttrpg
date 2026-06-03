@@ -27,6 +27,7 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     elif grip=='lunge':pen += cfg['LUNGE_TEMPO_PEN']    # extended/lunge: slower to repeat (reach/commit gain elsewhere)
     t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']-pen
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
+    t*=struct_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
     return max(cfg['TEMPO_FLOOR'],t)
 def close_tempo(c, cfg, fatigue=0.0):
     """Cadence IN THE CLOSE — conditional (fatigue/grip). A long two-handed pole (spear/staff) is SLOW to recover
@@ -281,3 +282,15 @@ def init_overcommit_loss(aggressor, exposure, cfg, TR):
     """True-times discipline (English; also Italian/Japanese tempo): tempo-disciplined fighters lose less grip on the
     Vor from their own commitment. Returns the initiative loss magnitude (neutral tempo = base)."""
     return cfg['INIT_LOSS_OVERCOMMIT'] * exposure / TR.channel_weight(aggressor.tradition,'tempo')
+
+# ---------- kuzushi / structure (dynamic balance) ----------
+def struct_factor(c, cfg):
+    """Maps current structure [STRUCT_FLOOR,1] to a [STRUCT_EFFECT_FLOOR,1] multiplier on tempo and defence: a
+    broken-balance (kuzushi'd) fighter acts and defends worse. At full structure (1.0) returns 1.0 (no effect), so
+    full-structure fighters are unaffected. Pure."""
+    s=max(cfg['STRUCT_FLOOR'], min(1.0, c.structure))
+    return cfg['STRUCT_EFFECT_FLOOR'] + (1-cfg['STRUCT_EFFECT_FLOOR'])*(s-cfg['STRUCT_FLOOR'])/(1-cfg['STRUCT_FLOOR'])
+
+def clamp_structure(x, cfg):
+    """Bound structure to [STRUCT_FLOOR, 1.0]."""
+    return max(cfg['STRUCT_FLOOR'], min(1.0, x))

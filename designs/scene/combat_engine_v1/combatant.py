@@ -73,6 +73,7 @@ class Combatant:
         self.conc=0.0; self.conc_max=0.0
         self.ready=0.0
         self.initiative=0.0                  # the Vor/Nach state (signed; +ve = holds initiative). Reset/managed by wrapper.
+        self.structure=1.0                   # kuzushi/balance (1.0=balanced, broken downward). Reset/managed by wrapper.
     # weapon vector accessors
     @property
     def w(self): return WEAPONS[self.weapon]

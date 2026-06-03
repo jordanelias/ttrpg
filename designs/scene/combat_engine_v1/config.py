@@ -64,6 +64,12 @@ CFG = dict(
   INIT_DECAY=0.75, INIT_CAP=1.5,                         # damper (per beat) + hard bound
   INIT_GAIN_HIT=0.18, INIT_LOSS_WOUNDED=0.28,            # press the advantage / forced toward Nach by damage
   INIT_STEAL_INDES=0.36, INIT_LOSS_OVERCOMMIT=0.14,      # read-based steal (Indes/sen-no-sen) / overcommit bleeds grip
+  # kuzushi / structure (dynamic balance): broken by overcommit / losing the bind / a solid blow; while broken it
+  # degrades tempo AND defence; recovers each beat toward 1.0. This is the DYNAMIC tempo-vs-structure fix deferred
+  # from the initiative build (replaces the rejected static footwork->tempo coupling — structure is dynamic, footwork
+  # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
+  STRUCT_FLOOR=0.5, STRUCT_EFFECT_FLOOR=0.88, STRUCT_RECOVER=0.20,
+  STRUCT_BREAK_OVERCOMMIT=0.09, STRUCT_BREAK_BIND=0.05, STRUCT_BREAK_HIT=0.07, STRUCT_SOLID_HIT=8.0,
   # 95% videogame cap: structural per-exchange floor so no matchup reads 100/0 (always an upset chance)
   UPSET_FLOOR=0.05,
 )

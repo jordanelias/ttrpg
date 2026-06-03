@@ -11,6 +11,7 @@ def _init_live(c, cfg):
     c.conc_max=S.conc_max(c,cfg);   c.conc=c.conc_max
     c.ready=0.0
     c.initiative=0.0
+    c.structure=1.0
 
 def engagement(A, B, first, cfg, rng):
     """One engagement (the exchange inside a bout). `first` is the initiating Combatant object. Returns the
@@ -36,6 +37,9 @@ def engagement(A, B, first, cfg, rng):
         # INITIATIVE DECAY (damper) — per-tradition HOLD: high measure (destreza) decays slower, holding the Vor longer.
         A.initiative=S.clamp_initiative(A.initiative*S.init_hold_decay(A,cfg,TR), cfg)
         B.initiative=S.clamp_initiative(B.initiative*S.init_hold_decay(B,cfg,TR), cfg)
+        # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
+        A.structure=S.clamp_structure(A.structure+cfg['STRUCT_RECOVER']*(1-A.structure), cfg)
+        B.structure=S.clamp_structure(B.structure+cfg['STRUCT_RECOVER']*(1-B.structure), cfg)
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -117,7 +121,7 @@ def engagement(A, B, first, cfg, rng):
         modes=['parry','dodge','wind']
         msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
         mode=max(msig,key=msig.get) if read_win else modes[rng.integers(3)]
-        dsig=msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg)
+        dsig=(msig[mode]*(1-cfg['MENTAL_FAT_DEF_K']*mental_fat_d)*(1-feint_debuff) - S.handling_penalty(defender,fat_d,cfg) + S.stance_stability(defender,fat_d,cfg))*S.struct_factor(defender,cfg)
         atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
@@ -137,6 +141,7 @@ def engagement(A, B, first, cfg, rng):
         # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
         if overcommit_exposure>0:
             aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)
+            aggressor.structure=S.clamp_structure(aggressor.structure - cfg['STRUCT_BREAK_OVERCOMMIT']*overcommit_exposure, cfg)  # overextended = off-balance
         # ----- outcome mapping (deg = AGGRESSOR's degree; defender mode can neutralize) -----
         hit=0; riposte=False; bind=False
         # neutralize is a FIXED mode-shape (parry deflects / dodge voids / wind binds) — NOT re-scaled by dsig,
@@ -187,6 +192,7 @@ def engagement(A, B, first, cfg, rng):
             # forced-to-Nach by DAMAGE: the aggressor presses the advantage (gains the Vor); the struck defender loses it.
             aggressor.initiative=S.clamp_initiative(aggressor.initiative+cfg['INIT_GAIN_HIT'], cfg)
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
+            defender.structure=S.clamp_structure(defender.structure - cfg['STRUCT_BREAK_HIT']*min(1.0, hit/cfg['STRUCT_SOLID_HIT']), cfg)  # solid blows stagger; chip damage barely
             if defender.felled: return defender
         if bind:
             # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
@@ -196,6 +202,8 @@ def engagement(A, B, first, cfg, rng):
             g=cfg['INIT_STEAL_INDES']*S.init_steal_factor(bw, True, TR)
             bw.initiative=S.clamp_initiative(bw.initiative+g, cfg)
             bl.initiative=S.clamp_initiative(bl.initiative-g, cfg)
+            # KUZUSHI: the bind winner breaks the loser's balance through the bind, scaled by leverage (Stärke-Schwäche).
+            bl.structure=S.clamp_structure(bl.structure - cfg['STRUCT_BREAK_BIND']*TR.channel_weight(bw.tradition,'leverage'), cfg)
             for _ in range(3):
                 beats+=1
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor
