@@ -33,10 +33,9 @@ def engagement(A, B, first, cfg, rng):
         # CONDITIONAL TEMPO (correction 2): recompute each beat with current fatigue — grip/stance/fatigue change
         # cadence; it is not a static weapon property. Approach uses general cadence; closed uses close-cadence.
         ffat={A:max(0.0,1-A.stamina/max(1,A.stamina_max)), B:max(0.0,1-B.stamina/max(1,B.stamina_max))}
-        # INITIATIVE DECAY (the damper): the Vor bleeds toward contested each beat — you hold it only by continuing to
-        # threaten. This is the bounded-loop safeguard (gain < 1 per cycle) the NERS audit requires for this state.
-        A.initiative=S.clamp_initiative(A.initiative*cfg['INIT_DECAY'], cfg)
-        B.initiative=S.clamp_initiative(B.initiative*cfg['INIT_DECAY'], cfg)
+        # INITIATIVE DECAY (damper) — per-tradition HOLD: high measure (destreza) decays slower, holding the Vor longer.
+        A.initiative=S.clamp_initiative(A.initiative*S.init_hold_decay(A,cfg,TR), cfg)
+        B.initiative=S.clamp_initiative(B.initiative*S.init_hold_decay(B,cfg,TR), cfg)
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -123,20 +122,21 @@ def engagement(A, B, first, cfg, rng):
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
         net_sigma=atk_sig - dsig - reach_pen + adef + init_edge
-        # INDES / sen-no-sen STEAL (forced-to-Nach by READING): if the defender out-read a deeply-committed aggressor,
-        # the defender acts within the aggressor's tempo and STEALS the Vor (the sign flips toward the defender).
+        # INDES / sen-no-sen STEAL (forced-to-Nach by READING): a defender who out-read a deeply-committed aggressor
+        # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
         if read_win and commit>=4:
-            defender.initiative=S.clamp_initiative(defender.initiative+cfg['INIT_STEAL_INDES'], cfg)
-            aggressor.initiative=S.clamp_initiative(aggressor.initiative-cfg['INIT_STEAL_INDES'], cfg)
+            steal=cfg['INIT_STEAL_INDES']*S.init_steal_factor(defender, mode=='wind', TR)
+            defender.initiative=S.clamp_initiative(defender.initiative+steal, cfg)
+            aggressor.initiative=S.clamp_initiative(aggressor.initiative-steal, cfg)
         pool=core.resolution_pool(aggressor.history)
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; footwork-balance curbs it.
         overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg)
-        # forced-to-Nach by losing BALANCE/grip: a deep commit that left exposure bleeds the aggressor's initiative.
+        # forced-to-Nach by losing BALANCE/grip — per-tradition: tempo-disciplined (English true-times) lose less grip.
         if overcommit_exposure>0:
-            aggressor.initiative=S.clamp_initiative(aggressor.initiative-cfg['INIT_LOSS_OVERCOMMIT']*overcommit_exposure, cfg)
+            aggressor.initiative=S.clamp_initiative(aggressor.initiative - S.init_overcommit_loss(aggressor,overcommit_exposure,cfg,TR), cfg)
         # ----- outcome mapping (deg = AGGRESSOR's degree; defender mode can neutralize) -----
         hit=0; riposte=False; bind=False
         # neutralize is a FIXED mode-shape (parry deflects / dodge voids / wind binds) — NOT re-scaled by dsig,
@@ -189,6 +189,13 @@ def engagement(A, B, first, cfg, rng):
             defender.initiative=S.clamp_initiative(defender.initiative-cfg['INIT_LOSS_WOUNDED'], cfg)
             if defender.felled: return defender
         if bind:
+            # German Fühlen / Stärke-Schwäche: whoever DOMINATES the bind (bind_sigma sign) steals the Vor through the
+            # contact — once, at bind entry, scaled by their tactile+leverage. Not gated on the visual read.
+            bsig0 = S.bind_sigma(aggressor, defender, cfg, TR)
+            bw, bl = (aggressor, defender) if bsig0>=0 else (defender, aggressor)
+            g=cfg['INIT_STEAL_INDES']*S.init_steal_factor(bw, True, TR)
+            bw.initiative=S.clamp_initiative(bw.initiative+g, cfg)
+            bl.initiative=S.clamp_initiative(bl.initiative-g, cfg)
             for _ in range(3):
                 beats+=1
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor

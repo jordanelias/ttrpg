@@ -240,7 +240,7 @@ def seizure_score(c, reach_val, cfg, TR):
     rd = reading(c) * TR.channel_weight(c.tradition,'precommit')
     cc = c.conc/max(1.0, c.conc_max)
     return (cfg['INIT_SEIZE_READ']*rd
-            + cfg['INIT_SEIZE_REACH']*reach_val*TR.channel_weight(c.tradition,'measure') + cfg['INIT_SEIZE_CONC']*cc)
+            + cfg['INIT_SEIZE_REACH']*reach_val + cfg['INIT_SEIZE_CONC']*cc)
 
 def initiative_seize(a, b, er, cfg, TR):
     """Initial graded initiative from the pre-contact seizure contest. Returns (init_a, init_b), signed, bounded by
@@ -259,3 +259,25 @@ def initiative_sigma(aggressor, defender, cfg):
 def clamp_initiative(x, cfg):
     """Hard bound on |initiative| (the CAP safeguard; paired with the wrapper's per-beat DECAY = the damper)."""
     return max(-cfg['INIT_CAP'], min(cfg['INIT_CAP'], x))
+
+# ---------- initiative DIFFERENTIATION layer (per-tradition signature = channel weight x substrate mechanism) ----------
+# A pure layer on top of the substrate: each tradition's signature initiative ability is just its existing channel
+# weight multiplying the relevant substrate magnitude. No tradition-name branches; neutral tradition = 1.0 everywhere
+# (so default fighters are unaffected and every invariant holds by construction).
+def init_steal_factor(stealer, bind_active, TR):
+    """WHO steals the Vor best. In a BIND (winding), the steal scales with tactile+leverage — German Fühlen /
+    Stärke-Schwäche. In the OPEN, with tempo — Italian contratempo (the single-time counter). Neutral = 1.0."""
+    if bind_active:
+        return (TR.channel_weight(stealer.tradition,'tactile') + TR.channel_weight(stealer.tradition,'leverage'))/2
+    return TR.channel_weight(stealer.tradition,'tempo')
+
+def init_hold_decay(holder, cfg, TR):
+    """Geometric HOLD (Spanish destreza): high measure slows the per-beat decay, so the Vor is held longer. Returns
+    this fighter's effective decay multiplier (neutral measure = base INIT_DECAY)."""
+    m = TR.channel_weight(holder.tradition,'measure')
+    return 1 - (1 - cfg['INIT_DECAY'])/m
+
+def init_overcommit_loss(aggressor, exposure, cfg, TR):
+    """True-times discipline (English; also Italian/Japanese tempo): tempo-disciplined fighters lose less grip on the
+    Vor from their own commitment. Returns the initiative loss magnitude (neutral tempo = base)."""
+    return cfg['INIT_LOSS_OVERCOMMIT'] * exposure / TR.channel_weight(aggressor.tradition,'tempo')
