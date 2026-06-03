@@ -1,20 +1,22 @@
-# Ground-Up Social Contest — Ratification
+# Ground-Up Social Contest — Ratification (revised, corrected state)
 
-**Date:** 2026-06-03 · **Authority:** Jordan directive ("ratify commit all").
+**Date:** 2026-06-03 (revised) · **Authority:** Jordan directive. Supersedes the initial ratification, which predated the audit.
 
-## What is ratified (structure)
-The ground-up structure, designed from the rhetoric corpus and validated top-down by it and by the resolution diagnostic:
-- The **primitives**: stasis terrain (four grounds + strongest-tenable-rung fallback ladder), the three modes of proof (ethos/pathos/logos), standing as a spendable resource, the action reserve, the self-gating triage (licit tactics by relative standing × audience), leverage into the shared engine, the merits accumulation clock, and the defeat-condition catalogue.
-- The **modes-of-discourse typology**: distinct contests that do not share a win condition — deliberative, forensic, ceremonial, dyadic counsel, royal appeal, negotiation.
-- The **composite resolver**: a deterministic wrapper (turn order, live ground, merits clock, defeat-condition checklist, ledgers) around a small stochastic core (per-move reception only), resolving by deterministic clinch or merits accumulation.
+## What is ratified
+1. **The ground-up structure** (unchanged): the primitives (stasis terrain + fallback ladder, the three modes of proof ethos/pathos/logos, standing, reserve, self-gating triage, leverage, the merits clock, the defeat-condition catalogue), the modes-of-discourse typology (deliberative/forensic/ceremonial/dyadic/appeal/negotiation), and the composite resolver (deterministic clinch OR merits accumulation around a small stochastic reception core). Validated top-down by the rhetoric corpus.
+2. **The corrected wrapper-over-modules implementation**, after the all-directions audit:
+   - the audit found a severe turn-order bias (symmetric contests 87/13); it is **fixed** — merits are judged at the exchange boundary, and **symmetry is now a unit invariant** (identical contestants ~50/50).
+   - appeals are **functional** (logos→merits, ethos→standing, pathos→room), not inert.
+   - the resolver is a thin wrapper composing the primitives; a shared `contract` module removes the former import cycle; opponent passed explicitly; dispatch/scoring split; boundary input validation.
+   - 34/34 unit + invariant + integration tests pass.
 
 ## What is provisional (not ratified)
-- **All numbers are `[SEED]`** — untuned. History validates structure, not numbers. Balance (threshold, reserve sizes, lever magnitudes, the reception-variance band) is a separate sim pass.
-- The four non-core modes (dyadic, appeal, negotiation, ceremonial) are **scaffolds** — declared with their win conditions, not implemented.
-- How much reception variance to retain is a **feel decision** reserved to Jordan.
+- **All numbers remain `[SEED]`** — the balance pass (threshold, reserve sizes, lever magnitudes, defeat-condition counts, reception-variance band) is still pending; the variance band is a Jordan feel call.
+- Deeper deliberative/forensic differentiation (distinct win conditions/decision rules beyond opening ground).
+- The four non-core modes (dyadic, appeal, negotiation, ceremonial) remain scaffolds.
 
 ## Provenance
-No v30 inheritance: no Memory/Projection, no genre axis, no Evidence-clock, no v30 formulas or trackers. The only canonical reference is the shared resolution engine (verified `core.md` + σ-leverage armature constants), which is engine-level, not contest-specific.
+No v30 inheritance. The only canonical reference is the shared resolution engine (verified `core.md` + σ-leverage armature), which is engine-level, not contest-specific.
 
-## Follow-ups
-All-directions audit + stress test (this session); the balance pass on the seeds; building the scaffold sub-systems; and eventual promotion from this date-keyed baseline to a canonical scene design doc once balance is validated.
+## Validation status
+Structure ratified; architecture corrected and unit-tested; audit complete with its P1 fixed and re-validated. **Stress test in progress** (this session). Balance pass and scaffold sub-systems remain.
