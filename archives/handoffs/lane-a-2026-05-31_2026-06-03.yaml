@@ -65,6 +65,7 @@ working_state:
 last_commit: 960416b5ffcf4ebdb370691794d1e4740af3b1ce
 created: '2026-06-01T01:50:10.147428+00:00'
 updated: '2026-06-01T01:50:10.147428+00:00'
-status: active
+status: closed
 key_values: []
 blockers: []
+closed_at: '2026-06-03T06:32:27.329331+00:00'
