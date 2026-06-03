@@ -1,6 +1,6 @@
 id: resolution-diagnostic-v3-2026-06-01
 scope: infrastructure
-status: complete
+status: closed
 session_token: a1073570e6917798
 last_commit: e5f94e987f991e51141d49e75944a7c197aef5c4
 owns:
@@ -60,3 +60,4 @@ blockers:
 - NONE — deliverable shipped + verified.
 created: '2026-06-01T03:37:19.263518+00:00'
 updated: '2026-06-01T03:37:19.263518+00:00'
+closed_at: '2026-06-03T06:32:28.773102+00:00'
