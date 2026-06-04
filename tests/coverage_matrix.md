@@ -80,3 +80,7 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 
 <!-- 2026-06-03 continuous-scale rework - step 1a -->
 - **footprint generator (step 1a)** - `geometry.footprint_for(shape, troops, concentration)` + continuous-scale constants (CELL_FLOOR=40 / CELL_CAP=200 / SUBUNIT_ROUT_FLOOR=80 / MAX_TROOPS_PER_UNIT=10000). Lays a continuous troop count into a shape at a target density, bounded [40,200]. Validated 0 bound-violations across all 5 shapes; legacy tier path untouched. Subunit wiring follows (1b-d).
+
+
+<!-- 2026-06-03 continuous-scale rework - step 1b/1c -->
+- **continuous footprint wiring (step 1b/1c)** - `Subunit` gains `troops` + `concentration`; `troop_count` returns the continuous count when set, else the tier value. A new `_oriented(su)` chokepoint routes all 9 `oriented_pattern(shape, tier, dir)` sites to `footprint_for` when troops is set (else byte-exact tier fallback); `cell_speed` stays (position-based). Validated: Lanchester signature byte-exact (p=1.45/1.30); a continuous unit (5000 @ concentration 100 -> 48 cells, ~104/cell) builds its col-grid and runs a full battle. Harness wiring + tier removal: 1d.

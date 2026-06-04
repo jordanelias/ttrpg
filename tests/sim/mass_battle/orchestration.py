@@ -407,6 +407,22 @@ def role_allowed(troop_type, role):
     """True iff `role` is in `troop_type`'s gated menu."""
     return role in roles_for(troop_type)
 
+
+def _oriented(su):
+    """Oriented base pattern for a subunit, as a list of (orig_r, orig_c, or_r, or_c) tuples.
+    Continuous path (su.troops set): footprint_for(shape, troops, concentration). Legacy path
+    (troops None): oriented_pattern(shape, tier) — byte-exact. Orientation matches
+    oriented_pattern exactly. [Jordan directive — continuous footprint]"""
+    troops = getattr(su, 'troops', None)
+    if troops is not None:
+        pat = footprint_for(su.shape, troops, su.concentration)
+        if su.advance_dir == -1:
+            return [(r, c, r, c) for r, c in pat]
+        max_r = max(r for r, c in pat)
+        return [(r, c, max_r - r, c) for r, c in pat]
+    return oriented_pattern(su.shape, su.tier, su.advance_dir)
+
+
 @dataclass
 class Subunit:
     shape: str
@@ -449,6 +465,11 @@ class Subunit:
     # (brace→+density, etc.) is the behaviour-cascading next step (design §3.5/§9.1).
     role: Optional[str] = None
     instructions: Tuple[str, ...] = ()
+    # Continuous-scale (Jordan directive 2026-06-03): when `troops` is set the footprint is
+    # generated from (troops, concentration) via footprint_for and `tier` becomes vestigial;
+    # None keeps the legacy tier path (byte-exact).
+    troops: Optional[float] = None
+    concentration: Optional[float] = None
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -458,7 +479,9 @@ class Subunit:
         # (cell_offsets are 0 here); dynamic movement past the edge is a separate concern.
         if self.shape not in CELL_PATTERN_FN:
             raise ValueError(f"Subunit shape {self.shape!r} unknown; valid shapes: {sorted(CELL_PATTERN_FN)}")
-        if self.tier not in TROOPS_PER_TIER:
+        if (self.troops is None) != (self.concentration is None):
+            raise ValueError("Subunit: continuous mode needs both troops and concentration (or neither, for the tier path)")
+        if self.troops is None and self.tier not in TROOPS_PER_TIER:
             raise ValueError(f"Subunit (shape={self.shape}) tier must be one of {sorted(TROOPS_PER_TIER)}, got {self.tier!r}")
         for ar, ac in self.cells():
             if not (0 <= ar < BATTLEFIELD_SIZE and 0 <= ac < BATTLEFIELD_SIZE):
@@ -468,7 +491,8 @@ class Subunit:
                     f"move the anchor inward so the formation fits.")
 
     @property
-    def troop_count(self): return TROOPS_PER_TIER[self.tier]
+    def troop_count(self):
+        return self.troops if self.troops is not None else TROOPS_PER_TIER[self.tier]
 
     @property
     def charge_pen(self):
@@ -479,7 +503,7 @@ class Subunit:
         return 3 if self.troop_type == 'cavalry' else 0
 
     def cells(self):
-        op = oriented_pattern(self.shape, self.tier, self.advance_dir)
+        op = _oriented(self)
         result = []
         for orig_r, orig_c, or_r, or_c in op:
             abs_r = (self.starting_position[0] + or_r
@@ -524,7 +548,7 @@ class Subunit:
         self._prev_facings = dict(self.cell_facing_vec)
         # v13: reset per-turn movement tracker
         self._moved_this_turn = set()
-        op = oriented_pattern(self.shape, self.tier, self.advance_dir)
+        op = _oriented(self)
         disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)
         stance_mod = STANCE_SPEED_MOD[self.stance]
         all_speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _, _ in op]
@@ -688,7 +712,7 @@ class Subunit:
         """
         if not self._prev_offsets:
             return (0, 0)  # First turn, no snapshot to revert to
-        op = oriented_pattern(self.shape, self.tier, self.advance_dir)
+        op = _oriented(self)
         pos_to_cells = {}
         for orig_r, orig_c, or_r, or_c in op:
             ar = (self.starting_position[0] + or_r
@@ -943,7 +967,7 @@ def resolve_cross_side_contention(unit_a, unit_b):
         """abs_pos -> [(subunit, orig_coord, contention_speed)]"""
         result = {}
         for su in unit.subunits:
-            op = oriented_pattern(su.shape, su.tier, su.advance_dir)
+            op = _oriented(su)
             for orig_r, orig_c, or_r, or_c in op:
                 ar = (su.starting_position[0] + or_r
                       + su.cell_offsets.get((orig_r, orig_c), 0) * su.advance_dir)
@@ -1027,7 +1051,7 @@ def _momentum_speed(atom, contact_abs_cells):
     [canonical: Jordan handoff §(2)]"""
     if not contact_abs_cells: return 0.0
     speeds = []
-    op = oriented_pattern(atom.shape, atom.tier, atom.advance_dir)
+    op = _oriented(atom)
     for abs_r, abs_c in contact_abs_cells:
         for orig_r, orig_c, or_r, or_c in op:
             comp_r = (atom.starting_position[0] + or_r
@@ -1165,8 +1189,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             atk_cc = sum(c for r,c in attacker_cells) / len(attacker_cells)
             atk_centroid = (atk_cr, atk_cc)
             mods = []
-            op = oriented_pattern(defender_subunit.shape, defender_subunit.tier,
-                                   defender_subunit.advance_dir)
+            op = _oriented(defender_subunit)
             abs_to_orig = {}
             for orig_r, orig_c, or_r, or_c in op:
                 abs_r = (defender_subunit.starting_position[0] + or_r
@@ -1192,8 +1215,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 # a gapped formation (GappedLine) is correctly "wide" by its reach.
                 _dc = [t[3] for t in op]; _def_front = max(_dc) - min(_dc) + 1
                 if attacker_subunit is not None:
-                    _op_atk = oriented_pattern(attacker_subunit.shape, attacker_subunit.tier,
-                                               attacker_subunit.advance_dir)
+                    _op_atk = _oriented(attacker_subunit)
                     _ac = [t[3] for t in _op_atk]; _atk_front = max(_ac) - min(_ac) + 1
                 else:
                     _atk_front = _def_front + 1
@@ -1581,7 +1603,7 @@ def run_battle(unit_a, unit_b, max_turns=18):
         for atom in unit_a.subunits + unit_b.subunits:
             atom.halted_cells = set()
         for p in pre_pairs:
-            op_a = oriented_pattern(p["atom_a"].shape, p["atom_a"].tier, p["atom_a"].advance_dir)
+            op_a = _oriented(p["atom_a"])
             for cell in p["a_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_a:
                     abs_r = (p["atom_a"].starting_position[0] + or_r
@@ -1590,7 +1612,7 @@ def run_battle(unit_a, unit_b, max_turns=18):
                              + p["atom_a"].cell_offsets_c.get((orig_r,orig_c), 0))
                     if (abs_r, abs_c) == cell:
                         p["atom_a"].halted_cells.add((orig_r, orig_c)); break
-            op_b = oriented_pattern(p["atom_b"].shape, p["atom_b"].tier, p["atom_b"].advance_dir)
+            op_b = _oriented(p["atom_b"])
             for cell in p["b_cells"]:
                 for orig_r, orig_c, or_r, or_c in op_b:
                     abs_r = (p["atom_b"].starting_position[0] + or_r
