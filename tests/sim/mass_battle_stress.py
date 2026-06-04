@@ -34,9 +34,11 @@ _SKEW_FLAG = 5                                       # [class-B test-param: |A-B
 
 def make_unit(faction, troop='infantry', unit_type='melee', tier=4,
               shape='Line', instructions=(), speed='Standard', stance='balanced',
-              power=None, command=None, discipline=None, morale=None, dr=None):
+              power=None, command=None, discipline=None, morale=None, dr=None,
+              troops=None, concentration=None):
     """Build a deployed test unit. 'A' starts near the high-row edge facing in; 'B' mirrors it.
-    Stat args default to the module fixtures (None -> _PWR/_CMD/_DISC/_MOR/_DR); override to sweep."""
+    Stat args default to the module fixtures (None -> _PWR/_CMD/_DISC/_MOR/_DR); override to sweep.
+    Set troops+concentration for a continuous-scale unit (footprint via footprint_for); both None -> tier path."""
     ad = -1 if faction == 'A' else 1
     row = (BATTLEFIELD_SIZE - _EDGE_GAP) if faction == 'A' else (_EDGE_GAP - 1)
     pwr = _PWR if power is None else power
@@ -45,7 +47,8 @@ def make_unit(faction, troop='infantry', unit_type='melee', tier=4,
     mor = _MOR if morale is None else morale
     drv = _DR if dr is None else dr
     su = Subunit(shape=shape, troop_type=troop, tier=tier, starting_position=(row, _COL),
-                 advance_dir=ad, unit_type=unit_type, instructions=instructions)
+                 advance_dir=ad, unit_type=unit_type, instructions=instructions,
+                 troops=troops, concentration=concentration)
     return Unit(name=faction, faction=faction, power=pwr, command=cmd,
                 discipline=dis, discipline_start=dis, morale=mor, morale_start=mor,
                 subunits=[su], dr=drv, stance=stance, speed=speed)

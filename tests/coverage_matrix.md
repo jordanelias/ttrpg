@@ -84,3 +84,7 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 
 <!-- 2026-06-03 continuous-scale rework - step 1b/1c -->
 - **continuous footprint wiring (step 1b/1c)** - `Subunit` gains `troops` + `concentration`; `troop_count` returns the continuous count when set, else the tier value. A new `_oriented(su)` chokepoint routes all 9 `oriented_pattern(shape, tier, dir)` sites to `footprint_for` when troops is set (else byte-exact tier fallback); `cell_speed` stays (position-based). Validated: Lanchester signature byte-exact (p=1.45/1.30); a continuous unit (5000 @ concentration 100 -> 48 cells, ~104/cell) builds its col-grid and runs a full battle. Harness wiring + tier removal: 1d.
+
+
+<!-- 2026-06-03 continuous-scale rework - step 1d -->
+- **harness continuous support (step 1d)** - `make_unit` gains `troops` + `concentration` (threaded to the Subunit); both None -> tier path (byte-exact). Validated: signature byte-exact (p=1.45/1.30); `make_unit(troops=800, concentration=100)` -> 6-cell unit (~133/cell) builds and runs; tier default builds the 35-cell Line. Tier-param removal across callers follows once continuous is re-baselined.
