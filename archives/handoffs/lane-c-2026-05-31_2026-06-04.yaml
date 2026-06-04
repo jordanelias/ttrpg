@@ -148,4 +148,5 @@ blockers:
 last_commit: 8feb752627b2586cdcc46eb6c8429aaa98e1d329
 created: '2026-06-01T00:14:00.830306+00:00'
 updated: '2026-06-01T01:28:53.268896+00:00'
-status: active
+status: closed
+closed_at: '2026-06-04T04:46:14.252631+00:00'
