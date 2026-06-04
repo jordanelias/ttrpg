@@ -313,4 +313,5 @@ blockers:
   to C1-C7 historical bands; mechanism validated, numbers tunable.'
 created: '2026-06-03T00:52:10.734036+00:00'
 updated: '2026-06-03T16:32:12.766079+00:00'
-status: active
+status: closed
+closed_at: '2026-06-04T04:46:10.060745+00:00'
