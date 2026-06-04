@@ -108,7 +108,7 @@ systems:
     # layer of combat_v30.md (lore/flavor retained). Modules: wrapper/systems/core/config/combatant/geometry/
     # tradition. config.py = live Class-C parameter source. SHA-track via freshness_gate.py --update.
     resolution_engine: "designs/scene/combat_engine_v1/"
-    resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified 2026-06-04, ED-900); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
+    resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified ED-900; ALL 2026-06 work re-ratified+approved ED-904, Jordan); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__threadwork__threadwork_v30_md: "08e4dcf2657922279bf8b2bf036e465c13572317"
