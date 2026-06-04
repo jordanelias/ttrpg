@@ -1,3 +1,10 @@
+> **SUPERSEDED 2026-06-03** by `AUDIT_RECONCILED.md` (the master). Retained as history — do not follow
+> independently. Its HIGH headline (finding 1, `resist` inert) was empirically refuted and reconciled to
+> "scale-fragile, MEDIUM"; its Smoothness "cliff" (finding 4) and Necessary "fail" were corrected. See the
+> reconciled master for the adjudicated findings and the empirical evidence.
+
+---
+
 # Full Audit — Social Contest Engine + Faction Adapter (2026-06-03)
 
 **Verdict.** A well-structured engine with a clean venue-determined core, carrying one live logic
