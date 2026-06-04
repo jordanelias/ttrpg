@@ -4,7 +4,7 @@ engine.py — the shared stochastic core. This is the universal Valoria resoluti
 the σ-leverage armature. It is mode-agnostic: it knows nothing about contests, only how a
 pool resolves under leverage. Fixed; not tuned here.
 """
-from math import sqrt, tanh, erf
+from math import sqrt, tanh
 import random
 
 # Base engine (params/core.md): net ~ Normal(0.40·pool, 0.80·√pool) at TN 7;
@@ -21,11 +21,6 @@ def sigma_N(pool):                  return SD_PER_DIE * sqrt(max(1, pool))
 def eff_sigma(net_dsigma):          return M_MAX * tanh(net_dsigma / M_MAX)
 def effective_ob(base_ob, net_dsigma, pool):
     return max(OB_MIN, base_ob - eff_sigma(net_dsigma) * sigma_N(pool))
-
-def _Phi(z):                        return 0.5 * (1 + erf(z / sqrt(2)))
-def p_success(pool, base_ob, net_dsigma):
-    mu, sd = MU_PER_DIE * pool, SD_PER_DIE * sqrt(max(1, pool))
-    return 1 - _Phi((effective_ob(base_ob, net_dsigma, pool) - mu) / sd)
 
 def roll_net(pool):
     s = 0

@@ -1,48 +1,53 @@
 """
-modes.py — modes of discourse. The contested-debate core (deliberative + forensic) is implemented
-over the primitives via the Bout wrapper; the genuinely distinct sub-systems are honest scaffolds.
-Flavors differ by opening stasis ground (forensic opens on FACT, the defence climbing the ladder;
-deliberative opens on QUALITY — is the course advantageous/right). Fuller win-condition/decision-rule
-differentiation between deliberative and forensic is still to design.
+modes.py — institutions as top-down VENUE specs. Each venue supplies its proof-weighting, its
+win-condition (what winning IS), and its defeat-catalogue (which faults are fatal). The primitives
+are identical across them; only the imposed conditions differ.
+
+  court        — tribunal: logos-weighted, ProofBar (burden of proof on the challenger), full
+                 nigrahāsthana faults.
+  disputation  — debate: logos-weighted, ThresholdRace, full faults.
+  assembly     — deliberative: pathos-weighted, TallyAtClose (the body votes), no device-bar fault.
+  appeal       — petition: ethos-weighted, GraceThreshold, deference faults (no device-bar, no
+                 evasion clinch; silence and self-contradiction still fatal).
+
+Genuinely different sub-systems (dyadic counsel, negotiation, ceremonial) remain scaffolds.
 """
 from contract import Adjudicator
-from resolver import Contestant, Config, run
-from primitives import Stasis, Standing
+from resolver import Contestant, Venue, run, ThresholdRace, TallyAtClose, ProofBar, GraceThreshold
+from primitives import Stasis, Standing, DefeatCatalogue
+
+def court_venue(**o):
+    return Venue(proof_ethos=.25, proof_pathos=.20, proof_logos=.55, start_ground=Stasis.FACT,
+                 win=ProofBar(bar=4.0), faults=DefeatCatalogue(), **o)
+def disputation_venue(**o):
+    return Venue(proof_ethos=.15, proof_pathos=.10, proof_logos=.75, start_ground=Stasis.FACT,
+                 win=ThresholdRace(5.0), faults=DefeatCatalogue(), **o)
+def assembly_venue(**o):
+    return Venue(proof_ethos=.25, proof_pathos=.50, proof_logos=.25, start_ground=Stasis.QUALITY,
+                 win=TallyAtClose(), faults=DefeatCatalogue(barred=False), **o)
+def appeal_venue(**o):
+    # petition: a personal plea, judged by the sovereign's character (no institutional proof-weighting,
+    # so resonance comes from the sovereign via leak); grace is not automatic (high bar) and is
+    # discretionary — a stern sovereign denies, a merciful one grants.
+    return Venue(proof_ethos=.34, proof_pathos=.33, proof_logos=.33, start_ground=Stasis.QUALITY,
+                 win=GraceThreshold(7.0), faults=DefeatCatalogue(barred=False, evasion_strikes=0), **o)
+
+VENUES = {"court": court_venue, "disputation": disputation_venue,
+          "assembly": assembly_venue, "appeal": appeal_venue}
 
 class ContestedMode:
-    FLAVORS = {"deliberative": dict(start_ground=Stasis.QUALITY),
-               "forensic":     dict(start_ground=Stasis.FACT)}
-    def __init__(self, flavor="forensic", adjudicator=None, **overrides):
-        self.flavor = flavor
-        self.cfg = Config(**{**self.FLAVORS[flavor], **overrides})
+    def __init__(self, venue="disputation", adjudicator=None, **overrides):
+        self.venue = VENUES[venue](**overrides) if isinstance(venue, str) else venue
         self.adj = adjudicator or Adjudicator()
-    def play(self, faculty_a, faculty_b, polA, polB,
-             standing_a=Standing.START, standing_b=Standing.START):
-        ca = Contestant(faculty_a, standing_a)
-        cb = Contestant(faculty_b, standing_b)
-        return run(ca, cb, self.cfg, self.adj, polA, polB)
+    def play(self, fa, fb, polA, polB, sa=Standing.START, sb=Standing.START, da=None, db=None):
+        return run(Contestant(fa, sa, dossier=da), Contestant(fb, sb, dossier=db), self.venue, self.adj, polA, polB)
 
-# ── Distinct sub-systems (scaffolds; the corpus says these are different games) ──
 class DyadicMode:
-    """SCAFFOLD. Read and steer ONE listener; success invisible (the course seems self-chosen).
-       Loop: scan power+disposition → open/close → desire/fear register matched to character.
-       Win: the listener adopts the course as his own. Composes Leverage/Standing/Reserve, not the
-       public merits clock. To build."""
+    """SCAFFOLD. Steer one listener; success invisible; win = the listener adopts the course. To build."""
     def play(self, *a, **k): raise NotImplementedError("dyadic counsel is a separate sub-system — scaffold only")
-
-class AppealMode:
-    """SCAFFOLD. Asymmetric, up a power gradient. Two instruments: supplique (subject→sovereign,
-       seeks grace; rank-indexed, deference, intercessor modifies) and remontrance (institution→Crown,
-       contests a measure; escalation ladder). Win: grace granted / measure reconsidered. To build."""
-    def play(self, *a, **k): raise NotImplementedError("royal appeal is a separate sub-system — scaffold only")
-
 class NegotiationMode:
-    """SCAFFOLD. Bounded, reputation-laden exchange: typed envoy latitude, escalating instruments
-       (conciliation→concession→division→force), a small set of policy stances. Win: agreement inside
-       the interest overlap. To build."""
+    """SCAFFOLD. Typed envoy latitude, escalating instruments; win = agreement in the overlap. To build."""
     def play(self, *a, **k): raise NotImplementedError("negotiation is a separate sub-system — scaffold only")
-
 class CeremonialMode:
-    """SCAFFOLD. Nothing is at issue (the opposite of a contested case); builds/spends Standing only.
-       Win: a standing shift / acclamation. To build."""
+    """SCAFFOLD. Nothing at issue (the corpus's point); builds/spends standing; win = acclamation. To build."""
     def play(self, *a, **k): raise NotImplementedError("ceremonial is a separate sub-system — scaffold only")
