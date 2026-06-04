@@ -530,7 +530,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Personal | Endurance | **Health** | non-multiplier: `(End+6) × (MW+1)`, MW cap 3 | Drains down |
 | Personal | Endurance + Spirit | **Stamina** | `(3×End)+(2×Spirit)` (RATIFIED S1; was ×5) | Drains down |
 | Personal | Charisma | **Composure** | ×3 | Drains down |
-| Personal | Focus | **Concentration** | ×3 | Drains down |
+| | Personal | Focus + Spirit | **Concentration** | `(3×Focus)+Spirit` — **STRUCK** old `Focus×3` 2026-06-04 (Jordan; engine adds Spirit; ED-901) | Drains down |
 | Personal | Spirit | **Thread Fatigue** | ×5 (threshold) | Counts up |
 | Personal | Spirit | **Resolve / Inspiration cap** | ×1 (passthrough) | Ceiling |
 | Unit | Size | **TroopCount** | ×block_size | Drains down |
@@ -574,7 +574,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 
 | Pool | Formula | Default Range | System |
 |------|---------|---------------|--------|
-| Combat Pool | `(Agility × 2) + History + 3`, min 5 | 5–17D | Combat |
+| | Combat Pool | `max(5, History + 6)` — Agility-**independent**, weapon-SKILL (History)-driven; **STRUCK** old `(Agility×2)+History+3` 2026-06-04 (Jordan — combat_engine_v1 canonical, ED-901) | 6–12D | Combat |
 | Argue Pool | `(Primary × 2) + History + 3 + style` | 5–18D | Social Contest |
 | Thread Pool | `(Spirit × 2) + History + TPS`, min 5 | 5–17D+ | Thread Operations |
 | Fieldwork Pool | `(Primary × 2) + History + 3` | 5–17D | Fieldwork |
