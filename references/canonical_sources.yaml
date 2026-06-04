@@ -102,8 +102,7 @@ systems:
   combat:
     design_doc: designs/scene/combat_v30.md
     canonical_sha__designs__scene__combat_v30_md: "77718315a5f99b3da82db773bdae201270e55f20"
-    params: params/combat.md
-    canonical_sha__params__combat_md: "878cbe8243fd3ca649087949e84271756edb8360"
+    # params/combat.md DEPRECATED 2026-06-04 (Jordan) -> deprecated/params/combat.md; resolution superseded by combat_engine_v1 (ED-900/901/902)
     # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
     # designs/scene/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
     # layer of combat_v30.md (lore/flavor retained). Modules: wrapper/systems/core/config/combatant/geometry/

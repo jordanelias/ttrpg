@@ -1,3 +1,5 @@
+<!-- [DEPRECATED 2026-06-04, Jordan] Old combat params. RESOLUTION superseded by combat_engine_v1 (ED-900); Combat Pool + Concentration STRUCK (ED-901/902). Moved here from params/combat.md; no longer canonical. -->
+
 <!-- version: v0.14-AUD5-R1 | sources: designs/combat/combat_v30.md | last_updated: 2026-04-03 -->
 <!-- CANONICAL SOURCE: combat_v30.md supersedes stage8_combat.md -->
 <!-- PATCHES APPLIED (canonical): PP-86, PP-91, PP-165, PP-171–172, PP-174, PP-188, PP-210, PP-215, PP-232, PP-238–239, PP-247–248, PP-258, PP-260–261, PP-263, PP-271, PP-273–277, PP-284–286, PP-290–292, PP-294–295, PP-337, PP-352, PP-382, PP-386, PP-406–407, PP-611–612, PP-615, PP-627 -->
