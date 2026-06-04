@@ -4,7 +4,7 @@ NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
 from mass_battle.config import *
 
-__all__ = ['arrowhead_cells', 'line_cells', 'horseshoe_cells', 'gapped_line_cells', 'refused_flank_cells', 'CELL_PATTERN_FN', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed']
+__all__ = ['arrowhead_cells', 'line_cells', 'horseshoe_cells', 'gapped_line_cells', 'refused_flank_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed']
 
 def arrowhead_cells(tier):
     cells = []
@@ -68,6 +68,67 @@ CELL_PATTERN_FN = {
     "Horseshoe": horseshoe_cells, "GappedLine": gapped_line_cells,
     "RefusedFlank": refused_flank_cells,
 }
+
+# ─── CONTINUOUS-SCALE FOOTPRINT GENERATOR (Jordan directive 2026-06-03) ───
+# Dimension-parametric cell builders (the tier *_cells fns above stay for the legacy path).
+# footprint_for lays a continuous troop count into a shape at a user-set concentration,
+# bounded so per-cell troops stay in [CELL_FLOOR, CELL_CAP]; achievable density is the closest
+# the shape's discrete geometry allows within that bound.
+def _cells_line(width, depth):
+    return [(r, c) for r in range(depth) for c in range(width)]
+def _cells_arrowhead(depth):
+    cells = []
+    for r in range(depth):
+        w = 2 * r + 1; start = (depth - 1) - r
+        cells += [(r, c) for c in range(start, start + w)]
+    return cells
+def _cells_horseshoe(wing_w, depth):
+    full = wing_w * 2 + 1; cells = []
+    for r in range(depth):
+        cells += [(r, c) for c in range(wing_w)]
+        cells += [(r, c) for c in range(wing_w + 1, full)]
+    cells += [(depth, c) for c in range(full)]
+    return cells
+def _cells_gapped_line(half_w, depth):
+    cells = []
+    for r in range(depth):
+        cells += [(r, c) for c in range(half_w)]
+        cells += [(r, c) for c in range(half_w + 1, 2 * half_w + 1)]
+    return cells
+def _cells_refused_flank(width, depth):
+    cells = [(r, c) for r in range(depth) for c in range(width - 1)]
+    cells.append((depth, width - 1))
+    return cells
+
+_SHAPE_BUILD = {
+    "Line":         (lambda s: dict(width=max(1, round(LINE_ASPECT * s)), depth=s), _cells_line),
+    "Arrowhead":    (lambda s: dict(depth=s),                                       _cells_arrowhead),
+    "Horseshoe":    (lambda s: dict(wing_w=s, depth=s),                             _cells_horseshoe),
+    "GappedLine":   (lambda s: dict(half_w=s, depth=s),                             _cells_gapped_line),
+    "RefusedFlank": (lambda s: dict(width=s, depth=s),                              _cells_refused_flank),
+}
+
+def footprint_for(shape, troops, concentration):
+    """Lay `troops` into `shape` at ~`concentration` troops/cell, bounded so per-cell stays
+    in [CELL_FLOOR, CELL_CAP]; returns the cell-set [(r,c), ...]. Achievable density is the
+    closest the shape's discrete geometry allows within the bound."""
+    troops = max(1, int(troops))
+    lo = math.ceil(troops / CELL_CAP)
+    hi = max(lo, troops // CELL_FLOOR)
+    target = min(hi, max(lo, round(troops / max(1.0, float(concentration)))))
+    mk, build = _SHAPE_BUILD[shape]
+    max_s = max(2, math.isqrt(hi) + 2)
+    best = None
+    for s in range(1, max_s + 1):
+        n = len(build(**mk(s)))
+        if lo <= n <= hi and (best is None or abs(n - target) < abs(best[1] - target)):
+            best = (s, n)
+    if best is None:                                  # granularity skipped [lo,hi]; nearest overall
+        for s in range(1, max_s + 1):
+            n = len(build(**mk(s)))
+            if best is None or abs(n - target) < abs(best[1] - target): best = (s, n)
+    s, n = best
+    return build(**mk(s))
 
 def oriented_pattern(shape, tier, advance_dir):
     pattern = CELL_PATTERN_FN[shape](tier)
