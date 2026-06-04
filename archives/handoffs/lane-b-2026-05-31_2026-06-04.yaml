@@ -206,4 +206,5 @@ blockers:
 last_commit: a166d52ccf12de2618948c99e2b724fd238cea9f
 created: '2026-06-01T00:22:36.206463+00:00'
 updated: '2026-06-01T04:08:59.928860+00:00'
-status: active
+status: closed
+closed_at: '2026-06-04T04:46:12.741336+00:00'
