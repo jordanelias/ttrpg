@@ -116,6 +116,12 @@ in_session_hooks:
     level: 4
     role: "PI core_rules canonical-name enforcement (Solmund, never Galbados). Mirrors prose-writer/scripts/consistency_check.py."
 
+  - hook: abbreviation_registry_gate
+    level: 4
+    role: "One-owner-per-abbreviation enforcement. Consumes references/name_collision_database.yaml; fires on definitional 'Name (ACR)' patterns; halts on enforced owner-violations + deprecated abbreviations, soft-warns on status:recorded / unregistered."
+    paired_ci: tools/valoria_collator.py
+    notes: "Added 2026-06-04. Closes the gap where name_collision_database.yaml declared itself hook-checkable but no hook consumed it. Collisions CI/Crown-Index, IP/Imperial-Pressure, PT/Piety-Territory+Parliamentary-Transfer registered status:recorded pending Jordan rename ruling."
+
   - hook: vetting_gate
     level: 4
     role: "Class A/B patches require vetting block (PP-674)."

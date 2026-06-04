@@ -69,6 +69,25 @@ FORBIDDEN_TOKEN_EXEMPT_PATHS = (
     'tests/hooks/test_correctness_gates.py',   # gate test fixtures contain bare 'Galbados' by design
 )
 
+# ── Abbreviation registry gate (acronym one-owner enforcement) ────────────────
+# Enforces references/name_collision_database.yaml ("every abbreviation has exactly
+# one owner"). The registry self-declares "Hook-checkable ... should fail pre-commit"
+# but no hook consumed it (only the manual tools/valoria_collator.py at Level 3).
+# This promotes it to Level 4. Calibrated like forbidden_token_gate:
+#   - fires ONLY on definitional patterns "Some Name (ACR)" (bare ACR usage is legit
+#     and pervasive: CI/IP/PT appear thousands of times),
+#   - HALTS on enforced owner-violation or deprecated abbreviation,
+#   - SOFT-WARNS on status:recorded collisions (Jordan ruling pending) or unregistered,
+#   - co-location escape: file also contains the owner term -> rename/meta doc, skip.
+ABBREV_REGISTRY_PATH = "references/name_collision_database.yaml"
+ABBREV_GATE_EXEMPT_PREFIXES = (
+    'archives/', 'deprecated/', 'references/', 'tests/',
+    'session_logs/', 'handoffs/', 'skills/',
+)
+_ABBREV_DEF_RE = re.compile(r'([A-Z][A-Za-z]+(?:[ /\-][A-Za-z][A-Za-z]+){0,4})\s*\(([A-Z]{2,5})\)')
+
+
+
 # Informational — enforcing gate is COMMIT_FORMAT regex below
 COMMIT_FORMAT   = re.compile(r'^\[(editorial|patch|simulation|compilation|infrastructure|skill|cleanup|godot|phase|fix|bugfix)\] .{10,}')
 COMMIT_SCOPES   = tuple(COMMIT_FORMAT.pattern.split('(')[1].split(')')[0].split('|'))
@@ -1012,6 +1031,100 @@ def placeholder_names_gate(additions: list) -> None:
     print(f"[HOOK ✓] placeholder_names_gate")
 
 
+
+def abbreviation_registry_gate(additions: list) -> None:
+    """Level-4 enforcement of the abbreviation one-owner rule.
+
+    Reads references/name_collision_database.yaml (or the version in this commit).
+    For each definitional 'Name (ACR)' in committed content:
+      - ACR registered, owner term mismatches, status 'enforced' -> HALT
+        (unless the owner term is co-located in the file: rename/meta doc).
+      - ACR registered, status 'recorded'/'unverified' -> soft-warn (record-only).
+      - ACR in deprecated set -> HALT.
+      - ACR unregistered -> soft-warn (register it).
+    Bootstrap-safe: silently skips if the registry is absent.
+    """
+    import os
+    try:
+        import yaml
+    except ImportError:
+        return
+    reg_text = None
+    for path, content in additions:                      # prefer commit's version
+        if path == ABBREV_REGISTRY_PATH:
+            reg_text = content
+            break
+    if reg_text is None:
+        for cand in (ABBREV_REGISTRY_PATH,
+                     os.path.join(os.getcwd(), ABBREV_REGISTRY_PATH),
+                     "/home/claude/" + ABBREV_REGISTRY_PATH):
+            if os.path.exists(cand):
+                try:
+                    reg_text = open(cand).read()
+                except OSError:
+                    pass
+                break
+    if reg_text is None:
+        return
+    try:
+        reg = yaml.safe_load(reg_text)
+    except yaml.YAMLError:
+        return
+    if not isinstance(reg, dict):
+        return
+
+    owners = {}                                          # ACR -> (owner_term, status)
+    for acr, info in (reg.get('abbreviations', {}) or {}).items():
+        if isinstance(info, dict):
+            owners[acr] = (str(info.get('term', '')).strip(),
+                           str(info.get('status', 'enforced')))
+    deprecated = set()
+    dep = reg.get('deprecated')
+    if isinstance(dep, list):
+        for d in dep:
+            s = d if isinstance(d, str) else (d.get('abbr') or d.get('old') or '')
+            deprecated.update(re.findall(r'\b([A-Z]{2,5})\b', str(s)))
+
+    halts, warns = [], []
+    for path, content in additions:
+        if path == ABBREV_REGISTRY_PATH:
+            continue
+        if any(path.startswith(p) for p in ABBREV_GATE_EXEMPT_PREFIXES):
+            continue
+        for m in _ABBREV_DEF_RE.finditer(content):
+            name, acr = m.group(1).strip(), m.group(2)
+            line = content[:m.start()].count('\n') + 1
+            owner = owners.get(acr)
+            if owner:
+                owner_term, status = owner
+                if (owner_term
+                        and name.lower() not in owner_term.lower()
+                        and owner_term.lower() not in name.lower()):
+                    if owner_term.lower() in content.lower():
+                        continue                          # co-location escape
+                    rec = (f"{path} L{line}: '{name} ({acr})' binds '{acr}', "
+                           f"registered to '{owner_term}'")
+                    if status == 'enforced':
+                        halts.append(rec + " (one-owner rule). Rename or update registry.")
+                    else:
+                        warns.append(rec + f" [status:{status}] record-only.")
+            elif acr in deprecated:
+                halts.append(f"{path} L{line}: '{acr}' is a deprecated abbreviation.")
+            else:
+                warns.append(f"{path} L{line}: '{name} ({acr})' — '{acr}' unregistered; "
+                             f"add it to {ABBREV_REGISTRY_PATH}.")
+    for w in warns:
+        print(f"[HOOK \u26a0 soft] abbreviation_registry_gate: {w}")
+    if halts:
+        raise RuntimeError(
+            "[HOOK VIOLATION] abbreviation_registry_gate FAILED:\n  "
+            + "\n  ".join(halts)
+            + "\n\nreferences/name_collision_database.yaml enforces one owner per "
+              "abbreviation. Resolve via the registry (rename, or flip status) before commit."
+        )
+    print(f"[HOOK \u2713] abbreviation_registry_gate ({len(additions)} files scanned)")
+
+
 def pre_commit_gate(additions: list, deletions: list = None) -> None:
     """
     Hard gate before every commit. Checks:
@@ -1165,6 +1278,12 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     # placeholders that still appear in committed content
     try:
         placeholder_names_gate(additions)
+    except RuntimeError as e:
+        errors.append(str(e))
+
+    # Abbreviation one-owner gate (references/name_collision_database.yaml)
+    try:
+        abbreviation_registry_gate(additions)
     except RuntimeError as e:
         errors.append(str(e))
 

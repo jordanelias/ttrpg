@@ -17,12 +17,12 @@
 
 abbreviations:
   # Character (§1)
-  CP: {term: "Character Points", silo: 1}
+  CP: {term: "Character Points", silo: 1, status: enforced}  # NOTE: mass-combat "Combat Power (CP)" deprecated -> Power (PP-232)
   TS: {term: "Thread Sensitivity", silo: 1}
   TPS: {term: "Thread Pool Score", silo: 1}
 
   # Faction (§2)
-  PS: {term: "Public Support", silo: 2}
+  PS: {term: "Popular Support", silo: 2, status: enforced}  # was "Public Support"; Jordan ruling 2026-05-30 (settlement L/PS)
   M: {term: "Mandate (faction stat)", silo: 2, scope: "table-only"}
   I: {term: "Influence (faction stat)", silo: 2, scope: "table-only"}
   W: {term: "Wealth (faction stat)", silo: 2, scope: "table-only"}
@@ -47,11 +47,17 @@ abbreviations:
   # No single-letter or two-letter abbreviations for contest terms
 
   # Piety & Church Influence (§9)
-  PT: {term: "Piety Track", silo: 9}
-  CI: {term: "Church Influence", silo: 9}
+  PT: {term: "Piety Track", silo: 9, status: recorded}  # COLLISION: "Piety Territory (PT)" derived_stats + "Parliamentary Transfer (PT)" faction; ruling pending
+  CI: {term: "Church Influence", silo: 9, status: recorded}  # COLLISION: "Crown Index (CI)" in derived_stats_v30 §; Jordan rename ruling pending
+  # ── 2026-06-04 acronym-sweep additions ──
+  SW: {term: "Spiritual Weight", silo: 9, status: enforced}        # ci_political (repurposed CI-contribution values)
+  WC: {term: "Warden Cooperation", silo: 4, status: enforced}      # fieldwork/victory (Warden family)
+  WR: {term: "Warden Recognition", silo: 4, status: enforced}      # fieldwork
+  PC: {term: "Per-Cell", silo: 5, status: recorded}                # COLLISION: "Personal Combat" + "Player Character (PC)" also use PC; ruling pending
+  GM: {term: "UNRESOLVED", silo: 0, status: unverified}            # 13 docs, no expansion located 2026-06-04; likely legacy "Game Master" (PI: No GM)
 
   # Clocks (§12)
-  IP: {term: "Institutional Pressure", silo: 12}
+  IP: {term: "Institutional Pressure", silo: 12, status: recorded}  # COLLISION: "Imperial Pressure (IP)" in derived_stats_v30; ruling pending
   PI: {term: "Public Instability", silo: 12}
 
   # Dice Engine (§16A)
@@ -361,6 +367,7 @@ terms:
 # ═══════════════════════════════════════════════════════════════
 
 deprecated:
+  - "Public Support"   # PS now = Popular Support (Jordan 2026-05-30)
   - term: "Conviction Track"
     replacement: "Piety Track (territory, 0–5) or Persuasion Track (contest, 0–10)"
     date: "2026-05-08"
