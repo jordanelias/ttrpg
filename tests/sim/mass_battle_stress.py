@@ -25,7 +25,7 @@ from mass_battle.resolution import start_trace, get_trace
 
 # --- test fixtures (stress-harness inputs, NOT engine mechanics) ---
 _PWR = 4; _CMD = 4; _DISC = 5; _MOR = 6; _DR = 1   # [class-B test-fixture: neutral mid-scale actor]
-_EDGE_GAP = 9                                       # [class-B test-param: start gap from each edge]
+_EDGE_GAP = 16                                      # step-2 rescale (50-grid): fit 10k formation + closing gap
 _COL = BATTLEFIELD_SIZE // 2                         # field-centre column (symmetric)
 _ENGAGEMENT_TICKS = 18                               # [class-B one-engagement cap (3 phases), per run_battle]
 _SEEDS = 20                                          # stress seeds per cell (harness loop count, not a mechanic)

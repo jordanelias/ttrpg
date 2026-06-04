@@ -88,3 +88,7 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 
 <!-- 2026-06-03 continuous-scale rework - step 1d -->
 - **harness continuous support (step 1d)** - `make_unit` gains `troops` + `concentration` (threaded to the Subunit); both None -> tier path (byte-exact). Validated: signature byte-exact (p=1.45/1.30); `make_unit(troops=800, concentration=100)` -> 6-cell unit (~133/cell) builds and runs; tier default builds the 35-cell Line. Tier-param removal across callers follows once continuous is re-baselined.
+
+
+<!-- 2026-06-03 continuous-scale rework - step 2a -->
+- **battlefield rescale to fit 10k (step 2a)** - BATTLEFIELD_SIZE 25->50; SIDE_A/B_START_ROW 34/15, harness _EDGE_GAP 16 (front-gap 6); UNIT_GRID_SIZE/BUFFER_CELLS scaled (vestigial). Verified 10000 troops fit at concentrations 40/100/200 (234/88/70 cells). NOT byte-exact (positioning shift; signature retired in step 5). **Finding:** at 10k the old frontage-count model gives ~0 casualties (~98% hp at a morale-only rout) - opposite of 'reduced numbers each side'; needs step 3 mass-scaling + morale-erosion-fraction fix. Lethality calibration moved to after step 3.
