@@ -1,30 +1,43 @@
-# Social Contest — modular build (ground-up, corrected)
+# Social Contest — venue-determined engine (general two-party adjudicated discourse)
 
-Built ground-up from the rhetoric corpus; corrected per the code-architecture review into a clean
-**wrapper-over-modules** shape. No v30 reference. Numbers are tunable `[SEED]`s. **34/34 tests pass.**
+General **emergent primitives** + a **top-down Venue spec** that imposes the conditions. There is no
+privileged "merits": the primitives accumulate a per-side **advancement** (modulated persuasion), and
+the **venue's win-condition** decides what winning *is* and how it resolves. The venue also supplies
+the **defeat-catalogue** (which faults are fatal). Numbers are `[SEED]`s. **36/36 tests pass.**
 
 ## Layers
-- **contract.py** — shared types (`Move`, `ContestView`, `FaultState`, `Adjudicator`, side identity `A/B`/`other`). Depends on nothing; breaks the former resolver↔policy import cycle.
-- **engine.py** — the shared stochastic core (σ-leverage + base d10), verified, fixed.
-- **primitives.py** — one module per primitive: Stasis (+ladder), Appeal, Standing/Reserve (stateful), Pool, SelfGating (triage), Leverage (static), Room (pathos's target), Merits (verdict clock), DefeatConditions (`check → (side, reason)`).
-- **resolver.py** — the **wrapper** (`Bout`): owns state, composes modules, adds no mechanics beyond sequencing.
-- **modes.py** — contested-debate core (deliberative/forensic flavors); the distinct sub-systems are honest scaffolds.
-- **policy.py** — decoupled policies via the contract; no resolver internals.
-- **tests.py** — per-module unit tests + wrapper invariants + integration.
+- **contract.py** — shared types (`Move`, `ContestView`, `FaultState`, `Adjudicator`, `Panel`, side identity). No package deps (breaks the resolver↔policy cycle).
+- **engine.py** — shared stochastic core (σ-leverage + base d10).
+- **primitives.py** — the general substrate: Stasis, Appeal, Standing/Reserve, Pool, SelfGating, Leverage (N-collapsed: faculty + on-ground only), Room, Resonance, Readiness, and the venue-configured `DefeatCatalogue`.
+- **resolver.py** — the wrapper (`Bout`) + the **`Venue`** top-down spec + the **win-conditions**.
+- **modes.py** — institutions as venue presets.
+- **policy.py** — decoupled policies via the contract.
 
-## Corrections applied (from the review)
-- **Appeals are now functional** (were inert): logos→merits, ethos→standing, pathos→room. Unit-tested ("appeals matter": pure-ethos cannot win the verdict).
-- **Circular dependency removed** via `contract.py` (no lazy import).
-- **Hidden `_opp_standing` side-channel removed** — the opponent is passed explicitly.
-- **`_process` god-function split** into dispatch (`_apply`) / reception (`_reception`) / scoring (`_score`).
-- **Turn-order bug fixed**: merits judged at the **exchange boundary** (both move, then judge); a clinch still ends immediately. Symmetry is now a **unit invariant** (identical contestants ~50/50), not just an integration hope.
-- **Single fault-state** (`FaultState`); `check` returns `(side, reason)` in one pass (`_why` deleted). Side identity defined once in `contract`.
-- **Leverage made static**; **Pool moved into primitives**; **adjudicator split out of `Config`**; **boundary validation** (bad move/ground raises `ValueError`); dead imports and a duplicated default removed.
+## Win-conditions (the venue says what winning is)
+- **ThresholdRace** — first past T and ahead; higher at close (debate / disputation).
+- **TallyAtClose** — the body votes at the end, higher total wins (assembly). *Resolves the mismatched-appeal deadlock the old single-merits clock left as ~100% draws.*
+- **ProofBar** — asymmetric: the challenger must drive net persuasion past a bar; else the defender prevails on doubt (tribunal — burden of proof).
+- **GraceThreshold** — asymmetric one-sided: the petitioner must reach a grace bar; else denied (appeal).
 
-## Resolution (the two paths)
-A bout ends by a **deterministic clinch** (a side incurs a named defeat-condition — barred device, self-contradiction, evasion, silence; tested to fire against the right side) or by **merits accumulation** at the boundary. The stochastic surface is only the per-move reception.
+## Defeat-conditions are venue-configured
+`DefeatCatalogue` sets which faults are fatal and at what count. A **disputation** clinches on the full *nigrahāsthana* (barred-device, self-contradiction, evasion, silence); an **assembly** disables the rhetorical-device bar; an **appeal** keeps silence/contradiction but drops the evasion clinch; a **ceremony** would have none. The general fault *detection* lives in the wrapper; the venue decides which are *fatal*.
 
-## Remaining (honest scope)
-- **Balance `[SEED]` pass** on the now-fair resolver (threshold, reserve sizes, lever magnitudes, defeat-condition counts, and the reception-variance band — the last a Jordan feel call).
-- **Deeper deliberative/forensic differentiation** (distinct win conditions/decision rules beyond opening ground).
-- The four scaffold sub-systems (dyadic, appeal, negotiation, ceremonial).
+## Adjudicator(s)
+A single `Adjudicator` or a `Panel` (jury/bench/council) that aggregates its members' character, discipline, and learned/hostile — the wrapper treats one-or-many uniformly.
+
+## Institutions as venues (modes.py)
+`court` (tribunal: logos, ProofBar, full faults) · `disputation` (debate: logos, ThresholdRace, full faults) · `assembly` (deliberative: pathos, TallyAtClose, no device-bar) · `appeal` (petition: ethos, GraceThreshold, deference faults). Dyadic counsel, negotiation, ceremonial remain scaffolds (genuinely different sub-systems).
+
+## What holds (tested)
+Symmetry; context/adjudicator/tension modulation; defeat-conditions fire (and **vary by venue**); tally **resolves** the mismatch; proof-bar **favours the defender** on equal play (burden of proof); panels **aggregate**. Build-then-close pays in **mixed** venues; the **matched pure appeal** wins **extreme** venues — the historically faithful result.
+
+## Remaining
+- The proof **set** is still ethos/pathos/logos (correct for the setting; a fully general engine would parameterize it).
+- Minor: exact-tie draws under TallyAtClose (discrete increments) — a legitimate tied-vote outcome, reducible with a tiebreak.
+- Balance/feel: trim build-then-close's edge in mixed venues; soften strong-gap decisiveness; scale the clock with faculty (floor/ceiling draws).
+- The new architecture warrants a fresh **audit + stress + historical-validation** cycle before ratification.
+
+## Evidence, pressure, jitter (latest pass)
+- **Evidence** — a dossier of items with **hidden weights** (the player sees a count, not the value); presenting a **relevant** item adds **hard proof** (readiness-independent), with **corroboration** (diminishing returns); irrelevant evidence has nothing to present. More relevant evidence is better.
+- **Pressure on the adjudicator** — `Pressure(toward, institutional, public)`: institutional pressure tilts the verdict; public pressure raises the adjudicator's susceptibility (leak) and unlocks the character beneath the role.
+- **Persuasion-jitter** (±8%) removes high-faculty exact-tie draws; contests resolve (a hung outcome can be a venue option later).
