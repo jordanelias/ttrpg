@@ -500,6 +500,8 @@ class Subunit:
         _ids = [(o_r, o_c) for o_r, o_c, _a, _b in _oriented(self)]
         _per = self.troop_count / len(_ids) if _ids else 0.0
         self.cell_troops = {pid: _per for pid in _ids}
+        if PC_NODE_COHESION:
+            self._init_node_state()
 
     @property
     def troop_count(self):
@@ -514,6 +516,8 @@ class Subunit:
         return 3 if self.troop_type == 'cavalry' else 0
 
     def cells(self):
+        if PC_NODE_COHESION and hasattr(self, '_node_pos'):
+            return self._node_cells()
         op = _oriented(self)
         result = []
         for orig_r, orig_c, or_r, or_c in op:
@@ -537,6 +541,84 @@ class Subunit:
     def troop_total(self):
         return sum(self.cell_troops.values())
 
+    def _init_node_state(self):
+        """Node-relational cohesion (step 2): cells are nodes at live positions, held in formation by
+        relational offsets read off the spawn layout. The shape lays them out once; thereafter the
+        formation translates (later wheels/deforms) while the relational offsets maintain cohesion.
+        [arch: shapes = initial layout; cohesion = node relational-distance, not re-imposed pattern.]"""
+        pos = {}
+        for orig_r, orig_c, or_r, or_c in _oriented(self):
+            pos[(orig_r, orig_c)] = (float(self.starting_position[0] + or_r),
+                                     float(self.starting_position[1] + or_c))
+        if not pos:
+            self._node_pos = {}; self._node_rel = {}
+            self._node_anchor = (0.0, 0.0); self._node_prev_pos = {}
+            return
+        ar = sum(p[0] for p in pos.values()) / len(pos)
+        ac = sum(p[1] for p in pos.values()) / len(pos)
+        self._node_anchor = (ar, ac)
+        self._node_rel = {cid: (p[0] - ar, p[1] - ac) for cid, p in pos.items()}
+        self._node_pos = dict(pos)
+        self._node_prev_pos = dict(pos)
+
+    def _node_cells(self):
+        """Node-path cells(): live positions snapped to the integer grid, in _oriented order."""
+        out = []
+        for orig_r, orig_c, _o_r, _o_c in _oriented(self):
+            r, c = self._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+            out.append((int(round(r)), int(round(c))))
+        return out
+
+    def _node_advance(self, discipline, target_centroid, enemy_cells=None):
+        """Node-path advance (step 2, increment a): the formation translates toward the target as a
+        body (vector-halt at adjacency preserved); each cell relaxes toward its relational slot
+        (anchor + rel) by a discipline-gated cohesion factor, so the formation holds together while
+        contention/edges can dent it. No wheel yet (facing points at the target).
+        [arch: relational cohesion replaces the re-imposed shape pattern.]"""
+        if self.stance == "hold":
+            return
+        self._node_prev_pos = {cid: p for cid, p in self._node_pos.items()}
+        self._moved_this_turn = set()
+        op = _oriented(self)
+        disc_mult = 1.0 if discipline >= 5 else (0.7 if discipline >= 3 else 0.4)
+        stance_mod = STANCE_SPEED_MOD[self.stance]
+        speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
+        nz = [s for s in speeds if s > 0]
+        base = min(nz) if nz else 0
+        step = max(0, math.floor(base * disc_mult) + stance_mod)
+        if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
+            step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
+        ar, ac = self._node_anchor
+        if target_centroid and step > 0:
+            dr = target_centroid[0] - ar
+            dc = target_centroid[1] - ac
+            if self.stance == "retreat":
+                dr, dc = -dr, -dc
+            if enemy_cells:
+                mine = self._node_cells()
+                if mine:
+                    dmin = min(max(abs(mr - er), abs(mc - ec))
+                               for (mr, mc) in mine for (er, ec) in enemy_cells)
+                    step = min(step, max(0, dmin - 1))   # vector-halt: stop at adjacency, not past
+            mag = abs(dr) + abs(dc)
+            if mag >= 0.5 and step > 0:
+                self._node_anchor = (ar + step * (dr / mag), ac + step * (dc / mag))
+        nar, nac = self._node_anchor
+        k = disc_mult   # cohesion factor reuses the discipline multiplier: disciplined formations hold tight, ragged ones deform
+        for orig_r, orig_c, _o_r, _o_c in op:
+            if (orig_r, orig_c) in self.halted_cells:
+                continue
+            rel = self._node_rel.get((orig_r, orig_c), (0.0, 0.0))
+            des_r = nar + rel[0]; des_c = nac + rel[1]
+            cr, cc = self._node_pos[(orig_r, orig_c)]
+            nr = min(BATTLEFIELD_SIZE - 1, max(0, cr + k * (des_r - cr)))
+            nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
+            if target_centroid:
+                self.cell_facing_vec[(orig_r, orig_c)] = (target_centroid[0] - nr, target_centroid[1] - nc)
+            self.cell_last_speed[(orig_r, orig_c)] = step
+            self._node_pos[(orig_r, orig_c)] = (nr, nc)
+            self._moved_this_turn.add((orig_r, orig_c))
+
     def centroid(self):
         c = self.cells()
         if not c: return self.starting_position
@@ -549,6 +631,8 @@ class Subunit:
         the nearest enemy cell. Prevents over-run that produces paradoxical angles.
         [canonical: Jordan design — vector halt at first adjacency]
         """
+        if PC_NODE_COHESION and hasattr(self, '_node_pos'):
+            return self._node_advance(discipline, target_centroid, enemy_cells)
         if self.stance == "hold": return
         # KITING (§13): a ranged unit with the 'kite' instruction regulates its distance to stay in
         # the volley band [VOLLEY_MIN_RANGE, VOLLEY_MAX_RANGE] instead of closing to melee. Distance
