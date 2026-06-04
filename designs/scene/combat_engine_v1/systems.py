@@ -25,7 +25,7 @@ def weapon_tempo(c, cfg, fatigue=0.0):
     grip=getattr(c,'grip','normal')
     if grip=='choke':  pen += cfg['CHOKE_TEMPO_PEN']    # choked grip: a bit slower cadence (control/leverage gain elsewhere)
     elif grip=='lunge':pen += cfg['LUNGE_TEMPO_PEN']    # extended/lunge: slower to repeat (reach/commit gain elsewhere)
-    t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']-pen
+    t=cfg['BASE_TEMPO']+w['spd']*cfg['SPEED_K']+cfg['AGI_TEMPO_K']*(c.agi-4)-pen   # athleticism adds a LITTLE cadence (Jordan 2026-06-04); centred at agi 4 so default fighters & the mirror are unchanged
     t*=(1-cfg['TEMPO_FATIGUE_K']*fatigue)               # fatigue slows the rate of action
     t*=poise_factor(c, cfg)                            # DYNAMIC structure/balance: a kuzushi'd fighter acts slower (1.0 at full)
     return max(cfg['TEMPO_FLOOR'],t)
