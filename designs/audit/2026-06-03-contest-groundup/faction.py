@@ -25,6 +25,7 @@ MOTIONS = {'censure': dict(threshold=0.50, reb_ob=2), 'outlawry': dict(threshold
            'subsidy': dict(threshold=0.50, reb_ob=None)}
 # political forum baseline (the role); voters' own disposition is their character
 FORUM = dict(proof_ethos=.30, proof_pathos=.25, proof_logos=.45, start_ground=Stasis.QUALITY)
+RESIST_DAMP = 0.15   # [SEED] each high-Stability abstainer compresses the track toward committee (audit R1: scale-stable)
 
 def case(strength='solid'):
     """Calibrated documented evidence for the faction context. Weights chosen (sweep 2026-06-03) so a
@@ -100,8 +101,9 @@ def succession(a_fac, b_fac, body_adj, a_style=None, b_style=None,
     cb = Contestant(b_fac, b_stand if b_stand is not None else Standing.START)
     bout = Bout(ca, cb, v, body_adj); bout.resolve(a_style, b_style)
     t = pt.track(bout.state)
-    if t >= 9 or t <= 1: return ('unified',  'a' if t >= 9 else 'b', None, round(t, 2))
-    if t >= 7 or t <= 3: return ('decisive', 'a' if t >= 7 else 'b', None, round(t, 2))
+    band = pt.resolve(bout.state, closing=True)   # audit: dedup — single source for the band thresholds
+    if band in ('A_total', 'B_total'):       return ('unified',  'a' if band == 'A_total' else 'b', None, round(t, 2))
+    if band in ('A_decisive', 'B_decisive'): return ('decisive', 'a' if band == 'A_decisive' else 'b', None, round(t, 2))
     leader = 'a' if t >= 5 else 'b'
     ratio = {4: 0.60, 5: 0.55, 6: 0.50}[min(6, max(4, round(t)))]
     return ('split', leader, ratio, round(t, 2))
@@ -120,18 +122,20 @@ def coalition_vote(sides, lobby=0.0, scale=1.0):
        compromise zone), read in bands. Demonstrates that COALITIONS pool onto the two-party engine — the
        multi-faction case needs no N-party spine. `sides`: list of (Faction, 'pro'|'anti'|'abstain').
        Returns pass | committee | fail."""
-    from resolver import ContestState, PersuasionTrack
+    from resolver import ContestState
     from engine import roll_net
     pool_A = sum(f.mandate for f, st in sides if st == 'pro')
     pool_B = sum(f.mandate for f, st in sides if st == 'anti')
-    # canon: a high-Stability abstainer adds resistance (here: shrinks both pools' effect, max -2)
+    # canon §10: high-Stability abstention makes the vote harder to resolve decisively → compress toward
+    # committee. Audit R1: damp the SCALE (acts on the track's deviation from centre, scale-stable), NOT
+    # subtract from both pools (cancelled in the difference; went inert at large pools).
     abst = sum(1 for f, st in sides if st == 'abstain' and f.mandate >= 5)
-    resist = min(2, abst)
+    damp = max(0.0, 1.0 - RESIST_DAMP * min(2, abst))
     start = max(4.0, min(6.0, 5.0 + lobby))                       # ED-621 lobby clamp
     s = ContestState()
-    s.adv[A] = max(0, roll_net(max(1, pool_A)) - resist)
-    s.adv[B] = max(0, roll_net(max(1, pool_B)) - resist)
-    band = PersuasionTrack(scale=scale, start=start).resolve(s, closing=True)
+    s.adv[A] = max(0, roll_net(max(1, pool_A)))
+    s.adv[B] = max(0, roll_net(max(1, pool_B)))
+    band = PersuasionTrack(scale=scale * damp, start=start).resolve(s, closing=True)
     return {'A_total': 'pass', 'A_decisive': 'pass', 'committee': 'committee',
             'B_decisive': 'fail', 'B_total': 'fail'}[band]
 

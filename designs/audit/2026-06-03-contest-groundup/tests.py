@@ -9,6 +9,8 @@ from modes import ContestedMode, DyadicMode
 from policy import (logos_spammer as LOG, demagogue as DEM, courtier as COU,
                     build_then_close as BTC, exploiter as EXP, overreacher as OV, staller as ST)
 from collections import Counter
+import random, sys
+random.seed(20260603)   # audit: deterministic, reproducible suite (was unseeded)
 
 P = Fc = 0
 def ck(n, c):
@@ -180,6 +182,11 @@ _dp=FX.coalition_rate(_sp,N=400); ck(f"§10 strong-pro coalition leans pass ({_d
 _db=FX.coalition_rate(_bal,N=400); ck(f"§10 balanced coalition symmetric ({abs(_db.get('pass',0)-_db.get('fail',0)):.2f})", abs(_db.get('pass',0)-_db.get('fail',0)) < 0.12)
 ck("§10 committee reachable", _db.get('committee',0) > 0)
 _dl=FX.coalition_rate(_bal,N=400,lobby=1.0); ck(f"§10 lobby tilts to pro ({_dl.get('pass',0):.2f}>{_db.get('pass',0):.2f})", _dl.get('pass',0) > _db.get('pass',0))
+def _commfrac(pro,anti,nab,N=2000):
+    body=[(_Fc("p",pro),'pro'),(_Fc("q",anti),'anti')]+[(_Fc(f"x{i}",6),'abstain') for i in range(nab)]
+    return sum(1 for _ in range(N) if FX.coalition_vote(body)=='committee')/N
+ck("R1: abstainer resistance pulls committee at SMALL pools", _commfrac(10,8,2) > _commfrac(10,8,0)+0.03)
+ck("R1: abstainer resistance pulls committee at LARGE pools (was inert pre-fix)", _commfrac(30,28,2) > _commfrac(30,28,0)+0.03)
 
 print("== validation + scaffolds ==")
 def bad(v): return Move("garbage")
@@ -189,3 +196,4 @@ try: DyadicMode().play(); ck("scaffold raises", False)
 except NotImplementedError: ck("scaffold raises", True)
 
 print(f"\nRESULT: {P} passed, {Fc} failed")
+sys.exit(1 if Fc else 0)   # audit: CI can gate (was exit 0 on failure)

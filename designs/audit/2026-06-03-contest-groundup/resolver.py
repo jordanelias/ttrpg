@@ -22,6 +22,7 @@ JITTER = 0.08       # [SEED] irreducible variability in how persuasion lands
 PUBLIC_LEAK = 0.5   # [SEED] public pressure → adjudicator susceptibility
 INST_BIAS = 0.6     # [SEED] institutional thumb on the scale
 PUB_BIAS = 0.3      # [SEED] public favour tilt
+EVIDENCE_CAP = 3.0  # [SEED] ceiling on one evidence item's magnitude (audit R1/R4: bound the readiness-free channel)
 
 class ContestState:
     """Live tally the win-condition reads. Only `adv` is authoritative here; standing/room/live
@@ -178,7 +179,8 @@ class Bout:
             if idx is None:                          # nothing relevant to present — refund the spend, no gain
                 c.reserve.cur = min(c.reserve.max, c.reserve.cur + Reserve.COST["evidence"]); return
             item, factor = c.dossier.present(idx)
-            self._advance(side, item.weight * factor, item.appeal, readiness=False, build=False)   # hard proof; value hidden
+            mag = min(item.weight * factor, EVIDENCE_CAP)   # audit R4: cap the one readiness-free channel
+            self._advance(side, mag, item.appeal, readiness=False, build=False)   # hard proof; value hidden
             return
         # advance / hard (argument — stochastic reception)
         if not SelfGating.licit(mv.kind, c.standing.v, opp.standing.v, self.adj.learned, self.adj.hostile):
