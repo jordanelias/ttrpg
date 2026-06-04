@@ -4,7 +4,7 @@ NB: explicit __all__ so underscore-prefixed helpers cross `import *`."""
 import math
 from mass_battle.config import *
 
-__all__ = ['arrowhead_cells', 'line_cells', 'horseshoe_cells', 'gapped_line_cells', 'refused_flank_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed']
+__all__ = ['arrowhead_cells', 'line_cells', 'horseshoe_cells', 'gapped_line_cells', 'refused_flank_cells', 'column_cells', 'CELL_PATTERN_FN', 'footprint_for', 'oriented_pattern', 'cell_facing', 'octagon_angle', '_support_along_vector', 'atom_max_width', 'cells_to_orig_coords', 'support_engage_frac', '_cell_facing_key', '_rotate_defender_facing', '_init_dynamic_facings', '_atom_avg_facing', 'cell_speed']
 
 def arrowhead_cells(tier):
     cells = []
@@ -20,6 +20,15 @@ def line_cells(tier):
     sizes = {1: (3, 3), 2: (5, 3), 3: (5, 5), 4: (7, 5)}
     width, depth = sizes.get(tier, (7, 5))
     return [(r, c) for r in range(depth) for c in range(width)]
+
+
+def column_cells(tier):
+    # Deep-narrow column = the Line block transposed (its wide rectangle stood on end):
+    # narrow frontage, deep files. The depth primitive for depth-vs-width tactics
+    # (phalanx / assault column; Leuctra's deep wing).
+    # [canonical: Jordan directive 2026-06-03 — depth wins by staying-power/breakthrough;
+    #  width's edge is envelopment. A deployable deep-narrow form lets that choice exist.]
+    return [(c, r) for (r, c) in line_cells(tier)]
 
 def horseshoe_cells(tier):
     sizes = {1: (2, 2), 2: (2, 3), 3: (3, 3), 4: (3, 4)}
@@ -67,6 +76,7 @@ CELL_PATTERN_FN = {
     "Line": line_cells, "Arrowhead": arrowhead_cells,
     "Horseshoe": horseshoe_cells, "GappedLine": gapped_line_cells,
     "RefusedFlank": refused_flank_cells,
+    "Column": column_cells,
 }
 
 # ─── CONTINUOUS-SCALE FOOTPRINT GENERATOR (Jordan directive 2026-06-03) ───
@@ -106,6 +116,7 @@ _SHAPE_BUILD = {
     "Horseshoe":    (lambda s: dict(wing_w=s, depth=s),                             _cells_horseshoe),
     "GappedLine":   (lambda s: dict(half_w=s, depth=s),                             _cells_gapped_line),
     "RefusedFlank": (lambda s: dict(width=s, depth=s),                              _cells_refused_flank),
+    "Column":       (lambda s: dict(width=max(1, round(s)), depth=max(1, round(LINE_ASPECT * LINE_ASPECT * s))), _cells_line),
 }
 
 def footprint_for(shape, troops, concentration):
@@ -323,6 +334,7 @@ def _atom_avg_facing(atom, contact_abs_cells, dynamic_facings):
 
 def cell_speed(shape, tier, local_r, local_c):
     if shape == "Line":    return 1
+    if shape == "Column":  return 1
     if shape == "Arrowhead": return 2 if local_r == 0 else 1
     if shape == "Horseshoe":
         sizes = {1: 2, 2: 2, 3: 3, 4: 3}
