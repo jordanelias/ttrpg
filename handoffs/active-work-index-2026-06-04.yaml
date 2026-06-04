@@ -6,8 +6,9 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'fe8d9dfc (martial_traditions_synthesis, this session). Per-stream tips:
-  combat-engine 6e9b6aa6; mass-battle 613a3e87; lane-B a166d52c; lane-C 8feb7526.'
+last_commit: '19298bb (cell-up step3-redirect: Column depth primitive — mass-battle
+  stream, THIS session). Per-stream tips: combat-engine 6e9b6aa6; mass-battle 19298bb;
+  lane-B a166d52c; lane-C 8feb7526.'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -33,16 +34,21 @@ owns:
 - valoria-game/**
 working_state:
   next:
-  - 'Resume by stream (sections A-D). Autonomous now: Lane-B items (C) + Lane-C buildable
-    stubs (D). Everything else awaits Jordan.'
+  - Resume by stream (A-D). Mass-battle (B) is the LIVE thread; IMMEDIATE next = the
+    breakthrough primitive (below). Lane-B(C)+Lane-C stubs(D) autonomous; A awaits
+    Jordan.
+  - '(B) IMMEDIATE [Jordan ''proceed with wiring'']: build the BREAKTHROUGH/PENETRATION
+    primitive — a concentrated front (wedge point / deep column) penetrates a thinner
+    line. Fixes the one fragile canonical counter (Wedge>Line) AND realizes depth=shock/breakthrough(#3)
+    — one primitive, both. PC_BREAKTHROUGH toggle (default OFF/byte-exact); penetration
+    term in resolve_engagements (sigma head) keyed on local front-concentration vs
+    defender thinness; gauge-validate Wedge>Line + deep-vs-thin emerge WITHOUT breaking
+    command-dominates / ShieldWall>Wedge.'
   - '(A) Await Jordan: ratify combat_engine_v1 (3 commits) + martial-traditions D-alpha/beta/gamma/delta.'
-  - (B) Await Jordan per-cell CAP value -> wire density into _lanchester_strength
-    (orchestration 1105-1118 + call sites 1374-1375) + cap-derived footprints + re-validate
-    LINEAR exponent.
   - '(C) Autonomous: index-refresh+generator-fix, check_handoff_conflicts glob-bug,
     propagation_map owns-narrow, 7.2-followup, 1.20.'
   - (D) Continue Lane-C buildable stubs (6.3->6.5->8.1->1.16); CB-economy + resolver-dispute
-    items wait on Jordan.
+    wait on Jordan.
   consolidation: 'Collated 5 active handoffs (collate->reconcile->consolidate). #1
     valoria-troops-in-cell-cap-decision merged into mass-battle stream (#2): identical
     last_commit 613a3e87, overlapping owns, #1=latest step. Other three are distinct
@@ -65,23 +71,48 @@ working_state:
       - martial-traditions D-alpha replace/coexist, D-beta count(6), D-gamma grade=V,
         D-delta naming
     B_mass_battle_pc_formation:
-      status: built+validated; BLOCKED on Jordan CAP value
-      last_commit: 613a3e87 (harness only; engine byte-exact at HEAD)
-      done: 'P-C role scaffold + report-grounded taxonomy; BRACE (7691eb6a, ON==OFF
-        byte-exact); counter-cycle 40-seed (pike-beats-cav braced+deep ~75%); missile-density
-        coupling (a6ae38ad, p=2.00); arch review #1 (051a8d4c); counter-cycle log
-        -> pc_formation_system.md §11.'
-      next: WAIT Jordan per-cell CAP. Then strength=SUM min(troops-per-cell,CAP) in
-        _lanchester_strength + pass unit to call sites; cap-derived footprints; re-validate
-        LINEAR + selftest + re-calibrate; reconcile 3/4-vs-4/4 exponent-signature
-        discrepancy.
+      status: Cell-up steps 1-2 DONE+committed (behind PC_NODE_COHESION, byte-exact
+        OFF); step 3 REDIRECTED to a DEPLOY primitive (Column shape, committed). Engine
+        CANON-VALIDATED. LIVE thread; IMMEDIATE next = breakthrough primitive.
+      last_commit: '19298bb (Column). Cell-up chain: 19298bb <- 6d6db27(2c) <- 2bd7d28(2b)
+        <- 3a47d15(2a) <- da7b7b6(step1).'
+      done: 'THIS SESSION cell-up build: (1) cell-primary state da7b7b6 (Subunit.cell_troops
+        dict; hp=sum cells). (2) node-relational cohesion behind PC_NODE_COHESION
+        (default OFF->byte-exact): 2a 3a47d15 (live _node_pos + relational offsets
+        + soft cohesion + translation), 2b 2bd7d28 (formation wheel), 2c 6d6db27 (node-aware
+        contention + momentum + per-cell collision/no-pass-through). (3-REDIRECT)
+        deep-narrow Column shape 19298bb = the DEPLOY PRIMITIVE. Measurement redirected
+        step 3: engine is ALREADY frontage-capped (_lanchester_strength = contact
+        cols x per-cell density) + has depth machinery (rotation/refill, fatigue-damp,
+        charge-absorption), and a deep formation wins frontally ONCE DEPLOYABLE (monkeypatch
+        deep-Column-vs-wide-Line 8/12). So the gap was a deploy primitive, NOT a damage
+        rewrite. Column = Line-block transposed (tier pattern) + width=s,depth=round(LINE_ASPECT^2
+        *s) ~2:1 (continuous); purely additive (existing shapes byte-exact); validated
+        deploys 4x8, holds/wins vs wide Line (7/12). CANON VALIDATION (vs precedents_warfare
+        §1, resolving depth max_turns=180): command-dominates EMERGES 20/20 (small
+        high-Cmd annihilates large low-Cmd); ShieldWall>Wedge EMERGES 19/20; Wedge>Line
+        FRAGILE 8/20 continuous (tier3 ok). REFRAME: Cannae is COMMAND-enabled maneuver
+        in canon (§1.1), NOT a Horseshoe shape -> gauge H3/H4 Horseshoe bands are
+        NON-CANONICAL; the earlier ''envelopment broken'' was a bad test. gauge_mb
+        FIXED LOCALLY (exec(sim_v22)->modular imports + matchup max_turns 18->180
+        + canonical-status docstring) but COMMIT BLOCKED: sim_fabrication_check whole-file-scans
+        and flags gauge_mb''s PRE-EXISTING constants (ANCHOR_MAP, bands) — the container-local
+        citation ledger is non-durable and lost them.'
+      next: 'IMMEDIATE: breakthrough/penetration primitive (see top-level next). THEN:
+        realign gauge bands to the CANONICAL counters (retire H3/H4 Horseshoe targets);
+        commit gauge once its constants are re-cited in the ledger; decide PC_NODE_COHESION
+        default (node 91/30 vs offset 83/56 — lower priority now depth lives in deployment);
+        reconcile the per-cell-CAP refinement (below) with the validated ''density
+        dominates'' finding.'
       jordan_blocks:
-      - per-cell CAP value (THE blocking input)
-      - density-primitive magnitude
-      - troop-type->role gating table (S3.5)+instruction vocab (pending research)
-      - MIN_DISCIPLINE gate / ED-136 stratagems / intervention cadence / allocation
-        UX / subunit coord cap
-      - canon-doc A.6 flat-dice strip + A.5 update (mass_battle_v30)
+      - per-cell CAP value — the OLDER density-into-_lanchester_strength refinement
+        (strength=SUM min(troops-per-cell,CAP)); still blocked; reconcile with validated
+        density-dominates when wiring.
+      - '[ANSWERED by ''proceed with wiring''] cell-vs-cell damage necessity -> SUBSUMED
+        by the breakthrough primitive; NOT a separate build.'
+      - gauge canonical band realignment — H3/H4 Horseshoe bands non-canonical (Cannae=command);
+        realign to canonical counters (historical targets).
+      - PC_NODE_COHESION default on/off (more-decisive 91/30 calibration).
     C_lane_b_infra_governance:
       status: much DONE; autonomous + Jordan-verify + non-parallel-gated remain
       last_commit: a166d52c
@@ -120,6 +151,9 @@ blockers:
   / combat_v30 PARTIALLY SUPERSEDED / deprecate params/combat.md).'
 - '[OPEN - Jordan] (A) martial_traditions_synthesis: D-alpha replace-vs-coexist, D-beta
   count(6), D-gamma grade=''V'' ratify, D-delta in-world naming.'
+- '[OPEN - Jordan] (B) gauge canonical band realignment — H3/H4 Horseshoe targets
+  non-canonical (Cannae=command-enabled maneuver, §1.1); realign bands to the canonical
+  counters before trusting gauge verdicts.'
 - '[OPEN - Jordan] (B) mass-battle per-cell CAP value — blocks density-into-exchange
   wiring (THE input).'
 - '[OPEN - Jordan] (B) density magnitude + troop-type->role table (pending research)
@@ -141,6 +175,25 @@ key_values:
   50, mastery dominant, traditions ~48, no one-shot, 95% cap).'
 - 'Lane model (workplan v2 2026-05-31): write-disjoint A(canon/designs)/B(infra/tooling)/C(sim+tests+valoria-game).
   Preserved here as sections.'
+- 'CELL-UP (this session): steps 1-2 committed behind PC_NODE_COHESION (env, default
+  ''0'' -> byte-exact); Column shape committed 19298bb (additive). RUN: cd mass_battle
+  && PER_CELL=1 PYTHONHASHSEED=0 PYTHONPATH=/home/claude python3 -m mass_battle_stress.
+  Toggles set BEFORE python (config reads env at import): PER_CELL=1, PC_NODE_COHESION=1.'
+- 'CANON VALIDATION vs precedents_warfare §1: command-dominates ✓20/20, ShieldWall>Wedge
+  ✓19/20, Wedge>Line FRAGILE 8/20. Canonical counters §1.2: Wedge>Line, ShieldWall>Wedge,
+  Skirmish-immune-flanking + the command-dominates axiom. Cannae = command-enabled
+  maneuver (NOT Horseshoe).'
+- '[DRIFT] sim_fabrication_check whole-file-scans + flags PRE-EXISTING comment-cited
+  constants the non-durable container ledger lost -> re-committing ANY touched legacy
+  sim file (e.g. gauge_mb) is BLOCKED until its constants are re-registered.'
+- 'NEXT PRIMITIVE: PC_BREAKTHROUGH (penetration term in resolve_engagements sigma
+  head) — concentrated-front-vs-thin-line; fixes Wedge>Line + delivers depth=shock(#3).
+  Default OFF/byte-exact; gauge-validated.'
+- 'Mass-battle commit workflow (engine=tests/sim/mass_battle/*.py + tests/sim/mass_battle_stress.py):
+  bootstrap -> h.sim_fabrication_check(adds) -> g.read_files_graphql(sim-set+coverage)
+  -> h.task_gate(''simulation'') -> h.safe_commit(adds,[],msg). ANY tests/sim/** commit
+  REQUIRES co-file tests/coverage_matrix.md in adds (append dated HTML comment). Reuse
+  cited constants. Commit set this session: da7b7b6,3a47d15,2bd7d28,6d6db27,19298bb.'
 context_files:
 - path: designs/audit/2026-06-02-combat-engine/ratification_and_deprecation_proposal.md
   depth: full
@@ -166,6 +219,18 @@ context_files:
 - path: references/id_reservations.yaml
   depth: full
   reason: 'C/D: reserved ID blocks'
+- path: references/historical/precedents_warfare.md
+  depth: full
+  reason: 'B: §1 canonical counters + command-dominates + Cannae=command (the validation
+    targets)'
+- path: tests/sim/mass_battle/geometry.py
+  depth: skeleton
+  reason: 'B: Column shape (_SHAPE_BUILD/CELL_PATTERN_FN/column_cells), cell_speed,
+    footprint_for'
+- path: tests/sim/mass_battle/orchestration.py
+  depth: skeleton
+  reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
+    node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-04T04:45:50.955649+00:00'
+updated: '2026-06-04T17:52:06.543333+00:00'
 status: active
