@@ -82,6 +82,7 @@ last_commit: '613a3e87 broaden stress sweep: config_sweep generalization + NERS 
   probe (harness only; engine untouched)'
 created: '2026-06-03T17:26:32.122858+00:00'
 updated: '2026-06-03T17:26:32.122858+00:00'
-status: active
+status: closed
 key_values: []
 blockers: []
+closed_at: '2026-06-04T04:46:08.367566+00:00'
