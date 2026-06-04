@@ -5,7 +5,7 @@ import math
 from mass_battle.config import *
 from mass_battle.geometry import *
 
-__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', '_fatigue_sigma', '_envelopment_sigma', '_defender_depth', 'update_stamina']
+__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'sync_col_grid', '_fatigue_sigma', '_envelopment_sigma', '_defender_depth', 'update_stamina']
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -26,21 +26,31 @@ def build_column_grid(unit):
     """Derive a per-column block grid from the unit's CURRENT cell footprint (continuous-sigma granularity).
     frontage = distinct columns; per column: troops = (#cells in column) * troops/cell; depth = #ranks.
     Returns list[_ColBlock] ordered left->right. State only — resolution wires in at Increment 2."""
-    cells = []
-    for a in unit.subunits:
-        cells.extend(a.cells())
-    if not cells:
-        return []
-    ncells = len(cells)
-    tpc = unit.total_troops() / ncells           # troops per native cell
     bycol = {}
-    for (r, c) in cells:
-        bycol.setdefault(c, []).append(r)
+    for a in unit.subunits:
+        for _pid, (r, c), troops in a.iter_cells():
+            bycol.setdefault(c, []).append(troops)
+    if not bycol:
+        return []
     grid = []
     for c in sorted(bycol):
-        ranks = bycol[c]
-        grid.append(_ColBlock(col=c, density=tpc * len(ranks), depth=len(ranks)))
+        col_troops = bycol[c]
+        grid.append(_ColBlock(col=c, density=sum(col_troops), depth=len(col_troops)))
     return grid
+
+def sync_col_grid(unit):
+    """Cell-primary (step 1): refresh each column's density (= Sum of its cells' troops) from the
+    cell state, preserving stamina/start_density. depth (structural) is left as built.
+    [arch: column = emergent view, rebuilt from cells after they change.]"""
+    grid = getattr(unit, 'col_grid', None)
+    if not grid:
+        return
+    bycol = {}
+    for a in unit.subunits:
+        for _pid, (r, c), troops in a.iter_cells():
+            bycol[c] = bycol.get(c, 0.0) + troops
+    for b in grid:
+        b.density = bycol.get(b.col, 0.0)
 
 def _engaged_cols(unit, pairs):
     """Absolute columns of `unit` that are in contact this tick (from find_contacts pairs)."""
@@ -58,20 +68,25 @@ def distribute_casualties(unit, dmg, pairs):
     proportional to each engaged column's current density. Keeps sum(col densities) == hp:
     the same total `dmg` run_battle subtracts from unit.hp is subtracted here across columns.
     Transparent substrate — does NOT feed back into resolution yet (later increments read this state)."""
-    grid = getattr(unit, 'col_grid', None)
-    if not grid or dmg <= 0:
+    if dmg <= 0:
         return
     eng = _engaged_cols(unit, pairs)
-    targets = [b for b in grid if b.col in eng and b.alive()]
-    if not targets:
-        targets = [b for b in grid if b.alive()]      # fallback: spread over the line
-    if not targets:
-        return
-    tot = sum(b.density for b in targets)
+    cells = []   # (subunit, cell_id, troops) over the ENGAGED front
+    for a in unit.subunits:
+        for pid, (r, c), troops in a.iter_cells():
+            if troops > 0 and (not eng or c in eng):
+                cells.append((a, pid, troops))
+    if not cells:                                  # fallback: spread over all living cells
+        for a in unit.subunits:
+            for pid, (r, c), troops in a.iter_cells():
+                if troops > 0:
+                    cells.append((a, pid, troops))
+    tot = sum(t for _a, _p, t in cells)
     if tot <= 0:
         return
-    for b in targets:
-        b.density = max(0.0, b.density - dmg * (b.density / tot))
+    for a, pid, troops in cells:                   # proportional per cell (assoc.-equiv to the per-column spread)
+        a.cell_troops[pid] = max(0.0, troops - dmg * (troops / tot))
+    sync_col_grid(unit)                            # refresh emergent column densities from cells
 
 def _fatigue_sigma(unit, engaged_cols):
     """Increment 3: fatigue of the engaged front as a delta-sigma. 0 at full stamina, down to

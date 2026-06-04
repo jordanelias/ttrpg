@@ -494,6 +494,12 @@ class Subunit:
                     f"Subunit (shape={self.shape}, tier={self.tier}) at anchor {self.starting_position} "
                     f"places a cell at ({ar},{ac}) outside the {BATTLEFIELD_SIZE}x{BATTLEFIELD_SIZE} battlefield; "
                     f"move the anchor inward so the formation fits.")
+        # Step 1 (cell-primary, Jordan directive 2026-06-03): per-cell troops are the SOURCE OF TRUTH.
+        # troop_count spreads uniformly over the subunit's cells at spawn; columns + unit hp become
+        # emergent sums over these. [arch: cell = primitive; column = first-level emergence.]
+        _ids = [(o_r, o_c) for o_r, o_c, _a, _b in _oriented(self)]
+        _per = self.troop_count / len(_ids) if _ids else 0.0
+        self.cell_troops = {pid: _per for pid in _ids}
 
     @property
     def troop_count(self):
@@ -517,6 +523,19 @@ class Subunit:
                      + self.cell_offsets_c.get((orig_r, orig_c), 0))
             result.append((abs_r, abs_c))
         return result
+
+    def iter_cells(self):
+        """Cell-primary view (step 1): yield (cell_id, (abs_r,abs_c), troops) per cell in _oriented
+        order. cell_id = (orig_r, orig_c) pattern identity (stable under movement)."""
+        for orig_r, orig_c, or_r, or_c in _oriented(self):
+            abs_r = (self.starting_position[0] + or_r
+                     + self.cell_offsets.get((orig_r, orig_c), 0) * self.advance_dir)
+            abs_c = (self.starting_position[1] + or_c
+                     + self.cell_offsets_c.get((orig_r, orig_c), 0))
+            yield (orig_r, orig_c), (abs_r, abs_c), self.cell_troops.get((orig_r, orig_c), 0.0)
+
+    def troop_total(self):
+        return sum(self.cell_troops.values())
 
     def centroid(self):
         c = self.cells()
@@ -826,7 +845,7 @@ class Unit:
         self.h_per_size = max(1, min(self.discipline, self.command) + self.dr)
         # v19: HP = TroopCount = Size × BLOCK_SIZE. Bottom-up: damage = soldier casualties.
         # [canonical: derived_stats architecture — "TroopCount = Size × block_size"]
-        self.hp_max = self.size_max * BLOCK_SIZE
+        self.hp_max = float(total)   # step 1: hp_max = actual troops = Sum(cell troops); emergent from cells
         self.hp = float(self.hp_max)
         self.ncells = sum(len(a.cells()) for a in self.subunits)  # step 3: cell count for all-fight per-cell density
         self.effective_size = float(self.size)  # v16: continuous, not floored
