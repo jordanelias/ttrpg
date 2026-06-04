@@ -636,6 +636,8 @@ class Subunit:
             cr, cc = self._node_pos[(orig_r, orig_c)]
             nr = min(BATTLEFIELD_SIZE - 1, max(0, cr + k * (des_r - cr)))
             nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
+            if enemy_cells and (int(round(nr)), int(round(nc))) in enemy_cells:
+                nr, nc = cr, cc   # blocked: an enemy holds this cell -> hold (no pass-through; front dents); cohesion retries next tick
             if self._node_facing is not None:
                 self.cell_facing_vec[(orig_r, orig_c)] = self._node_facing
             elif target_centroid:
@@ -1107,6 +1109,9 @@ def resolve_cross_side_contention(unit_a, unit_b):
                       + su.cell_offsets.get((orig_r, orig_c), 0) * su.advance_dir)
                 ac = (su.starting_position[1] + or_c
                       + su.cell_offsets_c.get((orig_r, orig_c), 0))
+                if PC_NODE_COHESION and hasattr(su, '_node_pos'):
+                    _pr, _pc = su._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                    ar, ac = int(round(_pr)), int(round(_pc))
                 # Contention speed: only counts if cell moved this turn
                 speed = (su.cell_last_speed.get((orig_r, orig_c), 0)
                          if (orig_r, orig_c) in su._moved_this_turn
@@ -1145,6 +1150,8 @@ def resolve_cross_side_contention(unit_a, unit_b):
                 su.cell_offsets[oc] = su._prev_offsets.get(oc, 0)
                 su.cell_offsets_c[oc] = su._prev_offsets_c.get(oc, 0)
                 su.cell_facing_vec[oc] = su._prev_facings.get(oc, (su.advance_dir, 0))
+                if PC_NODE_COHESION and hasattr(su, '_node_pos'):
+                    su._node_pos[oc] = su._node_prev_pos.get(oc, su._node_pos.get(oc, (0.0, 0.0)))
                 n_resolved += 1
             # Loser that didn't move: nothing to revert. The mover (winner) is
             # already at this position; both cells now occupy it. This is the
@@ -1192,6 +1199,9 @@ def _momentum_speed(atom, contact_abs_cells):
                       + atom.cell_offsets.get((orig_r, orig_c), 0) * atom.advance_dir)
             comp_c = (atom.starting_position[1] + or_c
                       + atom.cell_offsets_c.get((orig_r, orig_c), 0))
+            if PC_NODE_COHESION and hasattr(atom, '_node_pos'):
+                _pr, _pc = atom._node_pos.get((orig_r, orig_c), (0.0, 0.0))
+                comp_r, comp_c = int(round(_pr)), int(round(_pc))
             if (comp_r, comp_c) == (abs_r, abs_c):
                 speeds.append(atom.cell_last_speed.get((orig_r, orig_c), 0))
                 break
