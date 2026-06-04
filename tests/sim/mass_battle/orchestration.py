@@ -287,15 +287,20 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     [canonical: designs/provincial/mass_battle_v30.md §A.4 — morale floor 1 while general present;
      §A.4 — cap −3 non-general morale loss per Cascade Phase]"""
     for u in [unit_a, unit_b]:
-        if u.routed or u.broken:
+        if u.routed:
             continue
-        if u.stamina > 0:
-            continue  # only exhausted units feel phase-boundary pressure
-        # v20: exhaustion accelerates morale erosion at phase boundary.
-        # Additional erosion = 1.0 / (discipline * command). Small but compounds.
-        if u.discipline > 0 and u.command > 0:
-            exhaustion_erosion = 1.0 / (u.discipline * u.command)
-            u.morale -= exhaustion_erosion
+        # step 3 (Jordan directive 2026-06-03): canonical Size-fraction morale triggers (§A.4),
+        # replacing the per-tick absolute-damage erosion. Routs occur at meaningful casualty levels,
+        # not ~98% intact. No general-floor in the unit duel (units rout from their own casualties).
+        frac = (u.hp / u.hp_max) if u.hp_max else 1.0
+        loss = 0.0
+        if frac < 0.50: loss += 1.0    # Size < 50% max -> -1
+        if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
+        if u.broken: loss += 1.0       # discipline broken (formation gone) -> -1 (canon A.4); broken units rout, not freeze
+        if u.stamina <= 0 and u.discipline > 0 and u.command > 0:
+            loss += 1.0 / (u.discipline * u.command)   # exhaustion pressure (kept)
+        if loss:
+            u.morale -= min(loss, 3.0)   # cap -3 per Cascade Phase (§A.4)
 
 
 def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
@@ -823,6 +828,7 @@ class Unit:
         # [canonical: derived_stats architecture — "TroopCount = Size × block_size"]
         self.hp_max = self.size_max * BLOCK_SIZE
         self.hp = float(self.hp_max)
+        self.ncells = sum(len(a.cells()) for a in self.subunits)  # step 3: cell count for all-fight per-cell density
         self.effective_size = float(self.size)  # v16: continuous, not floored
         self.stamina = STAMINA_MAX
         self.stamina_max = STAMINA_MAX
@@ -1126,7 +1132,7 @@ PC_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('PC_ROLLUP_MIN_DEPTH', '2.0'))
 
 from mass_battle.percell import *  # P-A stage 3: percell extracted
 
-def _lanchester_strength(contact_cells):
+def _lanchester_strength(contact_cells, unit=None):
     """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged
     contact-frontage (distinct contact columns) normalized to ~1 at LANCHESTER_STRENGTH_REF
     so K_LINEAR composes with the canonical exchange scale (PP-233 successes×(1+Power)).
@@ -1139,6 +1145,9 @@ def _lanchester_strength(contact_cells):
     if not contact_cells:
         return 0.0
     n_eng_cols = len(set(c for r, c in contact_cells))
+    if unit is not None and getattr(unit, 'ncells', 0):
+        tpc = unit.hp / unit.ncells   # all-fight: current per-cell troops (thins as casualties mount)
+        return n_eng_cols * (min(tpc, CELL_CAP) / LANCHESTER_DENSITY_REF) / LANCHESTER_STRENGTH_REF
     return n_eng_cols / LANCHESTER_STRENGTH_REF
 
 def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
@@ -1393,8 +1402,8 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             # contact (frontage-capped); DAMAGE_BY_DEGREE retained as per-soldier exchange
             # quality. Numbers-in-contact lives ONLY here under Lanchester (the run_battle
             # opp_frac post-scaler is skipped) — one variable, one role (Lesson 1).
-            lin_b = _lanchester_strength(p["b_cells"])   # B's contacting strength -> casualties to A
-            lin_a = _lanchester_strength(p["a_cells"])   # A's contacting strength -> casualties to B
+            lin_b = _lanchester_strength(p["b_cells"], unit_b)   # B's contacting strength -> casualties to A
+            lin_a = _lanchester_strength(p["a_cells"], unit_a)   # A's contacting strength -> casualties to B
             dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
             dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
         else:
@@ -1758,9 +1767,9 @@ def run_battle(unit_a, unit_b, max_turns=18):
         # check rout for both. Prevents ordering from affecting which unit
         # routs first within a single tick.
         # [canonical: designs/provincial/mass_battle_v30.md §A.4 — generalship]
-        total_dmg_a_morale = result.get("dmg_a", 0) + volley_dmg_a * volley_hp_scale(unit_a)
-        total_dmg_b_morale = result.get("dmg_b", 0) + volley_dmg_b * volley_hp_scale(unit_b)
-        for u, total_dmg in [(unit_a, total_dmg_a_morale), (unit_b, total_dmg_b_morale)]:
+        # step 3 (Jordan directive 2026-06-03): per-tick ABSOLUTE-damage morale erosion REMOVED.
+        # Morale degrades by canonical Size-fraction triggers at the phase boundary (morale_check_phase, §A.4).
+        for u in [unit_a, unit_b]:
             if u.routed: continue
             # General incapacitated/captured (ED-898): Command=0 → instant rout (M1: general IS the army).
             # Command=0 models a general removed from command (incapacitated, captured if field lost) — never killed.
@@ -1768,9 +1777,7 @@ def run_battle(unit_a, unit_b, max_turns=18):
             if u.command <= 0:
                 u.morale = 0.0
                 continue  # rout check below
-            if total_dmg > 0 and u.discipline > 0:
-                erosion = total_dmg / (u.discipline * u.command) * (MORALE_EROSION_DAMP if MORALE_FIX else 1.0)
-                u.morale -= erosion
+
         # Rout check AFTER both erosions applied
         for u in [unit_a, unit_b]:
             if not u.routed and u.morale <= 0:
