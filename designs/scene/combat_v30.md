@@ -1,3 +1,4 @@
+<!-- [PARTIALLY SUPERSEDED 2026-06-04, Jordan / ED-900] Personal-combat RESOLUTION superseded by designs/scene/combat_engine_v1/ (canonical modular resolver). Lore/flavor/non-resolution content here retained. config.py supersedes params/combat.md resolution values (pool, stamina, etc.). -->
 <!-- SKELETON — mechanical spec only — atomized 2026-04-13 from designs/combat/combat_v30.md -->
 <!-- Infill: designs/combat/combat_v30_infill.md -->
 <!-- DO NOT add prose. Rationale/examples live in the infill file. -->

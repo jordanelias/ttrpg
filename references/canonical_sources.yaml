@@ -101,9 +101,15 @@ systems:
     canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
   combat:
     design_doc: designs/scene/combat_v30.md
-    canonical_sha__designs__scene__combat_v30_md: "512ad246626b7a76b4dc094361e49ad2eb9cf797"
+    canonical_sha__designs__scene__combat_v30_md: "77718315a5f99b3da82db773bdae201270e55f20"
     params: params/combat.md
     canonical_sha__params__combat_md: "878cbe8243fd3ca649087949e84271756edb8360"
+    # ── RESOLUTION ENGINE (ratified 2026-06-04, Jordan 'ratify commit all'; ED-900) ─────────────────
+    # designs/scene/combat_engine_v1/ is the CANONICAL personal-combat resolver, superseding the RESOLUTION
+    # layer of combat_v30.md (lore/flavor retained). Modules: wrapper/systems/core/config/combatant/geometry/
+    # tradition. config.py = live Class-C parameter source. SHA-track via freshness_gate.py --update.
+    resolution_engine: "designs/scene/combat_engine_v1/"
+    resolution_engine_canonical_status: "CANONICAL combat_engine_v1 (ratified 2026-06-04, ED-900); supersedes combat_v30 RESOLUTION layer; config.py is the live parameter source"
   threadwork:
     design_doc: designs/threadwork/threadwork_v30.md
     canonical_sha__designs__threadwork__threadwork_v30_md: "08e4dcf2657922279bf8b2bf036e465c13572317"
