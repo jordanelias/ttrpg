@@ -546,6 +546,7 @@ class Subunit:
         relational offsets read off the spawn layout. The shape lays them out once; thereafter the
         formation translates (later wheels/deforms) while the relational offsets maintain cohesion.
         [arch: shapes = initial layout; cohesion = node relational-distance, not re-imposed pattern.]"""
+        self._node_facing = None; self._node_facing0 = None
         pos = {}
         for orig_r, orig_c, or_r, or_c in _oriented(self):
             pos[(orig_r, orig_c)] = (float(self.starting_position[0] + or_r),
@@ -604,16 +605,40 @@ class Subunit:
             if mag >= 0.5 and step > 0:
                 self._node_anchor = (ar + step * (dr / mag), ac + step * (dc / mag))
         nar, nac = self._node_anchor
+        # WHEEL (increment 2b): the formation re-faces the enemy as a body. f = current facing (unit vector),
+        # f0 = spawn facing (toward the enemy at first contact); the relational layout is rotated by the
+        # rotation taking f0 -> f, so the whole formation pivots while cohesion holds it together. Head-on
+        # engagements (f stays ~ f0) leave the rotation at identity -> identical to increment 2a.
+        rc_w, rs_w = 1.0, 0.0   # (cos, sin) of the spawn->current rotation; identity until the body wheels
+        if target_centroid:
+            tdr = target_centroid[0] - nar; tdc = target_centroid[1] - nac
+            tmag = math.hypot(tdr, tdc)
+            if tmag > 0:
+                ftr, ftc = tdr / tmag, tdc / tmag   # f_target: unit direction to the enemy
+                if self._node_facing is None:
+                    self._node_facing = (ftr, ftc); self._node_facing0 = (ftr, ftc)
+                else:
+                    kw = disc_mult * 0.5            # wheel rate (disc-gated, slower than the cohesion snap)
+                    fr0, fc0 = self._node_facing
+                    lr, lc = fr0 + kw * (ftr - fr0), fc0 + kw * (ftc - fc0)
+                    lmag = math.hypot(lr, lc)
+                    if lmag > 0: self._node_facing = (lr / lmag, lc / lmag)
+                f0r, f0c = self._node_facing0; fr, fc = self._node_facing
+                rc_w = f0r * fr + f0c * fc          # cos of rotation f0 -> f
+                rs_w = f0r * fc - f0c * fr          # sin of rotation f0 -> f
         k = disc_mult   # cohesion factor reuses the discipline multiplier: disciplined formations hold tight, ragged ones deform
         for orig_r, orig_c, _o_r, _o_c in op:
             if (orig_r, orig_c) in self.halted_cells:
                 continue
             rel = self._node_rel.get((orig_r, orig_c), (0.0, 0.0))
-            des_r = nar + rel[0]; des_c = nac + rel[1]
+            des_r = nar + (rc_w * rel[0] - rs_w * rel[1])   # anchor + R(f0->f) . rel : rotated relational slot
+            des_c = nac + (rs_w * rel[0] + rc_w * rel[1])
             cr, cc = self._node_pos[(orig_r, orig_c)]
             nr = min(BATTLEFIELD_SIZE - 1, max(0, cr + k * (des_r - cr)))
             nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
-            if target_centroid:
+            if self._node_facing is not None:
+                self.cell_facing_vec[(orig_r, orig_c)] = self._node_facing
+            elif target_centroid:
                 self.cell_facing_vec[(orig_r, orig_c)] = (target_centroid[0] - nr, target_centroid[1] - nc)
             self.cell_last_speed[(orig_r, orig_c)] = step
             self._node_pos[(orig_r, orig_c)] = (nr, nc)
