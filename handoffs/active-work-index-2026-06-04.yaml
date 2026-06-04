@@ -1,0 +1,171 @@
+id: active-work-index-2026-06-04
+scope: general
+task:
+  skill: valoria-orchestrator
+  description: 'CONSOLIDATED master resumption index (2026-06-04). Folds 5 prior active
+    handoffs into one sectioned master across 4 work-streams; sources archived to
+    archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
+    decisions resolved — every Jordan-blocked call carried as OPEN.'
+last_commit: 'fe8d9dfc (martial_traditions_synthesis, this session). Per-stream tips:
+  combat-engine 6e9b6aa6; mass-battle 613a3e87; lane-B a166d52c; lane-C 8feb7526.'
+owns:
+- designs/scene/combat_engine_v1/**
+- designs/audit/2026-06-02-combat-engine/**
+- designs/audit/2026-05-29-combat-armature/martial_traditions_synthesis.md
+- designs/proposals/pc_formation_system.md
+- designs/provincial/mass_battle_v30.md
+- designs/audit/2026-06-01-massbattle-stub-wiring/**
+- tests/sim/mass_battle/**
+- tests/sim/gauge_mb.py
+- tests/sim/sim_mb_sigma.py
+- tests/sim/mass_battle_stress.py
+- skills/valoria-orchestrator/scripts/**
+- references/**
+- tests/hooks/**
+- tests/index/**
+- tools/**
+- archives/**
+- session_logs/**
+- skills/valoria-orchestrator/references/skill_registry.yaml
+- sim/**
+- tests/sim/**
+- tests/coverage_matrix.md
+- valoria-game/**
+working_state:
+  next:
+  - 'Resume by stream (sections A-D). Autonomous now: Lane-B items (C) + Lane-C buildable
+    stubs (D). Everything else awaits Jordan.'
+  - '(A) Await Jordan: ratify combat_engine_v1 (3 commits) + martial-traditions D-alpha/beta/gamma/delta.'
+  - (B) Await Jordan per-cell CAP value -> wire density into _lanchester_strength
+    (orchestration 1105-1118 + call sites 1374-1375) + cap-derived footprints + re-validate
+    LINEAR exponent.
+  - '(C) Autonomous: index-refresh+generator-fix, check_handoff_conflicts glob-bug,
+    propagation_map owns-narrow, 7.2-followup, 1.20.'
+  - (D) Continue Lane-C buildable stubs (6.3->6.5->8.1->1.16); CB-economy + resolver-dispute
+    items wait on Jordan.
+  consolidation: 'Collated 5 active handoffs (collate->reconcile->consolidate). #1
+    valoria-troops-in-cell-cap-decision merged into mass-battle stream (#2): identical
+    last_commit 613a3e87, overlapping owns, #1=latest step. Other three are distinct
+    streams kept as sections (write-disjoint lane model preserved). Sources archived;
+    git keeps originals.'
+  sections:
+    A_personal_combat_engine:
+      status: BUILT+validated; ratification STAGED — awaiting Jordan
+      last_commit: 6e9b6aa6 (engine); fe8d9dfc (martial-traditions, this session)
+      done: 'combat_engine_v1 (6 modules/655 lines) matrix-validated A0-A3; ratification_and_deprecation_proposal.md
+        staged; wound-count tiebreak removed (undecided=UNRESOLVED, 9e7ce85a); P1/P2
+        cleanup. THIS SESSION: martial_traditions_synthesis.md (fe8d9dfc) — 6 Valoria-native
+        traditions engine-legible (vector+armature abilities+familiarity), Constraint
+        fully specced, grade=''V'' proposed.'
+      next: 'On ratification: 3 safe_commits (canonize+canonical_sources / combat_v30
+        PARTIALLY SUPERSEDED / deprecate params/combat.md) + magnitude tuning. Martial-traditions:
+        spec 5 remaining + run resolution-diagnostic once D-alpha/beta/gamma set.'
+      jordan_blocks:
+      - ratify combat_engine_v1 (3-commit canonization)
+      - martial-traditions D-alpha replace/coexist, D-beta count(6), D-gamma grade=V,
+        D-delta naming
+    B_mass_battle_pc_formation:
+      status: built+validated; BLOCKED on Jordan CAP value
+      last_commit: 613a3e87 (harness only; engine byte-exact at HEAD)
+      done: 'P-C role scaffold + report-grounded taxonomy; BRACE (7691eb6a, ON==OFF
+        byte-exact); counter-cycle 40-seed (pike-beats-cav braced+deep ~75%); missile-density
+        coupling (a6ae38ad, p=2.00); arch review #1 (051a8d4c); counter-cycle log
+        -> pc_formation_system.md §11.'
+      next: WAIT Jordan per-cell CAP. Then strength=SUM min(troops-per-cell,CAP) in
+        _lanchester_strength + pass unit to call sites; cap-derived footprints; re-validate
+        LINEAR + selftest + re-calibrate; reconcile 3/4-vs-4/4 exponent-signature
+        discrepancy.
+      jordan_blocks:
+      - per-cell CAP value (THE blocking input)
+      - density-primitive magnitude
+      - troop-type->role gating table (S3.5)+instruction vocab (pending research)
+      - MIN_DISCIPLINE gate / ED-136 stratagems / intervention cadence / allocation
+        UX / subunit coord cap
+      - canon-doc A.6 flat-dice strip + A.5 update (mass_battle_v30)
+    C_lane_b_infra_governance:
+      status: much DONE; autonomous + Jordan-verify + non-parallel-gated remain
+      last_commit: a166d52c
+      done: 5.5 freshness; 5.6 compliance; 7.2 hook tests(33); 5.2 six subsystem docs;
+        5.8 scope-vocab single-source+drift-guard; 1.10b CI fix; 1.18 retire atoms_pending(381);
+        P1 citation-rot diagnosed+prevention (validate_ed_citations.py 8/8); INDEX
+        de-accretion (647 curated rows preserved).
+      next: 'Autonomous: index-refresh+generator-fix, check_handoff_conflicts glob-bug,
+        propagation_map owns-narrow, 7.2-followup, 1.20.'
+      jordan_blocks:
+      - 1.17 superseded-before-deletion verify (2 flagged branches)
+      - 'non-parallel-gated: 5.3 canonical_sources SHA-split + 5.8-reduction (single-lane
+        only)'
+    D_lane_c_sim_stubs:
+      status: queue in progress; mostly self-unblocked
+      last_commit: 8feb7526
+      done: '6.1 DONE (20 sim/ stubs remain); 6.4 DONE; 6.3 IN PROGRESS 3/11: parliamentary_vote(d0f3c0bd)/stay(251c5528)/transfer(8feb7526),
+        sweep-verified; articulation reclassified (not a sim stub; consumes PP-687
+        Key substrate).'
+      next: Continue 6.3 buildable stubs -> 6.5 -> 8.1 -> 1.16. parliamentary_transfer
+        gated on CB-economy gap (no Casus Belli ledger).
+      jordan_blocks:
+      - 7 hard-gated stubs + Varfell need Lane-A/Jordan canon (the resolver dispute
+        below)
+  reconciliation_notes:
+  - '#1 cell-cap folded into Section B — same stream/commit, latest step; no conflict,
+    pure redundancy.'
+  - 'coverage_matrix.md claimed by B,C,D — generated/derivative, regenerated not hand-merged
+    (conflict-res #9); shared-ownership noted.'
+  - propagation_map.md double-claim (Lane A vs B) — Lane A finding; owns-narrow is
+    a Lane-B item + coordination flag.
+  - No design/canon decision resolved during consolidation; all carried to blockers
+    as OPEN (Jordan authority).
+blockers:
+- '[OPEN - Jordan] (A) Ratify combat_engine_v1 -> 3 commits (canonize+canonical_sources
+  / combat_v30 PARTIALLY SUPERSEDED / deprecate params/combat.md).'
+- '[OPEN - Jordan] (A) martial_traditions_synthesis: D-alpha replace-vs-coexist, D-beta
+  count(6), D-gamma grade=''V'' ratify, D-delta in-world naming.'
+- '[OPEN - Jordan] (B) mass-battle per-cell CAP value — blocks density-into-exchange
+  wiring (THE input).'
+- '[OPEN - Jordan] (B) density magnitude + troop-type->role table (pending research)
+  + MIN_DISCIPLINE/UX opens + canon A.6/A.5 reconciliation.'
+- '[OPEN - Jordan] (C/D) ED-883/865/866 P1 resolver dispute — canon ID-conflict, faction/Jordan
+  adjudication (matches ED-865/866/867 backlog); gates 7 Lane-C stubs + Varfell.'
+- '[OPEN - Jordan] (C) lane-B 1.17 superseded-before-deletion verify (2 flagged branches).'
+- '[COORDINATION] coverage_matrix.md shared B/C/D (regenerate, don''t hand-merge);
+  propagation_map.md owns-narrow (Lane A/B).'
+key_values:
+- 'Reserved ID maxima — ED: lane-B max 884 (<890); lane-C next 970 (970-999). PP:
+  lane-B 726 (<727); lane-C next 780 (780-799). DO NOT collide.'
+- 'valoria_index.sql is SELECTIVE: committed = schema + curated (meta 8/concepts 82/aliases
+  334/concept_files 231); files+entities runtime-only, NEVER committed. Naive full-regen-then-commit
+  DESTROYS the 647 curated rows.'
+- Mass-battle engine byte-exact at HEAD (7 modules). COMMAND_SIGMA_ENABLED ON; OFF==canonical
+  Size pool byte-exact. Command=round((2*Cha+Cog)/3) (ED-899).
+- 'combat_engine_v1: 6 modules/655 lines, validated 6e9b6aa; invariants hold (mirror
+  50, mastery dominant, traditions ~48, no one-shot, 95% cap).'
+- 'Lane model (workplan v2 2026-05-31): write-disjoint A(canon/designs)/B(infra/tooling)/C(sim+tests+valoria-game).
+  Preserved here as sections.'
+context_files:
+- path: designs/audit/2026-06-02-combat-engine/ratification_and_deprecation_proposal.md
+  depth: full
+  reason: 'A: ratification checklist+deprecation+validation'
+- path: designs/scene/combat_engine_v1/
+  depth: full
+  reason: 'A: the engine'
+- path: designs/audit/2026-05-29-combat-armature/martial_traditions_synthesis.md
+  depth: full
+  reason: 'A: this-session synthesis (fe8d9dfc); D-alpha..delta open'
+- path: designs/proposals/pc_formation_system.md
+  depth: full
+  reason: 'B: P-C capture, S3.5 roles/instructions, §11 counter-cycle log'
+- path: tests/sim/mass_battle/orchestration.py
+  depth: full
+  reason: 'B: _lanchester_strength(1105-1118)+call sites(1374-1375)'
+- path: tests/sim/mass_battle/percell.py
+  depth: full
+  reason: 'B: build_column_grid (no cap) — cap-derived footprint lands here'
+- path: references/lane_assignments.yaml
+  depth: full
+  reason: 'C/D: lane owns/range/protocol'
+- path: references/id_reservations.yaml
+  depth: full
+  reason: 'C/D: reserved ID blocks'
+created: '2026-06-04T04:45:50.955649+00:00'
+updated: '2026-06-04T04:45:50.955649+00:00'
+status: active
