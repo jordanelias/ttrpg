@@ -49,7 +49,7 @@ def act_cost(c, commit, cfg):
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 def conc_max(c, cfg):
-    return cfg['CONC_COG']*c.cog + cfg['CONC_SPIRIT']*c.spirit   # 3*Cog + 2*Spi (Jordan 2026-06-03; replaces 3*Foc+1*Spi — DEVIATES from canon §5.2 Focus×3, pending canon propagation)
+    return cfg['CONC_FOCUS']*c.focus + cfg['CONC_SPIRIT']*c.spirit   # 3*Focus + 2*Spirit (Jordan 2026-06-04, canonical ED-902; corrects prior Cog-driven form)
 def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-3)   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 

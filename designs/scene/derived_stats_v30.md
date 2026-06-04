@@ -497,7 +497,7 @@ Audit of all 51 stat ±1/±2 references. Classified as CONVERT (routine → deri
 | Max Wounds = floor(End/2)+1 | → Eliminated | Wounds computed on the fly: floor(damage / Wound_Interval) |
 | Stamina = End + History + 1 − armour | → Stamina = End × 5 [SUPERSEDED by RATIFIED S1: now (3×End)+(2×Spirit)]; History → recovery; armour → drain modifier | Single-attribute base, variable action costs, BB precedent |
 | Composure = Cha + 6 | → Composure = Cha × 3 | Removes +6 constant, opens social equipment space |
-| Concentration = Focus + Recall | → Concentration = Focus × 3 | Removes Recall (wrong attribute), single-attribute derivation |
+| Concentration = Focus + Recall | → Concentration = `(3×Focus) + (2×Spirit)` | Focus-driven attention + Spirit; supersedes the Focus×3 interim (2026-06-04, Jordan, ED-902) |
 | Contact Rounds = Focus | → Thread Fatigue threshold = Spirit × 5; Focus → max ops per session | Separates duration (Spirit) from skill (Focus), variable costs |
 | Size (1–7 stored stat) | → TroopCount = Size × block_size; Size computed | Sub-Size visibility, output scaling, reinforcement decisions |
 | A.3 scale table (narrative only) | → block_size canonicalized | Required for TroopCount derivation |
@@ -530,7 +530,7 @@ Four buckets of state in the engine, distinguished by what they represent and ho
 | Personal | Endurance | **Health** | non-multiplier: `(End+6) × (MW+1)`, MW cap 3 | Drains down |
 | Personal | Endurance + Spirit | **Stamina** | `(3×End)+(2×Spirit)` (RATIFIED S1; was ×5) | Drains down |
 | Personal | Charisma | **Composure** | ×3 | Drains down |
-| | Personal | Focus + Spirit | **Concentration** | `(3×Focus)+Spirit` — **STRUCK** old `Focus×3` 2026-06-04 (Jordan; engine adds Spirit; ED-901) | Drains down |
+| | Personal | Focus + Spirit | **Concentration** | `(3×Focus)+(2×Spirit)` — **STRUCK** old `Focus×3` 2026-06-04 (Jordan; ED-902) | Drains down |
 | Personal | Spirit | **Thread Fatigue** | ×5 (threshold) | Counts up |
 | Personal | Spirit | **Resolve / Inspiration cap** | ×1 (passthrough) | Ceiling |
 | Unit | Size | **TroopCount** | ×block_size | Drains down |
