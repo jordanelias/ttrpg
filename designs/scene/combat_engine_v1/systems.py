@@ -49,8 +49,8 @@ def act_cost(c, commit, cfg):
 
 # ---------- concentration (Focus+Spirit tracker) ----------
 def conc_max(c, cfg):
-    return cfg['CONC_BASE_K']*(cfg['CONC_FOCUS']*c.focus+cfg['CONC_SPIRIT']*c.spirit)/(cfg['CONC_FOCUS']+cfg['CONC_SPIRIT'])
-def reading(c): return (c.cog+c.att)/2
+    return cfg['CONC_COG']*c.cog + cfg['CONC_SPIRIT']*c.spirit   # 3*Cog + 2*Spi (Jordan 2026-06-03; replaces 3*Foc+1*Spi — DEVIATES from canon §5.2 Focus×3, pending canon propagation)
+def reading(c, cfg): return (2*c.cog + c.att)/3 + cfg['READ_HISTORY_K']*(c.history-3)   # cog primary, Att half, + relevant-History experience (Jordan 2026-06-03)
 def reflex(c, cfg): return (cfg['REFLEX_AGI']*c.agi+cfg['REFLEX_ATT']*c.att)/(cfg['REFLEX_AGI']+cfg['REFLEX_ATT'])
 
 # ---------- strength handling + endurance fatigue ----------
@@ -66,7 +66,7 @@ def balance_eff(c, fat, cfg):
     # BALANCE is NOT a stat (Jordan): it is GOVERNED BY AGILITY, modulated by CURRENT poise (kuzushi context); ability
     # modulation (Destreza compás etc.) arrives with the channel-wiring pass. The `agi-1` aligns Agility's neutral (4)
     # to the engine's balance-neutral (3), so a default fighter's substrate is unchanged. Still 1.0× at full poise.
-    return (c.agi - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)
+    return (0.5*c.agi + 0.5*c.strength - 1 + c.skill('balance'))*(1-cfg['FATIGUE_FOOT_K']*fat) * poise_factor(c, cfg)   # ½Agi + ½Str (Jordan 2026-06-03), re-centred so Agi=Str=4 stays neutral 3
 def anti_overcommit(c, fat, cfg): return cfg['FOOT_COMMIT_DISC_K']*(balance_eff(c,fat,cfg)-3)
 def stance_stability(c, fat, cfg): return cfg['FOOT_STANCE_K']*(balance_eff(c,fat,cfg)-3)
 
@@ -87,7 +87,7 @@ assert set(GATE)>=set(WEAPONS), f"GATE missing weapons: {set(WEAPONS)-set(GATE)}
 assert set(GEOMETRY)>=set(WEAPONS), f"GEOMETRY missing weapons: {set(WEAPONS)-set(GEOMETRY)}"
 def mode_sigma(mode, aggressor, defender, commit, choke, read_win, fat_d, cfg):
     """defender's δσ for a chosen defensive mode. Reading universal; +2 axis-specific. Skills bias per-axis."""
-    rd=reading(defender)-reading(aggressor)
+    rd=reading(defender,cfg)-reading(aggressor,cfg)
     rfx=reflex(defender,cfg); tech=defender.history+defender.skill('technique')
     ftw=balance_eff(defender,fat_d,cfg); strn=defender.strength
     base=cfg['READ_K']*rd*(1.3 if read_win else 0.7)
@@ -199,8 +199,8 @@ def feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR):
           and rng.random() < cfg['FEINT_P'] and aggressor.stamina>0)
     if not do:
         return dict(do=False, debuff=0.0, new_streak=0, beat_cost=0.0, stamina_cost=0.0)
-    feint_q = (reading(aggressor)+aggressor.skill('technique'))*TR.channel_weight(aggressor.tradition,'tempo')
-    def_read = reading(defender)*TR.channel_weight(defender.tradition,'visual')*(1-0.4*mental_fat_d)
+    feint_q = (reading(aggressor,cfg)+aggressor.skill('technique'))*TR.channel_weight(aggressor.tradition,'tempo')
+    def_read = reading(defender,cfg)*TR.channel_weight(defender.tradition,'visual')*(1-0.4*mental_fat_d)
     read_feint = rng.random() < 1/(1+exp(-(def_read-feint_q)/2.0))
     debuff = -cfg['FEINT_PUNISH'] if read_feint else cfg['FEINT_DEBUFF']
     return dict(do=True, debuff=debuff, new_streak=feint_streak+1,
@@ -211,14 +211,14 @@ def approach_displace(shorter, longer, cfg):
     suppressing its stop-hit and speeding the close. Returns a fraction in [0, APPROACH_DISPLACE_MAX]. Pure."""
     lever_edge = leverage(shorter,cfg) - leverage(longer,cfg)
     if longer.w['head']!='point' or lever_edge<=0: return 0.0
-    rd=(reading(shorter)-reading(longer))
+    rd=(reading(shorter,cfg)-reading(longer,cfg))
     return min(cfg['APPROACH_DISPLACE_MAX'], cfg['APPROACH_DISPLACE_K']*lever_edge*(1+0.1*rd))
 
 def reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
     """Probability the LONGER weapon regains distance given a created moment exists: reads to seize vs shorter's
     denial, executes with balance, scaled by armour; freed-hand shove adds a path. Pure (returns a probability)."""
-    id_read = reading(longer)*TR.channel_weight(longer.tradition,'visual')
-    deny_read = reading(shorter)*TR.channel_weight(shorter.tradition,'visual')
+    id_read = reading(longer,cfg)*TR.channel_weight(longer.tradition,'visual')
+    deny_read = reading(shorter,cfg)*TR.channel_weight(shorter.tradition,'visual')
     read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
     foot = balance_eff(longer,0,cfg)/3
     p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/0.62
@@ -233,8 +233,8 @@ def bind_sigma(aggressor, defender, cfg, TR):
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
           * (TR.channel_weight(aggressor.tradition,'leverage')/TR.channel_weight(defender.tradition,'leverage'))
     catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
-    tac = (reading(aggressor)*TR.channel_weight(aggressor.tradition,'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
-           - reading(defender)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
+    tac = (reading(aggressor,cfg)*TR.channel_weight(aggressor.tradition,'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
+           - reading(defender,cfg)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     return lev + catch + tac + strq
 
@@ -244,7 +244,7 @@ def seizure_score(c, reach_val, cfg, TR):
     sen-sen-no-sen), REACH (the longer weapon threatens first in the approach, measure-weighted), and CONCENTRATION
     (composure to commit). Footwork is deliberately NOT here — its 'step in first' role already lives in the approach
     close-rate; double-counting it over-weights balance. Pure. Higher = seizes the Vor."""
-    rd = reading(c) * TR.channel_weight(c.tradition,'precommit')
+    rd = reading(c, cfg) * TR.channel_weight(c.tradition,'precommit')
     cc = c.conc/max(1.0, c.conc_max)
     return (cfg['INIT_SEIZE_READ']*rd
             + cfg['INIT_SEIZE_REACH']*reach_val + cfg['INIT_SEIZE_CONC']*cc

@@ -45,8 +45,8 @@ def engagement(A, B, first, cfg, rng):
         A.initiative=S.clamp_initiative(A.initiative + cfg['DISP_INIT_K']*S.disp_lean(A), cfg)
         B.initiative=S.clamp_initiative(B.initiative + cfg['DISP_INIT_K']*S.disp_lean(B), cfg)
         # STRUCTURE recovery (the kuzushi damper): balance regathers toward 1.0 each beat.
-        A.poise=S.clamp_poise(A.poise+cfg['POISE_RECOVER']*(1-A.poise), cfg)
-        B.poise=S.clamp_poise(B.poise+cfg['POISE_RECOVER']*(1-B.poise), cfg)
+        A.poise=S.clamp_poise(A.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(A.focus-3))*(1-A.poise), cfg)   # Focus speeds structure recovery (Jordan 2026-06-03)
+        B.poise=S.clamp_poise(B.poise+cfg['POISE_RECOVER']*(1+cfg['POISE_FOCUS_K']*(B.focus-3))*(1-B.poise), cfg)
         if not closed: rate={c:S.weapon_tempo(c,cfg,ffat[c]) for c in (A,B)}
         else:          rate={c:S.close_tempo(c,cfg,ffat[c]) for c in (A,B)}
         for c in (A,B): ready[c]+=rate[c]
@@ -115,7 +115,7 @@ def engagement(A, B, first, cfg, rng):
         # standing reach advantage (module): defender's reach lowers the attacker's net, falling with armour.
         reach_pen=S.reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR)
         # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
-        init=cfg['INIT_K']*(aggressor.agi-defender.agi)*TR.channel_weight(ta,'tempo')
+        init=(cfg['INIT_K']*(aggressor.agi-defender.agi) + cfg['INIT_READING_K']*(S.reading(aggressor,cfg)-S.reading(defender,cfg)) + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.channel_weight(ta,'tempo')   # initiative = tempo(Agi) + reading(Cog/Att) + experience(History) (Jordan 2026-06-03)
         consistency_a=cfg['FOCUS_CONSISTENCY_K']*(aggressor.focus-3)
         # feinting (module): wrapper applies the state changes the pure evaluator returns.
         fv=S.feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR)
@@ -129,8 +129,8 @@ def engagement(A, B, first, cfg, rng):
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
         fam = TR.familiarity(td, ta)
         legib=S.legibility(aggressor, commit, cfg, defender.armor)   # mode-aware: swings/blunt easy, thrusts (incl. half-sword vs plate) hard
-        read_d=S.reading(defender)*TR.channel_weight(td,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
-        read_a=S.reading(aggressor)*TR.channel_weight(ta,'visual')+consistency_a
+        read_d=S.reading(defender,cfg)*TR.channel_weight(td,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
+        read_a=S.reading(aggressor,cfg)*TR.channel_weight(ta,'visual')+consistency_a
         read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
         modes=['parry','dodge','wind']
         msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
@@ -262,8 +262,11 @@ def engagement(A, B, first, cfg, rng):
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
         exchanges+=1
-        if exchanges>=cfg['MAX_EXCHANGES_PER_BOUT']: return None
-        if A.stamina<=-4 or B.stamina<=-4 or rng.random()<cfg['SEPARATION_P']: return None
+        # DISENGAGE is emergent (Jordan 2026-06-03): fighters keep trading exchanges in measure and break when TIRED
+        # (a clean separation to recover) or on stamina collapse — NOT at a fixed exchange count. Fresh pairs trade many
+        # exchanges (a fencing phrase); winded pairs separate. One engagement = one ~10s turn.
+        if A.stamina<=-4 or B.stamina<=-4: return None
+        if rng.random() < cfg['SEPARATION_P'] + cfg['DISENGAGE_FATIGUE_K']*max(ffat[A], ffat[B]): return None
     return None
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
@@ -272,7 +275,7 @@ def fight(A, B, cfg=None, rng=None, max_bouts=12):
     A.wt.__init__(A.end); B.wt.__init__(B.end)   # reset wounds
     _init_live(A,cfg); _init_live(B,cfg)
     result=0
-    for bout in range(max_bouts):
+    for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
         first = A if rng.random()<0.5 else B
         loser = engagement(A,B,first,cfg,rng)
         if loser is not None:

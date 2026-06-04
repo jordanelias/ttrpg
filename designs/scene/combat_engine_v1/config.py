@@ -35,10 +35,11 @@ CFG = dict(
   # stamina / recovery
   STAMINA_REF=18.0, RECOVERY_FRAC=0.5, COST_SCALE=0.5, ACT_BASE=2.0, ACT_WEIGHT=1.0, ACT_COMMIT=0.4, OOB=2,
   # concentration (Focus+Spirit tracker; baseline-consistency + fatigue-resistance)
-  CONC_FOCUS=3.0, CONC_SPIRIT=1.0, CONC_BASE_K=4.0, CONC_DRAIN_BOUT=3.0, CONC_DRAIN_LOSS=2.0, CONC_DRAIN_HIT=2.0,
+  CONC_COG=3.0, CONC_SPIRIT=2.0, CONC_FOCUS=3.0, CONC_BASE_K=4.0, CONC_DRAIN_BOUT=3.0, CONC_DRAIN_LOSS=2.0, CONC_DRAIN_HIT=2.0,   # Concentration = 3*Cog + 2*Spi (Jordan 2026-06-03; was 3*Foc+1*Spi)
   CONC_RECOVER_FRAC=0.4, FOCUS_MENTAL_K=0.5, FOCUS_CONSISTENCY_K=0.10, DISRUPT_K=0.7,
   # reading / tempo channels
   READ_K=0.5, REFLEX_AGI=2.0, REFLEX_ATT=1.0, INIT_K=0.045, COMMIT_SIGMA=0.18,
+  READ_HISTORY_K=0.2, INIT_READING_K=0.03, INIT_HISTORY_K=0.02,   # reading=experience(History) term; initiative reading/History terms (Jordan 2026-06-03; Class-C)
   # defense modes
   PARRY_K=0.9, DODGE_K=0.9, WIND_K=0.9, CHOKE_BIND_K=0.30,
   # strength handling + endurance fatigue
@@ -51,7 +52,7 @@ CFG = dict(
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
   STOPHIT_NSIG_BASE=0.4, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,
-  RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4, SEPARATION_P=0.03,
+  RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4, SEPARATION_P=0.03, DISENGAGE_FATIGUE_K=0.15,   # disengage emergent: break chance rises with fatigue (Jordan 2026-06-03)
   # mental-fatigue weights (calibrated): how much fatigue degrades the read vs the defence
   MENTAL_FAT_READ_K=0.4, MENTAL_FAT_DEF_K=0.3,
   # initiative substrate (the three-phase Vor/Nach/Indes ~ sen state; culture-neutral, differentiation layered on top).
@@ -68,7 +69,7 @@ CFG = dict(
   # degrades tempo AND defence; recovers each beat toward 1.0. This is the DYNAMIC tempo-vs-structure fix deferred
   # from the initiative build (replaces the rejected static balance->tempo coupling — structure is dynamic, balance
   # keeps its existing roles). Effect factor is 1.0 at full structure, so default/full-structure fighters are unaffected.
-  POISE_FLOOR=0.5, POISE_EFFECT_FLOOR=0.88, POISE_RECOVER=0.20,
+  POISE_FLOOR=0.5, POISE_EFFECT_FLOOR=0.88, POISE_RECOVER=0.20, POISE_FOCUS_K=0.10,   # Focus speeds structure recovery (Jordan 2026-06-03; Class-C)
   POISE_BREAK_OVERCOMMIT=0.09, POISE_BREAK_BIND=0.05, POISE_BREAK_HIT=0.07, POISE_SOLID_HIT=8.0,
   # attacker bias: a small per-exchange edge to the aggressor (first-mover / Vor-holder) so under equal circumstances
   # the one who moves first is favoured — an EDGE, not determinism (defence still works); the mirror stays 50 because
