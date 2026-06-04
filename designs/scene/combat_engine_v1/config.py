@@ -31,7 +31,7 @@ CFG = dict(
   ADEF_THRESHOLD={'none':0.0,'light':0.70,'medium':0.45,'heavy':0.72},
   CLOSE_RATE_K=0.40, STOPHIT_CHANCE=0.75, STOPHIT_FULL_GAP=3.0,
   # tempo
-  BASE_TEMPO=2.0, SPEED_K=0.6, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, MAX_EXCHANGES_PER_BOUT=3,
+  BASE_TEMPO=2.0, SPEED_K=0.6, WEIGHT_PEN=0.8, HANDS_COMMIT=0.5, POLE_CLOSE_PENALTY=1.2, ACT_THRESHOLD=2.5, BURST_MAX=4,   # per-TURN burst ceiling: a turn holds 1 to ~3-4 exchanges (Jordan 2026-06-03)
   # stamina / recovery
   STAMINA_REF=18.0, RECOVERY_FRAC=0.5, COST_SCALE=0.5, ACT_BASE=2.0, ACT_WEIGHT=1.0, ACT_COMMIT=0.4, OOB=2,
   # concentration (Focus+Spirit tracker; baseline-consistency + fatigue-resistance)
@@ -52,7 +52,7 @@ CFG = dict(
   BIND_TECH_K=0.06, BIND_TACTILE_K=0.04, BIND_STR_K=0.0156,
   # outcome-mapping probabilities (calibrated) — lifted from wrapper inline literals (single source)
   STOPHIT_NSIG_BASE=0.4, PARTIAL_DODGE_GRAZE=0.4, PARTIAL_PARRY_GRAZE=0.30, WIND_BIND_P=0.55,
-  RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4, SEPARATION_P=0.03, DISENGAGE_FATIGUE_K=0.15,   # disengage emergent: break chance rises with fatigue (Jordan 2026-06-03)
+  RIPOSTE_ON_NEUTRALIZE=0.20, BIND_HIT_P=0.4,
   # mental-fatigue weights (calibrated): how much fatigue degrades the read vs the defence
   MENTAL_FAT_READ_K=0.4, MENTAL_FAT_DEF_K=0.3,
   # initiative substrate (the three-phase Vor/Nach/Indes ~ sen state; culture-neutral, differentiation layered on top).

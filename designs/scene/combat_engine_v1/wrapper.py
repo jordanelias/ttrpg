@@ -262,11 +262,16 @@ def engagement(A, B, first, cfg, rng):
             defender.conc=max(0,defender.conc-cfg['CONC_DRAIN_LOSS'])
             aggressor, defender = defender, aggressor   # role flip — objects, frame-safe
         exchanges+=1
-        # DISENGAGE is emergent (Jordan 2026-06-03): fighters keep trading exchanges in measure and break when TIRED
-        # (a clean separation to recover) or on stamina collapse — NOT at a fixed exchange count. Fresh pairs trade many
-        # exchanges (a fencing phrase); winded pairs separate. One engagement = one ~10s turn.
+        # TURN = one approach -> burst -> separation (Jordan 2026-06-03). The burst is a SMALL EMERGENT run of
+        # exchanges, gated by TEMPO (who re-reaches ACT_THRESHOLD via close_tempo), NOT by ripostes: a faster fighter
+        # can land SEVERAL hits in a single turn with no reply. It ends when (a) the ceiling BURST_MAX is reached, or
+        # (b) an exchange resolves CLEANLY on defence -- a dodge/parry/miss with no hit, no riposte, no bind -- so the
+        # measure breaks (the floor: one swing, one dodge, separate = 1 exchange). A landed hit, a riposte (role flip),
+        # or a bind CONTINUES the pressing. Felling / stamina-collapse exits are handled above. Combat = many such
+        # turns; wounds persist across them, so equal fighters take several turns to resolve (emergent, not enforced).
         if A.stamina<=-4 or B.stamina<=-4: return None
-        if rng.random() < cfg['SEPARATION_P'] + cfg['DISENGAGE_FATIGUE_K']*max(ffat[A], ffat[B]): return None
+        if exchanges >= cfg['BURST_MAX']: return None
+        if not (hit>0 or riposte or bind): return None
     return None
 
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
