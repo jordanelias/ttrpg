@@ -1,1 +1,129 @@
-{"entries": [{"value": "3", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "4", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "5", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "6", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "7", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "8", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "9", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "12", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "18", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "25", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "45", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "50", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "99", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "233", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "712", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}, {"value": "999", "source": "orchestration.py", "note": "pre-existing constant, cited in function docstring"}]}
+{
+  "entries": [
+    {
+      "value": "3",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "4",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "5",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "6",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "7",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "8",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "9",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "12",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "18",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "25",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "45",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "50",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "99",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "233",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "712",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "999",
+      "source": "orchestration.py",
+      "note": "pre-existing constant, cited in function docstring"
+    },
+    {
+      "value": "3000",
+      "source": "validators.py",
+      "note": "validator scenario fixture: fixed-defender troop strength (illustrative deployment, not an engine constant)"
+    },
+    {
+      "value": "4000",
+      "source": "validators.py",
+      "note": "validator scenario fixture: pinning main-body troop strength"
+    },
+    {
+      "value": "1500",
+      "source": "validators.py",
+      "note": "validator scenario fixture: enveloping detachment troop strength"
+    },
+    {
+      "value": "15",
+      "source": "validators.py",
+      "note": "validator scenario fixture: defender deploy row (faction B)"
+    },
+    {
+      "value": "20",
+      "source": "validators.py",
+      "note": "validator scenario fixture: main-body deploy row / aggregate seed count"
+    },
+    {
+      "value": "24",
+      "source": "validators.py",
+      "note": "validator scenario fixture: detachment deploy row"
+    },
+    {
+      "value": "120",
+      "source": "validators.py",
+      "note": "validator scenario fixture: standard line concentration"
+    },
+    {
+      "value": "60",
+      "source": "validators.py",
+      "note": "validator scenario fixture: decisive-outcome turn cap"
+    },
+    {
+      "value": "216",
+      "source": "validators.py / orchestration.py",
+      "note": "historical date: battle of Cannae, 216 BCE (anchor for the fixing-force envelopment goal)"
+    }
+  ]
+}

@@ -157,9 +157,6 @@ from typing import List, Tuple, Optional, Dict, Set
 
 # [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
 from mass_battle.config import *  # P-A: constants extracted to mass_battle/config.py
-MANEUVER_SURGE_DEPTH  = 5   # [canonical: Jordan maneuver - surge drives this many rows past enemy front; class-B sim-tunable]
-MANEUVER_ENVELOP_WIDE = 4   # [canonical: Jordan maneuver - envelop waypoint this far beyond enemy flank; class-B sim-tunable]
-REFORM_ENGAGE_DIST    = 1   # [canonical: mass_battle_v30.md L180 reform - Chebyshev dist <= this = engaged; class-B]
 # [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 # v20 fix: symmetric deployment. Both sides 7 rows from center (row 12).
 # [canonical: designs/provincial/mass_battle_v30.md §deployment]
@@ -348,41 +345,9 @@ def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — rally lands in a future cycle (G-7)."""
     pass
 
-def _maneuver_target(su, mnv, tc, enemy_cells, my_r, my_c, base_col):
-    """Directed maneuver target: envelop (wide-then-hook) or surge (break-and-drive),
-    not straight-at-nearest. Stateless; recomputed each tick from live geometry.
-    [canonical: Jordan directed-maneuver pathing; class-B sim mechanic]"""
-    e_cols = [c for (_r, c) in enemy_cells]; e_rows = [r for (r, _c) in enemy_cells]
-    emin, emax = min(e_cols), max(e_cols)
-    adv = su.advance_dir
-    e_front = min(e_rows, key=lambda r: abs(r - my_r))   # enemy facing-edge row nearest me
-    if mnv == "surge":
-        # break the line: drive forward past the enemy front, holding my column (penetrate)
-        return (e_front + adv * MANEUVER_SURGE_DEPTH, base_col)
-    # envelop: choose a flank, go wide alongside it, then hook into its flank/rear
-    side = su.maneuver_side
-    if side == "left" or (side is None and abs(my_c - emin) <= abs(my_c - emax)):
-        flank_col = emin - MANEUVER_ENVELOP_WIDE
-    else:
-        flank_col = emax + MANEUVER_ENVELOP_WIDE
-    passed = (my_r <= e_front) if adv < 0 else (my_r >= e_front)
-    if not passed:
-        return (e_front, flank_col)                       # PHASE 1: wide + forward
-    return min(enemy_cells, key=lambda e: (e[0]-my_r)**2 + (e[1]-my_c)**2)  # PHASE 2: hook inward
-
 def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """A unit not in melee contact regroups: discipline restores toward its start (cap);
-    requires general's Command >= current Discipline + 1 AND Command >= 2.
-    [canonical: mass_battle_v30.md L180-183 reform restoration; PP-241 command gate; discipline=cohesion PP-232]"""
-    for u, foe in ((unit_a, unit_b), (unit_b, unit_a)):
-        if u.routed or u.broken or u.discipline >= u.discipline_start:
-            continue
-        if u.command < 2 or u.command < u.discipline + 1:   # PP-241 command prerequisite for reform
-            continue
-        engaged = any(_atom_distance(su, fsu) <= REFORM_ENGAGE_DIST
-                      for su in u.subunits for fsu in foe.subunits)
-        if not engaged:
-            u.discipline = min(u.discipline_start, u.discipline + 1)
+    """Empty hook — reform lands in a future cycle (G-8)."""
+    pass
 
 def threadwork_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — threadwork lands in a future cycle (G-9)."""
@@ -483,8 +448,6 @@ class Subunit:
     # [class-B] targeting extensions
     target_delay_ticks: int = 0          # hold N ticks before first targeting; decremented each assign_targets call
     target_condition: Optional[str] = None  # None/'nearest'(default) | 'weakest' | 'in_range:N' | 'direct'
-    maneuver: Optional[str] = None        # None/'direct' | 'envelop'(wide-then-hook) | 'surge'(break line, drive deep)
-    maneuver_side: Optional[str] = None   # 'left'|'right'|None(auto) - flank to envelop
     # F-ii: last movement speed per orig coord (only updated when cell actually moves)
     cell_last_speed: Dict[Tuple[int, int], int] = field(default_factory=dict)
     # v11: per-cell raw movement vector for octagon angle computation.
@@ -765,21 +728,19 @@ class Subunit:
             cell_target = None
             if target_centroid:
                 my_starting_col = self.starting_position[1] + or_c
-                _mnv = self.maneuver
-                if _mnv is None and self.instructions:
-                    if 'envelop' in self.instructions: _mnv = 'envelop'
-                    elif 'surge' in self.instructions or 'breakthrough' in self.instructions: _mnv = 'surge'
-                if _mnv in ('envelop', 'surge') and PER_CELL and enemy_cells:
-                    # DIRECTED MANEUVER (Jordan 2026-06-05): wide-then-hook / break-and-drive, not straight-at-nearest
-                    cell_target = _maneuver_target(self, _mnv, target_centroid, enemy_cells, my_r, my_c, my_starting_col)
-                else:
-                    cell_target = (target_centroid[0], my_starting_col)
-                    if PER_CELL and PC_WHEEL and enemy_cells:
-                        e_cols = [ec for (_er, ec) in enemy_cells]
-                        emin, emax = min(e_cols), max(e_cols)
-                        if my_c < emin or my_c > emax:
-                            cell_target = min(enemy_cells,
-                                              key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
+                cell_target = (target_centroid[0], my_starting_col)
+                # ENVELOPMENT WHEEL (Jordan 2026-05-31): an OVERHANG cell — one with no enemy in its
+                # file (beyond the enemy frontage) — wheels toward the nearest enemy cell (the flank)
+                # instead of holding its column. Lateral movement -> the facing vector (set below at
+                # cell_facing_vec) rotates inward -> the octagon angle reads the enemy's flank/rear.
+                # "the front of the cell should be the same as its vector." Gated; toggle-off untouched.
+                if PER_CELL and PC_WHEEL and enemy_cells:
+                    e_cols = [ec for (_er, ec) in enemy_cells]
+                    emin, emax = min(e_cols), max(e_cols)
+                    # overhang = my column lies BEYOND the enemy's frontage span (past either flank)
+                    if my_c < emin or my_c > emax:
+                        cell_target = min(enemy_cells,
+                                          key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
             if cell_target:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c
@@ -1323,6 +1284,8 @@ PC_ROLLUP_FLANK_REACH = float(_sigma_os.environ.get('PC_ROLLUP_FLANK_REACH', '1.
 PC_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('PC_ROLLUP_MIN_DEPTH', '2.0'))  # defender must still have this depth
 
 from mass_battle.percell import *  # P-A stage 3: percell extracted
+import os
+PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 
 def _lanchester_strength(contact_cells, unit=None):
     """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged
@@ -1349,6 +1312,23 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
     dynamic_facings: per-cell facing dict for F-iii (None -> default advance_dir)."""
     dmg_a, dmg_b = 0, 0
     eng_counts = count_engagements_per_atom(pairs)
+    # A (atomized fixing-force, subunit-scale): a subunit engaged on its FRONT by an enemy body cannot
+    # wheel as a body to face a SEPARATE detachment on its flank/rear -- so that detachment's hit lands
+    # with the zone penalty (the envelopment of a fixed unit). "Fixed" is emergent from frontal contact
+    # and requires a DIFFERENT enemy subunit than the flanker -> impossible in any single-subunit clash
+    # (byte-exact for the counters). Centroid-based, per contacting pair.
+    def _su_centroid(_su):
+        _cs = _su.cells()
+        return (sum(r for r, c in _cs) / len(_cs), sum(c for r, c in _cs) / len(_cs)) if _cs else None
+    _front_fixers = {}
+    for _p in pairs:
+        for _d, _e in ((_p["atom_a"], _p["atom_b"]), (_p["atom_b"], _p["atom_a"])):
+            _dc = _su_centroid(_d); _ec = _su_centroid(_e)
+            if _dc is None or _ec is None:
+                continue
+            _fz0, _ = octagon_angle(_ec, _dc, (_d.advance_dir, 0))
+            if _fz0 == "GREEN":
+                _front_fixers.setdefault(id(_d), set()).add(id(_e))
     for p in pairs:
         atom_a, atom_b = p["atom_a"], p["atom_b"]
         a_troops_frac = atom_a.troop_count / unit_a.total_troops()
@@ -1381,7 +1361,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         # [canonical: Jordan design — octagon, GREEN<45°, YELLOW 45-90°, RED≥90°]
         # For each contact cell-pair, compute angle using defender's per-cell facing vector.
         # Average the modifier across all contact cell-pairs per side.
-        def _per_cell_angle_mod(defender_subunit, defender_cells, attacker_cells, attacker_subunit=None):
+        def _per_cell_angle_mod(defender_subunit, defender_cells, attacker_cells, attacker_subunit=None, fixed_by_other=False):
             if not defender_cells or not attacker_cells: return 0
             # Use attacker CENTROID rather than nearest-cell to avoid non-determinism
             # when a defender cell is equidistant between attacker cells (e.g. Arrowhead tip
@@ -1454,6 +1434,17 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                             worst_mod = PC_ENVELOP_MOD; worst_ang = ang; worst_pos = a
                     if worst_mod < 0 and (not pinned) and worst_ang <= FOV_HALF_DEG:
                         worst_mod = 0   # refused: free to turn AND can see the threat
+                    # A (atomized detached-flank / envelopment of a fixed unit): if no wider-line wrap
+                    # fired, a cell whose SUBUNIT is fixed frontally by a separate body (fixed_by_other)
+                    # with the attacker bearing on its flank/rear arc takes the zone penalty -- independent
+                    # of attacker frontage-width. The detachment strikes the flank/rear of a fixed unit.
+                    # [canonical: Cannae 216 BC; du Picq -- the unseen attack on a pinned line.]
+                    if worst_mod == 0 and fixed_by_other and PC_FIXING_FLANK:
+                        _fz, _fa = octagon_angle(atk_centroid, d_pos, facing)
+                        if _fz in ("YELLOW", "RED") and ANGLE_DEF_MOD[_fz] < 0:
+                            worst_mod = ANGLE_DEF_MOD[_fz]; worst_ang = _fa
+                            worst_pos = min(attacker_cells,
+                                            key=lambda a: (a[0]-d_pos[0])**2 + (a[1]-d_pos[1])**2)
                     if worst_mod < 0:
                         # depth resists the wrap, measured PARALLEL to the wrapper's approach (Jordan):
                         # a flank wrap is blunted by ROW depth, a rear wrap by FILE depth -- not the
@@ -1504,10 +1495,12 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     mods.append(ANGLE_DEF_MOD[zone])
             return sum(mods) / len(mods) if mods else 0
 
+        a_fixed_other = bool(_front_fixers.get(id(atom_a), set()) - {id(atom_b)})
+        b_fixed_other = bool(_front_fixers.get(id(atom_b), set()) - {id(atom_a)})
         a_angle_mod = _per_cell_angle_mod(atom_a, list(set(p["a_cells"])),
-                                           list(set(p["b_cells"])), atom_b)
+                                           list(set(p["b_cells"])), atom_b, a_fixed_other)
         b_angle_mod = _per_cell_angle_mod(atom_b, list(set(p["b_cells"])),
-                                           list(set(p["a_cells"])), atom_a)
+                                           list(set(p["a_cells"])), atom_a, b_fixed_other)
         # === SIGMA-LEVERAGE HEAD (prototype) ===
         # Advantages (octagon angle, puncture, encirclement, ranged-in-melee) enter as a
         # delta-sigma net-boost on the offensive net successes (uniform impact across pool

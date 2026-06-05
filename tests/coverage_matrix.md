@@ -163,3 +163,13 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - Added gate. Validated: cmd5/d3->4, cmd4/d3->4, cmd4/d4 no-change, cmd2/d3 + cmd1 no-change.
   Counters 5/8 8/8 8/8 unchanged; fuzz(120) 0 fail. [SELF-AUTHORED catch: reform implemented from the
   one-line L180 summary, not the full L180-183 - corrected on canon read.]
+
+## Build A -- atomized fixing-force flank (subunit-scale)  [commit pending]
+- orchestration.py `_per_cell_angle_mod`: detached-flank term fires when a subunit is fixed
+  frontally by a SEPARATE body (`_front_fixers`) and the attacker bears on its flank/rear;
+  provably inert single-subunit (byte-exact counters 5/8, 8/8, 8/8). Toggle `PC_FIXING_FLANK`.
+- validators.py: V-CANNAE (envelopment advantage; no seed worse, delta>0) + V-FIXING
+  (pin-conditional; zero effect without a front-fixer). Emergent, public outputs only.
+- robustness: fuzz(120) 0 engine-failures / 0 degenerate; mirror skew 2/48.
+- scope: A is the angle disadvantage (modest); decisive collapse = B; reliable rear-reach = C
+  (a detachment approaching directly into the rear/flank forms no contact pair today).
