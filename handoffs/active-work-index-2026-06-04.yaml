@@ -6,10 +6,8 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: '1f9361fb (mass-battle BREAKTHROUGH VALIDATION — NULL, Stream B: breakthrough
-  primitive validated as a misframed target, no engine change, package pristine 7655743e5a91b238).
-  Per-stream tips: combat-engine 6e9b6aa6; mass-battle 1f9361fb; lane-B a166d52c;
-  lane-C 8feb7526.'
+last_commit: '3778d6e6 (stress harness + sim_verification_ledger). Per-stream: combat-engine
+  6e9b6aa6; mass-battle 3778d6e6; lane-B a166d52c; lane-C 8feb7526.'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -35,17 +33,18 @@ owns:
 - valoria-game/**
 working_state:
   next:
-  - 'Resume by stream (A-D). Mass-battle (B): the breakthrough/penetration primitive
-    is RESOLVED (NULL, 1f9361fb) — B reverts to Jordan-blocked items. Lane-B(C)+Lane-C
-    stubs(D) autonomous; A awaits Jordan.'
-  - '(B) breakthrough/penetration primitive RESOLVED — NULL (1f9361fb; designs/audit/mass_battle_breakthrough_validation_2026-06-05.md).
-    Validated MISFRAMED: a wedge does not win a frontal grind vs a solid line (Goldsworthy
-    10.1177/096834459700400101; Gaugamela = gap/penetration, not grind). Pristine
-    engine ALREADY matches precedent on the archetypal counters (command-dominates,
-    ShieldWall>Wedge, cav-vs-braced) + Sabin casualty asymmetry (victor 84-94% vs
-    loser 45-63%). NO PC_BREAKTHROUGH built. deepColumn=50% = depth/frontage tradeoff
-    -> Jordan interpretation call (lever: existing PC_DEPTH_ROTATE/PC_STAM_SIGMA,
-    a tune not a coupling).'
+  - 'Resume by stream (A-D). Mass-battle (B): targeting extensions committed; engine
+    stress-tested and validated. Remaining B items are Jordan-blocked (see below).
+    Lane-B(C)+Lane-C stubs(D) autonomous; A awaits Jordan.'
+  - '(B) This session: breakthrough validated NULL (1f9361fb); targeting extensions
+    added (3faa2b4bc8: target_delay_ticks countdown + target_condition weakest/in_range:N
+    + order_target_idx documented); flanking/cavalry assessed (facing system works
+    — rear charge devastates: B HP 0.86→0.51; cav 2x speed, frontal charge not dominant
+    vs steady infantry, square near-immune); robustness confirmed 180+ trials 0 failures;
+    stance=retreat confirmed as pre-contact lure mechanic (vector-halt blocks post-contact
+    disengage). Open: PC_NODE_COHESION crashes in continuous path (KeyError _node_advance);
+    GappedLine/Horseshoe param-sensitive non-closing; ledger bootstrap (fetch tests/sim_verification_ledger.json
+    → /home/claude/ in future sessions).'
   - '(A) Await Jordan: ratify combat_engine_v1 (3 commits) + martial-traditions D-alpha/beta/gamma/delta.'
   - '(C) Autonomous: index-refresh+generator-fix, check_handoff_conflicts glob-bug,
     propagation_map owns-narrow, 7.2-followup, 1.20.'
@@ -73,9 +72,10 @@ working_state:
       - martial-traditions D-alpha replace/coexist, D-beta count(6), D-gamma grade=V,
         D-delta naming
     B_mass_battle_pc_formation:
-      status: Engine CANON+HISTORY-validated, PRISTINE (7655743e5a91b238). Breakthrough
-        primitive RESOLVED as a misframed target (NULL, 1f9361fb) — no engine change.
-        B reverts to Jordan-blocked items.
+      status: 'Engine validated + targeting-extended + stress-tested. Targeting: target_delay_ticks,
+        target_condition (weakest/in_range:N), order_target_idx (direct). Robustness:
+        0 failures across 180+ randomised trials. PC_NODE_COHESION broken in continuous
+        path (off by default, correctly). Remaining B items Jordan-blocked.'
       last_commit: '19298bb (Column). Cell-up chain: 19298bb <- 6d6db27(2c) <- 2bd7d28(2b)
         <- 3a47d15(2a) <- da7b7b6(step1).'
       done: 'THIS SESSION cell-up build: (1) cell-primary state da7b7b6 (Subunit.cell_troops
@@ -108,11 +108,18 @@ working_state:
         command 100%, ShieldWall>Wedge 97%, cav-vs-braced 0%; winner 84-94% vs loser
         45-63%, all decisive (Sabin). VERDICT: wedge-frontal-loss is HISTORICALLY
         CORRECT; primitives already correspond; prototype reverted to pristine. PC_BREAKTHROUGH
-        next-primitive RETIRED.'
-      next: Breakthrough primitive DONE (NULL). B live-next = the Jordan-blocked items
-        below (gauge band realignment; per-cell CAP; density magnitude/role table)
-        + deepColumn=50% interpretation call. No autonomous mass-battle build remains
-        pending.
+        next-primitive RETIRED. || 2026-06-05 (THIS SESSION): Flanking/cav assessed
+        (facing works, rear-charge devastating); stance=retreat pre-contact lure mechanic
+        confirmed; all 6 shapes vary size/density/location confirmed; targeting extensions:
+        target_delay_ticks + target_condition (weakest/in_range:N) added to Subunit
+        + assign_targets (3faa2b4bc8); stress harness stress_random.py committed (3778d6e6);
+        PC_NODE_COHESION crash in continuous path found (KeyError _node_advance, off
+        by default).'
+      next: 'Jordan-blocked items (gauge band realignment, per-cell CAP, density magnitude).
+        Open engine work: PC_NODE_COHESION fix (continuous-path _node_pos coverage);
+        GappedLine/Horseshoe non-closing investigation; sim_verification_ledger.json
+        bootstrap (future sessions must fetch tests/sim_verification_ledger.json →
+        /home/claude/ or re-run extraction before committing to orchestration.py).'
       jordan_blocks:
       - per-cell CAP value — the OLDER density-into-_lanchester_strength refinement
         (strength=SUM min(troops-per-cell,CAP)); still blocked; reconcile with validated
@@ -204,6 +211,11 @@ key_values:
   -> h.task_gate(''simulation'') -> h.safe_commit(adds,[],msg). ANY tests/sim/** commit
   REQUIRES co-file tests/coverage_matrix.md in adds (append dated HTML comment). Reuse
   cited constants. Commit set this session: da7b7b6,3a47d15,2bd7d28,6d6db27,19298bb.'
+- 'TARGETING: target_delay_ticks (delay N ticks before engaging), target_condition="weakest"
+  (focus-fire fewest-troops), target_condition="in_range:N" (hold until within N cells),
+  order_target_idx (direct index). All committed 3faa2b4bc8.'
+- 'LEDGER: tests/sim_verification_ledger.json committed (3778d6e6) — bootstrap must
+  fetch to /home/claude/sim_verification_ledger.json for future orchestration.py commits.'
 context_files:
 - path: designs/audit/2026-06-02-combat-engine/ratification_and_deprecation_proposal.md
   depth: full
@@ -242,5 +254,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T04:06:14.107998+00:00'
+updated: '2026-06-05T14:59:49.485277+00:00'
 status: active
