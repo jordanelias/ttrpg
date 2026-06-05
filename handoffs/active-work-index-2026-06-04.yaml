@@ -6,8 +6,9 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: '3778d6e6 (stress harness + sim_verification_ledger). Per-stream: combat-engine
-  6e9b6aa6; mass-battle 3778d6e6; lane-B a166d52c; lane-C 8feb7526.'
+last_commit: 'd869461c (discipline-speed flooring fix). This-session chain: 88479e58
+  (self-healing fabrication gate) -> 545af082 (PC_NODE_COHESION continuous-path) ->
+  d869461c (floor->round speed fix).'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -72,10 +73,11 @@ working_state:
       - martial-traditions D-alpha replace/coexist, D-beta count(6), D-gamma grade=V,
         D-delta naming
     B_mass_battle_pc_formation:
-      status: 'Engine validated + targeting-extended + stress-tested. Targeting: target_delay_ticks,
-        target_condition (weakest/in_range:N), order_target_idx (direct). Robustness:
-        0 failures across 180+ randomised trials. PC_NODE_COHESION broken in continuous
-        path (off by default, correctly). Remaining B items Jordan-blocked.'
+      status: 'Engine validated + targeting-extended + stress-tested + two real defects
+        fixed this session. PC_NODE_COHESION continuous-path crash fixed (setdefault).
+        Discipline-speed flooring fixed (floor->round): low-discipline units no longer
+        freeze. All historical counters preserved. NO GappedLine/Horseshoe shape defect
+        exists (was a misattribution).'
       last_commit: '19298bb (Column). Cell-up chain: 19298bb <- 6d6db27(2c) <- 2bd7d28(2b)
         <- 3a47d15(2a) <- da7b7b6(step1).'
       done: 'THIS SESSION cell-up build: (1) cell-primary state da7b7b6 (Subunit.cell_troops
@@ -114,12 +116,22 @@ working_state:
         target_delay_ticks + target_condition (weakest/in_range:N) added to Subunit
         + assign_targets (3faa2b4bc8); stress harness stress_random.py committed (3778d6e6);
         PC_NODE_COHESION crash in continuous path found (KeyError _node_advance, off
-        by default).'
+        by default). || 2026-06-05 (cont.): Self-healing fabrication gate (88479e58:
+        pattern accepts bare [canonical:], bootstrap auto-fetches ledger); PC_NODE_COHESION
+        continuous-path crash fixed (545af082: _node_advance setdefault); discipline-speed
+        flooring fixed (d869461c: floor->round in advance_cells + _node_advance —
+        base_speed=1 + disc_mult=0.7 floored to 0, freezing disc-3-4 units; both-low-disc
+        battles drew at 100%); NULL on GappedLine/Horseshoe shape defect (single-subunit
+        shapes close 20/20 at every parameter; the non-close was the speed cliff,
+        shape-independent, affecting plain Lines too).'
       next: 'Jordan-blocked items (gauge band realignment, per-cell CAP, density magnitude).
-        Open engine work: PC_NODE_COHESION fix (continuous-path _node_pos coverage);
-        GappedLine/Horseshoe non-closing investigation; sim_verification_ledger.json
-        bootstrap (future sessions must fetch tests/sim_verification_ledger.json →
-        /home/claude/ or re-run extraction before committing to orchestration.py).'
+        Optional follow-ups: (a) disc<3 + base_speed-1 still rounds to 0 (near-rout
+        edge, not in fuzz range) — add mobility floor if full mobility wanted there;
+        (b) multi-subunit DEFAULT targeting/positioning — laterally-offset subunits
+        at non-overlapping columns engage piecemeal (column-local targeting working
+        as designed); needs Jordan sign-off on multi-subunit spacing convention if
+        multi-subunit is a supported config; (c) in-combat tactical withdrawal (break-contact
+        + rout-risk morale).'
       jordan_blocks:
       - per-cell CAP value — the OLDER density-into-_lanchester_strength refinement
         (strength=SUM min(troops-per-cell,CAP)); still blocked; reconcile with validated
@@ -216,6 +228,11 @@ key_values:
   order_target_idx (direct index). All committed 3faa2b4bc8.'
 - 'LEDGER: tests/sim_verification_ledger.json committed (3778d6e6) — bootstrap must
   fetch to /home/claude/sim_verification_ledger.json for future orchestration.py commits.'
+- 'SPEED FIX (d869461c): actual_speed uses round() not floor() of base_speed*disc_mult.
+  Was freezing standard infantry (base 1) at discipline <5. disc>=5 unchanged (round==floor).
+  Editorial-latitude, vetoable. Counters preserved.'
+- 'NULL: no GappedLine/Horseshoe shape defect. Single-subunit shapes close at every
+  param. Prior "non-closing" was the discipline-speed cliff, not shape geometry.'
 context_files:
 - path: designs/audit/2026-06-02-combat-engine/ratification_and_deprecation_proposal.md
   depth: full
@@ -254,5 +271,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T14:59:49.485277+00:00'
+updated: '2026-06-05T17:10:47.099745+00:00'
 status: active
