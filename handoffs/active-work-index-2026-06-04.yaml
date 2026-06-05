@@ -35,6 +35,45 @@ owns:
 - valoria-game/**
 working_state:
   next:
+  - 'BUILD C bottom-up read DONE (2026-06-05) -- scope REFINED by an empirical probe.
+    Read: find_contacts (orchestration.py:1177) is PURELY POSITIONAL (Chebyshev<=1
+    any cell pair, facing-agnostic) -> the rear WOULD register as contact if reached,
+    so NO contact-detection fix needed. assign_targets (:1028) = nearest-centroid
+    (or order_target_idx/target_condition). MOVEMENT (Subunit advance, ~:695-790)
+    already does 2D steering toward a cell_target (row+col split), and column-local
+    targeting holds each cell''s file UNLESS it is an OVERHANG cell (column beyond
+    the enemy frontage emin..emax), in which case the ENVELOPMENT WHEEL (PC_WHEEL,
+    default ON, Jordan 2026-05-31) steers it to the nearest enemy cell (the flank)
+    and rotates its facing vector inward so the octagon reads the flank/rear. PROBE
+    (M frontal at (20,25) dir-1 fixing D''s front + detachment F deployed WIDE at
+    (15,40) past D''s frontage, PC_WHEEL on): F WHEELED in and engaged D''s right
+    flank (F centroid (16.0,30.5) vs D (16.5,27.5); 2 contact pairs M->D and F->D;
+    decisive: D hp 0.541, A hp 0.822). => FLANK ENVELOPMENT ALREADY WORKS via the
+    existing wheel + A + B when the detachment is deployed WIDE (overhang). The earlier
+    ''no contact pair'' finding was for a detachment BESIDE (within frontage, no overhang)
+    or directly behind -- NOT a wide deployment. NEXT-SESSION caveat: verify A''s
+    fixed_by_other + B''s shock fire precisely in this flank case (the probe shows
+    the decisive outcome + RED/flank zones, consistent with A+B, but confirm via the
+    per-pair a_fixed_other / angle_mod, not just hp).'
+  - 'BUILD C REFINED DESIGN (implement next session): the FLANK is handled; C''s remaining
+    gap is REAR-REACH (deep envelopment) -- a detachment getting BEHIND the enemy
+    (the rows past it) for the full Cannae (front pinned + flank + REAR) and the RED
+    rear shock (1.6x vs flank 1.0x). The wheel steers overhang cells to the NEAREST
+    enemy cell (the flank), never the rear. PROPOSED: an ''envelop'' INSTRUCTION (Subunit.instructions,
+    like the existing ''brace''/''kite'') that, when set, gives the detachment a maneuver
+    target = the enemy''s REAR cells (centroid + a depth offset past the far edge),
+    so the 2D cell_target steering paths it AROUND the flank into the rear rows. Gate
+    PC_ENVELOP_PATH (default ON but fires ONLY for units carrying the ''envelop''
+    instruction -> the gauge/counter scenarios have none -> byte-exact; verify 5/8,8/8,8/8).
+    Reuse the existing 2D steering + wheel; do NOT rebuild movement. Validator V-ENVELOP:
+    a detachment ordered to envelop REACHES and ENGAGES the rear (RED zone on the
+    enemy), and the enveloped unit then takes A''s penalty + B''s RED shock from behind
+    -> strictly more decisive than the flank-only case. [canonical: Cannae 216 BC
+    double-envelopment; Khalid at Walaja; A.8 Envelopment.] SEQUENCE NOTE for Jordan:
+    the CORE envelopment goal (front pinned + flank, DECISIVE) is now ACHIEVED by
+    A+B+wheel; C (rear) is the maximal-effect refinement, D (pin/Anvil role) and E
+    (sweep + archer-targeting) are separate features. Re-confirm priority before C
+    if desired.'
   - 'BUILD B DONE + COMMITTED c2134e16 (2026-06-05). Envelopment moral-shock: a subunit
     FIXED frontally by a separate body and struck on its flank/rear cannot face the
     new threat, so the du Picq moral shock fires even WITHOUT a momentum charge (the
@@ -372,5 +411,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T23:51:54.379049+00:00'
+updated: '2026-06-05T23:56:53.532667+00:00'
 status: active
