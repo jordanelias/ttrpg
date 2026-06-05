@@ -6,11 +6,10 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: '8ec085c0 (reform_check wired + directed maneuver pathing envelop/surge;
-  targeting granularity confirmed unit->subunit->cell). Chain: 88479e58 (self-healing
-  fabrication gate) -> 545af082 (PC_NODE_COHESION fix) -> d869461c (floor->round,
-  SUPERSEDED) -> afdabadf (discipline-speed decoupling, PP-232) -> 8ec085c0 (reform
-  + maneuvers).'
+last_commit: 'ED-905 canonization 8a758de8 (ratify+canonize all 2026-06-05 mass-battle
+  work). Chain: 88479e58 (self-healing gate) -> 545af082 (PC_NODE_COHESION fix) ->
+  afdabadf (discipline-speed decoupling PP-232) -> 8ec085c0 (reform wired + maneuvers)
+  -> 34db3c91 (reform PP-241 command-gate canon fix) -> 8a758de8 (ED-905 ledger canonization).'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -36,10 +35,12 @@ owns:
 - valoria-game/**
 working_state:
   next:
-  - 'Resume by stream (A-D). Mass-battle (B): reform_check (regroup) wired + directed
-    maneuver pathing (envelop/surge) committed (8ec085c0); targeting granularity CONFIRMED
-    unit->subunit->cell; engine stress-validated. Remaining B items below (mostly
-    Jordan-blocked or hygiene). Lane-B(C)+Lane-C stubs(D) autonomous; A awaits Jordan.'
+  - 'Resume by stream (A-D). Mass-battle (B): RATIFIED + CANONIZED (ED-905) -- discipline
+    decoupled from speed (PP-232), reform_check wired with PP-241 command gate, directed
+    maneuver pathing (envelop implements A.8 Envelopment / surge = breakthrough gap-fill),
+    targeting granularity unit->subunit->cell confirmed. NOW IN: maneuver-constant
+    tuning + stress testing of the new mechanics. Lane-B(C)+Lane-C stubs(D) autonomous;
+    A awaits Jordan.'
   - '(B) Recent chain: PC_NODE_COHESION continuous-path crash FIXED (545af082, setdefault->anchor);
     the long-standing GappedLine/Horseshoe ''non-close'' diagnosed as NOT a shape
     defect but the discipline-speed flooring cliff, then discipline DECOUPLED from
@@ -295,5 +296,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T18:58:38.041935+00:00'
+updated: '2026-06-05T19:27:00.101208+00:00'
 status: active
