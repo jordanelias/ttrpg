@@ -6,10 +6,11 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'afdabadf (discipline decoupled from speed; supersedes d869461c). This-session
-  chain: 88479e58 (self-healing fabrication gate) then 545af082 (PC_NODE_COHESION)
-  then d869461c (floor->round, SUPERSEDED) then afdabadf (discipline-speed decoupling,
-  canon PP-232).'
+last_commit: '8ec085c0 (reform_check wired + directed maneuver pathing envelop/surge;
+  targeting granularity confirmed unit->subunit->cell). Chain: 88479e58 (self-healing
+  fabrication gate) -> 545af082 (PC_NODE_COHESION fix) -> d869461c (floor->round,
+  SUPERSEDED) -> afdabadf (discipline-speed decoupling, PP-232) -> 8ec085c0 (reform
+  + maneuvers).'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -35,18 +36,32 @@ owns:
 - valoria-game/**
 working_state:
   next:
-  - 'Resume by stream (A-D). Mass-battle (B): targeting extensions committed; engine
-    stress-tested and validated. Remaining B items are Jordan-blocked (see below).
-    Lane-B(C)+Lane-C stubs(D) autonomous; A awaits Jordan.'
-  - '(B) This session: breakthrough validated NULL (1f9361fb); targeting extensions
-    added (3faa2b4bc8: target_delay_ticks countdown + target_condition weakest/in_range:N
-    + order_target_idx documented); flanking/cavalry assessed (facing system works
-    — rear charge devastates: B HP 0.86→0.51; cav 2x speed, frontal charge not dominant
-    vs steady infantry, square near-immune); robustness confirmed 180+ trials 0 failures;
-    stance=retreat confirmed as pre-contact lure mechanic (vector-halt blocks post-contact
-    disengage). Open: PC_NODE_COHESION crashes in continuous path (KeyError _node_advance);
-    GappedLine/Horseshoe param-sensitive non-closing; ledger bootstrap (fetch tests/sim_verification_ledger.json
-    → /home/claude/ in future sessions).'
+  - 'Resume by stream (A-D). Mass-battle (B): reform_check (regroup) wired + directed
+    maneuver pathing (envelop/surge) committed (8ec085c0); targeting granularity CONFIRMED
+    unit->subunit->cell; engine stress-validated. Remaining B items below (mostly
+    Jordan-blocked or hygiene). Lane-B(C)+Lane-C stubs(D) autonomous; A awaits Jordan.'
+  - '(B) Recent chain: PC_NODE_COHESION continuous-path crash FIXED (545af082, setdefault->anchor);
+    the long-standing GappedLine/Horseshoe ''non-close'' diagnosed as NOT a shape
+    defect but the discipline-speed flooring cliff, then discipline DECOUPLED from
+    movement speed (afdabadf; canon PP-232 discipline=cohesion, params/mass_combat.md
+    has zero speed coupling) - disc_mult retained only for node cohesion factor +
+    wheel rate; ledger auto-bootstrap + relaxed fabrication-gate pattern (88479e58).
+    THIS session (8ec085c0): reform_check WIRED (unengaged unit restores +1 discipline
+    toward discipline_start each phase boundary per mass_battle_v30 L180; engaged
+    = Chebyshev<=1); directed maneuver pathing added (Subunit.maneuver: envelop=go-wide-then-hook-flank/rear,
+    surge=break-line-and-drive-deep; also fired by instructions tokens so the Flanker
+    envelop template is now live; _maneuver_target stateless per-tick; advance_cells
+    branches, direct column-local+wheel is byte-exact default); targeting granularity
+    CONFIRMED unit(matchup+stance/disc/cmd)->subunit(target selection + maneuver)->cell(each
+    cell computes own target+moves). Validation: counters 5/8 8/8 8/8 unchanged, fuzz(120)
+    0 engfail/0 degen, reform unengaged 3->4 capped/engaged unchanged, envelop hooks
+    flank (row 17), surge breaks weak line (row 10 vs direct 16). OPEN (B): cell-support-fluidity
+    (discipline role #4) only PARTIAL + threadwork_check empty (G-9); config.py 10
+    pre-existing uncited constants (hygiene - blocks future config.py commits; maneuver
+    constants live in orchestration.py to avoid it); multi-subunit lateral spacing
+    convention (Jordan sign-off - harness SPREADs are my invention); in-combat tactical
+    withdrawal (enhancement). Jordan-blocked: gauge band realign, per-cell CAP value,
+    density magnitude/role table.'
   - '(A) Await Jordan: ratify combat_engine_v1 (3 commits) + martial-traditions D-alpha/beta/gamma/delta.'
   - '(C) Autonomous: index-refresh+generator-fix, check_handoff_conflicts glob-bug,
     propagation_map owns-narrow, 7.2-followup, 1.20.'
@@ -280,5 +295,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T17:28:29.642021+00:00'
+updated: '2026-06-05T18:58:38.041935+00:00'
 status: active
