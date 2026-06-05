@@ -445,6 +445,9 @@ class Subunit:
     cell_offsets_c: Dict[Tuple[int, int], int] = field(default_factory=dict)
     halted_cells: Set[Tuple[int, int]] = field(default_factory=set)
     target_atom: Optional[object] = field(default=None, repr=False)
+    # [class-B] targeting extensions
+    target_delay_ticks: int = 0          # hold N ticks before first targeting; decremented each assign_targets call
+    target_condition: Optional[str] = None  # None/'nearest'(default) | 'weakest' | 'in_range:N' | 'direct'
     # F-ii: last movement speed per orig coord (only updated when cell actually moves)
     cell_last_speed: Dict[Tuple[int, int], int] = field(default_factory=dict)
     # v11: per-cell raw movement vector for octagon angle computation.
@@ -1023,22 +1026,34 @@ from mass_battle.resolution import *  # P-A stage 4: resolution (sigma head) ext
 # ─── TARGETING ───────────────────────────────────────────────────────────────
 
 def assign_targets(unit_a, unit_b):
-    for atom in unit_a.subunits:
-        if not unit_b.subunits: atom.target_atom = None; continue
-        if atom.order_target_idx is not None and atom.order_target_idx < len(unit_b.subunits):
-            atom.target_atom = unit_b.subunits[atom.order_target_idx]
+    """Assign target_atom per subunit every tick.
+    Priority: delay countdown > order_target_idx (direct by index) > target_condition.
+    Conditions: 'nearest'(default) | 'weakest'(fewest remaining troops) | 'in_range:N'(hold until within N).
+    Delay: target_delay_ticks=N holds the subunit N ticks before first activation (one-shot countdown)."""
+    def _pick(atom, enemies):
+        if not enemies: return None
+        if atom.target_delay_ticks > 0:
+            atom.target_delay_ticks -= 1
+            return None                                          # subunit holds this tick
+        if atom.order_target_idx is not None and atom.order_target_idx < len(enemies):
+            return enemies[atom.order_target_idx]               # direct: fixed index
+        cond = atom.target_condition or 'nearest'
+        if cond == 'nearest':
+            my = atom.centroid()
+            return min(enemies, key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+        elif cond == 'weakest':
+            return min(enemies, key=lambda e: sum(e.cell_troops.values()) if e.cell_troops else 0)
+        elif cond.startswith('in_range:'):
+            R = float(cond.split(':', 1)[1])
+            my = atom.centroid()
+            nearest = min(enemies, key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+            d = math.hypot(my[0]-nearest.centroid()[0], my[1]-nearest.centroid()[1])
+            return nearest if d <= R else None                   # hold until in range
         else:
             my = atom.centroid()
-            atom.target_atom = min(unit_b.subunits,
-                key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
-    for atom in unit_b.subunits:
-        if not unit_a.subunits: atom.target_atom = None; continue
-        if atom.order_target_idx is not None and atom.order_target_idx < len(unit_a.subunits):
-            atom.target_atom = unit_a.subunits[atom.order_target_idx]
-        else:
-            my = atom.centroid()
-            atom.target_atom = min(unit_a.subunits,
-                key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+            return min(enemies, key=lambda e: math.hypot(my[0]-e.centroid()[0], my[1]-e.centroid()[1]))
+    for atom in unit_a.subunits: atom.target_atom = _pick(atom, unit_b.subunits)
+    for atom in unit_b.subunits: atom.target_atom = _pick(atom, unit_a.subunits)
 
 # ─── CONTACTS ────────────────────────────────────────────────────────────────
 
