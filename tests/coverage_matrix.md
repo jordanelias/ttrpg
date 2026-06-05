@@ -111,3 +111,13 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - _node_advance: `_node_pos[(orig_r,orig_c)]` → `setdefault(key, anchor)`
 - Continuous-mode cells not present in _node_pos at spawn now seed from anchor (first-time default)
 - Verified: 20-trial fuzz with PC_NODE_COHESION=1 → 0 engine failures
+
+## Discipline-speed flooring fix (2026-06-05)
+- advance_cells + _node_advance: actual_speed used math.floor(base_speed * disc_mult);
+  base_speed=1 (standard infantry) with disc_mult=0.7 (discipline 3-4) floored to 0 -> unit frozen.
+- When both sides had discipline <5 neither could move -> false draw at 100%/100% troops.
+- Changed floor -> round: discipline now slows (disc 3-4 move at speed 1) rather than freezing.
+- Validated: historical counters byte-identical (deepColumn 5/8, ShieldWall 8/8, command 8/8);
+  disc-3 two-Line engages 5/5 (was frozen); fuzz draw_hold 20->12 (frozen draws resolved); 0 engfail/degen.
+- NOTE: this resolves what was mis-flagged as "GappedLine/Horseshoe non-closing" - that was never
+  shape-specific; single-subunit shapes close at every parameter. The non-close was this speed cliff.
