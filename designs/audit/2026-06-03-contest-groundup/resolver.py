@@ -13,7 +13,8 @@ import random
 from dataclasses import dataclass, field
 from contract import A, B, other, Move, ContestView, FaultState, Adjudicator, Pressure
 from primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
-                        Resonance, Readiness, DefeatCatalogue, EvidenceItem, Dossier)
+                        Resonance, Readiness, DefeatCatalogue, EvidenceItem, Dossier,
+                        RhetoricalWeights)
 from engine import roll_net, effective_ob, degree
 
 VALID_KINDS = ("advance", "hard", "shift", "support", "pass", "evidence", "rebut")
@@ -116,11 +117,19 @@ class Venue:
     proof_future: float = 1.0
     split_standing: bool = False   # PROTOTYPE: split fused Standing into ascribed Rank + earned Credit (default off)
     allow_rebuttal: bool = False   # PROTOTYPE (Fork 3): permit the rebut move (attrition on opponent adv); default off
+    rhetorical: RhetoricalWeights = field(default_factory=RhetoricalWeights)  # 3×3 combinatorial matrix
     def role(self): return {"ethos": self.proof_ethos, "pathos": self.proof_pathos, "logos": self.proof_logos}
     def tense_weight(self):
         w = {"past": self.proof_past, "present": self.proof_present, "future": self.proof_future}
         s = sum(w.values()) or 1.0
         return {k: 3.0 * v / s for k, v in w.items()}   # equal weights -> 1.0 each (zero regression)
+    def joint_weight(self, appeal: str, tense: str) -> float:
+        """Combinatorial venue weight for (appeal, tense): venue_role × R[appeal][tense] × tfit.
+        Replaces the independent res × tfit product in _advance with a single value that
+        captures the Aristotelian cross-term (e.g. logos is stronger in past/forensic;
+        pathos stronger in future/deliberative). Row sums of R ≈ 3.0 → neutral temporal
+        weights leave gain scale unchanged."""
+        return self.role()[appeal] * self.rhetorical.weight(appeal, tense) * self.tense_weight()[tense]
 
 class Contestant:
     """Immutable SPEC: faculty, starting standing, reserve cap, evidence items. The Bout builds a fresh
@@ -193,12 +202,13 @@ class Bout:
         if appeal not in Appeal.ALL:
             raise ValueError(f"unknown appeal {appeal!r}; valid: {Appeal.ALL}")
         c = self.c[side]
+        tense = Stasis.tense(ground)
         leak = min(Resonance.LEAK_CAP, Resonance.leak(self.adj.discipline, c.cred_frac())
                    + self.pr.public * PUBLIC_LEAK)
-        res = Resonance.effective(appeal, self.v.role(), self.adj.character(), leak)
+        venue_w = self.v.joint_weight(appeal, tense)          # rhetorical × temporal × venue-role — combined
+        res = (1 - leak) * venue_w + leak * self.adj.character().get(appeal, 0.0)
         rdy = Readiness.of(c.cred_frac(), self.room.frac(side)) if readiness else 1.0
-        tfit = self.v.tense_weight()[Stasis.tense(ground)]   # temporal-register fit (extended ground axis)
-        gain = MERIT_SCALE * magnitude * res * rdy * tfit * random.uniform(1 - JITTER, 1 + JITTER) * self._bias(side)
+        gain = MERIT_SCALE * magnitude * res * rdy * random.uniform(1 - JITTER, 1 + JITTER) * self._bias(side)
         self.state.adv[side] += gain
         if build and appeal == Appeal.ETHOS:
             c.build_ethos(magnitude)
@@ -247,7 +257,7 @@ class Bout:
         if not Stasis.relevant(mv.ground, self.live):
             c.fault.evasion += 1; c.fault.reason = "argued off the live issue (arthantara)"; return
         deg = self._reception(side)
-        if deg >= 2:
+        if deg >= 1:                                         # partial (1) gives a small gain; 0=failure still nothing
             self._advance(side, deg, mv.appeal, mv.ground)
 
     def resolve(self, polA, polB):

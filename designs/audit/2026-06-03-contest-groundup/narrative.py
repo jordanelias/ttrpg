@@ -52,7 +52,7 @@ class Chronicle:
 
     def render(self):
         w = _name(self.winner)
-        pct = f"{self.margin * 100:.0f}%"
+        pct = "nothing" if self.margin < 0.005 else f"{self.margin * 100:.0f}%"
         if self.shape == "SPLIT_DECISION":
             room = _name(self.room_leader)
             return (f"[SPLIT DECISION] {room} carried the room by {pct} on momentum, "

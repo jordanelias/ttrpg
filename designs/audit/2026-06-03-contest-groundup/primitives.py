@@ -38,12 +38,49 @@ class Standing:
 
 class Reserve:
     MAX = 12  # [SEED]
-    COST = {"advance": 3, "hard": 5, "shift": 4, "support": 2, "pass": 0, "evidence": 3, "rebut": 4}
+    COST = {"advance": 3, "hard": 5, "shift": 4, "support": 2, "pass": 0, "evidence": 3, "rebut": 3}
     REGAIN = 4
     def __init__(self, mx=MAX): self.max = mx; self.cur = mx
     def can(self, kind):   return self.cur >= self.COST[kind]
     def spend(self, kind): self.cur = max(0, self.cur - self.COST[kind])
     def regroup(self):     self.cur = min(self.max, self.cur + self.REGAIN)
+
+# ---------------------------------------------------------------------------
+# Rhetorical–Temporal matrix — the combinatorial cross of the three appeals
+# with the three temporal registers (Aristotle Rhet. I.3; verified 2026-06-05).
+# Each entry is a MODIFIER centred on 1.0 (row sums = 3.0, so neutral temporal
+# weights → zero scale change). The matrix replaces the independent product
+# venue_role[appeal] × tfit with a venue-specific joint weight.
+#
+# Defaults (Aristotelian):
+#   Forensic / PAST   : logos-dominant (evidence, what happened)
+#   Epideictic / PRESENT : ethos-dominant (character, praise/blame)
+#   Deliberative / FUTURE : pathos-dominant (fear/hope, moving to action)
+#
+# All nine entries are [SEED] — Jordan to calibrate.
+@dataclass
+class RhetoricalWeights:
+    """3×3 modifier matrix for (appeal, tense). Row sums = 3.0 → average modifier
+    is 1.0 per appeal, preserving gain scale on neutral venues. Applied as:
+      joint = venue_role[appeal] × R[appeal][tense] × tfit[tense]
+    Aristotelian defaults grounded in Rhet. I.3 (forensic/past=logos;
+    epideictic/present=ethos; deliberative/future=pathos). [SEED]"""
+    # LOGOS — forensic home; weakest in deliberative
+    logos_past:    float = 1.20   # [SEED] forensic evidence/fact
+    logos_present: float = 1.00   # [SEED] epideictic demonstration
+    logos_future:  float = 0.80   # [SEED] deliberative policy argument
+    # ETHOS — epideictic home; credibility matters less in raw deliberation
+    ethos_past:    float = 0.85   # [SEED] witness/character standing in past
+    ethos_present: float = 1.20   # [SEED] reputation/honour display
+    ethos_future:  float = 0.95   # [SEED] trustworthy advisor
+    # PATHOS — deliberative home; emotional weight matters least in cold evidence
+    pathos_past:   float = 0.85   # [SEED] victim impact / retrospective grief
+    pathos_present: float = 0.90  # [SEED] epideictic affect / pride/shame
+    pathos_future: float = 1.25   # [SEED] fear / hope / desire for future benefit
+
+    def weight(self, appeal: str, tense: str) -> float:
+        """Return the modifier for (appeal, tense). Row sums ≈ 3.0."""
+        return getattr(self, f"{appeal}_{tense}", 1.0)
 
 class Pool:
     BASE = 3  # [SEED]
@@ -92,8 +129,8 @@ class Resonance:
 
 class Readiness:
     """Built support that makes appeals land; floor < 1 so unsupported still moves something."""
-    FLOOR = 0.35  # [SEED]
-    W_STANDING, W_ROOM = 0.5, 0.5
+    FLOOR = 0.40       # [SEED] raised from 0.35: floor is competitive enough without ethos/pathos investment
+    W_STANDING, W_ROOM = 0.40, 0.40  # [SEED] lowered from 0.50: reduces 1.66x amplification to ~1.35x
     @staticmethod
     def of(standing_frac, room_frac):
         r = Readiness.W_STANDING * standing_frac + Readiness.W_ROOM * room_frac
