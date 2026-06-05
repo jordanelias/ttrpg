@@ -353,6 +353,30 @@ for s in range(200):
     if NAR.summarize(vb.log, vw, vy).shape == "SPLIT_DECISION": _seen = True; break
 ck("fork1+2: a VoteAtClose bout can yield a SPLIT_DECISION", _seen)
 
+# == INSTITUTIONAL REGIMES (fork-enabled modes.py presets; mechanics only) ==
+import modes as MOD
+_arb = MOD.single_arbiter_mode(); _del = MOD.deliberative_body_mode(panel_size=7, noise=1.2); _sch = MOD.scholastic_disputation_mode()
+ck("modes: fused_arbiter is fused (TallyAtClose), no rebuttal", isinstance(_arb.venue.win, TallyAtClose) and _arb.venue.allow_rebuttal is False)
+ck("modes: fused_arbiter judged by a single adjudicator",       isinstance(_arb.adj, Adjudicator))
+ck("modes: deliberative_body un-fuses verdict (VoteAtClose)",   isinstance(_del.venue.win, VoteAtClose))
+ck("modes: deliberative_body permits rebuttal",                 _del.venue.allow_rebuttal is True)
+ck("modes: deliberative_body judged by a Panel of n",           isinstance(_del.adj, Panel) and len(_del.adj.members) == 7)
+ck("modes: scholastic_disputation is a clinch race + rebuttal", isinstance(_sch.venue.win, ThresholdRace) and _sch.venue.allow_rebuttal is True)
+ck("modes: registry exposes exactly the three regimes",         set(MOD.INSTITUTIONAL_MODES) == {"fused_arbiter", "deliberative_body", "scholastic_disputation"})
+for _m in (_arb, _del, _sch):
+    random.seed(1); _w, _ = _m.play(5, 4, LOG, LOG)
+    ck("modes: regime resolves to a valid verdict", _w in ("a", "b", "draw"))
+ck("modes: baseline court untouched (ProofBar, no rebuttal)",        isinstance(MOD.court_venue().win, ProofBar) and MOD.court_venue().allow_rebuttal is False)
+ck("modes: baseline assembly untouched (TallyAtClose, no rebuttal)", isinstance(MOD.assembly_venue().win, TallyAtClose) and MOD.assembly_venue().allow_rebuttal is False)
+_dsplit = False
+for s in range(300):
+    random.seed(s)
+    _mm = MOD.deliberative_body_mode(panel_size=7, noise=1.4)
+    _bt = Bout(Contestant(5), Contestant(5), _mm.venue, _mm.adj, record=True)
+    _ww, _wy = _bt.resolve(LOG, LOG)
+    if NAR.summarize(_bt.log, _ww, _wy).shape == "SPLIT_DECISION": _dsplit = True; break
+ck("modes: deliberative_body can yield a verdict that crosses the room", _dsplit)
+
 print("== validation + scaffolds ==")
 def bad(v): return Move("garbage")
 try: M_disp.play(4,4,bad,LOG); ck("validation raises", False)
