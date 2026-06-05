@@ -6,9 +6,10 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'd869461c (discipline-speed flooring fix). This-session chain: 88479e58
-  (self-healing fabrication gate) -> 545af082 (PC_NODE_COHESION continuous-path) ->
-  d869461c (floor->round speed fix).'
+last_commit: 'afdabadf (discipline decoupled from speed; supersedes d869461c). This-session
+  chain: 88479e58 (self-healing fabrication gate) then 545af082 (PC_NODE_COHESION)
+  then d869461c (floor->round, SUPERSEDED) then afdabadf (discipline-speed decoupling,
+  canon PP-232).'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -73,11 +74,11 @@ working_state:
       - martial-traditions D-alpha replace/coexist, D-beta count(6), D-gamma grade=V,
         D-delta naming
     B_mass_battle_pc_formation:
-      status: 'Engine validated + targeting-extended + stress-tested + two real defects
-        fixed this session. PC_NODE_COHESION continuous-path crash fixed (setdefault).
-        Discipline-speed flooring fixed (floor->round): low-discipline units no longer
-        freeze. All historical counters preserved. NO GappedLine/Horseshoe shape defect
-        exists (was a misattribution).'
+      status: 'Engine validated, targeting-extended, stress-tested, discipline canon-aligned.
+        Discipline DECOUPLED from movement speed (PP-232: discipline=Cohesion; canon
+        has no disc-x-speed coupling). disc_mult retained for cohesion factor + wheel
+        rate only. PC_NODE_COHESION crash fixed. Historical counters preserved. NO
+        GappedLine/Horseshoe shape defect (it was the speed cliff).'
       last_commit: '19298bb (Column). Cell-up chain: 19298bb <- 6d6db27(2c) <- 2bd7d28(2b)
         <- 3a47d15(2a) <- da7b7b6(step1).'
       done: 'THIS SESSION cell-up build: (1) cell-primary state da7b7b6 (Subunit.cell_troops
@@ -123,15 +124,20 @@ working_state:
         base_speed=1 + disc_mult=0.7 floored to 0, freezing disc-3-4 units; both-low-disc
         battles drew at 100%); NULL on GappedLine/Horseshoe shape defect (single-subunit
         shapes close 20/20 at every parameter; the non-close was the speed cliff,
-        shape-independent, affecting plain Lines too).'
-      next: 'Jordan-blocked items (gauge band realignment, per-cell CAP, density magnitude).
-        Optional follow-ups: (a) disc<3 + base_speed-1 still rounds to 0 (near-rout
-        edge, not in fuzz range) — add mobility floor if full mobility wanted there;
-        (b) multi-subunit DEFAULT targeting/positioning — laterally-offset subunits
-        at non-overlapping columns engage piecemeal (column-local targeting working
-        as designed); needs Jordan sign-off on multi-subunit spacing convention if
-        multi-subunit is a supported config; (c) in-combat tactical withdrawal (break-contact
-        + rout-risk morale).'
+        shape-independent, affecting plain Lines too). || 2026-06-05 (cont2): Discipline-speed
+        DECOUPLING (afdabadf, supersedes d869461c). Canon evidence: mass_battle_v30
+        L7 PP-232 renames Cohesion to Discipline; params/mass_combat zero disc-x-movement.
+        Removed disc_mult from actual_speed and step; kept it for node cohesion factor
+        (k) and wheel rate (kw). Counters byte-identical, fuzz and mirror clean. Mapped
+        discipline actual wiring vs the 4 intended roles.'
+      next: 'DISCIPLINE 4-ROLE WIRING (design direction needed): (1) morale-drop WIRED
+        (erosion=dmg/(disc*cmd), L2265); (2) cohesion-loss WIRED (resolve_internal_collisions
+        d10 vs disc L828-873; node k=disc_mult L632); (3) cell-regroup EMPTY HOOK
+        (reform_check unimplemented L348; canon has Reform +1 disc restoration mass_battle_v30
+        L180; engine future cycle G-8) -- THE REAL GAP; (4) cell-support-fluidity
+        PARTIAL (cohesion factor governs hold; discipline-gating of support unclear).
+        Plus prior blocked items (gauge band, per-cell CAP, density magnitude) and
+        multi-subunit spacing convention.'
       jordan_blocks:
       - per-cell CAP value — the OLDER density-into-_lanchester_strength refinement
         (strength=SUM min(troops-per-cell,CAP)); still blocked; reconcile with validated
@@ -228,11 +234,14 @@ key_values:
   order_target_idx (direct index). All committed 3faa2b4bc8.'
 - 'LEDGER: tests/sim_verification_ledger.json committed (3778d6e6) — bootstrap must
   fetch to /home/claude/sim_verification_ledger.json for future orchestration.py commits.'
-- 'SPEED FIX (d869461c): actual_speed uses round() not floor() of base_speed*disc_mult.
-  Was freezing standard infantry (base 1) at discipline <5. disc>=5 unchanged (round==floor).
-  Editorial-latitude, vetoable. Counters preserved.'
 - 'NULL: no GappedLine/Horseshoe shape defect. Single-subunit shapes close at every
   param. Prior "non-closing" was the discipline-speed cliff, not shape geometry.'
+- 'DISCIPLINE=COHESION (PP-232, mass_battle_v30 L7). Decoupled from speed (afdabadf):
+  actual_speed=base_speed+stance_mod, step=base+stance_mod. disc_mult kept ONLY for
+  node cohesion factor (L632) and wheel rate (L624). Speed is discipline-independent.
+  Counters preserved.'
+- 'DISCIPLINE 4-ROLE STATUS: morale-drop WIRED, cohesion-loss WIRED, cell-regroup
+  EMPTY HOOK (reform_check), cell-support PARTIAL. Regroup is the open design item.'
 context_files:
 - path: designs/audit/2026-06-02-combat-engine/ratification_and_deprecation_proposal.md
   depth: full
@@ -271,5 +280,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T17:10:47.099745+00:00'
+updated: '2026-06-05T17:28:29.642021+00:00'
 status: active
