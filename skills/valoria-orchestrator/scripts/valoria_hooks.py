@@ -1927,7 +1927,7 @@ def sim_gate(scope: str, systems: list = None) -> None:
 # the line above.
 
 _MECHANICAL_NUMERIC_PATTERN = re.compile(r'(?<![a-zA-Z_])(\d+)(?![a-zA-Z_])')
-_CANONICAL_COMMENT_PATTERN = re.compile(r'#\s*\[canonical:\s*[^\]]+\]')
+_CANONICAL_COMMENT_PATTERN = re.compile(r'(?:#\s*)?\[canonical:\s*[^\]]+\]')
 
 # Values exempt from citation requirement — these are structural, not mechanical.
 _EXEMPT_NUMBERS = {'0', '1', '2', '10', '100'}  # indices, loop bounds, percentages

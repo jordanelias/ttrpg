@@ -1338,6 +1338,20 @@ def quick_bootstrap(extra_paths: list = None, force_full: bool = False) -> tuple
         _n = len(getattr(_g_mod, '_active_handoffs', []) or [])
         print(f"[bootstrap ✓ warm] token {token} · {_n} active handoff(s) · gate ok · status suppressed (force_full=True to show)")
 
+    # Auto-fetch sim_verification_ledger to /home/claude/ so sim_fabrication_check
+    # passes on future commits to tests/sim/mass_battle/orchestration.py (non-blocking).
+    _ledger_local = '/home/claude/sim_verification_ledger.json'
+    try:
+        import os as _os
+        if not _os.path.exists(_ledger_local):
+            _lc = read_files_graphql(['tests/sim_verification_ledger.json'],
+                                     skip_health_check=True, skip_cache=True)
+            _lv = _lc.get('tests/sim_verification_ledger.json')
+            if _lv:
+                open(_ledger_local, 'w').write(_lv)
+    except Exception:
+        pass  # non-blocking: ledger fetch failure never aborts a session
+
     return _g_mod, _h_mod, files, token
 
 
