@@ -73,7 +73,7 @@ def engagement(A, B, first, cfg, rng):
                 closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ)  # point set aside
             if rng.random() < stophit_p:
-                pool=core.resolution_pool(longer.history)
+                pool=max(1, core.resolution_pool(longer.history) - longer.wt.pool_penalty())
                 nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
                 ob=core.effective_ob(pool, nsig); net=core.roll_net(pool, rng)
                 deg=core.degree(net, ob)
@@ -157,7 +157,7 @@ def engagement(A, B, first, cfg, rng):
             # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
             # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
             counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
-        pool=core.resolution_pool(aggressor.history)
+        pool=max(1, core.resolution_pool(aggressor.history) - aggressor.wt.pool_penalty())
         ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
         deg=core.degree(net, ob)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
