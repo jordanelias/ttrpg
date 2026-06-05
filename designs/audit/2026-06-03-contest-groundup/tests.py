@@ -378,6 +378,25 @@ for s in range(300):
     if NAR.summarize(_bt.log, _ww, _wy).shape == "SPLIT_DECISION": _dsplit = True; break
 ck("modes: deliberative_body can yield a verdict that crosses the room", _dsplit)
 
+# == CROSS-CULTURAL VENUES (smoke tests: instantiate, win-condition type, valid bout) ==
+import modes as MOD_CC; from resolver import ProofBar as _PB, GraceThreshold as _GT
+_cc = {k: f() for k,f in MOD_CC.CROSS_CULTURAL_VENUES.items()}
+ck("cc: public_oration is TallyAtClose, no rebuttal, pathos-heavy",
+   isinstance(_cc["public_oration"].venue.win, TallyAtClose) and _cc["public_oration"].venue.proof_pathos > _cc["public_oration"].venue.proof_ethos)
+ck("cc: inquisition is ProofBar(3.0), evasion_strikes=1",
+   isinstance(_cc["inquisition_hearing"].venue.win, _PB) and _cc["inquisition_hearing"].venue.faults.evasion_strikes == 1)
+ck("cc: excommunication is ProofBar(5.0), ethos-dominant",
+   isinstance(_cc["excommunication_court"].venue.win, _PB) and _cc["excommunication_court"].venue.proof_ethos > 0.45)
+ck("cc: imperial_petition is GraceThreshold(8.0), evasion disabled",
+   isinstance(_cc["imperial_petition"].venue.win, _GT) and _cc["imperial_petition"].venue.faults.evasion_strikes == 0)
+ck("cc: secret_council is ThresholdRace(3.0), logos-dominant",
+   isinstance(_cc["secret_council"].venue.win, ThresholdRace) and _cc["secret_council"].venue.proof_logos > 0.70)
+ck("cc: memorial_remonstrance is GraceThreshold(6.0), ethos-dominant, evasion disabled",
+   isinstance(_cc["memorial_remonstrance"].venue.win, _GT) and _cc["memorial_remonstrance"].venue.faults.evasion_strikes == 0)
+for name, mode in _cc.items():
+    random.seed(42); _w, _ = mode.play(5, 4, LOG, LOG)
+    ck(f"cc: {name} resolves to a valid verdict", _w in ("a","b","draw"))
+
 # == σ-LEVERAGE ENGINE (regression guards for the two patches) ==
 from primitives import Leverage
 from engine import effective_ob as _eff_ob, sigma_N as _sN
