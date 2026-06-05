@@ -371,11 +371,19 @@ terms:
 # ═══════════════════════════════════════════════════════════════
 
 deprecated:
-  - "Public Support"   # PS now = Popular Support (Jordan 2026-05-30)
+  # ambiguous:false → distinctive phrase; Rule-3 gate HALTS on bare usage
+  # ambiguous:true  → bare form is a LIVE homonym; documentation-only, NOT gated
+  # pure-ACR entries (CT/CV/TC) → abbreviation logic; Galbados → forbidden_token_gate
+  - term: "Public Support"
+    replacement: "Popular Support"
+    date: "2026-05-30"
+    reason: "Jordan ruling — PS now = Popular Support"
+    ambiguous: false
   - term: "Conviction Track"
     replacement: "Piety Track (territory, 0–5) or Persuasion Track (contest, 0–10)"
     date: "2026-05-08"
     reason: "'Conviction' is §1 character-attribute vocabulary"
+    ambiguous: false
 
   - term: "CT"
     replacement: "PT (Piety Track) or spell out Persuasion Track"
@@ -389,6 +397,7 @@ deprecated:
     replacement: "Church Influence (CI)"
     date: "2026-05-08"
     reason: "ED-782"
+    ambiguous: false
 
   - term: "TC"
     replacement: "CI"
@@ -398,39 +407,45 @@ deprecated:
     replacement: "Turmoil"
     date: "2026-05-08"
     reason: "PS abbreviation collision with Public Support"
+    ambiguous: false
 
   - term: "Initiative (contest context)"
     replacement: "First to Speak"
     date: "2026-05-08"
     reason: "Collision with combat Initiative"
+    ambiguous: true
 
   - term: "Authority (pressure point)"
     replacement: "Sanction"
     date: "2026-05-08"
     reason: "Collision with Conviction #2 Authority"
+    ambiguous: true
 
   - term: "Loyalty (pressure point)"
     replacement: "Solidarity"
     date: "2026-05-08"
+    ambiguous: true
 
   - term: "Mandate Pool"
     replacement: "Political Pool"
     date: "2026-05-08"
+    ambiguous: false
 
   - term: "Faction Pool"
     replacement: "Political Pool"
     date: "2026-05-08"
+    ambiguous: false
 
   - term: "Memory (score)"
     replacement: "Recall"
     date: "2026-05-08"
     reason: "Collision with debate genre Memory and per-NPC Memory entry"
+    ambiguous: true
 
   - term: "Galbados"
     replacement: "Solmund"
     date: "pre-2026"
-    reason: "Canonical name enforcement"
-
+    reason: "Canonical name enforcement (forbidden_token_gate owns enforcement)"
 # ═══════════════════════════════════════════════════════════════
 # ═══════════════════════════════════════════════════════════════
 # 2026-06-04 FIVE-SYSTEM SCRAPE FINDINGS (callable record)
