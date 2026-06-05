@@ -1032,6 +1032,29 @@ def placeholder_names_gate(additions: list) -> None:
 
 
 
+
+_DEPRECATED_TERM_GATE_SKIP = ('Galbados', 'Galbadian')
+_DEPRECATION_CONTEXT_RE = re.compile(
+    r'(deprecat|renamed|formerly|replaced\s+by|superseded|no\s+longer|use\s+instead|\u2192|->|\bvs\.?\b)',
+    re.IGNORECASE)
+
+
+def _deprecated_term_phrases(reg):
+    """[(phrase, ambiguous)] from registry deprecated:. Bare ACRs are handled by the
+    abbreviation logic; Galbados is left to forbidden_token_gate."""
+    out = []
+    for d in (reg.get('deprecated') or []):
+        if not isinstance(d, dict):
+            continue
+        term = str(d.get('term', '')).strip()
+        phrase = re.sub(r'\s*\(.*?\)\s*$', '', term).strip()
+        if not phrase or phrase in _DEPRECATED_TERM_GATE_SKIP:
+            continue
+        if re.fullmatch(r'[A-Z]{2,5}', phrase):
+            continue
+        out.append((phrase, bool(d.get('ambiguous', False))))
+    return out
+
 def abbreviation_registry_gate(additions: list) -> None:
     """Level-4 enforcement of the abbreviation one-owner rule.
 
@@ -1113,6 +1136,26 @@ def abbreviation_registry_gate(additions: list) -> None:
             else:
                 warns.append(f"{path} L{line}: '{name} ({acr})' — '{acr}' unregistered; "
                              f"add it to {ABBREV_REGISTRY_PATH}.")
+    # Rule 3 — deprecated full-term (bare-phrase) usage; calibrated by `ambiguous`.
+    dep_terms = _deprecated_term_phrases(reg)
+    for path, content in additions:
+        if path == ABBREV_REGISTRY_PATH:
+            continue
+        if any(path.startswith(p) for p in ABBREV_GATE_EXEMPT_PREFIXES):
+            continue
+        _dl = content.splitlines()
+        for _phrase, _amb in dep_terms:
+            if _amb:
+                continue
+            _m = re.search(r'\b' + re.escape(_phrase) + r'\b', content)
+            if not _m:
+                continue
+            _ln = content[:_m.start()].count('\n') + 1
+            _lt = _dl[_ln-1] if _ln-1 < len(_dl) else ''
+            if _DEPRECATION_CONTEXT_RE.search(_lt):
+                continue
+            halts.append(f"{path} L{_ln}: deprecated term '{_phrase}' in new content "
+                         f"- use the current term (name_collision_database.yaml deprecated:).")
     for w in warns:
         print(f"[HOOK \u26a0 soft] abbreviation_registry_gate: {w}")
     if halts:
