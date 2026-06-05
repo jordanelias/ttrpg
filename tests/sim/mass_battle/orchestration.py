@@ -157,6 +157,9 @@ from typing import List, Tuple, Optional, Dict, Set
 
 # [canonical: designs/provincial/mass_battle_v30.md §map — 25×25 grid, 5-cell buffer per side]
 from mass_battle.config import *  # P-A: constants extracted to mass_battle/config.py
+MANEUVER_SURGE_DEPTH  = 5   # [canonical: Jordan maneuver - surge drives this many rows past enemy front; class-B sim-tunable]
+MANEUVER_ENVELOP_WIDE = 4   # [canonical: Jordan maneuver - envelop waypoint this far beyond enemy flank; class-B sim-tunable]
+REFORM_ENGAGE_DIST    = 1   # [canonical: mass_battle_v30.md L180 reform - Chebyshev dist <= this = engaged; class-B]
 # [canonical: designs/provincial/mass_battle_v30.md §units — 15×15 cell unit grid fits T4 pattern]
 # v20 fix: symmetric deployment. Both sides 7 rows from center (row 12).
 # [canonical: designs/provincial/mass_battle_v30.md §deployment]
@@ -345,9 +348,38 @@ def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — rally lands in a future cycle (G-7)."""
     pass
 
+def _maneuver_target(su, mnv, tc, enemy_cells, my_r, my_c, base_col):
+    """Directed maneuver target: envelop (wide-then-hook) or surge (break-and-drive),
+    not straight-at-nearest. Stateless; recomputed each tick from live geometry.
+    [canonical: Jordan directed-maneuver pathing; class-B sim mechanic]"""
+    e_cols = [c for (_r, c) in enemy_cells]; e_rows = [r for (r, _c) in enemy_cells]
+    emin, emax = min(e_cols), max(e_cols)
+    adv = su.advance_dir
+    e_front = min(e_rows, key=lambda r: abs(r - my_r))   # enemy facing-edge row nearest me
+    if mnv == "surge":
+        # break the line: drive forward past the enemy front, holding my column (penetrate)
+        return (e_front + adv * MANEUVER_SURGE_DEPTH, base_col)
+    # envelop: choose a flank, go wide alongside it, then hook into its flank/rear
+    side = su.maneuver_side
+    if side == "left" or (side is None and abs(my_c - emin) <= abs(my_c - emax)):
+        flank_col = emin - MANEUVER_ENVELOP_WIDE
+    else:
+        flank_col = emax + MANEUVER_ENVELOP_WIDE
+    passed = (my_r <= e_front) if adv < 0 else (my_r >= e_front)
+    if not passed:
+        return (e_front, flank_col)                       # PHASE 1: wide + forward
+    return min(enemy_cells, key=lambda e: (e[0]-my_r)**2 + (e[1]-my_c)**2)  # PHASE 2: hook inward
+
 def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """Empty hook — reform lands in a future cycle (G-8)."""
-    pass
+    """A unit not in melee contact regroups: discipline restores toward its start (cap).
+    [canonical: mass_battle_v30.md L180 reform restoration; discipline=cohesion PP-232]"""
+    for u, foe in ((unit_a, unit_b), (unit_b, unit_a)):
+        if u.routed or u.broken or u.discipline >= u.discipline_start:
+            continue
+        engaged = any(_atom_distance(su, fsu) <= REFORM_ENGAGE_DIST
+                      for su in u.subunits for fsu in foe.subunits)
+        if not engaged:
+            u.discipline = min(u.discipline_start, u.discipline + 1)
 
 def threadwork_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — threadwork lands in a future cycle (G-9)."""
@@ -448,6 +480,8 @@ class Subunit:
     # [class-B] targeting extensions
     target_delay_ticks: int = 0          # hold N ticks before first targeting; decremented each assign_targets call
     target_condition: Optional[str] = None  # None/'nearest'(default) | 'weakest' | 'in_range:N' | 'direct'
+    maneuver: Optional[str] = None        # None/'direct' | 'envelop'(wide-then-hook) | 'surge'(break line, drive deep)
+    maneuver_side: Optional[str] = None   # 'left'|'right'|None(auto) - flank to envelop
     # F-ii: last movement speed per orig coord (only updated when cell actually moves)
     cell_last_speed: Dict[Tuple[int, int], int] = field(default_factory=dict)
     # v11: per-cell raw movement vector for octagon angle computation.
@@ -589,7 +623,7 @@ class Subunit:
         speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
         nz = [s for s in speeds if s > 0]
         base = min(nz) if nz else 0
-        step = max(0, base + stance_mod)  # [canonical: PP-232 Cohesion->Discipline; disc_mult retained below for cohesion(k) + wheel(kw), not speed]
+        step = max(0, math.floor(base * disc_mult) + stance_mod)
         if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
             step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
         ar, ac = self._node_anchor
@@ -696,7 +730,7 @@ class Subunit:
             if (orig_r, orig_c) in self.halted_cells: continue
             base_speed = cell_speed(self.shape, self.tier, orig_r, orig_c)
             if base_speed == 0: continue
-            actual_speed = max(0, base_speed + stance_mod)  # [canonical: PP-232 Cohesion->Discipline; canon ties discipline to cohesion/morale/Power, NOT movement speed]
+            actual_speed = max(0, math.floor(base_speed * disc_mult) + stance_mod)
             if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and actual_speed > 0:
                 # Increment 4-followup: cavalry velocity primitive — cavalry closes faster, producing the
                 # momentum differential that triggers the depth-absorbed charge (Incr5). [ASSUMPTION:
@@ -728,19 +762,21 @@ class Subunit:
             cell_target = None
             if target_centroid:
                 my_starting_col = self.starting_position[1] + or_c
-                cell_target = (target_centroid[0], my_starting_col)
-                # ENVELOPMENT WHEEL (Jordan 2026-05-31): an OVERHANG cell — one with no enemy in its
-                # file (beyond the enemy frontage) — wheels toward the nearest enemy cell (the flank)
-                # instead of holding its column. Lateral movement -> the facing vector (set below at
-                # cell_facing_vec) rotates inward -> the octagon angle reads the enemy's flank/rear.
-                # "the front of the cell should be the same as its vector." Gated; toggle-off untouched.
-                if PER_CELL and PC_WHEEL and enemy_cells:
-                    e_cols = [ec for (_er, ec) in enemy_cells]
-                    emin, emax = min(e_cols), max(e_cols)
-                    # overhang = my column lies BEYOND the enemy's frontage span (past either flank)
-                    if my_c < emin or my_c > emax:
-                        cell_target = min(enemy_cells,
-                                          key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
+                _mnv = self.maneuver
+                if _mnv is None and self.instructions:
+                    if 'envelop' in self.instructions: _mnv = 'envelop'
+                    elif 'surge' in self.instructions or 'breakthrough' in self.instructions: _mnv = 'surge'
+                if _mnv in ('envelop', 'surge') and PER_CELL and enemy_cells:
+                    # DIRECTED MANEUVER (Jordan 2026-06-05): wide-then-hook / break-and-drive, not straight-at-nearest
+                    cell_target = _maneuver_target(self, _mnv, target_centroid, enemy_cells, my_r, my_c, my_starting_col)
+                else:
+                    cell_target = (target_centroid[0], my_starting_col)
+                    if PER_CELL and PC_WHEEL and enemy_cells:
+                        e_cols = [ec for (_er, ec) in enemy_cells]
+                        emin, emax = min(e_cols), max(e_cols)
+                        if my_c < emin or my_c > emax:
+                            cell_target = min(enemy_cells,
+                                              key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
             if cell_target:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c

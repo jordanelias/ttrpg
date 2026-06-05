@@ -132,3 +132,25 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - Validated: counters byte-identical (deepColumn 5/8, ShieldWall 8/8, command 8/8); disc 3-7 all engage;
   fuzz(120) 0 engfail/0 degen; mirror(60) |aw-bw|=6 symmetric.
 - The earlier floor->round (d869461c) patched a coupling that should not exist; this removes it.
+
+## reform_check (regroup) wired + directed maneuver pathing (2026-06-05)
+- reform_check (G-8 hook, was empty): a unit NOT in melee contact restores +1 discipline toward
+  discipline_start each phase boundary. [canonical: mass_battle_v30.md L180 reform restoration;
+  discipline=cohesion PP-232]. Engaged = any subunit pair within Chebyshev REFORM_ENGAGE_DIST(=1).
+- Maneuver pathing: units no longer always path straight at nearest.
+  - Subunit.maneuver ('envelop'|'surge') + maneuver_side ('left'|'right'|auto). Also derived from
+    instructions tokens ('envelop'/'surge'/'breakthrough'), so the Flanker (envelop) template is now live.
+  - _maneuver_target: stateless per-tick pather (no path state to corrupt).
+    * envelop: go wide past the enemy's nearer flank (col +/- MANEUVER_ENVELOP_WIDE=4), then hook
+      inward to its flank/rear once the front row is passed (two-phase, geometric).
+    * surge: break the line and drive MANEUVER_SURGE_DEPTH(=5) rows past the enemy front, holding column.
+  - advance_cells branches on maneuver; the DEFAULT path (column-local + overhang wheel) is the
+    else-branch, byte-exact for maneuver=None.
+- Constants in orchestration.py, inline-cited; class-B sim-tunable (Jordan-vetoable). config.py NOT
+  touched (its 10 pre-existing uncited constants are a separate hygiene item).
+- Targeting granularity CONFIRMED unit->subunit->cell: unit = matchup + unit stance/disc/cmd;
+  subunit = target selection (order_target_idx / target_condition / delay) + maneuver; cell = each cell
+  independently computes its target (column-local / wheel / maneuver) and moves (genuine per-cell).
+- Validation: counters 5/8 8/8 8/8 unchanged; fuzz(120) 0 engfail/0 degen; reform unengaged 3->4
+  capped at start, engaged unchanged; envelop hooks flank (deepest row 17 vs direct 16), surge breaks
+  a weak line and drives through (deepest row 10 vs direct 16). Fabrication gate: all constants cited.
