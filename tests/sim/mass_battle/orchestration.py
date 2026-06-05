@@ -636,7 +636,7 @@ class Subunit:
             rel = self._node_rel.get((orig_r, orig_c), (0.0, 0.0))
             des_r = nar + (rc_w * rel[0] - rs_w * rel[1])   # anchor + R(f0->f) . rel : rotated relational slot
             des_c = nac + (rs_w * rel[0] + rc_w * rel[1])
-            cr, cc = self._node_pos[(orig_r, orig_c)]
+            cr, cc = self._node_pos.setdefault((orig_r, orig_c), self._node_anchor)  # [canonical: continuous-mode seed: unseen cell defaults to anchor]
             nr = min(BATTLEFIELD_SIZE - 1, max(0, cr + k * (des_r - cr)))
             nc = min(BATTLEFIELD_SIZE - 1, max(0, cc + k * (des_c - cc)))
             if enemy_cells and (int(round(nr)), int(round(nc))) in enemy_cells:

@@ -106,3 +106,8 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - `order_target_idx`: direct subunit-to-subunit targeting by index (pre-existing; now documented)
 - Backward-compatible: neutral defaults preserve byte-exact prior behaviour
 - Stress-tested: 0 engine failures / 0 degenerate across 60 targeting-varied + 30 backward-compat trials
+
+## PC_NODE_COHESION continuous-path fix (2026-06-05)
+- _node_advance: `_node_pos[(orig_r,orig_c)]` → `setdefault(key, anchor)`
+- Continuous-mode cells not present in _node_pos at spawn now seed from anchor (first-time default)
+- Verified: 20-trial fuzz with PC_NODE_COHESION=1 → 0 engine failures
