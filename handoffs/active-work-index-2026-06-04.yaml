@@ -6,9 +6,10 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: '19298bb (cell-up step3-redirect: Column depth primitive — mass-battle
-  stream, THIS session). Per-stream tips: combat-engine 6e9b6aa6; mass-battle 19298bb;
-  lane-B a166d52c; lane-C 8feb7526.'
+last_commit: '1f9361fb (mass-battle BREAKTHROUGH VALIDATION — NULL, Stream B: breakthrough
+  primitive validated as a misframed target, no engine change, package pristine 7655743e5a91b238).
+  Per-stream tips: combat-engine 6e9b6aa6; mass-battle 1f9361fb; lane-B a166d52c;
+  lane-C 8feb7526.'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -34,16 +35,17 @@ owns:
 - valoria-game/**
 working_state:
   next:
-  - Resume by stream (A-D). Mass-battle (B) is the LIVE thread; IMMEDIATE next = the
-    breakthrough primitive (below). Lane-B(C)+Lane-C stubs(D) autonomous; A awaits
-    Jordan.
-  - '(B) IMMEDIATE [Jordan ''proceed with wiring'']: build the BREAKTHROUGH/PENETRATION
-    primitive — a concentrated front (wedge point / deep column) penetrates a thinner
-    line. Fixes the one fragile canonical counter (Wedge>Line) AND realizes depth=shock/breakthrough(#3)
-    — one primitive, both. PC_BREAKTHROUGH toggle (default OFF/byte-exact); penetration
-    term in resolve_engagements (sigma head) keyed on local front-concentration vs
-    defender thinness; gauge-validate Wedge>Line + deep-vs-thin emerge WITHOUT breaking
-    command-dominates / ShieldWall>Wedge.'
+  - 'Resume by stream (A-D). Mass-battle (B): the breakthrough/penetration primitive
+    is RESOLVED (NULL, 1f9361fb) — B reverts to Jordan-blocked items. Lane-B(C)+Lane-C
+    stubs(D) autonomous; A awaits Jordan.'
+  - '(B) breakthrough/penetration primitive RESOLVED — NULL (1f9361fb; designs/audit/mass_battle_breakthrough_validation_2026-06-05.md).
+    Validated MISFRAMED: a wedge does not win a frontal grind vs a solid line (Goldsworthy
+    10.1177/096834459700400101; Gaugamela = gap/penetration, not grind). Pristine
+    engine ALREADY matches precedent on the archetypal counters (command-dominates,
+    ShieldWall>Wedge, cav-vs-braced) + Sabin casualty asymmetry (victor 84-94% vs
+    loser 45-63%). NO PC_BREAKTHROUGH built. deepColumn=50% = depth/frontage tradeoff
+    -> Jordan interpretation call (lever: existing PC_DEPTH_ROTATE/PC_STAM_SIGMA,
+    a tune not a coupling).'
   - '(A) Await Jordan: ratify combat_engine_v1 (3 commits) + martial-traditions D-alpha/beta/gamma/delta.'
   - '(C) Autonomous: index-refresh+generator-fix, check_handoff_conflicts glob-bug,
     propagation_map owns-narrow, 7.2-followup, 1.20.'
@@ -71,9 +73,9 @@ working_state:
       - martial-traditions D-alpha replace/coexist, D-beta count(6), D-gamma grade=V,
         D-delta naming
     B_mass_battle_pc_formation:
-      status: Cell-up steps 1-2 DONE+committed (behind PC_NODE_COHESION, byte-exact
-        OFF); step 3 REDIRECTED to a DEPLOY primitive (Column shape, committed). Engine
-        CANON-VALIDATED. LIVE thread; IMMEDIATE next = breakthrough primitive.
+      status: Engine CANON+HISTORY-validated, PRISTINE (7655743e5a91b238). Breakthrough
+        primitive RESOLVED as a misframed target (NULL, 1f9361fb) — no engine change.
+        B reverts to Jordan-blocked items.
       last_commit: '19298bb (Column). Cell-up chain: 19298bb <- 6d6db27(2c) <- 2bd7d28(2b)
         <- 3a47d15(2a) <- da7b7b6(step1).'
       done: 'THIS SESSION cell-up build: (1) cell-primary state da7b7b6 (Subunit.cell_troops
@@ -97,13 +99,20 @@ working_state:
         FIXED LOCALLY (exec(sim_v22)->modular imports + matchup max_turns 18->180
         + canonical-status docstring) but COMMIT BLOCKED: sim_fabrication_check whole-file-scans
         and flags gauge_mb''s PRE-EXISTING constants (ANCHOR_MAP, bands) — the container-local
-        citation ledger is non-durable and lost them.'
-      next: 'IMMEDIATE: breakthrough/penetration primitive (see top-level next). THEN:
-        realign gauge bands to the CANONICAL counters (retire H3/H4 Horseshoe targets);
-        commit gauge once its constants are re-cited in the ledger; decide PC_NODE_COHESION
-        default (node 91/30 vs offset 83/56 — lower priority now depth lives in deployment);
-        reconcile the per-cell-CAP refinement (below) with the validated ''density
-        dominates'' finding.'
+        citation ledger is non-durable and lost them. || 2026-06-05 (THIS SESSION)
+        BREAKTHROUGH VALIDATION (1f9361fb): radial-concentration exchange-sigma channel
+        tried -> FAILED (attrition-frontage limit). Reframed bottom-up-primitives
+        / top-down-history: _lanchester_strength frontage-only = CORRECT (Goldsworthy:
+        rear ranks inflict no significant damage; depth = cohesion/endurance/sustainment,
+        not lethality). Continuous N=18x2: Wedge>Line 33%, deepColumn>thinLine 50%,
+        command 100%, ShieldWall>Wedge 97%, cav-vs-braced 0%; winner 84-94% vs loser
+        45-63%, all decisive (Sabin). VERDICT: wedge-frontal-loss is HISTORICALLY
+        CORRECT; primitives already correspond; prototype reverted to pristine. PC_BREAKTHROUGH
+        next-primitive RETIRED.'
+      next: Breakthrough primitive DONE (NULL). B live-next = the Jordan-blocked items
+        below (gauge band realignment; per-cell CAP; density magnitude/role table)
+        + deepColumn=50% interpretation call. No autonomous mass-battle build remains
+        pending.
       jordan_blocks:
       - per-cell CAP value — the OLDER density-into-_lanchester_strength refinement
         (strength=SUM min(troops-per-cell,CAP)); still blocked; reconcile with validated
@@ -182,13 +191,14 @@ key_values:
 - 'CANON VALIDATION vs precedents_warfare §1: command-dominates ✓20/20, ShieldWall>Wedge
   ✓19/20, Wedge>Line FRAGILE 8/20. Canonical counters §1.2: Wedge>Line, ShieldWall>Wedge,
   Skirmish-immune-flanking + the command-dominates axiom. Cannae = command-enabled
-  maneuver (NOT Horseshoe).'
+  maneuver (NOT Horseshoe). [2026-06-05: Wedge>Line "fragility" is HISTORICALLY CORRECT,
+  not a defect — wedge wins by gap/penetration (Gaugamela), not frontal grind; 1f9361fb.]'
 - '[DRIFT] sim_fabrication_check whole-file-scans + flags PRE-EXISTING comment-cited
   constants the non-durable container ledger lost -> re-committing ANY touched legacy
   sim file (e.g. gauge_mb) is BLOCKED until its constants are re-registered.'
-- 'NEXT PRIMITIVE: PC_BREAKTHROUGH (penetration term in resolve_engagements sigma
-  head) — concentrated-front-vs-thin-line; fixes Wedge>Line + delivers depth=shock(#3).
-  Default OFF/byte-exact; gauge-validated.'
+- '[RESOLVED 2026-06-05, 1f9361fb] PC_BREAKTHROUGH RETIRED — validated a misframed
+  target (NULL). Wedge wins via gap/penetration not frontal grind; pristine engine
+  already matches precedent. NOT built.'
 - 'Mass-battle commit workflow (engine=tests/sim/mass_battle/*.py + tests/sim/mass_battle_stress.py):
   bootstrap -> h.sim_fabrication_check(adds) -> g.read_files_graphql(sim-set+coverage)
   -> h.task_gate(''simulation'') -> h.safe_commit(adds,[],msg). ANY tests/sim/** commit
@@ -232,5 +242,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-04T17:52:06.543333+00:00'
+updated: '2026-06-05T04:06:14.107998+00:00'
 status: active
