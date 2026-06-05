@@ -18,12 +18,14 @@ from primitives import Stasis, Standing, DefeatCatalogue
 
 def court_venue(**o):
     return Venue(proof_ethos=.25, proof_pathos=.20, proof_logos=.55, start_ground=Stasis.FACT,
+                 proof_past=.60, proof_present=.30, proof_future=.10,   # forensic register: past-weighted (Rhet I.3)
                  win=ProofBar(bar=4.0), faults=DefeatCatalogue(), **o)
 def disputation_venue(**o):
     return Venue(proof_ethos=.15, proof_pathos=.10, proof_logos=.75, start_ground=Stasis.FACT,
                  win=ThresholdRace(5.0), faults=DefeatCatalogue(), **o)
 def assembly_venue(**o):
-    return Venue(proof_ethos=.25, proof_pathos=.50, proof_logos=.25, start_ground=Stasis.QUALITY,
+    return Venue(proof_ethos=.25, proof_pathos=.50, proof_logos=.25, start_ground=Stasis.CONSEQUENCE,
+                 proof_past=.20, proof_present=.20, proof_future=.60,   # deliberative register: future-weighted (Rhet I.3)
                  win=TallyAtClose(), faults=DefeatCatalogue(barred=False), **o)
 def appeal_venue(**o):
     # petition: a personal plea, judged by the sovereign's character (no institutional proof-weighting,

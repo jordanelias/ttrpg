@@ -96,8 +96,8 @@ ck(f"PROOF-BAR favours defender on equal play (b {w.get('b',0):.2f})", w.get('b'
 
 print("== venue-determined defeat-conditions (message 2) ==")
 M_disp=ContestedMode("disputation"); M_asm=ContestedMode("assembly")
-wn,why=M_disp.play(4,4,LOG,OV); ck("disputation: overreacher clinches out (barred)", wn=="a" and why=="clinch:barred-device")
-wn,why=M_asm.play(4,4,LOG,OV);  ck("assembly: barred NOT fatal → not a barred clinch", why!="clinch:barred-device" and wn=="a")
+wn,why=M_disp.play(4,4,LOG,OV); ck("disputation: overreacher clinches out (barred)", wn=="a" and why.startswith("clinch:barred-device"))
+wn,why=M_asm.play(4,4,LOG,OV);  ck("assembly: barred NOT fatal → not a barred clinch", not why.startswith("clinch:barred-device") and wn=="a")
 ck("clean v clean no clinch (disputation)", sum(1 for _ in range(400) if M_disp.play(4,4,LOG,LOG)[1].startswith("clinch"))==0)
 
 print("== adjudicator(s): panel aggregation in play ==")
@@ -187,6 +187,171 @@ def _commfrac(pro,anti,nab,N=2000):
     return sum(1 for _ in range(N) if FX.coalition_vote(body)=='committee')/N
 ck("R1: abstainer resistance pulls committee at SMALL pools", _commfrac(10,8,2) > _commfrac(10,8,0)+0.03)
 ck("R1: abstainer resistance pulls committee at LARGE pools (was inert pre-fix)", _commfrac(30,28,2) > _commfrac(30,28,0)+0.03)
+
+print("== temporal register: extended ground axis (forum weights past<->future) ==")
+from resolver import Bout, Contestant, TallyAtClose
+from modes import VENUES
+# (1) calibration is a normalized tilt: court favours past, assembly future; a neutral venue is exactly 1.0
+_ct=VENUES["court"]().tense_weight(); _as=VENUES["assembly"]().tense_weight(); _nt=Venue().tense_weight()
+ck(f"court past-tilt > future ({_ct['past']:.2f}>{_ct['future']:.2f})", _ct['past'] > _ct['future'])
+ck(f"assembly future-tilt > past ({_as['future']:.2f}>{_as['past']:.2f})", _as['future'] > _as['past'])
+ck("neutral venue tense_weight == 1.0 (the no-regression guarantee)", all(isclose(_nt[k],1.0) for k in _nt))
+# (2) argument: a venue rewards arguing in its register. Hold all else fixed; vary only the live register
+#     (start_ground) and the venue's tense weights; measure A's accumulated advantage (TallyAtClose => full budget).
+def _adv(start_ground, past, present, future, N=300):
+    tot=0.0
+    for _ in range(N):
+        b=Bout(Contestant(4), Contestant(4),
+               Venue(start_ground=start_ground, proof_ethos=.25, proof_pathos=.20, proof_logos=.55,
+                     proof_past=past, proof_present=present, proof_future=future, win=TallyAtClose()), NEUT)
+        b.resolve(LOG, LOG); tot += b.state.adv[A]
+    return tot/N
+_pf=_adv(Stasis.FACT,.60,.30,.10); _pc=_adv(Stasis.CONSEQUENCE,.60,.30,.10)
+ck(f"past-weighted venue rewards past-ground argument ({_pf:.1f} > {_pc:.1f})", _pf > _pc*2.0)
+_ff=_adv(Stasis.FACT,.10,.30,.60); _fc=_adv(Stasis.CONSEQUENCE,.10,.30,.60)
+ck(f"future-weighted venue rewards future-ground argument ({_fc:.1f} > {_ff:.1f})", _fc > _ff*2.0)
+# (3) evidence flows through the same temporal factor (logos-asymmetry resolution: forensic strength = evidence).
+#     Same FACT-evidence, same live ground (FACT); only the venue's tense weighting differs.
+_EVf=lambda: Dossier([EvidenceItem(Stasis.FACT,2.5), EvidenceItem(Stasis.FACT,2.0)])
+def _adv_ev(past, present, future, N=300):
+    tot=0.0
+    for _ in range(N):
+        b=Bout(Contestant(4, dossier=_EVf()), Contestant(4),
+               Venue(start_ground=Stasis.FACT, proof_ethos=.25, proof_pathos=.20, proof_logos=.55,
+                     proof_past=past, proof_present=present, proof_future=future, win=TallyAtClose()), NEUT)
+        b.resolve(ADV, LOG); tot += b.state.adv[A]
+    return tot/N
+_ep=_adv_ev(.60,.30,.10); _ev=_adv_ev(.10,.30,.60)
+ck(f"FACT-evidence is potent in a past venue, weak in a future venue ({_ep:.1f} > {_ev:.1f})", _ep > _ev*1.5)
+
+print("== Standing split (PROTOTYPE flag): ascribed Rank vs earned Credit ==")
+def _bth(v):  # build (ethos) for three turns, then attempt overreach
+    return Move("advance","ethos",v.live_ground) if v.i < 3 else Move("hard","logos",v.live_ground)
+_UNL = Adjudicator(learned=False)
+_Vf = Venue(start_ground=Stasis.FACT, win=TallyAtClose(), split_standing=False)
+_Vs = Venue(start_ground=Stasis.FACT, win=TallyAtClose(), split_standing=True)
+ck("split flag defaults off (fused engine is the default)", Venue().split_standing is False)
+# Texture 1 — under the split, earned credibility does NOT license overreach (rank-gated); fused, it does
+def _barred_out(venue, N=250):
+    n = 0
+    for _ in range(N):
+        wn, why = Bout(Contestant(4, standing_start=3), Contestant(4, standing_start=2), venue, _UNL).resolve(_bth, LOG)
+        if wn == "b" and "barred" in why: n += 1
+    return n / N
+ck("split: ethos cannot buy hard-licence (low-born barred out)", _barred_out(_Vs) > 0.8)
+ck("fused: ethos buys hard-licence (low-born not barred)",       _barred_out(_Vf) < 0.2)
+# Texture 2 — fused, ascribed standing lends argument force; split, it lends none
+def _awin(venue, N=400):
+    return sum(1 for _ in range(N) if Bout(Contestant(4, standing_start=9), Contestant(4), venue, NEUT).resolve(LOG, LOG)[0] == "a") / N
+ck("fused: ascribed standing lends force (high-born dominates)", _awin(_Vf) > 0.75)
+ck("split: ascribed rank lends no force (high-born ~even)",      0.35 < _awin(_Vs) < 0.65)
+
+# == narrative layer (post-bout chronicle: legibility + scenario classification) ==
+import narrative as NAR
+_trv = lambda: Venue(start_ground=Stasis.FACT, win=ThresholdRace(6.0))
+# instrumentation is inert by default, records only when asked
+ck("narrative: record=False leaves no log", Bout(Contestant(4), Contestant(4), _trv(), NEUT).log is None)
+_rb = Bout(Contestant(4), Contestant(4), _trv(), NEUT, record=True); _rw, _rwhy = _rb.resolve(LOG, DEM)
+ck("narrative: record=True captures a beat log", isinstance(_rb.log, list) and len(_rb.log) > 0)
+ck("narrative: clean win names a decisive appeal", NAR.summarize(_rb.log, _rw, _rwhy).decisive_appeal in Appeal.ALL)
+# a fault ends the bout as COLLAPSE, rendered as a fault, won by the non-faulter
+_cb = Bout(Contestant(4), Contestant(4), VENUES["court"](), NEUT, record=True); _cw, _cwhy = _cb.resolve(OV, LOG)
+_cc = NAR.summarize(_cb.log, _cw, _cwhy)
+ck("narrative: overreach bout classifies COLLAPSE", _cc.shape == "COLLAPSE")
+ck("narrative: COLLAPSE render reports a fault",    "faulted out" in _cc.render())
+ck("narrative: COLLAPSE won by the non-faulter",    _cw == "b")
+# the scenario taxonomy is live (reachable) and non-degenerate
+def _shapes(ka, kb, adj, pa, pb, N=300):
+    c = Counter()
+    for _ in range(N):
+        b = Bout(ka, kb, _trv(), adj, record=True); w, why = b.resolve(pa, pb)
+        c[NAR.summarize(b.log, w, why).shape] += 1
+    return c
+ck("narrative: big skill gap reaches ROUT",                _shapes(Contestant(7), Contestant(2), NEUT, LOG, LOG)["ROUT"] > 0)
+ck("narrative: balanced REVERSAL is a minority not default", _shapes(Contestant(4), Contestant(4), NEUT, LOG, DEM)["REVERSAL"] < 150)
+# public pre-contest cue + graceful empty input
+ck("narrative: venue_brief surfaces the court's logos reward", "logos" in NAR.venue_brief(VENUES["court"]()))
+ck("narrative: empty log => DEADLOCK", NAR.summarize([], "draw", "draw").shape == "DEADLOCK")
+# --- truth tests: hand-built logs with KNOWN trajectories => assert the chronicle is CORRECT, not just
+# well-formed (closes critique-P1: nothing checked turning_point / decisive / margin against a known bout).
+def _bt(i, side, gain, advA, advB, appeal="logos", ground="fact", kind="advance", fault=None):
+    return dict(i=i, side=side, kind=kind, appeal=appeal, ground=ground, gain=gain,
+                live=ground, advA=advA, advB=advB, fault=fault)
+# (1) REVERSAL: A leads through ex3, B overtakes at ex4 and wins; B's gains are mostly pathos.
+_rev = [_bt(0,A,2,2,0),_bt(0,B,0,2,0), _bt(1,A,1,3,0),_bt(1,B,0,3,0), _bt(2,A,1,4,0),_bt(2,B,2,4,2,"pathos"),
+        _bt(3,A,0,4,2),_bt(3,B,1,4,3,"ethos"), _bt(4,A,0,4,3),_bt(4,B,3,4,6,"pathos"), _bt(5,A,0,4,6),_bt(5,B,2,4,8,"pathos")]
+_cr = NAR.summarize(_rev, "b", "win")
+ck("narrative truth: late comeback classifies REVERSAL",     _cr.shape == "REVERSAL")
+ck("narrative truth: turning_point is the crossing exchange", _cr.turning_point == 4)
+ck("narrative truth: decisive appeal = pathos (by realised gain)", _cr.decisive_appeal == "pathos")
+ck("narrative truth: margin = |4-8|/12",                      isclose(_cr.margin, 4/12))
+# (2) ROUT: A dominant, never behind, large margin.
+_rt = [_bt(0,A,3,3,0),_bt(0,B,0,3,0), _bt(1,A,3,6,0),_bt(1,B,0,6,0), _bt(2,A,2,8,0),_bt(2,B,0,8,0)]
+_ct = NAR.summarize(_rt, "a", "win")
+ck("narrative truth: wire-to-wire dominance => ROUT", _ct.shape == "ROUT")
+ck("narrative truth: ROUT decisive appeal = logos",   _ct.decisive_appeal == "logos")
+ck("narrative truth: ROUT margin = 1.0",              isclose(_ct.margin, 1.0))
+# (3) COLLAPSE: fault at ex1; turning_point is the clinch exchange, decisive factor is None (the win is the fault).
+_co = [_bt(0,A,2,2,0),_bt(0,B,0,2,0), _bt(1,A,0,2,0,kind="hard",fault="overreach not licensed by standing (chala/jati)")]
+_cco = NAR.summarize(_co, "b", "clinch:barred-device - overreach not licensed by standing (chala/jati)")
+ck("narrative truth: fault end classifies COLLAPSE",        _cco.shape == "COLLAPSE")
+ck("narrative truth: COLLAPSE turning_point = clinch exch", _cco.turning_point == 1)
+ck("narrative truth: COLLAPSE decisive_appeal is None",     _cco.decisive_appeal is None)
+ck("narrative truth: COLLAPSE render names the fault",      "faulted out" in _cco.render() and "overreach" in _cco.render())
+# recording is provably inert: same seed, record off vs on => identical (winner, why) (substantiates P3).
+def _same(seed):
+    random.seed(seed); o1 = Bout(Contestant(4), Contestant(4), _trv(), NEUT).resolve(LOG, DEM)
+    random.seed(seed); o2 = Bout(Contestant(4), Contestant(4), _trv(), NEUT, record=True).resolve(LOG, DEM)
+    return o1 == o2
+ck("narrative: recording is inert (same seed => same outcome)", all(_same(s) for s in range(50)))
+
+# == FORKS (opt-in prototypes): un-fused verdict (VoteAtClose) + bounded rebuttal + split-decision narrative ==
+from resolver import VoteAtClose, REBUT_CAP
+# Fork 1 — VoteAtClose: no-noise vote tracks momentum; with noise the verdict is genuinely separable from it
+_stA = ContestState(); _stA.adv[A] = 5.0
+ck("fork1: no-noise vote tracks the room",          VoteAtClose(jurors=7, noise=0.0).resolve(_stA, closing=True) == A)
+ck("fork1: VoteAtClose is silent before close",     VoteAtClose().resolve(_stA, closing=False) is None)
+_stS = ContestState(); _stS.adv[A] = 1.0
+random.seed(7)
+_vw = [VoteAtClose(jurors=7, sharpness=0.6, noise=1.5).resolve(_stS, closing=True) for _ in range(300)]
+ck("fork1: noisy verdict can uphold the room", _vw.count(A) > 0)
+ck("fork1: noisy verdict can upset the room",  _vw.count(B) > 0)     # the vote crosses momentum => genuinely un-fused
+# Fork 3 — rebut: off by default (fault, opponent untouched); on, it erases bounded adv, floored at 0
+_Vno = Venue(start_ground=Stasis.FACT, win=ThresholdRace(6.0))
+_Vye = Venue(start_ground=Stasis.FACT, win=ThresholdRace(6.0), allow_rebuttal=True)
+def _reb(venue, opp_start, seed):
+    random.seed(seed); b = Bout(Contestant(5), Contestant(5), venue, NEUT)
+    b.state.adv[B] = opp_start; b._apply(A, Move("rebut", ground="fact"))
+    return b.state.adv[B], b.c[A].fault
+_off_adv, _off_flt = _reb(_Vno, 10.0, 1)
+ck("fork3: rebuttal off-limits leaves opponent intact", _off_adv == 10.0)
+ck("fork3: rebuttal off-limits is a fault",             _off_flt.evasion >= 1)
+random.seed(3); _bounded = True; _reduced = 0
+for s in range(40):
+    a2, _ = _reb(_Vye, 10.0, s)
+    if not (0.0 <= a2 <= 10.0): _bounded = False
+    if a2 < 10.0: _reduced += 1
+ck("fork3: a landed rebuttal stays within [0, start]", _bounded)
+ck("fork3: a rebuttal lands sometimes (reduces opp adv)", _reduced > 0)
+ck("fork3: tiny opponent adv floors at 0, never negative", all(0.0 <= _reb(_Vye, 1.0, 100 + s)[0] <= 1.0 for s in range(40)))
+ck("fork3: a single cut cannot exceed REBUT_CAP", REBUT_CAP <= 3.0 and all(10.0 - _reb(_Vye, 10.0, 200 + s)[0] <= REBUT_CAP for s in range(40)))
+# Fork 2 — SPLIT_DECISION: verdict crosses the room; render contrasts room vs verdict
+def _b2(i, s, g, a, b): return dict(i=i, side=s, kind="advance", appeal="logos", ground="fact", gain=g, live="fact", advA=a, advB=b, fault=None)
+_split = [_b2(0,A,6,6,0),_b2(0,B,0,6,0), _b2(1,A,4,10,0),_b2(1,B,2,10,2)]   # A carried the room 10-2, vote went to B
+_cs = NAR.summarize(_split, "b", "win")
+ck("fork2: verdict crossing the room => SPLIT_DECISION", _cs.shape == "SPLIT_DECISION")
+ck("fork2: room_leader is the momentum leader (A)",      _cs.room_leader == A)
+ck("fork2: SPLIT render contrasts room and verdict",     "room" in _cs.render() and "verdict" in _cs.render())
+ck("fork2: verdict matching the room is not a split",    NAR.summarize(_split, "a", "win").shape != "SPLIT_DECISION")
+ck("fork2: classified shapes are declared SHAPES",       _cs.shape in NAR.SHAPES and NAR.summarize(_split, "a", "win").shape in NAR.SHAPES)
+# Fork 1+2 end-to-end: a VoteAtClose bout can actually produce a split decision
+_seen = False
+for s in range(200):
+    random.seed(1000 + s)
+    vb = Bout(Contestant(5), Contestant(5), Venue(start_ground=Stasis.FACT, win=VoteAtClose(jurors=7, noise=1.5)), NEUT, record=True)
+    vw, vy = vb.resolve(LOG, LOG)
+    if NAR.summarize(vb.log, vw, vy).shape == "SPLIT_DECISION": _seen = True; break
+ck("fork1+2: a VoteAtClose bout can yield a SPLIT_DECISION", _seen)
 
 print("== validation + scaffolds ==")
 def bad(v): return Move("garbage")

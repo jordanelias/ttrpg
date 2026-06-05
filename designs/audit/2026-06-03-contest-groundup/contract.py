@@ -19,6 +19,7 @@ class FaultState:
     yields: int = 0
     contradicted: bool = False
     barred: bool = False
+    reason: str = None   # specific (Nyaya-named) descriptor of the most recent fault — legibility only; check() ignores it
 
 @dataclass(frozen=True)
 class Adjudicator:

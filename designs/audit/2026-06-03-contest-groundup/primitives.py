@@ -10,13 +10,19 @@ from engine import level
 
 class Stasis:
     FACT, DEFINITION, QUALITY, JURISDICTION = "fact", "definition", "quality", "jurisdiction"
-    LADDER = [FACT, DEFINITION, QUALITY, JURISDICTION]
+    CONSEQUENCE, FEASIBILITY = "consequence", "feasibility"   # deliberative/future grounds (Aristotle Rhet I.4-8)
+    LADDER = [FACT, DEFINITION, QUALITY, JURISDICTION, CONSEQUENCE, FEASIBILITY]
+    # intrinsic temporal orientation: the genre's question carries the tense (forensic past, deliberative future)
+    TENSE = {FACT: "past", DEFINITION: "past", QUALITY: "present", JURISDICTION: "present",
+             CONSEQUENCE: "future", FEASIBILITY: "future"}
     @staticmethod
     def is_ground(g):                       return g in Stasis.LADDER
     @staticmethod
     def relevant(move_ground, live_ground): return move_ground == live_ground
     @staticmethod
     def stronger_than(a, b):                return Stasis.LADDER.index(a) > Stasis.LADDER.index(b)
+    @staticmethod
+    def tense(g):                           return Stasis.TENSE.get(g, "present")
 
 class Appeal:
     ETHOS, PATHOS, LOGOS = "ethos", "pathos", "logos"
@@ -32,7 +38,7 @@ class Standing:
 
 class Reserve:
     MAX = 12  # [SEED]
-    COST = {"advance": 3, "hard": 5, "shift": 4, "support": 2, "pass": 0, "evidence": 3}
+    COST = {"advance": 3, "hard": 5, "shift": 4, "support": 2, "pass": 0, "evidence": 3, "rebut": 4}
     REGAIN = 4
     def __init__(self, mx=MAX): self.max = mx; self.cur = mx
     def can(self, kind):   return self.cur >= self.COST[kind]
