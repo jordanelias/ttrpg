@@ -1,0 +1,36 @@
+======================================================================
+DC-8 LOOP-GAIN RIGOR PASS — results
+======================================================================
+
+[L-DSERIES] Mandate<->L/PS  (settlement_layer §1.8)
+  equilibrium Mandate ............. 6
+  shock displaced mean-q by ....... 1.5  (mission-failure -2L/-1PS all setts)
+  residual after 20 seasons ........ 0.429
+  per-cycle gain (contraction) .... 0.966   < 1 -> DAMPED
+  bound check: Mandate at q=7 -> 7, q=0 -> 0, 0 setts -> 0  (clamps 0..7)
+  VERDICT: DAMPED + BOUNDED. Negative (mean-reverting) feedback + saturating
+           T/(T+K) aggregate; gain<1 confirms return-to-equilibrium, not just a cap.
+
+[L-STRAIN] Turmoil  (peninsular_strain §4)
+  hard ceiling .................... 10   advance cap/season: +3
+  (A) sustained instability, weak governance:  peak=10 end=10 ceiling-hits=37/40
+  (B) same drive + active de-escalation:        peak=0 end=0
+  VERDICT: CAP-BOUNDED (0..10, +3/s advance — cannot run away). Under sustained
+           drive it RATCHETS to the ceiling and sticks (recovery is ACTIVE: govern
+           Accord back >=2, treaties, diplomacy); under active de-escalation it DAMPS.
+           Lesson-5-safe via the cap; not unconditionally self-damping.
+
+[L-SPLIT / L-MIRACLE] gated-event loops — gain frame N/A
+  L-SPLIT: each split requires a fresh leader-elimination (D1 Trigger 5, rare active
+           event) + re-merge at Mandate>=3 + RM 4-season cooldown -> no self-cascade.
+           Bounded by gating; cooldown value UNTUNED (smoke-test owed).
+  L-MIRACLE: Sacred-Assembly-gated, one-time Accord per event -> sustained gain ~0.
+
+[L-MASSBATTLE] rout-contagion — cited prior (passC): braked, sim-validated in-band.
+  Full per-cycle gain recompute needs mass_battle §E morale formula (not re-read).
+
+[L-CONV] Scar->conviction->behavior->Scar — DEFERRED.
+  Per-cycle gain needs conviction_axis_matrix cascade coefficients (passC DC-6).
+  Structural bound stands: 1 Scar/season cap + per-Conviction thresholds.
+
+======================================================================
