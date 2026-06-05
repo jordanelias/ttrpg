@@ -154,3 +154,12 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - Validation: counters 5/8 8/8 8/8 unchanged; fuzz(120) 0 engfail/0 degen; reform unengaged 3->4
   capped at start, engaged unchanged; envelop hooks flank (deepest row 17 vs direct 16), surge breaks
   a weak line and drives through (deepest row 10 vs direct 16). Fabrication gate: all constants cited.
+
+## reform_check CANON CORRECTION: PP-241 command gate added (2026-06-05, fixes 8ec085c0)
+- 8ec085c0 implemented only the L180 '+1 if unengaged' clause; MISSED the L180-183 command gate.
+- Canon (mass_battle_v30.md L180-183): discipline restores only if general's Command >= current
+  Discipline + 1 AND Command >= 2 (PP-241); Command=1 general cannot restore at all; command caps
+  the reformable discipline (a Cmd-4 general restores a unit only up to disc 4).
+- Added gate. Validated: cmd5/d3->4, cmd4/d3->4, cmd4/d4 no-change, cmd2/d3 + cmd1 no-change.
+  Counters 5/8 8/8 8/8 unchanged; fuzz(120) 0 fail. [SELF-AUTHORED catch: reform implemented from the
+  one-line L180 summary, not the full L180-183 - corrected on canon read.]

@@ -371,10 +371,13 @@ def _maneuver_target(su, mnv, tc, enemy_cells, my_r, my_c, base_col):
     return min(enemy_cells, key=lambda e: (e[0]-my_r)**2 + (e[1]-my_c)**2)  # PHASE 2: hook inward
 
 def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """A unit not in melee contact regroups: discipline restores toward its start (cap).
-    [canonical: mass_battle_v30.md L180 reform restoration; discipline=cohesion PP-232]"""
+    """A unit not in melee contact regroups: discipline restores toward its start (cap);
+    requires general's Command >= current Discipline + 1 AND Command >= 2.
+    [canonical: mass_battle_v30.md L180-183 reform restoration; PP-241 command gate; discipline=cohesion PP-232]"""
     for u, foe in ((unit_a, unit_b), (unit_b, unit_a)):
         if u.routed or u.broken or u.discipline >= u.discipline_start:
+            continue
+        if u.command < 2 or u.command < u.discipline + 1:   # PP-241 command prerequisite for reform
             continue
         engaged = any(_atom_distance(su, fsu) <= REFORM_ENGAGE_DIST
                       for su in u.subunits for fsu in foe.subunits)
