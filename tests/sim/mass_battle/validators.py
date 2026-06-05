@@ -14,7 +14,8 @@ bears on its flank/rear lands the zone penalty and the fixed unit fights worse. 
 ANGLE DISADVANTAGE of envelopment and is modest by design -- it reduces the fixed unit's
 offence, it does not by itself shatter it. Two companions are out of A's scope and are
 documented here so the bands below are read honestly:
-  * the DECISIVE cohesion / morale collapse of an enveloped line is build B (shock);
+  * the DECISIVE collapse of an enveloped line is build B (shock) -- IMPLEMENTED here as the
+    envelopment-shock reusing _charge_shock_sigma on the fixed+flanked condition; V-SHOCK/V-BRACE;
   * reliable detachment rear-reach is build C -- today a detachment approaching directly
     into the rear or flank forms NO contact pair, so envelopment emerges only via the
     frontal mass spilling around a fixed defender (the scenario used below).
@@ -49,6 +50,7 @@ _SEEDS = 20            # [class-B test-fixture: aggregate sample size]
 _TURNS = 60            # [class-B test-fixture: run toward a decisive outcome so the angle penalty compounds]
 _FWD = 1               # advance_dir for faction B (defender), toward higher rows
 _BACK = -1             # advance_dir for faction A (attacker), toward lower rows
+_VULN_DISC = 4         # [class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock]
 
 
 def _line(faction, row, advance_dir, troops, stance):
@@ -63,9 +65,15 @@ def _unit(name, faction, subunits, stance):
                 subunits=subunits, dr=_DR, stance=stance, speed='Standard')
 
 
-def _defender():
-    """A single line, held (cannot advance) -- the unit to be fixed and enveloped."""
-    return _unit('D', 'B', [_line('B', _DEF_ROW, _FWD, _DEF_TROOPS, 'hold')], 'hold')
+def _defender(stance='hold', disc=_DISC):
+    """The line to be fixed and enveloped. Its resilience to shock is tuned by stance/discipline:
+    held + disc5 = a braced, disciplined square (resists envelopment shock -- the Waterloo square);
+    balanced + disc4 = a typical line (shattered). [du Picq: order and depth absorb the moral
+    impulse; a loose line does not.]"""
+    su = _line('B', _DEF_ROW, _FWD, _DEF_TROOPS, stance)
+    return Unit(name='D', faction='B', power=_PWR, command=_CMD, discipline=disc,
+                discipline_start=disc, morale=_MOR, morale_start=_MOR, subunits=[su],
+                dr=_DR, stance=stance, speed='Standard')
 
 
 def _attacker(pin):
@@ -80,18 +88,19 @@ def _attacker(pin):
     return _unit('A', 'A', subs, 'balanced')
 
 
-def _attacker_retained(pin, mechanic_on, seeds=_SEEDS, turns=_TURNS):
-    """Per-seed attacker retained-hp fraction. The fixing-force flank mechanic is toggled
-    in-process (the engine reads the module flag at call time), so the on/off runs share
-    identical geometry and seeds -- the only difference is the mechanic. Attacker hp is the
-    apt metric: A reduces the FIXED unit's offence, so its effect surfaces as the attacker
-    losing less, not as the defender's hp falling faster."""
-    _orch.PC_FIXING_FLANK = mechanic_on
+def _attacker_retained(pin, fix, shock, def_stance='hold', def_disc=_DISC,
+                       seeds=_SEEDS, turns=_TURNS):
+    """Per-seed attacker retained-hp fraction. BOTH mechanic flags are set explicitly (the
+    engine reads them at call time), so each validator isolates exactly the mechanic it tests
+    on identical geometry and seeds. Attacker hp is the apt metric: A and B both reduce the
+    FIXED unit's offence, so the effect surfaces as the attacker losing less."""
+    _orch.PC_FIXING_FLANK = fix
+    _orch.PC_ENVELOP_SHOCK = shock
     out = []
     for s in range(seeds):
         random.seed(s)
         a = _attacker(pin)
-        d = _defender()
+        d = _defender(def_stance, def_disc)
         run_battle(a, d, max_turns=turns)
         out.append(a.hp / a.hp_max if a.hp_max else 0.0)
     return out
@@ -104,8 +113,8 @@ def v_cannae():
     [canonical: Cannae 216 BC -- a pinned centre enveloped on both flanks and rear is
     destroyed out of proportion to the numbers; du Picq -- the telling blow is the one the
     fixed line cannot turn to meet.]"""
-    on = _attacker_retained(pin=True, mechanic_on=True)
-    off = _attacker_retained(pin=True, mechanic_on=False)
+    on = _attacker_retained(pin=True, fix=True, shock=False)
+    off = _attacker_retained(pin=True, fix=False, shock=False)
     worse = sum(1 for x, y in zip(on, off) if x < y)
     delta = statistics.mean(on) - statistics.mean(off)
     passed = (worse == 0) and (delta > 0)
@@ -121,10 +130,10 @@ def v_fixing():
     zero effect; only a unit fixed frontally by a separate body suffers the penalty.
     [canonical: the fixing-force doctrine -- fix, then flank; an unfixed line simply turns
     to meet the detachment, and the unseen-attack advantage never arises.]"""
-    on_pin = _attacker_retained(pin=True, mechanic_on=True)
-    off_pin = _attacker_retained(pin=True, mechanic_on=False)
-    on_no = _attacker_retained(pin=False, mechanic_on=True)
-    off_no = _attacker_retained(pin=False, mechanic_on=False)
+    on_pin = _attacker_retained(pin=True, fix=True, shock=False)
+    off_pin = _attacker_retained(pin=True, fix=False, shock=False)
+    on_no = _attacker_retained(pin=False, fix=True, shock=False)
+    off_no = _attacker_retained(pin=False, fix=False, shock=False)
     delta_pin = statistics.mean(on_pin) - statistics.mean(off_pin)
     delta_no = statistics.mean(on_no) - statistics.mean(off_no)
     no_pin_inert = all(x == y for x, y in zip(on_no, off_no))
@@ -135,7 +144,45 @@ def v_fixing():
                       "without a separate front-fixer the flank term cannot fire")
 
 
-GOALS = [v_cannae, v_fixing]
+def v_shock():
+    """GOAL (build B): the envelopment SHOCK makes envelopment DECISIVE. A unit fixed frontally
+    and struck on its flank/rear cannot face the new threat; beyond A's angle disadvantage, the
+    moral shock collapses it -- the attacker retains materially more strength than under A alone.
+    Measured on a balanced line (the typical enveloped unit); the shock never harms the attacker
+    (per seed) and is positive in aggregate.
+    [canonical: Cannae 216 BC -- the pinned legions, struck front/flank/rear, broke from the shock
+    of the unfaceable attack; du Picq Battle Studies -- the moral impulse, not the physical, decides.]"""
+    ab = _attacker_retained(pin=True, fix=True, shock=True, def_stance='balanced', def_disc=_VULN_DISC)
+    a_only = _attacker_retained(pin=True, fix=True, shock=False, def_stance='balanced', def_disc=_VULN_DISC)
+    worse = sum(1 for x, y in zip(ab, a_only) if x < y)
+    delta = statistics.mean(ab) - statistics.mean(a_only)
+    passed = (worse == 0) and (delta > 0)
+    return GoalResult("V-SHOCK", passed, round(delta, 4),
+                      "delta>0 and no seed where the shock hurt the attacker",
+                      "Cannae 216 BC; du Picq",
+                      "B is the decisive layer over A's modest angle disadvantage")
+
+
+def v_brace():
+    """GOAL (build B guard): a BRACED, disciplined unit RESISTS envelopment shock (the square Ney
+    could not break). The shock is conditional on disorder -- not a blanket flank insta-kill -- so
+    B's marginal effect on a held+disciplined defender is smaller than on a balanced line.
+    [canonical: Waterloo squares; PC_SHOCK_BRACE_FLOOR calibration -- order and depth absorb the
+    moral impulse.]"""
+    br_ab = _attacker_retained(pin=True, fix=True, shock=True, def_stance='hold', def_disc=_DISC)
+    br_a = _attacker_retained(pin=True, fix=True, shock=False, def_stance='hold', def_disc=_DISC)
+    ln_ab = _attacker_retained(pin=True, fix=True, shock=True, def_stance='balanced', def_disc=_VULN_DISC)
+    ln_a = _attacker_retained(pin=True, fix=True, shock=False, def_stance='balanced', def_disc=_VULN_DISC)
+    bm_braced = statistics.mean(br_ab) - statistics.mean(br_a)
+    bm_line = statistics.mean(ln_ab) - statistics.mean(ln_a)
+    passed = bm_braced < bm_line
+    return GoalResult("V-BRACE", passed, (round(bm_braced, 4), round(bm_line, 4)),
+                      "B-marginal(braced) < B-marginal(line): the square resists",
+                      "Waterloo squares; brace-floor calibration",
+                      "guards against B being a blanket flank insta-kill")
+
+
+GOALS = [v_cannae, v_fixing, v_shock, v_brace]
 
 
 def run_all():

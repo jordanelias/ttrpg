@@ -173,3 +173,15 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - robustness: fuzz(120) 0 engine-failures / 0 degenerate; mirror skew 2/48.
 - scope: A is the angle disadvantage (modest); decisive collapse = B; reliable rear-reach = C
   (a detachment approaching directly into the rear/flank forms no contact pair today).
+
+## Build B -- envelopment shock (reuses _charge_shock_sigma)  [commit pending]
+- orchestration.py: PC_ENVELOP_SHOCK (default ON) fires the calibrated _charge_shock_sigma on the
+  fixed_by_other + flank/rear condition, as an elif to the charge-shock path (no double-count).
+  Reuses the existing zone/brace/depth/shaken gating: a braced+deep+disciplined line resists
+  (Waterloo square), a loose/shaken/shallow one shatters (Cannae). Byte-exact (inert single-subunit);
+  fuzz(120) 0 fail / 0 degen.
+- validators.py: V-SHOCK (B decisive vs a balanced line: A+B retains +0.030 over A alone, no seed
+  worse) + V-BRACE (braced unit resists; B-marginal braced 0.004 < line 0.030). V-CANNAE/V-FIXING
+  now isolate A (shock off).
+- scope: envelopment now decisive vs a vulnerable line via frontal-mass spillover; a detachment
+  reaching the rear directly (no contact pair today) remains build C.

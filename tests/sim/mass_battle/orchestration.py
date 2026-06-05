@@ -1286,6 +1286,7 @@ PC_ROLLUP_MIN_DEPTH = float(_sigma_os.environ.get('PC_ROLLUP_MIN_DEPTH', '2.0'))
 from mass_battle.percell import *  # P-A stage 3: percell extracted
 import os
 PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
+PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
 
 def _lanchester_strength(contact_cells, unit=None):
     """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged
@@ -1536,8 +1537,21 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                     if a_pen > 0:
                         _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")
                         ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb)
+                    elif PC_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
+                        # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
+                        # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
+                        # fires even WITHOUT a momentum charge (the charge path's gap). Reuses the calibrated
+                        # _charge_shock_sigma (zone/brace/depth/shaken gated: a braced+deep+disciplined line
+                        # resists, a loose/shaken/shallow one shatters -- Cannae). elif -> mutually exclusive
+                        # with the charge path (no double-count); b_fixed_other -> provably inert single-subunit.
+                        # [canonical: Cannae 216 BC; du Picq Battle Studies -- the unfaceable attack on a pinned line.]
+                        _zb = "YELLOW" if b_angle_mod > -1.5 else "RED"
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb)
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za)
+                    elif PC_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
+                        _za = "YELLOW" if a_angle_mod > -1.5 else "RED"
                         ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za)
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
                     # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
