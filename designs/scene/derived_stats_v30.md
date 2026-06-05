@@ -66,7 +66,7 @@ This section is the source-of-truth for the Health formula and wound mechanic ac
 | Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. Felled (incapacitated) at 0 Health, which equals MW + 1 wounds accrued. |
 | Damage > WI in one hit | Multiple wounds applied simultaneously (each WI of damage = +1 wound counter). |
 | Wounds clearance | All wounds clear at session end (canonical). Stabilised characters return to action after one full scene of rest. |
-| Equipment | Adds flat Health (+4 leather, +6 chain, +8 plate). Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
+| Equipment | ~~Adds flat Health (+4 leather, +6 chain, +8 plate)~~ - **STRUCK 2026-06-05 (Jordan ratified): armour grants damage reduction only (DR/Resist; engine core.py RESIST), NOT flat Health - the engine WoundTracker takes no equipment_health**. Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
 | Wound penalty | −1D to ALL Pools (Combat, Thread — Leap, Weaving, Pulling, Mending, FR — Hybrid mass-battle Command). Universal rule. **No Ob penalty from wounds, ever.** Cumulative; capped by per-Pool floor (Combat Pool floor 5, Thread Pool floor 5 per threadwork §pool-floor). |
 
 Per-Endurance reference table:
