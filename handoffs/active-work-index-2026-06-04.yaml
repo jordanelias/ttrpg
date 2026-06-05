@@ -6,10 +6,10 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'build A committed cb8b5844 (2026-06-05): atomize flank-bonus gate ->
-  subunit-scale fixing-force + V-CANNAE/V-FIXING validators + PC_FIXING_FLANK toggle.
-  Chain: 8a758de8 (ED-905 canonize) -> bf8168aa (scale-atomization audit) -> cb8b5844
-  (build A).'
+last_commit: 'build B committed c2134e16 (2026-06-05): envelopment shock reuses _charge_shock_sigma
+  on the fixed+flanked condition + V-SHOCK/V-BRACE. Chain: bf8168aa (audit) -> cb8b5844
+  (build A) -> c2134e16 (build B). Backups /tmp/orch_A_GOOD.py (A) and /tmp/orch_AB_GOOD.py
+  (A+B).'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -35,6 +35,45 @@ owns:
 - valoria-game/**
 working_state:
   next:
+  - 'BUILD B DONE + COMMITTED c2134e16 (2026-06-05). Envelopment moral-shock: a subunit
+    FIXED frontally by a separate body and struck on its flank/rear cannot face the
+    new threat, so the du Picq moral shock fires even WITHOUT a momentum charge (the
+    charge path''s gap that left A modest). B REUSES the calibrated resolution._charge_shock_sigma
+    on the SAME fixed_by_other + flank/rear condition A detects, fired as an elif
+    to the charge-shock site in orchestration.py (mutually exclusive -> no double-count).
+    Flag PC_ENVELOP_SHOCK (orchestration.py module global, default ON, env-overridable,
+    toggled in-process by validators). B DEPENDS ON A (its gate b_angle_mod<=-0.5
+    needs A''s term to have fired). Byte-exact: counters 5/8,8/8,8/8 with B on / B
+    off / A+B off (fires only on fixed_by_other -> inert single-subunit); fuzz(120)
+    0 engfail/0 degen; mirror skew 6/48 (stochastic). One shock mechanic, two triggers
+    (charge, envelopment) -- Lesson 1; REJECTED flat-temp-disc-penalty + node-scatter
+    (latter would force PC_NODE_COHESION on, breaking byte-exactness). Validators
+    tests/sim/mass_battle/validators.py now 4: V-CANNAE/V-FIXING isolate A (shock=False);
+    V-SHOCK (B decisive vs a balanced disc4 line: A+B retains +0.030 over A-only,
+    0 seeds worse) + V-BRACE (a braced disc5 unit RESISTS: B-marginal braced 0.004
+    < line 0.030 -- guards against B as a blanket flank insta-kill). Magnitudes: A
+    angle penalty -0.4sigma (RED); B shock ungated -0.55sigma (flank) to -0.88sigma
+    (rear), brace floor 0.05 -> -0.044sigma.'
+  - 'EMERGENT picture after A+B: envelopment is now DECISIVE against a vulnerable
+    line, but ONLY via frontal-mass SPILLOVER (held/balanced D fixed by main M frontal
+    + detachment F joining behind M and spilling onto D''s flank/rear). A braced+deep+disciplined
+    unit still resists (correct -- Waterloo square; needs multi-direction envelopment,
+    which awaits C). Full Cannae annihilation (front pinned + both flanks + rear)
+    is NOT yet reachable because a detachment cannot ENGAGE the rear directly.'
+  - 'NEXT: build C -- fix the front-biased contact/targeting so a detachment ordered
+    to envelop can REACH and ENGAGE the flank/rear directly (the no-rear-contact-pair
+    finding: direct rear/flank approaches form NO contact pair today; envelopment
+    emerges only by spillover). Bottom-up read FIRST: find_contacts (orchestration.py
+    ~L1216) + the maneuver-pathing system (_maneuver_target / envelop maneuver, A.8
+    Envelopment) + assign_targets. Likely a Phase-2 maneuver hook routing the detachment
+    to FLANK/REAR cells (not nearest) + possibly a contact-detection fix so a body
+    bearing on the rear forms a pair. Validator V-ENVELOP (a detachment ordered to
+    envelop reaches and engages the rear; the enveloped unit then takes A''s penalty
+    + B''s shock from the new direction). Then D (wire a fixing/pin role -- ''pin''/Anvil
+    currently inert in TROOP_TYPE_ROLES/ROLE_SPEC) and E (''sweep''/horizontal path
+    + atomize volley/flanker targeting of archers; V-ARCHER). CALIBRATION GUARD unchanged:
+    byte-exact-verify every change vs A-absent (match 5/8,8/8,8/8 OR PC_FIXING_FLANK=0/PC_ENVELOP_SHOCK=0)
+    before commit; flag/known-values method, never swap-and-restore.'
   - 'BUILD A DONE + COMMITTED cb8b5844 (2026-06-05). Atomized the flank-bonus gate
     from the unit-WIDTH gate to SUBUNIT-SCALE fixing-force: a subunit fixed frontally
     by a SEPARATE body (orchestration.py _front_fixers, centroid-GREEN per contacting
@@ -333,5 +372,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T23:23:00.669267+00:00'
+updated: '2026-06-05T23:51:54.379049+00:00'
 status: active
