@@ -55,6 +55,10 @@ abbreviations:
   WR: {term: "Warden Recognition", silo: 4, status: enforced}      # fieldwork
   PC: {term: "Per-Cell", silo: 5, status: recorded}                # COLLISION: "Personal Combat" + "Player Character (PC)" also use PC; ruling pending
   GM: {term: "UNRESOLVED", silo: 0, status: unverified}            # 13 docs, no expansion located 2026-06-04; likely legacy "Game Master" (PI: No GM)
+  # ── 2026-06-04 five-system scrape additions (byte-verified real terms) ──
+  AP:  {term: "Church Attention Pool", silo: 9,  status: enforced}    # ci_political
+  CB:  {term: "Casus Belli", silo: 11, status: enforced}             # faction_layer §3.5 — standing right to act
+  POI: {term: "Points of Interest", silo: 8,  status: enforced}      # investigation_systems
 
   # Clocks (§12)
   IP: {term: "Institutional Pressure", silo: 12, status: recorded}  # COLLISION: "Imperial Pressure (IP)" in derived_stats_v30; ruling pending
@@ -428,6 +432,37 @@ deprecated:
     reason: "Canonical name enforcement"
 
 # ═══════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════
+# 2026-06-04 FIVE-SYSTEM SCRAPE FINDINGS (callable record)
+# Programmatic scrape of full bytes of the current canonical docs for
+# Mass Battle, Personal Combat, Social Contest, Investigation, Faction Actions
+# (19 docs, 692 KB). Collisions LOGGED, not resolved — renames are Jordan's call.
+# ═══════════════════════════════════════════════════════════════
+
+scrape_findings_2026_06_04:
+  acronym_collisions_confirmed:   # fresh byte-evidence; already status:recorded above
+    - {acr: CI, owners: ["Church Influence (faction)", "Crown Index (derived_stats_v30)"], ruling: pending}
+    - {acr: IP, owners: ["Institutional Pressure (faction/clock_registry)", "Imperial Pressure (derived_stats_v30)"], ruling: pending}
+    - {acr: PT, owners: ["Piety Track (faction)", "Piety Territory (derived_stats_v30)"], ruling: pending}
+  acronym_mismatch_or_stale:
+    - {acr: DR, db_owner: "Damage Resistance", in_doc: "Damage Reduction (combat_v30 L266)", note: "term drift — reconcile Resistance vs Reduction (canonical call)"}
+    - {acr: GM, in_doc: "The Game Master (social_contest_v30)", note: "stale TTRPG term; contradicts No-GM identity — flag for removal"}
+  deprecated_abbrev_in_use:       # gate catches these going forward (definitional pattern)
+    - {acr: CT, expands: "Piety Track", in: "faction docs", correct: PT}
+    - {acr: CV, expands: "Conviction",  in: "faction docs", correct: PT}
+  deprecated_term_residual:       # bare-term usage — current gate does NOT catch (Rule-3 gap)
+    - {term: "Public Support", at: "settlement_layer_v30 L631 (stat table)", correct: "Popular Support", note: "PS rename 2026-05-30 recorded in registry but not propagated into this table"}
+    - {term: "Mandate Pool", at: "ci_political_v30 §7.2 (Political-Pool-vs-Mandate-Pool heading)", note: "likely explanatory/historical section — verify before sweep"}
+  corrections_to_prior_assumptions:
+    - {item: "Coup Counter", was: "assumed struck (stale chat memory)", actual: "LIVE Loewenritter coup-viability clock (derived_stats clock table; faction_layer 'Coup Counter = 4'); silo 12 — register as current, NOT deprecated"}
+    - {item: "legacy faction name (naming-rule)", at: "faction_politics_v30 §naming-note", actual: "appears only in an editorial note ABOUT the naming rule, not live usage — NOT a violation; but the note flags a 'Galbadian->Solmund' propagation TODO to grep designs/ for the adjective form"}
+  unregistered_acronyms_candidates:   # found in faction/investigation docs; verify byte-context before registering as enforced
+    - {acr: PW,  candidate: "Popular Will"}
+    - {acr: NPE, candidate: "NPC Population Engine"}
+    - {acr: TK,  candidate: "Thread Investigation Track"}
+    - {acr: WA,  candidate: "Warden Accord"}
+  scrape_coverage_note: "Acronym + DB-controlled-vocabulary cross-reference over full doc bytes. Catches definitional 'Name (ACR)' collisions, deprecated-term residuals, cross-silo appearances. Does NOT discover brand-new undefined terms. Term-level silo-uniqueness (Rule 2) and bare deprecated-term usage (Rule 3) remain ungated by abbreviation_registry_gate."
+
 # VALIDATION RULES
 # ═══════════════════════════════════════════════════════════════
 #
