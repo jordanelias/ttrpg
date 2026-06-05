@@ -178,7 +178,7 @@ class Bout:
     def _reception(self, side):
         c = self.c[side]
         lev = Leverage.net(c.faculty, on_ground=True)
-        ob = max(1, round(effective_ob(self.v.base_ob, lev, Pool.size(c.faculty))))
+        ob = max(1.0, effective_ob(self.v.base_ob, lev, Pool.size(c.faculty)))  # σ-leverage: float OB, no rounding
         return degree(roll_net(Pool.size(c.faculty)), ob)
 
     def _bias(self, side):

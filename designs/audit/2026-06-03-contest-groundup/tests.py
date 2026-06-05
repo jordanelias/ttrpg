@@ -5,6 +5,7 @@ from contract import A, B, other, Move, FaultState, Adjudicator, Panel
 from primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
                         Resonance, Readiness, DefeatCatalogue)
 from resolver import (ContestState, ThresholdRace, TallyAtClose, ProofBar, GraceThreshold, Venue)
+from engine import degree
 from modes import ContestedMode, DyadicMode
 from policy import (logos_spammer as LOG, demagogue as DEM, courtier as COU,
                     build_then_close as BTC, exploiter as EXP, overreacher as OV, staller as ST)
@@ -376,6 +377,21 @@ for s in range(300):
     _ww, _wy = _bt.resolve(LOG, LOG)
     if NAR.summarize(_bt.log, _ww, _wy).shape == "SPLIT_DECISION": _dsplit = True; break
 ck("modes: deliberative_body can yield a verdict that crosses the room", _dsplit)
+
+# == σ-LEVERAGE ENGINE (regression guards for the two patches) ==
+from primitives import Leverage
+from engine import effective_ob as _eff_ob, sigma_N as _sN
+_fac1_lev = Leverage.net(1, on_ground=True)
+_fac1_ob  = max(1.0, _eff_ob(2.0, _fac1_lev, Pool.size(1)))
+_fac2_ob  = max(1.0, _eff_ob(2.0, Leverage.net(2, on_ground=True), Pool.size(2)))
+ck("sigma-leverage: READING_COEFF=1/6 gives lev=0 at fac=1 on-ground (no precision drift)", abs(_fac1_lev) < 1e-9)
+ck("sigma-leverage: fac=1 ob is exactly 2.0 (no round() cliff)",                            abs(_fac1_ob - 2.0) < 1e-9)
+ck("sigma-leverage: ob is a float, not int",                                                 isinstance(_fac1_ob, float))
+ck("sigma-leverage: net=2 at fac=1 is SUCCESS, not partial",                                degree(2, _fac1_ob) == 2)
+ck("sigma-leverage: net=1 at fac=2 is PARTIAL (float ob < 2 allows fractional threshold)",  degree(1, _fac2_ob) == 1)
+ck("sigma-leverage: net=2 at fac=2 is SUCCESS (not partial)",                               degree(2, _fac2_ob) == 2)
+ck("sigma-leverage: fac=7 on-ground ob hits the 1.0 floor",                                 max(1.0, _eff_ob(2.0, Leverage.net(7, True), Pool.size(7))) == 1.0)
+ck("sigma-leverage: fac=7 off-ground ob also hits 1.0 (expert immune to ground penalty)",   max(1.0, _eff_ob(2.0, Leverage.net(7, False), Pool.size(7))) == 1.0)
 
 print("== validation + scaffolds ==")
 def bad(v): return Move("garbage")

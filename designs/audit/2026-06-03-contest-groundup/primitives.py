@@ -63,7 +63,7 @@ class Leverage:
     """δσ into the reception roll. N-collapsed: faculty (skill) + on-ground (terrain) only.
        Standing/room no longer feed the roll — they feed readiness (their one role)."""
     ONGROUND = level("moderate")
-    READING_COEFF = 0.167  # [SEED]
+    READING_COEFF = 1/6    # exact 1/6 — 0.167 was a decimal approximation that gave lev=-0.001 at fac=1
     @staticmethod
     def net(faculty, on_ground):
         d = (faculty - 4) * Leverage.READING_COEFF
