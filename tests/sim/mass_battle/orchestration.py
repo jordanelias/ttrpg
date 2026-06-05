@@ -589,7 +589,7 @@ class Subunit:
         speeds = [cell_speed(self.shape, self.tier, r, c) for r, c, _o, _p in op]
         nz = [s for s in speeds if s > 0]
         base = min(nz) if nz else 0
-        step = max(0, round(base * disc_mult) + stance_mod)  # [canonical: discipline slows, never freezes - round not floor]
+        step = max(0, base + stance_mod)  # [canonical: PP-232 Cohesion->Discipline; disc_mult retained below for cohesion(k) + wheel(kw), not speed]
         if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and step > 0:
             step = int(math.floor(step * PC_CAVALRY_SPEED_MULT))
         ar, ac = self._node_anchor
@@ -696,7 +696,7 @@ class Subunit:
             if (orig_r, orig_c) in self.halted_cells: continue
             base_speed = cell_speed(self.shape, self.tier, orig_r, orig_c)
             if base_speed == 0: continue
-            actual_speed = max(0, round(base_speed * disc_mult) + stance_mod)  # [canonical: discipline slows, never freezes a mobile cell - round not floor]
+            actual_speed = max(0, base_speed + stance_mod)  # [canonical: PP-232 Cohesion->Discipline; canon ties discipline to cohesion/morale/Power, NOT movement speed]
             if PER_CELL and self.troop_type in ('cavalry', 'mounted_archers') and actual_speed > 0:
                 # Increment 4-followup: cavalry velocity primitive — cavalry closes faster, producing the
                 # momentum differential that triggers the depth-absorbed charge (Incr5). [ASSUMPTION:

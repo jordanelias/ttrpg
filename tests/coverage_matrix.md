@@ -121,3 +121,14 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   disc-3 two-Line engages 5/5 (was frozen); fuzz draw_hold 20->12 (frozen draws resolved); 0 engfail/degen.
 - NOTE: this resolves what was mis-flagged as "GappedLine/Horseshoe non-closing" - that was never
   shape-specific; single-subunit shapes close at every parameter. The non-close was this speed cliff.
+
+## Discipline decoupled from movement speed (2026-06-05, supersedes d869461c floor->round)
+- CANONICAL BASIS: mass_battle_v30.md L7 — PP-232 renames Cohesion->Discipline. Discipline IS cohesion.
+  Canon ties discipline to: Power penalty (A.4 table), degradation under Size-loss asymmetry, Reform
+  restoration, the H formula. params/mass_combat.md has ZERO discipline x movement coupling.
+- disc_mult on actual_speed/step was engine-introduced with no canonical basis. Removed.
+- actual_speed = base_speed + stance_mod (advance_cells); step = base + stance_mod (_node_advance).
+- disc_mult RETAINED where canonical (it = cohesion): node cohesion factor k (L632), wheel rate kw (L624).
+- Validated: counters byte-identical (deepColumn 5/8, ShieldWall 8/8, command 8/8); disc 3-7 all engage;
+  fuzz(120) 0 engfail/0 degen; mirror(60) |aw-bw|=6 symmetric.
+- The earlier floor->round (d869461c) patched a coupling that should not exist; this removes it.
