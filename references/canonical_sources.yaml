@@ -457,3 +457,7 @@ systems:
 # Mandate x20 meter resolved (2026-05-30, mechanical-tier): NOT a defect -- per derived_stats §3 multipliers are per-system (Treasury x100, Reputation x15, Discipline x10, Legitimacy x20), no 0-100 master scale; sigma engine governs Mandate RESOLUTION (d+sigma resolver) not the meter buffer. Removed the speculative 0-100 flag.
 # F-RESID migration (2026-05-30, ED-885, Jordan-ratified): 4 bare-stat Unique Actions (Royal Decree, Excommunication, Private Collection, Economic Leverage) migrated to the d+sigma resolver (D=max(1,(O-1)*2); contested=target stat). Hafenmark Doctrine flagged, not migrated.
 # Comprehensive all-directions NERS audit of LPS-2e + size-weighted Mandate + F-RESID migration (2026-05-30): designs/audit/2026-05-30-lps-mandate-ners-audit/. Verdict NERS-compliant as built; 2 Jordan intent/data confirmations (hugeness-premium, Weight redundancy) + 1 elegance reservation; no hard mechanical defect.
+
+# ─── 2026-06-04 term-propagation co-file note ───
+# settlement_layer_v30.md: "Public Support" → "Popular Support" (Jordan 2026-05-30 ruling).
+# Term-level change only; canonical source authority for the settlement layer is unchanged.

@@ -628,7 +628,7 @@ When a faction emerges at Stage 4 (Faction Declaration), it receives the followi
 | Stat | Starting Value | Rationale |
 |------|----------------|-----------|
 | Legitimacy (L) | 2 | Limited institutional recognition — newly-declared faction. Advances via Mandate Recovery (+1/season when no hostile DAs target and Stability ≥ 2) and Conviction fulfillment by founder. |
-| Public Support (PS) | 3 | Grass-roots base anchored by founding NPC officers. |
+| Popular Support (PS) | 3 | Grass-roots base anchored by founding NPC officers. |
 | Influence (I) | floor(Renown ÷ 2) at Declaration | Carries the Declaration roll pool forward as institutional capacity. |
 | Wealth (W) | 2 + (# settlements controlled − 1), capped at 5 | Founding economic base plus per-settlement scaling. |
 | Military (Mil) | 1 | Militia only at founding; no standing army. Recruits from settlement Order. |
