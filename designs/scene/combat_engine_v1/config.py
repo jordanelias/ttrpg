@@ -60,8 +60,6 @@ CFG = dict(
   # (the damper — you hold the Vor only by continuing to threaten) + a hard CAP on |initiative| (the bound). Both are
   # required by the NERS audit for this positive-feedback state.
   INIT_SIGMA_K=0.16, INIT_SCALE=1.2,                     # the edge: INIT_SIGMA_K*tanh(rel_initiative/INIT_SCALE)
-  INIT_SEIZE_K=0.45, INIT_SEIZE_SCALE=4.0,                # initial pre-contact seizure magnitude + contest scale
-  INIT_SEIZE_READ=1.0, INIT_SEIZE_REACH=0.3, INIT_SEIZE_CONC=0.5,
   INIT_DECAY=0.75, INIT_CAP=1.5,                         # damper (per beat) + hard bound
   INIT_GAIN_HIT=0.18, INIT_LOSS_WOUNDED=0.28,            # press the advantage / forced toward Nach by damage
   INIT_STEAL_INDES=0.36, INIT_LOSS_OVERCOMMIT=0.14,      # read-based steal (Indes/sen-no-sen) / overcommit bleeds grip

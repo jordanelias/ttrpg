@@ -239,23 +239,10 @@ def bind_sigma(aggressor, defender, cfg, TR):
     return lev + catch + tac + strq
 
 # ---------- initiative substrate (three-phase Vor / Nach / Indes ~ sen; culture-neutral) ----------
-def seizure_score(c, reach_val, cfg, TR):
-    """Pre-contact seizure factors — who would land the first credible threat: the READ (anticipation, precommit /
-    sen-sen-no-sen), REACH (the longer weapon threatens first in the approach, measure-weighted), and CONCENTRATION
-    (composure to commit). Footwork is deliberately NOT here — its 'step in first' role already lives in the approach
-    close-rate; double-counting it over-weights balance. Pure. Higher = seizes the Vor."""
-    rd = reading(c, cfg) * TR.channel_weight(c.tradition,'precommit')
-    cc = c.conc/max(1.0, c.conc_max)
-    return (cfg['INIT_SEIZE_READ']*rd
-            + cfg['INIT_SEIZE_REACH']*reach_val + cfg['INIT_SEIZE_CONC']*cc
-            + TR.ability_bonus(c,'seize'))   # equipped seize abilities (Vorschlag / sen-no-sen) raise the pre-contact score
-
-def initiative_seize(a, b, er, cfg, TR):
-    """Initial graded initiative from the pre-contact seizure contest. Returns (init_a, init_b), signed, bounded by
-    INIT_SEIZE_K, symmetric (equal fighters -> 0/0). Decides who enters the first exchange holding the Vor. Pure."""
-    sa = seizure_score(a, er[a], cfg, TR); sb = seizure_score(b, er[b], cfg, TR)
-    edge = cfg['INIT_SEIZE_K']*tanh((sa-sb)/cfg['INIT_SEIZE_SCALE'])
-    return edge, -edge
+# Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert): seizure_score + initiative_seize removed. The
+# pre-contact Vor contest gave a small initial edge (INIT_SEIZE_K 0.45*tanh) washed out by per-beat dynamics
+# (INIT_GAIN_HIT 0.18/hit, decay, steals); ablation ~0 outcome impact. The ongoing initiative system
+# (initiative_sigma + hit-gains/steals/decay) is retained and load-bearing.
 
 def initiative_sigma(aggressor, defender, cfg):
     """The bounded sigma-edge the initiative state confers on whoever holds the Vor, on BOTH attack and defence.

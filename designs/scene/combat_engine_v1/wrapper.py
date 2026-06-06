@@ -24,9 +24,9 @@ def engagement(A, B, first, cfg, rng):
     # matchups), which the attacker-favouring mechanics amplified. Different reach is deterministic as before.
     longer = A if erA>erB else (B if erB>erA else (A if rng.random()<0.5 else B)); shorter = B if longer is A else A
     measure_gap=max(0.0, er[longer]-er[shorter]); closed=(measure_gap<=0.3)
-    # INITIATIVE SEIZURE (pre-contact): a graded contest of read + balance + reach + composure sets who enters the
-    # first exchange holding the Vor. Frame-safe: initiative_seize returns (init_A, init_B) for the objects in order.
-    A.initiative, B.initiative = S.initiative_seize(A, B, er, cfg, TR)
+    # Pre-contact seizure CUT 2026-06-05 (Jordan; verified inert - ablation ~0, washed out by per-beat dynamics):
+    # initiatives start even (0.0 from _init_live); the ongoing Vor (hit-gains/steals/decay) decides who holds it.
+    A.initiative, B.initiative = 0.0, 0.0
     # tempo is CONDITIONAL (grip/stance/fatigue), recomputed per-beat below — not a static pre-loop property.
     ready={A:0.0,B:0.0}
     beats=0; exchanges=0; soft=8
