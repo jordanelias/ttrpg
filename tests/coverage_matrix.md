@@ -134,3 +134,17 @@ Archived entries in tests/coverage_matrix_archive.md
   editorial reading -- the original E item named 'sweep' without a spec; anchored to oblique order / flank
   march (Leuctra, Leuthen). Class-B, Jordan-vetoable. An earlier per-cell-flank attempt tore the unit toward
   both flanks (centroid cancelled); fixed by the unit-level flank decision.
+
+## Build D -- pin / Anvil  [CLOSED done-by-A, Jordan ruling 2026-06-06]
+- RULING (Jordan 2026-06-06, Variant 3): D is delivered by the existing pin (`pinned` facing gate,
+  orchestration.py L1508-1519) + build A (fixed_by_other, L1526) -- a pinned/fixed cell cannot reface, so the
+  flank/rear angle penalty lands. No separate D mechanic is built; the anvil function = pin + A.
+- Investigation (subsumption, this session): the obvious pin wirings measure 0.0000. `pinned` is read in
+  exactly one place (the facing-refusal gate). Stamina drain is already contact-proportional (L210-211), so a
+  'pinned drains harder' debuff double-counts. The one distinct lever -- denying the held enemy its
+  between-turn stamina recovery (BETWEEN_TURN_STAMINA_RECOVERY, L2133) -- is called only in
+  run_multi_turn_battle / run_multi_unit_battle (L2200, L2555), never in run_battle (L1898, the validated
+  path) -> provably inert there. A single-battle pin debuff would over-punish an already-penalized state
+  (A flank + B shock + contact drain) -> fails NERS-N.
+- status: CLOSED. No code change. (Variants 1 recovery-denial / 2 cohesion-debuff remain available on a
+  future canonical decision; not pursued.)
