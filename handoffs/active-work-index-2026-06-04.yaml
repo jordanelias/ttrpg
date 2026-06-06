@@ -6,11 +6,11 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'build E committed aee3af04e9e671b3fa7fe67f6e3c6944a1c7cf46 (2026-06-06).
-  Chain: bf8168aa (audit) -> cb8b5844 (A) -> c2134e16 (B) -> 40fe9845 (C) -> aee3af04
-  (E). ALL VALIDATED: 7/7 validators PASS (V-CANNAE/FIXING/SHOCK/BRACE/ENVELOP/REFORM/ARCHER);
-  counters 5/8,8/8,8/8 byte-exact; fuzz(120) 0 engfail/0 degen; default-volley probe
-  identical to committed.'
+last_commit: 'build D CLOSED done-by-A, committed 391f4a989ace66bfe252c33d3c9c90855d6c4cf3
+  (Jordan Variant 3, 2026-06-06). FULL SEQUENCE COMPLETE: A cb8b5844, B c2134e16,
+  C 40fe9845, E-volley aee3af04, archive-pass 63e8cb59, E-sweep 8b66f7f4, D-closed
+  391f4a98. 8/8 validators PASS; mass-battle maneuver layer (fix / shock / envelop
+  / archer-concentration / sweep) shipped + validated; D ruled delivered by pin+A.'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -36,6 +36,13 @@ owns:
 - valoria-game/**
 working_state:
   next:
+  - 'D CLOSED done-by-A (committed 391f4a98) per Jordan ruling 2026-06-06 (Variant
+    3): the anvil''s held-enemy -> flank-vulnerable function is delivered by the existing
+    pin facing-gate (orchestration.py L1508-1519) + build A (fixed_by_other L1526).
+    No separate D mechanic built; subsumption finding recorded in coverage_matrix
+    Build D section. Variants 1 (recovery-denial, multi-turn) / 2 (cohesion-debuff,
+    single-battle) remain available on a future canonical decision, not pursued. THE
+    A-E + D WORK ORDER IS FULLY DISCHARGED -- nothing outstanding on this stream.'
   - 'D RESOLVED AS HONEST FINDING (NOT shipped -- shipping would be manufacture).
     Verdict: D (pin/Anvil) is SUBSUMED; no clean non-redundant, gated-byte-exact,
     NERS-necessary mechanic exists. Bottom-up evidence (this session, orchestration.py):
@@ -520,5 +527,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-06T21:15:06.764676+00:00'
+updated: '2026-06-06T21:32:10.648977+00:00'
 status: active
