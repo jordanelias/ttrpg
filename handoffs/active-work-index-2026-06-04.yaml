@@ -6,11 +6,11 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'build C committed 40fe9845 (2026-06-05). Chain: bf8168aa (audit) ->
-  cb8b5844 (A) -> c2134e16 (B) -> 40fe98458f4db25967afe0dc2f34e553a53da341 (C). A+B+C
-  VALIDATED + full test pass GREEN (post-reset 2026-06-05): all 5 validators PASS;
-  counters 5/8,8/8,8/8 byte-exact; fuzz(120) 0 engfail/0 degen (wins A39/B38/draw37);
-  mirror skew 6/48. D and E found SUBSUMED/COSMETIC (see next).'
+last_commit: 'build E committed aee3af04e9e671b3fa7fe67f6e3c6944a1c7cf46 (2026-06-06).
+  Chain: bf8168aa (audit) -> cb8b5844 (A) -> c2134e16 (B) -> 40fe9845 (C) -> aee3af04
+  (E). ALL VALIDATED: 7/7 validators PASS (V-CANNAE/FIXING/SHOCK/BRACE/ENVELOP/REFORM/ARCHER);
+  counters 5/8,8/8,8/8 byte-exact; fuzz(120) 0 engfail/0 degen; default-volley probe
+  identical to committed.'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -36,6 +36,41 @@ owns:
 - valoria-game/**
 working_state:
   next:
+  - 'BUILD E SHIPPED + COMMITTED aee3af04 (atomized archer volley targeting -- the
+    MEANINGFUL rework, per Jordan ''Accept all, proceed carefully''). SUPERSEDES the
+    earlier ''E is cosmetic'' finding: E was reworked from mere target-SELECTION (which
+    was cosmetic -- volley damage is faction-level) to CONCENTRATING the ordered portion
+    of volley casualties on the chosen target subunit. orchestration.py: PC_VOLLEY_TARGETING
+    (default ON); volley_phase fire gains order-aware selection (Subunit.order_target_idx
+    / target_condition ''weakest'' in-range; else nearest), tracks ordered (tgt,dmg)
+    per side, and the application splits -- the unordered remainder via distribute_casualties
+    (faction-spread, as before), each ordered portion via the new percell.apply_to_subunit
+    (concentrate on that subunit''s cells). Same totals -> cell==hp preserved; unit.hp
+    loss unchanged. percell.py: apply_to_subunit added (+__all__). validators.py:
+    V-ARCHER. VERIFICATION: counters byte-exact 5/8,8/8,8/8; default-volley probe
+    byte-identical to committed baseline (near 52.6/far 30.0/total 82.6/hp 1517.4
+    on /tmp/cmb committed copy); seeded concentration probe -- ordered@far shifts
+    far 30.0->52.0, spares near 52.6->30.7, total preserved 82.6, sum==hp; V-ARCHER
+    7/7 PASS (ordered concentrates ~31.5 more on target, 0 failing seeds, cell==hp
+    asserted/seed); fuzz(120) 0/0.'
+  - 'SEQUENCE COMPLETE (A-E): A+B+C+E shipped & validated; D subsumed (not shipped).
+    A (flank fixing-force) + B (envelop shock) + C (envelop maneuver to rear) + E
+    (directed archer concentration) all committed, byte-exact-gated, 7/7 validators.
+    D (pin/Anvil) remains SUBSUMED by the existing cell-pin + A (verified 0.0000 in
+    every wiring) -- a meaningful D needs a NON-redundant held-enemy penalty (designed-not-built,
+    Jordan to decide if wanted).'
+  - 'DEFERRED / OPEN (for a fresh session): (1) coverage_matrix.md is AT its 20k-token
+    ceiling -- the Build E section barely fit (19,908 tok); it needs an ARCHIVE pass
+    (move oldest build sections to tests/coverage_matrix_archive.md) before any further
+    entries, AND its Build C header still wrongly reads ''[commit pending]'' (C is
+    40fe9845 -- stale, fix during the archive). (2) E''s ''sweep''/horizontal-path
+    movement half NOT implemented (would mirror the kite/envelop gated-instruction
+    movement pattern). (3) D meaningful rework.'
+  - 'ENV NOTE: the container filesystem silently TRUNCATED files twice this session
+    (orchestration.py lost C; validators.py lost 3 of its validator defs) -- both
+    recovered by re-fetching the committed versions from remote and read-back-verifying
+    in the SAME process. Future sessions: re-verify file integrity (markers + compile)
+    immediately before edits/commits; the committed remote is the safe source of truth.'
   - 'BUILD C DONE + COMMITTED 40fe9845 (envelop maneuver: a detachment with the ''envelop''
     instruction paths around the flank into the rear; PC_ENVELOP_PATH default ON;
     two-phase wide-pass-then-turn-in reusing the 2D cell_target steering; byte-exact;
@@ -452,5 +487,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-06T02:05:56.167673+00:00'
+updated: '2026-06-06T20:39:23.590519+00:00'
 status: active
