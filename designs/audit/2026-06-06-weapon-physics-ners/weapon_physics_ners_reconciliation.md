@@ -2,125 +2,113 @@
 
 **Status:** Audit / reconciliation record. Class-C mechanical findings, Jordan-vetoable.
 **Session:** 2026-06-06. **Scope:** personal combat (`designs/scene/combat_engine_v1/`) weapon-physics layer.
-**Decision context:** Jordan directed **path B** (Valoria's combat gains a quantitative weapon-physics layer — a structural/ontological call, his) and "proceed all." This records the executed build, its empirical verdict, and a showstopper the re-baseline uncovered.
+**Decision context:** Jordan directed **path B** (Valoria's combat gains a quantitative weapon-physics layer — a structural call, his) and "proceed all."
 
-`[READ:]` provenance: `combat_engine_v1/{combatant,core,config,systems,geometry,wrapper}.py` (full); `designs/audit/2026-05-29-combat-armature/weapon_axes_v2.md` (full); `tests/sim/v32-combat-balance/` module set (engine deps). Baseline, MoI bake, MoI→tempo wiring, and mirror scan were executed in-container against the live engine this session.
+> **CORRECTION (2026-06-06, same session — supersedes the first commit of this file).** The earlier "broken-mirror showstopper" is a **MEASUREMENT ERROR and is WITHDRAWN.** The mirror is **fair.** The flawed win-rate metric divided A-wins by *total* fights including draws; sabre mirrors draw ~79% of the time, so "sabre A=10%" was misread as a 90% loss — in fact B also wins ~10% and ~79% draw, and **among *decided* fights it is 49.5% (symmetric).** Corrected mirror balance (A-of-decided): all weapons 48–52%. `[CORRECTION: §5/§6/§7 — A_wins/total vs A_wins/decided; draws not excluded]`
 
----
-
-## 1. Input semantics — GROUNDED (fixes the prior R-fail)
-
-The physical fields (`mass`, `pob_frac`, `head_len`, `grip_len`) were added to `combatant.py` (e414098) with **no canonical definition** — `weapon_axes_v2` defines only categorical axes (reach/weight/hands/head/speed/handling). The following semantics are adopted (mechanical-tier, **vetoable**), validated top-down against real weapons:
-
-- **`mass` = kilograms.**
-- **`head_len` / `grip_len` = forward / rear lever arms, in FEET** (hand→tip ; hand→butt).
-- **`pob_frac` = (hand→balance distance) / head_len.**
-
-Validation (balance = `pob_frac·head_len`, ft→cm vs real balance-ahead-of-hand):
-
-| weapon | model balance | real balance |
-|---|---|---|
-| spear | 70 cm | 70 cm |
-| mace | 33 cm | 33 cm |
-| rapier | 10 cm | 10 cm |
-| greatsword | 24 cm | 18 cm |
-| staff | 4 cm | 2 cm |
-
-Several reproduce exactly. `[CONFIDENCE: high — top-down validated against real weapon dimensions]`
+`[READ:]` provenance: `combat_engine_v1/{combatant,core,config,systems,geometry,wrapper}.py` (full); `designs/audit/2026-05-29-combat-armature/weapon_axes_v2.md` (full); `tests/sim/v32-combat-balance/` module set. Baseline, MoI bake, MoI→tempo wiring, mirror scan, and the corrected re-measurement were executed in-container this session.
 
 ---
 
-## 2. MoI model — unified, elegant (corrected from the inherited "three regimes")
+## 1. Input semantics — GROUNDED (fixes the prior R-fail on inputs)
 
-The handoff's "three regimes" was an unaudited mislabel — it is **two orthogonal axes**: mass-distribution (sets `r_eff` in one MoI law) × delivery-mode (cut/thrust/blunt). One formula:
+The physical fields (`mass`, `pob_frac`, `head_len`, `grip_len`) were added to `combatant.py` (e414098) with **no canonical definition** — `weapon_axes_v2` defines only categorical axes. Adopted semantics (mechanical-tier, **vetoable**), validated top-down against real weapons:
+
+- **`mass` = kilograms.** · **`head_len`/`grip_len` = forward/rear lever arms, in FEET** (hand→tip ; hand→butt). · **`pob_frac` = (hand→balance) / head_len.**
+
+Validation (balance = `pob_frac·head_len`, ft→cm vs real): spear 70=70 · mace 33=33 · rapier 10=10 · greatsword 24~18 · staff 4~2. `[CONFIDENCE: high — top-down validated]`
+
+---
+
+## 2. MoI model — unified, elegant ("three regimes" was a mislabel)
+
+Two orthogonal axes: mass-distribution (sets `r_eff`) × delivery-mode. One law:
 
 ```
 MoI = mass · r_eff²
-  SWING      r_eff = pob_frac · head_len     (blade, mass at CG; rapier…halfsword)
+  SWING      r_eff = pob_frac · head_len     (blade, mass at CG)
   POLE       r_eff = head_len / √3           (uniform rod about rear hand; spear, staff, poleaxe)
-  HEAD-HEAVY r_eff = head_len                 (mass at the head, top-heavy; mace)   ← "centre" was wrong; a mace is head-heavy
+  HEAD-HEAVY r_eff = head_len                 (mass at the head, top-heavy; mace)   ← "centre" was wrong
 ```
 
-`[ASSUMPTION: regime classification POLE={spear,staff,poleaxe}, HEAD-HEAVY={mace}, else SWING — vetoable]`
-
-Computed MoI (selected): rapier 0.13 · arming 0.10 · longsword 0.215 · greatsword 1.69 · sabre 0.20 · dagger 0.009 · spear **20.17** · staff 3.92 · **mace 3.89** (head-heavy; was 1.40 under the CG model — 2.78× more sluggish) · poleaxe 4.03 · halfsword 0.04.
-
-Polearm cross-check: `(1/3)·m·head_len²` for the spear is 24.0× the lumped sword proxy — matching the handoff's independent ~25× prediction.
+Computed: rapier 0.13 · longsword 0.215 · greatsword 1.69 · spear **20.17** · staff 3.92 · **mace 3.89** (head-heavy; was 1.40 under CG — 2.78× more sluggish) · poleaxe 4.03. Spear polearm MoI = 24.0× the lumped sword proxy (matches the handoff's ~25× prediction). `[ASSUMPTION: regime classification POLE={spear,staff,poleaxe}, HEAD-HEAVY={mace} — vetoable]`
 
 ---
 
-## 3. Baseline captured (live engine, this session — prior sessions never ran it)
+## 3. Baseline captured (live engine — prior sessions never ran it)
 
 ```
-MIRROR arming v arming    45.7%   ~holds
-ARMOUR none vs heavy       8.3%   directional ✓
+MIRROR (A-of-decided)     48–52% for ALL weapons — FAIR (see §5)
+ARMOUR none vs heavy       heavy wins ~92% — directional ✓
 no-one-shot               HOLDS for defender end≥2 (health 24–52 > 18); breaks only at end=1 floor (health 14)
 max overwhelming hit      18 FLAT across strength 3→7   ← tanh-saturated; strength adds nothing at the top
-95% cap                   3/66 unarmoured matchups at the boundary — cap doing its job
-reach                     GOVERNS the unarmoured tier
+reach                     GOVERNS the unarmoured tier (real; low-draw matchups)
 ```
-
-Correction to the handoff's "no-one-shot holds": it holds for normal stats; the only breach is the end=1 floor.
 
 ---
 
 ## 4. The build, and why the layer is INERT
 
-`MoI` baked behaviour-neutral (baseline byte-identical). `MoI→tempo` wired (replacing the binary `wt` mass term; `HANDS_COMMIT` unchanged; bounded by `MAX_TEMPO_PEN`; new `MOI_TEMPO_K=0.30`). It corrected the cadence **inversion** — the spear (MoI 20.17) had tempo 2.0 with **zero** weight penalty while the mace (MoI 3.89) was penalised to 1.2; post-wiring spear→1.2, staff→1.41, mace→1.41.
+`MoI` baked behaviour-neutral (baseline byte-identical). `MoI→tempo` wired (replacing the binary `wt` mass term; `HANDS_COMMIT` unchanged; bounded by `MAX_TEMPO_PEN`; new `MOI_TEMPO_K=0.30`). It corrected a real cadence **inversion** — the spear (MoI 20.17) had tempo 2.0 with **zero** weight penalty while the mace (MoI 3.89) was penalised to 1.2; post-wiring spear→1.2, staff→1.41, mace→1.41.
 
 But correcting cadence **did not change outcomes**:
 
 ```
-mace vs staff      5.7% → 8.0%    (staff slowed 2.0→1.41, mace sped 1.2→1.41; staff still wins ~92% on REACH)
-longsword v spear 20.7% → 22.9%   (spear slowed 2.0→1.20; spear still wins ~77% on REACH)
+mace vs staff      5.5% → 8.0%    (staff still wins ~92% on REACH; 0 draws)
+longsword v spear 20.7% → 22.9%   (spear still wins ~80% on REACH)
 ```
 
-Reach dominates; mass/cadence is ~outcome-irrelevant. **The MoI→tempo wiring was NOT committed** (it fails NERS-N — corrects an inconsistency with no play consequence). The MoI bake is local-only, **not committed to engine code** (committing inert, unconsumed fields would be dead data — fails NERS-E).
+Reach dominates; mass/cadence is ~outcome-irrelevant. The MoI→tempo wiring was **NOT committed** (fails NERS-N — corrects an inconsistency with no play consequence). The MoI bake is local-only, **not committed to engine** (unconsumed = dead data, fails NERS-E).
 
 ---
 
-## 5. SHOWSTOPPER — the mirror invariant is broken
+## 5. Mirror is FAIR; what varies is DECISIVENESS (draw rate) — [corrected]
 
-A same-weapon fight must be ~50/50. It is not (A% over seeds 1–4):
+Corrected measurement (n=1500, A/B/draw %, and A-among-decided):
 
 ```
-rapier      47.8 44.8 46.0 47.2    ~OK
-arming      45.5 45.0 48.2 44.2    ~OK   ← the ONLY weapon the prior "mirror=50 holds" claim checked
-longsword   46.0 50.2 48.2 45.2    ~OK
-dagger / spear / staff / mace      ~OK
-greatsword  31.2 28.0 34.2 32.0    SKEWED   (B wins ~68%)
-sabre       10.2  9.5 13.2 12.2    BROKEN   (B wins ~90%)
-poleaxe     54.0 51.5 53.8 55.5    mild skew (A favoured)
+weapon       A%    B%    draw%   A-of-decided
+arming      46.0  46.3   7.7      49.8   ← the one weapon the prior claim checked
+longsword   48.0  51.5   0.5      48.2
+poleaxe     50.3  49.7   0.0      50.3
+mace        49.6  49.1   1.3      50.2
+spear       48.3  48.1   3.6      50.1
+rapier      46.5  43.5  10.0      51.6
+staff       46.2  42.1  11.7      52.3
+greatsword  32.1  33.2  34.7      49.2
+sabre       10.5  10.7  78.7      49.5   ← symmetric; the 79% draw rate, NOT a 90/10 loss
 ```
 
-A sabre fighting an identical sabre loses ~90% of the time depending only on which slot it occupies. This is a structural attacker/defender asymmetry in `fight()` (weapon × initiative). **Pre-existing, not from the wiring** — proof: greatsword tempo is capped at 0.8 both before and after the patch (identical), yet its mirror is 30%; a symmetric tempo change cannot cause an A/B asymmetry.
-
-`[OPEN — Jordan / investigation] Mirror break in fight() — sabre 10/90, greatsword 30/70. Priority defect. Trace fight() initiative/turn-order. Confirm whether mirror≈50 is the intended invariant for all weapons (a 90/10 same-weapon result is a defect under any reading).`
+**The mirror invariant holds.** What is real and notable: **draw/decisiveness rate varies hugely by weapon** — two equal sabres reach the bout limit unresolved ~79% of the time, greatswords ~35%, vs longsword 0.5% / poleaxe 0%. This is a *decisiveness/feel* property (the engine explicitly allows unresolved as a legitimate outcome — `fight()` comment), **not** a fairness defect. Whether a ~79% undecided rate for equal fast curved-cutters is desirable is an open feel question, not a bug.
 
 ---
 
-## 6. NERS verdict (objective, all directions)
+## 6. NERS verdict (objective, all directions — corrected)
 
 ```
 SYSTEM: personal combat + weapon-physics layer (path B, grounded)
-VERDICT: layer is groundable + elegant but INERT; the ENGINE beneath it fails R.
+VERDICT: the ENGINE is sound; the weapon-physics LAYER is groundable + elegant but INERT.
 
-N  FAIL    MoI→tempo moves outcomes ~2pts; reach governs. Corrects an inconsistency with no play consequence.
-R  FAIL    Not the physics — the ENGINE: mirror invariant broken (sabre 10/90, greatsword 30/70);
-           + reach so dominant no other axis affects outcomes (collapsed strategic space).
-S  ~OK     Physics model smooth (one formula); engine has the initiative asymmetry.
-E  PASS    Grounded substrate is one elegant formula; B's ontology expansion is consciously Jordan's.
+N  FAIL    MoI→tempo moves outcomes ~2pts; reach governs. Layer corrects an inconsistency with no play consequence.
+R  PASS    Mirror FAIR (corrected); armour directional; no-one-shot holds end≥2; 95% cap respected.
+           Reach-dominance produces near-cap extremes (staff>mace 94.5%) but within the legal cap — a diversity
+           question, not a defect. Draw-rate variation noted (§5), not a fairness fault.
+S  PASS    Engine transitions cleanly; one-formula physics is smooth.
+E  ~        Grounded substrate is one elegant formula; B's ontology expansion is consciously Jordan's.
+           BUT the layer is inert — committing unconsumed MoI fields would be dead data (so it stays out of engine).
 ```
+
+The earlier R-FAIL ("mirror invariant broken") is **withdrawn** — it was the §5 metric error.
 
 ---
 
-## 7. Reframed priorities + open decisions (Jordan)
+## 7. Reframed priorities + open decisions (Jordan) — corrected
 
-1. **Broken mirror is the priority** — perfecting weapon physics on an engine where the sabre has a 90/10 slot-bias is wasted. Trace `fight()`.
-2. **Reach-dominance** is the structural reason the physics is inert — if weapon mass/feel is to matter (the top-heavy-mace goal), reach's grip on outcomes must loosen, or the damage `tanh` saturation must be addressed.
-3. **Grounded MoI substrate** (§1–2) is correct and preserved here; it is inert until 1 and 2 are resolved, so it stays out of engine code for now.
+1. **Reach-dominance is the real structural issue** (not a broken mirror — that was my error). It is *why* the physics is inert and why some matchups are near-deterministic. If weapon mass/feel is to matter (the top-heavy-mace goal), the lever is **reach-balance** or the **damage `tanh` saturation** — not mass.
+2. **Grounded MoI substrate** (§1–2) is correct and preserved here; inert until (1), so it stays out of engine code.
+3. **Decisiveness/draw-rate** (§5) — open feel question: is a ~79% undecided sabre-mirror rate (and 35% greatsword) acceptable, or should the bout-resolution be tightened?
 
-`[OPEN — Jordan] (a) canonize the §1 input semantics into weapon_axes_v2 when/if the physics layer is activated; (b) direction on reach-dominance vs tanh-saturation as the lever for weapon distinctiveness.`
+`[OPEN — Jordan] (a) canonize §1 input semantics into weapon_axes_v2 if/when the physics layer is activated; (b) reach-dominance vs tanh-saturation as the lever for weapon distinctiveness; (c) draw-rate/decisiveness target.`
 
 ---
 
@@ -129,6 +117,5 @@ Citations:
   - designs/scene/combat_engine_v1/core.py
   - designs/scene/combat_engine_v1/config.py
   - designs/scene/combat_engine_v1/systems.py
-  - designs/scene/combat_engine_v1/geometry.py
+  - designs/scene/combat_engine_v1/wrapper.py
   - designs/audit/2026-05-29-combat-armature/weapon_axes_v2.md
-  - tests/sim/v32-combat-balance/ (engine resolution deps)
