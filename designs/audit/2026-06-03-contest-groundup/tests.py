@@ -161,7 +161,7 @@ def _bands(fa,fb,N=600):
         w[Bout(Contestant(fa),Contestant(fb),v,NEUT).resolve(LOG,LOG)[0]]+=1
     return w
 _m=_bands(4,4); ck(f"matched → committee plurality ({_m['committee']/600:.2f})", _m['committee']/600 > 0.6)
-_lop=_bands(6,2); _dec=(_lop['A_decisive']+_lop['A_total'])/600; ck(f"skill gap → decisive majority ({_dec:.2f})", _dec > 0.6)
+_lop=_bands(6,2); _dec=(_lop['A_decisive']+_lop['A_total'])/600; ck(f"skill gap → A-decisive, de-saturated ({_dec:.2f})", _dec > 0.25)   # re-baseline 2026-06-05: was >0.6; degree-3 σ-gate moves mass to committee (~0.66), A still dwarfs B (~12:1)
 ck("committee reachable (canon 4-6 zone)", _m['committee'] > 0)
 
 print("== faction adapter: banded votes (committee) + succession (on PersuasionTrack) ==")
@@ -174,7 +174,7 @@ _prop=FFac("P",4,5,(.45,.2,.35)); _targ=FFac("T",2,3,(.2,.35,.45)); _oth=[FFac("
 _d,_=FX.rate_banded(_prop,_targ,[_prop,_targ]+_oth,"censure",LOG,DEM,N=300)
 ck(f"strong proposer Censure pass-dominant ({_d.get('pass',0):.2f})", _d.get('pass',0) > 0.7)
 _ms=FX.succession_rate(4,4,NEUT,N=300); ck(f"matched succession splits ({_ms.get('split',0):.2f})", _ms.get('split',0) > 0.6)
-_os=FX.succession_rate(7,1,NEUT,N=300); ck(f"overwhelming succession decisive/unified ({_os.get('decisive',0)+_os.get('unified',0):.2f})", (_os.get('decisive',0)+_os.get('unified',0)) > 0.5)
+_os=FX.succession_rate(7,1,NEUT,N=300); ck(f"overwhelming succession decisive/unified ({_os.get('decisive',0)+_os.get('unified',0):.2f})", (_os.get('decisive',0)+_os.get('unified',0)) > 0.20)   # re-baseline 2026-06-05: was >0.5; de-saturation raises split share (WATCH: 7v1 split ~0.73, §7.2.1)
 _o=FX.succession(4,4,NEUT); ck("succession split ratio canonical (§7.2.1)", _o[0]!='split' or _o[2] in (0.50,0.55,0.60))
 _Fc=lambda n,m: FFac(n,m,4,(.34,.33,.33))
 _sp=[(_Fc("a",4),'pro'),(_Fc("b",3),'pro'),(_Fc("c",2),'anti'),(_Fc("d",2),'anti')]
@@ -383,15 +383,15 @@ import modes as MOD_CC; from resolver import ProofBar as _PB, GraceThreshold as 
 _cc = {k: f() for k,f in MOD_CC.CROSS_CULTURAL_VENUES.items()}
 ck("cc: public_oration is TallyAtClose, no rebuttal, pathos-heavy",
    isinstance(_cc["public_oration"].venue.win, TallyAtClose) and _cc["public_oration"].venue.proof_pathos > _cc["public_oration"].venue.proof_ethos)
-ck("cc: inquisition is ProofBar(3.0), evasion_strikes=1",
+ck("cc: inquisition is ProofBar(2.5), evasion_strikes=1",
    isinstance(_cc["inquisition_hearing"].venue.win, _PB) and _cc["inquisition_hearing"].venue.faults.evasion_strikes == 1)
-ck("cc: excommunication is ProofBar(5.0), ethos-dominant",
+ck("cc: excommunication is ProofBar(3.0), ethos-dominant",
    isinstance(_cc["excommunication_court"].venue.win, _PB) and _cc["excommunication_court"].venue.proof_ethos > 0.45)
-ck("cc: imperial_petition is GraceThreshold(8.0), evasion disabled",
+ck("cc: imperial_petition is GraceThreshold(5.5), evasion disabled",
    isinstance(_cc["imperial_petition"].venue.win, _GT) and _cc["imperial_petition"].venue.faults.evasion_strikes == 0)
-ck("cc: secret_council is ThresholdRace(3.0), logos-dominant",
-   isinstance(_cc["secret_council"].venue.win, ThresholdRace) and _cc["secret_council"].venue.proof_logos > 0.70)
-ck("cc: memorial_remonstrance is GraceThreshold(6.0), ethos-dominant, evasion disabled",
+ck("cc: secret_council is VoteAtClose ballotta, logos-dominant",
+   isinstance(_cc["secret_council"].venue.win, VoteAtClose) and _cc["secret_council"].venue.proof_logos > 0.70)
+ck("cc: memorial_remonstrance is GraceThreshold(5.5), ethos-dominant, evasion disabled",
    isinstance(_cc["memorial_remonstrance"].venue.win, _GT) and _cc["memorial_remonstrance"].venue.faults.evasion_strikes == 0)
 for name, mode in _cc.items():
     random.seed(42); _w, _ = mode.play(5, 4, LOG, LOG)
@@ -418,6 +418,37 @@ try: M_disp.play(4,4,bad,LOG); ck("validation raises", False)
 except ValueError: ck("validation raises", True)
 try: DyadicMode().play(); ck("scaffold raises", False)
 except NotImplementedError: ck("scaffold raises", True)
+
+# == DE-SATURATION + RES-FLOOR + BALLOTTA (balancing pass 2026-06-05) ==
+print("== de-saturation bar + resonance floor + ballotta ==")
+from engine import roll_net as _rn
+from resolver import RES_FLOOR as _RF, PUBLIC_LEAK as _PL
+# T1: live (pool-aware) degree-3 stays bounded across pools; legacy (pool-less) saturates at high pool
+random.seed(20260605)
+def _d3(pool, leg=False, N=8000):
+    return sum(1 for _ in range(N) if degree(_rn(pool), 2.0, None if leg else pool) == 3) / N
+_paw = {p: _d3(p) for p in range(2, 9)}
+_leg8 = _d3(8, leg=True)
+ck(f"de-saturation: high-pool Overwhelming bounded (max {max(_paw.values()):.2f}, pool8 {_paw[8]:.2f})",
+   max(_paw.values()) < 0.38 and _paw[8] < 0.32)
+ck(f"de-saturation: pool-aware cuts the legacy high-pool spike (legacy8 {_leg8:.2f} vs paw8 {_paw[8]:.2f})",
+   _leg8 > 0.38 and _paw[8] < _leg8 - 0.15)
+# T2: res-floor is load-bearing — some venue/appeal drives RAW resonance below RES_FLOOR, the floor lifts it
+def _rawres(b, ap, gr):
+    c = b.c["a"]; lk = min(Resonance.LEAK_CAP, Resonance.leak(b.adj.discipline, c.cred_frac()) + b.pr.public * _PL)
+    return (1 - lk) * b.v.joint_weight(ap, Stasis.tense(gr)) + lk * b.adj.character().get(ap, 0.0)
+_minraw = min(_rawres(Bout(Contestant(5), Contestant(5), f().venue, f().adj), ap, gr)
+              for f in MOD_CC.CROSS_CULTURAL_VENUES.values() for ap in Appeal.ALL for gr in Stasis.LADDER)
+ck(f"res-floor is load-bearing (min raw resonance {_minraw:.3f} < floor {_RF})", _minraw < _RF)
+# T3: ballotta — secret_council (VoteAtClose) yields un-fused SPLIT_DECISION verdicts
+_sc = MOD_CC.CROSS_CULTURAL_VENUES["secret_council"]()
+ck("ballotta: secret_council win condition is VoteAtClose", isinstance(_sc.venue.win, VoteAtClose))
+_sp = 0; _N = 400
+for _s in range(_N):
+    random.seed(_s); _b = Bout(Contestant(5), Contestant(5), _sc.venue, _sc.adj, record=True)
+    _w, _y = _b.resolve(LOG, LOG)
+    if NAR.summarize(_b.log, _w, _y).shape == "SPLIT_DECISION": _sp += 1
+ck(f"ballotta: secret_council yields SPLIT_DECISION verdicts ({_sp/_N:.3f})", 0.03 < _sp/_N < 0.40)
 
 print(f"\nRESULT: {P} passed, {Fc} failed")
 sys.exit(1 if Fc else 0)   # audit: CI can gate (was exit 0 on failure)

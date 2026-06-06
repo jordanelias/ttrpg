@@ -19,7 +19,7 @@ from primitives import Stasis, Standing, DefeatCatalogue
 def court_venue(**o):
     return Venue(proof_ethos=.25, proof_pathos=.20, proof_logos=.55, start_ground=Stasis.FACT,
                  proof_past=.60, proof_present=.30, proof_future=.10,   # forensic register: past-weighted (Rhet I.3)
-                 win=ProofBar(bar=4.0), faults=DefeatCatalogue(), **o)
+                 win=ProofBar(bar=2.0), faults=DefeatCatalogue(), **o)
 def disputation_venue(**o):
     return Venue(proof_ethos=.15, proof_pathos=.10, proof_logos=.75, start_ground=Stasis.FACT,
                  win=ThresholdRace(5.0), faults=DefeatCatalogue(), **o)
@@ -32,7 +32,7 @@ def appeal_venue(**o):
     # so resonance comes from the sovereign via leak); grace is not automatic (high bar) and is
     # discretionary — a stern sovereign denies, a merciful one grants.
     return Venue(proof_ethos=.34, proof_pathos=.33, proof_logos=.33, start_ground=Stasis.QUALITY,
-                 win=GraceThreshold(7.0), faults=DefeatCatalogue(barred=False, evasion_strikes=0), **o)
+                 win=GraceThreshold(5.0), faults=DefeatCatalogue(barred=False, evasion_strikes=0), **o)
 
 VENUES = {"court": court_venue, "disputation": disputation_venue,
           "assembly": assembly_venue, "appeal": appeal_venue}
@@ -146,7 +146,7 @@ def inquisition_hearing_venue(**o):
     [SEED] all numeric values."""
     return Venue(proof_ethos=.30, proof_pathos=.15, proof_logos=.55, start_ground=Stasis.FACT,
                  proof_past=.65, proof_present=.25, proof_future=.10,
-                 win=ProofBar(bar=3.0),
+                 win=ProofBar(bar=2.5),
                  faults=DefeatCatalogue(barred=True, contradiction=True,
                                         evasion_strikes=1, yield_strikes=2), **o)
 
@@ -165,7 +165,7 @@ def excommunication_court_venue(**o):
     [SEED] all numeric values."""
     return Venue(proof_ethos=.50, proof_pathos=.25, proof_logos=.25, start_ground=Stasis.FACT,
                  proof_past=.55, proof_present=.30, proof_future=.15,
-                 win=ProofBar(bar=5.0),
+                 win=ProofBar(bar=3.0),
                  faults=DefeatCatalogue(barred=True, contradiction=True,
                                         evasion_strikes=2, yield_strikes=2), **o)
 
@@ -187,7 +187,7 @@ def imperial_petition_venue(**o):
     [SEED] all numeric values. The adjudicator profile (discipline, character) is authored by Jordan."""
     return Venue(proof_ethos=.35, proof_pathos=.35, proof_logos=.30, start_ground=Stasis.QUALITY,
                  proof_past=.25, proof_present=.50, proof_future=.25,
-                 win=GraceThreshold(bar=8.0),
+                 win=GraceThreshold(bar=5.5),
                  faults=DefeatCatalogue(barred=False, contradiction=True,
                                         evasion_strikes=0, yield_strikes=3), **o)
 
@@ -204,7 +204,7 @@ def secret_council_venue(**o):
     of civic virtue over personal preference — Comino et al. 2020 doi:10.1111/joie.12223).
     [SEED] all numeric values."""
     return Venue(proof_ethos=.15, proof_pathos=.10, proof_logos=.75, start_ground=Stasis.FACT,
-                 win=ThresholdRace(3.0),
+                 win=VoteAtClose(jurors=5, sharpness=0.6, noise=0.8),
                  faults=DefeatCatalogue(barred=True, contradiction=True,
                                         evasion_strikes=1, yield_strikes=2), **o)
 
@@ -227,7 +227,7 @@ def memorial_remonstrance_venue(**o):
     [SEED] all numeric values. Adjudicator is the lord/sovereign: Jordan sets discipline and character."""
     return Venue(proof_ethos=.45, proof_pathos=.35, proof_logos=.20, start_ground=Stasis.FACT,
                  proof_past=.60, proof_present=.25, proof_future=.15,
-                 win=GraceThreshold(bar=6.0),
+                 win=GraceThreshold(bar=5.5),
                  faults=DefeatCatalogue(barred=False, contradiction=True,
                                         evasion_strikes=0, yield_strikes=2), **o)
 

@@ -18,6 +18,8 @@ from primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Lev
 from engine import roll_net, effective_ob, degree
 
 VALID_KINDS = ("advance", "hard", "shift", "support", "pass", "evidence", "rebut")
+RES_FLOOR = 0.15  # de-saturation floor (diagnostic Lesson 6): a hostile/off-axis reception can't zero
+                  # an advance's resonance, so even an unfavoured appeal keeps minimal viability.
 REBUT_CAP = 3.0   # Fork 3 (PROTOTYPE): max advantage a single rebuttal can erase — bounds the one
                   # attrition channel so a rebuttal war cannot death-spiral (diagnostic Lesson 5).
 MERIT_SCALE = 2.6   # [SEED]
@@ -186,9 +188,10 @@ class Bout:
 
     def _reception(self, side):
         c = self.c[side]
+        pool = Pool.size(c.faculty)
         lev = Leverage.net(c.faculty, on_ground=True)
-        ob = max(1.0, effective_ob(self.v.base_ob, lev, Pool.size(c.faculty)))  # σ-leverage: float OB, no rounding
-        return degree(roll_net(Pool.size(c.faculty)), ob)
+        ob = max(1.0, effective_ob(self.v.base_ob, lev, pool))  # σ-leverage: float OB, no rounding
+        return degree(roll_net(pool), ob, pool)                 # pool-aware degree -> σ-gated Overwhelming
 
     def _bias(self, side):
         if self.pr.toward != side: return 1.0
@@ -206,7 +209,7 @@ class Bout:
         leak = min(Resonance.LEAK_CAP, Resonance.leak(self.adj.discipline, c.cred_frac())
                    + self.pr.public * PUBLIC_LEAK)
         venue_w = self.v.joint_weight(appeal, tense)          # rhetorical × temporal × venue-role — combined
-        res = (1 - leak) * venue_w + leak * self.adj.character().get(appeal, 0.0)
+        res = max(RES_FLOOR, (1 - leak) * venue_w + leak * self.adj.character().get(appeal, 0.0))
         rdy = Readiness.of(c.cred_frac(), self.room.frac(side)) if readiness else 1.0
         gain = MERIT_SCALE * magnitude * res * rdy * random.uniform(1 - JITTER, 1 + JITTER) * self._bias(side)
         self.state.adv[side] += gain

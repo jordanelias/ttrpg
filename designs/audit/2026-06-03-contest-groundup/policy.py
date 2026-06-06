@@ -42,8 +42,19 @@ def advocate(v):
     return Move("advance", Appeal.LOGOS, v.live_ground)
 def overreacher(v): return Move("hard", Appeal.PATHOS, v.live_ground)
 def staller(v):     return Move("pass")
+def counterpuncher(v):
+    """Reactive rebuttal posture grounded in the classical partes orationis: confirmatio before
+       refutatio (Quintilian — prove your own case, THEN rebut the opponent). Builds a position in the
+       first half; in the back half, if not ahead, attacks the opponent's standing advantage instead of
+       adding to its own. Banks reserve when low. Lands rebuttals only where venue.allow_rebuttal is set;
+       elsewhere a back-half rebut scores as an off-issue evasion (so it self-limits there)."""
+    if _low(v): return Move("support")
+    if v.i >= v.n // 2 and not v.leading:
+        return Move("rebut", ground=v.live_ground)
+    return Move("advance", Appeal.LOGOS, v.live_ground)
 
 POLICIES = {"logos": logos_spammer, "demagogue": demagogue, "courtier": courtier,
             "build_then_close": build_then_close, "exploiter": exploiter,
             "fallback": fallback_ladder, "off_ground": off_ground_chancer,
-            "advocate": advocate, "overreacher": overreacher, "staller": staller}
+            "advocate": advocate, "overreacher": overreacher, "staller": staller,
+            "counterpuncher": counterpuncher}
