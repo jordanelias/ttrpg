@@ -266,7 +266,64 @@ def v_reform():
                       "default OFF preserves the calibrated baseline; opt-in for re-baseline")
 
 
-GOALS = [v_cannae, v_fixing, v_shock, v_brace, v_envelop, v_reform]
+_FAR_ROW = _DEF_ROW - 2   # second enemy subunit, two rows deeper than the near one, still in volley range
+
+
+def _archer_pair(target_idx):
+    """An archer (faction A, ranged, held) facing a two-subunit enemy -- a NEAR line and a FAR line,
+    both inside volley range. target_idx=None -> no order (fires nearest); target_idx=1 -> ordered at
+    the FAR subunit. Held on both sides so only the volley acts (no melee), isolating fire distribution."""
+    arch = Subunit(shape='Line', troop_type='infantry', tier=_TIER,
+                   starting_position=(_MAIN_ROW, _COL), advance_dir=_BACK,
+                   unit_type='ranged', stance='hold', troops=_DET_TROOPS, concentration=_CONC,
+                   order_target_idx=target_idx)
+    A = _unit('A', 'A', [arch], 'hold')
+    near = _line('B', _DEF_ROW, _FWD, _DEF_TROOPS, 'hold')
+    far = Subunit(shape='Line', troop_type='infantry', tier=_TIER,
+                  starting_position=(_FAR_ROW, _COL), advance_dir=_FWD,
+                  unit_type='melee', stance='hold', troops=_DEF_TROOPS, concentration=_CONC)
+    B = _unit('B', 'B', [near, far], 'hold')
+    return A, B
+
+
+def _archer_far_loss(target_idx, on, seeds=_SEEDS, turns=6):
+    """Per-seed casualties inflicted on the FAR enemy subunit. PC_VOLLEY_TARGETING toggled in-process.
+    Asserts the cell==hp invariant every seed -- the split (concentrate ordered / spread the rest) must
+    redistribute casualties without creating or destroying any."""
+    _orch.PC_VOLLEY_TARGETING = on
+    losses = []
+    for s in range(seeds):
+        random.seed(s)
+        a, b = _archer_pair(target_idx)
+        far0 = sum(b.subunits[1].cell_troops.values())
+        run_battle(a, b, max_turns=turns)
+        far1 = sum(b.subunits[1].cell_troops.values())
+        cellsum = sum(sum(su.cell_troops.values()) for su in b.subunits)
+        assert abs(cellsum - b.hp) < 1, "cell==hp invariant broken under ordered volley"
+        losses.append(far0 - far1)
+    return losses
+
+
+def v_archer():
+    """GOAL (build E): archers ORDERED to a target subunit CONCENTRATE their volley casualties on it.
+    Same scenario and same total fire either way -- only the FLAG differs: with PC_VOLLEY_TARGETING the
+    ordered archers land their casualties on the chosen (far) subunit; without it the order is ignored and
+    the fire spreads by engaged density (the prior faction-wide behaviour). Directed fire puts more on the
+    target than the spread does, on every seed; the cell==hp invariant is asserted throughout, so the total
+    is merely redistributed, not inflated.
+    [canonical: longbow fire discipline -- Crecy/Agincourt; mass_battle §A.7 Phase 2 directed volley.]"""
+    ordered = _archer_far_loss(target_idx=1, on=True)    # flag ON  -> concentrate on the far subunit
+    spread = _archer_far_loss(target_idx=1, on=False)    # flag OFF -> order ignored, spreads (prior behaviour)
+    worse = sum(1 for o, d in zip(ordered, spread) if o < d)
+    delta = statistics.mean(ordered) - statistics.mean(spread)
+    passed = (worse == 0) and (delta > 0)
+    return GoalResult("V-ARCHER", passed, (round(delta, 1), worse),
+                      "ordered fire concentrates MORE casualties on the target subunit than the default spread, every seed",
+                      "Crecy/Agincourt longbow fire discipline; A.7 directed volley",
+                      "cell==hp asserted each seed; total fire unchanged, only its distribution; flag-OFF is the byte-exact prior path")
+
+
+GOALS = [v_cannae, v_fixing, v_shock, v_brace, v_envelop, v_reform, v_archer]
 
 
 def run_all():

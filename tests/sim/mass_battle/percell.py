@@ -5,7 +5,7 @@ import math
 from mass_battle.config import *
 from mass_battle.geometry import *
 
-__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'sync_col_grid', '_fatigue_sigma', '_envelopment_sigma', '_defender_depth', 'update_stamina']
+__all__ = ['_ColBlock', 'build_column_grid', '_engaged_cols', 'distribute_casualties', 'sync_col_grid', '_fatigue_sigma', '_envelopment_sigma', '_defender_depth', 'update_stamina', 'apply_to_subunit']
 
 class _ColBlock:
     """One file/column of a unit's formation: a depleting troop density + stamina + depth (rank count).
@@ -87,6 +87,25 @@ def distribute_casualties(unit, dmg, pairs):
     for a, pid, troops in cells:                   # proportional per cell (assoc.-equiv to the per-column spread)
         a.cell_troops[pid] = max(0.0, troops - dmg * (troops / tot))
     sync_col_grid(unit)                            # refresh emergent column densities from cells
+
+def apply_to_subunit(unit, subunit, dmg):
+    """Apply `dmg` troop-casualties to a SINGLE subunit's living cells, proportional to density,
+    then refresh the unit's column grid. Used by ORDERED volley fire (build E) to CONCENTRATE
+    casualties on a chosen target subunit instead of spreading them across the whole unit. The same
+    `dmg` the caller removes from unit.hp for this portion is removed here from the target's cells,
+    preserving the cell == hp invariant.
+    [canonical: directed/aimed fire concentration -- longbow fire discipline, Crecy/Agincourt;
+    mass_battle §A.7 volley targeting.]"""
+    if dmg <= 0:
+        return
+    cells = [(pid, t) for pid, (_r, _c), t in subunit.iter_cells() if t > 0]
+    tot = sum(t for _p, t in cells)
+    if tot <= 0:
+        return
+    for pid, t in cells:
+        subunit.cell_troops[pid] = max(0.0, t - dmg * (t / tot))
+    sync_col_grid(unit)
+
 
 def _fatigue_sigma(unit, engaged_cols):
     """Increment 3: fatigue of the engaged front as a delta-sigma. 0 at full stamina, down to

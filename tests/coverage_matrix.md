@@ -210,3 +210,12 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   recovery and sub-unit merge. [OPEN -- Jordan: cadence is per phase-boundary (bounded by start);
   canon Reform is once-per-turn (the Reform Phase) -- may rule once-per-turn.]
 - scope: discipline restoration only; flag-gated opt-in pending a re-baseline decision.
+
+## Build E -- atomized archer volley targeting (directed concentrated fire)  [committed 2026-06-06]
+- PC_VOLLEY_TARGETING (default ON): an ordered archer (order_target_idx / 'weakest' in-range; else
+  nearest) concentrates its volley casualties on the target subunit (percell.apply_to_subunit); unordered
+  fire spreads by engaged density as before -- same totals, cell==hp preserved. No-order path byte-exact
+  (counters 5/8,8/8,8/8; default-volley probe identical to committed; fuzz(120) 0/0).
+- validators.py: V-ARCHER -- ordered fire concentrates ~31.5 more casualties on target, every seed; 7/7 PASS.
+- prior volley was faction-level (targeting cosmetic); E concentrates the ordered portion, default
+  unchanged (opt-in, Jordan-vetoable). percell.apply_to_subunit added to __all__. 'sweep' half deferred.

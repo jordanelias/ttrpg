@@ -1346,6 +1346,7 @@ import os
 PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
 PC_ENVELOP_PATH = (os.environ.get("PC_ENVELOP_PATH", "1") == "1")  # C: directed envelop maneuver -- a detachment with the 'envelop' instruction paths around the flank into the rear (toggle; default ON)
+PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
 
 def _lanchester_strength(contact_cells, unit=None):
     """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged
@@ -1798,17 +1799,38 @@ def volley_phase(unit_a, unit_b):
         """Pick nearest in-range target atom, roll Power vs TN, return Size loss inflicted.
         Volley loss scales with the TARGET formation's density (_volley_density_mult)."""
         if shooter_atom.unit_type != "ranged":
-            return 0, None
+            return 0, None, False
         target_atoms = target_unit.subunits
+        # E (atomized archer targeting): an archer ORDERED to a specific or weakest target fires at IT when
+        # in range, else the nearest -- so archers can be directed at a flanker / priority unit. Gated by
+        # PC_VOLLEY_TARGETING + an explicit order; default (no order) = nearest (the exact prior logic) ->
+        # byte-exact. The ORDERED portion is concentrated on the target subunit downstream (apply_to_subunit);
+        # unordered fire stays faction-spread. [canonical: longbow fire discipline, Crecy/Agincourt; §A.7.]
+        _ordered = None
+        if PC_VOLLEY_TARGETING:
+            _oti = getattr(shooter_atom, 'order_target_idx', None)
+            if _oti is not None and _oti < len(target_atoms):
+                _ordered = target_atoms[_oti]
+            elif getattr(shooter_atom, 'target_condition', None) == 'weakest':
+                _cand = [t for t in target_atoms
+                         if VOLLEY_MIN_RANGE <= _atom_distance(shooter_atom, t) <= VOLLEY_MAX_RANGE]
+                if _cand:
+                    _ordered = min(_cand, key=lambda t: sum(t.cell_troops.values()) if t.cell_troops else 0)
         best_target = None
         best_dist = float('inf')
-        for t in target_atoms:
-            d = _atom_distance(shooter_atom, t)
-            if VOLLEY_MIN_RANGE <= d <= VOLLEY_MAX_RANGE and d < best_dist:
-                best_dist = d
-                best_target = t
+        was_ordered = False
+        if _ordered is not None and VOLLEY_MIN_RANGE <= _atom_distance(shooter_atom, _ordered) <= VOLLEY_MAX_RANGE:
+            best_target = _ordered
+            best_dist = _atom_distance(shooter_atom, _ordered)
+            was_ordered = True
+        else:
+            for t in target_atoms:
+                d = _atom_distance(shooter_atom, t)
+                if VOLLEY_MIN_RANGE <= d <= VOLLEY_MAX_RANGE and d < best_dist:
+                    best_dist = d
+                    best_target = t
         if best_target is None:
-            return 0, None
+            return 0, None, False
         # Pool = unit Power dice (PP-503). Discipline penalty applies (per §A.4).
         pool = max(1, shooter_unit.power - shooter_unit.discipline_penalty_volley())
         net = _roll_volley_pool(pool)
@@ -1825,20 +1847,27 @@ def volley_phase(unit_a, unit_b):
         trace_event('volley', shooter=getattr(shooter_unit, 'name', '?'), d=best_dist,
                     pool=pool, net=net, net_dr=round(net_after_dr, 2),
                     dens=round(dens, 3), loss=round(out, 2))
-        return out, best_target
+        return out, best_target, was_ordered
 
+    ordered_a = []
+    ordered_b = []
     for atom in unit_a.subunits:
-        dmg, tgt = fire(atom, unit_a, unit_b)
+        dmg, tgt, was_ordered = fire(atom, unit_a, unit_b)
         if tgt is not None:
             loss_b += dmg
             shots += 1
+            if was_ordered:
+                ordered_b.append((tgt, dmg))
     for atom in unit_b.subunits:
-        dmg, tgt = fire(atom, unit_b, unit_a)
+        dmg, tgt, was_ordered = fire(atom, unit_b, unit_a)
         if tgt is not None:
             loss_a += dmg
             shots += 1
+            if was_ordered:
+                ordered_a.append((tgt, dmg))
 
-    return {"loss_a": loss_a, "loss_b": loss_b, "shots": shots}
+    return {"loss_a": loss_a, "loss_b": loss_b, "shots": shots,
+            "ordered_a": ordered_a, "ordered_b": ordered_b}
 
 
 # ─── BATTLE ──────────────────────────────────────────────────────────────────
@@ -2009,8 +2038,21 @@ def run_battle(unit_a, unit_b, max_turns=18):
         unit_b.hp = max(0, unit_b.hp - result["dmg_b"] - volley_dmg_b * volley_hp_scale(unit_b))
         if PER_CELL:
             # Increment 2: mirror the same total casualties onto the per-column grid (keeps sum==hp).
-            distribute_casualties(unit_a, result["dmg_a"] + volley_dmg_a * volley_hp_scale(unit_a), pairs)
-            distribute_casualties(unit_b, result["dmg_b"] + volley_dmg_b * volley_hp_scale(unit_b), pairs)
+            # E: ORDERED volley fire concentrates its portion on the target subunit (apply_to_subunit); the
+            # unordered remainder spreads as before. Same totals -> sum==hp preserved; with no ordered fire
+            # (the default) this is byte-exact-identical to the prior two distribute_casualties calls.
+            _sa = volley_hp_scale(unit_a)
+            _sb = volley_hp_scale(unit_b)
+            _ord_a = vol.get("ordered_a", [])
+            _ord_b = vol.get("ordered_b", [])
+            _ord_a_tot = sum(_d for _su, _d in _ord_a)
+            _ord_b_tot = sum(_d for _su, _d in _ord_b)
+            distribute_casualties(unit_a, result["dmg_a"] + (volley_dmg_a - _ord_a_tot) * _sa, pairs)
+            distribute_casualties(unit_b, result["dmg_b"] + (volley_dmg_b - _ord_b_tot) * _sb, pairs)
+            for _su, _d in _ord_a:
+                apply_to_subunit(unit_a, _su, _d * _sa)
+            for _su, _d in _ord_b:
+                apply_to_subunit(unit_b, _su, _d * _sb)
             update_stamina(unit_a, pairs)   # Increment 3: drain engaged (depth-damped), rest others
             update_stamina(unit_b, pairs)
         unit_a.recalc_size()
