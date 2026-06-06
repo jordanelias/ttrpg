@@ -6,10 +6,11 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'build B committed c2134e16 (2026-06-05): envelopment shock reuses _charge_shock_sigma
-  on the fixed+flanked condition + V-SHOCK/V-BRACE. Chain: bf8168aa (audit) -> cb8b5844
-  (build A) -> c2134e16 (build B). Backups /tmp/orch_A_GOOD.py (A) and /tmp/orch_AB_GOOD.py
-  (A+B).'
+last_commit: 'build C committed 40fe9845 (2026-06-05). Chain: bf8168aa (audit) ->
+  cb8b5844 (A) -> c2134e16 (B) -> 40fe98458f4db25967afe0dc2f34e553a53da341 (C). A+B+C
+  VALIDATED + full test pass GREEN (post-reset 2026-06-05): all 5 validators PASS;
+  counters 5/8,8/8,8/8 byte-exact; fuzz(120) 0 engfail/0 degen (wins A39/B38/draw37);
+  mirror skew 6/48. D and E found SUBSUMED/COSMETIC (see next).'
 owns:
 - designs/scene/combat_engine_v1/**
 - designs/audit/2026-06-02-combat-engine/**
@@ -35,6 +36,46 @@ owns:
 - valoria-game/**
 working_state:
   next:
+  - 'BUILD C DONE + COMMITTED 40fe9845 (envelop maneuver: a detachment with the ''envelop''
+    instruction paths around the flank into the rear; PC_ENVELOP_PATH default ON;
+    two-phase wide-pass-then-turn-in reusing the 2D cell_target steering; byte-exact;
+    V-ENVELOP: rear-reach mean row-offset ~0 / 7-of-20 behind vs +3.9 / 0 behind straight).
+    FULL TEST PASS GREEN post-reset: 5 validators PASS, counters 5/8,8/8,8/8, fuzz(120)
+    ROBUST (0/0), mirror skew 6/48.'
+  - 'BUILD D (pin/Anvil) -- HONEST FINDING: SUBSUMED, not shipped. The ''pin'' instruction''s
+    intended function (fix the enemy so it cannot reface/disengage while the hammer
+    strikes) is ALREADY delivered by the existing cell-pin mechanic (orchestration.py
+    ~L1466: a cell with an attacker in its front arc within PC_PIN_REACH cannot reface
+    -> takes the flank penalty) + build A''s fixed_by_other. Empirically every wiring
+    of ''pin'' (deny-disengage; extended pin reach PC_PIN_REACH*2 for an anvil) produced
+    delta 0.0000 in every scenario (held D, balanced D, anvil at contact, anvil held
+    at dist 2): deny-disengage duplicates halt-at-contact (contact cells already frozen);
+    extended reach is a no-op (fixers close to contact -> base reach already pins;
+    held defenders never reface). Per no-manufacture, did NOT ship inert code or a
+    sham validator -- reverted to clean A+B+C. A MEANINGFUL D would need a NON-redundant
+    pin mechanic (e.g. a held enemy suffers a distinct cohesion/mobility penalty WITHOUT
+    double-counting A/B) -- a separate scoped build, Jordan to decide if wanted.'
+  - 'BUILD E (atomize archer volley/flanker targeting + sweep) -- HONEST FINDING:
+    targeting-atomization is COSMETIC under the current model, not shipped. volley_phase
+    (orchestration.py ~L1753) accumulates each shot''s dmg into a FACTION-LEVEL total
+    (loss_a/loss_b); the returned target subunit (tgt) is used ONLY as a None/in-range
+    gate, and the density mult keys on the whole target_unit -- so WHICH subunit an
+    archer targets changes neither the damage amount nor its distribution (spread
+    across the whole enemy unit downstream). Implemented PC_VOLLEY_TARGETING (order_target_idx/weakest
+    in fire, byte-exact) but it changed no outcome (probe [225,225] either way; weakest
+    hit the stronger). A MEANINGFUL E needs a VOLLEY-DAMAGE DISTRIBUTION rework (apply
+    dmg to the SELECTED target subunit''s cells, not a faction total) -- substantial,
+    calibration-sensitive, byte-exactness-risky; separate scoped build. The ''sweep''/horizontal-path
+    half is untouched (would mirror the kite/envelop instruction pattern as a gated
+    movement mode). E reverted; clean A+B+C.'
+  - 'SEQUENCE VERDICT: A+B+C achieve the CORE envelopment goal -- decisive envelopment
+    of a vulnerable line (front pinned + flank, with B''s shock) is validated; the
+    detachment can reach flank (wheel) and rear (C). D+E as originally scoped are
+    subsumed/cosmetic given the existing engine model (cell-pin+A/B/C for D; faction-level
+    volley for E). RECOMMEND to Jordan: either accept A+B+C as the envelopment deliverable
+    and rescope D/E as the deeper reworks above (non-redundant pin; per-target volley
+    damage; sweep movement mode), or deprioritize them. Do NOT ship the cosmetic D/E
+    wirings.'
   - 'BUILD C bottom-up read DONE (2026-06-05) -- scope REFINED by an empirical probe.
     Read: find_contacts (orchestration.py:1177) is PURELY POSITIONAL (Chebyshev<=1
     any cell pair, facing-agnostic) -> the rear WOULD register as contact if reached,
@@ -411,5 +452,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-05T23:56:53.532667+00:00'
+updated: '2026-06-06T02:05:56.167673+00:00'
 status: active
