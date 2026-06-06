@@ -194,3 +194,19 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
 - validators.py: V-ENVELOP -- with the maneuver the detachment reaches the rear region (mean row-offset
   ~0, behind in 7/20 seeds) vs straight advance (+3.9, 0/20). Reaching the rear enables the RED rear shock.
 - scope: routes reliably to the rear region; full per-seed rear lodgment is combat-dependent.
+
+
+## Reform (G-8) -- Discipline restoration (reform_check)  [committed 2026-06-06]
+- orchestration.py: REFORM_CHECK_ENABLED (env, default OFF). Flag kept in-engine (not config.py) to
+  avoid the sim_fabrication ledger drift on config's pre-existing constants. reform_check filled per
+  canon (mass_battle_v30.md §A.5 / Phase Reform): an unengaged unit (find_contacts empty) gains +1
+  Discipline toward discipline_start, gated by Command >= Discipline+1 AND Command >= 2 (Command-
+  asymmetry, PP-241); a Command of one cannot restore. Default OFF => byte-exact (lanchester
+  signature byte-identical vs the original `pass`; the 5 envelopment validators unchanged, PER_CELL=1).
+- validators.py: V-REFORM -- 7/7 gating cases (unengaged-eligible restores +1 capped at start;
+  cmd=1 / cmd<disc+1 / already-at-start / engaged / routed / flag-OFF all inert). Toggles the flag
+  in-process (save/restore) so it cannot perturb the other goals. run_all 6/6 PASS.
+- NOT implemented (canon Reform also does these; separate, morale/lifecycle-touching): +1 Morale
+  recovery and sub-unit merge. [OPEN -- Jordan: cadence is per phase-boundary (bounded by start);
+  canon Reform is once-per-turn (the Reform Phase) -- may rule once-per-turn.]
+- scope: discipline restoration only; flag-gated opt-in pending a re-baseline decision.

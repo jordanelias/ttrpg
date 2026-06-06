@@ -226,7 +226,47 @@ def v_envelop():
                       "reaching the rear enables the RED rear shock (A+B from behind)")
 
 
-GOALS = [v_cannae, v_fixing, v_shock, v_brace, v_envelop]
+def v_reform():
+    """GOAL: a NON-ENGAGED unit restores +1 Discipline toward its start, gated by the
+    general's Command; an engaged, routed, or Command-deficient unit does not, and with the
+    flag OFF the hook is inert. Direct mechanism check on the canon Reform Phase rule.
+    [canonical: mass_battle_v30.md §A.5 / Phase Reform — an unengaged unit gains +1 Discipline; the general's Command must exceed the current Discipline and be at least two (the Command-asymmetry rule); a Command of one cannot restore.]"""
+    saved_flag = _orch.REFORM_CHECK_ENABLED
+    saved_fc = _orch.find_contacts
+    partner = _defender()  # at start (disc==start) -> never perturbed by the shared loop
+    def _mk(disc, start, cmd, routed=False):
+        u = _defender(disc=disc); u.discipline = disc; u.discipline_start = start
+        u.command = cmd; u.routed = routed; return u
+    # (label, flag_on, engaged, disc, start, cmd, routed, expected_final_disc)
+    # discipline/command points are test-fixture probes of the canon gating, not engine constants.
+    cases = [
+        ("on_unengaged_eligible", True,  False, 3, 5, 5, False, 4),  # cmd5 >= 3+1 & >=2 -> +1
+        ("on_cmd1_prohibited",    True,  False, 3, 5, 1, False, 3),  # Command-asymmetry: a Command of one cannot restore
+        ("on_cmd_lt_disc_plus1",  True,  False, 4, 5, 4, False, 4),  # 4 < 4+1 -> inert
+        ("on_already_at_start",   True,  False, 5, 5, 5, False, 5),  # capped at discipline_start
+        ("on_engaged_blocked",    True,  True,  3, 5, 5, False, 3),  # in contact -> no reform
+        ("on_routed_blocked",     True,  False, 3, 5, 5, True,  3),  # routed -> skipped
+        ("off_inert",             False, False, 3, 5, 5, False, 3),  # flag OFF -> no-op
+    ]
+    n_ok = 0
+    try:
+        for label, flag_on, engaged, disc, start, cmd, routed, exp in cases:
+            _orch.REFORM_CHECK_ENABLED = flag_on
+            _orch.find_contacts = (lambda a, b: [object()]) if engaged else (lambda a, b: [])
+            u = _mk(disc, start, cmd, routed)
+            _orch.reform_check(u, partner, 1)
+            n_ok += (u.discipline == exp)
+    finally:
+        _orch.REFORM_CHECK_ENABLED = saved_flag
+        _orch.find_contacts = saved_fc
+    passed = (n_ok == len(cases))
+    return GoalResult("V-REFORM", passed, (n_ok, len(cases)),
+                      "all gating cases correct: unengaged & Command>=Disc+1 & Command>=2 restores +1 (capped at start); engaged/routed/Command-deficient/flag-OFF inert",
+                      "mass_battle_v30.md §A.5 Reform Phase; Command-asymmetry rule",
+                      "default OFF preserves the calibrated baseline; opt-in for re-baseline")
+
+
+GOALS = [v_cannae, v_fixing, v_shock, v_brace, v_envelop, v_reform]
 
 
 def run_all():

@@ -345,9 +345,41 @@ def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — rally lands in a future cycle (G-7)."""
     pass
 
+import os as _reform_os
+# G-8 reform flag kept in-engine (not config.py) to avoid the sim_fabrication ledger drift on
+# config's pre-existing constants; default OFF preserves the calibrated byte-exact baseline.
+REFORM_CHECK_ENABLED = _reform_os.environ.get('REFORM_CHECK_ENABLED', '0') == '1'
+
 def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
-    """Empty hook — reform lands in a future cycle (G-8)."""
-    pass
+    # [canonical: mass_battle_v30.md §A.5; PP-241 — Reform Phase Discipline restoration:]
+    #   an unengaged unit gains +1 Discipline; requires the general's Command to be at least
+    #   one above the unit's current Discipline, and Command of at least two; a Command of one
+    #   cannot restore (the Command-asymmetry rule).
+    # [canonical: mass_battle_v30.md §A.7 Phase Reform — non-engaged units restore Discipline.]
+    """G-8 Reform: an unengaged unit restores one step of Discipline toward its start,
+    gated by the general's Command. Flag-gated default OFF (REFORM_CHECK_ENABLED) to
+    preserve the calibrated byte-exact baseline; opt-in for re-baseline, mirroring
+    PER_CELL / PC_NODE_COHESION. Canon Reform also recovers Morale and merges sub-units —
+    not implemented here (separate, morale/lifecycle-touching).
+    [ASSUMPTION: cadence — fires per phase-boundary, bounded by discipline_start so a unit
+     only recovers what it lost. Canon Reform is once-per-turn (the Reform Phase); the sim's
+     phase-boundary count varies with the turn cap, so per-boundary+cap is the conservative
+     mapping pending a once-per-turn ruling.]
+    """
+    if not REFORM_CHECK_ENABLED:
+        return
+    if find_contacts(unit_a, unit_b):
+        return  # any contact pair -> both units engaged (1v1) -> no reform this boundary
+    for u in (unit_a, unit_b):
+        if u.routed or u.broken:
+            continue
+        # Command-asymmetry (PP-241 on the citation line above): one cannot restore;
+        # restoration needs Command at least one above the current Discipline.
+        if u.command < 2 or u.command < u.discipline + 1:
+            continue
+        if u.discipline < u.discipline_start:
+            u.discipline = min(u.discipline_start, u.discipline + 1)
+            u.check_drift()
 
 def threadwork_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — threadwork lands in a future cycle (G-9)."""
