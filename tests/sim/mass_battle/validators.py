@@ -323,7 +323,48 @@ def v_archer():
                       "cell==hp asserted each seed; total fire unchanged, only its distribution; flag-OFF is the byte-exact prior path")
 
 
-GOALS = [v_cannae, v_fixing, v_shock, v_brace, v_envelop, v_reform, v_archer]
+def _attacker_sweep():
+    """A single line at centre carrying the 'sweep' instruction -- the build-E lateral maneuver slides it
+    to the nearer enemy flank and concentrates there (rather than holding its deployed column)."""
+    su = _line('A', _MAIN_ROW, _BACK, _MAIN_TROOPS, 'balanced')
+    su.instructions = ('sweep',)
+    return _unit('A', 'A', [su], 'balanced')
+
+
+def _sweep_disp(sweep_on, seeds=_SEEDS, turns=_TURNS):
+    """Per-seed lateral column displacement |end_col - start_col| of the sweeping unit's centroid. PC_SWEEP
+    toggled in-process; the unit always carries 'sweep', so off = the maneuver disabled (straight column-local
+    advance, which holds the file)."""
+    _orch.PC_SWEEP = sweep_on
+    out = []
+    for s in range(seeds):
+        random.seed(s)
+        a = _attacker_sweep(); d = _defender('hold', _VULN_DISC)
+        c0 = a.subunits[0].centroid()[1]
+        run_battle(a, d, max_turns=turns)
+        c1 = a.subunits[0].centroid()[1]
+        out.append(abs(c1 - c0))
+    return out
+
+
+def v_sweep():
+    """GOAL (build E, lateral half): a unit ordered to SWEEP marches laterally to the enemy's flank and
+    concentrates there, instead of holding its deployed column. With the maneuver the body displaces sideways
+    toward a flank; without it (column-local advance) it stays in its file. Capability test via the unit's
+    lateral column displacement (public), on every seed.
+    [canonical: oblique order / flank march -- Leuctra (Epaminondas); Leuthen 1757.]"""
+    on = _sweep_disp(True)
+    off = _sweep_disp(False)
+    on_m = statistics.mean(on); off_m = statistics.mean(off)
+    worse = sum(1 for x, y in zip(on, off) if x < y)
+    passed = (on_m > off_m + 1.0) and (worse == 0)
+    return GoalResult("V-SWEEP", passed, (round(on_m, 2), round(off_m, 2)),
+                      "sweep displaces the unit laterally toward a flank; straight advance holds the deployed column",
+                      "oblique order / flank march -- Leuctra, Leuthen",
+                      "byte-exact without the 'sweep' instruction; lateral concentration is editorial, Jordan-vetoable")
+
+
+GOALS = [v_cannae, v_fixing, v_shock, v_brace, v_envelop, v_reform, v_archer, v_sweep]
 
 
 def run_all():

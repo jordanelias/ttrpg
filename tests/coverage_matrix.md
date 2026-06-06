@@ -121,3 +121,16 @@ Archived entries in tests/coverage_matrix_archive.md
 - validators.py: V-ARCHER -- ordered fire concentrates ~31.5 more casualties on target, every seed; 7/7 PASS.
 - prior volley was faction-level (targeting cosmetic); E concentrates the ordered portion, default
   unchanged (opt-in, Jordan-vetoable). percell.apply_to_subunit added to __all__. 'sweep' half deferred.
+
+## Build E (lateral half) -- sweep maneuver (flank-ward lateral march)  [committed 2026-06-06]
+- orchestration.py: PC_SWEEP (default ON). advance_cells gains a 'sweep' clause (after envelop): a subunit
+  with the 'sweep' instruction picks a flank at UNIT level (its deploy column vs enemy centre) and all cells
+  shift laterally toward it (uniform sign -> formation coheres), then turn in to engage the flank frontally.
+  Distinct from envelop (around to REAR) and the wheel (overhang cells only). Gated on the 'sweep' instruction
+  -> INERT for every existing scenario -> byte-exact (counters 5/8,8/8,8/8; fuzz(60) 0 fail/0 degen).
+- validators.py: V-SWEEP -- a 'sweep' unit displaces ~3.0 columns laterally to a flank vs ~0.08 for straight
+  column-local advance, every seed; concentrates on the enemy flank (frontage chewed down). run_all 8/8 PASS.
+- [ASSUMPTION] 'sweep' semantics (lateral flank-ward march then frontal flank engagement) are a grounded
+  editorial reading -- the original E item named 'sweep' without a spec; anchored to oblique order / flank
+  march (Leuctra, Leuthen). Class-B, Jordan-vetoable. An earlier per-cell-flank attempt tore the unit toward
+  both flanks (centroid cancelled); fixed by the unit-level flank decision.

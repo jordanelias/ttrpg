@@ -799,6 +799,28 @@ class Subunit:
                     else:
                         cell_target = min(enemy_cells,            # phase 2: turn in to the (now rear) cells
                                           key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
+                # SWEEP MANEUVER (build E, lateral half): a subunit carrying the 'sweep' instruction marches
+                # LATERALLY to the nearer enemy FLANK column, then drives in to engage there -- concentrating
+                # force on a flank WITHOUT the full wrap-to-rear of 'envelop'. Distinct from envelop (rear) and
+                # from the wheel (which only turns OVERHANG cells): sweep repositions the whole body sideways
+                # first, then engages the flank frontally. Gated by the 'sweep' instruction -> INERT for every
+                # existing scenario -> byte-exact.
+                # [ASSUMPTION: 'sweep' = lateral flank-ward repositioning then frontal flank engagement -- basis:
+                #  oblique order / flank march (Leuthen 1757; Epaminondas at Leuctra). The original E item named
+                #  'sweep' without semantics; this is a grounded editorial reading. Class-B, Jordan-vetoable.]
+                if PER_CELL and PC_SWEEP and 'sweep' in self.instructions and enemy_cells:
+                    _swc = [ec for (_er, ec) in enemy_cells]
+                    _swmin, _swmax = min(_swc), max(_swc)
+                    _swcen = (_swmin + _swmax) / 2.0
+                    # UNIT-level flank direction (from the subunit's deploy column, NOT the cell's) so the whole
+                    # body shifts coherently to one flank -- per-cell choice would tear the unit toward both.
+                    _swsign = -1 if self.starting_position[1] < _swcen else 1
+                    _swgoal = _swmin if _swsign < 0 else _swmax
+                    if (_swsign < 0 and my_c > _swgoal) or (_swsign > 0 and my_c < _swgoal):
+                        cell_target = (my_r, my_c + _swsign * actual_speed)   # phase 1: shift laterally (uniform) toward the flank
+                    else:
+                        cell_target = min(enemy_cells,            # phase 2: at the flank -> drive in to engage
+                                          key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
             if cell_target:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c
@@ -1347,6 +1369,7 @@ PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
 PC_ENVELOP_PATH = (os.environ.get("PC_ENVELOP_PATH", "1") == "1")  # C: directed envelop maneuver -- a detachment with the 'envelop' instruction paths around the flank into the rear (toggle; default ON)
 PC_VOLLEY_TARGETING = (os.environ.get("PC_VOLLEY_TARGETING", "1") == "1")  # E: atomized archer volley targeting -- an ordered archer fires at + concentrates casualties on its target subunit (toggle; default ON)
+PC_SWEEP = (os.environ.get("PC_SWEEP", "1") == "1")  # E (lateral half): a subunit with the 'sweep' instruction marches laterally to the nearer enemy flank then drives in (toggle; default ON)
 
 def _lanchester_strength(contact_cells, unit=None):
     """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged
