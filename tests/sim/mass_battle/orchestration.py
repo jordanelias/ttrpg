@@ -741,6 +741,32 @@ class Subunit:
                     if my_c < emin or my_c > emax:
                         cell_target = min(enemy_cells,
                                           key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
+                # ENVELOP MANEUVER (build C): a subunit carrying the 'envelop' instruction paths AROUND the
+                # enemy's flank into its REAR -- two phase. Phase 1 (not yet past the enemy's depth): steer to a
+                # point wide of the nearer flank and beyond the enemy's far row edge (go around, not into the
+                # front). Phase 2 (past the enemy's depth): turn in to the nearest enemy cell, which is now a
+                # REAR cell -> the facing vector reads RED. Reuses the 2D cell_target steering; gated by the
+                # 'envelop' instruction -> INERT for every existing scenario (no such instruction) -> byte-exact.
+                # [canonical: Cannae 216 BC double-envelopment; Khalid at Walaja; A.8 Envelopment -- the wrap to the rear.]
+                if PER_CELL and PC_ENVELOP_PATH and 'envelop' in self.instructions and enemy_cells:
+                    _er_rows = [er for (er, _ec) in enemy_cells]
+                    _ec_cols = [ec for (_er, ec) in enemy_cells]
+                    _emin_r, _emax_r = min(_er_rows), max(_er_rows)
+                    _emin_c, _emax_c = min(_ec_cols), max(_ec_cols)
+                    _cen_c = (_emin_c + _emax_c) / 2.0
+                    _ew = (_emax_c - _emin_c) + 2          # clearance >= enemy frontage so the pass stays out of contact range
+                    _wide = (_emin_c - _ew) if my_c < _cen_c else (_emax_c + _ew)
+                    if self.advance_dir < 0:
+                        _past = my_r < _emin_r
+                        _rear_r = _emin_r - 2
+                    else:
+                        _past = my_r > _emax_r
+                        _rear_r = _emax_r + 2
+                    if not _past:
+                        cell_target = (_rear_r, _wide)            # phase 1: around the flank, past the depth
+                    else:
+                        cell_target = min(enemy_cells,            # phase 2: turn in to the (now rear) cells
+                                          key=lambda e: (e[0] - my_r) ** 2 + (e[1] - my_c) ** 2)
             if cell_target:
                 dr = cell_target[0] - my_r
                 dc = cell_target[1] - my_c
@@ -1287,6 +1313,7 @@ from mass_battle.percell import *  # P-A stage 3: percell extracted
 import os
 PC_FIXING_FLANK = (os.environ.get("PC_FIXING_FLANK", "1") == "1")
 PC_ENVELOP_SHOCK = (os.environ.get("PC_ENVELOP_SHOCK", "1") == "1")  # B: envelopment moral-shock on a fixed unit struck flank/rear (toggle; default ON)
+PC_ENVELOP_PATH = (os.environ.get("PC_ENVELOP_PATH", "1") == "1")  # C: directed envelop maneuver -- a detachment with the 'envelop' instruction paths around the flank into the rear (toggle; default ON)
 
 def _lanchester_strength(contact_cells, unit=None):
     """P-L Linear Law: enemy effective strength IN CONTACT, expressed as engaged

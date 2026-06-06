@@ -124,6 +124,11 @@
       "value": "216",
       "source": "validators.py / orchestration.py",
       "note": "historical date: battle of Cannae, 216 BCE (anchor for the fixing-force envelopment goal)"
+    },
+    {
+      "value": "42",
+      "source": "validators.py",
+      "note": "validator scenario fixture: detachment wide-deploy column for the envelop maneuver"
     }
   ]
 }

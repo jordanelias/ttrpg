@@ -51,6 +51,7 @@ _TURNS = 60            # [class-B test-fixture: run toward a decisive outcome so
 _FWD = 1               # advance_dir for faction B (defender), toward higher rows
 _BACK = -1             # advance_dir for faction A (attacker), toward lower rows
 _VULN_DISC = 4         # [class-B test-fixture: a typical (un-braced) line's discipline -- shattered by envelopment shock]
+_DET_WIDE_COL = 42     # [class-B test-fixture: detachment deploy column, wide past the defender's flank (for the envelop maneuver)]
 
 
 def _line(faction, row, advance_dir, troops, stance):
@@ -182,7 +183,50 @@ def v_brace():
                       "guards against B being a blanket flank insta-kill")
 
 
-GOALS = [v_cannae, v_fixing, v_shock, v_brace]
+def _attacker_envelop():
+    """Main body fixing the front + a detachment deployed WIDE (past the flank) carrying the
+    'envelop' instruction -- the build-C maneuver routes it around to the enemy's rear."""
+    main = _line('A', _MAIN_ROW, _BACK, _MAIN_TROOPS, 'balanced')
+    det = _line('A', _MAIN_ROW, _BACK, _DET_TROOPS, 'balanced')
+    det.starting_position = (_MAIN_ROW, _DET_WIDE_COL)
+    det.instructions = ('envelop',)
+    return _unit('A', 'A', [main, det], 'balanced')
+
+
+def _envelop_reach(path_on, seeds=_SEEDS, turns=_TURNS):
+    """Per-seed signed (detachment_row - defender_row). Negative => the detachment is BEHIND the
+    defender (its rear, since the defender faces +row). PC_ENVELOP_PATH toggled in-process; the
+    detachment always carries the 'envelop' instruction, so off = the maneuver disabled."""
+    _orch.PC_ENVELOP_PATH = path_on
+    diffs = []
+    for s in range(seeds):
+        random.seed(s)
+        a = _attacker_envelop(); d = _defender('hold', _VULN_DISC)
+        run_battle(a, d, max_turns=turns)
+        det = a.subunits[1]; dfn = d.subunits[0]
+        diffs.append(det.centroid()[0] - dfn.centroid()[0])
+    return diffs
+
+
+def v_envelop():
+    """GOAL (build C): a detachment ordered to ENVELOP reaches the enemy's REAR. With the maneuver it
+    paths around the flank and ends at/behind the enemy (positioned to strike the rear -- the RED shock);
+    without it, the detachment advances straight and never gets behind. Capability test via the
+    detachment's final position relative to the defender (public).
+    [canonical: Cannae 216 BC double-envelopment; Khalid at Walaja; A.8 Envelopment -- the wrap to the rear.]"""
+    on = _envelop_reach(True)
+    off = _envelop_reach(False)
+    on_m = statistics.mean(on); off_m = statistics.mean(off)
+    on_behind = sum(1 for x in on if x < -1.0)
+    off_behind = sum(1 for x in off if x < -1.0)
+    passed = (on_m < off_m - 1.0) and (on_behind > off_behind) and (off_behind == 0)
+    return GoalResult("V-ENVELOP", passed, (round(on_m, 2), round(off_m, 2), on_behind, off_behind),
+                      "envelop pulls the detachment to the rear (much lower row-diff, some behind) vs straight (none behind)",
+                      "Cannae 216 BC; Khalid at Walaja",
+                      "reaching the rear enables the RED rear shock (A+B from behind)")
+
+
+GOALS = [v_cannae, v_fixing, v_shock, v_brace, v_envelop]
 
 
 def run_all():

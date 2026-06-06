@@ -185,3 +185,12 @@ One row per module. Trial detail in commit body + sim_verification_ledger.json.
   now isolate A (shock off).
 - scope: envelopment now decisive vs a vulnerable line via frontal-mass spillover; a detachment
   reaching the rear directly (no contact pair today) remains build C.
+
+## Build C -- envelop maneuver (around the flank to the rear)  [commit pending]
+- orchestration.py: PC_ENVELOP_PATH (default ON); envelop clause in advance_cells cell_target, gated by
+  the 'envelop' instruction -> inert for every existing scenario -> byte-exact (5/8,8/8,8/8; fuzz(120)
+  0 fail/0 degen). Two-phase: pass wide of the flank (clearance >= enemy frontage), then turn in to the
+  now-rear cells. Reuses the existing 2D steering + wheel.
+- validators.py: V-ENVELOP -- with the maneuver the detachment reaches the rear region (mean row-offset
+  ~0, behind in 7/20 seeds) vs straight advance (+3.9, 0/20). Reaching the rear enables the RED rear shock.
+- scope: routes reliably to the rear region; full per-seed rear lodgment is combat-dependent.
