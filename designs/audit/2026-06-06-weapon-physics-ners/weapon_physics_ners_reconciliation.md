@@ -112,6 +112,17 @@ The earlier R-FAIL ("mirror invariant broken") is **withdrawn** — it was the �
 
 ---
 
+## 8. Balance framing — context-gating (Jordan directive, 2026-06-06)
+
+Recorded per Jordan (design authority on balance structure). **Supersedes the reach-dominance framing in §6-§7.** Balance is **not** universal weapon parity.
+
+- **Context-gated.** Weapons and armour are gated by social venue — no poleaxe-and-full-plate fighter in a royal court. Each armour tier (A0 unarmoured -> A3 full plate) corresponds to a **context** (court / duel / battlefield) with its own admissible weapon+armour set. Balance is judged **within a context's real pairings**; gated-apart cross-context cells (staff vs mace, poleaxe vs rapier) are not balance targets.
+- **Lopsided is often correct.** A **dagger is not useful in most scenarios** (niche: concealment, grapple, armour-gap at the bind; court-carry for discreetness, not duelling). **Heavy, unbalanced weapons are bad for duels.** The engine producing those lopsided results is correct, bounded by the 95% upset cap - **not** a defect.
+- **Consequence:** the §6/§7 treatment of "reach-dominance collapsing strategic space" is **withdrawn as a defect.** Reach + venue-gating owning cross-weapon outcomes is intended. The live question for weapon physics/handling is **intra-context differentiation** - distinguishing similar-reach weapons that actually co-occur (court swords rapier/arming/sabre; the diagonal block of each tier's matrix) - not cross-reach matchups.
+- **Reference matrices.** Jordan's stratified weapon-pair matrices (A0/A1/A2/A3 + v3 A0/A3) and weapon_pair_matrix_reference.md are the **rough-guide** reference ("not perfect"). They **did not transfer to this session** (uploads empty; content not in context) and are **not reproduced here** - to be read and canonized on re-upload. `[GAP: matrix files absent - not fabricated]`
+
+---
+
 Citations:
   - designs/scene/combat_engine_v1/combatant.py
   - designs/scene/combat_engine_v1/core.py
