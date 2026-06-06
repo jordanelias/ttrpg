@@ -36,6 +36,39 @@ owns:
 - valoria-game/**
 working_state:
   next:
+  - 'D RESOLVED AS HONEST FINDING (NOT shipped -- shipping would be manufacture).
+    Verdict: D (pin/Anvil) is SUBSUMED; no clean non-redundant, gated-byte-exact,
+    NERS-necessary mechanic exists. Bottom-up evidence (this session, orchestration.py):
+    (1) the pin (`pinned`, L1508-1519) does ONE thing -- gates whether a cell may
+    reface; pinned -> cannot reface -> the flank/rear angle penalty lands. That IS
+    the anvil''s ''held-enemy -> flank-vulnerable'' function, already delivered +
+    extended by build A (fixed_by_other L1526). (2) stamina drain is ALREADY contact-proportional
+    (L210-211, ~1/cell) -> a ''pinned drains harder'' debuff double-counts. (3) the
+    one genuinely distinct lever -- denying the held enemy its between-turn stamina
+    recovery (BETWEEN_TURN_STAMINA_RECOVERY=30, L2133) -- is called ONLY in run_multi_turn_battle
+    / run_multi_unit_battle (L2200, L2555), NEVER in run_battle (L1898) that the validators
+    + calibrated counters use -> provably INERT in the validated path (this is the
+    documented prior 0.0000). Every D candidate is thus redundant, inert-in-validated-path,
+    or an arbitrary/calibration-touching debuff (a structural/canonical decision =
+    Jordan''s). Unlike A/B/C/E -- each gated cleanly on a NEW instruction/flag, stayed
+    byte-exact, and showed a measurable DISTINCT effect -- D has no such clean handle.'
+  - 'D PROPOSAL for Jordan (his structural/canonical call -- I did not ship any):
+    Variant 1 (recovery denial): an ''anvil'' instruction denies the pinned enemy
+    its between-turn stamina recovery -- distinct + grounded (du Picq: the held unit
+    can''t pull back to rest), byte-exact for single battle, but only matters in the
+    MULTI-TURN harness and needs a multi-turn validator + anvil-state tracking + a
+    canonical magnitude. Variant 2 (pin cohesion/discipline debuff, single-battle,
+    gated on ''anvil'' -> byte-exact): buildable like envelop/sweep BUT risks over-engineering
+    -- the pinned unit is already punished by A (flank) + B (shock) + contact stamina
+    drain; an extra debuff likely fails NERS-N (removing it would not worsen the model)
+    and has no canonical magnitude anchor. Variant 3 (recommended): rule D delivered
+    by pin + A and close it as done-by-A. Awaiting Jordan''s decision; I will build
+    Variant 1 or 2 on his approval of the calibration/magnitude/necessity.'
+  - 'SEQUENCE A-E FULLY SHIPPED + the deferred backlog cleared: A cb8b5844, B c2134e16,
+    C 40fe9845, E-volley aee3af04, archive-pass 63e8cb59, E-sweep 8b66f7f4. 8/8 validators
+    PASS. D = honest finding above (no manufacture). The archive pass + both E halves
+    were verified committed against the repo this session (orchestration PC_VOLLEY_TARGETING
+    x4 + PC_SWEEP x3; coverage_matrix 2817 tok, May stub-infill archived).'
   - 'BUILD E SHIPPED + COMMITTED aee3af04 (atomized archer volley targeting -- the
     MEANINGFUL rework, per Jordan ''Accept all, proceed carefully''). SUPERSEDES the
     earlier ''E is cosmetic'' finding: E was reworked from mere target-SELECTION (which
@@ -487,5 +520,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-06T20:39:23.590519+00:00'
+updated: '2026-06-06T21:15:06.764676+00:00'
 status: active
