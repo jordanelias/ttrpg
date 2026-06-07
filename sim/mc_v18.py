@@ -33,6 +33,7 @@ from dataclasses import dataclass, field
 from sim.autoload import game_state, victory, scene_slate
 from sim.provincial.faction_action import faction_take_action
 from sim.peninsular.season import run_season
+from sim.cross_scale import scene_dispatch
 
 
 DEFAULT_PARAMS = {
@@ -75,6 +76,11 @@ def _faction_actions_callback(world):
             faction_take_action(faction, world, world.rng)
         except Exception:
             pass  # action error — skip
+    # Scale seam (§4 zoom protocol): dispatch personal-scale scenes triggered by
+    # this season's world-state. Caller-side per season.py design. Side-effect-free
+    # on strategic stats until the context-derivation bridge lands — see
+    # sim/cross_scale/scene_dispatch.py GAP notes.
+    scene_dispatch.run_scene_phase(world, world.rng)
 
 
 def run_campaign(seed: int | None = None, max_seasons: int = 50,
