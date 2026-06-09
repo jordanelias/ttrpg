@@ -6,7 +6,10 @@ task:
     handoffs into one sectioned master across 4 work-streams; sources archived to
     archives/handoffs/. Reconcile: #1 cell-cap merged into mass-battle (#2). NO design
     decisions resolved — every Jordan-blocked call carried as OPEN.'
-last_commit: 'build D CLOSED done-by-A, committed 391f4a989ace66bfe252c33d3c9c90855d6c4cf3
+last_commit: 'aafdc05d8047 (2026-06-09) [editorial] ED-907..910 — command architecture,
+  echelon mapping, taxonomy reconciliation (supersedes ED-816 in part), phase-dependence.
+
+  PRIOR: build D CLOSED done-by-A, committed 391f4a989ace66bfe252c33d3c9c90855d6c4cf3
   (Jordan Variant 3, 2026-06-06). FULL SEQUENCE COMPLETE: A cb8b5844, B c2134e16,
   C 40fe9845, E-volley aee3af04, archive-pass 63e8cb59, E-sweep 8b66f7f4, D-closed
   391f4a98. 8/8 validators PASS; mass-battle maneuver layer (fix / shock / envelop
@@ -299,6 +302,8 @@ working_state:
     propagation_map owns-narrow, 7.2-followup, 1.20.'
   - (D) Continue Lane-C buildable stubs (6.3->6.5->8.1->1.16); CB-economy + resolver-dispute
     wait on Jordan.
+  - Decide ED-910 phase-dependence; resolve ED-909 residual mapping; scope the ED-816/engine
+    revamp (Horseshoe/RefusedFlank -> Unit-level).
   consolidation: 'Collated 5 active handoffs (collate->reconcile->consolidate). #1
     valoria-troops-in-cell-cap-decision merged into mass-battle stream (#2): identical
     last_commit 613a3e87, overlapping owns, #1=latest step. Other three are distinct
@@ -427,6 +432,14 @@ working_state:
     a Lane-B item + coordination flag.
   - No design/canon decision resolved during consolidation; all carried to blockers
     as OPEN (Jordan authority).
+  mass_battle_taxonomy_update_2026_06_09: 'ED-907..910 filed to canon/editorial_ledger.jsonl
+    (OID aafdc05d, 2026-06-09): ED-907 FM three-level command architecture (provisional,
+    fidelity-confirm pending); ED-908 echelon mapping (Unit=battalion=army / Subunit=company
+    / cell=squad) + formation/subformation distinction; ED-909 taxonomy reconciliation,
+    SUPERSEDES ED-816 in part (Horseshoe/RefusedFlank -> Unit-level Envelopment/Refused-Flank;
+    Line/Arrowhead/GappedLine stay Subunit; precedent Cannae/Leuctra/Leuthen); ED-910
+    phase-dependence finding (OPEN). Games-research reference doc optional, not yet
+    committed.'
 blockers:
 - '[OPEN - Jordan] (A) Ratify combat_engine_v1 -> 3 commits (canonize+canonical_sources
   / combat_v30 PARTIALLY SUPERSEDED / deprecate params/combat.md).'
@@ -444,6 +457,13 @@ blockers:
 - '[OPEN - Jordan] (C) lane-B 1.17 superseded-before-deletion verify (2 flagged branches).'
 - '[COORDINATION] coverage_matrix.md shared B/C/D (regenerate, don''t hand-merge);
   propagation_map.md owns-narrow (Lane A/B).'
+- 'OPEN ED-910 phase-dependence (filed 2026-06-09): Jordan decision pending — adopt
+  a light reactive-defensive-posture (playtest-gated) or drop the FM26 IP/OOP split
+  entirely.'
+- 'OPEN ED-909 residual (filed 2026-06-09): §A.6 dice-modifier ↔ geometric-shape mapping
+  unresolved; working hypothesis = orthogonal geometry × posture; needs a decision.'
+- 'NEXT ENGINE REVAMP (committed by ED-909, 2026-06-09): amend ED-816 + move Horseshoe/RefusedFlank
+  from Subunit.shape to Unit-level emergent presets — scoping plan in progress.'
 key_values:
 - 'Reserved ID maxima — ED: lane-B max 884 (<890); lane-C next 970 (970-999). PP:
   lane-B 726 (<727); lane-C next 780 (780-799). DO NOT collide.'
@@ -489,6 +509,10 @@ key_values:
   Counters preserved.'
 - 'DISCIPLINE 4-ROLE STATUS: morale-drop WIRED, cohesion-loss WIRED, cell-regroup
   EMPTY HOOK (reform_check), cell-support PARTIAL. Regroup is the open design item.'
+- ED-907 FM command architecture (provisional)
+- ED-908 echelon mapping Unit/Subunit/cell
+- ED-909 taxonomy reconciliation (supersedes ED-816 in part)
+- ED-910 phase-dependence (open)
 context_files:
 - path: designs/audit/2026-06-02-combat-engine/ratification_and_deprecation_proposal.md
   depth: full
@@ -527,5 +551,5 @@ context_files:
   reason: 'B: resolve_engagements (sigma head = breakthrough-primitive site), _lanchester_strength,
     node-cohesion _node_advance'
 created: '2026-06-04T04:45:50.955649+00:00'
-updated: '2026-06-06T21:32:10.648977+00:00'
+updated: '2026-06-09T20:54:20.467523+00:00'
 status: active
