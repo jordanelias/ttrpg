@@ -98,6 +98,7 @@ working_state:
   - win-computation-victory-2026-06-09 (this) — mass-battle/strategic + victory.
 created: '2026-06-09T21:00:16.752322+00:00'
 updated: '2026-06-09T21:00:16.752322+00:00'
-status: active
+status: closed
 key_values: []
 blockers: []
+closed_at: '2026-06-09T21:56:02.214354+00:00'
