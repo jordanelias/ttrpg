@@ -1308,6 +1308,17 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
                 f"  Markdown companion to the yaml registry must also stay in sync."
             )
 
+    # R7 (W1.5) value-formula consistency, soft-warn: derived_stats §14 is the authority
+    # for derived-value formulas. A non-derived_stats design doc that DEFINES one (e.g.
+    # "Composure = ...") is the F4-F7 drift class. Non-blocking advisory.
+    for _p, _c in additions:
+        if re.match(r'designs/.+\.md$', _p) and 'derived_stats' not in _p:
+            _r7 = sorted({m.group(1) for m in re.finditer(
+                r'\b(' + '|'.join(re.escape(n) for n in DERIVED_VALUE_NAMES) + r')\b\s*=\s*[^=\s]', _c)})
+            if _r7:
+                print(f"[HOOK \u26a0] R7 advisory: {_p} defines derived-value formula(s) {_r7}; "
+                      f"derived_stats \u00a714 is authoritative \u2014 ensure consistency (F4-F7 drift class).")
+
     # Sim fabrication check — catches uncited mechanical constants in sim files
     try:
         sim_fabrication_check(additions)
@@ -1434,6 +1445,7 @@ def propose_mechanic_gate(system: str) -> None:
 # Fixed context cost estimates
 _SYSTEM_OVERHEAD_TOKENS = 50_000
 _TOKENIZER_FACTOR = 1.35  # ecosystem_versions.yaml: this model emits ~1.35x tokens vs chars/4 (finding 4C.1/K5)
+DERIVED_VALUE_NAMES = ('Health', 'Stamina', 'Composure', 'Concentration', 'Thread Fatigue', 'Resolve', 'Garrison Strength', 'Local Economy')  # derived_stats §14.1 authority (R7 / W1.5)
 # Accounts for: project instructions (~8k), user prefs (~1.5k), SKILL.md (~4.5k),
 # conversation turns (30 avg * 1000 = 30k), tool output tokens (~3k buffer), safety margin (~3k).
 # Conservative by design — real usage is higher. When in doubt, close earlier.
