@@ -256,3 +256,9 @@ RESONANCE-STYLES GAP: partly resolved. Resonant Styles are canonical + Convictio
 Decision-queue additions:
 9.  W2.9 - descriptor-registry DOMAIN scope: one mechanism partitioned by domain vs parallel registries (recommend one + domain field).
 10. (read) player_agency §2 to enumerate Resonant Styles before W1.13 build.
+
+### §8.2-note (2026-06-06) — resonance_style is a DANGLING reference
+Read of player_agency_v30.md (the derived_stats §5.3 pointer target) found NO enumeration or
+definition of Resonant Styles. The term is referenced as Conviction-derived but never specified.
+GAP (Jordan): define the Resonant-Style members + the Conviction->style rule, OR mark vestigial.
+resonance_style remains a PLANNED registry KIND in §8.2, not yet buildable.
