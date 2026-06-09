@@ -1238,11 +1238,27 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
     design_docs = [p for p, _ in additions
                    if re.match(r'designs/.+_v30\.md$', p) and 'infill' not in p]
     if design_docs and 'references/canonical_sources.yaml' not in paths_in_commit:
-        errors.append(
-            f"CO-FILE: design docs changed {design_docs} but\n"
-            f"  references/canonical_sources.yaml not in commit.\n"
-            f"  Include if source authority changed."
-        )
+        # Calibration (W0.8): registration (canonical_sources) is required only for
+        # NEW design docs. Editing an existing (already-registered) design doc does
+        # not de-sync registration -> non-blocking advisory. Fail-closed: if existence
+        # is indeterminate, treat as NEW (hard error).
+        def _doc_exists(p):
+            try:
+                return bool(g.file_exists(p))
+            except Exception:
+                return False
+        _new = [p for p in design_docs if not _doc_exists(p)]
+        _edit = [p for p in design_docs if _doc_exists(p)]
+        if _new:
+            errors.append(
+                f"CO-FILE: NEW design docs {_new} require\n"
+                f"  references/canonical_sources.yaml in the commit (registration)."
+            )
+        if _edit:
+            print(
+                f"[HOOK \u26a0] CO-FILE advisory: existing design doc(s) edited without "
+                f"canonical_sources.yaml: {_edit} \u2014 update it iff authority/version changed."
+            )
 
     # Co-file: patch register content write → propagation_map
     # Index files (patch_register_index*.md) are excluded — they don't affect propagation.
