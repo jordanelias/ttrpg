@@ -77,8 +77,8 @@ design_threads:
     status: in_progress
     note: "combat_v32_proposal (state-graph reframe of v31, per Jordan 2026-05-28 vision). NERS improved, not-yet-compliant. F1/F2 fixed; F7/N4 addressed; F3/N1/N3/N5 open. Supersedes combat_v30 sections 1-4 on ratification. I-17 build-axis sim validating (8-module decomposition, 0271da2)."
   - id: faction-action-layer
-    status: decision_made_impl_pending
-    note: "Was the sole NON-COMPLIANT resolution system (R/S/E fail). Jordan 2026-05-29: resolver = AGGREGATE pool + monotonic Ob (FAC-F2 already ruled Ob=floor(stat/2)+1). Implementation pending: faction_layer resolution rewrite + ED-865/868 update."
+    status: resolved
+    note: "Was the sole NON-COMPLIANT resolution system (R/S/E fail). Jordan 2026-05-29: resolver = AGGREGATE pool + monotonic Ob (FAC-F2 already ruled Ob=floor(stat/2)+1). SUPERSEDED 2026-05-31 by ED-874 (d+sigma resolver RATIFIED, 'works well'); the 2026-05-29 'aggregate pool' framing was implemented as the d+sigma resolver. Residual: propagate d+sigma into faction_layer_v30 prose (W3.3)."
 
 resolved_decisions:
   - "D0 -- branch protection: LEAVE DISABLED (proven writable; direct commits 05-28/29). Validates striking the stale B6-blocked claim."
@@ -89,7 +89,7 @@ resolved_decisions:
   - "D6 -- scope-vocab unification: UNIFY (TASK_REQUIRED_FILES / SESSION_SCOPES / COMMIT_FORMAT -> one set). Impl: pending."
   - "OWN-1/2 -- LOCKED (Jordan, passC): MS net-decays by default; start MS=60 (resolves 60-vs-72 -> 60); passive Warden Mending exists but degradable. Propagation: annotate ms_trajectory + clock_registry (start 72->60); add Warden-interruption events."
   - "OWN-3 -- RESOLVED (passC): maintain = de-escalate + heal (no WC buff). Open piece -> pending (closure threshold)."
-  - "FR -- RESOLVED (Jordan 2026-05-29): faction-resolver = AGGREGATE the pool + smooth Ob monotonic in target strength. Kills the bare-stat small-pool binary (the R/S/E failure). Impl pending: faction_layer resolution rewrite + ED-865/ED-868 update."
+  - "FR -- RESOLVED (Jordan 2026-05-29): faction-resolver = AGGREGATE the pool + smooth Ob monotonic in target strength. Kills the bare-stat small-pool binary (the R/S/E failure). Implemented as the d+sigma resolver, RATIFIED 2026-05-31 (ED-874). Residual: faction_layer_v30 prose propagation (W3.3)."
   - "PT -- RESOLVED (Jordan 2026-05-29): RATIFY ED-844-856 + apply declared defaults (a/b/c, x/y/z). Execution pending: flip ED-844-856 status to ratified in a focused editorial turn."
   - "CMB -- DEFERRED (Jordan 2026-05-29): combat_v32 N3/N4/N5 moved to a dedicated combat-testing chat + I-17 build-axis sim; not decided here."
   - "OWN-3T -- RESOLVED (Jordan 2026-05-29): maintain-victory closure at a 1:2 damage:healing ratio -- one season of tearing requires two seasons of mending to undo (~2 seasons per wound-point; supersedes the 3.5-season estimate). Foundational Mend rate / site-wound counter tuned to this ratio (sim-tuning)."
@@ -99,11 +99,11 @@ resolved_decisions:
 pending_decisions:
   - "OWN-4 -- insurgency dissolution: confirm multi-path (military / sponsor-withdrawal / amnesty / persist); sponsor-withdrawal high-value add (only OWN-3T of the tail answered 2026-05-29)"
   - "OWN-5 -- defection cascade (B1.2/B1.3): build scheduling -- build as specced + fragility-multiplier + suppression-brake (still open)"
-  - "IDR -- ED-865/866/867 ID collision: cb32edb5 (engine-replacement) vs c93a36df (faction F1/F2) claim the same 3 IDs. Renumber direction is Jordan's call (recommend keep cb32edb5 at 865-867; renumber faction set to 874+)"
+  - "IDR -- ED-865/866/867 ID collision: cb32edb5 (engine-replacement) vs c93a36df (faction F1/F2) claim the same 3 IDs. RESOLVED: live ledger has 0 duplicate IDs; faction set renumbered to 874+ (ED-874); only ED-867 [SUPERSEDED-BY] markers remain (W3.7)."
 
 integrity_actions_open:
   - "Strike stale B6-blocked claim corpus-wide (PI + architecture [Jordan-settings] + audit docs)"
   - "Re-issue engine_replacement_reconciled finding register (strike GD-2 miscite ED-865; drop manufactured 0-P1 ED-866)"
   - "Add [SUPERSEDED-BY] markers to ners_verdict_faction + resolution_diagnostic_faction (corrected P=0.070/0.010, ED-867)"
   - "File staged ED backlog with de-dup across 24h-correction (868-877) + owner_decisions_1to5 + sql-index-and-ners"
-  - "Editorial ledger open load: 79 open + 94 ID-conflict + 20 _migration_partial"
+  - "Editorial ledger open load: 55 open, 0 ID-conflict (94-conflict resolved in JSONL migration), 0 _migration_partial (verified live ledger 2026-06-06)"
