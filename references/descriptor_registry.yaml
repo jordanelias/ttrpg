@@ -1,0 +1,114 @@
+# descriptor_registry.yaml
+# Single source of truth for all quantified-qualitative descriptors (W1.13).
+# Companion to core (the engine) AND key_substrate (the vectors): this registry DEFINES the
+# descriptor space; Keys carry instances. Systems bind descriptors BY KEY (name-indexed), so a
+# descriptor can be renamed / recategorized / extended HERE without rewriting any consumer.
+#
+# Decisions ratified 2026-06-06 (Jordan):
+#   W2.8  Body/Mind/Social aggregates -> PLACEHOLDERS (defined; not yet wired into derived values).
+#   W2.9  ONE registry mechanism, partitioned by `domain` (actor/settlement/equipment/environment).
+#   resonance_style -> DEPRECATED (was "most-persuasive mode of argument"; superseded by
+#         contest_style + Conviction-driven interpretation; never canonically enumerated).
+#   attribute roster -> 9 personal attributes (3 body / 3 mind / 3 social), IN FLUX:
+#         `name` is the current primary; `aliases` carry alternatives + LEGACY names so existing
+#         formula references back-resolve (this is what makes the roster cheap to churn).
+#
+# KIND: attribute_scalar | attribute_aggregate | faction_stat | settlement_stat |
+#       conviction_weight | ethical_axis | conviction_axis_map | orientation_scalar |
+#       contest_style | temperament_type | template
+# Entries that ALREADY have a canonical source doc are REGISTERED BY REFERENCE (source:) rather
+# than re-transcribed here -- the source doc stays authoritative (re-transcription = drift).
+
+version: v1
+ratified: 2026-06-06
+domains: [actor, settlement, equipment, environment]
+
+# ============================================================================
+# ATTRIBUTES (actor) -- DEFINED HERE. No prior single source existed; that gap is W1.13's reason.
+# Scalar 1-7. Roster IN FLUX: primary name + aliases (incl. legacy names for back-resolution).
+# ============================================================================
+attributes:
+  scale: "1-7"
+  default: 1
+  body:
+    - {key: attr.body.strength,  name: Strength,  aliases: []}
+    - {key: attr.body.endurance, name: Endurance, aliases: [Vitality]}
+    - {key: attr.body.agility,   name: Agility,   aliases: [Dexterity]}
+  mind:
+    - {key: attr.mind.focus,  name: Focus,  aliases: []}
+    - {key: attr.mind.acuity, name: Acuity, aliases: [Reasoning, Cognition]}   # [ASSUMPTION] legacy 'Cognition' folds to Acuity -- Jordan veto
+    - {key: attr.mind.will,   name: Will,   aliases: [Spirit]}                  # 'spirit move': formerly standalone Spirit; legacy formulas resolve via alias
+  social:
+    - {key: attr.social.attunement, name: Attunement, aliases: [Perception]}
+    - {key: attr.social.charisma,   name: Charisma,   aliases: [Influence, Presence]}
+    - {key: attr.social.bonds,      name: Bonds,      aliases: [Sincerity, Affability]}
+
+# AGGREGATES (W2.8 PLACEHOLDERS) -- computed from category members; NOT yet wired into derived values.
+aggregates:
+  entries:
+    - {key: agg.body,   name: Body,   compute: sum, members: [attr.body.strength, attr.body.endurance, attr.body.agility], status: placeholder}
+    - {key: agg.mind,   name: Mind,   compute: sum, members: [attr.mind.focus, attr.mind.acuity, attr.mind.will],          status: placeholder}
+    - {key: agg.social, name: Social, compute: sum, members: [attr.social.attunement, attr.social.charisma, attr.social.bonds], status: placeholder}
+  note: >
+    The legacy "Stat x 3" derived-value multipliers (e.g. Composure = Charisma x 3) are
+    dimensionally equivalent to a category aggregate (3 members summed). These placeholders let a
+    future migration (W3) define derived values off the aggregate and retire the ad-hoc multipliers.
+    NOT active until that migration; R7 + derived_stats §14 remain authoritative meanwhile.
+
+# ============================================================================
+# FACTION stats (actor/faction) -- scalar 1-7. Mandate is DERIVED, not a base descriptor.
+# ============================================================================
+faction_stats:
+  scale: "1-7"
+  source: params/factions/stats_1_7_scale.md
+  entries:
+    - {key: fac.influence, name: Influence}
+    - {key: fac.wealth,    name: Wealth}
+    - {key: fac.military,  name: Military}
+    - {key: fac.intel,     name: Intel}
+    - {key: fac.stability, name: Stability}
+  note: "Mandate is a size-weighted derived aggregate of settlement L/PS (settlement_layer §1.8) -- NOT a base attribute."
+
+# ============================================================================
+# SETTLEMENT stats (settlement domain).
+# ============================================================================
+settlement_stats:
+  source: "designs/territory/settlement_layer_v30.md §1.8"
+  entries:
+    - {key: set.legitimacy,      name: Legitimacy,       scale: "0-7"}
+    - {key: set.popular_support, name: Popular Support,  scale: "0-7"}
+    - {key: set.prosperity,      name: Prosperity,       scale: "0-5"}
+    - {key: set.defense,         name: Defense,          scale: "0-5"}
+    - {key: set.order,           name: Order,            scale: "0-5"}
+
+# ============================================================================
+# REGISTERED BY REFERENCE -- authoritative content stays in the source doc (no re-transcription).
+# ============================================================================
+by_reference:
+  - {key: "conv.*",  kind: conviction_weight,    name: "13 Convictions",                                         scale: "0-1 weight (vector)", scope: "actor + faction", source: "designs/personal/conviction_taxonomy_v30.md §2"}
+  - {key: "axis.*",  kind: ethical_axis,         name: "4 ethical axes (hierarchical/sacred/instrumental/traditional)", scale: "[-1,+1] basis",       source: "designs/personal/conviction_axis_matrix_v30.md / PP-687"}
+  - {key: map.conviction_axis, kind: conviction_axis_map, name: CONVICTION_AXIS_MATRIX,                           shape: "13x4",                source: "designs/personal/conviction_axis_matrix_v30.md §2"}
+  - {key: orient.self_other,   kind: orientation_scalar,  name: "Self-Other Orientation",                         scale: "[-1,+1]",             source: "designs/personal/conviction_taxonomy_v30.md §3"}
+  - {key: "style.*", kind: contest_style,        name: "Contest styles (Precedent/Suppression/Vision/Insinuation = Memory|Projection x Revealing|Obscuring)", effect: "style bonus die", source: "designs/scene/social_contest_v30.md (Step 2-3)"}
+  - {key: "temp.*",  kind: temperament_type,     name: "5 territory temperaments",                               value: "alpha (outcomes) + beta (conduct) weights", scope: "territory/faction (pop-weighted avg)", source: "designs/territory/territory_temperaments_v30.md §3.4.1"}
+  - {key: template.cultural_background, kind: template, name: "Cultural Background Templates (conviction-distribution presets)", source: "designs/personal/conviction_taxonomy_v30.md §5"}
+
+# ============================================================================
+# DEPRECATED.
+# ============================================================================
+deprecated:
+  - {key: resonance_style, reason: "Was the 'most-persuasive mode of argument'. Superseded by contest_style (social_contest Step 2-3) + Conviction-driven interpretation. Never canonically enumerated (player_agency §2 references but does not define it). Retired 2026-06-06 (Jordan)."}
+
+# ============================================================================
+# NOT DESCRIPTORS -- computed/bounded runtime containers (derived_stats §14). Listed so consumers
+# do not mistake them for registry-bound descriptors.
+# ============================================================================
+not_descriptors:
+  derived_values: [Health, Stamina, Composure, Concentration, Thread Fatigue, Resolve, Garrison Strength, Local Economy, Mandate]
+  tracks:  [Piety, Disposition, Renown, Standing, Persuasion]
+  clocks:  [Evidence, CI, MS, IP]
+  pools:   [Combat, Argue, Thread, Fieldwork, Knot, MassCombat, FactionDomain]
+  note: >
+    Computed/bounded FROM registered descriptors (derived_stats §14). The §14.1 derivation specs
+    (which attribute x what multiplier) are registry-ADJACENT data; a future step (W2.8 migration)
+    may hold them here so multipliers are data, not code.
