@@ -204,7 +204,7 @@ def create_world(seed: int | None = None) -> World:
     return World(
         factions=factions,
         territories=territories,
-        clocks={'CI': 30.0, 'MS': 80.0, 'PI': 0.0, 'Strain': 0.0, 'Turmoil': 0.0},
+        clocks={'CI': 30.0, 'MS': 60.0, 'PI': 0.0, 'Strain': 0.0, 'Turmoil': 0.0},
         rng=rng,
     )
 

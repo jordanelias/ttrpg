@@ -1,7 +1,7 @@
 """
-sim/personal/parliamentary_vote.py — Board-Game Parliamentary Vote (faction scale)
+sim/personal/parliamentary_vote.py — Parliamentary Vote (faction scale)
 
-Canon source: designs/scene/social_contest_v30.md §10 (Board Game Parliamentary Vote)
+Canon source: designs/scene/social_contest_v30.md §10 (Parliamentary Vote)
 Game Design constraints applicable: GD-3 (extra-parliamentary factions cannot cast
     Parliamentary votes — canon/02_canon_constraints.md §B GD-3)
 Status: [implemented: 2026-05-31 — §10 BG vote against social_contest_v30. Faction-scale
@@ -110,7 +110,7 @@ def _side_genre(decls: list) -> str | None:
 
 
 def run_parliamentary_vote(motion: Motion, parties: list, world, rng=None) -> VoteResult:
-    """Resolve a Board-Game Parliamentary Vote per social_contest_v30 §10.
+    """Resolve a Parliamentary Vote per social_contest_v30 §10.
 
     parties: list of VoteDeclaration. Eligible factions not listed Abstain. GD-3: factions
     with parliamentary == False are ineligible (excluded from the vote entirely).

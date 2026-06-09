@@ -8,6 +8,6 @@ Modules:
   - accounting: 13-step end-of-season cascade
   - ci_track: Church Influence world-track
   - rs_track: Rendering Stability world-track
-  - ms_track: Mass Suspension world-track
+  - ms_track: Mending Stability world-track
   - ip_track: Altonian Imperial Pressure world-track
 """

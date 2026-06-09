@@ -786,7 +786,7 @@ mechanics:
     canon_sources: ["params/core.md#MS Baseline Decay"]
     sim_module: sim/peninsular/ms_track.py
     test_status: not_implemented
-    notes: "Mass Suspension world-track. PP-255 baseline decay."
+    notes: "Mending Stability world-track. PP-255 baseline decay."
 
   ip_track:
     scale: peninsular

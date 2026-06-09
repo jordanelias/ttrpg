@@ -1,5 +1,5 @@
 """
-sim/peninsular/ms_track.py — Mass Suspension (MS) world-track
+sim/peninsular/ms_track.py — Mending Stability (MS) world-track
 
 Canon source: params/core.md §MS Baseline Decay (PP-255)
 
@@ -8,14 +8,13 @@ of −1 per in-game year applied at Year-End Accounting. Thread operations
 and Restoration sources adjust beyond baseline via apply_ms_delta.
 
 MS lives at world.clocks['MS'] per game_state schema. Initial value set
-at world creation (currently 80; canon defaults: TTRPG 60, BG 72 — see
+at world creation (set to 60 per Jordan 2026-06-06; the 60/72 mode-split is deprecated framing, prior 80 was ungrounded drift — see
 ASSUMPTION below).
 
-[ASSUMPTION: starting-value reconciliation deferred — basis: game_state
- currently initialises MS=80 which does not match canon's TTRPG 60 / BG 72
- defaults. This is pre-existing schema state and out of Tier 0 scope.
- ms_track operates on whatever value world.clocks['MS'] holds; corrections
- to starting state belong in a separate game_state commit.]
+[RESOLVED 2026-06-06 (Jordan): MS start = 60, set in game_state clocks. The
+ previous MS=80 was an ungrounded drift (matched neither canon default); the
+ 60/72 mode-split is deprecated framing. 60 chosen as the tightest buffer ->
+ most consequential Mending-Stability / Thread economy (most exciting).]
 
 [DRIFT: accounting._ms_decay (sim/peninsular/accounting.py L36-39) ALSO
  implements PP-255 baseline decay inline. This module is the canonical
@@ -49,8 +48,7 @@ MS_BASELINE_DECAY_PER_YEAR = -1
 SEASONS_PER_YEAR = 4
 
 # [canonical: §MS Baseline Decay — starting values by mode]
-MS_START_TTRPG = 60
-MS_START_BOARD_GAME = 72
+MS_START = 60  # videogame canonical (Jordan 2026-06-06); the prior 60/72 mode-split was deprecated framing
 
 
 def _clamp(value: float) -> int:
@@ -66,7 +64,7 @@ def apply_ms_baseline_decay(world) -> int:
     one year's decay unconditionally when called. Returns the new MS value.
     """
     # [canonical: §MS Baseline Decay (PP-255)]
-    current = world.clocks.get('MS', MS_START_TTRPG)
+    current = world.clocks.get('MS', MS_START)
     new_value = _clamp(current + MS_BASELINE_DECAY_PER_YEAR)
     world.clocks['MS'] = new_value
     return new_value
@@ -87,7 +85,7 @@ def apply_ms_delta(delta: int, source: str, world) -> int:
     """
     # [canonical: §MS Baseline Decay (PP-255) — "Thread operations accelerate
     #  this. Restoration sources can offset but not reverse baseline decay."]
-    current = world.clocks.get('MS', MS_START_TTRPG)
+    current = world.clocks.get('MS', MS_START)
     new_value = _clamp(current + delta)
     world.clocks['MS'] = new_value
     return new_value

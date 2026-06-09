@@ -109,7 +109,7 @@ def compute_domain_echo(degree: str, scope_met: bool, source_scene: dict, world=
             affected_faction=source_scene.get('actor_faction'),
             affected_stat=source_scene.get('most_relevant_stat'),
             delta=-1,
-            timing="scene_end",  # Full TTRPG / Register Shift mode (§5.3)
+            timing="scene_end",  # Full / Register Shift mode (§5.3)
             notes=["§5.2 Failure: -1 to acting faction's own stat"],
         )
 
