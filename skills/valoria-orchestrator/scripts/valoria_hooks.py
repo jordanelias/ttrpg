@@ -1433,6 +1433,7 @@ def propose_mechanic_gate(system: str) -> None:
 
 # Fixed context cost estimates
 _SYSTEM_OVERHEAD_TOKENS = 50_000
+_TOKENIZER_FACTOR = 1.35  # ecosystem_versions.yaml: this model emits ~1.35x tokens vs chars/4 (finding 4C.1/K5)
 # Accounts for: project instructions (~8k), user prefs (~1.5k), SKILL.md (~4.5k),
 # conversation turns (30 avg * 1000 = 30k), tool output tokens (~3k buffer), safety margin (~3k).
 # Conservative by design — real usage is higher. When in doubt, close earlier.
@@ -2118,7 +2119,7 @@ def write_checkpoint(task_scope: str,
     import json as _json
 
     token = g.get_session_token()
-    fetch_tokens = sum(len(c) for c in g._session_fetches.values() if c) // 4
+    fetch_tokens = int((sum(len(c) for c in g._session_fetches.values() if c) // 4) * _TOKENIZER_FACTOR)  # 4C.1/K5: calibrate chars/4 to this model tokenizer
     total_tokens = fetch_tokens + _SYSTEM_OVERHEAD_TOKENS
 
     frontmatter = {
@@ -2308,7 +2309,7 @@ def context_gate() -> None:
     """
     global _soft_warn_issued
 
-    fetch_tokens = sum(len(c) for c in g._session_fetches.values() if c) // 4
+    fetch_tokens = int((sum(len(c) for c in g._session_fetches.values() if c) // 4) * _TOKENIZER_FACTOR)  # 4C.1/K5: calibrate chars/4 to this model tokenizer
     total = fetch_tokens + _SYSTEM_OVERHEAD_TOKENS
 
     if total >= CONTEXT_HARD:
