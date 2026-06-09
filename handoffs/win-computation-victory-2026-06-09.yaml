@@ -1,0 +1,103 @@
+id: win-computation-victory-2026-06-09
+scope: design
+context_files:
+- path: designs/audit/2026-06-06-integration/win_computation_compilation.md
+  depth: full
+  reason: compiled win-computation call graph + corrected victory model + state graph
+- path: designs/audit/2026-06-06-integration/architecture_survey_stubs_scopes.md
+  depth: full
+  reason: 'integration survey: modular/keys/determinism confirmed + missing-stub +
+    scope map'
+- path: sim/autoload/victory.py
+  depth: full
+  reason: 'BUILD TARGET (step 1): replace GD-1 proxy with single peninsula-control
+    victory (elimination/subjugation)'
+- path: sim/autoload/game_state.py
+  depth: skeleton
+  reason: STARTING_OWNER (canonical territory), clocks (MS=60 Mending Stability),
+    STARTING_STATS
+- path: sim/personal/faction_action.py
+  depth: skeleton
+  reason: sequential-IF cascade = dominant balance lever (Varfell/Hafenmark unique-action
+    fall-through)
+- path: sim/provincial/massbattle.py
+  depth: skeleton
+  reason: _faction_to_unit differentiates only by power=round(Mil); ~1905L god module
+    to decompose
+- path: sim/cross_scale/domain_echo.py
+  depth: skeleton
+  reason: 208L IMPL but UNWIRED to faction-stat (dynamic-substrate step 2)
+- path: sim/world/miraculous_event.py
+  depth: skeleton
+  reason: worldly-events STUB ~21L (dynamic-substrate step 2)
+- path: canon/editorial_ledger.jsonl
+  depth: skeleton
+  reason: ED-306/ED-107 deprecations; grep specific EDs
+task:
+  skill: valoria-orchestrator
+  description: Win-computation compilation + victory-model correction + integration-architecture
+    survey for the sim/ package (mass-battle / strategic-layer + victory stream).
+    Parallel to the personal-combat-engine stream (weapon-physics-stage2-2026-06-05)
+    and the general work index (active-work-index-2026-06-04).
+last_commit: '2edf6432 (Mending Stability start 80->60; deprecated framing labels
+  stripped; "Mass Suspension"->"Mending Stability" naming drift fixed x3 to canon).
+  Chain: 2bbcd277 (compilation + state graph) -> c6bd8694 (N=120 stress) -> 5c1b8cf3
+  (ED-306 deprecated + doc corrected) -> 5ac0bb0b (survey) -> de080659 (ED-107 deprecated)
+  -> 2edf6432.'
+owns:
+- sim/**
+- designs/audit/2026-06-06-integration/**
+- canon/editorial_ledger.jsonl (ED-306, ED-107)
+working_state:
+  summary_done:
+  - Win-computation traced + compiled (win_computation_compilation.md + state graph).
+    2bbcd277.
+  - 'N=120 instrumented stress: GD-1 victory fires 0/120; mc_18 territory fallback
+    decides 100%. Shares Varfell 55.8 / Crown 36.7 / Church 6.7 / Hafenmark 0.8. c6bd8694.'
+  - 'Architecture survey: modular/keys/determinism/Godot-shape CONFIRMED; missing-stub
+    + scope map. 5ac0bb0b.'
+  - 'Cleanup: MS start 80->60; framing labels; MS naming drift -> Mending Stability
+    x3. 2edf6432.'
+  canonical_decisions_jordan:
+  - Per-faction victory NOT canon. ED-306 + ED-107 DEPRECATED. victory_architecture_v1.md
+    (ED-306 ref) does NOT exist.
+  - SOLE victory = peninsula control by eliminating OR subjugating (treaty) all rivals.
+    GD-1 is only a territorial PROXY, itself wrong/incomplete (PS never written; conquest
+    accord-2.5 self-defeats accord-everywhere).
+  - STARTING_OWNER (game_state.py, mc_17 lineage) is canonical territory assignment.
+  - 'Heuristic: board-game/TTRPG/hybrid most likely superseded; CARVE-OUT (design_doc_framing):
+    MECHANICAL DETAIL survives, only framing/victory/economy/identity deprecate. Sweep:
+    no board-game doc canonical, no designs/board_game/; 129 BG-tagged ledger entries
+    = historical origin-markers, NOT blanket-deprecated.'
+  - MS (Mending Stability) start = 60; single videogame value; 60/72 mode-split deprecated;
+    prior 80 ungrounded drift.
+  next:
+  - '1) victory.py: SINGLE peninsula-control victory (no rival unsubjugated = eliminated
+    OR treaty-bound). Read treaties + elimination status; RETIRE GD-1 proxy AND mc_18
+    territory fallback. Wire treaty.py (~157L IMPL, UNWIRED). Substrate ED-109/304/312
+    valid.'
+  - '2) Dynamic substrate: domain_echo.py (208L IMPL, UNWIRED) -> faction-stat; then
+    tactic_cards.py (STUB); then sim/world/miraculous_event.py (STUB).'
+  - '3) Mass battles use real faction state: massbattle._faction_to_unit only power=round(Mil)
+    -> map real state; decompose ~1905L massbattle.'
+  - 4) Varfell/Hafenmark unique actions are STUBS undispatched; faction_action sequential-IF
+    (not elif) -> fall-through gives ~65% Conquest vs Crown/Church ~35% = dominant
+    balance lever. Build OR change cascade to elif.
+  - '5) Housekeeping: unify scope vocab (D6); triage 32 stub + 28 untagged; fix game_state
+    spine-inversion docstring.'
+  carryover_nonblocking:
+  - 4 stale canonical sources -> freshness_gate.py --update.
+  - 'jsonl_ledger_gate: 22 pre-existing entries missing description/status + PP-NPC-*
+    ids.'
+  - abbreviation soft-warns BG/BO/CV/PW/RS unregistered (pre-existing ledger lines).
+  - ED-NNN ID-conflict backlog (~94, e.g. ED-865/866/867) -> Jordan adjudication.
+  parallel_active_handoffs:
+  - active-work-index-2026-06-04 (general) — work index; may need updating.
+  - weapon-physics-stage2-2026-06-05 (design) — personal-combat-engine; INCOMPLETE;
+    ORTHOGONAL.
+  - win-computation-victory-2026-06-09 (this) — mass-battle/strategic + victory.
+created: '2026-06-09T21:00:16.752322+00:00'
+updated: '2026-06-09T21:00:16.752322+00:00'
+status: active
+key_values: []
+blockers: []
