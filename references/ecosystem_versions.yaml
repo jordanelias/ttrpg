@@ -1,0 +1,31 @@
+# ecosystem_versions.yaml — pinned external-ecosystem versions
+# The freshness ECOSYSTEM TIER (W0.2; addresses session finding K5).
+# freshness_gate SHOULD flag when the running environment diverges from these
+# pins; owner action on divergence = recalibrate, never silently proceed.
+# Created 2026-06-06 (Wave 0).
+
+claude:
+  bootstrap_model: opus-4.8        # model running orchestrator/bootstrap
+  prior_model: opus-4.7            # superseded; token-undercount 4C.1 logged under 4.7
+  tokenizer_factor: 1.35           # actual tokens ~= (chars/4) * 1.35 for this model
+  notes: >
+    context_gate estimated chars//4 with no model factor, undercounting ~35%
+    (audit 4C.1); the 90% hard-stop was therefore not real. W0.1 applies this
+    factor to fetch-token estimates.
+
+godot:
+  version: "4.6"                   # valoria-game implementation target
+  notes: Resource/autoload assumptions in the §8.8 Godot mapping target 4.6.
+
+libraries:
+  python_stdlib: [urllib, json, base64, sqlite3, importlib]
+  yaml: pyyaml
+  notes: hooks/ops are stdlib-first; SQL index uses sqlite3; YAML stores use pyyaml.
+
+api_assumptions:
+  github_contents: "GET /repos/{repo}/contents/{path}?ref=main (base64)"
+  github_graphql: "createCommitOnBranch (branch protection disabled - D0)"
+
+review:
+  cadence: per-session at bootstrap (once wired into freshness_gate)
+  owner_action_on_divergence: flag + recalibrate
