@@ -1319,6 +1319,24 @@ def pre_commit_gate(additions: list, deletions: list = None) -> None:
                 print(f"[HOOK \u26a0] R7 advisory: {_p} defines derived-value formula(s) {_r7}; "
                       f"derived_stats \u00a714 is authoritative \u2014 ensure consistency (F4-F7 drift class).")
 
+    # R4 (W1.4) no-direct-write on derived aggregates, soft-warn: faction Mandate is a DERIVED
+    # aggregate of settlement L/PS (settlement_layer §1.8 / Jordan 2026-05-30), so a direct
+    # write/delta to it is the F1 drift class. Detects DELTA patterns only (Mandate -1, +=, ±Mandate,
+    # +1 Mandate); READS in formulas (Legitimacy = Mandate x 20, += Mandate x 5) do NOT match.
+    for _p, _c in additions:
+        if re.match(r'designs/.+\.md$', _p):
+            _r4 = []
+            for _nm in DERIVED_AGGREGATE_NAMES:
+                _e = re.escape(_nm)
+                _pats = [rf'{_e}\s*[+\-\u2212]=', rf'{_e}\s*[+\-\u2212]\s*\d',
+                         rf'[\u00b1]\s*{_e}', rf'[+\-\u2212]\s*\d+\s+{_e}\b']
+                if any(re.search(p, _c) for p in _pats):
+                    _r4.append(_nm)
+            if _r4:
+                print(f"[HOOK \u26a0] R4 advisory: {_p} appears to directly write/delta {_r4}; these are "
+                      f"DERIVED aggregates (faction Mandate = settlement L/PS, settlement_layer \u00a71.8 / "
+                      f"Jordan 2026-05-30) \u2014 mutate the source stats, not the aggregate (F1 drift class).")
+
     # Sim fabrication check — catches uncited mechanical constants in sim files
     try:
         sim_fabrication_check(additions)
@@ -1446,6 +1464,7 @@ def propose_mechanic_gate(system: str) -> None:
 _SYSTEM_OVERHEAD_TOKENS = 50_000
 _TOKENIZER_FACTOR = 1.35  # ecosystem_versions.yaml: this model emits ~1.35x tokens vs chars/4 (finding 4C.1/K5)
 DERIVED_VALUE_NAMES = ('Health', 'Stamina', 'Composure', 'Concentration', 'Thread Fatigue', 'Resolve', 'Garrison Strength', 'Local Economy')  # derived_stats §14.1 authority (R7 / W1.5)
+DERIVED_AGGREGATE_NAMES = ('Mandate',)  # derived aggregates never written directly: faction Mandate = settlement L/PS aggregate (settlement_layer §1.8 / Jordan ruling 2026-05-30). R4/W1.4. Candidates pending ontology confirmation: Garrison Strength, Local Economy.
 # Accounts for: project instructions (~8k), user prefs (~1.5k), SKILL.md (~4.5k),
 # conversation turns (30 avg * 1000 = 30k), tool output tokens (~3k buffer), safety margin (~3k).
 # Conservative by design — real usage is higher. When in doubt, close earlier.
