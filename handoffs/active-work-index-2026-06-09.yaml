@@ -1,0 +1,81 @@
+id: active-work-index-2026-06-09
+scope: general
+last_commit: 59622c0e (2026-06-09) [compilation] session consolidation master
+task:
+  skill: valoria-orchestrator
+  description: Session consolidation master (2026-06-09). Supersedes active-work-index-2026-06-04;
+    folds win-computation-victory-2026-06-09 + weapon-physics-stage2-2026-06-05; ADDS
+    the faction-stat-architecture stream (this session). FULL detail in designs/audit/2026-06-09-session-consolidation-master.md
+    (commit 59622c0e). No design decisions resolved — every Jordan-blocked call carried
+    as OPEN (see blockers).
+context_files:
+- path: designs/audit/2026-06-09-session-consolidation-master.md
+  reason: THE master — read first; Part A faction-stat (full), Part B other streams,
+    Part C/D cross-stream + OPEN register
+  depth: full
+- path: designs/audit/2026-06-09-faction-stat-architecture-review/
+  reason: 'faction-stat packet: review 575a9b96 / io 85e9a620 / ners 4127d1e1'
+  depth: skeleton
+- path: designs/audit/2026-06-09-faction-settlement-attribute-flattening/attribute_flattening.md
+  reason: full attribute flatten a9cc3101
+  depth: skeleton
+- path: archives/handoffs/active-work-index-2026-06-04_2026-06-09.yaml
+  reason: archived combat/mass-battle/martial detail (master B.1-B.2)
+  depth: skeleton
+- path: archives/handoffs/weapon-physics-stage2-2026-06-05_2026-06-09.yaml
+  reason: archived weapon-physics detail (master B.3)
+  depth: skeleton
+- path: archives/handoffs/win-computation-victory-2026-06-09_2026-06-09.yaml
+  reason: archived victory/integration detail (master B.4)
+  depth: skeleton
+working_state:
+  next:
+  - 'Faction-stat: make the inversion call (or sim Wealth/Mandate first), then staged
+    write-side migration (master A.5). Fresh chat recommended.'
+  - 'Combat: await Jordan ratify combat_engine_v1 (3 commits) + martial-traditions
+    D-alpha/beta/gamma/delta.'
+  - 'Mass battle: Jordan gauge band realignment + per-cell CAP -> unblock density-into-exchange;
+    ED-910/909.'
+  - 'Weapon-physics: Jordan three-regime constants + error params + defender-wound
+    + draw-rate -> re-baseline.'
+  - 'Victory: wire treaty.py (~157L UNWIRED) + territory fallback; per-faction victory
+    stays non-canon.'
+  - 'Editorial: resolve the ~94-ID conflict backlog (Jordan) -> clears canonization
+    for ALL streams.'
+  streams: A faction-stat (this session, master Part A) / combat-engine / mass-battle
+    / weapon-physics / victory (master Part B, folded from archived handoffs)
+  note: No design decisions resolved this session; every Jordan-blocked call carried
+    as OPEN.
+owns:
+- designs/audit/2026-06-09-**
+- sim/**
+- designs/scene/combat_engine_v1/**
+- designs/provincial/mass_battle_v30.md
+- designs/scene/derived_stats_v30.md
+- canon/editorial_ledger.jsonl
+blockers:
+- '[OPEN - Jordan] P1 STAR — resolve the ~94-ID editorial conflict backlog (ED-865/866/867
+  class); blocks canonization across faction-stat + combat + victory + weapon-physics.
+  Adjudicate / renumber later claimants.'
+- '[OPEN - Jordan] Faction-stat: adopt/reject the derived-stat inversion; DECIDE-1
+  Influence/Intel basis (national, not settlement); DECIDE-2 national-event-modifier
+  semantics; Intel expand-vs-fold; CI vs Influence-stat naming. (Or sim one stat first.)'
+- '[OPEN - Jordan] Combat: ratify combat_engine_v1 (3 commits) + martial_traditions
+  D-alpha(replace/coexist)/D-beta(count6)/D-gamma(grade V)/D-delta(naming).'
+- '[OPEN - Jordan] Mass battle: gauge band realignment (H3/H4 Horseshoe non-canonical)
+  + per-cell CAP + density/troop-role table + ED-910 phase-dependence + ED-909 residual
+  + discipline 4-role wiring.'
+- '[OPEN - Jordan] Weapon-physics: three-regime authority/MoI constants + concentration
+  error params + defender-side wound + draw-rate (~7% vs auto-tiebreak) + P3 calibrate-or-cut
+  (do NOT bulk-delete).'
+- '[OPEN - Jordan] Victory: wire treaty.py + territory fallback (per-faction victory
+  non-canon; ED-306/ED-107 deprecated).'
+key_values:
+- 'Reserved ID maxima — ED: lane-B max 884 (<890); lane-C next 970 (970-999). PP:
+  lane-B 726 (<727); lane-C next 780 (780-799). DO NOT collide.'
+- Command = round((2*Cha + Cog)/3) (ED-899).
+- 'Superseded+archived 2026-06-09: active-work-index-2026-06-04, win-computation-victory-2026-06-09,
+  weapon-physics-stage2-2026-06-05.'
+created: '2026-06-09T21:57:02.467401+00:00'
+updated: '2026-06-09T21:57:02.467401+00:00'
+status: active
