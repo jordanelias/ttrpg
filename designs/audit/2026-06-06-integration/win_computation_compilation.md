@@ -8,6 +8,8 @@
 
 ---
 
+> **[CORRECTION — 2026-06-06; supersedes the per-faction-victory framing in 1/3/5/6 below]** Per Jordan: **per-faction victory is NOT canon.** The sole victory is **peninsula control**, achieved by **eliminating all rival factions or subjugating them through diplomacy/treaties** — one universal condition. ED-306 (and its referenced `victory_architecture_v1.md`, which does not exist in the repo) are **deprecated** and must NOT be wired. The sim's GD-1 "11-of-15 + accord" is itself only a territorial *proxy* for peninsula control, not the true condition. Any passage below recommending that per-faction conditions be wired is retracted; read it as: implement the single peninsula-control victory (elimination / treaty subjugation). The elimination/treaty mechanics in ED-109/ED-304/ED-312 remain valid substrate.
+
 ## §0 — COMPILATION: what computes the win-percentages
 
 A campaign is `create_world(seed)` → up to 50 iterations of `season.run_season` → per-iteration GD-1 victory check → post-loop territory fallback if no GD-1 winner. `run_batch` tallies winners over N campaigns into a 4-faction share.
@@ -102,7 +104,7 @@ flowchart TD
 - `_GarrisonStub(Mil=1.5)` for uncontrolled defenders, `terrain=None`, `_faction_to_unit` constant command/discipline/morale/tier — all `[GAP]`-flagged minimum-viable defaults; they flatten every faction's combat profile down to `round(Mil)`.
 
 **Missing wires (designed, not connected):**
-- **Per-faction victory architecture (ED-306 / `victory_architecture_v1.md`) is UNWIRED.** Canon defines distinct win conditions (Crown TCV≥18+Mandate≥5+TC<50+IP<60+PI≥4; Church TC≥75→TCV≥18 w/ CV≥3; Hafenmark TCV≥14+Mandate≥4+PI≥5+Crown Mandate≤3; Varfell 3 paths; RM 5×CV≤1+RS≥40), each sustained 2 seasons. `victory.py` implements **only** GD-1 generic sovereignty and forbids any other victory function (docstring L8-9). The sim judges every faction by one territorial condition it was never designed around.
+- **The single peninsula-control victory is UNIMPLEMENTED; what exists is a territorial proxy.** Canon (Jordan 2026-06-06): the sole victory is controlling the peninsula by eliminating every rival or subjugating them via diplomacy/treaties. `victory.py` implements only GD-1 (`11/15 + accord≥2-all + PS≤6 + sustain`) — a territory-threshold *proxy* with neither an elimination terminal (a 0-territory faction merely stops acting) nor any treaty/subjugation path (the `world.treaties` registry exists but the victory check never reads it). [Per-faction victory (ED-306) is deprecated — not the canonical model; see correction banner.]
 - Govern's payoff path is wired but dead: it raises accord toward a GD-1 gate that never fires.
 - Scene seam: wired structurally, side-effect-free (the context-derivation bridge + outcome→echo mapping are unbuilt — separate audit).
 - Accounting outputs (CI/MS/insurgency/NPC) compute but feed nothing the win metric reads.
@@ -138,10 +140,10 @@ Net: a ~4-mechanism core (start-Mil/geography → conquest → battle → fallba
 
 ## §3 — PATCHES / COMPENSATORY METHODS (investigation)
 
-- **The fix is already designed.** `ED-306` (P1-BLOCKER, resolved 2026-04-06) + `designs/board_game/victory_architecture_v1.md` replace deed-checklists with **per-faction simultaneous-condition victories** (TCV threshold + faction-specific requirements, held 2 seasons). Companion balance rulings exist: `ED-109` (Crown victory deliberately hard — suppress all rivals), `ED-110/112` (Church gain vs Hafenmark suppression is a voluntary trade-off), `ED-111` (Varfell fast path accepted), `ED-304` (Church+Hafenmark partition co-victory), `ED-312` (Crown victory = rivals Mandate≤2 / eliminated / treaty), `ED-314` (Church seizure Ob corrected via PP-560). **None of this is wired into `sim/autoload/victory.py`** — the sim regressed to a single generic GD-1 sovereignty condition.
+- **The intended victory was mis-identified in the first draft of this doc.** ED-306's per-faction architecture is **deprecated** (not canon). The canonical model is the *single* peninsula-control victory; its *mechanics* do have canonical grounding — `ED-109` (suppress all rivals: eradication, surrender, or treaties), `ED-304` (negotiated partition / conditional co-victory), `ED-312` (rival Mandate≤2 / eliminated / Crown treaty). These describe elimination + diplomatic subjugation, the substrate the sim needs. **None of it is wired:** `victory.py` reads only territory/accord/PS, never `world.treaties` or rival-elimination status.
 - **Hafenmark's compensatory identity is unused.** `ED-077` gives Hafenmark a Wealth/trade sink (Trade Network Investment, PP-178); Hafenmark also starts with the highest W (5). The sim's win metric ignores W entirely, so Hafenmark's designed economic engine cannot compensate for its Mil deficit.
 - **No runtime compensation exists.** No rubber-banding, catch-up, handicap, or balance-calibration constant anywhere on the win path (grep over `sim/provincial`, `sim/peninsular`, `sim/autoload` clean). The imbalance is unmitigated by design *and* unmitigated at runtime.
-- **Implication:** remediation is largely *wiring*, not *invention* — connect `victory_architecture_v1` per-faction conditions (and the quantities they need: TCV, CV, Mandate, PI, IP, RS) into the victory check, rather than designing a new balance system.
+- **Implication:** remediation is to implement the *single* peninsula-control victory — win when no rival remains unsubjugated (every other faction eliminated **or** bound by a subjugating treaty), reading `world.treaties` + rival-elimination status and retiring the `11/15 + dead-PS` proxy and the territory fallback — not to wire per-faction conditions. No runtime compensation (rubber-band/handicap) exists, and the dynamic substrate (cards, worldly events, domain echoes) that would let non-Mil play matter is also absent.
 
 ---
 
@@ -157,7 +159,7 @@ Verdict first: **as a win model this is a territory-count tiebreaker wearing the
 - **Off-path apparatus invites false confidence.** CI, MS, insurgency, NPE, the scene seam, and the registries all run, suggesting a rich simulation; none influence the outcome. A reader auditing "what drives wins" could easily over-credit them.
 - **Determinism caveat is real but secondary.** Outcomes are `world.rng`-reproducible (good), but reproducibility of a mis-specified model just makes the wrong answer stable.
 
-Where the critique should *not* overreach (honest balance): the layering is clean, the engine is deterministic and byte-reproducible, and per the context-gating canon a skewed *peninsula-conquest* win-rate is not by itself illegitimate — factions need not be equally likely to take the whole peninsula. The defect is not "unequal percentages"; it is that the percentages are produced by the wrong mechanism (generic territory tiebreak) instead of the canonical per-faction victory paths, so they measure something no one designed.
+Where the critique should *not* overreach (honest balance): the layering is clean, the engine is deterministic and byte-reproducible, and per the context-gating canon a skewed *peninsula-conquest* win-rate is not by itself illegitimate — factions need not be equally likely to take the whole peninsula. The defect is not "unequal percentages"; it is that the percentages are produced by the wrong mechanism (generic territory tiebreak) instead of the canonical peninsula-control victory (elimination or diplomatic subjugation), so they measure something no one designed.
 
 ---
 
@@ -167,8 +169,8 @@ Holding the compilation (§0-1), the contribution ranking (§2), the patch recor
 
 1. **What the win-computation is, factually:** initial Mil/geography asymmetry → a conquest-dominated action loop differentiated only by `round(Mil)` and the unique-action fall-through → a territory-count fallback at the 50-season cap. GD-1 and the entire CI/MS/insurgency/NPE/scene apparatus are inert with respect to the winner.
 2. **Why the percentages look the way they do** (Varfell 55.8 / Crown 36.7 / Church 6.7 / Hafenmark 0.8): Varfell = Mil 4 + 65% conquest + favourable adjacency; Crown = Mil 4 + 6-territory start but 35% conquest; Church = Mil 4 but 1-territory start + non-territorial unique actions; Hafenmark = Mil 3 + only Mil-4 neighbours. The single instrumented certainty is GD-1 = 0/120, fallback = 100%.
-3. **The gap is implementation, not design.** The canonical victory architecture (ED-306) that would give each faction a distinct, designed path — and make Hafenmark's economy and Church's clock matter — exists and is simply not wired. The balance "defect" is downstream of that omission plus three local faults: the accord/conquest self-coupling, the `if`-cascade, and the dead PS input.
-4. **No contradictions to escalate** in the *factual* compilation (all code-grounded). The *design* tension (sim uses GD-1; canon mandates per-faction victory) is a real divergence to surface to Jordan, not for Claude to resolve unilaterally — it is a structural/ontological question (what *is* victory in Valoria) reserved to the owner.
+3. **The gap is implementation, not design.** The canonical model — one peninsula-control victory by elimination or diplomatic subjugation — is unimplemented (the sim has a territory-threshold proxy, no elimination terminal, no treaty path). What would let Hafenmark's economy and Church's influence matter is the *dynamic substrate* (cards, worldly events, domain echoes feeding faction stats; real faction-state → mass-battle inputs), all unwired. The balance "defect" is downstream of that, plus three local faults: the accord/conquest self-coupling, the `if`-cascade, and the dead PS input. (ED-306 per-faction victory is deprecated, not the design to wire.)
+4. **No contradictions to escalate** in the *factual* compilation (all code-grounded). The structural question — what *is* victory in Valoria — has been answered by the owner: peninsula control via elimination or diplomatic subjugation. The sim's GD-1 proxy and the deprecated ED-306 both diverge from it; the corrective is implementation, below.
 
 ---
 
@@ -182,19 +184,19 @@ The causal chain, end to end:
 
 **What this means for each finding class:**
 - *Function:* the live system is ~4 mechanisms (start-Mil/geography, conquest, battle = round(Mil), fallback). The rest of the per-season code is inert.
-- *Stubs/wires:* the dominant balance lever is an *unimplemented* feature (Varfell/Hafenmark unique actions) acting through an `if`-cascade; the designed fix (per-faction victory, ED-306) is unwired.
+- *Stubs/wires:* the dominant balance lever is an *unimplemented* feature (Varfell/Hafenmark unique actions) acting through an `if`-cascade; the true victory (single peninsula control by elimination/subjugation) and its dynamic substrate (cards, events, domain echoes, real mass-battle inputs) are unimplemented. (ED-306 per-faction victory is deprecated.)
 - *Calibration:* one dead input (PS/Turmoil), one self-defeating coupling (conquest accord vs GD-1 accord), one over-weighted term (territory ×10), zero runtime compensation.
 - *Adversarial:* the percentages measure a turn-50 territory tiebreak, not the canonical victory paths; reproducible but mis-specified.
 
 **Corrective direction (worst-first; for Jordan's decision, not unilateral action):**
-1. **Wire the canonical victory architecture** (`ED-306` / `victory_architecture_v1.md`) into `victory.py` — per-faction conditions, replacing sole-GD-1. Requires adding the quantities those conditions read (TCV, CV, Mandate≈L, PI, IP, RS) to the schema. This is the structural decision that subsumes most of the balance problem.
+1. **Implement the single peninsula-control victory** in `victory.py`: a faction wins when no rival remains unsubjugated — every other faction eliminated (0 territories / removed) **or** bound by a subjugating treaty. Read `world.treaties` (registry already exists) + rival-elimination status; retire both the GD-1 `11/15 + dead-PS` proxy and the territory-count fallback. Elimination/subjugation mechanics in ED-109/304/312 are the substrate. (Per-faction victory / ED-306 is deprecated, not wired.)
 2. **Resolve the accord/conquest self-coupling** so the territorial condition is reachable (e.g. AI governs conquered land, or conquest's accord penalty is bounded/recoverable within the sustain window).
 3. **Decide the unique-action fall-through**: implement Varfell/Hafenmark unique actions, or change the cascade to `elif` so the absence stops inflating their conquest rate. Either choice moves every reported percentage.
 4. **Fix the dead PS input** (write `Turmoil`/PS from accounting, or drop the condition) and the over-weighted fallback (or retire the fallback once real victory paths exist).
 5. **Make the off-path apparatus matter or mark it inert**: either route CI/MS/insurgency/NPE/economy into the (new) victory conditions, or annotate that they do not affect the winner so the model isn't over-read.
 6. **Resolve the `ED-107` vs `STARTING_OWNER` territory-assignment drift** (which is canonical for the videogame).
 
-Open structural/ontological questions reserved to Jordan: (a) is per-faction victory (ED-306) the intended win model for the videogame, superseding sole-GD-1; (b) is a skewed peninsula-conquest rate acceptable under context-gating, or should each faction be balanced toward its own victory path; (c) which territory assignment is canonical.
+Open question reserved to Jordan: which territory assignment is canonical (`ED-107` board-game vs the sim's `STARTING_OWNER` / mc_v17 lineage). [Resolved 2026-06-06: the win model is the single peninsula-control victory by elimination / diplomatic subjugation — not per-faction (ED-306 deprecated); a skewed conquest rate is moot once elimination/subjugation + the dynamic substrate are wired.]
 
 ---
 
@@ -210,4 +212,4 @@ Citations:
   - sim/autoload/season_manager.py
   - canon/editorial_ledger.jsonl (ED-306, ED-077, ED-107, ED-109..ED-113, ED-304, ED-312, ED-314)
   - canon/patch_register_active.yaml
-  - designs/board_game/victory_architecture_v1.md
+  - [note: designs/board_game/victory_architecture_v1.md, referenced by ED-306, does NOT exist in the repo]
