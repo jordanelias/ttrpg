@@ -202,9 +202,7 @@ Tier 3 chronicle generates on `mechanical.accounting` Key with `annual == true` 
 
 ### §4.2 Voice
 
-**Omniscient narrative voice.** The chronicle speaks of all factions, territories, and named NPCs from outside any single perspective. Per artifact 13 §2: this is the engine's narrative authority, distinct from the protagonist's interpretive frame at Tier 1.
-
-The voice is steady, periodically lyrical, factual about what happened, sparing in editorial. Reference: artifact 15 §2 (Almud Year 3 sample).
+The narrative voice canon is maintained as a single source in `designs/world/narrative_voice_canon_v30.md` §1 (Omniscient Chronicle Voice). This layer consumes it; the voice is not re-authored here.
 
 ### §4.3 Significance function for Tier 3
 

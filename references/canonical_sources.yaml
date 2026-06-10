@@ -267,6 +267,11 @@ systems:
 #   Propagated designs/arcs/gm_ref/arcs_10_18.md §Terminology (L17) + ED-NEW-7 row.
   # ── Stage 4 promotions (2026-04-25) — Solmund split + RWCE extraction ─────
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
+  narrative_voice_canon:
+    design_doc: designs/world/narrative_voice_canon_v30.md
+    canonical_sha__designs__world__narrative_voice_canon_v30_md: "53bd456928c87f086ad4987689c39944764b6d07"
+    status: provisional
+    added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'
   solmund_voice:
     design_doc: designs/world/solmund_voice_v30.md
     canonical_sha__designs__world__solmund_voice_v30_md: "eb7988c7f9b455e061a6e77f78e889574c9e4221"
