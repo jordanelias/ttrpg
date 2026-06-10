@@ -25,7 +25,7 @@
 
 version: 1
 generated: 2026-05-10
-total_skills: 14
+total_skills: 15
 
 skills:
 
@@ -255,6 +255,29 @@ skills:
     gating_hooks: []
     last_verified: 2026-06-01
 
+  - name: valoria-module-adjudicator
+    path: skills/valoria-module-adjudicator/SKILL.md
+    model: claude-opus-4-6
+    triggers:
+      - module contract
+      - wrapper conformance
+      - is this system keyed
+      - input/output keys
+      - adjudicate the architecture
+      - interface audit
+      - key wiring
+      - interdependency check
+      - does the graph close
+      - scale coverage
+      - enforce the wrappers
+      # NOT single-mechanic balance or resolver NERS (-> valoria-mechanic-audit /
+      # valoria-resolution-diagnostic); this skill judges the BOUNDARIES between systems
+    purpose: "Module-contract enforcement: every system as IN(Keys) -> resolver -> OUT(Keys) + bucket-classified state, recorded in references/module_contracts.yaml and machine-checked by scripts/contract_adjudicator.py (A1-A9: emit/consume closure vs Key Type Registry incl. family wildcards, derived-value write guard, cross-scale transition coverage, loop annotation, registry self-check) plus judgment checks J1-J3. Stages 0-4: scope -> extract (index-first; stubs carry zero edges) -> adjudicate -> verdict (per-module CONFORMANT/NON-CONFORMANT, graph CLOSED/OPEN, all-directions coverage, NERS-N mapping) -> enforce (remediation routed to the owning canon mechanism; re-run until clean or [OPEN - Jordan])."
+    scripts:
+      - skills/valoria-module-adjudicator/scripts/contract_adjudicator.py
+    gating_hooks: []   # Level-3/4 wiring proposed in SKILL.md Stage 4, not yet built
+    last_verified: 2026-06-10
+
 # ── Routing matrix (consumed by orchestrator) ────────────────────────────────
 # Maps user-intent phrases to (skill, modes/workflows). Authoritative for
 # orchestrator routing decisions; the markdown registry mirrors this for humans.
@@ -306,6 +329,13 @@ routing:
   - intent: "stress test resolution / small pool problem / death spiral / cliff check"
     skill: valoria-resolution-diagnostic
     modes: ["Stage 1 diagnostic only, or full pipeline"]
+
+  - intent: "module contract / wrapper conformance / adjudicate the architecture"
+    skill: valoria-module-adjudicator
+    modes: ["full pipeline Stage 0-4 (extract -> adjudicate A1-A9 + J1-J3 -> verdict -> enforce)"]
+  - intent: "key wiring / does the graph close / enforce the wrappers"
+    skill: valoria-module-adjudicator
+    modes: ["Stage 2-3 over existing contracts (assessor run + verdict)"]
 
 # ── Drift-detection notes ────────────────────────────────────────────────────
 # - Co-file enforcement at Level 4 prevents skills/SKILL.md changes from drifting

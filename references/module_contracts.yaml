@@ -1,0 +1,269 @@
+# references/module_contracts.yaml
+# Module wrapper contracts — every game system/mechanic as IN → resolver → OUT(+Keys).
+# Governed by skills/valoria-module-adjudicator/SKILL.md; machine-checked by
+# skills/valoria-module-adjudicator/scripts/contract_adjudicator.py (checks A1-A9).
+#
+# DISCIPLINE (normative, from the skill):
+#   - Edges are transcribed VERBATIM from canonical sources, including type strings
+#     canon names but the Key Type Registry lacks — those are findings to surface,
+#     never transcription errors to silently normalize.
+#   - status: stub == pointer only, ZERO edges. Stage-1 extraction fills stubs.
+#   - Wildcards mirror canon's own family-level statements ("da_outcome.*" etc.).
+#   - scales / resolver enums are [ASSUMPTION]-grade pending Jordan ratification;
+#     the assessor warns, never halts, on unknown members.
+#
+# Seeded 2026-06-09/10 from: key_substrate_v30 §8 (integration contracts),
+# key_type_registry_v30 (§1, families, §9, §10), scale_transitions_v30 (§1-§3, §5),
+# derived_stats_v30 §1/§11/§14 (bucket taxonomy; PROPOSAL status).
+
+schema_version: 1
+generated: "2026-06-10"
+status: SEEDED  # full-graph Stage-1 extraction pending; stubs below are unextracted
+
+modules:
+
+  # ── extracted (edges grounded in this session's reads) ──────────────────
+
+  - module: faction_state
+    doc: designs/provincial/faction_behavior_v30.md
+    scales: [provincial]
+    resolver: null
+    consumes:
+      - {type: "da.*", from: [domain_actions]}
+      - {type: "state.scar_acquired", from: [piety_track]}
+      - {type: "env.peninsular_strain_shock", from: [peninsular_strain]}
+    emits: []
+    state: []
+    transitions:
+      - {via: "scale_transitions §3.2 Personal → Faction / §5 Domain Echo"}
+    loops: []
+    gap_notes:
+      - "emits Keys on Mission shift / Cascade re-resolution / L-PS threshold
+         crossings (key_substrate §8.6) — type ids unnamed there; Stage-1
+         extraction from faction_behavior_v30 §4 required"
+      - "cascade also triggers on state.succession (§8.1) — producer not pinned
+         in §8; edge withheld rather than invented"
+      - "resolver archetype unconfirmed this session"
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.1, §8.6 [READ: 2026-06-10]"
+
+  - module: political_dynamics
+    doc: designs/provincial/political_dynamics_keys_migration_v30.md
+    scales: [personal, scene]
+    resolver: null
+    consumes:
+      - {type: "scene.*", from: [scene_slate, social_contest]}
+      - {type: "da.*", from: [domain_actions]}
+    emits:
+      - {type: "scene.dialogue", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "Procedures B/C emit scene_event / state_transition Keys with subtypes
+         unnamed in §8.3; Stage-1 extraction required"
+      - "resolver archetype unconfirmed this session"
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.3 [READ: 2026-06-10]"
+
+  - module: piety_track
+    doc: null
+    scales: [personal]
+    resolver: null
+    consumes:
+      - {type: "scene.witness", from: [scene_slate]}
+    emits:
+      - {type: "state.scar_acquired", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.4 [READ: 2026-06-10]"
+
+  - module: threadwork
+    doc: null
+    scales: [personal, thread]
+    resolver: null
+    consumes: []
+    emits:
+      - {type: "scene.thread_operation", terminal: false}   # not in registry — F2 class
+    state: []
+    transitions:
+      - {via: "scale_transitions §3.1 Personal → Thread"}
+      - {via: "scale_transitions §3.5 Thread → Faction"}
+      - {via: "scale_transitions §3.6 Thread → Mass"}
+    loops: []
+    gap_notes:
+      - "Coherence (depleting resource) and Thread pool not yet bucket-classified
+         here; Stage-1 extraction required"
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.4 [READ: 2026-06-10]"
+      - "scale_transitions_v30 §3.1/§3.5/§3.6 [READ: 2026-06-10]"
+
+  - module: fieldwork_knots
+    doc: null
+    scales: [personal, scene]
+    resolver: null
+    consumes:
+      - {type: "*", from: engine}   # Memory Query API (Bonds ≥ 5 prerequisite)
+    emits:
+      - {type: "meta.knot_formed", terminal: false}
+      - {type: "meta.knot_ruptured", terminal: false}
+    state: []
+    transitions:
+      - {via: "scale_transitions §3.9 Fieldwork ↔ All Systems"}
+    loops: []
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.4, §8.7 [READ: 2026-06-10]"
+      - "scale_transitions_v30 §3.9 [READ: 2026-06-10]"
+
+  - module: scene_slate
+    doc: null
+    scales: [scene]
+    resolver: null
+    consumes: []
+    emits:
+      - {type: "mechanical.scene_entered", terminal: false}
+      - {type: "scene.*", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.5 [READ: 2026-06-10]"
+
+  - module: social_contest
+    doc: designs/scene/social_contest_v30.md
+    scales: [scene]
+    resolver: dice_pool
+    consumes: []
+    emits:
+      - {type: "scene.dialogue", terminal: false}   # persuasion_track_displacement payload
+    state:
+      - {name: persuasion_track, bucket: track, writable: true}
+    transitions:
+      - {via: "scale_transitions §3.4 Scene → Faction (Domain Echo)"}
+    loops: []
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.5 (PP-683 signed -5..+5) [READ: 2026-06-10]"
+      - "scale_transitions_v30 §3.4 [READ: 2026-06-10]"
+
+  - module: mass_battle
+    doc: designs/provincial/mass_battle_v30.md
+    scales: [scene]
+    resolver: null
+    consumes: []
+    emits:
+      - {type: "scene_outcome.battle_concluded", terminal: false}
+        # transcribed verbatim from key_substrate §8.5; registry §7 type_id is
+        # scene.battle_concluded — cross-doc naming-form drift, Jordan to adjudicate
+      - {type: "scene.*", terminal: false}
+    state: []
+    transitions:
+      - {via: "scale_transitions §3.6 Thread → Mass"}
+      - {via: "scale_transitions §3.7 Mass → Personal (General Duel)"}
+      - {via: "scale_transitions §3.8 Scene → Mass"}
+    loops: []
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.5 [READ: 2026-06-10]"
+      - "scale_transitions_v30 §3.6-§3.8 [READ: 2026-06-10]"
+
+  - module: domain_actions
+    doc: null
+    scales: [provincial]
+    resolver: null
+    consumes: []
+    emits:
+      - {type: "scene.draft_da", terminal: false}   # not in registry — F2 class
+      - {type: "da.*", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
+
+  - module: peninsular_strain
+    doc: designs/provincial/peninsular_strain_v30.md
+    scales: [peninsula]
+    resolver: null
+    consumes: []
+    emits:
+      - {type: "env.peninsular_strain_shock", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
+
+  - module: articulation_layer
+    doc: designs/articulation/articulation_layer_v30.md
+    scales: [personal, scene, provincial]
+    resolver: null
+    consumes:
+      - {type: "*", from: engine}   # universal reader of the full Key stream
+    emits: []
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "significance function and any belief_revised emission path not extracted;
+         §8.7 names registry extensions, not articulation's own emit set"
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.7 [READ: 2026-06-10]"
+
+  # ── stubs (pointer only — Stage-1 extraction pending; NO edges) ─────────
+
+  - module: personal_combat
+    doc: null
+    scales: [personal]
+    status: stub
+    gap_notes:
+      - "no outcome Key type exists in the scene_outcome family for personal
+         combat (registry §7: contest/battle/investigation only) — F3 class;
+         combat engine docs live under designs/scene/combat_engine_v1/"
+
+  - module: victory
+    doc: designs/provincial/victory_v30.md
+    scales: [provincial, peninsula]
+    status: stub
+    gap_notes: ["state_reader candidate — reads aggregated state at Accounting"]
+
+  - module: campaign_architecture
+    doc: designs/architecture/campaign_architecture_v30.md
+    scales: [provincial]
+    status: stub
+    gap_notes: ["clock-spine candidate: mechanical.season_change / accounting /
+                 cascade_resolution emissions — extract before wiring"]
+
+  - module: settlement_layer
+    doc: designs/territory/settlement_layer_v30.md
+    scales: [settlement, territory]
+    status: stub
+
+  - module: ci_political
+    doc: designs/provincial/ci_political_v30.md
+    scales: [provincial]
+    status: stub
+
+  - module: npc_behavior
+    doc: designs/npcs/npc_behavior_v30.md
+    scales: [personal, scene]
+    status: stub
+    gap_notes: ["bidirectional via Conviction armature — extract emit/consume set"]
+
+  - module: clock_registry
+    doc: designs/provincial/clock_registry_v30.md
+    scales: [provincial]
+    status: stub
+    gap_notes: ["manifest, not a resolving system; staleness report exists at
+                 designs/audit/clock_registry_staleness_report.md"]
