@@ -13,7 +13,11 @@ THRESHOLDS = {
     "session_logs/index.md":                   2_000,
     # editorial store + file index moved to JSONL/SQL (2026-05-28 cutover);
     # editorial_ledger.jsonl is checked soft below; valoria_index.sql is generated.
-    "references/canonical_sources.yaml":       5_000,
+    # Interim: bumped 5_000 -> 12_000 to match the sanctioned interim cap in
+    # g.TOKEN_THRESHOLDS (633f5e57; canonical_sources rode 9k->12k pending the
+    # freshness SHA-split, roadmap K-2 / workplan LB-6). Returns to 5_000 when
+    # the 115 canonical_sha fields move to references/canonical_freshness.yaml.
+    "references/canonical_sources.yaml":      12_000,
     "skills/valoria-orchestrator/SKILL.md":    8_000,
     "canon/patch_register_active.yaml":       20_000,
     "tests/coverage_matrix.md":               5_000,
