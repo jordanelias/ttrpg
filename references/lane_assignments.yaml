@@ -11,7 +11,7 @@
 # This file is the enabler (workplan 5.11). Companion: references/id_reservations.yaml (5.10).
 # =====================================================================================
 version: 1
-updated: "2026-05-31"
+updated: "2026-06-09"
 source: "valoria_master_workplan_v2_2026-05-31 — Three-Lane Operating Model (item 5.11)"
 
 boundary_rule: >
@@ -52,13 +52,12 @@ lanes:
       Structural ledger ops (re-issue register, strike, supersede, dedup — items 1.2/1.7/1.13)
       are Lane A ONLY, so two lanes never rewrite the same existing ledger rows.
       editorial_ledger.jsonl is append-only; each lane appends only within its reserved ED range.
-    launch_ready: false
-    launch_blocker: >
-      Overlaps active handoff '2026-05-29-resolution-diagnostic-faction-ratifications' on
-      params/factions/stats_1_7_scale.md and several designs/{provincial,world} docs.
-      Track 1.1 (park combat-armature handoff, reconcile the faction handoff) must run first,
-      else check_handoff_conflicts(Lane A) is non-empty. (Verified this session.)
-
+    launch_ready: true
+    launch_blocker_resolved: >
+      [RESOLVED 2026-06-09] check_handoff_conflicts(Lane A owns) returns NONE this session.
+      The named overlap handoffs (2026-05-29-resolution-diagnostic-faction-ratifications;
+      combat-armature) were archived by the 2026-06-09 consolidation master, so Track 1.1 is
+      satisfied. Lane A is launch-ready.
   B:
     name: "Infrastructure / Tooling / Governance"
     bootstrap_scope: ["infrastructure"]
