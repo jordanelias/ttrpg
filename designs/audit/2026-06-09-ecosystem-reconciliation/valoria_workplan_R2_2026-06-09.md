@@ -1,3 +1,5 @@
+> **SUPERSEDED 2026-06-10 → `designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md`.** Phases A–E, the budget/stop rules, the approved C-1 trim + D-3 mechanism, and the Deferred/Triggered/Dropped/Principles sets are carried into v3; v3 §0 corrects this file's carried-docket staleness (combat-v32 ratify, OWN-4, OWN-5 — all resolved/built) and records A-1 as executed (residual → LB-1).
+
 # Valoria — Workplan R2
 **2026-06-09 (evening) · supersedes `valoria_delta_workplan_2026-06-09.md` (same-day session artifact, not separately committed; consolidated here)**
 status: proposed · as_of: ttrpg@26b5ecee (latest observed HEAD this session) · binds_to: `designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md` (Jordan-approved)

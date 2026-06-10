@@ -1,3 +1,5 @@
+> **SUPERSEDED 2026-06-10 → `designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md`.** The Jordan-approved content here (methodology, Waves 0–1, the K8 commission) is carried into v3 with live status — this file is frozen as the 2026-06-06 approved record; W-item IDs remain citable. Supersession per PI `<document_consolidation>`.
+
 # Valoria — Master Workplan (Capstone)
 **Consolidates and SUPERSEDES** `valoria_schematic_and_workplan.md` and `valoria_hygiene_methodology_and_rewrite.md` Part IV; folds the hierarchy map, wiring analysis, and F1–F3 proposal into one plan. **Status: APPROVED methodology + Waves 0–1 + K8 commission (Jordan 2026-06-06); execution PENDING (nothing committed this turn).**
 `[SELF-AUTHORED — bias risk: synthesizes my own session output. Mitigation: §0 records a fresh-canon double-check that overturned two of my prior claims; every item carries a source handle for traceability.]`
