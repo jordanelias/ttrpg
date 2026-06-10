@@ -1,6 +1,6 @@
 id: active-work-index-2026-06-09
 scope: general
-last_commit: b42aa03f (2026-06-10) [godot] Python->Godot conversion strategy v1
+last_commit: e471b694 (2026-06-10) [compilation] master workplan v3 (three-lane consolidation)
 task:
   skill: valoria-orchestrator
   description: Session consolidation master (2026-06-09). Supersedes active-work-index-2026-06-04;
@@ -30,6 +30,10 @@ context_files:
   depth: skeleton
 working_state:
   next:
+  - 'MASTER PLAN = designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md
+    (supersedes 06-06 capstone + R2; lane_assignments queues repointed to v3 LA-/LB-/LC-
+    IDs). Resume any lane via its v3 queue; Jordan docket = v3 SS5 (J-1..18, unblock-ordered;
+    top: J-2 registry type set, J-1 A6 downward model, J-6a/b Lane-C starters).'
   - 'Godot conversion: execute Gate-0 doc half (architecture.md v2 + supersession
     banners + sim/README repoint; Key v1->v2 field map), then spine build (S2), then
     first module ritual (S3; settlement_layer recommended, Jordan picks). Spec: designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md'
@@ -99,6 +103,9 @@ key_values:
   drift census D1-D8 (Key schema v1 P1), Gate-0 = Key v2 + doc consolidation + W3.4
   types + K8; parity = named draws + recorded-draw replay + Key-log equality; Godot
   4.6 pinned.'
+- 'Master workplan v3 e471b694: 06-06 capstone + R2 superseded (banners); R2 docket
+  de-staled (combat-v32/OWN-4 resolved, OWN-5 built->LC-5 sim); strategy errata recorded
+  (A1-A12, contracts v3, G0.4->ED-1009 set); lane_assignments entry queues = v3 IDs.'
 created: '2026-06-09T21:57:02.467401+00:00'
-updated: '2026-06-10T19:03:30.623927+00:00'
+updated: '2026-06-10T22:03:05.028052+00:00'
 status: active
