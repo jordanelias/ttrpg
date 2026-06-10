@@ -41,7 +41,7 @@ Workflow targets **the latest Opus** (Opus 4.8). `references/ecosystem_versions.
 
 | ID | Item | Notes |
 |---|---|---|
-| C-1 | **K-3, precise:** build **W1.6 exactly as approved** (supersession-citation check — cite a superseded_id → warn); **W1.7 trimmed** to one status vocabulary across artifact classes + `superseded_by` required when status=superseded | The trim is a **proposed amendment to approved item W1.7** (full "lifecycle state machine wired to commit primitives" → the two pieces a solo operator exercises) — **Jordan sign-off required**; the full machine becomes an escalation path (trigger: a transition error actually occurs). W1.6 is untouched. |
+| C-1 | **K-3, precise:** build **W1.6 exactly as approved** (supersession-citation check — cite a superseded_id → warn); **W1.7 trimmed** to one status vocabulary across artifact classes + `superseded_by` required when status=superseded | **W1.7 trim APPROVED — Jordan, 2026-06-09.** The full "lifecycle state machine wired to commit primitives" is amended to the two pieces a solo operator exercises (one status vocabulary + required `superseded_by`); full transition-legality enforcement moves to an escalation path (trigger: a transition error actually occurs). W1.6 builds exactly as approved, untouched. |
 | C-2 | ED-867 supersession markers | Was L-3; rides on C-1's vocabulary. |
 | C-3 | Fresh-context review as **soft policy, not gate**: canonical promotion of `canon/` files and hook code *recommends* a separate-session pass (`reviewed_by` field, soft-warn if absent) | Demoted from gate per feasibility — a mandatory two-session cycle on every promotion is friction a solo operator will route around. Honestly named: fresh-context review (kills context anchoring), not independent review. |
 
@@ -51,7 +51,23 @@ Workflow targets **the latest Opus** (Opus 4.8). `references/ecosystem_versions.
 |---|---|---|
 | D-1 | Execute the `designs/audit/` promotion (git mv live design work out; repoint co-files) | Was L-1; Jordan's 2026-06-05 flag. |
 | D-2 | Clear the 2 index-drift orphans; PI text fixes (bootstrap/manifests naming — `.jsonl` vs deleted `_summary.yaml`); finish the **W0.6** B6-strike corpus sweep | Was L-2 + D-1 + D-2 of the morning plan, one pass. The morning plan's "M4 → built" PI edit is **cut** — verification shows the PI's M4 text is already correct. |
-| D-3 | **Creative-tier path gate, soft-warn:** hook warns on session edits under declared creative/narrative path prefixes *absent explicit Jordan direction in-session* | Directory-prefix rule, not a front-matter field. Soft-warn, not block — collaborative content infill under Jordan's direction is the workflow, and the gate must honor it; what it catches is Claude *initiating* creative changes as a side effect of mechanical work. The creative-prefix list itself is **Jordan's to confirm** (tier boundaries are a canon-structure call). Verify whether any mixed-content files need relocation first; relocate only what's found. |
+| D-3 | **Creative-tier path gate, soft-warn — mechanism APPROVED, Jordan, 2026-06-09.** Hook warns on session edits under creative/narrative path prefixes *absent explicit Jordan direction in-session* | Directory-prefix rule, not a front-matter field. Soft-warn, not block — collaborative content infill under Jordan's direction is the workflow; what it catches is Claude *initiating* creative changes as a side effect of mechanical work. **Prefix set: see the D-3 block below** — the unambiguous-creative prefixes are confirmed; four mixed-boundary cases await Jordan rulings before the gate ships. |
+
+### D-3 — creative-tier prefix set (grounded in `ttrpg@main` tree walk, 2026-06-09)
+
+**Confirmed creative-tier** (soft-warn applies; narrative / character / world / metaphysics — Claude does not initiate edits here absent Jordan direction):
+- `designs/world/` — worldbuilding, geography, character histories, Solmund corpus, southernmost, calamity (22 files)
+- `designs/npcs/` — character canon + NPC analyses (18 files)
+- `designs/arcs/` — narrative scenario chains, arc analysis (39 files)
+- `canon/00_philosophical_foundations.md`, `canon/00_philosophical_foundations_rules.md`, `canon/01_foundations_amendment_self_rendering.md`, `canon/02_foundations_amendment_leap_mechanism.md`, `canon/03_canonical_timeline.md` — metaphysics + timeline
+
+**Explicitly NOT creative-tier** (regex false-positives ruled out by content/role): `params/history/*` (mechanical param patch-histories), `sim/world/*` (simulation code), `designs/audit/*` (audit artifacts *about* creative content, not the content), `canon/02_canon_constraints.md` + ledger + registers + `mechanics_index.yaml` (mechanical).
+
+**Four mixed-boundary cases — [OPEN — Jordan rulings] (gate does not ship until ruled):**
+1. `designs/articulation/articulation_layer_v30.md` — the articulation *layer* is a mechanical system spec, but its subject is omniscient-voice narrative generation. Gate it as creative, mechanical, or split?
+2. `designs/threadwork/threadwork_philosophical_reference_v30.md` (+ `_infill`) — a creative philosophical-reference file inside an otherwise-mechanical `threadwork/` dir. Per-file creative, dir stays mechanical?
+3. `designs/personal/character_generation_questionnaire_v30.md` — single character-content file in a mechanical dir. Per-file creative?
+4. `skills/prose-writer/` — voice/tone/literary tooling (a skill, not canon content). Include in the creative gate, or leave to skill governance?
 
 ## PHASE E — Implementation foundation as per-system ritual (begins alongside, not after, A–D)
 
