@@ -1,6 +1,7 @@
 id: active-work-index-2026-06-09
 scope: general
-last_commit: e471b694 (2026-06-10) [compilation] master workplan v3 (three-lane consolidation)
+last_commit: 10ceb530 (2026-06-10) [editorial] deprecation map + supersession register
+  8->17
 task:
   skill: valoria-orchestrator
   description: Session consolidation master (2026-06-09). Supersedes active-work-index-2026-06-04;
@@ -30,6 +31,13 @@ context_files:
   depth: skeleton
 working_state:
   next:
+  - 'DEPRECATION MAP committed 10ceb530: canon/supersession_register.yaml (17 entries,
+    hook-read by supersession_check) is the enforced "filed as deprecated" authority;
+    designs/audit/2026-06-10-deprecation-map/deprecation_map.md is the readable companion.
+    Only master workplan = v3; combat-v32 = the PROPOSAL lineage (v31/v32 proposals
+    + v32 NERS verdict) -> ratified combat_engine_v1 (combat_v30 is PARTIAL, lore
+    retained). Residuals: proposal in-file banners + move to deprecated/proposals/
+    = LB-13; wire register into bootstrap fetch = Lane-B propose-only (behind K-budget).'
   - 'MASTER PLAN = designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md
     (supersedes 06-06 capstone + R2; lane_assignments queues repointed to v3 LA-/LB-/LC-
     IDs). Resume any lane via its v3 queue; Jordan docket = v3 SS5 (J-1..18, unblock-ordered;
@@ -106,6 +114,10 @@ key_values:
 - 'Master workplan v3 e471b694: 06-06 capstone + R2 superseded (banners); R2 docket
   de-staled (combat-v32/OWN-4 resolved, OWN-5 built->LC-5 sim); strategy errata recorded
   (A1-A12, contracts v3, G0.4->ED-1009 set); lane_assignments entry queues = v3 IDs.'
+- 'Supersession register 10ceb530: 17 entries. combat-v32 != combat_engine_v1 (the
+  proposal line is deprecated -> the engine is canonical). combat_v30 recorded PARTIAL
+  only. weapon_axes_v2 NOT deprecated (live weapon-physics input, the other index-drift
+  orphan).'
 created: '2026-06-09T21:57:02.467401+00:00'
-updated: '2026-06-10T22:03:05.028052+00:00'
+updated: '2026-06-10T22:23:41.742374+00:00'
 status: active
