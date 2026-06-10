@@ -15,7 +15,7 @@
 #   design_threads[], integrity_actions_open[] (informational only).
 
 schema_version: 1
-updated: 2026-05-30
+updated: 2026-06-09
 source_workplan: "valoria-audit-workplan.md (Pass 2) + valoria-master-workplan-2026-05-29.md (consolidation pass)"
 current_phase: 2
 
@@ -74,13 +74,16 @@ phases:
 
 design_threads:
   - id: combat-v32
-    status: in_progress
-    note: "combat_v32_proposal (state-graph reframe of v31, per Jordan 2026-05-28 vision). NERS improved, not-yet-compliant. F1/F2 fixed; F7/N4 addressed; F3/N1/N3/N5 open. Supersedes combat_v30 sections 1-4 on ratification. I-17 build-axis sim validating (8-module decomposition, 0271da2)."
+    status: resolved
+    note: "[RECONCILED 2026-06-09: realized as combat_engine_v1, FULLY RATIFIED ED-900-904 + 06-06 cut-inert-seizure fix, Jordan-approved.] combat_v32_proposal (state-graph reframe of v31, per Jordan 2026-05-28 vision). NERS improved, not-yet-compliant. F1/F2 fixed; F7/N4 addressed; F3/N1/N3/N5 open. Supersedes combat_v30 sections 1-4 on ratification. I-17 build-axis sim validating (8-module decomposition, 0271da2)."
   - id: faction-action-layer
     status: resolved
     note: "Was the sole NON-COMPLIANT resolution system (R/S/E fail). Jordan 2026-05-29: resolver = AGGREGATE pool + monotonic Ob (FAC-F2 already ruled Ob=floor(stat/2)+1). SUPERSEDED 2026-05-31 by ED-874 (d+sigma resolver RATIFIED, 'works well'); the 2026-05-29 'aggregate pool' framing was implemented as the d+sigma resolver. Residual: propagate d+sigma into faction_layer_v30 prose (W3.3)."
 
 resolved_decisions:
+  - "OWN-4 -- insurgency dissolution: RESOLVED (ED-881; 2026-06-09 reconcile) -- 4-path model (military / sponsor-withdrawal / amnesty / persist) ratified to insurgency_pipeline_v30 6.2/6.3, RAND-validated; closes GD-3 R-FAIL. Was stale-pending in the 06-09 master."
+  - "OWN-5 -- defection cascade (B1.2/B1.3): RESOLVED (ED-1000; 2026-06-09; vetoable editorial-tier) -- build-as-specced + fragility-multiplier + suppression-brake; loop damped (0.5 spillover + strain -1/s + Suppress brake) and bounded (tier cap + finite membership) per Lesson 5. Mechanic build into npc_relational_graph_v30 7 / political_hierarchy B1.2-B1.3 STAGED as a PP."
+  - "COMBAT + VICTORY (2026-06-09 reconcile): combat_engine_v1 FULLY RATIFIED -- ED-900/901/902/903/904 (Jordan comprehensive approval 2026-06-04) + 06-06 cut-inert-seizure fix; params/combat.md deprecated. Per-faction victory STRUCK by GD-1 (2026-05-17) -> universal Peninsular Sovereignty; treaty.py wiring is the only open victory work. Both were stale-pending in the 06-09 master."
   - "D0 -- branch protection: LEAVE DISABLED (proven writable; direct commits 05-28/29). Validates striking the stale B6-blocked claim."
   - "D2 -- M3 completeness_gate: CUT (chat-side discipline + in-code TASK_REQUIRED_FILES substitute). Impl: PI/arch text."
   - "D3 -- M4 citation enforcement: SOFT-WARN (pre_commit_gate regex, non-halting). Impl: pending in valoria_hooks.py + PI text."
@@ -97,8 +100,6 @@ resolved_decisions:
   - "LIC -- RESOLVED (Jordan 2026-05-29): LICENSE created (all-rights-reserved, (c) 2026 Jordan Elias) for GOV-08 / ED-788. Mirror to valoria-game pending Jordan confirm."
 
 pending_decisions:
-  - "OWN-4 -- insurgency dissolution: confirm multi-path (military / sponsor-withdrawal / amnesty / persist); sponsor-withdrawal high-value add (only OWN-3T of the tail answered 2026-05-29)"
-  - "OWN-5 -- defection cascade (B1.2/B1.3): build scheduling -- build as specced + fragility-multiplier + suppression-brake (still open)"
   - "IDR -- ED-865/866/867 ID collision: cb32edb5 (engine-replacement) vs c93a36df (faction F1/F2) claim the same 3 IDs. RESOLVED: live ledger has 0 duplicate IDs; faction set renumbered to 874+ (ED-874); only ED-867 [SUPERSEDED-BY] markers remain (W3.7)."
 
 integrity_actions_open:
