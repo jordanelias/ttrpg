@@ -1824,6 +1824,19 @@ def write_handoff(handoff: dict, extra_additions: list = None) -> str:
     handoff.setdefault('key_values', [])
     handoff.setdefault('blockers', [])
 
+    # LB-1: stamp the repo tip this handoff describes, captured mechanically
+    # rather than operator-asserted. Taken BEFORE the handoff's own commit, so
+    # as_of names the last real-work commit the handoff reflects — not the
+    # bookkeeping commit about to be written. A resuming session compares as_of
+    # against live HEAD to tell whether other lanes have moved past this handoff.
+    # Overwrites any caller-supplied as_of: the field is ground truth, not input.
+    try:
+        handoff['as_of'] = get_head_oid(repo='ttrpg')
+    except Exception as e:
+        handoff['as_of'] = handoff.get('last_commit', 'unknown')
+        print(f"[HANDOFF WARN] could not capture as_of HEAD ({e}); "
+              f"fell back to last_commit={handoff['as_of']}")
+
     path = f"{HANDOFF_DIR}/{hid}.yaml"
     content = yaml.safe_dump(handoff, default_flow_style=False,
                              sort_keys=False, allow_unicode=True)
@@ -1931,6 +1944,17 @@ if blockers:
 last = handoff.get(\'last_commit\')
 if last:
     print(f\'\\nLast commit: {{last}}\')
+as_of = handoff.get(\'as_of\')
+if as_of:
+    try:
+        _live = g.get_head_oid()
+        if _live == as_of:
+            print(f\'\\nAs-of HEAD:  {{as_of}}  [CURRENT — repo unchanged since handoff]\')
+        else:
+            print(f\'\\nAs-of HEAD:  {{as_of}}\')
+            print(f\'             repo HEAD now {{_live}} — commits landed since this handoff was written\')
+    except Exception:
+        print(f\'\\nAs-of HEAD:  {{as_of}}  [could not compare to live HEAD]\')
 print(f\'\\nContext loaded: {{len(files)}} file(s)\')
 missing = [cf[\'path\'] for cf in handoff.get(\'context_files\', [])
            if cf[\'path\'] not in files]
