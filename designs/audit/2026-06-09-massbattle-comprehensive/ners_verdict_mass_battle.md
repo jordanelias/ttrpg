@@ -10,3 +10,5 @@
 | **S** Sufficiency | **PASS** — all §A.4/§A.12 state graded+live; tactics/terrain GAPs re-framed onto FM route (ED-907/909) | **PARTIAL** — tri-strata doc drift (ED-899 FOLLOW-UP unapplied); F1/F2 P2 hygiene defects |
 
 **Overall: COMPLIANT-WITH-BACKLOG.** Backlog composition has shifted from mechanical defects (05-28: MB4/MB7/MB9/stalemate/stratagem — all now closed in canon) to documentation reconciliation + three named gates. Properties P-i…P-v verified by exact convolution; P-ii holds in the continuous target with a characterized discrete tie-breaking nuance (F5). No P1 findings. Findings F1–F12 and re-tests 1–6 in the comprehensive analysis; ledger candidates ED-970/971 staged there (§8), not appended, per ★ID-conflict counsel.
+
+**Amendment (same session, 2026-06-09):** the flatmap critique (massbattle_flow_state_flatmap_critique.md) revises **P-iv to PASS-WITH-EXCEPTIONS** (PP-683 cap exception unwired; reform unreachable in-engagement) and adds **N1 (no canonical gate-vector manifest)** to the R flags. Overall verdict unchanged.
