@@ -61,7 +61,8 @@ blockers:
 - '[OPEN - Jordan] Combat martial_traditions D-alpha (replace/coexist) / D-beta (count=6)
   / D-gamma (grade ''V'') / D-delta (in-world naming). Engine itself FULLY RATIFIED
   (ED-900-904 + 06-06 ''cut inert seizure'' fix, all Jordan-approved); only these
-  4 design sub-decisions remain. D-delta is creative-layer (Jordan).'
+  4 design sub-decisions remain. D-delta is creative-layer (Jordan). [HANDLED BY PARALLEL
+  COMBAT/SIM SESSION per Jordan 2026-06-09 - this session stays off it.]'
 - '[OPEN - Jordan] Mass battle: band realignment (H3/H4 Horseshoe) + per-cell CAP
   (gates density-into-exchange) + ED-910 phase-dependence + ED-909 mapping + discipline
   4-role wiring.'
@@ -69,9 +70,9 @@ blockers:
   defender-wound + draw-rate + P3 calibrate-or-cut.'
 - '[OPEN - Jordan] Victory: wire treaty.py (~157L, unwired) + territory fallback.
   Per-faction victory STRUCK (GD-1 2026-05-17) -> confirmed, NOT to be wired.'
-- '[STAGED - build] OWN-5 defection cascade RESOLVED (ED-1000, vetoable): build-as-specced
-  + fragility-multiplier + suppression-brake; author mechanic into npc_relational_graph_v30
-  §7 / political_hierarchy B1.2-B1.3.'
+- '[BUILT - sim-pending] OWN-5 defection cascade BUILT into npc_relational_graph_v30
+  section-7/8 (5a8a5461; ED-1000 decision / ED-1001 build). SIM-DEFECT (Lane C) testing
+  pending; magnitudes not yet load-bearing.'
 key_values:
 - 'RECONCILED 2026-06-09 (token 0912f834): consolidation master carried STALE pre-resolution
   status. Verified vs live canon: (1) ~94-ID conflict RESOLVED (live ledger 639 entries,
@@ -85,5 +86,5 @@ key_values:
 - 'Superseded+archived 2026-06-09: active-work-index-2026-06-04, win-computation-victory-2026-06-09,
   weapon-physics-stage2-2026-06-05.'
 created: '2026-06-09T21:57:02.467401+00:00'
-updated: '2026-06-10T01:13:07.547845+00:00'
+updated: '2026-06-10T03:02:47.393615+00:00'
 status: active
