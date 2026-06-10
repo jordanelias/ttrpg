@@ -120,7 +120,7 @@
 - Model: Opus 4.6
 - Triggers: module contract, wrapper conformance, is this system keyed, input/output keys, adjudicate the architecture, interface audit, key wiring, interdependency check, does the graph close, scale coverage, enforce the wrappers
 - Stages: 0 (scope) 1 (extract — index-first reads; stubs carry zero edges) 2 (adjudicate — machine checks A1-A9 + judgment J1-J3) 3 (verdict — per-module CONFORMANT/NON-CONFORMANT, graph CLOSED/OPEN, all-directions coverage table, NERS-N mapping) 4 (enforce — remediation routed to owning canon mechanism, re-run until clean or [OPEN — Jordan])
-- Scripts: `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py` (tests: `tests/contracts/test_contract_adjudicator.py`)
+- Scripts: `skills/valoria-module-adjudicator/scripts/contract_adjudicator.py` (tests: `tests/contracts/test_contract_adjudicator.py`); `contract_flowchart.py` (derived views: flowchart / state graph / flattened pipeline map)
 - Contract registry: `references/module_contracts.yaml` (anchored in canonical_sources)
 - Note: judges the BOUNDARIES between systems, not single-mechanic balance (that is valoria-mechanic-audit / valoria-resolution-diagnostic). Code-architecture sibling of valoria-canon-guard's prose-canon conformance. PP refs: key_substrate §2.3/§4/§8, key_type_registry §10, scale_transitions §3/§5, derived_stats §11.
 

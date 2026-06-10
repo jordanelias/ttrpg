@@ -1,0 +1,176 @@
+flowchart TB
+  subgraph sg_faction_state["faction_state"]
+    faction_state_x(("faction_state"))
+    q1[/"Mandate : derived_value"/]
+    q2[/"Treasury : derived_value"/]
+    q3["faction stats 1-7 : track"]
+  end
+  q1 -.->|reads| faction_state_x
+  q2 -.->|reads| faction_state_x
+  faction_state_x -->|writes| q3
+  subgraph sg_npc_behavior["npc_behavior"]
+    npc_behavior_x(("npc_behavior"))
+    q4["beliefs/opinions : track"]
+    q5["concerns : track"]
+    q6["projects : track"]
+    q7["arc state : track"]
+  end
+  npc_behavior_x -->|writes| q4
+  npc_behavior_x -->|writes| q5
+  npc_behavior_x -->|writes| q6
+  npc_behavior_x -->|writes| q7
+  subgraph sg_piety_track["piety_track"]
+    piety_track_x(("piety_track"))
+    q8["conviction scars : track"]
+  end
+  piety_track_x -->|writes| q8
+  subgraph sg_territorial_piety["territorial_piety"]
+    territorial_piety_x(("territorial_piety"))
+    q9["CV (per-territory Piety) : track"]
+    q10[("CI (Church Influence) : clock")]
+    q11[("TC (Theocracy Counter) : clock")]
+  end
+  territorial_piety_x -->|writes| q9
+  territorial_piety_x -->|writes| q10
+  territorial_piety_x -->|writes| q11
+  subgraph sg_threadwork["threadwork"]
+    threadwork_x(("threadwork"))
+    q12(["Coherence : pool"])
+    q13["Thread Fatigue : track"]
+  end
+  threadwork_x -->|writes| q12
+  threadwork_x -->|writes| q13
+  subgraph sg_fieldwork_knots["fieldwork_knots"]
+    fieldwork_knots_x(("fieldwork_knots"))
+    q14["knot strain : track"]
+    q15["Bonds : track"]
+    q16[("Evidence Track : clock")]
+    q17["Disposition Track : track"]
+  end
+  fieldwork_knots_x -->|writes| q14
+  fieldwork_knots_x -->|writes| q15
+  fieldwork_knots_x -->|writes| q16
+  fieldwork_knots_x -->|writes| q17
+  subgraph sg_social_contest["social_contest"]
+    social_contest_x(("social_contest"))
+    q18["persuasion_track : track"]
+  end
+  social_contest_x -->|writes| q18
+  subgraph sg_peninsular_strain["peninsular_strain"]
+    peninsular_strain_x(("peninsular_strain"))
+    q19[("Turmoil : clock")]
+    q20[("IP (Institutional Pressure) : clock")]
+  end
+  peninsular_strain_x -->|writes| q19
+  peninsular_strain_x -->|writes| q20
+  subgraph sg_settlement_layer["settlement_layer"]
+    settlement_layer_x(("settlement_layer"))
+    q21["Prosperity / Defense / Order : track"]
+    q22[/"Local Economy / Garrison Strength / Public Order : derived_value"/]
+    q23["Legitimacy (L) / Popular Support (PS) : track"]
+    q24[/"province Accord : derived_value"/]
+  end
+  settlement_layer_x -->|writes| q21
+  q22 -.->|reads| settlement_layer_x
+  settlement_layer_x -->|writes| q23
+  q24 -.->|reads| settlement_layer_x
+  subgraph sg_ci_political["ci_political"]
+    ci_political_x(("ci_political"))
+    q25[("CI (Church Influence) : clock")]
+    q26(["faction political pool : pool"])
+    q27["card hands / cooldown : track"]
+  end
+  q25 -.->|reads| ci_political_x
+  ci_political_x -->|writes| q26
+  ci_political_x -->|writes| q27
+  subgraph sg_victory["victory"]
+    victory_x(("victory"))
+    q28[("MS / IP / CI / Turmoil / Accord / Mandate / PV / PT reads : clock")]
+  end
+  q28 -.->|reads| victory_x
+  subgraph sg_engine_clock["engine_clock"]
+    engine_clock_x(("engine_clock"))
+    q29[("season counter : clock")]
+  end
+  engine_clock_x -->|writes| q29
+  MS[("Mending Stability (MS) : clock — NO owning module in contracts")]
+  subgraph DERIV["DERIVATIONS (calculations — authored from cited reads)"]
+    d0_s["settlement Order"] -->|"floor(mean settlement Order)"| d0_t[/"province Accord"/]
+    %% settlement_layer_v30 §1.3
+    d1_s["Prosperity"] -->|"Prosperity × 50"| d1_t[/"Local Economy"/]
+    %% settlement_layer_v30 §1.3
+    d2_s["Defense (+ Fort Level)"] -->|"Defense × 20 + Fort × 30"| d2_t[/"Garrison Strength"/]
+    %% settlement_layer_v30 §1.3
+    d3_s["settlement Order"] -->|"Order × 20 (riot events below 0)"| d3_t[/"Public Order"/]
+    %% settlement_layer_v30 §1.3
+    d4_s["L_s, PS_s, W_s"] -->|"q_s = 0.5L + 0.5PS"| d4_t[/"faction Mandate"/]
+    %% settlement_layer_v30 §1.8 LPS-2e
+    d5_s["faction Mandate"] -->|"drift ±1/settlement/season toward Mandate (damped)"| d5_t[/"settlement L/PS"/]
+    %% settlement_layer_v30 §1.8
+    d6_s["settlement Prosperity"] -->|"Σ settlement Prosperity × 10"| d6_t[/"faction Treasury income"/]
+    %% derived_stats §8.1 (as quoted in settlement_layer §1.8)
+  end
+  subgraph GATESB["GATES (thresholds — authored from cited reads)"]
+    g_ci100{"CI = 100"} --> g_ci100_c["Theocracy Unification attempt"]
+    %% ci_political_v30 §2.2
+    g_cicap{"seasonal CI cap"} --> g_cicap_c["CI gain bounded per season"]
+    %% ci_political_v30 §2.4
+    g_ip100{"IP = 100"} --> g_ip100_c["Occupation Phase 1 (first pass)"]
+    %% victory_v30 §5.2
+    g_ip85{"IP ≥ 85 for 3 seasons"} --> g_ip85_c["Occupation Phase 2 (Schoenland)"]
+    %% victory_v30 §5.2
+    g_ip80{"IP ≥ 80 for 3 more seasons"} --> g_ip80_c["Occupation Phase 3 (NW pass)"]
+    %% victory_v30 §5.2
+    g_ipfall{"IP < 85 (P1) / < 75 (P2)"} --> g_ipfall_c["invasion stalls / corridor abandoned"]
+    %% victory_v30 §5.2
+    g_ms0{"MS = 0"} --> g_ms0_c["Post-Calamity Era"]
+    %% victory_v30 §5.1
+    g_ms5{"MS ≤ 5 sustained 10 seasons"} --> g_ms5_c["Second Calamity (true terminal)"]
+    %% victory_v30 §5.1
+    g_msrec{"MS restored to 20 within 10 seasons"} --> g_msrec_c["Post-Calamity recovery"]
+    %% victory_v30 §5.1
+    g_diss{"all factions dissolved"} --> g_diss_c["Anarchy Era (Ministry continues)"]
+    %% victory_v30 §5.3
+    g_ord0{"settlement Order = 0"} --> g_ord0_c["local revolt"]
+    %% settlement_layer_v30 §1.3
+    g_def0{"settlement Defense = 0"} --> g_def0_c["undefended — auto-capture"]
+    %% settlement_layer_v30 §1.3
+    g_dv0{"derived value = 0 held through Accounting"} --> g_dv0_c["owning stat −1 (same rule as faction stats)"]
+    %% settlement_layer_v30 §1.3
+    g_scar3{"Scars on Conviction X ≥ 3"} --> g_scar3_c["Conviction crisis on X (d6 crisis table, 1 season)"]
+    %% conviction_track_v1 §2 (PP-718 per-Conviction)
+    g_scar2{"Scars on Conviction X = 2"} --> g_scar2_c["Resonant Style X exposed; arc transition if X was top primary"]
+    %% conviction_track_v1 §2
+    g_stall8{"project stall ≥ 8"} --> g_stall8_c["state.project_failed emitted"]
+    %% doc-12 §8 / §4.2
+    g_drift{"cumulative_drift > 0.5"} --> g_drift_c["scene.gossip emitted"]
+    %% doc-12 §8 / §6.3
+    g_strain{"Knot strain > capacity"} --> g_strain_c["Knot Break"]
+    %% knots_v30 §6.1
+    g_decay{"no new strain that season AND Disposition ≥ +3"} --> g_decay_c["Knot strain −1 at Accounting"]
+    %% knots_v30 §5
+    g_bond5{"Bonds ≥ 5"} --> g_bond5_c["knot operations eligible (Memory-Query-checked prerequisite)"]
+    %% key_substrate_v30 §8.4
+  end
+  q10 -.-> g_ci100
+  q10 -.-> g_cicap
+  q20 -.-> g_ip100
+  q20 -.-> g_ip85
+  q20 -.-> g_ip80
+  q20 -.-> g_ipfall
+  MS -.-> g_ms0
+  MS -.-> g_ms5
+  MS -.-> g_msrec
+  q1 -.-> g_diss
+  q21 -.-> g_ord0
+  q21 -.-> g_def0
+  q22 -.-> g_dv0
+  q8 -.-> g_scar2
+  q8 -.-> g_scar3
+  q6 -.-> g_stall8
+  q4 -.-> g_drift
+  q14 -.-> g_strain
+  q14 -.-> g_decay
+  q15 -.-> g_bond5
+  classDef gatecls fill:#ffd,stroke:#a80;
+  class g_ci100,g_cicap,g_ip100,g_ip85,g_ip80,g_ipfall,g_ms0,g_ms5,g_msrec,g_diss,g_ord0,g_def0,g_dv0,g_scar3,g_scar2,g_stall8,g_drift,g_strain,g_decay,g_bond5 gatecls;

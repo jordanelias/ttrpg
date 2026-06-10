@@ -135,7 +135,7 @@ necessary, not sufficient, for NERS; behavioral compliance stays with
 valoria-resolution-diagnostic.
 ```
 
-Output: `designs/audit/<YYYY-MM-DD>-module-adjudication/verdict_<scope>.md`. P1/P2 findings that are canonical gaps go to `canon/editorial_ledger.jsonl` via `append_to_register` — compute the next ED id at append time (parallel sessions assign concurrently; the class-#12 collision is live).
+Output: `designs/audit/<YYYY-MM-DD>-module-adjudication/verdict_<scope>.md`. Derived views (flowchart, state graph, flattened pipeline map) are regenerated into the same directory by `scripts/contract_flowchart.py --contracts ... --registry ... --outdir ...` — generated artifacts, never hand-edited. P1/P2 findings that are canonical gaps go to `canon/editorial_ledger.jsonl` via `append_to_register` — compute the next ED id at append time (parallel sessions assign concurrently; the class-#12 collision is live).
 
 ## STAGE 4 — ENFORCE & RE-TEST
 
