@@ -1,0 +1,69 @@
+stateDiagram-v2
+  direction TB
+
+  [*] --> Active : authored seed (faction_state_authoring s8)
+
+  state Active {
+    direction LR
+    [*] --> Solvent
+    Solvent --> WealthZero : Wealth = 0 (s5.7 no muster, Military -1 per Accounting)
+    WealthZero --> Solvent : Wealth >= 1 (FSS-LOOP-2 re-muster +1 per Accounting, cap = pre-collapse value)
+  }
+
+  Active --> Unstable : Stability <= 2
+  Unstable --> Active : Stability >= 3 (recovery s1.3, seasonal cap +-2)
+
+  note right of Unstable
+    FSS-LOOP-1 deterministic floor.
+    Accounting Check cannot reduce
+    Stability here. Only active
+    Triggers 1-5 cut further.
+    Survival Exception - once, at Stab 1
+    (treaty Mandate cost waived).
+  end note
+
+  Unstable --> Collapsed : Stability = 0 via active Trigger (ED-675)
+
+  state Succession {
+    direction TB
+    [*] --> Stage1
+    Stage1 : Stage 1 - who leads (resolver on claimant strength gap, FSS-1)
+    Stage1 --> GapEval
+    GapEval : Stage 2 - deterministic split eval on gap G
+    state gchoice <<choice>>
+    GapEval --> gchoice
+    gchoice --> Unified : G >= 3
+    gchoice --> Fractious : G = 2 (Disposition-gated)
+    gchoice --> Split : G <= 1 (assets 60/40, dice tails)
+    Fractious --> Unified : Disposition holds
+    Fractious --> Split : Disposition fails
+  }
+
+  Active --> Succession : leader lost or removed
+  Unstable --> Succession : leader lost or removed
+  Succession --> Regency : no eligible claimant (fallback)
+  Regency --> Succession : claimant emerges
+  Unified --> Active : continuity (Mission may shift - succession_mode key)
+  Split --> Active : majority faction continues
+  Split --> SplinterSpawn
+  SplinterSpawn : Splinter faction persists (s2.5) - enters its own lifecycle at [*]
+  Succession --> Collapsed : 3 failed contests
+
+  Collapsed : ED-675 six-step exit -<br/>Mandate to 0, territories Uncontrolled (Accord 0),<br/>officers Independent, PC de-affiliated,<br/>seat lost, victory closed
+  Collapsed --> Reconstituting : Influence vs Ob 4, requires >= 1 territory
+  Reconstituting --> Active : 3 seasons of successful rolls (re-enter at Stab 1, Mandate 1, 50 pct frozen values)
+
+  state EmergenceTrack {
+    direction TB
+    [*] --> Insurgency : GD-3 gate - 2+ contiguous Uncontrolled territories sustained 2 seasons
+    Insurgency : territorial, non-parliamentary -<br/>invades like a faction, incl. the parent
+    Insurgency --> Promoted : promotion thresholds (PT-gated RM variant)
+    Promoted : parliamentary or extra-parliamentary -<br/>full faction lifecycle from here (GD-1 eligible)
+  }
+
+  note left of EmergenceTrack
+    Insurgency exit conditions other than
+    promotion are not specified in the
+    canonical read set - intentionally
+    not drawn.
+  end note

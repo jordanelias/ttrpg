@@ -1,0 +1,104 @@
+flowchart TD
+
+%% ===================== INPUTS =====================
+subgraph INPUTS["INPUTS — exogenous to the faction layer"]
+  IN1["IN-1 Settlement substrate<br/>per-settlement L_s, PS_s 0-7<br/>Type, Prosperity, FacilityTier"]
+  IN2["IN-2 Authored state<br/>starting stats ED-787/ED-869<br/>Missions, cascade roots,<br/>institutional culture, seed L/PS"]
+  IN3["IN-3 NPC layer<br/>Convictions, supervisor graph,<br/>Standing, Scars"]
+  IN4["IN-4 Church CI track 0-100"]
+  IN5["IN-5 Peninsular Strain shocks"]
+  IN6["IN-6 Mass battle outcomes<br/>occupation events (dice scope)"]
+  IN7["IN-7 Personal-scale scene outcomes"]
+  IN8["IN-8 Player + NPC-AI decisions"]
+end
+
+%% ===================== DERIVATION =====================
+subgraph DERIVE["DERIVATION (each Accounting)"]
+  AGG["CALC-2 Mandate aggregation<br/>W_s = base(Type)+Prosperity+FacilityTier<br/>T = sum W_s*(0.5L_s+0.5PS_s)/7<br/>Mandate = clamp(round(7T/(T+6)),0,7)"]
+  CAS["CALC-3 PP-686 cascade<br/>alpha-blend effective Convictions,<br/>cascade_fidelity, strictness,<br/>Ob modifier clamp +-2"]
+end
+
+%% ===================== STATE =====================
+subgraph STATE["L2 FACTION STATE"]
+  ST1["Six stats: Mandate(derived) Influence<br/>Wealth Military Intel Stability"]
+  ST2["Status flag - Standing matrix -<br/>Conviction Scars - CB inventory -<br/>Treaty set - Mission"]
+end
+
+%% ===================== ACTION =====================
+subgraph ACTION["L3 PHASE 4 — ACTION RESOLUTION (priorities 1-7)"]
+  GD2{"GATE GD-2<br/>mandatory threat-response<br/>pass FIRST"}
+  P4["P1 Intel/Tribune - P2 Military/Battle -<br/>P3 Domain (Consul Muster Govern Trade Fortify) -<br/>P4 Social (Motions, Treaty initiation) -<br/>P5 Threads - P6 Unique (Decree, Excomm, Seizure) -<br/>P7 Projects"]
+end
+
+%% ===================== RESOLUTION =====================
+RES["CALC-1 d+sigma RESOLVER (ED-874)<br/>M = stat - difficulty<br/>P_success = clamp(0.50+0.10M, 0.05, 0.90)<br/>four-degree ladder"]
+DICE["Dice scope boundary:<br/>mass battle, Grand Debate 5-18D,<br/>personal combat stay dice"]
+
+%% ===================== L4 EVENTS =====================
+subgraph L4["L4 INTER-FACTION RESOLUTION"]
+  PARL["Parliament: votes = Mandate<br/>Church + floor(CI/20)<br/>10 motion types, Rebuttal,<br/>Sacred Veto 1-per-4-seasons"]
+  TRTY["Treaty 3-phase:<br/>positioning M = Inf - Inf,<br/>concessions, ratification M = Mandate-2<br/>Grand Debate degree -> +-M"]
+  SEIZ["Church Seizure CI>=60:<br/>Influence + floor(CI/15)<br/>vs Ob 7-PT"]
+  SUBT["Subterfuge: Spy Ob<br/>floor(target Intel/2)+1<br/>counter-espionage Intel>=4"]
+end
+
+%% ===================== STABILITY =====================
+subgraph STAB["STABILITY PIPELINE"]
+  T5{"GATE Trigger-5 (ED-876)<br/>A pool>=4 AND B Failure<br/>AND C net<=-2 or officer lost"}
+  TRIG["Triggers 1-4:<br/>occupation/loss (capital escalators) -<br/>treaty terms - antagonistic votes -<br/>subterfuge"]
+  FLOOR{"GATE FSS-LOOP-1<br/>Stab<=2: Accounting Check<br/>cannot reduce; only active<br/>Triggers cut further"}
+end
+
+%% ===================== ACCOUNTING =====================
+subgraph ACCT["L6 PHASE 5 — SEASONAL ACCOUNTING (10 steps, ED-678)"]
+  S1["1 attribute changes; votes resolve;<br/>treaty ratification"]
+  S2["2 Accounting Stability Check<br/>(>=2 attr loss); collapse check ED-675"]
+  S3["3 cooldowns - 4 clocks (CI formula) -<br/>5 Church Attention - 6 Turmoil/Accord/Strain -<br/>7 threshold events - 8 Warden/loyalty"]
+  S9["9 occupation duration (3rd season -><br/>transfer); Institutional Consolidation<br/>clean season -> Stab +1"]
+  S10["10 GD-1 VICTORY CHECK<br/>(2 consecutive Accountings)"]
+  S1-->S2-->S3-->S9-->S10
+end
+
+%% ===================== OUTPUTS =====================
+subgraph OUT["OUTPUTS"]
+  O1["Territory control changes<br/>(conquest, transfer, seizure, collapse)"]
+  O2["Settlement writes: dL_s/dPS_s per<br/>controlled settlement; Mandate feedback<br/>+-1/settlement/season (mean-revert)"]
+  O3["Keys emitted: mission_shift,<br/>succession, cascade_resolution,<br/>coup_attempted"]
+  O4["Muster -> military units<br/>(Power/Discipline) -> battles"]
+  O5["GD-1 victory progress (sole path)"]
+  O6["GD-3 emergence: 2+ contiguous<br/>Uncontrolled x2 seasons -><br/>Insurgency -> promoted faction"]
+end
+
+%% ===================== EDGES =====================
+IN1 --> AGG
+IN2 --> STATE
+IN3 --> CAS
+AGG -->|"Mandate"| ST1
+CAS -->|"Ob modifier, strictness"| ST2
+IN4 -->|"CI weight"| PARL
+IN4 --> SEIZ
+IN5 -->|"temperament drift"| CAS
+IN7 -->|"Domain Echo +-2 cap<br/>(direct stat write - under review)"| ST1
+IN8 --> GD2
+ST1 --> P4
+GD2 --> P4
+P4 -->|"DA, unique actions"| RES
+P4 -->|"battles"| DICE
+RES --> L4
+RES -->|"DA outcomes -> dPS/dL"| O2
+DICE --> IN6
+IN6 --> T5
+T5 -->|"gate met: -1 to -2,<br/>max -4/event"| TRIG
+L4 -->|"Trigger 2/3/4 deltas"| TRIG
+TRIG --> FLOOR
+FLOOR -->|"Stability deltas"| S2
+L4 --> S1
+S2 -->|"Stab 0 via active Trigger"| O1
+S9 -->|"Stab +1"| ST1
+S10 --> O5
+ACCT --> O3
+ST1 -->|"Wealth>=1: FSS-LOOP-2<br/>re-muster +1/Acct"| O4
+O4 --> IN6
+O1 --> O6
+O6 -->|"new faction entity"| STATE
+O2 -->|"next-season L_s/PS_s"| IN1
