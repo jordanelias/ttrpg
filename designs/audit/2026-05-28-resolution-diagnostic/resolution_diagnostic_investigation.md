@@ -1,3 +1,5 @@
+> **SUPERSEDED — 2026-06-10.** This Stage-1+3 verdict was issued from an index-depth read (its own caveat: "if a deeper read surfaced a fresh finding, it would supersede this verdict"). The full-depth read exists: `designs/audit/2026-06-10-investigation-exploration-diagnostic/` (`00_MASTER.md` + `resolution_diagnostic_fieldwork.md` + `ners_verdict_fieldwork.md`). Architecture findings INV1–INV9 **stand**; the NERS-COMPLIANT verdict is **reversed** (NON-COMPLIANT: E fail P1 — roll inputs canonically indeterminate across master/params/investigation_systems; R fail P2, scoped — ER-2 unlanded at wound-floored pools). Retained unedited below for the record.
+
 # Resolution Diagnostic + NERS Verdict — Investigation / Fieldwork
 
 **Date:** 2026-05-28
