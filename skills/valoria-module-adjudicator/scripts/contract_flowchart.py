@@ -23,106 +23,11 @@ UNREG_MARK = " [unreg]"
 
 # ── authored, canon-grounded reference data ─────────────────────────────────
 
-GATES = [
-    # (id, condition, consequence, source)
-    ("g_ci100", "CI = 100", "Theocracy Unification attempt", "ci_political_v30 §2.2"),
-    ("g_cicap", "seasonal CI cap", "CI gain bounded per season", "ci_political_v30 §2.4"),
-    ("g_ip100", "IP = 100", "Occupation Phase 1 (first pass)", "victory_v30 §5.2"),
-    ("g_ip85", "IP ≥ 85 for 3 seasons", "Occupation Phase 2 (Schoenland)", "victory_v30 §5.2"),
-    ("g_ip80", "IP ≥ 80 for 3 more seasons", "Occupation Phase 3 (NW pass)", "victory_v30 §5.2"),
-    ("g_ipfall", "IP < 85 (P1) / < 75 (P2)", "invasion stalls / corridor abandoned", "victory_v30 §5.2"),
-    ("g_ms0", "MS = 0", "Post-Calamity Era", "victory_v30 §5.1"),
-    ("g_ms5", "MS ≤ 5 sustained 10 seasons", "Second Calamity (true terminal)", "victory_v30 §5.1"),
-    ("g_msrec", "MS restored to 20 within 10 seasons", "Post-Calamity recovery", "victory_v30 §5.1"),
-    ("g_diss", "all factions dissolved", "Anarchy Era (Ministry continues)", "victory_v30 §5.3"),
-    ("g_ord0", "settlement Order = 0", "local revolt", "settlement_layer_v30 §1.3"),
-    ("g_def0", "settlement Defense = 0", "undefended — auto-capture", "settlement_layer_v30 §1.3"),
-    ("g_dv0", "derived value = 0 held through Accounting", "owning stat −1 (same rule as faction stats)",
-     "settlement_layer_v30 §1.3"),
-    ("g_scar3", "Scars on Conviction X ≥ 3", "Conviction crisis on X (d6 crisis table, 1 season)",
-     "conviction_track_v1 §2 (PP-718 per-Conviction)"),
-    ("g_scar2", "Scars on Conviction X = 2", "Resonant Style X exposed; arc transition if X was top primary",
-     "conviction_track_v1 §2"),
-    ("g_stall8", "project stall ≥ 8", "state.project_failed emitted", "doc-12 §8 / §4.2"),
-    ("g_drift", "cumulative_drift > 0.5", "scene.gossip emitted", "doc-12 §8 / §6.3"),
-    ("g_strain", "Knot strain > capacity", "Knot Break", "knots_v30 §6.1"),
-    ("g_decay", "no new strain that season AND Disposition ≥ +3", "Knot strain −1 at Accounting",
-     "knots_v30 §5"),
-    ("g_bond5", "Bonds ≥ 5", "knot operations eligible (Memory-Query-checked prerequisite)",
-     "key_substrate_v30 §8.4"),
-]
 
 # quantity → gate wiring: (module, state-name substring) → gate ids
-GATE_WIRES = [
-    ("territorial_piety", "CI (Church Influence)", ["g_ci100", "g_cicap"]),
-    ("peninsular_strain", "IP (Institutional Pressure)", ["g_ip100", "g_ip85", "g_ip80", "g_ipfall"]),
-    ("__MS__", None, ["g_ms0", "g_ms5", "g_msrec"]),
-    ("faction_state", "Mandate", ["g_diss"]),
-    ("settlement_layer", "Prosperity / Defense / Order", ["g_ord0", "g_def0"]),
-    ("settlement_layer", "Local Economy / Garrison Strength / Public Order", ["g_dv0"]),
-    ("piety_track", "conviction scars", ["g_scar2", "g_scar3"]),
-    ("npc_behavior", "projects", ["g_stall8"]),
-    ("npc_behavior", "beliefs/opinions", ["g_drift"]),
-    ("fieldwork_knots", "knot strain", ["g_strain", "g_decay"]),
-    ("fieldwork_knots", "Bonds", ["g_bond5"]),
-]
 
-DERIVATIONS = [
-    # (src label, dst label, formula, source)
-    ("settlement Order", "province Accord", "floor(mean settlement Order)", "settlement_layer_v30 §1.3"),
-    ("Prosperity", "Local Economy", "Prosperity × 50", "settlement_layer_v30 §1.3"),
-    ("Defense (+ Fort Level)", "Garrison Strength", "Defense × 20 + Fort × 30", "settlement_layer_v30 §1.3"),
-    ("settlement Order", "Public Order", "Order × 20 (riot events below 0)", "settlement_layer_v30 §1.3"),
-    ("L_s, PS_s, W_s", "faction Mandate",
-     "q_s = 0.5L + 0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = Σ W_s·(q_s/7); "
-     "Mandate = clamp(round(7T/(T+6)), 0, 7) — saturating (Lesson-5 bound)",
-     "settlement_layer_v30 §1.8 LPS-2e"),
-    ("faction Mandate", "settlement L/PS",
-     "drift ±1/settlement/season toward Mandate (damped); mean-reverting stabilizing feedback; "
-     "Stage-4 sim bounded over 30 seasons", "settlement_layer_v30 §1.8"),
-    ("settlement Prosperity", "faction Treasury income", "Σ settlement Prosperity × 10",
-     "derived_stats §8.1 (as quoted in settlement_layer §1.8)"),
-]
-
-SEQUENCE = [
-    ("season tick", "engine_clock emits mechanical.season_change",
-     "key_type_registry (engine_clock)"),
-    ("Accounting boundary", "engine_clock emits mechanical.accounting", "doc-12 §8"),
-    ("1. Procedure B", "Knowledge Decay → Concern Generation (memory_query reads Keys) → "
-     "Resolution (state.concern_resolved, state.belief_revised, MemoryReferences)", "doc-12 §8"),
-    ("2. DA Proposal Phase", "select_proposal() reads Faction Meta-Armature; "
-     "execute_proposed_domain_actions() emits da_outcome.*; displacement_neglect_observed → "
-     "scene.displacement [unreg]", "doc-12 §8"),
-    ("3. Procedure C", "mechanical.project_advanced [unreg]; state.project_failed [unreg] "
-     "(stall ≥ 8); state.project_completed [unreg]", "doc-12 §8"),
-    ("4. Procedure D", "state.opinion_revised per drift threshold", "doc-12 §8"),
-    ("5. Procedure E", "scene.interaction (ambient pairs); scene.dialogue (knowledge sharing); "
-     "scene.gossip (cumulative_drift > 0.5)", "doc-12 §8"),
-    ("emission processing", "substrate single-update rule: validate (registry + invariants, "
-     "causes[] DAG) → append immutable KEY_LOG → resolve observers — inline, deterministic",
-     "key_substrate_v30 §4.1"),
-    ("settlement Accounting", "derived-value-at-0-through-Accounting → stat −1; Mandate "
-     "feedback drift ±1; Knot strain decay check", "settlement §1.3/§1.8; knots §5"),
-]
 
 # per-module gate/sequence annotations for the flat table
-MODULE_GATES = {
-    "npc_behavior": "Accounting order B→DA→C→D→E (doc-12 §8); stall≥8; drift threshold; "
-                    "cumulative_drift>0.5",
-    "piety_track": "per-Conviction Scar 2 (Style exposed) / 3+ (crisis, d6 table) — PP-718",
-    "territorial_piety": "CI seasonal cap (ci_political §2.4); CI=100 handoff",
-    "ci_political": "CI=100 Theocracy attempt (§2.2); card cooldown track (§5.3)",
-    "victory": "MS=0; MS≤5×10s; IP=100/85/80 phase chain + repulsion exits; all-dissolved",
-    "peninsular_strain": "Turmoil 0–10; IP milestones 60/80/90 visibility (victory §5.2)",
-    "settlement_layer": "Order=0 revolt; Defense=0 auto-capture; derived=0 through "
-                        "Accounting → stat −1; Mandate↔L/PS damped feedback (§1.8)",
-    "fieldwork_knots": "Bonds≥5 prerequisite; strain>capacity Break; decay gate "
-                       "(Disposition≥+3, no new strain)",
-    "engine_clock": "season tick → mechanical.season_change; Accounting boundary → "
-                    "mechanical.accounting",
-    "faction_state": "±2 faction-stat seasonal cap (settlement §1.8); cascade loop [open]",
-    "threadwork": "Coherence depletion (variable cost); Thread Fatigue (ED-694)",
-}
 
 SCALE_GROUPS = [
     ("PENINSULA", ["peninsula"]),
@@ -140,6 +45,32 @@ BUCKET_SHAPE = {  # mermaid shape templates
 }
 
 
+def gates_from_contract(mods):
+    """(id, when, then, source, owning_module, on|None) from each module's gates."""
+    out = []
+    for m in mods:
+        for gt in m.get("gates", []) or []:
+            out.append((gt.get("id"), gt.get("when"), gt.get("then"),
+                        gt.get("source"), m["module"], gt.get("on")))
+    return out
+
+
+def derivations_from_contract(mods):
+    """(inputs_label, output, formula, source) from each module's derivations."""
+    out = []
+    for m in mods:
+        for d in m.get("derivations", []) or []:
+            out.append((", ".join(d.get("inputs", [])), d.get("output"),
+                        d.get("formula", ""), d.get("source", "")))
+    return out
+
+
+def sequence_from_contract(doc):
+    """(phase, does, source) from the root accounting_sequence."""
+    return [(s.get("phase"), s.get("does"), s.get("source"))
+            for s in doc.get("accounting_sequence", []) or []]
+
+
 def fam_summary(types):
     """Compact label for a set of type strings."""
     fams = {}
@@ -155,7 +86,7 @@ def load(contracts_path, registry_path):
     doc = yaml.safe_load(open(contracts_path))
     mods = doc["modules"]
     registered = parse_registry_types(open(registry_path).read())
-    return mods, registered
+    return mods, registered, doc
 
 
 def build_edges(mods):
@@ -273,29 +204,29 @@ def state_graph(mods):
             else:
                 L.append(f'  {q} -.->|reads| {name}_x')
     L.append('  MS[("Mending Stability (MS) : clock — NO owning module in contracts")]')
-    L.append('  subgraph DERIV["DERIVATIONS (calculations — authored from cited reads)"]')
-    for i, (src, dst, formula, source) in enumerate(DERIVATIONS):
-        L.append(f'    d{i}_s["{src}"] -->|"{formula.split(";")[0][:60]}"| d{i}_t[/"{dst}"/]')
+    derivs = derivations_from_contract(mods)
+    L.append('  subgraph DERIV["DERIVATIONS (calculations — from contract)"]')
+    for i, (src, dst, formula, source) in enumerate(derivs):
+        L.append(f'    d{i}_s["{src}"] -->|"{(formula or "").split(";")[0][:60]}"| d{i}_t[/"{dst}"/]')
         L.append(f'    %% {source}')
     L.append("  end")
-    L.append('  subgraph GATESB["GATES (thresholds — authored from cited reads)"]')
-    for gid, cond, conseq, source in GATES:
+    cgates = gates_from_contract(mods)
+    L.append('  subgraph GATESB["GATES (thresholds — from contract)"]')
+    for gid, cond, conseq, source, owner, on in cgates:
         L.append(f'    {gid}{{"{cond}"}} --> {gid}_c["{conseq}"]')
-        L.append(f'    %% {source}')
+        L.append(f'    %% {owner}: {source}')
     L.append("  end")
-    # wire owning quantities into their gates
-    for mod, sub, gids in GATE_WIRES:
-        if mod == "__MS__":
-            src = "MS"
+    # wire owning quantities into their gates via gate.on (state graph qid map)
+    for gid, cond, conseq, source, owner, on in cgates:
+        if on:
+            src = next((q for (mn, sn), q in qid.items() if mn == owner and sn == on), None)
+            if src:
+                L.append(f'  {src} -.-> {gid}')
         else:
-            src = next((q for (mn, sn), q in qid.items()
-                        if mn == mod and sub in sn), None)
-            if not src:
-                continue
-        for gid in gids:
-            L.append(f'  {src} -.-> {gid}')
+            # cross-module / unowned reader (e.g. victory reads MS)
+            L.append(f'  MS -.-> {gid}' if "MS" in (cond or "") else f'  {owner}_x -.-> {gid}')
     L += ["  classDef gatecls fill:#ffd,stroke:#a80;",
-          "  class " + ",".join(g[0] for g in GATES) + " gatecls;"]
+          "  class " + ",".join(g[0] for g in cgates) + " gatecls;"]
     return "\n".join(L)
 
 
@@ -344,7 +275,9 @@ def flat_tables(mods, registered):
         outputs = "; ".join(emits) or "—"
         state = "; ".join(f"{s['name']} ({s['bucket']}{'' if s.get('writable') else ', read'})"
                           for s in m.get("state") or []) or "—"
-        gates = MODULE_GATES.get(name, "—")
+        gsum = "; ".join(f"{gt['id']}: {gt['when']} → {gt['then']}"
+                         for gt in m.get("gates", []) or []) or "—"
+        gates = gsum
         rows.append(f"| {name} | {' '.join(m.get('scales') or [])} | {m.get('resolver') or '?'} "
                     f"| {inputs} | {state} | {gates} | {outputs} |")
     # type matrix
@@ -373,16 +306,18 @@ def main():
     ap.add_argument("--registry", required=True)
     ap.add_argument("--outdir", required=True)
     a = ap.parse_args()
-    mods, registered = load(a.contracts, a.registry)
+    mods, registered, doc = load(a.contracts, a.registry)
     os.makedirs(a.outdir, exist_ok=True)
     fc = flowchart(mods, registered)
     sg = state_graph(mods)
     master, types_tbl = flat_tables(mods, registered)
     open(os.path.join(a.outdir, "module_flowchart.mermaid"), "w").write(fc + "\n")
     open(os.path.join(a.outdir, "state_graph.mermaid"), "w").write(sg + "\n")
-    seq = "\n".join(f"| {a_} | {b} | {c} |" for a_, b, c in SEQUENCE)
-    gates = "\n".join(f"| {c} | {q} | {s} |" for _, c, q, s in GATES)
-    deriv = "\n".join(f"| {s} → {d} | `{f}` | {src} |" for s, d, f, src in DERIVATIONS)
+    seq = "\n".join(f"| {p} | {dz} | {sc} |" for p, dz, sc in sequence_from_contract(doc))
+    gates = "\n".join(f"| {owner} | {cond} | {conseq} | {src} |"
+                       for _gid, cond, conseq, src, owner, _on in gates_from_contract(mods))
+    deriv = "\n".join(f"| {inp} → {out} | `{f}` | {src} |"
+                       for inp, out, f, src in derivations_from_contract(mods))
     doc = DOC_TMPL.format(flow=fc, state=sg, era=ERA_MACHINE, master=master,
                           types=types_tbl, seq=seq, gates=gates, deriv=deriv,
                           n=len(mods))
@@ -433,9 +368,9 @@ ticking; MS declines" (§5.2) — Occupation and MS-driven transitions run concu
 |---|---|---|
 {seq}
 
-### 4.3 Gates
-| Condition | Consequence | Source |
-|---|---|---|
+### 4.3 Gates (per-system thresholds — from contract)
+| Owning system | Condition | Consequence | Source |
+|---|---|---|---|
 {gates}
 
 ### 4.4 Derivations (calculations)

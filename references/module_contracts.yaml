@@ -23,7 +23,21 @@
 # v1 seeded 2026-06-09/10 from key_substrate_v30 §8 / key_type_registry_v30 /
 # scale_transitions_v30 / derived_stats_v30 (commit cdbd1b50).
 
-schema_version: 1
+# v3 (2026-06-10) — gates + per-system calculations folded into the contract so the
+# enforcer checks them (A10 gates / A11 derivations / A12 sequence). Migrated verbatim
+# from the cited contract_flowchart.py literals; the flowchart now READS these from here
+# (single source of truth). settlement_layer Mandate↔L/PS loop annotated with its §1.8
+# canon damper. schema_version 1 -> 2.
+# v2 (2026-06-10) — Stage-1 extraction pass: registry emitting/consuming_systems
+# matrix parsed wholesale (38 typed entries, 29 named systems); 5 of 7 v1 stubs
+# extracted; political_dynamics CONSOLIDATED into npc_behavior (doc-12 = PP-687
+# npc-procedure Keys migration); 10 registry-named systems added as new modules;
+# personal_combat deferred (canonical-candidate, handoff-owned); campaign_architecture
+# reclassified (consolidation doc, retirement recommended).
+# v1 seeded 2026-06-09/10 from key_substrate_v30 §8 / key_type_registry_v30 /
+# scale_transitions_v30 / derived_stats_v30 (commit cdbd1b50).
+
+schema_version: 2
 generated: "2026-06-10"
 status: EXTRACTED_STAGE1  # personal_combat + campaign_architecture stubs remain
 
@@ -70,6 +84,7 @@ modules:
       - {via: "scale_transitions §3.2 Personal → Faction / §5 Domain Echo"}
     loops:
       - {open: true}   # self-loop: consumes own mechanical.cascade_resolution + mission_shift (cascade re-resolution, substrate §8.1); damper unconfirmed [OPEN — Jordan]
+    accounting_phase: [DA_proposal, settlement_accounting]
     gap_notes:
       - "V1 gap RESOLVED by registry matrix: faction_layer emits mechanical.cascade_resolution, mechanical.mission_shift, state.standing_change (was: \"type ids unnamed\" in substrate §8.6)"
       - "registry system name faction_layer vs module faction_state — vocabulary unification [OPEN — Jordan]"
@@ -128,6 +143,18 @@ modules:
     transitions: []
     loops:
       - {open: true}   # 2-cycle with social_contest (emits opinion_revised it consumes; consumes its scene.dialogue/contest_resolved) + self-loop via scene.witness; dampers unconfirmed [OPEN — Jordan]
+    gates:
+      - id: g_stall8
+        when: "project stall >= 8"
+        then: "state.project_failed emitted"
+        "on": "projects"
+        source: "doc-12 §8 / §4.2"
+      - id: g_drift
+        when: "cumulative_drift > 0.5"
+        then: "scene.gossip emitted"
+        "on": "beliefs/opinions"
+        source: "doc-12 §8 / §6.3"
+    accounting_phase: [B_concern, C_project, D_opinion, E_offscreen]
     gap_notes:
       - "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module — political_dynamics_keys_migration_v30 is \"Doc 12 Procedures — Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable."
       - "doc-12 §8 sequencing tree names FOUR Key types its own §7 never declares and the registry lacks: scene.displacement, mechanical.project_advanced, state.project_failed, state.project_completed — F2 class [registry §10 candidates]. Supersedes the v2 note \"Procedure C unkeyed\" (it IS keyed in §8, just unregistered)."
@@ -181,6 +208,17 @@ modules:
       - {name: "conviction scars", bucket: track, writable: true}   # conviction_track_v1 §2 — §1 taxonomy SUPERSEDED by conviction_taxonomy_v30 (PP-717); §2/§3 canonical pending PP-718
     transitions: []
     loops: []
+    gates:
+      - id: g_scar2
+        when: "Scars on Conviction X = 2"
+        then: "Resonant Style X exposed; arc transition if X was top primary"
+        "on": "conviction scars"
+        source: "conviction_track_v1 §2"
+      - id: g_scar3
+        when: "Scars on Conviction X >= 3"
+        then: "Conviction crisis on X (d6 crisis table, 1 season)"
+        "on": "conviction scars"
+        source: "conviction_track_v1 §2 (PP-718 per-Conviction)"
     gap_notes:
       - "NAME COLLISION (3-way) [OPEN — Jordan]: substrate §8.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home designs/personal/conviction_track_v1.md) vs designs/scene/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) — two different systems share both names"
     status: extracted
@@ -201,6 +239,17 @@ modules:
       - {name: "TC (Theocracy Counter)", bucket: clock, writable: true}   # §3 seasonal generation
     transitions: []
     loops: []
+    gates:
+      - id: g_ci100
+        when: "CI = 100"
+        then: "Theocracy Unification attempt"
+        "on": "CI (Church Influence)"
+        source: "ci_political_v30 §2.2"
+      - id: g_cicap
+        when: "seasonal CI cap"
+        then: "CI gain bounded per season"
+        "on": "CI (Church Influence)"
+        source: "ci_political_v30 §2.4"
     gap_notes:
       - "CANONICAL BG-era doc with ZERO Key integration — no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (§1.3b ED-676) and Calamity drift (§1.3) with no Key types [registry §10 candidate / Keys-migration pending]"
       - "name collision with personal piety_track — see piety_track gap_note [OPEN — Jordan]"
@@ -255,6 +304,23 @@ modules:
     transitions:
       - {via: "scale_transitions §3.9 Fieldwork ↔ All Systems"}
     loops: []
+    gates:
+      - id: g_strain
+        when: "Knot strain > capacity"
+        then: "Knot Break"
+        "on": "knot strain"
+        source: "knots_v30 §6.1"
+      - id: g_decay
+        when: "no new strain that season AND Disposition >= +3"
+        then: "Knot strain -1 at Accounting"
+        "on": "knot strain"
+        source: "knots_v30 §5"
+      - id: g_bond5
+        when: "Bonds >= 5"
+        then: "knot operations eligible (Memory-Query-checked prerequisite)"
+        "on": "Bonds"
+        source: "key_substrate_v30 §8.4"
+    accounting_phase: [settlement_accounting]
     gap_notes:
       - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
       - "knots_v30 §11 carries open canon contradictions (TIER-DRIFT-001, COMPOSURE-DRIFT-001) [OPEN — Jordan, pre-existing]"
@@ -407,6 +473,7 @@ modules:
     state: []
     transitions: []
     loops: []
+    accounting_phase: [DA_proposal]
     gap_notes:
       - "home doc unlocated [GAP] — DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home"
     status: extracted
@@ -430,6 +497,27 @@ modules:
       - {name: "IP (Institutional Pressure)", bucket: clock, writable: true}   # clock_registry: 0-100 [PROVISIONAL ED-793 start value]
     transitions: []
     loops: []
+    gates:
+      - id: g_ip100
+        when: "IP = 100"
+        then: "Occupation Phase 1 (first pass)"
+        "on": "IP (Institutional Pressure)"
+        source: "victory_v30 §5.2"
+      - id: g_ip85
+        when: "IP >= 85 for 3 seasons"
+        then: "Occupation Phase 2 (Schoenland)"
+        "on": "IP (Institutional Pressure)"
+        source: "victory_v30 §5.2"
+      - id: g_ip80
+        when: "IP >= 80 for 3 more seasons"
+        then: "Occupation Phase 3 (NW pass)"
+        "on": "IP (Institutional Pressure)"
+        source: "victory_v30 §5.2"
+      - id: g_ipfall
+        when: "IP < 85 (P1) / < 75 (P2)"
+        then: "invasion stalls / corridor abandoned"
+        "on": "IP (Institutional Pressure)"
+        source: "victory_v30 §5.2"
     status: extracted
     sources:
       - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
@@ -452,7 +540,55 @@ modules:
       - {name: "Legitimacy (L) / Popular Support (PS)", bucket: track, writable: true}   # §1.8 LPS-2e per-settlement 0-7 (Jordan ruling 2026-05-30)
       - {name: "province Accord", bucket: derived_value, writable: false}   # §1.3 floor(mean settlement Order) — F1 guard
     transitions: []
-    loops: []
+    loops:
+      - {with: faction_state, damper: "Mandate↔L/PS: saturating Mandate = 7T/(T+6) (∂Mandate/∂q shrinks as T grows) + mean-reverting feedback drift ±1; Stage-4 sim bounded 0-7 over 30 seasons under mission shocks (settlement_layer_v30 §1.8, Lesson-5 bound)"}
+    gates:
+      - id: g_ord0
+        when: "settlement Order = 0"
+        then: "local revolt"
+        "on": "Prosperity / Defense / Order"
+        source: "settlement_layer_v30 §1.3"
+      - id: g_def0
+        when: "settlement Defense = 0"
+        then: "undefended — auto-capture"
+        "on": "Prosperity / Defense / Order"
+        source: "settlement_layer_v30 §1.3"
+      - id: g_dv0
+        when: "derived value = 0 held through Accounting"
+        then: "owning stat -1 (same rule as faction stats)"
+        "on": "Local Economy / Garrison Strength / Public Order"
+        source: "settlement_layer_v30 §1.3"
+    derivations:
+      - output: "province Accord"
+        inputs: ["settlement Order"]
+        formula: "floor(mean settlement Order)"
+        bucket: derived_value
+        source: "settlement_layer_v30 §1.3"
+      - output: "Local Economy"
+        inputs: ["Prosperity"]
+        formula: "Prosperity × 50"
+        source: "settlement_layer_v30 §1.3"
+      - output: "Garrison Strength"
+        inputs: ["Defense", "Fort Level"]
+        formula: "Defense × 20 + Fort × 30"
+        source: "settlement_layer_v30 §1.3"
+      - output: "Public Order"
+        inputs: ["settlement Order"]
+        formula: "Order × 20 (riot events below 0)"
+        source: "settlement_layer_v30 §1.3"
+      - output: "faction Mandate (cross-module → faction_state)"
+        inputs: ["L_s", "PS_s", "W_s"]
+        formula: "q_s = 0.5L+0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = Σ W_s·(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) — saturating (Lesson-5 bound)"
+        source: "settlement_layer_v30 §1.8 LPS-2e"
+      - output: "settlement L/PS (Mandate feedback)"
+        inputs: ["faction Mandate"]
+        formula: "drift ±1/settlement/season toward Mandate (damped, mean-reverting; Stage-4 sim bounded 30 seasons)"
+        source: "settlement_layer_v30 §1.8"
+      - output: "faction Treasury income (cross-module → faction_state)"
+        inputs: ["settlement Prosperity"]
+        formula: "Σ settlement Prosperity × 10"
+        source: "derived_stats §8.1 (quoted in settlement_layer §1.8)"
+    accounting_phase: [settlement_accounting]
     gap_notes:
       - "settlement_layer_v30_index.md is STALE — predates LPS-2e §1.8 (no §1.8 row); index pipeline regeneration needed [tooling defect]"
     status: extracted
@@ -507,6 +643,27 @@ modules:
       - {name: "MS / IP / CI / Turmoil / Accord / Mandate / PV / PT reads", bucket: clock, writable: false}   # reader only — clocks owned by their source systems (clock_registry)
     transitions: []
     loops: []
+    gates:
+      - id: g_ms0
+        when: "MS = 0"
+        then: "Post-Calamity Era"
+        reads: ["MS (unowned clock — no module in contracts)"]
+        source: "victory_v30 §5.1"
+      - id: g_ms5
+        when: "MS <= 5 sustained 10 seasons"
+        then: "Second Calamity (true terminal)"
+        reads: ["MS (unowned clock)"]
+        source: "victory_v30 §5.1"
+      - id: g_msrec
+        when: "MS restored to 20 within 10 seasons"
+        then: "Post-Calamity recovery"
+        reads: ["MS (unowned clock)"]
+        source: "victory_v30 §5.1"
+      - id: g_diss
+        when: "all factions dissolved"
+        then: "Anarchy Era (Ministry continues)"
+        reads: ["faction Mandate (faction_state, all factions)"]
+        source: "victory_v30 §5.3"
     gap_notes:
       - "world-state era transitions (§5: MS=0 Post-Calamity, IP=100 Phased Occupation, all-dissolved Anarchy) are UNKEYED — no mechanical_event/state_transition type exists; articulation is blind to era changes via the Key stream [registry §10 candidate]"
       - "doc status: \"DESIGN — pending Varfell Path B user decision (ED-311)\" — not CANONICAL"
@@ -528,6 +685,7 @@ modules:
       - {name: "season counter", bucket: clock, writable: true}   # [ASSUMPTION]
     transitions: []
     loops: []
+    accounting_phase: [season_tick, accounting_boundary]
     gap_notes:
       - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
     status: extracted
@@ -637,3 +795,35 @@ modules:
       - "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) — a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_strain. Recommend stub retirement [OPEN — Jordan]"
       - "clock-spine hypothesis WITHDRAWN — engine_clock is the registry system for season/accounting; its home doc remains unlocated"
     status: stub
+
+
+# Canonical Accounting spine (doc-12 §8 + substrate §4.1). Module accounting_phase
+# entries must name a phase id below (checked by A12).
+accounting_sequence:
+  - phase: season_tick
+    does: "engine_clock emits mechanical.season_change"
+    source: "key_type_registry (engine_clock)"
+  - phase: accounting_boundary
+    does: "engine_clock emits mechanical.accounting"
+    source: "doc-12 §8"
+  - phase: B_concern
+    does: "Procedure B: Knowledge Decay -> Concern Generation (memory_query reads Keys) -> Resolution (state.concern_resolved, state.belief_revised, MemoryReferences)"
+    source: "doc-12 §8"
+  - phase: DA_proposal
+    does: "DA Proposal Phase: select_proposal() reads Faction Meta-Armature; execute_proposed_domain_actions() emits da_outcome.*; displacement_neglect_observed -> scene.displacement [unreg]"
+    source: "doc-12 §8"
+  - phase: C_project
+    does: "Procedure C: mechanical.project_advanced [unreg]; state.project_failed [unreg] (stall >= 8); state.project_completed [unreg]"
+    source: "doc-12 §8"
+  - phase: D_opinion
+    does: "Procedure D: state.opinion_revised per drift threshold"
+    source: "doc-12 §8"
+  - phase: E_offscreen
+    does: "Procedure E: scene.interaction (ambient pairs); scene.dialogue (knowledge sharing); scene.gossip (cumulative_drift > 0.5)"
+    source: "doc-12 §8"
+  - phase: emission_processing
+    does: "substrate single-update rule: validate (registry + invariants, causes[] DAG) -> append immutable KEY_LOG -> resolve observers — inline, deterministic"
+    source: "key_substrate_v30 §4.1"
+  - phase: settlement_accounting
+    does: "derived-value-at-0-through-Accounting -> stat -1; Mandate feedback drift ±1; Knot strain decay check"
+    source: "settlement §1.3/§1.8; knots §5"

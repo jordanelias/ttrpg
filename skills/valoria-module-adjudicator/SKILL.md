@@ -5,9 +5,11 @@ description: >
   system/mechanic as a module wrapper — IN(consumed Keys) → resolver → OUT(emitted Keys)
   plus owned, bucket-classified state — records each wrapper's contract in
   references/module_contracts.yaml, and actively enforces conformance with
-  scripts/contract_adjudicator.py (checks A1–A9): emit/consume closure against the Key
+  scripts/contract_adjudicator.py (checks A1–A12): emit/consume closure against the Key
   Type Registry, derived-value write protection, cross-scale edge coverage via the
-  scale_transitions handoff rules, module-graph loop annotation, and registry self-checks.
+  scale_transitions handoff rules, module-graph loop annotation, registry self-checks,
+  and per-system gate well-formedness/ownership, calculation/derivation validity, and
+  Accounting-sequence membership.
   Produces per-module and whole-graph verdicts mapped to NERS and the canonical
   "all directions" definition. ALWAYS use this skill when checking whether a system is
   keyed/wired correctly, whether inputs/outputs close over the registry, or whether the
@@ -102,6 +104,16 @@ Exit 1 on any violation; warnings alone exit 0. Fixture suite at `tests/contract
 | A7 module-graph cycle lacking a `loops[]` damper/cap annotation | violation | undamped+unbounded loops at graph level (Lesson 5) |
 | A8 extracted module's `doc` absent from canonical_sources | violation (W-DOC warning when doc is an explicit `[GAP]`) | contracts detached from canon |
 | A9 registry self-check: §9 declared family counts vs parsed type_ids | warning | registry-internal drift (the 37-vs-38 / section-vs-prefix housing finding, 2026-06-09) |
+| A10 gate well-formedness + ownership: each `gates[]` entry has when/then/source and either `on:` (a quantity the module owns as `state[]`) or `reads:` (cross-module/unowned); ids globally unique | violation | a system's threshold gating a quantity it does not own, or a malformed/duplicate gate |
+| A11 derivation validity: each `derivations[]` entry has output/formula/source; an output naming an in-module quantity must be `bucket: derived_value` (reinforces A5/F1); in-module `derived_value` with no recorded derivation is flagged, cross-module coverage noted as `A11-info` | violation + warning | per-system calculations that write a non-derived quantity, or derived values whose calculation the contract does not record |
+| A12 sequence membership: each module `accounting_phase[]` names a phase in the root `accounting_sequence` | violation | a system claiming an Accounting phase that does not exist in the canonical spine |
+
+**Contract fields for gates and calculations (schema_version 2).** Each module may carry:
+- `gates:` — list of `{id, when, then, source, (on | reads)}`. `on:` is the in-module `state[].name` the gate fires on; `reads:` lists cross-module or unowned quantities a reader-system tests (e.g. `victory` reading the unowned MS clock for era transitions). Exactly one of `on`/`reads`.
+- `derivations:` — list of `{output, inputs, formula, source, bucket?}`. The output is the computed quantity; if it is one of the module's own `state[]` it must be a `derived_value` (F1). Cross-module outputs (e.g. settlement_layer computing faction Mandate) are allowed and surfaced as `A11-info` against the owning module.
+- `accounting_phase:` — the spine phase(s) the module acts in, drawn from the root `accounting_sequence`.
+
+The root `accounting_sequence:` is the canonical Accounting spine (doc-12 §8 + substrate §4.1). These fields are the single source of truth for gates/calculations/sequence; `contract_flowchart.py` reads them (it no longer authors its own copies).
 
 Family is always derived from the `type_id` **prefix**, never from the registry section a type is housed under (§8 of the registry houses Class-B types outside their count families).
 

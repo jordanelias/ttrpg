@@ -273,6 +273,89 @@ def adjudicate(contracts: dict, registry_md: str, sources_text: str):
     W(f"A9-info: parsed prefix tally {dict(sorted(prefixes.items()))} "
       f"(scene.* spans scene_event + scene_outcome by design)")
 
+    # ── A10 — gates well-formed and gate-on-quantity owned ──
+    # A gate either gates an in-module quantity (`on:`, must match a state[].name)
+    # or reads cross-module / unowned quantities (`reads:`, informational). A gate
+    # claiming to gate a quantity the module does not own is a defect.
+    seen_gate_ids = {}
+    for m in modules:
+        name = m.get("module", "?")
+        snames = {s.get("name") for s in m.get("state", []) or []}
+        for gt in m.get("gates", []) or []:
+            gid = gt.get("id", "?")
+            for req in ("id", "when", "then", "source"):
+                if not gt.get(req):
+                    V(f"A10 [{name}]: gate '{gid}' missing required field '{req}'")
+            if gid in seen_gate_ids:
+                V(f"A10 [{name}]: gate id '{gid}' duplicates {seen_gate_ids[gid]} "
+                  f"(gate ids are global)")
+            else:
+                seen_gate_ids[gid] = name
+            has_on, has_reads = "on" in gt, "reads" in gt
+            if not has_on and not has_reads:
+                V(f"A10 [{name}]: gate '{gid}' declares neither 'on' (owned quantity) "
+                  f"nor 'reads' (cross-module quantities)")
+            if has_on and gt.get("on") not in snames:
+                V(f"A10 [{name}]: gate '{gid}' gates quantity '{gt.get('on')}' which is "
+                  f"not state of this module (own it, or use 'reads' if cross-module)")
+            if has_reads and not gt.get("reads"):
+                W(f"A10 [{name}]: gate '{gid}' has empty 'reads'")
+
+    # ── A11 — per-system calculations (derivations) ──
+    # Output that names an in-module quantity MUST be a derived_value bucket
+    # (reinforces F1 / A5: derived values are computed, never written). Reverse:
+    # an in-module derived_value with no derivation anywhere is flagged (warning).
+    derived_outputs = {}   # quantity name -> [modules that derive it]
+    for m in modules:
+        name = m.get("module", "?")
+        states = {s.get("name"): s for s in m.get("state", []) or []}
+        for d in m.get("derivations", []) or []:
+            out = d.get("output")
+            for req in ("output", "formula", "source"):
+                if not d.get(req):
+                    V(f"A11 [{name}]: derivation '{out or '?'}' missing required '{req}'")
+            if not d.get("inputs"):
+                W(f"A11 [{name}]: derivation '{out}' lists no inputs")
+            derived_outputs.setdefault(out, []).append(name)
+            if out in states and states[out].get("bucket") != "derived_value":
+                V(f"A11 [{name}]: derivation output '{out}' is an in-module state of bucket "
+                  f"'{states[out].get('bucket')}', must be 'derived_value' (F1)")
+            if d.get("bucket") and d.get("bucket") != "derived_value":
+                V(f"A11 [{name}]: derivation '{out}' declares bucket '{d.get('bucket')}' "
+                  f"(only derived_value is valid)")
+    # reverse: in-module derived_value states; note whether the calculation is
+    # recorded in-module, cross-module, or not at all.
+    for m in modules:
+        name = m.get("module", "?")
+        local_outs = {d.get("output") for d in m.get("derivations", []) or []}
+        for s in m.get("state", []) or []:
+            if s.get("bucket") != "derived_value":
+                continue
+            sn = s.get("name")
+            # split bundled names ("A / B / C") into components for matching
+            comps = [c.strip() for c in sn.split("/")]
+            local = any(o == sn or any(c and c in o for c in comps) for o in local_outs)
+            cross = any(o == sn or any(c and c in o for c in comps)
+                        for o in derived_outputs) and not local
+            if local:
+                continue
+            if cross:
+                W(f"A11-info [{name}]: derived_value '{sn}' is computed cross-module "
+                  f"(derivation recorded under {sorted({mm for o, ms in derived_outputs.items() for mm in ms if any(c and c in o for c in comps)})})")
+            else:
+                W(f"A11 [{name}]: derived_value '{sn}' has no recorded derivation in the "
+                  f"contract (calculation not yet captured)")
+
+    # ── A12 — accounting_phase membership in the canonical sequence ──
+    seq_ids = {s.get("phase") for s in contracts.get("accounting_sequence", []) or []}
+    if any(m.get("accounting_phase") for m in modules) and not seq_ids:
+        V("A12: modules declare accounting_phase but contract has no accounting_sequence")
+    for m in modules:
+        for p in m.get("accounting_phase", []) or []:
+            if p not in seq_ids:
+                V(f"A12 [{m.get('module','?')}]: accounting_phase '{p}' is not a phase in "
+                  f"accounting_sequence")
+
     return violations, warnings
 
 

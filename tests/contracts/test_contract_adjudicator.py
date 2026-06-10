@@ -229,6 +229,119 @@ def test_a9():
     assert any("declares 12" in x for x in hits("A9", w_bad))
 
 
+# ── A10 gates ───────────────────────────────────────────────────────────────
+
+def test_a10_pass_on_owned_quantity():
+    m = mod("m", state=[{"name": "scars", "bucket": "track", "writable": True}],
+            gates=[{"id": "g1", "when": "scars >= 3", "then": "crisis",
+                    "on": "scars", "source": "doc §1"}])
+    v, _ = run(m)
+    assert not hits("A10", v)
+
+
+def test_a10_gate_on_unowned_quantity_violates():
+    m = mod("m", state=[{"name": "scars", "bucket": "track", "writable": True}],
+            gates=[{"id": "g1", "when": "x", "then": "y", "on": "ghost", "source": "s"}])
+    v, _ = run(m)
+    assert any("ghost" in x for x in hits("A10", v))
+
+
+def test_a10_reads_crossmodule_passes():
+    m = mod("m", gates=[{"id": "g1", "when": "MS = 0", "then": "era",
+                         "reads": ["MS (unowned)"], "source": "victory §5"}])
+    v, _ = run(m)
+    assert not hits("A10", v)
+
+
+def test_a10_missing_field_and_neither_on_nor_reads():
+    m = mod("m", gates=[{"id": "g1", "when": "x", "then": "y", "source": "s"},
+                        {"id": "g2", "when": "x", "then": "y"}])  # g2 missing source
+    v, _ = run(m)
+    a10 = hits("A10", v)
+    assert any("neither 'on'" in x for x in a10)
+    assert any("missing required field 'source'" in x for x in a10)
+
+
+def test_a10_duplicate_gate_id():
+    a = mod("a", state=[{"name": "q", "bucket": "track", "writable": True}],
+            gates=[{"id": "gX", "when": "1", "then": "2", "on": "q", "source": "s"}])
+    b = mod("b", state=[{"name": "q", "bucket": "track", "writable": True}],
+            gates=[{"id": "gX", "when": "1", "then": "2", "on": "q", "source": "s"}])
+    v, _ = run(a, b)
+    assert any("duplicates" in x for x in hits("A10", v))
+
+
+# ── A11 derivations ─────────────────────────────────────────────────────────
+
+def test_a11_pass_derived_value_output():
+    m = mod("m", state=[{"name": "Accord", "bucket": "derived_value", "writable": False}],
+            derivations=[{"output": "Accord", "inputs": ["Order"],
+                          "formula": "floor(mean Order)", "source": "§1.3"}])
+    v, w = run(m)
+    assert not hits("A11", v)
+    assert not [x for x in hits("A11", w) if "Accord" in x]   # covered → no reverse warn
+
+
+def test_a11_output_wrong_bucket_violates():
+    m = mod("m", state=[{"name": "Mandate", "bucket": "track", "writable": True}],
+            derivations=[{"output": "Mandate", "inputs": ["L"], "formula": "f", "source": "s"}])
+    v, _ = run(m)
+    assert any("must be 'derived_value'" in x for x in hits("A11", v))
+
+
+def test_a11_missing_formula_violates():
+    m = mod("m", derivations=[{"output": "X", "inputs": ["a"], "source": "s"}])
+    v, _ = run(m)
+    assert any("missing required 'formula'" in x for x in hits("A11", v))
+
+
+def test_a11_uncovered_derived_value_warns():
+    m = mod("m", state=[{"name": "Treasury", "bucket": "derived_value", "writable": False}])
+    _, w = run(m)
+    assert any("Treasury" in x and "no recorded derivation" in x for x in hits("A11", w))
+
+
+def test_a11_crossmodule_coverage_is_info_not_missing():
+    prod = mod("prod", derivations=[{"output": "faction Mandate (x-module)",
+                                     "inputs": ["L"], "formula": "f", "source": "s"}])
+    owner = mod("owner", state=[{"name": "Mandate", "bucket": "derived_value",
+                                 "writable": False}])
+    _, w = run(prod, owner)
+    a11 = hits("A11", w)
+    assert any("Mandate" in x and "cross-module" in x for x in a11)
+    assert not any("Mandate" in x and "no recorded derivation" in x for x in a11)
+
+
+def test_a11_crossmodule_output_no_false_bucket_violation():
+    # output names a quantity that is NOT a state of this module → no bucket check
+    m = mod("m", derivations=[{"output": "faction Mandate (cross-module)", "inputs": ["L"],
+                               "formula": "f", "source": "s"}])
+    v, _ = run(m)
+    assert not hits("A11", v)
+
+
+# ── A12 sequence ────────────────────────────────────────────────────────────
+
+def test_a12_phase_in_sequence_passes():
+    doc = {"modules": [mod("m", accounting_phase=["B"])],
+           "accounting_sequence": [{"phase": "B", "does": "x", "source": "s"}]}
+    v, _ = adjudicate(doc, REGISTRY, SOURCES)
+    assert not hits("A12", v)
+
+
+def test_a12_unknown_phase_violates():
+    doc = {"modules": [mod("m", accounting_phase=["ZZ"])],
+           "accounting_sequence": [{"phase": "B", "does": "x", "source": "s"}]}
+    v, _ = adjudicate(doc, REGISTRY, SOURCES)
+    assert any("ZZ" in x for x in hits("A12", v))
+
+
+def test_a12_phase_without_sequence_violates():
+    doc = {"modules": [mod("m", accounting_phase=["B"])]}
+    v, _ = adjudicate(doc, REGISTRY, SOURCES)
+    assert any("no accounting_sequence" in x for x in hits("A12", v))
+
+
 # ── exit semantics ─────────────────────────────────────────────────────────
 
 def test_clean_contracts_yield_zero_violations():

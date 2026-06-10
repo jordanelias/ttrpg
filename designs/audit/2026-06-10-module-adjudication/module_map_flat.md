@@ -216,86 +216,86 @@ flowchart TB
   end
   engine_clock_x -->|writes| q29
   MS[("Mending Stability (MS) : clock — NO owning module in contracts")]
-  subgraph DERIV["DERIVATIONS (calculations — authored from cited reads)"]
+  subgraph DERIV["DERIVATIONS (calculations — from contract)"]
     d0_s["settlement Order"] -->|"floor(mean settlement Order)"| d0_t[/"province Accord"/]
     %% settlement_layer_v30 §1.3
     d1_s["Prosperity"] -->|"Prosperity × 50"| d1_t[/"Local Economy"/]
     %% settlement_layer_v30 §1.3
-    d2_s["Defense (+ Fort Level)"] -->|"Defense × 20 + Fort × 30"| d2_t[/"Garrison Strength"/]
+    d2_s["Defense, Fort Level"] -->|"Defense × 20 + Fort × 30"| d2_t[/"Garrison Strength"/]
     %% settlement_layer_v30 §1.3
     d3_s["settlement Order"] -->|"Order × 20 (riot events below 0)"| d3_t[/"Public Order"/]
     %% settlement_layer_v30 §1.3
-    d4_s["L_s, PS_s, W_s"] -->|"q_s = 0.5L + 0.5PS"| d4_t[/"faction Mandate"/]
+    d4_s["L_s, PS_s, W_s"] -->|"q_s = 0.5L+0.5PS"| d4_t[/"faction Mandate (cross-module → faction_state)"/]
     %% settlement_layer_v30 §1.8 LPS-2e
-    d5_s["faction Mandate"] -->|"drift ±1/settlement/season toward Mandate (damped)"| d5_t[/"settlement L/PS"/]
+    d5_s["faction Mandate"] -->|"drift ±1/settlement/season toward Mandate (damped, mean-reve"| d5_t[/"settlement L/PS (Mandate feedback)"/]
     %% settlement_layer_v30 §1.8
-    d6_s["settlement Prosperity"] -->|"Σ settlement Prosperity × 10"| d6_t[/"faction Treasury income"/]
-    %% derived_stats §8.1 (as quoted in settlement_layer §1.8)
+    d6_s["settlement Prosperity"] -->|"Σ settlement Prosperity × 10"| d6_t[/"faction Treasury income (cross-module → faction_state)"/]
+    %% derived_stats §8.1 (quoted in settlement_layer §1.8)
   end
-  subgraph GATESB["GATES (thresholds — authored from cited reads)"]
-    g_ci100{"CI = 100"} --> g_ci100_c["Theocracy Unification attempt"]
-    %% ci_political_v30 §2.2
-    g_cicap{"seasonal CI cap"} --> g_cicap_c["CI gain bounded per season"]
-    %% ci_political_v30 §2.4
-    g_ip100{"IP = 100"} --> g_ip100_c["Occupation Phase 1 (first pass)"]
-    %% victory_v30 §5.2
-    g_ip85{"IP ≥ 85 for 3 seasons"} --> g_ip85_c["Occupation Phase 2 (Schoenland)"]
-    %% victory_v30 §5.2
-    g_ip80{"IP ≥ 80 for 3 more seasons"} --> g_ip80_c["Occupation Phase 3 (NW pass)"]
-    %% victory_v30 §5.2
-    g_ipfall{"IP < 85 (P1) / < 75 (P2)"} --> g_ipfall_c["invasion stalls / corridor abandoned"]
-    %% victory_v30 §5.2
-    g_ms0{"MS = 0"} --> g_ms0_c["Post-Calamity Era"]
-    %% victory_v30 §5.1
-    g_ms5{"MS ≤ 5 sustained 10 seasons"} --> g_ms5_c["Second Calamity (true terminal)"]
-    %% victory_v30 §5.1
-    g_msrec{"MS restored to 20 within 10 seasons"} --> g_msrec_c["Post-Calamity recovery"]
-    %% victory_v30 §5.1
-    g_diss{"all factions dissolved"} --> g_diss_c["Anarchy Era (Ministry continues)"]
-    %% victory_v30 §5.3
-    g_ord0{"settlement Order = 0"} --> g_ord0_c["local revolt"]
-    %% settlement_layer_v30 §1.3
-    g_def0{"settlement Defense = 0"} --> g_def0_c["undefended — auto-capture"]
-    %% settlement_layer_v30 §1.3
-    g_dv0{"derived value = 0 held through Accounting"} --> g_dv0_c["owning stat −1 (same rule as faction stats)"]
-    %% settlement_layer_v30 §1.3
-    g_scar3{"Scars on Conviction X ≥ 3"} --> g_scar3_c["Conviction crisis on X (d6 crisis table, 1 season)"]
-    %% conviction_track_v1 §2 (PP-718 per-Conviction)
-    g_scar2{"Scars on Conviction X = 2"} --> g_scar2_c["Resonant Style X exposed; arc transition if X was top primary"]
-    %% conviction_track_v1 §2
-    g_stall8{"project stall ≥ 8"} --> g_stall8_c["state.project_failed emitted"]
-    %% doc-12 §8 / §4.2
+  subgraph GATESB["GATES (thresholds — from contract)"]
+    g_stall8{"project stall >= 8"} --> g_stall8_c["state.project_failed emitted"]
+    %% npc_behavior: doc-12 §8 / §4.2
     g_drift{"cumulative_drift > 0.5"} --> g_drift_c["scene.gossip emitted"]
-    %% doc-12 §8 / §6.3
+    %% npc_behavior: doc-12 §8 / §6.3
+    g_scar2{"Scars on Conviction X = 2"} --> g_scar2_c["Resonant Style X exposed; arc transition if X was top primary"]
+    %% piety_track: conviction_track_v1 §2
+    g_scar3{"Scars on Conviction X >= 3"} --> g_scar3_c["Conviction crisis on X (d6 crisis table, 1 season)"]
+    %% piety_track: conviction_track_v1 §2 (PP-718 per-Conviction)
+    g_ci100{"CI = 100"} --> g_ci100_c["Theocracy Unification attempt"]
+    %% territorial_piety: ci_political_v30 §2.2
+    g_cicap{"seasonal CI cap"} --> g_cicap_c["CI gain bounded per season"]
+    %% territorial_piety: ci_political_v30 §2.4
     g_strain{"Knot strain > capacity"} --> g_strain_c["Knot Break"]
-    %% knots_v30 §6.1
-    g_decay{"no new strain that season AND Disposition ≥ +3"} --> g_decay_c["Knot strain −1 at Accounting"]
-    %% knots_v30 §5
-    g_bond5{"Bonds ≥ 5"} --> g_bond5_c["knot operations eligible (Memory-Query-checked prerequisite)"]
-    %% key_substrate_v30 §8.4
+    %% fieldwork_knots: knots_v30 §6.1
+    g_decay{"no new strain that season AND Disposition >= +3"} --> g_decay_c["Knot strain -1 at Accounting"]
+    %% fieldwork_knots: knots_v30 §5
+    g_bond5{"Bonds >= 5"} --> g_bond5_c["knot operations eligible (Memory-Query-checked prerequisite)"]
+    %% fieldwork_knots: key_substrate_v30 §8.4
+    g_ip100{"IP = 100"} --> g_ip100_c["Occupation Phase 1 (first pass)"]
+    %% peninsular_strain: victory_v30 §5.2
+    g_ip85{"IP >= 85 for 3 seasons"} --> g_ip85_c["Occupation Phase 2 (Schoenland)"]
+    %% peninsular_strain: victory_v30 §5.2
+    g_ip80{"IP >= 80 for 3 more seasons"} --> g_ip80_c["Occupation Phase 3 (NW pass)"]
+    %% peninsular_strain: victory_v30 §5.2
+    g_ipfall{"IP < 85 (P1) / < 75 (P2)"} --> g_ipfall_c["invasion stalls / corridor abandoned"]
+    %% peninsular_strain: victory_v30 §5.2
+    g_ord0{"settlement Order = 0"} --> g_ord0_c["local revolt"]
+    %% settlement_layer: settlement_layer_v30 §1.3
+    g_def0{"settlement Defense = 0"} --> g_def0_c["undefended — auto-capture"]
+    %% settlement_layer: settlement_layer_v30 §1.3
+    g_dv0{"derived value = 0 held through Accounting"} --> g_dv0_c["owning stat -1 (same rule as faction stats)"]
+    %% settlement_layer: settlement_layer_v30 §1.3
+    g_ms0{"MS = 0"} --> g_ms0_c["Post-Calamity Era"]
+    %% victory: victory_v30 §5.1
+    g_ms5{"MS <= 5 sustained 10 seasons"} --> g_ms5_c["Second Calamity (true terminal)"]
+    %% victory: victory_v30 §5.1
+    g_msrec{"MS restored to 20 within 10 seasons"} --> g_msrec_c["Post-Calamity recovery"]
+    %% victory: victory_v30 §5.1
+    g_diss{"all factions dissolved"} --> g_diss_c["Anarchy Era (Ministry continues)"]
+    %% victory: victory_v30 §5.3
   end
+  q6 -.-> g_stall8
+  q4 -.-> g_drift
+  q8 -.-> g_scar2
+  q8 -.-> g_scar3
   q10 -.-> g_ci100
   q10 -.-> g_cicap
+  q14 -.-> g_strain
+  q14 -.-> g_decay
+  q15 -.-> g_bond5
   q20 -.-> g_ip100
   q20 -.-> g_ip85
   q20 -.-> g_ip80
   q20 -.-> g_ipfall
-  MS -.-> g_ms0
-  MS -.-> g_ms5
-  MS -.-> g_msrec
-  q1 -.-> g_diss
   q21 -.-> g_ord0
   q21 -.-> g_def0
   q22 -.-> g_dv0
-  q8 -.-> g_scar2
-  q8 -.-> g_scar3
-  q6 -.-> g_stall8
-  q4 -.-> g_drift
-  q14 -.-> g_strain
-  q14 -.-> g_decay
-  q15 -.-> g_bond5
+  MS -.-> g_ms0
+  MS -.-> g_ms5
+  MS -.-> g_msrec
+  victory_x -.-> g_diss
   classDef gatecls fill:#ffd,stroke:#a80;
-  class g_ci100,g_cicap,g_ip100,g_ip85,g_ip80,g_ipfall,g_ms0,g_ms5,g_msrec,g_diss,g_ord0,g_def0,g_dv0,g_scar3,g_scar2,g_stall8,g_drift,g_strain,g_decay,g_bond5 gatecls;
+  class g_stall8,g_drift,g_scar2,g_scar3,g_ci100,g_cicap,g_strain,g_decay,g_bond5,g_ip100,g_ip85,g_ip80,g_ipfall,g_ord0,g_def0,g_dv0,g_ms0,g_ms5,g_msrec,g_diss gatecls;
 ```
 
 ## 3. World-state era machine (victory_v30 §5)
@@ -328,13 +328,13 @@ stateDiagram-v2
 ### 4.1 Master module table
 | Module | Scales | Mechanic | Inputs | State & calculations | Gates / sequence | Outputs |
 |---|---|---|---|---|---|---|
-| faction_state | provincial | deterministic_accounting | da.* x5 ← domain_actions; mechanical.accounting ← engine_clock; state.* x2 ← faction_politics; state.standing_change ← faction_politics,faction_state; scene.investigation_resolved ← faction_politics,scene_slate; mechanical.* x2 ← faction_state; scene.gift ← fieldwork_knots,scene_slate; scene.battle_concluded ← mass_battle; meta.miraculous_event ← miraculous_event; env.peninsular_strain_shock ← peninsular_strain; env.disaster ← peninsular_strain,scenario_authoring; env.population_change ← peninsular_strain,settlement_layer; state.scar_acquired ← piety_track; scene.* x3 ← scene_slate,social_contest; scene.contest_resolved ← social_contest | Mandate (derived_value, read); Treasury (derived_value, read); faction stats 1-7 (track) | ±2 faction-stat seasonal cap (settlement §1.8); cascade loop [open] | mechanical.cascade_resolution; mechanical.mission_shift; state.standing_change |
-| npc_behavior | personal scene | deterministic_accounting | da.* x3 ← domain_actions; state.* x2 ← faction_politics; state.standing_change ← faction_politics,faction_state; scene.investigation_resolved ← faction_politics,scene_slate; mechanical.* x2 ← faction_state; meta.* x2, state.belief_revised ← fieldwork_knots; scene.gift ← fieldwork_knots,scene_slate; scene.battle_concluded ← mass_battle; meta.miraculous_event ← miraculous_event; scene.witness ← npc_behavior,scene_slate; env.peninsular_strain_shock ← peninsular_strain; state.scar_acquired ← piety_track; scene.* x3 ← scene_slate,social_contest; scene.contest_resolved ← social_contest; meta.thread_woven ← threadwork | beliefs/opinions (track); concerns (track); projects (track); arc state (track) | Accounting order B→DA→C→D→E (doc-12 §8); stall≥8; drift threshold; cumulative_drift>0.5 | scene.witness; state.concern_resolved; state.belief_revised; scene.displacement [unreg]; mechanical.project_advanced [unreg]; state.project_failed [unreg]; state.project_completed [unreg]; state.opinion_revised; scene.interaction; scene.dialogue; scene.gossip |
+| faction_state | provincial | deterministic_accounting | da.* x5 ← domain_actions; mechanical.accounting ← engine_clock; state.* x2 ← faction_politics; state.standing_change ← faction_politics,faction_state; scene.investigation_resolved ← faction_politics,scene_slate; mechanical.* x2 ← faction_state; scene.gift ← fieldwork_knots,scene_slate; scene.battle_concluded ← mass_battle; meta.miraculous_event ← miraculous_event; env.peninsular_strain_shock ← peninsular_strain; env.disaster ← peninsular_strain,scenario_authoring; env.population_change ← peninsular_strain,settlement_layer; state.scar_acquired ← piety_track; scene.* x3 ← scene_slate,social_contest; scene.contest_resolved ← social_contest | Mandate (derived_value, read); Treasury (derived_value, read); faction stats 1-7 (track) | — | mechanical.cascade_resolution; mechanical.mission_shift; state.standing_change |
+| npc_behavior | personal scene | deterministic_accounting | da.* x3 ← domain_actions; state.* x2 ← faction_politics; state.standing_change ← faction_politics,faction_state; scene.investigation_resolved ← faction_politics,scene_slate; mechanical.* x2 ← faction_state; meta.* x2, state.belief_revised ← fieldwork_knots; scene.gift ← fieldwork_knots,scene_slate; scene.battle_concluded ← mass_battle; meta.miraculous_event ← miraculous_event; scene.witness ← npc_behavior,scene_slate; env.peninsular_strain_shock ← peninsular_strain; state.scar_acquired ← piety_track; scene.* x3 ← scene_slate,social_contest; scene.contest_resolved ← social_contest; meta.thread_woven ← threadwork | beliefs/opinions (track); concerns (track); projects (track); arc state (track) | g_stall8: project stall >= 8 → state.project_failed emitted; g_drift: cumulative_drift > 0.5 → scene.gossip emitted | scene.witness; state.concern_resolved; state.belief_revised; scene.displacement [unreg]; mechanical.project_advanced [unreg]; state.project_failed [unreg]; state.project_completed [unreg]; state.opinion_revised; scene.interaction; scene.dialogue; scene.gossip |
 | npc_memory | personal | state_reader | scene.* x2, state.* x2 ← npc_behavior | — | — | — |
-| piety_track | personal | deterministic_accounting | da.* x2 ← domain_actions; meta.knot_ruptured ← fieldwork_knots; scene.battle_concluded ← mass_battle; scene.witness ← npc_behavior,scene_slate; scene.* x3 ← scene_slate,social_contest; meta.thread_woven ← threadwork | conviction scars (track) | per-Conviction Scar 2 (Style exposed) / 3+ (crisis, d6 table) — PP-718 | state.scar_acquired |
-| territorial_piety | territory provincial | deterministic_accounting | — | CV (per-territory Piety) (track); CI (Church Influence) (clock); TC (Theocracy Counter) (clock) | CI seasonal cap (ci_political §2.4); CI=100 handoff | — |
-| threadwork | personal thread | dice_pool | — | Coherence (pool); Thread Fatigue (track) | Coherence depletion (variable cost); Thread Fatigue (ED-694) | scene.thread_operation [unreg]; meta.thread_woven |
-| fieldwork_knots | personal scene | dice_pool | * ← engine | knot strain (track); Bonds (track); Evidence Track (clock); Disposition Track (track) | Bonds≥5 prerequisite; strain>capacity Break; decay gate (Disposition≥+3, no new strain) | meta.knot_formed; meta.knot_ruptured; scene.gift; state.belief_revised |
+| piety_track | personal | deterministic_accounting | da.* x2 ← domain_actions; meta.knot_ruptured ← fieldwork_knots; scene.battle_concluded ← mass_battle; scene.witness ← npc_behavior,scene_slate; scene.* x3 ← scene_slate,social_contest; meta.thread_woven ← threadwork | conviction scars (track) | g_scar2: Scars on Conviction X = 2 → Resonant Style X exposed; arc transition if X was top primary; g_scar3: Scars on Conviction X >= 3 → Conviction crisis on X (d6 crisis table, 1 season) | state.scar_acquired |
+| territorial_piety | territory provincial | deterministic_accounting | — | CV (per-territory Piety) (track); CI (Church Influence) (clock); TC (Theocracy Counter) (clock) | g_ci100: CI = 100 → Theocracy Unification attempt; g_cicap: seasonal CI cap → CI gain bounded per season | — |
+| threadwork | personal thread | dice_pool | — | Coherence (pool); Thread Fatigue (track) | — | scene.thread_operation [unreg]; meta.thread_woven |
+| fieldwork_knots | personal scene | dice_pool | * ← engine | knot strain (track); Bonds (track); Evidence Track (clock); Disposition Track (track) | g_strain: Knot strain > capacity → Knot Break; g_decay: no new strain that season AND Disposition >= +3 → Knot strain -1 at Accounting; g_bond5: Bonds >= 5 → knot operations eligible (Memory-Query-checked prerequisite) | meta.knot_formed; meta.knot_ruptured; scene.gift; state.belief_revised |
 | scene_slate | scene | state_reader | — | — | — | mechanical.scene_entered; scene.dialogue; scene.gift; scene.insult; scene.investigation_resolved; scene.threat; scene.witness |
 | game_director | scene | state_reader | — | — | — | mechanical.scene_entered; mechanical.scene_exited; mechanical.scene_skipped |
 | scene_timer | scene | clock_advance | mechanical.* x3 ← game_director | — | — | — |
@@ -342,12 +342,12 @@ stateDiagram-v2
 | social_contest | scene | dice_pool | state.opinion_revised ← npc_behavior | persuasion_track (track) | — | scene.contest_resolved; scene.dialogue; scene.insult; scene.threat |
 | mass_battle | scene | dice_pool | — | — | — | scene_outcome.battle_concluded [unreg]; scene.battle_concluded |
 | domain_actions | provincial | d_sigma | — | — | — | scene.draft_da [unreg]; da.antinomian_action; da.covert_betrayal; da.diplomatic_alliance; da.economic_intervention; da.public_governance |
-| peninsular_strain | peninsula | deterministic_accounting | — | Turmoil (clock); IP (Institutional Pressure) (clock) | Turmoil 0–10; IP milestones 60/80/90 visibility (victory §5.2) | env.crisis; env.disaster; env.peninsular_strain_shock; env.population_change |
-| settlement_layer | settlement territory | deterministic_accounting | env.peninsular_strain_shock ← peninsular_strain; env.disaster ← peninsular_strain,scenario_authoring | Prosperity / Defense / Order (track); Local Economy / Garrison Strength / Public Order (derived_value, read); Legitimacy (L) / Popular Support (PS) (track); province Accord (derived_value, read) | Order=0 revolt; Defense=0 auto-capture; derived=0 through Accounting → stat −1; Mandate↔L/PS damped feedback (§1.8) | env.population_change |
+| peninsular_strain | peninsula | deterministic_accounting | — | Turmoil (clock); IP (Institutional Pressure) (clock) | g_ip100: IP = 100 → Occupation Phase 1 (first pass); g_ip85: IP >= 85 for 3 seasons → Occupation Phase 2 (Schoenland); g_ip80: IP >= 80 for 3 more seasons → Occupation Phase 3 (NW pass); g_ipfall: IP < 85 (P1) / < 75 (P2) → invasion stalls / corridor abandoned | env.crisis; env.disaster; env.peninsular_strain_shock; env.population_change |
+| settlement_layer | settlement territory | deterministic_accounting | env.peninsular_strain_shock ← peninsular_strain; env.disaster ← peninsular_strain,scenario_authoring | Prosperity / Defense / Order (track); Local Economy / Garrison Strength / Public Order (derived_value, read); Legitimacy (L) / Popular Support (PS) (track); province Accord (derived_value, read) | g_ord0: settlement Order = 0 → local revolt; g_def0: settlement Defense = 0 → undefended — auto-capture; g_dv0: derived value = 0 held through Accounting → owning stat -1 (same rule as faction stats) | env.population_change |
 | settlement_economy | settlement | deterministic_accounting | da.economic_intervention ← domain_actions; env.population_change ← peninsular_strain,settlement_layer | — | — | — |
-| ci_political | provincial | deterministic_accounting | — | CI (Church Influence) (clock, read); faction political pool (pool); card hands / cooldown (track) | CI=100 Theocracy attempt (§2.2); card cooldown track (§5.3) | — |
-| victory | provincial peninsula | state_reader | — | MS / IP / CI / Turmoil / Accord / Mandate / PV / PT reads (clock, read) | MS=0; MS≤5×10s; IP=100/85/80 phase chain + repulsion exits; all-dissolved | — |
-| engine_clock | provincial | clock_advance | — | season counter (clock) | season tick → mechanical.season_change; Accounting boundary → mechanical.accounting | mechanical.accounting; mechanical.season_change |
+| ci_political | provincial | deterministic_accounting | — | CI (Church Influence) (clock, read); faction political pool (pool); card hands / cooldown (track) | — | — |
+| victory | provincial peninsula | state_reader | — | MS / IP / CI / Turmoil / Accord / Mandate / PV / PT reads (clock, read) | g_ms0: MS = 0 → Post-Calamity Era; g_ms5: MS <= 5 sustained 10 seasons → Second Calamity (true terminal); g_msrec: MS restored to 20 within 10 seasons → Post-Calamity recovery; g_diss: all factions dissolved → Anarchy Era (Ministry continues) | — |
+| engine_clock | provincial | clock_advance | — | season counter (clock) | — | mechanical.accounting; mechanical.season_change |
 | faction_politics | provincial | deterministic_accounting | — | — | — | scene.investigation_resolved; state.coup_attempted; state.standing_change; state.succession |
 | miraculous_event | personal scene | state_reader | — | — | — | meta.miraculous_event |
 | scenario_authoring | peninsula | manifest | — | — | — | env.crisis; env.disaster |
@@ -359,50 +359,50 @@ stateDiagram-v2
 ### 4.2 Canonical sequence (Accounting spine)
 | Step | What happens | Source |
 |---|---|---|
-| season tick | engine_clock emits mechanical.season_change | key_type_registry (engine_clock) |
-| Accounting boundary | engine_clock emits mechanical.accounting | doc-12 §8 |
-| 1. Procedure B | Knowledge Decay → Concern Generation (memory_query reads Keys) → Resolution (state.concern_resolved, state.belief_revised, MemoryReferences) | doc-12 §8 |
-| 2. DA Proposal Phase | select_proposal() reads Faction Meta-Armature; execute_proposed_domain_actions() emits da_outcome.*; displacement_neglect_observed → scene.displacement [unreg] | doc-12 §8 |
-| 3. Procedure C | mechanical.project_advanced [unreg]; state.project_failed [unreg] (stall ≥ 8); state.project_completed [unreg] | doc-12 §8 |
-| 4. Procedure D | state.opinion_revised per drift threshold | doc-12 §8 |
-| 5. Procedure E | scene.interaction (ambient pairs); scene.dialogue (knowledge sharing); scene.gossip (cumulative_drift > 0.5) | doc-12 §8 |
-| emission processing | substrate single-update rule: validate (registry + invariants, causes[] DAG) → append immutable KEY_LOG → resolve observers — inline, deterministic | key_substrate_v30 §4.1 |
-| settlement Accounting | derived-value-at-0-through-Accounting → stat −1; Mandate feedback drift ±1; Knot strain decay check | settlement §1.3/§1.8; knots §5 |
+| season_tick | engine_clock emits mechanical.season_change | key_type_registry (engine_clock) |
+| accounting_boundary | engine_clock emits mechanical.accounting | doc-12 §8 |
+| B_concern | Procedure B: Knowledge Decay -> Concern Generation (memory_query reads Keys) -> Resolution (state.concern_resolved, state.belief_revised, MemoryReferences) | doc-12 §8 |
+| DA_proposal | DA Proposal Phase: select_proposal() reads Faction Meta-Armature; execute_proposed_domain_actions() emits da_outcome.*; displacement_neglect_observed -> scene.displacement [unreg] | doc-12 §8 |
+| C_project | Procedure C: mechanical.project_advanced [unreg]; state.project_failed [unreg] (stall >= 8); state.project_completed [unreg] | doc-12 §8 |
+| D_opinion | Procedure D: state.opinion_revised per drift threshold | doc-12 §8 |
+| E_offscreen | Procedure E: scene.interaction (ambient pairs); scene.dialogue (knowledge sharing); scene.gossip (cumulative_drift > 0.5) | doc-12 §8 |
+| emission_processing | substrate single-update rule: validate (registry + invariants, causes[] DAG) -> append immutable KEY_LOG -> resolve observers — inline, deterministic | key_substrate_v30 §4.1 |
+| settlement_accounting | derived-value-at-0-through-Accounting -> stat -1; Mandate feedback drift ±1; Knot strain decay check | settlement §1.3/§1.8; knots §5 |
 
-### 4.3 Gates
-| Condition | Consequence | Source |
-|---|---|---|
-| CI = 100 | Theocracy Unification attempt | ci_political_v30 §2.2 |
-| seasonal CI cap | CI gain bounded per season | ci_political_v30 §2.4 |
-| IP = 100 | Occupation Phase 1 (first pass) | victory_v30 §5.2 |
-| IP ≥ 85 for 3 seasons | Occupation Phase 2 (Schoenland) | victory_v30 §5.2 |
-| IP ≥ 80 for 3 more seasons | Occupation Phase 3 (NW pass) | victory_v30 §5.2 |
-| IP < 85 (P1) / < 75 (P2) | invasion stalls / corridor abandoned | victory_v30 §5.2 |
-| MS = 0 | Post-Calamity Era | victory_v30 §5.1 |
-| MS ≤ 5 sustained 10 seasons | Second Calamity (true terminal) | victory_v30 §5.1 |
-| MS restored to 20 within 10 seasons | Post-Calamity recovery | victory_v30 §5.1 |
-| all factions dissolved | Anarchy Era (Ministry continues) | victory_v30 §5.3 |
-| settlement Order = 0 | local revolt | settlement_layer_v30 §1.3 |
-| settlement Defense = 0 | undefended — auto-capture | settlement_layer_v30 §1.3 |
-| derived value = 0 held through Accounting | owning stat −1 (same rule as faction stats) | settlement_layer_v30 §1.3 |
-| Scars on Conviction X ≥ 3 | Conviction crisis on X (d6 crisis table, 1 season) | conviction_track_v1 §2 (PP-718 per-Conviction) |
-| Scars on Conviction X = 2 | Resonant Style X exposed; arc transition if X was top primary | conviction_track_v1 §2 |
-| project stall ≥ 8 | state.project_failed emitted | doc-12 §8 / §4.2 |
-| cumulative_drift > 0.5 | scene.gossip emitted | doc-12 §8 / §6.3 |
-| Knot strain > capacity | Knot Break | knots_v30 §6.1 |
-| no new strain that season AND Disposition ≥ +3 | Knot strain −1 at Accounting | knots_v30 §5 |
-| Bonds ≥ 5 | knot operations eligible (Memory-Query-checked prerequisite) | key_substrate_v30 §8.4 |
+### 4.3 Gates (per-system thresholds — from contract)
+| Owning system | Condition | Consequence | Source |
+|---|---|---|---|
+| npc_behavior | project stall >= 8 | state.project_failed emitted | doc-12 §8 / §4.2 |
+| npc_behavior | cumulative_drift > 0.5 | scene.gossip emitted | doc-12 §8 / §6.3 |
+| piety_track | Scars on Conviction X = 2 | Resonant Style X exposed; arc transition if X was top primary | conviction_track_v1 §2 |
+| piety_track | Scars on Conviction X >= 3 | Conviction crisis on X (d6 crisis table, 1 season) | conviction_track_v1 §2 (PP-718 per-Conviction) |
+| territorial_piety | CI = 100 | Theocracy Unification attempt | ci_political_v30 §2.2 |
+| territorial_piety | seasonal CI cap | CI gain bounded per season | ci_political_v30 §2.4 |
+| fieldwork_knots | Knot strain > capacity | Knot Break | knots_v30 §6.1 |
+| fieldwork_knots | no new strain that season AND Disposition >= +3 | Knot strain -1 at Accounting | knots_v30 §5 |
+| fieldwork_knots | Bonds >= 5 | knot operations eligible (Memory-Query-checked prerequisite) | key_substrate_v30 §8.4 |
+| peninsular_strain | IP = 100 | Occupation Phase 1 (first pass) | victory_v30 §5.2 |
+| peninsular_strain | IP >= 85 for 3 seasons | Occupation Phase 2 (Schoenland) | victory_v30 §5.2 |
+| peninsular_strain | IP >= 80 for 3 more seasons | Occupation Phase 3 (NW pass) | victory_v30 §5.2 |
+| peninsular_strain | IP < 85 (P1) / < 75 (P2) | invasion stalls / corridor abandoned | victory_v30 §5.2 |
+| settlement_layer | settlement Order = 0 | local revolt | settlement_layer_v30 §1.3 |
+| settlement_layer | settlement Defense = 0 | undefended — auto-capture | settlement_layer_v30 §1.3 |
+| settlement_layer | derived value = 0 held through Accounting | owning stat -1 (same rule as faction stats) | settlement_layer_v30 §1.3 |
+| victory | MS = 0 | Post-Calamity Era | victory_v30 §5.1 |
+| victory | MS <= 5 sustained 10 seasons | Second Calamity (true terminal) | victory_v30 §5.1 |
+| victory | MS restored to 20 within 10 seasons | Post-Calamity recovery | victory_v30 §5.1 |
+| victory | all factions dissolved | Anarchy Era (Ministry continues) | victory_v30 §5.3 |
 
 ### 4.4 Derivations (calculations)
 | Mapping | Formula | Source |
 |---|---|---|
 | settlement Order → province Accord | `floor(mean settlement Order)` | settlement_layer_v30 §1.3 |
 | Prosperity → Local Economy | `Prosperity × 50` | settlement_layer_v30 §1.3 |
-| Defense (+ Fort Level) → Garrison Strength | `Defense × 20 + Fort × 30` | settlement_layer_v30 §1.3 |
+| Defense, Fort Level → Garrison Strength | `Defense × 20 + Fort × 30` | settlement_layer_v30 §1.3 |
 | settlement Order → Public Order | `Order × 20 (riot events below 0)` | settlement_layer_v30 §1.3 |
-| L_s, PS_s, W_s → faction Mandate | `q_s = 0.5L + 0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = Σ W_s·(q_s/7); Mandate = clamp(round(7T/(T+6)), 0, 7) — saturating (Lesson-5 bound)` | settlement_layer_v30 §1.8 LPS-2e |
-| faction Mandate → settlement L/PS | `drift ±1/settlement/season toward Mandate (damped); mean-reverting stabilizing feedback; Stage-4 sim bounded over 30 seasons` | settlement_layer_v30 §1.8 |
-| settlement Prosperity → faction Treasury income | `Σ settlement Prosperity × 10` | derived_stats §8.1 (as quoted in settlement_layer §1.8) |
+| L_s, PS_s, W_s → faction Mandate (cross-module → faction_state) | `q_s = 0.5L+0.5PS; W_s = base(Type)+Prosperity+FacilityTier; T = Σ W_s·(q_s/7); Mandate = clamp(round(7T/(T+6)),0,7) — saturating (Lesson-5 bound)` | settlement_layer_v30 §1.8 LPS-2e |
+| faction Mandate → settlement L/PS (Mandate feedback) | `drift ±1/settlement/season toward Mandate (damped, mean-reverting; Stage-4 sim bounded 30 seasons)` | settlement_layer_v30 §1.8 |
+| settlement Prosperity → faction Treasury income (cross-module → faction_state) | `Σ settlement Prosperity × 10` | derived_stats §8.1 (quoted in settlement_layer §1.8) |
 
 ### 4.5 Key-type matrix (flattened I/O at type granularity)
 | Key type | Registered | Emitters (contracts) | Consumers (contracts; wildcard-matched) |
