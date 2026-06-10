@@ -1,0 +1,123 @@
+stateDiagram-v2
+
+%% VALORIA SETTLEMENT LAYER - STATE GRAPH
+%% Concurrent regions inside SETTLEMENT = orthogonal axes of one settlement.
+%% Sources: settlement_layer_v30.md, valoria_political_hierarchy_v30.md, settlement_adjacency_v30.md.
+
+state "SETTLEMENT (per settlement, concurrent axes)" as SETTLEMENT {
+
+  state "Control / military axis" as CTRL {
+    [*] --> Held
+    Held --> UnderAssault : hostile adjacent declares Assault
+    UnderAssault --> Captured : attacker wins (Military vs Def + garrison Discipline)
+    UnderAssault --> Held : repelled, attacker takes casualties
+    Held --> UnderSiege : Siege declared (Military >= Defense), attacker pinned
+    UnderSiege --> Surrendered : Order reaches 0 (Order -1 per season)
+    UnderSiege --> Held : siege lifted
+    Held --> Bypassed : Bypass (Military > Defense + 2)
+    Bypassed --> Held : invader leaves province
+    Bypassed --> Bypassed : supply raid each season (Mil vs Ob 1 gives invader units -1 Discipline)
+    Held --> AutoCaptured : Defense 0 + no garrison + hostile entry (no roll)
+    Captured --> ControllerChange
+    Surrendered --> ControllerChange
+    AutoCaptured --> ControllerChange
+    ControllerChange --> Held : new controller installed (LA Disposition reset to 0, L/PS re-keyed)
+    ControllerChange --> RMTransition : RM takes control (Governance Transition scene)
+    RMTransition --> Held : Disestablishment (-1 Order 2 seasons, then Accord +0.5/season, PT -1 now)
+    RMTransition --> Held : Accommodation (no penalty, PT -0.5 only)
+    RMTransition --> Held : Transformation (4 seasons, then PT -1 and Accord +0.5/season)
+    Held --> Holdout : parent Seat captured + Order >= 3 (+ governor Disp >= +3 in collapse case)
+    Holdout --> Held : reduced individually or granted autonomy
+    note right of Held
+      Fortress gate - cannot be bypassed
+      unless Military exceeds Defense by 3+
+      (par.5.1, Lowenskyst intended near-absolute)
+    end note
+  }
+  --
+  state "Governance axis" as GOV {
+    [*] --> Governed
+    state Governed {
+      [*] --> FactionGovernorNPC
+      FactionGovernorNPC --> PlayerGovernor : Duty assignment (Standing gate 3/4/5)
+      PlayerGovernor --> FactionGovernorNPC : removal / departure
+      FactionGovernorNPC --> SubnationalGovernor : management granted (Influence, Ob 1)
+      SubnationalGovernor --> FactionGovernorNPC : revoked (Ob = sub Influence / 2, Order -1, Disp -2)
+      FactionGovernorNPC --> BishopGovernor : Ecclesiastical Appointment (Church tree, fractionalizes province if controller differs from Seat)
+    }
+    Governed --> Unmanaged : governor dies / removed / expelled / faction collapse
+    Unmanaged --> Governed : new assignment (eligibility by Standing)
+    Unmanaged --> ChurchGoverned : Pastoral Assumption (Ob 1, requires Chapel+ and no governor)
+    ChurchGoverned --> Governed : province revokes (Ob = Church Influence / 2, Order -1, Disp -2)
+    note right of Unmanaged
+      Unmanaged ticks Order -1 per season
+      until a governor is assigned (par.7.2)
+    end note
+  }
+  --
+  state "Civil / economic axis" as CIV {
+    [*] --> Stable
+    Stable --> Flourishing : Order 5 and Prosperity 4+ (festival, +1 Disp all local NPCs)
+    Flourishing --> Stable : condition lapses
+    Stable --> Famine : Prosperity 0 (Order -1 automatic, population leaving)
+    Famine --> Stable : Prosperity recovers
+    Stable --> Revolt : Order 0 (governor expelled unless garrison present)
+    Revolt --> Stable : Order restored (Pacify path)
+    Stable --> BlackMarket : Order <= 1 or no governor (automatic)
+    BlackMarket --> Stable : Order >= 3 (automatic)
+    note right of BlackMarket
+      Intel broker spawns where Prosperity >= 3
+      and governance weak. Thread exploitation
+      site wherever Thread Proximity <= 2.
+      (par.4.7 - 4.9)
+    end note
+  }
+}
+
+state "PROVINCE (parent node)" as PROVINCE {
+  [*] --> Unified
+  Unified --> Fractured : constituent settlements aligned to different factions
+  Fractured --> Unified : all sub-provinces return to common alignment
+  note right of Fractured
+    Named sub-provinces (northern/southern etc.)
+    each keeps the 1-3 settlement rule and counts
+    as a full province for political value.
+    Unification bonus lost while fractured.
+    (hierarchy par.2.3 - 2.4)
+  end note
+}
+
+state "FACTION LIFECYCLE (settlement-driven)" as LIFECYCLE {
+  [*] --> Cell
+  Cell --> Organization : first settlement held (Renown 3-4)
+  Organization --> Movement : 2+ settlements, Renown 5+, 2 officers at Disp +3
+  Movement --> Faction : 4+ settlements across 2+ provinces, Renown 7+, 1 Seat, Declaration (Influence = Renown/2 vs Ob 3)
+  Faction --> Hegemon : 2+ province Seats, Renown 9+, full sheet, Parliament
+  Faction --> CityState : last province lost, leader alive in personally held settlement
+  Hegemon --> CityState : same collapse rule
+  CityState --> Movement : re-emergence via Stage 2-4 pathway
+  CityState --> Dissolved : leader killed/captured and no successor at Standing 4+
+  Dissolved --> [*] : settlements unmanaged, officers become free agents
+  note right of Faction
+    Founded faction starts L2 PS3
+    I = Renown/2, W = 2 + settlements - 1 (cap 5),
+    Mil 1, Int 2, Sta 3 (ED-790)
+  end note
+  note right of CityState
+    Partial sheet - Influence, Wealth, Stability.
+    No Mandate, no Military unless garrisoned.
+    Defends, trades, allies, rebuilds. (par.6.3)
+  end note
+}
+
+state "STANDING-6 RESIDENCY (per claimant at a Seat)" as RESIDENCY {
+  [*] --> WingHeld
+  WingHeld --> Vacated : death / succession / exile / formal transfer
+  Vacated --> WingHeld : new claimant occupies
+  [*] --> PendingRank : Standing 6 reached, no Wing free
+  PendingRank --> WingHeld : holder departs OR Expand Capacity (Treasury -300, +1 Wing, max 1 per decade)
+  PendingRank --> PrinceInWaiting : accepts provisional rank
+  PrinceInWaiting --> PrinceInWaiting : each season Disposition pool vs Ob 2 to hold standing
+  PrinceInWaiting --> RevertedStd5 : seasonal contest failed
+  PrinceInWaiting --> WingHeld : Wing opens
+}

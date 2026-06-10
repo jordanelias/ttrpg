@@ -1,0 +1,134 @@
+flowchart TD
+
+%% VALORIA SETTLEMENT LAYER - DATAFLOW
+%% Sources: settlement_layer_v30.md (incl. par.1.8 LPS-2e), valoria_political_hierarchy_v30.md (PP-726),
+%% settlement_adjacency_v30.md, derived_stats_v30.md, territory_temperaments_v30.md, valoria_geography_v30.yaml
+%% Dashed nodes = PENDING / TBD (not canonicalized)
+
+subgraph INPUTS["INPUTS - actions and events"]
+  GACT["Governor action, 1 free per season<br/>Develop / Fortify / Pacify / Administer<br/>(par.3.2)"]
+  DACT["Domain Actions<br/>assign governor - grant/revoke management<br/>Expand Capacity: Treasury -300, +1 Wing, max 1 per decade<br/>(par.3.2-3.3, par.1.4.3)"]
+  CHACT["Church actions<br/>build Axes 1-4 - Pastoral Assumption Ob 1<br/>Ecclesiastical Appointment, Bishop-Governor<br/>(par.1.5, par.1.7, par.3.2)"]
+  MILACT["Military<br/>march - Assault - Siege - Bypass - garrison<br/>(par.5.1-5.2, adjacency par.2)"]
+  THOP["Thread operations, Relational+ scale<br/>capped +/-1 per stat per season (par.4.4)"]
+  MISS["Faction mission outcomes<br/>delta-L / delta-PS uniform to held settlements (par.1.8)"]
+  SEAS["Seasonal Accounting tick<br/>events 0-1 per settlement (par.4.3) - clocks (par.7.1)"]
+end
+
+subgraph SSTATE["SETTLEMENT STATE - S-001..S-037"]
+  TY["Type + sub-features<br/>(par.2.1, par.2.2)"]
+  PDO["Prosperity 0-5 - Defense 0-5 - Order 0-5<br/>(par.1.3)"]
+  LPS["Legitimacy 0-7 - Popular Support 0-7<br/>per controlling faction (par.1.8)"]
+  FACT["FacilityTier 0-3 + slot occupancy<br/>(par.1.4)"]
+  AXES["Church axes: Building / Templar / Inquisitor / Church Gov<br/>(par.1.5)"]
+  GOVS["Governor slot: NPC / PC / subnational / Bishop / Church<br/>(par.3)"]
+  GARR["Garrison: one unit (par.5.2)"]
+  LACT["Local Actors 0-2, Disposition (par.4.5)"]
+  EMRG["Emergent: black market - intel broker - Thread site<br/>(par.4.7-4.9)"]
+end
+
+subgraph CALCS["CALCULATIONS"]
+  WCALC["W_s = base(Type) + Prosperity + FacilityTier<br/>range 1-11 (par.1.8)"]
+  QCALC["q_s = 0.5 L + 0.5 PS (par.1.8)"]
+  TCALC["T = Sum over held settlements of W_s x (q_s / 7)"]
+  MAND["Mandate = clamp(round(7T / (T + K)), 0, 7), K = 6<br/>saturating bound (par.1.8)"]
+  AGGLP["aggregate_L, aggregate_PS = weight-weighted means (par.1.8)"]
+  ACCORD["Province Accord = floor(mean settlement Order)<br/>single settlement = passthrough - Seat +1 tie-break<br/>(par.1.3, ED-SETT-03)"]
+  EFFDEF["Effective Defense = Defense + garrison Discipline (par.5.2)"]
+  INCOME["Faction income = Sum of Prosperity x 10 gold per season<br/>(derived_stats par.8.1)"]
+  LEGM["Legitimacy meter = Mandate x 20, 0-140<br/>(derived_stats par.8)"]
+  PVAL["Political value = Sum territory_value + Sum unification_bonus<br/>scalars TBD (hierarchy par.2.4)"]
+  DERIV["Settlement derived values - PENDING, derived_stats par.9<br/>Local Economy x50 - Garrison Str x20 + Fort x30 - Public Order x20"]
+end
+
+subgraph PTIER["PROVINCE TIER"]
+  PACC["Province Accord"]
+  FRACS["Unified / Fractured state machine<br/>(hierarchy par.2.3)"]
+  PTEMP["Province temperament alpha/beta, 17 authored<br/>(temperaments par.2)"]
+end
+
+subgraph FTIER["FACTION TIER"]
+  FMAND["Faction Mandate 0-7"]
+  FTREAS["Treasury, cap = Wealth x 100"]
+  FTEMP["Faction temperament = pop-weighted average<br/>uniform interim (temperaments par.3)"]
+  FPV["Parliamentary weight"]
+end
+
+subgraph CONS["CONSUMERS / OUTPUTS"]
+  PARL["Parliament votes = Mandate (par.1.8 GD-1)"]
+  STRICT["PE strictness = base + 0.5(L/7) - 0.3(PS/7)<br/>reads aggregates (par.1.8)"]
+  VICT["Victory gate: Accord >= 2 in all provinces (par.8.1)"]
+  SLATE["Scene Slate: settlement events P4 - Local Actors P5"]
+  MB["Mass battle inputs: EffDef + edge and type modifiers<br/>(adjacency par.2.2)"]
+  CLK["Clock flows: PT - CI - CV - RS - Church Attention<br/>(par.1.5, par.3.3, par.4.9)"]
+end
+
+%% input -> state
+GACT --> PDO
+DACT --> GOVS
+DACT --> FACT
+CHACT --> AXES
+CHACT --> GOVS
+MILACT --> GARR
+MILACT --> PDO
+MILACT -->|"control transfer resets LA Disposition"| LACT
+MILACT -->|"controller change re-keys L/PS"| LPS
+THOP --> PDO
+MISS --> LPS
+SEAS --> PDO
+SEAS --> EMRG
+GOVS -->|"governance quality drivers"| LACT
+
+%% state -> calc
+TY --> WCALC
+PDO --> WCALC
+FACT --> WCALC
+LPS --> QCALC
+WCALC --> TCALC
+QCALC --> TCALC
+TCALC --> MAND
+WCALC --> AGGLP
+LPS --> AGGLP
+PDO --> ACCORD
+PDO --> EFFDEF
+GARR --> EFFDEF
+PDO --> INCOME
+PDO --> DERIV
+MAND --> LEGM
+TY --> PVAL
+PDO --> PVAL
+
+%% church side-effects
+AXES -->|"parish Order bonus (par.1.6)"| PDO
+AXES -->|"PT/CI generation - surveillance - seizure Ob mods cap -4"| CLK
+
+%% aggregation upward
+ACCORD --> PACC
+PACC --> VICT
+MAND --> FMAND
+FMAND --> PARL
+AGGLP --> STRICT
+INCOME --> FTREAS
+PVAL --> FPV
+PTEMP --> FTEMP
+
+%% feedback loops
+MAND -.->|"mean-reverting drift +/-1 per season (stabilizing)"| LPS
+EMRG -.->|"black market: Order <= 1 or no governor"| PDO
+GOVS -.->|"unmanaged: Order -1 per season (par.7.2)"| PDO
+
+%% gamespace outputs
+LACT --> SLATE
+EMRG --> SLATE
+SEAS --> SLATE
+EFFDEF --> MB
+TY --> MB
+EMRG --> CLK
+
+%% province fracture coupling
+GOVS -->|"Bishop-Governor splits controller from Seat holder"| FRACS
+FRACS --> FPV
+
+%% styling
+classDef pend stroke-dasharray: 6 4
+class PVAL,DERIV pend
