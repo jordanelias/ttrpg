@@ -1,3 +1,5 @@
+> **DEPRECATED 2026-06-10 → `designs/scene/combat_engine_v1/` (CANONICAL, ED-900/901/902/903/904).** This is the NERS verdict on the *combat-v32 proposal*, which the project did not ratify as a doc — the ratified personal-combat resolver is `combat_engine_v1`. Retained as the honest v32 test record; do not treat as forward-looking canon. Filed in `canon/supersession_register.yaml`.
+
 # NERS Verdict — combat_v32_proposal (state-graph reframe)
 
 `[SELF-AUTHORED — bias risk]` This diagnoses a proposal I built this session. Per the resolution-diagnostic skill's first guardrail, I treat it as external work and actively surface the criticism an independent reviewer would raise — the failure mode here is confirming the reframe "fixed everything." It did not.

@@ -118,3 +118,108 @@ entries:
       - params/bg/tracks.md
     commits: ["dede72f"]
 
+
+  # ──────────────────────────────────────────────────────────────────────────
+  # 2026-06-10 — Workplan + combat-proposal + Godot-framing deprecations.
+  # Filed this session (deprecation-map consolidation). Replacements are LIVE canon.
+  # ──────────────────────────────────────────────────────────────────────────
+
+  - superseded_id: designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md
+    scope: "2026-06-06 capstone master workplan (W-register, §8 kernel framing, Waves 0-1 + K8 commission)"
+    superseded_by: e471b694
+    superseded_date: 2026-06-10
+    replacement: >
+      designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md is THE master.
+      The 06-06 approved content is carried into v3 with live status; the 06-06 file is frozen as
+      the approved record (banner in place) and W-item IDs stay citable. Pull up v3, not this.
+    files_to_recheck:
+      - designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md
+
+  - superseded_id: designs/audit/2026-06-09-ecosystem-reconciliation/valoria_workplan_R2_2026-06-09.md
+    scope: "Workplan R2 (Phases A-E, keystones K-1/2/3, the per-system ritual, the carried docket)"
+    superseded_by: e471b694
+    superseded_date: 2026-06-10
+    replacement: >
+      Carried into master workplan v3 (designs/audit/2026-06-10-master-workplan-v3/). v3 §0 also
+      de-stales R2's carried docket (combat-v32 ratify / OWN-4 resolved; OWN-5 built -> sim-verify
+      only) and records A-1 as executed. Banner in place. Pull up v3.
+    files_to_recheck:
+      - designs/audit/2026-06-09-ecosystem-reconciliation/valoria_workplan_R2_2026-06-09.md
+
+  - superseded_id: valoria_delta_workplan_2026-06-09.md
+    scope: "Same-day delta workplan (never separately committed; an uploaded session artifact)"
+    superseded_by: e471b694
+    superseded_date: 2026-06-10
+    replacement: >
+      Superseded first by R2 (its own banner), then by master workplan v3. Its D-2 'M4 BUILT (L1980-2483)'
+      claim is FALSE (evening whole-file hook scan; M4 unbuilt = v3 LB-8). Do not treat any delta-workplan
+      content as authoritative. Not in-repo; recorded here so the supersession is discoverable.
+    files_to_recheck: []
+
+  - superseded_id: designs/proposals/combat_v32_proposal.md
+    scope: "combat-v32 — state-graph reframe PROPOSAL (PP-TBD; never ratified as a doc)"
+    superseded_by: ED-900
+    superseded_date: 2026-06-10
+    replacement: >
+      DEPRECATED. The ratified personal-combat resolver is designs/scene/combat_engine_v1/
+      (CANONICAL, ED-900/901/902/903/904; canonical_sources resolution_engine). The v32 proposal was the
+      pre-ratification engine-replacement design that the combat_engine_v1 implementation superseded; it
+      was never editorially ratified as a doc. Do not pull up as canon. Physical move to
+      deprecated/proposals/ + in-file banner = Lane-B follow (master-v3 LB-13).
+    files_to_recheck:
+      - designs/proposals/combat_v32_proposal.md
+
+  - superseded_id: designs/proposals/combat_v31_proposal.md
+    scope: "combat-v31 — earlier engine-replacement PROPOSAL in the same superseded line"
+    superseded_by: ED-900
+    superseded_date: 2026-06-10
+    replacement: >
+      DEPRECATED. Superseded by combat_v32_proposal (2026-05-28 reframe) and then jointly by the ratified
+      combat_engine_v1. Historical only. Move to deprecated/proposals/ = Lane-B follow (LB-13).
+    files_to_recheck:
+      - designs/proposals/combat_v31_proposal.md
+
+  - superseded_id: designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md
+    scope: "NERS verdict on the combat_v32 proposal (the index-drift orphan, registered to no concept)"
+    superseded_by: ED-900
+    superseded_date: 2026-06-10
+    replacement: >
+      DEPRECATED as a forward-looking verdict — it diagnosed a proposal the project did not ratify;
+      combat_engine_v1 is the ratified resolver. Retained as the honest test record of the v32 reframe.
+      Banner added this session. Resolves the 'registered to no concept' index-drift orphan for this file.
+    files_to_recheck:
+      - designs/audit/2026-05-28-combat-reframe/ners_verdict_combat_v32.md
+
+  - superseded_id: designs/godot/implementation_sequence.md
+    scope: "Godot implementation phasing G1-G7 (2026-04-18; manager-per-system autoloads, old system list)"
+    superseded_by: b42aa03
+    superseded_date: 2026-06-10
+    replacement: >
+      PARTIALLY SUPERSEDED. The G1-G7 sequencing is replaced by the conversion strategy Part VI
+      (designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md). The scene-tree
+      and transitions content in scene_tree_architecture.md remains valid. Per the strategy's own
+      supersedes-in-part clause.
+    files_to_recheck:
+      - designs/godot/implementation_sequence.md
+
+  - superseded_id: designs/godot/data_serialization_spec.md
+    scope: "Godot .tres schemas derived from the retired sim_framework/state.py (framing only)"
+    superseded_by: b42aa03
+    superseded_date: 2026-06-10
+    replacement: >
+      FRAMING SUPERSEDED. Serialization schemas now derive from references/module_contracts.yaml +
+      the Descriptor Registry, not sim_framework/state.py (conversion strategy Part V). The .tres
+      mechanics remain a useful reference; regenerate the schemas from the registries.
+    files_to_recheck:
+      - designs/godot/data_serialization_spec.md
+
+  - superseded_id: designs/scene/combat_v30.md
+    scope: "combat_v30 RESOLUTION layer (pool/stamina/wound resolution) — NOTE: PARTIAL only"
+    superseded_by: ED-900
+    superseded_date: 2026-06-04
+    replacement: >
+      PARTIALLY superseded (recorded for completeness, banner already in the file since 2026-06-04).
+      RESOLUTION superseded by combat_engine_v1; config.py supersedes params/combat.md values.
+      Lore / flavor / non-resolution content is RETAINED and canonical — DO NOT full-deprecate this file.
+    files_to_recheck:
+      - designs/scene/combat_v30.md
