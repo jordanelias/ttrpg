@@ -94,6 +94,7 @@
 
 ### prose-writer
 - Path: `skills/prose-writer/SKILL.md`
+- Voice canon: `designs/world/narrative_voice_canon_v30.md` — lexical register, grammar latitude (twelve authors), and voice constraints externalized 2026-06-09 (D-3); skill provides procedure.
 - Model: Sonnet 4.6
 - Triggers: write narrative prose, lore entry, character vignette, settlement description, faction history, dialogue scene, codex entry, cutscene script, flavor text, any creative/narrative text
 - Purpose: Valoria's singular literary voice — coherence-indexed weighted synthesis (Tolkien, Borges, Lispector, Ocampo, Márquez, Ishiguro, Mistry, Tartt, Beckett, Lem, McCarthy, Le Carré). Synthesis weights shift across coherence tiers (10-8, 7-5, 4-3, 2, 1).

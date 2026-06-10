@@ -269,7 +269,7 @@ systems:
   # PROVISIONAL: each design doc carries [PROVISIONAL:] marker; pending Jordan editorial review.
   narrative_voice_canon:
     design_doc: designs/world/narrative_voice_canon_v30.md
-    canonical_sha__designs__world__narrative_voice_canon_v30_md: "53bd456928c87f086ad4987689c39944764b6d07"
+    canonical_sha__designs__world__narrative_voice_canon_v30_md: "98fa8f671f63791e3315861b18c535ad1a129ac1"
     status: provisional
     added: '2026-06-09 D-3 voice-home consolidation — extracted verbatim from articulation_layer §4.2 (omniscient chronicle voice); home pending Jordan ratification'
   solmund_voice:

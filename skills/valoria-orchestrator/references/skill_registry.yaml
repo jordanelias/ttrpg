@@ -221,6 +221,7 @@ skills:
   - name: prose-writer
     path: skills/prose-writer/SKILL.md
     model: claude-sonnet-4-6
+    voice_canon: designs/world/narrative_voice_canon_v30.md   # voice canon externalized 2026-06-09 (D-3); skill = procedure, canon = aesthetic
     triggers:
       - write narrative prose
       - lore entry
