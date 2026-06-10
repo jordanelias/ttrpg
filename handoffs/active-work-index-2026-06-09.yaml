@@ -1,6 +1,6 @@
 id: active-work-index-2026-06-09
 scope: general
-last_commit: 59622c0e (2026-06-09) [compilation] session consolidation master
+last_commit: b42aa03f (2026-06-10) [godot] Python->Godot conversion strategy v1
 task:
   skill: valoria-orchestrator
   description: Session consolidation master (2026-06-09). Supersedes active-work-index-2026-06-04;
@@ -30,6 +30,9 @@ context_files:
   depth: skeleton
 working_state:
   next:
+  - 'Godot conversion: execute Gate-0 doc half (architecture.md v2 + supersession
+    banners + sim/README repoint; Key v1->v2 field map), then spine build (S2), then
+    first module ritual (S3; settlement_layer recommended, Jordan picks). Spec: designs/audit/2026-06-10-godot-conversion-strategy/godot_conversion_strategy_v1.md'
   - 'Faction-stat: make the inversion call (or sim Wealth/Mandate first), then staged
     write-side migration (master A.5). Fresh chat recommended.'
   - 'Combat: await Jordan ratify combat_engine_v1 (3 commits) + martial-traditions
@@ -43,7 +46,8 @@ working_state:
   - 'Editorial: resolve the ~94-ID conflict backlog (Jordan) -> clears canonization
     for ALL streams.'
   streams: A faction-stat (this session, master Part A) / combat-engine / mass-battle
-    / weapon-physics / victory (master Part B, folded from archived handoffs)
+    / weapon-physics / victory (master Part B, folded from archived handoffs) / godot-conversion
+    (2026-06-10, strategy committed b42aa03f)
   note: No design decisions resolved this session; every Jordan-blocked call carried
     as OPEN.
 owns:
@@ -53,6 +57,7 @@ owns:
 - designs/provincial/mass_battle_v30.md
 - designs/scene/derived_stats_v30.md
 - canon/editorial_ledger.jsonl
+- designs/audit/2026-06-10-godot-conversion-strategy/**
 blockers:
 - '[OPEN - Jordan] Faction-stat inversion: adopt/reject substrate primitive (faction
   stat = aggregate(holdings) (+) sum national-event-Keys); DECIDE-1 Influence/Intel
@@ -73,6 +78,11 @@ blockers:
 - '[BUILT - sim-pending] OWN-5 defection cascade BUILT into npc_relational_graph_v30
   section-7/8 (5a8a5461; ED-1000 decision / ED-1001 build). SIM-DEFECT (Lane C) testing
   pending; magnitudes not yet load-bearing.'
+- '[OPEN - Jordan] Godot conversion register (strategy Part VIII, all vetoable): downward
+  Key-delivery rule (ED-1006); Python-corpus role (oracle-vs-retire); Key runtime
+  form (Resource vs RefCounted, on K8 verdict); autoload ruling (III.3 live-pattern
+  recommendation); first module target (settlement_layer recommended). Faction-stat
+  inversion + module-level dockets carried above, unchanged.'
 key_values:
 - 'RECONCILED 2026-06-09 (token 0912f834): consolidation master carried STALE pre-resolution
   status. Verified vs live canon: (1) ~94-ID conflict RESOLVED (live ledger 639 entries,
@@ -85,6 +95,10 @@ key_values:
 - Command = round((2*Cha + Cog)/3) (ED-899).
 - 'Superseded+archived 2026-06-09: active-work-index-2026-06-04, win-computation-victory-2026-06-09,
   weapon-physics-stage2-2026-06-05.'
+- 'Godot conversion strategy v1 committed b42aa03f (2026-06-10): 27-module wave plan,
+  drift census D1-D8 (Key schema v1 P1), Gate-0 = Key v2 + doc consolidation + W3.4
+  types + K8; parity = named draws + recorded-draw replay + Key-log equality; Godot
+  4.6 pinned.'
 created: '2026-06-09T21:57:02.467401+00:00'
-updated: '2026-06-10T03:02:47.393615+00:00'
+updated: '2026-06-10T19:03:30.623927+00:00'
 status: active
