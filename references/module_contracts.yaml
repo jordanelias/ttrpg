@@ -7,163 +7,371 @@
 #   - Edges are transcribed VERBATIM from canonical sources, including type strings
 #     canon names but the Key Type Registry lacks — those are findings to surface,
 #     never transcription errors to silently normalize.
-#   - status: stub == pointer only, ZERO edges. Stage-1 extraction fills stubs.
-#   - Wildcards mirror canon's own family-level statements ("da_outcome.*" etc.).
+#   - status: stub == pointer only, ZERO edges.
+#   - from: lists are auto-wired from the registry's emitting_systems declarations
+#     (generator: this session's build script); cross-doc attribution conflicts are
+#     kept VISIBLE as dual emits + gap_notes, not resolved silently.
 #   - scales / resolver enums are [ASSUMPTION]-grade pending Jordan ratification;
 #     the assessor warns, never halts, on unknown members.
 #
-# Seeded 2026-06-09/10 from: key_substrate_v30 §8 (integration contracts),
-# key_type_registry_v30 (§1, families, §9, §10), scale_transitions_v30 (§1-§3, §5),
-# derived_stats_v30 §1/§11/§14 (bucket taxonomy; PROPOSAL status).
+# v2 (2026-06-10) — Stage-1 extraction pass: registry emitting/consuming_systems
+# matrix parsed wholesale (38 typed entries, 29 named systems); 5 of 7 v1 stubs
+# extracted; political_dynamics CONSOLIDATED into npc_behavior (doc-12 = PP-687
+# npc-procedure Keys migration); 10 registry-named systems added as new modules;
+# personal_combat deferred (canonical-candidate, handoff-owned); campaign_architecture
+# reclassified (consolidation doc, retirement recommended).
+# v1 seeded 2026-06-09/10 from key_substrate_v30 §8 / key_type_registry_v30 /
+# scale_transitions_v30 / derived_stats_v30 (commit cdbd1b50).
 
 schema_version: 1
 generated: "2026-06-10"
-status: SEEDED  # full-graph Stage-1 extraction pending; stubs below are unextracted
+status: EXTRACTED_STAGE1  # personal_combat + campaign_architecture stubs remain
 
 modules:
 
-  # ── extracted (edges grounded in this session's reads) ──────────────────
-
   - module: faction_state
+    registry_system: "faction_layer"   # Key Type Registry vocabulary
     doc: designs/provincial/faction_behavior_v30.md
     scales: [provincial]
-    resolver: null
+    resolver: deterministic_accounting   # [ASSUMPTION] accounting-cadence procedures; d_sigma for contested resolution per ED-874
     consumes:
-      - {type: "da.*", from: [domain_actions]}
-      - {type: "state.scar_acquired", from: [piety_track]}
+      - {type: "da.antinomian_action", from: [domain_actions]}
+      - {type: "da.covert_betrayal", from: [domain_actions]}
+      - {type: "da.diplomatic_alliance", from: [domain_actions]}
+      - {type: "da.economic_intervention", from: [domain_actions]}
+      - {type: "da.public_governance", from: [domain_actions]}
+      - {type: "env.disaster", from: [peninsular_strain, scenario_authoring]}
       - {type: "env.peninsular_strain_shock", from: [peninsular_strain]}
-    emits: []
-    state: []
+      - {type: "env.population_change", from: [peninsular_strain, settlement_layer]}
+      - {type: "mechanical.accounting", from: [engine_clock]}
+      - {type: "mechanical.cascade_resolution", from: [faction_state]}
+      - {type: "mechanical.mission_shift", from: [faction_state]}
+      - {type: "meta.miraculous_event", from: [miraculous_event]}
+      - {type: "scene.battle_concluded", from: [mass_battle]}
+      - {type: "scene.contest_resolved", from: [social_contest]}
+      - {type: "scene.dialogue", from: [scene_slate, social_contest]}
+      - {type: "scene.gift", from: [fieldwork_knots, scene_slate]}
+      - {type: "scene.insult", from: [scene_slate, social_contest]}
+      - {type: "scene.investigation_resolved", from: [faction_politics, scene_slate]}
+      - {type: "scene.threat", from: [scene_slate, social_contest]}
+      - {type: "state.coup_attempted", from: [faction_politics]}
+      - {type: "state.scar_acquired", from: [piety_track]}
+      - {type: "state.standing_change", from: [faction_politics, faction_state]}
+      - {type: "state.succession", from: [faction_politics]}
+    emits:
+      - {type: "mechanical.cascade_resolution", terminal: false}
+      - {type: "mechanical.mission_shift", terminal: false}
+      - {type: "state.standing_change", terminal: false}
+    state:
+      - {name: "Mandate", bucket: derived_value, writable: false}   # size-weighted aggregate of settlement L/PS (settlement_layer §1.8 LPS-2e) — F1 guard
+      - {name: "Treasury", bucket: derived_value, writable: false}   # derived_stats §3 (x100)
+      - {name: "faction stats 1-7", bucket: track, writable: true}   # Military/Stability/etc.; ±1 at accounting
     transitions:
       - {via: "scale_transitions §3.2 Personal → Faction / §5 Domain Echo"}
-    loops: []
+    loops:
+      - {open: true}   # self-loop: consumes own mechanical.cascade_resolution + mission_shift (cascade re-resolution, substrate §8.1); damper unconfirmed [OPEN — Jordan]
     gap_notes:
-      - "emits Keys on Mission shift / Cascade re-resolution / L-PS threshold
-         crossings (key_substrate §8.6) — type ids unnamed there; Stage-1
-         extraction from faction_behavior_v30 §4 required"
-      - "cascade also triggers on state.succession (§8.1) — producer not pinned
-         in §8; edge withheld rather than invented"
-      - "resolver archetype unconfirmed this session"
+      - "V1 gap RESOLVED by registry matrix: faction_layer emits mechanical.cascade_resolution, mechanical.mission_shift, state.standing_change (was: \"type ids unnamed\" in substrate §8.6)"
+      - "registry system name faction_layer vs module faction_state — vocabulary unification [OPEN — Jordan]"
     status: extracted
     sources:
       - "key_substrate_v30 §8.1, §8.6 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+      - "settlement_layer_v30 §1.8 LPS-2e [READ: 2026-06-10]"
 
-  - module: political_dynamics
-    doc: designs/provincial/political_dynamics_keys_migration_v30.md
+  - module: npc_behavior
+    registry_system: "npc_behavior (+ Procedures B/D/E)"   # Key Type Registry vocabulary
+    doc: designs/npcs/npc_behavior_v30.md
     scales: [personal, scene]
-    resolver: null
+    resolver: deterministic_accounting   # [ASSUMPTION] doc-12 §8 sequencing-within-Accounting + §9 determinism; Conviction-armature reads (substrate §8.2) feed decision derivation §4
     consumes:
-      - {type: "scene.*", from: [scene_slate, social_contest]}
-      - {type: "da.*", from: [domain_actions]}
+      - {type: "da.antinomian_action", from: [domain_actions]}
+      - {type: "da.covert_betrayal", from: [domain_actions]}
+      - {type: "da.public_governance", from: [domain_actions]}
+      - {type: "env.peninsular_strain_shock", from: [peninsular_strain]}
+      - {type: "mechanical.cascade_resolution", from: [faction_state]}
+      - {type: "mechanical.mission_shift", from: [faction_state]}
+      - {type: "meta.knot_formed", from: [fieldwork_knots]}
+      - {type: "meta.knot_ruptured", from: [fieldwork_knots]}
+      - {type: "meta.miraculous_event", from: [miraculous_event]}
+      - {type: "meta.thread_woven", from: [threadwork]}
+      - {type: "scene.battle_concluded", from: [mass_battle]}
+      - {type: "scene.contest_resolved", from: [social_contest]}
+      - {type: "scene.dialogue", from: [scene_slate, social_contest]}
+      - {type: "scene.gift", from: [fieldwork_knots, scene_slate]}
+      - {type: "scene.insult", from: [scene_slate, social_contest]}
+      - {type: "scene.investigation_resolved", from: [faction_politics, scene_slate]}
+      - {type: "scene.threat", from: [scene_slate, social_contest]}
+      - {type: "scene.witness", from: [npc_behavior, scene_slate]}
+      - {type: "state.belief_revised", from: [fieldwork_knots]}
+      - {type: "state.coup_attempted", from: [faction_politics]}
+      - {type: "state.scar_acquired", from: [piety_track]}
+      - {type: "state.standing_change", from: [faction_politics, faction_state]}
+      - {type: "state.succession", from: [faction_politics]}
     emits:
-      - {type: "scene.dialogue", terminal: false}
+      - {type: "scene.witness", terminal: false}
+      - {type: "state.concern_resolved", terminal: false}   # Procedure B (doc-12 §3, §7.4)
+      - {type: "state.opinion_revised", terminal: false}   # Procedure D (doc-12 §5, §7.1)
+      - {type: "scene.interaction", terminal: false}   # Procedure E (doc-12 §6.1, §7.2)
+      - {type: "scene.gossip", terminal: false}   # Procedure E (doc-12 §6.3, §7.3)
+    state:
+      - {name: "beliefs/opinions", bucket: track, writable: true}   # doc-12 §5 opinion drift; npc_behavior §3.1-3.2
+      - {name: "concerns", bucket: track, writable: true}   # doc-12 §3 generation/resolution
+      - {name: "projects", bucket: track, writable: true}   # doc-12 §4 advancement/stall
+      - {name: "arc state", bucket: track, writable: true}   # npc_behavior §5 state machine
+    transitions: []
+    loops:
+      - {open: true}   # 2-cycle with social_contest (emits opinion_revised it consumes; consumes its scene.dialogue/contest_resolved) + self-loop via scene.witness; dampers unconfirmed [OPEN — Jordan]
+    gap_notes:
+      - "CONSOLIDATED 2026-06-10: absorbs former political_dynamics module — political_dynamics_keys_migration_v30 is \"Doc 12 Procedures — Key-Migration Spec (PP-687)\" i.e. THIS system's Keys migration, not a separate political-dynamics system. The v1 political_dynamics record (incl. its scene.dialogue emit, unsupported by registry) is superseded by this entry. Mechanical-tier consolidation, Jordan-vetoable."
+      - "Procedure C (project advancement, doc-12 §4) declares no Class-B Key type in §7 — project events unkeyed [registry §10 candidate]"
+    status: extracted
+    sources:
+      - "designs/npcs/npc_behavior_v30_index.md [READ: 2026-06-10]"
+      - "political_dynamics_keys_migration_v30 §1-§9 index [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+      - "key_substrate_v30 §8.2, §8.3 [READ: 2026-06-10]"
+
+  - module: npc_memory
+    registry_system: "npc_memory"   # Key Type Registry vocabulary
+    doc: null
+    scales: [personal]
+    resolver: state_reader   # [ASSUMPTION] Memory store written from Keys; queried by Procedures (doc-12 §2.3 bridge)
+    consumes:
+      - {type: "scene.gossip", from: [npc_behavior]}
+      - {type: "scene.interaction", from: [npc_behavior]}
+      - {type: "state.concern_resolved", from: [npc_behavior]}
+      - {type: "state.opinion_revised", from: [npc_behavior]}
+    emits: []
     state: []
     transitions: []
     loops: []
     gap_notes:
-      - "Procedures B/C emit scene_event / state_transition Keys with subtypes
-         unnamed in §8.3; Stage-1 extraction required"
-      - "resolver archetype unconfirmed this session"
+      - "home doc unlocated — Memory schema lives in doc-12 §2.3 schema bridge; standalone spec [GAP]"
     status: extracted
     sources:
-      - "key_substrate_v30 §8.3 [READ: 2026-06-10]"
+      - "political_dynamics_keys_migration_v30 §2.3 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: piety_track
-    doc: null
+    registry_system: "conviction_track"   # Key Type Registry vocabulary
+    doc: designs/personal/conviction_track_v1.md
     scales: [personal]
-    resolver: null
+    resolver: deterministic_accounting   # [ASSUMPTION] scar accumulation thresholds (conviction_track_v1 §2)
     consumes:
-      - {type: "scene.witness", from: [scene_slate]}
+      - {type: "da.antinomian_action", from: [domain_actions]}
+      - {type: "da.covert_betrayal", from: [domain_actions]}
+      - {type: "meta.knot_ruptured", from: [fieldwork_knots]}
+      - {type: "meta.thread_woven", from: [threadwork]}
+      - {type: "scene.battle_concluded", from: [mass_battle]}
+      - {type: "scene.dialogue", from: [scene_slate, social_contest]}
+      - {type: "scene.insult", from: [scene_slate, social_contest]}
+      - {type: "scene.threat", from: [scene_slate, social_contest]}
+      - {type: "scene.witness", from: [npc_behavior, scene_slate]}
     emits:
       - {type: "state.scar_acquired", terminal: false}
-    state: []
+    state:
+      - {name: "conviction scars", bucket: track, writable: true}   # conviction_track_v1 §2 — §1 taxonomy SUPERSEDED by conviction_taxonomy_v30 (PP-717); §2/§3 canonical pending PP-718
     transitions: []
     loops: []
+    gap_notes:
+      - "NAME COLLISION (3-way) [OPEN — Jordan]: substrate §8.4 \"Piety Track\" (this personal scar system, registry system conviction_track, home designs/personal/conviction_track_v1.md) vs designs/scene/conviction_track_v30.md which is the TERRITORIAL \"Piety Track & Church Victory Redesign\" (PP-406-418, CV per territory) — two different systems share both names"
     status: extracted
     sources:
       - "key_substrate_v30 §8.4 [READ: 2026-06-10]"
+      - "conviction_track_v1.md header + §1-§4 index [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: territorial_piety
+    doc: designs/scene/conviction_track_v30.md
+    scales: [territory, provincial]
+    resolver: deterministic_accounting   # [ASSUMPTION] CV movement rules §1.2 + seasonal TC calculation §3
+    consumes: []
+    emits: []
+    state:
+      - {name: "CV (per-territory Piety)", bucket: track, writable: true}   # conviction_track_v30 §1, 0-base
+      - {name: "CI (Church Influence)", bucket: clock, writable: true}   # CI generation §3 — clock_registry: CI 0-100 source = conviction_track_v30 §3
+      - {name: "TC (Theocracy Counter)", bucket: clock, writable: true}   # §3 seasonal generation
+    transitions: []
+    loops: []
+    gap_notes:
+      - "CANONICAL BG-era doc with ZERO Key integration — no emitting/consuming_systems entry in the registry names it; CV drift consumes thread-op effects (§1.3b ED-676) and Calamity drift (§1.3) with no Key types [registry §10 candidate / Keys-migration pending]"
+      - "name collision with personal piety_track — see piety_track gap_note [OPEN — Jordan]"
+    status: extracted
+    sources:
+      - "conviction_track_v30 index §1-§11 [READ: 2026-06-10]"
+      - "clock_registry_v30 Shared Clocks table [READ: 2026-06-10]"
 
   - module: threadwork
-    doc: null
+    registry_system: "threadwork"   # Key Type Registry vocabulary
+    doc: designs/threadwork/threadwork_v30.md
     scales: [personal, thread]
-    resolver: null
+    resolver: dice_pool   # Leap Roll + operation rolls (threadwork_v30 Part Two)
     consumes: []
     emits:
-      - {type: "scene.thread_operation", terminal: false}   # not in registry — F2 class
-    state: []
+      - {type: "scene.thread_operation", terminal: false}   # substrate §8.4 verbatim — NOT in registry (F2 class); registry instead has meta.thread_woven; same event? [OPEN — Jordan]
+      - {type: "meta.thread_woven", terminal: false}   # registry-declared
+    state:
+      - {name: "Coherence", bucket: pool, writable: true}   # [ASSUMPTION bucket] depleting continuous resource (canonical pool notice PP-616/618/619/624/625)
+      - {name: "Thread Fatigue", bucket: track, writable: true}   # ED-694, replaces Contact Rounds
     transitions:
       - {via: "scale_transitions §3.1 Personal → Thread"}
       - {via: "scale_transitions §3.5 Thread → Faction"}
       - {via: "scale_transitions §3.6 Thread → Mass"}
     loops: []
     gap_notes:
-      - "Coherence (depleting resource) and Thread pool not yet bucket-classified
-         here; Stage-1 extraction required"
+      - "threadwork_v30 header: \"design proposal, requires editorial approval\" yet carries CANONICAL POOL NOTICE — doc status ambiguity [OPEN — Jordan]"
     status: extracted
     sources:
       - "key_substrate_v30 §8.4 [READ: 2026-06-10]"
+      - "threadwork_v30 index Parts One-Two [READ: 2026-06-10]"
       - "scale_transitions_v30 §3.1/§3.5/§3.6 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: fieldwork_knots
-    doc: null
+    registry_system: "fieldwork"   # Key Type Registry vocabulary
+    doc: designs/personal/knots_v30.md
     scales: [personal, scene]
-    resolver: null
+    resolver: dice_pool   # Fieldwork Pool (fieldwork_v30 §2); knot formation procedure (knots_v30 §3.2)
     consumes:
-      - {type: "*", from: engine}   # Memory Query API (Bonds ≥ 5 prerequisite)
+      - {type: "*", from: engine}   # Memory Query API — Bonds ≥ 5 prerequisite (substrate §8.7)
     emits:
       - {type: "meta.knot_formed", terminal: false}
       - {type: "meta.knot_ruptured", terminal: false}
-    state: []
+      - {type: "scene.gift", terminal: false}
+      - {type: "state.belief_revised", terminal: false}
+    state:
+      - {name: "knot strain", bucket: track, writable: true}   # knots_v30 §5
+      - {name: "Bonds", bucket: track, writable: true}   # knots_v30 §3.4 capacity (ED-780)
+      - {name: "Evidence Track", bucket: clock, writable: true}   # fieldwork_v30 §4.1
+      - {name: "Disposition Track", bucket: track, writable: true}   # fieldwork_v30 §5.1
     transitions:
       - {via: "scale_transitions §3.9 Fieldwork ↔ All Systems"}
     loops: []
+    gap_notes:
+      - "registry attributes scene.gift emission to fieldwork (gift-giving as fieldwork social action) — cross-check vs scene_slate emitting same type"
+      - "knots_v30 §11 carries open canon contradictions (TIER-DRIFT-001, COMPOSURE-DRIFT-001) [OPEN — Jordan, pre-existing]"
     status: extracted
     sources:
+      - "knots_v30 full [READ: 2026-06-10]"
+      - "fieldwork_v30 index [READ: 2026-06-10]"
       - "key_substrate_v30 §8.4, §8.7 [READ: 2026-06-10]"
-      - "scale_transitions_v30 §3.9 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: scene_slate
+    registry_system: "scene_slate"   # Key Type Registry vocabulary
     doc: null
     scales: [scene]
-    resolver: null
+    resolver: state_reader   # [ASSUMPTION] scene activation/anchoring (settlement_layer §4.1)
     consumes: []
     emits:
-      - {type: "mechanical.scene_entered", terminal: false}
-      - {type: "scene.*", terminal: false}
+      - {type: "mechanical.scene_entered", terminal: false}   # substrate §8.5 verbatim — registry attributes scene lifecycle (entered/exited/skipped) to game_director instead: cross-doc attribution conflict [OPEN — Jordan]
+      - {type: "scene.dialogue", terminal: false}
+      - {type: "scene.gift", terminal: false}
+      - {type: "scene.insult", terminal: false}
+      - {type: "scene.investigation_resolved", terminal: false}
+      - {type: "scene.threat", terminal: false}
+      - {type: "scene.witness", terminal: false}
     state: []
     transitions: []
     loops: []
+    gap_notes:
+      - "home doc unlocated — scene slate spec referenced from settlement_layer §4.1 and substrate §8.5; standalone doc [GAP]"
     status: extracted
     sources:
       - "key_substrate_v30 §8.5 [READ: 2026-06-10]"
+      - "settlement_layer_v30 §4.1 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: game_director
+    registry_system: "game_director"   # Key Type Registry vocabulary
+    doc: null
+    scales: [scene]
+    resolver: state_reader   # [ASSUMPTION] scene lifecycle orchestration
+    consumes: []
+    emits:
+      - {type: "mechanical.scene_entered", terminal: false}
+      - {type: "mechanical.scene_exited", terminal: false}
+      - {type: "mechanical.scene_skipped", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "registry-derived; home doc unlocated [GAP]; see scene_slate attribution conflict on mechanical.scene_entered"
+    status: extracted
+    sources:
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: scene_timer
+    registry_system: "scene_timer"   # Key Type Registry vocabulary
+    doc: null
+    scales: [scene]
+    resolver: clock_advance   # [ASSUMPTION] scene-duration clocks
+    consumes:
+      - {type: "mechanical.scene_entered", from: [game_director]}
+      - {type: "mechanical.scene_exited", from: [game_director]}
+      - {type: "mechanical.scene_skipped", from: [game_director]}
+    emits: []
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "registry-derived; home doc unlocated [GAP]"
+    status: extracted
+    sources:
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: audit
+    registry_system: "audit"   # Key Type Registry vocabulary
+    doc: null
+    scales: [scene]
+    resolver: state_reader   # [ASSUMPTION] telemetry consumer
+    consumes:
+      - {type: "mechanical.scene_entered", from: [game_director]}
+      - {type: "mechanical.scene_exited", from: [game_director]}
+      - {type: "mechanical.scene_skipped", from: [game_director]}
+    emits: []
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "registry-derived; runtime-system vs QA-tooling classification [OPEN — Jordan]; home doc unlocated [GAP]"
+    status: extracted
+    sources:
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: social_contest
+    registry_system: "social_contest"   # Key Type Registry vocabulary
     doc: designs/scene/social_contest_v30.md
     scales: [scene]
     resolver: dice_pool
-    consumes: []
+    consumes:
+      - {type: "state.opinion_revised", from: [npc_behavior]}
     emits:
-      - {type: "scene.dialogue", terminal: false}   # persuasion_track_displacement payload
+      - {type: "scene.contest_resolved", terminal: false}
+      - {type: "scene.dialogue", terminal: false}   # persuasion_track_displacement payload (PP-683 signed -5..+5)
+      - {type: "scene.insult", terminal: false}
+      - {type: "scene.threat", terminal: false}
     state:
-      - {name: persuasion_track, bucket: track, writable: true}
+      - {name: "persuasion_track", bucket: track, writable: true}
     transitions:
       - {via: "scale_transitions §3.4 Scene → Faction (Domain Echo)"}
     loops: []
     status: extracted
     sources:
-      - "key_substrate_v30 §8.5 (PP-683 signed -5..+5) [READ: 2026-06-10]"
+      - "key_substrate_v30 §8.5 (PP-683) [READ: 2026-06-10]"
       - "scale_transitions_v30 §3.4 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: mass_battle
+    registry_system: "mass_battle"   # Key Type Registry vocabulary
     doc: designs/provincial/mass_battle_v30.md
     scales: [scene]
-    resolver: null
+    resolver: dice_pool
     consumes: []
     emits:
-      - {type: "scene_outcome.battle_concluded", terminal: false}
-        # transcribed verbatim from key_substrate §8.5; registry §7 type_id is
-        # scene.battle_concluded — cross-doc naming-form drift, Jordan to adjudicate
-      - {type: "scene.*", terminal: false}
+      - {type: "scene_outcome.battle_concluded", terminal: false}   # substrate §8.5 verbatim; registry §7 type_id is scene.battle_concluded — cross-doc naming-form drift [OPEN — Jordan]
+      - {type: "scene.battle_concluded", terminal: false}   # registry-declared form
     state: []
     transitions:
       - {via: "scale_transitions §3.6 Thread → Mass"}
@@ -174,96 +382,251 @@ modules:
     sources:
       - "key_substrate_v30 §8.5 [READ: 2026-06-10]"
       - "scale_transitions_v30 §3.6-§3.8 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: domain_actions
+    registry_system: "da_framework"   # Key Type Registry vocabulary
     doc: null
     scales: [provincial]
-    resolver: null
+    resolver: d_sigma   # [ASSUMPTION] Domain Action resolver = deterministic+stochastic d+sigma (ED-874)
     consumes: []
     emits:
-      - {type: "scene.draft_da", terminal: false}   # not in registry — F2 class
-      - {type: "da.*", terminal: false}
+      - {type: "scene.draft_da", terminal: false}   # substrate §8.6 verbatim — NOT in registry (F2 class)
+      - {type: "da.antinomian_action", terminal: false}
+      - {type: "da.covert_betrayal", terminal: false}
+      - {type: "da.diplomatic_alliance", terminal: false}
+      - {type: "da.economic_intervention", terminal: false}
+      - {type: "da.public_governance", terminal: false}
     state: []
     transitions: []
     loops: []
+    gap_notes:
+      - "home doc unlocated [GAP] — DA resolver spec at designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md is audit output, not a designs/ home"
     status: extracted
     sources:
       - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: peninsular_strain
+    registry_system: "peninsular_strain"   # Key Type Registry vocabulary
     doc: designs/provincial/peninsular_strain_v30.md
     scales: [peninsula]
-    resolver: null
+    resolver: deterministic_accounting   # [ASSUMPTION]
     consumes: []
     emits:
+      - {type: "env.crisis", terminal: false}
+      - {type: "env.disaster", terminal: false}
       - {type: "env.peninsular_strain_shock", terminal: false}
-    state: []
+      - {type: "env.population_change", terminal: false}
+    state:
+      - {name: "Turmoil", bucket: clock, writable: true}   # clock_registry: 0-10, peninsular_strain_v30 §4
+      - {name: "IP (Institutional Pressure)", bucket: clock, writable: true}   # clock_registry: 0-100 [PROVISIONAL ED-793 start value]
     transitions: []
     loops: []
     status: extracted
     sources:
       - "key_substrate_v30 §8.6 [READ: 2026-06-10]"
+      - "clock_registry_v30 Shared Clocks [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
-  - module: articulation_layer
-    doc: designs/articulation/articulation_layer_v30.md
-    scales: [personal, scene, provincial]
-    resolver: null
+  - module: settlement_layer
+    registry_system: "settlement_layer"   # Key Type Registry vocabulary
+    doc: designs/territory/settlement_layer_v30.md
+    scales: [settlement, territory]
+    resolver: deterministic_accounting
     consumes:
-      - {type: "*", from: engine}   # universal reader of the full Key stream
+      - {type: "env.disaster", from: [peninsular_strain, scenario_authoring]}
+      - {type: "env.peninsular_strain_shock", from: [peninsular_strain]}
+    emits:
+      - {type: "env.population_change", terminal: false}
+    state:
+      - {name: "Prosperity / Defense / Order", bucket: track, writable: true}   # §1.3, 0-5 per settlement
+      - {name: "Local Economy / Garrison Strength / Public Order", bucket: derived_value, writable: false}   # §1.3 derived (Prosperity x50 etc.) — F1 guard
+      - {name: "Legitimacy (L) / Popular Support (PS)", bucket: track, writable: true}   # §1.8 LPS-2e per-settlement 0-7 (Jordan ruling 2026-05-30)
+      - {name: "province Accord", bucket: derived_value, writable: false}   # §1.3 floor(mean settlement Order) — F1 guard
+    transitions: []
+    loops: []
+    gap_notes:
+      - "settlement_layer_v30_index.md is STALE — predates LPS-2e §1.8 (no §1.8 row); index pipeline regeneration needed [tooling defect]"
+    status: extracted
+    sources:
+      - "settlement_layer_v30 §1.3/§1.8/§4.1 full [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: settlement_economy
+    registry_system: "settlement_economy"   # Key Type Registry vocabulary
+    doc: null
+    scales: [settlement]
+    resolver: deterministic_accounting   # [ASSUMPTION]
+    consumes:
+      - {type: "da.economic_intervention", from: [domain_actions]}
+      - {type: "env.population_change", from: [peninsular_strain, settlement_layer]}
     emits: []
     state: []
     transitions: []
     loops: []
     gap_notes:
-      - "significance function and any belief_revised emission path not extracted;
-         §8.7 names registry extensions, not articulation's own emit set"
+      - "registry-derived; relationship to settlement_layer §1.3 Local Economy derived value unestablished — possibly the same system [OPEN — Jordan]; home doc [GAP]"
     status: extracted
     sources:
-      - "key_substrate_v30 §8.7 [READ: 2026-06-10]"
-
-  # ── stubs (pointer only — Stage-1 extraction pending; NO edges) ─────────
-
-  - module: personal_combat
-    doc: null
-    scales: [personal]
-    status: stub
-    gap_notes:
-      - "no outcome Key type exists in the scene_outcome family for personal
-         combat (registry §7: contest/battle/investigation only) — F3 class;
-         combat engine docs live under designs/scene/combat_engine_v1/"
-
-  - module: victory
-    doc: designs/provincial/victory_v30.md
-    scales: [provincial, peninsula]
-    status: stub
-    gap_notes: ["state_reader candidate — reads aggregated state at Accounting"]
-
-  - module: campaign_architecture
-    doc: designs/architecture/campaign_architecture_v30.md
-    scales: [provincial]
-    status: stub
-    gap_notes: ["clock-spine candidate: mechanical.season_change / accounting /
-                 cascade_resolution emissions — extract before wiring"]
-
-  - module: settlement_layer
-    doc: designs/territory/settlement_layer_v30.md
-    scales: [settlement, territory]
-    status: stub
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: ci_political
     doc: designs/provincial/ci_political_v30.md
     scales: [provincial]
-    status: stub
+    resolver: deterministic_accounting   # stat economy §4 + card system §5; CI bonus dice feed dice_pool contexts §3.2-§3.4
+    consumes: []
+    emits: []
+    state:
+      - {name: "CI (Church Influence)", bucket: clock, writable: false}   # reads CI for political effects (§3); generation owned by territorial_piety (conviction_track_v30 §3) per clock_registry
+      - {name: "faction political pool", bucket: pool, writable: true}   # §3.4
+      - {name: "card hands / cooldown", bucket: track, writable: true}   # §5 (PP-177)
+    transitions: []
+    loops: []
+    gap_notes:
+      - "ZERO Key integration in a CANONICAL doc — no registry entry names ci_political; CI=100 Theocracy Unification Attempt (§2.2) is unkeyed [registry §10 candidate]"
+    status: extracted
+    sources:
+      - "ci_political_v30 full [READ: 2026-06-10]"
+      - "clock_registry_v30 Shared Clocks [READ: 2026-06-10]"
 
-  - module: npc_behavior
-    doc: designs/npcs/npc_behavior_v30.md
+  - module: victory
+    doc: designs/provincial/victory_v30.md
+    scales: [provincial, peninsula]
+    resolver: state_reader   # reads aggregated clocks/state at Accounting; era transitions are deterministic
+    consumes: []
+    emits: []
+    state:
+      - {name: "MS / IP / CI / Turmoil / Accord / Mandate / PV / PT reads", bucket: clock, writable: false}   # reader only — clocks owned by their source systems (clock_registry)
+    transitions: []
+    loops: []
+    gap_notes:
+      - "world-state era transitions (§5: MS=0 Post-Calamity, IP=100 Phased Occupation, all-dissolved Anarchy) are UNKEYED — no mechanical_event/state_transition type exists; articulation is blind to era changes via the Key stream [registry §10 candidate]"
+      - "doc status: \"DESIGN — pending Varfell Path B user decision (ED-311)\" — not CANONICAL"
+      - "victory_v30_index.md STALE: §5.1 indexed as \"RS=0\" but doc reads \"MS=0\" [index pipeline defect, same class as settlement]"
+    status: extracted
+    sources:
+      - "victory_v30 §5 full + header [READ: 2026-06-10]"
+
+  - module: engine_clock
+    registry_system: "engine_clock"   # Key Type Registry vocabulary
+    doc: null
+    scales: [provincial]
+    resolver: clock_advance
+    consumes: []
+    emits:
+      - {type: "mechanical.accounting", terminal: false}
+      - {type: "mechanical.season_change", terminal: false}
+    state:
+      - {name: "season counter", bucket: clock, writable: true}   # [ASSUMPTION]
+    transitions: []
+    loops: []
+    gap_notes:
+      - "registry-derived; home doc unlocated [GAP] — campaign_architecture_v30 examined and is NOT it (victory-revision consolidation, no clock-spine sections)"
+    status: extracted
+    sources:
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: faction_politics
+    registry_system: "faction_politics"   # Key Type Registry vocabulary
+    doc: null
+    scales: [provincial]
+    resolver: deterministic_accounting   # [ASSUMPTION]
+    consumes: []
+    emits:
+      - {type: "scene.investigation_resolved", terminal: false}
+      - {type: "state.coup_attempted", terminal: false}
+      - {type: "state.standing_change", terminal: false}
+      - {type: "state.succession", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "registry-derived; distinct system from faction_layer per registry vocabulary (emits succession/coup/standing/investigation) — boundary vs faction_state unestablished [OPEN — Jordan]; home doc [GAP]"
+    status: extracted
+    sources:
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: miraculous_event
+    registry_system: "miraculous_event"   # Key Type Registry vocabulary
+    doc: null
     scales: [personal, scene]
-    status: stub
-    gap_notes: ["bidirectional via Conviction armature — extract emit/consume set"]
+    resolver: state_reader   # [ASSUMPTION] event source
+    consumes: []
+    emits:
+      - {type: "meta.miraculous_event", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "registry-derived; system-vs-event-source classification [OPEN — Jordan]; home doc [GAP]"
+    status: extracted
+    sources:
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: scenario_authoring
+    registry_system: "scenario_authoring"   # Key Type Registry vocabulary
+    doc: null
+    scales: [peninsula]
+    resolver: manifest   # [ASSUMPTION] authoring-time event injection
+    consumes: []
+    emits:
+      - {type: "env.crisis", terminal: false}
+      - {type: "env.disaster", terminal: false}
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "registry-derived; authoring-time vs runtime classification [OPEN — Jordan]; home doc [GAP]"
+    status: extracted
+    sources:
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
+
+  - module: articulation_layer
+    registry_system: "articulation"   # Key Type Registry vocabulary
+    doc: designs/articulation/articulation_layer_v30.md
+    scales: [personal, scene, provincial]
+    resolver: armature_dot_product   # matrix-mediated armature interpretation (substrate §8.2, §8.7)
+    consumes:
+      - {type: "*", from: engine}   # universal reader of the full Key stream (substrate §8.7); registry also lists 31 explicit per-type subscriptions — kept as the wildcard
+    emits: []
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "significance function and any belief_revised emission path not extracted; §8.7 names registry extensions, not articulation's own emit set"
+    status: extracted
+    sources:
+      - "key_substrate_v30 §8.7 [READ: 2026-06-10]"
+      - "key_type_registry_v30 emitting/consuming_systems matrix [READ: 2026-06-10]"
 
   - module: clock_registry
     doc: designs/provincial/clock_registry_v30.md
     scales: [provincial]
+    resolver: manifest   # catalog of clocks/tracks; owns no state, resolves nothing
+    consumes: []
+    emits: []
+    state: []
+    transitions: []
+    loops: []
+    gap_notes:
+      - "pure manifest — every listed clock is owned by its source system; carries PROVISIONAL flags ED-793/794/795 (staleness verifications pending)"
+    status: extracted
+    sources:
+      - "clock_registry_v30 full [READ: 2026-06-10]"
+
+  - module: personal_combat
+    doc: null
+    scales: [personal]
+    gap_notes:
+      - "DEFERRED: home = designs/scene/combat_engine_v1/ (README: \"canonical-candidate, ratification proposed, see designs/audit/2026-06-02-combat-engine/\") — owned by active handoff active-work-index-2026-06-09; extraction deferred until ratification"
+      - "F3 stands: no outcome Key type in scene_outcome family for personal combat (registry §7: contest/battle/investigation only)"
     status: stub
-    gap_notes: ["manifest, not a resolving system; staleness report exists at
-                 designs/audit/clock_registry_staleness_report.md"]
+
+  - module: campaign_architecture
+    doc: designs/architecture/campaign_architecture_v30.md
+    scales: [provincial]
+    gap_notes:
+      - "RECLASSIFIED 2026-06-10: doc is the 2026-04-17 victory-revision CONSOLIDATION (Church infra, RM identity, MS/Coherence reform, Thread revelation, IP escalation, Warden, Portrait/Lineage) — a cross-cutting design doc, not a runtime module; its contents distribute across victory/threadwork/settlement_layer/peninsular_strain. Recommend stub retirement [OPEN — Jordan]"
+      - "clock-spine hypothesis WITHDRAWN — engine_clock is the registry system for season/accounting; its home doc remains unlocated"
+    status: stub
