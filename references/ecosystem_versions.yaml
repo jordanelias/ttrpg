@@ -12,6 +12,15 @@ claude:
     context_gate estimated chars//4 with no model factor, undercounting ~35%
     (audit 4C.1); the 90% hard-stop was therefore not real. W0.1 applies this
     factor to fetch-token estimates.
+  adjacent_note: >
+    LB-3 (Workplan v3 §9): bootstrap_model above is the model this orchestrator's
+    token and context assumptions are calibrated to — the 1.35 factor, the
+    fetch-token estimate, and the context budget all assume opus-4.8. A session
+    that bootstraps under an ADJACENT Claude model (a different point release in
+    this family, or a sibling tier) inherits a different tokenizer factor and
+    context-window size, so the pin above is not portable to it. On such
+    divergence, recalibrate per owner_action_on_divergence below; do not carry
+    1.35 or the opus-4.8 budget across model boundaries.
 
 godot:
   version: "4.6"                   # valoria-game implementation target

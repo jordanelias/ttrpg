@@ -15,8 +15,13 @@
 #   design_threads[], integrity_actions_open[] (informational only).
 
 schema_version: 1
-updated: 2026-06-09
-source_workplan: "valoria-audit-workplan.md (Pass 2) + valoria-master-workplan-2026-05-29.md (consolidation pass)"
+updated: 2026-06-10
+# 2026-06-10 micro-reconcile (LB-3, Workplan v3 §9): repointed to the v3 three-lane
+# consolidation master; Lane-B infra landed since the 06-09 update — CI register-threshold
+# desync fixed (canonical_sources CI 5k->12k interim-match, 9e9f6ef) and write_handoff now
+# stamps as_of=HEAD with resume-block staleness display (620601bd). Phase counters below are
+# the pre-v3 audit track, carried forward by v3 lanes (not re-mapped here).
+source_workplan: "designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md (v3 three-lane consolidation — PROPOSED, Jordan-vetoable; supersedes the Pass-2 audit-workplan + 2026-05-29 consolidation master)"
 current_phase: 2
 
 phases:
