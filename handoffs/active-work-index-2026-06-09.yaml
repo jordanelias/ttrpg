@@ -54,28 +54,36 @@ owns:
 - designs/scene/derived_stats_v30.md
 - canon/editorial_ledger.jsonl
 blockers:
-- '[OPEN - Jordan] P1 STAR — resolve the ~94-ID editorial conflict backlog (ED-865/866/867
-  class); blocks canonization across faction-stat + combat + victory + weapon-physics.
-  Adjudicate / renumber later claimants.'
-- '[OPEN - Jordan] Faction-stat: adopt/reject the derived-stat inversion; DECIDE-1
-  Influence/Intel basis (national, not settlement); DECIDE-2 national-event-modifier
-  semantics; Intel expand-vs-fold; CI vs Influence-stat naming. (Or sim one stat first.)'
-- '[OPEN - Jordan] Combat: ratify combat_engine_v1 (3 commits) + martial_traditions
-  D-alpha(replace/coexist)/D-beta(count6)/D-gamma(grade V)/D-delta(naming).'
-- '[OPEN - Jordan] Mass battle: gauge band realignment (H3/H4 Horseshoe non-canonical)
-  + per-cell CAP + density/troop-role table + ED-910 phase-dependence + ED-909 residual
-  + discipline 4-role wiring.'
-- '[OPEN - Jordan] Weapon-physics: three-regime authority/MoI constants + concentration
-  error params + defender-side wound + draw-rate (~7% vs auto-tiebreak) + P3 calibrate-or-cut
-  (do NOT bulk-delete).'
-- '[OPEN - Jordan] Victory: wire treaty.py + territory fallback (per-faction victory
-  non-canon; ED-306/ED-107 deprecated).'
+- '[OPEN - Jordan] Faction-stat inversion: adopt/reject substrate primitive (faction
+  stat = aggregate(holdings) (+) sum national-event-Keys); DECIDE-1 Influence/Intel
+  basis (national); DECIDE-2 national-event semantics; Intel expand-vs-fold; CI/Influence
+  naming. (Or sim Wealth/Mandate first.)'
+- '[OPEN - Jordan] Combat martial_traditions D-alpha (replace/coexist) / D-beta (count=6)
+  / D-gamma (grade ''V'') / D-delta (in-world naming). Engine itself FULLY RATIFIED
+  (ED-900-904 + 06-06 ''cut inert seizure'' fix, all Jordan-approved); only these
+  4 design sub-decisions remain. D-delta is creative-layer (Jordan).'
+- '[OPEN - Jordan] Mass battle: band realignment (H3/H4 Horseshoe) + per-cell CAP
+  (gates density-into-exchange) + ED-910 phase-dependence + ED-909 mapping + discipline
+  4-role wiring.'
+- '[OPEN - Jordan] Weapon-physics Stage-2: three-regime constants + error params +
+  defender-wound + draw-rate + P3 calibrate-or-cut.'
+- '[OPEN - Jordan] Victory: wire treaty.py (~157L, unwired) + territory fallback.
+  Per-faction victory STRUCK (GD-1 2026-05-17) -> confirmed, NOT to be wired.'
+- '[STAGED - build] OWN-5 defection cascade RESOLVED (ED-1000, vetoable): build-as-specced
+  + fragility-multiplier + suppression-brake; author mechanic into npc_relational_graph_v30
+  §7 / political_hierarchy B1.2-B1.3.'
 key_values:
+- 'RECONCILED 2026-06-09 (token 0912f834): consolidation master carried STALE pre-resolution
+  status. Verified vs live canon: (1) ~94-ID conflict RESOLVED (live ledger 639 entries,
+  0 dup IDs); (2) combat_engine_v1 FULLY RATIFIED+approved by Jordan (ED-900/901/902/903/904
+  + 06-06 fix 44dcc54e); (3) per-faction victory STRUCK (GD-1); (4) OWN-4 insurgency
+  dissolution RESOLVED (ED-881, 4-path RAND-validated). Stale P1 ID-conflict blocker
+  struck. Remaining blockers are the genuine opens only.'
 - 'Reserved ID maxima — ED: lane-B max 884 (<890); lane-C next 970 (970-999). PP:
   lane-B 726 (<727); lane-C next 780 (780-799). DO NOT collide.'
 - Command = round((2*Cha + Cog)/3) (ED-899).
 - 'Superseded+archived 2026-06-09: active-work-index-2026-06-04, win-computation-victory-2026-06-09,
   weapon-physics-stage2-2026-06-05.'
 created: '2026-06-09T21:57:02.467401+00:00'
-updated: '2026-06-09T21:57:02.467401+00:00'
+updated: '2026-06-10T01:13:07.547845+00:00'
 status: active
