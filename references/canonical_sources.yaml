@@ -369,7 +369,7 @@ systems:
 
   npc_relational_graph:
     design_doc: designs/npcs/npc_relational_graph_v30.md
-    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "cfa928bc6dedbc93512c4b08d524957b5323c825"
+    canonical_sha__designs__npcs__npc_relational_graph_v30_md: "9e67cd7122cbf3f46d3966a60af90e949eee0e9f"
     pp: PP-724
     status: provisional
 

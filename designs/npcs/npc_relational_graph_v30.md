@@ -498,33 +498,34 @@ This composes with §3.7 strain decay (decay is unchanged by distance; sustained
 ---
 
 
-## §7 Defection Cascade Hooks [B1.2 — Deferred]
+## §7 Defection Cascade [B1.2 — BUILT 2026-06-09, ED-1000; sim-tuning pending]
 
-When a sworn-bond breaks or a liege-vassal edge breaks (per §3.8), neighboring edges may **cascade**: bonds shared with broken-edge parties strain or break in turn, producing the ROTK-signature multi-officer defection narrative.
+When a sworn-bond or liege-vassal edge breaks (§3.8) or ruptures (§3.9), the break can **cascade** along the relational graph: edges shared with the broken-edge parties strain or sever in turn, producing the ROTK-signature multi-officer defection. The cascade is a positive feedback loop, held bounded by three dampers plus a hard cap (loop-safety L-DEFECT; resolution-diagnostic Lesson 5 — no loop both undamped and unbounded).
 
-**Hook specification (B1.2 deferred):**
-- Tier-1 cascade: every edge between either broken-edge party and a third NPC accrues +1 strain immediate at break.
-- Tier-2 cascade: NPCs whose sworn-bond was tier-1-strained may, at next Accounting, take Decision Fork on whether to maintain or sever — if sever, they break too, propagating tier-2.
-- Tier-3+ cascade rare; only fires if tier-2 produced 3+ further breaks.
-- Faction-Cascade implications resolved per B1.3 (faction-aggregate Conviction recomputes after settling the relational graph).
+**Trigger.** A sworn-bond or liege-vassal edge breaks at strain capacity (§3.8) or ruptures (§3.9).
 
-The Niflhel-strike scar in `faction_politics §2.6` is a relevant target case — the Niflhel dissolution should have produced a defection cascade across all officers who had sworn-bonds or patron-ties to Niflhel-aligned figures. Pre-canonization of B1.2 means that's currently treated as a clean dissolution rather than a cascading event; B1.2 will let future Niflhel-equivalent dissolutions resolve as the scattered-officer narratives they should be.
+**Tier-1 (immediate, at break).** Every edge between either broken-edge party and a third NPC accrues defection-strain **attenuated by hop-distance** (§6.2): `+1` at hop 0–1, **halved per additional hop** (`+0.5^(hop−1)`, floored at +0.1; ∞-distance edges unaffected). The ½-per-hop attenuation is the spatial damper — total tier-1 strain injected is bounded by a geometric sum regardless of graph size.
 
----
+**Fragility-multiplier (the loop gain).** Each *cascade-produced* defection (a break caused by the cascade, not the originating break) raises the faction's **Fragility** by +1 (**cap +3**). Fragility lowers the Decision-Fork sever threshold for that faction's remaining members: the tier-2 maintain-vs-sever fork is taken at `sever DC − Fragility`. Fragility decays **−1 per season at Accounting** with no new cascade break (reuses the §3.7 strain-decay cadence). This is the sole positive-gain term; capped and decaying, it cannot compound unbounded.
 
-## §8 Faction-Cascade Integration Hooks [B1.3 — Deferred]
+**Tier-2 (next Accounting).** NPCs whose edge was tier-1-strained take the Decision Fork (maintain vs sever) at `DC − Fragility`. A sever breaks the edge (§3.8 consequences) and propagates tier-1 from that node at the **next** hop ring — reach marches outward at most one ring per Accounting, never instantaneously.
 
-PP-686 §3.2 Cascade math currently aggregates personal Convictions to faction `effective_convictions`. With the relational graph in place, an officer's relational position modulates Cascade weight:
+**Suppression-brake (player damper).** The holding faction may spend its **Suppress** action against the cascade: each Suppress applies **−1 to the tier-2 sever check** for one targeted node-cluster this season (bounded; mirrors insurgency Stage-3 suppression, ED-853). Suppress is the player's explicit lever to arrest a cascade, trading action economy for cohesion.
 
-**Hook specification (B1.3 deferred):**
-- *Centrality weighting:* an officer with high-degree centrality (many strong sworn-bonds + liege-vassal edges within faction) contributes more to faction-aggregate Convictions; peripheral officers contribute less.
-- *Edge-aligned amplification:* officers connected by sworn-bonds with shared primary Convictions amplify each other's contribution (cluster-resonance).
-- *Rivalry suppression:* officers with internal-faction rivalries suppress each other's contribution (Cascade dampening).
-- *Defection signal:* a broken liege-vassal edge produces an immediate Cascade decrement on the relevant axis (axis = primary Conviction of the defecting vassal, per PP-718 per-Conviction Scar mechanics).
+**Tier-3+ (rare cap).** A tier-3 ring fires only if tier-2 produced **3+ further breaks**; beyond tier-3 the cascade cannot self-propagate (hard cap). With finite membership and hop-attenuation, total cascade depth is bounded.
 
-Full B1.3 spec deferred. The hook is named here so future authoring composes cleanly with PP-686 + PP-718.
+**Loop-safety verdict.** Gain: Fragility (+1/break, cap +3, −1/s decay). Dampers: hop-attenuation (½/hop), Fragility decay (−1/s), Suppress (−1/check). Bound: tier-3 cap + finite membership. Net per-cycle gain < 1 ⇒ damped; reach and depth finite ⇒ bounded ⇒ **passes Lesson 5**. `[NEEDS TESTING — SIM-DEFECT (Lane C): the magnitudes (½/hop, Fragility +1/cap +3, sever-DC coupling, tier-3 trigger = 3, Suppress −1) are illustrative; the per-cycle-gain bound is a design argument, not yet sim-measured. Confirm termination and tune magnitudes before treating them as load-bearing.]`
 
----
+**Worked target case.** The Niflhel-strike scar (`faction_politics §2.6`): Niflhel dissolution now produces a tier-laddered defection cascade across officers with sworn-bonds or patron-ties to Niflhel-aligned figures — hop-attenuated from the dissolution locus, brakeable by a surviving holder's Suppress — replacing the prior clean-dissolution placeholder.
+
+## §8 Faction-Cascade Integration [B1.3 — BUILT 2026-06-09, ED-1000; sim-tuning pending]
+
+After the relational cascade settles (no further tier propagation this Accounting), faction-aggregate state recomputes **once**, not per-break (avoids intra-season thrash):
+
+- **Officer loss → faction stat.** Each severed liege-vassal or sworn-bond edge that removes an officer reduces that faction's derived strength inputs at Accounting (Military / Influence via the §6.4 officer-reassignment path), feeding the existing faction-collapse loop (FSS-LOOP-1/2), already bounded in canon.
+- **Fragility → faction Conviction.** Residual Fragility (§7) applies a one-Accounting −1 to the faction's Conviction-hold check (a shaken faction), clearing as Fragility decays. No new faction stat is introduced.
+- **No double-count.** The cascade writes through *relational edges and officer reassignment only*; faction L/PS/Mandate remain settlement-derived (LPS-2e) and are not written by the cascade — it changes *who holds*, not the settlement substrate.
+- **Termination.** Integration runs once per Accounting after §7 settles; with §7 bounded, faction-cascade integration is bounded by construction. `[NEEDS TESTING — SIM-DEFECT: confirm officer-loss feeding FSS-LOOP does not stack with §7 Fragility to exceed the collapse-loop's established bound.]`
 
 ## §9 Engine Implementation
 
