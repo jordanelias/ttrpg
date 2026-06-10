@@ -452,10 +452,10 @@ systems:
     canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "5e0aa77c05af685ff1d2b19b1555bad52ae96a6e"
   module_contracts:
     design_doc: references/module_contracts.yaml
-    canonical_sha__references__module_contracts_yaml: "2a93895c8aa698cab5d679c936b5540f5d00c24b"
+    canonical_sha__references__module_contracts_yaml: "105efb2ee37c589324304bec1a6ab268ca3b5f2c"
     canonized: "2026-06-10"
-    canonized_pass: "valoria-module-adjudicator seeding (commit cdbd1b50)"
-    note: "Module wrapper contracts (status SEEDED): 11 extracted + 7 stubs. Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
+    canonized_pass: "Stage-1 extraction v2 (commit ebc3669c; seeded cdbd1b50)"
+    note: "Module wrapper contracts (status EXTRACTED_STAGE1): 25 extracted + 2 stubs. Governed by skills/valoria-module-adjudicator/SKILL.md; assessor checks A1-A9. Stage-1 full-graph extraction pending."
 
 # LPS-2e (2026-05-30): settlement_layer_v30 §1.8 re-grained — L/PS per-settlement (was faction-level); Mandate = size-weighted saturating aggregate, W=base(Type)+Prosperity+FacilityTier, K=6; geography "territory" (T1-T17)=province-tier, retained.
 # LPS-2+ consumer wiring (2026-05-30): faction_behavior/faction_canon/faction_state_authoring/stats_1_7_scale/derived_stats wired to settlement-grain + size-weighted Mandate; settlement_layer §1.8 (LPS-2e) is authoritative for Weight + formula.
