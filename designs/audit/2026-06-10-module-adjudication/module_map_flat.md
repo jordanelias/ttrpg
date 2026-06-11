@@ -454,7 +454,7 @@ stateDiagram-v2
 | state.succession | yes | faction_politics | faction_state, npc_behavior |
 
 ## 5. Red overlay (where the map bleeds)
-Adjudication v2.1: 27 violations / 56 warnings — 7 unregistered canon-named types (A2),
+Adjudication v2.1: 27 violations / 58 warnings — 7 unregistered canon-named types (A2),
 19 top-down cross-scale seams (A6: scale_transitions §3 has no downward rule), orphan
 emissions incl. pseudo-consumer-only types (A4), conviction_track_v1 outside
 canonical_sources (A8), registry 37-vs-38 self-drift (A9). Full detail: ED-1006 +
