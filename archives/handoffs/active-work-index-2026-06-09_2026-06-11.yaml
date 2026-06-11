@@ -142,5 +142,6 @@ key_values:
   orphan).'
 created: '2026-06-09T21:57:02.467401+00:00'
 updated: '2026-06-11T21:49:22.143826+00:00'
-status: active
+status: closed
 as_of: 4a66aca2c0cfbca7d9a7e61fee8e45b0a20bd92b
+closed_at: '2026-06-11T23:45:41.034021+00:00'
