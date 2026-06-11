@@ -1,7 +1,6 @@
 id: active-work-index-2026-06-09
 scope: general
-last_commit: 10ceb530 (2026-06-10) [editorial] deprecation map + supersession register
-  8->17
+last_commit: 07b0cb2c (2026-06-10) [fix] master-v3 provenance + M4 code-level verification
 task:
   skill: valoria-orchestrator
   description: Session consolidation master (2026-06-09). Supersedes active-work-index-2026-06-04;
@@ -31,6 +30,14 @@ context_files:
   depth: skeleton
 working_state:
   next:
+  - 'ADVERSARIAL REVIEW of this session''s 4 deliverables done. Factual audit: 20
+    SHAs + 8 EDs (881/900-904/1000/1001) all verified real; M4 unbuilt CONFIRMED at
+    code level (delta workplan misread sim-fabrication+context-gate as M4). FIXES:
+    master-v3 07b0cb2c (ebfdd10=handoff not master->59622c0; M4 verification); PI
+    V2.7 task_manifests synced to live dict (editorial/propose_mechanic/design_proposal
+    -> editorial_ledger.JSONL, were stale .yaml/_summary.yaml). Deprecation map +
+    architecture V2.6 = reviewed SOUND, no change. PI/arch remain Jordan-applied file
+    deliverables.'
   - 'DEPRECATION MAP committed 10ceb530: canon/supersession_register.yaml (17 entries,
     hook-read by supersession_check) is the enforced "filed as deprecated" authority;
     designs/audit/2026-06-10-deprecation-map/deprecation_map.md is the readable companion.
@@ -119,5 +126,6 @@ key_values:
   only. weapon_axes_v2 NOT deprecated (live weapon-physics input, the other index-drift
   orphan).'
 created: '2026-06-09T21:57:02.467401+00:00'
-updated: '2026-06-10T22:23:41.742374+00:00'
+updated: '2026-06-11T05:18:18.545103+00:00'
 status: active
+as_of: 07b0cb2c085c646f8855b124f976249edc83897c
