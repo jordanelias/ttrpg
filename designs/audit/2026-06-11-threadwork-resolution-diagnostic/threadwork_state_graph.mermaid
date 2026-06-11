@@ -1,0 +1,139 @@
+stateDiagram-v2
+    %% THREADWORK COMPREHENSIVE STATE GRAPH — 2026-06-10
+    %% Sources: threadwork_v30 Parts 3-5 (lines cited in master analysis §3),
+    %% params/threadwork.md (PP-603/604/632), knots_v30 §3/§6 [Option A provisional, ED-841]
+    %% Cross-machine couplings listed in the legend note at bottom.
+
+    state "PRACTITIONER COHERENCE (v30 Part 3)" as PC {
+        [*] --> Stable
+        Stable: Stable (10-8) — no penalty
+        Dissonant: Dissonant (7-5) — flickers; Close Knots +1 strain/3 sessions
+        Fragmented: Fragmented (4-3) — -1D social/Recall; +1 Ob ops; Fallout roll on entry
+        Fractured: Fractured (2) — -2D; Belief Co-Authorship; Fallout roll on entry
+        Severed: Severed (1) — +2 Ob ops; episodes each scene
+        Crisis: Crisis (0) — no Thread access
+        Stable --> Dissonant: Coherence loss (§3.2)
+        Dissonant --> Fragmented
+        Fragmented --> Fractured
+        Fractured --> Severed
+        Severed --> Crisis
+        Crisis --> CrisisArc
+        Dissonant --> Stable: Recovery (§3.5)
+        Fragmented --> Dissonant: Recovery
+        Fractured --> Fragmented: Recovery
+        Severed --> Fractured: Recovery
+
+        state "RENDERING CRISIS ARC (§3.7, PP-194)" as CrisisArc {
+            [*] --> Withdrawal
+            Withdrawal: Full season, no Thread practice
+            Anchoring: 3 Anchoring Scenes — Bonds TN7 Ob2 each
+            Resolution: Roll at Accounting — highest Close Knot Bonds + successful scenes, TN7 Ob3
+            Withdrawal --> Anchoring
+            Anchoring --> Resolution: conditions met
+            Resolution --> Coh4: Overwhelming (perm -1 TS)
+            Resolution --> Coh3: Success (-1 TS)
+            Resolution --> Coh1: Partial (repeat arc)
+            Resolution --> NPC: Failure (PC lost at season end)
+            Coh4 --> [*]
+            Coh3 --> [*]
+            Coh1 --> [*]
+            NPC --> [*]
+        }
+    }
+
+    state "CONTACT CYCLE (v30 §2.3-2.4)" as CC {
+        [*] --> Rendered
+        Rendered: Rendered — ordinary play
+        Declared: Declared — intent + target configuration named
+        Leaping: Leap roll — gates TS>=30, Coherence>=1, Health>0 (PP-232)
+        InContact: In contact — operations fire; Thread Fatigue accrues (ED-694)
+        Return: Return to rendering
+        Rendered --> Declared
+        Declared --> Leaping
+        Leaping --> InContact: Leap succeeds
+        Leaping --> Rendered: Leap fails
+        InContact --> Return: voluntary exit
+        InContact --> Return: fatigue limit (ED-694)
+        InContact --> Return: Attunement disruption (Wound check fails)
+        InContact --> Return: incapacitation — op resolves as Failure (§2.3 l.219)
+        Return --> Rendered
+    }
+
+    state "WORLD MENDING STABILITY (v30 Part 5; PP-603 cap STRUCK)" as MS {
+        [*] --> W_Stable
+        W_Stable: Stable (100-80) — substrate sound
+        W_Strained: Strained (79-60) — unease at old operation sites
+        W_Fragile: Fragile (59-40) — spontaneous Shifting Objects; +1 Ob in affected territories
+        W_Fractured: Fractured (39-20) — spontaneous Gaps (1d10, 1-2); Incursion risk; cumulative per P-14
+        W_Critical: Critical (19-1) — Gap risk doubled (1-4); +1 Ob worldwide; faction Stability checks Ob1
+        W_Rupture: THE RUPTURE (0) — terminal; campaign ends
+        W_Stable --> W_Strained: RS loss (ops, Gaps, Locks)
+        W_Strained --> W_Fragile
+        W_Fragile --> W_Fractured
+        W_Fractured --> W_Critical
+        W_Critical --> W_Rupture
+        W_Strained --> W_Stable: Mending / WC track / Gap self-closure
+        W_Fragile --> W_Strained: recovery
+        W_Fractured --> W_Fragile: recovery
+        W_Critical --> W_Fractured: recovery
+        W_Rupture --> [*]
+    }
+
+    state "GAP LIFECYCLE (PP-604)" as GL {
+        [*] --> Sound
+        Sound: Sound substrate
+        ShiftingObject: Shifting Object (n=0) — self-closes 1 season, 0 drain
+        Gap1: Relational Gap (n=1) — drain 1/season, self-close 2 seasons
+        Gap2: Field Gap (n=2) — drain 2/season, self-close 4 seasons
+        Gap3: Structural Gap (n=3) — drain 3/season, self-close 8 seasons
+        Gap5: Foundational Gap (n=5) — drain 5/season, self-close 32 seasons
+        Mended: Mended — Ob = (Depth Ob - 1) + age 0/+1/+2 [ceiling conflict — finding N5]
+        Sound --> ShiftingObject: Dissolution Partial (v30 §2.4 fork — finding N4)
+        Sound --> Gap1: Dissolution at scale (Success=n, Partial=n+1, Fail=n+2; breach cost n RS)
+        Sound --> Gap2
+        Sound --> Gap3
+        Sound --> Gap5
+        ShiftingObject --> Sound: self-closure
+        Gap1 --> Sound: self-closure or Mending
+        Gap2 --> Sound: self-closure or Mending
+        Gap3 --> Sound: self-closure or Mending
+        Gap5 --> Sound: self-closure or Mending
+        Gap1 --> Gap2: deepening (further Dissolution in area)
+        Gap2 --> Gap3: deepening
+        Mended --> Sound
+    }
+
+    state "KNOT STATE (knots_v30; Option A provisional per ED-841)" as KS {
+        [*] --> Unbonded
+        Unbonded: No Knot — Disposition below +5
+        DispClimb: Disposition +5 reached — requires PC Bonds >= 5 (ED-780)
+        Formation: Formation roll — knots_v30 §3.2 Spirit x2 + History TN7 Ob2 [forks params PP-632 — finding N9]
+        Distant: Distant tier — strain capacity 4 [Option A]
+        Close: Close tier — strain capacity 7; eligible for Anchoring / Crisis arc
+        Broken: Broken — strain exceeded capacity
+        Ruptured: Ruptured — immediate trigger; mandatory -1 Coherence (PP-632); FR-rupture victim +1 Wound
+        Dissolved: Player-dissolved at Accounting — 2 Composure; Disposition persists
+        Unbonded --> DispClimb
+        DispClimb --> Formation
+        Formation --> Distant: Success
+        Formation --> DispClimb: Partial (holds +5, retry next season)
+        Formation --> Unbonded: Failure (Disposition drops to +4)
+        Distant --> Close: §3.2 re-roll at Overwhelming (strain resets)
+        Distant --> Broken: strain > 4
+        Close --> Broken: strain > 7
+        Distant --> Ruptured: rupture trigger (§6.2)
+        Close --> Ruptured: rupture trigger (§6.2)
+        Distant --> Dissolved: player choice
+        Close --> Dissolved: player choice
+    }
+
+    note right of PC
+        CROSS-MACHINE COUPLINGS (flattened in master analysis §3):
+        1. Coherence loss is paid inside ContactCycle.InContact (op costs, v30 §3.2)
+        2. Knot Ruptured fires -1 Coherence into PC (PP-632)
+        3. PC band penalties (+1/+2 Ob) feed every InContact operation roll
+        4. Dissolution inside InContact creates GapLifecycle entries and pays MS breach cost
+        5. Gap drain bleeds MS each season; MS bands feed +1 Ob back into operations
+        6. PC Crisis arc consumes Close Knots (Anchoring Scenes) — KS Close is a gate for PC recovery
+        7. MS Critical faction checks couple the world track to faction Mandate (integration spec ED-673)
+    end note

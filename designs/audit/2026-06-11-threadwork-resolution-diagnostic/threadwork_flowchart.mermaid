@@ -1,0 +1,90 @@
+flowchart TD
+
+%% THREADWORK — OPERATION LIFECYCLE (canonical state 2026-06-10)
+%% Sources: threadwork_v30.md, params/threadwork.md, knots_v30.md,
+%% thread_horizontal_integration_spec.md (ED-673..681), conviction_track_v1 §3, ED-871
+
+subgraph IN["INPUTS"]
+  I1["Spirit 1-7"]
+  I2["History bonus (cap 3D, +3 floor)"]
+  I3["TPS = TS / 10"]
+  I4["Focus 1-7 (ops/window = Focus-1)"]
+  I5["Approach Training tag"]
+  I6["Coherence 10-0 (band mods)"]
+  I7["Wounds (-1D each, PP-716)"]
+  I8["World RS/MS 100-0"]
+end
+
+subgraph DECL["PRE-LEAP DECLARATION (intentionality)"]
+  D1["Declare op type + target(s)<br/>(sequence fixed before Leap)"]
+  D2["Optional concealment:<br/>Cognition, TN7, Ob = obsTS/30"]
+  D3["Collective: Anchor = highest TS;<br/>helpers +floor(Cog/2)D; Belief checks"]
+end
+
+subgraph GATE["ELIGIBILITY GATES"]
+  G1{"Approach Training?"}
+  G2{"TS >= 30?"}
+  G3{"Not incapacitated (PP-232)?"}
+  G4{"Op TS gate met?<br/>30/50/70/90 by Depth"}
+  G5{"POP only: TS >= 70<br/>AND MS <= 60"}
+  G6{"Not melee-engaged<br/>(Leap = Priority 5 full round)"}
+end
+
+LEAP["LEAP ROLL<br/>(Spirit x2)+Hist+TPS, TN7<br/>Ob: TS30-49=2, TS50+=1<br/>-1D/wound; +1 Ob at Coh 4-3; +2 at Coh 1"]
+
+LF["Failure: no contact<br/>-1D TPS rest of scene"]
+LP["Partial: contact, op Ob +1,<br/>2 Composure"]
+LS["Success / OW: contact<br/>(OW: next Ob -1, +1 TS)"]
+
+subgraph CONTACT["CONTACT WINDOW"]
+  C1["Thread Fatigue counter -> threshold Spirit x5<br/>Leap 3 | sense 2/rd | Mend 4 | Pull 5 | Lock 7 | Diss 10"]
+  C2["Ops remaining <= Focus - 1"]
+  C3["Wound during contact:<br/>Spirit TN7 Ob1 or contact drops"]
+end
+
+subgraph OB["PER-OPERATION DIFFICULTY (PP-622/623)"]
+  O1["Ob = Depth(Fib 1/2/3/5/8/13)<br/>+ Breadth(0-4) + Distance(0-3)"]
+  O2["Mending: Depth-1 + age(0/+1/+2); ceiling 8"]
+  O3["Mods: OA +1, Overweave +1cum (heal +2),<br/>opposition +floor(oppTPS/2) min1,<br/>saturation +1..+2, sustained +1,<br/>fortification +lvl, MS-band +1"]
+  O4["TN: 7 std | 8 Lock/Diss/POP | 9 POP-Binding"]
+end
+
+ROLL{"Roll pool vs TN, count vs Ob<br/>(pool floor 5)"}
+
+subgraph OUTC["DEGREE OUTCOMES (per op tables)"]
+  R1["Weave: effect; OA hazard at Rel+;<br/>brittleness -> Shifting Object"]
+  R2["Pull: effect, duration ladder R-54"]
+  R3["POP: temporal displacement;<br/>paradox window d6=6 (PP-193)"]
+  R4["Lock: frozen; chronic MS drift<br/>(static 0 / slow -1 / dynamic -2)"]
+  R5["Dissolution: Gap per PP-604<br/>(OW in-scene / S @n / P @n+1 / F @n+2;<br/>breach -n RS) [v30 table CONFLICTS - N4]"]
+  R6["Mend: Gap closes/reduces; RS +1/+2;<br/>seasonal fatigue +1 Ob cum"]
+end
+
+COMO["CO-MOVEMENT (P-01, every op)<br/>Personal: temporal+epistemic auto, actual d6<br/>Strategic: Co-Movement card (18-deck)"]
+
+subgraph OUT["OUTPUTS / FIRE PATHS"]
+  U1["Coherence per 3.2<br/>cap -1/op; FR exempt (PP-196);<br/>Mending 0 (ED-871);<br/>residue -1 exempt"]
+  U2["RS/MS delta -> world track<br/>(cap STRUCK PP-603)"]
+  U3["Settlement stats +-1<br/>cap 1/stat/season (T1)"]
+  U4["Domain Echo ED-673 -> faction<br/>Stability/Mandate, queued Accounting,<br/>cap 1/scene/faction"]
+  U5["CV drift ED-676 (cap +-2/terr/season)"]
+  U6["Conviction Scars (track v1 §3 matrix)<br/>+ player check ED-664"]
+  U7["Key emission -> articulation<br/>triggers 1/6/7/10; Case Board ED-680"]
+  U8["Church Attention / TC;<br/>Evidence (Thread-Read, Depth>=4)"]
+  U9["Knot strain (opposed ops, anchoring,<br/>buffer, remote read)"]
+end
+
+ACCT["ACCOUNTING (season)<br/>MS thresholds activate; Gap self-closure timers (PP-604);<br/>Lock drift; Coherence +1 non-practice;<br/>Knot strain decay; Domain Echo lands"]
+
+IN --> DECL --> GATE
+G1 --> G2 --> G3 --> G4 --> G5 --> G6 --> LEAP
+LEAP --> LF
+LEAP --> LP --> CONTACT
+LEAP --> LS --> CONTACT
+CONTACT --> OB --> ROLL --> OUTC --> COMO --> OUT
+OUT --> C2
+C1 -->|"threshold reached"| EXIT["Contact breaks; return to rendering"]
+C2 -->|"ops exhausted"| EXIT
+C3 -->|"check failed / incapacitated"| EXIT
+OUT --> ACCT
+EXIT --> ACCT
