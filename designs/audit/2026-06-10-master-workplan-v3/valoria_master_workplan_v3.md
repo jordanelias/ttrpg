@@ -108,6 +108,11 @@ Governing spec: **the conversion strategy** (Parts V–VI are the dictionary + s
 | LA-8 | Mass-battle **canon-side** docket execution (bands, per-cell CAP, ED-910/909, discipline 4-role) in `designs/provincial/mass_battle_v30.md` | Handoff blocker; pairs with LC-8 | J-9 |
 | LA-9 | Voice-canon closeout: confirm the executed articulation split (`d8eeab9`/`b25a08f`) as the case-#1 ruling | §0 joint 5 | J-3 |
 | LA-10 | Fieldwork §11 five pending decisions → ledger records | `a11e2fa` P2 cluster | J-18 |
+| LA-11 | **Game-flow canon-propagation & reconciliation** — propagate *already-decided* canon to lagging docs (gf-F6 `victory_v30 §0` "All 15"→GD-1 11+/15; gf-F7 strike the dead ×3 Thread-in-mass-battle MS multiplier in `videogame_mode_spec §1.5` per `campaign_architecture §3.1` flat −1/−2; gf-F8 CI 15→28 [P-32] + Hybrid Personal Phase 2–3→3–5 scenes [player_agency §6.1]); confirm-anchor then reconcile gf-F9 settlement count 35/36/37 and gf-F5 MS=0 shared-loss residue vs GD-1 sole-victory | game_flow_analysis `6199d83a`/`c005da27` | — |
+| LA-12 | **Canon-flatten propagation + rename-residue cleanup** — apply the struck PP-675 still live in `canon/03`; apply ED-061 *Restoration* over residual "Revolution"/"People's Revolution"; resolve the rename-sweep self-clobber + C14q Solmund/Solmund doubled-name; C14p stale paths; Almud TS-28. **Commit the source flatten first** (currently uncommitted; full register = 30 items) | conv `a835dd91` canon flatten (UNCOMMITTED) | — (four-name part → J-21) |
+| LA-13 | **Threadwork value reconciliation** — add TN 9/POP Binding to `params/core` TN-summary + EV table; propagate the canonical-marked Gap-drain over `v30 §5.2` flat −4/season; apply the threadcut external-op ×2; fix the §4.4↔§3.2 stale Mending row (N1); record WC2 Gap/Lock-halved as the L2 damper. **Commit the source flatten first** (uncommitted; supersedes 06-10 master-analysis §3) | conv `79e2cad2` threadwork flatten (UNCOMMITTED) | — |
+
+*Integrated 2026-06-11 (this session): findings from the 06-11 **game-flow** (committed `c005da27`/`6199d83a`), **canon-flatten** (conv `a835dd91`, **uncommitted**), and **threadwork** (conv `79e2cad2`, **uncommitted**) analyses routed into §4/§5. Findings are as-reported by those sessions (their `[READ:]` trails stand; not re-verified this session) and Jordan-vetoable. gf-F1 (ED-1006 down-channel) and gf-F2 (faction-stat inversion) were already tracked (J-1/J-7; LA-2/3/6). The two uncommitted flattens are flagged for commit under LA-12/LA-13 so their full finding sets (canon 30 items; threadwork 6 contested cells) become durable beyond the chat record.*
 
 ---
 
@@ -135,12 +140,15 @@ Struck from the inherited docket with citations (§0): **combat-v32 ratify** (re
 | J-16 | Filename-versioning convention (lockfile trade-off) | carried |
 | J-17 | Classification trio: miraculous_event (system vs event-source) · audit (runtime vs QA) · scenario_authoring (authoring vs runtime) | low; tidies three thin modules' contracts |
 | J-18 | Fieldwork §11 five pending decisions | LA-10 |
+| J-19 | **Accord range + derivation** — canonical Accord range (0–3 per `peninsular_strain §2`/`clock_registry`, which makes GD-2(a) "Accord ≤ 3 → mandatory Muster" fire always) and the settlement-Order(0–5)→province-Accord(0–3) mapping | gf-F3/F4; LA-11 Accord-side; mandatory-Muster trigger correctness |
+| J-20 | **Assert/Suppress failure penalty** — `faction_layer §9` *Stability −1* (track) vs `victory §7` *Discipline −15* (derived); which quantity the failure hits | gf-F10; faction-action resolution consistency |
+| J-21 | **Four-name world-track fracture** — which of the four world-track names is canonical; the one doc with inverted TT arithmetic is a mechanical fix once direction is set | canon-flatten GD-class; LA-12 four-name part |
 
 ---
 
 ## §6 — CROSS-LANE DEPENDENCY MAP (the joints, compact)
 
-`J-2 → LA-2 → LC-4` (dice-engine ports emit) · `J-1 → {assessor carve-out (LB), scale_transitions edit (LA), strategy flag retirement (LC)}` · `J-4 → LA-3 → 11 ports exit PROVISIONAL` · `LA-1 → LC-4(module 20)` · `K8 → {J-6d, LC Wave-4}` · `LB-4(K-1) → LB-7 → every session's status` · `LB-10(K-3) → LB-11` · `J-3 → {LB-15, LA-9}` · `J-7 → LA-6 → faction_state port completion` · `LB-6(K-2) solo-window ↔ Lane-A design-doc co-file traffic` (do not overlap) · `LC-1 → LC-3 → LC-4` · `J-9/J-10 → {LA-8, LC-8}` paired canon/engine halves.
+`J-2 → LA-2 → LC-4` (dice-engine ports emit) · `J-1 → {assessor carve-out (LB), scale_transitions edit (LA), strategy flag retirement (LC)}` · `J-4 → LA-3 → 11 ports exit PROVISIONAL` · `LA-1 → LC-4(module 20)` · `K8 → {J-6d, LC Wave-4}` · `LB-4(K-1) → LB-7 → every session's status` · `LB-10(K-3) → LB-11` · `J-3 → {LB-15, LA-9}` · `J-7 → LA-6 → faction_state port completion` · `LB-6(K-2) solo-window ↔ Lane-A design-doc co-file traffic` (do not overlap) · `LC-1 → LC-3 → LC-4` · `J-9/J-10 → {LA-8, LC-8}` paired canon/engine halves. · `J-19/J-20 → LA-11` · `J-21 → LA-12` · 06-11 analyses (game-flow `6199d83a` committed; canon/threadwork flattens UNCOMMITTED) integrated into §4/§5.
 
 ## §7 — DONE-REGISTER (2026-06-06→10; excluded from all queues above)
 
