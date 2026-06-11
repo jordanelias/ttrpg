@@ -9,6 +9,13 @@ task:
     (commit 59622c0e). No design decisions resolved — every Jordan-blocked call carried
     as OPEN (see blockers).
 context_files:
+- path: designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md
+  reason: UNIFIED interdependency & I/O master (2026-06-11 consolidation, commit 4a66aca2).
+    Folds the 3 graph views (06-06 hierarchy+wiring, 06-10 module-adjudication verdict+map,
+    06-11 game-flow analysis+flat-spec) + 4 feeders into one all-directions graph;
+    §8 = de-duplicated OPEN register keyed to v3 J-1..J-21 docket. Read first for
+    "how everything wires."
+  depth: full
 - path: designs/audit/2026-06-09-session-consolidation-master.md
   reason: THE master — read first; Part A faction-stat (full), Part B other streams,
     Part C/D cross-stream + OPEN register
@@ -77,6 +84,7 @@ owns:
 - designs/scene/derived_stats_v30.md
 - canon/editorial_ledger.jsonl
 - designs/audit/2026-06-10-godot-conversion-strategy/**
+- designs/audit/2026-06-11-interdependency-master/**
 blockers:
 - '[OPEN - Jordan] Faction-stat inversion: adopt/reject substrate primitive (faction
   stat = aggregate(holdings) (+) sum national-event-Keys); DECIDE-1 Influence/Intel
@@ -103,6 +111,13 @@ blockers:
   recommendation); first module target (settlement_layer recommended). Faction-stat
   inversion + module-level dockets carried above, unchanged.'
 key_values:
+- 'INTERDEPENDENCY MASTER committed 4a66aca2 (2026-06-11, scope cleanup): designs/audit/2026-06-11-interdependency-master/valoria_interdependency_master_v1.md.
+  Unifies the 3 federated graph views + feeders into one navigable canon->flow->architecture->mechanics->modules
+  graph, all directions/scales. §8 de-dups the 3 finding registers into ONE OPEN register
+  mapped to live J-1..J-21. No new ED IDs (94-conflict backlog). No conflicts resolved
+  (Jordan-gated). Supersedes-by markers staged for the 5 folded authored views; generated
+  files + feeders + workplan-v3 stay live. R4 commit advisory was a non-blocking false-positive
+  (doc describes the never-write-Mandate rule).'
 - 'RECONCILED 2026-06-09 (token 0912f834): consolidation master carried STALE pre-resolution
   status. Verified vs live canon: (1) ~94-ID conflict RESOLVED (live ledger 639 entries,
   0 dup IDs); (2) combat_engine_v1 FULLY RATIFIED+approved by Jordan (ED-900/901/902/903/904
@@ -126,6 +141,6 @@ key_values:
   only. weapon_axes_v2 NOT deprecated (live weapon-physics input, the other index-drift
   orphan).'
 created: '2026-06-09T21:57:02.467401+00:00'
-updated: '2026-06-11T05:18:18.545103+00:00'
+updated: '2026-06-11T21:49:22.143826+00:00'
 status: active
-as_of: 07b0cb2c085c646f8855b124f976249edc83897c
+as_of: 4a66aca2c0cfbca7d9a7e61fee8e45b0a20bd92b
