@@ -1,5 +1,7 @@
 # VALORIA — Game Flow: Flattened Operational Specification
 **Date: 2026-06-11 · Companion to `game_flow_analysis_v1.md` (same directory) · Status: ANALYSIS (audit)**
+**Revision (intensification pass, 2026-06-11):** `[RB]` rows for Stability triggers, Parliament actions, the CI formula and the collapse procedure resolved against raw `faction_layer §1.2/§5.4/§9/§1.5` (fetched bypassing the index redirect); two sequence errors in the prior cut corrected (Accord/Strain/battle accounting → **Step 6** per the ED-678 consolidated reference, not Step 4); adversarial self-review added as §H; findings extended to F14. Prior content preserved in git history.
+
 **What this is:** the campaign machine flattened to one addressable level — every state variable (A), every formula (B), every gate (C), the master sequence (D), every cross-system edge (E), every output (F), with the open flags mapped onto the rows they touch (G). Rows cross-reference by ID: a sequence step names the gates it checks (C-nn) and the logic it runs (B-nn); edges name the steps they connect. Citations are block-level (same canonical set as the analysis; full list there). `[RB]` = read-bounded: the element exists canonically but its full table/values were not expanded in this session's read set — do not implement from this row alone. `[F-n]` = carries analysis finding n.
 
 ---
@@ -88,12 +90,12 @@
 |---|---|---|
 | B-12 | Mass battle: 7-phase machine Strategy→Volley→Manoeuvre→Thread→Engagement→Cascade→Reform; auto-resolve (Part B): Martial pool vs Battle Ob; conquest result → Accord 1; splitting exploit countered by terrain/tactic gates | mass_battle via CSR Part 6 |
 | B-13 | Mandate (LPS-2e): q_s = 0.5·L_s + 0.5·PS_s; T = Σ W_s·(q_s/7); Mandate = clamp(round(7T/(T+6)), 0, 7) — saturating, mean-reverting | settlement_layer §1.8 |
-| B-14 | CI seasonal sequence (Accounting order): (1) Momentum +1 → (2) Piety Yield = floor(Σ: +1 per Church-Prominent PT-5 territory, +0.5 per PT-4; Prominent = Church Mandate > controller Mandate) → (3) Assert (Church, optional): Influence vs Ob 2, Success CI +1 → (4) Suppress (opponent, optional): Mandate vs Ob ⌊Church Mandate/2⌋+1, Success negates step 1 → (5) Baralta structural −1 while her Mandate ≥ 4. Caps ±3 player-initiated / ±5 total. **Failure penalty divergent [F10]: faction_layer §9 "Stability −1" vs victory §7 "Discipline −15".** | victory §7; faction_layer §9 |
+| B-14 | CI seasonal sequence (Accounting order): (1) Momentum +1 → (2) Piety Yield = floor(Σ: +1 per Church-Prominent PT-5 territory, +0.5 per PT-4; Prominent = Church Mandate > controller Mandate) → (3) Assert (Church, optional): Influence vs Ob 2, Success CI +1 → (4) Suppress (opponent, optional): Mandate vs Ob ⌊Church Mandate/2⌋+1, Success negates step 1 → (5) Baralta structural −1 while her Mandate ≥ 4. Caps ±3 player-initiated / ±5 total. **Failure penalty [F10]: faction_layer §7 + §9 (×2) all say Stability −1; victory §7 says Discipline −15 (lone outlier, not derivable since Discipline = Stab×10 → −10 ≠ −15) — Stability −1 is the dominant canonical reading.** Cap PP-504. | victory §7; faction_layer §7/§9 |
 | B-15 | Mass Seizure: gate CI ≥ 60, one-shot, no second attempt; P(declare) = ((CI−60)/40)^3.3 per season (1%@70, 10%@80, 39%@90, 100%@100); on declaration every Church-building territory is a simultaneous target; pool = Influence + ⌊CI/15⌋; Ob = 10 − PT − infrastructure (floor 1); requires Prominence + Church Mandate ≥ 4; OW: PT +1; one Emergency Session season of response; seized governance at Accord 1–2 | victory §7, §3.2; campaign_architecture §1.3 |
 | B-16 | IP advance (ED-743): per Accounting, count playable-faction territories at Accord ≤ 1 → 0–1: +0 · 2–3: +1 · 4–5: +2 · 6+: +3; CI ≥ 60 sustained: +2/season; faction elimination: +2 one-time. NPC-faction battles don't advance IP directly but their Accord ≤ 1 products count. Decay: Vanguard-Commander Social Contest Success −3; no battle 3 seasons → −1/season; repulsion resets: military OW retreat one phase, ×2 consecutive OW → full withdrawal IP=60 (cap 80 for 10 seasons); diplomatic (Elske ≥ 6, contest vs VC Ob 4, IP < 80) → 40, OW → 20 + 20-season Non-Aggression; resistance (UN Mandate ≥ 3 + Governorate Accord 0 everywhere + battle Success+) → 30; any of these = permanent defeat, IP frozen | peninsular_strain §3.2; victory §5.2 |
 | B-17 | Strain update (ED-743): +1 per Accord ≤ 1 playable-held territory (cap +3/season); +2 per elimination; +1 per Revolt (both uncapped, discrete); decay −1 if no territory-instability advance this season; −1 per active Treaty pair (cap −2/season); −1 public diplomatic resolution (max 1/season). Löwenritter exemption: coup = +1 not +2; first 2 post-activation seasons' battles exempt | peninsular_strain §4.1–4.3 |
 | B-18 | MS deltas: per battle on Valorian soil −1 (Campaign/War −2; siege −1; uprising −1; Vanguard battle −1; Seizure-with-battle −1; covert/ungarrisoned-seizure 0); −1/year baseline; Strain-Collapse band −1/season; Mending +1..+2 per active Mender by Spirit tier (OW to +5); WC 3 → +2; seasonal net cap ±10. Hysteresis (ED-882): bands fall at 60/40/20, recover at 68/48/28; leading warnings within 12 of an edge and at MS ≤ 12 (PST-1) | peninsular_strain §3.1; ms_trajectory §5.1; clocks.md |
-| B-19 | Parliament: votes = Mandate; Church bloc +⌊CI/20⌋; anti-Church −⌊CI/30⌋; Sacred Veto cadence 1 per 4 seasons; action set Censure / Embargo / Blockade / Outlawry / Subsidy / War Authorisation (+ Rebuttal §5.5) `[RB: per-action effects]`; Winter Year-End renewals for Embargo/Blockade | faction_layer §5 |
+| B-19 | Parliament (§5.3–5.4): votes = Mandate; Church bloc +⌊CI/20⌋; anti-Church −⌊CI/30⌋; Sacred Veto 1/4 seasons. **Actions** (proposer-min · vote · target effect · proposer cost): Censure (M2·maj·Stab−1 Mand−1·—) · Embargo (M3·maj·W−1/s·self W−1/s) · Blockade (Mil3 M3·maj·W−2/s Stab−1·self Mil−1) · Embargo+Blockade (both·supermaj·W−2/s Stab−1/s Mand−1) · Outlawry (M5·supermaj·Mand−2 Stab−2 CB-all·self Mand−1) · Subsidy (M2·maj·recipient W+1·self W−1) · War Authorisation (Mil2·maj·free first advance + CB·—) · Treaty Ratification (signatory·maj·binds all) · Recognition Challenge (M4·supermaj·target −1 TCV·self Mand−1) · Succession Endorsement (M3·maj·heir recognised, succession Ob −1·—). Embargo/Blockade renew annually at Year-End or lapse | faction_layer §5.3–5.4 |
 | B-20 | Scene economy: actions/season Narrative 5 · Normal 4 · Hard 3, ± Standing/Knot/Wound modifiers; slate size Narrative 4–5 · Normal 5–7 · Hard 7–9 (ED-747 pruning to size); travel 1 action/province | player_agency §6.1, §4.2 |
 | B-21 | Renown sources: +1 per resolved Conviction · exceeded Duty · Domain Echo · influenced arc · Complex+ case · battle presence · Accord improvement · Knot; cap +2/season; governance failures −1, cap −2/season | player_agency §5 |
 | B-22 | Standing deltas: Duty succeed +1 / exceed +2 / fail −1 (floor 1); Initiation Duty is the 0→1 gate | player_agency §3 |
@@ -110,7 +112,7 @@
 ### C1 · Victory / terminal
 | ID | Gate | Condition | Fires → | Checked at | Source |
 |---|---|---|---|---|---|
-| C1.1 | GD-1 Peninsular Sovereignty (sole victory) | 11+/15 territories (direct, treaty-bound, Submitted, or institutionally dominated: rival Mandate ≤ 1 ∧ hegemon Mandate ≥ 5) ∧ Accord ≥ 2 in all directly-controlled ∧ Strain ≤ 6, all simultaneous, held 2 consecutive Accountings (A1.10 counter) [F6: victory §0 text still "all 15"; three names for the Strain gate] | campaign victory | S5.10 | canon/02 GD-1; victory §0 |
+| C1.1 | GD-1 Peninsular Sovereignty (sole victory) | 11+/15 territories (direct, **hegemony-counting treaty** [Peace/Alliance/Capitulation/Tributary — NOT Truce/Commercial; faction_layer §1.2 / peninsular_strain §6.1], Submitted, or institutionally dominated: rival Mandate ≤ 1 ∧ hegemon Mandate ≥ 5) ∧ Accord ≥ 2 in all directly-controlled ∧ Strain ≤ 6, all simultaneous, held 2 consecutive Accountings (A1.10 counter) [F6: victory §0 text still "all 15"; three names for the Strain gate] | campaign victory | S5.10 | canon/02 GD-1; victory §0 |
 | C1.2 | Second Calamity (only terminal) | 10 consecutive seasons at MS ≤ 5 **inside Post-Calamity Era** | campaign ends | S5.10 (era-scoped) | victory §5.3; peninsular_strain §6.4 |
 
 ### C2 · Strategic mandatories & emergence (canon/02 enforcement set)
@@ -152,9 +154,14 @@
 ### C5 · Faction stability ladder
 | ID | Gate | Condition | Fires → | Source |
 |---|---|---|---|---|
-| C5.1–C5.5 | Stability Triggers 1–5 | T1 Territorial Occupation or Loss · T2 Unfavourable Treaty Terms · T3 Antagonistic Parliamentary Vote · T4 Major Subterfuge · T5 Failed Military Engagement: Significant Losses | Stability check / loss per trigger spec `[RB: per-trigger magnitudes]` | faction_layer §1.2 |
+| C5.1 | Trigger 1 — Territorial Occupation/Loss | own territory occupied −1 (ongoing each Accounting while held); formal transfer −1 more; **capital** (T1/T8/T9/T12) lost −2 / transferred −3 (replaces standard) | faction_layer §1.2 |
+| C5.2 | Trigger 2 — Unfavourable Treaty | minor cession −1 · major −2 · capitulation −3 · tributary −1/yr · mutual peace +1; breach: Mandate −2 + Stab −1 + co-signatories gain CB (Mandate cost waived for a Stab-1 faction facing elimination) | faction_layer §1.2 |
+| C5.3 | Trigger 3 — Antagonistic Vote | Censure −1 (Mandate −1) · Blockade −1 · Embargo+Blockade −1/season · Outlawry −2 (Mandate −2) | faction_layer §1.2/§5.4 |
+| C5.4 | Trigger 4 — Major Subterfuge | sabotage success −1 · named-officer assassination −2 (Mandate −1) · assassination OW (clean) −2 (no Mandate) | faction_layer §1.2 |
+| C5.5 | Trigger 5 — Failed Engagement | three-condition gate, all true: A Military pool ≥ 4 · B Failure (net ≤ 0) · C (net ≤ −2 ∨ pool ≥ 6 ∨ named-officer capture/death). Any false → no consequence | faction_layer §6.2 |
+| C5.5r | Stability recovery (cap FACTION_STAT_SEASONAL_CAP ±2/season) | mutual peace +1 · recapture own territory +1 · Rebuttal OW +1 · Institutional Consolidation +1 (clean season, +Accord 1) · Church Absolution +1 (Church Mandate −1) · Löwenritter endorsement +1 | faction_layer §1.3 |
 | C5.6 | Accounting Stability Check | ≥ 2 attribute points lost this season → Stability pool vs Ob = loss magnitude; **FSS-LOOP-1 floor: at Stability ≤ 2 this check cannot reduce Stability** (collapse only via active Triggers 1–5) | possible Stability −1 | faction_layer §1.4 |
-| C5.7 | Collapse | Stability 0 → §1.5 exit: Mandate→0, territories Uncontrolled @ Accord 0, units Masterless, officers Independent, player Standing benefits void; one-time Survival Exception at Stability 1; elimination feeds Strain +2 / IP +2 | faction exits | faction_layer §1.5 (ED-675) |
+| C5.7 | Collapse (6-step, ED-675) | Stability 0 at Accounting Step 2 → (1) Mandate→0 then freeze other attributes · (2) territories Uncontrolled @ Accord 0, units Masterless (Claim via Mil Ob 2) · (3) officers Independent (recruit via Social, Ob = Leadership-Deviation+2) · (4) PC loses Standing dice, continues unaffiliated · (5) seat lost; treaties dissolve if no reconstitution in 4 seasons · (6) victory counters void. **Reconstitution:** Influence Ob 4 ×3 consecutive seasons → Stab 1 / Mand 1 / others 50% frozen, needs ≥1 territory. **Survival Exception** (Stab 1→0 via §1.4 only): stays 1, Mandate −1, one attacker-chosen territory Contested; once per faction per campaign. Multi-collapse: descending-Mandate order. Elimination feeds Strain +2 / IP +2 | faction_layer §1.5 |
 | C5.8 | Löwenritter Autonomy ladder | Loyal → **Restless** (Crown Stability ≤ 3 ∨ no military action 4+ seasons ∨ Crown loses a province; S014 defensive-only, Crown +1 Ob offensive, T14 fragmentation Ob +1) → **Autonomous** (Crown Stability ≤ 2 ∨ Ehrenwall Disposition to Almud < 0 ∨ 4+ seasons Restless; S014 ignores Crown, Crown Military −T14 garrison, no Fort 3, PI −1) → **Split** (Crown attacks ∨ Crown eliminated ∨ 4+ seasons Autonomous; T14 → Löwenritter as separate faction 3/3/2/3/5/3/5, PI −3, Crown Military → 2 + unit loss, PV −3) + Coup path via Coup Counter `[RB: coup thresholds]` | monarchy re-bases; roster grows | faction_layer Löwenritter table; core.md |
 | C5.9 | Wealth-0 ratchet damper | FSS-LOOP-2: re-muster +1 Military/Accounting while Wealth ≥ 1, up to pre-collapse value | bounds L2 | faction_layer (ratified 2026-05-30) |
 
@@ -195,6 +202,7 @@
 | C9.3 | Echo caps | per B-26 | clamp | PP-329; AUD-SET-02 |
 | C9.4 | CI caps | ±3 player-initiated / ±5 total per season | clamp | faction_layer §9 |
 | C9.5 | Strain source caps | +3 instability / −2 treaty / −1 diplomatic per season | clamp | peninsular_strain §4 |
+| C9.6 | Faction stat seasonal cap | FACTION_STAT_SEASONAL_CAP = ±2 per stat per season, any combination of sources | clamp | faction_layer §1.3 |
 
 ---
 
@@ -253,9 +261,9 @@ Format: `STEP — process | inputs | gates checked | logic run | outputs (state 
 | S5.1 | Pending attribute changes; Parliamentary votes; treaty ratifications | B-19; Sacred Veto cadence; Trigger 2/3 consequences (C5.2/C5.3) | stat deltas; treaty set (A3.4) |
 | S5.2 | Stability checks | C5.6 (FSS-LOOP-1 floor); C5.7 collapse + Survival Exception | Stability deltas; possible faction exit (→ Strain/IP one-times; territories Uncontrolled) |
 | S5.3 | Cooldowns advance | — | timers |
-| S5.4 | Clock advances | B-14 CI [F10] → MS yearly (B-18) → PI → **4c** C4.1–C4.3 → **4d** B-17 + C3.12 → **4e** (battle MS already applied; ED-743 struck battle-IP) | A1.1–A1.5 updated; Revolts resolved; band effects applied |
+| S5.4 | Clock advances (**clocks only**) | B-14 CI [F10] → RS/MS yearly baseline (B-18) → IP → PI; Church Prominence update [F11: §7 names the substrate clock "RS"; four other docs call it "MS" — same clock] | A1.1–A1.4 updated |
 | S5.5 | Church Attention Pool; Thread Debt drain | `[RB: magnitudes]` | resource ticks |
-| S5.6 | Turmoil consolidation | (4c/4d/4e block bookkeeping) | — |
+| S5.6 | **Turmoil accounting** (canonical home of Accord/Strain/battle — **Step 6**, faction_layer §7 ED-678; NOT Step 4 [F12]) | Accord checks C4.1–C4.3 → Strain update B-17 + C3.12 band effects → battle-consequence accounting (RS/MS already applied in-phase; ED-743 struck battle-IP). *peninsular_strain §7 labels these "4c/4d/4e" = pre-ED-678 numbering* | A1.1/A1.3/A1.5 + A2.2; Revolts resolved; bands applied |
 | S5.7 | Threshold events; Milestones; Warden Emergence; **GD-3 check** | C2.3; C3.x crossings | insurgencies spawn/promote; event cards |
 | S5.8 | Warden Cooperation; Torben/Elske loyalty events | `[RB: event tables]` | A1.6/A1.8 deltas |
 | S5.9 | Occupation duration; Institutional Consolidation | C4.4; C4.5 | control transfers; Stab/Accord recovery |
@@ -291,7 +299,7 @@ Format: `STEP — process | inputs | gates checked | logic run | outputs (state 
 | E2.1 | world state → Scene Slate | S0.3 reads clocks, Accord, Scars, Duty, Convictions | built (presentation channel) |
 | E2.2 | board outcome → scene difficulty | C6.4 degree shading | built |
 | E2.3 | strategic events → forced presence | C6.1 mandatory zooms; C6.6 Witness; C6.7 retrospectives | built |
-| E2.4 | strategic outcomes → personal-scale **Keys** | which Keys, payloads, mandatory effects on the present player | **[F1 / ED-1006: NO canonical rule — all nine scale_transitions §3 rules run upward. The single largest flow hole; blocks Wave-S/4 module specs.]** |
+| E2.4 | strategic outcomes → personal-scale **Keys** | which Keys, payloads, mandatory effects on the present player | **[F1/F13 — narrowed. Downward links that DO exist: §3.7 Mass→Personal (tactical duel), §3.9 BG-Survey→TTRPG + §4.1 board-degree Ob-shading. MISSING: a general channel delivering arbitrary strategic outcomes/events (DA results, succession, coup, peninsula shocks) as consumable Keys with payloads/mandatory effects. Still the largest flow gap; blocks Wave-S/4. ED-1006's "all 9 upward" overstated — Jordan to restate.]** |
 
 ### E3 · Intra-strategic couplings
 | ID | Edge | Mechanism |
@@ -336,7 +344,7 @@ Format: `STEP — process | inputs | gates checked | logic run | outputs (state 
 
 | Finding | Touches | One-line consequence for implementation |
 |---|---|---|
-| F1 (P1, ED-1006, OPEN — Jordan) | E2.4; D4; F.1 consumers | down-channel Key delivery unspecified; Wave-S/4 modules (scene_slate, articulation, npc Key consumption) blocked from clean spec |
+| F1 (P1, ED-1006, OPEN — Jordan) | E2.4; D4; F.1 consumers | down-channel **general Key-delivery** unspecified — **narrowed by F13** (tactical-zoom + Ob-shading down-links DO exist; the gap is arbitrary-outcome Key delivery). Wave-S/4 modules still blocked |
 | F2 (P1, OPEN — Jordan) | A3.2 write-paths; S2.3 outputs | faction-stat architecture (aggregate-of-holdings vs authored) decides every Wave-2 write-path; parameterize |
 | F3 (P2, INTENT UNDETERMINED) | C2.1 | "garrison everything" vs "garrison the restive" — one-line Jordan confirmation before `mandatory_actions()` |
 | F4 (P2) | A2.2 ← A2.5 | ⌊mean Order⌋ (0–5) → Accord (0–3) clamp unstated; first-port (settlement_layer) relevant |
@@ -345,7 +353,36 @@ Format: `STEP — process | inputs | gates checked | logic run | outputs (state 
 | F7 (P3) | B-18 | videogame_mode_spec ×3 MS residue — flat −1/−2 is canonical |
 | F8 (P3) | INIT.4; B-20 | campaign_modes CI 15 / "2–3 scenes" stale; 28 and 3–5-by-difficulty govern |
 | F9 (P3) | INIT.2 | settlement count 35/36/37 — data table wins |
-| F10 (P3) | B-14; S5.4 | Assert/Suppress failure cost: Stability −1 vs Discipline −15 — CI module needs one |
+| F10 (P3) | B-14; S5.4 | Assert/Suppress failure cost: Stability −1 vs Discipline −15 — CI module needs one (Stab−1 dominant) |
+| F11 (P3, NEW) | A1.1; S5.4/S5.6; B-18 | substrate clock named **RS** in faction_layer §7, **MS** in clocks.md/victory/peninsular_strain/ms_trajectory — one name for the codebase |
+| F12 (P2, NEW) | D6 S5.4/S5.6 | Accord/Strain/battle accounting is **Step 6** (faction_layer §7 ED-678), not Step 4 (peninsular_strain §7's pre-consolidation "4c/4d/4e"); prior cut of this spec misplaced it — corrected here |
+| F13 (P1-adjacent, NEW — corrects ED-1006 + analysis F1) | E2.4; §H | "all nine §3 rules upward / no downward handoff" **overstated**: §3 is *Eight* rules (+§3.9); §3.7 Mass→Personal and §3.9 BG-Survey→TTRPG + §4.1 board-Ob-shading ARE downward. True gap: no *general Key-delivery channel* for strategic outcomes/events to reach personal scale as consumable Keys. **Flag for Jordan: restate ED-1006, do not overwrite** |
+| F14 (P3, NEW) | D-sequence; scale_transitions §3.2 | residual "GM" reference ("GM recognises faction scope") in a no-GM videogame — same class as the videogame_mode_spec "GM decides" residue |
+
+---
+
+## H — ADVERSARIAL REVIEW (self-authored — bias risk)
+
+`[SELF-AUTHORED — bias risk]` This spec and its prose companion were written by the same agent now reviewing them. The pass below re-fetched primary sources **raw** (bypassing the index redirect) specifically to attack the prior cut's claims and citations. Verdict-first; survivals reported as honestly as falsifications — a citation that checks out is not a finding to inflate, a claim that breaks is not one to soften.
+
+| Claim under test | Method | Result |
+|---|---|---|
+| ED-678 governs the 10-step Accounting | raw faction_layer §7 | **SURVIVES** — "SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]" verbatim |
+| ED-675 governs collapse | raw faction_layer §1.5 | **SURVIVES** |
+| F10 CI-failure divergence is real | raw faction_layer §7+§9 vs victory §7 | **CONFIRMED + resolved** — 3 faction_layer refs say Stab−1; victory §7's Discipline−15 is the outlier, not derivable (Discipline = Stab×10) |
+| "all nine §3 rules upward / no downward handoff" (F1, ED-1006) | raw scale_transitions §3 | **FALSIFIED as stated → F13** — §3 is *Eight* rules + §3.9; §3.7 Mass→Personal and §3.9 BG-Survey→TTRPG + §4.1 Ob-shading are downward; true gap is narrower |
+| Accord/Strain/battle accounting at Step 4 (prior cut) | raw faction_layer §7 | **FALSIFIED → F12** — canonical position is Step 6; prior cut followed peninsular_strain §7's pre-consolidation "4c/4d/4e" labels |
+| `[RB]` trigger magnitudes / Parliament effects / CI formula / collapse | raw faction_layer §1.2/§5.4/§9/§1.5 | **RESOLVED** — now in C5.1–C5.5, C5.7, B-14, B-19 |
+| Substrate clock naming | raw faction_layer §7 | **DRIFT → F11** — "RS" here vs "MS" in four docs |
+| No-GM invariant | raw scale_transitions §3.2 | **RESIDUE → F14** — "GM recognises faction scope" survives in canon text |
+| Effective-hegemony counts all treaties | raw faction_layer §1.2 / peninsular_strain §6.1 | **REFINED** — only Peace/Alliance/Capitulation/Tributary count; Truce/Commercial excluded (C1.1 corrected) |
+
+**Bias self-check.** The prior cut's most consequential claim (F1) was the one most flattering to the analysis's "single largest flow hole" framing — and the one that broke under source contact. That is the predictable direction of self-authored error (the dramatic structural gap is more satisfying to assert than the mundane narrower truth), which is why the down-channel claim, not the arithmetic, was the first thing re-fetched. F13 walks it back to what the source supports.
+
+**Unreconciled / deferred (cautious — not silently resolved):**
+- **F13 vs ED-1006** — existing prior-session ledger entry; architecture routes ledger adjudication to Jordan. F13 is a *proposed restatement*, not an overwrite. `[OPEN — Jordan]`
+- **F10 victory §7 value** — Stab−1 dominant, but victory §7 is an authored doc; correcting "Discipline−15" is Jordan-vetoable, not unilateral. `[OPEN — Jordan]`
+- **Still `[RB]`** — Thread Echo values (ED-673), coup-counter thresholds (C5.8), SUC-01..03 succession, Warden/loyalty event tables, Church Attention Pool / Thread Debt magnitudes, and the derived-value EDs (ED-901/902 trace to the 06-06 hierarchy-map *audit* doc, not re-verified against primary derived_stats this session). Fetch before implementing those rows.
 
 ---
 
