@@ -1303,6 +1303,11 @@ def quick_bootstrap(extra_paths: list = None, force_full: bool = False) -> tuple
             report_lane(files.get('references/lane_assignments.yaml'))
         except Exception as e:
             print(f"[LANE WARN] Could not read lane assignment: {e}")
+        try:
+            report_open_items(roadmap_content=files.get('references/roadmap_state.yaml'),
+                              handoffs=_g_mod._active_handoffs)
+        except Exception as e:
+            print(f"[OPEN-ITEMS WARN] Could not compute open items: {e}")
 
     # Load the SQL file-index (concept/alias find-by-context + files manifest).
     # Non-blocking: any failure degrades to name-keyed fetch. load_index uses
@@ -2206,6 +2211,235 @@ def report_handoffs(handoffs: list = None) -> None:
         if blockers:
             print(f"     blockers: {', '.join(str(b) for b in blockers[:3])}")
         print(f"     updated: {updated}")
+    print()
+
+
+# ── K-1: report_open_items() — W1.1 (union/typed/topological) + W1.2 (decision-
+#         aging line) + W1.8 ([ROADMAP-STALE]). Sibling reporter to report_roadmap;
+#         pure prints, never raises — open-item surfacing is informational.
+_OPEN_ITEMS_DATE_RE = re.compile(r'(20\d{2})[-/](\d{2})[-/](\d{2})')
+
+
+def _oi_as_date(s):
+    """A date from an ISO-ish value (date/datetime/str), else None."""
+    from datetime import date as _date, datetime as _dt
+    if not s:
+        return None
+    if isinstance(s, _dt):
+        return s.date()
+    if isinstance(s, _date):
+        return s
+    m = _OPEN_ITEMS_DATE_RE.search(str(s))
+    if not m:
+        return None
+    try:
+        return _date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+    except ValueError:
+        return None
+
+
+def _oi_earliest_date_in(text):
+    """Earliest YYYY-MM-DD mentioned in text (text-derived, approximate), else None."""
+    from datetime import date as _date
+    best = None
+    for m in _OPEN_ITEMS_DATE_RE.finditer(str(text or '')):
+        try:
+            d = _date(int(m.group(1)), int(m.group(2)), int(m.group(3)))
+        except ValueError:
+            continue
+        if best is None or d < best:
+            best = d
+    return best
+
+
+def collect_open_items(roadmap_content=None, handoffs=None,
+                       ledger_lines=None, patch_content=None) -> list:
+    """Union of open items across sources, typed per the K4 schema
+    (id, kind, sev, authority, label, blocked_by, source, since, since_text).
+
+    Sources (W1.1): roadmap (phases not complete + pending_decisions +
+    integrity_actions_open), editorial ledger (open/provisional; superseded ->
+    supersession callout), patch_register (provisional), handoff.next.
+    Defensive: an unparseable source is skipped, never raised.
+
+    `since` is a real date FIELD only (handoff.updated, patch.date, ledger.date);
+    `since_text` is a date parsed from item text — less reliable, used only for an
+    explicitly-approximate aging fallback, never asserted as an open-date."""
+    import yaml
+    items = []
+
+    if roadmap_content:
+        try:
+            rm = yaml.safe_load(roadmap_content)
+        except Exception:
+            rm = None
+        if isinstance(rm, dict):
+            for p in rm.get('phases', []):
+                if p.get('status') in ('not_started', 'in_progress'):
+                    items.append(dict(
+                        id=f"Phase{p.get('id')}", kind='epic', sev=None, authority='M',
+                        label=p.get('name', '?'), blocked_by=[], source='roadmap.phase',
+                        since=None, since_text=None,
+                        extra=f"{p.get('items_done',0)}/{p.get('items_total','?')}"))
+            for d in rm.get('pending_decisions', []):
+                s = str(d)
+                _id = s.split(' \u2014 ')[0].split(' -')[0].strip()[:24]
+                items.append(dict(
+                    id=_id, kind='decision', sev=None, authority='J', label=s,
+                    blocked_by=[], source='roadmap.pending',
+                    since=None, since_text=_oi_earliest_date_in(s)))
+            for a in rm.get('integrity_actions_open', []):
+                s = str(a)
+                items.append(dict(
+                    id=(s[:34] + '\u2026') if len(s) > 34 else s, kind='fix', sev=None,
+                    authority='M', label=s, blocked_by=[], source='roadmap.integrity',
+                    since=None, since_text=_oi_earliest_date_in(s),
+                    supersession=('supersed' in s.lower())))
+
+    for hid, ho in (handoffs or []):
+        if not isinstance(ho, dict):
+            continue
+        ws = ho.get('working_state', {}) or {}
+        upd = _oi_as_date(ho.get('updated') or ho.get('created'))
+        for n, nx in enumerate(ws.get('next') or [], 1):
+            items.append(dict(
+                id=f"{hid}#{n}", kind='task', sev=None, authority='M', label=str(nx),
+                blocked_by=[], source='handoff.next', since=upd, since_text=None))
+
+    for l in (ledger_lines or []):
+        if not l.strip():
+            continue
+        try:
+            d = json.loads(l)
+        except Exception:
+            continue
+        st = str(d.get('status', '')).lower()
+        if st in ('open', 'provisional'):
+            items.append(dict(
+                id=d.get('id', 'ED-?'), kind=('decision' if st == 'open' else 'task'),
+                sev=None, authority='M',
+                label=d.get('decision') or d.get('description') or '', blocked_by=[],
+                source=f'ledger.{st}',
+                since=_oi_as_date(d.get('date') or d.get('date_opened')),
+                since_text=_oi_earliest_date_in(d.get('description'))))
+        elif st == 'superseded':
+            items.append(dict(
+                id=d.get('id', 'ED-?'), kind='fix', sev=None, authority='M',
+                label='superseded \u2014 verify [SUPERSEDED-BY] marker', blocked_by=[],
+                source='ledger.superseded', since=None, since_text=None, supersession=True))
+
+    if patch_content:
+        try:
+            pr = yaml.safe_load(patch_content)
+        except Exception:
+            pr = None
+        if isinstance(pr, dict):
+            for pt in pr.get('patches', []):
+                if str(pt.get('status', '')).lower() == 'provisional':
+                    items.append(dict(
+                        id=pt.get('id', 'PP-?'), kind='task', sev=pt.get('severity'),
+                        authority='M', label=pt.get('description', ''), blocked_by=[],
+                        source='patch.provisional',
+                        since=_oi_as_date(pt.get('date')), since_text=None))
+    return items
+
+
+def _oi_toposort(items):
+    """Stable topological sort on blocked_by (matched by id). Items whose blockers
+    are external/already-placed come first; a cycle remnant falls back to stable
+    order. No-op when no item carries blocked_by (current live data)."""
+    by_id = {it['id']: it for it in items}
+    placed, placed_ids, remaining = [], set(), list(items)
+    progress = True
+    while remaining and progress:
+        progress = False
+        still = []
+        for it in remaining:
+            deps = [b for b in it.get('blocked_by', []) if b in by_id]
+            if all(b in placed_ids for b in deps):
+                placed.append(it)
+                placed_ids.add(it['id'])
+                progress = True
+            else:
+                still.append(it)
+        remaining = still
+    placed.extend(remaining)
+    return placed
+
+
+def report_open_items(roadmap_content=None, handoffs=None, ledger_lines=None,
+                      patch_content=None, today=None, cap=5) -> None:
+    """Print the OPEN ITEMS fold for the Status Block (W1.1/W1.2/W1.8). Never raises.
+
+    Cheap (bootstrap) mode = roadmap + handoffs only: the editorial ledger (~650
+    JSONL entries) and patch register are NOT bootstrap-cached, and re-reading the
+    ledger on every subprocess violates cost-discipline. Full mode = pass
+    ledger_lines + patch_content for the complete union (on-demand standalone call,
+    e.g. g.report_open_items(rm, ho, ledger_lines, patch_content))."""
+    import yaml
+    from datetime import date as _date
+    today = today or _date.today()
+    try:
+        items = collect_open_items(roadmap_content, handoffs, ledger_lines, patch_content)
+    except Exception as e:
+        print(f"\nOPEN ITEMS: unreadable ({e})\n")
+        return
+    items = _oi_toposort(items)
+    full = bool(ledger_lines or patch_content)
+    srcs = sorted({it['source'].split('.')[0] for it in items})
+
+    print()
+    mode = 'full' if full else 'cheap: roadmap+handoffs'
+    print(f"OPEN ITEMS ({len(items)} tracked \u00b7 {mode} \u00b7 sources: {', '.join(srcs) or 'none'}):")
+
+    cat_order = [('decision', '\u27d0 decisions'), ('epic', '\u25e2 phases'),
+                 ('fix', '\u2691 fixes/integrity'), ('task', '\u25ba tasks/next'),
+                 ('audit', '\u2726 audits')]
+    for kind, label in cat_order:
+        grp = [it for it in items if it['kind'] == kind]
+        if not grp:
+            continue
+        shown = grp[:cap]
+        ids = ', '.join(i['id'] for i in shown)
+        more = len(grp) - len(shown)
+        print(f"  {label} ({len(grp)}): {ids}" + (f" (+{more} more)" if more > 0 else ""))
+
+    sup = [it for it in items if it.get('supersession')]
+    if sup:
+        print(f"  \u2298 supersession pending ({len(sup)}): "
+              + ', '.join(i['id'] for i in sup[:cap])
+              + (f" (+{len(sup)-cap} more)" if len(sup) > cap else ""))
+
+    # W1.2 decision-aging line. Asserted age uses real date FIELDS only; a text-
+    # mentioned date is shown only as an explicitly-approximate fallback.
+    field_dec = [(it['since'], it['id']) for it in items
+                 if it['kind'] == 'decision' and it.get('since')]
+    field_any = [(it['since'], it['id']) for it in items if it.get('since')]
+    text_any = [(it['since_text'], it['id']) for it in items if it.get('since_text')]
+    if field_dec:
+        d, i = min(field_dec)
+        print(f"  oldest \u27d0: {(today - d).days} days ({i}, {d.isoformat()})")
+    elif field_any:
+        d, i = min(field_any)
+        print(f"  oldest \u27d0: undated (open decisions carry no date field); "
+              f"oldest dated item {(today - d).days} days ({i}, {d.isoformat()})")
+    else:
+        print("  oldest \u27d0: undated (no open item carries a date field)")
+    if not field_dec and text_any:
+        d, i = min(text_any)
+        print(f"  \u2248 oldest (text-derived, approximate): {(today - d).days} days ({i}) "
+              f"\u2014 add an `opened:` field on decision creation to age reliably")
+
+    # W1.8 [ROADMAP-STALE] when roadmap.updated is older than the threshold.
+    if roadmap_content:
+        try:
+            rm = yaml.safe_load(roadmap_content)
+            upd = _oi_as_date(rm.get('updated')) if isinstance(rm, dict) else None
+            if upd and (today - upd).days > 7:
+                print(f"  [ROADMAP-STALE: updated {upd.isoformat()}, "
+                      f"{(today - upd).days} days ago \u2014 reconcile]")
+        except Exception:
+            pass
     print()
 
 
