@@ -1,4 +1,6 @@
 # Valoria — Master Workplan v3 (consolidated, three-lane)
+
+> **[SUPERSEDED-BY: `designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md` — landed 2026-06-11 at ttrpg@d010fe27. v3 is the frozen 2026-06-10 record; its J-1…J-18 keys remain citable and are carried unchanged into v4. Work v4's queues, not v3's.]**
 **2026-06-10 · status: PROPOSED (Jordan-vetoable throughout) · as_of: ttrpg@695552e3 (HEAD this session; a parallel audit session is committing — re-pin on resume)**
 
 **Supersedes:** `designs/audit/2026-06-06-architecture-map/valoria_master_workplan.md` (the Jordan-approved capstone — its approved content [methodology, Waves 0–1, the K8 commission] is **carried, not reopened**; W-item IDs stay citable) · `designs/audit/2026-06-09-ecosystem-reconciliation/valoria_workplan_R2_2026-06-09.md` (incl. its supersession of the uncommitted same-day delta workplan). The 2026-05-31 workplan-v2's **Three-Lane Operating Model survives as the operating frame** — it lives operationally in `references/lane_assignments.yaml`, whose `source:` pointer and entry queues this consolidation repoints to v3.

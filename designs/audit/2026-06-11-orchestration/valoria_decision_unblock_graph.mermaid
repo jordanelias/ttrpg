@@ -1,0 +1,46 @@
+%% Valoria — decision-unblock DAG (what each Jordan ruling opens; hand-authored synthesis, update with workplan v4; verified HEAD d010fe27)
+%% Legend: purple = J-key ruling · pink = one-sitting batch · teal = lane execution · amber = outcome/port
+%% Leverage order (v4 §9): J-2 → J-1 → J-22 → J-6(a,b) → J-23, then sittings J-31 · J-32 · J-30
+flowchart LR
+
+classDef jkey fill:#ede7f6,stroke:#4527a0,color:#311b92
+classDef sit fill:#fce4ec,stroke:#ad1457,color:#880e4f
+classDef lane fill:#e0f2f1,stroke:#00695c,color:#004d40
+classDef outc fill:#fff8e1,stroke:#ff8f00,color:#e65100
+
+J2["J-2 registry type set"]:::jkey --> LA2["LA-2 registry executions"]:::lane
+LA2 --> LC4["LC-4 dice-engine ports"]:::outc
+J1["J-1 top-down ruling"]:::jkey --> CARVE["assessor carve-out + tests — Lane B"]:::lane
+J1 --> ST3["scale_transitions rule-3 documentation — Lane A"]:::lane
+J1 --> LC0c["LC-0c errata fold · interim down-edge rule retires"]:::lane
+J22["J-22 GD-1 number"]:::jkey --> J11["J-11 victory wiring go"]:::jkey
+J11 --> LC7["LC-7 victory + treaty port"]:::outc
+J22 --> PROP1["one-commit propagation: canon/02 · victory_v30 · mechanics_index"]:::lane
+J6["J-6 a,b Lane-C starters"]:::jkey --> LC0a["LC-0a autoload ruling"]:::lane
+LC0a --> LC1["LC-1 Key spine"]:::lane
+LC1 --> LC3["LC-3 first ritual — settlement_layer"]:::outc
+LC3 --> LC4
+J19["J-19 GD-2 intent + Order-to-Accord clamp"]:::jkey --> LC3
+J34["J-34 settlement quartet"]:::jkey --> LC3
+J23["J-23 backstory in/out — default IN"]:::jkey --> TL["canon/03 certainty + chains-banner citation fix"]:::lane
+J7["J-7 faction-stat inversion (+J-8 echo routing)"]:::jkey --> LA6["LA-6 write-side migration"]:::lane
+LA6 --> FS["faction_state write-side port"]:::outc
+J4["J-4 shadow-module status"]:::jkey --> LA3["LA-3 shadow docs"]:::lane
+LA3 --> PROVX["11 ports exit PROVISIONAL"]:::outc
+J31["J-31 contest sitting D-1 to D-10"]:::sit --> LA19["LA-19 CR1-CR7 propagation + L3 commit"]:::lane
+LA19 --> M13["module 13 port confidence"]:::outc
+J32["J-32 threadwork sitting — master analysis section 6"]:::sit --> LA20["LA-20 threadwork reconciliation"]:::lane
+LA20 --> RECS["record-S to PARTIAL · module 21"]:::outc
+J33["J-33 combat residual — 3 commits · ED-911 coverage · traditions"]:::jkey --> M16["module 16 completion · handoff blocker clears"]:::outc
+J9["J-9 mass-battle set"]:::jkey --> LA8["LA-8 mass-battle canon updates"]:::lane
+J9 --> LC8["LC-8 mass-battle port"]:::outc
+J10["J-10 weapon-physics constants"]:::jkey --> LC8
+J21["J-21 world-track name"]:::jkey --> SWEEP["four-name + TT-arithmetic-inversion sweep — LA-11 half"]:::lane
+J30["J-30 naming batch sitting"]:::sit --> NAMES["naming executions — LA-4 · LA-16"]:::lane
+J25["J-25 arcs commission"]:::jkey --> LA21["LA-21 arcs 28-30 regen — Jordan-led"]:::lane
+J24["J-24 registry re-ratify or demote — incl. seed-CI 22 vs 28"]:::jkey --> METR["metronome re-derivation if 22 — window to ~S19"]:::lane
+J3["J-3 D-3 boundary rulings"]:::jkey --> LB15["LB-15 D-3 hook"]:::lane
+J3 --> LA9["LA-9 voice-canon closeout"]:::lane
+KB["K-budget: K-1 · K-2 · K-3"]:::lane --> HOOKS["LB-16/17/18/20 hook set"]:::lane
+LB4["LB-4 K-1 report_open_items"]:::lane --> LB7["LB-7 session-entry rewire"]:::lane
+LB10["LB-10 K-3 supersession vocabulary"]:::lane --> LB11["LB-11 ED-867 markers"]:::lane

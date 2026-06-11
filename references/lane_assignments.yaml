@@ -12,7 +12,7 @@
 # =====================================================================================
 version: 1
 updated: "2026-06-10"
-source: "designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md — §1 operating model (lineage: workplan_v2 2026-05-31 item 5.11; structure unchanged, queues migrated to v3 LA-/LB-/LC- IDs)"
+source: "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md — §1 operating model (lineage: v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; structure unchanged, queues carried to v4 LA-/LB-/LC- IDs)"
 
 boundary_rule: >
   A lane NEVER writes outside its owns: set. Need another lane's file changed? Read its
@@ -47,7 +47,7 @@ lanes:
     reserved_ed: "890-939"
     reserved_pp: "727-759"
     reconciliation_zone_ed: "874-889"   # Lane A ONLY — Track 1.8/1.11 cleanup of reserved-unfiled 874-882,885
-    entry_items: ["LA-1", "LA-5", "LA-2", "LA-3", "LA-4", "LA-6", "LA-8", "LA-9", "LA-10", "LA-7"]   # v3 §4; gates per v3 §5 docket
+    entry_items: ["LA-1", "LA-5", "LA-2", "LA-3", "LA-4", "LA-6", "LA-8", "LA-9", "LA-10", "LA-7"]   # v4 §4; gates per v4 §3 docket
     notes: >
       Structural ledger ops (re-issue register, strike, supersede, dedup — items 1.2/1.7/1.13)
       are Lane A ONLY, so two lanes never rewrite the same existing ledger rows.
@@ -75,7 +75,7 @@ lanes:
       - "references/canonical_freshness.yaml"
     reserved_ed: "940-969"
     reserved_pp: "760-779"
-    entry_items: ["LB-1", "LB-2", "LB-3", "LB-4", "LB-5", "LB-6", "LB-7", "LB-8", "LB-9", "LB-10", "LB-11", "LB-12", "LB-13", "LB-14", "LB-15", "LB-16", "LB-17", "LB-18"]   # v3 §2; sequencing/gates per v3 §9
+    entry_items: ["LB-1", "LB-2", "LB-3", "LB-4", "LB-5", "LB-6", "LB-7", "LB-8", "LB-9", "LB-10", "LB-11", "LB-12", "LB-13", "LB-14", "LB-15", "LB-16", "LB-17", "LB-18"]   # v4 §5; sequencing/gates per v4 §9
     solo_items: ["LB-6"]              # structural rewrites of shared infra — run OUTSIDE the parallel window (former 5.3 SHA-split; former 5.1A SQLite-wire shipped as the enshrined SQL index pipeline, architecture V2.5)
     notes: >
       PI / architecture text edits are Jordan-applied: propose, do not self-commit.
@@ -95,8 +95,8 @@ lanes:
       - "tests/sim/HANDOFF_*"
     reserved_ed: "970-999"
     reserved_pp: "780-799"
-    entry_items: ["LC-0a", "LC-1", "LC-3", "LC-4", "LC-5"]   # v3 §3; governing spec = godot_conversion_strategy_v1
-    canon_gated: ["LC-0b", "LC-7", "LC-8"]   # unblock on v3 docket J-2 / J-11 / J-9+J-10
+    entry_items: ["LC-0a", "LC-1", "LC-3", "LC-4", "LC-5"]   # v4 §6; governing spec = godot_conversion_strategy_v1
+    canon_gated: ["LC-0b", "LC-7", "LC-8"]   # unblock on v4 docket J-2 / J-11 / J-9+J-10
     notes: >
       valoria-game is a separate repo, so Lane C implementation work is collision-free with A/B.
     launch_ready: true

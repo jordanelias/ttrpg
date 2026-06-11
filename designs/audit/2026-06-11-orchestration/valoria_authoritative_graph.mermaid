@@ -1,0 +1,99 @@
+%% Valoria — authoritative system graph (hand-authored SYNTHESIS view; update with valoria_authoritative_graph_v1.md)
+%% Legend: green = conformant · orange = non-conformant · blue = conformant-isolated · gray dashed = stub
+%%         solid edges = wired (up/lateral) · dashed = down-channels that exist · "J-1 seam" dashed = missing down-rule (8 seams / 15 type-edges)
+%% as_of: 2026-06-11 corpus · PROPOSED, Jordan-vetoable · verified HEAD d010fe27; generated module mermaids remain the contract-level authority (regenerate, never hand-edit)
+flowchart TB
+
+classDef conf fill:#e8f5e9,stroke:#1b5e20,color:#1b5e20
+classDef ncf fill:#fff3e0,stroke:#e65100,color:#bf360c
+classDef iso fill:#e3f2fd,stroke:#0d47a1,color:#0d47a1
+classDef stub fill:#eceff1,stroke:#546e7a,color:#37474f,stroke-dasharray:5 4
+classDef hub fill:#fffde7,stroke:#f57f17,color:#5d4037
+
+KEY[("KEY LOG — single-update rule 4.1<br/>validate, append, observers 4.2 scale-agnostic,<br/>apply_state_changes, typed consume")]:::hub
+
+subgraph PEN["PENINSULA"]
+  strain["peninsular_strain"]:::ncf
+  scen["scenario_authoring"]:::ncf
+  eclk["engine_clock"]:::conf
+  vict["victory — GD-1 number open J-22"]:::iso
+end
+
+subgraph PROV["PROVINCIAL"]
+  fstate["faction_state · faction_layer"]:::conf
+  fpol["faction_politics"]:::ncf
+  da["domain_actions · da_framework"]:::ncf
+  ci["ci_political"]:::iso
+  creg["clock_registry"]:::conf
+end
+
+subgraph SETL["SETTLEMENT · TERRITORY"]
+  setl["settlement_layer"]:::ncf
+  seco["settlement_economy — dup pair J-5"]:::ncf
+  tpi["territorial_piety"]:::iso
+end
+
+subgraph SCN["SCENE"]
+  slate["scene_slate"]:::ncf
+  soc["social_contest"]:::conf
+  mass["mass_battle"]:::ncf
+  gdir["game_director"]:::conf
+  stim["scene_timer"]:::conf
+  aud["audit"]:::conf
+end
+
+subgraph PERS["PERSONAL"]
+  comb["personal_combat stub — combat_engine_v1 CANONICAL"]:::stub
+  thr["threadwork"]:::ncf
+  fw["fieldwork_knots"]:::conf
+  pie["piety_track · conviction_track"]:::ncf
+  npc["npc_behavior"]:::ncf
+  mem["npc_memory"]:::conf
+  mir["miraculous_event"]:::conf
+end
+
+subgraph READ["CONNECTIVE · READ-SIDE"]
+  art["articulation_layer — universal reader"]:::conf
+  camp["campaign_architecture stub — retire?"]:::stub
+end
+
+%% Substrate hub (every module emits/consumes via the log; representative edges drawn)
+eclk -- "season tick · accounting Keys" --> KEY
+KEY --- art
+KEY -."C7 observer delivery — scale-agnostic, already applies stat_deltas down".-> npc
+
+%% Bottom-up Echo channels (capped, gated, queued)
+soc -- "Domain Echo cap 2 per stat · 1/scene/faction · queued PP-329/109" --> fstate
+slate -- "Accord Echo 1/territory/zoom · queued to Step-6 block" --> setl
+thr -- "Thread Echo 1/scene/faction · queued ED-673" --> fstate
+thr -- "Dissolution CI +1 · POP CI −1 — rule 10" --> ci
+setl -- "Mandate = clamp(round(7T/(T+6)),0,7) — LPS-2e damped" --> fstate
+fstate -- "Mandate drift 1/settlement/season — mean-reverting" --> setl
+setl -- "Accord at-most-1 territories: Strain +1 each · cap +3/season" --> strain
+mass -- "battle: MS −1 (−2 War) · Stability triggers" --> fstate
+
+%% Lateral
+slate --- soc
+slate --- mass
+da -- "da.* ×5" --> fstate
+fpol -- "coup · succession · standing" --> fstate
+
+%% Down-channels that EXIST (dashed)
+mass -."3.7 general duel — the lone rule-3 down-handoff".-> comb
+fstate -."mandatory + world-state zooms C2/C3".-> slate
+da -."board degree shades scene Ob — C5 modifier".-> slate
+
+%% The 8 J-1 seams (consume intent canonical; delivery rule + personal targets missing)
+da -.->|"J-1 seam 1 — da.* ×3"| npc
+da -.->|"J-1 seam 2 — da.* ×2"| pie
+da -.->|"J-1 seam 3 — economic_intervention"| seco
+fpol -.->|"J-1 seam 4 — ×4"| npc
+strain -.->|"J-1 seam 5 — strain_shock"| npc
+strain -.->|"J-1 seam 6 — population_change"| seco
+strain -.->|"J-1 seam 7 — env.* ×2"| setl
+scen -.->|"J-1 seam 8 — env.disaster"| setl
+
+%% Clock valve + victory read
+ci -- "CI at 60 opens IP +2/season — the central pacing valve" --> strain
+fstate -.->|"Step-10 victory check"| vict
+strain -.->|"Strain at-most-6 gate"| vict
