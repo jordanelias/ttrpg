@@ -1,0 +1,64 @@
+id: active-work-index-2026-06-11
+scope: general
+owns:
+- designs/audit/2026-06-11-orchestration/**
+last_commit: '9a437f5e (2026-06-11) [compilation] land 2026-06-11 orchestration set:
+  map + graph + workplan v4 authoritative'
+task:
+  skill: valoria-orchestrator
+  description: 'Orchestration master (2026-06-11). Supersedes active-work-index-2026-06-09.
+    The 06-09->06-11 analysis layer is consolidated into ONE register + docket: workplan
+    v4 is the authoritative working master (§2 unified 28-row register, §3 docket
+    J-1..J-34); the map is the document-authority/navigation surface; the graph is
+    the all-directions edge layer (+2 mermaids). v4 supersedes v3 (bannered); lane_assignments
+    source: repointed to v4. Verified at HEAD 9a437f5e: ledger 653/0-dup; v2 source
+    layer committed. Nothing resolved-and-settled: the docket is authoritative+primary
+    as the OPEN-WORK surface (Jordan clarification 2026-06-11). Two value flags OPEN:
+    CI 22-vs-28; MS-start 2edf6432 referent.'
+context_files:
+- path: designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md
+  reason: THE master — read first. §0 reconciliation + 2 value flags; §2 register
+    (28 rows); §3 docket J-1..J-34 (veto surface); §4-6 lanes; §9 sequence. Leverage
+    J-2->J-1->J-22->J-6(a,b)->J-23.
+  depth: full
+- path: designs/audit/2026-06-11-orchestration/valoria_authoritative_map_v1.md
+  reason: Document-authority table + governance/canon/mechanics + 27-module status.
+    "Where is everything."
+  depth: full
+- path: designs/audit/2026-06-11-orchestration/valoria_authoritative_graph_v1.md
+  reason: Edges by six directions + quantity lattice + loop inventory (inherited)
+    + coverage. "How it wires / what is open (J-1)."
+  depth: full
+- path: designs/audit/2026-06-11-interdependency-master/valoria_interdependency_atlas_v1.md
+  reason: Primitive-grounded edge atlas v2 (R1-R8 + P1-P5). Edge depth behind the
+    graph.
+  depth: skeleton
+- path: designs/audit/2026-06-11-canon-flatten/canon_flatten_examination.md
+  reason: Canon register v2 (C2 REVERSED -> do NOT edit canon/03).
+  depth: skeleton
+- path: designs/audit/2026-06-09-session-consolidation-master.md
+  reason: Prior master (superseded by v4; faction-stat Part A retained).
+  depth: skeleton
+working_state:
+  next:
+  - 'Docket = blocker surface; Jordan rules J-1..J-34 (v4 §3). Leverage: J-2 -> J-1
+    -> J-22 -> J-6(a,b) -> J-23.'
+  - 'Three one-sitting batches clear 9 rows: J-31 (contest D-1..D-10), J-32 (threadwork
+    §6), J-30 (naming, incl. Halvardshelm/Halvarshelm).'
+  - 'Ungated NOW (~2-3 sessions, -8 rows): LA-12 rename archaeology, LA-14 Coup-Counter->autonomy,
+    LA-15 timeline arithmetic, LA-16 hygiene, LA-17 faction propagation, LA-18 derived-value
+    formulas.'
+  - 'Bootstrap-verify two value flags (LB-3): CI seed 22 vs 28 (window ~S16 vs ~S19);
+    MS-start "80->60" referent (commit 2edf6432).'
+  blockers:
+  - '[OPEN - Jordan] v4 §3 docket J-1..J-34 standing decision surface; creative-tier
+    (J-25 arcs; LA-21/22 Vaynard) Jordan-led, Claude drafts on commission.'
+  - '[OPEN - Jordan] Faction-stat inversion J-7 (+J-8) gates Wave-2 write-path.'
+  - '[OPEN - Jordan] Combat residual J-33 (3 post-ED-904 commits; F1 coverage / ED-911
+    staged) — parallel-owned, coordinate.'
+created: '2026-06-11T23:45:39.266357+00:00'
+updated: '2026-06-11T23:45:39.266357+00:00'
+status: active
+key_values: []
+blockers: []
+as_of: 9a437f5e433690c7e9a0640f3f0df1b8d0cf172e
