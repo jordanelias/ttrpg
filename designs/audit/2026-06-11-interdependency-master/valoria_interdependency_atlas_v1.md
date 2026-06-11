@@ -128,6 +128,8 @@ compute_observers(key):
 | 8 | `scenario_authoring` → `settlement_layer` | peninsula → settlement | `env.disaster` ×1 |
 | 9 | `scene_slate` → `piety_track` | scene → personal | `scene.*` ×4 |
 
+**Classification caveat (adversarial-review fix R4).** Seam 9 (`scene_slate → piety_track`, scene→personal) is **near-lateral, not strategic→personal top-down** — `scene_slate` is the scene-scale slate reader feeding Conviction Scars, so this edge sits *within* the personal/scene band rather than crossing down from the strategic layer. The "19" is the adjudicator's A6 count and is retained as-reported, but the **genuine strategic/peninsula→personal/settlement down-gap is the 8 cross-band seams (#1–8) = 15 type-edges**; seam 9 (4 edges) is a borderline inclusion. This does not change the J-1 decision — it sharpens the count the assessor's carve-out would clear.
+
 `[OPEN — J-1 / ED-1006: all nine seams resolve the same way once Jordan rules C7-exempt-vs-explicit-§3-rule. The registry already lists these consumers for these types (e.g. `env.peninsular_strain_shock` consuming_systems include `npc_behavior`, `settlement_layer`) — the consume intent is canonical; only the *delivery rule* is missing. Not invented here.]`
 
 ### §2.5 — DIAGONAL (cross-scale AND cross-family; bottom-up covered, top-down absent)
@@ -146,6 +148,8 @@ compute_observers(key):
 
 ## §3 — THE KEY-TYPE EDGE MATRIX (primitive-grounded, with registry↔contract reconciliation)
 *The 37 registered types (`key_type_registry §1–§9`) as directed edges: canonical emitter → canonical consumer. Drift column flags where the contract (`module_map §4.5`) diverges from the registry — read through the §0 name map. `[UNREG]` = emitted by a system per the substrate's own §8 but **absent from the registry** ⇒ `validate()` rejects (the F2 wall, master item 3), confirmed at the primitive.*
+
+**Source-tier (read before trusting any row — adversarial-review fix R1).** The **emitter/consumer columns are PRIMARY canon** (`key_type_registry`, read live `ref=main` this session — fresh). The **"drift vs contract" column is DERIVED/SECONDARY** (`module_map §4.5`, generated from `module_contracts.yaml`) and inherits two known weaknesses: the verdict §7 caveat that ~40% of the contract graph is registry-shadow over-claim, and the fact that **`module_contracts.yaml` is itself one of the 6 currently registry-stale sources** (its declared pin lags live). Treat a registry edge as bedrock and a contract-only drift flag as a lead to verify, not a settled fact.
 
 ### Registered types by family
 | Type | Emitter(s) (registry) | Consumer(s) (registry) | Scale | Drift vs contract |
@@ -204,7 +208,9 @@ compute_observers(key):
 **This is the F2 root at the primitive, not the adjudicator:** the substrate's *own* §8 integration contract (§8.4, §8.6) declares emit types its *own* companion registry does not define — an internal contradiction in the canonical substrate pair, resolved only by J-2 (register via §10 Class-B, or strike from doc-12 §8 / substrate §8). Registry §9 also self-drifts: declares 37 types, parser counts 38 headings (A9, master item 11).
 
 ## §4 — THE QUANTITY-COUPLING LATTICE (granular stat→quantity edges beneath the Key edges)
-*The resource lattice the Keys move. Source: `derived_stats §14` / `settlement §1.8` (derivations); module_map §4.4; `game_flow §4` (clock rates); wiring 3-C. Each row: source → formula/mechanism → target, direction, cap/damper.*
+*The resource lattice the Keys move. Each row: source → formula/mechanism → target, direction, cap/damper.*
+
+**Source & verification status (adversarial-review fix R6).** The **faction multipliers and the settlement Mandate/Accord block below were re-read against the live primaries this session** (`derived_stats_v30 §14` + `settlement_layer_v30 §1.8`, `ref=main`) and **verified exact** — note both are among the 6 registry-stale sources, so the live read (not the stale pin) is the authority here. **Not re-verified this session:** the *personal* multipliers (Health/Stamina/Concentration/**Composure** — Composure carries the live ×3-vs-+6 drift, item 10/J-12), sourced from `derived_stats §14`'s personal block which was not extracted. **Out of scope here (pointed to, not transcribed):** the full seasonal **income/drain ledger** (`derived_stats §8.1` — Treasury ±, Legitimacy ±, Reputation ±, Discipline ± per action/event) and the **derived→stat ratchet** (`§8.2` — derived-value-at-0-through-Accounting → owning stat −1) are the edges that actually *move* these quantities; §4 captures the static derivation, not the per-season movement.
 
 **Settlement-derived (deterministic accounting; A5 — never write the derived value, write the source):**
 - settlement Order → **province Accord** = `⌊mean settlement Order⌋` (Order 0–5 → Accord 0–3; **clamp implied/unstated — item 8 / J-19**)
@@ -213,7 +219,7 @@ compute_observers(key):
 - faction Mandate → settlement L/PS = `drift ±1/settlement/season` — **mean-reverting (closes L3)**
 - settlement Prosperity → faction Treasury income = `Σ Prosperity ×10`
 
-**Faction-derived (`Stat×multiplier`):** Wealth→Treasury `×100` · Stability→Discipline `×10` · Influence→Reputation `×15` · Military→Levies `×2` · Mandate→Legitimacy-meter `×20`.
+**Faction-derived (`Stat×multiplier`; ✅ all five verified vs live `derived_stats §14` this session):** Wealth→Treasury `×100` · Stability→Discipline `×10` · Influence→Reputation `×15` · Military→Levies `×2` · Mandate→Legitimacy-meter `×20`.
 
 **Personal-derived:** Endurance→Health `(End+6)×(MW+1)` (MW cap 3) · End+Spirit→Stamina `(3·End)+(2·Spi)` · Focus+Spirit→Concentration `(3·Foc)+(2·Spi)` · Charisma→Composure `×3` **[drift: ×3 vs +6 — item 10 / J-12]** · Spirit→Thread-Fatigue `×5`. **Wounds → every personal pool: −1D each** (the universal personal-scale debuff edge).
 
@@ -266,6 +272,27 @@ compute_observers(key):
 
 **Supersession.** This atlas **extends** `valoria_interdependency_master_v1.md` §5 (granular companion); it does **not** supersede it — both stay live, master as the navigable layer, atlas as the edge-level depth. The primitives read this session (`scale_transitions_v30`, `key_type_registry_v30`, `key_substrate_v30`, `params/scale_transitions`) are **canon, read-only** — not folded. No new ED IDs assigned; every finding routes to the existing J-1/J-2/J-7/J-19/LA-5/LA-11 docket for Jordan adjudication.
 
+## §7 — ADVERSARIAL REVIEW & RECONCILIATION RECORD (2026-06-11, this session)
+
+`[SELF-AUTHORED — bias risk]` Dispassionate self-audit of this atlas **and** `valoria_interdependency_master_v1.md`, treating both as external work and hunting what the author is incentivized to miss. **Verdict: the registry-/scale_transitions-/substrate-grounded core is sound and now partly live-verified; the weaknesses are epistemic — source-tier conflation, inherited (not re-derived) safety claims, and a supersession over-claim — all reconciled below. No fabricated findings; no claim cleared without the look.**
+
+**The meta-finding (subsumes R1/R2):** this is a large synthesis built almost entirely on the author's own prior synthesis, and the one external check already on record (verdict §7) warned ~40% of the contract graph is registry-shadow over-claim. The master and atlas *amplified* confidence rather than damping it. Reconciliation: the bedrock is the **primary canon** read live this session (`key_type_registry`, `key_substrate §4.1/§4.2/§8`, `scale_transitions §3–§10`, and now `derived_stats §14` + `settlement §1.8`); everything **contract-/module_map-derived** is demoted to secondary and flagged inline.
+
+| # | Finding (what a dispassionate reviewer attacks) | Sev | Disposition |
+|---|---|---|---|
+| **R1** | Edge tables conflated **primary** (registry) and **derived** (contract/module_map) sources as co-equal. | 1 | **FIXED** — §3 now tier-marks; registry = bedrock, contract drift = lead-to-verify. |
+| **R2** | Loop-safety / sim results ("ratified; P(collapse) 0.41→0.97") presented as fact; trail = reads, not re-derivation. | 1 | **RECONCILED (labelled)** — these are **INHERITED from the source audits (game_flow §8, verdict A7), not re-verified this session.** Master §7 / §9 carry the same inheritance. |
+| **R3** | Master §11 claimed the 3 source views "consolidated into this master" (superseded) **while also** calling flat-spec a live "value-table reference" — a contradiction; and no `[SUPERSEDED-BY]` markers were ever written. | 1 | **FIXED** — master §11 reframed: the views are **complementary live sources synthesized/indexed**, not superseded. Honest framing: this was *build-one-index-over-N*, not *collapse-N-to-1*; artifact count rose because master+atlas are new synthesis layers — appropriate, since the sources are distinct detail, not redundant copies. |
+| **R4** | Seam-9 (`scene_slate→piety_track`) is near-lateral, not top-down — inflates the down-gap count. | 2 | **FIXED** — §2.4 caveat; genuine down-gap = 8 seams / 15 edges. |
+| **R5** | Master item 2 bundles two distinct Jordan decisions (faction-stat write-path **J-7** vs Mandate-echo routing **J-8**). | 2 | **NOTED** — the row already names both; flagged here as two decisions, not one. |
+| **R6** | §4 multipliers were secondary-sourced, in a drift-prone area whose primary (`derived_stats`) is registry-stale. | 2 | **FIXED by verification** — faction multipliers + Mandate/Accord block **re-read live and verified exact**; personal multipliers + the §8.1/§8.2 income-drain ledger marked unverified/out-of-scope (§4). |
+| **R7** | Freshness never investigated — 6 stale canonical sources flagged every bootstrap. | 3 | **RESOLVED** — checked: 6 stale = settlement_layer, derived_stats, key_substrate, articulation_layer, module_contracts; **4 are load-bearing here.** All primitives I cite were read live (`ref=main`), ahead of their stale registry pins — citations are current; the staleness is a pre-existing pin lag (LB-6), not a read defect. |
+| **R8** | Master item 10's non-Composure drifts (Stamina/Concentration/Combat-pool/Intel) waved at "LA-5"; LA-5 is index-regen, not formula propagation. | 3 | **NOTED** — these are mechanical propagation lacking a precise docket home; surface for a docket entry. |
+
+`[NULL: searched both artifacts for a *substantive* error — a wrong edge, a fabricated mechanism, a mis-cited formula. None found beyond the tier/inheritance/framing weaknesses above. The §4 formulas verified exact against live primaries; the edge set matches the registry; the gap is enumerated honestly. The defects are epistemic-presentation, not factual.]`
+
+**Net effect of reconciliation:** confidence is now **calibrated, not flattened** — the primary-canon core is verified-live and marked bedrock; the contract-derived layer is demoted and flagged; the safety verdict is labelled inherited; the supersession story is corrected. Nothing was invented to fill the top-down gap, and nothing factual required retraction.
+
 ---
-*Method: bottom-up from the four canonical primitives (full reads, pinned SHAs in the banner) cross-checked against `module_map_flat.md §4.5`. Every edge cites its primitive. No mechanical value invented; the top-down gap is enumerated seam-by-seam, never filled. `[SELF-AUTHORED — bias risk]` throughout — §5 is the place an independent reviewer should re-test against the editorial ledger.*
+*Method: bottom-up from the four canonical primitives (full reads, pinned SHAs in the banner; `derived_stats §14` + `settlement §1.8` additionally verified live in §4) cross-checked against `module_map_flat.md §4.5`. Every edge cites its primitive. No mechanical value invented; the top-down gap is enumerated seam-by-seam, never filled. §7 is the adversarial-review record. `[SELF-AUTHORED — bias risk]` throughout.*
 

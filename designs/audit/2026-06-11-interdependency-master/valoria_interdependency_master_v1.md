@@ -250,12 +250,12 @@ The graph is a **lint-level pass away from R**, but the lint is *necessary, not 
 
 ## §11 — SUPERSESSION & PROVENANCE LEDGER
 
-**Consolidated into this master** (authored analyses — folded here; supersession is hook-tracked, non-blocking; git preserves full detail). Mark with `[SUPERSEDED-BY: valoria_interdependency_master_v1.md]` on next touch; do **not** delete:
-- `2026-06-06-architecture-map/valoria_system_hierarchy_map.md` (`f1b3f4c9`) → §1–§4
-- `2026-06-06-architecture-map/valoria_system_wiring_analysis.md` (`f1b3f4c9`) → §4–§5, §7, §8, §10
-- `2026-06-11-game-flow/game_flow_analysis_v1.md` (`c005da27`) → §6, §6.1, §7, §8
-- `2026-06-11-game-flow/game_flow_flat_spec_v1.md` (`6199d83a`) → §5.3, §6, §8 (its A–G registries remain the value-table reference; pointed to, not duplicated)
-- `2026-06-10-module-adjudication/verdict_full_graph.md` (`8d8a2081`) → §4, §5.1, §8, §9
+**Synthesized & indexed by this master — NOT superseded (adversarial-review fix R3).** This master is a **new synthesis layer over complementary live sources**, not a replacement that retires them. Each source remains the authoritative *detail* for its axis; the master is the navigable *index/synthesis* across them. (The earlier "consolidated into this master / mark `[SUPERSEDED-BY]`" framing was an over-claim and internally contradictory — it called `flat_spec` both "superseded" and "the live value-table reference." Corrected: none of these is superseded; no `[SUPERSEDED-BY]` markers are written.) This was a *build-one-index-over-N* consolidation, **not** a *collapse-N-to-1* — the artifact count rose by design, because these sources are distinct detail, not redundant copies.
+- `2026-06-06-architecture-map/valoria_system_hierarchy_map.md` (`f1b3f4c9`) — authoritative system specs → synthesized in §1–§4
+- `2026-06-06-architecture-map/valoria_system_wiring_analysis.md` (`f1b3f4c9`) — structural edges + contradiction register → §4–§5, §7, §8, §10
+- `2026-06-11-game-flow/game_flow_analysis_v1.md` (`c005da27`) — temporal flow + loop inventory → §6, §6.1, §7, §8
+- `2026-06-11-game-flow/game_flow_flat_spec_v1.md` (`6199d83a`) — **the live value-table reference** (registries A–G) → indexed in §5.3, §6, §8
+- `2026-06-10-module-adjudication/verdict_full_graph.md` (`8d8a2081`) — per-module conformance + NERS → §4, §5.1, §8, §9
 
 **Stay live (NOT superseded — they are sources or generators, not folded analyses):**
 - `references/module_contracts.yaml` (`c8e982b5`) — the generating spine.
@@ -264,7 +264,9 @@ The graph is a **lint-level pass away from R**, but the lint is *necessary, not 
 - `2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md` (`ac49cea6`) — the live workplan; this master is its canon-state graph input and keys §8 to its J-1…J-21 docket and §6 cross-lane map.
 - All canonical design docs (the `designs/**` bodies cited throughout) — canon, read-only here.
 
-**Method note.** Consolidation per PI `<document_consolidation>`: collate → reconcile → one master. Every row traces to a source view read in full this session; no mechanical value is invented; every substantive conflict is carried OPEN to the live J-NN docket (creative/structural-ontology = Jordan), never silently resolved. `[SELF-AUTHORED — bias risk]` applies throughout — the §8 register is the place an independent reviewer should re-test against the editorial ledger, which is not swept here.
+**Method note.** Consolidation per PI `<document_consolidation>`: collate → reconcile → one synthesis index. Every row traces to a source read in full this session; no mechanical value is invented; every substantive conflict is carried OPEN to the live J-NN docket (creative/structural-ontology = Jordan), never silently resolved.
+
+**Adversarial review & confidence calibration (2026-06-11).** A dispassionate self-audit of this master and the companion atlas is recorded in `valoria_interdependency_atlas_v1.md §7` (findings R1–R8, all reconciled). Two calibrations apply here: **(1) source tier** — the primary-canon spine (`key_substrate`, `key_type_registry`, `scale_transitions`, and `derived_stats §14` + `settlement §1.8`, read live this session) is bedrock; everything **contract-/`module_map`-derived** is secondary and inherits the verdict §7 registry-shadow over-claim — and **4 of 6 currently-stale canonical sources** (`module_contracts`, `derived_stats`, `settlement_layer`, `key_substrate`) are dependencies, so live reads (not stale pins) are the authority. **(2) The loop-safety verdict (§7) and NERS verdict (§9) are INHERITED** from the source audits (game_flow §8, verdict A7), **not re-derived this session** — the sims are cited, not re-run. `[SELF-AUTHORED — bias risk]` throughout — §8 is the register an independent reviewer should re-test against the editorial ledger, which is not swept here.
 
 ---
 *Citations (full session `[READ:]` trail in the session log): the five consolidated views above (read in full this session at the pinned SHAs) + `canon/02_canon_constraints.md` (P-01–P-15, GD-1/2/3) + `skills/valoria-mechanic-audit/SKILL.md` (task-gate) + `references/canonical_sources.yaml` + `references/module_contracts.yaml`. Underlying canonical mechanics are cited inline by doc + section as carried from the source views.*
