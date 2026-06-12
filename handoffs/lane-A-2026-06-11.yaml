@@ -97,6 +97,10 @@ working_state:
     live inbound refs to designs/scene/fieldwork_v30.md (sim/params/valoria_index.sql/mechanics_index/propagation_map/design_registry/...)
     untouched; relocation-to-designs/fieldwork/ rejected (would break 37 to heal 12).
     renamed-from history comments retained.'
+  - 'Fieldwork canonical_sources coverage DONE 2026-06-12: compliance-cap drift fixed
+    @3b503788, robust 15-file fieldwork key registered @4c3b0ea0. ED-914 coverage
+    gap closed (registration in place; no relocation). Remaining ED-914 = the PP-632
+    content reconciliation (handed off).'
   next:
   - 'LA-15 remainder NOT mechanical: C11a (Einhir texts ''condemned in 4th Century''
     = future) + C11b (''400-year-old'' Church text = pre-Catastrophe) are flagged-impossible
@@ -210,17 +214,13 @@ blockers:
   Pool carries the ED-901-STRUCK old form (Agi×2)+H+3 + superseded PP-615 claim; canonical
   replacement = combat_engine_v1 form, which ED-904 ties to OPEN balance levers (Jordan
   pending). Needs engine-form read + Jordan balance check. ED-933.'
-- 'REGISTRATION BLOCKED (2026-06-12): robust canonical_sources fieldwork key (15 files,
-  +581 tok) pushes canonical_sources 8,822 -> 9,403 tok, HALTED by [MANUAL] size_exceeded
-  compliance rule (threshold 9,000). DRIFT FINDING: the 9,000 compliance threshold
-  is inconsistent with TOKEN_THRESHOLDS=12,000 and the architecture interim cap=12,000
-  (raised 633f5e57) — looks stale (pre-interim-raise). Two readings: (a) stale ->
-  update compliance threshold to 12k [Lane-B/Jordan] and the robust key fits; (b)
-  intentionally strict to force the queued SHA-split (Phase 2.4/K-2: move canonical_sha
-  fields -> canonical_freshness.yaml, relieving canonical_sources to ~5k) before adding
-  more keys. Header fixes already LANDED (3bae984d); only the registration is blocked.
-  AWAITING JORDAN on the path.'
+- 'REGISTRATION RESOLVED 2026-06-12: compliance cap drift fixed @3b503788 (atomization_rules.yaml
+  canonical_sources max_tokens 9000 -> 12000, aligning with TOKEN_THRESHOLDS; Jordan
+  chose option (a)). Robust 15-file fieldwork key registered @4c3b0ea0 (canonical_sources
+  8,822 -> 9,403 tok). Fieldwork now under freshness/co-file coverage. NOTE: canonical_sources
+  bloat (115 canonical_sha fields) still warrants the queued SHA-split (Phase 2.4
+  / K-2); cap raise was the realignment, not the cure.'
 created: '2026-06-12T02:13:54.540784+00:00'
-updated: '2026-06-12T19:02:24.221193+00:00'
+updated: '2026-06-12T21:01:30.912710+00:00'
 status: active
-as_of: 3bae984d70f3333b777bab48757dd6aed3087d3e
+as_of: 4c3b0ea0f318a5f8d662c35f22f96ca0fe413efa
