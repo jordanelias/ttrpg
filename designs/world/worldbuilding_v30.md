@@ -120,7 +120,7 @@ Deniability Debt: already in stage13. No changes.
 
 ## 4.3 Löwenritter Event Cards (Board Game — Named Character Events)
 
-**Card: Ehrenwall Split** *(formerly Card: Ehrenwall Coup — renamed post-Session-B to reflect Löwenritter graduated autonomy replacing the binary Coup Counter; fires when Autonomy track reaches Split stage, not on a single count-threshold trigger. See designs/architecture/conflict_architecture_proposal.md and params/clocks/clock_registry_v30.md.)*
+**Card: Ehrenwall Split** *(formerly Card: Ehrenwall Coup — renamed post-Session-B to reflect Löwenritter graduated autonomy replacing the binary Coup Counter; fires when Autonomy track reaches Split stage, not on a single count-threshold trigger. See designs/architecture/conflict_architecture_proposal.md.)*
 
 **Card: Riskbreaker Exposure**
 - Trigger: Deniability Debt reaches 3 (tracked per stage13).
