@@ -1,5 +1,5 @@
 # VALORIA — FIELDWORK SYSTEM v1.1 — §12 Open Items and Editorial Flags
-## Parent: designs/fieldwork/fieldwork_v30.md
+## Parent: designs/scene/fieldwork_v30.md
 ## Status: DESIGN — canonical subsystem file. PP-628/PP-630/PP-632 applied 2026-04-13.
 ## Mode applicability: ALL
 
@@ -70,7 +70,7 @@ SIM-DEBT: Disposition/Knot system requires simulation pass (add to SIM-DEBT regi
 
 | File | Change | Status |
 |------|--------|--------|
-| designs/fieldwork/fieldwork_socializing.md | Disposition+Knot redesign | **DONE** (PP-632) |
+| designs/scene/fieldwork_socializing.md | Disposition+Knot redesign | **DONE** (PP-632) |
 | designs/ttrpg/threadwork_redesign_v25.md | Knot mechanics section added | **DONE** (PP-632) |
 | references/params_threadwork.md | Knot pool/tier mechanics | **DONE** (PP-632) |
 | references/params_core.md | Bonds attribute Knot governance note | **DONE** (PP-632) |

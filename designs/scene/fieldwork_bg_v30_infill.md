@@ -2,7 +2,7 @@
 <!-- Skeleton: fieldwork_bg_v30.md -->
 
 # VALORIA — FIELDWORK SYSTEM v1.1 — §8 Board Game Mode
-## Parent: designs/fieldwork/fieldwork_design_v1.md
+## Parent: designs/scene/fieldwork_v30.md
 ## Status: DESIGN — canonical subsystem file. See parent for full cross-references.
 ## Mode applicability: Board Game / Hybrid
 ## §8 BOARD GAME MODE

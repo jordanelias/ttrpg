@@ -1,5 +1,5 @@
 # VALORIA — FIELDWORK SYSTEM v1.1 — §10 Godot Video Game Implementation
-## Parent: designs/fieldwork/fieldwork_design_v1.md
+## Parent: designs/scene/fieldwork_v30.md
 ## Status: DESIGN — canonical subsystem file. See parent for full cross-references.
 ## Mode applicability: Godot video game
 ## Godot validation: 2026-04-13 against jordanelias/valoria-game@main

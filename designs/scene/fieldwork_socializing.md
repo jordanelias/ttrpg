@@ -1,5 +1,5 @@
 # VALORIA — FIELDWORK SYSTEM v1.1 — §5 Socializing
-## Parent: designs/fieldwork/fieldwork_v30.md
+## Parent: designs/scene/fieldwork_v30.md
 ## Status: DESIGN — canonical subsystem file. PP-632 applied 2026-04-13.
 ## Mode applicability: TTRPG / Hybrid / Board Game / Godot
 

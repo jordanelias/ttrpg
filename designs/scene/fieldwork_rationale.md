@@ -1,5 +1,5 @@
 # VALORIA — FIELDWORK SYSTEM — §13 Design Rationale Index
-## Parent: designs/fieldwork/fieldwork_design_v1.md
+## Parent: designs/scene/fieldwork_v30.md
 ## Status: CONTENT — rationale only. No mechanical values here.
 ## Per Skeleton Ruleset Principle: rationale separated from skeleton (2026-04-13 split).
 ## Sourced from: session log 2026-04-13_OPUS_FIELDWORK_DESIGN, PP-576 through PP-583.

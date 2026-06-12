@@ -2,7 +2,7 @@
 <!-- Skeleton: fieldwork_hybrid_v30.md -->
 
 # VALORIA — FIELDWORK SYSTEM v1.1 — §9 Hybrid Mode
-## Parent: designs/fieldwork/fieldwork_design_v1.md
+## Parent: designs/scene/fieldwork_v30.md
 ## Status: DESIGN — canonical subsystem file. See parent for full cross-references.
 ## Mode applicability: Hybrid
 ## §9 HYBRID MODE
