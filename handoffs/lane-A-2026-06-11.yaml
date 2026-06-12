@@ -8,8 +8,8 @@ owns:
 - designs/personal/**
 - designs/proposals/**
 - references/propagation_map.md
-last_commit: 'd49f992e (2026-06-11) [fix] southernmost_v30 §6.2: game-start 45 AG
-  -> 245 AG (C11d)'
+last_commit: 2aee0bba (2026-06-12) [cleanup] params/bg/clocks.md remove verbatim-dup
+  MS/CI/IP+Battle+Vanguard block (C14c/LA-16); ED-932 @da45e556
 task:
   skill: valoria-orchestrator
   description: 'Lane A execution against workplan v4 (§4 queue, §9 sequence, §3 docket
@@ -43,6 +43,10 @@ context_files:
   depth: skeleton
   reason: Append-shared keyed store. LA-1 entries ED-912..929 filed here (open). Allocate
     future Lane A IDs from 930 within reserved 890-939; never read-max-and-add.
+- path: designs/audit/2026-06-11-canon-flatten/canon_flatten_examination.md
+  depth: skeleton
+  reason: C-register source for remaining LA items (C14 hygiene + derived-value findings);
+    LA-16 used C14c/C14a. C2 REVERSED -> do NOT edit canon/03.
 working_state:
   completed:
   - 'LA-1 ledger filing: 18 entries ED-912..929 committed @2877a53e; verified at HEAD
@@ -63,6 +67,14 @@ working_state:
   - 'LA-15 (C11d): southernmost_v30 §6.2 game-start date 45 AG -> 245 AG @d49f992e,
     verified live. Grounded in primary canon/03_canonical_timeline.md (line 122 ''245
     AG GAME START''; line 177 ''200-year shift''). Awareness values untouched.'
+  - 'LA-14 (C9 dangling clock-registry path) -- PRIOR SESSION post-handoff, was unrecorded:
+    struck dangling params/clocks/clock_registry_v30.md citation in worldbuilding_v30
+    4.3 @aafabf50; filed ED-931 @e2917a0b. Coup-Counter table migration piece of LA-14
+    NOT done -- still open.'
+  - 'LA-16 (C14c clocks.md verbatim de-dup) -- THIS SESSION: removed the 2nd verbatim
+    copy of MS/CI/IP + Battle Consequences + Altonian Vanguard in params/bg/clocks.md
+    @2aee0bba (108->55 lines; copies confirmed identical by line diff; no value changed);
+    filed ED-932 @da45e556 (de-dup done + open remainder).'
   next:
   - 'LA-15 remainder NOT mechanical: C11a (Einhir texts ''condemned in 4th Century''
     = future) + C11b (''400-year-old'' Church text = pre-Catastrophe) are flagged-impossible
@@ -81,11 +93,17 @@ working_state:
   - 'GATED: ED-930 (PP-236 Crown-no-Intel marking, Jordan/LA-13); ED-915 PARKED (cond.
     on ED-920 + reconciled-engine §2 read).'
   - 'BLOCKED (owns-gap): all designs/scene fieldwork master+split propagations (ED-912..929).'
-  - 'Remaining ungated LA candidates each need own scoping: LA-14 (C9 dangling clock_registry
-    path -> params/bg/clocks.md is the file; + Coup-Counter table migration), LA-16
-    (C14a status headers, C14c clocks.md verbatim de-dup -- params/bg/clocks.md in-owns),
-    LA-18 (R8 derived-value formula propagation).'
+  - 'Remaining ungated LA candidates (each needs own scoping), UPDATED after LA-14-C9
+    + LA-16 landed: LA-18 (R8 derived-value formula propagation); LA-14 REMAINDER
+    = Coup-Counter table migration (only the C9 dangling-path piece landed @aafabf50);
+    LA-17 GAP sweep (sibling faction docs faction_behavior_v30 / factions_personal_v30
+    / conviction_track_v30 / stage6_factions for 6->7-stat + Intel drift). LA-16 otherwise
+    DONE; its C14a status-integrity piece is fully owns-gapped (designs/scene + designs/arcs)
+    -- see blockers + ED-932.'
 key_values:
+- 'ED allocation (UPDATED): A.ED 912-932 CONSUMED (912-929 fieldwork LA-1; 930 LA-17;
+  931 LA-14 C9; 932 LA-16 C14c); next free = 933 within reserved 890-939. Supersedes
+  the earlier ''931'' note.'
 - 'ED allocation: A.ED 912-930 CONSUMED (912-929 fieldwork LA-1; 930 LA-17 finding);
   next free = 931 (within reserved 890-939).'
 - 'LA-17 VERDICT: the faction propagation-debt sweep is mostly already done in the
@@ -112,6 +130,11 @@ key_values:
   fieldwork key + PP-719 record/strike), ED-920 (sub-5D pool construction), ED-921
   (Lattice Interview schedule), ED-922=J-18 (NPE-01/02, DL-01/02, RR-01), ED-924 (evidence-threshold
   legibility), ED-925 (Exposure schedule).'
+- 'PATTERN (4th confirmation, LA-16): the only in-owns surface for LA-16 was C14c
+  (1 commit). ALL of C14a (status-integrity) is owns-gapped -- miraculous_event_v30
+  + conviction_track_v30 in designs/scene/, arc_expansion_v30 in designs/arcs/. ''Ungated
+  in workplan §4'' is NOT ''in-owns''; the dominant Lane-A blocker remains the designs/scene
+  + designs/arcs + designs/territory owns-gaps (Lane B/Jordan governance defect).'
 blockers:
 - 'OWNS-GAP (governance/infra defect, Lane B/Jordan): designs/scene/** is in NO lane''s
   owns set — Lane A owns provincial/world/personal/proposals only; B/C do not claim
@@ -125,7 +148,15 @@ blockers:
   -> 930 and verified_live_max.ED -> 1012 (verified 2026-06-11).'
 - Dangling patch citations PP-619/626/628 (see key_values finding) — FOR JORDAN/LANE-B
   to resolve.
+- 'OWNS-GAP (C14a, Lane B/Jordan): status-integrity defects sit in non-Lane-A dirs
+  -- miraculous_event_v30.md (header ''## Status: CANONICAL'' directly above ''**Status:**
+  PROVISIONAL'') + conviction_track_v30.md (concatenated-date status token) in designs/scene/;
+  arc_expansion_v30.md (strike banner ''-->'' with no opening ''<!--'') in designs/arcs/.
+  Owner assignment needed. Tracked: ED-932.'
+- (id_reservations update) live max ED now 1012; Lane-A consumed through 932; next
+  free 933. references/id_reservations.yaml still Lane-B-owned + stale -- FOR Lane
+  B.
 created: '2026-06-12T02:13:54.540784+00:00'
-updated: '2026-06-12T02:43:22.122550+00:00'
+updated: '2026-06-12T06:01:37.462927+00:00'
 status: active
-as_of: d49f992e2bcfbf2cc7457a7ac1a50b5d7b191d3a
+as_of: da45e55690c3c8f313539abba01ca1e30edb5970
