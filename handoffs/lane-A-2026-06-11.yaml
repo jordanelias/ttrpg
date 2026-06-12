@@ -81,6 +81,16 @@ working_state:
     -> ''(3×Focus)+(2×Spirit)'' (range 3-21 -> 5-35). Grounded ED-901/902/904 + derived_stats
     §4.2 RATIFIED S1. Filed ED-933 @5ce5c152. Composure PARKED (J-12); Combat Pool
     old struck form left in core.md (engine-form-gated) -- see ED-933 remainder.'
+  - 'LA-14 REMAINDER (Coup-Counter table migration) + LA-17 GAP (sibling faction-doc
+    sweep) -- THIS SESSION, ASSESSED-CLOSED, no edit: LA-14 remainder targets BOTH
+    owns-gapped (conflict_architecture_proposal in designs/architecture/, throughline_resolutions_v30
+    in designs/arcs/) -> Lane B/Jordan. LA-17 GAP swept the in-owns siblings (faction_behavior_v30
+    clean; factions_personal_v30 carries a 6-stat sheet {Mandate/Influence/Wealth/Military/Intel/Stability}
+    vs params/factions_personal.md 7-stat {Legitimacy/Popular_Support/Influence/Wealth/Military/Intel/Stability});
+    Intel/ED-787 ALREADY propagated to both; the 6->7 residual is ALREADY FILED as
+    ED-869 (open, Jordan-pending -- the Mandate-vs-Legitimacy/Popular_Support base-stat
+    ontology is Jordan''s structural call, not mechanical); other faction residuals
+    tracked ED-894 (Niflhel->params) + ED-930 (Intel/PP-236).'
   next:
   - 'LA-15 remainder NOT mechanical: C11a (Einhir texts ''condemned in 4th Century''
     = future) + C11b (''400-year-old'' Church text = pre-Catastrophe) are flagged-impossible
@@ -99,13 +109,12 @@ working_state:
   - 'GATED: ED-930 (PP-236 Crown-no-Intel marking, Jordan/LA-13); ED-915 PARKED (cond.
     on ED-920 + reconciled-engine §2 read).'
   - 'BLOCKED (owns-gap): all designs/scene fieldwork master+split propagations (ED-912..929).'
-  - 'Remaining ungated LA candidates (each needs own scoping), UPDATED after LA-14-C9
-    + LA-16 + LA-18 landed: LA-14 REMAINDER = Coup-Counter table migration (only the
-    C9-path piece landed @aafabf50); LA-17 GAP sweep (sibling faction docs faction_behavior_v30/factions_personal_v30/conviction_track_v30/stage6_factions
-    for 6->7-stat+Intel drift). LA-18 DONE-PARTIAL: Stamina+Concentration @7ad92356/ED-933;
-    its Combat Pool remainder is combat-engine-form-gated (needs combat_engine_v1
-    Combat Pool form + ED-904 open-balance-lever check -- engine-read/Jordan item,
-    NOT a clean mechanical propagation).'
+  - 'UNGATED LANE-A MECHANICAL QUEUE EXHAUSTED (this session). LA-16 + LA-18 were
+    the only items with clean in-owns mechanical surface. LA-14 remainder = owns-gapped
+    (designs/architecture + designs/arcs). LA-17 GAP = swept, residual is structural
+    + already tracked ED-869 (Jordan-pending) / ED-894 / ED-930. EVERYTHING FURTHER
+    in Lane A is docket-gated (J-keys) or Lane B (owns-gaps). Next leverage = the
+    docket: J-2 -> J-1 -> J-22 -> J-6(a,b) -> J-23, then sittings J-31/J-32/J-30.'
 key_values:
 - 'ED allocation (UPDATED): A.ED 912-933 CONSUMED (912-929 fieldwork LA-1; 930 LA-17;
   931 LA-14 C9; 932 LA-16 C14c; 933 LA-18 R8); next free = 934 within reserved 890-939.'
@@ -146,6 +155,11 @@ key_values:
   levers (Jordan); Composure = J-12. Even the ''derived-value propagation'' row =
   small in-owns slice + owns-gapped manifest + engine/Jordan-gated remainder. Consistent
   across LA-14/15/16/17/18.'
+- 'QUEUE-EXHAUSTION (verified this session): the ungated Lane-A mechanical surface
+  is closed. ED allocation through 933; next free 934. The faction-propagation debt
+  residuals (ED-869/894/930) and all C14a status-integrity items are either Jordan-pending
+  or owns-gapped. No further clean in-owns mechanical Lane-A work exists without Jordan
+  rulings.'
 blockers:
 - 'OWNS-GAP (governance/infra defect, Lane B/Jordan): designs/scene/** is in NO lane''s
   owns set — Lane A owns provincial/world/personal/proposals only; B/C do not claim
@@ -172,6 +186,6 @@ blockers:
   replacement = combat_engine_v1 form, which ED-904 ties to OPEN balance levers (Jordan
   pending). Needs engine-form read + Jordan balance check. ED-933.'
 created: '2026-06-12T02:13:54.540784+00:00'
-updated: '2026-06-12T06:34:00.645956+00:00'
+updated: '2026-06-12T08:00:15.616194+00:00'
 status: active
-as_of: 5ce5c1527acc2cca8bac71c798bf44b3f8ca6709
+as_of: 7104e4e1ca574e786fcd3f017cabf41bfcc8cf4d
