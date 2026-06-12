@@ -8,8 +8,8 @@ owns:
 - designs/personal/**
 - designs/proposals/**
 - references/propagation_map.md
-last_commit: 2aee0bba (2026-06-12) [cleanup] params/bg/clocks.md remove verbatim-dup
-  MS/CI/IP+Battle+Vanguard block (C14c/LA-16); ED-932 @da45e556
+last_commit: 7ad92356 (2026-06-12) [fix] propagate ratified Stamina+Concentration
+  to param consumers (LA-18/R8); ED-933 @5ce5c152
 task:
   skill: valoria-orchestrator
   description: 'Lane A execution against workplan v4 (§4 queue, §9 sequence, §3 docket
@@ -75,6 +75,12 @@ working_state:
     copy of MS/CI/IP + Battle Consequences + Altonian Vanguard in params/bg/clocks.md
     @2aee0bba (108->55 lines; copies confirmed identical by line diff; no value changed);
     filed ED-932 @da45e556 (de-dup done + open remainder).'
+  - 'LA-18 (R8 derived-value formula propagation) -- THIS SESSION: propagated 2 RATIFIED
+    formulas to stale in-owns consumers @7ad92356 -- params/core.md Stamina ''Endurance
+    × 5'' -> ''(3×End)+(2×Spirit)''; params/contest.md Concentration ''Focus × 3''
+    -> ''(3×Focus)+(2×Spirit)'' (range 3-21 -> 5-35). Grounded ED-901/902/904 + derived_stats
+    §4.2 RATIFIED S1. Filed ED-933 @5ce5c152. Composure PARKED (J-12); Combat Pool
+    old struck form left in core.md (engine-form-gated) -- see ED-933 remainder.'
   next:
   - 'LA-15 remainder NOT mechanical: C11a (Einhir texts ''condemned in 4th Century''
     = future) + C11b (''400-year-old'' Church text = pre-Catastrophe) are flagged-impossible
@@ -94,16 +100,15 @@ working_state:
     on ED-920 + reconciled-engine §2 read).'
   - 'BLOCKED (owns-gap): all designs/scene fieldwork master+split propagations (ED-912..929).'
   - 'Remaining ungated LA candidates (each needs own scoping), UPDATED after LA-14-C9
-    + LA-16 landed: LA-18 (R8 derived-value formula propagation); LA-14 REMAINDER
-    = Coup-Counter table migration (only the C9 dangling-path piece landed @aafabf50);
-    LA-17 GAP sweep (sibling faction docs faction_behavior_v30 / factions_personal_v30
-    / conviction_track_v30 / stage6_factions for 6->7-stat + Intel drift). LA-16 otherwise
-    DONE; its C14a status-integrity piece is fully owns-gapped (designs/scene + designs/arcs)
-    -- see blockers + ED-932.'
+    + LA-16 + LA-18 landed: LA-14 REMAINDER = Coup-Counter table migration (only the
+    C9-path piece landed @aafabf50); LA-17 GAP sweep (sibling faction docs faction_behavior_v30/factions_personal_v30/conviction_track_v30/stage6_factions
+    for 6->7-stat+Intel drift). LA-18 DONE-PARTIAL: Stamina+Concentration @7ad92356/ED-933;
+    its Combat Pool remainder is combat-engine-form-gated (needs combat_engine_v1
+    Combat Pool form + ED-904 open-balance-lever check -- engine-read/Jordan item,
+    NOT a clean mechanical propagation).'
 key_values:
-- 'ED allocation (UPDATED): A.ED 912-932 CONSUMED (912-929 fieldwork LA-1; 930 LA-17;
-  931 LA-14 C9; 932 LA-16 C14c); next free = 933 within reserved 890-939. Supersedes
-  the earlier ''931'' note.'
+- 'ED allocation (UPDATED): A.ED 912-933 CONSUMED (912-929 fieldwork LA-1; 930 LA-17;
+  931 LA-14 C9; 932 LA-16 C14c; 933 LA-18 R8); next free = 934 within reserved 890-939.'
 - 'ED allocation: A.ED 912-930 CONSUMED (912-929 fieldwork LA-1; 930 LA-17 finding);
   next free = 931 (within reserved 890-939).'
 - 'LA-17 VERDICT: the faction propagation-debt sweep is mostly already done in the
@@ -135,6 +140,12 @@ key_values:
   + conviction_track_v30 in designs/scene/, arc_expansion_v30 in designs/arcs/. ''Ungated
   in workplan §4'' is NOT ''in-owns''; the dominant Lane-A blocker remains the designs/scene
   + designs/arcs + designs/territory owns-gaps (Lane B/Jordan governance defect).'
+- 'PATTERN (5th confirmation, LA-18): clean in-owns yield = 2 consumer-formula propagations
+  (Stamina, Concentration). Manifest derived_stats_v30 owns-gapped (designs/scene/);
+  Combat Pool''s correct form is combat_engine_v1''s, entangled with ED-904 OPEN balance
+  levers (Jordan); Composure = J-12. Even the ''derived-value propagation'' row =
+  small in-owns slice + owns-gapped manifest + engine/Jordan-gated remainder. Consistent
+  across LA-14/15/16/17/18.'
 blockers:
 - 'OWNS-GAP (governance/infra defect, Lane B/Jordan): designs/scene/** is in NO lane''s
   owns set — Lane A owns provincial/world/personal/proposals only; B/C do not claim
@@ -156,7 +167,11 @@ blockers:
 - (id_reservations update) live max ED now 1012; Lane-A consumed through 932; next
   free 933. references/id_reservations.yaml still Lane-B-owned + stale -- FOR Lane
   B.
+- 'LA-18 Combat Pool remainder (Lane B/Jordan + engine-read): params/core.md Combat
+  Pool carries the ED-901-STRUCK old form (Agi×2)+H+3 + superseded PP-615 claim; canonical
+  replacement = combat_engine_v1 form, which ED-904 ties to OPEN balance levers (Jordan
+  pending). Needs engine-form read + Jordan balance check. ED-933.'
 created: '2026-06-12T02:13:54.540784+00:00'
-updated: '2026-06-12T06:01:37.462927+00:00'
+updated: '2026-06-12T06:34:00.645956+00:00'
 status: active
-as_of: da45e55690c3c8f313539abba01ca1e30edb5970
+as_of: 5ce5c1527acc2cca8bac71c798bf44b3f8ca6709
