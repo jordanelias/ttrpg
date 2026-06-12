@@ -8,87 +8,93 @@ owns:
 - designs/personal/**
 - designs/proposals/**
 - references/propagation_map.md
-last_commit: 2877a53e (2026-06-11) [editorial] File fieldwork diagnostic candidates
-  ED-912..929 (LA-1; a11e2fa)
+last_commit: '34d28e8f (2026-06-11) [fix] params/fieldwork: Thread-Read->Spirit +
+  correct source path (ED-913, ED-914)'
 task:
   skill: valoria-orchestrator
-  description: 'Lane A execution against workplan v4 (§4 Lane A queue, §9 sequence,
-    §3 docket J-1..J-34). entry_items order: LA-1, LA-5, LA-2, LA-3, LA-4, LA-6, LA-8,
-    LA-9, LA-10, LA-7 (gates per v4 §3). LA-1 = fieldwork canonical-line split, sourced
-    from the 2026-06-10 investigation/exploration diagnostic (commit a11e2fa). LA-1
-    ledger-FILING step is COMPLETE; mechanical propagation + gated rulings remain.
-    Project-owner contract in force: Lane A propagates already-decided/evidence-grounded
-    values; genuine value choices are Jordan''s and are parked as gated ledger entries,
-    never auto-resolved.'
+  description: 'Lane A execution against workplan v4 (§4 queue, §9 sequence, §3 docket
+    J-1..J-34). entry_items order: LA-1, LA-5, LA-2, LA-3, LA-4, LA-6, LA-8, LA-9,
+    LA-10, LA-7 (gated per §3). LA-1 = fieldwork canonical-line split (source: 2026-06-10
+    diagnostic, a11e2fa). LA-1 ledger filing DONE + first in-owns mechanical propagations
+    DONE; remaining propagation is owns-gapped (designs/scene) or Jordan-gated. Project-owner
+    contract in force: propagate already-decided/evidence-grounded values only; park
+    genuine value choices.'
 context_files:
 - path: designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md
   depth: full
   reason: 'THE master. §4 Lane A queue, §9 sequence (LA-1 + LA-12..18 ungated now),
-    §3 docket J-1..J-34 (Jordan veto surface). Two value flags still OPEN: seed CI
-    22-vs-28 (J-24); MS-start 72-vs-80->60 referent (commit 2edf6432 -> LB-3).'
+    §3 docket J-1..J-34 (Jordan veto surface). Value flags OPEN: seed CI 22-vs-28
+    (J-24); MS-start 72-vs-80->60 (2edf6432 -> LB-3).'
 - path: references/lane_assignments.yaml
   depth: full
-  reason: Lane A owns/reserved blocks (ED 890-939, PP 727-759; reconciliation_zone
-    ED 874-889), entry_items order, launch_protocol. Source repointed to workplan
-    v4.
+  reason: Lane A owns/reserved (ED 890-939, PP 727-759; reconciliation_zone 874-889),
+    entry_items order, launch_protocol. Source repointed to v4.
+- path: designs/scene/fieldwork_v30.md
+  depth: full
+  reason: 'CANONICAL master for fieldwork content (live at HEAD, 76.8k chars, UNREGISTERED
+    in canonical_sources per ED-914). Authority for the master-vs-params reconciliation.
+    Thread-Read=Spirit confirmed in 2.1/4.2/4.5. NOTE: this file is in designs/scene/
+    which is OWNS-GAPPED (see blockers).'
 - path: designs/audit/2026-06-10-investigation-exploration-diagnostic/00_MASTER.md
   depth: full
-  reason: LA-1 source diagnostic (a11e2fa). §6 [OPEN-Jordan] Disposition value-choices,
-    §11 five pending decisions. Drives ED-912..929.
-- path: designs/audit/2026-06-10-investigation-exploration-diagnostic/ledger_candidates_jsonl_ready.jsonl
-  depth: full
-  reason: The 18 staged candidates FW-CAND-01..18 — now FILED as ED-912..929. Maps
-    candidate->ED for traceability.
+  reason: LA-1 source diagnostic (a11e2fa). §6 [OPEN-Jordan] Disposition value-choices;
+    §11 five pending. Drives ED-912..929.
 - path: canon/editorial_ledger.jsonl
   depth: skeleton
-  reason: Append-shared keyed store. The 18 filed LA-1 entries live here as ED-912..929
-    (status:open). Allocate future Lane A IDs from 930 within reserved 890-939; never
-    read-max-and-add.
+  reason: Append-shared keyed store. LA-1 entries ED-912..929 filed here (open). Allocate
+    future Lane A IDs from 930 within reserved 890-939; never read-max-and-add.
 working_state:
   completed:
-  - 'LA-1 ledger filing: 18 entries ED-912..929 built from FW-CAND-01..18 and committed
-    @2877a53e.'
-  - 'Verified at HEAD: ledger 653->671 entries, all 18 present, 0 duplicate IDs, jsonl_ledger_gate
-    PASS (0 warnings).'
-  - ED-912..929 carry full provenance (audit ef659454b0c8 / a11e2fa, filed by Lane
-    A 2026-06-11 LA-1) + per-entry jordan_decision (gated vs 'none — Lane A mechanical').
+  - 'LA-1 ledger filing: 18 entries ED-912..929 committed @2877a53e; verified at HEAD
+    (653->671, 0 dup, gate PASS).'
+  - 'ED-913 (params side): Thread-Read attribute Attunement->Spirit in params/fieldwork.md
+    line 22, committed @34d28e8f, verified live. Grounded in master fieldwork_v30
+    sections 2.1/4.2/4.5 (3 statements) + params internal consistency; NOT entangled
+    with gated ED-912.'
+  - 'ED-914 (mechanical part): params/fieldwork.md header source path designs/fieldwork/
+    -> designs/scene/ corrected @34d28e8f, verified live.'
   next:
-  - 'In-owns mechanical propagation (params/** only; NOT designs/scene — see blockers),
-    each its own safe_commit citing its ED: ED-913 Thread-Read = Spirit x2 (per PP-619/626/628
-    ''Attunement struck'') -> params/fieldwork.md (Attunement->Spirit); ED-915 ER-2
-    continuity term (extends ED-873) -> params/core.md; ED-914 dead parent-path fix
-    in params/fieldwork.md header (partial; canonical-line PICK itself is Jordan-gated).'
+  - 'PARKED — ED-915 (continuity term, params/core.md): its necessity is conditionally
+    gated on ED-920 (''if sub-5D kept, ED-915 is load-bearing'') AND the exact net-(Ob-0.5)
+    term needs designs/audit/2026-05-28-engine-replacement/engine_replacement_reconciled.md
+    section 2 read. Do not land until ED-920 ruled + term verified.'
+  - BLOCKED (owns-gap) — all fieldwork-master + split-file propagations from ED-912..929
+    (e.g. ED-913 designs/scene/fieldwork_investigation.md copy; ED-918/919/923/927
+    split targets). designs/scene/** is unowned — needs Lane B / Jordan to assign
+    an owner.
+  - 'GATED — do not auto-resolve Jordan entries: ED-912, 914(consolidation), 920,
+    921, 922(=J-18), 924, 925.'
   - 'Then proceed down entry_items: LA-5, LA-2, LA-3, LA-4, LA-6, LA-8, LA-9, LA-10,
-    LA-7 — fire each per its v4 §3 docket gate.'
-  - Do NOT execute fieldwork-master / split-file propagations until the designs/scene
-    owns-gap (blocker 1) is resolved by Lane B / Jordan.
-  - Do NOT auto-resolve any Jordan-gated entry (blocker 3); await rulings.
+    LA-7 per §3 gates.'
 key_values:
-- 'ED allocation: A.ED 912-929 CONSUMED this session; next free = 930 (within reserved
-  890-939).'
-- 'Jordan-GATED ledger entries (await ruling): ED-912 (canonical-line pick + stepped-vs-subtraction
-  Ob + -3-vs-4 floor + Knot model), ED-914 (root-cause/consolidation), ED-920 (pool-construction
-  intent), ED-921 (Lattice Interview schedule), ED-922 = docket J-18 (five §11 pending:
-  NPE-01/02, DL-01/02, RR-01), ED-924 (evidence-threshold legibility), ED-925 (Exposure
-  schedule).'
-- 'Lane-A MECHANICAL entries (propagate when target in-owns): ED-913, 915, 916(->Lane
-  C sim), 917, 918, 919, 923, 926(->Lane C), 927, 928, 929.'
+- 'ED allocation: A.ED 912-929 CONSUMED; next free = 930 (within reserved 890-939).'
+- 'FINDING (strengthens ED-914 authority-breakdown): PP-619/626/628 — the patches
+  ED-913 cites as grounding for Thread-Read=Spirit — are NOT in canon/patch_register_active.yaml
+  and NOT in canon/editorial_ledger.jsonl except self-referenced by ED-913/914. They
+  appear ONLY inside the master fieldwork_v30.md text itself. Contrast PP-632 (7 ledger
+  hits) / PP-684 (8, incl. ED-770 RESOLVED-APPLIED): real applied patches leave ledger
+  traces. ED-913 was still safely propagated because the MASTER DOC (not the PPs)
+  is the authority and states Spirit in 3 places. FOR JORDAN/LANE-B: locate/archive
+  PP-619/626/628 or annotate them as master-internal-only citations.'
+- 'Jordan-GATED entries (await ruling): ED-912 (canonical-line pick + stepped-vs-subtraction
+  Ob + -3-vs-4 floor + Knot model), ED-914 (consolidation direction + canonical_sources
+  fieldwork key + PP-719 record/strike), ED-920 (sub-5D pool construction), ED-921
+  (Lattice Interview schedule), ED-922=J-18 (NPE-01/02, DL-01/02, RR-01), ED-924 (evidence-threshold
+  legibility), ED-925 (Exposure schedule).'
 blockers:
-- 'OWNS-GAP (governance/infra defect): designs/scene/** is in NO lane''s owns set
-  — Lane A owns only provincial/world/personal/proposals; Lane B/C do not claim scene.
-  The fieldwork master designs/scene/fieldwork_v30.md (live but UNREGISTERED in canonical_sources,
-  confirms FW-CAND-03), its 14 split files, and designs/scene/investigation_systems_v30.md
-  are therefore UNOWNED. All fieldwork master+split propagations from ED-912..929
-  are BLOCKED until an owner is assigned. Resolution is Lane B / Jordan (lane_assignments
-  + PI are not Lane-A-writable); Lane A must not self-edit lane_assignments.'
-- 'id_reservations.yaml STALE and Lane-B-owned: references/id_reservations.yaml shows
-  reservations.A.ED.next_free=890 and verified_live_max.ED=884 (dated 2026-05-31),
-  but 890-929 are now consumed and live max ED = 1012. Lane A cannot write this file
-  (owns boundary). FOR LANE B (protocol-sanctioned note-for-owner): set reservations.A.ED.next_free
+- 'OWNS-GAP (governance/infra defect, Lane B/Jordan): designs/scene/** is in NO lane''s
+  owns set — Lane A owns provincial/world/personal/proposals only; B/C do not claim
+  scene. The fieldwork master designs/scene/fieldwork_v30.md (live but UNREGISTERED
+  in canonical_sources), its 14 split files, and designs/scene/investigation_systems_v30.md
+  are UNOWNED. All master+split propagations from ED-912..929 are BLOCKED until an
+  owner is assigned. Lane A must not self-edit lane_assignments.'
+- 'id_reservations.yaml STALE + Lane-B-owned: references/id_reservations.yaml reservations.A.ED.next_free=890,
+  verified_live_max.ED=884 (2026-05-31); but 890-929 consumed and live max ED=1012.
+  Lane A cannot write this file (owns boundary). FOR LANE B: set reservations.A.ED.next_free
   -> 930 and verified_live_max.ED -> 1012 (verified 2026-06-11).'
-- Jordan value-choices parked (diagnostic §6 [OPEN-Jordan] / §11 pending) — see key_values
-  gated list; these require Jordan rulings before their propagation can proceed.
-created: '2026-06-12T02:03:58.005869+00:00'
-updated: '2026-06-12T02:03:58.005869+00:00'
+- Dangling patch citations PP-619/626/628 (see key_values finding) — FOR JORDAN/LANE-B
+  to resolve.
+created: '2026-06-12T02:13:54.540784+00:00'
+updated: '2026-06-12T02:13:54.540784+00:00'
 status: active
-as_of: 2877a53e757a3511dffa6d38e4e4d4bf35303764
+as_of: 34d28e8f796fd67b8f7cf8c6766e11c342169c20
