@@ -189,8 +189,8 @@ policies:
     max_tokens: 8000
 
   - match: "references/canonical_sources.yaml"
-    max_tokens: 9000
-    note: "Raised 5000 -> 8000 -> 9000 (2026-05-18). 115 canonical_sha fields added by freshness_gate --update pushed file to 8086 tokens; threshold predated SHA metadata."
+    max_tokens: 12000
+    note: "Raised 5000 -> 8000 -> 9000 (2026-05-18) -> 12000 (2026-06-12, aligned with TOKEN_THRESHOLDS + arch interim cap 633f5e57). 115 canonical_sha fields added by freshness_gate --update pushed file to 8086 tokens; threshold predated SHA metadata."
 
 
   # ────────────────────────────────────────────────────────────
