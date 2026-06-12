@@ -1,4 +1,4 @@
-<!-- version: v1.0 | source: designs/fieldwork/fieldwork_v30.md | last_updated: 2026-04-13 -->
+<!-- version: v1.0 | source: designs/scene/fieldwork_v30.md | last_updated: 2026-06-11 -->
 <!-- PATCHES APPLIED: PP-575 (initial), PP-576 (audit), PP-577 (transitions), PP-578 (threadwork), PP-579 (ontological), PP-580 (extended), PP-581 (P1 resolution), PP-582 (fidelity), PP-632 (Disposition redesign + Knot system) -->
 
 # params_fieldwork.md — Fieldwork System (Exploration / Investigation / Socializing)
@@ -19,7 +19,7 @@ Pool maximum: 24D (Attribute 7, History 7: (7×2) + (7+3) = 24)
 | Investigation | Physical evidence | Cognition |
 | Investigation | Witness / informant | Attunement |
 | Investigation | Lore / research | Recall |
-| Investigation | Thread-Read | Attunement (+ Thread Pool Score) |
+| Investigation | Thread-Read | Spirit (+ Thread Pool Score) |
 | Socializing | Read | Attunement |
 | Socializing | Impress | Charisma |
 | Socializing | Connect | Bonds |
