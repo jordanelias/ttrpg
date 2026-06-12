@@ -11,7 +11,7 @@
 # This file is the enabler (workplan 5.11). Companion: references/id_reservations.yaml (5.10).
 # =====================================================================================
 version: 1
-updated: "2026-06-10"
+updated: "2026-06-12"
 source: "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md — §1 operating model (lineage: v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; structure unchanged, queues carried to v4 LA-/LB-/LC- IDs)"
 
 boundary_rule: >
@@ -42,6 +42,7 @@ lanes:
       - "designs/provincial/**"
       - "designs/world/**"
       - "designs/personal/**"
+      - "designs/scene/**"          # [2026-06-12 Jordan] scene -> Lane A (sole design-content lane; owns all sibling designs/ globs). Resolves OWNS-GAP: social_contest/combat_engine_v1/conviction_track/derived_stats/miraculous_event/investigation_systems/fieldwork were unowned. Fieldwork to move into designs/scene/fieldwork/ (separate Lane-A op).
       - "designs/proposals/**"
       - "references/propagation_map.md"
     reserved_ed: "890-939"
