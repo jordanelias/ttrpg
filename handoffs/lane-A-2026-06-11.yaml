@@ -187,6 +187,34 @@ key_values:
   §5.6b citation STANDS (record, not strike). META: PP-619/626/628 (the other ''dangling''
   fieldwork patches) are likely ALSO archived — recheck archives/patches/ before treating
   any as dangling.'
+- 'PP-619/626/628 ALL FOUND+VALID (archived, applied) — same archive-blind false-negative
+  as PP-719. PP-619 -> archives/patches/patch_register_archive_1401_1600.yaml (threadwork;
+  live refs params/threadwork.md, sim/thread/operations.py). PP-626 -> ...1401_1600
+  (+...1601_1800) = Thread-Read Attunement->Spirit correction. PP-628 -> ...1601_1800
+  (2026-04-13 P1: canon-guard review of fieldwork_design_v1.md — P-05 Mode1/2, P-01
+  co-movement, PP-626 Spirit propagation, P-06 Knot strain +1/use cumulative-5=instability,
+  Domain Echo scope). CORRECTIONS: ED-913 (PP-619/626 ''absent'') + ED-914/ED-912
+  (PP-628 ''absent/0-hits'') claims are FALSE -> strike on next ledger edit. ROOT
+  CAUSE: the dangling-patch check searches patch_register_active + editorial_ledger
+  but NOT archives/patches/ — fix the checker to include archives before any future
+  ''dangling patch'' finding is trusted.'
+- 'SHA-SPLIT (K-2) FULLY SCOPED 2026-06-12, deliberately NOT executed (solo-session
+  task; insidious failure mode + core-script edit). MECHANISM: fg.parse_canonical_pairs(canonical_sources_content)
+  -> [(path, recorded_sha)] by scanning each path line + the next canonical_sha__
+  line. TWO callers: (1) freshness_gate.run_check (l.279) + run_update (inject_shas
+  -> canonical_sources, l.354 + commit); (2) valoria_hooks BOOTSTRAP (l.372, on cached
+  canonical_sources). CUTOVER SPEC: (a) create references/canonical_freshness.yaml
+  = {path: sha} for ~130 paths (extract current canonical_sha__ values); (b) freshness_gate.py:
+  parse_canonical_pairs reads PATHS from canonical_sources but SHAS from canonical_freshness.yaml
+  (new cached loader); run_update writes canonical_freshness.yaml; (c) valoria_hooks
+  l.365-372: also load+cache canonical_freshness.yaml and feed the revised pair-builder;
+  (d) strip canonical_sha__ lines from canonical_sources (-> ~5k). FAILURE MODE: stripping
+  SHAs WITHOUT rewiring the reader makes parse return (path,None) for all -> freshness
+  SILENTLY reports 0 stale (false-clean, no error). ORDER: rewire readers FIRST, local-test
+  (new fg vs new files MUST report the SAME stale set), THEN strip + commit ATOMICALLY.
+  Touches a CORE bootstrap script -> dedicated tested session. Note: cap raise @3b503788
+  already removed the immediate commit-blocking, so this is no longer urgent — do
+  it clean, not rushed.'
 blockers:
 - 'OWNS-GAP RESOLVED 2026-06-12 @04f929cb: designs/scene/** assigned to Lane A (Jordan
   directive — sole design-content lane owning all sibling designs/ globs). Scene now
@@ -221,6 +249,6 @@ blockers:
   bloat (115 canonical_sha fields) still warrants the queued SHA-split (Phase 2.4
   / K-2); cap raise was the realignment, not the cure.'
 created: '2026-06-12T02:13:54.540784+00:00'
-updated: '2026-06-12T21:01:30.912710+00:00'
+updated: '2026-06-12T21:18:25.849468+00:00'
 status: active
-as_of: 4c3b0ea0f318a5f8d662c35f22f96ca0fe413efa
+as_of: ece2d5b86f10cec0cd9ba59d88d03b506ee54d9e
