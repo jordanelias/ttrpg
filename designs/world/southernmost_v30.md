@@ -54,7 +54,7 @@ Scale: 0–7 (where applicable) or 0–10 for factions with active research infr
 - Diagnosis at Einhir core sites (requires expedition access; automatic for Thread Sensitivity 50+, Ob 3 below)
 - Dedicated research arcs by practitioner officers
 
-**Starting Awareness by faction** (game start, 45 AG):
+**Starting Awareness by faction** (game start, 245 AG):
 
 | Faction | Starting Awareness | Basis |
 |---|---|---|
