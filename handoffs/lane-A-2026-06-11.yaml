@@ -8,8 +8,8 @@ owns:
 - designs/personal/**
 - designs/proposals/**
 - references/propagation_map.md
-last_commit: '34d28e8f (2026-06-11) [fix] params/fieldwork: Thread-Read->Spirit +
-  correct source path (ED-913, ED-914)'
+last_commit: c03140da (2026-06-11) [editorial] File LA-17 finding ED-930 (PP-236 Crown-no-Intel
+  superseded by ED-787)
 task:
   skill: valoria-orchestrator
   description: 'Lane A execution against workplan v4 (§4 queue, §9 sequence, §3 docket
@@ -53,21 +53,36 @@ working_state:
     with gated ED-912.'
   - 'ED-914 (mechanical part): params/fieldwork.md header source path designs/fieldwork/
     -> designs/scene/ corrected @34d28e8f, verified live.'
+  - 'LA-17 (faction propagation-debt) ASSESSED: named residuals ED-787/869/874/876
+    are substantially already propagated — stats_1_7_scale.md is current (7-stat schema
+    + Intel column, Crown Mil 5/6 with the Jordan-2026-05-31 strike applied, full
+    d+sigma resolver spec, ED-876 cliff fix); faction_layer_v30.md references the
+    resolver (line 339) and has the ED-876 patch (line 155). NEW finding filed as
+    ED-930 @c03140da: PP-236 ''Crown has no Intel'' section unmarked-superseded by
+    ED-787.'
   next:
-  - 'PARKED — ED-915 (continuity term, params/core.md): its necessity is conditionally
-    gated on ED-920 (''if sub-5D kept, ED-915 is load-bearing'') AND the exact net-(Ob-0.5)
-    term needs designs/audit/2026-05-28-engine-replacement/engine_replacement_reconciled.md
-    section 2 read. Do not land until ED-920 ruled + term verified.'
-  - BLOCKED (owns-gap) — all fieldwork-master + split-file propagations from ED-912..929
-    (e.g. ED-913 designs/scene/fieldwork_investigation.md copy; ED-918/919/923/927
-    split targets). designs/scene/** is unowned — needs Lane B / Jordan to assign
-    an owner.
-  - 'GATED — do not auto-resolve Jordan entries: ED-912, 914(consolidation), 920,
-    921, 922(=J-18), 924, 925.'
-  - 'Then proceed down entry_items: LA-5, LA-2, LA-3, LA-4, LA-6, LA-8, LA-9, LA-10,
-    LA-7 per §3 gates.'
+  - 'GAP (LA-17 remainder): exhaustively sweep the OTHER faction sibling docs (faction_behavior_v30,
+    factions_personal_v30, conviction_track_v30, stage6_factions) for the 6->7-stat
+    / Intel-missing drift — only ED-869''s named affected_docs (faction_layer_v30
+    + params/bg/core, both checked) were covered this session.'
+  - 'GATED (ED-930): PP-236 Crown-no-Intel supersession marking awaits Jordan ruling,
+    or folds into LA-13 supersession-register sweep.'
+  - 'NOTE: ED-869 faction_layer_v30 schema residual NOT locatable as a stale enumeration
+    — likely resolved since 2026-05-30; consider closing the faction_layer portion
+    of ED-869 on a confirming sweep.'
+  - 'PARKED — ED-915 (continuity term, params/core.md): conditionally gated on ED-920
+    + needs engine_replacement_reconciled section 2 read.'
+  - BLOCKED (owns-gap) — all designs/scene fieldwork master+split propagations (ED-912..929).
+  - 'Next ungated LA items to consider: LA-15 (timeline arithmetic C11 a/b/d), LA-16
+    (canon hygiene batch), LA-18 (derived-value formula propagation), LA-14 (params
+    clock path fix). Each needs its own bottom-up scoping.'
 key_values:
-- 'ED allocation: A.ED 912-929 CONSUMED; next free = 930 (within reserved 890-939).'
+- 'ED allocation: A.ED 912-930 CONSUMED (912-929 fieldwork LA-1; 930 LA-17 finding);
+  next free = 931 (within reserved 890-939).'
+- 'LA-17 VERDICT: the faction propagation-debt sweep is mostly already done in the
+  two authoritative faction docs. Remaining = (a) sibling-doc drift sweep [GAP], (b)
+  ED-930 PP-236 marking [Jordan/LA-13]. The §4 ''7 P2s residuals'' framing overstated
+  live remaining work for ED-787/869/874/876.'
 - 'FINDING (strengthens ED-914 authority-breakdown): PP-619/626/628 — the patches
   ED-913 cites as grounding for Thread-Read=Spirit — are NOT in canon/patch_register_active.yaml
   and NOT in canon/editorial_ledger.jsonl except self-referenced by ED-913/914. They
@@ -95,6 +110,6 @@ blockers:
 - Dangling patch citations PP-619/626/628 (see key_values finding) — FOR JORDAN/LANE-B
   to resolve.
 created: '2026-06-12T02:13:54.540784+00:00'
-updated: '2026-06-12T02:13:54.540784+00:00'
+updated: '2026-06-12T02:27:58.293428+00:00'
 status: active
-as_of: 34d28e8f796fd67b8f7cf8c6766e11c342169c20
+as_of: c03140da9bda0b352a56b60b044c1747dcaa77d4
