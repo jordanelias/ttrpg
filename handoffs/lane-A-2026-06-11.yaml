@@ -8,8 +8,8 @@ owns:
 - designs/personal/**
 - designs/proposals/**
 - references/propagation_map.md
-last_commit: c03140da (2026-06-11) [editorial] File LA-17 finding ED-930 (PP-236 Crown-no-Intel
-  superseded by ED-787)
+last_commit: 'd49f992e (2026-06-11) [fix] southernmost_v30 §6.2: game-start 45 AG
+  -> 245 AG (C11d)'
 task:
   skill: valoria-orchestrator
   description: 'Lane A execution against workplan v4 (§4 queue, §9 sequence, §3 docket
@@ -60,22 +60,31 @@ working_state:
     resolver (line 339) and has the ED-876 patch (line 155). NEW finding filed as
     ED-930 @c03140da: PP-236 ''Crown has no Intel'' section unmarked-superseded by
     ED-787.'
+  - 'LA-15 (C11d): southernmost_v30 §6.2 game-start date 45 AG -> 245 AG @d49f992e,
+    verified live. Grounded in primary canon/03_canonical_timeline.md (line 122 ''245
+    AG GAME START''; line 177 ''200-year shift''). Awareness values untouched.'
   next:
-  - 'GAP (LA-17 remainder): exhaustively sweep the OTHER faction sibling docs (faction_behavior_v30,
-    factions_personal_v30, conviction_track_v30, stage6_factions) for the 6->7-stat
-    / Intel-missing drift — only ED-869''s named affected_docs (faction_layer_v30
-    + params/bg/core, both checked) were covered this session.'
-  - 'GATED (ED-930): PP-236 Crown-no-Intel supersession marking awaits Jordan ruling,
-    or folds into LA-13 supersession-register sweep.'
-  - 'NOTE: ED-869 faction_layer_v30 schema residual NOT locatable as a stale enumeration
-    — likely resolved since 2026-05-30; consider closing the faction_layer portion
-    of ED-869 on a confirming sweep.'
-  - 'PARKED — ED-915 (continuity term, params/core.md): conditionally gated on ED-920
-    + needs engine_replacement_reconciled section 2 read.'
-  - BLOCKED (owns-gap) — all designs/scene fieldwork master+split propagations (ED-912..929).
-  - 'Next ungated LA items to consider: LA-15 (timeline arithmetic C11 a/b/d), LA-16
-    (canon hygiene batch), LA-18 (derived-value formula propagation), LA-14 (params
-    clock path fix). Each needs its own bottom-up scoping.'
+  - 'LA-15 remainder NOT mechanical: C11a (Einhir texts ''condemned in 4th Century''
+    = future) + C11b (''400-year-old'' Church text = pre-Catastrophe) are flagged-impossible
+    but the CORRECT in-range date is not pinned by the finding -> determination/Jordan,
+    not a mechanical fix. C11c (Lenneth archive date) is J-28-gated.'
+  - 'C14q PARKED + finding-correction: People''s Revolution is RM''s stale name in
+    southernmost_v30 §6.2 (line 64), chains, arcs 28-30 -- substance real (Restoration
+    Movement is the canonical name throughout current canon) BUT canon flatten v2
+    MIS-CITES ED-061 as the Restoration-naming authority (ED-061 = ''Projectile weapon
+    categories''; ED-308 = Varfell succession, also not it). The real rename-deciding
+    ED/PP is unlocatable. Locate it or get Jordan confirm before propagating; route
+    via the naming sweep (LA-16 / J-30).'
+  - 'GAP (LA-17 remainder): sweep other faction sibling docs (faction_behavior_v30,
+    factions_personal_v30, conviction_track_v30, stage6_factions) for the 6->7-stat/Intel
+    drift.'
+  - 'GATED: ED-930 (PP-236 Crown-no-Intel marking, Jordan/LA-13); ED-915 PARKED (cond.
+    on ED-920 + reconciled-engine §2 read).'
+  - 'BLOCKED (owns-gap): all designs/scene fieldwork master+split propagations (ED-912..929).'
+  - 'Remaining ungated LA candidates each need own scoping: LA-14 (C9 dangling clock_registry
+    path -> params/bg/clocks.md is the file; + Coup-Counter table migration), LA-16
+    (C14a status headers, C14c clocks.md verbatim de-dup -- params/bg/clocks.md in-owns),
+    LA-18 (R8 derived-value formula propagation).'
 key_values:
 - 'ED allocation: A.ED 912-930 CONSUMED (912-929 fieldwork LA-1; 930 LA-17 finding);
   next free = 931 (within reserved 890-939).'
@@ -83,6 +92,13 @@ key_values:
   two authoritative faction docs. Remaining = (a) sibling-doc drift sweep [GAP], (b)
   ED-930 PP-236 marking [Jordan/LA-13]. The §4 ''7 P2s residuals'' framing overstated
   live remaining work for ED-787/869/874/876.'
+- 'PATTERN across LA-12..18 (3 items in): the ungated mechanical-propagation yield
+  is THINNER than §9''s ''~2-3 sessions, shrinks ~8 rows'' estimate -- much is already-propagated
+  (LA-17), owns-gapped to designs/scene+designs/territory (LA-1 residuals), or needs
+  Jordan determination rather than mechanical correction (C11a/b, C14q''s unlocatable
+  grounding). Clean in-owns decided edits landed so far: 3 (ED-913 Thread-Read, ED-914
+  path, C11d date). Recommend Jordan revisit the LA-12..18 sizing; several ''mechanical''
+  findings are actually determination-gated.'
 - 'FINDING (strengthens ED-914 authority-breakdown): PP-619/626/628 — the patches
   ED-913 cites as grounding for Thread-Read=Spirit — are NOT in canon/patch_register_active.yaml
   and NOT in canon/editorial_ledger.jsonl except self-referenced by ED-913/914. They
@@ -110,6 +126,6 @@ blockers:
 - Dangling patch citations PP-619/626/628 (see key_values finding) — FOR JORDAN/LANE-B
   to resolve.
 created: '2026-06-12T02:13:54.540784+00:00'
-updated: '2026-06-12T02:27:58.293428+00:00'
+updated: '2026-06-12T02:43:22.122550+00:00'
 status: active
-as_of: c03140da9bda0b352a56b60b044c1747dcaa77d4
+as_of: d49f992e2bcfbf2cc7457a7ac1a50b5d7b191d3a
