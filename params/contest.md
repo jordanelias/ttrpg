@@ -104,7 +104,7 @@ Audience resistance: average Stability of factions (round up) − 1, minimum 0. 
 | Composure | Charisma × 3 | 3–21 |
 | Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) | 0–2 |
 | Focus defence | floor(Foc ÷ 2) | 0–3 |
-| Concentration | Focus × 3 | 3–21 |
+| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 |
 | Read pool | Attunement only | 1–7 |
 
 ## Composure and Rattled
