@@ -13,7 +13,7 @@
 
 | Clock | Range | Start | Direction | Source |
 |-------|-------|-------|-----------|--------|
-| Mending Stability (MS) | 0–100 | 72 | ↓ (decay) | params_threadwork.md §MS. Videogame-only start value. |
+| Mending Stability (MS) | 0–100 | 60 | ↓ (decay) | params/threadwork.md §RS Track. Videogame start = 60 per OWN-1/2 (Jordan passC, net-decays); resolves 60-vs-72 → 60 (was BG-default 72; videogame uses the TTRPG-default 60). Lore substrate-integrity trajectory still derives 72 at 245 AG — ms_trajectory_v1 reconciliation pending Jordan (creative-layer). |
 | Church Influence (CI) | 0–100 | 28 | ↑ | conviction_track_v30.md §3 (generation), ci_political_v30.md (political effects) |
 | Institutional Pressure (IP) | 0–100 | 20 | ↑ | peninsular_strain_v30.md §4.4, params_board_game.md §IP [PROVISIONAL: ED-793 — start value 20 per staleness report item 3; verify against params_bg_core] |
 | Turmoil | 0–10 | 0 | ↑ (bad) | peninsular_strain_v30.md §4. Replaces Parliament Integrity (PP-403 repealed). |

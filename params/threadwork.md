@@ -136,7 +136,7 @@ Immediate breach cost: n RS (one-time). Degree determines Gap scale:
 
 ## RS Track (PP-603 — canonical)
 Range 100→0. Seasonal cap: STRUCK (PP-603). Reality takes full consequence.
-Starting: TTRPG default 60; BG default 72.
+Starting: videogame canonical **60** (OWN-1/2, Jordan passC — MS/RS net-decays by default; resolves 60-vs-72 → 60). [Legacy mode-split retained for provenance: TTRPG default 60 / BG default 72 — videogame uses 60.]
 RS = 0: Rupture (shared loss).
 
 ## Dissonance — Spirit Check (PP-607, PP-610 — canonical)
