@@ -37,7 +37,7 @@ from r5_strength_stamina import (
     stamina_max, wield_pool_penalty, action_stamina_cost, strength_leverage_dsig,
     STR_STAGGER_WINDOW, STAMINA_OUT_OF_BREATH_PENALTY,
 )
-from m1_dice_sigma_core import roll_net_continuous, LEVEL_SIGMA, TN_STANDARD
+from m1_dice_sigma_core import roll_net_continuous, net_boost, LEVEL_SIGMA, TN_STANDARD
 from m7_facing_fov import emergent_facing_advantage
 from m3_weapon_class_layer import WEAPON_CLASSES
 
@@ -155,9 +155,8 @@ def resolve_phrase(A, B, rng):
                          + (atk["strength"] - dfn["strength"]) * STR_PRESSURE_PER_POINT
                          + stagger[opp])
             stagger[opp] = 0.0
-            ob = effective_ob(DECISIVE_OB, pool, net_sigma)
-            net = roll_net_continuous(pool, TN_STANDARD, rng=rng)
-            deg = degree_of_success(net, ob)
+            net = roll_net_continuous(pool, TN_STANDARD, rng=rng) + net_boost(net_sigma, pool, TN_STANDARD)   # F4 mu-shift
+            deg = degree_of_success(net, DECISIVE_OB)
             if deg in ("success", "overwhelming"):
                 dmg = strike_damage(int(round(net)), atk["strength"], atk["weapon"], dfn["armor"])
                 body[opp].apply(dmg)

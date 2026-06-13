@@ -148,3 +148,4 @@ Archived entries in tests/coverage_matrix_archive.md
   (A flank + B shock + contact drain) -> fails NERS-N.
 - status: CLOSED. No code change. (Variants 1 recovery-denial / 2 cohesion-debuff remain available on a
   future canonical decision; not pursued.)
+| r1_sigma_resolution + r8_parity_harness | F4 μ-shift resolution (base Ob + net_boost; eff_ob DISPLAY-ONLY) | mirror 49.9/50.0 · str6v4 59.5/40.5 · hist7v4 61.7/38.2 · agi6v4 65.6/34.4 (N=3000) · atom MC≡p_success | ED-934 | 2026-06-12 |

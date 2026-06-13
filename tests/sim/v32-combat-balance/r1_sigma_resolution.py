@@ -26,7 +26,7 @@ Constant provenance: tests/sim/v32-combat-balance/r1_verification_ledger.json
 """
 import numpy as np
 from m1_dice_sigma_core import (
-    eff_ob, p_success, roll_net_continuous, LEVEL_SIGMA, TN_STANDARD,
+    eff_ob, p_success, roll_net_continuous, net_boost, LEVEL_SIGMA, TN_STANDARD,
 )
 
 # ===== Class A: canonical resolution floors / degree thresholds (params/core.md) =====
@@ -127,8 +127,8 @@ def resolve_action(base_ob, history_points, contributors, bout_state,
     contrib = dict(contributors)
     contrib["agi_tempo"] = contrib.get("agi_tempo", 0.0) + agility_delta_sigma(agi)
     net_sigma = state_gated_net_sigma(bout_state, contrib)
-    ob = effective_ob(base_ob, pool, net_sigma)
-    net = roll_net_continuous(pool, tn, rng=rng)
+    ob = base_ob                                              # F4 mu-shift: base Ob (eff_ob is DISPLAY-ONLY)
+    net = roll_net_continuous(pool, tn, rng=rng) + net_boost(net_sigma, pool, tn)
     deg = degree_of_success(net, ob)
     return {
         "pool": pool, "base_ob": base_ob, "net_sigma": round(net_sigma, 2),
