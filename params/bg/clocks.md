@@ -1,7 +1,7 @@
 ## Clock Environmental Effects (v04 B2)
 
 ### Mending Stability (MS) Effects
-**Canonical source: `designs/setting/calamity_radiation_v30.md`** (Simplified BG Lookup Table).
+**Canonical source: `designs/world/calamity_radiation_v30.md`** (Simplified BG Lookup Table).
 
 MS effects are geographically graduated by Proximity Rating (node distance from Askeheim T15), not applied globally.
 Each territory card includes a Proximity Rating (0–5). At Accounting, one lookup per territory: current MS band × Proximity Rating.
@@ -37,7 +37,7 @@ Southernmost Surge (one-time, MS ≤ 10): all territories within Proximity 2 of 
 | 30–59 | Trade with Schoenland: +1 Ob. All factions: +1D to Intel orders |
 | 60–74 | Trade disrupted: +2 Ob. Proxy at T4: +1D military |
 
-**Battle Consequences (peninsular_strain_v1.md §3):**
+**Battle Consequences (peninsular_strain_v30.md §3):**
 All battles on Valorian soil: MS −1 (MS −2 for Campaign/War scale). Each season with inter-faction battle: IP +2. Each season with inter-faction battle: Turmoil +1. Faction elimination: Strain +2. Territory Revolt (Accord 0): Strain +1. Covert actions and ungarrisoned Church Seizure: no MS/IP/Strain cost.
 
 
