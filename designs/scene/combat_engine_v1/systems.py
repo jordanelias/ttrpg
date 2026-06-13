@@ -168,9 +168,9 @@ def reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR):
     """Standing measure-domain sigma the DEFENDER's reach imposes on the aggressor (proportional to gap, weighted
     high unarmoured, falling with armour). +ve lowers the attacker's net. Pure."""
     gap=er[defender]-er[aggressor]
-    foot_meas=cfg['FOOT_MEASURE_K']*(balance_eff(defender,fat_d,cfg)*TR.channel_weight(defender.tradition,'balance')
-                                     - balance_eff(aggressor,fat_a,cfg)*TR.channel_weight(aggressor.tradition,'balance'))
-    meas_w = TR.channel_weight(defender.tradition,'measure')/TR.channel_weight(aggressor.tradition,'measure')
+    foot_meas=cfg['FOOT_MEASURE_K']*(balance_eff(defender,fat_d,cfg)*TR.eff_cw(defender, 'balance')
+                                     - balance_eff(aggressor,fat_a,cfg)*TR.eff_cw(aggressor, 'balance'))
+    meas_w = TR.eff_cw(defender, 'measure')/TR.eff_cw(aggressor, 'measure')
     reach_edge=(gap*cfg['REACH_FRAC']+foot_meas)*meas_w
     return cfg['REACH_W'][defender.armor]*reach_edge
 
@@ -199,8 +199,8 @@ def feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR):
           and rng.random() < cfg['FEINT_P'] and aggressor.stamina>0)
     if not do:
         return dict(do=False, debuff=0.0, new_streak=0, beat_cost=0.0, stamina_cost=0.0)
-    feint_q = (reading(aggressor,cfg)+aggressor.skill('technique'))*TR.channel_weight(aggressor.tradition,'tempo')
-    def_read = reading(defender,cfg)*TR.channel_weight(defender.tradition,'visual')*(1-0.4*mental_fat_d)
+    feint_q = (reading(aggressor,cfg)+aggressor.skill('technique'))*TR.eff_cw(aggressor, 'tempo')
+    def_read = reading(defender,cfg)*TR.eff_cw(defender, 'visual')*TR.eff_cw(defender, 'precommit')*(1-0.4*mental_fat_d)
     read_feint = rng.random() < 1/(1+exp(-(def_read-feint_q)/2.0))
     debuff = -cfg['FEINT_PUNISH'] if read_feint else cfg['FEINT_DEBUFF']
     return dict(do=True, debuff=debuff, new_streak=feint_streak+1,
@@ -217,8 +217,8 @@ def approach_displace(shorter, longer, cfg):
 def reopen_prob(longer, shorter, base_gap, push_avail, cfg, TR):
     """Probability the LONGER weapon regains distance given a created moment exists: reads to seize vs shorter's
     denial, executes with balance, scaled by armour; freed-hand shove adds a path. Pure (returns a probability)."""
-    id_read = reading(longer,cfg)*TR.channel_weight(longer.tradition,'visual')
-    deny_read = reading(shorter,cfg)*TR.channel_weight(shorter.tradition,'visual')
+    id_read = reading(longer,cfg)*TR.eff_cw(longer, 'visual')
+    deny_read = reading(shorter,cfg)*TR.eff_cw(shorter, 'visual')
     read_edge = 1/(1+exp(-(id_read-deny_read)/2.0))
     foot = balance_eff(longer,0,cfg)/3
     p=cfg['REOPEN_K']*base_gap*foot*read_edge*cfg['REACH_W'][shorter.armor]/0.62
@@ -231,10 +231,10 @@ def bind_sigma(aggressor, defender, cfg, TR):
     excels) + TACTILE read (Fuhlen); Strength minor. +ve favours the aggressor winning the bind. Pure."""
     lev = ((aggressor.history+aggressor.skill('bind')) - (defender.history+defender.skill('bind')))*cfg['BIND_TECH_K'] \
           + (leverage(aggressor,cfg) - leverage(defender,cfg)) \
-          * (TR.channel_weight(aggressor.tradition,'leverage')/TR.channel_weight(defender.tradition,'leverage'))
+          * (TR.eff_cw(aggressor, 'leverage')/TR.eff_cw(defender, 'leverage'))
     catch = cfg['BIND_GUARD_K']*(aggressor.w['blade_guard'] - defender.w['blade_guard'])   # quillons/rings catch the blade
-    tac = (reading(aggressor,cfg)*TR.channel_weight(aggressor.tradition,'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
-           - reading(defender,cfg)*TR.channel_weight(defender.tradition,'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
+    tac = (reading(aggressor,cfg)*TR.eff_cw(aggressor, 'tactile')*TR.familiarity(aggressor.tradition,defender.tradition)
+           - reading(defender,cfg)*TR.eff_cw(defender, 'tactile')*TR.familiarity(defender.tradition,aggressor.tradition))*cfg['BIND_TACTILE_K']
     strq = (aggressor.strength-defender.strength)*cfg['BIND_STR_K']
     return lev + catch + tac + strq
 
@@ -263,19 +263,19 @@ def init_steal_factor(stealer, bind_active, TR):
     """WHO steals the Vor best. In a BIND (winding), the steal scales with tactile+leverage — German Fühlen /
     Stärke-Schwäche. In the OPEN, with tempo — Italian contratempo (the single-time counter). Neutral = 1.0."""
     if bind_active:
-        return (TR.channel_weight(stealer.tradition,'tactile') + TR.channel_weight(stealer.tradition,'leverage'))/2
-    return TR.channel_weight(stealer.tradition,'tempo')
+        return (TR.eff_cw(stealer, 'tactile') + TR.eff_cw(stealer, 'leverage'))/2
+    return TR.eff_cw(stealer, 'tempo')
 
 def init_hold_decay(holder, cfg, TR):
     """Geometric HOLD (Spanish destreza): high measure slows the per-beat decay, so the Vor is held longer. Returns
     this fighter's effective decay multiplier (neutral measure = base INIT_DECAY)."""
-    m = TR.channel_weight(holder.tradition,'measure')
+    m = TR.eff_cw(holder, 'measure')
     return 1 - (1 - cfg['INIT_DECAY'])/m
 
 def init_overcommit_loss(aggressor, exposure, cfg, TR):
     """True-times discipline (English; also Italian/Japanese tempo): tempo-disciplined fighters lose less grip on the
     Vor from their own commitment. Returns the initiative loss magnitude (neutral tempo = base)."""
-    return cfg['INIT_LOSS_OVERCOMMIT'] * exposure / TR.channel_weight(aggressor.tradition,'tempo')
+    return cfg['INIT_LOSS_OVERCOMMIT'] * exposure / TR.eff_cw(aggressor, 'tempo')
 
 # ---------- kuzushi / structure (dynamic balance) ----------
 def poise_factor(c, cfg):
