@@ -23,6 +23,7 @@
 | TRIGGER5_POOL_CLIFF (ED-876) | Trigger-5 Condition C clause "Engaged pool ≥ 6" REMOVED from the gate, retained in the cost table as a severity escalator only. Eliminated a non-monotonic battle→Stability exposure (single Command point swinging compound-collapse ~25×). Stage-4 re-tested; routs still penalized, large-force routs still escalate to −2. |
 | PARLIAMENT_MANOEUVRE_EXISTING | Parliamentary Manoeuvre is Hafenmark's existing Priority-4 Social action. New Parliament convening is a separate Accounting-phase system. See §5.2 for phase placement. |
 | OCCUPATION_TCV_UNSPECIFIED | Occupied territories count 0 TCV for both parties. Control transfer (formal or treaty) required for TCV to count. |
+| FACTION_RESOLVER_PROPAGATION (ED-874, W3.3) | Remaining in-scope bare-stat faction checks migrated to the deterministic+stochastic resolver (params/factions/stats_1_7_scale.md §Domain Action Resolution): §1.4 Accounting Stability (M = Stability − loss magnitude), §1.5 Reconstitute (M = Influence − 4), §2.5 Resistance (M = Influence − (floor(opp Mandate/2)+1)), §5.5 Rebuttal (M = Mandate − 2/−3). Completes the ED-865/874 migration begun for treaty Phase 1/3 (§3.3, 270915da). Transformation: legacy "X vs Ob N" → M = X − N; four-degree ladder + named exceptions retained. KEPT (out of ED-874 scope): mass-battle/military pools (Trigger 5, §6.2), TTRPG d10 officer-fate, Mandate vote-tallies. DEFERRED (cross-module, not this commit): §2.7 Church Seizure (CI-coupled) and CI Assert/Suppress (ci_political-owned). |
 
 | Gap closed | Resolution |
 |---|---|
@@ -188,7 +189,7 @@ Three-condition gate. ALL three must be met simultaneously.
 
 ### §1.4 Accounting Stability Check (Existing — Retained)
 
-Phase 5 Step 2 (existing, params_board_game): any faction with ≥2 attribute points lost this season rolls Stability pool vs Ob = magnitude of total attribute loss.
+Phase 5 Step 2 (existing, params_board_game): any faction with ≥2 attribute points lost this season resolves an Accounting Stability check via the deterministic+stochastic resolver (params/factions/stats_1_7_scale.md §Domain Action Resolution): **M = Stability − (magnitude of total attribute loss)** (legacy: Stability pool vs Ob = loss magnitude). It emits the same four-degree ladder below.
 
 | Result | Effect |
 |---|---|
@@ -218,7 +219,7 @@ When a faction's Stability reaches 0 at Accounting end, the faction collapses. T
 | Path | Requirement | Mechanical effect |
 |---|---|---|
 | Join another faction | That faction's Standing 0 initiation gate | Begin at Standing 0 in new faction; old Standing irrelevant |
-| Reconstitute collapsed faction | Influence Domain Action, Ob 4, repeated 3 seasons consecutively | Faction re-emerges at Stability 1, Mandate 1, other attributes at 50% of frozen values (round down). Player becomes faction leader. Requires at least 1 territory held or recaptured. |
+| Reconstitute collapsed faction | Influence Domain Action via resolver (**M = Influence − 4**; legacy Ob 4), repeated 3 seasons consecutively | Faction re-emerges at Stability 1, Mandate 1, other attributes at 50% of frozen values (round down). Player becomes faction leader. Requires at least 1 territory held or recaptured. |
 | Remain unaffiliated | None | No faction actions available; personal-scale play only; may act as independent agent or mercenary |
 
 **Step 5 — Parliamentary removal.** The collapsed faction loses its Parliamentary seat. Any active Motions proposed by the collapsed faction lapse. Treaties with the collapsed faction remain in force only if the faction reconstitutes within 4 seasons; otherwise they dissolve automatically.
@@ -292,8 +293,7 @@ Ob for military_advance = 2 + (defending territory's Fort level).
 
 Once per Accounting while territory is Occupied, displaced faction may declare a Resistance check (does not cost a Domain Action slot; it is a free Accounting action):
 
-- Pool: Influence
-- Ob: floor(occupying faction Mandate / 2) + 1
+- Resolver (params/factions/stats_1_7_scale.md §Domain Action Resolution): **M = Influence − (floor(occupying faction Mandate / 2) + 1)** (legacy: Pool Influence vs Ob floor(occupying Mandate/2)+1)
 - Success: Occupation marker removed (territory ungovernable — occupier withdraws)
 - Failure: Occupation persists
 - Overwhelming: marker removed AND occupying faction Stability −1 (costly suppression)
@@ -457,7 +457,7 @@ If Church uses Sacred Veto to block a motion that protects Church interests: add
 The targeted faction may Rebuttal any Censure or Outlawry vote:
 
 - Declare Rebuttal in Phase 4 (Social, same season as Motion declared) — costs one action slot
-- Roll: Mandate vs Ob 2 (Censure) or Ob 3 (Outlawry)
+- Resolver (params/factions/stats_1_7_scale.md §Domain Action Resolution): **M = Mandate − 2** (Censure) or **M = Mandate − 3** (Outlawry) (legacy: Mandate roll vs Ob 2 / Ob 3)
 
 | Result | Effect |
 |---|---|
@@ -556,7 +556,7 @@ PHASE 5 — SEASONAL ACCOUNTING (10 steps) [ED-678: collapsed from 13, PP-472]
   Step 1:  Apply all pending attribute changes from resolved orders
            Parliamentary votes resolve → Trigger 3 effects applied
            Treaty ratification rolls (Phase 3) → Trigger 2 effects applied
-  Step 2:  Accounting Stability check (≥2 attribute loss → Stability pool roll vs Ob)
+  Step 2:  Accounting Stability check (≥2 attribute loss → resolver, M = Stability − loss magnitude; §1.4)
            Includes Trigger 1–5 and Parliament consequences. Collapse check (§1.5) fires here.
   Step 3:  Cooldown track advance
   Step 4:  Clock advances (RS, CI formula, IP, PI)
