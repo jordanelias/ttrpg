@@ -291,6 +291,12 @@ Per PP-687 key_type_registry_v30.md §8. Articulation layer consumes; ED-773 Com
 
 Per PP-687 key_type_registry_v30.md §8. Articulation layer consumes; emits Tier 2 cut scene by default (high-significance per §3.5).
 
+### §6.4 scene.combat_resolved (NEW Class B addition — ED-935)
+
+Per PP-687 `key_type_registry_v30.md` §7. Articulation layer consumes; emits Tier 2 cut scene by default (high-significance per §3.5 — a decisive combat outcome). `scene.battle_concluded` (existing) already triggers Tier 2; `scene.combat_resolved` mirrors it at personal / skirmish scale.
+
+<!-- [ASSUMPTION: Tier-2 default for combat_resolved authored under the 2026-06-14 consumer-design grant (ED-936); mirrors §6.3. Jordan-vetoable.] -->
+
 ---
 
 ## §7 Pacing (Deferred per D11)

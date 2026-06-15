@@ -314,6 +314,18 @@ if opinion.confidence >= 3 and contradiction_acute:
 
 Concern generation here continues to use doc 12 Concern schema. The Concern itself is per-NPC state (not a Key); no emission required at this hook.
 
+### §5.4 scene_outcome consumption (ED-936 — J-2 consumer wiring)
+
+Per ED-935, Procedure D additionally consumes `scene_outcome` Keys
+(`scene.contest_resolved`, `scene.battle_concluded`, `scene.combat_resolved`):
+the decisive outcome of a contest / combat scene drifts the opinion each aware NPC
+holds of every named participant — victor gains respect or fear, loser loses
+standing — keyed to `outcome` and the observer's existing relationship. Threshold
+crossing emits `state.opinion_revised` exactly as §5.2, with `causes[]` wired to the
+scene_outcome Key.
+
+<!-- [ASSUMPTION: scene_outcome -> disposition-drift effect authored under Jordan's 2026-06-14 consumer-design grant (logged ED-936). Bottom-up = registry consuming_systems (npc_behavior on contest/battle/combat_resolved) + the §5.1 input filter. Top-down = grand-strategy relationship sims (e.g. CK) shift character opinion on duel/battle outcomes. Drift magnitude/curve unspecified — Jordan-vetoable. -->
+
 ---
 
 ## §6 Procedure E — Off-Screen Interactions

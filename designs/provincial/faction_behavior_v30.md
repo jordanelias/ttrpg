@@ -430,6 +430,10 @@ PP-686's 0.5L+0.5PS blend, now SIZE-WEIGHTED and saturating per settlement_layer
 | `env.peninsular_strain_shock` | Public temperament drift |
 | `mechanical.accounting` (annual) | Triggers Self-Other drift integration; emits faction summary Keys |
 
+**scene_outcome routing (ED-936):** Faction-state does **not** consume `scene.contest_resolved` / `scene.combat_resolved` directly; these reach faction stats via the **Domain Echo** path when they meet Sufficient Scope (`scale_transitions §7`, e.g. bullet 5 — combat victory against a faction office-holder → §5 Echo). `scene.battle_concluded` additionally drives MS / Stability through `mass_battle`. The §5.2 table above is the direct-consumption set only.
+
+<!-- [ASSUMPTION: scene_outcome->faction routing note authored under the 2026-06-14 consumer-design grant (ED-936); bottom-up = scale_transitions §7 bullet 5 + §5 Domain Echo. Jordan-vetoable.] -->
+
 ### §5.3 Subscription pattern
 
 PP-686 registers faction-layer subscribers in `TYPE_SUBSCRIPTIONS` per PP-687 §4.1 step 5. All subscription callbacks O(1) or async. Faction state recomputation runs at season boundaries; per-Key callbacks queue updates rather than execute mid-emission.

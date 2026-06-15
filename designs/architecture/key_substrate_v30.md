@@ -495,7 +495,7 @@ Doc 12's procedures rewrite to consume Keys (Phase B Stage 1):
 - Procedure A (Concern generation) reads memory Keys filtered by salience and Conviction-relevance.
 - Procedure B (Project advancement) emits scene_event Keys for actions; reads outcome Keys.
 - Procedure C (Project completion) emits state_transition Keys.
-- Procedure D (Disposition update) consumes scene_event and da_outcome Keys.
+- Procedure D (Disposition update) consumes scene_event, da_outcome, and scene_outcome Keys (scene_outcome added ED-936 — contest/battle/combat outcomes drift disposition; handler: political_dynamics_keys_migration_v30 §5.4).
 - Procedure E (Knowledge sharing) emits scene.dialogue Keys with knowledge payload.
 
 ### §8.4 Personal-scale systems
