@@ -1,0 +1,110 @@
+id: la-8-massbattle-reconcile-2026-06-15
+status: done
+scope: lane-A
+owns:
+- params/**
+- designs/provincial/**
+last_commit: de2d08eb951ebb9ebff98c95f8aca54cc4a19cb9
+task:
+  skill: valoria-mechanic-audit
+  description: LA-8 (entry-items track) — ED-899 follow-up doc-reconciliation pass
+    for the mass-battle system. COMPLETE and LANDED at de2d08eb (live HEAD). 3 lagging
+    docs reconciled to the leading-canon engine tests/sim/mass_battle/config.py +
+    ratified ledger (ED-899/898/909). Doc/params text only; engine code = LC-8, untouched.
+context_files:
+- path: tests/sim/mass_battle/config.py
+  depth: full
+  reason: 'Leading canon (T0 ground-truth): pool base = COMMAND_POOL_MULT x Command
+    = 2 x Command, Size via Lanchester frontage exponent only; Command = clamp(round((2*Cha+Cog)/3),1,7)
+    with CMD_CHA_WEIGHT=2/CMD_COG_WEIGHT=1; COMMAND_SIGMA_ENABLED=0 reproduces legacy
+    min(Size,Command)+Command byte-exact; BATTLEFIELD_SIZE=50/UNIT_GRID_SIZE=30/BUFFER_CELLS=10.
+    Every LA-8 value traces here.'
+- path: canon/editorial_ledger.jsonl
+  depth: skeleton
+  reason: 'Resolved/closed decisions LA-8 propagated: ED-899 (pool/Command/Power FOLLOW-UP),
+    ED-898 (general death -> two-stage incapacitation/capture; magnitudes & timing
+    UNCHANGED), ED-909 (formation-taxonomy ratification, Jordan 2026-06-09). Read
+    ED bodies directly. ED-970/971 are UNFILED (0 lines) — do NOT cite/file.'
+- path: params/mass_combat.md
+  depth: full
+  reason: 'Reconciled doc #1 (11 edits): F3.6 Power-not-from-Size (L4 provenance +
+    L108 def); F3.1 pool ED-899 banner (L5 breadcrumb + L60 Core Formula, legacy worked-example
+    L62-102 preserved as OFF-path model); F3.2 Command derivation (L137/L359/L367);
+    F3.5 general death -> Stage-1/Stage-2 incapacitation (L162/L163/L167/L439).'
+- path: designs/provincial/mass_battle_v30.md
+  depth: full
+  reason: 'Reconciled doc #2 (6 edits): F3.1 pool notes (L27 banner + L414 phase-5
+    step); F3.2 Command (L247); F3.5 lone remaining death-reframe (L329); F3.3a A.6
+    ED-909 taxonomy pointer (dice-mod table L299-311 UNCHANGED); F3.4 A.3b geometry-drift
+    marker (41-grid). Also carries the PARKED R4 finding at L631.'
+- path: designs/provincial/mass_battle_integration_v30.md
+  depth: full
+  reason: 'Reconciled doc #3 (1 edit): F4 partially-superseded banner after L7 (pool/geometry/taxonomy
+    + ED-898/899/909; 25x25 row L54 flagged). No body rewrite.'
+- path: handoffs/lane-A-2026-06-11.yaml
+  depth: full
+  reason: 'Parent Lane-A handoff (updated 2026-06-12, as_of ece2d5b8 — PREDATES this
+    LA-8 work). entry_items order: LA-1,LA-5,LA-2,LA-3,LA-4,LA-6,LA-8(now done),LA-9,LA-10,LA-7.
+    Its "ungated queue EXHAUSTED" pertains to the LA-12..18/fieldwork track, a different
+    series; reconcile that note against this LA-8 completion.'
+working_state:
+  completed:
+  - LA-8 LANDED @de2d08eb (live HEAD verified via GitHub API; content present, old
+    strings absent). 3 files, 18 edits, 3-pass clean. Re-execution this session reproduced
+    byte-identical content (commit no-op confirmed idempotency).
+  - 'ED-899 pool: banner on params Core Formula + doc L27/L414 — engine base = 2 x
+    Command, Size via Lanchester only; legacy min(Size,Command)+Command retained as
+    the COMMAND_SIGMA_ENABLED=0 reproduction.'
+  - 'ED-899 Command: clamp(round((2*Cha+Cog)/3),1,7), Cha primary — replaced equal-weight
+    ceil((Cha+Cog)/2) at params L137/L359/L367 + doc L247.'
+  - 'ED-899 + file own tables: Power = 1-7 quality stat (tier/Military-capped), NOT
+    derived from Size — params L4/L108.'
+  - 'ED-898: general death -> two-stage incapacitation/capture at remaining unreframed
+    sites (params morale table + L439; doc L329). Magnitudes/timing unchanged; doc
+    was already compliant elsewhere.'
+  - 'ED-909: formation-taxonomy pointer on doc A.6 (dice-mod table unchanged). Geometry-drift
+    markers on doc A.3b (41-grid) + integration (25x25) vs engine 50-grid.'
+  advisories:
+  - 'CO-FILE (non-blocking): design docs edited w/o canonical_sources.yaml — advisory
+    scopes "iff authority/version changed"; LA-8 changed NEITHER -> NO action needed.'
+  - 'R4 (non-blocking): doc L631 "Campaign-scale defeat: Discipline -30 ... Mandate
+    -1" is a direct-write to a DERIVED aggregate (Mandate=clamp(round(7T/(T+6))) from
+    settlement L/PS). PRE-EXISTING text, NOT authored/changed by LA-8, OUT of ED-899
+    scope -> NOT fixed; parked (see parked list). Fix needs a dL/dPS-mapping value
+    choice (Jordan).'
+  parked:
+  - 'ED-909 residual: A.6 dice-modifier set <-> geometric taxonomy mapping (orthogonal-axes
+    question) — noted via pointer, decision pending (ED-909 follow-up).'
+  - 'Geometry re-derivation: doc A.3b (41-grid) + integration (25x25) decompositions
+    vs engine 50-grid -> full re-derivation = LC-8 (engine port).'
+  - Engine Horseshoe/RefusedFlank removal from CELL_PATTERN_FN/MIN_DISCIPLINE -> LC-8.
+  - NPC-direct Command (doc A.5 L255-256, assigned directly without Cha+Cog derivation)
+    — NOT ED-899-mandated, left as-is.
+  - Off/Def split phase-dependence -> ED-910 (open) / ED-971 (UNFILED, do not cite).
+  - Volley-pool Power-vs-Command -> ED-970 (UNFILED, do not cite).
+  - 'NEW (from R4 advisory): doc L631 Mandate -1 direct-write (R4 / F1 drift class)
+    -> register #2 (+/-Mandate routing, J-7/J-8).'
+  next:
+  - 'Entry-items track: next item after LA-8 is LA-9. (J-9 mass-battle-set canon-doc-update
+    portion is now landed by LA-8; the engine port = LC-8 and remaining J-9/J-10 items
+    stay OPEN.)'
+  - 'Reconcile the parent lane-A-2026-06-11 handoff: its "ungated Lane-A queue EXHAUSTED"
+    note is from the 2026-06-12 LA-12..18/fieldwork track and predates this LA-8 entry-items
+    work — advance/annotate it for LA-9.'
+  - Do NOT file ED-970/971 (0 ledger lines). Do NOT touch engine code under LC-8 from
+    Lane A.
+key_values:
+- ED-899 pool base = COMMAND_POOL_MULT x Command = 2 x Command; Size enters only via
+  the Lanchester frontage exponent.
+- ED-899 Command = clamp(round((2*Charisma + Cognition)/3), 1, 7); CMD_CHA_WEIGHT=2
+  / CMD_COG_WEIGHT=1.
+- COMMAND_SIGMA_ENABLED=0 reproduces legacy min(Size,Command)+Command byte-exact.
+- 'ED-898: no mass-battle mechanic kills a named character; worst outcome = incapacitation/capture;
+  magnitudes & timing unchanged (fictional outcome only).'
+- 'ED-909 ratified taxonomy: Subunit = Line/Arrowhead-Wedge/GappedLine; Unit = Envelopment(Cannae)/Refused-Flank(Leuctra/Leuthen);
+  Horseshoe+RefusedFlank removed from Subunit set (engine revamp = LC-8).'
+- config.py is leading canon for the mass-battle system; docs follow (ED-899 FOLLOW-UP).
+blockers: []
+created: '2026-06-15T02:26:32.984990+00:00'
+updated: '2026-06-15T02:26:32.984990+00:00'
+as_of: de2d08eb951ebb9ebff98c95f8aca54cc4a19cb9
