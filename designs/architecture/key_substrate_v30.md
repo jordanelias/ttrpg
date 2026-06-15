@@ -509,7 +509,7 @@ Doc 12's procedures rewrite to consume Keys (Phase B Stage 1):
 
 - scene_slate: scene activation emits mechanical.scene_entered; events within emit scene.* Keys.
 - social_contest (with PP-683 signed −5..+5): each exchange emits scene.dialogue with persuasion_track_displacement payload.
-- mass_battle: resolution emits scene_outcome.battle_concluded; phase events emit scene.* Keys.
+- mass_battle: resolution emits scene.battle_concluded; phase events emit scene.* Keys.
 
 ### §8.6 Strategic-scale systems
 
