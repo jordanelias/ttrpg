@@ -6,6 +6,8 @@
 
 ## Companion canon: `designs/provincial/mass_battle_v30.md` (CANONICAL, approved 2026-04-17). This doc does NOT supersede mass_battle_v30; it specifies what implementation in sim/ must cover, identifies gaps, and orders the work.
 
+> **⚠ PARTIALLY SUPERSEDED (2026-06-11, LA-8 / ED-899 reconciliation).** This integration spec predates the engine becoming leading canon. Three things here are superseded by `tests/sim/mass_battle/config.py` + the editorial ledger and must be read against them, not this doc: **(1) the engagement-pool formula** — engine base = **2 × Command** with Size via the Lanchester frontage exponent only (ED-899), not the older `min(Size, Command) + Command`; **(2) all battlefield-geometry values** here (e.g. the “25×25 battlefield + 5-cell buffer” row below) — the engine uses `BATTLEFIELD_SIZE=50`/`UNIT_GRID_SIZE=30`/`BUFFER_CELLS=10`; **(3) the formation taxonomy + general outcome** — taxonomy ratified per ED-909 (Subunit: Line/Arrowhead/GappedLine; Unit: Envelopment/Refused-Flank; Horseshoe/RefusedFlank removed, engine revamp = LC-8), and general “death” reframed to incapacitation/capture per ED-898. The port target and feature inventory below remain valid; the superseded values do not. config.py is leading canon.
+
 ## GD constraints: GD-1 binding. Mass battle resolution produces faction stat / territorial-control deltas only. No `mass_battle_outcome → game_victory` triggers permitted at this scale (per `canon/02_canon_constraints.md` §B GD-1).
 
 ## Sources of authority:

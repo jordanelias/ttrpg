@@ -1,8 +1,8 @@
 <!-- version: v0.14+design-ST7-R4-PP235 | sources: designs/mass_combat/mass_battle_v30.md (v4.4, PP-106) | last_updated: 2026-04-03 -->
 <!-- PATCHES APPLIED (canonical): PP-86, PP-91, PP-104, PP-106, PP-111, PP-171, PP-173, PP-175, PP-188–194, PP-196–197, PP-200–202, PP-204, PP-222–225, PP-227, PP-229, PP-231–233, PP-235, PP-240–241, PP-245, PP-249–251, PP-256, PP-268, PP-273, PP-282–283, PP-300–301, PP-305–306, PP-333–334, PP-336, PP-338, PP-366–368, PP-370–371, PP-374, PP-376, PP-388, PP-398, PP-500, PP-502–508, PP-297, PP-530, PP-550, PP-555, PP-567, PP-600–601, PP-610, PP-613 -->
 <!-- PP-232: Unit stats renamed (Strength→Size, Combat Power→Power, Cohesion→Discipline, Coherence Rating/Command Rating→Command); -->
-<!--         Power derived from Size; damage formula references updated. -->
-<!-- PP-233: Unit combat formula established. Pool = min(Size,Command)+Command. -->
+<!--         Power renamed (Combat Power→Power); the PP-232-era "derived from Size" claim is SUPERSEDED — Power is a 1–7 quality stat set by tier / capped by faction Military (ED-899); damage formula references updated. -->
+<!-- PP-233: Unit combat formula established. Pool = min(Size,Command)+Command. [ED-899: superseded as engine default — pool base = 2 × Command, Size via Lanchester frontage only; this model = the COMMAND_SIGMA_ENABLED=0 reproduction. See Core Formula banner.] -->
 <!--         Health per Size = min(Discipline,Command)+DR. Total Health = Size×H. -->
 <!--         Damage per success = 1+Power. Size after = ⌊remaining Health÷H⌋. -->
 <!--         Damage simultaneous. Size loss only reduces pool when Size>Command. -->
@@ -59,6 +59,8 @@ Damage simultaneity: Effective Power for Phase 5 calculated from Size as of Phas
 
 ## Core Formula (PP-233)
 
+> **⚠ ED-899 SUPERSESSION — engine leads; this section is the documented OFF-path model.** Leading canon for the engagement pool is the live engine (`tests/sim/mass_battle/config.py`): pool base = `COMMAND_POOL_MULT × Command` (= **2 × Command**), and **Size enters only through the Lanchester frontage exponent**, not the pool. Command is derived `clamp(round((2 × Charisma + Cognition) ÷ 3), 1, 7)` (`CMD_CHA_WEIGHT=2`/`CMD_COG_WEIGHT=1`). The `min(Size, Command) + Command` model below is **retained** as the model the engine reproduces byte-exact when `COMMAND_SIGMA_ENABLED=0`. Per ED-899 FOLLOW-UP, config.py is leading canon; this doc follows.
+
 ### Definitions
 | Term | Value |
 |------|-------|
@@ -105,7 +107,7 @@ Group 2 is destroyed but their 10 damage resolves first (simultaneous). Group 1 
 | Stat | Description |
 |------|-------------|
 | Size | Headcount/health pool. At 0: destroyed. |
-| Power | Dice pool ceiling. Derived from Size. |
+| Power | Unit-quality stat (1–7): dice-pool ceiling, set by tier (see Power Tier Reference) and capped by faction Military (see Faction Military → Unit Quality). **NOT derived from Size** (ED-899). |
 | Discipline | Organisational integrity (1–7). |
 | Morale | Rout threshold (1–7). |
 | Speed | Slow / Standard / Fast |
@@ -134,7 +136,7 @@ Group 2 is destroyed but their 10 damage resolves first (simultaneous). Group 1 
 | 7 | 7 | 7 |
 
 ## Command [PROPOSAL] (PP-232)
-Command = ⌈(Charisma + Cognition) ÷ 2⌉
+Command = clamp(round((2 × Charisma + Cognition) ÷ 3), 1, 7)  *(ED-899: Charisma primary, Cognition secondary — engine CMD_CHA_WEIGHT=2 / CMD_COG_WEIGHT=1, leading canon; supersedes the equal-weight ⌈(Cha+Cog) ÷ 2⌉ form.)*
 Governs: sub-unit limit (max = Command; TTRPG hard cap 3); Discipline ceiling; Morale floor (= 1 while general present); tactic execution (Command dice vs Ob).
 Command = 1: cannot restore Discipline to any unit — all degradation permanent for that battle.
 
@@ -159,12 +161,12 @@ Restoration: Reform Phase only (not engaged), +1 Discipline, Command ≥ current
 | Size < 25% max | −1 additional |
 | Discipline broken this turn | −1 |
 | Allied unit routed in same zone | −1 |
-| General incapacitated | −1 |
-| General killed | −2 (not subject to phase cap) |
+| General incapacitated (Stage 1) | −1 |
+| General incapacitated/captured (Stage 2) | −2 (not subject to phase cap) |
 | Flanked and lost exchange | −1 |
 | Idle 2+ consecutive turns | −1 |
 
-Cap: −3 per Cascade Phase (general death separate and uncapped).
+Cap: −3 per Cascade Phase (Stage-2 general incapacitation separate and uncapped — ED-898; reframed from "general death", magnitude unchanged).
 Floor: 1 while general present. At 0: rout.
 Rout contagion: −1 Morale to adjacent units; secondary loss cannot cascade to rout until next turn.
 
@@ -356,7 +358,7 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 ## Commander Bonus Formulas — Consolidated (ED-033 resolved — provisional)
 | Context | Formula | Notes |
 |---------|---------|-------|
-| TTRPG mass combat | Command = ⌈(Charisma + Cognition) ÷ 2⌉ | Per params_mass_combat (PP-232) |
+| TTRPG mass combat | Command = clamp(round((2 × Charisma + Cognition) ÷ 3), 1, 7) | ED-899 (Charisma primary); supersedes the PP-232 equal-weight form |
 | BG battle resolution | Commander bonus = floor(faction Military / 2) | Per §B.3 |
 | Hybrid Zoom In | Use TTRPG CR for TTRPG-layer actions; BG commander bonus for BG-layer accounting | No conversion between them |
 [PROVISIONAL]
@@ -364,7 +366,7 @@ The −3 Morale cap per Cascade Phase applies as a total across all non-general 
 ## Volley TN (ED-037 resolved — provisional)
 Volley phase uses TN 6 (not TN 7). Rationale: ranged advantage before armour engagement; represents favourable conditions (distance, preparation). [PROVISIONAL — confirmed from prior provisional]
 ## Commander Bonus (PP-190)
-Formula: floor(faction Military / 2). Applies to BG mode. TTRPG uses Command = ⌈(Cha+Cog)÷2⌉ (PP-232). (PP-555 — corrects PP-550: pool bonus, not Ob; no +1) See consolidated table above.
+Formula: floor(faction Military / 2). Applies to BG mode. TTRPG uses Command = clamp(round((2 × Cha + Cog) ÷ 3), 1, 7) (ED-899; supersedes the PP-232 equal-weight form). (PP-555 — corrects PP-550: pool bonus, not Ob; no +1) See consolidated table above.
 ## Altonian Invasion Units (PP-193, ED-036 resolved 2026-04-03)
 Generated from Altonian Military ~5 (foreign professional standing army; above Crown/Church 4).
 [ED-036 resolved 2026-04-03] Stats confirmed: Vanguard Str5 CP4 Coh4 Mor5 HeavyCut Medium. Elite Guard Str4 CP5 Coh5 Mor5 HeavyCut Heavy. Thread Corps Str3 CP3 Coh4 Mor4 TS40.
@@ -436,7 +438,7 @@ CF wound during Zoom In → −1D to that commander's BG tactic Pool for remaind
 1 Coherence/night of rest (no Thread ops). Single-day battle: no in-battle Coherence recovery.
 
 ## PP-273 — Mass battle minimum pool
-1 die minimum after all penalties. Discipline 0 = Formation Break (no attack). Command=0 general death: units at 1 die minimum.
+1 die minimum after all penalties. Discipline 0 = Formation Break (no attack). Command=0 (Stage 2 general incapacitation, ED-898): units at 1 die minimum.
 
 ## PP-282 — STRUCK (duplicate of PP-193 Altonian block above)
 > Superseded. PP-193 §Altonian Invasion Units is the canonical stat block.

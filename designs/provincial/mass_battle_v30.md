@@ -26,6 +26,8 @@ damage. Two stats unified in personal combat split here:
 
 **Effective Combat Pool = min(Size, Command) + Command** (PP-233)
 
+> **ED-899 (engine leads):** This is the legacy / OFF-path model. The live engine (`tests/sim/mass_battle/config.py`) sets the engagement pool base to `COMMAND_POOL_MULT × Command` (= 2 × Command), with **Size entering only through the Lanchester frontage exponent**, not the pool; it reproduces the `min(Size, Command) + Command` value here byte-exact when `COMMAND_SIGMA_ENABLED=0`. Per ED-899 FOLLOW-UP, config.py is leading canon and this doc follows.
+
 As Size drops, the pool shrinks — fewer soldiers means fewer dice
 regardless of individual quality. Command caps both Size and Power contributions. (PP-233) Size determines
 whether you reach it.
@@ -91,6 +93,8 @@ Thread Sensitivity minimums per scale still apply.
 ### A.3b BATTLEFIELD GEOMETRY (NEW 2026-05-15)
 
 Cell-level battlefield for the sim/Godot implementation. Establishes the spatial container in which formations deploy, manoeuvre, and engage. Set by IMPOSED tuning 2026-05-15.
+
+> **⚠ GEOMETRY DRIFT — engine rescaled; config.py is leading canon.** The cell-grid constants in this A.3b section (per-unit 41×21, connected 1v1 41×42, BATTLEFIELD_WIDTH=41, etc.) **predate the engine rescale.** The live engine (`tests/sim/mass_battle/config.py`) uses `BATTLEFIELD_SIZE=50`, `UNIT_GRID_SIZE=30`, `BUFFER_CELLS=10` (a step-2 rescale to fit the ~10k-troop target), with `SIDE_A_START_ROW=34`/`SIDE_B_START_ROW=15`. **A full re-derivation of this decomposition against the 50-grid is deferred to LC-8** (the mass-battle engine port); until then treat config.py as leading canon for all battlefield-geometry values, and the numbers below as the superseded 41-grid design sketch.
 
 **Per-unit grid:** 41 cols × 21 rows. Within this grid, a formation occupies up to a 19 cols × 11 rows formation area, centered. Surrounding the formation area:
 - Front buffer (toward enemy): 5 rows
@@ -244,7 +248,7 @@ Sling: effective Power −2D; ammo modifier per unit table above.
 
 ### A.5 COMMAND RATING
 
-**Command = ⌈(Charisma + Cognition) ÷ 2⌉** *[confirmed]*
+**Command = clamp(round((2 × Charisma + Cognition) ÷ 3), 1, 7)** *(ED-899: Charisma primary, Cognition secondary — engine CMD_CHA_WEIGHT=2 / CMD_COG_WEIGHT=1, leading canon; supersedes the equal-weight ⌈(Cha+Cog) ÷ 2⌉ form)*
 
 Command governs:
 1. Sub-unit limit (max simultaneous commanded = Command; TTRPG hard cap: 3)
@@ -306,6 +310,8 @@ execution rolls. A 2-wound general has tactic success probability halved.
 | Feigned Retreat | — | — | See Tactics |
 | Reserve | Cannot engage | Cannot engage | Commits at Phase 3 start of NEXT turn *[P3-02]* |
 
+> **ED-909 (formation taxonomy — Jordan-adjudicated 2026-06-09):** The *geometric* formation set is ratified as — **Subunit shapes:** Line, Arrowhead/Wedge, GappedLine; **Unit-level manoeuvres:** Envelopment (Cannae), Refused Flank (Leuctra/Leuthen). Horseshoe and RefusedFlank were removed from the Subunit shape set (engine re-architecture = LC-8). The mapping between this A.6 **dice-modifier** formation set (Shield Wall, Wedge, Skirmish, Column, Feigned Retreat, Reserve) and that geometric set is an orthogonal-axes question **PARKED as an ED-909 follow-up** — the dice-modifier table above is unchanged pending that decision. The live engine’s `CELL_PATTERN_FN`/`MIN_DISCIPLINE` still list Horseshoe/RefusedFlank; their removal is tracked under LC-8, not here.
+
 > **Clarification:** "Roll a number of d10s equal to the opposing general's Command score, against Ob 2, to recognise the Feigned Retreat as a feint rather than a genuine withdrawal. Success: the pursuing side is not deceived; the Feigned Retreat has no effect this turn. Failure (or no roll if the opposing general is incapacitated/captured): pursuing side pursues normally and suffers the Discipline check."
 
 > **Feigned Retreat Discipline check Ob (PP-256):** The pursuing-side Discipline check is **Ob 1**. Discipline-4 unit: ~87% success. Discipline-1 unit: ~40% success.
@@ -326,7 +332,7 @@ cannot advance. No formation is universally dominant. *[P2-01]*
 **Units beyond Command limit** fight at Line formation, Discipline = 1 floor,
 no tactics available. *[P3-03]*
 
-**Minimum unit combat pool (PP-273):** After all penalties (Discipline modifier, Command limit effects), the effective combat pool has a minimum of **1 die**. A unit at Discipline 1 with −2D penalty and pool 2 fights at 1 die, not 0. The only condition that removes all attacking capability is Discipline 0 (Formation Broken — unit cannot attack). When the general dies and Command = 0, all units are beyond the Command limit and fight at 1 die minimum until Formation Broken or routed.
+**Minimum unit combat pool (PP-273):** After all penalties (Discipline modifier, Command limit effects), the effective combat pool has a minimum of **1 die**. A unit at Discipline 1 with −2D penalty and pool 2 fights at 1 die, not 0. The only condition that removes all attacking capability is Discipline 0 (Formation Broken — unit cannot attack). When the general is incapacitated (Stage 2, ED-898) and Command = 0, all units are beyond the Command limit and fight at 1 die minimum until Formation Broken or routed.
 
 ---
 
@@ -411,7 +417,7 @@ Summary:
 **Phase 5 — Engagement** (max 3 simultaneous, TTRPG) *[P1-01]*
 
 Per engagement:
-1. Effective Pool = min(Size, Command) + Command − Discipline penalty (PP-233; Size as of Phase 3 end)
+1. Effective Pool = min(Size, Command) + Command − Discipline penalty (PP-233; Size as of Phase 3 end) *(ED-899: COMMAND_SIGMA_ENABLED=0 model; engine default pool base = 2 × Command with Size via Lanchester frontage — see the ED-899 pool banner above.)*
 2. Apply Formation modifier
 3. Split into Offence / Defence (both sides simultaneously)
 4. Roll. Net hits = Offence succs − Defence succs
