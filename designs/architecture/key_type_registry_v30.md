@@ -126,6 +126,56 @@ emitting_systems: [scene_slate, social_contest]
 consuming_systems: [npc_behavior, conviction_track, faction_layer, articulation]
 ```
 
+### scene.thread_operation
+
+```yaml
+description: Thread operation performed (weave / cut / reinforce); per-scene threadwork act.
+required_payload_fields:
+  - operation                 # weave | cut | reinforce | <threadwork op>
+  - operator_id               # actor_id
+optional_payload_fields:
+  - target_thread             # thread_id
+  - operation_scale           # personal | settlement | territory
+default_scale_signature: [personal]
+default_permanence: persistent
+default_time_horizon: near
+emitting_systems: [threadwork]
+consuming_systems: [npc_behavior, articulation]
+```
+
+### scene.draft_da
+
+```yaml
+description: Domain Action drafted / submitted (pre-resolution); resolution later emits da_outcome.*.
+required_payload_fields:
+  - action_type               # intended da subtype
+  - actor_id                  # submitting actor
+optional_payload_fields:
+  - target_id                 # intended target faction / territory
+default_scale_signature: [personal]
+default_permanence: transient
+default_time_horizon: immediate
+emitting_systems: [domain_actions]
+consuming_systems: [npc_behavior, articulation]
+```
+
+### scene.displacement
+
+```yaml
+description: Displacement / neglect perceived (Procedure displacement_neglect_observed) — an NPC registers being displaced or neglected in a relation.
+required_payload_fields:
+  - observer_id               # actor who perceives displacement
+  - displaced_relation        # relation / edge affected
+optional_payload_fields:
+  - displaced_by              # actor_id who displaced
+  - neglect_context           # short string
+default_scale_signature: [personal]
+default_permanence: transient
+default_time_horizon: immediate
+emitting_systems: [npc_behavior]
+consuming_systems: [npc_behavior, articulation]
+```
+
 ---
 
 ## §3 Family: da_outcome
@@ -387,6 +437,24 @@ notes:
   - mandatory skips (slate_priority=0) should be rare and indicate a missing container or depth-exceeded path; surface in audit.
 ```
 
+### mechanical.project_advanced
+
+```yaml
+description: NPC Project advanced one step (Procedure C). Doc-12 §4.1.
+required_payload_fields:
+  - project_id
+  - progress_before           # int
+  - progress_after            # int
+  - project_domain
+optional_payload_fields:
+  - mood_modifier
+default_scale_signature: [personal]
+default_permanence: persistent
+default_time_horizon: near
+emitting_systems: [npc_behavior]
+consuming_systems: [npc_behavior, articulation]
+```
+
 ---
 
 ## §5 Family: state_transition
@@ -473,6 +541,41 @@ emitting_systems: [faction_politics]
 consuming_systems: [faction_layer, npc_behavior, articulation]
 notes:
   - Triggers immediate cascade_resolution event with triggered_by=succession.
+```
+
+### state.project_completed
+
+```yaml
+description: NPC Project completed (progress >= 10; Procedure C). Doc-12 §4.3.
+required_payload_fields:
+  - project_id
+  - project_domain
+  - completion_effect
+  - supporters                # [actor_ids]
+  - obstructors               # [actor_ids]
+  - goal_short
+optional_payload_fields: []
+default_scale_signature: [personal]
+default_permanence: persistent
+default_time_horizon: near
+emitting_systems: [npc_behavior]
+consuming_systems: [npc_behavior, articulation]
+```
+
+### state.project_failed
+
+```yaml
+description: NPC Project failed via stall (seasons_stalled >= 8; Procedure C). Doc-12 §4.2.
+required_payload_fields:
+  - project_id
+  - failure_mode              # 'stalled'
+  - seasons_stalled           # int
+optional_payload_fields: []
+default_scale_signature: [personal]
+default_permanence: persistent
+default_time_horizon: near
+emitting_systems: [npc_behavior]
+consuming_systems: [npc_behavior, articulation]
 ```
 
 ---
@@ -613,6 +716,24 @@ default_permanence: indelible
 default_time_horizon: far
 emitting_systems: [scene_slate, faction_politics]
 consuming_systems: [faction_layer, npc_behavior, articulation]
+```
+
+### scene.combat_resolved
+
+```yaml
+description: Personal / skirmish combat concluded (F3 — the missing combat scene_outcome subtype; mirrors scene.contest_resolved on the combat path).
+required_payload_fields:
+  - scene_id
+  - outcome                   # attacker_win | defender_win | draw | rout | withdrawal
+  - participants              # [actor_ids]
+optional_payload_fields:
+  - casualties                # [actor_ids]
+  - wounds_inflicted          # {actor_id: int}
+default_scale_signature: [personal]
+default_permanence: persistent
+default_time_horizon: near
+emitting_systems: [personal_combat]
+consuming_systems: [npc_behavior, faction_layer, articulation]
 ```
 
 ---
@@ -833,16 +954,16 @@ articulation_significance: stakes_weight 1-2 per affect magnitude
 
 | Family | Subtypes | Notes |
 |---|---|---|
-| scene_event | 7 | Adds Class B scene.interaction, scene.gossip per PP-687 Phase B Stage 1 |
+| scene_event | 10 | Adds Class B scene.interaction, scene.gossip per PP-687 Phase B Stage 1 |
 | da_outcome | 5 |  |
-| mechanical_event | 7 | Adds Class B mechanical.scene_entered/exited/skipped per Phase 5a session 3.5 telemetry substrate |
-| state_transition | 6 | Adds Class B state.opinion_revised, state.concern_resolved per PP-687 Phase B Stage 1 |
+| mechanical_event | 8 | Adds Class B mechanical.scene_entered/exited/skipped per Phase 5a session 3.5 telemetry substrate |
+| state_transition | 8 | Adds Class B state.opinion_revised, state.concern_resolved per PP-687 Phase B Stage 1 |
 | environmental | 4 |  |
-| scene_outcome | 3 |  |
+| scene_outcome | 4 |  |
 | system_meta | 5 (incl. PP-688 Class B additions: meta.knot_ruptured, state.belief_revised, plus meta.legacy_event) |  |
-| **Total** | **37** |  |
+| **Total** | **44** |  |
 
-Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 (+4 types) and Phase 5a session 3.5 telemetry substrate (+3 types) expand the registry by 7 types (11 of total are Class B post-Stage-1+telemetry). Class A type count remains within the 25-30 bound.
+Original integration-plan target was 25-30 per §3.2 commit 1 D6; Class B extensions in PP-687 Phase B Stage 1 (+4 types) and Phase 5a session 3.5 telemetry substrate (+3 types) expand the registry by 7 types (11 of total are Class B post-Stage-1+telemetry). Class A type count remains within the 25-30 bound. ED-935 (J-2 register-all) adds 7 further types — scene.thread_operation, scene.draft_da, scene.displacement, mechanical.project_advanced, state.project_completed, state.project_failed, scene.combat_resolved — Total -> 44. (§9 family counts are logical groupings; some Class-B types are physically filed under §8 system_meta. The pre-existing declared-vs-parsed header drift, master item 11 / A9, is out of J-2 scope.)
 
 ---
 
