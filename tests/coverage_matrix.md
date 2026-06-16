@@ -165,3 +165,20 @@ Archived entries in tests/coverage_matrix_archive.md
   historical gauge tests/sim/gauge_mb.py (precedents_warfare.md bands) is now STALE and needs
   RE-CALIBRATION to the smooth engine (in-band dropped flat 3/6 -> smooth 1/6 on the 6-test subset).
   FLAGGED as a separate Jordan-canon follow-up.
+
+## 2026-06-15 — Mass-battle gauge recalibration (ED-1014) [resolves the ED-1013 gauge-staleness flag]
+- tests/sim/gauge_mb.py recalibrated bottom-up from historical precedent + peer-reviewed academic military
+  analysis (grounding doc: references/historical/mass_battle_gauge_grounding.md). Bands set by HISTORY, the
+  engine validated against them -- a fail FLAGS engine divergence, it does not lower the band.
+- METRIC: raw-A% -> DECISIVE SPLIT decA=A/(A+B) (raw-A% failed symmetric mirrors purely on draw rate); the
+  draw rate is validated separately (draw_exp). Near-parity high-draw is analytically expected (Hillestad 1995
+  NRL 42(2); Taylor 1979/1983; Lanchester tie Armstrong&Sodergren 2015).
+- VALIDATION (smooth engine, multi, n=120): 9/20 VALIDATED (mirrors; envelopment foot+mounted C4 93.8%, C7
+  86.7%; command-decisive; maniples-absorb-wedge; misconception-corrected C1 45.7%). 6 DIVERGE-soft (subtle
+  formation edges washed by the ED-1013 cohesion pool -- defensible per Biddle/Burkholder, below the v9 A.6
+  modest edge). 3 DIVERGE-hard ENGINE-DEFECT FLAGS left FAILING: C2/C6 braced foot never beats cavalry (brace
+  under-repels); C5 morale-shock inert (decA identical to C1). R1 ranged too-drawish open-field; R3 ranged
+  mirror unresolvable; single-mode all-draws (18-tick cap).
+- C1 REBASELINE 52-80 -> 35-55: the old band encoded the cavalry-beats-unprepared-infantry misconception
+  (Burkholder 2007). Engine-defect flags (frontal cav shock/brace/morale flat) are future-work, not bands.
+- Jordan directive 2026-06-15 (bottom-up recalibration, repeated); Jordan-vetoable.

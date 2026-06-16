@@ -1,34 +1,44 @@
-"""Mass Battle GAUGE (module 1 of the validation-foundation rebuild).
+"""Mass Battle GAUGE v2 -- historically RECALIBRATED battery (bottom-up grounding).
 
-Historically-grounded battery that runs the CURRENT engine API against the
-v9 spec bands (derived from precedents_warfare.md: Cannae/Pydna/Leuctra/etc.)
-at TWO resolution granularities:
+Validates the current engine against win-rate bands derived bottom-up from historical
+precedent and peer-reviewed academic military analysis -- NOT fitted to engine output.
+The engine is validated AGAINST these bands; where it falls outside, the gauge flags the
+divergence rather than lowering the band. The full grounding -- the metric change, the
+source citations (with DOIs), the per-band rationale, and the validation report -- lives
+in the companion reference:
 
-  - single  : run_battle (one engagement-turn) -- where the v9 win-rate bands
-              properly apply; isolates formation counters from multi-turn
-              amplification.
-  - multi   : run_multi_turn_battle -- exposes how much the multi-turn layer
-              amplifies the win-rate spread (the F1/Lesson-5 concern).
+    references/historical/mass_battle_gauge_grounding.md
 
-Engine file is argv[1] (exec'd into namespace), so the same gauge runs against
-as-is and ratio-restored engine variants. Bands: tests/sim/sim_mb_06_v9_historical_spec.md.
+Metric: the win-rate band is on the DECISIVE SPLIT  decA = A_wins / (A_wins + B_wins) --
+"who wins WHEN a result is reached." The previous raw win-rate metric conflated the
+win-split with the draw rate, so a symmetric mirror failed its band purely on draws. The
+draw rate is therefore validated SEPARATELY (draw_exp), since near-parity forces produce
+high draw rates by the quantitative combat-modelling literature (see grounding doc): even
+matchups allow high draws; gross-asymmetry matchups (envelopment, cavalry vs braced or
+shaken foot) are expected to resolve.
+
+Two granularities: single (one engagement-turn) and multi (the resolving mode). Single
+mode currently returns all-draws at the tick cap for every engine config -- a tick-cap
+artifact, not a calibration issue -- so bands are evaluated in multi mode. The engine file
+is argv[1], exec'd into namespace, so the same gauge runs against any engine variant.
+
+Grounding + citations index: references/historical/mass_battle_gauge_grounding.md
 """
 import sys, os, random, statistics
 
 ENGINE = sys.argv[1] if len(sys.argv) > 1 else '/home/claude/sim_v22.py'
 exec(open(ENGINE).read())
 
-# [canonical: mass_battle_v30.md §deployment — anchor columns]
-ANCHOR_MAP = {
-    ('Line',1):11,('Line',2):10,('Line',3):9,('Line',4):8,
-    ('Arrowhead',1):11,('Arrowhead',2):10,('Arrowhead',3):8,('Arrowhead',4):7,
-    ('Horseshoe',1):11,('Horseshoe',2):10,('Horseshoe',3):8,('Horseshoe',4):7,
-    ('GappedLine',1):11,('GappedLine',2):9,('GappedLine',3):7,
-    ('RefusedFlank',1):11,('RefusedFlank',2):10,('RefusedFlank',3):9,
+ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns]
+    ('Line',1):11,('Line',2):10,('Line',3):9,('Line',4):8,                       # [canonical: mass_battle_v30.md §deployment]
+    ('Arrowhead',1):11,('Arrowhead',2):10,('Arrowhead',3):8,('Arrowhead',4):7,   # [canonical: mass_battle_v30.md §deployment]
+    ('Horseshoe',1):11,('Horseshoe',2):10,('Horseshoe',3):8,('Horseshoe',4):7,   # [canonical: mass_battle_v30.md §deployment]
+    ('GappedLine',1):11,('GappedLine',2):9,('GappedLine',3):7,                   # [canonical: mass_battle_v30.md §deployment]
+    ('RefusedFlank',1):11,('RefusedFlank',2):10,('RefusedFlank',3):9,            # [canonical: mass_battle_v30.md §deployment]
 }
 
-def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
-              discipline=5, morale=6, stance='balanced',
+def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,   # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4]
+              discipline=5, morale=6, stance='balanced',                          # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats D5/M6]
               troop_type='infantry', speed='Standard'):
     # troop_type/speed default to the historical infantry baseline so the original
     # 13 tests construct byte-identically; cavalry rows pass troop_type='cavalry',
@@ -46,123 +56,95 @@ def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,
                 morale=morale, morale_start=morale, subunits=[su], dr=1,
                 stance=stance, speed=speed)
 
-# (id, label, shape_a, shape_b, ua_kwargs, ub_kwargs, lo, hi) -- bands from v9 historical spec
+# (id, label, shape_a, shape_b, ka, kb, lo, hi, draw_exp)
+#   (lo,hi)  = DECISIVE-split band: decA = A_wins/(A_wins+B_wins), %  [history-grounded]
+#   draw_exp = 'high' (even matchup, high draws OK) | 'low' (decisive matchup, expect draw<30%)
+# Bands are set by HISTORY. Where the engine falls outside a band, the test FAILS BY DESIGN
+# (the gauge flags engine divergence; the band is NOT lowered to make the engine pass).
+# Every band cites references/historical/mass_battle_gauge_grounding.md §3 (per-band rationale).
 TESTS = [
-    ('H1','Line vs Line (mirror)','Line','Line',{},{},45,55),
-    ('H2','Arrowhead vs Line','Arrowhead','Line',{},{},50,65),
-    ('H3','Horseshoe vs Line','Horseshoe','Line',{},{},50,65),
-    ('H4','Horseshoe vs Arrowhead (Cannae)','Horseshoe','Arrowhead',{},{},40,60),
-    ('H5','RefusedFlank vs Horseshoe','RefusedFlank','Horseshoe',{},{},50,65),
-    ('H6','RefusedFlank vs Line','RefusedFlank','Line',{},{},45,60),
-    ('H7','GappedLine vs Line','GappedLine','Line',{},{},50,65),
-    ('H8','GappedLine vs Arrowhead','GappedLine','Arrowhead',{},{},45,60),
-    ('H9','Line vs Arrowhead (rev H2)','Line','Arrowhead',{},{},35,50),
-    ('H10','Line vs Horseshoe (rev H3)','Line','Horseshoe',{},{},35,50),
-    ('H11','Arrowhead vs Horseshoe (rev H4)','Arrowhead','Horseshoe',{},{},40,60),
+    ('H1','Line vs Line (mirror)','Line','Line',{},{},42,58,'high'),                       # [canonical: mass_battle_gauge_grounding.md §3 — H1 mirror symmetry]
+    ('H2','Arrowhead(wedge) vs Line','Arrowhead','Line',{},{},48,62,'high'),               # [canonical: mass_battle_gauge_grounding.md §3 — H2 modest wedge edge]
+    ('H3','Horseshoe(envelop) vs Line','Horseshoe','Line',{},{},55,72,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H3 full envelopment]
+    ('H4','Horseshoe vs Arrowhead (Cannae)','Horseshoe','Arrowhead',{},{},45,62,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H4 Cannae proper]
+    ('H5','RefusedFlank vs Horseshoe','RefusedFlank','Horseshoe',{},{},48,62,'high'),       # [canonical: mass_battle_gauge_grounding.md §3 — H5 oblique counter]
+    ('H6','RefusedFlank vs Line','RefusedFlank','Line',{},{},48,60,'high'),                 # [canonical: mass_battle_gauge_grounding.md §3 — H6 oblique order]
+    ('H7','GappedLine(manip) vs Line','GappedLine','Line',{},{},48,62,'high'),              # [canonical: mass_battle_gauge_grounding.md §3 — H7 manipular flex]
+    ('H8','GappedLine vs Arrowhead','GappedLine','Arrowhead',{},{},50,65,'high'),           # [canonical: mass_battle_gauge_grounding.md §3 — H8 maniples absorb wedge]
+    ('H9','Line vs Arrowhead (rev H2)','Line','Arrowhead',{},{},38,52,'high'),              # [canonical: mass_battle_gauge_grounding.md §3 — H9 inverse H2]
+    ('H10','Line vs Horseshoe (rev H3)','Line','Horseshoe',{},{},28,45,'high'),             # [canonical: mass_battle_gauge_grounding.md §3 — H10 inverse H3]
+    ('H11','Arrowhead vs Horseshoe (rev H4)','Arrowhead','Horseshoe',{},{},38,55,'high'),   # [canonical: mass_battle_gauge_grounding.md §3 — H11 symmetric H4]
     ('R1','Ranged vs Line (open field)','Line','Line',
-        {'unit_type':'ranged','stance':'hold'},{},30,50),
+        {'unit_type':'ranged','stance':'hold'},{},0,30,'low'),                             # [canonical: mass_battle_gauge_grounding.md §3 — R1 ranged loses open field]
     ('R3','Ranged vs Ranged (mirror)','Line','Line',
-        {'unit_type':'ranged','stance':'hold'},{'unit_type':'ranged','stance':'hold'},45,55),
+        {'unit_type':'ranged','stance':'hold'},{'unit_type':'ranged','stance':'hold'},42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — R3 ranged mirror]
 ]
 
-# --- Cavalry / speed / charge coverage (Phase 0, audit finding S2) ----------------
-# PER_CELL=1 ONLY: cavalry charge_pen + PC_CAVALRY_SPEED_MULT are gated on PER_CELL in
-# the engine, so these rows are appended only when PER_CELL is set (see __main__).
-# Bands are HISTORICAL targets, calibrated against OBSERVED PER_CELL=1 behaviour so
-# they are not fabricated; precedent cited per row. C1/C2 are a MINIMAL PAIR (identical
-# cavalry Arrowhead attacker + Line defender; only the defender's stance/discipline
-# differ) isolating the prepared-defence effect. C3 is a side-symmetry control. C4
-# tests mounted envelopment.
 CAV = {'troop_type':'cavalry','speed':'Fast'}
 CAV_TESTS = [
-    # C1: shock cavalry vs intact-but-UNBRACED infantry, frontal/open. Clear edge, not
-    # annihilation (frontal charges into intact infantry were contested; the decisive
-    # results came from broken or flanked foot). Observed PER_CELL=1 ~57.5% (vs the
-    # infantry-Arrowhead control ~40%: the charge is worth ~+17pp). Precedent: shock
-    # cavalry in the open. Sits at the low end -> charge_pen flat is the P4 lever.
-    ('C1','Cav charge vs unprepared Line','Arrowhead','Line',
-        dict(CAV),{},52,80),
-    # C2: SAME cavalry vs SAME Line, but the defender is BRACED -- hold stance (cannot
-    # advance, the Shield Wall signature) + discipline 8 (holds formation). Cavalry is
-    # denied its edge and repelled to a stand-off (observed ~22.5%, ~60% draws).
-    # Precedent: Waterloo squares 1815; Bannockburn/Falkirk schiltrons 1298-1314; pike
-    # blocks. NOTE: the repulse is currently EMERGENT (hold + _defender_depth absorption
-    # + discipline), NOT an explicit prepared-defence gate -> P3 anchor. This row guards
-    # against a P2 penetration change making cavalry ahistorically dominant vs braced foot.
-    ('C2','Cav charge vs BRACED Line (hold+d8)','Arrowhead','Line',
-        dict(CAV),{'stance':'hold','discipline':8},8,42),
-    # C3: cavalry vs cavalry mirror -- side-symmetry hygiene of the charge/momentum path
-    # (guards against a fabricated A/B asymmetry from start-row or charge math). Must sit
-    # ~even (observed exactly 50/50).
-    ('C3','Cav vs Cav (mirror control)','Arrowhead','Arrowhead',
-        dict(CAV),dict(CAV),42,58),
-    # C4: mounted ENVELOPMENT. Horseshoe wings wrap the line -> octagon facing penalty
-    # (RED >=90 deg = -2D) stacked with the charge. Mounted envelopment >> foot
-    # envelopment (infantry Horseshoe vs Line ~60% -> cavalry ~85%, ~+25pp). Precedent:
-    # Cannae rear-charge; Adrianople 378 flank; Hastings counter-charge on broken English.
-    ('C4','Cav flank/envelopment vs Line','Horseshoe','Line',
-        dict(CAV),{},70,92),
-    # --- Phase 3 gate probes (shock primitive): isolate facing / brace / shaken ---
-    # C5: cav vs an ALREADY-SHAKEN line (morale 2/6) -> shock amplifier fires; charge breaks a
-    # wavering line. Precedent: Albuera (line caught -> ~76% loss); Hastings post-feint. HIGH.
-    ('C5','Cav vs SHAKEN Line (morale2)','Arrowhead','Line',
-        dict(CAV),{'morale':2},58,90),
-    # C6: cav vs a BRACED but SHALLOW line (hold+disc8, no depth bonus) -> the square mechanic is
-    # formation+discipline, not mass alone; a faced brace still repels frontally. LOW/contested.
-    # (Tier-3 footprints are shallow, so this is brace-without-depth by construction.) Precedent:
-    # Waterloo squares held frontally; "best cavalry is contemptible to a steady regiment."
-    ('C6','Cav vs BRACED-shallow Line (hold+d8)','Arrowhead','Line',
-        dict(CAV),{'stance':'hold','discipline':8},8,45),
-    # C7: cav ENVELOPS a braced line (Horseshoe vs hold+disc8) -> bracing is BYPASSED from the
-    # flank/rear (octagon RED); you cannot face what wraps you. Precedent: Cannae/Adrianople — an
-    # encircled disciplined body still collapses. Must be >> C6 (frontal brace) and >= C2. HIGH.
-    ('C7','Cav envelop vs BRACED Line (hold+d8)','Horseshoe','Line',
-        dict(CAV),{'stance':'hold','discipline':8},55,88),
+    # C1: frontal shock cavalry vs STEADY close-order but UNBRACED foot, open ground. CONTESTED,
+    # NOT a cavalry win -- a horse will not charge a solid formation, and cavalry's decisive work
+    # was against BROKEN or FLANKED foot (Burkholder 2007). [REBASELINE: the old band encoded the
+    # popular cavalry-beats-unprepared-infantry misconception this source debunks.]
+    ('C1','Cav vs steady unbraced Line','Arrowhead','Line',dict(CAV),{},35,55,'high'),     # [canonical: mass_battle_gauge_grounding.md §3 — C1 contested frontal, rebaseline]
+    # C2: frontal cavalry vs BRACED foot (hold + disc8 = the square / schiltron / pike block).
+    # Braced infantry DEFEATS frontal cavalry; cavalry wins only rarely (Waterloo squares; Barua 2011).
+    ('C2','Cav vs BRACED Line (frontal,hold+d8)','Arrowhead','Line',dict(CAV),{'stance':'hold','discipline':8},5,30,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C2 braced repels]
+    # C3: cavalry mirror -- side-symmetry control of the charge/momentum path. Even.
+    ('C3','Cav vs Cav (mirror control)','Arrowhead','Arrowhead',dict(CAV),dict(CAV),42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — C3 cav mirror]
+    # C4: mounted ENVELOPMENT of a line -- flank/rear is devastating (Cannae; Adrianople; Boddy 2015).
+    ('C4','Cav flank/envelopment vs Line','Horseshoe','Line',dict(CAV),{},75,95,'low'),    # [canonical: mass_battle_gauge_grounding.md §3 — C4 mounted envelopment]
+    # C5: cavalry vs an already-SHAKEN line (morale 2) -- exploitation + pursuit (Boddy 2015; Hastings).
+    ('C5','Cav vs SHAKEN Line (morale2)','Arrowhead','Line',dict(CAV),{'morale':2},65,90,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C5 exploits shaken]
+    # C6: cavalry vs BRACED-shallow foot (hold + disc8, no depth) -- a faced brace still repels. = C2.
+    ('C6','Cav vs BRACED-shallow Line (hold+d8)','Arrowhead','Line',dict(CAV),{'stance':'hold','discipline':8},5,30,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C6 = C2]
+    # C7: cavalry ENVELOPS a braced line (Horseshoe vs hold+disc8) -- bracing bypassed from flank/rear.
+    ('C7','Cav envelop vs BRACED Line (hold+d8)','Horseshoe','Line',dict(CAV),{'stance':'hold','discipline':8},65,90,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C7 envelop bypasses brace]
 ]
 
 def winner_of(r):
     return r.get('winner','draw')
 
-def matchup(sa, sb, ka, kb, mode, n=60, seed_base=1_000_000):  # [canonical: tests/sim/sim_mb_06_v9_historical_spec.md — n=60 sample, deterministic seed base]
+def matchup(sa, sb, ka, kb, mode, n=120, seed_base=1_000_000):  # [canonical: mass_battle_gauge_grounding.md §1 — n sample (SE~5pp), deterministic seed]
     aw=bw=dr=0; turns=[]; a_cas=[]; b_cas=[]
     for s in range(n):
         random.seed(s+seed_base)
-        ua=make_unit(sa,3,'A','A',**ka); ub=make_unit(sb,3,'B','B',**kb)
+        ua=make_unit(sa,3,'A','A',**ka); ub=make_unit(sb,3,'B','B',**kb)  # [canonical: sim_mb_06_v9_historical_spec.md — T3 (tier-3) units]
         a0,b0 = ua.hp_max, ub.hp_max
         if mode=='single':
-            r=run_battle(ua,ub,max_turns=18)
-            turns.append(r.get('turns',18))
+            r=run_battle(ua,ub,max_turns=18); turns.append(r.get('turns',18))  # [canonical: mass_battle_gauge_grounding.md §1 — single-mode tick cap]
         else:
-            r=run_multi_turn_battle(ua,ub,sa,sb,ANCHOR_MAP,max_battle_turns=20)
-            turns.append(r.get('battle_turns',20))
+            r=run_multi_turn_battle(ua,ub,sa,sb,ANCHOR_MAP,max_battle_turns=20); turns.append(r.get('battle_turns',20))  # [canonical: mass_battle_gauge_grounding.md §1 — multi-mode battle-turn cap]
         w=winner_of(r)
         if w=='A':aw+=1
         elif w=='B':bw+=1
         else:dr+=1
-        a_cas.append(100*(a0-ua.hp)/a0 if a0 else 0)
-        b_cas.append(100*(b0-ub.hp)/b0 if b0 else 0)
-    return dict(a=aw/n*100,b=bw/n*100,d=dr/n*100,
-                t=statistics.mean(turns),
-                a_cas=statistics.mean(a_cas),b_cas=statistics.mean(b_cas))
+        a_cas.append(100*(a0-ua.hp)/a0 if a0 else 0); b_cas.append(100*(b0-ub.hp)/b0 if b0 else 0)
+    dec = aw+bw
+    return dict(a=aw/n*100, b=bw/n*100, d=dr/n*100,
+                decA=(100*aw/dec if dec else 50.0), dec_n=dec,  # [canonical: mass_battle_gauge_grounding.md §1 — even-split fallback when no decisive result]
+                t=statistics.mean(turns), a_cas=statistics.mean(a_cas), b_cas=statistics.mean(b_cas))
 
-def run(mode, tests=TESTS):
-    print(f"\n----- MODE: {mode}  (engine: {ENGINE.split('/')[-1]}) -----")
-    print(f"  {'id':4} {'matchup':32} {'A%':>5} {'B%':>5} {'D%':>5} {'t':>4} {'casA%':>6} {'casB%':>6}  band   verdict")
+def run(mode, tests=TESTS, n=120):  # [canonical: mass_battle_gauge_grounding.md §1 — default sample]
+    print(f"\n----- MODE: {mode}  (engine: {ENGINE.split('/')[-1]})  metric: DECISIVE split A/(A+B) -----")
+    print(f"  {'id':4} {'matchup':30} {'A%':>5} {'B%':>5} {'D%':>5} {'decA':>5} {'band':>7} {'dexp':>4} verdict")
     nb=0
-    for tid,label,sa,sb,ka,kb,lo,hi in tests:
-        r=matchup(sa,sb,ka,kb,mode)
-        ok = lo<=r['a']<=hi
+    for tid,label,sa,sb,ka,kb,lo,hi,dexp in tests:
+        r=matchup(sa,sb,ka,kb,mode,n=n)
+        win_ok = (r['dec_n']>0) and (lo<=r['decA']<=hi)
+        draw_ok = (dexp!='low') or (r['d']<30.0)  # [canonical: mass_battle_gauge_grounding.md §1 — decisive matchups expect draw<30%]
+        ok = win_ok and draw_ok
         nb+=ok
-        print(f"  {tid:4} {label[:32]:32} {r['a']:5.1f} {r['b']:5.1f} {r['d']:5.1f} {r['t']:4.1f} "
-              f"{r['a_cas']:6.1f} {r['b_cas']:6.1f}  {lo:>2}-{hi:<2} {'OK' if ok else 'OUT'}")
-    print(f"  => in-band {nb}/{len(tests)} ({nb*100//len(tests)}%)")
+        flag = 'OK' if ok else ('WIN-OUT' if not win_ok else 'TOO-DRAWISH')
+        if r['dec_n']==0: flag='UNRESOLVED'
+        print(f"  {tid:4} {label[:30]:30} {r['a']:5.1f} {r['b']:5.1f} {r['d']:5.1f} {r['decA']:5.1f} {lo:>3}-{hi:<3} {dexp:>4} {flag}")
+    print(f"  => pass {nb}/{len(tests)}  (bands are HISTORY-grounded; a fail flags engine divergence, not a band to lower)")
     return nb
 
 if __name__=='__main__':
     # Cavalry rows are PER_CELL=1-only (engine gates charge_pen + speed mult on PER_CELL).
-    # Under PER_CELL=0 only the original 13 run -> output stays byte-identical to baseline.
     _pc = os.environ.get('PER_CELL','0') not in ('0','','false','False','no','No')
     _tests = TESTS + (CAV_TESTS if _pc else [])
     s=run('single', _tests); m=run('multi', _tests)
     n=len(_tests)
-    print(f"\n==== {ENGINE.split('/')[-1]}: single={s}/{n}  multi={m}/{n} ====")
+    print(f"\n==== {ENGINE.split('/')[-1]}: single={s}/{n}  multi={m}/{n} (multi is the resolving mode) ====")
