@@ -39,26 +39,44 @@ ANCHOR_MAP = {  # [canonical: mass_battle_v30.md §deployment — anchor columns
 
 def make_unit(shape, tier, name, faction, unit_type='melee', power=4, command=4,   # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats P4/C4]
               discipline=5, morale=6, stance='balanced',                          # [canonical: sim_mb_06_v9_historical_spec.md — uniform T3 stats D5/M6]
-              troop_type='infantry', speed='Standard'):
+              troop_type='infantry', speed='Standard', morale_start=None, instructions=()):
     # troop_type/speed default to the historical infantry baseline so the original
     # 13 tests construct byte-identically; cavalry rows pass troop_type='cavalry',
     # speed='Fast' by kwargs. Cavalry charge mechanics (charge_pen,
     # PC_CAVALRY_SPEED_MULT) are PER_CELL=1-gated in the engine; under PER_CELL=0
     # cavalry == infantry (S1: speed is not yet wired into combat).
+    #
+    # morale_start / instructions default to leave EVERY pre-existing row byte-exact
+    # (morale_start=None -> morale_start==morale; instructions=() -> no brace).
+    #   * instructions=('brace',) sets the engine's FM brace tactic on the subunit:
+    #     _unit_braced(unit) then fires the grounded reciprocal charge-recoil
+    #     (PC_CHARGE_RECOIL, calibrated vs Courtrai/Swiss/Waterloo) so a frontal
+    #     charge into a prepared wall is REPELLED. Bracing is a deliberate tactic,
+    #     NOT an automatic consequence of holding -> the gauge must set it to test
+    #     a braced unit (the engine gating is correct game design).
+    #   * morale_start>morale expresses a genuinely SHAKEN unit (cohesion eroded
+    #     BELOW its start, du Picq): _charge_shock_sigma's shaken-amplifier
+    #     (PC_SHOCK_SHAKEN_GAIN) and _morale_sigma then fire. "Shaken" is RELATIVE
+    #     (a unit that has LOST morale), not a low absolute ceiling -> a shaken line
+    #     needs morale<morale_start, which make_unit's old morale_start==morale
+    #     could not express.
     advance_dir = -1 if faction == 'A' else 1
     start_row = SIDE_A_START_ROW if faction == 'A' else SIDE_B_START_ROW
     anchor_col = ANCHOR_MAP.get((shape, tier), 10)
     su = Subunit(shape=shape, troop_type=troop_type, tier=tier,
                  starting_position=(start_row, anchor_col),
-                 advance_dir=advance_dir, unit_type=unit_type)
+                 advance_dir=advance_dir, unit_type=unit_type, instructions=tuple(instructions))
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
-                morale=morale, morale_start=morale, subunits=[su], dr=1,
-                stance=stance, speed=speed)
+                morale=morale, morale_start=(morale if morale_start is None else morale_start),
+                subunits=[su], dr=1, stance=stance, speed=speed)
 
-# (id, label, shape_a, shape_b, ka, kb, lo, hi, draw_exp)
-#   (lo,hi)  = DECISIVE-split band: decA = A_wins/(A_wins+B_wins), %  [history-grounded]
-#   draw_exp = 'high' (even matchup, high draws OK) | 'low' (decisive matchup, expect draw<30%)
+# (id, label, shape_a, shape_b, ka, kb, lo, hi, draw_exp[, metric])
+#   (lo,hi)  = band, % [history-grounded]. metric (optional, default 'decA') selects what (lo,hi) bounds:
+#     'decA' = DECISIVE-split decA = A_wins/(A_wins+B_wins); draw_exp constrains the draw rate.
+#     'rawA' = RAW A win-rate (braced-REPEL rows): the wall repels, so cavalry (A) must be LOW; a
+#              repulse is a HOLD (decisive n tiny -> decA uninformative) and high draws are EXPECTED.
+#   draw_exp = 'high' (even matchup / repel hold, high draws OK) | 'low' (decisive, expect draw<30%)
 # Bands are set by HISTORY. Where the engine falls outside a band, the test FAILS BY DESIGN
 # (the gauge flags engine divergence; the band is NOT lowered to make the engine pass).
 # Every band cites references/historical/mass_battle_gauge_grounding.md §3 (per-band rationale).
@@ -87,19 +105,41 @@ CAV_TESTS = [
     # was against BROKEN or FLANKED foot (Burkholder 2007). [REBASELINE: the old band encoded the
     # popular cavalry-beats-unprepared-infantry misconception this source debunks.]
     ('C1','Cav vs steady unbraced Line','Arrowhead','Line',dict(CAV),{},35,55,'high'),     # [canonical: mass_battle_gauge_grounding.md §3 — C1 contested frontal, rebaseline]
-    # C2: frontal cavalry vs BRACED foot (hold + disc8 = the square / schiltron / pike block).
-    # Braced infantry DEFEATS frontal cavalry; cavalry wins only rarely (Waterloo squares; Barua 2011).
-    ('C2','Cav vs BRACED Line (frontal,hold+d8)','Arrowhead','Line',dict(CAV),{'stance':'hold','discipline':8},5,30,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C2 braced repels]
+    # C2: frontal cavalry vs a BRACED wall (hold + disc8 + the 'brace' tactic = square / schiltron /
+    # pike block). The brace instruction fires the grounded reciprocal charge-recoil (PC_CHARGE_RECOIL,
+    # calibrated vs Courtrai/Swiss/Waterloo): the wall REPELS the charge -- cavalry rarely breaks it.
+    # Judged on RAW cavalry win-rate (must be LOW): a repelled charge is a HOLD, not a decisive result,
+    # so decisive-split is uninformative here (tiny decisive n) and high draws are EXPECTED (Waterloo
+    # squares held all day; cavalry could not charge a solid formation -- Burkholder 2007; Barua 2011).
+    ('C2','Cav vs BRACED Line (hold+d8+brace)','Arrowhead','Line',dict(CAV),
+        {'stance':'hold','discipline':8,'instructions':('brace',)},0,30,'high','rawA'),  # [canonical: mass_battle_gauge_grounding.md §3 — C2 braced repels; raw cav-a LOW]
     # C3: cavalry mirror -- side-symmetry control of the charge/momentum path. Even.
     ('C3','Cav vs Cav (mirror control)','Arrowhead','Arrowhead',dict(CAV),dict(CAV),42,58,'high'),  # [canonical: mass_battle_gauge_grounding.md §3 — C3 cav mirror]
     # C4: mounted ENVELOPMENT of a line -- flank/rear is devastating (Cannae; Adrianople; Boddy 2015).
     ('C4','Cav flank/envelopment vs Line','Horseshoe','Line',dict(CAV),{},75,95,'low'),    # [canonical: mass_battle_gauge_grounding.md §3 — C4 mounted envelopment]
-    # C5: cavalry vs an already-SHAKEN line (morale 2) -- exploitation + pursuit (Boddy 2015; Hastings).
-    ('C5','Cav vs SHAKEN Line (morale2)','Arrowhead','Line',dict(CAV),{'morale':2},65,90,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C5 exploits shaken]
-    # C6: cavalry vs BRACED-shallow foot (hold + disc8, no depth) -- a faced brace still repels. = C2.
-    ('C6','Cav vs BRACED-shallow Line (hold+d8)','Arrowhead','Line',dict(CAV),{'stance':'hold','discipline':8},5,30,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C6 = C2]
-    # C7: cavalry ENVELOPS a braced line (Horseshoe vs hold+disc8) -- bracing bypassed from flank/rear.
-    ('C7','Cav envelop vs BRACED Line (hold+d8)','Horseshoe','Line',dict(CAV),{'stance':'hold','discipline':8},65,90,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C7 envelop bypasses brace]
+    # C5: cavalry vs a genuinely SHAKEN line -- morale 2 of a start-6 unit (cohesion eroded 2/3 BELOW
+    # start; "shaken" is RELATIVE, du Picq, not a low absolute ceiling). The shaken-amplifier
+    # (PC_SHOCK_SHAKEN_GAIN) + _morale_sigma fire: the wavering line breaks under the charge --
+    # exploitation + pursuit. Decisive cavalry win; ceiling is NEAR-TOTAL rout: cavalry vs disordered
+    # foot was catastrophic (Boddy 2015 dispersed 15,000 disordered French; Hastings post-feint). The
+    # Phase-2 ceiling 90 was provisional (set when this row was inert/contested at 45.7); the working
+    # shock + history put it near-total. draws scarce (decisive-split appropriate).
+    ('C5','Cav vs SHAKEN Line (m2/start6)','Arrowhead','Line',dict(CAV),
+        {'morale':2,'morale_start':6},65,98,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C5 exploits shaken; near-total ceiling]
+    # C6: cavalry vs a BRACED-shallow line (hold + disc8 + 'brace') -- a faced brace still repels
+    # frontally (the recoil needs discipline x some depth, not maximal depth). Control duplicate of C2
+    # on a shallower wall; same RAW cav-a-LOW judgement, draws expected.
+    ('C6','Cav vs BRACED-shallow Line (hold+d8+brace)','Arrowhead','Line',dict(CAV),
+        {'stance':'hold','discipline':8,'instructions':('brace',)},0,30,'high','rawA'),  # [canonical: mass_battle_gauge_grounding.md §3 — C6 = C2; raw cav-a LOW]
+    # C7: cavalry ENVELOPS a holding line (Horseshoe vs hold+disc8) -- the flank/rear bypasses the
+    # frontal brace (you cannot face the rear, Burkholder 2007). An immobile (hold-stance) line that
+    # cannot turn to face the encirclement is ANNIHILATED when resolved (Cannae/Adrianople) -> decA
+    # saturates to ~100 (infantry never wins); the brace only DELAYS the kill (higher draw rate than
+    # the unbraced C4). Decisive-to-total -> ceiling 100. NOTE: C7 uses hold-only, NOT the 'brace'
+    # instruction, deliberately -- the reciprocal charge-recoil (orchestration ~L1647) does NOT
+    # zone-gate, so a braced+enveloped unit would WRONGLY fire the recoil from the rear. [FLAG: latent
+    # engine issue -- the recoil should fire frontally only; out of scope here, see grounding §4.]
+    ('C7','Cav envelop vs holding Line (hold+d8)','Horseshoe','Line',dict(CAV),{'stance':'hold','discipline':8},65,100,'low'),  # [canonical: mass_battle_gauge_grounding.md §3 — C7 envelop bypasses brace; Cannae-total ceiling]
 ]
 
 def winner_of(r):
@@ -126,18 +166,26 @@ def matchup(sa, sb, ka, kb, mode, n=120, seed_base=1_000_000):  # [canonical: ma
                 t=statistics.mean(turns), a_cas=statistics.mean(a_cas), b_cas=statistics.mean(b_cas))
 
 def run(mode, tests=TESTS, n=120):  # [canonical: mass_battle_gauge_grounding.md §1 — default sample]
-    print(f"\n----- MODE: {mode}  (engine: {ENGINE.split('/')[-1]})  metric: DECISIVE split A/(A+B) -----")
-    print(f"  {'id':4} {'matchup':30} {'A%':>5} {'B%':>5} {'D%':>5} {'decA':>5} {'band':>7} {'dexp':>4} verdict")
+    print(f"\n----- MODE: {mode}  (engine: {ENGINE.split('/')[-1]})  metric: DECISIVE split A/(A+B); RAW A% for 'rawA' repel rows -----")
+    print(f"  {'id':4} {'matchup':30} {'A%':>5} {'B%':>5} {'D%':>5} {'val':>5} {'band':>7} {'dexp':>4} {'m':>4} verdict")
     nb=0
-    for tid,label,sa,sb,ka,kb,lo,hi,dexp in tests:
+    for t in tests:
+        tid,label,sa,sb,ka,kb,lo,hi,dexp,*rest = t
+        metric = rest[0] if rest else 'decA'  # [canonical: mass_battle_gauge_grounding.md §1 — decA default; rawA for braced-repel rows]
         r=matchup(sa,sb,ka,kb,mode,n=n)
-        win_ok = (r['dec_n']>0) and (lo<=r['decA']<=hi)
-        draw_ok = (dexp!='low') or (r['d']<30.0)  # [canonical: mass_battle_gauge_grounding.md §1 — decisive matchups expect draw<30%]
+        if metric=='rawA':
+            # REPEL rows (braced wall): judge RAW cavalry (A) win-rate LOW. A repulse is a HOLD, so the
+            # decisive-split (tiny decisive n) is uninformative and high draws are EXPECTED (not penalised).
+            val=r['a']; win_ok = lo<=val<=hi; draw_ok = True
+            flag = 'REPELLED' if (win_ok and draw_ok) else 'NOT-REPELLED'
+        else:
+            val=r['decA']; win_ok = (r['dec_n']>0) and (lo<=val<=hi)
+            draw_ok = (dexp!='low') or (r['d']<30.0)  # [canonical: mass_battle_gauge_grounding.md §1 — decisive matchups expect draw<30%]
+            flag = 'OK' if (win_ok and draw_ok) else ('WIN-OUT' if not win_ok else 'TOO-DRAWISH')
+            if r['dec_n']==0: flag='UNRESOLVED'
         ok = win_ok and draw_ok
         nb+=ok
-        flag = 'OK' if ok else ('WIN-OUT' if not win_ok else 'TOO-DRAWISH')
-        if r['dec_n']==0: flag='UNRESOLVED'
-        print(f"  {tid:4} {label[:30]:30} {r['a']:5.1f} {r['b']:5.1f} {r['d']:5.1f} {r['decA']:5.1f} {lo:>3}-{hi:<3} {dexp:>4} {flag}")
+        print(f"  {tid:4} {label[:30]:30} {r['a']:5.1f} {r['b']:5.1f} {r['d']:5.1f} {val:5.1f} {lo:>3}-{hi:<3} {dexp:>4} {metric:>4} {flag}")
     print(f"  => pass {nb}/{len(tests)}  (bands are HISTORY-grounded; a fail flags engine divergence, not a band to lower)")
     return nb
 

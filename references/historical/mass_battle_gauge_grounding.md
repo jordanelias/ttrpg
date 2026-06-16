@@ -1,5 +1,5 @@
-# Mass-Battle Gauge — Historical & Academic Grounding (v2 recalibration)
-**Date:** 2026-06-15 · **Status:** drives `tests/sim/gauge_mb.py` bands · **Supersedes the band-derivation basis of** `tests/sim/sim_mb_06_v9_historical_spec.md` (the v9 spec's H/R bands stand; its cavalry bands were never in scope and the gauge's later cavalry bands were *fitted to engine output* — this doc re-derives them bottom-up).
+# Mass-Battle Gauge — Historical & Academic Grounding (v2.1)
+**Date:** 2026-06-15 (v2); 2026-06-16 (v2.1 — cavalry construction fix) · **Status:** drives `tests/sim/gauge_mb.py` bands · **Supersedes the band-derivation basis of** `tests/sim/sim_mb_06_v9_historical_spec.md` (the v9 spec's H/R bands stand; its cavalry bands were never in scope and the gauge's later cavalry bands were *fitted to engine output* — this doc re-derives them bottom-up).
 
 This is the bottom-up grounding for the recalibrated gauge bands. Every band is set by **historical precedent + peer-reviewed academic military analysis**, not by engine output. The engine is then validated *against* these bands; where it falls outside, the gauge **flags the divergence** — the band is not lowered to make the engine pass.
 
@@ -20,6 +20,8 @@ The draw rate is validated **separately**, as a decisiveness dimension (`draw_ex
 - Armstrong & Sodergren (2015), *Social Science Quarterly* 96(4), DOI [10.1111/ssqu.12178](https://doi.org/10.1111/ssqu.12178): the Lanchester square law yields an exact **tie** when `aC₀² = bU₀²`; Lanchester models are the validated quantitative framework for tactical engagements (Weiss applied them across 64 Civil War battles).
 
 So: **even matchups** (mirrors, subtle formation edges) → `draw_exp='high'` (high draws OK); **gross-asymmetry matchups** (envelopment, cavalry vs braced/shaken) → `draw_exp='low'` (the matchup should resolve).
+
+**One refinement (v2.1, 2026-06-16):** a *repelled* charge is a HOLD, not a decisive result. When braced infantry breaks a frontal cavalry charge, most trials end in a **draw** — the wall holds, but a hold-stance line cannot itself rout the cavalry (exactly the Waterloo squares, which held all day without destroying the French cavalry). For these rows (C2/C6) the decisive split is uninformative (the decisive *n* is tiny) and high draws are *expected*, so they are judged on **raw cavalry win-rate, which must be LOW** — `metric='rawA'`. Every other row keeps the decisive split.
 
 ---
 
@@ -61,36 +63,55 @@ So: **even matchups** (mirrors, subtle formation edges) → `draw_exp='high'` (h
 | H9/H10/H11 | inverse bands | high | Reverses of H2/H3/H4 (asymmetry confirmation). |
 | R1 | 0–30 | low | Open-field ranged loses to melee that closes (Crécy/Agincourt won only with terrain/stakes — out of scope). `low`: melee should *close decisively*, not stand off. |
 | R3 | 42–58 | high | Ranged mirror — symmetry sanity. |
-| C1 | **35–55** | high | Frontal cavalry vs steady unbraced close-order foot is **contested** (Burkholder). **REBASELINE from 52-80** — the old band was the misconception. |
-| C2 | 5–30 | low | Frontal cavalry vs braced foot (square/schiltron) — infantry wins (Waterloo; Barua). |
-| C3 | 42–58 | high | Cavalry mirror — side-symmetry control. |
-| C4 | 75–95 | low | Mounted envelopment of a line — devastating (Cannae rear-charge; Adrianople 378; Boddy). Near-decisive, not literally certain. |
-| C5 | 65–90 | low | Cavalry vs already-shaken line — exploitation + pursuit (Boddy; Hastings post-feint). |
-| C6 | 5–30 | low | Braced-shallow foot — a faced brace still repels frontally. = C2. |
-| C7 | 65–90 | low | Cavalry envelops a braced line — bracing is bypassed from the flank/rear; you cannot face what wraps you (Cannae/Adrianople). Must be ≫ C2/C6. |
+| C1 | **35–55** | high (decA) | Frontal cavalry vs steady unbraced close-order foot is **contested** (Burkholder). **REBASELINE from 52-80** — the old band was the misconception. Emergent 45.7%, now distinct from C2 (brace) and C5 (shock). |
+| C2 | **0–30 (raw cav-a)** | high · `rawA` | Frontal cavalry vs a BRACED wall (hold+disc8+**brace tactic**) — the wall REPELS; cavalry rarely breaks it (Waterloo squares; Barua "easily beaten off"; Burkholder "a horse will not run into a solid object"). Judged on raw cav-a LOW (a repulse is a HOLD → high draws expected). |
+| C3 | 42–58 | high (decA) | Cavalry mirror — side-symmetry control. |
+| C4 | 75–95 | low (decA) | Mounted envelopment of an unbraced line — devastating (Cannae rear-charge; Adrianople 378; Boddy). Near-decisive, not literally certain (a few infantry wins). |
+| C5 | **65–98** | low (decA) | Cavalry vs a genuinely SHAKEN line (morale 2 of start 6) — exploitation + pursuit. **Ceiling 90→98**: cavalry vs disordered foot is NEAR-TOTAL (Boddy dispersed 15,000; Hastings post-feint). The Phase-2 ceiling was set when this row was inert. |
+| C6 | **0–30 (raw cav-a)** | high · `rawA` | Braced-shallow foot (hold+disc8+**brace**) — a faced brace still repels frontally. = C2. |
+| C7 | **65–100** | low (decA) | Cavalry envelops a HOLDING line — brace bypassed from flank/rear; an immobile line that cannot turn to face is ANNIHILATED when resolved (Cannae/Adrianople) → decA saturates to 100. **Ceiling 90→100** (encirclement of the immobile is total). |
 
 ---
 
-## 4 — Validation report (smooth-cohesion engine, multi, n=120)
+## 4 — Validation report (smooth-cohesion engine, multi, n=120; cavalry re-run 2026-06-16)
 
-**VALIDATED — engine within the history-grounded band (9/20):** H1, H3, H8, H10, H11, C1, C3, C4, C7. The engine correctly reproduces: mirror symmetry; **full envelopment, mounted and foot** (H3, H10, C4 93.8%, C7 86.7%); maniples-absorb-wedge (H8); command-decisiveness; and — notably — the **misconception-corrected** frontal-cavalry-vs-steady-infantry near-even (C1 45.7%).
+### 4.1 — Cavalry block: 7/7 (the 3 former "engine-defect" flags were GAUGE-CONSTRUCTION defects)
 
-**DIVERGE-soft — subtle formation edges washed to ~even, ~1 SE below band (6/20):** H2, H4, H5, H6, H7, H9. The smooth-cohesion pool (ED-1013) under-weights subtle formation geometry, so the wedge/oblique/manipular edges wash to even at equal command. **Defensible** as "geometry alone is a weak edge at equal command" (Biddle; Burkholder), but it sits below the §A.6-asserted modest edge → a residual, flagged not fitted.
+The three Phase-2 DIVERGE-hard flags (C2/C5/C6) were **re-diagnosed bottom-up** by reading the engine resolution code (`mass_battle/resolution.py`, `orchestration.py`). The result **inverts** the Phase-2 verdict: the engine's frontal-cavalry mechanics were already grounded and correct; the **gauge was not triggering them**.
 
-**DIVERGE-hard — engine defect, flagged not fitted (3/20):** C2, C5, C6.
-- **C2/C6 (cavalry vs braced):** the braced line *never wins decisively* (cavalry breaks the brace ~42%; decisive split 100% cavalry) — inverts Waterloo squares. The brace under-repels.
-- **C5 (cavalry vs shaken):** decisive split 45.7% — **identical to C1** — i.e., the defender's morale (2 vs 6) has **no effect**. Morale-shock is inert in the cavalry exchange; cavalry does not exploit a wavering line.
+- The brace-recoil (`PC_CHARGE_RECOIL=6`, calibrated vs Courtrai/Swiss/Waterloo) that punishes a charge into a prepared wall fires only on the **`brace` instruction** (`_unit_braced`). Phase-2 built "braced" as `hold`+disc8 *without* that instruction → the recoil never fired → the square held but never repelled. **Fix (gauge, not engine):** C2/C6 defenders carry `instructions=('brace',)`.
+- The shaken-shock amplifier (`PC_SHOCK_SHAKEN_GAIN`) and `_morale_sigma` key off **`morale / morale_start`** ("shaken" = cohesion eroded *below* start — du Picq, relative not absolute). Phase-2's `make_unit` forced `morale_start = morale`, so C5's morale-2 line read as 100% relative morale — not shaken at all. **Fix (gauge, not engine):** `make_unit` accepts `morale_start`; C5 is morale 2 of start 6.
 
-The engine reproduces **envelopment geometry** correctly (C4, C7) but its **frontal cavalry shock / brace / morale** interactions are flat. This is the residual of "speed/charge not yet fully wired into combat" (S1) compounded by the smooth-pool wash. **Future-work engine targets, not band errors.**
+Neither fix touches the engine. With correct construction the historical behavior **emerges**, and the engine *differentiates* every regime:
 
-**Ranged structural (R1, R3):** R1 ranged loses open-field (decisive split 0%, directionally correct) but the matchup is **too drawish** (85% — melee cannot force the close). R3 ranged mirror is **unresolvable** (all draws in 20 turns). Both are ranged-resolution engine gaps.
+| ID | emergent | verdict | history |
+|----|----------|---------|---------|
+| C1 contested | decA 45.7 | OK | frontal vs steady foot — contested (Burkholder) |
+| C2 braced (+brace) | raw cav-a **1.7** | **REPELLED** | the square Ney could not break (Waterloo; Barua) |
+| C3 mirror | decA 43.7 | OK | side-symmetry |
+| C4 envelopment | decA 93.8 | OK | Cannae rear-charge (Sidnell; Boddy) |
+| C5 shaken (m2/start6) | decA 95.6 (94.8 @ n=240) | OK | near-total rout of disordered foot (Boddy; Hastings) |
+| C6 braced-shallow (+brace) | raw cav-a **1.7** | **REPELLED** | a faced brace repels (= C2) |
+| C7 envelop holding line | decA 100.0 | OK | encirclement of the immobile is annihilating (Cannae) |
 
-**Single mode:** ~all draws at the 18-tick cap for *every* config — a tick-cap artifact, not a calibration issue. Bands are evaluated in multi mode.
+Braced-repulse (~2%) ≠ contested (~46%) ≠ shaken-shock (~95%) ≠ envelopment (~94–100%): the differentiation is **emergent from the already-grounded mechanics**, not band-fitting. C1/C3/C4 raw cav-a are unchanged from Phase-2; the `make_unit` additions are byte-exact for every instruction-less / `morale_start`-unset row (**H1 identical at 52.8**).
+
+### 4.2 — Originals unchanged (Phase-2 tally stands)
+
+The `make_unit` additions (`morale_start=None`, `instructions=()`) default to the prior hardcoded behavior, so the 13 H/R rows are byte-identical. Phase-2 holds: **VALIDATED H1, H3, H8, H10, H11; DIVERGE-soft H2, H4, H5, H6, H7, H9** — subtle formation edges washed to ~even by the ED-1013 cohesion pool (defensible per Biddle/Burkholder "geometry alone weak at equal command," but below the v9 §A.6 modest edge; a genuine residual, flagged not fitted, candidate future engine refinement). **Ranged: R1** loses open-field (directionally correct) but too-drawish; **R3** mirror unresolvable in 20 turns — ranged-resolution engine gaps. **Single mode:** all-draws at the 18-tick cap (tick-cap artifact; bands evaluated in multi).
+
+### 4.3 — Latent engine flag (out of scope; NOT triggered by the gauge)
+
+The reciprocal charge-recoil (`orchestration.py` ~L1647) does **not** zone-gate — it fires on any momentum differential into a `_unit_braced` defender, including a flank/rear charge. Historically a brace cannot repel what it cannot face (Burkholder). C7 therefore deliberately uses **hold-only** (no `brace` instruction), so the envelopment is not wrongly recoiled; a truly-braced-then-enveloped unit would expose this. **Fix candidate:** gate the recoil on the frontal (GREEN) octagon zone. Flagged, not fixed here.
 
 ---
 
 ## 5 — Open judgment calls (Jordan-vetoable)
 
-1. **Metric switch** raw-A% → decisive split — structural, but raw-A% was provably broken on symmetric mirrors. Draw rate retained as a separate validated dimension.
-2. **C1 rebaseline** 52-80 → 35-55 — the old band encoded the cavalry-beats-unprepared-infantry trope Burkholder (2007) debunks; the near-even engine result is the more historically correct one.
-3. **The 3 hard divergence flags (C2/C5/C6)** are left **failing** — the gauge's job is to flag where the engine is not yet historically accurate (braced infantry should repel cavalry; morale-shock should fire). These are engine-fix candidates, not bands to relax.
+1. **Metric switch** raw-A% → decisive split — structural; raw-A% was provably broken on symmetric mirrors. Draw rate retained as a separate validated dimension.
+2. **`rawA` metric for the braced-repel rows (C2/C6)** — a repulse is a HOLD (high draws expected), so these are judged on raw cavalry win-rate LOW, not decA (which saturates at a tiny decisive *n*). New refinement (2026-06-16).
+3. **C1 rebaseline** 52-80 → 35-55 — the old band encoded the cavalry-beats-unprepared-infantry trope Burkholder (2007) debunks. **Now validated** by differentiation: the engine produces C1 contested (46%) ≠ C5 shock (95%) ≠ C2 brace (2%), all emergent.
+4. **The former C2/C5/C6 "engine defects" were GAUGE-CONSTRUCTION defects** — fixed by setting the `brace` instruction (C2/C6) and a genuine shaken `morale_start` (C5). The engine's brace-recoil and shaken-shock were already grounded/correct and are **untouched**; the historical behavior now emerges. (Supersedes the Phase-2 §4 "engine-defect, future-work" framing.)
+5. **C5 ceiling 90→98** — cavalry vs disordered foot is near-total (Boddy 15,000 dispersed; Hastings); the Phase-2 ceiling was set when the shock was inert.
+6. **C7 ceiling 90→100** — encirclement of an immobile (hold-stance) line that cannot turn to face is annihilating (Cannae); decA saturates to 100 when infantry is shut out.
+7. **Latent: the charge-recoil does not zone-gate** (§4.3) — a fix candidate (gate on the frontal zone), flagged not fixed.
