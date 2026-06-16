@@ -1,5 +1,5 @@
 # Valoria — Authoritative Graph v1 (nodes · edges · loops · coverage, all directions)
-**2026-06-11 · status: PROPOSED (Jordan-vetoable) · companion to the map (navigation) and workplan v4 (register/docket). Rendered views: `valoria_authoritative_graph.mermaid` (topology) + `valoria_decision_unblock_graph.mermaid` (docket DAG).**
+**2026-06-11 · status: CANON — adopted 2026-06-12 (Jordan); synthesis view of canonical v4 · companion to the map (navigation) and workplan v4 (register/docket). Rendered views: `valoria_authoritative_graph.mermaid` (topology) + `valoria_decision_unblock_graph.mermaid` (docket DAG).**
 
 **Source tier (load-bearing, atlas R1):** the edge set below is **primary-canon-grounded** — `key_substrate §4.1/§4.2/§8` · `key_type_registry` (37 types) · `scale_transitions §3–§10` · `derived_stats §14` + `settlement §1.8` (the last two live-verified exact this corpus). Contract-/`module_map`-derived rows are secondary leads. Type-granular emitter→consumer detail: **atlas §3** and generated `module_map_flat.md §4.5` — pointed to, not re-transcribed. Loop-safety status is **inherited** from the source audits (sims cited, not re-run — atlas R2).
 

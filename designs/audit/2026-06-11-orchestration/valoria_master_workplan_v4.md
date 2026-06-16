@@ -1,5 +1,5 @@
 # Valoria — Master Workplan v4 (orchestrated, three-lane, single register)
-**2026-06-11 · status: PROPOSED (Jordan-vetoable throughout; §3 is the veto surface)**
+**2026-06-11 · status: CANON — ratified 2026-06-12 (Jordan); the active master, supersedes v3 (§3 remains the live decision docket — open J-keys await rulings; the document itself is no longer provisional)**
 **as_of: the 2026-06-11 upload corpus (latest cited commits `c8e982b5` contracts / `6199d83a`·`c005da27` game-flow / `ac49cea6` workplan-v3). Verified at commit against live HEAD `d010fe27`: editorial ledger 653 entries / 0 duplicate IDs confirmed; the v2 source layer confirmed committed. The two §0 value flags (CI 22v28; MS-start) remain OPEN — not resolved this session.**
 
 **Supersedes (on commit):** `designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md` — its frame, lanes, and approved carries are retained; its docket is extended and de-staled below. Banner discipline per the v3→v2 precedent; v3 stays the frozen 06-10 record, J-1…J-18 IDs stay citable and are NOT renumbered.
@@ -169,4 +169,4 @@ Deferred / Triggered / Dropped / Principles carry from R2 via v3 unchanged. **Th
 - **Commit path for this orchestration:** bootstrapped session → re-pin as_of → verify ledger + the two §0 value flags → land map/graph/workplan under `designs/audit/2026-06-11-orchestration/` → banner v3 → repoint `lane_assignments.yaml` source + entry queues to v4 IDs in the same commit.
 
 ---
-*v4 is the single working master per PI `<document_consolidation>` once committed; until then it is the working proposal. Every recommendation is Jordan-vetoable; §3 is the veto surface. No ED IDs assigned by this document; staged candidates file via lane blocks.*
+*v4 is the single working master per PI `<document_consolidation>` — committed and ratified 2026-06-12 (Jordan), the active canonical master. Every recommendation is Jordan-vetoable; §3 is the veto surface. No ED IDs assigned by this document; staged candidates file via lane blocks.*

@@ -1,5 +1,5 @@
 # Valoria — Authoritative Map v1 (governance ⊗ canon ⊗ mechanics, one navigation surface)
-**2026-06-11 · status: PROPOSED (Jordan-vetoable) · companion to `valoria_master_workplan_v4.md` (the register/docket) and `valoria_authoritative_graph_v1.md` (the edge layer)**
+**2026-06-11 · status: CANON — adopted 2026-06-12 (Jordan); synthesis view of canonical v4 · companion to `valoria_master_workplan_v4.md` (the register/docket) and `valoria_authoritative_graph_v1.md` (the edge layer)**
 
 **What this is.** The single "where is everything, what is its status, which file is live" surface across all three layers of the project — governance, canon (metaphysics/world/characters/events), and mechanics (substrate/systems/modules) — synthesized from the full 2026-06-11 corpus. Per the corrected consolidation discipline (atlas R3): this is a **synthesis index over live sources, not a replacement** — every underlying artifact named in §1 stays authoritative for its own depth; status defects are tracked **once**, in workplan v4 §2 (rows cited here as `W#n`), never duplicated.
 
@@ -15,7 +15,7 @@
 
 | Domain | LIVE authority | Superseded / lagging | Notes |
 |---|---|---|---|
-| **Workplan** | `valoria_master_workplan_v4.md` (this orchestration; PROPOSED) | v3 (06-10, frozen on commit of v4) → R2 + 06-06 capstone (bannered) → delta (dead) | J-keys stable across versions |
+| **Workplan** | `valoria_master_workplan_v4.md` (this orchestration; CANON) | v3 (06-10, frozen on commit of v4) → R2 + 06-06 capstone (bannered) → delta (dead) | J-keys stable across versions |
 | **Interdependency (graph layer)** | master v1 (v2-corrected) = navigable index · **atlas v1** = edge depth · `valoria_authoritative_graph_v1.md` = this orchestration's unified view | — (sources stay live per R3; nothing superseded) | the five source views (hierarchy/wiring/game-flow×2/verdict) remain authoritative detail |
 | **Canon examination** | canon flatten **v2** (adversarially reconciled; same path supersedes v1) | flatten v1 (git history) | C-register lives in W4 §2 rows 7–14, 25–28 |
 | **Temporal spec** | game-flow analysis + flat-spec **v2** (flat-spec = the live value-table reference, registries A–G) | v1 cuts (git history) | Step-6 Accounting; CI ≈S16; §H scorecard |
