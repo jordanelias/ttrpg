@@ -142,6 +142,7 @@ default_time_horizon: near
 emitting_systems: [threadwork]
 consuming_systems: [npc_behavior, articulation]
 ```
+<!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->
 
 ### scene.draft_da
 
@@ -158,6 +159,7 @@ default_time_horizon: immediate
 emitting_systems: [domain_actions]
 consuming_systems: [npc_behavior, articulation]
 ```
+<!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->
 
 ### scene.displacement
 
@@ -175,6 +177,7 @@ default_time_horizon: immediate
 emitting_systems: [npc_behavior]
 consuming_systems: [npc_behavior, articulation]
 ```
+<!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->
 
 ---
 
@@ -735,6 +738,7 @@ default_time_horizon: near
 emitting_systems: [personal_combat]
 consuming_systems: [npc_behavior, faction_layer, articulation]
 ```
+<!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->
 
 ---
 
@@ -841,6 +845,7 @@ notes:
   - Belief revision is canonical character-development beat — high significance.
   - Triggers Tier 2 cut scene; chronicle named-event by default.
 ```
+<!-- [STUB: emitting_systems=[fieldwork] may under-attribute — npc_behavior §3 belief revision may also emit this; verify; tracked workplan #32 / ED-937] -->
 
 ### meta.legacy_event
 

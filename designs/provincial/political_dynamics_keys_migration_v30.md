@@ -325,6 +325,7 @@ crossing emits `state.opinion_revised` exactly as §5.2, with `causes[]` wired t
 scene_outcome Key.
 
 <!-- [ASSUMPTION: scene_outcome -> disposition-drift effect authored under Jordan's 2026-06-14 consumer-design grant (logged ED-936). Bottom-up = registry consuming_systems (npc_behavior on contest/battle/combat_resolved) + the §5.1 input filter. Top-down = grand-strategy relationship sims (e.g. CK) shift character opinion on duel/battle outcomes. Drift magnitude/curve unspecified — Jordan-vetoable. -->
+<!-- [STUB: drift magnitude/curve unspecified — provisional; pending Jordan tuning; tracked workplan #30 / ED-936] -->
 
 ---
 
