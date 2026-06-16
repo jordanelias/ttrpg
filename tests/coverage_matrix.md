@@ -149,3 +149,19 @@ Archived entries in tests/coverage_matrix_archive.md
 - status: CLOSED. No code change. (Variants 1 recovery-denial / 2 cohesion-debuff remain available on a
   future canonical decision; not pursued.)
 | r1_sigma_resolution + r8_parity_harness | F4 μ-shift resolution (base Ob + net_boost; eff_ob DISPLAY-ONLY) | mirror 49.9/50.0 · str6v4 59.5/40.5 · hist7v4 61.7/38.2 · agi6v4 65.6/34.4 (N=3000) · atom MC≡p_success | ED-934 | 2026-06-12 |
+
+## Smooth command-sigma combat pool + continuous discipline penalty (2026-06-15, ED-1013)
+- CANONICAL BASIS: Jordan directive 2026-06-15 'smooth pools / fix discipline' (path 1 of documented fork).
+- base_combat_pool COMMAND_SIGMA branch: flat 2*Command -> Command*(1 + hp/hp_max) -- 2*Command at full
+  strength (size-decoupled, ED-899 preserved; cohesion is a FRACTION so per-capita effectiveness stays
+  size-independent, Lanchester exponent ~1), degrading smoothly to Command at annihilation.
+- discipline_penalty(): tiers {0,-1,-2} -> continuous -(5-disc)/2 clamped [-2,0] (same endpoints, no step).
+- WHY: the flat pool left the discipline STEP as the sole pool-degradation term, which amplified a tiny
+  latent contact-geometry asymmetry into a side-B mirror bias (H1 62/38, |A-B|=21.7pp). The smooth
+  own-casualty degradation dilutes the discipline term -> mirror side-symmetric.
+- VALIDATED: H1 Line-Line mirror n=120 A=53%/B=47% decisive, |A-B|=3.3pp (was 21.7); command decisive
+  (cmd6-vs-2 -> 40-0); discipline decisive (disc5-vs-disc2 -> 20-0); mechanics_selftest clean.
+- COVERAGE IMPACT (Jordan-accepted trade-off): smooth pool reduces FORMATION/charge decisiveness; the
+  historical gauge tests/sim/gauge_mb.py (precedents_warfare.md bands) is now STALE and needs
+  RE-CALIBRATION to the smooth engine (in-band dropped flat 3/6 -> smooth 1/6 on the 6-test subset).
+  FLAGGED as a separate Jordan-canon follow-up.

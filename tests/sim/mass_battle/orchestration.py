@@ -1060,10 +1060,10 @@ class Unit:
         if self.size == 0: self.routed = True
 
     def discipline_penalty(self):
-        if self.discipline >= 5: return 0
-        if self.discipline >= 3: return -1
-        if self.discipline >= 1: return -2
-        return -99
+        # SMOOTH (Jordan 2026-06-15 'fix discipline'): continuous linear penalty over the SAME range as the
+        # old tiers' endpoints (discipline>=5 -> 0, discipline 1 -> -2) -- no step/cliff. disc<=0 -> broken.
+        if self.discipline <= 0: return -99
+        return -max(0.0, min(2.0, (5.0 - self.discipline) * 0.5))
 
     def discipline_penalty_volley(self):
         """Volley discipline penalty: returns POSITIVE pool reduction.
@@ -1084,11 +1084,13 @@ class Unit:
         #  min(Size, Command) + Command"; Size here is continuous from TroopCount]
         stam_pen = _stamina_pool_penalty(self.stamina)
         if COMMAND_SIGMA_ENABLED:
-            # [canonical: Jordan canon-structure directive 2026-06-02 — base exchange driven
-            #  SOLELY by Command (sigma-leverage quality); Size enters outcomes ONLY via the
-            #  Lanchester frontage term. Replaces min(Size,Command)+Command (size-dependent →
-            #  super-linear melee). pen/stam_pen remain pool-side advantages (sigma head unchanged).]
-            raw = command_base_pool(self.command, pen, stam_pen)
+            # SMOOTH POOLS (Jordan 2026-06-15): 2*command at FULL strength (size-decoupled per ED-899),
+            # degrading SMOOTHLY with own casualties to command at annihilation via cohesion=hp/hp_max.
+            # Cohesion is a FRACTION (not headcount) -> per-capita effectiveness size-independent -> Lanchester
+            # exponent stays ~1 (ED-899 preserved). The smooth own-casualty degradation dilutes the discipline
+            # term so it can no longer dominate and bias the mirror (the flat-2*command pool was the defect).
+            cohesion = self.hp / self.hp_max if self.hp_max else 0.0
+            raw = self.command * (1.0 + cohesion) + pen + stam_pen
         else:
             raw = min(self.effective_size, self.command) + self.command + pen + stam_pen
         return max(1, math.floor(raw))
