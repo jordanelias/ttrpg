@@ -4,7 +4,7 @@ import math, random
 from mass_battle.config import *
 from mass_battle.percell import *
 
-__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace']
+__all__ = ['roll_pool', 'compute_degree', '_morale_sigma', '_charge_shock_sigma', '_sigma_softcap', '_sigma_net_boost', '_unit_braced', '_subunit_braced', '_wall_prep', '_disc_prep', '_depth_prep', 'trace_event', 'start_trace', 'get_trace']
 
 # ─── passive mechanical-trace collector ─────────────────────────────────────
 # Observe-only. Records per-mechanic internals (melee contest, volley, per-tick markers) when ON.
@@ -42,19 +42,26 @@ def compute_degree(net, ob):
     if net >= ob:                   return "Success"
     return "Partial"
 
-def _morale_sigma(u):
+def _morale_sigma(u, atom=None):
     # Graded morale effectiveness as a delta-sigma: 0 at full morale, down to -MORALE_SIGMA_SCALE near rout.
-    # A breaking unit wins fewer exchanges and deals less -> it cannot out-damage the winner pre-rout.
-    # [historical anchor: Ardant du Picq / Clausewitz — combat effectiveness degrades progressively as
-    #  cohesion erodes, BEFORE the rout; most casualties fall in the pursuit, not the stand]
-    if not MORALE_FIX or not getattr(u, 'morale_start', 0): return 0.0
-    frac = max(0.0, min(1.0, u.morale / u.morale_start))
+    # [historical anchor: Ardant du Picq / Clausewitz — effectiveness degrades progressively before the rout]
+    # atom (Jordan directive): per-subunit morale; None -> unit. Single-subunit eff_morale==u.morale -> byte-exact.
+    if not MORALE_FIX: return 0.0
+    morale = atom.eff_morale if atom is not None else u.morale
+    morale_start = atom.eff_morale_start if atom is not None else getattr(u, 'morale_start', 0)
+    if not morale_start: return 0.0
+    frac = max(0.0, min(1.0, morale / morale_start))
     return MORALE_SIGMA_SCALE * (frac - 1.0)
 def _unit_braced(unit):
     """True if any subunit carries the 'brace' instruction (the FM brace tactic). Gates the brace
     benefit (charge-resistance) and the reciprocal charge-recoil; INERT for instruction-less units
     (the historical gauge + signature scenarios) -> byte-exact."""
     return any('brace' in getattr(su, 'instructions', ()) for su in getattr(unit, 'subunits', ()))
+
+def _subunit_braced(atom):
+    """Per-subunit brace (Jordan directive): THIS subunit carries 'brace'. For a single-subunit
+    unit this equals _unit_braced(unit) -> byte-exact; for a mixed unit only the braced subunit resists."""
+    return 'brace' in getattr(atom, 'instructions', ())
 
 def _disc_prep(disc):
     """Discipline -> preparedness 0..1. SHARED by the charge-shock brace gate (independent retention)
@@ -67,14 +74,13 @@ def _depth_prep(depth):
     ref = PC_SHOCK_DEPTH_REF if PC_SHOCK_DEPTH_REF > 1.0 else 2.0   # [class-B] depth-ref guard
     return max(0.0, min(1.0, (depth - 1.0) / (ref - 1.0)))
 
-def _wall_prep(unit, contact_cells):
+def _wall_prep(unit, contact_cells, atom=None):
     """Conjunctive wall-preparedness for the reciprocal charge-recoil: high only when disciplined
-    AND deep (a true prepared pike block, not a deep mob or a thin elite line). Uses the shared
-    _disc_prep/_depth_prep curves. [bottom-up: discipline x _defender_depth -- the wall that breaks a charge.]"""
-    disc = getattr(unit, 'discipline', 5)                          # [class-B] default disc mirrors _charge_shock_sigma
+    AND deep. atom (Jordan directive): per-subunit discipline; None -> unit (byte-exact single-subunit)."""
+    disc = atom.eff_discipline if atom is not None else getattr(unit, 'discipline', 5)
     return _disc_prep(disc) * _depth_prep(_defender_depth(unit, contact_cells))
 
-def _charge_shock_sigma(defender, def_cells, zone):
+def _charge_shock_sigma(defender, def_cells, zone, atom=None):
     """Phase 3: DEFENDER moral-shock delta-sigma (<=0) on a charge impact.
     Cavalry's weapon is the MORAL impulse (du Picq), gated by the defender's preparedness:
     near-zero vs a braced+disciplined+deep defender facing the charge (Waterloo squares),
@@ -90,16 +96,20 @@ def _charge_shock_sigma(defender, def_cells, zone):
     if zone == "GREEN":   g_face = PC_SHOCK_FRONT      # faced charge mostly absorbed
     elif zone == "RED":   g_face = PC_SHOCK_REAR       # rear bypass (cannot face it)
     else:                 g_face = 1.0                 # YELLOW flank
-    # brace gate (multiplicative): hold-stance x discipline x depth, floored
-    b_stance = PC_SHOCK_HOLD_BRACE if (getattr(defender, 'stance', 'balanced') == 'hold' or _unit_braced(defender)) else 1.0
-    disc = getattr(defender, 'discipline', 5)
+    # atom (Jordan directive): per-subunit defender stats; None -> unit. Single-subunit: atom.stance==unit.stance,
+    # eff_discipline/eff_morale inherit -> byte-exact. brace gate (multiplicative): hold-stance x discipline x depth.
+    _stance = atom.stance if atom is not None else getattr(defender, 'stance', 'balanced')
+    _braced = _subunit_braced(atom) if atom is not None else _unit_braced(defender)
+    b_stance = PC_SHOCK_HOLD_BRACE if (_stance == 'hold' or _braced) else 1.0
+    disc = atom.eff_discipline if atom is not None else getattr(defender, 'discipline', 5)
     b_disc = 1.0 - _disc_prep(disc) * (1.0 - PC_SHOCK_DISC_FULL)        # independent disc retention (shared prep curve)
     depth = _defender_depth(defender, def_cells)
     b_depth = 1.0 - _depth_prep(depth) * (1.0 - PC_SHOCK_DEPTH_FULL)    # independent depth retention (shared prep curve)
     g_brace = max(PC_SHOCK_BRACE_FLOOR, min(1.0, b_stance * b_disc * b_depth))
     # shaken amplifier: a wavering defender takes more
-    ms = getattr(defender, 'morale_start', 0) or 0
-    frac = max(0.0, min(1.0, defender.morale / ms)) if ms else 1.0
+    ms = (atom.eff_morale_start if atom is not None else getattr(defender, 'morale_start', 0)) or 0
+    _morale = atom.eff_morale if atom is not None else defender.morale
+    frac = max(0.0, min(1.0, _morale / ms)) if ms else 1.0
     a_shaken = 1.0 + PC_SHOCK_SHAKEN_GAIN * (1.0 - frac)
     return -PC_CHARGE_SIGMA * g_face * g_brace * a_shaken
 

@@ -510,6 +510,15 @@ class Subunit:
     # None keeps the legacy tier path (byte-exact).
     troops: Optional[float] = None
     concentration: Optional[float] = None
+    # Per-subunit quality stats (Jordan directive): a subunit is a homogeneous typed body
+    # with its OWN combat stats; None INHERITS the parent Unit (back-ref _unit set in Unit.__post_init__),
+    # so single-subunit / homogeneous units stay byte-exact. Mixed units (e.g. a cavalry subunit + an
+    # infantry subunit) differentiate per-subunit in the pool, casualty exchange, and charge/brace/morale sigma.
+    power: Optional[int] = None
+    discipline: Optional[int] = None
+    morale: Optional[int] = None
+    morale_start: Optional[int] = None
+    dr: Optional[int] = None
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -535,12 +544,51 @@ class Subunit:
         _ids = [(o_r, o_c) for o_r, o_c, _a, _b in _oriented(self)]
         _per = self.troop_count / len(_ids) if _ids else 0.0
         self.cell_troops = {pid: _per for pid in _ids}
+        self._unit = None                      # stat-inheritance back-ref (set by Unit.__post_init__)
+        self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
         if PC_NODE_COHESION:
             self._init_node_state()
 
     @property
     def troop_count(self):
         return self.troops if self.troops is not None else TROOPS_PER_TIER[self.tier]
+
+    # ── per-subunit effective stats: own value, else inherit parent Unit (byte-exact when None) ──
+    def _u(self):
+        return getattr(self, '_unit', None)
+    @property
+    def eff_power(self):
+        return self.power if self.power is not None else (self._u().power if self._u() else 4)
+    @property
+    def eff_discipline(self):
+        return self.discipline if self.discipline is not None else (self._u().discipline if self._u() else 5)
+    @property
+    def eff_morale(self):
+        if self.morale is not None: return self.morale
+        return self._u().morale if self._u() else 0
+    @property
+    def eff_morale_start(self):
+        if self.morale_start is not None: return self.morale_start
+        return getattr(self._u(), 'morale_start', 0) if self._u() else 0
+    @property
+    def eff_dr(self):
+        return self.dr if self.dr is not None else (self._u().dr if self._u() else 1)
+    @property
+    def cur_troops(self):
+        return sum(self.cell_troops.values()) if getattr(self, 'cell_troops', None) else self.troop_count
+    @property
+    def cohesion(self):
+        u = self._u()
+        if u is not None and len(u.subunits) == 1:
+            return (u.hp / u.hp_max) if u.hp_max else 0.0   # exact match to unit base_combat_pool (byte-exact single-subunit path)
+        start = getattr(self, '_start_troops', 0) or self.troop_count
+        return (self.cur_troops / start) if start else 0.0
+    @property
+    def eff_size(self):
+        u = self._u()
+        if u is not None and len(u.subunits) == 1:
+            return u.effective_size
+        return self.cur_troops / BLOCK_SIZE
 
     @property
     def charge_pen(self):
@@ -996,6 +1044,28 @@ def command_base_pool(command, pen, stam_pen):
     return COMMAND_POOL_MULT * command + pen + stam_pen
 
 
+def subunit_combat_pool(unit, atom):
+    """Per-subunit combat pool (Jordan directive): SHARED Command (the general),
+    per-subunit Discipline + cohesion, shared stamina. Mirrors Unit.base_combat_pool EXACTLY for a
+    single-subunit unit (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline inherits unit) ->
+    byte-exact for the homogeneous gauge; differentiates per subunit for mixed units.
+    [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
+     mirrors Unit.discipline_penalty 'fix discipline'; size-decoupled cohesion form]"""
+    if unit.routed or unit.broken:
+        return 0
+    disc = atom.eff_discipline
+    if disc <= 0:
+        unit.broken = True
+        return 0
+    pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
+    stam_pen = _stamina_pool_penalty(unit.stamina)
+    if COMMAND_SIGMA_ENABLED:
+        raw = unit.command * (1.0 + atom.cohesion) + pen + stam_pen
+    else:
+        raw = min(atom.eff_size, unit.command) + unit.command + pen + stam_pen
+    return max(1, math.floor(raw))
+
+
 @dataclass
 class Unit:
     name: str
@@ -1047,10 +1117,23 @@ class Unit:
         self.stamina_max = STAMINA_MAX
         for a in self.subunits:
             if a.stance == "balanced": a.stance = self.stance
+            a._unit = self                     # stat-inheritance back-ref (per-subunit eff_* falls back here)
         # Increment 1: per-column block grid (state only; resolution wires in at Increment 2).
         self.col_grid = build_column_grid(self) if PER_CELL else None
 
     def total_troops(self): return sum(a.troop_count for a in self.subunits)
+
+    # Derived unit-level aggregates (Jordan directive): troop-weighted means of the
+    # subunits' effective stats. For a homogeneous unit these equal the unit's own stat; for a mixed
+    # unit they are the genuine composite. Combat reads PER-SUBUNIT (below); these are the unit view.
+    def _agg(self, attr):
+        tt = sum(a.troop_count for a in self.subunits)
+        if tt <= 0: return getattr(self, attr.replace('eff_', ''), 0)
+        return sum(getattr(a, attr) * a.troop_count for a in self.subunits) / tt
+    def agg_power(self):      return self._agg('eff_power')
+    def agg_discipline(self): return self._agg('eff_discipline')
+    def agg_morale(self):     return self._agg('eff_morale')
+    def agg_dr(self):         return self._agg('eff_dr')
 
     def recalc_size(self):
         # v19: effective_size = HP / BLOCK_SIZE (HP = TroopCount).
@@ -1419,8 +1502,8 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
         atom_a, atom_b = p["atom_a"], p["atom_b"]
         a_troops_frac = atom_a.troop_count / unit_a.total_troops()
         b_troops_frac = atom_b.troop_count / unit_b.total_troops()
-        a_base = unit_a.base_combat_pool()
-        b_base = unit_b.base_combat_pool()
+        a_base = subunit_combat_pool(unit_a, atom_a)   # per-subunit pool (shared command; per-subunit discipline+cohesion)
+        b_base = subunit_combat_pool(unit_b, atom_b)
 
         # F-i: support-stack-adjusted engage_frac
         a_engage_frac = support_engage_frac(atom_a, p["a_cells"])
@@ -1621,7 +1704,7 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                 if PER_CELL:
                     if a_pen > 0:
                         _zb = "GREEN" if b_angle_mod > -0.5 else ("YELLOW" if b_angle_mod > -1.5 else "RED")
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
                     elif PC_ENVELOP_SHOCK and b_fixed_other and b_angle_mod <= -0.5:
                         # B (envelopment shock): a subunit FIXED frontally by a separate body and struck on
                         # its flank/rear cannot face the new threat -- the du Picq moral shock of envelopment
@@ -1631,29 +1714,29 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
                         # with the charge path (no double-count); b_fixed_other -> provably inert single-subunit.
                         # [canonical: Cannae 216 BC; du Picq Battle Studies -- the unfaceable attack on a pinned line.]
                         _zb = "YELLOW" if b_angle_mod > -1.5 else "RED"
-                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb)
+                        ns_b += _charge_shock_sigma(unit_b, p["b_cells"], _zb, atom_b)
                     if b_pen > 0:
                         _za = "GREEN" if a_angle_mod > -0.5 else ("YELLOW" if a_angle_mod > -1.5 else "RED")
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
                     elif PC_ENVELOP_SHOCK and a_fixed_other and a_angle_mod <= -0.5:
                         _za = "YELLOW" if a_angle_mod > -1.5 else "RED"
-                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za)
+                        ns_a += _charge_shock_sigma(unit_a, p["a_cells"], _za, atom_a)
                     # Reciprocal charge-recoil (the missing historical term): a charge driven home into a
                     # BRACED + deep + disciplined wall shatters the charger (Courtrai/Swiss/Waterloo squares).
                     # Charger = higher-momentum side; recoil scales with the wall's prep (discipline x depth).
                     # Gated by the 'brace' INSTRUCTION -> instruction-less scenarios stay byte-exact. Emergent:
                     # pikes break a cavalry charge, a loose/shallow line is still ridden down.
                     if PC_BRACE_ENABLED:
-                        if a_mom > b_mom and _unit_braced(unit_b):
-                            ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"]) * SIGMA_PER_D
-                        elif b_mom > a_mom and _unit_braced(unit_a):
-                            ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"]) * SIGMA_PER_D
+                        if a_mom > b_mom and _subunit_braced(atom_b):
+                            ns_a -= PC_CHARGE_RECOIL * _wall_prep(unit_b, p["b_cells"], atom_b) * SIGMA_PER_D
+                        elif b_mom > a_mom and _subunit_braced(atom_a):
+                            ns_b -= PC_CHARGE_RECOIL * _wall_prep(unit_a, p["a_cells"], atom_a) * SIGMA_PER_D
             if eng_counts.get(id(atom_a), 0) >= 2: ns_a -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if eng_counts.get(id(atom_b), 0) >= 2: ns_b -= ENCIRCLEMENT_PENALTY * SIGMA_PER_D
             if atom_a.unit_type == 'ranged': ns_a += RANGED_MELEE_SIGMA
             if atom_b.unit_type == 'ranged': ns_b += RANGED_MELEE_SIGMA
-            ns_a += _morale_sigma(unit_a)    # graded morale effectiveness (du Picq): low morale -> worse exchange
-            ns_b += _morale_sigma(unit_b)
+            ns_a += _morale_sigma(unit_a, atom_a)    # graded morale effectiveness (du Picq): per-subunit morale
+            ns_b += _morale_sigma(unit_b, atom_b)
             if PER_CELL:    # Increment 3: fatigue of the engaged front (depth-damped) as delta-sigma
                 ns_a += _fatigue_sigma(unit_a, set(c for r, c in p["a_cells"]))
                 ns_b += _fatigue_sigma(unit_b, set(c for r, c in p["b_cells"]))
@@ -1688,11 +1771,11 @@ def resolve_engagements(unit_a, unit_b, pairs, dynamic_facings=None):
             # opp_frac post-scaler is skipped) — one variable, one role (Lesson 1).
             lin_b = _lanchester_strength(p["b_cells"], unit_b)   # B's contacting strength -> casualties to A
             lin_a = _lanchester_strength(p["a_cells"], unit_a)   # A's contacting strength -> casualties to B
-            dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
-            dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
+            dmg_a += K_LINEAR * lin_b * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr)
+            dmg_b += K_LINEAR * lin_a * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr)
         else:
-            dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](unit_b.power) - unit_a.dr)
-            dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](unit_a.power) - unit_b.dr)
+            dmg_a += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[b_deg](atom_b.eff_power) - atom_a.eff_dr)
+            dmg_b += CASUALTY_SCALE * max(0, DAMAGE_BY_DEGREE[a_deg](atom_a.eff_power) - atom_b.eff_dr)
         trace_event('melee', a_pool=a_pool, b_pool=b_pool,
                     ns_a=round(ns_a, 3), ns_b=round(ns_b, 3),
                     a_net=round(a_net, 2), b_net=round(b_net, 2),
@@ -1857,7 +1940,9 @@ def volley_phase(unit_a, unit_b):
         if best_target is None:
             return 0, None, False
         # Pool = unit Power dice (PP-503). Discipline penalty applies (per §A.4).
-        pool = max(1, shooter_unit.power - shooter_unit.discipline_penalty_volley())
+        _vdisc = shooter_atom.eff_discipline   # per-subunit volley pool (Jordan directive): shooter subunit's power + discipline
+        _vpen = 0 if _vdisc >= 5 else (1 if _vdisc >= 3 else (2 if _vdisc >= 1 else 99))
+        pool = max(1, shooter_atom.eff_power - _vpen)
         net = _roll_volley_pool(pool)
         # DR subtracts from net successes (Ranged DR Table)
         net_after_dr = max(0, net - RANGED_DR_DEFAULT)
@@ -1866,7 +1951,7 @@ def volley_phase(unit_a, unit_b):
             # target area, so volley effectiveness scales with SHOOTER COUNT (toward N²-type
             # concentration over the integral). Distinct from the frontage-capped melee linear
             # term. [spec mb_lanchester_design.md §3b; Lanchester Square Law = ranged/aimed fire.]
-            net_after_dr = net_after_dr * K_SQUARE * shooter_unit.effective_size
+            net_after_dr = net_after_dr * K_SQUARE * shooter_atom.eff_size
         dens = _volley_density_mult(target_unit)
         out = net_after_dr * dens
         trace_event('volley', shooter=getattr(shooter_unit, 'name', '?'), d=best_dist,

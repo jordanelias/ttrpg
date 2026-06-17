@@ -208,3 +208,15 @@ Archived entries in tests/coverage_matrix_archive.md
   gate on the frontal (GREEN) zone. The 6 formation soft-divergences (H2/H4/H5/H6/H7/H9) remain a separate residual.
 - Jordan directive 2026-06-16 ('for 1/2/3 do everything you can to fix everything from a bottom-up emergent
   approach'); implemented by Claude, Jordan-vetoable.
+- ED-1016 (per-subunit stat derivation, Jordan directive 2026-06-16; per-subunit pool option 1, "intensive
+  attention to detail"): pushed power/discipline/morale/morale_start/dr onto Subunit (OPTIONAL; None inherits
+  parent Unit via _unit back-ref), added per-subunit cohesion + subunit_combat_pool (SHARED command, per-subunit
+  discipline+cohesion, shared stamina), repointed the engagement pool + Lanchester casualty power/dr +
+  charge-shock/brace-recoil/morale sigma + Phase-2 volley (power/discipline/eff_size) to the contacting subunit's
+  effective stats; Unit derives agg_power/discipline/morale/dr (troop-weighted) atop existing HP=Size=Sum(subunits).
+  BYTE-EXACT verified vs a CLEAN pre-edit engine across melee/cavalry/brace/morale AND ranged/volley (exact states +
+  win-rates identical) -- single-subunit fast-paths (cohesion->hp/hp_max, eff_size->effective_size) + None-inheritance
+  guarantee the homogeneous historical battery is untouched. Mixed-unit differentiation demonstrated: cavalry subunit
+  P6/D6 pool 8 vs infantry subunit P4/D4 pool 7, carried into the combat trace. Added make_mixed_unit gauge constructor
+  (make_unit unchanged). V1 SCOPE: per-subunit combat morale uses the subunit's nominal value for overriding subunits;
+  the eroding morale pool + rout + discipline degradation stay UNIT-level. Implemented by Claude, Jordan-vetoable.
