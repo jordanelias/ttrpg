@@ -75,8 +75,7 @@ def engagement(A, B, first, cfg, rng):
             if rng.random() < stophit_p:
                 pool=max(1, core.resolution_pool(longer.history) - longer.wt.pool_penalty())
                 nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
-                ob=core.effective_ob(pool, nsig); net=core.roll_net(pool, rng)
-                deg=core.degree(net, ob)
+                deg, net = core.resolve(pool, nsig, rng)
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, False, cfg)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
@@ -116,7 +115,7 @@ def engagement(A, B, first, cfg, rng):
         reach_pen=S.reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR)
         # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
         init=(cfg['INIT_K']*(aggressor.agi-defender.agi) + cfg['INIT_READING_K']*(S.reading(aggressor,cfg)-S.reading(defender,cfg)) + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.channel_weight(ta,'tempo')   # initiative = tempo(Agi) + reading(Cog/Att) + experience(History) (Jordan 2026-06-03)
-        consistency_a=cfg['FOCUS_CONSISTENCY_K']*(aggressor.focus-3)
+        consistency_a=cfg['FOCUS_CONSISTENCY_K']*(aggressor.conc/5.0 - 3)   # Concentration tracker (3F+2S, depletes), not static Focus (Jordan #12)
         # feinting (module): wrapper applies the state changes the pure evaluator returns.
         fv=S.feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR)
         feint_debuff=fv['debuff']; feint_streak=fv['new_streak']
@@ -158,8 +157,7 @@ def engagement(A, B, first, cfg, rng):
             # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
             counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
         pool=max(1, core.resolution_pool(aggressor.history) - aggressor.wt.pool_penalty())
-        ob=core.effective_ob(pool, net_sigma); net=core.roll_net(pool, rng)
-        deg=core.degree(net, ob)
+        deg, net = core.resolve(pool, net_sigma, rng)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
         overcommit_exposure = max(0.0, cfg['COMMIT_EXPOSE_K']*(commit-3)) - S.anti_overcommit(aggressor,fat_a,cfg) - TR.ability_bonus(aggressor,'anti_overcommit')

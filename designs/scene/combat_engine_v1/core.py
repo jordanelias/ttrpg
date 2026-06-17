@@ -2,7 +2,8 @@
 Wraps canonical r1/r8/m1 so every subsystem resolves identically. No A/B knowledge here."""
 import sys; sys.path.insert(0,'/home/claude'); sys.path.insert(0,'/home/claude/v32')
 from math import tanh
-import r1_sigma_resolution as r1, r8_parity_harness as r8
+import r1_sigma_resolution as r1, r8_parity_harness as r8, m1_dice_sigma_core as m1
+from math import sqrt as _sqrt
 
 DECISIVE_OB = r8.DECISIVE_OB
 TN = r8.TN_STANDARD
@@ -13,6 +14,20 @@ def roll_net(pool, rng): return r8.roll_net_continuous(pool, TN, rng=rng)
 def degree(net, ob):
     d = r1.degree_of_success(net, ob)
     return 'fail' if d=='failure' else d
+
+def resolve(pool, net_sigma, rng):
+    """Canonical mu-shift resolution (sigma_leverage_handoff §1): base Ob fixed at DECISIVE_OB; the sigma-leverage
+    boosts the ROLL (boost = eff_sigma*sigma_N = soft_cap(net_sigma)*sigma_n(pool)), it does NOT shift the Ob.
+    r1.effective_ob is display-only per its own docstring; resolving via the floored Ob-shift distorted the degree
+    bands (overwhelming trivialised by the Ob-floor). Returns (deg, net)."""
+    net = roll_net(pool, rng) + m1.soft_cap(net_sigma) * m1.sigma_n(pool)
+    return degree(net, DECISIVE_OB), net
+
+def p_auth(w):
+    """Derived percussion authority: min(8, 9.5*(sqrt(mass)*pob_frac)**0.30). Replaces the hand-set per-weapon
+    'percussion'; pob_frac & mass were dead weapon inputs and this is their consumer (combat_residuals_pob_f5 §2).
+    Read only in core's blunt branch, so non-blunt heads are unaffected (their hand-set percussion was dead data)."""
+    return min(8.0, 9.5 * (_sqrt(max(0.0, w.get('mass', 1.0))) * w.get('pob_frac', 0.15)) ** 0.30)
 
 # ---- damage (D1: Impact x Coupling x Quality), armour mitigation by head-mode x armour-type ----
 HEFT={'light':4,'heavy':6}
@@ -57,4 +72,4 @@ def strike(attacker, defender, deg, close, cfg):
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
     subsystem contract."""
     return damage(deg, attacker.weight, attacker.head, attacker.strength, defender.armor, close,
-                  cfg['DAMAGE_SCALE'], cfg['CAP_END'], attacker.w['gap'], attacker.w.get('percussion', 8))
+                  cfg['DAMAGE_SCALE'], cfg['CAP_END'], attacker.w['gap'], p_auth(attacker.w))
