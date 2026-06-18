@@ -276,3 +276,12 @@ Archived entries in tests/coverage_matrix_archive.md
   kept 7 dice; breaking the front too routed the unit (derive_rout). Single-subunit routs exactly at morale 0 as before.
   Grounding (references/historical/mass_battle_gauge_grounding.md S8): A.12 Cannae/Hastings sectional collapse; du Picq
   Battle Studies (panic is local, spreads from a break). Implemented by Claude, Jordan-vetoable.
+
+- **ED-1020** (bugfix -- per-subunit broken-state scope; ED-1019 follow-up). Per-subunit stress testing
+  (tests/sim/mass_battle/test_persubunit_stress.py) caught subunit_combat_pool flagging the WHOLE unit broken when
+  ONE sub-unit hit Discipline 0, whose top gate then zeroed every healthy sibling's pool -- an unintended intra-unit
+  break cascade contradicting the canonized A.4 ('siblings fight on') and A.12 inter-unit-only cascade. Fix: the
+  Discipline-0 gate sets atom.broken and promotes to unit.broken only when ALL sub-units are broken; single-subunit is
+  the lone sub-unit broken => unit.broken (byte-exact, digest unchanged). Re-test: broken levy 0 while healthy heavy
+  sibling fights and unit not broken; all broken -> unit.broken. Stress battery all pass. Found + fixed by Claude
+  during the ED-1018/1019 NERS audit; Jordan-vetoable.

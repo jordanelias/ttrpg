@@ -1199,8 +1199,16 @@ def subunit_combat_pool(unit, atom):
         return 0
     disc = atom.eff_discipline
     if disc <= 0:
-        unit.broken = True
+        # Per-subunit broken state (ED-1020 fix): this SUBUNIT's formation is gone (Discipline 0,
+        # §A.4 "Formation broken; cannot attack") -> it contributes 0. The UNIT is broken only when
+        # EVERY subunit is broken (the whole formation is gone); a single broken section must NOT zero
+        # its healthy siblings' pools -- that was an unintended intra-unit break cascade, contradicting
+        # §A.12's inter-unit-only cascade decision and the per-subunit "siblings fight on" model.
+        # Single-subunit: the lone subunit broken => all() true => unit.broken set exactly as before
+        # (byte-exact for the homogeneous gauge).
         atom.broken = True
+        if all(s.broken for s in unit.subunits):
+            unit.broken = True
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
     stam_pen = _stamina_pool_penalty(atom.eff_stamina)
