@@ -9,6 +9,7 @@
 ## Three-mode: TTRPG/Hybrid (Part A); Board Game (Part B); Hybrid Handoff (§B.5)
 ## All P1/P2/P3 patches applied. Gaps filled. Editorial notes flagged.
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
+## v4.9 addendum (2026-06-17): per-sub-unit rout / Morale / Discipline (ED-1019) + per-sub-unit troop-type stat presets (ED-1018) canonised from the validated engine — see §A.4 (Per-sub-unit rout) and §A.12 (Cascade scope). Provisional canon, Jordan-vetoable; byte-exact for single-sub-unit / homogeneous units.
 
 ---
 
@@ -209,6 +210,12 @@ separately, not subject to the cap. *[P1-03]*
 > **Artillery cascade ruling (PP-198):** Multiple simultaneous HBl unit destructions in one Cascade Phase each trigger Morale −1 (allied unit routed). Total non-general Morale loss still capped at −3. No runaway cascade possible from Artillery alone.
 
 While general is present: Morale floor = 1. At Morale 0: unit routs.
+
+**Per-sub-unit rout, Morale, and Discipline (ED-1019 — canonised 2026-06-17 from the validated engine; Jordan-vetoable).** A unit is composed of up to three sub-units (§A.6, §A.7). Each sub-unit now tracks its **own** Morale and Discipline and routs **independently**. The Morale degradation triggers above (Size below 50% / 25%, Discipline broken, flanked-and-lost, exhaustion) are read against *that sub-unit's* own Size fraction, so a heavily-engaged sub-unit erodes while a fresh reserve sub-unit does not; a sub-unit routs when its own Morale reaches 0. A routed sub-unit flees and cannot attack (its combat pool is 0) while its siblings fight on — one section of the line breaks while another holds (Cannae's centre collapsing while the wings fought; Hastings' shield-wall broken in sections by the feigned retreats). Discipline degrades and restores per sub-unit by the §A.4 rules above (the unit-level Size-loss asymmetry drives each sub-unit's degradation counter). Per-sub-unit Morale follows the same between-battle reset as unit Morale (§A.13, PP-711).
+
+The **unit** rout — the unit-level state that §A.12 (Cascade, Pursuit) and victory/winner resolution key on — is **derived**: a unit routs when its troop-weighted **aggregate** Morale reaches 0, OR all its sub-units have routed, OR its general is gone (Command 0). A unit of one sub-unit, or a homogeneous unit whose sub-units share stats, behaves **exactly** as the unit-level Morale/Discipline/rout rules in this section describe — the per-sub-unit model is the granular layer beneath them, not a revision of them.
+
+**Per-sub-unit stat presets (ED-1018).** A sub-unit of a named troop type carries that type's Power / Discipline / Morale drawn from the canonical unit table (§B.2); a Heavy-Infantry sub-unit and a Levy sub-unit in the same unit therefore differentiate in combat pool and in damage. (Armour→DR and Endurance→stamina from §B.2 are not yet mapped onto sub-units — left to inherit pending a confirmed scale.)
 
 **Rout contagion brake:** Rout causes −1 Morale to adjacent units, but this
 secondary loss cannot itself cause further routs until the next turn. *[P1-02]*
@@ -577,6 +584,8 @@ Over-pursuing exposes flanks. *[confirmed]*
 [EDITORIAL: ED-688 — Morale Cascade. Source: historical_precedents_warfare.md §1.3c.]
 
 **Rout vs Destroyed (definitional boundary):** *Rout* = Morale reaches 0; unit flees and cannot fight back (§A.12 cascade fires). *Destroyed* = Size reaches 0; unit eliminated at Phase 6 Step 1. These are distinct states with distinct trigger chains. §A.12 Morale Cascade fires only on Morale rout, not on Size destruction. Artillery-caused unit elimination (Size→0) triggers the Morale −1 "allied unit routed in same zone" entry in §A.4 and PP-198 as a separate enumerated trigger — this does NOT fire the §A.12 Discipline check cascade.
+
+**Cascade scope — inter-unit only (ED-1019, 2026-06-17; Jordan-vetoable).** With per-sub-unit rout (§A.4), the Morale Cascade above remains **between units**: it is the *unit* rout (the derived unit-level rout) that fires the friendly-unit Discipline check and the −1 rout contagion. A single sub-unit routing inside a unit does **not** by itself cascade onto its sibling sub-units — there is no intra-unit cascade. This is the canonical decision for the per-sub-unit model: the cascade's own rationale ("one section of the line broke and panic spread") could justify an intra-unit cascade, and per-sub-unit rout now makes a "section" a concrete sub-unit, but adding sub-unit-to-sub-unit panic propagation is a future model change, deferred here. When the inter-unit cascade does fire its −1 on an adjacent unit, that hit is applied across that unit's sub-units consistently — eroding each sub-unit's Morale once, without multiplying by sub-unit count.
 
 
 **Stalemate Break (PP-297):** If 3 consecutive Battle Turns produce 0 total damage across all engagements (no Health loss on either side), both armies execute Tactical Withdrawal. Effects: no Piety Track movement, no pursuit, no Rout. Each side's general rolls Command Ob 1 to maintain formation during withdrawal; failure = −1 Discipline on one unit (disorderly retreat). The battle ends as inconclusive. Neither side claims victory. Accounting consequences: IP +1 (military posturing without resolution).
