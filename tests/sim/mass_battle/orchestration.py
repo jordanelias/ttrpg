@@ -256,6 +256,13 @@ def _formation_depth(unit):
     return max_depth
 
 
+def _subunit_depth(atom):
+    # Rank count (rows) of ONE subunit's pattern = its internal reserve depth for stamina rotation.
+    # For a single-subunit unit this equals _formation_depth(unit) -> byte-exact phase recovery.
+    pattern = CELL_PATTERN_FN[atom.shape](atom.tier)
+    return (max(r for r, c in pattern) + 1) if pattern else 1
+
+
 def _stamina_pool_penalty(stamina):
     """Return pool penalty (negative int) based on current stamina level."""
     if stamina <= 0:
@@ -273,10 +280,11 @@ def stamina_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     for u in [unit_a, unit_b]:
         if u.routed or u.broken:
             continue
-        depth = _formation_depth(u)
-        reserve_ranks = max(0, depth - 1)
-        recovery = STAMINA_RECOVERY_PER_RESERVE_RANK * reserve_ranks
-        u.stamina = min(u.stamina_max, u.stamina + recovery)
+        for atom in u.subunits:
+            depth = _subunit_depth(atom)
+            reserve_ranks = max(0, depth - 1)
+            recovery = STAMINA_RECOVERY_PER_RESERVE_RANK * reserve_ranks
+            atom.recover_stamina(recovery)
 
 
 def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
@@ -297,7 +305,7 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
         if frac < 0.50: loss += 1.0    # Size < 50% max -> -1
         if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
         if u.broken: loss += 1.0       # discipline broken (formation gone) -> -1 (canon A.4); broken units rout, not freeze
-        if u.stamina <= 0 and u.discipline > 0 and u.command > 0:
+        if u.agg_stamina() <= 0 and u.discipline > 0 and u.command > 0:
             loss += 1.0 / (u.discipline * u.command)   # exhaustion pressure (kept)
         if loss:
             u.morale -= min(loss, 3.0)   # cap -3 per Cascade Phase (§A.4)
@@ -519,6 +527,12 @@ class Subunit:
     morale: Optional[int] = None
     morale_start: Optional[int] = None
     dr: Optional[int] = None
+    # Per-subunit stamina (Jordan directive): a subunit drains and rests its OWN stamina; None INHERITS
+    # the parent Unit (single-subunit / homogeneous units stay byte-exact via eff_stamina -> unit.stamina).
+    # An engaged subunit drains; a reserve subunit stays fresh -> line relief / depth-as-reserve becomes
+    # mechanically real (triplex-acies line relief; Clausewitz reserves).
+    stamina: Optional[float] = None
+    stamina_max: Optional[float] = None
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -573,6 +587,31 @@ class Subunit:
     @property
     def eff_dr(self):
         return self.dr if self.dr is not None else (self._u().dr if self._u() else 1)
+    @property
+    def eff_stamina(self):
+        if self.stamina is not None: return self.stamina
+        u = self._u()
+        return u.stamina if u is not None else STAMINA_MAX
+    @property
+    def eff_stamina_max(self):
+        if self.stamina_max is not None: return self.stamina_max
+        u = self._u()
+        return u.stamina_max if u is not None else STAMINA_MAX
+    def drain_stamina(self, amount):
+        # Reduce effective stamina (floor 0). Writes to own stamina if set, else routes to the inherited
+        # Unit -> a single-subunit unit reproduces the old unit.stamina drain exactly (byte-exact).
+        new = max(0, self.eff_stamina - amount)
+        if self.stamina is not None: self.stamina = new
+        else:
+            u = self._u()
+            if u is not None: u.stamina = new
+    def recover_stamina(self, amount):
+        # Increase effective stamina, capped at eff_stamina_max; same own-else-inherited-Unit write routing.
+        new = min(self.eff_stamina_max, self.eff_stamina + amount)
+        if self.stamina is not None: self.stamina = new
+        else:
+            u = self._u()
+            if u is not None: u.stamina = new
     @property
     def cur_troops(self):
         return sum(self.cell_troops.values()) if getattr(self, 'cell_troops', None) else self.troop_count
@@ -1046,7 +1085,7 @@ def command_base_pool(command, pen, stam_pen):
 
 def subunit_combat_pool(unit, atom):
     """Per-subunit combat pool (Jordan directive): SHARED Command (the general),
-    per-subunit Discipline + cohesion, shared stamina. Mirrors Unit.base_combat_pool EXACTLY for a
+    per-subunit Discipline + cohesion + stamina. Mirrors Unit.base_combat_pool EXACTLY for a
     single-subunit unit (atom.cohesion fast-paths to unit.hp/hp_max; eff_discipline inherits unit) ->
     byte-exact for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
@@ -1058,7 +1097,7 @@ def subunit_combat_pool(unit, atom):
         unit.broken = True
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
-    stam_pen = _stamina_pool_penalty(unit.stamina)
+    stam_pen = _stamina_pool_penalty(atom.eff_stamina)
     if COMMAND_SIGMA_ENABLED:
         raw = unit.command * (1.0 + atom.cohesion) + pen + stam_pen
     else:
@@ -1134,6 +1173,7 @@ class Unit:
     def agg_discipline(self): return self._agg('eff_discipline')
     def agg_morale(self):     return self._agg('eff_morale')
     def agg_dr(self):         return self._agg('eff_dr')
+    def agg_stamina(self):    return self._agg('eff_stamina')
 
     def recalc_size(self):
         # v19: effective_size = HP / BLOCK_SIZE (HP = TroopCount).
@@ -1165,7 +1205,7 @@ class Unit:
         # v16: pool uses continuous effective_size (float), floored for dice count.
         # [canonical: mass_battle_v30.md §A.4 — "Effective Combat Pool =
         #  min(Size, Command) + Command"; Size here is continuous from TroopCount]
-        stam_pen = _stamina_pool_penalty(self.stamina)
+        stam_pen = _stamina_pool_penalty(self.agg_stamina())
         if COMMAND_SIGMA_ENABLED:
             # SMOOTH POOLS (Jordan 2026-06-15): 2*command at FULL strength (size-decoupled per ED-899),
             # degrading SMOOTHLY with own casualties to command at annihilation via cohesion=hp/hp_max.
@@ -2066,17 +2106,22 @@ def run_battle(unit_a, unit_b, max_turns=18):
         # v20: stamina drain proportional to cells in contact (bottom-up).
         # More front-line cells fighting = more exhaustion. Emergent from formation.
         if pairs:
+            # Per-subunit stamina drain (Jordan directive): each ENGAGED subunit drains by ITS OWN cells in
+            # contact; a subunit not in this tick's contact set (a reserve) does not drain -> rotation. For a
+            # single-subunit unit the one subunit's contact-cells == the unit's, so unit.stamina drains
+            # identically to the old unit-level drain (byte-exact).
             for u in [unit_a, unit_b]:
                 if u.routed:
                     continue
-                cells_in_contact = 0
-                for p in pairs:
-                    if p.get('atom_a') in u.subunits:
-                        cells_in_contact += len(p.get('a_cells', []))
-                    elif p.get('atom_b') in u.subunits:
-                        cells_in_contact += len(p.get('b_cells', []))
-                drain = max(1, cells_in_contact) * STAMINA_DRAIN_PER_CONTACT_CELL
-                u.stamina = max(0, u.stamina - drain)
+                for atom in u.subunits:
+                    cic = 0
+                    for p in pairs:
+                        if p.get('atom_a') is atom:
+                            cic += len(p.get('a_cells', []))
+                        elif p.get('atom_b') is atom:
+                            cic += len(p.get('b_cells', []))
+                    if cic > 0:
+                        atom.drain_stamina(cic * STAMINA_DRAIN_PER_CONTACT_CELL)
         result = (resolve_engagements_cascading(unit_a, unit_b, pairs)
                   if CASCADING_ENABLED
                   else resolve_engagements(unit_a, unit_b, pairs))
@@ -2202,7 +2247,7 @@ def run_battle(unit_a, unit_b, max_turns=18):
     tick_in_phase = turns % TICKS_PER_PHASE if turns else 0
     return {"winner": winner, "turns": turns,
             "phases": current_phase, "tick_in_phase": tick_in_phase,
-            "a_stamina": unit_a.stamina, "b_stamina": unit_b.stamina,
+            "a_stamina": unit_a.agg_stamina(), "b_stamina": unit_b.agg_stamina(),
             "a_hp_pct": round(unit_a.hp / unit_a.hp_max * 100, 1) if unit_a.hp_max else 0,
             "b_hp_pct": round(unit_b.hp / unit_b.hp_max * 100, 1) if unit_b.hp_max else 0,
             "a_morale": unit_a.morale, "b_morale": unit_b.morale}
@@ -2229,7 +2274,8 @@ def between_turn_recovery(unit):
     [canonical: params/mass_combat.md §PP-712 — discipline persists]"""
     if unit.routed or unit.broken:
         return
-    unit.stamina = min(unit.stamina_max, unit.stamina + BETWEEN_TURN_STAMINA_RECOVERY)
+    for atom in unit.subunits:
+        atom.recover_stamina(BETWEEN_TURN_STAMINA_RECOVERY)
     unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
 
 
@@ -2275,7 +2321,7 @@ def run_multi_turn_battle(unit_a, unit_b, shape_a, shape_b, anchor_map,
             'a_pool': unit_a.base_combat_pool(), 'b_pool': unit_b.base_combat_pool(),
             'a_eff_size': unit_a.effective_size, 'b_eff_size': unit_b.effective_size,
             'a_morale': unit_a.morale, 'b_morale': unit_b.morale,
-            'a_stamina': unit_a.stamina, 'b_stamina': unit_b.stamina,
+            'a_stamina': unit_a.agg_stamina(), 'b_stamina': unit_b.agg_stamina(),
             'a_routed': unit_a.routed, 'b_routed': unit_b.routed,
             'ticks': r['turns'], 'phases': r['phases'],
         })
@@ -2663,4 +2709,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed']
+__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed']

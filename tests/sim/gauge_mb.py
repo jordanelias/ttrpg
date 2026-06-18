@@ -41,7 +41,7 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
                     morale_start=None, dr=1, stance='balanced', speed='Standard'):
     """Build a MULTI-subunit Unit with per-subunit stats (Jordan directive: different unit
     types / troop counts per subunit). `specs` = list of dicts; each may set shape, tier, troop_type,
-    unit_type, stance, instructions, starting_position, and per-subunit power/discipline/morale/morale_start/dr.
+    unit_type, stance, instructions, starting_position, and per-subunit power/discipline/morale/morale_start/dr/stamina/stamina_max.
     Per-subunit stats default None -> inherit the unit-level fallbacks (power/discipline/morale) below, so a
     spec list with no stat overrides reproduces a homogeneous unit. make_unit (single-subunit) is unchanged.
     [canonical: derived_stats architecture -- unit stats composed from subunits]"""
@@ -56,7 +56,8 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
             instructions=sp.pop('instructions', ()),
             power=sp.pop('power', None), discipline=sp.pop('discipline', None),
             morale=sp.pop('morale', None), morale_start=sp.pop('morale_start', None),
-            dr=sp.pop('dr', None)))
+            dr=sp.pop('dr', None),
+            stamina=sp.pop('stamina', None), stamina_max=sp.pop('stamina_max', None)))
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),

@@ -1,5 +1,5 @@
-# Mass-Battle Gauge — Historical & Academic Grounding (v2.1)
-**Date:** 2026-06-15 (v2); 2026-06-16 (v2.1 — cavalry construction fix) · **Status:** drives `tests/sim/gauge_mb.py` bands · **Supersedes the band-derivation basis of** `tests/sim/sim_mb_06_v9_historical_spec.md` (the v9 spec's H/R bands stand; its cavalry bands were never in scope and the gauge's later cavalry bands were *fitted to engine output* — this doc re-derives them bottom-up).
+# Mass-Battle Gauge — Historical & Academic Grounding (v2.2)
+**Date:** 2026-06-15 (v2); 2026-06-16 (v2.1 — cavalry construction fix); 2026-06-17 (v2.2 — per-subunit stamina / line-relief depth-as-reserve grounding, ED-1017) · **Status:** drives `tests/sim/gauge_mb.py` bands · **Supersedes the band-derivation basis of** `tests/sim/sim_mb_06_v9_historical_spec.md` (the v9 spec's H/R bands stand; its cavalry bands were never in scope and the gauge's later cavalry bands were *fitted to engine output* — this doc re-derives them bottom-up).
 
 This is the bottom-up grounding for the recalibrated gauge bands. Every band is set by **historical precedent + peer-reviewed academic military analysis**, not by engine output. The engine is then validated *against* these bands; where it falls outside, the gauge **flags the divergence** — the band is not lowered to make the engine pass.
 
@@ -115,3 +115,23 @@ The reciprocal charge-recoil (`orchestration.py` ~L1647) does **not** zone-gate 
 5. **C5 ceiling 90→98** — cavalry vs disordered foot is near-total (Boddy 15,000 dispersed; Hastings); the Phase-2 ceiling was set when the shock was inert.
 6. **C7 ceiling 90→100** — encirclement of an immobile (hold-stance) line that cannot turn to face is annihilating (Cannae); decA saturates to 100 when infantry is shut out.
 7. **Latent: the charge-recoil does not zone-gate** (§4.3) — a fix candidate (gate on the frontal zone), flagged not fixed.
+8. **Per-subunit stamina / line relief (§6, ED-1017)** — stamina pushed onto the Subunit; an engaged subunit drains while a reserve stays fresh, and the fresh reserve relieves the exhausted front (Sabin/Zhmodikov/du Picq/Clausewitz). Byte-exact single-subunit; `_fatigue_sigma` deliberately left unchanged (already sub-unit-scoped at its call site — NERS-E).
+
+---
+
+## 6 — Per-subunit stamina & line relief (depth as reserve) — ED-1017
+
+**Mechanic (Jordan directive 2026-06-17).** Stamina moves from the Unit onto the **Subunit** as optional state (`None` inherits the parent Unit, so single-subunit / homogeneous units stay byte-exact). Each subunit drains its own stamina by *its* cells in contact and rests/recovers when not engaged; the combat pool reads the *contacting subunit's* stamina (`subunit_combat_pool` → `_stamina_pool_penalty(atom.eff_stamina)`). An engaged front subunit therefore tires while a rear reserve stays fresh, and rotating the fresh reserve forward restores the pool the exhausted front had lost — **depth becomes a stamina reserve**.
+
+**Why this is historically real** (the top-down anchor required by the project-owner contract; the bottom-up anchor is the traced engine code, not a guess):
+
+- **Roman battles were long, and sustained by line relief rather than one exhausting clash.** Sabin (2000), *Journal of Roman Studies* 90, 1–17, DOI [10.2307/300198](https://doi.org/10.2307/300198): Roman infantry combat lasted *hours*, resolving as a sequence of surges and lulls, and one of the four mechanics that structure it is the **role of the supporting troops behind the front line** — the *triplex acies* by which an engaged first line admits or withdraws through its supports (hastati → principes → triarii). A model in which a tiring front is **relieved by fresh ranks drawn from depth** is precisely what makes the long Roman battle intelligible.
+- **The fighting line was rotated and relieved, not fought to destruction in place.** Zhmodikov (2000), *Historia* 49/1, 67–78: Republican heavy infantry fought in repeated short clashes with the forward ranks relieved — the reserve lines are a fatigue-management instrument, not merely a numerical backstop.
+- **A tiring front loses combat effectiveness; depth that rotates fresh ranks sustains it.** Ardant du Picq, *Battle Studies* (the engine's existing `_fatigue_sigma` anchor): combat power is a function of cohesion and freshness; a thin line that cannot rotate wears out where a deep one does not.
+- **Reserves renew and prolong the combat.** Clausewitz, *On War* III.12 ("The Reserve"): the reserve exists for the *prolongation and renewal* of the fight — the doctrinal generalisation of the same idea.
+
+**Engine mapping.** Optional `Subunit.stamina/stamina_max`; `eff_stamina/eff_stamina_max` (own value else inherit Unit); `drain_stamina/recover_stamina` route writes to own-stamina-if-set, else to the inherited Unit (so a single-subunit unit reproduces the old `Unit.stamina` arithmetic exactly); `agg_stamina` (troop-weighted) for the unit-level reads (exhaustion-morale, `base_combat_pool`, the run report). Per-tick drain, phase-boundary recovery (`stamina_check` via a per-subunit `_subunit_depth`), and between-turn recovery all became per-subunit. The per-column fatigue sigma (`_fatigue_sigma`, a *second* fatigue channel) is **unchanged**: its call site already passes the *engaged subunit's* contact columns, so it is already sub-unit-scoped — adding an `atom` parameter would be unused apparatus (NERS-E).
+
+**Validation.** Byte-exact against a clean pre-edit engine across 9 matchups (melee mirror / asymmetric / envelopment, ranged / volley, cavalry charge / braced / envelopment / shaken) × 20 seeds in the resolving multi-turn mode — identical state-vector digest. Rotation demonstrated: an engaged front subunit drained to 32/100 while a held reserve stayed at 100/100 (a divergence impossible under the old shared `Unit.stamina`), and the fresh reserve yielded a larger combat pool than the exhausted front.
+
+`[mechanical-tier, Jordan-vetoable: which consumers go per-subunit, and that reserve relief is positional (the engine has no reserve-hold AI — a held reserve is shown via target_delay_ticks), are design calls — built bottom-up from the engine, anchored top-down on Sabin/Zhmodikov/du Picq/Clausewitz, logged for veto.]`
