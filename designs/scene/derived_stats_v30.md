@@ -17,7 +17,7 @@ One attribute per derived value. No multi-attribute combinations. History and eq
 
 Stats change rarely (structural capability). Derived values change frequently (current state). The two-layer split exists because stats serve the resolution engine (small integers for dice pools) while derived values serve the state engine (large integers for resource tracking). These are different jobs requiring different scales.
 
-**Documented exceptions (TD-1/TD-2, audit 2026-05-15).** The claim "no change to the dice engine" applies to the d10/TN/Ob/degree primitives; small parameter shifts have occurred under PP-717 (crit threshold raised from ≥3 to ≥4) and combat-layer half-step TN conventions (PP-717 Fiore: base 7.0, 2H −0.5). The derived-value formula `attribute × multiplier` has one documented exception: Health uses `(End+6) × (MW+1)` with MW cap 3 (PP-716/PP-717 D1), preserving wound-interval × wound-count structure that a simple multiplier cannot capture. §4.1 is the authoritative spec.
+**Documented exceptions (TD-1/TD-2, audit 2026-05-15).** The claim "no change to the dice engine" applies to the d10/TN/Ob/degree primitives; small parameter shifts have occurred under PP-717 (crit threshold raised from ≥3 to ≥4) and combat-layer half-step TN conventions (PP-717 Fiore: base 7.0, 2H −0.5). The derived-value formula `attribute × multiplier` has one documented exception: Health uses `round(WI × (MW+1) + 0.25 × Strength × End)` with `WI = round(End + 4 + 0.4 × Spirit)` and MW cap 3 (PP-716/PP-717 D1; D-A noise terms ED-1021), preserving the wound-interval × wound-count structure that a simple multiplier cannot capture. §4.1 is the authoritative spec.
 
 **Engine duality (Decision E, 2026-05-15).** The engine is now specified two ways: discrete (d10 dice, legacy/TTRPG mode) and continuous (Normal-distribution sampling, videogame/Godot mode). Both produce statistically equivalent outputs. The continuous specification enables fractional Ob, fractional TN, and continuous degree resolution. See `params/core.md` §Continuous Engine for full spec. Derived stat formulas remain unchanged under either engine.
 
@@ -56,14 +56,16 @@ Resolution: stats remain 1–7 (correct pool range for d10 probability curves). 
 
 This section is the source-of-truth for the Health formula and wound mechanic across all systems. Other documents (combat_v30, threadwork_v30, params/combat, params/threadwork, params/mass_combat) reference this section rather than restating.
 
+**D-A update (ED-1021, Jordan-ratified 2026-06-18).** To reduce uniformity, Spirit now adds a low-weight term to the Wound Interval and Strength a very-low-weight term (proportional to Endurance) to Health. The flat Wound-Interval base was lowered 6→4, the 2 points reallocated into these terms, so **average Health is conserved** (Endurance-4 average = 40, unchanged). Felling switched from a fixed wound count (≥ MW+1 wounds) to **Health depletion** (cumulative damage ≥ Health) so the Strength→Health buffer actually affects outcomes — under the wound-count rule it was inert. Equal average characters now fall in ~4–6 landed hits.
+
 | Aspect | Specification |
 |---|---|
 | Stat name | Health |
 | Underlying attribute | Endurance |
 | Max Wounds | `Max Wounds = min(floor(Endurance / 2) + 1, 3)` — capped at 3 (PP-717) |
-| Wound Interval | `WI = Endurance + 6` (range 7–13 across End 1–7) |
-| Formula | `Health (full) = (Endurance + 6) × (Max Wounds + 1)` = WI × (MW+1) |
-| Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. Felled (incapacitated) at 0 Health, which equals MW + 1 wounds accrued. |
+| Wound Interval | `WI = round(Endurance + 4 + 0.4 × Spirit)` — Spirit adds a low-weight, uniformity-reducing term (D-A, ED-1021). At average Spirit 3, `WI = round(End + 5.2)`. |
+| Formula | `Health (full) = round(WI × (Max Wounds + 1) + 0.25 × Strength × Endurance)` — the Strength term (very low weight, proportional to Endurance) adds a survivability buffer that reduces uniformity (D-A, ED-1021). At average Strength 4. |
+| Behavior | Total damage capacity. Non-resetting grand total. Each wound subtracts WI from Health. **Felled (incapacitated) at Health depletion (cumulative damage ≥ Health)** (D-A, ED-1021); the Strength buffer makes this slightly beyond MW+1 wounds, so Strength buys survivability. Coincides with the legacy 'MW+1 wounds = 0 Health' rule when the Strength buffer is zero. The wound counter (driving the −1D/wound penalty) still caps at MW+1. |
 | Damage > WI in one hit | Multiple wounds applied simultaneously (each WI of damage = +1 wound counter). |
 | Wounds clearance | All wounds clear at session end (canonical). Stabilised characters return to action after one full scene of rest. |
 | Equipment | ~~Adds flat Health (+4 leather, +6 chain, +8 plate)~~ - **STRUCK 2026-06-05 (Jordan ratified): armour grants damage reduction only (DR/Resist; engine core.py RESIST), NOT flat Health - the engine WoundTracker takes no equipment_health**. Consumables restore on rest (+4 rations, +8 healer's kit). Poisons drain per round. |
@@ -71,15 +73,15 @@ This section is the source-of-truth for the Health formula and wound mechanic ac
 
 Per-Endurance reference table:
 
-| End | WI | MW | Health (full) | wounds before felled |
+| End (avg Spirit 3, Strength 4) | WI | MW | Health (full) | wounds before felled |
 |-----|----|----|---------------|---------------------|
-| 1 | 7 | 1 | 14 | 1 (felled at 2nd) |
-| 2 | 8 | 2 | 24 | 2 (felled at 3rd) |
-| 3 | 9 | 2 | 27 | 2 (felled at 3rd) |
-| 4 | 10 | 3 | 40 | 3 (felled at 4th) |
-| 5 | 11 | 3 | 44 | 3 (felled at 4th) |
-| 6 | 12 | 3 | 48 | 3 (felled at 4th) |
-| 7 | 13 | 3 | 52 | 3 (felled at 4th) |
+| 1 | 6 | 1 | 13 | 1 (felled in the 2nd wound) |
+| 2 | 7 | 2 | 23 | 2 (felled in the 3rd wound) |
+| 3 | 8 | 2 | 27 | 2 (felled in the 3rd wound) |
+| 4 | 9 | 3 | 40 | 3 (felled in the 4th wound) |
+| 5 | 10 | 3 | 45 | 3 (felled in the 4th wound) |
+| 6 | 11 | 3 | 50 | 3 (felled in the 4th wound) |
+| 7 | 12 | 3 | 55 | 3 (felled in the 4th wound) |
 
 Endurance-4 worked example (per Jordan canonical clarification 2026-05-09): Health 40 → 30 (1 wound) → 20 (2 wounds) → 10 (3 wounds, still alive at last threshold) → 0 (4 wounds, felled).
 

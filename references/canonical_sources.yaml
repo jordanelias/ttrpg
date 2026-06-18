@@ -205,7 +205,7 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "5fcd6ab5fb634b1b17eeea42b30b0d4c45211b3f"
+    canonical_sha__designs__scene__derived_stats_v30_md: "5131e5370070644808eb62760f4fcba166fbee2c"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
