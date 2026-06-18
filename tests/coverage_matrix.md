@@ -285,3 +285,15 @@ Archived entries in tests/coverage_matrix_archive.md
   the lone sub-unit broken => unit.broken (byte-exact, digest unchanged). Re-test: broken levy 0 while healthy heavy
   sibling fights and unit not broken; all broken -> unit.broken. Stress battery all pass. Found + fixed by Claude
   during the ED-1018/1019 NERS audit; Jordan-vetoable.
+
+- **ED-1021** (simulation -- D-A personal-combat wound model: Spirit->Wound Interval, Strength->Health, health-based felling).
+  Jordan-ratified (2026-06-18): add Spirit to the Wound Interval at low weight (WI = round(End + 4 + 0.4*Spirit);
+  flat base 6->4, the 2 points reallocated into the Spirit/Strength terms so avg Health stays 40) and Strength to
+  Health proportional to Endurance (Health = round(WI*(MaxWounds+1) + 0.25*Strength*End)). Felling switched from the
+  wound-COUNT rule (>= MW+1 wounds) to health-depletion (cumulative damage >= Health) because the count rule made the
+  Strength->Health buffer a verified no-op on outcomes (str7-v-4 0.877 ~ mirror); health-based felling makes Strength
+  buy survivability. Validated (np.default_rng, MB=50): equal average chars fall in ~5.2 hits (target 4-6); mirror 0.516;
+  Spirit now matters spi7-v-4 0.50->0.81; Strength holds str7-v-4 ~0.88; noise Health 37/40/43 (str1/4/7), WI 8/9/11
+  (spi1/3/7). r2 self-test 7/7 PASS (Health-40 fixture held; WI 10->9). Pre-existing ~50% multi-bout mutual-stall noted
+  (baseline too, not caused here). Isolated to personal combat (WI/Health unused by mass-battle). Implemented by Claude,
+  Jordan-vetoable. derived_stats_v30 §4.1 propagation follows.

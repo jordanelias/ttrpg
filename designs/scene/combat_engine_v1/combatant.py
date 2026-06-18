@@ -68,7 +68,7 @@ class Combatant:
         self.equipped=equipped or []        # equipped tradition abilities (modulators over the substrate; default none)
         # derived (canonical)
         self.pool=max(5, history+6)
-        self.wt=r8.WoundTracker(end)
+        self.wt=r8.WoundTracker(end, spirit=self.spirit, strength=self.strength)
         self.health_full=self.wt.health_full
         # live state (reset/managed by wrapper)
         self.stamina=0.0; self.stamina_max=0.0

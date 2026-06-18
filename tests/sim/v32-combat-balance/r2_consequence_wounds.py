@@ -18,11 +18,13 @@ from m3_weapon_class_layer import str_multiplier, armor_damage_mod, WEAPON_CLASS
 # ===== Class A: canonical crit / wound-gate constants =====
 CRIT_NET_MIN = 3             # [canonical: combat_v30 §5 Damage Resolution (Critical Hit: net hits >= 3 -> weapon modifier doubled)]
 CRIT_WEAPON_MOD_MULT = 2     # [canonical: combat_v30 §5 Damage Resolution (Critical: weapon modifier doubled before armour reduction, PP-211)]
-WOUND_INTERVAL_BASE = 6      # [canonical: derived_stats_v30 §4.1 (Wound Interval = Endurance + 6)]
+WOUND_INTERVAL_BASE = 4       # [D-A recalib, Jordan 2026-06-18: flat base lowered 6->4; the 2 pts moved into the Spirit/Strength terms below, conserving avg Health=40 while adding spread]      # [canonical: derived_stats_v30 §4.1 (Wound Interval = Endurance + 6)]
 MAXWOUNDS_DIV = 2            # [canonical: derived_stats_v30 §4.1 (floor(Endurance / 2))]
 MAXWOUNDS_ADD = 1            # [canonical: derived_stats_v30 §4.1 (+1)]
 MAXWOUNDS_CAP = 3            # [canonical: derived_stats_v30 §4.1 (Max Wounds capped at 3, PP-717)]
 WOUND_POOL_PENALTY = 1       # [canonical: derived_stats_v30 §4.1 (each wound: -1D to Pools; no Ob penalty)]
+SPI_WI_W = 0.4               # [D-A noise, Jordan 2026-06-18: Spirit at low weight increases the Wound Interval -> reduces uniformity]
+STR_HEALTH_W = 0.25          # [D-A noise, Jordan 2026-06-18: Strength at very low weight, proportional to Endurance, into Health -> reduces uniformity]
 DAMAGE_FLOOR = 0             # [canonical: combat_v30 §5 (net hits minimum 0; damage cannot be negative)]
 
 
@@ -31,14 +33,14 @@ def max_wounds(end):
     return min(end // MAXWOUNDS_DIV + MAXWOUNDS_ADD, MAXWOUNDS_CAP)
 
 
-def wound_interval(end):
-    """Wound Interval (derived_stats_v30 §4.1): End + base."""
-    return end + WOUND_INTERVAL_BASE
+def wound_interval(end, spirit=3):
+    """Wound Interval (derived_stats_v30 §4.1): End + base + low-weight Spirit (D-A, Jordan 2026-06-18)."""
+    return round(end + WOUND_INTERVAL_BASE + SPI_WI_W*spirit)
 
 
-def health_full(end):
-    """Full Health (derived_stats_v30 §4.1, authoritative): WI x (MaxWounds + 1)."""
-    return wound_interval(end) * (max_wounds(end) + 1)
+def health_full(end, spirit=3, strength=4):
+    """Full Health (derived_stats_v30 §4.1): WI x (MaxWounds+1) + low-weight Strength*Endurance (D-A, Jordan 2026-06-18)."""
+    return round(wound_interval(end, spirit) * (max_wounds(end) + 1) + STR_HEALTH_W*strength*end)
 
 
 def strike_damage(net, strength, weapon_class, armor_tier):
@@ -62,15 +64,15 @@ def strike_damage(net, strength, weapon_class, armor_tier):
 class WoundTracker:
     """The authoritative non-resetting wound-gate tracker (derived_stats_v30 §4.1).  # [canonical: see r2_verification_ledger.json]
     Health depletes; every WI of cumulative damage is a wound gate; a single hit larger than WI
-    crosses multiple gates at once (the decisive strike). Felled at MW+1 wounds (Health 0).
+    crosses multiple gates at once (the decisive strike). Felled at Health depletion (D-A reshape).
     Each wound = -1D to Pools (queried via pool_penalty); no Ob penalty, ever. Persists between
     encounters (cleared only at session end, per canon)."""
 
-    def __init__(self, end, equipment_health=0):
-        self.end = end
-        self.wi = wound_interval(end)
+    def __init__(self, end, equipment_health=0, spirit=3, strength=4):
+        self.end = end; self.spirit = spirit; self.strength = strength
+        self.wi = wound_interval(end, spirit)
         self.max_wounds = max_wounds(end)
-        self.health_full = health_full(end) + equipment_health
+        self.health_full = health_full(end, spirit, strength) + equipment_health
         self.cumulative_damage = 0
 
     @property
@@ -84,8 +86,10 @@ class WoundTracker:
 
     @property
     def felled(self):
-        """Incapacitated at MW+1 wounds (Health 0)."""
-        return self.wounds >= self.max_wounds + 1
+        """Incapacitated at Health depletion (cumulative damage >= Health). Health carries a low-weight
+        Strength buffer (D-A reshape, Jordan-ratified), so Strength now buys survivability; coincides with the
+        old MW+1-wound rule when that buffer is zero. Pool penalty still caps at MW+1 wounds (-1D each)."""
+        return self.cumulative_damage >= self.health_full
 
     def pool_penalty(self):
         """-1D per wound to all Pools (capped at felled). No Ob penalty (canon)."""
@@ -142,7 +146,7 @@ if __name__ == "__main__":
 
     # (d) Wound-gate tracker reproduces derived_stats §4.1 authoritative table (End4 worked example).
     t = WoundTracker(4)  # [canonical: combat_v30 §5 / derived_stats §4.1 -- self-test fixture]
-    table_ok = (t.health_full == 40 and t.wi == 10 and t.max_wounds == 3)  # [canonical: combat_v30 §5 / derived_stats §4.1 -- self-test fixture]
+    table_ok = (t.health_full == 40 and t.wi == 9 and t.max_wounds == 3)  # [D-A recalib 2026-06-18: WI 10->9; Health held at 40]
     t.apply(10);  w1 = (t.wounds, t.health_remaining)   # 40->30, 1 wound
     t.apply(10);  w2 = (t.wounds, t.health_remaining)   # ->20, 2
     t.apply(10);  w3 = (t.wounds, t.health_remaining)   # ->10, 3, still alive
