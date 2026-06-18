@@ -1368,8 +1368,10 @@ class Unit:
         return max(1, math.floor(raw))
 
     def check_drift(self):
+        # per-subunit formation drift: each subunit's OWN Discipline governs whether it can hold its
+        # shape (consistent with the per-subunit Discipline model); single-subunit == unit -> byte-exact.
         for a in self.subunits:
-            if self.discipline < MIN_DISCIPLINE[a.shape] and a.shape != "Line":
+            if a.eff_discipline < MIN_DISCIPLINE[a.shape] and a.shape != "Line":
                 a.shape = "Line"
 
 # ─── DICE ────────────────────────────────────────────────────────────────────
@@ -2231,11 +2233,13 @@ def run_battle(unit_a, unit_b, max_turns=18):
                 cached_centroids[id(atom)] = atom.target_atom.centroid()
         for atom in unit_a.subunits:
             if atom.target_atom:
-                atom.advance_cells(unit_a.discipline, cached_centroids[id(atom)],
+                # per-subunit formation-hold: each subunit advances on its OWN Discipline
+                # (single-subunit inherits -> == unit.discipline -> byte-exact)
+                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
                                    enemy_cells=b_cells_set)
         for atom in unit_b.subunits:
             if atom.target_atom:
-                atom.advance_cells(unit_b.discipline, cached_centroids[id(atom)],
+                atom.advance_cells(atom.eff_discipline, cached_centroids[id(atom)],
                                    enemy_cells=a_cells_set)
         # v11: vector halt-at-contact — prevent over-run that creates paradoxical angles
         for atom in unit_a.subunits: atom.halt_before_enemy(unit_b)

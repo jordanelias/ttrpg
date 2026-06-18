@@ -315,3 +315,8 @@ Archived entries in tests/coverage_matrix_archive.md
   own Morale to start and clears routed/broken (rout is derived from Morale, so the flags must clear); Discipline persists
   (PP-712). Uncalled within a battle -> byte-exact (digest unchanged); the campaign layer calls it at the battle boundary.
   Regression S13.
+
+- **ED-1026** (simulation -- sweep fidelity findings 1-2). Two formation paths now read per-subunit Discipline:
+  advance_cells (movement formation-hold; run_battle passed unit.discipline -> atom.eff_discipline) and Unit.check_drift
+  (formation drift; self.discipline -> a.eff_discipline). Byte-exact single-subunit (digest unchanged). A low-Discipline
+  subunit now advances slower and drifts to Line independently of disciplined siblings. Regression S14 (drift) + S15 (advance).

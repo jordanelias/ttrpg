@@ -199,11 +199,44 @@ def test_between_battle_reset():
     _ok("S13 Discipline persists (not reset)", own.eff_discipline == pre_disc_own and pre_disc_own == 3)
 
 
+def test_drift_per_subunit_discipline():
+    print("S14 — check_drift uses per-subunit Discipline: low-disc subunit drifts to Line, high-disc keeps shape")
+    lo = mk_su('heavy_infantry', shape='Arrowhead', col=8, discipline=3, discipline_start=3)   # below Arrowhead min
+    hi = mk_su('heavy_infantry', shape='Arrowhead', col=9, discipline=5, discipline_start=5)   # at/above min
+    u = mk_unit([lo, hi])
+    u.check_drift()
+    _ok("S14 low-disc subunit drifted to Line (own Discipline below shape min)", lo.shape == "Line")
+    _ok("S14 high-disc subunit kept its shape", hi.shape == "Arrowhead")
+
+
+def test_advance_per_subunit_discipline():
+    print("S15 — advance_cells uses per-subunit Discipline: low-disc subunit advances less than high-disc sibling")
+    def mk(disc, col):
+        return Subunit(shape='Line', troop_type='heavy_infantry', tier=2,
+                       starting_position=(SIDE_A_START_ROW, col), advance_dir=-1,
+                       discipline=disc, discipline_start=disc)
+    tgt = (SIDE_A_START_ROW - 8, 8)
+    hi = mk(5, 8); lo = mk(2, 9)
+    for s in (hi, lo):                                    # the run_battle pattern: each subunit on its OWN Discipline
+        s.advance_cells(s.eff_discipline, tgt, enemy_cells=None)
+    hi_adv = max([abs(v) for v in hi.cell_offsets.values()] + [0])
+    lo_adv = max([abs(v) for v in lo.cell_offsets.values()] + [0])
+    _ok("S15 high-disc subunit advanced", hi_adv > 0)
+    _ok("S15 low-disc subunit advanced less than high-disc", lo_adv < hi_adv)
+    hi2 = mk(5, 8); lo2 = mk(2, 9)
+    for s in (hi2, lo2):                                  # contrast: a SHARED (old, unit-level) Discipline
+        s.advance_cells(5, tgt, enemy_cells=None)
+    same = (max([abs(v) for v in hi2.cell_offsets.values()] + [0])
+            == max([abs(v) for v in lo2.cell_offsets.values()] + [0]))
+    _ok("S15 under shared (old) Discipline both advance equally — confirms the fix changes multi-subunit behavior", same)
+
+
 def main():
     for fn in (test_of_type_presets, test_all_routed_unit_routs, test_single_subunit_morale0_routs,
                test_extreme_spread, test_cohesion_guard, test_command_zero, test_cascade_no_double_count,
                test_broken_scope, test_deep_erosion, test_restore_cap,
-               test_fidelity_own_loss, test_of_type_wiring, test_between_battle_reset):
+               test_fidelity_own_loss, test_of_type_wiring, test_between_battle_reset,
+               test_drift_per_subunit_discipline, test_advance_per_subunit_discipline):
         fn()
     print(f"\n=== {('ALL PASS' if not _FAILS else str(len(_FAILS)) + ' FAIL')} ===")
     if _FAILS:
