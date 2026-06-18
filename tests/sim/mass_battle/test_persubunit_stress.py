@@ -20,7 +20,8 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from mass_battle.orchestration import (  # noqa: E402
     Subunit, Unit, subunit_combat_pool, morale_check_phase, rout_resolution,
-    discipline_check_phase, stats_for, TROOP_TYPE_STATS, SIDE_A_START_ROW, SIDE_B_START_ROW)
+    discipline_check_phase, reset_morale_between_battles, stats_for, TROOP_TYPE_STATS,
+    SIDE_A_START_ROW, SIDE_B_START_ROW)
 
 _FAILS = []
 
@@ -181,11 +182,28 @@ def test_of_type_wiring():
     _ok("S12 non-canonical inherits", (inf.power, inf.discipline, inf.morale) == (None, None, None))
 
 
+def test_between_battle_reset():
+    print("S13 — reset_morale_between_battles: Morale resets, Discipline persists, rout clears (campaign boundary)")
+    own = mk_su('heavy_infantry', col=8, morale=6, morale_start=6, discipline=5, discipline_start=5)
+    inh = mk_su('levy', col=9)                                    # inherits unit morale/discipline
+    u = mk_unit([own, inh])
+    own.erode_morale(9); own.degrade_discipline(); own.degrade_discipline()   # own morale -3, disc 5->3
+    u.morale = 0; u.derive_rout()                                 # whole unit routs (agg morale <= 0)
+    pre_disc_own = own.eff_discipline
+    assert u.routed and own.routed
+    reset_morale_between_battles(u)
+    _ok("S13 unit morale reset to start", u.morale == u.morale_start)
+    _ok("S13 own-subunit morale reset to start", own.eff_morale == own.eff_morale_start)
+    _ok("S13 inherited subunit morale follows unit", inh.eff_morale == u.morale_start)
+    _ok("S13 rout/broken cleared (unit+subunits)", not (u.routed or u.broken or own.routed or inh.routed))
+    _ok("S13 Discipline persists (not reset)", own.eff_discipline == pre_disc_own and pre_disc_own == 3)
+
+
 def main():
     for fn in (test_of_type_presets, test_all_routed_unit_routs, test_single_subunit_morale0_routs,
                test_extreme_spread, test_cohesion_guard, test_command_zero, test_cascade_no_double_count,
                test_broken_scope, test_deep_erosion, test_restore_cap,
-               test_fidelity_own_loss, test_of_type_wiring):
+               test_fidelity_own_loss, test_of_type_wiring, test_between_battle_reset):
         fn()
     print(f"\n=== {('ALL PASS' if not _FAILS else str(len(_FAILS)) + ' FAIL')} ===")
     if _FAILS:

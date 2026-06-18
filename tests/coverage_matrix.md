@@ -307,3 +307,11 @@ Archived entries in tests/coverage_matrix_archive.md
   troop type draws its B.2 presets (ED-1018 consumed -- closes the Part-2 wiring gap); only caller-set stat keys forwarded
   so the preset fills the rest, non-canonical 'infantry' inherits, override wins. Additive (no callers; bat.py unaffected).
   Regression S12.
+
+- **ED-1024** (editorial -- ruling). Morale is CONTINUOUS in play (Jordan): B.2 starting values integer, erosion
+  continuous. No engine change -- Morale is already float throughout; only the turn-LOG rounds (round(.,3)), no int()
+  coercion. Resolves the Mode-B audit flag.
+- **ED-1025** (simulation -- campaign-boundary reset). New reset_morale_between_battles(unit): resets unit + per-subunit
+  own Morale to start and clears routed/broken (rout is derived from Morale, so the flags must clear); Discipline persists
+  (PP-712). Uncalled within a battle -> byte-exact (digest unchanged); the campaign layer calls it at the battle boundary.
+  Regression S13.

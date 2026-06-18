@@ -2434,6 +2434,26 @@ def between_turn_recovery(unit):
     unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
 
 
+def reset_morale_between_battles(unit):
+    """Campaign-boundary reset: Morale resets between battles; the unit reforms.
+    [canonical: designs/provincial/mass_battle_v30.md §A.4; params/mass_combat.md §PP-711 (Morale resets between battles), §PP-712 (Discipline persists between battles)]
+    Resets the unit's Morale and each own-Morale subunit's Morale to its nominal start, and clears the
+    routed/broken flags -- rout is DERIVED from Morale reaching zero, so resetting Morale without clearing
+    the flags would leave an incoherent routed-but-full-Morale unit (derive_rout only ever SETS the flag).
+    Discipline is NOT reset (it persists per the citation above). Inherited-Morale subunits (own Morale is
+    None) are covered by the unit-level reset via eff_morale. Called by the campaign layer at the battle
+    boundary -- NOT within a single battle: between_turn_recovery handles the within-battle turn boundary,
+    this handles the battle-to-battle boundary. A single-subunit unit reduces to the unit-level reset."""
+    unit.morale = unit.morale_start
+    unit.routed = False
+    unit.broken = False
+    for atom in unit.subunits:
+        if atom.morale is not None:
+            atom.morale = atom.eff_morale_start   # own Morale -> its nominal start
+        atom.routed = False
+        atom.broken = False
+
+
 def reset_positions(unit, shape, anchor_map):
     """Reset subunit positions for re-engagement after disengagement.
     Units return to their starting rows for fresh approach."""
@@ -2866,4 +2886,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
+__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_morale_between_battles', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']
