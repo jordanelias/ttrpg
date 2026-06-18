@@ -28,7 +28,7 @@
 ### valoria-mechanic-audit
 - Path: `skills/valoria-mechanic-audit/SKILL.md`
 - Model: Sonnet 4.6
-- Triggers: audit, consistency check, mechanic check, gap detection, redundancy, formula check, what's broken, what's missing, cross-reference audit
+- Triggers: consistency check, mechanic check, gap detection, redundancy, formula check, what's broken, what's missing  (D1: bare "audit" is NOT a trigger — routes to nothing; "NERS audit" → valoria-resolution-diagnostic)
 - Modes: A-G (formula/consistency/contradiction/gap/principles/coverage/cross-mode)
 
 ### valoria-canon-guard
@@ -107,7 +107,7 @@
 - Path: `skills/valoria-resolution-diagnostic/SKILL.md`
 - Model: Opus
 - Scope: ROLLING ENGINES ONLY — any mechanism resolving an outcome by a draw (dice, U[0,1), card). NOT a general "any mechanic" auditor; non-rolling systems (character sheet, pure ledger, static stat block, bare clock) are OUT OF SCOPE -> valoria-mechanic-audit.
-- Triggers: is this rolling engine NERS compliant, diagnose this resolver, stress test this roll, resolution audit, is this sigma-leverage or deterministic+stochastic, does this resolution scale, leverage non-uniformity, clamp/Ob-floor conflict
+- Triggers: is this rolling engine NERS compliant, diagnose this resolver, stress test this roll, NERS audit, is this sigma-leverage or deterministic+stochastic, does this resolution scale, leverage non-uniformity, clamp/Ob-floor conflict
 - Purpose: Tests a rolling engine against five engine properties (legible odds / in-band uniform leverage / bounded+monotonic / graded recoverable / right engine for the pool regime), using two current canonical instances — sigma-leverage (Continuous Engine) and deterministic+stochastic (Domain Action resolver, ratified ED-874) — plus a [NEW ENGINE] branch for any third/novel rolled mechanic. Pipeline: Stage 0 validate the skill vs adjudicated cases (ED-874/884/ER-2) -> Phase 0–6 stress test -> lesson/property mapping -> per-engine NERS verdict -> Stage 4 re-test.
 - Relationship: runs AFTER valoria-mechanic-audit (consistency); checks rolling-engine resolution fitness under stress and the loops/cliffs a rolling engine drives.
 - Note: raw d10-vs-Ob is legacy TTRPG-mode only (a defect flag in videogame canon). Non-rolling components inside a composite are recognized-and-routed-out, not diagnosed.
@@ -134,13 +134,13 @@
 | "stress test [mode]" | valoria-simulator | All G-submodes for that mode — orchestrator stages across sessions |
 | "simulate [scenario]" | valoria-simulator | Mode C + M |
 | "simulate [ttrpg/hybrid/boardgame]" | valoria-simulator | Mode C + G-suite + M — multi-session |
-| "audit [subsystem]" | valoria-mechanic-audit | Modes A-G |
+| "check consistency [subsystem]" / "find gaps" | valoria-mechanic-audit | Modes A-G  (bare "audit" → nothing, D1) |
 | "topographic audit" / "vector audit" | valoria-vector-audit | Stages 1-7 + all 8 diagnostic modes |
 | "corpus audit" / "find structural weaknesses" | valoria-vector-audit | Full pipeline |
 | "vocabulary debt" / "find struck terms still in use" | valoria-vector-audit | Mode G only (fast) |
 | "find isolates" / "what's disconnected" | valoria-vector-audit | Modes E + H |
 | "find implied connections" | valoria-vector-audit | Modes B + C |
-| "is this NERS compliant" / "resolution audit" / "balance audit" | valoria-resolution-diagnostic | Full Stage 1–5 pipeline |
+| "NERS audit" / "is this NERS compliant" / "diagnose this resolver" | valoria-resolution-diagnostic | Full Stage 1–5 pipeline |
 | "stress test resolution" / "small pool problem" / "death spiral" | valoria-resolution-diagnostic | Stage 1 diagnostic or full pipeline |
 | "canon check [mechanic]" | valoria-canon-guard | Full P-01–P-14 pass |
 | "resolve editorials" | valoria-editorial-register | Workflow A |

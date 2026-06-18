@@ -13,19 +13,18 @@ description: >
   (3) per-engine NERS verdict + remediation; (4) re-test the fix. ALWAYS use when checking
   whether a ROLLING ENGINE is NERS-compliant, stress-testing a resolver, or checking leverage
   uniformity / clamp-or-floor cliffs / wrong-engine-for-the-pool. Trigger on: "is this rolling
-  engine NERS compliant", "diagnose this resolver", "stress test this roll", "resolution
-  audit", "is this sigma-leverage or deterministic+stochastic", "does this resolution scale",
+  engine NERS compliant", "diagnose this resolver", "stress test this roll", "NERS audit", "is this sigma-leverage or deterministic+stochastic", "does this resolution scale",
   "leverage non-uniformity", "clamp/Ob-floor conflict", or when the orchestrator routes a
-  resolution diagnosis. Do NOT trigger to audit a character sheet, inventory, pure economy
+  resolution diagnosis. The bare word "audit" does NOT route here — only the explicit phrase "NERS audit" does. Do NOT trigger to audit a character sheet, inventory, pure economy
   ledger, or other non-rolling system — that is valoria-mechanic-audit's job.
 ---
 
-**Prerequisite:** Bootstrap complete — `assert_bootstrap()` via `quick_bootstrap()` before invoking. This skill reads canonical mechanics; never diagnose from memory or project-file copies. This session, fetch (via the tracked path `g.read_files_graphql` / `g.fetch_system`):
+**Prerequisite:** Bootstrap complete — `assert_bootstrap()` via `quick_bootstrap()` before invoking. This skill reads the engine mechanics from a **canonical reference baseline** AND the **session-local target**; never diagnose from *memory* — read the actual artifact, never a remembered or hallucinated version. This session, fetch (via the tracked path `g.read_files_graphql` / `g.fetch_system`) the canonical reference baseline below, plus the target (which may be session-local work, not canon — see the last bullet):
 - `params/core.md` — core engine: **Die Rule (legacy/TTRPG), Continuous Engine (Decision E), Degrees, Obstacle Scale, Expected Value table, Pool Floor**.
 - `designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md` — the **deterministic+stochastic resolver** spec (ratified per ED-874).
 - `designs/audit/2026-05-28-engine-replacement/engine_replacement_reconciled.md` — the engine-replacement reconciliation (continuity correction; resolver-vs-engine boundary).
 - `canon/02_canon_constraints.md` (P-01–P-15 + GD-1/2/3) and `canon/definitions.yaml` (NERS criteria).
-- Target rolling engine's canonical design doc (resolve path via `references/canonical_sources.yaml`).
+- **Target rolling engine — whatever work/files exist local to the session** (a draft, an in-progress design, an uncommitted artifact, the latest local revision). It need **NOT** be canon (D2): the point of the modular architecture is to bring canon in from the repo as the *baseline* while the latest **local session work supersedes the stale canon**. If a canonical version of the target exists, fetch it and declare which local artifact supersedes which canonical source; otherwise audit the local work directly. This breaks the canonical-bootstrap circularity — a system can be NERS-audited *en route to* becoming canon, not only after it already is.
 
 **Model:** Opus (multi-system cross-referencing + quantitative reasoning).
 

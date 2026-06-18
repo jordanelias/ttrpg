@@ -3,11 +3,12 @@ name: valoria-mechanic-audit
 description: >
   Systematic mechanical consistency checking for the Valoria ruleset — formulas, number systems,
   interaction chains, gap detection, redundancy detection, and core principles compliance.
-  ALWAYS use this skill when auditing mechanics, checking consistency, finding gaps, reviewing
+  ALWAYS use this skill when checking mechanical consistency, finding gaps, reviewing
   number systems, checking formulas, or evaluating mechanical interactions. Trigger on:
-  "audit mechanics", "check consistency", "find gaps", "number systems", "formula check",
+  "check consistency", "find gaps", "number systems", "formula check",
   "interaction analysis", "what's broken", "what's missing", any specific mechanical question,
-  or when the orchestrator routes a mechanical audit.
+  or when the orchestrator routes a mechanical-consistency check. The bare word "audit" does
+  NOT route here (it routes to nothing — D1); "NERS audit" routes to valoria-resolution-diagnostic.
 ---
 
 **Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
@@ -23,14 +24,14 @@ Before running any audit mode, verify the following have been fetched from GitHu
 # Required files — fetch via g.read_files_graphql() if not already in context
 required = [
     'references/canonical_sources.yaml',       # confirm which design doc is canonical
-    '<canonical design doc for target system>', # from canonical_sources.yaml lookup
+    '<target system doc — session-local work OR canonical>',  # need NOT be canon (D2); canon is the baseline
     'references/params_<system>.md',           # extracted mechanical values
     'canon/02_canon_constraints.md',           # P-01–P-15
     'references/propagation_map.md',          # dependency map
 ]
 ```
 
-**Never audit from memory or project-file versions of design docs. The canonical source is always on GitHub.**
+**The audit target may be whatever work/files exist local to the session — it need NOT be canon (D2).** Fetch canon as the *baseline/yardstick*; where a canonical version of the target exists, the latest local session work *supersedes the stale canon* (note which local artifact supersedes which source). The standing prohibition is narrower than before: **never audit from *memory* — read the actual local artifact, never a remembered or hallucinated version.**
 
 ## Audit Modes
 
