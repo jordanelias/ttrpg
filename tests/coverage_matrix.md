@@ -297,3 +297,13 @@ Archived entries in tests/coverage_matrix_archive.md
   (spi1/3/7). r2 self-test 7/7 PASS (Health-40 fixture held; WI 10->9). Pre-existing ~50% multi-bout mutual-stall noted
   (baseline too, not caused here). Isolated to personal combat (WI/Health unused by mass-battle). Implemented by Claude,
   Jordan-vetoable. derived_stats_v30 §4.1 propagation follows.
+
+- **ED-1022** (bugfix -- roll-input fidelity). discipline_check_phase drove every sub-unit's Discipline from the
+  UNIT's cumulative loss + unit-level asymmetry, so a fresh reserve sub-unit cracked from siblings' casualties. Now each
+  sub-unit degrades from its OWN (start_troops-cur_troops) loss; single-sub-unit uses the exact (hp_max-hp) expression
+  (byte-exact, digest unchanged). Asymmetry baseline stays the opposing UNIT (no per-sub-unit opponent in 1v1). Verified:
+  a gutted sub-unit degrades while a fresh reserve sibling (unit loss 2.0) does not. Regression S11.
+- **ED-1023** (simulation -- of_type wiring). make_mixed_unit now builds each sub-unit via Subunit.of_type, so a canonical
+  troop type draws its B.2 presets (ED-1018 consumed -- closes the Part-2 wiring gap); only caller-set stat keys forwarded
+  so the preset fills the rest, non-canonical 'infantry' inherits, override wins. Additive (no callers; bat.py unaffected).
+  Regression S12.

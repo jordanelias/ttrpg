@@ -339,19 +339,31 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
 def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """v18 (D-6): discipline degradation at phase boundary using cumulative loss.
     [canonical: params/mass_combat.md §Discipline Degradation —
-     deterministic, fires when effective_size loss > threshold AND asymmetric]"""
+     deterministic, fires when effective_size loss > threshold AND asymmetric]
+    Roll-input fidelity: each subunit's Discipline degrades from ITS OWN cumulative
+    Size loss, not the whole unit's -- so a fresh reserve subunit does not crack from casualties
+    its engaged siblings took. This makes Discipline consistent with morale_check_phase, which
+    already reads the per-subunit cohesion. A single-subunit unit uses the exact unit-loss
+    expression (mirrors cohesion's byte-exact fast-path) so the homogeneous gauge is unchanged.
+    The loss-asymmetry baseline stays the opposing UNIT's loss (the 1v1 engine has no per-subunit
+    opponent mapping); for a single-subunit unit this reduces to the exact old `my_loss > their_loss`.
+    """
     a_loss = (unit_a.hp_max - unit_a.hp) / BLOCK_SIZE if BLOCK_SIZE else 0
     b_loss = (unit_b.hp_max - unit_b.hp) / BLOCK_SIZE if BLOCK_SIZE else 0
-    for u, my_loss, their_loss in [(unit_a, a_loss, b_loss), (unit_b, b_loss, a_loss)]:
+    for u, their_loss in [(unit_a, b_loss), (unit_b, a_loss)]:
         if u.routed or u.broken:
             continue
-        # How many full thresholds of loss have we crossed?  (unit-level loss drives the trigger)
-        disc_hits = int(my_loss / DISCIPLINE_LOSS_THRESHOLD)
+        single = len(u.subunits) == 1
         for atom in u.subunits:
             if atom.routed or atom.broken:
                 continue
-            # already applied for THIS subunit: eff_discipline_start - eff_discipline
-            # (single-subunit: == u.discipline_start - u.discipline -> byte-exact)
+            # per-subunit own Size loss drives THIS subunit's degradation
+            if single:
+                my_loss = (u.hp_max - u.hp) / BLOCK_SIZE if BLOCK_SIZE else 0   # exact old value -> byte-exact
+            else:
+                my_loss = (atom._start_troops - atom.cur_troops) / BLOCK_SIZE if BLOCK_SIZE else 0
+            disc_hits = int(my_loss / DISCIPLINE_LOSS_THRESHOLD)
+            # already applied for THIS subunit (single-subunit: == u.discipline_start - u.discipline)
             already_applied = atom.eff_discipline_start - atom.eff_discipline
             if disc_hits > already_applied and my_loss > their_loss:
                 atom.degrade_discipline()   # -1 toward 0, routes own-else-Unit

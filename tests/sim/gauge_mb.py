@@ -42,22 +42,29 @@ def make_mixed_unit(specs, name, faction, power=4, command=4, discipline=5, mora
     """Build a MULTI-subunit Unit with per-subunit stats (Jordan directive: different unit
     types / troop counts per subunit). `specs` = list of dicts; each may set shape, tier, troop_type,
     unit_type, stance, instructions, starting_position, and per-subunit power/discipline/morale/morale_start/dr/stamina/stamina_max.
-    Per-subunit stats default None -> inherit the unit-level fallbacks (power/discipline/morale) below, so a
-    spec list with no stat overrides reproduces a homogeneous unit. make_unit (single-subunit) is unchanged.
+    Each subunit is built via Subunit.of_type, so a CANONICAL troop type (TROOP_TYPE_STATS:
+    levy, light_infantry, heavy_infantry, cavalry, archers, crossbow, sling, artillery, knights_templar)
+    draws its §B.2 Power/Discipline/Morale presets unless the spec overrides them. A non-canonical
+    type (e.g. 'infantry') or an explicit override behaves exactly as before -> inherits the unit-level
+    fallbacks below, so a spec list of non-canonical types with no overrides still reproduces a homogeneous
+    unit. make_unit (single-subunit) is unchanged.
     [canonical: derived_stats architecture -- unit stats composed from subunits]"""
     subs = []
     for i, sp in enumerate(specs):
         sp = dict(sp)
         pos = sp.pop('starting_position', (10 + i * 4, 15))
-        subs.append(Subunit(
-            shape=sp.pop('shape'), troop_type=sp.pop('troop_type', 'infantry'),
-            tier=sp.pop('tier', 3), starting_position=pos,
-            unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
-            instructions=sp.pop('instructions', ()),
-            power=sp.pop('power', None), discipline=sp.pop('discipline', None),
-            morale=sp.pop('morale', None), morale_start=sp.pop('morale_start', None),
-            dr=sp.pop('dr', None),
-            stamina=sp.pop('stamina', None), stamina_max=sp.pop('stamina_max', None)))
+        tt = sp.pop('troop_type', 'infantry')
+        # build typed subunits via Subunit.of_type so a canonical troop type draws its
+        # §B.2 Power/Discipline/Morale presets (the taxonomy stat home, ED-1018). Only forward the
+        # stat keys the caller explicitly set, so of_type's setdefault fills the rest from the preset;
+        # a non-canonical type ('infantry') fills nothing and inherits the unit-level fallbacks exactly
+        # as before. A caller-set stat still overrides the preset.
+        kw = dict(unit_type=sp.pop('unit_type', 'melee'), stance=sp.pop('stance', stance),
+                  instructions=sp.pop('instructions', ()))
+        for k in ('power', 'discipline', 'morale', 'morale_start', 'dr', 'stamina', 'stamina_max'):
+            if k in sp:
+                kw[k] = sp.pop(k)
+        subs.append(Subunit.of_type(tt, sp.pop('shape'), sp.pop('tier', 3), pos, **kw))
     return Unit(name=name, faction=faction, power=power, command=command,
                 discipline=discipline, discipline_start=discipline,
                 morale=morale, morale_start=(morale if morale_start is None else morale_start),

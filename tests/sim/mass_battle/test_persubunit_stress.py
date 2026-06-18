@@ -151,10 +151,41 @@ def test_restore_cap():
     _ok("S10 restore capped at 4", a.eff_discipline == 4)
 
 
+def test_fidelity_own_loss():
+    print("S11 — Discipline degrades from the sub-unit's OWN loss, not the unit's (roll-input fidelity)")
+    def su3(tt, col):
+        return Subunit(shape='Line', troop_type=tt, tier=3, starting_position=(SIDE_A_START_ROW, col),
+                       advance_dir=-1, discipline=5, discipline_start=5)
+    s0 = su3('heavy_infantry', 8); s1 = su3('levy', 9)
+    a = Unit(name='A', faction='A', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, subunits=[s0, s1], dr=1)
+    bsu = Subunit(shape='Line', troop_type='heavy_infantry', tier=3,
+                  starting_position=(SIDE_B_START_ROW, 8), advance_dir=1, discipline=5, discipline_start=5)
+    b = Unit(name='B', faction='B', power=4, command=4, discipline=5, discipline_start=5,
+             morale=6, morale_start=6, subunits=[bsu], dr=1)
+    for k in s0.cell_troops:                 # gut s0's own troops; s1 stays fresh
+        s0.cell_troops[k] *= 0.5
+    a.hp = s0.cur_troops + s1.cur_troops      # unit-level loss large -> OLD code would degrade BOTH
+    discipline_check_phase(a, b, 0)
+    _ok("S11 gutted sub-unit degrades from own loss", s0.eff_discipline == 4)
+    _ok("S11 fresh reserve NOT degraded from sibling loss", s1.eff_discipline == 5)
+
+
+def test_of_type_wiring():
+    print("S12 — of_type construction (as make_mixed_unit now builds) draws B.2 presets (taxonomy wiring)")
+    kt = Subunit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8))
+    _ok("S12 canonical type draws preset", (kt.power, kt.discipline, kt.morale) == (5, 6, 6))
+    ov = Subunit.of_type('knights_templar', 'Line', 1, (SIDE_A_START_ROW, 8), discipline=3)
+    _ok("S12 caller override beats preset", ov.discipline == 3 and ov.power == 5)
+    inf = Subunit.of_type('infantry', 'Line', 1, (SIDE_A_START_ROW, 8))
+    _ok("S12 non-canonical inherits", (inf.power, inf.discipline, inf.morale) == (None, None, None))
+
+
 def main():
     for fn in (test_of_type_presets, test_all_routed_unit_routs, test_single_subunit_morale0_routs,
                test_extreme_spread, test_cohesion_guard, test_command_zero, test_cascade_no_double_count,
-               test_broken_scope, test_deep_erosion, test_restore_cap):
+               test_broken_scope, test_deep_erosion, test_restore_cap,
+               test_fidelity_own_loss, test_of_type_wiring):
         fn()
     print(f"\n=== {('ALL PASS' if not _FAILS else str(len(_FAILS)) + ' FAIL')} ===")
     if _FAILS:
