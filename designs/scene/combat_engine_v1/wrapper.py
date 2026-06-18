@@ -114,7 +114,7 @@ def engagement(A, B, first, cfg, rng):
         # standing reach advantage (module): defender's reach lowers the attacker's net, falling with armour.
         reach_pen=S.reach_sigma(aggressor, defender, er, fat_a, fat_d, cfg, TR)
         # tempo emphasis (commitment-window exploitation): re-weights the aggressor's initiative
-        init=(cfg['INIT_K']*(aggressor.agi-defender.agi) + cfg['INIT_READING_K']*(S.reading(aggressor,cfg)-S.reading(defender,cfg)) + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.channel_weight(ta,'tempo')   # initiative = tempo(Agi) + reading(Cog/Att) + experience(History) (Jordan 2026-06-03)
+        init=(cfg['INIT_K']*(aggressor.agi-defender.agi) + cfg['INIT_READING_K']*(S.reading(aggressor,cfg)-S.reading(defender,cfg)) + cfg['INIT_HISTORY_K']*(aggressor.history-defender.history))*TR.eff_cw(aggressor,'tempo')   # initiative = tempo(Agi) + reading(Cog/Att) + experience(History) (Jordan 2026-06-03)
         consistency_a=cfg['FOCUS_CONSISTENCY_K']*(aggressor.conc/5.0 - 3)   # Concentration tracker (3F+2S, depletes), not static Focus (Jordan #12)
         # feinting (module): wrapper applies the state changes the pure evaluator returns.
         fv=S.feint_eval(aggressor, defender, mental_fat_d, feint_streak, cfg, rng, TR)
@@ -128,8 +128,8 @@ def engagement(A, B, first, cfg, rng):
         # more readable. So the defender's read rises vs swings/lunges and falls vs thrusts.
         fam = TR.familiarity(td, ta)
         legib=S.legibility(aggressor, commit, cfg, defender.armor)   # mode-aware: swings/blunt easy, thrusts (incl. half-sword vs plate) hard
-        read_d=S.reading(defender,cfg)*TR.channel_weight(td,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
-        read_a=S.reading(aggressor,cfg)*TR.channel_weight(ta,'visual')+consistency_a
+        read_d=S.reading(defender,cfg)*TR.eff_cw(defender,'visual')*fam*legib*(1-cfg['MENTAL_FAT_READ_K']*mental_fat_d)*(1-feint_debuff)
+        read_a=S.reading(aggressor,cfg)*TR.eff_cw(aggressor,'visual')+consistency_a
         read_win = rng.random() < 1/(1+exp(-(read_d-read_a)/1.0))
         modes=['parry','dodge','wind']
         msig={m:S.mode_sigma(m,aggressor,defender,commit,0.0,read_win,fat_d,cfg) for m in modes}
@@ -155,7 +155,7 @@ def engagement(A, B, first, cfg, rng):
             # SAME tempo. Universal, but SELECTION is tempo-driven (how often you reach for it); SUCCESS (below) is
             # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
             # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
-            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.channel_weight(defender.tradition,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
+            counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
         pool=max(1, core.resolution_pool(aggressor.history) - aggressor.wt.pool_penalty())
         deg, net = core.resolve(pool, net_sigma, rng)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
@@ -239,7 +239,7 @@ def engagement(A, B, first, cfg, rng):
             bw.initiative=S.clamp_initiative(bw.initiative+g, cfg)
             bl.initiative=S.clamp_initiative(bl.initiative-g, cfg)
             # KUZUSHI: the bind winner breaks the loser's balance through the bind, scaled by leverage (Stärke-Schwäche).
-            bl.poise=S.clamp_poise(bl.poise - cfg['POISE_BREAK_BIND']*TR.channel_weight(bw.tradition,'leverage'), cfg)
+            bl.poise=S.clamp_poise(bl.poise - cfg['POISE_BREAK_BIND']*TR.eff_cw(bw,'leverage'), cfg)
             for _ in range(3):
                 beats+=1
                 bsig = S.bind_sigma(aggressor, defender, cfg, TR)   # module: leverage + tactile (Fuhlen), Str minor
