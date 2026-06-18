@@ -4,120 +4,104 @@ owns:
 - tests/sim/mass_battle/**
 - tests/sim/gauge_mb.py
 - tests/coverage_matrix.md
-last_commit: '7cf07d8 (2026-06-16) [infrastructure] derive unit combat stats from
-  subunits: per-subunit power/discipline/morale/dr + per-subunit pool; ED-1016. Prior:
-  50ed594 cavalry gauge fix ED-1015.'
+last_commit: 'bbed131 (2026-06-17) [infrastructure] per-subunit stamina: optional
+  Subunit stamina/stamina_max + per-subunit drain/recovery/pool; byte-exact single-subunit;
+  ED-1017. Prior: 7cf07d8 ED-1016.'
 task:
   skill: valoria-orchestrator
-  description: 'QUEUED (Jordan directive 2026-06-17): give each Subunit its OWN stamina
-    (optional, None->inherit Unit), so rotation / supporting-troops / depth logic
-    is justified by historical precedent -- a fresh rear/reserve subunit relieves
-    an exhausted engaged one; depth = stamina reserve (Roman triplex-acies line relief;
-    Clausewitz reserves). Mirror EXACTLY the per-subunit-stats refactor just landed
-    (ED-1016): optional fields on Subunit, _unit back-ref (present), eff_* props with
-    a single-subunit fast-path, repoint consumers, prove byte-exact on the battery
-    (MULTI-TICK battle), demonstrate rotation, then commit + ED + coverage co-file
-    + grounding doc.'
+  description: 'DONE @bbed131 (ED-1017): per-subunit stamina. Each Subunit has OWN
+    optional stamina/stamina_max (None inherits Unit via _unit); an engaged subunit
+    drains by its cells-in-contact while a reserve stays fresh; the combat pool reads
+    the contacting subunit stamina. Byte-exact for single-subunit (identical state-vector
+    digest across 9 matchups x 20 seeds, multi-turn) and rotation demonstrated (engaged
+    front -> 32 while held reserve stays 100; fresh reserve +1 pool). Mirrors ED-1016.
+    REMAINING = two deferred SECONDARY items (below) awaiting Jordan go/veto.'
 context_files:
 - path: tests/sim/mass_battle/orchestration.py
   depth: full
-  reason: Unit.stamina/stamina_max (flat UNIT-level -- push down); update_stamina
-    (drains ENGAGED depth depth-damped, rests reserves); subunit_combat_pool uses
-    _stamina_pool_penalty(unit.stamina) -> per-subunit; between_turn_recovery; phase-boundary
-    stamina. Subunit now has optional power/discipline/morale/morale_start/dr + _unit
-    back-ref + eff_*/cohesion/eff_size (ED-1016) -- ADD stamina/stamina_max identically.
-- path: tests/sim/mass_battle/percell.py
-  depth: full
-  reason: _ColBlock per-column depth-ranks + stamina; update_stamina engaged-depth
-    drain vs reserve rest; sync_col_grid. Depth-as-reserve mechanics per-subunit stamina
-    makes historically real.
-- path: tests/sim/mass_battle/resolution.py
-  depth: skeleton
-  reason: '_fatigue_sigma (engaged-front stamina penalty; col-grid) -> per-subunit.
-    ED-1016 atom-parameterized the sigma helpers (pattern: optional atom=None, None->unit,
-    byte-exact single-subunit).'
-- path: tests/sim/mass_battle/config.py
-  depth: skeleton
-  reason: STAMINA_MAX + stamina drain/recovery constants; env flags PER_CELL/LANCHESTER_ENABLED/COMMAND_SIGMA_ENABLED/PC_BRACE_ENABLED
-    read at import.
+  reason: 'Per-subunit stamina lives here: Subunit.stamina/stamina_max (optional,
+    None->inherit Unit) + eff_stamina/eff_stamina_max + drain_stamina/recover_stamina
+    (write routing) + agg_stamina + _subunit_depth; consumers repointed (subunit_combat_pool,
+    base_combat_pool, per-tick drain, stamina_check, between_turn_recovery, morale
+    exhaustion). Unit retains stamina as inherit-source/single-subunit home.'
 - path: tests/sim/gauge_mb.py
   depth: skeleton
-  reason: make_unit (single-subunit; byte-exact contract, do NOT change signature)
-    + make_mixed_unit (multi-subunit, ED-1016; extend for per-subunit stamina rotation
-    demos).
-- path: designs/provincial/mass_battle_v30.md
+  reason: make_mixed_unit extended to accept per-subunit stamina/stamina_max (rotation
+    demos). make_unit (single-subunit, byte-exact contract) UNCHANGED.
+- path: tests/sim/mass_battle/percell.py
   depth: skeleton
-  reason: Section A.4 stat block + stamina/fatigue; canonical design doc. Cite for
-    stamina-mechanic grounding.
+  reason: _ColBlock per-column stamina + _fatigue_sigma (channel 2) — left UNCHANGED
+    on purpose (already sub-unit-scoped at the call site; NERS-E). Relevant if per-subunit
+    rout/eroding-morale SECONDARY is taken up.
 - path: references/historical/mass_battle_gauge_grounding.md
   depth: skeleton
-  reason: Historical-precedent grounding (v2.1, ED-1015). ADD rotation/line-relief/depth-as-reserve
-    precedent (top-down anchor required by project-owner contract). Co-file pattern.
+  reason: v2.2 — added section 6 (per-subunit stamina / line relief; Sabin 2000 JRS,
+    Zhmodikov 2000, du Picq, Clausewitz).
 - path: canon/editorial_ledger.jsonl
   depth: skeleton
-  reason: Append-shared store. ED-1016 = immediate predecessor + template. Next mass-battle
-    ED ~1017 -- VERIFY ledger max at HEAD before allocating.
+  reason: ED-1017 appended (max now 1017). 23 PRE-EXISTING data-quality warnings are
+    not ours.
+- path: tests/coverage_matrix.md
+  depth: skeleton
+  reason: ED-1017 co-file entry appended after ED-1016.
 working_state:
   completed:
-  - 'ED-1016 @7cf07d8: per-subunit power/discipline/morale/morale_start/dr on Subunit
-    (optional, None->inherit Unit via _unit); per-subunit cohesion + subunit_combat_pool
-    (SHARED Command, per-subunit Discipline+cohesion, shared stamina); repointed engagement
-    pool + Lanchester casualty power/dr + charge-shock/brace-recoil/morale sigma +
-    Phase-2 volley to contacting subunit eff_*; Unit derives agg_power/discipline/morale/dr.'
-  - BYTE-EXACT verified vs CLEAN pre-edit engine across melee/cavalry/brace/morale
-    AND ranged/volley (exact states + win-rates identical). single-subunit fast-paths
-    + None-inheritance.
-  - 'Mixed-unit differentiation shown: cavalry P6/D6 pool 8 vs infantry P4/D4 pool
-    7, into the combat trace. make_mixed_unit added (make_unit unchanged).'
-  - 'ED-1015 @50ed594: cavalry gauge test-construction fix (brace + shaken morale_start);
-    battery 7/7. Gauge-only.'
-  - 'Three defects caught+fixed by verification: @dataclass decorator displaced onto
-    subunit_combat_pool; _subunit_braced missing from resolution __all__; env-flag
-    harness slip (flags must be set BEFORE import) producing a spurious FAIL.'
+  - 'ED-1017 @bbed131: per-subunit stamina. Subunit gained optional stamina/stamina_max
+    (None->inherit Unit), eff_stamina/eff_stamina_max, drain_stamina/recover_stamina
+    (own-else-inherited-Unit write routing), agg_stamina (troop-weighted), _subunit_depth.
+    Repointed per-subunit: subunit_combat_pool penalty (atom.eff_stamina), base_combat_pool
+    (agg_stamina), per-tick contact drain (engaged subunits only), stamina_check phase
+    recovery (via _subunit_depth), between_turn_recovery, exhaustion-morale read.
+    _fatigue_sigma left UNCHANGED (already sub-unit-scoped at its call site; NERS-E)
+    — a reasoned deviation from the handoff literal step-2 list, logged in ED-1017
+    + grounding section 6.'
+  - 'BYTE-EXACT verified vs a CLEAN pre-edit engine: identical SHA digest fe99574610caca44052509beb8c0b81a1b3d1972c6a3c8e3513e38933ef27c69
+    across Line-mirror/Arrowhead-Line/Arrowhead-Horseshoe/Ranged-Line/Ranged-mirror/Cav-Line/Cav-Braced/Cav-Envelop/Cav-Shaken
+    x 20 seeds in the resolving multi-turn mode. Single-subunit None-inheritance +
+    identical drain/recovery arithmetic => byte-exact by construction, now empirically
+    confirmed.'
+  - 'ROTATION demonstrated: a held reserve (target_delay_ticks) stays at 100 while
+    the engaged front drains to 32 (divergence impossible under shared Unit.stamina);
+    a fresh reserve subunit yields +1 combat-pool die over an exhausted (stamina 0)
+    front. make_mixed_unit extended for per-subunit stamina; grounding section 6 added
+    (Sabin 2000 JRS line relief DOI 10.2307/300198; Zhmodikov 2000 Historia; du Picq;
+    Clausewitz On War III.12). Coverage co-file + ED-1017 committed.'
+  - 'ED-1016 @7cf07d8 (predecessor/template): per-subunit power/discipline/morale/morale_start/dr
+    + per-subunit pool (shared Command). Per-subunit stamina composes with it.'
   next:
-  - 'PRIMARY (queued): per-subunit stamina. (1) optional stamina/stamina_max on Subunit
-    (None->inherit); eff_stamina/eff_stamina_max props + single-subunit fast-path
-    (->unit.stamina). (2) repoint: _stamina_pool_penalty in subunit_combat_pool; update_stamina
-    drain/rest per-subunit; _fatigue_sigma per-subunit (atom param, mirror ED-1016);
-    between_turn_recovery + phase-boundary. (3) CLEAN baseline on a MULTI-TICK battle
-    (stamina drains over ticks; single max_turns=18 barely moves it -- use run_multi_turn_battle
-    or persistent run_battle calls), prove byte-exact. (4) demonstrate rotation: engaged
-    front subunit drains while fresh rear recovers; rotating rear in restores pool.
-    (5) add line-relief/depth-as-reserve precedent to mass_battle_gauge_grounding.md.
-    (6) commit [infrastructure] + ED-1017 + coverage co-file + Citations.'
-  - 'SECONDARY (deferred ED-1016): per-subunit ROUT + eroding morale/discipline (currently
-    UNIT-level v1 scope). With per-subunit stamina this completes subunit lifecycle
-    independence. Jordan-vetoable.'
-  - 'SECONDARY: wire fine troop taxonomy (heavy/light infantry, archer) onto the now-existing
-    per-subunit stats -- the stat home the 2026-06-16 completeness audit found missing.'
+  - 'SECONDARY (deferred ED-1016, Jordan-vetoable, NOT STARTED): per-subunit ROUT
+    + eroding morale/discipline (currently UNIT-level v1 scope). With per-subunit
+    stamina now in place, this completes subunit lifecycle independence. Needs a Jordan
+    go/veto before starting (mechanical-tier design call).'
+  - 'SECONDARY (Jordan-vetoable, NOT STARTED): wire the fine troop taxonomy (heavy/light
+    infantry, archer) onto the now-existing per-subunit stats — the stat home the
+    2026-06-16 completeness audit found missing.'
 key_values:
-- 'HEAD this thread: 7cf07d8 (ED-1016). Engine: tests/sim/mass_battle/{orchestration,resolution,percell,geometry,config,engine,lanchester_signature,validators}.py
+- 'HEAD this thread: bbed131 (ED-1017). Engine: tests/sim/mass_battle/{orchestration,resolution,percell,geometry,config,engine,lanchester_signature,validators}.py
   + tests/sim/gauge_mb.py.'
-- 'RUN RECIPE: fetch 8 mass_battle/*.py -> /home/claude/simpkg/mass_battle/ + __init__.py
-  + mb_flat.py shim; gauge via importlib. ENV FLAGS BEFORE PYTHON IMPORT: PER_CELL=1
-  LANCHESTER_ENABLED=1 COMMAND_SIGMA_ENABLED=1 PC_BRACE_ENABLED=1 (engine reads at
-  import; setting os.environ after import = wrong path = spurious divergence).'
-- 'BYTE-EXACT METHOD: random.seed(S); make_unit per matchup; run; record [round(hp_a,6),round(hp_b,6),size_a,size_b,routed_a,routed_b]
-  + n-win-rates; clean-vs-edited. STAMINA needs a MULTI-TICK battle. make_unit = SINGLE-subunit
-  -> per-subunit==unit -> byte-exact by construction.'
-- 'COMMIT DISCIPLINE: task_gate(type) in-process BEFORE safe_commit/write_handoff.
-  Co-file: tests/sim/ edit requires tests/coverage_matrix.md update. sim_fabrication_check
-  flags 2+-digit integers in DOCSTRINGS (skips # comments) -> keep dates/ED-numbers
-  out of docstrings. 23 jsonl warnings PRE-EXISTING (not yours). CollisionError =
-  re-fetch via read_files_graphql + retry. write_handoff depth must be full|skeleton
-  (not index).'
-- 'V1 SCOPE (ED-1016): per-subunit combat morale = subunit nominal for overriders;
-  eroding morale pool + rout + discipline degradation stay UNIT-level. Per-subunit
-  stamina composes with this; per-subunit rout is the deferred secondary.'
-- Two OTHER active handoffs (lane-A-2026-06-11 canon propagation; active-work-index-2026-06-11
-  orchestration) are SEPARATE scopes -- do NOT consolidate across the lane boundary.
+- 'RUN RECIPE: fetch the 8 mass_battle/*.py + __init__.py -> /home/claude/simpkg/mass_battle/,
+  add simpkg to sys.path (absolute imports `from mass_battle.X import *`); no flat
+  shim needed for direct import (mb_flat.py only needed for gauge_mb.py exec, which
+  provides no __file__). ENV FLAGS BEFORE IMPORT: PER_CELL=1 LANCHESTER_ENABLED=1
+  COMMAND_SIGMA_ENABLED=1 PC_BRACE_ENABLED=1.'
+- 'BYTE-EXACT METHOD: bat.py takes a package dir + N seeds; per matchup per seed records
+  [round(hp_a,6),round(hp_b,6),size_a,size_b,routed_a,routed_b]; SHA over all -> compare
+  clean vs edited. STAMINA needs a MULTI-TICK battle (run_multi_turn_battle). make_unit
+  = SINGLE-subunit -> per-subunit==unit -> byte-exact.'
+- 'COMMIT DISCIPLINE: safe_commit additions are ("path", content_str) TUPLES (not
+  dicts). task_gate(type) in-process before safe_commit. Co-file: tests/sim/ edit
+  requires tests/coverage_matrix.md. sim_fabrication_check flags 2+-digit ints in
+  DOCSTRINGS (skips # comments) -> all added prose in # comments. 23 jsonl ledger
+  warnings PRE-EXISTING (ED-419..485, PP-NPC; not ours). CollisionError = re-fetch
+  ledger via read_files_graphql + retry.'
+- Two OTHER active handoffs (lane-A-2026-06-11 canon propagation; active-work-index-2026-06-11)
+  are SEPARATE scopes — do NOT consolidate. Appending an ED to canon/editorial_ledger.jsonl
+  is the shared cross-cutting editorial pattern, not a lane-A edit.
 blockers:
-- None blocking the queued per-subunit-stamina task -- clean in-owns mechanical refactor
-  with a proven pattern (ED-1016).
-- 'Jordan-vetoable: per-subunit-stamina design choices (which consumers go per-subunit;
-  the rotation/relief trigger) are mechanical-tier -- build bottom-up + cite line-relief/reserve
-  precedent, log, vetoable.'
-as_of: 7cf07d84910f7a6ac5b9e35c916923da8f6edf21
-created: '2026-06-17T19:25:40.569984+00:00'
-updated: '2026-06-17T19:25:40.569984+00:00'
+- None — PRIMARY per-subunit-stamina shipped @bbed131 (ED-1017). The two SECONDARY
+  items are mechanical-tier design calls that need an explicit Jordan go/veto before
+  starting; surfaced to Jordan in-chat.
 status: active
+created: '2026-06-18T01:36:49.274950+00:00'
+updated: '2026-06-18T01:36:49.274950+00:00'
+as_of: bbed131b518cfcec985abb74849368afdf593c10
