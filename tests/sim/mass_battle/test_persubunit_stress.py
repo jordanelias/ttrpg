@@ -231,12 +231,49 @@ def test_advance_per_subunit_discipline():
     _ok("S15 under shared (old) Discipline both advance equally — confirms the fix changes multi-subunit behavior", same)
 
 
+def test_recalc_size_routs_subunits():
+    print("S16 — recalc_size destruction propagates rout to subunits (finding 3)")
+    s0 = mk_su('heavy_infantry', col=8); s1 = mk_su('levy', col=9)
+    u = mk_unit([s0, s1])
+    u.hp = 0
+    u.recalc_size()
+    _ok("S16 unit routed on size 0", u.routed)
+    _ok("S16 subunits marked routed (per-subunit consumers see it)", s0.routed and s1.routed)
+
+
+def test_agg_discipline_per_subunit():
+    print("S17 — agg_discipline is troop-weighted per-subunit (the cascade denominator, finding 4)")
+    hi = mk_su('heavy_infantry', col=8, discipline=5, discipline_start=5)
+    lo = mk_su('levy', col=9, discipline=1, discipline_start=1)
+    u = mk_unit([hi, lo])
+    agg = u.agg_discipline()
+    _ok("S17 agg reflects both subunits' own Discipline (mean of 5 and 1 = 3)", agg == 3)
+    _ok("S17 agg differs from the nominal unit Discipline", agg != u.discipline)
+
+
+def test_between_turn_recovery_per_subunit():
+    print("S18 — between_turn_recovery recovers per-subunit Morale (finding 6; recovery temporarily enabled)")
+    import mass_battle.orchestration as _O
+    own = mk_su('heavy_infantry', col=8, morale=6, morale_start=6, discipline=5)
+    u = mk_unit([own])
+    own.erode_morale(2)                          # own morale 6 -> 4
+    saved = _O.BETWEEN_TURN_MORALE_RECOVERY
+    try:
+        _O.BETWEEN_TURN_MORALE_RECOVERY = 1
+        _O.between_turn_recovery(u)
+        _ok("S18 per-subunit Morale recovered toward start", own.eff_morale == 5)
+    finally:
+        _O.BETWEEN_TURN_MORALE_RECOVERY = saved
+
+
 def main():
     for fn in (test_of_type_presets, test_all_routed_unit_routs, test_single_subunit_morale0_routs,
                test_extreme_spread, test_cohesion_guard, test_command_zero, test_cascade_no_double_count,
                test_broken_scope, test_deep_erosion, test_restore_cap,
                test_fidelity_own_loss, test_of_type_wiring, test_between_battle_reset,
-               test_drift_per_subunit_discipline, test_advance_per_subunit_discipline):
+               test_drift_per_subunit_discipline, test_advance_per_subunit_discipline,
+               test_recalc_size_routs_subunits, test_agg_discipline_per_subunit,
+               test_between_turn_recovery_per_subunit):
         fn()
     print(f"\n=== {('ALL PASS' if not _FAILS else str(len(_FAILS)) + ' FAIL')} ===")
     if _FAILS:

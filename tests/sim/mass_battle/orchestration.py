@@ -1329,23 +1329,16 @@ class Unit:
         # [canonical: derived_stats architecture — "Size = floor(TroopCount / block_size)"]
         self.effective_size = self.hp / BLOCK_SIZE if BLOCK_SIZE > 0 else 0.0
         self.size = max(0, math.floor(self.effective_size))
-        if self.size == 0: self.routed = True
+        if self.size == 0:
+            self.routed = True
+            for a in self.subunits:        # destruction routs the unit; mark subunits for per-subunit consumers
+                a.routed = True
 
     def discipline_penalty(self):
         # SMOOTH (Jordan 2026-06-15 'fix discipline'): continuous linear penalty over the SAME range as the
         # old tiers' endpoints (discipline>=5 -> 0, discipline 1 -> -2) -- no step/cliff. disc<=0 -> broken.
         if self.discipline <= 0: return -99
         return -max(0.0, min(2.0, (5.0 - self.discipline) * 0.5))
-
-    def discipline_penalty_volley(self):
-        """Volley discipline penalty: returns POSITIVE pool reduction.
-        [canonical: mass_battle_v30.md §A.4 Discipline table — Power penalty same for ranged]
-        Discipline 5-7: 0; Discipline 3-4: 1; Discipline 1-2: 2; Discipline 0: broken (large).
-        """
-        if self.discipline >= 5: return 0
-        if self.discipline >= 3: return 1
-        if self.discipline >= 1: return 2
-        return 99
 
     def base_combat_pool(self):
         if self.routed or self.broken: return 0
@@ -2436,6 +2429,9 @@ def between_turn_recovery(unit):
     for atom in unit.subunits:
         atom.recover_stamina(BETWEEN_TURN_STAMINA_RECOVERY)
     unit.morale = min(unit.morale_start, unit.morale + BETWEEN_TURN_MORALE_RECOVERY)
+    for atom in unit.subunits:        # per-subunit Morale recovery (own-Morale subunits; inert at RECOVERY=0)
+        if atom.morale is not None:
+            atom.morale = min(atom.eff_morale_start, atom.morale + BETWEEN_TURN_MORALE_RECOVERY)
 
 
 def reset_morale_between_battles(unit):
@@ -2744,8 +2740,9 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     target.recalc_size()
                     # Morale erosion from flanking damage
                     # [canonical: designs/provincial/mass_battle_v30.md §A.4]
-                    if target.discipline > 0 and target.command > 0:
-                        erosion = dmg / (target.discipline * target.command)
+                    _disc = target.agg_discipline()   # per-subunit-aware resistance (== unit.discipline if homogeneous)
+                    if _disc > 0 and target.command > 0:
+                        erosion = dmg / (_disc * target.command)
                         target.cascade_morale_hit(erosion)
                     for atom in target.subunits:
                         if not atom.routed and atom.eff_morale <= 0:

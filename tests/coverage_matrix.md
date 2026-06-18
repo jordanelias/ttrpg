@@ -320,3 +320,8 @@ Archived entries in tests/coverage_matrix_archive.md
   advance_cells (movement formation-hold; run_battle passed unit.discipline -> atom.eff_discipline) and Unit.check_drift
   (formation drift; self.discipline -> a.eff_discipline). Byte-exact single-subunit (digest unchanged). A low-Discipline
   subunit now advances slower and drifts to Line independently of disciplined siblings. Regression S14 (drift) + S15 (advance).
+
+- **ED-1027** (simulation -- sweep findings 3-6 closeout). (3) recalc_size now propagates rout to subunits on
+  destruction; (4) the inter-unit cascade denominator uses agg_discipline (per-subunit troop-weighted, == unit when
+  homogeneous); (6) between_turn_recovery recovers per-subunit Morale (inert at RECOVERY=0); (5) deleted dead
+  discipline_penalty_volley. Byte-exact single-subunit (digest unchanged). Regression S16 + S17 + S18.
