@@ -5,10 +5,11 @@ description: >
   interaction chains, gap detection, redundancy detection, and core principles compliance.
   ALWAYS use this skill when checking mechanical consistency, finding gaps, reviewing
   number systems, checking formulas, or evaluating mechanical interactions. Trigger on:
-  "check consistency", "find gaps", "number systems", "formula check",
-  "interaction analysis", "what's broken", "what's missing", any specific mechanical question,
-  or when the orchestrator routes a mechanical-consistency check. The bare word "audit" does
-  NOT route here (it routes to nothing — D1); "NERS audit" routes to valoria-resolution-diagnostic.
+  "mechanical audit", "audit for mechanics", "check consistency", "find gaps", "number systems",
+  "formula check", "interaction analysis", "what's broken", "what's missing", any specific
+  mechanical question, or when the orchestrator routes a mechanical-consistency check. The bare
+  word "audit" routes to nothing; the audit-word phrases that route here are "mechanical audit"
+  and "audit for mechanics".
 ---
 
 **Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.

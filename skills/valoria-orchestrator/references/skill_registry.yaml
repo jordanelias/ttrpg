@@ -71,6 +71,8 @@ skills:
     path: skills/valoria-mechanic-audit/SKILL.md
     model: claude-sonnet-4-6
     triggers:
+      - mechanical audit
+      - audit for mechanics
       - consistency check
       - mechanic check
       - gap detection
@@ -78,7 +80,7 @@ skills:
       - formula check
       - what's broken
       - what's missing
-      # D1: bare "audit" is NOT a trigger (routes to nothing); "NERS audit" -> valoria-resolution-diagnostic
+      # bare "audit" is NOT a trigger (routes to nothing); audit-word triggers = "mechanical audit" / "audit for mechanics"
     purpose: "Audit modes A–G: formula, consistency, contradiction, gap, principles, coverage, cross-mode."
     gating_hooks:
       - task_gate('audit')             # required-fetch (task TYPE 'audit', not the trigger word)
@@ -242,7 +244,9 @@ skills:
     path: skills/valoria-resolution-diagnostic/SKILL.md
     model: claude-opus-4-6
     triggers:
-      - NERS audit
+      - engine audit
+      - resolution diagnostic audit
+      - resolution audit
       - is this rolling engine NERS compliant
       - diagnose this resolver
       - stress test this roll
@@ -250,7 +254,7 @@ skills:
       - does this resolution scale
       - leverage non-uniformity
       - clamp/Ob-floor conflict
-      # D1: bare "audit" is NOT a trigger; only "NERS audit" routes here
+      # bare "audit" is NOT a trigger; "NERS audit" is NOT a trigger (unassigned); audit-word triggers = engine/resolution diagnostic/resolution audit
       # NOT non-rolling systems (character sheet, pure ledger, bare clock) -> valoria-mechanic-audit
     purpose: "Rolling-engine resolution diagnostic (rolling engines ONLY; non-rolling systems -> valoria-mechanic-audit). Five-property engine test; sigma-leverage (Continuous Engine) + deterministic+stochastic (Domain Action resolver, ED-874) as instances + [NEW ENGINE] branch. Pipeline: Stage 0 validate vs adjudicated cases -> Phase 0-6 stress test -> lesson/property mapping -> per-engine NERS verdict -> re-test."
     gating_hooks: []

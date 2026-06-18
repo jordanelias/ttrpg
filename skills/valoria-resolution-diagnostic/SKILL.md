@@ -13,9 +13,9 @@ description: >
   (3) per-engine NERS verdict + remediation; (4) re-test the fix. ALWAYS use when checking
   whether a ROLLING ENGINE is NERS-compliant, stress-testing a resolver, or checking leverage
   uniformity / clamp-or-floor cliffs / wrong-engine-for-the-pool. Trigger on: "is this rolling
-  engine NERS compliant", "diagnose this resolver", "stress test this roll", "NERS audit", "is this sigma-leverage or deterministic+stochastic", "does this resolution scale",
+  engine NERS compliant", "diagnose this resolver", "stress test this roll", "engine audit", "resolution diagnostic audit", "resolution audit", "is this sigma-leverage or deterministic+stochastic", "does this resolution scale",
   "leverage non-uniformity", "clamp/Ob-floor conflict", or when the orchestrator routes a
-  resolution diagnosis. The bare word "audit" does NOT route here — only the explicit phrase "NERS audit" does. Do NOT trigger to audit a character sheet, inventory, pure economy
+  resolution diagnosis. The bare word "audit" routes to nothing; the audit-word phrases that route here are "engine audit", "resolution diagnostic audit", and "resolution audit" — NOT "NERS audit" (currently unassigned). Do NOT trigger to audit a character sheet, inventory, pure economy
   ledger, or other non-rolling system — that is valoria-mechanic-audit's job.
 ---
 

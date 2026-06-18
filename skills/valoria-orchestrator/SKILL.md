@@ -226,13 +226,13 @@ If `compilation_current: false`, never use the compilation as a source of mechan
 | valoria-orchestrator | `skills/valoria-orchestrator/SKILL.md` | Sonnet | Session start, routing, multi-step |
 | valoria-simulator | `skills/valoria-simulator/SKILL.md` | Sonnet | Stress test, simulate |
 | valoria-mechanic-audit | `skills/valoria-mechanic-audit/SKILL.md` | Sonnet | Mechanical consistency, gap detection (NOT bare "audit") |
-| valoria-resolution-diagnostic | `skills/valoria-resolution-diagnostic/SKILL.md` | Opus | "NERS audit" — rolling-engine resolution / balance under stress |
+| valoria-resolution-diagnostic | `skills/valoria-resolution-diagnostic/SKILL.md` | Opus | "engine / resolution audit" — rolling-engine resolution under stress |
 | valoria-canon-guard | `skills/valoria-canon-guard/SKILL.md` | Sonnet | Canon compliance P-01–P-15 |
 | valoria-editorial-register | `skills/valoria-editorial-register/SKILL.md` | Sonnet | Resolve editorials, harvest flags |
 | valoria-compiler | `skills/valoria-compiler/SKILL.md` | Sonnet | Compile (lowest priority) |
 | valoria-chunker | `skills/valoria-chunker/SKILL.md` | Haiku | Pre-process docs >500 lines |
 
-**Audit routing (D1).** The bare word "audit" routes to **nothing** — it is a free English word, not a trigger. Only the explicit phrase **"NERS audit"** routes to `valoria-resolution-diagnostic`. Specific audit kinds still route by their own phrasing ("check consistency" / "find gaps" → `valoria-mechanic-audit`; "canon check" → `valoria-canon-guard`). **All audits run on whatever work/files exist local to the session — the target need not be canon (D2);** canon is the baseline, the latest local session work supersedes stale canon.
+**Audit routing.** The bare word "audit" routes to **nothing** — it is a free English word, not a trigger. Qualified audit phrases route to their specific skill: "mechanical audit" / "audit for mechanics" → `valoria-mechanic-audit`; "engine audit" / "resolution diagnostic audit" / "resolution audit" → `valoria-resolution-diagnostic`; "canon check" → `valoria-canon-guard`; "vector/topographic/corpus audit" → `valoria-vector-audit`; "interface audit" → `valoria-module-adjudicator`. **"NERS audit" is currently unassigned (routes to nothing)** — NERS (Necessary/Robust/Smooth/Elegant) is the project-wide verdict framework, not a single skill. **All audits run on whatever work/files exist local to the session — the target need not be canon (D2);** canon is the baseline, the latest local session work supersedes stale canon.
 
 **Skills load from `/mnt/skills/user/` at runtime.** GitHub (`skills/*/SKILL.md`) is the version-controlled source. Do not fetch skills from GitHub during a session.
 
