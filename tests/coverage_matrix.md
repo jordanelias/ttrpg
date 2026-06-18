@@ -235,3 +235,21 @@ Archived entries in tests/coverage_matrix_archive.md
   per-subunit stamina (make_unit unchanged). Grounding (references/historical/mass_battle_gauge_grounding.md §6): Sabin 2000
   JRS line relief / supporting troops; Zhmodikov 2000 Historia; du Picq Battle Studies; Clausewitz On War III.12. V1 SCOPE:
   per-subunit rout + eroding morale/discipline stay UNIT-level (deferred, Jordan-vetoable). Implemented by Claude, Jordan-vetoable.
+- ED-1018 (troop-taxonomy stat home, Jordan directive 2026-06-17): wired the troop taxonomy onto the per-subunit stats
+  (ED-1016/ED-1017). Added orchestration.TROOP_TYPE_STATS -- canonical per-type Power/Discipline/Morale presets transcribed from
+  mass_battle_v30 B.2, keyed to the existing TROOP_TYPE_ROLES snake_case taxonomy (levy, light_infantry, heavy_infantry,
+  cavalry, archers, crossbow, sling, artillery, knights_templar) -- plus orchestration.stats_for(troop_type) (case-insensitive
+  accessor mirroring roles_for; fresh dict or None) and the constructor Subunit.of_type(troop_type, shape, tier,
+  starting_position, **kw), which fills power/discipline/morale/morale_start from the preset unless the caller overrides;
+  an unknown type fills nothing so fields stay None and inherit the parent Unit. PURELY ADDITIVE: nothing that does not call
+  of_type changes, so the gauge constructors (make_unit/make_mixed_unit) are untouched and single-subunit units stay
+  BYTE-EXACT (9-matchup x 20-seed multi-turn battery digest unchanged: fe99574610caca44052509beb8c0b81a1b3d1972c6a3c8e3513e38933ef27c69).
+  SCOPE: only the three unambiguous B.2 integers are mapped; dr (the Armour column -> a vs-Piercing DR scale at orch L413-417
+  whose identity with Subunit.dr is unconfirmed) and stamina (the Endur column, no clean bridge to the 0-100 pool) are
+  deliberately left to inherit and flagged, not guessed; unit_type (melee vs ranged) stays caller-controlled (a role, not a
+  stat). Differentiation demonstrated: of_type reproduces every B.2 row exactly; the stats separate combat on both channels --
+  pool via discipline (Levy 6 dice -> Cavalry/Knights Templar 8) and damage via the (1+Power) multiplier (Levy x2 -> Cavalry
+  x6); caller overrides beat the preset; unknown types inherit the Unit. Grounding (references/historical/
+  mass_battle_gauge_grounding.md §7): the canonical B.2 table itself (bottom-up); Sabin Lost Battles 2007 validated
+  ancient-battle model rating units by type and quality, plus the settled heavy/light/missile distinction (top-down).
+  Implemented by Claude, Jordan-vetoable.

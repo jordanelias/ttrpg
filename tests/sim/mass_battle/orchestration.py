@@ -453,6 +453,42 @@ def role_allowed(troop_type, role):
     return role in roles_for(troop_type)
 
 
+# ─── CANONICAL TROOP-TYPE STAT PRESETS ──────────────────────────────────────
+# The "stat home" for the troop taxonomy: a subunit OF a given type carries these
+# per-subunit combat stats. Values are transcribed directly from the canonical BG
+# unit table (mass_battle_v30.md §B.2) — the TTRPG Power / Discipline / Morale columns.
+# Keyed to match the config TROOP_TYPE_ROLES snake_case taxonomy. Co-located here with
+# its accessor (stats_for) and constructor (Subunit.of_type) — the role accessors
+# (roles_for / role_allowed) already live in this module. Constructions that do not call
+# stats_for / of_type are untouched (byte-exact). dr (armour) and stamina (endurance) are
+# intentionally left to inherit: §B.2's Armour column maps to a vs-Piercing DR scale
+# (orch L413-417, None=0/Light=1/Medium=2/Heavy=3) whose identity with the Subunit.dr
+# field is unconfirmed, and Endur (1-6) has no clean bridge to the 0-100 stamina pool.
+# Both are deferred to an explicit follow-up rather than guessed. [ED-1018]
+TROOP_TYPE_STATS = {
+    # troop_type        : power, discipline, morale   (morale_start defaults to morale)
+    "levy":             {"power": 1, "discipline": 1, "morale": 2},
+    "light_infantry":   {"power": 3, "discipline": 3, "morale": 4},
+    "heavy_infantry":   {"power": 4, "discipline": 4, "morale": 5},
+    "cavalry":          {"power": 5, "discipline": 5, "morale": 5},
+    "archers":          {"power": 3, "discipline": 3, "morale": 3},
+    "crossbow":         {"power": 3, "discipline": 3, "morale": 3},
+    "sling":            {"power": 2, "discipline": 2, "morale": 3},
+    "artillery":        {"power": 2, "discipline": 2, "morale": 3},
+    "knights_templar":  {"power": 5, "discipline": 6, "morale": 6},
+}
+
+
+def stats_for(troop_type):
+    """Canonical per-subunit combat stats for a troop type (mass_battle_v30 §B.2), as a
+    fresh dict {power, discipline, morale}, or None if the type has no preset. None lets
+    the caller fall back to Unit inheritance (byte-exact). Lookup is case-insensitive."""
+    if troop_type is None:
+        return None
+    preset = TROOP_TYPE_STATS.get(str(troop_type).strip().lower())
+    return dict(preset) if preset is not None else None
+
+
 def _oriented(su):
     """Oriented base pattern for a subunit, as a list of (orig_r, orig_c, or_r, or_c) tuples.
     Continuous path (su.troops set): footprint_for(shape, troops, concentration). Legacy path
@@ -562,6 +598,25 @@ class Subunit:
         self._start_troops = self.troop_count  # spawn troop count = per-subunit cohesion denominator
         if PC_NODE_COHESION:
             self._init_node_state()
+
+    @classmethod
+    def of_type(cls, troop_type, shape, tier, starting_position, **kw):
+        """Construct a Subunit of a canonical troop type (mass_battle_v30 §B.2). The type's
+        power / discipline / morale (and morale_start = morale) are filled from
+        TROOP_TYPE_STATS unless the caller overrides them in **kw; an unknown type fills
+        nothing (fields stay None -> inherit the parent Unit). This is the taxonomy's
+        'stat home'. It is purely additive: callers that build Subunit(...) directly are
+        unaffected, so single-subunit / homogeneous units stay byte-exact.
+        NOTE: only STATS are mapped. unit_type (melee vs ranged) is a role, not a stat —
+        a ranged type (archers / crossbow / sling) takes unit_type='ranged' via **kw."""
+        preset = stats_for(troop_type)
+        if preset:
+            kw.setdefault('power', preset['power'])
+            kw.setdefault('discipline', preset['discipline'])
+            kw.setdefault('morale', preset['morale'])
+            kw.setdefault('morale_start', preset['morale'])
+        return cls(shape=shape, troop_type=troop_type, tier=tier,
+                   starting_position=starting_position, **kw)
 
     @property
     def troop_count(self):
@@ -2709,4 +2764,4 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                          for i, u in enumerate(side_b)},
     }
 
-__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed']
+__all__ = ['_formation_depth', '_subunit_depth', '_stamina_pool_penalty', 'stamina_check', 'morale_check_phase', 'rout_resolution', 'discipline_check_phase', 'rally_check', 'reform_check', 'threadwork_check', 'phase_boundary', 'Subunit', 'Unit', 'derive_command', 'command_base_pool', 'assign_targets', 'resolve_cross_side_contention', 'find_contacts', 'count_engagements_per_atom', '_momentum_speed', '_cascade_depth_key', 'PC_ROLLUP_PER_RANK', 'PC_ROLLUP_MARGIN', 'PC_ROLLUP_REACH', 'PC_ROLLUP_CAP', 'PC_ROLLUP_FLANK_REACH', 'PC_ROLLUP_MIN_DEPTH', '_lanchester_strength', 'resolve_engagements', 'resolve_engagements_cascading', '_atom_distance', '_roll_volley_pool', 'volley_phase', 'run_battle', 'BETWEEN_TURN_STAMINA_RECOVERY', 'BETWEEN_TURN_MORALE_RECOVERY', 'between_turn_recovery', 'reset_positions', 'run_multi_turn_battle', 'REARGUARD_PENALTY', 'RECALL_OB', 'pursuit_damage', 'recall_check', 'MORALE_CASCADE_OB', 'ROUT_CONTAGION_MORALE_HIT', 'FREED_ATTACKER_FLANK_PENALTY', 'discipline_check_cascade', 'freed_attacker_damage', 'run_multi_unit_battle', 'roles_for', 'role_allowed', 'stats_for', 'TROOP_TYPE_STATS']

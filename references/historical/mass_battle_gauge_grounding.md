@@ -1,5 +1,5 @@
-# Mass-Battle Gauge — Historical & Academic Grounding (v2.2)
-**Date:** 2026-06-15 (v2); 2026-06-16 (v2.1 — cavalry construction fix); 2026-06-17 (v2.2 — per-subunit stamina / line-relief depth-as-reserve grounding, ED-1017) · **Status:** drives `tests/sim/gauge_mb.py` bands · **Supersedes the band-derivation basis of** `tests/sim/sim_mb_06_v9_historical_spec.md` (the v9 spec's H/R bands stand; its cavalry bands were never in scope and the gauge's later cavalry bands were *fitted to engine output* — this doc re-derives them bottom-up).
+# Mass-Battle Gauge — Historical & Academic Grounding (v2.3)
+**Date:** 2026-06-15 (v2); 2026-06-16 (v2.1 — cavalry construction fix); 2026-06-17 (v2.2 — per-subunit stamina / line-relief depth-as-reserve grounding, ED-1017); 2026-06-17 (v2.3 — troop-taxonomy stat home, ED-1018) · **Status:** drives `tests/sim/gauge_mb.py` bands · **Supersedes the band-derivation basis of** `tests/sim/sim_mb_06_v9_historical_spec.md` (the v9 spec's H/R bands stand; its cavalry bands were never in scope and the gauge's later cavalry bands were *fitted to engine output* — this doc re-derives them bottom-up).
 
 This is the bottom-up grounding for the recalibrated gauge bands. Every band is set by **historical precedent + peer-reviewed academic military analysis**, not by engine output. The engine is then validated *against* these bands; where it falls outside, the gauge **flags the divergence** — the band is not lowered to make the engine pass.
 
@@ -116,6 +116,7 @@ The reciprocal charge-recoil (`orchestration.py` ~L1647) does **not** zone-gate 
 6. **C7 ceiling 90→100** — encirclement of an immobile (hold-stance) line that cannot turn to face is annihilating (Cannae); decA saturates to 100 when infantry is shut out.
 7. **Latent: the charge-recoil does not zone-gate** (§4.3) — a fix candidate (gate on the frontal zone), flagged not fixed.
 8. **Per-subunit stamina / line relief (§6, ED-1017)** — stamina pushed onto the Subunit; an engaged subunit drains while a reserve stays fresh, and the fresh reserve relieves the exhausted front (Sabin/Zhmodikov/du Picq/Clausewitz). Byte-exact single-subunit; `_fatigue_sigma` deliberately left unchanged (already sub-unit-scoped at its call site — NERS-E).
+9. **Troop-taxonomy stat home (§7, ED-1018)** — the canonical §B.2 per-type stats (Power/Discipline/Morale) wired onto the per-subunit fields via `TROOP_TYPE_STATS` + `Subunit.of_type`. Pure gap-fill (transcribes an existing canonical table into a constructor); byte-exact. Deliberately maps only the three unambiguous integers — Armour→`dr` and Endur→`stamina` are left to inherit (no confirmed scale bridge), flagged here not guessed.
 
 ---
 
@@ -135,3 +136,23 @@ The reciprocal charge-recoil (`orchestration.py` ~L1647) does **not** zone-gate 
 **Validation.** Byte-exact against a clean pre-edit engine across 9 matchups (melee mirror / asymmetric / envelopment, ranged / volley, cavalry charge / braced / envelopment / shaken) × 20 seeds in the resolving multi-turn mode — identical state-vector digest. Rotation demonstrated: an engaged front subunit drained to 32/100 while a held reserve stayed at 100/100 (a divergence impossible under the old shared `Unit.stamina`), and the fresh reserve yielded a larger combat pool than the exhausted front.
 
 `[mechanical-tier, Jordan-vetoable: which consumers go per-subunit, and that reserve relief is positional (the engine has no reserve-hold AI — a held reserve is shown via target_delay_ticks), are design calls — built bottom-up from the engine, anchored top-down on Sabin/Zhmodikov/du Picq/Clausewitz, logged for veto.]`
+
+---
+
+## 7 — Troop-taxonomy stat home (per-type per-subunit stats) — ED-1018
+
+**Gap (2026-06-16 completeness audit).** The engine carried a troop-type *label* (`Subunit.troop_type`) and an inert role scaffold (`TROOP_TYPE_ROLES` / `ROLE_SPEC`), but a subunit's troop type had **no effect on its combat stats** — there was no "stat home" connecting a type to its Power / Discipline / Morale. With per-subunit stats (ED-1016) and per-subunit stamina (ED-1017) now in place, the subunit can finally *carry* a type's stats.
+
+**Mechanic (Jordan directive 2026-06-17).** A canonical preset table, `orchestration.TROOP_TYPE_STATS`, transcribes the **TTRPG Power / Discipline / Morale** columns of the canonical BG unit table (`mass_battle_v30.md §B.2`) keyed to the existing snake_case taxonomy. `orchestration.stats_for(troop_type)` returns a type's preset (case-insensitive; `None` for an unknown type), and the constructor `Subunit.of_type(troop_type, shape, tier, starting_position, **kw)` fills `power` / `discipline` / `morale` / `morale_start` from that preset unless the caller overrides them. An unknown type fills nothing — the fields stay `None` and inherit the parent Unit, so nothing that does not call `of_type` changes (**byte-exact**).
+
+**Source is the canon table itself; this is the purest gap-fill.** The bottom-up anchor is not a guess — it is the verbatim §B.2 table (Levy P1/D1/M2, Light Infantry P3/D3/M4, Heavy Infantry P4/D4/M5, Cavalry P5/D5/M5, Archer/Crossbow P3/D3/M3, Sling/Artillery P2/D2/M3, Knights Templar P5/D6/M6). The work is wiring an already-canonical, already-historically-grounded table into a constructor.
+
+**Why the *ordering* is sound** (the top-down check required by the project-owner contract):
+
+- **Differentiated troop quality and type is the settled basis of military history and of validated battle-modelling.** Sabin, *Lost Battles* (2007) — the same Philip Sabin as the §6 *JRS* source — reconstructs ~35 ancient battles with a model whose units are rated separately by **type** (heavy infantry, light infantry, cavalry, …) and by **quality** (levy / average / veteran), and that model reproduces historical outcomes. The §B.2 ordering this ED transcribes is the same shape: professional heavy foot steadier and more disciplined than levy, missile troops lighter and less able to hold a line, shock cavalry highest in single-blow power. The heavy / light / missile distinction itself is foundational and uncontested.
+
+**Engine mapping.** `TROOP_TYPE_STATS` (data, in `orchestration` beside its accessor `stats_for` and constructor `of_type` — where the role accessors `roles_for` / `role_allowed` already live; the role *scaffold* data `TROOP_TYPE_ROLES` / `ROLE_SPEC` remains in `config`); `stats_for` (accessor, mirrors `roles_for`); `Subunit.of_type` (classmethod constructor). Only the three §B.2 integers are mapped. `dr` (the §B.2 Armour column) and `stamina` (the Endur column) are **deliberately left to inherit**: §B.2's Armour maps to a vs-Piercing DR scale (orch L413–417: None=0 / Light=1 / Medium=2 / Heavy=3) whose identity with the `Subunit.dr` field is unconfirmed, and Endur (1–6) has no clean bridge to the 0–100 stamina pool. Mapping either would be a guess at a scale; both are flagged for an explicit follow-up rather than invented.
+
+**Validation.** Byte-exact: the 9-matchup × 20-seed multi-turn battery digest is unchanged from the pre-edit engine (`fe99574610caca44052509beb8c0b81a1b3d1972c6a3c8e3513e38933ef27c69`) — `of_type` is additive and unused by the gauge constructors. Differentiation demonstrated: `of_type` reproduces every §B.2 row exactly, and the stats separate combat on both channels — the combat **pool** via discipline (Levy 6 dice → Cavalry / Knights Templar 8 dice) and **damage** via the `(1+Power)` multiplier (Levy ×2 → Cavalry ×6). Caller overrides beat the preset; unknown types inherit the Unit.
+
+`[mechanical-tier, Jordan-vetoable: the snake_case key set and the decision to map only Power/Discipline/Morale (deferring Armour→dr and Endur→stamina) are design calls — built bottom-up from the canonical §B.2 table, anchored top-down on Sabin's validated troop-type model, logged for veto. of_type maps stats only; unit_type (melee vs ranged) stays caller-controlled, since it is a role, not a stat.]`
