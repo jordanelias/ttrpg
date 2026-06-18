@@ -38,7 +38,9 @@ def p_auth(w):
 #   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(coverage) — material/mode physics.
 #   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
 HEFT={'light':0,'heavy':3}                                          # [damage_model — additive weight heft]
-QUAL={'graze':0.35,'partial':0.6,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY + engine graze]
+QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
+STR_REF=4.0; STR_EXP=1.0      # [M-STR D-A: strength MULTIPLICATIVE, pivot on Str-4 reference (Jordan B, 2026-06-18)]
+OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
 DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
@@ -63,18 +65,24 @@ def coupling(head, armor, coverage='full'):
         return max(DELIVERY['cut_thrust']*_transmit('shear',mat,coverage),
                    DELIVERY['point']*_transmit('puncture',mat,coverage))
     return DELIVERY.get(head,1.5)*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage)
-def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, gap=0.65, perc=8):
+def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, gap=0.65, perc=8, q=None):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
     continuous from it. scale/cap_end/gap retained for signature compat — vestigial under the linear model
     (old tanh cap superseded; per-weapon gap-skill folds into the 2b puncture work)."""
     if deg not in ('graze','success','overwhelming'): return 0
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT.get(weapon_wt,0)
-    return max(0, int(round((strength+heft) * coupling(weapon_head, armor) * QUAL[deg] * DMG_SCALE)))
+    qf = q if q is not None else QUAL[deg]
+    impact = (STR_REF + heft) * (strength/STR_REF)**STR_EXP      # M-STR: strength multiplicative, ref-pivoted
+    return max(0, int(round(impact * coupling(weapon_head, armor) * qf * DMG_SCALE)))
 
-def strike(attacker, defender, deg, close, cfg):
+def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
     DEFENDER, returning the int damage. Single call-site for every blow so the 11-arg positional surface (the
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
     subsystem contract."""
+    q=None
+    if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
+        z=max(0.0,(net-2*DECISIVE_OB)/m1.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
+        q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
     return damage(deg, attacker.weight, attacker.head, attacker.strength, defender.armor, close,
-                  cfg['DAMAGE_SCALE'], cfg['CAP_END'], attacker.w['gap'], p_auth(attacker.w))
+                  cfg['DAMAGE_SCALE'], cfg['CAP_END'], attacker.w['gap'], p_auth(attacker.w), q=q)

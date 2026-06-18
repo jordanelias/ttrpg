@@ -77,7 +77,7 @@ def engagement(A, B, first, cfg, rng):
                 nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
                 deg, net = core.resolve(pool, nsig, rng)
                 if deg in ('success','overwhelming'):
-                    d=core.strike(longer, shorter, deg, False, cfg)
+                    d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
                     shorter.apply_wound(d); shorter.conc=max(0,shorter.conc-cfg['CONC_DRAIN_HIT'])
                     if shorter.felled: return shorter
             if not closed:
@@ -182,7 +182,7 @@ def engagement(A, B, first, cfg, rng):
             else: hit=core.strike(aggressor, defender, 'success', close, cfg)
         else:
             if rng.random()<max(0.0,neutralize-cfg['NEUTRALIZE_OVERWHELM_DROP']): hit=0
-            else: hit=core.strike(aggressor, defender, 'overwhelming', close, cfg)
+            else: hit=core.strike(aggressor, defender, 'overwhelming', close, cfg, net=net, pool=pool)
         if counter_attempt:
             # SUCCESS scales with training (history) + reflex; the untrained single-time counter mostly fails — a
             # desperate-idiot move. Tradition abilities will modulate this upward (added later).
@@ -195,7 +195,7 @@ def engagement(A, B, first, cfg, rng):
                 defender.initiative=S.clamp_initiative(defender.initiative-steal, cfg)
                 aggressor.initiative=S.clamp_initiative(aggressor.initiative+steal, cfg)
                 bind=False; riposte=False
-                hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', close, cfg) if deg in ('partial','success','overwhelming') else 0
+                hit=core.strike(aggressor, defender, 'overwhelming' if deg=='overwhelming' else 'success', close, cfg, net=net, pool=pool) if deg in ('partial','success','overwhelming') else 0
         sim=(hit>0 and riposte)
         # DISPLACE-AND-STEP-INSIDE (manual technique): vs a COMMITTED THRUST (point head, deep commit), a defender
         # with a LEVERAGE advantage can set the point aside with grip+mass and step inside the reach while the
