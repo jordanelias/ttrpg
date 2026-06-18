@@ -29,42 +29,47 @@ def p_auth(w):
     Read only in core's blunt branch, so non-blunt heads are unaffected (their hand-set percussion was dead data)."""
     return min(8.0, 9.5 * (_sqrt(max(0.0, w.get('mass', 1.0))) * w.get('pob_frac', 0.15)) ** 0.30)
 
-# ---- damage (D1: Impact x Coupling x Quality), armour mitigation by head-mode x armour-type ----
-HEFT={'light':4,'heavy':6}
-QUAL={'partial':0.6,'graze':0.35,'success':1.0,'overwhelming':1.5}
-RESIST={'none':{'blunt':0,'point':0,'cut':0},
-        'light':{'blunt':.10,'point':.18,'cut':.60},
-        'medium':{'blunt':.20,'point':.45,'cut':.80},
-        'heavy':{'blunt':.30,'point':.70,'cut':.95}}
-DELIVERY={'blunt':1.6,'point':1.45,'cut':1.35}
-def _mode_transmit(mode, armor, close, gap, perc=8):
-    """Transmit fraction for a single resolved mode (blunt/point/cut) vs an armour state. Blunt scales with PERCUSSION
-    authority (a wooden staff transmits little through plate; a steel hammer transmits fully)."""
-    if mode=='point':
-        if armor in ('medium','heavy'):
-            gap_transmit = (cfg_gap_a(armor) + cfg_gap_b(armor)*gap) if close else 0.12*gap
-            return gap_transmit*DELIVERY['point']        # plate body dead; value is the gap-find only
-        t = max(1.0-RESIST[armor]['point'], 0.5*gap if close else 0.15*gap)
-        return t*DELIVERY['point']
-    t = 1.0-RESIST[armor][mode]
-    if mode=='blunt': t *= (perc/8.0)                    # percussion authority (perc 8 = steel-hammer reference)
-    return t*DELIVERY[mode]
-def coupling(head, armor, close, gap=0.65, perc=8):
-    """Damage transmit. A cut-and-thrust head uses its BEST mode (cut vs half-sword point) at each armour level, so a
-    defender taking more armour never flips the attacker to a suddenly-better transmit (removes the light->medium
-    cliff). Pure cutters cannot half-sword and stay 'cut' (collapse vs plate). Blunt scales with percussion."""
-    if head=='blunt':  return _mode_transmit('blunt', armor, close, gap, perc)
-    if head=='point':  return _mode_transmit('point', armor, close, gap, perc)
+# ---- damage (Impact x Coupling x Quality) — CONTINUOUS transmission, NO tanh saturation ----
+# Adopts the ground-up linear damage model [damage_model.py / damage_model_design, Jordan 2026-05-30,
+# ratified 2026-06-17]: damage = Impact x Coupling x Quality, NO cap/tanh, so head/strength/armour drive
+# damage as a live gradient (the old tanh cap saturated everything to ~the cap and flattened the gradient).
+#   Impact   = strength + heft; BLUNT heft is CONTINUOUS from percussion authority P_auth (perc carries it);
+#              cut/thrust heft is weight-class (continuous-mass cut-impact deferred, plan #9).
+#   Coupling = DELIVERY(head) x transmit(material-resistance-per-mode) x gap(coverage) — material/mode physics.
+#   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
+HEFT={'light':0,'heavy':3}                                          # [damage_model — additive weight heft]
+QUAL={'graze':0.35,'partial':0.6,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY + engine graze]
+DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
+HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
+DELIVERY={'blunt':1.6,'point':1.45,'cut_thrust':1.35,'straight_cut':1.5,'curved_cut':1.5,'cut':1.5}  # [damage_model head delivery]
+RESIST={'none': {'percussion':0,  'shear':0,  'puncture':0},        # [damage_model — material resistance per mode in [0,1]]
+        'cloth':{'percussion':.10,'shear':.35,'puncture':.15},
+        'mail': {'percussion':.20,'shear':.80,'puncture':.45},
+        'plate':{'percussion':.30,'shear':.95,'puncture':.70}}
+TIER2MAT={'none':'none','light':'cloth','medium':'mail','heavy':'plate'}  # [armour_axes presets — tier->material]
+COVERAGE_GAP={'full':0.15,'partial':0.5}                            # [damage_model — gap/bare-zone exposure]
+def _transmit(mode, mat, coverage):
+    t=1.0-RESIST[mat][mode]
+    if mode=='puncture': return max(t, COVERAGE_GAP[coverage])      # thrust takes through-material OR the gap
+    if mat!='none':
+        g=COVERAGE_GAP[coverage]; return t*(1-g)+1.0*g             # some blows reach a bare zone
+    return t
+def coupling(head, armor, coverage='full'):
+    """DELIVERY x transmit. cut_thrust is VERSATILE — takes the better of its edge (shear) or the half-sword thrust
+    (puncture/gaps) at each armour level: a longsword half-swords vs plate instead of bouncing (restores the prior
+    engine's max(cut,point) mode-shift; HEMA: you half-sword vs harness). [damage_model.coupling + cut_thrust versatility]"""
+    mat=TIER2MAT[armor]
     if head=='cut_thrust':
-        return max(_mode_transmit('cut', armor, close, gap, perc), _mode_transmit('point', armor, close, gap, perc))
-    return _mode_transmit('cut', armor, close, gap, perc)      # straight_cut, curved_cut — no mode-shift
-def cfg_gap_a(armor): return {'medium':0.10,'heavy':0.06}[armor]   # baseline gap-find transmit (low)
-def cfg_gap_b(armor): return {'medium':0.40,'heavy':0.40}[armor]   # precision payoff: high-gap points reach gaps
+        return max(DELIVERY['cut_thrust']*_transmit('shear',mat,coverage),
+                   DELIVERY['point']*_transmit('puncture',mat,coverage))
+    return DELIVERY.get(head,1.5)*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage)
 def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, gap=0.65, perc=8):
+    """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
+    continuous from it. scale/cap_end/gap retained for signature compat — vestigial under the linear model
+    (old tanh cap superseded; per-weapon gap-skill folds into the 2b puncture work)."""
     if deg not in ('graze','success','overwhelming'): return 0
-    imp=HEFT[weapon_wt]+min(max((strength-3)//2,-1),2)
-    cap=1.2*(cap_end+6)
-    return int(round(QUAL[deg]*cap*tanh(imp*coupling(weapon_head,armor,close,gap,perc)*scale/cap)))
+    heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT.get(weapon_wt,0)
+    return max(0, int(round((strength+heft) * coupling(weapon_head, armor) * QUAL[deg] * DMG_SCALE)))
 
 def strike(attacker, defender, deg, close, cfg):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
