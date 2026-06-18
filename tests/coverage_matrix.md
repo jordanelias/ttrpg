@@ -253,3 +253,26 @@ Archived entries in tests/coverage_matrix_archive.md
   mass_battle_gauge_grounding.md §7): the canonical B.2 table itself (bottom-up); Sabin Lost Battles 2007 validated
   ancient-battle model rating units by type and quality, plus the settled heavy/light/missile distinction (top-down).
   Implemented by Claude, Jordan-vetoable.
+- ED-1019 (per-subunit rout + eroding morale/discipline, Jordan directive 2026-06-17 + "Continue" confirm; completes
+  the per-subunit lifecycle after ED-1016 stats / ED-1017 stamina): pushed rout, morale erosion, and discipline
+  degradation from the Unit onto the Subunit so a section of the line breaks from its OWN casualties while a fresh
+  sibling holds. (SUBUNIT_ROUT_FLOOR was a dead config stub -- defined/exported/never referenced; this is the
+  per-subunit rout it pointed at.) New Subunit fields routed/broken/discipline_start; props/methods eff_discipline_start,
+  erode_morale, degrade_discipline, restore_discipline (write-routed own-else-inherited-Unit -> single-subunit
+  reproduces the old unit arithmetic); Unit methods derive_rout + cascade_morale_hit. Repointed per-subunit:
+  morale_check_phase (each subunit erodes by its OWN cohesion + own stamina/discipline exhaustion), rout_resolution
+  (each subunit routs at own eff_morale<=0, then derive_rout), discipline_check_phase (unit-loss asymmetry drives a
+  per-subunit counter), reform_check (flag OFF), the run-loop rout trigger, the per-tick drain (routed subunit skipped),
+  subunit_combat_pool (routed/broken subunit -> 0), and the multi-unit inter-unit cascade / flank-erosion morale hits
+  (cascade_morale_hit hits the unit's inherited-default morale ONCE plus each own-morale subunit -> no double-count on
+  homogeneous units). TWO CANON-STRUCTURE FORKS, Jordan-vetoable: (a) unit-rout DERIVED (agg morale 0 / all subunits
+  routed / Command<=0; winner/pursuit/cascade keep keying on derived unit.routed -> spec's unit-level rout preserved);
+  (b) NO intra-unit cascade added (A.12 cascade stays inter-unit per spec, though its "section of the line breaks"
+  Cannae/Hastings rationale could justify intra-unit -- a canon-model change left for Jordan). NO mass_battle_v30 edit.
+  BYTE-EXACT: 9-matchup x 20-seed multi-turn battery digest unchanged (fe99574610caca44052509beb8c0b81a1b3d1972c6a3c8e3513e38933ef27c69).
+  Per-subunit rout demonstrated: a 2-subunit unit (heavy front + levy rear) with the rear gutted to ~18% eroded the
+  rear's morale to 0 over 2 phases (cohesion 0.18 -> -2/phase) while the front held at 5.0 (cohesion 1.0); rout_resolution
+  routed the rear only (rear.routed=True, front.routed=False, UNIT.routed=False -- line held), rear pool -> 0 while front
+  kept 7 dice; breaking the front too routed the unit (derive_rout). Single-subunit routs exactly at morale 0 as before.
+  Grounding (references/historical/mass_battle_gauge_grounding.md S8): A.12 Cannae/Hastings sectional collapse; du Picq
+  Battle Studies (panic is local, spreads from a break). Implemented by Claude, Jordan-vetoable.

@@ -300,15 +300,18 @@ def morale_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
         # step 3 (Jordan directive 2026-06-03): canonical Size-fraction morale triggers (§A.4),
         # replacing the per-tick absolute-damage erosion. Routs occur at meaningful casualty levels,
         # not ~98% intact. No general-floor in the unit duel (units rout from their own casualties).
-        frac = (u.hp / u.hp_max) if u.hp_max else 1.0
-        loss = 0.0
-        if frac < 0.50: loss += 1.0    # Size < 50% max -> -1
-        if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
-        if u.broken: loss += 1.0       # discipline broken (formation gone) -> -1 (canon A.4); broken units rout, not freeze
-        if u.agg_stamina() <= 0 and u.discipline > 0 and u.command > 0:
-            loss += 1.0 / (u.discipline * u.command)   # exhaustion pressure (kept)
-        if loss:
-            u.morale -= min(loss, 3.0)   # cap -3 per Cascade Phase (§A.4)
+        for atom in u.subunits:
+            if atom.routed:
+                continue
+            frac = atom.cohesion           # single-subunit: == u.hp/u.hp_max (byte-exact); else this subunit's own
+            loss = 0.0
+            if frac < 0.50: loss += 1.0    # Size < 50% max -> -1
+            if frac < 0.25: loss += 1.0    # Size < 25% max -> -1 additional
+            if u.broken: loss += 1.0       # unit formation-broken pressure (kept unit-scoped for byte-exactness)
+            if atom.eff_stamina <= 0 and atom.eff_discipline > 0 and u.command > 0:
+                loss += 1.0 / (atom.eff_discipline * u.command)   # per-subunit exhaustion pressure
+            if loss:
+                atom.erode_morale(min(loss, 3.0))   # cap -3 per Cascade Phase (§A.4); routes own-else-Unit
 
 
 def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
@@ -324,8 +327,10 @@ def rout_resolution(unit_a, unit_b, phase_idx):  # noqa: ARG001
     for u, opponent in [(unit_a, unit_b), (unit_b, unit_a)]:
         if u.routed or u.broken:
             continue
-        if u.morale <= 0:
-            u.routed = True
+        for atom in u.subunits:
+            if not atom.routed and atom.eff_morale <= 0:
+                atom.routed = True   # this subunit's eroding morale reached 0 -> it breaks ("a section of the line")
+        u.derive_rout()              # unit routs iff agg morale <= 0 / all subunits routed / general gone (byte-exact single-subunit)
             # No pursuit damage from Standard infantry (canonical: Fast only).
             # Pursuit damage will be handled at the battle-map level (level 2)
             # when cavalry (G-11) and multi-unit engagements (D-3) are implemented.
@@ -340,13 +345,17 @@ def discipline_check_phase(unit_a, unit_b, phase_idx):  # noqa: ARG001
     for u, my_loss, their_loss in [(unit_a, a_loss, b_loss), (unit_b, b_loss, a_loss)]:
         if u.routed or u.broken:
             continue
-        # How many full thresholds of loss have we crossed?
+        # How many full thresholds of loss have we crossed?  (unit-level loss drives the trigger)
         disc_hits = int(my_loss / DISCIPLINE_LOSS_THRESHOLD)
-        # How many have we already applied? Track via discipline_start - discipline
-        already_applied = u.discipline_start - u.discipline
-        if disc_hits > already_applied and my_loss > their_loss:
-            u.discipline = max(0, u.discipline - 1)
-            u.check_drift()
+        for atom in u.subunits:
+            if atom.routed or atom.broken:
+                continue
+            # already applied for THIS subunit: eff_discipline_start - eff_discipline
+            # (single-subunit: == u.discipline_start - u.discipline -> byte-exact)
+            already_applied = atom.eff_discipline_start - atom.eff_discipline
+            if disc_hits > already_applied and my_loss > their_loss:
+                atom.degrade_discipline()   # -1 toward 0, routes own-else-Unit
+        u.check_drift()
 
 
 def rally_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
@@ -382,12 +391,17 @@ def reform_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
         if u.routed or u.broken:
             continue
         # Command-asymmetry (PP-241 on the citation line above): one cannot restore;
-        # restoration needs Command at least one above the current Discipline.
-        if u.command < 2 or u.command < u.discipline + 1:
+        # restoration needs Command at least one above the (per-subunit) current Discipline.
+        if u.command < 2:
             continue
-        if u.discipline < u.discipline_start:
-            u.discipline = min(u.discipline_start, u.discipline + 1)
-            u.check_drift()
+        for atom in u.subunits:
+            if atom.routed or atom.broken:
+                continue
+            if u.command < atom.eff_discipline + 1:
+                continue
+            if atom.eff_discipline < atom.eff_discipline_start:
+                atom.restore_discipline()   # +1 toward start, routes own-else-Unit (byte-exact single-subunit)
+        u.check_drift()
 
 def threadwork_check(unit_a, unit_b, phase_idx):  # noqa: ARG001
     """Empty hook — threadwork lands in a future cycle (G-9)."""
@@ -569,6 +583,15 @@ class Subunit:
     # mechanically real (triplex-acies line relief; Clausewitz reserves).
     stamina: Optional[float] = None
     stamina_max: Optional[float] = None
+    # Per-subunit rout lifecycle (Jordan directive 2026-06-17): a subunit tracks its OWN rout/broken
+    # state, so a heavily-hit subunit can break while a fresh sibling holds ("a section of the line
+    # breaks" — §A.12 Cannae/Hastings). routed = its eroding morale reached 0; broken = its discipline
+    # reached 0 (formation gone, contributes 0 to combat). For a single-subunit unit these coincide with
+    # the parent Unit's routed/broken so the homogeneous gauge stays byte-exact. discipline_start mirrors
+    # morale_start (the per-subunit nominal start for degradation tracking); None inherits the Unit.
+    routed: bool = False
+    broken: bool = False
+    discipline_start: Optional[int] = None
 
     def __post_init__(self):
         # Construction-time validation (arch review / stress-test hardening): turn the cryptic
@@ -667,6 +690,33 @@ class Subunit:
         else:
             u = self._u()
             if u is not None: u.stamina = new
+    @property
+    def eff_discipline_start(self):
+        if self.discipline_start is not None: return self.discipline_start
+        u = self._u()
+        return u.discipline_start if u is not None else 5
+    def erode_morale(self, amount):
+        # Reduce effective morale (may pass <=0 -> rout, matching the unit `morale -= loss`). Writes to own
+        # morale if set, else routes to the inherited Unit -> single-subunit reproduces the old unit erosion.
+        new = self.eff_morale - amount
+        if self.morale is not None: self.morale = new
+        else:
+            u = self._u()
+            if u is not None: u.morale = new
+    def degrade_discipline(self):
+        # -1 discipline toward floor 0 (formation degradation); own-else-inherited-Unit write routing.
+        new = max(0, self.eff_discipline - 1)
+        if self.discipline is not None: self.discipline = new
+        else:
+            u = self._u()
+            if u is not None: u.discipline = new
+    def restore_discipline(self):
+        # +1 discipline toward the nominal start (Reform); own-else-inherited-Unit write routing.
+        new = min(self.eff_discipline_start, self.eff_discipline + 1)
+        if self.discipline is not None: self.discipline = new
+        else:
+            u = self._u()
+            if u is not None: u.discipline = new
     @property
     def cur_troops(self):
         return sum(self.cell_troops.values()) if getattr(self, 'cell_troops', None) else self.troop_count
@@ -1145,11 +1195,12 @@ def subunit_combat_pool(unit, atom):
     byte-exact for the homogeneous gauge; differentiates per subunit for mixed units.
     [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; the (5.0-disc)*0.5 discipline penalty
      mirrors Unit.discipline_penalty 'fix discipline'; size-decoupled cohesion form]"""
-    if unit.routed or unit.broken:
+    if unit.routed or unit.broken or atom.routed or atom.broken:
         return 0
     disc = atom.eff_discipline
     if disc <= 0:
         unit.broken = True
+        atom.broken = True
         return 0
     pen = -max(0.0, min(2.0, (5.0 - disc) * 0.5))
     stam_pen = _stamina_pool_penalty(atom.eff_stamina)
@@ -1229,6 +1280,29 @@ class Unit:
     def agg_morale(self):     return self._agg('eff_morale')
     def agg_dr(self):         return self._agg('eff_dr')
     def agg_stamina(self):    return self._agg('eff_stamina')
+
+    def derive_rout(self):
+        # Unit-level rout DERIVED from subunit state (per-subunit rout, Jordan directive): the unit routs
+        # when its general is gone (Command<=0), when every subunit has routed, or when its troop-weighted
+        # aggregate morale reaches 0 (the canonical Morale-0 rout, §A.4/§A.12, now read as the composite).
+        # A routed unit's subunits all rout (the whole body flees). Single-subunit: agg_morale == the lone
+        # subunit's morale == unit.morale, so this fires exactly when the old `unit.morale<=0` did (byte-exact).
+        if self.routed:
+            return
+        if self.command <= 0 or all(a.routed for a in self.subunits) or self.agg_morale() <= 0:
+            self.routed = True
+            for a in self.subunits:
+                a.routed = True
+    def cascade_morale_hit(self, amount):
+        # Unit-wide morale hit (§A.12 inter-unit cascade / contagion / flank erosion): erode the unit's
+        # inherited-default morale ONCE (covers every subunit that INHERITS it -> no double-count for a
+        # homogeneous unit) AND each subunit that carries its OWN morale, by `amount`. Single-subunit /
+        # homogeneous: exactly the old `unit.morale -= amount` (byte-exact). Mixed: own-morale subunits
+        # are eroded too, so the cascade is felt per-subunit consistently with the rest of the model.
+        self.morale -= amount
+        for a in self.subunits:
+            if a.morale is not None:
+                a.morale = a.morale - amount
 
     def recalc_size(self):
         # v19: effective_size = HP / BLOCK_SIZE (HP = TroopCount).
@@ -2169,6 +2243,8 @@ def run_battle(unit_a, unit_b, max_turns=18):
                 if u.routed:
                     continue
                 for atom in u.subunits:
+                    if atom.routed or atom.broken:
+                        continue
                     cic = 0
                     for p in pairs:
                         if p.get('atom_a') is atom:
@@ -2288,10 +2364,14 @@ def run_battle(unit_a, unit_b, max_turns=18):
                 u.morale = 0.0
                 continue  # rout check below
 
-        # Rout check AFTER both erosions applied
+        # Rout check AFTER both erosions applied — per-subunit, then derive the unit rout
         for u in [unit_a, unit_b]:
-            if not u.routed and u.morale <= 0:
-                u.routed = True
+            if u.routed:
+                continue
+            for atom in u.subunits:
+                if not atom.routed and atom.eff_morale <= 0:
+                    atom.routed = True
+            u.derive_rout()   # single-subunit: fires iff old `u.morale<=0` did (byte-exact)
         # v15: phase boundary — stamina_check, morale_check_phase, rout_resolution
         # are now populated (G-1 + G-2). rally/reform/threadwork remain empty.
         if t % TICKS_PER_PHASE == 0:
@@ -2622,9 +2702,11 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     # [canonical: designs/provincial/mass_battle_v30.md §A.4]
                     if target.discipline > 0 and target.command > 0:
                         erosion = dmg / (target.discipline * target.command)
-                        target.morale -= erosion
-                    if target.morale <= 0:
-                        target.routed = True
+                        target.cascade_morale_hit(erosion)
+                    for atom in target.subunits:
+                        if not atom.routed and atom.eff_morale <= 0:
+                            atom.routed = True
+                    target.derive_rout()
                     turn_log['freed_attacks'].append({
                         'freed': freed_unit.name, 'target': target.name,
                         'damage': dmg,
@@ -2669,7 +2751,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     continue
                 # Morale cascade: Discipline check Ob 1
                 if not discipline_check_cascade(friend):
-                    friend.morale -= 1
+                    friend.cascade_morale_hit(1)
                     turn_log['cascades'].append({
                         'unit': friend.name, 'trigger': f'{routed_side}{routed_idx} routed',
                         'result': 'failed — morale -1',
@@ -2681,7 +2763,7 @@ def run_multi_unit_battle(side_a, side_b, pairings, shapes_a, shapes_b,
                     })
                 # Rout contagion: additional -1, braked
                 # [canonical: L167 — "Rout causes −1 Morale to adjacent units"]
-                friend.morale -= ROUT_CONTAGION_MORALE_HIT
+                friend.cascade_morale_hit(ROUT_CONTAGION_MORALE_HIT)
                 # Brake: this morale loss cannot cause rout this turn
                 # (rout check deferred to next turn's engagement resolution)
 
