@@ -1,7 +1,7 @@
 # Combat — consolidated decision docket
 ### Two-week pile (06-03→06-17) reconciled to live HEAD · the thing that unsticks it
 
-**2026-06-17 · status: PROPOSED working master · re-pinned to HEAD `15269f3c` (2026-06-17 19:32)**
+**2026-06-17 · status: RATIFIED 2026-06-19 (Jordan adopt-all directive, ED-1029) — implementation queued · re-pinned to HEAD `15269f3c` (2026-06-17 19:32)**
 
 `[SELF-AUTHORED — bias risk: synthesizes Claude-authored audit corpus + Claude's own reconciliation plan. Recommendations below are carried from the 06-16 reconciliation_plan, not new authority. Every "CLOSED" cite is a committed SHA or ledger ED read live this session.]`
 

@@ -1,3 +1,5 @@
+> **EXECUTED / HISTORICAL (2026-06-19).** combat_engine_v1 was canonized as the personal-combat resolver (ED-900) and `params/combat.md` deprecated 2026-06-04; `combat_v31/v32_proposal` DEPRECATED by ED-900. This 2026-06-02 staging proposal is superseded by those actions and retained for record only. Docket-level adopt-all ratification: ED-1029.
+
 # Combat Engine v1 — Ratification & Deprecation Proposal
 **2026-06-02 · personal-combat resolution · proposed canonization**
 
