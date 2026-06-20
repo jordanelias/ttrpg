@@ -1,7 +1,7 @@
-<!-- [PROVISIONAL: 2026-06-09 — narrative voice canon; D-3 voice-home consolidation. Content extracted verbatim from canonical articulation §4.2 and from the prose-writer skill's voice sections; new consolidated home pending Jordan ratification. User retains exclusive authority over narrative/worldbuilding content.] -->
+<!-- [EDITORIAL: ED-1030 — narrative voice canon ratified by Jordan 2026-06-19: PROVISIONAL->CANONICAL; content verbatim-unchanged (articulation §4.2 + prose-writer skill voice sections, 2026-06-09 D-3 consolidation). User retains exclusive authority over narrative/worldbuilding content.] -->
 # Narrative Voice Canon
 
-## Status: PROVISIONAL (content verbatim-canonical; new consolidated home pending ratification)
+## Status: CANONICAL (ratified by Jordan 2026-06-19, ED-1030; content verbatim-unchanged from provisional consolidation 2026-06-09)
 
 This document is the single source for Valoria's narrative voice. Mechanical systems that render narrative output reference this file rather than re-authoring voice rules inline.
 
