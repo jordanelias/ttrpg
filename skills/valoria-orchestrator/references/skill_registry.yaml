@@ -258,7 +258,7 @@ skills:
       # NOT non-rolling systems (character sheet, pure ledger, bare clock) -> valoria-mechanic-audit
     purpose: "Rolling-engine resolution diagnostic (rolling engines ONLY; non-rolling systems -> valoria-mechanic-audit). Five-property engine test; sigma-leverage (Continuous Engine) + deterministic+stochastic (Domain Action resolver, ED-874) as instances + [NEW ENGINE] branch. Pipeline: Stage 0 validate vs adjudicated cases -> Phase 0-6 stress test -> lesson/property mapping -> per-engine NERS verdict -> re-test."
     gating_hooks: []
-    last_verified: 2026-06-18
+    last_verified: 2026-06-19
 
   - name: valoria-module-adjudicator
     path: skills/valoria-module-adjudicator/SKILL.md

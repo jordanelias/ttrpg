@@ -83,6 +83,12 @@ At TN 7: `net ~ Normal(0.4·pool, 0.8·√pool)`; **`σ_N = 0.8·√Pool`** is t
 
 **Leverage layer** (`designs/audit/2026-05-29-combat-armature/`, handoff `2026-05-29-combat-armature-sigma-leverage`): strategic-setup advantages accumulate as **Δσ**, **tanh soft-capped**, converted to an **Ob shift scaled by `σ_N`**, so probability impact is **uniform regardless of pool size** (P-ii). This is the **C-04 (Agi-OP) fix**: outcome decoupled from raw pool/dice count.
 
+**Leverage axis — the μ-shift ≡ Ob-shift dual, and the flat-shift trap.** Advantage can enter `net ~ Normal(0.4·Pool, σ_N)` on **either** axis: shift the **roll mean** `μ = E[net]` (a "+X to net" / innate or trait bonus), or shift the **obstacle Ob** (the leverage layer above). Because resolution is on the **margin `net − Ob`**, the two are **duals** — with `z = (μ − Ob)/σ_N`, a μ-shift of `+δ` and an Ob-shift of `−δ` both move `z` by `+δ/σ_N`: identical P(success), magnitude, and degree. *Which end you push is free; how you scale the push is the whole game.*
+- **Uniformity (P-ii) lives in the scaling, not the axis.** `Δz = δ/σ_N`. A shift is in-band/uniform **iff `δ` scales with `σ_N` (= 0.8·√Pool)** → `Δz = k`, pool-independent. The Ob-axis leverage layer already does this (Δσ → tanh → Ob shift scaled by σ_N); a μ-axis modifier must scale the **same way**.
+- **The flat-shift trap (a P-ii defect the Ob-only path doesn't surface).** A **flat** advantage — constant `+X` to net, or constant `−X` Ob, *not* σ_N-scaled — gives `Δz = X/(0.8·√Pool) ∝ 1/√Pool`: **hot at small pools** — the exact `1/√N` non-uniformity the engine was built to kill, re-imported through a flat bonus. A naive "+X to net" skill/trait bonus is a **wrong-form leverage defect (Lesson 2 / P-ii)** unless σ_N-scaled; the fix is to route it through the σ_N-scaled leverage layer (either axis), never to add it flat.
+- **Neither axis de-swings.** μ-shift and Ob-shift both leave `σ_N` unchanged: they relocate the operating point, not the **spread**. Outcome swing (`σ_N/μ = 2/√Pool`) shrinks only with a larger pool or aggregation (Lesson 4), never with any μ/Ob shift — the axis statement of "leverage calibration is not a substitute for the right pool regime."
+- **Sub-5D (ER-2) binds both axes.** A μ-shifted `net` read through the raw Normal below ~5D inherits the 4–32% continuity error (Phase 3c); resolve against `net − (Ob − 0.5)` and never report flat-Normal μ-shift odds at the floor.
+
 **Degree output** (`params/core.md §Degrees of Success`): magnitude `net − Ob` as a gauge; Overwhelming (`net ≥ 2·Ob` AND `net ≥ 3`), Success (`net ≥ Ob`), Partial (`0 < net < Ob`), Failure (`net ≤ 0`). Ob cap 20, **Ob min 1 (P-232)**. Pool floor 1D.
 
 **Scope:** healthy pools with a real setup/skill axis — personal combat (~5–18D), social contest, thread operations, **aggregated** mass battle.
@@ -91,6 +97,7 @@ At TN 7: `net ~ Normal(0.4·pool, 0.8·√pool)`; **`σ_N = 0.8·√Pool`** is t
 - **Low-input leverage spike (P-ii; ED-875, OPEN, Gate G8):** sigma-leverage is **hot at low Command (~0.500/pt at Cmd 2)**, in-band only by Cmd 4–7. Check per-point dP across the *whole* range, not the midpoint.
 - **Ob-floor collision (P-iii; ED-884, resolved):** advantage as an Ob reduction can push `eff_Ob` below the P-232 floor of 1; it must saturate at the floor (or convert to magnitude), never violate Ob≥1.
 - **Sub-5D approximation (P-i/P-iii):** below ~5D the Normal model is shaky; with the continuity correction it tracks, without it it does not. Routine sub-5D use without the correction = finding.
+- **Flat (un-scaled) advantage (P-ii; the μ/Ob-shift dual):** advantage added as a flat "+X to net" or flat "−X Ob" instead of σ_N-scaled — `Δz = X/(0.8·√Pool) ∝ 1/√Pool`, hot at small pools. The leverage layer avoids this by scaling its Ob-shift by σ_N; a bypassing flat bonus does not.
 
 ### Instance B — Deterministic+stochastic resolver (Domain Action Resolver)
 
@@ -192,7 +199,7 @@ Run in order. Phase 0 applies the Scope Gate + Engine-Selection Rule and routes 
   Rank (H/M/L)³. Any H is a flag; two+ H is a candidate finding.
 
 ### Phase 3 — Check the engine's curves (and the loops/cliffs its output drives)
-- **3a. Leverage uniformity (P-ii):** does the engine deliver in-band uniform leverage across the *whole* input range? (Both A and B target this by construction; ED-875 proves it can still fail at an extreme.)
+- **3a. Leverage uniformity (P-ii):** does the engine deliver in-band uniform leverage across the *whole* input range? (Both A and B target this by construction; ED-875 proves it can still fail at an extreme.) **Instance-A axis check:** an advantage injected as a flat μ-shift ("+X to net") or flat Ob-shift — not σ_N-scaled — reintroduces 1/√Pool non-uniformity (the μ/Ob-shift dual; see Instance A); uniform leverage requires σ_N-scaling on *whichever* axis.
 - **3b. Cliffs (P-iii):** continuous input crossing a discrete boundary that jumps the outcome; engine-internal risks — the sigma Ob-shift hitting the P-232 floor (ED-884), Mode-B clamp edges (verify monotonic). **Scope:** cliffs *in the engine's response* or that a discrete boundary forces on the engine's output. A cliff in a purely non-roll quantity → mechanic-audit.
 - **3c. Continuity correction (Instance A):** resolving against `net − (Ob − 0.5)`? Absent + routinely-small-pool = finding (ER-2).
 - **3d. Role conflation, scoped to the roll:** does a variable that **feeds or reads** this engine carry more than one independent role (capacity AND cohesion AND collapse), such that the roll's input/output is overloaded? Pure non-roll role conflation → mechanic-audit.
