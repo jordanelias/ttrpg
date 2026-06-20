@@ -1,3 +1,4 @@
+<!-- [DEPRECATED: 2026-06-19 — superseded by canonical combat_engine_v1; not canon, will not be ratified. Per Jordan ratification 2026-06-19 (ratification decision #17). Retained for historical reference only.] -->
 <!-- PROPOSAL — PP-TBD; supersedes designs/scene/combat_v30.md §§1–4 on ratification -->
 <!-- Source: combat_v31_proposal.md reframed per Jordan top-down vision (2026-05-28) -->
 <!-- Architecture: engine replacement within d10/TN/Ob substrate; combat as probability-weighted state graph -->
@@ -7,7 +8,7 @@
 
 ## Date: 2026-05-28
 ## Version: combat_v32_proposal v1.0 (state-graph reframe of v31)
-## Status: PROPOSAL — pending editorial ratification; will supersede designs/scene/combat_v30.md §§1–4 on ratification
+## Status: DEPRECATED (2026-06-19) — superseded by canonical combat_engine_v1; will NOT be ratified (Jordan ratification 2026-06-19)
 ## Scope: Personal-scale combat engine. Mass combat, Thread-in-combat (combat_v30 §10), Combat World Bridge (combat_v30 §13), Fieldwork transitions (combat_v30 §11.5) preserved by reference.
 ## Mode applicability: VIDEOGAME (Godot). Per VGMS §4, TTRPG-only mode struck — single mode in this proposal.
 ## Authority: canon/00_philosophical_foundations_rules.md → canon/02_canon_constraints.md → designs/architecture/videogame_mode_spec.md → this document → params/combat.md (pending refresh)
