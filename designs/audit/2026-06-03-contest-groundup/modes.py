@@ -32,7 +32,7 @@ def appeal_venue(**o):
     # so resonance comes from the sovereign via leak); grace is not automatic (high bar) and is
     # discretionary — a stern sovereign denies, a merciful one grants.
     return Venue(proof_ethos=.34, proof_pathos=.33, proof_logos=.33, start_ground=Stasis.QUALITY,
-                 win=GraceThreshold(5.0), faults=DefeatCatalogue(barred=False, evasion_strikes=0), **o)
+                 win=GraceThreshold(5.5), faults=DefeatCatalogue(barred=False, evasion_strikes=0), **o)
 
 VENUES = {"court": court_venue, "disputation": disputation_venue,
           "assembly": assembly_venue, "appeal": appeal_venue}
@@ -155,7 +155,7 @@ def excommunication_court_venue(**o):
     has forfeited community membership. ethos-dominant (the highest ethos weight in any venue —
     the entire question is who you ARE before God and the community); past-weighted (the
     charges are about past conduct and continuing disposition).
-    High ProofBar (5.0): canonical procedure required substantial proof and three prior citations
+    High ProofBar (3.0): canonical procedure required substantial proof and three prior citations
     with opportunities to recant before spiritual exclusion could be declared (Clarke 2007, cited
     in Nederman 2011 doi:10.1111/j.1467-9809.2010.01002.x). The community's participation —
     isolation, 'pollution' language, collective enforcement — is the mechanism of the sanction's
