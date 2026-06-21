@@ -22,7 +22,20 @@ def level(name):                    return LEVEL[name]
 def sigma_N(pool):                  return SD_PER_DIE * sqrt(max(1, pool))
 def eff_sigma(net_dsigma):          return M_MAX * tanh(net_dsigma / M_MAX)
 def effective_ob(base_ob, net_dsigma, pool):
+    """DISPLAY-ONLY (not the resolution path, post ED-884 / ED-934): a floored 'effective
+    difficulty' a UI may surface. Resolution applies advantage as net_boost (the mu-shift),
+    which leaves base_ob untouched so the Ob floor (OB_MIN, P-232) is never breached."""
     return max(OB_MIN, base_ob - eff_sigma(net_dsigma) * sigma_N(pool))
+
+def net_boost(net_dsigma, pool, capped=True):
+    """Advantage as a mu-shift on the expected net (ED-884 resolution; ED-934 combat precedent):
+    eff_sigma(dσ)·sigma_N(pool). The σ cancels in the z-score, so the modifier shifts the
+    outcome z by exactly eff_sigma at every pool size (uniform impact, TN-exact); base_ob and
+    TN are unchanged, so the Ob floor (OB_MIN, P-232) is never breached. This is the
+    resolution-path modifier; effective_ob above is retained DISPLAY-ONLY. Replaces the
+    pre-ED-884 Ob-reduction path that clamped at OB_MIN and reintroduced 1/√N non-uniformity."""
+    eff = eff_sigma(net_dsigma) if capped else net_dsigma
+    return eff * sigma_N(pool)
 
 def roll_net(pool):
     s = 0

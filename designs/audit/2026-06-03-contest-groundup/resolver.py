@@ -15,7 +15,7 @@ from contract import A, B, other, Move, ContestView, FaultState, Adjudicator, Pr
 from primitives import (Stasis, Appeal, Standing, Reserve, Pool, SelfGating, Leverage, Room,
                         Resonance, Readiness, DefeatCatalogue, EvidenceItem, Dossier,
                         RhetoricalWeights)
-from engine import roll_net, effective_ob, degree
+from engine import roll_net, effective_ob, degree, net_boost
 
 VALID_KINDS = ("advance", "hard", "shift", "support", "pass", "evidence", "rebut")
 RES_FLOOR = 0.15  # de-saturation floor (diagnostic Lesson 6): a hostile/off-axis reception can't zero
@@ -190,8 +190,8 @@ class Bout:
         c = self.c[side]
         pool = Pool.size(c.faculty)
         lev = Leverage.net(c.faculty, on_ground=True)
-        ob = max(1.0, effective_ob(self.v.base_ob, lev, pool))  # σ-leverage: float OB, no rounding
-        return degree(roll_net(pool), ob, pool)                 # pool-aware degree -> σ-gated Overwhelming
+        net = roll_net(pool) + net_boost(lev, pool)             # σ-leverage as mu-shift (ED-884/934): base_ob untouched, Ob floor never breached
+        return degree(net, self.v.base_ob, pool)                # pool-aware degree -> σ-gated Overwhelming; effective_ob now display-only
 
     def _bias(self, side):
         if self.pr.toward != side: return 1.0
