@@ -9,7 +9,7 @@ GD-1 enforcement: this module is the only place in sim that returns a game-end
 faction-victory result. No other victory function may be registered.
 
 Victory condition (GD-1):
-  Control 11+ of 15 territories, Accord >= 2 in all held, Political Stability <= 6,
+  Control all 15 territories, Accord >= 2 in all held, Political Stability <= 6,
   sustained for 2 consecutive seasons.
 
 Dependencies:
@@ -24,7 +24,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 
-VICTORY_THRESHOLD = 11   # 11 of 15 territories
+VICTORY_THRESHOLD = 15   # all 15 of 15 territories (Jordan 2026-06-19, J-22)
 ACCORD_MIN = 2.0
 PS_MAX = 6.0
 SUSTAIN_SEASONS = 2
@@ -52,7 +52,7 @@ def reset():
 def check_peninsular_sovereignty(faction_id: str, world) -> VictoryResult:
     """Check if faction meets GD-1 peninsular sovereignty victory.
 
-    Canon: 11/15 territories held, Accord >= 2 in all, PS <= 6, sustained 2 seasons.
+    Canon: all 15 territories held, Accord >= 2 in all, PS <= 6, sustained 2 seasons.
     """
     from sim.autoload.game_state import ALL_PLAYABLE_15
 

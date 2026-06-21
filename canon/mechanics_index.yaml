@@ -805,7 +805,7 @@ mechanics:
     sim_module: sim/autoload/victory.py
     test_status: not_implemented
     gd_applicable: [GD-1]
-    notes: "GD-1 sole victory condition. 11+ of 15 territories sustained 2 consecutive seasons with Accord >= 2 and Political Stability <= 6."
+    notes: "GD-1 sole victory condition. all 15 territories sustained 2 consecutive seasons with Accord >= 2 and Political Stability <= 6."
 
   # ─── WORLD (sim/world/) ──────────────────────────────────────────────────
 
