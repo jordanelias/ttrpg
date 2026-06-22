@@ -6,13 +6,11 @@
 
 Scope: **personal combat (`combat_engine_v1`) only.** Mass battle (including ED-811), fieldwork, and social contest are excluded.
 
-## §1 — NEEDS JORDAN (decisions / authorship — blocking)
-- **D2 / puncture magnitude** — pick-vs-plate has a ratified *ranking* but no calibrated number `[GAP]`. Set an anchor or accept ranking-only. (docket D2; reconciliation Stage-4 #2)
-- **D8 — new traditions** — the urumi rigidity axis (flexible blade / guard-bypass / area-denial / self-risk) and other priority-gap schools. World authorship, your layer; parked. (docket D8; research_skeleton §4, T2/T3 confidence)
-- **F7 — crit saturation** — pool 12, σ=+1.0 → 74.2% overwhelming. Adopt the ED-906 pool-gated Overwhelming bar in combat, or accept as bounded? (Likely subsumed by D3.) (comprehensive F7 / §10.5)
-- **Wound model N + magnitude** (this session) — Health = WI×N with WI a 5:3:2 blend (End:Str:Spi) and graduated bunched gates is calibrated; awaiting your **N (3 or 4)** and **WI magnitude** (Health ~80 default, up to ~120 for weapon definition).
-- **ED-879 [GATE G8]** — out-of-bounds × Pool-Floor-5 interaction underspecified. (May be mooted by M2 dropping the dead floor — see §3.) (ledger ED-879)
-- **ED-864** — scene-combat C4 direction + Contest! decisions (6 records, 2026-05-17) filed but not executed. (ledger ED-864)
+## §1 — TRIAGED (directive 2026-06-19: "test §1 until it makes sense")
+- **Wound model N + magnitude** — **SETTLED (tested).** N=4 (vs N=3: N=4 is exactly coherent — wounds fire at identical %-health-lost 44/75/94/100 across every build; N=3 drifts ~1% on rounding — and gives 4 graduated states vs 3, first wound at 44%). WI = round(2.5·End + 1.5·Str + 1.0·Spi) (your 5:3:2 ratio); Health = WI×4 (avg 76, tank 140); gates (2i−1)/4·WI consumed largest-first. Verified against your worked example (WI=16, N=4 → 28/48/60/64). **Lands coupled with the §4 attack/defense asymmetry fix** — N=4 allows up to −4D before felling, which deepens the −1D-per-wound mutual-stall; the asymmetry fix resolves it, so they co-land or the draw rate regresses. `[ASSUMPTION: weights at exact 5:3:2 per your ratio; magnitude (Health ~76) re-tunes via DMG_SCALE when D1 lands — bottom-up: verified gates/coherency; top-down: accelerating-collapse injury model. Jordan-vetoable.]`
+- **ED-864** — scene-combat C4 direction + Contest! integration (6 records, 2026-05-17): design-*direction*, not a calibration — needs its own focused pass. (ledger ED-864)
+- **D8 — new traditions** — **HELD (yours).** Creative-world authorship (the urumi rigidity axis etc.); no test authors a tradition's identity. Per the project-owner contract this stays parked for you, even under "test §1." (docket D8)
+- *(moved out by the triage: **D2** → rides D1 (§2); **F7** → subsumed by D3 (§7); **ED-879** → mooted (§7).)*
 
 ## §2 — RATIFIED (ED-1029), IMPLEMENTATION PENDING (engineering + parity re-validation)
 - **D1** continuous weapon-vs-armour transmission model replaces RESIST/DELIVERY/HEFT/ADEF — **re-bases this session's D-A damage reshape** (intent survives; coupling numbers + DMG_SCALE/~5-hit calibration recomputed). (docket D1)
@@ -50,6 +48,8 @@ sabre mirror draws ~80% (open feel question, 2026-06-06) · read-dominance Cog/H
 - **F2** eff_cw channel wiring 18/23 live (M1 finishes the last 5); channel-abilities (misura / atajo / Stärke-Schwäche) fire.
 - P_auth (pob_frac / mass inputs) WIRED; atk_sig → Concentration WIRED (ED-934 / 15269f3c).
 - **ED-870** PP-717 Agi×2 propagation — **mooted**: the engine pool is `max(5, History+6)` (ED-901), never Agi×2; the drifted docs (combat_v30 / params/combat) are deprecated. Verify-and-close.
+- **F7** crit saturation (pool-12, 74% overwhelming) — **subsumed by D3**: the continuum + saturating quality replaces the 4-band model that produces the top-band saturation; resolved under D3, not a separate ED-906 bar.
+- **ED-879** out-of-bounds × Pool-Floor-5 — **mooted (tested 2026-06-19)**: OOB feeds `atk_sig` (wrapper.py:139), not the pool; the floor (5) never binds (pool ≥ 7). No interaction exists; M2 removes the dead floor.
 
 `[CONFIDENCE: high on structure, status, and authority (all source-cited); medium where the source itself flags it — F7-vs-D3 subsumption, ED-870/879 moot-pending-verify, and the comprehensive's 06-09 numbers pre-dating the μ-shift.]`
 `[GAP: the F4 / P_auth / atk_sig "wired" claims are inherited from the docket §A SHA cites, not re-grepped this session.]`
