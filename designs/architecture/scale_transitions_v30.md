@@ -39,6 +39,8 @@ Operations span five scales. Scale determines base difficulty and Thread require
 
 ## §3 Eight Handoff Rules
 
+> **Delivery model.** The handoffs below are the *named, curated* cross-scale procedures. Beneath them the universal Key substrate (key_substrate §4.1/§4.2) delivers in **all directions** — top-down, bottom-up, vertical, diagonal, lateral, horizontal — by observer resolution; see §12. A handoff is authored sugar over the substrate, not the only path between scales.
+
 
 ### §3.1 Personal → Thread
 Leap triggers. Contact duration starts on the round Leap succeeds. Thread pool and operations become available. Return to Personal scale on Contact end or voluntary withdrawal.
@@ -294,3 +296,40 @@ Paradox window = 1 season on POP. Full TTRPG RS values propagate directly to BG 
 
 
 - CF wound during personal combat → +1 Ob to commander's BG tactic rolls for remainder of current battle
+
+---
+
+## §12 All-Directions Key Delivery (J-1, ED-1038)
+
+[EDITORIAL: ED-1038 — §12 authored: all-directions Key-delivery rule + authoring discipline + A6 exemption. Jordan ruling J-1, 2026-06-19 ("top down key delivery but ensure it can go all directions"). Source: key_substrate §1/§4.1/§4.2/§2.2. Adds no mechanism; records the rule, the sub-scale-targeting discipline, and the assessor carve-out.]
+
+**Ruling (Jordan, 2026-06-19, J-1):** top-down Key delivery is canonical — and the delivery model must operate in **all directions**. This section records that ruling. It adds no new mechanism: the substrate already delivers in every direction (§12.1). What was missing was the rule, the discipline of populating sub-scale targets (§12.3), and the assessor exemption (§12.2).
+
+### §12.1 The all-directions guarantee
+Key delivery is direction-neutral. The single update rule (key_substrate §4.1) resolves an observer set (key_substrate §4.2 `compute_observers`) from three independent sources — `source_actor`, every `targets[].actor_id`, and, for public Keys, `actors_in_scale(scale_signature)` — then **applies** `key.stat_deltas` to each observer (§4.1 step 4, `observer.apply_state_changes`). `actors_in_scale` returns every actor whose state intersects the named scales, with no preferred topology. Direction is therefore an *emergent property* of a Key's `targets[]`, `scale_signature`, and `visibility` — not a separate channel per direction. One substrate carries all six canonical directions:
+
+| Direction | How the substrate carries it | Status |
+|---|---|---|
+| bottom-up | scene/personal Key meeting Sufficient Scope (§7) -> faction via Domain Echo (§5) | covered (§3, §5, §7) |
+| lateral / horizontal | same-scale observers via shared `scale_signature` and scene presence | covered |
+| vertical (up) | the eight handoffs (§3.1-§3.8) | covered |
+| diagonal | `causes[]`-chained cross-scale consequence (e.g. Thread Echo §5.6) | covered |
+| top-down | strategic / environmental Key naming sub-scale `actor_id`(s) in `targets[]` and including the sub-scale in `scale_signature` -> personal / settlement observers | mechanism present; requires §12.3 |
+| down-diagonal | as top-down, across a system-family boundary | mechanism present; requires §12.3 |
+
+### §12.2 No private channel; the substrate is the only delivery path (A6 exemption)
+Per key_substrate §1, no system maintains a private event channel; every system emits and consumes Keys. Engine-mediated Key delivery is therefore the **sole** canonical cross-scale delivery channel, in every direction, and is exempt from the assessor "no top-down channel" finding (A6 / J-1): that finding identified a missing *rule and populated targets*, never a missing mechanism. A bespoke top-down delivery channel is **not** to be authored — it would duplicate the substrate and violate §1. The fix is discipline (§12.3), not apparatus.
+
+### §12.3 Authoring discipline — populate sub-scale targets
+When a strategic-scale or environmental Key carries a consequence that reaches a sub-scale actor, the emitter **must**:
+1. add each affected sub-scale actor to `targets[]` with the correct `role` (§2.2: `subject` = acted-upon directly; `object` = territorial / institutional; `witness` / `bystander` = present);
+2. include the sub-scale in `scale_signature`, so `actors_in_scale` resolves those observers for public Keys; and
+3. set `stat_deltas` and `impact_vector` for each such target.
+
+This extends the §2.2 `causes[]` authoring guideline to targets: a strategic Key with sparse sub-scale `targets[]` delivers blind — the consequence is intended (the consumers are registry-canonical) but unreached. Sparse down-targeting is the §12 defect, exactly as sparse `causes[]` is the diagonal-chain defect.
+
+### §12.4 Known down-seams (Lane-B implementation targets)
+The J-1 analysis enumerates eight cross-band down-seams / fifteen type-edges whose *consume intent is already registry-canonical* (the consumers are listed in key_type_registry) but whose strategic emitters do not yet populate sub-scale targets: `domain_actions -> {npc_behavior, piety_track, settlement_economy}`, `faction_politics -> npc_behavior`, `peninsular_strain -> {npc_behavior, settlement_economy, settlement_layer}`, `scenario_authoring -> settlement_layer`. Closing them is emitter-side `targets[]` population per §12.3, plus the assessor carve-out and tests (Lane B) — not a mechanism change. Reference: `designs/audit/2026-06-11-orchestration/valoria_authoritative_graph_v1.md` §2 (top-down / diagonal); key_type_registry consumer schemas.
+
+### §12.5 NERS note
+**N** — closes the Robust-direction gap (delivery complete in all six directions) without adding apparatus; the guarantee is a recognition of existing §4.1/§4.2 behaviour. **R** — the eight handoffs plus the substrate guarantee leave no unreachable direction. **S** — identical observer-resolution methodology across every direction; no per-direction special case. **E** — one rule: direction is a property of the Key, not a catalogue of channels.
