@@ -112,6 +112,7 @@
 - Relationship: runs AFTER valoria-mechanic-audit (consistency); checks rolling-engine resolution fitness under stress and the loops/cliffs a rolling engine drives.
 - Note: raw d10-vs-Ob is legacy TTRPG-mode only (a defect flag in videogame canon). Non-rolling components inside a composite are recognized-and-routed-out, not diagnosed.
 - Leverage-axis note (2026-06-22): Instance A documents the **μ-shift / Ob-shift leverage relation** — exact for P(success), divergent on degrees (μ-shift guards the Failure floor; Ob-shift inflates Overwhelming) — and the **flat-shift trap**: advantage must be σ_N-scaled, else a flat "+X to net"/"−X Ob" re-imports 1/√Pool non-uniformity where the pool varies (P-ii). Corrects the 2026-06-19 over-claim of full duality.
+- Continuous-Obstacle + ER-2 note (2026-06-22): Instance A now states the obstacle is a continuous axis (fractional Ob is a real difficulty knob, canonical per params/core.md §Obstacle Scale; integer-collapse is discrete-mode only), and the ER-2 continuity correction (net − (Ob − 0.5)) is LANDED in params/core.md §Continuous Engine (commit a3d3888) — the skill's [OPEN] tags flipped to landed.
 
 
 ---

@@ -79,7 +79,7 @@ A rolling engine is diagnosed against **five properties**, regardless of which e
 
 At TN 7: `net ~ Normal(0.4·pool, 0.8·√pool)`; **`σ_N = 0.8·√Pool`** is the spread the leverage layer scales against.
 
-**Continuity correction (REQUIRED for fidelity; ER-2, `engine_replacement_reconciled §2/§5`).** Raw continuous `P(success)` runs **4–32% low** vs discrete below ~5D (missing continuity term). Fix: resolve against **`net − (Ob − 0.5)`** → agreement to ~1–3% across the whole range (0.067 vs 0.070 at 2D, Ob 3). One-line engine edit — **status: recommended, not yet landed in `params/core.md §Continuous Engine`** (`[OPEN — landing the continuity term]`). A continuous component without it = a P-iii/P-i defect: TTRPG and videogame modes disagree on the same action's odds.
+**Continuity correction (REQUIRED for fidelity; ER-2, `engine_replacement_reconciled §2/§5`).** Raw continuous `P(success)` runs **4–32% low** vs discrete below ~5D (missing continuity term). Fix: resolve against **`net − (Ob − 0.5)`** → agreement to ~1–3% across the whole range (0.067 vs 0.070 at 2D, Ob 3). One-line engine edit — **status: LANDED 2026-06-22 in `params/core.md §Continuous Engine` (commit a3d3888).** A continuous component without it = a P-iii/P-i defect: TTRPG and videogame modes disagree on the same action's odds.
 
 **Leverage layer** (`designs/audit/2026-05-29-combat-armature/`, handoff `2026-05-29-combat-armature-sigma-leverage`): strategic-setup advantages accumulate as **Δσ**, **tanh soft-capped**, converted to an **Ob shift scaled by `σ_N`**, so probability impact is **uniform regardless of pool size** (P-ii). This is the **C-04 (Agi-OP) fix**: outcome decoupled from raw pool/dice count.
 
@@ -91,6 +91,8 @@ At TN 7: `net ~ Normal(0.4·pool, 0.8·√pool)`; **`σ_N = 0.8·√Pool`** is t
 - **Sub-5D (ER-2) binds both axes.** A μ-shifted `net` read through the raw Normal below ~5D still carries the continuity error (ER-2 order — the 4–32% seen at the floor); resolve against `net − (Ob − 0.5)` (Phase 3c), and never report flat-Normal μ-shift odds at the floor.
 
 **Degree output** (`params/core.md §Degrees of Success`): magnitude `net − Ob` as a gauge; Overwhelming (`net ≥ 2·Ob` AND `net ≥ 3`), Success (`net ≥ Ob`), Partial (`0 < net < Ob`), Failure (`net ≤ 0`). Ob cap 20, **Ob min 1 (P-232)**. Pool floor 1D.
+
+**Obstacle is a continuous axis (videogame mode; `params/core.md §Obstacle Scale` + §Continuous Engine).** Ob is continuous, not integer-quantized: fractional Ob (weapon condition, cover, terrain) is canonical, and a fractional base Ob is a real intermediate *difficulty* setting (`P = Φ((μ_net − Ob)/σ_N)` is strictly monotonic in Ob — Ob 1.4 ≠ Ob 1.6). It rides the same continuous Ob axis as the leverage layer's Ob-shift and composes with it, but it is *difficulty*, not a structural lever: it relocates the operating point without changing `σ_N` (tunes difficulty, and via the `2·Ob` bar the Overwhelming rate; never small-pool swing). The integer collapse `Ob 1.4 ≡ 1.6 ≡ 2` happens only in discrete/TTRPG mode (integer `net`); the videogame resolves continuously, so fractional Ob is live — and below ~5D its odds take the continuity correction `net − (Ob − 0.5)` like any continuous read (now canonical, §Continuous Engine).
 
 **Scope:** healthy pools with a real setup/skill axis — personal combat (~5–18D), social contest, thread operations, **aggregated** mass battle.
 
@@ -340,7 +342,7 @@ Starting assessments, **not** pipeline-confirmed. Each needs a full Stage 0→4 
 - **Personal combat (Instance A)** — **gated**: the armature/resolution *structure* is Jordan's (handoff 2026-05-29 doc 2.5). Validate the **engine** (continuity correction, in-band leverage) separately from the **structure**.
 - **Mass battle (Instance A, aggregated)** — pool aggregated/healthy; **watch ED-875** (low-Command leverage too hot, OPEN Gate G8).
 - **Non-rolling systems** (CI economy, Treasury, peninsula/victory clocks, investigation five-filter, character sheet) — **out of scope**; route to `valoria-mechanic-audit`.
-- **Continuity correction (ER-2)** — `[OPEN]` one-line edit to `params/core.md §Continuous Engine`; recommend landing regardless.
+- **Continuity correction (ER-2)** — **LANDED 2026-06-22** in `params/core.md §Continuous Engine` (commit a3d3888).
 - **Settlement resolver (ER-6)** — **unspecified**; specify deterministic-first to avoid importing the faction degeneracy.
 
 ---
@@ -351,7 +353,7 @@ Starting assessments, **not** pipeline-confirmed. Each needs a full Stage 0→4 
 - `[OPEN — Jordan scope]` Full bare-stat migration (Domain Actions + Suppress + Rebuttal + §1.4) vs Domain Actions only (`domain_action_resolver_spec.md §5`).
 - `[OPEN — Gate G8, Jordan]` ED-875: mass-battle low-Command sigma-leverage too hot (~0.500/pt @ Cmd 2).
 - `[OPEN — co-design]` §1.4 Accounting Stability Check ↔ §1.3 recovery (CC-4) — avoid double-counting.
-- `[OPEN — landing]` Continuity correction `Ob − 0.5` not yet in `params/core.md §Continuous Engine` (ER-2).
+- `[LANDED 2026-06-22]` Continuity correction `Ob − 0.5` in `params/core.md §Continuous Engine` (ER-2, commit a3d3888).
 - `[OPEN — Jordan, gated]` Personal-combat resolution STRUCTURE (handoff 2026-05-29 doc 2.5) — must not be invented; build blocked until set.
 - `[UNVERIFIED]` "omega" Class-A-new-system vetting framework — spec not read this session; NERS retained as the verdict.
 - `[CALIBRATION DEPENDENCY]` Stage 0 assumes ED-876 (mass-battle cliff fix) and ED-884 (Ob-floor) as settled ground truth; if either reopens, recalibrate Stage 0.
