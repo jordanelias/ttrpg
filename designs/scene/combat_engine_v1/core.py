@@ -39,7 +39,6 @@ def p_auth(w):
 #   Quality  = degree factor.   Constants from damage_model (emergent-calibrated so an even Success ~= 1 WI).
 HEFT={'light':0,'heavy':3}                                          # [damage_model — additive weight heft]
 QUAL={'graze':0.25,'partial':0.5,'success':1.0,'overwhelming':1.5}  # [damage_model QUALITY base; overwhelming = sigma-leverage tail floor]
-STR_REF=4.0; STR_EXP=1.0      # [M-STR D-A: strength MULTIPLICATIVE, pivot on Str-4 reference (Jordan B, 2026-06-18)]
 OW_MAX=2.5; OW_Z=1.5          # [M-QUAL D-A: overwhelming quality saturates 1.5->OW_MAX by sigma-leverage severity]
 DMG_SCALE=1.55                                                      # [damage_model — even Success ~= 1 WI; emergent-tunable]
 HEAD_MODE={'blunt':'percussion','point':'puncture','cut_thrust':'shear','straight_cut':'shear','curved_cut':'shear','cut':'shear'}
@@ -72,7 +71,7 @@ def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, 
     if deg not in ('graze','success','overwhelming'): return 0
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT.get(weapon_wt,0)
     qf = q if q is not None else QUAL[deg]
-    impact = (STR_REF + heft) * (strength/STR_REF)**STR_EXP      # M-STR: strength multiplicative, ref-pivoted
+    impact = strength + heft                                      # additive force (damage_model design: Str+Heft). M-STR commit 2a2c9f78 reverted per sim v33-mstr-impact (mstr_lin stalled low-Str+heavy).
     return max(0, int(round(impact * coupling(weapon_head, armor) * qf * DMG_SCALE)))
 
 def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
