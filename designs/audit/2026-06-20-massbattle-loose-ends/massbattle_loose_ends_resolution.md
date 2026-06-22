@@ -135,9 +135,10 @@ All staged changes applied, ED-907 ratified, decision surface resolved. Commits 
 - ED-907 player-control layers (Cohesion-priority {Hold-shape/Adapt}, allocation grid, intervention windows): **deferred** videogame-UI/future, not current gaps. Implementing Hold-shape is the principled way to make drift player-conditioned when that UI is built.
 - Reform/rally: reform_check is real §A.5/§A.7 logic but unreachable in-engagement (sustained clash = always in contact) -> **reform-between-turns-only is intended**; rally_check is an empty stub -> **rally deferred to cycle G-7**.
 
-**Residuals (minor, noted).**
-- PP-683 encirclement cap exception: documented (doc L208), engine-wiring unverified - verify/wire-or-strike in a focused follow-up.
-- Engine comment lag: `base_combat_pool`'s top `[canonical:]` comment still cites the legacy `min(Size,Command)+Command`; behavior is correct and its §A.4 pointer now resolves to the corrected value. Cosmetic; sweep when next editing the file.
-- Docket J-9 (mass-battle canon set): **folded into this resolution**. J-10 (weapon-physics constants): separate workstream -> route to the 2026-06-13 combat bottom-up / weapon-physics thread.
+**Residuals - addressed 2026-06-20 (Jordan: "address and resolve all identified defects").**
+- *PP-683 encirclement cap-removal* - **resolved as framing drift** (ED-ED-1039; doc note 5b5dbf27). Verified: the -3 morale cap (orchestration.py L314) is unconditional; cap-removal is unwired *and correctly so* - the engine delivers encirclement via PC_ENVELOP_SHOCK + Lanchester overlap, and a second cap-removal term would double-count and break H4 Cannae (same reason _envelopment_sigma is dormant, NERS-N/E). Not wired; doc §A.4 now states this.
+- *base_combat_pool comment lag* - **fixed** (7e62451f): the [canonical:] comment now cites the live Command*(1+cohesion); comment-only, gauge digest 1f8c05a9 unchanged.
+- *N1 (no gate-vector manifest)* - **resolved as not-warranted**: ED-875/G8 was the last open mass-battle gate (now resolved), so there is no open-gate backlog to manifest; the ledger is the gate record and a separate manifest would be unneeded apparatus (NERS-N/E).
+- *Docket J-9* folded into this resolution; *J-10 (weapon-physics constants)* remains a separate workstream (2026-06-13 combat bottom-up / weapon-physics thread) - a hand-off, not a defect.
 
-Net: the mass-battle backlog holds no open items except the two minor residuals and the J-10 hand-off. NERS posture unchanged (COMPLIANT); the S=PARTIAL tri-strata flag is closed for the exchange pool.
+Net: no open mass-battle defects remain; J-10 is the only outstanding item, by routing. NERS posture unchanged (COMPLIANT); the S=PARTIAL tri-strata flag is closed for the exchange pool.
