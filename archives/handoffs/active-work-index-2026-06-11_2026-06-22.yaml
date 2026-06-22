@@ -58,7 +58,8 @@ working_state:
     staged) — parallel-owned, coordinate.'
 created: '2026-06-11T23:45:39.266357+00:00'
 updated: '2026-06-11T23:45:39.266357+00:00'
-status: active
+status: closed
 key_values: []
 blockers: []
 as_of: 9a437f5e433690c7e9a0640f3f0df1b8d0cf172e
+closed_at: '2026-06-22T23:30:34.142758+00:00'
