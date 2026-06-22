@@ -13,7 +13,7 @@ Scope: **personal combat (`combat_engine_v1`) only.** Mass battle (including ED-
 - *(moved out by the triage: **D2** → rides D1 (§2); **F7** → subsumed by D3 (§7); **ED-879** → mooted (§7).)*
 
 ## §2 — RATIFIED (ED-1029), IMPLEMENTATION PENDING (engineering + parity re-validation)
-- **D1** continuous weapon-vs-armour transmission model replaces RESIST/DELIVERY/HEFT/ADEF — **re-bases this session's D-A damage reshape** (intent survives; coupling numbers + DMG_SCALE/~5-hit calibration recomputed). (docket D1)
+- **D1** continuous weapon-vs-armour transmission model replaces RESIST/DELIVERY/HEFT/ADEF. **Impact-model sub-question RESOLVED (ED-1040, commit 2dd8167b): additive strength+heft adopted, M-STR multiplicative (2a2c9f78) reverted** — sim v33-mstr-impact: multiplicative stalled low-str+heavy (42% draws) for <=3pt gain. *(Correction: the prior "intent survives the re-base" was wrong — D1's additive does NOT preserve the multiplicative intent; M-STR is superseded, not re-tuned.)* Full continuous-transmission adoption (armour_axes + damage_model coupling) remains the pending build; DMG_SCALE/~5-hit calibration recomputed on that substrate. (docket D1)
 - **D3** continuum degree + saturating quality replaces the 4-band degree + QUAL{.35/1.0/1.5} — supersedes the M-QUAL band model. (docket D3)
 - **D4** composite pool recompute (experience / tradition / stamina / focus) — **A6 σ-leverage parity recal required first**. (docket D4)
 - **D6** tradition representation → S3⊕S4 (abilities qualitative + channels as player-allocated affinity budget). (docket D6)
@@ -32,8 +32,8 @@ Scope: **personal combat (`combat_engine_v1`) only.** Mass battle (including ED-
 
 ## §4 — THIS SESSION'S D-A WORK (post-06-17, to land)
 - **New wound model** (Health=WI×N, graduated bunched gates, health-based felling) — supersedes ED-1021; pending §1 N+magnitude, then one commit (core DMG_SCALE + r2 + derived_stats §4.1 re-propagation + new ED).
-- **Attack/defense wound asymmetry** — the ~50% multi-bout mutual-stall fix (defense degrades faster than offense; boxing land-vs-thrown decay, du Picq) — **not yet prototyped**.
-- **D-A damage re-base** onto D1's gradient — the first implementation step of §2; gated on the D2 magnitude call (re-tuning twice otherwise).
+- ~~**Attack/defense wound asymmetry**~~ **MOOTED (ED-1040, 2026-06-19).** The "~50% multi-bout mutual-stall" was a sim-harness artifact: win-attribution misread fight()'s -1/0/+1 return as a 0/1 loser-index, miscounting every -1 (B-win) as a draw. With correct attribution the engine is fair (mirror Awin ~50%) and resolves ~98% of fights (mirror draw ~2%). No structural stall — the du Picq asymmetry fix is NOT needed. (The one real stall, mstr_lin x low-str x heavy = 42% draws, is removed by the additive revert.)
+- **D-A damage re-base** onto D1's gradient — first implementation step of §2. **Impact aggregation now settled (additive, ED-1040, landed).** Remaining: fold additive impact into D1's continuous coupling; gated on the D2 magnitude call (re-tuning twice otherwise).
 
 ## §5 — MAGNITUDE TUNING (post-ratification, non-blocking) — ratification_proposal §4
 longsword-vs-spear (19 vs ~40 target) · longsword-vs-plate magnitude · A1 mail dials · feint-vs-elite-reader floor (~5%, slightly over-punished) · autonomous choke / lunge / feint decision policy (states wired, not engine-chosen).
