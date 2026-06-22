@@ -41,6 +41,8 @@ Thread operations: TN 7 standard; TN 8 for Locking, Dissolution, and Past-Orient
 
 Ob minimum: 1. No modifier may reduce Ob below 1. (PP-232)
 
+**Continuous axis (videogame mode).** The obstacle is a continuous axis; the rows above are reference points, not a quantization. In continuous (Godot) mode fractional Ob is valid (see §Continuous Engine — weapon condition, cover, terrain) and a fractional Ob between two rows is a real intermediate difficulty: the continuous-mode success probability is strictly monotonic in Ob, so e.g. Ob 1.4 and Ob 1.6 give different odds. Integer Ob applies only in discrete/TTRPG mode, where `net` is an integer sum and a fractional Ob collapses to the next integer up (`Ob 1.4 ≡ 1.6 ≡ 2`).
+
 ## Degrees of Success
 | Degree | Condition |
 |--------|-----------|
@@ -74,6 +76,8 @@ The engine MAY be implemented two ways with statistically equivalent outputs:
 **Adoption note:** discrete engine remains canonical for TTRPG-mode play; continuous engine is canonical for Godot implementation. They are interchangeable specifications of the same underlying probability distribution.
 
 **Validation scope (WS-D-1, ED-836).** Phase 5 sim demonstrated distribution equivalence at combat-system parameters (pool 5-17D, TN 7). The result is mathematically system-agnostic (CLT applies to any d10 dice pool sum), so it transfers to social contest, thread operations, fieldwork, mass-combat, and faction systems by construction. System-specific validation sims have not been run; faction-scale (bare 1-7D pools) sits at the small-pool boundary where Normal approximation grows shaky and would benefit from dedicated sanity-check.
+
+**Continuity correction (sub-5D fidelity; ER-2, `engine_replacement_reconciled §2/§5`; landed 2026-06-22).** Below ~5D the raw Normal underestimates `P(success)` versus the discrete engine by 4–32% (it omits the half-integer continuity term the discrete lattice implies at the threshold). The continuous engine therefore resolves against **`net − (Ob − 0.5)`** rather than `net − Ob`: the `−0.5` continuity term restores agreement with the discrete engine to ~1–3% across the whole range (e.g. `0.067` vs `0.070` at 2D, Ob 3). The same half-step applies at each integer degree boundary. Above ~5D the term is negligible. This closes the small-pool boundary flagged in the Validation-scope note above, keeping discrete and continuous modes in agreement on the same action's odds.
 
 ## Coherence 0 — NPC Transition (PP-261)
 At Coherence 0: character becomes NPC (100% functional, player agency ends). See params_threadwork.md for full rule.
