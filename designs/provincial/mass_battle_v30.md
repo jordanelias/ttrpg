@@ -27,7 +27,7 @@ damage. Two stats unified in personal combat split here:
 
 **Effective Combat Pool = min(Size, Command) + Command** (PP-233)
 
-> **ED-899 (engine leads):** This is the legacy / OFF-path model. The live engine (`tests/sim/mass_battle/config.py`) sets the engagement pool base to `COMMAND_POOL_MULT × Command` (= 2 × Command), with **Size entering only through the Lanchester frontage exponent**, not the pool; it reproduces the `min(Size, Command) + Command` value here byte-exact when `COMMAND_SIGMA_ENABLED=0`. Per ED-899 FOLLOW-UP, config.py is leading canon and this doc follows.
+> **ED-899 (engine leads):** This is the legacy / OFF-path model. The live engine (`tests/sim/mass_battle/config.py`) sets the engagement pool base to `COMMAND_POOL_MULT × Command` (= 2 × Command), with **Size entering only through the Lanchester frontage exponent**, not the pool; it reproduces the `min(Size, Command) + Command` value here byte-exact when `COMMAND_SIGMA_ENABLED=0`. Per ED-899 FOLLOW-UP, config.py is leading canon and this doc follows. **ED-1013 (smooth pool, 2026-06-15):** the base is not flat — the live engine computes `Command × (1 + cohesion)` where `cohesion = current Size ÷ max Size` (hp/hp_max): 2 × Command at full strength, degrading smoothly to Command at annihilation, which holds the Lanchester exponent ~1 while letting own casualties dilute the Discipline term. [canonical: tests/sim/mass_battle/orchestration.py base_combat_pool / subunit_combat_pool, COMMAND_SIGMA path]
 
 As Size drops, the pool shrinks — fewer soldiers means fewer dice
 regardless of individual quality. Command caps both Size and Power contributions. (PP-233) Size determines
@@ -430,7 +430,7 @@ Summary:
 **Phase 5 — Engagement** (max 3 simultaneous, TTRPG) *[P1-01]*
 
 Per engagement:
-1. Effective Pool = min(Size, Command) + Command − Discipline penalty (PP-233; Size as of Phase 3 end) *(ED-899: COMMAND_SIGMA_ENABLED=0 model; engine default pool base = 2 × Command with Size via Lanchester frontage — see the ED-899 pool banner above.)*
+1. Effective Pool = min(Size, Command) + Command − Discipline penalty (PP-233; Size as of Phase 3 end) *(ED-899: COMMAND_SIGMA_ENABLED=0 model; engine default pool base = 2 × Command with Size via Lanchester frontage — see the ED-899 pool banner above. ED-1013 refines this to `Command × (1 + cohesion)` — smooth own-casualty degradation, 2 × Command full → Command at annihilation.)*
 2. Apply Formation modifier
 3. Split into Offence / Defence (both sides simultaneously)
 4. Roll. Net hits = Offence succs − Defence succs

@@ -59,7 +59,7 @@ Damage simultaneity: Effective Power for Phase 5 calculated from Size as of Phas
 
 ## Core Formula (PP-233)
 
-> **⚠ ED-899 SUPERSESSION — engine leads; this section is the documented OFF-path model.** Leading canon for the engagement pool is the live engine (`tests/sim/mass_battle/config.py`): pool base = `COMMAND_POOL_MULT × Command` (= **2 × Command**), and **Size enters only through the Lanchester frontage exponent**, not the pool. Command is derived `clamp(round((2 × Charisma + Cognition) ÷ 3), 1, 7)` (`CMD_CHA_WEIGHT=2`/`CMD_COG_WEIGHT=1`). The `min(Size, Command) + Command` model below is **retained** as the model the engine reproduces byte-exact when `COMMAND_SIGMA_ENABLED=0`. Per ED-899 FOLLOW-UP, config.py is leading canon; this doc follows.
+> **⚠ ED-899 SUPERSESSION — engine leads; this section is the documented OFF-path model.** Leading canon for the engagement pool is the live engine (`tests/sim/mass_battle/config.py`): pool base = `COMMAND_POOL_MULT × Command` (= **2 × Command**), and **Size enters only through the Lanchester frontage exponent**, not the pool. Command is derived `clamp(round((2 × Charisma + Cognition) ÷ 3), 1, 7)` (`CMD_CHA_WEIGHT=2`/`CMD_COG_WEIGHT=1`). The `min(Size, Command) + Command` model below is **retained** as the model the engine reproduces byte-exact when `COMMAND_SIGMA_ENABLED=0`. Per ED-899 FOLLOW-UP, config.py is leading canon; this doc follows. **ED-1013 (smooth, 2026-06-15):** the live base is `Command × (1 + cohesion)` (cohesion = Size ÷ max Size = hp/hp_max) — 2 × Command at full strength, smoothly → Command at annihilation. [canonical: orchestration.py base_combat_pool COMMAND_SIGMA path]
 
 ### Definitions
 | Term | Value |

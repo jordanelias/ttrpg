@@ -154,13 +154,13 @@ systems:
     canonical_sha__designs__territory__march_layer_v30_md: "3ddebb61c4014982d933e352b78d43867cbfd4fb"
   mass_combat:
     design_doc: designs/provincial/mass_battle_v30.md
-    canonical_sha__designs__provincial__mass_battle_v30_md: "0442aeaa54ad261159a17ba8aa2f64b2a5917feb"
+    canonical_sha__designs__provincial__mass_battle_v30_md: "b57b10ae4cb5e1c4ce836d7f61f349dfde4e2e67"
     mass_battle_index: designs/provincial/mass_battle_v30_index.md
     canonical_sha__designs__provincial__mass_battle_v30_index_md: "46d7daf157a1b944ee55c47388c2b1ba4f4c6ea4"
     mass_battle_infill: designs/provincial/mass_battle_v30_infill.md
     canonical_sha__designs__provincial__mass_battle_v30_infill_md: "c4639775db4bd15257a01682c37cb4fc1fa98b5e"
     params: params/mass_combat.md
-    canonical_sha__params__mass_combat_md: "694d7a232a7204a93b634b936596d822ddafe2d2"
+    canonical_sha__params__mass_combat_md: "4ea8793e57c8a3d8fbde63f07028e37058cca1bb"
   social_debate:
     design_doc: params/contest.md
     canonical_sha__params__contest_md: "4534909c7d8875417a7c66fcc0ba5a5796765a3e"
