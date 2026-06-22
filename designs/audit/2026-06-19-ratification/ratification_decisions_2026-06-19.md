@@ -14,13 +14,14 @@ Committed this session (jordanelias/ttrpg @ main):
 - `8a6c290e` — #16 voice-canon home **PROVISIONAL->CANONICAL** verbatim (**ED-1030**)
 - `cca6677c` — #10 **ED-859 closed** (shared battlefield grid)
 - `84fc39df` — #1 **GD-1 = ALL 15** — canon/02 + mechanics_index + sim/autoload/victory.py engine threshold 11->15 (**ED-1031**)
+- `26af0cad` — #4 / J-1 **all-directions Key-delivery rule** authored as `scale_transitions §12` (**ED-1038**)
 
 Remaining queue — locked decisions, staged as focused sessions to preserve canon/sim integrity (NOT rushed):
 - **Mass-battle session** (shared docs + sim; requires sim runs to verify): #8 ED-875 smooth+monotonic Command curve 1-7 + verification · #9 echelon-revamp adopt · #11 ED-822/823 retune · mechanical subset (ED-542 propagation · ED-857 speed-tier table · deb405b9 wound -1D vs ED-1021 D-A model · stamina-secondaries VERIFY vs already-resolved ED-1018/1019)
 - **CI 28->22** corpus sweep + metronome re-derivation (#2)
 - **MS naming sweep** — TT/RS/Metaphysical->MS, merge rs_track/ms_track, fix inverted-TT arithmetic (#5)
 - **Mandate-derived-from-L/PS** faction-layer sweep (#3)
-- **J-1 all-directions delivery rule** authoring + assessor carve-out + personal targets (#4)
+- **J-1 Lane-B** (#4 rule LANDED `26af0cad` / ED-1038): populate the 8 down-seams (da_framework · faction_politics · peninsular_strain · scenario_authoring emitters) + assessor carve-out + tests
 - **Editorial cluster** (bounded): #14 Niflhel strike (canon/03 row + Viability matrix + LA-13) · #6 backstory PP-675 banner fix · #18 J-2 stub flips + grounded magnitudes
 - **Residuals needing Jordan**: #12 Klapp Conviction (Temperance/CE) · #13 Lenneth archive date
 - Then sync `valoria_master_workplan_v4.md` §3 docket statuses to RULED, citing this record.
