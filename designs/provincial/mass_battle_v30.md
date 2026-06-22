@@ -207,6 +207,8 @@ separately, not subject to the cap. *[P1-03]*
 
 > **Encirclement exception (PP-683, MB-08):** A unit with no valid retreat path — flanked from 3 simultaneous directions, OR all retreat zones occupied by enemy units — has the −3 Morale cap removed for that Cascade Phase only. Cap restored next turn if retreat path opens. Models historical catastrophic collapse (Cannae, Lake Trasimene) where encircled armies routed beyond what normal cohesion could absorb. Stage 2 general incapacitation remains additive on top.
 
+> **Engine note (2026-06-20):** The videogame engine delivers the encirclement effect through the **envelopment moral-shock model** (`PC_ENVELOP_SHOCK` — a sub-unit fixed frontally and struck on flank/rear takes the du Picq shock; coverage_matrix: "a loose/shaken/shallow one shatters (Cannae)") plus the Lanchester contact-overlap edge — **not** by removing the −3 cap. The cap-removal above is the TTRPG-era framing and is intentionally **not** wired: a second encirclement term double-counts and breaks H4 Cannae (the same reason `_envelopment_sigma` is held dormant — NERS-N/E, no unneeded apparatus). The −3 cap (`min(loss, 3.0)`, orchestration.py L314) therefore stays in force; encirclement lethality is the shock + overlap, not an unbounded morale drop. [canonical: tests/sim/mass_battle/orchestration.py PC_ENVELOP_SHOCK / _envelopment_sigma; tests/coverage_matrix.md envelopment entries]
+
 > **Artillery cascade ruling (PP-198):** Multiple simultaneous HBl unit destructions in one Cascade Phase each trigger Morale −1 (allied unit routed). Total non-general Morale loss still capped at −3. No runaway cascade possible from Artillery alone.
 
 While general is present: Morale floor = 1. At Morale 0: unit routs.
