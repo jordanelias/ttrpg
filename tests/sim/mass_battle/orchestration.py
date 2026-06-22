@@ -1365,7 +1365,15 @@ class Unit:
         # shape (consistent with the per-subunit Discipline model); single-subunit == unit -> byte-exact.
         for a in self.subunits:
             if a.eff_discipline < MIN_DISCIPLINE[a.shape] and a.shape != "Line":
+                # ED-1032: on drift, re-key cell_troops to the new shape's pattern so the sub-unit's
+                # troops re-inherit the (Line) formation instead of orphaning the wings -- preserves
+                # total strength (sum(cell_troops) == hp) and mirrors the spawn distribution (L629).
+                # Spatial-fidelity fix; identical for any sub-unit that does not drift (branch not entered).
+                total = sum(a.cell_troops.values())
                 a.shape = "Line"
+                new_ids = [(o_r, o_c) for o_r, o_c, _a2, _b2 in _oriented(a)]
+                per = total / len(new_ids) if new_ids else 0.0
+                a.cell_troops = {pid: per for pid in new_ids}
 
 # ─── DICE ────────────────────────────────────────────────────────────────────
 

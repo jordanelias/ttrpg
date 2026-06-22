@@ -325,3 +325,9 @@ Archived entries in tests/coverage_matrix_archive.md
   destruction; (4) the inter-unit cascade denominator uses agg_discipline (per-subunit troop-weighted, == unit when
   homogeneous); (6) between_turn_recovery recovers per-subunit Morale (inert at RECOVERY=0); (5) deleted dead
   discipline_penalty_volley. Byte-exact single-subunit (digest unchanged). Regression S16 + S17 + S18.
+
+## 2026-06-20 — Formation-drift cell orphaning fix (ED-1032) [DIGEST CHANGE — first since the per-subunit gauge baseline]
+- FINDING (diagnosed bottom-up vs orchestration.py + percell.py this session): on formation drift to Line (Unit.check_drift, L1368) cell_troops was not re-keyed to the new shape's pattern. ~42% of a drifted sub-unit's troops (157/376 in test) became spatially orphaned -- counted in HP (sum(cell_troops)==hp held, so strength/pool stayed correct) but invisible to iter_cells AND inert to front-cell casualty distribution (the orphaned wing never bled, held no frontage, could not be enveloped). Violates ED-907's "each cell inherits the best execution".
+- FIX (orchestration.py check_drift): on drift, total=sum(cell_troops); shape="Line"; re-key cell_troops to _oriented(a)'s Line pattern with uniform per=total/len(new_ids), mirroring spawn (L629). Preserves total strength; restores the full cell complement.
+- VALIDATION: test_persubunit_stress S1-S18 ALL PASS (no property regression); drifted unit final orphan=0.00 with HP preserved; no committed golden-digest test (digest asserted only by local bat.py).
+- DIGEST CHANGE (intended, first since baseline): fe99574610caca44052509beb8c0b81a1b3d1972c6a3c8e3513e38933ef27c69 -> 1f8c05a9748d0b29c35a3acbd5e87d8f7112e159513cd3782af4f781a7cee05e. The fix deliberately alters drift-scenario outcomes (re-keyed casualties spread over the full Line, not the shared spine); IDENTICAL for any sub-unit that does not drift (reassignment is inside the drift branch). Jordan-approved adoption 2026-06-20.
