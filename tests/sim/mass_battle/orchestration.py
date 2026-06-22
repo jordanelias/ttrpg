@@ -1345,8 +1345,9 @@ class Unit:
         pen = self.discipline_penalty()
         if pen == -99: self.broken = True; return 0
         # v16: pool uses continuous effective_size (float), floored for dice count.
-        # [canonical: mass_battle_v30.md §A.4 — "Effective Combat Pool =
-        #  min(Size, Command) + Command"; Size here is continuous from TroopCount]
+        # [canonical: mass_battle_v30.md §A.4 Effective Combat Pool; live value =
+        #  Command*(1+cohesion) (2*Command at full strength -> Command at annihilation,
+        #  ED-899/ED-1013); legacy OFF-path min(Size,Command)+Command at COMMAND_SIGMA_ENABLED=0]
         stam_pen = _stamina_pool_penalty(self.agg_stamina())
         if COMMAND_SIGMA_ENABLED:
             # SMOOTH POOLS (Jordan 2026-06-15): 2*command at FULL strength (size-decoupled per ED-899),
