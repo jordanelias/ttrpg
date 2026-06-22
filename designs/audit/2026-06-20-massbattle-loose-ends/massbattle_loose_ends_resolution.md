@@ -3,6 +3,8 @@
 **Scope:** every open mass-battle loose end, gathered from all authoritative sources and driven to a terminal state.
 **Frame:** ED-907's FM three-level command architecture — *army strategy/formation → sub-unit (troop type + subformation + tactic) → each cell inherits the best execution of that tactic* — confirmed verbatim by Jordan this session. That confirmation is the fidelity sign-off ED-907 invited; it is also the yardstick several findings below are measured against.
 
+> **STATUS — EXECUTED 2026-06-20 (Jordan: "accept ratify resolve all").** All staged changes applied, ED-907 ratified, full decision surface resolved. Commits: ED-1032 engine fix `46373da8` · pool propagation `c82681dd` · ledger ratify/resolve `07fa954e`. §0–§6 below are the original triage; the executed state is **§8**.
+
 ## §0 — Disposition summary
 
 | Bucket | Count | Items |
@@ -113,3 +115,29 @@ Both are propagation of decided values; applying them requires the design-gate +
 ## §7 — Confidence & limits
 
 [CONFIDENCE: high] on everything cited to read source + the engine tests run this session (§3 map, §4 orphaning + fix, the ledger/verdict status). [CONFIDENCE: medium] on the run-to-run *outcome* deltas of the orphaning fix — the engine is stochastic, so the validation establishes the invariant (orphan→0, HP preserved) rather than a tick-matched outcome diff. The F4–F9/F11–F12 findings from the 06-09 analysis were not re-walked individually this pass; they were P3/below and the 06-09 verdict folded them into the backlog already characterized here. No P1 surfaced. All design-touching changes (§4, §5) are Jordan-vetoable and held for sign-off.
+
+---
+
+## §8 — EXECUTION RECORD (2026-06-20 · Jordan: "accept ratify resolve all")
+
+All staged changes applied, ED-907 ratified, decision surface resolved. Commits (jordanelias/ttrpg, main):
+
+**Stage A — orphaning fix (ED-1032), `46373da8`.** Re-key `cell_troops` to the new shape's pattern on drift in `orchestration.py` `check_drift` (mirrors spawn L629). Validated: stress S1-S18 PASS, drifted-unit orphan->0, HP preserved. Gauge digest fe995746->1f8c05a9 (first change since the per-subunit baseline; drift-only, non-drift identical). coverage_matrix co-filed; engine is not freshness-pinned (no re-pin).
+
+**Stage B - tri-strata pool propagation, `c82681dd` (atomic, with re-pin).** Doc §A.4 (L30 banner + L433) and the params ED-899 banner now state the live exchange pool `Command*(1+cohesion)` = 2*Command full strength -> Command at annihilation (was flat 2*Command, ED-899 only). Closes the ED-1013 doc-lag. canonical_sources re-pinned for doc + params (params was independently stale-pinned, also fixed).
+  - *Volley pool - finding corrected, not propagated.* Bottom-up read (`resolution.py` volley_phase/_roll_volley_pool) shows volley is **Power-based** (`max(1, eff_power - disc_pen)`, PP-503), matching the doc's ED-753. **No** volley doc-lag; F1/ED-970's "ED-800 min(Size,Power)+Power" claim is not borne out and is struck. Verifying bottom-up prevented injecting a wrong formula into canon.
+
+**Stage C - ledger ratify/resolve, `07fa954e`.** ED-907 **ratified** (Jordan fidelity-confirmed; player-control layers deferred-UI). Resolved: ED-1032, ED-970 (corrected), ED-971 + ED-910 (FM IP/OOP re-grounded on the structural disanalogy, not adopted - the adopted FM analogy is ED-907's command hierarchy), ED-875/G8.
+
+**Gate G8 / ED-875 - resolved (mechanical-tier, Jordan-vetoable).** Keep the high low-Command sigma-leverage as intended. Bottom-up: COMMAND_SIGMA pool = Command*(1+cohesion), so +1 Command is relatively larger at low Command (2->3 ~ +33% base vs 6->7 ~ +14%) - command quality matters most where scarce. Top-down anchor: generalship's outsized effect on small/poorly-led forces; acclaimed strategy designs (Total War, Field of Glory) make leadership leverage high for small/elite units. Model unchanged; precision retune, if wanted, needs a sigma-sweep (out of scope).
+
+**Design-status confirmations.**
+- ED-907 player-control layers (Cohesion-priority {Hold-shape/Adapt}, allocation grid, intervention windows): **deferred** videogame-UI/future, not current gaps. Implementing Hold-shape is the principled way to make drift player-conditioned when that UI is built.
+- Reform/rally: reform_check is real §A.5/§A.7 logic but unreachable in-engagement (sustained clash = always in contact) -> **reform-between-turns-only is intended**; rally_check is an empty stub -> **rally deferred to cycle G-7**.
+
+**Residuals (minor, noted).**
+- PP-683 encirclement cap exception: documented (doc L208), engine-wiring unverified - verify/wire-or-strike in a focused follow-up.
+- Engine comment lag: `base_combat_pool`'s top `[canonical:]` comment still cites the legacy `min(Size,Command)+Command`; behavior is correct and its §A.4 pointer now resolves to the corrected value. Cosmetic; sweep when next editing the file.
+- Docket J-9 (mass-battle canon set): **folded into this resolution**. J-10 (weapon-physics constants): separate workstream -> route to the 2026-06-13 combat bottom-up / weapon-physics thread.
+
+Net: the mass-battle backlog holds no open items except the two minor residuals and the J-10 hand-off. NERS posture unchanged (COMPLIANT); the S=PARTIAL tri-strata flag is closed for the exchange pool.
