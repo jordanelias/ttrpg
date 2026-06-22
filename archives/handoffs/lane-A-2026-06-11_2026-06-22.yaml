@@ -250,5 +250,6 @@ blockers:
   / K-2); cap raise was the realignment, not the cure.'
 created: '2026-06-12T02:13:54.540784+00:00'
 updated: '2026-06-12T21:18:25.849468+00:00'
-status: active
+status: closed
 as_of: ece2d5b86f10cec0cd9ba59d88d03b506ee54d9e
+closed_at: '2026-06-22T23:29:19.295102+00:00'
