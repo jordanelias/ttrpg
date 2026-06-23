@@ -43,12 +43,13 @@
 
 ### EVT-G204 — "The Curate's Offer" · Friction (the Geneva trap)
 - **triggers:** `Order <= 2` AND `religious_building == Chapel`
-- **weight:** base 2, +1 if `Wessel.advance >= 2` · **cooldown:** 3 · **npc_refs:** G03
+- **weight:** base 2, +1 if `Wessel.progress >= 2` · **cooldown:** 3 · **npc_refs:** G03
 - **the_ask:** "Wessel offers the parish's hands — almonry, schooling, dispute-mediation — to steady the town. It would lift Order at a stroke. It would also make the Church the thing holding Goldenfurt together."
-- **responses:**
+- **responses:** *(v1.1 fix deck-F3/sim-F6 — a secular Order-relief out now exists, so the Geneva trap is a temptation not the only valve; Decline is Π-neutral)*
+  - `Keep Order: Consent` (2 AP, Charisma) → Order +1 with **no Church creep**, PS +1 — the costlier secular alternative the vise previously lacked
   - `Keep Order: Clergy` (1 AP) → Order +1 and Order-decay −1 (§1.6), **but** Church-infra creep: **Wessel +1 progress on G603**, **Ledger** `Debt:church-dependence`
-  - `Decline` → Order stays low, Wessel.Disp −1, **Π +1**
-  - `Bargain` → limited parish (Order +1 once, no decay bonus, no creep); Wessel.Disp −1
+  - `Decline` → Order stays low, Wessel.Disp −1 (**Π +0** — refusing the trap is no longer itself a pressure penalty)
+  - `Bargain` → limited parish (Order +1 once, no decay bonus, no creep) **plus** a unique chit `Leverage:parish-favour` (Wessel owes one future intercession); Wessel.Disp −1
 
 ### EVT-G401 — "Conscription Riot" · Crisis
 - **triggers:** `Π >= 8` AND (`Grudge:Hedda` OR `Grudge:Mertha`) AND recent force/levy action
@@ -86,10 +87,11 @@
 
 ### EVT-G606 — "The Bailiff's Report" · Ambition (fires when G06 progress ≥ 4)
 - **the_ask:** "Bailiff Ems has filed."
-- **resolution by state:**
-  - if `Leverage:konrad-corrupt` held → the report is **buried**; Konrad is yours (Debt:harbor-corrupt-agent); suspicion resets
+- **resolution by state:** *(v1.1 fix deck-F2/CG-7 — a survivable in-card escape exists at resolution time, not only via pre-banked tags; Konrad's advance is capped +1/season, see npc_cast G06)*
+  - if `Leverage:konrad-corrupt` held → the report is **buried**; Konrad is yours (`Debt:harbor-corrupt-agent`); suspicion resets
   - else if `PS >= 5` and `Hedda allied` → the recall attempt **backfires into your faction-emergence** (Stage 2→3): the town backs you over the Crown
-  - else → **Recall scene** (social contest to keep your post; lose → replaced, the slice ends for this PC, the settlement keeps your Ledger for your successor)
+  - **`Submit to audit`** (always available; 2 AP + Treasury, writes `Reputation:Compliant` for a season) → suspicion drops **two notches**, you keep your post — the Just path becomes *sustainable* rather than a countdown
+  - else → **Recall scene** (social contest to keep your post, **Ob lowered by `Reputation:Just`**; lose → replaced, the settlement keeps your Ledger for your successor)
 
 ---
 
@@ -111,10 +113,10 @@
 | **G501** Intrigue | seeded by G101-comply | The widow's son returns embittered → RM recruit (Greta, advances G605) or rioter (seeds G401). Counsel (defuse, Conviction-fulfill) / ignore. |
 | **G503** Intrigue | `Wessel.Disp <= -1` OR sheltered RM | Wessel's letter to the Inquisitor (Church Attention/suspicion+). Investigate→expose him as informer (leverage) / appease (concede G603) / ride it out (suspicion+1). |
 | **G504** Intrigue | Tomas discovered and not expelled | Niflhel calls a favour through Tomas. Comply covert (Niflhel chit, exposure risk) / refuse (Tomas−, may implicate Hedda) / turn him in (Hedda secret blown → G505). |
-| **G602** Ambition | Orsk progress ≥3 | Charter gambit / engineered shortage. If checked → fails, Guild Inf−; else → perpetual toll charter (ford revenue privatized, future Develop +1 Ob). |
+| **G602** Ambition | Orsk progress ≥3 | Charter gambit / engineered shortage. *(v1.1 fix deck-F5 — by-state fork)* **By state:** `Precedent:toll-capped` (you backed Brun, G102) → charter **void**, Guild Inf−, `Grudge:Orsk`; elif funded-via-Guild / Guild Inf high → **perpetual toll charter** (ford revenue privatized, Develop +1 Ob); else → contested (social contest). |
 | **G603** Ambition | Wessel progress ≥4 | Chapel→Church. Geneva trap closes: durable Order/Stability, but Church infra = −2 seizure vector and Wessel is moral authority (removal needs Mass Battle / Mandate Challenge). |
-| **G604** Ambition | Tomas progress ≥3 | The river economy becomes load-bearing — Tomas/Niflhel co-govern the dock. Wealth↑, Crown legitimacy↓, you're entangled with Niflhel. |
-| **G605** Ambition | Greta progress ≥5 | RM hits 3-settlement cell resilience; a public Einhir rite. PS surges in hamlets, Church Attention spikes, Crown may issue a harsher Suppress Directive. |
+| **G604** Ambition | Tomas progress ≥3 | The river economy goes load-bearing. *(v1.1 fix deck-F5 — by-state fork)* **By state:** co-opted (`Leverage:tomas-known` + sheltered) → he's your dock-fixer (Wealth↑, you carry Niflhel exposure); cracked down (G403) → it fractures (Order+, Niflhel reprisal seeds G504); else → Tomas/Niflhel co-govern the dock (Crown legitimacy↓). |
+| **G605** Ambition | Greta progress ≥5 | The public Einhir rite. *(v1.1 fix CG-4 — player response added)* **Response:** `Tolerate` → `Precedent:rm-tolerated`, suspicion+1, Greta.Disp+2, PS surges, **Π −1**; `Disperse by force` → seeds the uprising branch, `Grudge:hamlets`, `Reputation:Harsh`, Church Attention spikes, **Π +2**. Either way Crown may issue a harsher Suppress Directive. |
 | **G701** Thread | RM rite performed (G605 path) OR RS bleed at the circle | "The stone circle stirs." Thread op at the circle (§4.4): Weaving→Order+1 / Dissolution→Defense−1 & Order−1. Ties Greta to the Thread layer. |
 | **G702** Thread | Thread Proximity ≤2 | "The forgotten field" — crops grow wrong, time slips. Investigate→harvest residue (Wealth+1, RS−0.5, §4.9) / Mend (Prosperity+1). |
 

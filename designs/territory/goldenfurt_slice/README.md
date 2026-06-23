@@ -71,8 +71,8 @@ That is the churn: you never had a turn the world didn't act on, and the world n
 
 **Adversarial verification ran (2026-06-23)** — a 4-lens skeptic pass surfaced **32 findings (15 high)**. The clear bugs and missing fields are fixed in this commit; the design-revision items are tracked. Full record: **[verification_findings.md](verification_findings.md)**. Headlines:
 - Fixed ✅ — mis-signed Π homeostat term (pinned toward 0, not 3); 7 deck-referenced fields the sim spec never modeled (directive, religious_building, church_attention, faction-emergence, treasury, open_needs); G201's zero-Π-delta vise; the suspicion track being purely reactive; the README overclaim above.
-- Deferred ⏳ v1.1 — the G606 recall death-spiral, the G204 Geneva vise (no acceptable out), G602/G605 lacking payoff-for-play, Tomas being unreachable in a well-governed town, and Greta not escalating on neglect.
-- Still open — `Thread` family is thin (2 cards); numeric tuning (AP curve, Π band, suspicion→recall threshold) is unvalidated pending the §9 sim sweep.
+- Fixed in **v1.1** (this branch) — the G606 recall death-spiral (a `Submit to audit` escape + Konrad capped +1/season), the G204 Geneva vise (a secular `Keep Order: Consent` relief; Decline Π-neutral), G602/G604/G605 payoff-for-play forks, Tomas reachability (the Old Brun lever), and Greta's neglect-escalation.
+- Still ⏳ — predicate-grammar history triggers (sim-F4), the empty Wessel/Greta collision card (npc-F4), decorative-Knot wiring (npc-F5), ethic mechanization (npc-F6), and numeric tuning (AP curve, Π band, suspicion→recall threshold) pending the §9 sim sweep.
 
 ## Build status / what's next
 

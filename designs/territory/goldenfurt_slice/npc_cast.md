@@ -80,20 +80,21 @@ populace pulls from below (Hedda/Orsk/Wessel/Greta/Tomas). No move is free.
 - **Loyalty / Disposition(governor):** 0 (unknown to you until Investigated).
 - **Leverage:** wants — the ford unwatched, Crown attention elsewhere, Hedda protected. fears — Hedda's career destroyed by his exposure, an Inquisitor crackdown, Niflhel calling in his debt. **Secret:** he's leveraged to a Niflhel broker — not fully his own man.
 - **Knots:** kin → G01 (Hedda) · network → Niflhel (off-settlement) · informant → LA-G02 (Old Brun sees who crosses at night).
-- **Trajectory:** *if exposed and not expelled* → Niflhel calls a favour through him (→ G504). *if co-opted* → becomes an intel asset (but you inherit his Niflhel exposure). *if conviction served* → the river economy entrenches (Wealth +0.5 / Order −0.5 churn, advances G604).
+- **Reachability** *(v1.1 fix npc-F2)*: Old Brun (LA-G02), the night-ferryman, can be drawn out by `Hold Court`/`Treat` at the ford to name who crosses → an `Investigate` then surfaces Tomas at **any** Order level (writes `Leverage:tomas-known`), not only via the G403 chronic-disorder path. So the player can reach this NPC in a *well-governed* town, not just a failing one.
+- **Trajectory:** *if exposed and not expelled* → Niflhel calls a favour through him (→ G504). *if co-opted* → becomes an intel asset (you inherit his Niflhel exposure). *if conviction served* → the river economy entrenches (Wealth +0.5 / Order −0.5 churn, advances G604).
 
 ## NPC-G05 — Greta Saatfeld, RM cell elder (posing as a farm-widow)
 
 - **Faction:** RM (covert, Einhir heritage). **Ethic:** β — principled.
 - **Convictions:** "The old stone circle outlasts every Crown." · "We do not burn for the rite; we outlast for it."
 - **Ambition:** grow RM Presence to **3 Kronmark settlements** (cell resilience, §3.3) and keep the old rites alive against Church/Crown suppression.
-  - **Method + escalation:** covert community-organizing → open defiance / martyrdom only if violently suppressed; **never aggressor-violent** (β).
+  - **Method + escalation:** *(v1.1 fix npc-F3 — escalates on neglect, not only on force)* covert community-organizing → if **blocked-without-force** (conditional shelter, co-opted organizers) she shifts to **deeper-covert cell-export** to the other Kronmark settlements (still advancing G605, just unseen) → open defiance / martyrdom only if violently suppressed; **never aggressor-violent** (β).
   - **Timeline:** 5 seasons. **Progress:** 1. **Fires:** `EVT-G605`.
   - **Autonomous advance:** +1 each season the province CV/PT is low and she's unsuppressed; +1 whenever Wessel (G03) overreaches (drives recruits to her).
 - **Loyalty / Disposition(governor):** 0 (hidden; +1 toward governors who leave the hamlets alone).
 - **Leverage:** wants — tolerance, the stone circle untouched, hamlet autonomy. fears — Inquisitor surveillance, the Church upgrade, betrayal by a frightened neighbour. **Secret:** several "farm widows" are her organizers; the circle is a live RM meeting site.
 - **Knots:** enemy → G03 (Wessel) · network → RM cell (off-settlement) · shelters → the radicalized (LA-G01's son, via G501).
-- **Trajectory:** *if suppressed by force* → goes deeper covert (+1 Ob to suppress per cell-resilience), recruits radicalize. *if sheltered* → RM Presence grows (PS+ in hamlets, but Church Attention/suspicion rises). *if conviction violated* (the circle is desecrated) → open uprising seed.
+- **Trajectory:** *if ignored / neglected* → quietly exports the cell to neighbouring hamlets (progress still advances — she never stalls, so doing nothing is not safe). *if suppressed by force* → goes deeper covert (+1 Ob to suppress per cell-resilience), recruits radicalize. *if sheltered* → RM Presence grows (PS+ in hamlets, but Church Attention/suspicion rises). *if conviction violated* (the circle is desecrated) → open uprising seed.
 
 ## NPC-G06 — Bailiff Konrad Ems, Crown levy agent
 
