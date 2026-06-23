@@ -39,6 +39,7 @@ CFG = dict(
   CONC_RECOVER_FRAC=0.4, FOCUS_MENTAL_K=0.5, FOCUS_CONSISTENCY_K=0.10, DISRUPT_K=0.7,
   # reading / tempo channels
   READ_K=0.5, REFLEX_AGI=2.0, REFLEX_ATT=1.0, INIT_K=0.045, COMMIT_SIGMA=0.18,
+    WOUND_ATK_OB=0.15, WOUND_DEF_OB=0.25,   # ED-1041 wound obstacle (bilateral, tunable): +0.15 Ob attacking / +0.25 Ob defending per wound; supersedes the -1D aggressor-only pool penalty (ED-1021). Defender has no pool, so defence-impairment must be an Ob channel.
   READ_HISTORY_K=0.2, INIT_READING_K=0.03, INIT_HISTORY_K=0.02,   # reading=experience(History) term; initiative reading/History terms (Jordan 2026-06-03; Class-C)
   # defense modes
   PARRY_K=0.9, DODGE_K=0.9, WIND_K=0.9, CHOKE_BIND_K=0.30,

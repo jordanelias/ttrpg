@@ -73,8 +73,8 @@ def engagement(A, B, first, cfg, rng):
                 closed=True; ready={A:0.0,B:0.0}   # reset readiness: closed phase starts fair (no banked approach tempo)
             stophit_p = cfg['STOPHIT_CHANCE'] * min(1.0, measure_gap/cfg['STOPHIT_FULL_GAP']) * (1-displ)  # point set aside
             if rng.random() < stophit_p:
-                pool=max(1, core.resolution_pool(longer.history) - longer.wt.pool_penalty())
-                nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE']
+                pool=max(1, core.resolution_pool(longer.history))
+                nsig=cfg['REACH_DISADV_K']*measure_gap + cfg['STOPHIT_NSIG_BASE'] + cfg['WOUND_DEF_OB']*shorter.wt.wounds - cfg['WOUND_ATK_OB']*longer.wt.wounds
                 deg, net = core.resolve(pool, nsig, rng)
                 if deg in ('success','overwhelming'):
                     d=core.strike(longer, shorter, deg, False, cfg, net=net, pool=pool)
@@ -140,7 +140,7 @@ def engagement(A, B, first, cfg, rng):
         atk_sig=cfg['COMMIT_SIGMA']*(commit-3) + init - oob*0.5 - S.handling_penalty(aggressor,fat_a,cfg) + consistency_a
         adef=S.armor_defeat_sigma(aggressor, defender, cfg)   # armour-defeat capability controls armoured exchanges
         init_edge=S.initiative_sigma(aggressor, defender, cfg)  # the Vor edge (bounded; +ve if aggressor holds initiative)
-        net_sigma=atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS']  # first-mover/Vor edge (bounded; mirror stays 50 — aggressor alternates)
+        net_sigma=atk_sig - dsig - reach_pen + adef + init_edge + cfg['ATTACKER_BIAS'] + cfg['WOUND_DEF_OB']*defender.wt.wounds - cfg['WOUND_ATK_OB']*aggressor.wt.wounds  # first-mover/Vor edge (bounded; mirror stays 50 — aggressor alternates)
         # INDES / sen-no-sen STEAL (forced-to-Nach by READING): a defender who out-read a deeply-committed aggressor
         # steals the Vor. Per-tradition: in a bind (winding) German tactile+leverage steals hardest; open, Italian tempo.
         counter_attempt=False
@@ -156,7 +156,7 @@ def engagement(A, B, first, cfg, rng):
             # skill-gated and a miss is punished. The basic two-time riposte (on miss/neutralize) is the universal fallback.
             # cautious temperament favours the single-time counter (reactive); aggressive presses instead (lean<0 -> up, lean>0 -> down).
             counter_attempt = rng.random() < cfg['COUNTER_SELECT_BASE']*TR.eff_cw(defender,'tempo')*max(0.0, 1-cfg['DISP_COUNTER_K']*S.disp_lean(defender))*TR.ability_factor(defender,'counter_select')
-        pool=max(1, core.resolution_pool(aggressor.history) - aggressor.wt.pool_penalty())
+        pool=max(1, core.resolution_pool(aggressor.history))
         deg, net = core.resolve(pool, net_sigma, rng)
         close = closed   # C-1: per-beat close-coupling follows the engagement measure-state (not raw reach alone)
         # anti_overcommit (D-1): a deep commit exposes the aggressor to the riposte; balance-balance curbs it.
