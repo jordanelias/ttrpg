@@ -81,9 +81,9 @@ def _try_faction_unique(faction, world, rng) -> str:
     """Phase 5/9 dispatch — faction-unique action routing by faction.name.
 
     Crown: Crown Initiative (3 modes via select_initiative_mode heuristic).
-    Church: Excommunication / Absolution / Council, picked by situational priority:
-        1. Council if not used this arc (rare, high value)
-        2. Excommunication if a viable target exists (highest-L rival not already excomm)
+    Church: picked by situational priority, matching the executed order below:
+        1. Excommunication if a viable target exists (highest-L rival not already excomm)
+        2. Council if not used this arc (rare, high value)
         3. Absolution otherwise (recovery + Stability support — Church always has L cost)
     Varfell/Hafenmark: deferred (Pass 2d/2e + contamination audit BLOCKED).
     """

@@ -2,7 +2,7 @@
 #  # [canonical: N/A — doc]
 # Faction-unique action expansion. Implements Crown Initiative 3 modes (Royal  # [canonical: N/A — doc]
 # Progress / Great Work / Coronation Renewal), the faction analogues from  # [canonical: N/A — doc]
-# Part 10 (Church Synod, Hafenmark Charter, Varfell's Hall), Church  # [canonical: N/A — doc]
+# Part 10 (Church Synod, Hafenmark Charter, Vaynard's Hall), Church  # [canonical: N/A — doc]
 # Excommunication and Absolution, RM Cultural Uprising of T9, and  # [canonical: N/A — doc]
 # parametric faction-specific tactic-card pool modifiers (deferred from M3).  # [canonical: N/A — doc]
 #  # [canonical: N/A — doc]
@@ -246,7 +246,7 @@ def excommunication_outcome(degree):
     # [canonical: faction_canon Church sheet Excommunication degree table]
     if degree == DEGREE_OVERWHELMING:
         return {
-            'target_mandate_delta': -1,                             # [canonical: faction_canon Church — "target faction L -1"]
+            'target_mandate_delta': -1,                             # [canonical: faction_canon_v30 §9 Excommunication:626 — "-1 Legitimacy to each of target's controlled settlements (aggregate L→Mandate, settlement_layer §1.8)"; LPS-2e reconciliation]
             'strips_circles_bonus': True,                           # [canonical: faction_canon Church — "Strips target's Circles bonus with Church contacts"]
             'barred_from_public_office': True,                      # [canonical: faction_canon Church — "target barred from public office and Church-loyal command"]
             'target_personal_reputation_delta': -1,                 # [canonical: faction_canon Church — "personal Reputation -1 with all factions"]
@@ -264,8 +264,8 @@ def excommunication_outcome(degree):
         return {}
     elif degree == DEGREE_FAILURE:
         return {
-            'church_mandate_delta': -1,                             # [canonical: faction_canon Church — "Church L -1"]
-            'target_mandate_delta': 1,                              # [canonical: faction_canon Church — "target gains L +1 (sympathy martyr)"]
+            'church_mandate_delta': -1,                             # [canonical: faction_canon_v30 §9 Excommunication:628 — "-1 Legitimacy to each Church-controlled settlement" (aggregate L→Mandate)]
+            'target_mandate_delta': 1,                              # [canonical: faction_canon_v30 §9 Excommunication:628 — "target gains +1 Legitimacy in each controlled settlement (sympathy martyr)"]
         }
     else:
         raise ValueError(f"Unknown degree: {degree}")
@@ -392,7 +392,7 @@ def charter_of_liberties_outcome(degree):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-# VARFELL'S HALL — part10 §5.3 analogue
+# VAYNARD'S HALL — part10 §5.3 analogue
 # ═══════════════════════════════════════════════════════════════════════════
 
 VAYNARDS_HALL_MILITARY_COST = -1  # [canonical: part10 §5.3 — "Military -1"]

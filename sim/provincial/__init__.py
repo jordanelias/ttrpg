@@ -12,8 +12,8 @@ Modules:
   - absolution: Church absolution action
   - council_solmund: Church 1/arc convocation
   - charter_liberties: Hafenmark Charter of Liberties
-  - vaynards_hall: Varfell Mandate-gain action (name + mechanic pending Jordan ratification)
-  - einhir_revival: Varfell territorial mechanic (Pass 2d, canon authoring pending faction contamination audit)
+  - varfell_mandate_action: Varfell Mandate-gain action (placeholder name per VARFELL-MANDATE-ACTION-001; mechanic pending Jordan ratification)
+  - varfell_territorial_acquisition: Varfell territorial mechanic (placeholder name per VARFELL-TERRITORIAL-ACQUISITION-001; canon authoring pending contamination audit)
   - altonian_reinforcements: Hafenmark choice-locked reinforcement (Pass 2e, pending audit)
   - infrastructure_reclamation: Church infrastructure-backed reclamation (Pass 2f, pending audit)
   - home_sanctuary: Church T9 protection mechanic (Pass 2f, pending audit)
