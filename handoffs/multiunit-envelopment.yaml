@@ -1,0 +1,78 @@
+id: multiunit-envelopment
+scope: simulation
+session_token: 59f33c23fb523078
+task:
+  skill: valoria-simulator
+  description: Implement army-scale multi-unit envelopment (Cannae) in the mass-battle
+    sim engine via Path B = bottom-up emergent field unification. Phase 0 confirmed;
+    Phase 1 (engine generalization) is next. Work phase by phase in order; defer top-down
+    historical validation to after the phases.
+context_files:
+- path: designs/proposals/multiunit_envelopment_plan.md
+  depth: full
+  reason: 'THE plan: Path B, Phase 0 confirmation, Phase 1 change-set, locked decisions,
+    open items. Read first.'
+- path: tests/sim/mass_battle/orchestration.py
+  depth: full
+  reason: The engine. run_multi_unit_battle L2636 = 1-D lane abstraction to generalize;
+    _front_fixers build L1685-1693 + b_fixed_other use L1860-1861 = unit-agnostic
+    envelop machinery (no change); unit_a/unit_b pool fractions to make atom->owner-unit.
+- path: tests/sim/mass_battle/config.py
+  depth: full
+  reason: 'Spatial/cap params: MAX_TROOPS_PER_UNIT=10000, UNIT_GRID_SIZE=30, BATTLEFIELD_SIZE=50,
+    CELL_FLOOR=40/CELL_CAP=200, LINE_ASPECT=1.4.'
+- path: designs/provincial/mass_battle_v30.md
+  depth: skeleton
+  reason: 'Canon: A.3 scales, A.3b battlefield geometry, A.12 rout/pursuit/cascade
+    (port onto unified field, do not drop).'
+- path: tests/coverage_matrix.md
+  depth: skeleton
+  reason: Co-file required for any sim/engine commit.
+owns:
+- tests/sim/mass_battle/**
+- designs/proposals/multiunit_envelopment_plan.md
+working_state:
+  phase_0: 'CONFIRMED (line-level): per-cell envelopment machinery (_front_fixers
+    build L1685-1693; b_fixed_other use L1860-1861) is purely id-keyed/unit-agnostic.
+    Only the `pairs` input (contacts within one unit-pair) + the unit_a/unit_b pool-fraction
+    refs scope it to two units.'
+  existing_multiunit: 'run_multi_unit_battle L2636 EXISTS but is a 1-D lane abstraction:
+    isolated 1v1 run_battle per pairing + abstracted cross-lane effects (rout contagion
+    +/-1, sequential freed-attacker, Fast pursuit; per A.12). Concurrent N-on-1 convergence
+    is explicitly stubbed (''for future 2v1 support'').'
+  decision: Path B locked = bottom-up emergent (no scripted convergence). Last turn's
+    2-subunit fix+envelop test fired the shock (enveloped routed 12/15), proving cross-subunit;
+    cross-UNIT is the Phase 1 field-unification.
+  next: Phase 1 engine generalization (see key_values change-set); then Phases 2-4
+    in order.
+key_values:
+- 'PHASE 1 CHANGE-SET: (1) generalize find_contacts / resolve_cross_side_contention
+  to produce `pairs` across ALL units'' cells on the 50x50 field, not one (unit_a,unit_b)
+  pair; (2) in resolve_engagements replace unit_a/unit_b in the pool fractions (atom.troop_count/unit_X.total_troops(),
+  subunit_combat_pool(unit_X,atom)) with atom->owner-unit lookup; (3) multi-unit field
+  harness placing N units at army positions. NO change to _front_fixers, envelop-shock,
+  or the elif/dormant-_envelopment_sigma double-count guard (preserve exactly).'
+- Phase 2 = positioning/maneuver (units hold 2-D positions, advance/wheel/envelop
+  over turns so the wrap develops dynamically). Phase 3 = commanded envelopment gated
+  on command/discipline per ED-907 3-level command. Phase 4 = NERS + re-run Cannae
+  at army scale + historical re-validation.
+- 'ENGINE = CANON: tests/sim/mass_battle/ (Instance A). HEAD a1c0d316. Session commits:
+  a1c0d316 (plan), a94b6475 (wiring+historical validation: all mechanics wired + 6
+  anchors MATCH), c8ef557c (ED-1039 PP-683), 5b5dbf27 (PP-683 doc), 7e62451f (comment
+  fix). All mass-battle defects+loose-ends resolved; NERS COMPLIANT.'
+- 'LOCAL (resets on new session - re-fetch): /home/claude/orch_repo.py == HEAD engine;
+  simpkg_patched = packaged (gauge digest 1f8c05a9); bat.py/wire.py = batteries. Ledger
+  uses json.dumps spacing (grep via J.loads).'
+blockers:
+- 'DECISION (Jordan): max units per side at army scale (2-3? 10+?) - sets whether
+  spatial bucketing lands in Phase 1 or deferred (perf: all cells on one grid is O(cells^2)
+  without bucketing).'
+- 'DECISION (Jordan): confirm A.12 cascade/pursuit ports onto the unified field (not
+  dropped).'
+- 'DECISION (Jordan): LINE_ASPECT 1.4 -> ~2.0-2.3 (wider depth:width per 25x11 sketch)
+  - recommend AFTER Phase 1 emergence validated.'
+last_commit: a1c0d316e8610c019c754e5df1a878d4982514f8
+created: '2026-06-23T00:01:19.659569+00:00'
+updated: '2026-06-23T00:01:19.659569+00:00'
+status: active
+as_of: 9523887d095695b158f3f8f693083dd409316240
