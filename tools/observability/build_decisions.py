@@ -157,11 +157,11 @@ def main():
             raw = yaml.safe_load(sr.read_text(encoding="utf-8")) or {}
             for e in (raw.get("entries") or []):
                 if isinstance(e, dict) and e.get("superseded_id"):
-                    resolved.append({"id": e.get("superseded_id"),
-                                     "scope": e.get("scope", ""),
-                                     "superseded_by": e.get("superseded_by", ""),
-                                     "date": e.get("superseded_date") or e.get("date", ""),
-                                     "replacement": (e.get("replacement") or "")[:160]})
+                    resolved.append({"id": str(e.get("superseded_id")),
+                                     "scope": str(e.get("scope", "")),
+                                     "superseded_by": str(e.get("superseded_by", "")),
+                                     "date": str(e.get("superseded_date") or e.get("date", "")),
+                                     "replacement": str(e.get("replacement") or "")[:160]})
         except yaml.YAMLError:
             pass
 
