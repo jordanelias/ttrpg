@@ -446,3 +446,99 @@ Findings a verifier actively refuted, plus items checked and found correct:
 - Run 1 (`wf_f71cfc72-9b9`): rate-killed - 2 naming findings only.
 - Run 2 / Pass A (`wf_c7f7c98c-8bb`): 28 findings; verify stage rate-limited; Critical/High self-verified.
 - Run 3 / Pass B (`wf_47c3e7bb-989`): 20 findings, 19 confirmed / 1 rejected; verifiers completed; completeness critic ran.
+
+
+---
+
+## Pass C — faction layer (solo / inline, 2026-06-23)
+
+Audited inline (no workflow — the extension workflow `wf_24f2af8f-27c` died on a hard
+session limit) against faction_layer_v30 §2–§5, params/bg/parliament.md, part10 §3.3, and
+the sim modules (faction_action.py, treaty.py, parliamentary_transfer.py,
+sim/personal/parliamentary_vote.py). All findings self-verified by direct file reads.
+
+**Through-line:** the sim implements the *terminal* states (immediate conquest transfer,
+treaty expiration) but not the *churn-generating intermediate* mechanics (occupation
+windows, 3-phase negotiation, parliamentary motions) — exactly the branch points that
+produce emergent narrative. ("The world happens to the player, and the player happens to
+the world — always churn.")
+
+### [HIGH] Great Work's "Open Pledge per PP-515" contradicts PP-515
+- **Layer:** canon (cross-doc) · **Status:** verified
+- part10 §3.3:150 frames Great Work as "Open Pledge per PP-515 ... over 3 seasons." But
+  PP-515 (params/bg/parliament.md:72): "Scope: One season only. Cannot commit future
+  seasons." Direct contradiction.
+- Second mismatch: Great Work cites "PP-515 breach penalties" of Cohesion −20 /
+  Reputation −15 (part10 §3.3:158-159), but PP-515's actual breach penalty
+  (parliament.md:69) is "Stability −1 + Casus Belli (3 seasons)." The cited magnitudes are
+  not in PP-515.
+- Live sim sidesteps it: crown_initiative.py resolves Great Work instantly (multi-season
+  tracking deferred), so this is a canon-level contradiction, not propagated to code.
+- **Fix:** give Great Work a distinct multi-season "Project Pledge" construct, or drop the
+  "per PP-515" citation; reconcile the breach magnitudes.
+
+### [HIGH] Parliament: two divergent vote models; §5.4 motion catalogue unimplemented
+- **Layer:** cross_layer / sim_code · **Status:** verified
+- faction_layer §5.3 defines Mandate-weighted voting (votes = Mandate; Majority >50%,
+  Supermajority ≥60%), Church Sacred Veto, and CI weighting (Church vote = Mandate+floor(CI/20);
+  anti-Church = max(0, Mandate−floor(CI/30))).
+- The sim's run_parliamentary_vote (sim/personal/parliamentary_vote.py:4,156) instead
+  implements social_contest_v30 §10 — a Persuasion-Track dice contest (Mandate→pool, TN 7,
+  track 0–10, win ≥7 / loss ≤3, genre/audience bonuses). A different model entirely.
+- None of §5.4's 10 motions (Censure / Embargo / Blockade / Outlawry / Subsidy / War
+  Authorisation / Treaty Ratification / Recognition Challenge / Succession Endorsement /
+  Combined) is implemented. The only parliamentary sim action is parliamentary_transfer
+  (territory transfer, from a 3rd canon doc parliamentary_transfer_v30.md). Sacred Veto and
+  CI weighting are absent from the sim.
+- **Fix:** decide which vote model is canonical for faction-layer motions and reconcile
+  §5.3 vs social_contest §10; implement the §5.4 motions or mark them out of sim scope.
+
+### [HIGH] Occupation (faction_layer §2) entirely unimplemented — conquest is immediate transfer
+- **Layer:** cross_layer / sim_code · **Status:** verified
+- faction_action.py:_try_conquest (174-188) sets `t.owner = faction.name` immediately on any
+  battle win (terrain=None → Fort Ob ignored), bypassing: §2.2 (Success = occupation marker,
+  control NOT transferred; only Overwhelming = immediate), §2.3 (Stability loss without TCV
+  strip), §2.4 (3-season auto-conversion), §2.5 (Resistance check), and the §2.2 Fort
+  march-Ob table (Lowenskyst Fort 3 → Ob 5). No occupation module exists in sim/provincial.
+- **Churn note:** the 3-season occupation window (resist / treaty-cede / recapture branches)
+  is a primary emergent-narrative generator; immediate transfer collapses it.
+- **Fix:** implement the occupation marker + 3-season conversion + Resistance check, gate
+  immediate transfer to Overwhelming only, and wire Fort levels into march Ob.
+
+### [HIGH] 3-phase treaty negotiation (faction_layer §3.3) unimplemented — only expiration exists
+- **Layer:** cross_layer / sim_code · **Status:** verified
+- treaty.py implements process_treaty_expirations (lapse 0.90) + scaffolding register_treaty;
+  propose_treaty raises NotImplementedError (97-111). The §3.3 Positioning (M=Inf−Inf) /
+  Concession / Ratification (M=Mandate−2) resolver + guarantor option has no sim home.
+- treaty.py is sourced from treaty_expiration_v30.md (a different canon doc) — so treaty
+  FORMATION (faction_layer §3.3) and EXPIRATION (treaty_expiration_v30) are split, with only
+  expiration implemented.
+- **Fix:** implement the §3.3 negotiation resolver, or reconcile which treaty canon is
+  authoritative for formation.
+
+### [MEDIUM] PP-442 Counter-Intel Postures: undefined composition + zero sim coverage
+- **Layer:** bg_params · **Status:** verified
+- Hafenmark Procedural Objection "consumes Parliamentary Challenge use"
+  (faction_actions.md:233), but PP-431-COR (faction_actions.md:88) fires the structural-CI-
+  suppression replacement "in any season Hafenmark plays Parliamentary Challenge." It is
+  undefined whether consuming the use via Objection counts as "playing" Challenge — so the
+  structural-suppression interaction is ambiguous.
+- All three postures (Crown Royal Guard / Hafenmark Procedural Objection / Church Sanctuary
+  Extension) have no sim model or tests.
+- **Fix:** define the Objection ↔ Challenge ↔ PP-431-COR composition explicitly; decide
+  whether the postures are in sim scope.
+
+### [LOW] Cultural Reclamation (ED-880) still absent from faction_canon §9
+- **Layer:** cross_layer · **Status:** verified (partially addressed this session)
+- The faction_actions.md "military-only" framing was corrected this session (ED-880 note
+  added). But faction_canon §9 Unique-Action Overview still lists Varfell = "The Private
+  Collection" with no Cultural Reclamation row; conviction_track_v30:64 defines it (Influence
+  vs Ob 2; target-territory PT −1). Residual of the disjoint-§9 architectural finding.
+- **Fix:** add a Cultural Reclamation entry to faction_canon §9 (or the reconciled action registry).
+
+---
+
+## Provenance (Pass C)
+- Pass C (solo / inline, 2026-06-23): faction-layer extension. Workflow `wf_24f2af8f-27c`
+  died on a hard session limit, so this pass was done inline by the main loop. 6 findings
+  (4 HIGH, 1 MEDIUM, 1 LOW), all self-verified by direct file reads.
