@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CombatConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://engines/combat/resources/combat_config.gd" id="1"]
+
+; The live Class-C tunables are the script @export defaults (single source of truth — the old
+; config.py DAMAGE_SCALE=4.0 dead-duplicate is gone). Override a value here to retune in the inspector.
+[resource]
+script = ExtResource("1")
+damage_scale = 1.55

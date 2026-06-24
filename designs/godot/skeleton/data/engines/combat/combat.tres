@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EngineManifest" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/engine_manifest.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+engine_id = "personal_combat"
+engine_script = "res://engines/combat/combat_engine.gd"
+scale = "personal"
+modules = Array[String](["res://data/engines/combat/strike.tres", "res://data/engines/combat/wound.tres"])
+accounting_phase = Array[String](["emission_processing"])
