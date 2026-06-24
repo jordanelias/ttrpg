@@ -22,22 +22,22 @@
 | CG-6 | deck G201 / README | Comply branch carries no Π delta on the most-played path | same G201 fix; audit other Comply branches | ✅ (G201) / ⏳ (audit G202/203/205) |
 | CG-5 | README L69 | coherence self-check overclaims "every card has a Π-delta+Ledger" — untrue of the 21 compact rows | downgrade ✅→⚠ with honest scope | ✅ |
 | npc-F1 | npc G06 Konrad | suspicion track is purely reactive — a **compliant** player never advances Konrad (dead world→player) | add player-independent advance (under-quota / RM-Presence rise) | ✅ |
-| deck-F2 / CG-7 | deck G606 | **recall death-spiral** — the celebrated "defy to protect the town" path ratchets Konrad to recall; escapes need pre-banked tags | add a survivable in-card escape (submit-to-audit) + cap Konrad +1/season | ⏳ |
-| deck-F3 | deck G204 | Curate's Offer is a genuine **no-acceptable-out vise** — every branch raises Π or feeds the near-irreversible G603 | add a non-Church Order-relief branch; make Decline Π-neutral | ⏳ |
-| deck-F5 | deck G602, G605 | Ambition cards don't branch on prior player choices → no payoff-for-play | give by-state forks mirroring G601/G606 (e.g. `Precedent:toll-capped`→charter void) | ⏳ |
-| npc-F2 | npc G04 Tomas | unmovable/unreachable in a well-governed town (only discovery is chronic disorder) | wire Old Brun (LA-G02) as a discovery lever at any Order level | ⏳ |
-| npc-F3 | npc G05 Greta | ambition escalates on force but **not on neglect** (static if ignored-without-suppression) | add a blocked-by-non-force branch (deeper-covert cell-export) | ⏳ |
+| deck-F2 / CG-7 | deck G606 | **recall death-spiral** — the celebrated "defy to protect the town" path ratchets Konrad to recall; escapes need pre-banked tags | added a `Submit to audit` escape (always available, −2 suspicion) + Konrad capped +1/season | ✅ v1.1 |
+| deck-F3 | deck G204 | Curate's Offer is a genuine **no-acceptable-out vise** — every branch raises Π or feeds the near-irreversible G603 | added `Keep Order: Consent` (secular relief); Decline now Π-neutral | ✅ v1.1 |
+| deck-F5 | deck G602, G605 | Ambition cards don't branch on prior player choices → no payoff-for-play | G602/G604/G605 given by-state forks (`Precedent:toll-capped`→charter void, etc.) | ✅ v1.1 |
+| npc-F2 | npc G04 Tomas | unmovable/unreachable in a well-governed town (only discovery is chronic disorder) | added a Reachability path: Old Brun → Investigate surfaces Tomas at any Order | ✅ v1.1 |
+| npc-F3 | npc G05 Greta | ambition escalates on force but **not on neglect** (static if ignored-without-suppression) | added a blocked-by-neglect branch (deeper-covert cell-export; she never stalls) | ✅ v1.1 |
 | sim-F4 | sim §5 predicates | grammar too weak for event-history triggers (`Investigated(Tomas)`, `ruled against Orsk`) | require those cards to drop a history/Leverage tag; triggers read `has_tag(...)` | ⏳ |
 
-## Medium (12) — all ⏳ v1.1
+## Medium (12) — mostly ⏳ v1.1 (deck-F4, CG-4, sim-F6 fixed this commit)
 
-- **deck-F4** Bargain is a dominated/dead choice in G201/G202/G204 → give each Bargain one axis where it's strictly best (e.g. G201 Bargain should *not* raise suspicion — that's its point).
+- **deck-F4** ◑ *partially fixed* — G201 Bargain no longer raises suspicion (its whole point vs Defy); G204 Bargain now grants a unique `Leverage:parish-favour` chit. G202 Bargain still to differentiate.
 - **deck-F6** G401 riot: the only no-cost Π-release (`Hedda mediates`) is gated on `Hedda.Disp≥+2` but the trigger needs `Grudge:Hedda OR Grudge:Mertha` → can lock out the release; widen the gate or add a Force-branch Π-release.
 - **npc-F4** Wessel-vs-Greta collision is mechanically empty (no verb forces the tradeoff) → author a Sponsor/Hold-Court card that raises one and lowers the other.
 - **npc-F5** decorative Knots (Tomas→Brun, Wessel→Aldith, Hedda→Aldith) never referenced by a card → wire each to a card or cut.
-- **CG-4** G605 (deepest payoff card) has no player response / no Ledger write → add Tolerate vs Disperse branches.
+- **CG-4** ✅ *fixed* — G605 now has `Tolerate` vs `Disperse by force` player branches with Ledger writes + Π deltas.
 - **CG-5b** expand the compact Ambition rows G602/G603/G604 to full response schema so they satisfy the churn triple.
-- **sim-F6** G204 weight references `Wessel.advance` but runtime exposes `.progress` → rename to `.progress`.
+- **sim-F6** ✅ *fixed* — renamed the G204 weight clause to `Wessel.progress` (matching the runtime accessor).
 - **sim-F7b** decide Treasury draw location explicitly (done via `treasury_source` ✅, but Sponsor/relief read-rule still needs spec).
 - **sim-F8** `social_contest(§7)` is a dangling ref (§7 here is the build sequence, not social contest) and absent from the build → wire `social_contest_v30 §7` into `governance.py` (add build step).
 - **sim-F10** dependency order: §7 S4 (deck engine) needs §6/S5 ambition runtime for the forced-queue → land the `deck_state['forced']` interface in S4; add an anti-stall test.

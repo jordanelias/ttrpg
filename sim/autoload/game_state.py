@@ -176,6 +176,14 @@ class World:
     npc_drift_state: dict = field(default_factory=dict)          # territory_id → drift float (from sim/territory/temperaments)
     threadcut_beings: dict = field(default_factory=dict)         # being_id → ThreadcutState (from sim/thread/threadcut)
     comovement_deck: dict = field(default_factory=lambda: {'remaining': [], 'discard': []})  # global deck state (from sim/thread/co_movement)
+    # ─── Schema migration #3 — 2026-06-23 (settlement registry, audit gap G1) ──
+    # A province now holds its canonical 1-3 settlements (settlement_layer
+    # §1.1/§2.1) instead of the prior 1:1 territory->settlement stub. Same
+    # Any-typing + store-router rationale as migrations #1/#2; the owning module
+    # sim/territory/registry defines Settlement and falls back to a module-level
+    # store when world is None (legacy callers + tests).
+    # [canonical: designs/territory/goldenfurt_slice/sim_build_spec.md §1]
+    settlements: dict = field(default_factory=dict)             # sid → Settlement (from sim/territory/registry)
 
 
 def create_world(seed: int | None = None) -> World:

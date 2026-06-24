@@ -75,15 +75,40 @@ class ProvinceState:
     member_settlements: list[str]
 
 
+def _state_from_settlement(s) -> SettlementState:
+    """Build the §1.3 derived-value view directly from an authored registry
+    Settlement (sim/territory/registry.py). Used by the registry-backed path."""
+    return SettlementState(
+        settlement_id=s.sid,
+        settlement_type=s.stype,
+        owner=s.owner_faction,
+        prosperity=s.prosperity,
+        defense=s.defense,
+        order=s.order,
+        fort_level=s.fort_level,
+        local_economy=s.prosperity * PROSPERITY_TO_LOCAL_ECONOMY,
+        garrison_strength=s.defense * DEFENSE_BASE_TO_GARRISON + s.fort_level * FORT_LEVEL_TO_GARRISON,
+        public_order=s.order * ORDER_TO_PUBLIC_ORDER,
+    )
+
+
 def compute_settlement_state(settlement_id: str, world) -> SettlementState:
     """Derive §1.3 settlement-state view for one settlement.
 
-    Currently maps 1:1 from Territory; see module docstring ASSUMPTION.
+    Prefers an authored Settlement from the registry (registry.py); falls back
+    to the 1:1 Territory derivation for legacy callers; see module ASSUMPTION.
     Order is derived from Territory.accord (continuous 0.5-7.0) as the
     canon §1.3 mapping requires an integer 0-5 stat; we map by linear
     clamp + floor. Defense is derived from fort_level + garrison
     presence per §1.2 Fortress / §1.3 Defense.
     """
+    # [registry-backed path — closes audit gap G1] prefer an authored Settlement
+    # if the registry holds one; else fall back to the 1:1 Territory derivation.
+    from sim.territory.registry import get_settlement
+    s = get_settlement(settlement_id, world)
+    if s is not None:
+        return _state_from_settlement(s)
+
     # [canonical: §1.3 — accord is the floor-aggregate of settlement Order;
     #  inverse mapping for derivation: settlement Order = Territory Accord
     #  clamped/floored into the 0-5 stat scale]
@@ -144,19 +169,32 @@ def aggregate_to_province(province_id: str, world) -> ProvinceState:
     # [canonical: §1.3 — "Province Accord = floor of the average Order across
     #  all settlements in the province" + "Each point of settlement Prosperity
     #  adds to the province's Prosperity pool"]
+    # [registry-backed path — closes G1] aggregate the province's REAL member
+    # settlements when the registry is populated — the multi-settlement
+    # floor-average the §1.3 formula always intended (was a synthetic single).
+    from sim.territory.registry import province_members
+    members = province_members(province_id, world)
+    if members:
+        states = [_state_from_settlement(s) for s in members]
+        orders = [st.order for st in states]
+        accord_int = math.floor(sum(orders) / len(orders)) if orders else 0
+        return ProvinceState(
+            province_id=province_id,
+            accord=accord_int,
+            effective_prosperity=sum(st.prosperity for st in states),
+            settlement_count=len(members),
+            member_settlements=[s.sid for s in members],
+        )
+
+    # Fallback (no registry): one settlement per province (the territory itself)
     if province_id not in world.territories:
         raise KeyError(f"province_id not found in world.territories: {province_id}")
-
-    # Until registry: one settlement per province (the territory itself)
     member_settlements = [province_id]
     states = [compute_settlement_state(sid, world) for sid in member_settlements]
-
-    orders = [s.order for s in states]
+    orders = [st.order for st in states]
     avg_order = sum(orders) / len(orders) if orders else 0
     accord_int = math.floor(avg_order)
-
-    effective_prosperity = sum(s.prosperity for s in states)
-
+    effective_prosperity = sum(st.prosperity for st in states)
     return ProvinceState(
         province_id=province_id,
         accord=accord_int,
