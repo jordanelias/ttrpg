@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="TraditionResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://engines/combat/resources/tradition_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+tradition_id = "none"
+set_name = ""
+mode = ""
+visual = 1.0
+tactile = 1.0
+precommit = 1.0
+leverage = 1.0
+tempo = 1.0
+measure = 1.0
+balance = 1.0

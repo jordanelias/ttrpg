@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://engines/combat/resources/weapon_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+weapon_name = "arming"
+reach = "long"
+weight = "light"
+hands = 1
+head = "cut_thrust"
+spd = 1.5
+handling = "Standard"
+grip_len = 0.8
+head_len = 2.4
+reach_adj = -0.6
+hand_guard = 0.4
+blade_guard = 0.55
+gap = 0.65
+mass = 1.2
+pob_frac = 0.12

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="KeyTypeResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/key_type_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+type_id = "scene.combat_resolved"
+family = "scene"
+required_payload_fields = Array[String](["scene_id"])
+optional_payload_fields = Array[String](["participants", "outcome"])
+default_scale_signature = Array[String](["personal"])
+default_permanence = "persistent"
+default_time_horizon = "near"
+emitting_systems = Array[String](["personal_combat"])
+consuming_systems = Array[String](["faction_state", "npc_behavior"])
