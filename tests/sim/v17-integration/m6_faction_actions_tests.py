@@ -233,7 +233,7 @@ def t6_faction_analogues():
     check(charter_ow['rival_excommunication_ob_delta_campaign'] == 1,
           "Charter OW: rivals +1 Ob to Excomm this campaign")  # [canonical: see charter_of_liberties_outcome ledger]
 
-    # Varfell's Hall
+    # Vaynard's Hall
     check(m6.VAYNARDS_HALL_MILITARY_COST == -1 and m6.VAYNARDS_HALL_OB == 3, "Vaynard's Hall: M-1, Ob 3")  # [canonical: see VAYNARDS_HALL_MILITARY_COST + VAYNARDS_HALL_OB ledgers]
 
     check(m6.vaynards_hall_pool(4, False) == 4, "Vaynard's Hall Pool mil=4 no_tribune → 4")  # [canonical: see vaynards_hall_pool ledger]
