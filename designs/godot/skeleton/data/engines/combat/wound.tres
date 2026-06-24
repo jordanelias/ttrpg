@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WoundModule" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://engines/combat/modules/wound_module.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+module_id = "combat.wound"
+resolver = 5
+consumes = Array[String](["scene.combat_hit"])
+emits = Array[String](["scene.combat_felled"])
+owned_scalars = Array[Dictionary]([{"bucket": "track", "name": "cumulative_damage", "writable": true}, {"bucket": "track", "name": "wounds", "writable": true}, {"bucket": "derived_value", "name": "health", "writable": false}])

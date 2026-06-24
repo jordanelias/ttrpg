@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="StrikeModule" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://engines/combat/modules/strike_module.gd" id="1"]
+[ext_resource type="Resource" path="res://data/combat_config.tres" id="2"]
+
+[resource]
+script = ExtResource("1")
+module_id = "combat.strike"
+resolver = 1
+consumes = Array[String](["scene.combat_strike"])
+emits = Array[String](["scene.combat_hit"])
+owned_scalars = Array[Dictionary]([])
+config = ExtResource("2")

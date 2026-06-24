@@ -740,6 +740,57 @@ consuming_systems: [npc_behavior, faction_layer, articulation]
 ```
 <!-- [STUB: payload inferred, not canon-specified — provisional per J-2 register-all; pending Jordan ratification; tracked workplan #29 / ED-935] -->
 
+### scene.combat_strike
+
+```yaml
+description: A declared combat action (a strike) entering personal-combat resolution — the action-input subtype the CombatEngine's StrikeModule consumes (F3 — combat-path action vocabulary; 2-part family.subtype per registry convention).
+required_payload_fields:
+  - attacker                  # actor_id
+  - defender                  # actor_id
+optional_payload_fields:
+  - commit                    # int 2-5 (commitment depth; disposition-skewed)
+  - weapon                    # weapon_id override
+default_scale_signature: [personal]
+default_permanence: transient
+default_time_horizon: immediate
+emitting_systems: [scene_slate, player_input]
+consuming_systems: [personal_combat]
+```
+<!-- [STUB: combat-path action vocabulary; provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->
+
+### scene.combat_hit
+
+```yaml
+description: A landed blow within a fight; carries the wound as a write-protected `health` stat_delta on the defender target (F1 — the wound rides the substrate, never a direct write). StrikeModule emits; WoundModule consumes.
+required_payload_fields: []
+optional_payload_fields:
+  - degree                    # graze | partial | success | overwhelming
+  - damage                    # int (health-delta magnitude)
+  - net                       # float (sigma-leverage net)
+default_scale_signature: [personal]
+default_permanence: transient
+default_time_horizon: immediate
+emitting_systems: [personal_combat]
+consuming_systems: [personal_combat]
+```
+<!-- [STUB: provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->
+
+### scene.combat_felled
+
+```yaml
+description: A combatant incapacitated by Health depletion (ED-1041 wound model). Witnessable; ripples up to factions and into NPC memory.
+required_payload_fields:
+  - actor_id                  # the felled combatant
+optional_payload_fields:
+  - by_actor                  # actor_id of the feller
+default_scale_signature: [personal]
+default_permanence: indelible
+default_time_horizon: near
+emitting_systems: [personal_combat]
+consuming_systems: [npc_behavior, faction_layer, articulation]
+```
+<!-- [STUB: provisional per J-2 register-all; extracted 2026-06-23 with personal_combat] -->
+
 ---
 
 ## §8 Family: system_meta

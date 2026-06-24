@@ -79,3 +79,9 @@ That is the churn: you never had a turn the world didn't act on, and the world n
 **S0–S1 are now built** (this branch): `sim/territory/registry.py` (the Settlement registry — closes audit gap **G1**) + `sim/territory/ledger.py` (durable Ledger tags), `World.settlements`, and a registry-backed path in `settlement.py` so the §1.3 multi-settlement province floor-average finally fires over real members. Covered by `tests/sim/territory_registry/test_registry_ledger.py` (6 tests, passing: AP economy, ledger-survives-succession, single-valued Reputation, 3-settlement aggregation, registry-backed derived values, and the legacy 1:1 fallback intact).
 
 Next, in order: **S2** governance verbs + AP economy · **S3** Directive generator + comply/bargain/defy · **S4** deck engine + Π homeostat · **S5** NPC ambition tick · **S6** the Goldenfurt content pack. The acceptance test remains the two-season churn trace reproducing end-to-end in the sim.
+- Deferred ⏳ v1.1 — the G606 recall death-spiral, the G204 Geneva vise (no acceptable out), G602/G605 lacking payoff-for-play, Tomas being unreachable in a well-governed town, and Greta not escalating on neglect.
+- Still open — `Thread` family is thin (2 cards); numeric tuning (AP curve, Π band, suspicion→recall threshold) is unvalidated pending the §9 sim sweep.
+
+## Build status / what's next
+
+This slice is **content + spec only**; none of it runs until `sim_build_spec §7 S0` (the settlement registry, audit gap G1) lands. Recommended order: build S0–S1 (registry + ledger), port the Goldenfurt content to the `content/` YAMLs, then S2–S6. The acceptance test is the two-season trace above reproducing in the sim.

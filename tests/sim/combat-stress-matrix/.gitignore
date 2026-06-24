@@ -1,0 +1,7 @@
+# test instrumentation — regenerate with `python stage_engine.py`
+_engine/
+# throwaway smoke output
+smoke.json
+__pycache__/
+*.pyc
+run.log

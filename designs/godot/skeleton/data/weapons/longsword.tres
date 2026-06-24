@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WeaponResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://engines/combat/resources/weapon_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+weapon_name = "longsword"
+reach = "long"
+weight = "heavy"
+hands = 2
+head = "cut_thrust"
+spd = 0.5
+handling = "Standard"
+grip_len = 1.6
+head_len = 2.8
+reach_adj = -0.9
+hand_guard = 0.45
+blade_guard = 0.85
+gap = 0.9
+mass = 1.4
+pob_frac = 0.14

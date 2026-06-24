@@ -39,7 +39,14 @@
 
 schema_version: 2
 generated: "2026-06-10"
-status: EXTRACTED_STAGE1  # personal_combat + campaign_architecture stubs remain
+status: EXTRACTED_STAGE1  # campaign_architecture stub remains; personal_combat EXTRACTED 2026-06-23 (v4, below)
+
+# v4 (2026-06-23) — personal_combat EXTRACTED (deferral resolved: combat_engine_v1 ratified CANONICAL
+# by ED-900/904 + docket ED-1029; the stale README 'canonical-candidate' line that gated the trigger is
+# corrected). Shaped as CombatEngine (BaseEngine, d_sigma) hosting the 11-action module set; combat.strike
+# + combat.wound ported to the Godot skeleton (slice). F3 resolved (scene.combat_* outcome Key family).
+# Model corrected off the v30 placeholder (Agi×2/TN-7/mult-STR) to the canonical sigma engine + ED-1041
+# bilateral-Ob wounds. See the personal_combat entry below + the 2026-06-22 personal-combat audit.
 
 modules:
 
@@ -339,6 +346,7 @@ modules:
     consumes: []
     emits:
       - {type: "mechanical.scene_entered", terminal: false}   # substrate §8.5 verbatim — registry attributes scene lifecycle (entered/exited/skipped) to game_director instead: cross-doc attribution conflict [OPEN — Jordan]
+      - {type: "scene.combat_strike", terminal: false}   # combat-path action driver (personal_combat consumes); extracted 2026-06-23
       - {type: "scene.dialogue", terminal: false}
       - {type: "scene.gift", terminal: false}
       - {type: "scene.insult", terminal: false}
@@ -781,12 +789,60 @@ modules:
       - "clock_registry_v30 full [READ: 2026-06-10]"
 
   - module: personal_combat
-    doc: null
+    registry_system: "personal_combat"   # Key Type Registry vocabulary
+    doc: designs/scene/combat_engine_v1/   # CANONICAL (ED-900/904; docket ED-1029)
+    godot_home: designs/godot/skeleton/engines/combat/   # CombatEngine (BaseEngine) + Strike/Wound modules (slice)
     scales: [personal]
+    resolver: d_sigma   # sigma-leverage continuous (r1/m1): pool=max(5,History+6), base Ob 3 FIXED, advantage = mu-shift on the ROLL. NOT v30 dice_pool (Agi×2 / TN-7).
+    consumes:
+      - {type: "scene.combat_strike", from: [scene_slate, player_input]}
+      - {type: "scene.combat_hit", from: [personal_combat]}   # intra-engine: Strike emits, Wound consumes
+    emits:
+      - {type: "scene.combat_hit", terminal: false}      # Strike -> Wound; carries a write-protected `health` stat_delta (F1 — the wound rides the substrate)
+      - {type: "scene.combat_felled", terminal: false}   # Wound -> on Health depletion
+      - {type: "scene.combat_resolved", terminal: false} # CombatEngine -> up to factions / sideways to witnesses / into NPC memory
+    state:
+      - {name: "Health", bucket: derived_value, writable: false}   # WI*(MW+1)+0.25*Str*End - cumulative_damage; route deltas to the wound substrate — F1
+      - {name: "cumulative_damage", bucket: track, writable: true}  # the substrate the health delta lands on (WI=round(End+4+0.4*Spi))
+      - {name: "Wounds", bucket: track, writable: true}   # min(floor(cum/WI), MW+1); the BILATERAL-Ob source (ED-1041 — impairs offence AND defence)
+      - {name: "Stamina", bucket: pool, writable: true}   # 3*End+2*Spirit (full port; not in the slice)
+      - {name: "Initiative", bucket: track, writable: true}  # Vor/Nach (full port)
+      - {name: "Poise", bucket: track, writable: true}    # kuzushi/structure (full port)
+    derivations:
+      - output: "Health"
+        inputs: ["Endurance", "Spirit", "Strength", "cumulative_damage"]
+        formula: "round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage"
+        bucket: derived_value   # F1 — route deltas to the wound substrate (cumulative_damage), never the derived value
+        source: "r2_consequence_wounds.health_full = WI*(MaxWounds+1)+0.25*Str*End, minus accrued damage (ED-1041 / derived_stats_v30 §4.1)"
+    transitions:
+      - {via: "scale_transitions §3.4 Domain Echo (scene.combat_resolved -> faction/NPC) / §12.3 down-up targeting"}
+    loops:
+      - {open: true}   # bounded self-loop: Strike emits scene.combat_hit, Wound consumes it; terminates at felling / Health depletion
+    accounting_phase: [emission_processing]
+    modules:   # the EngineModules the CombatEngine hosts (the canonical 11-action set; the slice ports 2)
+      - {id: "combat.strike",  resolver: d_sigma,      status: PORTED,  in: ["scene.combat_strike"], out: ["scene.combat_hit"]}
+      - {id: "combat.wound",   resolver: state_reader, status: PORTED,  in: ["scene.combat_hit"], out: ["scene.combat_felled"]}
+      - {id: "combat.feint",   resolver: d_sigma,      status: PENDING}
+      - {id: "combat.bind",    resolver: d_sigma,      status: PENDING}   # winding / Stärke-Schwäche / kuzushi
+      - {id: "combat.approach", resolver: d_sigma,     status: PENDING}   # closing / stop-hit / reach re-open
+      - {id: "combat.displace", resolver: d_sigma,     status: PENDING}   # displace-and-step-inside
+      - {id: "combat.grapple", resolver: d_sigma,      status: PENDING}   # clinch (the currently-unconsumed `clinch` weapon field)
+      - {id: "combat.halfsword", resolver: state_reader, status: PENDING} # auto-switch to the half-sword form vs plate
+      - {id: "combat.initiative", resolver: state_reader, status: PENDING} # Vor/Nach decay/drift/steal/edge
+      - {id: "combat.poise",   resolver: state_reader, status: PENDING}   # structure / kuzushi recovery
+      - {id: "combat.armour_defeat", resolver: d_sigma, status: FOLDED}   # a term inside combat.strike for the slice; promote to a module in the full port
     gap_notes:
-      - "DEFERRED: home = designs/scene/combat_engine_v1/ (README: \"canonical-candidate, ratification proposed, see designs/audit/2026-06-02-combat-engine/\") — owned by active handoff active-work-index-2026-06-09; extraction deferred until ratification"
-      - "F3 stands: no outcome Key type in scene_outcome family for personal combat (registry §7: contest/battle/investigation only)"
-    status: stub
+      - "EXTRACTED 2026-06-23: the v2 deferral ('canonical-candidate, extraction deferred until ratification') is RESOLVED — combat_engine_v1 was ratified CANONICAL by ED-900/904 and docket ED-1029; the only thing keeping the trigger from firing was the stale README 'canonical-candidate' line (audit F6), corrected this pass."
+      - "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi×2, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, sim/personal/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty)."
+      - "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types — scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in designs/godot/skeleton/data/key_types/ (was: registry §7 had contest/battle/investigation only)."
+      - "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3)."
+      - "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them — the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat→faction/NPC ripple)."
+    status: extracted
+    sources:
+      - "designs/scene/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]"
+      - "tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r2_consequence_wounds}.py [READ: 2026-06-23]"
+      - "canon/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]"
+      - "personal-combat audit 2026-06-22 (this session) — model-correctness + drift findings folded in"
 
   - module: campaign_architecture
     doc: designs/architecture/campaign_architecture_v30.md

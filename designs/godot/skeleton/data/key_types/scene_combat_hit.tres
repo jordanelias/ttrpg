@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="KeyTypeResource" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://core/key_type_resource.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+type_id = "scene.combat_hit"
+family = "scene"
+required_payload_fields = Array[String]([])
+optional_payload_fields = Array[String](["degree", "damage", "net"])
+default_scale_signature = Array[String](["personal"])
+default_permanence = "transient"
+default_time_horizon = "immediate"
+emitting_systems = Array[String](["personal_combat"])
+consuming_systems = Array[String](["personal_combat"])

@@ -50,6 +50,12 @@
   - `Keep Order: Clergy` (1 AP) → Order +1 and Order-decay −1 (§1.6), **but** Church-infra creep: **Wessel +1 progress on G603**, **Ledger** `Debt:church-dependence`
   - `Decline` → Order stays low, Wessel.Disp −1 (**Π +0** — refusing the trap is no longer itself a pressure penalty)
   - `Bargain` → limited parish (Order +1 once, no decay bonus, no creep) **plus** a unique chit `Leverage:parish-favour` (Wessel owes one future intercession); Wessel.Disp −1
+- **weight:** base 2, +1 if `Wessel.advance >= 2` · **cooldown:** 3 · **npc_refs:** G03
+- **the_ask:** "Wessel offers the parish's hands — almonry, schooling, dispute-mediation — to steady the town. It would lift Order at a stroke. It would also make the Church the thing holding Goldenfurt together."
+- **responses:**
+  - `Keep Order: Clergy` (1 AP) → Order +1 and Order-decay −1 (§1.6), **but** Church-infra creep: **Wessel +1 progress on G603**, **Ledger** `Debt:church-dependence`
+  - `Decline` → Order stays low, Wessel.Disp −1, **Π +1**
+  - `Bargain` → limited parish (Order +1 once, no decay bonus, no creep); Wessel.Disp −1
 
 ### EVT-G401 — "Conscription Riot" · Crisis
 - **triggers:** `Π >= 8` AND (`Grudge:Hedda` OR `Grudge:Mertha`) AND recent force/levy action

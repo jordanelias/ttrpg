@@ -11,4 +11,7 @@ leverage, armour-defeat, half-sword switch, etc.), tradition.py (cognitive-mode 
 familiarity), wrapper.py (engagement state machine: measure/approach/close, displacement, re-opening, bind,
 feinting, 95% cap).
 
-Status: canonical-candidate (ratification proposed; see designs/audit/2026-06-02-combat-engine/).
+Status: CANONICAL — ratified by ED-900/904 and docket ED-1029 (the 2026-06-02 proposal is EXECUTED/HISTORICAL).
+Godot port: shaped into the module architecture at designs/godot/skeleton/engines/combat/ + references/module_contracts.yaml
+(personal_combat); the canonical resolution is d_sigma (sigma-leverage), additive-coupled damage, and ED-1041 bilateral-Ob
+wounds — NOT the v30 model (Agi×2 pool / TN-7 / multiplicative STR) still found in deprecated sims.

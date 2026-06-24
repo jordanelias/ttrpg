@@ -95,6 +95,7 @@ populace pulls from below (Hedda/Orsk/Wessel/Greta/Tomas). No move is free.
 - **Leverage:** wants — tolerance, the stone circle untouched, hamlet autonomy. fears — Inquisitor surveillance, the Church upgrade, betrayal by a frightened neighbour. **Secret:** several "farm widows" are her organizers; the circle is a live RM meeting site.
 - **Knots:** enemy → G03 (Wessel) · network → RM cell (off-settlement) · shelters → the radicalized (LA-G01's son, via G501).
 - **Trajectory:** *if ignored / neglected* → quietly exports the cell to neighbouring hamlets (progress still advances — she never stalls, so doing nothing is not safe). *if suppressed by force* → goes deeper covert (+1 Ob to suppress per cell-resilience), recruits radicalize. *if sheltered* → RM Presence grows (PS+ in hamlets, but Church Attention/suspicion rises). *if conviction violated* (the circle is desecrated) → open uprising seed.
+- **Trajectory:** *if suppressed by force* → goes deeper covert (+1 Ob to suppress per cell-resilience), recruits radicalize. *if sheltered* → RM Presence grows (PS+ in hamlets, but Church Attention/suspicion rises). *if conviction violated* (the circle is desecrated) → open uprising seed.
 
 ## NPC-G06 — Bailiff Konrad Ems, Crown levy agent
 
