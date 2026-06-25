@@ -64,10 +64,12 @@ def coupling(head, armor, coverage='full'):
         return max(DELIVERY['cut_thrust']*_transmit('shear',mat,coverage),
                    DELIVERY['point']*_transmit('puncture',mat,coverage))
     return DELIVERY.get(head,1.5)*_transmit(HEAD_MODE.get(head,'shear'),mat,coverage)
-def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, gap=0.65, perc=8, q=None):
+def damage(deg, weapon_wt, weapon_head, strength, armor, close, gap=0.65, perc=8, q=None):
     """Linear: (strength+heft) x Coupling x Quality x DMG_SCALE — no tanh/cap. perc carries P_auth; blunt heft
-    continuous from it. scale/cap_end/gap retained for signature compat — vestigial under the linear model
-    (old tanh cap superseded; per-weapon gap-skill folds into the 2b puncture work)."""
+    continuous from it. DMG_SCALE (above) is the single damage-scaling knob; the old tanh-cap scale/cap_end
+    parameters were dead under the linear model and have been removed (with the config DAMAGE_SCALE/CAP_END
+    entries they read). gap retained for signature compat — still vestigial here (per-weapon gap-skill folds
+    into the 2b puncture work)."""
     if deg not in ('graze','success','overwhelming'): return 0
     heft = 3.0*(perc/8.0) if weapon_head=='blunt' else HEFT.get(weapon_wt,0)
     qf = q if q is not None else QUAL[deg]
@@ -76,12 +78,14 @@ def damage(deg, weapon_wt, weapon_head, strength, armor, close, scale, cap_end, 
 
 def strike(attacker, defender, deg, close, cfg, net=None, pool=None):
     """Role-object damage convenience: reads weight/head/strength/gap/percussion off the ATTACKER and armour off the
-    DEFENDER, returning the int damage. Single call-site for every blow so the 11-arg positional surface (the
+    DEFENDER, returning the int damage. Single call-site for every blow so the 9-arg positional surface (the
     transposition-bug class) exists in exactly one place. Takes role objects (never raw A/B), consistent with the
-    subsystem contract."""
+    subsystem contract. `cfg` is retained as the engine-config handle at this single damage chokepoint — no longer
+    read here now that DMG_SCALE is the lone scaling constant, but it is the wiring point should a damage knob ever
+    move into config."""
     q=None
     if net is not None and deg=='overwhelming':                  # M-QUAL: sigma-leverage tail (canonical sigma_n + tanh)
         z=max(0.0,(net-2*DECISIVE_OB)/m1.sigma_n(pool))          # severity beyond the overwhelming bar (net>=6)
         q=1.5+(OW_MAX-1.5)*tanh(z/OW_Z)
     return damage(deg, attacker.weight, attacker.head, attacker.strength, defender.armor, close,
-                  cfg['DAMAGE_SCALE'], cfg['CAP_END'], attacker.w['gap'], p_auth(attacker.w), q=q)
+                  attacker.w['gap'], p_auth(attacker.w), q=q)
