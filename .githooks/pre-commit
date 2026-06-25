@@ -1,0 +1,10 @@
+#!/bin/sh
+# Valoria local pre-commit gate (VERSIONED — travels with the clone).
+#
+# Activate once per clone:   git config core.hooksPath .githooks
+#
+# Runs the SAME validators CI runs, against the staged changeset, for fast local
+# feedback before a commit is recorded. Bypass with `git commit --no-verify`
+# (CI on the protected main branch still enforces — this is an accelerator, not
+# the authoritative boundary).
+python tools/valoria_local.py --staged

@@ -12,6 +12,14 @@ Mechanical-only content (tables, formulas) is NOT exempt — the rule is path-ba
 """
 import subprocess, sys, os, re
 
+# Shared diff oracle — one definition of "what changed" (was previously copy-pasted
+# byte-for-byte into this file and ci_co_file_checker.py).
+try:
+    import ci_common
+except ImportError:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ci_common
+
 EDITORIAL_PATHS = (
     'designs/npcs/',
     'designs/world/',
@@ -22,54 +30,14 @@ MARKERS = ('[EDITORIAL:', '[PROVISIONAL:', '[EDITORIAL GATE]')
 MIN_LEN  = 200  # below this = stub, exempt
 SKELETON_EXEMPT = '_skeleton.md'  # auto-generated, exempt from editorial markers
 
-def get_changed_files():
-    """
-    Get changed files using GitHub event context (accurate for push, PR, squash merge).
-    Falls back to HEAD~1 for local runs.
-    """
-    event   = os.environ.get('GITHUB_EVENT_NAME', '')
-    before  = os.environ.get('GITHUB_EVENT_BEFORE', '')
-    sha     = os.environ.get('GITHUB_SHA', '')
-    base    = os.environ.get('GITHUB_BASE_REF', '')
-
-    if event == 'push' and before and sha and before != '0' * 40:
-        # Push event: diff from before SHA to current SHA (accurate for all push types)
-        r = subprocess.run(['git', 'diff', '--name-only', before, sha],
-                           capture_output=True, text=True)
-        if r.returncode == 0:
-            return set(r.stdout.strip().splitlines())
-
-    if event == 'pull_request' and base:
-        # PR event: all files changed in this PR branch vs base
-        r = subprocess.run(['git', 'diff', '--name-only', f'origin/{base}...HEAD'],
-                           capture_output=True, text=True)
-        if r.returncode == 0:
-            return set(r.stdout.strip().splitlines())
-
-    # Fallback (local run or initial push): HEAD~1 or empty tree
-    r = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
-                       capture_output=True, text=True)
-    if r.returncode == 0 and r.stdout.strip():
-        return set(r.stdout.strip().splitlines())
-    r2 = subprocess.run(
-        ['git', 'diff', '--name-only', '4b825dc642cb6eb9a060e54bf8d69288fbee4904', 'HEAD'],
-        capture_output=True, text=True)
-    return set(r2.stdout.strip().splitlines()) if r2.returncode == 0 else set()
-
-changed = get_changed_files()
+_mode = 'staged' if '--staged' in sys.argv else ('local' if '--local' in sys.argv else 'ci')
+changed = ci_common.get_changed_files(_mode)
 violations = []
 
 # Check deleted editorial files — deletion also requires a marker in the commit message
 # (can't check deleted file content, so check git log message instead)
-deleted = set()
-r_del = subprocess.run(['git', 'diff', '--name-only', '--diff-filter=D',
-                         os.environ.get('GITHUB_EVENT_BEFORE', 'HEAD~1'),
-                         os.environ.get('GITHUB_SHA', 'HEAD')],
-                        capture_output=True, text=True)
-if r_del.returncode == 0:
-    for path in r_del.stdout.strip().splitlines():
-        if any(path.startswith(p) for p in EDITORIAL_PATHS):
-            deleted.add(path)
+deleted = {p for p in ci_common.get_changed_files_filtered(_mode, diff_filter='D')
+           if any(p.startswith(ep) for ep in EDITORIAL_PATHS)}
 
 if deleted:
     # Get commit message to check for [EDITORIAL] marker
