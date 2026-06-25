@@ -9,43 +9,19 @@ Runs in CI. Checks that commits satisfy co-file requirements:
 
 Uses git diff to get changed files. Exits 1 on violation.
 """
-import subprocess, sys, os, re
+import sys, os, re
 
-def get_changed_files():
-    """
-    Get changed files using GitHub event context (accurate for push, PR, squash merge).
-    Falls back to HEAD~1 for local runs.
-    """
-    event   = os.environ.get('GITHUB_EVENT_NAME', '')
-    before  = os.environ.get('GITHUB_EVENT_BEFORE', '')
-    sha     = os.environ.get('GITHUB_SHA', '')
-    base    = os.environ.get('GITHUB_BASE_REF', '')
+# Shared diff oracle — one definition of "what changed", used by CI, the
+# pre-commit hook, and the tests. (Was previously copy-pasted into this file
+# and ci_editorial_checker.py byte-for-byte.)
+try:
+    import ci_common
+except ImportError:
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ci_common
 
-    if event == 'push' and before and sha and before != '0' * 40:
-        # Push event: diff from before SHA to current SHA (accurate for all push types)
-        r = subprocess.run(['git', 'diff', '--name-only', before, sha],
-                           capture_output=True, text=True)
-        if r.returncode == 0:
-            return set(r.stdout.strip().splitlines())
-
-    if event == 'pull_request' and base:
-        # PR event: all files changed in this PR branch vs base
-        r = subprocess.run(['git', 'diff', '--name-only', f'origin/{base}...HEAD'],
-                           capture_output=True, text=True)
-        if r.returncode == 0:
-            return set(r.stdout.strip().splitlines())
-
-    # Fallback (local run or initial push): HEAD~1 or empty tree
-    r = subprocess.run(['git', 'diff', '--name-only', 'HEAD~1', 'HEAD'],
-                       capture_output=True, text=True)
-    if r.returncode == 0 and r.stdout.strip():
-        return set(r.stdout.strip().splitlines())
-    r2 = subprocess.run(
-        ['git', 'diff', '--name-only', '4b825dc642cb6eb9a060e54bf8d69288fbee4904', 'HEAD'],
-        capture_output=True, text=True)
-    return set(r2.stdout.strip().splitlines()) if r2.returncode == 0 else set()
-
-changed = get_changed_files()
+_mode = 'staged' if '--staged' in sys.argv else ('local' if '--local' in sys.argv else 'ci')
+changed = ci_common.get_changed_files(_mode)
 if not changed:
     print("No changed files detected. Skipping co-file check.")
     sys.exit(0)
@@ -85,7 +61,12 @@ if sim_outputs and 'tests/coverage_matrix.md' not in changed:
         f"  Required: tests/coverage_matrix.md"
     )
 
-# ── Rule 4: design doc change → params file ───────────────────────────────────
+# ── Rule 4: design doc change → params file (only for params-bearing systems) ──
+# Conditional, not blanket: many design docs legitimately have NO params file, so
+# the old hard requirement false-positived on every prose-only design. We now
+# require the co-change only when a params file for this system actually exists in
+# the repo (i.e. the system is params-bearing). If a candidate exists on disk but
+# is absent from the changeset, that is the real co-file violation we want to catch.
 for doc in design_docs:
     # Extract system name from path: designs/{category}/{system}_v30.md
     basename = os.path.basename(doc).replace('_v30.md', '')
@@ -93,11 +74,13 @@ for doc in design_docs:
         f'params/{basename}.md',
         f'params/{basename.replace("_design","")}.md',
     ]
-    if not any(p in changed for p in params_candidates):
-        # Hard check: SPECIFIC params file required, not just any params file
+    existing = [p for p in params_candidates if os.path.exists(p)]
+    if not existing:
+        continue  # params-less system — nothing to require
+    if not any(p in changed for p in existing):
         violations.append(
             f"DESIGN DOC {doc} changed but its params file not in commit.\n"
-            f"  Expected one of: {params_candidates}\n"
+            f"  This system is params-bearing; expected one of: {existing}\n"
             f"  Include the params file if mechanical values changed."
         )
 

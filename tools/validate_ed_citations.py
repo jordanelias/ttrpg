@@ -26,7 +26,7 @@ discuss open work) and reported only at INFO level (--info).
 SCOPE (v1): ED citations only. PP/patch-register support is a follow-on (needs the
 active + archived patch registers loaded the same way). See checked_prefixes.
 
-USAGE (PAT in env or /home/claude/.valoria_pat):
+USAGE (reads the local working tree — no PAT, no network):
     python3 tools/validate_ed_citations.py                     # full scan, exit 1 on violations
     python3 tools/validate_ed_citations.py --path PATH ...     # scan only these repo paths
     python3 tools/validate_ed_citations.py --info              # also print INFO open-refs
@@ -34,7 +34,7 @@ USAGE (PAT in env or /home/claude/.valoria_pat):
 The pure core (audit_citations / build_status_map / _is_resolved) is import-testable
 with no network — see tests/hooks/test_ed_citation_integrity.py.
 """
-import os, re, sys, json, base64, urllib.request, argparse
+import os, re, sys, json, argparse
 
 REPO = 'jordanelias/ttrpg'
 
@@ -114,60 +114,7 @@ def audit_citations(docs: dict, status_map: dict, checked_prefixes=('ED',)) -> l
     return out
 
 
-# ── Network layer (CLI only) ──────────────────────────────────────────────────
-
-def _pat() -> str:
-    p = os.environ.get('GITHUB_PAT')
-    if not p and os.path.exists('/home/claude/.valoria_pat'):
-        p = open('/home/claude/.valoria_pat').read().strip()
-    if not p:
-        sys.exit('No PAT (set GITHUB_PAT or /home/claude/.valoria_pat).')
-    return p
-
-
-def _api(url, pat):
-    req = urllib.request.Request(url, headers={'Authorization': f'token {pat}',
-                                               'Accept': 'application/vnd.github.v3+json'})
-    with urllib.request.urlopen(req) as r:
-        return json.loads(r.read())
-
-
-def _blob(path, pat, tree):
-    sha = next((t['sha'] for t in tree if t['path'] == path and t['type'] == 'blob'), None)
-    if not sha:
-        return None
-    return base64.b64decode(_api(f'https://api.github.com/repos/{REPO}/git/blobs/{sha}', pat)['content']).decode()
-
-
-def load_ed_universe(pat, tree) -> dict:
-    """Active JSONL ledger + all editorial archive files -> {canon_id: status}."""
-    import yaml
-    entries = []
-    # active JSONL
-    led = _blob('canon/editorial_ledger.jsonl', pat, tree) or ''
-    for ln in led.splitlines():
-        ln = ln.strip()
-        if ln:
-            try:
-                entries.append(json.loads(ln))
-            except Exception:
-                pass
-    # archives (YAML lists/dicts of entries)
-    arch_paths = [t['path'] for t in tree if t['type'] == 'blob'
-                  and any(t['path'].startswith(g) for g in ARCHIVE_GLOBS)
-                  and 'editorial_ledger' in t['path'] and t['path'].endswith(('.yaml', '.yml'))]
-    for ap in arch_paths:
-        raw = _blob(ap, pat, tree)
-        if not raw:
-            continue
-        try:
-            data = yaml.safe_load(raw)
-        except Exception:
-            continue
-        for d in _walk_entries(data):
-            entries.append(d)
-    return build_status_map(entries)
-
+# ── Local working-tree layer (default; no network, no PAT) ───────────────────
 
 def _walk_entries(obj):
     """Yield dicts that look like ledger entries ({'id': 'ED-..'}) anywhere in a YAML structure."""
@@ -181,33 +128,75 @@ def _walk_entries(obj):
             yield from _walk_entries(v)
 
 
-def select_docs(tree, only_paths=None):
+def _read(path):
+    try:
+        with open(path, encoding='utf-8', errors='replace') as f:
+            return f.read()
+    except (FileNotFoundError, IsADirectoryError):
+        return None
+
+
+def _walk_repo_files():
+    out = []
+    for base in ('canon', 'designs', 'params', 'references', 'archives', 'deprecated'):
+        if not os.path.isdir(base):
+            continue
+        for root, _dirs, files in os.walk(base):
+            for fn in files:
+                out.append(os.path.join(root, fn).replace('\\', '/'))
+    return out
+
+
+def load_ed_universe() -> dict:
+    """Active JSONL ledger + editorial archive YAMLs on disk -> {canon_id: status}."""
+    import yaml
+    entries = []
+    led = _read('canon/editorial_ledger.jsonl') or ''
+    for ln in led.splitlines():
+        ln = ln.strip()
+        if ln:
+            try:
+                entries.append(json.loads(ln))
+            except Exception:
+                pass
+    for ap in _walk_repo_files():
+        if (any(ap.startswith(g) for g in ARCHIVE_GLOBS)
+                and 'editorial_ledger' in ap and ap.endswith(('.yaml', '.yml'))):
+            raw = _read(ap)
+            if not raw:
+                continue
+            try:
+                data = yaml.safe_load(raw)
+            except Exception:
+                continue
+            for d in _walk_entries(data):
+                entries.append(d)
+    return build_status_map(entries)
+
+
+def select_docs(only_paths=None):
     if only_paths:
-        return [p for p in only_paths]
-    return [t['path'] for t in tree if t['type'] == 'blob'
-            and t['path'] not in REGISTER_PATHS
-            and any(t['path'].startswith(s) for s in SCAN_PREFIXES)
-            and not any(t['path'].startswith(s) for s in SKIP_PREFIXES)
-            and t['path'].endswith(SCAN_SUFFIXES)]
+        return list(only_paths)
+    return [p for p in _walk_repo_files()
+            if p not in REGISTER_PATHS
+            and any(p.startswith(s) for s in SCAN_PREFIXES)
+            and not any(p.startswith(s) for s in SKIP_PREFIXES)
+            and p.endswith(SCAN_SUFFIXES)]
 
 
 def main():
-    ap = argparse.ArgumentParser(description='Validate ED citations against the editorial ledger universe.')
+    ap = argparse.ArgumentParser(description='Validate ED citations against the editorial ledger universe (reads the working tree).')
     ap.add_argument('--path', nargs='*', default=None, help='Scan only these repo paths.')
     ap.add_argument('--info', action='store_true', help='Also print INFO-level open references.')
     args = ap.parse_args()
 
-    pat = _pat()
-    head = _api(f'https://api.github.com/repos/{REPO}/branches/main', pat)['commit']['sha']
-    tree = _api(f'https://api.github.com/repos/{REPO}/git/trees/{head}?recursive=1', pat)['tree']
-
-    status_map = load_ed_universe(pat, tree)
+    status_map = load_ed_universe()
     print(f'ED universe: {len(status_map)} ids loaded (active + archives)')
 
-    paths = select_docs(tree, args.path)
+    paths = select_docs(args.path)
     docs = {}
     for p in paths:
-        c = _blob(p, pat, tree)
+        c = _read(p)
         if c is not None:
             docs[p] = c
     print(f'Scanning {len(docs)} doc(s) for ED citations...\n')
