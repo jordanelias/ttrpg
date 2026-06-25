@@ -24,3 +24,9 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
   rewrite `valoria-vector-audit` to read the working tree), then flip the `/home/claude`
   warning in `ci_hooks_verifier.py` to blocking.
 - Archive the dead home-dir scripts (`~/github_ops.py`, `~/valoria_hooks.py`, `~/_task_*.py`, …).
+- Triage the pre-existing debt the decoupled CI now surfaces (report-only), then flip each to blocking:
+  ED-citation violations (`validate_ed_citations`, ~722) and stale canonical docs
+  (`freshness_gate` — the canonical_sha SHA-split, roadmap K-2 / LB-6).
+- Consolidate the `coverage_matrix` size threshold (currently in BOTH
+  `tools/ci_register_size_check.py` and `references/atomization_rules.yaml`, set to 10000 in each)
+  into a single source.
