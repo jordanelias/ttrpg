@@ -1,175 +1,107 @@
 ---
 schema_version: 1
-session_token: 6a51d0a7a54a8ce3
-created_at: '2026-04-20T02:25:29.184099+00:00'
-status: closed
-task_scope: Full campaign simulation — Session 1 done, Session 2 pending
-context_tokens_at_checkpoint: 50361
+session_token: 1bd81c9e9bca010e
+created_at: '2026-06-26T22:13:47.451836+00:00'
+status: active
+task_scope: 'combat-traditions: morphology critique -> integration spec -> NERS distillation
+  (contact-axis regime pair clinch/disengage/choke)'
+context_tokens_at_checkpoint: 83470
 files_verified:
-- tests/sim/valoria_full_campaign_sim.py
-- /home/claude/sim_verification_ledger.json
-- params/bg/core.md
-- params/bg/clocks.md
-- params/factions/stats_1_7_scale.md
-- designs/provincial/factions_personal_v30.md
-sim_ledger_present: true
-commits_this_session:
-- 129f2f2b
+- designs/scene/combat_engine_v1/wrapper.py
+- designs/scene/combat_engine_v1/systems.py
+- designs/scene/combat_engine_v1/tradition.py
+- designs/scene/combat_engine_v1/core.py
+- designs/scene/combat_engine_v1/config.py
+- designs/scene/combat_engine_v1/ability_armature.md
+sim_ledger_present: false
+commits_this_session: []
 completed:
-- ED-667 / ED-717 / ED-632 / ED-633 / ED-721 all closed in ledger
-- 'canonical_sources.yaml systems: block populated (17 full_stack + 6 supporting)'
-- tests/sim/campaign_simulation_readiness_2026-04-19.md published
-- Session 1 foundation committed (129f2f2b) — 623 lines, all smoke tests pass
-- 103-entry sim_verification_ledger.json covering all Session 1 constants
+- Morphology critique of combat_analysis_rev2 abilities/traditions (outputs/combat_traditions_morphology_critique.md)
+- Schema integration spec with state-graph insertion markers (outputs/combat_traditions_integration_spec.md)
+- Adversarial NERS distillation + contact-axis fold (outputs/combat_traditions_ners_distillation.md)
+- 'Correction: eff_cw channel-wiring landed 2026-06-13 (40b58b04) -> 8 abilities live,
+  not 5; tradition.py docstring stale'
+- 'Correction: original ''three missing efficacy axes'' overstated; engine already
+  expresses most of D5/D7'
+- Distilled ~11 levers -> 3 (clinch, disengage, choke); folded absorb/redirect/evade
+  and targeting dials into existing machinery
 pending:
-- 'Session 2: Territory model (T1-T15 with Proximity/PV/SW/Accord)'
-- 'Session 2: Domain Action framework + canonical DAs (6+ starter actions)'
-- 'Session 2: Piety Yield + CI political pool bonus'
-- 'Session 2: Turmoil propagation'
-- 'Session 2: Mass combat (simplified) + Contest system'
-- 'Session 2: Faction AI stub (priority-based DA selection)'
-- 'Session 2: 40-season smoke test with real DAs'
-- 'Session 3: Threadwork, Victory, Scale transitions'
-- 'Session 3: NPC priority trees (7 major NPCs) + Arc transitions'
-- 'Session 3: Royal Assassination fuse, Tensions Deck activation'
-- 'Session 3: Deterministic test corpus (sim_var_01-06 regression)'
+- 'OPTIONAL: safe_commit the 3 deliverables under designs/audit/2026-06-25-combat-traditions-morphology/
+  with Citations block (Jordan go)'
+- Combat-engagement psychology research pass (intent disguise/reveal, overcommit,
+  hesitation, MMA regime-imposition)
+- Read combatant.py in full to confirm choke_clock field/reset surface before any
+  patch
+- 'Sims: invariant-safety pass + value calibration for clinch/disengage/choke before
+  they land in-engine'
+- Apply the four-axis vetting to the 7 TRADITIONS (chinese mode<->profile mismatch;
+  filipino/chinese anchoring) — Jordan-led on flavour
 decisions_made:
-- Single-file sim structure (valoria_full_campaign_sim.py) preferred over multi-module
-  package
-- 'Ledger-first discipline: inline canonical comments + /home/claude/sim_verification_ledger.json'
-- Default seed 42 for smoke tests
-- Session 1 scope = foundation only; DA stub retained for Session 2
+- Cut the granular force-relation family (redirect/evade/absorb) and targeting taxonomy
+  (T1/T5/T7/T3 dials) — fail NERS-N/E
+- Keep clinch+disengage+choke as the contact-axis regime pair + finish — the one genuinely-missing,
+  felt, efficacy-core distinction
+- Hold regime-imposition as biased WEIGHTS over existing engagement() machinery, NOT
+  a regime-selection planner
+- 'cripple (merged T2+T6) deferred like power-source: flag the gap, do not build on
+  spec'
 open_questions:
-- Ministry NPC design doc still not located (flagged in params/bg/core.md NPC-Only
-  Factions)
+- 'Internal-power seam (Jordan canon-structure): inert flavour (a) / engine [M] channels
+  (b) / actual Thread metaphysics (c)?'
+- Targeting effect-type as scalar levers vs a single categorical 'target' lever (adds
+  a 3rd op type) — design trade-off
+- 'absorb cut: keep as a distinct active-mitigation mechanic if play shows it''s felt
+  vs fold into Endurance — least-certain cut'
 next_bootstrap_actions:
-- Re-fetch params/factions/stats_1_7_scale.md §Domain Action Table and faction_politics_v30.md
-  §2 for DA catalog
-- Read designs/territory/settlement_layer_v30.md to extract T1-T15 canonical data
-- Read designs/provincial/ci_political_v30.md §1 for Piety Yield formula
-- Extend valoria_full_campaign_sim.py with §6 Territory, §7 Domain Actions, §8 Contests
-- Append ledger entries for each new constant
-closed_at: '2026-05-29T04:08:03.301156+00:00'
+- bootstrap design + re-pin as_of; verify the engine SHAs are still HEAD
+- 'if landing: safe_commit deliverables to the audit dir + co-file canonical_sources,
+  with Citations (wrapper/systems/tradition/core/config + 5 morphology uploads)'
 ---
 
-# Session Checkpoint — 2026-04-20 02:25 UTC
+# Session Checkpoint — 2026-06-26 22:13 UTC
 
-**Task scope:** Full campaign simulation — Session 1 done, Session 2 pending
-**Session token:** `6a51d0a7a54a8ce3`
-**Context at checkpoint:** ~50,361 tokens
+**Task scope:** combat-traditions: morphology critique -> integration spec -> NERS distillation (contact-axis regime pair clinch/disengage/choke)
+**Session token:** `1bd81c9e9bca010e`
+**Context at checkpoint:** ~83,470 tokens
 
 ## Narrative
 
-## Session 1 foundation — COMMITTED
-
-tests/sim/valoria_full_campaign_sim.py landed at commit 129f2f2b. Contains:
-- §1 Core engine: dice pool (d10, TN 7, face values 1/7-9/10 = -1/+1/+2), contest(),
-  resolve_degree() with PP-179 + PP-249 thresholds and Ob 10 exception.
-- §2 Faction model: 6-stat 1-7 scale, ±2/season cap, Military cap (ED-039),
-  starting_factions() with all 7 active factions (Niflhel dissolved).
-- §3 Clocks: RS/CI/IP/PI/Altonian diplomacy/Torben/Elske/WR/WC/Strain/Autonomy; CI ±5/season
-  uniform cap (PP-504, ED-721 Option A); PI +2/season accrual cap; Strain 0-10;
-  Mass Seizure gate at CI >= 60.
-- §4 Seasonal loop: accounting_phase() with CI auto-advance, battle
-  consequences, Strain decay, PI accrual/recovery, Mandate recovery, Autonomy
-  check, endgame (Rupture, PI 20).
-- §5 Smoke tests: dice engine verified; 10-season peaceful run verifies state.
-
-Verification ledger at /home/claude/sim_verification_ledger.json has 103
-entries covering 43 distinct values. sim_fabrication_check PASSES.
-
-Session 2 pending. Canonical docs for Session 2 already fetched this session
-(large — pushed context to 75%); next session should re-fetch on demand
-rather than preemptively. See pending work below.
-
-## What must come next
-
-Session 2 "Middle Layer" scope:
-1. Territory model — 15 territories (T1-T15) with Proximity rating 0-5,
-   PV (Prosperity Value), SW (Spiritual Weight), Accord 0-3, controller faction.
-   See designs/territory/settlement_layer_v30.md for canonical territory data.
-2. Domain Action framework — DataClass: name, actor, cost, stat, Ob,
-   degree-outcome map. Start with Royal Decree (Crown, stats_1_7_scale §Domain
-   Action Table L79), Assert/Suppress (Church), Sovereign Authority Doctrine
-   (Hafenmark/Baralta), Private Collection (Varfell/Vaynard), Community
-   Weaving (RM), Trade Deal (Guilds). See params/factions/stats_1_7_scale.md
-   §Domain Action Rules and faction_politics_v30.md for full catalog.
-3. Territory control — seize action, contest action, loss triggers, Mass
-   Seizure (CI >= 60 one-shot), Assert (Church), occupation PV zeroing.
-4. CI / Piety Yield mechanics — Piety Yield formula from ci_political_v30
-   §1 (CI from Piety Yield = Σ(PT tier × SW factor) per prominent territory,
-   SW factor = SW/5; T9 counts uniformly per ED-721 Option A).
-5. Church political pool bonus — floor(CI/20) bonus dice; opposing Mandate
-   -floor(CI/30) per ci_political §7.2.
-6. Turmoil propagation — battle +1, faction elimination +2, revolt
-   +1, peaceful -1.
-7. Mass combat (simplified) — mass_battle_v30. Needed for battle resolution.
-8. Contest system (simplified) — params/contest.md Grand Debate 5-exchange
-   structure for Parliament/theological contests.
-9. Faction AI stub — priority tree: if Mandate < starting, repair; else if
-   threatened, defensive; else expand. Full priority trees from npc_behavior_v30
-   §7-8 in Session 3.
-10. Smoke test: 40-season run, factions take DAs, verify endgame lands
-    plausibly (some faction wins or shared loss fires).
-
-Implementation note: keep single-file structure (valoria_full_campaign_sim.py).
-Append new sections §6-§10. Ledger grows incrementally — add entries for each
-new canonical value read.
-
-## Session 3 "Top Layer + Tests" scope (for reference)
-
-- Threadwork mechanics (Thread Tension, Coherence, Leap, Weaving)
-- Victory conditions (all 8 factions, Peninsular Sovereignty)
-- Scale transitions (personal → faction → strategic)
-- NPC priority trees (Almud, Himlensendt, Baralta, Vaynard, Ehrenwall, Torben,
-  Edeyja) per npc_behavior_v30 §7-8
-- Arc transitions per npc_behavior_v30 §5.2 Arc Maps + arc_expansion_v30
-- Royal Assassination fuse activation (params/bg/royal_assassination.md)
-- Tensions Deck card activations (params/bg/tensions_deck.md)
-- Deterministic-seed test corpus reproducing sim_var_01 through sim_var_06
-  scenarios
-- Regression tests against the narrative sims sim_x_01 through sim_x_36+
+Combat-traditions work arc (no canon committed; deliverables staged in outputs). Used the uploaded martial-morphology corpus to critique the combat_engine_v1 abilities/traditions layer, then proposed a schema integration, then ran an adversarial NERS pass that distilled it hard. All engine claims grounded first-hand at HEAD (wrapper/systems/tradition/core/config read with line numbers). Two self-corrections landed along the way: (1) the eff_cw channel-wiring pass shipped 2026-06-13 (40b58b04), so EIGHT abilities are live, not five — tradition.py's 'pending/inert' docstring is stale; (2) the original critique's 'three missing efficacy axes' OVERSTATED the gap — the engine already expresses most of force-relation (leverage, counter/steal, dodge) and targeting (poise-break, conc-drain, damage), so the genuine gap is narrow. Distillation outcome: cut ~11 proposed levers to a 3-lever CONTACT-AXIS PAIR — clinch (force the fight in) + disengage (refuse/slip the bind, the rapierist's missing escape) + choke (the clinch's incapacitation finish). Reframe: the primary contest is which REGIME the bout occupies (measure/contact/tempo bias-space); the engine already produces measure emergently and biases tempo, leaving only the contact axis's defensive pole missing. Hold the line: tendencies via biased weights, NOT a regime-selection planner. Next: a combat-engagement-psychology research pass (in progress), then an optional safe_commit landing the three deliverables under the audit dir.
 
 ## Completed this session
 
-- ED-667 / ED-717 / ED-632 / ED-633 / ED-721 all closed in ledger
-- canonical_sources.yaml systems: block populated (17 full_stack + 6 supporting)
-- tests/sim/campaign_simulation_readiness_2026-04-19.md published
-- Session 1 foundation committed (129f2f2b) — 623 lines, all smoke tests pass
-- 103-entry sim_verification_ledger.json covering all Session 1 constants
+- Morphology critique of combat_analysis_rev2 abilities/traditions (outputs/combat_traditions_morphology_critique.md)
+- Schema integration spec with state-graph insertion markers (outputs/combat_traditions_integration_spec.md)
+- Adversarial NERS distillation + contact-axis fold (outputs/combat_traditions_ners_distillation.md)
+- Correction: eff_cw channel-wiring landed 2026-06-13 (40b58b04) -> 8 abilities live, not 5; tradition.py docstring stale
+- Correction: original 'three missing efficacy axes' overstated; engine already expresses most of D5/D7
+- Distilled ~11 levers -> 3 (clinch, disengage, choke); folded absorb/redirect/evade and targeting dials into existing machinery
 
 ## Pending (in order)
 
-1. Session 2: Territory model (T1-T15 with Proximity/PV/SW/Accord)
-2. Session 2: Domain Action framework + canonical DAs (6+ starter actions)
-3. Session 2: Piety Yield + CI political pool bonus
-4. Session 2: Turmoil propagation
-5. Session 2: Mass combat (simplified) + Contest system
-6. Session 2: Faction AI stub (priority-based DA selection)
-7. Session 2: 40-season smoke test with real DAs
-8. Session 3: Threadwork, Victory, Scale transitions
-9. Session 3: NPC priority trees (7 major NPCs) + Arc transitions
-10. Session 3: Royal Assassination fuse, Tensions Deck activation
-11. Session 3: Deterministic test corpus (sim_var_01-06 regression)
+1. OPTIONAL: safe_commit the 3 deliverables under designs/audit/2026-06-25-combat-traditions-morphology/ with Citations block (Jordan go)
+2. Combat-engagement psychology research pass (intent disguise/reveal, overcommit, hesitation, MMA regime-imposition)
+3. Read combatant.py in full to confirm choke_clock field/reset surface before any patch
+4. Sims: invariant-safety pass + value calibration for clinch/disengage/choke before they land in-engine
+5. Apply the four-axis vetting to the 7 TRADITIONS (chinese mode<->profile mismatch; filipino/chinese anchoring) — Jordan-led on flavour
 
 ## Decisions made
 
-- Single-file sim structure (valoria_full_campaign_sim.py) preferred over multi-module package
-- Ledger-first discipline: inline canonical comments + /home/claude/sim_verification_ledger.json
-- Default seed 42 for smoke tests
-- Session 1 scope = foundation only; DA stub retained for Session 2
+- Cut the granular force-relation family (redirect/evade/absorb) and targeting taxonomy (T1/T5/T7/T3 dials) — fail NERS-N/E
+- Keep clinch+disengage+choke as the contact-axis regime pair + finish — the one genuinely-missing, felt, efficacy-core distinction
+- Hold regime-imposition as biased WEIGHTS over existing engagement() machinery, NOT a regime-selection planner
+- cripple (merged T2+T6) deferred like power-source: flag the gap, do not build on spec
 
 ## Open questions
 
-- Ministry NPC design doc still not located (flagged in params/bg/core.md NPC-Only Factions)
+- Internal-power seam (Jordan canon-structure): inert flavour (a) / engine [M] channels (b) / actual Thread metaphysics (c)?
+- Targeting effect-type as scalar levers vs a single categorical 'target' lever (adds a 3rd op type) — design trade-off
+- absorb cut: keep as a distinct active-mitigation mechanic if play shows it's felt vs fold into Endurance — least-certain cut
 
 ## Next bootstrap actions
 
 *(When a new session bootstraps, these are the first steps to take.)*
 
-1. Re-fetch params/factions/stats_1_7_scale.md §Domain Action Table and faction_politics_v30.md §2 for DA catalog
-2. Read designs/territory/settlement_layer_v30.md to extract T1-T15 canonical data
-3. Read designs/provincial/ci_political_v30.md §1 for Piety Yield formula
-4. Extend valoria_full_campaign_sim.py with §6 Territory, §7 Domain Actions, §8 Contests
-5. Append ledger entries for each new constant
+1. bootstrap design + re-pin as_of; verify the engine SHAs are still HEAD
+2. if landing: safe_commit deliverables to the audit dir + co-file canonical_sources, with Citations (wrapper/systems/tradition/core/config + 5 morphology uploads)
 
