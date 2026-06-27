@@ -1,7 +1,5 @@
 """All tunable coefficients in ONE place (seeds). Class-C — calibrated against the harness, not canon."""
 CFG = dict(
-  # core
-  DAMAGE_SCALE=4.0, CAP_END=4,
   # reach (continuous, derived from weapon vector)
   L0=4.0, LONG=2.0, HANDS2=0.8, HEADR=1.0, HEAD_REACH={'point':1.0,'straight_cut':0.5,'curved_cut':0.5,'cut_thrust':0.5,'blunt':0.0},
   REACH_DISADV_K=0.22, REACH_ADV_K=0.12, RESIDUAL_REACH_FRAC=0.3, FOOT_MEASURE_K=0.15,
