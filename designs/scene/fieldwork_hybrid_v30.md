@@ -9,7 +9,7 @@
 
 ## §9 HYBRID MODE
 
-Following the established hybrid pattern (social_contest_system_v2.md §11):
+Following the established hybrid pattern (social_contest_v30.md §11):
 
 ### §9.1 Hybrid Fieldwork Procedure
 

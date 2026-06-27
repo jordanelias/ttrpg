@@ -6,7 +6,7 @@
 ## Status: DESIGN — approved for commit. Review corrections: 2026-04-13 (v1.1), PP-628 (canon guard), PP-630 (three-axis Ob, Warden Emergence fix, ED-NEW harvest).
 ## Mode applicability: ALL (TTRPG baseline; Hybrid bridging; Board Game abstraction; Godot video game)
 ## Canon compliance: P-01 (inseparability — applied to Thread-Read operations, not passive discovery), P-03 (rendering = consciousness-performed), P-05 (three emergence modes — Mode 1/2 distinction added to §3.1), P-07 (Calamity = rendered-side mechanism), P-08 (epistemological barrier), P-14 (all modes express inseparability), P-15 (three-layer being-persistence)
-## Cross-references: params_core.md, social_contest_system_v2.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md
+## Cross-references: params_core.md, social_contest_v30.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md
 ## Review applied: fieldwork_review.md (2026-04-13). All 11 required corrections + 8 recommended additions incorporated.
 ## CORE PRINCIPLE: INTELLIGIBILITY GRADIENT
 Combat resolves physical conflict. Social Contest resolves formal social conflict. Fieldwork resolves the character's engagement with the world outside of structured conflict — the acts of moving through space, assembling knowledge, and building relationships.
@@ -97,10 +97,10 @@ When a social action aligns with or challenges a character's stated Belief, mech
 ### §5.6 Knot Integration
 At Disposition +5 (Bonded), the NPC becomes a Knot candidate per existing threadwork rules. Forming a Knot with a Bonded NPC follows standard Knot procedures (threadwork_redesign_v25.md §8).
 ### §5.7 Contest Escalation and Negotiate Boundary
-**Negotiate** applies only when: (a) parties share a goal but disagree on method (not formally opposed), or (b) the outcome is not consequential enough for full Contest. If the situation meets Contest initiation conditions (social_contest_system_v2.md §1: "two or more parties with opposed positions AND outcome is uncertain and consequential"), the interaction is a Contest, not a Negotiate. The GM does not offer a choice — the situation's structure determines the mechanic.
-When a social action fails at Disposition ≤ 0, or when the NPC has strong reason to resist, the GM may declare **escalation**. The interaction transitions from fieldwork to a formal Contest (social_contest_system_v2.md). This is a Register Shift (stage11 §11.2).
+**Negotiate** applies only when: (a) parties share a goal but disagree on method (not formally opposed), or (b) the outcome is not consequential enough for full Contest. If the situation meets Contest initiation conditions (social_contest_v30.md §1: "two or more parties with opposed positions AND outcome is uncertain and consequential"), the interaction is a Contest, not a Negotiate. The GM does not offer a choice — the situation's structure determines the mechanic.
+When a social action fails at Disposition ≤ 0, or when the NPC has strong reason to resist, the GM may declare **escalation**. The interaction transitions from fieldwork to a formal Contest (social_contest_v30.md). This is a Register Shift (stage11 §11.2).
 ### §5.8 Niflhel Social Toolkit Extension
-Niflhel cannot participate in Formal or Grand Contests (per social_contest_system_v2.md §9.7). Their fieldwork social toolkit is equally restricted:
+Niflhel cannot participate in Formal or Grand Contests (per social_contest_v30.md §9.7). Their fieldwork social toolkit is equally restricted:
 - **Available actions:** Read, Connect, Negotiate. One-on-one only (Niflhel cannot operate in group social settings).
 - **Unavailable actions:** Impress (no institutional social presence), Rumour (excluded from social networks).
 ## §6 EXPOSURE

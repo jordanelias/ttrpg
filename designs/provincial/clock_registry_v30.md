@@ -3,7 +3,7 @@
 
 <!-- v30 baseline — renamed from designs/systems/clock_registry.md on 2026-04-13 -->
 # Valoria Clock & Track Registry
-## Created: 2026-04-08 | Updated: 2026-04-26 (staleness report refresh — ED-793 through ED-796) | Status: CANONICAL
+## Created: 2026-04-08 | Updated: 2026-06-24 (contest-track sync — Persuasion Track + Obligation clocks registered; Composure/Concentration/Health/Stamina formulas synced to derived_stats §14.1; ED-939, docket J-31) | Status: CANONICAL
 ## Single source of truth for all clocks, tracks, and counters.
 ## Cross-references to authoritative source for each track's rules.
 
@@ -70,13 +70,23 @@ Reputation and Standing (oscillating, BG):
 | Coherence | 0–10 | 10 | params_threadwork.md §Coherence |
 | Certainty | 0–5 | Varies by background (see params_core.md) | params_core.md §Certainty. Oscillating: 5 = Solmund orthodoxy, 0 = Thread acceptance. |
 | Thread Sensitivity (TS) | 0–100 (hard cap) | Varies (0 for non-practitioners) | params_threadwork.md §TS |
-| Composure | 7–13 | Presence + 6 | params_contest.md §Composure |
-| Concentration | 2–14 | Focus + Recall | params_contest.md §Concentration |
-| Health | 7–13 | Endurance + 6 | params_core.md |
+| Composure | 3–21 | Charisma × 3 | derived_stats_v30.md §5.1 / §14.1 |
+| Concentration | 5–35 | (3×Focus)+(2×Spirit) | derived_stats_v30.md §5.2 / §14.1 (ED-902) |
+| Health | 13–55 | (End+6) × (MW+1), MW cap 3 | derived_stats_v30.md §4.1 / §14.1 |
 | Wounds | 0–max | 0 (accumulates) | params_combat.md §Wounds. Max = floor(End/2)+1. |
-| Stamina | min 2 | Endurance + 1 (History STRUCK per PP-611) | params_combat.md §Stamina |
+| Stamina | 5–47 | (3×End)+(2×Spirit) | derived_stats_v30.md §4.2 / §14.1 |
 | Momentum | 0–4 | 0 | params_core.md §Momentum |
 | Knot Count | 0–floor(Bonds/2)+1 | 0 | fieldwork_v30.md §5.6a (PP-632). Requires Bonds ≥ 5 to form first Knot. |
+
+## Contest Clocks & Tracks (TTRPG/Hybrid)
+
+Per-contest and contest-generated trackers (social_contest_v30.md). Per-character contest *resources* (Composure, Concentration) are in Personal Tracks above.
+
+| Track | Range | Start | Scope | Source |
+|-------|-------|-------|-------|--------|
+| Persuasion Track | 0–10 | GM-set (typical 5) | Per-contest | social_contest_v30.md §2 (setup) / §6 (resolution). A wins ≥7, B wins ≤3, compromise 4–6; Total Victory ≥9 / ≤1. |
+
+**Obligation clocks (contest-generated).** Binding cross-season commitments produced by a Decisive Formal/Grand Contest win (social_contest_v30.md §6.1). Each Obligation is tracked as a clock carrying: **source contest** (which proceeding + season produced it), **parties** (the bound losing side and the right-holding winning side), **commitment** (the specific, achievable, verifiable thing that must be done or not done), **duration in seasons** (Formal 2 / Grand 4-or-until-named-condition / Royal Audience 2 / Church Tribunal until-revoked), and **violation trigger** (what constitutes breach and fires the §6.1 consequences). GM advisory: cap ~3 active for tracking tractability (ED-619). Wager Obligations (future-conditional; Grand + Projection + Consequence) and their edge cases per §6.1.1 (ED-778); settlement-targeted Obligations per §6.1 / settlement_bridge_unification C-08. [ED-939, docket J-31]
 
 ## NPC-Specific Tracks
 

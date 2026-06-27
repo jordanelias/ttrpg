@@ -5,7 +5,7 @@
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-13
-## Cross-references: stage6_factions.md, social_contest_system_v2.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
+## Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
 ## Three-mode: TTRPG (§§1–7), Board Game (§8), Hybrid (§9)
 ## Patches: None (new system)
 
@@ -384,7 +384,7 @@ A character with TS 0–9 sees only public health data. No Thread-relevant infor
 
 
 Beliefs are revealed to players through:
-- Contest Appraise step (Overwhelming: one Belief revealed per §4 social_contest_system_v2.md)
+- Contest Appraise step (Overwhelming: one Belief revealed per §4 social_contest_v30.md)
 - Intelligence broker mode [was Niflhel — struck] (Success: one NPC's active Belief per stage6 §8.7)
 - Observation (GM grants Belief revelation when the NPC acts on a Belief in a way the PC witnesses)
 
@@ -546,8 +546,7 @@ This applies to: Vaynard Arc C (TS crosses threshold → epistemic seduction), H
 
 *Arc expansion v1 (ED-591-609, approved 2026-04-17): Full A/B/C arc sets for all named NPCs and sub-faction NPCs are specified in `designs/systems/arc_expansion_v1_2026-04-16.md`. That document is the canonical source for: Cardinal Officers (Stark/Voss/Vorn/Kald), Ehrenwall, Torsvald/Riskbreakers, Vossen/Hann, Orm (Second Warden), Niflhel operatives (Quartermaster/The Quiet One), Almud Arc C (3-trajectory), Vaynard Arc A/B full, environmental arc conditioners, cross-NPC conditioners, obligation conditioners, and 11 Zoom In triggers. The profiles below are the abbreviated canonical summaries; consult arc_expansion_v1 for full arc map detail.*
 
-### §5.2 Named NPC Arc Profiles
-
+[EDITORIAL: ED-1042 — de-duplicated the doubled `### §5.2 Named NPC Arc Profiles` heading (CM-10, docket J-31).]
 
 ---
 

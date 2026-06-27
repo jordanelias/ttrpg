@@ -63,7 +63,7 @@ Audience boost: the dominant faction's boost adds +1D to any argument matching t
 | Restoration | Rawlsian Social Contract | Revealing | Orientation |
 | Guilds | Moral Relativism | GM picks one | Either |
 | Löwenritter | Duty-based (if emerged) | Projection | Genre |
-| Niflhel | — | GM picks one | Either |
+<!-- Niflhel boost row STRUCK (ED-899 / ED-764): Niflhel cannot participate in Formal/Grand Contests (§9.7), so a parliamentary boost row is incoherent. -->
 
 An orator's total bonus dice from genre + audience: maximum +2D (primary genre +1D AND audience boost matches on the other axis +1D). Minimum +0D (non-primary genre, audience boost doesn't match).
 
@@ -89,6 +89,8 @@ These dice are added to the Argue pool at Step 3 of each exchange. They are fixe
 | Personal Appeal | 1 | Appealer proposes | N/A (tracker optional) |
 
 
+**Step 6 — Define stakes.** What each side wins, loses, or compromises on (detailed in the infill). Record before the first exchange. [ED-897: Step 6 restored to the skeleton — atomization had dropped it, leaving §2 jumping Step 5 → Step 7.]
+
 **Step 7 — Record all above in the hidden GM ledger.**
 
 ---
@@ -104,7 +106,7 @@ The primary attribute for the Argue roll shifts based on the adjudicator type.
 | Expert judge | Cognition | Judge evaluates logical structure |
 | Crowd | Charisma | Crowd responds to delivery and authority |
 | No adjudicator | Attunement | You must read the other party and calibrate |
-| Panel | Cognition | [PROVISIONAL — pre-ledger, accepted as canonical per 2026-04-26 audit] |
+| Panel | Cognition | [PROVISIONAL — ED-137: panel mechanics not yet designed; use Expert Judge until designed. Not fully specified.] |
 
 TN: 7 (Standard). Situational modifiers per core engine (TN 6 Controlled, TN 8 Desperate) apply as normal.
 
@@ -117,8 +119,8 @@ The Appraise step (§4, Step 1) always uses Attunement regardless of adjudicator
 
 ## §4 EXCHANGE STRUCTURE
 
-**Step 1 — Appraise (both orators) (PP-278):**
-Roll Attunement alone (no History), TN 7, Ob 1.
+**Step 1 — Appraise (both orators) (PP-278 / PP-614):**
+Roll Attunement + Recall, TN 7, Ob = opponent's Charisma ÷ 2 (round up, min 1). [ED-893: adopts the canonical PP-614 form; the prior "Attunement alone, Ob 1" was struck in params. Recall contributes to the Appraise pool and the citation bonus, but not to Concentration (ED-694).]
 
 Each exchange's Appraise senses the CURRENT state of the audience (which may have shifted from Doubt Markers, track movement, or strain). This is not a re-attempt of the same question — it is a fresh perception of changed circumstances.
 
@@ -129,6 +131,8 @@ Each exchange's Appraise senses the CURRENT state of the audience (which may hav
 | Success (2) | Full boost identified (e.g. "this audience favours Revealing") |
 | Overwhelming (3+) | Boost identified + one specific detail: a key individual's Belief, the audience's resistance threshold, or the opponent's emotional state |
 
+
+**Step 2 — Choose genre + orientation (style).** Each orator selects a genre (Memory or Projection) and an orientation (Revealing or Obscuring) as a single style pick (detailed in infill §4 Step 2). [ED-897: Step 2 restored — atomization left a "Step 2b" with no "Step 2".]
 
 **Step 2b — Corroborate (optional):** A corroborator present at the contest may declare support before the Argue roll. On success: primary orator gains +1D for this exchange. Corroborator must be a declared coalition member (Knot not required). Knot-sharing corroborators roll at Ob 1; non-Knot coalition members roll at Ob 2. In asymmetric proceedings: all corroborators for the disadvantaged party use Ob 2 regardless of Knot. (PP-257) On failure: corroborator takes 1 strain.
 
@@ -150,8 +154,8 @@ Direct contest within the same temporal horizon.
 - If margin > resistance → Persuasion Track moves (margin − resistance) toward winner's position.
 - If margin ≤ resistance → 0 movement.
 - Strain to loser: margin + Charisma modifier of winner − Focus defence of loser. **Minimum 0.** [Matches combat damage minimum 0. Focus defence can fully absorb strain just as armour can fully absorb damage.]
-- Charisma modifier: max(0, floor((Charisma − 3) ÷ 2)) → Cha 1–3: +0; Cha 4–5: +1; Cha 6–7: +2.
-- Focus defence: floor(Focus ÷ 2) → Foc 1: 0; Foc 2–3: 1; Foc 4–5: 2; Foc 6–7: 3.
+- Charisma modifier: max(0, floor((Charisma − 3) ÷ 2)) × 3 → Cha 1–3: +0; Cha 4–5: +3; Cha 6–7: +6. [ED-891: ×3-scaled to match Composure ×3 and derived_stats §5.1; resolves the prior unscaled-0–2 vs scaled-0–6 strain-math ambiguity.]
+- Focus defence: floor(Focus ÷ 2) × 3 → Foc 1: 0; Foc 2–3: 3; Foc 4–5: 6; Foc 6–7: 9. [ED-891: ×3-scaled to match derived_stats §5.1.]
 
 **REINFORCE** (same genre, same orientation):
 Both orators push in the same direction within the same temporal horizon.
@@ -179,7 +183,7 @@ Both orators push in the same direction within the same temporal horizon.
 - Consumed on use.
 
 **Step 5 — Forfeit actions:**
-- **Regroup:** Forfeit exchange. No argument, no strain. Persuasion Track moves +1 toward non-forfeiting side. Concentration restores to max (Focus × 3).
+- **Regroup:** Forfeit exchange. No argument, no strain. Persuasion Track moves +1 toward non-forfeiting side. Concentration restores to max ((3 × Focus) + (2 × Spirit)).
 - **Concede a Point:** Forfeit exchange. Take 1 strain. Persuasion Track moves +1 toward non-forfeiting side. Gain +1D on next exchange.
 
 **Step 6 — Strain and Concentration:**
@@ -187,13 +191,13 @@ Both orators push in the same direction within the same temporal horizon.
 **Composure = Charisma × 3.** Range 3–21. Social damage buffer before Rattled. [ED-127 resolved, ED-694 updated. Single attribute × multiplier. Strain, Charisma modifier, and Focus defence all scaled ×3 to match. Equipment (attire, regalia) adds flat Composure.]
 
 - Strain accumulates toward Composure threshold.
-- All subsequent contest rolls: +1 Ob per Rattled level (cumulative).
+- All subsequent contest rolls: −1D per Rattled level (cumulative). [ED-892: actor-state degradation is a Pool penalty, not Ob, per the channel reservation (Decision-B 2026-05-15 / PP-716). Supersedes the prior "+1 Ob".]
 - Rattled recovery: 1 mark clears per full scene of non-social activity or rest.
 - Composure recovery: full restore at scene change (new location, new interlocutors).
 
-**Concentration = Focus × 3.** Range 3–21. Depletes by 3 per exchange, −3 additional on exchange loss. (ED-694: Recall removed — Recall's role is the +2D citation bonus in Argue, not sustained focus.)
+**Concentration = (3 × Focus) + (2 × Spirit).** Range 5–35. (Canonical per derived_stats_v30 §14.1, ED-902 2026-06-04; supersedes the struck Focus × 3.) Depletes by 5 per exchange, −5 additional on exchange loss. [ED-890 / DEP: depletion rescaled −3 → −5 so Spent stays reachable mid-contest under the larger 5–35 range — an average Focus 4 / Spirit 3 = 18 reaches Spent by exchange 3–4, faster for the loser.] (ED-694: Recall removed from Concentration — Recall's role is the +2D citation bonus in Argue and the Appraise pool, not sustained focus.)
 - At Concentration 0: **Spent** — next exchange: −2D to all rolls; opponent gets +1D. Then resets to maximum.
-  **Spent timing:** Concentration is checked after Step 4 (CLASH/REINFORCE resolution). If Concentration reaches 0 at Step 4, Spent is entered immediately — but the penalty applies to the *next* exchange, not the current one (the triggering exchange has already rolled in Step 3). Spent resets to Focus × 3 after the penalty exchange resolves.
+  **Spent timing:** Concentration is checked after Step 4 (CLASH/REINFORCE resolution). If Concentration reaches 0 at Step 4, Spent is entered immediately — but the penalty applies to the *next* exchange, not the current one (the triggering exchange has already rolled in Step 3). Spent resets to (3 × Focus) + (2 × Spirit) after the penalty exchange resolves.
 - If both Rattled and Spent active: penalties cumulative. Pool minimum 1D per core engine.
 
 **Step 7 — GM records exchange on hidden ledger.**
@@ -251,11 +255,11 @@ A Decisive win (Persuasion Track ≥ 7 or ≤ 3) in a Formal or Grand Contest pr
 **Wager Obligations (extension — verifiable-future-condition framing):** Obligations may take a future-conditional form when the winning side explicitly extends present trust against future delivery. Wager Obligations are valid only in Grand Contests using Projection genre + Consequence Resonant Style. The losing side's commitment names a specific, time-bound, verifiable outcome in the future (e.g., "MS recovers to 60+ by Season N"; "Crown enters formal Warden alliance within 12 seasons"; "all three persistent Gaps in T6 closed within 6 seasons"). Wager content must be: (a) verifiable from game-state at the resolution moment, (b) achievable through actions the obligated party can plausibly take, (c) time-bound with a named season or condition trigger.
 
 Wager resolution operates on the named condition rather than on duration alone:
-- **Condition met within timeframe:** Obligation discharged successfully. Counterparty grants the negotiated benefit (typically: arc-specific advancement, accumulated penalties cleared, secondary Conviction shift toward Reason for Continuity NPCs). Counterparty's Belief may form: "[Obligated party] are practitioners/factions worth the cost."
+- **Condition met within timeframe:** Obligation discharged successfully. Counterparty grants the negotiated benefit (typically: arc-specific advancement, accumulated penalties cleared, secondary Conviction shift toward Scholastic for Warden NPCs). Counterparty's Belief may form: "[Obligated party] are practitioners/factions worth the cost."
 - **Condition not met within timeframe:** Obligation fails. Default Grand Contest violation consequences fire (Mandate −2, Stability −1, +2 Ob next DA targeting violated party) AND the original arc transition that the wager replaced now fires immediately with no probation or appeal path.
 - **Condition partially met:** GM judgment. Typical resolution: no advance, no decay; Obligation discharged neutrally.
 
-The Wager Obligation is the structural mechanism by which Continuity-Conviction NPCs (npc_behavior §1.2) extend cooperation against present substrate or institutional cost. Edeyja Arc E (npc_behavior §5.2) is the canonical example. The structure is generalizable: any NPC with secondary Conviction Reason or Precedent and primary Conviction Continuity, Faith, or Order may accept Wager Obligations from Petitioners with established Consequence-genre track records.
+The Wager Obligation is the structural mechanism by which Warden-Conviction NPCs (npc_behavior_v30 §1.2) extend cooperation against present substrate or institutional cost. Edeyja's Arc E "The Wager" (npc_behavior_v30 §5.2 → "Edeyja — Arc Map") is the canonical example. The structure is generalizable: any NPC with secondary Conviction Scholastic or Precedent and primary Conviction Warden, Faith, or Order may accept Wager Obligations from Petitioners with established Consequence-genre track records.
 
 **§6.1.1 Wager Obligation Edge Cases (NEW — ED-778)**
 
@@ -265,7 +269,7 @@ The basic Wager resolution table covers Condition Met / Not Met / Partial. Three
 |---|---|---|
 | **Counterparty death / incapacitation** | The party owing the Wager benefit (typically the NPC who lost the Grand Contest) dies, suffers Coherence 0 with no Reconstitution, or is permanently incapacitated before the Wager condition resolves | Wager is **discharged neutrally**: no benefit granted, no violation consequences fire. Original arc transition that the wager replaced does NOT fire (the counterparty is no longer available to undergo the transition). The PC who held the Wager Obligation gains Renown +1 in factions aligned with the Wager subject (the counterparty's commitment is publicly remembered as honor-fulfilled-by-circumstance). |
 | **Counterparty institutional collapse** | The counterparty's faction collapses (Stability 0, formal dissolution per faction_layer §1) before the Wager condition resolves AND the counterparty was institutionally bound (e.g., wagered as Cardinal, as Jarl, as Crown Inner Circle member) | Wager is **suspended**, not discharged. If the counterparty re-acquires equivalent Standing in a successor faction within 4 seasons (Standing ≥ 5 in any faction Conviction-aligned with the original wager): Wager resumes with original timeframe extended by the suspension duration. If 4 seasons pass without successor Standing: Wager is discharged neutrally per counterparty-incapacitation rule above. |
-| **Condition becomes structurally impossible** | The Wager condition referenced a specific event or state that has been rendered impossible by intervening game-state changes (e.g., Wager named "Edeyja's recovery from Niflhel association" but Niflhel has been STRUCK; Wager named "MS recovery to 80 by Year 5" but MS has reached 0 / Rupture by Year 4) | The Wager **fails forward**: original arc transition fires immediately at next Accounting (the substrate-level support the Wager required is gone). No additional Mandate/Stability penalties apply (the failure is structural, not procedural breach). The PC who held the Wager Obligation gains 1 Conviction Scar (or, for PCs without Scar tracks per §3.6.1: their active Conviction is "shaken" for 2 seasons). |
+| **Condition becomes structurally impossible** | The Wager condition referenced a specific event or state that has been rendered impossible by intervening game-state changes (e.g., Wager named "Edeyja's recovery from Niflhel association" but Niflhel has been STRUCK; Wager named "MS recovery to 80 by Year 5" but MS has reached 0 / Rupture by Year 4) | The Wager **fails forward**: original arc transition fires immediately at next Accounting (the substrate-level support the Wager required is gone). No additional Mandate/Stability penalties apply (the failure is structural, not procedural breach). The PC who held the Wager Obligation gains 1 Conviction Scar (or, for PCs without Scar tracks per conviction_track_v1.md §2/§3: their active Conviction is "shaken" for 2 seasons). |
 
 **Special case — PC death holding Wager Obligation:** If the PC dies while holding an outstanding Wager Obligation toward an NPC, the Obligation transfers per the canonical Generational Transition rule (generational_transition_v30 — TRANSFER section: "Active Obligations transfer to new character's faction; the institution remembers the commitment even if the individual doesn't. New character inherits obligation countdown and violation conditions"). The successor character's faction inherits the right to the Wager benefit. The Wager-bound NPC's Disposition with the successor starts at faction-default (per generational_transition RESET section: "Disposition toward PC: all NPCs reset to faction-default" — the successor is a new person, the personal relationship the deceased PC had does not transfer).
 
@@ -285,7 +289,9 @@ The basic Wager resolution table covers Condition Met / Not Met / Partial. Three
 
 When a player's contest argument produces a Conviction Scar on an NPC (per npc_behavior_v30 §3.3 — decisive outcome via Resonant Style targeting with Conviction engagement), the player receives a narrative signal. The GM states: "Something shifted in [NPC]'s expression. Your argument reached something they cannot dismiss." This is not a stat reveal — the player does not learn the Scar count. They learn that their words had structural impact.
 
-**Videogame implementation:** NPC portrait shows a subtle visual indicator (a crack, a flicker, a moment of instability) when a Scar is produced. The indicator is momentary — it does not persist on the portrait. The player must remember that they wounded this NPC's conviction. If they Appraise in a future contest, the Scar count is revealed per npc_behavior §3.1 (Appraise Overwhelming: one Conviction revealed).
+**Videogame implementation:** NPC portrait shows a subtle visual indicator (a crack, a flicker, a moment of instability) when a Scar is produced. The indicator is momentary — it does not persist on the portrait. The player must remember that they wounded this NPC's conviction. If they Appraise in a future contest, the Scar count is revealed per npc_behavior_v30 §6.1 (Appraise Revelation); Scar tracking per conviction_track_v1.md §2.
+
+[EDITORIAL: ED-1042 — outbound dangling cross-reference repairs (docket J-31): CM-4 §9.1 `fieldwork_investigation §2.3` → §4.1/§4.3; CM-6 §6.1.1 self-ref `§3.6.1` → conviction_track_v1 §2/§3; CM-7 §6.1 Wager eligibility deprecated labels Continuity → Warden, Reason → Scholastic (npc_behavior_v30 §1.2 / conviction_migration_roster PP-685); CM-8 §6.2 `npc_behavior §3.1` (Belief Structure) → §6.1 Appraise Revelation; CM-10 §6.1 Edeyja citation pinned to npc_behavior_v30 §5.2 "Edeyja — Arc Map".]
 
 ### §6.3 Chain Contests (NEW — unresolved tension generates follow-up)
 
@@ -298,7 +304,7 @@ When a contest ends in Compromise (Persuasion Track 4–6), the tension is defer
 - The NPC's Scar count from the first contest persists — accumulated wounds do not heal between chain contests.
 - A chain contest's Decisive win produces an Obligation (§6.1) as normal. A second Compromise extends the chain — another follow-up Scene Slate entry for the next season.
 
-**Resistance stall-break (ED-582):** If two consecutive exchanges in a chain contest produce zero track movement (both sides' margins ≤ resistance), the contest enters Deadlock. In Deadlock:
+**Resistance stall-break (ED-582 — partially subsumed, ED-896 / D-9):** [The per-exchange resistance erosion (ED-864 / ED-295 Option D: Stab_resistance_t = max(0, Stab_resistance_0 − ⌊exchange_count ÷ 2⌋), all contests) already lowers resistance every two exchanges, so the Deadlock resistance-drop below is redundant and retired. The chain hard-stop rules (third consecutive zero-movement → Compromise; max-chain-3 cold equilibrium) remain in force as the chain-contest terminator.] If two consecutive exchanges in a chain contest produce zero track movement (both sides' margins ≤ resistance), the contest enters Deadlock. In Deadlock:
 - Resistance for both sides drops by 1 (minimum 0) for the remainder of this contest.
 - If a third consecutive zero-movement exchange occurs after the Resistance drop, the contest ends immediately as a Compromise at the current track position.
 - Rationale: prolonged mutual stonewalling exhausts the audience's patience. The institutional pressure forces resolution or capitulation.
@@ -417,8 +423,8 @@ The 4-6 season duration window gives the player time to:
 | Composure | Charisma × 3 | 3–21 | Vitality = Endurance × 10 (ED-694) |
 | Charisma modifier | max(0, floor((Cha − 3) ÷ 2)) × 3 | 0–6 | — |
 | Focus defence | floor(Foc ÷ 2) × 3 | 0–9 | Armour Rating (damage reduction), scaled ×3 |
-| Concentration | Focus × 3 | 3–21 | Maximum = Focus × 3 (Regroup restores to max). Recall removed — no conceptual link to sustained focus. (ED-694) |
-| Appraise pool | Attunement only | 1–7 | — |
+| Concentration | (3 × Focus) + (2 × Spirit) | 5–35 | Maximum = (3 × Focus) + (2 × Spirit) (Regroup restores to max). Depletes 5/exchange, −5 on loss (ED-890/DEP). Recall removed from Concentration (ED-694); formula per derived_stats §14.1 (ED-902). |
+| Appraise pool | Attunement + Recall | 2–14 | Ob = opponent Cha ÷ 2 (round up, min 1); PP-614 (ED-893) |
 | Argue pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool = (Agility × 2) + History + 3 |
 
 ---
@@ -438,19 +444,19 @@ Pool: Attunement + most relevant History, TN 7, Ob 1.
 
 Time requirement: at least 1 hour. Rushed (< 1 hour): TN 8.
 
-**Evidence Track Findings as preparation (F-TRANS-11):** Findings from a completed fieldwork investigation may be cited in the Contest opening. Each Finding cited grants +1D on Exchange 1 (maximum +2D from Findings, regardless of count). Findings are not consumed by citation — they remain on the Evidence Track for future use. Finding citation must be declared at contest setup (GM sets scope: the Finding must be relevant to the contest's subject matter). This bonus stacks with standard preparation (+1D), for a maximum Exchange 1 bonus of +3D when both are available. Requires prior multi-scene investigation to produce Findings. Reference: fieldwork_investigation.md §2.3, §4.1.
+**Evidence Track Findings as preparation (F-TRANS-11):** Findings from a completed fieldwork investigation may be cited in the Contest opening. Each Finding cited grants +1D on Exchange 1 (maximum +2D from Findings, regardless of count). Findings are not consumed by citation — they remain on the Evidence Track for future use. Finding citation must be declared at contest setup (GM sets scope: the Finding must be relevant to the contest's subject matter). This bonus stacks with standard preparation (+1D), for a maximum Exchange 1 bonus of +3D when both are available. Requires prior multi-scene investigation to produce Findings. Reference: fieldwork_investigation.md §4.1 (Evidence Track / Findings), §4.3 (+2D Documentary citation).
 
 ### §9.2 Multi-Party Contest — Coalition Structure
-Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (Focus + Recall) at contest setup. Each exchange depletes the shared pool by 1 (plus 1 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. First to speak transfers to winning side; that side nominates holder.
+Each orator declares Side A or Side B at setup. No side-switching. Each side nominates one Lead per exchange (may change between exchanges). Non-lead coalition members may Corroborate (max 1 per side per exchange). Composure and Rattled tracked individually. **Coalition Concentration — shared pool (PP-237):** Concentration tracks on a shared pool equal to the sum of all coalition members' (3 × Focus) + (2 × Spirit) at contest setup. [ED-894: Recall removed to match solo Concentration (ED-694); the coalition pool now mirrors the solo formula.] Each exchange depletes the shared pool by 5 (plus 5 on exchange loss) regardless of which member holds Lead. Rotating Lead does not reset depletion. Spent triggers at 0; pool resets to its setup total. First to speak transfers to winning side; that side nominates holder.
 
 ### §9.3 Practitioner Weaving in Contests (R-65)
 A practitioner with TS ≥ 30 in active Thread contact adds bonus dice: floor(TS ÷ 30) (+1D at 30, +2D at 60, +3D at 90). Must declare before rolling. Visible to all observers. Church may file Heresy Investigation on observation. After exchange: Coherence check Ob 1.
 
 ### §9.4 Thread Operations Between Exchanges
-A practitioner may initiate a Thread operation between exchanges. Effects apply before next exchange's Read step. Genre/orientation dice are fixed at setup — Thread operations cannot change them mid-contest. Temporal axis conflict: if the Thread operation's temporal axis contradicts the contest's primary genre (Memory-axis operation during Projection-primary contest, or vice versa), both orators' Read rolls in the next exchange use TN 8.
+A practitioner may initiate a Thread operation between exchanges. Effects apply before next exchange's Read step. Genre/orientation dice are fixed at setup — Thread operations cannot change them mid-contest. Temporal axis conflict: if the Thread operation's temporal axis contradicts the contest's primary genre (Memory-axis operation during Projection-primary contest, or vice versa), the operation's co-movement effects apply to the Persuasion Track (±1 shift per co-movement instance during the contest scene), per the canonical PP-351 (contest_extensions). [ED-900 / D-3: the prior "TN 8 on both next Read rolls" and the params "PP-258 −1D both Argue" forms are superseded; routing temporal dissonance to Track co-movement preserves P-14.]
 
 
-**Temporal Axis Conflict (PP-351):** If a practitioner initiates a Thread operation on a temporal axis that opposes the contest's primary temporal orientation (e.g., a Past-axis operation during a Future-primary contest, or vice versa), the resulting temporal dissonance imposes TN 8 on both orators' next Read roll. This applies regardless of which side the practitioner supports — temporal contradiction disrupts the entire epistemic field. Same-axis operations and non-temporal Thread operations (Object-scale, Relational without temporal component) are unaffected.
+**Temporal Axis Conflict (PP-351 — canonical, ED-900 / D-3):** If a practitioner initiates a Thread operation on a temporal axis that opposes the contest's primary temporal orientation (e.g., a Past-axis operation during a Future-primary contest, or vice versa), the resulting temporal dissonance routes the operation's co-movement to the Persuasion Track: ±1 Track shift per co-movement instance during the contest scene (preserves P-14). This applies regardless of which side the practitioner supports — temporal contradiction disrupts the entire epistemic field. Same-axis operations and non-temporal Thread operations (Object-scale, Relational without temporal component) are unaffected. [Supersedes this block's prior "TN 8 on next Read" text and params PP-258 "−1D both Argue".]
 ### §9.4b Adjudicator Thread Response (ED-667)
 
 When an adjudicator (NPC presiding over formal proceedings — Court, Tribunal, Parliamentary Session, Church Inquiry) witnesses Thread use during the proceeding:
@@ -471,7 +477,7 @@ When an adjudicator (NPC presiding over formal proceedings — Court, Tribunal, 
 ### §9.5 Beliefs Integration
 Winning an exchange while arguing for a position aligned with the orator's stated Belief counts as a Belief achievement for Momentum. Max 1 Momentum per contest from Belief alignment.
 
-### §9.6 Forced Unmask
+### §9.6 Chamber Violence (Forced Forfeit) [ED-897: renamed from "Forced Unmask" to disambiguate from PP-255's stalemate Forced Unmask — P3-11 name collision. Violence in the chamber = immediate forfeit by the violent party; see infill.]
 
 ### §9.7 Niflhel Social Toolkit
 Niflhel cannot participate in Formal or Grand Contests. Their social toolkit:
@@ -511,6 +517,7 @@ Total Victory: Persuasion Track ≥ 9 or ≤ 1 → losing coalition's dominant f
 
 1. **BG layer:** run one round of BG Parliamentary Vote (§10). Apply Persuasion Track offset, capped at ±2 from neutral. Per PP-256, BG lobbying offset is restricted to the compromise zone (4–6 at Hybrid session start); the BG layer cannot produce a final resolution — the TTRPG layer always runs.
 2. **Set TTRPG starting Persuasion Track:** 5 ± capped BG offset, clamped to compromise zone (4–6).
+3. **Run the TTRPG personal contest:** standard Formal (3 exchanges) or Grand (5) per §§4–7 from the adjusted starting position. [ED-897: step 3 restored — §11 skipped from 2 to 4.]
 4. **Resolution:** final TTRPG Persuasion Track position determines outcome. Thread consequences may fire.
 
 ---
@@ -561,7 +568,7 @@ A Parliamentary Stay is a Senator Inward motion that halts an active Church Trib
 ### Resolved by this version (PP-234)
 | Item | Resolution |
 |---|---|
-| ED-127 (Composure redesign) | Composure = Charisma + 6. Parallels Health = Endurance + 6. |
+| ED-127 (Composure redesign) | Composure = Charisma × 3 (range 3–21). [ED-898: prior "Charisma + 6" was the pre-ED-694 value; §6/§8 govern with ×3.] |
 | Three-genre system | Turfed. Two genres (Memory/Projection). |
 | Faction boost system | Four options (Memory/Projection/Revealing/Obscuring), one per faction. |
 | Fractional multipliers | Replaced with integer bonus dice (+1D primary, +1D audience boost). |

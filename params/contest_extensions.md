@@ -9,7 +9,7 @@ In Cross-Time + TIE: no strain to either orator (PP-236 takes precedence). Persu
 Source: SIM-DB-STRESS-01 D-04 finding. 2026-04-09.
 
 ## PP-NEW-D — Concentration maximum (SIM-DB-STRESS-01 D-08b; updated PP-716)
-Concentration maximum = Focus × 3 (= starting value at contest setup; per `designs/scene/derived_stats_v30.md` §5.2).
+Concentration maximum = (3 × Focus) + (2 × Spirit) (= starting value at contest setup; per `designs/scene/derived_stats_v30.md` §14.1, ED-902 2026-06-04 — supersedes the struck Focus × 3 / §5.2). [ED-890]
 Restoration (from Regroup or other effects) cannot raise Concentration above this maximum.
 Source: SIM-DB-STRESS-01 D-08b finding. 2026-04-09.
 
@@ -24,7 +24,7 @@ Findings from completed fieldwork investigations may be cited in Contest opening
 
 Findings are **not consumed** by citation — remain on Evidence Track. Must be declared at contest setup. GM determines scope relevance (Finding must relate to contest subject). Stacks with §9.1 preparation bonus (+1D), for maximum Exchange 1 pool bonus of +3D when both available.
 
-Source: fieldwork_investigation.md §2.3 / F-TRANS-11. social_contest_system_v2.md §9.1.
+Source: fieldwork_investigation.md §4.1, §4.3 / F-TRANS-11. social_contest_v30.md §9.1.
 
 ## Resonant Style Targeting (from npc_behavior_system_v1.md §6)
 <!-- Source: designs/systems/npc_behavior_system_v1.md. Canonical. -->
@@ -56,7 +56,8 @@ Wrong MS vs Church institutional NPC (Himlensendt, Olafsson, Klapp, Cardinals) i
 ### Stacking
 Max positional bonus: +5D (genre +1, audience +1, MS targeting +1, Recall +2). Each prerequisite independently costly. Practical pools 12–18D; 25D+ extreme.
 
-## Temporal Axis Conflict (PP-351 — canonical)
+## Temporal Axis Conflict (PP-351 — canonical, ED-900 / D-3)
+[D-3: this ±1-Track co-movement form is the single canonical temporal-axis rule; it supersedes social_contest §9.4's prior "TN 8 on next Read" and params PP-258's "−1D both Argue". Preserves P-14.]
 
 If a practitioner initiates a Thread operation on a temporal axis that opposes
 the contest's primary temporal orientation, the Thread operation's co-movement
