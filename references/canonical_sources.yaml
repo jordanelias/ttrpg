@@ -96,7 +96,7 @@ systems:
     design_doc: designs/architecture/complete_systems_reference.md
     canonical_sha__designs__architecture__complete_systems_reference_md: "17771c5cc2650ee65dae304c23ea48a4f77a9d43"
     params: params/core.md
-    canonical_sha__params__core_md: "1e595256bf7e871cd1a1c9a77eb419c1f7b872e2"
+    canonical_sha__params__core_md: "8f13946bf39f15016867d593c597213ebe31dfd0"
     bg_params: params/bg/core.md
     canonical_sha__params__bg__core_md: "6a1290024b4f037f78dd6fd96292308dba5d4f53"
   combat:
@@ -163,15 +163,15 @@ systems:
     canonical_sha__params__mass_combat_md: "4ea8793e57c8a3d8fbde63f07028e37058cca1bb"
   social_debate:
     design_doc: params/contest.md
-    canonical_sha__params__contest_md: "2d789dbc4a53a6a8d86e7e1e6f8abdd70fd10ff7"
+    canonical_sha__params__contest_md: "d3a675259b8b1e15615f43e3f07720799bd13d71"
     social_contest_design: designs/scene/social_contest_v30.md
-    canonical_sha__designs__scene__social_contest_v30_md: "e8c92145f6ddebc48e71e29424f34c4ed7fa5676"
+    canonical_sha__designs__scene__social_contest_v30_md: "e3683a1215a6ba5eaf8020e3017a2081ceabbc4a"
     social_contest_index: designs/scene/social_contest_v30_index.md
     canonical_sha__designs__scene__social_contest_v30_index_md: "601365398399b133b2592b4ae94d1ab61df5445a"
     social_contest_infill: designs/scene/social_contest_v30_infill.md
-    canonical_sha__designs__scene__social_contest_v30_infill_md: "15f1b0f6a916bbf0343405955210f9145cd95418"
+    canonical_sha__designs__scene__social_contest_v30_infill_md: "02fd3d7252e6935a18d1790fd349ac48b605fcd8"
     params: params/contest.md
-    canonical_sha__params__contest_md: "2d789dbc4a53a6a8d86e7e1e6f8abdd70fd10ff7"
+    canonical_sha__params__contest_md: "d3a675259b8b1e15615f43e3f07720799bd13d71"
   scale_transitions:
     design_doc: designs/architecture/scale_transitions_v30.md
     canonical_sha__designs__architecture__scale_transitions_v30_md: "b602e9c7e72aee1871f77f19c77cca722314aef3"
@@ -205,7 +205,7 @@ systems:
     canonical_sha__designs__architecture__campaign_architecture_v30_index_md: "5dca4049f3d5e3df1085ace67275c73a05965900"
   derived_stats:
     design_doc: designs/scene/derived_stats_v30.md
-    canonical_sha__designs__scene__derived_stats_v30_md: "5131e5370070644808eb62760f4fcba166fbee2c"
+    canonical_sha__designs__scene__derived_stats_v30_md: "f55b09a94e3fb8078a4f97e555d560c93201c012"
     supplemental: params/factions/stats_1_7_scale.md
     canonical_sha__params__factions__stats_1_7_scale_md: "f17314c268c65352f2d87835236228fa371bef85"
 
@@ -219,7 +219,7 @@ systems:
     params: params/factions/npc_stance_triangles.md
     canonical_sha__params__factions__npc_stance_triangles_md: "6db3a4211cf9151e120a826f73ca895169b8fefe"
     related: designs/npcs/npc_behavior_v30.md  # PP-717: §1.2 redirect updated to point at conviction_taxonomy_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "167b66a4cbbf80c2a9271d7c9e7825629480d01e"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "4657f2464a8b35094c0d27d68f82e5ee6660864e"
   faction_succession_split:
     design_doc: designs/provincial/faction_succession_split_v30.md
     canonical_sha__designs__provincial__faction_succession_split_v30_md: "af69d4575de9337189b6cf1ec68f52ebc6de2469"
@@ -356,7 +356,7 @@ systems:
 
   character_canon_consolidation:
     design_doc: designs/npcs/character_canon_v30.md
-    canonical_sha__designs__npcs__character_canon_v30_md: "081a5e9fb35ac3760f22c767eaf133d87435b00e"
+    canonical_sha__designs__npcs__character_canon_v30_md: "cc3779b981dbc228f61c87e96bb82c8a7053f019"
     status: provisional
     added: '2026-05-08 Character canon consolidation — PART A Framework (§§1-11). Per-NPC sheets pending Q1 scope. Supersedes piecemeal lookup across npc_roster/npc_behavior/npc_character_analyses/migration_roster/stance_triangles.'
   faction_canon_consolidation:
@@ -391,14 +391,14 @@ systems:
     canonical_sha__designs__world__calamity_radiation_v30_infill_md: "b1d24c136acb6542f073685ac23a37a37222df5d"
   character_histories:
     design_doc: designs/world/character_histories_v30.md
-    canonical_sha__designs__world__character_histories_v30_md: "ffcad0a3c0db345000e939831af21a81d1af61a1"
+    canonical_sha__designs__world__character_histories_v30_md: "6bfd1c76ba5c6b7b29748cca92fff99be0760552"
     index: designs/world/character_histories_v30_index.md
     canonical_sha__designs__world__character_histories_v30_index_md: "87ef6d969a39903521360fcab05195809807887e"
     infill: designs/world/character_histories_v30_infill.md
-    canonical_sha__designs__world__character_histories_v30_infill_md: "d276a6fd4ac02d203cad3445eee24880b99b8410"
+    canonical_sha__designs__world__character_histories_v30_infill_md: "c554d08a871321246fd2852af99f486cb3cfe952"
   clock_registry:
     design_doc: designs/provincial/clock_registry_v30.md
-    canonical_sha__designs__provincial__clock_registry_v30_md: "74821fe2a94a00c1892dc0fb85e682a10aa00c4b"
+    canonical_sha__designs__provincial__clock_registry_v30_md: "17d1cc2af1eaca2da6f1fcef3c865e689e03eeb7"
     infill: designs/provincial/clock_registry_v30_infill.md
     canonical_sha__designs__provincial__clock_registry_v30_infill_md: "d4f8f6d53a737a0ccdb3a8c99815309ced1924a9"
   companion_spec:
@@ -419,17 +419,17 @@ systems:
     canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
   fieldwork:
     design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "fa8cb05e308c025904c205e475b478327a904fd4"
+    canonical_sha__designs__scene__fieldwork_v30_md: "dce3c19967feb1d279f119f06fdd1e194cf747c0"
     index: designs/scene/fieldwork_v30_index.md
     canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
     infill: designs/scene/fieldwork_v30_infill.md
-    canonical_sha__designs__scene__fieldwork_v30_infill_md: "b5adf9541fddfe8e67f5b317e23a5d70f2f1a0a6"
+    canonical_sha__designs__scene__fieldwork_v30_infill_md: "47a2a78ffb2ff8fef741d5a0ad24c07ead41b630"
     bg: designs/scene/fieldwork_bg_v30.md
     canonical_sha__designs__scene__fieldwork_bg_v30_md: "ecd05c6b4732a203243f1f05d682df90a91eb3d8"
     bg_infill: designs/scene/fieldwork_bg_v30_infill.md
     canonical_sha__designs__scene__fieldwork_bg_v30_infill_md: "270a77ed20d7b445e2ec3d46833ee0e7ac515804"
     hybrid: designs/scene/fieldwork_hybrid_v30.md
-    canonical_sha__designs__scene__fieldwork_hybrid_v30_md: "8e31744fd467894c3bb61d92117b573a5acf66a5"
+    canonical_sha__designs__scene__fieldwork_hybrid_v30_md: "e7415ea1233c72a7f38a98bdce62e716d28f5fc8"
     hybrid_infill: designs/scene/fieldwork_hybrid_v30_infill.md
     canonical_sha__designs__scene__fieldwork_hybrid_v30_infill_md: "b7f35f0f5edb227181f965957b27644dffb40d8a"
     editorial: designs/scene/fieldwork_editorial.md
@@ -441,11 +441,11 @@ systems:
     godot: designs/scene/fieldwork_godot.md
     canonical_sha__designs__scene__fieldwork_godot_md: "a1d03ce664024d31154e985caf7858bf033ba1d0"
     investigation: designs/scene/fieldwork_investigation.md
-    canonical_sha__designs__scene__fieldwork_investigation_md: "1f6ddf282d6beaa9fbd13b6d2578c72ee1a4ed4d"
+    canonical_sha__designs__scene__fieldwork_investigation_md: "a1604b831b505e2e2b58eae62976e19983452482"
     rationale: designs/scene/fieldwork_rationale.md
     canonical_sha__designs__scene__fieldwork_rationale_md: "25b8893296466e9909357e267b998e3c0c9b6df3"
     socializing: designs/scene/fieldwork_socializing.md
-    canonical_sha__designs__scene__fieldwork_socializing_md: "e711c68a7c6224f6fbcad8133e10db1e88e99126"
+    canonical_sha__designs__scene__fieldwork_socializing_md: "6bc994b81d163ea86d2c2eee3cd073393a168792"
     summary: designs/scene/fieldwork_summary.md
     canonical_sha__designs__scene__fieldwork_summary_md: "743c3c8d214f16ee23c589ab06a28331f9624ef1"
   npc_roster:
@@ -481,11 +481,11 @@ systems:
     canonical_sha__designs__architecture__videogame_mode_spec_index_md: "dd69cd83df9d2f9ee7a601674158cf795ea4a084"
   npc_behavior:
     design_doc: designs/npcs/npc_behavior_v30.md
-    canonical_sha__designs__npcs__npc_behavior_v30_md: "167b66a4cbbf80c2a9271d7c9e7825629480d01e"
+    canonical_sha__designs__npcs__npc_behavior_v30_md: "4657f2464a8b35094c0d27d68f82e5ee6660864e"
     npc_behavior_index: designs/npcs/npc_behavior_v30_index.md
     canonical_sha__designs__npcs__npc_behavior_v30_index_md: "479c32aba5078cc590a1f452249b1c06741e98b1"
     npc_behavior_infill: designs/npcs/npc_behavior_v30_infill.md
-    canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "5e0aa77c05af685ff1d2b19b1555bad52ae96a6e"
+    canonical_sha__designs__npcs__npc_behavior_v30_infill_md: "e0b2a2f21dee973525ff75e19ad94d2eb84c575b"
   module_contracts:
     design_doc: references/module_contracts.yaml
     canonical_sha__references__module_contracts_yaml: "97b9a436114f7504ee789b8662c3252b64e7d617"

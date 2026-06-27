@@ -223,7 +223,7 @@ Spirit is unrelated to Certainty.
 
 **Pool floor: 1D.** All dice pools have a minimum of 1D regardless of cumulative penalties. Formula: max(1, base_pool − penalties). Applies to:
 - Feint pool reduction in combat (PP-294: pool reduction floor minimum 1D)
-- Spent + Rattled combined penalties in Contest (social_contest_system_v2.md §4 Step 7)
+- Spent + Rattled combined penalties in Contest (social_contest_v30.md §4 Step 7)
 - Stamina-depleted or wound-penalised fieldwork pools
 - Any other system that applies subtractive penalties to a pool
 

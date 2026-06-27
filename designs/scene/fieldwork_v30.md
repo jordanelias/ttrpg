@@ -7,7 +7,7 @@
 ## Status: DESIGN — approved for commit. Review corrections: 2026-04-13 (v1.1), PP-628 (canon guard), PP-630 (three-axis Ob, Warden Emergence fix, ED-NEW harvest).
 ## Mode applicability: ALL (TTRPG baseline; Hybrid bridging; Board Game abstraction; Godot video game)
 ## Canon compliance: P-01 (inseparability — applied to Thread-Read operations, not passive discovery), P-03 (rendering = consciousness-performed), P-05 (three emergence modes — Mode 1/2 distinction added to §3.1), P-07 (Calamity = rendered-side mechanism), P-08 (epistemological barrier), P-14 (all modes express inseparability), P-15 (three-layer being-persistence)
-## Cross-references: params_core.md, social_contest_system_v2.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md
+## Cross-references: params_core.md, social_contest_v30.md, combat_design_v1.md, threadwork_redesign_v25.md, geography_design.md, calamity_radiation.md, clock_registry.md
 ## Review applied: fieldwork_review.md (2026-04-13). All 11 required corrections + 8 recommended additions incorporated.
 
 ---
@@ -56,7 +56,7 @@ Ob floor: 1 (per core engine).
 
 **Pool = (Primary Attribute × 2) + History bonus**
 
-Same construction as Contest Pool (social_contest_system_v2.md §3: Primary Attribute × 2 + History bonus). History bonus = relevant History points + 3 (per params_core.md §4.1 character creation).
+Same construction as Contest Pool (social_contest_v30.md §3: Primary Attribute × 2 + History bonus). History bonus = relevant History points + 3 (per params_core.md §4.1 character creation).
 
 **[RESOLVED: ED-NEW-11 — Pool formula ×2 confirmed canonical by PP-615 (params_core.md). The doubled formula (Primary Attribute × 2) is consistent across Combat (PP-615), Contest (PP-234), and Fieldwork. Ob calibration is correct as-is.]**
 
@@ -69,7 +69,7 @@ TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Despe
 **Degree table:** Fieldwork uses the core engine degree table (params_core.md). Overwhelming requires net ≥ 2×Ob AND net ≥ 3 (PP-232/PP-249). At Ob 1, Overwhelming requires net ≥ 3 (not net ≥ 2).
 
 
-**Wounds:** Physical wounds (−1D per wound, cumulative) apply to fieldwork rolls that require physical exertion: Endurance-based exploration, Surveil. Social and cognitive fieldwork (Examine, Interview, Research, Read, Converse, Connect, Impress, Negotiate, Rumour, Reconstruct) is unaffected by physical wounds. Rattled marks (from Contest, per social_contest_system_v2.md §4 Step 6) apply +1 Ob per mark to social fieldwork actions for the remainder of the scene.
+**Wounds:** Physical wounds (−1D per wound, cumulative) apply to fieldwork rolls that require physical exertion: Endurance-based exploration, Surveil. Social and cognitive fieldwork (Examine, Interview, Research, Read, Converse, Connect, Impress, Negotiate, Rumour, Reconstruct) is unaffected by physical wounds. Rattled marks (from Contest, per social_contest_v30.md §4 Step 6) apply +1 Ob per mark to social fieldwork actions for the remainder of the scene.
 
 **Inspiration spend:** Before rolling any fieldwork action, a character may spend 1 Inspiration to reduce the Ob by 1 (minimum 1). This follows the same pattern as Inspiration spend for scope shift (stage11 §11.4). A character pursuing their Beliefs through fieldwork can leverage emotional conviction to press through resistance.
 
@@ -97,13 +97,13 @@ TN: 7 (Standard). TN 6 (Controlled) when unhurried with preparation. TN 8 (Despe
 
 **Fieldwork → Combat:** When hostile contact interrupts fieldwork, the current fieldwork action resolves (degree applied, Evidence/Exposure updated). Combat then begins per combat_design_v1.md §3 (initiative by Attunement). If the character was at Exposure ≥ Noticed when interrupted, the interrupting hostile party gains +1D on their first exchange Offence (positional awareness from the character's conspicuousness). Evidence gathered before the interruption is retained regardless of combat outcome.
 
-**Fieldwork → Contest (Escalation):** Per §5.7. Current Disposition maps to Piety Track offset (±1 per 2 Disposition, cap ±2). Evidence from fieldwork may be cited in the Contest for +2D Recall bonus (per social_contest_system_v2.md §4 Step 3). Evidence cited in a Contest is not consumed — the Evidence Track and its contents persist. The investigation continues after the Contest.
+**Fieldwork → Contest (Escalation):** Per §5.7. Current Disposition maps to Piety Track offset (±1 per 2 Disposition, cap ±2). Evidence from fieldwork may be cited in the Contest for +2D Recall bonus (per social_contest_v30.md §4 Step 3). Evidence cited in a Contest is not consumed — the Evidence Track and its contents persist. The investigation continues after the Contest.
 
 **Fieldwork → Mass Battle (Suspension):** Mass battle suspends all active fieldwork. Evidence Tracks freeze at their current value. Battle actions (including Thread operations in Phase 4) do not consume fieldwork time units. Thread-Read during mass battle: resolves in Phase 4 window, classified as intelligence (not offensive). Co-movement fires. May advance an Evidence Track if the Thread-Read targets an investigation question. Fieldwork resumes after the battle at its frozen state.
 
 **Combat → Fieldwork:** Combat ends; fieldwork resumes as a new scene. Wounds persist (−1D to physical fieldwork per wound, per §2.2). Combat generates Exposure in the current territory: +1 for a quiet fight (subdued, no witnesses), +2 for a conspicuous fight (noise, damage, witnesses), +3 for a public battle (multiple combatants, civilian observers).
 
-**Contest → Fieldwork:** Contest ends; fieldwork resumes. Information gained through a Contest Appraise action (social_contest_system_v2.md §4 Step 1) may be applied to an active Evidence Track as +1 progress (Partial quality, Testimonial tag). This is automatic — no additional fieldwork action required. Post-Contest Disposition update: adjudicator's Disposition shifts +1 toward the Contest winner, −1 toward the loser.
+**Contest → Fieldwork:** Contest ends; fieldwork resumes. Information gained through a Contest Appraise action (social_contest_v30.md §4 Step 1) may be applied to an active Evidence Track as +1 progress (Partial quality, Testimonial tag). This is automatic — no additional fieldwork action required. Post-Contest Disposition update: adjudicator's Disposition shifts +1 toward the Contest winner, −1 toward the loser.
 
 
 **Combined Findings in Contest:** Multiple resolved Findings on related topics may be presented as a combined argument. The combined argument uses the strongest constituent reliability tag. Each additional Finding beyond the first adds +1D to the Argue roll (max +2D from combined Findings).
@@ -263,7 +263,7 @@ Investigation is a structured process of assembling knowledge. Each investigatio
 | Complex question | 5 | "What is the Church hiding in Himmelenger?" "What happened at the Einhir site?" |
 | Structural question | 8 | "How does the Calamity mechanism work?" "What is the Restoration's true plan?" |
 
-The GM sets the threshold at investigation opening. The threshold is not known to the player (unless the investigation is institutional — Church Heresy Investigations have published procedure lengths per social_contest_system_v2.md §7).
+The GM sets the threshold at investigation opening. The threshold is not known to the player (unless the investigation is institutional — Church Heresy Investigations have published procedure lengths per social_contest_v30.md §7).
 
 **Evidence Track progress is persistent across scenes and sessions.** An investigation begun in one session can be continued in the next. Evidence does not decay (knowledge, once assembled, remains assembled). However, the world may change around the evidence — a witness may be killed, a document may be destroyed, a site may be altered by Thread operations.
 
@@ -352,7 +352,7 @@ Desperate Trail clears when: (a) any single action produces a Success or Overwhe
 
 This resolves per action, not per investigation. Each investigation action faces: base Ob (from Depth) + Concealment Ob (from opponent's concealment roll for that scene). The concealing party must actively maintain concealment — each scene they are not present to conceal, the Concealment Ob is 0.
 
-**Church Heresy Investigation** is a specific institutional form of contested investigation. The Church's Concealment Ob equivalent is its investigatory bonus (+1D Investigate, +2 Ob for targets in Church territory with Inquisitor). See social_contest_system_v2.md §7 and params_board_game.md §Church Attention Pool for the BG-scale version.
+**Church Heresy Investigation** is a specific institutional form of contested investigation. The Church's Concealment Ob equivalent is its investigatory bonus (+1D Investigate, +2 Ob for targets in Church territory with Inquisitor). See social_contest_v30.md §7 and params_board_game.md §Church Attention Pool for the BG-scale version.
 
 ---
 
@@ -387,7 +387,7 @@ This resolves per action, not per investigation. Each investigation action faces
 
 ### §5.2 Social Actions (Non-Contest)
 
-Social actions outside formal contests use the fieldwork pool. These are individual rolls, not the exchange structure of social_contest_system_v2.md. A social action represents one meaningful interaction within a scene.
+Social actions outside formal contests use the fieldwork pool. These are individual rolls, not the exchange structure of social_contest_v30.md. A social action represents one meaningful interaction within a scene.
 
 
 | Action | Primary Attribute | Ob | Effect |
@@ -450,7 +450,7 @@ A character can access the same information through different routes. The NPC wh
 Knot-linked characters gain:
 - Automatic Disposition maintenance (no decay)
 - +1D on all social actions with the Knot partner
-- Shared Composure buffer (per social_contest_system_v2.md §4 Step 6)
+- Shared Composure buffer (per social_contest_v30.md §4 Step 6)
 - Relational contagion risk (P-12): Thread-shift propagates through Knots
 
 
@@ -484,7 +484,7 @@ The Knot lifecycle was previously specified for formation (§5.6a) and use (§2.
 
 **Strain accumulation:** A Knot accrues *strain* through several mechanisms:
 - Knot-mediated remote Thread-Read (§2.6): +1 strain per use.
-- Knot-as-Composure-buffer (social_contest_system_v2 §4 Step 6): +1 strain per use.
+- Knot-as-Composure-buffer (social_contest_v30 §4 Step 6): +1 strain per use.
 - Knot-mediated counsel extraction (npc_behavior §3.5.3 ED-664): +0 strain on extraction itself; +1 strain per subsequent retrieval attempt (single-extraction-per-campaign rule means typically 0 cumulative).
 - FR Lock or Dissolution near a Knot partner (threadwork_v30 §6 Knot-substrate inseparability): +1 strain.
 - Witnessing Conviction Scar firing in Knot partner (per Piety Track ≥3 Scar count): +1 strain at next Accounting.
@@ -666,7 +666,7 @@ At BG scale, inter-faction relationships are modelled by existing mechanics: Sen
 
 ## §9 HYBRID MODE
 
-Following the established hybrid pattern (social_contest_system_v2.md §11):
+Following the established hybrid pattern (social_contest_v30.md §11):
 
 ### §9.1 Hybrid Fieldwork Procedure
 

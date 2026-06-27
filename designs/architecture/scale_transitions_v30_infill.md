@@ -15,7 +15,7 @@ These rules govern how actions in one system translate to effects in another. Ea
 ### §3.1 Personal → Thread
 ### §3.2 Personal → Faction
 ### §3.3 Personal → Scene (Contest)
-Personal roll may serve as opening move or Appeal in a Contest (social_contest_system_v2.md). The personal action transitions to structured social resolution.
+Personal roll may serve as opening move or Appeal in a Contest (social_contest_v30.md). The personal action transitions to structured social resolution.
 ### §3.4 Scene → Faction (Domain Echo)
 Successful Appeal/Debate at sufficient scope (§7) → Domain Echo fires. No extra roll required. The personal-scene outcome directly produces a faction-level consequence.
 ### §3.5 Thread → Faction

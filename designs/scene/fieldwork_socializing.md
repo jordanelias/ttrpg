@@ -160,7 +160,7 @@ The Sincerity Gate is not a punishment for strategic play. It is the NPC's rende
 **Knot effects:**
 - Automatic Disposition maintenance (no seasonal decay at any level while Knotted)
 - +1D on all social actions with the Knot partner
-- Shared Composure buffer (per social_contest_system_v2.md §4 Step 6)
+- Shared Composure buffer (per social_contest_v30.md §4 Step 6)
 - Relational contagion (P-12): Thread-shift propagates through Knots for Thread practitioners
 
 **Breaking:**
@@ -177,7 +177,7 @@ The distinction matters: rupture leaves a wound in the relationship. Loss leaves
 
 ### §5.7 Contest Escalation and Negotiate Boundary
 
-**Negotiate** applies only when: (a) parties share a goal but disagree on method, or (b) the outcome is not consequential enough for full Contest. If the situation meets Contest initiation conditions (social_contest_system_v2.md §1), the interaction is a Contest. The GM does not offer a choice — the situation's structure determines the mechanic.
+**Negotiate** applies only when: (a) parties share a goal but disagree on method, or (b) the outcome is not consequential enough for full Contest. If the situation meets Contest initiation conditions (social_contest_v30.md §1), the interaction is a Contest. The GM does not offer a choice — the situation's structure determines the mechanic.
 
 Escalation preserves Disposition, applied as Piety Track offset: ±1 per 2 Disposition points, capped at ±2.
 

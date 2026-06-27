@@ -4,7 +4,7 @@
 # VALORIA — NPC ETHICAL STANCE AND RESONANCE BEHAVIOR SYSTEM v1
 ## Status: CANONICAL — approved 2026-04-17 (editorial batch acceptance)
 ## Date: 2026-04-13
-## Cross-references: stage6_factions.md, social_contest_system_v2.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
+## Cross-references: stage6_factions.md, social_contest_v30.md, params_factions.md, params_board_game.md, params_core.md (Certainty), threadwork_redesign_v25.md (Coherence, TS), edeyja_npc.md, character_histories_lifepath.md, victory_architecture_v1.md
 ## Three-mode: TTRPG (§§1–7), Board Game (§8), Hybrid (§9)
 ## Patches: None (new system)
 ## §1 CORE CONCEPTS
@@ -107,7 +107,7 @@ Each named NPC has 2–3 predefined arc paths that the GM tracks. Arc paths are 
 - Behavior: Edeyja may leave the Southernmost for the first time. This is a campaign-defining event. [NOTE: This arc explicitly overrides edeyja_npc.md §'She never leaves the Southernmost.' The canonical statement describes current behavior under current conditions. Arc C specifies conditions under which that behavior changes. The canonical document's statement — 'She needs help she cannot ask for from people who don't know she exists' — implies she would act differently if the Southernmost's survival required it.] A TS 75–80 practitioner entering the peninsula's political space changes everything.
 ## §6 RESONANT STYLE IN THE CONTEST SYSTEM
 ### §6.1 Appraise Revelation
-When a player achieves Overwhelming on the Appraise step (Attunement, TN 7, Ob 1, net ≥ 3): GM reveals the NPC's primary Resonant Style in addition to one Belief (per existing social_contest_system_v2.md rules).
+When a player achieves Overwhelming on the Appraise step (Attunement, TN 7, Ob 1, net ≥ 3): GM reveals the NPC's primary Resonant Style in addition to one Belief (per existing social_contest_v30.md rules).
 When a player achieves Overwhelming + net ≥ 4: GM reveals both primary and secondary Resonant Style.
 ### §6.1b Evidence Resonant Style — Thread Sensitivity Gate (AUD-NPC-01 fix)
 Evidence targeting against TS 0 NPCs is restricted to ontical evidence: documents, testimony, political facts, historical records. Thread-level evidence (Thread state data, ontological observations, practitioner-only perceptions) does not function as Evidence Resonant Style against non-sensitives. Per Foundations §10.1: "The knowledge is propositionally available — they can recite what they have been told — but they cannot epistemologically reconcile it." A fact that cannot be epistemologically reconciled cannot function as a Resonant Style attack.

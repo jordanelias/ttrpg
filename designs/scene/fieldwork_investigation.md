@@ -17,7 +17,7 @@ Investigation is a structured process of assembling knowledge. Each investigatio
 | Complex question | 5 | "What is the Church hiding in Himmelenger?" "What happened at the Einhir site?" |
 | Structural question | 8 | "How does the Calamity mechanism work?" "What is the Restoration's true plan?" |
 
-The GM sets the threshold at investigation opening. The threshold is not known to the player (unless the investigation is institutional — Church Heresy Investigations have published procedure lengths per social_contest_system_v2.md §7).
+The GM sets the threshold at investigation opening. The threshold is not known to the player (unless the investigation is institutional — Church Heresy Investigations have published procedure lengths per social_contest_v30.md §7).
 
 **Evidence Track progress is persistent across scenes and sessions.** An investigation begun in one session can be continued in the next. Evidence does not decay (knowledge, once assembled, remains assembled). However, the world may change around the evidence — a witness may be killed, a document may be destroyed, a site may be altered by Thread operations.
 
@@ -105,7 +105,7 @@ When two parties are investigating the same question (or one party is investigat
 
 This resolves per action, not per investigation. Each investigation action faces: base Ob (from Depth) + Concealment Ob (from opponent's concealment roll for that scene). The concealing party must actively maintain concealment — each scene they are not present to conceal, the Concealment Ob is 0.
 
-**Church Heresy Investigation** is a specific institutional form of contested investigation. The Church's Concealment Ob equivalent is its investigatory bonus (+1D Investigate, +2 Ob for targets in Church territory with Inquisitor). See social_contest_system_v2.md §7 and params_board_game.md §Church Attention Pool for the BG-scale version.
+**Church Heresy Investigation** is a specific institutional form of contested investigation. The Church's Concealment Ob equivalent is its investigatory bonus (+1D Investigate, +2 Ob for targets in Church territory with Inquisitor). See social_contest_v30.md §7 and params_board_game.md §Church Attention Pool for the BG-scale version.
 
 ---
 
