@@ -38,12 +38,20 @@ import os, re, sys, json, argparse
 
 REPO = 'jordanelias/ttrpg'
 
-CITE_RE = re.compile(r'\b(ED|PP)-(\d{1,4}(?:/\d{1,4})*)\b')   # captures compact groups: ED-865/874
+# Captures compact groups (ED-865/874) and inclusive ranges (ED-844-856 / ED-844–856).
+CITE_RE = re.compile(r'\b(ED|PP)-(\d{1,4}(?:/\d{1,4})*(?:[-–]\d{1,4})?)\b')
 
 # Words that turn a citation into a *claim of authority* on the citing doc.
 BASIS_KEYWORDS = (
     'canonical', 'ratif', 'applied', 'apply', 'closes', 'closed by',
     'resolved by', 'approved', 'extension', 'superseded', 'per ed', 'per pp',
+)
+# Planning / negation context: the citation is being discussed or proposed, not
+# asserted as a firm canonical basis. Demotes an OPEN_AS_BASIS hit to OPEN_INFO.
+NONBASIS_MARKERS = (
+    'execution pending', 'pending', 'proposed', 'awaiting', 'new ed',
+    'not re-filed', 'do not apply', "don't apply", 'contradiction',
+    'flagged', 'flag for', 'spun out',
 )
 CONTEXT = 90  # chars of context captured each side of a citation
 
@@ -51,6 +59,19 @@ CONTEXT = 90  # chars of context captured each side of a citation
 REGISTER_PATHS = {'canon/editorial_ledger.jsonl', 'canon/patch_register_active.yaml'}
 # Frozen history: citations there are records, not live claims.
 SKIP_PREFIXES = ('archives/', 'deprecated/', 'references/atoms_pending/')
+# Working documents (audits, workplans) PROPOSE and TRACK EDs — they do not
+# assert canon, so they are out of the validator's mandate (which is canonical
+# surfaces only). Excluded from scanning entirely. See _is_working_doc.
+WORKING_PREFIXES = ('designs/audit/', 'designs/workplans/')
+# Provenance registers RECORD where an ED applies; a citation there is a record,
+# never a canonical-basis claim. Demoted to OPEN_INFO. See _is_provenance.
+PROVENANCE_PATHS = {
+    'references/roadmap_state.yaml',
+    'references/synonym_registry.yaml',
+    'references/mechanical_terms_index.md',
+    'canon/supersession_register.yaml',
+}
+PROVENANCE_PREFIXES = ('references/splits/',)
 # Live docs that can make canonical claims.
 SCAN_PREFIXES = ('canon/', 'designs/', 'params/', 'references/')
 SCAN_SUFFIXES = ('.md', '.yaml', '.yml')
@@ -67,11 +88,47 @@ def _canon_id(prefix: str, num: str) -> str:
 
 
 def _is_resolved(status) -> bool:
-    """A citation basis is satisfied only by a resolved/struck/applied/superseded entry."""
+    """A citation basis is satisfied by any terminal/decided entry. Accepts the
+    canonical statuses plus their legitimate synonyms (ratified/confirmed) and
+    terminal states (deprecated) so a genuinely-decided ED is never a violation."""
     if status is None:
         return False
-    s = str(status).lower()
-    return s.startswith('resolved') or s in ('struck', 'applied', 'superseded', 'closed')
+    s = str(status).strip().lower()
+    return (s.startswith('resolved') or s.startswith('ratif')   # ratified / ratified-...
+            or s in ('struck', 'applied', 'superseded', 'closed', 'confirmed', 'deprecated'))
+
+
+def _is_working_doc(path: str) -> bool:
+    """Audits/workplans propose & track EDs; they don't assert canon — out of mandate."""
+    if any(path.startswith(p) for p in WORKING_PREFIXES):
+        return True
+    return 'workplan' in path.rsplit('/', 1)[-1].lower()
+
+
+def _is_provenance(path: str) -> bool:
+    """Provenance registers record where an ED applies — never a basis claim."""
+    return path in PROVENANCE_PATHS or any(path.startswith(p) for p in PROVENANCE_PREFIXES)
+
+
+def _expand_nums(group: str) -> list:
+    """Expand a citation's numeric group into individual ED numbers.
+
+    Handles slash groups (865/874 -> [865, 874]) and inclusive ranges
+    (844-856 / 844–856 -> [844..856]). Ranges wider than 200 are not expanded
+    (only the low bound is checked) to guard against pathological spans.
+    """
+    nums = []
+    for token in group.split('/'):
+        rng = re.match(r'^(\d{1,4})[-–](\d{1,4})$', token)
+        if rng:
+            lo, hi = int(rng.group(1)), int(rng.group(2))
+            if lo <= hi <= lo + 200:
+                nums.extend(str(n) for n in range(lo, hi + 1))
+            else:
+                nums.append(rng.group(1))
+        else:
+            nums.append(token)
+    return nums
 
 
 def build_status_map(entries) -> dict:
@@ -96,6 +153,7 @@ def audit_citations(docs: dict, status_map: dict, checked_prefixes=('ED',)) -> l
     out = []
     checked = set(checked_prefixes)
     for path, text in docs.items():
+        prov = _is_provenance(path)
         for m in CITE_RE.finditer(text):
             prefix = m.group(1)
             if prefix not in checked:
@@ -103,13 +161,18 @@ def audit_citations(docs: dict, status_map: dict, checked_prefixes=('ED',)) -> l
             line = text.count('\n', 0, m.start()) + 1
             ctx = text[max(0, m.start() - CONTEXT): m.end() + CONTEXT].replace('\n', ' ').strip()
             ctx_l = ctx.lower()
-            for num in m.group(2).split('/'):        # expand compact "ED-865/874" -> 865, 874
+            for num in _expand_nums(m.group(2)):
                 raw = f"{prefix}-{num}"
                 key = _canon_id(prefix, num)
                 if key not in status_map:
                     out.append({'path': path, 'line': line, 'id': raw, 'kind': 'NONEXISTENT', 'ctx': ctx})
                 elif not _is_resolved(status_map[key]):
-                    kind = 'OPEN_AS_BASIS' if any(k in ctx_l for k in BASIS_KEYWORDS) else 'OPEN_INFO'
+                    # A basis claim requires a basis keyword AND a non-provenance file
+                    # AND no planning/negation marker that recasts it as discussion.
+                    is_basis = (not prov
+                                and any(k in ctx_l for k in BASIS_KEYWORDS)
+                                and not any(n in ctx_l for n in NONBASIS_MARKERS))
+                    kind = 'OPEN_AS_BASIS' if is_basis else 'OPEN_INFO'
                     out.append({'path': path, 'line': line, 'id': raw, 'kind': kind, 'status': status_map[key], 'ctx': ctx})
     return out
 
@@ -181,6 +244,7 @@ def select_docs(only_paths=None):
             if p not in REGISTER_PATHS
             and any(p.startswith(s) for s in SCAN_PREFIXES)
             and not any(p.startswith(s) for s in SKIP_PREFIXES)
+            and not _is_working_doc(p)
             and p.endswith(SCAN_SUFFIXES)]
 
 
@@ -199,6 +263,9 @@ def main():
         c = _read(p)
         if c is not None:
             docs[p] = c
+    print('Mandate: canonical surfaces only — audits/workplans excluded '
+          '(designs/audit/, designs/workplans/, *workplan*); provenance registers '
+          'reported as INFO, not basis.')
     print(f'Scanning {len(docs)} doc(s) for ED citations...\n')
 
     viols = audit_citations(docs, status_map, checked_prefixes=('ED',))
