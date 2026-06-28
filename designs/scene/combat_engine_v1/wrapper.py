@@ -275,7 +275,10 @@ def engagement(A, B, first, cfg, rng):
 def fight(A, B, cfg=None, rng=None, max_bouts=12):
     import numpy as np
     cfg=cfg or CFG; rng=rng or np.random.default_rng()
-    A.wt.__init__(A.end); B.wt.__init__(B.end)   # reset wounds
+    # reset wounds — must mirror Combatant.__init__'s tracker construction (combatant.py:71). WoundTracker.__init__
+    # defaults spirit=3/strength=4, so re-init'ing with end alone silently reverts non-default fighters to those
+    # defaults — corrupting wi, health_full, and every derived health value from bout 2 onward. Pass spirit/strength.
+    A.wt.__init__(A.end, spirit=A.spirit, strength=A.strength); B.wt.__init__(B.end, spirit=B.spirit, strength=B.strength)
     _init_live(A,cfg); _init_live(B,cfg)
     result=0
     for turn in range(max_bouts):   # each iteration = ONE engagement (~10s turn); victor emerges over MULTIPLE turns with persistent wounds/fatigue. fight() is the multi-turn SIM harness (runs to a decision for win-rates); the GAME calls one engagement per turn.
