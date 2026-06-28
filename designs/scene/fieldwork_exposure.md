@@ -74,7 +74,7 @@ In territories where the Church has influence (Piety Track ≥ 3 or Church-contr
 | Fieldwork Pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool; Argue Pool |
 | Exploration Ob | Depth base + modifiers | 1–10+ | Ob scale per params_core.md |
 | Investigation Threshold | GM-set (3/5/8 by scope) | 3–8 | Clock-style progress track |
-| Disposition | Starting value ± social actions | −3 to +5 | Asymmetric per-NPC per-PC |
+| Disposition | Starting value ± social actions | −5 to +5 | Asymmetric per-NPC per-PC |
 | Cover | Cognition + most relevant History | 2–14 | Composure (Cha + 6); Stamina (End + Hist + 1) |
 | Exposure | 0 + accumulation vs Cover-derived thresholds | 0–10+ | Strain toward Composure threshold |
 

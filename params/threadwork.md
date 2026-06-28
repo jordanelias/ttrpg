@@ -29,26 +29,25 @@ Requires: Revolution Mandate ≥ 1. One per contact window round. Not a Domain A
 Note: PP-250 Community Organizing formula (Attunement + History + TPS) is superseded by PP-616. (PP-631)
 
 
-## Knot Mechanics (PP-632 — canonical)
+## Knot Mechanics (ED-912 / ED-773 strain model — supersedes PP-632 tier-cost)
 
-**Ontological basis:** Knots are being-with (Mitsein), not Thread operations. Any character. TS not required.
+**Ontological basis:** Knots are being-with (Mitsein), Thread-bound. **TS ≥ 30 required** (supersedes the PP-632 "any character"). Canonical spec: fieldwork_v30 §5.6.
 
-**Pool = (Bonds × 2) + 3**
-| Tier | Point Cost |
-|------|-----------|
-| Close | 5 |
-| Medium | 2 |
-| Loose | 1 |
+**Prerequisites (all):** Disposition **+5** (Bonded) · (PC or NPC) TS ≥ 30 · PC **Bonds ≥ 5** · Knot count < floor(Bonds/2)+1 · no existing Knot with this NPC.
+
+**Tiers:** Distant / Close (Distant upgradeable to Close via 3 social scenes at Disposition +5).
 
 **Max Knot count = floor(Bonds/2)+1**
 
-**Formation:** Max Disposition (floor(Bonds/2)+1) + Connect roll TN 7, Ob = tier + Disposition subtracted. Partial = one tier below.
+**Formation:** Spirit pool (Spirit × 2) vs TN 7, **Ob 2**. Overwhelming → Close; Success → Distant; Partial/Failure → no Knot.
 
-**Effects:** +1D social with partner; no Disposition decay; shared Composure buffer; relational contagion (P-12) for practitioners; Knot-mediated remote Thread-Read (TS 30+, +1 strain/use).
+**Strain — bidirectional −5..+5 bond-strain gauge:** Distant −2..+5 (start 0); Close −5..+5 (start −2). +1 strain per stress-use (Thread-Read, Composure buffer, counsel retrieval, sustained Disposition < +3 for 2 seasons). **Rupture at +5.** Reinforcement: −1/season at Accounting when Disposition ≥ +3 and no strain added. **−5 = Tempered** (Close — absorbs the next rupture trigger once, then resets to 0).
+
+**Effects:** +1D social with partner; no Disposition decay; shared Composure buffer; relational contagion (P-12) for practitioners; Knot-mediated remote Thread-Read (+1 strain/use).
 
 **Breaking:**
-- Rupture: points return; Disposition →−4; Composure damage = tier cost. **Simultaneous Rupture cap (PP-633):** multiple Knots rupturing same scene → total Composure damage capped at floor(Composure×0.75), min = highest single-tier cost. Non-Composure effects uncapped.
-- Loss: points return; Disposition track removed; Coherence −1; Composure damage = tier cost
+- Rupture (strain +5 OR public citation of private counsel): Disposition **−3** (floor −5); Composure damage 4. **Simultaneous Rupture cap (PP-633):** multiple Knots rupturing same scene → total Composure damage capped at floor(Composure×0.75), min = highest single break (4). Non-Composure effects uncapped.
+- Loss (partner death / Dissolution): Knot removed; Coherence −1; Composure damage 4.
 
 **Threadcut being Knot strain:** +1 self-maintenance strain per Knot use. At 5: rendering instability. −1/season rest.
 

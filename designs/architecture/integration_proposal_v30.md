@@ -365,7 +365,7 @@ The following elements of the existing design are either formally complete, phil
 
 **The Conviction-to-AI Integration.** The three-step decision procedure (Institutional Filter → Conviction Filter → Decision Fork by wound count) is simple enough to be deterministic, rich enough to be emergent. Every new NPC behavior proposal must work within this architecture rather than alongside it.
 
-**PP-632 (Disposition/Knot via Bonds).** One formula (floor(Bonds/2)+1), two applications (Disposition ceiling and Knot capacity), philosophically grounded, simulation-validated. This is the gold standard for how mechanics should be derived in Valoria. Future mechanics should match this standard.
+**Bonds-derived Knot capacity (floor(Bonds/2)+1).** Bonds drives **Knot capacity** (max Knot count) — philosophically grounded, simulation-validated. *(Historical note: PP-632 also tied a Disposition ceiling to Bonds; ED-912 decoupled them — Disposition is now a flat −5..+5 and Bonds ≥ 5 is an explicit Knot prerequisite. The single-formula-derives-capacity principle remains the standard.)*
 
 **The Evidence Track Thresholds (Simple 3 / Complex 5 / Structural 8).** Correctly calibrated. The Named Theory Synthesis (GI-I from comprehensive audit) and Theory Commitment (BH-I) both work within these thresholds. They should not be changed.
 

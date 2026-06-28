@@ -42,7 +42,7 @@ TERRITORY ECOLOGY
 | Beliefs | Player-authored (§2 of Agency proposal) | 3 active |
 | Evidence | Fieldwork Evidence Track, per investigation | Tagged discoveries |
 | Histories | Character creation, cap = Recall | Named tags |
-| Disposition | Per NPC, from Fieldwork/Socializing | −4 to floor(Bonds/2)+1 |
+| Disposition | Per NPC, from Fieldwork/Socializing | −5 to +5 (ED-912 — flat; was −4 to floor(Bonds/2)+1) |
 | Conviction Wounds | Per NPC, from contest outcomes | 0 / 1 / 2+ |
 | Standing | Per faction, from Duty completion | 0–5 |
 

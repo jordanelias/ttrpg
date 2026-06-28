@@ -102,7 +102,7 @@ Per-contest and contest-generated trackers (social_contest_v30.md). Per-characte
 | Exposure | 0–10+ (vs Cover thresholds) | 0 | Per-character, per-territory, per-season | fieldwork_v30.md §6 |
 | Cover (derived) | 2–14 | Cognition + History | Per-character | fieldwork_v30.md §6.1 |
 | Evidence Track | 0–threshold (3/5/8) | 0 | Per-investigation | fieldwork_v30.md §4.1 |
-| Disposition | −4 to floor(Bonds/2)+1 | Faction-indexed | Per-NPC per-PC | fieldwork_v30.md §5.1 (PP-632) |
+| Disposition | −5 to +5 | Faction-indexed | Per-NPC per-PC | fieldwork_v30.md §5.1 (ED-912) |
 
 ## Cooldown/Duration Tracks
 
@@ -128,7 +128,7 @@ Per-contest and contest-generated trackers (social_contest_v30.md). Per-characte
 | Settlement Prosperity | 0–5 | Per settlement registry | settlement_layer_v30 §1.3, §2.1 |
 | Settlement Defense | 0–5 | Per settlement registry | settlement_layer_v30 §1.3, §2.1 |
 | Settlement Order | 0–5 | Per settlement registry | settlement_layer_v30 §1.3, §2.1 |
-| Local Actor Disposition | −3 to +5 | +1 toward governor, 0 others | settlement_layer_v30 §4.5 |
+| Local Actor Disposition | −5 to +5 | +1 toward governor, 0 others | settlement_layer_v30 §4.5 |
 | Guild Favor (per settlement) | 1–7 | 3 (Guild-managed) / 1 (other) | player_agency_v30 §9 (T2) |
 
 

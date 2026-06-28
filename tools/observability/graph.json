@@ -102,6 +102,12 @@
         "original": "articulation (low priority)",
         "resolved": "articulation_layer",
         "note": ""
+      },
+      {
+        "kind": "system",
+        "original": "player_input",
+        "resolved": "player_input",
+        "note": "registry-only (no contract)"
       }
     ],
     "full_stream_systems": [
@@ -113,19 +119,19 @@
       "mechanical.season_change"
     ],
     "stats": {
-      "systems": 28,
-      "keys": 45,
+      "systems": 29,
+      "keys": 48,
       "key_families": 7,
-      "scalars": 29,
+      "scalars": 35,
       "scales": 8,
-      "edges": 183,
-      "keys_with_emitter": 45,
-      "keys_with_consumer": 42,
+      "edges": 196,
+      "keys_with_emitter": 48,
+      "keys_with_consumer": 45,
       "orphan_emits": [
         "meta.legacy_event"
       ],
       "unemitted_consumes": [],
-      "naming_alerts": 8
+      "naming_alerts": 9
     }
   },
   "systems": [
@@ -1363,28 +1369,121 @@
       "full_stream": false,
       "registry_only": false,
       "registry_system": "personal_combat",
-      "doc": null,
-      "resolver": "",
+      "doc": "designs/scene/combat_engine_v1/",
+      "resolver": "d_sigma",
       "scales": [
         "personal"
       ],
-      "status": "stub",
-      "accounting_phase": [],
-      "transitions": [],
-      "loops": [],
-      "gap_notes": [
-        "DEFERRED: home = designs/scene/combat_engine_v1/ (README: \"canonical-candidate, ratification proposed, see designs/audit/2026-06-02-combat-engine/\") \u2014 owned by active handoff active-work-index-2026-06-09; extraction deferred until ratification",
-        "F3 stands: no outcome Key type in scene_outcome family for personal combat (registry \u00a77: contest/battle/investigation only)"
+      "status": "extracted",
+      "accounting_phase": [
+        "emission_processing"
       ],
-      "sources": [],
+      "transitions": [
+        "scale_transitions \u00a73.4 Domain Echo (scene.combat_resolved -> faction/NPC) / \u00a712.3 down-up targeting"
+      ],
+      "loops": [
+        {
+          "open": true
+        }
+      ],
+      "gap_notes": [
+        "EXTRACTED 2026-06-23: the v2 deferral ('canonical-candidate, extraction deferred until ratification') is RESOLVED \u2014 combat_engine_v1 was ratified CANONICAL by ED-900/904 and docket ED-1029; the only thing keeping the trigger from firing was the stale README 'canonical-candidate' line (audit F6), corrected this pass.",
+        "MODEL CORRECTION: resolver is d_sigma (sigma-leverage), NOT the v30 dice_pool model (pool=Agi\u00d72, TN-7, damage=net_hits+STR) that the Godot skeleton placeholder, sim/personal/combat.py, mechanics_index.yaml, and data_serialization_spec.md WeaponData all still carried. Canonical: pool=max(5,History+6); additive-coupled damage (Str+heft)*coupling*1.55; bilateral-Ob wounds (ED-1041, supersedes the -1D aggressor-only pool penalty).",
+        "F3 RESOLVED: the scene_outcome family now carries personal-combat outcome Key types \u2014 scene.combat_hit / scene.combat_resolved / scene.combat_felled registered in designs/godot/skeleton/data/key_types/ (was: registry \u00a77 had contest/battle/investigation only).",
+        "SLICE: combat.strike + combat.wound are PORTED + validated to the Godot shape; the remaining 9 action/substrate modules are PENDING the full port (implementation_sequence Phase G3).",
+        "CONSUMER WIRING (A4, surfaced): scene.combat_resolved / scene.combat_felled are declared with consuming_systems [npc_behavior, faction_layer, articulation] in the registry, but those modules' contract `consumes` lists do not yet name them \u2014 the KeyBus delivers to observers/subscribers regardless; the contract declaration follows when npc_behavior/faction_state are next touched (the README's combat\u2192faction/NPC ripple)."
+      ],
+      "sources": [
+        "designs/scene/combat_engine_v1/{core,systems,wrapper,combatant,config,tradition}.py [READ: 2026-06-22/23]",
+        "tests/sim/v32-combat-balance/{m1_dice_sigma_core,r1_sigma_resolution,r2_consequence_wounds}.py [READ: 2026-06-23]",
+        "canon/editorial_ledger.jsonl ED-900/904/1029/1040/1041 [READ: 2026-06-22]",
+        "personal-combat audit 2026-06-22 (this session) \u2014 model-correctness + drift findings folded in"
+      ],
       "gd_constraints": [],
       "sim_module": "",
       "test_status": "",
-      "emits": [],
-      "consumes": [],
-      "state": [],
+      "emits": [
+        {
+          "type": "scene.combat_hit",
+          "terminal": false
+        },
+        {
+          "type": "scene.combat_felled",
+          "terminal": false
+        },
+        {
+          "type": "scene.combat_resolved",
+          "terminal": false
+        }
+      ],
+      "consumes": [
+        {
+          "type": "scene.combat_strike",
+          "from": [
+            "scene_slate",
+            "player_input"
+          ]
+        },
+        {
+          "type": "scene.combat_hit",
+          "from": [
+            "personal_combat"
+          ]
+        }
+      ],
+      "state": [
+        {
+          "name": "Health",
+          "bucket": "derived_value",
+          "writable": false,
+          "scalar_id": "personal_combat::Health"
+        },
+        {
+          "name": "cumulative_damage",
+          "bucket": "track",
+          "writable": true,
+          "scalar_id": "personal_combat::cumulative_damage"
+        },
+        {
+          "name": "Wounds",
+          "bucket": "track",
+          "writable": true,
+          "scalar_id": "personal_combat::Wounds"
+        },
+        {
+          "name": "Stamina",
+          "bucket": "pool",
+          "writable": true,
+          "scalar_id": "personal_combat::Stamina"
+        },
+        {
+          "name": "Initiative",
+          "bucket": "track",
+          "writable": true,
+          "scalar_id": "personal_combat::Initiative"
+        },
+        {
+          "name": "Poise",
+          "bucket": "track",
+          "writable": true,
+          "scalar_id": "personal_combat::Poise"
+        }
+      ],
       "gates": [],
-      "derivations": []
+      "derivations": [
+        {
+          "output": "Health",
+          "inputs": [
+            "Endurance",
+            "Spirit",
+            "Strength",
+            "cumulative_damage"
+          ],
+          "formula": "round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage",
+          "bucket": "derived_value",
+          "source": "r2_consequence_wounds.health_full = WI*(MaxWounds+1)+0.25*Str*End, minus accrued damage (ED-1041 / derived_stats_v30 \u00a74.1)"
+        }
+      ]
     },
     {
       "id": "piety_track",
@@ -1504,6 +1603,31 @@
       "derivations": []
     },
     {
+      "id": "player_input",
+      "full_stream": false,
+      "registry_only": true,
+      "registry_system": "player_input",
+      "doc": null,
+      "resolver": "",
+      "scales": [],
+      "status": "registry-only",
+      "accounting_phase": [],
+      "transitions": [],
+      "loops": [],
+      "gap_notes": [
+        "referenced in routing but has no module contract"
+      ],
+      "sources": [],
+      "gd_constraints": [],
+      "sim_module": "",
+      "test_status": "",
+      "emits": [],
+      "consumes": [],
+      "state": [],
+      "gates": [],
+      "derivations": []
+    },
+    {
       "id": "scenario_authoring",
       "full_stream": false,
       "registry_only": false,
@@ -1569,6 +1693,10 @@
       "emits": [
         {
           "type": "mechanical.scene_entered",
+          "terminal": false
+        },
+        {
+          "type": "scene.combat_strike",
           "terminal": false
         },
         {
@@ -2583,6 +2711,44 @@
       ]
     },
     {
+      "id": "scene.combat_felled",
+      "family": "scene_outcome",
+      "description": "A combatant incapacitated by Health depletion (ED-1041 wound model). Witnessable; ripples up to factions and into NPC memory.",
+      "scale_signature": [
+        "personal"
+      ],
+      "permanence": "indelible",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "personal_combat"
+      ],
+      "consumers": [
+        "articulation_layer",
+        "faction_state",
+        "npc_behavior"
+      ]
+    },
+    {
+      "id": "scene.combat_hit",
+      "family": "scene_outcome",
+      "description": "A landed blow within a fight; carries the wound as a write-protected `health` stat_delta on the defender target (F1 \u2014 the wound rides the substrate, never a direct write). StrikeModule emits; WoundModule consumes.",
+      "scale_signature": [
+        "personal"
+      ],
+      "permanence": "transient",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "personal_combat"
+      ],
+      "consumers": [
+        "personal_combat"
+      ]
+    },
+    {
       "id": "scene.combat_resolved",
       "family": "scene_outcome",
       "description": "Personal / skirmish combat concluded (F3 \u2014 the missing combat scene_outcome subtype; mirrors scene.contest_resolved on the combat path).",
@@ -2600,6 +2766,25 @@
         "articulation_layer",
         "faction_state",
         "npc_behavior"
+      ]
+    },
+    {
+      "id": "scene.combat_strike",
+      "family": "scene_outcome",
+      "description": "A declared combat action (a strike) entering personal-combat resolution \u2014 the action-input subtype the CombatEngine's StrikeModule consumes (F3 \u2014 combat-path action vocabulary; 2-part family.subtype per registry convention).",
+      "scale_signature": [
+        "personal"
+      ],
+      "permanence": "transient",
+      "cls": "A",
+      "registered": true,
+      "broadcast": false,
+      "emitters": [
+        "player_input",
+        "scene_slate"
+      ],
+      "consumers": [
+        "personal_combat"
       ]
     },
     {
@@ -3285,6 +3470,68 @@
       "name": "Turmoil",
       "owner": "peninsular_strain",
       "bucket": "clock",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "personal_combat::Health",
+      "name": "Health",
+      "owner": "personal_combat",
+      "bucket": "derived_value",
+      "writable": false,
+      "derived_by": [
+        "round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage"
+      ],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "personal_combat::Initiative",
+      "name": "Initiative",
+      "owner": "personal_combat",
+      "bucket": "track",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "personal_combat::Poise",
+      "name": "Poise",
+      "owner": "personal_combat",
+      "bucket": "track",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "personal_combat::Stamina",
+      "name": "Stamina",
+      "owner": "personal_combat",
+      "bucket": "pool",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "personal_combat::Wounds",
+      "name": "Wounds",
+      "owner": "personal_combat",
+      "bucket": "track",
+      "writable": true,
+      "derived_by": [],
+      "gated_by": [],
+      "read_by": []
+    },
+    {
+      "id": "personal_combat::cumulative_damage",
+      "name": "cumulative_damage",
+      "owner": "personal_combat",
+      "bucket": "track",
       "writable": true,
       "derived_by": [],
       "gated_by": [],
@@ -4059,6 +4306,12 @@
     },
     {
       "src": "scene_slate",
+      "dst": "scene.combat_strike",
+      "kind": "emits",
+      "terminal": false
+    },
+    {
+      "src": "scene_slate",
       "dst": "scene.dialogue",
       "kind": "emits",
       "terminal": false
@@ -4513,6 +4766,76 @@
       "dst": "env.disaster",
       "kind": "emits",
       "terminal": false
+    },
+    {
+      "src": "personal_combat",
+      "dst": "scene.combat_hit",
+      "kind": "emits",
+      "terminal": false
+    },
+    {
+      "src": "personal_combat",
+      "dst": "scene.combat_felled",
+      "kind": "emits",
+      "terminal": false
+    },
+    {
+      "src": "personal_combat",
+      "dst": "scene.combat_resolved",
+      "kind": "emits",
+      "terminal": false
+    },
+    {
+      "src": "scene.combat_strike",
+      "dst": "personal_combat",
+      "kind": "consumes"
+    },
+    {
+      "src": "scene.combat_hit",
+      "dst": "personal_combat",
+      "kind": "consumes"
+    },
+    {
+      "src": "personal_combat",
+      "dst": "personal_combat::Health",
+      "kind": "owns"
+    },
+    {
+      "src": "personal_combat",
+      "dst": "personal_combat::cumulative_damage",
+      "kind": "owns"
+    },
+    {
+      "src": "personal_combat",
+      "dst": "personal_combat::Wounds",
+      "kind": "owns"
+    },
+    {
+      "src": "personal_combat",
+      "dst": "personal_combat::Stamina",
+      "kind": "owns"
+    },
+    {
+      "src": "personal_combat",
+      "dst": "personal_combat::Initiative",
+      "kind": "owns"
+    },
+    {
+      "src": "personal_combat",
+      "dst": "personal_combat::Poise",
+      "kind": "owns"
+    },
+    {
+      "src": "personal_combat",
+      "dst": "personal_combat::Health",
+      "kind": "derives",
+      "formula": "round(round(End+4+0.4*Spirit) * (min(floor(End/2)+1,3)+1) + 0.25*Strength*Endurance) - cumulative_damage",
+      "inputs": [
+        "Endurance",
+        "Spirit",
+        "Strength",
+        "cumulative_damage"
+      ]
     }
   ]
 }

@@ -52,7 +52,7 @@ Reads `Bonds_5_or_higher` set per `fieldwork_socializing.md`. UI: list of named 
 
 Three signal types from `fieldwork_socializing.md` §5.5–5.6 + `params/core.md` L128 + ED-773:
 
-- **Knots** (Loose / Medium / Close): pair-relational binding requiring socializing investment; rupture causes Composure damage (5 default per ED-773).
+- **Knots** (Distant / Close): pair-relational binding requiring socializing investment; rupture causes **4** Composure damage (ED-912 / ED-842 — corrects the prior "5"; bidirectional −5..+5 strain model per fieldwork §5.6b).
 - **Beliefs** (player-authored truth-statements): ~3-5 per protagonist; engaged by scene events; revision is a high-significance state transition.
 - **Inspirations** (player-authored aspirational arcs): each with associated NPCs; engaged by Bonds + scene events.
 
