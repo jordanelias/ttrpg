@@ -54,6 +54,7 @@ THRESHOLDS = {
     "references/arc_register.md":            20_000,
     "references/propagation_map.md":         15_000,
     "references/design_registry.yaml":        8_000,
+    "references/names_index.yaml":            8_000,  # unified names index (the one place a name lives)
     # ── Archives (soft limits — warn when approaching split threshold) ──────
     # These are large by design; alert when year-split is needed
     "canon/patch_register_archive.yaml":     100_000,

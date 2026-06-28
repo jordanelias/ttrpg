@@ -1,0 +1,128 @@
+# names_index.yaml — UNIFIED NAMES INDEX (the one place a definition's name lives).
+#
+# WHY: names used to be hardcoded and duplicated across 50+ prose docs, params/, the
+# registries, and the tools (ci_naming_check.py even hardcoded the deprecated proper
+# noun). descriptor_registry.yaml already promised "a descriptor can be renamed HERE
+# without rewriting any consumer" — this index makes that real for ALL named
+# definitions, not just descriptors.
+#
+# HOW IT IS READ (one source, many readers — all via tools/names.py):
+#   * tools/ci_naming_check.py   — hard gate; flags any `legacy` name of an `enforce: block` entry.
+#   * tools/ci_names_check.py    — report-only drift lint; flags `legacy` names of `enforce: warn` entries.
+#   * tools/valoria_rename.py    — the "change once" executor: edit a `canonical` here (or run the
+#                                  tool) and every occurrence across docs/params/registries is rewritten.
+#   * tools/ci_names_consistency.py — asserts the mirror name fields in descriptor_registry.yaml /
+#                                  proper_noun_registry.yaml still match the `canonical` here.
+#
+# ENTRY SCHEMA:
+#   <dotted.key>:
+#     canonical: <the ONE display string>
+#     aliases:   [<allowed equivalent phrasings — not errors>]
+#     legacy:    [<deprecated names that must NOT appear in active docs>]
+#     category:  attribute | aggregate | faction_stat | settlement_stat | clock |
+#                track | mechanic | mass_combat_stat | substrate | proper_noun
+#     enforce:   block | warn
+#                  block = hard CI gate (ci_naming_check) — naming invariants.
+#                  warn  = report-only drift lint (ci_names_check) until triaged, then flipped.
+#
+# MIRRORS (consistency-checked by tools/ci_names_consistency.py):
+#   attr.* / agg.* / fac.* / set.*  -> references/descriptor_registry.yaml
+#   world.* (and other proper nouns) -> references/proper_noun_registry.yaml
+# Mechanic/clock/track legacy entries are seeded from references/deprecated_terms_registry.yaml
+# and references/synonym_registry.yaml; they drive the drift lint + rename, not a mirror.
+#
+# MIGRATION: this is the initial seed (attributes, faction/settlement stats, the proper-noun
+# naming invariant, and the clean mechanic renames). The existing registries keep their `name`
+# fields as validated mirrors for now; folding the rest of the proper-noun corpus in, and
+# flipping `warn -> block` per entry, are follow-ups (see HANDOFF.md).
+
+version: 1
+
+entries:
+
+  # ── ATTRIBUTES (mirror: descriptor_registry.yaml attributes; scalar 1-7) ──────
+  attr.body.strength:    {canonical: Strength,   aliases: [],                     legacy: [], category: attribute, enforce: warn}
+  attr.body.endurance:   {canonical: Endurance,  aliases: [Vitality],             legacy: [], category: attribute, enforce: warn}
+  attr.body.agility:     {canonical: Agility,    aliases: [Dexterity],            legacy: [], category: attribute, enforce: warn}
+  attr.mind.focus:       {canonical: Focus,      aliases: [],                     legacy: [], category: attribute, enforce: warn}
+  attr.mind.acuity:      {canonical: Acuity,     aliases: [Reasoning, Cognition], legacy: [], category: attribute, enforce: warn}
+  attr.mind.will:        {canonical: Will,       aliases: [Spirit],               legacy: [], category: attribute, enforce: warn}
+  attr.social.attunement: {canonical: Attunement, aliases: [Perception],          legacy: [], category: attribute, enforce: warn}
+  attr.social.charisma:  {canonical: Charisma,   aliases: [Influence, Presence],  legacy: [], category: attribute, enforce: warn}
+  attr.social.bonds:     {canonical: Bonds,      aliases: [Sincerity, Affability], legacy: [], category: attribute, enforce: warn}
+
+  # ── AGGREGATES (mirror: descriptor_registry.yaml aggregates; placeholders) ────
+  agg.body:   {canonical: Body,   aliases: [], legacy: [], category: aggregate, enforce: warn}
+  agg.mind:   {canonical: Mind,   aliases: [], legacy: [], category: aggregate, enforce: warn}
+  agg.social: {canonical: Social, aliases: [], legacy: [], category: aggregate, enforce: warn}
+
+  # ── FACTION STATS (mirror: descriptor_registry.yaml faction_stats; scalar 1-7) ─
+  fac.influence:  {canonical: Influence, aliases: [], legacy: [], category: faction_stat, enforce: warn}
+  fac.wealth:     {canonical: Wealth,    aliases: [], legacy: [], category: faction_stat, enforce: warn}
+  fac.military:   {canonical: Military,  aliases: [], legacy: [], category: faction_stat, enforce: warn}
+  fac.intel:      {canonical: Intel,     aliases: [], legacy: [], category: faction_stat, enforce: warn}
+  fac.stability:  {canonical: Stability, aliases: [], legacy: [], category: faction_stat, enforce: warn}
+
+  # ── SETTLEMENT STATS (mirror: descriptor_registry.yaml settlement_stats) ──────
+  set.legitimacy:      {canonical: Legitimacy,      aliases: [], legacy: [], category: settlement_stat, enforce: warn}
+  set.popular_support: {canonical: Popular Support, aliases: [], legacy: [], category: settlement_stat, enforce: warn}
+  set.prosperity:      {canonical: Prosperity,      aliases: [], legacy: [], category: settlement_stat, enforce: warn}
+  set.defense:         {canonical: Defense,         aliases: [], legacy: [], category: settlement_stat, enforce: warn}
+  set.order:           {canonical: Order,           aliases: [], legacy: [], category: settlement_stat, enforce: warn}
+
+  # ── PROPER-NOUN NAMING INVARIANT (mirror: proper_noun_registry.yaml) ──────────
+  # block-tier: this is the hard gate ci_naming_check enforces. The deprecated name
+  # lives HERE now, not in code.
+  world.solmund:
+    canonical: Solmund
+    aliases: []
+    legacy: [Galbados]
+    category: proper_noun
+    enforce: block
+
+  # ── CLEAN MECHANIC RENAMES (seed: deprecated_terms_registry + synonym_registry) ─
+  # warn-tier drift lint: flags the legacy term, suggests the canonical. Legacy strings
+  # are chosen to be unambiguous at a word boundary (no bare "Strength"/abbreviations
+  # that collide with live terms).
+  clock.church_influence:
+    canonical: Church Influence
+    aliases: []
+    legacy: ["Theocracy Counter"]
+    category: clock
+    enforce: warn
+  clock.mending_stability:
+    canonical: Mending Stability
+    aliases: []
+    legacy: ["Rendering Stability"]
+    category: clock
+    enforce: warn
+  mass.power:
+    canonical: Power
+    aliases: []
+    legacy: ["Combat Power"]
+    category: mass_combat_stat
+    enforce: warn
+  mass.discipline:
+    canonical: Discipline
+    aliases: []
+    legacy: ["Cohesion"]
+    category: mass_combat_stat
+    enforce: warn
+  mass.command:
+    canonical: Command
+    aliases: []
+    legacy: ["Command Rating"]
+    category: mass_combat_stat
+    enforce: warn
+  thread.thread_fatigue:
+    canonical: Thread Fatigue
+    aliases: []
+    legacy: ["Contact Rounds"]
+    category: mechanic
+    enforce: warn
+  substrate.key:
+    canonical: Key
+    aliases: []
+    legacy: ["EventImpact"]
+    category: substrate
+    enforce: warn
