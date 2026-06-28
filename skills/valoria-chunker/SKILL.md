@@ -9,57 +9,26 @@ description: >
   This skill MUST run before canon-guard, mechanic-audit, or simulator receive input.
 ---
 
-**Model:** Haiku 4.5. Structural extraction only — no content judgment.
+Structural extraction only — no content judgment.
 
 
-## Bootstrap & Commit Protocol (MANDATORY)
+## Read & Commit Protocol (MANDATORY)
 
-Chunker writes files to GitHub. All writes go through hooks.
+Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
-```python
-import sys; sys.path.insert(0, '/home/claude')
-from github_ops import quick_bootstrap
-g, h, files, token = quick_bootstrap(['references/canonical_sources.yaml'])
-h.context_gate()
-h.task_gate('design')
+- `references/canonical_sources.yaml`  # document version label for file naming
+- `<path/to/document.md>`  # the target document to chunk
 
-# Fetch target document
-doc_files = g.read_files_graphql(['<path/to/document.md>'])
-content = doc_files.get('<path/to/document.md>')
-if not content:
-    raise RuntimeError("Document not found — cannot chunk")
-
-# ... perform chunking work ...
-
-# Commit ALL chunk outputs atomically
-oid = h.safe_commit(
-    additions=[
-        ('references/<chunk_output>.md', chunk_content),
-        # add all chunk files here
-    ],
-    deletions=[],
-    message='[infrastructure] chunk <document> — section map + extractions'
-)
-print(f"Chunks committed: {oid}")
-```
+Then perform the chunking work and write all chunk outputs directly to their repo paths, then `git commit` all chunks for a document in one commit.
 
 **Rules:**
-- Never write chunk files without going through `h.safe_commit()`
-- Never use `g.atomic_commit()` directly
 - All chunk output paths must be in `references/` or `tests/` — not root
 - Commit all chunks for a document in one atomic commit
+- Commit message format: `[infrastructure] chunk <document> — section map + extractions`
 
 ## Input Validation (MANDATORY)
 
-The document to be chunked must be fetched from GitHub this session. Do not chunk a document from memory or a local copy.
-
-```python
-# Fetch target document from GitHub before chunking
-files = g.read_files_graphql(['<path to document on GitHub>'])
-content = files['<path to document on GitHub>']
-if content is None:
-    raise RuntimeError("Document not found on GitHub — cannot chunk")
-```
+Read the document to be chunked from the working tree (Read tool); the checkout is authoritative — do not chunk from memory. If the document is absent from the working tree, stop and report it.
 
 **Requires:** Document version label for file naming (read from `references/canonical_sources.yaml`).
 
@@ -81,7 +50,7 @@ Extract sections by heading or line range into individual chunk files.
 **Header per chunk:**
 ```
 # Chunk: [Part].[Section] — [Title]
-Source: [document path on GitHub], Lines [N–M], Version: [label]
+Source: [document path in repo], Lines [N–M], Version: [label]
 ```
 
 ### C — Mechanic Extraction
@@ -116,4 +85,4 @@ Run once per project. Update only when Foundations changes (check `canonical_sou
 - No content judgment — extraction and indexing only
 - Report after completion: sections found · chunk count · estimated tokens/chunk
 - If a chunk exceeds 500 lines after heading-level split, split at next sub-heading level
-- Source path in every chunk header must be the GitHub path, not a local path
+- Source path in every chunk header must be the repo-relative path

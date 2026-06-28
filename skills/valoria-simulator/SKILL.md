@@ -10,24 +10,14 @@ description: >
   "push this to its limits", or when the orchestrator routes a simulation.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
-
-**Model:** Sonnet 4.6. Requires multi-step mechanical reasoning with full state tracking.
-
 ## Input Validation (MANDATORY BEFORE ANY SIMULATION)
 
-Before running any simulation mode, verify the following have been fetched from GitHub this session:
+Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
-```python
-# Required files — fetch via g.read_files_graphql() if not already in context
-required = [
-    'references/canonical_sources.yaml',       # confirm which design doc is canonical
-    '<canonical design doc for target system>', # from canonical_sources.yaml
-    'references/params_<system>.md',            # mechanical values
-    'canon/02_canon_constraints.md',            # P-01–P-15
-]
-```
+- `references/canonical_sources.yaml` — confirm which design doc is canonical
+- `<canonical design doc for target system>` — from canonical_sources.yaml
+- `references/params_<system>.md` — mechanical values
+- `canon/02_canon_constraints.md` — P-01–P-15
 
 ## Simulation Modes
 
@@ -164,7 +154,7 @@ Simulate fieldwork operations across investigation, exploration, and socializing
 
 **Step 1 — Module decomposition (first session).**
 
-Before writing any code, produce a module manifest at `/home/claude/sim_module_manifest.md`. Each module is a self-contained mechanical layer that can be built, verified, and tested in one session.
+Before writing any code, produce a module manifest at `tests/sim/sim_module_manifest.md` in the working tree. Each module is a self-contained mechanical layer that can be built, verified, and tested in one session.
 
 Canonical modules for a full-stack Valoria sim (as one example):
 
@@ -183,25 +173,23 @@ Canonical modules for a full-stack Valoria sim (as one example):
 | 11. Zoom-in personal resolution | combat, thread, social | respective design docs | 2–3 sessions |
 | 12. Integration + batch runner | all above | — | 1 session |
 
-The manifest must list: module number, name, dependencies, canonical source paths (fetched via `canonical_sources.yaml`, not guessed), and estimated session budget. Commit the manifest to `tests/sim/<sim-name>/module_manifest.md`.
+The manifest must list: module number, name, dependencies, canonical source paths (resolved via `canonical_sources.yaml`, not guessed), and estimated session budget. Commit the manifest to `tests/sim/<sim-name>/module_manifest.md`.
 
 **Step 2 — Per-module session protocol.**
 
 Each module gets its own session. The session protocol:
 
-1. Bootstrap normally.
-2. `h.task_gate('simulation')`.
-3. Read the module manifest from GitHub.
-4. Identify the current module (next unchecked in manifest).
-5. Fetch every canonical source listed for this module at FULL depth: `g.read_files_graphql(paths, force_full=True)`. Verify with `g.read_depth_report(paths)` — every path must read `full`.
-6. Build the verification ledger at `/home/claude/sim_verification_ledger.json`. Every mechanical constant used in this module must have a ledger entry (sim_variable, value, canonical_source, section, quoted_text). Quoted_text must actually appear in the fetched content — verify with in-memory string search before adding the entry.
-7. `h.sim_gate('custom', systems=[list of systems this module touches])`. Must pass.
-8. Write the module code. Every mechanical constant carries an inline `# [canonical: path §section]` comment OR corresponds to a ledger entry. `sim_fabrication_check()` will verify this at commit.
-9. Run module in isolation against known inputs. Outputs logged.
-10. `h.safe_commit()` with the module file and an updated `tests/sim/<sim-name>/module_manifest.md` that marks the module `status: verified`.
-11. Update `session_log_current.md` with: module completed, ledger entries added, next module to build.
+1. Read the module manifest from the working tree.
+2. Identify the current module (next unchecked in manifest).
+3. Read every canonical source listed for this module in full from the working tree (use the Read tool). The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent, stop and report it.
+4. Build the verification ledger at `tests/sim/sim_verification_ledger.json` in the working tree. Every mechanical constant used in this module must have a ledger entry (sim_variable, value, canonical_source, section, quoted_text). Quoted_text must actually appear in the read content — verify with in-memory string search before adding the entry.
+5. Write the module code. Every mechanical constant carries an inline `# [canonical: path §section]` comment OR corresponds to a ledger entry.
+6. Run `python tools/ci_sim_fabrication_check.py` against the module — the sim anti-fabrication gate. It must pass (CI enforces the same gate).
+7. Run module in isolation against known inputs. Outputs logged.
+8. Stage the module file and an updated `tests/sim/<sim-name>/module_manifest.md` that marks the module `status: verified`, then `git commit` (the local pre-commit hook re-runs the gate; CI is authoritative).
+9. Update `HANDOFF.md` with: module completed, ledger entries added, next module to build.
 
-**If a session cannot complete a module:** write a checkpoint (`h.write_checkpoint()`) with exactly which canonical sources are read/verified and where the partial code is. Next session resumes from checkpoint.
+**If a session cannot complete a module:** record in `HANDOFF.md` exactly which canonical sources are read/verified and where the partial code is. Next session resumes from that note.
 
 **Step 3 — Inter-module integration.**
 
@@ -230,7 +218,7 @@ These are non-negotiable for incremental build sims:
 | Anti-pattern | Why it failed | What to do instead |
 |---|---|---|
 | Build a "v1" sim across a single session covering all systems | Canonical sources get read at index depth because there's no time to infill everything | Module decomposition, one system per session |
-| Fetch indexes for design docs, build mechanics from section titles | Section titles imply structure but not mechanical values; code gets built on inference | Always `force_full=True` for design docs used in a module's canonical source list |
+| Skim design docs, build mechanics from section titles | Section titles imply structure but not mechanical values; code gets built on inference | Always read design docs in full from the working tree for every doc in a module's canonical source list |
 | Invent victory conditions, elimination rules, and clock thresholds because they "sound right" | Violates canonical system in non-obvious ways; produces superficially valid outputs | Every mechanic traced to a verified ledger entry; if the ledger can't cite it, the mechanic isn't built yet |
 | Run 50-seed batches on a sim that failed validation | Compounds the fabrication: bad results look statistically rigorous and get trusted | No batch runs before all modules pass `status: verified` in the manifest |
 | Assume "the structure is right, I'll fix values later" | Never happens; the sim gets committed and used as reference | The structure IS the values — fix at commit time or don't commit |
@@ -273,4 +261,4 @@ Quick reference:
 - P1 findings: immediately flag in findings section.
 - After each simulation: update `sim_coverage_matrix.md` and commit findings.
 - Simulations exceeding 30 resolution steps: checkpoint mid-simulation, summarize state, continue.
-- All mechanical values must be sourced from the GitHub-fetched params or design doc. Never use remembered values.
+- All mechanical values must be sourced from the working-tree params or design doc. Never use remembered values.

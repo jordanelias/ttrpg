@@ -11,26 +11,17 @@ description: >
   arcs inline.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
 # VALORIA ARC GENERATOR
-
-**Model:** Sonnet 4.6.
 
 ## Input Validation (MANDATORY BEFORE ANY ARC GENERATION)
 
-Before generating arcs, fetch the following from GitHub:
+Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
-```python
-# Step 1: always fetch canonical_sources.yaml first
-files = g.read_files_graphql(['references/canonical_sources.yaml'])
-canonical = files['references/canonical_sources.yaml']
-if canonical is None:
-    raise RuntimeError("canonical_sources.yaml missing — cannot resolve which docs are current")
+- `references/canonical_sources.yaml`  # always read first — resolves which docs are current
 
-# Step 2: fetch required docs based on arc scope (see Read Protocol below)
-# Step 3: check designs/arcs/gm_ref/ directory to avoid arc duplication
-```
+Then:
+1. Read the required docs based on arc scope (see Read Protocol below).
+2. Check the `designs/arcs/gm_ref/` directory to avoid arc duplication.
 
 **Do not read compilation stage files from memory.** Even if you have seen them this session, verify via `canonical_sources.yaml` which version is current before using any values.
 
@@ -47,34 +38,34 @@ Deliver 3–5 arcs per batch unless the user specifies otherwise. End each batch
 
 ---
 
-## Read Protocol (GitHub fetches — do not skip)
+## Read Protocol (working-tree reads — do not skip)
 
-Fetch in this order. Check `canonical_sources.yaml` to confirm current paths before fetching.
+Read in this order from the working tree (Read tool). The checkout is authoritative — do not fetch from GitHub and do not work from memory. Check `canonical_sources.yaml` to confirm current paths before reading. If a listed file is absent from the working tree, stop and report it.
 
 **Always required:**
 - `references/canonical_sources.yaml` (done in input validation)
-- `references/glossary.md` — term definitions; fetch before using any game-specific term
+- `references/glossary.md` — term definitions; read before using any game-specific term
 - `params/factions.md` — faction stats, Domain Actions, seasonal accounting
 - `params/core.md` — dice engine baseline
 
-**Fetch if arcs involve Thread mechanics:**
+**Read if arcs involve Thread mechanics:**
 - `params/threadwork.md`
-- `canon/00_philosophical_foundations.md` §1–2 only (inseparability, scale principle) — fetch the file, read only those sections
+- `canon/00_philosophical_foundations.md` §1–2 only (inseparability, scale principle) — read only those sections
 
-**Fetch if arcs involve social/debate:**
+**Read if arcs involve social/debate:**
 - `params/contest.md`
 
-**Fetch if arcs involve mass battle:**
+**Read if arcs involve mass battle:**
 - `params/mass_combat.md`
 
-**Fetch if arcs involve specific Non-Player Characters:**
+**Read if arcs involve specific Non-Player Characters:**
 - The canonical NPC doc (check `canonical_sources.yaml` for current path)
 
-**Fetch if arcs involve territories or clocks:**
+**Read if arcs involve territories or clocks:**
 - The canonical territories doc (check `canonical_sources.yaml` for current path)
 
-**Check for prior arcs (fetch directory listing, avoid duplication):**
-- `designs/arcs/gm_ref/` — list contents via GitHub API before generating; do not reproduce an arc already documented there
+**Check for prior arcs (avoid duplication):**
+- `designs/arcs/gm_ref/` — list directory contents in the working tree before generating; do not reproduce an arc already documented there
 
 ---
 
@@ -131,7 +122,7 @@ Fetch in this order. Check `canonical_sources.yaml` to confirm current paths bef
 - `.md` file if 4+ arcs or if the user requests a document.
 Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
-**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
+**Post-commit verification:** after the commit lands, re-read all files modified in that commit from the working tree and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
 
-- Commit to `designs/arcs/gm_ref/` on GitHub after every batch via `g.atomic_commit()`. File naming: `arcs_NN_MM_[topic].md`.
+- Write each batch directly to `designs/arcs/gm_ref/` in the working tree and `git commit` after every batch. File naming: `arcs_NN_MM_[topic].md`.
 - Log any canon corrections found during generation as `[GAP-ARC-NN]` in the output document.

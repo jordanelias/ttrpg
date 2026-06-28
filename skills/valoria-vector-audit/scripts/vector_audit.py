@@ -21,9 +21,8 @@ Stages executed by --mode all:
     7. Discourse/design overlay
 
 PRECONDITIONS:
-    - bootstrap complete (assert_bootstrap() called)
-    - github_ops module on sys.path with read_files_graphql + PAT
-    - PAT in /home/claude/.valoria_pat OR env GITHUB_PAT
+    - run from the repo root; the corpus is read from the working tree (the
+      checkout is authoritative — no GitHub fetch, no PAT, no bootstrap).
 
 POSTCONDITIONS:
     All intermediate JSON/NPZ files written to {output_dir}/data/
@@ -366,20 +365,20 @@ def main():
     ap.add_argument('--output-dir', required=True, help='audit output folder')
     ap.add_argument('--mode', default='all',
                     help='stage selector: all | A,B,G | etc.')
-    ap.add_argument('--pat-file', default='/home/claude/.valoria_pat')
+    ap.add_argument('--repo-root', default='.',
+                    help='repo root to read the corpus from (working tree)')
     args = ap.parse_args()
 
     out = Path(args.output_dir)
     (out / 'data').mkdir(parents=True, exist_ok=True)
 
-    pat = Path(args.pat_file).read_text().strip() if Path(args.pat_file).exists() \
-        else os.environ.get('GITHUB_PAT', '')
-    if not pat:
-        sys.exit("PAT not found")
+    root = Path(args.repo_root)
+    if not root.exists():
+        sys.exit(f"repo root not found: {root}")
 
     print(f"[vector_audit v3] output: {out}")
     print(f"[vector_audit v3] mode: {args.mode}")
-    print(f"[vector_audit v3] PAT loaded: {len(pat)} chars")
+    print(f"[vector_audit v3] corpus root (working tree): {root}")
 
     # Stage execution dispatcher would go here.
     # Full pipeline implementation lives in this file in the production version;

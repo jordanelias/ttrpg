@@ -10,11 +10,7 @@ description: >
   Index Ruleset Principle (doc > 400 lines with explanatory content).
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
 # VALORIA ATOMIZER SKILL
-
-**Model:** Sonnet 4.6.
 
 ## Purpose
 
@@ -48,32 +44,24 @@ Apply the Index Ruleset Principle to every v30 design doc. After atomization:
 
 ## Input Validation (MANDATORY)
 
-```python
-import os, sys, re
-os.environ["GITHUB_PAT"] = "<PAT>"
-sys.path.insert(0, "/home/claude")
-import github_ops as g
+Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
-# 1. Fetch design_registry.yaml to find canonical_v30 path
-registry_files = g.read_files_graphql(["references/design_registry.yaml"])
-# 2. Identify the target system entry
-# 3. Confirm canonical_v30 path exists; atomized == not_started
-# 4. Fetch the design doc
-target_files = g.read_files_graphql([canonical_v30_path])
-```
+- `references/design_registry.yaml`  # find canonical_v30 path for the target system entry
+- `<canonical_v30_path>`  # the design doc to atomize (resolved from the registry)
+
+Then:
+1. Identify the target system entry in the registry.
+2. Confirm the `canonical_v30` path exists and `atomized == not_started`.
+3. Read the design doc at that path.
 
 **If `atomized: complete`:** skip — already done. Report and stop.
 **If `atomized: in_progress`:** check which file is missing, complete it.
 **If `canonical_v30: null`:** cannot atomize — source is unverified. Report blocker and stop.
 
-## Fetch Log (emit before any work)
-
-```
-
 ## Workflow
 
 ### Step 1 — Section Inventory
-Parse the fetched design doc into sections (by `##` headers).
+Parse the design doc into sections (by `##` headers).
 For each section, classify:
 - `index-only` — all content is tables, formulas, or one-sentence rulings
 - `infill-only` — all content is prose, rationale, or examples
@@ -123,7 +111,7 @@ Content rules:
 - If the index has an edge case that was truncated, include the full text here
 
 ### Step 4 — Update Registry
-Fetch `references/design_registry.yaml` immediately before write (collision guard).
+Re-read `references/design_registry.yaml` from the working tree immediately before write (collision guard).
 Update the target entry:
 ```yaml
   index: designs/{system}/{name}_v30_index.md  # or _v30.md if replacing in-place
@@ -131,8 +119,8 @@ Update the target entry:
   atomized: complete
 ```
 
-### Step 5 — Atomic Commit
-Files in commit:
+### Step 5 — Commit
+Write all output files directly to their repo paths in the working tree, then `git commit`. Files in commit:
 1. Index file (`{name}_v30_index.md` or updated `{name}_v30.md`)
 2. Infill file (`{name}_v30_infill.md`) — NEW
 3. `references/design_registry.yaml` — updated
@@ -177,7 +165,7 @@ Exit 0 required. On non-zero: fix before committing.
 
 ## Post-Commit Verification
 
-After `atomic_commit()` returns SHA: re-fetch both output files. Confirm:
+After the commit lands: re-read both output files from the working tree. Confirm:
 - Index file contains NO prose paragraphs > 1 sentence
 - Infill file contains NO mechanical formula tables
 - `design_registry.yaml` shows `atomized: complete`
@@ -198,4 +186,4 @@ Work through in this order (highest mechanical value / most cross-referenced fir
 
 ## Collision Prevention
 
-Before every `atomic_commit()` call, re-fetch all files being written and compare SHA to session-start fetch. If changed: STOP, report collision. See valoria-orchestrator skill §Collision Prevention.
+Before every commit, re-read all files being written from the working tree and compare to what you read at the start of the task. If changed underneath you: STOP, report collision. See valoria-orchestrator skill §Collision Prevention.

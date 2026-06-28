@@ -12,8 +12,6 @@ description: >
   reconstruct the parameter block or simulation logic inline.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
 # Valoria Combat Simulator
 
 ## Purpose
@@ -21,26 +19,15 @@ Statistically simulate personal combat between two characters across all valid
 weapon × armour build combinations. Produces win/loss/draw probabilities,
 identifies balance flags, and generates patch proposals.
 
-**Model:** Sonnet 4.6. Never route to Haiku or Opus.
-
 ---
 
 ## Step 1 — Input Validation (MANDATORY, BLOCKING)
 
-Fetch the following from GitHub before writing any simulation code or reading any mechanical value:
+Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
-```python
-required = [
-    'references/canonical_sources.yaml',  # confirm current design doc
-    'params/combat.md',        # ALL mechanical values — source of truth
-    'params/core.md',          # dice engine baseline
-]
-files = g.read_files_graphql(required)
-token = g.assert_fetched(*required)  # raises if any path not fetched
-for path, content in files.items():
-    if content is None:
-        raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
-```
+- `references/canonical_sources.yaml` — confirm current design doc
+- `params/combat.md` — ALL mechanical values — source of truth
+- `params/core.md` — dice engine baseline
 
 ---
 
@@ -79,7 +66,7 @@ python3 /path/to/scripts/combat_sim.py \
   --n-fights 5000 \
   --max-rounds 30 \
   --run-label "Run-N" \
-  --output /home/claude/sim_results_runN.md
+  --output tests/sim/sim_results_runN.md
 ```
 
 **Robust testing** (when requested): run ALL stat brackets:
@@ -134,7 +121,7 @@ Apply findings framework from `references/findings_template.md`:
 
 ## Step 7 — Output
 
-Write to `/home/claude/sim_results_runN.md`. Commit to `tests/sim/sim_results_runN.md` via `g.atomic_commit()`.
+Write directly to `tests/sim/sim_results_runN.md` in the working tree, then `git commit`.
 Update `session_log_current.md`.
 
 ---
@@ -151,14 +138,10 @@ Log to `canon/patch_register_active.yaml`.
 
 Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
-**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
-
-**Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
-
 ## Version Check Protocol (Mandatory)
 
 Before running any mode that uses mechanical values:
-1. Read the relevant `params/*.md` file(s) from GitHub.
+1. Read the relevant `params/*.md` file(s) from the working tree.
 2. Check the `<!-- version: -->` tag at the top of each params file.
 3. Compare against the current ruleset version (stated in `deprecated/compilation/README.md`).
 4. If params version ≠ current ruleset version: **halt**, flag as `[STALE PARAMS: <file> is vX.XX, current ruleset is vY.YY — update params before proceeding]`, and do not proceed until the user confirms or params are updated.

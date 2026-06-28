@@ -98,7 +98,7 @@ policies:
   - match: "tests/coverage_matrix.md"
     max_tokens: 10000
     on_exceed: "flag_for_manual_archive"
-    note: "Raised 8000 -> 10000 (2026-06-24) to match tools/ci_register_size_check.py; the 8000 cap had been failing CI (file ~8.3k). Markdown narrative file; auto-archive-by-status doesn't apply (no per-entry status field). When threshold reached, manually move closed-finding paragraphs to tests/coverage_matrix_archive_<date>.md and reset."
+    note: "SINGLE SOURCE OF TRUTH for this threshold — tools/ci_register_size_check.py reads max_tokens from here (COVERAGE_MATRIX_LIMIT); change it in this one place. Raised 8000 -> 10000 (2026-06-24): the 8000 cap had been failing CI (file ~8.3k). Markdown narrative file; auto-archive-by-status doesn't apply (no per-entry status field). When threshold reached, manually move closed-finding paragraphs to tests/coverage_matrix_archive_<date>.md and reset. Drift guard: tests/valoria/test_coverage_matrix_threshold.py."
 
   # ────────────────────────────────────────────────────────────
   # PARAMS FILES — atomized by domain

@@ -12,25 +12,15 @@ description: >
   and "audit for mechanics".
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
-
-**Model:** Sonnet 4.6. Requires cross-referencing complex interacting systems.
-
 ## Input Validation (MANDATORY BEFORE ANY AUDIT)
 
-Before running any audit mode, verify the following have been fetched from GitHub this session:
+Read the following files from the working tree (use the Read tool) before proceeding. The checkout is authoritative — do not fetch from GitHub and do not work from memory. If a listed file is absent from the working tree, stop and report it.
 
-```python
-# Required files — fetch via g.read_files_graphql() if not already in context
-required = [
-    'references/canonical_sources.yaml',       # confirm which design doc is canonical
-    '<target system doc — session-local work OR canonical>',  # need NOT be canon (D2); canon is the baseline
-    'references/params_<system>.md',           # extracted mechanical values
-    'canon/02_canon_constraints.md',           # P-01–P-15
-    'references/propagation_map.md',          # dependency map
-]
-```
+- `references/canonical_sources.yaml` — confirm which design doc is canonical
+- `<target system doc — session-local work OR canonical>` — need NOT be canon (D2); canon is the baseline
+- `references/params_<system>.md` — extracted mechanical values
+- `canon/02_canon_constraints.md` — P-01–P-15
+- `references/propagation_map.md` — dependency map
 
 **The audit target may be whatever work/files exist local to the session — it need NOT be canon (D2).** Fetch canon as the *baseline/yardstick*; where a canonical version of the target exists, the latest local session work *supersedes the stale canon* (note which local artifact supersedes which source). The standing prohibition is narrower than before: **never audit from *memory* — read the actual local artifact, never a remembered or hallucinated version.**
 
@@ -123,4 +113,4 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 - All findings assigned severity (P1/P2/P3)
 - P1 findings automatically appended to `canon/editorial_ledger.yaml`
 - No editorial judgment — mechanical analysis only
-- All mechanical values cited with source file and section from GitHub fetch
+- All mechanical values cited with source file and section from the working tree
