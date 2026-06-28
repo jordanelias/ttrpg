@@ -32,7 +32,7 @@ Pool maximum: 24D (Attribute 7, History 7: (7×2) + (7+3) = 24)
 | 0 | Surface | None | Auto |
 | 1 | Settled | Cog ≥ 2 or local History | 1 |
 | 2 | Hidden | Cog ≥ 3 or Att ≥ 3 | 2 |
-| 3 | Buried | TS ≥ 10 (explore/invest) or Disposition ≥ Bonds − 1 (social, PP-684) | 3 |
+| 3 | Buried | TS ≥ 10 (explore/invest) or Disposition ≥ +3 (social; ED-912 — was Bonds − 1) | 3 |
 | 4 | Liminal | TS ≥ 30 | 5 |
 | 5 | Unintelligible | TS ≥ 50; Coherence check Ob 2 | 8 |
 
@@ -116,36 +116,27 @@ Evidence: +2 (Success), +3 (Overwhelming).
 
 Mending arc: severity reduction yields +1/+2/+2/+3 across four reductions.
 
-## Disposition Track (PP-632)
-Range: −4 to Bonds (PP-684 revised from floor(Bonds/2)+1). Asymmetric per-NPC per-PC.
+## Disposition Track (ED-912 — supersedes PP-632 redesign + PP-684 "ceiling = Bonds")
+Range: **−5 to +5** (flat; NOT Bonds-capped). Asymmetric per-NPC per-PC. Canonical spec: fieldwork_v30 §5.1.
 
-| Bonds | Max Disposition |
-|-------|----------------|
-| 1 | +1 |
-| 2 | +2 |
-| 3 | +3 |
-| 4 | +4 |
-| 5 | +5 |
-| 6–7 | +5 (capped by Disposition max) |
+**Ob rule: stepped table (ED-912 — replaces the PP-632 direct-subtraction `max(1, base Ob − Disposition)`).** Floor Ob 1 always applies. Impress is exempt (it sets starting Disposition).
 
-**Ob rule: effective Ob = max(1, base Ob − Disposition).** Direct subtraction; no stepped table.
-Negative Disposition adds difficulty. Positive Disposition reduces it. Floor 1 always applies.
-Impress is exempt (it produces starting Disposition; Disposition is not yet established).
-
-| Value | Label | Info Gate |
-|-------|-------|-----------|
-| −4 | Hostile | Refuses interaction. Violence possible. |
-| −3 | Suspicious | Minimal cooperation. |
-| −2 | Wary | Guarded. Surface only. |
-| −1 | Cool | Cautious. Surface only. |
-| 0 | Neutral | Standard. Surface. |
-| +1 | Interested | Settled information. |
-| +2 | Friendly | Hidden information. |
-| +3 | Trusting | Buried information. |
-| +4 | Devoted | Liminal information. Knot threshold at Bonds 6–7. |
+| Value | Label | Ob mod | Info Gate |
+|-------|-------|--------|-----------|
+| −5 | Hateful | +5 | Active enmity. Will harm given opportunity. |
+| −4 | Hostile | +4 | Refuses interaction. Violence possible. |
+| −3 | Antagonistic | +3 | Openly uncooperative. Obstructs. |
+| −2 | Suspicious | +2 | Minimal cooperation. |
+| −1 | Wary | +1 | Guarded. Surface only. |
+| 0 | Neutral | 0 | Standard. Surface. |
+| +1 | Warm | −1 | Settled information. |
+| +2 | Friendly | −1 | Hidden information. |
+| +3 | Trusting | −2 | Buried information. |
+| +4 | Devoted | −2 | Liminal information. |
+| +5 | Bonded | −3 | Knot candidate (Bonds ≥ 5 + TS ≥ 30). Deepest access. |
 
 **Starting Disposition — lifepath derivation (PP-632):**
-For each relevant lifepath element, assign ±0.5 based on alignment/conflict with NPC faction, culture, and role. Sum, take floor, clamp to [−4, floor(Bonds/2)+1].
+For each relevant lifepath element, assign ±0.5 based on alignment/conflict with NPC faction, culture, and role. Sum, take floor, clamp to [−5, +5] (ED-912 — was [−4, floor(Bonds/2)+1]).
 - Same birthplace/cultural region: +0.5
 - Same occupation/guild/trade: +0.5
 - Same faction (loose): +0.5 / (full member): +1
@@ -160,17 +151,17 @@ Post-Contest: winner Disposition +1 with adjudicator, loser −1.
 NPC learns investigation revealed their secrets: −2 (exception: +1 if NPC wanted truth).
 
 
-## Knot System (PP-632 — see params/threadwork.md for full mechanics)
-Knots are being-with (Mitsein), not Thread operations. Any character. TS not required.
+## Knot System (ED-912 / ED-773 strain model — supersedes PP-632 tier-cost; full mechanics: fieldwork_v30 §5.6 + params/threadwork.md)
+Knots are being-with (Mitsein), Thread-bound (TS ≥ 30 required — supersedes the PP-632 "any character").
 
-Pool = (Bonds × 2) + 3. Max count = floor(Bonds/2)+1.
-Tiers: Close (5pts) / Medium (2pts) / Loose (1pt).
-Formation: max Disposition + Connect roll (Ob = tier, Disposition subtracted, floor 1).
-Effects: +1D social with partner; no Disposition decay; shared Composure buffer;
-  relational contagion (P-12) for practitioners; Knot-mediated Thread-Read (TS 30+, +1 strain/use).
-Rupture: Disposition →−4; Composure damage = tier cost.
-Loss: Disposition track removed; Coherence −1; Composure damage = tier cost.
-Full mechanics: params/threadwork.md §Knot Mechanics.
+**Prerequisites (all):** Disposition **+5** (Bonded) · (PC or NPC) TS ≥ 30 · PC **Bonds ≥ 5** · Knot count < floor(Bonds/2)+1 · no existing Knot with this NPC.
+Tiers: **Distant** / **Close** (Distant upgradeable to Close via 3 social scenes at Disposition +5, §5.6a).
+Formation: Spirit pool (Spirit × 2) vs TN 7, **Ob 2**. Overwhelming → Close; Success → Distant; Partial/Failure → no Knot.
+**Strain: bidirectional −5..+5 bond-strain gauge** (Distant −2..+5, start 0; Close −5..+5, start −2). +1 strain per stress-use (Thread-Read, Composure buffer, counsel retrieval, sustained Disposition < +3 for 2 seasons). **Rupture at +5.** Reinforcement: −1/season at Accounting when Disposition ≥ +3 and no strain added. **−5 = Tempered** (Close — absorbs the next rupture trigger once, resets to 0).
+Effects: +1D social with partner; no Disposition decay; shared Composure buffer; relational contagion (P-12); Knot-mediated Thread-Read (+1 strain/use).
+Break (strain +5): Disposition **−3** (floor −5); both take 4 Composure; benefits cease; Conviction Scar +1 on a Close break.
+Betrayal rupture (public citation of private counsel): Disposition → **−3**, bypasses strain.
+Loss (partner death / Dissolution): Knot removed; Coherence −1; 4 Composure damage.
 
 ## Sincerity Gate
 Trigger: GM-called when Belief contradicts genuine engagement.
@@ -178,7 +169,7 @@ Pool: Spirit. TN: 7. Ob: 1.
 Failure: Disposition unchanged or −1. Success: normal result.
 
 ## Gift/Bribe
-No roll. Starting Disposition +1. Once per NPC per season. Fails at Disposition ≤ −3 (Suspicious/Hostile NPCs reject gifts from strangers).
+No roll. Starting Disposition +1. Once per NPC per season. Fails at Disposition ≤ −2 (Suspicious and below reject gifts from strangers).
 
 ## Knot-Mediated Remote Thread-Read (§2.6)
 Pool: standard Thread-Read. TN: 7. Ob: Personal (2).

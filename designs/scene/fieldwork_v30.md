@@ -361,19 +361,22 @@ This resolves per action, not per investigation. Each investigation action faces
 ### §5.1 Disposition Track
 
 
-**Disposition range: −3 to +5.** Maximum Disposition per NPC is capped by the player's Bonds attribute: **ceiling = Bonds** (PP-684, revised from PP-632 floor formula). Bonds 1 caps at +1 (Interested). Bonds 2 caps at +2 (Friendly). Bonds 3 caps at +3 (Trusting — companion eligibility). Bonds 4 caps at +4 (Devoted). Bonds 5 caps at +5 (Bonded — Knot candidate, achievable at creation). This makes Bonds the structural capacity for relationship depth; Disposition is the current state within that capacity.
+<!-- [EDITORIAL: ED-912/ED-841 — Jordan ruling 2026-06-23 (revised 2026-06-28): Disposition range = −5..+5 (flat; NOT Bonds-capped). Supersedes PP-632 redesign + PP-684 "ceiling = Bonds". Knot model = strain (ED-773, Option A), reframed as a bidirectional −5..+5 bond-strain gauge (§5.6b). Bonds ≥ 5 retained as an EXPLICIT Knot prerequisite (§5.6a), no longer derived from a ceiling. Stepped Ob table (below) replaces the params direct-subtraction rule. -->
+**Disposition range: −5 to +5.** Flat per NPC per PC — the same fixed swing for every character; no Bonds ceiling. Asymmetric: A's Disposition toward B is independent of B's toward A. Relationship *depth* gating (companion eligibility, Knot formation) is expressed by explicit prerequisites (§5.6), not by a Bonds-derived cap.
 
 | Value | Label | Effect on Social Ob | Information Gate |
 |-------|-------|---------------------|-----------------|
-| −3 | Hostile | +3 Ob | Refuses interaction. Violence possible. |
+| −5 | Hateful | +5 Ob | Active enmity. Will harm the character given opportunity. |
+| −4 | Hostile | +4 Ob | Refuses interaction. Violence possible. |
+| −3 | Antagonistic | +3 Ob | Openly uncooperative. Obstructs. |
 | −2 | Suspicious | +2 Ob | Minimal cooperation. Monosyllabic. |
 | −1 | Wary | +1 Ob | Guarded responses. Surface information only. |
 | 0 | Neutral | +0 Ob | Standard interaction. Surface information. |
-| +1 | Interested | +0 Ob | Willing to engage. Settled information accessible. |
+| +1 | Warm | −1 Ob | Willing to engage. Settled information accessible. |
 | +2 | Friendly | −1 Ob | Volunteers information. Hidden information accessible. |
-| +3 | Trusting | −1 Ob | Shares private knowledge. Buried information accessible. |
+| +3 | Trusting | −2 Ob | Shares private knowledge. Buried information accessible. |
 | +4 | Devoted | −2 Ob | Takes personal risk for the character. Liminal information accessible. |
-| +5 | Bonded | −2 Ob | Knot candidate. Deepest personal access. |
+| +5 | Bonded | −3 Ob | Knot candidate. Deepest personal access. |
 
 **Starting Disposition** is determined by faction alignment, social context, and NPC personality:
 - Same faction: +1
@@ -445,7 +448,7 @@ A character can access the same information through different routes. The NPC wh
 ### §5.6 Knot Integration
 
 
-**Non-sensitive characters at Disposition +5:** If neither the PC nor the NPC has TS ≥ 30, Knot formation is impossible — Knots require Thread contact. The relationship is as deep as it can be without Thread linkage. Mechanically: no decay, +1D on social actions (these benefits apply at Disposition +5 regardless of Knot status). Relational contagion (P-12) does not apply without a Knot.
+**Non-sensitive characters at Disposition +5 (Bonded):** If neither the PC nor the NPC has TS ≥ 30, Knot formation is impossible — Knots require Thread contact. The relationship is as deep as it can be without Thread linkage. Mechanically: no decay, +1D on social actions (these benefits apply at Disposition +5 regardless of Knot status). Relational contagion (P-12) does not apply without a Knot.
 
 Knot-linked characters gain:
 - Automatic Disposition maintenance (no decay)
@@ -457,13 +460,13 @@ Knot-linked characters gain:
 ### §5.6a Knot Formation Procedure (AUD-NPC-01 resolution; ED-780 prerequisite clarification)
 
 **Prerequisites (all required):**
-1. Disposition +5 with the target NPC
+1. Disposition +5 (Bonded) with the target NPC
 2. Either PC or NPC has TS ≥ 30 (Thread contact — per A12, Knots bind threads; substrate must be accessible)
 3. PC's current Knot count < floor(Bonds/2)+1 (per params_core §Bonds max Knot count)
 4. No existing Knot with this NPC
-5. **PC Bonds ≥ 5** (derived prerequisite from §3 Disposition ceiling = Bonds rule and prerequisite 1 above; Bonds 1-4 caps Disposition below +5, making Knot formation structurally impossible. ED-780 surfaces this implicit gate explicitly.)
+5. **PC Bonds ≥ 5** (EXPLICIT prerequisite per ED-912 ruling 2026-06-23: Disposition is now a flat −5..+5 with no Bonds ceiling, so this gate is stated directly rather than derived. ED-780's intent — Knots demand deep relational capacity — is preserved as a standalone gate.)
 
-**Bonds prerequisite rationale (ED-780):** A character with Bonds 1-4 cannot reach Disposition +5 with any NPC because §3 caps Disposition by Bonds attribute. Such a character pursuing Knot formation would reach Disposition equal to their Bonds value (e.g., Bonds 3 → Disposition cap +3 = Cordial), then accumulate no further Disposition regardless of social investment. The Knot formation Spirit Ob 2 roll (resolution below) is never reached. Surfacing this explicitly prevents player frustration from invisible structural gates and clarifies the character creation tradeoff: low Bonds means unable to form Knots, which closes off the Knot-mediated Wager system (social_contest §6.1), Knot-as-Composure-buffer (social_contest §4 Step 6), Knot-mediated Thread-Read (§2.6), and Knot anchoring for Coherence recovery (threadwork §3.5). High Bonds is the canonical relational-system gate.
+**Bonds prerequisite rationale (ED-780, restated under the flat −5..+5 range):** Reaching the +5 (Bonded) level is necessary but **not sufficient** for a Knot. A character with Bonds 1-4 can reach Disposition +5 with an NPC yet still cannot form a Knot, because Knots demand the deep relational *capacity* that Bonds represents (and their Knot-count slot, floor(Bonds/2)+1, would be only 1-2). This preserves the character-creation tradeoff: low Bonds closes off the Knot-mediated Wager system (social_contest §6.1), Knot-as-Composure-buffer (social_contest §4 Step 6), Knot-mediated Thread-Read (§2.6), and Knot anchoring for Coherence recovery (threadwork §3.5). High Bonds remains the canonical relational-system gate.
 
 When prerequisites are met, a Knot Formation scene appears on the Scene Slate at Priority 2. The scene fires once per eligible NPC per season. If declined, it reappears next season while prerequisites hold.
 
@@ -490,19 +493,22 @@ The Knot lifecycle was previously specified for formation (§5.6a) and use (§2.
 - Witnessing Conviction Scar firing in Knot partner (per Piety Track ≥3 Scar count): +1 strain at next Accounting.
 - Sustained Disposition reduction (Disposition drops below +3 for **2 consecutive seasons** — defined as: Disposition value at Accounting in season N is below +3 AND Disposition value at Accounting in season N+1 is below +3, both unbroken): +1 strain at Accounting of season N+1. Non-consecutive seasons below +3 do not aggregate. (PP-719 clarification per EC-F2.A-01 fieldwork_lifecycle_stress_01.)
 
-**Knot break threshold:** A Knot accumulates strain up to capacity. At capacity exceeded, the Knot breaks at the next Accounting.
+**Knot strain is a bidirectional −5..+5 bond-strain gauge** (ED-912 revision 2026-06-28; replaces the prior one-way 0→capacity accumulator). Positive strain is *wear* toward rupture; negative strain is *resilience* earned through mutual investment.
 
-| Knot Type | Strain Capacity | Notes |
-|---|---|---|
-| Distant Knot | 4 strain | Can be upgraded to Close (per §5.6a Success outcome). Upgrade resets strain to 0. |
-| Close Knot | 7 strain | Upgrade ceiling. Reaching 7 strain triggers break. |
+| Knot Type | Strain range | Starts at | Notes |
+|---|---|---|---|
+| Distant Knot | −2 … +5 | 0 | Shallower bond; reinforces only to −2. Upgradeable to Close (§5.6a Success). |
+| Close Knot | −5 … +5 | −2 | Deeper bond; begins already buffered, can temper to −5. Upgrade Distant→Close shifts current strain by −2 (deepening adds buffer). |
 
-**Knot break consequences:**
-- Disposition with the Knot partner drops to +2 (or current value −2, whichever is lower; floor at −3 per §3.5 Disposition range).
+- **Rupture at +5:** when strain reaches +5, the Knot breaks at the next Accounting (the wear-direction ceiling for both types). This is the old "capacity exceeded," now a single shared threshold.
+- **−5 = Tempered** (Close only): a maximally reinforced bond **absorbs the next rupture trigger once** — the Knot holds and strain resets to 0 instead of breaking.
+
+**Knot break consequences (strain reaches +5):**
+- Disposition with the Knot partner: **−3** (floor −5 per §5.1 Disposition range).
 - Both partners take 4 Composure (per A12-derived disorientation: the Thread previously connecting renderings releases force).
 - Knot-mediated benefits (Composure shared buffer, +1D social, P-12 contagion, Wager prerequisite, counsel extraction eligibility) cease immediately.
-- Knot count slot frees up — player may form new Knot in a subsequent season per §5.6a procedure.
-- For Close Knots that broke at high strain: Conviction Scar +1 to both partners (the broken Knot leaves perceptual residue per A1/C1 Thread-binding inseparability).
+- Knot count slot frees up — player may form a new Knot in a subsequent season per §5.6a procedure.
+- For Close Knots that broke from positive strain: Conviction Scar +1 to both partners (the broken Knot leaves perceptual residue per A1/C1 Thread-binding inseparability).
 
 **Rupture (immediate break, bypassing strain accumulation):**
 
@@ -510,13 +516,13 @@ Certain events trigger immediate Knot rupture:
 
 | Trigger | Source | Notes |
 |---|---|---|
-| Public citation of private counsel (ED-664 §3.5.4) | npc_behavior §3.5.4 | Knot ruptures with Disposition reset to −4 (per §3.5.4 specific value). |
+| Public citation of private counsel (ED-664 §3.5.4) | npc_behavior §3.5.4 | Knot ruptures with Disposition reset to −3 (Antagonistic) — the ED-912 betrayal-rupture value within the −5..+5 range (revised from the prior −4). |
 | Knot partner's death | Universal | Disposition becomes irrelevant; Knot partner enters Memory state. Knot-as-buffer can absorb final Composure damage to dying partner per Last Stand rule (player_agency §X — TBD). |
 | FR Dissolution targeting Knot partner | threadwork §3.4 | Tears the Knot directly; partner-of-rupture takes +1 Wound (no armor). |
 | Permanent Conviction shift to opposing Conviction | npc_behavior §5 | Knot tied to specific Conviction-state; opposite Conviction makes the Thread-binding incompatible. |
 | Player explicit dissolution | Player choice | Player may dissolve a Knot at Accounting at any time. Cost: 2 Composure (one-sided release strain). Disposition unchanged (the relationship persists at non-Knotted level). |
 
-**Strain decay:** Knot strain decays at −1 per season at Accounting if no strain was added that season AND Disposition is +3 or higher. Sustained mutual investment in the relationship dissipates accumulated stress.
+**Strain reinforcement (decay toward −5):** strain moves −1 per season at Accounting if no strain was added that season AND Disposition is +3 (Trusting) or higher. Sustained mutual investment pushes the bond past 0 into resilience — Distant Knots floor at −2, Close Knots at −5 (Tempered). This is the reinforcement direction of the bidirectional gauge.
 
 **Threadcut being Knots:** Knots formed with threadcut beings (per §2.6) follow the same lifecycle but use the threadcut being's Coherence as a parallel resource — strain on the Knot also drains the threadcut being's Coherence at +0.5 per strain (round up). When threadcut Coherence reaches 0, the Knot collapses regardless of strain count. This models the threadcut being's continuous Thread-work to maintain existence — adding a Knot adds maintenance cost that competes with their primary survival.
 
@@ -620,7 +626,7 @@ In territories where the Church has influence (Piety Track ≥ 3 or Church-contr
 | Fieldwork Pool | (Primary Attribute × 2) + History bonus | Variable | Combat Pool; Argue Pool |
 | Exploration Ob | Depth base + modifiers | 1–10+ | Ob scale per params_core.md |
 | Investigation Threshold | GM-set (3/5/8 by scope) | 3–8 | Clock-style progress track |
-| Disposition | Starting value ± social actions | −3 to +5 | Asymmetric per-NPC per-PC |
+| Disposition | Starting value ± social actions | −5 to +5 | Asymmetric per-NPC per-PC |
 | Cover | Cognition + most relevant History | 2–14 | Composure (Cha + 6); Stamina (End + Hist + 1) |
 | Exposure | 0 + accumulation vs Cover-derived thresholds | 0–10+ | Strain toward Composure threshold |
 
@@ -743,7 +749,7 @@ Journal
 
 NPC Disposition drives the dialogue system:
 
-**Disposition meter:** Visible on NPC portrait during interaction. Range −3 to +5 displayed as a segmented bar.
+**Disposition meter:** Visible on NPC portrait during interaction. Range −5 to +5 displayed as a segmented bar.
 
 
 **Social action as dialogue choice:** Each dialogue node can trigger a social action roll. The player selects the approach (Read, Converse, Connect, Impress, Negotiate, Rumour), the game rolls the pool, and the result determines the conversation branch.

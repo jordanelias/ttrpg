@@ -223,3 +223,25 @@ entries:
       Lore / flavor / non-resolution content is RETAINED and canonical — DO NOT full-deprecate this file.
     files_to_recheck:
       - designs/scene/combat_v30.md
+
+  - superseded_id: "PP-632 (Disposition redesign + Knot tier-cost) / PP-684 (Disposition ceiling = Bonds)"
+    scope: "Disposition range −4..Bonds with direct-subtraction Ob + Bonds ceiling; Knot tier-cost model (Loose/Medium/Close 1/2/5, any character, pool (Bonds×2)+3)"
+    superseded_by: ED-912
+    superseded_date: 2026-06-28
+    replacement: >
+      ED-912 (Jordan ruling 2026-06-28) canonizes: Disposition is a flat −5..+5 (NOT Bonds-capped;
+      Bonds ≥ 5 is a separate explicit Knot prerequisite), resolved via a stepped Ob table
+      (Hateful −5 = +5 Ob … Bonded +5 = −3 Ob). Knot model = ED-773 strain (Option A), reframed as a
+      bidirectional −5..+5 bond-strain gauge (Distant −2..+5 start 0; Close −5..+5 start −2; rupture at
+      +5; reinforce −1/season at Disposition ≥ +3; −5 = Tempered). Break/rupture: Disposition −3, 4
+      Composure. Resolves ED-841 (TIER-DRIFT-001), ED-842 (COMPOSURE-DRIFT-001 → 4), ED-912, ED-914.
+    files_to_recheck:
+      - designs/scene/fieldwork_v30.md §5.1/§5.6
+      - params/fieldwork.md
+      - params/threadwork.md §Knot Mechanics
+      - params/core.md (Bonds)
+      - designs/personal/knots_v30.md
+      - designs/architecture/complete_systems_reference.md Part 8
+      - designs/scene/articulation_layer_v30.md §2.4
+      - designs/scene/investigation_systems_v30.md (Ontological Ledger)
+      - designs/scene/fieldwork_socializing.md

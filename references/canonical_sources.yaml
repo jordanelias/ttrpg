@@ -68,7 +68,7 @@ sources:
 
   knots_unified:
     design_doc: designs/personal/knots_v30.md
-    canonical_sha__designs__personal__knots_v30_md: "6571d73ea3018d725092ad853fb9ffa8cec75290"
+    canonical_sha__designs__personal__knots_v30_md: "017ce385b0d4909ca6cee83605be47e675930690"
     canonized: "2026-05-17"
     canonized_pass: "Pass 2g"
     contradictions_pending:
@@ -94,7 +94,7 @@ sources:
 systems:
   core_engine:
     design_doc: designs/architecture/complete_systems_reference.md
-    canonical_sha__designs__architecture__complete_systems_reference_md: "17771c5cc2650ee65dae304c23ea48a4f77a9d43"
+    canonical_sha__designs__architecture__complete_systems_reference_md: "875d40e19093f7bf8749aaa99fd149f53306ea15"
     params: params/core.md
     canonical_sha__params__core_md: "8f13946bf39f15016867d593c597213ebe31dfd0"
     bg_params: params/bg/core.md
@@ -330,7 +330,7 @@ systems:
     added: '2026-05-01 PP-686 v2 ratification — faction architecture consuming PP-687'
   articulation_layer:
     design_doc: designs/articulation/articulation_layer_v30.md
-    canonical_sha__designs__articulation__articulation_layer_v30_md: "ff2fd7d85132f858b92369e30b336aa28b05b3ff"
+    canonical_sha__designs__articulation__articulation_layer_v30_md: "e38d1a92586784e6c50026fc4e9a422637e7a6e2"
     status: canonical
     added: '2026-05-01 PP-688 ratification — articulation layer consuming PP-687; 2026-05-02 ED-785 §3.1 trigger ruleset finalized (10 triggers, threshold 0.40, belief_revised added)'
   conviction_axis_matrix:
@@ -414,12 +414,12 @@ systems:
     canonical_sha__designs__provincial__faction_politics_v30_index_md: "d10b44b062fb3f80e3093b4671bf7e7ce96ade68"
   investigation:
     design_doc: designs/scene/investigation_systems_v30.md
-    canonical_sha__designs__scene__investigation_systems_v30_md: "0de5220629863b955f87b386020eee7c8e44d5d9"
+    canonical_sha__designs__scene__investigation_systems_v30_md: "f5265bc470c5c0e80a24c514654314a0bd3c77be"
     index: designs/scene/investigation_systems_v30_index.md
     canonical_sha__designs__scene__investigation_systems_v30_index_md: "8eebbbbae7920118a246b88fe1821d5dd150a32b"
   fieldwork:
     design_doc: designs/scene/fieldwork_v30.md
-    canonical_sha__designs__scene__fieldwork_v30_md: "dce3c19967feb1d279f119f06fdd1e194cf747c0"
+    canonical_sha__designs__scene__fieldwork_v30_md: "273cfba8cae1f2c234d8728d2de182dddfb369d0"
     index: designs/scene/fieldwork_v30_index.md
     canonical_sha__designs__scene__fieldwork_v30_index_md: "be12d3f8161cab0082e1789e542a84d053e631cf"
     infill: designs/scene/fieldwork_v30_infill.md

@@ -21,7 +21,7 @@
       "placeholders": 8,
       "handshakes": 9,
       "with_definition": 133,
-      "linked_to_graph": 7
+      "linked_to_graph": 10
     }
   },
   "terms": [
@@ -3163,6 +3163,12 @@
         "references/alias_registry.yaml",
         "references/name_collision_database.yaml",
         "references/glossary.md"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "personal_combat::Health"
+        }
       ]
     },
     {
@@ -3445,6 +3451,12 @@
       "collision_note": "",
       "sources": [
         "references/name_collision_database.yaml"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "personal_combat::Initiative"
+        }
       ]
     },
     {
@@ -6009,6 +6021,12 @@
         "references/alias_registry.yaml",
         "references/name_collision_database.yaml",
         "references/glossary.md"
+      ],
+      "links": [
+        {
+          "kind": "scalar",
+          "id": "personal_combat::Stamina"
+        }
       ]
     },
     {

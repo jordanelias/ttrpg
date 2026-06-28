@@ -72,7 +72,7 @@ Hollow victory: BG condition met but PC arc contradicts it. Player choice: accep
 | System | TTRPG | Board Game | Hybrid |
 |--------|-------|-----------|--------|
 | Personal combat | Full pool split + priority table | N/A | TTRPG during Personal Phase |
-| Mass combat | Zone-based; Zoom In/Out | Disposition table, single roll | BG resolution; Zoom In for named NPCs |
+| Mass combat | Zone-based; Zoom In/Out | Stance table, single roll | BG resolution; Zoom In for named NPCs |
 | Domain Actions | GM-recognised from personal roll | Explicit Order Set | Strategic Phase BG; Personal Phase TTRPG |
 | Thread ops | Full ops, Version C co-movement | Faction-scale, Co-Movement Cards | Personal: Version C; Strategic: Cards |
 | Seasonal stat cap | ±2/stat/season | ±2/stat/season | Shared — applies across both phases |

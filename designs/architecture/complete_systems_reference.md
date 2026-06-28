@@ -217,7 +217,7 @@ Battle consequences: MS −1 (Campaign −2), IP +2/season, Political Stability 
 
 **Domain Echo:** Sufficient Scope → OW ±2, Success ±1, Partial narrative, Failure −1.
 
-**Knots (PP-632):** Being-with, not Thread ops. Pool = (Bonds×2)+3. Max = floor(Bonds/2)+1 (same formula as Disposition ceiling). Close 5 / Medium 2 / Loose 1. Rupture: Disp → −4. Loss: Coherence −1 mandatory.
+**Knots (ED-912 strain model — supersedes PP-632 tier-cost):** Being-with, Thread-bound (TS ≥ 30). Prereqs: Disposition **+5** (Bonded) + Bonds ≥ 5 + Knot count < floor(Bonds/2)+1. Tiers: **Distant / Close** (2-tier). Formation: Spirit pool (Spirit×2) TN 7 Ob 2 (OW → Close, Success → Distant). Strain: bidirectional **−5..+5** bond-strain (Distant −2..+5 start 0; Close −5..+5 start −2); rupture at +5; reinforce −1/season at Disp ≥ +3; −5 = Tempered. Rupture/break: Disp → **−3**, 4 Composure, Coherence −1 on loss. Disposition itself is a flat **−5..+5** (no Bonds ceiling).
 
 **AI Posture:** 1. Existential. 2. Defend. 3. Consolidate. 4. Counter-threat (CI ≥ 55). 5. Expand. 6. Opportunistic.
 

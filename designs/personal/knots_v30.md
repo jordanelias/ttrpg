@@ -25,7 +25,7 @@
 A **Knot** is a thread-substrate binding between two characters whose relational depth has reached the structural maximum (Disposition +5). It is *constitutive*, not contractual — the Knot IS the Thread-level relationship, not a label applied to one. Once formed, the binding can be strained, broken, or ruptured but not unilaterally dissolved by either party except through deliberate Player Choice (per §6 below).
 
 **Knot vs Bond.**
-- **Bonds** (attribute, 1-7) is structural capability — how deep relationships CAN go. Caps Disposition ceiling.
+- **Bonds** (attribute, 1-7) is structural capability — how deep relationships CAN go. Gates Knot eligibility (Bonds ≥ 5); it does **not** cap Disposition (ED-912 — Disposition is a flat −5..+5).
 - **Knot** is the realized state of one specific relationship at Disposition +5.
 
 The PC's Knot count is capped at `floor(Bonds/2) + 1` (per PP-632, derived_stats §14.4 Knot Pool entry).
@@ -36,39 +36,26 @@ The PC's Knot count is capped at `floor(Bonds/2) + 1` (per PP-632, derived_stats
 |---|---|---|
 | **Knot Pool** (formation roll) | `(Bonds × 2) + 3`, min 5 | PP-632; derived_stats §14.4 |
 | **Knot Max** (simultaneous Knots) | `floor(Bonds/2) + 1` | PP-632; fieldwork §5.6a prereq 3 |
-| **Knot tier system** | **3 candidate systems — see §2 [PROVISIONAL: TIER-DRIFT-001]** | conflicting canon |
-| **Disposition ceiling** | `Bonds` (max +5) | derived_stats §10.1 (PP-684); fieldwork §5.1 |
+| **Knot tier system** | **Distant / Close** (2-tier), bidirectional −5..+5 strain | RESOLVED ED-912 (TIER-DRIFT-001); fieldwork §5.6b |
+| **Disposition range** | flat **−5..+5** (NOT Bonds-capped; Bonds ≥ 5 is a separate Knot prereq) | ED-912; fieldwork §5.1 |
 | **Knot detection** | Bonded characters perceive each other across distance via the binding | fieldwork §2.6 |
 
 ---
 
-## §2. Tier System — CANON CONTRADICTION SURFACED
+## §2. Tier System — RESOLVED (ED-912, 2026-06-28)
 
-**Three canon sources specify different tier systems for Knots:**
+**TIER-DRIFT-001 and COMPOSURE-DRIFT-001 — RESOLVED.** Jordan ruling 2026-06-28: **Option A**, reframed onto a bidirectional **−5..+5 bond-strain gauge**. The prior 0→capacity accumulator (Distant 4 / Close 7) is replaced by a single −5..+5 axis: positive strain is *wear* toward rupture; negative strain is *resilience* earned through mutual investment. Canonical spec: `fieldwork_v30.md` §5.6b.
 
-| Canon source | Date | Tier names | Strain capacity per tier |
+| Knot tier | Strain range | Starts at | Notes |
 |---|---|---|---|
-| `complete_systems_reference.md` Part 8 PP-632 | pre-2026-04-19 | Loose / Medium / Close | 1 / 2 / 5 |
-| `articulation_layer_v30.md` §2.4 | 2026 (post PP-688) | Loose / Medium / Close | (cites Composure damage as 5, no strain cap listed) |
-| `fieldwork_v30.md` §5.6b (ED-773) | 2026-04-25 | Distant / Close | 4 / 7 |
+| **Distant** | −2 … +5 | 0 | Shallower bond; reinforces only to −2. Upgradeable to Close (§3.3). |
+| **Close** | −5 … +5 | −2 | Deeper bond; begins buffered, tempers to −5. |
 
-Articulation §2.4 cites ED-773 ("rupture causes Composure damage (5 default per ED-773)"), but ED-773 in fieldwork §5.6b states break Composure cost is **4** ("Both partners take 4 Composure"). Internal contradiction.
+- **Rupture at +5** (both tiers). **−5 = Tempered** (Close only) absorbs the next rupture trigger once, then resets to 0.
+- **Reinforcement:** −1 strain/season at Accounting when Disposition ≥ +3 and no strain added.
+- **Break Composure damage = 4** (COMPOSURE-DRIFT-001 resolved — the canonical value is **4** per `fieldwork_v30.md` §5.6b; the prior articulation §2.4 citation of "5" is corrected).
 
-**[PROVISIONAL: TIER-DRIFT-001]** — Jordan resolution required. Three options:
-
-| Option | Resolution direction |
-|---|---|
-| **A** — ED-773 supersedes PP-632 (chronological): canonize Distant/Close 2-tier with strain 4/7. Update PP-632 reference + articulation §2.4 + register supersession in supersession_register.yaml + update PP-632 spec in complete_systems_reference Part 8. |
-| **B** — PP-632 stands; ED-773 is partial/incorrect: canonize Loose/Medium/Close 3-tier with strain 1/2/5. Strike Distant terminology from fieldwork §5.6b + correct it to 3-tier strain table. |
-| **C** — Both are partial; 4-tier system Loose / Medium / Distant / Close with capacities (1 / 2 / 4 / 7). Distant inserts between Medium and Close. New canonization. |
-
-Option A is the most likely intended (ED-773 carries a 2026-04-25 date stamp and explicit "ED-773 closes the gap" framing), but PP-632's appearance in `complete_systems_reference.md` (CANONICAL 2026-04-15) makes this a real supersession that should have been logged.
-
-**[PROVISIONAL: COMPOSURE-DRIFT-001]** — articulation §2.4 cites "Composure damage (5 default per ED-773)" but ED-773 says 4. Canonical value is **4** per the spec text (articulation citation is incorrect). Forward to Pass 2k to correct articulation §2.4 reference.
-
-**Forward to Pass 2k editorial-ledger batch** for ratification.
-
-**Pending resolution, this doc uses Option A's tier system (Distant/Close) where strain capacity matters mechanically.** Surface annotations as `[Option A]` where the choice affects derivation.
+**Superseded:** the PP-632 Loose/Medium/Close 3-tier point-cost model (1/2/5) is struck in favour of the Distant/Close strain model. Supersession logged in `canon/supersession_register.yaml`; `complete_systems_reference.md` Part 8 and `articulation_layer_v30.md` §2.4 updated to match.
 
 ---
 
@@ -82,7 +69,7 @@ Per fieldwork §5.6a (AUD-NPC-01 + ED-780):
 2. **Either PC or NPC has TS ≥ 30** (Thread contact — per A12, Knots bind threads; substrate must be accessible)
 3. **PC's current Knot count < floor(Bonds/2) + 1** (per PP-632)
 4. **No existing Knot with this NPC**
-5. **PC Bonds ≥ 5** (derived prerequisite — Disposition ceiling = Bonds rule means Bonds 1-4 caps Disposition below +5, making prereq 1 structurally unreachable; ED-780 surfaces this implicit gate explicitly)
+5. **PC Bonds ≥ 5** (explicit prerequisite per ED-912 — Disposition is a flat −5..+5 with no Bonds ceiling, so this gate is stated directly; a Bonds 1-4 character can reach Disposition +5 yet still cannot form a Knot. ED-780's intent preserved.)
 
 ### §3.2 Procedure
 
@@ -90,18 +77,18 @@ Roll: **Spirit × 2 + History (Relationships)**, **TN 7**, **Ob 2**.
 
 | Degree | Outcome |
 |---|---|
-| Overwhelming | Knot forms at **Close** tier directly. Strain 0. |
-| Success | Knot forms at **Distant** tier. Strain 0. Can be upgraded to Close per §3.3. (Option A) |
+| Overwhelming | Knot forms at **Close** tier directly. Strain starts at −2 (Close buffer). |
+| Success | Knot forms at **Distant** tier. Strain starts at 0. Can be upgraded to Close per §3.3. |
 | Partial | Knot does not form. Disposition holds at +5. May retry next season. |
 | Failure | Knot does not form. Disposition drops to +4. May retry only after returning to +5. |
 
-[PROVISIONAL: degree-table outcomes assume Option A tier resolution. If Option B is canonized: Overwhelming → Close, Success → Medium, Partial → Loose.]
+(Canonical per ED-912 — Option A Distant/Close tiers.)
 
 ### §3.3 Tier Upgrade
 
 Per fieldwork §5.6b: a Distant Knot can be upgraded to Close via a subsequent §3.2 procedure rolled at Overwhelming success. Upgrade resets strain to 0.
 
-[PROVISIONAL: upgrade path between Loose/Medium/Close (Option B) is not specified in any canon source — would need to be authored if Option B is adopted.]
+(Option B's Loose/Medium/Close tiers are not adopted — ED-912 canonizes Distant/Close only.)
 
 ### §3.4 Bonds Capacity Rationale (ED-780)
 
@@ -137,7 +124,7 @@ Evidence: Thread-verified. Inert Knowledge for non-sensitives. Advances Evidence
 ### §4.2 Knot-as-Composure-buffer
 
 Per social_contest §4 Step 6 (referenced in articulation §2.4):
-- A Knot partner present in a social contest may absorb up to N Composure damage on the PC's behalf (N capped by Knot tier — Close = up to 5, Distant = up to 4 [Option A]).
+- A Knot partner present in a social contest may absorb up to N Composure damage on the PC's behalf (N capped by Knot tier — Close = up to 5, Distant = up to 4).
 - Cost: **+1 Knot strain per use** (per fieldwork §5.6b)
 - Cap: once per contest
 
