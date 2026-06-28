@@ -24,23 +24,41 @@ CLI:
     python tools/ci_naming_check.py            # CI mode (GitHub event context)
     python tools/ci_naming_check.py --staged   # the git index (pre-commit)
     python tools/ci_naming_check.py --local     # HEAD~1..HEAD
+
+SOURCE OF TRUTH: the deprecated name(s) are no longer hardcoded here — they are
+read from references/names_index.yaml (via tools/names.py): every entry whose
+`enforce` tier is `block` contributes its `legacy` names. That is the single
+place a name is changed. This file therefore enforces the index; it does not
+define the invariant. (The broader, report-only drift lint over `warn`-tier
+entries lives in tools/ci_names_check.py.)
 """
 import re
 import sys
 
 try:
     import ci_common
+    import names
 except ImportError:  # allow `python tools/ci_naming_check.py` from repo root
     import os
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import ci_common
+    import names
 
-# Deprecated name. Keep this list short and explicit.
-FORBIDDEN = (re.compile(r'\bgalbados\b', re.IGNORECASE),)
 
-# Paths that legitimately contain the forbidden token (definition, history, tests,
+def _forbidden_patterns():
+    """Word-boundary, case-insensitive matchers for every `block`-tier legacy name
+    in names_index.yaml. Read fresh so a change to the index needs no code edit."""
+    return [re.compile(r'\b' + re.escape(legacy_name) + r'\b', re.IGNORECASE)
+            for (legacy_name, _canon, _key, _tier) in names.all_legacy(enforce='block')]
+
+
+# Built once at import; the index is the authoritative source (see module docstring).
+FORBIDDEN = tuple(_forbidden_patterns())
+
+# Paths that legitimately contain a forbidden token (definition, history, tests,
 # the matcher). Matched as substrings against the forward-slashed path.
 EXCLUDE = (
+    'references/names_index.yaml',          # the source of truth — names the token by design
     'references/name_collision_database.yaml',
     'references/ci_checks_registry.yaml',
     'references/deprecated_terms_registry.yaml',
@@ -88,6 +106,13 @@ def main(argv):
     elif '--local' in argv:
         mode = 'local'
 
+    if not FORBIDDEN:
+        # Fail-safe: an empty matcher means the index could not be read (missing
+        # file / no PyYAML / no block-tier entries). Never silently disable the gate.
+        print("[NAMING CHECK ERROR] no block-tier names loaded from "
+              "references/names_index.yaml — cannot enforce the naming invariant.")
+        return 1
+
     added = ci_common.get_added_lines(mode)
     violations = []
     for path, lines in added.items():
@@ -96,14 +121,16 @@ def main(argv):
             violations.append((path, h))
 
     if violations:
+        mapping = '; '.join(f'"{canon}" (never "{leg}")'
+                            for (leg, canon, _k, _t) in names.all_legacy(enforce='block'))
         print(f"[NAMING VIOLATIONS: {len(violations)}]")
-        print('  Canonical name is "Solmund"; "Galbados" must not be introduced as a name.')
+        print(f"  Canonical names enforced from references/names_index.yaml: {mapping}")
         for path, line in violations:
             print(f"  {path}: {line[:120]}")
         print("  If this is a legitimate historical/registry reference, add the path to "
               "EXCLUDE in tools/ci_naming_check.py.")
         return 1
-    print("Naming check: no new use of the deprecated name.")
+    print("Naming check: no new use of a deprecated name.")
     return 0
 
 

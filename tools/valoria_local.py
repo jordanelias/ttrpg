@@ -26,6 +26,8 @@ def main(argv):
     # (script, extra_args, blocking)
     checks = [
         ('ci_naming_check.py',          [mode_flag], True),
+        ('ci_names_consistency.py',     [],          True),   # index <-> registry mirrors agree
+        ('ci_names_check.py',           [mode_flag], False),  # report-only naming-drift lint
         ('ci_co_file_checker.py',       [mode_flag], True),
         ('ci_editorial_checker.py',     [mode_flag], True),
         ('ci_register_size_check.py',   [],          True),

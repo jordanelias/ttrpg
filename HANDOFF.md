@@ -19,6 +19,17 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Next actions
 
+- Centralized names index (`references/names_index.yaml`) landed as a SEED. Follow-ups:
+  - Fold the rest of the proper-noun corpus + the mechanic/clock/track canonicals into the index
+    (currently: attributes, faction/settlement stats, the Solmund invariant, and the clean
+    mechanic renames). Seed sources: `descriptor_registry`, `alias_registry`,
+    `proper_noun_registry`, `deprecated_terms_registry`, `synonym_registry`.
+  - Triage the corpus against the report-only `names-drift` job, then flip entries `warn -> block`
+    in the index one at a time (each moves under `naming-check`). Use `tools/valoria_rename.py
+    --apply` to clear residuals from a single edit.
+  - Once an entry's mirror is redundant, drop the duplicate `name:`/`canonical:` field from the
+    source registry so the index is the *only* copy (the `ci_names_consistency` gate currently
+    keeps the mirrors honest in the interim).
 - After the migration PR merges, finish the deferred skill-port cleanup (strip `Model:`/
   `assert_bootstrap`/`g.read_files_graphql` boilerplate from the remaining `skills/*/SKILL.md`,
   rewrite `valoria-vector-audit` to read the working tree), then flip the `/home/claude`
