@@ -12,60 +12,29 @@ description: >
   This skill owns all editorial register work — never process editorials inline.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
-
 # VALORIA EDITORIAL REGISTER SKILL
-
-**Model:** Sonnet 4.6.
 
 ## Input Validation (MANDATORY BEFORE ANY WORKFLOW)
 
-Fetch the following from GitHub before running any workflow. Do not use memory or local copies.
+Read the following from the working tree before running any workflow. Do not use memory.
 
-```python
-required = [
-    'canon/editorial_ledger.yaml',     # the register itself
-    'references/file_index.md',        # for propagation target resolution
-    'references/glossary.md',          # term definitions
-]
-files = g.read_files_graphql(required)
-# Verify nothing returned None before proceeding
-for path, content in files.items():
-    if content is None:
-        raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
-```
+- `canon/editorial_ledger.yaml` — the register itself
+- `references/file_index.md` — for propagation target resolution
+- `references/glossary.md` — term definitions
 
-**If any fetch fails:** STOP. Report the failure. Do not proceed using memory.
+**If any path is missing:** STOP. Report the failure. Do not proceed using memory.
 
-**Additional reads:** Any workflow that touches a specific design file must fetch that file from GitHub before reading or modifying it. Never work from memory of a design file's contents.
+**Additional reads:** Any workflow that touches a specific design file must read that file from the working tree before reading or modifying it. Never work from memory of a design file's contents.
 
 ## ED Number Collision Guard (MANDATORY — re-read before every ID assignment)
 
-The session-start fetch of `canon/editorial_ledger.yaml` is **not sufficient** for safe ID assignment.
-Another session may have written new items since then. Always re-fetch immediately before assigning:
+An earlier read of `canon/editorial_ledger.yaml` is **not sufficient** for safe ID assignment.
+Another session may have written new items since then. Always re-read the ledger from the working tree immediately before assigning:
 
-```python
-# Re-fetch the ledger RIGHT NOW, not at session start
-fresh_ledger_files = g.read_files_graphql(["canon/editorial_ledger.yaml"])
-raw = fresh_ledger_files["canon/editorial_ledger.yaml"]
-if raw is None:
-    raise RuntimeError("Failed to re-fetch editorial ledger — cannot assign IDs safely")
-
-import re
-nid_match = re.search(r"# next_id:\s*(\d+)", raw)
-if not nid_match:
-    raise RuntimeError("next_id header missing from ledger — do not proceed")
-
-next_id = int(nid_match.group(1))
-# SAFETY: also scan for highest ED-NNN actually present in the file
-all_ids = [int(m) for m in re.findall(r"ED-(\d+)", raw)]
-highest_present = max(all_ids) if all_ids else 0
-safe_next = max(next_id, highest_present + 1)
-
-# Use safe_next for assignment. Increment per item.
-print(f"Safe next ED ID: {safe_next}")
-```
+1. Re-read `canon/editorial_ledger.yaml` from the working tree right now, not at session start.
+2. Parse the `# next_id: <N>` header; if it is missing, do not proceed.
+3. SAFETY: also scan for the highest `ED-NNN` actually present in the file.
+4. `safe_next = max(next_id, highest_present + 1)`. Use `safe_next` for assignment, incrementing per item.
 
 **Assign IDs starting from `safe_next`.** After committing, verify the committed file's `# next_id:` equals the batch-end + 1.
 
@@ -74,13 +43,13 @@ print(f"Safe next ED ID: {safe_next}")
 
 ## Term Reference
 
-Use `references/glossary.md` (fetched above) for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
+Use `references/glossary.md` (read above) for all term definitions and permitted abbreviations before using any game-specific term or abbreviation.
 
 ## Purpose
 
 Maintain `canon/editorial_ledger.yaml` as the single source of truth for all
 editorial decisions. Present unresolved items to the user, record decisions,
-propagate changes to GitHub, and keep the register clean.
+propagate changes across the working tree and commit, and keep the register clean.
 
 ---
 
@@ -114,12 +83,12 @@ editorial_decisions:
 
 ## Workflow A — Resolve Items
 
-1. From fetched `canon/editorial_ledger.yaml`: filter `status: open`, sorted by priority (P1-BLOCKER first).
+1. From `canon/editorial_ledger.yaml` (read from the working tree): filter `status: open`, sorted by priority (P1-BLOCKER first).
 2. Present one item at a time: ID, description, flag text, source file, related IDs.
 3. Record user's decision in `decision` field.
 4. Set `status: resolved`, `date_resolved: today`.
-5. Set `propagation_targets` based on fetched `references/file_index.md`.
-6. Fetch each propagation target from GitHub, apply decision, commit.
+5. Set `propagation_targets` based on `references/file_index.md` (read from the working tree).
+6. Read each propagation target from the working tree, apply decision, commit.
 7. Set `propagation_status: complete`.
 8. Atomic commit: ledger + all target files.
 
@@ -129,9 +98,9 @@ editorial_decisions:
 
 Triggered when a design file contains `[EDITORIAL: ...]` flags not yet in the ledger.
 
-1. Fetch source file from GitHub.
+1. Read source file from the working tree.
 2. Extract all `[EDITORIAL: ...]` instances.
-3. For each: check if already registered (search fetched ledger by description similarity).
+3. For each: check if already registered (search the ledger by description similarity).
 4. If not registered: assign next ED-NNN id, populate schema, append to ledger.
 5. Run Workflow D (dedup) before committing.
 6. Atomic commit: ledger only.
@@ -142,15 +111,15 @@ Triggered when a design file contains `[EDITORIAL: ...]` flags not yet in the le
 
 Run after any batch of resolved items.
 
-1. From fetched ledger: filter `status: resolved` AND `propagation_status: pending`.
-2. For each: fetch target files from GitHub, apply decision text, mark `propagation_status: complete`.
+1. From the ledger: filter `status: resolved` AND `propagation_status: pending`.
+2. For each: read target files from the working tree, apply decision text, mark `propagation_status: complete`.
 3. Atomic commit: all modified files + ledger.
 
 ---
 
 ## Workflow D — Dedup, Consolidate, and Strike
 
-**Run:** at session start (after fetching ledger) and whenever new items are added.
+**Run:** at session start (after reading the ledger) and whenever new items are added.
 
 ### Step 1 — Deduplication
 Identify pairs of items that describe the same decision:
@@ -210,9 +179,9 @@ After running dedup/consolidate/strike, output a table:
 
 After any session where design work was done:
 
-1. Fetch all files modified in the session from GitHub.
-2. Extract all `[EDITORIAL: ...]` flags from fetched files.
-3. Cross-reference against fetched ledger (by description match).
+1. Read all files modified in the session from the working tree.
+2. Extract all `[EDITORIAL: ...]` flags from those files.
+3. Cross-reference against the ledger (by description match).
 4. Add unregistered items to ledger.
 5. Run Workflow D (dedup/consolidate/strike).
 6. Report: N new items added, N consolidated, N struck.

@@ -20,9 +20,7 @@ description: >
   routes an architecture-conformance task.
 ---
 
-**Prerequisite:** Bootstrap complete — `assert_bootstrap()` via `quick_bootstrap()` before invoking. This skill reads canonical architecture docs; never adjudicate from memory or chat-session maps. Fetch this session, index-first: `designs/architecture/key_substrate_v30.md` (§2.3, §4.1, §4.6, §8), `designs/architecture/key_type_registry_v30.md`, `designs/architecture/scale_transitions_v30.md` (§3, §5), `designs/scene/derived_stats_v30.md` (§1, §11, §14 — PROPOSAL status; re-verify before relying), plus the target module's canonical doc via `references/canonical_sources.yaml` lookup.
-
-**Model:** Opus (whole-graph cross-referencing); Sonnet acceptable for single-module Stage 1 extraction.
+**Prerequisite:** This skill reads canonical architecture docs; never adjudicate from memory or chat-session maps. Read from the working tree, index-first: `designs/architecture/key_substrate_v30.md` (§2.3, §4.1, §4.6, §8), `designs/architecture/key_type_registry_v30.md`, `designs/architecture/scale_transitions_v30.md` (§3, §5), `designs/scene/derived_stats_v30.md` (§1, §11, §14 — PROPOSAL status; re-verify before relying), plus the target module's canonical doc via `references/canonical_sources.yaml` lookup.
 
 **Naming note (collision guard):** "armature" is a canonical term (Conviction armature, `armature_position`, Faction Meta-Armature — key_substrate §8.2). This instrument is therefore the *adjudicator*, never "the armature." It audits modules that *use* the Conviction armature; it does not modify that system.
 
@@ -68,7 +66,7 @@ Contract record (one per module, in `references/module_contracts.yaml`):
 
 ## STAGE 0 — SCOPE
 
-Operator provides: one module, a scale slice (e.g., "everything at scene scale"), or `full graph`. Resolve target docs via `canonical_sources.yaml`. Run `h.task_gate('audit')` for adjudication work; `('infrastructure')` for registry-maintenance-only work.
+Operator provides: one module, a scale slice (e.g., "everything at scene scale"), or `full graph`. Resolve target docs via `canonical_sources.yaml`.
 
 ## STAGE 1 — EXTRACT (bottom-up, per module)
 
