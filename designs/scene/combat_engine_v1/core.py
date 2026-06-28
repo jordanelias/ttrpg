@@ -1,6 +1,6 @@
 """Core engine module — canonical resolution primitives. Single source for ob/degree/roll/damage.
 Wraps canonical r1/r8/m1 so every subsystem resolves identically. No A/B knowledge here."""
-import sys; sys.path.insert(0,'/home/claude'); sys.path.insert(0,'/home/claude/v32')
+import sys, os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../tests/sim/v32-combat-balance'))
 from math import tanh
 import r1_sigma_resolution as r1, r8_parity_harness as r8, m1_dice_sigma_core as m1
 from math import sqrt as _sqrt

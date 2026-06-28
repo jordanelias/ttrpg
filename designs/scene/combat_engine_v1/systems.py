@@ -1,7 +1,7 @@
 """Subsystem modules. Uniform contract: each is a pure function of (aggressor, defender, state, cfg[, rng]).
 NO subsystem touches raw A/B — they receive Combatant objects in role. This isolates every mechanic for
 unit-testing and makes the coupling explicit (the fix for the recurring inversion bugs)."""
-import sys; sys.path.insert(0,'/home/claude/combat_engine')
+import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from math import exp, tanh
 from config import HANDLE_RANK
 import core
