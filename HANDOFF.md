@@ -13,6 +13,17 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-06-28 — **Editorial-ledger relevance triage.** Deep per-item verification of all **93 unresolved**
+  entries (82 open + 10 provisional + 1 deferred) against the live working tree, in 6 read-only cluster
+  passes. Result: **37 still relevant** (25 real open work + 12 NEEDS_JORDAN), **56 stale**. Applied via
+  Workflow D: **31 struck** (21 superseded by later canon — esp. the mass-battle per-cell/Lanchester
+  re-architecture + the 2026-06-22 `net-(Ob-0.5)` continuity fix; 10 `[PROPOSED:…]` migration residue),
+  **25 resolved** (open-but-done — decision had landed, row never closed). Unresolved queue 93→37.
+  ED-citation violations dropped 315→292 as a side effect. Report:
+  `designs/audit/2026-06-28-editorial-relevance-triage/relevance_triage.md`. **Residual for Jordan:** 12
+  NEEDS_JORDAN items (NPC naming ED-649/650/651, deferrals ED-644/788, design-intent gates
+  ED-879/893/911/920/924/1033/1036); three of these (644/649/893) are the OPEN_AS_BASIS citations still
+  holding the ED-citation validator report-only.
 - 2026-06-28 — **Open-session unification + LB-22 closed.** Reviewed every `origin` session branch;
   six were already squash-merged into main (#14–#21), one (`claude/github-ci-environment-review` = PR #18)
   carried genuinely-unmerged work, and `claude/refresh-state-3m7nL` (abandoned 04-20 pre-migration line
