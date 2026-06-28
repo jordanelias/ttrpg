@@ -43,11 +43,11 @@ allocation: workplan-v5 **LB-21**, at the next integration pause.)_
   stale-canonical step back to blocking; reconcile/flip `validate_ed_citations` (HANDOFF said
   report-only ~722, but the tool currently `sys.exit(1)` — verify which is live in CI). Solo / K-2 / LB-6.
 - **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0 (index-routes).
-- **Ledger-status reconciliation (LA-23, Lane A):** the 2026-06-28 ED-912 ruling regenerated prose but
-  left **ED-841/842/912/914 at status=open** in the ledger (ratified-in-prose, not-in-ledger); and the
-  J-31 commit (#13) referenced **ED-938/ED-939 which were never filed** to `editorial_ledger.jsonl`.
-  Flip the four / file the two (or repoint #13's references). Each also subtracts from the report-only
-  `validate_ed_citations` count (748 corpus-wide; the job is `continue-on-error`, non-blocking).
+- **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`resolved`
+  and filed the never-written ED-938/ED-939 (backfilled from #13; artifacts verified). Dropped the
+  report-only `validate_ed_citations` count 748→731. **Residual:** ED-914 left `open` — its mechanical
+  parts remain (PP-719 record-or-strike; dead `fieldwork_design_v1` parent-path refs in `params/bg/core.md`,
+  `designs/scene/fieldwork_v30.md`, `designs/scene/fieldwork_godot.md`).
 - **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
   row #39 → LA-19) and the new **J-36** (Key-bus closure for the 6 off-bus writers, row #40 — gated on
   the distillation report's deferred adversarial pass).
