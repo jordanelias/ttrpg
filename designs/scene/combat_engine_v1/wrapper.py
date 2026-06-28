@@ -1,7 +1,7 @@
 """CombatWrapper — owns the state graph and the A/B identity. The driver assigns aggressor/defender ONCE per
 beat and passes Combatant objects to every subsystem. Initialization is the only toggle. This is the structural
 cure for the role-inversion bug class: no subsystem and no resolution step ever indexes raw 'A'/'B'."""
-import sys; sys.path.insert(0,'/home/claude/combat_engine')
+import sys, os; sys.path.insert(0, os.path.dirname(__file__))
 from math import exp
 import core, systems as S, tradition as TR
 from config import CFG
