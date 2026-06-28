@@ -1,12 +1,19 @@
-# Valoria — Current Canonical Surface
+# Valoria — Current Canonical Surface · **Generation v40**
+
+> **Generation v40** = the consolidated, contracts-bound, Godot-ready generation: the v30 per-system
+> flatten **+** universal Key substrate (PP-687) **+** contracts spine v3 (schema-2) **+** combat-engine
+> ratification (ED-900–904) **+** descriptor registry **+** master-workplan v4 orchestration. "v40" is a
+> *generation marker*, not a filename suffix — the `_v30` files remain (renaming 138 files / ~16k
+> citations buys no clarity). Currency is carried here + by each head's `## Status:` line, enforced by
+> `tools/ci_generation_consistency.py`.
 
 **This is the single human-readable index of what is live.** When in doubt about whether a doc
 is current, start here. Machine-readable source of truth: `references/canonical_sources.yaml`
 (SHA-pinned) and `canon/mechanics_index.yaml`. Superseded exploration lives under `archives/`
 and `deprecated/` — present for history, *not* canonical.
 
-_Last reconciled: 2026-06-28 (deprecation & currency sweep). Every row is the head of its lineage;
-predecessors are archived._
+_Last reconciled: 2026-06-28 (deprecation & currency sweep + v40 generation declaration). Every row is
+the head of its lineage; predecessors are archived._
 
 | Subsystem | Current head |
 |---|---|
