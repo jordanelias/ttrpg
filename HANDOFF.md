@@ -13,20 +13,41 @@ This replaces the old session-log + `canon/session_checkpoint.md` + checkpoint m
 
 ## Decisions
 
+- 2026-06-28 — **Master Workplan v5** authored (`designs/audit/2026-06-28-recent-work-orchestration/`),
+  reconciling the post-v4 work (06-12→06-28) into one register and superseding v4. Roadmap +
+  lane_assignments repointed to v5. Ledger verified live: 711 entries / 0 duplicate IDs / ED 1042.
+- 2026-06-28 — **ED-912**: Disposition & Knot unified on a ±5 swing (Bonds ≥5 now a Knot
+  prerequisite; break = Disposition −3 / 4 Composure). Resolves ED-841/842/912/914; supersedes
+  PP-632/PP-684. Source-of-truth + consumer tail regenerated; "Stance table" rename in combat.
+- 2026-06-26 — **J-31** social-contest docket recovered (ED-938/939/1042 + rule resolutions);
+  22-doc cross-corpus reference + terminology repair landed (#13). contest.py sim edit deferred
+  behind pre-existing sim-fabrication debt (19 uncited constants on main).
 - 2026-06-24 — Migrated the Claude↔GitHub automation to a Claude Code-native model:
   retired the `/home/claude` GraphQL/cache/session harness; gates now live once in `tools/`
   and run in CI (authoritative) + local hooks/`.githooks` (advisory). See the migration PR.
 
 ## Next actions
 
-- After the migration PR merges, finish the deferred skill-port cleanup (strip `Model:`/
-  `assert_bootstrap`/`g.read_files_graphql` boilerplate from the remaining `skills/*/SKILL.md`,
-  rewrite `valoria-vector-audit` to read the working tree), then flip the `/home/claude`
-  warning in `ci_hooks_verifier.py` to blocking.
-- Archive the dead home-dir scripts (`~/github_ops.py`, `~/valoria_hooks.py`, `~/_task_*.py`, …).
-- Triage the pre-existing debt the decoupled CI now surfaces (report-only), then flip each to blocking:
-  ED-citation violations (`validate_ed_citations`, ~722) and stale canonical docs
-  (`freshness_gate` — the canonical_sha SHA-split, roadmap K-2 / LB-6).
-- Consolidate the `coverage_matrix` size threshold (currently in BOTH
-  `tools/ci_register_size_check.py` and `references/atomization_rules.yaml`, set to 10000 in each)
-  into a single source.
+_(Reserved-ID blocks are exhausted — ED ceiling 1042 past A/B/C 890–999. Re-block before any new ID
+allocation: workplan-v5 **LB-21**, at the next integration pause.)_
+
+- **Done this pass:** coverage_matrix size threshold consolidated to one source
+  (`ci_register_size_check.py` reads it from `atomization_rules.yaml`, safe fallback); old-harness
+  boilerplate (`Model:`/`assert_bootstrap`/`g.read_files_graphql`) stripped from the 12 simple
+  `skills/*/SKILL.md`.
+- **Skill-port remainder (LB-22):** rewrite `valoria-vector-audit` to read the working tree (its
+  read-path is load-bearing — a real rewrite); decide whether `valoria-orchestrator` (retired-harness
+  skill) stays; **then** flip the `/home/claude` warning in `ci_hooks_verifier.py` to blocking.
+- **CI debt blocking-flips (LB-23):** after the **K-2 SHA-split** (115 `canonical_sha` fields out of
+  `canonical_sources.yaml` → `references/canonical_freshness.yaml`), flip `freshness_gate`'s
+  stale-canonical step back to blocking; reconcile/flip `validate_ed_citations` (HANDOFF said
+  report-only ~722, but the tool currently `sys.exit(1)` — verify which is live in CI). Solo / K-2 / LB-6.
+- **`ci_political_v30` read-routing (LB-24):** raw file ~26k but tracked read returns 0 (index-routes).
+- **Ledger-status reconciliation (LA-23, Lane A — mostly done):** flipped ED-841/842/912 `open`→`resolved`
+  and filed the never-written ED-938/ED-939 (backfilled from #13; artifacts verified). Dropped the
+  report-only `validate_ed_citations` count 748→731. **Residual:** ED-914 left `open` — its mechanical
+  parts remain (PP-719 record-or-strike; dead `fieldwork_design_v1` parent-path refs in `params/bg/core.md`,
+  `designs/scene/fieldwork_v30.md`, `designs/scene/fieldwork_godot.md`).
+- **Design-tier docket awaiting Jordan:** J-31 extended (social-contest deliberative-game findings,
+  row #39 → LA-19) and the new **J-36** (Key-bus closure for the 6 off-bus writers, row #40 — gated on
+  the distillation report's deferred adversarial pass).

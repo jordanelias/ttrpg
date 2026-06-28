@@ -12,32 +12,22 @@ description: >
   and "audit for mechanics".
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
-
-**Model:** Sonnet 4.6. Requires cross-referencing complex interacting systems.
-
 ## Input Validation (MANDATORY BEFORE ANY AUDIT)
 
-Before running any audit mode, verify the following have been fetched from GitHub this session:
+Before running any audit mode, read the following from the working tree:
 
-```python
-# Required files — fetch via g.read_files_graphql() if not already in context
-required = [
-    'references/canonical_sources.yaml',       # confirm which design doc is canonical
-    '<target system doc — session-local work OR canonical>',  # need NOT be canon (D2); canon is the baseline
-    'references/params_<system>.md',           # extracted mechanical values
-    'canon/02_canon_constraints.md',           # P-01–P-15
-    'references/propagation_map.md',          # dependency map
-]
-```
+- `references/canonical_sources.yaml` — confirm which design doc is canonical
+- the target system doc — session-local work OR canonical; need NOT be canon (D2); canon is the baseline
+- `references/params_<system>.md` — extracted mechanical values
+- `canon/02_canon_constraints.md` — P-01–P-15
+- `references/propagation_map.md` — dependency map
 
-**The audit target may be whatever work/files exist local to the session — it need NOT be canon (D2).** Fetch canon as the *baseline/yardstick*; where a canonical version of the target exists, the latest local session work *supersedes the stale canon* (note which local artifact supersedes which source). The standing prohibition is narrower than before: **never audit from *memory* — read the actual local artifact, never a remembered or hallucinated version.**
+**The audit target may be whatever work/files exist in the working tree — it need NOT be canon (D2).** Read canon as the *baseline/yardstick*; where a canonical version of the target exists, the latest working-tree work *supersedes the stale canon* (note which artifact supersedes which source). The standing prohibition is narrower than before: **never audit from *memory* — read the actual artifact from the working tree, never a remembered or hallucinated version.**
 
 ## Audit Modes
 
 ### Mode A — Formula Validation
-For each formula in the fetched design doc:
+For each formula in the design doc (read from the working tree):
 - Verify all variables are defined elsewhere in the ruleset
 - Calculate output at minimum, average, and maximum input values
 - Check for: division by zero, negative pools, impossible states, results outside stated range
@@ -61,7 +51,7 @@ Inventory all numerical scales:
 ```
 
 ### Mode C — Interaction Chain Analysis
-For each mechanic in the fetched design doc: map inputs and outputs.
+For each mechanic in the design doc (read from the working tree): map inputs and outputs.
 Build dependency chains:
 - What feeds this mechanic? (upstream)
 - What does this mechanic feed? (downstream)
@@ -95,7 +85,7 @@ Systematic check:
 Severity: P1 (blocks play), P2 (causes ambiguity), P3 (polish)
 
 ### Mode E — Core Principles Compliance
-Cross-reference against the 13 core principles from the fetched Foundations:
+Cross-reference against the 13 core principles from the Foundations (read from the working tree):
 
 | # | Principle | Test |
 |---|-----------|------|
@@ -123,4 +113,4 @@ For each: PRESENT / ALTERED (with justification check) / ABSENT
 - All findings assigned severity (P1/P2/P3)
 - P1 findings automatically appended to `canon/editorial_ledger.yaml`
 - No editorial judgment — mechanical analysis only
-- All mechanical values cited with source file and section from GitHub fetch
+- All mechanical values cited with source file and section from the working tree

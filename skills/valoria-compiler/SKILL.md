@@ -8,29 +8,18 @@ description: >
   "apply patches", "produce clean version", "write it up", or when the orchestrator routes assembly.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
-**Model:** Haiku 4.5 for structural assembly. Sonnet 4.6 for final canon-guard pass.
-
 **Priority:** Lowest. Never block design, simulation, or editorial work for compilation. Compile only when a system is stable (no open P1 editorials, no unresolved stress-test findings) and the user explicitly requests it.
 
 ## Input Validation (MANDATORY)
 
-Before compiling, fetch the following from GitHub:
+Before compiling, read the following from the working tree:
 
-```python
-required = [
-    'references/canonical_sources.yaml',  # confirm canonical source and compilation_current flag
-    'canon/patch_register_active.yaml',          # pending approved patches
-    'canon/editorial_ledger.yaml',        # pending editorial items
-    '<canonical design doc>',             # from canonical_sources.yaml
-]
-files = g.read_files_graphql(required)
-token = g.assert_fetched(*required)  # raises if any path not fetched
-for path, content in files.items():
-    if content is None:
-        raise RuntimeError(f"GitHub fetch failed: {path} — cannot compile without live repo data")
-```
+- `references/canonical_sources.yaml` — confirm canonical source and compilation_current flag
+- `canon/patch_register_active.yaml` — pending approved patches
+- `canon/editorial_ledger.yaml` — pending editorial items
+- the canonical design doc named in `canonical_sources.yaml`
+
+If any of these paths is missing, stop — cannot compile without the repo data.
 
 **Gate check:** If `compilation_current: true` in `canonical_sources.yaml`, compilation is already up to date — do not re-compile. If `compilation_current: false`, proceed.
 
@@ -61,7 +50,7 @@ Every compiled ruleset MUST begin with:
 - Include Appendix: Open Items (from editorial ledger, P1 and P2 only)
 
 ### 6. Final Canon Guard Pass (Sonnet)
-- Fetch and run valoria-canon-guard on the compiled output
+- Run valoria-canon-guard on the compiled output
 - Any FAIL results: revert the causing patch, flag for review
 - Any PARTIAL results: note in compilation report
 
@@ -113,9 +102,7 @@ Every compiled ruleset MUST begin with:
 - All output to md format
 Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
-**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
-
-**Re-fetch after writes:** after any `atomic_commit()` call, re-fetch all modified files before referencing them again in the same session. The in-context version and the committed version may differ.
+**Post-commit verification:** after committing, re-read all modified files from the working tree and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
 
 - Patch log is append-only (never delete entries; mark reverted if needed)
-- All source values cited from GitHub-fetched files
+- All source values cited from working-tree files

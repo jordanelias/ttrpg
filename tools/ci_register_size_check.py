@@ -7,6 +7,34 @@ This is the external enforcement gate — runs outside Claude, cannot be bypasse
 """
 import os, sys
 
+# Single source of truth for the coverage-matrix cap: references/atomization_rules.yaml
+# (the declarative atomizer spec the local compliance gate already reads). Sourcing it
+# here removes the duplicated literal that drifted once (8000 vs 10000, 2026-06-24).
+# Falls back to a hardcoded value so this unbypassable CI gate never crashes on a
+# missing/unparseable rules file.
+_COVERAGE_MATRIX_FALLBACK = 10_000
+
+
+def _coverage_matrix_threshold(
+    rules_path="references/atomization_rules.yaml",
+    match="tests/coverage_matrix.md",
+    fallback=_COVERAGE_MATRIX_FALLBACK,
+):
+    """Read the coverage_matrix max_tokens from atomization_rules.yaml; fall back on any error."""
+    try:
+        import yaml
+        with open(rules_path, encoding="utf-8") as f:
+            rules = yaml.safe_load(f)
+        for policy in (rules or {}).get("policies", []):
+            if policy.get("match") == match:
+                mt = policy.get("max_tokens")
+                if isinstance(mt, int):
+                    return mt
+    except Exception as e:
+        print(f"NOTE: coverage_matrix threshold falling back to {fallback:,} ({type(e).__name__}: {e})")
+    return fallback
+
+
 THRESHOLDS = {
     # ── Active registers (strict limits — must chunk before exceeding) ──────
     "session_log_current.md":                  2_000,
@@ -19,11 +47,10 @@ THRESHOLDS = {
     # the 115 canonical_sha fields move to references/canonical_freshness.yaml.
     "references/canonical_sources.yaml":      12_000,
     "canon/patch_register_active.yaml":       20_000,
-    # Bumped 5_000 -> 10_000 (2026-06-24): coverage_matrix grows naturally as test
-    # coverage expands; the 5k cap had been failing main CI (file at ~8.3k) and
-    # cascade-skipping every downstream gate. Same rationale as canonical_sources
-    # (5k->12k). Trim/split the matrix and lower this if it bloats further.
-    "tests/coverage_matrix.md":              10_000,
+    # coverage_matrix cap sourced from references/atomization_rules.yaml (single source —
+    # 2026-06-28 consolidation). Was independently set 10_000 here AND in the yaml; the
+    # literal drifted once (8000 vs 10000). To change it, edit the yaml policy only.
+    "tests/coverage_matrix.md":              _coverage_matrix_threshold(),
     "references/arc_register.md":            20_000,
     "references/propagation_map.md":         15_000,
     "references/design_registry.yaml":        8_000,

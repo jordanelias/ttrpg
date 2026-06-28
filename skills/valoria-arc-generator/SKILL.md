@@ -11,28 +11,17 @@ description: >
   arcs inline.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
 # VALORIA ARC GENERATOR
-
-**Model:** Sonnet 4.6.
 
 ## Input Validation (MANDATORY BEFORE ANY ARC GENERATION)
 
-Before generating arcs, fetch the following from GitHub:
+Before generating arcs, read these from the working tree:
 
-```python
-# Step 1: always fetch canonical_sources.yaml first
-files = g.read_files_graphql(['references/canonical_sources.yaml'])
-canonical = files['references/canonical_sources.yaml']
-if canonical is None:
-    raise RuntimeError("canonical_sources.yaml missing — cannot resolve which docs are current")
+- Step 1: always read `references/canonical_sources.yaml` first — it resolves which docs are current.
+- Step 2: read required docs based on arc scope (see Read Protocol below).
+- Step 3: check the `designs/arcs/gm_ref/` directory to avoid arc duplication.
 
-# Step 2: fetch required docs based on arc scope (see Read Protocol below)
-# Step 3: check designs/arcs/gm_ref/ directory to avoid arc duplication
-```
-
-**Do not read compilation stage files from memory.** Even if you have seen them this session, verify via `canonical_sources.yaml` which version is current before using any values.
+**Do not read compilation stage files from memory.** Read them from the working tree, and check `canonical_sources.yaml` for which version is current before using any values.
 
 **If `compilation_current: false` in `canonical_sources.yaml`:** Use the canonical design doc for that system, not the compilation snapshot.
 
@@ -47,40 +36,40 @@ Deliver 3–5 arcs per batch unless the user specifies otherwise. End each batch
 
 ---
 
-## Read Protocol (GitHub fetches — do not skip)
+## Read Protocol (working-tree reads — do not skip)
 
-Fetch in this order. Check `canonical_sources.yaml` to confirm current paths before fetching.
+Read in this order. Check `canonical_sources.yaml` to confirm current paths before reading.
 
 **Always required:**
 - `references/canonical_sources.yaml` (done in input validation)
-- `references/glossary.md` — term definitions; fetch before using any game-specific term
+- `references/glossary.md` — term definitions; read before using any game-specific term
 - `params/factions.md` — faction stats, Domain Actions, seasonal accounting
 - `params/core.md` — dice engine baseline
 
-**Fetch if arcs involve Thread mechanics:**
+**Read if arcs involve Thread mechanics:**
 - `params/threadwork.md`
-- `canon/00_philosophical_foundations.md` §1–2 only (inseparability, scale principle) — fetch the file, read only those sections
+- `canon/00_philosophical_foundations.md` §1–2 only (inseparability, scale principle) — read only those sections
 
-**Fetch if arcs involve social/debate:**
+**Read if arcs involve social/debate:**
 - `params/contest.md`
 
-**Fetch if arcs involve mass battle:**
+**Read if arcs involve mass battle:**
 - `params/mass_combat.md`
 
-**Fetch if arcs involve specific Non-Player Characters:**
+**Read if arcs involve specific Non-Player Characters:**
 - The canonical NPC doc (check `canonical_sources.yaml` for current path)
 
-**Fetch if arcs involve territories or clocks:**
+**Read if arcs involve territories or clocks:**
 - The canonical territories doc (check `canonical_sources.yaml` for current path)
 
-**Check for prior arcs (fetch directory listing, avoid duplication):**
-- `designs/arcs/gm_ref/` — list contents via GitHub API before generating; do not reproduce an arc already documented there
+**Check for prior arcs (avoid duplication):**
+- `designs/arcs/gm_ref/` — list the directory contents before generating; do not reproduce an arc already documented there
 
 ---
 
 ## Arc Generation Rules
 
-**Mechanical grounding:** Every node in the flowchart must cite a specific mechanic — stat, Ob value, threshold, trigger condition, or faction rule from the fetched params files. No nodes that say "situation escalates" without naming the mechanic doing the escalating.
+**Mechanical grounding:** Every node in the flowchart must cite a specific mechanic — stat, Ob value, threshold, trigger condition, or faction rule from the params files read from the working tree. No nodes that say "situation escalates" without naming the mechanic doing the escalating.
 
 **Emergence standard:** Each arc must satisfy: *no single player decision caused this; it required multiple independent systems running simultaneously.* If a single player choice is sufficient to explain the arc, it is a plot hook, not an emergent arc.
 
@@ -92,9 +81,9 @@ Fetch in this order. Check `canonical_sources.yaml` to confirm current paths bef
 
 **Scope:** Keep arcs to systems with current params files. Do not invent mechanics. If a mechanic needed for an arc has a known gap, note the gap inline rather than assuming a value.
 
-**Non-Player Character fidelity:** Use documented Beliefs, Resonant Styles, and trigger conditions exactly from the fetched NPC doc. Do not invent Non-Player Character motivations. If Non-Player Character data is needed and not found, flag it with [EDITORIAL].
+**Non-Player Character fidelity:** Use documented Beliefs, Resonant Styles, and trigger conditions exactly from the NPC doc read from the working tree. Do not invent Non-Player Character motivations. If Non-Player Character data is needed and not found, flag it with [EDITORIAL].
 
-**Editorial gate:** Any arc requiring a worldbuilding or narrative decision not resolvable from fetched documents must be flagged: `[EDITORIAL: requires user approval — description]`.
+**Editorial gate:** Any arc requiring a worldbuilding or narrative decision not resolvable from the working-tree documents must be flagged: `[EDITORIAL: requires user approval — description]`.
 
 ---
 
@@ -131,7 +120,5 @@ Fetch in this order. Check `canonical_sources.yaml` to confirm current paths bef
 - `.md` file if 4+ arcs or if the user requests a document.
 Exit 0 required on all three. On non-zero exit: fix the reported issue before committing.
 
-**Post-commit verification:** after `atomic_commit()` returns a SHA, re-fetch all files modified in that commit and confirm content matches what was committed. If content differs: flag immediately, do not proceed.
-
-- Commit to `designs/arcs/gm_ref/` on GitHub after every batch via `g.atomic_commit()`. File naming: `arcs_NN_MM_[topic].md`.
+- Commit to `designs/arcs/gm_ref/` after every batch. File naming: `arcs_NN_MM_[topic].md`.
 - Log any canon corrections found during generation as `[GAP-ARC-NN]` in the output document.

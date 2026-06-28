@@ -11,35 +11,20 @@ description: >
   "dice math", or whenever mechanic-audit or simulator needs quantitative support.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
-
-**Model:** Haiku 4.5 for all execution (simulation is arithmetic, not reasoning).
-**Sonnet** may call this skill and interpret results; it never reruns the math inline.
-
----
-
 ## Input Validation (MANDATORY BEFORE ANY TASK)
 
-Fetch the following from GitHub before running any calculation:
+Read the following from the working tree before running any calculation:
 
-```python
-required = [
-    'params/core.md',   # canonical die rule, TN values, Ob definitions
-    'references/glossary.md',      # term definitions
-]
-files = g.read_files_graphql(required)
-token = g.assert_fetched(*required)  # raises if any path not fetched
-for path, content in files.items():
-    if content is None:
-        raise RuntimeError(f"GitHub fetch failed: {path} — cannot proceed")
-```
+- `params/core.md` — canonical die rule, TN values, Ob definitions
+- `references/glossary.md` — term definitions
+
+If either path is missing, stop — cannot proceed.
 
 **The die rule and TN values are read from `params/core.md`.** The module source below encodes the current standard rule; if `params_core.md` differs, the module source is stale and must be updated before proceeding.
 
 ## Term Reference
 
-Use `references/glossary.md` (fetched above) for all term definitions and permitted abbreviations.
+Use `references/glossary.md` (read above) for all term definitions and permitted abbreviations.
 
 ---
 
@@ -65,18 +50,16 @@ If `params_core.md` specifies different values, those govern over the above.
 
 ## Setup
 
-The canonical Python module lives at `valoria_dice.py`. On every invocation:
+The canonical Python module lives at `skills/valoria-dice-model/valoria_dice.py` in the working tree. On every invocation:
 
-1. Check whether `/home/claude/valoria_dice.py` exists.
-2. If not, write it from the **Module Source** section below before running anything.
-3. All computations use `TRIALS = 200_000` unless the task specifies fewer.
+1. Use the module at `skills/valoria-dice-model/valoria_dice.py`.
+2. All computations use `TRIALS = 200_000` unless the task specifies fewer.
 
 ---
 
 ## Module Source
 
-Source: `skills/valoria-dice-model/valoria_dice.py` on GitHub.
-Fetch and write to `/home/claude/valoria_dice.py` before running any calculation.
+The module is `skills/valoria-dice-model/valoria_dice.py` in the working tree. Read it before running any calculation.
 
 ---
 
@@ -138,7 +121,7 @@ Use when mechanic-audit or simulator needs a spot probability without a full tab
 3. Add a delta table: TN6 minus TN8 at each cell.
 4. Flag cells where TN6→TN8 shift causes >25% swing in P(full).
 
-**Standard reference output** (generate once, cache to `references/tn_full_tables.md` via `g.atomic_commit()`):
+**Standard reference output** (generate once, cache to `references/tn_full_tables.md`):
 Pool 3–12, Ob 1–6, all three TNs.
 
 ---
