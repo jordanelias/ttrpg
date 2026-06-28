@@ -15,13 +15,18 @@
 #   design_threads[], integrity_actions_open[] (informational only).
 
 schema_version: 1
-updated: 2026-06-10
-# 2026-06-10 micro-reconcile (LB-3, Workplan v3 §9): repointed to the v3 three-lane
-# consolidation master; Lane-B infra landed since the 06-09 update — CI register-threshold
-# desync fixed (canonical_sources CI 5k->12k interim-match, 9e9f6ef) and write_handoff now
-# stamps as_of=HEAD with resume-block staleness display (620601bd). Phase counters below are
-# the pre-v3 audit track, carried forward by v3 lanes (not re-mapped here).
-source_workplan: "designs/audit/2026-06-10-master-workplan-v3/valoria_master_workplan_v3.md (v3 three-lane consolidation — PROPOSED, Jordan-vetoable; supersedes the Pass-2 audit-workplan + 2026-05-29 consolidation master)"
+updated: 2026-06-28
+# 2026-06-28 reconcile (Master Workplan v5): repointed from v3 to the v5 post-v4
+# reconciliation master. Folds the 06-12->06-28 work no prior workplan reconciled —
+# the Claude-Code-native infra migration (#11, gate decoupling), ED-912 (Disposition/Knot
+# unified on +/-5; resolves ED-841/842/912/914, supersedes PP-632/PP-684), the J-31
+# social-contest 22-doc repair (#13, ED-938/939/1042 + rule resolutions), the combat
+# ER-2 engine-code fix (#12), and the 06-28 design-audit batch (#15). Ledger verified live
+# at HEAD a3837d0: 711 entries / 711 distinct IDs / 0 duplicate IDs / ED ceiling 1042.
+# Reserved-ID blocks (id_reservations.yaml A 890-939/B 940-969/C 970-999) are EXHAUSTED
+# (ED past 1000) -> re-block queued as workplan-v5 LB-21. Phase counters below are the
+# pre-v3 audit track, carried forward by the lanes (not re-mapped here).
+source_workplan: "designs/audit/2026-06-28-recent-work-orchestration/valoria_master_workplan_v5.md (v5 post-v4 reconciliation — CANON-PROPOSED, Jordan-vetoable; supersedes v4 2026-06-11-orchestration, retaining its register/docket/lanes)"
 current_phase: 2
 
 phases:
@@ -98,7 +103,7 @@ resolved_decisions:
   - "OWN-1/2 -- LOCKED (Jordan, passC): MS net-decays by default; start MS=60 (resolves 60-vs-72 -> 60); passive Warden Mending exists but degradable. Propagation: annotate ms_trajectory + clock_registry (start 72->60); add Warden-interruption events."
   - "OWN-3 -- RESOLVED (passC): maintain = de-escalate + heal (no WC buff). Open piece -> pending (closure threshold)."
   - "FR -- RESOLVED (Jordan 2026-05-29): faction-resolver = AGGREGATE the pool + smooth Ob monotonic in target strength. Kills the bare-stat small-pool binary (the R/S/E failure). Implemented as the d+sigma resolver, RATIFIED 2026-05-31 (ED-874). Residual: faction_layer_v30 prose propagation (W3.3)."
-  - "PT -- RESOLVED (Jordan 2026-05-29): RATIFY ED-844-856 + apply declared defaults (a/b/c, x/y/z). Execution pending: flip ED-844-856 status to ratified in a focused editorial turn."
+  - "PT -- RESOLVED (Jordan 2026-05-29): RATIFY ED-844-856 + apply declared defaults (a/b/c, x/y/z). Status flip DONE 2026-06-28: ED-845/848/856 (the residual open entries) set to resolved in the JSONL ledger, citing this ratification. Default-content propagation to docs may still be needed."
   - "CMB -- DEFERRED (Jordan 2026-05-29): combat_v32 N3/N4/N5 moved to a dedicated combat-testing chat + I-17 build-axis sim; not decided here."
   - "OWN-3T -- RESOLVED (Jordan 2026-05-29): maintain-victory closure at a 1:2 damage:healing ratio -- one season of tearing requires two seasons of mending to undo (~2 seasons per wound-point; supersedes the 3.5-season estimate). Foundational Mend rate / site-wound counter tuned to this ratio (sim-tuning)."
   - "CAP -- RESOLVED (Jordan 2026-05-29): build/adopt the -10/s Force-3 heavy-tearing guardrail. Propagation pending: params + ms section 5."

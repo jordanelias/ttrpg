@@ -19,14 +19,12 @@ description: >
   ledger, or other non-rolling system — that is valoria-mechanic-audit's job.
 ---
 
-**Prerequisite:** Bootstrap complete — `assert_bootstrap()` via `quick_bootstrap()` before invoking. This skill reads the engine mechanics from a **canonical reference baseline** AND the **session-local target**; never diagnose from *memory* — read the actual artifact, never a remembered or hallucinated version. This session, fetch (via the tracked path `g.read_files_graphql` / `g.fetch_system`) the canonical reference baseline below, plus the target (which may be session-local work, not canon — see the last bullet):
+**Prerequisite:** This skill reads the engine mechanics from a **canonical reference baseline** AND the **session-local target**; never diagnose from *memory* — read the actual artifact, never a remembered or hallucinated version. Read from the working tree the canonical reference baseline below, plus the target (which may be session-local work, not canon — see the last bullet):
 - `params/core.md` — core engine: **Die Rule (legacy/TTRPG), Continuous Engine (Decision E), Degrees, Obstacle Scale, Expected Value table, Pool Floor**.
 - `designs/audit/2026-05-28-resolution-diagnostic/domain_action_resolver_spec.md` — the **deterministic+stochastic resolver** spec (ratified per ED-874).
 - `designs/audit/2026-05-28-engine-replacement/engine_replacement_reconciled.md` — the engine-replacement reconciliation (continuity correction; resolver-vs-engine boundary).
 - `canon/02_canon_constraints.md` (P-01–P-15 + GD-1/2/3) and `canon/definitions.yaml` (NERS criteria).
-- **Target rolling engine — whatever work/files exist local to the session** (a draft, an in-progress design, an uncommitted artifact, the latest local revision). It need **NOT** be canon (D2): the point of the modular architecture is to bring canon in from the repo as the *baseline* while the latest **local session work supersedes the stale canon**. If a canonical version of the target exists, fetch it and declare which local artifact supersedes which canonical source; otherwise audit the local work directly. This breaks the canonical-bootstrap circularity — a system can be NERS-audited *en route to* becoming canon, not only after it already is.
-
-**Model:** Opus (multi-system cross-referencing + quantitative reasoning).
+- **Target rolling engine — whatever work/files exist local to the session** (a draft, an in-progress design, an uncommitted artifact, the latest local revision). It need **NOT** be canon (D2): the point of the modular architecture is to bring canon in from the repo as the *baseline* while the latest **local session work supersedes the stale canon**. If a canonical version of the target exists, read it from the working tree and declare which local artifact supersedes which canonical source; otherwise audit the local work directly. This breaks the canonical-bootstrap circularity — a system can be NERS-audited *en route to* becoming canon, not only after it already is.
 
 **Relationship to `valoria-mechanic-audit`:** that skill checks *internal consistency* (formulas, gaps, redundancy) for **any** system, rolling or not. This skill checks **resolution fitness under stress for rolling engines specifically**, plus the loops/cliffs a rolling engine's output drives, and ends in a NERS verdict. A non-rolling system, or pure non-roll balance (a deterministic feedback loop with no draw), belongs to `valoria-mechanic-audit` or a dedicated balance pass — not here. Run consistency first if the engine is unverified; run this when the question is "does this rolling engine hold up at its extremes, on the right engine model, and is it NERS-compliant."
 
@@ -208,7 +206,7 @@ Run in order. Phase 0 applies the Scope Gate + Engine-Selection Rule and routes 
 - **3d. Role conflation, scoped to the roll:** does a variable that **feeds or reads** this engine carry more than one independent role (capacity AND cohesion AND collapse), such that the roll's input/output is overloaded? Pure non-roll role conflation → mechanic-audit.
 
 ### Phase 4 — Check the loops the engine participates in (highest severity)
-- **4a.** Identify feedback loops whose gain runs **through this rolling engine's output, or that gate its input** — including cross-system / cross-scale couplings (e.g., a resolved Domain-Action/Suppress outcome → Stability → territory → muster → military → back into the resolver's inputs). List inter-system edges; fetch cross-referenced docs. *(A feedback loop with no rolling engine in its cycle is out of scope — route to mechanic-audit or a balance pass.)*
+- **4a.** Identify feedback loops whose gain runs **through this rolling engine's output, or that gate its input** — including cross-system / cross-scale couplings (e.g., a resolved Domain-Action/Suppress outcome → Stability → territory → muster → military → back into the resolver's inputs). List inter-system edges; read cross-referenced docs from the working tree. *(A feedback loop with no rolling engine in its cycle is out of scope — route to mechanic-audit or a balance pass.)*
 - **4b.** For each in-scope loop: **damper present?** (gain < 1 per loop cycle) and **cap present?** (hard bound on the amplified variable) — two separate checks; defect = **both undamped and unbounded**. *(Re-evaluate gain under the correct engine: `engine_replacement_reconciled §6` reclassified faction collapse from "deterministic" to "probabilistic, loss-weighted" once bare dice → Mode B; the resolver raises recovery odds.)*
 
 ### Phase 5 — Intent gate (every candidate finding)
@@ -320,7 +318,7 @@ Iterate until clean or flag `[OPEN TRADE-OFF]`.
 
 ## WORKED EXAMPLE 2 — Social Contest (Instance A; proves genericity off-faction)
 
-*(Sketch — a real run fetches the system doc. System-specific values below are flagged `[verify: params/contest.md / social_contest_v30 — not read this session]`.)*
+*(Sketch — a real run reads the system doc from the working tree. System-specific values below are flagged `[verify: params/contest.md / social_contest_v30 — not read this session]`.)*
 
 - **Phase 0:** scope gate — rolling engine present (the exchange roll). Components: (A) **sigma-leverage** exchange roll on a healthy pool `[verify ~5–18D]`; recognize-and-exclude the **Persuasion clock** (0–10 accumulator → out of scope as a resolver) and **Composure** (continuous resource feeding the roll → roll-input, not diagnosed). Engine-Selection Rule → A (pool ≥ ~5D, genuine setup/skill axis via stance/reading).
 - **Phase 1:** Instance-A stress = the **bottom of the pool band** (a Rattled/Spent contestant dragged toward the 5D floor) and the **sub-5D continuity-correction** region if penalties push below 5D; NOT a faction-style bare-stat binary.

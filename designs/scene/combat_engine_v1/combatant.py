@@ -1,7 +1,7 @@
 """Combatant — built ONCE at init; identity (which fighter) never changes. The wrapper passes a Combatant
 to every subsystem as `aggressor` or `defender`; no subsystem ever sees raw 'A'/'B'. This is the structural
 fix for the frame-mapping bug class: roles are objects, not positional/dict keys."""
-import sys; sys.path.insert(0,'/home/claude'); sys.path.insert(0,'/home/claude/v32')
+import sys, os; sys.path.insert(0, os.path.join(os.path.dirname(__file__), '../../../tests/sim/v32-combat-balance'))
 import r8_parity_harness as r8
 
 # canonical weapon axis-vectors (weapon_axes_v2 §5)

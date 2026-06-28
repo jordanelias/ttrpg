@@ -11,8 +11,12 @@
 # This file is the enabler (workplan 5.11). Companion: references/id_reservations.yaml (5.10).
 # =====================================================================================
 version: 1
-updated: "2026-06-12"
-source: "designs/audit/2026-06-11-orchestration/valoria_master_workplan_v4.md — §1 operating model (lineage: v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; structure unchanged, queues carried to v4 LA-/LB-/LC- IDs)"
+updated: "2026-06-28"
+source: "designs/audit/2026-06-28-recent-work-orchestration/valoria_master_workplan_v5.md — §1 operating model (lineage: v4 2026-06-11 -> v3 2026-06-10 -> workplan_v2 2026-05-31 item 5.11; owns-globs/lanes unchanged, queues carried to v5 LA-/LB-/LC- IDs)"
+# RESERVED-ID EXHAUSTION (workplan v5 §0a, 2026-06-28): the reserved ED/PP blocks in
+# references/id_reservations.yaml (A 890-939/940-969/970-999 etc.) are EXHAUSTED — the live
+# ED ceiling is 1042, past every block. Re-blocking the next disjoint round is queued as
+# workplan-v5 LB-21 (do at an integration pause; per id_reservations.exhaustion_policy).
 
 boundary_rule: >
   A lane NEVER writes outside its owns: set. Need another lane's file changed? Read its

@@ -11,25 +11,15 @@ description: >
   This skill NEVER approves content that contradicts the Foundations.
 ---
 
-**Prerequisite:** Bootstrap must be complete — `assert_bootstrap()` called by orchestrator or via `quick_bootstrap()` before invoking this skill.
-
-
-**Model:** Sonnet 4.6. Requires deep philosophical reasoning.
-
 ## Input Validation (MANDATORY BEFORE ANY COMPLIANCE CHECK)
 
-Before running any compliance check, verify the following have been fetched from GitHub this session:
+Before running any compliance check, read these files from the working tree:
 
-```python
-# Required files — fetch via g.read_files_graphql() if not already in context
-required = [
-    'canon/00_philosophical_foundations_rules.md',  # primary authority
-    'canon/02_canon_constraints.md',          # P-01–P-15 derived constraints
-    # fetch any canon/01_*.md amendments relevant to the target system
-]
-```
+- `canon/00_philosophical_foundations_rules.md` — primary authority
+- `canon/02_canon_constraints.md` — P-01–P-15 derived constraints
+- any `canon/01_*.md` amendments relevant to the target system
 
-**If any required file was not fetched from GitHub this session:** STOP. Fetch it. Do not use remembered Foundations content — the file on GitHub is authoritative.
+Read them from the working tree — do not rely on remembered Foundations content; the file on disk is authoritative.
 
 ## Canon Constraints Reference (P-01 through P-15)
 
@@ -49,16 +39,16 @@ required = [
 | P-12 | Relational contagion via knotting | Does a transforming practitioner's shift propagate through Knots? |
 | P-13 | Forgetting = rendering failure | Is Southernmost knowledge mechanically untransmittable to non-sensitives? |
 | P-14 | Board/VG modes must express inseparability | Is co-movement mechanically implemented in all play modes? |
-| P-15 | [Fetch from canon/02_canon_constraints.md — do not use memory] | |
+| P-15 | [Read from canon/02_canon_constraints.md in the working tree — do not use memory] | |
 
 ## Process
-1. Fetch and load `canon/00_philosophical_foundations_rules.md` and `canon/02_canon_constraints.md` from GitHub
+1. Read `canon/00_philosophical_foundations_rules.md` and `canon/02_canon_constraints.md` from the working tree
 2. Load relevant Foundations section by chunk reference or direct read
 3. For each applicable constraint:
    - **PASS**: mechanic satisfies the constraint
    - **PARTIAL**: mechanic partially satisfies — identify what's missing
    - **FAIL**: mechanic violates the constraint
-4. For FAIL: cite specific Foundations text (by section, from fetched file), explain philosophical reasoning, propose repair
+4. For FAIL: cite specific Foundations text (by section, from the working-tree file), explain philosophical reasoning, propose repair
 5. For PARTIAL: flag what's missing and assess severity (cosmetic vs. structural)
 
 ## Output Format
@@ -74,7 +64,7 @@ required = [
 
 ## Violations (if any)
 ### [ID]: [Brief description]
-**Foundations ref:** §[N], key concept [cite from fetched file]
+**Foundations ref:** §[N], key concept [cite from the working-tree file]
 **Current implementation:** [what the mechanic does]
 **Why this violates:** [philosophical reasoning]
 **Proposed repair:** [mechanical suggestion]
@@ -90,5 +80,5 @@ required = [
 - If a mechanic is mechanically sound but philosophically incoherent, it fails.
 - If a repair proposal involves setting/narrative/character content: flag `[EDITORIAL: requires user approval]`.
 - When uncertain whether something violates: flag as PARTIAL with reasoning, not PASS.
-- All Foundations citations must reference the fetched file, not memory.
-- Do not use remembered constraint values — P-15 in particular must be read from `canon/02_canon_constraints.md` on GitHub.
+- All Foundations citations must reference the working-tree file, not memory.
+- Do not use remembered constraint values — P-15 in particular must be read from `canon/02_canon_constraints.md` in the working tree.
