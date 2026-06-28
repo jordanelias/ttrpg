@@ -67,14 +67,14 @@ lanes:
     name: "Infrastructure / Tooling / Governance"
     bootstrap_scope: ["infrastructure"]
     owns:
-      - "skills/valoria-orchestrator/scripts/**"
+      - "deprecated/skills/valoria-orchestrator/scripts/**"   # retired harness — moved to deprecated/ (LB-22)
       - "references/**"                 # EXCEPT the shared_files below (canonical_sources / canonical_freshness)
       - "tests/hooks/**"
       - "tests/index/**"
       - "session_logs/**"
       - "tools/**"
       - "archives/**"
-      - "skills/valoria-orchestrator/references/skill_registry.yaml"
+      - "deprecated/skills/valoria-orchestrator/references/skill_registry.yaml"   # retired harness — moved to deprecated/ (LB-22)
     shared_not_exclusive:             # under references/** but co-owned — see shared_files
       - "references/canonical_sources.yaml"
       - "references/canonical_freshness.yaml"

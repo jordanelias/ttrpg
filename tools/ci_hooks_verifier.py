@@ -16,8 +16,11 @@ Blocking checks:
   1. .claude/settings.json exists and wires hooks to tools/ (or .githooks/).
   2. CLAUDE.md documents the git commit path.
   3. No SKILL.md exceeds its token budget.
+  4. No /home/claude sandbox references under skills/ (the native-skill surface;
+     the retired harness is gone, so skills must read the working tree).
 Non-blocking warnings:
-  - lingering /home/claude sandbox references (porting debt).
+  - lingering /home/claude sandbox references under tools/ (analysis utilities
+    pending the GitHub-API->working-tree port; tracked in HANDOFF.md).
   - design-doc skeleton-debt (>400 lines).
 """
 import glob
@@ -68,7 +71,11 @@ for skill_md in sorted(glob.glob('skills/*/SKILL.md')):
     else:
         print(f"OK   size {skill_md}: {tokens:,}/{DEFAULT_SKILL_LIMIT:,} tokens")
 
-# ── Check 4 (warn): lingering /home/claude sandbox references ─────────────────
+# ── Check 4: lingering /home/claude sandbox references ───────────────────────
+# skills/ are the native-skill surface and must be clean → BLOCKING.
+# tools/ analysis utilities (and this verifier's own message strings) still
+# mention the retired sandbox pending the GitHub-API→working-tree port → WARN.
+# deprecated/ is intentionally NOT walked (retired artifacts kept for history).
 for base in ('skills', 'tools'):
     for dirpath, _dirs, files in os.walk(base):
         for fn in files:
@@ -81,8 +88,13 @@ for base in ('skills', 'tools'):
             except OSError:
                 continue
             if '/home/claude' in txt:
-                warnings.append(f"SANDBOX REF: {p.replace(os.sep, '/')} still references /home/claude "
-                                f"(port to working-tree reads)")
+                rel = p.replace(os.sep, '/')
+                if base == 'skills':
+                    violations.append(f"SANDBOX REF: {rel} references /home/claude — "
+                                      f"skills must read the working tree (retired harness)")
+                else:
+                    warnings.append(f"SANDBOX REF: {rel} still references /home/claude "
+                                    f"(port to working-tree reads)")
 
 # ── Check 5 (warn): skeleton-debt — design docs over 400 lines ───────────────
 for root, _dirs, files in os.walk('designs'):

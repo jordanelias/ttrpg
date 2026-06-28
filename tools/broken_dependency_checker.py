@@ -101,18 +101,10 @@ def check_canonical_sources(all_files):
     broken = [r for r in refs if r not in all_files]
     return broken, []
 
-def check_skill_registry(all_files):
-    """Check skill_registry.md for broken skill paths."""
-    content = read_file("skills/valoria-orchestrator/references/skill_registry.md")
-    if not content:
-        return [], []
-    refs = set()
-    for m in re.finditer(r'Path:\s*`([^`]+)`', content):
-        path = m.group(1).strip()
-        if "/" in path:
-            refs.add(path)
-    broken = [r for r in refs if r not in all_files]
-    return broken, []
+# check_skill_registry retired: the orchestrator's skill_registry.md was an
+# orchestrator-era coordination artifact, moved to deprecated/ when the
+# orchestrator was retired (2026-06-24). Claude Code now discovers skills by
+# name + description (see CLAUDE.md), so there is no live registry to validate.
 
 def check_editorial_ledger(all_files):
     """Check editorial_ledger.yaml propagation_targets for broken paths."""
@@ -134,7 +126,6 @@ def main():
     checks = [
         ("propagation_map.md",    check_propagation_map),
         ("canonical_sources.yaml", check_canonical_sources),
-        ("skill_registry.md",     check_skill_registry),
         ("editorial_ledger.yaml", check_editorial_ledger),
     ]
 
